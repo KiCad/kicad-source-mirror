@@ -352,22 +352,22 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PA
     }
 
     txt.Printf( wxT( "%d" ), board->GetPadCount() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Pads" ), txt, DARKGREEN ) );
+    aList.emplace_back( _( "Pads" ), txt, DARKGREEN );
 
     txt.Printf( wxT( "%d" ), viasCount );
-    aList.push_back( MSG_PANEL_ITEM( _( "Vias" ), txt, DARKGREEN ) );
+    aList.emplace_back( _( "Vias" ), txt, DARKGREEN );
 
     txt.Printf( wxT( "%d" ), trackSegmentsCount );
-    aList.push_back( MSG_PANEL_ITEM( _( "Track Segments" ), txt, DARKGREEN ) );
+    aList.emplace_back( _( "Track Segments" ), txt, DARKGREEN );
 
     txt.Printf( wxT( "%d" ), board->GetNodesCount() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Nodes" ), txt, DARKCYAN ) );
+    aList.emplace_back( _( "Nodes" ), txt, DARKCYAN );
 
     txt.Printf( wxT( "%d" ), board->GetNetCount() - 1 /* don't include "No Net" in count */ );
-    aList.push_back( MSG_PANEL_ITEM( _( "Nets" ), txt, RED ) );
+    aList.emplace_back( _( "Nets" ), txt, RED );
 
     txt.Printf( wxT( "%d" ), board->GetConnectivity()->GetUnconnectedCount() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Unrouted" ), txt, BLUE ) );
+    aList.emplace_back( _( "Unrouted" ), txt, BLUE );
 }
 
 

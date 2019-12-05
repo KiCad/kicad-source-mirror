@@ -603,12 +603,12 @@ void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
     }
 
 
-    corners.push_back( wxPoint( - dx, - dy ) );
-    corners.push_back( wxPoint( - dx, + dy ) );
-    corners.push_back( wxPoint( + dx, + dy ) );
-    corners.push_back( wxPoint( + dx, - dy ) );
+    corners.emplace_back( - dx, - dy );
+    corners.emplace_back( - dx, + dy );
+    corners.emplace_back( + dx, + dy );
+    corners.emplace_back( + dx, - dy );
     // Close polygon
-    corners.push_back( wxPoint( - dx, - dy ) );
+    corners.emplace_back( - dx, - dy );
 
     for( unsigned ii = 0; ii < corners.size(); ii++ )
     {
@@ -649,7 +649,7 @@ void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSiz
     SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
 
     for( int ii = 0; ii < poly.PointCount(); ++ii )
-        cornerList.push_back( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+        cornerList.emplace_back( poly.Point( ii ).x, poly.Point( ii ).y );
 
     if( cornerList.back() != cornerList.front() )
         cornerList.push_back( cornerList.front() );
@@ -671,7 +671,7 @@ void HPGL_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
         cornerList.reserve( poly.PointCount() );
 
         for( int ii = 1; ii < poly.PointCount(); ++ii )
-            cornerList.push_back( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+            cornerList.emplace_back( poly.Point( ii ).x, poly.Point( ii ).y );
 
         if( cornerList.back() != cornerList.front() )
             cornerList.push_back( cornerList.front() );

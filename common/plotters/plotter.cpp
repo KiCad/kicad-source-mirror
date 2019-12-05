@@ -577,10 +577,10 @@ void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
     std::vector< wxPoint > cornerList;
 
     for( int ii = 0; ii < aCornerList.PointCount(); ii++ )
-        cornerList.push_back( wxPoint( aCornerList.CPoint( ii ) ) );
+        cornerList.emplace_back( aCornerList.CPoint( ii ) );
 
     if( aCornerList.IsClosed() && cornerList.front() != cornerList.back() )
-        cornerList.push_back( wxPoint( aCornerList.CPoint( 0 ) ) );
+        cornerList.emplace_back( aCornerList.CPoint( 0 ) );
 
     PlotPoly( cornerList , aFill, aWidth, aData );
 }

@@ -196,7 +196,7 @@ void EDGE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset
 
         for( auto iter = m_Poly.CIterate(); iter; iter++ )
         {
-            points.push_back( wxPoint( iter->x,iter->y ) );
+            points.emplace_back( iter->x,iter->y );
         }
 
         for( unsigned ii = 0; ii < points.size(); ii++ )
@@ -252,7 +252,7 @@ void EDGE_MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_IT
     if( !board )
         return;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), module->GetReference(), DARKCYAN ) );
+    aList.emplace_back( _( "Footprint" ), module->GetReference(), DARKCYAN );
 
     // append the features shared with the base class
     DRAWSEGMENT::GetMsgPanelInfo( aUnits, aList );

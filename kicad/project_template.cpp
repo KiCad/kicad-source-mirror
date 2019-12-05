@@ -86,7 +86,7 @@ std::vector<wxFileName> PROJECT_TEMPLATE::GetFileList()
 
         // Files that are in the meta directory must not be included
         if( !p.GetPath().StartsWith( m_metaPath.GetPath() ) )
-            files.push_back( allfiles[i] );
+            files.emplace_back(allfiles[i] );
     }
 
     return files;

@@ -2065,7 +2065,7 @@ void CALLBACK CombineCallback( GLdouble coords[3],
     OPENGL_GAL::TessParams* param = static_cast<OPENGL_GAL::TessParams*>( aData );
 
     // Save the pointer so we can delete it later
-    param->intersectPoints.push_back( boost::shared_array<GLdouble>( vertex ) );
+    param->intersectPoints.emplace_back( vertex );
 
     memcpy( vertex, coords, 3 * sizeof(GLdouble) );
 

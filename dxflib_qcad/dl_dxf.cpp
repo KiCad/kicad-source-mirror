@@ -2310,7 +2310,7 @@ void DL_Dxf::addHatch( DL_CreationInterface* creationInterface )
 void DL_Dxf::addHatchLoop()
 {
     addHatchEdge();
-    hatchEdges.push_back( std::vector<DL_HatchEdgeData>() );
+    hatchEdges.emplace_back( );
 }
 
 
@@ -2384,7 +2384,7 @@ bool DL_Dxf::handleHatchData( DL_CreationInterface* creationInterface )
         {
         case 10:
             hatchEdge.type = 0;
-            hatchEdge.vertices.push_back( std::vector<double>() );
+            hatchEdge.vertices.emplace_back( );
             hatchEdge.vertices.back().push_back( toReal( groupValue ) );
             return true;
 

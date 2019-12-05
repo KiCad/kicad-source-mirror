@@ -246,8 +246,8 @@ void MARKER_BASE::PrintMarker( wxDC* aDC, const wxPoint& aOffset )
 
     for( int ii = 0; ii < ccount; ii++ )
     {
-        shape.push_back( wxPoint( GetShapePolygonCorner( ii ).x * MarkerScale(),
-                                  GetShapePolygonCorner( ii ).y * MarkerScale() ) );
+        shape.emplace_back( GetShapePolygonCorner( ii ).x * MarkerScale(),
+                                  GetShapePolygonCorner( ii ).y * MarkerScale() );
     }
 
     for( int ii = 0; ii < ccount; ii++ )

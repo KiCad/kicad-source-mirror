@@ -908,7 +908,7 @@ void mpScaleX::recalculateTicks( wxDC& dc, mpWindow& w )
 
     for( double t : m_tickValues )
     {
-        m_tickLabels.push_back( TickLabel( t ) );
+        m_tickLabels.emplace_back( t );
     }
 
     updateTickLabels( dc, w );
@@ -1103,7 +1103,7 @@ void mpScaleY::computeSlaveTicks( mpWindow& w )
     {
         m = TransformFromPlot( m_masterScale->TransformToPlot( m_masterScale->m_tickValues[i] ) );
         m_tickValues.push_back( m );
-        m_tickLabels.push_back( TickLabel( m ) );
+        m_tickLabels.emplace_back( m );
         m_absVisibleMaxV = std::max( m_absVisibleMaxV, fabs( m ) );
     }
 }
@@ -1190,7 +1190,7 @@ void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
     }
 
     for( double t : m_tickValues )
-        m_tickLabels.push_back( TickLabel( t ) );
+        m_tickLabels.emplace_back( t );
 
 
     // n0 = floor(minVvis / bestStep) * bestStep;
@@ -1246,12 +1246,12 @@ void mpScaleXLog::recalculateTicks( wxDC& dc, mpWindow& w )
     for( d = minDecade; d<=maxDecade; d *= 10.0 )
     {
         // printf("d %.1f\n",d );
-        m_tickLabels.push_back( TickLabel( d ) );
+        m_tickLabels.emplace_back( d );
 
         for( double dd = d; dd < d * 10; dd += d )
         {
             if( visibleDecades < 2 )
-                m_tickLabels.push_back( TickLabel( dd ) );
+                m_tickLabels.emplace_back( dd );
 
             m_tickValues.push_back( dd );
         }

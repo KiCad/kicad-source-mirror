@@ -397,12 +397,12 @@ void LIB_ARC::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >
 
     msg = MessageTextFromValue( aUnits, m_Width, true );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
+    aList.emplace_back( _( "Line Width" ), msg, BLUE );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Bounding Box" ), msg, BROWN ) );
+    aList.emplace_back( _( "Bounding Box" ), msg, BROWN );
 }
 
 

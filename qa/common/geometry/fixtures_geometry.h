@@ -58,45 +58,45 @@ struct CommonTestData
     CommonTestData()
     {
         // UniqueVertexPolySet shall have a unique vertex
-        uniquePoints.push_back( VECTOR2I( 100, 50 ) );
+        uniquePoints.emplace_back( 100, 50 );
 
         // Populate the holey polygon set points with 12 points
 
         // Square
-        holeyPoints.push_back( VECTOR2I( 100, 100 ) );
-        holeyPoints.push_back( VECTOR2I( 0, 100 ) );
-        holeyPoints.push_back( VECTOR2I( 0, 0 ) );
-        holeyPoints.push_back( VECTOR2I( 100, 0 ) );
+        holeyPoints.emplace_back( 100, 100 );
+        holeyPoints.emplace_back( 0, 100 );
+        holeyPoints.emplace_back( 0, 0 );
+        holeyPoints.emplace_back( 100, 0 );
 
         // Pentagon
-        holeyPoints.push_back( VECTOR2I( 10, 10 ) );
-        holeyPoints.push_back( VECTOR2I( 10, 20 ) );
-        holeyPoints.push_back( VECTOR2I( 15, 15 ) );
-        holeyPoints.push_back( VECTOR2I( 20, 20 ) );
-        holeyPoints.push_back( VECTOR2I( 20, 10 ) );
+        holeyPoints.emplace_back( 10, 10 );
+        holeyPoints.emplace_back( 10, 20 );
+        holeyPoints.emplace_back( 15, 15 );
+        holeyPoints.emplace_back( 20, 20 );
+        holeyPoints.emplace_back( 20, 10 );
 
         // Triangle
-        holeyPoints.push_back( VECTOR2I( 40, 10 ) );
-        holeyPoints.push_back( VECTOR2I( 40, 20 ) );
-        holeyPoints.push_back( VECTOR2I( 60, 10 ) );
+        holeyPoints.emplace_back( 40, 10 );
+        holeyPoints.emplace_back( 40, 20 );
+        holeyPoints.emplace_back( 60, 10 );
 
         // Save the segments of the holeyPolySet.
-        holeySegments.push_back( SEG( holeyPoints[0], holeyPoints[1] ) );
-        holeySegments.push_back( SEG( holeyPoints[1], holeyPoints[2] ) );
-        holeySegments.push_back( SEG( holeyPoints[2], holeyPoints[3] ) );
-        holeySegments.push_back( SEG( holeyPoints[3], holeyPoints[0] ) );
+        holeySegments.emplace_back( holeyPoints[0], holeyPoints[1] );
+        holeySegments.emplace_back( holeyPoints[1], holeyPoints[2] );
+        holeySegments.emplace_back( holeyPoints[2], holeyPoints[3] );
+        holeySegments.emplace_back( holeyPoints[3], holeyPoints[0] );
 
         // Pentagon segments
-        holeySegments.push_back( SEG( holeyPoints[4], holeyPoints[5] ) );
-        holeySegments.push_back( SEG( holeyPoints[5], holeyPoints[6] ) );
-        holeySegments.push_back( SEG( holeyPoints[6], holeyPoints[7] ) );
-        holeySegments.push_back( SEG( holeyPoints[7], holeyPoints[8] ) );
-        holeySegments.push_back( SEG( holeyPoints[8], holeyPoints[4] ) );
+        holeySegments.emplace_back( holeyPoints[4], holeyPoints[5] );
+        holeySegments.emplace_back( holeyPoints[5], holeyPoints[6] );
+        holeySegments.emplace_back( holeyPoints[6], holeyPoints[7] );
+        holeySegments.emplace_back( holeyPoints[7], holeyPoints[8] );
+        holeySegments.emplace_back( holeyPoints[8], holeyPoints[4] );
 
         // Triangle segments
-        holeySegments.push_back( SEG( holeyPoints[9], holeyPoints[10] ) );
-        holeySegments.push_back( SEG( holeyPoints[10], holeyPoints[11] ) );
-        holeySegments.push_back( SEG( holeyPoints[11], holeyPoints[9] ) );
+        holeySegments.emplace_back( holeyPoints[9], holeyPoints[10] );
+        holeySegments.emplace_back( holeyPoints[10], holeyPoints[11] );
+        holeySegments.emplace_back( holeyPoints[11], holeyPoints[9] );
 
         // Auxiliary variables to store the contours that will be added to the polygons
         SHAPE_LINE_CHAIN polyLine, hole;

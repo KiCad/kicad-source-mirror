@@ -72,12 +72,12 @@ vector<COMPLEX> NGSPICE::GetPlot( const string& aName, int aMaxLen )
         if( vi->v_realdata )
         {
             for( int i = 0; i < length; i++ )
-                data.push_back( COMPLEX( vi->v_realdata[i], 0.0 ) );
+                data.emplace_back( vi->v_realdata[i], 0.0 );
         }
         else if( vi->v_compdata )
         {
             for( int i = 0; i < length; i++ )
-                data.push_back( COMPLEX( vi->v_compdata[i].cx_real, vi->v_compdata[i].cx_imag ) );
+                data.emplace_back( vi->v_compdata[i].cx_real, vi->v_compdata[i].cx_imag );
         }
     }
 

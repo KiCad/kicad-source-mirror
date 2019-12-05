@@ -185,7 +185,7 @@ void SGCOLORS::SetColorList( size_t aListSize, const SGCOLOR* aColorList )
 
 void SGCOLORS::AddColor( double aRedValue, double aGreenValue, double aBlueValue )
 {
-    colors.push_back( SGCOLOR( aRedValue, aGreenValue, aBlueValue ) );
+    colors.emplace_back( aRedValue, aGreenValue, aBlueValue );
     return;
 }
 

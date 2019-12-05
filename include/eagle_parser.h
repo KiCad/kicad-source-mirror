@@ -116,7 +116,7 @@ class XPATH
 public:
     void push( const char* aPathSegment, const char* aAttribute="" )
     {
-        p.push_back( TRIPLET( aPathSegment, aAttribute ) );
+        p.emplace_back( aPathSegment, aAttribute );
     }
 
     void clear()    { p.clear(); }

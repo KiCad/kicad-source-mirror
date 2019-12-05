@@ -140,10 +140,10 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataFromWindow()
 
     for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
     {
-        pluginSettings.push_back( std::make_pair(
+        pluginSettings.emplace_back(
                                     m_grid->GetCellValue( ii, COLUMN_PATH ),
                                     m_grid->GetCellValue( ii, COLUMN_VISIBLE ) == wxT("1") ? wxT( "Visible" ) : wxT( "Hidden" )
-                                ) );
+                                );
     }
 
     m_frame->SetActionPluginSettings( pluginSettings );

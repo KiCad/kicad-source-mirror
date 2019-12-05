@@ -62,7 +62,7 @@ void BASIC_GAL::DrawPolyline( const std::deque<VECTOR2D>& aPointList )
     for( ; it != aPointList.end(); ++it )
     {
         VECTOR2D corner = transform(*it);
-        polyline_corners.push_back( wxPoint( corner.x, corner.y ) );
+        polyline_corners.emplace_back( corner.x, corner.y );
     }
 
     if( m_DC )

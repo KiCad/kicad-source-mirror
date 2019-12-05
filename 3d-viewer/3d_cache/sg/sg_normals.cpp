@@ -186,7 +186,7 @@ void SGNORMALS::SetNormalList( size_t aListSize, const SGVECTOR* aNormalList )
 
 void SGNORMALS::AddNormal( double aXValue, double aYValue, double aZValue )
 {
-    norms.push_back( SGVECTOR( aXValue, aYValue, aZValue ) );
+    norms.emplace_back( aXValue, aYValue, aZValue );
     return;
 }
 

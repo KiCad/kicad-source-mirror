@@ -567,8 +567,8 @@ void DP_GATEWAYS::BuildForCursor( const VECTOR2I& aCursorPos )
             if( m_fitVias )
                 BuildGeneric( aCursorPos + dir, aCursorPos - dir, true, true );
             else
-                m_gateways.push_back( DP_GATEWAY( aCursorPos + dir,
-                                      aCursorPos - dir, attempt ? true : false ) );
+                m_gateways.emplace_back( aCursorPos + dir,
+                                      aCursorPos - dir, attempt ? true : false );
 
         }
     }
@@ -671,13 +671,13 @@ void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool
 
             if( !aViaMode )
             {
-                m_gateways.push_back( DP_GATEWAY( m - dir, m + dir, diagColl, DIRECTION_45::ANG_RIGHT, prio ) );
+                m_gateways.emplace_back( m - dir, m + dir, diagColl, DIRECTION_45::ANG_RIGHT, prio );
 
                 dir = makeGapVector( p0_n - p0_p, 2 * m_gap );
-                m_gateways.push_back( DP_GATEWAY( p0_p - dir, p0_p - dir + dir.Perpendicular(), diagColl ) );
-                m_gateways.push_back( DP_GATEWAY( p0_p - dir, p0_p - dir - dir.Perpendicular(), diagColl ) );
-                m_gateways.push_back( DP_GATEWAY( p0_n + dir + dir.Perpendicular(), p0_n + dir, diagColl ) );
-                m_gateways.push_back( DP_GATEWAY( p0_n + dir - dir.Perpendicular(), p0_n + dir, diagColl ) );
+                m_gateways.emplace_back( p0_p - dir, p0_p - dir + dir.Perpendicular(), diagColl );
+                m_gateways.emplace_back( p0_p - dir, p0_p - dir - dir.Perpendicular(), diagColl );
+                m_gateways.emplace_back( p0_n + dir + dir.Perpendicular(), p0_n + dir, diagColl );
+                m_gateways.emplace_back( p0_n + dir - dir.Perpendicular(), p0_n + dir, diagColl );
             }
         }
     }
@@ -710,7 +710,7 @@ void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool
                         VECTOR2I g_p( ( p0_p - m ).Resize( ceil( (double) m_gap * M_SQRT1_2 ) ) );
                         VECTOR2I g_n( ( p0_n - m ).Resize( ceil( (double) m_gap * M_SQRT1_2 ) ) );
 
-                        m_gateways.push_back( DP_GATEWAY( m + g_p, m + g_n, k == 0 ? true : false, DIRECTION_45::ANG_OBTUSE, prio ) );
+                        m_gateways.emplace_back( m + g_p, m + g_n, k == 0 ? true : false, DIRECTION_45::ANG_OBTUSE, prio );
                     }
                 }
             }
@@ -733,13 +733,13 @@ void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool
                         g_n = ( p0_n - m ).Resize( ceil( (double) m_gap ) );
 
                         if( angle( g_p, g_n ) != DIRECTION_45::ANG_ACUTE )
-                            m_gateways.push_back( DP_GATEWAY( m + g_p, m + g_n, true ) );
+                            m_gateways.emplace_back( m + g_p, m + g_n, true );
 
                         g_p = ( p0_p - m ).Resize( m_gap );
                         g_n = ( p0_n - m ).Resize( ceil( (double) m_gap * M_SQRT2 ) );
 
                         if( angle( g_p, g_n ) != DIRECTION_45::ANG_ACUTE )
-                            m_gateways.push_back( DP_GATEWAY( m + g_p, m + g_n, true ) );
+                            m_gateways.emplace_back( m + g_p, m + g_n, true );
                     }
                 }
             }

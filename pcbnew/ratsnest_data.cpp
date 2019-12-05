@@ -232,7 +232,7 @@ public:
 
         for( auto n : m_allNodes )
         {
-            anchorChains.push_back( ANCHOR_LIST() );
+            anchorChains.emplace_back( );
         }
 
         for( auto n : m_allNodes )
@@ -310,7 +310,7 @@ public:
                 const auto& prevNode    = chain[j - 1];
                 const auto& curNode     = chain[j];
                 int weight = prevNode->GetCluster() != curNode->GetCluster() ? 1 : 0;
-                mstEdges.push_back( CN_EDGE ( prevNode, curNode, weight ) );
+                mstEdges.emplace_back( prevNode, curNode, weight );
             }
         }
 

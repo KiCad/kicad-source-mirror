@@ -141,7 +141,7 @@ void D_PAD::AddPrimitive( const SHAPE_POLY_SET& aPoly, int aThickness )
     poly_no_hole.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
     for( auto iter = poly_no_hole.CIterate(); iter; iter++ )
-        points.push_back( wxPoint( iter->x, iter->y ) );
+        points.emplace_back( iter->x, iter->y );
 
     AddPrimitive( points, aThickness );
 }

@@ -89,28 +89,28 @@ void TEXTE_PCB::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM
     wxCHECK_RET( m_Parent != NULL, wxT( "TEXTE_PCB::GetMsgPanelInfo() m_Parent is NULL." ) );
 
     if( m_Parent->Type() == PCB_DIMENSION_T )
-        aList.push_back( MSG_PANEL_ITEM( _( "Dimension" ), GetShownText(), DARKGREEN ) );
+        aList.emplace_back( _( "Dimension" ), GetShownText(), DARKGREEN );
     else
-        aList.push_back( MSG_PANEL_ITEM( _( "PCB Text" ), GetShownText(), DARKGREEN ) );
+        aList.emplace_back( _( "PCB Text" ), GetShownText(), DARKGREEN );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), BLUE ) );
+    aList.emplace_back( _( "Layer" ), GetLayerName(), BLUE );
 
     if( !IsMirrored() )
-        aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), _( "No" ), DARKGREEN ) );
+        aList.emplace_back( _( "Mirror" ), _( "No" ), DARKGREEN );
     else
-        aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), _( "Yes" ), DARKGREEN ) );
+        aList.emplace_back( _( "Mirror" ), _( "Yes" ), DARKGREEN );
 
     msg.Printf( wxT( "%.1f" ), GetTextAngle() / 10.0 );
-    aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, DARKGREEN ) );
+    aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
 
     msg = MessageTextFromValue( aUnits, GetThickness() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Thickness" ), msg, MAGENTA ) );
+    aList.emplace_back( _( "Thickness" ), msg, MAGENTA );
 
     msg = MessageTextFromValue( aUnits, GetTextWidth() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, RED ) );
+    aList.emplace_back( _( "Width" ), msg, RED );
 
     msg = MessageTextFromValue( aUnits, GetTextHeight() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, RED ) );
+    aList.emplace_back( _( "Height" ), msg, RED );
 }
 
 

@@ -1035,7 +1035,7 @@ EDEVICE::EDEVICE( wxXmlNode* aDevice )
 
     while( connectNode )
     {
-        connects.push_back( ECONNECT( connectNode ) );
+        connects.emplace_back( connectNode );
         connectNode = connectNode->GetNext();
     }
 }

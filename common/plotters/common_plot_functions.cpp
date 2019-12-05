@@ -126,8 +126,8 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                     SHAPE_LINE_CHAIN& outline = poly->GetPolygons().Outline( idx );
 
                     for( int ii = 0; ii < outline.PointCount(); ii++ )
-                        points.push_back( wxPoint( outline.Point( ii ).x ,
-                                                   outline.Point( ii ).y ) );
+                        points.emplace_back( outline.Point( ii ).x ,
+                                                   outline.Point( ii ).y );
 
                     plotter->PlotPoly(  points, FILLED_SHAPE, poly->GetPenWidth() );
                 }

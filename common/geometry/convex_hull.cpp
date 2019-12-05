@@ -151,7 +151,7 @@ void BuildConvexHull( std::vector<wxPoint>& aResult,
 
         for( int ii = 0; ii < poly.PointCount(); ++ii )
         {
-            buf.push_back( wxPoint( poly.CPoint( ii ).x, poly.CPoint( ii ).y ) );
+            buf.emplace_back( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
         }
     }
 

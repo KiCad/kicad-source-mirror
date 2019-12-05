@@ -675,7 +675,7 @@ bool SHAPE_LINE_CHAIN::Parse( std::stringstream& aStream )
         int x, y;
         aStream >> x;
         aStream >> y;
-        m_points.push_back( VECTOR2I( x, y ) );
+        m_points.emplace_back( x, y );
     }
 
     return true;

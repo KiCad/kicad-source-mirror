@@ -791,15 +791,15 @@ void TRACK::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& 
         std::tie( count, trackLen, lenPadToDie ) = board->GetTrackLength( *this );
 
         msg = MessageTextFromValue( aUnits, trackLen );
-        aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKCYAN ) );
+        aList.emplace_back( _( "Length" ), msg, DARKCYAN );
 
         if( lenPadToDie != 0 )
         {
             msg = MessageTextFromValue( aUnits, trackLen + lenPadToDie );
-            aList.push_back( MSG_PANEL_ITEM( _( "Full Length" ), msg, DARKCYAN ) );
+            aList.emplace_back( _( "Full Length" ), msg, DARKCYAN );
 
             msg = MessageTextFromValue( aUnits, lenPadToDie, true );
-            aList.push_back( MSG_PANEL_ITEM( _( "Pad To Die Length" ), msg, DARKCYAN ) );
+            aList.emplace_back( _( "Pad To Die Length" ), msg, DARKCYAN );
         }
     }
 
@@ -807,19 +807,19 @@ void TRACK::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& 
 
     if( netclass )
     {
-        aList.push_back( MSG_PANEL_ITEM( _( "NC Name" ), netclass->GetName(), DARKMAGENTA ) );
+        aList.emplace_back( _( "NC Name" ), netclass->GetName(), DARKMAGENTA );
 
         msg = MessageTextFromValue( aUnits, netclass->GetClearance(), true );
-        aList.push_back( MSG_PANEL_ITEM( _( "NC Clearance" ), msg, DARKMAGENTA ) );
+        aList.emplace_back( _( "NC Clearance" ), msg, DARKMAGENTA );
 
         msg = MessageTextFromValue( aUnits, netclass->GetTrackWidth(), true );
-        aList.push_back( MSG_PANEL_ITEM( _( "NC Width" ), msg, DARKMAGENTA ) );
+        aList.emplace_back( _( "NC Width" ), msg, DARKMAGENTA );
 
         msg = MessageTextFromValue( aUnits, netclass->GetViaDiameter(), true );
-        aList.push_back( MSG_PANEL_ITEM( _( "NC Via Size" ), msg, DARKMAGENTA ) );
+        aList.emplace_back( _( "NC Via Size" ), msg, DARKMAGENTA );
 
         msg = MessageTextFromValue( aUnits, netclass->GetViaDrill(), true );
-        aList.push_back( MSG_PANEL_ITEM( _( "NC Via Drill"), msg, DARKMAGENTA ) );
+        aList.emplace_back( _( "NC Via Drill"), msg, DARKMAGENTA );
     }
 }
 
@@ -837,18 +837,18 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_UNITS_T aUnits, std::vector< MSG_PAN
         else
             msg = wxT( "<no name>" );
 
-        aList.push_back( MSG_PANEL_ITEM( _( "NetName" ), msg, RED ) );
+        aList.emplace_back( _( "NetName" ), msg, RED );
 
         // Display net code : (useful in test or debug)
         msg.Printf( wxT( "%d" ), GetNetCode() );
-        aList.push_back( MSG_PANEL_ITEM( _( "NetCode" ), msg, RED ) );
+        aList.emplace_back( _( "NetCode" ), msg, RED );
     }
 
 #if defined(DEBUG)
 
     // Display the flags
     msg.Printf( wxT( "0x%08X" ), m_Flags );
-    aList.push_back( MSG_PANEL_ITEM( wxT( "Flags" ), msg, BLUE ) );
+    aList.emplace_back( wxT( "Flags" ), msg, BLUE );
 
 #if 0
     // Display start and end pointers:
@@ -880,7 +880,7 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_UNITS_T aUnits, std::vector< MSG_PAN
     if( GetState( TRACK_AR ) )
         msg[2] = 'A';
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Status" ), msg, MAGENTA ) );
+    aList.emplace_back( _( "Status" ), msg, MAGENTA );
 }
 
 void TRACK::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
@@ -888,7 +888,7 @@ void TRACK::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM
     wxString msg;
     BOARD* board = GetBoard();
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), _( "Track" ), DARKCYAN ) );
+    aList.emplace_back( _( "Type" ), _( "Track" ), DARKCYAN );
 
     GetMsgPanelInfoBase_Common( aUnits, aList );
 
@@ -898,16 +898,16 @@ void TRACK::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM
     else
         msg.Printf(wxT("%d"), m_Layer );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, BROWN ) );
+    aList.emplace_back( _( "Layer" ), msg, BROWN );
 
     // Display width
     msg = MessageTextFromValue( aUnits, m_Width, true );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, DARKCYAN ) );
+    aList.emplace_back( _( "Width" ), msg, DARKCYAN );
 
     // Display segment length
     msg = ::MessageTextFromValue( aUnits, GetLength() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Segment Length" ), msg, DARKCYAN ) );
+    aList.emplace_back( _( "Segment Length" ), msg, DARKCYAN );
 }
 
 void VIA::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
@@ -937,7 +937,7 @@ void VIA::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >
         break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
+    aList.emplace_back( _( "Type" ), msg, DARKCYAN );
 
     GetMsgPanelInfoBase_Common( aUnits, aList );
 
@@ -953,13 +953,13 @@ void VIA::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >
     else
         msg.Printf( wxT( "%d/%d" ), top_layer, bottom_layer );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Layers" ), msg, BROWN ) );
+    aList.emplace_back( _( "Layers" ), msg, BROWN );
 
     // Display width
     msg = MessageTextFromValue( aUnits, m_Width, true );
 
     // Display diameter value:
-    aList.push_back( MSG_PANEL_ITEM( _( "Diameter" ), msg, DARKCYAN ) );
+    aList.emplace_back( _( "Diameter" ), msg, DARKCYAN );
 
     // Display drill value
     msg = MessageTextFromValue( aUnits, GetDrillValue() );
@@ -991,7 +991,7 @@ void VIA::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >
     else
         title += _( "(NetClass)" );
 
-    aList.push_back( MSG_PANEL_ITEM( title, msg, RED ) );
+    aList.emplace_back( title, msg, RED );
 }
 
 

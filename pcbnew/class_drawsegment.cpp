@@ -464,47 +464,47 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_IT
 
     msg = _( "Drawing" );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
+    aList.emplace_back( _( "Type" ), msg, DARKCYAN );
 
     wxString    shape = _( "Shape" );
 
     switch( m_Shape )
     {
     case S_CIRCLE:
-        aList.push_back( MSG_PANEL_ITEM( shape, _( "Circle" ), RED ) );
+        aList.emplace_back( shape, _( "Circle" ), RED );
 
         msg = MessageTextFromValue( aUnits, GetLineLength( m_Start, m_End ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
+        aList.emplace_back( _( "Radius" ), msg, RED );
         break;
 
     case S_ARC:
-        aList.push_back( MSG_PANEL_ITEM( shape, _( "Arc" ), RED ) );
+        aList.emplace_back( shape, _( "Arc" ), RED );
         msg.Printf( wxT( "%.1f" ), m_Angle / 10.0 );
-        aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, RED ) );
+        aList.emplace_back( _( "Angle" ), msg, RED );
 
         msg = MessageTextFromValue( aUnits, GetLineLength( m_Start, m_End ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
+        aList.emplace_back( _( "Radius" ), msg, RED );
         break;
 
     case S_CURVE:
-        aList.push_back( MSG_PANEL_ITEM( shape, _( "Curve" ), RED ) );
+        aList.emplace_back( shape, _( "Curve" ), RED );
 
         msg = MessageTextFromValue( aUnits, GetLength() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKGREEN ) );
+        aList.emplace_back( _( "Length" ), msg, DARKGREEN );
         break;
 
     default:
     {
-        aList.push_back( MSG_PANEL_ITEM( shape, _( "Segment" ), RED ) );
+        aList.emplace_back( shape, _( "Segment" ), RED );
 
         msg = MessageTextFromValue( aUnits, GetLineLength( m_Start, m_End ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKGREEN ) );
+        aList.emplace_back( _( "Length" ), msg, DARKGREEN );
 
         // angle counter-clockwise from 3'o-clock
         const double deg = RAD2DEG( atan2( (double)( m_Start.y - m_End.y ),
                                            (double)( m_End.x - m_Start.x ) ) );
         msg.Printf( wxT( "%.1f" ), deg );
-        aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, DARKGREEN ) );
+        aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
     }
     }
 
@@ -515,11 +515,11 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_IT
                                        MessageTextFromValue( aUnits, GetEnd().x ),
                                        MessageTextFromValue( aUnits, GetEnd().y ) );
 
-    aList.push_back( MSG_PANEL_ITEM( start, end, DARKGREEN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), DARKBROWN ) );
+    aList.emplace_back( start, end, DARKGREEN );
+    aList.emplace_back( _( "Layer" ), GetLayerName(), DARKBROWN );
 
     msg = MessageTextFromValue( aUnits, m_Width, true );
-    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, DARKCYAN ) );
+    aList.emplace_back( _( "Width" ), msg, DARKCYAN );
 }
 
 
@@ -961,7 +961,7 @@ const std::vector<wxPoint> DRAWSEGMENT::BuildPolyPointsList() const
         {
             for ( auto iter = m_Poly.CIterate(); iter; iter++ )
             {
-                rv.push_back( wxPoint( iter->x, iter->y ) );
+                rv.emplace_back( iter->x, iter->y );
             }
         }
     }

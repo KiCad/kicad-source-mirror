@@ -87,7 +87,7 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
 
     // append a pair representing the NPTH set of holes, for separate drill files.
     if( !m_merge_PTH_NPTH )
-        hole_sets.push_back( DRILL_LAYER_PAIR( F_Cu, B_Cu ) );
+        hole_sets.emplace_back( F_Cu, B_Cu );
 
     for( std::vector<DRILL_LAYER_PAIR>::const_iterator it = hole_sets.begin();
          it != hole_sets.end();  ++it )

@@ -779,7 +779,7 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
         m_LastArcDataType = ARC_INFO_TYPE_NONE;
         ReadXYCoord( text, true );
         // This is the first point (starting point) of routing
-        m_RoutePositions.push_back( EXCELLON_ROUTE_COORD( m_CurrentPos ) );
+        m_RoutePositions.emplace_back( m_CurrentPos );
         break;
 
     case DRILL_G_DRILL:
@@ -801,7 +801,7 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
         m_LastArcDataType = ARC_INFO_TYPE_NONE;
         m_Iterpolation = GERB_INTERPOL_LINEAR_1X;
         ReadXYCoord( text, true );
-        m_RoutePositions.push_back( EXCELLON_ROUTE_COORD( m_CurrentPos ) );
+        m_RoutePositions.emplace_back( m_CurrentPos );
         break;
 
     case DRILL_G_CWMOVE:
@@ -812,9 +812,9 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
             ReadIJCoord( text );
 
         if( m_LastArcDataType == ARC_INFO_TYPE_CENTER )
-            m_RoutePositions.push_back( EXCELLON_ROUTE_COORD( m_CurrentPos, m_IJPos, ROUTE_CW ) );
+            m_RoutePositions.emplace_back( m_CurrentPos, m_IJPos, ROUTE_CW );
         else
-            m_RoutePositions.push_back( EXCELLON_ROUTE_COORD( m_CurrentPos, m_ArcRadius, ROUTE_CW ) );
+            m_RoutePositions.emplace_back( m_CurrentPos, m_ArcRadius, ROUTE_CW );
         break;
 
     case DRILL_G_CCWMOVE:
@@ -825,9 +825,9 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
             ReadIJCoord( text );
 
         if( m_LastArcDataType == ARC_INFO_TYPE_CENTER )
-            m_RoutePositions.push_back( EXCELLON_ROUTE_COORD( m_CurrentPos, m_IJPos, ROUTE_CCW ) );
+            m_RoutePositions.emplace_back( m_CurrentPos, m_IJPos, ROUTE_CCW );
         else
-            m_RoutePositions.push_back( EXCELLON_ROUTE_COORD( m_CurrentPos, m_ArcRadius, ROUTE_CCW ) );
+            m_RoutePositions.emplace_back( m_CurrentPos, m_ArcRadius, ROUTE_CCW );
         break;
 
     case DRILL_G_ABSOLUTE:

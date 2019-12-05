@@ -200,8 +200,8 @@ void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, 
         SHAPE_LINE_CHAIN& outline = m_Polygons.Outline( idx );
 
         for( int ii = 0; ii < outline.PointCount(); ii++ )
-            points_moved.push_back( wxPoint( outline.Point( ii ).x + aOffset.x,
-                                             outline.Point( ii ).y + aOffset.y ) );
+            points_moved.emplace_back( outline.Point( ii ).x + aOffset.x,
+                                             outline.Point( ii ).y + aOffset.y );
 
         GRPoly( nullptr, aDC, points_moved.size(), &points_moved[0], FILLED_SHAPE,
                 GetPenWidth(), aColor, aColor );
