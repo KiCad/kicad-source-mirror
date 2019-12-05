@@ -291,7 +291,7 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
         // 45 constraint
         if( aMgr.GetLeaderMode() == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 )
         {
-            auto pts = aMgr.GetLeaderLinePoints();
+            const auto& pts = aMgr.GetLeaderLinePoints();
             for( int i = 1; i < pts.PointCount(); i++ )
                 outline->Append( pts.CPoint( i ) );
         }

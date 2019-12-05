@@ -546,7 +546,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
                         auto pin = static_cast<SCH_PIN*>( item );
 
                         auto refText = pin->GetParentComponent()->GetRef( &sheet );
-                        auto pinText = pin->GetNumber();
+                        const auto& pinText = pin->GetNumber();
 
                         // Skip power symbols and virtual components
                         if( refText[0] == wxChar( '#' ) )
