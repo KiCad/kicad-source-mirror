@@ -47,9 +47,9 @@ struct IteratorFixture
 
     IteratorFixture()
     {
-        nullPoints.push_back( VECTOR2I( 100, 100 ) );
-        nullPoints.push_back( VECTOR2I( 0, 100 ) );
-        nullPoints.push_back( VECTOR2I( 0, 0 ) );
+        nullPoints.emplace_back( 100, 100 );
+        nullPoints.emplace_back( 0, 100 );
+        nullPoints.emplace_back( 0, 0 );
 
         // Create a polygon with its last segment null
         SHAPE_LINE_CHAIN polyLine;

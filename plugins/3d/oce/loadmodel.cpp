@@ -839,7 +839,7 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
     for(int i = 1; i <= triangulation->NbNodes(); i++)
     {
         gp_XYZ v( arrPolyNodes(i).Coord() );
-        vertices.push_back( SGPOINT( v.X(), v.Y(), v.Z() ) );
+        vertices.emplace_back( v.X(), v.Y(), v.Z() );
     }
 
     for(int i = 1; i <= triangulation->NbTriangles(); i++)

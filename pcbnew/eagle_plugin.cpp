@@ -1155,7 +1155,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     while( vertex )
     {
         if( vertex->GetName() == "vertex" )
-            vertices.push_back( EVERTEX( vertex ) );
+            vertices.emplace_back( vertex );
 
         vertex = vertex->GetNext();
     }
@@ -1752,8 +1752,8 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     wxPoint end(   wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
 
     pts.push_back( start );
-    pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
-    pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
+    pts.emplace_back( kicad_x( r.x2 ), kicad_y( r.y1 ) );
+    pts.emplace_back( kicad_x( r.x2 ), kicad_y( r.y2 ) );
     pts.push_back( end );
 
     dwg->SetPolyPoints( pts );
@@ -1793,7 +1793,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     while( vertex )
     {
         if( vertex->GetName() == "vertex" )
-            vertices.push_back( EVERTEX( vertex ) );
+            vertices.emplace_back( vertex );
 
         vertex = vertex->GetNext();
     }
@@ -1805,7 +1805,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
         EVERTEX v1 = vertices[i];
 
         // Append the corner
-        pts.push_back( wxPoint( kicad_x( v1.x ), kicad_y( v1.y ) ) );
+        pts.emplace_back( kicad_x( v1.x ), kicad_y( v1.y ) );
 
         if( v1.curve )
         {

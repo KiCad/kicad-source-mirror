@@ -390,7 +390,7 @@ public:
      */
     void AddLine( EDIT_POINT& aOrigin, EDIT_POINT& aEnd )
     {
-        m_lines.push_back( EDIT_LINE( aOrigin, aEnd ) );
+        m_lines.emplace_back( aOrigin, aEnd );
     }
 
     /**

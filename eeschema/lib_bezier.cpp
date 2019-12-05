@@ -100,7 +100,7 @@ bool LIB_BEZIER::Inside( EDA_RECT& aRect ) const
 void LIB_BEZIER::MoveTo( const wxPoint& aPosition )
 {
     if ( !m_PolyPoints.size() )
-        m_PolyPoints.push_back( wxPoint(0, 0) );
+        m_PolyPoints.emplace_back(0, 0 );
 
     Offset( aPosition - m_PolyPoints[ 0 ] );
 }
@@ -341,7 +341,7 @@ void LIB_BEZIER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITE
 
     msg = MessageTextFromValue( aUnits, m_Width, true );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
+    aList.emplace_back( _( "Line Width" ), msg, BLUE );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ),
                 bBox.GetOrigin().x,
@@ -349,7 +349,7 @@ void LIB_BEZIER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITE
                 bBox.GetEnd().x,
                 bBox.GetEnd().y );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Bounding Box" ), msg, BROWN ) );
+    aList.emplace_back( _( "Bounding Box" ), msg, BROWN );
 }
 
 wxPoint LIB_BEZIER::GetPosition() const

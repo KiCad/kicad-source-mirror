@@ -86,7 +86,7 @@ void PCB_GENERAL_SETTINGS::Load( wxConfigBase* aCfg )
         }
 
         plugin = pluginTokenizer.GetNextToken();
-        m_pluginSettings.push_back( std::make_pair( plugin, pluginTokenizer.GetNextToken() ) );
+        m_pluginSettings.emplace_back( plugin, pluginTokenizer.GetNextToken() );
     }
 
 #endif

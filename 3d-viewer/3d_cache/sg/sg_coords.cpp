@@ -188,7 +188,7 @@ void SGCOORDS::SetCoordsList( size_t aListSize, const SGPOINT* aCoordsList )
 
 void SGCOORDS::AddCoord( double aXValue, double aYValue, double aZValue )
 {
-    coords.push_back( SGPOINT( aXValue, aYValue, aZValue ) );
+    coords.emplace_back( aXValue, aYValue, aZValue );
     return;
 }
 

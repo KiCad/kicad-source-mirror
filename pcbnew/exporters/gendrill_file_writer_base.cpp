@@ -226,7 +226,7 @@ std::vector<DRILL_LAYER_PAIR> GENDRILL_WRITER_BASE::getUniqueLayerPairs() const
 
     std::vector<DRILL_LAYER_PAIR>    ret;
 
-    ret.push_back( DRILL_LAYER_PAIR( F_Cu, B_Cu ) );      // always first in returned list
+    ret.emplace_back( F_Cu, B_Cu );      // always first in returned list
 
     for( std::set< DRILL_LAYER_PAIR >::const_iterator it = unique.begin();  it != unique.end(); ++it )
         ret.push_back( *it );
@@ -301,7 +301,7 @@ void GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
 
     // append a pair representing the NPTH set of holes, for separate drill files.
     if( !m_merge_PTH_NPTH )
-        hole_sets.push_back( DRILL_LAYER_PAIR( F_Cu, B_Cu ) );
+        hole_sets.emplace_back( F_Cu, B_Cu );
 
     for( std::vector<DRILL_LAYER_PAIR>::const_iterator it = hole_sets.begin();
          it != hole_sets.end();  ++it )

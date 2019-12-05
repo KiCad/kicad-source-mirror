@@ -619,7 +619,7 @@ void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int 
         const SHAPE_LINE_CHAIN& path = outlineBuffer.COutline(0 );
 
         for( int jj = 0; jj < path.PointCount(); jj++ )
-            cornerList.push_back( wxPoint( path.CPoint( jj ).x , path.CPoint( jj ).y ) );
+            cornerList.emplace_back( path.CPoint( jj ).x , path.CPoint( jj ).y );
 
         // Ensure the polygon is closed
         if( cornerList[0] != cornerList[cornerList.size() - 1] )

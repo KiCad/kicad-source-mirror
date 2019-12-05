@@ -902,7 +902,7 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     cornerList.reserve( poly.PointCount() + 1 );
 
     for( int ii = 0; ii < poly.PointCount(); ++ii )
-        cornerList.push_back( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+        cornerList.emplace_back( poly.Point( ii ).x, poly.Point( ii ).y );
 
     // Close polygon
     cornerList.push_back( cornerList[0] );
@@ -942,7 +942,7 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
         cornerList.clear();
 
         for( int ii = 0; ii < poly.PointCount(); ++ii )
-            cornerList.push_back( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+            cornerList.emplace_back( poly.Point( ii ).x, poly.Point( ii ).y );
 
         // Close polygon
         cornerList.push_back( cornerList[0] );

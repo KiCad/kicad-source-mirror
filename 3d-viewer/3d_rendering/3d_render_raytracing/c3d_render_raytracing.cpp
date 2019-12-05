@@ -2141,7 +2141,7 @@ void C3D_RENDER_RAYTRACING::initialize_block_positions()
 
     for( int x = 0; x < blocks_x; ++x )
         for( int y = 0; y < blocks_y; ++y )
-            m_blockPositions.push_back( SFVEC2UI( x * RAYPACKET_DIM, y * RAYPACKET_DIM ) );
+            m_blockPositions.emplace_back( x * RAYPACKET_DIM, y * RAYPACKET_DIM );
 
     const SFVEC2UI center( m_realBufferSize.x / 2, m_realBufferSize.y / 2 );
     std::sort( m_blockPositions.begin(), m_blockPositions.end(),

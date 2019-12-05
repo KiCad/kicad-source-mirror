@@ -89,10 +89,10 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_I
     double    lengthnet = 0.0;      // This  is the length of tracks on pcb
     double    lengthPadToDie = 0.0; // this is the length of internal ICs connections
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Net Name" ), GetNetname(), RED ) );
+    aList.emplace_back( _( "Net Name" ), GetNetname(), RED );
 
     txt.Printf( wxT( "%d" ), GetNet() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Net Code" ), txt, RED ) );
+    aList.emplace_back( _( "Net Code" ), txt, RED );
 
     // Warning: for netcode == NETINFO_LIST::ORPHANED, the parent or the board
     // can be NULL
@@ -115,7 +115,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_I
     }
 
     txt.Printf( wxT( "%d" ), count );
-    aList.push_back( MSG_PANEL_ITEM( _( "Pads" ), txt, DARKGREEN ) );
+    aList.emplace_back( _( "Pads" ), txt, DARKGREEN );
 
     count  = 0;
 
@@ -135,17 +135,17 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_I
     }
 
     txt.Printf( wxT( "%d" ), count );
-    aList.push_back( MSG_PANEL_ITEM( _( "Vias" ), txt, BLUE ) );
+    aList.emplace_back( _( "Vias" ), txt, BLUE );
 
     // Displays the full net length (tracks on pcb + internal ICs connections ):
     txt = MessageTextFromValue( aUnits, lengthnet + lengthPadToDie );
-    aList.push_back( MSG_PANEL_ITEM( _( "Net Length" ), txt, RED ) );
+    aList.emplace_back( _( "Net Length" ), txt, RED );
 
     // Displays the net length of tracks only:
     txt = MessageTextFromValue( aUnits, lengthnet );
-    aList.push_back( MSG_PANEL_ITEM( _( "On Board" ), txt, RED ) );
+    aList.emplace_back( _( "On Board" ), txt, RED );
 
     // Displays the net length of internal ICs connections (wires inside ICs):
     txt = MessageTextFromValue( aUnits, lengthPadToDie, true );
-    aList.push_back( MSG_PANEL_ITEM( _( "In Package" ), txt, RED ) );
+    aList.emplace_back( _( "In Package" ), txt, RED );
 }

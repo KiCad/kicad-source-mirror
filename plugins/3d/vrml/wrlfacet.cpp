@@ -818,7 +818,7 @@ SGNODE* SHAPE::CalcShape( SGNODE* aParent, SGNODE* aColor, WRL1_ORDER aVertexOrd
         pt.y = vertices[i].y;
         pt.z = vertices[i].z;
         lCPts.push_back( pt );
-        lCNorm.push_back( SGVECTOR( normals[i].x, normals[i].y, normals[i].z ) );
+        lCNorm.emplace_back( normals[i].x, normals[i].y, normals[i].z );
     }
 
     vertices.clear();

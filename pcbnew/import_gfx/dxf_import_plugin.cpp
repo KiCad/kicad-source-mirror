@@ -195,8 +195,8 @@ void DXF_IMPORT_PLUGIN::addControlPoint( const DL_ControlPointData& aData )
         return;
 
     // Called for every spline control point, when reading a spline entity
-    m_curr_entity.m_SplineControlPointList.push_back( SPLINE_CTRL_POINT( aData.x , aData.y,
-                                                                         aData.w ) );
+    m_curr_entity.m_SplineControlPointList.emplace_back( aData.x , aData.y,
+                                                                         aData.w );
 }
 
 
@@ -207,7 +207,7 @@ void DXF_IMPORT_PLUGIN::addFitPoint( const DL_FitPointData& aData )
 
     // Called for every spline fit point, when reading a spline entity
     // we store only the X,Y coord values in a VECTOR2D
-    m_curr_entity.m_SplineFitPointList.push_back( VECTOR2D( aData.x, aData.y ) );
+    m_curr_entity.m_SplineFitPointList.emplace_back( aData.x, aData.y );
 }
 
 

@@ -141,7 +141,7 @@ double Evaluate( AM_PARAM_EVAL_STACK& aExp )
             }
             else
             {
-                optype.push_back( OP_CODE( prm ) );
+                optype.emplace_back( prm );
                 optype.back().m_Priority += extra_priority;
             }
         }

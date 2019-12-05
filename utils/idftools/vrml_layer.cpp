@@ -1388,7 +1388,7 @@ bool VRML_LAYER::addTriplet( VERTEX_3D* p0, VERTEX_3D* p1, VERTEX_3D* p2 )
     if( ( dx2 + dy2 ) < err )
         return false;
 
-    triplets.push_back( TRIPLET_3D( p0->o, p1->o, p2->o ) );
+    triplets.emplace_back( p0->o, p1->o, p2->o );
 
     return true;
 }

@@ -49,24 +49,24 @@ struct CollisionFixture
         // Create points colliding with the poly set.
 
         // Inside the polygon
-        collidingPoints.push_back( VECTOR2I( 10, 90 ) );
+        collidingPoints.emplace_back( 10, 90 );
 
         // Inside the polygon, but on a re-entrant angle of a hole
-        collidingPoints.push_back( VECTOR2I( 15, 16 ) );
+        collidingPoints.emplace_back( 15, 16 );
 
         // On a hole edge => inside the polygon
-        collidingPoints.push_back( VECTOR2I( 40, 25 ) );
+        collidingPoints.emplace_back( 40, 25 );
 
         // Create points not colliding with the poly set.
 
         // On the outline edge => outside the polygon
-        nonCollidingPoints.push_back( VECTOR2I( 0, 10 ) );
+        nonCollidingPoints.emplace_back( 0, 10 );
 
         // Completely outside of the polygon
-        nonCollidingPoints.push_back( VECTOR2I( 200, 200 ) );
+        nonCollidingPoints.emplace_back( 200, 200 );
 
         // Inside the outline and inside a hole => outside the polygon
-        nonCollidingPoints.push_back( VECTOR2I( 15, 12 ) );
+        nonCollidingPoints.emplace_back( 15, 12 );
     }
 
     ~CollisionFixture()

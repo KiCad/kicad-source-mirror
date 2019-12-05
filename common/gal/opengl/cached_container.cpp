@@ -329,7 +329,7 @@ void CACHED_CONTAINER::mergeFreeChunks()
 
     for( it = m_freeChunks.begin(), it_end = m_freeChunks.end(); it != it_end; ++it )
     {
-        freeChunks.push_back( std::make_pair( it->second, it->first ) );
+        freeChunks.emplace_back( it->second, it->first );
     }
 
     m_freeChunks.clear();

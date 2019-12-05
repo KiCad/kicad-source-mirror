@@ -367,7 +367,7 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::doValidate( bool aRemoveRedundantCorners )
             m_currshape.m_Poly.clear();
 
             for( int ii = 0; ii < polyline.PointCount(); ++ii )
-                m_currshape.m_Poly.push_back( wxPoint( polyline.CPoint( ii ).x, polyline.CPoint( ii ).y ) );
+                m_currshape.m_Poly.emplace_back( polyline.CPoint( ii ).x, polyline.CPoint( ii ).y );
 
             m_warningIcon->Show( true );
             m_warningText->Show( true );
@@ -402,7 +402,7 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::OnButtonAdd( wxCommandEvent& event )
     }
 
     if( m_currshape.m_Poly.size() == 0 || row >= (int) m_currshape.m_Poly.size() )
-        m_currshape.m_Poly.push_back( wxPoint( 0, 0 ) );
+        m_currshape.m_Poly.emplace_back( 0, 0 );
     else
         m_currshape.m_Poly.insert( m_currshape.m_Poly.begin() + row, wxPoint( 0, 0 ) );
 

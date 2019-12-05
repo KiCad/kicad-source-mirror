@@ -199,7 +199,7 @@ void FOOTPRINT_LIST_IMPL::StartWorkers( FP_LIB_TABLE* aTable, wxString const* aN
 
     for( unsigned i = 0; i < aNThreads; ++i )
     {
-        m_threads.push_back( std::thread( &FOOTPRINT_LIST_IMPL::loader_job, this ) );
+        m_threads.emplace_back( &FOOTPRINT_LIST_IMPL::loader_job, this );
     }
 }
 
@@ -252,7 +252,7 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
 
     for( size_t ii = 0; ii < std::thread::hardware_concurrency() + 1; ++ii )
     {
-        threads.push_back( std::thread( [this, &queue_parsed]() {
+        threads.emplace_back( [this, &queue_parsed]() {
             wxString nickname;
 
             while( this->m_queue_out.pop( nickname ) && !m_cancelled )
@@ -293,7 +293,7 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
 
                 m_count_finished.fetch_add( 1 );
             }
-        } ) );
+        } );
     }
 
     while( !m_cancelled && (size_t)m_count_finished.load() < total_count )

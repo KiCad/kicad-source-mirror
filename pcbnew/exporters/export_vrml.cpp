@@ -1118,8 +1118,8 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
         SHAPE_LINE_CHAIN poly( polySet.Outline( 0 ) );
 
         for( int ii = 0; ii < poly.PointCount(); ++ii )
-            cornerList.push_back( wxRealPoint( poly.Point( ii ).x * BOARD_SCALE,
-                                               -poly.Point( ii ).y * BOARD_SCALE ) );
+            cornerList.emplace_back( poly.Point( ii ).x * BOARD_SCALE,
+                                               -poly.Point( ii ).y * BOARD_SCALE );
 
         // Close polygon
         cornerList.push_back( cornerList[0] );
@@ -1141,8 +1141,8 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
             cornerList.clear();
 
             for( int ii = 0; ii < poly.PointCount(); ++ii )
-                cornerList.push_back( wxRealPoint( poly.Point( ii ).x * BOARD_SCALE,
-                                                   -poly.Point( ii ).y * BOARD_SCALE ) );
+                cornerList.emplace_back( poly.Point( ii ).x * BOARD_SCALE,
+                                                   -poly.Point( ii ).y * BOARD_SCALE );
 
             // Close polygon
             cornerList.push_back( cornerList[0] );
@@ -1722,7 +1722,7 @@ static void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX color
     size_t j = 0;
 
     for( size_t i = 0; i < nvert; ++i, j+= 3 )
-        vlist.push_back( SGPOINT( vertices[j], vertices[j+1], vertices[j+2] ) );
+        vlist.emplace_back( vertices[j], vertices[j+1], vertices[j+2] );
 
     // create the intermediate scenegraph
     IFSG_TRANSFORM tx0( PcbOutput.GetRawPtr() );    // tx0 = Transform for this outline
@@ -1809,7 +1809,7 @@ static void create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX color
     size_t j = 0;
 
     for( size_t i = 0; i < nvert; ++i, j+= 3 )
-        vlist.push_back( SGPOINT( vertices[j], vertices[j+1], vertices[j+2] ) );
+        vlist.emplace_back( vertices[j], vertices[j+1], vertices[j+2] );
 
     // create the intermediate scenegraph
     IFSG_TRANSFORM tx0( PcbOutput.GetRawPtr() );    // tx0 = Transform for this outline

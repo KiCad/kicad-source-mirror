@@ -1426,13 +1426,13 @@ void LIB_PIN::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >
                      + aComponent->GetPosition();
 
     text = MessageTextFromValue( aUnits, pinpos.x, true );
-    aList.push_back( MSG_PANEL_ITEM( _( "Pos X" ), text, DARKMAGENTA ) );
+    aList.emplace_back( _( "Pos X" ), text, DARKMAGENTA );
 
     text = MessageTextFromValue( aUnits, pinpos.y, true );
-    aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text, DARKMAGENTA ) );
+    aList.emplace_back( _( "Pos Y" ), text, DARKMAGENTA );
 
-    aList.push_back( MSG_PANEL_ITEM( aComponent->GetField( REFERENCE )->GetShownText(),
-                                     aComponent->GetField( VALUE )->GetShownText(), DARKCYAN ) );
+    aList.emplace_back( aComponent->GetField( REFERENCE )->GetShownText(),
+                                     aComponent->GetField( VALUE )->GetShownText(), DARKCYAN );
 
 #if defined(DEBUG)
 

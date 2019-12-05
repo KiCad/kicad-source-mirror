@@ -484,7 +484,7 @@ static SCENEGRAPH* vrmlToSG( VRML_LAYER& vpcb, int idxColor, SGNODE* aParent, do
     size_t j = 0;
 
     for( size_t i = 0; i < nvert; ++i, j+= 3 )
-        vlist.push_back( SGPOINT( vertices[j], vertices[j+1], vertices[j+2] ) );
+        vlist.emplace_back( vertices[j], vertices[j+1], vertices[j+2] );
 
     // create the intermediate scenegraph
     IFSG_TRANSFORM* tx0 = new IFSG_TRANSFORM( aParent );            // tx0 = Transform for this outline

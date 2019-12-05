@@ -1071,7 +1071,7 @@ bool FILENAME_RESOLVER::GetKicadPaths( std::list< wxString >& paths )
     }
 
     if( !hasKisys3D )
-        paths.push_back( "${KISYS3DMOD}" );
+        paths.emplace_back("${KISYS3DMOD}" );
 
     return true;
 }

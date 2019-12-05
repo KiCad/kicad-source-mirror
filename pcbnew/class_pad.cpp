@@ -765,41 +765,41 @@ void D_PAD::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM>& a
 
     if( module )
     {
-        aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), module->GetReference(), DARKCYAN ) );
+        aList.emplace_back( _( "Footprint" ), module->GetReference(), DARKCYAN );
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), m_name, BROWN ) );
+    aList.emplace_back( _( "Pad" ), m_name, BROWN );
 
     if( !GetPinFunction().IsEmpty() )
-        aList.push_back( MSG_PANEL_ITEM( _( "Pin fct" ), GetPinFunction(), BROWN ) );
+        aList.emplace_back( _( "Pin fct" ), GetPinFunction(), BROWN );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Net" ), UnescapeString( GetNetname() ), DARKCYAN ) );
+    aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ), DARKCYAN );
 
     board = GetBoard();
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ),
-                     LayerMaskDescribe( board, m_layerMask ), DARKGREEN ) );
+    aList.emplace_back( _( "Layer" ),
+                     LayerMaskDescribe( board, m_layerMask ), DARKGREEN );
 
-    aList.push_back( MSG_PANEL_ITEM( ShowPadShape(), ShowPadAttr(), DARKGREEN ) );
+    aList.emplace_back( ShowPadShape(), ShowPadAttr(), DARKGREEN );
 
     msg = MessageTextFromValue( aUnits, m_Size.x, true );
-    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, RED ) );
+    aList.emplace_back( _( "Width" ), msg, RED );
 
     msg = MessageTextFromValue( aUnits, m_Size.y, true );
-    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, RED ) );
+    aList.emplace_back( _( "Height" ), msg, RED );
 
     msg = MessageTextFromValue( aUnits, m_Drill.x, true );
 
     if( GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
     {
-        aList.push_back( MSG_PANEL_ITEM( _( "Drill" ), msg, RED ) );
+        aList.emplace_back( _( "Drill" ), msg, RED );
     }
     else
     {
         msg = MessageTextFromValue( aUnits, m_Drill.x, true )
                + wxT( "/" )
                + MessageTextFromValue( aUnits, m_Drill.y, true );
-        aList.push_back( MSG_PANEL_ITEM( _( "Drill X / Y" ), msg, RED ) );
+        aList.emplace_back( _( "Drill X / Y" ), msg, RED );
     }
 
     double module_orient_degrees = module ? module->GetOrientationDegrees() : 0;
@@ -811,17 +811,17 @@ void D_PAD::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM>& a
     else
         msg.Printf( wxT( "%3.1f" ), GetOrientationDegrees() );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, LIGHTBLUE ) );
+    aList.emplace_back( _( "Angle" ), msg, LIGHTBLUE );
 
     msg = MessageTextFromValue( aUnits, m_Pos.x )
            + wxT( ", " )
            + MessageTextFromValue( aUnits, m_Pos.y );
-    aList.push_back( MSG_PANEL_ITEM( _( "Position" ), msg, LIGHTBLUE ) );
+    aList.emplace_back( _( "Position" ), msg, LIGHTBLUE );
 
     if( GetPadToDieLength() )
     {
         msg = MessageTextFromValue( aUnits, GetPadToDieLength(), true );
-        aList.push_back( MSG_PANEL_ITEM( _( "Length in package" ), msg, CYAN ) );
+        aList.emplace_back( _( "Length in package" ), msg, CYAN );
     }
 }
 

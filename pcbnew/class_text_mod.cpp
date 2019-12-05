@@ -350,42 +350,42 @@ void TEXTE_MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_I
     };
 
     Line = module->GetReference();
-    aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), Line, DARKCYAN ) );
+    aList.emplace_back( _( "Footprint" ), Line, DARKCYAN );
 
     Line = GetShownText();
-    aList.push_back( MSG_PANEL_ITEM( _( "Text" ), Line, BROWN ) );
+    aList.emplace_back( _( "Text" ), Line, BROWN );
 
     wxASSERT( m_Type >= TEXT_is_REFERENCE && m_Type <= TEXT_is_DIVERS );
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), text_type_msg[m_Type], DARKGREEN ) );
+    aList.emplace_back( _( "Type" ), text_type_msg[m_Type], DARKGREEN );
 
     if( !IsVisible() )
         msg = _( "No" );
     else
         msg = _( "Yes" );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Display" ), msg, DARKGREEN ) );
+    aList.emplace_back( _( "Display" ), msg, DARKGREEN );
 
     // Display text layer
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), DARKGREEN ) );
+    aList.emplace_back( _( "Layer" ), GetLayerName(), DARKGREEN );
 
     if( IsMirrored() )
         msg = _( "Yes" );
     else
         msg = _( "No" );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), msg, DARKGREEN ) );
+    aList.emplace_back( _( "Mirror" ), msg, DARKGREEN );
 
     msg.Printf( wxT( "%.1f" ), GetTextAngleDegrees() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, DARKGREEN ) );
+    aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
 
     msg = MessageTextFromValue( aUnits, GetThickness(), true );
-    aList.push_back( MSG_PANEL_ITEM( _( "Thickness" ), msg, DARKGREEN ) );
+    aList.emplace_back( _( "Thickness" ), msg, DARKGREEN );
 
     msg = MessageTextFromValue( aUnits, GetTextWidth(), true );
-    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, RED ) );
+    aList.emplace_back( _( "Width" ), msg, RED );
 
     msg = MessageTextFromValue( aUnits, GetTextHeight(), true );
-    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, RED ) );
+    aList.emplace_back( _( "Height" ), msg, RED );
 }
 
 

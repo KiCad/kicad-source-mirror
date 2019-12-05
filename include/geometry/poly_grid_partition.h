@@ -164,7 +164,7 @@ enum HASH_FLAG
         {
             for( int x = 0; x < gridSize; x++ )
             {
-                m_grid.push_back( EDGE_LIST() );
+                m_grid.emplace_back( );
             }
         }
 
