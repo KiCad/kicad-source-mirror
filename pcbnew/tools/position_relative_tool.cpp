@@ -22,6 +22,7 @@
  */
 
 #include <functional>
+#include <memory>
 using namespace std::placeholders;
 
 #include "position_relative_tool.h"
@@ -48,7 +49,7 @@ POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
 void POSITION_RELATIVE_TOOL::Reset( RESET_REASON aReason )
 {
     if( aReason != RUN )
-        m_commit.reset( new BOARD_COMMIT( this ) );
+        m_commit = std::make_unique<BOARD_COMMIT>( this );
 }
 
 

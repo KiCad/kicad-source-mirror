@@ -26,6 +26,7 @@
 #include <gal/opengl/utils.h>
 #include <gal/color4d.h>
 
+#include <memory>
 #include <tuple>
 
 #include "gl_builtin_shaders.h"
@@ -138,7 +139,7 @@ bool ANTIALIASING_SUPERSAMPLING::Init()
 {
     if( mode == SUPERSAMPLING_MODE::X4 && !areShadersCreated )
     {
-        x4_shader.reset( new SHADER() );
+        x4_shader = std::make_unique<SHADER>( );
         x4_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX, BUILTIN_SHADERS::ssaa_x4_vertex_shader );
         x4_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT, BUILTIN_SHADERS::ssaa_x4_fragment_shader );
         x4_shader->Link();
@@ -315,7 +316,7 @@ uniform vec4 SMAA_RT_METRICS;
     //
     // Set up pass 1 Shader
     //
-    pass_1_shader.reset( new SHADER() );
+    pass_1_shader = std::make_unique<SHADER>( );
     pass_1_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX, vert_preamble,
         quality_string, smaa_source, BUILTIN_SHADERS::smaa_pass_1_vertex_shader );
     pass_1_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT, frag_preamble,
@@ -333,7 +334,7 @@ uniform vec4 SMAA_RT_METRICS;
     //
     // set up pass 2 shader
     //
-    pass_2_shader.reset( new SHADER() );
+    pass_2_shader = std::make_unique<SHADER>( );
     pass_2_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX, vert_preamble,
         quality_string, smaa_source, BUILTIN_SHADERS::smaa_pass_2_vertex_shader );
     pass_2_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT, frag_preamble,
@@ -355,7 +356,7 @@ uniform vec4 SMAA_RT_METRICS;
     //
     // set up pass 3 shader
     //
-    pass_3_shader.reset( new SHADER() );
+    pass_3_shader = std::make_unique<SHADER>( );
     pass_3_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX, vert_preamble,
         quality_string, smaa_source, BUILTIN_SHADERS::smaa_pass_3_vertex_shader );
     pass_3_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT, frag_preamble,

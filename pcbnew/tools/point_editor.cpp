@@ -23,6 +23,7 @@
  */
 
 #include <functional>
+#include <memory>
 using namespace std::placeholders;
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
@@ -240,7 +241,7 @@ void POINT_EDITOR::Reset( RESET_REASON aReason )
     m_altConstraint.reset();
     getViewControls()->SetAutoPan( false );
 
-    m_statusPopup.reset( new STATUS_TEXT_POPUP( getEditFrame<PCB_BASE_EDIT_FRAME>() ) );
+    m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( getEditFrame<PCB_BASE_EDIT_FRAME>() );
     m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
     m_statusPopup->SetText( _( "Self-intersecting polygons are not allowed." ) );
 }

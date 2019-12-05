@@ -46,6 +46,8 @@
 #include <geometry/shape_circle.h>
 #include <geometry/shape_arc.h>
 
+#include <memory>
+
 #include "tools/pcb_tool_base.h"
 
 #include "pns_kicad_iface.h"
@@ -1332,7 +1334,7 @@ void PNS_KICAD_IFACE::Commit()
 {
     EraseView();
     m_commit->Push( _( "Added a track" ) );
-    m_commit.reset( new BOARD_COMMIT( m_tool ) );
+    m_commit = std::make_unique<BOARD_COMMIT>( m_tool );
 }
 
 
@@ -1378,7 +1380,7 @@ void PNS_KICAD_IFACE::SetRouter( PNS::ROUTER* aRouter )
 void PNS_KICAD_IFACE::SetHostTool( PCB_TOOL_BASE* aTool )
 {
     m_tool = aTool;
-    m_commit.reset( new BOARD_COMMIT( m_tool ) );
+    m_commit = std::make_unique<BOARD_COMMIT>( m_tool );
 }
 
 void PNS_KICAD_IFACE::SetDisplayOptions( const PCB_DISPLAY_OPTIONS* aDispOptions )

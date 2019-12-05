@@ -42,6 +42,7 @@
 #include <gal/graphics_abstraction_layer.h>
 
 #include <functional>
+#include <memory>
 #include <thread>
 using namespace std::placeholders;
 
@@ -111,7 +112,7 @@ PCB_DRAW_PANEL_GAL::PCB_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_view = new KIGFX::PCB_VIEW( true );
     m_view->SetGAL( m_gal );
 
-    m_painter.reset( new KIGFX::PCB_PAINTER( m_gal ) );
+    m_painter = std::make_unique<KIGFX::PCB_PAINTER>( m_gal );
     m_view->SetPainter( m_painter.get() );
 
     setDefaultLayerOrder();
@@ -190,7 +191,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
         m_view->Add( zone );
 
     // Ratsnest
-    m_ratsnest.reset( new KIGFX::RATSNEST_VIEWITEM( aBoard->GetConnectivity() ) );
+    m_ratsnest = std::make_unique<KIGFX::RATSNEST_VIEWITEM>( aBoard->GetConnectivity() );
     m_view->Add( m_ratsnest.get() );
 }
 

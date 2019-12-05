@@ -22,35 +22,36 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include <cstdint>
-#include <functional>
 #include "pcb_editor_control.h"
-#include "pcb_actions.h"
-#include <tool/tool_manager.h>
-#include <tools/tool_event_utils.h>
-#include <ws_proxy_undo_item.h>
-#include "selection_tool.h"
 #include "drawing_tool.h"
+#include "pcb_actions.h"
 #include "pcbnew_picker_tool.h"
-#include <painter.h>
-#include <project.h>
-#include <pcbnew_id.h>
-#include <pcb_edit_frame.h>
+#include "selection_tool.h"
+#include <bitmaps.h>
+#include <board_commit.h>
 #include <class_board.h>
-#include <class_zone.h>
 #include <class_module.h>
 #include <class_pcb_target.h>
+#include <class_zone.h>
 #include <collectors.h>
-#include <board_commit.h>
-#include <bitmaps.h>
-#include <view/view_group.h>
-#include <view/view_controls.h>
-#include <origin_viewitem.h>
+#include <cstdint>
 #include <dialogs/dialog_page_settings.h>
-#include <netlist_reader/pcb_netlist.h>
 #include <dialogs/dialog_update_pcb.h>
+#include <functional>
 #include <gestfich.h>
+#include <memory>
+#include <netlist_reader/pcb_netlist.h>
+#include <origin_viewitem.h>
+#include <painter.h>
+#include <pcb_edit_frame.h>
+#include <pcbnew_id.h>
+#include <project.h>
+#include <tool/tool_manager.h>
+#include <tools/tool_event_utils.h>
+#include <view/view_controls.h>
+#include <view/view_group.h>
 #include <wildcards_and_files_ext.h>
+#include <ws_proxy_undo_item.h>
 
 using namespace std::placeholders;
 
@@ -140,8 +141,8 @@ PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.EditorControl" ),
     m_frame( nullptr )
 {
-    m_placeOrigin.reset( new KIGFX::ORIGIN_VIEWITEM( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
-                                                KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS ) );
+    m_placeOrigin = std::make_unique<KIGFX::ORIGIN_VIEWITEM>( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
+                                                KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS );
 }
 
 

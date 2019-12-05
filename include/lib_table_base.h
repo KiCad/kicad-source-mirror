@@ -28,8 +28,9 @@
 
 #include <map>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
 
 #include <project.h>
 #include <properties.h>
@@ -189,7 +190,7 @@ protected:
         enabled( aRow.enabled )
     {
         if( aRow.properties )
-            properties.reset( new PROPERTIES( *aRow.properties.get() ) );
+            properties = std::make_unique<PROPERTIES>( *aRow.properties.get() );
         else
             properties.reset();
     }

@@ -20,6 +20,7 @@
  */
 
 #include <cstdio>
+#include <memory>
 #include <vector>
 
 #include <view/view.h>
@@ -90,7 +91,7 @@ void ROUTER::SyncWorld()
 {
     ClearWorld();
 
-    m_world = std::unique_ptr<NODE>( new NODE );
+    m_world = std::make_unique<NODE>( );
     m_iface->SyncWorld( m_world.get() );
 
 }
@@ -133,10 +134,10 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aStartItem, int aDragMode 
     if( !aStartItem || aStartItem->OfKind( ITEM::SOLID_T ) )
         return false;
 
-    m_placer.reset( new LINE_PLACER( this ) );
+    m_placer = std::make_unique<LINE_PLACER>( this );
     m_placer->Start( aP, aStartItem );
 
-    m_dragger.reset( new DRAGGER( this ) );
+    m_dragger = std::make_unique<DRAGGER>( this );
     m_dragger->SetMode( aDragMode );
     m_dragger->SetWorld( m_world.get() );
     m_dragger->SetDebugDecorator ( m_iface->GetDebugDecorator () );
@@ -185,19 +186,19 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
     switch( m_mode )
     {
         case PNS_MODE_ROUTE_SINGLE:
-            m_placer.reset( new LINE_PLACER( this ) );
+            m_placer = std::make_unique<LINE_PLACER>( this );
             break;
         case PNS_MODE_ROUTE_DIFF_PAIR:
-            m_placer.reset( new DIFF_PAIR_PLACER( this ) );
+            m_placer = std::make_unique<DIFF_PAIR_PLACER>( this );
             break;
         case PNS_MODE_TUNE_SINGLE:
-            m_placer.reset( new MEANDER_PLACER( this ) );
+            m_placer = std::make_unique<MEANDER_PLACER>( this );
             break;
         case PNS_MODE_TUNE_DIFF_PAIR:
-            m_placer.reset( new DP_MEANDER_PLACER( this ) );
+            m_placer = std::make_unique<DP_MEANDER_PLACER>( this );
             break;
         case PNS_MODE_TUNE_DIFF_PAIR_SKEW:
-            m_placer.reset( new MEANDER_SKEW_PLACER( this ) );
+            m_placer = std::make_unique<MEANDER_SKEW_PLACER>( this );
             break;
 
         default:

@@ -41,9 +41,11 @@
 #include <connectivity/connectivity_data.h>
 #include <ratsnest_data.h>
 #include <widgets/progress_reporter.h>
-#include "ar_matrix.h"
-#include "ar_cell.h"
+
 #include "ar_autoplacer.h"
+#include "ar_cell.h"
+#include "ar_matrix.h"
+#include <memory>
 
 #define AR_GAIN            16
 #define AR_KEEPOUT_MARGIN  500
@@ -73,7 +75,7 @@ static const double OrientationPenalty[11] =
 AR_AUTOPLACER::AR_AUTOPLACER( BOARD* aBoard )
 {
     m_board = aBoard;
-    m_connectivity.reset( new CONNECTIVITY_DATA );
+    m_connectivity = std::make_unique<CONNECTIVITY_DATA>( );
 
     for( auto mod : m_board->Modules() )
         m_connectivity->Add( mod );
