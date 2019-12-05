@@ -580,7 +580,7 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
     TopoDS_Iterator it;
     IFSG_TRANSFORM childNode( parent );
     SGNODE* pptr = childNode.GetRawPtr();
-    TopLoc_Location loc = shape.Location();
+    const TopLoc_Location& loc = shape.Location();
     bool ret = false;
 
     if( !loc.IsIdentity() )
@@ -634,7 +634,7 @@ bool processComp( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
     TopoDS_Iterator it;
     IFSG_TRANSFORM childNode( parent );
     SGNODE* pptr = childNode.GetRawPtr();
-    TopLoc_Location loc = shape.Location();
+    const TopLoc_Location& loc = shape.Location();
     bool ret = false;
 
     if( !loc.IsIdentity() )

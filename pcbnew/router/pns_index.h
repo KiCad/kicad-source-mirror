@@ -177,7 +177,7 @@ int INDEX::Query( const ITEM* aItem, int aMinDistance, Visitor& aVisitor )
 
     total += querySingle( SI_Multilayer, shape, aMinDistance, aVisitor );
 
-    const LAYER_RANGE layers = aItem->Layers();
+    const LAYER_RANGE& layers = aItem->Layers();
 
     if( layers.IsMultilayer() )
     {

@@ -39,7 +39,7 @@ INDEX::ITEM_SHAPE_INDEX* INDEX::getSubindex( const ITEM* aItem )
 {
     int idx_n = -1;
 
-    const LAYER_RANGE l = aItem->Layers();
+    const LAYER_RANGE& l = aItem->Layers();
 
     switch( aItem->Kind() )
     {

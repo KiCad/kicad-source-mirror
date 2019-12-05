@@ -62,7 +62,7 @@ wxString EDA_FILE_SELECTOR( const wxString& aTitle,
 {
     wxString fullfilename;
     wxString curr_cwd    = wxGetCwd();
-    wxString defaultname = aFileName;
+    const wxString& defaultname = aFileName;
     wxString defaultpath = aPath;
     wxString dotted_Ext = wxT(".") + aExtension;
 
@@ -209,7 +209,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 bool OpenPDF( const wxString& file )
 {
     wxString command;
-    wxString filename = file;
+    const wxString& filename = file;
 
     Pgm().ReadPdfBrowserInfos();
 

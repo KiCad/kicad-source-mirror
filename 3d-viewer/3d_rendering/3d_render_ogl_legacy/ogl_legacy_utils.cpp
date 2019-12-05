@@ -218,8 +218,8 @@ void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment,
 {
     glPushMatrix();
 
-    const SFVEC2F start = aSegment.GetStart();
-    const SFVEC2F end_minus_start = aSegment.GetEnd_minus_Start();
+    const SFVEC2F& start = aSegment.GetStart();
+    const SFVEC2F& end_minus_start = aSegment.GetEnd_minus_Start();
     const float radius = aSegment.GetRadius();
     const float width  = aSegment.GetWidth();
     const float length = aSegment.GetLength();

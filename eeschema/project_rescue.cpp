@@ -367,7 +367,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
 
     for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
     {
-        LIB_ID part_id = each_component->GetLibId();
+        const LIB_ID& part_id = each_component->GetLibId();
 
         if( old_part_id != part_id )
         {

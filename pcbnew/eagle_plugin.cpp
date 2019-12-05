@@ -830,7 +830,7 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
             )
         {
             wxString lib = aLibName ? *aLibName : m_lib_path;
-            wxString pkg = pack_ref;
+            const wxString& pkg = pack_ref;
 
             wxString emsg = wxString::Format(
                 _( "<package> name: \"%s\" duplicated in eagle <library>: \"%s\"" ),
