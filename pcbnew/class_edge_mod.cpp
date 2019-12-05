@@ -50,7 +50,7 @@
 
 #include <view/view.h>
 
-#include <stdio.h>
+#include <cstdio>
 
 EDGE_MODULE::EDGE_MODULE( MODULE* parent, STROKE_T aShape ) :
     DRAWSEGMENT( parent, PCB_MODULE_EDGE_T )

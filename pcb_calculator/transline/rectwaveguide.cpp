@@ -21,9 +21,9 @@
  *
  */
 
-#include <stdio.h>
-#include <string.h>
 #include <cmath>
+#include <cstdio>
+#include <cstring>
 
 #include <units.h>
 #include <transline.h>

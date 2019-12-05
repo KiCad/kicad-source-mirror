@@ -29,7 +29,7 @@
 
 #include "cimage.h"
 #include "buffers_debug.h"
-#include <string.h> // For memcpy
+#include <cstring> // For memcpy
 
 #include <atomic>
 #include <thread>

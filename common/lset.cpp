@@ -23,8 +23,8 @@
  */
 
 
-#include <stdarg.h>
-#include <assert.h>
+#include <cassert>
+#include <cstdarg>
 
 #include <layers_id_colors_and_visibility.h>
 #include <class_board.h>

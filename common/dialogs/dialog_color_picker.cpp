@@ -18,8 +18,8 @@
  */
 
 
-#include "math.h"
 #include "dialog_color_picker.h"
+#include <cmath>
 
 #define ALPHA_MAX 100   // the max value returned by the alpha (opacity) slider
 

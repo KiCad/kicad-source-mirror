@@ -27,17 +27,17 @@
  */
 
 #include "pcbnew_action_plugins.h"
-#include <python_scripting.h>
-#include <stdio.h>
-#include <macros.h>
-#include <pcbnew_id.h>
-#include <menus_helpers.h>
+#include <board_commit.h>
 #include <class_board.h>
+#include <class_drawsegment.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_drawsegment.h>
 #include <class_zone.h>
-#include <board_commit.h>
+#include <cstdio>
+#include <macros.h>
+#include <menus_helpers.h>
+#include <pcbnew_id.h>
+#include <python_scripting.h>
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
 

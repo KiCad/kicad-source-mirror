@@ -27,7 +27,7 @@
 #define DLIST_H_
 
 
-#include <stdio.h>          // NULL definition.
+#include <cstdio>          // NULL definition.
 
 
 class EDA_ITEM;

@@ -45,7 +45,7 @@ unsigned GetRunningMicroSecs()
 
 #elif defined(HAVE_CLOCK_GETTIME)
 
-#include <time.h>
+#include <ctime>
 
 unsigned GetRunningMicroSecs()
 {

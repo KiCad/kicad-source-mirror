@@ -25,10 +25,10 @@
 #ifndef DSNLEXER_H_
 #define DSNLEXER_H_
 
-#include <stdio.h>
+#include <cstdio>
+#include <hashtables.h>
 #include <string>
 #include <vector>
-#include <hashtables.h>
 
 #include <richio.h>
 

@@ -31,7 +31,7 @@
 #define _COBJECT2D_H_
 
 #include "cbbox2d.h"
-#include <string.h>
+#include <cstring>
 
 #include <class_board_item.h>
 

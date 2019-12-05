@@ -19,9 +19,9 @@
 #include "sexpr/sexpr_parser.h"
 #include "sexpr/sexpr_exception.h"
 #include <cctype>
+#include <cstdlib>     /* strtod */
 #include <iterator>
 #include <stdexcept>
-#include <stdlib.h>     /* strtod */
 
 #include <fstream>
 #include <streambuf>

@@ -66,7 +66,7 @@
 	nsvgDelete(image);
 */
 
-#include <stdio.h>
+#include <cstdio>
 
 enum NSVGpaintType {
 	NSVG_PAINT_NONE = 0,

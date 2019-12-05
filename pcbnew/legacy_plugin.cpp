@@ -58,13 +58,13 @@
 */
 
 
+#include <cerrno>
 #include <cmath>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include <cstdio>
+#include <cstring>
+#include <legacy_plugin.h>   // implement this here
 #include <wx/ffile.h>
 #include <wx/string.h>
-#include <legacy_plugin.h>   // implement this here
 
 #include <kicad_string.h>
 #include <macros.h>

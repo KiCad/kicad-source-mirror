@@ -30,17 +30,17 @@
 #include <Python.h>
 #undef HAVE_CLOCK_GETTIME  // macro is defined in Python.h and causes redefine warning
 
-#include <pcbnew_scripting_helpers.h>
-#include <pcbnew.h>
-#include <pcbnew_id.h>
+#include <action_plugin.h>
 #include <build_version.h>
 #include <class_board.h>
-#include <kicad_string.h>
+#include <cstdlib>
 #include <io_mgr.h>
+#include <kicad_string.h>
 #include <macros.h>
-#include <stdlib.h>
 #include <pcb_draw_panel_gal.h>
-#include <action_plugin.h>
+#include <pcbnew.h>
+#include <pcbnew_id.h>
+#include <pcbnew_scripting_helpers.h>
 
 static PCB_EDIT_FRAME* s_PcbEditFrame = NULL;
 

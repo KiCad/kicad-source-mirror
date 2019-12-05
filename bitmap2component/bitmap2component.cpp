@@ -23,12 +23,12 @@
  */
 
 #include <algorithm>    // std::max
+#include <cerrno>
 #include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <string>
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <vector>
 
 #include <common.h>

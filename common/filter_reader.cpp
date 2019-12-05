@@ -23,9 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <string.h>
-#include <richio.h>
+#include <cstring>
 #include <filter_reader.h>
+#include <richio.h>
 
 
 FILTER_READER::FILTER_READER( LINE_READER& aReader ) :

@@ -50,7 +50,7 @@ Load() TODO's
 
 */
 
-#include <errno.h>
+#include <cerrno>
 
 #include <wx/string.h>
 #include <wx/xml/xml.h>

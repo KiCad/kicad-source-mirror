@@ -28,7 +28,7 @@
  */
 
 #include "cobject2d.h"
-#include <stdio.h>
+#include <cstdio>
 
 
 COBJECT2D_STATS *COBJECT2D_STATS::s_instance = 0;

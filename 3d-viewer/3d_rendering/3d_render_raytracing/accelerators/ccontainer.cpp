@@ -28,7 +28,7 @@
  */
 
 #include "ccontainer.h"
-#include <stdio.h>
+#include <cstdio>
 
 CGENERICCONTAINER::CGENERICCONTAINER()
 {

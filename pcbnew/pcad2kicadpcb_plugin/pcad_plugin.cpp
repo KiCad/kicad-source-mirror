@@ -27,7 +27,7 @@
  * @brief Pcbnew PLUGIN for P-Cad 200x ASCII *.pcb format.
  */
 
-#include <errno.h>
+#include <cerrno>
 
 #include <wx/string.h>
 #include <wx/filename.h>

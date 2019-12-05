@@ -27,8 +27,8 @@
 
 #include <wx/log.h>
 
+#include <cmath>
 #include <iostream>
-#include <math.h>
 #include <sstream>
 
 

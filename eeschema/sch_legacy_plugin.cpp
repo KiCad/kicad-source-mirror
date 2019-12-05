@@ -20,9 +20,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ctype.h>
 #include <algorithm>
 #include <boost/algorithm/string/join.hpp>
+#include <cctype>
 
 #include <wx/mstream.h>
 #include <wx/filename.h>

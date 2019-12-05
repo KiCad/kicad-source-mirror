@@ -22,7 +22,7 @@
 #ifndef __TIME_LIMIT_H
 #define __TIME_LIMIT_H
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace PNS {
 

@@ -32,7 +32,7 @@
 #ifndef _MORTONCODES_H_
 #define _MORTONCODES_H_
 
-#include <stdint.h>
+#include <cstdint>
 
 uint32_t EncodeMorton2( uint32_t x, uint32_t y );
 uint32_t EncodeMorton3( uint32_t x, uint32_t y, uint32_t z );
