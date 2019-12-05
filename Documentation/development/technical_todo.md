@@ -33,12 +33,6 @@ Compiler support:
 
 * GCC: complete by GCC 5: [GCC C++14 support](https://gcc.gnu.org/projects/cxx-status.html#cxx14).
 
-Provides:
-
-* [`std::make_unique`](https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique)
-  is available. The "polyfill" in `make_unique.h` is no longer required and can
-  be removed.
-
 ## C++17 {#todo_cpp_17}
 
 Compiler support:
