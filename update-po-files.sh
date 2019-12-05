@@ -46,7 +46,7 @@ esac
 done
 
 if [ -z ${SOURCEDIR} ]; then
-  SOURCEDIR=../../code/kicad
+  SOURCEDIR=../kicad
   echo "Using default SOURCEDIR=${SOURCEDIR}"
 fi
 
