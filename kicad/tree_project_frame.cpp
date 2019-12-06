@@ -578,18 +578,22 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
             can_delete = false;
             can_print = false;
             break;
+
         case TREE_DIRECTORY:
             can_switch_to_project = false;
             can_edit = false;
             can_rename = false;
             can_print = false;
             break;
+
         default:
             can_switch_to_project = false;
             can_create_new_directory = false;
             can_open_this_directory = false;
+
             if( !CanPrintFile( full_file_name ) )
                 can_print = false;
+
             break;
         }
     }
@@ -600,16 +604,17 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 
     if( can_switch_to_project )
     {
-        AddMenuItem( &popup_menu, ID_PROJECT_SWITCH_TO_OTHER, _( "&Switch to this Project" ),
-                _( "Close all editors, and switch to the selected project" ),
-                KiBitmap( open_project_xpm ) );
+        AddMenuItem( &popup_menu, ID_PROJECT_SWITCH_TO_OTHER,
+                     _( "Switch to this Project" ),
+                     _( "Close all editors, and switch to the selected project" ),
+                     KiBitmap( open_project_xpm ) );
         popup_menu.AppendSeparator();
     }
 
     if( can_create_new_directory )
     {
-        AddMenuItem( &popup_menu, ID_PROJECT_NEWDIR, _( "New D&irectory..." ),
-                _( "Create a New Directory" ), KiBitmap( directory_xpm ) );
+        AddMenuItem( &popup_menu, ID_PROJECT_NEWDIR, _( "New Directory..." ),
+                     _( "Create a New Directory" ), KiBitmap( directory_xpm ) );
     }
 
     if( can_open_this_directory )
@@ -620,7 +625,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
             text = _( "Reveal in Finder" );
             help_text = _( "Reveals the directory in a Finder window" );
 #else
-            text = _( "&Open Directory in File Explorer" );
+            text = _( "Open Directory in File Explorer" );
             help_text = _( "Opens the directory in the default system file manager" );
 #endif
         }
@@ -630,7 +635,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
             text = _( "Reveal in Finder" );
             help_text = _( "Reveals the directories in a Finder window" );
 #else
-            text = _( "&Open Directories in File Explorer" );
+            text = _( "Open Directories in File Explorer" );
             help_text = _( "Opens the directories in the default system file manager" );
 #endif
         }
@@ -644,22 +649,22 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
         if( tree_data.size() == 1 )
             help_text = _( "Open the file in a Text Editor" );
         else
-            help_text = _( "Open the files in a Text Editor" );
+            help_text = _( "Open files in a Text Editor" );
 
-        AddMenuItem( &popup_menu, ID_PROJECT_TXTEDIT, _( "&Edit in a Text Editor" ), help_text,
-                KiBitmap( editor_xpm ) );
+        AddMenuItem( &popup_menu, ID_PROJECT_TXTEDIT, _( "Edit in a Text Editor" ),
+                     help_text, KiBitmap( editor_xpm ) );
     }
 
     if( can_rename )
     {
         if( tree_data.size() == 1 )
         {
-            text = _( "&Rename File..." );
+            text = _( "Rename File..." );
             help_text = _( "Rename file" );
         }
         else
         {
-            text = _( "&Rename Files..." );
+            text = _( "Rename Files..." );
             help_text = _( "Rename files" );
         }
 
@@ -676,8 +681,9 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
         if( can_switch_to_project || can_create_new_directory || can_open_this_directory || can_edit
                 || can_rename )
             popup_menu.AppendSeparator();
+
         AddMenuItem(
-                &popup_menu, ID_PROJECT_DELETE, _( "&Delete" ), help_text, KiBitmap( delete_xpm ) );
+                &popup_menu, ID_PROJECT_DELETE, _( "Delete" ), help_text, KiBitmap( delete_xpm ) );
     }
 
     if( can_print )
@@ -687,7 +693,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 #ifdef __APPLE__
                 _( "Print..." ),
 #else
-                _( "&Print" ),
+                _( "Print" ),
 #endif
                 _( "Print the contents of the file" ), KiBitmap( print_button_xpm ) );
     }
@@ -698,17 +704,27 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 
 void TREE_PROJECT_FRAME::OnOpenSelectedFileWithTextEditor( wxCommandEvent& event )
 {
+    wxString editorname = Pgm().GetEditorName();
+
+    if( editorname.IsEmpty() )
+        return;
+
     std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
+
+    wxString files;
 
     for( TREEPROJECT_ITEM* item_data : tree_data )
     {
         wxString fullFileName = item_data->GetFileName();
         AddDelimiterString( fullFileName );
-        wxString editorname = Pgm().GetEditorName();
 
-        if( !editorname.IsEmpty() )
-            ExecuteFile( this, editorname, fullFileName );
+        if( !files.IsEmpty() )
+            files += " ";
+
+        files += fullFileName;
     }
+
+    ExecuteFile( this, editorname, files );
 }
 
 
@@ -740,7 +756,8 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
         return;
 
     wxString buffer = m_TreeProject->GetItemText( curr_item );
-    wxString msg = wxString::Format( _( "Change filename: \"%s\"" ), tree_data[0]->GetFileName() );
+    wxString msg = wxString::Format( _( "Change filename: \"%s\"" ),
+                                     tree_data[0]->GetFileName() );
     wxTextEntryDialog dlg( this, msg, _( "Change filename" ), buffer );
 
     if( dlg.ShowModal() != wxID_OK )
