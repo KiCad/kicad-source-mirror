@@ -95,7 +95,6 @@ void KIWAY::SetTop( wxFrame* aTop )
 const wxString KIWAY::dso_search_path( FACE_T aFaceId )
 {
     const char*   name;
-    const char*   dirName;
 
     switch( aFaceId )
     {
@@ -110,13 +109,6 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
     default:
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFaceId" ) );
         return wxEmptyString;
-    }
-
-    // The subdirectories usually have the same name as the kiface
-    switch( aFaceId )
-    {
-        case FACE_PL_EDITOR: dirName = "pagelayout_editor";   break;
-        default:             dirName = name + 1;              break;
     }
 
 #ifndef __WXMAC__
@@ -153,6 +145,15 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
         fn.AppendDir( wxT( "PlugIns" ) );
         fn.SetName( name );
 #else
+        const char*   dirName;
+
+        // The subdirectories usually have the same name as the kiface
+        switch( aFaceId )
+        {
+            case FACE_PL_EDITOR: dirName = "pagelayout_editor";   break;
+            default:             dirName = name + 1;              break;
+        }
+
         fn.RemoveLastDir();
         fn.AppendDir( dirName );
 #endif
