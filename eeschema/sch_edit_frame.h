@@ -37,6 +37,7 @@
 #include <sch_text.h>               // enum PINSHEETLABEL_SHAPE
 #include <tool/selection.h>
 #include <status_popup.h>
+#include <hierarch.h>
 
 class SCH_ITEM;
 class EDA_ITEM;
@@ -133,11 +134,13 @@ private:
     bool                    m_autoplaceJustify;   ///< allow autoplace to change justification
     bool                    m_autoplaceAlign;     ///< align autoplaced fields to the grid
     bool                    m_footprintPreview;   ///< whether to show footprint previews
+    bool                    m_navigatorStaysOpen; ///< whether to keep Navigator open
     bool                    m_showIllegalSymbolLibDialog;
     bool                    m_showSheetFileNameCaseSensitivityDlg;
 
     DIALOG_SCH_FIND*        m_findReplaceDialog;
     STATUS_TEXT_POPUP*      m_findReplaceStatusPopup;
+    HIERARCHY_NAVIG_DLG*    m_hierarchyDialog;
 
     /// Flag to indicate show hidden pins.
     bool        m_showAllPins;
@@ -208,6 +211,9 @@ public:
     bool GetShowFootprintPreviews() const { return m_footprintPreview; }
     void SetShowFootprintPreviews( bool aEnable ) { m_footprintPreview = aEnable; }
 
+    bool GetNavigatorStaysOpen() const { return m_navigatorStaysOpen; }
+    void SetNavigatorStaysOpen( bool aEnable ) { m_navigatorStaysOpen = aEnable; }
+
     bool GetAutoplaceFields() const { return m_autoplaceFields; }
     void SetAutoplaceFields( bool aEnable ) { m_autoplaceFields = aEnable; }
 
@@ -226,6 +232,8 @@ public:
     /// accessor to the destination directory to use when generating plot files.
     const wxString& GetPlotDirectoryName() const { return m_plotDirectoryName; }
     void SetPlotDirectoryName( const wxString& aDirName ) { m_plotDirectoryName = aDirName; }
+
+    bool IsHierarchyNavigatorOpen() { return m_hierarchyDialog != nullptr; }
 
     /**
      * Return the project file parameter list for Eeschema.
@@ -331,6 +339,11 @@ public:
      */
     void ShowFindReplaceDialog( bool aReplace );
 
+    /**
+     * Run the Hierarchy Navigator dialog.
+     */
+    void UpdateHierarchyNavigator(  bool update = true );
+
     void ShowFindReplaceStatus( const wxString& aMsg );
     void ClearFindReplaceStatus();
 
@@ -343,6 +356,11 @@ public:
      * Notification that the Find dialog has closed.
      */
     void OnFindDialogClose();
+
+    /**
+     * Notification that the Hierarchy Navigator dialog has closed.
+     */
+    void OnHierarchyNavigatorClose();
 
     /**
      * Breaks a single segment into two at the specified point.

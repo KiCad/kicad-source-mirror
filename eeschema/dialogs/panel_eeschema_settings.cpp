@@ -46,6 +46,7 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
 
     m_checkHVOrientation->SetValue( m_frame->GetForceHVLines() );
     m_footprintPreview->SetValue( m_frame->GetShowFootprintPreviews() );
+    m_navigatorStaysOpen->SetValue( m_frame->GetNavigatorStaysOpen() );
 
     m_checkAutoplaceFields->SetValue( m_frame->GetAutoplaceFields() );
     m_checkAutoplaceJustify->SetValue( m_frame->GetAutoplaceJustify() );
@@ -75,6 +76,7 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
 
     m_frame->SetForceHVLines( m_checkHVOrientation->GetValue() );
     m_frame->SetShowFootprintPreviews( m_footprintPreview->GetValue() );
+    m_frame->SetNavigatorStaysOpen( m_navigatorStaysOpen->GetValue() );
 
     m_frame->SetAutoplaceFields( m_checkAutoplaceFields->GetValue() );
     m_frame->SetAutoplaceJustify( m_checkAutoplaceJustify->GetValue() );

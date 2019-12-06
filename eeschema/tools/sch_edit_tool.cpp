@@ -932,6 +932,11 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             }
             else
                 m_frame->RemoveFromScreen( sch_item );
+
+            if( sch_item->Type() == SCH_SHEET_T )
+            {
+                m_frame->UpdateHierarchyNavigator( m_frame->IsHierarchyNavigatorOpen() );
+            }
         }
     }
 
@@ -1226,6 +1231,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->GetCanvas()->Refresh();
+            m_frame->UpdateHierarchyNavigator( m_frame->IsHierarchyNavigatorOpen() );
         }
 
         break;

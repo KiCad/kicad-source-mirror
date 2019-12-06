@@ -67,6 +67,7 @@
 #include <wildcards_and_files_ext.h>
 #include <connection_graph.h>
 #include <sch_painter.h>
+#include <hierarch.h>
 
 #include <gal/graphics_abstraction_layer.h>
 
@@ -246,6 +247,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_findReplaceDialog = nullptr;
     m_findReplaceStatusPopup = nullptr;
+    m_hierarchyDialog = nullptr;
 
     SetForceHVLines( true );
     SetSpiceAdjustPassiveValues( false );
@@ -547,6 +549,12 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         m_findReplaceDialog = nullptr;
     }
 
+    if( m_hierarchyDialog )
+    {
+        m_hierarchyDialog->Destroy();
+        m_hierarchyDialog = nullptr;
+    }
+
     SCH_SCREENS screens;
     wxFileName fn;
 
@@ -655,6 +663,18 @@ wxFindReplaceData* SCH_EDIT_FRAME::GetFindReplaceData()
     return nullptr;
 }
 
+void SCH_EDIT_FRAME::UpdateHierarchyNavigator( bool update )
+{
+    if( update == false )
+        return;
+
+    if( m_hierarchyDialog )
+        m_hierarchyDialog->Destroy();
+
+    m_hierarchyDialog = new HIERARCHY_NAVIG_DLG( this );
+    m_hierarchyDialog->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( HIERARCHY_NAVIG_DLG::OnClose ) );
+    m_hierarchyDialog->Show( true );
+}
 
 void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
 {
@@ -708,6 +728,11 @@ void SCH_EDIT_FRAME::OnFindDialogClose()
     m_findReplaceDialog = nullptr;
 }
 
+void SCH_EDIT_FRAME::OnHierarchyNavigatorClose()
+{
+    m_hierarchyDialog->Destroy();
+    m_hierarchyDialog = nullptr;
+}
 
 void SCH_EDIT_FRAME::OnLoadFile( wxCommandEvent& event )
 {
