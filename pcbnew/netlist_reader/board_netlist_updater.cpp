@@ -38,6 +38,7 @@
 #include <netinfo.h>
 #include <class_module.h>
 #include <class_pad.h>
+#include <class_track.h>
 #include <class_zone.h>
 
 #include "pcb_netlist.h"
