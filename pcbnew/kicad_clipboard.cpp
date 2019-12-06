@@ -23,11 +23,13 @@
  */
 
 #include <wx/clipbrd.h>
-#include <common.h>
-#include <pcb_parser.h>
-#include <netinfo.h>
-#include <class_board.h>
+
 #include <build_version.h>
+#include <class_board.h>
+#include <class_track.h>
+#include <common.h>
+#include <netinfo.h>
+#include <pcb_parser.h>
 
 #include <kicad_plugin.h>
 #include <kicad_clipboard.h>
