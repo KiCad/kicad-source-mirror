@@ -36,6 +36,7 @@
 #include <dialog_edit_label_base.h>
 #include <kicad_string.h>
 #include <tool/actions.h>
+#include <sch_iref.h>
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
@@ -350,6 +351,18 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
     // Make the text size the new default size ( if it is a new text ):
     if( m_CurrentText->IsNew() )
         SetDefaultTextSize( m_CurrentText->GetTextWidth() );
+
+    if( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( m_CurrentText );
+        SCH_IREF*        iref = label->GetIref();
+        if( iref )
+        {
+            if( iref->GetBoundingBox().Intersects( label->GetBoundingBox() ) )
+                iref->PlaceAtDefaultPosition();
+            iref->CopyParentStyle();
+        }
+    }
 
     return true;
 }

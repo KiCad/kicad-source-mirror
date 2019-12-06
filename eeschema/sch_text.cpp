@@ -43,6 +43,7 @@
 #include <sch_text.h>
 #include <netlist_object.h>
 #include <trace_helpers.h>
+#include <sch_iref.h>
 
 #include <wx/debug.h>
 
@@ -733,7 +734,9 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
     m_Layer = LAYER_GLOBLABEL;
     m_shape = NET_BIDI;
     m_isDangling = true;
+    m_iref = nullptr;
     SetMultilineAllowed( false );
+    m_savedIrefPos = wxDefaultPosition;
 }
 
 

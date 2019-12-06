@@ -177,6 +177,9 @@ public:
     static TOOL_ACTION leaveSheet;
     static TOOL_ACTION navigateHierarchy;
 
+    // Intersheets references
+    static TOOL_ACTION intersheetRefs;
+
     // Miscellaneous
     static TOOL_ACTION cleanupSheetPins;
     static TOOL_ACTION editTextAndGraphics;

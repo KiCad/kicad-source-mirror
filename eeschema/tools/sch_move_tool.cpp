@@ -102,6 +102,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         SCH_COMPONENT_T,
         SCH_SHEET_PIN_T,
         SCH_SHEET_T,
+        SCH_IREF_T,
         EOT
     };
 
@@ -613,6 +614,15 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
         SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) aItem;
         pin->SetStoredPos( pin->GetStoredPos() + (wxPoint) aDelta );
         pin->ConstrainOnEdge( pin->GetStoredPos() );
+        break;
+    }
+    case SCH_GLOBAL_LABEL_T:
+    {
+        SCH_GLOBALLABEL* label = (SCH_GLOBALLABEL*) aItem;
+        EDA_ITEM*        iref = (EDA_ITEM*) ( label->GetIref() );
+        static_cast<SCH_ITEM*>( aItem )->Move( (wxPoint) aDelta );
+        if( iref )
+            static_cast<SCH_ITEM*>( iref )->Move( (wxPoint) aDelta );
         break;
     }
     default:

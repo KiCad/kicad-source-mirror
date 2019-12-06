@@ -36,10 +36,9 @@
 #include <sch_item.h>
 #include <sch_connection.h>   // for CONNECTION_TYPE
 
-
 class LINE_READER;
 class NETLIST_OBJECT_LIST;
-
+class SCH_IREF;
 
 /* Shape/Type of SCH_HIERLABEL and SCH_GLOBALLABEL
  * mainly used to handle the graphic associated shape
@@ -300,8 +299,16 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    SCH_IREF* GetIref() { return m_iref; }
+    void SetIref( SCH_IREF* iref ) { m_iref = iref; }
+
+    wxPoint GetIrefSavedPosition() { return m_savedIrefPos; }
+    void SetIrefSavedPosition( wxPoint pos ) { m_savedIrefPos = pos; }
+
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override { return EDA_TEXT::GetTextPos() == aPosition; }
+    SCH_IREF* m_iref;
+    wxPoint   m_savedIrefPos;
 };
 
 
