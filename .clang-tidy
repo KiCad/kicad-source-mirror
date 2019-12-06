@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+Checks:          '-clang-diagnostic-*,clang-analyzer-*, bug-prone-*, modernize-deprecated-headers, modernize-loop-convert, modernize-use-override, modernize-redundant-void-arg, modernize-use-emplace, modernize-use-noexcept, modernize-use-bool-literals, modernize-pass-by-value, modernize-use-equals-default, modernize-use-equals-default, modernize-use-equals-delete'
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'
+FormatStyle:     'file'
