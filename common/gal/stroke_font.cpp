@@ -70,7 +70,7 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
         GLYPH    glyph;
         double   glyphStartX = 0.0;
         double   glyphEndX = 0.0;
-        double   glyphWidth;
+        double   glyphWidth = 0.0;
 
         std::vector<VECTOR2D>* pointList = nullptr;
 
