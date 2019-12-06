@@ -62,7 +62,7 @@ wxString EDA_FILE_SELECTOR( const wxString& aTitle,
 {
     wxString fullfilename;
     wxString curr_cwd    = wxGetCwd();
-    const wxString& defaultname = aFileName;
+    wxString defaultname = aFileName;
     wxString defaultpath = aPath;
     wxString dotted_Ext = wxT(".") + aExtension;
 
@@ -91,14 +91,10 @@ wxString EDA_FILE_SELECTOR( const wxString& aTitle,
             aKeepWorkingDirectory );
 #endif
 
-    fullfilename = wxFileSelector( aTitle,
-                                   defaultpath,
-                                   defaultname,
-                                   dotted_Ext,
-                                   aWildcard,
+    fullfilename = wxFileSelector( aTitle, defaultpath, defaultname,
+                                   dotted_Ext, aWildcard,
                                    aStyle,         // open mode wxFD_OPEN, wxFD_SAVE ..
-                                   aParent,
-                                   aPosition.x, aPosition.y );
+                                   aParent, aPosition.x, aPosition.y );
 
     if( aKeepWorkingDirectory )
         wxSetWorkingDirectory( curr_cwd );
