@@ -42,6 +42,7 @@
 #include <sch_sheet_path.h>
 
 #include <view/view.h>
+#include <hierarch.h>
 
 class HIERARCHY_NAVIG_DLG;
 
@@ -60,24 +61,6 @@ public:
     }
 };
 
-
-/**
- * Handle hierarchy tree control.
- */
-class HIERARCHY_TREE : public wxTreeCtrl
-{
-private:
-    HIERARCHY_NAVIG_DLG* m_parent;
-    wxImageList*      imageList;
-
-public:
-    HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent );
-
-    // Closes the dialog on escape key
-    void onChar( wxKeyEvent& event );
-};
-
-
 HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
     wxTreeCtrl( (wxWindow*) parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                 wxTR_HAS_BUTTONS, wxDefaultValidator, wxT( "HierachyTreeCtrl" ) )
@@ -94,51 +77,6 @@ HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
 
     AssignImageList( imageList );
 }
-
-
-class HIERARCHY_NAVIG_DLG : public DIALOG_SHIM
-{
-public:
-    SCH_EDIT_FRAME* m_SchFrameEditor;
-    HIERARCHY_TREE* m_Tree;
-    int             m_nbsheets;
-
-private:
-    SCH_SHEET_PATH m_currSheet;     // The currently opened scheet in hierarchy
-
-public:
-    HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent );
-
-    ~HIERARCHY_NAVIG_DLG();
-
-private:
-    /**
-     * Create the hierarchical tree of the schematic.
-     *
-     * This routine is reentrant!
-     * @param aList = the SCH_SHEET_PATH* list to explore
-     * @param aPreviousmenu = the wxTreeItemId used as parent to add sub items
-     */
-    void buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPreviousmenu );
-
-    /**
-     * Open the selected sheet and display the corresponding screen when a tree item is
-     * selected.
-     */
-    void onSelectSheetPath( wxTreeEvent& event );
-};
-
-
-int SCH_EDITOR_CONTROL::NavigateHierarchy( const TOOL_EVENT& aEvent )
-{
-    HIERARCHY_NAVIG_DLG* treeframe = new HIERARCHY_NAVIG_DLG( m_frame );
-
-    treeframe->ShowQuasiModal();
-    treeframe->Destroy();
-
-    return 0;
-}
-
 
 HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent ) :
     DIALOG_SHIM( aParent, wxID_ANY, _( "Navigator" ), wxDefaultPosition, wxDefaultSize,
@@ -207,7 +145,10 @@ HIERARCHY_NAVIG_DLG::~HIERARCHY_NAVIG_DLG()
 void HIERARCHY_TREE::onChar( wxKeyEvent& event )
 {
     if( event.GetKeyCode() == WXK_ESCAPE )
-        m_parent->Close( true );
+    {
+        if( m_parent->m_SchFrameEditor->GetNavigatorStaysOpen() == false )
+            m_parent->m_SchFrameEditor->OnHierarchyNavigatorClose();
+    }
     else
         event.Skip();
 }
@@ -254,9 +195,14 @@ void HIERARCHY_NAVIG_DLG::onSelectSheetPath( wxTreeEvent& event )
     wxTreeItemId ItemSel = m_Tree->GetSelection();
     m_SchFrameEditor->SetCurrentSheet(( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetPath );
     m_SchFrameEditor->DisplayCurrentSheet();
-    Close( true );
+    if( m_SchFrameEditor->GetNavigatorStaysOpen() == false )
+        m_SchFrameEditor->OnHierarchyNavigatorClose();
 }
 
+void HIERARCHY_NAVIG_DLG::OnClose( wxCloseEvent& event )
+{
+    m_SchFrameEditor->OnHierarchyNavigatorClose();
+}
 
 void SCH_EDIT_FRAME::DisplayCurrentSheet()
 {

@@ -59,7 +59,8 @@ class PANEL_EESCHEMA_SETTINGS_BASE : public wxPanel
 		wxCheckBox* m_checkAutoplaceJustify;
 		wxCheckBox* m_checkAutoplaceAlign;
 		wxCheckBox* m_footprintPreview;
-		
+		wxCheckBox* m_navigatorStaysOpen;
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnChooseUnits( wxCommandEvent& event ) { event.Skip(); }
 		

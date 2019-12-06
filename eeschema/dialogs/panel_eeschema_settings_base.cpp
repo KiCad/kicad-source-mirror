@@ -124,6 +124,8 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	m_footprintPreview = new wxCheckBox( this, wxID_ANY, _("Show footprint previews in symbol chooser"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_footprintPreview, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
+	m_navigatorStaysOpen = new wxCheckBox( this, wxID_ANY, _("Keep hierarchy navigator open"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_navigatorStaysOpen, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	bLeftColumn->Add( bSizer9, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
