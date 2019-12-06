@@ -45,7 +45,7 @@ std::vector<BOX2D>* g_newStrokeFontGlyphBoundingBoxes;   ///< Bounding boxes of 
 
 
 STROKE_FONT::STROKE_FONT( GAL* aGal ) :
-    m_gal( aGal )
+    m_gal( aGal ), m_glyphBoundingBoxes( {} ), m_glyphs( nullptr )
 {
 }
 

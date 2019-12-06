@@ -211,7 +211,7 @@ public:
         std::vector<ANCHOR_LIST> anchorChains;
 
         triNodes.reserve( m_allNodes.size() );
-        anchorChains.reserve( m_allNodes.size() );
+        anchorChains.resize( m_allNodes.size() );
 
         std::sort( m_allNodes.begin(), m_allNodes.end(),
                 [] ( const CN_ANCHOR_PTR& aNode1, const CN_ANCHOR_PTR& aNode2 )
@@ -229,11 +229,6 @@ public:
 
         CN_ANCHOR_PTR prev, last;
         int id = 0;
-
-        for( const auto& n : m_allNodes )
-        {
-            anchorChains.emplace_back( );
-        }
 
         for( const auto& n : m_allNodes )
         {
