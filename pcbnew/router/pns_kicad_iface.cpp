@@ -1038,6 +1038,10 @@ bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem )
             && item->ViewGetLOD( item->GetLayer(), m_view ) < m_view->GetScale() )
         return true;
 
+    // Items hidden in the router are not hidden on the board
+    if( m_hiddenItems.find( item ) != m_hiddenItems.end() )
+        return true;
+
     return false;
 }
 
