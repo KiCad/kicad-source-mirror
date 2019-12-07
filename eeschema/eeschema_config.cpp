@@ -55,7 +55,7 @@ static int s_textMarkupFlags = 0;
 static bool s_selectTextAsBox = false;
 static bool s_selectDrawChildren = true;
 static bool s_selectFillShapes = false;
-
+static int  s_selectThickness = DEFAULTSELECTIONTHICKNESS;
 
 int GetDefaultBusThickness()
 {
@@ -152,6 +152,17 @@ void SetSelectionFillShapes( bool aBool )
     s_selectFillShapes = aBool;
 }
 
+
+int GetSelectionThickness()
+{
+    return s_selectThickness;
+}
+
+
+void SetSelectionThickness( int aThickness )
+{
+    s_selectThickness = aThickness;
+}
 
 // Color to draw selected items
 COLOR4D GetItemSelectedColor()
@@ -326,6 +337,7 @@ static const wxChar showPinElectricalType[] =       wxT( "LibeditShowPinElectric
 static const wxChar boxedSelectedText[] =           wxT( "SelectionTextAsBox" );
 static const wxChar drawSelectedChildren[] =        wxT( "SelectionDrawChildItems" );
 static const wxChar selectionFillShapes[] =         wxT( "SelectionFillShapes" );
+static const wxChar selectionThickness[] =          wxT( "SelectionThickness" );
 
 ///@}
 
@@ -388,6 +400,8 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     SetSelectionTextAsBox( aCfg->ReadBool( boxedSelectedText, false ) );
     SetSelectionDrawChildItems( aCfg->ReadBool( drawSelectedChildren, true ) );
     SetSelectionFillShapes( aCfg->ReadBool( selectionFillShapes, false ) );
+    SetSelectionThickness(
+            static_cast<int>( aCfg->Read( selectionThickness, DEFAULTSELECTIONTHICKNESS ) ) );
 
     SetTextMarkupFlags( (int) aCfg->Read( TextMarkupFlagsEntry, 0L ) );
 
@@ -447,6 +461,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( boxedSelectedText, GetSelectionTextAsBox() );
     aCfg->Write( drawSelectedChildren, GetSelectionDrawChildItems() );
     aCfg->Write( selectionFillShapes, GetSelectionFillShapes() );
+    aCfg->Write( selectionThickness, GetSelectionThickness() );
 
     // Save template fieldnames
     STRING_FORMATTER sf;

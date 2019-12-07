@@ -117,6 +117,23 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	m_checkSelFillShapes = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Fill selected shapes"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer3->Add( m_checkSelFillShapes, 0, wxALL|wxEXPAND, 5 );
 
+	wxFlexGridSizer* fgSizer321;
+	fgSizer321 = new wxFlexGridSizer( 0, 2, 3, 0 );
+	fgSizer321->AddGrowableCol( 1 );
+	fgSizer321->SetFlexibleDirection( wxBOTH );
+	fgSizer321->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_selWidthLabel = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("&Highlight thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_selWidthLabel->Wrap( -1 );
+	fgSizer321->Add( m_selWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_selWidthCtrl = new wxSpinCtrlDouble( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 50, 0, 1 );
+	m_selWidthCtrl->SetDigits( 0 );
+	fgSizer321->Add( m_selWidthCtrl, 0, wxEXPAND, 5 );
+
+
+	sbSizer3->Add( fgSizer321, 1, wxEXPAND|wxTOP, 5 );
+
 
 	bRightColumn->Add( sbSizer3, 1, wxEXPAND|wxTOP, 5 );
 
