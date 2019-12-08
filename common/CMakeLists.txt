@@ -257,6 +257,7 @@ set( COMMON_SRCS
     advanced_config.cpp
     array_axis.cpp
     array_options.cpp
+    base64.cpp
     base_struct.cpp
     bezier_curves.cpp
     bin_mod.cpp
