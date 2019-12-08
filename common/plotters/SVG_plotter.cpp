@@ -90,6 +90,8 @@
  * flag_sweep : 0 = CCW, 1 = CW
  * The center of ellipse is automatically calculated.
  */
+
+#include <base64.h>
 #include <fctsys.h>
 #include <trigo.h>
 #include <eda_base_frame.h>
@@ -100,6 +102,8 @@
 #include <macros.h>
 #include <kicad_string.h>
 
+#include <cstdint>
+#include <wx/mstream.h>
 
 
 /**
@@ -499,7 +503,7 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 
     setFillMode( NO_FILL );
     SetCurrentLineWidth( width );
-    fprintf( outputFile, "<path d=\"M%g %g A%g %g 0.0 %d %d %g %g \" />\n",
+    fprintf( outputFile, "<path d=\"M%g %g A%g %g 0.0 %d %d %g %g\" />\n",
              start.x, start.y, radius_dev, radius_dev,
              flg_arc, flg_sweep,
              end.x, end.y  );
@@ -554,12 +558,51 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
 void SVG_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos,
                              double aScaleFactor )
 {
-    // in svg file we must insert a link to a png image file to plot an image
-    // the image itself is not included in the svg file.
-    // So we prefer skip the image, and just draw a rectangle,
-    // like other plotters which do not support images
+    wxSize pix_size( aImage.GetWidth(), aImage.GetHeight() );
 
-    PLOTTER::PlotImage( aImage, aPos, aScaleFactor );
+    // Requested size (in IUs)
+    DPOINT drawsize( aScaleFactor * pix_size.x,
+                     aScaleFactor * pix_size.y );
+
+    // calculate the bitmap start position
+    wxPoint start( aPos.x - drawsize.x / 2,
+                   aPos.y - drawsize.y / 2);
+
+    // Rectangles having a 0 size value for height or width are just not drawn on Inscape,
+    // so use a line when happens.
+    if( drawsize.x == 0.0 || drawsize.y == 0.0 )    // Draw a line
+    {
+        PLOTTER::PlotImage( aImage, aPos, aScaleFactor );
+    }
+    else
+    {
+        wxMemoryOutputStream img_stream;
+
+        aImage.SaveFile( img_stream, wxBITMAP_TYPE_PNG );
+        size_t input_len = img_stream.GetOutputStreamBuffer()->GetBufferSize();
+        std::vector<uint8_t> buffer( input_len );
+        std::vector<uint8_t> encoded;
+
+        img_stream.CopyTo( buffer.data(), buffer.size() );
+        base64::encode( buffer, encoded );
+
+        fprintf( outputFile,
+                 "<image x=\"%g\" y=\"%g\" xlink:href=\"data:image/png;base64,",
+                 userToDeviceSize( start.x ), userToDeviceSize( start.y )
+                 );
+
+        for( size_t i = 0; i < encoded.size(); i++ )
+        {
+            fprintf( outputFile, "%c", static_cast<char>( encoded[i] ) );
+
+            if( ( i % 64 )  == 63 )
+                fprintf( outputFile, "\n" );
+        }
+
+        fprintf( outputFile, "\"\npreserveAspectRatio=\"none\" height=\"%g\" width=\"%g\" />",
+                userToDeviceSize( drawsize.x ), userToDeviceSize( drawsize.y ) );
+    }
+
 
 }
 
@@ -633,7 +676,7 @@ bool SVG_PLOTTER::StartPlot()
     // Write viewport pos and size
     wxPoint origin;    // TODO set to actual value
     fprintf( outputFile,
-             "    width=\"%gcm\" height=\"%gcm\" viewBox=\"%d %d %d %d \">\n",
+             "    width=\"%gcm\" height=\"%gcm\" viewBox=\"%d %d %d %d\">\n",
              (double) paperSize.x / m_IUsPerDecimil * 2.54 / 10000,
              (double) paperSize.y / m_IUsPerDecimil * 2.54 / 10000,
              origin.x, origin.y,
@@ -660,7 +703,7 @@ bool SVG_PLOTTER::StartPlot()
              m_brush_rgb_color, opacity, m_pen_rgb_color, opacity );
 
     // output the pen cap and line joint
-    fputs( "stroke-linecap:round; stroke-linejoin:round; \"\n", outputFile );
+    fputs( "stroke-linecap:round; stroke-linejoin:round;\"\n", outputFile );
     fputs( " transform=\"translate(0 0) scale(1 1)\">\n", outputFile );
     return true;
 }
