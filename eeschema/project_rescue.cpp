@@ -25,6 +25,7 @@
 #include <sch_draw_panel.h>
 #include <class_library.h>
 #include <confirm.h>
+#include <connection_graph.h>
 #include <invoke_sch_dialog.h>
 #include <kiway.h>
 #include <project_rescue.h>
@@ -373,13 +374,34 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             // A new part name is found (a new group starts here).
             // Search the symbol names candidates only once for this group:
             old_part_id = part_id;
+
+            // Get the library symbol from the cache library.  It will be a flattened
+            // symbol by default (no inheritance).
             cache_match = find_component( part_id.Format().wx_str(), aRescuer.GetPrj()->SchLibs(),
                                           true );
 
+            // Get the library symbol from the symbol library table.
             lib_match = SchGetLibPart( part_id, aRescuer.GetPrj()->SchSymbolLibTable() );
 
             if( !cache_match && !lib_match )
                 continue;
+
+            PART_SPTR lib_match_parent;
+
+            // If it's a derive symbol, use the parent symbol to perform the pin test.
+            if( lib_match && lib_match->IsAlias() )
+            {
+                lib_match_parent = lib_match->GetParent().lock();
+
+                if( !lib_match_parent )
+                {
+                    lib_match = nullptr;
+                }
+                else
+                {
+                    lib_match = lib_match_parent.get();
+                }
+            }
 
             // Test whether there is a conflict or if the symbol can only be found in the cache.
             if( LIB_ID::HasIllegalChars( part_id.GetLibItemName(), LIB_ID::ID_SCH ) == -1 )
@@ -534,6 +556,15 @@ bool SCH_EDIT_FRAME::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand )
 
         if( viewer )
             viewer->ReCreateListLib();
+
+        if( aRunningOnDemand )
+        {
+            SCH_SCREENS schematic;
+
+            schematic.UpdateSymbolLinks( true );
+            g_ConnectionGraph->Reset();
+            RecalculateConnections( GLOBAL_CLEANUP );
+        }
 
         GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
         SyncView();
