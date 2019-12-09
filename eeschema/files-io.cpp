@@ -388,7 +388,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 RescueSymbolLibTableProject( false );
         }
 
-        schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
+        schematic.UpdateSymbolLinks( true );      // Update all symbol library links for all sheets.
+        g_ConnectionGraph->Reset();
+        RecalculateConnections( GLOBAL_CLEANUP );
         SetScreen( g_CurrentSheet->LastScreen() );
 
         // Migrate conflicting bus definitions
