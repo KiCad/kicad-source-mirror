@@ -24,19 +24,28 @@
  */
 
 
-#include <view/wx_view_controls.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <sch_draw_panel.h>
-#include <sch_view.h>
+
+#include <wx/debug.h>
+#include <wx/event.h>
+#include <wx/gdicmn.h>
+#include <wx/window.h>
+#include <wx/windowid.h>
+#include <memory>
+#include <stdexcept>
+
+#include <confirm.h>
+#include <eda_draw_frame.h>
+#include <gal/definitions.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <layers_id_colors_and_visibility.h>
+#include <math/vector2d.h>
+#include <view/view.h>
+#include <view/view_controls.h>
+#include <view/wx_view_controls.h>
+
+#include <sch_base_frame.h>
 #include <sch_painter.h>
-#include <sch_edit_frame.h>
-#include <preview_items/selection_area.h>
-#include <tool/tool_manager.h>
-#include <tool/actions.h>
-#include <functional>
-#include <sch_sheet.h>
-#include <pgm_base.h>
-#include <tools/ee_selection_tool.h>
 
 
 SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
@@ -164,6 +173,27 @@ void SCH_DRAW_PANEL::setDefaultLayerDeps()
 KIGFX::SCH_VIEW* SCH_DRAW_PANEL::GetView() const
 {
     return static_cast<KIGFX::SCH_VIEW*>( m_view );
+}
+
+
+void SCH_DRAW_PANEL::OnShow()
+{
+    SCH_BASE_FRAME* frame = dynamic_cast<SCH_BASE_FRAME*>( GetParent() );
+
+    try
+    {
+        // Check if the current rendering backend can be properly initialized
+        m_view->UpdateItems();
+    }
+    catch( const std::runtime_error& e )
+    {
+        // Fallback to software renderer
+        DisplayInfoMessage( frame, e.what() );
+        SwitchBackend( GAL_TYPE_CAIRO );
+
+        if( frame )
+            frame->ActivateGalCanvas();
+    }
 }
 
 

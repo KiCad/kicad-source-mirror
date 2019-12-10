@@ -54,6 +54,9 @@ public:
 protected:
     virtual void onPaint( wxPaintEvent& WXUNUSED( aEvent ) ) override;
 
+    ///> @copydoc EDA_DRAW_PANEL_GAL::OnShow()
+    void OnShow() override;
+
     void setDefaultLayerOrder();    ///> Reassigns layer order to the initial settings.
     void setDefaultLayerDeps();     ///> Sets rendering targets & dependencies for layers.
 
