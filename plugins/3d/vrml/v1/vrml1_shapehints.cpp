@@ -36,7 +36,7 @@ WRL1SHAPEHINTS::WRL1SHAPEHINTS( NAMEREGISTER* aDictionary ) : WRL1NODE( aDiction
 {
     m_order = ORD_UNKNOWN;
     m_Type = WRL1_SHAPEHINTS;
-    m_crease = 0.733;   // approx 42 degrees; this is larger than VRML spec.
+    m_crease = 0.733f;   // approx 42 degrees; this is larger than VRML spec.
     return;
 }
 
@@ -46,7 +46,7 @@ WRL1SHAPEHINTS::WRL1SHAPEHINTS( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 {
     m_order = ORD_UNKNOWN;
     m_Type = WRL1_SHAPEHINTS;
-    m_crease = 0.733;   // approx 42 degrees; this is larger than VRML spec.
+    m_crease = 0.733f;   // approx 42 degrees; this is larger than VRML spec.
     m_Parent = aParent;
 
     if( NULL != m_Parent )
@@ -280,9 +280,9 @@ bool WRL1SHAPEHINTS::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             }
 
             if( tmp < 0.0 )
-                tmp = 0.0;
+                tmp = 0.0f;
             else if( tmp > M_PI )
-                tmp = M_PI;
+                tmp = static_cast<float>(M_PI);
 
             m_crease = tmp;
         }

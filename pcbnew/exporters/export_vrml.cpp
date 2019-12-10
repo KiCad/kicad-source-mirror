@@ -92,19 +92,19 @@ struct VRML_COLOR
     VRML_COLOR()
     {
         // default green
-        diffuse_red = 0.13;
-        diffuse_grn = 0.81;
-        diffuse_blu = 0.22;
-        spec_red = 0.01;
-        spec_grn = 0.08;
-        spec_blu = 0.02;
-        emit_red = 0.0;
-        emit_grn = 0.0;
-        emit_blu = 0.0;
+        diffuse_red = 0.13f;
+        diffuse_grn = 0.81f;
+        diffuse_blu = 0.22f;
+        spec_red = 0.01f;
+        spec_grn = 0.08f;
+        spec_blu = 0.02f;
+        emit_red = 0.0f;
+        emit_grn = 0.0f;
+        emit_blu = 0.0f;
 
-        ambient = 0.8;
-        transp  = 0;
-        shiny   = 0.02;
+        ambient = 0.8f;
+        transp  = 0.0f;
+        shiny   = 0.02f;
     }
 
     VRML_COLOR( float dr, float dg, float db,
@@ -186,17 +186,17 @@ public:
         m_brd_thickness = 1.6;
 
         // pcb green
-        colors[ VRML_COLOR_PCB ]    = VRML_COLOR( .07, .3, .12, .01, .03, .01,
-                                                  0, 0, 0, 0.8, 0, 0.02 );
+        colors[ VRML_COLOR_PCB ]    = VRML_COLOR( 0.07f, 0.3f, 0.12f, 0.01f, 0.03f, 0.01f,
+                                                  0.0f, 0.0f, 0.0f, 0.8f, 0.0f, 0.02f );
         // track green
-        colors[ VRML_COLOR_TRACK ]  = VRML_COLOR( .08, .5, .1, .01, .05, .01,
-                                                  0, 0, 0, 0.8, 0, 0.02 );
+        colors[ VRML_COLOR_TRACK ]  = VRML_COLOR( 0.08f, 0.5f, 0.1f, 0.01f, 0.05f, 0.01f,
+                                                  0.0f, 0.0f, 0.0f, 0.8f, 0.0f, 0.02f );
         // silkscreen white
-        colors[ VRML_COLOR_SILK ]   = VRML_COLOR( .9, .9, .9, .1, .1, .1,
-                                                  0, 0, 0, 0.9, 0, 0.02 );
+        colors[ VRML_COLOR_SILK ]   = VRML_COLOR( 0.9f, 0.9f, 0.9f, 0.1f, 0.1f, 0.1f,
+                                                  0.0f, 0.0f, 0.0f, 0.9f, 0.0f, 0.02f );
         // pad silver
-        colors[ VRML_COLOR_TIN ]    = VRML_COLOR( .749, .756, .761, .749, .756, .761,
-                                                  0, 0, 0, 0.8, 0, 0.8 );
+        colors[ VRML_COLOR_TIN ]    = VRML_COLOR( 0.749f, 0.756f, 0.761f, 0.749f, 0.756f, 0.761f,
+                                                  0.0f, 0.0f, 0.0f, 0.8f, 0.0f, 0.8f );
 
         m_plainPCB = false;
         SetOffset( 0.0, 0.0 );

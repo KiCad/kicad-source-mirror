@@ -485,11 +485,11 @@ S3DMODEL* S3D::GetModel( SCENEGRAPH* aNode )
     // also typical of MCAD applications. When a model has no associated
     // material color it shall be assigned the index 0.
     SGAPPEARANCE app( NULL );
-    app.ambient = SGCOLOR( 0.6, 0.6, 0.6 );
-    app.diffuse = SGCOLOR( 0.6, 0.6, 0.6 );
+    app.ambient = SGCOLOR( 0.6f, 0.6f, 0.6f );
+    app.diffuse = SGCOLOR( 0.6f, 0.6f, 0.6f );
     app.specular = app.diffuse;
-    app.shininess = 0.05;
-    app.transparency = 0.0;
+    app.shininess = 0.05f;
+    app.transparency = 0.0f;
 
     materials.matorder.push_back( &app );
     materials.matmap.insert( std::pair< SGAPPEARANCE const*, int >( &app, 0 ) );

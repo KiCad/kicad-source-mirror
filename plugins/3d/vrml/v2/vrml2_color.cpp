@@ -246,9 +246,9 @@ void WRL2COLOR::GetColor( int aIndex, float& red, float& green, float& blue )
 {
     if( aIndex < 0 || aIndex >= (int)colors.size() )
     {
-        red = 0.8;
-        green = 0.8;
-        blue = 0.8;
+        red = 0.8f;
+        green = 0.8f;
+        blue = 0.8f;
         return;
     }
 

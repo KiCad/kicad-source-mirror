@@ -388,7 +388,7 @@ SGNODE* WRL1MATERIAL::GetAppearance( int aIndex )
     app.SetTransparency( val );
 
     if( aIndex == 0 || shininess.empty() )
-        val = 0.2;
+        val = 0.2f;
     else
         val = shininess[0];
 
@@ -397,9 +397,9 @@ SGNODE* WRL1MATERIAL::GetAppearance( int aIndex )
 
     if( aIndex ==0 || ambientColor.empty() )
     {
-        red = 0.2;
-        green = 0.2;
-        blue = 0.2;
+        red = 0.2f;
+        green = 0.2f;
+        blue = 0.2f;
     }
     else
     {
@@ -415,9 +415,9 @@ SGNODE* WRL1MATERIAL::GetAppearance( int aIndex )
 
     if( aIndex == 0 || diffuseColor.empty() )
     {
-        red = 0.8;
-        green = 0.8;
-        blue = 0.8;
+        red = 0.8f;
+        green = 0.8f;
+        blue = 0.8f;
     }
     else
     {
@@ -503,9 +503,9 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
         }
         else
         {
-            dRed = 0.8;
-            dGreen = 0.8;
-            dBlue = 0.8;
+            dRed = 0.8f;
+            dGreen = 0.8f;
+            dBlue = 0.8f;
         }
     }
     else
@@ -527,9 +527,9 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
         }
         else
         {
-            eRed = 0.0;
-            eGreen = 0.0;
-            eBlue = 0.0;
+            eRed = 0.0f;
+            eGreen = 0.0f;
+            eBlue = 0.0f;
         }
     }
     else
@@ -551,9 +551,9 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
         }
         else
         {
-            aRed = 0.2;
-            aGreen = 0.2;
-            aBlue = 0.2;
+            aRed = 0.2f;
+            aGreen = 0.2f;
+            aBlue = 0.2f;
         }
     }
     else
@@ -575,9 +575,9 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
         }
         else
         {
-            sRed = 0.2;
-            sGreen = 0.2;
-            sBlue = 0.2;
+            sRed = 0.2f;
+            sGreen = 0.2f;
+            sBlue = 0.2f;
         }
     }
     else
@@ -593,7 +593,7 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
         if( !shininess.empty() )
             shiny = shininess.back();
         else
-            shiny = 0.2;
+            shiny = 0.2f;
     }
     else
     {
@@ -615,16 +615,16 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
 
     int n = 0;
 
-    if( aRed + aGreen + aBlue > 0.01 )
+    if( aRed + aGreen + aBlue > 0.01f )
         ++n;
 
-    if( eRed + eGreen + eBlue > 0.01 )
+    if( eRed + eGreen + eBlue > 0.01f )
         ++n;
 
-    if( dRed + dGreen + dBlue > 0.01 )
+    if( dRed + dGreen + dBlue > 0.01f )
         ++n;
 
-    if( (sRed + sGreen + sBlue) * shiny > 0.01 )
+    if( (sRed + sGreen + sBlue) * shiny > 0.01f )
         ++n;
 
     if( 0 == n )

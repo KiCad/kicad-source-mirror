@@ -85,8 +85,8 @@ void WRL2FACESET::setDefaults( void )
     normalPerVertex = true;
     solid = true;
 
-    creaseAngle = 0.733;    // approx 42 degrees; this is larger than VRML spec.
-    creaseLimit = 0.74317;  // cos( 0.733 )
+    creaseAngle = 0.733f;    // approx 42 degrees; this is larger than VRML spec.
+    creaseLimit = 0.74317f;  // cos( 0.733 )
 }
 
 
@@ -578,9 +578,9 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             }
 
             if( creaseAngle < 0.0 )
-                creaseAngle = 0.0;
+                creaseAngle = 0.0f;
             else if( creaseAngle > M_PI_2 )
-                creaseAngle = M_PI_2;
+                creaseAngle = static_cast<float>(M_PI_2);
 
             creaseLimit = cosf( creaseAngle );
         }
