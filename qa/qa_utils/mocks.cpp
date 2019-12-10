@@ -150,10 +150,9 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent 
 {
     // these members are initialized to avoid warnings about non initialized vars
     m_frame = aParent;
-    m_itemCount = 0;
-    m_foundItem = nullptr;
-    m_hitList = nullptr;
-    isUpToDate = false;
+    m_hitList.clear();
+    m_it = m_hitList.begin();
+    m_upToDate = false;
 }
 
 void DIALOG_FIND::onFindNextClick( wxCommandEvent& aEvent )

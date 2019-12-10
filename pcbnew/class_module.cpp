@@ -274,7 +274,7 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     switch( aBoardItem->Type() )
     {
     case PCB_MODULE_TEXT_T:
-        // Only user texts can be added this way. Reference and value are not hold in the DLIST.
+        // Only user text can be added this way.
         assert( static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS );
 
         // no break
@@ -321,7 +321,7 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
     switch( aBoardItem->Type() )
     {
     case PCB_MODULE_TEXT_T:
-        // Only user texts can be removed this way. Reference and value are not hold in the DLIST.
+        // Only user text can be removed this way.
         wxCHECK_RET(
                 static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS,
                 "Please report this bug: Invalid remove operation on required text" );

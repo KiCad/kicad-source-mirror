@@ -51,16 +51,6 @@ wxString BOARD_ITEM::ShowShape( STROKE_T aShape )
 }
 
 
-void BOARD_ITEM::UnLink()
-{
-    DLIST<BOARD_ITEM>* list = (DLIST<BOARD_ITEM>*) GetList();
-    wxASSERT( list );
-
-    if( list )
-        list->Remove( this );
-}
-
-
 BOARD* BOARD_ITEM::GetBoard() const
 {
     if( Type() == PCB_T )

@@ -230,17 +230,6 @@ public:
     {
     }
 
-    void UnLink()
-    {
-        /* if it were needed:
-        DHEAD* list = GetList();
-
-        wxASSERT( list );
-
-        list->remove( this );
-        */
-    }
-
     //-----</ satisfy some virtual functions >-----------------------------
 
     /**
