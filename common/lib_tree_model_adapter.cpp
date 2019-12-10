@@ -216,6 +216,10 @@ void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
     wxString partHead = _( "Item" );
     wxString descHead = _( "Description" );
 
+    // The extent of the text doesn't take into account the space on either side
+    // in the header, so artificially pad it by M
+    wxSize partHeadMinWidth = GetTextSize( partHead + "M", aDataViewCtrl );
+
     if( aDataViewCtrl->GetColumnCount() > 0 )
     {
         int partWidth = aDataViewCtrl->GetColumn( PART_COL )->GetWidth();
@@ -240,6 +244,15 @@ void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
                                                   m_colWidths[PART_COL] );
     m_col_desc = aDataViewCtrl->AppendTextColumn( descHead, DESC_COL, wxDATAVIEW_CELL_INERT,
                                                   m_colWidths[DESC_COL] );
+
+    // Ensure the part column is wider than the smallest allowable width
+    if( m_colWidths[PART_COL] < partHeadMinWidth.x )
+    {
+        m_colWidths[PART_COL] = partHeadMinWidth.x;
+        m_col_part->SetWidth( partHeadMinWidth.x );
+    }
+
+    m_col_part->SetMinWidth( partHeadMinWidth.x );
 }
 
 
