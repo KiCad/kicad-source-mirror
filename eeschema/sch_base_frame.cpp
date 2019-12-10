@@ -394,7 +394,24 @@ void SCH_BASE_FRAME::RefreshSelection()
         KIGFX::SCH_VIEW*   view = GetCanvas()->GetView();
 
         for( EDA_ITEM* item : selection )
-            view->Update( item, KIGFX::REPAINT );
+        {
+            EDA_ITEM* parent = item->GetParent();
+
+            if( item->Type() == SCH_SHEET_PIN_T )
+            {
+                // Sheet pins aren't in the view.  Refresh their parent.
+                if( parent )
+                    GetCanvas()->GetView()->Update( parent );
+            }
+            else
+            {
+                view->Update( item, KIGFX::REPAINT );
+
+                // Component children are drawn from their parents.  Mark them for re-paint.
+                if( parent && parent->Type() == SCH_COMPONENT_T )
+                    GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
+            }
+        }
     }
 }
 
