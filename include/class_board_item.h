@@ -213,15 +213,8 @@ public:
     }
 
     /**
-     * Function UnLink
-     * detaches this object from its owner.  This base class implementation
-     * should work for all derived classes which are held in a DLIST<>.
-     */
-    virtual void UnLink();
-
-    /**
      * Function DeleteStructure
-     * deletes this object after UnLink()ing it from its owner if it has one.
+     * deletes this object after removing from its parent if it has one.
      */
     void DeleteStructure();
 

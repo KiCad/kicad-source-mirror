@@ -51,12 +51,11 @@ bool FindIncludeTexts = true;
 bool FindIncludeValues = true;
 bool FindIncludeReferences = true;
 bool FindIncludeMarkers = true;
-//bool findIncludeVias = false;
+
 
 DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aFrame ) : DIALOG_FIND_BASE( aFrame )
 {
     m_frame = aFrame;
-    m_foundItem = NULL;
     GetSizer()->SetSizeHints( this );
 
     m_searchCombo->Append( m_frame->GetFindHistoryList() );
@@ -84,10 +83,10 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aFrame ) : DIALOG_FIND_BASE( aFrame )
     m_includeMarkers->SetValue( FindIncludeMarkers );
 
     m_status->SetLabel( wxEmptyString);
-    m_hitList = new DLIST<BOARD_ITEM>;
-    m_hitList->SetOwnership( false );
-    m_itemCount = 0;
-    isUpToDate = false;
+    m_upToDate = false;
+
+    m_hitList.clear();
+    m_it = m_hitList.begin();
 
     m_findNext->SetDefault();
     SetInitialFocus( m_searchCombo );
@@ -112,7 +111,7 @@ void DIALOG_FIND::onFindPreviousClick( wxCommandEvent& aEvent )
 
 void DIALOG_FIND::onSearchAgainClick( wxCommandEvent& aEvent )
 {
-    isUpToDate = false;
+    m_upToDate = false;
     search( true );
 }
 
@@ -132,7 +131,7 @@ void DIALOG_FIND::search( bool aDirection )
     {
         m_searchCombo->Insert( searchString, 0 );
         m_searchCombo->SetSelection( 0 );
-        isUpToDate = false;
+        m_upToDate = false;
         m_frame->GetFindHistoryList().Insert( searchString, 0 );
 
         if( m_searchCombo->GetCount() > 10 )
@@ -146,7 +145,7 @@ void DIALOG_FIND::search( bool aDirection )
         m_searchCombo->Delete( index );
         m_searchCombo->Insert( searchString, 0 );
         m_searchCombo->SetSelection( 0 );
-        isUpToDate = false;
+        m_upToDate = false;
 
         if( m_frame->GetFindHistoryList().Index( searchString ) )
             m_frame->GetFindHistoryList().Remove( searchString );
@@ -160,19 +159,19 @@ void DIALOG_FIND::search( bool aDirection )
     if( FindOptionCase != m_matchCase->GetValue() )
     {
         FindOptionCase = m_matchCase->GetValue();
-        isUpToDate = false;
+        m_upToDate = false;
     }
 
     if( FindOptionWords != m_matchWords->GetValue() )
     {
         FindOptionWords = m_matchWords->GetValue();
-        isUpToDate = false;
+        m_upToDate = false;
     }
 
     if( FindOptionWildcards != m_wildcards->GetValue() )
     {
         FindOptionWildcards = m_wildcards->GetValue();
-        isUpToDate = false;
+        m_upToDate = false;
     }
 
     FindOptionWrap = m_wrap->GetValue();
@@ -180,25 +179,25 @@ void DIALOG_FIND::search( bool aDirection )
     if( FindIncludeTexts != m_includeTexts->GetValue() )
     {
         FindIncludeTexts = m_includeTexts->GetValue();
-        isUpToDate = false;
+        m_upToDate = false;
     }
 
     if( FindIncludeValues != m_includeValues->GetValue() )
     {
         FindIncludeValues = m_includeValues->GetValue();
-        isUpToDate = false;
+        m_upToDate = false;
     }
 
     if( FindIncludeReferences != m_includeReferences->GetValue() )
     {
         FindIncludeReferences = m_includeReferences->GetValue();
-        isUpToDate = false;
+        m_upToDate = false;
     }
 
     if( FindIncludeMarkers != m_includeMarkers->GetValue() )
     {
         FindIncludeMarkers = m_includeMarkers->GetValue();
-        isUpToDate = false;
+        m_upToDate = false;
     }
 
     if( FindOptionCase )
@@ -218,14 +217,10 @@ void DIALOG_FIND::search( bool aDirection )
     m_frame->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
 
     // Refresh the list of results
-    if( !isUpToDate )
+    if( !m_upToDate )
     {
         m_status->SetLabel( _( "Searching..." ) );
-
-        while( m_hitList->GetCount() > 0 )
-            m_hitList->PopBack();
-
-        m_foundItem = NULL;
+        m_hitList.clear();
 
         if( FindIncludeTexts || FindIncludeValues || FindIncludeReferences )
         {
@@ -236,7 +231,7 @@ void DIALOG_FIND::search( bool aDirection )
                         || ( module->Value().Matches( m_frame->GetFindReplaceData(), nullptr )
                                    && FindIncludeValues ) )
                 {
-                    m_hitList->Append( module );
+                    m_hitList.push_back( module );
                 }
 
                 if( m_includeTexts->GetValue() )
@@ -248,7 +243,7 @@ void DIALOG_FIND::search( bool aDirection )
                         if( textItem
                                 && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
                         {
-                            m_hitList->Append( module );
+                            m_hitList.push_back( module );
                         }
                     }
                 }
@@ -262,7 +257,7 @@ void DIALOG_FIND::search( bool aDirection )
 
                     if( textItem && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
                     {
-                        m_hitList->Append( textItem );
+                        m_hitList.push_back( textItem );
                     }
                 }
             }
@@ -275,60 +270,50 @@ void DIALOG_FIND::search( bool aDirection )
                 MARKER_PCB* marker = m_frame->GetBoard()->GetMARKER( i );
 
                 if( marker->Matches( m_frame->GetFindReplaceData(), nullptr ) )
-                    m_hitList->Append( marker );
+                    m_hitList.push_back( marker );
             }
         }
 
-        m_itemCount = -1;
+        m_upToDate = true;
+
+        if( aDirection )
+            m_it = m_hitList.begin();
+        else
+            m_it = m_hitList.end();
     }
 
     // Do we want a sorting algorithm ? If so, implement it here.
 
     // Get the item to display
-    if( m_hitList->begin() == NULL )
+    if( m_hitList.empty() )
     {
         m_frame->SetStatusText( wxEmptyString );
-        m_itemCount = 0;
-        m_foundItem = NULL;
-    }
-    else if( m_itemCount == -1 )
-    {
-        m_foundItem = aDirection ? m_hitList->begin() : m_hitList->end();
-        m_itemCount = aDirection ? 0 : (int) m_hitList->GetCount() - 1;
-        isUpToDate = true;
     }
     else
     {
         if( aDirection )
         {
-            if( m_itemCount >= static_cast<int>( m_hitList->GetCount() - 1 ) )
+            m_it++;
+
+            if( m_it == m_hitList.end() )
             {
                 if( m_wrap->GetValue() )
-                {
-                    m_itemCount = 0;
-                    m_foundItem = m_hitList->begin();
-                }
+                    m_it = m_hitList.begin();
                 else
                 {
                     m_frame->SetStatusText( wxEmptyString );
                     DisplayError( this, _( "No more item to show" ), 10 );
                     return;
                 }
-            }
-            else
-            {
-                m_itemCount++;
-                m_foundItem = dynamic_cast<BOARD_ITEM*>( m_foundItem->Next() );
             }
         }
         else
         {
-            if( m_itemCount <= 0 )
+            if( m_it == m_hitList.begin() )
             {
                 if( m_wrap->GetValue() )
                 {
-                    m_itemCount = (int) m_hitList->GetCount() - 1;
-                    m_foundItem = m_hitList->end();
+                    m_it = m_hitList.end();
                 }
                 else
                 {
@@ -337,24 +322,22 @@ void DIALOG_FIND::search( bool aDirection )
                     return;
                 }
             }
-            else
-            {
-                m_itemCount--;
-                m_foundItem = dynamic_cast<BOARD_ITEM*>( m_foundItem->Back() );
-            }
+
+            m_it--;
         }
     }
 
     // Display the item
-    if( m_foundItem )
+    if( m_it != m_hitList.end() )
     {
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, m_foundItem );
-        m_frame->FocusOnLocation( m_foundItem->GetPosition(), true );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, *m_it );
+        m_frame->FocusOnLocation( ( *m_it )->GetPosition(), true );
 
         msg.Printf( _( "\"%s\" found" ), searchString );
         m_frame->SetStatusText( msg );
 
-        msg.Printf( _( "Hit(s): %i / %i" ), m_itemCount + 1, m_hitList->GetCount() );
+        msg.Printf( _( "Hit(s): %ld / %lu" ), std::distance( m_hitList.begin(), m_it ),
+                m_hitList.size() );
         m_status->SetLabel( msg );
     }
     else
@@ -364,12 +347,11 @@ void DIALOG_FIND::search( bool aDirection )
         msg.Printf( _( "\"%s\" not found" ), searchString );
         DisplayError( this, msg, 10 );
 
-        m_itemCount = 0;
         m_status->SetLabel( _( "No hits" ) );
     }
 
     if( m_highlightCallback )
-        m_highlightCallback( m_foundItem );
+        m_highlightCallback( GetItem() );
 }
 
 void DIALOG_FIND::onClose( wxCommandEvent& aEvent )
@@ -384,9 +366,5 @@ void DIALOG_FIND::onClose( wxCommandEvent& aEvent )
     FindIncludeMarkers = m_includeMarkers->GetValue();
     FindIncludeReferences = m_includeReferences->GetValue();
 
-    while( m_hitList->GetCount() > 0 )
-        m_hitList->PopBack();
-
-    delete m_hitList;
     EndModal( 1 );
 }
