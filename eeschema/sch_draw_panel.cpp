@@ -23,18 +23,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
+#include <functional>
 #include <view/wx_view_controls.h>
 #include <worksheet_viewitem.h>
 
+#include <confirm.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <sch_draw_panel.h>
 #include <sch_view.h>
 #include <sch_painter.h>
 #include <sch_edit_frame.h>
 #include <preview_items/selection_area.h>
-
-#include <functional>
 
 #include <sch_sheet.h>
 #include <pgm_base.h>
@@ -174,7 +173,19 @@ void SCH_DRAW_PANEL::DisplaySheet( const SCH_SCREEN *aScreen )
 
 void SCH_DRAW_PANEL::OnShow()
 {
-    //m_view->RecacheAllItems();
+    SCH_BASE_FRAME* frame = dynamic_cast<SCH_BASE_FRAME*>( GetParent() );
+
+    try
+    {
+        // Check if the current rendering backend can be properly initialized
+        m_view->UpdateItems();
+    }
+    catch( const std::runtime_error& e )
+    {
+        // Fallback to software renderer
+        DisplayInfoMessage( frame, e.what() );
+        SwitchBackend( GAL_TYPE_CAIRO );
+    }
 }
 
 
