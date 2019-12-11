@@ -141,9 +141,11 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
                 break;
 
             case PAD_ATTRIB_SMD:       // SMD pads (One external copper layer only) with solder paste
-                if( aPad->GetShape() == PAD_SHAPE_CIRCLE ) // perhaps a BGA pad
-                    gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_BGAPAD_CUDEF );
-                else
+                // If round shape, perhaps a BGA pad but not sure: so use currently SMDPAD attribute,
+                // until an explicit BGA pad attribute is added in Pcbnew
+//                if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
+//                    gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_BGAPAD_CUDEF );
+//                else
                     gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_SMDPAD_CUDEF );
                 break;
             }
