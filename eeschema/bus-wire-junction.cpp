@@ -211,7 +211,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
                 else if( secondLine->IsEndPoint( firstLine->GetEndPoint() ) )
                     needed = aScreen->IsJunctionNeeded( firstLine->GetEndPoint() );
 
-                if( !needed && ( line = (SCH_LINE*) secondLine->MergeOverlap( firstLine ) ) )
+                if( !needed && ( line = secondLine->MergeOverlap( firstLine ) ) )
                 {
                     remove_item( item );
                     remove_item( secondItem );
@@ -367,7 +367,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
             }
 
             // Try to merge the remaining lines
-            if( SCH_LINE* line = (SCH_LINE*) secondLine->MergeOverlap( firstLine ) )
+            if( SCH_LINE* line = secondLine->MergeOverlap( firstLine ) )
             {
                 remove_item( item );
                 remove_item( secondItem );

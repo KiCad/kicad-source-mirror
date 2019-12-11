@@ -81,7 +81,7 @@ public:
     int AddJunctionsIfNeeded( const TOOL_EVENT& aEvent );
 
 private:
-    int doDrawSegments( const std::string& aTool, int aType, SCH_LINE* aSegment );
+    int doDrawSegments( const std::string& aTool, int aType );
     SCH_LINE* startSegments( int aType, const VECTOR2D& aPos );
     SCH_LINE* doUnfoldBus( const wxString& aNet );
     void finishSegments();
@@ -91,7 +91,10 @@ private:
 
 private:
     /// Data related to bus unfolding tool.
-    BUS_UNFOLDING_T       m_busUnfold;
+    BUS_UNFOLDING_T         m_busUnfold;
+
+    /// Storage for the line segments while drawing
+    std::deque<SCH_LINE*>   m_wires;
 };
 
 #endif /* SCH_LINE_WIRE_BUS_TOOL_H */
