@@ -54,6 +54,7 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public wxPanel
 		wxCheckBox* m_checkSelFillShapes;
 		wxStaticText* m_selWidthLabel;
 		wxSpinCtrlDouble* m_selWidthCtrl;
+		wxStaticText* m_highlightColorNote;
 
 	public:
 
