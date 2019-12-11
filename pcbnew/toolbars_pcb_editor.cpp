@@ -689,7 +689,7 @@ void PCB_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( ACTIONS::metricUnits,              GetUserUnits() != INCHES );
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits,            GetUserUnits() == INCHES );
     m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,        GetShowPolarCoords() );
-    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,        !galOpts.m_fullscreenCursor );
+    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,        galOpts.m_fullscreenCursor );
     m_optionsToolBar->Toggle( PCB_ACTIONS::showRatsnest,         opts.m_ShowGlobalRatsnest );
     m_optionsToolBar->Toggle( PCB_ACTIONS::ratsnestLineMode,     opts.m_DisplayRatsnestLinesCurved );
     m_optionsToolBar->Toggle( PCB_ACTIONS::showLayersManager,    LayerManagerShown() );
