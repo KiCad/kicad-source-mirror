@@ -405,7 +405,7 @@ bool SCH_LINE::IsParallel( SCH_LINE* aLine )
 }
 
 
-EDA_ITEM* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
+SCH_LINE* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
 {
     auto less = []( const wxPoint& lhs, const wxPoint& rhs ) -> bool
     {
@@ -418,7 +418,7 @@ EDA_ITEM* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
                  wxT( "Cannot test line segment for overlap." ) );
 
     if( this == aLine || GetLayer() != aLine->GetLayer() )
-        return NULL;
+        return nullptr;
 
     auto leftmost_start = aLine->m_start;
     auto leftmost_end = aLine->m_end;
@@ -455,7 +455,7 @@ EDA_ITEM* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
     // If we end one before the beginning of the other, no overlap is possible
     if( less( leftmost_end, other_start ) )
     {
-        return NULL;
+        return nullptr;
     }
 
     // Search for a common end:
@@ -514,7 +514,7 @@ EDA_ITEM* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
         return ret;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 

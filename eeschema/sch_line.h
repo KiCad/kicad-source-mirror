@@ -163,7 +163,7 @@ public:
      * @param aLine - Line to compare.
      * @return New line that combines the two or NULL on non-overlapping segments.
      */
-    EDA_ITEM* MergeOverlap( SCH_LINE* aLine );
+    SCH_LINE* MergeOverlap( SCH_LINE* aLine );
 
     /**
      * Check if two lines are in the same quadrant as each other, using a reference point as
