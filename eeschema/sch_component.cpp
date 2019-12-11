@@ -186,15 +186,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     for( SCH_FIELD& field : m_Fields )
         field.SetParent( this );
 
-    m_pins = aComponent.m_pins;
-    m_pinMap.clear();
-
-    // Re-parent the pins and build the pinMap
-    for( unsigned i = 0; i < m_pins.size(); ++i )
-    {
-        m_pins[ i ].SetParent( this );
-        m_pinMap[ m_pins[ i ].GetLibPin() ] = i;
-    }
+    UpdatePins();
 
     m_fieldsAutoplaced = aComponent.m_fieldsAutoplaced;
 }
@@ -253,9 +245,15 @@ void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, PART_LIBS* aLibs )
         SetModified();
 
         if( aLibs )
+        {
             Resolve( aLibs );
+        }
         else
+        {
             m_part.reset();
+            m_pins.clear();
+            m_pinMap.clear();
+        }
     }
 }
 
@@ -288,6 +286,7 @@ void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTab
     }
 
     m_part.reset( symbol.release() );
+    UpdatePins();
 }
 
 
@@ -319,7 +318,8 @@ bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
     // flimsy search path ordering.  None-the-less find a part based on that design:
     if( LIB_PART* part = aLibs->FindLibPart( m_lib_id ) )
     {
-        m_part.reset( part );
+        m_part.reset( new LIB_PART( *part ) );
+        UpdatePins();
         return true;
     }
 
@@ -367,6 +367,7 @@ bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
         if( part )
         {
             m_part.reset( part.release() );
+            UpdatePins();
             return true;
         }
     }
@@ -380,6 +381,7 @@ bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
                 m_lib_id.Format().wx_str() );
 
     m_part.reset();
+    UpdatePins();     // This will clear the pin map and library symbol pin pointers.
 
     return false;
 }
@@ -459,9 +461,11 @@ void SCH_COMPONENT::UpdatePins( const EE_COLLECTOR& aComponents )
 
 void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
 {
+    m_pins.clear();
+    m_pinMap.clear();
+
     if( m_part )
     {
-        m_pinMap.clear();
         unsigned i = 0;
 
         for( LIB_PIN* libPin = m_part->GetNextPin(); libPin; libPin = m_part->GetNextPin( libPin ) )
@@ -474,14 +478,7 @@ void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
             if( libPin->GetConvert() && m_convert && ( m_convert != libPin->GetConvert() ) )
                 continue;
 
-            if( m_pins.size() <= i || m_pins[ i ].GetLibPin() != libPin )
-            {
-                if( m_pins.size() > i )
-                    m_pins.erase( m_pins.begin() + i, m_pins.end() );
-
-                m_pins.emplace_back( SCH_PIN( libPin, this ) );
-            }
-
+            m_pins.emplace_back( SCH_PIN( libPin, this ) );
             m_pinMap[ libPin ] = i;
 
             if( aSheet )
@@ -489,11 +486,6 @@ void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
 
             ++i;
         }
-    }
-    else
-    {
-        m_pins.clear();
-        m_pinMap.clear();
     }
 }
 
@@ -998,7 +990,9 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 
     LIB_PART* part = component->m_part.release();
     component->m_part.reset( m_part.release() );
+    component->UpdatePins();
     m_part.reset( part );
+    UpdatePins();
 
     std::swap( m_Pos, component->m_Pos );
     std::swap( m_unit, component->m_unit );
@@ -1813,15 +1807,7 @@ SCH_COMPONENT& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
         for( SCH_FIELD& field : m_Fields )
             field.SetParent( this );
 
-        m_pins = c->m_pins;           // std::vector's assignment operator
-        m_pinMap.clear();
-
-        // Re-parent the pins and build the pinMap
-        for( unsigned i = 0; i < m_pins.size(); ++i )
-        {
-            m_pins[ i ].SetParent( this );
-            m_pinMap[ m_pins[ i ].GetLibPin() ] = i;
-        }
+        UpdatePins();
     }
 
     return *this;
