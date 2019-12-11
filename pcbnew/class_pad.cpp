@@ -74,6 +74,7 @@ D_PAD::D_PAD( MODULE* parent ) :
                                                     // is PAD_CIRCLE.
     SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );        // Default pad drill shape is a circle.
     m_Attribute           = PAD_ATTRIB_STANDARD;    // Default pad type is NORMAL (thru hole)
+    SetProperty( PAD_PROP_NONE );                   // no special fabrication property
     m_LocalClearance      = 0;
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
@@ -427,6 +428,12 @@ void D_PAD::SetAttribute( PAD_ATTR_T aAttribute )
 }
 
 
+void D_PAD::SetProperty( PAD_PROP_T aProperty )
+{
+    m_Property = aProperty;
+}
+
+
 void D_PAD::SetOrientation( double aAngle )
 {
     NORMALIZE_ANGLE_POS( aAngle );
@@ -770,9 +777,26 @@ void D_PAD::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aLis
     board = GetBoard();
 
     aList.emplace_back( _( "Layer" ),
-                     LayerMaskDescribe( board, m_layerMask ), DARKGREEN );
+                        LayerMaskDescribe( board, m_layerMask ), DARKGREEN );
 
-    aList.emplace_back( ShowPadShape(), ShowPadAttr(), DARKGREEN );
+    // Show the pad shape, attribute and property
+    wxString props = ShowPadAttr();
+
+    if( GetProperty() != PAD_PROP_NONE )
+        props += ',';
+
+    switch( GetProperty() )
+    {
+    case PAD_PROP_NONE: break;
+    case PAD_PROP_BGA:              props += _("BGA" ); break;
+    case PAD_PROP_FIDUCIAL_GLBL:    props += _("Fiducial global" ); break;
+    case PAD_PROP_FIDUCIAL_LOCAL:   props += _("Fiducial local" ); break;
+    case PAD_PROP_TESTPOINT:        props += _("Test point" ); break;
+    case PAD_PROP_HEATSINK:         props += _("Heat sink" ); break;
+    case PAD_PROP_CASTELLATED:      props += _("Castellated" ); break;
+    }
+
+    aList.emplace_back( ShowPadShape(), props, DARKGREEN );
 
     msg = MessageTextFromValue( aUnits, m_Size.x, true );
     aList.emplace_back( _( "Width" ), msg, RED );
@@ -1465,6 +1489,7 @@ void D_PAD::ImportSettingsFrom( const D_PAD& aMasterPad )
     SetShape( aMasterPad.GetShape() );
     SetLayerSet( aMasterPad.GetLayerSet() );
     SetAttribute( aMasterPad.GetAttribute() );
+    SetProperty( aMasterPad.GetProperty() );
 
     // The pad orientation, for historical reasons is the
     // pad rotation + parent rotation.

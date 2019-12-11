@@ -68,4 +68,21 @@ enum PAD_ATTR_T
 };
 
 
+/**
+ * Enum PAD_PROP_T
+ * is the set of pad properties used in Gerber files (Draw files, and P&P files)
+ * to define some properties in fabrication or test files
+ */
+enum PAD_PROP_T
+{
+    PAD_PROP_NONE,                  ///< no special fabrication property
+    PAD_PROP_BGA,                   ///< Smd pad, used in BGA footprints
+    PAD_PROP_FIDUCIAL_GLBL,         ///< a fiducial (usually a smd) for the full board
+    PAD_PROP_FIDUCIAL_LOCAL,        ///< a fiducial (usually a smd) local to the parent footprint
+    PAD_PROP_TESTPOINT,             ///< a test point pad
+    PAD_PROP_HEATSINK,              ///< a pad used as heat sink, usually in SMD footprints
+    PAD_PROP_CASTELLATED            ///< a pad with a castellated through hole
+};
+
+
 #endif  // PAD_SHAPES_H_

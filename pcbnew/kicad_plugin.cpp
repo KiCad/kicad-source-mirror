@@ -1327,6 +1327,22 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         THROW_IO_ERROR( wxString::Format( "unknown pad attribute: %d", aPad->GetAttribute() ) );
     }
 
+    const char* property = nullptr;
+
+    switch( aPad->GetProperty() )
+    {
+    case PAD_PROP_NONE:             break;
+    case PAD_PROP_BGA:              property = "pad_prop_bga"; break;
+    case PAD_PROP_FIDUCIAL_GLBL:    property = "pad_prop_fiducial_glob"; break;
+    case PAD_PROP_FIDUCIAL_LOCAL:   property = "pad_prop_fiducial_loc"; break;
+    case PAD_PROP_TESTPOINT:        property = "pad_prop_testpoint"; break;
+    case PAD_PROP_HEATSINK:         property = "pad_prop_heatsink"; break;
+    case PAD_PROP_CASTELLATED:      property = "pad_prop_castellated"; break;
+
+    default:
+        THROW_IO_ERROR( wxString::Format( "unknown pad property: %d", aPad->GetProperty() ) );
+    }
+
     m_out->Print( aNestLevel, "(pad %s %s %s",
                   m_out->Quotew( aPad->GetName() ).c_str(),
                   type, shape );
@@ -1362,6 +1378,11 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
             m_out->Print( 0, " (offset %s)", FormatInternalUnits( aPad->GetOffset() ).c_str() );
 
         m_out->Print( 0, ")" );
+    }
+
+    if( property )
+    {
+        m_out->Print( 0, " (property %s)", property );
     }
 
     formatLayers( aPad->GetLayerSet() );

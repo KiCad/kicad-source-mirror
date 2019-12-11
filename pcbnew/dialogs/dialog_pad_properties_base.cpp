@@ -392,7 +392,19 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_LayersSizer->Add( m_PadLayerECO2, 0, wxALL, 4 );
 
 
-	m_middleBoxSizer->Add( m_LayersSizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_middleBoxSizer->Add( m_LayersSizer, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
+
+	m_staticTextFabProperty = new wxStaticText( m_panelGeneral, wxID_ANY, _("Fabrication Property:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextFabProperty->Wrap( -1 );
+	m_staticTextFabProperty->SetToolTip( _("Optional property to specify a special purpose or constraint in fabrication files:\nBGA attribute is for pads in BGA footprints\nFiducial local is a fiducial for the parent footprint\nFiducial global is a fiducial for the whole board\nTest pad is useful to specify test points in Gerber files\nHeatsink pad  specify a thermal pad\nCastellated specify castellated through hole pads on a board edge\nThis property is specified in Gerber X2  files.") );
+
+	m_middleBoxSizer->Add( m_staticTextFabProperty, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	wxString m_choiceFabPropertyChoices[] = { _("None"), _("BGA pad"), _("Fiducial, local to footprint"), _("Fiducial, global to board"), _("Test Point Pad"), _("Heatsink pad"), _("Castellated pad (through hole only)") };
+	int m_choiceFabPropertyNChoices = sizeof( m_choiceFabPropertyChoices ) / sizeof( wxString );
+	m_choiceFabProperty = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceFabPropertyNChoices, m_choiceFabPropertyChoices, 0 );
+	m_choiceFabProperty->SetSelection( 0 );
+	m_middleBoxSizer->Add( m_choiceFabProperty, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bGeneralSizer->Add( m_middleBoxSizer, 0, wxEXPAND|wxALL, 3 );
@@ -421,13 +433,13 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_staticTextInfoPosValue = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Positive clearance means area bigger than the pad (usual for mask clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPosValue->Wrap( -1 );
-	m_staticTextInfoPosValue->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_staticTextInfoPosValue->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	sbClearancesSizer->Add( m_staticTextInfoPosValue, 0, wxTOP|wxRIGHT, 10 );
 
 	m_staticTextInfoNegVal = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Negative clearance means area smaller than the pad (usual for paste clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoNegVal->Wrap( -1 );
-	m_staticTextInfoNegVal->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_staticTextInfoNegVal->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	sbClearancesSizer->Add( m_staticTextInfoNegVal, 0, wxBOTTOM|wxRIGHT, 10 );
 
@@ -500,13 +512,13 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_nonCopperNote = new wxStaticText( notePanel, wxID_ANY, _("Note: solder mask and paste values are used only for pads on copper layers."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_nonCopperNote->Wrap( -1 );
-	m_nonCopperNote->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_nonCopperNote->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	bNoteSizer->Add( m_nonCopperNote, 0, wxTOP|wxRIGHT, 5 );
 
 	m_staticTextInfoPaste = new wxStaticText( notePanel, wxID_ANY, _("Note: solder paste clearances (absolute and relative) are added to determine the final clearance."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPaste->Wrap( -1 );
-	m_staticTextInfoPaste->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_staticTextInfoPaste->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	bNoteSizer->Add( m_staticTextInfoPaste, 0, wxBOTTOM|wxRIGHT, 5 );
 
@@ -671,13 +683,13 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_parentInfoLine1 = new wxStaticText( this, wxID_ANY, _("Footprint name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_parentInfoLine1->Wrap( -1 );
-	m_parentInfoLine1->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_parentInfoLine1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	bSizerDisplayPad->Add( m_parentInfoLine1, 0, wxTOP, 8 );
 
 	m_parentInfoLine2 = new wxStaticText( this, wxID_ANY, _("side and rotation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_parentInfoLine2->Wrap( -1 );
-	m_parentInfoLine2->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_parentInfoLine2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	bSizerDisplayPad->Add( m_parentInfoLine2, 0, wxRIGHT, 3 );
 
@@ -722,7 +734,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	this->SetSizer( m_MainSizer );
 	this->Layout();
-	m_MainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 

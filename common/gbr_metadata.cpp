@@ -223,7 +223,32 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
         attribute_string = "TA.AperFunction,HeatsinkPad";
         break;
 
-    case GBR_APERTURE_ATTRIB_VIADRILL:   // print info associated to a via hole in drill files
+    case GBR_APERTURE_ATTRIB_TESTPOINT:   // print info associated to a flashed test point pad
+                                            // (typically for SMDs)
+        attribute_string = "TA.AperFunction,TestPad";
+        break;
+
+    case GBR_APERTURE_ATTRIB_FIDUCIAL_GLBL: // print info associated to a flashed fiducial pad
+                                            // (typically for SMDs)
+        attribute_string = "TA.AperFunction,FiducialPad,Global";
+        break;
+
+    case GBR_APERTURE_ATTRIB_FIDUCIAL_LOCAL:    // print info associated to a flashed fiducial pad
+                                                // (typically for SMDs)
+        attribute_string = "TA.AperFunction,FiducialPad,Local";
+        break;
+
+    case GBR_APERTURE_ATTRIB_CASTELLATEDPAD:    // print info associated to a flashed castellated pad
+                                                // (typically for SMDs)
+        attribute_string = "TA.AperFunction,CastellatedPad";
+        break;
+
+    case GBR_APERTURE_ATTRIB_CASTELLATEDDRILL:  // print info associated to a flashed castellated pad
+                                                // in drill files
+        attribute_string = "TA.AperFunction,CastellatedDrill";
+        break;
+
+    case GBR_APERTURE_ATTRIB_VIADRILL:      // print info associated to a via hole in drill files
         attribute_string = "TA.AperFunction,ViaDrill";
         break;
 

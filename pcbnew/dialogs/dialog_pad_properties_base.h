@@ -142,6 +142,8 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_PadLayerDraft;
 		wxCheckBox* m_PadLayerECO1;
 		wxCheckBox* m_PadLayerECO2;
+		wxStaticText* m_staticTextFabProperty;
+		wxChoice* m_choiceFabProperty;
 		wxPanel* m_localSettingsPanel;
 		wxStaticText* m_staticTextInfoPosValue;
 		wxStaticText* m_staticTextInfoNegVal;
@@ -220,7 +222,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 764,581 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PAD_PROPERTIES_BASE();
 
 };

@@ -444,6 +444,9 @@ public:
     void SetAttribute( PAD_ATTR_T aAttribute );
     PAD_ATTR_T GetAttribute() const             { return m_Attribute; }
 
+    void SetProperty( PAD_PROP_T aProperty );
+    PAD_PROP_T GetProperty() const              { return m_Property; }
+
     // We don't currently have an attribute for APERTURE, and adding one will change the file
     // format, so for now just infer a copper-less pad to be an APERTURE pad.
     bool IsAperturePad() const                  { return ( m_layerMask & LSET::AllCuMask() ).none(); }
@@ -921,6 +924,8 @@ private:    // Private variable members:
 
     PAD_ATTR_T  m_Attribute;        ///< PAD_ATTRIB_NORMAL, PAD_ATTRIB_SMD,
                                     ///< PAD_ATTRIB_CONN, PAD_ATTRIB_HOLE_NOT_PLATED
+    PAD_PROP_T  m_Property;         ///< property in fab files (BGA, FIDUCIAL, TEST POINT, CASTELLATED)
+
     double      m_Orient;           ///< in 1/10 degrees
 
     int         m_LengthPadToDie;   ///< Length net from pad to die, inside the package

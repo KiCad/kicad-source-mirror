@@ -24,12 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <common.h>
-#include <gr_basic.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view_controls.h>
-#include <trigo.h>
 #include <confirm.h>
 #include <pcbnew.h>
 #include <pcb_base_frame.h>
@@ -157,10 +153,10 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_techLayersLabel->SetFont( infoFont );
     m_parentInfoLine1->SetFont( infoFont );
     m_parentInfoLine2->SetFont( infoFont );
-    m_nonCopperNote->SetFont( infoFont );
-    m_staticTextInfoPaste->SetFont( infoFont );
 
     infoFont.SetStyle( wxFONTSTYLE_ITALIC );
+    m_nonCopperNote->SetFont( infoFont );
+    m_staticTextInfoPaste->SetFont( infoFont );
     m_staticTextInfoNegVal->SetFont( infoFont );
     m_staticTextInfoPosValue->SetFont( infoFont );
 
@@ -765,6 +761,25 @@ void DIALOG_PAD_PROPERTIES::initValues()
         }
     }
 
+    switch( m_dummyPad->GetProperty() )
+    {
+    case PAD_PROP_NONE:             m_choiceFabProperty->SetSelection( 0 ); break;
+    case PAD_PROP_BGA:              m_choiceFabProperty->SetSelection( 1 ); break;
+    case PAD_PROP_FIDUCIAL_LOCAL:   m_choiceFabProperty->SetSelection( 2 ); break;
+    case PAD_PROP_FIDUCIAL_GLBL:    m_choiceFabProperty->SetSelection( 3 ); break;
+    case PAD_PROP_TESTPOINT:        m_choiceFabProperty->SetSelection( 4 ); break;
+    case PAD_PROP_HEATSINK:         m_choiceFabProperty->SetSelection( 5 ); break;
+    case PAD_PROP_CASTELLATED:      m_choiceFabProperty->SetSelection( 6 ); break;
+    }
+
+    // Ensure the pad property is compatible with the pad type
+    if( m_dummyPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+    {
+        m_choiceFabProperty->SetSelection( 0 );
+        m_choiceFabProperty->Enable( false );
+    }
+
+
     // Disable Pad name,and pad to die length for mechanical and aperture pads
     m_PadNumText->Enable( !mechanical && !aperture );
     m_PadNumCtrl->Enable( !mechanical && !aperture );
@@ -1017,6 +1032,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
         ii = 0;
 
     bool hasHole, hasConnection;
+    bool hasProperty = true;
 
     switch( ii )
     {
@@ -1024,7 +1040,12 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     case 0: /* PTH */      hasHole = true;  hasConnection = true;  break;
     case 1: /* SMD */      hasHole = false; hasConnection = true;  break;
     case 2: /* CONN */     hasHole = false; hasConnection = true;  break;
-    case 3: /* NPTH */     hasHole = true;  hasConnection = false; break;
+    case 3: /* NPTH */
+        hasHole = true;
+        hasConnection = false;
+        hasProperty = false;
+        break;
+
     case 4: /* Aperture */ hasHole = false; hasConnection = false; break;
     }
 
@@ -1053,6 +1074,11 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
         m_PadNumCtrl->SetValue( m_currentPad->GetName() );
         m_PadNetSelector->SetSelectedNetcode( m_currentPad->GetNetCode() );
     }
+
+    if( !hasProperty )
+        m_choiceFabProperty->SetSelection( 0 );
+
+    m_choiceFabProperty->Enable( hasProperty );
 
     transferDataToPad( m_dummyPad );
     redraw();
@@ -1259,6 +1285,17 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         break;
     }
 
+    if( m_dummyPad->GetProperty() != PAD_PROP_NONE &&
+        m_dummyPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
+        error_msgs.Add(  _( "Property cannot be set for NPTH" ) );
+
+    if( m_dummyPad->GetProperty() == PAD_PROP_CASTELLATED &&
+        m_dummyPad->GetAttribute() != PAD_ATTRIB_STANDARD )
+        error_msgs.Add(  _( "Castellated property can be set only for PTH" ) );
+
+    if( m_dummyPad->GetProperty() == PAD_PROP_BGA &&
+        m_dummyPad->GetAttribute() != PAD_ATTRIB_SMD )
+        error_msgs.Add(  _( "BGA property can be set only for SMD pads" ) );
 
     if( m_dummyPad->GetShape() == PAD_SHAPE_ROUNDRECT ||
         m_dummyPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
@@ -1523,6 +1560,9 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
         m_currentPad->SetShape( PAD_SHAPE_RECT );
     }
 
+    // Set the fabrication property:
+    m_currentPad->SetProperty( getSelectedProperty() );
+
     // define the way the clearance area is defined in zones
     m_currentPad->SetCustomShapeInZoneOpt( m_padMaster->GetCustomShapeInZoneOpt() );
 
@@ -1537,6 +1577,25 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     commit.Push( _( "Modify pad" ) );
 
     return true;
+}
+
+
+PAD_PROP_T DIALOG_PAD_PROPERTIES::getSelectedProperty()
+{
+    PAD_PROP_T prop = PAD_PROP_NONE;
+
+    switch( m_choiceFabProperty->GetSelection() )
+    {
+    case 0:     prop = PAD_PROP_NONE; break;
+    case 1:     prop = PAD_PROP_BGA; break;
+    case 2:     prop = PAD_PROP_FIDUCIAL_LOCAL; break;
+    case 3:     prop = PAD_PROP_FIDUCIAL_GLBL; break;
+    case 4:     prop = PAD_PROP_TESTPOINT; break;
+    case 5:     prop = PAD_PROP_HEATSINK; break;
+    case 6:     prop = PAD_PROP_CASTELLATED; break;
+    }
+
+    return prop;
 }
 
 
@@ -1772,6 +1831,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         if( value.ToDouble( &ratioPercent ) )
             aPad->SetChamferRectRatio( ratioPercent / 100.0 );
     }
+
+    aPad->SetProperty( getSelectedProperty() );
 
     LSET padLayerMask;
 

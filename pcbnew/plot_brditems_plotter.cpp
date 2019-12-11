@@ -142,12 +142,38 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
                 break;
 
             case PAD_ATTRIB_SMD:       // SMD pads (One external copper layer only) with solder paste
-                // If round shape, perhaps a BGA pad but not sure: so use currently SMDPAD attribute,
-                // until an explicit BGA pad attribute is added in Pcbnew
-//                if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
-//                    gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_BGAPAD_CUDEF );
-//                else
-                    gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_SMDPAD_CUDEF );
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_SMDPAD_CUDEF );
+                break;
+            }
+
+            // Fabrication properties can have specific GBR_APERTURE_METADATA options:
+            switch( aPad->GetProperty() )
+            {
+            case PAD_PROP_BGA:
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_BGAPAD_CUDEF );
+                break;
+
+            case PAD_PROP_FIDUCIAL_GLBL:
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_FIDUCIAL_GLBL );
+                break;
+
+            case PAD_PROP_FIDUCIAL_LOCAL:
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_FIDUCIAL_LOCAL );
+                break;
+
+            case PAD_PROP_TESTPOINT:    // Only on outer layers
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_TESTPOINT );
+                break;
+
+            case PAD_PROP_HEATSINK:
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_HEATSINKPAD );
+                break;
+
+            case PAD_PROP_CASTELLATED:
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CASTELLATEDPAD );
+                break;
+
+            case PAD_PROP_NONE:
                 break;
             }
         }

@@ -163,6 +163,13 @@ pad_size
 pad_to_mask_clearance
 pad_to_paste_clearance
 pad_to_paste_clearance_ratio
+pad_prop_bga
+pad_prop_fiducial_loc
+pad_prop_fiducial_glob
+pad_prop_castellated
+pad_prop_testpoint
+pad_prop_heatsink
+property
 page
 path
 pcb_text_size

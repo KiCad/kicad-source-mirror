@@ -85,14 +85,21 @@ public:
         GBR_APERTURE_ATTRIB_EDGECUT,        ///< aperture used for board cutout
         GBR_APERTURE_ATTRIB_NONCONDUCTOR,   ///< aperture used for not connected items (texts, outlines on copper)
         GBR_APERTURE_ATTRIB_VIAPAD,         ///< aperture used for vias
+
         GBR_APERTURE_ATTRIB_COMPONENTPAD,   ///< aperture used for through hole component on outer layer
         GBR_APERTURE_ATTRIB_SMDPAD_SMDEF,   ///< aperture used for SMD pad. Excluded BGA pads which have their own type
         GBR_APERTURE_ATTRIB_SMDPAD_CUDEF,   ///< aperture used for SMD pad with a solder mask defined by the solder mask
         GBR_APERTURE_ATTRIB_BGAPAD_SMDEF,   ///< aperture used for BGA pads with a solder mask defined by the copper shape
         GBR_APERTURE_ATTRIB_BGAPAD_CUDEF,   ///< aperture used for BGA pad with a solder mask defined by the solder mask
-        GBR_APERTURE_ATTRIB_CONNECTORPAD,   ///< aperture used for edge connecto pad (outer layers)
+        GBR_APERTURE_ATTRIB_CONNECTORPAD,   ///< aperture used for edge connector pad (outer layers)
         GBR_APERTURE_ATTRIB_WASHERPAD,      ///< aperture used for mechanical pads (NPTH)
+        GBR_APERTURE_ATTRIB_TESTPOINT,      ///< aperture used for test point pad (outer layers)
+        GBR_APERTURE_ATTRIB_FIDUCIAL_GLBL,  ///< aperture used for fiducial pad (outer layers), at board level
+        GBR_APERTURE_ATTRIB_FIDUCIAL_LOCAL, ///< aperture used for fiducial pad (outer layers), at footprint level
         GBR_APERTURE_ATTRIB_HEATSINKPAD,    ///< aperture used for heat sink pad (typically for SMDs)
+        GBR_APERTURE_ATTRIB_CASTELLATEDPAD, ///< aperture used for castellated pads in copper layer files
+        GBR_APERTURE_ATTRIB_CASTELLATEDDRILL, ///< aperture used for castellated pads in drill files
+
         GBR_APERTURE_ATTRIB_VIADRILL,       ///< aperture used for via holes in drill files
         GBR_APERTURE_ATTRIB_CMP_DRILL,      ///< aperture used for pad holes in drill files
         GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL, ///< aperture used for pads oblong holes in drill files

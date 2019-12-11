@@ -152,6 +152,9 @@ private:
     void onPrimitiveDClick( wxMouseEvent& event ) override;
     /// Called on selection/deselection of a basic shape
 	void OnPrimitiveSelection( wxListEvent& event ) override;
+
+    /// Return the pad property currently selected
+    PAD_PROP_T getSelectedProperty();
 };
 
 /**

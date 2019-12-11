@@ -3144,6 +3144,52 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
         }
             break;
 
+        case T_property:
+        {
+            while( token != T_RIGHT )
+            {
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_pad_prop_bga:
+                    pad->SetProperty( PAD_PROP_BGA );
+                    break;
+
+                case T_pad_prop_fiducial_glob:
+                    pad->SetProperty( PAD_PROP_FIDUCIAL_GLBL );
+                    break;
+
+                case T_pad_prop_fiducial_loc:
+                    pad->SetProperty( PAD_PROP_FIDUCIAL_LOCAL );
+                    break;
+
+                case T_pad_prop_testpoint:
+                    pad->SetProperty( PAD_PROP_TESTPOINT );
+                    break;
+
+                case T_pad_prop_castellated:
+                    pad->SetProperty( PAD_PROP_CASTELLATED );
+                    break;
+
+                case T_pad_prop_heatsink:
+                    pad->SetProperty( PAD_PROP_HEATSINK );
+                    break;
+
+                case T_RIGHT:
+                    break;
+
+                default:
+#if 0   // Currently: skip unknown property
+                    Expecting( "pad_prop_bga pad_prop_fiducial_glob pad_prop_fiducial_loc"
+                               " pad_prop_heatsink or pad_prop_castellated" );
+#endif
+                    break;
+                }
+            }
+        }
+            break;
+
         case T_options:
             parseD_PAD_option( pad.get() );
             break;

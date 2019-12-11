@@ -191,16 +191,21 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
         else if( dyn_cast<const D_PAD*>( hole_descr.m_ItemParent ) )
         {
             last_item_is_via = false;
+            const D_PAD* pad = dyn_cast<const D_PAD*>( hole_descr.m_ItemParent );
 
-            // Good practice of oblong pad holes (slots) is to use a specific aperture for routing, not used
-            // in drill commands
-            if( hole_descr.m_Hole_Shape )
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL );
+            if( pad->GetProperty() == PAD_PROP_CASTELLATED )
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CASTELLATEDDRILL );
             else
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_DRILL );
+            {
+                // Good practice of oblong pad holes (slots) is to use a specific aperture for routing, not used
+                // in drill commands
+                if( hole_descr.m_Hole_Shape )
+                    gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL );
+                else
+                    gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_DRILL );
+            }
 
             // Add object attribute: component reference to pads (mainly usefull for users)
-            const D_PAD* pad = dyn_cast<const D_PAD*>( hole_descr.m_ItemParent );
             wxString ref = pad->GetParent()->GetReference();
 
             gbr_metadata.SetCmpReference( ref );
