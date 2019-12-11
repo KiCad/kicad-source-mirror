@@ -45,6 +45,7 @@
 #include <netlist.h>
 #include <netlist_object.h>
 #include <class_library.h>
+#include <connection_graph.h>
 #include <sch_junction.h>
 #include <sch_bus_entry.h>
 #include <sch_line.h>
@@ -1198,6 +1199,12 @@ void SCH_SCREENS::UpdateSymbolLinks( bool aForce )
 {
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
         screen->UpdateSymbolLinks( aForce );
+
+    SCH_SHEET_LIST sheets( g_RootSheet );
+
+    // All of the library symbols have been replaced with copies so the connection graph
+    // pointer are stale.
+    g_ConnectionGraph->Recalculate( sheets, true );
 }
 
 
@@ -1232,7 +1239,6 @@ void SCH_SCREENS::TestDanglingEnds()
         for( size_t ii = 0; ii < parallelThreadCount; ++ii )
             returns[ii].wait();
     }
-
 }
 
 
