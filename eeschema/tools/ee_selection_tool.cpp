@@ -1083,16 +1083,30 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     // NOTE: in the future this is where eeschema layer/itemtype visibility will be handled
+    LIB_EDIT_FRAME* editFrame = dynamic_cast< LIB_EDIT_FRAME* >( m_frame );
+
+    wxCHECK( editFrame, false );
 
     switch( aItem->Type() )
     {
     case SCH_PIN_T:
-        if( !static_cast<const SCH_PIN*>( aItem )->IsVisible() && !m_frame->GetShowAllPins() )
+        if( !static_cast<const SCH_PIN*>( aItem )->IsVisible() && !editFrame->GetShowAllPins() )
             return false;
         break;
 
     case LIB_PART_T:    // In libedit we do not want to select the symbol itself.
         return false;
+
+    case LIB_FIELD_T:
+    {
+        LIB_PART*       currentPart = editFrame->GetCurPart();
+
+        // Nothing in derived symbols is editable at the moment.
+        if( currentPart && currentPart->IsAlias() )
+            return false;
+
+        break;
+    }
 
     case LIB_ARC_T:
     case LIB_CIRCLE_T:
@@ -1102,7 +1116,6 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
     case LIB_BEZIER_T:
     case LIB_PIN_T:
     {
-        LIB_EDIT_FRAME* editFrame = (LIB_EDIT_FRAME*) m_frame;
         LIB_ITEM*       lib_item = (LIB_ITEM*) aItem;
 
         if( lib_item->GetUnit() && lib_item->GetUnit() != editFrame->GetUnit() )
@@ -1113,6 +1126,7 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
 
         break;
     }
+
     case SCH_MARKER_T:  // Always selectable
         return true;
 

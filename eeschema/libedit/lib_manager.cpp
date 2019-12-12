@@ -642,6 +642,15 @@ void LIB_MANAGER::GetRootSymbolNames( const wxString& aLibraryName,
 }
 
 
+bool LIB_MANAGER:: HasDerivedSymbols( const wxString& aSymbolName,
+                                      const wxString& aLibraryName )
+{
+    LIB_BUFFER& libBuf = getLibraryBuffer( aLibraryName );
+
+    return libBuf.HasDerivedSymbols( aSymbolName );
+}
+
+
 wxString LIB_MANAGER::getLibraryName( const wxString& aFilePath )
 {
     wxFileName fn( aFilePath );

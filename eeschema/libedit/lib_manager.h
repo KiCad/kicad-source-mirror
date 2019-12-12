@@ -290,6 +290,14 @@ public:
 
     void GetRootSymbolNames( const wxString& aLibName, wxArrayString& aRootSymbolNames );
 
+    /**
+     * Check if symbol \a aSymbolName in library \a aLibraryName is a root symbol that
+     * has derived symbols.
+     *
+     * @return true if \aSymbolName in \a aLibraryName has derived symbols.
+     */
+    bool HasDerivedSymbols( const wxString& aSymbolName, const wxString& aLibraryName );
+
 private:
     ///> Extracts library name basing on the file name
     static wxString getLibraryName( const wxString& aFilePath );
