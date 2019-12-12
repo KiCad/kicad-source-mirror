@@ -460,7 +460,7 @@ void LIB_EDIT_FRAME::savePartAs()
 
         if( new_lib.IsEmpty() )
         {
-            DisplayError( NULL, _( "No library specified.  Symbol could not be saved." ) );
+            DisplayError( this, _( "No library specified.  Symbol could not be saved." ) );
             return;
         }
 
@@ -471,7 +471,7 @@ void LIB_EDIT_FRAME::savePartAs()
 
         if( new_name.IsEmpty() )
         {
-            DisplayError( NULL, _( "No symbol name specified.  Symbol could not be saved." ) );
+            DisplayError( this, _( "No symbol name specified.  Symbol could not be saved." ) );
             return;
         }
 
@@ -487,7 +487,6 @@ void LIB_EDIT_FRAME::savePartAs()
         LIB_PART new_part( *part );
         new_part.SetName( new_name );
 
-        fixDuplicateAliases( &new_part, new_lib );
         m_libMgr->UpdatePart( &new_part, new_lib );
         SyncLibraries( false );
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( new_lib, new_part.GetName() ) );
@@ -539,11 +538,31 @@ void LIB_EDIT_FRAME::DeletePartFromLibrary()
     LIB_ID libId = getTargetLibId();
 
     if( m_libMgr->IsPartModified( libId.GetLibItemName(), libId.GetLibNickname() )
-        && !IsOK( this, _( wxString::Format( "Component %s has been modified\n"
+        && !IsOK( this, _( wxString::Format( "The symbol \"%s\" has been modified\n"
                                              "Do you want to remove it from the library?",
                                              libId.GetUniStringLibItemName() ) ) ) )
     {
         return;
+    }
+
+    if( m_libMgr->HasDerivedSymbols( libId.GetLibItemName(), libId.GetLibNickname() ) )
+    {
+        wxString msg;
+
+        msg.Printf( _( "The symbol \"%s\" is used to derive other symbols.\n"
+                       "Deleting this symbol will delete all of the symbols derived from it.\n\n"
+                       "Do you wish to delete this symbol and all of it's derivatives?" ),
+                    libId.GetLibItemName().wx_str() );
+
+        wxMessageDialog::ButtonLabel yesButtonLabel( _( "Delete Symbol" ) );
+        wxMessageDialog::ButtonLabel noButtonLabel( _( "Keep Symbol" ) );
+
+        wxMessageDialog dlg( this, msg, _( "Warning" ),
+                             wxYES_NO | wxYES_DEFAULT | wxICON_QUESTION | wxCENTER );
+        dlg.SetYesNoLabels( yesButtonLabel, noButtonLabel );
+
+        if( dlg.ShowModal() == wxID_NO )
+            return;
     }
 
     if( isCurrentPart( libId ) )
