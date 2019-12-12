@@ -546,7 +546,7 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygonItem( GERBER_DRAW_ITEM* aGbrItem, LAYER
     int cnt_max = poly.PointCount() -1;
 
     // Do not generate last corner, if it is the same point as the first point:
-    if( poly.Point( 0 ) == poly.Point( cnt_max ) )
+    if( poly.CPoint( 0 ) == poly.CPoint( cnt_max ) )
         cnt_max--;
 
     for( int ii = 0; ii <= cnt_max; ii++ )
@@ -557,9 +557,8 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygonItem( GERBER_DRAW_ITEM* aGbrItem, LAYER
             fprintf( m_fp, "\n" );
         }
 
-        fprintf( m_fp, " (xy %s %s)",
-                 Double2Str( MapToPcbUnits( poly.Point( ii ).x ) ).c_str(),
-                 Double2Str( MapToPcbUnits( -poly.Point( ii ).y ) ).c_str() );
+        fprintf( m_fp, " (xy %s %s)", Double2Str( MapToPcbUnits( poly.CPoint( ii ).x ) ).c_str(),
+                Double2Str( MapToPcbUnits( -poly.CPoint( ii ).y ) ).c_str() );
     }
 
     fprintf( m_fp, ")" );

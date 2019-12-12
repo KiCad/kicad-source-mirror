@@ -986,7 +986,7 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
         auto l = arc.ConvertToPolyline();
 
         for( int i = 0; i < l.SegmentCount(); i++ )
-            itemShape.push_back( l.CSegment(i) );
+            itemShape.push_back( l.Segment( i ) );
 
         break;
     }
@@ -1003,7 +1003,7 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
         auto l = circle.ConvertToPolyline();
 
         for( int i = 0; i < l.SegmentCount(); i++ )
-            itemShape.push_back( l.CSegment(i) );
+            itemShape.push_back( l.Segment( i ) );
 
         break;
     }

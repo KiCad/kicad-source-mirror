@@ -520,8 +520,8 @@ void DP_GATEWAYS::BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool a
                 VECTOR2I gw_p( p0_p + sign * ( dir + dp ) + dv );
                 VECTOR2I gw_n( p0_n + sign * ( dir + dp ) - dv );
 
-                SHAPE_LINE_CHAIN entryP( p0_p, p0_p + sign * dir, gw_p );
-                SHAPE_LINE_CHAIN entryN( p0_n, p0_n + sign * dir, gw_n );
+                SHAPE_LINE_CHAIN entryP( { p0_p, p0_p + sign * dir, gw_p } );
+                SHAPE_LINE_CHAIN entryN( { p0_n, p0_n + sign * dir, gw_n } );
 
                 DP_GATEWAY gw( gw_p, gw_n, false );
 
@@ -831,8 +831,8 @@ void DIFF_PAIR::CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs ) const
     {
         for( int j = 0; j < n.SegmentCount(); j++ )
         {
-            SEG sp = p.CSegment( i );
-            SEG sn = n.CSegment( j );
+            SEG sp = p.Segment( i );
+            SEG sn = n.Segment( j );
 
             SEG p_clip, n_clip;
 

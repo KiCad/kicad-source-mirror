@@ -836,8 +836,8 @@ void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent,
     {
         SHAPE_LINE_CHAIN& poly = shapeBuffer->Outline( ii );
 
-        GRClosedPoly( aClipBox, aDC,
-                      poly.PointCount(), (wxPoint*)&poly.Point( 0 ), aFilledShape, aColor, aColor );
+        GRClosedPoly( aClipBox, aDC, poly.PointCount(), (wxPoint*) &poly.CPoint( 0 ), aFilledShape,
+                aColor, aColor );
     }
 }
 

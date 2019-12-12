@@ -21,10 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include <limits>
+#include <vector>
 
 #include <preview_items/polygon_geom_manager.h>
 
 #include <geometry/geometry_utils.h>
+#include <geometry/shape_line_chain.h>
 
 
 POLYGON_GEOM_MANAGER::POLYGON_GEOM_MANAGER( CLIENT& aClient ):
@@ -181,13 +183,13 @@ void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER
             }
         }
 
-        m_leaderPts = SHAPE_LINE_CHAIN( last_pt, new_end );
+        m_leaderPts = SHAPE_LINE_CHAIN( { last_pt, new_end } );
 
         if( pt )
         {
             // This checks for backtracking from the point to intersection
             if( SEG( last_pt, new_end ).Collinear( SEG( new_end, *pt ) ) )
-                m_leaderPts = SHAPE_LINE_CHAIN( last_pt, *pt );
+                m_leaderPts = SHAPE_LINE_CHAIN( { last_pt, *pt } );
             else
                 m_leaderPts.Append( *pt );
         }
@@ -195,7 +197,7 @@ void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER
     else
     {
         // direct segment
-        m_leaderPts = SHAPE_LINE_CHAIN( last_pt, aEndPoint );
+        m_leaderPts = SHAPE_LINE_CHAIN( { last_pt, aEndPoint } );
     }
 
     m_client.OnGeometryChange( *this );

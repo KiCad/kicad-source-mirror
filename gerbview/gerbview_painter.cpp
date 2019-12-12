@@ -26,6 +26,7 @@
 #include <convert_to_biu.h>
 #include <gerbview.h>
 
+#include <dcode.h>
 #include <gerber_draw_item.h>
 #include <gerber_file_image.h>
 
@@ -253,10 +254,16 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         if( !isFilled )
             m_gal->SetLineWidth( m_gerbviewSettings.m_outlineWidth );
 
-        SHAPE_POLY_SET absolutePolygon = aItem->m_Polygon;
+        std::vector<VECTOR2I> pts = aItem->m_Polygon.COutline( 0 ).CPoints();
 
-        for( auto it = absolutePolygon.Iterate( 0 ); it; ++it )
-            *it = aItem->GetABPosition( *it );
+        for( auto& pt : pts )
+            pt = aItem->GetABPosition( pt );
+
+
+        SHAPE_POLY_SET   absolutePolygon;
+        SHAPE_LINE_CHAIN chain( pts );
+        chain.SetClosed( true );
+        absolutePolygon.AddOutline( chain );
 
         // Degenerated polygons (having < 3 points) are drawn as lines
         // to avoid issues in draw polygon functions
@@ -362,7 +369,8 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         {
             if( aItem->m_Polygon.OutlineCount() == 0 )
                 aItem->ConvertSegmentToPolygon();
-            drawPolygon( aItem, aItem->m_Polygon, isFilled );
+
+            drawPolygon( aItem, code, isFilled );
         }
         else
         {
@@ -392,23 +400,25 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 }
 
 
-void GERBVIEW_PAINTER::drawPolygon( GERBER_DRAW_ITEM* aParent,
-                                    SHAPE_POLY_SET& aPolygon,
-                                    bool aFilled )
+void GERBVIEW_PAINTER::drawPolygon(
+        GERBER_DRAW_ITEM* aParent, D_CODE* aCode, bool aFilled, bool aShift )
 {
-    for( auto it = aPolygon.Iterate( 0 ); it; ++it )
-        *it = aParent->GetABPosition( *it );
+    SHAPE_POLY_SET poly;
+    auto&          pts = aCode->m_Polygon.COutline( 0 ).CPoints();
+    VECTOR2I       offset = aShift ? VECTOR2I( aParent->m_Start ) : VECTOR2I( 0, 0 );
+
+    for( auto& pt : pts )
+        poly.Append( aParent->GetABPosition( pt + offset ) );
 
     if( !m_gerbviewSettings.m_polygonFill )
         m_gal->SetLineWidth( m_gerbviewSettings.m_outlineWidth );
 
     if( !aFilled )
     {
-        for( int i = 0; i < aPolygon.OutlineCount(); i++ )
-            m_gal->DrawPolyline( aPolygon.COutline( i ) );
+        m_gal->DrawPolyline( poly.COutline( 0 ) );
     }
     else
-        m_gal->DrawPolygon( aPolygon );
+        m_gal->DrawPolygon( poly );
 }
 
 
@@ -442,9 +452,9 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
                 code->ConvertShapeToPolygon();
 
             SHAPE_POLY_SET poly = code->m_Polygon;
-            poly.Move( aItem->m_Start );
+            poly.Move( VECTOR2I( aItem->m_Start ) );
 
-            drawPolygon( aItem, poly, aFilled );
+            drawPolygon( aItem, code, aFilled );
         }
 
         break;
@@ -469,10 +479,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
             if( code->m_Polygon.OutlineCount() == 0 )
                 code->ConvertShapeToPolygon();
 
-            SHAPE_POLY_SET poly = code->m_Polygon;
-            poly.Move( aItem->m_Start );
-
-            drawPolygon( aItem, poly, aFilled );
+            drawPolygon( aItem, code, aFilled );
         }
         break;
     }
@@ -511,10 +518,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
             if( code->m_Polygon.OutlineCount() == 0 )
                 code->ConvertShapeToPolygon();
 
-            SHAPE_POLY_SET poly = code->m_Polygon;
-            poly.Move( aItem->m_Start );
-
-            drawPolygon( aItem, poly, aFilled );
+            drawPolygon( aItem, code, aFilled );
         }
         break;
     }
@@ -524,10 +528,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
         if( code->m_Polygon.OutlineCount() == 0 )
             code->ConvertShapeToPolygon();
 
-        SHAPE_POLY_SET poly = code->m_Polygon;
-        poly.Move( aItem->m_Start );
-
-        drawPolygon( aItem, poly, aFilled );
+        drawPolygon( aItem, code, aFilled );
         break;
     }
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 <Jean-Pierre Charras>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -413,11 +413,7 @@ void GERBER_DRAW_ITEM::MoveAB( const wxPoint& aMoveVector )
     m_End       += xymove;
     m_ArcCentre += xymove;
 
-    if( m_Polygon.OutlineCount() > 0 )
-    {
-        for( auto it = m_Polygon.Iterate( 0 ); it; ++it )
-            *it += xymove;
-    }
+    m_Polygon.Move( VECTOR2I( xymove ) );
 }
 
 
@@ -427,11 +423,7 @@ void GERBER_DRAW_ITEM::MoveXY( const wxPoint& aMoveVector )
     m_End       += aMoveVector;
     m_ArcCentre += aMoveVector;
 
-    if( m_Polygon.OutlineCount() > 0 )
-    {
-        for( auto it = m_Polygon.Iterate( 0 ); it; ++it )
-            *it += aMoveVector;
-    }
+    m_Polygon.Move( VECTOR2I( aMoveVector ) );
 }
 
 
@@ -624,13 +616,10 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon()
     m_Polygon.Append( VECTOR2I( close ) );  // close the shape
 
     // Create final polygon:
-    for( auto it = m_Polygon.Iterate( 0 ); it; ++it )
-    {
-        if( change )
-            ( *it ).y = -( *it ).y;
+    if( change )
+        m_Polygon.Mirror( false, true );
 
-        *it += start;
-    }
+    m_Polygon.Move( VECTOR2I( start ) );
 }
 
 
@@ -645,7 +634,7 @@ void GERBER_DRAW_ITEM::PrintGerberPoly( wxDC* aDC, COLOR4D aColor, const wxPoint
 
     for( int ii = 0; ii < pointCount; ii++ )
     {
-        wxPoint p( poly.Point( ii ).x, poly.Point( ii ).y );
+        wxPoint p( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
         points[ii] = p + aOffset;
         points[ii] = GetABPosition( points[ii] );
     }
@@ -798,7 +787,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
 
     case GBR_SPOT_POLY:
         poly = GetDcodeDescr()->m_Polygon;
-        poly.Move( m_Start );
+        poly.Move( VECTOR2I( m_Start ) );
         return poly.Contains( VECTOR2I( ref_pos ), 0, aAccuracy );
 
     case GBR_SPOT_RECT:

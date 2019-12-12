@@ -125,8 +125,8 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
             if( courtyard.OutlineCount() )
             {
                 //Overlap between footprint and candidate
-                VECTOR2I& pos = courtyard.Vertex( 0, 0, -1 );
-                auto      marker = std::unique_ptr<MARKER_PCB>(
+                auto& pos = courtyard.CVertex( 0, 0, -1 );
+                auto  marker = std::unique_ptr<MARKER_PCB>(
                         marker_factory.NewMarker( wxPoint( pos.x, pos.y ), footprint, candidate,
                                 DRCE_OVERLAPPING_FOOTPRINTS ) );
                 HandleMarker( std::move( marker ) );
@@ -162,8 +162,8 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
             if( courtyard.OutlineCount() )
             {
                 //Overlap between footprint and candidate
-                VECTOR2I& pos = courtyard.Vertex( 0, 0, -1 );
-                auto      marker = std::unique_ptr<MARKER_PCB>(
+                auto& pos = courtyard.CVertex( 0, 0, -1 );
+                auto  marker = std::unique_ptr<MARKER_PCB>(
                         marker_factory.NewMarker( wxPoint( pos.x, pos.y ), footprint, candidate,
                                 DRCE_OVERLAPPING_FOOTPRINTS ) );
                 HandleMarker( std::move( marker ) );

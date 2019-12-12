@@ -192,6 +192,8 @@ int SHAPE_POLY_SET::NewHole( int aOutline )
 
 int SHAPE_POLY_SET::Append( int x, int y, int aOutline, int aHole, bool aAllowDuplication )
 {
+    assert( m_polys.size() );
+
     if( aOutline < 0 )
         aOutline += m_polys.size();
 
@@ -273,25 +275,6 @@ SHAPE_POLY_SET SHAPE_POLY_SET::Subset( int aFirstPolygon, int aLastPolygon )
 }
 
 
-VECTOR2I& SHAPE_POLY_SET::Vertex( int aIndex, int aOutline, int aHole )
-{
-    if( aOutline < 0 )
-        aOutline += m_polys.size();
-
-    int idx;
-
-    if( aHole < 0 )
-        idx = 0;
-    else
-        idx = aHole + 1;
-
-    assert( aOutline < (int) m_polys.size() );
-    assert( idx < (int) m_polys[aOutline].size() );
-
-    return m_polys[aOutline][idx].Point( aIndex );
-}
-
-
 const VECTOR2I& SHAPE_POLY_SET::CVertex( int aIndex, int aOutline, int aHole ) const
 {
     if( aOutline < 0 )
@@ -311,18 +294,6 @@ const VECTOR2I& SHAPE_POLY_SET::CVertex( int aIndex, int aOutline, int aHole ) c
 }
 
 
-VECTOR2I& SHAPE_POLY_SET::Vertex( int aGlobalIndex )
-{
-    SHAPE_POLY_SET::VERTEX_INDEX index;
-
-    // Assure the passed index references a legal position; abort otherwise
-    if( !GetRelativeIndices( aGlobalIndex, &index ) )
-        throw( std::out_of_range( "aGlobalIndex-th vertex does not exist" ) );
-
-    return m_polys[index.m_polygon][index.m_contour].Point( index.m_vertex );
-}
-
-
 const VECTOR2I& SHAPE_POLY_SET::CVertex( int aGlobalIndex ) const
 {
     SHAPE_POLY_SET::VERTEX_INDEX index;
@@ -332,12 +303,6 @@ const VECTOR2I& SHAPE_POLY_SET::CVertex( int aGlobalIndex ) const
         throw( std::out_of_range( "aGlobalIndex-th vertex does not exist" ) );
 
     return m_polys[index.m_polygon][index.m_contour].CPoint( index.m_vertex );
-}
-
-
-VECTOR2I& SHAPE_POLY_SET::Vertex( SHAPE_POLY_SET::VERTEX_INDEX index )
-{
-    return Vertex( index.m_vertex, index.m_polygon, index.m_contour - 1 );
 }
 
 
@@ -1444,6 +1409,23 @@ void SHAPE_POLY_SET::RemoveVertex( VERTEX_INDEX aIndex )
 }
 
 
+void SHAPE_POLY_SET::SetVertex( int aGlobalIndex, const VECTOR2I& aPos )
+{
+    VERTEX_INDEX index;
+
+    if( GetRelativeIndices( aGlobalIndex, &index ) )
+        SetVertex( index, aPos );
+    else
+        throw( std::out_of_range( "aGlobalIndex-th vertex does not exist" ) );
+}
+
+
+void SHAPE_POLY_SET::SetVertex( const VERTEX_INDEX& aIndex, const VECTOR2I& aPos )
+{
+    m_polys[aIndex.m_polygon][aIndex.m_contour].SetPoint( aIndex.m_vertex, aPos );
+}
+
+
 bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, int aAccuracy,
                                      bool aUseBBoxCaches ) const
 {
@@ -1474,6 +1456,18 @@ void SHAPE_POLY_SET::Move( const VECTOR2I& aVector )
     {
         for( SHAPE_LINE_CHAIN& path : poly )
             path.Move( aVector );
+    }
+}
+
+
+void SHAPE_POLY_SET::Mirror( bool aX, bool aY, const VECTOR2I& aRef )
+{
+    for( POLYGON& poly : m_polys )
+    {
+        for( SHAPE_LINE_CHAIN& path : poly )
+        {
+            path.Mirror( aX, aY, aRef );
+        }
     }
 }
 
@@ -1676,8 +1670,8 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
         for( int currVertex = 0; currVertex < currContour.PointCount(); currVertex++ )
         {
             // Current vertex
-            int x1  = currContour.Point( currVertex ).x;
-            int y1  = currContour.Point( currVertex ).y;
+            int x1 = currContour.CPoint( currVertex ).x;
+            int y1 = currContour.CPoint( currVertex ).y;
 
             if( aPreserveCorners && aPreserveCorners->count( VECTOR2I( x1, y1 ) ) > 0 )
             {
@@ -1698,12 +1692,12 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
             nextVertex = currVertex == currContour.PointCount() - 1 ? 0 : currVertex + 1;
 
             // Previous vertex computation
-            double  xa  = currContour.Point( prevVertex ).x - x1;
-            double  ya  = currContour.Point( prevVertex ).y - y1;
+            double xa = currContour.CPoint( prevVertex ).x - x1;
+            double ya = currContour.CPoint( prevVertex ).y - y1;
 
             // Next vertex computation
-            double  xb  = currContour.Point( nextVertex ).x - x1;
-            double  yb  = currContour.Point( nextVertex ).y - y1;
+            double xb = currContour.CPoint( nextVertex ).x - x1;
+            double yb = currContour.CPoint( nextVertex ).y - y1;
 
             // Compute the new distances
             double  lena    = hypot( xa, ya );

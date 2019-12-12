@@ -327,14 +327,8 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     case S_POLYGON:
         // polygon corners coordinates are always relative to the
         // footprint position, orientation 0
-        for( auto iter = m_Poly.Iterate(); iter; iter++ )
-        {
-            if( aFlipLeftRight )
-                MIRROR( iter->x, 0 );
-            else
-                MIRROR( iter->y, 0 );
-        }
-	break;
+        m_Poly.Mirror( aFlipLeftRight, !aFlipLeftRight );
+        break;
     }
 
     // DRAWSEGMENT items are not usually on copper layers, but
@@ -391,13 +385,8 @@ void EDGE_MODULE::Mirror( wxPoint aCentre, bool aMirrorAroundXAxis )
     case S_POLYGON:
         // polygon corners coordinates are always relative to the
         // footprint position, orientation 0
-        for( auto iter = m_Poly.Iterate(); iter; iter++ )
-        {
-            if( aMirrorAroundXAxis )
-                MIRROR( iter->y, aCentre.y );
-            else
-                MIRROR( iter->x, aCentre.x );
-        }
+        m_Poly.Mirror( !aMirrorAroundXAxis, aMirrorAroundXAxis );
+        break;
     }
 
     SetDrawCoord();
@@ -433,8 +422,7 @@ void EDGE_MODULE::Move( const wxPoint& aMoveVector )
     case S_POLYGON:
         // polygon corners coordinates are always relative to the
         // footprint position, orientation 0
-        for( auto iter = m_Poly.Iterate(); iter; iter++ )
-            *iter += VECTOR2I( aMoveVector );
+        m_Poly.Move( VECTOR2I( aMoveVector ) );
 
         break;
     }

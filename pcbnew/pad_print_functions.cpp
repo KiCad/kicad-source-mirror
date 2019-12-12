@@ -280,8 +280,9 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
                 if( poly.PointCount() > 0 )
                 {
-                    GRClosedPoly( nullptr, aDC, poly.PointCount(), (wxPoint*)&poly.Point( 0 ),
-                                  false, 0, aDrawInfo.m_Color, aDrawInfo.m_Color );
+                    GRClosedPoly( nullptr, aDC, poly.PointCount(),
+                            (const wxPoint*) &poly.CPoint( 0 ), false, 0, aDrawInfo.m_Color,
+                            aDrawInfo.m_Color );
                 }
             }
         }
@@ -307,8 +308,8 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
         SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
 
-        GRClosedPoly( nullptr, aDC, poly.PointCount(), (wxPoint*)&poly.Point( 0 ), filled, 0,
-                      aDrawInfo.m_Color, aDrawInfo.m_Color );
+        GRClosedPoly( nullptr, aDC, poly.PointCount(), (const wxPoint*) &poly.CPoint( 0 ), filled,
+                0, aDrawInfo.m_Color, aDrawInfo.m_Color );
 
         if( aDrawInfo.m_PadClearance )
         {
@@ -327,8 +328,8 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             SHAPE_LINE_CHAIN& clearance_poly = outline.Outline( 0 );
 
             GRClosedPoly( nullptr, aDC, clearance_poly.PointCount(),
-                          (wxPoint*)&clearance_poly.Point( 0 ), false, 0,
-                          aDrawInfo.m_Color, aDrawInfo.m_Color );
+                    (const wxPoint*) &clearance_poly.CPoint( 0 ), false, 0, aDrawInfo.m_Color,
+                    aDrawInfo.m_Color );
         }
         }
         break;
@@ -373,7 +374,6 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         SHAPE_POLY_SET outline;     // Will contain the corners in board coordinates
         outline.Append( m_customShapeAsPolygon );
         CustomShapeAsPolygonToBoardPosition( &outline, pad_pos, GetOrientation() );
-        SHAPE_LINE_CHAIN* poly;
 
         if( aDrawInfo.m_Mask_margin.x )
         {
@@ -387,10 +387,10 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         // ( can happen with CUSTOM pads and negative margins )
         for( int jj = 0; jj < outline.OutlineCount(); ++jj )
         {
-            poly = &outline.Outline( jj );
+            auto& poly = outline.Outline( jj );
 
-            GRClosedPoly( nullptr, aDC, poly->PointCount(), (wxPoint*)&poly->Point( 0 ),
-                          aDrawInfo.m_ShowPadFilled, 0, aDrawInfo.m_Color, aDrawInfo.m_Color );
+            GRClosedPoly( nullptr, aDC, poly.PointCount(), (const wxPoint*) &poly.CPoint( 0 ),
+                    aDrawInfo.m_ShowPadFilled, 0, aDrawInfo.m_Color, aDrawInfo.m_Color );
         }
 
         if( aDrawInfo.m_PadClearance )
@@ -404,12 +404,13 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
             for( int jj = 0; jj < clearance_outline.OutlineCount(); ++jj )
             {
-                poly = &clearance_outline.Outline( jj );
+                auto& poly = clearance_outline.Outline( jj );
 
-                if( poly->PointCount() > 0 )
+                if( poly.PointCount() > 0 )
                 {
-                    GRClosedPoly( nullptr, aDC, poly->PointCount(), (wxPoint*)&poly->Point( 0 ),
-                                  false, 0, aDrawInfo.m_Color, aDrawInfo.m_Color );
+                    GRClosedPoly( nullptr, aDC, poly.PointCount(),
+                            (const wxPoint*) &poly.CPoint( 0 ), false, 0, aDrawInfo.m_Color,
+                            aDrawInfo.m_Color );
                 }
             }
         }

@@ -41,10 +41,10 @@
 #include <widgets/progress_reporter.h>
 #include <zone_filler.h>
 
+// TODO: Remove these to the commit object below
 // Local variables
 static PICKED_ITEMS_LIST s_PickedList;    // a picked list to save zones for undo/redo command
 static PICKED_ITEMS_LIST s_AuxiliaryList; // a picked list to store zones that are deleted or added when combined
-
 
 void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
 {

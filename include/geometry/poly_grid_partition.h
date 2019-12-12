@@ -177,7 +177,7 @@ enum HASH_FLAG
 
         for( int i = 0; i<m_outline.SegmentCount(); i++ )
         {
-            SEG edge = m_outline.CSegment( i );
+            SEG edge = m_outline.Segment( i );
 
             if( edgeSet.find( edge ) == edgeSet.end() )
             {
@@ -191,7 +191,7 @@ enum HASH_FLAG
 
         for( int i = 0; i<m_outline.SegmentCount(); i++ )
         {
-            auto    edge    = m_outline.CSegment( i );
+            auto    edge = m_outline.Segment( i );
             auto    dir     = edge.B - edge.A;
             int     flags   = 0;
 
@@ -468,7 +468,7 @@ public:
                 const auto& cell = m_grid [ m_gridSize * gy + gx];
                 for ( auto index : cell )
                 {
-                    const auto& seg = m_outline.CSegment(index);
+                    const auto& seg = m_outline.Segment( index );
 
                     if ( seg.SquaredDistance(aP) <= dist )
                         return true;

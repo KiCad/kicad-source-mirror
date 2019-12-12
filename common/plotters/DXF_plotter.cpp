@@ -777,12 +777,12 @@ void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize
     // TransformRoundRectToPolygon creates only one convex polygon
     SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
 
-    MoveTo( wxPoint( poly.Point( 0 ).x, poly.Point( 0 ).y ) );
+    MoveTo( wxPoint( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
 
     for( int ii = 1; ii < poly.PointCount(); ++ii )
-        LineTo( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+        LineTo( wxPoint( poly.CPoint( ii ).x, poly.CPoint( ii ).y ) );
 
-    FinishTo( wxPoint( poly.Point( 0 ).x, poly.Point( 0 ).y ) );
+    FinishTo( wxPoint( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
 }
 
 void DXF_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
@@ -793,12 +793,12 @@ void DXF_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
     {
         SHAPE_LINE_CHAIN& poly = aPolygons->Outline( cnt );
 
-        MoveTo( wxPoint( poly.Point( 0 ).x, poly.Point( 0 ).y ) );
+        MoveTo( wxPoint( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
 
         for( int ii = 1; ii < poly.PointCount(); ++ii )
-            LineTo( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+            LineTo( wxPoint( poly.CPoint( ii ).x, poly.CPoint( ii ).y ) );
 
-        FinishTo(wxPoint( poly.Point( 0 ).x, poly.Point( 0 ).y ) );
+        FinishTo( wxPoint( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
     }
 }
 

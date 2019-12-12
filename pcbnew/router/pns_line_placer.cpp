@@ -147,7 +147,7 @@ bool LINE_PLACER::handleSelfIntersections()
     // from the beginning
     if( n < 2 )
     {
-        m_p_start = tail.Point( 0 );
+        m_p_start = tail.CPoint( 0 );
         m_direction = m_initial_direction;
         tail.Clear();
         head.Clear();
@@ -548,8 +548,8 @@ bool LINE_PLACER::rhStopAtNearestObstacle( const VECTOR2I& aP, LINE& aNewHead )
         SEG segL( s.B, leadL.LineProject( aP ) );
         SEG segR( s.B, leadR.LineProject( aP ) );
 
-        LINE finishL( l0, SHAPE_LINE_CHAIN( segL.A, segL.B ) );
-        LINE finishR( l0, SHAPE_LINE_CHAIN( segR.A, segR.B ) );
+        LINE finishL( l0, SHAPE_LINE_CHAIN( { segL.A, segL.B } ) );
+        LINE finishR( l0, SHAPE_LINE_CHAIN( { segR.A, segR.B } ) );
 
         LINE reducedL = reduceToNearestObstacle( finishL );
         LINE reducedR = reduceToNearestObstacle( finishR );
@@ -1213,7 +1213,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aInver
     {
         if( Settings().GetFreeAngleMode() && Settings().Mode() == RM_MarkObstacles )
         {
-            l = SHAPE_LINE_CHAIN( m_p_start, aP );
+            l = SHAPE_LINE_CHAIN( { m_p_start, aP } );
         }
         else
         {
@@ -1228,7 +1228,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aInver
             VECTOR2I newLast = l.CSegment( 0 ).LineProject( l.CPoint( -1 ) );
 
             l.Remove( -1, -1 );
-            l.Point( 1 ) = newLast;
+            l.SetPoint( 1, newLast );
         }
     }
 

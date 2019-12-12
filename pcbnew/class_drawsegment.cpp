@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,10 +100,7 @@ void DRAWSEGMENT::Move( const wxPoint& aMoveVector )
     switch ( m_Shape )
     {
     case S_POLYGON:
-        for( auto iter = m_Poly.Iterate(); iter; iter++ )
-        {
-            (*iter) += VECTOR2I( aMoveVector );
-        }
+        m_Poly.Move( VECTOR2I( aMoveVector ) );
         break;
 
     case S_CURVE:
@@ -136,10 +133,7 @@ void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
         break;
 
     case S_POLYGON:
-        for( auto iter = m_Poly.Iterate(); iter; iter++ )
-        {
-            RotatePoint( *iter, VECTOR2I(aRotCentre), aAngle);
-        }
+        m_Poly.Rotate( -DECIDEG2RAD( aAngle ), VECTOR2I( aRotCentre ) );
         break;
 
     case S_CURVE:
@@ -184,13 +178,7 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         break;
 
     case S_POLYGON:
-        for( auto iter = m_Poly.Iterate(); iter; iter++ )
-        {
-            if( aFlipLeftRight )
-                iter->x = aCentre.x - ( iter->x - aCentre.x );
-            else
-                iter->y = aCentre.y - ( iter->y - aCentre.y );
-        }
+        m_Poly.Mirror( aFlipLeftRight, !aFlipLeftRight, VECTOR2I( aCentre ) );
         break;
 
     case S_CURVE:
@@ -441,8 +429,8 @@ void DRAWSEGMENT::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& aOffse
             for( int jj = 0; jj < outline.OutlineCount(); ++jj )
             {
                 SHAPE_LINE_CHAIN& poly = outline.Outline( jj );
-                GRClosedPoly( nullptr, DC, poly.PointCount(), (wxPoint*)&poly.Point( 0 ),
-                              IsPolygonFilled(), GetWidth(), color, color );
+                GRClosedPoly( nullptr, DC, poly.PointCount(), (const wxPoint*) &poly.CPoint( 0 ),
+                        IsPolygonFilled(), GetWidth(), color, color );
             }
         }
         break;

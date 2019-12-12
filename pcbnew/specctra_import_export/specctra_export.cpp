@@ -506,8 +506,8 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
                 for( int idx = 0; idx < polygonal_shape.PointCount(); idx++ )
                 {
-                    POINT corner( scale( polygonal_shape.Point( idx ).x ),
-                                  scale( -polygonal_shape.Point( idx ).y ) );
+                    POINT corner( scale( polygonal_shape.CPoint( idx ).x ),
+                            scale( -polygonal_shape.CPoint( idx ).y ) );
                     corner += dsnOffset;
                     polygon->AppendPoint( corner );
 
@@ -843,12 +843,12 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
 
         for( int ii = 0; ii < outline.PointCount(); ii++ )
         {
-            wxPoint pos( outline.Point( ii ).x, outline.Point( ii ).y );
+            wxPoint pos( outline.CPoint( ii ).x, outline.CPoint( ii ).y );
             path->AppendPoint( mapPt( pos ) );
         }
 
         // Close polygon:
-        wxPoint pos0( outline.Point( 0 ).x, outline.Point( 0 ).y );
+        wxPoint pos0( outline.CPoint( 0 ).x, outline.CPoint( 0 ).y );
         path->AppendPoint( mapPt( pos0 ) );
 
         // Generate holes as keepout:
@@ -866,12 +866,12 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
 
             for( int jj = 0; jj < hole.PointCount(); jj++ )
             {
-                wxPoint pos( hole.Point( jj ).x, hole.Point( jj ).y );
+                wxPoint pos( hole.CPoint( jj ).x, hole.CPoint( jj ).y );
                 poly_ko->AppendPoint( mapPt( pos ) );
             }
 
             // Close polygon:
-            wxPoint pos( hole.Point( 0 ).x, hole.Point( 0 ).y );
+            wxPoint pos( hole.CPoint( 0 ).x, hole.CPoint( 0 ).y );
             poly_ko->AppendPoint( mapPt( pos ) );
         }
     }
