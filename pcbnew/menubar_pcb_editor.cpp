@@ -245,55 +245,72 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
-    auto layersPaletteShownCondition = [ this ] ( const SELECTION& aSel ) {
+    auto layersPaletteShownCondition = [ this ]( const SELECTION &aSel )
+    {
         return LayerManagerShown();
     };
-    auto microwaveToolbarShownCondition = [ this ] ( const SELECTION& aSel ) {
+    auto microwaveToolbarShownCondition = [ this ]( const SELECTION &aSel )
+    {
         return MicrowaveToolbarShown();
     };
-    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
+    auto gridShownCondition = [ this ]( const SELECTION &aSel )
+    {
         return IsGridVisible();
     };
-    auto polarCoordsCondition = [ this ] ( const SELECTION& aSel ) {
+    auto polarCoordsCondition = [ this ]( const SELECTION &aSel )
+    {
         return GetShowPolarCoords();
     };
-    auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+    auto imperialUnitsCondition = [ this ]( const SELECTION &aSel )
+    {
         return GetUserUnits() == INCHES;
     };
-    auto metricUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+    auto metricUnitsCondition = [ this ]( const SELECTION &aSel )
+    {
         return GetUserUnits() == MILLIMETRES;
     };
-    auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
+    auto fullCrosshairCondition = [ this ]( const SELECTION &aSel )
+    {
         return GetGalDisplayOptions().m_fullscreenCursor;
     };
-    auto ratsnestShownCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+    auto ratsnestShownCondition = [ &disp_opt ]( const SELECTION &aSel )
+    {
         return disp_opt.m_ShowGlobalRatsnest;
     };
-    auto curvedRatsnestCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+    auto curvedRatsnestCondition = [ &disp_opt ]( const SELECTION &aSel )
+    {
         return disp_opt.m_DisplayRatsnestLinesCurved;
     };
-    auto boardFlippedCondition = [ this ] ( const SELECTION& aSel ) {
+    auto boardFlippedCondition = [ this ]( const SELECTION &aSel )
+    {
         return GetCanvas()->GetView()->IsMirroredX();
     };
-    auto zonesFilledCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+    auto zonesFilledCondition = [ &disp_opt ]( const SELECTION &aSel )
+    {
         return disp_opt.m_DisplayZonesMode == 0;
     };
-    auto zonesWireframedCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+    auto zonesWireframedCondition = [ &disp_opt ]( const SELECTION &aSel )
+    {
         return disp_opt.m_DisplayZonesMode == 1;
     };
-    auto zonesOutlinedCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+    auto zonesOutlinedCondition = [ &disp_opt ]( const SELECTION &aSel )
+    {
         return disp_opt.m_DisplayZonesMode == 2;
     };
-    auto sketchTracksCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+    auto sketchTracksCondition = [ &disp_opt ]( const SELECTION &aSel )
+    {
         return !disp_opt.m_DisplayPcbTrackFill;
     };
-    auto sketchViasCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+    auto sketchViasCondition = [ &disp_opt ]( const SELECTION &aSel )
+    {
         return !disp_opt.m_DisplayViaFill;
     };
-    auto sketchPadsCondition = [ this, disp_opt ] ( const SELECTION& aSel ) {
+    auto sketchPadsCondition = [ disp_opt ]( const SELECTION &aSel )
+    {
         return !disp_opt.m_DisplayPadFill;
     };
-    auto contrastModeCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+    auto contrastModeCondition = [ &disp_opt ]( const SELECTION &aSel )
+    {
         return !disp_opt.m_ContrastModeDisplay;
     };
 
