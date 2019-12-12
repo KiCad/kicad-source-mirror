@@ -42,7 +42,7 @@ bool LIB_CONTROL::Init()
     m_frame = getEditFrame<SCH_BASE_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     m_isLibEdit = m_frame->IsType( FRAME_SCH_LIB_EDITOR );
-    
+
     if( m_isLibEdit )
     {
         CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
@@ -56,34 +56,34 @@ bool LIB_CONTROL::Init()
             LIB_ID sel = editFrame->GetTreeLIBID();
             return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
         };
-    
+
         ctxMenu.AddItem( ACTIONS::newLibrary,            SELECTION_CONDITIONS::ShowAlways );
         ctxMenu.AddItem( ACTIONS::addLibrary,            SELECTION_CONDITIONS::ShowAlways );
         ctxMenu.AddItem( ACTIONS::save,                  libSelectedCondition );
         ctxMenu.AddItem( ACTIONS::saveAs,                libSelectedCondition );
         ctxMenu.AddItem( ACTIONS::revert,                libSelectedCondition );
-    
+
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::newSymbol,          SELECTION_CONDITIONS::ShowAlways );
         ctxMenu.AddItem( EE_ACTIONS::editSymbol,         symbolSelectedCondition );
-    
+
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( ACTIONS::save,                  symbolSelectedCondition );
         ctxMenu.AddItem( ACTIONS::saveCopyAs,            symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::duplicateSymbol,    symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::deleteSymbol,       symbolSelectedCondition );
         ctxMenu.AddItem( ACTIONS::revert,                symbolSelectedCondition );
-    
+
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::cutSymbol,          symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::copySymbol,         symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::pasteSymbol,        SELECTION_CONDITIONS::ShowAlways );
-    
+
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::importSymbol,       SELECTION_CONDITIONS::ShowAlways );
         ctxMenu.AddItem( EE_ACTIONS::exportSymbol,       symbolSelectedCondition );
     }
-    
+
     return true;
 }
 
@@ -106,7 +106,7 @@ int LIB_CONTROL::EditSymbol( const TOOL_EVENT& aEvent )
         LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
         int             unit = 0;
         LIB_ID          partId = editFrame->GetTreeLIBID( &unit );
-        
+
         editFrame->LoadPart( partId.GetLibItemName(), partId.GetLibNickname(), unit );
     }
 
@@ -171,10 +171,10 @@ int LIB_CONTROL::CutCopyDelete( const TOOL_EVENT& aEvt )
     if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
     {
         LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
-        
+
         if( aEvt.IsAction( &EE_ACTIONS::cutSymbol ) || aEvt.IsAction( &EE_ACTIONS::copySymbol ) )
             editFrame->CopyPartToClipboard();
-        
+
         if( aEvt.IsAction( &EE_ACTIONS::cutSymbol ) || aEvt.IsAction( &EE_ACTIONS::deleteSymbol ) )
             editFrame->DeletePartFromLibrary();
     }

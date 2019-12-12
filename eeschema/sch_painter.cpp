@@ -679,23 +679,23 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     {
     case PIN_UP:
         p0 = VECTOR2I( pos.x, pos.y - len );
-        dir = VECTOR2I(0, 1);
+        dir = VECTOR2I( 0, 1 );
         break;
 
     case PIN_DOWN:
         p0 = VECTOR2I( pos.x, pos.y + len );
-        dir = VECTOR2I(0, -1);
+        dir = VECTOR2I( 0, -1 );
         break;
 
     case PIN_LEFT:
         p0 = VECTOR2I( pos.x - len, pos.y );
-        dir = VECTOR2I(1, 0);
+        dir = VECTOR2I( 1, 0 );
         break;
 
     default:
     case PIN_RIGHT:
         p0 = VECTOR2I( pos.x + len, pos.y );
-        dir = VECTOR2I(-1, 0);
+        dir = VECTOR2I( -1, 0 );
         break;
     }
 
@@ -755,7 +755,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
                      pc,
                      p0 + VECTOR2D( -dir.y, dir.x) * clock_size );
 
-            if(!dir.y)
+            if( !dir.y )
             {
                 triLine( p0 + VECTOR2D(dir.x, 0) * diam,
                          p0 + VECTOR2D(dir.x, -1) * diam,
@@ -774,7 +774,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         case PINSHAPE_CLOCK:
             m_gal->DrawLine( p0, pos );
 
-            if (!dir.y)
+            if( !dir.y )
             {
                 triLine( p0 + VECTOR2D( 0, clock_size ),
                          p0 + VECTOR2D( -dir.x * clock_size, 0 ),
@@ -791,7 +791,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         case PINSHAPE_INPUT_LOW:
             m_gal->DrawLine( p0, pos );
 
-            if(!dir.y)
+            if( !dir.y )
             {
                 triLine( p0 + VECTOR2D(dir.x, 0) * diam,
                          p0 + VECTOR2D(dir.x, -1) * diam,
@@ -984,14 +984,14 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             SET_DC( INSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText ( text[INSIDE], pos + VECTOR2D( 0, insideOffset + len ), M_PI / 2);
+            strokeText( text[INSIDE], pos + VECTOR2D( 0, insideOffset + len ), M_PI / 2 );
         }
         if( size[OUTSIDE] )
         {
             SET_DC( OUTSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText ( text[OUTSIDE], pos + VECTOR2D( 0, -outsideOffset ), M_PI / 2);
+            strokeText( text[OUTSIDE], pos + VECTOR2D( 0, -outsideOffset ), M_PI / 2 );
         }
         if( size[ABOVE] )
         {
@@ -1015,14 +1015,14 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             SET_DC( INSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText ( text[INSIDE], pos + VECTOR2D( 0, -insideOffset - len ), M_PI / 2);
+            strokeText( text[INSIDE], pos + VECTOR2D( 0, -insideOffset - len ), M_PI / 2 );
         }
         if( size[OUTSIDE] )
         {
             SET_DC( OUTSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText ( text[OUTSIDE], pos + VECTOR2D( 0, outsideOffset ), M_PI / 2);
+            strokeText( text[OUTSIDE], pos + VECTOR2D( 0, outsideOffset ), M_PI / 2 );
         }
         if( size[ABOVE] )
         {
@@ -1074,7 +1074,7 @@ void SCH_PAINTER::drawDanglingSymbol( const wxPoint& aPos, bool aDrawingShadows 
 
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
-    m_gal->SetLineWidth ( aDrawingShadows ? getShadowWidth() : 1.0F );
+    m_gal->SetLineWidth( aDrawingShadows ? getShadowWidth() : 1.0F );
 
     m_gal->DrawRectangle( aPos - radius, aPos + radius );
 }
@@ -1321,12 +1321,12 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 
     tempPart.SetFlags( aComp->GetFlags() );
 
-    orientPart( &tempPart, aComp->GetOrientation());
+    orientPart( &tempPart, aComp->GetOrientation() );
 
     for( auto& tempItem : tempPart.GetDrawItems() )
     {
         tempItem.SetFlags( aComp->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
-        tempItem.MoveTo( tempItem.GetPosition() + (wxPoint) mapCoords( aComp->GetPosition()));
+        tempItem.MoveTo( tempItem.GetPosition() + (wxPoint) mapCoords( aComp->GetPosition() ) );
     }
 
     // Copy the pin info from the component to the temp pins
