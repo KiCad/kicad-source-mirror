@@ -1085,8 +1085,6 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
     // NOTE: in the future this is where eeschema layer/itemtype visibility will be handled
     LIB_EDIT_FRAME* editFrame = dynamic_cast< LIB_EDIT_FRAME* >( m_frame );
 
-    wxCHECK( editFrame, false );
-
     switch( aItem->Type() )
     {
     case SCH_PIN_T:
@@ -1099,11 +1097,14 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
 
     case LIB_FIELD_T:
     {
-        LIB_PART*       currentPart = editFrame->GetCurPart();
+        if( editFrame )
+        {
+            LIB_PART* currentPart = editFrame->GetCurPart();
 
-        // Nothing in derived symbols is editable at the moment.
-        if( currentPart && currentPart->IsAlias() )
-            return false;
+            // Nothing in derived symbols is editable at the moment.
+            if( currentPart && currentPart->IsAlias() )
+                return false;
+        }
 
         break;
     }
@@ -1116,13 +1117,16 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
     case LIB_BEZIER_T:
     case LIB_PIN_T:
     {
-        LIB_ITEM*       lib_item = (LIB_ITEM*) aItem;
+        if( editFrame )
+        {
+            LIB_ITEM* lib_item = (LIB_ITEM*) aItem;
 
-        if( lib_item->GetUnit() && lib_item->GetUnit() != editFrame->GetUnit() )
-            return false;
+            if( lib_item->GetUnit() && lib_item->GetUnit() != editFrame->GetUnit() )
+                return false;
 
-        if( lib_item->GetConvert() && lib_item->GetConvert() != editFrame->GetConvert() )
-            return false;
+            if( lib_item->GetConvert() && lib_item->GetConvert() != editFrame->GetConvert() )
+                return false;
+        }
 
         break;
     }
