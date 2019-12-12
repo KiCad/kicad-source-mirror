@@ -365,9 +365,9 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
     // 60mils is 1.524mm
     if( !foundTextSize )
     {
-    	const double defaultTextSize = 1.524 * IU_PER_MM;
+        const double defaultTextSize = 1.524 * IU_PER_MM;
 
-    	aText->SetTextSize( wxSize( defaultTextSize, defaultTextSize ) );
+        aText->SetTextSize( wxSize( defaultTextSize, defaultTextSize ) );
     }
 }
 

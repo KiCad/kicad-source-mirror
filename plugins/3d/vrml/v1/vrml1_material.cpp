@@ -624,7 +624,7 @@ void WRL1MATERIAL::GetColor( SGCOLOR* aColor, int aIndex )
     if( dRed + dGreen + dBlue > 0.01f )
         ++n;
 
-    if( (sRed + sGreen + sBlue) * shiny > 0.01f )
+    if( ( sRed + sGreen + sBlue ) * shiny > 0.01f )
         ++n;
 
     if( 0 == n )
