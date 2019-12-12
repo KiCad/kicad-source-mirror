@@ -876,8 +876,9 @@ bool LIB_MANAGER::LIB_BUFFER::DeleteBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartB
     bool retv = true;
 
     // Remove all derived symbols to prevent broken inheritance.
-    if( aPartBuf->GetPart()->IsRoot() )
-        retv &= removeChildSymbols( aPartBuf );
+    if( aPartBuf->GetPart()->IsRoot() && HasDerivedSymbols( aPartBuf->GetPart()->GetName() )
+      && removeChildSymbols( aPartBuf ) == 0 )
+        retv = false;
 
     m_deleted.emplace_back( *partBufIt );
     m_parts.erase( partBufIt );
