@@ -53,7 +53,7 @@ public:
     /**
      * Constructor
      *
-     * Creates a tool with given name. The name must be unique. 
+     * Creates a tool with given name. The name must be unique.
      */
     EE_TOOL_BASE( const std::string& aName ) :
         TOOL_INTERACTIVE ( aName ),
@@ -128,7 +128,8 @@ protected:
             SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
             if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
-                editFrame->SaveCopyInUndoList( (SCH_ITEM*) aItem->GetParent(), UR_CHANGED, aAppend );
+                editFrame->SaveCopyInUndoList( (SCH_ITEM*) aItem->GetParent(), UR_CHANGED,
+                        aAppend );
             else
                 editFrame->SaveCopyInUndoList( (SCH_ITEM*) aItem, aType, aAppend );
         }
