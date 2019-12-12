@@ -34,10 +34,10 @@ SGAPPEARANCE::SGAPPEARANCE( SGNODE* aParent ) : SGNODE( aParent)
     m_SGtype = S3D::SGTYPE_APPEARANCE;
 
     // defaults in accord with VRML2.0 spec
-    ambient.SetColor( 0.05317, 0.17879, 0.01804 );
-    shininess = 0.2;
-    transparency = 0.0;
-    diffuse.SetColor( 0.8, 0.8, 0.8 );
+    ambient.SetColor( 0.05317f, 0.17879f, 0.01804f );
+    shininess = 0.2f;
+    transparency = 0.0f;
+    diffuse.SetColor( 0.8f, 0.8f, 0.8f );
 
     if( NULL != aParent && S3D::SGTYPE_SHAPE != aParent->GetNodeType() )
     {
@@ -318,13 +318,13 @@ bool SGAPPEARANCE::WriteVRML( std::ostream& aFile, bool aReuseFlag )
     diffuse.GetColor( ambr, ambg, ambb );
     float den = ( 0.212671 * ambr + 0.71516 * ambg + 0.072169 * ambb );
 
-    if( den < 0.004 )
-        den = 0.004;
+    if( den < 0.004f )
+        den = 0.004f;
 
     amb /= den;
 
-    if( amb > 1.0 )
-        amb = 1.0;
+    if( amb > 1.0f )
+        amb = 1.0f;
 
     S3D::FormatFloat( tmp, amb );
     aFile << "   ambientIntensity " << tmp << "\n";
