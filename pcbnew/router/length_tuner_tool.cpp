@@ -56,37 +56,37 @@ static TOOL_ACTION ACT_StartTuning( "pcbnew.LengthTuner.StartTuning",
         'X', LEGACY_HK_NAME( "Add New Track" ),
         _( "New Track" ), _( "Starts laying a new track." ) );
 
-static TOOL_ACTION ACT_EndTuning( "pcbnew.LengthTuner.EndTuning", 
+static TOOL_ACTION ACT_EndTuning( "pcbnew.LengthTuner.EndTuning",
         AS_CONTEXT,
         WXK_END, LEGACY_HK_NAME( "Stop laying the current track." ),
         _( "End Track" ), _( "Stops laying the current meander." ) );
 
-static TOOL_ACTION ACT_Settings( "pcbnew.LengthTuner.Settings", 
+static TOOL_ACTION ACT_Settings( "pcbnew.LengthTuner.Settings",
         AS_CONTEXT,
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         MD_CTRL + 'L', LEGACY_HK_NAME( "Length Tuning Settings (Modern Toolset only)" ),
         _( "Length Tuning Settings..." ), _( "Sets the length tuning parameters for currently routed item." ),
         router_len_tuner_setup_xpm );
 
-static TOOL_ACTION ACT_SpacingIncrease( "pcbnew.LengthTuner.SpacingIncrease", 
+static TOOL_ACTION ACT_SpacingIncrease( "pcbnew.LengthTuner.SpacingIncrease",
         AS_CONTEXT,
         '1', LEGACY_HK_NAME( "Increase meander spacing by one step." ),
         _( "Increase Spacing" ), _( "Increase meander spacing by one step." ),
         router_len_tuner_dist_incr_xpm );
 
-static TOOL_ACTION ACT_SpacingDecrease( "pcbnew.LengthTuner.SpacingDecrease", 
+static TOOL_ACTION ACT_SpacingDecrease( "pcbnew.LengthTuner.SpacingDecrease",
         AS_CONTEXT,
         '2', LEGACY_HK_NAME( "Decrease meander spacing by one step." ),
         _( "Decrease Spacing" ), _( "Decrease meander spacing by one step." ),
         router_len_tuner_dist_decr_xpm );
 
-static TOOL_ACTION ACT_AmplIncrease( "pcbnew.LengthTuner.AmplIncrease", 
+static TOOL_ACTION ACT_AmplIncrease( "pcbnew.LengthTuner.AmplIncrease",
         AS_CONTEXT,
         '3', LEGACY_HK_NAME( "Increase meander amplitude by one step." ),
         _( "Increase Amplitude" ), _( "Increase meander amplitude by one step." ),
         router_len_tuner_amplitude_incr_xpm );
 
-static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease", 
+static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease",
         AS_CONTEXT,
         '4', LEGACY_HK_NAME( "Decrease meander amplitude by one step." ),
         _( "Decrease Amplitude" ), _( "Decrease meander amplitude by one step." ),
@@ -182,11 +182,15 @@ void LENGTH_TUNER_TOOL::performTuning()
 
     VECTOR2I end( m_startSnapPoint );
 
-    PNS_TUNE_STATUS_POPUP statusPopup( frame() );
-    statusPopup.Popup();
+    // Create an instance of PNS_TUNE_STATUS_POPUP.
+    // DO NOT create it on the stack: otherwise on Windows, wxWidgets 3.1.3
+    // it creates a crash. I am pretty sure this crash is created by the stack switching
+    // when managing events (JPC).
+    std::unique_ptr<PNS_TUNE_STATUS_POPUP> statusPopup( new PNS_TUNE_STATUS_POPUP( frame() ) );
+    statusPopup->Popup();
 
     m_router->Move( end, NULL );
-    updateStatusPopup( statusPopup );
+    updateStatusPopup( *statusPopup );
 
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -198,7 +202,7 @@ void LENGTH_TUNER_TOOL::performTuning()
         {
             end = evt->Position();
             m_router->Move( end, NULL );
-            updateStatusPopup( statusPopup );
+            updateStatusPopup( *statusPopup );
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -214,32 +218,32 @@ void LENGTH_TUNER_TOOL::performTuning()
         {
             placer->AmplitudeStep( -1 );
             m_router->Move( end, NULL );
-            updateStatusPopup( statusPopup );
+            updateStatusPopup( *statusPopup );
         }
         else if( evt->IsAction( &ACT_AmplIncrease ) )
         {
             placer->AmplitudeStep( 1 );
             m_router->Move( end, NULL );
-            updateStatusPopup( statusPopup );
+            updateStatusPopup( *statusPopup );
         }
         else if(evt->IsAction( &ACT_SpacingDecrease ) )
         {
             placer->SpacingStep( -1 );
             m_router->Move( end, NULL );
-            updateStatusPopup( statusPopup );
+            updateStatusPopup( *statusPopup );
         }
         else if( evt->IsAction( &ACT_SpacingIncrease ) )
         {
             placer->SpacingStep( 1 );
             m_router->Move( end, NULL );
-            updateStatusPopup( statusPopup );
+            updateStatusPopup( *statusPopup );
         }
         else if( evt->IsAction( &ACT_Settings ) )
         {
-            statusPopup.Hide();
+            statusPopup->Hide();
             TOOL_EVENT dummy;
             meanderSettingsDialog( dummy );
-            statusPopup.Show();
+            statusPopup->Show();
         }
     }
 
