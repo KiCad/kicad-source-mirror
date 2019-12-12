@@ -103,64 +103,64 @@ static SGNODE* getColor( IFSG_SHAPE& shape, int colorIdx )
     {
     case 0:
         // green for PCB
-        material.SetSpecular( 0.13, 0.81, 0.22 );
-        material.SetDiffuse( 0.13, 0.81, 0.22 );
+        material.SetSpecular( 0.13f, 0.81f, 0.22f );
+        material.SetDiffuse( 0.13f, 0.81f, 0.22f );
         // default ambient intensity
-        material.SetShininess( 0.3 );
+        material.SetShininess( 0.3f );
 
         break;
 
     case 1:
         // magenta
-        material.SetSpecular( 0.8, 0.0, 0.8 );
-        material.SetDiffuse( 0.6, 0.0, 0.6 );
+        material.SetSpecular( 0.8f, 0.0f, 0.8f );
+        material.SetDiffuse( 0.6f, 0.0f, 0.6f );
         // default ambient intensity
-        material.SetShininess( 0.3 );
+        material.SetShininess( 0.3f );
 
         break;
 
     case 2:
         // red
-        material.SetSpecular( 0.69, 0.14, 0.14 );
-        material.SetDiffuse( 0.69, 0.14, 0.14 );
+        material.SetSpecular( 0.69f, 0.14f, 0.14f );
+        material.SetDiffuse( 0.69f, 0.14f, 0.14f );
         // default ambient intensity
-        material.SetShininess( 0.3 );
+        material.SetShininess( 0.3f );
 
         break;
 
     case 3:
         // orange
-        material.SetSpecular( 1.0, 0.44, 0.0 );
-        material.SetDiffuse( 1.0, 0.44, 0.0 );
+        material.SetSpecular( 1.0f, 0.44f, 0.0f );
+        material.SetDiffuse( 1.0f, 0.44f, 0.0f );
         // default ambient intensity
-        material.SetShininess( 0.3 );
+        material.SetShininess( 0.3f );
 
         break;
 
     case 4:
         // yellow
-        material.SetSpecular( 0.93, 0.94, 0.16 );
-        material.SetDiffuse( 0.93, 0.94, 0.16 );
+        material.SetSpecular( 0.93f, 0.94f, 0.16f );
+        material.SetDiffuse( 0.93f, 0.94f, 0.16f );
         // default ambient intensity
-        material.SetShininess( 0.3 );
+        material.SetShininess( 0.3f );
 
         break;
 
     case 5:
         // blue
-        material.SetSpecular( 0.1, 0.11, 0.88 );
-        material.SetDiffuse( 0.1, 0.11, 0.88 );
+        material.SetSpecular( 0.1f, 0.11f, 0.88f );
+        material.SetDiffuse( 0.1f, 0.11f, 0.88f );
         // default ambient intensity
-        material.SetShininess( 0.3 );
+        material.SetShininess( 0.3f );
 
         break;
 
     default:
         // violet
-        material.SetSpecular( 0.32, 0.07, 0.64 );
-        material.SetDiffuse( 0.32, 0.07, 0.64 );
+        material.SetSpecular( 0.32f, 0.07f, 0.64f );
+        material.SetDiffuse( 0.32f, 0.07f, 0.64f );
         // default ambient intensity
-        material.SetShininess( 0.3 );
+        material.SetShininess( 0.3f );
 
         break;
     }

@@ -208,9 +208,9 @@ bool WRL2COORDS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
 
     while( sP != eP )
     {
-        sP->x *= 2.54;
-        sP->y *= 2.54;
-        sP->z *= 2.54;
+        sP->x *= 2.54f;
+        sP->y *= 2.54f;
+        sP->z *= 2.54f;
         ++sP;
     }
 
