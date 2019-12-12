@@ -1635,10 +1635,10 @@ bool SCH_SCREENS::CanCauseCaseSensitivityIssue( const wxString& aSchematicFileNa
         if( lhs.GetPath() != rhs.GetPath() )
             continue;
 
-        lhsLower = lhs.GetName().Lower();
-        rhsLower = rhs.GetName().Lower();
+        lhsLower = lhs.GetFullName().Lower();
+        rhsLower = rhs.GetFullName().Lower();
 
-        if( lhsLower == rhsLower )
+        if( lhsLower == rhsLower && lhs.GetFullName() != rhs.GetFullName() )
             return true;
     }
 
