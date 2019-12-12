@@ -165,11 +165,15 @@ void LENGTH_TUNER_TOOL::performTuning()
 
     VECTOR2I end( m_startSnapPoint );
 
-    PNS_TUNE_STATUS_POPUP statusPopup( frame() );
-    statusPopup.Popup();
+    // Create an instance of PNS_TUNE_STATUS_POPUP.
+    // DO NOT create it on the stack: otherwise on Windows, wxWidgets 3.1.3
+    // it creates a crash. I am pretty sure this crash is created by the stack switching
+    // when managing events (JPC).
+    std::unique_ptr<PNS_TUNE_STATUS_POPUP> statusPopup( new PNS_TUNE_STATUS_POPUP( frame() ) );
+    statusPopup->Popup();
 
     m_router->Move( end, NULL );
-    updateStatusPopup( statusPopup );
+    updateStatusPopup( *statusPopup );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -179,7 +183,7 @@ void LENGTH_TUNER_TOOL::performTuning()
         {
             end = evt->Position();
             m_router->Move( end, NULL );
-            updateStatusPopup( statusPopup );
+            updateStatusPopup( *statusPopup );
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -195,32 +199,32 @@ void LENGTH_TUNER_TOOL::performTuning()
         {
             placer->AmplitudeStep( -1 );
             m_router->Move( end, NULL );
-            updateStatusPopup( statusPopup );
+            updateStatusPopup( *statusPopup );
         }
         else if( evt->IsAction( &ACT_AmplIncrease ) )
         {
             placer->AmplitudeStep( 1 );
             m_router->Move( end, NULL );
-            updateStatusPopup( statusPopup );
+            updateStatusPopup( *statusPopup );
         }
         else if(evt->IsAction( &ACT_SpacingDecrease ) )
         {
             placer->SpacingStep( -1 );
             m_router->Move( end, NULL );
-            updateStatusPopup( statusPopup );
+            updateStatusPopup( *statusPopup );
         }
         else if( evt->IsAction( &ACT_SpacingIncrease ) )
         {
             placer->SpacingStep( 1 );
             m_router->Move( end, NULL );
-            updateStatusPopup( statusPopup );
+            updateStatusPopup( *statusPopup );
         }
         else if( evt->IsAction( &ACT_Settings ) )
         {
-            statusPopup.Hide();
+            statusPopup->Hide();
             TOOL_EVENT dummy;
             meanderSettingsDialog( dummy );
-            statusPopup.Show();
+            statusPopup->Show();
         }
     }
 
