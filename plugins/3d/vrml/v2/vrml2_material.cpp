@@ -65,19 +65,19 @@ WRL2MATERIAL::~WRL2MATERIAL()
 void WRL2MATERIAL::setDefaults( void )
 {
     // default material values as per VRML2 spec
-    diffuseColor.x = 0.8;
-    diffuseColor.y = 0.8;
-    diffuseColor.z = 0.8;
+    diffuseColor.x = 0.8f;
+    diffuseColor.y = 0.8f;
+    diffuseColor.z = 0.8f;
 
-    emissiveColor.x = 0.0;
-    emissiveColor.y = 0.0;
-    emissiveColor.z = 0.0;
+    emissiveColor.x = 0.0f;
+    emissiveColor.y = 0.0f;
+    emissiveColor.z = 0.0f;
 
     specularColor = emissiveColor;
 
-    ambientIntensity = 0.2;
-    shininess = 0.2;
-    transparency = 0.0;
+    ambientIntensity = 0.2f;
+    shininess = 0.2f;
+    transparency = 0.0f;
 
     return;
 }

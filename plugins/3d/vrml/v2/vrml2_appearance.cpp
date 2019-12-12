@@ -493,12 +493,12 @@ SGNODE* WRL2APPEARANCE::TranslateToSG( SGNODE* aParent )
     {
         // use a default gray appearance
         IFSG_APPEARANCE matNode( aParent );
-        matNode.SetEmissive( 0.0, 0.0, 0.0 );
-        matNode.SetSpecular( 0.65, 0.65, 0.65 );
-        matNode.SetDiffuse( 0.65, 0.65, 0.65 );
+        matNode.SetEmissive( 0.0f, 0.0f, 0.0f );
+        matNode.SetSpecular( 0.65f, 0.65f, 0.65f );
+        matNode.SetDiffuse( 0.65f, 0.65f, 0.65f );
         // default ambient
-        matNode.SetShininess( 0.2 );
-        matNode.SetTransparency( 0.0 );
+        matNode.SetShininess( 0.2f );
+        matNode.SetTransparency( 0.0f );
         m_sgNode = matNode.GetRawPtr();
 
         return m_sgNode;

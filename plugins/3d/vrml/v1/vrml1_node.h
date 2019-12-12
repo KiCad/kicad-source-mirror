@@ -98,7 +98,7 @@ struct WRL1STATUS
         coord = NULL;
         txmatrix = glm::scale( glm::mat4( 1.0 ), glm::vec3( 1.0 ) );
         order = ORD_UNKNOWN;
-        creaseLimit = 0.878;
+        creaseLimit = 0.878f;
         return;
     }
 };
