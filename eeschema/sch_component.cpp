@@ -997,26 +997,8 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
     std::swap( m_Pos, component->m_Pos );
     std::swap( m_unit, component->m_unit );
     std::swap( m_convert, component->m_convert );
-    std::swap( m_pins, component->m_pins );
-
-    m_pinMap.clear();
-    component->m_pinMap.clear();
 
     m_Fields.swap( component->m_Fields );    // std::vector's swap()
-
-    // Reparent items after copying data
-    // (after swap(), m_Parent member does not point to the right parent):
-    for( unsigned i = 0; i < m_pins.size(); ++i )
-    {
-        m_pins[ i ].SetParent( this );
-        m_pinMap[ m_pins[ i ].GetLibPin() ] = i;
-    }
-
-    for( unsigned i = 0; i < component->m_pins.size(); ++i )
-    {
-        component->m_pins[ i ].SetParent( component );
-        component->m_pinMap[ component->m_pins[ i ].GetLibPin() ] = i;
-    }
 
     for( int ii = 0; ii < component->GetFieldCount();  ++ii )
         component->GetField( ii )->SetParent( component );
