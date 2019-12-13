@@ -264,6 +264,16 @@ void PL_EDITOR_FRAME::OnExit( wxCommandEvent& aEvent )
 
 void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
+#if defined( _WIN32 )
+    //Windows Only: This will stall any shutdown without user confirming it
+    //Used in conjunction with ShutdownBlockReasonCreate
+    if( aEvent.GetId() == wxEVT_QUERY_END_SESSION && GetScreen()->IsModify() )
+    {
+        aEvent.Veto();
+        return;
+    }
+#endif
+
     if( GetScreen()->IsModify() )
     {
         wxFileName filename = GetCurrFileName();
@@ -764,6 +774,20 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
     UpdateTitleAndInfo();
 
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+
+    if( GetCurrFileName().IsEmpty() )
+    {
+        // Default shutdown reason until a file is loaded
+        // Shutdown block message must be configured ahead of any close event
+        SetShutdownBlockReason( _( "New page layout file is unsaved" ) );
+    }
+    else
+    {
+        // Shutdown block message must be configured ahead of any close event
+        wxString shutdownBlockMsg = wxString::Format(
+                _( "Page layout file \"%s\" changes are unsaved" ), GetCurrFileName() );
+        SetShutdownBlockReason( shutdownBlockMsg );
+    }
 }
 
 
