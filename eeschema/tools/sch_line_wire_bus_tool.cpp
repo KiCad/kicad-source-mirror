@@ -178,6 +178,7 @@ SCH_LINE_WIRE_BUS_TOOL::SCH_LINE_WIRE_BUS_TOOL() :
     EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawingLineWireBus" )
 {
     m_busUnfold = {};
+    m_wires.reserve( 16 );
 }
 
 
@@ -250,12 +251,6 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
 }
 
 
-static bool isNewSegment( SCH_ITEM* aItem )
-{
-    return aItem && aItem->IsNew() && aItem->Type() == SCH_LINE_T;
-}
-
-
 bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingLine( const SELECTION& aSelection )
 {
     static KICAD_T graphicLineType[] = { SCH_LINE_LOCATE_GRAPHIC_LINE_T, EOT };
@@ -282,7 +277,7 @@ bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( const SELECTION& aSelection
     // NOTE: for immediate hotkeys, it is NOT required that the line, wire or bus tool
     // be selected
     SCH_ITEM* item = (SCH_ITEM*) aSelection.Front();
-    return isNewSegment( item );
+    return item && item->IsNew() && item->Type() == SCH_LINE_T;
 }
 
 
@@ -384,12 +379,9 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
 }
 
 
-/**
- * A helper function to find any sheet pins at the specified position.
- */
-static const SCH_SHEET_PIN* getSheetPin( SCH_SCREEN* aScreen, const wxPoint& aPosition )
+const SCH_SHEET_PIN* SCH_LINE_WIRE_BUS_TOOL::getSheetPin( const wxPoint& aPosition )
 {
-    for( SCH_ITEM* item = aScreen->GetDrawItems(); item; item = item->Next() )
+    for( SCH_ITEM* item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
     {
         if( item->Type() == SCH_SHEET_T )
         {
@@ -407,17 +399,7 @@ static const SCH_SHEET_PIN* getSheetPin( SCH_SCREEN* aScreen, const wxPoint& aPo
 }
 
 
-/**
- * Function ComputeBreakPoint
- * computes the middle coordinate for 2 segments from the start point to \a aPosition
- * with the segments kept in the horizontal or vertical axis only.
- *
- * @param aSegments A pair of pointers to a #SCH_LINE objects containing the first line break point
- *                 to compute.
- * @param aPosition A reference to a wxPoint object containing the coordinates of the
- *                  position used to calculate the line break point.
- */
-static void computeBreakPoint( SCH_SCREEN* aScreen, std::pair<SCH_LINE*, SCH_LINE*> aSegments,
+void SCH_LINE_WIRE_BUS_TOOL::computeBreakPoint( const std::pair<SCH_LINE*, SCH_LINE*>& aSegments,
         wxPoint& aPosition )
 {
     wxCHECK_RET( aSegments.first && aSegments.second,
@@ -430,7 +412,7 @@ static void computeBreakPoint( SCH_SCREEN* aScreen, std::pair<SCH_LINE*, SCH_LIN
     int iDx = segment->GetEndPoint().x - segment->GetStartPoint().x;
     int iDy = segment->GetEndPoint().y - segment->GetStartPoint().y;
 
-    const SCH_SHEET_PIN* connectedPin = getSheetPin( aScreen, segment->GetStartPoint() );
+    const SCH_SHEET_PIN* connectedPin = getSheetPin( segment->GetStartPoint() );
     auto force = connectedPin ? connectedPin->GetEdge() : SHEET_UNDEFINED_SIDE;
 
     if( force == SHEET_LEFT_SIDE || force == SHEET_RIGHT_SIDE )
@@ -438,7 +420,7 @@ static void computeBreakPoint( SCH_SCREEN* aScreen, std::pair<SCH_LINE*, SCH_LIN
         if( aPosition.x == connectedPin->GetPosition().x )  // push outside sheet boundary
         {
             int direction = ( force == SHEET_LEFT_SIDE ) ? -1 : 1;
-            aPosition.x += int( aScreen->GetGridSize().x * direction );
+            aPosition.x += int( m_frame->GetScreen()->GetGridSize().x * direction );
         }
 
         midPoint.x = aPosition.x;
@@ -615,7 +597,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
             if( evt->IsDblClick( BUT_LEFT ) && segment )
             {
                 if( forceHV && m_wires.size() >= 2 )
-                    computeBreakPoint( screen, { m_wires.end()[-2], segment }, cursorPos );
+                    computeBreakPoint( { m_wires.end()[-2], segment }, cursorPos );
 
                 finishSegments();
                 segment = nullptr;
@@ -665,7 +647,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
             {
                 // Coerce the line to vertical or horizontal if necessary
                 if( forceHV && m_wires.size() >= 2 )
-                    computeBreakPoint( screen, { m_wires.end()[-2], segment }, cursorPos );
+                    computeBreakPoint( { m_wires.end()[-2], segment }, cursorPos );
                 else
                     segment->SetEndPoint( cursorPos );
             }
@@ -758,26 +740,26 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos
  * A second wire backtracks over it:
  * -------------------<====================>
  *
- * RemoveBacktracks is called:
+ * simplifyWireList is called:
  * ------------------->
  */
-static void removeBacktracks( std::deque<SCH_LINE*>& aWires )
+void SCH_LINE_WIRE_BUS_TOOL::simplifyWireList()
 {
-    for( auto it = aWires.begin(); it != aWires.end(); )
+    for( auto it = m_wires.begin(); it != m_wires.end(); )
     {
         SCH_LINE* line = *it;
 
         if( line->IsNull() )
         {
             delete line;
-            it = aWires.erase( it );
+            it = m_wires.erase( it );
             continue;
         }
 
         auto next_it = it;
         ++next_it;
 
-        if( next_it == aWires.end() )
+        if( next_it == m_wires.end() )
             break;
 
         SCH_LINE* next_line = *next_it;
@@ -788,7 +770,7 @@ static void removeBacktracks( std::deque<SCH_LINE*>& aWires )
             {
                 delete line;
                 delete next_line;
-                it = aWires.erase( it );
+                it = m_wires.erase( it );
                 *it = merged;
             }
         }
@@ -801,14 +783,14 @@ static void removeBacktracks( std::deque<SCH_LINE*>& aWires )
 void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
 {
     // Clear selection when done so that a new wire can be started.
-    // NOTE: this must be done before RemoveBacktracks is called or we might end up with
+    // NOTE: this must be done before simplifyWireList is called or we might end up with
     // freed selected items.
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     PICKED_ITEMS_LIST itemList;
 
     // Remove segments backtracking over others
-    removeBacktracks( m_wires );
+    simplifyWireList();
 
     // Collect the possible connection points for the new lines
     std::vector< wxPoint > connections;
