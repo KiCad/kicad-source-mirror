@@ -50,6 +50,10 @@ public:
 
     SCH_LINE( const wxPoint& pos = wxPoint( 0, 0 ), int layer = LAYER_NOTES );
 
+    SCH_LINE( const VECTOR2D& pos, int layer = LAYER_NOTES ) :
+        SCH_LINE( wxPoint( pos.x, pos.y ), layer )
+    {}
+
     SCH_LINE( const SCH_LINE& aLine );
 
     ~SCH_LINE() { }
