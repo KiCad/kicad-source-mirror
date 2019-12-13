@@ -49,7 +49,7 @@ class LIB_MANAGER;
  */
 class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 {
-    std::unique_ptr< LIB_PART > m_my_part;  // a part I own, it is not in any library, but a copy
+    LIB_PART*          m_my_part;           // a part I own, it is not in any library, but a copy
                                             // could be.
     wxComboBox*        m_unitSelectBox;     // a ComboBox to select a unit to edit (if the part
                                             // has multiple units)
@@ -149,7 +149,7 @@ public:
      *
      * This is a LIB_PART that I own, it is at best a copy of one in a library.
      */
-    LIB_PART* GetCurPart() { return m_my_part.get(); }
+    LIB_PART* GetCurPart() { return m_my_part; }
 
     /**
      * Take ownership of aPart and notes that it is the one currently being edited.

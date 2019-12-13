@@ -251,7 +251,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString& aL
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     updateTitle();
     RebuildSymbolUnitsList();
-    SetShowDeMorgan( GetCurPart()->Flatten()->HasConversion() );
+    SetShowDeMorgan( GetCurPart()->HasConversion() );
     SyncToolbars();
 
     // Display the document information based on the entry selected just in
@@ -464,6 +464,16 @@ void LIB_EDIT_FRAME::savePartAs()
             return;
         }
 
+        // @todo Either check the selecteced library to see if the parent symbol name is in
+        //       the new library and/or copy the parent symbol as well.  This is the lazy
+        //       solution to ensure derived parts do not get orphaned.
+        if( part->IsAlias() && new_lib != old_lib )
+        {
+            DisplayError( this, _( "Derived symbols must be save in the same library\n"
+                                   "that the parent symbol exists." ) );
+            return;
+        }
+
         wxString new_name = nameTextCtrl->GetValue();
         new_name.Trim( true );
         new_name.Trim( false );
@@ -490,9 +500,7 @@ void LIB_EDIT_FRAME::savePartAs()
         m_libMgr->UpdatePart( &new_part, new_lib );
         SyncLibraries( false );
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( new_lib, new_part.GetName() ) );
-
-        if( isCurrentPart( old_lib_id ) )
-            LoadPart( new_name, new_lib, m_unit );
+        LoadPart( new_name, new_lib, m_unit );
     }
 }
 
@@ -517,7 +525,7 @@ void LIB_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName, wxArrayStr
             m_my_part->SetName( *aOldName );
         }
         else
-            m_libMgr->UpdatePartAfterRename( m_my_part.get(), *aOldName, lib );
+            m_libMgr->UpdatePartAfterRename( m_my_part, *aOldName, lib );
     }
 
     // Reselect the renamed part

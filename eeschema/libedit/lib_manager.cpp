@@ -390,6 +390,26 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
 
     if( partBuf )
     {
+        if( partBuf->GetPart()->IsRoot() && libBuf.HasDerivedSymbols( aPart->GetName() ) )
+        {
+            // Reparent derived symbols.
+            for( auto entry : libBuf.GetBuffers() )
+            {
+                if( entry->GetPart()->IsRoot() )
+                    continue;
+
+                if( entry->GetPart()->GetParent().lock() == partBuf->GetPart()->SharedPtr() )
+                {
+                    if( !libBuf.DeleteBuffer( entry ) )
+                        return false;
+
+                    LIB_PART* reparentedPart = new LIB_PART( *entry->GetPart() );
+                    reparentedPart->SetParent( partCopy );
+                    libBuf.CreateBuffer( reparentedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
+                }
+            }
+        }
+
         libBuf.UpdateBuffer( partBuf, partCopy );
     }
     else    // New entry
@@ -761,7 +781,7 @@ LIB_MANAGER::LIB_BUFFER& LIB_MANAGER::getLibraryBuffer( const wxString& aLibrary
         }
         else if( !buf.GetPart( part->GetName() ) )
         {
-            buf.CreateBuffer( new LIB_PART( *part, nullptr ), new SCH_SCREEN( &m_frame.Kiway() ) );
+            buf.CreateBuffer( new LIB_PART( *part ), new SCH_SCREEN( &m_frame.Kiway() ) );
         }
     }
 

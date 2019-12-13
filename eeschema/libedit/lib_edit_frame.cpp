@@ -105,6 +105,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetShowElectricalType( true );
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
+    m_my_part = nullptr;
     m_treePane = nullptr;
     m_libMgr = nullptr;
     m_unit = 1;
@@ -367,7 +368,10 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 {
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_my_part.reset( aPart );
+    if( m_my_part )
+        delete m_my_part;
+
+    m_my_part = aPart;
 
     // select the current component in the tree widget
     if( m_my_part )
@@ -507,7 +511,7 @@ LIB_PART* LIB_EDIT_FRAME::getTargetPart() const
         return alias;
     }
 
-    return m_my_part.get();
+    return m_my_part;
 }
 
 
@@ -639,7 +643,7 @@ bool LIB_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxString
 void LIB_EDIT_FRAME::storeCurrentPart()
 {
     if( m_my_part && !GetCurLib().IsEmpty() && GetScreen()->IsModify() )
-        m_libMgr->UpdatePart( m_my_part.get(), GetCurLib() ); // UpdatePart() makes a copy
+        m_libMgr->UpdatePart( m_my_part, GetCurLib() ); // UpdatePart() makes a copy
 }
 
 
@@ -702,7 +706,7 @@ void LIB_EDIT_FRAME::RebuildView()
     GetRenderSettings()->m_ShowUnit = m_unit;
     GetRenderSettings()->m_ShowConvert = m_convert;
     GetRenderSettings()->m_ShowDisabled = m_my_part && m_my_part->IsAlias();
-    GetCanvas()->DisplayComponent( m_my_part.get() );
+    GetCanvas()->DisplayComponent( m_my_part );
     GetCanvas()->GetView()->HideWorksheet();
     GetCanvas()->GetView()->ClearHiddenFlags();
 
