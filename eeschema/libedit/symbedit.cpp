@@ -109,7 +109,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
     wxCHECK_RET( alias, "Invalid symbol." );
 
-    SaveCopyInUndoList( m_my_part.get() );
+    SaveCopyInUndoList( m_my_part );
 
     LIB_PART* first = alias;
     LIB_ITEMS_CONTAINER& drawList = first->GetDrawItems();
@@ -129,7 +129,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
         LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
 
-        newItem->SetParent( m_my_part.get() );
+        newItem->SetParent( m_my_part );
         m_my_part->AddDrawItem( newItem );
         item.ClearSelected();
     }
@@ -189,7 +189,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
         plugin->CreateSymbolLib( fn.GetFullPath(), &nodoc_props );
 
         // The part gets flattened by the LIB_PART copy constructor.
-        LIB_PART* saved_part = new LIB_PART( *m_my_part.get() );
+        LIB_PART* saved_part = new LIB_PART( *m_my_part );
         plugin->SaveSymbol( fn.GetFullPath(), saved_part, &nodoc_props );
     }
     catch( const IO_ERROR& ioe )

@@ -75,7 +75,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList()
 
     // Store the current part in the undo buffer
     PICKED_ITEMS_LIST* undoCommand = new PICKED_ITEMS_LIST();
-    LIB_PART* oldPart = m_my_part.get();
+    LIB_PART* oldPart = m_my_part;
     oldPart->SetFlags( UR_TRANSIENT );
     ITEM_PICKER undoWrapper( oldPart, undoRedoType );
     undoCommand->PushItem( undoWrapper );
@@ -85,7 +85,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList()
     // which calls delete <previous part>.
     // <previous part> is now put in undo list and is owned by this list
     // Just set the current part to the part which come from the redo list
-    m_my_part.reset( part );
+    m_my_part = part;
 
     if( undoRedoType == UR_LIB_RENAME )
     {
@@ -123,7 +123,7 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList()
 
     // Store the current part in the redo buffer
     PICKED_ITEMS_LIST* redoCommand = new PICKED_ITEMS_LIST();
-    LIB_PART* oldPart = m_my_part.get();
+    LIB_PART* oldPart = m_my_part;
     oldPart->SetFlags( UR_TRANSIENT );
     ITEM_PICKER redoWrapper( oldPart, undoRedoType );
     redoCommand->PushItem( redoWrapper );
@@ -133,7 +133,7 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList()
     // which calls delete <previous part>.
     // <previous part> is now put in redo list and is owned by this list.
     // Just set the current part to the part which come from the undo list
-    m_my_part.reset( part );
+    m_my_part = part;
 
     if( undoRedoType == UR_LIB_RENAME )
     {

@@ -96,9 +96,6 @@ LIB_PART::LIB_PART( const wxString& aName, LIB_PART* aParent, PART_LIB* aLibrary
     m_showPinNumbers      = true;
     m_showPinNames        = true;
 
-    if( aParent )
-        m_parent = aParent->SharedPtr();
-
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
     m_drawings[LIB_FIELD_T].reserve( 4 );
@@ -107,8 +104,12 @@ LIB_PART::LIB_PART( const wxString& aName, LIB_PART* aParent, PART_LIB* aLibrary
     m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, FOOTPRINT ) );
     m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, DATASHEET ) );
 
-    SetLib( aLibrary );
     SetName( aName );
+
+    if( aParent )
+        SetParent( aParent );
+
+    SetLib( aLibrary );
 }
 
 
@@ -120,7 +121,6 @@ LIB_PART::LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary ) :
 
     m_library             = aLibrary;
     m_name                = aPart.m_name;
-    m_parent              = aPart.m_parent;
     m_FootprintList       = wxArrayString( aPart.m_FootprintList );
     m_unitCount           = aPart.m_unitCount;
     m_unitsLocked         = aPart.m_unitsLocked;
@@ -143,6 +143,11 @@ LIB_PART::LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary ) :
         newItem->SetParent( this );
         m_drawings.push_back( newItem );
     }
+
+    PART_SPTR parent = aPart.m_parent.lock();
+
+    if( parent )
+        SetParent( parent.get() );
 }
 
 
@@ -260,9 +265,37 @@ void LIB_PART::SetName( const wxString& aName )
 void LIB_PART::SetParent( LIB_PART* aParent )
 {
     if( aParent )
+    {
         m_parent = aParent->SharedPtr();
+
+        // Inherit the parent mandatory field attributes.
+        for( int id=0;  id<MANDATORY_FIELDS;  ++id )
+        {
+            LIB_FIELD* field = GetField( id );
+
+            // the MANDATORY_FIELDS are exactly that in RAM.
+            wxASSERT( field );
+
+            LIB_FIELD* parentField = aParent->GetField( id );
+
+            wxASSERT( parentField );
+
+            wxString name = field->GetText();
+
+            *field = *parentField;
+
+            if( id == VALUE )
+                field->SetText( name );
+            else if( id == DATASHEET && !GetDocFileName().IsEmpty() )
+                field->SetText( GetDocFileName() );
+
+            field->SetParent( this );
+        }
+    }
     else
+    {
         m_parent.reset();
+    }
 }
 
 
