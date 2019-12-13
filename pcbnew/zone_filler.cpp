@@ -980,7 +980,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
                     break;
                 }
 
-                spoke.Rotate( padAngle );
+                spoke.Rotate( -DECIDEG2RAD( padAngle ) );
                 spoke.Move( shapePos );
 
                 spoke.SetClosed( true );
