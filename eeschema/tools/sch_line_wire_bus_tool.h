@@ -25,9 +25,17 @@
 #ifndef SCH_LINE_WIRE_BUS_TOOL_H
 #define SCH_LINE_WIRE_BUS_TOOL_H
 
-#include <tools/ee_tool_base.h>
-#include <core/optional.h>
-#include <sch_base_frame.h>
+#include <wx/gdicmn.h>
+#include <wx/string.h>
+#include <string>
+#include <vector>
+
+#include <math/vector2d.h>
+#include <tool/tool_event.h>
+#include <sch_edit_frame.h>
+#include <sch_line.h>
+
+#include <ee_tool_base.h>
 
 
 class SCH_BUS_WIRE_ENTRY;
@@ -86,15 +94,41 @@ private:
     SCH_LINE* doUnfoldBus( const wxString& aNet );
     void finishSegments();
 
+    /**
+     * Iterates over the wire list and removes the null segments and
+     * overlapping segments to create a simplified wirelist
+     */
+    void simplifyWireList();
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
+
+    /**
+     * Searches for a sheet pin at a location
+     * TODO(snh): Move this to generalized search on RTree
+     * @param aPosition grid point to search for existing sheet pin
+     * @return Pointer to sheet pin or nullptr on failure
+     */
+    const SCH_SHEET_PIN* getSheetPin( const wxPoint& aPosition );
+
+    /**
+     * Function ComputeBreakPoint
+     * computes the middle coordinate for 2 segments from the start point to \a aPosition
+     * with the segments kept in the horizontal or vertical axis only.
+     *
+     * @param aSegments A pair of pointers to a #SCH_LINE objects containing the first line
+     *                  break point to compute.
+     * @param aPosition A reference to a wxPoint object containing the coordinates of the
+     *                  position used to calculate the line break point.
+     */
+    void computeBreakPoint( const std::pair<SCH_LINE*, SCH_LINE*>& aSegments, wxPoint& aPosition );
 
 private:
     /// Data related to bus unfolding tool.
     BUS_UNFOLDING_T         m_busUnfold;
 
     /// Storage for the line segments while drawing
-    std::deque<SCH_LINE*>   m_wires;
+    std::vector<SCH_LINE*>   m_wires;
 };
 
 #endif /* SCH_LINE_WIRE_BUS_TOOL_H */
