@@ -2884,29 +2884,6 @@ void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr<LIB_PART>& aPart,
 
             newPart->SetParent( aPart.get() );
 
-            // Inherit the mandatory field positions and the reference and footprint field
-            // values from the parent symbol.
-            for( LIB_ITEM& item : aPart->GetDrawItems() )
-            {
-                if( item.Type() != LIB_FIELD_T )
-                    continue;
-
-                LIB_FIELD* field = (LIB_FIELD*) &item;
-                wxString tmp = field->GetText();
-
-                if( field->GetId() < MANDATORY_FIELDS )
-                {
-                    // Get all of the parent field information except for the string.
-                    *newPart->GetField( field->GetId() ) = *field;
-
-                    // Restore the alias strings that are defined in this file format.
-                    if( field->GetId() == REFERENCE
-                      || field->GetId() == FOOTPRINT
-                      || field->GetId() == VALUE )
-                        newPart->GetField( field->GetId() )->SetText( tmp );
-                }
-            }
-
             // This will prevent duplicate aliases.
             (*aMap)[ newPart->GetName() ] = newPart;
         }
