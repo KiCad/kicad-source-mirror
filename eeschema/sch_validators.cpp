@@ -79,18 +79,31 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
         return false;
 
     wxString val( text->GetValue() );
-    wxString tmp = val.Clone();           // For trailing and leading white space tests.
-    wxString fieldName;
+
+    // The format of the error message for not allowed chars
+    wxString fieldCharError;
 
     switch( m_fieldId )
     {
-    case FIELD_NAME:  fieldName = _( "field name" );         break;
-    case FIELD_VALUE: fieldName = _( "field value" );        break;
-    case REFERENCE:   fieldName = _( "reference field" );    break;
-    case VALUE:       fieldName = _( "value field" );        break;
-    case FOOTPRINT:   fieldName = _( "footprint field" );    break;
-    case DATASHEET:   fieldName = _( "datasheet field" );    break;
-    default:          fieldName = _( "user defined field" ); break;
+    case REFERENCE:
+        fieldCharError = _( "The reference field cannot contain %s character(s)." );
+        break;
+
+    case VALUE:
+        fieldCharError = _( "The value field cannot contain %s character(s)." );
+        break;
+
+    case FOOTPRINT:
+        fieldCharError = _( "The footprint field cannot contain %s character(s)." );
+        break;
+
+    case DATASHEET:
+        fieldCharError = _( "The datasheet field cannot contain %s character(s)." );
+        break;
+
+    default:
+        fieldCharError = _( "The field cannot contain %s character(s)." );
+        break;
     };
 
     wxString msg;
@@ -98,7 +111,13 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
     // We can only do some kinds of validation once the input is complete, so
     // check for them here:
     if( HasFlag( wxFILTER_EMPTY ) && val.empty() )
-        msg.Printf( _( "The %s cannot be empty." ), fieldName );
+    {
+        // Some fields cannot have an empty value, and user fields require a name:
+        if( m_fieldId == FIELD_NAME )
+            msg.Printf( _( "The name of the field cannot be empty." ) );
+        else    // the FIELD_VALUE id or REFERENCE or VALUE
+            msg.Printf( _( "The value of the field cannot be empty." ) );
+    }
     else if( HasFlag( wxFILTER_EXCLUDE_CHAR_LIST ) && ContainsExcludedCharacters( val ) )
     {
         wxArrayString whiteSpace;
@@ -126,9 +145,9 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
             badChars.Printf( _( "%s, %s, %s, or %s" ),
                              whiteSpace[0], whiteSpace[1], whiteSpace[2], whiteSpace[3] );
         else
-            wxCHECK_MSG( false, true, wxT( "Invalid illegal character in field validator." ) );
+            wxCHECK_MSG( false, true, "Invalid illegal character in field validator." );
 
-        msg.Printf( _( "The %s cannot contain %s characters." ), fieldName, badChars );
+        msg.Printf( fieldCharError, badChars );
     }
 
     if ( !msg.empty() )
