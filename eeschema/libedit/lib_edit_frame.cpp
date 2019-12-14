@@ -189,6 +189,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetCanvas()->GetView()->SetBoundary( bbox );
 
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+
+    SetShutdownBlockReason( _( "Library changes are unsaved" ) );
 }
 
 

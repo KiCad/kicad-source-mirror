@@ -686,9 +686,7 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     SetMsgPanel( GetBoard() );
     SetStatusText( wxEmptyString );
 
-    wxString shutdownBlockMsg = wxString::Format(
-            _( "PCB file \"%s\" changes are unsaved" ), GetBoard()->GetFileName() );
-    SetShutdownBlockReason( shutdownBlockMsg );
+    SetShutdownBlockReason( _( "PCB file changes are unsaved" ) );
 }
 
 

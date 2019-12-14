@@ -179,7 +179,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Ensure the toolbars are sync'd properly so the filtering options display correct
     SyncToolbars();
 
-    SetShutdownBlockReason( _( "Symbol to Footprint changes are unsaved" ) );
+    SetShutdownBlockReason( _( "Symbol to footprint changes are unsaved" ) );
 }
 
 
