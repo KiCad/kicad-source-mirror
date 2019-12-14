@@ -191,6 +191,7 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
     ReleaseFile();
 }
 
+
 void EDA_DRAW_FRAME::ReleaseFile()
 {
     m_file_checker = nullptr;
