@@ -196,11 +196,12 @@ protected:
     /**
      *  Helper routine to draw a polygon
      * @param aParent Pointer to the draw item for AB Position calculation
-     * @param aCode Flash code pointer
+     * @param aPolygon the polygon to draw
      * @param aFilled If true, draw the polygon as filled, otherwise only outline
      * @param aShift If true, draw the polygon relative to the parent item position
      */
-    void drawPolygon( GERBER_DRAW_ITEM* aParent, D_CODE* aCode, bool aFilled, bool aShift = false );
+    void drawPolygon( GERBER_DRAW_ITEM* aParent, const SHAPE_POLY_SET& aPolygon,
+                      bool aFilled, bool aShift = false );
 
     /// Helper to draw a flashed shape (aka spot)
     void drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled );

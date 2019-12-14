@@ -452,4 +452,5 @@ static void addHoleToPolygon( SHAPE_POLY_SET*       aPolygon,
     }
 
     aPolygon->BooleanSubtract( holeBuffer, SHAPE_POLY_SET::PM_FAST );
+    aPolygon->Fracture( SHAPE_POLY_SET::PM_FAST );
 }
