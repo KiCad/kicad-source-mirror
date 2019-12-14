@@ -178,6 +178,8 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Ensure the toolbars are sync'd properly so the filtering options display correct
     SyncToolbars();
+
+    SetShutdownBlockReason( _( "Symbol to Footprint changes are unsaved" ) );
 }
 
 
@@ -302,15 +304,25 @@ void CVPCB_MAINFRAME::setupEventHandlers()
 }
 
 
-void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
+void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
     if( m_modified )
     {
+#if defined( _WIN32 )
+        //Windows Only: This will stall any shutdown without user confirming it
+        //Used in conjunction with ShutdownBlockReasonCreate
+        if( aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+        {
+            aEvent.Veto();
+            return;
+        }
+#endif
+
         if( !HandleUnsavedChanges( this, _( "Symbol to Footprint links have been modified. "
                                             "Save changes?" ),
                                    [&]()->bool { return SaveFootprintAssociation( false ); } ) )
         {
-            Event.Veto();
+            aEvent.Veto();
             return;
         }
     }
@@ -326,7 +338,7 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 
     // Skip the close event. Looks like needed to have the close event sent to the
     // root class EDA_BASE_FRAME, and save config
-    Event.Skip();
+    aEvent.Skip();
 }
 
 

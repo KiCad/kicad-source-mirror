@@ -502,12 +502,6 @@ public:
      * Rebuild all toolbars, and update the checked state of ckeck tools
      */
     void RecreateToolbars();
-
-    /**
-     * Sets the block reason why the window/application is preventing OS shutdown.
-     * This is mainly intended for Windows platforms where this is a native feature.
-     */
-    void SetShutdownBlockReason( const wxString& reason );
 };
 
 #endif  // DRAW_FRAME_H_

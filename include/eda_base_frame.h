@@ -466,6 +466,14 @@ public:
     virtual void RefreshCanvas() { };
 
     const wxString& GetAboutTitle() const { return m_AboutTitle; }
+
+    /**
+     * Sets the block reason why the window/application is preventing OS shutdown.
+     * This should be set far ahead of any close event.
+     *
+     * This is mainly intended for Windows platforms where this is a native feature.
+     */
+    void SetShutdownBlockReason( const wxString& reason );
 };
 
 
