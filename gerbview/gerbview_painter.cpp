@@ -370,7 +370,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
             if( aItem->m_Polygon.OutlineCount() == 0 )
                 aItem->ConvertSegmentToPolygon();
 
-            drawPolygon( aItem, code, isFilled );
+            drawPolygon( aItem, aItem->m_Polygon, isFilled );
         }
         else
         {
@@ -383,7 +383,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     }
 
     default:
-        wxASSERT_MSG( false, wxT( "GERBER_DRAW_ITEM shape is unknown!" ) );
+        wxASSERT_MSG( false, "GERBER_DRAW_ITEM shape is unknown!" );
         break;
     }
 
@@ -401,10 +401,16 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 
 
 void GERBVIEW_PAINTER::drawPolygon(
-        GERBER_DRAW_ITEM* aParent, D_CODE* aCode, bool aFilled, bool aShift )
+        GERBER_DRAW_ITEM* aParent, const SHAPE_POLY_SET& aPolygon, bool aFilled, bool aShift )
 {
+    wxASSERT( aPolygon.OutlineCount() == 1 );
+
+    if( aPolygon.OutlineCount() == 0 )
+        return;
+
     SHAPE_POLY_SET poly;
-    auto&          pts = aCode->m_Polygon.COutline( 0 ).CPoints();
+    poly.NewOutline();
+    const std::vector<VECTOR2I> pts = aPolygon.COutline( 0 ).CPoints();
     VECTOR2I       offset = aShift ? VECTOR2I( aParent->m_Start ) : VECTOR2I( 0, 0 );
 
     for( auto& pt : pts )
@@ -426,7 +432,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
 {
     D_CODE* code = aItem->GetDcodeDescr();
 
-    wxASSERT_MSG( code, wxT( "drawFlashedShape: Item has no D_CODE!" ) );
+    wxASSERT_MSG( code, "drawFlashedShape: Item has no D_CODE!" );
 
     if( !code )
         return;
@@ -451,10 +457,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
             if( code->m_Polygon.OutlineCount() == 0 )
                 code->ConvertShapeToPolygon();
 
-            SHAPE_POLY_SET poly = code->m_Polygon;
-            poly.Move( VECTOR2I( aItem->m_Start ) );
-
-            drawPolygon( aItem, code, aFilled );
+            drawPolygon( aItem, code->m_Polygon, aFilled, true );
         }
 
         break;
@@ -479,7 +482,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
             if( code->m_Polygon.OutlineCount() == 0 )
                 code->ConvertShapeToPolygon();
 
-            drawPolygon( aItem, code, aFilled );
+            drawPolygon( aItem, code->m_Polygon, aFilled, true );
         }
         break;
     }
@@ -518,7 +521,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
             if( code->m_Polygon.OutlineCount() == 0 )
                 code->ConvertShapeToPolygon();
 
-            drawPolygon( aItem, code, aFilled );
+            drawPolygon( aItem, code->m_Polygon, aFilled, true );
         }
         break;
     }
@@ -528,7 +531,7 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
         if( code->m_Polygon.OutlineCount() == 0 )
             code->ConvertShapeToPolygon();
 
-        drawPolygon( aItem, code, aFilled );
+        drawPolygon( aItem, code->m_Polygon, aFilled, true );
         break;
     }
 
