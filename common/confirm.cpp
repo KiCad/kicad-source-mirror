@@ -248,14 +248,13 @@ void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime )
 
 void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxString& aExtraInfo )
 {
-    wxRichMessageDialog* dlg;
-    int                  icon = wxICON_ERROR;
+    wxMessageDialog* dlg;
 
-    dlg = new wxRichMessageDialog( aParent, aText, _( "Error" ),
-                                   wxOK | wxCENTRE | wxRESIZE_BORDER | icon | wxSTAY_ON_TOP );
+    dlg = new wxMessageDialog( aParent, aText, _( "Error" ),
+                               wxOK | wxCENTRE | wxRESIZE_BORDER | wxICON_ERROR | wxSTAY_ON_TOP );
 
     if( !aExtraInfo.IsEmpty() )
-        dlg->ShowDetailedText( aExtraInfo );
+        dlg->SetExtendedMessage( aExtraInfo );
 
     dlg->ShowModal();
     dlg->Destroy();
