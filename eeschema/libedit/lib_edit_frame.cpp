@@ -242,7 +242,7 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
             if( m_libMgr->IsLibraryModified( libNickname ) )
             {
                 aEvent.Veto();
-                break;
+                return;
             }
         }
     }
