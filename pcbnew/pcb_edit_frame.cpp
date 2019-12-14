@@ -311,7 +311,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ActivateGalCanvas();
 
     // Default shutdown reason until a file is loaded
-    // Shutdown block message must be configured ahead of any close event
     SetShutdownBlockReason( _( "New PCB file is unsaved" ) );
 
     // disable Export STEP item if kicad2step does not exist
@@ -687,7 +686,6 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     SetMsgPanel( GetBoard() );
     SetStatusText( wxEmptyString );
 
-    // Shutdown block message must be configured ahead of any close event
     wxString shutdownBlockMsg = wxString::Format(
             _( "PCB file \"%s\" changes are unsaved" ), GetBoard()->GetFileName() );
     SetShutdownBlockReason( shutdownBlockMsg );

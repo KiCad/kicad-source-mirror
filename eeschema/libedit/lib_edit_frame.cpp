@@ -232,12 +232,25 @@ void LIB_EDIT_FRAME::setupTools()
 }
 
 
-void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
+void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
+    //Win32 API: This will stall any shutdown without user confirming it
+    if( aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+    {
+        for( const auto& libNickname : m_libMgr->GetLibraryNames() )
+        {
+            if( m_libMgr->IsLibraryModified( libNickname ) )
+            {
+                aEvent.Veto();
+                break;
+            }
+        }
+    }
+
     if( saveAllLibraries( true ) )
         Destroy();
     else
-        Event.Veto();
+        aEvent.Veto();
 }
 
 

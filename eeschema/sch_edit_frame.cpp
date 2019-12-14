@@ -303,7 +303,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     UpdateTitle();
 
     // Default shutdown reason until a file is loaded
-    // Shutdown block message must be configured ahead of any close event
     SetShutdownBlockReason( _( "New schematic file is unsaved" ) );
 }
 
