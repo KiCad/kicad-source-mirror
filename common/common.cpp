@@ -425,7 +425,7 @@ wxString KIwxExpandEnvVars(const wxString& str)
                     if( !expanded )
                         strResult << (wxChar)bracket;
 
-                    str_m = str[++m];
+                    m++;
                 }
             }
 
