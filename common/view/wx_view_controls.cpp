@@ -487,7 +487,7 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition( bool aEnableSnapping ) const
 
 
 void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpView,
-        bool aTriggeredByArrows )
+                                          bool aTriggeredByArrows, long aArrowCommand )
 {
     m_updateCursor = false;
 
@@ -495,6 +495,7 @@ void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpV
     {
         m_settings.m_lastKeyboardCursorPositionValid = true;
         m_settings.m_lastKeyboardCursorPosition = aPosition;
+        m_settings.m_lastKeyboardCursorCommand = aArrowCommand;
         m_cursorWarped = false;
     }
     else

@@ -113,7 +113,7 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
         wxFAIL_MSG( "CursorControl(): unexpected request" );
     }
 
-    getViewControls()->SetCursorPosition( cursor, true, true );
+    getViewControls()->SetCursorPosition( cursor, true, true, type );
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     return 0;

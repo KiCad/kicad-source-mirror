@@ -323,7 +323,21 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
                 VECTOR2I mousePos( controls->GetMousePosition() );
+
                 m_cursor = grid.BestSnapAnchor( mousePos, item_layers, sel_items );
+
+                if( controls->GetSettings().m_lastKeyboardCursorPositionValid )
+                {
+                    long action = controls->GetSettings().m_lastKeyboardCursorCommand;
+
+                    // The arrow keys are by definition SINGLE AXIS.  Do not allow the other
+                    // axis to be snapped to the grid.
+                    if( action == ACTIONS::CURSOR_LEFT || action == ACTIONS::CURSOR_RIGHT )
+                        m_cursor.y = prevPos.y;
+                    else if( action == ACTIONS::CURSOR_UP || action == ACTIONS::CURSOR_DOWN )
+                        m_cursor.x = prevPos.x;
+                }
+
                 controls->ForceCursorPosition( true, m_cursor );
                 selection.SetReferencePoint( m_cursor );
 
