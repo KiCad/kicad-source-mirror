@@ -536,10 +536,20 @@ void GBR_TO_PCB_EXPORTER::writePcbLineItem( bool aIsArc, wxPoint& aStart, wxPoin
 
 void GBR_TO_PCB_EXPORTER::writePcbPolygonItem( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
 {
-    fprintf( m_fp, "(gr_poly (pts " );
-
     SHAPE_POLY_SET polys = aGbrItem->m_Polygon;
+
+    // Cleanup the polygon
+    polys.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+    // Ensure the polygon is valid:
+    if( polys.OutlineCount() == 0 )
+        return;
+
+    polys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
     SHAPE_LINE_CHAIN& poly = polys.Outline( 0 );
+
+    fprintf( m_fp, "(gr_poly (pts " );
 
     #define MAX_COORD_CNT 4
     int jj = MAX_COORD_CNT;
