@@ -682,11 +682,13 @@ TOOL_ACTION PCB_ACTIONS::viaDisplayMode( "pcbnew.Control.viaDisplayMode",
         via_sketch_xpm );
 
 TOOL_ACTION PCB_ACTIONS::graphicDisplayMode( "pcbnew.Control.graphicDisplayMode",
-        AS_GLOBAL );
+        AS_GLOBAL, 0, "",
+        _( "Sketch Board Graphic Items" ), _( "Show board graphic items in outline mode" ),
+        show_graphics_mode_xpm );
 
 TOOL_ACTION PCB_ACTIONS::moduleEdgeOutlines( "pcbnew.Control.graphicOutlines",
         AS_GLOBAL, 0, "",
-        _( "Sketch Graphics" ), _( "Show footprint graphic items in outline mode" ),
+        _( "Sketch Footprint Graphic Items" ), _( "Show footprint graphic items in outline mode" ),
         show_mod_edge_xpm );
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayEnable( "pcbnew.Control.zoneDisplayEnable",
