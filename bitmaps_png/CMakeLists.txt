@@ -462,6 +462,7 @@ set( BMAPS_MID
     show_dcodenumber
     show_footprint
     show_mod_edge
+    show_graphics_mode
     showtrack
     show_zone
     show_zone_disable

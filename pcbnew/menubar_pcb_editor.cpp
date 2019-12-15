@@ -313,6 +313,14 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     {
         return !disp_opt.m_ContrastModeDisplay;
     };
+    auto sketchGraphicsCondition = [ &disp_opt ]( const SELECTION &aSel )
+    {
+        return !disp_opt.m_DisplayDrawItemsFill;
+    };
+    auto sketchModuleEdgeOutlinesCondition = [ &disp_opt ]( const SELECTION &aSel )
+    {
+        return !disp_opt.m_DisplayModEdgeFill;
+    };
 
     viewMenu->AddCheckItem( PCB_ACTIONS::showLayersManager,    layersPaletteShownCondition );
     viewMenu->AddCheckItem( PCB_ACTIONS::showMicrowaveToolbar, microwaveToolbarShownCondition );
@@ -359,6 +367,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::padDisplayMode,      sketchPadsCondition );
     drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::viaDisplayMode,      sketchViasCondition );
     drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::trackDisplayMode,    sketchTracksCondition );
+
+    drawingModeSubMenu->AddSeparator();
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::graphicDisplayMode,  sketchGraphicsCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::moduleEdgeOutlines,  sketchModuleEdgeOutlinesCondition );
+
     viewMenu->AddMenu( drawingModeSubMenu );
 
     // Contrast Mode Submenu
