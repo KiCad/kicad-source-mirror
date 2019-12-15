@@ -78,11 +78,19 @@ private:
     void    export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
 
     /**
-     * write a non copper polygon item to the board file.
+     * write anot filled  polygon item to the board file.
      * @param aGbrItem = the Gerber item (line, arc) to export
      * @param aLayer = the technical layer to use
      */
     void    writePcbPolygonItem( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+
+    /**
+     * write a zone item to the board file.
+     * Currently: only experimental, for tests
+     * @param aGbrItem = the Gerber item (line, arc) to export
+     * @param aLayer = the technical layer to use
+     */
+    void    writePcbZoneItem( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
 
     /**
      * write a track or via) to the board file.
@@ -339,9 +347,16 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_
         break;
 
     case GBR_POLYGON:
-        // Currently: Pcbnew does not really handle polygons on copper layers (no DRC test).
-        // However, we can export them if the purpose of this export is to help recreate a board
+        // One can use a polygon or a zone to output a Gerber region.
+        // none are perfect.
+        // The current way is use a polygon, as the zone export
+        // is exprimental and only for tests.
+#if 1
         writePcbPolygonItem( aGbrItem, aLayer );
+#else
+        // Only for tests:
+        writePcbZoneItem( aGbrItem, aLayer );
+#endif
         break;
 
     default:
@@ -536,10 +551,20 @@ void GBR_TO_PCB_EXPORTER::writePcbLineItem( bool aIsArc, wxPoint& aStart, wxPoin
 
 void GBR_TO_PCB_EXPORTER::writePcbPolygonItem( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
 {
-    fprintf( m_fp, "(gr_poly (pts " );
-
     SHAPE_POLY_SET polys = aGbrItem->m_Polygon;
+
+    // Cleanup the polygon
+    polys.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+    // Ensure the polygon is valid:
+    if( polys.OutlineCount() == 0 )
+        return;
+
+    polys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
     SHAPE_LINE_CHAIN& poly = polys.Outline( 0 );
+
+    fprintf( m_fp, "(gr_poly (pts " );
 
     #define MAX_COORD_CNT 4
     int jj = MAX_COORD_CNT;
@@ -568,4 +593,56 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygonItem( GERBER_DRAW_ITEM* aGbrItem, LAYER
 
     fprintf( m_fp, "(layer %s) (width 0) )\n",
              TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+}
+
+
+void GBR_TO_PCB_EXPORTER::writePcbZoneItem( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
+{
+    SHAPE_POLY_SET polys = aGbrItem->m_Polygon;
+    polys.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+    if( polys.OutlineCount() == 0 )
+        return;
+
+    fprintf( m_fp, "(zone (net 0) (net_name \"\") (layer %s) (tstamp 0000000) (hatch edge 0.508)\n",
+            TO_UTF8( GetPCBDefaultLayerName( aLayer ) ) );
+
+    fprintf( m_fp, "  (connect_pads (clearance 0.0))\n" );
+
+    fprintf( m_fp, "  (min_thickness 0.1) (filled_areas_thickness no)\n"
+                   "  (fill (thermal_gap 0.3) (thermal_bridge_width 0.3))\n" );
+
+    // Now, write the zone outlines with holes.
+    // first polygon is the main outline, next are holes
+    // One cannot know the initial zone outline.
+    // However most of (if not all) holes are just items with clearance,
+    // not really a hole in the initial zone outline.
+    // So we build a zone outline only with no hole.
+    fprintf( m_fp, "  (polygon\n    (pts" );
+
+    SHAPE_LINE_CHAIN& poly = polys.Outline( 0 );
+
+    #define MAX_COORD_CNT 4
+    int jj = MAX_COORD_CNT;
+    int cnt_max = poly.PointCount() -1;
+
+    // Do not generate last corner, if it is the same point as the first point:
+    if( poly.CPoint( 0 ) == poly.CPoint( cnt_max ) )
+        cnt_max--;
+
+    for( int ii = 0; ii <= cnt_max; ii++ )
+    {
+        if( --jj == 0 )
+        {
+            jj = MAX_COORD_CNT;
+            fprintf( m_fp, "\n   " );
+        }
+
+        fprintf( m_fp, " (xy %s %s)", Double2Str( MapToPcbUnits( poly.CPoint( ii ).x ) ).c_str(),
+                 Double2Str( MapToPcbUnits( -poly.CPoint( ii ).y ) ).c_str() );
+    }
+
+    fprintf( m_fp, ")\n" );
+
+    fprintf( m_fp, "  )\n)\n" );
 }
