@@ -441,10 +441,10 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
             break;                // Finish
         }
 
-        else if( evt->Action() == TA_UNDO_REDO_PRE )
+        else if( evt->IsAction( &ACTIONS::undo ) )
         {
-            unselect = true;
-            break;
+            restore_state = true; // Perform undo locally
+            break;                // Finish
         }
 
         // Dispatch TOOL_ACTIONs
