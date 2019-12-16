@@ -504,7 +504,7 @@ void LIB_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     if( renamed )
     {
         parent->SetName( newFieldValue );
-        m_frame->UpdateAfterSymbolProperties( &oldFieldValue, nullptr );
+        m_frame->UpdateAfterSymbolProperties( &oldFieldValue );
     }
     else
     {

@@ -505,7 +505,7 @@ void LIB_EDIT_FRAME::savePartAs()
 }
 
 
-void LIB_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName, wxArrayString* aOldAliases )
+void LIB_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
 {
     wxCHECK( m_my_part, /* void */ );
 
@@ -680,9 +680,15 @@ void LIB_EDIT_FRAME::fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibr
 {
     wxCHECK( aPart, /* void */ );
 
+    int      i;
     wxString newName;
 
-    newName.Printf( "%s_copy", aPart->GetName() );
+    // Append a number to the name until the name is unique in the library.
+    do
+    {
+        newName.Printf( "%s_%d", aPart->GetName(), i );
+        i++;
+    } while( m_libMgr->PartExists( newName, aLibrary ) );
 
     aPart->SetName( newName );
 }

@@ -236,7 +236,7 @@ public:
 
     void OnUpdatePartNumber( wxUpdateUIEvent& event );
 
-    void UpdateAfterSymbolProperties( wxString* aOldName, wxArrayString* aOldAliases );
+    void UpdateAfterSymbolProperties( wxString* aOldName = nullptr );
     void RebuildSymbolUnitsList();
 
     void OnCloseWindow( wxCloseEvent& Event );
