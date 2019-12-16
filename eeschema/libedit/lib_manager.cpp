@@ -426,49 +426,16 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
 bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& aOldName,
                                          const wxString& aLibrary )
 {
-    // This is essentially a delete/update.
-
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibrary );
     auto partBuf = libBuf.GetBuffer( aOldName );
+
     wxCHECK( partBuf, false );
 
-    // Save the original record so it is transferred to the new buffer
-    std::unique_ptr<LIB_PART> original( new LIB_PART( *partBuf->GetOriginal() ) );
+    LIB_PART* bufferedPart = const_cast< LIB_PART* >( partBuf->GetPart() );
 
-    // Save the screen object, so it is transferred to the new buffer
-    std::unique_ptr<SCH_SCREEN> screen = partBuf->RemoveScreen();
+    wxCHECK( bufferedPart, false );
 
-    if( partBuf->GetPart()->IsRoot() && libBuf.HasDerivedSymbols( aOldName ) )
-    {
-        // Reparent derived symbols.
-        for( auto entry : libBuf.GetBuffers() )
-        {
-            if( entry->GetPart()->IsRoot() )
-                continue;
-
-            if( entry->GetPart()->GetParent().lock() == original->SharedPtr() )
-            {
-                if( !libBuf.DeleteBuffer( entry ) )
-                    return false;
-
-                LIB_PART* reparentedPart = new LIB_PART( *entry->GetPart() );
-                reparentedPart->SetParent( original.get() );
-                libBuf.CreateBuffer( reparentedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
-            }
-        }
-    }
-
-    if( !libBuf.DeleteBuffer( partBuf ) )
-        return false;
-
-    if( !UpdatePart( aPart, aLibrary ) )
-        return false;
-
-    partBuf = libBuf.GetBuffer( aPart->GetName() );
-    partBuf->SetScreen( std::move( screen ) );
-    wxCHECK( partBuf, false );
-    partBuf->SetOriginal( original.release() ); // part buffer takes ownership of pointer
-
+    bufferedPart->SetName( aPart->GetName() );
     SetCurrentPart( aPart->GetName() );
     m_frame.SyncLibraries( false );
 

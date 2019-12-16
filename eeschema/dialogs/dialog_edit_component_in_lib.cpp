@@ -289,11 +289,28 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
 
     // We need to keep the name and the value the same at the moment!
     wxString   newName = m_fields->at( VALUE ).GetText();
+    wxString   oldName = m_libEntry->GetName();
 
-    if( m_libEntry->GetName() != newName )
+    if( oldName != newName )
+    {
+        wxString libName = m_Parent->GetCurLib();
+
+        if( m_Parent->GetLibManager().PartExists( newName, libName ) )
+        {
+            wxString msg;
+
+            msg.Printf( _( "The name '%s' conflicts with an existing entry in the library '%s'." ),
+                        newName, libName );
+            DisplayErrorMessage( this, msg );
+            return false;
+        }
+
         m_Parent->SaveCopyInUndoList( m_libEntry, UR_LIB_RENAME );
+    }
     else
+    {
         m_Parent->SaveCopyInUndoList( m_libEntry );
+    }
 
     // The Y axis for components in lib is from bottom to top while the screen axis is top
     // to bottom: we must change the y coord sign when writing back to the library
@@ -337,6 +354,11 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
     }
 
     m_libEntry->SetFootprintFilters( m_FootprintFilterListBox->GetStrings() );
+
+    if( oldName != newName )
+        m_Parent->UpdateAfterSymbolProperties( &oldName );
+    else
+        m_Parent->RebuildView();
 
     return true;
 }
