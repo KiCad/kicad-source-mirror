@@ -161,10 +161,12 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
 
     if( aReason == TOOL_BASE::MODEL_RELOAD )
     {
-        // Remove pointers to the selected items from containers
+        // Deselect any item being currently in edit, to avoid unexpected behavior
+        // and remove pointers to the selected items from containers
         // without changing their properties (as they are already deleted
         // while a new board is loaded)
-        m_selection.Clear();
+        ClearSelection( true );
+
         getView()->GetPainter()->GetSettings()->SetHighlight( false );
     }
     else
