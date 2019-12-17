@@ -200,29 +200,29 @@ static EXCELLON_CMD excellonHeaderCmdList[] =
     { "M30",    DRILL_M_ENDFILE,             -1 },  // End of File (last line of NC drill)
     { "M47",    DRILL_M_MESSAGE,             -1 },  // Operator Message
     { "M45",    DRILL_M_LONGMESSAGE,         -1 },  // Long Operator message (use more than one line)
-    { "M48",    DRILL_M_HEADER,              0  },  // beginning of a header
-    { "M95",    DRILL_M_ENDHEADER,           0  },  // End of the header
-    { "METRIC", DRILL_METRIC_HEADER,          1  },
-    { "INCH",   DRILL_IMPERIAL_HEADER,        1  },
-    { "M71",    DRILL_M_METRIC,              1  },
-    { "M72",    DRILL_M_IMPERIAL,            1  },
-    { "M25",    DRILL_M_BEGINPATTERN,        0  },  // Beginning of Pattern
-    { "M01",    DRILL_M_ENDPATTERN,          0  },  // End of Pattern
+    { "M48",    DRILL_M_HEADER,               0 },  // beginning of a header
+    { "M95",    DRILL_M_ENDHEADER,            0 },  // End of the header
+    { "METRIC", DRILL_METRIC_HEADER,          1 },
+    { "INCH",   DRILL_IMPERIAL_HEADER,        1 },
+    { "M71",    DRILL_M_METRIC,               1 },
+    { "M72",    DRILL_M_IMPERIAL,             1 },
+    { "M25",    DRILL_M_BEGINPATTERN,         0 },  // Beginning of Pattern
+    { "M01",    DRILL_M_ENDPATTERN,           0 },  // End of Pattern
     { "M97",    DRILL_M_CANNEDTEXT,          -1 },
     { "M98",    DRILL_M_CANNEDTEXT,          -1 },
     { "DETECT", DRILL_DETECT_BROKEN,         -1 },
-    { "ICI",    DRILL_INCREMENTALHEADER,     1  },
-    { "FMAT",   DRILL_FMT,                   1  },  // Use Format command
-    { "ATC",    DRILL_AUTOMATIC_TOOL_CHANGE, 0  },
-    { "TCST",   DRILL_TOOL_CHANGE_STOP,      0  },  // Tool Change Stop
-    { "AFS",    DRILL_AUTOMATIC_SPEED },            // Automatic Feeds and Speeds
-    { "VER",    DRILL_AXIS_VERSION,          1  },  // Selection of X and Y Axis Version
+    { "ICI",    DRILL_INCREMENTALHEADER,      1 },
+    { "FMAT",   DRILL_FMT,                    1 },  // Use Format command
+    { "ATC",    DRILL_AUTOMATIC_TOOL_CHANGE,  0 },
+    { "TCST",   DRILL_TOOL_CHANGE_STOP,       0 },  // Tool Change Stop
+    { "AFS",    DRILL_AUTOMATIC_SPEED,        0 },  // Automatic Feeds and Speeds
+    { "VER",    DRILL_AXIS_VERSION,           1 },  // Selection of X and Y Axis Version
     { "R",      DRILL_RESET_CMD,             -1 },  // Reset commands
     { "%",      DRILL_REWIND_STOP,           -1 },  // Rewind stop. End of the header
     { "/",      DRILL_SKIP,                  -1 },  // Clear Tool Linking. End of the header
     // Keep this item after all commands starting by 'T':
-    { "T",      DRILL_TOOL_INFORMATION,      0  },  // Tool Information
-    { "",       DRILL_M_UNKNOWN,             0  }   // last item in list
+    { "T",      DRILL_TOOL_INFORMATION,       0 },  // Tool Information
+    { "",       DRILL_M_UNKNOWN,              0 }   // last item in list
 };
 
 static EXCELLON_CMD excellon_G_CmdList[] =
