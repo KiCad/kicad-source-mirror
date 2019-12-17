@@ -56,7 +56,7 @@ SCH_VIEW::SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame ) :
     // So we have to use a smaller value.
     // A full size = 3 * MAX_PAGE_SIZE_MILS size allows a wide margin
     // around the worksheet.
-    double max_size = MAX_PAGE_SIZE_MILS * IU_PER_MILS * 3.0;
+    double max_size = Mils2iu( MAX_PAGE_SIZE_MILS ) * 3.0;
     m_boundary.SetOrigin( -max_size/4, -max_size/4 );
     m_boundary.SetSize( max_size, max_size );
 
@@ -83,11 +83,9 @@ void SCH_VIEW::SetScale( double aScale, VECTOR2D aAnchor )
 void SCH_VIEW::ResizeSheetWorkingArea( SCH_SCREEN* aScreen )
 {
     const PAGE_INFO& page_info = aScreen->GetPageSettings();
-    // A full size = 3 * page size allows a wide margin around the worksheet.
-    // This is useful to have a large working area.
-    double max_size_x = page_info.GetWidthMils() * IU_PER_MILS * 2.0;
-    double max_size_y = page_info.GetHeightMils() * IU_PER_MILS * 2.0;
-    m_boundary.SetOrigin( -max_size_x /4, -max_size_y/4 );
+    double max_size_x = page_info.GetWidthIU() * 3.0;
+    double max_size_y = page_info.GetHeightIU() * 3.0;
+    m_boundary.SetOrigin( -max_size_x/4, -max_size_y/4 );
     m_boundary.SetSize( max_size_x, max_size_y );
 }
 
@@ -97,7 +95,8 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
     for( auto item = aScreen->GetDrawItems(); item; item = item->Next() )
         Add( item );
 
-    m_worksheet.reset( new KIGFX::WS_PROXY_VIEW_ITEM( 1, &aScreen->GetPageSettings(),
+    m_worksheet.reset( new KIGFX::WS_PROXY_VIEW_ITEM( static_cast< int >( IU_PER_MILS ),
+                                                      &aScreen->GetPageSettings(),
                                                       &aScreen->GetTitleBlock() ) );
     m_worksheet->SetSheetNumber( aScreen->m_ScreenNumber );
     m_worksheet->SetSheetCount( aScreen->m_NumberOfScreens );
@@ -221,6 +220,7 @@ void SCH_VIEW::HideWorksheet()
 {
     //    SetVisible( m_worksheet.get(), false );
 }
+
 
 void SCH_VIEW::HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin )
 {

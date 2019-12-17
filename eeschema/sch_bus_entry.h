@@ -32,7 +32,7 @@
 
 #include <sch_item.h>
 
-#define TARGET_BUSENTRY_RADIUS 12   // Circle diameter drawn at the ends
+#define TARGET_BUSENTRY_RADIUS Mils2iu( 12 )   // Circle diameter drawn at the ends
 
 
 /**
@@ -56,7 +56,6 @@ public:
     ~SCH_BUS_ENTRY_BASE() { }
 
     /**
-     * Virtual function IsMovableFromAnchorPoint
      * Return true for items which are moved with the anchor point at mouse cursor
      *  and false for items moved with no reference to anchor
      * @return false for a bus entry
@@ -66,13 +65,11 @@ public:
     wxPoint m_End() const;
 
     /**
-     * function GetBusEntryShape
      * @return the shape of the bus entry, as an ascii code '/' or '\'
      */
     char GetBusEntryShape() const;
 
     /**
-     * function SetBusEntryShape
      * @param aShape = the shape of the bus entry, as an ascii code '/' or '\'
      */
     void SetBusEntryShape( char aShape );

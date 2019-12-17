@@ -63,7 +63,7 @@ int GetDefaultBusThickness()
 }
 
 
-void SetDefaultBusThickness( int aThickness)
+void SetDefaultBusThickness( int aThickness )
 {
     s_defaultBusThickness = std::max( 1, aThickness );
 }
@@ -252,6 +252,9 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
     // Read schematic editor setup
     ret &= Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDIT, GetProjectFileParameters() );
 
+    // Convert default text size to internal units.
+    SetDefaultTextSize( Mils2iu( GetDefaultTextSize() ) );
+
     // Verify some values, because the config file can be edited by hand,
     // and have bad values:
     LIB_PART::SetSubpartIdNotation( LIB_PART::GetSubpartIdSeparator(),
@@ -293,7 +296,12 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
 
     wxString path = fn.GetFullPath();
 
+    // Convert default text size from internal units temporarily.
+    SetDefaultTextSize( Iu2Mils( GetDefaultTextSize() ) );
+
     prj.ConfigSave( Kiface().KifaceSearch(), GROUP_SCH_EDIT, GetProjectFileParameters(), path );
+
+    SetDefaultTextSize( Mils2iu( GetDefaultTextSize() ) );
 }
 
 ///@{
@@ -357,12 +365,6 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, PrintSheetRefEntry,
                                                     &m_printSheetReference, true ) );
 
-    m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatStepXEntry,
-                                                   &m_repeatStep.x, DEFAULT_REPEAT_OFFSET_X,
-                                                   -REPEAT_OFFSET_MAX, REPEAT_OFFSET_MAX ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatStepYEntry,
-                                                   &m_repeatStep.y, DEFAULT_REPEAT_OFFSET_Y,
-                                                   -REPEAT_OFFSET_MAX, REPEAT_OFFSET_MAX ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatLabelIncrementEntry,
                                                    &m_repeatDeltaLabel, DEFAULT_REPEAT_LABEL_INC,
                                                    -10, +10 ) );
@@ -383,20 +385,26 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
+    aCfg->Read( RepeatStepXEntry, &tmp, DEFAULT_REPEAT_OFFSET_X );
+    m_repeatStep.x = Mils2iu( static_cast< int >( tmp ) );
+    aCfg->Read( RepeatStepYEntry, &tmp, DEFAULT_REPEAT_OFFSET_Y );
+    m_repeatStep.y = Mils2iu( static_cast< int >( tmp ) );
+
     // LibEdit owns this one, but we must read it in if LibEdit hasn't set it yet
     if( GetDefaultLineThickness() < 0 )
     {
-        SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry,
-                                                   DEFAULTDRAWLINETHICKNESS ) );
+        SetDefaultLineThickness( Mils2iu( (int) aCfg->Read( DefaultDrawLineWidthEntry,
+                                                            DEFAULTDRAWLINETHICKNESS ) ) );
     }
 
-    SetDefaultBusThickness( (int) aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
+    SetDefaultBusThickness( Mils2iu( (int) aCfg->Read( DefaultBusWidthEntry,
+                                                       DEFAULTBUSTHICKNESS ) ) );
 
     // Property introduced in 6.0; use DefaultLineWidth for earlier projects
     if( !aCfg->Read( DefaultWireWidthEntry, &tmp ) )
         aCfg->Read( DefaultDrawLineWidthEntry, &tmp, DEFAULTDRAWLINETHICKNESS );
 
-    SetDefaultWireThickness( (int) tmp );
+    SetDefaultWireThickness( Mils2iu( (int) tmp ) );
 
     SetSelectionTextAsBox( aCfg->ReadBool( boxedSelectedText, false ) );
     SetSelectionDrawChildItems( aCfg->ReadBool( drawSelectedChildren, true ) );
@@ -407,7 +415,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     SetTextMarkupFlags( (int) aCfg->Read( TextMarkupFlagsEntry, 0L ) );
 
     if( aCfg->Read( DefaultJctSizeEntry, &tmp ) )
-        SCH_JUNCTION::SetSymbolSize( (int) tmp );
+        SCH_JUNCTION::SetSymbolSize( Mils2iu( (int) tmp ) );
 
     aCfg->Read( DragActionIsMoveEntry, &m_dragActionIsMove, true );
     aCfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
@@ -450,10 +458,12 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 
+    aCfg->Write( RepeatStepXEntry, static_cast< long >( Iu2Mils( m_repeatStep.x ) ) );
+    aCfg->Write( RepeatStepYEntry, static_cast< long >( Iu2Mils( m_repeatStep.y ) ) );
     aCfg->Write( DragActionIsMoveEntry, m_dragActionIsMove );
-    aCfg->Write( DefaultBusWidthEntry, (long) GetDefaultBusThickness() );
-    aCfg->Write( DefaultWireWidthEntry, (long) GetDefaultWireThickness() );
-    aCfg->Write( DefaultJctSizeEntry, (long) SCH_JUNCTION::GetSymbolSize() );
+    aCfg->Write( DefaultBusWidthEntry, (long) Iu2Mils( GetDefaultBusThickness() ) );
+    aCfg->Write( DefaultWireWidthEntry, (long) Iu2Mils( GetDefaultWireThickness() ) );
+    aCfg->Write( DefaultJctSizeEntry, (long) Iu2Mils( SCH_JUNCTION::GetSymbolSize() ) );
     aCfg->Write( ShowHiddenPinsEntry, m_showAllPins );
     aCfg->Write( SelectPinSelectSymbolEntry, GetSelectPinSelectSymbol() );
     aCfg->Write( HorzVertLinesOnlyEntry, GetForceHVLines() );
@@ -485,17 +495,23 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry,
-                                               DEFAULTDRAWLINETHICKNESS ) );
-    SetDefaultPinLength( (int) aCfg->Read( DefaultPinLengthEntry, DEFAULTPINLENGTH ) );
-    m_textPinNumDefaultSize = (int) aCfg->Read( defaultPinNumSizeEntry, DEFAULTPINNUMSIZE );
-    m_textPinNameDefaultSize = (int) aCfg->Read( defaultPinNameSizeEntry, DEFAULTPINNAMESIZE );
+    SetDefaultLineThickness( Mils2iu( (int) aCfg->Read( DefaultDrawLineWidthEntry,
+                                                        DEFAULTDRAWLINETHICKNESS ) ) );
+    SetDefaultPinLength( Mils2iu( (int) aCfg->Read( DefaultPinLengthEntry, DEFAULTPINLENGTH ) ) );
+    m_textPinNumDefaultSize = Mils2iu( (int) aCfg->Read( defaultPinNumSizeEntry,
+                                                         DEFAULTPINNUMSIZE ) );
+    m_textPinNameDefaultSize = Mils2iu( (int) aCfg->Read( defaultPinNameSizeEntry,
+                                                          DEFAULTPINNAMESIZE ) );
     SetRepeatDeltaLabel( (int) aCfg->Read( repeatLibLabelIncEntry, DEFAULT_REPEAT_LABEL_INC ) );
-    SetRepeatPinStep( (int) aCfg->Read( pinRepeatStepEntry, DEFAULT_REPEAT_OFFSET_PIN ) );
+    SetRepeatPinStep( Mils2iu( (int) aCfg->Read( pinRepeatStepEntry,
+                                                 DEFAULT_REPEAT_OFFSET_PIN ) ) );
 
     wxPoint step;
-    aCfg->Read( repeatLibStepXEntry, &step.x, DEFAULT_REPEAT_OFFSET_X );
-    aCfg->Read( repeatLibStepYEntry, &step.y, DEFAULT_REPEAT_OFFSET_Y );
+    step.x = Mils2iu( static_cast< int >( aCfg->Read( repeatLibStepXEntry,
+            static_cast< long >( DEFAULT_REPEAT_OFFSET_X ) ) ) );
+    step.y = Mils2iu( static_cast< int >( aCfg->Read( repeatLibStepYEntry,
+            static_cast< long >( DEFAULT_REPEAT_OFFSET_Y ) ) ) );
+
     SetRepeatStep( step );
     m_showPinElectricalTypeName = aCfg->ReadBool( showPinElectricalType, true );
     aCfg->Read( defaultLibWidthEntry, &m_defaultLibWidth, DEFAULTLIBWIDTH );
@@ -532,14 +548,14 @@ void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    aCfg->Write( DefaultDrawLineWidthEntry, GetDefaultLineThickness() );
-    aCfg->Write( DefaultPinLengthEntry, GetDefaultPinLength() );
-    aCfg->Write( defaultPinNumSizeEntry, GetPinNumDefaultSize() );
-    aCfg->Write( defaultPinNameSizeEntry, GetPinNameDefaultSize() );
+    aCfg->Write( DefaultDrawLineWidthEntry, Iu2Mils( GetDefaultLineThickness() ) );
+    aCfg->Write( DefaultPinLengthEntry, Iu2Mils( GetDefaultPinLength() ) );
+    aCfg->Write( defaultPinNumSizeEntry, Iu2Mils( GetPinNumDefaultSize() ) );
+    aCfg->Write( defaultPinNameSizeEntry, Iu2Mils( GetPinNameDefaultSize() ) );
     aCfg->Write( repeatLibLabelIncEntry, GetRepeatDeltaLabel() );
-    aCfg->Write( pinRepeatStepEntry, GetRepeatPinStep() );
-    aCfg->Write( repeatLibStepXEntry, GetRepeatStep().x );
-    aCfg->Write( repeatLibStepYEntry, GetRepeatStep().y );
+    aCfg->Write( pinRepeatStepEntry, Iu2Mils( GetRepeatPinStep() ) );
+    aCfg->Write( repeatLibStepXEntry, Iu2Mils( GetRepeatStep().x ) );
+    aCfg->Write( repeatLibStepYEntry, Iu2Mils( GetRepeatStep().y ) );
     aCfg->Write( showPinElectricalType, GetShowElectricalType() );
     aCfg->Write( defaultLibWidthEntry, m_treePane->GetSize().x );
 }

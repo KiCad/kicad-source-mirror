@@ -48,7 +48,8 @@ LIB_CIRCLE::LIB_CIRCLE( LIB_PART* aParent ) :
 
 bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef, int aAccuracy ) const
 {
-    int mindist = std::max( aAccuracy + GetPenSize() / 2, MINIMUM_SELECTION_DISTANCE );
+    int mindist = std::max( aAccuracy + GetPenSize() / 2,
+                            Mils2iu( MINIMUM_SELECTION_DISTANCE ) );
     int dist = KiROUND( GetLineLength( aPosRef, DefaultTransform.TransformCoordinate( m_Pos ) ) );
 
     if( abs( dist - GetRadius() ) <= mindist )

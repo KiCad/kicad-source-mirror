@@ -248,7 +248,8 @@ void LIB_BEZIER::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
 
 bool LIB_BEZIER::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
 {
-    int     mindist = std::max( aAccuracy + GetPenSize() / 2, MINIMUM_SELECTION_DISTANCE );
+    int     mindist = std::max( aAccuracy + GetPenSize() / 2,
+                                Mils2iu( MINIMUM_SELECTION_DISTANCE ) );
     wxPoint start, end;
 
     for( unsigned ii = 1; ii < GetCornerCount(); ii++ )

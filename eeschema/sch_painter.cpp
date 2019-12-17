@@ -120,12 +120,12 @@ static LIB_PART* dummy()
 
         LIB_RECTANGLE* square = new LIB_RECTANGLE( part );
 
-        square->MoveTo( wxPoint( -200, 200 ) );
-        square->SetEndPosition( wxPoint( 200, -200 ) );
+        square->MoveTo( wxPoint( Mils2iu( -200 ), Mils2iu( 200 ) ) );
+        square->SetEndPosition( wxPoint( Mils2iu( 200 ), Mils2iu( -200 ) ) );
 
         LIB_TEXT* text = new LIB_TEXT( part );
 
-        text->SetTextSize( wxSize( 150, 150 ) );
+        text->SetTextSize( wxSize( Mils2iu( 150 ), Mils2iu( 150 ) ) );
         text->SetText( wxString( wxT( "??" ) ) );
 
         part->AddDrawItem( square );
@@ -165,8 +165,8 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
         m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
         m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
         m_gal->SetStrokeColor( COLOR4D( LIGHTRED ) );
-        m_gal->SetLineWidth( 2 );
-        m_gal->SetGlyphSize( VECTOR2D( 20, 20 ) );
+        m_gal->SetLineWidth( Mils2ui( 2 ) );
+        m_gal->SetGlyphSize( VECTOR2D( Mils2ui( 20 ), Mils2ui( 20 ) ) );
         m_gal->StrokeText( conn->Name( true ), pos, 0.0 );
     }
 
@@ -896,8 +896,8 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     int   insideOffset = textOffset;
     int   outsideOffset = 10;
     float lineThickness = (float) GetDefaultLineThickness();
-    float aboveOffset = PIN_TEXT_MARGIN + ( thickness[ABOVE] + lineThickness ) / 2.0;
-    float belowOffset = PIN_TEXT_MARGIN + ( thickness[BELOW] + lineThickness ) / 2.0;
+    float aboveOffset = Mils2iu( PIN_TEXT_MARGIN ) + ( thickness[ABOVE] + lineThickness ) / 2.0;
+    float belowOffset = Mils2iu( PIN_TEXT_MARGIN ) + ( thickness[BELOW] + lineThickness ) / 2.0;
 
     if( drawingShadows )
     {
@@ -1070,7 +1070,7 @@ void SCH_PAINTER::draw( LIB_BEZIER *aCurve, int aLayer )
 // being moved.
 void SCH_PAINTER::drawDanglingSymbol( const wxPoint& aPos, bool aDrawingShadows )
 {
-    wxPoint radius( DANGLING_SYMBOL_SIZE, DANGLING_SYMBOL_SIZE );
+    wxPoint radius( Mils2iu( DANGLING_SYMBOL_SIZE ), Mils2iu( DANGLING_SYMBOL_SIZE ) );
 
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
