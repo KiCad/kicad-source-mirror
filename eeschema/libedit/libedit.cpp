@@ -680,7 +680,7 @@ void LIB_EDIT_FRAME::fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibr
 {
     wxCHECK( aPart, /* void */ );
 
-    int      i;
+    int      i = 1;
     wxString newName;
 
     // Append a number to the name until the name is unique in the library.
