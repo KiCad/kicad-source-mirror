@@ -481,6 +481,13 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_IT
         aList.emplace_back( _( "Length" ), msg, DARKGREEN );
         break;
 
+    case S_POLYGON:
+        aList.emplace_back( shape, _( "Polygon" ), RED );
+
+        msg.Printf( "%d", GetPolyShape().Outline(0).PointCount() );
+        aList.emplace_back( _( "Points" ), msg, DARKGREEN );
+        break;
+
     default:
     {
         aList.emplace_back( shape, _( "Segment" ), RED );
