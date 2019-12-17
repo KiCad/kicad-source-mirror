@@ -898,6 +898,17 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
             }
             break;
 
+        case PCB_PAD_T:
+            {
+                auto pad = static_cast<D_PAD*>( item );
+                auto parent = static_cast<MODULE*>( item->GetParent() );
+
+                m_commit->Modify( parent );
+                getView()->Remove( pad );
+                parent->Remove( pad );
+            }
+            break;
+
         default:
             m_commit->Remove( item );
             break;
