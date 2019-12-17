@@ -152,8 +152,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     description << "<ul>";
     description << "<li>"
                 << _( "Report or examine bugs - " )
-                << HtmlHyperlink( "https://bugs.launchpad.net/kicad/+bugs?orderby=-id&start=0",
-                                  "https://bugs.launchpad.net/kicad" )
+                << HtmlHyperlink( "https://gitlab.com/kicad/code/kicad/issues" )
                 << "</li>";
     description << "</ul></p>";
 
