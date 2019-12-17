@@ -1204,7 +1204,8 @@ void SCH_SCREENS::UpdateSymbolLinks( bool aForce )
 
     // All of the library symbols have been replaced with copies so the connection graph
     // pointer are stale.
-    g_ConnectionGraph->Recalculate( sheets, true );
+    if( g_ConnectionGraph )
+        g_ConnectionGraph->Recalculate( sheets, true );
 }
 
 
