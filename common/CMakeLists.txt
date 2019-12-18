@@ -153,10 +153,10 @@ install( TARGETS lib_kicad
 endif()
 
 
-# KiCad build version string defaults to "no-vcs-found" which forces the build version header
-# command to look for git to create the version string header when the .git path is found in
-# the source path.
-set( KICAD_BRANCH_NAME "" CACHE STRING "KiCad repository name." )
+# The build version string defaults to the value in the KiCadVersion.cmake file.
+# If being built inside a git repository, the git tag and commit hash are used to create
+# a new version string instead. The user can supply an additional string to be appended
+# to the end inside the KICAD_VERSION_EXTRA variable
 set( KICAD_VERSION_EXTRA "" CACHE STRING
     "User defined configuration string to append to KiCad version." )
 
@@ -164,8 +164,6 @@ set( KICAD_VERSION_EXTRA "" CACHE STRING
 add_custom_target(
     version_header ALL
     COMMAND ${CMAKE_COMMAND}
-        -DKICAD_VERSION=${KICAD_VERSION}
-        -DKICAD_BRANCH_NAME=${KICAD_BRANCH_NAME}
         -DKICAD_VERSION_EXTRA=${KICAD_VERSION_EXTRA}
         -DOUTPUT_FILE=${CMAKE_BINARY_DIR}/kicad_build_version.h
         -DSRC_PATH=${PROJECT_SOURCE_DIR}

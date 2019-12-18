@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright (C) 2016-2017 Lubomir Rintel <lkundrak@v3.sk> -->
-<!-- Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors. -->
+<!-- Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors. -->
 <component type="desktop">
-  <id>kicad.desktop</id>
+  <id>org.kicad_pcb.kicad</id>
   <name>KiCad</name>
-  <project_license>AGPL-3.0+</project_license>
+
+  <project_license>AGPL-3.0-or-later</project_license>
   <metadata_license>CC-BY-SA-4.0</metadata_license>
+
   <summary>EDA Suite</summary>
   <summary xml:lang="de">EDA Lösung</summary>
   <summary xml:lang="it">Suite EDA</summary>
   <summary xml:lang="sv">EDA Programpaket</summary>
+
+  <provides>
+    <binary>kicad</binary>
+    <binary>eeschema</binary>
+    <binary>pcbnew</binary>
+    <binary>gerbview</binary>
+    <binary>pl_editor</binary>
+    <binary>bitmap2component</binary>
+    <binary>pcb_calculator</binary>
+  </provides>
+
+  <translation type="gettext">kicad</translation>
 
   <keywords>
     <keyword>KiCad</keyword>
@@ -46,27 +60,38 @@
 
   <screenshots>
     <screenshot type="default">
-      <image width="1024" height="576">http://kicad-pcb.org/img/screenshots/appstream/kicad.png</image>
+      <image width="1024" height="576">https://kicad-pcb.org/img/screenshots/appstream/kicad.png</image>
     </screenshot>
 
     <screenshot>
       <caption>Eeschema Schematic Editor</caption>
-      <image width="1024" height="576">http://kicad-pcb.org/img/screenshots/appstream/eeschema.png</image>
+      <image width="1024" height="576">https://kicad-pcb.org/img/screenshots/appstream/eeschema.png</image>
     </screenshot>
 
     <screenshot>
       <caption>PcbNew PCB Layout</caption>
-      <image width="1024" height="576">http://kicad-pcb.org/img/screenshots/appstream/pcbnew.png</image>
+      <image width="1024" height="576">https://kicad-pcb.org/img/screenshots/appstream/pcbnew.png</image>
     </screenshot>
 
     <screenshot>
       <caption>PcbNew 3D Viewer</caption>
-      <image width="1024" height="576">http://kicad-pcb.org/img/screenshots/appstream/3dviewer.png</image>
+      <image width="1024" height="576">https://kicad-pcb.org/img/screenshots/appstream/3dviewer.png</image>
     </screenshot>
   </screenshots>
 
-  <url type="homepage">http://kicad-pcb.org/</url>
-  <url type="bugtracker">http://kicad-pcb.org/help/report-a-bug/</url>
+  <url type="homepage">https://kicad-pcb.org/</url>
+  <url type="bugtracker">https://kicad-pcb.org/help/report-a-bug/</url>
+  <url type="help">https://docs.kicad-pcb.org/</url>
+  <url type="donation">https://kicad-pcb.org/</url>
+
   <update_contact>kicad-developers@lists.launchpad.net</update_contact>
   <developer_name>The KiCad Developers</developer_name>
+
+  <!-- This is actually a valid tag, but the utilities don't think so -->
+  <content_rating type="oars-1.1" />
+
+  <releases>
+    <release version="@KICAD_VERSION_FULL@" date="@KICAD_CONFIG_TIMESTAMP@" />
+  </releases>
+
 </component>

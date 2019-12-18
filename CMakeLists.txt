@@ -894,6 +894,14 @@ add_custom_target( uninstall
     "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" )
 
 
+#################################################
+# Generate platform metadata files
+#################################################
+if( UNIX AND NOT APPLE )
+    include( ${CMAKE_MODULE_PATH}/WritePlatformMetadata_linux.cmake )
+endif()
+
+
 #================================================
 # Installation
 #================================================
@@ -919,7 +927,7 @@ if( UNIX AND NOT APPLE )
     set( UNIX_MIME_FILES ${UNIX_MIME_DIR}/mime )
     set( UNIX_ICON_FILES ${UNIX_MIME_DIR}/icons )
     set( UNIX_APPLICATIONS_FILES ${UNIX_MIME_DIR}/applications )
-    set( UNIX_APPDATA_FILES resources/linux/appdata )
+    set( UNIX_APPDATA_FILES ${PROJECT_BINARY_DIR}/resources/linux/appdata )
 
     # Install Mime directory
     install( DIRECTORY ${UNIX_ICON_FILES}
@@ -943,6 +951,9 @@ if( UNIX AND NOT APPLE )
     install( DIRECTORY ${UNIX_APPDATA_FILES}
         DESTINATION share
         COMPONENT resources
+        FILES_MATCHING
+        PATTERN "*appdata.xml"
+        PATTERN "*.in" EXCLUDE
         )
 endif()
 
