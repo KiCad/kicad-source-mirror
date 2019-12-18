@@ -253,7 +253,7 @@ For more information about testing KiCad, see [this page](testing.md).
 
 The KiCad version string is defined by the output of `git describe --dirty` when git is available
 or the version string defined in CMakeModules/KiCadVersion.cmake with the value of
-KICAD_VERSION_EXTRA appended to the former.  If the KICAD_VERSION_EXTRA variable is not define,
+KICAD_VERSION_EXTRA appended to the former.  If the KICAD_VERSION_EXTRA variable is not defined,
 it is not appended to the version string.  If the KICAD_VERSION_EXTRA  variable is defined it
 is appended along with a leading '-' to the full version string as follows:
 
