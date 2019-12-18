@@ -465,6 +465,13 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_IT
         aList.push_back( MSG_PANEL_ITEM( shape, _( "Curve" ), RED ) );
         break;
 
+    case S_POLYGON:
+        aList.emplace_back( shape, _( "Polygon" ), RED );
+
+        msg.Printf( "%d", GetPolyShape().Outline(0).PointCount() );
+        aList.emplace_back( _( "Points" ), msg, DARKGREEN );
+        break;
+
     default:
     {
         aList.push_back( MSG_PANEL_ITEM( shape, _( "Segment" ), RED ) );
@@ -480,14 +487,27 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_IT
     }
     }
 
-    wxString start = wxString::Format( "@(%s, %s)",
-                                       MessageTextFromValue( aUnits, GetStart().x ),
-                                       MessageTextFromValue( aUnits, GetStart().y ) );
-    wxString end   = wxString::Format( "@(%s, %s)",
-                                       MessageTextFromValue( aUnits, GetEnd().x ),
-                                       MessageTextFromValue( aUnits, GetEnd().y ) );
+    if( m_Shape == S_POLYGON )
+    {
+        VECTOR2I point0 = GetPolyShape().Outline(0).CPoint(0);
+        wxString origin = wxString::Format( "@(%s, %s)",
+                                           MessageTextFromValue( aUnits, point0.x ),
+                                           MessageTextFromValue( aUnits, point0.y ) );
 
-    aList.push_back( MSG_PANEL_ITEM( start, end, DARKGREEN ) );
+        aList.emplace_back( _( "Origin" ), origin, DARKGREEN );
+    }
+    else
+    {
+        wxString start = wxString::Format( "@(%s, %s)",
+                                           MessageTextFromValue( aUnits, GetStart().x ),
+                                           MessageTextFromValue( aUnits, GetStart().y ) );
+        wxString end   = wxString::Format( "@(%s, %s)",
+                                           MessageTextFromValue( aUnits, GetEnd().x ),
+                                           MessageTextFromValue( aUnits, GetEnd().y ) );
+
+        aList.emplace_back( start, end, DARKGREEN );
+    }
+
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), DARKBROWN ) );
 
     msg = MessageTextFromValue( aUnits, m_Width, true );
