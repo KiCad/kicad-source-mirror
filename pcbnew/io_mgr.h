@@ -590,6 +590,26 @@ public:
         {
         }
 
+        RELEASER( RELEASER&& aOther )
+        {
+            // steal the other's plugin (but do not release)
+            plugin = aOther.plugin;
+            aOther.plugin = nullptr;
+        }
+
+        RELEASER& operator=( RELEASER&& aOther )
+        {
+            // release our plugin first
+            if( plugin )
+                release();
+
+            // steal the other's plugin (but do not release)
+            plugin = aOther.plugin;
+            aOther.plugin = nullptr;
+
+            return *this;
+        }
+
         ~RELEASER()
         {
             if( plugin )
