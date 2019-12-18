@@ -27,6 +27,8 @@ macro( create_git_version_header _git_src_path )
     find_package( Git )
 
     if( GIT_FOUND )
+        message( STATUS "Using Git to determine build version string." )
+
         set( _Git_SAVED_LC_ALL "$ENV{LC_ALL}" )
         set( ENV{LC_ALL} C )
 
