@@ -474,6 +474,16 @@ public:
      * This is mainly intended for Windows platforms where this is a native feature.
      */
     void SetShutdownBlockReason( const wxString& reason );
+
+    /**
+     * Removes any shutdown block reason set
+     */
+    void RemoveShutdownBlockReason();
+
+    /**
+     * Whether or not the window supports setting a shutdown block reason
+     */
+    bool SupportsShutdownBlockReason();
 };
 
 

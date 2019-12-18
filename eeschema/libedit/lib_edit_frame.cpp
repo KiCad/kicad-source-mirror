@@ -236,9 +236,8 @@ void LIB_EDIT_FRAME::setupTools()
 
 void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
-#if defined( _WIN32 )
-    //Win32 API: This will stall any shutdown without user confirming it
-    if( aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+    // Shutdown blocks must be determined and vetoed as early as possible
+    if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
     {
         for( const auto& libNickname : m_libMgr->GetLibraryNames() )
         {
@@ -249,7 +248,6 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
             }
         }
     }
-#endif
 
     if( saveAllLibraries( true ) )
         Destroy();

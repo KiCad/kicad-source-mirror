@@ -451,14 +451,12 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
     if( GetScreen()->IsModify() && GetBoard()->GetFirstModule() )
     {
-#if defined( _WIN32 )
-        //Win32 API: This will stall any shutdown without user confirming it
-        if( aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+        // Shutdown blocks must be determined and vetoed as early as possible
+        if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
         {
             aEvent.Veto();
             return;
         }
-#endif
 
         wxString footprintName = GetBoard()->GetFirstModule()->GetFPID().GetLibItemName();
         wxString msg = _( "Save changes to \"%s\" before closing?" );

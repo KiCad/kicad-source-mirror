@@ -160,11 +160,30 @@ EDA_BASE_FRAME::~EDA_BASE_FRAME()
 {
     delete m_autoSaveTimer;
 
+    if( SupportsShutdownBlockReason() )
+    {
+        RemoveShutdownBlockReason();
+    }
+}
+
+
+bool EDA_BASE_FRAME::SupportsShutdownBlockReason()
+{
+#if defined( _WIN32 )
+    return true;
+#endif
+    return false;
+}
+
+
+void EDA_BASE_FRAME::RemoveShutdownBlockReason()
+{
 #if defined( _WIN32 )
     // Windows: Destroys any block reason that may have existed
     ShutdownBlockReasonDestroy( GetHandle() );
 #endif
 }
+
 
 void EDA_BASE_FRAME::SetShutdownBlockReason( const wxString& aReason )
 {
@@ -182,6 +201,7 @@ void EDA_BASE_FRAME::SetShutdownBlockReason( const wxString& aReason )
     }
 #endif
 }
+
 
 // TODO: Implement an RAII mechanism for the stack PushTool/PopTool pairs
 void EDA_BASE_FRAME::PushTool( const std::string& actionName )

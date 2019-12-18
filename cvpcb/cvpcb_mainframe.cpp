@@ -308,15 +308,12 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
     if( m_modified )
     {
-#if defined( _WIN32 )
-        //Windows Only: This will stall any shutdown without user confirming it
-        //Used in conjunction with ShutdownBlockReasonCreate
-        if( aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+        // Shutdown blocks must be determined and vetoed as early as possible
+        if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
         {
             aEvent.Veto();
             return;
         }
-#endif
 
         if( !HandleUnsavedChanges( this, _( "Symbol to Footprint links have been modified. "
                                             "Save changes?" ),
