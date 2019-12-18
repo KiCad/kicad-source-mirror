@@ -486,9 +486,9 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAn
     fprintf( outputFile, "G75*\n" ); // Multiquadrant (360 degrees) mode
 
     if( aStAngle < aEndAngle )
-        fprintf( outputFile, "G03" );
+        fprintf( outputFile, "G03*\n" );    // Active circular interpolation, CCW
     else
-        fprintf( outputFile, "G02" );
+        fprintf( outputFile, "G02*\n" );    // Active circular interpolation, CW
 
     fprintf( outputFile, "X%dY%dI%dJ%dD01*\n",
              KiROUND( devEnd.x ), KiROUND( devEnd.y ),
