@@ -301,6 +301,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     DefaultExecFlags();
 
     UpdateTitle();
+
+    // Default shutdown reason until a file is loaded
+    SetShutdownBlockReason( _( "New schematic file is unsaved" ) );
 }
 
 
@@ -497,6 +500,16 @@ void SCH_EDIT_FRAME::SaveUndoItemInUndoList( SCH_ITEM* aItem, bool aAppend )
 
 void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
+    SCH_SHEET_LIST sheetList( g_RootSheet );
+
+    // Shutdown blocks must be determined and vetoed as early as possible
+    if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+            && sheetList.IsModified() )
+    {
+        aEvent.Veto();
+        return;
+    }
+
     if( Kiface().IsSingle() )
     {
         LIB_EDIT_FRAME* libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
@@ -518,7 +531,6 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     if( simFrame && !simFrame->Close() )   // Can close the simulator?
         return;
 
-    SCH_SHEET_LIST sheetList( g_RootSheet );
 
     if( sheetList.IsModified() )
     {
