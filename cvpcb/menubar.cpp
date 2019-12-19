@@ -45,7 +45,12 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, tool );
 
-    fileMenu->AddItem( CVPCB_ACTIONS::saveAssociations, SELECTION_CONDITIONS::ShowAlways );
+    auto enableSaveCondition = [ this ] ( const SELECTION& sel )
+    {
+        return IsContentModified();
+    };
+
+    fileMenu->AddItem( CVPCB_ACTIONS::saveAssociations, enableSaveCondition );
     fileMenu->AddSeparator();
     fileMenu->AddClose( _( "Assign Footprints" ) );
 
