@@ -234,6 +234,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_showAllPins = false;
+    m_selectPinSelectSymbol = true;
     m_printMonochrome = true;
     m_printSheetReference = true;
     SetShowPageLimits( true );

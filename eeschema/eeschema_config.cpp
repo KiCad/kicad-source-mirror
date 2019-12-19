@@ -322,6 +322,7 @@ static const wxString RepeatStepYEntry =            "RepeatStepY";
 static const wxString RepeatLabelIncrementEntry =   "RepeatLabelIncrement";
 static const wxString ShowIllegalSymboLibDialog =   "ShowIllegalSymbolLibDialog";
 static const wxString showSheetFileNameCaseSensitivityDlg = "ShowSheetFileNameCaseSensitivityDlg";
+static const wxString SelectPinSelectSymbolEntry =  "SelectPinSelectSymbolOpt";
 
 // Library editor wxConfig entry names.
 static const wxChar defaultLibWidthEntry[] =        wxT( "LibeditLibWidth" );
@@ -410,6 +411,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     aCfg->Read( DragActionIsMoveEntry, &m_dragActionIsMove, true );
     aCfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
+    aCfg->Read( SelectPinSelectSymbolEntry, &m_selectPinSelectSymbol, true );
     aCfg->Read( HorzVertLinesOnlyEntry, &m_forceHVLines, true );
     aCfg->Read( AutoplaceFieldsEntry, &m_autoplaceFields, true );
     aCfg->Read( AutoplaceJustifyEntry, &m_autoplaceJustify, true );
@@ -453,6 +455,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( DefaultWireWidthEntry, (long) GetDefaultWireThickness() );
     aCfg->Write( DefaultJctSizeEntry, (long) SCH_JUNCTION::GetSymbolSize() );
     aCfg->Write( ShowHiddenPinsEntry, m_showAllPins );
+    aCfg->Write( SelectPinSelectSymbolEntry, GetSelectPinSelectSymbol() );
     aCfg->Write( HorzVertLinesOnlyEntry, GetForceHVLines() );
     aCfg->Write( AutoplaceFieldsEntry, m_autoplaceFields );
     aCfg->Write( AutoplaceJustifyEntry, m_autoplaceJustify );

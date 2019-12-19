@@ -53,6 +53,8 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
 
     m_mouseDragIsDrag->SetValue( m_frame->GetDragActionIsMove() );
 
+    m_cbPinSelectionOpt->SetValue( m_frame->GetSelectPinSelectSymbol() );
+
     return true;
 }
 
@@ -81,6 +83,8 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
     m_frame->SetAutoplaceAlign( m_checkAutoplaceAlign->GetValue() );
 
     m_frame->SetDragActionIsMove( !m_mouseDragIsDrag->GetValue() );
+
+    m_frame->SetSelectPinSelectSymbol( m_cbPinSelectionOpt->GetValue() );
 
     return true;
 }

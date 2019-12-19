@@ -113,6 +113,12 @@ public:
     virtual bool GetShowAllPins() const { return true; }
 
     /**
+     * Allow some frames to select the parent symbol when trying to select a pin.
+     * The default impl select the pin.
+     */
+    virtual bool GetSelectPinSelectSymbol() const { return false; }
+
+    /**
      * Allow some frames to show/hide pin electrical type names.
      */
     bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
