@@ -30,7 +30,7 @@
 #include <sch_base_frame.h>
 #include <sch_edit_frame.h>
 #include <lib_edit_frame.h>
-#include <viewlib_frame.h>
+#include <lib_view_frame.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_field.h>

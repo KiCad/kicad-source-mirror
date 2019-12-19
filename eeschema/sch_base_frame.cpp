@@ -33,7 +33,7 @@
 #include <class_library.h>
 #include <eeschema_id.h>
 #include <lib_edit_frame.h>
-#include <viewlib_frame.h>
+#include <lib_view_frame.h>
 #include <sch_base_frame.h>
 #include <symbol_lib_table.h>
 #include <tool/action_toolbar.h>

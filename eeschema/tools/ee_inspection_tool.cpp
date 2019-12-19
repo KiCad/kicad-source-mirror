@@ -40,7 +40,7 @@
 #include <sch_view.h>
 #include <sch_edit_frame.h>
 #include <lib_edit_frame.h>
-#include <viewlib_frame.h>
+#include <lib_view_frame.h>
 #include <eda_doc.h>
 #include <invoke_sch_dialog.h>
 #include <project.h>

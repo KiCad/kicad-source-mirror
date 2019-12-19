@@ -160,6 +160,7 @@ set( EESCHEMA_SRCS
     lib_polyline.cpp
     lib_rectangle.cpp
     lib_text.cpp
+    lib_view_frame.cpp
     libarch.cpp
     menubar.cpp
     netlist_generator.cpp
@@ -206,11 +207,9 @@ set( EESCHEMA_SRCS
     symbol_tree_model_adapter.cpp
     symbol_tree_synchronizing_adapter.cpp
     template_fieldnames.cpp
+    toolbars_lib_view.cpp
     toolbars_sch_editor.cpp
-    toolbars_viewlib.cpp
     transform.cpp
-    viewlib_frame.cpp
-    viewlibs.cpp
 
     netlist_exporters/netlist_exporter.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp

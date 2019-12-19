@@ -23,21 +23,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <kiface_i.h>
-#include <pgm_base.h>
-#include <sch_view.h>
-#include <msgpanel.h>
 #include <bitmaps.h>
-#include <eeschema_id.h>
-#include <viewlib_frame.h>
-#include <symbol_lib_table.h>
-#include <dialog_helpers.h>
 #include <class_libentry.h>
 #include <class_library.h>
-#include <view/view_controls.h>
-#include <sch_painter.h>
 #include <confirm.h>
+#include <dialog_helpers.h>
+#include <dialog_choose_component.h>
+#include <eda_doc.h>
+#include <eeschema_id.h>
+#include <fctsys.h>
+#include <kiface_i.h>
+#include <kiway.h>
+#include <lib_view_frame.h>
+#include <msgpanel.h>
+#include <sch_draw_panel.h>
+#include <sch_view.h>
+#include <sch_painter.h>
+#include <symbol_lib_table.h>
+#include <symbol_tree_model_adapter.h>
+#include <pgm_base.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_dispatcher.h>
@@ -47,6 +51,7 @@
 #include <tools/ee_actions.h>
 #include <tools/lib_control.h>
 #include <tools/ee_inspection_tool.h>
+#include <view/view_controls.h>
 
 // Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
@@ -724,5 +729,105 @@ void LIB_VIEW_FRAME::FinishModal()
         DismissModal( false );
 
     Close( true );
+}
+
+
+
+void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
+{
+    std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_COMPONENT::g_Mutex, std::defer_lock );
+
+    // One CHOOSE_COMPONENT dialog at a time.  User probaby can't handle more anyway.
+    if( !dialogLock.try_lock() )
+        return;
+
+    // Container doing search-as-you-type.
+    SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
+    auto adapterPtr( SYMBOL_TREE_MODEL_ADAPTER::Create( libs ) );
+    auto adapter = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapterPtr.get() );
+
+    const auto libNicknames = libs->GetLogicalLibs();
+    adapter->AddLibraries( libNicknames, this );
+
+    LIB_PART* current = GetSelectedSymbol();
+    LIB_ID id;
+    int unit = 0;
+
+    if( current )
+    {
+        id = current->GetLibId();
+        adapter->SetPreselectNode( id, unit );
+    }
+
+    wxString dialogTitle;
+    dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
+
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapterPtr, m_convert, false, false, false );
+
+    if( dlg.ShowQuasiModal() == wxID_CANCEL )
+        return;
+
+    id = dlg.GetSelectedLibId( &unit );
+
+    if( !id.IsValid() )
+        return;
+
+    SetSelectedLibrary( id.GetLibNickname() );
+    SetSelectedComponent( id.GetLibItemName() );
+    SetUnitAndConvert( unit, 1 );
+}
+
+
+void LIB_VIEW_FRAME::onSelectNextSymbol( wxCommandEvent& aEvent )
+{
+    wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
+    int ii = m_cmpList->GetSelection();
+
+    // Select the next symbol or stop at the end of the list.
+    if( ii != wxNOT_FOUND || ii != (int)m_cmpList->GetCount() - 1 )
+        ii += 1;
+
+    m_cmpList->SetSelection( ii );
+    ProcessEvent( evt );
+}
+
+
+void LIB_VIEW_FRAME::onSelectPreviousSymbol( wxCommandEvent& aEvent )
+{
+    wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
+    int ii = m_cmpList->GetSelection();
+
+    // Select the previous symbol or stop at the beginning of list.
+    if( ii != wxNOT_FOUND && ii != 0 )
+        ii -= 1;
+
+    m_cmpList->SetSelection( ii );
+    ProcessEvent( evt );
+}
+
+
+void LIB_VIEW_FRAME::onSelectSymbolUnit( wxCommandEvent& aEvent )
+{
+    int ii = m_unitChoice->GetSelection();
+
+    if( ii < 0 )
+        return;
+
+    m_unit = ii + 1;
+
+    updatePreviewSymbol();
+}
+
+
+void LIB_VIEW_FRAME::DisplayLibInfos()
+{
+    if( m_libList && !m_libList->IsEmpty() && !m_libraryName.IsEmpty() )
+    {
+        const SYMBOL_LIB_TABLE_ROW* row = Prj().SchSymbolLibTable()->FindRow( m_libraryName );
+
+        wxString title = wxString::Format( _( "Symbol Library Browser -- %s" ),
+                                           row ? row->GetFullURI() : _( "no library selected" ) );
+        SetTitle( title );
+    }
 }
 

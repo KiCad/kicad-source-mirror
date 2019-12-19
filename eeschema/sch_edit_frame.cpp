@@ -41,7 +41,7 @@
 #include <symbol_lib_table.h>
 #include <reporter.h>
 #include <lib_edit_frame.h>
-#include <viewlib_frame.h>
+#include <lib_view_frame.h>
 #include <eeschema_config.h>
 #include <sch_sheet.h>
 #include <sim/sim_plot_frame.h>
