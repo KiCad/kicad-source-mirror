@@ -299,6 +299,13 @@ public:
     void OnQuit( wxCommandEvent& event );
 
     /**
+     * Get if the current board has been modified but not saved.
+     *
+     * @return true if the any changes have not been saved
+     */
+    bool IsContentModified() override;
+
+    /**
      * Reload the Python plugins if they are newer than
      * the already loaded, and load new plugins if any
      * Do nothing if KICAD_SCRIPTING is not defined

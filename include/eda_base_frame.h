@@ -484,6 +484,13 @@ public:
      * Whether or not the window supports setting a shutdown block reason
      */
     bool SupportsShutdownBlockReason();
+
+    /**
+     * Get if the contents of the frame have been modified since the last save.
+     *
+     * @return true if the contents of the frame have not been saved
+     */
+    virtual bool IsContentModified();
 };
 
 

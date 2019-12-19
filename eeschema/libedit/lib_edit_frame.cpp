@@ -237,16 +237,11 @@ void LIB_EDIT_FRAME::setupTools()
 void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
-    if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+    if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+            && IsContentModified() )
     {
-        for( const auto& libNickname : m_libMgr->GetLibraryNames() )
-        {
-            if( m_libMgr->IsLibraryModified( libNickname ) )
-            {
-                aEvent.Veto();
-                return;
-            }
-        }
+        aEvent.Veto();
+        return;
     }
 
     if( saveAllLibraries( true ) )
@@ -820,4 +815,23 @@ bool LIB_EDIT_FRAME::HasLibModifications() const
     wxCHECK( m_libMgr, false );
 
     return m_libMgr->HasModifications();
+}
+
+
+bool LIB_EDIT_FRAME::IsContentModified()
+{
+    wxCHECK( m_libMgr, false );
+
+    // Test if the currently edited part is modified
+    if( GetScreen() && GetScreen()->IsModify() && GetCurPart() )
+        return true;
+
+    // Test if any library has been modified
+    for( const auto& libNickname : m_libMgr->GetLibraryNames() )
+    {
+        if( m_libMgr->IsLibraryModified( libNickname ) )
+            return true;
+    }
+
+    return false;
 }

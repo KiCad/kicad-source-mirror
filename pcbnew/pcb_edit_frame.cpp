@@ -390,6 +390,12 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 }
 
 
+bool PCB_EDIT_FRAME::IsContentModified()
+{
+    return GetScreen() && GetScreen()->IsModify() && GetBoard() && !GetBoard()->IsEmpty();
+}
+
+
 bool PCB_EDIT_FRAME::isAutoSaveRequired() const
 {
     if( GetScreen() )
@@ -471,7 +477,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
     if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-            && GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
+            && IsContentModified() )
     {
         aEvent.Veto();
         return;
@@ -486,7 +492,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     if( open_dlg )
         open_dlg->Close( true );
 
-    if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
+    if( IsContentModified() )
     {
         wxFileName fileName = GetBoard()->GetFileName();
         wxString msg = _( "Save changes to \"%s\" before closing?" );

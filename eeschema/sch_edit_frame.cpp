@@ -1164,3 +1164,11 @@ void SCH_EDIT_FRAME::FixupJunctions()
     GetCurrentSheet().UpdateAllScreenReferences();
     SetScreen( GetCurrentSheet().LastScreen() );
 }
+
+
+bool SCH_EDIT_FRAME::IsContentModified()
+{
+    SCH_SHEET_LIST sheetList( g_RootSheet );
+
+    return sheetList.IsModified();
+}

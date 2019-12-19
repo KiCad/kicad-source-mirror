@@ -252,6 +252,12 @@ bool PL_EDITOR_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 }
 
 
+bool PL_EDITOR_FRAME::IsContentModified()
+{
+    return GetScreen() && GetScreen()->IsModify();
+}
+
+
 void PL_EDITOR_FRAME::OnExit( wxCommandEvent& aEvent )
 {
     if( aEvent.GetId() == wxID_EXIT )
@@ -266,13 +272,13 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
     if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-            && GetScreen()->IsModify() )
+            && IsContentModified() )
     {
         aEvent.Veto();
         return;
     }
 
-    if( GetScreen()->IsModify() )
+    if( IsContentModified() )
     {
         wxFileName filename = GetCurrFileName();
         wxString msg = _( "Save changes to \"%s\" before closing?" );

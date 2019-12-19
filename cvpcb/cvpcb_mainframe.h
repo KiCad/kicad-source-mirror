@@ -137,6 +137,16 @@ public:
     };
 
     /**
+     * Get if the current associations have been modified but not saved.
+     *
+     * @return true if the any changes have not been saved
+     */
+    bool IsContentModified() override
+    {
+        return m_modified;
+    }
+
+    /**
      * @return a pointer on the Footprint Viewer frame, if exists, or NULL
      */
     DISPLAY_FOOTPRINTS_FRAME* GetFootprintViewerFrame();

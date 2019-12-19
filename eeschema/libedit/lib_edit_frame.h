@@ -124,6 +124,13 @@ public:
     void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
 
     /**
+     * Get if any parts or libraries have been modified but not saved.
+     *
+     * @return true if the any changes have not been saved
+     */
+    bool IsContentModified() override;
+
+    /**
      * Check if any pending libraries have been modified.
      *
      * This only checks for modified libraries.  If a new symbol was created and modified

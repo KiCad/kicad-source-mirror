@@ -225,9 +225,9 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
     auto& opts = GetDisplayOptions();
 
     if( IsCurrentFPFromBoard() )
-        m_mainToolBar->Toggle( PCB_ACTIONS::saveToBoard,   GetScreen() && GetScreen()->IsModify() );
+        m_mainToolBar->Toggle( PCB_ACTIONS::saveToBoard,   IsContentModified() );
     else
-        m_mainToolBar->Toggle( PCB_ACTIONS::saveToLibrary, GetScreen() && GetScreen()->IsModify() );
+        m_mainToolBar->Toggle( PCB_ACTIONS::saveToLibrary, IsContentModified() );
 
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );

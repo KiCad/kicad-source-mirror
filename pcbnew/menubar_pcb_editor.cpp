@@ -51,7 +51,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     wxMenuBar* menuBar = new wxMenuBar();
 
     auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
-        return GetScreen()->IsModify();
+        return IsContentModified();
     };
 
     // Recreate all menus:
