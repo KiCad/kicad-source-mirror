@@ -670,7 +670,7 @@ void PCB_EDIT_FRAME::SyncToolbars()
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
     int                         zoneMode = opts.m_DisplayZonesMode;
 
-    m_mainToolBar->Toggle( ACTIONS::save, GetScreen() && GetScreen()->IsModify() );
+    m_mainToolBar->Toggle( ACTIONS::save, IsContentModified() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );

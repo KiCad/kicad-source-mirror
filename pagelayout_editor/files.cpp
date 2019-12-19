@@ -43,7 +43,7 @@ bool PL_EDITOR_FRAME::saveCurrentPageLayout()
     saveEvent.SetId( wxID_SAVE );
     Files_io( saveEvent );
 
-    return( !GetScreen()->IsModify() );
+    return !IsContentModified();
 }
 
 
@@ -55,7 +55,7 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
 
     if( filename != wxEmptyString )
     {
-        if( GetScreen()->IsModify() )
+        if( IsContentModified() )
         {
             if( !HandleUnsavedChanges( this, _( "The current page layout has been modified. "
                                                 "Save changes?" ),
@@ -90,7 +90,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     if( filename.IsEmpty() && id == wxID_SAVE )
         id = wxID_SAVEAS;
 
-    if( ( id == wxID_NEW || id == wxID_OPEN ) && GetScreen()->IsModify() )
+    if( ( id == wxID_NEW || id == wxID_OPEN ) && IsContentModified() )
     {
         if( !HandleUnsavedChanges( this, _( "The current page layout has been modified.  "
                                             "Save changes?" ),

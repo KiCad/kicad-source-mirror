@@ -100,7 +100,7 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
     if( GetBoard() == NULL )
         return false;
 
-    if( aQuery && GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
+    if( aQuery && IsContentModified() )
     {
         wxSafeYield( this, true );      // Allow frame to come to front before showing warning.
 

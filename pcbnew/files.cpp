@@ -277,7 +277,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
     case ID_NEW_BOARD:
     {
-        if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
+        if( IsContentModified() )
         {
             wxFileName fileName = GetBoard()->GetFileName();
             wxString   saveMsg =
@@ -433,7 +433,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         return false;
     }
 
-    if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
+    if( IsContentModified() )
     {
         if( !HandleUnsavedChanges( this, _( "The current PCB has been modified.  Save changes?" ),
             [&]()->bool { return SavePcbFile( GetBoard()->GetFileName(), CREATE_BACKUP_FILE ); } ) )

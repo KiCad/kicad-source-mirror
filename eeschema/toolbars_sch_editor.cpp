@@ -166,13 +166,12 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 
 
 void SCH_EDIT_FRAME::SyncToolbars()
-{    
+{
 #define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
 
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
-    SCH_SHEET_LIST              sheetList( g_RootSheet );
 
-    m_mainToolBar->Toggle( ACTIONS::save, sheetList.IsModified() );
+    m_mainToolBar->Toggle( ACTIONS::save, IsContentModified() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );

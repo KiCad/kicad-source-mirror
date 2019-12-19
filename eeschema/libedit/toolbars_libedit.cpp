@@ -157,14 +157,10 @@ void LIB_EDIT_FRAME::SyncToolbars()
     const wxString& libName = libId.GetLibNickname();
     const wxString& partName = libId.GetLibItemName();
     bool isEditable = m_my_part && m_my_part->IsRoot();
-    bool modified = m_libMgr->HasModifications();
 
-    if( !modified && !partName.IsEmpty() && m_libMgr->IsPartModified( partName, libName ) )
-        modified = true;
-
-    m_mainToolBar->Toggle( ACTIONS::saveAll, modified );
-    m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::saveAll,  IsContentModified() );
+    m_mainToolBar->Toggle( ACTIONS::undo,     GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::redo,     GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, IsCurrentTool( ACTIONS::zoomTool ) );
     m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, (bool) m_my_part );
     m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganStandard,

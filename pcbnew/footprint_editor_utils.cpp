@@ -189,7 +189,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             LIB_ID selected = m_treePane->GetLibTree()->GetSelectedLibId();
 
-            if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
+            if( IsContentModified() )
             {
                 if( !HandleUnsavedChanges( this, _( "The current footprint has been modified.  "
                                                     "Save changes?" ),

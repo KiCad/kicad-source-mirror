@@ -306,6 +306,13 @@ public:
     void ReCreateMenuBar() override;
 
     /**
+     * Get if the current schematic has been modified but not saved.
+     *
+     * @return true if the any changes have not been saved
+     */
+    bool IsContentModified() override;
+
+    /**
      * Must be called after a schematic change in order to set the "modify" flag of the
      * current screen and update the date in frame reference.
      */

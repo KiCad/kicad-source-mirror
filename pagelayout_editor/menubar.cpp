@@ -45,7 +45,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     wxMenuBar*  menuBar = new wxMenuBar();
 
     auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
-        return GetScreen() && GetScreen()->IsModify();
+        return IsContentModified();
     };
 
     static FILE_HISTORY_MENU* openRecentMenu;  // Open Recent submenu, static to remember this menu

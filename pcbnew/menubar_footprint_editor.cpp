@@ -48,7 +48,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     wxMenuBar* menuBar = new wxMenuBar();
 
     auto modifiedDocumentCondition = [this]( const SELECTION& sel ) {
-        return !GetBoard()->Modules().empty() && GetScreen()->IsModify();
+        return IsContentModified();
     };
     auto haveFootprintCondition = [this]( const SELECTION& aSelection ) {
         return GetBoard()->GetFirstModule() != nullptr;

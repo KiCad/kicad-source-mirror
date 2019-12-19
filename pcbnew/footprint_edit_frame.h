@@ -61,6 +61,13 @@ public:
     ///> @copydoc PCB_BASE_EDIT_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
+    /**
+     * Get if any footprints or libraries have been modified but not saved.
+     *
+     * @return true if the any changes have not been saved
+     */
+    bool IsContentModified() override;
+
     bool IsCurrentFPFromBoard() const;
 
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const override;

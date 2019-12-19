@@ -150,7 +150,7 @@ void PL_EDITOR_FRAME::SyncToolbars()
 {
 #define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
 
-    m_mainToolBar->Toggle( ACTIONS::save, GetScreen() && GetScreen()->IsModify() );
+    m_mainToolBar->Toggle( ACTIONS::save, IsContentModified() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );

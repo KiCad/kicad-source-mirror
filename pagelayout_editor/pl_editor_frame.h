@@ -98,6 +98,12 @@ public:
      */
     bool InsertPageLayoutDescrFile( const wxString& aFullFileName );
 
+    /**
+     * Get if the page layout has been modified but not saved.
+     *
+     * @return true if the any changes have not been saved
+     */
+    bool IsContentModified() override;
 
     /*
      * Function OnExit

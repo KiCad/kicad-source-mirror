@@ -240,6 +240,11 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 }
 
 
+bool FOOTPRINT_EDIT_FRAME::IsContentModified()
+{
+    return GetScreen() && GetScreen()->IsModify() && GetBoard() && GetBoard()->GetFirstModule();
+}
+
 
 void FOOTPRINT_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
@@ -449,7 +454,7 @@ const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents() const
 
 void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
-    if( GetScreen()->IsModify() && GetBoard()->GetFirstModule() )
+    if( IsContentModified() )
     {
         // Shutdown blocks must be determined and vetoed as early as possible
         if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
