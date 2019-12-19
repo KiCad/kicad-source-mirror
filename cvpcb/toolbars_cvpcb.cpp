@@ -40,6 +40,9 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
         m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                 KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
+    m_mainToolBar->Add( CVPCB_ACTIONS::saveAssociations );
+
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( ACTIONS::showFootprintLibTable );
 
     KiScaledSeparator( m_mainToolBar, this );
@@ -85,8 +88,9 @@ void CVPCB_MAINFRAME::SyncToolbars()
 {
 #define filterActive( filter ) ( m_filteringOptions & filter )
 
-    m_mainToolBar->Toggle( ACTIONS::undo, m_undoList.size() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::redo, m_redoList.size() > 0 );
+    m_mainToolBar->Toggle( CVPCB_ACTIONS::saveAssociations, IsContentModified() );
+    m_mainToolBar->Toggle( ACTIONS::undo,                   m_undoList.size() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::redo,                   m_redoList.size() > 0 );
 
     m_mainToolBar->Toggle( CVPCB_ACTIONS::FilterFPbyFPFilters,
                            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS ) );
