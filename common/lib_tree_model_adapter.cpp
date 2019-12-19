@@ -170,10 +170,12 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
         m_widget->UnselectAll();
 
         Cleared();
-#ifndef __WINDOWS__
+#if defined( __LINUX__ )
         // The fastest method to update wxDataViewCtrl is to rebuild from
         // scratch by calling Cleared(). Linux requires to reassociate model to
         // display data, but Windows will create multiple associations.
+        // On MacOS, this crashes kicad. See https://gitlab.com/kicad/code/kicad/issues/3666
+        // and https://gitlab.com/kicad/code/kicad/issues/3653
         AttachTo( m_widget );
 #endif
     }
