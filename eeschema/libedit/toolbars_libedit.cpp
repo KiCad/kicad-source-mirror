@@ -153,9 +153,6 @@ void LIB_EDIT_FRAME::SyncToolbars()
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
 
-    LIB_ID libId = getTargetLibId();
-    const wxString& libName = libId.GetLibNickname();
-    const wxString& partName = libId.GetLibItemName();
     bool isEditable = m_my_part && m_my_part->IsRoot();
 
     m_mainToolBar->Toggle( ACTIONS::saveAll,  IsContentModified() );
