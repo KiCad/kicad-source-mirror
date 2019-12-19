@@ -32,6 +32,7 @@
 #include <wx_html_report_panel.h>
 
 #include <class_library.h>
+#include <lib_view_frame.h>
 #include <project_rescue.h>
 #include <sch_io_mgr.h>
 #include <sch_sheet.h>
@@ -39,7 +40,6 @@
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
-#include <viewlib_frame.h>
 #include <env_paths.h>
 
 #include <dialog_symbol_remap.h>

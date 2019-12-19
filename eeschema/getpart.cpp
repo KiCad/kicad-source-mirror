@@ -38,7 +38,7 @@
 #include <class_library.h>
 #include <sch_component.h>
 #include <lib_edit_frame.h>
-#include <viewlib_frame.h>
+#include <lib_view_frame.h>
 #include <eeschema_id.h>
 #include <symbol_lib_table.h>
 

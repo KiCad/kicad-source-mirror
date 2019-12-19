@@ -31,7 +31,7 @@
 #include <eda_dde.h>
 #include <sch_edit_frame.h>
 #include <lib_edit_frame.h>
-#include <viewlib_frame.h>
+#include <lib_view_frame.h>
 #include <general.h>
 #include <class_libentry.h>
 #include <transform.h>
