@@ -185,7 +185,7 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     double   dXpos = To_User_Unit( GetUserUnits(), cursorPos.x );
     double   dYpos = To_User_Unit( GetUserUnits(), cursorPos.y );
 
-    if ( GetUserUnits() == MILLIMETRES )
+    if( GetUserUnits() == EDA_UNITS_T::MILLIMETRES )
     {
         dXpos = RoundTo0( dXpos, 100.0 );
         dYpos = RoundTo0( dYpos, 100.0 );
@@ -196,17 +196,17 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 
     switch( GetUserUnits() )
     {
-    case INCHES:
+    case EDA_UNITS_T::INCHES:
         absformatter = "X %.3f  Y %.3f";
         locformatter = "dx %.3f  dy %.3f  dist %.3f";
         break;
 
-    case MILLIMETRES:
+    case EDA_UNITS_T::MILLIMETRES:
         absformatter = "X %.2f  Y %.2f";
         locformatter = "dx %.2f  dy %.2f  dist %.2f";
         break;
 
-    case UNSCALED_UNITS:
+    case EDA_UNITS_T::UNSCALED_UNITS:
         absformatter = "X %f  Y %f";
         locformatter = "dx %f  dy %f  dist %f";
         break;
@@ -226,7 +226,7 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     dXpos = To_User_Unit( GetUserUnits(), dx );
     dYpos = To_User_Unit( GetUserUnits(), dy );
 
-    if( GetUserUnits() == MILLIMETRES )
+    if( GetUserUnits() == EDA_UNITS_T::MILLIMETRES )
     {
         dXpos = RoundTo0( dXpos, 100.0 );
         dYpos = RoundTo0( dYpos, 100.0 );

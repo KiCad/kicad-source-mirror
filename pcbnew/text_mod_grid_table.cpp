@@ -54,10 +54,14 @@ TEXT_MOD_GRID_TABLE::TEXT_MOD_GRID_TABLE( EDA_UNITS_T aUserUnits, PCB_BASE_FRAME
 
     if( g_menuOrientations.IsEmpty() )
     {
-        g_menuOrientations.push_back( wxT( "0 " ) + GetAbbreviatedUnitsLabel( DEGREES ) );
-        g_menuOrientations.push_back( wxT( "90 " ) + GetAbbreviatedUnitsLabel( DEGREES ) );
-        g_menuOrientations.push_back( wxT( "-90 " ) + GetAbbreviatedUnitsLabel( DEGREES ) );
-        g_menuOrientations.push_back( wxT( "180 " ) + GetAbbreviatedUnitsLabel( DEGREES ) );
+        g_menuOrientations.push_back(
+                wxT( "0 " ) + GetAbbreviatedUnitsLabel( EDA_UNITS_T::DEGREES ) );
+        g_menuOrientations.push_back(
+                wxT( "90 " ) + GetAbbreviatedUnitsLabel( EDA_UNITS_T::DEGREES ) );
+        g_menuOrientations.push_back(
+                wxT( "-90 " ) + GetAbbreviatedUnitsLabel( EDA_UNITS_T::DEGREES ) );
+        g_menuOrientations.push_back(
+                wxT( "180 " ) + GetAbbreviatedUnitsLabel( EDA_UNITS_T::DEGREES ) );
     }
 
     m_orientationColAttr = new wxGridCellAttr;
@@ -198,7 +202,8 @@ wxString TEXT_MOD_GRID_TABLE::GetValue( int aRow, int aCol )
         return text.GetLayerName();
 
     case TMC_ORIENTATION:
-        return StringFromValue( DEGREES, (int) NormalizeAnglePos( text.GetTextAngle() ), true );
+        return StringFromValue(
+                EDA_UNITS_T::DEGREES, (int) NormalizeAnglePos( text.GetTextAngle() ), true );
 
     case TMC_XOFFSET:
         return StringFromValue( m_userUnits, text.GetPos0().x, true );
@@ -268,7 +273,7 @@ void TEXT_MOD_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         break;
 
     case TMC_ORIENTATION:
-        text.SetTextAngle( DoubleValueFromString( DEGREES, aValue ) );
+        text.SetTextAngle( DoubleValueFromString( EDA_UNITS_T::DEGREES, aValue ) );
         text.SetDrawCoord();
         break;
 

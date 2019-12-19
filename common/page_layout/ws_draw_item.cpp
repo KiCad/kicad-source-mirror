@@ -137,10 +137,10 @@ void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aL
 
     aList.push_back( MSG_PANEL_ITEM( _( "First Page Option" ), msg, BROWN ) );
 
-    msg = MessageTextFromValue( UNSCALED_UNITS, dataItem->m_RepeatCount );
+    msg = MessageTextFromValue( EDA_UNITS_T::UNSCALED_UNITS, dataItem->m_RepeatCount );
     aList.push_back( MSG_PANEL_ITEM( _( "Repeat Count" ), msg, BLUE ) );
 
-    msg = MessageTextFromValue( UNSCALED_UNITS, dataItem->m_IncrementLabel );
+    msg = MessageTextFromValue( EDA_UNITS_T::UNSCALED_UNITS, dataItem->m_IncrementLabel );
     aList.push_back( MSG_PANEL_ITEM( _( "Repeat Label Increment" ), msg, DARKGRAY ) );
 
     msg.Printf( wxT( "(%s, %s)" ),

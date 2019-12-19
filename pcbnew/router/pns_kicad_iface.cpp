@@ -861,7 +861,7 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
         dlg.ShowDetailedText(
             wxString::Format( _( "%s\nThis zone cannot be handled by the track layout tool.\n"
                                  "Please verify it is not a self-intersecting polygon." ),
-                              aZone->GetSelectMenuText( MILLIMETRES ) ) );
+                        aZone->GetSelectMenuText( EDA_UNITS_T::MILLIMETRES ) ) );
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
         dlg.ShowModal();
 

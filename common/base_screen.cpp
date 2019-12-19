@@ -112,8 +112,8 @@ int BASE_SCREEN::BuildGridsChoiceList( wxArrayString& aGridsList, bool aMmFirst)
     for( size_t i = 0; i < GetGridCount(); i++ )
     {
         const GRID_TYPE& grid = m_grids[i];
-        double gridValueMils = To_User_Unit( INCHES, grid.m_Size.x ) * 1000;
-        double gridValue_mm = To_User_Unit( MILLIMETRES, grid.m_Size.x );
+        double           gridValueMils = To_User_Unit( EDA_UNITS_T::INCHES, grid.m_Size.x ) * 1000;
+        double           gridValue_mm = To_User_Unit( EDA_UNITS_T::MILLIMETRES, grid.m_Size.x );
 
         if( grid.m_CmdId == ID_POPUP_GRID_USER )
         {

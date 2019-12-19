@@ -1487,7 +1487,7 @@ void SCH_COMPONENT::Rotate( wxPoint aPosition )
 
 bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
-    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( MILLIMETRES ) );
+    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( EDA_UNITS_T::MILLIMETRES ) );
 
     // Components are searchable via the child field and pin item text.
     return false;

@@ -131,7 +131,7 @@ void PANEL_PREV_3D::loadCommonSettings()
  */
 static double rotationFromString( const wxString& aValue )
 {
-    double rotation = DoubleValueFromString( DEGREES, aValue ) / 10.0;
+    double rotation = DoubleValueFromString( EDA_UNITS_T::DEGREES, aValue ) / 10.0;
 
     if( rotation > MAX_ROTATION )
     {
@@ -156,14 +156,14 @@ wxString PANEL_PREV_3D::formatScaleValue( double aValue )
 
 wxString PANEL_PREV_3D::formatRotationValue( double aValue )
 {
-    return wxString::Format( "%.2f %s", aValue, GetAbbreviatedUnitsLabel( DEGREES ) );
+    return wxString::Format( "%.2f %s", aValue, GetAbbreviatedUnitsLabel( EDA_UNITS_T::DEGREES ) );
 }
 
 
 wxString PANEL_PREV_3D::formatOffsetValue( double aValue )
 {
     // Convert from internal units (mm) to user units
-    if( m_userUnits == INCHES )
+    if( m_userUnits == EDA_UNITS_T::INCHES )
         aValue /= 25.4f;
 
     return wxString::Format( "%.4f %s", aValue, GetAbbreviatedUnitsLabel( m_userUnits ) );
@@ -218,9 +218,12 @@ void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
         // Write settings back to the parent
         MODULE_3D_SETTINGS* modelInfo = &m_parentModelList->at( (unsigned) m_selected );
 
-        modelInfo->m_Scale.x = DoubleValueFromString( UNSCALED_UNITS, xscale->GetValue() );
-        modelInfo->m_Scale.y = DoubleValueFromString( UNSCALED_UNITS, yscale->GetValue() );
-        modelInfo->m_Scale.z = DoubleValueFromString( UNSCALED_UNITS, zscale->GetValue() );
+        modelInfo->m_Scale.x =
+                DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, xscale->GetValue() );
+        modelInfo->m_Scale.y =
+                DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, yscale->GetValue() );
+        modelInfo->m_Scale.z =
+                DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, zscale->GetValue() );
 
         modelInfo->m_Rotation.x = rotationFromString( xrot->GetValue() );
         modelInfo->m_Rotation.y = rotationFromString( yrot->GetValue() );
@@ -247,7 +250,7 @@ void PANEL_PREV_3D::doIncrementScale( wxSpinEvent& event, double aSign )
     else if( spinCtrl == m_spinZscale )
         textCtrl = zscale;
 
-    double curr_value = DoubleValueFromString( UNSCALED_UNITS, textCtrl->GetValue() );
+    double curr_value = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, textCtrl->GetValue() );
 
     curr_value += ( SCALE_INCREMENT * aSign );
     curr_value = std::max( 1/MAX_SCALE, curr_value );
@@ -267,7 +270,7 @@ void PANEL_PREV_3D::doIncrementRotation( wxSpinEvent& aEvent, double aSign )
     else if( spinCtrl == m_spinZrot )
         textCtrl = zrot;
 
-    double curr_value = DoubleValueFromString( DEGREES, textCtrl->GetValue() ) / 10.0;
+    double curr_value = DoubleValueFromString( EDA_UNITS_T::DEGREES, textCtrl->GetValue() ) / 10.0;
 
     curr_value += ( ROTATION_INCREMENT * aSign );
     curr_value = std::max( -MAX_ROTATION, curr_value );
@@ -290,7 +293,7 @@ void PANEL_PREV_3D::doIncrementOffset( wxSpinEvent& event, double aSign )
 
     double step = OFFSET_INCREMENT_MM;
 
-    if( m_userUnits == INCHES )
+    if( m_userUnits == EDA_UNITS_T::INCHES )
         step = OFFSET_INCREMENT_MIL/1000.0;
 
     double curr_value = DoubleValueFromString( m_userUnits, textCtrl->GetValue() ) / IU_PER_MM;
@@ -315,7 +318,7 @@ void PANEL_PREV_3D::onMouseWheelScale( wxMouseEvent& event )
     if( event.GetWheelRotation() >= 0 )
         step = -step;
 
-    double curr_value = DoubleValueFromString( UNSCALED_UNITS, textCtrl->GetValue() );
+    double curr_value = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, textCtrl->GetValue() );
 
     curr_value += step;
     curr_value = std::max( 1/MAX_SCALE, curr_value );
@@ -337,7 +340,7 @@ void PANEL_PREV_3D::onMouseWheelRot( wxMouseEvent& event )
     if( event.GetWheelRotation() >= 0 )
         step = -step;
 
-    double curr_value = DoubleValueFromString( DEGREES, textCtrl->GetValue() ) / 10.0;
+    double curr_value = DoubleValueFromString( EDA_UNITS_T::DEGREES, textCtrl->GetValue() ) / 10.0;
 
     curr_value += step;
     curr_value = std::max( -MAX_ROTATION, curr_value );
@@ -356,7 +359,7 @@ void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
     if( event.ShiftDown( ) )
         step = OFFSET_INCREMENT_MM_FINE;
 
-    if( m_userUnits == INCHES )
+    if( m_userUnits == EDA_UNITS_T::INCHES )
     {
         step = OFFSET_INCREMENT_MIL/1000.0;
         if( event.ShiftDown( ) )

@@ -111,8 +111,8 @@ void DIALOG_PLOT::init_Dialog()
         || m_XScaleAdjust > PLOT_MAX_SCALE || m_YScaleAdjust > PLOT_MAX_SCALE )
         m_XScaleAdjust = m_YScaleAdjust = 1.0;
 
-    m_fineAdjustXCtrl->SetValue( StringFromValue( UNSCALED_UNITS, m_XScaleAdjust ) );
-    m_fineAdjustYCtrl->SetValue( StringFromValue( UNSCALED_UNITS, m_YScaleAdjust ) );
+    m_fineAdjustXCtrl->SetValue( StringFromValue( EDA_UNITS_T::UNSCALED_UNITS, m_XScaleAdjust ) );
+    m_fineAdjustYCtrl->SetValue( StringFromValue( EDA_UNITS_T::UNSCALED_UNITS, m_YScaleAdjust ) );
 
     // Test for a reasonable PS width correction value. Set to 0 if problem.
     if( m_PSWidthAdjust < m_widthAdjustMinValue || m_PSWidthAdjust > m_widthAdjustMaxValue )

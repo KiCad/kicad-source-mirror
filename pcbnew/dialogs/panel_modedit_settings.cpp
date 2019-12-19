@@ -42,7 +42,7 @@ bool PANEL_MODEDIT_SETTINGS::TransferDataToWindow()
 {
     // Display options
     m_PolarDisplay->SetSelection( m_frame->GetShowPolarCoords() ? 1 : 0 );
-    m_UnitsSelection->SetSelection( m_frame->GetUserUnits() == INCHES ? 0 : 1 );
+    m_UnitsSelection->SetSelection( m_frame->GetUserUnits() == EDA_UNITS_T::INCHES ? 0 : 1 );
 
     // Editing options
     m_Segments_45_Only_Ctrl->SetValue( m_frame->Settings().m_Use45DegreeGraphicSegments );
@@ -56,7 +56,8 @@ bool PANEL_MODEDIT_SETTINGS::TransferDataFromWindow()
 {
     // Display options
     m_frame->SetShowPolarCoords( m_PolarDisplay->GetSelection() != 0 );
-    m_frame->SetUserUnits( m_UnitsSelection->GetSelection() == 0 ? INCHES : MILLIMETRES );
+    m_frame->SetUserUnits( m_UnitsSelection->GetSelection() == 0 ? EDA_UNITS_T::INCHES :
+                                                                   EDA_UNITS_T::MILLIMETRES );
 
     // Editing options
     m_frame->Settings().m_Use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();

@@ -447,21 +447,23 @@ int COMMON_TOOLS::GridProperties( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::MetricUnits( const TOOL_EVENT& aEvent )
 {
-    m_frame->ChangeUserUnits( MILLIMETRES );
+    m_frame->ChangeUserUnits( EDA_UNITS_T::MILLIMETRES );
     return 0;
 }
 
 
 int COMMON_TOOLS::ImperialUnits( const TOOL_EVENT& aEvent )
 {
-    m_frame->ChangeUserUnits( INCHES );
+    m_frame->ChangeUserUnits( EDA_UNITS_T::INCHES );
     return 0;
 }
 
 
 int COMMON_TOOLS::ToggleUnits( const TOOL_EVENT& aEvent )
 {
-    m_frame->ChangeUserUnits( m_frame->GetUserUnits() == INCHES ? MILLIMETRES : INCHES );
+    m_frame->ChangeUserUnits( m_frame->GetUserUnits() == EDA_UNITS_T::INCHES ?
+                                      EDA_UNITS_T::MILLIMETRES :
+                                      EDA_UNITS_T::INCHES );
     return 0;
 }
 

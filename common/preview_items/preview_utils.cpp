@@ -37,23 +37,23 @@ static wxString formatPreviewDimension( double aVal, EDA_UNITS_T aUnits )
     // be accurate down to the nanometre
     switch( aUnits )
     {
-    case MILLIMETRES:
+    case EDA_UNITS_T::MILLIMETRES:
         precision = 3;  // 1um
         break;
 
-    case INCHES:
+    case EDA_UNITS_T::INCHES:
         precision = 4;  // 0.1mil
         break;
 
-    case DEGREES:
+    case EDA_UNITS_T::DEGREES:
         precision = 1;  // 0.1deg
         break;
 
-    case PERCENT:
+    case EDA_UNITS_T::PERCENT:
         precision = 1;  // 0.1%
         break;
 
-    case UNSCALED_UNITS:
+    case EDA_UNITS_T::UNSCALED_UNITS:
         break;
     }
 

@@ -132,7 +132,7 @@ void DIALOG_POSITION_RELATIVE::updateDialogControls( bool aPolar )
     {
         m_xOffset.SetLabel( _( "Distance:" ) );     // Polar radius
         m_yOffset.SetLabel( _( "Angle:" ) );        // Polar theta or angle
-        m_yOffset.SetUnits( DEGREES );
+        m_yOffset.SetUnits( EDA_UNITS_T::DEGREES );
     }
     else
     {

@@ -68,7 +68,7 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, wxPoint& aTransla
     m_moveX.SetValue( m_options.entry1 );
     m_moveY.SetValue( m_options.entry2 );
 
-    m_rotate.SetUnits( DEGREES );
+    m_rotate.SetUnits( EDA_UNITS_T::DEGREES );
     m_rotate.SetValue( m_options.entryRotation );
     m_anchorOptions->SetSelection( std::min( m_options.entryAnchorSelection, m_menuIDs.size() ) );
 
@@ -175,7 +175,7 @@ void DIALOG_MOVE_EXACT::updateDialogControls( bool aPolar )
     {
         m_moveX.SetLabel( _( "Distance:" ) );     // Polar radius
         m_moveY.SetLabel( _( "Angle:" ) );        // Polar theta or angle
-        m_moveY.SetUnits( DEGREES );
+        m_moveY.SetUnits( EDA_UNITS_T::DEGREES );
     }
     else
     {

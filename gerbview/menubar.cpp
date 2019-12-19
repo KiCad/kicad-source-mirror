@@ -154,10 +154,10 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         return m_show_layer_manager_tools;
     };
     auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetUserUnits() == INCHES;
+        return GetUserUnits() == EDA_UNITS_T::INCHES;
     };
     auto metricUnitsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetUserUnits() == MILLIMETRES;
+        return GetUserUnits() == EDA_UNITS_T::MILLIMETRES;
     };
     auto sketchFlashedCondition = [ this ] ( const SELECTION& aSel ) {
         return !m_DisplayOptions.m_DisplayFlashedItemsFill;

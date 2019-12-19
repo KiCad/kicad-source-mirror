@@ -435,8 +435,8 @@ void DISPLAY_FOOTPRINTS_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,    IsGridVisible() );
     m_optionsToolBar->Toggle( ACTIONS::selectionTool, IsCurrentTool( ACTIONS::selectionTool ) );
     m_optionsToolBar->Toggle( ACTIONS::measureTool,   IsCurrentTool( ACTIONS::measureTool ) );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits,   GetUserUnits() != INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,   GetUserUnits() != EDA_UNITS_T::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS_T::INCHES );
     m_optionsToolBar->Refresh();
 }
 

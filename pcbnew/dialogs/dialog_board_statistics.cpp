@@ -339,7 +339,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             }
         }
 
-        if( GetUserUnits() == INCHES )
+        if( GetUserUnits() == EDA_UNITS_T::INCHES )
             m_boardArea /= ( IU_PER_MILS * IU_PER_MILS * 1000000 );
         else
             m_boardArea /= ( IU_PER_MM * IU_PER_MM );

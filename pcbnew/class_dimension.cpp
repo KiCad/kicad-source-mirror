@@ -39,14 +39,14 @@
 #include <base_units.h>
 
 
-DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
-    BOARD_ITEM( aParent, PCB_DIMENSION_T ),
-    m_Width( Millimeter2iu( 0.2 ) ),
-    m_Unit( INCHES ),
-    m_UseMils( false ),
-    m_Value( 0 ),
-    m_Height( 0 ),
-    m_Text( this )
+DIMENSION::DIMENSION( BOARD_ITEM* aParent )
+        : BOARD_ITEM( aParent, PCB_DIMENSION_T ),
+          m_Width( Millimeter2iu( 0.2 ) ),
+          m_Unit( EDA_UNITS_T::INCHES ),
+          m_UseMils( false ),
+          m_Value( 0 ),
+          m_Height( 0 ),
+          m_Text( this )
 {
     m_Layer = Dwgs_User;
     m_Shape = 0;
@@ -336,7 +336,7 @@ void DIMENSION::AdjustDimensionDetails( int aPrecision )
 
     m_Value = measure;
 
-    if( m_Unit == MILLIMETRES )
+    if( m_Unit == EDA_UNITS_T::MILLIMETRES )
         aPrecision += 2;
     else if( !m_UseMils )
         aPrecision += 3;

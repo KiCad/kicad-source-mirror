@@ -136,7 +136,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
         m_GridStyleCtrl->SetSelection( 0 ); break;
     }
 
-    m_gridStyleRotation.SetUnits( DEGREES );
+    m_gridStyleRotation.SetUnits( EDA_UNITS_T::DEGREES );
     m_gridStyleRotation.SetValue( m_settings.m_HatchFillTypeOrientation*10 ); // IU is decidegree
 
     // Gives a reasonable value to grid style parameters, if currently there are no defined

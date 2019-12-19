@@ -710,7 +710,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     // Pad Orient
     // Note: use ChangeValue() instead of SetValue() so that we don't generate events
-    m_orientation->ChangeValue( StringFromValue( DEGREES, angle ) );
+    m_orientation->ChangeValue( StringFromValue( EDA_UNITS_T::DEGREES, angle ) );
 
     switch( m_dummyPad->GetShape() )
     {

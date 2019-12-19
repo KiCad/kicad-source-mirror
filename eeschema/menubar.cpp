@@ -163,10 +163,10 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
         return IsGridVisible();
     };
     auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetUserUnits() == INCHES;
+        return GetUserUnits() == EDA_UNITS_T::INCHES;
     };
     auto metricUnitsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetUserUnits() == MILLIMETRES;
+        return GetUserUnits() == EDA_UNITS_T::MILLIMETRES;
     };
     auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
         return GetGalDisplayOptions().m_fullscreenCursor;

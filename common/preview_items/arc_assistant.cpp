@@ -131,7 +131,7 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         double degs = getNormDeciDegFromRad( initAngle );
 
         cursorStrings.push_back( DimensionLabel( "r", m_constructMan.GetRadius(), m_units ) );
-        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs, DEGREES ) );
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs, EDA_UNITS_T::DEGREES ) );
     }
     else
     {
@@ -148,8 +148,10 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         // draw dimmed extender line to cursor
         preview_ctx.DrawLineWithAngleHighlight( origin, m_constructMan.GetLastPoint(), true );
 
-        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "Δθ" ), subtendedDeg, DEGREES ) );
-        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), endAngleDeg, DEGREES ) );
+        cursorStrings.push_back(
+                DimensionLabel( wxString::FromUTF8( "Δθ" ), subtendedDeg, EDA_UNITS_T::DEGREES ) );
+        cursorStrings.push_back(
+                DimensionLabel( wxString::FromUTF8( "θ" ), endAngleDeg, EDA_UNITS_T::DEGREES ) );
     }
 
     // place the text next to cursor, on opposite side from radius

@@ -750,7 +750,7 @@ void SCH_SHEET::Resize( const wxSize& aSize )
 
 bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
-    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( MILLIMETRES ) );
+    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( EDA_UNITS_T::MILLIMETRES ) );
 
     // Ignore the sheet file name if searching to replace.
     if( !(aSearchData.GetFlags() & FR_SEARCH_REPLACE)

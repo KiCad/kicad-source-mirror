@@ -55,13 +55,14 @@ NUMERIC_EVALUATOR::NUMERIC_EVALUATOR( EDA_UNITS_T aUnits, bool aUseMils )
 
     switch( aUnits )
     {
-    case INCHES:
+    case EDA_UNITS_T::INCHES:
         if( aUseMils )
             m_defaultUnits = Unit::Mil;
         else
             m_defaultUnits = Unit::Inch;
         break;
-    case MILLIMETRES:m_defaultUnits = Unit::Metric;
+    case EDA_UNITS_T::MILLIMETRES:
+        m_defaultUnits = Unit::Metric;
         break;
     default:m_defaultUnits = Unit::Metric;
         break;

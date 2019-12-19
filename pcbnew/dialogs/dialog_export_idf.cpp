@@ -120,12 +120,12 @@ public:
 
     double GetXRef()
     {
-        return DoubleValueFromString( UNSCALED_UNITS, m_IDF_Xref->GetValue() );
+        return DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, m_IDF_Xref->GetValue() );
     }
 
     double GetYRef()
     {
-        return DoubleValueFromString( UNSCALED_UNITS, m_IDF_Yref->GetValue() );
+        return DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, m_IDF_Yref->GetValue() );
     }
 
     bool GetAutoAdjustOffset()

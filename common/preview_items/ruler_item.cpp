@@ -51,7 +51,8 @@ static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
     cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), aUnits ) );
 
     double degs = RAD2DECIDEG( -aRulerVec.Angle() );
-    cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs, DEGREES ) );
+    cursorStrings.push_back(
+            DimensionLabel( wxString::FromUTF8( "θ" ), degs, EDA_UNITS_T::DEGREES ) );
 
     auto temp = aRulerVec;
     DrawTextNextToCursor( aView, aCursor, -temp, cursorStrings );
@@ -84,7 +85,7 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
     aTickSpace = 1;
 
     // convert to a round (mod-10) number of mils
-    if( aUnits == INCHES )
+    if( aUnits == EDA_UNITS_T::INCHES )
     {
         aTickSpace *= 2.54;
     }

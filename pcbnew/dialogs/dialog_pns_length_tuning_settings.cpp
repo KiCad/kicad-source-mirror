@@ -44,7 +44,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( EDA_DRAW_F
     m_stdButtonsOK->SetDefault();
     m_targetLengthText->SetSelection( -1, -1 );
     m_targetLengthText->SetFocus();
-    m_radius.SetUnits( PERCENT );
+    m_radius.SetUnits( EDA_UNITS_T::PERCENT );
 
     GetSizer()->SetSizeHints(this);
     Centre();

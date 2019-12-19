@@ -500,7 +500,7 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, 
         return;
 
     wxString msg;
-    bool mmFirst = GetUserUnits() != INCHES;
+    bool     mmFirst = GetUserUnits() != EDA_UNITS_T::INCHES;
 
     aTrackWidthSelectBox->Clear();
 
@@ -508,8 +508,8 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, 
     {
         int size = GetDesignSettings().m_TrackWidthList[ii];
 
-        double valueMils = To_User_Unit( INCHES, size ) * 1000;
-        double value_mm = To_User_Unit( MILLIMETRES, size );
+        double valueMils = To_User_Unit( EDA_UNITS_T::INCHES, size ) * 1000;
+        double value_mm = To_User_Unit( EDA_UNITS_T::MILLIMETRES, size );
 
         if( mmFirst )
             msg.Printf( _( "Track: %.3f mm (%.2f mils)" ), value_mm, valueMils );
@@ -543,23 +543,23 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
 
     aViaSizeSelectBox->Clear();
 
-    bool mmFirst = GetUserUnits() != INCHES;
+    bool mmFirst = GetUserUnits() != EDA_UNITS_T::INCHES;
 
     for( unsigned ii = 0; ii < GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
     {
         VIA_DIMENSION viaDimension = GetDesignSettings().m_ViasDimensionsList[ii];
         wxString      msg, mmStr, milsStr;
 
-        double diam = To_User_Unit( MILLIMETRES, viaDimension.m_Diameter );
-        double hole = To_User_Unit( MILLIMETRES, viaDimension.m_Drill );
+        double diam = To_User_Unit( EDA_UNITS_T::MILLIMETRES, viaDimension.m_Diameter );
+        double hole = To_User_Unit( EDA_UNITS_T::MILLIMETRES, viaDimension.m_Drill );
 
         if( hole > 0 )
             mmStr.Printf( _( "%.2f / %.2f mm" ), diam, hole );
         else
             mmStr.Printf( _( "%.2f mm" ), diam );
 
-        diam = To_User_Unit( INCHES, viaDimension.m_Diameter ) * 1000;
-        hole = To_User_Unit( INCHES, viaDimension.m_Drill ) * 1000;
+        diam = To_User_Unit( EDA_UNITS_T::INCHES, viaDimension.m_Diameter ) * 1000;
+        hole = To_User_Unit( EDA_UNITS_T::INCHES, viaDimension.m_Drill ) * 1000;
 
         if( hole > 0 )
             milsStr.Printf( _( "%.1f / %.1f mils" ), diam, hole );
@@ -686,8 +686,8 @@ void PCB_EDIT_FRAME::SyncToolbars()
     PrepareLayerIndicator();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,               IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits,              GetUserUnits() != INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,            GetUserUnits() == INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != EDA_UNITS_T::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS_T::INCHES );
     m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,        GetShowPolarCoords() );
     m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,        galOpts.m_fullscreenCursor );
     m_optionsToolBar->Toggle( PCB_ACTIONS::showRatsnest,         opts.m_ShowGlobalRatsnest );

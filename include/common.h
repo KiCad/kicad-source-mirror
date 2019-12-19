@@ -130,7 +130,7 @@ constexpr ret_type KiROUND( fp_type v )
 //-----</KiROUND KIT>-----------------------------------------------------------
 
 
-enum EDA_UNITS_T {
+enum class EDA_UNITS_T {
     INCHES = 0,
     MILLIMETRES = 1,
     UNSCALED_UNITS = 2,

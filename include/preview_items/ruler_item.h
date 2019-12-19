@@ -73,10 +73,10 @@ public:
 
     void SwitchUnits()
     {
-        if( m_userUnits == INCHES )
-            m_userUnits = MILLIMETRES;
+        if( m_userUnits == EDA_UNITS_T::INCHES )
+            m_userUnits = EDA_UNITS_T::MILLIMETRES;
         else
-            m_userUnits = INCHES;
+            m_userUnits = EDA_UNITS_T::INCHES;
     }
 
 private:
