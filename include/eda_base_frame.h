@@ -28,8 +28,8 @@
  * @brief Base window classes and related definitions.
  */
 
-#ifndef  WXSTRUCT_H_
-#define  WXSTRUCT_H_
+#ifndef  EDA_BASE_FRAME_H_
+#define  EDA_BASE_FRAME_H_
 
 
 #include <vector>
@@ -582,4 +582,4 @@ public:
     }
 };
 
-#endif  // WXSTRUCT_H_
+#endif  // EDA_BASE_FRAME_H_
