@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -131,7 +131,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 
 	sbSizer3->Add( fgSizer321, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
-	m_highlightColorNote = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Note: highlight color can be edited in the \"Colors\" section."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_highlightColorNote = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Note:\nhighlight color can be edited in the \"Colors\" section."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_highlightColorNote->Wrap( -1 );
 	sbSizer3->Add( m_highlightColorNote, 0, wxALL, 5 );
 
