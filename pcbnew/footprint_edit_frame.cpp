@@ -223,6 +223,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     updateTitle();
     InitExitKey();
 
+    // Default shutdown reason until a file is loaded
+    SetShutdownBlockReason( _( "Footprint changes are unsaved" ) );
+
     Raise();            // On some window managers, this is needed
     Show( true );
 }
@@ -444,17 +447,24 @@ const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents() const
 }
 
 
-void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
+void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
     if( GetScreen()->IsModify() && GetBoard()->GetFirstModule() )
     {
+        // Shutdown blocks must be determined and vetoed as early as possible
+        if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+        {
+            aEvent.Veto();
+            return;
+        }
+
         wxString footprintName = GetBoard()->GetFirstModule()->GetFPID().GetLibItemName();
         wxString msg = _( "Save changes to \"%s\" before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, footprintName ),
                     [&]() -> bool { return SaveFootprint( GetBoard()->GetFirstModule() ); } ) )
         {
-            Event.Veto();
+            aEvent.Veto();
             return;
         }
     }
@@ -470,7 +480,7 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     Clear_Pcb( false );
 
     // Close the editor
-    Event.Skip();
+    aEvent.Skip();
 }
 
 
