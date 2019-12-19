@@ -549,14 +549,24 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             collector.Remove( other );
     }
 
-    // Prefer a symbol to a pin
+    // Prefer a symbol to a pin or the opposite, when both a symbol and a pin are selected
+    // We need to be able to select only a pin:
+    // - to display its characteristics (especially if an ERC is attached to the pin)
+    // - for cross probing, to select the corresponding pad.
+    // Note also the case happens only in schematic editor. In symbol editor, the symbol
+    // itself is never selected
     for( int i = 0; collector.GetCount() == 2 && i < 2; ++i )
     {
         EDA_ITEM* item = collector[ i ];
         EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
 
         if( item->Type() == SCH_COMPONENT_T && other->Type() == SCH_PIN_T )
-            collector.Remove( other );
+        {
+            if( m_frame->GetSelectPinSelectSymbol() )
+                collector.Remove( other );
+            else
+                collector.Remove( item );
+        }
     }
 
     // Prefer a field to a symbol

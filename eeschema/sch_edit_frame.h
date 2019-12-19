@@ -142,6 +142,9 @@ private:
     /// Flag to indicate show hidden pins.
     bool        m_showAllPins;
 
+    /// Flag to indicate the pin selection (on a left click) select the paren symbol.
+    bool m_selectPinSelectSymbol;
+
     /// The name of the destination directory to use when generating plot files.
     wxString    m_plotDirectoryName;
 
@@ -204,6 +207,9 @@ public:
 
     bool GetShowAllPins() const override { return m_showAllPins; }
     void SetShowAllPins( bool aEnable ) { m_showAllPins = aEnable; }
+
+    bool GetSelectPinSelectSymbol() const override { return m_selectPinSelectSymbol; }
+    void SetSelectPinSelectSymbol( bool aEnable ) { m_selectPinSelectSymbol = aEnable; }
 
     bool GetShowFootprintPreviews() const { return m_footprintPreview; }
     void SetShowFootprintPreviews( bool aEnable ) { m_footprintPreview = aEnable; }
