@@ -310,6 +310,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
+    // Default shutdown reason until a file is loaded
+    SetShutdownBlockReason( _( "New PCB file is unsaved" ) );
+
     // disable Export STEP item if kicad2step does not exist
     wxString strK2S = Pgm().GetExecutablePath();
 
@@ -464,8 +467,16 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 }
 
 
-void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
+void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
+    // Shutdown blocks must be determined and vetoed as early as possible
+    if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+            && GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
+    {
+        aEvent.Veto();
+        return;
+    }
+
     // First close the DRC dialog.
     // For some reason, if the board editor frame is destroyed when the DRC
     // dialog currently open, Pcbnew crashes, At least on Windows.
@@ -483,7 +494,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
                                    [&]()->bool { return Files_io_from_id( ID_SAVE_BOARD ); } ) )
         {
-            Event.Veto();
+            aEvent.Veto();
             return;
         }
     }
@@ -538,7 +549,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     Show( false );
 
     // Close frame:
-    Event.Skip();
+    aEvent.Skip();
 }
 
 
@@ -672,6 +683,8 @@ void PCB_EDIT_FRAME::onBoardLoaded()
 
     SetMsgPanel( GetBoard() );
     SetStatusText( wxEmptyString );
+
+    SetShutdownBlockReason( _( "PCB file changes are unsaved" ) );
 }
 
 

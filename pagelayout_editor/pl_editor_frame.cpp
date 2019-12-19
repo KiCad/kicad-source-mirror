@@ -264,6 +264,14 @@ void PL_EDITOR_FRAME::OnExit( wxCommandEvent& aEvent )
 
 void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
+    // Shutdown blocks must be determined and vetoed as early as possible
+    if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+            && GetScreen()->IsModify() )
+    {
+        aEvent.Veto();
+        return;
+    }
+
     if( GetScreen()->IsModify() )
     {
         wxFileName filename = GetCurrFileName();
@@ -764,6 +772,16 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
     UpdateTitleAndInfo();
 
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+
+    if( GetCurrFileName().IsEmpty() )
+    {
+        // Default shutdown reason until a file is loaded
+        SetShutdownBlockReason( _( "New page layout file is unsaved" ) );
+    }
+    else
+    {
+        SetShutdownBlockReason( _( "Page layout changes are unsaved" ) );
+    }
 }
 
 

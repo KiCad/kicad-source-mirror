@@ -271,6 +271,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
     Prj().SchSymbolLibTable();
 
+    SetShutdownBlockReason( _( "Schematic file changes are unsaved" ) );
+
     if( is_new )
     {
         // mark new, unsaved file as modified.

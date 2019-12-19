@@ -189,6 +189,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetCanvas()->GetView()->SetBoundary( bbox );
 
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+
+    SetShutdownBlockReason( _( "Library changes are unsaved" ) );
 }
 
 
@@ -232,12 +234,25 @@ void LIB_EDIT_FRAME::setupTools()
 }
 
 
-void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
+void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
+    // Shutdown blocks must be determined and vetoed as early as possible
+    if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+    {
+        for( const auto& libNickname : m_libMgr->GetLibraryNames() )
+        {
+            if( m_libMgr->IsLibraryModified( libNickname ) )
+            {
+                aEvent.Veto();
+                return;
+            }
+        }
+    }
+
     if( saveAllLibraries( true ) )
         Destroy();
     else
-        Event.Veto();
+        aEvent.Veto();
 }
 
 
