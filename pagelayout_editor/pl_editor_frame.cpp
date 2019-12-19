@@ -264,15 +264,13 @@ void PL_EDITOR_FRAME::OnExit( wxCommandEvent& aEvent )
 
 void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
-#if defined( _WIN32 )
-    //Windows Only: This will stall any shutdown without user confirming it
-    //Used in conjunction with ShutdownBlockReasonCreate
-    if( aEvent.GetId() == wxEVT_QUERY_END_SESSION && GetScreen()->IsModify() )
+    // Shutdown blocks must be determined and vetoed as early as possible
+    if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+            && GetScreen()->IsModify() )
     {
         aEvent.Veto();
         return;
     }
-#endif
 
     if( GetScreen()->IsModify() )
     {
