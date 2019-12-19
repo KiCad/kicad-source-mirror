@@ -55,7 +55,9 @@ target_link_libraries( qa_pcbnew_tools
     pnsrouter
     pcad2kicadpcb
     gal
-    lib_dxf
+    dxflib_qcad
+    tinyspline_lib
+    nanosvg
     idf3
     common
     qa_utils

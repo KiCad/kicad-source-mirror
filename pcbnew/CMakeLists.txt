@@ -43,7 +43,6 @@ include_directories(
     ../common
     ../common/dialogs
     ./exporters
-    ../dxflib_qcad
     ../utils/idftools
     ${GLM_INCLUDE_DIR}
     ./specctra_import_export
@@ -201,7 +200,6 @@ set( PCBNEW_IMPORT_GFX
     import_gfx/graphics_importer_buffer.cpp
     import_gfx/dxf_import_plugin.cpp
     import_gfx/svg_import_plugin.cpp
-    import_gfx/nanosvg.cpp
     )
 
 
@@ -619,12 +617,18 @@ make_lexer(
 # CMake <3.9 can't link anything to object libraries,
 # but we only need include directories, as we will link the kiface MODULE
 target_include_directories( pcbnew_kiface_objects PRIVATE
-   $<TARGET_PROPERTY:common,INTERFACE_INCLUDE_DIRECTORIES>
-)
+    $<TARGET_PROPERTY:common,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:dxflib_qcad,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:nanosvg,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:tinyspline_lib,INTERFACE_INCLUDE_DIRECTORIES>
+    )
 
 # Since we're not using target_link_libraries, we need to explicitly
 # declare the dependency
 add_dependencies( pcbnew_kiface_objects common )
+add_dependencies( pcbnew_kiface_objects dxflib_qcad )
+add_dependencies( pcbnew_kiface_objects tinyspline_lib )
+add_dependencies( pcbnew_kiface_objects nanosvg )
 
 add_library( pcbnew_kiface MODULE $<TARGET_OBJECTS:pcbnew_kiface_objects> )
 
@@ -656,8 +660,10 @@ set( PCBNEW_KIFACE_LIBRARIES
     pcad2kicadpcb
     common
     gal
-    lib_dxf
+    dxflib_qcad
+    tinyspline_lib
     idf3
+    nanosvg
     ${wxWidgets_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

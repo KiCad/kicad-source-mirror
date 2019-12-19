@@ -1,13 +1,8 @@
 include_directories(
     "${CMAKE_SOURCE_DIR}/include"
-    "${CMAKE_SOURCE_DIR}/dxflib_qcad"
     "${CMAKE_SOURCE_DIR}/utils/idftools"
     ${OPENGL_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
-)
-
-link_directories(
-    "${CMAKE_BINARY_DIR}/lib_dxf"
 )
 
 set( IDF3_FILES
@@ -29,7 +24,7 @@ add_executable( idfrect idf_rect.cpp )
 add_executable( dxf2idf dxf2idfmain.cpp dxf2idf.cpp )
 add_executable( idf2vrml idf2vrml.cpp )
 
-target_link_libraries( dxf2idf lib_dxf idf3 ${wxWidgets_LIBRARIES} )
+target_link_libraries( dxf2idf dxflib_qcad idf3 ${wxWidgets_LIBRARIES} )
 
 target_link_libraries( idf2vrml idf3 common ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )
 
