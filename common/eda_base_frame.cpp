@@ -171,8 +171,9 @@ bool EDA_BASE_FRAME::SupportsShutdownBlockReason()
 {
 #if defined( _WIN32 )
     return true;
-#endif
+#else
     return false;
+#endif
 }
 
 
