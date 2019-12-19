@@ -1012,7 +1012,7 @@ void DXF_IMPORT_PLUGIN::insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aS
 }
 
 
-#include "tinyspline_lib/tinysplinecpp.h"
+#include "tinysplinecpp.h"
 
 void DXF_IMPORT_PLUGIN::insertSpline( int aWidth )
 {

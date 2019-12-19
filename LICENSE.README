@@ -16,7 +16,11 @@ Licensed under BOOSTv1:
 Licensed under ISC:
 - portions of code in include/geometry/polygon_triangulation.h
 Licensed under MIT:
-- tinyspline_lib in dxflib_qcad/tinyspline_lib
+- tinyspline_lib in thirdparty/tinyspline_lib
+Licensed under GPLv2 (or later):
+- dxflib in thirdparty/dxflib_qcad
+Licensed under ZLib:
+- nanosvg in thirdparty/nanosvg
 Licensed under CC-BY-SA-4.0:
 - All the demo files provided in demos/*
 Licensed under GPLv3 (or later):

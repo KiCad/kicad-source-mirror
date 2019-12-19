@@ -70,7 +70,9 @@ target_link_libraries( qa_pcbnew
     common
     gal
     qa_utils
-    lib_dxf
+    dxflib_qcad
+    tinyspline_lib
+    nanosvg
     idf3
     unit_test_utils
     ${wxWidgets_LIBRARIES}
