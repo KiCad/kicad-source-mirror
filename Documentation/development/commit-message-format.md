@@ -17,7 +17,7 @@ automatically close the issue and add a link to your commit in the issue.
 
 For example, the following line will automatically close issue #1234567:
 
-    Fixes #1234567 | https://gitlab.com/kicad/code/kicad/issues/1234567
+    Fixes https://gitlab.com/kicad/code/kicad/issues/1234567
 
 There is an [alias](#commit_fixes_alias) to simplify this step.
 You can read more about automatic issue closing in the
@@ -70,8 +70,8 @@ Following is an example of a properly formatted commit message:
     CHANGED: "Wire" lines now optionally include data on the line style,
     width and color if they differ from the default.
 
-    Fixes #594059 | https://gitlab.com/kicad/code/kicad/issues/594059
-    Fixes #1405026 | https://gitlab.com/kicad/code/kicad/issues/1405026
+    Fixes https://gitlab.com/kicad/code/kicad/issues/594059
+    Fixes https://gitlab.com/kicad/code/kicad/issues/1405026
 
 # Git aliases file # {#commit_git_aliases}
 
@@ -89,7 +89,7 @@ most recent commit to include the bug report link:
 
 For example, the command below will append a line to the last commit message:
 
-    Fixes #1234567 | https://gitlab.com/kicad/code/kicad/issues/1234567
+    Fixes https://gitlab.com/kicad/code/kicad/issues/1234567
 
 ## 'changelog' alias # {#commit_changelog_alias}
 
