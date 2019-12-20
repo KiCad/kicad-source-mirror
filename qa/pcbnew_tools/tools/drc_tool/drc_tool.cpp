@@ -127,7 +127,7 @@ private:
         int index = 0;
         for( const auto& m : aMarkers )
         {
-            std::cout << index++ << ": " << m->GetReporter().ShowReport( EDA_UNITS_T::MILLIMETRES );
+            std::cout << index++ << ": " << m->GetReporter().ShowReport( EDA_UNITS::MILLIMETRES );
         }
 
         if( index )

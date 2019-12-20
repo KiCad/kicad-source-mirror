@@ -121,22 +121,28 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
 
     switch( m_settings.m_Zone_HatchingStyle )
     {
-    case ZONE_CONTAINER::NO_HATCH:      m_OutlineAppearanceCtrl->SetSelection( 0 ); break;
-    case ZONE_CONTAINER::DIAGONAL_EDGE: m_OutlineAppearanceCtrl->SetSelection( 1 ); break;
-    case ZONE_CONTAINER::DIAGONAL_FULL: m_OutlineAppearanceCtrl->SetSelection( 2 ); break;
+    case ZONE_HATCH_STYLE::NO_HATCH:
+        m_OutlineAppearanceCtrl->SetSelection( 0 );
+        break;
+    case ZONE_HATCH_STYLE::DIAGONAL_EDGE:
+        m_OutlineAppearanceCtrl->SetSelection( 1 );
+        break;
+    case ZONE_HATCH_STYLE::DIAGONAL_FULL:
+        m_OutlineAppearanceCtrl->SetSelection( 2 );
+        break;
     }
 
     SetInitialFocus( m_OutlineAppearanceCtrl );
 
     switch( m_settings.m_FillMode )
     {
-    case ZFM_HATCH_PATTERN:
+    case ZONE_FILL_MODE::HATCH_PATTERN:
         m_GridStyleCtrl->SetSelection( 1 ); break;
     default:
         m_GridStyleCtrl->SetSelection( 0 ); break;
     }
 
-    m_gridStyleRotation.SetUnits( DEGREES );
+    m_gridStyleRotation.SetUnits( EDA_UNITS::DEGREES );
     m_gridStyleRotation.SetValue( m_settings.m_HatchFillTypeOrientation*10 ); // IU is decidegree
 
     // Gives a reasonable value to grid style parameters, if currently there are no defined
@@ -218,18 +224,24 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
 
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
-    case 0: m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::NO_HATCH;      break;
-    case 1: m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_EDGE; break;
-    case 2: m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_FULL; break;
+    case 0:
+        m_settings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::NO_HATCH;
+        break;
+    case 1:
+        m_settings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
+        break;
+    case 2:
+        m_settings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::DIAGONAL_FULL;
+        break;
     }
 
     if( m_GridStyleCtrl->GetSelection() > 0 )
-        m_settings.m_FillMode = ZFM_HATCH_PATTERN;
+        m_settings.m_FillMode = ZONE_FILL_MODE::HATCH_PATTERN;
     else
-        m_settings.m_FillMode = ZFM_POLYGONS;
+        m_settings.m_FillMode = ZONE_FILL_MODE::POLYGONS;
 
 
-    if( m_settings.m_FillMode == ZFM_HATCH_PATTERN )
+    if( m_settings.m_FillMode == ZONE_FILL_MODE::HATCH_PATTERN )
     {
         int minThickness = m_minWidth.GetValue();
 

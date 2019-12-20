@@ -153,11 +153,11 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     auto layersManagerShownCondition = [ this ] ( const SELECTION& aSel ) {
         return m_show_layer_manager_tools;
     };
-    auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetUserUnits() == INCHES;
+    auto imperialUnitsCondition = [this]( const SELECTION& aSel ) {
+        return GetUserUnits() == EDA_UNITS::INCHES;
     };
-    auto metricUnitsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetUserUnits() == MILLIMETRES;
+    auto metricUnitsCondition = [this]( const SELECTION& aSel ) {
+        return GetUserUnits() == EDA_UNITS::MILLIMETRES;
     };
     auto sketchFlashedCondition = [ this ] ( const SELECTION& aSel ) {
         return !m_DisplayOptions.m_DisplayFlashedItemsFill;

@@ -256,7 +256,7 @@ public:
     /* divers */
     int Shape() const { return m_Shape; }
 
-    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     wxString ShowGBRShape() const;
 
@@ -326,7 +326,7 @@ public:
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     ///> @copydoc EDA_ITEM::GetSelectMenuText()
-    virtual wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    virtual wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     ///> @copydoc EDA_ITEM::GetMenuImage()
     BITMAP_DEF GetMenuImage() const override;

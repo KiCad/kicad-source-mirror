@@ -39,14 +39,14 @@
 #include <base_units.h>
 
 
-DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
-    BOARD_ITEM( aParent, PCB_DIMENSION_T ),
-    m_Width( Millimeter2iu( 0.2 ) ),
-    m_Unit( INCHES ),
-    m_UseMils( false ),
-    m_Value( 0 ),
-    m_Height( 0 ),
-    m_Text( this )
+DIMENSION::DIMENSION( BOARD_ITEM* aParent )
+        : BOARD_ITEM( aParent, PCB_DIMENSION_T ),
+          m_Width( Millimeter2iu( 0.2 ) ),
+          m_Unit( EDA_UNITS::INCHES ),
+          m_UseMils( false ),
+          m_Value( 0 ),
+          m_Height( 0 ),
+          m_Text( this )
 {
     m_Layer = Dwgs_User;
     m_Shape = 0;
@@ -336,7 +336,7 @@ void DIMENSION::AdjustDimensionDetails( int aPrecision )
 
     m_Value = measure;
 
-    if( m_Unit == MILLIMETRES )
+    if( m_Unit == EDA_UNITS::MILLIMETRES )
         aPrecision += 2;
     else if( !m_UseMils )
         aPrecision += 3;
@@ -390,7 +390,7 @@ void DIMENSION::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 
 
 // see class_cotation.h
-void DIMENSION::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void DIMENSION::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     // for now, display only the text within the DIMENSION using class TEXTE_PCB.
     m_Text.GetMsgPanelInfo( aUnits, aList );
@@ -496,7 +496,7 @@ const EDA_RECT DIMENSION::GetBoundingBox() const
 }
 
 
-wxString DIMENSION::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString DIMENSION::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Dimension \"%s\" on %s" ), GetText(), GetLayerName() );
 }

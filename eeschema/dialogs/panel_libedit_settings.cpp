@@ -39,12 +39,18 @@ PANEL_LIBEDIT_SETTINGS::PANEL_LIBEDIT_SETTINGS( LIB_EDIT_FRAME* aFrame, wxWindow
 
 bool PANEL_LIBEDIT_SETTINGS::TransferDataToWindow()
 {
-    m_lineWidthCtrl->SetValue( StringFromValue( INCHES, GetDefaultLineThickness(), false, true ) );
-    m_pinLengthCtrl->SetValue( StringFromValue( INCHES, m_frame->GetDefaultPinLength(), false, true ) );
-    m_pinNumSizeCtrl->SetValue( StringFromValue( INCHES, m_frame->GetPinNumDefaultSize(), false, true ) );
-    m_pinNameSizeCtrl->SetValue( StringFromValue( INCHES, m_frame->GetPinNameDefaultSize(), false, true ) );
-    m_hPitchCtrl->SetValue( StringFromValue( INCHES, m_frame->GetRepeatStep().x, false, true ) );
-    m_vPitchCtrl->SetValue( StringFromValue( INCHES, m_frame->GetRepeatStep().y, false, true ) );
+    m_lineWidthCtrl->SetValue(
+            StringFromValue( EDA_UNITS::INCHES, GetDefaultLineThickness(), false, true ) );
+    m_pinLengthCtrl->SetValue(
+            StringFromValue( EDA_UNITS::INCHES, m_frame->GetDefaultPinLength(), false, true ) );
+    m_pinNumSizeCtrl->SetValue(
+            StringFromValue( EDA_UNITS::INCHES, m_frame->GetPinNumDefaultSize(), false, true ) );
+    m_pinNameSizeCtrl->SetValue(
+            StringFromValue( EDA_UNITS::INCHES, m_frame->GetPinNameDefaultSize(), false, true ) );
+    m_hPitchCtrl->SetValue(
+            StringFromValue( EDA_UNITS::INCHES, m_frame->GetRepeatStep().x, false, true ) );
+    m_vPitchCtrl->SetValue(
+            StringFromValue( EDA_UNITS::INCHES, m_frame->GetRepeatStep().y, false, true ) );
     m_choicePinDisplacement->SetSelection( m_frame->GetRepeatPinStep() == 50 ? 1 : 0 );
     m_spinRepeatLabel->SetValue( m_frame->GetRepeatDeltaLabel() );
 
@@ -56,12 +62,17 @@ bool PANEL_LIBEDIT_SETTINGS::TransferDataToWindow()
 
 bool PANEL_LIBEDIT_SETTINGS::TransferDataFromWindow()
 {
-    SetDefaultLineThickness( ValueFromString( INCHES, m_lineWidthCtrl->GetValue(), true ) );
-    m_frame->SetDefaultPinLength( ValueFromString( INCHES, m_pinLengthCtrl->GetValue(), true ) );
-    m_frame->SetPinNumDefaultSize( ValueFromString( INCHES, m_pinNumSizeCtrl->GetValue(), true ) );
-    m_frame->SetPinNameDefaultSize( ValueFromString( INCHES, m_pinNameSizeCtrl->GetValue(), true ) );
-    m_frame->SetRepeatStep( wxPoint( ValueFromString( INCHES, m_hPitchCtrl->GetValue(), true ),
-                                     ValueFromString( INCHES, m_vPitchCtrl->GetValue(), true ) ) );
+    SetDefaultLineThickness(
+            ValueFromString( EDA_UNITS::INCHES, m_lineWidthCtrl->GetValue(), true ) );
+    m_frame->SetDefaultPinLength(
+            ValueFromString( EDA_UNITS::INCHES, m_pinLengthCtrl->GetValue(), true ) );
+    m_frame->SetPinNumDefaultSize(
+            ValueFromString( EDA_UNITS::INCHES, m_pinNumSizeCtrl->GetValue(), true ) );
+    m_frame->SetPinNameDefaultSize(
+            ValueFromString( EDA_UNITS::INCHES, m_pinNameSizeCtrl->GetValue(), true ) );
+    m_frame->SetRepeatStep(
+            wxPoint( ValueFromString( EDA_UNITS::INCHES, m_hPitchCtrl->GetValue(), true ),
+                    ValueFromString( EDA_UNITS::INCHES, m_vPitchCtrl->GetValue(), true ) ) );
     m_frame->SetRepeatPinStep( m_choicePinDisplacement->GetSelection() == 1 ? 50 : 100 );
     m_frame->SetRepeatDeltaLabel( m_spinRepeatLabel->GetValue() );
 

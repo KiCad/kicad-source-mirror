@@ -685,7 +685,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 zone->SetLayer( layer );
                 zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
-                ZONE_CONTAINER::HATCH_STYLE outline_hatch = ZONE_CONTAINER::DIAGONAL_EDGE;
+                ZONE_HATCH_STYLE outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
 
                 const int outlineIdx = -1;      // this is the id of the copper zone main outline
                 zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
@@ -767,7 +767,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 dimension->Text().SetTextSize( designSettings.GetTextSize( layer ) );
                 dimension->Text().SetThickness( designSettings.GetTextThickness( layer ) );
                 dimension->SetWidth( designSettings.GetLineThickness( layer ) );
-                dimension->SetUnits( MILLIMETRES, false );
+                dimension->SetUnits( EDA_UNITS::MILLIMETRES, false );
 
                 // check which axis the dimension runs in
                 // because the "height" of the dimension is perpendicular to that axis
@@ -1215,13 +1215,13 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     {
         zone->SetIsKeepout( true );
         zone->SetDoNotAllowCopperPour( true );
-        zone->SetHatchStyle( ZONE_CONTAINER::NO_HATCH );
+        zone->SetHatchStyle( ZONE_HATCH_STYLE::NO_HATCH );
     }
     else if( p.pour == EPOLYGON::HATCH )
     {
         int spacing = p.spacing ? p.spacing->ToPcbUnits() : 50 * IU_PER_MILS;
 
-        zone->SetFillMode( ZFM_HATCH_PATTERN );
+        zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
         zone->SetHatchFillTypeThickness( p.width.ToPcbUnits() );
         zone->SetHatchFillTypeGap( spacing - p.width.ToPcbUnits() );
         zone->SetHatchFillTypeOrientation( 0 );

@@ -67,7 +67,7 @@ SCH_COMPONENT* SCH_PIN::GetParentComponent() const
 }
 
 
-wxString SCH_PIN::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString SCH_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( "%s %s",
                              GetParentComponent()->GetSelectMenuText( aUnits ),
@@ -75,7 +75,7 @@ wxString SCH_PIN::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 }
 
 
-void SCH_PIN::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
+void SCH_PIN::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     m_libPin->GetMsgPanelInfo( aUnits, aList, GetParentComponent() );
 }

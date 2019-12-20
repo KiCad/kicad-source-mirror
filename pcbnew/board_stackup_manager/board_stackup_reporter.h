@@ -28,10 +28,10 @@
 #ifndef BOARD_STACKUP_REPORTER_H
 #define BOARD_STACKUP_REPORTER_H
 
-#include <common.h>     // for EDA_UNITS_T
+#include <common.h> // for EDA_UNITS
 
 class BOARD_STACKUP;
 
-wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS_T aUnits );
+wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS aUnits );
 
 #endif      // #ifndef BOARD_STACKUP_REPORTER_H

@@ -228,7 +228,7 @@ const EDA_RECT LIB_CIRCLE::GetBoundingBox() const
 }
 
 
-void LIB_CIRCLE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
+void LIB_CIRCLE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
@@ -252,7 +252,7 @@ void LIB_CIRCLE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 }
 
 
-wxString LIB_CIRCLE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString LIB_CIRCLE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Circle center (%s, %s), radius %s" ),
                              MessageTextFromValue( aUnits, m_Pos.x ),

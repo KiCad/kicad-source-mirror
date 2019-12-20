@@ -1390,7 +1390,7 @@ public:
         textAsLines = true;
         m_currentColor = COLOR4D::BLACK;
         m_currentLineType = 0;
-        SetUnits( DXF_PLOTTER::DXF_UNIT_INCHES );
+        SetUnits( DXF_UNITS::INCHES );
     }
 
     virtual PlotFormat GetPlotterType() const override
@@ -1477,10 +1477,10 @@ public:
 
 
     // Must be in the same order as the drop-down list in the plot dialog inside pcbnew
-    enum DXF_UNITS
+    enum class DXF_UNITS
     {
-        DXF_UNIT_INCHES = 0,
-        DXF_UNIT_MILLIMETERS = 1
+        INCHES = 0,
+        MILLIMETERS = 1
     };
 
     /**

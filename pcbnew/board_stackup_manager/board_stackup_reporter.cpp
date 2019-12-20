@@ -36,7 +36,7 @@
 #include "board_stackup_reporter.h"
 
 
-wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS_T aUnits )
+wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS aUnits )
 {
     // Build a ascii representation of stackup and copy it in the clipboard
     wxString report;

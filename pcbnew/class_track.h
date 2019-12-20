@@ -184,7 +184,7 @@ public:
         return ( Type() == PCB_VIA_T ) || ( m_Start == m_End );
     }
 
-    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
@@ -214,7 +214,7 @@ public:
      */
     virtual int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const override;
 
-    virtual wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    virtual wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 
@@ -254,10 +254,10 @@ protected:
      * Display info about the track segment only, and does not calculate the full track length
      * @param aList A list of #MSG_PANEL_ITEM objects to add status information.
      */
-    virtual void GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList );
+    virtual void GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList );
 
 
-    void GetMsgPanelInfoBase_Common( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfoBase_Common( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList );
 
 
     int         m_Width;            ///< Thickness of track, or via diameter
@@ -327,7 +327,7 @@ public:
         return wxT( "VIA" );
     }
 
-    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 
@@ -383,7 +383,7 @@ public:
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
 protected:
-    void GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 private:
     /// The bottom layer of the via (the top layer is in m_Layer)

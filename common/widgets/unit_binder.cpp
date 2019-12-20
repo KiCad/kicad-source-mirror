@@ -65,7 +65,7 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
 }
 
 
-void UNIT_BINDER::SetUnits( EDA_UNITS_T aUnits, bool aUseMils )
+void UNIT_BINDER::SetUnits( EDA_UNITS aUnits, bool aUseMils )
 {
     m_units = aUnits;
     m_useMils = aUseMils;

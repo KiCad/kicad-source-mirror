@@ -408,7 +408,7 @@ void LIB_FIELD::SetName( const wxString& aName )
 }
 
 
-wxString LIB_FIELD::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString LIB_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Field %s \"%s\"" ), GetName(), ShortenedShownText() );
 }
@@ -426,7 +426,7 @@ void LIB_FIELD::CalcEdit( const wxPoint& aPosition )
 }
 
 
-void LIB_FIELD::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
+void LIB_FIELD::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 

@@ -325,7 +325,7 @@ public:
      *
      * @param aList is the list to populate.
      */
-    virtual void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+    virtual void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
     {
     }
 
@@ -485,7 +485,7 @@ public:
      *
      * @return The menu text string.
      */
-    virtual wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const;
+    virtual wxString GetSelectMenuText( EDA_UNITS aUnits ) const;
 
     /**
      * Function GetMenuImage

@@ -95,7 +95,7 @@ private:
                          SHAPE_POLY_SET& aFinalPolys );
 
     /**
-     * for zones having the ZONE_FILL_MODE::ZFM_HATCH_PATTERN, create a grid pattern
+     * for zones having the ZONE_FILL_MODE::ZONE_FILL_MODE::HATCH_PATTERN, create a grid pattern
      * in filled areas of aZone, giving to the filled polygons a fill style like a grid
      * @param aZone is the zone to modify
      * @param aRawPolys: A reference to a SHAPE_POLY_SET buffer containing the initial

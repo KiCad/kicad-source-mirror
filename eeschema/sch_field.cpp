@@ -284,7 +284,8 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
     if( ( flags & FR_SEARCH_REPLACE ) && m_id == REFERENCE && !( flags & FR_REPLACE_REFERENCES ) )
         return false;
 
-    wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText( MILLIMETRES ) );
+    wxLogTrace(
+            traceFindItem, wxT( "    child item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 
     // Take sheet path into account which effects the reference field and the unit for
     // components with multiple parts.
@@ -361,7 +362,7 @@ void SCH_FIELD::Rotate( wxPoint aPosition )
 }
 
 
-wxString SCH_FIELD::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString SCH_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Field %s" ), GetName() );
 }

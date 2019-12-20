@@ -569,7 +569,7 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
         return false;
 
     int count;
-    EDA_UNITS_T units = GetUserUnits();
+    EDA_UNITS units = GetUserUnits();
 
     fprintf( fp, "** Drc report for %s **\n",
              TO_UTF8( m_brdEditor->GetBoard()->GetFileName() ) );

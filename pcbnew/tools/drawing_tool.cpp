@@ -597,8 +597,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->Text().SetThickness( boardSettings.GetTextThickness( layer ) );
                 dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
                 dimension->SetWidth( boardSettings.GetLineThickness( layer ) );
-                dimension->SetUnits( boardSettings.m_DimensionUnits == 2 ? MILLIMETRES : INCHES,
-                                     boardSettings.m_DimensionUnits == 1 );
+                dimension->SetUnits( boardSettings.m_DimensionUnits == 2 ? EDA_UNITS::MILLIMETRES :
+                                                                           EDA_UNITS::INCHES,
+                        boardSettings.m_DimensionUnits == 1 );
                 dimension->AdjustDimensionDetails( boardSettings.m_DimensionPrecision );
 
                 preview.Add( dimension );

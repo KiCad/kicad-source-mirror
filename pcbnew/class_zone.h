@@ -61,9 +61,6 @@ class ZONE_CONTAINER : public BOARD_CONNECTED_ITEM
 {
 public:
 
-    /// Zone hatch styles
-    typedef enum HATCH_STYLE { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE } HATCH_STYLE;
-
     /**
      * The ctor to build ZONE_CONTAINER, but comaptible with MODULE_ZONE_CONTAINER
      * requirement.
@@ -102,7 +99,7 @@ public:
      */
     unsigned GetPriority() const { return m_priority; }
 
-    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     void SetLayerSet( LSET aLayerSet );
 
@@ -516,12 +513,12 @@ public:
      */
     bool AppendCorner( wxPoint aPosition, int aHoleIdx, bool aAllowDuplication = false );
 
-    HATCH_STYLE GetHatchStyle() const
+    ZONE_HATCH_STYLE GetHatchStyle() const
     {
         return m_hatchStyle;
     }
 
-    void SetHatchStyle( HATCH_STYLE aStyle )
+    void SetHatchStyle( ZONE_HATCH_STYLE aStyle )
     {
         m_hatchStyle = aStyle;
     }
@@ -618,7 +615,7 @@ public:
         return m_RawPolysList;
     }
 
-    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 
@@ -662,7 +659,7 @@ public:
      * @param  aRebuildHatch is a flag to indicate whether to re-hatch after having set the
      *                       previous parameters.
      */
-    void SetHatch( int aHatchStyle, int aHatchPitch, bool aRebuildHatch );
+    void SetHatch( ZONE_HATCH_STYLE aHatchStyle, int aHatchPitch, bool aRebuildHatch );
 
     /**
      * Function SetHatchPitch
@@ -761,8 +758,8 @@ protected:
 
 
     /** How to fill areas:
-     * ZFM_POLYGONS => use solid polygons
-     * ZFM_HATCH_PATTERN => use a grid pattern as shape
+     * ZONE_FILL_MODE::POLYGONS => use solid polygons
+     * ZONE_FILL_MODE::HATCH_PATTERN => use a grid pattern as shape
      */
     ZONE_FILL_MODE        m_FillMode;
 
@@ -807,7 +804,7 @@ protected:
     MD5_HASH              m_filledPolysHash;    // A hash value used in zone filling calculations
                                                 // to see if the filled areas are up to date
 
-    HATCH_STYLE           m_hatchStyle;     // hatch style, see enum above
+    ZONE_HATCH_STYLE      m_hatchStyle;     // hatch style, see enum above
     int                   m_hatchPitch;     // for DIAGONAL_EDGE, distance between 2 hatch lines
     std::vector<SEG>      m_HatchLines;     // hatch lines
     std::vector<int>      m_insulatedIslands;

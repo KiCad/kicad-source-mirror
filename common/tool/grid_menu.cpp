@@ -43,7 +43,7 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) :
     SetIcon( grid_select_xpm );
 
     wxArrayString gridsList;
-    screen->BuildGridsChoiceList( gridsList, m_parent->GetUserUnits() != INCHES );
+    screen->BuildGridsChoiceList( gridsList, m_parent->GetUserUnits() != EDA_UNITS::INCHES );
 
     for( unsigned int i = 0; i < gridsList.GetCount(); ++i )
     {
@@ -69,7 +69,7 @@ void GRID_MENU::update()
     int           currentId = screen->GetGridCmdId();
     wxArrayString gridsList;
 
-    screen->BuildGridsChoiceList( gridsList, m_parent->GetUserUnits() != INCHES );
+    screen->BuildGridsChoiceList( gridsList, m_parent->GetUserUnits() != EDA_UNITS::INCHES );
 
     for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
     {

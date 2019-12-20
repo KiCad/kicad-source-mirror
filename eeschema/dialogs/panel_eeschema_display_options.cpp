@@ -67,9 +67,9 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 
     m_choiceSeparatorRefId->SetSelection( refStyleSelection );
 
-    m_busWidth.SetUnits( INCHES, true );
-    m_wireWidth.SetUnits( INCHES, true );
-    m_junctionSize.SetUnits( INCHES, true );
+    m_busWidth.SetUnits( EDA_UNITS::INCHES, true );
+    m_wireWidth.SetUnits( EDA_UNITS::INCHES, true );
+    m_junctionSize.SetUnits( EDA_UNITS::INCHES, true );
 
     m_busWidth.SetValue( GetDefaultBusThickness() );
     m_wireWidth.SetValue( GetDefaultWireThickness() );

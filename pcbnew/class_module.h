@@ -408,7 +408,7 @@ public:
             SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError = ARC_HIGH_DEF ) const;
 
     ///> @copydoc EDA_ITEM::GetMsgPanelInfo
-    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
@@ -575,7 +575,7 @@ public:
         return wxT( "MODULE" );
     }
 
-    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 

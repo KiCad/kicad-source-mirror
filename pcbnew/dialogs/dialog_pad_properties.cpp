@@ -710,7 +710,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     // Pad Orient
     // Note: use ChangeValue() instead of SetValue() so that we don't generate events
-    m_orientation->ChangeValue( StringFromValue( DEGREES, angle ) );
+    m_orientation->ChangeValue( StringFromValue( EDA_UNITS::DEGREES, angle ) );
 
     switch( m_dummyPad->GetShape() )
     {
@@ -781,7 +781,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 }
 
 // A small helper function, to display coordinates:
-static wxString formatCoord( EDA_UNITS_T aUnits, wxPoint aCoord )
+static wxString formatCoord( EDA_UNITS aUnits, wxPoint aCoord )
 {
     return wxString::Format( "(X:%s Y:%s)",
                              MessageTextFromValue( aUnits, aCoord.x, true ),
