@@ -47,7 +47,7 @@ const int EPSILON = Mils2iu( 5 );
 
 DRC_MARKER_FACTORY::DRC_MARKER_FACTORY()
 {
-    SetUnits( EDA_UNITS_T::MILLIMETRES );
+    SetUnits( EDA_UNITS::MILLIMETRES );
 }
 
 
@@ -57,7 +57,7 @@ void DRC_MARKER_FACTORY::SetUnitsProvider( UNITS_PROVIDER aUnitsProvider )
 }
 
 
-void DRC_MARKER_FACTORY::SetUnits( EDA_UNITS_T aUnits )
+void DRC_MARKER_FACTORY::SetUnits( EDA_UNITS aUnits )
 {
     m_units_provider = [=]() { return aUnits; };
 }

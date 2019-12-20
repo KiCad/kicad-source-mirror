@@ -29,7 +29,7 @@ double KIGFX::PREVIEW::PreviewOverlayDeemphAlpha( bool aDeemph )
 }
 
 
-static wxString formatPreviewDimension( double aVal, EDA_UNITS_T aUnits )
+static wxString formatPreviewDimension( double aVal, EDA_UNITS aUnits )
 {
     int precision = 4;
 
@@ -37,23 +37,23 @@ static wxString formatPreviewDimension( double aVal, EDA_UNITS_T aUnits )
     // be accurate down to the nanometre
     switch( aUnits )
     {
-    case MILLIMETRES:
+    case EDA_UNITS::MILLIMETRES:
         precision = 3;  // 1um
         break;
 
-    case INCHES:
+    case EDA_UNITS::INCHES:
         precision = 4;  // 0.1mil
         break;
 
-    case DEGREES:
+    case EDA_UNITS::DEGREES:
         precision = 1;  // 0.1deg
         break;
 
-    case PERCENT:
+    case EDA_UNITS::PERCENT:
         precision = 1;  // 0.1%
         break;
 
-    case UNSCALED_UNITS:
+    case EDA_UNITS::UNSCALED:
         break;
     }
 
@@ -70,8 +70,7 @@ static wxString formatPreviewDimension( double aVal, EDA_UNITS_T aUnits )
 }
 
 
-wxString KIGFX::PREVIEW::DimensionLabel( const wxString& prefix,
-            double aVal, EDA_UNITS_T aUnits )
+wxString KIGFX::PREVIEW::DimensionLabel( const wxString& prefix, double aVal, EDA_UNITS aUnits )
 {
     wxString str;
 

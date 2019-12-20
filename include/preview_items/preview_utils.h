@@ -47,8 +47,7 @@ double PreviewOverlayDeemphAlpha( bool aDeemph = true );
  * Get a formatted string showing a dimension to a sane precision
  * with an optional prefix and unit suffix.
  */
-wxString DimensionLabel( const wxString& prefix, double aVal,
-                         EDA_UNITS_T aUnits );
+wxString DimensionLabel( const wxString& prefix, double aVal, EDA_UNITS aUnits );
 
 /**
  * Set the GAL glyph height to a constant scaled value, so that it

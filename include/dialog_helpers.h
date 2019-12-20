@@ -32,8 +32,8 @@
 #define  DIALOG_HELPERS_H_
 
 
-#include <common.h>             // EDA_UNITS_T
 #include <../common/dialogs/dialog_list_selector_base.h>
+#include <common.h> // EDA_UNITS
 
 void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput );
 
@@ -107,7 +107,7 @@ private:
 class EDA_POSITION_CTRL
 {
 public:
-    EDA_UNITS_T   m_UserUnit;
+    EDA_UNITS m_UserUnit;
 
     wxTextCtrl*   m_FramePosX;
     wxTextCtrl*   m_FramePosY;
@@ -116,8 +116,8 @@ private:
     wxStaticText* m_TextX, * m_TextY;
 
 public:
-    EDA_POSITION_CTRL( wxWindow* parent, const wxString& title,
-                       const wxPoint& pos_to_edit, EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer );
+    EDA_POSITION_CTRL( wxWindow* parent, const wxString& title, const wxPoint& pos_to_edit,
+            EDA_UNITS user_unit, wxBoxSizer* BoxSizer );
 
     ~EDA_POSITION_CTRL();
 
@@ -134,8 +134,8 @@ public:
 class EDA_SIZE_CTRL : public EDA_POSITION_CTRL
 {
 public:
-    EDA_SIZE_CTRL( wxWindow* parent, const wxString& title,
-                   const wxSize& size_to_edit, EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer );
+    EDA_SIZE_CTRL( wxWindow* parent, const wxString& title, const wxSize& size_to_edit,
+            EDA_UNITS user_unit, wxBoxSizer* BoxSizer );
 
     ~EDA_SIZE_CTRL() { }
     wxSize GetValue();

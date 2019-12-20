@@ -859,9 +859,9 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
         KIDIALOG dlg( nullptr, wxString::Format( _( "Malformed keep-out zone at (%d, %d)" ),
                 aZone->GetPosition().x, aZone->GetPosition().y ), KIDIALOG::KD_WARNING );
         dlg.ShowDetailedText(
-            wxString::Format( _( "%s\nThis zone cannot be handled by the track layout tool.\n"
-                                 "Please verify it is not a self-intersecting polygon." ),
-                              aZone->GetSelectMenuText( MILLIMETRES ) ) );
+                wxString::Format( _( "%s\nThis zone cannot be handled by the track layout tool.\n"
+                                     "Please verify it is not a self-intersecting polygon." ),
+                        aZone->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) ) );
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
         dlg.ShowModal();
 

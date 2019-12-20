@@ -111,7 +111,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
                                                 // BLACK for Pcbnew, BLACK or WHITE for eeschema
     m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
     m_zoomLevelCoeff      = 1.0;
-    m_userUnits           = MILLIMETRES;
+    m_userUnits = EDA_UNITS::MILLIMETRES;
     m_PolarCoords         = false;
     m_findReplaceData     = new wxFindReplaceData( wxFR_DOWN );
 
@@ -389,11 +389,11 @@ void EDA_DRAW_FRAME::DisplayGridMsg()
 
     switch( m_userUnits )
     {
-    case INCHES:
+    case EDA_UNITS::INCHES:
         gridformatter = "grid %.3f";
         break;
 
-    case MILLIMETRES:
+    case EDA_UNITS::MILLIMETRES:
         gridformatter = "grid %.4f";
         break;
 
@@ -416,8 +416,12 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 
     switch( m_userUnits )
     {
-    case INCHES:      msg = _( "Inches" ); break;
-    case MILLIMETRES: msg = _( "mm" );     break;
+    case EDA_UNITS::INCHES:
+        msg = _( "Inches" );
+        break;
+    case EDA_UNITS::MILLIMETRES:
+        msg = _( "mm" );
+        break;
     default:          msg = _( "Units" );  break;
     }
 
@@ -461,12 +465,12 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     wxConfigBase* cmnCfg = Pgm().CommonSettings();
 
     // Read units used in dialogs and toolbars
-    EDA_UNITS_T unitsTmp;
+    EDA_UNITS unitsTmp;
 
     if( aCfg->Read( baseCfgName + UserUnitsEntryKeyword, (int*) &unitsTmp ) )
         SetUserUnits( unitsTmp );
     else
-        SetUserUnits( MILLIMETRES );
+        SetUserUnits( EDA_UNITS::MILLIMETRES );
 
     // Read show/hide grid entry
     bool btmp;

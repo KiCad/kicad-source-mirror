@@ -1373,7 +1373,7 @@ void LIB_PIN::SetWidth( int aWidth )
 }
 
 
-void LIB_PIN::getMsgPanelInfoBase( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
+void LIB_PIN::getMsgPanelInfoBase( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString text = m_number.IsEmpty() ? wxT( "?" ) : m_number;
 
@@ -1397,7 +1397,7 @@ void LIB_PIN::getMsgPanelInfoBase( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), text, DARKMAGENTA ) );
 }
 
-void LIB_PIN::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
+void LIB_PIN::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     getMsgPanelInfoBase( aUnits, aList );
 
@@ -1413,8 +1413,8 @@ void LIB_PIN::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text, DARKMAGENTA ) );
 }
 
-void LIB_PIN::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList,
-                               SCH_COMPONENT* aComponent )
+void LIB_PIN::GetMsgPanelInfo(
+        EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList, SCH_COMPONENT* aComponent )
 {
     getMsgPanelInfoBase( aUnits, aList );
 
@@ -1603,7 +1603,7 @@ BITMAP_DEF LIB_PIN::GetMenuImage() const
 }
 
 
-wxString LIB_PIN::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString LIB_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Pin %s, %s, %s" ),
                              m_number,
@@ -1614,7 +1614,7 @@ wxString LIB_PIN::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 
 bool LIB_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxDat )
 {
-    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( MILLIMETRES ) );
+    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 
     // Note: this will have to be modified if we add find and replace capability to the
     // compoment library editor.  Otherwise, you wont be able to replace pin text.
@@ -1622,7 +1622,8 @@ bool LIB_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxDat )
         || ( aSearchData.GetFlags() & FR_SEARCH_REPLACE ) )
         return false;
 
-    wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText( MILLIMETRES ) );
+    wxLogTrace(
+            traceFindItem, wxT( "    child item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 
     return EDA_ITEM::Matches( GetName(), aSearchData )
                 || EDA_ITEM::Matches( m_number, aSearchData );

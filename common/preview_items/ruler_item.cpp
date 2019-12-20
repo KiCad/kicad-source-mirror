@@ -39,8 +39,8 @@ static const double midTickLengthFactor = 1.5;
 static const double majorTickLengthFactor = 2.5;
 
 
-static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
-                               const VECTOR2D& aRulerVec, EDA_UNITS_T aUnits )
+static void drawCursorStrings(
+        KIGFX::VIEW* aView, const VECTOR2D& aCursor, const VECTOR2D& aRulerVec, EDA_UNITS aUnits )
 {
     // draw the cursor labels
     std::vector<wxString> cursorStrings;
@@ -51,7 +51,8 @@ static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
     cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), aUnits ) );
 
     double degs = RAD2DECIDEG( -aRulerVec.Angle() );
-    cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs, DEGREES ) );
+    cursorStrings.push_back(
+            DimensionLabel( wxString::FromUTF8( "θ" ), degs, EDA_UNITS::DEGREES ) );
 
     auto temp = aRulerVec;
     DrawTextNextToCursor( aView, aCursor, -temp, cursorStrings );
@@ -70,7 +71,7 @@ struct TICK_FORMAT
 };
 
 
-static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA_UNITS_T aUnits )
+static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA_UNITS aUnits )
 {
     // simple 1/2/5 scales per decade
     static std::vector<TICK_FORMAT> tickFormats =
@@ -84,7 +85,7 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
     aTickSpace = 1;
 
     // convert to a round (mod-10) number of mils
-    if( aUnits == INCHES )
+    if( aUnits == EDA_UNITS::INCHES )
     {
         aTickSpace *= 2.54;
     }
@@ -115,8 +116,8 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
  * @param aLine line vector
  * @param aMinorTickLen length of minor ticks in IU
  */
-void drawTicksAlongLine( KIGFX::VIEW *aView, const VECTOR2D& aOrigin,
-                         const VECTOR2D& aLine, double aMinorTickLen, EDA_UNITS_T aUnits )
+void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
+        double aMinorTickLen, EDA_UNITS aUnits )
 {
     VECTOR2D tickLine = aLine.Rotate( -M_PI_2 );
     auto gal = aView->GetGAL();
@@ -198,11 +199,12 @@ void drawBacksideTicks( KIGFX::GAL& aGal, const VECTOR2D& aOrigin,
 }
 
 
-RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, EDA_UNITS_T userUnits ):
-    EDA_ITEM( NOT_USED ),    // Never added to anything - just a preview
-    m_geomMgr( aGeomMgr ),
-    m_userUnits( userUnits )
-{}
+RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, EDA_UNITS userUnits )
+        : EDA_ITEM( NOT_USED ), // Never added to anything - just a preview
+          m_geomMgr( aGeomMgr ),
+          m_userUnits( userUnits )
+{
+}
 
 
 const BOX2I RULER_ITEM::ViewBBox() const

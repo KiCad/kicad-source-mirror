@@ -65,8 +65,8 @@ public:
 
     wxString GetDefaultNetName( const SCH_SHEET_PATH aPath );
 
-    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
-    void GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList ) override;
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+    void     GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList ) override;
 
     void Print( wxDC* aDC, const wxPoint& aOffset ) override {}
 

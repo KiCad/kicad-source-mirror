@@ -1350,8 +1350,7 @@ void DRC::doFootprintOverlappingDrc()
 }
 
 
-void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS_T aUnits,
-                          DRC_LIST& aDRCList )
+void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits, DRC_LIST& aDRCList )
 {
 
     // Search for duplicate footprints on the board

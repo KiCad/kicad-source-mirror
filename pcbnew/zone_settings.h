@@ -34,10 +34,19 @@
 #include <zones.h>
 #include <wx/dataview.h>
 
-enum ZONE_FILL_MODE
+enum class ZONE_FILL_MODE
 {
-    ZFM_POLYGONS = 0,       // fill zone with polygons
-    ZFM_HATCH_PATTERN = 1   // fill zone using a grid pattern
+    POLYGONS = 0,     // fill zone with polygons
+    HATCH_PATTERN = 1 // fill zone using a grid pattern
+};
+
+
+/// Zone hatch styles
+enum class ZONE_HATCH_STYLE
+{
+    NO_HATCH,
+    DIAGONAL_FULL,
+    DIAGONAL_EDGE
 };
 
 /**
@@ -78,7 +87,7 @@ public:
     PCB_LAYER_ID    m_CurrentZone_Layer;    ///< Layer used to create the current zone
 
     /// Option to show the zone area (outlines only, short hatches or full hatches
-    int  m_Zone_HatchingStyle;
+    ZONE_HATCH_STYLE m_Zone_HatchingStyle;
 
     long m_ThermalReliefGap;            ///< thickness of the gap in thermal reliefs
     long m_ThermalReliefCopperBridge;   ///< thickness of the copper bridge in thermal reliefs

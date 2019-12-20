@@ -120,7 +120,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_endX.SetValue( m_shape->m_Start.x );     // arc center
         m_endY.SetValue( m_shape->m_Start.y );
         m_radiusLabel->SetLabel( _( "Angle:" ) );
-        m_radius.SetUnits( DEGREES );
+        m_radius.SetUnits( EDA_UNITS::DEGREES );
         m_radius.SetValue( m_shape->m_ArcAngle );
         m_ctrl1X.Show( false, true );
         m_ctrl1Y.Show( false, true );
@@ -566,7 +566,7 @@ DIALOG_PAD_PRIMITIVES_TRANSFORM::DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aPar
     m_vectorY( aFrame, m_yLabel, m_yCtrl, m_yUnits, true ),
     m_rotation( aFrame, m_rotationLabel, m_rotationCtrl, m_rotationUnits )
 {
-    m_rotation.SetUnits( DEGREES );
+    m_rotation.SetUnits( EDA_UNITS::DEGREES );
 
     if( !aShowDuplicate )     // means no duplicate transform
     {
@@ -593,7 +593,7 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<PAD_CS_PRIMITIVE>* 
 {
     wxPoint move_vect( m_vectorX.GetValue(), m_vectorY.GetValue() );
     double  rotation = m_rotation.GetValue();
-    double scale = DoubleValueFromString( UNSCALED_UNITS, m_scaleCtrl->GetValue() );
+    double  scale = DoubleValueFromString( EDA_UNITS::UNSCALED, m_scaleCtrl->GetValue() );
 
     // Avoid too small / too large scale, which could create issues:
     if( scale < 0.01 )

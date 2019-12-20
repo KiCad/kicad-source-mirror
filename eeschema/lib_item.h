@@ -204,7 +204,7 @@ public:
      * </p>
      * @param aList is the list to populate.
      */
-    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
      * Test LIB_ITEM objects for equivalence.

@@ -54,7 +54,7 @@ enum TEXT_MOD_COL_ORDER
 class TEXT_MOD_GRID_TABLE : public wxGridTableBase, public std::vector<TEXTE_MODULE>
 {
 public:
-    TEXT_MOD_GRID_TABLE( EDA_UNITS_T userUnits, PCB_BASE_FRAME* aFrame );
+    TEXT_MOD_GRID_TABLE( EDA_UNITS userUnits, PCB_BASE_FRAME* aFrame );
     ~TEXT_MOD_GRID_TABLE();
 
     int GetNumberRows() override { return (int) size(); }
@@ -81,13 +81,13 @@ public:
     void SetValueAsLong( int aRow, int aCol, long aValue ) override;
 
 private:
-    EDA_UNITS_T        m_userUnits;
-    PCB_BASE_FRAME*    m_frame;
+    EDA_UNITS       m_userUnits;
+    PCB_BASE_FRAME* m_frame;
 
-    wxGridCellAttr*    m_readOnlyAttr;
-    wxGridCellAttr*    m_boolColAttr;
-    wxGridCellAttr*    m_orientationColAttr;
-    wxGridCellAttr*    m_layerColAttr;
+    wxGridCellAttr* m_readOnlyAttr;
+    wxGridCellAttr* m_boolColAttr;
+    wxGridCellAttr* m_orientationColAttr;
+    wxGridCellAttr* m_layerColAttr;
 };
 
 

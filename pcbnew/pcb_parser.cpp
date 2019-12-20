@@ -2168,7 +2168,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             dimension->Text().SetTimeStamp( dimension->GetTimeStamp() );
             dimension->SetPosition( text->GetTextPos() );
 
-            EDA_UNITS_T units = INCHES;
+            EDA_UNITS units = EDA_UNITS::INCHES;
             bool useMils = false;
             FetchUnitsFromString( text->GetText(), units, useMils );
             dimension->SetUnits( units, useMils );
@@ -3432,7 +3432,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as ZONE_CONTAINER." ) );
 
-    ZONE_CONTAINER::HATCH_STYLE hatchStyle = ZONE_CONTAINER::NO_HATCH;
+    ZONE_HATCH_STYLE hatchStyle = ZONE_HATCH_STYLE::NO_HATCH;
 
     int     hatchPitch = ZONE_CONTAINER::GetDefaultHatchPitch();
     wxPoint pt;
@@ -3508,9 +3508,14 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
             switch( token )
             {
             default:
-            case T_none:   hatchStyle = ZONE_CONTAINER::NO_HATCH;        break;
-            case T_edge:   hatchStyle = ZONE_CONTAINER::DIAGONAL_EDGE;   break;
-            case T_full:   hatchStyle = ZONE_CONTAINER::DIAGONAL_FULL;
+            case T_none:
+                hatchStyle = ZONE_HATCH_STYLE::NO_HATCH;
+                break;
+            case T_edge:
+                hatchStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
+                break;
+            case T_full:
+                hatchStyle = ZONE_HATCH_STYLE::DIAGONAL_FULL;
             }
 
             hatchPitch = parseBoardUnits( "hatch pitch" );
@@ -3601,13 +3606,13 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                             m_showLegacyZoneWarning = false;
                         }
 
-                        zone->SetFillMode( ZFM_POLYGONS );
+                        zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
                         m_board->SetModified();
                     }
                     else if( token == T_hatch )
-                        zone->SetFillMode( ZFM_HATCH_PATTERN );
+                        zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
                     else
-                        zone->SetFillMode( ZFM_POLYGONS );
+                        zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
                     NeedRIGHT();
                     break;
 
@@ -3808,7 +3813,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
     {
         if( !zone->IsOnCopperLayer() )
         {
-            //zone->SetFillMode( ZFM_POLYGONS );
+            //zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
             zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
         }
 

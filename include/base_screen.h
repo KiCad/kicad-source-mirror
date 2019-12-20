@@ -305,7 +305,7 @@ public:
     int SetGrid( int aCommandId );
 
     void AddGrid( const GRID_TYPE& aGrid );
-    void AddGrid( const wxRealPoint& size, EDA_UNITS_T aUnit, int id );
+    void AddGrid( const wxRealPoint& size, EDA_UNITS aUnit, int id );
 
     /**
      * Function GridExists

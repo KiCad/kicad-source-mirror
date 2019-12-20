@@ -821,7 +821,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 }
                 default:
                     wxLogTrace( "CONN", "Driver type unsupported: %s",
-                                driver->GetSelectMenuText( MILLIMETRES ) );
+                            driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
                     break;
                 }
 
@@ -893,7 +893,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             }
             default:
                 wxLogTrace( "CONN", "Unexpected strong driver %s",
-                            driver->GetSelectMenuText( MILLIMETRES ) );
+                        driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
                 break;
             }
         }

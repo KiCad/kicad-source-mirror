@@ -94,7 +94,7 @@ public:
 
     void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
-    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override
     {
         return wxString( _( "No Connect" ) );
     }

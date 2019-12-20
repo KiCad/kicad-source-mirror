@@ -86,9 +86,9 @@ public:
      */
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxDat ) override;
 
-    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override
     {
         return wxString( _( "ERC Marker" ) );
     }

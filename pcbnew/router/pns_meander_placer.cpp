@@ -235,7 +235,7 @@ int MEANDER_PLACER::CurrentLayer() const
 }
 
 
-const wxString MEANDER_PLACER::TuningInfo( EDA_UNITS_T aUnits ) const
+const wxString MEANDER_PLACER::TuningInfo( EDA_UNITS aUnits ) const
 {
     wxString status;
 

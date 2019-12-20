@@ -147,7 +147,7 @@ public:
      */
     virtual void SetTopLayer( int aLayer );
 
-    virtual void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+    virtual void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
     {
         wxASSERT( false );
     }

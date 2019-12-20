@@ -79,9 +79,8 @@ public:
      * @param bPos The position of the second of two objects
      * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
      */
-    MARKER_BASE( EDA_UNITS_T aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                 EDA_ITEM* aItem, const wxPoint& aPos,
-                 EDA_ITEM* bItem, const wxPoint& bPos, int aScalingFactor );
+    MARKER_BASE( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos, EDA_ITEM* aItem,
+            const wxPoint& aPos, EDA_ITEM* bItem, const wxPoint& bPos, int aScalingFactor );
 
     /**
      * Constructor
@@ -199,9 +198,8 @@ public:
      * @param bItem The second of the two conflicting objects
      * @param bPos The position of the second of two objects
      */
-    void SetData( EDA_UNITS_T aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                  EDA_ITEM* aItem, const wxPoint& aPos,
-                  EDA_ITEM* bItem = nullptr, const wxPoint& bPos = wxPoint() );
+    void SetData( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos, EDA_ITEM* aItem,
+            const wxPoint& aPos, EDA_ITEM* bItem = nullptr, const wxPoint& bPos = wxPoint() );
 
     /**
      * Function SetData

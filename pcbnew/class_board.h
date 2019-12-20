@@ -552,7 +552,7 @@ public:
     TITLE_BLOCK& GetTitleBlock()                            { return m_titles; }
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )    { m_titles = aTitleBlock; }
 
-    wxString    GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     /**
      * Function GetColorSettings
@@ -794,7 +794,7 @@ public:
         return ComputeBoundingBox( true );
     }
 
-    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
      * Function Print.
@@ -964,8 +964,8 @@ public:
      * @param aHatch = hatch option
      * @return a reference to the new area
      */
-    ZONE_CONTAINER* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
-                             PCB_LAYER_ID aLayer, wxPoint aStartPointPosition, int aHatch );
+    ZONE_CONTAINER* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
+            wxPoint aStartPointPosition, ZONE_HATCH_STYLE aHatch );
 
     /**
      * Add a copper area to net, inserting after m_ZoneDescriptorList[aAreaIdx]
@@ -977,8 +977,8 @@ public:
      * @param aHatch is the hatch option
      * @return pointer to the new area
      */
-    ZONE_CONTAINER* InsertArea( int aNetcode, int aAreaIdx, PCB_LAYER_ID aLayer,
-                                int aCornerX, int aCornerY, int aHatch );
+    ZONE_CONTAINER* InsertArea( int aNetcode, int aAreaIdx, PCB_LAYER_ID aLayer, int aCornerX,
+            int aCornerY, ZONE_HATCH_STYLE aHatch );
 
     /**
      * Function NormalizeAreaPolygon
