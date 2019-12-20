@@ -44,7 +44,7 @@
 ZONE_SETTINGS::ZONE_SETTINGS()
 {
     m_ZonePriority = 0;
-    m_FillMode = ZFM_POLYGONS;                                             // Mode for filling zone : 1 use segments, 0 use polygons
+    m_FillMode = ZONE_FILL_MODE::POLYGONS;                                             // Mode for filling zone : 1 use segments, 0 use polygons
     // Zone clearance value
     m_ZoneClearance      = Mils2iu( ZONE_CLEARANCE_MIL );
     // Min thickness value in filled areas (this is the minimum width of copper to fill solid areas) :

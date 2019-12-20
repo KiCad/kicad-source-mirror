@@ -190,7 +190,7 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
 
     switch( m_settings.m_FillMode )
     {
-    case ZFM_HATCH_PATTERN:
+    case ZONE_FILL_MODE::HATCH_PATTERN:
         m_GridStyleCtrl->SetSelection( 1 ); break;
     default:
         m_GridStyleCtrl->SetSelection( 0 ); break;
@@ -264,9 +264,9 @@ bool DIALOG_COPPER_ZONE::TransferDataFromWindow()
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
 
     if( m_GridStyleCtrl->GetSelection() > 0 )
-        m_settings.m_FillMode = ZFM_HATCH_PATTERN;
+        m_settings.m_FillMode = ZONE_FILL_MODE::HATCH_PATTERN;
     else
-        m_settings.m_FillMode = ZFM_POLYGONS;
+        m_settings.m_FillMode = ZONE_FILL_MODE::POLYGONS;
 
     if( !AcceptOptions() )
         return false;
@@ -304,7 +304,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
 
     m_gridStyleRotation.SetValue( NormalizeAngle180( m_gridStyleRotation.GetValue() ) );
 
-    if( m_settings.m_FillMode == ZFM_HATCH_PATTERN )
+    if( m_settings.m_FillMode == ZONE_FILL_MODE::HATCH_PATTERN )
     {
         int minThickness = m_minWidth.GetValue();
 

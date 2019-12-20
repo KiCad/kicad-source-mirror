@@ -774,7 +774,7 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
         dumper->Write( &aRawPolys, "solid-areas-before-hatching" );
 
     // Now remove the non filled areas due to the hatch pattern
-    if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
+    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
         addHatchFillTypeOnZone( aZone, aRawPolys );
 
     if( s_DumpZonesWhenFilling )
@@ -848,7 +848,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
         smoothedPoly.Deflate( half_min_width - epsilon, numSegs );
 
         // Remove the non filled areas due to the hatch pattern
-        if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
+        if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
             addHatchFillTypeOnZone( aZone, smoothedPoly );
 
         // Re-inflate after pruning of areas that don't meet minimum-width criteria

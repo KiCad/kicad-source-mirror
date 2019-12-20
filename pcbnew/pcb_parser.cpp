@@ -3601,13 +3601,13 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                             m_showLegacyZoneWarning = false;
                         }
 
-                        zone->SetFillMode( ZFM_POLYGONS );
+                        zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
                         m_board->SetModified();
                     }
                     else if( token == T_hatch )
-                        zone->SetFillMode( ZFM_HATCH_PATTERN );
+                        zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
                     else
-                        zone->SetFillMode( ZFM_POLYGONS );
+                        zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
                     NeedRIGHT();
                     break;
 
@@ -3808,7 +3808,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
     {
         if( !zone->IsOnCopperLayer() )
         {
-            //zone->SetFillMode( ZFM_POLYGONS );
+            //zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
             zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
         }
 

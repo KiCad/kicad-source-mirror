@@ -1794,7 +1794,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
         m_out->Print( 0, " yes" );
 
     // Default is polygon filled.
-    if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
+    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
         m_out->Print( 0, " (mode hatch)" );
 
     m_out->Print( 0, " (thermal_gap %s) (thermal_bridge_width %s)",
@@ -1826,7 +1826,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                           FormatInternalUnits( aZone->GetCornerRadius() ).c_str() );
     }
 
-    if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
+    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
     {
         m_out->Print( 0, "\n" );
         m_out->Print( aNestLevel+2, "(hatch_thickness %s) (hatch_gap %s) (hatch_orientation %s)",

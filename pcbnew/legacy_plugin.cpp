@@ -2648,11 +2648,11 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 }
 
                 // User OK'd; switch to polygon mode
-                zc->SetFillMode( ZFM_POLYGONS );
+                zc->SetFillMode( ZONE_FILL_MODE::POLYGONS );
                 m_board->SetModified();
             }
             else
-                zc->SetFillMode( ZFM_POLYGONS );
+                zc->SetFillMode( ZONE_FILL_MODE::POLYGONS );
 
             zc->SetIsFilled( fillstate == 'S' );
             zc->SetThermalReliefGap( thermalReliefGap );
@@ -2756,7 +2756,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             {
                 if( !zc->IsOnCopperLayer() )
                 {
-                    zc->SetFillMode( ZFM_POLYGONS );
+                    zc->SetFillMode( ZONE_FILL_MODE::POLYGONS );
                     zc->SetNetCode( NETINFO_LIST::UNCONNECTED );
                 }
 

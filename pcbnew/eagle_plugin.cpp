@@ -1221,7 +1221,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     {
         int spacing = p.spacing ? p.spacing->ToPcbUnits() : 50 * IU_PER_MILS;
 
-        zone->SetFillMode( ZFM_HATCH_PATTERN );
+        zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
         zone->SetHatchFillTypeThickness( p.width.ToPcbUnits() );
         zone->SetHatchFillTypeGap( spacing - p.width.ToPcbUnits() );
         zone->SetHatchFillTypeOrientation( 0 );

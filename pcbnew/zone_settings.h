@@ -34,10 +34,10 @@
 #include <zones.h>
 #include <wx/dataview.h>
 
-enum ZONE_FILL_MODE
+enum class ZONE_FILL_MODE
 {
-    ZFM_POLYGONS = 0,       // fill zone with polygons
-    ZFM_HATCH_PATTERN = 1   // fill zone using a grid pattern
+    POLYGONS = 0,       // fill zone with polygons
+    HATCH_PATTERN = 1   // fill zone using a grid pattern
 };
 
 /**

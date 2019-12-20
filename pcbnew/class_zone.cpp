@@ -47,7 +47,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
 {
     m_CornerSelection = nullptr;                // no corner is selected
     m_IsFilled = false;                         // fill status : true when the zone is filled
-    m_FillMode = ZFM_POLYGONS;
+    m_FillMode = ZONE_FILL_MODE::POLYGONS;
     m_hatchStyle = DIAGONAL_EDGE;
     m_hatchPitch = GetDefaultHatchPitch();
     m_hv45 = false;
@@ -742,9 +742,9 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL
 
     switch( m_FillMode )
     {
-    case ZFM_POLYGONS:
+    case ZONE_FILL_MODE::POLYGONS:
         msg = _( "Solid" ); break;
-    case ZFM_HATCH_PATTERN:
+    case ZONE_FILL_MODE::HATCH_PATTERN:
         msg = _( "Hatched" ); break;
     default:
         msg = _( "Unknown" ); break;

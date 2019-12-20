@@ -761,8 +761,8 @@ protected:
 
 
     /** How to fill areas:
-     * ZFM_POLYGONS => use solid polygons
-     * ZFM_HATCH_PATTERN => use a grid pattern as shape
+     * ZONE_FILL_MODE::POLYGONS => use solid polygons
+     * ZONE_FILL_MODE::HATCH_PATTERN => use a grid pattern as shape
      */
     ZONE_FILL_MODE        m_FillMode;
 

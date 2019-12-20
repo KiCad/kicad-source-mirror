@@ -130,7 +130,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
 
     switch( m_settings.m_FillMode )
     {
-    case ZFM_HATCH_PATTERN:
+    case ZONE_FILL_MODE::HATCH_PATTERN:
         m_GridStyleCtrl->SetSelection( 1 ); break;
     default:
         m_GridStyleCtrl->SetSelection( 0 ); break;
@@ -224,12 +224,12 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     }
 
     if( m_GridStyleCtrl->GetSelection() > 0 )
-        m_settings.m_FillMode = ZFM_HATCH_PATTERN;
+        m_settings.m_FillMode = ZONE_FILL_MODE::HATCH_PATTERN;
     else
-        m_settings.m_FillMode = ZFM_POLYGONS;
+        m_settings.m_FillMode = ZONE_FILL_MODE::POLYGONS;
 
 
-    if( m_settings.m_FillMode == ZFM_HATCH_PATTERN )
+    if( m_settings.m_FillMode == ZONE_FILL_MODE::HATCH_PATTERN )
     {
         int minThickness = m_minWidth.GetValue();
 

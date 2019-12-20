@@ -995,7 +995,7 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
         if( !zone->IsFilled() )
         {
             ZONE_FILLER filler( aPcb );
-            zone->SetFillMode( ZFM_POLYGONS ); // use filled polygons
+            zone->SetFillMode( ZONE_FILL_MODE::POLYGONS ); // use filled polygons
             filler.Fill( { zone } );
         }
 
