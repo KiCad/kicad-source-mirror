@@ -171,7 +171,7 @@ void UpdateUserInterface()
 int GetUserUnits()
 {
     if( s_PcbEditFrame )
-        return s_PcbEditFrame->GetUserUnits();
+        return static_cast<int>( s_PcbEditFrame->GetUserUnits() );
 
     return -1;
 }
