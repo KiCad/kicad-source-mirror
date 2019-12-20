@@ -178,8 +178,8 @@ void SCH_EDIT_FRAME::SyncToolbars()
     m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits,            GetUserUnits() != INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,          GetUserUnits() == INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
     m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,      galOpts.m_fullscreenCursor );
     m_optionsToolBar->Toggle( EE_ACTIONS::toggleHiddenPins,    GetShowAllPins() );
     m_optionsToolBar->Toggle( EE_ACTIONS::toggleForceHV,       GetForceHVLines() );

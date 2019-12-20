@@ -43,8 +43,7 @@ class TWO_POINT_GEOMETRY_MANAGER;
 class RULER_ITEM : public EDA_ITEM
 {
 public:
-
-    RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr, EDA_UNITS_T userUnits );
+    RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr, EDA_UNITS userUnits );
 
     ///> @copydoc EDA_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
@@ -73,15 +72,15 @@ public:
 
     void SwitchUnits()
     {
-        if( m_userUnits == INCHES )
-            m_userUnits = MILLIMETRES;
+        if( m_userUnits == EDA_UNITS::INCHES )
+            m_userUnits = EDA_UNITS::MILLIMETRES;
         else
-            m_userUnits = INCHES;
+            m_userUnits = EDA_UNITS::INCHES;
     }
 
 private:
     const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr;
-    EDA_UNITS_T                       m_userUnits;
+    EDA_UNITS                         m_userUnits;
 };
 
 } // PREVIEW

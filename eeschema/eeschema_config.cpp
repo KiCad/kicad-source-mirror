@@ -349,8 +349,8 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
 
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, ShowPageLimitsEntry,
                                                     &m_showPageLimits, true ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, UnitsEntry,
-                                                   (int*)&m_userUnits, MILLIMETRES ) );
+    m_configSettings.push_back( new PARAM_CFG_INT(
+            true, UnitsEntry, (int*) &m_userUnits, (int) EDA_UNITS::MILLIMETRES ) );
 
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, PrintMonochromeEntry,
                                                     &m_printMonochrome, true ) );

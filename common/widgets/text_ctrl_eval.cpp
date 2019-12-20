@@ -24,18 +24,16 @@
 
 #include <widgets/text_ctrl_eval.h>
 
-TEXT_CTRL_EVAL::TEXT_CTRL_EVAL( wxWindow* aParent, wxWindowID aId, const
-        wxString& aValue, const wxPoint& aPos, const wxSize& aSize, long aStyle,
-        const wxValidator& aValidator, const wxString& aName )
-    : wxTextCtrl( aParent, aId, aValue, aPos, aSize, aStyle | wxTE_PROCESS_ENTER, aValidator, aName ),
-      m_eval( UNSCALED_UNITS )
+TEXT_CTRL_EVAL::TEXT_CTRL_EVAL( wxWindow* aParent, wxWindowID aId, const wxString& aValue,
+        const wxPoint& aPos, const wxSize& aSize, long aStyle, const wxValidator& aValidator,
+        const wxString& aName )
+        : wxTextCtrl( aParent, aId, aValue, aPos, aSize, aStyle | wxTE_PROCESS_ENTER, aValidator,
+                  aName ),
+          m_eval( EDA_UNITS::UNSCALED )
 {
-    Connect( wxEVT_SET_FOCUS,
-            wxFocusEventHandler( TEXT_CTRL_EVAL::onTextFocusGet ), NULL, this );
-    Connect( wxEVT_KILL_FOCUS,
-            wxFocusEventHandler( TEXT_CTRL_EVAL::onTextFocusLost ), NULL, this );
-    Connect( wxEVT_TEXT_ENTER,
-            wxCommandEventHandler( TEXT_CTRL_EVAL::onTextEnter ), NULL, this );
+    Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( TEXT_CTRL_EVAL::onTextFocusGet ), NULL, this );
+    Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TEXT_CTRL_EVAL::onTextFocusLost ), NULL, this );
+    Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( TEXT_CTRL_EVAL::onTextEnter ), NULL, this );
 }
 
 

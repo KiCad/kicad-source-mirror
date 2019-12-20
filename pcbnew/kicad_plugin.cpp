@@ -1650,8 +1650,8 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
         const VIA*  via = static_cast<const VIA*>( aTrack );
         BOARD*      board = (BOARD*) via->GetParent();
 
-        wxCHECK_RET( board != 0, wxT( "Via " ) + via->GetSelectMenuText( MILLIMETRES ) +
-                     wxT( " has no parent." ) );
+        wxCHECK_RET( board != 0, wxT( "Via " ) + via->GetSelectMenuText( EDA_UNITS::MILLIMETRES )
+                                         + wxT( " has no parent." ) );
 
         m_out->Print( aNestLevel, "(via" );
 
@@ -1733,9 +1733,15 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     switch( aZone->GetHatchStyle() )
     {
     default:
-    case ZONE_CONTAINER::NO_HATCH:       hatch = "none";    break;
-    case ZONE_CONTAINER::DIAGONAL_EDGE:  hatch = "edge";    break;
-    case ZONE_CONTAINER::DIAGONAL_FULL:  hatch = "full";    break;
+    case ZONE_HATCH_STYLE::NO_HATCH:
+        hatch = "none";
+        break;
+    case ZONE_HATCH_STYLE::DIAGONAL_EDGE:
+        hatch = "edge";
+        break;
+    case ZONE_HATCH_STYLE::DIAGONAL_FULL:
+        hatch = "full";
+        break;
     }
 
     m_out->Print( 0, " (hatch %s %s)\n", hatch.c_str(),
@@ -1793,7 +1799,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
         m_out->Print( 0, " yes" );
 
     // Default is polygon filled.
-    if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
+    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
         m_out->Print( 0, " (mode hatch)" );
 
     m_out->Print( 0, " (thermal_gap %s) (thermal_bridge_width %s)",
@@ -1825,7 +1831,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                           FormatInternalUnits( aZone->GetCornerRadius() ).c_str() );
     }
 
-    if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
+    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
     {
         m_out->Print( 0, "\n" );
         m_out->Print( aNestLevel+2, "(hatch_thickness %s) (hatch_gap %s) (hatch_orientation %s)",

@@ -101,7 +101,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_item = dynamic_cast<DRAWSEGMENT*>( aItem );
     m_moduleItem = dynamic_cast<EDGE_MODULE*>( aItem );
 
-    m_angle.SetUnits( DEGREES );
+    m_angle.SetUnits( EDA_UNITS::DEGREES );
     m_AngleValidator.SetRange( -360.0, 360.0 );
     m_angleCtrl->SetValidator( m_AngleValidator );
     m_AngleValidator.SetWindow( m_angleCtrl );

@@ -72,13 +72,13 @@ public:
         m_auxItemWeakRef  = nullptr;
     }
 
-    DRC_ITEM( EDA_UNITS_T aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
-              EDA_ITEM* bAuxiliaryItem, const wxPoint& bAuxiliaryPos )
+    DRC_ITEM( EDA_UNITS aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
+            EDA_ITEM* bAuxiliaryItem, const wxPoint& bAuxiliaryPos )
     {
         SetData( aUnits, aErrorCode, aMainItem, aMainPos, bAuxiliaryItem, bAuxiliaryPos );
     }
 
-    DRC_ITEM( EDA_UNITS_T aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos )
+    DRC_ITEM( EDA_UNITS aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos )
     {
         SetData( aUnits, aErrorCode, aMainItem, aMainPos );
     }
@@ -100,8 +100,8 @@ public:
      * @param aMainPos = position the first item and therefore of this issue
      * @param bAuxiliaryPos = position the second item
      */
-    void SetData( EDA_UNITS_T aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
-                  EDA_ITEM* bAuxiliaryItem = nullptr, const wxPoint& bAuxiliaryPos = wxPoint() )
+    void SetData( EDA_UNITS aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
+            EDA_ITEM* bAuxiliaryItem = nullptr, const wxPoint& bAuxiliaryPos = wxPoint() )
     {
         m_ErrorCode         = aErrorCode;
         m_MainText          = aMainItem->GetSelectMenuText( aUnits );
@@ -186,7 +186,7 @@ public:
      * wxWidget's wxHtmlListBox class.
      * @return wxString - the html text.
      */
-    wxString ShowHtml( EDA_UNITS_T aUnits ) const;
+    wxString ShowHtml( EDA_UNITS aUnits ) const;
 
     /**
      * Function ShowReport
@@ -194,7 +194,7 @@ public:
      * to disk in a report.
      * @return wxString - the simple multi-line report text.
      */
-    wxString ShowReport( EDA_UNITS_T aUnits ) const;
+    wxString ShowReport( EDA_UNITS aUnits ) const;
 
     /**
      * Function GetErrorCode
@@ -241,7 +241,7 @@ public:
      * @param aPos The position to format
      * @return wxString - The formated string
      */
-    static wxString ShowCoord( EDA_UNITS_T aUnits, const wxPoint& aPos );
+    static wxString ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos );
 };
 
 

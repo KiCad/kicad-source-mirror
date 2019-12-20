@@ -236,8 +236,8 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
     m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,              IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits,             GetUserUnits() != INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,           GetUserUnits() == INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
     m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,       GetShowPolarCoords() );
     m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,      !opts.m_DisplayPadFill );
     m_optionsToolBar->Toggle( PCB_ACTIONS::moduleEdgeOutlines,  !opts.m_DisplayModEdgeFill );

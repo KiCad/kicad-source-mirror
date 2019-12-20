@@ -259,7 +259,7 @@ void LIB_TEXT::print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRAN
 }
 
 
-void LIB_TEXT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
+void LIB_TEXT::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
@@ -293,7 +293,7 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
 }
 
 
-wxString LIB_TEXT::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString LIB_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Graphic Text \"%s\"" ), ShortenedShownText() );
 }

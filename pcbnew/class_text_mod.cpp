@@ -335,7 +335,7 @@ double TEXTE_MODULE::GetDrawRotation() const
 
 
 // see class_text_mod.h
-void TEXTE_MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void TEXTE_MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     MODULE* module = (MODULE*) m_Parent;
 
@@ -389,7 +389,7 @@ void TEXTE_MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_I
 }
 
 
-wxString TEXTE_MODULE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString TEXTE_MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     switch( m_Type )
     {

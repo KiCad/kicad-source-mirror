@@ -27,7 +27,7 @@
 
 
 #include <class_marker_pcb.h>
-#include <common.h> // for EDA_UNITS_T
+#include <common.h> // for EDA_UNITS
 
 
 class ZONE_CONTAINER;
@@ -42,7 +42,7 @@ class SEG;
 class DRC_MARKER_FACTORY
 {
 public:
-    using UNITS_PROVIDER = std::function<EDA_UNITS_T()>;
+    using UNITS_PROVIDER = std::function<EDA_UNITS()>;
 
     DRC_MARKER_FACTORY();
 
@@ -57,7 +57,7 @@ public:
      * Set the units provider to a function returning a constant value.
      * This is a shorthand for #SetUnitProvider.
      */
-    void SetUnits( EDA_UNITS_T aUnits );
+    void SetUnits( EDA_UNITS aUnits );
 
     /**
      * Creates a marker on a track, via or pad.
@@ -93,7 +93,7 @@ public:
     MARKER_PCB* NewMarker( int aErrorCode, const wxString& aMessage ) const;
 
 private:
-    EDA_UNITS_T getCurrentUnits() const
+    EDA_UNITS getCurrentUnits() const
     {
         return m_units_provider();
     }

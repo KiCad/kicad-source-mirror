@@ -168,7 +168,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
     GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
 
-    GetScreen()->AddGrid( m_UserGridSize, EDA_UNITS_T::UNSCALED_UNITS, ID_POPUP_GRID_USER );
+    GetScreen()->AddGrid( m_UserGridSize, EDA_UNITS::UNSCALED, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
 
     // In modedit, set the default paper size to A4:

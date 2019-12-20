@@ -55,9 +55,8 @@ public:
      * @param bItem The second of the two conflicting objects
      * @param bPos The position of the second of two objects
      */
-    MARKER_PCB( EDA_UNITS_T aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                BOARD_ITEM* aItem, const wxPoint& aPos,
-                BOARD_ITEM* bItem = nullptr, const wxPoint& bPos = wxPoint() );
+    MARKER_PCB( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos, BOARD_ITEM* aItem,
+            const wxPoint& aPos, BOARD_ITEM* bItem = nullptr, const wxPoint& bPos = wxPoint() );
 
     /**
      * Constructor
@@ -103,14 +102,14 @@ public:
 
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
-    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
-     {
-         return BOARD_ITEM::Matches( m_drc.GetErrorText(), aSearchData );
-     }
+    {
+        return BOARD_ITEM::Matches( m_drc.GetErrorText(), aSearchData );
+    }
 
-    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 

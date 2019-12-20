@@ -194,8 +194,6 @@ void PCB_POLYGON::AddToBoard()
         zone->SetNetCode( m_netCode );
 
         // add outline
-        int outline_hatch = ZONE_CONTAINER::DIAGONAL_EDGE;
-
         for( i = 0; i < (int) m_outline.GetCount(); i++ )
         {
             zone->AppendCorner( wxPoint( KiROUND( m_outline[i]->x ),
@@ -206,7 +204,7 @@ void PCB_POLYGON::AddToBoard()
 
         zone->SetPriority( m_priority );
 
-        zone->SetHatch( outline_hatch, zone->GetDefaultHatchPitch(), true );
+        zone->SetHatch( ZONE_HATCH_STYLE::DIAGONAL_EDGE, zone->GetDefaultHatchPitch(), true );
 
         if ( m_objType == wxT( 'K' ) )
         {

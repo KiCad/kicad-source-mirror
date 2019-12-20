@@ -530,7 +530,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     int             ii, jj;
     wxString        Line;
     wxArrayString   list;
-    double          scale = GetUserUnits() == INCHES ? IU_PER_MILS * 1000 : IU_PER_MM;
+    double          scale = GetUserUnits() == EDA_UNITS::INCHES ? IU_PER_MILS * 1000 : IU_PER_MM;
     int       curr_layer = GetActiveLayer();
 
     for( int layer = 0; layer < (int)ImagesMaxCount(); ++layer )
@@ -550,7 +550,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 
         list.Add( Line );
 
-        const char* units = GetUserUnits() == INCHES ? "\"" : "mm";
+        const char* units = GetUserUnits() == EDA_UNITS::INCHES ? "\"" : "mm";
 
         for( ii = 0, jj = 1; ii < TOOLS_MAX_COUNT; ii++ )
         {
@@ -980,11 +980,11 @@ void GERBVIEW_FRAME::DisplayGridMsg()
 
     switch( m_userUnits )
     {
-    case INCHES:
+    case EDA_UNITS::INCHES:
         gridformatter = "grid X %.6f  Y %.6f";
         break;
 
-    case MILLIMETRES:
+    case EDA_UNITS::MILLIMETRES:
         gridformatter = "grid X %.6f  Y %.6f";
         break;
 
@@ -996,7 +996,7 @@ void GERBVIEW_FRAME::DisplayGridMsg()
     BASE_SCREEN* screen = GetScreen();
     wxArrayString gridsList;
 
-    int icurr = screen->BuildGridsChoiceList( gridsList, m_userUnits != INCHES );
+    int        icurr = screen->BuildGridsChoiceList( gridsList, m_userUnits != EDA_UNITS::INCHES );
     GRID_TYPE& grid = screen->GetGrid( icurr );
     double grid_x = To_User_Unit( m_userUnits, grid.m_Size.x );
     double grid_y = To_User_Unit( m_userUnits, grid.m_Size.y );
@@ -1028,9 +1028,15 @@ void GERBVIEW_FRAME::UpdateStatusBar()
 
         switch( GetUserUnits() )
         {
-        case INCHES:         formatter = wxT( "r %.6f  theta %.1f" ); break;
-        case MILLIMETRES:    formatter = wxT( "r %.5f  theta %.1f" ); break;
-        case UNSCALED_UNITS: formatter = wxT( "r %f  theta %f" );     break;
+        case EDA_UNITS::INCHES:
+            formatter = wxT( "r %.6f  theta %.1f" );
+            break;
+        case EDA_UNITS::MILLIMETRES:
+            formatter = wxT( "r %.5f  theta %.1f" );
+            break;
+        case EDA_UNITS::UNSCALED:
+            formatter = wxT( "r %f  theta %f" );
+            break;
         default:             wxASSERT( false );                       break;
         }
 
@@ -1048,17 +1054,17 @@ void GERBVIEW_FRAME::UpdateStatusBar()
 
     switch( GetUserUnits() )
     {
-    case INCHES:
+    case EDA_UNITS::INCHES:
         absformatter = wxT( "X %.6f  Y %.6f" );
         relformatter = wxT( "dx %.6f  dy %.6f  dist %.4f" );
         break;
 
-    case MILLIMETRES:
+    case EDA_UNITS::MILLIMETRES:
         absformatter = wxT( "X %.5f  Y %.5f" );
         relformatter = wxT( "dx %.5f  dy %.5f  dist %.3f" );
         break;
 
-    case UNSCALED_UNITS:
+    case EDA_UNITS::UNSCALED:
         absformatter = wxT( "X %f  Y %f" );
         relformatter = wxT( "dx %f  dy %f  dist %f" );
         break;
@@ -1178,7 +1184,7 @@ void GERBVIEW_FRAME::updateGridSelectBox()
     // Update grid values with the current units setting.
     m_gridSelectBox->Clear();
     wxArrayString gridsList;
-    int icurr = GetScreen()->BuildGridsChoiceList( gridsList, GetUserUnits() != INCHES );
+    int icurr = GetScreen()->BuildGridsChoiceList( gridsList, GetUserUnits() != EDA_UNITS::INCHES );
 
     for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
     {

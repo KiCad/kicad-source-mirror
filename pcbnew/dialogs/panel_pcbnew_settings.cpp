@@ -46,7 +46,7 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
 
     /* Set display options */
     m_PolarDisplay->SetSelection( m_Frame->GetShowPolarCoords() ? 1 : 0 );
-    m_UnitsSelection->SetSelection( m_Frame->GetUserUnits() == INCHES ? 0 : 1 );
+    m_UnitsSelection->SetSelection( m_Frame->GetUserUnits() == EDA_UNITS::INCHES ? 0 : 1 );
     m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts.m_DisplayRatsnestLinesCurved );
     m_showGlobalRatsnest->SetValue( displ_opts.m_ShowGlobalRatsnest );
     m_showSelectedRatsnest->SetValue( displ_opts.m_ShowModuleRatsnest );
@@ -71,7 +71,8 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
 bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
 {
     m_Frame->SetShowPolarCoords( m_PolarDisplay->GetSelection() != 0 );
-    m_Frame->SetUserUnits( m_UnitsSelection->GetSelection() == 0 ? INCHES : MILLIMETRES );
+    m_Frame->SetUserUnits(
+            m_UnitsSelection->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES );
 
     m_Frame->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
 

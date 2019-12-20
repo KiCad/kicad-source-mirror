@@ -556,7 +556,7 @@ SHAPE_POLY_SET MODULE::GetBoundingPoly() const
 }
 
 
-void MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 
@@ -879,7 +879,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
 }
 
 
-wxString MODULE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     wxString reference = GetReference();
 

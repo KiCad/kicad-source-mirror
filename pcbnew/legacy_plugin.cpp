@@ -2489,7 +2489,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 {
     unique_ptr<ZONE_CONTAINER> zc( new ZONE_CONTAINER( m_board ) );
 
-    ZONE_CONTAINER::HATCH_STYLE outline_hatch = ZONE_CONTAINER::NO_HATCH;
+    ZONE_HATCH_STYLE outline_hatch = ZONE_HATCH_STYLE::NO_HATCH;
     bool    endContour = false;
     int     holeIndex = -1;     // -1 is the main outline; holeIndex >= 0 = hole index
     char    buf[1024];
@@ -2559,14 +2559,21 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 THROW_IO_ERROR( m_error );
             }
 
-            switch( *hopt )   // upper case required
+            switch( *hopt ) // upper case required
             {
-            case 'N':   outline_hatch = ZONE_CONTAINER::NO_HATCH;        break;
-            case 'E':   outline_hatch = ZONE_CONTAINER::DIAGONAL_EDGE;   break;
-            case 'F':   outline_hatch = ZONE_CONTAINER::DIAGONAL_FULL;   break;
+            case 'N':
+                outline_hatch = ZONE_HATCH_STYLE::NO_HATCH;
+                break;
+            case 'E':
+                outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
+                break;
+            case 'F':
+                outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_FULL;
+                break;
 
             default:
-                m_error.Printf( _( "Bad ZAux for CZONE_CONTAINER \"%s\"" ), zc->GetNetname().GetData() );
+                m_error.Printf(
+                        _( "Bad ZAux for CZONE_CONTAINER \"%s\"" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2648,11 +2655,11 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 }
 
                 // User OK'd; switch to polygon mode
-                zc->SetFillMode( ZFM_POLYGONS );
+                zc->SetFillMode( ZONE_FILL_MODE::POLYGONS );
                 m_board->SetModified();
             }
             else
-                zc->SetFillMode( ZFM_POLYGONS );
+                zc->SetFillMode( ZONE_FILL_MODE::POLYGONS );
 
             zc->SetIsFilled( fillstate == 'S' );
             zc->SetThermalReliefGap( thermalReliefGap );
@@ -2756,7 +2763,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             {
                 if( !zc->IsOnCopperLayer() )
                 {
-                    zc->SetFillMode( ZFM_POLYGONS );
+                    zc->SetFillMode( ZONE_FILL_MODE::POLYGONS );
                     zc->SetNetCode( NETINFO_LIST::UNCONNECTED );
                 }
 

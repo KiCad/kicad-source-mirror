@@ -95,7 +95,7 @@ bool WS_DRAW_ITEM_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAc
 }
 
 
-void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
+void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString            msg;
     WS_DATA_ITEM* dataItem = GetPeer();
@@ -137,10 +137,10 @@ void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aL
 
     aList.push_back( MSG_PANEL_ITEM( _( "First Page Option" ), msg, BROWN ) );
 
-    msg = MessageTextFromValue( UNSCALED_UNITS, dataItem->m_RepeatCount );
+    msg = MessageTextFromValue( EDA_UNITS::UNSCALED, dataItem->m_RepeatCount );
     aList.push_back( MSG_PANEL_ITEM( _( "Repeat Count" ), msg, BLUE ) );
 
-    msg = MessageTextFromValue( UNSCALED_UNITS, dataItem->m_IncrementLabel );
+    msg = MessageTextFromValue( EDA_UNITS::UNSCALED, dataItem->m_IncrementLabel );
     aList.push_back( MSG_PANEL_ITEM( _( "Repeat Label Increment" ), msg, DARKGRAY ) );
 
     msg.Printf( wxT( "(%s, %s)" ),
@@ -179,7 +179,7 @@ bool WS_DRAW_ITEM_TEXT::HitTest( const EDA_RECT& aRect, bool aContains, int aAcc
 }
 
 
-wxString WS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString WS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Text %s at (%s, %s)" ),
                              GetShownText(),
@@ -279,7 +279,7 @@ bool WS_DRAW_ITEM_POLYPOLYGONS::HitTest( const EDA_RECT& aRect, bool aContained,
 }
 
 
-wxString WS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString WS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Imported shape at (%s, %s)" ),
                              MessageTextFromValue( aUnits, GetPosition().x ),
@@ -336,7 +336,7 @@ bool WS_DRAW_ITEM_RECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-wxString WS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString WS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Rectangle from (%s, %s) to (%s, %s)" ),
                              MessageTextFromValue( aUnits, GetStart().x ),
@@ -367,7 +367,7 @@ bool WS_DRAW_ITEM_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-wxString WS_DRAW_ITEM_LINE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString WS_DRAW_ITEM_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Line from (%s, %s) to (%s, %s)" ),
                              MessageTextFromValue( aUnits, GetStart().x ),
@@ -420,7 +420,7 @@ bool WS_DRAW_ITEM_BITMAP::HitTest( const EDA_RECT& aRect, bool aContains, int aA
 }
 
 
-wxString WS_DRAW_ITEM_BITMAP::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString WS_DRAW_ITEM_BITMAP::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Image at (%s, %s)" ),
                              MessageTextFromValue( aUnits, GetPosition().x ),
@@ -428,7 +428,7 @@ wxString WS_DRAW_ITEM_BITMAP::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 }
 
 
-wxString WS_DRAW_ITEM_PAGE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString WS_DRAW_ITEM_PAGE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     wxString txt( "Page limits" );
     return txt;

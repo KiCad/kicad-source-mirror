@@ -132,7 +132,7 @@ PANEL_SETUP_NETCLASSES::~PANEL_SETUP_NETCLASSES()
 }
 
 
-static void netclassToGridRow( EDA_UNITS_T aUnits, wxGrid* aGrid, int aRow, const NETCLASSPTR& nc )
+static void netclassToGridRow( EDA_UNITS aUnits, wxGrid* aGrid, int aRow, const NETCLASSPTR& nc )
 {
     aGrid->SetCellValue( aRow, GRID_NAME, nc->GetName() );
 
@@ -227,7 +227,7 @@ void PANEL_SETUP_NETCLASSES::rebuildNetclassDropdowns()
 }
 
 
-static void gridRowToNetclass( EDA_UNITS_T aUnits, wxGrid* grid, int row, const NETCLASSPTR& nc )
+static void gridRowToNetclass( EDA_UNITS aUnits, wxGrid* grid, int row, const NETCLASSPTR& nc )
 {
     nc->SetName( grid->GetCellValue( row, GRID_NAME ) );
 

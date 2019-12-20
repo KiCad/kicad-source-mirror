@@ -84,7 +84,7 @@ wxString DRC_ITEM::GetErrorText() const
     }
 }
 
-wxString DRC_ITEM::ShowCoord( EDA_UNITS_T aUnits, const wxPoint& aPos )
+wxString DRC_ITEM::ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos )
 {
     return wxString::Format( "@(%s, %s)",
                              MessageTextFromValue( aUnits, aPos.x ),
@@ -92,7 +92,7 @@ wxString DRC_ITEM::ShowCoord( EDA_UNITS_T aUnits, const wxPoint& aPos )
 }
 
 
-wxString DRC_ITEM::ShowHtml( EDA_UNITS_T aUnits ) const
+wxString DRC_ITEM::ShowHtml( EDA_UNITS aUnits ) const
 {
     wxString mainText = m_MainText;
     // a wxHtmlWindows does not like < and > in the text to display
@@ -138,7 +138,7 @@ wxString DRC_ITEM::ShowHtml( EDA_UNITS_T aUnits ) const
 }
 
 
-wxString DRC_ITEM::ShowReport( EDA_UNITS_T aUnits ) const
+wxString DRC_ITEM::ShowReport( EDA_UNITS aUnits ) const
 {
     if( m_hasSecondItem )
     {
