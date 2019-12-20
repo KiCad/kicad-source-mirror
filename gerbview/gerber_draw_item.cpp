@@ -643,7 +643,7 @@ void GERBER_DRAW_ITEM::PrintGerberPoly( wxDC* aDC, COLOR4D aColor, const wxPoint
 }
 
 
-void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     wxString text;
@@ -955,7 +955,7 @@ SEARCH_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData, cons
 }
 
 
-wxString GERBER_DRAW_ITEM::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString GERBER_DRAW_ITEM::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     wxString layerName;
 

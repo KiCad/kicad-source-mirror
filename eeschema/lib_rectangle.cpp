@@ -182,7 +182,7 @@ void LIB_RECTANGLE::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
 }
 
 
-void LIB_RECTANGLE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
+void LIB_RECTANGLE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
@@ -248,7 +248,7 @@ bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-wxString LIB_RECTANGLE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString LIB_RECTANGLE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Rectangle from (%s, %s) to (%s, %s)" ),
                              MessageTextFromValue( aUnits, m_Pos.x ),

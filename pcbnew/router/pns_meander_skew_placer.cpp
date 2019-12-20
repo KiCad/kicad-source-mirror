@@ -154,7 +154,7 @@ bool MEANDER_SKEW_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 }
 
 
-const wxString MEANDER_SKEW_PLACER::TuningInfo( EDA_UNITS_T aUnits ) const
+const wxString MEANDER_SKEW_PLACER::TuningInfo( EDA_UNITS aUnits ) const
 {
     wxString status;
 

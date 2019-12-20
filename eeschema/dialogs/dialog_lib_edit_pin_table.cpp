@@ -58,11 +58,11 @@ private:
     // contains only a single pin.
     std::vector<LIB_PINS> m_rows;
 
-    EDA_UNITS_T           m_userUnits;
+    EDA_UNITS           m_userUnits;
     bool                  m_edited;
 
 public:
-    PIN_TABLE_DATA_MODEL( EDA_UNITS_T aUserUnits ) :
+    PIN_TABLE_DATA_MODEL( EDA_UNITS aUserUnits ) :
             m_userUnits( aUserUnits ), m_edited( false )
     {}
 
@@ -97,7 +97,7 @@ public:
         return GetValue( m_rows[ aRow ], aCol, m_userUnits );
     }
 
-    static wxString GetValue( const LIB_PINS& pins, int aCol, EDA_UNITS_T aUserUnits )
+    static wxString GetValue( const LIB_PINS& pins, int aCol, EDA_UNITS aUserUnits )
     {
         wxString fieldValue;
 
@@ -233,7 +233,7 @@ public:
     }
 
     static bool compare( const LIB_PINS& lhs, const LIB_PINS& rhs,
-                         int sortCol, bool ascending, EDA_UNITS_T units )
+                         int sortCol, bool ascending, EDA_UNITS units )
     {
         wxString lhStr = GetValue( lhs, sortCol, units );
         wxString rhStr = GetValue( rhs, sortCol, units );

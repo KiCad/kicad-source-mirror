@@ -100,7 +100,7 @@ public:
 
 private:
     SCH_BASE_FRAME*       m_frame;
-    EDA_UNITS_T           m_userUnits;
+    EDA_UNITS           m_userUnits;
     LIB_PART*             m_part;
 
     SCH_FIELD_VALIDATOR   m_fieldNameValidator;

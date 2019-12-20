@@ -177,7 +177,7 @@ public:
 class DRCLISTBOX : public wxHtmlListBox
 {
 private:
-    EDA_UNITS_T    m_units;
+    EDA_UNITS    m_units;
     DRC_ITEM_LIST* m_list;     ///< wxHtmlListBox does not own the list, I do
 
 public:
@@ -186,7 +186,7 @@ public:
             long style = 0, const wxString choices[] = NULL, int unused = 0)
         : wxHtmlListBox( parent, id, pos, size, style )
     {
-        m_units = EDA_UNITS_T::MILLIMETRES;
+        m_units = EDA_UNITS::MILLIMETRES;
         m_list = 0;
     }
 
@@ -204,7 +204,7 @@ public:
      * @param aList The DRC_ITEM_LIST* containing the DRC_ITEMs which will be
      *  displayed in the wxHtmlListBox
      */
-    void SetList( EDA_UNITS_T aUnits, DRC_ITEM_LIST* aList )
+    void SetList( EDA_UNITS aUnits, DRC_ITEM_LIST* aList )
     {
         delete m_list;
 

@@ -165,7 +165,7 @@ protected:
 
     void update() override
     {
-        EDA_UNITS_T            units = m_frame.GetUserUnits();
+        EDA_UNITS            units = m_frame.GetUserUnits();
         BOARD_DESIGN_SETTINGS& bds = m_frame.GetBoard()->GetDesignSettings();
         bool                   useIndex = !bds.m_UseConnectedTrackWidth &&
                                           !bds.UseCustomTrackViaSize();
@@ -294,7 +294,7 @@ protected:
 
     void update() override
     {
-        EDA_UNITS_T                   units = m_frame.GetUserUnits();
+        EDA_UNITS                   units = m_frame.GetUserUnits();
         const BOARD_DESIGN_SETTINGS&  bds = m_frame.GetBoard()->GetDesignSettings();
 
         Clear();

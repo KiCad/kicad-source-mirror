@@ -61,18 +61,18 @@ IMAGE_SIZE::IMAGE_SIZE()
     m_outputSize = 0.0;
     m_originalDPI = DEFAULT_DPI;
     m_originalSizePixels = 0;
-    m_unit = EDA_UNITS_T::MILLIMETRES;
+    m_unit = EDA_UNITS::MILLIMETRES;
 }
 
 
 void IMAGE_SIZE::SetOutputSizeFromInitialImageSize()
 {
     // Set the m_outputSize value from the m_originalSizePixels and the selected unit
-    if( m_unit == EDA_UNITS_T::MILLIMETRES )
+    if( m_unit == EDA_UNITS::MILLIMETRES )
     {
         m_outputSize = (double)GetOriginalSizePixels() / m_originalDPI * 25.4;
     }
-    else if( m_unit == EDA_UNITS_T::INCHES )
+    else if( m_unit == EDA_UNITS::INCHES )
     {
         m_outputSize = (double)GetOriginalSizePixels() / m_originalDPI;
     }
@@ -88,11 +88,11 @@ int IMAGE_SIZE::GetOutputDPI()
 {
     int outputDPI;
 
-    if( m_unit == EDA_UNITS_T::MILLIMETRES )
+    if( m_unit == EDA_UNITS::MILLIMETRES )
     {
         outputDPI = GetOriginalSizePixels() / ( m_outputSize / 25.4 );
     }
-    else if( m_unit == EDA_UNITS_T::INCHES )
+    else if( m_unit == EDA_UNITS::INCHES )
     {
         outputDPI = GetOriginalSizePixels() / m_outputSize;
     }
@@ -105,7 +105,7 @@ int IMAGE_SIZE::GetOutputDPI()
 }
 
 
-void IMAGE_SIZE::SetUnit( EDA_UNITS_T aUnit )
+void IMAGE_SIZE::SetUnit( EDA_UNITS aUnit )
 {
     // Set the unit used for m_outputSize, and convert the old m_outputSize value
     // to the value in new unit
@@ -115,11 +115,11 @@ void IMAGE_SIZE::SetUnit( EDA_UNITS_T aUnit )
     // Convert m_outputSize to mm:
     double size_mm;
 
-    if( m_unit == EDA_UNITS_T::MILLIMETRES )
+    if( m_unit == EDA_UNITS::MILLIMETRES )
     {
         size_mm = m_outputSize;
     }
-    else if( m_unit == EDA_UNITS_T::INCHES )
+    else if( m_unit == EDA_UNITS::INCHES )
     {
         size_mm = m_outputSize * 25.4;
     }
@@ -134,11 +134,11 @@ void IMAGE_SIZE::SetUnit( EDA_UNITS_T aUnit )
     }
 
     // Convert m_outputSize to new value:
-    if( aUnit == EDA_UNITS_T::MILLIMETRES )
+    if( aUnit == EDA_UNITS::MILLIMETRES )
     {
         m_outputSize = size_mm;
     }
-    else if( aUnit == EDA_UNITS_T::INCHES )
+    else if( aUnit == EDA_UNITS::INCHES )
     {
         m_outputSize = size_mm / 25.4;
     }
@@ -471,11 +471,11 @@ wxString BM2CMP_FRAME::FormatOutputSize( double aSize )
 {
     wxString text;
 
-    if( getUnitFromSelection() == EDA_UNITS_T::MILLIMETRES )
+    if( getUnitFromSelection() == EDA_UNITS::MILLIMETRES )
     {
         text.Printf( "%.1f", aSize );
     }
-    else if( getUnitFromSelection() == EDA_UNITS_T::INCHES )
+    else if( getUnitFromSelection() == EDA_UNITS::INCHES )
     {
         text.Printf( "%.2f", aSize );
     }
@@ -506,23 +506,23 @@ void BM2CMP_FRAME::updateImageInfo()
 }
 
 
-EDA_UNITS_T BM2CMP_FRAME::getUnitFromSelection()
+EDA_UNITS BM2CMP_FRAME::getUnitFromSelection()
 {
-    // return the EDA_UNITS_T from the m_PixelUnit choice
+    // return the EDA_UNITS from the m_PixelUnit choice
     switch( m_PixelUnit->GetSelection() )
     {
     case 1:
-        return EDA_UNITS_T::INCHES;
+        return EDA_UNITS::INCHES;
 
     case 2:
-        return EDA_UNITS_T::UNSCALED_UNITS;
+        return EDA_UNITS::UNSCALED;
 
     case 0:
     default:
         break;
     }
 
-    return EDA_UNITS_T::MILLIMETRES;
+    return EDA_UNITS::MILLIMETRES;
 }
 
 
@@ -536,7 +536,7 @@ void BM2CMP_FRAME::OnSizeChangeX( wxCommandEvent& event )
         {
             double calculatedY = new_size / m_AspectRatio;
 
-            if( getUnitFromSelection() == EDA_UNITS_T::UNSCALED_UNITS )
+            if( getUnitFromSelection() == EDA_UNITS::UNSCALED )
             {
                 // for units in DPI, keeping aspect ratio cannot use m_AspectRatioLocked.
                 // just rescale the other dpi
@@ -565,7 +565,7 @@ void BM2CMP_FRAME::OnSizeChangeY( wxCommandEvent& event )
         {
             double calculatedX = new_size * m_AspectRatio;
 
-            if( getUnitFromSelection() == EDA_UNITS_T::UNSCALED_UNITS )
+            if( getUnitFromSelection() == EDA_UNITS::UNSCALED )
             {
                 // for units in DPI, keeping aspect ratio cannot use m_AspectRatioLocked.
                 // just rescale the other dpi

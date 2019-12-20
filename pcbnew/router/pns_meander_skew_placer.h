@@ -49,7 +49,7 @@ public:
     bool Move( const VECTOR2I& aP, ITEM* aEndItem ) override;
 
     /// @copydoc MEANDER_PLACER_BASE::TuningInfo()
-    const wxString TuningInfo( EDA_UNITS_T aUnits ) const override;
+    const wxString TuningInfo( EDA_UNITS aUnits ) const override;
 
 private:
     long long int currentSkew() const;

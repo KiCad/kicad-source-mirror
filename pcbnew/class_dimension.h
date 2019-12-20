@@ -62,7 +62,7 @@ class DIMENSION : public BOARD_ITEM
 {
     int         m_Width;        ///< Line width
     int         m_Shape;        ///< Currently always 0.
-    EDA_UNITS_T m_Unit;         ///< 0 = inches, 1 = mm
+    EDA_UNITS m_Unit;         ///< 0 = inches, 1 = mm
     bool        m_UseMils;      ///< If inches, use mils.
     int         m_Value;        ///< value of PCB dimensions.
     int         m_Height;       ///< length of feature lines
@@ -185,13 +185,13 @@ public:
      */
     void AdjustDimensionDetails( int aPrecision );
 
-    void GetUnits( EDA_UNITS_T& aUnits, bool& aUseMils ) const
+    void GetUnits( EDA_UNITS& aUnits, bool& aUseMils ) const
     {
         aUnits = m_Unit;
         aUseMils = m_UseMils;
     }
 
-    void SetUnits( EDA_UNITS_T aUnits, bool aUseMils )
+    void SetUnits( EDA_UNITS aUnits, bool aUseMils )
     {
         m_Unit = aUnits;
         m_UseMils = aUseMils;
@@ -222,7 +222,7 @@ public:
      */
     void Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight = false );
 
-    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
@@ -235,7 +235,7 @@ public:
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
 
-    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 

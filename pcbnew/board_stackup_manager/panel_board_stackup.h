@@ -228,7 +228,7 @@ private:
     std::vector<BOARD_STACKUP_ROW_UI_ITEM> m_rowUiItemsList;
     BOARD*          m_board;
     BOARD_DESIGN_SETTINGS*  m_brdSettings;
-    EDA_UNITS_T     m_units;
+    EDA_UNITS     m_units;
     PCB_EDIT_FRAME* m_frame;
     wxSize          m_numericTextCtrlSize;  // Best size to enter values with units in wxTextCtrl
     wxSize          m_numericFieldsSize;    // Best size to enter double values in wxTextCtrl

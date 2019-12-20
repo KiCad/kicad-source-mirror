@@ -388,7 +388,7 @@ const EDA_RECT LIB_ARC::GetBoundingBox() const
 }
 
 
-void LIB_ARC::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void LIB_ARC::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
@@ -406,7 +406,7 @@ void LIB_ARC::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >
 }
 
 
-wxString LIB_ARC::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString LIB_ARC::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Arc center (%s, %s), radius %s" ),
                              MessageTextFromValue( aUnits, m_Pos.x ),

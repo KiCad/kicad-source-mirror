@@ -83,7 +83,7 @@ void NETINFO_ITEM::SetClass( const NETCLASSPTR& aNetClass )
 }
 
 
-void NETINFO_ITEM::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void NETINFO_ITEM::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString  txt;
     double    lengthnet = 0.0;      // This  is the length of tracks on pcb

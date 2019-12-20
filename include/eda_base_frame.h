@@ -148,7 +148,7 @@ protected:
 
     wxString        m_mruPath;              // Most recently used path.
 
-    EDA_UNITS_T     m_userUnits;
+    EDA_UNITS     m_userUnits;
 
     ///> Default style flags used for wxAUI toolbars
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
@@ -208,10 +208,10 @@ public:
     /**
      * Return the user units currently in use.
      */
-    EDA_UNITS_T GetUserUnits() const { return m_userUnits; }
-    void SetUserUnits( EDA_UNITS_T aUnits ) { m_userUnits = aUnits; }
+    EDA_UNITS GetUserUnits() const { return m_userUnits; }
+    void SetUserUnits( EDA_UNITS aUnits ) { m_userUnits = aUnits; }
 
-    void ChangeUserUnits( EDA_UNITS_T aUnits )
+    void ChangeUserUnits( EDA_UNITS aUnits )
     {
         SetUserUnits( aUnits );
         unitsChangeRefresh();

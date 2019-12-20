@@ -1151,7 +1151,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     frame()->PushTool( tool );
     Activate();
 
-    EDA_UNITS_T units = frame()->GetUserUnits();
+    EDA_UNITS units = frame()->GetUserUnits();
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
     KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units );
 

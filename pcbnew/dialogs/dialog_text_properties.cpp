@@ -248,21 +248,21 @@ void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
 
 void DIALOG_TEXT_PROPERTIES::OnDimensionTextChange( wxCommandEvent& event )
 {
-    EDA_UNITS_T units = EDA_UNITS_T::UNSCALED_UNITS;
+    EDA_UNITS units = EDA_UNITS::UNSCALED;
     bool useMils;
 
     FetchUnitsFromString( m_DimensionText->GetValue(), units, useMils );
 
-    if( units != EDA_UNITS_T::UNSCALED_UNITS )
+    if( units != EDA_UNITS::UNSCALED )
         m_DimensionUnitsOpt->SetSelection(
-                units == EDA_UNITS_T::MILLIMETRES ? 2 : useMils ? 1 : 0 );
+                units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
 }
 
 
 void DIALOG_TEXT_PROPERTIES::OnDimensionUnitsChange( wxCommandEvent& event )
 {
     DIMENSION* dimension = (DIMENSION*) m_item;
-    EDA_UNITS_T units;
+    EDA_UNITS units;
     bool useMils;
 
     // Get default units in case dimension text doesn't contain units.
@@ -273,15 +273,15 @@ void DIALOG_TEXT_PROPERTIES::OnDimensionUnitsChange( wxCommandEvent& event )
     switch( event.GetSelection() )
     {
     case 0:
-        units = EDA_UNITS_T::INCHES;
+        units = EDA_UNITS::INCHES;
         useMils = false;
         break;
     case 1:
-        units = EDA_UNITS_T::INCHES;
+        units = EDA_UNITS::INCHES;
         useMils = true;
         break;
     case 2:
-        units = EDA_UNITS_T::MILLIMETRES;
+        units = EDA_UNITS::MILLIMETRES;
         useMils = false;
         break;
     default: break;
@@ -313,12 +313,12 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         m_DimensionText->SetSelection( -1, -1 );
 
         DIMENSION* dimension = (DIMENSION*) m_item;
-        EDA_UNITS_T units;
+        EDA_UNITS units;
         bool useMils;
         dimension->GetUnits( units, useMils );
 
         m_DimensionUnitsOpt->SetSelection(
-                units == EDA_UNITS_T::MILLIMETRES ? 2 : useMils ? 1 : 0 );
+                units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
 
         m_linesThickness.SetValue( dimension->GetWidth() );
     }
@@ -424,13 +424,13 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         switch( m_DimensionUnitsOpt->GetSelection() )
         {
         case 0:
-            dimension->SetUnits( EDA_UNITS_T::INCHES, false );
+            dimension->SetUnits( EDA_UNITS::INCHES, false );
             break;
         case 1:
-            dimension->SetUnits( EDA_UNITS_T::INCHES, true );
+            dimension->SetUnits( EDA_UNITS::INCHES, true );
             break;
         case 2:
-            dimension->SetUnits( EDA_UNITS_T::MILLIMETRES, false );
+            dimension->SetUnits( EDA_UNITS::MILLIMETRES, false );
             break;
         default: break;
         }

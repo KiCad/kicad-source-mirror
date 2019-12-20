@@ -64,7 +64,7 @@ public:
         BOARD_ITEM( nullptr, NOT_USED )
     {}
 
-    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override
     {
         return _( "(Deleted Item)" );
     }
@@ -670,7 +670,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
 }
 
 
-wxString BOARD::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString BOARD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "PCB" ) );
 }
@@ -815,7 +815,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 }
 
 
-void BOARD::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void BOARD::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString txt;
     int      viasCount = 0;

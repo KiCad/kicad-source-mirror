@@ -60,7 +60,7 @@ public:
      * Normally not needed (as the UNIT_BINDER inherits from the parent frame), but can be
      * used to set to DEGREES for angular controls.
      */
-    virtual void SetUnits( EDA_UNITS_T aUnits, bool aUseMils = false );
+    virtual void SetUnits( EDA_UNITS aUnits, bool aUseMils = false );
 
     /**
      * Function SetValue
@@ -133,7 +133,7 @@ protected:
     wxStaticText*     m_unitLabel;
 
     ///> Currently used units.
-    EDA_UNITS_T       m_units;
+    EDA_UNITS       m_units;
     bool              m_useMils;
 
     ///> Validation support.

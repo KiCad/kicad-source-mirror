@@ -81,7 +81,7 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed =
  * @param aValue The value in internal units to convert.
  * @param aUseMils Indicates mils should be used for imperial units (inches).
  */
-double To_User_Unit( EDA_UNITS_T aUnit, double aValue, bool aUseMils = false );
+double To_User_Unit( EDA_UNITS aUnit, double aValue, bool aUseMils = false );
 
 /**
  * Function AngleToStringDegrees
@@ -108,11 +108,11 @@ wxString AngleToStringDegrees( double aAngle );
  * @param aUseMils Convert inch values to mils if true.
  * @return The converted string for display in user interface elements.
  */
-wxString MessageTextFromValue( EDA_UNITS_T aUnits, double aValue, bool aUseMils = false );
+wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aUseMils = false );
 
-wxString MessageTextFromValue( EDA_UNITS_T aUnits, int aValue, bool aUseMils = false );
+wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, bool aUseMils = false );
 
-wxString MessageTextFromValue( EDA_UNITS_T aUnits, long long int aValue, bool aUseMils = false );
+wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, bool aUseMils = false );
 
 /**
  * Function StringFromValue
@@ -135,13 +135,13 @@ wxString MessageTextFromValue( EDA_UNITS_T aUnits, long long int aValue, bool aU
  * @return A wxString object containing value and optionally the symbol unit (like 2.000 mm)
  */
 wxString StringFromValue(
-        EDA_UNITS_T aUnit, double aValue, bool aAddUnitSymbol = false, bool aUseMils = false );
+        EDA_UNITS aUnit, double aValue, bool aAddUnitSymbol = false, bool aUseMils = false );
 
 /**
  * Return in internal units the value "val" given in a real unit
  * such as "in", "mm" or "deg"
  */
-double From_User_Unit( EDA_UNITS_T aUnit, double aValue, bool aUseMils = false );
+double From_User_Unit( EDA_UNITS aUnit, double aValue, bool aUseMils = false );
 
 
 /**
@@ -152,7 +152,7 @@ double From_User_Unit( EDA_UNITS_T aUnit, double aValue, bool aUseMils = false )
  * @param aUseMils Indicates mils should be used for imperial units (inches).
  * @return A double representing that value in internal units
  */
-double DoubleValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue,
+double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue,
                               bool aUseMils = false );
 
 /**
@@ -165,13 +165,13 @@ double DoubleValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue,
  * @return The string from Value, according to units (inch, mm ...) for display,
  */
 long long int ValueFromString(
-        EDA_UNITS_T aUnits, const wxString& aTextValue, bool aUseMils = false );
+        EDA_UNITS aUnits, const wxString& aTextValue, bool aUseMils = false );
 
 /**
  * Function FetchUnitsFromString
  * writes any unit info found in the string to aUnits and aUseMils.
  */
-void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS_T& aUnits, bool& aUseMils );
+void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits, bool& aUseMils );
 
 /**
  * Get the units string for a given units type.
@@ -179,7 +179,7 @@ void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS_T& aUnits, bool
  * @param aUnits - The units requested.
  * @return The human readable units string.
  */
-wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit, bool aUseMils = false );
+wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils = false );
 
 /**
  * Function FormatInternalUnits

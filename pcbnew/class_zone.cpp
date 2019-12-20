@@ -677,7 +677,7 @@ bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos ) const
 }
 
 
-void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
@@ -931,7 +931,7 @@ bool ZONE_CONTAINER::AppendCorner( wxPoint aPosition, int aHoleIdx, bool aAllowD
 }
 
 
-wxString ZONE_CONTAINER::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString ZONE_CONTAINER::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     wxString text;
 

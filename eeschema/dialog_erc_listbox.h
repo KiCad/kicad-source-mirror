@@ -68,7 +68,7 @@ public:
      * Function DisplayList();
      * Build the Html marker list and show it
      */
-    void DisplayList( EDA_UNITS_T aUnits )
+    void DisplayList( EDA_UNITS aUnits )
     {
         wxString htmlpage;
         wxColour bgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );

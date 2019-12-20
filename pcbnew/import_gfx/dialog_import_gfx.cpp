@@ -171,7 +171,7 @@ void DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX::onUnitPositionSelection( wxCommandEve
 double DIALOG_IMPORT_GFX::getPCBdefaultLineWidthMM()
 {
     double value =
-            DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, m_textCtrlLineWidth->GetValue() );
+            DoubleValueFromString( EDA_UNITS::UNSCALED, m_textCtrlLineWidth->GetValue() );
 
     switch( m_lineWidthUnits )
     {
@@ -304,7 +304,7 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
         // Set coordinates offset for import (offset is given in mm)
         m_importer->SetImportOffsetMM( m_origin );
         m_scaleImport = DoubleValueFromString(
-                EDA_UNITS_T::UNSCALED_UNITS, m_textCtrlImportScale->GetValue() );
+                EDA_UNITS::UNSCALED, m_textCtrlImportScale->GetValue() );
 
         // The line width is meant to be in pcbnew units, so we scale the import width before
         // applying
@@ -355,8 +355,8 @@ void DIALOG_IMPORT_GFX::originOptionOnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_IMPORT_GFX::updatePcbImportOffsets_mm()
 {
-    m_origin.x = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, m_DxfPcbXCoord->GetValue() );
-    m_origin.y = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, m_DxfPcbYCoord->GetValue() );
+    m_origin.x = DoubleValueFromString( EDA_UNITS::UNSCALED, m_DxfPcbXCoord->GetValue() );
+    m_origin.y = DoubleValueFromString( EDA_UNITS::UNSCALED, m_DxfPcbYCoord->GetValue() );
 
     if( m_originUnits )   // Units are inches
         m_origin = m_origin * 25.4;

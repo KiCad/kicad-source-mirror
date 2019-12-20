@@ -1350,7 +1350,7 @@ void DRC::doFootprintOverlappingDrc()
 }
 
 
-void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS_T aUnits,
+void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits,
                           DRC_LIST& aDRCList )
 {
 

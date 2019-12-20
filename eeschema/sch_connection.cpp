@@ -371,7 +371,7 @@ void SCH_CONNECTION::AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 
     if( auto driver = Driver() )
     {
-        msg.Printf( "%s at %p", driver->GetSelectMenuText( EDA_UNITS_T::MILLIMETRES ), driver );
+        msg.Printf( "%s at %p", driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ), driver );
         aList.push_back( MSG_PANEL_ITEM( "Connection Source", msg, RED ) );
     }
 }

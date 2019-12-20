@@ -106,27 +106,27 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
 
     // Import default parameters from widgets
     msg = m_textCtrlDefaultLineWidth->GetValue();
-    model.m_DefaultLineWidth = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+    model.m_DefaultLineWidth = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
     msg = m_textCtrlDefaultTextSizeX->GetValue();
-    model.m_DefaultTextSize.x = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+    model.m_DefaultTextSize.x = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
     msg = m_textCtrlDefaultTextSizeY->GetValue();
-    model.m_DefaultTextSize.y = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+    model.m_DefaultTextSize.y = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
     msg = m_textCtrlDefaultTextThickness->GetValue();
-    model.m_DefaultTextThickness = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+    model.m_DefaultTextThickness = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
     // Get page margins values
     msg = m_textCtrlRightMargin->GetValue();
-    model.SetRightMargin( DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg ) );
+    model.SetRightMargin( DoubleValueFromString( EDA_UNITS::UNSCALED, msg ) );
     msg = m_textCtrlDefaultBottomMargin->GetValue();
-    model.SetBottomMargin( DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg ) );
+    model.SetBottomMargin( DoubleValueFromString( EDA_UNITS::UNSCALED, msg ) );
 
     // cordinates of the left top corner are the left and top margins
     msg = m_textCtrlLeftMargin->GetValue();
-    model.SetLeftMargin( DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg ) );
+    model.SetLeftMargin( DoubleValueFromString( EDA_UNITS::UNSCALED, msg ) );
     msg = m_textCtrlTopMargin->GetValue();
-    model.SetTopMargin( DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg ) );
+    model.SetTopMargin( DoubleValueFromString( EDA_UNITS::UNSCALED, msg ) );
 
     return true;
 }
@@ -354,14 +354,14 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
 
     // Import thickness
     msg = m_textCtrlThickness->GetValue();
-    aItem->m_LineWidth = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+    aItem->m_LineWidth = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
     // Import Start point
     msg = m_textCtrlPosX->GetValue();
-    aItem->m_Pos.m_Pos.x = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+    aItem->m_Pos.m_Pos.x = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
     msg = m_textCtrlPosY->GetValue();
-    aItem->m_Pos.m_Pos.y = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+    aItem->m_Pos.m_Pos.y = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
     switch( m_comboBoxCornerPos->GetSelection() )
     {
@@ -373,10 +373,10 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
 
     // Import End point
     msg = m_textCtrlEndX->GetValue();
-    aItem->m_End.m_Pos.x = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+    aItem->m_End.m_Pos.x = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
     msg = m_textCtrlEndY->GetValue();
-    aItem->m_End.m_Pos.y = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+    aItem->m_End.m_Pos.y = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
     switch( m_comboBoxCornerEnd->GetSelection() )
     {
@@ -393,10 +393,10 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
     aItem->m_RepeatCount = itmp;
 
     msg = m_textCtrlStepX->GetValue();
-    aItem->m_IncrementVector.x = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+    aItem->m_IncrementVector.x = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
     msg = m_textCtrlStepY->GetValue();
-    aItem->m_IncrementVector.y = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+    aItem->m_IncrementVector.y = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
     if( aItem->GetType() == WS_DATA_ITEM::WS_TEXT )
     {
@@ -426,21 +426,21 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
         }
 
         msg = m_textCtrlRotation->GetValue();
-        item->m_Orient = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+        item->m_Orient = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
         // Import text size
         msg = m_textCtrlTextSizeX->GetValue();
-        item->m_TextSize.x = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+        item->m_TextSize.x = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
         msg = m_textCtrlTextSizeY->GetValue();
-        item->m_TextSize.y = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+        item->m_TextSize.y = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
         // Import constraints:
         msg = m_textCtrlConstraintX->GetValue();
-        item->m_BoundingBoxSize.x = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+        item->m_BoundingBoxSize.x = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
 
         msg = m_textCtrlConstraintY->GetValue();
-        item->m_BoundingBoxSize.y = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+        item->m_BoundingBoxSize.y = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
     }
 
     if( aItem->GetType() == WS_DATA_ITEM::WS_POLYPOLYGON )
@@ -448,7 +448,7 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
         WS_DATA_ITEM_POLYGONS* item = (WS_DATA_ITEM_POLYGONS*) aItem;
 
         msg = m_textCtrlRotation->GetValue();
-        item->m_Orient = DoubleValueFromString( EDA_UNITS_T::UNSCALED_UNITS, msg );
+        item->m_Orient = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
     }
 
     if( aItem->GetType() == WS_DATA_ITEM::WS_BITMAP )

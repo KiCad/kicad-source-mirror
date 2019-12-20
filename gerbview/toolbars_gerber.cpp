@@ -274,8 +274,8 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
     // Build the aperture list of the current layer, and add it to the combo box:
     wxArrayString dcode_list;
     wxString msg;
-    const char*   units = GetUserUnits() == EDA_UNITS_T::INCHES ? "mils" : "mm";
-    double        scale = GetUserUnits() == EDA_UNITS_T::INCHES ? IU_PER_MILS : IU_PER_MM;
+    const char*   units = GetUserUnits() == EDA_UNITS::INCHES ? "mils" : "mm";
+    double        scale = GetUserUnits() == EDA_UNITS::INCHES ? IU_PER_MILS : IU_PER_MM;
 
     for( int ii = 0; ii < TOOLS_MAX_COUNT; ii++ )
     {
@@ -474,8 +474,8 @@ void GERBVIEW_FRAME::SyncToolbars()
 
     TOGGLE_TOOL( m_optionsToolBar, ACTIONS::selectionTool );
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != EDA_UNITS_T::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS_T::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
     m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,      !galOpts.m_fullscreenCursor );
     m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::flashedDisplayOutlines,
                                                   !m_DisplayOptions.m_DisplayFlashedItemsFill );

@@ -2168,7 +2168,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             dimension->Text().SetTimeStamp( dimension->GetTimeStamp() );
             dimension->SetPosition( text->GetTextPos() );
 
-            EDA_UNITS_T units = EDA_UNITS_T::INCHES;
+            EDA_UNITS units = EDA_UNITS::INCHES;
             bool useMils = false;
             FetchUnitsFromString( text->GetText(), units, useMils );
             dimension->SetUnits( units, useMils );

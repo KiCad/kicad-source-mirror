@@ -61,7 +61,7 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     void BeginEdit( const wxPoint aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;
@@ -90,7 +90,7 @@ public:
     void SetRadius( int aRadius ) { m_EndPos = wxPoint( m_Pos.x + aRadius, m_Pos.y ); }
     int GetRadius() const { return KiROUND( GetLineLength( m_EndPos, m_Pos ) ); }
 
-    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 

@@ -193,7 +193,7 @@ BITMAP_DEF SCH_BITMAP::GetMenuImage() const
 }
 
 
-void SCH_BITMAP::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
+void SCH_BITMAP::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     aList.push_back( MSG_PANEL_ITEM( _( "Bitmap" ), wxEmptyString, RED ) );
 

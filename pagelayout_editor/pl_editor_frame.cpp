@@ -80,7 +80,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                         wxDefaultPosition, wxDefaultSize,
                         KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME )
 {
-    m_userUnits = EDA_UNITS_T::MILLIMETRES;
+    m_userUnits = EDA_UNITS::MILLIMETRES;
     m_zoomLevelCoeff = 290.0;   // Adjusted to roughly displays zoom level = 1
                                 // when the screen shows a 1:1 image
                                 // obviously depends on the monitor,
@@ -570,10 +570,10 @@ void PL_EDITOR_FRAME::DisplayGridMsg()
 
     switch( m_userUnits )
     {
-    case EDA_UNITS_T::INCHES:
+    case EDA_UNITS::INCHES:
         gridformatter = "grid %.3f";
         break;
-    case EDA_UNITS_T::MILLIMETRES:
+    case EDA_UNITS::MILLIMETRES:
         gridformatter = "grid %.4f";
         break;
     default:          gridformatter = "grid %f";   break;
@@ -640,13 +640,13 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 
     switch( GetUserUnits() )
     {
-    case EDA_UNITS_T::INCHES:
+    case EDA_UNITS::INCHES:
         SetStatusText( _( "inches" ), 6 );
         break;
-    case EDA_UNITS_T::MILLIMETRES:
+    case EDA_UNITS::MILLIMETRES:
         SetStatusText( _( "mm" ), 6 );
         break;
-    case EDA_UNITS_T::UNSCALED_UNITS:
+    case EDA_UNITS::UNSCALED:
         SetStatusText( wxEmptyString, 6 );
         break;
     default:             wxASSERT( false );                 break;

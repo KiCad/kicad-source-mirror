@@ -48,7 +48,7 @@ double PreviewOverlayDeemphAlpha( bool aDeemph = true );
  * with an optional prefix and unit suffix.
  */
 wxString DimensionLabel( const wxString& prefix, double aVal,
-                         EDA_UNITS_T aUnits );
+                         EDA_UNITS aUnits );
 
 /**
  * Set the GAL glyph height to a constant scaled value, so that it

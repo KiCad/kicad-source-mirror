@@ -32,7 +32,7 @@
 /* Class to display and edit a coordinated INCHES or MM */
 /********************************************************/
 EDA_POSITION_CTRL::EDA_POSITION_CTRL( wxWindow* parent, const wxString& title, const wxPoint& aPos,
-                                      EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer )
+                                      EDA_UNITS user_unit, wxBoxSizer* BoxSizer )
 {
     m_UserUnit = user_unit;
 
@@ -88,7 +88,7 @@ void EDA_POSITION_CTRL::SetValue( int x_value, int y_value )
 /* EDA_SIZE_CTRL */
 /*******************/
 EDA_SIZE_CTRL::EDA_SIZE_CTRL( wxWindow* parent, const wxString& title, const wxSize& aSize,
-                              EDA_UNITS_T aUnit, wxBoxSizer* aBoxSizer ) :
+                              EDA_UNITS aUnit, wxBoxSizer* aBoxSizer ) :
     EDA_POSITION_CTRL( parent, title, wxPoint( aSize.x, aSize.y ), aUnit, aBoxSizer )
 {
 }

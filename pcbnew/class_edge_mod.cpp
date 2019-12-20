@@ -238,7 +238,7 @@ void EDGE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset
 
 
 // see class_edge_mod.h
-void EDGE_MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void EDGE_MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
@@ -260,7 +260,7 @@ void EDGE_MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_IT
 
 
 
-wxString EDGE_MODULE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString EDGE_MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Graphic %s of %s on %s" ),
                              ShowShape( m_Shape  ),

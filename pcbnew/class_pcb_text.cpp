@@ -82,7 +82,7 @@ void TEXTE_PCB::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 }
 
 
-void TEXTE_PCB::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void TEXTE_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString    msg;
 
@@ -158,7 +158,7 @@ void TEXTE_PCB::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-wxString TEXTE_PCB::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString TEXTE_PCB::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Pcb Text \"%s\" on %s"), ShortenedShownText(), GetLayerName() );
 }

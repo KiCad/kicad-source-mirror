@@ -86,7 +86,7 @@ EDA_ITEM* VIA::Clone() const
 }
 
 
-wxString VIA::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     wxString format;
     BOARD* board = GetBoard();
@@ -773,7 +773,7 @@ unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 
 // see class_track.h
-void TRACK::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void TRACK::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     BOARD*   board = GetBoard();
@@ -823,7 +823,7 @@ void TRACK::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& 
     }
 }
 
-void TRACK::GetMsgPanelInfoBase_Common( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void TRACK::GetMsgPanelInfoBase_Common( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
@@ -883,7 +883,7 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_UNITS_T aUnits, std::vector< MSG_PAN
     aList.emplace_back( _( "Status" ), msg, MAGENTA );
 }
 
-void TRACK::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void TRACK::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     BOARD* board = GetBoard();
@@ -910,7 +910,7 @@ void TRACK::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM
     aList.emplace_back( _( "Segment Length" ), msg, DARKCYAN );
 }
 
-void VIA::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void VIA::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     BOARD*   board = GetBoard();
@@ -1044,7 +1044,7 @@ bool VIA::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 }
 
 
-wxString TRACK::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString TRACK::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _("Track %s %s on %s, length: %s" ),
                              MessageTextFromValue( aUnits, m_Width ),

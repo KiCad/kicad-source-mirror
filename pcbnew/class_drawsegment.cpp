@@ -446,7 +446,7 @@ void DRAWSEGMENT::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& aOffse
 }
 
 
-void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
@@ -835,7 +835,7 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 }
 
 
-wxString DRAWSEGMENT::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString DRAWSEGMENT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Pcb Graphic %s, length %s on %s" ),
                              ShowShape( m_Shape ),

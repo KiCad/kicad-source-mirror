@@ -263,11 +263,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     };
     auto imperialUnitsCondition = [ this ]( const SELECTION &aSel )
     {
-        return GetUserUnits() == EDA_UNITS_T::INCHES;
+        return GetUserUnits() == EDA_UNITS::INCHES;
     };
     auto metricUnitsCondition = [ this ]( const SELECTION &aSel )
     {
-        return GetUserUnits() == EDA_UNITS_T::MILLIMETRES;
+        return GetUserUnits() == EDA_UNITS::MILLIMETRES;
     };
     auto fullCrosshairCondition = [ this ]( const SELECTION &aSel )
     {

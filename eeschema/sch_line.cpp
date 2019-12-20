@@ -622,7 +622,7 @@ void SCH_LINE::GetSelectedPoints( std::vector< wxPoint >& aPoints ) const
 }
 
 
-wxString SCH_LINE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString SCH_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     wxString txtfmt, orient;
 
@@ -787,7 +787,7 @@ void SCH_LINE::SetPosition( const wxPoint& aPosition )
 }
 
 
-void SCH_LINE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
+void SCH_LINE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 

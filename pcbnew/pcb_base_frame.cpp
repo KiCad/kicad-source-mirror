@@ -560,11 +560,11 @@ void PCB_BASE_FRAME::DisplayGridMsg()
 
     switch( m_userUnits )
     {
-    case EDA_UNITS_T::INCHES:
+    case EDA_UNITS::INCHES:
         gridformatter = "grid X %.6f  Y %.6f";
         break;
 
-    case EDA_UNITS_T::MILLIMETRES:
+    case EDA_UNITS::MILLIMETRES:
         gridformatter = "grid X %.6f  Y %.6f";
         break;
 
@@ -576,7 +576,7 @@ void PCB_BASE_FRAME::DisplayGridMsg()
     BASE_SCREEN* screen = GetScreen();
     wxArrayString gridsList;
 
-    int icurr = screen->BuildGridsChoiceList( gridsList, m_userUnits != EDA_UNITS_T::INCHES );
+    int icurr = screen->BuildGridsChoiceList( gridsList, m_userUnits != EDA_UNITS::INCHES );
     GRID_TYPE& grid = screen->GetGrid( icurr );
     double grid_x = To_User_Unit( m_userUnits, grid.m_Size.x );
     double grid_y = To_User_Unit( m_userUnits, grid.m_Size.y );
@@ -611,13 +611,13 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 
         switch( GetUserUnits() )
         {
-        case EDA_UNITS_T::INCHES:
+        case EDA_UNITS::INCHES:
             formatter = wxT( "r %.6f  theta %.1f" );
             break;
-        case EDA_UNITS_T::MILLIMETRES:
+        case EDA_UNITS::MILLIMETRES:
             formatter = wxT( "r %.6f  theta %.1f" );
             break;
-        case EDA_UNITS_T::UNSCALED_UNITS:
+        case EDA_UNITS::UNSCALED:
             formatter = wxT( "r %f  theta %f" );
             break;
         default:             wxASSERT( false );                       break;
@@ -638,17 +638,17 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 
     switch( GetUserUnits() )
     {
-    case EDA_UNITS_T::INCHES:
+    case EDA_UNITS::INCHES:
         absformatter = "X %.6f  Y %.6f";
         locformatter = "dx %.6f  dy %.6f  dist %.4f";
         break;
 
-    case EDA_UNITS_T::MILLIMETRES:
+    case EDA_UNITS::MILLIMETRES:
         absformatter = "X %.6f  Y %.6f";
         locformatter = "dx %.6f  dy %.6f  dist %.3f";
         break;
 
-    case EDA_UNITS_T::UNSCALED_UNITS:
+    case EDA_UNITS::UNSCALED:
         absformatter = "X %f  Y %f";
         locformatter = "dx %f  dy %f  dist %f";
         break;
@@ -695,9 +695,9 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     wxString baseCfgName = GetName();
 
-    EDA_UNITS_T userGridUnits;
+    EDA_UNITS userGridUnits;
     aCfg->Read(
-            baseCfgName + UserGridUnitsEntry, (int*) &userGridUnits, (int) EDA_UNITS_T::INCHES );
+            baseCfgName + UserGridUnitsEntry, (int*) &userGridUnits, (int) EDA_UNITS::INCHES );
 
     double tmp;
     aCfg->Read( baseCfgName + UserGridSizeXEntry, &tmp, 0.01 );
@@ -782,7 +782,7 @@ void PCB_BASE_FRAME::UpdateGridSelectBox()
     m_gridSelectBox->Clear();
     wxArrayString gridsList;
     int           icurr =
-            GetScreen()->BuildGridsChoiceList( gridsList, GetUserUnits() != EDA_UNITS_T::INCHES );
+            GetScreen()->BuildGridsChoiceList( gridsList, GetUserUnits() != EDA_UNITS::INCHES );
 
     for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
     {

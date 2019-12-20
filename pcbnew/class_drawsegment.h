@@ -214,7 +214,7 @@ public:
 
     void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& aOffset = ZeroOffset ) override;
 
-    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     const EDA_RECT GetBoundingBox() const override;
 
@@ -253,7 +253,7 @@ public:
     void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue,
             int aError = ARC_HIGH_DEF, bool ignoreLineWidth = false ) const override;
 
-    virtual wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    virtual wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     virtual BITMAP_DEF GetMenuImage() const override;
 

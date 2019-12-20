@@ -100,7 +100,7 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
 
     // User grid
     BASE_SCREEN* screen = m_parent->GetScreen();
-    screen->AddGrid( m_parent->m_UserGridSize, EDA_UNITS_T::UNSCALED_UNITS, ID_POPUP_GRID_USER );
+    screen->AddGrid( m_parent->m_UserGridSize, EDA_UNITS::UNSCALED, ID_POPUP_GRID_USER );
 
     // If the user grid is the current option, recall SetGrid()
     // to force new values put in list as current grid value

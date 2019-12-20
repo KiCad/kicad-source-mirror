@@ -27,7 +27,7 @@
 
 #include "bitmap2cmp_gui_base.h"
 #include <potracelib.h>
-#include <common.h>     // for EDA_UNITS_T
+#include <common.h>     // for EDA_UNITS
 
 
 class IMAGE_SIZE
@@ -37,7 +37,7 @@ public:
 
     // Set the unit used for m_outputSize, and convert the old m_outputSize value
     // to the value in new unit
-    void SetUnit( EDA_UNITS_T aUnit );
+    void SetUnit( EDA_UNITS aUnit );
 
     // Accessors:
     void SetOriginalDPI( int aDPI )
@@ -55,7 +55,7 @@ public:
         return m_outputSize;
     }
 
-    void SetOutputSize( double aSize, EDA_UNITS_T aUnit )
+    void SetOutputSize( double aSize, EDA_UNITS aUnit )
     {
         m_unit = aUnit;
         m_outputSize = aSize;
@@ -75,7 +75,7 @@ public:
     int GetOutputDPI();
 
 private:
-    EDA_UNITS_T  m_unit;            // The units for m_outputSize (mm, inch, dpi)
+    EDA_UNITS  m_unit;            // The units for m_outputSize (mm, inch, dpi)
     double  m_outputSize;           // The size in m_unit of the output image, depending on
                                     // the user settings. Set to the initial image size
     int     m_originalDPI;          // The image DPI if specified in file, or 0 if unknown
@@ -101,8 +101,8 @@ private:
     void OnExportToFile( wxCommandEvent& event ) override;
     void OnExportToClipboard( wxCommandEvent& event ) override;
 
-    ///> @return the EDA_UNITS_T from the m_PixelUnit choice
-    EDA_UNITS_T getUnitFromSelection();
+    ///> @return the EDA_UNITS from the m_PixelUnit choice
+    EDA_UNITS getUnitFromSelection();
 
     // return a string giving the output size, according to the selected unit
     wxString FormatOutputSize( double aSize );

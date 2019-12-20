@@ -34,7 +34,7 @@ class BOARD_COMMIT;
 class TRACKS_CLEANER
 {
 public:
-    TRACKS_CLEANER( EDA_UNITS_T aUnits, BOARD* aPcb, BOARD_COMMIT& aCommit );
+    TRACKS_CLEANER( EDA_UNITS aUnits, BOARD* aPcb, BOARD_COMMIT& aCommit );
 
     /**
      * the cleanup function.
@@ -115,7 +115,7 @@ private:
      */
     bool testTrackEndpointIsNode( TRACK* aTrack, bool aTstStart );
 
-    EDA_UNITS_T   m_units;
+    EDA_UNITS   m_units;
     BOARD*        m_brd;
     BOARD_COMMIT& m_commit;
     bool          m_dryRun;
