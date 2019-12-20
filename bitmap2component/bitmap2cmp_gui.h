@@ -76,7 +76,7 @@ public:
 
 private:
     EDA_UNITS m_unit;               // The units for m_outputSize (mm, inch, dpi)
-    double  m_outputSize;           // The size in m_unit of the output image, depending on
+    double    m_outputSize;         // The size in m_unit of the output image, depending on
                                     // the user settings. Set to the initial image size
     int     m_originalDPI;          // The image DPI if specified in file, or 0 if unknown
     int     m_originalSizePixels;   // The original image size read from file, in pixels
