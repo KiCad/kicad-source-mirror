@@ -458,7 +458,7 @@ private:
      * they are pin info without the actual pin position, which
      * is not known in schematic without knowing the parent component
      */
-    void getMsgPanelInfoBase( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList );
+    void getMsgPanelInfoBase( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList );
 
 
     /**

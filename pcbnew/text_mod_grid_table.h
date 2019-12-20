@@ -82,12 +82,12 @@ public:
 
 private:
     EDA_UNITS       m_userUnits;
-    PCB_BASE_FRAME*    m_frame;
+    PCB_BASE_FRAME* m_frame;
 
-    wxGridCellAttr*    m_readOnlyAttr;
-    wxGridCellAttr*    m_boolColAttr;
-    wxGridCellAttr*    m_orientationColAttr;
-    wxGridCellAttr*    m_layerColAttr;
+    wxGridCellAttr* m_readOnlyAttr;
+    wxGridCellAttr* m_boolColAttr;
+    wxGridCellAttr* m_orientationColAttr;
+    wxGridCellAttr* m_layerColAttr;
 };
 
 

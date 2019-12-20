@@ -312,8 +312,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         m_DimensionText->SetSelection( -1, -1 );
 
         DIMENSION* dimension = (DIMENSION*) m_item;
-        EDA_UNITS units;
-        bool useMils;
+        EDA_UNITS  units;
+        bool       useMils;
         dimension->GetUnits( units, useMils );
 
         m_DimensionUnitsOpt->SetSelection( units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );

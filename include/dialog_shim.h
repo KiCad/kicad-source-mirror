@@ -194,7 +194,7 @@ protected:
     void ResetSize();
 
     EDA_UNITS   m_units;    // userUnits for display and parsing
-    std::string            m_hash_key;     // alternate for class_map when classname re-used
+    std::string m_hash_key; // alternate for class_map when classname re-used
 
     // On MacOS (at least) SetFocus() calls made in the constructor will fail because a
     // window that isn't yet visible will return false to AcceptsFocus().  So we must delay

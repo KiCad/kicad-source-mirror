@@ -26,8 +26,8 @@
 #include "bitmap2component.h"
 
 #include "bitmap2cmp_gui_base.h"
+#include <common.h> // for EDA_UNITS
 #include <potracelib.h>
-#include <common.h>     // for EDA_UNITS
 
 
 class IMAGE_SIZE

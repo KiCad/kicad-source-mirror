@@ -677,7 +677,7 @@ bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos ) const
 }
 
 
-void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 

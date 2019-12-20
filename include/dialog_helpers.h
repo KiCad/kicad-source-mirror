@@ -32,8 +32,8 @@
 #define  DIALOG_HELPERS_H_
 
 
-#include <common.h> // EDA_UNITS
 #include <../common/dialogs/dialog_list_selector_base.h>
+#include <common.h> // EDA_UNITS
 
 void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput );
 

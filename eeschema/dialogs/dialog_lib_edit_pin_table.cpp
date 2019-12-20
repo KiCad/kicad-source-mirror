@@ -59,7 +59,7 @@ private:
     std::vector<LIB_PINS> m_rows;
 
     EDA_UNITS m_userUnits;
-    bool                  m_edited;
+    bool      m_edited;
 
 public:
     PIN_TABLE_DATA_MODEL( EDA_UNITS aUserUnits ) : m_userUnits( aUserUnits ), m_edited( false )

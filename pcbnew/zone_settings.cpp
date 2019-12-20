@@ -46,16 +46,17 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_ZonePriority = 0;
     m_FillMode = ZONE_FILL_MODE::POLYGONS; // Mode for filling zone
     // Zone clearance value
-    m_ZoneClearance      = Mils2iu( ZONE_CLEARANCE_MIL );
+    m_ZoneClearance = Mils2iu( ZONE_CLEARANCE_MIL );
     // Min thickness value in filled areas (this is the minimum width of copper to fill solid areas) :
-    m_ZoneMinThickness   = Mils2iu( ZONE_THICKNESS_MIL );
-    m_HatchFillTypeThickness = 0;     // good value of grid line thickness if m_FillMode = ZFM_GRID_PATTERN
-    m_HatchFillTypeGap = 0;           // good value  of grid line gap if m_FillMode = ZFM_GRID_PATTERN
-    m_HatchFillTypeOrientation = 0.0; // Grid style: orientation of grid lines in degrees
-    m_HatchFillTypeSmoothingLevel = 0;    // Grid pattern smoothing type. 0 = no smoothing
-    m_HatchFillTypeSmoothingValue = 0.1;  // Grid pattern chamfer value relative to the gap value
-    m_NetcodeSelection   = 0;                               // Net code selection for the current zone
-    m_CurrentZone_Layer = F_Cu;           // Layer used to create the current zone
+    m_ZoneMinThickness = Mils2iu( ZONE_THICKNESS_MIL );
+    m_HatchFillTypeThickness =
+            0;              // good value of grid line thickness if m_FillMode = ZFM_GRID_PATTERN
+    m_HatchFillTypeGap = 0; // good value  of grid line gap if m_FillMode = ZFM_GRID_PATTERN
+    m_HatchFillTypeOrientation = 0.0;    // Grid style: orientation of grid lines in degrees
+    m_HatchFillTypeSmoothingLevel = 0;   // Grid pattern smoothing type. 0 = no smoothing
+    m_HatchFillTypeSmoothingValue = 0.1; // Grid pattern chamfer value relative to the gap value
+    m_NetcodeSelection = 0;              // Net code selection for the current zone
+    m_CurrentZone_Layer = F_Cu;          // Layer used to create the current zone
     m_Zone_HatchingStyle =
             ZONE_HATCH_STYLE::DIAGONAL_EDGE; // Option to show the zone area (outlines only,
                                              //short hatches or full hatches

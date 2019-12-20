@@ -99,9 +99,9 @@ public:
     bool BoolFromString( wxString aValue );
 
 private:
-    SCH_BASE_FRAME*       m_frame;
+    SCH_BASE_FRAME* m_frame;
     EDA_UNITS       m_userUnits;
-    LIB_PART*             m_part;
+    LIB_PART*       m_part;
 
     SCH_FIELD_VALIDATOR   m_fieldNameValidator;
     SCH_FIELD_VALIDATOR   m_referenceValidator;

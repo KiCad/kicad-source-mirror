@@ -295,7 +295,7 @@ protected:
     void update() override
     {
         EDA_UNITS                    units = m_frame.GetUserUnits();
-        const BOARD_DESIGN_SETTINGS&  bds = m_frame.GetBoard()->GetDesignSettings();
+        const BOARD_DESIGN_SETTINGS& bds = m_frame.GetBoard()->GetDesignSettings();
 
         Clear();
 
