@@ -40,6 +40,15 @@ enum class ZONE_FILL_MODE
     HATCH_PATTERN = 1   // fill zone using a grid pattern
 };
 
+
+/// Zone hatch styles
+enum class ZONE_HATCH_STYLE
+{
+    NO_HATCH,
+    DIAGONAL_FULL,
+    DIAGONAL_EDGE
+};
+
 /**
  * Class ZONE_SETTINGS
  * handles zones parameters.
@@ -78,7 +87,7 @@ public:
     PCB_LAYER_ID    m_CurrentZone_Layer;    ///< Layer used to create the current zone
 
     /// Option to show the zone area (outlines only, short hatches or full hatches
-    int  m_Zone_HatchingStyle;
+    ZONE_HATCH_STYLE m_Zone_HatchingStyle;
 
     long m_ThermalReliefGap;            ///< thickness of the gap in thermal reliefs
     long m_ThermalReliefCopperBridge;   ///< thickness of the copper bridge in thermal reliefs

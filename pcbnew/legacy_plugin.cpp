@@ -2489,7 +2489,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 {
     unique_ptr<ZONE_CONTAINER> zc( new ZONE_CONTAINER( m_board ) );
 
-    ZONE_CONTAINER::HATCH_STYLE outline_hatch = ZONE_CONTAINER::NO_HATCH;
+    ZONE_HATCH_STYLE outline_hatch = ZONE_HATCH_STYLE::NO_HATCH;
     bool    endContour = false;
     int     holeIndex = -1;     // -1 is the main outline; holeIndex >= 0 = hole index
     char    buf[1024];
@@ -2561,9 +2561,9 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             switch( *hopt )   // upper case required
             {
-            case 'N':   outline_hatch = ZONE_CONTAINER::NO_HATCH;        break;
-            case 'E':   outline_hatch = ZONE_CONTAINER::DIAGONAL_EDGE;   break;
-            case 'F':   outline_hatch = ZONE_CONTAINER::DIAGONAL_FULL;   break;
+            case 'N':   outline_hatch = ZONE_HATCH_STYLE::NO_HATCH;        break;
+            case 'E':   outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_EDGE;   break;
+            case 'F':   outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_FULL;   break;
 
             default:
                 m_error.Printf( _( "Bad ZAux for CZONE_CONTAINER \"%s\"" ), zc->GetNetname().GetData() );

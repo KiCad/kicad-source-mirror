@@ -1544,7 +1544,7 @@ std::list<ZONE_CONTAINER*> BOARD::GetZoneList( bool aIncludeZonesInFootprints )
 
 
 ZONE_CONTAINER* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
-                                PCB_LAYER_ID aLayer, wxPoint aStartPointPosition, int aHatch )
+                                PCB_LAYER_ID aLayer, wxPoint aStartPointPosition, ZONE_HATCH_STYLE aHatch )
 {
     ZONE_CONTAINER* new_area = InsertArea( aNetcode,
                                            m_ZoneDescriptorList.size( ) - 1,
@@ -1580,7 +1580,7 @@ void BOARD::RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to
 
 
 ZONE_CONTAINER* BOARD::InsertArea( int aNetcode, int aAreaIdx, PCB_LAYER_ID aLayer,
-                                   int aCornerX, int aCornerY, int aHatch )
+                                   int aCornerX, int aCornerY, ZONE_HATCH_STYLE aHatch )
 {
     ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
 
@@ -1593,7 +1593,7 @@ ZONE_CONTAINER* BOARD::InsertArea( int aNetcode, int aAreaIdx, PCB_LAYER_ID aLay
     else
         m_ZoneDescriptorList.push_back( new_area );
 
-    new_area->SetHatchStyle( (ZONE_CONTAINER::HATCH_STYLE) aHatch );
+    new_area->SetHatchStyle( (ZONE_HATCH_STYLE) aHatch );
 
     // Add the first corner to the new zone
     new_area->AppendCorner( wxPoint( aCornerX, aCornerY ), -1 );

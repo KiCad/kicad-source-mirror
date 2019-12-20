@@ -98,9 +98,9 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataToWindow()
 
     switch( m_zonesettings.m_Zone_HatchingStyle )
     {
-    case ZONE_CONTAINER::NO_HATCH:      m_OutlineAppearanceCtrl->SetSelection( 0 ); break;
-    case ZONE_CONTAINER::DIAGONAL_EDGE: m_OutlineAppearanceCtrl->SetSelection( 1 ); break;
-    case ZONE_CONTAINER::DIAGONAL_FULL: m_OutlineAppearanceCtrl->SetSelection( 2 ); break;
+    case ZONE_HATCH_STYLE::NO_HATCH:      m_OutlineAppearanceCtrl->SetSelection( 0 ); break;
+    case ZONE_HATCH_STYLE::DIAGONAL_EDGE: m_OutlineAppearanceCtrl->SetSelection( 1 ); break;
+    case ZONE_HATCH_STYLE::DIAGONAL_FULL: m_OutlineAppearanceCtrl->SetSelection( 2 ); break;
     }
 
     SetInitialFocus( m_OutlineAppearanceCtrl );
@@ -159,9 +159,9 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataFromWindow()
 
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
-    case 0: m_zonesettings.m_Zone_HatchingStyle = ZONE_CONTAINER::NO_HATCH;      break;
-    case 1: m_zonesettings.m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_EDGE; break;
-    case 2: m_zonesettings.m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_FULL; break;
+    case 0: m_zonesettings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::NO_HATCH;      break;
+    case 1: m_zonesettings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE; break;
+    case 2: m_zonesettings.m_Zone_HatchingStyle = ZONE_HATCH_STYLE::DIAGONAL_FULL; break;
     }
 
     if( m_config )

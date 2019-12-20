@@ -685,7 +685,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 zone->SetLayer( layer );
                 zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
-                ZONE_CONTAINER::HATCH_STYLE outline_hatch = ZONE_CONTAINER::DIAGONAL_EDGE;
+                ZONE_HATCH_STYLE outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
 
                 const int outlineIdx = -1;      // this is the id of the copper zone main outline
                 zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
@@ -1215,7 +1215,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     {
         zone->SetIsKeepout( true );
         zone->SetDoNotAllowCopperPour( true );
-        zone->SetHatchStyle( ZONE_CONTAINER::NO_HATCH );
+        zone->SetHatchStyle( ZONE_HATCH_STYLE::NO_HATCH );
     }
     else if( p.pour == EPOLYGON::HATCH )
     {

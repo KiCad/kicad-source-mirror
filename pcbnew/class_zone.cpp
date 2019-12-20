@@ -48,7 +48,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
     m_CornerSelection = nullptr;                // no corner is selected
     m_IsFilled = false;                         // fill status : true when the zone is filled
     m_FillMode = ZONE_FILL_MODE::POLYGONS;
-    m_hatchStyle = DIAGONAL_EDGE;
+    m_hatchStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
     m_hatchPitch = GetDefaultHatchPitch();
     m_hv45 = false;
     m_HatchFillTypeThickness = 0;
@@ -954,10 +954,11 @@ int ZONE_CONTAINER::GetHatchPitch() const
 }
 
 
-void ZONE_CONTAINER::SetHatch( int aHatchStyle, int aHatchPitch, bool aRebuildHatch )
+void ZONE_CONTAINER::SetHatch(
+        ZONE_HATCH_STYLE aHatchStyle, int aHatchPitch, bool aRebuildHatch )
 {
     SetHatchPitch( aHatchPitch );
-    m_hatchStyle = (ZONE_CONTAINER::HATCH_STYLE) aHatchStyle;
+    m_hatchStyle = aHatchStyle;
 
     if( aRebuildHatch )
         Hatch();
@@ -988,7 +989,7 @@ void ZONE_CONTAINER::Hatch()
 {
     UnHatch();
 
-    if( m_hatchStyle == NO_HATCH || m_hatchPitch == 0 || m_Poly->IsEmpty() )
+    if( m_hatchStyle == ZONE_HATCH_STYLE::NO_HATCH || m_hatchPitch == 0 || m_Poly->IsEmpty() )
         return;
 
     // define range for hatch lines
@@ -1015,7 +1016,7 @@ void ZONE_CONTAINER::Hatch()
     // Calculate spacing between 2 hatch lines
     int spacing;
 
-    if( m_hatchStyle == DIAGONAL_EDGE )
+    if( m_hatchStyle == ZONE_HATCH_STYLE::DIAGONAL_EDGE )
         spacing = m_hatchPitch;
     else
         spacing = m_hatchPitch * 2;
@@ -1118,7 +1119,7 @@ void ZONE_CONTAINER::Hatch()
             // Push only one line for diagonal hatch,
             // or for small lines < twice the line length
             // else push 2 small lines
-            if( m_hatchStyle == DIAGONAL_FULL || std::abs( dx ) < 2 * hatch_line_len )
+            if( m_hatchStyle == ZONE_HATCH_STYLE::DIAGONAL_FULL || std::abs( dx ) < 2 * hatch_line_len )
             {
                 m_HatchLines.emplace_back( SEG( pointbuffer[ip], pointbuffer[ip + 1] ) );
             }

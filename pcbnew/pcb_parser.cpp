@@ -3432,7 +3432,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as ZONE_CONTAINER." ) );
 
-    ZONE_CONTAINER::HATCH_STYLE hatchStyle = ZONE_CONTAINER::NO_HATCH;
+    ZONE_HATCH_STYLE hatchStyle = ZONE_HATCH_STYLE::NO_HATCH;
 
     int     hatchPitch = ZONE_CONTAINER::GetDefaultHatchPitch();
     wxPoint pt;
@@ -3508,9 +3508,9 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
             switch( token )
             {
             default:
-            case T_none:   hatchStyle = ZONE_CONTAINER::NO_HATCH;        break;
-            case T_edge:   hatchStyle = ZONE_CONTAINER::DIAGONAL_EDGE;   break;
-            case T_full:   hatchStyle = ZONE_CONTAINER::DIAGONAL_FULL;
+            case T_none:   hatchStyle = ZONE_HATCH_STYLE::NO_HATCH;        break;
+            case T_edge:   hatchStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;   break;
+            case T_full:   hatchStyle = ZONE_HATCH_STYLE::DIAGONAL_FULL;
             }
 
             hatchPitch = parseBoardUnits( "hatch pitch" );

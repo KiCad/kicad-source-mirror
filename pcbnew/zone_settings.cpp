@@ -56,7 +56,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_HatchFillTypeSmoothingValue = 0.1;  // Grid pattern chamfer value relative to the gap value
     m_NetcodeSelection   = 0;                               // Net code selection for the current zone
     m_CurrentZone_Layer  = F_Cu;                            // Layer used to create the current zone
-    m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_EDGE;   // Option to show the zone area (outlines only,
+    m_Zone_HatchingStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;   // Option to show the zone area (outlines only,
                                                             //short hatches or full hatches
 
     // thickness of the gap in thermal reliefs:
