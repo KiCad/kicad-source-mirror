@@ -314,7 +314,7 @@ public:
      */
     int GetScreenCount() const;
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /* there is no member for orientation in sch_sheet, to preserve file
      * format, we detect orientation based on pin edges

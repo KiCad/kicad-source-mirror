@@ -1651,8 +1651,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
         BOARD*      board = (BOARD*) via->GetParent();
 
         wxCHECK_RET( board != 0, wxT( "Via " ) + via->GetSelectMenuText( EDA_UNITS::MILLIMETRES )
-                                         +
-                     wxT( " has no parent." ) );
+                                         + wxT( " has no parent." ) );
 
         m_out->Print( aNestLevel, "(via" );
 
@@ -1734,9 +1733,15 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     switch( aZone->GetHatchStyle() )
     {
     default:
-    case ZONE_HATCH_STYLE::NO_HATCH:       hatch = "none";    break;
-    case ZONE_HATCH_STYLE::DIAGONAL_EDGE:  hatch = "edge";    break;
-    case ZONE_HATCH_STYLE::DIAGONAL_FULL:  hatch = "full";    break;
+    case ZONE_HATCH_STYLE::NO_HATCH:
+        hatch = "none";
+        break;
+    case ZONE_HATCH_STYLE::DIAGONAL_EDGE:
+        hatch = "edge";
+        break;
+    case ZONE_HATCH_STYLE::DIAGONAL_FULL:
+        hatch = "full";
+        break;
     }
 
     m_out->Print( 0, " (hatch %s %s)\n", hatch.c_str(),

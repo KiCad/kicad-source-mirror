@@ -39,8 +39,8 @@ static const double midTickLengthFactor = 1.5;
 static const double majorTickLengthFactor = 2.5;
 
 
-static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
-                               const VECTOR2D& aRulerVec, EDA_UNITS aUnits )
+static void drawCursorStrings(
+        KIGFX::VIEW* aView, const VECTOR2D& aCursor, const VECTOR2D& aRulerVec, EDA_UNITS aUnits )
 {
     // draw the cursor labels
     std::vector<wxString> cursorStrings;
@@ -116,8 +116,8 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
  * @param aLine line vector
  * @param aMinorTickLen length of minor ticks in IU
  */
-void drawTicksAlongLine( KIGFX::VIEW *aView, const VECTOR2D& aOrigin,
-                         const VECTOR2D& aLine, double aMinorTickLen, EDA_UNITS aUnits )
+void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
+        double aMinorTickLen, EDA_UNITS aUnits )
 {
     VECTOR2D tickLine = aLine.Rotate( -M_PI_2 );
     auto gal = aView->GetGAL();
@@ -199,11 +199,12 @@ void drawBacksideTicks( KIGFX::GAL& aGal, const VECTOR2D& aOrigin,
 }
 
 
-RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, EDA_UNITS userUnits ):
-    EDA_ITEM( NOT_USED ),    // Never added to anything - just a preview
-    m_geomMgr( aGeomMgr ),
-    m_userUnits( userUnits )
-{}
+RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, EDA_UNITS userUnits )
+        : EDA_ITEM( NOT_USED ), // Never added to anything - just a preview
+          m_geomMgr( aGeomMgr ),
+          m_userUnits( userUnits )
+{
+}
 
 
 const BOX2I RULER_ITEM::ViewBBox() const

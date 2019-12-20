@@ -218,12 +218,9 @@ void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
         // Write settings back to the parent
         MODULE_3D_SETTINGS* modelInfo = &m_parentModelList->at( (unsigned) m_selected );
 
-        modelInfo->m_Scale.x =
-                DoubleValueFromString( EDA_UNITS::UNSCALED, xscale->GetValue() );
-        modelInfo->m_Scale.y =
-                DoubleValueFromString( EDA_UNITS::UNSCALED, yscale->GetValue() );
-        modelInfo->m_Scale.z =
-                DoubleValueFromString( EDA_UNITS::UNSCALED, zscale->GetValue() );
+        modelInfo->m_Scale.x = DoubleValueFromString( EDA_UNITS::UNSCALED, xscale->GetValue() );
+        modelInfo->m_Scale.y = DoubleValueFromString( EDA_UNITS::UNSCALED, yscale->GetValue() );
+        modelInfo->m_Scale.z = DoubleValueFromString( EDA_UNITS::UNSCALED, zscale->GetValue() );
 
         modelInfo->m_Rotation.x = rotationFromString( xrot->GetValue() );
         modelInfo->m_Rotation.y = rotationFromString( yrot->GetValue() );

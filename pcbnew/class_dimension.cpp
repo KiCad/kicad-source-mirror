@@ -390,7 +390,7 @@ void DIMENSION::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 
 
 // see class_cotation.h
-void DIMENSION::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void DIMENSION::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     // for now, display only the text within the DIMENSION using class TEXTE_PCB.
     m_Text.GetMsgPanelInfo( aUnits, aList );

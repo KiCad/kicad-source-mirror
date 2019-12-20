@@ -254,15 +254,14 @@ void DIALOG_TEXT_PROPERTIES::OnDimensionTextChange( wxCommandEvent& event )
     FetchUnitsFromString( m_DimensionText->GetValue(), units, useMils );
 
     if( units != EDA_UNITS::UNSCALED )
-        m_DimensionUnitsOpt->SetSelection(
-                units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
+        m_DimensionUnitsOpt->SetSelection( units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
 }
 
 
 void DIALOG_TEXT_PROPERTIES::OnDimensionUnitsChange( wxCommandEvent& event )
 {
     DIMENSION* dimension = (DIMENSION*) m_item;
-    EDA_UNITS units;
+    EDA_UNITS  units;
     bool useMils;
 
     // Get default units in case dimension text doesn't contain units.
@@ -317,8 +316,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         bool useMils;
         dimension->GetUnits( units, useMils );
 
-        m_DimensionUnitsOpt->SetSelection(
-                units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
+        m_DimensionUnitsOpt->SetSelection( units == EDA_UNITS::MILLIMETRES ? 2 : useMils ? 1 : 0 );
 
         m_linesThickness.SetValue( dimension->GetWidth() );
     }

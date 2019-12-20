@@ -44,7 +44,7 @@
 ZONE_SETTINGS::ZONE_SETTINGS()
 {
     m_ZonePriority = 0;
-    m_FillMode = ZONE_FILL_MODE::POLYGONS;                                             // Mode for filling zone : 1 use segments, 0 use polygons
+    m_FillMode = ZONE_FILL_MODE::POLYGONS; // Mode for filling zone
     // Zone clearance value
     m_ZoneClearance      = Mils2iu( ZONE_CLEARANCE_MIL );
     // Min thickness value in filled areas (this is the minimum width of copper to fill solid areas) :
@@ -55,9 +55,10 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_HatchFillTypeSmoothingLevel = 0;    // Grid pattern smoothing type. 0 = no smoothing
     m_HatchFillTypeSmoothingValue = 0.1;  // Grid pattern chamfer value relative to the gap value
     m_NetcodeSelection   = 0;                               // Net code selection for the current zone
-    m_CurrentZone_Layer  = F_Cu;                            // Layer used to create the current zone
-    m_Zone_HatchingStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;   // Option to show the zone area (outlines only,
-                                                            //short hatches or full hatches
+    m_CurrentZone_Layer = F_Cu;           // Layer used to create the current zone
+    m_Zone_HatchingStyle =
+            ZONE_HATCH_STYLE::DIAGONAL_EDGE; // Option to show the zone area (outlines only,
+                                             //short hatches or full hatches
 
     // thickness of the gap in thermal reliefs:
     m_ThermalReliefGap = Mils2iu( ZONE_THERMAL_RELIEF_GAP_MIL );

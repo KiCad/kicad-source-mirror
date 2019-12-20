@@ -325,7 +325,7 @@ public:
      *
      * @param aList is the list to populate.
      */
-    virtual void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+    virtual void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
     {
     }
 

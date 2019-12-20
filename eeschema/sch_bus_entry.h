@@ -112,7 +112,7 @@ public:
 
     void Plot( PLOTTER* aPlotter ) override;
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }

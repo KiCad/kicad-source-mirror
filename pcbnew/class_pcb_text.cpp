@@ -82,7 +82,7 @@ void TEXTE_PCB::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 }
 
 
-void TEXTE_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void TEXTE_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString    msg;
 

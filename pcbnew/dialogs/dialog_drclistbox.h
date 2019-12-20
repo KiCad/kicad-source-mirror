@@ -177,7 +177,7 @@ public:
 class DRCLISTBOX : public wxHtmlListBox
 {
 private:
-    EDA_UNITS    m_units;
+    EDA_UNITS      m_units;
     DRC_ITEM_LIST* m_list;     ///< wxHtmlListBox does not own the list, I do
 
 public:

@@ -996,7 +996,7 @@ void GERBVIEW_FRAME::DisplayGridMsg()
     BASE_SCREEN* screen = GetScreen();
     wxArrayString gridsList;
 
-    int icurr = screen->BuildGridsChoiceList( gridsList, m_userUnits != EDA_UNITS::INCHES );
+    int        icurr = screen->BuildGridsChoiceList( gridsList, m_userUnits != EDA_UNITS::INCHES );
     GRID_TYPE& grid = screen->GetGrid( icurr );
     double grid_x = To_User_Unit( m_userUnits, grid.m_Size.x );
     double grid_y = To_User_Unit( m_userUnits, grid.m_Size.y );
@@ -1184,8 +1184,7 @@ void GERBVIEW_FRAME::updateGridSelectBox()
     // Update grid values with the current units setting.
     m_gridSelectBox->Clear();
     wxArrayString gridsList;
-    int           icurr =
-            GetScreen()->BuildGridsChoiceList( gridsList, GetUserUnits() != EDA_UNITS::INCHES );
+    int icurr = GetScreen()->BuildGridsChoiceList( gridsList, GetUserUnits() != EDA_UNITS::INCHES );
 
     for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
     {

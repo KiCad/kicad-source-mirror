@@ -335,7 +335,7 @@ double TEXTE_MODULE::GetDrawRotation() const
 
 
 // see class_text_mod.h
-void TEXTE_MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void TEXTE_MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     MODULE* module = (MODULE*) m_Parent;
 

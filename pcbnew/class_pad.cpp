@@ -747,7 +747,7 @@ int D_PAD::GetThermalGap() const
 }
 
 
-void D_PAD::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM>& aList )
+void D_PAD::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     MODULE*     module;
     wxString    msg;

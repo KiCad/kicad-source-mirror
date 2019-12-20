@@ -3508,9 +3508,14 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
             switch( token )
             {
             default:
-            case T_none:   hatchStyle = ZONE_HATCH_STYLE::NO_HATCH;        break;
-            case T_edge:   hatchStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;   break;
-            case T_full:   hatchStyle = ZONE_HATCH_STYLE::DIAGONAL_FULL;
+            case T_none:
+                hatchStyle = ZONE_HATCH_STYLE::NO_HATCH;
+                break;
+            case T_edge:
+                hatchStyle = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
+                break;
+            case T_full:
+                hatchStyle = ZONE_HATCH_STYLE::DIAGONAL_FULL;
             }
 
             hatchPitch = parseBoardUnits( "hatch pitch" );

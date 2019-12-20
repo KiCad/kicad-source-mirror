@@ -38,7 +38,6 @@ namespace PREVIEW {
 class ARC_ASSISTANT : public EDA_ITEM
 {
 public:
-
     ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager, EDA_UNITS aUnits );
 
     const BOX2I ViewBBox() const override;
@@ -66,7 +65,7 @@ public:
 private:
 
     const ARC_GEOM_MANAGER& m_constructMan;
-    EDA_UNITS             m_units;
+    EDA_UNITS               m_units;
 };
 }       // PREVIEW
 }       // KIGFX

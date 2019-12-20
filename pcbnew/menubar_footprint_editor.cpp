@@ -149,10 +149,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     auto polarCoordsCondition = [ this ] ( const SELECTION& aSel ) {
         return GetShowPolarCoords();
     };
-    auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+    auto imperialUnitsCondition = [this]( const SELECTION& aSel ) {
         return GetUserUnits() == EDA_UNITS::INCHES;
     };
-    auto metricUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+    auto metricUnitsCondition = [this]( const SELECTION& aSel ) {
         return GetUserUnits() == EDA_UNITS::MILLIMETRES;
     };
     auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {

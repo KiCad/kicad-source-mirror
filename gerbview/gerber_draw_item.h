@@ -256,7 +256,7 @@ public:
     /* divers */
     int Shape() const { return m_Shape; }
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     wxString ShowGBRShape() const;
 

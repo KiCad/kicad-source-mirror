@@ -388,7 +388,7 @@ const EDA_RECT LIB_ARC::GetBoundingBox() const
 }
 
 
-void LIB_ARC::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void LIB_ARC::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();

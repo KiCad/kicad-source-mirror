@@ -1413,8 +1413,8 @@ void LIB_PIN::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text, DARKMAGENTA ) );
 }
 
-void LIB_PIN::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList,
-                               SCH_COMPONENT* aComponent )
+void LIB_PIN::GetMsgPanelInfo(
+        EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList, SCH_COMPONENT* aComponent )
 {
     getMsgPanelInfoBase( aUnits, aList );
 
@@ -1622,8 +1622,8 @@ bool LIB_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxDat )
         || ( aSearchData.GetFlags() & FR_SEARCH_REPLACE ) )
         return false;
 
-    wxLogTrace( traceFindItem,
-            wxT( "    child item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
+    wxLogTrace(
+            traceFindItem, wxT( "    child item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 
     return EDA_ITEM::Matches( GetName(), aSearchData )
                 || EDA_ITEM::Matches( m_number, aSearchData );

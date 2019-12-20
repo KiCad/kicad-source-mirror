@@ -152,8 +152,7 @@ double From_User_Unit( EDA_UNITS aUnit, double aValue, bool aUseMils = false );
  * @param aUseMils Indicates mils should be used for imperial units (inches).
  * @return A double representing that value in internal units
  */
-double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue,
-                              bool aUseMils = false );
+double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, bool aUseMils = false );
 
 /**
  * Function ValueFromString

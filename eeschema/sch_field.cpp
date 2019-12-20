@@ -284,8 +284,8 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
     if( ( flags & FR_SEARCH_REPLACE ) && m_id == REFERENCE && !( flags & FR_REPLACE_REFERENCES ) )
         return false;
 
-    wxLogTrace( traceFindItem,
-            wxT( "    child item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
+    wxLogTrace(
+            traceFindItem, wxT( "    child item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 
     // Take sheet path into account which effects the reference field and the unit for
     // components with multiple parts.

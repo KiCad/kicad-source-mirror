@@ -34,10 +34,8 @@
 
 using namespace KIGFX::PREVIEW;
 
-ARC_ASSISTANT::ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager, EDA_UNITS aUnits ) :
-    EDA_ITEM( NOT_USED ),
-    m_constructMan( aManager ),
-    m_units( aUnits )
+ARC_ASSISTANT::ARC_ASSISTANT( const ARC_GEOM_MANAGER& aManager, EDA_UNITS aUnits )
+        : EDA_ITEM( NOT_USED ), m_constructMan( aManager ), m_units( aUnits )
 {
 }
 
@@ -131,7 +129,8 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         double degs = getNormDeciDegFromRad( initAngle );
 
         cursorStrings.push_back( DimensionLabel( "r", m_constructMan.GetRadius(), m_units ) );
-        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs, EDA_UNITS::DEGREES ) );
+        cursorStrings.push_back(
+                DimensionLabel( wxString::FromUTF8( "θ" ), degs, EDA_UNITS::DEGREES ) );
     }
     else
     {

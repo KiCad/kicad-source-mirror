@@ -104,8 +104,8 @@ MARKER_BASE::MARKER_BASE( int aScalingFactor )
 
 
 MARKER_BASE::MARKER_BASE( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                          EDA_ITEM* aItem, const wxPoint& aPos,
-                          EDA_ITEM* bItem, const wxPoint& bPos, int aScalingFactor )
+        EDA_ITEM* aItem, const wxPoint& aPos, EDA_ITEM* bItem, const wxPoint& bPos,
+        int aScalingFactor )
 {
     m_ScalingFactor = aScalingFactor;
     init();
@@ -141,8 +141,7 @@ MARKER_BASE::~MARKER_BASE()
 
 
 void MARKER_BASE::SetData( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                           EDA_ITEM* aItem, const wxPoint& aPos,
-                           EDA_ITEM* bItem, const wxPoint& bPos )
+        EDA_ITEM* aItem, const wxPoint& aPos, EDA_ITEM* bItem, const wxPoint& bPos )
 {
     m_Pos = aMarkerPos;
     m_drc.SetData( aUnits, aErrorCode, aItem, aPos, bItem, bPos );

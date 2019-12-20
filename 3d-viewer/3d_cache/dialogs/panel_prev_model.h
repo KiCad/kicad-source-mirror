@@ -87,7 +87,7 @@ private:
     std::vector<MODULE_3D_SETTINGS>* m_parentModelList;
     int                              m_selected;   /// Index into m_parentInfoList
 
-    EDA_UNITS                      m_userUnits;
+    EDA_UNITS m_userUnits;
 
     // Methods of the class
 private:

@@ -238,7 +238,7 @@ void EDGE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset
 
 
 // see class_edge_mod.h
-void EDGE_MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void EDGE_MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 
@@ -257,7 +257,6 @@ void EDGE_MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM
     // append the features shared with the base class
     DRAWSEGMENT::GetMsgPanelInfo( aUnits, aList );
 }
-
 
 
 wxString EDGE_MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const

@@ -133,7 +133,7 @@ protected:
     wxStaticText*     m_unitLabel;
 
     ///> Currently used units.
-    EDA_UNITS       m_units;
+    EDA_UNITS         m_units;
     bool              m_useMils;
 
     ///> Validation support.

@@ -412,8 +412,8 @@ public:
      * Test the board footprints against a netlist.  Will report DRCE_MISSING_FOOTPRINT,
      * DRCE_DUPLICATE_FOOTPRINT and DRCE_EXTRA_FOOTPRINT errors in aDRCList.
      */
-    static void TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits,
-                                DRC_LIST& aDRCList );
+    static void TestFootprints(
+            NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits, DRC_LIST& aDRCList );
 
     /**
      * Open a dialog and prompts the user, then if a test run button is

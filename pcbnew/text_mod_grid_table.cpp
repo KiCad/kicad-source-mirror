@@ -38,9 +38,8 @@ enum
 wxArrayString g_menuOrientations;
 
 
-TEXT_MOD_GRID_TABLE::TEXT_MOD_GRID_TABLE( EDA_UNITS aUserUnits, PCB_BASE_FRAME* aFrame ) :
-    m_userUnits( aUserUnits ),
-    m_frame( aFrame )
+TEXT_MOD_GRID_TABLE::TEXT_MOD_GRID_TABLE( EDA_UNITS aUserUnits, PCB_BASE_FRAME* aFrame )
+        : m_userUnits( aUserUnits ), m_frame( aFrame )
 {
     // Build the column attributes.
 

@@ -81,7 +81,7 @@ public:
     void SetValueAsLong( int aRow, int aCol, long aValue ) override;
 
 private:
-    EDA_UNITS        m_userUnits;
+    EDA_UNITS       m_userUnits;
     PCB_BASE_FRAME*    m_frame;
 
     wxGridCellAttr*    m_readOnlyAttr;

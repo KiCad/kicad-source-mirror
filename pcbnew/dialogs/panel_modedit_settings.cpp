@@ -56,8 +56,8 @@ bool PANEL_MODEDIT_SETTINGS::TransferDataFromWindow()
 {
     // Display options
     m_frame->SetShowPolarCoords( m_PolarDisplay->GetSelection() != 0 );
-    m_frame->SetUserUnits( m_UnitsSelection->GetSelection() == 0 ? EDA_UNITS::INCHES :
-                                                                   EDA_UNITS::MILLIMETRES );
+    m_frame->SetUserUnits(
+            m_UnitsSelection->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES );
 
     // Editing options
     m_frame->Settings().m_Use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();

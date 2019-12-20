@@ -51,10 +51,10 @@ MARKER_PCB::MARKER_PCB( BOARD_ITEM* aParent ) :
 
 
 MARKER_PCB::MARKER_PCB( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                        BOARD_ITEM* aItem, const wxPoint& aPos,
-                        BOARD_ITEM* bItem, const wxPoint& bPos ) :
-    BOARD_ITEM( nullptr, PCB_MARKER_T ),  // parent set during BOARD::Add()
-    MARKER_BASE( aUnits, aErrorCode, aMarkerPos, aItem, aPos, bItem, bPos, SCALING_FACTOR ), m_item( nullptr )
+        BOARD_ITEM* aItem, const wxPoint& aPos, BOARD_ITEM* bItem, const wxPoint& bPos )
+        : BOARD_ITEM( nullptr, PCB_MARKER_T ), // parent set during BOARD::Add()
+          MARKER_BASE( aUnits, aErrorCode, aMarkerPos, aItem, aPos, bItem, bPos, SCALING_FACTOR ),
+          m_item( nullptr )
 {
     m_Color = WHITE;
 }
@@ -87,7 +87,7 @@ bool MARKER_PCB::IsOnLayer( PCB_LAYER_ID aLayer ) const
     return IsCopperLayer( aLayer );
 }
 
-void MARKER_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void MARKER_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString errorTxt, txtA, txtB;
 

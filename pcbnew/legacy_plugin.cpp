@@ -2559,14 +2559,21 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 THROW_IO_ERROR( m_error );
             }
 
-            switch( *hopt )   // upper case required
+            switch( *hopt ) // upper case required
             {
-            case 'N':   outline_hatch = ZONE_HATCH_STYLE::NO_HATCH;        break;
-            case 'E':   outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_EDGE;   break;
-            case 'F':   outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_FULL;   break;
+            case 'N':
+                outline_hatch = ZONE_HATCH_STYLE::NO_HATCH;
+                break;
+            case 'E':
+                outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_EDGE;
+                break;
+            case 'F':
+                outline_hatch = ZONE_HATCH_STYLE::DIAGONAL_FULL;
+                break;
 
             default:
-                m_error.Printf( _( "Bad ZAux for CZONE_CONTAINER \"%s\"" ), zc->GetNetname().GetData() );
+                m_error.Printf(
+                        _( "Bad ZAux for CZONE_CONTAINER \"%s\"" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 

@@ -129,7 +129,10 @@ public:
 
     void OnPaint( wxPaintEvent &event );
 
-    EDA_UNITS GetUserUnits() const { return m_units; }
+    EDA_UNITS GetUserUnits() const
+    {
+        return m_units;
+    }
 
     static bool IsCtrl( int aChar, const wxKeyEvent& e )
     {
@@ -190,7 +193,7 @@ protected:
      */
     void ResetSize();
 
-    EDA_UNITS            m_units;        // userUnits for display and parsing
+    EDA_UNITS   m_units;    // userUnits for display and parsing
     std::string            m_hash_key;     // alternate for class_map when classname re-used
 
     // On MacOS (at least) SetFocus() calls made in the constructor will fail because a

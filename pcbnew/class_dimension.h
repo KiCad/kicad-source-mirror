@@ -62,7 +62,7 @@ class DIMENSION : public BOARD_ITEM
 {
     int         m_Width;        ///< Line width
     int         m_Shape;        ///< Currently always 0.
-    EDA_UNITS m_Unit;         ///< 0 = inches, 1 = mm
+    EDA_UNITS   m_Unit;         ///< 0 = inches, 1 = mm
     bool        m_UseMils;      ///< If inches, use mils.
     int         m_Value;        ///< value of PCB dimensions.
     int         m_Height;       ///< length of feature lines
@@ -222,7 +222,7 @@ public:
      */
     void Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight = false );
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;

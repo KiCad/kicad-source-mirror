@@ -197,8 +197,10 @@ void SCH_BITMAP::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     aList.push_back( MSG_PANEL_ITEM( _( "Bitmap" ), wxEmptyString, RED ) );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), MessageTextFromValue( aUnits, GetSize().x ), RED ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), MessageTextFromValue( aUnits, GetSize().y ), RED ) );
+    aList.push_back(
+            MSG_PANEL_ITEM( _( "Width" ), MessageTextFromValue( aUnits, GetSize().x ), RED ) );
+    aList.push_back(
+            MSG_PANEL_ITEM( _( "Height" ), MessageTextFromValue( aUnits, GetSize().y ), RED ) );
 }
 
 

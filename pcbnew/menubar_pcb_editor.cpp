@@ -261,12 +261,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     {
         return GetShowPolarCoords();
     };
-    auto imperialUnitsCondition = [ this ]( const SELECTION &aSel )
-    {
+    auto imperialUnitsCondition = [this]( const SELECTION& aSel ) {
         return GetUserUnits() == EDA_UNITS::INCHES;
     };
-    auto metricUnitsCondition = [ this ]( const SELECTION &aSel )
-    {
+    auto metricUnitsCondition = [this]( const SELECTION& aSel ) {
         return GetUserUnits() == EDA_UNITS::MILLIMETRES;
     };
     auto fullCrosshairCondition = [ this ]( const SELECTION &aSel )

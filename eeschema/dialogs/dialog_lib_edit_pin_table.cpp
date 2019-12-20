@@ -58,13 +58,13 @@ private:
     // contains only a single pin.
     std::vector<LIB_PINS> m_rows;
 
-    EDA_UNITS           m_userUnits;
+    EDA_UNITS m_userUnits;
     bool                  m_edited;
 
 public:
-    PIN_TABLE_DATA_MODEL( EDA_UNITS aUserUnits ) :
-            m_userUnits( aUserUnits ), m_edited( false )
-    {}
+    PIN_TABLE_DATA_MODEL( EDA_UNITS aUserUnits ) : m_userUnits( aUserUnits ), m_edited( false )
+    {
+    }
 
     int GetNumberRows() override { return (int) m_rows.size(); }
     int GetNumberCols() override { return COL_COUNT; }
@@ -232,8 +232,8 @@ public:
         return -1;
     }
 
-    static bool compare( const LIB_PINS& lhs, const LIB_PINS& rhs,
-                         int sortCol, bool ascending, EDA_UNITS units )
+    static bool compare(
+            const LIB_PINS& lhs, const LIB_PINS& rhs, int sortCol, bool ascending, EDA_UNITS units )
     {
         wxString lhStr = GetValue( lhs, sortCol, units );
         wxString rhStr = GetValue( rhs, sortCol, units );

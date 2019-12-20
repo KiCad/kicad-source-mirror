@@ -71,8 +71,8 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
 bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
 {
     m_Frame->SetShowPolarCoords( m_PolarDisplay->GetSelection() != 0 );
-    m_Frame->SetUserUnits( m_UnitsSelection->GetSelection() == 0 ? EDA_UNITS::INCHES :
-                                                                   EDA_UNITS::MILLIMETRES );
+    m_Frame->SetUserUnits(
+            m_UnitsSelection->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES );
 
     m_Frame->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
 

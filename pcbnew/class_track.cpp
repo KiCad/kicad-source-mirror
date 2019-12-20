@@ -773,7 +773,7 @@ unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 
 // see class_track.h
-void TRACK::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void TRACK::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
     BOARD*   board = GetBoard();
@@ -823,7 +823,7 @@ void TRACK::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aL
     }
 }
 
-void TRACK::GetMsgPanelInfoBase_Common( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+void TRACK::GetMsgPanelInfoBase_Common( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 
@@ -883,7 +883,8 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_UNITS aUnits, std::vector< MSG_PANEL
     aList.emplace_back( _( "Status" ), msg, MAGENTA );
 }
 
-void TRACK::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+
+void TRACK::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
     BOARD* board = GetBoard();
@@ -910,7 +911,8 @@ void TRACK::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >
     aList.emplace_back( _( "Segment Length" ), msg, DARKCYAN );
 }
 
-void VIA::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector< MSG_PANEL_ITEM >& aList )
+
+void VIA::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
     BOARD*   board = GetBoard();
@@ -1000,6 +1002,7 @@ bool TRACK::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     return TestSegmentHit( aPosition, m_Start, m_End, aAccuracy + ( m_Width / 2 ) );
 }
 
+
 bool VIA::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int max_dist = aAccuracy + ( m_Width / 2 );
@@ -1023,6 +1026,7 @@ bool TRACK::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
     else
         return arect.Intersects( GetStart(), GetEnd() );
 }
+
 
 bool VIA::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {

@@ -36,8 +36,8 @@
 
 enum class ZONE_FILL_MODE
 {
-    POLYGONS = 0,       // fill zone with polygons
-    HATCH_PATTERN = 1   // fill zone using a grid pattern
+    POLYGONS = 0,     // fill zone with polygons
+    HATCH_PATTERN = 1 // fill zone using a grid pattern
 };
 
 

@@ -954,8 +954,7 @@ int ZONE_CONTAINER::GetHatchPitch() const
 }
 
 
-void ZONE_CONTAINER::SetHatch(
-        ZONE_HATCH_STYLE aHatchStyle, int aHatchPitch, bool aRebuildHatch )
+void ZONE_CONTAINER::SetHatch( ZONE_HATCH_STYLE aHatchStyle, int aHatchPitch, bool aRebuildHatch )
 {
     SetHatchPitch( aHatchPitch );
     m_hatchStyle = aHatchStyle;
@@ -1119,7 +1118,8 @@ void ZONE_CONTAINER::Hatch()
             // Push only one line for diagonal hatch,
             // or for small lines < twice the line length
             // else push 2 small lines
-            if( m_hatchStyle == ZONE_HATCH_STYLE::DIAGONAL_FULL || std::abs( dx ) < 2 * hatch_line_len )
+            if( m_hatchStyle == ZONE_HATCH_STYLE::DIAGONAL_FULL
+                    || std::abs( dx ) < 2 * hatch_line_len )
             {
                 m_HatchLines.emplace_back( SEG( pointbuffer[ip], pointbuffer[ip + 1] ) );
             }

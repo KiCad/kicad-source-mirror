@@ -73,7 +73,7 @@ public:
     }
 
     DRC_ITEM( EDA_UNITS aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
-              EDA_ITEM* bAuxiliaryItem, const wxPoint& bAuxiliaryPos )
+            EDA_ITEM* bAuxiliaryItem, const wxPoint& bAuxiliaryPos )
     {
         SetData( aUnits, aErrorCode, aMainItem, aMainPos, bAuxiliaryItem, bAuxiliaryPos );
     }
@@ -101,7 +101,7 @@ public:
      * @param bAuxiliaryPos = position the second item
      */
     void SetData( EDA_UNITS aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
-                  EDA_ITEM* bAuxiliaryItem = nullptr, const wxPoint& bAuxiliaryPos = wxPoint() )
+            EDA_ITEM* bAuxiliaryItem = nullptr, const wxPoint& bAuxiliaryPos = wxPoint() )
     {
         m_ErrorCode         = aErrorCode;
         m_MainText          = aMainItem->GetSelectMenuText( aUnits );

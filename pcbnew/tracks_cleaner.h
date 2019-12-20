@@ -115,7 +115,7 @@ private:
      */
     bool testTrackEndpointIsNode( TRACK* aTrack, bool aTstStart );
 
-    EDA_UNITS   m_units;
+    EDA_UNITS     m_units;
     BOARD*        m_brd;
     BOARD_COMMIT& m_commit;
     bool          m_dryRun;

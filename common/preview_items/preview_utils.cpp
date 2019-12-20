@@ -70,8 +70,7 @@ static wxString formatPreviewDimension( double aVal, EDA_UNITS aUnits )
 }
 
 
-wxString KIGFX::PREVIEW::DimensionLabel( const wxString& prefix,
-            double aVal, EDA_UNITS aUnits )
+wxString KIGFX::PREVIEW::DimensionLabel( const wxString& prefix, double aVal, EDA_UNITS aUnits )
 {
     wxString str;
 
