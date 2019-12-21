@@ -42,7 +42,7 @@ SEARCH_RESULT GERBER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     if( testItem->HitTest( m_RefPos ) )
         Append( testItem );
 
-    return SEARCH_CONTINUE;
+    return SEARCH_RESULT::CONTINUE;
 }
 
 

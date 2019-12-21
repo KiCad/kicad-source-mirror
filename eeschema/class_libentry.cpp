@@ -1003,12 +1003,12 @@ SEARCH_RESULT LIB_PART::Visit( INSPECTOR aInspector, void* aTestData, const KICA
     {
         if( item.IsType( aFilterTypes ) )
         {
-            if( aInspector( &item, aTestData ) == SEARCH_QUIT )
-                return SEARCH_QUIT;
+            if( aInspector( &item, aTestData ) == SEARCH_RESULT::QUIT )
+                return SEARCH_RESULT::QUIT;
         }
     }
 
-    return SEARCH_CONTINUE;
+    return SEARCH_RESULT::CONTINUE;
 }
 
 

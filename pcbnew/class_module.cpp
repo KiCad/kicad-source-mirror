@@ -803,7 +803,7 @@ void MODULE::Add3DModel( MODULE_3D_SETTINGS* a3DModel )
 SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T        stype;
-    SEARCH_RESULT  result = SEARCH_CONTINUE;
+    SEARCH_RESULT  result = SEARCH_RESULT::CONTINUE;
     const KICAD_T* p    = scanTypes;
     bool           done = false;
 
@@ -835,12 +835,12 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
         case PCB_MODULE_TEXT_T:
             result = inspector( m_Reference, testData );
 
-            if( result == SEARCH_QUIT )
+            if( result == SEARCH_RESULT::QUIT )
                 break;
 
             result = inspector( m_Value, testData );
 
-            if( result == SEARCH_QUIT )
+            if( result == SEARCH_RESULT::QUIT )
                 break;
 
         // m_Drawings can hold TYPETEXTMODULE also, so fall thru
@@ -871,7 +871,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
             break;
         }
 
-        if( result == SEARCH_QUIT )
+        if( result == SEARCH_RESULT::QUIT )
             break;
     }
 

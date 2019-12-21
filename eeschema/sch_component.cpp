@@ -1615,8 +1615,8 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
         // If caller wants to inspect component type or and component children types.
         if( stype == SCH_LOCATE_ANY_T || stype == Type() )
         {
-            if( SEARCH_QUIT == aInspector( this, aTestData ) )
-                return SEARCH_QUIT;
+            if( SEARCH_RESULT::QUIT == aInspector( this, aTestData ) )
+                return SEARCH_RESULT::QUIT;
         }
 
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
@@ -1624,46 +1624,46 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
             // Test the bounding boxes of fields if they are visible and not empty.
             for( int ii = 0; ii < GetFieldCount(); ii++ )
             {
-                if( SEARCH_QUIT == aInspector( GetField( ii ), (void*) this ) )
-                    return SEARCH_QUIT;
+                if( SEARCH_RESULT::QUIT == aInspector( GetField( ii ), (void*) this ) )
+                    return SEARCH_RESULT::QUIT;
             }
         }
 
         if( stype == SCH_FIELD_LOCATE_REFERENCE_T )
         {
-            if( SEARCH_QUIT == aInspector( GetField( REFERENCE ), (void*) this ) )
-                return SEARCH_QUIT;
+            if( SEARCH_RESULT::QUIT == aInspector( GetField( REFERENCE ), (void*) this ) )
+                return SEARCH_RESULT::QUIT;
         }
 
         if( stype == SCH_FIELD_LOCATE_VALUE_T )
         {
-            if( SEARCH_QUIT == aInspector( GetField( VALUE ), (void*) this ) )
-                return SEARCH_QUIT;
+            if( SEARCH_RESULT::QUIT == aInspector( GetField( VALUE ), (void*) this ) )
+                return SEARCH_RESULT::QUIT;
         }
 
         if( stype == SCH_FIELD_LOCATE_FOOTPRINT_T )
         {
-            if( SEARCH_QUIT == aInspector( GetField( FOOTPRINT ), (void*) this ) )
-                return SEARCH_QUIT;
+            if( SEARCH_RESULT::QUIT == aInspector( GetField( FOOTPRINT ), (void*) this ) )
+                return SEARCH_RESULT::QUIT;
         }
 
         if( stype == SCH_FIELD_LOCATE_DATASHEET_T )
         {
-            if( SEARCH_QUIT == aInspector( GetField( DATASHEET ), (void*) this ) )
-                return SEARCH_QUIT;
+            if( SEARCH_RESULT::QUIT == aInspector( GetField( DATASHEET ), (void*) this ) )
+                return SEARCH_RESULT::QUIT;
         }
 
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_PIN_T )
         {
             for( SCH_PIN& pin : m_pins )
             {
-                if( SEARCH_QUIT == aInspector( &pin, (void*) this ) )
-                    return SEARCH_QUIT;
+                if( SEARCH_RESULT::QUIT == aInspector( &pin, (void*) this ) )
+                    return SEARCH_RESULT::QUIT;
             }
         }
     }
 
-    return SEARCH_CONTINUE;
+    return SEARCH_RESULT::CONTINUE;
 }
 
 

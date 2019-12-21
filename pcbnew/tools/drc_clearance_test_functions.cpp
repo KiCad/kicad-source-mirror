@@ -704,15 +704,15 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                     DRAWSEGMENT* test_edge = dynamic_cast<DRAWSEGMENT*>( item );
 
                     if( !test_edge || test_edge->GetLayer() != Edge_Cuts )
-                        return SEARCH_CONTINUE;
+                        return SEARCH_RESULT::CONTINUE;
 
                     if( test_edge->HitTest((wxPoint) pt, w_dist ) )
                     {
                         edge = test_edge;
-                        return SEARCH_QUIT;
+                        return SEARCH_RESULT::QUIT;
                     }
 
-                    return SEARCH_CONTINUE;
+                    return SEARCH_RESULT::CONTINUE;
                 };
 
                 // Best-efforts search for edge segment

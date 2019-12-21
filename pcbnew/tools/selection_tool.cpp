@@ -1314,12 +1314,12 @@ void SELECTION_TOOL::RebuildSelection()
 
             // Flags on module children might be set only because the parent is selected.
             if( parent && parent->Type() == PCB_MODULE_T && parent->IsSelected() )
-                return SEARCH_CONTINUE;
+                return SEARCH_RESULT::CONTINUE;
 
             highlight( (BOARD_ITEM*) item, SELECTED, &m_selection );
         }
 
-        return SEARCH_CONTINUE;
+        return SEARCH_RESULT::CONTINUE;
     };
 
     board()->Visit( inspector, nullptr,  m_editModules ? GENERAL_COLLECTOR::ModuleItems
