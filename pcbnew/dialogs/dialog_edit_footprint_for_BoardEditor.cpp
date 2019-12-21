@@ -337,10 +337,18 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     switch( m_footprint->GetZoneConnection() )
     {
     default:
-    case PAD_ZONE_CONN_INHERITED: m_ZoneConnectionChoice->SetSelection( 0 ); break;
-    case PAD_ZONE_CONN_FULL:      m_ZoneConnectionChoice->SetSelection( 1 ); break;
-    case PAD_ZONE_CONN_THERMAL:   m_ZoneConnectionChoice->SetSelection( 2 ); break;
-    case PAD_ZONE_CONN_NONE:      m_ZoneConnectionChoice->SetSelection( 3 ); break;
+    case ZONE_CONNECTION::INHERITED:
+        m_ZoneConnectionChoice->SetSelection( 0 );
+        break;
+    case ZONE_CONNECTION::FULL:
+        m_ZoneConnectionChoice->SetSelection( 1 );
+        break;
+    case ZONE_CONNECTION::THERMAL:
+        m_ZoneConnectionChoice->SetSelection( 2 );
+        break;
+    case ZONE_CONNECTION::NONE:
+        m_ZoneConnectionChoice->SetSelection( 3 );
+        break;
     }
 
     // 3D Settings
@@ -677,10 +685,18 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
     switch( m_ZoneConnectionChoice->GetSelection() )
     {
     default:
-    case 0: m_footprint->SetZoneConnection( PAD_ZONE_CONN_INHERITED ); break;
-    case 1: m_footprint->SetZoneConnection( PAD_ZONE_CONN_FULL );      break;
-    case 2: m_footprint->SetZoneConnection( PAD_ZONE_CONN_THERMAL );   break;
-    case 3: m_footprint->SetZoneConnection( PAD_ZONE_CONN_NONE );      break;
+    case 0:
+        m_footprint->SetZoneConnection( ZONE_CONNECTION::INHERITED );
+        break;
+    case 1:
+        m_footprint->SetZoneConnection( ZONE_CONNECTION::FULL );
+        break;
+    case 2:
+        m_footprint->SetZoneConnection( ZONE_CONNECTION::THERMAL );
+        break;
+    case 3:
+        m_footprint->SetZoneConnection( ZONE_CONNECTION::NONE );
+        break;
     }
 
     // Set Module Position

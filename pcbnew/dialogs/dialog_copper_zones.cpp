@@ -161,10 +161,18 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     switch( m_settings.GetPadConnection() )
     {
     default:
-    case PAD_ZONE_CONN_THERMAL:     m_PadInZoneOpt->SetSelection( 1 ); break;
-    case PAD_ZONE_CONN_THT_THERMAL: m_PadInZoneOpt->SetSelection( 2 ); break;
-    case PAD_ZONE_CONN_NONE:        m_PadInZoneOpt->SetSelection( 3 ); break;
-    case PAD_ZONE_CONN_FULL:        m_PadInZoneOpt->SetSelection( 0 ); break;
+    case ZONE_CONNECTION::THERMAL:
+        m_PadInZoneOpt->SetSelection( 1 );
+        break;
+    case ZONE_CONNECTION::THT_THERMAL:
+        m_PadInZoneOpt->SetSelection( 2 );
+        break;
+    case ZONE_CONNECTION::NONE:
+        m_PadInZoneOpt->SetSelection( 3 );
+        break;
+    case ZONE_CONNECTION::FULL:
+        m_PadInZoneOpt->SetSelection( 0 );
+        break;
     }
 
     // Do not enable/disable antipad clearance and spoke width.  They might be needed if
@@ -323,10 +331,18 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
 
     switch( m_PadInZoneOpt->GetSelection() )
     {
-    case 3: m_settings.SetPadConnection( PAD_ZONE_CONN_NONE );        break;
-    case 2: m_settings.SetPadConnection( PAD_ZONE_CONN_THT_THERMAL ); break;
-    case 1: m_settings.SetPadConnection( PAD_ZONE_CONN_THERMAL );     break;
-    case 0: m_settings.SetPadConnection( PAD_ZONE_CONN_FULL );        break;
+    case 3:
+        m_settings.SetPadConnection( ZONE_CONNECTION::NONE );
+        break;
+    case 2:
+        m_settings.SetPadConnection( ZONE_CONNECTION::THT_THERMAL );
+        break;
+    case 1:
+        m_settings.SetPadConnection( ZONE_CONNECTION::THERMAL );
+        break;
+    case 0:
+        m_settings.SetPadConnection( ZONE_CONNECTION::FULL );
+        break;
     }
 
     switch( m_OutlineAppearanceCtrl->GetSelection() )

@@ -66,7 +66,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     // thickness of the copper bridge in thermal reliefs:
     m_ThermalReliefCopperBridge = Mils2iu( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL );
 
-    m_PadConnection = PAD_ZONE_CONN_THERMAL;                   // How pads are covered by copper in zone
+    m_PadConnection = ZONE_CONNECTION::THERMAL; // How pads are covered by copper in zone
 
     m_Zone_45_Only = false;
 

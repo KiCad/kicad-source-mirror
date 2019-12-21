@@ -1239,7 +1239,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 
     // missing == yes per DTD.
     bool thermals = !p.thermals || *p.thermals;
-    zone->SetPadConnection( thermals ? PAD_ZONE_CONN_THERMAL : PAD_ZONE_CONN_FULL );
+    zone->SetPadConnection( thermals ? ZONE_CONNECTION::THERMAL : ZONE_CONNECTION::FULL );
 
     if( thermals )
     {
@@ -2035,7 +2035,7 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, D_PAD* aPad ) cons
 
     // Solid connection to copper zones
     if( aEaglePad.thermals && !*aEaglePad.thermals )
-        aPad->SetZoneConnection( PAD_ZONE_CONN_FULL );
+        aPad->SetZoneConnection( ZONE_CONNECTION::FULL );
 
     MODULE* module = aPad->GetParent();
     wxCHECK( module, /* void */ );

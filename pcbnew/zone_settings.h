@@ -97,7 +97,7 @@ public:
 private:
     int  m_cornerSmoothingType;           ///< Corner smoothing type
     unsigned int  m_cornerRadius;         ///< Corner chamfer distance / fillet radius
-    ZoneConnection m_PadConnection;
+    ZONE_CONNECTION m_PadConnection;
 
     /* A zone outline can be a keepout zone.
      * It will be never filled, and DRC should test for pads, tracks and vias
@@ -152,8 +152,8 @@ public:
 
     unsigned int GetCornerRadius() const { return m_cornerRadius; }
 
-    ZoneConnection GetPadConnection() const { return m_PadConnection; }
-    void SetPadConnection( ZoneConnection aPadConnection ) { m_PadConnection = aPadConnection; }
+    ZONE_CONNECTION GetPadConnection() const { return m_PadConnection; }
+    void SetPadConnection( ZONE_CONNECTION aPadConnection ) { m_PadConnection = aPadConnection; }
 
     /**
      * Accessors to parameters used in Keepout zones:

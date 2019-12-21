@@ -2444,7 +2444,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             break;
 
         case T_zone_connect:
-            module->SetZoneConnection( (ZoneConnection) parseInt( "zone connection value" ) );
+            module->SetZoneConnection( (ZONE_CONNECTION) parseInt( "zone connection value" ) );
             NeedRIGHT();
             break;
 
@@ -3065,7 +3065,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
             break;
 
         case T_zone_connect:
-            pad->SetZoneConnection( (ZoneConnection) parseInt( "zone connection value" ) );
+            pad->SetZoneConnection( (ZONE_CONNECTION) parseInt( "zone connection value" ) );
             NeedRIGHT();
             break;
 
@@ -3536,15 +3536,15 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                 switch( token )
                 {
                 case T_yes:
-                    zone->SetPadConnection( PAD_ZONE_CONN_FULL );
+                    zone->SetPadConnection( ZONE_CONNECTION::FULL );
                     break;
 
                 case T_no:
-                    zone->SetPadConnection( PAD_ZONE_CONN_NONE );
+                    zone->SetPadConnection( ZONE_CONNECTION::NONE );
                     break;
 
                 case T_thru_hole_only:
-                    zone->SetPadConnection( PAD_ZONE_CONN_THT_THERMAL );
+                    zone->SetPadConnection( ZONE_CONNECTION::THT_THERMAL );
                     break;
 
                 case T_clearance:

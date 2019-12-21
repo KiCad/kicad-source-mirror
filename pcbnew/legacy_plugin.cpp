@@ -1383,7 +1383,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
         else if( TESTLINE( ".ZoneConnection" ) )
         {
             int tmp = intParse( line + SZ( ".ZoneConnection" ) );
-            aModule->SetZoneConnection( (ZoneConnection)tmp );
+            aModule->SetZoneConnection( (ZONE_CONNECTION)tmp );
         }
 
         else if( TESTLINE( ".ThermalWidth" ) )
@@ -1618,7 +1618,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
         else if( TESTLINE( ".ZoneConnection" ) )
         {
             int tmp = intParse( line + SZ( ".ZoneConnection" ) );
-            pad->SetZoneConnection( (ZoneConnection)tmp );
+            pad->SetZoneConnection( (ZONE_CONNECTION)tmp );
         }
 
         else if( TESTLINE( ".ThermalWidth" ) )
@@ -2672,17 +2672,25 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             BIU     clearance = biuParse( line + SZ( "ZClearance" ), &data );
             char*   padoption = strtok_r( (char*) data, delims, &saveptr );  // data: " I"
 
-            ZoneConnection popt;
+            ZONE_CONNECTION popt;
             switch( *padoption )
             {
-            case 'I': popt = PAD_ZONE_CONN_FULL;        break;
-            case 'T': popt = PAD_ZONE_CONN_THERMAL;     break;
-            case 'H': popt = PAD_ZONE_CONN_THT_THERMAL; break;
-            case 'X': popt = PAD_ZONE_CONN_NONE;        break;
+            case 'I':
+                popt = ZONE_CONNECTION::FULL;
+                break;
+            case 'T':
+                popt = ZONE_CONNECTION::THERMAL;
+                break;
+            case 'H':
+                popt = ZONE_CONNECTION::THT_THERMAL;
+                break;
+            case 'X':
+                popt = ZONE_CONNECTION::NONE;
+                break;
 
             default:
                 m_error.Printf( _( "Bad ZClearance padoption for CZONE_CONTAINER \"%s\"" ),
-                    zc->GetNetname().GetData() );
+                        zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
