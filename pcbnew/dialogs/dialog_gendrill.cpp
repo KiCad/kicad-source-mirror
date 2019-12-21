@@ -183,15 +183,15 @@ void DIALOG_GENDRILL::InitDisplayParams()
         {
             switch( via->GetViaType() )
             {
-            case VIA_THROUGH:
+            case VIATYPE::THROUGH:
                 m_throughViasCount++;
                 break;
 
-            case VIA_MICROVIA:
+            case VIATYPE::MICROVIA:
                 m_microViasCount++;
                 break;
 
-            case VIA_BLIND_BURIED:
+            case VIATYPE::BLIND_BURIED:
                 m_blindOrBuriedViasCount++;
                 break;
 

@@ -58,7 +58,7 @@ int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
         // Micro vias have a size only defined in their netclass
         // (no specific values defined by a table of specific value)
         // Ensure the netclass is accessible:
-        if( via->GetViaType() == VIA_MICROVIA && net == NULL )
+        if( via->GetViaType() == VIATYPE::MICROVIA && net == NULL )
             net = aTrackItem->GetNet();
 
         // Get the draill value, regardless it is default or specific
@@ -75,7 +75,7 @@ int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
             new_drill = GetDesignSettings().GetCurrentViaDrill();
         }
 
-        if( via->GetViaType() == VIA_MICROVIA )
+        if( via->GetViaType() == VIATYPE::MICROVIA )
         {
             if( net )
             {

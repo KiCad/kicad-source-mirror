@@ -65,7 +65,7 @@ public:
     };
 
     using padsType_t = typeContainer_t<PAD_ATTR_T>;
-    using viasType_t = typeContainer_t<VIATYPE_T>;
+    using viasType_t = typeContainer_t<VIATYPE>;
 
     /**
      * Struct holds information about component type (such as SMD, THT,

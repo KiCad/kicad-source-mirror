@@ -1659,14 +1659,14 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
 
         switch( via->GetViaType() )
         {
-        case VIA_THROUGH:           //  Default shape not saved.
+        case VIATYPE::THROUGH: //  Default shape not saved.
             break;
 
-        case VIA_BLIND_BURIED:
+        case VIATYPE::BLIND_BURIED:
             m_out->Print( 0, " blind" );
             break;
 
-        case VIA_MICROVIA:
+        case VIATYPE::MICROVIA:
             m_out->Print( 0, " micro" );
             break;
 

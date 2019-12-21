@@ -647,7 +647,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
                 VIA*         via = (VIA*) segm;
                 PCB_LAYER_ID top_layer, bottom_layer;
 
-                if( via->GetViaType() == VIA_THROUGH )
+                if( via->GetViaType() == VIATYPE::THROUGH )
                     continue;
 
                 via->LayerPair( &top_layer, &bottom_layer );
@@ -3361,11 +3361,11 @@ VIA* PCB_PARSER::parseVIA()
         switch( token )
         {
         case T_blind:
-            via->SetViaType( VIA_BLIND_BURIED );
+            via->SetViaType( VIATYPE::BLIND_BURIED );
             break;
 
         case T_micro:
-            via->SetViaType( VIA_MICROVIA );
+            via->SetViaType( VIATYPE::MICROVIA );
             break;
 
         case T_at:

@@ -290,7 +290,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             if( track->Type() == PCB_VIA_T )
             {
                 const VIA *via = static_cast< const VIA*>( track );
-                const VIATYPE_T viatype = via->GetViaType();
+                const VIATYPE viatype = via->GetViaType();
                 const float holediameter = via->GetDrillValue() * BiuTo3Dunits();
                 const float thickness = GetCopperThickness3DU();
                 const float hole_inner_radius = ( holediameter / 2.0f );
@@ -298,7 +298,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                 const SFVEC2F via_center(  via->GetStart().x * m_biuTo3Dunits,
                                           -via->GetStart().y * m_biuTo3Dunits );
 
-                if( viatype != VIA_THROUGH )
+                if( viatype != VIATYPE::THROUGH )
                 {
 
                     // Add hole objects
@@ -374,9 +374,9 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             if( track->Type() == PCB_VIA_T )
             {
                 const VIA *via = static_cast< const VIA*>( track );
-                const VIATYPE_T viatype = via->GetViaType();
+                const VIATYPE viatype = via->GetViaType();
 
-                if( viatype != VIA_THROUGH )
+                if( viatype != VIATYPE::THROUGH )
                 {
 
                     // Add VIA hole contourns

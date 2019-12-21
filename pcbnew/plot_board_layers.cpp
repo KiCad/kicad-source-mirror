@@ -526,7 +526,8 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
         gbr_metadata.SetNetName( Via->GetNetname() );
 
-        COLOR4D color = aBoard->Colors().GetItemColor( LAYER_VIAS + Via->GetViaType() );
+        COLOR4D color =
+                aBoard->Colors().GetItemColor( LAYER_VIAS + static_cast<int>( Via->GetViaType() ) );
         // Set plot color (change WHITE to LIGHTGRAY because the white items are not seen on a
         // white paper or screen
         aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);

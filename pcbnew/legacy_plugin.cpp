@@ -2258,7 +2258,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
         assert( TESTLINE( "Po" ) );
 
-        VIATYPE_T viatype = static_cast<VIATYPE_T>( intParse( line + SZ( "Po" ), &data ));
+        VIATYPE viatype = static_cast<VIATYPE>( intParse( line + SZ( "Po" ), &data ));
         BIU start_x = biuParse( data, &data );
         BIU start_y = biuParse( data, &data );
         BIU end_x   = biuParse( data, &data );
@@ -2350,7 +2350,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
             else
                 via->SetDrill( drill );
 
-            if( via->GetViaType() == VIA_THROUGH )
+            if( via->GetViaType() == VIATYPE::THROUGH )
                 via->SetLayerPair( F_Cu, B_Cu );
             else
             {

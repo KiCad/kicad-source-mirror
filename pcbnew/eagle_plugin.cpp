@@ -2216,11 +2216,11 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         m_min_via_hole = drillz;
 
                     if( layer_front_most == F_Cu && layer_back_most == B_Cu )
-                        via->SetViaType( VIA_THROUGH );
+                        via->SetViaType( VIATYPE::THROUGH );
                     else if( layer_front_most == F_Cu || layer_back_most == B_Cu )
-                        via->SetViaType( VIA_MICROVIA );
+                        via->SetViaType( VIATYPE::MICROVIA );
                     else
-                        via->SetViaType( VIA_BLIND_BURIED );
+                        via->SetViaType( VIATYPE::BLIND_BURIED );
 
                     via->SetTimeStamp( EagleTimeStamp( netItem ) );
 

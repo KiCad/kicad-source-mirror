@@ -170,7 +170,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         wxPoint refviaPos = refvia->GetPosition();
 
         // test if the via size is smaller than minimum
-        if( refvia->GetViaType() == VIA_MICROVIA )
+        if( refvia->GetViaType() == VIATYPE::MICROVIA )
         {
             if( refvia->GetWidth() < dsnSettings.m_MicroViasMinSize )
             {
@@ -219,7 +219,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         }
 
         // test if the type of via is allowed due to design rules
-        if( refvia->GetViaType() == VIA_MICROVIA && !dsnSettings.m_MicroViasAllowed )
+        if( refvia->GetViaType() == VIATYPE::MICROVIA && !dsnSettings.m_MicroViasAllowed )
         {
             markers.PUSH_NEW_MARKER_3( refviaPos, refvia, DRCE_MICRO_VIA_NOT_ALLOWED );
 
@@ -228,7 +228,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         }
 
         // test if the type of via is allowed due to design rules
-        if( refvia->GetViaType() == VIA_BLIND_BURIED && !dsnSettings.m_BlindBuriedViaAllowed )
+        if( refvia->GetViaType() == VIATYPE::BLIND_BURIED && !dsnSettings.m_BlindBuriedViaAllowed )
         {
             markers.PUSH_NEW_MARKER_3( refviaPos, refvia, DRCE_BURIED_VIA_NOT_ALLOWED );
 
@@ -239,7 +239,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         // For microvias: test if they are blind vias and only between 2 layers
         // because they are used for very small drill size and are drill by laser
         // and **only one layer** can be drilled
-        if( refvia->GetViaType() == VIA_MICROVIA )
+        if( refvia->GetViaType() == VIATYPE::MICROVIA )
         {
             PCB_LAYER_ID    layer1, layer2;
             bool        err = true;

@@ -378,9 +378,9 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     {
         auto type = via->GetViaType();
 
-        if( ( m_Guide->IgnoreThroughVias() && type == VIA_THROUGH ) ||
-            ( m_Guide->IgnoreBlindBuriedVias() && type == VIA_BLIND_BURIED ) ||
-            ( m_Guide->IgnoreMicroVias() && type == VIA_MICROVIA ) )
+        if( ( m_Guide->IgnoreThroughVias() && type == VIATYPE::THROUGH )
+                || ( m_Guide->IgnoreBlindBuriedVias() && type == VIATYPE::BLIND_BURIED )
+                || ( m_Guide->IgnoreMicroVias() && type == VIATYPE::MICROVIA ) )
         {
             goto exit;
         }

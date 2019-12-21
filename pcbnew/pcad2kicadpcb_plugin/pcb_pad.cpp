@@ -349,7 +349,7 @@ void PCB_PAD::AddToBoard()
             via->SetEnd( wxPoint( m_positionX, m_positionY ) );
 
             via->SetWidth( height );
-            via->SetViaType( VIA_THROUGH );
+            via->SetViaType( VIATYPE::THROUGH );
             via->SetLayerPair( F_Cu, B_Cu );
             via->SetDrill( m_hole );
 

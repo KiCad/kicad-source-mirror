@@ -501,16 +501,19 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 }
 
 
-static VIATYPE_T getViaTypeFromFlags( int aFlags )
+static VIATYPE getViaTypeFromFlags( int aFlags )
 {
     switch( aFlags & VIA_ACTION_FLAGS::VIA_MASK )
     {
-    case VIA_ACTION_FLAGS::VIA:       return VIA_THROUGH;
-    case VIA_ACTION_FLAGS::BLIND_VIA: return VIA_BLIND_BURIED;
-    case VIA_ACTION_FLAGS::MICROVIA:  return VIA_MICROVIA;
+    case VIA_ACTION_FLAGS::VIA:
+        return VIATYPE::THROUGH;
+    case VIA_ACTION_FLAGS::BLIND_VIA:
+        return VIATYPE::BLIND_BURIED;
+    case VIA_ACTION_FLAGS::MICROVIA:
+        return VIATYPE::MICROVIA;
     default:
         wxASSERT_MSG( false, "Unhandled via type" );
-        return VIA_THROUGH;
+        return VIATYPE::THROUGH;
     }
 }
 
@@ -519,13 +522,13 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 {
     const int actViaFlags = aEvent.Parameter<intptr_t>();
 
-    VIATYPE_T viaType = getViaTypeFromFlags( actViaFlags );
+    VIATYPE    viaType = getViaTypeFromFlags( actViaFlags );
     const bool selectLayer = actViaFlags & VIA_ACTION_FLAGS::SELECT_LAYER;
 
     BOARD_DESIGN_SETTINGS& bds = board()->GetDesignSettings();
 
-    const int layerCount = bds.GetCopperLayerCount();
-    int currentLayer = m_router->GetCurrentLayer();
+    const int    layerCount = bds.GetCopperLayerCount();
+    int          currentLayer = m_router->GetCurrentLayer();
     PCB_LAYER_ID pairTop = frame()->GetScreen()->m_Route_Layer_TOP;
     PCB_LAYER_ID pairBottom = frame()->GetScreen()->m_Route_Layer_BOTTOM;
 
@@ -538,8 +541,8 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
     {
         wxPoint dlgPosition = wxGetMousePosition();
 
-        targetLayer = frame()->SelectLayer( static_cast<PCB_LAYER_ID>( currentLayer ),
-                LSET::AllNonCuMask(), dlgPosition );
+        targetLayer = frame()->SelectLayer(
+                static_cast<PCB_LAYER_ID>( currentLayer ), LSET::AllNonCuMask(), dlgPosition );
 
         // Reset the cursor to the position where the event occured
         controls()->SetCursorPosition( aEvent.HasPosition() ? aEvent.Position() : dlgPosition );
@@ -551,44 +554,48 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
     if( !m_router->IsPlacingVia() )
     {
         // Cannot place microvias or blind vias if not allowed (obvious)
-        if( ( viaType == VIA_BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
+        if( ( viaType == VIATYPE::BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
         {
-            DisplayError( frame(), _( "Blind/buried vias have to be enabled in Board Setup > Design Rules > Constraints." ) );
+            DisplayError( frame(),
+                    _( "Blind/buried vias have to be enabled in Board Setup > Design Rules > Constraints." ) );
             return false;
         }
 
-        if( ( viaType == VIA_MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
+        if( ( viaType == VIATYPE::MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
         {
-            DisplayError( frame(), _( "Microvias have to be enabled in Board Setup > Design Rules > Constraints." ) );
+            DisplayError( frame(),
+                    _( "Microvias have to be enabled in Board Setup > Design Rules > Constraints." ) );
             return false;
         }
 
         // Can only place through vias on 2-layer boards
-        if( ( viaType != VIA_THROUGH ) && ( layerCount <= 2 ) )
+        if( ( viaType != VIATYPE::THROUGH ) && ( layerCount <= 2 ) )
         {
             DisplayError( frame(), _( "Only through vias are allowed on 2 layer boards." ) );
             return false;
         }
 
         // Can only place microvias if we're on an outer layer, or directly adjacent to one
-        if( ( viaType == VIA_MICROVIA ) && ( currentLayer > In1_Cu ) && ( currentLayer < layerCount - 2 ) )
+        if( ( viaType == VIATYPE::MICROVIA ) && ( currentLayer > In1_Cu )
+                && ( currentLayer < layerCount - 2 ) )
         {
-            DisplayError( frame(), _( "Microvias can be placed only between the outer layers " \
+            DisplayError( frame(), _( "Microvias can be placed only between the outer layers "
                                       "(F.Cu/B.Cu) and the ones directly adjacent to them." ) );
             return false;
         }
     }
 
     // Convert blind/buried via to a through hole one, if it goes through all layers
-    if( viaType == VIA_BLIND_BURIED   && ( ( targetLayer == B_Cu && currentLayer == F_Cu )
-                                      || (   targetLayer == F_Cu && currentLayer == B_Cu ) ) )
+    if( viaType == VIATYPE::BLIND_BURIED
+            && ( ( targetLayer == B_Cu && currentLayer == F_Cu )
+                    || ( targetLayer == F_Cu && currentLayer == B_Cu ) ) )
     {
-        viaType = VIA_THROUGH;
+        viaType = VIATYPE::THROUGH;
     }
 
     switch( viaType )
     {
-    case VIA_THROUGH:
+    case VIATYPE::THROUGH:
         sizes.SetViaDiameter( bds.GetCurrentViaSize() );
         sizes.SetViaDrill( bds.GetCurrentViaDrill() );
 
@@ -604,11 +611,12 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         }
         break;
 
-    case VIA_MICROVIA:
+    case VIATYPE::MICROVIA:
         sizes.SetViaDiameter( bds.GetCurrentMicroViaSize() );
         sizes.SetViaDrill( bds.GetCurrentMicroViaDrill() );
 
-        wxASSERT_MSG( !selectLayer, "Unexpected select layer for microvia (microvia layers are implicit)" );
+        wxASSERT_MSG( !selectLayer,
+                "Unexpected select layer for microvia (microvia layers are implicit)" );
 
         if( currentLayer == F_Cu || currentLayer == In1_Cu )
         {
@@ -622,11 +630,12 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         }
         else
         {
-            wxASSERT_MSG( false, "Invalid layer pair for microvia (must be on or adjacent to an outer layer)" );
+            wxASSERT_MSG( false,
+                    "Invalid layer pair for microvia (must be on or adjacent to an outer layer)" );
         }
         break;
 
-    case VIA_BLIND_BURIED:
+    case VIATYPE::BLIND_BURIED:
         sizes.SetViaDiameter( bds.GetCurrentViaSize() );
         sizes.SetViaDrill( bds.GetCurrentViaDrill() );
 
