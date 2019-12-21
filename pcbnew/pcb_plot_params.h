@@ -66,7 +66,7 @@ private:
     DXF_PLOTTER::DXF_UNITS m_DXFplotUnits;
 
     /// Plot format type (chooses the driver to be used)
-    PlotFormat  m_format;
+    PLOT_FORMAT  m_format;
 
     /// Holes can be not plotted, have a small mark or plotted in actual size
     DrillMarksType m_drillMarks;
@@ -252,8 +252,8 @@ public:
     void        SetExcludeEdgeLayer( bool aFlag ) { m_excludeEdgeLayer = aFlag; }
     bool        GetExcludeEdgeLayer() const { return m_excludeEdgeLayer; }
 
-    void        SetFormat( PlotFormat aFormat ) { m_format = aFormat; }
-    PlotFormat  GetFormat() const { return m_format; }
+    void        SetFormat( PLOT_FORMAT aFormat ) { m_format = aFormat; }
+    PLOT_FORMAT  GetFormat() const { return m_format; }
 
     void        SetOutputDirectory( wxString aDir ) { m_outputDirectory = aDir; }
     wxString    GetOutputDirectory() const { return m_outputDirectory; }

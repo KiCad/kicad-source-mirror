@@ -47,16 +47,16 @@ class GBR_NETLIST_METADATA;
  * is the set of supported output plot formats.  They should be kept in order
  * of the radio buttons in the plot panel/windows.
  */
-enum PlotFormat {
-    PLOT_FORMAT_UNDEFINED = -1,
-    PLOT_FIRST_FORMAT = 0,
-    PLOT_FORMAT_HPGL = PLOT_FIRST_FORMAT,
-    PLOT_FORMAT_GERBER,
-    PLOT_FORMAT_POST,
-    PLOT_FORMAT_DXF,
-    PLOT_FORMAT_PDF,
-    PLOT_FORMAT_SVG,
-    PLOT_LAST_FORMAT = PLOT_FORMAT_SVG
+enum class PLOT_FORMAT {
+    UNDEFINED = -1,
+    FIRST_FORMAT = 0,
+    HPGL = FIRST_FORMAT,
+    GERBER,
+    POST,
+    DXF,
+    PDF,
+    SVG,
+    LAST_FORMAT = SVG
 };
 
 /**
@@ -110,7 +110,7 @@ public:
      * now is required since some things are only done with some output devices
      * (like drill marks, emitted only for postscript
      */
-    virtual PlotFormat GetPlotterType() const = 0;
+    virtual PLOT_FORMAT GetPlotterType() const = 0;
 
     virtual bool StartPlot() = 0;
     virtual bool EndPlot() = 0;
@@ -602,9 +602,9 @@ class HPGL_PLOTTER : public PLOTTER
 public:
     HPGL_PLOTTER();
 
-    virtual PlotFormat GetPlotterType() const override
+    virtual PLOT_FORMAT GetPlotterType() const override
     {
-        return PLOT_FORMAT_HPGL;
+        return PLOT_FORMAT::HPGL;
     }
 
     static wxString GetDefaultFileExtension()
@@ -794,9 +794,9 @@ public:
         return wxString( wxT( "ps" ) );
     }
 
-    virtual PlotFormat GetPlotterType() const override
+    virtual PLOT_FORMAT GetPlotterType() const override
     {
-        return PLOT_FORMAT_POST;
+        return PLOT_FORMAT::POST;
     }
 
     virtual bool StartPlot() override;
@@ -847,9 +847,9 @@ public:
         pageTreeHandle = 0;
     }
 
-    virtual PlotFormat GetPlotterType() const override
+    virtual PLOT_FORMAT GetPlotterType() const override
     {
-        return PLOT_FORMAT_PDF;
+        return PLOT_FORMAT::PDF;
     }
 
     static wxString GetDefaultFileExtension()
@@ -936,9 +936,9 @@ public:
         return wxString( wxT( "svg" ) );
     }
 
-    virtual PlotFormat GetPlotterType() const override
+    virtual PLOT_FORMAT GetPlotterType() const override
     {
-        return PLOT_FORMAT_SVG;
+        return PLOT_FORMAT::SVG;
     }
 
     virtual void SetColor( COLOR4D color ) override;
@@ -1141,9 +1141,9 @@ class GERBER_PLOTTER : public PLOTTER
 public:
     GERBER_PLOTTER();
 
-    virtual PlotFormat GetPlotterType() const override
+    virtual PLOT_FORMAT GetPlotterType() const override
     {
-        return PLOT_FORMAT_GERBER;
+        return PLOT_FORMAT::GERBER;
     }
 
     static wxString GetDefaultFileExtension()
@@ -1393,9 +1393,9 @@ public:
         SetUnits( DXF_UNITS::INCHES );
     }
 
-    virtual PlotFormat GetPlotterType() const override
+    virtual PLOT_FORMAT GetPlotterType() const override
     {
-        return PLOT_FORMAT_DXF;
+        return PLOT_FORMAT::DXF;
     }
 
     static wxString GetDefaultFileExtension()
@@ -1541,7 +1541,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
 
 /** Returns the default plot extension for a format
   */
-wxString GetDefaultPlotExtension( PlotFormat aFormat );
+wxString GetDefaultPlotExtension( PLOT_FORMAT aFormat );
 
 
 #endif  // PLOT_COMMON_H_

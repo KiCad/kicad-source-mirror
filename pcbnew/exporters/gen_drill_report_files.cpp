@@ -56,7 +56,7 @@ inline double diameter_in_mm( double ius )
 
 
 bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName,
-                                            PlotFormat aFormat )
+                                            PLOT_FORMAT aFormat )
 {
     // Remark:
     // Hole list must be created before calling this function, by buildHolesList(),
@@ -80,14 +80,14 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName,
     // an A4 sheet in PS, + text description of symbols
     switch( aFormat )
     {
-    case PLOT_FORMAT_GERBER:
+    case PLOT_FORMAT::GERBER:
         offset  = GetOffset();
         plotter = new GERBER_PLOTTER();
         plotter->SetViewport( offset, IU_PER_MILS/10, scale, false );
         plotter->SetGerberCoordinatesFormat( 5 );   // format x.5 unit = mm
         break;
 
-    case PLOT_FORMAT_HPGL:    // Scale for HPGL format.
+    case PLOT_FORMAT::HPGL: // Scale for HPGL format.
     {
         HPGL_PLOTTER* hpgl_plotter = new HPGL_PLOTTER;
         plotter = hpgl_plotter;
@@ -102,8 +102,8 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName,
     default:
         wxASSERT( false );
         // fall through
-    case PLOT_FORMAT_PDF:
-    case PLOT_FORMAT_POST:
+    case PLOT_FORMAT::PDF:
+    case PLOT_FORMAT::POST:
     {
         PAGE_INFO   pageA4( wxT( "A4" ) );
         wxSize      pageSizeIU = pageA4.GetSizeIU();
@@ -131,7 +131,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName,
         offset.y    = KiROUND( double( bbbox.Centre().y ) -
                                ( ypagesize_for_board / 2.0 ) / scale );
 
-        if( aFormat == PLOT_FORMAT_PDF )
+        if( aFormat == PLOT_FORMAT::PDF )
             plotter = new PDF_PLOTTER;
         else
             plotter = new PS_PLOTTER;
@@ -141,7 +141,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName,
     }
         break;
 
-    case PLOT_FORMAT_DXF:
+    case PLOT_FORMAT::DXF:
     {
         DXF_PLOTTER* dxf_plotter = new DXF_PLOTTER;
 
@@ -156,7 +156,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName,
     }
         break;
 
-    case PLOT_FORMAT_SVG:
+    case PLOT_FORMAT::SVG:
     {
         SVG_PLOTTER* svg_plotter = new SVG_PLOTTER;
         plotter = svg_plotter;

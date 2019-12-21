@@ -93,12 +93,24 @@ void DIALOG_PLOT::init_Dialog()
     switch( m_plotOpts.GetFormat() )
     {
     default:
-    case PLOT_FORMAT_GERBER: m_plotFormatOpt->SetSelection( 0 ); break;
-    case PLOT_FORMAT_POST:   m_plotFormatOpt->SetSelection( 1 ); break;
-    case PLOT_FORMAT_SVG:    m_plotFormatOpt->SetSelection( 2 ); break;
-    case PLOT_FORMAT_DXF:    m_plotFormatOpt->SetSelection( 3 ); break;
-    case PLOT_FORMAT_HPGL:   m_plotFormatOpt->SetSelection( 4 ); break;
-    case PLOT_FORMAT_PDF:    m_plotFormatOpt->SetSelection( 5 ); break;
+    case PLOT_FORMAT::GERBER:
+        m_plotFormatOpt->SetSelection( 0 );
+        break;
+    case PLOT_FORMAT::POST:
+        m_plotFormatOpt->SetSelection( 1 );
+        break;
+    case PLOT_FORMAT::SVG:
+        m_plotFormatOpt->SetSelection( 2 );
+        break;
+    case PLOT_FORMAT::DXF:
+        m_plotFormatOpt->SetSelection( 3 );
+        break;
+    case PLOT_FORMAT::HPGL:
+        m_plotFormatOpt->SetSelection( 4 );
+        break;
+    case PLOT_FORMAT::PDF:
+        m_plotFormatOpt->SetSelection( 5 );
+        break;
     }
 
     // Set units and value for HPGL pen size (this param is in mils).
@@ -357,20 +369,13 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 }
 
 
-PlotFormat DIALOG_PLOT::getPlotFormat()
+PLOT_FORMAT DIALOG_PLOT::getPlotFormat()
 {
     // plot format id's are ordered like displayed in m_plotFormatOpt
-    static const PlotFormat plotFmt[] =
-    {
-        PLOT_FORMAT_GERBER,
-        PLOT_FORMAT_POST,
-        PLOT_FORMAT_SVG,
-        PLOT_FORMAT_DXF,
-        PLOT_FORMAT_HPGL,
-        PLOT_FORMAT_PDF
-    };
+    static const PLOT_FORMAT plotFmt[] = { PLOT_FORMAT::GERBER, PLOT_FORMAT::POST, PLOT_FORMAT::SVG,
+        PLOT_FORMAT::DXF, PLOT_FORMAT::HPGL, PLOT_FORMAT::PDF };
 
-    return plotFmt[ m_plotFormatOpt->GetSelection() ];
+    return plotFmt[m_plotFormatOpt->GetSelection()];
 }
 
 
@@ -379,12 +384,12 @@ PlotFormat DIALOG_PLOT::getPlotFormat()
 void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 {
     // this option exist only in DXF format:
-    m_DXF_plotModeOpt->Enable( getPlotFormat() == PLOT_FORMAT_DXF );
+    m_DXF_plotModeOpt->Enable( getPlotFormat() == PLOT_FORMAT::DXF );
 
     switch( getPlotFormat() )
     {
-    case PLOT_FORMAT_PDF:
-    case PLOT_FORMAT_SVG:
+    case PLOT_FORMAT::PDF:
+    case PLOT_FORMAT::SVG:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( false );
         setPlotModeChoiceSelection( FILLED );
@@ -409,7 +414,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
         break;
 
-    case PLOT_FORMAT_POST:
+    case PLOT_FORMAT::POST:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( true );
         m_plotMirrorOpt->Enable( true );
@@ -431,7 +436,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
         break;
 
-    case PLOT_FORMAT_GERBER:
+    case PLOT_FORMAT::GERBER:
         m_drillShapeOpt->Enable( false );
         m_drillShapeOpt->SetSelection( 0 );
         m_plotModeOpt->Enable( false );
@@ -458,7 +463,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
         break;
 
-    case PLOT_FORMAT_HPGL:
+    case PLOT_FORMAT::HPGL:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( true );
         m_plotMirrorOpt->Enable( true );
@@ -481,7 +486,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
         break;
 
-    case PLOT_FORMAT_DXF:
+    case PLOT_FORMAT::DXF:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( false );
         setPlotModeChoiceSelection( FILLED );
@@ -509,7 +514,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         OnChangeDXFPlotMode( event );
         break;
 
-    case PLOT_FORMAT_UNDEFINED:
+    case PLOT_FORMAT::UNDEFINED:
         break;
     }
 
@@ -603,7 +608,7 @@ void DIALOG_PLOT::applyPlotSettings()
     // However, due to issues when converting this value from or to mm
     // that can slightly change the value, update this param only if it
     // is in use
-    if( getPlotFormat() == PLOT_FORMAT_HPGL )
+    if( getPlotFormat() == PLOT_FORMAT::HPGL )
     {
         if( !tempOptions.SetHPGLPenDiameter( m_defaultPenSize.GetValue() / IU_PER_MILS ) )
         {
@@ -784,7 +789,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
      * the default scale adjust is initialized to 0 and saved in program
      * settings resulting in a divide by zero fault.
      */
-    if( getPlotFormat() == PLOT_FORMAT_POST )
+    if( getPlotFormat() == PLOT_FORMAT::POST )
     {
         if( m_XScaleAdjust != 0.0 )
             m_plotOpts.SetFineScaleAdjustX( m_XScaleAdjust );
@@ -831,7 +836,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
         // Use Gerber Extensions based on layer number
         // (See http://en.wikipedia.org/wiki/Gerber_File)
-        if( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER && m_useGerberExtensions->GetValue() )
+        if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && m_useGerberExtensions->GetValue() )
             file_ext = GetGerberProtelExtension( layer );
 
         BuildPlotFileName( &fn, outputDir.GetPath(), board->GetLayerName( layer ), file_ext );
@@ -863,7 +868,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         wxSafeYield();      // displays report message.
     }
 
-    if( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER && m_plotOpts.GetCreateGerberJobFile() )
+    if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && m_plotOpts.GetCreateGerberJobFile() )
     {
         // Pick the basename from the board file
         wxFileName fn( boardFilename );

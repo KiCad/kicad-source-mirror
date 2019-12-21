@@ -115,7 +115,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_plotInvisibleText          = false;
     m_plotPadsOnSilkLayer        = false;
     m_subtractMaskFromSilk       = false;
-    m_format                     = PLOT_FORMAT_GERBER;
+    m_format = PLOT_FORMAT::GERBER;
     m_mirror                     = false;
     m_drillMarks                 = SMALL_DRILL_SHAPE;
     m_autoScale                  = false;
@@ -505,8 +505,9 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_outputformat:
-            aPcbPlotParams->m_format = static_cast<PlotFormat>(
-                                    parseInt( PLOT_FIRST_FORMAT, PLOT_LAST_FORMAT ) );
+            aPcbPlotParams->m_format = static_cast<PLOT_FORMAT>(
+                    parseInt( static_cast<int>( PLOT_FORMAT::FIRST_FORMAT ),
+                            static_cast<int>( PLOT_FORMAT::LAST_FORMAT ) ) );
             break;
 
         case T_mirror:

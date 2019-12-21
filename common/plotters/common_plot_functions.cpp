@@ -35,17 +35,25 @@
 
 
 
-wxString GetDefaultPlotExtension( PlotFormat aFormat )
+wxString GetDefaultPlotExtension( PLOT_FORMAT aFormat )
 {
     switch( aFormat )
     {
-    case PLOT_FORMAT_DXF:    return DXF_PLOTTER::GetDefaultFileExtension();
-    case PLOT_FORMAT_POST:   return PS_PLOTTER::GetDefaultFileExtension();
-    case PLOT_FORMAT_PDF:    return PDF_PLOTTER::GetDefaultFileExtension();
-    case PLOT_FORMAT_HPGL:   return HPGL_PLOTTER::GetDefaultFileExtension();
-    case PLOT_FORMAT_GERBER: return GERBER_PLOTTER::GetDefaultFileExtension();
-    case PLOT_FORMAT_SVG:    return SVG_PLOTTER::GetDefaultFileExtension();
-    default:                 wxASSERT( false ); return wxEmptyString;
+    case PLOT_FORMAT::DXF:
+        return DXF_PLOTTER::GetDefaultFileExtension();
+    case PLOT_FORMAT::POST:
+        return PS_PLOTTER::GetDefaultFileExtension();
+    case PLOT_FORMAT::PDF:
+        return PDF_PLOTTER::GetDefaultFileExtension();
+    case PLOT_FORMAT::HPGL:
+        return HPGL_PLOTTER::GetDefaultFileExtension();
+    case PLOT_FORMAT::GERBER:
+        return GERBER_PLOTTER::GetDefaultFileExtension();
+    case PLOT_FORMAT::SVG:
+        return SVG_PLOTTER::GetDefaultFileExtension();
+    default:
+        wxASSERT( false );
+        return wxEmptyString;
     }
 }
 

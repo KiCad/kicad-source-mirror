@@ -167,7 +167,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
     {
         // Skip NPTH pads on copper layers ( only if hole size == pad size ):
         // Drill mark will be plotted if drill mark is SMALL_DRILL_SHAPE  or FULL_DRILL_SHAPE
-        if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+        if( plotOpt.GetFormat() == PLOT_FORMAT::DXF )
         {
             plotOpt.SetSkipPlotNPTH_Pads( false );
             PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
@@ -191,7 +191,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
             // Plot solder mask:
             if( soldermask_min_thickness == 0 )
             {
-                if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+                if( plotOpt.GetFormat() == PLOT_FORMAT::DXF )
                     PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
                 else
                     PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
@@ -210,7 +210,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
             // Disable plot pad holes
             plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
-            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+            if( plotOpt.GetFormat() == PLOT_FORMAT::DXF )
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
                 PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
@@ -218,7 +218,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
 
         case F_SilkS:
         case B_SilkS:
-            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF && plotOpt.GetDXFPlotPolygonMode() )
+            if( plotOpt.GetFormat() == PLOT_FORMAT::DXF && plotOpt.GetDXFPlotPolygonMode() )
                 // PlotLayerOutlines() is designed only for DXF plotters.
                 // and must not be used for other plot formats
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
@@ -226,7 +226,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                 PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
 
             // Gerber: Subtract soldermask from silkscreen if enabled
-            if( aPlotter->GetPlotterType() == PLOT_FORMAT_GERBER
+            if( aPlotter->GetPlotterType() == PLOT_FORMAT::GERBER
                 && plotOpt.GetSubtractMaskFromSilk() )
             {
                 if( aLayer == F_SilkS )
@@ -261,7 +261,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
             plotOpt.SetSkipPlotNPTH_Pads( false );
             plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
-            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF && plotOpt.GetDXFPlotPolygonMode() )
+            if( plotOpt.GetFormat() == PLOT_FORMAT::DXF && plotOpt.GetDXFPlotPolygonMode() )
                 // PlotLayerOutlines() is designed only for DXF plotters.
                 // and must not be used for other plot formats
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
@@ -273,7 +273,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
             plotOpt.SetSkipPlotNPTH_Pads( false );
             plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
-            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF && plotOpt.GetDXFPlotPolygonMode() )
+            if( plotOpt.GetFormat() == PLOT_FORMAT::DXF && plotOpt.GetDXFPlotPolygonMode() )
                 // PlotLayerOutlines() is designed only for DXF plotters.
                 // and must not be used for other plot formats
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
@@ -1040,7 +1040,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
 
     switch( aPlotOpts->GetFormat() )
     {
-    case PLOT_FORMAT_DXF:
+    case PLOT_FORMAT::DXF:
         DXF_PLOTTER* DXF_plotter;
         DXF_plotter = new DXF_PLOTTER();
         DXF_plotter->SetUnits(
@@ -1049,7 +1049,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
         plotter = DXF_plotter;
         break;
 
-    case PLOT_FORMAT_POST:
+    case PLOT_FORMAT::POST:
         PS_PLOTTER* PS_plotter;
         PS_plotter = new PS_PLOTTER();
         PS_plotter->SetScaleAdjust( aPlotOpts->GetFineScaleAdjustX(),
@@ -1057,11 +1057,11 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
         plotter = PS_plotter;
         break;
 
-    case PLOT_FORMAT_PDF:
+    case PLOT_FORMAT::PDF:
         plotter = new PDF_PLOTTER();
         break;
 
-    case PLOT_FORMAT_HPGL:
+    case PLOT_FORMAT::HPGL:
         HPGL_PLOTTER* HPGL_plotter;
         HPGL_plotter = new HPGL_PLOTTER();
 
@@ -1070,11 +1070,11 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
         plotter = HPGL_plotter;
         break;
 
-    case PLOT_FORMAT_GERBER:
+    case PLOT_FORMAT::GERBER:
         plotter = new GERBER_PLOTTER();
         break;
 
-    case PLOT_FORMAT_SVG:
+    case PLOT_FORMAT::SVG:
         plotter = new SVG_PLOTTER();
         break;
 
@@ -1098,7 +1098,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
         plotter->ClearHeaderLinesList();
 
         // For the Gerber "file function" attribute, set the layer number
-        if( plotter->GetPlotterType() == PLOT_FORMAT_GERBER )
+        if( plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
         {
             bool useX2mode = plotOpts.GetUseGerberX2format();
 

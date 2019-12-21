@@ -434,7 +434,7 @@ void PLOT_CONTROLLER::ClosePlot()
 
 
 bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix,
-                                    PlotFormat     aFormat,
+                                    PLOT_FORMAT     aFormat,
                                     const wxString &aSheetDesc )
 {
     LOCALE_IO toggle;
@@ -462,8 +462,8 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix,
 
         // Gerber format can use specific file ext, depending on layers
         // (now not a good practice, because the official file ext is .gbr)
-        if( GetPlotOptions().GetFormat() == PLOT_FORMAT_GERBER &&
-            GetPlotOptions().GetUseGerberProtelExtensions() )
+        if( GetPlotOptions().GetFormat() == PLOT_FORMAT::GERBER
+                && GetPlotOptions().GetUseGerberProtelExtensions() )
             fileExt = GetGerberProtelExtension( GetLayer() );
 
         // Build plot filenames from the board name and layer names:
