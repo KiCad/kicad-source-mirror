@@ -7,8 +7,8 @@
 # Set to 0 to pull the commit with the has given by NGSPICE_GIT_HASH
 USE_GIT_TAG=1
 
-NGSPICE_GIT_TAG="ngspice-30-2"
-NGSPICE_GIT_HASH="d6f5a32c93a46b6dec8a5097533ddf682cecf2d9"
+NGSPICE_GIT_TAG="ngspice-31.3"
+NGSPICE_GIT_HASH="33985ae1e5eff44065a52bea45489a1dba0af8f3"
 
 NGSPICE_GIT="git://git.code.sf.net/p/ngspice/ngspice"
 
