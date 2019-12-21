@@ -348,35 +348,46 @@ wxString FormatStringFromGerber( const wxString& aString )
     {
         unsigned code = aString[ii];
 
-        if( code == '\\' )
+        if( code == '\\' && ii < count-5 && aString[ii+1] == 'u' )
         {
-            // If next char is not a hexadecimal char, just skip the '\'
-            // It is perhaps a escape sequence like \\ or \" or ...
-            if( ii < count-1 )
-            {
-                code = aString[ii+1];
-
-                if( char2Hex( code ) < 0 )
-                {
-                    ++ii;
-                    txt.Append( aString[ii] );
-                    continue;
-                }
-            }
-            // Convert 4 hexadecimal digits to a 16 bit unicode
+            // Note the latest Gerber X2 spec (2019 06) uses \uXXXX to encode
+            // the unicode XXXX hexadecimal value
+            // If 4 chars next to 'u' are hexadecimal chars,
+            // Convert these 4 hexadecimal digits to a 16 bit unicode
             // (Gerber allows only 4 hexadecimal digits)
+            // If an error occurs, the escape sequence is not translated,
+            // and used "as this"
             long value = 0;
+            bool error = false;
 
             for( int jj = 0; jj < 4; jj++ )
             {
                 value <<= 4;
-                code = aString[++ii];
-                // Basic conversion (with no control), but it expects a valid gerber file
+                code = aString[ii+jj+2];
+
                 int hexa = char2Hex( code );
-                value += hexa;
+
+                if( hexa >= 0 )
+                    value += hexa;
+                else
+                {
+                    error = true;
+                    break;
+                }
             }
 
-            txt.Append( wxChar( value ) );
+            if( !error )
+            {
+                if( value >= ' ' )  // Is a valid wxChar ?
+                    txt.Append( wxChar( value ) );
+
+                ii += 5;
+            }
+            else
+            {
+                txt.Append( aString[ii] );
+                continue;
+            }
         }
         else
             txt.Append( aString[ii] );
@@ -390,6 +401,8 @@ wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf
 {
     /* format string means convert any code > 0x7E and unautorized codes to a hexadecimal
      * 16 bits sequence unicode
+     * However if aAllowUtf8Chars is true only unautorized codes will be escaped, because some
+     * Gerber files accept UTF8 chars.
      * unautorized codes are ',' '*' '%' '\' and are used as separators in Gerber files
      */
     wxString txt;
@@ -420,12 +433,11 @@ wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf
 
         if( convert )
         {
-            txt += '\\';
-
             // Convert code to 4 hexadecimal digit
-            // (Gerber allows only 4 hexadecimal digit)
+            // (Gerber allows only 4 hexadecimal digit) in escape seq:
+            // "\uXXXX", XXXX is the unicode 16 bits hexa value
             char hexa[32];
-            sprintf( hexa,"%4.4X", code & 0xFFFF);
+            sprintf( hexa,"\\u%4.4X", code & 0xFFFF);
             txt += hexa;
         }
         else
