@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 10 2019)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -61,7 +61,7 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Generate Footprint Position Files"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Generate Footprint Position Files"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 480,370 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_GEN_FOOTPRINT_POSITION_BASE();
 
 };

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 10 2019)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,7 +31,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_outputDirectoryName->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the board file location.") );
 	m_outputDirectoryName->SetMinSize( wxSize( 350,-1 ) );
 
-	bSizerdirBrowse->Add( m_outputDirectoryName, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bSizerdirBrowse->Add( m_outputDirectoryName, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_browseButton->SetMinSize( wxSize( 30,28 ) );
@@ -100,7 +100,6 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 
 	this->SetSizer( m_MainSizer );
 	this->Layout();
-	m_MainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 
