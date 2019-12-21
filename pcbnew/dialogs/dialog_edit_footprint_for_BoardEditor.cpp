@@ -651,7 +651,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
     while( i < m_texts->size() )
     {
         auto newText = new TEXTE_MODULE( m_texts->at( i++ ) );
-        m_footprint->Add( newText, ADD_APPEND );
+        m_footprint->Add( newText, ADD_MODE::APPEND );
         view->Add( newText );
     }
 

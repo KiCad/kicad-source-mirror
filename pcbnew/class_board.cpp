@@ -556,7 +556,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
             return;
         }
 
-        if( aMode == ADD_APPEND )
+        if( aMode == ADD_MODE::APPEND )
             m_tracks.push_back( static_cast<TRACK*>( aBoardItem ) );
         else
             m_tracks.push_front( static_cast<TRACK*>( aBoardItem ) );
@@ -564,7 +564,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
         break;
 
     case PCB_MODULE_T:
-        if( aMode == ADD_APPEND )
+        if( aMode == ADD_MODE::APPEND )
             m_modules.push_back( (MODULE*) aBoardItem );
         else
             m_modules.push_front( (MODULE*) aBoardItem );
@@ -575,7 +575,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     case PCB_LINE_T:
     case PCB_TEXT_T:
     case PCB_TARGET_T:
-        if( aMode == ADD_APPEND )
+        if( aMode == ADD_MODE::APPEND )
             m_drawings.push_back( aBoardItem );
         else
             m_drawings.push_front( aBoardItem );

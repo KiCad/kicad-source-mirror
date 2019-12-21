@@ -265,7 +265,7 @@ public:
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
     int GetFileFormatVersionAtLoad()  const { return m_fileFormatVersionAtLoad; }
 
-    void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_INSERT ) override;
+    void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT ) override;
 
     void Remove( BOARD_ITEM* aBoardItem ) override;
 

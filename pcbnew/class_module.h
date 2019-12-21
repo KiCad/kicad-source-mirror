@@ -126,7 +126,7 @@ public:
     }
 
     ///> @copydoc BOARD_ITEM_CONTAINER::Add()
-    void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_INSERT ) override;
+    void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT ) override;
 
     ///> @copydoc BOARD_ITEM_CONTAINER::Remove()
     void Remove( BOARD_ITEM* aItem ) override;

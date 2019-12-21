@@ -451,7 +451,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
             module->SetFPID( fpid );
 
             loadMODULE( module.get() );
-            m_board->Add( module.release(), ADD_APPEND );
+            m_board->Add( module.release(), ADD_MODE::APPEND );
         }
 
         else if( TESTLINE( "$DRAWSEGMENT" ) )
@@ -2047,7 +2047,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
 
         else if( TESTLINE( "$EndDRAWSEGMENT" ) )
         {
-            m_board->Add( dseg.release(), ADD_APPEND );
+            m_board->Add( dseg.release(), ADD_MODE::APPEND );
             return;     // preferred exit
         }
     }
@@ -2147,7 +2147,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 
     // maybe someday a constructor that takes all this data in one call?
     TEXTE_PCB*  pcbtxt = new TEXTE_PCB( m_board );
-    m_board->Add( pcbtxt, ADD_APPEND );
+    m_board->Add( pcbtxt, ADD_MODE::APPEND );
 
     char*   line;
     char*   saveptr;
@@ -2796,7 +2796,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
 
         if( TESTLINE( "$endCOTATION" ) )
         {
-            m_board->Add( dim.release(), ADD_APPEND );
+            m_board->Add( dim.release(), ADD_MODE::APPEND );
             return;     // preferred exit
         }
 
@@ -3009,7 +3009,7 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
 
             PCB_TARGET* t = new PCB_TARGET( m_board, shape, leg_layer2new( m_cu_count,  layer_num ),
                                     wxPoint( pos_x, pos_y ), size, width );
-            m_board->Add( t, ADD_APPEND );
+            m_board->Add( t, ADD_MODE::APPEND );
 
             t->SetTimeStamp( timestamp );
         }

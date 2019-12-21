@@ -567,35 +567,35 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         case T_gr_curve:
         case T_gr_line:
         case T_gr_poly:
-            m_board->Add( parseDRAWSEGMENT(), ADD_APPEND );
+            m_board->Add( parseDRAWSEGMENT(), ADD_MODE::APPEND );
             break;
 
         case T_gr_text:
-            m_board->Add( parseTEXTE_PCB(), ADD_APPEND );
+            m_board->Add( parseTEXTE_PCB(), ADD_MODE::APPEND );
             break;
 
         case T_dimension:
-            m_board->Add( parseDIMENSION(), ADD_APPEND );
+            m_board->Add( parseDIMENSION(), ADD_MODE::APPEND );
             break;
 
         case T_module:
-            m_board->Add( parseMODULE(), ADD_APPEND );
+            m_board->Add( parseMODULE(), ADD_MODE::APPEND );
             break;
 
         case T_segment:
-            m_board->Add( parseTRACK(), ADD_INSERT );
+            m_board->Add( parseTRACK(), ADD_MODE::INSERT );
             break;
 
         case T_via:
-            m_board->Add( parseVIA(), ADD_INSERT );
+            m_board->Add( parseVIA(), ADD_MODE::INSERT );
             break;
 
         case T_zone:
-            m_board->Add( parseZONE_CONTAINER( m_board ), ADD_APPEND );
+            m_board->Add( parseZONE_CONTAINER( m_board ), ADD_MODE::APPEND );
             break;
 
         case T_target:
-            m_board->Add( parsePCB_TARGET(), ADD_APPEND );
+            m_board->Add( parsePCB_TARGET(), ADD_MODE::APPEND );
             break;
 
         default:
@@ -2524,7 +2524,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
                 RotatePoint( &pt, module->GetOrientation() );
                 pad->SetPosition( pt + module->GetPosition() );
-                module->Add( pad, ADD_APPEND );
+                module->Add( pad, ADD_MODE::APPEND );
             }
             break;
 
@@ -2535,7 +2535,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
         case T_zone:
         {
             ZONE_CONTAINER* zone = parseZONE_CONTAINER( module.get() );
-            module->Add( zone, ADD_APPEND );
+            module->Add( zone, ADD_MODE::APPEND );
         }
         break;
 

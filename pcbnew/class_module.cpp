@@ -280,21 +280,21 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
         // no break
 
     case PCB_MODULE_EDGE_T:
-        if( aMode == ADD_APPEND )
+        if( aMode == ADD_MODE::APPEND )
             m_drawings.push_back( aBoardItem );
         else
             m_drawings.push_front( aBoardItem );
         break;
 
     case PCB_PAD_T:
-        if( aMode == ADD_APPEND )
+        if( aMode == ADD_MODE::APPEND )
             m_pads.push_back( static_cast<D_PAD*>( aBoardItem ) );
         else
             m_pads.push_front( static_cast<D_PAD*>( aBoardItem ) );
         break;
 
     case PCB_MODULE_ZONE_AREA_T:
-        if( aMode == ADD_APPEND )
+        if( aMode == ADD_MODE::APPEND )
             m_fp_zones.push_back( static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) );
         else
             m_fp_zones.insert( m_fp_zones.begin(), static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) );

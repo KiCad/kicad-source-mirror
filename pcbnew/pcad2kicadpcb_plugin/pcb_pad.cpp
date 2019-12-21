@@ -360,7 +360,7 @@ void PCB_PAD::AddToBoard()
     else // pad
     {
         MODULE* module = new MODULE( m_board );
-        m_board->Add( module, ADD_APPEND );
+        m_board->Add( module, ADD_MODE::APPEND );
 
         m_name.text = m_defaultPinDes;
 
