@@ -34,6 +34,7 @@
 #include <gerbview.h>
 #include <gerber_file_image.h>
 #include <X2_gerber_attributes.h>
+#include <gbr_metadata.h>
 
 extern int ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
@@ -138,50 +139,6 @@ int GERBER_FILE_IMAGE::ReadXCommandID( char*& text )
     return result;
 }
 
-/**
- * Convert a string read from a gerber file to an unicode string
- * Usual chars (ASCII7 values) are the only values allowed in Gerber files,
- * and are just copied.
- * However Gerber format allows using non ASCII7 values by coding them in a
- * sequence of 4 hexadecimal chars (16 bits hexadecimal value)
- * Hexadecimal coded values ("\hhhh") are converted to
- * the unicode char value
- */
-static const wxString fromGerberString( const wxString& aGbrString )
-{
-    wxString text;
-
-    for( unsigned ii = 0; ii < aGbrString.size(); ++ii )
-    {
-        if( aGbrString[ii] == '\\' )
-        {
-            unsigned value = 0;
-
-            for( int jj = 0; jj < 4; jj++ )
-            {   // Convert 4 hexa digits to binary value:
-                ii++;
-                value <<= 4;
-                int digit = aGbrString[ii];
-
-                if( digit >= '0' && digit <= '9' )
-                    digit -= '0';
-                else if( digit >= 'A' && digit <= 'F' )
-                    digit -= 'A' - 10;
-                else if( digit >= 'a' && digit <= 'f' )
-                    digit -= 'a' - 10;
-                else digit = 0;
-
-                value += digit & 0xF;
-            }
-
-            text.Append( wxUniChar( value ) );
-        }
-        else
-            text.Append( aGbrString[ii] );
-    }
-
-    return text;
-}
 
 bool GERBER_FILE_IMAGE::ReadRS274XCommand( char *aBuff, unsigned int aBuffSize, char*& aText )
 {
@@ -451,18 +408,18 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         if( dummy.GetAttribute() == ".N" )
         {
             m_NetAttributeDict.m_NetAttribType |= GBR_NETLIST_METADATA::GBR_NETINFO_NET;
-            m_NetAttributeDict.m_Netname = fromGerberString( dummy.GetPrm( 1 ) );
+            m_NetAttributeDict.m_Netname = FormatStringFromGerber( dummy.GetPrm( 1 ) );
         }
         else if( dummy.GetAttribute() == ".C" )
         {
             m_NetAttributeDict.m_NetAttribType |= GBR_NETLIST_METADATA::GBR_NETINFO_CMP;
-            m_NetAttributeDict.m_Cmpref = fromGerberString( dummy.GetPrm( 1 ) );
+            m_NetAttributeDict.m_Cmpref = FormatStringFromGerber( dummy.GetPrm( 1 ) );
         }
         else if( dummy.GetAttribute() == ".P" )
         {
             m_NetAttributeDict.m_NetAttribType |= GBR_NETLIST_METADATA::GBR_NETINFO_PAD;
-            m_NetAttributeDict.m_Cmpref = fromGerberString( dummy.GetPrm( 1 ) );
-            m_NetAttributeDict.m_Padname = fromGerberString( dummy.GetPrm( 2 ) );
+            m_NetAttributeDict.m_Cmpref = FormatStringFromGerber( dummy.GetPrm( 1 ) );
+            m_NetAttributeDict.m_Padname = FormatStringFromGerber( dummy.GetPrm( 2 ) );
         }
         }
         break;

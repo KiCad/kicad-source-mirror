@@ -268,33 +268,78 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
     return full_attribute_string;
 }
 
+
+// Helper function to convert a ascii hex char to its integer value
+// If the char is not a hexa char, return -1
+int char2Hex( unsigned aCode )
+{
+    if( aCode >= '0' && aCode <= '9' )
+        return aCode - '0';
+
+    if( aCode >= 'A' && aCode <= 'F' )
+        return aCode - 'A' + 10;
+
+    if( aCode >= 'a' && aCode <= 'f' )
+        return aCode - 'a' + 10;
+
+    return -1;
+}
+
+
 wxString FormatStringFromGerber( const wxString& aString )
 {
     // make the inverse conversion of formatStringToGerber()
     // It converts a "normalized" gerber string and convert it to a 16 bits sequence unicode
     // and return a wxString (unicode 16) from the gerber string
+    // Note the initial gerber string can already contain unicode chars.
     wxString txt;
 
-    for( unsigned ii = 0; ii < aString.Length(); ++ii )
+    unsigned count = aString.Length();
+
+    for( unsigned ii = 0; ii < count; ++ii )
     {
         unsigned code = aString[ii];
 
-        if( code == '\\' )
+        if( code == '\\' && ii < count-5 && aString[ii+1] == 'u' )
         {
-            // Convert 4 hexadecimal digits to a 16 bit unicode
+            // Note the latest Gerber X2 spec (2019 06) uses \uXXXX to encode
+            // the unicode XXXX hexadecimal value
+            // If 4 chars next to 'u' are hexadecimal chars,
+            // convert these 4 hexadecimal digits to a 16 bit unicode
             // (Gerber allows only 4 hexadecimal digits)
+            // If an error occurs, the escape sequence is not translated,
+            // and used "as this"
             long value = 0;
+            bool error = false;
 
             for( int jj = 0; jj < 4; jj++ )
             {
                 value <<= 4;
-                code = aString[++ii];
-                // Very basic conversion, but it expects a valid gerber file
-                int hexa = (code <= '9' ? code - '0' : code - 'A' + 10) & 0xF;
-                value += hexa;
+                code = aString[ii+jj+2];
+
+                int hexa = char2Hex( code );
+
+                if( hexa >= 0 )
+                    value += hexa;
+                else
+                {
+                    error = true;
+                    break;
+                }
             }
 
-            txt.Append( wxChar( value ) );
+            if( !error )
+            {
+                if( value >= ' ' )  // Is a valid wxChar ?
+                    txt.Append( wxChar( value ) );
+
+                ii += 5;
+            }
+            else
+            {
+                txt.Append( aString[ii] );
+                continue;
+            }
         }
         else
             txt.Append( aString[ii] );
@@ -334,12 +379,10 @@ std::string formatStringToGerber( const wxString& aString )
 
         if( convert || code > 0x7F )
         {
-            txt += '\\';
-
             // Convert code to 4 hexadecimal digit
             // (Gerber allows only 4 hexadecimal digit)
             char hexa[32];
-            sprintf( hexa,"%4.4X", code & 0xFFFF);
+            sprintf( hexa,"\\u%4.4X", code & 0xFFFF);
             txt += hexa;
         }
         else
