@@ -289,7 +289,7 @@ struct APP_KICAD : public wxApp
      *
      * @see http://wiki.wxwidgets.org/WxMac-specific_topics
      */
-    void MacOpenFile( const wxString& aFileName )
+    void MacOpenFile( const wxString& aFileName ) override
     {
         Pgm().MacOpenFile( aFileName );
     }
