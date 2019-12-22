@@ -41,14 +41,18 @@
 #include <sch_view.h>
 
 
-static wxPenStyle getwxPenStyle( PlotDashType aType )
+static wxPenStyle getwxPenStyle( PLOT_DASH_TYPE aType )
 {
     switch( aType )
     {
-    case PLOTDASHTYPE_SOLID:    return wxPENSTYLE_SOLID;
-    case PLOTDASHTYPE_DASH:     return wxPENSTYLE_SHORT_DASH;
-    case PLOTDASHTYPE_DOT:      return wxPENSTYLE_DOT;
-    case PLOTDASHTYPE_DASHDOT:  return wxPENSTYLE_DOT_DASH;
+    case PLOT_DASH_TYPE::SOLID:
+        return wxPENSTYLE_SOLID;
+    case PLOT_DASH_TYPE::DASH:
+        return wxPENSTYLE_SHORT_DASH;
+    case PLOT_DASH_TYPE::DOT:
+        return wxPENSTYLE_DOT;
+    case PLOT_DASH_TYPE::DASHDOT:
+        return wxPENSTYLE_DOT_DASH;
     }
 
     wxFAIL_MSG( "Unhandled PlotDashType" );
@@ -63,7 +67,7 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     m_end   = pos;
     m_startIsDangling = m_endIsDangling = false;
     m_size  = 0;
-    m_style = -1;
+    m_style = PLOT_DASH_TYPE::DEFAULT;
     m_color = COLOR4D::UNSPECIFIED;
 
     switch( layer )
@@ -106,28 +110,25 @@ static const char* style_names[] =
     "solid", "dashed", "dotted", "dash_dot", nullptr
 };
 
-const char* SCH_LINE::GetLineStyleName( int aStyle )
+const char* SCH_LINE::GetLineStyleName( PLOT_DASH_TYPE aStyle )
 {
-    const char * styleName = style_names[1];
+    const char* styleName = style_names[1];
 
     switch( aStyle )
     {
-        case PLOTDASHTYPE_SOLID:
-            styleName = style_names[0];
-            break;
-
-        default:
-        case PLOTDASHTYPE_DASH:
-            styleName = style_names[1];
-            break;
-
-        case PLOTDASHTYPE_DOT:
-            styleName = style_names[2];
-            break;
-
-        case PLOTDASHTYPE_DASHDOT:
-            styleName = style_names[3];
-            break;
+    case PLOT_DASH_TYPE::SOLID:
+        styleName = style_names[0];
+        break;
+    default:
+    case PLOT_DASH_TYPE::DASH:
+        styleName = style_names[1];
+        break;
+    case PLOT_DASH_TYPE::DOT:
+        styleName = style_names[2];
+        break;
+    case PLOT_DASH_TYPE::DASHDOT:
+        styleName = style_names[3];
+        break;
     }
 
     return styleName;
@@ -268,27 +269,27 @@ COLOR4D SCH_LINE::GetLineColor() const
     return m_color;
 }
 
-int SCH_LINE::GetDefaultStyle() const
+PLOT_DASH_TYPE SCH_LINE::GetDefaultStyle() const
 {
     if( IsGraphicLine() )
-        return PLOTDASHTYPE_DASH;
+        return PLOT_DASH_TYPE::DASH;
 
-    return PLOTDASHTYPE_SOLID;
+    return PLOT_DASH_TYPE::SOLID;
 }
 
 
-void SCH_LINE::SetLineStyle( const int aStyle )
+void SCH_LINE::SetLineStyle( const PLOT_DASH_TYPE aStyle )
 {
     if( aStyle == GetDefaultStyle() )
-        m_style = -1;
+        m_style = PLOT_DASH_TYPE::DEFAULT;
     else
         m_style = aStyle;
 }
 
 
-int SCH_LINE::GetLineStyle() const
+PLOT_DASH_TYPE SCH_LINE::GetLineStyle() const
 {
-    if( m_style >= 0 )
+    if( m_style != PLOT_DASH_TYPE::DEFAULT )
         return m_style;
 
     return GetDefaultStyle();
@@ -332,7 +333,7 @@ void SCH_LINE::Print( wxDC* DC, const wxPoint& offset )
     wxPoint end = m_end;
 
     GRLine( nullptr, DC, start.x, start.y, end.x, end.y, width, color,
-            getwxPenStyle( (PlotDashType) GetLineStyle() ) );
+            getwxPenStyle( (PLOT_DASH_TYPE) GetLineStyle() ) );
 }
 
 
@@ -776,7 +777,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter )
     aPlotter->MoveTo( m_start );
     aPlotter->FinishTo( m_end );
 
-    aPlotter->SetDash( 0 );
+    aPlotter->SetDash( PLOT_DASH_TYPE::SOLID );
 }
 
 

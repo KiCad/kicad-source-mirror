@@ -95,17 +95,21 @@ static const struct
 };
 
 
-static const char* getDXFLineType( PlotDashType aType )
+static const char* getDXFLineType( PLOT_DASH_TYPE aType )
 {
     switch( aType )
     {
-    case PLOTDASHTYPE_SOLID:    return "CONTINUOUS";
-    case PLOTDASHTYPE_DASH:     return "DASHED";
-    case PLOTDASHTYPE_DOT:      return "DOTTED";
-    case PLOTDASHTYPE_DASHDOT:  return "DASHDOT";
+    case PLOT_DASH_TYPE::SOLID:
+        return "CONTINUOUS";
+    case PLOT_DASH_TYPE::DASH:
+        return "DASHED";
+    case PLOT_DASH_TYPE::DOT:
+        return "DOTTED";
+    case PLOT_DASH_TYPE::DASHDOT:
+        return "DASHDOT";
     }
 
-    wxFAIL_MSG( "Unhandled PlotDashType" );
+    wxFAIL_MSG( "Unhandled PLOT_DASH_TYPE" );
     return "CONTINUOUS";
 }
 
@@ -589,10 +593,11 @@ void DXF_PLOTTER::PenTo( const wxPoint& pos, char plume )
 
     if( penLastpos != pos && plume == 'D' )
     {
-        wxASSERT( m_currentLineType >= 0 && m_currentLineType < 4 );
+        wxASSERT( m_currentLineType >= PLOT_DASH_TYPE::FIRST_TYPE
+                  && m_currentLineType <= PLOT_DASH_TYPE::LAST_TYPE );
         // DXF LINE
-        wxString cname = getDXFColorName( m_currentColor );
-        const char *lname = getDXFLineType( (PlotDashType) m_currentLineType );
+        wxString    cname = getDXFColorName( m_currentColor );
+        const char* lname = getDXFLineType( static_cast<PLOT_DASH_TYPE>( m_currentLineType ) );
         fprintf( outputFile, "0\nLINE\n8\n%s\n6\n%s\n10\n%g\n20\n%g\n11\n%g\n21\n%g\n",
                  TO_UTF8( cname ), lname,
                  pen_lastpos_dev.x, pen_lastpos_dev.y, pos_dev.x, pos_dev.y );
@@ -601,10 +606,10 @@ void DXF_PLOTTER::PenTo( const wxPoint& pos, char plume )
 }
 
 
-void DXF_PLOTTER::SetDash( int dashed )
+void DXF_PLOTTER::SetDash( PLOT_DASH_TYPE aDashed )
 {
-    wxASSERT( dashed >= 0 && dashed < 4 );
-    m_currentLineType = dashed;
+    wxASSERT( aDashed >= PLOT_DASH_TYPE::FIRST_TYPE && aDashed <= PLOT_DASH_TYPE::LAST_TYPE );
+    m_currentLineType = aDashed;
 }
 
 

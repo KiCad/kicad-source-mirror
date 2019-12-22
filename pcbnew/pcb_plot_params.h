@@ -72,7 +72,7 @@ private:
     DrillMarksType m_drillMarks;
 
     /// Choose how represent text with PS, PDF and DXF drivers
-    PlotTextMode m_textMode;
+    PLOT_TEXT_MODE m_textMode;
 
     /// The default line width (used to draw items having no defined width)
     int         m_lineWidth;
@@ -192,8 +192,8 @@ public:
     void        SetColor( COLOR4D aVal ) { m_color = aVal; }
     COLOR4D     GetColor() const { return m_color; }
 
-    void        SetTextMode( PlotTextMode aVal ) { m_textMode = aVal; }
-    PlotTextMode GetTextMode() const { return m_textMode; }
+    void        SetTextMode( PLOT_TEXT_MODE aVal ) { m_textMode = aVal; }
+    PLOT_TEXT_MODE GetTextMode() const { return m_textMode; }
 
     void        SetPlotMode( EDA_DRAW_MODE_T aPlotMode ) { m_plotMode = aPlotMode; }
     EDA_DRAW_MODE_T GetPlotMode() const { return m_plotMode; }

@@ -199,7 +199,7 @@ void DIALOG_PLOT::init_Dialog()
     m_DXF_plotModeOpt->SetValue( m_plotOpts.GetDXFPlotPolygonMode() );
 
     // DXF text mode
-    m_DXF_plotTextStrokeFontOpt->SetValue( m_plotOpts.GetTextMode() == PLOTTEXTMODE_DEFAULT );
+    m_DXF_plotTextStrokeFontOpt->SetValue( m_plotOpts.GetTextMode() == PLOT_TEXT_MODE::DEFAULT );
 
     // DXF units selection
     m_DXF_plotUnits->SetSelection( static_cast<int>( m_plotOpts.GetDXFPlotUnits() ) );
@@ -594,11 +594,11 @@ void DIALOG_PLOT::applyPlotSettings()
 
     tempOptions.SetPlotViaOnMaskLayer( m_plotNoViaOnMaskOpt->GetValue() );
 
-    if( !m_DXF_plotTextStrokeFontOpt->IsEnabled() )     // Currently, only DXF supports this option
-        tempOptions.SetTextMode( PLOTTEXTMODE_DEFAULT  );
+    if( !m_DXF_plotTextStrokeFontOpt->IsEnabled() ) // Currently, only DXF supports this option
+        tempOptions.SetTextMode( PLOT_TEXT_MODE::DEFAULT );
     else
-        tempOptions.SetTextMode( m_DXF_plotTextStrokeFontOpt->GetValue() ?
-                                 PLOTTEXTMODE_DEFAULT : PLOTTEXTMODE_NATIVE );
+        tempOptions.SetTextMode( m_DXF_plotTextStrokeFontOpt->GetValue() ? PLOT_TEXT_MODE::DEFAULT :
+                                                                           PLOT_TEXT_MODE::NATIVE );
 
     // Update settings from text fields. Rewrite values back to the fields,
     // since the values may have been constrained by the setters.

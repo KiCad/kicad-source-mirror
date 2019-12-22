@@ -71,21 +71,25 @@ enum class PLOT_FORMAT {
  * This is recognized by the DXF driver too, where NATIVE emits
  * TEXT entities instead of stroking the text
  */
-enum PlotTextMode {
-    PLOTTEXTMODE_STROKE,
-    PLOTTEXTMODE_NATIVE,
-    PLOTTEXTMODE_PHANTOM,
-    PLOTTEXTMODE_DEFAULT
+enum class PLOT_TEXT_MODE
+{
+    STROKE,
+    NATIVE,
+    PHANTOM,
+    DEFAULT
 };
 
 /**
  * Enum for choosing dashed line type
  */
-enum PlotDashType {
-    PLOTDASHTYPE_SOLID,
-    PLOTDASHTYPE_DASH,
-    PLOTDASHTYPE_DOT,
-    PLOTDASHTYPE_DASHDOT,
+enum class PLOT_DASH_TYPE {
+	DEFAULT = -1,
+    SOLID = 0,
+	FIRST_TYPE = SOLID,
+    DASH,
+    DOT,
+    DASHDOT,
+	LAST_TYPE = DASHDOT
 };
 
 /**
@@ -156,7 +160,7 @@ public:
 
     virtual void SetColor( COLOR4D color ) = 0;
 
-    virtual void SetDash( int dashed ) = 0;
+    virtual void SetDash( PLOT_DASH_TYPE dashed ) = 0;
 
     virtual void SetCreator( const wxString& aCreator )
     {
@@ -449,7 +453,7 @@ public:
      * Change the current text mode. See the PlotTextMode
      * explanation at the beginning of the file
      */
-    virtual void SetTextMode( PlotTextMode mode )
+    virtual void SetTextMode( PLOT_TEXT_MODE mode )
     {
         // NOP for most plotters.
     }
@@ -623,7 +627,7 @@ public:
     }
 
     virtual void SetDefaultLineWidth( int width ) override {}
-    virtual void SetDash( int dashed ) override;
+    virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
     virtual void SetColor( COLOR4D color ) override {}
 
@@ -688,17 +692,16 @@ protected:
 class PSLIKE_PLOTTER : public PLOTTER
 {
 public:
-    PSLIKE_PLOTTER() : plotScaleAdjX( 1 ), plotScaleAdjY( 1 ),
-                       m_textMode( PLOTTEXTMODE_PHANTOM )
+    PSLIKE_PLOTTER() : plotScaleAdjX( 1 ), plotScaleAdjY( 1 ), m_textMode( PLOT_TEXT_MODE::PHANTOM )
     {
     }
 
     /**
      * PS and PDF fully implement native text (for the Latin-1 subset)
      */
-    virtual void SetTextMode( PlotTextMode mode ) override
+    virtual void SetTextMode( PLOT_TEXT_MODE mode ) override
     {
-        if( mode != PLOTTEXTMODE_DEFAULT )
+        if( mode != PLOT_TEXT_MODE::DEFAULT )
             m_textMode = mode;
     }
 
@@ -775,7 +778,7 @@ protected:
     double plotScaleAdjX, plotScaleAdjY;
 
     /// How to draw text
-    PlotTextMode m_textMode;
+    PLOT_TEXT_MODE m_textMode;
 };
 
 
@@ -786,7 +789,7 @@ public:
     {
         // The phantom plot in postscript is an hack and reportedly
         // crashes Adobe's own postscript interpreter!
-        m_textMode = PLOTTEXTMODE_STROKE;
+        m_textMode = PLOT_TEXT_MODE::STROKE;
     }
 
     static wxString GetDefaultFileExtension()
@@ -802,7 +805,7 @@ public:
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
-    virtual void SetDash( int dashed ) override;
+    virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror ) override;
@@ -872,7 +875,7 @@ public:
     virtual void StartPage();
     virtual void ClosePage();
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
-    virtual void SetDash( int dashed ) override;
+    virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
     /** PDF can have multiple pages, so SetPageSettings can be called
      * with the outputFile open (but not inside a page stream!) */
@@ -945,7 +948,7 @@ public:
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
-    virtual void SetDash( int dashed ) override;
+    virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror ) override;
@@ -1010,10 +1013,7 @@ protected:
     bool m_graphics_changed;        // true if a pen/brush parameter is modified
                                     // color, pen size, fil mode ...
                                     // the new SVG stype must be output on file
-    int m_dashed;                   // 0 = plot solid line style
-                                    // 1 = plot dashed line style
-                                    // 2 = plot dotted line style
-                                    // 3 = plot dash-dot line style
+    PLOT_DASH_TYPE m_dashed;        // plot line style
 
     /**
      * function emitSetRGBColor()
@@ -1162,7 +1162,10 @@ public:
     virtual void SetDefaultLineWidth( int width ) override;
 
     // RS274X has no dashing, nor colours
-    virtual void SetDash( int dashed ) override {}
+    virtual void SetDash( PLOT_DASH_TYPE dashed ) override
+    {
+    }
+
     virtual void SetColor( COLOR4D color ) override {}
     // Currently, aScale and aMirror are not used in gerber plotter
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
@@ -1389,7 +1392,7 @@ public:
     {
         textAsLines = true;
         m_currentColor = COLOR4D::BLACK;
-        m_currentLineType = 0;
+        m_currentLineType = PLOT_DASH_TYPE::SOLID;
         SetUnits( DXF_UNITS::INCHES );
     }
 
@@ -1406,10 +1409,10 @@ public:
     /**
      * DXF handles NATIVE text emitting TEXT entities
      */
-    virtual void SetTextMode( PlotTextMode mode ) override
+    virtual void SetTextMode( PLOT_TEXT_MODE mode ) override
     {
-        if( mode != PLOTTEXTMODE_DEFAULT )
-            textAsLines = ( mode != PLOTTEXTMODE_NATIVE );
+        if( mode != PLOT_TEXT_MODE::DEFAULT )
+            textAsLines = ( mode != PLOT_TEXT_MODE::NATIVE );
     }
 
     virtual bool StartPlot() override;
@@ -1427,7 +1430,7 @@ public:
         defaultPenWidth = 0;
     }
 
-    virtual void SetDash( int dashed ) override;
+    virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
     virtual void SetColor( COLOR4D color ) override;
 
@@ -1524,7 +1527,7 @@ public:
 protected:
     bool textAsLines;
     COLOR4D m_currentColor;
-    int m_currentLineType;
+    PLOT_DASH_TYPE m_currentLineType;
 
     DXF_UNITS    m_plotUnits;
     double       m_unitScalingFactor;

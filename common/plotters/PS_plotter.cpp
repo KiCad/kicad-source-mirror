@@ -553,19 +553,19 @@ void PS_PLOTTER::emitSetRGBColor( double r, double g, double b )
 /**
  * Postscript supports dashed lines
  */
-void PS_PLOTTER::SetDash( int dashed )
+void PS_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 {
     switch( dashed )
     {
-    case PLOTDASHTYPE_DASH:
+    case PLOT_DASH_TYPE::DASH:
         fprintf( outputFile, "[%d %d] 0 setdash\n",
                 (int) GetDashMarkLenIU(), (int) GetDashGapLenIU() );
         break;
-    case PLOTDASHTYPE_DOT:
+    case PLOT_DASH_TYPE::DOT:
         fprintf( outputFile, "[%d %d] 0 setdash\n",
                 (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
         break;
-    case PLOTDASHTYPE_DASHDOT:
+    case PLOT_DASH_TYPE::DASHDOT:
         fprintf( outputFile, "[%d %d %d %d] 0 setdash\n",
                 (int) GetDashMarkLenIU(), (int) GetDashGapLenIU(),
                 (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
@@ -999,7 +999,7 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
 
     // Draw the native postscript text (if requested)
     // Currently: does not work: disable it
-    bool use_native = false; // = m_textMode == PLOTTEXTMODE_NATIVE && !aMultilineAllowed;
+    bool use_native = false; // = m_textMode == PLOT_TEXT_MODE::NATIVE && !aMultilineAllowed;
 
     if( use_native )
     {
@@ -1046,7 +1046,7 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
     }
 
     // Draw the hidden postscript text (if requested)
-    if( m_textMode == PLOTTEXTMODE_PHANTOM )
+    if( m_textMode == PLOT_TEXT_MODE::PHANTOM )
     {
         fputsPostscriptString( outputFile, aText );
         DPOINT pos_dev = userToDeviceCoordinates( aPos );
