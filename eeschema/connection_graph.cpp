@@ -2015,21 +2015,27 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
     if( bus_entry && bus_entry->m_connected_bus_item )
     {
         bus_wire = bus_entry->m_connected_bus_item;
-        conflict = true;
 
-        auto test_name = bus_entry->Connection( sheet )->Name( true );
-
-        for( const auto& member : bus_wire->Connection( sheet )->Members() )
+        // In some cases, the connection list (SCH_CONNECTION*) can be null.
+        // Skip null connections.
+        if( bus_entry->Connection( sheet ) && bus_wire->Connection( sheet ) )
         {
-            if( member->Type() == CONNECTION_BUS )
+            conflict = true;
+
+            auto test_name = bus_entry->Connection( sheet )->Name( true );
+
+            for( const auto& member : bus_wire->Connection( sheet )->Members() )
             {
-                for( const auto& sub_member : member->Members() )
-                    if( sub_member->Name( true ) == test_name )
-                        conflict = false;
-            }
-            else if( member->Name( true ) == test_name )
-            {
-                conflict = false;
+                if( member->Type() == CONNECTION_BUS )
+                {
+                    for( const auto& sub_member : member->Members() )
+                        if( sub_member->Name( true ) == test_name )
+                            conflict = false;
+                }
+                else if( member->Name( true ) == test_name )
+                {
+                    conflict = false;
+                }
             }
         }
     }

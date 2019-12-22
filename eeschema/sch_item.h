@@ -327,6 +327,7 @@ public:
 
     /**
      * Retrieves the connection associated with this object in the given sheet
+     * Note: the returned value can be nullptr.
      */
     SCH_CONNECTION* Connection( const SCH_SHEET_PATH& aPath ) const;
 
