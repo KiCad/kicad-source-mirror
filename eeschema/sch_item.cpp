@@ -127,7 +127,8 @@ bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
 
 SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH& aSheet ) const
 {
-    if( m_connection_map.count( aSheet ) )
+    // Warning: the m_connection_map can be empty.
+    if( m_connection_map.size() && m_connection_map.count( aSheet ) )
         return m_connection_map.at( aSheet );
 
     return nullptr;
