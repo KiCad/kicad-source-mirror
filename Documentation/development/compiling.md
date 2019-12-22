@@ -435,16 +435,16 @@ and some other fixes/improvements are contained in the `kicad/macos-wx-3.0` bran
 To perform a wxWidgets build, execute the following commands:
 
     cd <your wxWidgets build folder>
-    git clone -b kicad/macos-wx-3.0 https://github.com/KiCad/wxWidgets
+    git clone -b kicad/macos-wx-3.0 https://gitlab.com/kicad/code/wxWidgets.git
     mkdir wx-build
     cd wx-build
     ../wxWidgets/configure \
         --prefix=`pwd`/../wx-bin \
         --with-opengl \
         --enable-aui \
-        --enable-utf8 \
         --enable-html \
         --enable-stl \
+        --enable-richtext \
         --with-libjpeg=builtin \
         --with-libpng=builtin \
         --with-regex=builtin \
