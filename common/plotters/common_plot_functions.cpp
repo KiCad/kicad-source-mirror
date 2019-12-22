@@ -34,7 +34,6 @@
 #include <wx/filename.h>
 
 
-
 wxString GetDefaultPlotExtension( PLOT_FORMAT aFormat )
 {
     switch( aFormat )
@@ -56,7 +55,6 @@ wxString GetDefaultPlotExtension( PLOT_FORMAT aFormat )
         return wxEmptyString;
     }
 }
-
 
 
 void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,

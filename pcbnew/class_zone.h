@@ -178,7 +178,7 @@ public:
 
     ZONE_CONNECTION GetPadConnection( D_PAD* aPad = NULL ) const;
 
-    void            SetPadConnection( ZONE_CONNECTION aPadConnection )
+    void SetPadConnection( ZONE_CONNECTION aPadConnection )
     {
         m_PadConnection = aPadConnection;
     }

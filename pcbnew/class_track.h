@@ -394,11 +394,11 @@ protected:
 
 private:
     /// The bottom layer of the via (the top layer is in m_Layer)
-    PCB_LAYER_ID  m_BottomLayer;
+    PCB_LAYER_ID m_BottomLayer;
 
-    VIATYPE m_ViaType;        // Type of via
+    VIATYPE m_ViaType; // Type of via
 
-    int       m_Drill;          // for vias: via drill (- 1 for default value)
+    int m_Drill; // for vias: via drill (- 1 for default value)
 };
 
 
