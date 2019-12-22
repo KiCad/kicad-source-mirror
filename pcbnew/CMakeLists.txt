@@ -758,7 +758,7 @@ if( KICAD_SCRIPTING )
             DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
             COMMENT "Copying pcbnew.py into ${PYTHON_DEST}"
             )
-        add_dependencies( ScriptingPcbnewPyCopy ScriptingWxpythonCopy )
+        add_dependencies( ScriptingPcbnewPyCopy ScriptingPythonDirectoryCreation )
     endif()
 
     # python plugins
@@ -805,7 +805,7 @@ if( KICAD_SCRIPTING_MODULES )
             DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.so
             COMMENT "Copying _pcbnew.so into ${PYTHON_DEST}"
             )
-        add_dependencies( ScriptingModulesPcbnewSoCopy ScriptingWxpythonCopy )
+        add_dependencies( ScriptingModulesPcbnewSoCopy ScriptingPythonDirectoryCreation )
         set( PYMOD_EXT "so" )
     else()  # only linux remains among supported platforms
         add_library( pcbnew_python MODULE $<TARGET_OBJECTS:pcbnew_kiface_objects> )
@@ -846,6 +846,14 @@ endif()
 
 if( APPLE )
     if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
+        # If we don't have wxPython, then we must create the site-packages directory
+        add_custom_target( ScriptingPythonDirectoryCreation ALL
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${PYTHON_DEST}"
+            COMMENT "Creating Python library directory ${PYTHON_DEST}"
+            )
+    endif()
+
+    if( KICAD_SCRIPTING_WXPYTHON )
         # find wx-X.Y-osx_cocoa path below PYTHON_SITE_PACKAGE_PATH
         file( GLOB WXPYTHON_DIR RELATIVE ${PYTHON_SITE_PACKAGE_PATH} ${PYTHON_SITE_PACKAGE_PATH}/wx-?.?-osx_cocoa )
         if( NOT WXPYTHON_DIR )
@@ -857,5 +865,6 @@ if( APPLE )
             COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_SITE_PACKAGE_PATH}/wxversion.py" "${PYTHON_DEST}"
             COMMENT "Copying wxPython into ${PYTHON_DEST}"
             )
+        add_dependencies( ScriptingWxpythonCopy ScriptingPythonDirectoryCreation )
     endif()
 endif()
