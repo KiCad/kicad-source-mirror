@@ -370,10 +370,10 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
     m_pcbEditFrame->ClearMsgPanel();
     WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
 
-    const PLOT_FORMAT filefmt[6] =
-    {   // Keep these format ids in the same order than m_Choice_Drill_Map choices
-        PLOT_FORMAT::HPGL, PLOT_FORMAT::POST, PLOT_FORMAT::GERBER, PLOT_FORMAT::DXF, PLOT_FORMAT::SVG,
-        PLOT_FORMAT::PDF
+    const PLOT_FORMAT filefmt[6] = {
+        // Keep these format ids in the same order than m_Choice_Drill_Map choices
+        PLOT_FORMAT::HPGL, PLOT_FORMAT::POST, PLOT_FORMAT::GERBER, PLOT_FORMAT::DXF,
+        PLOT_FORMAT::SVG, PLOT_FORMAT::PDF
     };
 
     unsigned choice = (unsigned) m_Choice_Drill_Map->GetSelection();

@@ -76,8 +76,7 @@ public:
      * @param aFormat is the plot file format identifier
      * @param aSheetDesc
      */
-    bool OpenPlotfile( const wxString &aSuffix, PLOT_FORMAT aFormat,
-                       const wxString &aSheetDesc );
+    bool OpenPlotfile( const wxString& aSuffix, PLOT_FORMAT aFormat, const wxString& aSheetDesc );
 
     /** Plot a single layer on the current plotfile
      * m_plotLayer is the layer to plot

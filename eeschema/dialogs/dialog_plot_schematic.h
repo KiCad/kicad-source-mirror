@@ -48,8 +48,8 @@ class DIALOG_PLOT_SCHEMATIC : public DIALOG_PLOT_SCHEMATIC_BASE
 private:
     SCH_EDIT_FRAME* m_parent;
     wxConfigBase*   m_config;
-    bool            m_configChanged;        // true if a project config param has changed
-    PLOT_FORMAT      m_plotFormat;
+    bool            m_configChanged; // true if a project config param has changed
+    PLOT_FORMAT     m_plotFormat;
     static int      m_pageSizeSelect;       // Static to keep last option for some format
     static int      m_HPGLPaperSizeSelect;  // for HPGL format only: last selected paper size
     double          m_HPGLPenSize;          // for HPGL format only: pen size

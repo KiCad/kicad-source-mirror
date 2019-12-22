@@ -1383,7 +1383,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
         else if( TESTLINE( ".ZoneConnection" ) )
         {
             int tmp = intParse( line + SZ( ".ZoneConnection" ) );
-            aModule->SetZoneConnection( (ZONE_CONNECTION)tmp );
+            aModule->SetZoneConnection( (ZONE_CONNECTION) tmp );
         }
 
         else if( TESTLINE( ".ThermalWidth" ) )
@@ -1618,7 +1618,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
         else if( TESTLINE( ".ZoneConnection" ) )
         {
             int tmp = intParse( line + SZ( ".ZoneConnection" ) );
-            pad->SetZoneConnection( (ZONE_CONNECTION)tmp );
+            pad->SetZoneConnection( (ZONE_CONNECTION) tmp );
         }
 
         else if( TESTLINE( ".ThermalWidth" ) )
@@ -2258,7 +2258,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
         assert( TESTLINE( "Po" ) );
 
-        VIATYPE viatype = static_cast<VIATYPE>( intParse( line + SZ( "Po" ), &data ));
+        VIATYPE viatype = static_cast<VIATYPE>( intParse( line + SZ( "Po" ), &data ) );
         BIU start_x = biuParse( data, &data );
         BIU start_y = biuParse( data, &data );
         BIU end_x   = biuParse( data, &data );

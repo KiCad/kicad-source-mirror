@@ -146,8 +146,8 @@ protected:
     std::vector<HOLE_INFO>   m_holeListBuffer;          // Buffer containing holes
     std::vector<DRILL_TOOL>  m_toolListBuffer;          // Buffer containing tools
 
-    PLOT_FORMAT               m_mapFileFmt;              // the format of the map drill file,
-                                                        // if this map is needed
+    PLOT_FORMAT m_mapFileFmt;    // the format of the map drill file,
+                                 // if this map is needed
     const PAGE_INFO*         m_pageInfo;                // the page info used to plot drill maps
                                                         // If NULL, use a A4 page format
     // This Ctor is protected.
@@ -195,7 +195,10 @@ public:
      * PLOT_FORMAT_DXF, PLOT_FORMAT_SVG, PLOT_FORMAT_PDF
      * the most useful are PLOT_FORMAT_PDF and PLOT_FORMAT_POST
      */
-    void SetMapFileFormat( PLOT_FORMAT aMapFmt ) { m_mapFileFmt = aMapFmt; }
+    void SetMapFileFormat( PLOT_FORMAT aMapFmt )
+    {
+        m_mapFileFmt = aMapFmt;
+    }
 
     /**
      * Function CreateMapFilesSet

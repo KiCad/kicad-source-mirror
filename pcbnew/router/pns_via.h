@@ -57,8 +57,7 @@ public:
 
     VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill, int aNet = -1,
             VIATYPE aViaType = VIATYPE::THROUGH )
-            :
-        ITEM( VIA_T )
+            : ITEM( VIA_T )
     {
         SetNet( aNet );
         SetLayers( aLayers );
@@ -169,11 +168,11 @@ public:
     const VIA_HANDLE MakeHandle() const;
 
 private:
-    int m_diameter;
-    int m_drill;
-    VECTOR2I m_pos;
+    int          m_diameter;
+    int          m_drill;
+    VECTOR2I     m_pos;
     SHAPE_CIRCLE m_shape;
-    VIATYPE m_viaType;
+    VIATYPE      m_viaType;
 };
 
 }

@@ -520,9 +520,17 @@ public:
     */
     wxSize GetSolderPasteMargin() const;
 
-    void SetZoneConnection( ZONE_CONNECTION aType ) { m_ZoneConnection = aType; }
+    void SetZoneConnection( ZONE_CONNECTION aType )
+    {
+        m_ZoneConnection = aType;
+    }
+
     ZONE_CONNECTION GetZoneConnection() const;
-    ZONE_CONNECTION GetLocalZoneConnection() const { return m_ZoneConnection; }
+
+    ZONE_CONNECTION GetLocalZoneConnection() const
+    {
+        return m_ZoneConnection;
+    }
 
     void SetThermalWidth( int aWidth ) { m_ThermalWidth = aWidth; }
     int GetThermalWidth() const;

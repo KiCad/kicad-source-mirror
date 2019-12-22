@@ -347,7 +347,7 @@ bool hasThermalConnection( D_PAD* pad, const ZONE_CONTAINER* aZone )
 {
     // Rejects non-standard pads with tht-only thermal reliefs
     if( aZone->GetPadConnection( pad ) == ZONE_CONNECTION::THT_THERMAL
-        && pad->GetAttribute() != PAD_ATTRIB_STANDARD )
+            && pad->GetAttribute() != PAD_ATTRIB_STANDARD )
     {
         return false;
     }
@@ -550,8 +550,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
                 pad = &dummypad;
             }
 
-            if( pad->GetNetCode() != aZone->GetNetCode()
-                  || pad->GetNetCode() <= 0
+            if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0
                     || aZone->GetPadConnection( pad ) == ZONE_CONNECTION::NONE )
             {
                 int gap = std::max( zone_clearance, pad->GetClearance() );

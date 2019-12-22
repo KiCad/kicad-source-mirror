@@ -47,7 +47,8 @@ class GBR_NETLIST_METADATA;
  * is the set of supported output plot formats.  They should be kept in order
  * of the radio buttons in the plot panel/windows.
  */
-enum class PLOT_FORMAT {
+enum class PLOT_FORMAT
+{
     UNDEFINED = -1,
     FIRST_FORMAT = 0,
     HPGL = FIRST_FORMAT,
@@ -82,14 +83,15 @@ enum class PLOT_TEXT_MODE
 /**
  * Enum for choosing dashed line type
  */
-enum class PLOT_DASH_TYPE {
-	DEFAULT = -1,
+enum class PLOT_DASH_TYPE
+{
+    DEFAULT = -1,
     SOLID = 0,
-	FIRST_TYPE = SOLID,
+    FIRST_TYPE = SOLID,
     DASH,
     DOT,
     DASHDOT,
-	LAST_TYPE = DASHDOT
+    LAST_TYPE = DASHDOT
 };
 
 /**

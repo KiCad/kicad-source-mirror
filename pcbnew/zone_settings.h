@@ -152,8 +152,15 @@ public:
 
     unsigned int GetCornerRadius() const { return m_cornerRadius; }
 
-    ZONE_CONNECTION GetPadConnection() const { return m_PadConnection; }
-    void SetPadConnection( ZONE_CONNECTION aPadConnection ) { m_PadConnection = aPadConnection; }
+    ZONE_CONNECTION GetPadConnection() const
+    {
+        return m_PadConnection;
+    }
+
+    void SetPadConnection( ZONE_CONNECTION aPadConnection )
+    {
+        m_PadConnection = aPadConnection;
+    }
 
     /**
      * Accessors to parameters used in Keepout zones:

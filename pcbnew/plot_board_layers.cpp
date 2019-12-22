@@ -227,7 +227,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
 
             // Gerber: Subtract soldermask from silkscreen if enabled
             if( aPlotter->GetPlotterType() == PLOT_FORMAT::GERBER
-                && plotOpt.GetSubtractMaskFromSilk() )
+                    && plotOpt.GetSubtractMaskFromSilk() )
             {
                 if( aLayer == F_SilkS )
                     layer_mask = LSET( F_Mask );

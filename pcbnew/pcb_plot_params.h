@@ -66,7 +66,7 @@ private:
     DXF_PLOTTER::DXF_UNITS m_DXFplotUnits;
 
     /// Plot format type (chooses the driver to be used)
-    PLOT_FORMAT  m_format;
+    PLOT_FORMAT m_format;
 
     /// Holes can be not plotted, have a small mark or plotted in actual size
     DrillMarksType m_drillMarks;
@@ -192,8 +192,15 @@ public:
     void        SetColor( COLOR4D aVal ) { m_color = aVal; }
     COLOR4D     GetColor() const { return m_color; }
 
-    void        SetTextMode( PLOT_TEXT_MODE aVal ) { m_textMode = aVal; }
-    PLOT_TEXT_MODE GetTextMode() const { return m_textMode; }
+    void SetTextMode( PLOT_TEXT_MODE aVal )
+    {
+        m_textMode = aVal;
+    }
+
+    PLOT_TEXT_MODE GetTextMode() const
+    {
+        return m_textMode;
+    }
 
     void        SetPlotMode( EDA_DRAW_MODE_T aPlotMode ) { m_plotMode = aPlotMode; }
     EDA_DRAW_MODE_T GetPlotMode() const { return m_plotMode; }
@@ -252,8 +259,15 @@ public:
     void        SetExcludeEdgeLayer( bool aFlag ) { m_excludeEdgeLayer = aFlag; }
     bool        GetExcludeEdgeLayer() const { return m_excludeEdgeLayer; }
 
-    void        SetFormat( PLOT_FORMAT aFormat ) { m_format = aFormat; }
-    PLOT_FORMAT  GetFormat() const { return m_format; }
+    void SetFormat( PLOT_FORMAT aFormat )
+    {
+        m_format = aFormat;
+    }
+
+    PLOT_FORMAT GetFormat() const
+    {
+        return m_format;
+    }
 
     void        SetOutputDirectory( wxString aDir ) { m_outputDirectory = aDir; }
     wxString    GetOutputDirectory() const { return m_outputDirectory; }

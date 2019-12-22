@@ -185,7 +185,7 @@ public:
 
     bool       m_MicroViasAllowed;          ///< true to allow micro vias
     bool       m_BlindBuriedViaAllowed;     ///< true to allow blind/buried vias
-    VIATYPE  m_CurrentViaType;            ///< (VIA_BLIND_BURIED, VIA_THROUGH, VIA_MICROVIA)
+    VIATYPE    m_CurrentViaType;            ///< (VIA_BLIND_BURIED, VIA_THROUGH, VIA_MICROVIA)
 
     bool       m_RequireCourtyards;         ///< require courtyard definitions in footprints
     bool       m_ProhibitOverlappingCourtyards;  ///< check for overlapping courtyards in DRC

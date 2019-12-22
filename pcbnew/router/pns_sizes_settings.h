@@ -92,8 +92,15 @@ public:
     int GetLayerTop() const;
     int GetLayerBottom() const;
 
-    void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
-    VIATYPE ViaType() const { return m_viaType; }
+    void SetViaType( VIATYPE aViaType )
+    {
+        m_viaType = aViaType;
+    }
+
+    VIATYPE ViaType() const
+    {
+        return m_viaType;
+    }
 
 private:
 

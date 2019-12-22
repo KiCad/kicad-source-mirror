@@ -47,12 +47,13 @@
                                         // ZONE_EXPORT_VALUES
 
 /// How pads are covered by copper in zone
-enum class ZONE_CONNECTION {
+enum class ZONE_CONNECTION
+{
     INHERITED = -1,
-    NONE,         ///< Pads are not covered
-    THERMAL,      ///< Use thermal relief for pads
-    FULL,         ///< pads are covered by copper
-    THT_THERMAL   ///< Thermal relief only for THT pads
+    NONE,       ///< Pads are not covered
+    THERMAL,    ///< Use thermal relief for pads
+    FULL,       ///< pads are covered by copper
+    THT_THERMAL ///< Thermal relief only for THT pads
 };
 
 class ZONE_CONTAINER;

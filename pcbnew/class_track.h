@@ -59,11 +59,11 @@ enum ENDPOINT_T {
 // Note that this enum must be synchronized to GAL_LAYER_ID
 enum class VIATYPE
 {
-    THROUGH      = 3,      /* Always a through hole via */
-    BLIND_BURIED = 2,      /* this via can be on internal layers */
-    MICROVIA     = 1,      /* this via which connect from an external layer
+    THROUGH = 3,      /* Always a through hole via */
+    BLIND_BURIED = 2, /* this via can be on internal layers */
+    MICROVIA = 1,     /* this via which connect from an external layer
                                 * to the near neighbor internal layer */
-    NOT_DEFINED  = 0       /* not yet used */
+    NOT_DEFINED = 0   /* not yet used */
 };
 
 #define UNDEFINED_DRILL_DIAMETER  -1       //< Undefined via drill diameter.
@@ -343,8 +343,15 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
-    VIATYPE GetViaType() const          { return m_ViaType; }
-    void SetViaType( VIATYPE aViaType ) { m_ViaType = aViaType; }
+    VIATYPE GetViaType() const
+    {
+        return m_ViaType;
+    }
+
+    void SetViaType( VIATYPE aViaType )
+    {
+        m_ViaType = aViaType;
+    }
 
     /**
      * Function SetDrill

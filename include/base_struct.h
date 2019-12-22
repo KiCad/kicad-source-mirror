@@ -51,7 +51,8 @@ enum FILL_T {
 };
 
 
-enum class SEARCH_RESULT {
+enum class SEARCH_RESULT
+{
     QUIT,
     CONTINUE
 };

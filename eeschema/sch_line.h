@@ -25,8 +25,8 @@
 #ifndef _SCH_LINE_H_
 #define _SCH_LINE_H_
 
-#include <sch_item.h>
 #include <plotter.h>
+#include <sch_item.h>
 
 class NETLIST_OBJECT_LIST;
 
@@ -105,7 +105,7 @@ public:
 
     PLOT_DASH_TYPE GetDefaultStyle() const;
 
-    void SetLineStyle( const PLOT_DASH_TYPE aStyle );
+    void           SetLineStyle( const PLOT_DASH_TYPE aStyle );
     PLOT_DASH_TYPE GetLineStyle() const;
 
     /// @return the style name from the style id

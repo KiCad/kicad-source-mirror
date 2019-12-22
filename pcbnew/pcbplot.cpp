@@ -433,9 +433,8 @@ void PLOT_CONTROLLER::ClosePlot()
 }
 
 
-bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix,
-                                    PLOT_FORMAT     aFormat,
-                                    const wxString &aSheetDesc )
+bool PLOT_CONTROLLER::OpenPlotfile(
+        const wxString& aSuffix, PLOT_FORMAT aFormat, const wxString& aSheetDesc )
 {
     LOCALE_IO toggle;
 
