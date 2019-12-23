@@ -96,3 +96,6 @@ pcbnew/Info.plist
 .cproject
 .pydevproject
 __pycache__
+
+# Visual Studio
+.vs/
