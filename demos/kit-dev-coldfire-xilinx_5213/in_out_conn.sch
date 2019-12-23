@@ -1479,7 +1479,7 @@ AN[0..7]
 Text HLabel 9900 1100 0    60   Input ~ 0
 DTIN[0..3]
 Text HLabel 11550 3300 0    60   Input ~ 0
-IRQ-[0..7]
+IRQ-[1..7]
 Text HLabel 11100 1250 0    60   Input ~ 0
 GPT[0..3]
 Text HLabel 12250 4100 0    60   Input ~ 0

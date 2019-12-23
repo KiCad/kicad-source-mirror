@@ -825,7 +825,7 @@ DTIN[0..3]
 Text Label 12400 7650 0    60   ~ 0
 AN[0..7]
 Text Label 12400 7850 0    60   ~ 0
-IRQ-[0..7]
+IRQ-[1..7]
 Text Label 15250 8950 0    60   ~ 0
 RSTO-
 Text Label 15250 8850 0    60   ~ 0
@@ -881,7 +881,7 @@ F0 "inout_user" 60
 F1 "in_out_conn.sch" 60
 F2 "AN[0..7]" I L 13100 7650 60 
 F3 "DTIN[0..3]" I L 13100 7750 60 
-F4 "IRQ-[0..7]" I L 13100 7850 60 
+F4 "IRQ-[1..7]" I L 13100 7850 60 
 F5 "GPT[0..3]" I L 13100 7950 60 
 F6 "VCCA" I L 13100 8050 60 
 F7 "RCON-" I L 13100 8150 60 
@@ -2501,6 +2501,8 @@ F 3 "" H 4700 3350 60  0000 C CNN
 	1    4700 3350
 	1    0    0    -1  
 $EndComp
+Wire Bus Line
+	5400 5050 5400 5950
 Wire Bus Line
 	5550 5950 5550 6650
 $EndSCHEMATC
