@@ -41,7 +41,6 @@
 
 #include <connection_graph.h>
 
-
 bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 {
     int highest_priority = -1;
@@ -503,11 +502,19 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
 
             case SCH_BUS_BUS_ENTRY_T:
                 conn->SetType( CONNECTION_BUS );
+                // clean previous (old) links:
+                static_cast<SCH_BUS_BUS_ENTRY*>( item )->m_connected_bus_items[0] = nullptr;
+                static_cast<SCH_BUS_BUS_ENTRY*>( item )->m_connected_bus_items[1] = nullptr;
                 break;
 
             case SCH_PIN_T:
+                conn->SetType( CONNECTION_NET );
+                break;
+
             case SCH_BUS_WIRE_ENTRY_T:
                 conn->SetType( CONNECTION_NET );
+                // clean previous (old) link:
+                static_cast<SCH_BUS_WIRE_ENTRY*>( item )->m_connected_bus_item = nullptr;
                 break;
 
             default:
@@ -2016,9 +2023,12 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
     {
         bus_wire = bus_entry->m_connected_bus_item;
 
+        wxASSERT( bus_wire->Type() == SCH_LINE_T );
+
         // In some cases, the connection list (SCH_CONNECTION*) can be null.
         // Skip null connections.
-        if( bus_entry->Connection( sheet ) && bus_wire->Connection( sheet ) )
+        if( bus_entry->Connection( sheet ) && bus_wire->Type() == SCH_LINE_T
+            && bus_wire->Connection( sheet ) )
         {
             conflict = true;
 
