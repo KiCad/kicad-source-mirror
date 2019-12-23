@@ -66,7 +66,7 @@ extern IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl );
 
 
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
-    PCB_TOOL_BASE( "pcbnew.Control" ), 
+    PCB_TOOL_BASE( "pcbnew.Control" ),
     m_frame( nullptr )
 {
     m_gridOrigin.reset( new KIGFX::ORIGIN_VIEWITEM() );
@@ -238,6 +238,32 @@ int PCBNEW_CONTROL::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
         for( auto item : module->GraphicalItems() )
         {
             if( item->Type() == PCB_MODULE_EDGE_T )
+                view()->Update( item, KIGFX::GEOMETRY );
+        }
+    }
+
+    canvas()->Refresh();
+
+    return 0;
+}
+
+
+int PCBNEW_CONTROL::ModuleTextOutlines( const TOOL_EVENT& aEvent )
+{
+    auto opts = displayOptions();
+
+    Flip( opts.m_DisplayModTextFill );
+    m_frame->SetDisplayOptions( opts );
+    view()->UpdateDisplayOptions( opts );
+
+    for( auto module : board()->Modules() )
+    {
+        view()->Update( &module->Reference(), KIGFX::GEOMETRY );
+        view()->Update( &module->Value(), KIGFX::GEOMETRY );
+
+        for( auto item : module->GraphicalItems() )
+        {
+            if( item->Type() == PCB_MODULE_TEXT_T )
                 view()->Update( item, KIGFX::GEOMETRY );
         }
     }
@@ -1066,7 +1092,7 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::AddLibrary,           ACTIONS::addLibrary.MakeEvent() );
     Go( &PCBNEW_CONTROL::Print,                ACTIONS::print.MakeEvent() );
     Go( &PCBNEW_CONTROL::Quit,                 ACTIONS::quit.MakeEvent() );
-    
+
     // Display modes
     Go( &PCBNEW_CONTROL::TrackDisplayMode,     PCB_ACTIONS::trackDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToggleRatsnest,       PCB_ACTIONS::showRatsnest.MakeEvent() );
@@ -1075,6 +1101,7 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::ViaDisplayMode,       PCB_ACTIONS::viaDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::GraphicDisplayMode,   PCB_ACTIONS::graphicDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::ModuleEdgeOutlines,   PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ModuleTextOutlines,   PCB_ACTIONS::moduleTextOutlines.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
