@@ -27,7 +27,9 @@
  */
 
 #include <fctsys.h>
+#include <nlohmann/json.hpp>
 #include <wx/filename.h>
+
 #include <wildcards_and_files_ext.h>
 #include <gerbview.h>
 #include <richio.h>
@@ -38,7 +40,8 @@
 #include <gbr_metadata.h>
 #include <html_messagebox.h>
 #include <view/view.h>
-#include "json11.hpp"   // A light JSON parser
+
+using json = nlohmann::json;
 
 /**
  * this class read and parse a Gerber job file to extract useful info
@@ -130,16 +133,19 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
         while( ( line = jobfileReader.ReadLine() ) )
             data << '\n' << line;
 
-        std::string err;
-        json11::Json json_parser = json11::Json::parse( TO_UTF8( data ), err );
-
-        if( !err.empty() )
-            return false;
-
-        for( auto& entry : json_parser["FilesAttributes"].array_items() )
+        try
         {
-            std::string name = entry["Path"].string_value();
-            m_GerberFiles.Add( formatStringFromJSON( name ) );
+            json js = json::parse( TO_UTF8( data ) );
+
+            for( json& entry : js["FilesAttributes"] )
+            {
+                std::string name = entry["Path"].get<std::string>();
+                m_GerberFiles.Add( formatStringFromJSON( name ) );
+            }
+        }
+        catch( ... )
+        {
+            return false;
         }
     }
     else

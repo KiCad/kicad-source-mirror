@@ -27,13 +27,15 @@
  */
 
 #include <fctsys.h>
-#include <kiface_i.h>
-#include <pgm_base.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gestfich.h>
+#include <kiface_i.h>
+#include <nlohmann/json.hpp>
+#include <pgm_base.h>
 #include <wildcards_and_files_ext.h>
-#include "json11.hpp"
+
+using json = nlohmann::json;
 
 const wxChar* g_GerberPageSizeList[] =
 {
@@ -192,29 +194,26 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 
         try
         {
-            std::string  err;
-            json11::Json json = json11::Json::parse(TO_UTF8( data ), err );
+            // Will throw on parse error
+            json js = json::parse( TO_UTF8( data ) );
 
-            if( err.empty() )
+            for( auto& entry : js["FilesAttributes"] )
             {
-                for( auto& entry : json[ "FilesAttributes" ].array_items() )
+                wxString path = wxString( entry["Path"].get<std::string>() );
+
+                if( path.StartsWith( aProjectName + "-" ) )
                 {
-                    wxString path = entry[ "Path" ].string_value();
-
-                    if( path.StartsWith( aProjectName + "-" ) )
-                    {
-                        path.Replace( aProjectName, aNewProjectName, false );
-                        entry[ "Path" ].set_string_value( path.ToStdString() );
-                    }
+                    path.Replace( aProjectName, aNewProjectName, false );
+                    entry["Path"] = path.ToStdString();
                 }
-
-                wxFile destJobFile( destFile.GetFullPath(), wxFile::write );
-
-                if( destJobFile.IsOpened() )
-                    success = destJobFile.Write( json.dump( 0 ) );
-
-                // wxFile dtor will close the file
             }
+
+            wxFile destJobFile( destFile.GetFullPath(), wxFile::write );
+
+            if( destJobFile.IsOpened() )
+                success = destJobFile.Write( js.dump( 0 ) );
+
+            // wxFile dtor will close the file
         }
         catch( ... )
         {
