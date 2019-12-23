@@ -310,14 +310,14 @@ public:
 
     static TOOL_ACTION importSpecctraSession;
     static TOOL_ACTION exportSpecctraDSN;
-    
+
     static TOOL_ACTION generateGerbers;
     static TOOL_ACTION generateDrillFiles;
     static TOOL_ACTION generatePosFile;
     static TOOL_ACTION generateReportFile;
     static TOOL_ACTION generateD356File;
     static TOOL_ACTION generateBOM;
-    
+
     static TOOL_ACTION listNets;
     static TOOL_ACTION runDRC;
 
@@ -329,11 +329,11 @@ public:
     // Module editor tools
 
     static TOOL_ACTION toggleFootprintTree;
-    
+
     // We don't use ACTION::new here because we need to distinguish between New Library
     // and New Footprint.
     static TOOL_ACTION newFootprint;
-    
+
     // Create a new footprint using the Footprint Wizard
     static TOOL_ACTION createFootprint;
 
@@ -349,7 +349,7 @@ public:
     static TOOL_ACTION pasteFootprint;
     static TOOL_ACTION importFootprint;
     static TOOL_ACTION exportFootprint;
-    
+
     static TOOL_ACTION footprintProperties;
     static TOOL_ACTION defaultPadProperties;
 
@@ -367,6 +367,9 @@ public:
 
     /// Display module edges as outlines
     static TOOL_ACTION moduleEdgeOutlines;
+
+    /// Display module texts as lines
+    static TOOL_ACTION moduleTextOutlines;
 
     // Pad tools
 

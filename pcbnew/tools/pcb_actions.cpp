@@ -691,6 +691,11 @@ TOOL_ACTION PCB_ACTIONS::moduleEdgeOutlines( "pcbnew.Control.graphicOutlines",
         _( "Sketch Footprint Graphic Items" ), _( "Show footprint graphic items in outline mode" ),
         show_mod_edge_xpm );
 
+TOOL_ACTION PCB_ACTIONS::moduleTextOutlines( "pcbnew.Control.fpTextOutlines",
+        AS_GLOBAL, 0, "",
+        _( "Line Mode Footprint Text Items" ), _( "Show footprint texts in line mode" ),
+        text_sketch_xpm );
+
 TOOL_ACTION PCB_ACTIONS::zoneDisplayEnable( "pcbnew.Control.zoneDisplayEnable",
         AS_GLOBAL, 0, "",
         _( "Fill Zones" ), _( "Show filled areas of zones" ),

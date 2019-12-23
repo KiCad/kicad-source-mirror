@@ -319,6 +319,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     {
         return !disp_opt.m_DisplayModEdgeFill;
     };
+    auto sketchModuleTextOutlinesCondition = [ &disp_opt ]( const SELECTION &aSel )
+    {
+        return !disp_opt.m_DisplayModTextFill;
+    };
 
     viewMenu->AddCheckItem( PCB_ACTIONS::showLayersManager,    layersPaletteShownCondition );
     viewMenu->AddCheckItem( PCB_ACTIONS::showMicrowaveToolbar, microwaveToolbarShownCondition );
@@ -369,6 +373,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     drawingModeSubMenu->AddSeparator();
     drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::graphicDisplayMode,  sketchGraphicsCondition );
     drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::moduleEdgeOutlines,  sketchModuleEdgeOutlinesCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::moduleTextOutlines,  sketchModuleTextOutlinesCondition );
 
     viewMenu->AddMenu( drawingModeSubMenu );
 

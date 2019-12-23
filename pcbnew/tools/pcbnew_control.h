@@ -62,6 +62,7 @@ public:
     int ViaDisplayMode( const TOOL_EVENT& aEvent );
     int GraphicDisplayMode( const TOOL_EVENT& aEvent );
     int ModuleEdgeOutlines( const TOOL_EVENT& aEvent );
+    int ModuleTextOutlines( const TOOL_EVENT& aEvent );
     int HighContrastMode( const TOOL_EVENT& aEvent );
 
     // Layer control
