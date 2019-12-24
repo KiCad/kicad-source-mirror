@@ -234,7 +234,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     if( item->IsNew() )
                     {
-                        if( item->HasFlag(TEMP_SELECTED ) && m_isDragOperation )
+                        if( item->HasFlag( TEMP_SELECTED ) && m_isDragOperation )
                         {
                             // Item was added in getConnectedDragItems
                             saveCopyInUndoList( (SCH_ITEM*) item, UR_NEW, appendUndo );
@@ -430,6 +430,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
         item->ClearEditFlags();
+
+    m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
 
     if( restore_state )
     {
