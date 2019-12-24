@@ -117,6 +117,12 @@ protected:
     void saveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO_T aType, bool aAppend = false )
     {
         KICAD_T itemType = aItem->Type();
+        bool    selected = aItem->IsSelected();
+
+        // IS_SELECTED flag should not be set on undo items which were added for
+        // a drag operation.
+        if( selected && aItem->HasFlag( TEMP_SELECTED ))
+            aItem->ClearSelected();
 
         if( m_isLibEdit )
         {
@@ -133,6 +139,9 @@ protected:
             else
                 editFrame->SaveCopyInUndoList( (SCH_ITEM*) aItem, aType, aAppend );
         }
+
+        if( selected && aItem->HasFlag( TEMP_SELECTED ) )
+            aItem->SetSelected();
     }
 
 protected:
