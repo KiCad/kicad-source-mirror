@@ -238,6 +238,10 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
     settings->Read( ENBL_AUTO_PAN_KEY, &option );
     viewControls->EnableAutoPan( option );
 
+    settings->Read( ENBL_RIGHT_BUTTON_PAN_KEY, &option );
+    viewControls->SetAdditionalPanButtons(
+            viewControls->GetSettings().m_panWithLeftButton, option );
+
     m_galDisplayOptions.ReadCommonConfig( *settings, this );
 }
 

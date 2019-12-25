@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 25 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -192,6 +192,11 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_AutoPANOpt->SetToolTip( _("When drawing a track or moving an item, pan when approaching the edge of the display.") );
 
 	sbSizer51->Add( m_AutoPANOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+
+	m_RightButtonPan = new wxCheckBox( sbSizer51->GetStaticBox(), wxID_ANY, _("Pan with &right mouse button"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_RightButtonPan->SetToolTip( _("Use the right mouse button to pan") );
+
+	sbSizer51->Add( m_RightButtonPan, 0, wxALL, 5 );
 
 
 	rightSizer->Add( sbSizer51, 0, wxEXPAND|wxALL, 5 );
