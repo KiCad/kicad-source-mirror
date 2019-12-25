@@ -95,12 +95,17 @@ if( APPLE )
         set( SCRIPTING_HELPER "0" )
     endif()
 
+    if( KICAD_USE_OCC )
+        set( KICAD_BUNDLE_LIBS ${OCC_LIBRARY_DIR} )
+    endif()
+
     # make main bundle relocatable
     install( CODE "
         # find all libs and modules
         file( GLOB PLUGINS_KIFACE ${OSX_BUNDLE_INSTALL_KIFACE_DIR}/*.kiface )
         file( GLOB_RECURSE PLUGINS_SO ${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/*.so )
-        set( BUNDLE_FIX_LIBS \${PLUGINS_KIFACE} \${PLUGINS_SO} )
+        file( GLOB_RECURSE PLUGINS_3D ${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/3d/*.dylib )
+        set( BUNDLE_FIX_LIBS \${PLUGINS_KIFACE} \${PLUGINS_SO} \${PLUGINS_3D} )
         if( ${SCRIPTING_HELPER} )
             file( GLOB WXPYTHON_DIR RELATIVE ${OSX_BUNDLE_INSTALL_LIB_DIR}/${PYTHON_LIB_DIR} ${OSX_BUNDLE_INSTALL_LIB_DIR}/${PYTHON_LIB_DIR}/wx-?.?-osx_cocoa )
             file( GLOB PYTHON_SCRIPTING_SO ${OSX_BUNDLE_INSTALL_LIB_DIR}/${PYTHON_LIB_DIR}/*.so )
@@ -117,7 +122,7 @@ if( APPLE )
 
         fixup_bundle( ${OSX_BUNDLE_INSTALL_BIN_DIR}/kicad
             \"\${BUNDLE_FIX_LIBS}\"
-            \"\"
+            \" ${KICAD_BUNDLE_LIBS}\"
             )
         " COMPONENT Runtime
         )
