@@ -151,21 +151,25 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
     case 0:
         m_netNamesOnPads = false;
         m_netNamesOnTracks = false;
+        m_netNamesOnVias = false;
         break;
 
     case 1:
         m_netNamesOnPads = true;
         m_netNamesOnTracks = false;
+        m_netNamesOnVias = true;        // Follow pads or tracks?  For now we chose pads....
         break;
 
     case 2:
         m_netNamesOnPads = false;
         m_netNamesOnTracks = true;
+        m_netNamesOnVias = false;       // Follow pads or tracks?  For now we chose pads....
         break;
 
     case 3:
         m_netNamesOnPads = true;
         m_netNamesOnTracks = true;
+        m_netNamesOnVias = true;
         break;
     }
 
