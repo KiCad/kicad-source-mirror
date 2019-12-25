@@ -621,6 +621,7 @@ target_include_directories( pcbnew_kiface_objects PRIVATE
     $<TARGET_PROPERTY:dxflib_qcad,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:nanosvg,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:tinyspline_lib,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 # Since we're not using target_link_libraries, we need to explicitly

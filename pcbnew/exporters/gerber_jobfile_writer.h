@@ -30,6 +30,10 @@
 #ifndef GERBER_JOBFILE_WRITER_H
 #define GERBER_JOBFILE_WRITER_H
 
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
+
 
 // A helper enum to handle sides of some layers (silk, mask)
 enum ONSIDE
@@ -148,60 +152,6 @@ private:
      */
     void addJSONDesignRules();
 
-    /**
-     * Remove the comma if it is the last char in m_JSONbuffer,
-     * or the previous char if the last char is a \n
-     */
-    void removeJSONSepararator();
-
-    /**
-     * add m_indent spaces in m_JSONbuffer
-     */
-    void addIndent() { m_JSONbuffer.Append( ' ', m_indent ); }
-
-    /**
-     * open a JSON block: add '{' and increment indentation
-     */
-    void openBlock() { addIndent(); m_JSONbuffer << "{\n"; m_indent += 2; }
-
-    /**
-     * open a JSON array block: add '[' and increment indentation
-     */
-    void openArrayBlock() { addIndent(); m_JSONbuffer << "[\n"; m_indent += 2; }
-
-    /**
-     * close a JSON block: decrement indentation and add '}'
-     */
-    void closeBlock() { m_indent -= 2; addIndent(); m_JSONbuffer << "}\n"; }
-
-    /**
-     * close a JSON block: decrement indentation and add '}' and ','
-     */
-    void closeBlockWithSep() { m_indent -= 2; addIndent(); m_JSONbuffer << "},\n"; }
-
-    /**
-     * close a JSON array block: decrement indentation and add ']'
-     */
-    void closeArrayBlock() { m_indent -= 2; addIndent(); m_JSONbuffer << "]\n"; }
-
-    /**
-     * close a JSON array block: decrement indentation and add ']' and ','
-     */
-    void closeArrayBlockWithSep() { m_indent -= 2; addIndent(); m_JSONbuffer << "],\n"; }
-
-    /**
-     * Add aParam to m_JSONbuffer, with suitable indentation
-     */
-    void addJSONObject( const wxString& aParam )
-    {
-        addIndent(); m_JSONbuffer << aParam;
-    }
-
-    void addJSONObject( const char* aParam )
-    {
-        addIndent(); m_JSONbuffer << aParam;
-    }
-
     /** A helper function to convert a wxString ( therefore a Unicode text ) to
      * a JSON compatible string (a escaped unicode sequence of 4 hexa).
      */
@@ -212,8 +162,7 @@ private:
     REPORTER* m_reporter;       // a reporter for messages (can be null)
     JOBFILE_PARAMS m_params;    // the list of various prms and data to write in a job file
     double m_conversionUnits;   // scaling factor to convert brd units to gerber units (mm)
-    wxString m_JSONbuffer;      // a buffer to build the JSON data
-    int m_indent;               // helper for JSON format: the current indentation value
+    json m_json;                // json document built by this class
 };
 
 #endif  //  #ifndef GERBER_JOBFILE_WRITER_H
