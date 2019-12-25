@@ -63,7 +63,7 @@ wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat )
         break;
 
     case GBR_NC_STRING_FORMAT_GBRJOB:
-        msg.Printf( "\"CreationDate\":  \"%s%s\"", date.FormatISOCombined(), timezone_offset );
+        msg.Printf( "%s%s", date.FormatISOCombined(), timezone_offset );
         break;
 
     case GBR_NC_STRING_FORMAT_NCDRILL:
@@ -481,7 +481,7 @@ std::string FormatStringToGerber( const wxString& aString )
      * quoted, the conversion is expected to be already made, and the returned string must use
      * UTF8 encoding
      */
-    if( aString[0] != '\"' || aString[aString.Len()-1] != '\"' )
+    if( !aString.IsEmpty() && ( aString[0] != '\"' || aString[aString.Len()-1] != '\"' ) )
         converted = ConvertNotAllowedCharsInGerber( aString, false, false );
     else
         converted = aString;
