@@ -217,7 +217,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
         dlg.SetOKLabel( _( "Clear and Annotate" ) );
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
-        if( dlg.ShowModal() == wxCANCEL )
+        if( dlg.ShowModal() == wxID_CANCEL )
             return;
     }
 
