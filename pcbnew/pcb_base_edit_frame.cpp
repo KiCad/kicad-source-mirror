@@ -48,8 +48,11 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
 PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()
 {
-    wxTextFile footprintInfoCache( Prj().GetProjectPath() + "fp-info-cache" );
-    GFootprintList.WriteCacheToFile( &footprintInfoCache );
+    if( wxFileName::IsDirWritable( Prj().GetProjectPath() ) )
+    {
+        wxTextFile footprintInfoCache( Prj().GetProjectPath() + "fp-info-cache" );
+        GFootprintList.WriteCacheToFile( &footprintInfoCache );
+    }
 }
 
 
