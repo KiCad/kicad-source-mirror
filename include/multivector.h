@@ -204,6 +204,19 @@ public:
         return CONST_ITERATOR( this, operator[]( bucket ).end(), bucket, aType );
     }
 
+    void clear( int aType = UNDEFINED_TYPE )
+    {
+        if( aType != UNDEFINED_TYPE )
+        {
+            operator[]( aType ).clear();
+        }
+        else
+        {
+            for( int i = 0; i < TYPES_COUNT; ++i)
+                m_data[ i ].clear();
+        }
+    }
+
     size_t size( int aType = UNDEFINED_TYPE ) const
     {
         if( aType != UNDEFINED_TYPE )

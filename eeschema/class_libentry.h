@@ -572,6 +572,8 @@ public:
     bool operator==( const LIB_PART* aPart ) const { return this == aPart; }
     bool operator==( const LIB_PART& aPart ) const { return Compare( aPart ) == 0; }
 
+    const LIB_PART& operator=( const LIB_PART& aPart );
+
     /**
      * Return a flattened symbol inheritance to the caller.
      *
