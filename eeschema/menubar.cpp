@@ -260,6 +260,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     };
 
     toolsMenu->AddItem( ACTIONS::updatePcbFromSchematic,    EE_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( ACTIONS::updateSchematicFromPcb,    EE_CONDITIONS::ShowAlways );
     toolsMenu->AddItem( EE_ACTIONS::showPcbNew,             EE_CONDITIONS::ShowAlways );
 
     toolsMenu->AddSeparator();
