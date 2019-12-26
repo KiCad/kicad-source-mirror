@@ -286,19 +286,21 @@ std::string LSET::FmtHex() const
 
     static const char hex[] = "0123456789abcdef";
 
-    unsigned nibble_count = ( size() + 3 ) / 4;
+    size_t nibble_count = ( size() + 3 ) / 4;
 
-    for( unsigned nibble = 0; nibble < nibble_count; ++nibble )
+    for( size_t nibble = 0; nibble < nibble_count; ++nibble )
     {
-        unsigned ndx = 0;
+        unsigned int ndx = 0;
 
-        // test 4 consecutive bits and set ndx to 0-15:
-        for( unsigned nibble_bit = 0; nibble_bit < 4; ++nibble_bit )
+        // test 4 consecutive bits and set ndx to 0-15
+        for( size_t nibble_bit = 0; nibble_bit < 4; ++nibble_bit )
         {
-            if( ( nibble_bit + nibble * 4 ) >= size() )
+            size_t nibble_pos = nibble_bit + ( nibble * 4 );
+            // make sure it's not extra bits that dont exist in the bitset but need to in the hex format
+            if( nibble_pos >= size() )
                 break;
 
-            if( (*this)[nibble_bit + nibble * 4] )
+            if( ( *this )[nibble_pos] )
                 ndx |= ( 1 << nibble_bit );
         }
 
