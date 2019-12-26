@@ -219,6 +219,13 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
+    /**
+     * Returns if the line is a graphic (non electrical line)
+     *
+     * Currently, anything on the internal NOTES layer is a graphic line
+     */
+    bool IsGraphicLine() const;
+
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;
 };

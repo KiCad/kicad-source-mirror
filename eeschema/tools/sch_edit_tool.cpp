@@ -175,21 +175,30 @@ bool SCH_EDIT_TOOL::Init()
         }
     };
 
-    auto propertiesCondition = []  ( const SELECTION& aSel ) {
+    auto propertiesCondition = []( const SELECTION& aSel ) {
         if( aSel.GetSize() != 1 )
             return false;
 
-        switch( static_cast<EDA_ITEM*>( aSel.Front() )->Type() )
+        auto item = static_cast<EDA_ITEM*>( aSel.Front() );
+        switch( item->Type() )
         {
         case SCH_MARKER_T:
         case SCH_JUNCTION_T:
         case SCH_NO_CONNECT_T:
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_BUS_BUS_ENTRY_T:
-        case SCH_LINE_T:
         case SCH_SHEET_PIN_T:
         case SCH_PIN_T:
             return false;
+        case SCH_LINE_T:
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+            assert( line != nullptr );
+
+            // Only graphic lines support properties in the file format
+            return line->IsGraphicLine();
+        }
         default:
             return true;
         }
@@ -1282,10 +1291,10 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_LINE_T:
     {
-        SCH_LINE* line = (SCH_LINE*) item;
+        SCH_LINE* line = static_cast<SCH_LINE*>( item );
 
         // We purposely disallow editing everything except graphic lines
-        if( line->GetLayer() != LAYER_NOTES )
+        if( !line->IsGraphicLine() )
             break;
 
         DIALOG_EDIT_LINE_STYLE dlg( m_frame, line );

@@ -270,7 +270,7 @@ COLOR4D SCH_LINE::GetLineColor() const
 
 int SCH_LINE::GetDefaultStyle() const
 {
-    if( m_Layer == LAYER_NOTES )
+    if( IsGraphicLine() )
         return PLOTDASHTYPE_DASH;
 
     return PLOTDASHTYPE_SOLID;
@@ -520,7 +520,7 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
 
 void SCH_LINE::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
-    if( GetLayer() == LAYER_NOTES )
+    if( IsGraphicLine() )
         return;
 
     if( ( GetLayer() == LAYER_BUS ) || ( GetLayer() == LAYER_WIRE ) )
@@ -565,7 +565,7 @@ bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
                 break;
         }
     }
-    else if( GetLayer() == LAYER_BUS || GetLayer() == LAYER_NOTES )
+    else if( GetLayer() == LAYER_BUS || IsGraphicLine() )
     {
         // Lines on the notes layer and the bus layer cannot be tested for dangling ends.
         previousStartState = previousEndState = m_startIsDangling = m_endIsDangling = false;
@@ -663,7 +663,7 @@ void SCH_LINE::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                                SCH_SHEET_PATH*      aSheetPath )
 {
     // Net list item not required for graphic lines.
-    if( (GetLayer() != LAYER_BUS) && (GetLayer() != LAYER_WIRE) )
+    if( IsGraphicLine() )
         return;
 
     NETLIST_OBJECT* item = new NETLIST_OBJECT();
@@ -813,3 +813,8 @@ void SCH_LINE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
     }
 }
 
+
+bool SCH_LINE::IsGraphicLine() const
+{
+    return ( GetLayer() == LAYER_NOTES );
+}
