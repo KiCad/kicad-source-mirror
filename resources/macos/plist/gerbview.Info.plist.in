@@ -50,7 +50,7 @@
     <key>CSResourcesFileMapped</key>                <true/>
     <key>LSRequiresCarbon</key>                     <true/>
     <key>NSRequiresAquaSystemAppearance</key>       <true/>
-    <key>NSHumanReadableCopyright</key>             <string></string>
+    <key>NSHumanReadableCopyright</key>             <string>Copyright The KiCad Developers</string>
     <key>NSHighResolutionCapable</key>              <string>True</string>
 </dict>
 </plist>

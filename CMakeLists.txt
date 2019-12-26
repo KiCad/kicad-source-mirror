@@ -897,7 +897,9 @@ add_custom_target( uninstall
 #################################################
 # Generate platform metadata files
 #################################################
-if( UNIX AND NOT APPLE )
+if( APPLE )
+    include( ${CMAKE_MODULE_PATH}/WritePlatformMetadata_macos.cmake )
+elseif( UNIX )
     include( ${CMAKE_MODULE_PATH}/WritePlatformMetadata_linux.cmake )
 endif()
 
