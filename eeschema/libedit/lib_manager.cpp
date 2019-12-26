@@ -384,36 +384,22 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
     wxCHECK( aPart, false );
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibrary );
     auto partBuf = libBuf.GetBuffer( aPart->GetName() );
-    LIB_PART* partCopy = new LIB_PART( *aPart, nullptr );
 
-    partCopy->SetLibId( LIB_ID( aLibrary, aPart->GetLibId().GetLibItemName() ) );
-
-    if( partBuf )
+    if( partBuf )     // Existing symbol.
     {
-        if( partBuf->GetPart()->IsRoot() && libBuf.HasDerivedSymbols( aPart->GetName() ) )
-        {
-            // Reparent derived symbols.
-            for( auto entry : libBuf.GetBuffers() )
-            {
-                if( entry->GetPart()->IsRoot() )
-                    continue;
+        LIB_PART* bufferedPart = const_cast< LIB_PART* >( partBuf->GetPart() );
 
-                if( entry->GetPart()->GetParent().lock() == partBuf->GetPart()->SharedPtr() )
-                {
-                    if( !libBuf.DeleteBuffer( entry ) )
-                        return false;
+        wxCHECK( bufferedPart, false );
 
-                    LIB_PART* reparentedPart = new LIB_PART( *entry->GetPart() );
-                    reparentedPart->SetParent( partCopy );
-                    libBuf.CreateBuffer( reparentedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
-                }
-            }
-        }
-
-        libBuf.UpdateBuffer( partBuf, partCopy );
+        *bufferedPart = *aPart;
+        partBuf->GetScreen()->SetModify();
     }
-    else    // New entry
+    else              // New symbol
     {
+        LIB_PART* partCopy = new LIB_PART( *aPart, nullptr );
+
+        partCopy->SetLibId( LIB_ID( aLibrary, aPart->GetLibId().GetLibItemName() ) );
+
         SCH_SCREEN* screen = new SCH_SCREEN( &m_frame.Kiway() );
         libBuf.CreateBuffer( partCopy, screen );
         screen->SetModify();
@@ -431,11 +417,7 @@ bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& aOldNa
 
     wxCHECK( partBuf, false );
 
-    LIB_PART* bufferedPart = const_cast< LIB_PART* >( partBuf->GetPart() );
-
-    wxCHECK( bufferedPart, false );
-
-    bufferedPart->SetName( aPart->GetName() );
+    libBuf.UpdateBuffer( partBuf, aPart );
     SetCurrentPart( aPart->GetName() );
     m_frame.SyncLibraries( false );
 
@@ -846,12 +828,16 @@ bool LIB_MANAGER::LIB_BUFFER::CreateBuffer( LIB_PART* aCopy, SCH_SCREEN* aScreen
 bool LIB_MANAGER::LIB_BUFFER::UpdateBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf,
                                             LIB_PART* aCopy )
 {
-    bool ret = true;
+    wxCHECK( aCopy && aPartBuf, false );
 
-    aPartBuf->SetPart( aCopy );
+    LIB_PART* bufferedPart = aPartBuf->GetPart();
+
+    wxCHECK( bufferedPart, false );
+
+    *bufferedPart = *aCopy;
     ++m_hash;
 
-    return ret;
+    return true;
 }
 
 

@@ -156,6 +156,49 @@ LIB_PART::~LIB_PART()
 }
 
 
+const LIB_PART& LIB_PART::operator=( const LIB_PART& aPart )
+{
+    if( &aPart == this )
+        return aPart;
+
+    LIB_ITEM* newItem;
+
+    m_library             = aPart.m_library;
+    m_name                = aPart.m_name;
+    m_FootprintList       = wxArrayString( aPart.m_FootprintList );
+    m_unitCount           = aPart.m_unitCount;
+    m_unitsLocked         = aPart.m_unitsLocked;
+    m_pinNameOffset       = aPart.m_pinNameOffset;
+    m_showPinNumbers      = aPart.m_showPinNumbers;
+    m_showPinNames        = aPart.m_showPinNames;
+    m_dateLastEdition     = aPart.m_dateLastEdition;
+    m_options             = aPart.m_options;
+    m_libId               = aPart.m_libId;
+    m_description         = aPart.m_description;
+    m_keyWords            = aPart.m_keyWords;
+    m_docFileName         = aPart.m_docFileName;
+
+    m_drawings.clear();
+
+    for( const LIB_ITEM& oldItem : aPart.m_drawings )
+    {
+        if( ( oldItem.GetFlags() & ( IS_NEW | STRUCT_DELETED ) ) != 0 )
+            continue;
+
+        newItem = (LIB_ITEM*) oldItem.Clone();
+        newItem->SetParent( this );
+        m_drawings.push_back( newItem );
+    }
+
+    PART_SPTR parent = aPart.m_parent.lock();
+
+    if( parent )
+        SetParent( parent.get() );
+
+    return *this;
+}
+
+
 int LIB_PART::Compare( const LIB_PART& aRhs ) const
 {
     if( m_me == aRhs.m_me )

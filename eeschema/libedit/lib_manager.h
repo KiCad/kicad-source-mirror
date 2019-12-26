@@ -379,7 +379,7 @@ private:
         ///> Creates a new buffer to store a part. LIB_BUFFER takes ownership of aCopy.
         bool CreateBuffer( LIB_PART* aCopy, SCH_SCREEN* aScreen );
 
-        ///> Updates the stored part. LIB_BUFFER takes ownership of aCopy.
+        ///> Updates the buffered part with the contents of \a aCopy.
         bool UpdateBuffer( PART_BUFFER::PTR aPartBuf, LIB_PART* aCopy );
 
         bool DeleteBuffer( PART_BUFFER::PTR aPartBuf );
