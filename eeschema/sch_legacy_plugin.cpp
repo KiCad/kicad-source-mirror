@@ -1255,7 +1255,7 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( LINE_READER& aReader )
         else if( buf == T_STYLE )
         {
             parseUnquotedString( buf, aReader, line, &line );
-            int style = SCH_LINE::GetLineStyleInternalId( buf );
+            PLOT_DASH_TYPE style = SCH_LINE::GetLineStyleByName( buf );
             wire->SetLineStyle( style );
         }
         else    // should be the color parameter.

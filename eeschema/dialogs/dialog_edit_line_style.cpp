@@ -120,7 +120,7 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
     m_frame->SaveCopyInUndoList( m_line, UR_CHANGED );
 
     m_line->SetLineWidth( m_width.GetValue() );
-    m_line->SetLineStyle( static_cast<PLOT_DASH_TYPE>( m_lineStyle->GetSelection() ) );
+    m_line->SetLineStyle( m_lineStyle->GetSelection() );
     m_line->SetLineColor( m_selectedColor );
 
     m_frame->RefreshItem( m_line );

@@ -115,7 +115,7 @@ public:
 
     /// @return the style id from the style  name
     /// (mainly to read style from .sch file
-    static int GetLineStyleInternalId( const wxString& aStyleName );
+    static PLOT_DASH_TYPE GetLineStyleByName( const wxString& aStyleName );
 
     void SetLineColor( const COLOR4D aColor );
 

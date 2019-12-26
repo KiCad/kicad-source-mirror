@@ -105,48 +105,38 @@ EDA_ITEM* SCH_LINE::Clone() const
     return new SCH_LINE( *this );
 }
 
-static const char* style_names[] =
-{
-    "solid", "dashed", "dotted", "dash_dot", nullptr
+
+/*
+ * Conversion between PLOT_DASH_TYPE values and style names displayed
+ */
+const std::map<PLOT_DASH_TYPE, const char*> lineStyleNames{
+    { PLOT_DASH_TYPE::SOLID, "solid" },
+    { PLOT_DASH_TYPE::DASH, "dashed" },
+    { PLOT_DASH_TYPE::DASHDOT, "dash_dot" },
+    { PLOT_DASH_TYPE::DOT, "dotted" },
 };
+
 
 const char* SCH_LINE::GetLineStyleName( PLOT_DASH_TYPE aStyle )
 {
-    const char* styleName = style_names[1];
+    auto resultIt = lineStyleNames.find( aStyle );
 
-    switch( aStyle )
-    {
-    case PLOT_DASH_TYPE::SOLID:
-        styleName = style_names[0];
-        break;
-    default:
-    case PLOT_DASH_TYPE::DASH:
-        styleName = style_names[1];
-        break;
-    case PLOT_DASH_TYPE::DOT:
-        styleName = style_names[2];
-        break;
-    case PLOT_DASH_TYPE::DASHDOT:
-        styleName = style_names[3];
-        break;
-    }
-
-    return styleName;
+    //legacy behavior is to default to dash if there is no name
+    return resultIt == lineStyleNames.end() ? lineStyleNames.find( PLOT_DASH_TYPE::DASH )->second :
+                                              resultIt->second;
 }
 
 
-int SCH_LINE::GetLineStyleInternalId( const wxString& aStyleName )
+PLOT_DASH_TYPE SCH_LINE::GetLineStyleByName( const wxString& aStyleName )
 {
-    int id = -1;    // Default style id
+    PLOT_DASH_TYPE id = PLOT_DASH_TYPE::DEFAULT; // Default style id
 
-    for( int ii = 0; style_names[ii] != nullptr; ii++ )
-    {
-        if( aStyleName == style_names[ii] )
-        {
-            id = ii;
-            break;
-        }
-    }
+    //find the name by value
+    auto resultIt = std::find_if( lineStyleNames.begin(), lineStyleNames.end(),
+            [aStyleName]( const auto& it ) { return it.second == aStyleName; } );
+
+    if( resultIt != lineStyleNames.end() )
+        id = resultIt->first;
 
     return id;
 }
