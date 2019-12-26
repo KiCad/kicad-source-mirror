@@ -293,7 +293,7 @@ std::string LSET::FmtHex() const
         unsigned int ndx = 0;
 
         // test 4 consecutive bits and set ndx to 0-15
-        for( int nibble_bit = 0; nibble_bit < 4; ++nibble_bit )
+        for( size_t nibble_bit = 0; nibble_bit < 4; ++nibble_bit )
         {
             size_t nibble_pos = nibble_bit + ( nibble * 4 );
             // make sure it's not extra bits that dont exist in the bitset but need to in the hex format
