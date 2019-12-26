@@ -334,8 +334,15 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
     case ID_COPY_BOARD_AS:
     case ID_SAVE_BOARD_AS:
         {
+            wxString orig_name;
+            wxFileName::SplitPath( GetBoard()->GetFileName(),
+                    nullptr, nullptr, &orig_name, nullptr );
+
+            if( orig_name.IsEmpty() )
+                orig_name = _( "noname" );
+
             wxString    pro_dir = wxPathOnly( Prj().GetProjectFullName() );
-            wxFileName  fn( pro_dir, _( "noname" ), KiCadPcbFileExtension );
+            wxFileName  fn( pro_dir, orig_name, KiCadPcbFileExtension );
             wxString    filename = fn.GetFullPath();
 
             if( AskSaveBoardFileName( this, &filename ) )
