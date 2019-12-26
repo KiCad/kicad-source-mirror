@@ -278,6 +278,12 @@ PLOT_DASH_TYPE SCH_LINE::GetDefaultStyle() const
 }
 
 
+void SCH_LINE::SetLineStyle( const int aStyleId )
+{
+    SetLineStyle( static_cast<PLOT_DASH_TYPE>( aStyleId ) );
+}
+
+
 void SCH_LINE::SetLineStyle( const PLOT_DASH_TYPE aStyle )
 {
     if( aStyle == GetDefaultStyle() )

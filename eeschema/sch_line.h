@@ -106,6 +106,7 @@ public:
     PLOT_DASH_TYPE GetDefaultStyle() const;
 
     void           SetLineStyle( const PLOT_DASH_TYPE aStyle );
+    void           SetLineStyle( const int aStyleId );
     PLOT_DASH_TYPE GetLineStyle() const;
 
     /// @return the style name from the style id

@@ -238,8 +238,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
         if( lineItem->GetLayer() == LAYER_NOTES )
         {
             if( m_lineStyle->GetStringSelection() != INDETERMINATE )
-                lineItem->SetLineStyle(
-                        static_cast<PLOT_DASH_TYPE>( m_lineStyle->GetSelection() ) );
+                lineItem->SetLineStyle( m_lineStyle->GetSelection() );
 
             if( m_setColor->GetValue() )
                 lineItem->SetLineColor( m_color->GetColour() );
