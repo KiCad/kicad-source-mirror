@@ -327,10 +327,24 @@ void PCB_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
 
 void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
-    const std::string& payload = mail.GetPayload();
+    std::string& payload = mail.GetPayload();
 
     switch( mail.Command() )
     {
+    case MAIL_PCB_GET_NETLIST:
+    {
+        NETLIST          netlist;
+        STRING_FORMATTER sf;
+        for( auto& module : this->GetBoard()->Modules() )
+        {
+            netlist.AddComponent( new COMPONENT( module->GetFPID(), module->GetReference(),
+                    module->GetValue(), module->GetPath() ) );
+        }
+        netlist.Format(
+                "pcb_netlist", &sf, 0, CTL_OMIT_FILTERS | CTL_OMIT_NETS | CTL_OMIT_FILTERS );
+        payload = sf.GetString();
+        break;
+    }
     case MAIL_CROSS_PROBE:
         ExecuteRemoteCommand( payload.c_str() );
         break;
