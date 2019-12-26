@@ -2216,7 +2216,7 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
     m_out->Print( 0, "Wire %s %s", layer, width );
 
     // Write line style (width, type, color) only for non default values
-    if( aLine->GetLayer() == LAYER_NOTES )
+    if( aLine->IsGraphicLine() )
     {
         if( aLine->GetPenSize() != aLine->GetDefaultWidth() )
             m_out->Print( 0, " %s %d", T_WIDTH, aLine->GetLineSize() );
