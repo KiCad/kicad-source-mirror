@@ -827,8 +827,8 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICA
         // If caller wants to inspect my type
         if( stype == SCH_LOCATE_ANY_T || stype == Type() )
         {
-            if( SEARCH_QUIT == aInspector( this, NULL ) )
-                return SEARCH_QUIT;
+            if( SEARCH_RESULT::QUIT == aInspector( this, NULL ) )
+                return SEARCH_RESULT::QUIT;
         }
 
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_SHEET_PIN_T )
@@ -836,13 +836,13 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICA
             // Test the sheet labels.
             for( size_t i = 0;  i < m_pins.size();  i++ )
             {
-                if( SEARCH_QUIT == aInspector( &m_pins[ i ], this ) )
-                    return SEARCH_QUIT;
+                if( SEARCH_RESULT::QUIT == aInspector( &m_pins[i], this ) )
+                    return SEARCH_RESULT::QUIT;
             }
         }
     }
 
-    return SEARCH_CONTINUE;
+    return SEARCH_RESULT::CONTINUE;
 }
 
 

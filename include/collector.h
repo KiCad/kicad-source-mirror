@@ -83,7 +83,10 @@ public:
 
     virtual ~COLLECTOR() {}
 
-    virtual SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData ) { return SEARCH_QUIT; };
+    virtual SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData )
+    {
+        return SEARCH_RESULT::QUIT;
+    };
 
     using ITER = std::vector<EDA_ITEM*>::iterator;
     using CITER = std::vector<EDA_ITEM*>::const_iterator;

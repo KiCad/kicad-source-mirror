@@ -1118,7 +1118,7 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( width );
 
-    if( aLine->GetLineStyle() <= PLOTDASHTYPE_SOLID || drawingShadows )
+    if( aLine->GetLineStyle() <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
     {
         m_gal->DrawLine( aLine->GetStartPoint(), aLine->GetEndPoint() );
     }
@@ -1136,13 +1136,13 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
         switch( aLine->GetLineStyle() )
         {
         default:
-        case PLOTDASHTYPE_DASH:
+        case PLOT_DASH_TYPE::DASH:
             strokes[0] = strokes[2] = DASH_MARK_LEN( width );
             break;
-        case PLOTDASHTYPE_DOT:
+        case PLOT_DASH_TYPE::DOT:
             strokes[0] = strokes[2] = DOT_MARK_LEN( width );
             break;
-        case PLOTDASHTYPE_DASHDOT:
+        case PLOT_DASH_TYPE::DASHDOT:
             strokes[0] = DASH_MARK_LEN( width );
             strokes[2] = DOT_MARK_LEN( width );
             break;

@@ -676,10 +676,18 @@ void DIALOG_PAD_PROPERTIES::initValues()
     switch( m_dummyPad->GetLocalZoneConnection() )
     {
     default:
-    case PAD_ZONE_CONN_INHERITED: m_ZoneConnectionChoice->SetSelection( 0 ); break;
-    case PAD_ZONE_CONN_FULL:      m_ZoneConnectionChoice->SetSelection( 1 ); break;
-    case PAD_ZONE_CONN_THERMAL:   m_ZoneConnectionChoice->SetSelection( 2 ); break;
-    case PAD_ZONE_CONN_NONE:      m_ZoneConnectionChoice->SetSelection( 3 ); break;
+    case ZONE_CONNECTION::INHERITED:
+        m_ZoneConnectionChoice->SetSelection( 0 );
+        break;
+    case ZONE_CONNECTION::FULL:
+        m_ZoneConnectionChoice->SetSelection( 1 );
+        break;
+    case ZONE_CONNECTION::THERMAL:
+        m_ZoneConnectionChoice->SetSelection( 2 );
+        break;
+    case ZONE_CONNECTION::NONE:
+        m_ZoneConnectionChoice->SetSelection( 3 );
+        break;
     }
 
     if( m_dummyPad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
@@ -1578,10 +1586,18 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     switch( m_ZoneConnectionChoice->GetSelection() )
     {
     default:
-    case 0: aPad->SetZoneConnection( PAD_ZONE_CONN_INHERITED ); break;
-    case 1: aPad->SetZoneConnection( PAD_ZONE_CONN_FULL );      break;
-    case 2: aPad->SetZoneConnection( PAD_ZONE_CONN_THERMAL );   break;
-    case 3: aPad->SetZoneConnection( PAD_ZONE_CONN_NONE );      break;
+    case 0:
+        aPad->SetZoneConnection( ZONE_CONNECTION::INHERITED );
+        break;
+    case 1:
+        aPad->SetZoneConnection( ZONE_CONNECTION::FULL );
+        break;
+    case 2:
+        aPad->SetZoneConnection( ZONE_CONNECTION::THERMAL );
+        break;
+    case 3:
+        aPad->SetZoneConnection( ZONE_CONNECTION::NONE );
+        break;
     }
 
     aPad->SetPosition( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );

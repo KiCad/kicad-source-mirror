@@ -863,9 +863,9 @@ void ZONE_CONTAINER::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
 }
 
 
-ZoneConnection ZONE_CONTAINER::GetPadConnection( D_PAD* aPad ) const
+ZONE_CONNECTION ZONE_CONTAINER::GetPadConnection( D_PAD* aPad ) const
 {
-    if( aPad == NULL || aPad->GetZoneConnection() == PAD_ZONE_CONN_INHERITED )
+    if( aPad == NULL || aPad->GetZoneConnection() == ZONE_CONNECTION::INHERITED )
         return m_PadConnection;
     else
         return aPad->GetZoneConnection();

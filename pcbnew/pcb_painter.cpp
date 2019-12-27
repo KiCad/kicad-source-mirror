@@ -535,15 +535,15 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
     switch( aVia->GetViaType() )
     {
-    case VIA_THROUGH:
+    case VIATYPE::THROUGH:
         sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_THROUGH];
         break;
 
-    case VIA_BLIND_BURIED:
+    case VIATYPE::BLIND_BURIED:
         sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_BBLIND];
         break;
 
-    case VIA_MICROVIA:
+    case VIATYPE::MICROVIA:
         sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_MICROVIA];
         break;
 
@@ -567,7 +567,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         m_gal->SetFillColor( color );
     }
 
-    if( aVia->GetViaType() == VIA_BLIND_BURIED && aLayer != LAYER_VIAS_HOLES )
+    if( aVia->GetViaType() == VIATYPE::BLIND_BURIED && aLayer != LAYER_VIAS_HOLES )
     {
         // Outer circles of blind/buried vias are drawn in a special way to indicate the
         // top and bottom layers

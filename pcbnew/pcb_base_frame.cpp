@@ -180,7 +180,7 @@ void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
 {
     if( module )
     {
-        GetBoard()->Add( module, ADD_APPEND );
+        GetBoard()->Add( module, ADD_MODE::APPEND );
 
         module->SetFlags( IS_NEW );
 

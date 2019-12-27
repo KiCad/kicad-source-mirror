@@ -1000,7 +1000,8 @@ void C3D_RENDER_RAYTRACING::insert3DViaHole( const VIA* aVia )
     if( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) )
         objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_settings.m_CopperColor ) );
     else
-        objPtr->SetColor( ConvertSRGBToLinear( m_settings.GetItemColor( LAYER_VIAS + aVia->GetViaType() ) ) );
+        objPtr->SetColor( ConvertSRGBToLinear(
+                m_settings.GetItemColor( LAYER_VIAS + static_cast<int>( aVia->GetViaType() ) ) ) );
 
     m_object_container.Add( objPtr );
 }

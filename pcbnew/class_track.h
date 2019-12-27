@@ -57,13 +57,13 @@ enum ENDPOINT_T {
 
 // Via types
 // Note that this enum must be synchronized to GAL_LAYER_ID
-enum VIATYPE_T
+enum class VIATYPE
 {
-    VIA_THROUGH      = 3,      /* Always a through hole via */
-    VIA_BLIND_BURIED = 2,      /* this via can be on internal layers */
-    VIA_MICROVIA     = 1,      /* this via which connect from an external layer
+    THROUGH      = 3, /* Always a through hole via */
+    BLIND_BURIED = 2, /* this via can be on internal layers */
+    MICROVIA     = 1, /* this via which connect from an external layer
                                 * to the near neighbor internal layer */
-    VIA_NOT_DEFINED  = 0       /* not yet used */
+    NOT_DEFINED  = 0  /* not yet used */
 };
 
 #define UNDEFINED_DRILL_DIAMETER  -1       //< Undefined via drill diameter.
@@ -343,8 +343,15 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
-    VIATYPE_T GetViaType() const          { return m_ViaType; }
-    void SetViaType( VIATYPE_T aViaType ) { m_ViaType = aViaType; }
+    VIATYPE GetViaType() const
+    {
+        return m_ViaType;
+    }
+
+    void SetViaType( VIATYPE aViaType )
+    {
+        m_ViaType = aViaType;
+    }
 
     /**
      * Function SetDrill
@@ -387,11 +394,11 @@ protected:
 
 private:
     /// The bottom layer of the via (the top layer is in m_Layer)
-    PCB_LAYER_ID  m_BottomLayer;
+    PCB_LAYER_ID m_BottomLayer;
 
-    VIATYPE_T m_ViaType;        // Type of via
+    VIATYPE m_ViaType; // Type of via
 
-    int       m_Drill;          // for vias: via drill (- 1 for default value)
+    int m_Drill; // for vias: via drill (- 1 for default value)
 };
 
 

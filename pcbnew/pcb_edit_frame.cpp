@@ -909,11 +909,21 @@ void PCB_EDIT_FRAME::ToPlotter( int aID )
 
     switch( aID )
     {
-    case ID_GEN_PLOT_GERBER: plotSettings.SetFormat( PLOT_FORMAT_GERBER );   break;
-    case ID_GEN_PLOT_DXF:    plotSettings.SetFormat( PLOT_FORMAT_DXF );      break;
-    case ID_GEN_PLOT_HPGL:   plotSettings.SetFormat( PLOT_FORMAT_HPGL );     break;
-    case ID_GEN_PLOT_PDF:    plotSettings.SetFormat( PLOT_FORMAT_PDF );      break;
-    case ID_GEN_PLOT_PS:     plotSettings.SetFormat( PLOT_FORMAT_POST );     break;
+    case ID_GEN_PLOT_GERBER:
+        plotSettings.SetFormat( PLOT_FORMAT::GERBER );
+        break;
+    case ID_GEN_PLOT_DXF:
+        plotSettings.SetFormat( PLOT_FORMAT::DXF );
+        break;
+    case ID_GEN_PLOT_HPGL:
+        plotSettings.SetFormat( PLOT_FORMAT::HPGL );
+        break;
+    case ID_GEN_PLOT_PDF:
+        plotSettings.SetFormat( PLOT_FORMAT::PDF );
+        break;
+    case ID_GEN_PLOT_PS:
+        plotSettings.SetFormat( PLOT_FORMAT::POST );
+        break;
     case ID_GEN_PLOT:        /* keep the previous setup */                   break;
     default:
         wxFAIL_MSG( "ToPlotter(): unexpected plot type" ); break;

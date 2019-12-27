@@ -62,12 +62,12 @@ void SCH_EDIT_FRAME::PlotSchematic()
 }
 
 
-DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent ) :
-    DIALOG_PLOT_SCHEMATIC_BASE( parent ),
-    m_parent( parent ),
-    m_plotFormat( PLOT_FORMAT_UNDEFINED ),
-    m_defaultLineWidth( parent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
-    m_penWidth( parent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
+DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent )
+        : DIALOG_PLOT_SCHEMATIC_BASE( parent ),
+          m_parent( parent ),
+          m_plotFormat( PLOT_FORMAT::UNDEFINED ),
+          m_defaultLineWidth( parent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
+          m_penWidth( parent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
 {
     m_config = Kiface().KifaceSettings();
     m_configChanged = false;
@@ -112,17 +112,27 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
     m_HPGLPenSize *= IU_PER_MM;
 
     // Switch to the last save plot format
-    long plotfmt;
+    int plotfmt;
     m_config->Read( PLOT_FORMAT_KEY, &plotfmt, 0 );
 
-    switch( plotfmt )
+    switch( static_cast<PLOT_FORMAT>( plotfmt ) )
     {
     default:
-    case PLOT_FORMAT_POST: m_plotFormatOpt->SetSelection( 0 ); break;
-    case PLOT_FORMAT_PDF:  m_plotFormatOpt->SetSelection( 1 ); break;
-    case PLOT_FORMAT_SVG:  m_plotFormatOpt->SetSelection( 2 ); break;
-    case PLOT_FORMAT_DXF:  m_plotFormatOpt->SetSelection( 3 ); break;
-    case PLOT_FORMAT_HPGL: m_plotFormatOpt->SetSelection( 4 ); break;
+    case PLOT_FORMAT::POST:
+        m_plotFormatOpt->SetSelection( 0 );
+        break;
+    case PLOT_FORMAT::PDF:
+        m_plotFormatOpt->SetSelection( 1 );
+        break;
+    case PLOT_FORMAT::SVG:
+        m_plotFormatOpt->SetSelection( 2 );
+        break;
+    case PLOT_FORMAT::DXF:
+        m_plotFormatOpt->SetSelection( 3 );
+        break;
+    case PLOT_FORMAT::HPGL:
+        m_plotFormatOpt->SetSelection( 4 );
+        break;
     }
 
     // Set the default line width (pen width which should be used for
@@ -179,23 +189,28 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
 }
 
 
-PlotFormat DIALOG_PLOT_SCHEMATIC::GetPlotFileFormat()
+PLOT_FORMAT DIALOG_PLOT_SCHEMATIC::GetPlotFileFormat()
 {
     switch( m_plotFormatOpt->GetSelection() )
     {
-        default:
-        case 0: return PLOT_FORMAT_POST;
-        case 1: return PLOT_FORMAT_PDF;
-        case 2: return PLOT_FORMAT_SVG;
-        case 3: return PLOT_FORMAT_DXF;
-        case 4: return PLOT_FORMAT_HPGL;
+    default:
+    case 0:
+        return PLOT_FORMAT::POST;
+    case 1:
+        return PLOT_FORMAT::PDF;
+    case 2:
+        return PLOT_FORMAT::SVG;
+    case 3:
+        return PLOT_FORMAT::DXF;
+    case 4:
+        return PLOT_FORMAT::HPGL;
     }
 }
 
 
 void DIALOG_PLOT_SCHEMATIC::OnPageSizeSelected( wxCommandEvent& event )
 {
-    if( GetPlotFileFormat() == PLOT_FORMAT_HPGL )
+    if( GetPlotFileFormat() == PLOT_FORMAT::HPGL )
         m_HPGLPaperSizeSelect = m_paperSizeOption->GetSelection();
     else
         m_pageSizeSelect = m_paperSizeOption->GetSelection();
@@ -204,7 +219,7 @@ void DIALOG_PLOT_SCHEMATIC::OnPageSizeSelected( wxCommandEvent& event )
 
 void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    PlotFormat fmt = GetPlotFileFormat();
+    PLOT_FORMAT fmt = GetPlotFileFormat();
 
     if( fmt != m_plotFormat )
     {
@@ -215,7 +230,7 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 
         int selection;
 
-        if( fmt == PLOT_FORMAT_HPGL )
+        if( fmt == PLOT_FORMAT::HPGL )
         {
             paperSizes.push_back( _( "A4" ) );
             paperSizes.push_back( _( "A3" ) );
@@ -241,12 +256,12 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
         m_paperSizeOption->Set( paperSizes );
         m_paperSizeOption->SetSelection( selection );
 
-        m_defaultLineWidth.Enable( fmt == PLOT_FORMAT_POST || fmt == PLOT_FORMAT_PDF
-                                   || fmt == PLOT_FORMAT_SVG );
+        m_defaultLineWidth.Enable(
+                fmt == PLOT_FORMAT::POST || fmt == PLOT_FORMAT::PDF || fmt == PLOT_FORMAT::SVG );
 
-        m_plotOriginTitle->Enable( fmt == PLOT_FORMAT_HPGL );
-        m_plotOriginOpt->Enable( fmt == PLOT_FORMAT_HPGL );
-        m_penWidth.Enable( fmt == PLOT_FORMAT_HPGL );
+        m_plotOriginTitle->Enable( fmt == PLOT_FORMAT::HPGL );
+        m_plotOriginOpt->Enable( fmt == PLOT_FORMAT::HPGL );
+        m_penWidth.Enable( fmt == PLOT_FORMAT::HPGL );
     }
 }
 
@@ -296,11 +311,21 @@ void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
     switch( GetPlotFileFormat() )
     {
     default:
-    case PLOT_FORMAT_POST: createPSFile( aPlotAll, getPlotFrameRef() );   break;
-    case PLOT_FORMAT_DXF:  CreateDXFFile( aPlotAll, getPlotFrameRef() );  break;
-    case PLOT_FORMAT_PDF:  createPDFFile( aPlotAll, getPlotFrameRef() );  break;
-    case PLOT_FORMAT_SVG:  createSVGFile( aPlotAll, getPlotFrameRef() );  break;
-    case PLOT_FORMAT_HPGL: createHPGLFile( aPlotAll, getPlotFrameRef() ); break;
+    case PLOT_FORMAT::POST:
+        createPSFile( aPlotAll, getPlotFrameRef() );
+        break;
+    case PLOT_FORMAT::DXF:
+        CreateDXFFile( aPlotAll, getPlotFrameRef() );
+        break;
+    case PLOT_FORMAT::PDF:
+        createPDFFile( aPlotAll, getPlotFrameRef() );
+        break;
+    case PLOT_FORMAT::SVG:
+        createSVGFile( aPlotAll, getPlotFrameRef() );
+        break;
+    case PLOT_FORMAT::HPGL:
+        createHPGLFile( aPlotAll, getPlotFrameRef() );
+        break;
     }
 }
 

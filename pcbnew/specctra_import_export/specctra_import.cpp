@@ -231,7 +231,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
         via = new ::VIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
         via->SetDrill( drill_diam_iu );
-        via->SetViaType( VIA_THROUGH );
+        via->SetViaType( VIATYPE::THROUGH );
         via->SetWidth( viaDiam );
         via->SetLayerPair( F_Cu, B_Cu );
     }
@@ -249,7 +249,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
         via = new ::VIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
         via->SetDrill( drill_diam_iu );
-        via->SetViaType( VIA_THROUGH );
+        via->SetViaType( VIATYPE::THROUGH );
         via->SetWidth( viaDiam );
         via->SetLayerPair( F_Cu, B_Cu );
     }
@@ -294,9 +294,9 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
 
         if( (topLayerNdx==0 && botLayerNdx==1)
          || (topLayerNdx==copperLayerCount-2 && botLayerNdx==copperLayerCount-1))
-            via->SetViaType( VIA_MICROVIA );
+            via->SetViaType( VIATYPE::MICROVIA );
         else
-            via->SetViaType( VIA_BLIND_BURIED );
+            via->SetViaType( VIATYPE::BLIND_BURIED );
 
         via->SetWidth( viaDiam );
 

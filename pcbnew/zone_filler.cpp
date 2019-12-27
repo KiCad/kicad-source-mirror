@@ -346,14 +346,14 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 bool hasThermalConnection( D_PAD* pad, const ZONE_CONTAINER* aZone )
 {
     // Rejects non-standard pads with tht-only thermal reliefs
-    if( aZone->GetPadConnection( pad ) == PAD_ZONE_CONN_THT_THERMAL
-        && pad->GetAttribute() != PAD_ATTRIB_STANDARD )
+    if( aZone->GetPadConnection( pad ) == ZONE_CONNECTION::THT_THERMAL
+            && pad->GetAttribute() != PAD_ATTRIB_STANDARD )
     {
         return false;
     }
 
-    if( aZone->GetPadConnection( pad ) != PAD_ZONE_CONN_THERMAL
-        && aZone->GetPadConnection( pad ) != PAD_ZONE_CONN_THT_THERMAL )
+    if( aZone->GetPadConnection( pad ) != ZONE_CONNECTION::THERMAL
+            && aZone->GetPadConnection( pad ) != ZONE_CONNECTION::THT_THERMAL )
     {
         return false;
     }
@@ -550,9 +550,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
                 pad = &dummypad;
             }
 
-            if( pad->GetNetCode() != aZone->GetNetCode()
-                  || pad->GetNetCode() <= 0
-                  || aZone->GetPadConnection( pad ) == PAD_ZONE_CONN_NONE )
+            if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0
+                    || aZone->GetPadConnection( pad ) == ZONE_CONNECTION::NONE )
             {
                 int gap = std::max( zone_clearance, pad->GetClearance() );
                 EDA_RECT item_boundingbox = pad->GetBoundingBox();

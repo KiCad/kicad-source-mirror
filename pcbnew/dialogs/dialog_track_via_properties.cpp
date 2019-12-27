@@ -53,7 +53,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 {
     wxASSERT( !m_items.Empty() );
 
-    VIATYPE_T    viaType = VIA_NOT_DEFINED;
+    VIATYPE viaType = VIATYPE::NOT_DEFINED;
 
     m_netSelector->SetNetInfo( &aParent->GetBoard()->GetNetInfo() );
 
@@ -165,7 +165,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                         m_viaDrill.SetValue( INDETERMINATE );
 
                     if( viaType != v->GetViaType() )
-                        viaType = VIA_NOT_DEFINED;
+                        viaType = VIATYPE::NOT_DEFINED;
 
                     if( m_ViaStartLayer->GetLayerSelection() != v->TopLayer() )
                         m_ViaStartLayer->SetLayerSelection( UNDEFINED_LAYER );
@@ -226,14 +226,22 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         switch( viaType )
         {
-        case VIA_THROUGH:      m_ViaTypeChoice->SetSelection( 0 ); break;
-        case VIA_MICROVIA:     m_ViaTypeChoice->SetSelection( 1 ); break;
-        case VIA_BLIND_BURIED: m_ViaTypeChoice->SetSelection( 2 ); break;
-        case VIA_NOT_DEFINED:  m_ViaTypeChoice->SetSelection( 3 ); break;
+        case VIATYPE::THROUGH:
+            m_ViaTypeChoice->SetSelection( 0 );
+            break;
+        case VIATYPE::MICROVIA:
+            m_ViaTypeChoice->SetSelection( 1 );
+            break;
+        case VIATYPE::BLIND_BURIED:
+            m_ViaTypeChoice->SetSelection( 2 );
+            break;
+        case VIATYPE::NOT_DEFINED:
+            m_ViaTypeChoice->SetSelection( 3 );
+            break;
         }
 
-        m_ViaStartLayer->Enable( viaType != VIA_THROUGH );
-        m_ViaEndLayer->Enable( viaType != VIA_THROUGH );
+        m_ViaStartLayer->Enable( viaType != VIATYPE::THROUGH );
+        m_ViaEndLayer->Enable( viaType != VIATYPE::THROUGH );
     }
     else
     {
@@ -453,9 +461,16 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     switch( m_ViaTypeChoice->GetSelection() )
                     {
                     default:
-                    case 0: v->SetViaType( VIA_THROUGH ); v->SanitizeLayers(); break;
-                    case 1: v->SetViaType( VIA_MICROVIA );                     break;
-                    case 2: v->SetViaType( VIA_BLIND_BURIED );                 break;
+                    case 0:
+                        v->SetViaType( VIATYPE::THROUGH );
+                        v->SanitizeLayers();
+                        break;
+                    case 1:
+                        v->SetViaType( VIATYPE::MICROVIA );
+                        break;
+                    case 2:
+                        v->SetViaType( VIATYPE::BLIND_BURIED );
+                        break;
                     }
                 }
 
@@ -478,13 +493,13 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                         wxFAIL_MSG("Unhandled via type");
                         // fall through
 
-                    case VIA_THROUGH:
-                    case VIA_BLIND_BURIED:
+                    case VIATYPE::THROUGH:
+                    case VIATYPE::BLIND_BURIED:
                         v->SetWidth( v->GetNetClass()->GetViaDiameter() );
                         v->SetDrill( v->GetNetClass()->GetViaDrill() );
                         break;
 
-                    case VIA_MICROVIA:
+                    case VIATYPE::MICROVIA:
                         v->SetWidth( v->GetNetClass()->GetuViaDiameter() );
                         v->SetDrill( v->GetNetClass()->GetuViaDrill() );
                         break;

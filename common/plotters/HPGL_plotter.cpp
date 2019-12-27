@@ -421,19 +421,19 @@ void HPGL_PLOTTER::PenTo( const wxPoint& pos, char plume )
 /**
  * HPGL supports dashed lines
  */
-void HPGL_PLOTTER::SetDash( int dashed )
+void HPGL_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 {
     wxASSERT( outputFile );
 
     switch( dashed )
     {
-    case PLOTDASHTYPE_DASH:
+    case PLOT_DASH_TYPE::DASH:
         fprintf( outputFile, "LT -2 4 1;\n" );
         break;
-    case PLOTDASHTYPE_DOT:
+    case PLOT_DASH_TYPE::DOT:
         fprintf( outputFile, "LT -1 2 1;\n" );
         break;
-    case PLOTDASHTYPE_DASHDOT:
+    case PLOT_DASH_TYPE::DASHDOT:
         fprintf( outputFile, "LT -4 6 1;\n" );
         break;
     default:

@@ -947,11 +947,11 @@ SEARCH_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData, cons
     // If caller wants to inspect my type
     if( stype == Type() )
     {
-        if( SEARCH_QUIT == inspector( this, testData ) )
-            return SEARCH_QUIT;
+        if( SEARCH_RESULT::QUIT == inspector( this, testData ) )
+            return SEARCH_RESULT::QUIT;
     }
 
-    return SEARCH_CONTINUE;
+    return SEARCH_RESULT::CONTINUE;
 }
 
 

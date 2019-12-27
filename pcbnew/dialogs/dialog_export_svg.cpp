@@ -312,7 +312,7 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
     plot_opts.SetSkipPlotNPTH_Pads( false );
 
     plot_opts.SetMirror( m_printMirror );
-    plot_opts.SetFormat( PLOT_FORMAT_SVG );
+    plot_opts.SetFormat( PLOT_FORMAT::SVG );
 
     PAGE_INFO   pageInfo = m_board->GetPageSettings();
     wxPoint     axisorigin = m_board->GetAuxOrigin();

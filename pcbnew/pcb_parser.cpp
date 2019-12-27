@@ -567,35 +567,35 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         case T_gr_curve:
         case T_gr_line:
         case T_gr_poly:
-            m_board->Add( parseDRAWSEGMENT(), ADD_APPEND );
+            m_board->Add( parseDRAWSEGMENT(), ADD_MODE::APPEND );
             break;
 
         case T_gr_text:
-            m_board->Add( parseTEXTE_PCB(), ADD_APPEND );
+            m_board->Add( parseTEXTE_PCB(), ADD_MODE::APPEND );
             break;
 
         case T_dimension:
-            m_board->Add( parseDIMENSION(), ADD_APPEND );
+            m_board->Add( parseDIMENSION(), ADD_MODE::APPEND );
             break;
 
         case T_module:
-            m_board->Add( parseMODULE(), ADD_APPEND );
+            m_board->Add( parseMODULE(), ADD_MODE::APPEND );
             break;
 
         case T_segment:
-            m_board->Add( parseTRACK(), ADD_INSERT );
+            m_board->Add( parseTRACK(), ADD_MODE::INSERT );
             break;
 
         case T_via:
-            m_board->Add( parseVIA(), ADD_INSERT );
+            m_board->Add( parseVIA(), ADD_MODE::INSERT );
             break;
 
         case T_zone:
-            m_board->Add( parseZONE_CONTAINER( m_board ), ADD_APPEND );
+            m_board->Add( parseZONE_CONTAINER( m_board ), ADD_MODE::APPEND );
             break;
 
         case T_target:
-            m_board->Add( parsePCB_TARGET(), ADD_APPEND );
+            m_board->Add( parsePCB_TARGET(), ADD_MODE::APPEND );
             break;
 
         default:
@@ -647,7 +647,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
                 VIA*         via = (VIA*) segm;
                 PCB_LAYER_ID top_layer, bottom_layer;
 
-                if( via->GetViaType() == VIA_THROUGH )
+                if( via->GetViaType() == VIATYPE::THROUGH )
                     continue;
 
                 via->LayerPair( &top_layer, &bottom_layer );
@@ -2444,7 +2444,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             break;
 
         case T_zone_connect:
-            module->SetZoneConnection( (ZoneConnection) parseInt( "zone connection value" ) );
+            module->SetZoneConnection( (ZONE_CONNECTION) parseInt( "zone connection value" ) );
             NeedRIGHT();
             break;
 
@@ -2524,7 +2524,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
                 RotatePoint( &pt, module->GetOrientation() );
                 pad->SetPosition( pt + module->GetPosition() );
-                module->Add( pad, ADD_APPEND );
+                module->Add( pad, ADD_MODE::APPEND );
             }
             break;
 
@@ -2535,7 +2535,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
         case T_zone:
         {
             ZONE_CONTAINER* zone = parseZONE_CONTAINER( module.get() );
-            module->Add( zone, ADD_APPEND );
+            module->Add( zone, ADD_MODE::APPEND );
         }
         break;
 
@@ -3065,7 +3065,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
             break;
 
         case T_zone_connect:
-            pad->SetZoneConnection( (ZoneConnection) parseInt( "zone connection value" ) );
+            pad->SetZoneConnection( (ZONE_CONNECTION) parseInt( "zone connection value" ) );
             NeedRIGHT();
             break;
 
@@ -3361,11 +3361,11 @@ VIA* PCB_PARSER::parseVIA()
         switch( token )
         {
         case T_blind:
-            via->SetViaType( VIA_BLIND_BURIED );
+            via->SetViaType( VIATYPE::BLIND_BURIED );
             break;
 
         case T_micro:
-            via->SetViaType( VIA_MICROVIA );
+            via->SetViaType( VIATYPE::MICROVIA );
             break;
 
         case T_at:
@@ -3536,15 +3536,15 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                 switch( token )
                 {
                 case T_yes:
-                    zone->SetPadConnection( PAD_ZONE_CONN_FULL );
+                    zone->SetPadConnection( ZONE_CONNECTION::FULL );
                     break;
 
                 case T_no:
-                    zone->SetPadConnection( PAD_ZONE_CONN_NONE );
+                    zone->SetPadConnection( ZONE_CONNECTION::NONE );
                     break;
 
                 case T_thru_hole_only:
-                    zone->SetPadConnection( PAD_ZONE_CONN_THT_THERMAL );
+                    zone->SetPadConnection( ZONE_CONNECTION::THT_THERMAL );
                     break;
 
                 case T_clearance:

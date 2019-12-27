@@ -931,7 +931,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
                                                                      getCurFootprintName() );
 
         if( footprint )
-            GetBoard()->Add( footprint, ADD_APPEND );
+            GetBoard()->Add( footprint, ADD_MODE::APPEND );
 
         Update3DView( true );
 

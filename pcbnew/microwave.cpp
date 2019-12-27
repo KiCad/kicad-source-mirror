@@ -70,7 +70,7 @@ MODULE* PCB_EDIT_FRAME::CreateMuWaveBaseFootprint( const wxString& aValue,
     {
         D_PAD* pad = new D_PAD( module );
 
-        module->Add( pad, ADD_INSERT );
+        module->Add( pad, ADD_MODE::INSERT );
 
         int tw = GetDesignSettings().GetCurrentTrackWidth();
         pad->SetSize( wxSize( tw, tw ) );
@@ -484,7 +484,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     edge->SetShape( S_POLYGON );
     edge->SetLayer( F_Cu );
 
-    module->Add( edge, ADD_INSERT );
+    module->Add( edge, ADD_MODE::INSERT );
 
     // Get the corner buffer of the polygonal edge
     std::vector<wxPoint> polyPoints;
