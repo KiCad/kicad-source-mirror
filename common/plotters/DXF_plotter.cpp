@@ -99,6 +99,7 @@ static const char* getDXFLineType( PLOT_DASH_TYPE aType )
 {
     switch( aType )
     {
+    case PLOT_DASH_TYPE::DEFAULT:
     case PLOT_DASH_TYPE::SOLID:
         return "CONTINUOUS";
     case PLOT_DASH_TYPE::DASH:
@@ -107,10 +108,10 @@ static const char* getDXFLineType( PLOT_DASH_TYPE aType )
         return "DOTTED";
     case PLOT_DASH_TYPE::DASHDOT:
         return "DASHDOT";
+    default:
+        wxFAIL_MSG( "Unhandled PLOT_DASH_TYPE" );
+        return "CONTINUOUS";
     }
-
-    wxFAIL_MSG( "Unhandled PLOT_DASH_TYPE" );
-    return "CONTINUOUS";
 }
 
 

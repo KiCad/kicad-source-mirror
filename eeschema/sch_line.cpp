@@ -45,6 +45,7 @@ static wxPenStyle getwxPenStyle( PLOT_DASH_TYPE aType )
 {
     switch( aType )
     {
+    case PLOT_DASH_TYPE::DEFAULT:
     case PLOT_DASH_TYPE::SOLID:
         return wxPENSTYLE_SOLID;
     case PLOT_DASH_TYPE::DASH:
@@ -53,10 +54,10 @@ static wxPenStyle getwxPenStyle( PLOT_DASH_TYPE aType )
         return wxPENSTYLE_DOT;
     case PLOT_DASH_TYPE::DASHDOT:
         return wxPENSTYLE_DOT_DASH;
+    default:
+        wxFAIL_MSG( "Unhandled PlotDashType" );
+        return wxPENSTYLE_SOLID;
     }
-
-    wxFAIL_MSG( "Unhandled PlotDashType" );
-    return wxPENSTYLE_SOLID;
 }
 
 

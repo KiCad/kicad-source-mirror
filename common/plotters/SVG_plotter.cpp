@@ -238,19 +238,23 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
              m_pen_rgb_color, pen_w  );
     fputs( "stroke-linecap:round; stroke-linejoin:round;", outputFile );
 
+	//set any extra attributes for non-solid lines
     switch( m_dashed )
     {
     case PLOT_DASH_TYPE::DASH:
-        fprintf( outputFile, "stroke-dasharray:%g,%g;",
-                 GetDashMarkLenIU(), GetDashGapLenIU() );
+        fprintf( outputFile, "stroke-dasharray:%g,%g;", GetDashMarkLenIU(), GetDashGapLenIU() );
         break;
     case PLOT_DASH_TYPE::DOT:
-        fprintf( outputFile, "stroke-dasharray:%g,%g;",
-                 GetDotMarkLenIU(), GetDashGapLenIU() );
+        fprintf( outputFile, "stroke-dasharray:%g,%g;", GetDotMarkLenIU(), GetDashGapLenIU() );
         break;
     case PLOT_DASH_TYPE::DASHDOT:
-        fprintf( outputFile, "stroke-dasharray:%g,%g,%g,%g;",
-                GetDashMarkLenIU(), GetDashGapLenIU(), GetDotMarkLenIU(), GetDashGapLenIU() );
+        fprintf( outputFile, "stroke-dasharray:%g,%g,%g,%g;", GetDashMarkLenIU(), GetDashGapLenIU(),
+                GetDotMarkLenIU(), GetDashGapLenIU() );
+        break;
+    case PLOT_DASH_TYPE::DEFAULT:
+    case PLOT_DASH_TYPE::SOLID:
+    default:
+        //do nothing
         break;
     }
 
