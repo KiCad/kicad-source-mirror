@@ -84,7 +84,7 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_padChamferRectScale = 0.2;                   // Size of chamfer: ratio of smallest of X,Y size
     m_chamferPositions  = RECT_NO_CHAMFER;          // No chamfered corner
 
-    m_ZoneConnection = ZONE_CONNECTION::INHERITED;  // Use parent setting by default
+    m_ZoneConnection    = ZONE_CONNECTION::INHERITED; // Use parent setting by default
     m_ThermalWidth      = 0;                        // Use parent setting by default
     m_ThermalGap        = 0;                        // Use parent setting by default
 

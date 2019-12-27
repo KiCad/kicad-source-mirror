@@ -154,13 +154,13 @@ protected:
     // Use derived classes to build a fully initialized GENDRILL_WRITER_BASE class.
     GENDRILL_WRITER_BASE( BOARD* aPcb )
     {
-        m_pcb  = aPcb;
+        m_pcb             = aPcb;
         m_conversionUnits = 1.0;
-        m_unitsMetric    = true;
-        m_mapFileFmt = PLOT_FORMAT::PDF;
-        m_pageInfo = NULL;
-        m_merge_PTH_NPTH = false;
-        m_zeroFormat = DECIMAL_FORMAT;
+        m_unitsMetric     = true;
+        m_mapFileFmt      = PLOT_FORMAT::PDF;
+        m_pageInfo        = NULL;
+        m_merge_PTH_NPTH  = false;
+        m_zeroFormat      = DECIMAL_FORMAT;
     }
 
 public:

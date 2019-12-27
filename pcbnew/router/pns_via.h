@@ -50,9 +50,9 @@ public:
     VIA() :
         ITEM( VIA_T )
     {
-        m_diameter = 2;     // Dummy value
-        m_drill = 0;
-        m_viaType = VIATYPE::THROUGH;
+        m_diameter = 2; // Dummy value
+        m_drill    = 0;
+        m_viaType  = VIATYPE::THROUGH;
     }
 
     VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill, int aNet = -1,

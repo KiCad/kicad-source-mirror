@@ -80,7 +80,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     switch( aFormat )
     {
     case PLOT_FORMAT::GERBER:
-        offset = GetOffset();
+        offset  = GetOffset();
         plotter = new GERBER_PLOTTER();
         plotter->SetViewport( offset, IU_PER_MILS / 10, scale, false );
         plotter->SetGerberCoordinatesFormat( 5 ); // format x.5 unit = mm
@@ -89,7 +89,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     case PLOT_FORMAT::HPGL: // Scale for HPGL format.
     {
         HPGL_PLOTTER* hpgl_plotter = new HPGL_PLOTTER;
-        plotter = hpgl_plotter;
+        plotter                    = hpgl_plotter;
         hpgl_plotter->SetPenNumber( plot_opts.GetHPGLPenNum() );
         hpgl_plotter->SetPenSpeed( plot_opts.GetHPGLPenSpeed() );
         plotter->SetPageSettings( page_info );
@@ -214,10 +214,10 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     plotDrillMarks( plotter );
 
     // Print a list of symbols used.
-    int    charSize = 3 * IU_PER_MM; // text size in IUs
-    double charScale = 1.0 / scale;  // real scale will be 1/scale,
-                                     // because the global plot scale is scale
-    TextWidth = KiROUND( ( charSize * charScale ) / 10.0 ); // Set text width (thickness)
+    int    charSize  = 3 * IU_PER_MM; // text size in IUs
+    double charScale = 1.0 / scale;   // real scale will be 1/scale,
+                                      // because the global plot scale is scale
+    TextWidth  = KiROUND( ( charSize * charScale ) / 10.0 ); // Set text width (thickness)
     intervalle = KiROUND( charSize * charScale ) + TextWidth;
 
     // Trace information.

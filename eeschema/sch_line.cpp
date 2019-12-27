@@ -64,12 +64,12 @@ static wxPenStyle getwxPenStyle( PLOT_DASH_TYPE aType )
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     SCH_ITEM( NULL, SCH_LINE_T )
 {
-    m_start = pos;
-    m_end   = pos;
+    m_start           = pos;
+    m_end             = pos;
     m_startIsDangling = m_endIsDangling = false;
-    m_size  = 0;
-    m_style = PLOT_DASH_TYPE::DEFAULT;
-    m_color = COLOR4D::UNSPECIFIED;
+    m_size                              = 0;
+    m_style                             = PLOT_DASH_TYPE::DEFAULT;
+    m_color                             = COLOR4D::UNSPECIFIED;
 
     switch( layer )
     {

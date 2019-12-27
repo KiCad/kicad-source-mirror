@@ -167,10 +167,10 @@ SVG_PLOTTER::SVG_PLOTTER()
 {
     m_graphics_changed = true;
     SetTextMode( PLOT_TEXT_MODE::STROKE );
-    m_fillMode = NO_FILL;               // or FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR
-    m_pen_rgb_color = 0;                // current color value (black)
-    m_brush_rgb_color = 0;              // current color value (black)
-    m_dashed = PLOT_DASH_TYPE::SOLID;
+    m_fillMode        = NO_FILL; // or FILLED_SHAPE or FILLED_WITH_BG_BODYCOLOR
+    m_pen_rgb_color   = 0;       // current color value (black)
+    m_brush_rgb_color = 0;       // current color value (black)
+    m_dashed          = PLOT_DASH_TYPE::SOLID;
 }
 
 

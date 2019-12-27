@@ -49,9 +49,9 @@ class GBR_NETLIST_METADATA;
  */
 enum class PLOT_FORMAT
 {
-    UNDEFINED = -1,
+    UNDEFINED    = -1,
     FIRST_FORMAT = 0,
-    HPGL = FIRST_FORMAT,
+    HPGL         = FIRST_FORMAT,
     GERBER,
     POST,
     DXF,
@@ -85,8 +85,8 @@ enum class PLOT_TEXT_MODE
  */
 enum class PLOT_DASH_TYPE
 {
-    DEFAULT = -1,
-    SOLID = 0,
+    DEFAULT    = -1,
+    SOLID      = 0,
     FIRST_TYPE = SOLID,
     DASH,
     DOT,

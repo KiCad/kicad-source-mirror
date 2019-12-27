@@ -248,12 +248,12 @@ void VIA::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     if( aFlipLeftRight )
     {
         m_Start.x = aCentre.x - ( m_Start.x - aCentre.x );
-        m_End.x = aCentre.x - ( m_End.x - aCentre.x );
+        m_End.x   = aCentre.x - ( m_End.x - aCentre.x );
     }
     else
     {
         m_Start.y = aCentre.y - ( m_Start.y - aCentre.y );
-        m_End.y = aCentre.y - ( m_End.y - aCentre.y );
+        m_End.y   = aCentre.y - ( m_End.y - aCentre.y );
     }
 
     if( GetViaType() != VIATYPE::THROUGH )
@@ -262,7 +262,7 @@ void VIA::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         PCB_LAYER_ID top_layer;
         PCB_LAYER_ID bottom_layer;
         LayerPair( &top_layer, &bottom_layer );
-        top_layer = FlipLayer( top_layer, copperLayerCount );
+        top_layer    = FlipLayer( top_layer, copperLayerCount );
         bottom_layer = FlipLayer( bottom_layer, copperLayerCount );
         SetLayerPair( top_layer, bottom_layer );
     }
@@ -520,11 +520,11 @@ const BOX2I TRACK::ViewBBox() const
 void VIA::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
     int         radius;
-    int         fillvia = 0;
-    PCB_SCREEN* screen = aFrame->GetScreen();
+    int         fillvia    = 0;
+    PCB_SCREEN* screen     = aFrame->GetScreen();
     auto&       displ_opts = aFrame->GetDisplayOptions();
-    BOARD*      brd = GetBoard();
-    COLOR4D     color = aFrame->Settings().Colors().GetItemColor(
+    BOARD*      brd        = GetBoard();
+    COLOR4D     color      = aFrame->Settings().Colors().GetItemColor(
             LAYER_VIAS + static_cast<int>( GetViaType() ) );
 
     if( displ_opts.m_DisplayViaFill == FILLED )

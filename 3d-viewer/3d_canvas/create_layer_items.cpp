@@ -289,14 +289,14 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             // ADD VIAS and THT
             if( track->Type() == PCB_VIA_T )
             {
-                const VIA *via = static_cast< const VIA*>( track );
-                const VIATYPE viatype = via->GetViaType();
-                const float holediameter = via->GetDrillValue() * BiuTo3Dunits();
-                const float thickness = GetCopperThickness3DU();
-                const float hole_inner_radius = ( holediameter / 2.0f );
+                const VIA*    via               = static_cast<const VIA*>( track );
+                const VIATYPE viatype           = via->GetViaType();
+                const float   holediameter      = via->GetDrillValue() * BiuTo3Dunits();
+                const float   thickness         = GetCopperThickness3DU();
+                const float   hole_inner_radius = ( holediameter / 2.0f );
 
-                const SFVEC2F via_center(  via->GetStart().x * m_biuTo3Dunits,
-                                          -via->GetStart().y * m_biuTo3Dunits );
+                const SFVEC2F via_center(
+                        via->GetStart().x * m_biuTo3Dunits, -via->GetStart().y * m_biuTo3Dunits );
 
                 if( viatype != VIATYPE::THROUGH )
                 {

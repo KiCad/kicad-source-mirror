@@ -522,12 +522,12 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 {
     const int actViaFlags = aEvent.Parameter<intptr_t>();
 
-    VIATYPE    viaType = getViaTypeFromFlags( actViaFlags );
+    VIATYPE    viaType     = getViaTypeFromFlags( actViaFlags );
     const bool selectLayer = actViaFlags & VIA_ACTION_FLAGS::SELECT_LAYER;
 
     BOARD_DESIGN_SETTINGS& bds = board()->GetDesignSettings();
 
-    const int    layerCount = bds.GetCopperLayerCount();
+    const int    layerCount   = bds.GetCopperLayerCount();
     int          currentLayer = m_router->GetCurrentLayer();
     PCB_LAYER_ID pairTop = frame()->GetScreen()->m_Route_Layer_TOP;
     PCB_LAYER_ID pairBottom = frame()->GetScreen()->m_Route_Layer_BOTTOM;

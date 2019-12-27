@@ -115,7 +115,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_plotInvisibleText          = false;
     m_plotPadsOnSilkLayer        = false;
     m_subtractMaskFromSilk       = false;
-    m_format = PLOT_FORMAT::GERBER;
+    m_format                     = PLOT_FORMAT::GERBER;
     m_mirror                     = false;
     m_drillMarks                 = SMALL_DRILL_SHAPE;
     m_autoScale                  = false;
@@ -124,9 +124,9 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_fineScaleAdjustX           = 1.0;
     m_fineScaleAdjustY           = 1.0;
     m_widthAdjust                = 0.;
-    m_outputDirectory.clear();
     m_color                      = BLACK;
-    m_textMode = PLOT_TEXT_MODE::DEFAULT;
+    m_textMode                   = PLOT_TEXT_MODE::DEFAULT;
+	m_outputDirectory.clear();
     m_layerSelection             = LSET( 7, F_SilkS, B_SilkS, F_Mask, B_Mask,
                                          F_Paste, B_Paste, Edge_Cuts )
                                          | LSET::AllCuMask();
