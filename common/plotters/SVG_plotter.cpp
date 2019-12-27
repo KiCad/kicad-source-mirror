@@ -238,7 +238,7 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
              m_pen_rgb_color, pen_w  );
     fputs( "stroke-linecap:round; stroke-linejoin:round;", outputFile );
 
-	//set any extra attributes for non-solid lines
+    //set any extra attributes for non-solid lines
     switch( m_dashed )
     {
     case PLOT_DASH_TYPE::DASH:

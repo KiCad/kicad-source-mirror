@@ -380,7 +380,7 @@ void VIA::SanitizeLayers()
 {
     if( GetViaType() == VIATYPE::THROUGH )
     {
-        m_Layer = F_Cu;
+        m_Layer       = F_Cu;
         m_BottomLayer = B_Cu;
     }
 

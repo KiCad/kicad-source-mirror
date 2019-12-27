@@ -116,7 +116,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         // We should print the list of drill sizes, so reserve room for it
         // 60% height for board 40% height for list
         int    ypagesize_for_board = KiROUND( pageSizeIU.y * 0.6 );
-        double Yscale = double( ypagesize_for_board - margin ) / bbbox.GetHeight();
+        double Yscale              = double( ypagesize_for_board - margin ) / bbbox.GetHeight();
 
         scale = std::min( Xscale, Yscale );
 
