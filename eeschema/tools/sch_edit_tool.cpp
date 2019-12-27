@@ -176,7 +176,9 @@ bool SCH_EDIT_TOOL::Init()
     };
 
     auto propertiesCondition = []( const SELECTION& aSel ) {
-        if( aSel.GetSize() != 1 )
+        if( aSel.GetSize() != 1
+                && !( aSel.GetSize() >= 1 && aSel.Front()->Type() == SCH_LINE_T
+                        && aSel.AreAllItemsIdentical() ) )
             return false;
 
         auto item = static_cast<EDA_ITEM*>( aSel.Front() );
@@ -1297,7 +1299,18 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         if( !line->IsGraphicLine() )
             break;
 
-        DIALOG_EDIT_LINE_STYLE dlg( m_frame, line );
+		if (!selection.AreAllItemsIdentical())
+			break;
+
+		std::deque<SCH_LINE*> lines;
+		for (auto item : selection.Items())
+		{
+			auto line = dynamic_cast<SCH_LINE*>(item);
+			assert(line != nullptr);
+			lines.push_back(line);
+		}
+
+		DIALOG_EDIT_LINE_STYLE dlg(m_frame, lines);
 
         if( dlg.ShowModal() == wxID_OK )
         {

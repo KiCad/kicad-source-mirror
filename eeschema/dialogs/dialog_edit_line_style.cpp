@@ -31,11 +31,12 @@
 const int BUTT_COLOR_MINSIZE_X = 32;
 const int BUTT_COLOR_MINSIZE_Y = 20;
 
-DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent, SCH_LINE* aLine ) :
-    DIALOG_EDIT_LINE_STYLE_BASE( aParent ),
-    m_frame( aParent ),
-    m_line( aLine ),
-    m_width( aParent, m_staticTextWidth, m_lineWidth, m_staticWidthUnits, true )
+DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE(
+        SCH_EDIT_FRAME* aParent, std::deque<SCH_LINE*>& lines )
+        : DIALOG_EDIT_LINE_STYLE_BASE( aParent ),
+          m_frame( aParent ),
+          m_lines( lines ),
+          m_width( aParent, m_staticTextWidth, m_lineWidth, m_staticWidthUnits, true )
 {
     m_sdbSizerApply->SetLabel( _( "Default" ) );
 
@@ -54,9 +55,46 @@ DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent, SCH_LIN
 
 bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
 {
-    m_width.SetValue( m_line->GetPenSize() );
-    setColor( m_line->GetLineColor() );
-    m_lineStyle->SetSelection( static_cast<int>( m_line->GetLineStyle() ) );
+    auto first_line = m_lines.front();
+
+    if( m_lines.size() == 1
+            || ( m_lines.size() > 1
+                    && std::all_of( m_lines.begin() + 1, m_lines.end(), [&]( const SCH_LINE* r ) {
+                           return r->GetPenSize() == m_lines.front()->GetPenSize();
+                       } ) ) )
+    {
+        m_width.SetValue( first_line->GetPenSize() );
+    }
+    else
+    {
+        m_width.SetValue( INDETERMINATE );
+    }
+
+    if( m_lines.size() == 1
+            || ( m_lines.size() > 1
+                    && std::all_of( m_lines.begin() + 1, m_lines.end(), [&]( const SCH_LINE* r ) {
+                           return r->GetLineColor() == m_lines.front()->GetLineColor();
+                       } ) ) )
+    {
+        setColor( first_line->GetLineColor() );
+    }
+    else
+    {
+        setColor( COLOR4D::UNSPECIFIED );
+    }
+
+    if( m_lines.size() == 1
+            || ( m_lines.size() > 1
+                    && std::all_of( m_lines.begin() + 1, m_lines.end(), [&]( const SCH_LINE* r ) {
+                           return r->GetLineColor() == m_lines.front()->GetLineColor();
+                       } ) ) )
+    {
+        m_lineStyle->SetSelection( static_cast<int>( first_line->GetLineStyle() ) );
+    }
+    else
+    {
+        m_lineStyle->SetSelection( static_cast<int>( first_line->GetLineStyle() ) );
+    }
 
     return true;
 }
@@ -101,9 +139,9 @@ void DIALOG_EDIT_LINE_STYLE::updateColorButton( COLOR4D& aColor )
 
 void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
 {
-    m_width.SetValue( m_line->GetDefaultWidth() );
-    setColor( m_line->GetDefaultColor() );
-    m_lineStyle->SetSelection( static_cast<int>( m_line->GetDefaultStyle() ) );
+    m_width.SetValue( m_lines.front()->GetDefaultWidth() );
+    setColor( m_lines.front()->GetDefaultColor() );
+    m_lineStyle->SetSelection( static_cast<int>( m_lines.front()->GetDefaultStyle() ) );
     Refresh();
 }
 
@@ -117,13 +155,25 @@ void DIALOG_EDIT_LINE_STYLE::setColor( const COLOR4D& aColor )
 
 bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
 {
-    m_frame->SaveCopyInUndoList( m_line, UR_CHANGED );
+    for( auto& line : m_lines )
+    {
+        m_frame->SaveCopyInUndoList( line, UR_CHANGED );
 
-    m_line->SetLineWidth( m_width.GetValue() );
-    m_line->SetLineStyle( m_lineStyle->GetSelection() );
-    m_line->SetLineColor( m_selectedColor );
+        if( !m_width.IsIndeterminate() )
+        {
+            line->SetLineWidth( m_width.GetValue() );
+        }
 
-    m_frame->RefreshItem( m_line );
+        line->SetLineStyle( m_lineStyle->GetSelection() );
+
+        if( m_selectedColor != COLOR4D::UNSPECIFIED )
+        {
+            line->SetLineColor( m_selectedColor );
+        }
+
+        m_frame->RefreshItem( line );
+    }
+
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();
 

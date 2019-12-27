@@ -250,6 +250,16 @@ public:
         m_referencePoint = NULLOPT;
     }
 
+    bool AreAllItemsIdentical() const
+    {
+        return ( m_items.size() < 2
+                 || ( m_items.size() > 1
+                         && std::all_of(
+                                 m_items.begin() + 1, m_items.end(), [&]( const EDA_ITEM* r ) {
+                                     return r->Type() == m_items.front()->Type();
+                                 } ) ) );
+    }
+
 protected:
     OPT<VECTOR2I>         m_referencePoint;
     std::deque<EDA_ITEM*> m_items;
