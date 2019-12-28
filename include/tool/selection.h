@@ -254,10 +254,10 @@ public:
     {
         return ( m_items.size() < 2
                  || ( m_items.size() > 1
-                         && std::all_of(
-                                 m_items.begin() + 1, m_items.end(), [&]( const EDA_ITEM* r ) {
-                                     return r->Type() == m_items.front()->Type();
-                                 } ) ) );
+                            && std::all_of( m_items.begin() + 1, m_items.end(),
+                                       [&]( const EDA_ITEM* r ) {
+                                           return r->Type() == m_items.front()->Type();
+                                       } ) ) );
     }
 
 protected:

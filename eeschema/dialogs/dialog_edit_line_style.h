@@ -43,8 +43,8 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    SCH_EDIT_FRAME* m_frame;
-	std::deque<SCH_LINE*> m_lines;
+    SCH_EDIT_FRAME*       m_frame;
+    std::deque<SCH_LINE*> m_lines;
 
     UNIT_BINDER     m_width;
     COLOR4D         m_selectedColor;
