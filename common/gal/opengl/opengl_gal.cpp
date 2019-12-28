@@ -26,6 +26,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+// Apple, in their infinite wisdom, has decided to mark OpenGL as deprecated.
+// Luckily we can silence warnings about its deprecation.
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION 1
+#endif
+
 #include <gal/opengl/opengl_gal.h>
 #include <gal/opengl/utils.h>
 #include <gal/definitions.h>

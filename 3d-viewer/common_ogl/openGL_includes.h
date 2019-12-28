@@ -33,6 +33,9 @@
 #include <wx/wx.h>
 
 #ifdef __APPLE__
+// Apple, in their infinite wisdom, has decided to mark OpenGL as deprecated.
+// Luckily we can silence warnings about its deprecation.
+#define GL_SILENCE_DEPRECATION 1
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #else
