@@ -175,6 +175,8 @@ public:
                float aTransparency,
                float aReflection );
 
+    virtual ~CMATERIAL() {}
+
     const SFVEC3F &GetAmbientColor()  const { return m_ambientColor; }
     const SFVEC3F &GetEmissiveColor() const { return m_emissiveColor; }
     const SFVEC3F &GetSpecularColor() const { return m_specularColor; }
