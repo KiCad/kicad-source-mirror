@@ -215,7 +215,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_subtractmaskfromsilk ),
                        m_subtractMaskFromSilk ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_outputformat ),
-                       m_format );
+                       static_cast<int>( m_format ) );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_mirror ),
                        m_mirror ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_drillshape ),
