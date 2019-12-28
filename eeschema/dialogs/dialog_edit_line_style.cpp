@@ -27,6 +27,7 @@
 #include <sch_line.h>
 #include <dialogs/dialog_color_picker.h>
 #include <dialog_edit_line_style.h>
+#include <bitmaps.h>
 
 const int BUTT_COLOR_MINSIZE_X = 32;
 const int BUTT_COLOR_MINSIZE_Y = 20;
@@ -39,10 +40,6 @@ DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE(
           m_width( aParent, m_staticTextWidth, m_lineWidth, m_staticWidthUnits, true )
 {
     m_sdbSizerApply->SetLabel( _( "Default" ) );
-
-    wxBitmap bitmap( std::max( m_colorButton->GetSize().x, BUTT_COLOR_MINSIZE_X ),
-                     std::max( m_colorButton->GetSize().y, BUTT_COLOR_MINSIZE_Y ) );
-    m_colorButton->SetBitmap( bitmap );
 
     SetInitialFocus( m_lineWidth );
 
@@ -119,18 +116,29 @@ void DIALOG_EDIT_LINE_STYLE::updateColorButton( COLOR4D& aColor )
 {
     wxMemoryDC iconDC;
 
-    wxBitmap bitmap = m_colorButton->GetBitmapLabel();
-    iconDC.SelectObject( bitmap );
-    iconDC.SetPen( *wxBLACK_PEN );
 
-    wxBrush  brush( aColor.ToColour() );
-    iconDC.SetBrush( brush );
+	if (aColor == COLOR4D::UNSPECIFIED)
+	{
+		m_colorButton->SetBitmap(KiBitmap(unknown_xpm));
+	}
+	else
+	{
+		wxBitmap bitmap(std::max(m_colorButton->GetSize().x, BUTT_COLOR_MINSIZE_X),
+			std::max(m_colorButton->GetSize().y, BUTT_COLOR_MINSIZE_Y));
 
-    // Paint the full bitmap in aColor:
-    iconDC.SetBackground( brush );
-    iconDC.Clear();
+		iconDC.SelectObject(bitmap);
+		iconDC.SetPen(*wxBLACK_PEN);
 
-    m_colorButton->SetBitmapLabel( bitmap );
+		wxBrush  brush(aColor.ToColour());
+		iconDC.SetBrush(brush);
+
+		// Paint the full bitmap in aColor:
+		iconDC.SetBackground(brush);
+		iconDC.Clear();
+
+		m_colorButton->SetBitmap(bitmap);
+	}
+
     m_colorButton->Refresh();
 
     Refresh( false );
