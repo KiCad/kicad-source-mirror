@@ -28,7 +28,7 @@
 
 
 #include <cstdio>          // NULL definition.
-
+#include <wx/defs.h>       // wxDEPRECATED_MSG macro
 
 class EDA_ITEM;
 
@@ -139,7 +139,11 @@ public:
  * @see DHEAD for additional public functions.
  */
 template <class T>
-class DLIST : public DHEAD
+class
+#if !defined( EESCHEMA ) && !defined( GERBVIEW )
+    wxDEPRECATED_MSG( "DLIST is deprecated, do not use in new code" )
+#endif
+DLIST : public DHEAD
 {
 public:
 
