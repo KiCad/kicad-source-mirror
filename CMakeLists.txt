@@ -337,10 +337,10 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     # Level 3 includes full information, but binaries are much larger.
     if( BUILD_SMALL_DEBUG_FILES )
         set( CMAKE_C_FLAGS_DEBUG   "-g1 -ggdb1 -DDEBUG" )
-        set( CMAKE_CXX_FLAGS_DEBUG "-g1 -ggdb1 -DDEBUG -Wno-deprecated-declarations" )
+        set( CMAKE_CXX_FLAGS_DEBUG "-g1 -ggdb1 -DDEBUG" )
     else()
         set( CMAKE_C_FLAGS_DEBUG   "-g3 -ggdb3 -DDEBUG" )
-        set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG -Wno-deprecated-declarations" )
+        set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG" )
     endif()
 
     if( KICAD_SANITIZE )
