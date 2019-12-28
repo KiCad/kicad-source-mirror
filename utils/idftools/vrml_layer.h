@@ -35,6 +35,11 @@
 #ifndef VRML_LAYER_H
 #define VRML_LAYER_H
 
+// Apple, in their infinite wisdom, has decided to mark OpenGL as deprecated.
+// Luckily we can silence warnings about its deprecation.
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION 1
+#endif
 
 #include <wx/glcanvas.h>    // CALLBACK definition, needed on Windows
                             // alse needed on OSX to define __DARWIN__
