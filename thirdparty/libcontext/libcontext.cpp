@@ -15,7 +15,7 @@
 */
 #include <csetjmp>
 #include <cstdlib>
-#include <system/libcontext.h>
+#include <libcontext.h>
 
 #if defined(LIBCONTEXT_PLATFORM_windows_i386) && defined(LIBCONTEXT_COMPILER_gcc)
 __asm (
