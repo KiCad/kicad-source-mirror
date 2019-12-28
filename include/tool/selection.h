@@ -250,6 +250,11 @@ public:
         m_referencePoint = NULLOPT;
     }
 
+    /**
+     * Checks if all items in the selection are the same KICAD_T type
+     *
+     * @return True if all items are the same type, this includes zero or single items
+     */
     bool AreAllItemsIdentical() const
     {
         return ( m_items.size() < 2
