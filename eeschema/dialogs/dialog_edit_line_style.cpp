@@ -22,7 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <cassert>
 #include <sch_edit_frame.h>
 #include <sch_line.h>
 #include <dialogs/dialog_color_picker.h>
@@ -31,6 +30,25 @@
 
 const int BUTT_COLOR_MINSIZE_X = 32;
 const int BUTT_COLOR_MINSIZE_Y = 20;
+
+
+struct lineTypeStruct
+{
+    wxString             name;
+    const BITMAP_OPAQUE* bitmap;
+};
+
+
+/*
+ * Conversion map between PLOT_DASH_TYPE values and style names displayed
+ */
+const std::map<PLOT_DASH_TYPE, struct lineTypeStruct> lineTypeNames = {
+    { PLOT_DASH_TYPE::SOLID, { "Solid", stroke_solid_xpm } },
+    { PLOT_DASH_TYPE::DASH, { "Dashed", stroke_dash_xpm } },
+    { PLOT_DASH_TYPE::DOT, { "Dotted", stroke_dot_xpm } },
+    { PLOT_DASH_TYPE::DASHDOT, { "Dash-Dot", stroke_dashdot_xpm } },
+};
+
 
 DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE(
         SCH_EDIT_FRAME* aParent, std::deque<SCH_LINE*>& lines )
@@ -42,6 +60,11 @@ DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE(
     m_sdbSizerApply->SetLabel( _( "Default" ) );
 
     SetInitialFocus( m_lineWidth );
+
+    for( auto& typeEntry : lineTypeNames )
+    {
+        m_typeCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
+    }
 
     m_sdbSizerOK->SetDefault();
 
@@ -83,14 +106,17 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
     if( m_lines.size() == 1
             || ( m_lines.size() > 1
                     && std::all_of( m_lines.begin() + 1, m_lines.end(), [&]( const SCH_LINE* r ) {
-                           return r->GetLineColor() == m_lines.front()->GetLineColor();
+                           return r->GetLineStyle() == m_lines.front()->GetLineStyle();
                        } ) ) )
     {
-        m_lineStyle->SetSelection( static_cast<int>( first_line->GetLineStyle() ) );
+        int style = static_cast<int>( first_line->GetLineStyle() );
+        wxCHECK_MSG( style < lineTypeNames.size(), false,
+                "Line type for first line is not found in the type lookup map" );
+        m_typeCombo->SetSelection( style );
     }
     else
     {
-        m_lineStyle->SetSelection( static_cast<int>( first_line->GetLineStyle() ) );
+        m_typeCombo->SetSelection( wxNOT_FOUND );
     }
 
     return true;
@@ -99,7 +125,7 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
 
 void DIALOG_EDIT_LINE_STYLE::onColorButtonClicked( wxCommandEvent& event )
 {
-    COLOR4D newColor = COLOR4D::UNSPECIFIED;
+    COLOR4D             newColor = COLOR4D::UNSPECIFIED;
     DIALOG_COLOR_PICKER dialog( this, m_selectedColor, false );
 
     if( dialog.ShowModal() == wxID_OK )
@@ -109,35 +135,35 @@ void DIALOG_EDIT_LINE_STYLE::onColorButtonClicked( wxCommandEvent& event )
         return;
 
     setColor( newColor );
-
 }
+
 
 void DIALOG_EDIT_LINE_STYLE::updateColorButton( COLOR4D& aColor )
 {
     wxMemoryDC iconDC;
 
 
-	if (aColor == COLOR4D::UNSPECIFIED)
-	{
-		m_colorButton->SetBitmap(KiBitmap(unknown_xpm));
-	}
-	else
-	{
-		wxBitmap bitmap(std::max(m_colorButton->GetSize().x, BUTT_COLOR_MINSIZE_X),
-			std::max(m_colorButton->GetSize().y, BUTT_COLOR_MINSIZE_Y));
+    if( aColor == COLOR4D::UNSPECIFIED )
+    {
+        m_colorButton->SetBitmap( KiBitmap( question_mark_xpm ) );
+    }
+    else
+    {
+        wxBitmap bitmap( std::max( m_colorButton->GetSize().x, BUTT_COLOR_MINSIZE_X ),
+                std::max( m_colorButton->GetSize().y, BUTT_COLOR_MINSIZE_Y ) );
 
-		iconDC.SelectObject(bitmap);
-		iconDC.SetPen(*wxBLACK_PEN);
+        iconDC.SelectObject( bitmap );
+        iconDC.SetPen( *wxBLACK_PEN );
 
-		wxBrush  brush(aColor.ToColour());
-		iconDC.SetBrush(brush);
+        wxBrush brush( aColor.ToColour() );
+        iconDC.SetBrush( brush );
 
-		// Paint the full bitmap in aColor:
-		iconDC.SetBackground(brush);
-		iconDC.Clear();
+        // Paint the full bitmap in aColor:
+        iconDC.SetBackground( brush );
+        iconDC.Clear();
 
-		m_colorButton->SetBitmap(bitmap);
-	}
+        m_colorButton->SetBitmap( bitmap );
+    }
 
     m_colorButton->Refresh();
 
@@ -149,7 +175,12 @@ void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
 {
     m_width.SetValue( m_lines.front()->GetDefaultWidth() );
     setColor( m_lines.front()->GetDefaultColor() );
-    m_lineStyle->SetSelection( static_cast<int>( m_lines.front()->GetDefaultStyle() ) );
+
+    auto typeIt = lineTypeNames.find( m_lines.front()->GetDefaultStyle() );
+    wxCHECK_RET( typeIt != lineTypeNames.end(),
+            "Default line type not found line dialogs line type lookup map" );
+
+    m_typeCombo->SetSelection( static_cast<int>( typeIt->first ) );
     Refresh();
 }
 
@@ -172,7 +203,17 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
             line->SetLineWidth( m_width.GetValue() );
         }
 
-        line->SetLineStyle( m_lineStyle->GetSelection() );
+        if( m_typeCombo->GetSelection() != wxNOT_FOUND )
+        {
+            int selection = m_typeCombo->GetSelection();
+            wxCHECK_MSG( selection < lineTypeNames.size(), false,
+                    "Selected line type index exceeds size of line type lookup map" );
+
+            auto it = lineTypeNames.begin();
+            std::advance( it, selection );
+
+            line->SetLineStyle( it->first );
+        }
 
         if( m_selectedColor != COLOR4D::UNSPECIFIED )
         {

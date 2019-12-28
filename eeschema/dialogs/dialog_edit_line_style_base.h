@@ -23,9 +23,8 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/bmpcbox.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/radiobox.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
@@ -55,7 +54,9 @@ class DIALOG_EDIT_LINE_STYLE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticWidthUnits;
 		wxStaticText* m_staticText5;
 		wxBitmapButton* m_colorButton;
-		wxRadioBox* m_lineStyle;
+		wxStaticText* m_staticText4;
+		wxStaticText* m_staticText51;
+		wxBitmapComboBox* m_typeCombo;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -70,7 +71,7 @@ class DIALOG_EDIT_LINE_STYLE_BASE : public DIALOG_SHIM
 	public:
 		bool m_isValid;
 
-		DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Style"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 298,204 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Style"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 325,180 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~DIALOG_EDIT_LINE_STYLE_BASE();
 
 };

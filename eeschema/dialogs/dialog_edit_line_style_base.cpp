@@ -21,11 +21,8 @@ DIALOG_EDIT_LINE_STYLE_BASE::DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bSizerUpper;
-	bSizerUpper = new wxBoxSizer( wxHORIZONTAL );
 
-	wxStaticBoxSizer* sbSizerGeneral;
-	sbSizerGeneral = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General:") ), wxVERTICAL );
+	mainSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerGeneral;
 	fgSizerGeneral = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -33,42 +30,45 @@ DIALOG_EDIT_LINE_STYLE_BASE::DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWi
 	fgSizerGeneral->SetFlexibleDirection( wxBOTH );
 	fgSizerGeneral->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextWidth = new wxStaticText( sbSizerGeneral->GetStaticBox(), wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextWidth = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextWidth->Wrap( -1 );
 	fgSizerGeneral->Add( m_staticTextWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 
-	m_lineWidth = new wxTextCtrl( sbSizerGeneral->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_lineWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_lineWidth->SetMinSize( wxSize( 80,-1 ) );
 
 	fgSizerGeneral->Add( m_lineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 
-	m_staticWidthUnits = new wxStaticText( sbSizerGeneral->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticWidthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticWidthUnits->Wrap( -1 );
-	fgSizerGeneral->Add( m_staticWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 1 );
+	m_staticWidthUnits->SetMinSize( wxSize( 40,-1 ) );
 
-	m_staticText5 = new wxStaticText( sbSizerGeneral->GetStaticBox(), wxID_ANY, _("Color:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerGeneral->Add( m_staticWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+
+	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Color:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
 	fgSizerGeneral->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_colorButton = new wxBitmapButton( sbSizerGeneral->GetStaticBox(), idColorBtn, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_colorButton = new wxBitmapButton( this, idColorBtn, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 
 	m_colorButton->SetBitmap( wxNullBitmap );
-	fgSizerGeneral->Add( m_colorButton, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerGeneral->Add( m_colorButton, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
+
+	m_staticText4 = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4->Wrap( -1 );
+	fgSizerGeneral->Add( m_staticText4, 0, wxALL, 5 );
+
+	m_staticText51 = new wxStaticText( this, wxID_ANY, _("Type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText51->Wrap( -1 );
+	fgSizerGeneral->Add( m_staticText51, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_typeCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
+	m_typeCombo->SetMinSize( wxSize( 140,-1 ) );
+
+	fgSizerGeneral->Add( m_typeCombo, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 
 
-	sbSizerGeneral->Add( fgSizerGeneral, 3, wxEXPAND, 5 );
-
-
-	bSizerUpper->Add( sbSizerGeneral, 3, wxALL|wxEXPAND, 5 );
-
-	wxString m_lineStyleChoices[] = { _("Solid"), _("Dashed"), _("Dotted"), _("Dash-Dot") };
-	int m_lineStyleNChoices = sizeof( m_lineStyleChoices ) / sizeof( wxString );
-	m_lineStyle = new wxRadioBox( this, wxID_ANY, _("Line Style:"), wxDefaultPosition, wxDefaultSize, m_lineStyleNChoices, m_lineStyleChoices, 4, wxRA_SPECIFY_ROWS );
-	m_lineStyle->SetSelection( 1 );
-	bSizerUpper->Add( m_lineStyle, 2, wxALL|wxEXPAND, 5 );
-
-
-	mainSizer->Add( bSizerUpper, 0, wxEXPAND, 5 );
+	mainSizer->Add( fgSizerGeneral, 3, wxEXPAND, 5 );
 
 
 	mainSizer->Add( 0, 0, 1, wxALL|wxEXPAND, 1 );
