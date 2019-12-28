@@ -987,7 +987,7 @@ void EE_SELECTION_TOOL::RebuildSelection()
             select( item );
         }
 
-        return SEARCH_CONTINUE;
+        return SEARCH_RESULT::CONTINUE;
     };
 
     EDA_ITEM::IterateForward( start, inspector, nullptr, EE_COLLECTOR::AllItems );

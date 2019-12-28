@@ -80,16 +80,16 @@ SEARCH_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
         LIB_ITEM* lib_item = dynamic_cast<LIB_ITEM*>( aItem );
 
         if( m_Unit && lib_item && lib_item->GetUnit() && lib_item->GetUnit() != m_Unit )
-            return SEARCH_CONTINUE;
+            return SEARCH_RESULT::CONTINUE;
 
         if( m_Convert && lib_item && lib_item->GetConvert() && lib_item->GetConvert() != m_Convert )
-            return SEARCH_CONTINUE;
+            return SEARCH_RESULT::CONTINUE;
     }
 
     if( aItem->HitTest( m_RefPos, m_Threshold ) )
         Append( aItem );
 
-    return SEARCH_CONTINUE;
+    return SEARCH_RESULT::CONTINUE;
 }
 
 
@@ -150,7 +150,7 @@ SEARCH_RESULT EE_TYPE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* testData )
     // the scanList, so therefore we can collect anything given to us here.
     Append( aItem );
 
-    return SEARCH_CONTINUE;
+    return SEARCH_RESULT::CONTINUE;
 }
 
 

@@ -56,7 +56,7 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
 {
     m_width.SetValue( m_line->GetPenSize() );
     setColor( m_line->GetLineColor() );
-    m_lineStyle->SetSelection( m_line->GetLineStyle() );
+    m_lineStyle->SetSelection( static_cast<int>( m_line->GetLineStyle() ) );
 
     return true;
 }
@@ -103,7 +103,7 @@ void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
 {
     m_width.SetValue( m_line->GetDefaultWidth() );
     setColor( m_line->GetDefaultColor() );
-    m_lineStyle->SetSelection( m_line->GetDefaultStyle() );
+    m_lineStyle->SetSelection( static_cast<int>( m_line->GetDefaultStyle() ) );
     Refresh();
 }
 

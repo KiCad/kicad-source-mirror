@@ -179,7 +179,7 @@ void PCB_ARC::AddToBoard()
 {
     DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
 
-    m_board->Add( dseg, ADD_APPEND );
+    m_board->Add( dseg, ADD_MODE::APPEND );
 
     dseg->SetShape( IsCircle() ? S_CIRCLE : S_ARC );
     dseg->SetTimeStamp( m_timestamp );

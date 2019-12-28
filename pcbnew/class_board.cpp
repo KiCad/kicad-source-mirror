@@ -216,7 +216,7 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
         // aMoveVector was snapshotted, don't need "data".
         brd_item->Move( aMoveVector );
 
-        return SEARCH_CONTINUE;
+        return SEARCH_RESULT::CONTINUE;
     };
 
     Visit( inspector, NULL, top_level_board_stuff );
@@ -234,7 +234,7 @@ TRACKS BOARD::TracksInNet( int aNetCode )
         if( t->GetNetCode() == aNetCode )
             ret.push_back( t );
 
-        return SEARCH_CONTINUE;
+        return SEARCH_RESULT::CONTINUE;
     };
 
     // visit this BOARD's TRACKs and VIAs with above TRACK INSPECTOR which
@@ -556,7 +556,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
             return;
         }
 
-        if( aMode == ADD_APPEND )
+        if( aMode == ADD_MODE::APPEND )
             m_tracks.push_back( static_cast<TRACK*>( aBoardItem ) );
         else
             m_tracks.push_front( static_cast<TRACK*>( aBoardItem ) );
@@ -564,7 +564,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
         break;
 
     case PCB_MODULE_T:
-        if( aMode == ADD_APPEND )
+        if( aMode == ADD_MODE::APPEND )
             m_modules.push_back( (MODULE*) aBoardItem );
         else
             m_modules.push_front( (MODULE*) aBoardItem );
@@ -575,7 +575,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     case PCB_LINE_T:
     case PCB_TEXT_T:
     case PCB_TARGET_T:
-        if( aMode == ADD_APPEND )
+        if( aMode == ADD_MODE::APPEND )
             m_drawings.push_back( aBoardItem );
         else
             m_drawings.push_front( aBoardItem );
@@ -852,7 +852,7 @@ void BOARD::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aLis
 SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T        stype;
-    SEARCH_RESULT  result = SEARCH_CONTINUE;
+    SEARCH_RESULT  result = SEARCH_RESULT::CONTINUE;
     const KICAD_T* p    = scanTypes;
     bool           done = false;
 
@@ -992,7 +992,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             {
                 result = m_markers[i]->Visit( inspector, testData, p );
 
-                if( result == SEARCH_QUIT )
+                if( result == SEARCH_RESULT::QUIT )
                     break;
             }
 
@@ -1006,7 +1006,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             {
                 result = m_ZoneDescriptorList[i]->Visit( inspector, testData, p );
 
-                if( result == SEARCH_QUIT )
+                if( result == SEARCH_RESULT::QUIT )
                     break;
             }
 
@@ -1018,7 +1018,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             break;
         }
 
-        if( result == SEARCH_QUIT )
+        if( result == SEARCH_RESULT::QUIT )
             break;
     }
 
@@ -1061,10 +1061,10 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
         if( aReference == module->GetReference() )
         {
             found = module;
-            return SEARCH_QUIT;
+            return SEARCH_RESULT::QUIT;
         }
 
-        return SEARCH_CONTINUE;
+        return SEARCH_RESULT::CONTINUE;
     };
 
     // visit this BOARD with the above inspector

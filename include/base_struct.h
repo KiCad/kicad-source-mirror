@@ -51,9 +51,10 @@ enum FILL_T {
 };
 
 
-enum SEARCH_RESULT {
-    SEARCH_QUIT,
-    SEARCH_CONTINUE
+enum class SEARCH_RESULT
+{
+    QUIT,
+    CONTINUE
 };
 
 
@@ -423,11 +424,11 @@ public:
     {
         for( EDA_ITEM* p = listStart; p; p = p->Pnext )
         {
-            if( SEARCH_QUIT == p->Visit( inspector, testData, scanTypes ) )
-                return SEARCH_QUIT;
+            if( SEARCH_RESULT::QUIT == p->Visit( inspector, testData, scanTypes ) )
+                return SEARCH_RESULT::QUIT;
         }
 
-        return SEARCH_CONTINUE;
+        return SEARCH_RESULT::CONTINUE;
     }
 
     /**
@@ -443,11 +444,12 @@ public:
     {
         for( auto it : aList )
         {
-            if( static_cast<EDA_ITEM*>( it )->Visit( inspector, testData, scanTypes ) == SEARCH_QUIT )
-                return SEARCH_QUIT;
+            if( static_cast<EDA_ITEM*>( it )->Visit( inspector, testData, scanTypes )
+                    == SEARCH_RESULT::QUIT )
+                return SEARCH_RESULT::QUIT;
         }
 
-        return SEARCH_CONTINUE;
+        return SEARCH_RESULT::CONTINUE;
     }
 
     /**
@@ -462,11 +464,11 @@ public:
         for( auto it : aList )
         {
             if( static_cast<EDA_ITEM*>( it )->Visit( inspector, testData, scanTypes )
-                    == SEARCH_QUIT )
-                return SEARCH_QUIT;
+                    == SEARCH_RESULT::QUIT )
+                return SEARCH_RESULT::QUIT;
         }
 
-        return SEARCH_CONTINUE;
+        return SEARCH_RESULT::CONTINUE;
     }
 
     /**

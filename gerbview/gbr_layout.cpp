@@ -81,7 +81,7 @@ EDA_RECT GBR_LAYOUT::ComputeBoundingBox() const
 SEARCH_RESULT GBR_LAYOUT::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T        stype;
-    SEARCH_RESULT  result = SEARCH_CONTINUE;
+    SEARCH_RESULT  result = SEARCH_RESULT::CONTINUE;
     const KICAD_T* p    = scanTypes;
     bool           done = false;
 
@@ -105,7 +105,7 @@ SEARCH_RESULT GBR_LAYOUT::Visit( INSPECTOR inspector, void* testData, const KICA
 
                 result = gerber->Visit( inspector, testData, p );
 
-                if( result == SEARCH_QUIT )
+                if( result == SEARCH_RESULT::QUIT )
                     break;
             }
 
@@ -117,7 +117,7 @@ SEARCH_RESULT GBR_LAYOUT::Visit( INSPECTOR inspector, void* testData, const KICA
             break;
         }
 
-        if( result == SEARCH_QUIT )
+        if( result == SEARCH_RESULT::QUIT )
             break;
     }
 

@@ -176,8 +176,12 @@ public:
     int GetZoneClearance() const { return m_ZoneClearance; }
     void SetZoneClearance( int aZoneClearance ) { m_ZoneClearance = aZoneClearance; }
 
-    ZoneConnection GetPadConnection( D_PAD* aPad = NULL ) const;
-    void SetPadConnection( ZoneConnection aPadConnection ) { m_PadConnection = aPadConnection; }
+    ZONE_CONNECTION GetPadConnection( D_PAD* aPad = NULL ) const;
+
+    void SetPadConnection( ZONE_CONNECTION aPadConnection )
+    {
+        m_PadConnection = aPadConnection;
+    }
 
     int GetMinThickness() const { return m_ZoneMinThickness; }
     void SetMinThickness( int aMinThickness )
@@ -736,7 +740,7 @@ protected:
     bool                  m_doNotAllowVias;
     bool                  m_doNotAllowTracks;
 
-    ZoneConnection        m_PadConnection;
+    ZONE_CONNECTION       m_PadConnection;
     int                   m_ZoneClearance;           ///< Clearance value in internal units.
     int                   m_ZoneMinThickness;        ///< Minimum thickness value in filled areas.
     bool                  m_FilledPolysUseThickness;    ///< outline of filled polygons have thickness.

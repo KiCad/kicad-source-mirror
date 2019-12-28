@@ -451,7 +451,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
             module->SetFPID( fpid );
 
             loadMODULE( module.get() );
-            m_board->Add( module.release(), ADD_APPEND );
+            m_board->Add( module.release(), ADD_MODE::APPEND );
         }
 
         else if( TESTLINE( "$DRAWSEGMENT" ) )
@@ -1383,7 +1383,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
         else if( TESTLINE( ".ZoneConnection" ) )
         {
             int tmp = intParse( line + SZ( ".ZoneConnection" ) );
-            aModule->SetZoneConnection( (ZoneConnection)tmp );
+            aModule->SetZoneConnection( (ZONE_CONNECTION) tmp );
         }
 
         else if( TESTLINE( ".ThermalWidth" ) )
@@ -1618,7 +1618,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
         else if( TESTLINE( ".ZoneConnection" ) )
         {
             int tmp = intParse( line + SZ( ".ZoneConnection" ) );
-            pad->SetZoneConnection( (ZoneConnection)tmp );
+            pad->SetZoneConnection( (ZONE_CONNECTION) tmp );
         }
 
         else if( TESTLINE( ".ThermalWidth" ) )
@@ -2047,7 +2047,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
 
         else if( TESTLINE( "$EndDRAWSEGMENT" ) )
         {
-            m_board->Add( dseg.release(), ADD_APPEND );
+            m_board->Add( dseg.release(), ADD_MODE::APPEND );
             return;     // preferred exit
         }
     }
@@ -2147,7 +2147,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 
     // maybe someday a constructor that takes all this data in one call?
     TEXTE_PCB*  pcbtxt = new TEXTE_PCB( m_board );
-    m_board->Add( pcbtxt, ADD_APPEND );
+    m_board->Add( pcbtxt, ADD_MODE::APPEND );
 
     char*   line;
     char*   saveptr;
@@ -2258,7 +2258,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
         assert( TESTLINE( "Po" ) );
 
-        VIATYPE_T viatype = static_cast<VIATYPE_T>( intParse( line + SZ( "Po" ), &data ));
+        VIATYPE viatype = static_cast<VIATYPE>( intParse( line + SZ( "Po" ), &data ) );
         BIU start_x = biuParse( data, &data );
         BIU start_y = biuParse( data, &data );
         BIU end_x   = biuParse( data, &data );
@@ -2350,7 +2350,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
             else
                 via->SetDrill( drill );
 
-            if( via->GetViaType() == VIA_THROUGH )
+            if( via->GetViaType() == VIATYPE::THROUGH )
                 via->SetLayerPair( F_Cu, B_Cu );
             else
             {
@@ -2672,17 +2672,25 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             BIU     clearance = biuParse( line + SZ( "ZClearance" ), &data );
             char*   padoption = strtok_r( (char*) data, delims, &saveptr );  // data: " I"
 
-            ZoneConnection popt;
+            ZONE_CONNECTION popt;
             switch( *padoption )
             {
-            case 'I': popt = PAD_ZONE_CONN_FULL;        break;
-            case 'T': popt = PAD_ZONE_CONN_THERMAL;     break;
-            case 'H': popt = PAD_ZONE_CONN_THT_THERMAL; break;
-            case 'X': popt = PAD_ZONE_CONN_NONE;        break;
+            case 'I':
+                popt = ZONE_CONNECTION::FULL;
+                break;
+            case 'T':
+                popt = ZONE_CONNECTION::THERMAL;
+                break;
+            case 'H':
+                popt = ZONE_CONNECTION::THT_THERMAL;
+                break;
+            case 'X':
+                popt = ZONE_CONNECTION::NONE;
+                break;
 
             default:
                 m_error.Printf( _( "Bad ZClearance padoption for CZONE_CONTAINER \"%s\"" ),
-                    zc->GetNetname().GetData() );
+                        zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2796,7 +2804,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
 
         if( TESTLINE( "$endCOTATION" ) )
         {
-            m_board->Add( dim.release(), ADD_APPEND );
+            m_board->Add( dim.release(), ADD_MODE::APPEND );
             return;     // preferred exit
         }
 
@@ -3009,7 +3017,7 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
 
             PCB_TARGET* t = new PCB_TARGET( m_board, shape, leg_layer2new( m_cu_count,  layer_num ),
                                     wxPoint( pos_x, pos_y ), size, width );
-            m_board->Add( t, ADD_APPEND );
+            m_board->Add( t, ADD_MODE::APPEND );
 
             t->SetTimeStamp( timestamp );
         }

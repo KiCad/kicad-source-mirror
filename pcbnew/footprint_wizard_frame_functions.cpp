@@ -110,7 +110,7 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     if( module )
     {
         //  Add the object to board
-        GetBoard()->Add( module, ADD_APPEND );
+        GetBoard()->Add( module, ADD_MODE::APPEND );
         module->SetPosition( wxPoint( 0, 0 ) );
     }
     else

@@ -153,7 +153,7 @@ void PCB_LINE::AddToBoard()
     else
     {
         DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
-        m_board->Add( dseg, ADD_APPEND );
+        m_board->Add( dseg, ADD_MODE::APPEND );
 
         dseg->SetTimeStamp( m_timestamp );
         dseg->SetLayer( m_KiCadLayer );

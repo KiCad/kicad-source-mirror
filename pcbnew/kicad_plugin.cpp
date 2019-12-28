@@ -1107,7 +1107,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(clearance %s)\n",
                       FormatInternalUnits( aModule->GetLocalClearance() ).c_str() );
 
-    if( aModule->GetZoneConnection() != PAD_ZONE_CONN_INHERITED )
+    if( aModule->GetZoneConnection() != ZONE_CONNECTION::INHERITED )
         m_out->Print( aNestLevel+1, "(zone_connect %d)\n", aModule->GetZoneConnection() );
 
     if( aModule->GetThermalWidth() != 0 )
@@ -1430,7 +1430,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     if( aPad->GetLocalClearance() != 0 )
         StrPrintf( &output, " (clearance %s)", FormatInternalUnits( aPad->GetLocalClearance() ).c_str() );
 
-    if( aPad->GetZoneConnection() != PAD_ZONE_CONN_INHERITED )
+    if( aPad->GetZoneConnection() != ZONE_CONNECTION::INHERITED )
         StrPrintf( &output, " (zone_connect %d)", aPad->GetZoneConnection() );
 
     if( aPad->GetThermalWidth() != 0 )
@@ -1659,14 +1659,14 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
 
         switch( via->GetViaType() )
         {
-        case VIA_THROUGH:           //  Default shape not saved.
+        case VIATYPE::THROUGH: //  Default shape not saved.
             break;
 
-        case VIA_BLIND_BURIED:
+        case VIATYPE::BLIND_BURIED:
             m_out->Print( 0, " blind" );
             break;
 
-        case VIA_MICROVIA:
+        case VIATYPE::MICROVIA:
             m_out->Print( 0, " micro" );
             break;
 
@@ -1755,18 +1755,18 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     switch( aZone->GetPadConnection() )
     {
     default:
-    case PAD_ZONE_CONN_THERMAL:       // Default option not saved or loaded.
+    case ZONE_CONNECTION::THERMAL: // Default option not saved or loaded.
         break;
 
-    case PAD_ZONE_CONN_THT_THERMAL:
+    case ZONE_CONNECTION::THT_THERMAL:
         m_out->Print( 0, " thru_hole_only" );
         break;
 
-    case PAD_ZONE_CONN_FULL:
+    case ZONE_CONNECTION::FULL:
         m_out->Print( 0, " yes" );
         break;
 
-    case PAD_ZONE_CONN_NONE:
+    case ZONE_CONNECTION::NONE:
         m_out->Print( 0, " no" );
         break;
     }

@@ -1838,11 +1838,11 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             // Adjust the actual via layer pair
             switch( via->GetViaType() )
             {
-            case VIA_BLIND_BURIED:
+            case VIATYPE::BLIND_BURIED:
                 via->SetLayerPair( first_layer, last_layer );
                 break;
 
-            case VIA_MICROVIA:    // from external to the near neighbor inner layer
+            case VIATYPE::MICROVIA: // from external to the near neighbor inner layer
             {
                 PCB_LAYER_ID last_inner_layer =
                     ToLAYER_ID( ( m_board->GetCopperLayerCount() - 2 ) );

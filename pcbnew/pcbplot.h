@@ -94,7 +94,7 @@ public:
      */
     int getFineWidthAdj()
     {
-        if( GetFormat() == PLOT_FORMAT_POST )
+        if( GetFormat() == PLOT_FORMAT::POST )
             return GetWidthAdjust();
         else
             return 0;

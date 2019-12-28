@@ -25,6 +25,7 @@
 #ifndef _SCH_LINE_H_
 #define _SCH_LINE_H_
 
+#include <plotter.h>
 #include <sch_item.h>
 
 class NETLIST_OBJECT_LIST;
@@ -41,7 +42,7 @@ class SCH_LINE : public SCH_ITEM
     wxPoint m_start;            ///< Line start point
     wxPoint m_end;              ///< Line end point
     int     m_size;             ///< Line pensize
-    int     m_style;            ///< Line style
+    PLOT_DASH_TYPE m_style;            ///< Line style
     COLOR4D m_color;            ///< Line color
 
 public:
@@ -102,18 +103,19 @@ public:
     wxPoint GetEndPoint() const { return m_end; }
     void SetEndPoint( const wxPoint& aPosition ) { m_end = aPosition; }
 
-    int GetDefaultStyle() const;
+    PLOT_DASH_TYPE GetDefaultStyle() const;
 
-    void SetLineStyle( const int aStyle );
-    int GetLineStyle() const;
+    void           SetLineStyle( const PLOT_DASH_TYPE aStyle );
+    void           SetLineStyle( const int aStyleId );
+    PLOT_DASH_TYPE GetLineStyle() const;
 
     /// @return the style name from the style id
     /// (mainly to write it in .sch file
-    static const char* GetLineStyleName( int aStyle );
+    static const char* GetLineStyleName( PLOT_DASH_TYPE aStyle );
 
     /// @return the style id from the style  name
     /// (mainly to read style from .sch file
-    static int GetLineStyleInternalId( const wxString& aStyleName );
+    static PLOT_DASH_TYPE GetLineStyleByName( const wxString& aStyleName );
 
     void SetLineColor( const COLOR4D aColor );
 

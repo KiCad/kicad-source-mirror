@@ -123,7 +123,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         change = true;
     }
 
-    int via_type = GetDesignSettings().m_CurrentViaType;
+    int via_type = static_cast<int>( GetDesignSettings().m_CurrentViaType );
     via_color = Settings().Colors().GetItemColor( LAYER_VIAS + via_type );
 
     if( m_prevIconVal.previous_via_color != via_color )

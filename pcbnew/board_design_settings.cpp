@@ -434,7 +434,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_visibleElements = ~( 1 << GAL_LAYER_INDEX( LAYER_MOD_TEXT_INVISIBLE ) );
 
     SetCopperLayerCount( 2 );               // Default design is a double sided board
-    m_CurrentViaType = VIA_THROUGH;
+    m_CurrentViaType = VIATYPE::THROUGH;
 
     // if true, when creating a new track starting on an existing track, use this track width
     m_UseConnectedTrackWidth = false;

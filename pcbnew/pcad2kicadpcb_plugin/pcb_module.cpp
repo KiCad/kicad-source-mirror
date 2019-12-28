@@ -512,7 +512,7 @@ void PCB_MODULE::AddToBoard()
                  (double) -m_rotation );
 
     MODULE* module = new MODULE( m_board );
-    m_board->Add( module, ADD_APPEND );
+    m_board->Add( module, ADD_MODE::APPEND );
 
     module->SetPosition( wxPoint( m_positionX, m_positionY ) );
     module->SetLayer( m_mirror ? B_Cu : F_Cu );
