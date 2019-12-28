@@ -194,12 +194,17 @@ bool SCH_EDIT_TOOL::Init()
             return false;
         case SCH_LINE_T:
         {
-            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+            const std::deque<EDA_ITEM*> items = aSel.GetItems();
+            if( !std::all_of( items.begin(), items.end(), [&]( const EDA_ITEM* item ) {
+                    const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( item );
+                    assert( line != nullptr );
+                    return line->IsGraphicLine();
+                } ) )
+                return false;
 
-            assert( line != nullptr );
 
             // Only graphic lines support properties in the file format
-            return line->IsGraphicLine();
+            return true;
         }
         default:
             return true;
@@ -1292,32 +1297,36 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         break;
 
     case SCH_LINE_T:
-    {
-        SCH_LINE* line = static_cast<SCH_LINE*>( item );
-
-        // We purposely disallow editing everything except graphic lines
-        if( !line->IsGraphicLine() )
-            break;
-
-		if (!selection.AreAllItemsIdentical())
-			break;
-
-		std::deque<SCH_LINE*> lines;
-		for (auto item : selection.Items())
-		{
-			auto line = dynamic_cast<SCH_LINE*>(item);
-			assert(line != nullptr);
-			lines.push_back(line);
-		}
-
-		DIALOG_EDIT_LINE_STYLE dlg(m_frame, lines);
-
-        if( dlg.ShowModal() == wxID_OK )
         {
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-            m_frame->OnModify();
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+            // We purposely disallow editing everything except graphic lines
+            if( !line->IsGraphicLine() )
+                break;
+
+            if( !selection.AreAllItemsIdentical() )
+                break;
+
+            std::deque<SCH_LINE*> lines;
+            for( auto item : selection.Items() )
+            {
+                auto line = dynamic_cast<SCH_LINE*>( item );
+                assert( line != nullptr );
+                lines.push_back( line );
+            }
+
+            if( !std::all_of( lines.begin(), lines.end(),
+                        [&]( const SCH_LINE* r ) { return r->IsGraphicLine(); } ) )
+                break;
+
+            DIALOG_EDIT_LINE_STYLE dlg( m_frame, lines );
+
+            if( dlg.ShowModal() == wxID_OK )
+            {
+                m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+                m_frame->OnModify();
+            }
         }
-    }
         break;
 
     case SCH_MARKER_T:        // These items have no properties to edit
