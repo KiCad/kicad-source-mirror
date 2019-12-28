@@ -179,6 +179,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 SCH_ITEM* sch_item = (SCH_ITEM*) selection.Front();
                 bool      appendUndo = sch_item && sch_item->IsNew();
+                bool      placingNewItems = sch_item->IsNew();
 
                 //------------------------------------------------------------------------
                 // Setup a drag or a move
@@ -268,7 +269,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     wxASSERT_MSG( m_anchorPos, "Should be already set from previous cmd" );
                 }
-                else if( selection.Front()->HasFlag( IS_NEW ) )
+                else if( placingNewItems )
                 {
                     m_anchorPos = selection.GetReferencePoint();
                 }
