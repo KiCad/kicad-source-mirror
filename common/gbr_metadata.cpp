@@ -403,7 +403,7 @@ wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf
      * 16 bits sequence unicode
      * However if aAllowUtf8Chars is true only unautorized codes will be escaped, because some
      * Gerber files accept UTF8 chars.
-     * unautorized codes are ',' '*' '%' '\' and are used as separators in Gerber files
+     * unautorized codes are ',' '*' '%' '\' '"' and are used as separators in Gerber files
      */
     wxString txt;
 
@@ -422,6 +422,11 @@ wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf
         case '*':
         case ',':
             convert = true;
+            break;
+
+        case '"':
+            if( aQuoteString )
+                convert = true;
             break;
 
         default:
