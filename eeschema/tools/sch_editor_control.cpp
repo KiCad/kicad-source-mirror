@@ -148,7 +148,7 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
             else if( item->IsBrightened() )
                 m_selectionTool->UnbrightenItem( item );
 
-            return SEARCH_CONTINUE;
+            return SEARCH_RESULT::CONTINUE;
         };
 
         EDA_ITEM* start = m_frame->GetScreen()->GetDrawItems();
@@ -184,17 +184,17 @@ EDA_ITEM* nextMatch( SCH_SCREEN* aScreen, EDA_ITEM* after, wxFindReplaceData* da
             if( after == item )
                 after = nullptr;
 
-            return SEARCH_CONTINUE;
+            return SEARCH_RESULT::CONTINUE;
         }
 
         if( ( data == &g_markersOnly && item->Type() == SCH_MARKER_T )
                 || item->Matches( *data, nullptr ) )
         {
             found = item;
-            return SEARCH_QUIT;
+            return SEARCH_RESULT::QUIT;
         }
 
-        return SEARCH_CONTINUE;
+        return SEARCH_RESULT::CONTINUE;
     };
 
     EDA_ITEM::IterateForward( aScreen->GetDrawItems(), inspector, nullptr, EE_COLLECTOR::AllItems );

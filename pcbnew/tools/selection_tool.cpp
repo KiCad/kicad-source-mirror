@@ -1314,12 +1314,12 @@ void SELECTION_TOOL::RebuildSelection()
 
             // Flags on module children might be set only because the parent is selected.
             if( parent && parent->Type() == PCB_MODULE_T && parent->IsSelected() )
-                return SEARCH_CONTINUE;
+                return SEARCH_RESULT::CONTINUE;
 
             highlight( (BOARD_ITEM*) item, SELECTED, &m_selection );
         }
 
-        return SEARCH_CONTINUE;
+        return SEARCH_RESULT::CONTINUE;
     };
 
     board()->Visit( inspector, nullptr,  m_editModules ? GENERAL_COLLECTOR::ModuleItems
@@ -1533,24 +1533,24 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
             // Check if appropriate element layer is visible
             switch( via->GetViaType() )
             {
-                case VIA_THROUGH:
-                    if( !board()->IsElementVisible( LAYER_VIA_THROUGH ) )
-                        return false;
-                    break;
-
-                case VIA_BLIND_BURIED:
-                    if( !board()->IsElementVisible( LAYER_VIA_BBLIND ) )
-                        return false;
-                    break;
-
-                case VIA_MICROVIA:
-                    if( !board()->IsElementVisible( LAYER_VIA_MICROVIA ) )
-                        return false;
-                    break;
-
-                default:
-                    wxFAIL;
+            case VIATYPE::THROUGH:
+                if( !board()->IsElementVisible( LAYER_VIA_THROUGH ) )
                     return false;
+                break;
+
+            case VIATYPE::BLIND_BURIED:
+                if( !board()->IsElementVisible( LAYER_VIA_BBLIND ) )
+                    return false;
+                break;
+
+            case VIATYPE::MICROVIA:
+                if( !board()->IsElementVisible( LAYER_VIA_MICROVIA ) )
+                    return false;
+                break;
+
+            default:
+                wxFAIL;
+                return false;
             }
 
             // For vias it is enough if only one of its layers is visible

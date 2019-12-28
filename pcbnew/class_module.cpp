@@ -62,7 +62,7 @@ MODULE::MODULE( BOARD* parent ) :
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
-    m_ZoneConnection = PAD_ZONE_CONN_INHERITED; // Use zone setting by default
+    m_ZoneConnection              = ZONE_CONNECTION::INHERITED; // Use zone setting by default
     m_ThermalWidth = 0;     // Use zone setting by default
     m_ThermalGap = 0;       // Use zone setting by default
 
@@ -280,21 +280,21 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
         // no break
 
     case PCB_MODULE_EDGE_T:
-        if( aMode == ADD_APPEND )
+        if( aMode == ADD_MODE::APPEND )
             m_drawings.push_back( aBoardItem );
         else
             m_drawings.push_front( aBoardItem );
         break;
 
     case PCB_PAD_T:
-        if( aMode == ADD_APPEND )
+        if( aMode == ADD_MODE::APPEND )
             m_pads.push_back( static_cast<D_PAD*>( aBoardItem ) );
         else
             m_pads.push_front( static_cast<D_PAD*>( aBoardItem ) );
         break;
 
     case PCB_MODULE_ZONE_AREA_T:
-        if( aMode == ADD_APPEND )
+        if( aMode == ADD_MODE::APPEND )
             m_fp_zones.push_back( static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) );
         else
             m_fp_zones.insert( m_fp_zones.begin(), static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) );
@@ -803,7 +803,7 @@ void MODULE::Add3DModel( MODULE_3D_SETTINGS* a3DModel )
 SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T        stype;
-    SEARCH_RESULT  result = SEARCH_CONTINUE;
+    SEARCH_RESULT  result = SEARCH_RESULT::CONTINUE;
     const KICAD_T* p    = scanTypes;
     bool           done = false;
 
@@ -835,12 +835,12 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
         case PCB_MODULE_TEXT_T:
             result = inspector( m_Reference, testData );
 
-            if( result == SEARCH_QUIT )
+            if( result == SEARCH_RESULT::QUIT )
                 break;
 
             result = inspector( m_Value, testData );
 
-            if( result == SEARCH_QUIT )
+            if( result == SEARCH_RESULT::QUIT )
                 break;
 
         // m_Drawings can hold TYPETEXTMODULE also, so fall thru
@@ -871,7 +871,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
             break;
         }
 
-        if( result == SEARCH_QUIT )
+        if( result == SEARCH_RESULT::QUIT )
             break;
     }
 

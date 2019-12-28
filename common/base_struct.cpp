@@ -136,11 +136,11 @@ SEARCH_RESULT EDA_ITEM::Visit( INSPECTOR inspector, void* testData, const KICAD_
 
     if( IsType( scanTypes ) )
     {
-        if( SEARCH_QUIT == inspector( this, testData ) )
-            return SEARCH_QUIT;
+        if( SEARCH_RESULT::QUIT == inspector( this, testData ) )
+            return SEARCH_RESULT::QUIT;
     }
 
-    return SEARCH_CONTINUE;
+    return SEARCH_RESULT::CONTINUE;
 }
 
 

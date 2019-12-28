@@ -722,7 +722,7 @@ void DRC::testDrilledHoles()
     for( TRACK* track : m_pcb->Tracks() )
     {
         VIA* via = dynamic_cast<VIA*>( track );
-        if( via && via->GetViaType() == VIA_THROUGH )
+        if( via && via->GetViaType() == VIATYPE::THROUGH )
         {
             hole.m_location = via->GetPosition();
             hole.m_drillRadius = via->GetDrillValue() / 2;

@@ -50,14 +50,14 @@ public:
     VIA() :
         ITEM( VIA_T )
     {
-        m_diameter = 2;     // Dummy value
-        m_drill = 0;
-        m_viaType = VIA_THROUGH;
+        m_diameter = 2; // Dummy value
+        m_drill    = 0;
+        m_viaType  = VIATYPE::THROUGH;
     }
 
-    VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers,
-             int aDiameter, int aDrill, int aNet = -1, VIATYPE_T aViaType = VIA_THROUGH ) :
-        ITEM( VIA_T )
+    VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill, int aNet = -1,
+            VIATYPE aViaType = VIATYPE::THROUGH )
+            : ITEM( VIA_T )
     {
         SetNet( aNet );
         SetLayers( aLayers );
@@ -68,7 +68,7 @@ public:
         m_viaType = aViaType;
 
         //If we're a through-board via, use all layers regardless of the set passed
-        if( aViaType == VIA_THROUGH )
+        if( aViaType == VIATYPE::THROUGH )
         {
             LAYER_RANGE allLayers( 0, MAX_CU_LAYERS - 1 );
             SetLayers( allLayers );
@@ -107,12 +107,12 @@ public:
         m_shape.SetCenter( aPos );
     }
 
-    VIATYPE_T ViaType() const
+    VIATYPE ViaType() const
     {
         return m_viaType;
     }
 
-    void SetViaType( VIATYPE_T aViaType )
+    void SetViaType( VIATYPE aViaType )
     {
         m_viaType = aViaType;
     }
@@ -168,11 +168,11 @@ public:
     const VIA_HANDLE MakeHandle() const;
 
 private:
-    int m_diameter;
-    int m_drill;
-    VECTOR2I m_pos;
+    int          m_diameter;
+    int          m_drill;
+    VECTOR2I     m_pos;
     SHAPE_CIRCLE m_shape;
-    VIATYPE_T m_viaType;
+    VIATYPE      m_viaType;
 };
 
 }

@@ -528,7 +528,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
             int new_width;
             int new_drill;
 
-            if( via->GetViaType() == VIA_MICROVIA )
+            if( via->GetViaType() == VIATYPE::MICROVIA )
             {
                 auto net = via->GetNet();
 

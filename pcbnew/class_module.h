@@ -126,7 +126,7 @@ public:
     }
 
     ///> @copydoc BOARD_ITEM_CONTAINER::Add()
-    void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_INSERT ) override;
+    void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT ) override;
 
     ///> @copydoc BOARD_ITEM_CONTAINER::Remove()
     void Remove( BOARD_ITEM* aItem ) override;
@@ -243,8 +243,15 @@ public:
     double GetLocalSolderPasteMarginRatio() const { return m_LocalSolderPasteMarginRatio; }
     void SetLocalSolderPasteMarginRatio( double aRatio ) { m_LocalSolderPasteMarginRatio = aRatio; }
 
-    void SetZoneConnection( ZoneConnection aType ) { m_ZoneConnection = aType; }
-    ZoneConnection GetZoneConnection() const { return m_ZoneConnection; }
+    void SetZoneConnection( ZONE_CONNECTION aType )
+    {
+        m_ZoneConnection = aType;
+    }
+
+    ZONE_CONNECTION GetZoneConnection() const
+    {
+        return m_ZoneConnection;
+    }
 
     void SetThermalWidth( int aWidth ) { m_ThermalWidth = aWidth; }
     int GetThermalWidth() const { return m_ThermalWidth; }
@@ -692,7 +699,7 @@ private:
     int            m_ModuleStatus;      // For autoplace: flags (LOCKED, AUTOPLACED)
     EDA_RECT       m_BoundaryBox;       // Bounding box : coordinates on board, real orientation.
 
-    ZoneConnection m_ZoneConnection;
+    ZONE_CONNECTION m_ZoneConnection;
     int            m_ThermalWidth;
     int            m_ThermalGap;
     int            m_LocalClearance;

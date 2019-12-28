@@ -106,7 +106,7 @@ void PCB_TEXT::AddToBoard()
     m_name.textRotation = m_rotation;
 
     TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
-    m_board->Add( pcbtxt, ADD_APPEND );
+    m_board->Add( pcbtxt, ADD_MODE::APPEND );
 
     pcbtxt->SetText( m_name.text );
 

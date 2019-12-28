@@ -520,9 +520,17 @@ public:
     */
     wxSize GetSolderPasteMargin() const;
 
-    void SetZoneConnection( ZoneConnection aType ) { m_ZoneConnection = aType; }
-    ZoneConnection GetZoneConnection() const;
-    ZoneConnection GetLocalZoneConnection() const { return m_ZoneConnection; }
+    void SetZoneConnection( ZONE_CONNECTION aType )
+    {
+        m_ZoneConnection = aType;
+    }
+
+    ZONE_CONNECTION GetZoneConnection() const;
+
+    ZONE_CONNECTION GetLocalZoneConnection() const
+    {
+        return m_ZoneConnection;
+    }
 
     void SetThermalWidth( int aWidth ) { m_ThermalWidth = aWidth; }
     int GetThermalWidth() const;
@@ -930,7 +938,7 @@ private:    // Private variable members:
     double      m_LocalSolderPasteMarginRatio;  ///< Local solder mask margin ratio value of pad size
                                                 ///< The final margin is the sum of these 2 values
     /// how the connection to zone is made: no connection, thermal relief ...
-    ZoneConnection m_ZoneConnection;
+    ZONE_CONNECTION m_ZoneConnection;
 
     int         m_ThermalWidth;
     int         m_ThermalGap;

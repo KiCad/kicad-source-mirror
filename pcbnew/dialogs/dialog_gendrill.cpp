@@ -183,15 +183,15 @@ void DIALOG_GENDRILL::InitDisplayParams()
         {
             switch( via->GetViaType() )
             {
-            case VIA_THROUGH:
+            case VIATYPE::THROUGH:
                 m_throughViasCount++;
                 break;
 
-            case VIA_MICROVIA:
+            case VIATYPE::MICROVIA:
                 m_microViasCount++;
                 break;
 
-            case VIA_BLIND_BURIED:
+            case VIATYPE::BLIND_BURIED:
                 m_blindOrBuriedViasCount++;
                 break;
 
@@ -370,10 +370,10 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
     m_pcbEditFrame->ClearMsgPanel();
     WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
 
-    const PlotFormat filefmt[6] =
-    {   // Keep these format ids in the same order than m_Choice_Drill_Map choices
-        PLOT_FORMAT_HPGL, PLOT_FORMAT_POST, PLOT_FORMAT_GERBER,
-        PLOT_FORMAT_DXF, PLOT_FORMAT_SVG, PLOT_FORMAT_PDF
+    const PLOT_FORMAT filefmt[6] = {
+        // Keep these format ids in the same order than m_Choice_Drill_Map choices
+        PLOT_FORMAT::HPGL, PLOT_FORMAT::POST, PLOT_FORMAT::GERBER, PLOT_FORMAT::DXF,
+        PLOT_FORMAT::SVG, PLOT_FORMAT::PDF
     };
 
     unsigned choice = (unsigned) m_Choice_Drill_Map->GetSelection();

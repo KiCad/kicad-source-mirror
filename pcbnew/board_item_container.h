@@ -30,7 +30,11 @@
 #include <class_board_item.h>
 #include <zone_settings.h>
 
-enum ADD_MODE { ADD_INSERT, ADD_APPEND };
+enum class ADD_MODE
+{
+    INSERT,
+    APPEND
+};
 
 /**
  * @brief Abstract interface for BOARD_ITEMs capable of storing other items inside.
@@ -49,7 +53,7 @@ public:
      * @brief Adds an item to the container.
      * @param aMode decides whether the item is added in the beginning or at the end of the list.
      */
-    virtual void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_INSERT ) = 0;
+    virtual void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT ) = 0;
 
     /**
      * @brief Removes an item from the container.

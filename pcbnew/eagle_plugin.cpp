@@ -503,7 +503,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 if( width <= 0 )
                     width = m_board->GetDesignSettings().GetLineThickness( layer );
 
-                m_board->Add( dseg, ADD_APPEND );
+                m_board->Add( dseg, ADD_MODE::APPEND );
 
                 if( !w.curve )
                 {
@@ -537,7 +537,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             if( layer != UNDEFINED_LAYER )
             {
                 TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
-                m_board->Add( pcbtxt, ADD_APPEND );
+                m_board->Add( pcbtxt, ADD_MODE::APPEND );
 
                 pcbtxt->SetLayer( layer );
                 pcbtxt->SetTimeStamp( EagleTimeStamp( gr ) );
@@ -645,7 +645,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             if( layer != UNDEFINED_LAYER )       // unsupported layer
             {
                 DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
-                m_board->Add( dseg, ADD_APPEND );
+                m_board->Add( dseg, ADD_MODE::APPEND );
 
                 int width = c.width.ToPcbUnits();
                 int radius = c.radius.ToPcbUnits();
@@ -679,7 +679,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             {
                 // use a "netcode = 0" type ZONE:
                 ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
-                m_board->Add( zone, ADD_APPEND );
+                m_board->Add( zone, ADD_MODE::APPEND );
 
                 zone->SetTimeStamp( EagleTimeStamp( gr ) );
                 zone->SetLayer( layer );
@@ -711,7 +711,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             // Use m_hole_count to gen up a unique name.
 
             MODULE* module = new MODULE( m_board );
-            m_board->Add( module, ADD_APPEND );
+            m_board->Add( module, ADD_MODE::APPEND );
             module->SetReference( wxString::Format( "@HOLE%d", m_hole_count++ ) );
             module->Reference().SetVisible( false );
 
@@ -738,7 +738,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             {
                 const BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
                 DIMENSION* dimension = new DIMENSION( m_board );
-                m_board->Add( dimension, ADD_APPEND );
+                m_board->Add( dimension, ADD_MODE::APPEND );
 
                 if( d.dimensionType )
                 {
@@ -919,7 +919,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
         // copy constructor to clone the template
         MODULE* m = new MODULE( *mi->second );
-        m_board->Add( m, ADD_APPEND );
+        m_board->Add( m, ADD_MODE::APPEND );
 
         // update the nets within the pads of the clone
         for( auto pad : m->Pads() )
@@ -1127,7 +1127,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     // use a "netcode = 0" type ZONE:
     zone = new ZONE_CONTAINER( m_board );
     zone->SetTimeStamp( EagleTimeStamp( aPolyNode ) );
-    m_board->Add( zone, ADD_APPEND );
+    m_board->Add( zone, ADD_MODE::APPEND );
 
     if( p.layer == EAGLE_LAYER::TRESTRICT )         // front layer keepout
         zone->SetLayer( F_Cu );
@@ -1239,7 +1239,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 
     // missing == yes per DTD.
     bool thermals = !p.thermals || *p.thermals;
-    zone->SetPadConnection( thermals ? PAD_ZONE_CONN_THERMAL : PAD_ZONE_CONN_FULL );
+    zone->SetPadConnection( thermals ? ZONE_CONNECTION::THERMAL : ZONE_CONNECTION::FULL );
 
     if( thermals )
     {
@@ -2035,7 +2035,7 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, D_PAD* aPad ) cons
 
     // Solid connection to copper zones
     if( aEaglePad.thermals && !*aEaglePad.thermals )
-        aPad->SetZoneConnection( PAD_ZONE_CONN_FULL );
+        aPad->SetZoneConnection( ZONE_CONNECTION::FULL );
 
     MODULE* module = aPad->GetParent();
     wxCHECK( module, /* void */ );
@@ -2216,11 +2216,11 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         m_min_via_hole = drillz;
 
                     if( layer_front_most == F_Cu && layer_back_most == B_Cu )
-                        via->SetViaType( VIA_THROUGH );
+                        via->SetViaType( VIATYPE::THROUGH );
                     else if( layer_front_most == F_Cu || layer_back_most == B_Cu )
-                        via->SetViaType( VIA_MICROVIA );
+                        via->SetViaType( VIATYPE::MICROVIA );
                     else
-                        via->SetViaType( VIA_BLIND_BURIED );
+                        via->SetViaType( VIATYPE::BLIND_BURIED );
 
                     via->SetTimeStamp( EagleTimeStamp( netItem ) );
 

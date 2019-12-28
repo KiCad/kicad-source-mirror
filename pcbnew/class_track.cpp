@@ -71,10 +71,9 @@ EDA_ITEM* TRACK::Clone() const
 }
 
 
-VIA::VIA( BOARD_ITEM* aParent ) :
-    TRACK( aParent, PCB_VIA_T )
+VIA::VIA( BOARD_ITEM* aParent ) : TRACK( aParent, PCB_VIA_T )
 {
-    SetViaType( VIA_THROUGH );
+    SetViaType( VIATYPE::THROUGH );
     m_BottomLayer = B_Cu;
     SetDrillDefault();
 }
@@ -89,14 +88,14 @@ EDA_ITEM* VIA::Clone() const
 wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     wxString format;
-    BOARD* board = GetBoard();
+    BOARD*   board = GetBoard();
 
     switch( GetViaType() )
     {
-    case VIA_BLIND_BURIED:
+    case VIATYPE::BLIND_BURIED:
         format = _( "Blind/Buried Via %s %s on %s - %s" );
         break;
-    case VIA_MICROVIA:
+    case VIATYPE::MICROVIA:
         format = _( "Micro Via %s %s on %s - %s" );
         break;
     // else say nothing about normal (through) vias
@@ -111,20 +110,13 @@ wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
         PCB_LAYER_ID topLayer;
         PCB_LAYER_ID botLayer;
         LayerPair( &topLayer, &botLayer );
-        return wxString::Format( format.GetData(),
-                                 MessageTextFromValue( aUnits, m_Width ),
-                                 GetNetnameMsg(),
-                                 board->GetLayerName( topLayer ),
-                                 board->GetLayerName( botLayer ) );
-
+        return wxString::Format( format.GetData(), MessageTextFromValue( aUnits, m_Width ),
+                GetNetnameMsg(), board->GetLayerName( topLayer ), board->GetLayerName( botLayer ) );
     }
     else
     {
-        return wxString::Format( format.GetData(),
-                                 MessageTextFromValue( aUnits, m_Width ),
-                                 GetNetnameMsg(),
-                                 wxT( "??" ),
-                                 wxT( "??" ) );
+        return wxString::Format( format.GetData(), MessageTextFromValue( aUnits, m_Width ),
+                GetNetnameMsg(), wxT( "??" ), wxT( "??" ) );
     }
 }
 
@@ -145,13 +137,13 @@ int TRACK::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 
 int VIA::GetDrillValue() const
 {
-    if( m_Drill > 0 )      // Use the specific value.
+    if( m_Drill > 0 ) // Use the specific value.
         return m_Drill;
 
     // Use the default value from the Netclass
     NETCLASSPTR netclass = GetNetClass();
 
-    if( GetViaType() == VIA_MICROVIA )
+    if( GetViaType() == VIATYPE::MICROVIA )
         return netclass->GetuViaDrill();
 
     return netclass->GetViaDrill();
@@ -264,13 +256,13 @@ void VIA::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         m_End.y   = aCentre.y - ( m_End.y - aCentre.y );
     }
 
-    if( GetViaType() != VIA_THROUGH )
+    if( GetViaType() != VIATYPE::THROUGH )
     {
-        int copperLayerCount = GetBoard()->GetCopperLayerCount();
+        int          copperLayerCount = GetBoard()->GetCopperLayerCount();
         PCB_LAYER_ID top_layer;
         PCB_LAYER_ID bottom_layer;
         LayerPair( &top_layer, &bottom_layer );
-        top_layer = FlipLayer( top_layer, copperLayerCount );
+        top_layer    = FlipLayer( top_layer, copperLayerCount );
         bottom_layer = FlipLayer( bottom_layer, copperLayerCount );
         SetLayerPair( top_layer, bottom_layer );
     }
@@ -285,11 +277,11 @@ SEARCH_RESULT TRACK::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
     // If caller wants to inspect my type
     if( stype == Type() )
     {
-        if( SEARCH_QUIT == inspector( this, testData ) )
-            return SEARCH_QUIT;
+        if( SEARCH_RESULT::QUIT == inspector( this, testData ) )
+            return SEARCH_RESULT::QUIT;
     }
 
-    return SEARCH_CONTINUE;
+    return SEARCH_RESULT::CONTINUE;
 }
 
 
@@ -310,7 +302,7 @@ bool VIA::IsOnLayer( PCB_LAYER_ID layer_number ) const
 
 LSET VIA::GetLayerSet() const
 {
-    if( GetViaType() == VIA_THROUGH )
+    if( GetViaType() == VIATYPE::THROUGH )
         return LSET::AllCuMask();
 
     // VIA_BLIND_BURIED or VIA_MICRVIA:
@@ -320,7 +312,7 @@ LSET VIA::GetLayerSet() const
     wxASSERT( m_Layer <= m_BottomLayer );
 
     // PCB_LAYER_IDs are numbered from front to back, this is top to bottom.
-    for( LAYER_NUM id = m_Layer;  id <= m_BottomLayer;  ++id )
+    for( LAYER_NUM id = m_Layer; id <= m_BottomLayer; ++id )
     {
         layermask.set( id );
     }
@@ -355,7 +347,7 @@ void VIA::LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) const
     PCB_LAYER_ID t_layer = F_Cu;
     PCB_LAYER_ID b_layer = B_Cu;
 
-    if( GetViaType() != VIA_THROUGH )
+    if( GetViaType() != VIATYPE::THROUGH )
     {
         b_layer = m_BottomLayer;
         t_layer = m_Layer;
@@ -386,9 +378,9 @@ PCB_LAYER_ID VIA::BottomLayer() const
 
 void VIA::SanitizeLayers()
 {
-    if( GetViaType() == VIA_THROUGH )
+    if( GetViaType() == VIATYPE::THROUGH )
     {
-        m_Layer    = F_Cu;
+        m_Layer       = F_Cu;
         m_BottomLayer = B_Cu;
     }
 
@@ -527,18 +519,19 @@ const BOX2I TRACK::ViewBBox() const
 
 void VIA::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
-    int                  radius;
-    int                  fillvia = 0;
-    PCB_SCREEN*          screen = aFrame->GetScreen();
-    auto&                displ_opts = aFrame->GetDisplayOptions();
-    BOARD*               brd =  GetBoard();
-    COLOR4D              color = aFrame->Settings().Colors().GetItemColor( LAYER_VIAS + GetViaType() );
+    int         radius;
+    int         fillvia    = 0;
+    PCB_SCREEN* screen     = aFrame->GetScreen();
+    auto&       displ_opts = aFrame->GetDisplayOptions();
+    BOARD*      brd        = GetBoard();
+    COLOR4D     color      = aFrame->Settings().Colors().GetItemColor(
+            LAYER_VIAS + static_cast<int>( GetViaType() ) );
 
     if( displ_opts.m_DisplayViaFill == FILLED )
         fillvia = 1;
 
-    if( !brd->IsElementVisible( LAYER_VIAS + GetViaType() ) )
-       return;
+    if( !brd->IsElementVisible( LAYER_VIAS + static_cast<int>( GetViaType() ) ) )
+        return;
 
     // Only draw the via if at least one of the layers it crosses is being displayed
     if( !( brd->GetVisibleLayers() & GetLayerSet() ).any() )
@@ -612,7 +605,7 @@ void VIA::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 
     // for Micro Vias, draw a partial cross : X on component layer, or + on copper layer
     // (so we can see 2 superimposed microvias ):
-    if( GetViaType() == VIA_MICROVIA )
+    if( GetViaType() == VIATYPE::MICROVIA )
     {
         int ax, ay, bx, by;
 
@@ -642,7 +635,7 @@ void VIA::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 
     // for Buried Vias, draw a partial line : orient depending on layer pair
     // (so we can see superimposed buried vias ):
-    if( GetViaType() == VIA_BLIND_BURIED )
+    if( GetViaType() == VIATYPE::BLIND_BURIED )
     {
         int ax = 0, ay = radius, bx = 0, by = drill_radius;
         PCB_LAYER_ID layer_top, layer_bottom;
@@ -703,18 +696,18 @@ void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
     // Just show it on common via & via holes layers
     switch( GetViaType() )
     {
-    case VIA_THROUGH:
+    case VIATYPE::THROUGH:
         aLayers[2] = LAYER_VIA_THROUGH;
         break;
 
-    case VIA_BLIND_BURIED:
+    case VIATYPE::BLIND_BURIED:
         aLayers[2] = LAYER_VIA_BBLIND;
         aLayers[3] = m_Layer;
         aLayers[4] = m_BottomLayer;
         aCount += 2;
         break;
 
-    case VIA_MICROVIA:
+    case VIATYPE::MICROVIA:
         aLayers[2] = LAYER_VIA_MICROVIA;
         break;
 
@@ -743,19 +736,19 @@ unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     {
         switch( m_ViaType )
         {
-        case VIA_THROUGH:
+        case VIATYPE::THROUGH:
             if( !aView->IsLayerVisible( LAYER_VIA_THROUGH ) )
                 return HIDE;
 
             break;
 
-        case VIA_BLIND_BURIED:
+        case VIATYPE::BLIND_BURIED:
             if( !aView->IsLayerVisible( LAYER_VIA_BBLIND ) )
                 return HIDE;
 
             break;
 
-        case VIA_MICROVIA:
+        case VIATYPE::MICROVIA:
             if( !aView->IsLayerVisible( LAYER_VIA_MICROVIA ) )
                 return HIDE;
 
@@ -920,22 +913,22 @@ void VIA::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aL
     switch( GetViaType() )
     {
     default:
-    case VIA_NOT_DEFINED:
-        msg =  wxT( "???" ); // Not used yet, does not exist currently
+    case VIATYPE::NOT_DEFINED:
+        msg = wxT( "???" ); // Not used yet, does not exist currently
         break;
 
-    case VIA_MICROVIA:
+    case VIATYPE::MICROVIA:
         msg = _( "Micro Via" ); // from external layer (TOP or BOTTOM) from
-                                    // the near neighbor inner layer only
+                                // the near neighbor inner layer only
         break;
 
-    case VIA_BLIND_BURIED:
-        msg = _( "Blind/Buried Via" );  // from inner or external to inner
-                                            // or external layer (no restriction)
+    case VIATYPE::BLIND_BURIED:
+        msg = _( "Blind/Buried Via" ); // from inner or external to inner
+                                       // or external layer (no restriction)
         break;
 
-    case VIA_THROUGH:
-        msg =  _( "Through Via" );  // Usual via (from TOP to BOTTOM layer only )
+    case VIATYPE::THROUGH:
+        msg = _( "Through Via" ); // Usual via (from TOP to BOTTOM layer only )
         break;
     }
 
@@ -978,7 +971,7 @@ void VIA::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aL
 
         if( net )
         {
-            if( GetViaType() == VIA_MICROVIA )
+            if( GetViaType() == VIATYPE::MICROVIA )
                 drill_class_value = net->GetMicroViaDrillSize();
             else
                 drill_class_value = net->GetViaDrillSize();

@@ -137,7 +137,7 @@ int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
             VIA*         via = (VIA*) segm;
             PCB_LAYER_ID top_layer, bottom_layer;
 
-            if( via->GetViaType() == VIA_THROUGH )
+            if( via->GetViaType() == VIATYPE::THROUGH )
                 continue;
 
             via->LayerPair( &top_layer, &bottom_layer );
