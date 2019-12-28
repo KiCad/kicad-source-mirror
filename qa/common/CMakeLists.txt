@@ -77,16 +77,25 @@ set( common_libs
 add_executable( qa_common_gerbview ${common_srcs} )
 target_link_libraries( qa_common_gerbview ${common_libs} )
 target_compile_definitions( qa_common_gerbview PRIVATE GERBVIEW )
+target_include_directories( qa_common_gerbview PRIVATE
+    $<TARGET_PROPERTY:libcontext,INTERFACE_INCLUDE_DIRECTORIES>
+)
 
 # Use code with PCBNEW defines in place
 add_executable( qa_common_pcbnew ${common_srcs} )
 target_link_libraries( qa_common_pcbnew  ${common_libs} )
 target_compile_definitions( qa_common_pcbnew PRIVATE PCBNEW )
+target_include_directories( qa_common_pcbnew PRIVATE
+    $<TARGET_PROPERTY:libcontext,INTERFACE_INCLUDE_DIRECTORIES>
+)
 
 # Use code with EESCHEMA defines in place
 add_executable( qa_common_eeschema ${common_srcs} )
 target_link_libraries( qa_common_eeschema  ${common_libs} )
 target_compile_definitions( qa_common_eeschema PRIVATE EESCHEMA )
+target_include_directories( qa_common_eeschema PRIVATE
+    $<TARGET_PROPERTY:libcontext,INTERFACE_INCLUDE_DIRECTORIES>
+)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}

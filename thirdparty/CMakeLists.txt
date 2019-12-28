@@ -23,6 +23,8 @@
 
 
 add_subdirectory( dxflib_qcad )
+add_subdirectory( libcontext )
 add_subdirectory( markdown2html )
 add_subdirectory( nanosvg )
 add_subdirectory( tinyspline_lib )
+add_subdirectory( potrace )

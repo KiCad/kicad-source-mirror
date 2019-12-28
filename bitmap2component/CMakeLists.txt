@@ -6,10 +6,7 @@ endif()
 add_definitions( -DBITMAP_2_CMP )
 
 include_directories( BEFORE ${INC_BEFORE} )
-include_directories(
-    ../potrace
-    ${INC_AFTER}
-    )
+include_directories( ${INC_AFTER} )
 
 set( BITMAP2COMPONENT_SRCS
     ../common/single_top.cpp

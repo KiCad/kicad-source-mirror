@@ -12,13 +12,14 @@ You are free to use the *sources* under the terms of their respective licenses.
 Licensed under AGPLv3 (or later):
 - TTL [https://www.sintef.no/projectweb/geometry-toolkits/ttl/], sources in include/ttl/*
 Licensed under BOOSTv1:
-- libcontext [https://github.com/boostorg/context], sources in common/system/libcontext.cpp
+- libcontext [https://github.com/boostorg/context] in thirdparty/libcontext
 Licensed under ISC:
 - portions of code in include/geometry/polygon_triangulation.h
 Licensed under MIT:
 - tinyspline_lib in thirdparty/tinyspline_lib
 Licensed under GPLv2 (or later):
 - dxflib in thirdparty/dxflib_qcad
+- potrace in thirdparty/potrace
 Licensed under ZLib:
 - nanosvg in thirdparty/nanosvg
 Licensed under CC-BY-SA-4.0:

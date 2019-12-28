@@ -59,4 +59,8 @@ target_compile_definitions( qa_common_tools
     PRIVATE PCBNEW
 )
 
+target_include_directories( qa_common_tools PRIVATE
+    $<TARGET_PROPERTY:libcontext,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
 kicad_add_utils_executable( qa_common_tools )
