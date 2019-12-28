@@ -76,6 +76,8 @@ dielectric_constraints
 dimension
 diff_pair_width
 diff_pair_gap
+dimension_precision
+dimension_units
 drawings
 drill
 edge
