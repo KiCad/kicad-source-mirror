@@ -634,6 +634,9 @@ void PCB_IO::formatDefaults( const BOARD_DESIGN_SETTINGS& aSettings, int aNestLe
                   aSettings.m_TextItalic[ LAYER_CLASS_OTHERS ] ? " italic" : "",
                   aSettings.m_TextUpright[ LAYER_CLASS_OTHERS ] ? " keep_upright" : "" );
 
+    m_out->Print( aNestLevel+1, "(dimension_units %d)\n", aSettings.m_DimensionUnits );
+    m_out->Print( aNestLevel+1, "(dimension_precision %d)\n", aSettings.m_DimensionPrecision );
+
     m_out->Print( aNestLevel, ")\n" );
 }
 

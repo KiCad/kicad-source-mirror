@@ -1725,6 +1725,16 @@ void PCB_PARSER::parseDefaults( BOARD_DESIGN_SETTINGS& designSettings )
             parseDefaultTextDims( designSettings, LAYER_CLASS_OTHERS );
             break;
 
+        case T_dimension_units:
+            designSettings.m_DimensionUnits = parseInt( "dimension units" );
+            NeedRIGHT();
+            break;
+
+        case T_dimension_precision:
+            designSettings.m_DimensionPrecision = parseInt( "dimension precision" );
+            NeedRIGHT();
+            break;
+
         default:
             Unexpected( CurText() );
         }
