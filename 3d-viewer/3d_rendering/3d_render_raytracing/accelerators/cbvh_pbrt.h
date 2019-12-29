@@ -98,12 +98,12 @@ struct LinearBVHNode
 };
 
 
-enum SPLITMETHOD
+enum class SPLITMETHOD
 {
-    SPLIT_MIDDLE,
-    SPLIT_EQUALCOUNTS,
-    SPLIT_SAH,
-    SPLIT_HLBVH
+    MIDDLE,
+    EQUALCOUNTS,
+    SAH,
+    HLBVH
 };
 
 
@@ -113,7 +113,7 @@ class  CBVH_PBRT : public CGENERICACCELERATOR
 public:
     CBVH_PBRT( const CGENERICCONTAINER &aObjectContainer,
                int aMaxPrimsInNode = 4,
-               SPLITMETHOD aSplitMethod = SPLIT_SAH );
+               SPLITMETHOD aSplitMethod = SPLITMETHOD::SAH );
 
     ~CBVH_PBRT();
 
