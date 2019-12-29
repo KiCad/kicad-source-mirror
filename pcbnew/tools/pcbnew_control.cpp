@@ -327,19 +327,21 @@ int PCBNEW_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_FRAME* editFrame = m_frame;
+    BOARD*          brd        = board();
     LAYER_NUM layer = editFrame->GetActiveLayer();
+    LAYER_NUM       startLayer = layer;
 
     if( layer < F_Cu || layer > B_Cu )
         return 0;
 
-    int layerCount = board()->GetCopperLayerCount();
+    while( startLayer != ++layer )
+    {
+        if( brd->IsLayerVisible( static_cast<PCB_LAYER_ID>( layer ) ) && IsCopperLayer( layer ) )
+            break;
 
-    if( layer == layerCount - 2 || layerCount < 2 )
-        layer = B_Cu;
-    else if( layer == B_Cu )
-        layer = F_Cu;
-    else
-        ++layer;
+        if( layer >= B_Cu )
+            layer = F_Cu - 1;
+    }
 
     wxCHECK( IsCopperLayer( layer ), 0 );
     editFrame->SwitchLayer( NULL, ToLAYER_ID( layer ) );
@@ -351,19 +353,22 @@ int PCBNEW_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
 int PCBNEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_FRAME* editFrame = m_frame;
+    BOARD*          brd        = board();
     LAYER_NUM layer = editFrame->GetActiveLayer();
+    LAYER_NUM       startLayer = layer;
 
     if( layer < F_Cu || layer > B_Cu )
         return 0;
 
-    int layerCount = board()->GetCopperLayerCount();
+    while( startLayer != --layer )
+    {
+        if( brd->IsLayerVisible( static_cast<PCB_LAYER_ID>( layer ) ) && IsCopperLayer( layer ) )
+            break;
 
-    if( layer == F_Cu || layerCount < 2 )
-        layer = B_Cu;
-    else if( layer == B_Cu )
-        layer = layerCount - 2;
-    else
-        --layer;
+        if( layer <= F_Cu )
+            layer = B_Cu + 1;
+    }
+
 
     wxCHECK( IsCopperLayer( layer ), 0 );
     editFrame->SwitchLayer( NULL, ToLAYER_ID( layer ) );
