@@ -114,7 +114,7 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel,
                             transparency = a3DModel.m_Materials[mesh.m_MaterialIdx].m_Transparency;
 
                         if( (transparency > FLT_EPSILON) &&
-                            (aMaterialMode ==  MATERIAL_MODE_NORMAL) )
+                            (aMaterialMode ==  MATERIAL_MODE::NORMAL) )
                         {
                             // Create a new array of RGBA colors
                             pColorRGBA = new SFVEC4F[mesh.m_VertexSize];
@@ -131,12 +131,12 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel,
                         {
                             switch( aMaterialMode )
                             {
-                            case MATERIAL_MODE_NORMAL:
-                            case MATERIAL_MODE_DIFFUSE_ONLY:
+                            case MATERIAL_MODE::NORMAL:
+                            case MATERIAL_MODE::DIFFUSE_ONLY:
                                 // load the original RGB color array
                                 glColorPointer( 3, GL_FLOAT, 0, mesh.m_Color );
                                 break;
-                            case MATERIAL_MODE_CAD_MODE:
+                            case MATERIAL_MODE::CAD_MODE:
                                 // Create a new array of RGBA colors
                                 pColorRGBA = new SFVEC4F[mesh.m_VertexSize];
 
@@ -185,14 +185,14 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel,
                     {
                         switch( aMaterialMode )
                         {
-                        case MATERIAL_MODE_NORMAL:
+                        case MATERIAL_MODE::NORMAL:
                             OGL_SetMaterial( a3DModel.m_Materials[mesh.m_MaterialIdx] );
                             break;
-                        case MATERIAL_MODE_DIFFUSE_ONLY:
+                        case MATERIAL_MODE::DIFFUSE_ONLY:
                             OGL_SetDiffuseOnlyMaterial(
                                         a3DModel.m_Materials[mesh.m_MaterialIdx].m_Diffuse );
                             break;
-                        case MATERIAL_MODE_CAD_MODE:
+                        case MATERIAL_MODE::CAD_MODE:
                             OGL_SetDiffuseOnlyMaterial(
                                         MaterialDiffuseToColorCAD(
                                             a3DModel.m_Materials[mesh.m_MaterialIdx].m_Diffuse ) );

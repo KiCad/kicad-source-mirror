@@ -264,7 +264,7 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
         wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::OnPaint m_reload_is_needed" ) );
 
         m_reload_is_needed = false;
-        m_ogl_3dmodel = new C_OGL_3DMODEL( *m_3d_model, MATERIAL_MODE_NORMAL );
+        m_ogl_3dmodel = new C_OGL_3DMODEL( *m_3d_model, MATERIAL_MODE::NORMAL );
 
         // It convert a model as it was a board, so get the max size dimension of the board
         // and compute the conversion scale

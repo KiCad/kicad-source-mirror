@@ -416,17 +416,17 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         return;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL:
-        m_settings.MaterialModeSet( MATERIAL_MODE_NORMAL );
+        m_settings.MaterialModeSet( MATERIAL_MODE::NORMAL );
         NewDisplay( true );
         return;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY:
-        m_settings.MaterialModeSet( MATERIAL_MODE_DIFFUSE_ONLY );
+        m_settings.MaterialModeSet( MATERIAL_MODE::DIFFUSE_ONLY );
         NewDisplay( true );
         return;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE:
-        m_settings.MaterialModeSet( MATERIAL_MODE_CAD_MODE );
+        m_settings.MaterialModeSet( MATERIAL_MODE::CAD_MODE );
         NewDisplay( true );
         return;
 
@@ -806,8 +806,8 @@ void EDA_3D_VIEWER::LoadSettings( wxConfigBase *aCfg )
                                                                                   "OpenGL" );
     m_settings.RenderEngineSet( static_cast<RENDER_ENGINE>( tmpi ) );
 
-    aCfg->Read( keyRenderMaterial, &tmpi, (int)MATERIAL_MODE_NORMAL );
-    m_settings.MaterialModeSet( (MATERIAL_MODE)tmpi );
+    aCfg->Read( keyRenderMaterial, &tmpi, static_cast<int>( MATERIAL_MODE::NORMAL ) );
+    m_settings.MaterialModeSet( static_cast<MATERIAL_MODE>( tmpi ) );
 }
 
 
@@ -1144,15 +1144,15 @@ void EDA_3D_VIEWER::OnUpdateUIMaterial( wxUpdateUIEvent& aEvent )
     switch( aEvent.GetId() )
     {
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL:
-        aEvent.Check( m_settings.MaterialModeGet() == MATERIAL_MODE_NORMAL );
+        aEvent.Check( m_settings.MaterialModeGet() == MATERIAL_MODE::NORMAL );
         break;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY:
-        aEvent.Check( m_settings.MaterialModeGet() == MATERIAL_MODE_DIFFUSE_ONLY );
+        aEvent.Check( m_settings.MaterialModeGet() == MATERIAL_MODE::DIFFUSE_ONLY );
         break;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE:
-        aEvent.Check( m_settings.MaterialModeGet() == MATERIAL_MODE_CAD_MODE );
+        aEvent.Check( m_settings.MaterialModeGet() == MATERIAL_MODE::CAD_MODE );
         break;
 
     default:

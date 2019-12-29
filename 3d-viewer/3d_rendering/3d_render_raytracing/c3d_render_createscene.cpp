@@ -1332,7 +1332,7 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
                  imat < a3DModel->m_MaterialsSize;
                  ++imat )
             {
-                if( m_settings.MaterialModeGet() == MATERIAL_MODE_NORMAL )
+                if( m_settings.MaterialModeGet() == MATERIAL_MODE::NORMAL )
                 {
                     const SMATERIAL &material = a3DModel->m_Materials[imat];
 
@@ -1511,14 +1511,14 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
                             const SFVEC3F diffuseColor =
                                 a3DModel->m_Materials[mesh.m_MaterialIdx].m_Diffuse;
 
-                            if( m_settings.MaterialModeGet() == MATERIAL_MODE_CAD_MODE )
+                            if( m_settings.MaterialModeGet() == MATERIAL_MODE::CAD_MODE )
                                 newTriangle->SetColor( ConvertSRGBToLinear( MaterialDiffuseToColorCAD( diffuseColor ) ) );
                             else
                                 newTriangle->SetColor( ConvertSRGBToLinear( diffuseColor ) );
                         }
                         else
                         {
-                            if( m_settings.MaterialModeGet() == MATERIAL_MODE_CAD_MODE )
+                            if( m_settings.MaterialModeGet() == MATERIAL_MODE::CAD_MODE )
                                 newTriangle->SetColor( ConvertSRGBToLinear( MaterialDiffuseToColorCAD( mesh.m_Color[idx0] ) ),
                                                        ConvertSRGBToLinear( MaterialDiffuseToColorCAD( mesh.m_Color[idx1] ) ),
                                                        ConvertSRGBToLinear( MaterialDiffuseToColorCAD( mesh.m_Color[idx2] ) ) );

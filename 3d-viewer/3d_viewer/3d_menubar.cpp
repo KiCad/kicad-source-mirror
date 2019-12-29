@@ -128,13 +128,13 @@ void EDA_3D_VIEWER::CreateMenuBar()
         return m_settings.RenderEngineGet() != RENDER_ENGINE::OPENGL_LEGACY;
     };
     auto NormalModeCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_settings.MaterialModeGet() == MATERIAL_MODE_NORMAL;
+        return m_settings.MaterialModeGet() == MATERIAL_MODE::NORMAL;
     };
     auto DiffuseModeCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_settings.MaterialModeGet() == MATERIAL_MODE_DIFFUSE_ONLY;
+        return m_settings.MaterialModeGet() == MATERIAL_MODE::DIFFUSE_ONLY;
     };
     auto CADModeCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_settings.MaterialModeGet() == MATERIAL_MODE_CAD_MODE;
+        return m_settings.MaterialModeGet() == MATERIAL_MODE::CAD_MODE;
     };
     auto copperThicknessCondition = [ this ] ( const SELECTION& aSel ) {
         return m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS );

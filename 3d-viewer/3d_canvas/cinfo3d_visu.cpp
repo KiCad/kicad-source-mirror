@@ -59,7 +59,7 @@ CINFO3D_VISU::CINFO3D_VISU() :
     m_drawFlags.resize( FL_LAST, false );
 
     m_render_engine = RENDER_ENGINE::OPENGL_LEGACY;
-    m_material_mode = MATERIAL_MODE_NORMAL;
+    m_material_mode = MATERIAL_MODE::NORMAL;
 
     m_boardPos = wxPoint();
     m_boardSize = wxSize();

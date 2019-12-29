@@ -87,11 +87,11 @@ enum class RENDER_ENGINE
 
 
 /// Render 3d model shape materials mode
-enum MATERIAL_MODE
+enum class MATERIAL_MODE
 {
-    MATERIAL_MODE_NORMAL,       ///< Use all material properties from model file
-    MATERIAL_MODE_DIFFUSE_ONLY, ///< Use only diffuse material properties
-    MATERIAL_MODE_CAD_MODE      ///< Use a gray shading based on diffuse material
+    NORMAL,       ///< Use all material properties from model file
+    DIFFUSE_ONLY, ///< Use only diffuse material properties
+    CAD_MODE      ///< Use a gray shading based on diffuse material
 };
 
 #endif // _3D_ENUMS_H_
