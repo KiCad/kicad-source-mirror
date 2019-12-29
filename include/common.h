@@ -69,33 +69,6 @@ typedef uint32_t timestamp_t;
 #define TEXT_ANGLE_HORIZ    0
 #define TEXT_ANGLE_VERT     900
 
-//-----<KiROUND KIT>------------------------------------------------------------
-
-/**
- * Round a floating point number to an integer using "round halfway cases away from zero".
- *
- * In Debug build an assert fires if will not fit into the return type.
- */
-template <typename fp_type, typename ret_type = int>
-constexpr ret_type KiROUND( fp_type v )
-{
-    using max_ret = long long int;
-    fp_type ret = v < 0 ? v - 0.5 : v + 0.5;
-
-    if( std::numeric_limits<ret_type>::max() < ret ||
-        std::numeric_limits<ret_type>::lowest() > ret )
-    {
-        wxLogDebug
-        ( "Overflow KiROUND converting value %f to %s", double( v ), typeid(ret_type).name() );
-        return 0;
-    }
-
-    return ret_type( max_ret( ret ) );
-}
-
-//-----</KiROUND KIT>-----------------------------------------------------------
-
-
 enum class EDA_UNITS
 {
     INCHES = 0,

@@ -27,12 +27,11 @@
  * @brief Trigonometric and geometric basic functions.
  */
 
-#include <fctsys.h>
-#include <macros.h>
-#include <trigo.h>
-#include <common.h>
-#include <math_for_graphics.h>
+#include <clamp.h>
 #include <geometry/seg.h>
+#include <kiround.h>
+#include <math_for_graphics.h>
+#include <trigo.h>
 
 // Returns true if the point P is on the segment S.
 // faster than TestSegmentHit() because P should be exactly on S

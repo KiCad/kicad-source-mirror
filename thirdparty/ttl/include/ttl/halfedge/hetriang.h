@@ -52,7 +52,6 @@
 #include <fstream>
 #include <ttl/ttl_util.h>
 #include <memory>
-#include <layers_id_colors_and_visibility.h>
 #include <math/vector2d.h>
 
 class BOARD_CONNECTED_ITEM;

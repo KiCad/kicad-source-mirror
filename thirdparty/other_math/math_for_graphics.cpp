@@ -5,10 +5,11 @@
 #include <cmath>
 #include <float.h>
 #include <limits.h>
-#include <common.h>
 #include <cstdlib>      // for abs function on ints
 #include <algorithm>
 #include <math_for_graphics.h>
+
+#include <kiround.h>
 
 static bool InRange( double x, double xi, double xf );
 

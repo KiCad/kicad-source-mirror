@@ -21,11 +21,13 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
-
+add_subdirectory( clipper )
 add_subdirectory( dxflib_qcad )
 add_subdirectory( libcontext )
 add_subdirectory( markdown2html )
 add_subdirectory( nanosvg )
+add_subdirectory( other_math )
 add_subdirectory( tinyspline_lib )
+add_subdirectory( ttl )
 add_subdirectory( potrace )
 add_subdirectory( nlohmann_json )

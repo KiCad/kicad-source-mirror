@@ -13,6 +13,7 @@ Licensed under AGPLv3 (or later):
 - TTL [https://www.sintef.no/projectweb/geometry-toolkits/ttl/], sources in include/ttl/*
 Licensed under BOOSTv1:
 - libcontext [https://github.com/boostorg/context] in thirdparty/libcontext
+- clipper in thirdparty/clipper
 Licensed under ISC:
 - portions of code in include/geometry/polygon_triangulation.h
 Licensed under MIT:
@@ -22,6 +23,8 @@ Licensed under MIT:
 Licensed under GPLv2 (or later):
 - dxflib in thirdparty/dxflib_qcad
 - potrace in thirdparty/potrace
+- math_for_graphics in thirdparty/other_math
+- SutherlandHodgmanClipPoly in thirdparty/other_math
 Licensed under ZLib:
 - nanosvg in thirdparty/nanosvg
 Licensed under CC-BY-SA-4.0:

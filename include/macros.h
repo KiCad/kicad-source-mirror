@@ -126,27 +126,6 @@ void MIRROR( T& aPoint, const T& aMirrorRef )
 }
 
 
-/**
- * Function Clamp
- * limits @a value within the range @a lower <= @a value <= @a upper.  It will work
- * on temporary expressions, since they are evaluated only once, and it should work
- * on most if not all numeric types, string types, or any type for which "operator < ()"
- * is present. The arguments are accepted in this order so you can remember the
- * expression as a memory aid:
- * <p>
- * result is:  lower <= value <= upper
- */
-template <typename T> inline const T& Clamp( const T& lower, const T& value, const T& upper )
-{
-    wxASSERT( lower <= upper );
-    if( value < lower )
-        return lower;
-    else if( upper < value )
-        return upper;
-    return value;
-}
-
-
 #ifdef SWIG
 /// Declare a std::vector and also the swig %template in unison
 #define DECL_VEC_FOR_SWIG(TypeName, MemberType) namespace std { %template(TypeName) vector<MemberType>; } typedef std::vector<MemberType> TypeName;

@@ -26,12 +26,13 @@
  */
 #include <vector>
 
-#include <fctsys.h>
+//#include <fctsys.h>
 #include <trigo.h>
-#include <macros.h>
-#include <common.h>
+//#include <macros.h>
+//#include <common.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
+#include <kiround.h>
 
 
 void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aBuffer,
