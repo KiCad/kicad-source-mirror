@@ -33,7 +33,8 @@
 #include <wx/string.h>
 
 /// Image operation type
-enum class IMAGE_OP {
+enum class IMAGE_OP
+{
     RAW,
     ADD,
     SUB,
@@ -49,15 +50,17 @@ enum class IMAGE_OP {
 
 
 /// Image wrap type enumeration
-enum class IMAGE_WRAP {
-    ZERO,      ///< Coords that wraps are not evaluated
-    CLAMP,     ///< Coords are clamped to image size
-    WRAP       ///< Coords are wrapped arround
+enum class IMAGE_WRAP
+{
+    ZERO,  ///< Coords that wraps are not evaluated
+    CLAMP, ///< Coords are clamped to image size
+    WRAP   ///< Coords are wrapped arround
 };
 
 
 /// Filter type enumeration
-enum class IMAGE_FILTER {
+enum class IMAGE_FILTER
+{
     HIPASS,
     GAUSSIAN_BLUR,
     GAUSSIAN_BLUR2,
