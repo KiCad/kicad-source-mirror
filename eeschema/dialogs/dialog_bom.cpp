@@ -42,6 +42,7 @@
 #include <html_messagebox.h>
 #include <reporter.h>
 #include <bom_plugins.h>
+#include <i18n_utility.h>   // for _HKI definition used in dialog_bom_help_md.h
 
 #include <dialogs/dialog_bom_cfg_lexer.h>
 
@@ -50,8 +51,8 @@ static constexpr wxChar BOM_TRACE[] = wxT( "BOM_GENERATORS" );
 static constexpr wxChar BOM_GENERATORS_KEY[] = wxT( "bom_plugins" );
 static constexpr wxChar BOM_GENERATOR_SELECTED_KEY[] =  wxT( "bom_plugin_selected" );
 
-static const char* s_bomHelpInfo =
-#include <dialog_bom_help_html.h>
+wxString s_bomHelpInfo =
+#include <dialog_bom_help_md.h>
 ;
 
 using namespace T_BOMCFG_T;     // for the BOM_CFG_PARSER parser and its keywords
@@ -594,8 +595,9 @@ void DIALOG_BOM::OnHelp( wxCommandEvent& event )
     HTML_MESSAGE_BOX help_Dlg( this, _( "Bill of Material Generation Help" ) );
     help_Dlg.SetDialogSizeInDU( 500, 350 );
 
-    wxString msg = FROM_UTF8( s_bomHelpInfo );
-    help_Dlg.m_htmlWindow->AppendToPage( msg );
+    wxString html_txt;
+    ConvertMarkdown2Html( wxGetTranslation( s_bomHelpInfo ), html_txt );
+    help_Dlg.m_htmlWindow->AppendToPage( html_txt );
     help_Dlg.ShowModal();
 }
 
