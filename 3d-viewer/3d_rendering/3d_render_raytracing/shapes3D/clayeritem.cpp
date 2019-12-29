@@ -32,9 +32,8 @@
 #include <wx/debug.h>
 
 
-CLAYERITEM::CLAYERITEM( const COBJECT2D *aObject2D, float aZMin, float aZMax ) :
-    COBJECT( OBJECT3D_TYPE::LAYERITEM ),
-    m_object2d(aObject2D)
+CLAYERITEM::CLAYERITEM( const COBJECT2D* aObject2D, float aZMin, float aZMax )
+        : COBJECT( OBJECT3D_TYPE::LAYERITEM ), m_object2d( aObject2D )
 {
     wxASSERT( aObject2D );
 

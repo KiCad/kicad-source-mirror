@@ -53,9 +53,9 @@ CINFO3D_VISU::CINFO3D_VISU() :
 {
     wxLogTrace( m_logTrace, wxT( "CINFO3D_VISU::CINFO3D_VISU" ) );
 
-    m_board = NULL;
+    m_board            = NULL;
     m_3d_model_manager = NULL;
-    m_3D_grid_type = GRID3D_TYPE::NONE;
+    m_3D_grid_type     = GRID3D_TYPE::NONE;
     m_drawFlags.resize( FL_LAST, false );
 
     m_render_engine = RENDER_ENGINE::OPENGL_LEGACY;
@@ -187,8 +187,7 @@ bool CINFO3D_VISU::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
 
     default:
         // the layer is an internal copper layer, used the visibility
-        if( GetFlag( FL_SHOW_BOARD_BODY ) &&
-            (m_render_engine == RENDER_ENGINE::OPENGL_LEGACY) )
+        if( GetFlag( FL_SHOW_BOARD_BODY ) && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
         {
             // Do not render internal layers if it is overlap with the board
             // (on OpenGL render)
@@ -487,9 +486,9 @@ void CINFO3D_VISU::CameraSetType( CAMERA_TYPE aCameraType )
 {
     switch( aCameraType )
     {
-	case CAMERA_TYPE::TRACKBALL:
+    case CAMERA_TYPE::TRACKBALL:
         m_currentCamera = m_trackBallCamera;
-    break;
+        break;
 
     default:
         wxLogMessage( wxT( "CINFO3D_VISU::CameraSetType() error: unknown camera type %d" ),

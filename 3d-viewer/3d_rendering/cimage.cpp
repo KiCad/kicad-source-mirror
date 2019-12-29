@@ -201,7 +201,7 @@ void CIMAGE::Invert()
 }
 
 
-void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, IMAGE_OP aOperation )
+void CIMAGE::CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOperation )
 {
     int aV, bV;
 
@@ -466,12 +466,12 @@ static const S_FILTER FILTERS[] =   {
 //        do it without use the getpixel function.
 //        Optimization can be done to m_pixels[ix + iy * m_width]
 //        but keep in mind the parallel process of the algorithm
-void CIMAGE::EfxFilter( CIMAGE *aInImg, IMAGE_FILTER aFilterType )
+void CIMAGE::EfxFilter( CIMAGE* aInImg, IMAGE_FILTER aFilterType )
 {
     S_FILTER filter = FILTERS[static_cast<int>( aFilterType )];
 
     aInImg->m_wraping = IMAGE_WRAP::CLAMP;
-    m_wraping = IMAGE_WRAP::CLAMP;
+    m_wraping         = IMAGE_WRAP::CLAMP;
 
     std::atomic<size_t> nextRow( 0 );
     std::atomic<size_t> threadsFinished( 0 );

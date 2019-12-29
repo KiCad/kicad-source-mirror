@@ -109,11 +109,9 @@ enum class SPLITMETHOD
 
 class  CBVH_PBRT : public CGENERICACCELERATOR
 {
-
 public:
-    CBVH_PBRT( const CGENERICCONTAINER &aObjectContainer,
-               int aMaxPrimsInNode = 4,
-               SPLITMETHOD aSplitMethod = SPLITMETHOD::SAH );
+    CBVH_PBRT( const CGENERICCONTAINER& aObjectContainer, int aMaxPrimsInNode = 4,
+            SPLITMETHOD aSplitMethod = SPLITMETHOD::SAH );
 
     ~CBVH_PBRT();
 

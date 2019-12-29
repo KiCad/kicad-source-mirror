@@ -65,7 +65,7 @@ C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( CINFO3D_VISU &aSettings ) :
 
     m_ogl_circle_texture = 0;
     m_ogl_disp_list_grid = 0;
-    m_last_grid_type = GRID3D_TYPE::NONE;
+    m_last_grid_type     = GRID3D_TYPE::NONE;
 
     m_3dmodel_map.clear();
 }

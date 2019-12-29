@@ -166,7 +166,7 @@ public:
      *  IMAGE_OP::MIN        this <- (aImgA < aImgB)?aImgA:aImgB
      *  IMAGE_OP::MAX        this <- (aImgA > aImgB)?aImgA:aImgB
      */
-    void CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, IMAGE_OP aOperation );
+    void CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOperation );
 
     /**
      * Function Invert
@@ -181,7 +181,7 @@ public:
      * @param aInImg input image
      * @param aFilterType filter type to apply
      */
-    void EfxFilter( CIMAGE *aInImg, IMAGE_FILTER aFilterType );
+    void EfxFilter( CIMAGE* aInImg, IMAGE_FILTER aFilterType );
 
     /**
      * Function SaveAsPNG
@@ -226,7 +226,7 @@ private:
     unsigned int    m_width;            ///< width of the image
     unsigned int    m_height;           ///< height of the image
     unsigned int    m_wxh;              ///< width * height precalc value
-    IMAGE_WRAP          m_wraping;          ///< current wrapping type
+    IMAGE_WRAP      m_wraping;          ///< current wrapping type
 };
 
 #endif   // CIMAGE_H

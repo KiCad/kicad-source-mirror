@@ -176,72 +176,61 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
  * @param aZMin
  * @param aZMax
  */
-void C3D_RENDER_RAYTRACING::create_3d_object_from(  CCONTAINER &aDstContainer,
-                                                    const COBJECT2D *aObject2D,
-                                                    float aZMin, float aZMax,
-                                                    const CMATERIAL *aMaterial,
-                                                    const SFVEC3F &aObjColor )
+void C3D_RENDER_RAYTRACING::create_3d_object_from( CCONTAINER& aDstContainer,
+        const COBJECT2D* aObject2D, float aZMin, float aZMax, const CMATERIAL* aMaterial,
+        const SFVEC3F& aObjColor )
 {
     switch( aObject2D->GetObjectType() )
     {
-        case OBJECT2D_TYPE::DUMMYBLOCK:
-        {
-            m_stats_converted_dummy_to_plane++;
+    case OBJECT2D_TYPE::DUMMYBLOCK:
+    {
+        m_stats_converted_dummy_to_plane++;
 #if 1
-            CXYPLANE *objPtr;
-            objPtr = new CXYPLANE( CBBOX ( SFVEC3F( aObject2D->GetBBox().Min().x,
-                                                    aObject2D->GetBBox().Min().y,
-                                                    aZMin ),
-                                           SFVEC3F( aObject2D->GetBBox().Max().x,
-                                                    aObject2D->GetBBox().Max().y,
-                                                    aZMin ) ) );
-            objPtr->SetMaterial( aMaterial );
-            objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
-            aDstContainer.Add( objPtr );
+        CXYPLANE* objPtr;
+        objPtr = new CXYPLANE( CBBOX(
+                SFVEC3F( aObject2D->GetBBox().Min().x, aObject2D->GetBBox().Min().y, aZMin ),
+                SFVEC3F( aObject2D->GetBBox().Max().x, aObject2D->GetBBox().Max().y, aZMin ) ) );
+        objPtr->SetMaterial( aMaterial );
+        objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
+        aDstContainer.Add( objPtr );
 
-            objPtr = new CXYPLANE( CBBOX ( SFVEC3F( aObject2D->GetBBox().Min().x,
-                                                    aObject2D->GetBBox().Min().y,
-                                                    aZMax ),
-                                           SFVEC3F( aObject2D->GetBBox().Max().x,
-                                                    aObject2D->GetBBox().Max().y,
-                                                    aZMax ) ) );
-            objPtr->SetMaterial( aMaterial );
-            objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
-            aDstContainer.Add( objPtr );
+        objPtr = new CXYPLANE( CBBOX(
+                SFVEC3F( aObject2D->GetBBox().Min().x, aObject2D->GetBBox().Min().y, aZMax ),
+                SFVEC3F( aObject2D->GetBBox().Max().x, aObject2D->GetBBox().Max().y, aZMax ) ) );
+        objPtr->SetMaterial( aMaterial );
+        objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
+        aDstContainer.Add( objPtr );
 #else
-            objPtr = new CDUMMYBLOCK( CBBOX ( SFVEC3F( aObject2D->GetBBox().Min().x,
-                                                       aObject2D->GetBBox().Min().y,
-                                                       aZMin ),
-                                              SFVEC3F( aObject2D->GetBBox().Max().x,
-                                                       aObject2D->GetBBox().Max().y,
-                                                       aZMax ) ) );
-            objPtr->SetMaterial( aMaterial );
-            aDstContainer.Add( objPtr );
+        objPtr = new CDUMMYBLOCK( CBBOX(
+                SFVEC3F( aObject2D->GetBBox().Min().x, aObject2D->GetBBox().Min().y, aZMin ),
+                SFVEC3F( aObject2D->GetBBox().Max().x, aObject2D->GetBBox().Max().y, aZMax ) ) );
+        objPtr->SetMaterial( aMaterial );
+        aDstContainer.Add( objPtr );
 #endif
-        }
-        break;
+    }
+    break;
 
-        case OBJECT2D_TYPE::ROUNDSEG:
-        {
-            m_stats_converted_roundsegment2d_to_roundsegment++;
+    case OBJECT2D_TYPE::ROUNDSEG:
+    {
+        m_stats_converted_roundsegment2d_to_roundsegment++;
 
-            const CROUNDSEGMENT2D *aRoundSeg2D = static_cast<const CROUNDSEGMENT2D *>( aObject2D );
-            CROUNDSEG *objPtr = new CROUNDSEG( *aRoundSeg2D, aZMin, aZMax );
-            objPtr->SetMaterial( aMaterial );
-            objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
-            aDstContainer.Add( objPtr );
-        }
-        break;
+        const CROUNDSEGMENT2D* aRoundSeg2D = static_cast<const CROUNDSEGMENT2D*>( aObject2D );
+        CROUNDSEG*             objPtr      = new CROUNDSEG( *aRoundSeg2D, aZMin, aZMax );
+        objPtr->SetMaterial( aMaterial );
+        objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
+        aDstContainer.Add( objPtr );
+    }
+    break;
 
 
-        default:
-        {
-            CLAYERITEM *objPtr = new CLAYERITEM( aObject2D, aZMin, aZMax );
-            objPtr->SetMaterial( aMaterial );
-            objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
-            aDstContainer.Add( objPtr );
-        }
-        break;
+    default:
+    {
+        CLAYERITEM* objPtr = new CLAYERITEM( aObject2D, aZMin, aZMax );
+        objPtr->SetMaterial( aMaterial );
+        objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
+        aDstContainer.Add( objPtr );
+    }
+    break;
     }
 }
 

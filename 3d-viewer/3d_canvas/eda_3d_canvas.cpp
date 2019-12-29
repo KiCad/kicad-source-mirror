@@ -1093,14 +1093,13 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
 
 void EDA_3D_CANVAS::RenderEngineChanged()
 {
-
     switch( m_settings.RenderEngineGet() )
     {
-	case RENDER_ENGINE::OPENGL_LEGACY:
+    case RENDER_ENGINE::OPENGL_LEGACY:
         m_3d_render = m_3d_render_ogl_legacy;
         break;
 
-	case RENDER_ENGINE::RAYTRACING:
+    case RENDER_ENGINE::RAYTRACING:
         m_3d_render = m_3d_render_raytracing;
         break;
 

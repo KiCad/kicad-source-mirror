@@ -31,10 +31,8 @@
 #include "ccylinder.h"
 
 
-CVCYLINDER::CVCYLINDER( SFVEC2F aCenterPoint,
-                        float aZmin,
-                        float aZmax,
-                        float aRadius ) : COBJECT( OBJECT3D_TYPE::CYLINDER )
+CVCYLINDER::CVCYLINDER( SFVEC2F aCenterPoint, float aZmin, float aZmax, float aRadius )
+        : COBJECT( OBJECT3D_TYPE::CYLINDER )
 {
     m_center = aCenterPoint;
     m_radius_squared = aRadius * aRadius;

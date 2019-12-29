@@ -31,12 +31,9 @@
 #include <wx/debug.h>
 
 
-CROUNDSEGMENT2D::CROUNDSEGMENT2D( const SFVEC2F &aStart,
-                                  const SFVEC2F &aEnd,
-                                  float aWidth,
-                                  const BOARD_ITEM &aBoardItem ) :
-    COBJECT2D( OBJECT2D_TYPE::ROUNDSEG, aBoardItem ),
-    m_segment( aStart, aEnd )
+CROUNDSEGMENT2D::CROUNDSEGMENT2D(
+        const SFVEC2F& aStart, const SFVEC2F& aEnd, float aWidth, const BOARD_ITEM& aBoardItem )
+        : COBJECT2D( OBJECT2D_TYPE::ROUNDSEG, aBoardItem ), m_segment( aStart, aEnd )
 {
     wxASSERT( aStart != aEnd );
 

@@ -124,46 +124,46 @@ void EDA_3D_VIEWER::CreateMenuBar()
     //
     CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, tool );
 
-    auto raytracingCondition = [ this ] ( const SELECTION& aSel ) {
+    auto raytracingCondition = [this]( const SELECTION& aSel ) {
         return m_settings.RenderEngineGet() != RENDER_ENGINE::OPENGL_LEGACY;
     };
-    auto NormalModeCondition = [ this ] ( const SELECTION& aSel ) {
+    auto NormalModeCondition = [this]( const SELECTION& aSel ) {
         return m_settings.MaterialModeGet() == MATERIAL_MODE::NORMAL;
     };
-    auto DiffuseModeCondition = [ this ] ( const SELECTION& aSel ) {
+    auto DiffuseModeCondition = [this]( const SELECTION& aSel ) {
         return m_settings.MaterialModeGet() == MATERIAL_MODE::DIFFUSE_ONLY;
     };
-    auto CADModeCondition = [ this ] ( const SELECTION& aSel ) {
+    auto CADModeCondition = [this]( const SELECTION& aSel ) {
         return m_settings.MaterialModeGet() == MATERIAL_MODE::CAD_MODE;
     };
-    auto copperThicknessCondition = [ this ] ( const SELECTION& aSel ) {
+    auto copperThicknessCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS );
     };
-    auto boundingBoxesCondition = [ this ] ( const SELECTION& aSel ) {
+    auto boundingBoxesCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
     };
-    auto renderShadowsCondition = [ this ] ( const SELECTION& aSel ) {
+    auto renderShadowsCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS );
     };
-    auto proceduralTexturesCondition = [ this ] ( const SELECTION& aSel ) {
+    auto proceduralTexturesCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES );
     };
-    auto showFloorCondition = [ this ] ( const SELECTION& aSel ) {
+    auto showFloorCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR );
     };
-    auto useRefractionsCondition = [ this ] ( const SELECTION& aSel ) {
+    auto useRefractionsCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS );
     };
-    auto useReflectionsCondition = [ this ] ( const SELECTION& aSel ) {
+    auto useReflectionsCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS );
     };
-    auto antiAliasingCondition = [ this ] ( const SELECTION& aSel ) {
+    auto antiAliasingCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING );
     };
-    auto postProcessCondition = [ this ] ( const SELECTION& aSel ) {
+    auto postProcessCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING );
     };
-    auto showAxesCondition = [ this ] ( const SELECTION& aSel ) {
+    auto showAxesCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GetFlag( FL_AXIS );
     };
 
@@ -289,19 +289,19 @@ void EDA_3D_VIEWER::CreateMenuBar()
     gridSubmenu->SetTitle( _( "3D Grid" ) );
     gridSubmenu->SetIcon( grid_xpm );
 
-    auto noGridCondition = [ this ] ( const SELECTION& aSel ) {
+    auto noGridCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GridGet() == GRID3D_TYPE::NONE;
     };
-    auto grid10mmCondition = [ this ] ( const SELECTION& aSel ) {
+    auto grid10mmCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GridGet() == GRID3D_TYPE::GRID_10MM;
     };
-    auto grid5mmCondition = [ this ] ( const SELECTION& aSel ) {
+    auto grid5mmCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GridGet() == GRID3D_TYPE::GRID_5MM;
     };
-    auto grid2p5mmCondition = [ this ] ( const SELECTION& aSel ) {
+    auto grid2p5mmCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GridGet() == GRID3D_TYPE::GRID_2P5MM;
     };
-    auto grid_1mmCondition = [ this ] ( const SELECTION& aSel ) {
+    auto grid_1mmCondition = [this]( const SELECTION& aSel ) {
         return m_settings.GridGet() == GRID3D_TYPE::GRID_1MM;
     };
 

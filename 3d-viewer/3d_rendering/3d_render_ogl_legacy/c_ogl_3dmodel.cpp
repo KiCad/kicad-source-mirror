@@ -113,8 +113,8 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel,
                         if( mesh.m_MaterialIdx < a3DModel.m_MaterialsSize )
                             transparency = a3DModel.m_Materials[mesh.m_MaterialIdx].m_Transparency;
 
-                        if( (transparency > FLT_EPSILON) &&
-                            (aMaterialMode ==  MATERIAL_MODE::NORMAL) )
+                        if( ( transparency > FLT_EPSILON )
+                                && ( aMaterialMode == MATERIAL_MODE::NORMAL ) )
                         {
                             // Create a new array of RGBA colors
                             pColorRGBA = new SFVEC4F[mesh.m_VertexSize];

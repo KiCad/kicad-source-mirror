@@ -31,14 +31,13 @@
 #include "3d_fastmath.h"
 #include <wx/debug.h>
 
-CITEMLAYERCSG2D::CITEMLAYERCSG2D( const COBJECT2D *aObjectA,
-                                  std::vector<const COBJECT2D *> *aObjectB,
-                                  const COBJECT2D *aObjectC,
-                                  const BOARD_ITEM &aBoardItem ):
-    COBJECT2D( OBJECT2D_TYPE::CSG, aBoardItem ),
-    m_objectA(aObjectA),
-    m_objectB(aObjectB),
-    m_objectC(aObjectC)
+CITEMLAYERCSG2D::CITEMLAYERCSG2D( const COBJECT2D* aObjectA,
+        std::vector<const COBJECT2D*>* aObjectB, const COBJECT2D* aObjectC,
+        const BOARD_ITEM& aBoardItem )
+        : COBJECT2D( OBJECT2D_TYPE::CSG, aBoardItem ),
+          m_objectA( aObjectA ),
+          m_objectB( aObjectB ),
+          m_objectC( aObjectC )
 {
     wxASSERT( aObjectA );
 

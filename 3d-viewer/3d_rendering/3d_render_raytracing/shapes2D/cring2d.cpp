@@ -32,8 +32,9 @@
 #include <wx/debug.h>
 
 
-CRING2D::CRING2D( const SFVEC2F &aCenter, float aInnerRadius, float aOuterRadius,
-                  const BOARD_ITEM &aBoardItem ) : COBJECT2D( OBJECT2D_TYPE::RING, aBoardItem )
+CRING2D::CRING2D( const SFVEC2F& aCenter, float aInnerRadius, float aOuterRadius,
+        const BOARD_ITEM& aBoardItem )
+        : COBJECT2D( OBJECT2D_TYPE::RING, aBoardItem )
 {
     wxASSERT( aInnerRadius < aOuterRadius );
 

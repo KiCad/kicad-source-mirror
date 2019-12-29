@@ -31,10 +31,9 @@
 #include <wx/debug.h>
 
 
-CFILLEDCIRCLE2D::CFILLEDCIRCLE2D( const SFVEC2F &aCenter,
-                                  float aRadius,
-                                  const BOARD_ITEM &aBoardItem ) :
-                 COBJECT2D( OBJECT2D_TYPE::FILLED_CIRCLE, aBoardItem )
+CFILLEDCIRCLE2D::CFILLEDCIRCLE2D(
+        const SFVEC2F& aCenter, float aRadius, const BOARD_ITEM& aBoardItem )
+        : COBJECT2D( OBJECT2D_TYPE::FILLED_CIRCLE, aBoardItem )
 {
     wxASSERT( aRadius > 0.0f ); // If that happens, it should be handled before create this circle
 
