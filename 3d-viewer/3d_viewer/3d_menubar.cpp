@@ -290,19 +290,19 @@ void EDA_3D_VIEWER::CreateMenuBar()
     gridSubmenu->SetIcon( grid_xpm );
 
     auto noGridCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_settings.GridGet() == GRID3D_NONE;
+        return m_settings.GridGet() == GRID3D_TYPE::NONE;
     };
     auto grid10mmCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_settings.GridGet() == GRID3D_10MM;
+        return m_settings.GridGet() == GRID3D_TYPE::GRID_10MM;
     };
     auto grid5mmCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_settings.GridGet() == GRID3D_5MM;
+        return m_settings.GridGet() == GRID3D_TYPE::GRID_5MM;
     };
     auto grid2p5mmCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_settings.GridGet() == GRID3D_2P5MM;
+        return m_settings.GridGet() == GRID3D_TYPE::GRID_2P5MM;
     };
     auto grid_1mmCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_settings.GridGet() == GRID3D_1MM;
+        return m_settings.GridGet() == GRID3D_TYPE::GRID_1MM;
     };
 
     gridSubmenu->AddCheckItem( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), "",

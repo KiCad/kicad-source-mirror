@@ -55,7 +55,7 @@ CINFO3D_VISU::CINFO3D_VISU() :
 
     m_board = NULL;
     m_3d_model_manager = NULL;
-    m_3D_grid_type = GRID3D_NONE;
+    m_3D_grid_type = GRID3D_TYPE::NONE;
     m_drawFlags.resize( FL_LAST, false );
 
     m_render_engine = RENDER_ENGINE_OPENGL_LEGACY;

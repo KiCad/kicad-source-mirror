@@ -68,13 +68,13 @@ enum class CAMERA_TYPE
 
 
 /// Grid types
-enum GRID3D_TYPE
+enum class GRID3D_TYPE
 {
-    GRID3D_NONE,
-    GRID3D_1MM,
-    GRID3D_2P5MM,
-    GRID3D_5MM,
-    GRID3D_10MM
+    NONE,
+    GRID_1MM,
+    GRID_2P5MM,
+    GRID_5MM,
+    GRID_10MM
 };
 
 

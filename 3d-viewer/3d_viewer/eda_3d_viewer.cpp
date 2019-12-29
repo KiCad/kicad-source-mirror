@@ -567,13 +567,24 @@ void EDA_3D_VIEWER::On3DGridSelection( wxCommandEvent &event )
 
     switch( id )
     {
-    case ID_MENU3D_GRID_NOGRID: m_settings.GridSet( GRID3D_NONE );  break;
-    case ID_MENU3D_GRID_10_MM:  m_settings.GridSet( GRID3D_10MM );  break;
-    case ID_MENU3D_GRID_5_MM:   m_settings.GridSet( GRID3D_5MM );   break;
-    case ID_MENU3D_GRID_2P5_MM: m_settings.GridSet( GRID3D_2P5MM ); break;
-    case ID_MENU3D_GRID_1_MM:   m_settings.GridSet( GRID3D_1MM );   break;
+    case ID_MENU3D_GRID_NOGRID:
+        m_settings.GridSet( GRID3D_TYPE::NONE );
+        break;
+    case ID_MENU3D_GRID_10_MM:
+        m_settings.GridSet( GRID3D_TYPE::GRID_10MM );
+        break;
+    case ID_MENU3D_GRID_5_MM:
+        m_settings.GridSet( GRID3D_TYPE::GRID_5MM );
+        break;
+    case ID_MENU3D_GRID_2P5_MM:
+        m_settings.GridSet( GRID3D_TYPE::GRID_2P5MM );
+        break;
+    case ID_MENU3D_GRID_1_MM:
+        m_settings.GridSet( GRID3D_TYPE::GRID_1MM );
+        break;
 
-    default: wxFAIL_MSG( "Invalid event in EDA_3D_VIEWER::On3DGridSelection()" );
+    default:
+        wxFAIL_MSG( "Invalid event in EDA_3D_VIEWER::On3DGridSelection()" );
     }
 
     int menu_ids[]
@@ -786,7 +797,7 @@ void EDA_3D_VIEWER::LoadSettings( wxConfigBase *aCfg )
     m_settings.SetFlag( FL_SHOW_BOARD_BODY, tmp );
 
     int tmpi;
-    aCfg->Read( keyShowGrid, &tmpi, (int)GRID3D_NONE );
+    aCfg->Read( keyShowGrid, &tmpi, (int) GRID3D_TYPE::NONE );
     m_settings.GridSet( (GRID3D_TYPE)tmpi );
 
     aCfg->Read( keyRenderEngine, &tmpi, (int)RENDER_ENGINE_OPENGL_LEGACY );
