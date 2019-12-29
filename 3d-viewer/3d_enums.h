@@ -61,9 +61,9 @@ enum DISPLAY3D_FLG {
 
 
 /// Camera types
-enum CAMERA_TYPE
+enum class CAMERA_TYPE
 {
-    CAMERA_TRACKBALL
+    TRACKBALL
 };
 
 

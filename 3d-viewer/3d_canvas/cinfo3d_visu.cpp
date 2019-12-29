@@ -487,7 +487,7 @@ void CINFO3D_VISU::CameraSetType( CAMERA_TYPE aCameraType )
 {
     switch( aCameraType )
     {
-    case CAMERA_TRACKBALL:
+	case CAMERA_TYPE::TRACKBALL:
         m_currentCamera = m_trackBallCamera;
     break;
 
