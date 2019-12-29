@@ -123,7 +123,7 @@ bool CCONTAINER2D::Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aN
 
 INTERSECTION_RESULT CCONTAINER2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 {
-    return INTR_MISSES;
+    return INTERSECTION_RESULT::MISSES;
 }
 
 

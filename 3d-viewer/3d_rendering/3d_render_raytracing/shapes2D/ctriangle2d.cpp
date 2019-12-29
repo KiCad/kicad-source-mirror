@@ -98,9 +98,9 @@ bool CTRIANGLE2D::Intersect( const RAYSEG2D &aSegRay,
 INTERSECTION_RESULT CTRIANGLE2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 {
     if( !m_bbox.Intersects( aBBox ) )
-        return INTR_MISSES;
+        return INTERSECTION_RESULT::MISSES;
     // !TODO:
-    return INTR_MISSES;
+    return INTERSECTION_RESULT::MISSES;
 }
 
 

@@ -187,7 +187,7 @@ INTERSECTION_RESULT CITEMLAYERCSG2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 
     // !TODO:
 
-    return INTR_MISSES;
+    return INTERSECTION_RESULT::MISSES;
 }
 
 

@@ -35,11 +35,11 @@
 
 #include <class_board_item.h>
 
-enum INTERSECTION_RESULT
+enum class INTERSECTION_RESULT
 {
-    INTR_MISSES,
-    INTR_INTERSECTS,
-    INTR_FULL_INSIDE
+    MISSES,
+    INTERSECTS,
+    FULL_INSIDE
 };
 
 

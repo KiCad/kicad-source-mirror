@@ -177,7 +177,7 @@ INTERSECTION_RESULT CPOLYGON4PTS2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 {
     // !TODO:
 
-    return INTR_MISSES;
+    return INTERSECTION_RESULT::MISSES;
 }
 
 

@@ -125,7 +125,7 @@ bool CFILLEDCIRCLE2D::Intersect( const RAYSEG2D &aSegRay,
 INTERSECTION_RESULT CFILLEDCIRCLE2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 {
     if( !m_bbox.Intersects( aBBox ) )
-        return INTR_MISSES;
+        return INTERSECTION_RESULT::MISSES;
 
     SFVEC2F v[4];
 
@@ -153,16 +153,16 @@ INTERSECTION_RESULT CFILLEDCIRCLE2D::IsBBoxInside( const CBBOX2D &aBBox ) const
         isInside[1] &&
         isInside[2] &&
         isInside[3] )
-        return INTR_FULL_INSIDE;
+        return INTERSECTION_RESULT::FULL_INSIDE;
 
     // Check if any point is inside the circle
     if( isInside[0] ||
         isInside[1] ||
         isInside[2] ||
         isInside[3] )
-        return INTR_INTERSECTS;
+        return INTERSECTION_RESULT::INTERSECTS;
 
-    return INTR_MISSES;
+    return INTERSECTION_RESULT::MISSES;
 }
 
 

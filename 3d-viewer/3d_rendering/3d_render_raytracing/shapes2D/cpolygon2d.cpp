@@ -190,7 +190,7 @@ bool CPOLYGONBLOCK2D::Intersect( const RAYSEG2D &aSegRay,
 INTERSECTION_RESULT CPOLYGONBLOCK2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 {
 
-    return INTR_MISSES;
+    return INTERSECTION_RESULT::MISSES;
 }
 
 
@@ -267,7 +267,7 @@ bool CDUMMYBLOCK2D::Intersect( const RAYSEG2D &aSegRay,
 INTERSECTION_RESULT CDUMMYBLOCK2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 {
     //!TODO:
-    return INTR_MISSES;
+    return INTERSECTION_RESULT::MISSES;
 }
 
 
