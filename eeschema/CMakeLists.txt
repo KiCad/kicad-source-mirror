@@ -277,21 +277,21 @@ else()
     set( EESCHEMA_RESOURCES eeschema.rc )
 endif()
 
-# Create a C++ compilable string initializer containing html text into a *.h file:
+# Create a C++ compilable string initializer containing markdown text into a *.h file:
 add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_html.h
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_md.h
     COMMAND ${CMAKE_COMMAND}
-        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.html
-        -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_html.h
-        -P ${CMAKE_MODULE_PATH}/Html2C.cmake
-    DEPENDS ${CMAKE_MODULE_PATH}/Html2C.cmake ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.html
-    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_html.h
-       from ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.html"
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.md
+        -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_md.h
+        -P ${CMAKE_MODULE_PATH}/markdown2C.cmake
+    DEPENDS ${CMAKE_MODULE_PATH}/markdown2C.cmake ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.md
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_md.h
+       from ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.md"
     )
 
 set_source_files_properties( dialogs/dialog_bom.cpp
     PROPERTIES
-        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_html.h
+        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_md.h
     )
 
 if( APPLE )
@@ -354,6 +354,7 @@ target_include_directories( eeschema_kiface PUBLIC
 target_link_libraries( eeschema_kiface
     common
     sexpr
+    markdown_lib
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )
