@@ -33,7 +33,7 @@
 
 
 CLAYERITEM::CLAYERITEM( const COBJECT2D *aObject2D, float aZMin, float aZMax ) :
-    COBJECT( OBJ3D_LAYERITEM ),
+    COBJECT( OBJECT3D_TYPE::LAYERITEM ),
     m_object2d(aObject2D)
 {
     wxASSERT( aObject2D );

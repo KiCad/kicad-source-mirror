@@ -30,7 +30,7 @@
 #include "cplane.h"
 
 
-CXYPLANE::CXYPLANE( const CBBOX &aBBox ) : COBJECT( OBJ3D_XYPLANE )
+CXYPLANE::CXYPLANE( const CBBOX &aBBox ) : COBJECT( OBJECT3D_TYPE::XYPLANE )
 {
     m_centerPoint = aBBox.GetCenter();
     m_centroid = m_centerPoint;
@@ -46,7 +46,7 @@ CXYPLANE::CXYPLANE( const CBBOX &aBBox ) : COBJECT( OBJ3D_XYPLANE )
 
 CXYPLANE::CXYPLANE( SFVEC3F aCenterPoint,
                     float aXSize,
-                    float aYSize ) : COBJECT( OBJ3D_XYPLANE )
+                    float aYSize ) : COBJECT( OBJECT3D_TYPE::XYPLANE )
 {
     m_centerPoint = aCenterPoint;
     m_xsize = aXSize;
