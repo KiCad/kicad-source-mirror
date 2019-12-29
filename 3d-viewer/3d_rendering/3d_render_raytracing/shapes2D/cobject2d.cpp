@@ -42,18 +42,20 @@ COBJECT2D::COBJECT2D( OBJECT2D_TYPE aObjType, const BOARD_ITEM &aBoardItem )
 }
 
 
-static const char *OBJECT2D_STR[OBJ2D_MAX] =
-{
-    "OBJ2D_FILLED_CIRCLE",
-    "OBJ2D_CSG",
-    "OBJ2D_POLYGON",
-    "OBJ2D_DUMMYBLOCK",
-    "OBJ2D_POLYGON4PT",
-    "OBJ2D_RING",
-    "OBJ2D_ROUNDSEG",
-    "OBJ2D_TRIANGLE",
-    "OBJ2D_CONTAINER",
-    "OBJ2D_BVHCONTAINER"
+/*
+ * Lookup table for OBJECT2D_TYPE printed names
+ */
+const std::map<OBJECT2D_TYPE, const char*> objectTypeNames{
+    { OBJECT2D_TYPE::FILLED_CIRCLE, "OBJECT2D_TYPE::FILLED_CIRCLE" },
+    { OBJECT2D_TYPE::CSG, "OBJECT2D_TYPE::CSG" },
+    { OBJECT2D_TYPE::POLYGON, "OBJECT2D_TYPE::POLYGON" },
+    { OBJECT2D_TYPE::DUMMYBLOCK, "OBJECT2D_TYPE::DUMMYBLOCK" },
+    { OBJECT2D_TYPE::POLYGON4PT, "OBJECT2D_TYPE::POLYGON4PT" },
+    { OBJECT2D_TYPE::RING, "OBJECT2D_TYPE::RING" },
+    { OBJECT2D_TYPE::ROUNDSEG, "OBJECT2D_TYPE::ROUNDSEG" },
+    { OBJECT2D_TYPE::TRIANGLE, "OBJECT2D_TYPE::TRIANGLE" },
+    { OBJECT2D_TYPE::CONTAINER, "OBJECT2D_TYPE::CONTAINER" },
+    { OBJECT2D_TYPE::BVHCONTAINER, "OBJECT2D_TYPE::BVHCONTAINER" },
 };
 
 
@@ -61,8 +63,9 @@ void COBJECT2D_STATS::PrintStats()
 {
     printf( "OBJ2D Statistics:\n" );
 
-    for( unsigned int i = 0; i < OBJ2D_MAX; ++i )
+    for( auto& objectType : objectTypeNames )
     {
-        printf( "  %20s  %u\n", OBJECT2D_STR[i], m_counter[i] );
+        printf( "  %20s  %u\n", objectType.second,
+                m_counter[static_cast<int>( objectType.first )] );
     }
 }

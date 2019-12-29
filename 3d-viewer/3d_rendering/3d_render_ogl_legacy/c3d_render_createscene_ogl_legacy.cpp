@@ -287,18 +287,18 @@ CLAYERS_OGL_DISP_LISTS *C3D_RENDER_OGL_LEGACY::generate_holes_display_list(
         {
             const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*itemOnLayer);
 
-            wxASSERT( (object2d_A->GetObjectType() == OBJ2D_FILLED_CIRCLE) ||
-                      (object2d_A->GetObjectType() == OBJ2D_ROUNDSEG) );
+            wxASSERT( (object2d_A->GetObjectType() == OBJECT2D_TYPE::FILLED_CIRCLE) ||
+                      (object2d_A->GetObjectType() == OBJECT2D_TYPE::ROUNDSEG) );
 
             switch( object2d_A->GetObjectType() )
             {
-                case OBJ2D_FILLED_CIRCLE:
+                case OBJECT2D_TYPE::FILLED_CIRCLE:
                     add_object_to_triangle_layer( (const CFILLEDCIRCLE2D *)object2d_A,
                                                   layerTriangles,
                                                   aZtop, aZbot );
                 break;
 
-                case OBJ2D_ROUNDSEG:
+                case OBJECT2D_TYPE::ROUNDSEG:
                     add_object_to_triangle_layer( (const CROUNDSEGMENT2D *) object2d_A,
                                                   layerTriangles,
                                                   aZtop, aZbot );
@@ -394,7 +394,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
         {
             const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*itemOnLayer);
 
-            wxASSERT( object2d_A->GetObjectType() == OBJ2D_TRIANGLE );
+            wxASSERT( object2d_A->GetObjectType() == OBJECT2D_TYPE::TRIANGLE );
 
             const CTRIANGLE2D *tri = (const CTRIANGLE2D *)object2d_A;
 
@@ -563,27 +563,27 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
 
             switch( object2d_A->GetObjectType() )
             {
-            case OBJ2D_FILLED_CIRCLE:
+            case OBJECT2D_TYPE::FILLED_CIRCLE:
                 add_object_to_triangle_layer( (const CFILLEDCIRCLE2D *)object2d_A,
                                               layerTriangles, layer_z_top, layer_z_bot );
                 break;
 
-            case OBJ2D_POLYGON4PT:
+            case OBJECT2D_TYPE::POLYGON4PT:
                 add_object_to_triangle_layer( (const CPOLYGON4PTS2D *)object2d_A,
                                               layerTriangles, layer_z_top, layer_z_bot );
                 break;
 
-            case OBJ2D_RING:
+            case OBJECT2D_TYPE::RING:
                 add_object_to_triangle_layer( (const CRING2D *)object2d_A,
                                               layerTriangles, layer_z_top, layer_z_bot );
                 break;
 
-            case OBJ2D_TRIANGLE:
+            case OBJECT2D_TYPE::TRIANGLE:
                 add_object_to_triangle_layer( (const CTRIANGLE2D *)object2d_A,
                                               layerTriangles, layer_z_top, layer_z_bot );
                 break;
 
-            case OBJ2D_ROUNDSEG:
+            case OBJECT2D_TYPE::ROUNDSEG:
                 add_object_to_triangle_layer( (const CROUNDSEGMENT2D *) object2d_A,
                                               layerTriangles, layer_z_top, layer_z_bot );
                 break;
@@ -856,7 +856,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
             {
                 const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*itemOnLayer);
 
-                wxASSERT( object2d_A->GetObjectType() == OBJ2D_TRIANGLE );
+                wxASSERT( object2d_A->GetObjectType() == OBJECT2D_TYPE::TRIANGLE );
 
                 const CTRIANGLE2D *tri = (const CTRIANGLE2D *)object2d_A;
 

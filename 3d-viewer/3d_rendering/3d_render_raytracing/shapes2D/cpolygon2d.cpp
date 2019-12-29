@@ -73,7 +73,7 @@ static bool polygon_IsPointInside( const SEGMENTS &aSegments, const SFVEC2F &aPo
 CPOLYGONBLOCK2D::CPOLYGONBLOCK2D( const SEGMENTS_WIDTH_NORMALS &aOpenSegmentList,
                                   const OUTERS_AND_HOLES &aOuter_and_holes,
                                   const BOARD_ITEM &aBoardItem ) :
-                 COBJECT2D( OBJ2D_POLYGON, aBoardItem )
+                 COBJECT2D( OBJECT2D_TYPE::POLYGON, aBoardItem )
 {
     m_open_segments.resize( aOpenSegmentList.size() );
 
@@ -223,7 +223,7 @@ bool CPOLYGONBLOCK2D::IsPointInside( const SFVEC2F &aPoint ) const
 
 CDUMMYBLOCK2D::CDUMMYBLOCK2D( const SFVEC2F &aPbMin, const SFVEC2F &aPbMax,
                               const BOARD_ITEM &aBoardItem ) :
-               COBJECT2D( OBJ2D_DUMMYBLOCK, aBoardItem )
+               COBJECT2D( OBJECT2D_TYPE::DUMMYBLOCK, aBoardItem )
 {
     m_bbox.Set( aPbMin, aPbMax );
     m_bbox.ScaleNextUp();
@@ -233,7 +233,7 @@ CDUMMYBLOCK2D::CDUMMYBLOCK2D( const SFVEC2F &aPbMin, const SFVEC2F &aPbMax,
 
 CDUMMYBLOCK2D::CDUMMYBLOCK2D( const CBBOX2D &aBBox,
                               const BOARD_ITEM &aBoardItem ) :
-               COBJECT2D( OBJ2D_DUMMYBLOCK, aBoardItem )
+               COBJECT2D( OBJECT2D_TYPE::DUMMYBLOCK, aBoardItem )
 {
     m_bbox.Set( aBBox );
     m_bbox.ScaleNextUp();

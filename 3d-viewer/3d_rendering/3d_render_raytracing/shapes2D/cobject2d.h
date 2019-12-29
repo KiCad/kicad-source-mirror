@@ -43,19 +43,19 @@ enum class INTERSECTION_RESULT
 };
 
 
-enum OBJECT2D_TYPE
+enum class OBJECT2D_TYPE
 {
-    OBJ2D_FILLED_CIRCLE,
-    OBJ2D_CSG,
-    OBJ2D_POLYGON,
-    OBJ2D_DUMMYBLOCK,
-    OBJ2D_POLYGON4PT,
-    OBJ2D_RING,
-    OBJ2D_ROUNDSEG,
-    OBJ2D_TRIANGLE,
-    OBJ2D_CONTAINER,
-    OBJ2D_BVHCONTAINER,
-    OBJ2D_MAX
+    FILLED_CIRCLE,
+    CSG,
+    POLYGON,
+    DUMMYBLOCK,
+    POLYGON4PT,
+    RING,
+    ROUNDSEG,
+    TRIANGLE,
+    CONTAINER,
+    BVHCONTAINER,
+    MAX
 };
 
 
@@ -132,14 +132,20 @@ public:
 class COBJECT2D_STATS
 {
 public:
-    void ResetStats() { memset( m_counter, 0, sizeof( unsigned int ) * OBJ2D_MAX ); }
+    void ResetStats()
+    {
+        memset( m_counter, 0, sizeof( unsigned int ) * static_cast<int>( OBJECT2D_TYPE::MAX ) );
+    }
 
     unsigned int GetCountOf( OBJECT2D_TYPE aObjType ) const
     {
-        return m_counter[aObjType];
+        return m_counter[static_cast<int>( aObjType )];
     }
 
-    void AddOne( OBJECT2D_TYPE aObjType ) { m_counter[aObjType]++; }
+    void AddOne( OBJECT2D_TYPE aObjType )
+    {
+        m_counter[static_cast<int>( aObjType )]++;
+    }
 
     void PrintStats();
 
@@ -158,7 +164,7 @@ private:
     ~COBJECT2D_STATS(){}
 
 private:
-    unsigned int m_counter[OBJ2D_MAX];
+    unsigned int m_counter[static_cast<int>( OBJECT2D_TYPE::MAX )];
 
     static COBJECT2D_STATS *s_instance;
 };

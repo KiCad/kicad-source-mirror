@@ -36,7 +36,7 @@ CPOLYGON4PTS2D::CPOLYGON4PTS2D( const SFVEC2F &v1,
                                 const SFVEC2F &v3,
                                 const SFVEC2F &v4,
                                 const BOARD_ITEM &aBoardItem ) :
-                COBJECT2D( OBJ2D_POLYGON4PT, aBoardItem )
+                COBJECT2D( OBJECT2D_TYPE::POLYGON4PT, aBoardItem )
 {/*
     if( (v1.x > v2.x) || (v1.y < v2.y) )
     {

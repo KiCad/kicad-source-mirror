@@ -184,7 +184,7 @@ void C3D_RENDER_RAYTRACING::create_3d_object_from(  CCONTAINER &aDstContainer,
 {
     switch( aObject2D->GetObjectType() )
     {
-        case OBJ2D_DUMMYBLOCK:
+        case OBJECT2D_TYPE::DUMMYBLOCK:
         {
             m_stats_converted_dummy_to_plane++;
 #if 1
@@ -221,7 +221,7 @@ void C3D_RENDER_RAYTRACING::create_3d_object_from(  CCONTAINER &aDstContainer,
         }
         break;
 
-        case OBJ2D_ROUNDSEG:
+        case OBJECT2D_TYPE::ROUNDSEG:
         {
             m_stats_converted_roundsegment2d_to_roundsegment++;
 
@@ -405,7 +405,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
                     switch( hole2d->GetObjectType() )
                     {
-                    case OBJ2D_FILLED_CIRCLE:
+                    case OBJECT2D_TYPE::FILLED_CIRCLE:
                     {
                         const float radius = hole2d->GetBBox().GetExtent().x * 0.5f * 0.999f;
 
