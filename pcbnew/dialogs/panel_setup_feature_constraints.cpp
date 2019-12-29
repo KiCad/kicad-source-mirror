@@ -21,14 +21,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#include <fctsys.h>
-#include <pcb_edit_frame.h>
 #include <board_design_settings.h>
-
+#include <clamp.h>
+#include <class_board.h>                           // for BOARD
+#include <convert_to_biu.h>                        // for IU_PER_MM
 #include <panel_setup_feature_constraints.h>
+#include <panel_setup_feature_constraints_base.h>  // for PANEL_SETUP_FEATUR...
+#include <pcb_edit_frame.h>
 
-#include <advanced_config.h>    // To be removed later, when the zone fill option will be always allowed
+#include <widgets/paged_dialog.h>                  // for PAGED_DIALOG
+#include <widgets/unit_binder.h>                   // for UNIT_BINDER
+#include <wx/treebook.h>
+#include <wx/wx.h>
 
 
 PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* aParent,

@@ -22,11 +22,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
+#include <bitset>                             // for bitset, __bitset<>::ref...
 #include <cassert>
 #include <cstdarg>
+#include <iostream>                           // for string, endl, basic_ost...
+#include <stddef.h>                           // for size_t
 
-#include <layers_id_colors_and_visibility.h>
+#include <clamp.h>                            // for Clamp
+#include <layers_id_colors_and_visibility.h>  // for LSET, PCB_LAYER_ID, LSEQ
+#include <macros.h>                           // for arrayDim
+#include <wx/debug.h>                         // for wxASSERT, wxASSERT_MSG
+#include <wx/wx.h>                            // for wxT, wxChar
 
 
 LSET::LSET( const PCB_LAYER_ID* aArray, unsigned aCount ) :
