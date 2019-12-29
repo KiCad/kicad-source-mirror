@@ -33,6 +33,7 @@ int sgn( T aVal )
 
 bool SEG::PointCloserThan( const VECTOR2I& aP, int aDist ) const
 {
+    // See http://geomalgorithms.com/a02-_lines.html for some explanations and ideas.
     VECTOR2I d = B - A;
     ecoord dist_sq = (ecoord) aDist * aDist;
 
@@ -44,9 +45,17 @@ bool SEG::PointCloserThan( const VECTOR2I& aP, int aDist ) const
     else if( t >= l_squared )
         return ( aP - B ).SquaredEuclideanNorm() < dist_sq;
 
-    int dxdy = abs( d.x ) - abs( d.y );
+    // JPC: This code is not trivial and is not commented
+    // and does not work for d.x or d.y = -1...1
+    // I am guessing it is here for calculation time optimization.
+    // if someone can understand it, please fix it.
+    // It can be tested with a segment having d.x or d.y value
+    // is -1 or +1 ("this" is a quasi vertical or horizontal segment)
+    int dxdy = std::abs( d.x ) - std::abs( d.y );
 
-    if( ( dxdy >= -1 && dxdy <= 1 ) || abs( d.x ) <= 1 || abs( d.y ) <= 1 )
+    if( ( dxdy >= -1 && dxdy <= 1 )     // quasi 45 deg segment
+        /*|| std::abs( d.x ) <= 1       // quasi horizontal segment
+          || std::abs( d.y ) <= 1       // quasi vertical segment */ )
     {
         int ca = -sgn( d.y );
         int cb = sgn( d.x );
