@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-23 18:58+0100\n"
-"PO-Revision-Date: 2019-12-23 18:59+0100\n"
+"POT-Creation-Date: 2019-12-29 10:40+0100\n"
+"PO-Revision-Date: 2019-12-29 11:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1335,10 +1335,10 @@ msgstr "Infos"
 #: kicad/tools/kicad_manager_control.cpp:259
 #: pcbnew/dialogs/dialog_export_idf.cpp:165
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:317
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:325
 #: pcbnew/footprint_libraries_utils.cpp:472
-#: pcbnew/footprint_libraries_utils.cpp:970 pcbnew/router/router_tool.cpp:1002
-#: pcbnew/router/router_tool.cpp:1158 pcbnew/router/router_tool.cpp:1237
+#: pcbnew/footprint_libraries_utils.cpp:970 pcbnew/router/router_tool.cpp:1011
+#: pcbnew/router/router_tool.cpp:1167 pcbnew/router/router_tool.cpp:1246
 #: pcbnew/zone_filler.cpp:257
 msgid "Confirmation"
 msgstr "Confirmation"
@@ -2175,7 +2175,7 @@ msgid "Print Preview"
 msgstr "Prévisualisation"
 
 #: common/dialogs/dialog_print_generic.cpp:42
-#: eeschema/dialogs/dialog_annotate.cpp:116 eeschema/dialogs/dialog_bom.cpp:241
+#: eeschema/dialogs/dialog_annotate.cpp:116 eeschema/dialogs/dialog_bom.cpp:242
 #: eeschema/dialogs/dialog_erc.cpp:86 eeschema/dialogs/dialog_netlist.cpp:316
 #: eeschema/dialogs/dialog_plot_schematic.cpp:81
 #: eeschema/dialogs/dialog_print_using_printer.cpp:144
@@ -4989,7 +4989,7 @@ msgstr ""
 "%s\n"
 "introuvable. Script non disponible."
 
-#: eeschema/class_libentry.cpp:538
+#: eeschema/class_libentry.cpp:581
 #, c-format
 msgid ""
 "An attempt was made to remove the %s field from component %s in library %s."
@@ -5285,36 +5285,36 @@ msgstr "Premier nombre libre après numéro de feuille X 1000"
 msgid "Annotate Schematic"
 msgstr "Annotation de la Schématique"
 
-#: eeschema/dialogs/dialog_bom.cpp:240
+#: eeschema/dialogs/dialog_bom.cpp:241
 msgid "Generate"
 msgstr "Générer"
 
-#: eeschema/dialogs/dialog_bom.cpp:515 eeschema/dialogs/dialog_bom_base.cpp:43
+#: eeschema/dialogs/dialog_bom.cpp:516 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
 msgstr "Nom logique du générateur:"
 
-#: eeschema/dialogs/dialog_bom.cpp:515
+#: eeschema/dialogs/dialog_bom.cpp:516
 msgid "Add Generator"
 msgstr "Ajouter Générateur"
 
-#: eeschema/dialogs/dialog_bom.cpp:524
+#: eeschema/dialogs/dialog_bom.cpp:525
 #, c-format
 msgid "Nickname \"%s\" already in use."
 msgstr "Un nom logique \"%s\" existe déjà."
 
-#: eeschema/dialogs/dialog_bom.cpp:559 eeschema/dialogs/dialog_netlist.cpp:720
+#: eeschema/dialogs/dialog_bom.cpp:560 eeschema/dialogs/dialog_netlist.cpp:720
 msgid "Generator files:"
 msgstr "Fichiers Générateurs:"
 
-#: eeschema/dialogs/dialog_bom.cpp:578
+#: eeschema/dialogs/dialog_bom.cpp:579
 msgid "Generator file name not found."
 msgstr "Nom du fichier générateur introuvable."
 
-#: eeschema/dialogs/dialog_bom.cpp:588
+#: eeschema/dialogs/dialog_bom.cpp:589
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "Pas d'éditeur défini dans KiCad. Veuillez en sélectionner un."
 
-#: eeschema/dialogs/dialog_bom.cpp:594
+#: eeschema/dialogs/dialog_bom.cpp:595
 msgid "Bill of Material Generation Help"
 msgstr "Aide pour Génération de la Liste du Matériel"
 
@@ -5357,6 +5357,392 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom_base.h:80
 msgid "Bill of Material"
 msgstr "Liste du Matériel"
+
+#: eeschema/dialogs/dialog_bom_help_md.h:2
+msgid ""
+"# 1 - Full documentation\n"
+"\n"
+"The Eeschema documentation (*eeschema.html*) describes this intermediate "
+"netlist and gives examples(chapter ***creating customized netlists and bom "
+"files***).\n"
+"\n"
+"# 2 - The intermediate Netlist File\n"
+"\n"
+"BOM files (and netlist files) can be created from an *Intermediate netlist "
+"file* created by Eeschema.\n"
+"\n"
+"This file uses XML syntax and is called the intermediate netlist. The "
+"intermediate netlist includes a large amount of data about your board and "
+"because of this, it can be used with post-processing to create a BOM or "
+"other reports.\n"
+"\n"
+"Depending on the output (BOM or netlist), different subsets of the complete "
+"Intermediate Netlist file will be used in the post-processing.\n"
+"\n"
+"# 3 - Conversion to a new format\n"
+"\n"
+"By applying a post-processing filter to the Intermediate netlist file you "
+"can generate foreign netlist files as well as BOM files. Because this "
+"conversion is a text to text transformation, this post-processing filter can "
+"be written using *Python*, *XSLT*, or any other tool capable of taking XML "
+"as input.\n"
+"\n"
+"XSLT itself is a XML language suitable for XML transformations. There is a "
+"free program called `xsltproc` that you can download and install. The "
+"`xsltproc` program can be used to read the Intermediate XML netlist input "
+"file, apply a style-sheet to transform the input, and save the results in an "
+"output file. Use of `xsltproc` requires a style-sheet file using XSLT "
+"conventions. The full conversion process is handled by Eeschema, after it is "
+"configured once to run `xsltproc` in a specific way.\n"
+"\n"
+"A Python script is somewhat more easy to create.\n"
+"\n"
+"# 4 - Initialization of the dialog window\n"
+"\n"
+"You should add a new plugin (a script) in the plugin list by clicking on the "
+"Add Plugin button.\n"
+"\n"
+"## 4.1 - Plugin Configuration Parameters\n"
+"\n"
+"The Eeschema plug-in configuration dialog requires the following "
+"information:\n"
+"\n"
+" * The title: for instance, the name of the netlist format.\n"
+" * The command line to launch the converter (usually a script).\n"
+"\n"
+"***Note (Windows only):***\n"
+"*By default, the command line runs with hidden console window and output is "
+"redirected to \"Plugin info\" field. To show the window of the running "
+"command, set the checkbox \"Show console window\".*\n"
+"\n"
+"Once you click on the generate button the following will happen:\n"
+"\n"
+"1. Eeschema creates an intermediate netlist file \\*.xml, for instance `test."
+"xml`.\n"
+"2. Eeschema runs the script from the command line to create the final output "
+"file.\n"
+"\n"
+"## 4.2 - Generate netlist files with the command line\n"
+"\n"
+"Assuming we are using the program `xsltproc.exe` to apply the sheet style to "
+"the intermediate file, `xsltproc.exe` is executed with the following "
+"command.\n"
+"\n"
+"```\n"
+"xsltproc.exe -o <output filename> <style-sheet filename> <input XML file to "
+"convert>\n"
+"```\n"
+"\n"
+"On Windows the command line is the following.\n"
+"\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
+"\"\n"
+"```\n"
+"\n"
+"On Linux the command becomes as following.\n"
+"\n"
+"```\n"
+"xsltproc -o \"%O\" /usr/local/kicad/bin/plugins/myconverter .xsl \"%I\"\n"
+"```\n"
+"where `myconverter.xsl` is the style-sheet that you are applying.\n"
+"\n"
+"Do not forget the double quotes around the file names, this allows them to "
+"have spaces after the substitution by Eeschema.\n"
+"\n"
+"If a Python script is used, the command line is something like (depending on "
+"the Python script):\n"
+"\n"
+"```\n"
+"python f:/kicad/bin/plugins/bom-in-python/myconverter.py \"%I\" \"%O\"\n"
+"```\n"
+"\n"
+"or\n"
+"\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" "
+"\"%O\"\n"
+"```\n"
+"\n"
+"The command line format accepts parameters for filenames. The supported "
+"formatting parameters are:\n"
+"\n"
+" * `%B`: base filename of selected output file, minus path and extension.\n"
+" * `%P`: project directory, without name and without trailing '/'.\n"
+" * `%I`: complete filename and path of the temporary input file\n"
+"(the intermediate net file).\n"
+" * `%O`: complete filename and path (but without extension) of the user\n"
+"chosen output file.\n"
+"\n"
+"`%I` will be replaced by the actual intermediate file name (usually the full "
+"root sheet filename with extension \".xml\").\n"
+"`%O` will be replaced by the actual output file name (the full root sheet "
+"filename minus extension).\n"
+"`%B` will be replaced by the actual output short file name (the short root "
+"sheet filename minus extension).\n"
+"`%P` will be replaced by the actual current project path.\n"
+"\n"
+"## 4.3 - Command line format:\n"
+"\n"
+"### 4.3.1 - Remark:\n"
+"\n"
+"Most of time, the created file must have an extension, depending on its "
+"type.\n"
+"Therefore you have to add to the option ***%O*** the right file extension.\n"
+"\n"
+"For instance:\n"
+"\n"
+" * **%O.csv** to create a .csv file (comma separated value file).\n"
+" * **%O.htm** to create a .html file.\n"
+" * **%O.bom** to create a .bom file.\n"
+"\n"
+"### 4.3.2 Example for xsltproc:\n"
+"\n"
+"The command line format for xsltproc is the following:\n"
+"\n"
+"```\n"
+"<path of xsltproc> xsltproc <xsltproc parameters>\n"
+"```\n"
+"\n"
+"On Windows:\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O.bom\" f:/kicad/bin/plugins/"
+"netlist_form_pads-pcb.xsl \"%I\"\n"
+"```\n"
+"\n"
+"On Linux:\n"
+"```\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+"xsl \"%I\"\n"
+"```\n"
+"\n"
+"The above examples assume `xsltproc` is installed on your PC under Windows "
+"and xsl files located in `<path_to_kicad>/kicad/bin/plugins/`.\n"
+"\n"
+"\n"
+"### 4.3.3 Example for Python scripts:\n"
+"\n"
+"Assuming python is installed on your PC, and python scripts are located in\n"
+"\n"
+" `<path_to_kicad>/kicad/bin/plugins/bom-in-python/`,\n"
+"\n"
+"the command line format for python is something like:\n"
+"\n"
+"```\n"
+"python <script file name> <input filename> <output filename>\n"
+"```\n"
+"\n"
+"On Windows:\n"
+"```\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
+"\"%O.html\"\n"
+"```\n"
+"\n"
+"On Linux:\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
+"```\n"
+msgstr ""
+"# 1 - Documentation complète \n"
+"\n"
+"La documentation Eeschema (*eeschema.html*) décrit cette netlist "
+"intermédiaire et donne des exemples (chapitre ***création de netlists et "
+"fichiers bom personnalisés***).\n"
+"\n"
+"# 2 -  Le fichier Netliste intermédiaire\n"
+"\n"
+"Les fichiers de nomenclature (et les fichiers netlist) peuvent être créés à "
+"partir d'un *fichier netlist intermédiaire* créé par Eeschema.\n"
+"\n"
+"Ce fichier utilise la syntaxe XML et est appelé la netlist intermédiaire. La "
+"netliste intermédiaire comprend une grande quantité de données sur votre "
+"carte et pour cette raison, elle peut être utilisée avec le post-traitement "
+"pour créer une nomenclature ou d'autres rapports. \n"
+"\n"
+"Selon la sortie (nomenclature ou netlist), différents sous-ensembles du "
+"fichier Netlist intermédiaire complet seront utilisés dans le post-"
+"traitement. \n"
+"\n"
+"# 3 - Conversion vers un nouveau format \n"
+"\n"
+"En appliquant un filtre de post-traitement au fichier de netlist "
+"intermédiaire, vous pouvez générer des fichiers de netlist étrangers ainsi "
+"que des fichiers de nomenclature. Étant donné que cette conversion est une "
+"transformation de texte en texte, ce filtre de post-traitement peut être "
+"écrit à l'aide de *Python*, *XSLT* ou de tout autre outil capable de prendre "
+"XML en entrée.\n"
+"\n"
+"XSLT lui-même est un langage XML adapté aux transformations XML. Il existe "
+"un programme libre appelé «xsltproc» que vous pouvez télécharger et "
+"installer. Le programme `xsltproc` peut être utilisé pour lire le fichier "
+"d'entrée de netlist XML intermédiaire, appliquer une feuille de style pour "
+"transformer l'entrée et enregistrer les résultats dans un fichier de sortie. "
+"L'utilisation de `xsltproc` nécessite un fichier de feuille de style "
+"utilisant les conventions XSLT. Le processus de conversion complet est géré "
+"par Eeschema, après avoir été configuré une fois pour exécuter `xsltproc` "
+"d'une manière spécifique. \n"
+"\n"
+"Un script Python est un peu plus facile à créer. \n"
+"\n"
+"# 4 - Initialisation de la fenêtre de dialogue\n"
+"\n"
+" Vous devez ajouter un nouveau plugin (un script) dans la liste des plugins "
+"en cliquant sur le bouton Ajouter un plugin.\n"
+"\n"
+"## 4.1 - Paramètres de configuration du plugin\n"
+"\n"
+" La boîte de dialogue de configuration du plugin Eeschema nécessite les "
+"informations suivantes: \n"
+"\n"
+"* Le titre: par exemple, le nom du format de netlist.\n"
+"* La ligne de commande pour lancer le convertisseur (généralement un "
+"script). \n"
+"\n"
+"***Remarque (Windows uniquement):***\n"
+"\n"
+"*Par défaut, la ligne de commande s'exécute avec une fenêtre de console "
+"cachée et la sortie est redirigée vers le champ \"Plugin info\". Pour "
+"afficher la fenêtre de la commande en cours, cochez la case \"Afficher la "
+"fenêtre de la console\".*\n"
+"\n"
+" Une fois que vous avez cliqué sur le bouton Générer, les événements "
+"suivants se produisent:\n"
+"\n"
+"1. Eeschema crée un fichier de netliste intermédiaire \\*. xml, par exemple "
+"\"test.xml \".\n"
+"2. Eeschema exécute le script à partir de la ligne de commande pour créer le "
+"fichier de sortie final. \n"
+"\n"
+"## 4.2 - Générer des fichiers netlist avec la ligne de commande\n"
+"\n"
+"En supposant que nous utilisons le programme `xsltproc.exe` pour appliquer "
+"le style de feuille au fichier intermédiaire, `xsltproc.exe` est exécuté "
+"avec la commande suivante.\n"
+"\n"
+"```\n"
+"xsltproc.exe -o <output filename> <style-sheet filename> <input XML file to "
+"convert>\n"
+"```\n"
+"\n"
+"Sous Windows, la ligne de commande est la suivante.\n"
+"\n"
+"```\n"
+"f:/kicad/bin/xsltproc.exe -o\"%O \"f:/kicad/bin/plugins/myconverter.xsl \"%I"
+"\"\n"
+"```\n"
+"\n"
+"Sous Linux, la commande devient la suivante. \n"
+"\n"
+"```\n"
+"xsltproc -o \"%O\" /usr/local/kicad/bin/plugins /myconverter.xsl \"%I\"\n"
+"```\n"
+"\n"
+"où `myconverter.xsl` est la feuille de style que vous appliquez.\n"
+"\n"
+"N'oubliez pas les guillemets doubles autour des noms de fichiers, cela leur "
+"permet d'avoir des espaces après la substitution par Eeschema. \n"
+"\n"
+"Si un script Python est utilisé, la ligne de commande est quelque chose "
+"comme (selon le script Python):\n"
+"\n"
+"```\n"
+"python f:/kicad/bin/plugins/bom-in-python/myconverter.py \"%I \" \"%O \"\n"
+"```\n"
+"\n"
+"ou \n"
+"\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins /bom-in-python/myconverter .xsl \"%I \" "
+"\"%O\"\n"
+"```\n"
+"\n"
+"La ligne de commande accepte des paramètres pour les noms de fichiers. Les "
+"paramètres de formatage pris en charge sont:\n"
+"\n"
+"* `%B`: nom de fichier de base du fichier de sortie sélectionné, chemin "
+"moins et extension.\n"
+"* `%P`: répertoire du projet, sans nom et sans '/'.\n"
+"* `%I`: nom de fichier complet et chemin du fichier d'entrée temporaire (le "
+"fichier net intermédiaire).\n"
+"* `%O`: nom de fichier complet et chemin (mais sans extension) du fichier de "
+"sortie choisi par l'utilisateur. \n"
+"\n"
+"`%I` sera remplacé par le nom de fichier intermédiaire réel (généralement le "
+"nom de fichier complet de la feuille racine avec l'extension \".xml \"). \n"
+"`%O` sera remplacé par le nom du fichier de sortie réel (l'extension "
+"complète du nom de fichier de la feuille racine). \n"
+"`%B` sera remplacé par le nom de fichier court de sortie réel (l'extension "
+"du nom de fichier de la feuille racine courte moins).\n"
+" `%P` sera remplacé par le chemin actuel du projet actuel.\n"
+"\n"
+"## 4.3 - Format de la ligne de commande:\n"
+"\n"
+"### 4.3.1 - Remarque:\n"
+"\n"
+"La plupart du temps, le fichier créé doit avoir une extension, selon son "
+"type.\n"
+"Par conséquent, vous devez ajouter à l'option ***%O*** la bonne extension de "
+"fichier.\n"
+"\n"
+"Par exemple:\n"
+"\n"
+" * **%O.csv** pour créer un fichier .csv (fichier de valeurs séparées par "
+"des virgules).\n"
+" * **%O.htm** pour créer un fichier .html. \n"
+" * **%O.bom** pour créer un fichier .bom. \n"
+"\n"
+"### 4.3.2 Exemple pour xsltproc:\n"
+"\n"
+"Le format de ligne de commande pour xsltproc est le suivant:\n"
+"\n"
+"```\n"
+"<path of xsltproc> xsltproc <xsltproc parameters>\n"
+"```\n"
+"\n"
+"Sous Windows:\n"
+"```\n"
+" f:/kicad/bin/xsltproc.exe -o \"% O.bom\" f:/kicad/bin/plugins/"
+"netlist_form_pads-pcb.xsl \"%I\"\n"
+"```\n"
+"\n"
+"Sous Linux : \n"
+"```\n"
+"xsltproc -o \"%O.bom \"/usr/local/kicad/bin/plugins/netlist_form_pads-pcb.xsl"
+"\"%I \"\n"
+"```\n"
+"\n"
+"Les exemples ci-dessus supposent que `xsltproc` est installé sur votre PC "
+"sous Windows et les fichiers xsl situés dans ` <path_to_kicad>/kicad/bin/"
+"plugins/`. \n"
+"\n"
+"\n"
+"### 4.3.3 Exemple pour les scripts Python:\n"
+"\n"
+"En supposant que python est installé sur votre PC et que les scripts python "
+"sont situés dans\n"
+"\n"
+" `<path_to_kicad>/kicad/bin/plugins/bom-in-python/`, \n"
+"\n"
+"le format de ligne de commande pour python est quelque chose comme:\n"
+"\n"
+"```\n"
+"python <script file name> <input filename> <output filename>\n"
+"```\n"
+"\n"
+"On Windows:\n"
+"\n"
+"```\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
+"\"%O.html\"\n"
+"```\n"
+"\n"
+"On Linux:\n"
+"\n"
+"```\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
+"```\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:36
 msgid "Bus Definitions"
@@ -6759,7 +7145,7 @@ msgstr "Taille Texte Nom"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:83
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:51
 #: eeschema/lib_pin.cpp:1394 pcbnew/class_drawsegment.cpp:481
-#: pcbnew/class_drawsegment.cpp:496 pcbnew/class_track.cpp:794
+#: pcbnew/class_drawsegment.cpp:496 pcbnew/class_track.cpp:787
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:68
 msgid "Length"
 msgstr "Longueur"
@@ -6805,14 +7191,14 @@ msgstr "Position X:"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:90
 #: eeschema/fields_grid_table.cpp:119 eeschema/fields_grid_table.cpp:449
-#: eeschema/fields_grid_table.cpp:546 eeschema/sch_line.cpp:632
+#: eeschema/fields_grid_table.cpp:546 eeschema/sch_line.cpp:630
 #: eeschema/sch_text.cpp:577 pcbnew/dialogs/dialog_pad_properties_base.cpp:183
 msgid "Horizontal"
 msgstr "Horizontal"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:90
 #: eeschema/fields_grid_table.cpp:120 eeschema/fields_grid_table.cpp:450
-#: eeschema/fields_grid_table.cpp:548 eeschema/sch_line.cpp:630
+#: eeschema/fields_grid_table.cpp:548 eeschema/sch_line.cpp:628
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:183
 msgid "Vertical"
 msgstr "Vertical"
@@ -6934,7 +7320,7 @@ msgid "New Label"
 msgstr "Nouveau Label"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104 pcbnew/class_module.cpp:595
-#: pcbnew/class_track.cpp:883
+#: pcbnew/class_track.cpp:876
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:193
 msgid "Status"
 msgstr "Statut"
@@ -7067,16 +7453,16 @@ msgstr "Tracer Toutes les Pages"
 msgid "Plot Current Page"
 msgstr "Tracer Page Courante"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:155
+#: eeschema/dialogs/dialog_plot_schematic.cpp:165
 #: pcbnew/dialogs/dialog_export_svg.cpp:217
-#: pcbnew/dialogs/dialog_gendrill.cpp:305 pcbnew/dialogs/dialog_plot.cpp:333
+#: pcbnew/dialogs/dialog_gendrill.cpp:305 pcbnew/dialogs/dialog_plot.cpp:345
 #: pcbnew/exporters/gen_footprints_placefile.cpp:189
 #: pcbnew/exporters/gen_footprints_placefile.cpp:521
 msgid "Select Output Directory"
 msgstr "Sélection du Répertoire de Sortie"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:165
-#: pcbnew/dialogs/dialog_gendrill.cpp:315 pcbnew/dialogs/dialog_plot.cpp:343
+#: eeschema/dialogs/dialog_plot_schematic.cpp:175
+#: pcbnew/dialogs/dialog_gendrill.cpp:315 pcbnew/dialogs/dialog_plot.cpp:355
 #, c-format
 msgid ""
 "Do you want to use a path relative to\n"
@@ -7085,54 +7471,54 @@ msgstr ""
 "Voulez vous utiliser un chemin relatif à\n"
 "\"%s\""
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:167
-#: eeschema/dialogs/dialog_plot_schematic.cpp:175
+#: eeschema/dialogs/dialog_plot_schematic.cpp:177
+#: eeschema/dialogs/dialog_plot_schematic.cpp:185
 #: pcbnew/dialogs/dialog_export_svg.cpp:224
 #: pcbnew/dialogs/dialog_export_svg.cpp:235
 #: pcbnew/dialogs/dialog_gendrill.cpp:317
-#: pcbnew/dialogs/dialog_gendrill.cpp:324 pcbnew/dialogs/dialog_plot.cpp:346
-#: pcbnew/dialogs/dialog_plot.cpp:353
+#: pcbnew/dialogs/dialog_gendrill.cpp:324 pcbnew/dialogs/dialog_plot.cpp:358
+#: pcbnew/dialogs/dialog_plot.cpp:365
 #: pcbnew/exporters/gen_footprints_placefile.cpp:197
 #: pcbnew/exporters/gen_footprints_placefile.cpp:206
 msgid "Plot Output Directory"
 msgstr "Répertoire de Sortie des Tracés"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:174
-#: pcbnew/dialogs/dialog_gendrill.cpp:323 pcbnew/dialogs/dialog_plot.cpp:352
+#: eeschema/dialogs/dialog_plot_schematic.cpp:184
+#: pcbnew/dialogs/dialog_gendrill.cpp:323 pcbnew/dialogs/dialog_plot.cpp:364
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
 "Ne peut générer un chemin relatif (disque cible différent du disque du "
 "chemin par défaut)"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:214
+#: eeschema/dialogs/dialog_plot_schematic.cpp:229
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 msgid "Schematic size"
 msgstr "Taille schématique"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:220
 #: eeschema/dialogs/dialog_plot_schematic.cpp:235
+#: eeschema/dialogs/dialog_plot_schematic.cpp:250
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 msgid "A4"
 msgstr "A4"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:221
+#: eeschema/dialogs/dialog_plot_schematic.cpp:236
 msgid "A3"
 msgstr "A3"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:222
+#: eeschema/dialogs/dialog_plot_schematic.cpp:237
 msgid "A2"
 msgstr "A2"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:223
+#: eeschema/dialogs/dialog_plot_schematic.cpp:238
 msgid "A1"
 msgstr "A1"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:224
+#: eeschema/dialogs/dialog_plot_schematic.cpp:239
 msgid "A0"
 msgstr "A0"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:225
-#: eeschema/dialogs/dialog_plot_schematic.cpp:236
+#: eeschema/dialogs/dialog_plot_schematic.cpp:240
+#: eeschema/dialogs/dialog_plot_schematic.cpp:251
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:83
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:287
@@ -7141,24 +7527,24 @@ msgstr "A0"
 msgid "A"
 msgstr "A"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:226
+#: eeschema/dialogs/dialog_plot_schematic.cpp:241
 msgid "B"
 msgstr "B"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:227
+#: eeschema/dialogs/dialog_plot_schematic.cpp:242
 msgid "C"
 msgstr "C"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:228
+#: eeschema/dialogs/dialog_plot_schematic.cpp:243
 msgid "D"
 msgstr "D"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:229
+#: eeschema/dialogs/dialog_plot_schematic.cpp:244
 msgid "E"
 msgstr "E"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:320
-#: pcbnew/dialogs/dialog_export_svg.cpp:256 pcbnew/dialogs/dialog_plot.cpp:748
+#: eeschema/dialogs/dialog_plot_schematic.cpp:345
+#: pcbnew/dialogs/dialog_export_svg.cpp:256 pcbnew/dialogs/dialog_plot.cpp:753
 #: pcbnew/exporters/gen_footprints_placefile.cpp:256
 #: pcbnew/exporters/gen_footprints_placefile.cpp:364
 #, c-format
@@ -9063,15 +9449,15 @@ msgstr "Centre arc (%s, %s), rayon %s"
 #: eeschema/lib_arc.h:70 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/class_board_item.cpp:45 pcbnew/class_drawsegment.cpp:469
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:116
-#: pcbnew/dialogs/dialog_pad_properties.cpp:828
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1917
+#: pcbnew/dialogs/dialog_pad_properties.cpp:836
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1933
 msgid "Arc"
 msgstr "Arc"
 
 #: eeschema/lib_bezier.h:58
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:103
-#: pcbnew/dialogs/dialog_pad_properties.cpp:822
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1917
+#: pcbnew/dialogs/dialog_pad_properties.cpp:830
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1933
 msgid "Bezier"
 msgstr "Bézier"
 
@@ -9106,7 +9492,7 @@ msgstr "Champ %s \"%s\""
 #: eeschema/lib_field.cpp:440 eeschema/sch_bitmap.cpp:201
 #: pcbnew/class_drawsegment.cpp:530 pcbnew/class_pad.cpp:778
 #: pcbnew/class_pcb_text.cpp:110 pcbnew/class_text_mod.cpp:385
-#: pcbnew/class_track.cpp:907
+#: pcbnew/class_track.cpp:900
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:55
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:43
@@ -9131,8 +9517,8 @@ msgstr "Hauteur"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:25
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:74
 #: pcbnew/class_drawsegment.cpp:455 pcbnew/class_marker_pcb.cpp:94
-#: pcbnew/class_text_mod.cpp:359 pcbnew/class_track.cpp:892
-#: pcbnew/class_track.cpp:942 pcbnew/class_zone.cpp:692
+#: pcbnew/class_text_mod.cpp:359 pcbnew/class_track.cpp:885
+#: pcbnew/class_track.cpp:935 pcbnew/class_zone.cpp:692
 msgid "Type"
 msgstr "Type"
 
@@ -9446,14 +9832,14 @@ msgid "Error loading symbol \"%s\" from library \"%s\". (%s)"
 msgstr ""
 "Erreur lors du chargement du symbole \"%s\" de la librairie \"%s\". (%s)"
 
-#: eeschema/libedit/lib_manager.cpp:562
+#: eeschema/libedit/lib_manager.cpp:544
 #, c-format
 msgid "Cannot load symbol \"%s\" from library \"%s\" (%s)"
 msgstr ""
 "Impossible de charger le symbole \"%s\" à partie du fichier librairie \"%s"
 "\" (%s)"
 
-#: eeschema/libedit/lib_manager.cpp:707
+#: eeschema/libedit/lib_manager.cpp:689
 #, c-format
 msgid "Cannot enumerate library \"%s\" (%s)"
 msgstr "Ne peut pas énumérer la librairie \"%s\" (%s)"
@@ -10156,48 +10542,48 @@ msgstr ""
 "La librairie de symboles \"'%s\" existe déjà, impossible de créer une "
 "nouvelle bibliothèque"
 
-#: eeschema/sch_legacy_plugin.cpp:4356 pcbnew/legacy_plugin.cpp:3504
+#: eeschema/sch_legacy_plugin.cpp:4356 pcbnew/legacy_plugin.cpp:3512
 #, c-format
 msgid "library \"%s\" cannot be deleted"
 msgstr "la librairie \"%s\" ne peut pas être supprimée"
 
-#: eeschema/sch_line.cpp:636
+#: eeschema/sch_line.cpp:634
 #, c-format
 msgid "%s Graphic Line from (%s, %s) to (%s, %s)"
 msgstr "Ligne Graphique %s de (%s,%s) à (%s,%s)"
 
-#: eeschema/sch_line.cpp:637
+#: eeschema/sch_line.cpp:635
 #, c-format
 msgid "%s Wire from (%s, %s) to (%s, %s)"
 msgstr "Fil %s de (%s,%s) à (%s,%s)"
 
-#: eeschema/sch_line.cpp:638
+#: eeschema/sch_line.cpp:636
 #, c-format
 msgid "%s Bus from (%s, %s) to (%s, %s)"
 msgstr "Bus %s de  (%s,%s) à (%s,%s)"
 
-#: eeschema/sch_line.cpp:639
+#: eeschema/sch_line.cpp:637
 #, c-format
 msgid "%s Line on Unknown Layer from (%s, %s) to (%s, %s)"
 msgstr "Ligne %s sur Couche Inconnue de (%s,%s) à (%s,%s)"
 
-#: eeschema/sch_line.cpp:796
+#: eeschema/sch_line.cpp:794
 msgid "Net Wire"
 msgstr "Fil"
 
-#: eeschema/sch_line.cpp:797
+#: eeschema/sch_line.cpp:795
 msgid "Bus Wire"
 msgstr "Bus"
 
-#: eeschema/sch_line.cpp:798
+#: eeschema/sch_line.cpp:796
 msgid "Graphical"
 msgstr "Graphique"
 
-#: eeschema/sch_line.cpp:801
+#: eeschema/sch_line.cpp:799
 msgid "Line Type"
 msgstr "Style de Ligne"
 
-#: eeschema/sch_line.cpp:809
+#: eeschema/sch_line.cpp:807
 msgid "Connections"
 msgstr "Connexions"
 
@@ -11805,7 +12191,7 @@ msgstr "Aucun schéma n’est actuellement ouvert."
 msgid "Edit Component Name"
 msgstr "Editer Nom du Composant"
 
-#: eeschema/tools/lib_edit_tool.cpp:484 eeschema/tools/sch_edit_tool.cpp:1044
+#: eeschema/tools/lib_edit_tool.cpp:484 eeschema/tools/sch_edit_tool.cpp:1053
 #, c-format
 msgid "Edit %s Field"
 msgstr "Édition Champ %s"
@@ -11846,15 +12232,15 @@ msgstr "pas de symbole sélectionné"
 msgid "symbol is not multi-unit"
 msgstr "le symbole n'est pas multi-unité"
 
-#: eeschema/tools/sch_edit_tool.cpp:983 pcbnew/tools/pcbnew_control.cpp:546
+#: eeschema/tools/sch_edit_tool.cpp:992 pcbnew/tools/pcbnew_control.cpp:546
 msgid "Item locked."
 msgstr "Elément  verrouillé."
 
-#: eeschema/tools/sch_edit_tool.cpp:1396
+#: eeschema/tools/sch_edit_tool.cpp:1405
 msgid "There are no unreferenced pins in this sheet to remove."
 msgstr "Il n'y a pas de pins non référencées à supprimer dans cette feuille."
 
-#: eeschema/tools/sch_edit_tool.cpp:1400
+#: eeschema/tools/sch_edit_tool.cpp:1409
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 "Souhaitez-vous supprimer les pin de feuille non référencées de cette feuille?"
@@ -12114,7 +12500,7 @@ msgstr "Ne pas exporter"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:62
 #: pcbnew/class_drawsegment.cpp:527 pcbnew/class_pad.cpp:772
 #: pcbnew/class_pcb_text.cpp:96 pcbnew/class_text_mod.cpp:369
-#: pcbnew/class_track.cpp:902 pcbnew/class_zone.cpp:738
+#: pcbnew/class_track.cpp:895 pcbnew/class_zone.cpp:738
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:22
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:59
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:59
@@ -12570,7 +12956,7 @@ msgstr "Zoom Auto"
 msgid "Zoom "
 msgstr "Zoom "
 
-#: gerbview/gerbview_layer_widget.cpp:80 pcbnew/class_track.cpp:958
+#: gerbview/gerbview_layer_widget.cpp:80 pcbnew/class_track.cpp:951
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:46 pcbnew/layer_widget.cpp:497
 #: pcbnew/pcb_layer_widget.cpp:368
 msgid "Layers"
@@ -13094,13 +13480,13 @@ msgstr ""
 "\n"
 "Voulez vous créer un nouveau répertoire vide pour le projet?"
 
-#: kicad/import_project.cpp:138 pcbnew/pcb_edit_frame.cpp:1050
+#: kicad/import_project.cpp:138 pcbnew/pcb_edit_frame.cpp:1060
 msgid "Eeschema failed to load:\n"
 msgstr "Eeschema a échoué pour charger:\n"
 
 #: kicad/import_project.cpp:139 kicad/import_project.cpp:173
-#: kicad/tools/kicad_manager_control.cpp:595 pcbnew/pcb_edit_frame.cpp:1021
-#: pcbnew/pcb_edit_frame.cpp:1051
+#: kicad/tools/kicad_manager_control.cpp:595 pcbnew/pcb_edit_frame.cpp:1031
+#: pcbnew/pcb_edit_frame.cpp:1061
 msgid "KiCad Error"
 msgstr "KiCad erreur"
 
@@ -15851,7 +16237,7 @@ msgid "Bezier Curve"
 msgstr "Courbe de Bézier"
 
 #: pcbnew/class_board_item.cpp:48 pcbnew/class_drawsegment.cpp:485
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1918
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1934
 msgid "Polygon"
 msgstr "Polygone"
 
@@ -15874,8 +16260,8 @@ msgstr "Points"
 
 #: pcbnew/class_drawsegment.cpp:493
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:86
-#: pcbnew/dialogs/dialog_pad_properties.cpp:816
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1917
+#: pcbnew/dialogs/dialog_pad_properties.cpp:824
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1933
 msgid "Segment"
 msgstr "Segment"
 
@@ -15984,7 +16370,7 @@ msgstr "Fct pin"
 msgid "Net"
 msgstr "Net"
 
-#: pcbnew/class_pad.cpp:787 pcbnew/class_track.cpp:969
+#: pcbnew/class_pad.cpp:787 pcbnew/class_track.cpp:962
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:106
 msgid "Drill"
 msgstr "Perçage"
@@ -16101,90 +16487,90 @@ msgstr "Valeur %s de %s"
 msgid "Text \"%s\" of %s on %s"
 msgstr "Texte \"%s\" de %s sur %s"
 
-#: pcbnew/class_track.cpp:97
+#: pcbnew/class_track.cpp:96
 #, c-format
 msgid "Blind/Buried Via %s %s on %s - %s"
 msgstr "Via Borgne/Enterrée  %s %s sur couches %s - %s"
 
-#: pcbnew/class_track.cpp:100
+#: pcbnew/class_track.cpp:99
 #, c-format
 msgid "Micro Via %s %s on %s - %s"
 msgstr "Micro Via %s %s sur couches %s - %s"
 
-#: pcbnew/class_track.cpp:104
+#: pcbnew/class_track.cpp:103
 #, c-format
 msgid "Via %s %s on %s - %s"
 msgstr "Via %s %s sur %s - %s"
 
-#: pcbnew/class_track.cpp:799
+#: pcbnew/class_track.cpp:792
 msgid "Full Length"
 msgstr "Long. Totale"
 
-#: pcbnew/class_track.cpp:802
+#: pcbnew/class_track.cpp:795
 msgid "Pad To Die Length"
 msgstr "Dist. Pad à Chip"
 
-#: pcbnew/class_track.cpp:810
+#: pcbnew/class_track.cpp:803
 msgid "NC Name"
 msgstr "NC Nom"
 
-#: pcbnew/class_track.cpp:813
+#: pcbnew/class_track.cpp:806
 msgid "NC Clearance"
 msgstr "Isolation NC"
 
-#: pcbnew/class_track.cpp:816
+#: pcbnew/class_track.cpp:809
 msgid "NC Width"
 msgstr "NC largeur"
 
-#: pcbnew/class_track.cpp:819
+#: pcbnew/class_track.cpp:812
 msgid "NC Via Size"
 msgstr "NC Diam Via"
 
-#: pcbnew/class_track.cpp:822
+#: pcbnew/class_track.cpp:815
 msgid "NC Via Drill"
 msgstr "NC Perçage Via"
 
-#: pcbnew/class_track.cpp:840 pcbnew/class_zone.cpp:723
+#: pcbnew/class_track.cpp:833 pcbnew/class_zone.cpp:723
 msgid "NetName"
 msgstr "NetName"
 
-#: pcbnew/class_track.cpp:844 pcbnew/class_zone.cpp:727
+#: pcbnew/class_track.cpp:837 pcbnew/class_zone.cpp:727
 msgid "NetCode"
 msgstr "NetCode"
 
-#: pcbnew/class_track.cpp:892
+#: pcbnew/class_track.cpp:885
 msgid "Track"
 msgstr "Piste"
 
-#: pcbnew/class_track.cpp:911
+#: pcbnew/class_track.cpp:904
 msgid "Segment Length"
 msgstr "Long. Segment"
 
-#: pcbnew/class_track.cpp:928 pcbnew/pcb_layer_widget.cpp:73
+#: pcbnew/class_track.cpp:921 pcbnew/pcb_layer_widget.cpp:73
 msgid "Micro Via"
 msgstr "Micro Via"
 
-#: pcbnew/class_track.cpp:933
+#: pcbnew/class_track.cpp:926
 msgid "Blind/Buried Via"
 msgstr "Via Aveugle/Enterrée"
 
-#: pcbnew/class_track.cpp:938 pcbnew/pcb_layer_widget.cpp:71
+#: pcbnew/class_track.cpp:931 pcbnew/pcb_layer_widget.cpp:71
 msgid "Through Via"
 msgstr "Via Traversante"
 
-#: pcbnew/class_track.cpp:964
+#: pcbnew/class_track.cpp:957
 msgid "Diameter"
 msgstr "Diamètre"
 
-#: pcbnew/class_track.cpp:992
+#: pcbnew/class_track.cpp:985
 msgid "(Specific)"
 msgstr "(Spécifique)"
 
-#: pcbnew/class_track.cpp:994
+#: pcbnew/class_track.cpp:987
 msgid "(NetClass)"
 msgstr "(Net Classe)"
 
-#: pcbnew/class_track.cpp:1053
+#: pcbnew/class_track.cpp:1046
 #, c-format
 msgid "Track %s %s on %s, length: %s"
 msgstr "Piste %s %s sur couche %s, long.: %s"
@@ -16675,25 +17061,25 @@ msgstr "Modifications à Appliquer:"
 msgid "Cleanup Tracks and Vias"
 msgstr "Nettoyer Pistes et Vias"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:251
+#: pcbnew/dialogs/dialog_copper_zones.cpp:259
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:142
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:105
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:186
 msgid "Chamfer distance:"
 msgstr "Distance de chanfreinage:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:253
+#: pcbnew/dialogs/dialog_copper_zones.cpp:261
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:107
 msgid "Fillet radius:"
 msgstr "Rayon de l'arrondi:"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:371
+#: pcbnew/dialogs/dialog_copper_zones.cpp:387
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr ""
 "La largeur des freins thermique ne peut pas être plus petite que la largeur "
 "minimum."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:404
+#: pcbnew/dialogs/dialog_copper_zones.cpp:420
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:282
 msgid "No layer selected."
 msgstr "Pas de couche sélectionnée."
@@ -17389,24 +17775,24 @@ msgstr ""
 "circuit imprimé\n"
 "comme un connecteur de bord de carte (vieux PC ISA bus par exemple)"
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:445
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:368
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:453
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:376
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Nom fichier invalide:  %s"
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:597
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:553
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:605
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:561
 msgid "Text items must have some content."
 msgstr "Les éléments de texte doivent avoir du contenu."
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:733
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:668
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:749
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:684
 msgid "Modify module properties"
 msgstr "Modifier les propriétés de l'empreinte"
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:785
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:739
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:801
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:755
 msgid "Reference and value are mandatory."
 msgstr "Référence et valeur sont obligatoires."
 
@@ -17713,11 +18099,11 @@ msgstr "Activer les raccourcis clavier de déplacement et d'auto placement"
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Désactiver les raccourcis clavier de déplacement et d'auto placement"
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:507
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:515
 msgid "Footprint must have a name."
 msgstr "L'Empreinte doit avoir un nom."
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:512
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:520
 #, c-format
 msgid "Footprint name may not contain \"%s\"."
 msgstr "Le nom d'empreinte ne peut pas contenir \"%s\"."
@@ -18083,7 +18469,7 @@ msgstr ""
 msgid "Exported \"%s\"."
 msgstr "Exporté \"%s\"."
 
-#: pcbnew/dialogs/dialog_export_svg.cpp:289 pcbnew/dialogs/dialog_plot.cpp:859
+#: pcbnew/dialogs/dialog_export_svg.cpp:289 pcbnew/dialogs/dialog_plot.cpp:864
 #: pcbnew/exporters/gen_footprints_placefile.cpp:295
 #: pcbnew/exporters/gen_footprints_placefile.cpp:442
 #, c-format
@@ -19351,86 +19737,86 @@ msgstr "Empreinte %s (%s),"
 msgid "%s, rotated %.1f deg"
 msgstr "%s, rotation %.1f deg"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:810
+#: pcbnew/dialogs/dialog_pad_properties.cpp:818
 #, c-format
 msgid "width %s"
 msgstr "largeur %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:817
-#: pcbnew/dialogs/dialog_pad_properties.cpp:823
+#: pcbnew/dialogs/dialog_pad_properties.cpp:825
+#: pcbnew/dialogs/dialog_pad_properties.cpp:831
 msgid "from "
 msgstr "de "
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:818
-#: pcbnew/dialogs/dialog_pad_properties.cpp:824
+#: pcbnew/dialogs/dialog_pad_properties.cpp:826
+#: pcbnew/dialogs/dialog_pad_properties.cpp:832
 msgid "to "
 msgstr "à "
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:829
+#: pcbnew/dialogs/dialog_pad_properties.cpp:837
 msgid "center "
 msgstr "centre "
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:830
+#: pcbnew/dialogs/dialog_pad_properties.cpp:838
 msgid "start "
 msgstr "début "
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:831
+#: pcbnew/dialogs/dialog_pad_properties.cpp:839
 #, c-format
 msgid "angle %s"
 msgstr "angle %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:836
+#: pcbnew/dialogs/dialog_pad_properties.cpp:844
 msgid "ring"
 msgstr "anneau"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:838
+#: pcbnew/dialogs/dialog_pad_properties.cpp:846
 msgid "circle"
 msgstr "cercle"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:841
+#: pcbnew/dialogs/dialog_pad_properties.cpp:849
 #, c-format
 msgid "radius %s"
 msgstr "rayon %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:847
+#: pcbnew/dialogs/dialog_pad_properties.cpp:855
 #, c-format
 msgid "corners count %d"
 msgstr "nombre de sommets %d"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1144
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1152
 msgid "Pad size must be greater than zero"
 msgstr "La taille de la pastille doit être plus grande que zéro"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1150
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1158
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr ""
 "Valeur incorrecte pour diamètre de perçage: perçage plus grand que la taille "
 "du pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1157
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1165
 msgid "Pad local clearance must be zero or greater than zero"
 msgstr "La marge locale d'isolation doit être nulle ou plus grande que zéro"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1168
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1176
 msgid "Pad local solder mask clearance must be zero or greater than zero"
 msgstr ""
 "La marge locale de masque de soudure doit être nulle ou plus grande que zéro"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1176
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1184
 #, c-format
 msgid "Pad local solder mask clearance must be greater than %s"
 msgstr ""
 "La marge locale de masque de soudure du pad doit être plus grande que %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1191
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1199
 msgid "Error: pad has no layer"
 msgstr "Erreur: le pad n'est sur aucune couche"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1198
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1206
 msgid "Error: the pad is not on a copper layer and has a hole"
 msgstr "Erreur: le pad n'est pas sur une couche cuivre et a un trou"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1203
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1211
 msgid ""
 "For NPTH pad, set pad size value to pad drill value, if you do not want this "
 "pad plotted in gerber files"
@@ -19439,19 +19825,19 @@ msgstr ""
 "trou,\n"
 "si vous ne voulez pas que ce pad soit généré dans les fichiers Gerber"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1222
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1230
 msgid "Incorrect value for pad offset"
 msgstr "Valeur incorrecte pour offset du pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1227
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1235
 msgid "Too large value for pad delta size"
 msgstr "Valeur trop grande pour delta du pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1235
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1243
 msgid "Error: Through hole pad: drill diameter set to 0"
 msgstr "Erreur: pad à trou traversant: diamètre de perçage mis à 0"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1240
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1248
 msgid ""
 "Error: Connector pads are not on the solder paste layer\n"
 "Use SMD pads instead"
@@ -19459,52 +19845,52 @@ msgstr ""
 "Erreur: les pads de connecteurs ne sont pas sur la couche de pâte à souder\n"
 "Utiliser les pads CMS à la place"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1249
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1257
 msgid "Error: only one external copper layer allowed for SMD or Connector pads"
 msgstr ""
 "Erreur: une seule couche cuivre externe permise pour les pads CMS ou "
 "Connecteurs"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1262
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1270
 msgid "Incorrect corner size value"
 msgstr "Valeur incorrecte pour la taille du coin"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1266
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1274
 msgid "Incorrect (negative) corner size value"
 msgstr "Valeur incorrecte (négative) pour la taille du coin"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1268
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1276
 msgid "Corner size value must be smaller than 50%"
 msgstr "La taille des coins doit être inférieure à 50%"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1275
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1283
 msgid "Incorrect pad shape: the shape must be equivalent to only one polygon"
 msgstr ""
 "Forme de pad incorrecte: la forme doit être équivalente à un seul polygone"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1281
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1289
 msgid "Pad setup errors list"
 msgstr "Erreurs sur Paramètres du Pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1529
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1537
 msgid "Modify pad"
 msgstr "Modifier pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1828
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1965
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2000
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1844
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1981
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2016
 msgid "No shape selected"
 msgstr "Pas de forme sélectionnée"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1918
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1934
 msgid "Ring/Circle"
 msgstr "Anneau/Cercle"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1920
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1936
 msgid "Shape type:"
 msgstr "Type de forme:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1920
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1936
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:643
 msgid "Add Primitive"
 msgstr "Ajouter Primitive"
@@ -19938,23 +20324,23 @@ msgstr "Forme de Base Polygonale"
 msgid "Generate Drill Files..."
 msgstr "Créer Fichiers de Perçage..."
 
-#: pcbnew/dialogs/dialog_plot.cpp:611
+#: pcbnew/dialogs/dialog_plot.cpp:616
 msgid "HPGL pen size constrained."
 msgstr "Taille plume HPGL limitée."
 
-#: pcbnew/dialogs/dialog_plot.cpp:622
+#: pcbnew/dialogs/dialog_plot.cpp:627
 msgid "Default line width constrained."
 msgstr "Épaisseur ligne par défaut limitée."
 
-#: pcbnew/dialogs/dialog_plot.cpp:635
+#: pcbnew/dialogs/dialog_plot.cpp:640
 msgid "X scale constrained."
 msgstr "Échelle X limitée."
 
-#: pcbnew/dialogs/dialog_plot.cpp:649
+#: pcbnew/dialogs/dialog_plot.cpp:654
 msgid "Y scale constrained."
 msgstr "Échelle Y limitée."
 
-#: pcbnew/dialogs/dialog_plot.cpp:662
+#: pcbnew/dialogs/dialog_plot.cpp:667
 #, c-format
 msgid ""
 "Width correction constrained. The reasonable width correction value must be "
@@ -19963,19 +20349,19 @@ msgstr ""
 "Correction d'épaisseur. La valeur raisonnable de correction doit être dans "
 "la plage  [%s; %s] (%s)  pour les règles actuelles de conception."
 
-#: pcbnew/dialogs/dialog_plot.cpp:735
+#: pcbnew/dialogs/dialog_plot.cpp:740
 msgid "No layer selected, Nothing to plot"
 msgstr "Pas de couche sélectionnée, Rien à tracer"
 
-#: pcbnew/dialogs/dialog_plot.cpp:804
+#: pcbnew/dialogs/dialog_plot.cpp:809
 msgid "Warning: Scale option set to a very small value"
 msgstr "Attention: option d'échelle ajustée à une valeur très petite"
 
-#: pcbnew/dialogs/dialog_plot.cpp:807
+#: pcbnew/dialogs/dialog_plot.cpp:812
 msgid "Warning: Scale option set to a very large value"
 msgstr "Attention: option d'échelle ajustée à une valeur très grande"
 
-#: pcbnew/dialogs/dialog_plot.cpp:854
+#: pcbnew/dialogs/dialog_plot.cpp:859
 #, c-format
 msgid "Plot file \"%s\" created."
 msgstr "Fichier de tracé \"%s\" créé."
@@ -20848,7 +21234,7 @@ msgstr "Garder le texte droit"
 msgid "Parent footprint description"
 msgstr "Description de l'empreinte parente"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:291
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:299
 #, c-format
 msgid ""
 "This will change the net assigned to %s pad %s to %s.\n"
@@ -20857,7 +21243,7 @@ msgstr ""
 "Cela va changer le net assigné à %s pad %s à %s.\n"
 "Souhaitez-vous continuer?"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:301
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:309
 #, c-format
 msgid ""
 "This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
@@ -20866,7 +21252,7 @@ msgstr ""
 "Cela va changer le net assigné à %s pad %s et %s pad %s à %s.\n"
 "Souhaitez-vous continuer?"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:311
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:319
 #, c-format
 msgid ""
 "This will change the net assigned to %lu connected pads to %s.\n"
@@ -20875,21 +21261,21 @@ msgstr ""
 "Cela va changer le net assigné à %lu pads connectés à %s.\n"
 "Souhaitez-vous continuer?"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:318
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:326
 msgid "Continue"
 msgstr "Continuer"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:373
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:381
 msgid "Via drill size must be smaller than via diameter"
 msgstr ""
 "Le diamètre de perçage de la via doit être plus petit que le diamètre de la "
 "via"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:382
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:390
 msgid "Via start layer and end layer cannot be the same"
 msgstr "Les couches de début et de fin ne peuvent pas être identiques"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:529
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:544
 msgid "Edit track/via properties"
 msgstr "Éditer les propriétés des pistes/vias"
 
@@ -23042,7 +23428,7 @@ msgid "Select Library Table"
 msgstr "Sélection Table des Librairies"
 
 #: pcbnew/footprint_libraries_utils.cpp:601 pcbnew/gpcb_plugin.cpp:961
-#: pcbnew/kicad_plugin.cpp:2189 pcbnew/kicad_plugin.cpp:2275
+#: pcbnew/kicad_plugin.cpp:2193 pcbnew/kicad_plugin.cpp:2279
 #, c-format
 msgid "Library \"%s\" is read only"
 msgstr "Librairie \"%s\" est en lecture seule"
@@ -23310,23 +23696,23 @@ msgstr "mot clé \"%s\" inconnu"
 msgid "Element token contains %d parameters."
 msgstr "Element token contains %d parameters."
 
-#: pcbnew/gpcb_plugin.cpp:980 pcbnew/kicad_plugin.cpp:2319
+#: pcbnew/gpcb_plugin.cpp:980 pcbnew/kicad_plugin.cpp:2323
 #, c-format
 msgid "user does not have permission to delete directory \"%s\""
 msgstr ""
 "Vous n'avez pas la permission d'écriture pour supprimer le répertoire \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:988 pcbnew/kicad_plugin.cpp:2327
+#: pcbnew/gpcb_plugin.cpp:988 pcbnew/kicad_plugin.cpp:2331
 #, c-format
 msgid "library directory \"%s\" has unexpected sub-directories"
 msgstr "le répertoire librairie \"%s\" a des sous-répertoires inattendus"
 
-#: pcbnew/gpcb_plugin.cpp:1007 pcbnew/kicad_plugin.cpp:2346
+#: pcbnew/gpcb_plugin.cpp:1007 pcbnew/kicad_plugin.cpp:2350
 #, c-format
 msgid "unexpected file \"%s\" was found in library path \"%s\""
 msgstr "fichier inattendu \"%s\" trouvé dans le chemin de librairie \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:1025 pcbnew/kicad_plugin.cpp:2364
+#: pcbnew/gpcb_plugin.cpp:1025 pcbnew/kicad_plugin.cpp:2368
 #, c-format
 msgid "footprint library \"%s\" cannot be deleted"
 msgstr "la librairie d'empreintes  \"%s\" ne peut pas être supprimée"
@@ -23472,26 +23858,26 @@ msgstr ""
 "Le chemin de librairie d'empreintes \"%s\" n'existe pas (ou n'est pas un "
 "répertoire)"
 
-#: pcbnew/kicad_plugin.cpp:1310 pcbnew/legacy_plugin.cpp:96
+#: pcbnew/kicad_plugin.cpp:1314 pcbnew/legacy_plugin.cpp:96
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "type pad inconnu: %d"
 
-#: pcbnew/kicad_plugin.cpp:1674
+#: pcbnew/kicad_plugin.cpp:1678
 #, c-format
 msgid "unknown via type %d"
 msgstr "type via inconnu %d"
 
-#: pcbnew/kicad_plugin.cpp:1824
+#: pcbnew/kicad_plugin.cpp:1828
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "unknown zone corner smoothing type %d"
 
-#: pcbnew/kicad_plugin.cpp:2036
+#: pcbnew/kicad_plugin.cpp:2040
 msgid "this file does not contain a PCB"
 msgstr "ce fichier ne contient pas de PCB"
 
-#: pcbnew/kicad_plugin.cpp:2177
+#: pcbnew/kicad_plugin.cpp:2181
 #, c-format
 msgid ""
 "Library \"%s\" does not exist.\n"
@@ -23500,21 +23886,21 @@ msgstr ""
 "La librairie\"%s\" n'existe pas.\n"
 "Voulez vous la créer?"
 
-#: pcbnew/kicad_plugin.cpp:2181
+#: pcbnew/kicad_plugin.cpp:2185
 msgid "Library Not Found"
 msgstr "Librairie non trouvée"
 
-#: pcbnew/kicad_plugin.cpp:2220
+#: pcbnew/kicad_plugin.cpp:2224
 #, c-format
 msgid "Footprint file name \"%s\" is not valid."
 msgstr "Nom de fichier d'empreinte \"%s\" non valide."
 
-#: pcbnew/kicad_plugin.cpp:2226
+#: pcbnew/kicad_plugin.cpp:2230
 #, c-format
 msgid "No write permissions to delete file \"%s\""
 msgstr "Pas de permission d'écriture pour supprimer  le fichier \"%s\""
 
-#: pcbnew/kicad_plugin.cpp:2294
+#: pcbnew/kicad_plugin.cpp:2298
 #, c-format
 msgid "cannot overwrite library path \"%s\""
 msgstr "impossible de remplacer le chemin librairie  \"%s\""
@@ -23598,7 +23984,7 @@ msgstr "ZAux mauvais pour CZONE_CONTAINER \"%s\""
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Mauvais ZSmoothing pour CZONE_CONTAINER \"%s\""
 
-#: pcbnew/legacy_plugin.cpp:2644 pcbnew/pcb_parser.cpp:3596
+#: pcbnew/legacy_plugin.cpp:2644 pcbnew/pcb_parser.cpp:3606
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to polygon fills?"
@@ -23606,16 +23992,16 @@ msgstr ""
 "Le mode de remplissage par segment  n'est plus supporté.\n"
 "Convertir la zone en polygone de remplissage?"
 
-#: pcbnew/legacy_plugin.cpp:2646 pcbnew/pcb_parser.cpp:3598
+#: pcbnew/legacy_plugin.cpp:2646 pcbnew/pcb_parser.cpp:3608
 msgid "Legacy Zone Warning"
 msgstr "Avertissement d'Obsolescence"
 
-#: pcbnew/legacy_plugin.cpp:2684
+#: pcbnew/legacy_plugin.cpp:2692
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
 msgstr "Mauvais ZClearance padoption pour CZONE_CONTAINER \"%s\""
 
-#: pcbnew/legacy_plugin.cpp:3032 pcbnew/legacy_plugin.cpp:3069
+#: pcbnew/legacy_plugin.cpp:3040 pcbnew/legacy_plugin.cpp:3077
 #, c-format
 msgid ""
 "invalid float number in file: \"%s\"\n"
@@ -23624,7 +24010,7 @@ msgstr ""
 "nombre flottant invalide dans le fichier: \"%s\"\n"
 "ligne: %d, offset: %d"
 
-#: pcbnew/legacy_plugin.cpp:3041 pcbnew/legacy_plugin.cpp:3077
+#: pcbnew/legacy_plugin.cpp:3049 pcbnew/legacy_plugin.cpp:3085
 #, c-format
 msgid ""
 "missing float number in file: \"%s\"\n"
@@ -23633,12 +24019,12 @@ msgstr ""
 "Nombre flottant manquant dans le fichier: \"%s\"\n"
 "ligne: %d, offset: %d"
 
-#: pcbnew/legacy_plugin.cpp:3279
+#: pcbnew/legacy_plugin.cpp:3287
 #, c-format
 msgid "File '%s' is empty."
 msgstr "Le fichier \"%s\" est vide."
 
-#: pcbnew/legacy_plugin.cpp:3282
+#: pcbnew/legacy_plugin.cpp:3290
 #, c-format
 msgid "File '%s' is not a legacy library."
 msgstr "Le fichier \"%s\"  n'est pas une librairie à l'ancien format."
@@ -24097,7 +24483,7 @@ msgid "Cannot find component with reference \"%s\" in netlist."
 msgstr "Impossible de trouver le composant de référence \"%s\" en netliste."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:389
-#: pcbnew/pcb_parser.cpp:2325
+#: pcbnew/pcb_parser.cpp:2335
 #, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -24234,7 +24620,7 @@ msgstr "Les modifications du C.I. ne sont pas sauvées."
 msgid " [Unsaved]"
 msgstr " [Non sauvé]"
 
-#: pcbnew/pcb_edit_frame.cpp:952
+#: pcbnew/pcb_edit_frame.cpp:962
 msgid ""
 "Cannot update the PCB because Pcbnew is opened in stand-alone mode. In order "
 "to create or update PCBs from schematics, you must launch the KiCad project "
@@ -24244,16 +24630,16 @@ msgstr ""
 "Afin de créer/mettre à jour le PCB à partir du schéma, vous devrez lancer "
 "Kicad manager et créez un projet."
 
-#: pcbnew/pcb_edit_frame.cpp:987
+#: pcbnew/pcb_edit_frame.cpp:997
 msgid "Eeschema netlist"
 msgstr "Netliste EEschema"
 
-#: pcbnew/pcb_edit_frame.cpp:1020
+#: pcbnew/pcb_edit_frame.cpp:1030
 #, c-format
 msgid "Schematic file \"%s\" not found."
 msgstr "Fichier schématique\"%s\" non trouvé."
 
-#: pcbnew/pcb_edit_frame.cpp:1206
+#: pcbnew/pcb_edit_frame.cpp:1216
 msgid "Export Hyperlynx Layout"
 msgstr "Exporter au Format Hyperlynx"
 
@@ -24578,20 +24964,20 @@ msgstr ""
 msgid "%d is not a valid layer count"
 msgstr "%d n'est pas un nombre de couches valide"
 
-#: pcbnew/pcb_parser.cpp:1874
+#: pcbnew/pcb_parser.cpp:1884
 #, c-format
 msgid "Duplicate NETCLASS name \"%s\" in file \"%s\" at line %d, offset %d"
 msgstr ""
 "Nom NETCLASS \"%s\" dupliqué dans le fichier \"%s\" ligne %d, offset %d"
 
-#: pcbnew/pcb_parser.cpp:2585
+#: pcbnew/pcb_parser.cpp:2595
 #, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Ne peut gérer le texte d'empreinte type %s"
 
-#: pcbnew/pcb_parser.cpp:3018 pcbnew/pcb_parser.cpp:3028
-#: pcbnew/pcb_parser.cpp:3322 pcbnew/pcb_parser.cpp:3404
-#: pcbnew/pcb_parser.cpp:3474
+#: pcbnew/pcb_parser.cpp:3028 pcbnew/pcb_parser.cpp:3038
+#: pcbnew/pcb_parser.cpp:3332 pcbnew/pcb_parser.cpp:3414
+#: pcbnew/pcb_parser.cpp:3484
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -24604,7 +24990,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: pcbnew/pcb_parser.cpp:3860
+#: pcbnew/pcb_parser.cpp:3870
 #, c-format
 msgid ""
 "There is a zone that belongs to a not existing net\n"
@@ -25001,7 +25387,7 @@ msgstr ", écart via "
 msgid "Interactive Router"
 msgstr "Routeur Interactif"
 
-#: pcbnew/router/router_tool.cpp:556
+#: pcbnew/router/router_tool.cpp:560
 msgid ""
 "Blind/buried vias have to be enabled in Board Setup > Design Rules > "
 "Constraints."
@@ -25009,18 +25395,18 @@ msgstr ""
 "Vias aveugles / enterrées doivent être activées dans Config. CI > Règles de "
 "Conception > Contraintes."
 
-#: pcbnew/router/router_tool.cpp:562
+#: pcbnew/router/router_tool.cpp:567
 msgid ""
 "Microvias have to be enabled in Board Setup > Design Rules > Constraints."
 msgstr ""
 "Les microvias doivent être activées dans Config. CI > Règles de Conception > "
 "Contraintes."
 
-#: pcbnew/router/router_tool.cpp:569
+#: pcbnew/router/router_tool.cpp:574
 msgid "Only through vias are allowed on 2 layer boards."
 msgstr "Uniquement les vias traversantes sont admises pour les CI à 2 couches."
 
-#: pcbnew/router/router_tool.cpp:576
+#: pcbnew/router/router_tool.cpp:582
 msgid ""
 "Microvias can be placed only between the outer layers (F.Cu/B.Cu) and the "
 "ones directly adjacent to them."
@@ -25028,20 +25414,20 @@ msgstr ""
 "Les microvias peuvent être placées seulement entre une couche extérieure (F."
 "Cu/B.Cu) et celle adjacente."
 
-#: pcbnew/router/router_tool.cpp:682
+#: pcbnew/router/router_tool.cpp:691
 msgid "Tracks on Copper layers only"
 msgstr "Pistes sur Couches Cuivre seulement"
 
-#: pcbnew/router/router_tool.cpp:1002 pcbnew/router/router_tool.cpp:1158
-#: pcbnew/router/router_tool.cpp:1237
+#: pcbnew/router/router_tool.cpp:1011 pcbnew/router/router_tool.cpp:1167
+#: pcbnew/router/router_tool.cpp:1246
 msgid "The selected item is locked."
 msgstr "L'élément sélectionné est verrouillé."
 
-#: pcbnew/router/router_tool.cpp:1004 pcbnew/router/router_tool.cpp:1160
+#: pcbnew/router/router_tool.cpp:1013 pcbnew/router/router_tool.cpp:1169
 msgid "Drag Anyway"
 msgstr "Dragger de Toute Façon"
 
-#: pcbnew/router/router_tool.cpp:1239 pcbnew/tools/pcb_actions.cpp:1155
+#: pcbnew/router/router_tool.cpp:1248 pcbnew/tools/pcb_actions.cpp:1155
 #: pcbnew/tools/pcb_actions.cpp:1161
 msgid "Break Track"
 msgstr "Briser Piste"
