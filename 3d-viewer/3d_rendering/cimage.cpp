@@ -47,7 +47,7 @@ CIMAGE::CIMAGE( unsigned int aXsize, unsigned int aYsize )
     memset( m_pixels, 0, m_wxh );
     m_width   = aXsize;
     m_height  = aYsize;
-    m_wraping = WRAP::CLAMP;
+    m_wraping = IMAGE_WRAP::CLAMP;
 }
 
 
@@ -58,7 +58,7 @@ CIMAGE::CIMAGE( const CIMAGE &aSrcImage )
     memcpy( m_pixels, aSrcImage.GetBuffer(), m_wxh );
     m_width   = aSrcImage.GetWidth();
     m_height  = aSrcImage.GetHeight();
-    m_wraping = WRAP::CLAMP;
+    m_wraping = IMAGE_WRAP::CLAMP;
 }
 
 
@@ -81,14 +81,14 @@ bool CIMAGE::wrapCoords( int *aXo, int *aYo ) const
 
     switch(m_wraping)
     {
-    case WRAP::CLAMP:
+    case IMAGE_WRAP::CLAMP:
         x =  (x < 0 )?0:x;
         x =  (x >= (int)(m_width - 1))?(m_width - 1):x;
         y =  (y < 0)?0:y;
         y =  (y >= (int)(m_height - 1))?(m_height - 1):y;
         break;
 
-    case WRAP::WRAP:
+    case IMAGE_WRAP::WRAP:
         x = (x < 0)?((m_width - 1)+x):x;
         x = (x >= (int)(m_width - 1))?(x - m_width):x;
         y = (y < 0)?((m_height - 1)+y):y;
@@ -470,8 +470,8 @@ void CIMAGE::EfxFilter( CIMAGE *aInImg, IMAGE_FILTER aFilterType )
 {
     S_FILTER filter = FILTERS[static_cast<int>( aFilterType )];
 
-    aInImg->m_wraping = WRAP::CLAMP;
-    m_wraping = WRAP::CLAMP;
+    aInImg->m_wraping = IMAGE_WRAP::CLAMP;
+    m_wraping = IMAGE_WRAP::CLAMP;
 
     std::atomic<size_t> nextRow( 0 );
     std::atomic<size_t> threadsFinished( 0 );

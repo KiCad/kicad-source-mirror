@@ -49,7 +49,7 @@ enum class IMAGE_OP {
 
 
 /// Image wrap type enumeration
-enum class WRAP {
+enum class IMAGE_WRAP {
     ZERO,      ///< Coords that wraps are not evaluated
     CLAMP,     ///< Coords are clamped to image size
     WRAP       ///< Coords are wrapped arround
@@ -223,7 +223,7 @@ private:
     unsigned int    m_width;            ///< width of the image
     unsigned int    m_height;           ///< height of the image
     unsigned int    m_wxh;              ///< width * height precalc value
-    WRAP          m_wraping;          ///< current wrapping type
+    IMAGE_WRAP          m_wraping;          ///< current wrapping type
 };
 
 #endif   // CIMAGE_H
