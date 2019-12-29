@@ -34,10 +34,10 @@
 #include <wx/gdicmn.h>  // for wxSize
 #include <vector>
 
-enum PROJECTION_TYPE
+enum class PROJECTION_TYPE
 {
-    PROJECTION_ORTHO,
-    PROJECTION_PERSPECTIVE
+    ORTHO,
+    PERSPECTIVE
 };
 
 /**

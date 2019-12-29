@@ -96,14 +96,14 @@ void CTRACK_BALL::Pan( const wxPoint &aNewMousePosition )
 {
     m_parametersChanged = true;
 
-    if( m_projectionType == PROJECTION_ORTHO )
+    if( m_projectionType == PROJECTION_TYPE::ORTHO )
     {
         // With the ortographic projection, there is just a zoom factor
         const float panFactor = m_zoom / 37.5f; // Magic number from CCAMERA::rebuildProjection
         m_camera_pos.x -= panFactor * ( m_lastPosition.x - aNewMousePosition.x );
         m_camera_pos.y -= panFactor * ( aNewMousePosition.y - m_lastPosition.y );
     }
-    else // PROJECTION_PERSPECTIVE
+    else // PROJECTION_TYPE::PERSPECTIVE
     {
         // Unproject the coordinates using the precomputed frustum tangent (zoom level dependent)
         const float panFactor = -m_camera_pos.z *  m_frustum.tang * 2;
