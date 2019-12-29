@@ -125,7 +125,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, tool );
 
     auto raytracingCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_settings.RenderEngineGet() != RENDER_ENGINE_OPENGL_LEGACY;
+        return m_settings.RenderEngineGet() != RENDER_ENGINE::OPENGL_LEGACY;
     };
     auto NormalModeCondition = [ this ] ( const SELECTION& aSel ) {
         return m_settings.MaterialModeGet() == MATERIAL_MODE_NORMAL;

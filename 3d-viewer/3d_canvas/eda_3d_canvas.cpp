@@ -387,11 +387,11 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
     {
         m_3d_render = m_3d_render_ogl_legacy;
         m_render_raytracing_was_requested = false;
-        m_settings.RenderEngineSet( RENDER_ENGINE_OPENGL_LEGACY );
+        m_settings.RenderEngineSet( RENDER_ENGINE::OPENGL_LEGACY );
     }
 
     // Check if a raytacing was requested and need to switch to raytracing mode
-    if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+    if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
     {
         const bool was_camera_changed = m_settings.CameraGet().ParametersChanged();
 
@@ -1096,11 +1096,11 @@ void EDA_3D_CANVAS::RenderEngineChanged()
 
     switch( m_settings.RenderEngineGet() )
     {
-    case RENDER_ENGINE_OPENGL_LEGACY:
+	case RENDER_ENGINE::OPENGL_LEGACY:
         m_3d_render = m_3d_render_ogl_legacy;
         break;
 
-    case RENDER_ENGINE_RAYTRACING:
+	case RENDER_ENGINE::RAYTRACING:
         m_3d_render = m_3d_render_raytracing;
         break;
 

@@ -79,10 +79,10 @@ enum class GRID3D_TYPE
 
 
 /// Render engine mode
-enum RENDER_ENGINE
+enum class RENDER_ENGINE
 {
-    RENDER_ENGINE_OPENGL_LEGACY,
-    RENDER_ENGINE_RAYTRACING,
+    OPENGL_LEGACY,
+    RAYTRACING,
 };
 
 

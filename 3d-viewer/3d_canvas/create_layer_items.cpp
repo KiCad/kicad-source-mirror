@@ -224,7 +224,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         m_layers_container2D[curr_layer_id] = layerContainer;
 
         if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) &&
-            (m_render_engine == RENDER_ENGINE_OPENGL_LEGACY) )
+            (m_render_engine == RENDER_ENGINE::OPENGL_LEGACY) )
         {
             SHAPE_POLY_SET *layerPoly = new SHAPE_POLY_SET;
             m_layers_poly[curr_layer_id] = layerPoly;
@@ -455,7 +455,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // Creates outline contours of the tracks and add it to the poly of the layer
     // /////////////////////////////////////////////////////////////////////////
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) &&
-        (m_render_engine == RENDER_ENGINE_OPENGL_LEGACY) )
+        (m_render_engine == RENDER_ENGINE::OPENGL_LEGACY) )
     {
         for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
         {
@@ -588,7 +588,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // Add modules PADs poly contourns
     // /////////////////////////////////////////////////////////////////////////
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) &&
-        (m_render_engine == RENDER_ENGINE_OPENGL_LEGACY) )
+        (m_render_engine == RENDER_ENGINE::OPENGL_LEGACY) )
     {
         for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
         {
@@ -684,7 +684,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // Add graphic item on copper layers to poly contourns
     // /////////////////////////////////////////////////////////////////////////
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) &&
-        (m_render_engine == RENDER_ENGINE_OPENGL_LEGACY) )
+        (m_render_engine == RENDER_ENGINE::OPENGL_LEGACY) )
     {
         for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
         {
@@ -773,7 +773,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     if( GetFlag( FL_ZONE ) &&
         GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) &&
-        (m_render_engine == RENDER_ENGINE_OPENGL_LEGACY) )
+        (m_render_engine == RENDER_ENGINE::OPENGL_LEGACY) )
     {
         // ADD COPPER ZONES
         for( int ii = 0; ii < m_board->GetAreaCount(); ++ii )
@@ -802,7 +802,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         aStatusTextReporter->Report( _( "Simplifying copper layers polygons" ) );
 
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) &&
-        (m_render_engine == RENDER_ENGINE_OPENGL_LEGACY) )
+        (m_render_engine == RENDER_ENGINE::OPENGL_LEGACY) )
     {
         std::atomic<size_t> nextItem( 0 );
         std::atomic<size_t> threadsFinished( 0 );

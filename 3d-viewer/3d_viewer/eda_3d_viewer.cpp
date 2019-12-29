@@ -285,7 +285,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_ROTATE3D_X_POS:
         m_settings.CameraGet().RotateX( glm::radians(ROT_ANGLE) );
 
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
             m_canvas->Request_refresh();
         else
             m_canvas->RenderRaytracingRequest();
@@ -295,7 +295,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_ROTATE3D_X_NEG:
         m_settings.CameraGet().RotateX( -glm::radians(ROT_ANGLE) );
 
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
             m_canvas->Request_refresh();
         else
             m_canvas->RenderRaytracingRequest();
@@ -305,7 +305,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_ROTATE3D_Y_POS:
         m_settings.CameraGet().RotateY( glm::radians(ROT_ANGLE) );
 
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
             m_canvas->Request_refresh();
         else
             m_canvas->RenderRaytracingRequest();
@@ -315,7 +315,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_ROTATE3D_Y_NEG:
         m_settings.CameraGet().RotateY( -glm::radians(ROT_ANGLE) );
 
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
             m_canvas->Request_refresh();
         else
             m_canvas->RenderRaytracingRequest();
@@ -325,7 +325,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_ROTATE3D_Z_POS:
         m_settings.CameraGet().RotateZ( glm::radians(ROT_ANGLE) );
 
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
             m_canvas->Request_refresh();
         else
             m_canvas->RenderRaytracingRequest();
@@ -335,7 +335,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_ROTATE3D_Z_NEG:
         m_settings.CameraGet().RotateZ( -glm::radians(ROT_ANGLE) );
 
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
             m_canvas->Request_refresh();
         else
             m_canvas->RenderRaytracingRequest();
@@ -373,7 +373,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         if( Set3DColorFromUser( m_settings.m_BgColorBot, _( "Background Color, Bottom" ),
                                 nullptr ) )
         {
-            if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+            if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
                 m_canvas->Request_refresh();
             else
                 NewDisplay( true );
@@ -383,7 +383,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_MENU3D_BGCOLOR_TOP:
         if( Set3DColorFromUser( m_settings.m_BgColorTop, _( "Background Color, Top" ), nullptr ) )
         {
-            if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+            if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
                 m_canvas->Request_refresh();
             else
                 NewDisplay( true );
@@ -611,14 +611,14 @@ void EDA_3D_VIEWER::OnRenderEngineSelection( wxCommandEvent &event )
 {
     const RENDER_ENGINE old_engine = m_settings.RenderEngineGet();
 
-    if( old_engine == RENDER_ENGINE_OPENGL_LEGACY )
-        m_settings.RenderEngineSet( RENDER_ENGINE_RAYTRACING );
+    if( old_engine == RENDER_ENGINE::OPENGL_LEGACY )
+        m_settings.RenderEngineSet( RENDER_ENGINE::RAYTRACING );
     else
-        m_settings.RenderEngineSet( RENDER_ENGINE_OPENGL_LEGACY );
+        m_settings.RenderEngineSet( RENDER_ENGINE::OPENGL_LEGACY );
 
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::OnRenderEngineSelection type %s ",
-                ( m_settings.RenderEngineGet() == RENDER_ENGINE_RAYTRACING ) ?
-                "Ray Trace" : "OpenGL Legacy" );
+            ( m_settings.RenderEngineGet() == RENDER_ENGINE::RAYTRACING ) ? "Ray Trace" :
+                                                                            "OpenGL Legacy" );
 
     if( old_engine != m_settings.RenderEngineGet() )
     {
@@ -654,7 +654,7 @@ void EDA_3D_VIEWER::OnDisableRayTracing( wxCommandEvent& aEvent )
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::%s disabling ray tracing.", __WXFUNCTION__ );
 
     m_disable_ray_tracing = true;
-    m_settings.RenderEngineSet( RENDER_ENGINE_OPENGL_LEGACY );
+    m_settings.RenderEngineSet( RENDER_ENGINE::OPENGL_LEGACY );
 }
 
 
@@ -797,13 +797,14 @@ void EDA_3D_VIEWER::LoadSettings( wxConfigBase *aCfg )
     m_settings.SetFlag( FL_SHOW_BOARD_BODY, tmp );
 
     int tmpi;
-    aCfg->Read( keyShowGrid, &tmpi, (int) GRID3D_TYPE::NONE );
-    m_settings.GridSet( (GRID3D_TYPE)tmpi );
+    aCfg->Read( keyShowGrid, &tmpi, static_cast<int>( GRID3D_TYPE::NONE ) );
+    m_settings.GridSet( static_cast<GRID3D_TYPE>( tmpi ) );
 
-    aCfg->Read( keyRenderEngine, &tmpi, (int)RENDER_ENGINE_OPENGL_LEGACY );
+    aCfg->Read( keyRenderEngine, &tmpi, static_cast<int>( RENDER_ENGINE::OPENGL_LEGACY ) );
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::LoadSettings render setting %s",
-                ( (RENDER_ENGINE)tmpi == RENDER_ENGINE_RAYTRACING ) ? "Ray Trace" : "OpenGL" );
-    m_settings.RenderEngineSet( (RENDER_ENGINE)tmpi );
+            ( static_cast<RENDER_ENGINE>( tmpi ) == RENDER_ENGINE::RAYTRACING ) ? "Ray Trace" :
+                                                                                  "OpenGL" );
+    m_settings.RenderEngineSet( static_cast<RENDER_ENGINE>( tmpi ) );
 
     aCfg->Read( keyRenderMaterial, &tmpi, (int)MATERIAL_MODE_NORMAL );
     m_settings.MaterialModeSet( (MATERIAL_MODE)tmpi );
@@ -846,9 +847,10 @@ void EDA_3D_VIEWER::SaveSettings( wxConfigBase *aCfg )
 
     aCfg->Write( keyShowRealisticMode,      m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
 
-    aCfg->Write( keyRenderEngine,           (int)m_settings.RenderEngineGet() );
+    aCfg->Write( keyRenderEngine, static_cast<int>( m_settings.RenderEngineGet() ) );
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::SaveSettings render setting %s",
-                ( m_settings.RenderEngineGet() == RENDER_ENGINE_RAYTRACING ) ? "Ray Trace" : "OpenGL" );
+            ( m_settings.RenderEngineGet() == RENDER_ENGINE::RAYTRACING ) ? "Ray Trace" :
+                                                                            "OpenGL" );
 
     aCfg->Write( keyRenderMaterial,         (int)m_settings.MaterialModeGet() );
 
@@ -1132,7 +1134,7 @@ bool EDA_3D_VIEWER::Set3DSolderPasteColorFromUser()
 
 void EDA_3D_VIEWER::OnUpdateUIEngine( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( m_settings.RenderEngineGet() != RENDER_ENGINE_OPENGL_LEGACY );
+    aEvent.Check( m_settings.RenderEngineGet() != RENDER_ENGINE::OPENGL_LEGACY );
 }
 
 

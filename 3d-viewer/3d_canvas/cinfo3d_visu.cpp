@@ -58,7 +58,7 @@ CINFO3D_VISU::CINFO3D_VISU() :
     m_3D_grid_type = GRID3D_TYPE::NONE;
     m_drawFlags.resize( FL_LAST, false );
 
-    m_render_engine = RENDER_ENGINE_OPENGL_LEGACY;
+    m_render_engine = RENDER_ENGINE::OPENGL_LEGACY;
     m_material_mode = MATERIAL_MODE_NORMAL;
 
     m_boardPos = wxPoint();
@@ -188,7 +188,7 @@ bool CINFO3D_VISU::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
     default:
         // the layer is an internal copper layer, used the visibility
         if( GetFlag( FL_SHOW_BOARD_BODY ) &&
-            (m_render_engine == RENDER_ENGINE_OPENGL_LEGACY) )
+            (m_render_engine == RENDER_ENGINE::OPENGL_LEGACY) )
         {
             // Do not render internal layers if it is overlap with the board
             // (on OpenGL render)
