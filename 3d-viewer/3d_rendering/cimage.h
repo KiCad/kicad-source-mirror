@@ -57,18 +57,18 @@ enum class WRAP {
 
 
 /// Filter type enumeration
-enum E_FILTER {
-    FILTER_HIPASS,
-    FILTER_GAUSSIAN_BLUR,
-    FILTER_GAUSSIAN_BLUR2,
-    FILTER_INVERT_BLUR,
-    FILTER_CARTOON,
-    FILTER_EMBOSS,
-    FILTER_SHARPEN,
-    FILTER_MELT,
-    FILTER_SOBEL_GX,
-    FILTER_SOBEL_GY,
-    FILTER_BLUR_3X3,
+enum class IMAGE_FILTER {
+    HIPASS,
+    GAUSSIAN_BLUR,
+    GAUSSIAN_BLUR2,
+    INVERT_BLUR,
+    CARTOON,
+    EMBOSS,
+    SHARPEN,
+    MELT,
+    SOBEL_GX,
+    SOBEL_GY,
+    BLUR_3X3,
 };
 
 /// 5x5 Filter struct parameters
@@ -178,7 +178,7 @@ public:
      * @param aInImg input image
      * @param aFilterType filter type to apply
      */
-    void EfxFilter( CIMAGE *aInImg, E_FILTER aFilterType );
+    void EfxFilter( CIMAGE *aInImg, IMAGE_FILTER aFilterType );
 
     /**
      * Function SaveAsPNG

@@ -328,7 +328,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, IMAGE_OP aOpera
 // with a generic convolution matrix and get the values from there.
 // http://docs.gimp.org/nl/plug-in-convmatrix.html
 static const S_FILTER FILTERS[] =   {
-    // FILTER_HIPASS
+    // IMAGE_FILTER::HIPASS
     {
     {   { 0, -1, -1, -1,  0},
         {-1,  2, -4,  2, -1},
@@ -340,7 +340,7 @@ static const S_FILTER FILTERS[] =   {
         255
     },
 
-    // FILTER_GAUSSIAN_BLUR
+    // IMAGE_FILTER::GAUSSIAN_BLUR
     {
     {   { 3,  5,  7,  5,  3},
         { 5,  9, 12,  9,  5},
@@ -352,7 +352,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_GAUSSIAN_BLUR2
+    // IMAGE_FILTER::GAUSSIAN_BLUR2
     {
     {   { 1,  4,  7,  4,  1},
         { 4, 16, 26, 16,  4},
@@ -364,7 +364,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_INVERT_BLUR
+    // IMAGE_FILTER::INVERT_BLUR
     {
     {   { 0,  0,  0,  0,  0},
         { 0,  0, -1,  0,  0},
@@ -376,7 +376,7 @@ static const S_FILTER FILTERS[] =   {
         255
     },
 
-    // FILTER_CARTOON
+    // IMAGE_FILTER::CARTOON
     {
     {   {-1, -1, -1, -1,  0},
         {-1,  0,  0,  0,  0},
@@ -388,7 +388,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_EMBOSS
+    // IMAGE_FILTER::EMBOSS
     {
     {   {-1, -1, -1, -1,  0},
         {-1, -1, -1,  0,  1},
@@ -400,7 +400,7 @@ static const S_FILTER FILTERS[] =   {
         128
     },
 
-    // FILTER_SHARPEN
+    // IMAGE_FILTER::SHARPEN
     {
     {   {-1, -1, -1, -1, -1},
         {-1,  2,  2,  2, -1},
@@ -412,7 +412,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_MELT
+    // IMAGE_FILTER::MELT
     {
     {   { 4,  2,  6,  8,  1},
         { 1,  2,  5,  4,  2},
@@ -424,7 +424,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_SOBEL_GX
+    // IMAGE_FILTER::SOBEL_GX
     {
     {   { 0,  0,  0,  0,  0},
         { 0, -1,  0,  1,  0},
@@ -436,7 +436,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_SOBEL_GY
+    // IMAGE_FILTER::SOBEL_GY
     {
     {   { 1,  2,  4,  2,  1},
         {-1, -1,  0,  1,  1},
@@ -448,7 +448,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_BLUR_3X3
+    // IMAGE_FILTER::BLUR_3X3
     {
     {   { 0,  0,  0,  0,  0},
         { 0,  1,  2,  1,  0},
@@ -466,9 +466,9 @@ static const S_FILTER FILTERS[] =   {
 //        do it without use the getpixel function.
 //        Optimization can be done to m_pixels[ix + iy * m_width]
 //        but keep in mind the parallel process of the algorithm
-void CIMAGE::EfxFilter( CIMAGE *aInImg, E_FILTER aFilterType )
+void CIMAGE::EfxFilter( CIMAGE *aInImg, IMAGE_FILTER aFilterType )
 {
-    S_FILTER filter = FILTERS[aFilterType];
+    S_FILTER filter = FILTERS[static_cast<int>( aFilterType )];
 
     aInImg->m_wraping = WRAP::CLAMP;
     m_wraping = WRAP::CLAMP;

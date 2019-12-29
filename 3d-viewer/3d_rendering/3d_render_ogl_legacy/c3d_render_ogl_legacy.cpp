@@ -802,7 +802,7 @@ bool C3D_RENDER_OGL_LEGACY::initializeOpenGL()
 
     CIMAGE *circleImage_Copy = new CIMAGE( *circleImage );
 
-    circleImage->EfxFilter( circleImage_Copy, FILTER_BLUR_3X3 );
+    circleImage->EfxFilter( circleImage_Copy, IMAGE_FILTER::BLUR_3X3 );
 
     m_ogl_circle_texture = OGL_LoadTexture( *circleImage );
 
