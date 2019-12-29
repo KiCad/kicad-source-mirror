@@ -192,12 +192,18 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         bool dragAlwaysSelects = getEditFrame<PCB_BASE_FRAME>()->GetDragSelects();
         m_additive = m_subtractive = m_exclusive_or = false;
 
+        // OSX uses CTRL for context menu, and SHIFT is exclusive-or
+#ifdef __WXOSX_MAC__
+        if( evt->Modifier( MD_SHIFT ) )
+            m_exclusive_or = true;
+#else
         if( evt->Modifier( MD_SHIFT ) && evt->Modifier( MD_CTRL ) )
             m_subtractive = true;
         else if( evt->Modifier( MD_SHIFT ) )
             m_additive = true;
         else if( evt->Modifier( MD_CTRL ) )
             m_exclusive_or = true;
+#endif
 
         // Is the user requesting that the selection list include all possible
         // items without removing less likely selection candidates
