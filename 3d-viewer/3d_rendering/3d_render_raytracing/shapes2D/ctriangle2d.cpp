@@ -39,7 +39,6 @@
 #include "../../../3d_fastmath.h"
 
 
-
 CTRIANGLE2D::CTRIANGLE2D(
         const SFVEC2F& aV1, const SFVEC2F& aV2, const SFVEC2F& aV3, const BOARD_ITEM& aBoardItem )
         : COBJECT2D( OBJECT2D_TYPE::TRIANGLE, aBoardItem )

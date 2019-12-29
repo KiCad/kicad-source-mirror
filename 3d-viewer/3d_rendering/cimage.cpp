@@ -327,6 +327,7 @@ void CIMAGE::CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOpera
 // TIP: If you want create or test filters you can use GIMP
 // with a generic convolution matrix and get the values from there.
 // http://docs.gimp.org/nl/plug-in-convmatrix.html
+// clang-format off
 static const S_FILTER FILTERS[] =   {
     // IMAGE_FILTER::HIPASS
     {
@@ -460,6 +461,7 @@ static const S_FILTER FILTERS[] =   {
         0
     }
 };// Filters
+// clang-format on
 
 
 // !TODO: This functions can be optimized slipting it between the edges and
