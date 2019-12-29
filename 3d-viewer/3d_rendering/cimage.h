@@ -33,18 +33,18 @@
 #include <wx/string.h>
 
 /// Image operation type
-enum E_IMAGE_OP {
-    COPY_RAW,
-    COPY_ADD,
-    COPY_SUB,
-    COPY_DIF,
-    COPY_MUL,
-    COPY_AND,
-    COPY_OR,
-    COPY_XOR,
-    COPY_BLEND50,
-    COPY_MIN,
-    COPY_MAX
+enum class IMAGE_OP {
+    RAW,
+    ADD,
+    SUB,
+    DIF,
+    MUL,
+    AND,
+    OR,
+    XOR,
+    BLEND50,
+    MIN,
+    MAX
 };
 
 
@@ -151,19 +151,19 @@ public:
      * @param aImgA an image input
      * @param aImgB an image input
      * @param aOperation operation to perform
-     *  COPY_RAW        this <- aImgA
-     *  COPY_ADD        this <- CLAMP(aImgA + aImgB)
-     *  COPY_SUB        this <- CLAMP(aImgA - aImgB)
-     *  COPY_DIF        this <- abs(aImgA - aImgB)
-     *  COPY_MUL        this <- aImgA * aImgB
-     *  COPY_AND        this <- aImgA & aImgB
-     *  COPY_OR         this <- aImgA | aImgB
-     *  COPY_XOR        this <- aImgA ^ aImgB
-     *  COPY_BLEND50    this <- (aImgA + aImgB) / 2
-     *  COPY_MIN        this <- (aImgA < aImgB)?aImgA:aImgB
-     *  COPY_MAX        this <- (aImgA > aImgB)?aImgA:aImgB
+     *  IMAGE_OP::RAW        this <- aImgA
+     *  IMAGE_OP::ADD        this <- CLAMP(aImgA + aImgB)
+     *  IMAGE_OP::SUB        this <- CLAMP(aImgA - aImgB)
+     *  IMAGE_OP::DIF        this <- abs(aImgA - aImgB)
+     *  IMAGE_OP::MUL        this <- aImgA * aImgB
+     *  IMAGE_OP::AND        this <- aImgA & aImgB
+     *  IMAGE_OP::OR         this <- aImgA | aImgB
+     *  IMAGE_OP::XOR        this <- aImgA ^ aImgB
+     *  IMAGE_OP::BLEND50    this <- (aImgA + aImgB) / 2
+     *  IMAGE_OP::MIN        this <- (aImgA < aImgB)?aImgA:aImgB
+     *  IMAGE_OP::MAX        this <- (aImgA > aImgB)?aImgA:aImgB
      */
-    void CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOperation );
+    void CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, IMAGE_OP aOperation );
 
     /**
      * Function Invert

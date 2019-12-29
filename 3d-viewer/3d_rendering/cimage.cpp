@@ -201,11 +201,11 @@ void CIMAGE::Invert()
 }
 
 
-void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOperation )
+void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, IMAGE_OP aOperation )
 {
     int aV, bV;
 
-    if( aOperation == COPY_RAW )
+    if( aOperation == IMAGE_OP::RAW )
     {
         if( aImgA == NULL )
             return;
@@ -218,11 +218,11 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
 
     switch(aOperation)
     {
-    case COPY_RAW:
+    case IMAGE_OP::RAW:
         memcpy( m_pixels, aImgA->m_pixels, m_wxh );
     break;
 
-    case COPY_ADD:
+    case IMAGE_OP::ADD:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -235,7 +235,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
         }
     break;
 
-    case COPY_SUB:
+    case IMAGE_OP::SUB:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -248,7 +248,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
         }
     break;
 
-    case COPY_DIF:
+    case IMAGE_OP::DIF:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -258,7 +258,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
         }
     break;
 
-    case COPY_MUL:
+    case IMAGE_OP::MUL:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -268,28 +268,28 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
         }
     break;
 
-    case COPY_AND:
+    case IMAGE_OP::AND:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             m_pixels[it] = aImgA->m_pixels[it] & aImgB->m_pixels[it];
         }
     break;
 
-    case COPY_OR:
+    case IMAGE_OP::OR:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             m_pixels[it] = aImgA->m_pixels[it] | aImgB->m_pixels[it];
         }
     break;
 
-    case COPY_XOR:
+    case IMAGE_OP::XOR:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             m_pixels[it] = aImgA->m_pixels[it] ^ aImgB->m_pixels[it];
         }
     break;
 
-    case COPY_BLEND50:
+    case IMAGE_OP::BLEND50:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -299,7 +299,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
         }
     break;
 
-    case COPY_MIN:
+    case IMAGE_OP::MIN:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -309,7 +309,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
         }
     break;
 
-    case COPY_MAX:
+    case IMAGE_OP::MAX:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
