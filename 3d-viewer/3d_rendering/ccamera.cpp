@@ -51,7 +51,7 @@ CCAMERA::CCAMERA( float aRangeScale )
     m_board_lookat_pos_init = SFVEC3F( 0.0f );
     m_windowSize            = SFVEC2I( 0, 0 );
     m_projectionType        = PROJECTION_TYPE::PERSPECTIVE;
-    m_interpolation_mode    = INTERPOLATION_BEZIER;
+    m_interpolation_mode    = CAMERA_INTERPOLATION::BEZIER;
 
     Reset();
 }

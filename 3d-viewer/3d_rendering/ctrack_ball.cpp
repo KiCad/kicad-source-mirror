@@ -169,15 +169,15 @@ void CTRACK_BALL::Interpolate( float t )
 
     switch( m_interpolation_mode )
     {
-    case INTERPOLATION_BEZIER:
+    case CAMERA_INTERPOLATION::BEZIER:
         t = BezierBlend( t );
         break;
 
-    case INTERPOLATION_EASING_IN_OUT:
+    case CAMERA_INTERPOLATION::EASING_IN_OUT:
         t = QuadricEasingInOut( t );
         break;
 
-    case INTERPOLATION_LINEAR:
+    case CAMERA_INTERPOLATION::LINEAR:
     default:
         break;
     }
