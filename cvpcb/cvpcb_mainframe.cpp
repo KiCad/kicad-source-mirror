@@ -264,8 +264,6 @@ void CVPCB_MAINFRAME::setupEventHandlers()
     Bind( wxEVT_BUTTON,
             [this]( wxCommandEvent& )
             {
-                // Throw away modifications on a Cancel
-                m_modified = false;
                 Close( false );
             }, wxID_CANCEL );
 
