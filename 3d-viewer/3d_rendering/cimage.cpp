@@ -64,7 +64,7 @@ CIMAGE::CIMAGE( const CIMAGE &aSrcImage )
 
 CIMAGE::~CIMAGE()
 {
-	delete[] m_pixels;
+    delete[] m_pixels;
 }
 
 
