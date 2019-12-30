@@ -50,8 +50,8 @@ CCAMERA::CCAMERA( float aRangeScale )
     m_camera_pos_init       = SFVEC3F( 0.0f, 0.0f, -(aRangeScale * 2.0f ) );
     m_board_lookat_pos_init = SFVEC3F( 0.0f );
     m_windowSize            = SFVEC2I( 0, 0 );
-    m_projectionType        = PROJECTION_PERSPECTIVE;
-    m_interpolation_mode    = INTERPOLATION_BEZIER;
+    m_projectionType        = PROJECTION_TYPE::PERSPECTIVE;
+    m_interpolation_mode    = CAMERA_INTERPOLATION::BEZIER;
 
     Reset();
 }
@@ -148,7 +148,7 @@ void CCAMERA::rebuildProjection()
     switch( m_projectionType )
     {
     default:
-    case PROJECTION_PERSPECTIVE:
+    case PROJECTION_TYPE::PERSPECTIVE:
 
         m_frustum.nearD = 0.10f;
 
@@ -174,7 +174,7 @@ void CCAMERA::rebuildProjection()
         m_frustum.fw = m_frustum.fh * m_frustum.ratio;
         break;
 
-    case PROJECTION_ORTHO:
+    case PROJECTION_TYPE::ORTHO:
 
         m_frustum.nearD = -m_frustum.farD; // Use a symmetrical clip plane for ortho projection
 
@@ -303,12 +303,12 @@ void CCAMERA::MakeRay( const SFVEC2I &aWindowPos,
     switch( m_projectionType )
     {
     default:
-    case PROJECTION_PERSPECTIVE:
+    case PROJECTION_TYPE::PERSPECTIVE:
         aOutOrigin = up_plus_right + m_frustum.nc;
         aOutDirection = glm::normalize( aOutOrigin - m_pos );
         break;
 
-    case PROJECTION_ORTHO:
+    case PROJECTION_TYPE::ORTHO:
         aOutOrigin = up_plus_right * 0.5f + m_frustum.nc;
         aOutDirection = -m_dir + SFVEC3F( FLT_EPSILON );
         break;
@@ -334,12 +334,12 @@ void CCAMERA::MakeRay( const SFVEC2F &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &
     switch( m_projectionType )
     {
     default:
-    case PROJECTION_PERSPECTIVE:
+    case PROJECTION_TYPE::PERSPECTIVE:
         aOutOrigin = up_plus_right + m_frustum.nc;
         aOutDirection = glm::normalize( aOutOrigin - m_pos );
         break;
 
-    case PROJECTION_ORTHO:
+    case PROJECTION_TYPE::ORTHO:
         aOutOrigin = up_plus_right * 0.5f + m_frustum.nc;
         aOutDirection = -m_dir + SFVEC3F( FLT_EPSILON );
         break;
@@ -416,10 +416,10 @@ void CCAMERA::SetProjection( PROJECTION_TYPE aProjectionType )
 
 void CCAMERA::ToggleProjection()
 {
-    if( m_projectionType == PROJECTION_ORTHO )
-        m_projectionType = PROJECTION_PERSPECTIVE;
+    if( m_projectionType == PROJECTION_TYPE::ORTHO )
+        m_projectionType = PROJECTION_TYPE::PERSPECTIVE;
     else
-        m_projectionType = PROJECTION_ORTHO;
+        m_projectionType = PROJECTION_TYPE::ORTHO;
 
     rebuildProjection();
 }

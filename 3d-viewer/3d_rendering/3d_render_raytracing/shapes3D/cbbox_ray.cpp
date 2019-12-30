@@ -47,7 +47,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
 {
     switch( aRay.m_Classification )
     {
-    case MMM:
+    case RAY_CLASSIFICATION::MMM:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.y < m_min.y )
@@ -79,7 +79,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
     }
 
 
-    case MMP:
+    case RAY_CLASSIFICATION::MMP:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.y < m_min.y )
@@ -108,7 +108,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case MPM:
+    case RAY_CLASSIFICATION::MPM:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.y > m_max.y )
@@ -137,7 +137,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case MPP:
+    case RAY_CLASSIFICATION::MPP:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.y > m_max.y )
@@ -166,7 +166,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case PMM:
+    case RAY_CLASSIFICATION::PMM:
     {
         if( ( aRay.m_Origin.x > m_max.x )
             || ( aRay.m_Origin.y < m_min.y )
@@ -196,7 +196,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
     }
 
 
-    case PMP:
+    case RAY_CLASSIFICATION::PMP:
     {
         if( ( aRay.m_Origin.x > m_max.x )
             || ( aRay.m_Origin.y < m_min.y )
@@ -225,7 +225,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case PPM:
+    case RAY_CLASSIFICATION::PPM:
     {
         if( ( aRay.m_Origin.x > m_max.x )
             || ( aRay.m_Origin.y > m_max.y )
@@ -254,7 +254,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case PPP:
+    case RAY_CLASSIFICATION::PPP:
     {
         if( ( aRay.m_Origin.x > m_max.x )
             || ( aRay.m_Origin.y > m_max.y )
@@ -283,7 +283,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case OMM:
+    case RAY_CLASSIFICATION::OMM:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.x > m_max.x )
@@ -303,7 +303,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case OMP:
+    case RAY_CLASSIFICATION::OMP:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.x > m_max.x )
@@ -323,7 +323,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case OPM:
+    case RAY_CLASSIFICATION::OPM:
     {
         if( ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
             || ( aRay.m_Origin.y > m_max.y) || ( aRay.m_Origin.z < m_min.z)
@@ -342,7 +342,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case OPP:
+    case RAY_CLASSIFICATION::OPP:
     {
         if( ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
             || ( aRay.m_Origin.y > m_max.y) || ( aRay.m_Origin.z > m_max.z)
@@ -362,7 +362,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
     }
 
 
-    case MOM:
+    case RAY_CLASSIFICATION::MOM:
     {
         if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.z < m_min.z)
@@ -382,7 +382,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
     }
 
 
-    case MOP:
+    case RAY_CLASSIFICATION::MOP:
     {
         if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.z > m_max.z)
@@ -401,7 +401,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case POM:
+    case RAY_CLASSIFICATION::POM:
     {
         if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.z < m_min.z)
@@ -421,7 +421,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
     }
 
 
-    case POP:
+    case RAY_CLASSIFICATION::POP:
     {
         if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.z > m_max.z)
@@ -440,7 +440,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case MMO:
+    case RAY_CLASSIFICATION::MMO:
     {
         if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.y < m_min.y)
@@ -459,7 +459,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case MPO:
+    case RAY_CLASSIFICATION::MPO:
     {
         if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.y > m_max.y)
@@ -479,7 +479,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
     }
 
 
-    case PMO:
+    case RAY_CLASSIFICATION::PMO:
     {
         if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.y < m_min.y)
@@ -498,7 +498,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case PPO:
+    case RAY_CLASSIFICATION::PPO:
     {
         if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.y > m_max.y)
@@ -518,7 +518,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
     }
 
 
-    case MOO:
+    case RAY_CLASSIFICATION::MOO:
     {
         if( ( aRay.m_Origin.x < m_min.x)
             || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
@@ -531,7 +531,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case POO:
+    case RAY_CLASSIFICATION::POO:
     {
         if( ( aRay.m_Origin.x > m_max.x)
             || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
@@ -544,7 +544,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case OMO:
+    case RAY_CLASSIFICATION::OMO:
     {
         if( ( aRay.m_Origin.y < m_min.y)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
@@ -557,7 +557,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case OPO:
+    case RAY_CLASSIFICATION::OPO:
     {
         if( ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
@@ -571,7 +571,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
     }
 
 
-    case OOM:
+    case RAY_CLASSIFICATION::OOM:
     {
         if( ( aRay.m_Origin.z < m_min.z)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
@@ -584,7 +584,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
         return true;
     }
 
-    case OOP:
+    case RAY_CLASSIFICATION::OOP:
     {
         if( ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
@@ -606,7 +606,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
 {
     switch( aRay.m_Classification )
     {
-    case MMM:
+    case RAY_CLASSIFICATION::MMM:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.y < m_min.y )
@@ -624,7 +624,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
     }
 
 
-    case MMP:
+    case RAY_CLASSIFICATION::MMP:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.y < m_min.y )
@@ -641,7 +641,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case MPM:
+    case RAY_CLASSIFICATION::MPM:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.y > m_max.y )
@@ -658,7 +658,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case MPP:
+    case RAY_CLASSIFICATION::MPP:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.y > m_max.y )
@@ -675,7 +675,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case PMM:
+    case RAY_CLASSIFICATION::PMM:
     {
         if( ( aRay.m_Origin.x > m_max.x )
             || ( aRay.m_Origin.y < m_min.y )
@@ -693,7 +693,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
     }
 
 
-    case PMP:
+    case RAY_CLASSIFICATION::PMP:
     {
         if( ( aRay.m_Origin.x > m_max.x )
             || ( aRay.m_Origin.y < m_min.y )
@@ -710,7 +710,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case PPM:
+    case RAY_CLASSIFICATION::PPM:
     {
         if( ( aRay.m_Origin.x > m_max.x )
             || ( aRay.m_Origin.y > m_max.y )
@@ -727,7 +727,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case PPP:
+    case RAY_CLASSIFICATION::PPP:
     {
         if( ( aRay.m_Origin.x > m_max.x )
             || ( aRay.m_Origin.y > m_max.y )
@@ -744,7 +744,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case OMM:
+    case RAY_CLASSIFICATION::OMM:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.x > m_max.x )
@@ -756,7 +756,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case OMP:
+    case RAY_CLASSIFICATION::OMP:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.x > m_max.x )
@@ -769,7 +769,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case OPM:
+    case RAY_CLASSIFICATION::OPM:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.x > m_max.x )
@@ -782,7 +782,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case OPP:
+    case RAY_CLASSIFICATION::OPP:
     {
         if( ( aRay.m_Origin.x < m_min.x )
             || ( aRay.m_Origin.x > m_max.x )
@@ -796,7 +796,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
     }
 
 
-    case MOM:
+    case RAY_CLASSIFICATION::MOM:
     {
         if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.z < m_min.z)
@@ -809,7 +809,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
     }
 
 
-    case MOP:
+    case RAY_CLASSIFICATION::MOP:
     {
         if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.z > m_max.z)
@@ -821,7 +821,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case POM:
+    case RAY_CLASSIFICATION::POM:
     {
         if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.z < m_min.z)
@@ -834,7 +834,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
     }
 
 
-    case POP:
+    case RAY_CLASSIFICATION::POP:
     {
         if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.z > m_max.z)
@@ -846,7 +846,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case MMO:
+    case RAY_CLASSIFICATION::MMO:
     {
         if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.y < m_min.y)
@@ -858,7 +858,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case MPO:
+    case RAY_CLASSIFICATION::MPO:
     {
         if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.y > m_max.y)
@@ -871,7 +871,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
     }
 
 
-    case PMO:
+    case RAY_CLASSIFICATION::PMO:
     {
         if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.y < m_min.y)
@@ -883,7 +883,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case PPO:
+    case RAY_CLASSIFICATION::PPO:
     {
         if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.y > m_max.y)
@@ -896,7 +896,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
     }
 
 
-    case MOO:
+    case RAY_CLASSIFICATION::MOO:
     {
         if( ( aRay.m_Origin.x < m_min.x)
             || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
@@ -907,7 +907,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case POO:
+    case RAY_CLASSIFICATION::POO:
     {
         if( ( aRay.m_Origin.x > m_max.x)
             || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
@@ -918,7 +918,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case OMO:
+    case RAY_CLASSIFICATION::OMO:
     {
         if( ( aRay.m_Origin.y < m_min.y)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
@@ -929,7 +929,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case OPO:
+    case RAY_CLASSIFICATION::OPO:
     {
         if( ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
@@ -941,7 +941,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
     }
 
 
-    case OOM:
+    case RAY_CLASSIFICATION::OOM:
     {
         if( ( aRay.m_Origin.z < m_min.z)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
@@ -952,7 +952,7 @@ bool CBBOX::Intersect( const RAY& aRay ) const
         return true;
     }
 
-    case OOP:
+    case RAY_CLASSIFICATION::OOP:
     {
         if( ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)

@@ -33,7 +33,7 @@
  *   The rotation angle is consistent with the one for graphics objects.
  *   Positive rotation is counter- clockwise as viewed from the top side, even if
  *   the component is on the board side.
- *   The base orientation of component – no rotation - on the top side is as in IPC-7351.
+ *   The base orientation of component - no rotation - on the top side is as in IPC-7351.
  *   Components on the bottom side are of course mirrored.
  *   The base orientation on the bottom side is the one on the top side
  *   mirrored around the X axis.

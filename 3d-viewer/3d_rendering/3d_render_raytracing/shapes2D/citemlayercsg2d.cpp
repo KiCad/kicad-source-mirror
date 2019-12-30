@@ -31,14 +31,13 @@
 #include "3d_fastmath.h"
 #include <wx/debug.h>
 
-CITEMLAYERCSG2D::CITEMLAYERCSG2D( const COBJECT2D *aObjectA,
-                                  std::vector<const COBJECT2D *> *aObjectB,
-                                  const COBJECT2D *aObjectC,
-                                  const BOARD_ITEM &aBoardItem ):
-    COBJECT2D( OBJ2D_CSG, aBoardItem ),
-    m_objectA(aObjectA),
-    m_objectB(aObjectB),
-    m_objectC(aObjectC)
+CITEMLAYERCSG2D::CITEMLAYERCSG2D( const COBJECT2D* aObjectA,
+        std::vector<const COBJECT2D*>* aObjectB, const COBJECT2D* aObjectC,
+        const BOARD_ITEM& aBoardItem )
+        : COBJECT2D( OBJECT2D_TYPE::CSG, aBoardItem ),
+          m_objectA( aObjectA ),
+          m_objectB( aObjectB ),
+          m_objectC( aObjectC )
 {
     wxASSERT( aObjectA );
 
@@ -85,7 +84,7 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
     wxASSERT( aOutT );
     wxASSERT( aNormalOut );
 
-    if( m_objectA->GetObjectType() == OBJ2D_DUMMYBLOCK )
+    if( m_objectA->GetObjectType() == OBJECT2D_TYPE::DUMMYBLOCK )
         return false;
 
     float currentRayDist;
@@ -187,7 +186,7 @@ INTERSECTION_RESULT CITEMLAYERCSG2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 
     // !TODO:
 
-    return INTR_MISSES;
+    return INTERSECTION_RESULT::MISSES;
 }
 
 

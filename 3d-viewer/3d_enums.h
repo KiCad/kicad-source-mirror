@@ -61,37 +61,37 @@ enum DISPLAY3D_FLG {
 
 
 /// Camera types
-enum CAMERA_TYPE
+enum class CAMERA_TYPE
 {
-    CAMERA_TRACKBALL
+    TRACKBALL
 };
 
 
 /// Grid types
-enum GRID3D_TYPE
+enum class GRID3D_TYPE
 {
-    GRID3D_NONE,
-    GRID3D_1MM,
-    GRID3D_2P5MM,
-    GRID3D_5MM,
-    GRID3D_10MM
+    NONE,
+    GRID_1MM,
+    GRID_2P5MM,
+    GRID_5MM,
+    GRID_10MM
 };
 
 
 /// Render engine mode
-enum RENDER_ENGINE
+enum class RENDER_ENGINE
 {
-    RENDER_ENGINE_OPENGL_LEGACY,
-    RENDER_ENGINE_RAYTRACING,
+    OPENGL_LEGACY,
+    RAYTRACING,
 };
 
 
 /// Render 3d model shape materials mode
-enum MATERIAL_MODE
+enum class MATERIAL_MODE
 {
-    MATERIAL_MODE_NORMAL,       ///< Use all material properties from model file
-    MATERIAL_MODE_DIFFUSE_ONLY, ///< Use only diffuse material properties
-    MATERIAL_MODE_CAD_MODE      ///< Use a gray shading based on diffuse material
+    NORMAL,       ///< Use all material properties from model file
+    DIFFUSE_ONLY, ///< Use only diffuse material properties
+    CAD_MODE      ///< Use a gray shading based on diffuse material
 };
 
 #endif // _3D_ENUMS_H_

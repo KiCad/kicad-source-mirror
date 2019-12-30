@@ -308,7 +308,7 @@ void C3D_RENDER_RAYTRACING::render( GLubyte *ptrPBO , REPORTER *aStatusTextRepor
         if( m_camera_light )
             m_camera_light->SetDirection( -m_settings.CameraGet().GetDir() );
 
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
         {
             // Set all pixels of PBO transparent (Alpha to 0)
             // This way it will draw the full buffer but only shows the updated (

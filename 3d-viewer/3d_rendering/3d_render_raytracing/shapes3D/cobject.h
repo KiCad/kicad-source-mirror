@@ -35,15 +35,15 @@
 #include "../cmaterial.h"
 
 
-enum OBJECT3D_TYPE
+enum class OBJECT3D_TYPE
 {
-    OBJ3D_CYLINDER,
-    OBJ3D_DUMMYBLOCK,
-    OBJ3D_LAYERITEM,
-    OBJ3D_XYPLANE,
-    OBJ3D_ROUNDSEG,
-    OBJ3D_TRIANGLE,
-    OBJ3D_MAX
+    CYLINDER,
+    DUMMYBLOCK,
+    LAYERITEM,
+    XYPLANE,
+    ROUNDSEG,
+    TRIANGLE,
+    MAX
 };
 
 
@@ -102,14 +102,20 @@ public:
 class COBJECT3D_STATS
 {
 public:
+    void ResetStats()
+    {
+        memset( m_counter, 0, sizeof( unsigned int ) * static_cast<int>( OBJECT3D_TYPE::MAX ) );
+    }
 
-    void ResetStats() { memset( m_counter,
-                                0,
-                                sizeof( unsigned int ) * OBJ3D_MAX ); }
+    unsigned int GetCountOf( OBJECT3D_TYPE aObjType ) const
+    {
+        return m_counter[static_cast<int>( aObjType )];
+    }
 
-    unsigned int GetCountOf( OBJECT3D_TYPE aObjType ) const { return m_counter[aObjType]; }
-
-    void AddOne( OBJECT3D_TYPE aObjType ) { m_counter[aObjType]++; }
+    void AddOne( OBJECT3D_TYPE aObjType )
+    {
+        m_counter[static_cast<int>( aObjType )]++;
+    }
 
     void PrintStats();
 
@@ -128,7 +134,7 @@ private:
     ~COBJECT3D_STATS(){}
 
 private:
-    unsigned int m_counter[OBJ3D_MAX];
+    unsigned int m_counter[static_cast<int>( OBJECT3D_TYPE::MAX )];
 
     static COBJECT3D_STATS *s_instance;
 };

@@ -33,42 +33,45 @@
 #include <wx/string.h>
 
 /// Image operation type
-enum E_IMAGE_OP {
-    COPY_RAW,
-    COPY_ADD,
-    COPY_SUB,
-    COPY_DIF,
-    COPY_MUL,
-    COPY_AND,
-    COPY_OR,
-    COPY_XOR,
-    COPY_BLEND50,
-    COPY_MIN,
-    COPY_MAX
+enum class IMAGE_OP
+{
+    RAW,
+    ADD,
+    SUB,
+    DIF,
+    MUL,
+    AND,
+    OR,
+    XOR,
+    BLEND50,
+    MIN,
+    MAX
 };
 
 
 /// Image wrap type enumeration
-enum E_WRAP {
-    WRAP_ZERO,      ///< Coords that wraps are not evaluated
-    WRAP_CLAMP,     ///< Coords are clamped to image size
-    WRAP_WRAP       ///< Coords are wrapped arround
+enum class IMAGE_WRAP
+{
+    ZERO,  ///< Coords that wraps are not evaluated
+    CLAMP, ///< Coords are clamped to image size
+    WRAP   ///< Coords are wrapped arround
 };
 
 
 /// Filter type enumeration
-enum E_FILTER {
-    FILTER_HIPASS,
-    FILTER_GAUSSIAN_BLUR,
-    FILTER_GAUSSIAN_BLUR2,
-    FILTER_INVERT_BLUR,
-    FILTER_CARTOON,
-    FILTER_EMBOSS,
-    FILTER_SHARPEN,
-    FILTER_MELT,
-    FILTER_SOBEL_GX,
-    FILTER_SOBEL_GY,
-    FILTER_BLUR_3X3,
+enum class IMAGE_FILTER
+{
+    HIPASS,
+    GAUSSIAN_BLUR,
+    GAUSSIAN_BLUR2,
+    INVERT_BLUR,
+    CARTOON,
+    EMBOSS,
+    SHARPEN,
+    MELT,
+    SOBEL_GX,
+    SOBEL_GY,
+    BLUR_3X3,
 };
 
 /// 5x5 Filter struct parameters
@@ -151,19 +154,19 @@ public:
      * @param aImgA an image input
      * @param aImgB an image input
      * @param aOperation operation to perform
-     *  COPY_RAW        this <- aImgA
-     *  COPY_ADD        this <- CLAMP(aImgA + aImgB)
-     *  COPY_SUB        this <- CLAMP(aImgA - aImgB)
-     *  COPY_DIF        this <- abs(aImgA - aImgB)
-     *  COPY_MUL        this <- aImgA * aImgB
-     *  COPY_AND        this <- aImgA & aImgB
-     *  COPY_OR         this <- aImgA | aImgB
-     *  COPY_XOR        this <- aImgA ^ aImgB
-     *  COPY_BLEND50    this <- (aImgA + aImgB) / 2
-     *  COPY_MIN        this <- (aImgA < aImgB)?aImgA:aImgB
-     *  COPY_MAX        this <- (aImgA > aImgB)?aImgA:aImgB
+     *  IMAGE_OP::RAW        this <- aImgA
+     *  IMAGE_OP::ADD        this <- CLAMP(aImgA + aImgB)
+     *  IMAGE_OP::SUB        this <- CLAMP(aImgA - aImgB)
+     *  IMAGE_OP::DIF        this <- abs(aImgA - aImgB)
+     *  IMAGE_OP::MUL        this <- aImgA * aImgB
+     *  IMAGE_OP::AND        this <- aImgA & aImgB
+     *  IMAGE_OP::OR         this <- aImgA | aImgB
+     *  IMAGE_OP::XOR        this <- aImgA ^ aImgB
+     *  IMAGE_OP::BLEND50    this <- (aImgA + aImgB) / 2
+     *  IMAGE_OP::MIN        this <- (aImgA < aImgB)?aImgA:aImgB
+     *  IMAGE_OP::MAX        this <- (aImgA > aImgB)?aImgA:aImgB
      */
-    void CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOperation );
+    void CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOperation );
 
     /**
      * Function Invert
@@ -178,7 +181,7 @@ public:
      * @param aInImg input image
      * @param aFilterType filter type to apply
      */
-    void EfxFilter( CIMAGE *aInImg, E_FILTER aFilterType );
+    void EfxFilter( CIMAGE* aInImg, IMAGE_FILTER aFilterType );
 
     /**
      * Function SaveAsPNG
@@ -223,7 +226,7 @@ private:
     unsigned int    m_width;            ///< width of the image
     unsigned int    m_height;           ///< height of the image
     unsigned int    m_wxh;              ///< width * height precalc value
-    E_WRAP          m_wraping;          ///< current wrapping type
+    IMAGE_WRAP      m_wraping;          ///< current wrapping type
 };
 
 #endif   // CIMAGE_H

@@ -33,10 +33,34 @@
 #include <plugins/3dapi/xv3d_types.h>
 
 
-enum RAY_CLASSIFICATION
+enum class RAY_CLASSIFICATION
 {
-    MMM, MMP, MPM, MPP, PMM, PMP, PPM, PPP, POO, MOO, OPO, OMO, OOP, OOM, OMM,
-    OMP,OPM,OPP,MOM,MOP,POM,POP,MMO,MPO,PMO,PPO
+    MMM,
+    MMP,
+    MPM,
+    MPP,
+    PMM,
+    PMP,
+    PPM,
+    PPP,
+    POO,
+    MOO,
+    OPO,
+    OMO,
+    OOP,
+    OOM,
+    OMM,
+    OMP,
+    OPM,
+    OPP,
+    MOM,
+    MOP,
+    POM,
+    POP,
+    MMO,
+    MPO,
+    PMO,
+    PPO
 };
 
 

@@ -86,34 +86,34 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
         {
             if( m_Dir.z < 0 )
             {
-                m_Classification = MMM;
+                m_Classification = RAY_CLASSIFICATION::MMM;
             }
             else if( m_Dir.z > 0 ){
-                m_Classification = MMP;
+                m_Classification = RAY_CLASSIFICATION::MMP;
             }
             else//( m_Dir.z >= 0 )
             {
-                m_Classification = MMO;
+                m_Classification = RAY_CLASSIFICATION::MMO;
             }
         }
         else//( m_Dir.y >= 0 )
         {
             if( m_Dir.z < 0 )
             {
-                m_Classification = MPM;
+                m_Classification = RAY_CLASSIFICATION::MPM;
                 if( m_Dir.y == 0 )
-                    m_Classification = MOM;
+                    m_Classification = RAY_CLASSIFICATION::MOM;
             }
             else//( m_Dir.z >= 0 )
             {
                 if( ( m_Dir.y == 0 ) && ( m_Dir.z == 0 ) )
-                    m_Classification = MOO;
+                    m_Classification = RAY_CLASSIFICATION::MOO;
                 else if( m_Dir.z == 0 )
-                    m_Classification = MPO;
+                    m_Classification = RAY_CLASSIFICATION::MPO;
                 else if( m_Dir.y == 0 )
-                    m_Classification = MOP;
+                    m_Classification = RAY_CLASSIFICATION::MOP;
                 else
-                    m_Classification = MPP;
+                    m_Classification = RAY_CLASSIFICATION::MPP;
             }
         }
     }
@@ -123,20 +123,20 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
         {
             if( m_Dir.z < 0 )
             {
-                m_Classification = PMM;
+                m_Classification = RAY_CLASSIFICATION::PMM;
                 if( m_Dir.x == 0 )
-                    m_Classification = OMM;
+                    m_Classification = RAY_CLASSIFICATION::OMM;
             }
             else//( m_Dir.z >= 0 )
             {
                 if( ( m_Dir.x == 0 ) && ( m_Dir.z == 0 ) )
-                    m_Classification = OMO;
+                    m_Classification = RAY_CLASSIFICATION::OMO;
                 else if( m_Dir.z == 0 )
-                    m_Classification = PMO;
+                    m_Classification = RAY_CLASSIFICATION::PMO;
                 else if( m_Dir.x == 0 )
-                    m_Classification = OMP;
+                    m_Classification = RAY_CLASSIFICATION::OMP;
                 else
-                    m_Classification = PMP;
+                    m_Classification = RAY_CLASSIFICATION::PMP;
             }
         }
         else//( m_Dir.y >= 0 )
@@ -144,35 +144,35 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
             if( m_Dir.z < 0 )
             {
                 if( ( m_Dir.x == 0 ) && ( m_Dir.y == 0 ) )
-                    m_Classification = OOM;
+                    m_Classification = RAY_CLASSIFICATION::OOM;
                 else if( m_Dir.x == 0 )
-                    m_Classification = OPM;
+                    m_Classification = RAY_CLASSIFICATION::OPM;
                 else if( m_Dir.y == 0 )
-                    m_Classification = POM;
+                    m_Classification = RAY_CLASSIFICATION::POM;
                 else
-                    m_Classification = PPM;
+                    m_Classification = RAY_CLASSIFICATION::PPM;
             }
             else//( m_Dir.z > 0 )
             {
                 if( m_Dir.x == 0 )
                 {
                     if( m_Dir.y == 0 )
-                        m_Classification = OOP;
+                        m_Classification = RAY_CLASSIFICATION::OOP;
                     else if( m_Dir.z == 0 )
-                        m_Classification = OPO;
+                        m_Classification = RAY_CLASSIFICATION::OPO;
                     else
-                        m_Classification = OPP;
+                        m_Classification = RAY_CLASSIFICATION::OPP;
                 }
                 else
                 {
                     if( ( m_Dir.y == 0 ) && ( m_Dir.z == 0 ) )
-                        m_Classification = POO;
+                        m_Classification = RAY_CLASSIFICATION::POO;
                     else if( m_Dir.y == 0 )
-                        m_Classification = POP;
+                        m_Classification = RAY_CLASSIFICATION::POP;
                     else if( m_Dir.z == 0 )
-                        m_Classification = PPO;
+                        m_Classification = RAY_CLASSIFICATION::PPO;
                     else
-                        m_Classification = PPP;
+                        m_Classification = RAY_CLASSIFICATION::PPP;
                 }
             }
         }

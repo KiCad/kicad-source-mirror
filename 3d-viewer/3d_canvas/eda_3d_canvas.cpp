@@ -387,11 +387,11 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
     {
         m_3d_render = m_3d_render_ogl_legacy;
         m_render_raytracing_was_requested = false;
-        m_settings.RenderEngineSet( RENDER_ENGINE_OPENGL_LEGACY );
+        m_settings.RenderEngineSet( RENDER_ENGINE::OPENGL_LEGACY );
     }
 
     // Check if a raytacing was requested and need to switch to raytracing mode
-    if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+    if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
     {
         const bool was_camera_changed = m_settings.CameraGet().ParametersChanged();
 
@@ -899,7 +899,7 @@ void EDA_3D_CANVAS::move_pivot_based_on_cur_mouse_position()
     // Test it with the board bounding box
     if( m_settings.GetBBox3DU().Intersect( mouseRay, &hit_t ) )
     {
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().SetLookAtPos_T1( mouseRay.at( hit_t ) );
         m_settings.CameraGet().ResetXYpos_T1();
@@ -925,35 +925,35 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         return true;
 
     case WXK_LEFT:
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_LINEAR );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Pan_T1( SFVEC3F( -delta_move, 0.0f, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
         return true;
 
     case WXK_RIGHT:
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_LINEAR );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Pan_T1( SFVEC3F( +delta_move, 0.0f, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
         return true;
 
     case WXK_UP:
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_LINEAR );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Pan_T1( SFVEC3F( 0.0f, +delta_move, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
         return true;
 
     case WXK_DOWN:
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_LINEAR );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Pan_T1( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
         return true;
 
     case WXK_HOME:
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         request_start_moving_camera( glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 1/1.26f ), 1.26f ) );
@@ -963,7 +963,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         break;
 
     case WXK_TAB:
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_EASING_IN_OUT );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::EASING_IN_OUT );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().RotateZ_T1( glm::radians( 45.0f ) );
         request_start_moving_camera();
@@ -971,7 +971,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         break;
 
     case WXK_F1:
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
 
         if( m_settings.CameraGet().Zoom_T1( 1.26f ) )   // 3 steps per doubling
@@ -980,7 +980,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         return true;
 
     case WXK_F2:
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
 
         if( m_settings.CameraGet().Zoom_T1( 1/1.26f ) ) // 3 steps per halving
@@ -1018,14 +1018,14 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
 
     case 'r':
     case 'R':
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         request_start_moving_camera( glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
         return true;
 
     case 'X':
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         m_settings.CameraGet().RotateZ_T1( glm::radians( -90.0f ) );
@@ -1034,7 +1034,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         return true;
 
     case GR_KB_SHIFT + 'X':
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         m_settings.CameraGet().RotateZ_T1( glm::radians(  90.0f ) );
@@ -1043,7 +1043,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         return true;
 
     case 'Y':
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         m_settings.CameraGet().RotateX_T1( glm::radians( -90.0f ) );
@@ -1051,7 +1051,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         return true;
 
     case GR_KB_SHIFT + 'Y':
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         m_settings.CameraGet().RotateX_T1( glm::radians(  -90.0f ) );
@@ -1060,7 +1060,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         return true;
 
     case 'Z':
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         request_start_moving_camera(
@@ -1068,7 +1068,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         return true;
 
     case GR_KB_SHIFT + 'Z':
-        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
         m_settings.CameraGet().RotateY_T1( glm::radians( 180.0f ) );
@@ -1093,14 +1093,13 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
 
 void EDA_3D_CANVAS::RenderEngineChanged()
 {
-
     switch( m_settings.RenderEngineGet() )
     {
-    case RENDER_ENGINE_OPENGL_LEGACY:
+    case RENDER_ENGINE::OPENGL_LEGACY:
         m_3d_render = m_3d_render_ogl_legacy;
         break;
 
-    case RENDER_ENGINE_RAYTRACING:
+    case RENDER_ENGINE::RAYTRACING:
         m_3d_render = m_3d_render_raytracing;
         break;
 
