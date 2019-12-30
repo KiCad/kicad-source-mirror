@@ -41,6 +41,9 @@ add_executable( qa_eeschema
     # The main test entry points
     test_module.cpp
 
+    # Base internal units (1=100nm) testing.
+    test_sch_biu.cpp
+
     test_eagle_plugin.cpp
     test_lib_part.cpp
     test_sch_pin.cpp

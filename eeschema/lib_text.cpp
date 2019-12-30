@@ -46,7 +46,7 @@ LIB_TEXT::LIB_TEXT( LIB_PART * aParent ) :
     LIB_ITEM( LIB_TEXT_T, aParent ),
     EDA_TEXT()
 {
-    SetTextSize( wxSize( 50, 50 ) );
+    SetTextSize( wxSize( Mils2iu( 50 ), Mils2iu( 50 ) ) );
 }
 
 

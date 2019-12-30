@@ -38,8 +38,8 @@ class LIB_PART;
 class LIB_PIN;
 class SCH_BASE_FRAME;
 
-// Eeschema uses mils as the internal units
-constexpr double SCH_WORLD_UNIT = 0.001;
+// Eeschema 100nm as the internal units
+constexpr double SCH_WORLD_UNIT ( 1e-7 / 0.0254 );
 
 static const LAYER_NUM SCH_LAYER_ORDER[] =
 {

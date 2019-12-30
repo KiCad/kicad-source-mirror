@@ -97,12 +97,12 @@ static LIB_PART* dummy()
 
         LIB_RECTANGLE* square = new LIB_RECTANGLE( part );
 
-        square->MoveTo( wxPoint( -200, 200 ));
-        square->SetEndPosition( wxPoint( 200, -200 ) );
+        square->MoveTo( wxPoint( Mils2iu( -200 ), Mils2iu( 200 ) ) );
+        square->SetEndPosition( wxPoint( Mils2iu( 200 ), Mils2iu( -200 ) ) );
 
         LIB_TEXT* text = new LIB_TEXT( part );
 
-        text->SetTextSize( wxSize( 150, 150 ) );
+        text->SetTextSize( wxSize( Mils2iu( 150 ), Mils2iu( 150 ) ) );
         text->SetText( wxString( wxT( "??" ) ) );
 
         part->AddDrawItem( square );
@@ -563,7 +563,7 @@ void SCH_COMPONENT::Print( wxDC* aDC, const wxPoint& aOffset )
     SCH_FIELD* field = GetField( REFERENCE );
 
     if( field->IsVisible() )
-        field->Print(aDC, aOffset );
+        field->Print( aDC, aOffset );
 
     for( int ii = VALUE; ii < GetFieldCount(); ii++ )
     {
@@ -692,11 +692,13 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 
     SCH_FIELD* rf = GetField( REFERENCE );
 
+    // @todo Should we really be checking for what is a "reasonable" position?
     if( rf->GetText().IsEmpty()
-      || ( abs( rf->GetTextPos().x - m_Pos.x ) + abs( rf->GetTextPos().y - m_Pos.y ) > 10000 ) )
+      || ( abs( rf->GetTextPos().x - m_Pos.x ) +
+           abs( rf->GetTextPos().y - m_Pos.y ) > Mils2iu( 10000 ) ) )
     {
         // move it to a reasonable position
-        rf->SetTextPos( m_Pos + wxPoint( 50, 50 ) );
+        rf->SetTextPos( m_Pos + wxPoint( Mils2iu( 50 ), Mils2iu( 50 ) ) );
     }
 
     rf->SetText( ref );  // for drawing.
