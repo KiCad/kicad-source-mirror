@@ -124,7 +124,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     //
     CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, tool );
 
-	//clang-format off
+    //clang-format off
     auto raytracingCondition = [this]( const SELECTION& aSel )
     {
         return m_settings.RenderEngineGet() != RENDER_ENGINE::OPENGL_LEGACY;
@@ -194,7 +194,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     {
         return m_settings.GetFlag( FL_AXIS );
     };
-	//clang-format on
+    //clang-format on
 
     prefsMenu->AddItem( ID_TOOL_SET_VISIBLE_ITEMS, _( "Display Options" ), "",
                         read_setup_xpm,                SELECTION_CONDITIONS::ShowAlways );
@@ -318,21 +318,32 @@ void EDA_3D_VIEWER::CreateMenuBar()
     gridSubmenu->SetTitle( _( "3D Grid" ) );
     gridSubmenu->SetIcon( grid_xpm );
 
-    auto noGridCondition = [this]( const SELECTION& aSel ) {
+    //clang-format off
+    auto noGridCondition = [this]( const SELECTION& aSel )
+    {
         return m_settings.GridGet() == GRID3D_TYPE::NONE;
     };
-    auto grid10mmCondition = [this]( const SELECTION& aSel ) {
+
+    auto grid10mmCondition = [this]( const SELECTION& aSel )
+    {
         return m_settings.GridGet() == GRID3D_TYPE::GRID_10MM;
     };
-    auto grid5mmCondition = [this]( const SELECTION& aSel ) {
+
+    auto grid5mmCondition = [this]( const SELECTION& aSel )
+    {
         return m_settings.GridGet() == GRID3D_TYPE::GRID_5MM;
     };
-    auto grid2p5mmCondition = [this]( const SELECTION& aSel ) {
+
+    auto grid2p5mmCondition = [this]( const SELECTION& aSel )
+    {
         return m_settings.GridGet() == GRID3D_TYPE::GRID_2P5MM;
     };
-    auto grid_1mmCondition = [this]( const SELECTION& aSel ) {
+
+    auto grid_1mmCondition = [this]( const SELECTION& aSel )
+    {
         return m_settings.GridGet() == GRID3D_TYPE::GRID_1MM;
     };
+    //clang-format on
 
     gridSubmenu->AddCheckItem( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), "",
                                nullptr, noGridCondition );
