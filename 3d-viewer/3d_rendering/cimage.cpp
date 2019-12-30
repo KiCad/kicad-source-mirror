@@ -42,8 +42,8 @@
 
 CIMAGE::CIMAGE( unsigned int aXsize, unsigned int aYsize )
 {
-    m_wxh     = aXsize * aYsize;
-    m_pixels  = (unsigned char*)malloc( m_wxh );
+    m_wxh    = aXsize * aYsize;
+    m_pixels = new unsigned char[m_wxh];
     memset( m_pixels, 0, m_wxh );
     m_width   = aXsize;
     m_height  = aYsize;
@@ -53,8 +53,8 @@ CIMAGE::CIMAGE( unsigned int aXsize, unsigned int aYsize )
 
 CIMAGE::CIMAGE( const CIMAGE &aSrcImage )
 {
-    m_wxh     = aSrcImage.GetWidth() * aSrcImage.GetHeight();
-    m_pixels  = (unsigned char*)malloc( m_wxh );
+    m_wxh    = aSrcImage.GetWidth() * aSrcImage.GetHeight();
+    m_pixels = new unsigned char[m_wxh];
     memcpy( m_pixels, aSrcImage.GetBuffer(), m_wxh );
     m_width   = aSrcImage.GetWidth();
     m_height  = aSrcImage.GetHeight();
@@ -64,7 +64,7 @@ CIMAGE::CIMAGE( const CIMAGE &aSrcImage )
 
 CIMAGE::~CIMAGE()
 {
-    free( m_pixels );
+	delete[] m_pixels;
 }
 
 
