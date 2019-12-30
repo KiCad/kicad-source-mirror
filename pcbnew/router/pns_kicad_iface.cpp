@@ -519,31 +519,40 @@ private:
 };
 
 
-PNS::DEBUG_DECORATOR* PNS_KICAD_IFACE::GetDebugDecorator()
+PNS::DEBUG_DECORATOR* PNS_KICAD_IFACE_BASE::GetDebugDecorator()
 {
     return m_debugDecorator;
 }
 
 
-PNS_KICAD_IFACE::PNS_KICAD_IFACE()
+PNS_KICAD_IFACE_BASE::PNS_KICAD_IFACE_BASE()
 {
     m_ruleResolver = nullptr;
     m_board = nullptr;
+    m_router = nullptr;
+    m_debugDecorator = nullptr;
+}
+
+
+PNS_KICAD_IFACE::PNS_KICAD_IFACE()
+{
     m_tool = nullptr;
     m_view = nullptr;
     m_previewItems = nullptr;
-    m_router = nullptr;
-    m_debugDecorator = nullptr;
     m_dispOptions = nullptr;
+}
+
+
+PNS_KICAD_IFACE_BASE::~PNS_KICAD_IFACE_BASE()
+{
+    delete m_ruleResolver;
+    delete m_debugDecorator;
 }
 
 
 PNS_KICAD_IFACE::~PNS_KICAD_IFACE()
 {
-    delete m_ruleResolver;
-    delete m_debugDecorator;
-
-    if( m_previewItems )
+     if( m_previewItems )
     {
         m_previewItems->FreeItems();
         delete m_previewItems;
@@ -551,7 +560,7 @@ PNS_KICAD_IFACE::~PNS_KICAD_IFACE()
 }
 
 
-std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
+std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
 {
     LAYER_RANGE layers( 0, MAX_CU_LAYERS - 1 );
 
@@ -800,7 +809,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
 }
 
 
-std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE::syncTrack( TRACK* aTrack )
+std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( TRACK* aTrack )
 {
     std::unique_ptr< PNS::SEGMENT > segment(
         new PNS::SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNetCode() )
@@ -835,7 +844,7 @@ std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE::syncArc( ARC* aArc )
 }
 
 
-std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE::syncVia( VIA* aVia )
+std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
 {
     PCB_LAYER_ID top, bottom;
     aVia->LayerPair( &top, &bottom );
@@ -857,7 +866,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE::syncVia( VIA* aVia )
 }
 
 
-bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
+bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
 {
     SHAPE_POLY_SET poly;
 
@@ -926,7 +935,7 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
 }
 
 
-bool PNS_KICAD_IFACE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB_LAYER_ID aLayer )
+bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB_LAYER_ID aLayer )
 {
     if( !IsCopperLayer( aLayer ) )
         return false;
@@ -978,9 +987,11 @@ bool PNS_KICAD_IFACE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB_LAYE
 }
 
 
-bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
+bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
 {
     std::vector<SHAPE_SEGMENT*> segs;
+
+    printf("SyncGI: %p\n", aItem );
 
     if( aItem->GetLayer() != Edge_Cuts && !IsCopperLayer( aItem->GetLayer() ) )
         return false;
@@ -1072,7 +1083,7 @@ bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
 }
 
 
-void PNS_KICAD_IFACE::SetBoard( BOARD* aBoard )
+void PNS_KICAD_IFACE_BASE::SetBoard( BOARD* aBoard )
 {
     m_board = aBoard;
     wxLogTrace( "PNS", "m_board = %p", m_board );
@@ -1132,12 +1143,15 @@ bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem )
 }
 
 
-void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
+void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 {
     int worstPadClearance = 0;
 
+    printf("->syncWorld\n");
+
     if( !m_board )
     {
+        printf("no board\n");
         wxLogTrace( "PNS", "No board attached, aborting sync." );
         return;
     }
@@ -1239,6 +1253,10 @@ void PNS_KICAD_IFACE::EraseView()
         m_debugDecorator->Clear();
 }
 
+void PNS_KICAD_IFACE_BASE::SetDebugDecorator( PNS::DEBUG_DECORATOR *aDec )
+{
+    m_debugDecorator = aDec;
+}
 
 void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aColor, int aClearance, bool aEdit )
 {
@@ -1298,6 +1316,12 @@ void PNS_KICAD_IFACE::HideItem( PNS::ITEM* aItem )
 }
 
 
+void PNS_KICAD_IFACE_BASE::RemoveItem( PNS::ITEM* aItem )
+{
+
+}
+
+
 void PNS_KICAD_IFACE::RemoveItem( PNS::ITEM* aItem )
 {
     BOARD_CONNECTED_ITEM* parent = aItem->Parent();
@@ -1306,6 +1330,12 @@ void PNS_KICAD_IFACE::RemoveItem( PNS::ITEM* aItem )
     {
         m_commit->Remove( parent );
     }
+}
+
+
+void PNS_KICAD_IFACE_BASE::AddItem( PNS::ITEM* aItem )
+{
+
 }
 
 
@@ -1361,7 +1391,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 
     if( newBI )
     {
-        newBI->SetLocalRatsnestVisible( m_dispOptions->m_ShowGlobalRatsnest );
+        //newBI->SetLocalRatsnestVisible( m_dispOptions->m_ShowGlobalRatsnest );
         aItem->SetParent( newBI );
         newBI->ClearFlags();
 
@@ -1391,27 +1421,32 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
     m_view = aView;
     m_previewItems = new KIGFX::VIEW_GROUP( m_view );
     m_previewItems->SetLayer( LAYER_SELECT_OVERLAY ) ;
-    m_view->Add( m_previewItems );
+    
+    if(m_view)
+        m_view->Add( m_previewItems );
 
     delete m_debugDecorator;
-    m_debugDecorator = new PNS_PCBNEW_DEBUG_DECORATOR();
-    m_debugDecorator->SetView( m_view );
+
+    auto dec = new PNS_PCBNEW_DEBUG_DECORATOR();
+    dec->SetView( m_view );
+
+    m_debugDecorator = dec;
 }
 
 
 void PNS_KICAD_IFACE::UpdateNet( int aNetCode )
 {
     wxLogTrace( "PNS", "Update-net %d", aNetCode );
+
 }
 
-
-PNS::RULE_RESOLVER* PNS_KICAD_IFACE::GetRuleResolver()
+PNS::RULE_RESOLVER* PNS_KICAD_IFACE_BASE::GetRuleResolver()
 {
     return m_ruleResolver;
 }
 
 
-void PNS_KICAD_IFACE::SetRouter( PNS::ROUTER* aRouter )
+void PNS_KICAD_IFACE_BASE::SetRouter( PNS::ROUTER* aRouter )
 {
     m_router = aRouter;
 }
