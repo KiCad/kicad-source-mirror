@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
 
     m_gal->SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
     m_gal->SetCursorColor( GetLayerColor( LAYER_SCHEMATIC_CURSOR ) );
-    m_gal->SetGridSize( VECTOR2D( 50.0, 50.0 ) );
+    m_gal->SetGridSize( VECTOR2D( Mils2iu( 50.0 ), Mils2iu( 50.0 ) ) );
 
     m_viewControls->SetSnapping( true );
 

@@ -208,7 +208,8 @@ const EDA_RECT LIB_RECTANGLE::GetBoundingBox() const
 
 bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int     mindist = std::max( aAccuracy + GetPenSize() / 2, MINIMUM_SELECTION_DISTANCE );
+    int     mindist = std::max( aAccuracy + GetPenSize() / 2,
+                                Mils2iu( MINIMUM_SELECTION_DISTANCE ) );
     wxPoint actualStart = DefaultTransform.TransformCoordinate( m_Pos );
     wxPoint actualEnd   = DefaultTransform.TransformCoordinate( m_End );
 

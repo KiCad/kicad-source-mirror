@@ -228,7 +228,8 @@ void LIB_POLYLINE::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
 
 bool LIB_POLYLINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int              delta = std::max( aAccuracy + GetPenSize() / 2, MINIMUM_SELECTION_DISTANCE );
+    int              delta = std::max( aAccuracy + GetPenSize() / 2,
+                                       Mils2iu( MINIMUM_SELECTION_DISTANCE ) );
     SHAPE_LINE_CHAIN shape;
 
     for( wxPoint pt : m_PolyPoints )

@@ -699,8 +699,10 @@ void LIB_PIN::PrintPinTexts( wxDC* DC, wxPoint& pin_pos, int orient, int TextIns
     wxSize PinNumSize( m_numTextSize, m_numTextSize );
     int    nameLineWidth = Clamp_Text_PenSize( GetPenSize(), m_nameTextSize, false );
     int    numLineWidth = Clamp_Text_PenSize( GetPenSize(), m_numTextSize, false );
-    int    name_offset = PIN_TEXT_MARGIN + ( nameLineWidth + GetDefaultLineThickness() ) / 2;
-    int    num_offset = PIN_TEXT_MARGIN + ( numLineWidth + GetDefaultLineThickness() ) / 2;
+    int    name_offset = Mils2iu( PIN_TEXT_MARGIN ) +
+                         ( nameLineWidth + GetDefaultLineThickness() ) / 2;
+    int    num_offset = Mils2iu( PIN_TEXT_MARGIN ) +
+                        ( numLineWidth + GetDefaultLineThickness() ) / 2;
 
     /* Get the num and name colors */
     COLOR4D NameColor = IsVisible() ? GetLayerColor( LAYER_PINNAM ) : GetInvisibleItemColor();
@@ -1023,9 +1025,9 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
     int     numLineWidth = GetPenSize();
     numLineWidth = Clamp_Text_PenSize( numLineWidth, m_numTextSize, false );
 
-    int     name_offset = PIN_TEXT_MARGIN +
+    int     name_offset = Mils2iu( PIN_TEXT_MARGIN ) +
                           ( nameLineWidth + GetDefaultLineThickness() ) / 2;
-    int     num_offset = PIN_TEXT_MARGIN +
+    int     num_offset = Mils2iu( PIN_TEXT_MARGIN ) +
                          ( numLineWidth + GetDefaultLineThickness() ) / 2;
 
     /* Get the num and name colors */
@@ -1479,7 +1481,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles ) const
 
     // calculate top left corner position
     // for the default pin orientation (PIN_RIGHT)
-    begin.y = std::max( minsizeV, numberTextHeight + PIN_TEXT_MARGIN );
+    begin.y = std::max( minsizeV, numberTextHeight + Mils2iu( PIN_TEXT_MARGIN ) );
     begin.x = std::min( -TARGET_PIN_RADIUS, m_length - (numberTextLength / 2) );
 
     // calculate bottom right corner position and adjust top left corner position
@@ -1497,7 +1499,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles ) const
         nameTextLength = ( m_nameTextSize * length ) + nameTextOffset;
 
         // Actual text height are bigger than text size
-        nameTextHeight = KiROUND( m_nameTextSize * 1.1 ) + PIN_TEXT_MARGIN;
+        nameTextHeight = KiROUND( m_nameTextSize * 1.1 ) + Mils2iu( PIN_TEXT_MARGIN );
     }
 
     if( nameTextOffset )        // for values > 0, pin name is inside the body

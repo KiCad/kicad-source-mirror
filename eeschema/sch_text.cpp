@@ -151,7 +151,7 @@ wxPoint SCH_TEXT::GetSchematicTextOffset() const
     wxPoint text_offset;
 
     // add an offset to x (or y) position to aid readability of text on a wire or line
-    int thick_offset = TXT_MARGIN + ( GetPenSize() + GetDefaultLineThickness() ) / 2;
+    int thick_offset = Mils2iu( TXT_MARGIN ) + ( GetPenSize() + GetDefaultLineThickness() ) / 2;
 
     switch( GetLabelSpinStyle() )
     {
@@ -947,7 +947,8 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     height = ( (GetTextHeight() * 15) / 10 ) + width + 2 * TXT_MARGIN;
 
     // text X size add height for triangular shapes(bidirectional)
-    length = LenSize( GetShownText(), width, GetTextMarkupFlags() ) + height + DANGLING_SYMBOL_SIZE;
+    length = LenSize( GetShownText(), width, GetTextMarkupFlags() ) + height +
+             Mils2iu( DANGLING_SYMBOL_SIZE );
 
     switch( GetLabelSpinStyle() )    // respect orientation
     {
@@ -955,7 +956,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     case 0:                             // Horiz Normal Orientation (left justified)
         dx = -length;
         dy = height;
-        x += DANGLING_SYMBOL_SIZE;
+        x += Mils2iu( DANGLING_SYMBOL_SIZE );
         y -= height / 2;
         break;
 
@@ -963,13 +964,13 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
         dx = height;
         dy = -length;
         x -= height / 2;
-        y += DANGLING_SYMBOL_SIZE;
+        y += Mils2iu( DANGLING_SYMBOL_SIZE );
         break;
 
     case 2:     // Horiz Orientation - Right justified
         dx = length;
         dy = height;
-        x -= DANGLING_SYMBOL_SIZE;
+        x -= Mils2iu( DANGLING_SYMBOL_SIZE );
         y -= height / 2;
         break;
 
@@ -977,7 +978,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
         dx = height;
         dy = length;
         x -= height / 2;
-        y -= DANGLING_SYMBOL_SIZE;
+        y -= Mils2iu( DANGLING_SYMBOL_SIZE );
         break;
     }
 
@@ -1111,7 +1112,7 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
     height = GetTextHeight() + width + 2 * TXT_MARGIN;
     length = LenSize( GetShownText(), width, GetTextMarkupFlags() )
              + height                 // add height for triangular shapes
-             + 2 * DANGLING_SYMBOL_SIZE;
+             + 2 * Mils2iu( DANGLING_SYMBOL_SIZE );
 
     switch( GetLabelSpinStyle() )
     {
@@ -1119,7 +1120,7 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
     case 0:                             // Horiz Normal Orientation (left justified)
         dx = -length;
         dy = height;
-        x += DANGLING_SYMBOL_SIZE;
+        x += Mils2iu( DANGLING_SYMBOL_SIZE );
         y -= height / 2;
         break;
 
@@ -1127,13 +1128,13 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
         dx = height;
         dy = -length;
         x -= height / 2;
-        y += DANGLING_SYMBOL_SIZE;
+        y += Mils2iu( DANGLING_SYMBOL_SIZE );
         break;
 
     case 2:     // Horiz Orientation - Right justified
         dx = length;
         dy = height;
-        x -= DANGLING_SYMBOL_SIZE;
+        x -= Mils2iu( DANGLING_SYMBOL_SIZE );
         y -= height / 2;
         break;
 
@@ -1141,7 +1142,7 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
         dx = height;
         dy = length;
         x -= height / 2;
-        y -= DANGLING_SYMBOL_SIZE;
+        y -= Mils2iu( DANGLING_SYMBOL_SIZE );
         break;
     }
 

@@ -59,7 +59,8 @@ LIB_ARC::LIB_ARC( LIB_PART*      aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
 
 bool LIB_ARC::HitTest( const wxPoint& aRefPoint, int aAccuracy ) const
 {
-    int     mindist = std::max( aAccuracy + GetPenSize() / 2, MINIMUM_SELECTION_DISTANCE );
+    int     mindist = std::max( aAccuracy + GetPenSize() / 2,
+                                Mils2iu( MINIMUM_SELECTION_DISTANCE ) );
     wxPoint relativePosition = aRefPoint;
 
     relativePosition.y = -relativePosition.y; // reverse Y axis
