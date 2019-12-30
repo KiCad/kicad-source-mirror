@@ -285,7 +285,7 @@ CLAYERS_OGL_DISP_LISTS *C3D_RENDER_OGL_LEGACY::generate_holes_display_list(
              itemOnLayer != aListHolesObject2d.end();
              ++itemOnLayer )
         {
-            const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*itemOnLayer);
+            const COBJECT2D* object2d_A = static_cast<const COBJECT2D*>( *itemOnLayer );
 
             wxASSERT( ( object2d_A->GetObjectType() == OBJECT2D_TYPE::FILLED_CIRCLE )
                       || ( object2d_A->GetObjectType() == OBJECT2D_TYPE::ROUNDSEG ) );
@@ -293,13 +293,13 @@ CLAYERS_OGL_DISP_LISTS *C3D_RENDER_OGL_LEGACY::generate_holes_display_list(
             switch( object2d_A->GetObjectType() )
             {
             case OBJECT2D_TYPE::FILLED_CIRCLE:
-                add_object_to_triangle_layer(
-                        (const CFILLEDCIRCLE2D*) object2d_A, layerTriangles, aZtop, aZbot );
+                add_object_to_triangle_layer( static_cast<const CFILLEDCIRCLE2D*>( object2d_A ),
+                        layerTriangles, aZtop, aZbot );
                 break;
 
             case OBJECT2D_TYPE::ROUNDSEG:
-                add_object_to_triangle_layer(
-                        (const CROUNDSEGMENT2D*) object2d_A, layerTriangles, aZtop, aZbot );
+                add_object_to_triangle_layer( static_cast<const CROUNDSEGMENT2D*>( object2d_A ),
+                        layerTriangles, aZtop, aZbot );
                 break;
 
             default:
