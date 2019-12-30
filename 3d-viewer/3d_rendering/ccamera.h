@@ -34,10 +34,10 @@
 #include <wx/gdicmn.h>  // for wxSize
 #include <vector>
 
-enum PROJECTION_TYPE
+enum class PROJECTION_TYPE
 {
-    PROJECTION_ORTHO,
-    PROJECTION_PERSPECTIVE
+    ORTHO,
+    PERSPECTIVE
 };
 
 /**
@@ -62,12 +62,11 @@ struct FRUSTUM
 };
 
 
-enum CAMERA_INTERPOLATION
+enum class CAMERA_INTERPOLATION
 {
-    INTERPOLATION_LINEAR,
-    INTERPOLATION_EASING_IN_OUT,    // Quadratic
-    INTERPOLATION_BEZIER,
-
+    LINEAR,
+    EASING_IN_OUT, // Quadratic
+    BEZIER,
 };
 
 

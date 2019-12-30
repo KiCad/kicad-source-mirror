@@ -42,29 +42,29 @@
 
 CIMAGE::CIMAGE( unsigned int aXsize, unsigned int aYsize )
 {
-    m_wxh     = aXsize * aYsize;
-    m_pixels  = (unsigned char*)malloc( m_wxh );
+    m_wxh    = aXsize * aYsize;
+    m_pixels = new unsigned char[m_wxh];
     memset( m_pixels, 0, m_wxh );
     m_width   = aXsize;
     m_height  = aYsize;
-    m_wraping = (E_WRAP)WRAP_CLAMP;
+    m_wraping = IMAGE_WRAP::CLAMP;
 }
 
 
 CIMAGE::CIMAGE( const CIMAGE &aSrcImage )
 {
-    m_wxh     = aSrcImage.GetWidth() * aSrcImage.GetHeight();
-    m_pixels  = (unsigned char*)malloc( m_wxh );
+    m_wxh    = aSrcImage.GetWidth() * aSrcImage.GetHeight();
+    m_pixels = new unsigned char[m_wxh];
     memcpy( m_pixels, aSrcImage.GetBuffer(), m_wxh );
     m_width   = aSrcImage.GetWidth();
     m_height  = aSrcImage.GetHeight();
-    m_wraping = (E_WRAP)WRAP_CLAMP;
+    m_wraping = IMAGE_WRAP::CLAMP;
 }
 
 
 CIMAGE::~CIMAGE()
 {
-    free( m_pixels );
+    delete[] m_pixels;
 }
 
 
@@ -81,14 +81,14 @@ bool CIMAGE::wrapCoords( int *aXo, int *aYo ) const
 
     switch(m_wraping)
     {
-    case WRAP_CLAMP:
+    case IMAGE_WRAP::CLAMP:
         x =  (x < 0 )?0:x;
         x =  (x >= (int)(m_width - 1))?(m_width - 1):x;
         y =  (y < 0)?0:y;
         y =  (y >= (int)(m_height - 1))?(m_height - 1):y;
         break;
 
-    case WRAP_WRAP:
+    case IMAGE_WRAP::WRAP:
         x = (x < 0)?((m_width - 1)+x):x;
         x = (x >= (int)(m_width - 1))?(x - m_width):x;
         y = (y < 0)?((m_height - 1)+y):y;
@@ -201,11 +201,11 @@ void CIMAGE::Invert()
 }
 
 
-void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOperation )
+void CIMAGE::CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOperation )
 {
     int aV, bV;
 
-    if( aOperation == COPY_RAW )
+    if( aOperation == IMAGE_OP::RAW )
     {
         if( aImgA == NULL )
             return;
@@ -218,11 +218,11 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
 
     switch(aOperation)
     {
-    case COPY_RAW:
+    case IMAGE_OP::RAW:
         memcpy( m_pixels, aImgA->m_pixels, m_wxh );
     break;
 
-    case COPY_ADD:
+    case IMAGE_OP::ADD:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -235,7 +235,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
         }
     break;
 
-    case COPY_SUB:
+    case IMAGE_OP::SUB:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -248,7 +248,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
         }
     break;
 
-    case COPY_DIF:
+    case IMAGE_OP::DIF:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -258,7 +258,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
         }
     break;
 
-    case COPY_MUL:
+    case IMAGE_OP::MUL:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -268,28 +268,28 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
         }
     break;
 
-    case COPY_AND:
+    case IMAGE_OP::AND:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             m_pixels[it] = aImgA->m_pixels[it] & aImgB->m_pixels[it];
         }
     break;
 
-    case COPY_OR:
+    case IMAGE_OP::OR:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             m_pixels[it] = aImgA->m_pixels[it] | aImgB->m_pixels[it];
         }
     break;
 
-    case COPY_XOR:
+    case IMAGE_OP::XOR:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             m_pixels[it] = aImgA->m_pixels[it] ^ aImgB->m_pixels[it];
         }
     break;
 
-    case COPY_BLEND50:
+    case IMAGE_OP::BLEND50:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -299,7 +299,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
         }
     break;
 
-    case COPY_MIN:
+    case IMAGE_OP::MIN:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -309,7 +309,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
         }
     break;
 
-    case COPY_MAX:
+    case IMAGE_OP::MAX:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             aV = aImgA->m_pixels[it];
@@ -327,8 +327,9 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
 // TIP: If you want create or test filters you can use GIMP
 // with a generic convolution matrix and get the values from there.
 // http://docs.gimp.org/nl/plug-in-convmatrix.html
+// clang-format off
 static const S_FILTER FILTERS[] =   {
-    // FILTER_HIPASS
+    // IMAGE_FILTER::HIPASS
     {
     {   { 0, -1, -1, -1,  0},
         {-1,  2, -4,  2, -1},
@@ -340,7 +341,7 @@ static const S_FILTER FILTERS[] =   {
         255
     },
 
-    // FILTER_GAUSSIAN_BLUR
+    // IMAGE_FILTER::GAUSSIAN_BLUR
     {
     {   { 3,  5,  7,  5,  3},
         { 5,  9, 12,  9,  5},
@@ -352,7 +353,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_GAUSSIAN_BLUR2
+    // IMAGE_FILTER::GAUSSIAN_BLUR2
     {
     {   { 1,  4,  7,  4,  1},
         { 4, 16, 26, 16,  4},
@@ -364,7 +365,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_INVERT_BLUR
+    // IMAGE_FILTER::INVERT_BLUR
     {
     {   { 0,  0,  0,  0,  0},
         { 0,  0, -1,  0,  0},
@@ -376,7 +377,7 @@ static const S_FILTER FILTERS[] =   {
         255
     },
 
-    // FILTER_CARTOON
+    // IMAGE_FILTER::CARTOON
     {
     {   {-1, -1, -1, -1,  0},
         {-1,  0,  0,  0,  0},
@@ -388,7 +389,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_EMBOSS
+    // IMAGE_FILTER::EMBOSS
     {
     {   {-1, -1, -1, -1,  0},
         {-1, -1, -1,  0,  1},
@@ -400,7 +401,7 @@ static const S_FILTER FILTERS[] =   {
         128
     },
 
-    // FILTER_SHARPEN
+    // IMAGE_FILTER::SHARPEN
     {
     {   {-1, -1, -1, -1, -1},
         {-1,  2,  2,  2, -1},
@@ -412,7 +413,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_MELT
+    // IMAGE_FILTER::MELT
     {
     {   { 4,  2,  6,  8,  1},
         { 1,  2,  5,  4,  2},
@@ -424,7 +425,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_SOBEL_GX
+    // IMAGE_FILTER::SOBEL_GX
     {
     {   { 0,  0,  0,  0,  0},
         { 0, -1,  0,  1,  0},
@@ -436,7 +437,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_SOBEL_GY
+    // IMAGE_FILTER::SOBEL_GY
     {
     {   { 1,  2,  4,  2,  1},
         {-1, -1,  0,  1,  1},
@@ -448,7 +449,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // FILTER_BLUR_3X3
+    // IMAGE_FILTER::BLUR_3X3
     {
     {   { 0,  0,  0,  0,  0},
         { 0,  1,  2,  1,  0},
@@ -460,18 +461,19 @@ static const S_FILTER FILTERS[] =   {
         0
     }
 };// Filters
+// clang-format on
 
 
 // !TODO: This functions can be optimized slipting it between the edges and
 //        do it without use the getpixel function.
 //        Optimization can be done to m_pixels[ix + iy * m_width]
 //        but keep in mind the parallel process of the algorithm
-void CIMAGE::EfxFilter( CIMAGE *aInImg, E_FILTER aFilterType )
+void CIMAGE::EfxFilter( CIMAGE* aInImg, IMAGE_FILTER aFilterType )
 {
-    S_FILTER filter = FILTERS[aFilterType];
+    S_FILTER filter = FILTERS[static_cast<int>( aFilterType )];
 
-    aInImg->m_wraping = WRAP_CLAMP;
-    m_wraping = WRAP_CLAMP;
+    aInImg->m_wraping = IMAGE_WRAP::CLAMP;
+    m_wraping         = IMAGE_WRAP::CLAMP;
 
     std::atomic<size_t> nextRow( 0 );
     std::atomic<size_t> threadsFinished( 0 );

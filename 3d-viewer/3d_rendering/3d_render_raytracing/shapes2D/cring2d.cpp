@@ -32,8 +32,9 @@
 #include <wx/debug.h>
 
 
-CRING2D::CRING2D( const SFVEC2F &aCenter, float aInnerRadius, float aOuterRadius,
-                  const BOARD_ITEM &aBoardItem ) : COBJECT2D( OBJ2D_RING, aBoardItem )
+CRING2D::CRING2D( const SFVEC2F& aCenter, float aInnerRadius, float aOuterRadius,
+        const BOARD_ITEM& aBoardItem )
+        : COBJECT2D( OBJECT2D_TYPE::RING, aBoardItem )
 {
     wxASSERT( aInnerRadius < aOuterRadius );
 
@@ -141,7 +142,7 @@ INTERSECTION_RESULT CRING2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 {
     /*
     if( !m_bbox.Overlaps( aBBox ) )
-        return INTR_MISSES;
+        return INTERSECTION_RESULT::MISSES;
 
     SFVEC2F v[4];
 
@@ -169,16 +170,16 @@ INTERSECTION_RESULT CRING2D::IsBBoxInside( const CBBOX2D &aBBox ) const
         isInside[1] &&
         isInside[2] &&
         isInside[3] )
-        return INTR_FULL_INSIDE;
+        return INTERSECTION_RESULT::FULL_INSIDE;
 
     // Check if any point is inside the circle
     if( isInside[0] ||
         isInside[1] ||
         isInside[2] ||
         isInside[3] )
-        return INTR_INTERSECTS;
+        return INTERSECTION_RESULT::INTERSECTS;
 */
-    return INTR_MISSES;
+    return INTERSECTION_RESULT::MISSES;
 }
 
 

@@ -98,9 +98,8 @@ void CTRIANGLE::pre_calc_const()
 }
 
 
-CTRIANGLE::CTRIANGLE( const SFVEC3F &aV1,
-                      const SFVEC3F &aV2,
-                      const SFVEC3F &aV3 ) : COBJECT( OBJ3D_TRIANGLE )
+CTRIANGLE::CTRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3 )
+        : COBJECT( OBJECT3D_TYPE::TRIANGLE )
 {
     m_vertex[0] = aV1;
     m_vertex[1] = aV2;
@@ -114,10 +113,9 @@ CTRIANGLE::CTRIANGLE( const SFVEC3F &aV1,
 }
 
 
-CTRIANGLE::CTRIANGLE( const SFVEC3F &aV1,
-                      const SFVEC3F &aV2,
-                      const SFVEC3F &aV3,
-                      const SFVEC3F &aFaceNormal ) : COBJECT( OBJ3D_TRIANGLE )
+CTRIANGLE::CTRIANGLE(
+        const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3, const SFVEC3F& aFaceNormal )
+        : COBJECT( OBJECT3D_TYPE::TRIANGLE )
 {
     m_vertex[0] = aV1;
     m_vertex[1] = aV2;
@@ -135,12 +133,9 @@ CTRIANGLE::CTRIANGLE( const SFVEC3F &aV1,
 }
 
 
-CTRIANGLE::CTRIANGLE( const SFVEC3F &aV1,
-                      const SFVEC3F &aV2,
-                      const SFVEC3F &aV3,
-                      const SFVEC3F &aN1,
-                      const SFVEC3F &aN2,
-                      const SFVEC3F &aN3 ) : COBJECT( OBJ3D_TRIANGLE )
+CTRIANGLE::CTRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3,
+        const SFVEC3F& aN1, const SFVEC3F& aN2, const SFVEC3F& aN3 )
+        : COBJECT( OBJECT3D_TYPE::TRIANGLE )
 {
     m_vertex[0] = aV1;
     m_vertex[1] = aV2;

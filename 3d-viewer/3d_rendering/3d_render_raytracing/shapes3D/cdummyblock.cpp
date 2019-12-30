@@ -30,7 +30,7 @@
 #include "cdummyblock.h"
 
 
-CDUMMYBLOCK::CDUMMYBLOCK( const CBBOX &aBBox ) : COBJECT( OBJ3D_DUMMYBLOCK )
+CDUMMYBLOCK::CDUMMYBLOCK( const CBBOX& aBBox ) : COBJECT( OBJECT3D_TYPE::DUMMYBLOCK )
 {
     m_centroid = aBBox.GetCenter();
     m_bbox.Reset();
