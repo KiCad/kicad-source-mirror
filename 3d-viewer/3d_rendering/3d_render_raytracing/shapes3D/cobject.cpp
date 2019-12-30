@@ -29,6 +29,7 @@
 
 #include "cobject.h"
 #include <cstdio>
+#include <map>
 
 
 COBJECT3D_STATS *COBJECT3D_STATS::s_instance = 0;
@@ -43,23 +44,29 @@ COBJECT::COBJECT( OBJECT3D_TYPE aObjType )
 }
 
 
-static const char *OBJECT3D_STR[OBJ3D_MAX] =
-{
-    "OBJ3D_CYLINDER",
-    "OBJ3D_DUMMYBLOCK",
-    "OBJ3D_LAYERITEM",
-    "OBJ3D_XYPLANE",
-    "OBJ3D_ROUNDSEG",
-    "OBJ3D_TRIANGLE"
+/*
+ * Lookup table for OBJECT2D_TYPE printed names
+ */
+// clang-format off
+const std::map<OBJECT3D_TYPE, const char*> objectTypeNames 
+{ 
+    { OBJECT3D_TYPE::CYLINDER,   "OBJECT3D_TYPE::CYLINDER" },
+    { OBJECT3D_TYPE::DUMMYBLOCK, "OBJECT2D_TYPE::DUMMYBLOCK" },
+    { OBJECT3D_TYPE::LAYERITEM,  "OBJECT2D_TYPE::LAYERITEM" },
+    { OBJECT3D_TYPE::XYPLANE,    "OBJECT2D_TYPE::XYPLANE" },
+    { OBJECT3D_TYPE::ROUNDSEG,   "OBJECT2D_TYPE::ROUNDSEG" },
+    { OBJECT3D_TYPE::TRIANGLE,   "OBJECT2D_TYPE::TRIANGLE" } 
 };
+// clang-format on
 
 
 void COBJECT3D_STATS::PrintStats()
 {
     printf( "OBJ3D Statistics:\n" );
 
-    for( unsigned int i = 0; i < OBJ3D_MAX; ++i )
+    for( auto& objectType : objectTypeNames )
     {
-        printf( "  %20s  %u\n", OBJECT3D_STR[i], m_counter[i] );
+        printf( "  %20s  %u\n", objectType.second,
+                m_counter[static_cast<int>( objectType.first )] );
     }
 }

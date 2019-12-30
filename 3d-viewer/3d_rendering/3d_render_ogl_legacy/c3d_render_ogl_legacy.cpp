@@ -65,7 +65,7 @@ C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( CINFO3D_VISU &aSettings ) :
 
     m_ogl_circle_texture = 0;
     m_ogl_disp_list_grid = 0;
-    m_last_grid_type = GRID3D_NONE;
+    m_last_grid_type     = GRID3D_TYPE::NONE;
 
     m_3dmodel_map.clear();
 }
@@ -752,7 +752,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving,
     // Render Grid
     // /////////////////////////////////////////////////////////////////////////
 
-    if( m_settings.GridGet() != GRID3D_NONE )
+    if( m_settings.GridGet() != GRID3D_TYPE::NONE )
     {
         glDisable( GL_LIGHTING );
 
@@ -802,7 +802,7 @@ bool C3D_RENDER_OGL_LEGACY::initializeOpenGL()
 
     CIMAGE *circleImage_Copy = new CIMAGE( *circleImage );
 
-    circleImage->EfxFilter( circleImage_Copy, FILTER_BLUR_3X3 );
+    circleImage->EfxFilter( circleImage_Copy, IMAGE_FILTER::BLUR_3X3 );
 
     m_ogl_circle_texture = OGL_LoadTexture( *circleImage );
 
@@ -1108,7 +1108,7 @@ void C3D_RENDER_OGL_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
 
     m_ogl_disp_list_grid = 0;
 
-    if( aGridType == GRID3D_NONE )
+    if( aGridType == GRID3D_TYPE::NONE )
         return;
 
     m_ogl_disp_list_grid = glGenLists( 1 );
@@ -1136,18 +1136,18 @@ void C3D_RENDER_OGL_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
     switch( aGridType )
     {
     default:
-    case GRID3D_NONE:
+    case GRID3D_TYPE::NONE:
         return;
-    case GRID3D_1MM:
+    case GRID3D_TYPE::GRID_1MM:
         griSizeMM = 1.0;
         break;
-    case GRID3D_2P5MM:
+    case GRID3D_TYPE::GRID_2P5MM:
         griSizeMM = 2.5;
         break;
-    case GRID3D_5MM:
+    case GRID3D_TYPE::GRID_5MM:
         griSizeMM = 5.0;
         break;
-    case GRID3D_10MM:
+    case GRID3D_TYPE::GRID_10MM:
         griSizeMM = 10.0;
         break;
     }

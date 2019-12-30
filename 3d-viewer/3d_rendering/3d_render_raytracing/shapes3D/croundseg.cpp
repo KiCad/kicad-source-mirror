@@ -29,10 +29,8 @@
 
 #include "croundseg.h"
 
-CROUNDSEG::CROUNDSEG( const CROUNDSEGMENT2D &aSeg2D,
-                      float aZmin,
-                      float aZmax ) : COBJECT( OBJ3D_ROUNDSEG ),
-  m_segment( aSeg2D.m_segment )
+CROUNDSEG::CROUNDSEG( const CROUNDSEGMENT2D& aSeg2D, float aZmin, float aZmax )
+        : COBJECT( OBJECT3D_TYPE::ROUNDSEG ), m_segment( aSeg2D.m_segment )
 {
     m_radius = aSeg2D.GetRadius();
     m_radius_squared = m_radius * m_radius;

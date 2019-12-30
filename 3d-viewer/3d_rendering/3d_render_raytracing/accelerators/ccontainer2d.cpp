@@ -74,7 +74,7 @@ CGENERICCONTAINER2D::~CGENERICCONTAINER2D()
 // CCONTAINER2D
 // /////////////////////////////////////////////////////////////////////////////
 
-CCONTAINER2D::CCONTAINER2D() : CGENERICCONTAINER2D( OBJ2D_CONTAINER )
+CCONTAINER2D::CCONTAINER2D() : CGENERICCONTAINER2D( OBJECT2D_TYPE::CONTAINER )
 {
 
 }
@@ -123,7 +123,7 @@ bool CCONTAINER2D::Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aN
 
 INTERSECTION_RESULT CCONTAINER2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 {
-    return INTR_MISSES;
+    return INTERSECTION_RESULT::MISSES;
 }
 
 
@@ -160,7 +160,7 @@ void CCONTAINER2D::GetListObjectsIntersects( const CBBOX2D & aBBox,
 // CBVHCONTAINER2D
 // /////////////////////////////////////////////////////////////////////////////
 
-CBVHCONTAINER2D::CBVHCONTAINER2D() : CGENERICCONTAINER2D( OBJ2D_BVHCONTAINER )
+CBVHCONTAINER2D::CBVHCONTAINER2D() : CGENERICCONTAINER2D( OBJECT2D_TYPE::BVHCONTAINER )
 {
     m_isInitialized = false;
     m_bbox.Reset();

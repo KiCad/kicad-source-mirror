@@ -275,7 +275,7 @@ CBVH_PBRT::CBVH_PBRT( const CGENERICCONTAINER &aObjectContainer,
 
     BVHBuildNode *root;
 
-    if( m_splitMethod == SPLIT_HLBVH )
+    if( m_splitMethod == SPLITMETHOD::HLBVH )
         root = HLBVHBuild( primitiveInfo, &totalNodes, orderedPrims);
     else
         root = recursiveBuild( primitiveInfo, 0, m_primitives.size(),
@@ -314,10 +314,18 @@ CBVH_PBRT::CBVH_PBRT( const CGENERICCONTAINER &aObjectContainer,
 
     switch( m_splitMethod )
     {
-    case SPLIT_MIDDLE:      printf( "using SPLIT_MIDDLE\n" ); break;
-    case SPLIT_EQUALCOUNTS: printf( "using SPLIT_EQUALCOUNTS\n" ); break;
-    case SPLIT_SAH:         printf( "using SPLIT_SAH\n" ); break;
-    case SPLIT_HLBVH:       printf( "using SPLIT_HLBVH\n" ); break;
+    case SPLITMETHOD::MIDDLE:
+        printf( "using SPLITMETHOD::MIDDLE\n" );
+        break;
+    case SPLITMETHOD::EQUALCOUNTS:
+        printf( "using SPLITMETHOD::EQUALCOUNTS\n" );
+        break;
+    case SPLITMETHOD::SAH:
+        printf( "using SPLITMETHOD::SAH\n" );
+        break;
+    case SPLITMETHOD::HLBVH:
+        printf( "using SPLITMETHOD::HLBVH\n" );
+        break;
     }
 
     printf( "  BVH created with %d nodes (%.2f MB)\n",
@@ -533,7 +541,7 @@ BVHBuildNode *CBVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo> &primiti
             // Partition primitives based on _splitMethod_
             switch( m_splitMethod )
             {
-            case SPLIT_MIDDLE:
+            case SPLITMETHOD::MIDDLE:
             {
                 // Partition primitives through node's midpoint
                 float pmid = centroidBounds.GetCenter( dim );
@@ -549,11 +557,11 @@ BVHBuildNode *CBVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo> &primiti
                 if( (mid != start) && (mid != end) )
                     // for lots of prims with large overlapping bounding boxes, this
                     // may fail to partition; in that case don't break and fall through
-                    // to SPLIT_EQUAL_COUNTS
+                    // to SPLITMETHOD::EQUAL_COUNTS
                     break;
             }
 
-            case SPLIT_EQUALCOUNTS:
+            case SPLITMETHOD::EQUALCOUNTS:
             {
                 // Partition primitives into equally-sized subsets
                 mid = (start + end) / 2;
@@ -566,7 +574,7 @@ BVHBuildNode *CBVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo> &primiti
                 break;
             }
 
-            case SPLIT_SAH:
+            case SPLITMETHOD::SAH:
             default:
             {
                 // Partition primitives using approximate SAH
