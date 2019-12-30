@@ -49,7 +49,6 @@ set( GERBVIEW_SRCS
     gerbview_frame.cpp
     json11.cpp
     job_file_reader.cpp
-    locate.cpp
     menubar.cpp
     readgerb.cpp
     rs274_read_XY_and_IJ_coordinates.cpp

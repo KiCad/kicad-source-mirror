@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010-2018 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2019 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,8 @@
 // An useful macro used when reading gerber files;
 #define IsNumber( x ) ( ( ( (x) >= '0' ) && ( (x) <='9' ) )   \
                        || ( (x) == '-' ) || ( (x) == '+' )  || ( (x) == '.' ) )
+
+typedef std::vector<GERBER_DRAW_ITEM*> GERBER_DRAW_ITEMS;
 
 class GERBVIEW_FRAME;
 class D_CODE;
@@ -110,11 +112,10 @@ class GERBER_FILE_IMAGE : public EDA_ITEM
                                                             ///< (max TOOLS_MAX_COUNT: see dcode.h)
     bool               m_Exposure;                          ///< whether an aperture macro tool is flashed on or off
 
-    GERBER_LAYER       m_GBRLayerParams; // hold params for the current gerber layer
+    GERBER_LAYER       m_GBRLayerParams;                    // hold params for the current gerber layer
+    GERBER_DRAW_ITEMS  m_drawings;                              // linked list of Gerber Items to draw
 
 public:
-    DLIST<GERBER_DRAW_ITEM> m_Drawings;                         // linked list of Gerber Items to draw
-
     bool               m_InUse;                                 // true if this image is currently in use
                                                                 // (a file is loaded in it)
     bool               m_IsVisible;                             // true if the draw layer is visible and must be drawn
@@ -250,8 +251,6 @@ public:
         return wxT( "GERBER_FILE_IMAGE" );
     }
 
-    void Clear_GERBER_FILE_IMAGE();
-
     /**
      * Read and load a gerber file.
      * @param aFullFileName = the full filename of the Gerber file
@@ -264,7 +263,7 @@ public:
     const wxArrayString& GetMessages() const { return m_messagesList; }
 
     /**
-     * @return the count of Dcode tools in used by the image
+     * @return the count of Dcode tools in use in the image
      */
     int GetDcodesCount();
 
@@ -273,10 +272,31 @@ public:
     COLOR4D GetPositiveDrawColor() const { return m_PositiveDrawColor; }
 
     /**
-     * Function GetItemsList
-     * @return the first GERBER_DRAW_ITEM * item of the items list
+     * @return a reference to the GERBER_DRAW_ITEMS deque list
      */
-    GERBER_DRAW_ITEM * GetItemsList();
+    GERBER_DRAW_ITEMS& GetItems() { return m_drawings; }
+
+    /**
+     * @return the count of GERBER_DRAW_ITEMS in the image
+     */
+    int GetItemsCount() { return m_drawings.size(); }
+
+    /**
+     * Add a new GERBER_DRAW_ITEM item to the drawings list
+     * @param aItem is the GERBER_DRAW_ITEM to add to list
+     */
+    void AddItemToList( GERBER_DRAW_ITEM* aItem )
+    {
+        m_drawings.push_back( aItem );
+    }
+
+    /**
+     * @return the last GERBER_DRAW_ITEM* item of the items list
+     */
+    GERBER_DRAW_ITEM* GetLastItemInList() const
+    {
+        return m_drawings.back();
+    }
 
     /**
      * Function GetLayerParams

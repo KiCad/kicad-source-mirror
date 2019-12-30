@@ -20,7 +20,7 @@
 #include "gerber_collectors.h"
 
 const KICAD_T GERBER_COLLECTOR::AllItems[] = {
-    GERBER_IMAGE_LIST_T,
+    GERBER_LAYOUT_T,
     GERBER_IMAGE_T,
     GERBER_DRAW_ITEM_T,
     EOT

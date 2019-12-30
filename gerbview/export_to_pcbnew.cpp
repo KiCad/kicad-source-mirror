@@ -261,9 +261,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLa
         if( pcb_layer_number <= pcbCopperLayerMax ) // copper layer
             continue;
 
-        GERBER_DRAW_ITEM* gerb_item = gerber->GetItemsList();
-
-        for( ; gerb_item; gerb_item = gerb_item->Next() )
+        for(  GERBER_DRAW_ITEM* gerb_item : gerber->GetItems() )
             export_non_copper_item( gerb_item, pcb_layer_number );
     }
 
@@ -280,9 +278,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLa
         if( pcb_layer_number < 0 || pcb_layer_number > pcbCopperLayerMax )
             continue;
 
-        GERBER_DRAW_ITEM* gerb_item = gerber->GetItemsList();
-
-        for( ; gerb_item; gerb_item = gerb_item->Next() )
+        for( GERBER_DRAW_ITEM* gerb_item : gerber->GetItems() )
             export_copper_item( gerb_item, pcb_layer_number );
     }
 
