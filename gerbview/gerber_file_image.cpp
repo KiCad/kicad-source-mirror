@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,7 +105,11 @@ GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer ) :
 
 GERBER_FILE_IMAGE::~GERBER_FILE_IMAGE()
 {
-    m_Drawings.DeleteAll();
+
+    for( auto item : GetItems() )
+        delete item;
+
+    m_drawings.clear();
 
     for( unsigned ii = 0; ii < arrayDim( m_Aperture_List ); ii++ )
     {
@@ -113,15 +117,6 @@ GERBER_FILE_IMAGE::~GERBER_FILE_IMAGE()
     }
 
     delete m_FileFunction;
-}
-
-/*
- * Function GetItemsList
- * returns the first GERBER_DRAW_ITEM * item of the items list
- */
-GERBER_DRAW_ITEM * GERBER_FILE_IMAGE::GetItemsList()
-{
-    return m_Drawings;
 }
 
 
@@ -245,7 +240,7 @@ bool GERBER_FILE_IMAGE::HasNegativeItems()
         else
         {
             m_hasNegativeItems = 0;
-            for( GERBER_DRAW_ITEM* item = GetItemsList(); item; item = item->Next() )
+            for( GERBER_DRAW_ITEM* item : GetItems() )
             {
                 if( item->GetLayer() != m_GraphicLayer )
                     continue;
@@ -313,6 +308,7 @@ void GERBER_FILE_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
             // create duplicate only if ii or jj > 0
             if( jj == 0 && ii == 0 )
                 continue;
+
             GERBER_DRAW_ITEM* dupItem = new GERBER_DRAW_ITEM( aItem );
             wxPoint           move_vector;
             move_vector.x = scaletoIU( ii * GetLayerParams().m_StepForRepeat.x,
@@ -320,7 +316,7 @@ void GERBER_FILE_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
             move_vector.y = scaletoIU( jj * GetLayerParams().m_StepForRepeat.y,
                                    GetLayerParams().m_StepForRepeatMetric );
             dupItem->MoveXY( move_vector );
-            m_Drawings.Append( dupItem );
+            AddItemToList( dupItem );
         }
     }
 }
@@ -397,10 +393,6 @@ SEARCH_RESULT GERBER_FILE_IMAGE::Visit( INSPECTOR inspector, void* testData, con
     const KICAD_T* p    = scanTypes;
     bool           done = false;
 
-#if 0 && defined(DEBUG)
-    std::cout << GetClass().mb_str() << ' ';
-#endif
-
     while( !done )
     {
         stype = *p;
@@ -408,15 +400,16 @@ SEARCH_RESULT GERBER_FILE_IMAGE::Visit( INSPECTOR inspector, void* testData, con
         switch( stype )
         {
         case GERBER_IMAGE_T:
-        case GERBER_IMAGE_LIST_T:
+        case GERBER_LAYOUT_T:
             ++p;
             break;
 
         case GERBER_DRAW_ITEM_T:
-            result = IterateForward( &m_Drawings[0], inspector, testData, p );
+            result = IterateForward( GetItems(), inspector, testData, p );
             ++p;
             break;
 
+        case EOT:
         default:        // catch EOT or ANY OTHER type here and return.
             done = true;
             break;

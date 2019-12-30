@@ -174,7 +174,6 @@ enum KICAD_T
      */
     GERBER_LAYOUT_T,
     GERBER_DRAW_ITEM_T,
-    GERBER_IMAGE_LIST_T,
     GERBER_IMAGE_T,
 
     /*

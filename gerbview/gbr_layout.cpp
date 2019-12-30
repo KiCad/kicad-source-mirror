@@ -31,7 +31,7 @@
 #include <gerber_file_image_list.h>
 
 GBR_LAYOUT::GBR_LAYOUT() :
-    EDA_ITEM( (EDA_ITEM*)NULL, GERBER_LAYOUT_T )
+    EDA_ITEM( (EDA_ITEM*)nullptr, GERBER_LAYOUT_T )
 {
 }
 
@@ -59,7 +59,7 @@ EDA_RECT GBR_LAYOUT::ComputeBoundingBox() const
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
 
-        for( GERBER_DRAW_ITEM* item = gerber->GetItemsList(); item; item = item->Next() )
+        for( GERBER_DRAW_ITEM* item : gerber->GetItems() )
         {
             if( first_item )
             {
@@ -95,7 +95,7 @@ SEARCH_RESULT GBR_LAYOUT::Visit( INSPECTOR inspector, void* testData, const KICA
 
         switch( stype )
         {
-        case GERBER_IMAGE_LIST_T:
+        case GERBER_LAYOUT_T:
             for( unsigned layer = 0; layer < GetImagesList()->ImagesMaxCount(); ++layer )
             {
                 GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( layer );

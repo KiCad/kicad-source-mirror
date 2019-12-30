@@ -79,7 +79,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
      * or has missing definitions,
      * warn the user:
      */
-    if( gerber->GetItemsList() && gerber->m_Has_MissingDCode )
+    if( gerber->GetItemsCount() && gerber->m_Has_MissingDCode )
     {
         if( !gerber->m_Has_DCode )
             msg = _("Warning: this file has no D-Code definition\n"
@@ -99,7 +99,11 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
             // (maybe convert geometry into positives?)
         }
 
-        for( auto item = gerber->GetItemsList(); item; item = item->Next() )
+#ifdef GBR_USE_DLIST
+        for( auto item = gerber->GetFirstItemInList(); item; item = item->Next() )
+#else
+        for( auto item : gerber->GetItems() )
+#endif
             GetCanvas()->GetView()->Add( (KIGFX::VIEW_ITEM*) item );
     }
 

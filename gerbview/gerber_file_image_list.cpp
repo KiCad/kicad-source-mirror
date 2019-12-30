@@ -43,13 +43,12 @@ GERBER_FILE_IMAGE_LIST s_GERBER_List;
 
 
 // GERBER_FILE_IMAGE_LIST is a helper class to handle a list of GERBER_FILE_IMAGE files
-GERBER_FILE_IMAGE_LIST::GERBER_FILE_IMAGE_LIST() :
-    EDA_ITEM( (EDA_ITEM*)NULL, GERBER_IMAGE_LIST_T )
+GERBER_FILE_IMAGE_LIST::GERBER_FILE_IMAGE_LIST()
 {
     m_GERBER_List.reserve( GERBER_DRAWLAYERS_COUNT );
 
     for( unsigned layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
-        m_GERBER_List.push_back( NULL );
+        m_GERBER_List.push_back( nullptr );
 }
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,16 +32,11 @@
 #define GBR_LAYOUT_H
 
 
-#include <dlist.h>
-
 #include <colors_design_settings.h>
 #include <common.h>                         // PAGE_INFO
 #include <gerbview.h>                       // GERBER_DRAWLAYERS_COUNT
 #include <title_block.h>
 #include <gerber_draw_item.h>
-#include <gbr_display_options.h>
-
-#include <gr_basic.h>
 #include <eda_rect.h>
 
 class GERBER_FILE_IMAGE_LIST;

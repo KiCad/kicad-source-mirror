@@ -284,7 +284,7 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 
     if( GetCanvas() )
     {
-        for( GERBER_DRAW_ITEM* item = drill_layer->GetItemsList(); item; item = item->Next() )
+        for( GERBER_DRAW_ITEM* item : drill_layer->GetItems() )
             GetCanvas()->GetView()->Add( (KIGFX::VIEW_ITEM*) item );
     }
 
@@ -665,7 +665,7 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
                 }
 
                 gbritem = new GERBER_DRAW_ITEM( this );
-                m_Drawings.Append( gbritem );
+                AddItemToList( gbritem );
 
                 if( m_SlotOn )  // Oblong hole
                 {
@@ -925,7 +925,7 @@ void EXCELLON_IMAGE::FinishRouteCommand()
                          false );
         }
 
-        m_Drawings.Append( gbritem );
+        AddItemToList( gbritem );
 
         StepAndRepeatItem( *gbritem );
     }

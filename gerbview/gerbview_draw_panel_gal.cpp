@@ -138,7 +138,7 @@ bool GERBVIEW_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
                 if( gerber == NULL )    // Graphic layer not yet used
                     continue;
 
-                for( GERBER_DRAW_ITEM* item = gerber->GetItemsList(); item; item = item->Next() )
+                for( GERBER_DRAW_ITEM* item : gerber->GetItems() )
                 {
                     m_view->Add (item );
                 }

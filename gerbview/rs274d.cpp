@@ -552,9 +552,9 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
         break;
 
     case GC_TURN_OFF_POLY_FILL:
-        if( m_Exposure && GetItemsList() )    // End of polygon
+        if( m_Exposure && GetLastItemInList() )    // End of polygon
         {
-            GERBER_DRAW_ITEM * gbritem = m_Drawings.GetLast();
+            GERBER_DRAW_ITEM * gbritem = GetLastItemInList();
             gbritem->m_Polygon.Append( gbritem->m_Polygon.CVertex( 0 ) );
             StepAndRepeatItem( *gbritem );
         }
@@ -622,7 +622,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             {
                 m_Exposure = true;
                 gbritem    = new GERBER_DRAW_ITEM( this );
-                m_Drawings.Append( gbritem );
+                AddItemToList( gbritem );
                 gbritem->m_Shape = GBR_POLYGON;
                 gbritem->m_Flashed = false;
                 gbritem->m_DCode = 0;   // No DCode for a Polygon (Region in Gerber dialect)
@@ -639,7 +639,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             {
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
-                gbritem = m_Drawings.GetLast();
+                gbritem = GetLastItemInList();
 
                 fillArcPOLY( gbritem, m_PreviousPos,
                              m_CurrentPos, m_IJPos,
@@ -648,7 +648,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 break;
 
             default:
-                gbritem = m_Drawings.GetLast();
+                gbritem = GetLastItemInList();
 
                 gbritem->m_Start = m_PreviousPos;       // m_Start is used as temporary storage
                 if( gbritem->m_Polygon.OutlineCount() == 0 )
@@ -667,9 +667,9 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             break;
 
         case 2:     // code D2: exposure OFF (i.e. "move to")
-            if( m_Exposure && GetItemsList() )    // End of polygon
+            if( m_Exposure && GetLastItemInList() )    // End of polygon
             {
-                gbritem = m_Drawings.GetLast();
+                gbritem = GetLastItemInList();
                 gbritem->m_Polygon.Append( gbritem->m_Polygon.CVertex( 0 ) );
                 StepAndRepeatItem( *gbritem );
             }
@@ -702,7 +702,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             {
             case GERB_INTERPOL_LINEAR_1X:
                 gbritem = new GERBER_DRAW_ITEM( this );
-                m_Drawings.Append( gbritem );
+                AddItemToList( gbritem );
 
                 fillLineGBRITEM( gbritem, dcode, m_PreviousPos,
                                  m_CurrentPos, size, GetLayerParams().m_LayerNegative );
@@ -712,7 +712,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
                 gbritem = new GERBER_DRAW_ITEM( this );
-                m_Drawings.Append( gbritem );
+                AddItemToList( gbritem );
 
                 if( m_LastCoordIsIJPos )
                 {
@@ -757,7 +757,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             }
 
             gbritem = new GERBER_DRAW_ITEM( this );
-            m_Drawings.Append( gbritem );
+            AddItemToList( gbritem );
             fillFlashedGBRITEM( gbritem, aperture, dcode, m_CurrentPos,
                                 size, GetLayerParams().m_LayerNegative );
             StepAndRepeatItem( *gbritem );

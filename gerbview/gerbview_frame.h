@@ -470,8 +470,6 @@ public:
      */
     void OnQuit( wxCommandEvent& event );
 
-    GERBER_DRAW_ITEM* Locate( const wxPoint& aPosition, int typeloc );
-
     void OnUpdateDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
