@@ -66,9 +66,9 @@ double LIB_EDIT_FRAME::        g_LastTextAngle   = TEXT_ANGLE_HORIZ;
 int LIB_EDIT_FRAME::           g_LastLineWidth   = 0;
 
 // these values are overridden when reading the config
-int LIB_EDIT_FRAME::           m_textPinNumDefaultSize = DEFAULTPINNUMSIZE;
-int LIB_EDIT_FRAME::           m_textPinNameDefaultSize = DEFAULTPINNAMESIZE;
-int LIB_EDIT_FRAME::           m_defaultPinLength = DEFAULTPINLENGTH;
+int LIB_EDIT_FRAME::           m_textPinNumDefaultSize = Mils2iu( DEFAULTPINNUMSIZE );
+int LIB_EDIT_FRAME::           m_textPinNameDefaultSize = Mils2iu( DEFAULTPINNAMESIZE );
+int LIB_EDIT_FRAME::           m_defaultPinLength = Mils2iu( DEFAULTPINLENGTH );
 
 FILL_T LIB_EDIT_FRAME::        g_LastFillStyle   = NO_FILL;
 
@@ -101,7 +101,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_DrawSpecificConvert = true;
     m_DrawSpecificUnit    = false;
     m_SyncPinEdit         = false;
-    m_repeatPinStep = DEFAULT_REPEAT_OFFSET_PIN;
+    m_repeatPinStep = Mils2iu( DEFAULT_REPEAT_OFFSET_PIN );
     SetShowElectricalType( true );
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
@@ -735,7 +735,8 @@ const BOX2I LIB_EDIT_FRAME::GetDocumentExtents() const
 {
     if( !m_my_part )
     {
-        return BOX2I( VECTOR2I(-100, -100), VECTOR2I( 200, 200 ) );
+        return BOX2I( VECTOR2I( Mils2iu( -100 ), Mils2iu( -100 ) ),
+                      VECTOR2I( Mils2iu( 200 ), Mils2iu( 200 ) ) );
     }
     else
     {

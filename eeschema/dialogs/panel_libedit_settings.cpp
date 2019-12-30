@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ bool PANEL_LIBEDIT_SETTINGS::TransferDataToWindow()
             StringFromValue( EDA_UNITS::INCHES, m_frame->GetRepeatStep().x, false, true ) );
     m_vPitchCtrl->SetValue(
             StringFromValue( EDA_UNITS::INCHES, m_frame->GetRepeatStep().y, false, true ) );
-    m_choicePinDisplacement->SetSelection( m_frame->GetRepeatPinStep() == 50 ? 1 : 0 );
+    m_choicePinDisplacement->SetSelection( m_frame->GetRepeatPinStep() == Iu2Mils( 50 ) ? 1 : 0 );
     m_spinRepeatLabel->SetValue( m_frame->GetRepeatDeltaLabel() );
 
     m_checkShowPinElectricalType->SetValue( m_frame->GetShowElectricalType() );
@@ -73,7 +73,8 @@ bool PANEL_LIBEDIT_SETTINGS::TransferDataFromWindow()
     m_frame->SetRepeatStep(
             wxPoint( ValueFromString( EDA_UNITS::INCHES, m_hPitchCtrl->GetValue(), true ),
                     ValueFromString( EDA_UNITS::INCHES, m_vPitchCtrl->GetValue(), true ) ) );
-    m_frame->SetRepeatPinStep( m_choicePinDisplacement->GetSelection() == 1 ? 50 : 100 );
+    m_frame->SetRepeatPinStep( m_choicePinDisplacement->GetSelection() == 1 ?
+            Mils2iu( 50 ) : Mils2iu( 100 ) );
     m_frame->SetRepeatDeltaLabel( m_spinRepeatLabel->GetValue() );
 
     m_frame->SetShowElectricalType( m_checkShowPinElectricalType->GetValue() );
