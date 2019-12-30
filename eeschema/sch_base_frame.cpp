@@ -82,12 +82,13 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
 {
     createCanvas();
 
-    m_zoomLevelCoeff = 11.0;    // Adjusted to roughly displays zoom level = 1
-                                // when the screen shows a 1:1 image
-                                // obviously depends on the monitor,
-                                // but this is an acceptable value
-    m_repeatStep = wxPoint( DEFAULT_REPEAT_OFFSET_X, DEFAULT_REPEAT_OFFSET_Y );
-    m_repeatDeltaLabel = DEFAULT_REPEAT_LABEL_INC;
+    m_zoomLevelCoeff = 11.0 * IU_PER_MILS;    // Adjusted to roughly displays zoom level = 1
+                                              // when the screen shows a 1:1 image
+                                              // obviously depends on the monitor,
+                                              // but this is an acceptable value
+    m_repeatStep = wxPoint( Mils2iu( DEFAULT_REPEAT_OFFSET_X ),
+                            Mils2iu( DEFAULT_REPEAT_OFFSET_Y ) );
+    m_repeatDeltaLabel = Mils2iu( DEFAULT_REPEAT_LABEL_INC );
     m_showPinElectricalTypeName = false;
     m_repeatComponent = false;
     m_useAllUnits = false;

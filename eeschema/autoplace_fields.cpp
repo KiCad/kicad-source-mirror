@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015, 2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,14 +66,13 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 
-#define FIELD_PADDING 10            // arbitrarily chosen for aesthetics
-#define FIELD_PADDING_ALIGNED 18    // aligns 50 mil text to a 100 mil grid
-#define WIRE_V_SPACING 100
-#define HPADDING 25
-#define VPADDING 25
+#define FIELD_PADDING Mils2iu( 10 )            // arbitrarily chosen for aesthetics
+#define FIELD_PADDING_ALIGNED Mils2iu( 18 )    // aligns 50 mil text to a 100 mil grid
+#define WIRE_V_SPACING Mils2iu( 100 )
+#define HPADDING Mils2iu( 25 )
+#define VPADDING Mils2iu( 25 )
 
 /**
- * Function round_n
  * Round up/down to the nearest multiple of n
  */
 template<typename T> T round_n( const T& value, const T& n, bool aRoundUp )
@@ -86,8 +85,7 @@ template<typename T> T round_n( const T& value, const T& n, bool aRoundUp )
 
 
 /**
- * Function TO_HJUSTIFY
- * Converts an integer to a horizontal justification; neg=L zero=C pos=R
+ * Convert an integer to a horizontal justification; neg=L zero=C pos=R
  */
 EDA_TEXT_HJUSTIFY_T TO_HJUSTIFY( int x )
 {
@@ -171,8 +169,8 @@ public:
 
             if( m_align_to_grid )
             {
-                pos.x = round_n( pos.x, 50, field_side.x >= 0 );
-                pos.y = round_n( pos.y, 50, field_side.y == 1 );
+                pos.x = round_n( pos.x, Mils2iu( 50 ), field_side.x >= 0 );
+                pos.y = round_n( pos.y, Mils2iu( 50 ), field_side.y == 1 );
             }
 
             field->SetPosition( pos );
@@ -221,7 +219,6 @@ protected:
 
 
     /**
-     * Function get_pin_side
      * Return the side that a pin is on.
      */
     SIDE get_pin_side( LIB_PIN* aPin )
@@ -241,7 +238,6 @@ protected:
 
 
     /**
-     * Function pins_on_side
      * Count the number of pins on a side of the component.
      */
     unsigned pins_on_side( SIDE aSide )
@@ -264,7 +260,6 @@ protected:
 
 
     /**
-     * Function get_possible_colliders
      * Populate a list of all drawing items that *may* collide with the fields. That is,
      * all drawing items, including other fields, that are not the current component or
      * its own fields.
@@ -289,7 +284,6 @@ protected:
 
 
     /**
-     * Function filtered_colliders
      * Filter a list of possible colliders to include only those that actually collide
      * with a given rectangle. Returns the new vector.
      */
@@ -312,7 +306,6 @@ protected:
 
 
     /**
-     * Function get_preferred_sides
      * Return a list with the preferred field sides for the component, in
      * decreasing order of preference.
      */
@@ -382,7 +375,6 @@ protected:
 
 
     /**
-     * Function get_colliding_sides
      * Return a list of the sides where a field set would collide with another item.
      */
     std::vector<SIDE_AND_COLL> get_colliding_sides()
@@ -421,7 +413,6 @@ protected:
 
 
     /**
-     * Function choose_side_filtered
      * Choose a side for the fields, filtered on only one side collision type.
      * Removes the sides matching the filter from the list.
      */
@@ -457,7 +448,6 @@ protected:
 
 
     /**
-     * Function choose_side_for_fields
      * Look where a component's pins are to pick a side to put the fields on
      * @param aAvoidCollisions - if true, pick last the sides where the label will collide
      *      with other items.
@@ -495,7 +485,6 @@ protected:
 
 
     /**
-     * Function justify_field
      * Set the justification of a field based on the side it's supposed to be on, taking
      * into account whether the field will be displayed with flipped justification due to
      * mirroring.
@@ -511,8 +500,7 @@ protected:
 
 
     /**
-     * Function field_box_placement
-     * Returns the position of the field bounding box.
+     * Return the position of the field bounding box.
      */
     wxPoint field_box_placement( SIDE aFieldSide )
     {
@@ -532,7 +520,6 @@ protected:
 
 
     /**
-     * Function fit_fields_between_wires
      * Shift a field box up or down a bit to make the fields fit between some wires.
      * Returns true if a shift was made.
      */
@@ -588,9 +575,7 @@ protected:
 
 
     /**
-     * Function field_horiz_placement
-     * Place a field horizontally, taking into account the field width and
-     * justification.
+     * Place a field horizontally, taking into account the field width and justification.
      *
      * @param aField - the field to place.
      * @param aFieldBox - box in which fields will be placed
@@ -627,7 +612,6 @@ protected:
     }
 
     /**
-     * Function field_vert_placement
      * Place a field vertically. Because field vertical placements accumulate,
      * this takes a pointer to a vertical position accumulator.
      *
@@ -664,7 +648,6 @@ protected:
     }
 
     /**
-     * Function get_field_padding
      * Return the desired padding between fields.
      */
     int get_field_padding()

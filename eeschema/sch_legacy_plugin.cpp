@@ -67,6 +67,9 @@
 #include <tool/selection.h>
 
 
+#define Mils2Iu( x ) Mils2iu( x )
+
+
 // Must be the first line of part library document (.dcm) files.
 #define DOCFILE_IDENT     "EESchema-DOCLIB  Version 2.0"
 
@@ -975,14 +978,14 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
         {
             wxPoint position;
 
-            position.x = parseInt( aReader, line, &line );
-            position.y = parseInt( aReader, line, &line );
+            position.x = Mils2Iu( parseInt( aReader, line, &line ) );
+            position.y = Mils2Iu( parseInt( aReader, line, &line ) );
             sheet->SetPosition( position );
 
             wxSize  size;
 
-            size.SetWidth( parseInt( aReader, line, &line ) );
-            size.SetHeight( parseInt( aReader, line, &line ) );
+            size.SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
+            size.SetHeight( Mils2Iu( parseInt( aReader, line, &line ) ) );
             sheet->SetSize( size );
         }
         else if( strCompare( "U", line, &line ) )   // Sheet time stamp.
@@ -1000,7 +1003,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
             if( fieldId == 0 || fieldId == 1 )      // Sheet name and file name.
             {
                 parseQuotedString( text, aReader, line, &line );
-                size = parseInt( aReader, line, &line );
+                size = Mils2Iu( parseInt( aReader, line, &line ) );
 
                 if( fieldId == 0 )
                 {
@@ -1064,11 +1067,11 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
 
                 wxPoint position;
 
-                position.x = parseInt( aReader, line, &line );
-                position.y = parseInt( aReader, line, &line );
+                position.x = Mils2Iu( parseInt( aReader, line, &line ) );
+                position.y = Mils2Iu( parseInt( aReader, line, &line ) );
                 sheetPin->SetPosition( position );
 
-                size = parseInt( aReader, line, &line );
+                size = Mils2Iu( parseInt( aReader, line, &line ) );
 
                 sheetPin->SetTextSize( wxSize( size, size ) );
 
@@ -1103,8 +1106,8 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
         {
             wxPoint position;
 
-            position.x = parseInt( aReader, line, &line );
-            position.y = parseInt( aReader, line, &line );
+            position.x = Mils2Iu( parseInt( aReader, line, &line ) );
+            position.y = Mils2Iu( parseInt( aReader, line, &line ) );
             bitmap->SetPosition( position );
         }
         else if( strCompare( "Scale", line, &line ) )
@@ -1186,8 +1189,8 @@ SCH_JUNCTION* SCH_LEGACY_PLUGIN::loadJunction( LINE_READER& aReader )
 
     wxPoint position;
 
-    position.x = parseInt( aReader, line, &line );
-    position.y = parseInt( aReader, line, &line );
+    position.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    position.y = Mils2Iu( parseInt( aReader, line, &line ) );
     junction->SetPosition( position );
 
     return junction.release();
@@ -1208,8 +1211,8 @@ SCH_NO_CONNECT* SCH_LEGACY_PLUGIN::loadNoConnect( LINE_READER& aReader )
 
     wxPoint position;
 
-    position.x = parseInt( aReader, line, &line );
-    position.y = parseInt( aReader, line, &line );
+    position.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    position.y = Mils2Iu( parseInt( aReader, line, &line ) );
     no_connect->SetPosition( position );
 
     return no_connect.release();
@@ -1249,7 +1252,7 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( LINE_READER& aReader )
 
         else if( buf == T_WIDTH )
         {
-            int size = parseInt( aReader, line, &line );
+            int size = Mils2Iu( parseInt( aReader, line, &line ) );
             wire->SetLineWidth( size );
         }
         else if( buf == T_STYLE )
@@ -1302,10 +1305,10 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( LINE_READER& aReader )
 
     wxPoint begin, end;
 
-    begin.x = parseInt( aReader, line, &line );
-    begin.y = parseInt( aReader, line, &line );
-    end.x = parseInt( aReader, line, &line );
-    end.y = parseInt( aReader, line, &line );
+    begin.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    begin.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    end.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    end.y = Mils2Iu( parseInt( aReader, line, &line ) );
 
     wire->SetStartPoint( begin );
     wire->SetEndPoint( end );
@@ -1344,10 +1347,10 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( LINE_READER& aReader )
     wxPoint pos;
     wxSize size;
 
-    pos.x = parseInt( aReader, line, &line );
-    pos.y = parseInt( aReader, line, &line );
-    size.x = parseInt( aReader, line, &line );
-    size.y = parseInt( aReader, line, &line );
+    pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
+    size.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    size.y = Mils2Iu( parseInt( aReader, line, &line ) );
 
     size.x -= pos.x;
     size.y -= pos.y;
@@ -1387,12 +1390,12 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
     // Parse the parameters common to all text objects.
     wxPoint position;
 
-    position.x = parseInt( aReader, line, &line );
-    position.y = parseInt( aReader, line, &line );
+    position.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    position.y = Mils2Iu( parseInt( aReader, line, &line ) );
     text->SetPosition( position );
     text->SetLabelSpinStyle( parseInt( aReader, line, &line ) );
 
-    int size = parseInt( aReader, line, &line );
+    int size = Mils2Iu( parseInt( aReader, line, &line ) );
 
     text->SetTextSize( wxSize( size, size ) );
 
@@ -1557,8 +1560,8 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
         {
             wxPoint pos;
 
-            pos.x = parseInt( aReader, line, &line );
-            pos.y = parseInt( aReader, line, &line );
+            pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
+            pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
             component->SetPosition( pos );
         }
         else if( strCompare( "AR", line, &line ) )
@@ -1614,9 +1617,9 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
 
             char orientation = parseChar( aReader, line, &line );
             wxPoint pos;
-            pos.x = parseInt( aReader, line, &line );
-            pos.y = parseInt( aReader, line, &line );
-            int size = parseInt( aReader, line, &line );
+            pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
+            pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
+            int size = Mils2Iu( parseInt( aReader, line, &line ) );
             int attributes = parseHex( aReader, line, &line );
 
             if( index >= component->GetFieldCount() )
@@ -1979,7 +1982,9 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
                   aComponent->GetTimeStamp() );
 
     // Save the position
-    m_out->Print( 0, "P %d %d\n", aComponent->GetPosition().x, aComponent->GetPosition().y );
+    m_out->Print( 0, "P %d %d\n",
+                  Iu2Mils( aComponent->GetPosition().x ),
+                  Iu2Mils( aComponent->GetPosition().y ) );
 
     /* If this is a complex hierarchy; save hierarchical references.
      * but for simple hierarchies it is not necessary.
@@ -2027,8 +2032,9 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
         saveField( aComponent->GetField( i ) );
 
     // Unit number, position, box ( old standard )
-    m_out->Print( 0, "\t%-4d %-4d %-4d\n", aComponent->GetUnit(), aComponent->GetPosition().x,
-                  aComponent->GetPosition().y );
+    m_out->Print( 0, "\t%-4d %-4d %-4d\n", aComponent->GetUnit(),
+                  Iu2Mils( aComponent->GetPosition().x ),
+                  Iu2Mils( aComponent->GetPosition().y ) );
 
     TRANSFORM transform = aComponent->GetTransform();
 
@@ -2058,8 +2064,9 @@ void SCH_LEGACY_PLUGIN::saveField( SCH_FIELD* aField )
                   aField->GetId(),
                   EscapedUTF8( aField->GetText() ).c_str(),     // wraps in quotes too
                   aField->GetTextAngle() == TEXT_ANGLE_HORIZ ? 'H' : 'V',
-                  aField->GetLibPosition().x, aField->GetLibPosition().y,
-                  aField->GetTextWidth(),
+                  Iu2Mils( aField->GetLibPosition().x ),
+                  Iu2Mils( aField->GetLibPosition().y ),
+                  Iu2Mils( aField->GetTextWidth() ),
                   !aField->IsVisible(),
                   hjustify, vjustify,
                   aField->IsItalic() ? 'I' : 'N',
@@ -2084,7 +2091,9 @@ void SCH_LEGACY_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap )
     wxCHECK_RET( image != NULL, "wxImage* is NULL" );
 
     m_out->Print( 0, "$Bitmap\n" );
-    m_out->Print( 0, "Pos %-4d %-4d\n", aBitmap->GetPosition().x, aBitmap->GetPosition().y );
+    m_out->Print( 0, "Pos %-4d %-4d\n",
+                  Iu2Mils( aBitmap->GetPosition().x ),
+                  Iu2Mils( aBitmap->GetPosition().y ) );
     m_out->Print( 0, "Scale %f\n", aBitmap->GetImage()->GetScale() );
     m_out->Print( 0, "Data\n" );
 
@@ -2119,18 +2128,18 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
 
     m_out->Print( 0, "$Sheet\n" );
     m_out->Print( 0, "S %-4d %-4d %-4d %-4d\n",
-                  aSheet->GetPosition().x, aSheet->GetPosition().y,
-                  aSheet->GetSize().x, aSheet->GetSize().y );
+                  Iu2Mils( aSheet->GetPosition().x ), Iu2Mils( aSheet->GetPosition().y ),
+                  Iu2Mils( aSheet->GetSize().x ), Iu2Mils( aSheet->GetSize().y ) );
 
     m_out->Print( 0, "U %8.8X\n", aSheet->GetTimeStamp() );
 
     if( !aSheet->GetName().IsEmpty() )
         m_out->Print( 0, "F0 %s %d\n", EscapedUTF8( aSheet->GetName() ).c_str(),
-                      aSheet->GetSheetNameSize() );
+                      Iu2Mils( aSheet->GetSheetNameSize() ) );
 
     if( !aSheet->GetFileName().IsEmpty() )
         m_out->Print( 0, "F1 %s %d\n", EscapedUTF8( aSheet->GetFileName() ).c_str(),
-                      aSheet->GetFileNameSize() );
+                      Iu2Mils( aSheet->GetFileNameSize() ) );
 
     for( const SCH_SHEET_PIN& pin : aSheet->GetPins() )
     {
@@ -2160,8 +2169,9 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
 
         m_out->Print( 0, "F%d %s %c %c %-3d %-3d %-3d\n", pin.GetNumber(),
                       EscapedUTF8( pin.GetText() ).c_str(),     // supplies wrapping quotes
-                      type, side, pin.GetPosition().x, pin.GetPosition().y,
-                      pin.GetTextWidth() );
+                      type, side, Iu2Mils( pin.GetPosition().x ),
+                      Iu2Mils( pin.GetPosition().y ),
+                      Iu2Mils( pin.GetTextWidth() ) );
     }
 
     m_out->Print( 0, "$EndSheet\n" );
@@ -2173,7 +2183,7 @@ void SCH_LEGACY_PLUGIN::saveJunction( SCH_JUNCTION* aJunction )
     wxCHECK_RET( aJunction != NULL, "SCH_JUNCTION* is NULL" );
 
     m_out->Print( 0, "Connection ~ %-4d %-4d\n",
-                  aJunction->GetPosition().x, aJunction->GetPosition().y );
+                  Iu2Mils( aJunction->GetPosition().x ), Iu2Mils( aJunction->GetPosition().y ) );
 }
 
 
@@ -2181,8 +2191,8 @@ void SCH_LEGACY_PLUGIN::saveNoConnect( SCH_NO_CONNECT* aNoConnect )
 {
     wxCHECK_RET( aNoConnect != NULL, "SCH_NOCONNECT* is NULL" );
 
-    m_out->Print( 0, "NoConn ~ %-4d %-4d\n", aNoConnect->GetPosition().x,
-                  aNoConnect->GetPosition().y );
+    m_out->Print( 0, "NoConn ~ %-4d %-4d\n", Iu2Mils( aNoConnect->GetPosition().x ),
+                  Iu2Mils( aNoConnect->GetPosition().y ) );
 }
 
 
@@ -2192,12 +2202,14 @@ void SCH_LEGACY_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry )
 
     if( aBusEntry->GetLayer() == LAYER_WIRE )
         m_out->Print( 0, "Entry Wire Line\n\t%-4d %-4d %-4d %-4d\n",
-                      aBusEntry->GetPosition().x, aBusEntry->GetPosition().y,
-                      aBusEntry->m_End().x, aBusEntry->m_End().y );
+                      Iu2Mils( aBusEntry->GetPosition().x ),
+                      Iu2Mils( aBusEntry->GetPosition().y ),
+                      Iu2Mils( aBusEntry->m_End().x ), Iu2Mils( aBusEntry->m_End().y ) );
     else
         m_out->Print( 0, "Entry Bus Bus\n\t%-4d %-4d %-4d %-4d\n",
-                      aBusEntry->GetPosition().x, aBusEntry->GetPosition().y,
-                      aBusEntry->m_End().x, aBusEntry->m_End().y );
+                      Iu2Mils( aBusEntry->GetPosition().x ),
+                      Iu2Mils( aBusEntry->GetPosition().y ),
+                      Iu2Mils( aBusEntry->m_End().x ), Iu2Mils( aBusEntry->m_End().y ) );
 }
 
 
@@ -2219,10 +2231,11 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
     if( aLine->IsGraphicLine() )
     {
         if( aLine->GetPenSize() != aLine->GetDefaultWidth() )
-            m_out->Print( 0, " %s %d", T_WIDTH, aLine->GetLineSize() );
+            m_out->Print( 0, " %s %d", T_WIDTH, Iu2Mils( aLine->GetLineSize() ) );
 
         if( aLine->GetLineStyle() != aLine->GetDefaultStyle() )
-            m_out->Print( 0, " %s %s", T_STYLE, SCH_LINE::GetLineStyleName( aLine->GetLineStyle() ) );
+            m_out->Print( 0, " %s %s", T_STYLE,
+                          SCH_LINE::GetLineStyleName( aLine->GetLineStyle() ) );
 
         if( aLine->GetLineColor() != aLine->GetDefaultColor() )
             m_out->Print( 0, " %s",
@@ -2232,8 +2245,8 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
     m_out->Print( 0, "\n" );
 
     m_out->Print( 0, "\t%-4d %-4d %-4d %-4d",
-                  aLine->GetStartPoint().x, aLine->GetStartPoint().y,
-                  aLine->GetEndPoint().x, aLine->GetEndPoint().y );
+                  Iu2Mils( aLine->GetStartPoint().x ), Iu2Mils( aLine->GetStartPoint().y ),
+                  Iu2Mils( aLine->GetEndPoint().x ), Iu2Mils( aLine->GetEndPoint().y ) );
 
     m_out->Print( 0, "\n");
 }
@@ -2281,22 +2294,22 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
         }
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %d\n%s\n", textType,
-                      aText->GetPosition().x, aText->GetPosition().y,
+                      Iu2Mils( aText->GetPosition().x ), Iu2Mils( aText->GetPosition().y ),
                       aText->GetLabelSpinStyle(),
-                      aText->GetTextWidth(),
-                      italics, aText->GetThickness(), TO_UTF8( text ) );
+                      Iu2Mils( aText->GetTextWidth() ),
+                      italics, Iu2Mils( aText->GetThickness() ), TO_UTF8( text ) );
     }
     else if( layer == LAYER_GLOBLABEL || layer == LAYER_HIERLABEL )
     {
         textType = ( layer == LAYER_GLOBLABEL ) ? "GLabel" : "HLabel";
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %s %d\n%s\n", textType,
-                      aText->GetPosition().x, aText->GetPosition().y,
+                      Iu2Mils( aText->GetPosition().x ), Iu2Mils( aText->GetPosition().y ),
                       aText->GetLabelSpinStyle(),
-                      aText->GetTextWidth(),
+                      Iu2Mils( aText->GetTextWidth() ),
                       SheetLabelType[aText->GetShape()],
                       italics,
-                      aText->GetThickness(), TO_UTF8( text ) );
+                      Iu2Mils( aText->GetThickness() ), TO_UTF8( text ) );
     }
 }
 
@@ -2728,7 +2741,7 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    part->SetPinNameOffset( (int)num );
+    part->SetPinNameOffset( Mils2Iu( (int)num ) );
 
     tmp = tokens.GetNextToken();                  // Show pin numbers.
 
@@ -2941,13 +2954,13 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
 
     wxPoint pos;
 
-    pos.x = parseInt( aReader, line, &line );
-    pos.y = parseInt( aReader, line, &line );
+    pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
     field->SetPosition( pos );
 
     wxSize textSize;
 
-    textSize.x = textSize.y = parseInt( aReader, line, &line );
+    textSize.x = textSize.y = Mils2Iu( parseInt( aReader, line, &line ) );
     field->SetTextSize( textSize );
 
     char textOrient = parseChar( aReader, line, &line );
@@ -3126,11 +3139,11 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_PART>& aPart,
 
     wxPoint center;
 
-    center.x = parseInt( aReader, line, &line );
-    center.y = parseInt( aReader, line, &line );
+    center.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    center.y = Mils2Iu( parseInt( aReader, line, &line ) );
 
     arc->SetPosition( center );
-    arc->SetRadius( parseInt( aReader, line, &line ) );
+    arc->SetRadius( Mils2Iu( parseInt( aReader, line, &line ) ) );
 
     int angle1 = parseInt( aReader, line, &line );
     int angle2 = parseInt( aReader, line, &line );
@@ -3142,7 +3155,7 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_PART>& aPart,
 
     arc->SetUnit( parseInt( aReader, line, &line ) );
     arc->SetConvert( parseInt( aReader, line, &line ) );
-    arc->SetWidth( parseInt( aReader, line, &line ) );
+    arc->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
 
     // Old libraries (version <= 2.2) do not have always this FILL MODE param
     // when fill mode is no fill (default mode).
@@ -3154,10 +3167,10 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_PART>& aPart,
     {
         wxPoint arcStart, arcEnd;
 
-        arcStart.x = parseInt( aReader, line, &line );
-        arcStart.y = parseInt( aReader, line, &line );
-        arcEnd.x = parseInt( aReader, line, &line );
-        arcEnd.y = parseInt( aReader, line, &line );
+        arcStart.x = Mils2Iu( parseInt( aReader, line, &line ) );
+        arcStart.y = Mils2Iu( parseInt( aReader, line, &line ) );
+        arcEnd.x = Mils2Iu( parseInt( aReader, line, &line ) );
+        arcEnd.y = Mils2Iu( parseInt( aReader, line, &line ) );
 
         arc->SetStart( arcStart );
         arc->SetEnd( arcEnd );
@@ -3192,14 +3205,14 @@ LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_PART>& aPar
 
     wxPoint center;
 
-    center.x = parseInt( aReader, line, &line );
-    center.y = parseInt( aReader, line, &line );
+    center.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    center.y = Mils2Iu( parseInt( aReader, line, &line ) );
 
     circle->SetPosition( center );
-    circle->SetRadius( parseInt( aReader, line, &line ) );
+    circle->SetRadius( Mils2Iu( parseInt( aReader, line, &line ) ) );
     circle->SetUnit( parseInt( aReader, line, &line ) );
     circle->SetConvert( parseInt( aReader, line, &line ) );
-    circle->SetWidth( parseInt( aReader, line, &line ) );
+    circle->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
 
     if( *line != 0 )
         circle->SetFillMode( parseFillMode( aReader, line, &line ) );
@@ -3223,13 +3236,13 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_PART>& aPart,
 
     wxPoint center;
 
-    center.x = parseInt( aReader, line, &line );
-    center.y = parseInt( aReader, line, &line );
+    center.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    center.y = Mils2Iu( parseInt( aReader, line, &line ) );
     text->SetPosition( center );
 
     wxSize size;
 
-    size.x = size.y = parseInt( aReader, line, &line );
+    size.x = size.y = Mils2Iu( parseInt( aReader, line, &line ) );
     text->SetTextSize( size );
     text->SetVisible( !parseInt( aReader, line, &line ) );
     text->SetUnit( parseInt( aReader, line, &line ) );
@@ -3312,19 +3325,19 @@ LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr<LIB_PART>
 
     wxPoint pos;
 
-    pos.x = parseInt( aReader, line, &line );
-    pos.y = parseInt( aReader, line, &line );
+    pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
     rectangle->SetPosition( pos );
 
     wxPoint end;
 
-    end.x = parseInt( aReader, line, &line );
-    end.y = parseInt( aReader, line, &line );
+    end.x = Mils2Iu( parseInt( aReader, line, &line ) );
+    end.y = Mils2Iu( parseInt( aReader, line, &line ) );
     rectangle->SetEnd( end );
 
     rectangle->SetUnit( parseInt( aReader, line, &line ) );
     rectangle->SetConvert( parseInt( aReader, line, &line ) );
-    rectangle->SetWidth( parseInt( aReader, line, &line ) );
+    rectangle->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
 
     if( *line != 0 )
         rectangle->SetFillMode( parseFillMode( aReader, line, &line ) );
@@ -3365,7 +3378,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    position.x = (int) num;
+    position.x = Mils2Iu( (int) num );
 
     tmp = tokens.GetNextToken();
 
@@ -3374,7 +3387,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    position.y = (int) num;
+    position.y = Mils2Iu( (int) num );
     pin->m_position = position;
 
     tmp = tokens.GetNextToken();
@@ -3384,7 +3397,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->m_length = (int) num;
+    pin->m_length = Mils2Iu( (int) num );
 
 
     tmp = tokens.GetNextToken();
@@ -3403,7 +3416,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->m_numTextSize = (int) num;
+    pin->m_numTextSize = Mils2Iu( (int) num );
 
     tmp = tokens.GetNextToken();
 
@@ -3412,7 +3425,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                            aReader.LineNumber(), pos );
 
     pos += tmp.size() + 1;
-    pin->m_nameTextSize = (int) num;
+    pin->m_nameTextSize = Mils2Iu( (int) num );
 
     tmp = tokens.GetNextToken();
 
@@ -3527,15 +3540,15 @@ LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_PART>& 
     int points = parseInt( aReader, line, &line );
     polyLine->SetUnit( parseInt( aReader, line, &line ) );
     polyLine->SetConvert( parseInt( aReader, line, &line ) );
-    polyLine->SetWidth( parseInt( aReader, line, &line ) );
+    polyLine->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
     polyLine->Reserve( points );
 
     wxPoint pt;
 
     for( int i = 0; i < points; i++ )
     {
-        pt.x = parseInt( aReader, line, &line );
-        pt.y = parseInt( aReader, line, &line );
+        pt.x = Mils2Iu( parseInt( aReader, line, &line ) );
+        pt.y = Mils2Iu( parseInt( aReader, line, &line ) );
         polyLine->AddPoint( pt );
     }
 
@@ -3558,15 +3571,15 @@ LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_PART>& aPar
     int points = parseInt( aReader, line, &line );
     bezier->SetUnit( parseInt( aReader, line, &line ) );
     bezier->SetConvert( parseInt( aReader, line, &line ) );
-    bezier->SetWidth( parseInt( aReader, line, &line ) );
+    bezier->SetWidth( Mils2Iu( parseInt( aReader, line, &line ) ) );
 
     wxPoint pt;
     bezier->Reserve( points );
 
     for( int i = 0; i < points; i++ )
     {
-        pt.x = parseInt( aReader, line, &line );
-        pt.y = parseInt( aReader, line, &line );
+        pt.x = Mils2Iu( parseInt( aReader, line, &line ) );
+        pt.y = Mils2Iu( parseInt( aReader, line, &line ) );
         bezier->AddPoint( pt );
     }
 
@@ -3679,7 +3692,7 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aF
     }
 
     aFormatter.Print( 0, " %d %d %c %c %d %c %c\n",
-                      0, aSymbol->GetPinNameOffset(),
+                      0, Iu2Mils( aSymbol->GetPinNameOffset() ),
                       aSymbol->ShowPinNumbers() ? 'Y' : 'N',
                       aSymbol->ShowPinNames() ? 'Y' : 'N',
                       aSymbol->GetUnitCount(), aSymbol->UnitsLocked() ? 'L' : 'F',
@@ -3827,11 +3840,11 @@ void SCH_LEGACY_PLUGIN_CACHE::saveArc( LIB_ARC* aArc,
         x2 -= 3600;
 
     aFormatter.Print( 0, "A %d %d %d %d %d %d %d %d %c %d %d %d %d\n",
-                       aArc->GetPosition().x, aArc->GetPosition().y,
-                       aArc->GetRadius(), x1, x2, aArc->GetUnit(), aArc->GetConvert(),
-                       aArc->GetWidth(), fill_tab[aArc->GetFillMode()],
-                       aArc->GetStart().x, aArc->GetStart().y,
-                       aArc->GetEnd().x, aArc->GetEnd().y );
+                      Iu2Mils( aArc->GetPosition().x ), Iu2Mils( aArc->GetPosition().y ),
+                      Iu2Mils( aArc->GetRadius() ), x1, x2, aArc->GetUnit(), aArc->GetConvert(),
+                      Iu2Mils( aArc->GetWidth() ), fill_tab[aArc->GetFillMode()],
+                      Iu2Mils( aArc->GetStart().x ), Iu2Mils( aArc->GetStart().y ),
+                      Iu2Mils( aArc->GetEnd().x ), Iu2Mils( aArc->GetEnd().y ) );
 }
 
 
@@ -3841,10 +3854,10 @@ void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier,
     wxCHECK_RET( aBezier && aBezier->Type() == LIB_BEZIER_T, "Invalid LIB_BEZIER object." );
 
     aFormatter.Print( 0, "B %u %d %d %d", (unsigned)aBezier->GetPoints().size(),
-                      aBezier->GetUnit(), aBezier->GetConvert(), aBezier->GetWidth() );
+                      aBezier->GetUnit(), aBezier->GetConvert(), Iu2Mils( aBezier->GetWidth() ) );
 
     for( const auto& pt : aBezier->GetPoints() )
-        aFormatter.Print( 0, " %d %d", pt.x, pt.y );
+        aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
 
     aFormatter.Print( 0, " %c\n", fill_tab[aBezier->GetFillMode()] );
 }
@@ -3856,9 +3869,9 @@ void SCH_LEGACY_PLUGIN_CACHE::saveCircle( LIB_CIRCLE* aCircle,
     wxCHECK_RET( aCircle && aCircle->Type() == LIB_CIRCLE_T, "Invalid LIB_CIRCLE object." );
 
     aFormatter.Print( 0, "C %d %d %d %d %d %d %c\n",
-                      aCircle->GetPosition().x, aCircle->GetPosition().y,
-                      aCircle->GetRadius(), aCircle->GetUnit(), aCircle->GetConvert(),
-                      aCircle->GetWidth(), fill_tab[aCircle->GetFillMode()] );
+                      Iu2Mils( aCircle->GetPosition().x ), Iu2Mils( aCircle->GetPosition().y ),
+                      Iu2Mils( aCircle->GetRadius() ), aCircle->GetUnit(), aCircle->GetConvert(),
+                      Iu2Mils( aCircle->GetWidth() ), fill_tab[aCircle->GetFillMode()] );
 }
 
 
@@ -3888,7 +3901,8 @@ void SCH_LEGACY_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
     aFormatter.Print( 0, "F%d %s %d %d %d %c %c %c %c%c%c",
                       id,
                       EscapedUTF8( text ).c_str(),       // wraps in quotes
-                      aField->GetTextPos().x, aField->GetTextPos().y, aField->GetTextWidth(),
+                      Iu2Mils( aField->GetTextPos().x ), Iu2Mils( aField->GetTextPos().y ),
+                      Iu2Mils( aField->GetTextWidth() ),
                       aField->GetTextAngle() == 0 ? 'H' : 'V',
                       aField->IsVisible() ? 'V' : 'I',
                       hjustify, vjustify,
@@ -3971,9 +3985,9 @@ void SCH_LEGACY_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
 
     aFormatter.Print( 0, " %s %d %d %d %c %d %d %d %d %c",
                       aPin->GetNumber().IsEmpty() ? "~" : TO_UTF8( aPin->GetNumber() ),
-                      aPin->GetPosition().x, aPin->GetPosition().y,
-                      (int) aPin->GetLength(), (int) aPin->GetOrientation(),
-                      aPin->GetNumberTextSize(), aPin->GetNameTextSize(),
+                      Iu2Mils( aPin->GetPosition().x ), Iu2Mils( aPin->GetPosition().y ),
+                      Iu2Mils( (int) aPin->GetLength() ), (int) aPin->GetOrientation(),
+                      Iu2Mils( aPin->GetNumberTextSize() ), Iu2Mils( aPin->GetNameTextSize() ),
                       aPin->GetUnit(), aPin->GetConvert(), Etype );
 
     if( aPin->GetShape() || !aPin->IsVisible() )
@@ -4037,11 +4051,11 @@ void SCH_LEGACY_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine,
     int ccount = aPolyLine->GetCornerCount();
 
     aFormatter.Print( 0, "P %d %d %d %d", ccount, aPolyLine->GetUnit(), aPolyLine->GetConvert(),
-                      aPolyLine->GetWidth() );
+                      Iu2Mils( aPolyLine->GetWidth() ) );
 
     for( const auto& pt : aPolyLine->GetPolyPoints() )
     {
-        aFormatter.Print( 0, " %d %d", pt.x, pt.y );
+        aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
     }
 
     aFormatter.Print( 0, " %c\n", fill_tab[aPolyLine->GetFillMode()] );
@@ -4055,10 +4069,11 @@ void SCH_LEGACY_PLUGIN_CACHE::saveRectangle( LIB_RECTANGLE* aRectangle,
                  "Invalid LIB_RECTANGLE object." );
 
     aFormatter.Print( 0, "S %d %d %d %d %d %d %d %c\n",
-                      aRectangle->GetPosition().x, aRectangle->GetPosition().y,
-                      aRectangle->GetEnd().x, aRectangle->GetEnd().y,
+                      Iu2Mils( aRectangle->GetPosition().x ),
+                      Iu2Mils( aRectangle->GetPosition().y ),
+                      Iu2Mils( aRectangle->GetEnd().x ), Iu2Mils( aRectangle->GetEnd().y ),
                       aRectangle->GetUnit(), aRectangle->GetConvert(),
-                      aRectangle->GetWidth(), fill_tab[aRectangle->GetFillMode()] );
+                      Iu2Mils( aRectangle->GetWidth() ), fill_tab[aRectangle->GetFillMode()] );
 }
 
 
@@ -4077,8 +4092,8 @@ void SCH_LEGACY_PLUGIN_CACHE::saveText( LIB_TEXT* aText,
     }
 
     aFormatter.Print( 0, "T %g %d %d %d %d %d %d %s", aText->GetTextAngle(),
-                      aText->GetTextPos().x, aText->GetTextPos().y,
-                      aText->GetTextWidth(), !aText->IsVisible(),
+                      Iu2Mils( aText->GetTextPos().x ), Iu2Mils( aText->GetTextPos().y ),
+                      Iu2Mils( aText->GetTextWidth() ), !aText->IsVisible(),
                       aText->GetUnit(), aText->GetConvert(), TO_UTF8( text ) );
 
     aFormatter.Print( 0, " %s %d", aText->IsItalic() ? "Italic" : "Normal", aText->IsBold() );

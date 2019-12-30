@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ class SCH_COMPONENT;
 #include "class_libentry.h"
 
 // Circle diameter drawn at the active end of pins:
-#define TARGET_PIN_RADIUS   15
+#define TARGET_PIN_RADIUS   Mils2iu( 15 )
 
 // Pin visibility flag bit:
 #define PIN_INVISIBLE 1    // Set makes pin invisible

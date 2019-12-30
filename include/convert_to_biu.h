@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,12 @@ inline int Mils2iu( int mils )
     return int( x < 0 ? x - 0.5 : x + 0.5 );
 }
 
+constexpr inline double Iu2Mils( int iu )
+{
+    double mils = iu / IU_PER_MILS;
+
+    return static_cast< int >( mils < 0 ? mils - 0.5 : mils + 0.5 );
+}
 #elif defined (PL_EDITOR)
 constexpr double IU_PER_MM   =   1e3; // internal units in micron (should be enough)
 constexpr double IU_PER_MILS = (IU_PER_MM * 0.0254);
@@ -64,12 +70,20 @@ inline int Mils2iu( int mils )
 }
 
 #elif defined (EESCHEMA)            // Eeschema
-constexpr double IU_PER_MILS = 1.0;
-constexpr double IU_PER_MM   = ( IU_PER_MILS / 0.0254 );
+constexpr double IU_PER_MM   = 1e4;  // Schematic internal units 1=100nm
+constexpr double IU_PER_MILS = IU_PER_MM * 0.0254;
 
 constexpr inline int Mils2iu( int mils )
 {
-    return mils;
+    double x = mils * IU_PER_MILS;
+    return int( x < 0 ? x - 0.5 : x + 0.5 );
+}
+
+constexpr inline int Iu2Mils( int iu )
+{
+    double mils = iu / IU_PER_MILS;
+
+    return static_cast< int >( mils < 0 ? mils - 0.5 : mils + 0.5 );
 }
 #else
 // Here, we do not know the value of internal units: do not define
@@ -94,10 +108,10 @@ constexpr inline double Iu2Millimeter( int iu )
 }
 
 /// Convert mm to internal units (iu).
-constexpr inline double Iu2Mils( int iu )
-{
-    return iu / IU_PER_MILS;
-}
+// constexpr inline double Iu2Mils( int iu )
+// {
+//     return iu / IU_PER_MILS;
+// }
 
 // The max error is the distance between the middle of a segment, and the circle
 // for circle/arc to segment approximation.

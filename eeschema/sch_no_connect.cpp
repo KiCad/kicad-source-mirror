@@ -44,7 +44,7 @@ SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_NO_CONNECT_T )
 {
     m_pos    = pos;
-    m_size   = 48;      ///< No-connect symbol size.
+    m_size   = Mils2iu( 48 );      ///< No-connect symbol size.
 
     SetLayer( LAYER_NOCONNECT );
 }

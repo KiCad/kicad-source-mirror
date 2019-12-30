@@ -4,7 +4,7 @@
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,15 +69,35 @@
 #include <boost/foreach.hpp>
 
 #define EESCHEMA_FILE_STAMP   "EESchema"
+#define ZOOM_FACTOR( x )       ( x * IU_PER_MILS )
+
 
 /* Default zoom values. Limited to these values to keep a decent size
  * to menus
  */
 static double SchematicZoomList[] =
 {
-    0.5, 0.7, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 8.0, 11.0,
-    13.0, 16.0, 20.0, 26.0, 32.0, 48.0, 64.0, 80.0, 128.0
+    ZOOM_FACTOR( 0.5 ),
+    ZOOM_FACTOR( 0.7 ),
+    ZOOM_FACTOR( 1.0 ),
+    ZOOM_FACTOR( 1.5 ),
+    ZOOM_FACTOR( 2.0 ),
+    ZOOM_FACTOR( 3.0 ),
+    ZOOM_FACTOR( 4.0 ),
+    ZOOM_FACTOR( 6.0 ),
+    ZOOM_FACTOR( 8.0 ),
+    ZOOM_FACTOR( 11.0 ),
+    ZOOM_FACTOR( 13.0 ),
+    ZOOM_FACTOR( 16.0 ),
+    ZOOM_FACTOR( 20.0 ),
+    ZOOM_FACTOR( 26.0 ),
+    ZOOM_FACTOR( 32.0 ),
+    ZOOM_FACTOR( 48.0 ),
+    ZOOM_FACTOR( 64.0 ),
+    ZOOM_FACTOR( 80.0 ),
+    ZOOM_FACTOR( 128.0 )
 };
+
 
 /* Default grid sizes for the schematic editor.
  * Do NOT add others values (mainly grid values in mm), because they
@@ -92,13 +112,13 @@ static double SchematicZoomList[] =
  * 100mil grid, pin ends and origin must lie on grid nodes IEC-60617"
 */
 static GRID_TYPE SchematicGridList[] = {
-    { ID_POPUP_GRID_LEVEL_100, wxRealPoint( 100, 100 ) },
-    { ID_POPUP_GRID_LEVEL_50, wxRealPoint( 50, 50 ) },
-    { ID_POPUP_GRID_LEVEL_25, wxRealPoint( 25, 25 ) },
-    { ID_POPUP_GRID_LEVEL_10, wxRealPoint( 10, 10 ) },
-    { ID_POPUP_GRID_LEVEL_5, wxRealPoint( 5, 5 ) },
-    { ID_POPUP_GRID_LEVEL_2, wxRealPoint( 2, 2 ) },
-    { ID_POPUP_GRID_LEVEL_1, wxRealPoint( 1, 1 ) },
+    { ID_POPUP_GRID_LEVEL_100, wxRealPoint( Mils2iu( 100 ), Mils2iu( 100 ) ) },
+    { ID_POPUP_GRID_LEVEL_50, wxRealPoint( Mils2iu( 50 ), Mils2iu( 50 ) ) },
+    { ID_POPUP_GRID_LEVEL_25, wxRealPoint( Mils2iu( 25 ), Mils2iu( 25 ) ) },
+    { ID_POPUP_GRID_LEVEL_10, wxRealPoint( Mils2iu( 10 ), Mils2iu( 10 ) ) },
+    { ID_POPUP_GRID_LEVEL_5, wxRealPoint( Mils2iu( 5 ), Mils2iu( 5 ) ) },
+    { ID_POPUP_GRID_LEVEL_2, wxRealPoint( Mils2iu( 2 ), Mils2iu( 2 ) ) },
+    { ID_POPUP_GRID_LEVEL_1, wxRealPoint( Mils2iu( 1 ), Mils2iu( 1 ) ) },
 };
 
 
@@ -118,7 +138,7 @@ SCH_SCREEN::SCH_SCREEN( KIWAY* aKiway ) :
         AddGrid( grid );
 
     // Set the default grid size, now that the grid list is populated
-    SetGrid( wxRealPoint( 50, 50 ) );
+    SetGrid( wxRealPoint( Mils2iu( 50 ), Mils2iu( 50 ) ) );
 
     m_refCount = 0;
 
@@ -133,9 +153,9 @@ SCH_SCREEN::~SCH_SCREEN()
 {
     ClearUndoRedoList();
 
-    // Now delete items in draw list. We do that only if the list is not empty,
-    // because if the list was appended to another list (see SCH_SCREEN::Append( SCH_SCREEN* aScreen )
-    // it is empty but as no longer the ownership (m_drawList.meOwner == false) of items, and calling
+    // Now delete items in draw list.  We do that only if the list is not empty, because if the
+    // list was appended to another list (see SCH_SCREEN::Append( SCH_SCREEN* aScreen ) it is
+    // empty but as no longer the ownership (m_drawList.meOwner == false) of items, and calling
     // FreeDrawList() with m_drawList.meOwner == false will generate a debug alert in debug mode
     if( GetDrawItems() )
         FreeDrawList();
@@ -894,9 +914,9 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
                 fpfield->SetTextSize( component->GetField( VALUE )->GetTextSize() );
 
                 if( fpfield->GetTextAngle() == 0.0 )
-                    fpfield->Offset( wxPoint( 0, 100 ) );
+                    fpfield->Offset( wxPoint( 0, Mils2iu( 100 ) ) );
                 else
-                    fpfield->Offset( wxPoint( 100, 0 ) );
+                    fpfield->Offset( wxPoint( Mils2iu( 100 ), 0 ) );
             }
 
             fpfield->SetText( aFootPrint );
