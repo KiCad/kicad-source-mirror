@@ -47,13 +47,17 @@ COBJECT::COBJECT( OBJECT3D_TYPE aObjType )
 /*
  * Lookup table for OBJECT2D_TYPE printed names
  */
-const std::map<OBJECT3D_TYPE, const char*> objectTypeNames{ { OBJECT3D_TYPE::CYLINDER,
-                                                                    "OBJECT3D_TYPE::CYLINDER" },
+// clang-format off
+const std::map<OBJECT3D_TYPE, const char*> objectTypeNames 
+{ 
+    { OBJECT3D_TYPE::CYLINDER,   "OBJECT3D_TYPE::CYLINDER" },
     { OBJECT3D_TYPE::DUMMYBLOCK, "OBJECT2D_TYPE::DUMMYBLOCK" },
-    { OBJECT3D_TYPE::LAYERITEM, "OBJECT2D_TYPE::LAYERITEM" },
-    { OBJECT3D_TYPE::XYPLANE, "OBJECT2D_TYPE::XYPLANE" },
-    { OBJECT3D_TYPE::ROUNDSEG, "OBJECT2D_TYPE::ROUNDSEG" },
-    { OBJECT3D_TYPE::TRIANGLE, "OBJECT2D_TYPE::TRIANGLE" } };
+    { OBJECT3D_TYPE::LAYERITEM,  "OBJECT2D_TYPE::LAYERITEM" },
+    { OBJECT3D_TYPE::XYPLANE,    "OBJECT2D_TYPE::XYPLANE" },
+    { OBJECT3D_TYPE::ROUNDSEG,   "OBJECT2D_TYPE::ROUNDSEG" },
+    { OBJECT3D_TYPE::TRIANGLE,   "OBJECT2D_TYPE::TRIANGLE" } 
+};
+// clang-format on
 
 
 void COBJECT3D_STATS::PrintStats()
