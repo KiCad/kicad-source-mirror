@@ -195,13 +195,21 @@ bool SCH_EDIT_TOOL::Init()
         case SCH_LINE_T:
         {
             const std::deque<EDA_ITEM*> items = aSel.GetItems();
-            if( !std::all_of( items.begin(), items.end(), [&]( const EDA_ITEM* item ) {
+            if( !std::all_of( items.begin(), items.end(), 
+				[&]( const EDA_ITEM* item ) 
+                {
                     const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( item );
-                    assert( line != nullptr );
+					if (line != nullptr)
+					{
+                        wxLogWarning(
+                                "Non-line object encountered in selection, this shouldn't have bypassed the preceeding check" );
+						return false;
+					}
                     return line->IsGraphicLine();
                 } ) )
+            {
                 return false;
-
+            }
 
             // Only graphic lines support properties in the file format
             return true;
