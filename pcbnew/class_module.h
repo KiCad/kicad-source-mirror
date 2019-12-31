@@ -44,9 +44,6 @@
 #include "zones.h"
 #include <class_text_mod.h>
 #include <class_zone.h>
-
-#include <core/iterators.h>
-
 #include <functional>
 
 class LINE_READER;
