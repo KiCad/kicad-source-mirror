@@ -58,7 +58,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     m_config = Kiface().KifaceSettings();
 
     m_cmp = aComponent;
-    m_part = GetParent()->GetLibPart( m_cmp->GetLibId(), true );
+    m_part = m_cmp->GetPartRef().get();
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_part );
 
     m_width = 0;
