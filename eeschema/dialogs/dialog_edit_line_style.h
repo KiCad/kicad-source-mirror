@@ -26,7 +26,6 @@
 #define __dialog_edit_line_style__
 
 #include <dialog_edit_line_style_base.h>
-#include <sch_line.h>
 #include <widgets/unit_binder.h>
 
 

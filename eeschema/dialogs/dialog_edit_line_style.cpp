@@ -23,6 +23,7 @@
  */
 
 #include <bitmaps.h>
+#include <sch_line.h>
 #include <dialog_edit_line_style.h>
 #include <dialogs/dialog_color_picker.h>
 #include <sch_edit_frame.h>
