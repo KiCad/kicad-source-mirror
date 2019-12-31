@@ -196,15 +196,15 @@ bool SCH_EDIT_TOOL::Init()
         {
             const std::deque<EDA_ITEM*> items = aSel.GetItems();
             if( !std::all_of( items.begin(), items.end(), 
-				[&]( const EDA_ITEM* item ) 
+                [&]( const EDA_ITEM* item )
                 {
                     const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( item );
-					if (line != nullptr)
-					{
+                    if ( line == nullptr )
+                    {
                         wxLogWarning(
                                 "Non-line object encountered in selection, this shouldn't have bypassed the preceeding check" );
-						return false;
-					}
+                        return false;
+                    }
                     return line->IsGraphicLine();
                 } ) )
             {
