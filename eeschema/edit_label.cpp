@@ -39,7 +39,7 @@
 
 #include "invoke_sch_dialog.h"
 
-static PINSHEETLABEL_SHAPE  lastGlobalLabelShape = NET_INPUT;
+static PINSHEETLABEL_SHAPE  lastGlobalLabelShape = PINSHEETLABEL_SHAPE::INPUT;
 static int                  lastTextOrientation = 0;
 static bool                 lastTextBold = false;
 static bool                 lastTextItalic = false;

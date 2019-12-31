@@ -44,12 +44,13 @@ class NETLIST_OBJECT_LIST;
 /* Shape/Type of SCH_HIERLABEL and SCH_GLOBALLABEL
  * mainly used to handle the graphic associated shape
  */
-enum PINSHEETLABEL_SHAPE {
-    NET_INPUT,
-    NET_OUTPUT,
-    NET_BIDI,
-    NET_TRISTATE,
-    NET_UNSPECIFIED
+enum class PINSHEETLABEL_SHAPE
+{
+    INPUT,
+    OUTPUT,
+    BIDI,
+    TRISTATE,
+    UNSPECIFIED
 };
 
 

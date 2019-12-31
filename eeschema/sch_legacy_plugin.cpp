@@ -1033,23 +1033,23 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
                 switch( parseChar( aReader, line, &line ) )
                 {
                 case 'I':
-                    sheetPin->SetShape( NET_INPUT );
+                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::INPUT );
                     break;
 
                 case 'O':
-                    sheetPin->SetShape( NET_OUTPUT );
+                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::OUTPUT );
                     break;
 
                 case 'B':
-                    sheetPin->SetShape( NET_BIDI );
+                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::BIDI );
                     break;
 
                 case 'T':
-                    sheetPin->SetShape( NET_TRISTATE );
+                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::TRISTATE );
                     break;
 
                 case 'U':
-                    sheetPin->SetShape( NET_UNSPECIFIED );
+                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::UNSPECIFIED );
                     break;
                 default:
                     SCH_PARSE_ERROR( "invalid sheet pin type", aReader, line );
@@ -1362,6 +1362,16 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( LINE_READER& aReader )
 }
 
 
+const std::map<PINSHEETLABEL_SHAPE, const char*> sheetLabelNames
+{
+    { PINSHEETLABEL_SHAPE::INPUT, "Input" },
+    { PINSHEETLABEL_SHAPE::OUTPUT, "Output" },
+    { PINSHEETLABEL_SHAPE::BIDI, "BiDi" },
+    { PINSHEETLABEL_SHAPE::TRISTATE, "3State" },
+    { PINSHEETLABEL_SHAPE::UNSPECIFIED, "UnSpc" },
+};
+
+
 SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
 {
     const char*   line = aReader.Line();
@@ -1402,16 +1412,14 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
     // Parse the global and hierarchical label type.
     if( text->Type() == SCH_HIER_LABEL_T || text->Type() == SCH_GLOBAL_LABEL_T )
     {
-        if( strCompare( SheetLabelType[NET_INPUT], line, &line ) )
-            text->SetShape( NET_INPUT );
-        else if( strCompare( SheetLabelType[NET_OUTPUT], line, &line ) )
-            text->SetShape( NET_OUTPUT );
-        else if( strCompare( SheetLabelType[NET_BIDI], line, &line ) )
-            text->SetShape( NET_BIDI );
-        else if( strCompare( SheetLabelType[NET_TRISTATE], line, &line ) )
-            text->SetShape( NET_TRISTATE );
-        else if( strCompare( SheetLabelType[NET_UNSPECIFIED], line, &line ) )
-            text->SetShape( NET_UNSPECIFIED );
+        auto resultIt = std::find_if( sheetLabelNames.begin(), sheetLabelNames.end(),
+                [&line, this]( const auto& it )
+                { 
+                    return strCompare( it.second, line, &line ); 
+                } );
+
+        if( resultIt != sheetLabelNames.end() )
+            text->SetShape( resultIt->first );
         else
             SCH_PARSE_ERROR( "invalid label type", aReader, line );
     }
@@ -2159,12 +2167,12 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
 
         switch( pin.GetShape() )
         {
-        case NET_INPUT:       type = 'I'; break;
-        case NET_OUTPUT:      type = 'O'; break;
-        case NET_BIDI:        type = 'B'; break;
-        case NET_TRISTATE:    type = 'T'; break;
+        case PINSHEETLABEL_SHAPE::INPUT:       type = 'I'; break;
+        case PINSHEETLABEL_SHAPE::OUTPUT:      type = 'O'; break;
+        case PINSHEETLABEL_SHAPE::BIDI:        type = 'B'; break;
+        case PINSHEETLABEL_SHAPE::TRISTATE:    type = 'T'; break;
         default:
-        case NET_UNSPECIFIED: type = 'U'; break;
+        case PINSHEETLABEL_SHAPE::UNSPECIFIED: type = 'U'; break;
         }
 
         m_out->Print( 0, "F%d %s %c %c %-3d %-3d %-3d\n", pin.GetNumber(),
@@ -2303,11 +2311,14 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
     {
         textType = ( layer == LAYER_GLOBLABEL ) ? "GLabel" : "HLabel";
 
+        auto shapeLabelIt = sheetLabelNames.find( aText->GetShape() );
+        wxCHECK_RET( shapeLabelIt != sheetLabelNames.end(), "Shape not found in names list" );
+
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %s %d\n%s\n", textType,
                       Iu2Mils( aText->GetPosition().x ), Iu2Mils( aText->GetPosition().y ),
                       aText->GetLabelSpinStyle(),
                       Iu2Mils( aText->GetTextWidth() ),
-                      SheetLabelType[aText->GetShape()],
+                      shapeLabelIt->second,
                       italics,
                       Iu2Mils( aText->GetThickness() ), TO_UTF8( text ) );
     }

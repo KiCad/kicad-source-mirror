@@ -766,7 +766,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
 }
 
 
-PINSHEETLABEL_SHAPE SCH_EDIT_FRAME::m_lastSheetPinType = NET_INPUT;
+PINSHEETLABEL_SHAPE SCH_EDIT_FRAME::m_lastSheetPinType = PINSHEETLABEL_SHAPE::INPUT;
 wxSize SCH_EDIT_FRAME::m_lastSheetPinTextSize( -1, -1 );
 wxPoint SCH_EDIT_FRAME::m_lastSheetPinPosition;
 

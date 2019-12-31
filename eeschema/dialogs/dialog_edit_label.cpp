@@ -215,7 +215,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     int orient = m_CurrentText->GetLabelSpinStyle();
     m_TextOrient->SetSelection( EDA_TEXT::MapOrientation( m_CurrentText->Type(), orient ) );
 
-    m_TextShape->SetSelection( m_CurrentText->GetShape() );
+    m_TextShape->SetSelection( static_cast<int>( m_CurrentText->GetShape() ) );
 
     int style = 0;
 

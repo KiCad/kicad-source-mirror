@@ -56,17 +56,6 @@ extern void IncrementLabelMember( wxString& name, int aIncrement );
 // Margin in internal units (mils) between labels and wires
 #define TXT_MARGIN 4
 
-// Names of sheet label types.
-const char* SheetLabelType[] =
-{
-    "Input",
-    "Output",
-    "BiDi",
-    "3State",
-    "UnSpc",
-    "???"
-};
-
 /* Coding polygons for global symbol graphic shapes.
  *  the first parml is the number of corners
  *  others are the corners coordinates in reduced units
@@ -110,7 +99,7 @@ static int* TemplateShape[5][4] =
 SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
     SCH_ITEM( NULL, aType ),
     EDA_TEXT( text ),
-    m_shape( NET_INPUT )
+    m_shape( PINSHEETLABEL_SHAPE::INPUT )
 {
     m_Layer = LAYER_NOTES;
     SetTextPos( pos );
@@ -600,11 +589,11 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
     {
         switch( GetShape() )
         {
-        case NET_INPUT:        msg = _( "Input" );           break;
-        case NET_OUTPUT:       msg = _( "Output" );          break;
-        case NET_BIDI:         msg = _( "Bidirectional" );   break;
-        case NET_TRISTATE:     msg = _( "Tri-State" );       break;
-        case NET_UNSPECIFIED:  msg = _( "Passive" );         break;
+        case PINSHEETLABEL_SHAPE::INPUT:        msg = _( "Input" );           break;
+        case PINSHEETLABEL_SHAPE::OUTPUT:       msg = _( "Output" );          break;
+        case PINSHEETLABEL_SHAPE::BIDI:         msg = _( "Bidirectional" );   break;
+        case PINSHEETLABEL_SHAPE::TRISTATE:     msg = _( "Tri-State" );       break;
+        case PINSHEETLABEL_SHAPE::UNSPECIFIED:  msg = _( "Passive" );         break;
         default:               msg = wxT( "???" );           break;
         }
 
@@ -648,7 +637,7 @@ SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
     SCH_TEXT( pos, text, SCH_LABEL_T )
 {
     m_Layer = LAYER_LOCLABEL;
-    m_shape = NET_INPUT;
+    m_shape = PINSHEETLABEL_SHAPE::INPUT;
     m_isDangling = true;
     SetMultilineAllowed( false );
 }
@@ -732,7 +721,7 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
     SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T )
 {
     m_Layer = LAYER_GLOBLABEL;
-    m_shape = NET_BIDI;
+    m_shape = PINSHEETLABEL_SHAPE::BIDI;
     m_isDangling = true;
     SetMultilineAllowed( false );
 }
@@ -755,14 +744,14 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
 
     switch( m_shape )
     {
-    case NET_INPUT:
-    case NET_BIDI:
-    case NET_TRISTATE:
+    case PINSHEETLABEL_SHAPE::INPUT:
+    case PINSHEETLABEL_SHAPE::BIDI:
+    case PINSHEETLABEL_SHAPE::TRISTATE:
         offset += halfSize;
         break;
 
-    case NET_OUTPUT:
-    case NET_UNSPECIFIED:
+    case PINSHEETLABEL_SHAPE::OUTPUT:
+    case PINSHEETLABEL_SHAPE::UNSPECIFIED:
         offset += TXT_MARGIN;
         break;
 
@@ -888,23 +877,23 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 
     switch( m_shape )
     {
-    case NET_INPUT:
+    case PINSHEETLABEL_SHAPE::INPUT:
         x_offset = -halfSize;
         aPoints[0].x += halfSize;
         break;
 
-    case NET_OUTPUT:
+    case PINSHEETLABEL_SHAPE::OUTPUT:
         aPoints[3].x -= halfSize;
         break;
 
-    case NET_BIDI:
-    case NET_TRISTATE:
+    case PINSHEETLABEL_SHAPE::BIDI:
+    case PINSHEETLABEL_SHAPE::TRISTATE:
         x_offset = -halfSize;
         aPoints[0].x += halfSize;
         aPoints[3].x -= halfSize;
         break;
 
-    case NET_UNSPECIFIED:
+    case PINSHEETLABEL_SHAPE::UNSPECIFIED:
     default:
         break;
     }
@@ -1006,7 +995,7 @@ SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T 
     SCH_TEXT( pos, text, aType )
 {
     m_Layer = LAYER_HIERLABEL;
-    m_shape = NET_INPUT;
+    m_shape = PINSHEETLABEL_SHAPE::INPUT;
     m_isDangling = true;
     SetMultilineAllowed( false );
 }
@@ -1080,7 +1069,7 @@ void SCH_HIERLABEL::Print( wxDC* DC, const wxPoint& offset )
 
 void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
 {
-    int* Template = TemplateShape[m_shape][m_spin_style];
+    int* Template = TemplateShape[ static_cast<int>( m_shape ) ][ m_spin_style ];
     int  halfSize = GetTextWidth() / 2;
     int  imax = *Template; Template++;
 
