@@ -250,6 +250,20 @@ public:
         m_referencePoint = NULLOPT;
     }
 
+    /**
+     * Checks if all items in the selection are the same KICAD_T type
+     *
+     * @return True if all items are the same type, this includes zero or single items
+     */
+    bool AreAllItemsIdentical() const
+    {
+        return ( std::all_of( m_items.begin() + 1, m_items.end(),
+                        [&]( const EDA_ITEM* r ) 
+                        {
+                            return r->Type() == m_items.front()->Type();
+                        } ) );
+    }
+
 protected:
     OPT<VECTOR2I>         m_referencePoint;
     std::deque<EDA_ITEM*> m_items;
