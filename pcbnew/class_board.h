@@ -26,7 +26,6 @@
 #define CLASS_BOARD_H_
 
 #include <tuple>
-#include <core/iterators.h>
 #include <board_design_settings.h>
 #include <board_item_container.h>
 #include <class_module.h>
