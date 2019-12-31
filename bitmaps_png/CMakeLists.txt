@@ -91,6 +91,7 @@ set( BMAPS_SMALL
     pintype_opencoll
     pintype_openemit
     pintype_noconnect
+    question_mark
     refresh
     small_down
     small_edit
@@ -534,6 +535,10 @@ set( BMAPS_BIG
     )
 
 set( BMAPS_OTHER
+    stroke_dash
+    stroke_dashdot
+    stroke_dot
+    stroke_solid
     tune_diff_pair_length_legend
     tune_diff_pair_skew_legend
     tune_single_track_length_legend
