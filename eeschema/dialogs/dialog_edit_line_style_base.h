@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -52,10 +52,9 @@ class DIALOG_EDIT_LINE_STYLE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextWidth;
 		wxTextCtrl* m_lineWidth;
 		wxStaticText* m_staticWidthUnits;
-		wxStaticText* m_staticText5;
+		wxStaticText* m_staticTextColor;
 		wxBitmapButton* m_colorButton;
-		wxStaticText* m_staticText4;
-		wxStaticText* m_staticText51;
+		wxStaticText* m_staticTextStyle;
 		wxBitmapComboBox* m_typeCombo;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
@@ -71,7 +70,7 @@ class DIALOG_EDIT_LINE_STYLE_BASE : public DIALOG_SHIM
 	public:
 		bool m_isValid;
 
-		DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Style"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 325,180 ), long style = wxDEFAULT_DIALOG_STYLE );
+		DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Style"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 349,194 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_EDIT_LINE_STYLE_BASE();
 
 };
