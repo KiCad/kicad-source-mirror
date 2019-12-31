@@ -76,12 +76,11 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
 {
     auto first_line = m_lines.front();
 
-    if( m_lines.size() == 1
-            || ( m_lines.size() > 1
-                       && std::all_of(
-                                  m_lines.begin() + 1, m_lines.end(), [&]( const SCH_LINE* r ) {
-                                      return r->GetPenSize() == first_line->GetPenSize();
-                                  } ) ) )
+    if( std::all_of( m_lines.begin() + 1, m_lines.end(),
+        [&]( const SCH_LINE* r ) 
+        { 
+			return r->GetPenSize() == first_line->GetPenSize();
+		} ) )
     {
         m_width.SetValue( first_line->GetPenSize() );
     }
@@ -90,12 +89,11 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
         m_width.SetValue( INDETERMINATE );
     }
 
-    if( m_lines.size() == 1
-            || ( m_lines.size() > 1
-                       && std::all_of(
-                                  m_lines.begin() + 1, m_lines.end(), [&]( const SCH_LINE* r ) {
-                                      return r->GetLineColor() == first_line->GetLineColor();
-                                  } ) ) )
+    if( std::all_of( m_lines.begin() + 1, m_lines.end(), 
+        [&]( const SCH_LINE* r ) 
+        {
+            return r->GetLineColor() == first_line->GetLineColor();
+        } ) )
     {
         setColor( first_line->GetLineColor() );
     }
@@ -104,12 +102,11 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
         setColor( COLOR4D::UNSPECIFIED );
     }
 
-    if( m_lines.size() == 1
-            || ( m_lines.size() > 1
-                       && std::all_of(
-                                  m_lines.begin() + 1, m_lines.end(), [&]( const SCH_LINE* r ) {
-                                      return r->GetLineStyle() == first_line->GetLineStyle();
-                                  } ) ) )
+    if( std::all_of( m_lines.begin() + 1, m_lines.end(), 
+        [&]( const SCH_LINE* r ) 
+        {
+            return r->GetLineStyle() == first_line->GetLineStyle();
+        } ) )
     {
         int style = static_cast<int>( first_line->GetLineStyle() );
         wxCHECK_MSG( style < lineTypeNames.size(), false,
