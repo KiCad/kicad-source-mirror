@@ -130,7 +130,12 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
     m_unit      = unit;
     m_convert   = convert;
     m_lib_id    = aLibId;
-    m_part.reset( new LIB_PART( aPart ) );
+
+    std::unique_ptr< LIB_PART > part;
+
+    part = aPart.Flatten();
+    part->SetParent();
+    m_part.reset( part.release() );
     m_fieldsAutoplaced = AUTOPLACED_NO;
 
     SetTimeStamp( GetNewTimeStamp() );
@@ -274,7 +279,10 @@ void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTab
         LIB_PART* tmp = aSymLibTable->LoadSymbol( m_lib_id );
 
         if( tmp )
+        {
             symbol = tmp->Flatten();
+            symbol->SetParent();
+        }
     }
 
     if( !symbol && aCacheLib )
@@ -282,7 +290,10 @@ void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTab
         LIB_PART* tmp = aCacheLib->FindPart( m_lib_id.Format().wx_str() );
 
         if( tmp )
-            symbol.reset( new LIB_PART( *tmp ) );
+        {
+            symbol = tmp->Flatten();
+            symbol->SetParent();
+        }
     }
 
     m_part.reset( symbol.release() );
@@ -318,7 +329,9 @@ bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
     // flimsy search path ordering.  None-the-less find a part based on that design:
     if( LIB_PART* part = aLibs->FindLibPart( m_lib_id ) )
     {
-        m_part.reset( new LIB_PART( *part ) );
+        std::unique_ptr< LIB_PART > flattenedPart = part->Flatten();
+        flattenedPart->SetParent();
+        m_part.reset( flattenedPart.release() );
         UpdatePins();
         return true;
     }
@@ -346,7 +359,10 @@ bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
             LIB_PART* tmp = aLibTable.LoadSymbol( m_lib_id );
 
             if( tmp )
+            {
                 part = tmp->Flatten();
+                part->SetParent();
+            }
         }
 
         // Fall back to cache library.  This is temporary until the new schematic file
@@ -361,7 +377,10 @@ bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
             LIB_PART* tmp = aCacheLib->FindPart( libId );
 
             if( tmp )
-                part.reset( new LIB_PART( *tmp ) );
+            {
+                part = tmp->Flatten();
+                part->SetParent();
+            }
         }
 
         if( part )

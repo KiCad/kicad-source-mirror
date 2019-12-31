@@ -122,8 +122,13 @@ protected:
             wxString root_name = _( "Unknown" );
             wxString root_desc = "";
 
-            root_name = m_symbol->SharedPtr()->GetName();
-            root_desc = m_symbol->SharedPtr()->GetDescription();
+            std::shared_ptr< LIB_PART > parent = m_symbol->GetParent().lock();
+
+            if( parent )
+            {
+                root_name = parent->GetName();
+                root_desc = parent->GetDescription();
+            }
 
             m_html.Replace(
                 "__ALIASOF__", wxString::Format(
