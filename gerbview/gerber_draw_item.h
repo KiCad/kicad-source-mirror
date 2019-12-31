@@ -287,28 +287,6 @@ public:
         return wxT( "GERBER_DRAW_ITEM" );
     }
 
-    /**
-     * Function UnLink
-     * detaches this object from its owner.
-     */
-    void UnLink()
-    {
-        DLIST<GERBER_DRAW_ITEM>* list = (DLIST<GERBER_DRAW_ITEM>*) GetList();
-        wxASSERT( list );
-
-        if( list )
-            list->Remove( this );
-    }
-
-    /**
-     * Function DeleteStructure
-     * deletes this object after UnLink()ing it from its owner.
-     */
-    void DeleteStructure()
-    {
-        UnLink();
-        delete this;
-    }
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
