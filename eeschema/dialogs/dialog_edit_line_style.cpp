@@ -78,8 +78,8 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
     auto first_line = m_lines.front();
 
     if( std::all_of( m_lines.begin() + 1, m_lines.end(),
-        [&]( const SCH_LINE* r ) 
-        { 
+        [&]( const SCH_LINE* r )
+        {
 			return r->GetPenSize() == first_line->GetPenSize();
 		} ) )
     {
@@ -90,8 +90,8 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
         m_width.SetValue( INDETERMINATE );
     }
 
-    if( std::all_of( m_lines.begin() + 1, m_lines.end(), 
-        [&]( const SCH_LINE* r ) 
+    if( std::all_of( m_lines.begin() + 1, m_lines.end(),
+        [&]( const SCH_LINE* r )
         {
             return r->GetLineColor() == first_line->GetLineColor();
         } ) )
@@ -103,14 +103,14 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
         setColor( COLOR4D::UNSPECIFIED );
     }
 
-    if( std::all_of( m_lines.begin() + 1, m_lines.end(), 
-        [&]( const SCH_LINE* r ) 
+    if( std::all_of( m_lines.begin() + 1, m_lines.end(),
+        [&]( const SCH_LINE* r )
         {
             return r->GetLineStyle() == first_line->GetLineStyle();
         } ) )
     {
         int style = static_cast<int>( first_line->GetLineStyle() );
-        wxCHECK_MSG( style < lineTypeNames.size(), false,
+        wxCHECK_MSG( style < (int)lineTypeNames.size(), false,
                 "Line type for first line is not found in the type lookup map" );
         m_typeCombo->SetSelection( style );
     }
@@ -206,7 +206,7 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
         if( m_typeCombo->GetSelection() != wxNOT_FOUND )
         {
             int selection = m_typeCombo->GetSelection();
-            wxCHECK_MSG( selection < lineTypeNames.size(), false,
+            wxCHECK_MSG( selection < (int)lineTypeNames.size(), false,
                     "Selected line type index exceeds size of line type lookup map" );
 
             auto it = lineTypeNames.begin();
