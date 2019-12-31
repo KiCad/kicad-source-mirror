@@ -27,7 +27,6 @@
 #include <cstdarg>
 
 #include <layers_id_colors_and_visibility.h>
-#include <class_board.h>
 
 
 LSET::LSET( const PCB_LAYER_ID* aArray, unsigned aCount ) :
