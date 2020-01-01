@@ -180,7 +180,6 @@ F0 "U" -300 650 50 H V C CNN
 F1 "interf_u_schlib_74LS245" -300 -650 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
-ALIAS 74HC245
 $FPLIST
  DIP?20*
 $ENDFPLIST
@@ -218,7 +217,6 @@ F0 "U" -300 650 50 H V C CNN
 F1 "interf_u_schlib_74LS541" -300 -650 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
-ALIAS 74HCT541
 $FPLIST
  DIP?20*
 $ENDFPLIST
@@ -291,7 +289,7 @@ DEF interf_u_schlib_Bus_ISA_8bit J 0 40 Y Y 1 F N
 F0 "J" 0 1675 50 H V C CNN
 F1 "interf_u_schlib_Bus_ISA_8bit" 0 -1675 50 H V C CNN
 F2 "" -100 1575 30 H I C CNN
-F3 "" 0 0 50 H I C CNN
+F3 "https://en.wikipedia.org/wiki/Industry_Standard_Architecture" 0 0 50 H I C CNN
 DRAW
 S -600 -1600 600 1600 0 1 10 f
 X GND 1 -900 1500 300 R 50 50 1 1 P
@@ -406,7 +404,7 @@ DEF interf_u_schlib_Conn_02x08_Odd_Even J 0 40 Y N 1 F N
 F0 "J" 0 450 50 H V C CNN
 F1 "interf_u_schlib_Conn_02x08_Odd_Even" 0 -450 50 H V C CNN
 F2 "" -50 50 50 H I C CNN
-F3 "" -50 50 50 H I C CNN
+F3 "~" -50 50 50 H I C CNN
 $FPLIST
  Connector*:*2x??x*mm*
  Connector*:*2x???Pitch*
@@ -618,7 +616,7 @@ DEF interf_u_schlib_LED D 0 40 Y N 1 F N
 F0 "D" 0 100 50 H V C CNN
 F1 "interf_u_schlib_LED" 0 -100 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
+F3 "~" 0 0 50 H I C CNN
 $FPLIST
  LED*
 $ENDFPLIST

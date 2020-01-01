@@ -932,7 +932,7 @@ U 1 1 4652B4D4
 P 1050 7600
 F 0 "UARTCAN203" H 1050 8150 70  0000 C CNN
 F 1 "DB9" H 1050 7050 70  0000 C CNN
-F 2 "kit-dev-coldfire:DB9FC" H 1050 7600 60  0001 C CNN
+F 2 "Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm" H 1050 7600 60  0001 C CNN
 F 3 "" H 1050 7600 60  0001 C CNN
 	1    1050 7600
 	-1   0    0    1   
@@ -1081,7 +1081,7 @@ U 1 1 4652B4C2
 P 1050 4950
 F 0 "UARTCAN202" H 1050 5500 70  0000 C CNN
 F 1 "DB9" H 1050 4400 70  0000 C CNN
-F 2 "kit-dev-coldfire:DB9FC" H 1050 4950 60  0001 C CNN
+F 2 "Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm" H 1050 4950 60  0001 C CNN
 F 3 "" H 1050 4950 60  0001 C CNN
 	1    1050 4950
 	-1   0    0    1   
@@ -1230,7 +1230,7 @@ U 1 1 4652B26D
 P 1050 2300
 F 0 "UARTCAN201" H 1050 2850 70  0000 C CNN
 F 1 "DB9" H 1050 1750 70  0000 C CNN
-F 2 "kit-dev-coldfire:DB9FC" H 1050 2300 60  0001 C CNN
+F 2 "Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm" H 1050 2300 60  0001 C CNN
 F 3 "" H 1050 2300 60  0001 C CNN
 	1    1050 2300
 	-1   0    0    1   

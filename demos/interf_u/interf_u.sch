@@ -1,6 +1,5 @@
 EESchema Schematic File Version 5
-LIBS:interf_u-cache
-EELAYER 29 0
+EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -13,6 +12,11 @@ Comment1 "Comment 1"
 Comment2 "Comment 2"
 Comment3 "Comment 3"
 Comment4 "Comment 4"
+Comment5 ""
+Comment6 ""
+Comment7 ""
+Comment8 ""
+Comment9 ""
 $EndDescr
 $Bitmap
 Pos 11050 10550
@@ -1754,8 +1758,6 @@ Wire Wire Line
 	15000 3700 14950 3700
 Wire Wire Line
 	15000 3500 12300 3500
-Entry Bus Bus
-	3750 2350 3850 2450
 $Comp
 L interf_u_schlib:74LS541 U3
 U 1 1 4A087146
@@ -2845,8 +2847,6 @@ Wire Wire Line
 	6250 9900 6300 9900
 Wire Wire Line
 	3300 7950 3250 7950
-Wire Bus Line
-	4100 2450 3850 2450
 $Comp
 L interf_u_schlib:GND #GND01
 U 1 1 5A0AD927
@@ -2990,8 +2990,14 @@ Wire Wire Line
 Wire Wire Line
 	1650 9400 2200 9400
 Connection ~ 4750 2050
+Text Label 4100 2900 0    60   ~ 0
+PC-DB[0..7]
+Text Label 3750 5050 0    60   ~ 0
+PC-A[0..11]
 Wire Bus Line
-	3750 1650 3750 2350
+	3750 2450 4100 2450
+Wire Bus Line
+	3750 1650 3750 2450
 Wire Bus Line
 	3300 5350 3300 6600
 Wire Bus Line
