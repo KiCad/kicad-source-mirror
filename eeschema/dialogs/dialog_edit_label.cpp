@@ -212,8 +212,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     }
 
     // Set text options:
-    int orient = m_CurrentText->GetLabelSpinStyle();
-    m_TextOrient->SetSelection( EDA_TEXT::MapOrientation( m_CurrentText->Type(), orient ) );
+    m_TextOrient->SetSelection( static_cast<int>( m_CurrentText->GetLabelSpinStyle() ) );
 
     m_TextShape->SetSelection( static_cast<int>( m_CurrentText->GetShape() ) );
 
@@ -320,8 +319,8 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
         return false;
     }
 
-    int orient = m_TextOrient->GetSelection();
-    m_CurrentText->SetLabelSpinStyle( EDA_TEXT::MapOrientation( m_CurrentText->Type(), orient ) );
+    m_CurrentText->SetLabelSpinStyle(
+            static_cast<LABEL_SPIN_STYLE>( m_TextOrient->GetSelection() ) );
 
     m_CurrentText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
 

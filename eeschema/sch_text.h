@@ -40,6 +40,17 @@
 class LINE_READER;
 class NETLIST_OBJECT_LIST;
 
+/* 
+ * Spin style for text items of all kinds on schematics
+ * Basically a higher level abstraction of rotation and justification of text
+ */
+enum class LABEL_SPIN_STYLE
+{
+    LEFT   = 0,
+    UP     = 1,
+    RIGHT  = 2,
+    BOTTOM = 3
+};
 
 /* Shape/Type of SCH_HIERLABEL and SCH_GLOBALLABEL
  * mainly used to handle the graphic associated shape
@@ -77,7 +88,7 @@ protected:
      * This is a duplicattion of m_Orient, m_HJustified, and m_VJustified in #EDA_TEXT but is
      * easier to handle than 3 parameters when editing and reading and saving files.
      */
-    int m_spin_style;
+    LABEL_SPIN_STYLE m_spin_style;
 
 public:
     SCH_TEXT( const wxPoint& pos = wxPoint( 0, 0 ),
@@ -121,8 +132,11 @@ public:
      *  2 = (horizontal, right justified). This can be seen as the mirrored position of 0
      *  3 = bottom . This can be seen as the mirrored position of up
      */
-    virtual void SetLabelSpinStyle( int aSpinStyle );
-    int GetLabelSpinStyle() const               { return m_spin_style; }
+    virtual void     SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle );
+    LABEL_SPIN_STYLE GetLabelSpinStyle() const
+    {
+        return m_spin_style;
+    }
 
     PINSHEETLABEL_SHAPE GetShape() const        { return m_shape; }
 
@@ -166,6 +180,26 @@ public:
     void MirrorY( int aYaxis_position ) override;
     void MirrorX( int aXaxis_position ) override;
     void Rotate( wxPoint aPosition ) override;
+
+    /**
+     * Rotates the spin style just once clock wise
+     */
+    void SpinCW();
+
+    /**
+     * Rotates the spin style just once counter clock wise
+     */
+    void SpinCCW();
+
+    /**
+     * Mirrors the spin style over the X axis
+     */
+    void SpinX();
+
+    /**
+     * Mirrors the spin style over the Y axis
+     */
+    void SpinY();
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
     {
@@ -279,7 +313,7 @@ public:
         return wxT( "SCH_GLOBALLABEL" );
     }
 
-    void SetLabelSpinStyle( int aSpinStyle ) override;
+    void SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle ) override;
 
     wxPoint GetSchematicTextOffset() const override;
 
@@ -329,7 +363,7 @@ public:
         return wxT( "SCH_HIERLABEL" );
     }
 
-    void SetLabelSpinStyle( int aSpinStyle ) override;
+    void SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle ) override;
 
     wxPoint GetSchematicTextOffset() const override;
 

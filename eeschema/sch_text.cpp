@@ -96,17 +96,15 @@ static int* TemplateShape[5][4] =
 };
 
 
-SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
-    SCH_ITEM( NULL, aType ),
-    EDA_TEXT( text ),
-    m_shape( PINSHEETLABEL_SHAPE::INPUT )
+SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType )
+        : SCH_ITEM( NULL, aType ), EDA_TEXT( text ), m_shape( PINSHEETLABEL_SHAPE::INPUT )
 {
-    m_Layer = LAYER_NOTES;
-    SetTextPos( pos );
-    m_isDangling = false;
+    m_Layer          = LAYER_NOTES;
+    m_isDangling     = false;
     m_connectionType = CONNECTION_NONE;
-    m_spin_style = 0;
+    m_spin_style     = LABEL_SPIN_STYLE::LEFT;
 
+    SetTextPos( pos );
     SetMultilineAllowed( true );
 }
 
@@ -146,27 +144,68 @@ wxPoint SCH_TEXT::GetSchematicTextOffset() const
     switch( GetLabelSpinStyle() )
     {
     default:
-    case 0: text_offset.y = -thick_offset; break;  // Horiz Normal Orientation (left justified)
-    case 1: text_offset.x = -thick_offset; break;  // Vert Orientation UP
-    case 2: text_offset.y = -thick_offset; break;  // Horiz Orientation - Right justified
-    case 3: text_offset.x = -thick_offset; break;  // Vert Orientation BOTTOM
+    case LABEL_SPIN_STYLE::LEFT:
+        text_offset.y = -thick_offset;
+        break; // Horiz Normal Orientation (left justified)
+    case LABEL_SPIN_STYLE::UP:
+        text_offset.x = -thick_offset;
+        break; // Vert Orientation UP
+    case LABEL_SPIN_STYLE::RIGHT:
+        text_offset.y = -thick_offset;
+        break; // Horiz Orientation - Right justified
+    case LABEL_SPIN_STYLE::BOTTOM:
+        text_offset.x = -thick_offset;
+        break; // Vert Orientation BOTTOM
     }
 
     return text_offset;
 }
 
 
-void SCH_TEXT::MirrorY( int aYaxis_position )
+void SCH_TEXT::SpinX()
 {
-    // Text is NOT really mirrored; it is moved to a suitable horizontal position
     switch( GetLabelSpinStyle() )
     {
     default:
-    case 0: SetLabelSpinStyle( 2 ); break;  // horizontal text
-    case 1:                         break;  // Vert Orientation UP
-    case 2: SetLabelSpinStyle( 0 ); break;  // invert horizontal text
-    case 3:                         break;  // Vert Orientation BOTTOM
+        wxLogWarning( "SpinX encountered unknown current spin style" );
+    case LABEL_SPIN_STYLE::UP:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
+        break;
+    case LABEL_SPIN_STYLE::BOTTOM:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
+        break;
+    case LABEL_SPIN_STYLE::LEFT:
+        break;
+    case LABEL_SPIN_STYLE::RIGHT:
+        break;
     }
+}
+
+
+void SCH_TEXT::SpinY()
+{
+    switch( GetLabelSpinStyle() )
+    {
+    default:
+        wxLogWarning( "SpinY encountered unknown current spin style" );
+    case LABEL_SPIN_STYLE::LEFT:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+        break;
+    case LABEL_SPIN_STYLE::RIGHT:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+        break;
+    case LABEL_SPIN_STYLE::UP:
+        break;
+    case LABEL_SPIN_STYLE::BOTTOM:
+        break;
+    }
+}
+
+
+void SCH_TEXT::MirrorY( int aYaxis_position )
+{
+    // Text is NOT really mirrored; it is moved to a suitable horizontal position
+    SpinY();
 
     SetTextX( Mirror( GetTextPos().x, aYaxis_position ) );
 }
@@ -175,14 +214,7 @@ void SCH_TEXT::MirrorY( int aYaxis_position )
 void SCH_TEXT::MirrorX( int aXaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable vertical position
-    switch( GetLabelSpinStyle() )
-    {
-    default:
-    case 0:                         break;  // horizontal text
-    case 1: SetLabelSpinStyle( 3 ); break;  // Vert Orientation UP
-    case 2:                         break;  // invert horizontal text
-    case 3: SetLabelSpinStyle( 1 ); break;  // Vert Orientation BOTTOM
-    }
+    SpinX();
 
     SetTextY( Mirror( GetTextPos().y, aXaxis_position ) );
 }
@@ -190,30 +222,35 @@ void SCH_TEXT::MirrorX( int aXaxis_position )
 
 void SCH_TEXT::Rotate( wxPoint aPosition )
 {
-    int dy;
+    int dy = 0;
 
     wxPoint pt = GetTextPos();
     RotatePoint( &pt, aPosition, 900 );
     SetTextPos( pt );
 
-    int spin = GetLabelSpinStyle();
-
     // Global and hierarchical labels spin backwards.  Fix here because
-    // changing SetLabelSpinStyle would break existing designs.
-    if( this->Type() == SCH_GLOBAL_LABEL_T || this->Type() == SCH_HIER_LABEL_T )
-        SetLabelSpinStyle( ( spin - 1 >= 0 ? ( spin - 1 ) : 3 ) );
-    else
-        SetLabelSpinStyle( ( spin + 1 ) % 4 );
+    // changing SetLabelSpinStyle would break existing designs..
+    SpinCW();
 
     if( this->Type() == SCH_TEXT_T )
     {
         switch( GetLabelSpinStyle() )
         {
-        case 0:  dy = GetTextHeight(); break;     // horizontal text
-        case 1:  dy = 0;               break;     // Vert Orientation UP
-        case 2:  dy = GetTextHeight(); break;     // invert horizontal text
-        case 3:  dy = 0;               break;     // Vert Orientation BOTTOM
-        default: dy = 0;               break;
+        case LABEL_SPIN_STYLE::LEFT:
+            dy = GetTextHeight();
+            break;
+        case LABEL_SPIN_STYLE::UP:
+            dy = 0;
+            break;
+        case LABEL_SPIN_STYLE::RIGHT:
+            dy = GetTextHeight();
+            break;
+        case LABEL_SPIN_STYLE::BOTTOM:
+            dy = 0;
+            break;
+        default:
+            dy = 0;
+            break;
         }
 
         SetTextY( GetTextPos().y + dy );
@@ -221,7 +258,51 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
 }
 
 
-void SCH_TEXT::SetLabelSpinStyle( int aSpinStyle )
+void SCH_TEXT::SpinCW()
+{
+    switch( GetLabelSpinStyle() )
+    {
+    default:
+        wxLogWarning( "RotateCW encountered unknown current spin style" );
+    case LABEL_SPIN_STYLE::LEFT:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
+        break;
+    case LABEL_SPIN_STYLE::BOTTOM:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+        break;
+    case LABEL_SPIN_STYLE::RIGHT:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
+        break;
+    case LABEL_SPIN_STYLE::UP:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+        break;
+    }
+}
+
+
+void SCH_TEXT::SpinCCW()
+{
+    switch( GetLabelSpinStyle() )
+    {
+    default:
+        wxLogWarning( "RotateCCW encountered unknown current spin style" );
+    case LABEL_SPIN_STYLE::LEFT:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
+        break;
+    case LABEL_SPIN_STYLE::UP:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+        break;
+    case LABEL_SPIN_STYLE::RIGHT:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
+        break;
+    case LABEL_SPIN_STYLE::BOTTOM:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+        break;
+    }
+}
+
+
+void SCH_TEXT::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 {
     m_spin_style = aSpinStyle;
 
@@ -229,27 +310,27 @@ void SCH_TEXT::SetLabelSpinStyle( int aSpinStyle )
     {
     default:
         wxASSERT_MSG( 1, "Bad spin style" );
-    case 0: // Horiz Normal Orientation
+    case LABEL_SPIN_STYLE::LEFT: // Horiz Normal Orientation
         //
-        m_spin_style = 0; // Handle the error spin style by resetting
+        m_spin_style = LABEL_SPIN_STYLE::LEFT; // Handle the error spin style by resetting
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
 
-    case 1: // Vert Orientation UP
+    case LABEL_SPIN_STYLE::UP: // Vert Orientation UP
         SetTextAngle( TEXT_ANGLE_VERT );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
 
-    case 2: // Horiz Orientation - Right justified
+    case LABEL_SPIN_STYLE::RIGHT: // Horiz Orientation - Right justified
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
 
-    case 3: //  Vert Orientation BOTTOM
+    case LABEL_SPIN_STYLE::BOTTOM: //  Vert Orientation BOTTOM
         SetTextAngle( TEXT_ANGLE_VERT );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
@@ -564,11 +645,21 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 
     switch( GetLabelSpinStyle() )
     {
-    case 0:  msg = _( "Horizontal" );        break;
-    case 1:  msg = _( "Vertical up" );       break;
-    case 2:  msg = _( "Horizontal invert" ); break;
-    case 3:  msg = _( "Vertical down" );     break;
-    default: msg = wxT( "???" );             break;
+    case LABEL_SPIN_STYLE::LEFT:
+        msg = _( "Horizontal" );
+        break;
+    case LABEL_SPIN_STYLE::UP:
+        msg = _( "Vertical up" );
+        break;
+    case LABEL_SPIN_STYLE::RIGHT:
+        msg = _( "Horizontal invert" );
+        break;
+    case LABEL_SPIN_STYLE::BOTTOM:
+        msg = _( "Vertical down" );
+        break;
+    default:
+        msg = wxT( "???" );
+        break;
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), msg, BROWN ) );
@@ -589,12 +680,24 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
     {
         switch( GetShape() )
         {
-        case PINSHEETLABEL_SHAPE::INPUT:        msg = _( "Input" );           break;
-        case PINSHEETLABEL_SHAPE::OUTPUT:       msg = _( "Output" );          break;
-        case PINSHEETLABEL_SHAPE::BIDI:         msg = _( "Bidirectional" );   break;
-        case PINSHEETLABEL_SHAPE::TRISTATE:     msg = _( "Tri-State" );       break;
-        case PINSHEETLABEL_SHAPE::UNSPECIFIED:  msg = _( "Passive" );         break;
-        default:               msg = wxT( "???" );           break;
+        case PINSHEETLABEL_SHAPE::INPUT:
+            msg = _( "Input" );
+            break;
+        case PINSHEETLABEL_SHAPE::OUTPUT:
+            msg = _( "Output" );
+            break;
+        case PINSHEETLABEL_SHAPE::BIDI:
+            msg = _( "Bidirectional" );
+            break;
+        case PINSHEETLABEL_SHAPE::TRISTATE:
+            msg = _( "Tri-State" );
+            break;
+        case PINSHEETLABEL_SHAPE::UNSPECIFIED:
+            msg = _( "Passive" );
+            break;
+        default:
+            msg = wxT( "???" );
+            break;
         }
 
         aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, BLUE ) );
@@ -623,7 +726,7 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str()
                                  << " layer=\"" << m_Layer << '"'
-                                 << " shape=\"" << m_shape << '"'
+                                 << " shape=\"" << static_cast<int>( m_shape ) << '"'
                                  << " dangling=\"" << m_isDangling << '"'
                                  << '>'
                                  << TO_UTF8( GetText() )
@@ -633,11 +736,11 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
-    SCH_TEXT( pos, text, SCH_LABEL_T )
+SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text )
+        : SCH_TEXT( pos, text, SCH_LABEL_T )
 {
-    m_Layer = LAYER_LOCLABEL;
-    m_shape = PINSHEETLABEL_SHAPE::INPUT;
+    m_Layer      = LAYER_LOCLABEL;
+    m_shape      = PINSHEETLABEL_SHAPE::INPUT;
     m_isDangling = true;
     SetMultilineAllowed( false );
 }
@@ -717,11 +820,11 @@ BITMAP_DEF SCH_LABEL::GetMenuImage() const
 }
 
 
-SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
-    SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T )
+SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text )
+        : SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T )
 {
-    m_Layer = LAYER_GLOBLABEL;
-    m_shape = PINSHEETLABEL_SHAPE::BIDI;
+    m_Layer      = LAYER_GLOBLABEL;
+    m_shape      = PINSHEETLABEL_SHAPE::BIDI;
     m_isDangling = true;
     SetMultilineAllowed( false );
 }
@@ -762,17 +865,25 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
     switch( GetLabelSpinStyle() )
     {
     default:
-    case 0: text_offset.x -= offset; break;    // Orientation horiz normal
-    case 1: text_offset.y -= offset; break;    // Orientation vert UP
-    case 2: text_offset.x += offset; break;    // Orientation horiz inverse
-    case 3: text_offset.y += offset; break;    // Orientation vert BOTTOM
+    case LABEL_SPIN_STYLE::LEFT:
+        text_offset.x -= offset;
+        break; // Orientation horiz normal
+    case LABEL_SPIN_STYLE::UP:
+        text_offset.y -= offset;
+        break; // Orientation vert UP
+    case LABEL_SPIN_STYLE::RIGHT:
+        text_offset.x += offset;
+        break; // Orientation horiz inverse
+    case LABEL_SPIN_STYLE::BOTTOM:
+        text_offset.y += offset;
+        break; // Orientation vert BOTTOM
     }
 
     return text_offset;
 }
 
 
-void SCH_GLOBALLABEL::SetLabelSpinStyle( int aSpinStyle )
+void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 {
     m_spin_style = aSpinStyle;
 
@@ -780,27 +891,27 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( int aSpinStyle )
     {
     default:
         wxASSERT_MSG( 1, "Bad spin style" );
-    case 0: // Horiz Normal Orientation
+    case LABEL_SPIN_STYLE::RIGHT: // Horiz Normal Orientation
         //
-        m_spin_style = 0; // Handle the error spin style by resetting
+        m_spin_style = LABEL_SPIN_STYLE::RIGHT; // Handle the error spin style by resetting
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
-    case 1: // Vert Orientation UP
+    case LABEL_SPIN_STYLE::UP: // Vert Orientation UP
         SetTextAngle( TEXT_ANGLE_VERT );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
-    case 2: // Horiz Orientation
+    case LABEL_SPIN_STYLE::LEFT: // Horiz Orientation
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
-    case 3: //  Vert Orientation BOTTOM
+    case LABEL_SPIN_STYLE::BOTTOM: //  Vert Orientation BOTTOM
         SetTextAngle( TEXT_ANGLE_VERT );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
@@ -903,10 +1014,17 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
     switch( GetLabelSpinStyle() )
     {
     default:
-    case 0:               break;   // Orientation horiz normal
-    case 1: angle = -900; break;   // Orientation vert UP
-    case 2: angle = 1800; break;   // Orientation horiz inverse
-    case 3: angle = 900;  break;   // Orientation vert BOTTOM
+    case LABEL_SPIN_STYLE::LEFT:
+        break; // Orientation horiz normal
+    case LABEL_SPIN_STYLE::UP:
+        angle = -900;
+        break; // Orientation vert UP
+    case LABEL_SPIN_STYLE::RIGHT:
+        angle = 1800;
+        break; // Orientation horiz inverse
+    case LABEL_SPIN_STYLE::BOTTOM:
+        angle = 900;
+        break; // Orientation vert BOTTOM
     }
 
     // Rotate outlines and move corners in real position
@@ -943,28 +1061,28 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     switch( GetLabelSpinStyle() )    // respect orientation
     {
     default:
-    case 0:                             // Horiz Normal Orientation (left justified)
+    case LABEL_SPIN_STYLE::LEFT:
         dx = -length;
         dy = height;
         x += Mils2iu( DANGLING_SYMBOL_SIZE );
         y -= height / 2;
         break;
 
-    case 1:     // Vert Orientation UP
+    case LABEL_SPIN_STYLE::UP:
         dx = height;
         dy = -length;
         x -= height / 2;
         y += Mils2iu( DANGLING_SYMBOL_SIZE );
         break;
 
-    case 2:     // Horiz Orientation - Right justified
+    case LABEL_SPIN_STYLE::RIGHT:
         dx = length;
         dy = height;
         x -= Mils2iu( DANGLING_SYMBOL_SIZE );
         y -= height / 2;
         break;
 
-    case 3:     //  Vert Orientation BOTTOM
+    case LABEL_SPIN_STYLE::BOTTOM:
         dx = height;
         dy = length;
         x -= height / 2;
@@ -990,12 +1108,11 @@ BITMAP_DEF SCH_GLOBALLABEL::GetMenuImage() const
 }
 
 
-
-SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
-    SCH_TEXT( pos, text, aType )
+SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType )
+        : SCH_TEXT( pos, text, aType )
 {
-    m_Layer = LAYER_HIERLABEL;
-    m_shape = PINSHEETLABEL_SHAPE::INPUT;
+    m_Layer      = LAYER_HIERLABEL;
+    m_shape      = PINSHEETLABEL_SHAPE::INPUT;
     m_isDangling = true;
     SetMultilineAllowed( false );
 }
@@ -1007,35 +1124,35 @@ EDA_ITEM* SCH_HIERLABEL::Clone() const
 }
 
 
-void SCH_HIERLABEL::SetLabelSpinStyle( int aSpinStyle )
+void SCH_HIERLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 {
     m_spin_style = aSpinStyle;
 
     switch( aSpinStyle )
     {
     default:
-        wxASSERT_MSG( 1, "Bad spin style" );
-    case 0: // Horiz Normal Orientation
+        wxLogWarning( "SetLabelSpinStyle bad spin style" );
+    case LABEL_SPIN_STYLE::LEFT:
         //
-        m_spin_style = 0; // Handle the error spin style by resetting
+        m_spin_style = LABEL_SPIN_STYLE::LEFT; // Handle the error spin style by resetting
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
-    case 1: // Vert Orientation UP
+    case LABEL_SPIN_STYLE::UP:
         SetTextAngle( TEXT_ANGLE_VERT );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
-    case 2: // Horiz Orientation
+    case LABEL_SPIN_STYLE::RIGHT:
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
-    case 3: //  Vert Orientation BOTTOM
+    case LABEL_SPIN_STYLE::BOTTOM:
         SetTextAngle( TEXT_ANGLE_VERT );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
@@ -1069,7 +1186,7 @@ void SCH_HIERLABEL::Print( wxDC* DC, const wxPoint& offset )
 
 void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
 {
-    int* Template = TemplateShape[ static_cast<int>( m_shape ) ][ m_spin_style ];
+    int* Template = TemplateShape[static_cast<int>( m_shape )][static_cast<int>( m_spin_style )];
     int  halfSize = GetTextWidth() / 2;
     int  imax = *Template; Template++;
 
@@ -1107,28 +1224,28 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
     switch( GetLabelSpinStyle() )
     {
     default:
-    case 0:                             // Horiz Normal Orientation (left justified)
+    case LABEL_SPIN_STYLE::LEFT:
         dx = -length;
         dy = height;
         x += Mils2iu( DANGLING_SYMBOL_SIZE );
         y -= height / 2;
         break;
 
-    case 1:     // Vert Orientation UP
+    case LABEL_SPIN_STYLE::UP:
         dx = height;
         dy = -length;
         x -= height / 2;
         y += Mils2iu( DANGLING_SYMBOL_SIZE );
         break;
 
-    case 2:     // Horiz Orientation - Right justified
+    case LABEL_SPIN_STYLE::RIGHT:
         dx = length;
         dy = height;
         x -= Mils2iu( DANGLING_SYMBOL_SIZE );
         y -= height / 2;
         break;
 
-    case 3:     //  Vert Orientation BOTTOM
+    case LABEL_SPIN_STYLE::BOTTOM:
         dx = height;
         dy = length;
         x -= height / 2;
@@ -1151,10 +1268,18 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
     switch( GetLabelSpinStyle() )
     {
     default:
-    case 0: text_offset.x = -ii; break;  // Orientation horiz normale
-    case 1: text_offset.y = -ii; break;  // Orientation vert UP
-    case 2: text_offset.x =  ii; break;  // Orientation horiz inverse
-    case 3: text_offset.y =  ii; break;  // Orientation vert BOTTOM
+    case LABEL_SPIN_STYLE::LEFT:
+        text_offset.x = -ii;
+        break; // Orientation horiz normale
+    case LABEL_SPIN_STYLE::UP:
+        text_offset.y = -ii;
+        break; // Orientation vert UP
+    case LABEL_SPIN_STYLE::RIGHT:
+        text_offset.x = ii;
+        break; // Orientation horiz inverse
+    case LABEL_SPIN_STYLE::BOTTOM:
+        text_offset.y = ii;
+        break; // Orientation vert BOTTOM
     }
 
     return text_offset;

@@ -1361,15 +1361,16 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( LINE_READER& aReader )
     return busEntry.release();
 }
 
-
+// clang-format off
 const std::map<PINSHEETLABEL_SHAPE, const char*> sheetLabelNames
 {
-    { PINSHEETLABEL_SHAPE::INPUT, "Input" },
-    { PINSHEETLABEL_SHAPE::OUTPUT, "Output" },
-    { PINSHEETLABEL_SHAPE::BIDI, "BiDi" },
-    { PINSHEETLABEL_SHAPE::TRISTATE, "3State" },
+    { PINSHEETLABEL_SHAPE::INPUT,       "Input" },
+    { PINSHEETLABEL_SHAPE::OUTPUT,      "Output" },
+    { PINSHEETLABEL_SHAPE::BIDI,        "BiDi" },
+    { PINSHEETLABEL_SHAPE::TRISTATE,    "3State" },
     { PINSHEETLABEL_SHAPE::UNSPECIFIED, "UnSpc" },
 };
+// clang-format on
 
 
 SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
@@ -1403,7 +1404,24 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
     position.x = Mils2Iu( parseInt( aReader, line, &line ) );
     position.y = Mils2Iu( parseInt( aReader, line, &line ) );
     text->SetPosition( position );
-    text->SetLabelSpinStyle( parseInt( aReader, line, &line ) );
+
+    int spinStyle = parseInt( aReader, line, &line );
+    // Sadly we store the orientation of hierarchical and global labels using a different
+    // int encoding than that for local labels:
+    //                   Global      Local
+    // Left justified      0           2
+    // Up                  1           3
+    // Right justified     2           0
+    // Down                3           1
+    // So we must flip it as the enum is setup with the "local" numbering
+    if( text->Type() == SCH_GLOBAL_LABEL_T || text->Type() == SCH_HIER_LABEL_T )
+    {
+        if( spinStyle == 0 )
+            spinStyle = 2;
+        else if( spinStyle == 2 )
+            spinStyle = 0;
+    }
+    text->SetLabelSpinStyle( static_cast<LABEL_SPIN_STYLE>( spinStyle ) );
 
     int size = Mils2Iu( parseInt( aReader, line, &line ) );
 
@@ -1413,7 +1431,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
     if( text->Type() == SCH_HIER_LABEL_T || text->Type() == SCH_GLOBAL_LABEL_T )
     {
         auto resultIt = std::find_if( sheetLabelNames.begin(), sheetLabelNames.end(),
-                [&line, this]( const auto& it )
+                [ &line ]( const auto& it )
                 { 
                     return strCompare( it.second, line, &line ); 
                 } );
@@ -2167,12 +2185,22 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
 
         switch( pin.GetShape() )
         {
-        case PINSHEETLABEL_SHAPE::INPUT:       type = 'I'; break;
-        case PINSHEETLABEL_SHAPE::OUTPUT:      type = 'O'; break;
-        case PINSHEETLABEL_SHAPE::BIDI:        type = 'B'; break;
-        case PINSHEETLABEL_SHAPE::TRISTATE:    type = 'T'; break;
+        case PINSHEETLABEL_SHAPE::INPUT:
+            type = 'I';
+            break;
+        case PINSHEETLABEL_SHAPE::OUTPUT:
+            type = 'O';
+            break;
+        case PINSHEETLABEL_SHAPE::BIDI:
+            type = 'B';
+            break;
+        case PINSHEETLABEL_SHAPE::TRISTATE:
+            type = 'T';
+            break;
         default:
-        case PINSHEETLABEL_SHAPE::UNSPECIFIED: type = 'U'; break;
+        case PINSHEETLABEL_SHAPE::UNSPECIFIED:
+            type = 'U';
+            break;
         }
 
         m_out->Print( 0, "F%d %s %c %c %-3d %-3d %-3d\n", pin.GetNumber(),
@@ -2303,7 +2331,7 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %d\n%s\n", textType,
                       Iu2Mils( aText->GetPosition().x ), Iu2Mils( aText->GetPosition().y ),
-                      aText->GetLabelSpinStyle(),
+                      static_cast<int>( aText->GetLabelSpinStyle() ),
                       Iu2Mils( aText->GetTextWidth() ),
                       italics, Iu2Mils( aText->GetThickness() ), TO_UTF8( text ) );
     }
@@ -2314,9 +2342,16 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
         auto shapeLabelIt = sheetLabelNames.find( aText->GetShape() );
         wxCHECK_RET( shapeLabelIt != sheetLabelNames.end(), "Shape not found in names list" );
 
+        int spinStyle = static_cast<int>( aText->GetLabelSpinStyle() );
+        //flip value 2 and 0 for specifically global and hierachal labels
+        if( spinStyle == 0 )
+            spinStyle = 2;
+        else if( spinStyle == 2 )
+            spinStyle = 0;
+
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %s %d\n%s\n", textType,
                       Iu2Mils( aText->GetPosition().x ), Iu2Mils( aText->GetPosition().y ),
-                      aText->GetLabelSpinStyle(),
+                      spinStyle,
                       Iu2Mils( aText->GetTextWidth() ),
                       shapeLabelIt->second,
                       italics,

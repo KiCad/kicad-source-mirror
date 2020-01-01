@@ -50,7 +50,7 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
     else
         SetEdge( SHEET_LEFT_SIDE );
 
-    m_shape = PINSHEETLABEL_SHAPE::INPUT;
+    m_shape      = PINSHEETLABEL_SHAPE::INPUT;
     m_isDangling = true;
     m_number     = 2;
 }
@@ -117,25 +117,25 @@ void SCH_SHEET_PIN::SetEdge( SHEET_SIDE aEdge )
     case SHEET_LEFT_SIDE:
         m_edge = aEdge;
         SetTextX( Sheet->m_pos.x );
-        SetLabelSpinStyle( 2 ); // Orientation horiz inverse
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT ); // Orientation horiz inverse
         break;
 
     case SHEET_RIGHT_SIDE:
         m_edge = aEdge;
         SetTextX( Sheet->m_pos.x + Sheet->m_size.x );
-        SetLabelSpinStyle( 0 ); // Orientation horiz normal
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT ); // Orientation horiz normal
         break;
 
     case SHEET_TOP_SIDE:
         m_edge = aEdge;
         SetTextY( Sheet->m_pos.y );
-        SetLabelSpinStyle( 3 ); // Orientation vert BOTTOM
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM ); // Orientation vert BOTTOM
         break;
 
     case SHEET_BOTTOM_SIDE:
         m_edge = aEdge;
         SetTextY( Sheet->m_pos.y + Sheet->m_size.y );
-        SetLabelSpinStyle( 1 ); // Orientation vert UP
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::UP ); // Orientation vert UP
         break;
 
     default:
@@ -252,9 +252,14 @@ void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wx
 
     switch( m_shape )
     {
-    case PINSHEETLABEL_SHAPE::INPUT:  m_shape = PINSHEETLABEL_SHAPE::OUTPUT; break;
-    case PINSHEETLABEL_SHAPE::OUTPUT: m_shape = PINSHEETLABEL_SHAPE::INPUT;  break;
-    default:                               break;
+    case PINSHEETLABEL_SHAPE::INPUT:
+        m_shape = PINSHEETLABEL_SHAPE::OUTPUT;
+        break;
+    case PINSHEETLABEL_SHAPE::OUTPUT:
+        m_shape = PINSHEETLABEL_SHAPE::INPUT;
+        break;
+    default:
+        break;
     }
 
     SCH_HIERLABEL::CreateGraphicShape( aPoints, aPos );

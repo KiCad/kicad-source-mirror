@@ -383,87 +383,101 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         if( !moving )
             saveCopyInUndoList( item, UR_CHANGED );
 
-        for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
+        switch( item->Type() )
         {
-            switch( item->Type() )
+        case SCH_COMPONENT_T:
+        {
+            SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+
+            if( clockwise )
+                component->SetOrientation( CMP_ROTATE_CLOCKWISE );
+            else
+                component->SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
+
+            if( m_frame->GetAutoplaceFields() )
+                component->AutoAutoplaceFields( m_frame->GetScreen() );
+
+            break;
+        }
+
+        case SCH_TEXT_T:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        {
+            SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
+
+            if( clockwise )
+                textItem->SpinCW();
+            else
+                textItem->SpinCCW();
+
+            break;
+        }
+
+        case SCH_SHEET_PIN_T:
+        {
+            // Rotate pin within parent sheet
+            SCH_SHEET_PIN* pin   = static_cast<SCH_SHEET_PIN*>( item );
+            SCH_SHEET*     sheet = pin->GetParent();
+            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
             {
-            case SCH_COMPONENT_T:
-            {
-                SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
-
-                if( clockwise )
-                    component->SetOrientation( CMP_ROTATE_CLOCKWISE );
-                else
-                    component->SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
-
-                if( m_frame->GetAutoplaceFields() )
-                    component->AutoAutoplaceFields( m_frame->GetScreen() );
-
-                break;
-            }
-
-            case SCH_TEXT_T:
-            case SCH_LABEL_T:
-            case SCH_GLOBAL_LABEL_T:
-            case SCH_HIER_LABEL_T:
-            {
-                SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
-                textItem->SetLabelSpinStyle( ( textItem->GetLabelSpinStyle() + 1 ) & 3 );
-                break;
-            }
-
-            case SCH_SHEET_PIN_T:
-            {
-                // Rotate pin within parent sheet
-                SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
-                SCH_SHEET*     sheet = pin->GetParent();
                 pin->Rotate( sheet->GetBoundingBox().GetCenter() );
-                break;
+            }
+            break;
+        }
+
+        case SCH_BUS_BUS_ENTRY_T:
+        case SCH_BUS_WIRE_ENTRY_T:
+            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
+            {
+                item->Rotate( item->GetPosition() );
+            }
+            break;
+
+        case SCH_FIELD_T:
+        {
+            SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+
+            if( field->GetTextAngle() == TEXT_ANGLE_HORIZ )
+                field->SetTextAngle( TEXT_ANGLE_VERT );
+            else
+                field->SetTextAngle( TEXT_ANGLE_HORIZ );
+
+            // Now that we're moving a field, they're no longer autoplaced.
+            if( item->GetParent()->Type() == SCH_COMPONENT_T )
+            {
+                SCH_COMPONENT* parent = static_cast<SCH_COMPONENT*>( item->GetParent() );
+                parent->ClearFieldsAutoplaced();
             }
 
-            case SCH_BUS_BUS_ENTRY_T:
-            case SCH_BUS_WIRE_ENTRY_T:
-                item->Rotate( item->GetPosition() );
-                break;
+            break;
+        }
 
-            case SCH_FIELD_T:
+        case SCH_BITMAP_T:
+            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
             {
-                SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
-
-                if( field->GetTextAngle() == TEXT_ANGLE_HORIZ )
-                    field->SetTextAngle( TEXT_ANGLE_VERT );
-                else
-                    field->SetTextAngle( TEXT_ANGLE_HORIZ );
-
-                // Now that we're moving a field, they're no longer autoplaced.
-                if( item->GetParent()->Type() == SCH_COMPONENT_T )
-                {
-                    SCH_COMPONENT *parent = static_cast<SCH_COMPONENT*>( item->GetParent() );
-                    parent->ClearFieldsAutoplaced();
-                }
-
-                break;
+                item->Rotate( item->GetPosition() );
             }
+            // The bitmap is cached in Opengl: clear the cache to redraw
+            getView()->RecacheAllItems();
+            break;
 
-            case SCH_BITMAP_T:
-                item->Rotate( item->GetPosition() );
-                // The bitmap is cached in Opengl: clear the cache to redraw
-                getView()->RecacheAllItems();
-                break;
+        case SCH_SHEET_T:
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
-            case SCH_SHEET_T:
+            // Rotate the sheet on itself. Sheets do not have an anchor point.
+            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
             {
-                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
-
-                // Rotate the sheet on itself. Sheets do not have an anchor point.
                 rotPoint = m_frame->GetNearestGridPosition( sheet->GetRotationCenter() );
                 sheet->Rotate( rotPoint );
-                break;
             }
+            break;
+        }
 
-            default:
-                break;
-            }
+        default:
+            break;
         }
 
         connections = item->IsConnectable();
@@ -580,12 +594,11 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         case SCH_HIER_LABEL_T:
         {
             SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
-            int       spin = textItem->GetLabelSpinStyle();
 
-            if( xAxis && spin % 2 )
-                textItem->SetLabelSpinStyle( ( spin + 2 ) % 4 );
-            else if ( !xAxis && !( spin % 2 ) )
-                textItem->SetLabelSpinStyle( ( spin + 2 ) % 4 );
+            if( xAxis )
+                textItem->SpinX();
+            else if( !xAxis )
+                textItem->SpinY();
             break;
         }
 
