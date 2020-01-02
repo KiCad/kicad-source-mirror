@@ -197,6 +197,7 @@ set( COMMON_WIDGET_SRCS
     widgets/mathplot.cpp
     widgets/paged_dialog.cpp
     widgets/progress_reporter.cpp
+    widgets/split_button.cpp
     widgets/stepped_slider.cpp
     widgets/text_ctrl_eval.cpp
     widgets/two_column_tree_list.cpp

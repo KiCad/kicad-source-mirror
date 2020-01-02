@@ -65,49 +65,17 @@ static constexpr int FILTER_COUNT = 4;
 static const struct
 {
     wxString m_Description; ///< Description shown in the file picker dialog
-    wxString m_Extension;   ///< In case of folders it stands for extensions of files stored inside
+    wxString m_FileFilter;   ///< In case of folders it stands for extensions of files stored inside
     bool m_IsFile;          ///< Whether the library is a folder or a file
     IO_MGR::PCB_FILE_T m_Plugin;
 } fileFilters[FILTER_COUNT] =
 {
     // wxGenericDirCtrl does not handle regexes in wildcards
     { "KiCad (folder with .kicad_mod files)", "",    false, IO_MGR::KICAD_SEXP },
-    { "Eagle 6.x (*.lbr)",                    "lbr", true,  IO_MGR::EAGLE },
-    { "KiCad legacy (*.mod)",                 "mod", true,  IO_MGR::LEGACY },
+    { "Eagle 6.x (*.lbr)",                    EagleFootprintLibPathWildcard(), true,  IO_MGR::EAGLE },
+    { "KiCad legacy (*.mod)",                 LegacyFootprintLibPathWildcard(), true,  IO_MGR::LEGACY },
     { "Geda (folder with *.fp files)",        "",    false, IO_MGR::GEDA_PCB },
 };
-
-
-// Returns the filter string for the file picker
-static wxString getFilterString()
-{
-    wxString filterAll = _( "All supported library formats|" );
-    bool firstFilterAll = true;
-    wxString filter;
-
-    for( int i = 0; i < FILTER_COUNT; ++i )
-    {
-        if( fileFilters[i].m_IsFile )
-        {
-            // "All supported formats" filter
-            if( firstFilterAll )
-                firstFilterAll = false;
-            else
-                filterAll += ";";
-
-            wxASSERT( !fileFilters[i].m_Extension.IsEmpty() );
-            filterAll += "*." + fileFilters[i].m_Extension;
-        }
-
-
-        // Individual filter strings
-        filter += "|" + fileFilters[i].m_Description +
-                  "|" + ( fileFilters[i].m_IsFile ? "*." + fileFilters[i].m_Extension : "" );
-    }
-
-    return filterAll + filter;
-}
-
 
 /**
  * This class builds a wxGridTableBase by wrapping an #FP_LIB_TABLE object.
@@ -352,7 +320,6 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     // Configure button logos
     m_append_button->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_browse_button->SetBitmap( KiBitmap( folder_xpm ) );
     m_delete_button->SetBitmap( KiBitmap( trash_xpm ) );
     m_move_up_button->SetBitmap( KiBitmap( small_up_xpm ) );
     m_move_down_button->SetBitmap( KiBitmap( small_down_xpm ) );
@@ -364,6 +331,15 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     if( m_project_grid->GetNumberRows() > 0 )
         m_project_grid->SelectRow( 0 );
+
+    wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
+    for( int i = 0; i < FILTER_COUNT; ++i )
+    {
+        browseMenu->Append( wxID_HIGHEST + i, fileFilters[i].m_Description );
+
+        Connect( wxID_HIGHEST + i, wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler( PANEL_FP_LIB_TABLE::browseLibrariesHandler ) );
+    }
 }
 
 
@@ -612,44 +588,66 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( !m_cur_grid->CommitPendingChanges() )
         return;
 
+    int browseIdx = event.GetId() - wxID_HIGHEST;
+
     if( m_lastBrowseDir.IsEmpty() )
         m_lastBrowseDir = m_projectBasePath;
 
-    DIALOG_FILE_DIR_PICKER dlg( this, _( "Select Library" ), m_lastBrowseDir,
-                                getFilterString(), FD_MULTIPLE );
+    wxArrayString files;
+    auto          fileFilter = &fileFilters[browseIdx];
 
-    auto result = dlg.ShowModal();
+    if( fileFilter->m_IsFile )
+    {
+        wxFileDialog dlg( this, _( "Select Library" ), m_lastBrowseDir, wxEmptyString,
+                fileFilter->m_FileFilter, wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
-    if( result == wxID_CANCEL )
-        return;
+        auto result = dlg.ShowModal();
 
-    m_lastBrowseDir = dlg.GetDirectory();
+        if( result == wxID_CANCEL )
+            return;
+
+        dlg.GetFilenames( files );
+
+        m_lastBrowseDir = dlg.GetDirectory();
+    }
+    else
+    {
+        wxDirDialog dlg( nullptr, _( "Select Library" ), m_lastBrowseDir,
+                wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+
+        auto result = dlg.ShowModal();
+
+        if( result == wxID_CANCEL )
+            return;
+
+        files.Add( dlg.GetPath() );
+
+        m_lastBrowseDir = dlg.GetPath();
+    }
 
     // Drop the last directory if the path is a .pretty folder
     if( m_lastBrowseDir.EndsWith( KiCadFootprintLibPathExtension ) )
         m_lastBrowseDir = m_lastBrowseDir.BeforeLast( wxFileName::GetPathSeparator() );
 
-    const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
-    bool addDuplicates = false;
-    bool applyToAll = false;
-    wxString warning = _( "Warning: Duplicate Nickname" );
-    wxString msg = _( "A library nicknamed \"%s\" already exists." );
-    wxArrayString files;
-    dlg.GetFilenames( files );
+    const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
+    bool               addDuplicates = false;
+    bool               applyToAll    = false;
+    wxString           warning       = _( "Warning: Duplicate Nickname" );
+    wxString           msg           = _( "A library nicknamed \"%s\" already exists." );
 
     for( const auto& filePath : files )
     {
         wxFileName fn( filePath );
-        wxString nickname = LIB_ID::FixIllegalChars( fn.GetName(), LIB_ID::ID_PCB );
-        bool doAdd = true;
+        wxString   nickname = LIB_ID::FixIllegalChars( fn.GetName(), LIB_ID::ID_PCB );
+        bool       doAdd    = true;
 
         if( cur_model()->ContainsNickname( nickname ) )
         {
             if( !applyToAll )
             {
-                int ret = OKOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
-                                            _( "Skip" ), _( "Add Anyway" ), &applyToAll );
-                addDuplicates = (ret == wxID_CANCEL );
+                int ret       = OKOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
+                        _( "Skip" ), _( "Add Anyway" ), &applyToAll );
+                addDuplicates = ( ret == wxID_CANCEL );
             }
 
             doAdd = addDuplicates;
@@ -669,7 +667,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
-            if( path.IsEmpty() || (m_pageNdx == 0 && path.Contains( "${KIPRJMOD}" )) )
+            if( path.IsEmpty() || ( m_pageNdx == 0 && path.Contains( "${KIPRJMOD}" ) ) )
                 path = fn.GetFullPath();
 
             m_cur_grid->SetCellValue( last_row, COL_URI, path );
@@ -683,6 +681,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         m_cur_grid->SetGridCursor( new_row, m_cur_grid->GetGridCursorCol() );
     }
 }
+
 
 void PANEL_FP_LIB_TABLE::adjustPathSubsGridColumns( int aWidth )
 {
