@@ -275,7 +275,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
     m_outlineBoard2dObjects = new CCONTAINER2D;
 
-    const int outlineCount = ((const SHAPE_POLY_SET &)m_settings.GetBoardPoly()).OutlineCount();
+    const int outlineCount = m_settings.GetBoardPoly().OutlineCount();
 
     if( outlineCount > 0 )
     {
@@ -297,7 +297,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
                         *m_outlineBoard2dObjects,
                         m_settings.BiuTo3Dunits(),
                         divFactor,
-                        (const BOARD_ITEM &)*m_settings.GetBoard(),
+                        *dynamic_cast<const BOARD_ITEM*>(m_settings.GetBoard()),
                         iOutlinePolyIdx );
         }
 
