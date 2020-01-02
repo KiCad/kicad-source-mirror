@@ -25,6 +25,7 @@ public:
     wxMenu* GetSplitButtonMenu();
     void    SetBitmap( const wxBitmap& aBmp );
     void    SetMinSize( const wxSize& aSize ) override;
+    void    SetWidthPadding( int padding );
 
 protected:
     void OnKillFocus( wxFocusEvent& aEvent );
@@ -43,10 +44,12 @@ private:
     wxColor   m_colorNormal;
     wxColor   m_colorDisabled;
     const int m_arrowButtonWidth = 20;
+    int       m_widthPadding     = 20;
     bool      m_bLButtonDown     = false;
     wxString  m_label;
     wxMenu*   m_pMenu = nullptr;
     wxBitmap  m_bitmap;
+    wxSize    unAdjustedMinSize;
 };
 
 #endif /*__SPLIT_BUTTON_H__*/

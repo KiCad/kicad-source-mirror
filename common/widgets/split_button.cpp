@@ -48,7 +48,15 @@ SPLIT_BUTTON::~SPLIT_BUTTON()
 
 void SPLIT_BUTTON::SetMinSize( const wxSize& aSize )
 {
-    wxPanel::SetMinSize( wxSize( aSize.GetWidth() + m_arrowButtonWidth + 20, aSize.GetHeight() ) );
+    unAdjustedMinSize = aSize;
+    wxPanel::SetMinSize( wxSize( aSize.GetWidth() + m_arrowButtonWidth + m_widthPadding, aSize.GetHeight() ) );
+}
+
+
+void SPLIT_BUTTON::SetWidthPadding( int padding )
+{
+    m_widthPadding = padding;
+    SetMinSize( unAdjustedMinSize );
 }
 
 
@@ -56,8 +64,7 @@ void SPLIT_BUTTON::SetBitmap( const wxBitmap& aBmp )
 {
     m_bitmap = aBmp;
 
-    auto suze = wxSize( m_bitmap.GetWidth(), m_bitmap.GetHeight() );
-    SetMinSize( suze );
+    SetMinSize( wxSize( m_bitmap.GetWidth(), m_bitmap.GetHeight() ) );
 }
 
 
