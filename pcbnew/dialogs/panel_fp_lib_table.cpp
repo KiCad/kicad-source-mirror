@@ -330,7 +330,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
     // We must set the size to match the other bitmaps manually
-    m_browseButton->SetWidthPadding(4);
+    m_browseButton->SetWidthPadding( 4 );
     m_browseButton->SetMinSize( wxSize( 30, 30 ) );
 
     // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
