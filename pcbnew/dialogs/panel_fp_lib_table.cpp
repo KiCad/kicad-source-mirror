@@ -324,6 +324,10 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_move_up_button->SetBitmap( KiBitmap( small_up_xpm ) );
     m_move_down_button->SetBitmap( KiBitmap( small_down_xpm ) );
 
+    m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
+    // We must set the size to match the other bitmaps manually
+    m_browseButton->SetMinSize( wxSize( 30, 30 ) );
+
     // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
     // a currentCell which is sometimes not highlighted.
     if( m_global_grid->GetNumberRows() > 0 )
@@ -332,13 +336,14 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     if( m_project_grid->GetNumberRows() > 0 )
         m_project_grid->SelectRow( 0 );
 
+    // Populate the browse library options
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
     for( int i = 0; i < FILTER_COUNT; ++i )
     {
         browseMenu->Append( wxID_HIGHEST + i, fileFilters[i].m_Description );
 
         Connect( wxID_HIGHEST + i, wxEVT_COMMAND_MENU_SELECTED,
-            wxCommandEventHandler( PANEL_FP_LIB_TABLE::browseLibrariesHandler ) );
+                wxCommandEventHandler( PANEL_FP_LIB_TABLE::browseLibrariesHandler ) );
     }
 }
 
