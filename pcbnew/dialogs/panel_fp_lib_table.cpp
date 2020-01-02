@@ -61,7 +61,7 @@
 #include <widgets/grid_text_button_helpers.h>
 
 // clang-format off
-static const struct supportedFileType
+struct supportedFileType
 {
     wxString m_Description; ///< Description shown in the file picker dialog
     wxString m_FileFilter;  ///< In case of folders it stands for extensions of files stored inside
@@ -72,7 +72,7 @@ static const struct supportedFileType
 /*
  * Map of event id as key to the file type struct
  */
-std::map<int, supportedFileType> fileTypes = 
+static const std::map<int, supportedFileType> fileTypes =
 {
     { wxID_HIGHEST + 1, { "KiCad (folder with .kicad_mod files)", "",                               false, IO_MGR::KICAD_SEXP } },
     { wxID_HIGHEST + 2, { "Eagle 6.x (*.lbr)",                    EagleFootprintLibPathWildcard(),  true,  IO_MGR::EAGLE } },
