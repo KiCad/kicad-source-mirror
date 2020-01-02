@@ -406,17 +406,16 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
         CGENERICCONTAINER2D &aDstContainer,
         float aBiuTo3DunitsScale,
         float aDivFactor,
-        const BOARD_ITEM &aBoardItem )
+        const BOARD_ITEM &aBoardItem,
+        int aPolyIndex )
 {
-    BOX2I pathBounds = aMainPath.BBox();
-
     // Get the path
 
-    wxASSERT( aMainPath.OutlineCount() == 1 );
-    const SHAPE_POLY_SET::POLYGON& curr_polywithholes = aMainPath.CPolygon( 0 );
+    wxASSERT( aPolyIndex < aMainPath.OutlineCount() );
 
-    wxASSERT( curr_polywithholes.size() == 1 );
-    const SHAPE_LINE_CHAIN& path = curr_polywithholes[0];   // a simple polygon
+    const SHAPE_LINE_CHAIN& path = aMainPath.COutline( aPolyIndex );
+
+    BOX2I pathBounds = path.BBox();
 
     // Convert the points to segments class
     CBBOX2D bbox;
