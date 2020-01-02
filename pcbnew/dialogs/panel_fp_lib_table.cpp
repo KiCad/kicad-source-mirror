@@ -60,22 +60,26 @@
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
 
-// Filters for the file picker
-static constexpr int FILTER_COUNT = 4;
-static const struct
+// clang-format off
+static const struct supportedFileType
 {
     wxString m_Description; ///< Description shown in the file picker dialog
-    wxString m_FileFilter;   ///< In case of folders it stands for extensions of files stored inside
-    bool m_IsFile;          ///< Whether the library is a folder or a file
+    wxString m_FileFilter;  ///< In case of folders it stands for extensions of files stored inside
+    bool     m_IsFile;      ///< Whether the library is a folder or a file
     IO_MGR::PCB_FILE_T m_Plugin;
-} fileFilters[FILTER_COUNT] =
-{
-    // wxGenericDirCtrl does not handle regexes in wildcards
-    { "KiCad (folder with .kicad_mod files)", "",    false, IO_MGR::KICAD_SEXP },
-    { "Eagle 6.x (*.lbr)",                    EagleFootprintLibPathWildcard(), true,  IO_MGR::EAGLE },
-    { "KiCad legacy (*.mod)",                 LegacyFootprintLibPathWildcard(), true,  IO_MGR::LEGACY },
-    { "Geda (folder with *.fp files)",        "",    false, IO_MGR::GEDA_PCB },
 };
+
+/*
+ * Map of event id as key to the file type struct
+ */
+std::map<int, supportedFileType> fileTypes = 
+{
+    { wxID_HIGHEST + 1, { "KiCad (folder with .kicad_mod files)", "",                               false, IO_MGR::KICAD_SEXP } },
+    { wxID_HIGHEST + 2, { "Eagle 6.x (*.lbr)",                    EagleFootprintLibPathWildcard(),  true,  IO_MGR::EAGLE } },
+    { wxID_HIGHEST + 3, { "KiCad legacy (*.mod)",                 LegacyFootprintLibPathWildcard(), true,  IO_MGR::LEGACY } },
+    { wxID_HIGHEST + 4, { "Geda (folder with *.fp files)",        "",                               false, IO_MGR::GEDA_PCB } },
+};
+// clang-format on
 
 /**
  * This class builds a wxGridTableBase by wrapping an #FP_LIB_TABLE object.
@@ -338,11 +342,11 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     // Populate the browse library options
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
-    for( int i = 0; i < FILTER_COUNT; ++i )
+    for( auto& fileType : fileTypes )
     {
-        browseMenu->Append( wxID_HIGHEST + i, fileFilters[i].m_Description );
+        browseMenu->Append( fileType.first, fileType.second.m_Description );
 
-        Connect( wxID_HIGHEST + i, wxEVT_COMMAND_MENU_SELECTED,
+        Connect( fileType.first, wxEVT_COMMAND_MENU_SELECTED,
                 wxCommandEventHandler( PANEL_FP_LIB_TABLE::browseLibrariesHandler ) );
     }
 }
@@ -593,18 +597,23 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( !m_cur_grid->CommitPendingChanges() )
         return;
 
-    int browseIdx = event.GetId() - wxID_HIGHEST;
+    auto fileTypeIt = fileTypes.find( event.GetId() );
+    if( fileTypeIt == fileTypes.end() )
+    {
+        wxLogWarning( "File type selection event received not found in file type table" );
+        return;
+    }
+    auto fileType = fileTypeIt->second;
 
     if( m_lastBrowseDir.IsEmpty() )
         m_lastBrowseDir = m_projectBasePath;
 
     wxArrayString files;
-    auto          fileFilter = &fileFilters[browseIdx];
 
-    if( fileFilter->m_IsFile )
+    if(fileType.m_IsFile )
     {
         wxFileDialog dlg( this, _( "Select Library" ), m_lastBrowseDir, wxEmptyString,
-                fileFilter->m_FileFilter, wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
+                fileType.m_FileFilter, wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
         auto result = dlg.ShowModal();
 
