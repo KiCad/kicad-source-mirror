@@ -11,15 +11,16 @@
 #include <widgets/split_button.h>
 #include <wx/renderer.h>
 
-SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* parent, wxWindowID id, const wxString& label,
-        const wxPoint& pos, const wxSize& size )
-        : wxPanel( parent, id, pos, size, wxBORDER_NONE | wxTAB_TRAVERSAL, "DropDownButton" ),
-          m_label( label )
+
+SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
+        const wxPoint& aPos, const wxSize& aSize )
+        : wxPanel( aParent, aId, aPos, aSize, wxBORDER_NONE | wxTAB_TRAVERSAL, "DropDownButton" ),
+          m_label( aLabel )
 {
     m_colorNormal   = GetForegroundColour();
     m_colorDisabled = GetForegroundColour().MakeDisabled();
 
-    if( size == wxDefaultSize )
+    if( aSize == wxDefaultSize )
     {
         wxSize defaultSize = wxButton::GetDefaultSize();
 
@@ -45,18 +46,18 @@ SPLIT_BUTTON::~SPLIT_BUTTON()
 }
 
 
-void SPLIT_BUTTON::SetMinSize(const wxSize& size)
+void SPLIT_BUTTON::SetMinSize( const wxSize& aSize )
 {
-    wxPanel::SetMinSize( wxSize(size.GetWidth() + m_arrowButtonWidth + 20, size.GetHeight() ) );
+    wxPanel::SetMinSize( wxSize( aSize.GetWidth() + m_arrowButtonWidth + 20, aSize.GetHeight() ) );
 }
 
 
-void SPLIT_BUTTON::SetBitmap(const wxBitmap& bmp)
+void SPLIT_BUTTON::SetBitmap( const wxBitmap& aBmp )
 {
-    m_bitmap = bmp;
-    
-    auto suze = wxSize(m_bitmap.GetWidth(), m_bitmap.GetHeight());
-    SetMinSize(suze);
+    m_bitmap = aBmp;
+
+    auto suze = wxSize( m_bitmap.GetWidth(), m_bitmap.GetHeight() );
+    SetMinSize( suze );
 }
 
 
@@ -66,37 +67,37 @@ wxMenu* SPLIT_BUTTON::GetSplitButtonMenu()
 }
 
 
-void SPLIT_BUTTON::OnKillFocus( wxFocusEvent& event )
+void SPLIT_BUTTON::OnKillFocus( wxFocusEvent& aEvent )
 {
     m_stateButton = wxCONTROL_CURRENT;
     m_stateMenu   = wxCONTROL_CURRENT;
     Refresh();
 
-    event.Skip();
+    aEvent.Skip();
 }
 
 
-void SPLIT_BUTTON::OnMouseLeave( wxMouseEvent& event )
+void SPLIT_BUTTON::OnMouseLeave( wxMouseEvent& aEvent )
 {
     m_stateButton = 0;
     m_stateMenu   = 0;
     Refresh();
 
-    event.Skip();
+    aEvent.Skip();
 }
 
 
-void SPLIT_BUTTON::OnMouseEnter( wxMouseEvent& event )
+void SPLIT_BUTTON::OnMouseEnter( wxMouseEvent& aEvent )
 {
     m_stateButton = wxCONTROL_CURRENT;
     m_stateMenu   = wxCONTROL_CURRENT;
     Refresh();
 
-    event.Skip();
+    aEvent.Skip();
 }
 
 
-void SPLIT_BUTTON::OnLeftButtonUp( wxMouseEvent& event )
+void SPLIT_BUTTON::OnLeftButtonUp( wxMouseEvent& aEvent )
 {
     m_stateButton = 0;
     m_stateMenu   = 0;
@@ -105,7 +106,7 @@ void SPLIT_BUTTON::OnLeftButtonUp( wxMouseEvent& event )
 
     int x = -1;
     int y = -1;
-    event.GetPosition( &x, &y );
+    aEvent.GetPosition( &x, &y );
 
     if( x < ( GetSize().GetWidth() - m_arrowButtonWidth ) )
     {
@@ -121,17 +122,17 @@ void SPLIT_BUTTON::OnLeftButtonUp( wxMouseEvent& event )
 
     m_bLButtonDown = false;
 
-    event.Skip();
+    aEvent.Skip();
 }
 
 
-void SPLIT_BUTTON::OnLeftButtonDown( wxMouseEvent& event )
+void SPLIT_BUTTON::OnLeftButtonDown( wxMouseEvent& aEvent )
 {
     m_bLButtonDown = true;
 
     int x = -1;
     int y = -1;
-    event.GetPosition( &x, &y );
+    aEvent.GetPosition( &x, &y );
 
     if( x >= ( GetSize().GetWidth() - m_arrowButtonWidth ) )
     {
@@ -155,11 +156,11 @@ void SPLIT_BUTTON::OnLeftButtonDown( wxMouseEvent& event )
         Refresh();
     }
 
-    event.Skip();
+    aEvent.Skip();
 }
 
 
-void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( event ) )
+void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
     wxPaintDC dc( this );
     wxSize    size  = GetSize();
@@ -205,9 +206,9 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( event ) )
 }
 
 
-bool SPLIT_BUTTON::Enable( bool enable )
+bool SPLIT_BUTTON::Enable( bool aEnable )
 {
-    m_bIsEnable = enable;
+    m_bIsEnable = aEnable;
     wxPanel::Enable( m_bIsEnable );
 
     if( m_bIsEnable )
@@ -225,5 +226,5 @@ bool SPLIT_BUTTON::Enable( bool enable )
     ProcessEvent( event );
     Refresh();
 
-    return enable;
+    return aEnable;
 }

@@ -17,24 +17,24 @@
 class SPLIT_BUTTON : public wxPanel
 {
 public:
-    SPLIT_BUTTON( wxWindow* parent, wxWindowID id, const wxString& label,
-            const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
+    SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& aLabel,
+            const wxPoint& aPos = wxDefaultPosition, const wxSize& aSize = wxDefaultSize );
 
     ~SPLIT_BUTTON();
 
     wxMenu* GetSplitButtonMenu();
-    void SetBitmap(const wxBitmap& bmp);
-    void SetMinSize(const wxSize& size) override;
+    void    SetBitmap( const wxBitmap& aBmp );
+    void    SetMinSize( const wxSize& aSize ) override;
 
 protected:
-    void OnKillFocus( wxFocusEvent& event );
-    void OnMouseLeave( wxMouseEvent& event );
-    void OnMouseEnter( wxMouseEvent& event );
-    void OnLeftButtonUp( wxMouseEvent& event );
-    void OnLeftButtonDown( wxMouseEvent& event );
-    void OnPaint( wxPaintEvent& WXUNUSED( event ) );
+    void OnKillFocus( wxFocusEvent& aEvent );
+    void OnMouseLeave( wxMouseEvent& aEvent );
+    void OnMouseEnter( wxMouseEvent& aEvent );
+    void OnLeftButtonUp( wxMouseEvent& aEvent );
+    void OnLeftButtonDown( wxMouseEvent& aEvent );
+    void OnPaint( wxPaintEvent& WXUNUSED( aEvent ) );
 
-    bool Enable( bool enable = true ) override;
+    bool Enable( bool aEnable = true ) override;
 
 private:
     int       m_stateButton = 0;
