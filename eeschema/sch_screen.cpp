@@ -33,7 +33,7 @@
 #include <gr_basic.h>
 #include <common.h>
 #include <kicad_string.h>
-#include <eeschema_id.h>
+#include <id.h>
 #include <pgm_base.h>
 #include <kiway.h>
 #include <sch_draw_panel.h>

@@ -39,7 +39,6 @@
 #include <sch_component.h>
 #include <lib_edit_frame.h>
 #include <lib_view_frame.h>
-#include <eeschema_id.h>
 #include <symbol_lib_table.h>
 
 #include <dialog_choose_component.h>

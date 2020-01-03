@@ -34,7 +34,7 @@
 #include <richio.h>
 #include <trace_helpers.h>
 #include <tool/tool_manager.h>
-#include <eeschema_id.h>
+#include <id.h>
 #include <class_library.h>
 #include <lib_edit_frame.h>
 #include <sch_sheet.h>
