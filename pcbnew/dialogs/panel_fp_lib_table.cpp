@@ -679,8 +679,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
             m_cur_grid->SetCellValue( last_row, COL_NICKNAME, nickname );
 
-            auto type = IO_MGR::GuessPluginTypeFromLibPath( filePath );
-            m_cur_grid->SetCellValue( last_row, COL_TYPE, IO_MGR::ShowType( type ) );
+            m_cur_grid->SetCellValue( last_row, COL_TYPE, IO_MGR::ShowType( fileType.m_Plugin ) );
 
             // try to use path normalized to an environmental variable or project path
             wxString path = NormalizePath( filePath, &envVars, m_projectBasePath );
