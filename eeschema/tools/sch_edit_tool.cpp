@@ -195,7 +195,7 @@ bool SCH_EDIT_TOOL::Init()
         case SCH_LINE_T:
         {
             const std::deque<EDA_ITEM*> items = aSel.GetItems();
-            if( !std::all_of( items.begin(), items.end(), 
+            if( !std::all_of( items.begin(), items.end(),
                 [&]( const EDA_ITEM* item )
                 {
                     const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( item );
@@ -1306,23 +1306,19 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_LINE_T:
     {
-        SCH_LINE* line = static_cast<SCH_LINE*>( item );
-
-        // We purposely disallow editing everything except graphic lines
-        if( !line->IsGraphicLine() )
-            break;
-
         if( !selection.AreAllItemsIdentical() )
             break;
 
         std::deque<SCH_LINE*> lines;
-        for( auto item : selection.Items() )
+        for( auto selItem : selection.Items() )
         {
-            auto line = dynamic_cast<SCH_LINE*>( item );
-            assert( line != nullptr );
-            lines.push_back( line );
+            SCH_LINE* line = dynamic_cast<SCH_LINE*>( selItem );
+
+            if( line )
+                lines.push_back( line );
         }
 
+        // Verify we are only editing graphic lines
         if( !std::all_of( lines.begin(), lines.end(),
                     [&]( const SCH_LINE* r ) { return r->IsGraphicLine(); } ) )
             break;
