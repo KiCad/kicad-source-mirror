@@ -42,7 +42,7 @@ public:
     wxMenu* GetSplitButtonMenu();
     void    SetBitmap( const wxBitmap& aBmp );
     void    SetMinSize( const wxSize& aSize ) override;
-    void    SetWidthPadding( int padding );
+    void    SetWidthPadding( int aPadding );
 
 protected:
     void OnKillFocus( wxFocusEvent& aEvent );
