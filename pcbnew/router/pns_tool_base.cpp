@@ -30,7 +30,6 @@ using namespace std::placeholders;
 #include <pcb_edit_frame.h>
 #include <id.h>
 #include <macros.h>
-#include <pcbnew_id.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
 #include <dialogs/dialog_pns_settings.h>

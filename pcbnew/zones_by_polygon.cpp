@@ -34,7 +34,6 @@
 #include <class_zone.h>
 #include <pcbnew.h>
 #include <zones.h>
-#include <pcbnew_id.h>
 #include <zones_functions_for_undo_redo.h>
 #include <tools/drc.h>
 #include <connectivity/connectivity_data.h>

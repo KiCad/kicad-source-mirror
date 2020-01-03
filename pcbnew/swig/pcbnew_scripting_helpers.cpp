@@ -39,7 +39,6 @@
 #include <macros.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcbnew.h>
-#include <pcbnew_id.h>
 #include <pcbnew_scripting_helpers.h>
 
 static PCB_EDIT_FRAME* s_PcbEditFrame = NULL;

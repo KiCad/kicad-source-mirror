@@ -24,7 +24,6 @@
 #include "footprint_tree_pane.h"
 #include "fp_tree_synchronizing_adapter.h"
 #include <widgets/lib_tree.h>
-#include <pcbnew_id.h>
 #include <footprint_edit_frame.h>
 #include <fp_lib_table.h>
 
@@ -41,7 +40,7 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     SetSizer( boxSizer );      // should remove the previous sizer according to wxWidgets docs
     Layout();
     boxSizer->Fit( this );
-    
+
     // Event handlers
     Bind( COMPONENT_SELECTED, &FOOTPRINT_TREE_PANE::onComponentSelected, this );
     m_tree->Bind( wxEVT_UPDATE_UI, &FOOTPRINT_TREE_PANE::onUpdateUI, this );

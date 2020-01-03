@@ -34,7 +34,6 @@
 
 #include <class_draw_panel_gal.h>
 #include <eda_draw_frame.h>
-#include <pcbnew_id.h>
 
 #include <core/optional.h>
 

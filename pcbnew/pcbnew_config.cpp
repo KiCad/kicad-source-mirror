@@ -43,7 +43,6 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <pcbplot.h>
-#include <pcbnew_id.h>
 #include <footprint_viewer_frame.h>
 #include <invoke_pcb_dialog.h>
 #include <wildcards_and_files_ext.h>

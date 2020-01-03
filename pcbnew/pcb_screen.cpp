@@ -36,7 +36,7 @@
 #include <board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>
 
-#include <pcbnew_id.h>
+#include <id.h>
 
 
 #define ZOOM_FACTOR( x )       ( x * IU_PER_MILS / 10 )

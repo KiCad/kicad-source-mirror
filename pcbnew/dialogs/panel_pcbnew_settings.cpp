@@ -26,7 +26,6 @@
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
-#include <pcbnew_id.h>
 #include <class_board.h>
 #include <panel_pcbnew_settings.h>
 #include <widgets/paged_dialog.h>

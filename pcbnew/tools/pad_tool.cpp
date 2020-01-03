@@ -37,7 +37,6 @@
 #include <tools/pcb_selection_conditions.h>
 #include <tools/edit_tool.h>
 #include <dialogs/dialog_enum_pads.h>
-#include "pcbnew_id.h"
 
 
 PAD_TOOL::PAD_TOOL() :

@@ -28,7 +28,7 @@
 #include <pcb_base_edit_frame.h>
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
-#include <pcbnew_id.h>
+#include <id.h>
 #include <tool/common_tools.h>
 
 // Max values for grid size

@@ -32,9 +32,6 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 
-// For frame ToolID values
-#include <pcbnew_id.h>
-
 // For action icons
 #include <bitmaps.h>
 
