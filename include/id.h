@@ -73,10 +73,8 @@ enum main_id
 {
     ID_RUN_PCB                  = wxID_HIGHEST,
 
-    ID_LOAD_PROJECT,
     ID_APPEND_PROJECT,
     ID_SAVE_PROJECT,
-    ID_SAVE_PROJECT_AS,
     ID_LOAD_FILE,
     ID_NEW_BOARD,
     ID_SAVE_BOARD,
@@ -89,9 +87,6 @@ enum main_id
     ID_FILE1,
     ID_FILEMAX = ID_FILE + MAX_FILE_HISTORY_SIZE,
     ID_FILE_LIST_CLEAR,
-
-    ID_MENU_CANVAS_OPENGL,
-    ID_MENU_CANVAS_CAIRO,
 
     ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
     ID_PREFERENCES_CONFIGURE_PATHS,
@@ -119,8 +114,6 @@ enum main_id
 
     ID_EDIT_HOTKEY,
     ID_NO_TOOL_SELECTED,
-    ID_ZOOM_SELECTION,
-    ID_SEL_BG_COLOR,
 
     ID_LANGUAGE_CHOICE,
     ID_LANGUAGE_DEFAULT,
@@ -148,10 +141,6 @@ enum main_id
     ID_LANGUAGE_LITHUANIAN,
     ID_LANGUAGE_CHOICE_END,
 
-    ID_KICAD_SELECT_ICONS_OPTIONS,
-    ID_KICAD_SELECT_ICONS_IN_MENUS,
-    ID_KICAD_SELECT_ICON_OPTIONS_END,
-
     // Popup Menu (mouse Right button) (id consecutifs)
 
     ID_ON_ZOOM_SELECT,
@@ -163,9 +152,6 @@ enum main_id
     ID_POPUP_ZOOM_CENTER,
     ID_POPUP_ZOOM_PAGE,
     ID_POPUP_ZOOM_REDRAW,
-
-    ID_KEY_ZOOM_IN,
-    ID_KEY_ZOOM_OUT,
 
     /* Reserve IDs for popup menu zoom levels.  If you need more
      * levels of zoom, change ID_POPUP_ZOOM_LEVEL_END.  Note that more
@@ -210,8 +196,6 @@ enum main_id
 
     ID_GRID_SETTINGS,
 
-    ID_COMPONENT_BUTT,
-
     ID_ZOOM_BEGIN,
     ID_ZOOM_IN = ID_ZOOM_BEGIN,
     ID_ZOOM_OUT,
@@ -226,22 +210,9 @@ enum main_id
     ID_OFFCENTER_ZOOM_OUT,
     ID_ZOOM_END,
 
-    // Panning command event IDs.
-    ID_PAN_UP,
-    ID_PAN_DOWN,
-    ID_PAN_LEFT,
-    ID_PAN_RIGHT,
-
-    ID_MOUSE_CLICK,
-    ID_MOUSE_DOUBLECLICK,
-
-    ID_FIND_ITEMS,
 
     ID_EDA_SOCKET_EVENT_SERV,
     ID_EDA_SOCKET_EVENT,
-
-    // Common to all
-    ID_HELP_GET_INVOLVED,
 
     // Common to Pcbnew and CvPcb
     ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
