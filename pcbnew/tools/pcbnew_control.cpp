@@ -48,7 +48,6 @@
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
 #include <pcb_screen.h>
-#include <pcbnew_id.h>
 #include <properties.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>

@@ -37,7 +37,7 @@
 #include <wx/stattext.h>
 #include <pgm_base.h>
 #include <painter.h>
-#include <pcbnew_id.h>
+#include <id.h>
 
 /**
  * Threadsafe interface class between loader thread and panel class.

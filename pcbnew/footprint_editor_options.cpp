@@ -29,7 +29,6 @@
 #include <footprint_edit_frame.h>
 #include <board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>
-#include <pcbnew_id.h>
 
 
 PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()

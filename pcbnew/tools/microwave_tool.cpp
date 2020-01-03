@@ -31,7 +31,6 @@
 #include <confirm.h>
 #include <preview_items/two_point_geom_manager.h>
 #include <preview_items/centreline_rect_item.h>
-#include <pcbnew_id.h>
 #include <bitmaps.h>
 #include <class_board_item.h>
 #include <class_module.h>

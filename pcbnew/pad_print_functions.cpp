@@ -35,7 +35,6 @@
 #include <pcb_edit_frame.h>
 #include <pcb_screen.h>
 #include <pcbnew.h>
-#include <pcbnew_id.h> // ID_TRACK_BUTT
 #include <trigo.h>
 
 

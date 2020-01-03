@@ -34,7 +34,6 @@
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew.h>
-#include <pcbnew_id.h>
 #include <string>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
