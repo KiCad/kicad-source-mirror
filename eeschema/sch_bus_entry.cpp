@@ -42,11 +42,11 @@ SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, char 
     SCH_ITEM( NULL, aType )
 {
     m_pos    = pos;
-    m_size.x = 100;
-    m_size.y = 100;
+    m_size.x = Mils2iu( 100 );
+    m_size.y = Mils2iu( 100 );
 
     if( shape == '/' )
-        m_size.y = -100;
+        m_size.y *= -1;
 
     m_isDanglingStart = m_isDanglingEnd = true;
 }
