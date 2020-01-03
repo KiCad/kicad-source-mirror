@@ -30,7 +30,6 @@
 #define GERBER_DRAW_ITEM_H
 
 #include <base_struct.h>
-#include <dlist.h>
 #include <layers_id_colors_and_visibility.h>
 #include <gr_basic.h>
 #include <gbr_netlist_metadata.h>
