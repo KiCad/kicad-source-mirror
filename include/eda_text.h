@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jpe.charras at wanadoo.fr
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,19 +62,20 @@ enum EDA_DRAW_MODE_T {
 };
 
 
-/** This is the "default-of-the-default" hardcoded text size; individual
+/**
+ * This is the "default-of-the-default" hardcoded text size; individual
  * application define their own default policy starting with this
  * (usually with a user option or project).
- **/
-#define DEFAULT_SIZE_TEXT   Mils2iu( 50 )     // default text height (in mils, i.e. 1/1000")
-#define DIM_ANCRE_TEXTE     Mils2iu( 2 )      // Anchor size for text
+ */
+#define DEFAULT_SIZE_TEXT   50     // default text height (in mils, i.e. 1/1000")
+#define DIM_ANCRE_TEXTE     2      // Anchor size for text
 
 
 /**
- * Struct TEXT_EFFECTS
- * is a bucket for text effects.  These fields are bundled so they
- * can be easily copied together as a lot. The privacy policy is established
- * by client (incorporating) code.
+ * A container for text effects.
+ *
+ * These fields are bundled so they can be easily copied together as a lot. The privacy
+ * policy is established by client (incorporating) code.
  */
 struct TEXT_EFFECTS
 {
@@ -100,8 +101,7 @@ struct TEXT_EFFECTS
 
 
 /**
- * Class EDA_TEXT
- * is a mix-in class (via multiple inheritance) that handles texts such as
+ * A mix-in class (via multiple inheritance) that handles texts such as
  * labels, parts, components, or footprints.  Because it's a mix-in class, care
  * is used to provide function names (accessors) that to not collide with function
  * names likely to be seen in the combined derived classes.
@@ -116,34 +116,34 @@ public:
     virtual ~EDA_TEXT();
 
     /**
-     * Function GetText
-     * returns the string associated with the text object.
+     * Return the string associated with the text object.
      *
      * @return a const wxString reference containing the string of the item.
      */
     virtual const wxString& GetText() const { return m_text; }
 
     /**
-     * Returns the string actually shown after processing of the base
-     * text. Default is no processing */
+     * Return the string actually shown after processing of the base
+     * text. Default is no processing
+     */
     virtual wxString GetShownText() const { return m_shown_text; }
 
     /**
-     * Returns a shortened version (max 15 characters) of the shown text */
+     * Returns a shortened version (max 15 characters) of the shown text
+     */
     wxString ShortenedShownText() const;
 
     virtual void SetText( const wxString& aText );
 
     /**
-     * Function SetThickness
-     * sets pen width.
+     * Set the pen width.
+     *
      * @param aNewThickness is the new pen width
      */
     void SetThickness( int aNewThickness )      { m_e.penwidth = aNewThickness; };
 
     /**
-     * Function GetThickness
-     * returns pen width.
+     * Return the pen width.
      */
     int GetThickness() const                    { return m_e.penwidth; };
 
@@ -173,7 +173,6 @@ public:
     bool IsMirrored() const                     { return m_e.Bit( TE_MIRROR ); }
 
     /**
-     * Function SetMultiLineAllowed
      * @param aAllow true if ok to use multiline option, false
      *  if ok to use only single line text.  (Single line is faster in
      *  calculations than multiline.)
@@ -188,18 +187,18 @@ public:
     void SetVertJustify( EDA_TEXT_VJUSTIFY_T aType )    { m_e.vjustify = aType; };
 
     /**
-     * Function SetEffects
-     * sets the text effects from another instance.  (TEXT_EFFECTS
-     * is not exposed in the public API, but includes everything except the actual
-     * text string itself.)
+     * Set the text effects from another instance.
+     *
+     * TEXT_EFFECTS is not exposed in the public API, but includes everything except the actual
+     * text string itself.
      */
     void SetEffects( const EDA_TEXT& aSrc );
 
     /**
-     * Function SwapEffects
-     * swaps the text effects of the two involved instances.  (TEXT_EFECTS
-     * is not exposed in the public API, but includes everything except the actual
-     * text string itself.)
+     * Swap the text effects of the two involved instances.
+     *
+     * TEXT_EFFECTS is not exposed in the public API, but includes everything except the actual
+     * text string itself.
      */
     void SwapEffects( EDA_TEXT& aTradingPartner );
 
@@ -208,8 +207,9 @@ public:
     void CopyText( const EDA_TEXT& aSrc );
 
     /**
-     * Helper function used in search and replace dialog
-     * performs a text replace using the find and replace criteria in \a aSearchData.
+     * Helper function used in search and replace dialog.
+     *
+     * Perform a text replace using the find and replace criteria in \a aSearchData.
      *
      * @param aSearchData A reference to a wxFindReplaceData object containing the
      *                    search and replace criteria.
@@ -245,8 +245,9 @@ public:
 
     static EDA_TEXT_VJUSTIFY_T MapVertJustify( int aVertJustify );
 
-        /**
-     * Function Print
+    /**
+     * Print this text object to the device context \a aDC.
+     *
      * @param aDC = the current Device Context
      * @param aOffset = draw offset (usually (0,0))
      * @param aColor = text color
@@ -256,20 +257,22 @@ public:
                 EDA_DRAW_MODE_T aDisplay_mode = FILLED );
 
     /**
-     * Convert the text shape to a list of segment
-     * each segment is stored as 2 wxPoints: the starting point and the ending point
-     * there are therefore 2*n points
+     * Convert the text shape to a list of segment.
+     *
+     * Each segment is stored as 2 wxPoints: the starting point and the ending point
+     * there are therefore 2*n points.
+     *
      * @param aCornerBuffer = a buffer to store the polygon
      */
     void TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuffer ) const;
 
     /**
-     * Function TransformBoundingBoxWithClearanceToPolygon
-     * Convert the text bounding box to a rectangular polygon
-     * depending on the text orientation, the bounding box
-     * is not always horizontal or vertical
+     * Convert the text bounding box to a rectangular polygon depending on the text
+     * orientation, the bounding box is not always horizontal or vertical
+     *
      * Used in filling zones calculations
      * Circles and arcs are approximated by segments
+     *
      * @param aCornerBuffer = a buffer to store the polygon
      * @param aClearanceValue = the clearance around the text bounding box
      * to the real clearance value (usually near from 1.0)
@@ -278,8 +281,8 @@ public:
                                                      int aClearanceValue ) const;
 
     /**
-     * Function TextHitTest
      * Test if \a aPoint is within the bounds of this object.
+     *
      * @param aPoint- A wxPoint to test
      * @param aAccuracy - Amount to inflate the bounding box.
      * @return bool - true if a hit, else false
@@ -287,8 +290,7 @@ public:
     virtual bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const;
 
     /**
-     * Function TextHitTest (overloaded)
-     * Tests if object bounding box is contained within or intersects \a aRect.
+     * Test if object bounding box is contained within or intersects \a aRect.
      *
      * @param aRect - Rect to test against.
      * @param aContains - Test for containment instead of intersection if true.
@@ -298,20 +300,19 @@ public:
     virtual bool TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy = 0 ) const;
 
     /**
-     * Function LenSize
      * @return the text length in internal units
      * @param aLine : the line of text to consider.
      * For single line text, this parameter is always m_Text
      * @param aThickness : the stroke width of the text
-     * @param aMarkupFlags a flagset of MARKUP_FLAG enums indicating which markup tokens should
+     * @param aMarkupFlags a flag set of MARKUP_FLAG enums indicating which markup tokens should
      *                     be processed
      */
     int LenSize( const wxString& aLine, int aThickness, int aMarkupFlags ) const;
 
     /**
-     * Function GetTextBox
-     * useful in multiline texts to calculate the full text or a line area (for
+     * Useful in multiline texts to calculate the full text or a line area (for
      * zones filling, locate functions....)
+     *
      * @return the rect containing the line of text (i.e. the position and the
      *         size of one line)
      *         this rectangle is calculated for 0 orient text.
@@ -339,16 +340,15 @@ public:
     int GetInterline() const;
 
     /**
-     * Function GetTextStyleName
      * @return a wxString with the style name( Normal, Italic, Bold, Bold+Italic)
      */
     wxString GetTextStyleName();
 
     /**
-     * Function GetPositionsOfLinesOfMultilineText
-     * Populates aPositions with the position of each line of
+     * Populate \a aPositions with the position of each line of
      * a multiline text, according to the vertical justification and the
      * rotation of the whole text
+     *
      * @param aPositions is the list to populate by the wxPoint positions
      * @param aLineCount is the number of lines (not recalculated here
      * for efficiency reasons
@@ -356,8 +356,7 @@ public:
     void GetPositionsOfLinesOfMultilineText(
                 std::vector<wxPoint>& aPositions, int aLineCount ) const;
     /**
-     * Function Format
-     * outputs the object to \a aFormatter in s-expression form.
+     * Output the object to \a aFormatter in s-expression form.
      *
      * @param aFormatter The #OUTPUTFORMATTER object to write to.
      * @param aNestLevel The indentation next level.
@@ -372,8 +371,8 @@ private:
 
 private:
     /**
-     * Function printOneLineOfText
-     * Used to print each line of this EDA_TEXT, that can be multiline
+     * Print each line of this EDA_TEXT.
+     *
      * @param aDC = the current Device Context
      * @param aOffset = draw offset (usually (0,0))
      * @param aColor = text color
