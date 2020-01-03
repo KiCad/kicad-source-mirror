@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,13 +68,13 @@ class DANGLING_END_ITEM
 {
 private:
     /// A pointer to the connectable object.
-    EDA_ITEM* m_item;
+    EDA_ITEM*       m_item;
 
     /// The position of the connection point.
-    wxPoint        m_pos;
+    wxPoint         m_pos;
 
     /// The type of connection of #m_item.
-    DANGLING_END_T m_type;
+    DANGLING_END_T  m_type;
 
     /// A pointer to the parent object (in the case of pins)
     const EDA_ITEM* m_parent;
@@ -95,6 +95,28 @@ public:
         m_type = aType;
         m_pos = aPosition;
         m_parent = aParent;
+    }
+
+    bool operator==( const DANGLING_END_ITEM& aB )
+    {
+        return GetItem() == aB.GetItem()
+            && GetPosition() == aB.GetPosition()
+            && GetType() == aB.GetType()
+            && GetParent() == aB.GetParent();
+    }
+
+    bool operator!=( const DANGLING_END_ITEM& aB )
+    {
+        return GetItem() != aB.GetItem()
+                || GetPosition() != aB.GetPosition()
+                || GetType() != aB.GetType()
+                || GetParent() != aB.GetParent();;
+    }
+
+    bool operator<( const DANGLING_END_ITEM& rhs ) const
+    {
+        return( m_pos.x < rhs.m_pos.x || ( m_pos.x == rhs.m_pos.x && m_pos.y < rhs.m_pos.y )
+                || ( m_pos == rhs.m_pos && m_item < rhs.m_item ) );
     }
 
     wxPoint GetPosition() const { return m_pos; }
