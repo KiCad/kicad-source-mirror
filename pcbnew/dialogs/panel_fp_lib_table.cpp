@@ -59,55 +59,28 @@
 #include <kiway.h>
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <pcbnew_id.h>
 
-// Filters for the file picker
-static constexpr int FILTER_COUNT = 4;
-static const struct
+// clang-format off
+struct supportedFileType
 {
     wxString m_Description; ///< Description shown in the file picker dialog
-    wxString m_Extension;   ///< In case of folders it stands for extensions of files stored inside
-    bool m_IsFile;          ///< Whether the library is a folder or a file
+    wxString m_FileFilter;  ///< In case of folders it stands for extensions of files stored inside
+    bool     m_IsFile;      ///< Whether the library is a folder or a file
     IO_MGR::PCB_FILE_T m_Plugin;
-} fileFilters[FILTER_COUNT] =
-{
-    // wxGenericDirCtrl does not handle regexes in wildcards
-    { "KiCad (folder with .kicad_mod files)", "",    false, IO_MGR::KICAD_SEXP },
-    { "Eagle 6.x (*.lbr)",                    "lbr", true,  IO_MGR::EAGLE },
-    { "KiCad legacy (*.mod)",                 "mod", true,  IO_MGR::LEGACY },
-    { "Geda (folder with *.fp files)",        "",    false, IO_MGR::GEDA_PCB },
 };
 
-
-// Returns the filter string for the file picker
-static wxString getFilterString()
+/*
+ * Map of event id as key to the file type struct
+ */
+static const std::map<int, supportedFileType> fileTypes =
 {
-    wxString filterAll = _( "All supported library formats|" );
-    bool firstFilterAll = true;
-    wxString filter;
-
-    for( int i = 0; i < FILTER_COUNT; ++i )
-    {
-        if( fileFilters[i].m_IsFile )
-        {
-            // "All supported formats" filter
-            if( firstFilterAll )
-                firstFilterAll = false;
-            else
-                filterAll += ";";
-
-            wxASSERT( !fileFilters[i].m_Extension.IsEmpty() );
-            filterAll += "*." + fileFilters[i].m_Extension;
-        }
-
-
-        // Individual filter strings
-        filter += "|" + fileFilters[i].m_Description +
-                  "|" + ( fileFilters[i].m_IsFile ? "*." + fileFilters[i].m_Extension : "" );
-    }
-
-    return filterAll + filter;
-}
-
+    { ID_PANEL_FPLIB_ADD_KICADMOD,    { "KiCad (folder with .kicad_mod files)", "",                               false, IO_MGR::KICAD_SEXP } },
+    { ID_PANEL_FPLIB_ADD_EAGLE6,      { "Eagle 6.x (*.lbr)",                    EagleFootprintLibPathWildcard(),  true,  IO_MGR::EAGLE } },
+    { ID_PANEL_FPLIB_ADD_KICADLEGACY, { "KiCad legacy (*.mod)",                 LegacyFootprintLibPathWildcard(), true,  IO_MGR::LEGACY } },
+    { ID_PANEL_FPLIB_ADD_GEDA,        { "Geda (folder with *.fp files)",        "",                               false, IO_MGR::GEDA_PCB } },
+};
+// clang-format on
 
 /**
  * This class builds a wxGridTableBase by wrapping an #FP_LIB_TABLE object.
@@ -352,10 +325,14 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     // Configure button logos
     m_append_button->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_browse_button->SetBitmap( KiBitmap( folder_xpm ) );
     m_delete_button->SetBitmap( KiBitmap( trash_xpm ) );
     m_move_up_button->SetBitmap( KiBitmap( small_up_xpm ) );
     m_move_down_button->SetBitmap( KiBitmap( small_down_xpm ) );
+
+    m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
+    // We must set the size to match the other bitmaps manually
+    m_browseButton->SetWidthPadding( 4 );
+    m_browseButton->SetMinSize( wxSize( 30, 30 ) );
 
     // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
     // a currentCell which is sometimes not highlighted.
@@ -364,6 +341,19 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     if( m_project_grid->GetNumberRows() > 0 )
         m_project_grid->SelectRow( 0 );
+
+    // Populate the browse library options
+    wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
+    for( auto& fileType : fileTypes )
+    {
+        browseMenu->Append( fileType.first, fileType.second.m_Description );
+
+        browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_FP_LIB_TABLE::browseLibrariesHandler,
+                this, fileType.first );
+    }
+
+    // This is the button only press for the browse button instead of the menu
+    m_browseButton->Bind( wxEVT_BUTTON, &PANEL_FP_LIB_TABLE::browseLibrariesHandler, this );
 }
 
 
@@ -612,44 +602,89 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( !m_cur_grid->CommitPendingChanges() )
         return;
 
+    std::map<int, supportedFileType>::const_iterator fileTypeIt;
+
+    // We are bound both to the menu and button with this one handler
+    // So we must set the file type based on it
+    if( event.GetEventType() == wxEVT_BUTTON )
+    {
+        // Let's default to adding a kicad module for just the module
+        fileTypeIt = fileTypes.find( ID_PANEL_FPLIB_ADD_KICADMOD );
+    }
+    else
+    {
+        fileTypeIt = fileTypes.find( event.GetId() );
+    }
+
+    if( fileTypeIt == fileTypes.end() )
+    {
+        wxLogWarning( "File type selection event received but could not find the file type in the table" );
+        return;
+    }
+
+    supportedFileType fileType = fileTypeIt->second;
+
     if( m_lastBrowseDir.IsEmpty() )
         m_lastBrowseDir = m_projectBasePath;
 
-    DIALOG_FILE_DIR_PICKER dlg( this, _( "Select Library" ), m_lastBrowseDir,
-                                getFilterString(), FD_MULTIPLE );
+    wxArrayString files;
 
-    auto result = dlg.ShowModal();
+    wxString title;
 
-    if( result == wxID_CANCEL )
-        return;
+    title.Printf( _( "Select %s Library" ), fileType.m_Description );
 
-    m_lastBrowseDir = dlg.GetDirectory();
+    if( fileType.m_IsFile )
+    {
+        wxFileDialog dlg( this, title, m_lastBrowseDir, wxEmptyString,
+                fileType.m_FileFilter, wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
+
+        int result = dlg.ShowModal();
+
+        if( result == wxID_CANCEL )
+            return;
+
+        dlg.GetPaths( files );
+
+        m_lastBrowseDir = dlg.GetDirectory();
+    }
+    else
+    {
+        wxDirDialog dlg( nullptr, title, m_lastBrowseDir,
+                wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+
+        int result = dlg.ShowModal();
+
+        if( result == wxID_CANCEL )
+            return;
+
+        files.Add( dlg.GetPath() );
+
+        m_lastBrowseDir = dlg.GetPath();
+    }
 
     // Drop the last directory if the path is a .pretty folder
     if( m_lastBrowseDir.EndsWith( KiCadFootprintLibPathExtension ) )
         m_lastBrowseDir = m_lastBrowseDir.BeforeLast( wxFileName::GetPathSeparator() );
 
-    const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
-    bool addDuplicates = false;
-    bool applyToAll = false;
-    wxString warning = _( "Warning: Duplicate Nickname" );
-    wxString msg = _( "A library nicknamed \"%s\" already exists." );
-    wxArrayString files;
-    dlg.GetFilenames( files );
+    const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
+    bool               addDuplicates = false;
+    bool               applyToAll    = false;
+    wxString           warning       = _( "Warning: Duplicate Nickname" );
+    wxString           msg           = _( "A library nicknamed \"%s\" already exists." );
 
     for( const auto& filePath : files )
     {
         wxFileName fn( filePath );
-        wxString nickname = LIB_ID::FixIllegalChars( fn.GetName(), LIB_ID::ID_PCB );
-        bool doAdd = true;
+        wxString   nickname = LIB_ID::FixIllegalChars( fn.GetName(), LIB_ID::ID_PCB );
+        bool       doAdd    = true;
 
         if( cur_model()->ContainsNickname( nickname ) )
         {
             if( !applyToAll )
             {
-                int ret = OKOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
-                                            _( "Skip" ), _( "Add Anyway" ), &applyToAll );
-                addDuplicates = (ret == wxID_CANCEL );
+                int ret       = OKOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
+                        _( "Skip" ), _( "Add Anyway" ), &applyToAll );
+                addDuplicates = ( ret == wxID_CANCEL );
             }
 
             doAdd = addDuplicates;
@@ -661,15 +696,14 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
             m_cur_grid->SetCellValue( last_row, COL_NICKNAME, nickname );
 
-            auto type = IO_MGR::GuessPluginTypeFromLibPath( filePath );
-            m_cur_grid->SetCellValue( last_row, COL_TYPE, IO_MGR::ShowType( type ) );
+            m_cur_grid->SetCellValue( last_row, COL_TYPE, IO_MGR::ShowType( fileType.m_Plugin ) );
 
             // try to use path normalized to an environmental variable or project path
             wxString path = NormalizePath( filePath, &envVars, m_projectBasePath );
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
-            if( path.IsEmpty() || (m_pageNdx == 0 && path.Contains( "${KIPRJMOD}" )) )
+            if( path.IsEmpty() || ( m_pageNdx == 0 && path.Contains( "${KIPRJMOD}" ) ) )
                 path = fn.GetFullPath();
 
             m_cur_grid->SetCellValue( last_row, COL_URI, path );
@@ -683,6 +717,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         m_cur_grid->SetGridCursor( new_row, m_cur_grid->GetGridCursorCol() );
     }
 }
+
 
 void PANEL_FP_LIB_TABLE::adjustPathSubsGridColumns( int aWidth )
 {
