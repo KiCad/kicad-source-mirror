@@ -58,14 +58,16 @@ class SCH_SHEET_PIN;
 class CONNECTION_SUBGRAPH
 {
 public:
-    enum PRIORITY {
-        PRIORITY_NONE = 0,
-        PRIORITY_PIN,
-        PRIORITY_SHEET_PIN,
-        PRIORITY_HIER_LABEL,
-        PRIORITY_LOCAL_LABEL,
-        PRIORITY_POWER_PIN,
-        PRIORITY_GLOBAL
+    enum class PRIORITY
+    {
+        INVALID = -1,
+        NONE    = 0,
+        PIN,
+        SHEET_PIN,
+        HIER_LABEL,
+        LOCAL_LABEL,
+        POWER_PIN,
+        GLOBAL
     };
 
     explicit CONNECTION_SUBGRAPH( SCH_EDIT_FRAME* aFrame ) :

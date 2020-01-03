@@ -43,7 +43,7 @@
 
 bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 {
-    int highest_priority = -1;
+    PRIORITY               highest_priority = PRIORITY::INVALID;
     std::vector<SCH_ITEM*> candidates;
     std::vector<SCH_ITEM*> strong_drivers;
 
@@ -60,11 +60,11 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
     {
         PRIORITY item_priority = GetDriverPriority( item );
 
-        if( item_priority == PRIORITY_PIN &&
-            !static_cast<SCH_PIN*>( item )->GetParentComponent()->IsInNetlist() )
+        if( item_priority == PRIORITY::PIN
+                && !static_cast<SCH_PIN*>( item )->GetParentComponent()->IsInNetlist() )
             continue;
 
-        if( item_priority >= PRIORITY_HIER_LABEL )
+        if( item_priority >= PRIORITY::HIER_LABEL )
             strong_drivers.push_back( item );
 
         if( item_priority > highest_priority )
@@ -79,17 +79,17 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
         }
     }
 
-    if( highest_priority >= PRIORITY_HIER_LABEL )
+    if( highest_priority >= PRIORITY::HIER_LABEL )
         m_strong_driver = true;
 
     // Power pins are 5, global labels are 6
-    m_local_driver = ( highest_priority < PRIORITY_POWER_PIN );
+    m_local_driver = ( highest_priority < PRIORITY::POWER_PIN );
 
     if( !candidates.empty() )
     {
         if( candidates.size() > 1 )
         {
-            if( highest_priority == PRIORITY_SHEET_PIN )
+            if( highest_priority == PRIORITY::SHEET_PIN )
             {
                 // We have multiple options, and they are all hierarchical
                 // sheet pins.  Let's prefer outputs over inputs.
@@ -325,25 +325,25 @@ void CONNECTION_SUBGRAPH::UpdateItemConnections()
 CONNECTION_SUBGRAPH::PRIORITY CONNECTION_SUBGRAPH::GetDriverPriority( SCH_ITEM* aDriver )
 {
     if( !aDriver )
-        return PRIORITY_NONE;
+        return PRIORITY::NONE;
 
     switch( aDriver->Type() )
     {
-    case SCH_SHEET_PIN_T:     return PRIORITY_SHEET_PIN;
-    case SCH_HIER_LABEL_T:    return PRIORITY_HIER_LABEL;
-    case SCH_LABEL_T:         return PRIORITY_LOCAL_LABEL;
-    case SCH_GLOBAL_LABEL_T:  return PRIORITY_GLOBAL;
+    case SCH_SHEET_PIN_T:     return PRIORITY::SHEET_PIN;
+    case SCH_HIER_LABEL_T:    return PRIORITY::HIER_LABEL;
+    case SCH_LABEL_T:         return PRIORITY::LOCAL_LABEL;
+    case SCH_GLOBAL_LABEL_T:  return PRIORITY::GLOBAL;
     case SCH_PIN_T:
     {
         auto sch_pin = static_cast<SCH_PIN*>( aDriver );
 
         if( sch_pin->IsPowerConnection() )
-            return PRIORITY_POWER_PIN;
+            return PRIORITY::POWER_PIN;
         else
-            return PRIORITY_PIN;
+            return PRIORITY::PIN;
     }
 
-    default: return PRIORITY_NONE;
+    default: return PRIORITY::NONE;
     }
 }
 
@@ -1562,7 +1562,13 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
                 auto neighbor_conn = neighbor->m_driver_connection;
                 auto neighbor_name = neighbor_conn->Name();
 
+                // Matching name: no update needed
                 if( neighbor_name == member->Name() )
+                    continue;
+
+                // Don't override if the priority is higher than a local label anyway
+                if( CONNECTION_SUBGRAPH::GetDriverPriority( neighbor->m_driver )
+                        >= CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN )
                     continue;
 
                 wxLogTrace( "CONN", "%lu (%s) connected to bus member %s", neighbor->m_code,
@@ -1624,7 +1630,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
             CONNECTION_SUBGRAPH::GetDriverPriority( aSubgraph->m_driver );
 
     // Check if a subsheet has a higher-priority connection to the same net
-    if( highest < CONNECTION_SUBGRAPH::PRIORITY_POWER_PIN )
+    if( highest < CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN )
     {
         for( CONNECTION_SUBGRAPH* subgraph : visited )
         {
@@ -1635,7 +1641,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
             // Also upgrade if we found something with a shorter sheet path (higher in hierarchy)
             // but with an equivalent priority
 
-            if( ( priority >= CONNECTION_SUBGRAPH::PRIORITY_POWER_PIN ) ||
+            if( ( priority >= CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN ) ||
                 ( priority >= highest && subgraph->m_sheet.size() < aSubgraph->m_sheet.size() ) )
                 driver = subgraph;
         }
@@ -2049,6 +2055,13 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
             }
         }
     }
+
+    // Don't report warnings if this bus member has been overridden by a higher priority power pin
+    // or global label
+    if( conflict
+            && CONNECTION_SUBGRAPH::GetDriverPriority( aSubgraph->m_driver )
+                       >= CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN )
+        conflict = false;
 
     if( conflict )
     {
