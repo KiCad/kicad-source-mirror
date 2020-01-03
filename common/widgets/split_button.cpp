@@ -71,9 +71,9 @@ void SPLIT_BUTTON::SetMinSize( const wxSize& aSize )
 }
 
 
-void SPLIT_BUTTON::SetWidthPadding( int padding )
+void SPLIT_BUTTON::SetWidthPadding( int aPadding )
 {
-    m_widthPadding = padding;
+    m_widthPadding = aPadding;
     SetMinSize( m_unadjustedMinSize );
 }
 
