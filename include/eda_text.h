@@ -66,8 +66,8 @@ enum EDA_DRAW_MODE_T {
  * application define their own default policy starting with this
  * (usually with a user option or project).
  **/
-#define DEFAULT_SIZE_TEXT   50      // default text height (in mils, i.e. 1/1000")
-#define DIM_ANCRE_TEXTE     2       // Anchor size for text
+#define DEFAULT_SIZE_TEXT   Mils2iu( 50 )     // default text height (in mils, i.e. 1/1000")
+#define DIM_ANCRE_TEXTE     Mils2iu( 2 )      // Anchor size for text
 
 
 /**
