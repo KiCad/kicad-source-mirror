@@ -41,7 +41,7 @@
 #include <sch_connection.h>
 
 
-int SCH_JUNCTION::m_symbolSize = 40;    // Default diameter of the junction symbol
+int SCH_JUNCTION::m_symbolSize = Mils2iu( 40 );    // Default diameter of the junction symbol
 
 
 int SCH_JUNCTION::GetEffectiveSymbolSize()
