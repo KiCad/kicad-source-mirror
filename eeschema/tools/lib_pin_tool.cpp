@@ -25,7 +25,6 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 #include <lib_edit_frame.h>
-#include <eeschema_id.h>
 #include <confirm.h>
 #include <ee_actions.h>
 #include <sch_view.h>

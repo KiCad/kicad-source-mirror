@@ -45,7 +45,6 @@
 #include <dialogs/panel_libedit_settings.h>
 #include <sch_painter.h>
 #include "sch_junction.h"
-#include "eeschema_id.h"
 
 static int s_defaultBusThickness = DEFAULTBUSTHICKNESS;
 static int s_defaultWireThickness  = DEFAULTDRAWLINETHICKNESS;

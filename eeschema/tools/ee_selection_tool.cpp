@@ -44,7 +44,7 @@
 #include <tools/sch_line_wire_bus_tool.h>
 #include <ee_collectors.h>
 #include <painter.h>
-#include <eeschema_id.h>
+#include <eeschema_id.h>        // For MAX_SELECT_ITEM_IDS
 #include <menus_helpers.h>
 
 

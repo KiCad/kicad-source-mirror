@@ -30,7 +30,6 @@
 #include <sch_line.h>
 #include <connection_graph.h>
 #include <erc.h>
-#include <eeschema_id.h>
 #include <netlist_object.h>
 #include <tool/tool_manager.h>
 #include <tool/picker_tool.h>

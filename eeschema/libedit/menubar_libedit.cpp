@@ -30,7 +30,6 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
 #include <lib_manager.h>
-#include "eeschema_id.h"
 #include "lib_edit_frame.h"
 
 

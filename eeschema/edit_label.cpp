@@ -33,7 +33,6 @@
 #include <tools/ee_actions.h>
 #include <general.h>
 #include <sch_text.h>
-#include <eeschema_id.h>
 #include <sch_view.h>
 
 #include <wx/tokenzr.h>

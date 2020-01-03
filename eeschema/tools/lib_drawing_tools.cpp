@@ -25,7 +25,6 @@
 #include <ee_actions.h>
 #include <lib_edit_frame.h>
 #include <sch_view.h>
-#include <eeschema_id.h>
 #include <confirm.h>
 #include <view/view_controls.h>
 #include <view/view.h>

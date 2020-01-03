@@ -33,7 +33,6 @@
 #include <confirm.h>
 #include <sch_view.h>
 #include <lib_edit_frame.h>
-#include <eeschema_id.h>
 #include <dialogs/dialog_lib_edit_draw_item.h>
 #include <dialogs/dialog_lib_edit_text.h>
 #include <dialogs/dialog_edit_one_field.h>
