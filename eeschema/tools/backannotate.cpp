@@ -52,7 +52,7 @@ BACK_ANNOTATE::~BACK_ANNOTATE()
 }
 
 
-bool BACK_ANNOTATE::BackAnnotateComponents( const std::string& aNetlist )
+bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
 {
     m_changesCount = 0;
     wxString msg;
@@ -61,8 +61,7 @@ bool BACK_ANNOTATE::BackAnnotateComponents( const std::string& aNetlist )
             && !m_settings.processReferences )
     {
         m_settings.reporter.ReportTail(
-                _( "You should check at least one property to back annotate." ),
-                REPORTER::RPT_ERROR );
+                _( "Select at least one property to back annotate" ), REPORTER::RPT_ERROR );
         return false;
     }
 
@@ -75,14 +74,16 @@ bool BACK_ANNOTATE::BackAnnotateComponents( const std::string& aNetlist )
     m_refs.SortByTimeStamp();
     errors += m_refs.checkForDuplicatedElements( m_settings.reporter );
     errors += getChangeList();
-    errors += checkForUnusedComponents();
+    errors += checkForUnusedSymbols();
     errors += checkSharedSchematicErrors();
+
     if( errors > 0 )
         m_settings.dryRun = true;
     applyChangelist();
 
     if( !errors )
     {
+
         if( !m_settings.dryRun )
         {
             msg.Printf( _( "Schematic is back-annotated. %d changes applied." ), m_changesCount );
@@ -118,7 +119,7 @@ bool BACK_ANNOTATE::FetchNetlistFromPCB( std::string& aNetlist )
     if( !player )
     {
         DisplayErrorMessage(
-                this->m_frame, _( "Please open Pcbnew and run back-annotation again" ) );
+                this->m_frame, _( "Please open Pcbnew and run back annotation again" ) );
         return false;
     }
 
@@ -140,27 +141,29 @@ int BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
     {
         wxString path, value, footprint;
         wxASSERT( item.first == "ref" );
-        wxString ref = (UTF8&) item.second.front().first;
+        wxString ref = UTF8( item.second.front().first );
         try
         {
-            footprint = (UTF8&) item.second.get_child( "fpid" ).front().first;
-            if( footprint == "" && m_settings.ignoreStandaloneFootprints )
+            path = UTF8( item.second.get_child( "timestamp" ).front().first );
+
+            if( path == "" && m_settings.ignoreStandaloneFootprints )
                 continue;
-            path = (UTF8&) item.second.get_child( "timestamp" ).front().first;
-            value = (UTF8&) item.second.get_child( "value" ).front().first;
+            footprint = UTF8( item.second.get_child( "fpid" ).front().first );
+            value     = UTF8( item.second.get_child( "value" ).front().first );
         }
-        catch( boost::property_tree::ptree_bad_path& e )
+        catch( ... )
         {
-            wxASSERT_MSG( true, "Cannot parse PCB netlist for back-annotation" );
+            wxLogWarning( "Cannot parse PCB netlist for back-annotation" );
         }
 
         // Use lower_bound for not to iterate over map twice
         auto nearestItem = m_pcbModules.lower_bound( path );
+
         if( nearestItem != m_pcbModules.end() && nearestItem->first == path )
         {
             // Module with this path already exists - generate error
             wxString msg;
-            msg.Printf( _( "Pcb footprints %s and %s linked to same component" ),
+            msg.Printf( _( "Pcb footprints %s and %s linked to same symbol" ),
                     nearestItem->second->ref, ref );
             m_settings.reporter.ReportHead( msg, REPORTER::RPT_ERROR );
             ++errors;
@@ -189,9 +192,11 @@ int BACK_ANNOTATE::getChangeList()
         for( auto& item : m_multiUnitsRefs )
         {
             auto& refList = item.second;
+
             if( refList.FindRefByPath( pcbPath ) >= 0 )
             {
-                // If module linked to multi unit component, we add all component's units to
+
+                // If module linked to multi unit symbol, we add all symbol's units to
                 // the change list
                 foundInMultiunit = true;
                 for( size_t i = 0; i < refList.GetCount(); ++i )
@@ -206,13 +211,14 @@ int BACK_ANNOTATE::getChangeList()
             continue;
 
         int refIndex = m_refs.FindRefByPath( pcbPath );
+
         if( refIndex >= 0 )
             m_changelist.push_back( CHANGELIST_ITEM( m_refs[refIndex], pcbData ) );
         else
         {
-            // Haven't found linked component in multiunits or common refs. Generate error
+            // Haven't found linked symbol in multiunits or common refs. Generate error
             wxString msg;
-            msg.Printf( _( "Cannot find component for %s footprint" ), pcbData->ref );
+            msg.Printf( _( "Cannot find symbol for %s footprint" ), pcbData->ref );
             ++errors;
             m_settings.reporter.ReportTail( msg, REPORTER::RPT_ERROR );
         }
@@ -220,7 +226,7 @@ int BACK_ANNOTATE::getChangeList()
     return errors;
 }
 
-int BACK_ANNOTATE::checkForUnusedComponents()
+int BACK_ANNOTATE::checkForUnusedSymbols()
 {
     int errors = 0;
 
@@ -238,7 +244,7 @@ int BACK_ANNOTATE::checkForUnusedComponents()
         {
             ++errors;
             wxString msg;
-            msg.Printf( _( "Cannot find footprint for %s component" ), m_refs[i++].GetFullRef() );
+            msg.Printf( _( "Cannot find footprint for %s symbol" ), m_refs[i++].GetFullRef() );
             m_settings.reporter.ReportTail( msg, REPORTER::RPT_ERROR );
         }
 
@@ -250,9 +256,10 @@ int BACK_ANNOTATE::checkForUnusedComponents()
 
 bool BACK_ANNOTATE::checkReuseViolation( PCB_MODULE_DATA& aFirst, PCB_MODULE_DATA& aSecond )
 {
-    wxString msg;
+
     if( m_settings.processFootprints && aFirst.footprint != aSecond.footprint )
         return false;
+
     if( m_settings.processValues && aFirst.value != aSecond.value )
         return false;
     return true;
@@ -278,10 +285,12 @@ int BACK_ANNOTATE::checkSharedSchematicErrors()
     int errors = 0;
 
     // We will count how many times every component used in our changelist
+    // Component in this case is SCH_COMPONENT which can be used by more than one symbol
     int usageCount = 1;
     for( auto it = m_changelist.begin(); it != m_changelist.end(); ++it )
     {
         int compUsage = it->first.GetComp()->GetPathsAndReferences().Count();
+
         if( compUsage == 1 )
             continue;
 
@@ -291,11 +300,11 @@ int BACK_ANNOTATE::checkSharedSchematicErrors()
             ++usageCount;
             if( !checkReuseViolation( *it->second, *( it + 1 )->second ) )
             {
-                // Refs share same schematics but have different values or footprints
+                // Refs share same component but have different values or footprints
                 ++errors;
                 wxString msg;
-                msg.Printf( _( "Modules %s and %s cannot have different footprints or values "
-                               "as they use same schematic component" ),
+                msg.Printf( _( "%s and %s use the same schematic symbol. "
+                               "They cannot have different footprints or values." ),
                         ( it + 1 )->second->ref, it->second->ref );
                 m_settings.reporter.ReportTail( msg, REPORTER::RPT_ERROR );
             }
@@ -303,7 +312,7 @@ int BACK_ANNOTATE::checkSharedSchematicErrors()
         else
         {
             /* Next ref uses different component, so we count all components number for current
-            one. We compare that number stored in the component itself. If that differs, it
+            one. We compare that number to stored in the component itself. If that differs, it
             means that this particular component is reused in some another project. */
             if( !m_settings.ignoreOtherProjects && compUsage > usageCount )
             {
@@ -312,8 +321,8 @@ int BACK_ANNOTATE::checkSharedSchematicErrors()
                 if( !checkReuseViolation( tmp, *it->second ) )
                 {
                     wxString msg;
-                    msg.Printf( _( "Unable to change %s footprint or value as component is "
-                                   "reused in the another project" ),
+                    msg.Printf( _( "Unable to change %s footprint or value because associated"
+                                   "symbol is reused in the another project" ),
                             it->second->ref );
                     m_settings.reporter.ReportTail( msg, REPORTER::RPT_ERROR );
                     ++errors;
@@ -329,6 +338,7 @@ int BACK_ANNOTATE::checkSharedSchematicErrors()
 void BACK_ANNOTATE::applyChangelist()
 {
     wxString msg;
+
     // Apply changes from change list
     for( auto& item : m_changelist )
     {
@@ -336,8 +346,8 @@ void BACK_ANNOTATE::applyChangelist()
         PCB_MODULE_DATA& module = *item.second;
         wxString         oldFootprint = getTextFromField( ref, FOOTPRINT );
         wxString         oldValue = getTextFromField( ref, VALUE );
+        int              changesCountBefore = m_changesCount;
 
-        int changesCountBefore = m_changesCount;
         if( m_settings.processReferences && ref.GetRef() != module.ref )
         {
             ++m_changesCount;
@@ -346,15 +356,18 @@ void BACK_ANNOTATE::applyChangelist()
                 ref.GetComp()->SetRef( &ref.GetSheetPath(), module.ref );
             m_settings.reporter.ReportHead( msg, REPORTER::RPT_ACTION );
         }
+
         if( m_settings.processFootprints && oldFootprint != module.footprint )
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s footprint from \"%s\" to \"%s\"." ), ref.GetFullRef(),
                     getTextFromField( ref, FOOTPRINT ), module.footprint );
+
             if( !m_settings.dryRun )
                 ref.GetComp()->GetField( FOOTPRINT )->SetText( module.footprint );
             m_settings.reporter.ReportHead( msg, REPORTER::RPT_ACTION );
         }
+
         if( m_settings.processValues && oldValue != module.value )
         {
             ++m_changesCount;
@@ -364,6 +377,7 @@ void BACK_ANNOTATE::applyChangelist()
                 item.first.GetComp()->GetField( VALUE )->SetText( module.value );
             m_settings.reporter.ReportHead( msg, REPORTER::RPT_ACTION );
         }
+
         if( changesCountBefore == m_changesCount )
         {
             msg.Printf( _( "%s left unchanged" ), ref.GetFullRef() );
