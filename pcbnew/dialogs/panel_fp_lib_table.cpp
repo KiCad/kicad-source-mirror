@@ -59,6 +59,7 @@
 #include <kiway.h>
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <pcbnew_id.h>
 
 // clang-format off
 struct supportedFileType
@@ -74,10 +75,10 @@ struct supportedFileType
  */
 static const std::map<int, supportedFileType> fileTypes =
 {
-    { wxID_HIGHEST + 1, { "KiCad (folder with .kicad_mod files)", "",                               false, IO_MGR::KICAD_SEXP } },
-    { wxID_HIGHEST + 2, { "Eagle 6.x (*.lbr)",                    EagleFootprintLibPathWildcard(),  true,  IO_MGR::EAGLE } },
-    { wxID_HIGHEST + 3, { "KiCad legacy (*.mod)",                 LegacyFootprintLibPathWildcard(), true,  IO_MGR::LEGACY } },
-    { wxID_HIGHEST + 4, { "Geda (folder with *.fp files)",        "",                               false, IO_MGR::GEDA_PCB } },
+    { ID_PANEL_FPLIB_ADD_KICADMOD,    { "KiCad (folder with .kicad_mod files)", "",                               false, IO_MGR::KICAD_SEXP } },
+    { ID_PANEL_FPLIB_ADD_EAGLE6,      { "Eagle 6.x (*.lbr)",                    EagleFootprintLibPathWildcard(),  true,  IO_MGR::EAGLE } },
+    { ID_PANEL_FPLIB_ADD_KICADLEGACY, { "KiCad legacy (*.mod)",                 LegacyFootprintLibPathWildcard(), true,  IO_MGR::LEGACY } },
+    { ID_PANEL_FPLIB_ADD_GEDA,        { "Geda (folder with *.fp files)",        "",                               false, IO_MGR::GEDA_PCB } },
 };
 // clang-format on
 
