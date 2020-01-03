@@ -36,6 +36,13 @@ public:
     SHAPE_ARC() :
         SHAPE( SH_ARC ), m_centralAngle( 0.0 ), m_width( 0 ) {};
 
+    /**
+     * SHAPE_ARC ctor.
+     * @param aArcCenter is the arc center
+     * @param aArcStartPoint is the arc start point
+     * @param aCenterAngle is the arc angle in degrees
+     * @param aWidth is the arc line thickness
+     */
     SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
                double aCenterAngle, int aWidth = 0 ) :
         SHAPE( SH_ARC ), m_p0( aArcStartPoint ), m_pc( aArcCenter ), m_centralAngle( aCenterAngle ),
