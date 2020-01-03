@@ -351,6 +351,9 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
         Connect( fileType.first, wxEVT_COMMAND_MENU_SELECTED,
                 wxCommandEventHandler( PANEL_FP_LIB_TABLE::browseLibrariesHandler ) );
     }
+
+    // This is the button only press for the browse button instead of the menu
+    m_browseButton->Bind( wxEVT_BUTTON, &PANEL_FP_LIB_TABLE::browseLibrariesHandler, this );
 }
 
 
@@ -599,12 +602,26 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( !m_cur_grid->CommitPendingChanges() )
         return;
 
-    std::map<int, supportedFileType>::const_iterator fileTypeIt = fileTypes.find( event.GetId() );
+    std::map<int, supportedFileType>::const_iterator fileTypeIt;
+
+    // We are bound both to the menu and button with this one handler
+    // So we must set the file type based on it
+    if( event.GetEventType() == wxEVT_BUTTON )
+    {
+        // Let's default to adding a kicad module for just the module
+        fileTypeIt = fileTypes.find( ID_PANEL_FPLIB_ADD_KICADMOD );
+    }
+    else
+    {
+        fileTypeIt = fileTypes.find( event.GetId() );
+    }
+
     if( fileTypeIt == fileTypes.end() )
     {
-        wxLogWarning( "File type selection event received not found in file type table" );
+        wxLogWarning( "File type selection event received but could not find the file type in the table" );
         return;
     }
+
     supportedFileType fileType = fileTypeIt->second;
 
     if( m_lastBrowseDir.IsEmpty() )
