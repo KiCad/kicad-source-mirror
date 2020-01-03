@@ -622,7 +622,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         if( result == wxID_CANCEL )
             return;
 
-        dlg.GetFilenames( files );
+        dlg.GetPaths( files );
 
         m_lastBrowseDir = dlg.GetDirectory();
     }
