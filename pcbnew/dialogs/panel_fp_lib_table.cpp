@@ -59,7 +59,7 @@
 #include <kiway.h>
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
-#include <pcbnew_id.h>
+#include <pcbnew_id.h>          // For ID_PCBNEW_END_LIST
 
 // clang-format off
 struct supportedFileType
@@ -68,6 +68,16 @@ struct supportedFileType
     wxString m_FileFilter;  ///< In case of folders it stands for extensions of files stored inside
     bool     m_IsFile;      ///< Whether the library is a folder or a file
     IO_MGR::PCB_FILE_T m_Plugin;
+};
+
+/*
+ * Event IDs for the menu items in the split button menu
+ */
+enum {
+    ID_PANEL_FPLIB_ADD_KICADMOD = ID_PCBNEW_END_LIST,
+    ID_PANEL_FPLIB_ADD_EAGLE6,
+    ID_PANEL_FPLIB_ADD_KICADLEGACY,
+    ID_PANEL_FPLIB_ADD_GEDA,
 };
 
 /*
