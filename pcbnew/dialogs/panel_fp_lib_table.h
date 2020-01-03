@@ -53,7 +53,7 @@ private:
 
     void pageChangedHandler( wxAuiNotebookEvent& event ) override;
     void appendRowHandler( wxCommandEvent& event ) override;
-    void browseLibrariesHandler( wxCommandEvent& event ) override;
+    void browseLibrariesHandler( wxCommandEvent& event );
     void deleteRowHandler( wxCommandEvent& event ) override;
     void moveUpHandler( wxCommandEvent& event ) override;
     void moveDownHandler( wxCommandEvent& event ) override;
