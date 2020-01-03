@@ -348,8 +348,8 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     {
         browseMenu->Append( fileType.first, fileType.second.m_Description );
 
-        Connect( fileType.first, wxEVT_COMMAND_MENU_SELECTED,
-                wxCommandEventHandler( PANEL_FP_LIB_TABLE::browseLibrariesHandler ) );
+        browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_FP_LIB_TABLE::browseLibrariesHandler,
+                this, fileType.first );
     }
 
     // This is the button only press for the browse button instead of the menu
