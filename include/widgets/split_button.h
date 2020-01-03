@@ -49,7 +49,7 @@ private:
     wxString  m_label;
     wxMenu*   m_pMenu = nullptr;
     wxBitmap  m_bitmap;
-    wxSize    unAdjustedMinSize;
+    wxSize    m_unadjustedMinSize;
 };
 
 #endif /*__SPLIT_BUTTON_H__*/
