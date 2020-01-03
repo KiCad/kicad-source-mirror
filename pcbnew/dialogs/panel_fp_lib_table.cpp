@@ -599,13 +599,13 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( !m_cur_grid->CommitPendingChanges() )
         return;
 
-    auto fileTypeIt = fileTypes.find( event.GetId() );
+    std::map<int, supportedFileType>::const_iterator fileTypeIt = fileTypes.find( event.GetId() );
     if( fileTypeIt == fileTypes.end() )
     {
         wxLogWarning( "File type selection event received not found in file type table" );
         return;
     }
-    auto fileType = fileTypeIt->second;
+    supportedFileType fileType = fileTypeIt->second;
 
     if( m_lastBrowseDir.IsEmpty() )
         m_lastBrowseDir = m_projectBasePath;
@@ -617,7 +617,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         wxFileDialog dlg( this, _( "Select Library" ), m_lastBrowseDir, wxEmptyString,
                 fileType.m_FileFilter, wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
-        auto result = dlg.ShowModal();
+        int result = dlg.ShowModal();
 
         if( result == wxID_CANCEL )
             return;
@@ -631,7 +631,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         wxDirDialog dlg( nullptr, _( "Select Library" ), m_lastBrowseDir,
                 wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
-        auto result = dlg.ShowModal();
+        int result = dlg.ShowModal();
 
         if( result == wxID_CANCEL )
             return;
