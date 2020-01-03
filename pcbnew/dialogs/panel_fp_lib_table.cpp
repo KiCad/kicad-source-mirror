@@ -612,9 +612,13 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     wxArrayString files;
 
+    wxString title;
+
+    title.Printf( _( "Select %s Library" ), fileType.m_Description );
+
     if( fileType.m_IsFile )
     {
-        wxFileDialog dlg( this, _( "Select Library" ), m_lastBrowseDir, wxEmptyString,
+        wxFileDialog dlg( this, title, m_lastBrowseDir, wxEmptyString,
                 fileType.m_FileFilter, wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
         int result = dlg.ShowModal();
@@ -628,7 +632,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     }
     else
     {
-        wxDirDialog dlg( nullptr, _( "Select Library" ), m_lastBrowseDir,
+        wxDirDialog dlg( nullptr, title, m_lastBrowseDir,
                 wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
         int result = dlg.ShowModal();
