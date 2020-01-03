@@ -80,8 +80,9 @@ void DIALOG_UPDATE_FROM_PCB::updateData()
     m_messagePanel->Clear();
     BACK_ANNOTATE backAnno( this->m_frame, getSettings( true ) );
     std::string   netlist;
+
     if( backAnno.FetchNetlistFromPCB( netlist ) )
-        backAnno.BackAnnotateComponents( netlist );
+        backAnno.BackAnnotateSymbols( netlist );
     m_messagePanel->Flush( false );
 }
 
@@ -119,7 +120,8 @@ void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
     std::string netlist;
     m_messagePanel->Clear();
     BACK_ANNOTATE backAnno( this->m_frame, getSettings( false ) );
-    if( backAnno.FetchNetlistFromPCB( netlist ) && backAnno.BackAnnotateComponents( netlist ) )
+
+    if( backAnno.FetchNetlistFromPCB( netlist ) && backAnno.BackAnnotateSymbols( netlist ) )
     {
         g_CurrentSheet->UpdateAllScreenReferences();
         m_frame->SetSheetNumberAndCount();

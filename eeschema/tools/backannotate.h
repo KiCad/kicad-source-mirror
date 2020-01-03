@@ -46,12 +46,12 @@ class SCH_EDIT_FRAME;
 /**
  * @brief Back annotation algorithm class. It used to recieve, check and apply \ref NETLIST
  * from PCBNEW. Class check for following collisions:
- * - Schematic component exists, but linked PCBnew module missing
- * - PCBnew module exists but no schematic component connected to
+ * - Schematic symbol exists, but linked PCBnew module missing
+ * - PCBnew module exists but no schematic symbol connected to
  * - PCBnew module is standalone
  * - Schematic sheet is reused one or more times and user trying to change footprint or value
  * only for few of them.
- * - Schematic components share same path
+ * - Schematic symbols share same path
  * - More than one PCBnew module linked to same path
 
  */
@@ -111,7 +111,7 @@ public:
      * @param aNetlist netlist to run back annotation from
      * @return true if success
      */
-    bool BackAnnotateComponents( const std::string& aNetlist );
+    bool BackAnnotateSymbols( const std::string& aNetlist );
 
 private:
     SETTINGS                     m_settings;
@@ -124,7 +124,7 @@ private:
     ///> To count number of changes applied to the schematic
     int m_changesCount;
 
-    ///> Get text from component value ( such as Footprint or Value )
+    ///> Get text from symbol's field ( such as Footprint or Value )
     wxString getTextFromField( const SCH_REFERENCE& aRef, const NumFieldType aField );
 
     /**
@@ -147,11 +147,11 @@ private:
     int getChangeList();
 
     /**
-     * @brief Check if some components are not represented in PCB modules and vice versa.
+     * @brief Check if some symbols are not represented in PCB modules and vice versa.
      * \ref m_refs must be sorted by path
      * @return number of errors
      */
-    int checkForUnusedComponents();
+    int checkForUnusedSymbols();
 
     /**
      * @brief Check for errors connected to reusing schematic in project or between projects

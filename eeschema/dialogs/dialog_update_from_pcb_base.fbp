@@ -97,12 +97,12 @@
                                     <object class="wxGridBagSizer" expanded="1">
                                         <property name="empty_cell_size"></property>
                                         <property name="flexible_direction">wxBOTH</property>
-                                        <property name="growablecols">1</property>
+                                        <property name="growablecols">0,1</property>
                                         <property name="growablerows"></property>
                                         <property name="hgap">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">gbSizer2</property>
-                                        <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
+                                        <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_ALL</property>
                                         <property name="permission">none</property>
                                         <property name="vgap">0</property>
                                         <object class="gbsizeritem" expanded="1">
@@ -141,7 +141,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Update References</property>
+                                                <property name="label">Update references</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -209,7 +209,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Update Footprints</property>
+                                                <property name="label">Update footprints</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -277,7 +277,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Ignore Footrints with no component associated</property>
+                                                <property name="label">Ignore footrints with no symbol associated</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -298,7 +298,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass">; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Ignore footprints, which were created as standalone in PCB editor.</property>
+                                                <property name="tooltip">Ignore footprints that only exist on the PCB.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -345,7 +345,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Update Values</property>
+                                                <property name="label">Update values</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -413,7 +413,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Ignore Errors in Other Projects</property>
+                                                <property name="label">Ignore errors in other projects</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -434,7 +434,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass">; ; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">If some schematic was used more than once, it can cause an error when you try to back annotate value or footprint. If this option is on, all errors caused by using schematic in other projects will be disabled.</property>
+                                                <property name="tooltip">Schematic sheets used in multiple projects are not compatible with back annotation.  If this option is selected, errors generated by multiple use will be disabled.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
