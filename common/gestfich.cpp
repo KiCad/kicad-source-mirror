@@ -351,7 +351,12 @@ bool OpenPDF( const wxString& file )
 
     if( !Pgm().UseSystemPdfBrowser() )    //  Run the preferred PDF Browser
     {
+#ifdef __WXMSW__
+        // Windows requires double quotes around the filename to handle spaces
+        command = Pgm().GetPdfBrowserName() + wxT( " \"" ) + filename + wxT( "\"" );
+#else
         command = Pgm().GetPdfBrowserName() + wxT( " '" ) + filename + wxT( "'" );
+#endif
     }
     else
     {
