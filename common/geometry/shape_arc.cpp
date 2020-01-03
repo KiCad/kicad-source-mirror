@@ -155,9 +155,10 @@ const BOX2I SHAPE_ARC::BBox( int aClearance ) const
 {
     BOX2I bbox;
     std::vector<VECTOR2I> points;
-    points.push_back( m_pc );
+    // Put start and end points in the point list
     points.push_back( m_p0 );
     points.push_back( GetP1() );
+//    points.push_back( m_pc );     the center point is not necessary in the BBox
 
     double start_angle = GetStartAngle();
     double end_angle = start_angle + GetCentralAngle();

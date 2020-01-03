@@ -34,6 +34,7 @@
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <kicad_string.h>
+#include <geometry/shape_arc.h>
 
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberImageFile ) :
     EDA_ITEM( (EDA_ITEM*)NULL, GERBER_DRAW_ITEM_T )
@@ -306,10 +307,23 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
 
     case GBR_ARC:
     {
-        // Note: using a larger-than-necessary BB to simplify computation
-        double radius = GetLineLength( m_Start, m_ArcCentre );
-        bbox.Move( m_ArcCentre - m_Start );
-        bbox.Inflate( radius + m_Size.x, radius + m_Size.x );
+        double arc_angle =
+            atan2( double( m_End.y - m_ArcCentre.y ),  double( m_End.x - m_ArcCentre.x ) )
+            - atan2( double( m_Start.y - m_ArcCentre.y ),  double( m_Start.x - m_ArcCentre.x ) );
+
+        arc_angle *= 180.0 / M_PI;
+
+        if( arc_angle < 0.0 )
+            arc_angle += 360.0;
+
+        if( m_End == m_Start )      // Arc with the end point = start point is expected to be a circle
+            arc_angle = 360.0;
+
+        SHAPE_ARC arc( m_ArcCentre, m_Start, arc_angle );
+        BOX2I arc_bbox = arc.BBox( m_Size.x / 2 );  // m_Size.x is the line thickness
+        bbox.SetOrigin( arc_bbox.GetX(), arc_bbox.GetY() );
+        bbox.SetWidth( arc_bbox.GetWidth() );
+        bbox.SetHeight( arc_bbox.GetHeight() );
         break;
     }
 

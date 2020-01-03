@@ -329,11 +329,23 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         m_gal->DrawArcSegment( center, radius, startAngle, endAngle, width );
 
 #if 0   // Arc Debugging only
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
         m_gal->SetLineWidth( 5 );
-        m_gal->SetStrokeColor( COLOR4D( 0.0, 1.0, 0.0, 1.0 ) );
+        m_gal->SetStrokeColor( COLOR4D( 0.1, 0.5, 0.0, 0.5 ) );
         m_gal->DrawLine( center, aItem->GetABPosition( arcStart ) );
-        m_gal->SetStrokeColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+        m_gal->SetStrokeColor( COLOR4D( 0.6, 0.1, 0.0, 0.5 ) );
         m_gal->DrawLine( center, aItem->GetABPosition( arcEnd ) );
+#endif
+
+#if 0   // Bbox arc Debugging only
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        EDA_RECT box = aItem->GetBoundingBox();
+        m_gal->SetLineWidth( 5 );
+        m_gal->SetStrokeColor( COLOR4D(0.9, 0.9, 0, 0.4) );
+        // box coordinates are already in AB position.
+        m_gal->DrawRectangle( box.GetOrigin(), box.GetEnd() );
 #endif
         break;
     }
