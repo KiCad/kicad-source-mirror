@@ -22,51 +22,52 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <base_units.h>
+#include <class_library.h>
 #include <confirm.h>
+#include <connection_graph.h>
+#include <dialog_symbol_remap.h>
+#include <dialogs/dialog_schematic_find.h>
+#include <eeschema_config.h>
+#include <eeschema_id.h>
 #include <executable_names.h>
 #include <fctsys.h>
+#include <general.h>
 #include <gestfich.h>
 #include <gr_basic.h>
+#include <hierarch.h>
 #include <html_messagebox.h>
+#include <invoke_sch_dialog.h>
 #include <kiface_i.h>
 #include <kiway.h>
-#include <pgm_base.h>
-#include <profile.h>
-#include <advanced_config.h>
-#include <general.h>
-#include <eeschema_id.h>
-#include <class_library.h>
-#include <sch_edit_frame.h>
-#include <symbol_lib_table.h>
-#include <reporter.h>
 #include <lib_edit_frame.h>
 #include <lib_view_frame.h>
-#include <eeschema_config.h>
+#include <pgm_base.h>
+#include <profile.h>
+#include <reporter.h>
+#include <sch_edit_frame.h>
+#include <sch_painter.h>
 #include <sch_sheet.h>
 #include <sim/sim_plot_frame.h>
-#include <invoke_sch_dialog.h>
-#include <dialogs/dialog_schematic_find.h>
-#include <dialog_symbol_remap.h>
-#include <tool/tool_manager.h>
-#include <tool/tool_dispatcher.h>
+#include <symbol_lib_table.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
 #include <tool/picker_tool.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
 #include <tools/ee_actions.h>
-#include <tools/ee_selection_tool.h>
+#include <tools/ee_inspection_tool.h>
 #include <tools/ee_point_editor.h>
+#include <tools/ee_selection_tool.h>
 #include <tools/sch_drawing_tools.h>
+#include <tools/sch_edit_tool.h>
+#include <tools/sch_editor_control.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
-#include <tools/sch_edit_tool.h>
-#include <tools/ee_inspection_tool.h>
-#include <tools/sch_editor_control.h>
 #include <wildcards_and_files_ext.h>
-#include <connection_graph.h>
-#include <sch_painter.h>
 
 #include <gal/graphics_abstraction_layer.h>
 
@@ -247,6 +248,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_findReplaceDialog = nullptr;
     m_findReplaceStatusPopup = nullptr;
+    m_hierarchyDialog        = nullptr;
 
     SetForceHVLines( true );
     SetSpiceAdjustPassiveValues( false );
@@ -560,6 +562,12 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         m_findReplaceDialog = nullptr;
     }
 
+    if( m_hierarchyDialog )
+    {
+        m_hierarchyDialog->Destroy();
+        m_hierarchyDialog = nullptr;
+    }
+
     SCH_SCREENS screens;
     wxFileName fn;
 
@@ -668,6 +676,25 @@ wxFindReplaceData* SCH_EDIT_FRAME::GetFindReplaceData()
     return nullptr;
 }
 
+void SCH_EDIT_FRAME::UpdateHierarchyNavigator( bool aForceUpdate )
+{
+
+    if( aForceUpdate )
+    {
+        if( m_hierarchyDialog )
+            CloseHierarchyNavigator();
+
+        m_hierarchyDialog = new HIERARCHY_NAVIG_DLG( this );
+        m_hierarchyDialog->Connect(
+                wxEVT_CLOSE_WINDOW, wxCloseEventHandler( HIERARCHY_NAVIG_DLG::OnClose ) );
+        m_hierarchyDialog->Show( true );
+    }
+    else
+    {
+        if( m_hierarchyDialog )
+            m_hierarchyDialog->UpdateHierarchyTree();
+    }
+}
 
 void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
 {
@@ -721,6 +748,11 @@ void SCH_EDIT_FRAME::OnFindDialogClose()
     m_findReplaceDialog = nullptr;
 }
 
+void SCH_EDIT_FRAME::CloseHierarchyNavigator()
+{
+    m_hierarchyDialog->Destroy();
+    m_hierarchyDialog = nullptr;
+}
 
 void SCH_EDIT_FRAME::OnLoadFile( wxCommandEvent& event )
 {
