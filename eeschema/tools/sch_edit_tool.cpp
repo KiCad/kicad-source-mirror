@@ -196,9 +196,9 @@ bool SCH_EDIT_TOOL::Init()
         {
             const std::deque<EDA_ITEM*> items = aSel.GetItems();
             if( !std::all_of( items.begin(), items.end(),
-                [&]( const EDA_ITEM* item )
+                [&]( const EDA_ITEM* selItem )
                 {
-                    const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( item );
+                    const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( selItem );
                     if ( line == nullptr )
                     {
                         wxLogWarning(
