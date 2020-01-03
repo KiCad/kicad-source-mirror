@@ -987,6 +987,9 @@ if( UNIX AND NOT APPLE )
     install( DIRECTORY ${UNIX_APPDATA_FILES}
         DESTINATION share
         COMPONENT resources
+        FILES_MATCHING
+        PATTERN "*appdata.xml"
+        PATTERN "*.in" EXCLUDE
         )
 endif()
 
