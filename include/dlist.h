@@ -140,7 +140,7 @@ public:
  */
 template <class T>
 class
-#if !defined( EESCHEMA ) && !defined( GERBVIEW )
+#if !defined( EESCHEMA )
     wxDEPRECATED_MSG( "DLIST is deprecated, do not use in new code" )
 #endif
 DLIST : public DHEAD
