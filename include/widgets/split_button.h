@@ -25,8 +25,11 @@
 #ifndef __SPLIT_BUTTON_H__
 #define __SPLIT_BUTTON_H__
 
-#include <wx/menu.h>
-#include <wx/wx.h>
+#include <wx/bitmap.h>
+#include <wx/panel.h>
+
+class wxButton;
+class wxMenu;
 
 class SPLIT_BUTTON : public wxPanel
 {
