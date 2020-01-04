@@ -30,9 +30,9 @@
 #ifndef GERBER_JOBFILE_WRITER_H
 #define GERBER_JOBFILE_WRITER_H
 
-#include <nlohmann/json.hpp>
+#include <kicad_json.h>
 
-using json = nlohmann::json;
+using json = kicad::json;
 
 
 // A helper enum to handle sides of some layers (silk, mask)

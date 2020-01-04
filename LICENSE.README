@@ -18,6 +18,7 @@ Licensed under ISC:
 Licensed under MIT:
 - tinyspline_lib in thirdparty/tinyspline_lib
 - nlohmann/json in thirdparty/nlohmann_json
+- nlohmann/fifo_map in thirdparty/nlohmann_json
 Licensed under GPLv2 (or later):
 - dxflib in thirdparty/dxflib_qcad
 - potrace in thirdparty/potrace
