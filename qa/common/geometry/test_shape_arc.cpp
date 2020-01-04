@@ -87,6 +87,15 @@ static void CheckArcGeom( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps )
     /// All arcs are solid
     BOOST_CHECK_EQUAL( aArc.IsSolid(), true );
 
+    /// Test bouding box
+    #if 0   // Only for debug.
+    printf("abox %d %d %d %d prp %d %d %d %d\n",
+    aArc.BBox().GetX(), aArc.BBox().GetY(), aArc.BBox().GetSize().x, aArc.BBox().GetSize().y,
+    aProps.m_bbox.GetX(),aProps.m_bbox.GetY(),
+    aProps.m_bbox.GetSize().x, aProps.m_bbox.GetSize().y );
+    fflush(0);
+    #endif
+
     BOOST_CHECK_PREDICATE(
             KI_TEST::IsBoxWithinTol<BOX2I>, ( aArc.BBox() )( aProps.m_bbox )( pos_tol ) );
 
@@ -199,7 +208,7 @@ static const std::vector<ARC_CPA_CASE> arc_cases = {
                     0,
                     330,
                     200,
-                    { { 100, 100 }, { 200, 100 } },
+                    { { 273, 100 }, { 27, 100 } },
             },
     },
     {
@@ -222,7 +231,7 @@ static const std::vector<ARC_CPA_CASE> arc_cases = {
                     150,
                     20000,
                     // bbox defined by: centre, top quadrant point, two endpoints
-                    { { -17320, 0 }, { 17320 * 2, 20000 } },
+                    { { -17320, 10000 }, { 17320 * 2, 10000 } },
             },
     },
     {
