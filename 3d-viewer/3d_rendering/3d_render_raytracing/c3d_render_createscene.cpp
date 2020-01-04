@@ -512,73 +512,102 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
             std::vector<const COBJECT2D *> *object2d_B = CSGITEM_EMPTY;
 
-            if( true )  // previously, was a option, now holes are always drawn in zones
+            object2d_B = new std::vector<const COBJECT2D *>();
+
+            // Check if there are any layerhole that intersects this object
+            // Eg: a segment is cutted by a via hole or THT hole.
+            // /////////////////////////////////////////////////////////////
+            const MAP_CONTAINER_2D &layerHolesMap = m_settings.GetMapLayersHoles();
+
+            if( layerHolesMap.find(layer_id) != layerHolesMap.end() )
             {
-                object2d_B = new std::vector<const COBJECT2D *>();
+                MAP_CONTAINER_2D::const_iterator ii_hole = layerHolesMap.find(layer_id);
 
-                // Check if there are any layerhole that intersects this object
-                // Eg: a segment is cutted by a via hole or THT hole.
-                // /////////////////////////////////////////////////////////////
-                const MAP_CONTAINER_2D &layerHolesMap = m_settings.GetMapLayersHoles();
+                const CBVHCONTAINER2D *containerLayerHoles2d =
+                        static_cast<const CBVHCONTAINER2D *>(ii_hole->second);
 
-                if( layerHolesMap.find(layer_id) != layerHolesMap.end() )
+
+                CONST_LIST_OBJECT2D intersectionList;
+                containerLayerHoles2d->GetListObjectsIntersects( object2d_A->GetBBox(),
+                                                                 intersectionList );
+
+                if( !intersectionList.empty() )
                 {
-                    MAP_CONTAINER_2D::const_iterator ii_hole = layerHolesMap.find(layer_id);
-
-                    const CBVHCONTAINER2D *containerLayerHoles2d =
-                            static_cast<const CBVHCONTAINER2D *>(ii_hole->second);
-
-
-                    CONST_LIST_OBJECT2D intersectionList;
-                    containerLayerHoles2d->GetListObjectsIntersects( object2d_A->GetBBox(),
-                                                                     intersectionList );
-
-                    if( !intersectionList.empty() )
+                    for( CONST_LIST_OBJECT2D::const_iterator holeOnLayer =
+                         intersectionList.begin();
+                         holeOnLayer != intersectionList.end();
+                         ++holeOnLayer )
                     {
-                        for( CONST_LIST_OBJECT2D::const_iterator holeOnLayer =
-                             intersectionList.begin();
-                             holeOnLayer != intersectionList.end();
-                             ++holeOnLayer )
-                        {
-                            const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*holeOnLayer);
+                        const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*holeOnLayer);
 
-                            //if( object2d_A->Intersects( hole2d->GetBBox() ) )
-                                //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
-                                    object2d_B->push_back( hole2d );
-                        }
+                        //if( object2d_A->Intersects( hole2d->GetBBox() ) )
+                            //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
+                                object2d_B->push_back( hole2d );
                     }
                 }
+            }
 
-                // Check if there are any THT that intersects this object
-                // /////////////////////////////////////////////////////////////
-                if( !m_settings.GetThroughHole_Outer().GetList().empty() )
+            // Check if there are any THT that intersects this object
+            // /////////////////////////////////////////////////////////////
+            if( !m_settings.GetThroughHole_Outer().GetList().empty() )
+            {
+                CONST_LIST_OBJECT2D intersectionList;
+
+                m_settings.GetThroughHole_Outer().GetListObjectsIntersects(
+                            object2d_A->GetBBox(),
+                            intersectionList );
+
+                if( !intersectionList.empty() )
                 {
-                    CONST_LIST_OBJECT2D intersectionList;
-
-                    m_settings.GetThroughHole_Outer().GetListObjectsIntersects(
-                                object2d_A->GetBBox(),
-                                intersectionList );
-
-                    if( !intersectionList.empty() )
+                    for( CONST_LIST_OBJECT2D::const_iterator hole = intersectionList.begin();
+                         hole != intersectionList.end();
+                         ++hole )
                     {
-                        for( CONST_LIST_OBJECT2D::const_iterator hole = intersectionList.begin();
-                             hole != intersectionList.end();
-                             ++hole )
-                        {
-                            const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*hole);
+                        const COBJECT2D *hole2d = static_cast<const COBJECT2D *>(*hole);
 
-                            //if( object2d_A->Intersects( hole2d->GetBBox() ) )
-                                //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
-                                    object2d_B->push_back( hole2d );
-                        }
+                        //if( object2d_A->Intersects( hole2d->GetBBox() ) )
+                            //if( object2d_A->GetBBox().Intersects( hole2d->GetBBox() ) )
+                                object2d_B->push_back( hole2d );
                     }
                 }
+            }
+            
+            
+            const MAP_CONTAINER_2D &mapLayers = m_settings.GetMapLayers();
+                    
+            if( m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) &&
+                ( ( ( layer_id == B_SilkS ) &&
+                    ( mapLayers.find( B_Mask ) != mapLayers.end() ) ) ||
+                  ( ( layer_id == F_SilkS ) &&
+                    ( mapLayers.find( F_Mask ) != mapLayers.end() ) ) ) )
+            {
+                const PCB_LAYER_ID layerMask_id = (layer_id == B_SilkS)?B_Mask:F_Mask;
 
-                if( object2d_B->empty() )
+                const CBVHCONTAINER2D *containerMaskLayer2d =
+                        static_cast<const CBVHCONTAINER2D *>( mapLayers.at( layerMask_id ) );
+                
+                CONST_LIST_OBJECT2D intersectionList;
+                containerMaskLayer2d->GetListObjectsIntersects( object2d_A->GetBBox(),
+                                                                 intersectionList );
+
+                if( !intersectionList.empty() )
                 {
-                    delete object2d_B;
-                    object2d_B = CSGITEM_EMPTY;
+                    for( CONST_LIST_OBJECT2D::const_iterator objOnLayer =
+                         intersectionList.begin();
+                         objOnLayer != intersectionList.end();
+                         ++objOnLayer )
+                    {
+                        const COBJECT2D *obj2d = static_cast<const COBJECT2D *>(*objOnLayer);
+                        
+                        object2d_B->push_back( obj2d );
+                    }
                 }
+            }
+
+            if( object2d_B->empty() )
+            {
+                delete object2d_B;
+                object2d_B = CSGITEM_EMPTY;
             }
 
             if( (object2d_B == CSGITEM_EMPTY) &&
