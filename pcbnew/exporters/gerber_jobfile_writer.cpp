@@ -29,38 +29,38 @@
 
 #include <fctsys.h>
 
+#include <fstream>
+#include <iomanip>
 #include <vector>
 
-#include <plotter.h>
-#include <pcb_edit_frame.h>
 #include <build_version.h>
+#include <pcb_edit_frame.h>
+#include <plotter.h>
 
 #include <class_board.h>
-#include <class_zone.h>
 #include <class_module.h>
+#include <class_zone.h>
 
-#include <pcbplot.h>
-#include <pcbnew.h>
-#include <gerber_jobfile_writer.h>
-#include <wildcards_and_files_ext.h>
-#include <reporter.h>
-#include <gbr_metadata.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
-
+#include <gbr_metadata.h>
+#include <gerber_jobfile_writer.h>
+#include <pcbnew.h>
+#include <pcbplot.h>
+#include <reporter.h>
+#include <wildcards_and_files_ext.h>
 
 GERBER_JOBFILE_WRITER::GERBER_JOBFILE_WRITER( BOARD* aPcb, REPORTER* aReporter )
 {
     m_pcb = aPcb;
     m_reporter = aReporter;
-    m_conversionUnits = 1.0 / IU_PER_MM;    // Gerber units = mm
-    m_indent = 0;
+    m_conversionUnits = 1.0 / IU_PER_MM; // Gerber units = mm
 }
 
 std::string GERBER_JOBFILE_WRITER::formatStringFromUTF32( const wxString& aText )
 {
-    std::string fmt_text;     // the text after UTF32 to UTF8 conversion
+    std::string fmt_text; // the text after UTF32 to UTF8 conversion
 
-    for( unsigned long letter: aText )
+    for( unsigned long letter : aText )
     {
         if( letter >= ' ' && letter <= 0x7F )
             fmt_text += char( letter );
@@ -88,7 +88,7 @@ enum ONSIDE GERBER_JOBFILE_WRITER::hasSilkLayers()
             flag |= SIDE_TOP;
     }
 
-    return (enum ONSIDE)flag;
+    return (enum ONSIDE) flag;
 }
 
 
@@ -105,7 +105,7 @@ enum ONSIDE GERBER_JOBFILE_WRITER::hasSolderMasks()
             flag |= SIDE_TOP;
     }
 
-    return (enum ONSIDE)flag;
+    return (enum ONSIDE) flag;
 }
 
 const char* GERBER_JOBFILE_WRITER::sideKeyValue( enum ONSIDE aValue )
@@ -116,18 +116,21 @@ const char* GERBER_JOBFILE_WRITER::sideKeyValue( enum ONSIDE aValue )
 
     switch( aValue )
     {
-        case SIDE_NONE:
-            value = "No"; break;
+    case SIDE_NONE:
+        value = "No";
+        break;
 
-        case SIDE_TOP:
-            value = "TopOnly"; break;
+    case SIDE_TOP:
+        value = "TopOnly";
+        break;
 
-        case SIDE_BOTTOM:
-            value = "BotOnly"; break;
+    case SIDE_BOTTOM:
+        value = "BotOnly";
+        break;
 
-        case SIDE_BOTH:
-            value = "Both"; break;
-
+    case SIDE_BOTH:
+        value = "Both";
+        break;
     }
 
     return value;
@@ -136,7 +139,7 @@ const char* GERBER_JOBFILE_WRITER::sideKeyValue( enum ONSIDE aValue )
 
 bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
 {
-    bool success;
+    bool     success;
     wxString msg;
 
     success = WriteJSONJobFile( aFullFilename );
@@ -162,60 +165,33 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
 void GERBER_JOBFILE_WRITER::addJSONHeader()
 {
     wxString text;
-    openBlock();
-    addJSONObject( "\"Header\":\n" );
-    openBlock();
 
-    // Creates the GenerationSoftware
-    addJSONObject( "\"GenerationSoftware\":\n" );
-    openBlock();
-    addJSONObject( "\"Vendor\":      \"KiCad\",\n" );
-    addJSONObject( "\"Application\": \"Pcbnew\",\n" );
-    text.Printf( "\"Version\":     \"%s\"\n", GetBuildVersion() );
-    addJSONObject( text );
-    closeBlockWithSep();
-
-    // creates the CreationDate attribute:
-    // The attribute value must conform to the full version of the ISO 8601
-    // date and time format, including time and time zone.
-    text = GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT_GBRJOB ) + "\n";
-    addJSONObject( text );
-
-    closeBlockWithSep();
+    m_json["Header"] = {
+        {
+            "GenerationSoftware",
+            {
+                { "Vendor", "KiCad" },
+                { "Application", "Pcbnew" },
+                { "Version", GetBuildVersion() }
+            }
+        },
+        {
+            // The attribute value must conform to the full version of the ISO 8601
+            // date and time format, including time and time zone.
+            "CreationDate", GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT_GBRJOB )
+        }
+    };
 }
 
-
-void GERBER_JOBFILE_WRITER::removeJSONSepararator()
-{
-    if( m_JSONbuffer.Last() == ',' )
-    {
-        m_JSONbuffer.RemoveLast();
-        return;
-    }
-
-    if( m_JSONbuffer.Last() == '\n' )
-    {
-        m_JSONbuffer.RemoveLast();
-
-        if( m_JSONbuffer.Last() == ',' )
-            m_JSONbuffer.RemoveLast();
-
-        m_JSONbuffer.Append( '\n' );
-    }
-}
 
 bool GERBER_JOBFILE_WRITER::WriteJSONJobFile( const wxString& aFullFilename )
 {
     // Note: in Gerber job file, dimensions are in mm, and are floating numbers
-    FILE* jobFile = wxFopen( aFullFilename, "wt" );
-
-    m_JSONbuffer.Empty();
-    m_indent = 0;
-
-    if( jobFile == nullptr )
-        return false;
+    std::ofstream file( aFullFilename.ToUTF8() );
 
     LOCALE_IO dummy;
+
+    m_json = json( {} );
 
     // output the job file header
     addJSONHeader();
@@ -232,13 +208,7 @@ bool GERBER_JOBFILE_WRITER::WriteJSONJobFile( const wxString& aFullFilename )
     // output the board stackup:
     addJSONMaterialStackup();
 
-    // Close job file full block data
-    removeJSONSepararator();    // remove the last separator
-    closeBlock();
-
-    fputs( TO_UTF8( m_JSONbuffer ), jobFile );
-
-    fclose( jobFile );
+    file << std::setw( 2 ) << m_json << std::endl;
 
     return true;
 }
@@ -246,11 +216,8 @@ bool GERBER_JOBFILE_WRITER::WriteJSONJobFile( const wxString& aFullFilename )
 
 void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
 {
-    addJSONObject( "\"GeneralSpecs\":\n" );
-    openBlock();
-
-    addJSONObject( "\"ProjectId\":\n" );
-    openBlock();
+    m_json["GeneralSpecs"] = json( {} );
+    m_json["GeneralSpecs"]["ProjectId"] = json( {} );
 
     // Creates the ProjectId. Format is (from Gerber file format doc):
     // ProjectId,<project id>,<project GUID>,<revision id>*%
@@ -262,7 +229,7 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     // <project GUID> is a string which is an unique id of a project.
     // However Kicad does not handle such a project GUID, so it is built from the board name
     wxFileName fn = m_pcb->GetFileName();
-    wxString msg = fn.GetFullName();
+    wxString   msg = fn.GetFullName();
 
     // Build a <project GUID>, from the board name
     wxString guid = GbrMakeProjectGUIDfromString( msg );
@@ -277,53 +244,46 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     if( rev.IsEmpty() )
         rev = wxT( "rev?" );
 
-    addJSONObject( wxString::Format( "\"Name\": \"%s\",\n", msg.ToAscii() ) );
-    addJSONObject( wxString::Format( "\"GUID\": \"%s\",\n", guid ) );
-    addJSONObject( wxString::Format( "\"Revision\": \"%s\"\n", rev.ToAscii() ) );
-
-    closeBlockWithSep();
+    m_json["GeneralSpecs"]["ProjectId"]["Name"] = msg.ToAscii();
+    m_json["GeneralSpecs"]["ProjectId"]["GUID"] = guid;
+    m_json["GeneralSpecs"]["ProjectId"]["Revision"] = rev.ToAscii();
 
     // output the bord size in mm:
     EDA_RECT brect = m_pcb->GetBoardEdgesBoundingBox();
-    addJSONObject( "\"Size\":\n" );
-    openBlock();
 
-    addJSONObject( wxString::Format( "\"X\": %.3f,\n", brect.GetWidth()*m_conversionUnits ) );
-    addJSONObject( wxString::Format( "\"Y\": %.3f\n", brect.GetHeight()*m_conversionUnits ) );
-    closeBlockWithSep();
+    m_json["GeneralSpecs"]["Size"]["X"] = brect.GetWidth() * m_conversionUnits;
+    m_json["GeneralSpecs"]["Size"]["Y"] = brect.GetHeight() * m_conversionUnits;
+
 
     // Add some data to the JSON header, GeneralSpecs:
     // number of copper layers
-    addJSONObject( wxString::Format( "\"LayerNumber\": %d,\n", m_pcb->GetCopperLayerCount() ) );
+    m_json["GeneralSpecs"]["LayerNumber"] = m_pcb->GetCopperLayerCount();
 
     // Board thickness
-    addJSONObject( wxString::Format( "\"BoardThickness\":  %.3f,\n",
-             m_pcb->GetDesignSettings().GetBoardThickness()*m_conversionUnits ) );
-
+    m_json["GeneralSpecs"]["BoardThickness"] =
+            m_pcb->GetDesignSettings().GetBoardThickness() * m_conversionUnits;
 
     // Copper finish
     BOARD_STACKUP brd_stackup = m_pcb->GetDesignSettings().GetStackupDescriptor();
 
     if( !brd_stackup.m_FinishType.IsEmpty() )
-        addJSONObject( wxString::Format( "\"Finish\":  \"%s\",\n", brd_stackup.m_FinishType ) );
+        m_json["GeneralSpecs"]["Finish"] = brd_stackup.m_FinishType;
 
     if( brd_stackup.m_CastellatedPads )
-        addJSONObject( "\"Castellated\":  \"true\",\n" );
+        m_json["GeneralSpecs"]["Castellated"] = true;
 
     if( brd_stackup.m_EdgePlating )
-        addJSONObject( "\"EdgePlating\":  \"true\",\n" );
+        m_json["GeneralSpecs"]["EdgePlating"] = true;
 
     if( brd_stackup.m_EdgeConnectorConstraints )
     {
-        addJSONObject( "\"EdgeConnector\":  \"true\",\n" );
+        m_json["GeneralSpecs"]["EdgeConnector"] = true;
 
-        if( brd_stackup.m_EdgeConnectorConstraints == BS_EDGE_CONNECTOR_BEVELLED )
-            addJSONObject( "\"EdgeConnectorBevelled\":  \"true\",\n" );
-        else
-            addJSONObject( "\"EdgeConnectorBevelled\":  \"false\",\n" );
+        m_json["GeneralSpecs"]["EdgeConnectorBevelled"] =
+                ( brd_stackup.m_EdgeConnectorConstraints == BS_EDGE_CONNECTOR_BEVELLED );
     }
 
-#if 0    // Not yet in use
+#if 0 // Not yet in use
     /* The board type according to IPC-2221. There are six primary board types:
     - Type 1 - Single-sided
     - Type 2 - Double-sided
@@ -332,7 +292,7 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     - Type 5 - Multilayer metal-core board, TH components only
     - Type 6 - Multilayer metal-core
     */
-    addJSONObject( wxString::Format( "\"IPC-2221-Type\": \"%d\",\n", 4 ) );
+    m_json["GeneralSpecs"]["IPC-2221-Type"] = 4;
 
     /* Via protection: key words:
     Ia Tented - Single-sided
@@ -348,26 +308,24 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     VIII Filled and Capped
     None...No protection
     */
-    addJSONObject( wxString::Format( "\"ViaProtection\": \"%s\",\n", "Ib" ) );
+    m_json["GeneralSpecs"]["ViaProtection"] = "Ib";
 #endif
-    removeJSONSepararator();
-    closeBlockWithSep();
 }
 
 
 void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
 {
     // Add the Files Attributes section in JSON format to m_JSONbuffer
-    addJSONObject( "\"FilesAttributes\":\n" );
-    openArrayBlock();
+    m_json["FilesAttributes"] = json::array();
 
-    for( unsigned ii = 0; ii < m_params.m_GerberFileList.GetCount(); ii ++ )
+    for( unsigned ii = 0; ii < m_params.m_GerberFileList.GetCount(); ii++ )
     {
-        wxString& name = m_params.m_GerberFileList[ii];
+        wxString&    name = m_params.m_GerberFileList[ii];
         PCB_LAYER_ID layer = m_params.m_LayerId[ii];
-        wxString gbr_layer_id;
-        bool skip_file = false;     // true to skip files which should not be in job file
-        const char* polarity = "Positive";
+        wxString     gbr_layer_id;
+        bool         skip_file = false; // true to skip files which should not be in job file
+        const char*  polarity = "Positive";
+        json         file_json;
 
         if( layer <= B_Cu )
         {
@@ -376,7 +334,7 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
             if( layer == B_Cu )
                 gbr_layer_id << m_pcb->GetCopperLayerCount();
             else
-                gbr_layer_id << layer+1;
+                gbr_layer_id << layer + 1;
 
             gbr_layer_id << ",";
 
@@ -392,48 +350,61 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
         {
             switch( layer )
             {
-                case B_Adhes:
-                    gbr_layer_id = "Glue,Bot"; break;
-                case F_Adhes:
-                    gbr_layer_id = "Glue,Top"; break;
+            case B_Adhes:
+                gbr_layer_id = "Glue,Bot";
+                break;
+            case F_Adhes:
+                gbr_layer_id = "Glue,Top";
+                break;
 
-                case B_Paste:
-                    gbr_layer_id = "SolderPaste,Bot"; break;
-                case F_Paste:
-                    gbr_layer_id = "SolderPaste,Top"; break;
+            case B_Paste:
+                gbr_layer_id = "SolderPaste,Bot";
+                break;
+            case F_Paste:
+                gbr_layer_id = "SolderPaste,Top";
+                break;
 
-                case B_SilkS:
-                    gbr_layer_id = "Legend,Bot"; break;
-                case F_SilkS:
-                    gbr_layer_id = "Legend,Top"; break;
+            case B_SilkS:
+                gbr_layer_id = "Legend,Bot";
+                break;
+            case F_SilkS:
+                gbr_layer_id = "Legend,Top";
+                break;
 
-                case B_Mask:
-                    gbr_layer_id = "SolderMask,Bot"; polarity = "Negative"; break;
-                case F_Mask:
-                    gbr_layer_id = "SolderMask,Top"; polarity = "Negative"; break;
+            case B_Mask:
+                gbr_layer_id = "SolderMask,Bot";
+                polarity = "Negative";
+                break;
+            case F_Mask:
+                gbr_layer_id = "SolderMask,Top";
+                polarity = "Negative";
+                break;
 
-                case Edge_Cuts:
-                    gbr_layer_id = "Profile"; break;
+            case Edge_Cuts:
+                gbr_layer_id = "Profile";
+                break;
 
-                case B_Fab:
-                    gbr_layer_id = "AssemblyDrawing,Bot"; break;
-                case F_Fab:
-                    gbr_layer_id = "AssemblyDrawing,Top"; break;
+            case B_Fab:
+                gbr_layer_id = "AssemblyDrawing,Bot";
+                break;
+            case F_Fab:
+                gbr_layer_id = "AssemblyDrawing,Top";
+                break;
 
-                case Dwgs_User:
-                case Cmts_User:
-                case Eco1_User:
-                case Eco2_User:
-                case Margin:
-                case B_CrtYd:
-                case F_CrtYd:
-                   skip_file = true; break;
+            case Dwgs_User:
+            case Cmts_User:
+            case Eco1_User:
+            case Eco2_User:
+            case Margin:
+            case B_CrtYd:
+            case F_CrtYd:
+                skip_file = true;
+                break;
 
-                default:
-                    skip_file = true;
-                    m_reporter->Report( "Unexpected layer id in job file",
-                                        REPORTER::RPT_ERROR );
-                    break;
+            default:
+                skip_file = true;
+                m_reporter->Report( "Unexpected layer id in job file", REPORTER::RPT_ERROR );
+                break;
             }
         }
 
@@ -443,16 +414,13 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
             // Ensure the name is JSON compatible.
             std::string strname = formatStringFromUTF32( name );
 
-            openBlock();
-            addJSONObject( wxString::Format( "\"Path\":  \"%s\",\n", strname.c_str() ) );
-            addJSONObject( wxString::Format( "\"FileFunction\":  \"%s\",\n", gbr_layer_id ) ),
-            addJSONObject( wxString::Format( "\"FilePolarity\":  \"%s\"\n", polarity ) );
-            closeBlockWithSep();
+            file_json["Path"] = strname.c_str();
+            file_json["FileFunction"] = gbr_layer_id;
+            file_json["FilePolarity"] = polarity;
+
+            m_json["FilesAttributes"] += file_json;
         }
     }
-    // Close the file list:
-    removeJSONSepararator();    // remove the last separator
-    closeArrayBlockWithSep();
 }
 
 
@@ -461,14 +429,13 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     // Add the Design Rules section in JSON format to m_JSONbuffer
     // Job file support a few design rules:
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_pcb->GetDesignSettings();
-    NETCLASS defaultNC = *dsnSettings.GetDefault();
-    int minclearanceOuter = defaultNC.GetClearance();
-    bool hasInnerLayers = m_pcb->GetCopperLayerCount() > 2;
+    NETCLASS                     defaultNC = *dsnSettings.GetDefault();
+    int                          minclearanceOuter = defaultNC.GetClearance();
+    bool                         hasInnerLayers = m_pcb->GetCopperLayerCount() > 2;
 
     // Search a smaller clearance in other net classes, if any.
     for( NETCLASSES::const_iterator it = dsnSettings.m_NetClasses.begin();
-         it != dsnSettings.m_NetClasses.end();
-         ++it )
+            it != dsnSettings.m_NetClasses.end(); ++it )
     {
         NETCLASS netclass = *it->second;
         minclearanceOuter = std::min( minclearanceOuter, netclass.GetClearance() );
@@ -489,22 +456,19 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
         for( auto& pad : module->Pads() )
         {
             if( ( pad->GetLayerSet() & LSET::InternalCuMask() ).any() )
-               minPadClearanceInner = std::min( minPadClearanceInner, pad->GetClearance() );
+                minPadClearanceInner = std::min( minPadClearanceInner, pad->GetClearance() );
 
             if( ( pad->GetLayerSet() & LSET::ExternalCuMask() ).any() )
-               minPadClearanceOuter = std::min( minPadClearanceOuter, pad->GetClearance() );
+                minPadClearanceOuter = std::min( minPadClearanceOuter, pad->GetClearance() );
         }
     }
 
-
-    addJSONObject( "\"DesignRules\":\n" );
-    openArrayBlock();
-
-    openBlock();
-    addJSONObject( "\"Layers\": \"Outer\",\n" );
-    addJSONObject( wxString::Format( "\"PadToPad\":  %.3f,\n", minPadClearanceOuter*m_conversionUnits ) );
-    addJSONObject( wxString::Format( "\"PadToTrack\":  %.3f,\n", minPadClearanceOuter*m_conversionUnits ) );
-    addJSONObject( wxString::Format( "\"TrackToTrack\":  %.3f,\n", minclearance_track2track*m_conversionUnits ) );
+    m_json["DesignRules"] = { {
+        { "Layers", "Outer" },
+        { "PadToPad", minPadClearanceOuter * m_conversionUnits },
+        { "PadToTrack", minPadClearanceOuter * m_conversionUnits },
+        { "TrackToTrack", minclearance_track2track * m_conversionUnits }
+    } };
 
     // Until this is changed in Kicad, use the same value for internal tracks
     int minclearanceInner = minclearanceOuter;
@@ -525,8 +489,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     }
 
     if( mintrackWidthOuter != INT_MAX )
-        addJSONObject( wxString::Format( "\"MinLineWidth\":  %.3f,\n",
-                                mintrackWidthOuter*m_conversionUnits ) );
+        m_json["DesignRules"][0]["MinLineWidth"] = mintrackWidthOuter * m_conversionUnits;
 
     // Output the minimal zone to xx clearance
     // Note: zones can have a zone clearance set to 0
@@ -550,55 +513,39 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     }
 
     if( minclearanceOuter != INT_MAX )
-        addJSONObject( wxString::Format( "\"TrackToRegion\":  %.3f,\n",
-                            minclearanceOuter*m_conversionUnits ) );
+        m_json["DesignRules"][0]["TrackToRegion"] = minclearanceOuter * m_conversionUnits;
 
     if( minclearanceOuter != INT_MAX )
-        addJSONObject( wxString::Format( "\"RegionToRegion\":  %.3f,\n",
-                            minclearanceOuter*m_conversionUnits ) );
-
-    removeJSONSepararator();    // remove the last separator
-
-    if( !hasInnerLayers )
-        closeBlock();
-    else
-        closeBlockWithSep();
-
+        m_json["DesignRules"][0]["RegionToRegion"] = minclearanceOuter * m_conversionUnits;
 
     if( hasInnerLayers )
     {
-        openBlock();
-        addJSONObject( "\"Layers\": \"Inner\",\n" );
-        addJSONObject( wxString::Format( "\"PadToPad\":  %.3f,\n", minPadClearanceInner*m_conversionUnits ) );
-        addJSONObject( wxString::Format( "\"PadToTrack\":  %.3f,\n", minPadClearanceInner*m_conversionUnits ) );
-        addJSONObject( wxString::Format( "\"TrackToTrack\":  %.3f,\n", minclearance_track2track*m_conversionUnits ) );
+        m_json["DesignRules"] += json( {
+            { "Layers", "Inner" },
+            { "PadToPad", minPadClearanceInner * m_conversionUnits },
+            { "PadToTrack", minPadClearanceInner * m_conversionUnits },
+            { "TrackToTrack", minclearance_track2track * m_conversionUnits }
+        } );
 
         if( mintrackWidthInner != INT_MAX )
-            addJSONObject( wxString::Format( "\"MinLineWidth\":  %.3f,\n", mintrackWidthInner*m_conversionUnits ) );
+            m_json["DesignRules"][1]["MinLineWidth"] = mintrackWidthInner * m_conversionUnits;
 
         if( minclearanceInner != INT_MAX )
-            addJSONObject( wxString::Format( "\"TrackToRegion\":  %.3f,\n", minclearanceInner*m_conversionUnits ) );
+            m_json["DesignRules"][1]["TrackToRegion"] = minclearanceInner * m_conversionUnits;
 
         if( minclearanceInner != INT_MAX )
-            addJSONObject( wxString::Format( "\"RegionToRegion\":  %.3f,\n", minclearanceInner*m_conversionUnits ) );
-
-        removeJSONSepararator();    // remove the last separator
-        closeBlock();
+            m_json["DesignRules"][1]["RegionToRegion"] = minclearanceInner * m_conversionUnits;
     }
-
-    // Close DesignRules
-    closeArrayBlockWithSep();
 }
 
 
 void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
 {
     // Add the Material Stackup section in JSON format to m_JSONbuffer
-    addJSONObject( "\"MaterialStackup\":\n" );
-    openArrayBlock();
+    m_json["MaterialStackup"] = json::array();
 
     // Build the candidates list:
-    LSET maskLayer;
+    LSET          maskLayer;
     BOARD_STACKUP brd_stackup = m_pcb->GetDesignSettings().GetStackupDescriptor();
 
     // Ensure brd_stackup is up to date (i.e. no change made by SynchronizeWithBoard() )
@@ -606,7 +553,8 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
 
     if( !uptodate && m_pcb->GetDesignSettings().m_HasStackup )
         m_reporter->Report( _( "Board stackup settings not up to date\n"
-                               "Please fix the stackup" ), REPORTER::RPT_ERROR );
+                               "Please fix the stackup" ),
+                REPORTER::RPT_ERROR );
 
     PCB_LAYER_ID last_copper_layer = F_Cu;
 
@@ -615,15 +563,16 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
     {
         BOARD_STACKUP_ITEM* item = brd_stackup.GetStackupLayer( ii );
 
-        int sub_layer_count = item->GetType() == BS_ITEM_TYPE_DIELECTRIC
-                                    ? item->GetSublayersCount() : 1;
+        int sub_layer_count =
+                item->GetType() == BS_ITEM_TYPE_DIELECTRIC ? item->GetSublayersCount() : 1;
 
         for( int sub_idx = 0; sub_idx < sub_layer_count; sub_idx++ )
         {
             // layer thickness is always in mm
-            double thickness = item->GetThickness( sub_idx )*m_conversionUnits;
-            wxString layer_type;
-            std::string layer_name;     // for comment
+            double      thickness = item->GetThickness( sub_idx ) * m_conversionUnits;
+            wxString    layer_type;
+            std::string layer_name; // for comment
+            json        layer_json;
 
             switch( item->GetType() )
             {
@@ -654,23 +603,20 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                 // in build process, not necessary wanted.
                 if( sub_layer_count > 1 )
                 {
-                    layer_name = formatStringFromUTF32(
-                                    wxString::Format( "dielectric layer %d - %d/%d",
-                                                      item->GetDielectricLayerId(),
-                                                      sub_idx+1, sub_layer_count ) );
+                    layer_name =
+                            formatStringFromUTF32( wxString::Format( "dielectric layer %d - %d/%d",
+                                    item->GetDielectricLayerId(), sub_idx + 1, sub_layer_count ) );
                 }
                 else
-                    layer_name = formatStringFromUTF32(
-                                    wxString::Format( "dielectric layer %d",
-                                    item->GetDielectricLayerId() ) );
+                    layer_name = formatStringFromUTF32( wxString::Format(
+                            "dielectric layer %d", item->GetDielectricLayerId() ) );
                 break;
 
             default:
                 break;
             }
 
-            openBlock();
-            addJSONObject( wxString::Format( "\"Type\":  \"%s\",\n", layer_type ) );
+            layer_json["Type"] = layer_type;
 
             if( item->IsColorEditable() && uptodate )
             {
@@ -678,26 +624,25 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                 {
                     wxString colorName = item->GetColor();
 
-                    if( colorName.StartsWith( "#" ) )     // This is a user defined color.
+                    if( colorName.StartsWith( "#" ) ) // This is a user defined color.
                     {
                         // In job file a color can be given by its RGB values (0...255)
                         wxColor color( colorName );
                         colorName.Printf( "R%dG%dB%d", color.Red(), color.Green(), color.Blue() );
                     }
 
-                    addJSONObject( wxString::Format( "\"Color\":  \"%s\",\n", colorName ) );
+                    layer_json["Color"] = colorName;
                 }
             }
 
             if( item->IsThicknessEditable() && uptodate )
-                addJSONObject( wxString::Format( "\"Thickness\":  %.3f,\n", thickness ) );
+                layer_json["Thickness"] = thickness;
 
             if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
             {
                 if( item->HasMaterialValue() )
                 {
-                    addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n",
-                                   item->GetMaterial( sub_idx ) ) );
+                    layer_json["Material"] = item->GetMaterial( sub_idx );
 
                     // These constrains are only written if the board has impedance controlled tracks.
                     // If the board is not impedance controlled,  they are useless.
@@ -707,50 +652,50 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                         // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified: it is not
                         // a possible value
                         if( item->GetEpsilonR() > 1.0 )
-                            addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n",
-                                                item->FormatEpsilonR( sub_idx ) ) );
+                            layer_json["DielectricConstant"] = item->FormatEpsilonR( sub_idx );
 
                         // Generate LossTangent > 0.0 (value <= 0.0 means not specified: it is not
                         // a possible value
                         if( item->GetLossTangent() > 0.0 )
-                            addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n",
-                                                item->FormatLossTangent( sub_idx ) ) );
+                            layer_json["LossTangent"] = item->FormatLossTangent( sub_idx );
                     }
                 }
 
-                PCB_LAYER_ID next_copper_layer = (PCB_LAYER_ID) (last_copper_layer+1);
+                PCB_LAYER_ID next_copper_layer = ( PCB_LAYER_ID )( last_copper_layer + 1 );
 
                 // If the next_copper_layer is the last copper layer, the next layer id is B_Cu
-                if( next_copper_layer >= m_pcb->GetCopperLayerCount()-1 )
+                if( next_copper_layer >= m_pcb->GetCopperLayerCount() - 1 )
                     next_copper_layer = B_Cu;
 
                 wxString subLayerName;
 
                 if( sub_layer_count > 1 )
-                    subLayerName.Printf( " (%d/%d)",sub_idx+1, sub_layer_count );
+                    subLayerName.Printf( " (%d/%d)", sub_idx + 1, sub_layer_count );
 
-                addJSONObject( wxString::Format( "\"Name\":  \"%s/%s%s\",\n",
-                                    formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
-                                    formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ),
-                                    subLayerName )
-                             );
+                wxString name = wxString::Format( "%s/%s%s",
+                        formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
+                        formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ),
+                        subLayerName );
+
+                layer_json["Name"] = name;
 
                 // Add a comment ("Notes"):
-                wxString note = "\"Notes\": ";
+                wxString note;
 
-                note << wxString::Format( " \"Type: %s", layer_name.c_str() );
+                note << wxString::Format( "Type: %s", layer_name.c_str() );
 
-                note << wxString::Format( " (from %s to %s)\"\n",
-                                formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
-                                formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ) );
+                note << wxString::Format( " (from %s to %s)",
+                        formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
+                        formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ) );
 
-                addJSONObject( note );
+                layer_json["Notes"] = note;
             }
-            else if( item->GetType() == BS_ITEM_TYPE_SOLDERMASK || item->GetType() == BS_ITEM_TYPE_SILKSCREEN )
+            else if( item->GetType() == BS_ITEM_TYPE_SOLDERMASK
+                     || item->GetType() == BS_ITEM_TYPE_SILKSCREEN )
             {
                 if( item->HasMaterialValue() )
                 {
-                    addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", item->GetMaterial() ) );
+                    layer_json["Material"] = item->GetMaterial();
 
                     // These constrains are only written if the board has impedance controlled tracks.
                     // If the board is not impedance controlled,  they are useless.
@@ -760,29 +705,23 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                         // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified: it is not
                         // a possible value
                         if( item->GetEpsilonR() > 1.0 )
-                            addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n",
-                                                item->FormatEpsilonR() ) );
+                            layer_json["DielectricConstant"] = item->FormatEpsilonR();
 
                         // Generate LossTangent > 0.0 (value <= 0.0 means not specified: it is not
                         // a possible value
                         if( item->GetLossTangent() > 0.0 )
-                            addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n",
-                                                    item->FormatLossTangent() ) );
+                            layer_json["LossTangent"] = item->FormatLossTangent();
                     }
                 }
 
-                addJSONObject( wxString::Format( "\"Name\":  \"%s\",\n", layer_name.c_str() ) );
+                layer_json["Name"] = layer_name.c_str();
             }
             else
             {
-                addJSONObject( wxString::Format( "\"Name\":  \"%s\",\n", layer_name.c_str() ) );
+                layer_json["Name"] = layer_name.c_str();
             }
 
-            removeJSONSepararator();
-            closeBlockWithSep();
+            m_json["MaterialStackup"].insert( m_json["MaterialStackup"].end(), layer_json );
         }
     }
-
-    removeJSONSepararator();
-    closeArrayBlockWithSep();
 }

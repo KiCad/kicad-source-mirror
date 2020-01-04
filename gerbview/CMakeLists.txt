@@ -47,7 +47,6 @@ set( GERBVIEW_SRCS
     files.cpp
     gerbview_config.cpp
     gerbview_frame.cpp
-    json11.cpp
     job_file_reader.cpp
     menubar.cpp
     readgerb.cpp
@@ -112,6 +111,7 @@ target_link_libraries( gerbview
     # There's way too much crap coming in from common yet.
     gal
     common
+    nlohmann_json
     ${wxWidgets_LIBRARIES}
     )
 
@@ -147,6 +147,10 @@ if( MAKE_LINK_MAPS )
     set_target_properties( gerbview_kiface PROPERTIES
         LINK_FLAGS "-Wl,-cref,-Map=_gerbview.kiface.map" )
 endif()
+
+target_include_directories( gerbview_kiface PRIVATE
+    $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
+    )
 
 # if building gerbview, then also build gerbview_kiface if out of date.
 add_dependencies( gerbview gerbview_kiface )
