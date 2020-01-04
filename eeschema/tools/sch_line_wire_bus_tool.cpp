@@ -150,7 +150,7 @@ private:
         for( const auto& member : connection->Members() )
         {
             int id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
-            wxString name = member->Name( true );
+            wxString name = member->LocalName();
 
             if( member->Type() == CONNECTION_BUS )
             {
@@ -160,7 +160,7 @@ private:
                 for( const auto& sub_member : member->Members() )
                 {
                     id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
-                    submenu->Append( id, sub_member->Name( true ), wxEmptyString );
+                    submenu->Append( id, sub_member->LocalName(), wxEmptyString );
                 }
             }
             else
