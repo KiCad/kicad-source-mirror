@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 24 2019)
+// C++ code generated with wxFormBuilder (version v3.8.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -7,7 +7,7 @@
 
 #include "panel_eeschema_settings_base.h"
 
- ///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( PANEL_EESCHEMA_SETTINGS_BASE, wxPanel )
 	EVT_CHOICE( wxID_ANY, PANEL_EESCHEMA_SETTINGS_BASE::_wxFB_OnChooseUnits )

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version v3.8.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,15 +29,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_EESCHEMA_SETTINGS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_EESCHEMA_SETTINGS_BASE : public wxPanel 
+class PANEL_EESCHEMA_SETTINGS_BASE : public wxPanel
 {
 	DECLARE_EVENT_TABLE()
 	private:
-		
+
 		// Private event handlers
 		void _wxFB_OnChooseUnits( wxCommandEvent& event ){ OnChooseUnits( event ); }
-		
-	
+
+
 	protected:
 		wxStaticText* m_staticText2;
 		wxChoice* m_choiceUnits;
@@ -60,15 +60,15 @@ class PANEL_EESCHEMA_SETTINGS_BASE : public wxPanel
 		wxCheckBox* m_checkAutoplaceAlign;
 		wxCheckBox* m_footprintPreview;
 		wxCheckBox* m_navigatorStaysOpen;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnChooseUnits( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
+
 		PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_EESCHEMA_SETTINGS_BASE();
-	
+
 };
 

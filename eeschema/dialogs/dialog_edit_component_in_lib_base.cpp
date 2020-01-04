@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug 15 2019)
+// C++ code generated with wxFormBuilder (version v3.8.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 #include "dialog_edit_component_in_lib_base.h"
 
- ///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 
 DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
