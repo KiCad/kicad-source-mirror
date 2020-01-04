@@ -286,7 +286,9 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
     m_outlineBoard2dObjects = new CCONTAINER2D;
 
-    if( ((const SHAPE_POLY_SET &)m_settings.GetBoardPoly()).OutlineCount() == 1 )
+    const int outlineCount = m_settings.GetBoardPoly().OutlineCount();
+
+    if( outlineCount > 0 )
     {
         float divFactor = 0.0f;
 
@@ -299,12 +301,16 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
         SHAPE_POLY_SET boardPolyCopy = m_settings.GetBoardPoly();
         boardPolyCopy.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-        Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
-                    boardPolyCopy,
-                    *m_outlineBoard2dObjects,
-                    m_settings.BiuTo3Dunits(),
-                    divFactor,
-                    (const BOARD_ITEM &)*m_settings.GetBoard() );
+        for( int iOutlinePolyIdx = 0; iOutlinePolyIdx < outlineCount; iOutlinePolyIdx++ )
+        {
+            Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
+                        boardPolyCopy,
+                        *m_outlineBoard2dObjects,
+                        m_settings.BiuTo3Dunits(),
+                        divFactor,
+                        *dynamic_cast<const BOARD_ITEM*>( m_settings.GetBoard() ),
+                        iOutlinePolyIdx );
+        }
 
         if( m_settings.GetFlag( FL_SHOW_BOARD_BODY ) )
         {

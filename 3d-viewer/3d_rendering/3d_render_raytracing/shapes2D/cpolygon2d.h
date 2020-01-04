@@ -148,7 +148,8 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
         CGENERICCONTAINER2D &aDstContainer,
         float aBiuTo3DunitsScale,
         float aDivFactor,
-        const BOARD_ITEM &aBoardItem );
+        const BOARD_ITEM &aBoardItem,
+        int aPolyIndex );
 
 void Polygon2d_TestModule();
 
