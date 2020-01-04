@@ -59,9 +59,6 @@ public:
 
     ~SCH_LINE() { }
 
-    SCH_LINE* Next() const { return (SCH_LINE*) Pnext; }
-    SCH_LINE* Back() const { return (SCH_LINE*) Pback; }
-
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && SCH_LINE_T == aItem->Type();

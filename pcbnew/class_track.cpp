@@ -390,68 +390,6 @@ void VIA::SanitizeLayers()
 }
 
 
-TRACK* TRACK::GetStartNetCode( int NetCode )
-{
-    TRACK* Track = this;
-    int    ii    = 0;
-
-    if( NetCode == -1 )
-        NetCode = GetNetCode();
-
-    while( Track != NULL )
-    {
-        if( Track->GetNetCode() > NetCode )
-            break;
-
-        if( Track->GetNetCode() == NetCode )
-        {
-            ii++;
-            break;
-        }
-
-        Track = (TRACK*) Track->Pnext;
-    }
-
-    if( ii )
-        return Track;
-    else
-        return NULL;
-}
-
-
-TRACK* TRACK::GetEndNetCode( int NetCode )
-{
-    TRACK* NextS, * Track = this;
-    int    ii = 0;
-
-    if( Track == NULL )
-        return NULL;
-
-    if( NetCode == -1 )
-        NetCode = GetNetCode();
-
-    while( Track != NULL )
-    {
-        NextS = (TRACK*) Track->Pnext;
-
-        if( Track->GetNetCode() == NetCode )
-            ii++;
-
-        if( NextS == NULL )
-            break;
-
-        if( NextS->GetNetCode() > NetCode )
-            break;
-
-        Track = NextS;
-    }
-
-    if( ii )
-        return Track;
-    else
-        return NULL;
-}
-
 void TRACK::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
     BOARD* brd = GetBoard();

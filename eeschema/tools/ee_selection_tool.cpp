@@ -23,30 +23,32 @@
  */
 
 
-#include <ee_actions.h>
+#include <class_libentry.h>
 #include <core/typeinfo.h>
-#include <sch_item.h>
+#include <ee_actions.h>
+#include <ee_collectors.h>
 #include <ee_selection_tool.h>
-#include <sch_base_frame.h>
-#include <sch_edit_frame.h>
+#include <eeschema_id.h> // For MAX_SELECT_ITEM_IDS
 #include <lib_edit_frame.h>
+#include <lib_item.h>
 #include <lib_view_frame.h>
-#include <sch_component.h>
-#include <sch_sheet.h>
-#include <sch_field.h>
-#include <sch_line.h>
-#include <view/view.h>
-#include <view/view_controls.h>
-#include <view/view_group.h>
+#include <math/util.h>
+#include <menus_helpers.h>
+#include <painter.h>
 #include <preview_items/selection_area.h>
+#include <sch_base_frame.h>
+#include <sch_component.h>
+#include <sch_edit_frame.h>
+#include <sch_field.h>
+#include <sch_item.h>
+#include <sch_line.h>
+#include <sch_sheet.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_line_wire_bus_tool.h>
-#include <ee_collectors.h>
-#include <painter.h>
-#include <eeschema_id.h>        // For MAX_SELECT_ITEM_IDS
-#include <menus_helpers.h>
-#include <math/util.h>      // for KiROUND
+#include <view/view.h>
+#include <view/view_controls.h>
+#include <view/view_group.h>
 
 
 SELECTION_CONDITION EE_CONDITIONS::Empty = [] (const SELECTION& aSelection )
@@ -970,22 +972,13 @@ void EE_SELECTION_TOOL::RebuildSelection()
 
     if( m_isLibEdit )
     {
-        EDA_ITEM* start = nullptr;
-        start = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
+        LIB_PART* start = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
 
-        INSPECTOR_FUNC inspector = [&]( EDA_ITEM* item, void* testData ) {
-            // If the field and component are selected, only use the component
-            if( item->IsSelected()
-                    && !( item->Type() == SCH_FIELD_T && item->GetParent()
-                               && item->GetParent()->IsSelected() ) )
-            {
-                select( item );
-            }
-
-            return SEARCH_RESULT::CONTINUE;
-        };
-
-        EDA_ITEM::IterateForward( start, inspector, nullptr, EE_COLLECTOR::AllItems );
+        for( auto& item : start->GetDrawItems() )
+        {
+            if( item.IsSelected() )
+                select( static_cast<EDA_ITEM*>( &item ) );
+        }
     }
     else
     {

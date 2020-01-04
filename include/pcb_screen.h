@@ -55,7 +55,6 @@ public:
 
     ~PCB_SCREEN();
 
-    PCB_SCREEN* Next() const { return static_cast<PCB_SCREEN*>( Pnext ); }
 
     /* full undo redo management : */
 

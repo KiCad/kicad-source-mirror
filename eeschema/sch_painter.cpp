@@ -46,7 +46,7 @@
 #include <lib_polyline.h>
 #include <lib_rectangle.h>
 #include <lib_text.h>
-#include <math/util.h>      // for KiROUND
+#include <math/util.h>
 #include <plotter.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>

@@ -332,8 +332,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 break;
 
             case UR_EXCHANGE_T:
-                alt_item->SetNext( nullptr );
-                alt_item->SetBack( nullptr );
                 aList->SetPickedItem( alt_item, (unsigned) ii );
                 aList->SetPickedItemLink( item, (unsigned) ii );
                 item = alt_item;

@@ -84,10 +84,7 @@ EDA_ITEM::EDA_ITEM( const EDA_ITEM& base )
 void EDA_ITEM::initVars()
 {
     m_StructType = TYPE_NOT_INIT;
-    Pnext       = NULL;     // Linked list: Link (next struct)
-    Pback       = NULL;     // Linked list: Link (previous struct)
     m_Parent    = NULL;     // Linked list: Link (parent struct)
-    m_List      = NULL;     // I am not on any list yet
     m_Flags     = 0;        // flags for editions and other
     SetTimeStamp( 0 );      // Time stamp used for logical links
     m_Status    = 0;
@@ -227,8 +224,6 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 
     // A copy of an item cannot have the same time stamp as the original item.
     SetTimeStamp( GetNewTimeStamp() );
-
-    // do not copy list related fields (Pnext, Pback, m_List)
 
     return *this;
 }

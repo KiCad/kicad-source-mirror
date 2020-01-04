@@ -70,8 +70,6 @@ class GERBER_DRAW_ITEM : public EDA_ITEM
     // make SetNext() and SetBack() private so that they may not be called from anywhere.
     // list management is done on GERBER_DRAW_ITEMs using DLIST<GERBER_DRAW_ITEM> only.
 private:
-    void SetNext( EDA_ITEM* aNext )       { Pnext = aNext; }
-    void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
 
 
 public:
@@ -122,9 +120,6 @@ private:
 public:
     GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberparams );
     ~GERBER_DRAW_ITEM();
-
-    GERBER_DRAW_ITEM* Next() const { return static_cast<GERBER_DRAW_ITEM*>( Pnext ); }
-    GERBER_DRAW_ITEM* Back() const { return static_cast<GERBER_DRAW_ITEM*>( Pback ); }
 
     void SetNetAttributes( const GBR_NETLIST_METADATA& aNetAttributes );
     const GBR_NETLIST_METADATA& GetNetAttributes() const { return m_netAttributes; }

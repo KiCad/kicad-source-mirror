@@ -110,7 +110,6 @@ add_library( singletop STATIC EXCLUDE_FROM_ALL
 # as APIEXPORT
 set( LIB_KICAD_SRCS
     colors.cpp
-    dlist.cpp
     string.cpp
     )
 
