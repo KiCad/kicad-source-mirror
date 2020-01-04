@@ -717,16 +717,10 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     COLOR4D color;
 
     // Pad holes color is type specific
-    if( aLayer == LAYER_PADS_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
+    // Hole color is the background color for plated holes, but only if the pad size is greater than the hole size.
+    // ( Don't let pads that *should* be NPTH get lost )
+    if( ( aLayer == LAYER_PADS_PLATEDHOLES ) && !aPad->PadShouldBeNPTH() )
     {
-        // Hole color is the background color for plated holes, but a specific color
-        // for not plated holes (LAYER_NON_PLATEDHOLES color layer )
-        if( aPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
-            color = m_pcbSettings.GetColor( nullptr, LAYER_NON_PLATEDHOLES );
-        // Don't let pads that *should* be NPTH get lost
-        else if( aPad->PadShouldBeNPTH() )
-            color = m_pcbSettings.GetColor( aPad, aLayer );
-        else
             color = m_pcbSettings.GetBackgroundColor();
     }
     else
