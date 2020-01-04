@@ -129,6 +129,7 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
             member->m_type = CONNECTION_NET;
             member->m_prefix = m_prefix;
             member->m_name = vector_member;
+            member->m_local_name = vector_member;
             member->m_vector_index = i++;
             m_members.push_back( member );
         }
@@ -137,6 +138,7 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
     {
         m_type = CONNECTION_BUS_GROUP;
         m_name = aLabel;
+        m_local_name = aLabel;
 
         std::vector<wxString> members;
         wxString group_name;
@@ -172,6 +174,7 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
     else
     {
         m_name = aLabel;
+        m_local_name = aLabel;
         m_type = CONNECTION_NET;
     }
 }
@@ -181,6 +184,7 @@ void SCH_CONNECTION::Reset()
 {
     m_type = CONNECTION_NONE;
     m_name.Empty();
+    m_local_name.Empty();
     m_prefix.Empty();
     m_suffix .Empty();
     m_driver = nullptr;
@@ -202,6 +206,7 @@ void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
     m_driver = aOther.Driver();
     m_sheet = aOther.Sheet();
     m_name = aOther.m_name;
+    // Note: m_local_name is not cloned
     m_prefix = aOther.Prefix();
     m_suffix = aOther.Suffix();
     m_members = aOther.Members();

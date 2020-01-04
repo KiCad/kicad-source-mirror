@@ -152,6 +152,8 @@ public:
         return m_name;
     }
 
+    wxString LocalName() const { return m_local_name; }
+
     void SetName( const wxString& aName )
     {
         m_name = aName;
@@ -327,7 +329,16 @@ private:
 
     CONNECTION_TYPE m_type; ///< @see enum CONNECTION_TYPE
 
-    wxString m_name;        ///< Name of the bus.
+    wxString m_name;        ///< Name of the connection.
+
+    /**
+     * For bus members, we want to keep track of the "local" name of a member, that is,
+     * the name it takes on from its parent bus name.  This is because we always want to use
+     * the local name for bus unfolding, matching within buses, etc.  The actual resolved name
+     * of this bus member might change, for example if it's connected elsewhere to some other
+     * item with higher priority.
+     */
+    wxString m_local_name;
 
     ///< Prefix if connection is member of a labeled bus group (or "" if not)
     wxString m_prefix;
