@@ -1,4 +1,5 @@
-This directory contains the nlohmann/json project from https://github.com/nlohmann/json.
+This directory contains the nlohmann/json project from https://github.com/nlohmann/json and the
+nlohmann/fifo_map project from https://github.com/nlohmann/fifo_map.
 
-It is licensed under MIT, with the license text in this directory.
+They are licensed under MIT, with the license text in this directory.
 
