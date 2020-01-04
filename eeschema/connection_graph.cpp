@@ -273,6 +273,8 @@ void CONNECTION_SUBGRAPH::Absorb( CONNECTION_SUBGRAPH* aOther )
     m_bus_neighbors.insert( aOther->m_bus_neighbors.begin(), aOther->m_bus_neighbors.end() );
     m_bus_parents.insert( aOther->m_bus_parents.begin(), aOther->m_bus_parents.end() );
 
+    m_multiple_drivers |= aOther->m_multiple_drivers;
+
     aOther->m_absorbed = true;
     aOther->m_dirty = false;
     aOther->m_driver = nullptr;
@@ -1079,7 +1081,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         // This is a list of connections on the current subgraph to compare to the
         // drivers of each candidate subgraph.  If the current subgraph is a bus,
         // we should consider each bus member.
-        auto connections_to_check( connection->Members() );
+        std::vector< std::shared_ptr<SCH_CONNECTION> > connections_to_check;
 
         // Also check the main driving connection
         connections_to_check.push_back( std::make_shared<SCH_CONNECTION>( *connection ) );
@@ -1219,7 +1221,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 {
                     if( connection->IsBus() && candidate->m_driver_connection->IsNet() )
                     {
-                         wxLogTrace( "CONN", "%lu (%s) has neighbor %lu (%s)", subgraph->m_code,
+                         wxLogTrace( "CONN", "%lu (%s) has bus child %lu (%s)", subgraph->m_code,
                                      connection->Name(), candidate->m_code, member->Name() );
 
                         subgraph->m_bus_neighbors[member].insert( candidate );
@@ -1231,11 +1233,11 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                                     subgraph->m_code, connection->Name(),
                                     candidate->m_code, candidate->m_driver_connection->Name() );
 
+                        // Candidate may have other non-chosen drivers we need to follow
+                        add_connections_to_check( candidate );
+
                         subgraph->Absorb( candidate );
                         invalidated_subgraphs.insert( subgraph );
-
-                        // Candidate may have other non-chosen drivers we need to follow
-                        add_connections_to_check( subgraph );
                     }
                 }
             }
@@ -1346,6 +1348,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             continue;
 
         SCH_CONNECTION* conn = subgraph->m_driver_connection;
+
+        wxLogTrace( "CONN", "%lu (%s) has multiple bus parents", subgraph->m_code, conn->Name() );
 
         wxASSERT( conn->IsNet() );
 
@@ -1566,22 +1570,26 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
                 if( neighbor_name == member->Name() )
                     continue;
 
-                // Don't override if the priority is higher than a local label anyway
+                wxLogTrace( "CONN", "%lu (%s) connected to bus member %s (local %s)",
+                        neighbor->m_code, neighbor_name, member->Name(), member->LocalName() );
+
+                // Take whichever name is higher priority
                 if( CONNECTION_SUBGRAPH::GetDriverPriority( neighbor->m_driver )
-                        >= CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN )
-                    continue;
+                    >= CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN )
+                {
+                    member->Clone( *neighbor_conn );
+                }
+                else
+                {
+                    neighbor_conn->Clone( *member );
+                    neighbor->UpdateItemConnections();
 
-                wxLogTrace( "CONN", "%lu (%s) connected to bus member %s", neighbor->m_code,
-                        neighbor_name, member->Name() );
+                    recacheSubgraphName( neighbor, neighbor_name );
 
-                neighbor_conn->Clone( *member );
-                neighbor->UpdateItemConnections();
-
-                recacheSubgraphName( neighbor, neighbor_name );
-
-                // Recurse onto this neighbor in case it needs to re-propagate
-                neighbor->m_dirty = true;
-                propagateToNeighbors( neighbor );
+                    // Recurse onto this neighbor in case it needs to re-propagate
+                    neighbor->m_dirty = true;
+                    propagateToNeighbors( neighbor );
+                }
             }
         }
     };
@@ -1706,14 +1714,14 @@ SCH_CONNECTION* CONNECTION_GRAPH::matchBusMember(
             {
                 for( const auto& bus_member : c->Members() )
                 {
-                    if( bus_member->RawName() == aSearch->RawName() )
+                    if( bus_member->LocalName() == aSearch->RawName() )
                     {
                         match = bus_member.get();
                         break;
                     }
                 }
             }
-            else if( c->RawName() == aSearch->RawName() )
+            else if( c->LocalName() == aSearch->RawName() )
             {
                 match = c.get();
                 break;

@@ -214,7 +214,7 @@ void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
     m_bus_code = aOther.BusCode();
     m_vector_start = aOther.VectorStart();
     m_vector_end = aOther.VectorEnd();
-    m_vector_index = aOther.VectorIndex();
+    // Note: m_vector_index is not cloned
     m_vector_prefix = aOther.VectorPrefix();
 
     // Note: subgraph code isn't cloned, it should remain with the original object
