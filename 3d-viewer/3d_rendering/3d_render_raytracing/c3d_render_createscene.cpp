@@ -297,7 +297,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
                         *m_outlineBoard2dObjects,
                         m_settings.BiuTo3Dunits(),
                         divFactor,
-                        *dynamic_cast<const BOARD_ITEM*>(m_settings.GetBoard()),
+                        *dynamic_cast<const BOARD_ITEM*>( m_settings.GetBoard() ),
                         iOutlinePolyIdx );
         }
 
