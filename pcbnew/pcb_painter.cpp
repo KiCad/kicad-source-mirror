@@ -719,7 +719,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     // Pad holes color is type specific
     // Hole color is the background color for plated holes, but only if the pad size is greater than the hole size.
     // ( Don't let pads that *should* be NPTH get lost )
-    if( (aLayer == LAYER_PADS_PLATEDHOLES) && !aPad->PadShouldBeNPTH())
+    if( ( aLayer == LAYER_PADS_PLATEDHOLES ) && !aPad->PadShouldBeNPTH() )
     {
             color = m_pcbSettings.GetBackgroundColor();
     }
