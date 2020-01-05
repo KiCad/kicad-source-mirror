@@ -33,28 +33,28 @@ class WX_HTML_REPORT_PANEL;
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_UPDATE_FROM_PCB_BASE : public DIALOG_SHIM
 {
-    private:
+        private:
 
-    protected:
-        wxCheckBox* m_cbUpdateReferences;
-        wxCheckBox* m_cbUpdateFootprints;
-        wxCheckBox* m_cbIgnoreStandalone;
-        wxCheckBox* m_cbUpdateValues;
-        wxCheckBox* m_cbIgnoreOtherProjects;
-        WX_HTML_REPORT_PANEL* m_messagePanel;
-        wxStdDialogButtonSizer* m_sdbSizer1;
-        wxButton* m_sdbSizer1OK;
-        wxButton* m_sdbSizer1Cancel;
+        protected:
+                wxCheckBox* m_cbUpdateReferences;
+                wxCheckBox* m_cbUpdateFootprints;
+                wxCheckBox* m_cbIgnoreStandalone;
+                wxCheckBox* m_cbUpdateValues;
+                wxCheckBox* m_cbIgnoreOtherProjects;
+                WX_HTML_REPORT_PANEL* m_messagePanel;
+                wxStdDialogButtonSizer* m_sdbSizer1;
+                wxButton* m_sdbSizer1OK;
+                wxButton* m_sdbSizer1Cancel;
 
-        // Virtual event handlers, overide them in your derived class
-        virtual void OnOptionChanged( wxCommandEvent& event ) { event.Skip(); }
-        virtual void OnUpdateClick( wxCommandEvent& event ) { event.Skip(); }
+                // Virtual event handlers, overide them in your derived class
+                virtual void OnOptionChanged( wxCommandEvent& event ) { event.Skip(); }
+                virtual void OnUpdateClick( wxCommandEvent& event ) { event.Skip(); }
 
 
-    public:
+        public:
 
-        DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Update Schematic from PCB"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-        ~DIALOG_UPDATE_FROM_PCB_BASE();
+                DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Update Schematic from PCB"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+                ~DIALOG_UPDATE_FROM_PCB_BASE();
 
 };
 

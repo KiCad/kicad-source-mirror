@@ -95,7 +95,7 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
     }
     else
     {
-        msg.Printf( _( "Found %d errors. Fix them and run back annotation again." ), errors );
+        msg.Printf( _( "Found %d errors. Fix them and run back annotation." ), errors );
         m_settings.reporter.ReportTail( msg, REPORTER::RPT_ERROR );
     }
 
@@ -108,9 +108,9 @@ bool BACK_ANNOTATE::FetchNetlistFromPCB( std::string& aNetlist )
     if( Kiface().IsSingle() )
     {
         DisplayErrorMessage(
-                this->m_frame, _( "Cannot update fetch PCB netlist because eeschema is opened in "
-                                  "stand-alone mode, you must launch the KiCad project manager "
-                                  "and create a project." ) );
+                m_frame, _( "Cannot fetch PCB netlist because eeschema is opened in "
+                            "stand-alone mode, you must launch the KiCad project manager "
+                            "and create a project." ) );
         return false;
     }
 

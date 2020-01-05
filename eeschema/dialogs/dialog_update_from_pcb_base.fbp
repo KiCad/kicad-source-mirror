@@ -97,7 +97,7 @@
                                     <object class="wxGridBagSizer" expanded="1">
                                         <property name="empty_cell_size"></property>
                                         <property name="flexible_direction">wxBOTH</property>
-                                        <property name="growablecols">0,1</property>
+                                        <property name="growablecols"></property>
                                         <property name="growablerows"></property>
                                         <property name="hgap">0</property>
                                         <property name="minimum_size"></property>
@@ -162,7 +162,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass">; ; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Update references from PCB.</property>
+                                                <property name="tooltip">Update references of symbols that have been changed in the PCB editor.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -230,7 +230,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass">; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Update footprints from PCB.</property>
+                                                <property name="tooltip">Update footprint associations of symbols whose footprints have been replaced with different footprints in PCB.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -277,7 +277,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Ignore footrints with no symbol associated</property>
+                                                <property name="label">Ignore footprints with no symbol associated</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -366,7 +366,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass">; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Update values from PCB.</property>
+                                                <property name="tooltip">Update symbols values that have been replaced in the PCB editor.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>

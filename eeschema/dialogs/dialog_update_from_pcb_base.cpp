@@ -37,22 +37,22 @@ DIALOG_UPDATE_FROM_PCB_BASE::DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWi
 
     m_cbUpdateReferences = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Update references"), wxDefaultPosition, wxDefaultSize, 0 );
     m_cbUpdateReferences->SetValue(true);
-    m_cbUpdateReferences->SetToolTip( _("Update references from PCB.") );
+    m_cbUpdateReferences->SetToolTip( _("Update references of symbols that have been changed in the PCB editor.") );
 
     gbSizer2->Add( m_cbUpdateReferences, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
     m_cbUpdateFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Update footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_cbUpdateFootprints->SetToolTip( _("Update footprints from PCB.") );
+    m_cbUpdateFootprints->SetToolTip( _("Update footprint associations of symbols whose footprints have been replaced with different footprints in PCB.") );
 
     gbSizer2->Add( m_cbUpdateFootprints, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
-    m_cbIgnoreStandalone = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Ignore footrints with no symbol associated"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_cbIgnoreStandalone = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Ignore footprints with no symbol associated"), wxDefaultPosition, wxDefaultSize, 0 );
     m_cbIgnoreStandalone->SetToolTip( _("Ignore footprints that only exist on the PCB.") );
 
     gbSizer2->Add( m_cbIgnoreStandalone, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
     m_cbUpdateValues = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Update values"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_cbUpdateValues->SetToolTip( _("Update values from PCB.") );
+    m_cbUpdateValues->SetToolTip( _("Update symbols values that have been replaced in the PCB editor.") );
 
     gbSizer2->Add( m_cbUpdateValues, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 

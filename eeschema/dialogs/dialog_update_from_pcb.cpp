@@ -60,7 +60,7 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Update" ) );
+    m_sdbSizer1OK->SetLabel( _( "Update Schematic" ) );
     m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
     m_sdbSizer1->Layout();
 
@@ -77,12 +77,14 @@ BACK_ANNOTATE::SETTINGS DIALOG_UPDATE_FROM_PCB::getSettings( bool aDryRun )
 
 void DIALOG_UPDATE_FROM_PCB::updateData()
 {
+    bool successfulRun = false;
     m_messagePanel->Clear();
     BACK_ANNOTATE backAnno( this->m_frame, getSettings( true ) );
     std::string   netlist;
 
     if( backAnno.FetchNetlistFromPCB( netlist ) )
-        backAnno.BackAnnotateSymbols( netlist );
+        successfulRun = backAnno.BackAnnotateSymbols( netlist );
+    m_sdbSizer1OK->Enable( successfulRun );
     m_messagePanel->Flush( false );
 }
 
