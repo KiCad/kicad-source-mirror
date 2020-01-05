@@ -425,6 +425,11 @@ struct ECOORD
         return value / 25400;
     }
 
+    int To100NanoMeters() const
+    {
+        return value / 100;
+    }
+
     int ToNanoMeters() const
     {
         return value;
@@ -435,7 +440,7 @@ struct ECOORD
         return value / 1000000.0;
     }
 
-    int ToSchUnits() const { return ToMils(); }
+    int ToSchUnits() const { return To100NanoMeters(); }
     int ToPcbUnits() const { return ToNanoMeters(); }
 
     ECOORD operator+( const ECOORD& aOther ) const

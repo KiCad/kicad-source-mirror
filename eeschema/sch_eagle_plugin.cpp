@@ -775,7 +775,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     // Calculate the new sheet size.
     EDA_RECT sheetBoundingBox = getSheetBbox( m_currentSheet );
     wxSize   targetSheetSize  = sheetBoundingBox.GetSize();
-    targetSheetSize.IncBy( 1500, 1500 );
+    targetSheetSize.IncBy( Mils2iu( 1500 ), Mils2iu( 1500 ) );
 
     // Get current Eeschema sheet size.
     wxSize    pageSizeIU = m_currentSheet->GetScreen()->GetPageSettings().GetSizeIU();
@@ -783,10 +783,10 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
     // Increase if necessary
     if( pageSizeIU.x < targetSheetSize.x )
-        pageInfo.SetWidthMils( targetSheetSize.x );
+        pageInfo.SetWidthMils( Iu2Mils( targetSheetSize.x ) );
 
     if( pageSizeIU.y < targetSheetSize.y )
-        pageInfo.SetHeightMils( targetSheetSize.y );
+        pageInfo.SetHeightMils( Iu2Mils( targetSheetSize.y ) );
 
     // Set the new sheet size.
     m_currentSheet->GetScreen()->SetPageSettings( pageInfo );
@@ -797,8 +797,8 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
     // round the translation to nearest 100mil to place it on the grid.
     wxPoint translation = sheetcentre - itemsCentre;
-    translation.x       = translation.x - translation.x % 100;
-    translation.y       = translation.y - translation.y % 100;
+    translation.x       = translation.x - translation.x % Mils2iu( 100 );
+    translation.y       = translation.y - translation.y % Mils2iu( 100 );
 
     // Add global net labels for the named power input pins in this sheet
     for( SCH_ITEM* item = m_currentSheet->GetScreen()->GetDrawItems(); item; item = item->Next() )
@@ -929,7 +929,7 @@ void SCH_EAGLE_PLUGIN::loadSegments(
             {
                 label->SetPosition( firstWire->GetStartPoint() );
                 label->SetText( escapeName( netName ) );
-                label->SetTextSize( wxSize( 10, 10 ) );
+                label->SetTextSize( wxSize( Mils2iu( 10 ), Mils2iu( 10 ) ) );
                 label->SetLabelSpinStyle( 0 );
                 screen->Append( label.release() );
             }
@@ -1730,19 +1730,19 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(
 
         if( length == "short" )
         {
-            pin->SetLength( 100 );
+            pin->SetLength( Mils2iu( 100 ) );
         }
         else if( length == "middle" )
         {
-            pin->SetLength( 200 );
+            pin->SetLength( Mils2iu( 200 ) );
         }
         else if( length == "long" )
         {
-            pin->SetLength( 300 );
+            pin->SetLength( Mils2iu( 300 ) );
         }
         else if( length == "point" )
         {
-            pin->SetLength( 0 );
+            pin->SetLength( Mils2iu( 0 ) );
         }
     }
 
@@ -1905,7 +1905,7 @@ void SCH_EAGLE_PLUGIN::adjustNetLabels()
 
             // Create a vector pointing in the direction of the wire, 50 mils long
             VECTOR2I wireDirection( segAttached->B - segAttached->A );
-            wireDirection = wireDirection.Resize( 50 );
+            wireDirection = wireDirection.Resize( Mils2iu( 50 ) );
             const VECTOR2I origPos( labelPos );
 
             // Flags determining the search direction
@@ -2579,7 +2579,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections(
                 SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
                 netLabel->SetPosition( aComponent->GetPinPhysicalPosition( pin ) );
                 netLabel->SetText( extractNetName( pin->GetName() ) );
-                netLabel->SetTextSize( wxSize( 10, 10 ) );
+                netLabel->SetTextSize( wxSize( Mils2iu( 10 ), Mils2iu( 10 ) ) );
                 netLabel->SetLabelSpinStyle( 0 );
                 aScreen->Append( netLabel );
             }
