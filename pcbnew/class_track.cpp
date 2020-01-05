@@ -39,6 +39,7 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <view/view.h>
+#include <kiround.h>      // for KiROUND
 
 /**
  * Function ShowClearance

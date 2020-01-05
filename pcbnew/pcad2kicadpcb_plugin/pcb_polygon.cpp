@@ -31,6 +31,7 @@
 #include <wx/config.h>
 
 #include <common.h>
+#include <kiround.h>      // for KiROUND
 
 #include <pcb_polygon.h>
 

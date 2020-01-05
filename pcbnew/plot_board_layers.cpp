@@ -38,6 +38,7 @@
 #include <trigo.h>
 #include <pcb_base_frame.h>
 #include <macros.h>
+#include <kiround.h>      // for KiROUND
 
 #include <class_board.h>
 #include <class_module.h>

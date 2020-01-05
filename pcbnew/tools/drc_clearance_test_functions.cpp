@@ -38,6 +38,7 @@
 #include <polygon_test_point_inside.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <board_commit.h>
+#include <kiround.h>      // for KiROUND
 
 
 /**

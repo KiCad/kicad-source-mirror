@@ -28,6 +28,7 @@
 #include <macros.h>
 #include <convert_to_biu.h>
 #include <board_design_settings.h>
+#include <kiround.h>      // for KiROUND
 
 
 #define PLOT_LINEWIDTH_MIN        ( 0.02 * IU_PER_MM )  // min value for default line thickness

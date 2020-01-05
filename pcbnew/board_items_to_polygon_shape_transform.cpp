@@ -40,6 +40,7 @@
 #include <class_edge_mod.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
+#include <kiround.h>      // for KiROUND
 
 // A helper struct for the callback function
 // These variables are parameters used in addTextSegmToPoly.

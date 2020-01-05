@@ -39,6 +39,7 @@
 #include <tool/tool_manager.h>
 #include <tools/drc.h>
 #include <tools/zone_filler_tool.h>
+#include <kiround.h>      // for KiROUND
 
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :

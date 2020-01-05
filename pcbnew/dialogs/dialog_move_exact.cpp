@@ -23,6 +23,7 @@
  */
 
 #include <dialogs/dialog_move_exact.h>
+#include <kiround.h>      // for KiROUND
 #include <widgets/tab_traversal.h>
 #include <pcb_edit_frame.h>
 

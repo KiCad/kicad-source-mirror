@@ -33,6 +33,7 @@
 #include <class_board_item.h>
 #include <common.h>
 #include <convert_to_biu.h>
+#include <kiround.h>      // for KiROUND
 #include <math_for_graphics.h>
 #include <trigo.h>
 

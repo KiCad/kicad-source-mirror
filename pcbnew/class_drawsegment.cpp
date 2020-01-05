@@ -38,6 +38,7 @@
 #include <class_module.h>
 #include <class_drawsegment.h>
 #include <base_units.h>
+#include <kiround.h>      // for KiROUND
 
 
 DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :

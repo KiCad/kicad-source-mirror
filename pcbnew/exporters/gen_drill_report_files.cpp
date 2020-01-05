@@ -35,6 +35,7 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <macros.h>
+#include <kiround.h>      // for KiROUND
 
 #include <class_board.h>
 

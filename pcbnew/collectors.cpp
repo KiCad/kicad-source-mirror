@@ -30,6 +30,7 @@
 #include <class_track.h>
 #include <class_marker_pcb.h>
 #include <class_zone.h>
+#include <kiround.h>      // for KiROUND
 
 
 /* This module contains out of line member functions for classes given in

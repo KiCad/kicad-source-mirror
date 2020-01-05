@@ -36,6 +36,7 @@
 #include <gestfich.h>           // EDA_FileSelector()
 #include <trigo.h>              // RotatePoint()
 #include <macros.h>
+#include <kiround.h>      // for KiROUND
 
 #include <set>                  // std::set
 #include <map>                  // std::map

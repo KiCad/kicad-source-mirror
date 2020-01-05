@@ -40,6 +40,7 @@
 #include <widgets/wx_grid.h>
 #include <class_board.h>
 #include <class_module.h>
+#include <kiround.h>      // for KiROUND
 
 #include <dialog_pad_properties.h>
 #include <bitmaps.h>

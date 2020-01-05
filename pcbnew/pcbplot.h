@@ -33,6 +33,7 @@
 #include <pad_shapes.h>
 #include <pcb_plot_params.h>
 #include <layers_id_colors_and_visibility.h>
+#include <kiround.h>      // for KiROUND
 
 class PLOTTER;
 class TEXTE_PCB;

@@ -87,6 +87,7 @@
 #include <trigo.h>
 #include <build_version.h>
 #include <confirm.h>
+#include <kiround.h>      // for KiROUND
 
 typedef LEGACY_PLUGIN::BIU      BIU;
 

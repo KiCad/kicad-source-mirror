@@ -44,6 +44,7 @@
 #include <class_track.h>
 #include <class_edge_mod.h>
 #include <hash_eda.h>
+#include <kiround.h>      // for KiROUND
 
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* frame );
 static void CreateArtworksSection( FILE* aFile );

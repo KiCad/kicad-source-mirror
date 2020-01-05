@@ -49,6 +49,7 @@
 #include <pcbnew.h>
 #include <tools/drc.h>
 #include <netlist_reader/pcb_netlist.h>
+#include <kiround.h>      // for KiROUND
 
 #include <dialog_drc.h>
 #include <wx/progdlg.h>

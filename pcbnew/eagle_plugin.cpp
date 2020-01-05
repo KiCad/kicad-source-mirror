@@ -64,6 +64,7 @@ Load() TODO's
 #include <properties.h>
 #include <trigo.h>
 #include <wx/filename.h>
+#include <kiround.h>      // for KiROUND
 
 #include <class_board.h>
 #include <class_module.h>

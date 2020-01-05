@@ -43,6 +43,7 @@
 #include <class_edge_mod.h>
 #include <vector>
 #include <cctype>
+#include <kiround.h>      // for KiROUND
 
 /* Structure for holding the D-356 record fields.
  * Useful because 356A (when implemented) must be sorted before outputting it */
