@@ -163,7 +163,7 @@ void CCAMERA::rebuildProjection()
 
         m_projectionMatrixInv = glm::inverse( m_projectionMatrix );
 
-        m_frustum.tang = glm::tan( glm::radians( m_frustum.angle ) * 0.5f ) ;
+        m_frustum.tang = glm::tan( glm::radians( m_frustum.angle ) * 0.5f );
 
         m_focalLen.x = ( (float)m_windowSize.y / (float)m_windowSize.x ) / m_frustum.tang;
         m_focalLen.y = 1.0f / m_frustum.tang;
@@ -178,19 +178,21 @@ void CCAMERA::rebuildProjection()
 
         m_frustum.nearD = -m_frustum.farD; // Use a symmetrical clip plane for ortho projection
 
-        const float orthoReductionFactor = m_zoom / 75.0f;
+        // This formula was found by trial and error
+        const float orthoReductionFactor = glm::length( m_camera_pos_init ) *
+                                           m_zoom * m_zoom * 0.5f;
 
         // Initialize Projection Matrix for Ortographic View
-        m_projectionMatrix = glm::ortho( -m_windowSize.x * orthoReductionFactor,
-                                          m_windowSize.x * orthoReductionFactor,
-                                         -m_windowSize.y * orthoReductionFactor,
-                                          m_windowSize.y * orthoReductionFactor,
+        m_projectionMatrix = glm::ortho( -m_frustum.ratio * orthoReductionFactor,
+                                          m_frustum.ratio * orthoReductionFactor,
+                                         -orthoReductionFactor,
+                                          orthoReductionFactor,
                                           m_frustum.nearD, m_frustum.farD );
 
         m_projectionMatrixInv = glm::inverse( m_projectionMatrix );
 
-        m_frustum.nw = m_windowSize.x * orthoReductionFactor * 2.0f;
-        m_frustum.nh = m_windowSize.y * orthoReductionFactor * 2.0f;
+        m_frustum.nw = orthoReductionFactor * 2.0f * m_frustum.ratio;
+        m_frustum.nh = orthoReductionFactor * 2.0f;
         m_frustum.fw = m_frustum.nw;
         m_frustum.fh = m_frustum.nh;
 
