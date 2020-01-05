@@ -32,6 +32,8 @@
 #include <view/zoom_controller.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_dispatcher.h>
+#include <kiround.h>      // for KiROUND
+
 
 using namespace KIGFX;
 

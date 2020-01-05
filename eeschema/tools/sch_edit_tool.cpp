@@ -50,6 +50,7 @@
 #include <dialogs/dialog_edit_sheet_pin.h>
 #include <dialogs/dialog_edit_one_field.h>
 #include "sch_drawing_tools.h"
+#include <kiround.h>      // for KiROUND
 
 
 char g_lastBusEntryShape = '/';

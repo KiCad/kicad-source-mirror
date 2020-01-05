@@ -23,19 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <gr_basic.h>
-#include <pgm_base.h>
-#include <common.h>
-#include <kicad_string.h>
-#include <gestfich.h>
-#include <eda_base_frame.h>
-#include <config_params.h>
 
-#include <wx/apptrait.h>
-#include <wx/stdpaths.h>
-
-#include <wildcards_and_files_ext.h>
+#include <colors.h>              // for ColorByName, EDA_COLOR_T, UNSPECIFIE...
+#include <common.h>              // for LOCALE_IO
+#include <config_params.h>       // for PARAM_CFG_INT_WITH_SCALE, PARAM_CFG_...
+#include <gal/color4d.h>         // for COLOR4D
+#include <kiround.h>             // for KiROUND
+#include <wx/config.h>           // for wxConfigBase
+#include <wx/debug.h>            // for wxASSERT
+#include <wx/wx.h>               // for wxString, operator!=, operator==
 
 
 void wxConfigLoadParams( wxConfigBase* aCfg,

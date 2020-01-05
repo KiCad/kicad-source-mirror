@@ -51,6 +51,8 @@
 #include <invoke_sch_dialog.h>
 #include <dialogs/dialog_paste_special.h>
 #include <netlist_exporters/netlist_exporter_pspice.h>
+#include <kiround.h>      // for KiROUND
+
 
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
 {

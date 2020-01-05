@@ -27,6 +27,7 @@
 #include <transform.h>
 #include <common.h>
 #include <eda_rect.h>
+#include <kiround.h>      // for KiROUND
 
 
 bool TRANSFORM::operator==( const TRANSFORM& aTransform ) const

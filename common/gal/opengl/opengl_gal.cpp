@@ -39,6 +39,7 @@
 #include <geometry/shape_poly_set.h>
 #include <bitmap_base.h>
 #include <bezier_curves.h>
+#include <kiround.h>      // for KiROUND
 
 #include <macros.h>
 

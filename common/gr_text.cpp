@@ -38,6 +38,7 @@
 #include <macros.h>
 #include <base_screen.h>
 #include <gr_text.h>
+#include <kiround.h>      // for KiROUND
 
 #include <basic_gal.h>
 

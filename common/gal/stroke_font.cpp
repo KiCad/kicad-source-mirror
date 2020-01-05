@@ -28,6 +28,7 @@
 
 #include <gal/stroke_font.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <kiround.h>      // for KiROUND
 #include <wx/string.h>
 
 

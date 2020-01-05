@@ -29,13 +29,15 @@
  * @brief BASE_SCREEN object implementation.
  */
 
-#include <fctsys.h>
-#include <macros.h>
-#include <common.h>
-#include <base_struct.h>
+
 #include <base_screen.h>
-#include <id.h>
+#include <base_struct.h>
 #include <base_units.h>
+#include <common.h>
+#include <fctsys.h>
+#include <id.h>
+#include <kiround.h>      // for KiROUND
+#include <macros.h>
 #include <trace_helpers.h>
 
 

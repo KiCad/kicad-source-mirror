@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <kiface_i.h>
+#include <kiround.h>      // for KiROUND
 #include <project.h>
 #include <title_block.h>
 #include <tool/actions.h>

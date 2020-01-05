@@ -36,6 +36,7 @@
 #include <ws_draw_item.h>
 #include <collector.h>
 #include "pl_selection_tool.h"
+#include <kiround.h>      // for KiROUND
 
 /**
  * The maximum number of items in the clarify selection context menu.  The current

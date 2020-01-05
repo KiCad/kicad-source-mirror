@@ -45,6 +45,7 @@
 #include <invoke_sch_dialog.h>
 #include <project.h>
 #include <dialogs/dialog_display_info_HTML_base.h>
+#include <kiround.h>      // for KiROUND
 
 
 EE_INSPECTION_TOOL::EE_INSPECTION_TOOL()

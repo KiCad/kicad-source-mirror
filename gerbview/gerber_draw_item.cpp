@@ -35,6 +35,7 @@
 #include <gerber_file_image_list.h>
 #include <kicad_string.h>
 #include <geometry/shape_arc.h>
+#include <kiround.h>      // for KiROUND
 
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberImageFile ) :
     EDA_ITEM( (EDA_ITEM*)NULL, GERBER_DRAW_ITEM_T )

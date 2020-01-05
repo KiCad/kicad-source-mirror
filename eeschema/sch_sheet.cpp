@@ -36,6 +36,7 @@
 #include <plotter.h>
 #include <kicad_string.h>
 #include <msgpanel.h>
+#include <kiround.h>      // for KiROUND
 
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>

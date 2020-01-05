@@ -40,6 +40,7 @@
 #include <sch_edit_frame.h>
 #include <base_units.h>
 #include <msgpanel.h>
+#include <kiround.h>      // for KiROUND
 
 #include <general.h>
 #include <lib_edit_frame.h>

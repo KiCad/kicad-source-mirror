@@ -24,6 +24,8 @@
 #ifndef _DIALOG_PAGES_SETTINGS_H_
 #define _DIALOG_PAGES_SETTINGS_H_
 
+#include <page_info.h>
+#include <title_block.h>
 #include <widgets/unit_binder.h>
 #include <dialog_page_settings_base.h>
 

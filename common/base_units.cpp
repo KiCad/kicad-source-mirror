@@ -34,11 +34,13 @@
  *       depending on the application.
  */
 
-#include <macros.h>
 #include <base_struct.h>
-#include <title_block.h>
-#include <common.h>
 #include <base_units.h>
+#include <common.h>
+#include <kiround.h>      // for KiROUND
+#include <macros.h>
+#include <title_block.h>
+
 #include "libeval/numeric_evaluator.h"
 
 

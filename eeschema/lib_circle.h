@@ -26,6 +26,7 @@
 #define LIB_CIRCLE_H
 
 #include <lib_item.h>
+#include <kiround.h>      // for KiROUND
 
 
 class LIB_CIRCLE : public LIB_ITEM
