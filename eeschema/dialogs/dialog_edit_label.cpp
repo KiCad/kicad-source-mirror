@@ -45,7 +45,7 @@ class SCH_TEXT;
 class DIALOG_LABEL_EDITOR : public DIALOG_LABEL_EDITOR_BASE
 {
 public:
-    DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* parent, std::deque<SCH_TEXT*> aTextItems);
+    DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* parent, std::deque<SCH_TEXT*> aTextItems );
     ~DIALOG_LABEL_EDITOR();
 
     void SetTitle( const wxString& aTitle ) override
@@ -71,16 +71,16 @@ public:
 
 private:
     virtual void OnEnterKey( wxCommandEvent& aEvent ) override;
-    void OnCharHook( wxKeyEvent& aEvt );
+    void         OnCharHook( wxKeyEvent& aEvt );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     std::deque<SCH_TEXT*> m_textItems;
-    SCH_EDIT_FRAME* m_Parent;
-    wxWindow*       m_activeTextCtrl;
-    wxTextEntry*    m_activeTextEntry;
-    UNIT_BINDER     m_textSize;
+    SCH_EDIT_FRAME*       m_Parent;
+    wxWindow*             m_activeTextCtrl;
+    wxTextEntry*          m_activeTextEntry;
+    UNIT_BINDER           m_textSize;
     SCH_NETNAME_VALIDATOR m_netNameValidator;
 };
 
@@ -111,13 +111,15 @@ struct shapeTypeStruct
 /*
  * Conversion map between PLOT_DASH_TYPE values and style names displayed
  */
+// clang-format off
 const std::map<PINSHEETLABEL_SHAPE, struct shapeTypeStruct> shapeTypeNames = {
-    { PINSHEETLABEL_SHAPE::PS_INPUT, { _( "Input" ), pintype_input_xpm } },
-    { PINSHEETLABEL_SHAPE::PS_OUTPUT, { _( "Output" ), pintype_output_xpm } },
-    { PINSHEETLABEL_SHAPE::PS_BIDI, { _( "Bidirectional" ), pintype_bidi_xpm } },
-    { PINSHEETLABEL_SHAPE::PS_TRISTATE, { _( "Tri-state" ), pintype_3states_xpm } },
-    { PINSHEETLABEL_SHAPE::PS_UNSPECIFIED, { _( "Passive" ), stroke_dashdot_xpm } },
+    { PINSHEETLABEL_SHAPE::PS_INPUT,        { _( "Input" ),         pintype_input_xpm } },
+    { PINSHEETLABEL_SHAPE::PS_OUTPUT,       { _( "Output" ),        pintype_output_xpm } },
+    { PINSHEETLABEL_SHAPE::PS_BIDI,         { _( "Bidirectional" ), pintype_bidi_xpm } },
+    { PINSHEETLABEL_SHAPE::PS_TRISTATE,     { _( "Tri-state" ),     pintype_3states_xpm } },
+    { PINSHEETLABEL_SHAPE::PS_UNSPECIFIED,  { _( "Passive" ),       pintype_passive_xpm } },
 };
+// clang-format on
 
 
 struct orientationTypeStruct
@@ -129,12 +131,14 @@ struct orientationTypeStruct
 /*
  * Conversion map between PLOT_DASH_TYPE values and style names displayed
  */
+// clang-format off
 const std::map<LABEL_SPIN_STYLE, struct orientationTypeStruct> orientationOptionsMap = {
-    { LABEL_SPIN_STYLE::LEFT, { _("Left"), pintype_input_xpm } },
-    { LABEL_SPIN_STYLE::UP, { _("Up"), pintype_output_xpm } },
-    { LABEL_SPIN_STYLE::RIGHT, { _("Right"), pintype_bidi_xpm } },
-    { LABEL_SPIN_STYLE::BOTTOM, { _("Down"), pintype_3states_xpm } },
+    { LABEL_SPIN_STYLE::LEFT,   { _("Left"),    align_items_left_sm_xpm } },
+    { LABEL_SPIN_STYLE::UP,     { _("Up"),      align_items_top_sm_xpm } },
+    { LABEL_SPIN_STYLE::RIGHT,  { _("Right"),   align_items_right_sm_xpm } },
+    { LABEL_SPIN_STYLE::BOTTOM, { _("Down"),    align_items_bottom_sm_xpm } },
 };
+// clang-format on
 
 struct textStyleStruct
 {
@@ -145,13 +149,14 @@ struct textStyleStruct
 /*
  * Conversion map between PLOT_DASH_TYPE values and style names displayed
  */
+// clang-format off
 const std::map<int, struct textStyleStruct> textStylesMap = {
-    { 0, { _("Normal"), pintype_input_xpm } },
-    { 1, { _("Italic"), pintype_output_xpm } },
-    { 2, { _("Bold"), pintype_bidi_xpm } },
-    { 3, { _("Bold and italic"), pintype_bidi_xpm } },
+    { 0, { _("Normal"),             font_normal_xpm } },
+    { 1, { _("Italic"),             font_italic_xpm } },
+    { 2, { _("Bold"),               font_bold_xpm } },
+    { 3, { _("Bold and italic"),    font_bolditalic_xpm } },
 };
-
+// clang-format on
 
 
 // Don't allow text to disappear; it can be difficult to correct if you can't select it
@@ -159,12 +164,13 @@ const int MIN_TEXTSIZE = (int)( 0.01 * IU_PER_MM );
 const int MAX_TEXTSIZE = INT_MAX;
 
 
-DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, std::deque<SCH_TEXT*> aTextItems ) :
-    DIALOG_LABEL_EDITOR_BASE( aParent ),
-    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
-    m_netNameValidator( true )
+DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR(
+        SCH_EDIT_FRAME* aParent, std::deque<SCH_TEXT*> aTextItems )
+        : DIALOG_LABEL_EDITOR_BASE( aParent ),
+          m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
+          m_netNameValidator( true )
 {
-    m_Parent = aParent;
+    m_Parent    = aParent;
     m_textItems = aTextItems;
 
     wxASSERT( m_textItems.size() > 0 );
@@ -266,7 +272,8 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, std::deque<SC
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
     // so we have to listen to wxEVT_CHAR_HOOK events instead.
-    m_valueMultiLine->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ), nullptr, this );
+    m_valueMultiLine->Connect(
+            wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ), nullptr, this );
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient because the
     // various versions have different controls so we want to store sizes for each version.
@@ -280,7 +287,8 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, std::deque<SC
 
 DIALOG_LABEL_EDITOR::~DIALOG_LABEL_EDITOR()
 {
-    m_valueMultiLine->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ), nullptr, this );
+    m_valueMultiLine->Disconnect(
+            wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ), nullptr, this );
 }
 
 
@@ -289,12 +297,14 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    wxASSERT(m_textItems.size() > 0);
+    wxASSERT( m_textItems.size() > 0 );
 
     SCH_TEXT* firstItem = m_textItems.front();
 
     if( std::all_of( m_textItems.begin() + 1, m_textItems.end(),
-                [&]( const SCH_TEXT* r ) { return r->GetText() == firstItem->GetText(); } ) )
+                [&]( const SCH_TEXT* r ) { 
+                    return r->GetText() == firstItem->GetText(); 
+                } ) )
     {
         if( m_activeTextEntry )
             m_activeTextEntry->SetValue( UnescapeString( firstItem->GetText() ) );
@@ -335,15 +345,18 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     }
 
     // Set text options:
-    if( std::all_of( m_textItems.begin() + 1, m_textItems.end(), [&]( const SCH_TEXT* r ) {
-            return r->GetLabelSpinStyle() == firstItem->GetLabelSpinStyle();
-        } ) )
+    if( std::all_of( m_textItems.begin() + 1, m_textItems.end(), 
+                [&]( const SCH_TEXT* r ) {
+                    return r->GetLabelSpinStyle() == firstItem->GetLabelSpinStyle();
+                } ) )
     {
-        int spin = static_cast<int>( firstItem->GetShape() );
-        wxCHECK_MSG( spin < (int) orientationOptionsMap.size(), false,
+        auto findIt = orientationOptionsMap.find( firstItem->GetLabelSpinStyle() );
+
+        wxCHECK_MSG( findIt != orientationOptionsMap.end(), false,
                 "Text orientation not found in the orientation options map" );
 
-        m_comboOrientation->SetSelection( spin );
+        int idx = std::distance( orientationOptionsMap.cbegin(), findIt );
+        m_comboOrientation->SetSelection( idx );
     }
     else
     {
@@ -353,12 +366,18 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     if( m_comboShape->IsShown() )
     {
         if( std::all_of( m_textItems.begin() + 1, m_textItems.end(),
-                    [&]( const SCH_TEXT* r ) { return r->GetShape() == firstItem->GetShape(); } ) )
+                    [&]( const SCH_TEXT* r ) 
+                    { 
+                        return r->GetShape() == firstItem->GetShape(); 
+                    } ) )
         {
-            int shape = static_cast<int>( firstItem->GetShape() );
-            wxCHECK_MSG( shape < (int) shapeTypeNames.size(), false,
+            auto findIt = shapeTypeNames.find( firstItem->GetShape() );
+
+            wxCHECK_MSG( findIt != shapeTypeNames.end(), false,
                     "Text shape not found in the shape definition map" );
-            m_comboShape->SetSelection( shape );
+
+            int idx = std::distance( shapeTypeNames.cbegin(), findIt );
+            m_comboShape->SetSelection( idx );
         }
         else
         {
@@ -397,7 +416,6 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     {
         m_textSize.SetValue( INDETERMINATE );
     }
-
 
 
     return true;
@@ -515,16 +533,16 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
         {
             int selection = m_comboShape->GetSelection();
 
-            wxCHECK_MSG(selection < (int)shapeTypeNames.size(), false,
-                "Selected line type index exceeds size of line type lookup map");
+            wxCHECK_MSG( selection < (int) shapeTypeNames.size(), false,
+                    "Selected line type index exceeds size of line type lookup map" );
 
             auto it = shapeTypeNames.begin();
-            std::advance(it, selection);
+            std::advance( it, selection );
 
             textItem->SetShape( it->first );
         }
 
-        if (m_comboStyle->GetSelection() != wxNOT_FOUND)
+        if( m_comboStyle->GetSelection() != wxNOT_FOUND )
         {
             int style = m_comboStyle->GetSelection();
 

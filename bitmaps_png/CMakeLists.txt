@@ -66,7 +66,15 @@ option( MAINTAIN_PNGS
 
 # small icons (16x16) needed in listboxes and dialog buttons
 set( BMAPS_SMALL
+    align_items_bottom_sm
+    align_items_left_sm
+    align_items_right_sm
+    align_items_top_sm
     folder
+    font_bold
+    font_bolditalic
+    font_italic
+    font_normal
     pinorient_right
     pinorient_left
     pinorient_up

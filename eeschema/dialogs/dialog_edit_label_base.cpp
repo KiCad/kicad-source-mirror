@@ -100,21 +100,27 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_labelOrientation->Wrap( -1 );
 	m_textEntrySizer->Add( m_labelOrientation, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 
-	m_comboOrientation = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_comboOrientation = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
+	m_comboOrientation->SetMinSize( wxSize( 200,-1 ) );
+
 	m_textEntrySizer->Add( m_comboOrientation, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 3 );
 
 	m_labelStyle = new wxStaticText( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelStyle->Wrap( -1 );
 	m_textEntrySizer->Add( m_labelStyle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 
-	m_comboStyle = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_comboStyle = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
+	m_comboStyle->SetMinSize( wxSize( 200,-1 ) );
+
 	m_textEntrySizer->Add( m_comboStyle, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 3 );
 
 	m_labelShape = new wxStaticText( this, wxID_ANY, _("Shape:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelShape->Wrap( -1 );
 	m_textEntrySizer->Add( m_labelShape, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 
-	m_comboShape = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_comboShape = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
+	m_comboShape->SetMinSize( wxSize( 200,-1 ) );
+
 	m_textEntrySizer->Add( m_comboShape, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 3 );
 
 
