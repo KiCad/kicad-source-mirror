@@ -35,7 +35,7 @@
 #include <class_drawsegment.h>
 #include <class_marker_pcb.h>
 #include <math_for_graphics.h>
-#include <polygon_test_point_inside.h>
+#include <geometry/polygon_test_point_inside.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <board_commit.h>
 #include <kiround.h>      // for KiROUND

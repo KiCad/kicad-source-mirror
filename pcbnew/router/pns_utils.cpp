@@ -25,6 +25,7 @@
 #include "pns_router.h"
 
 #include <geometry/shape_segment.h>
+#include <math/box2.h>
 
 #include <cmath>
 

@@ -39,7 +39,7 @@
 #include <pcbnew.h>
 #include <zones.h>
 #include <math_for_graphics.h>
-#include <polygon_test_point_inside.h>
+#include <geometry/polygon_test_point_inside.h>
 #include <kiround.h>      // for KiROUND
 
 

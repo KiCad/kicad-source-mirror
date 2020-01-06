@@ -25,6 +25,7 @@
 #include "pns_router.h"
 
 #include <geometry/shape_rect.h>
+#include <math/box2.h>
 
 namespace PNS {
 
