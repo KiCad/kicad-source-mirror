@@ -228,8 +228,6 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
     RotatePoint( &pt, aPosition, 900 );
     SetTextPos( pt );
 
-    // Global and hierarchical labels spin backwards.  Fix here because
-    // changing SetLabelSpinStyle would break existing designs..
     SpinCW();
 
     if( this->Type() == SCH_TEXT_T )
