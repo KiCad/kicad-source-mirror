@@ -74,6 +74,11 @@ public:
     bool m_EnableUsePinFunction;
 
     /**
+     * Enable pad property handling in pcbnew.
+     */
+    bool m_EnableUsePadProperty;
+
+    /**
      * Do real-time connectivity
      */
     bool m_realTimeConnectivity;

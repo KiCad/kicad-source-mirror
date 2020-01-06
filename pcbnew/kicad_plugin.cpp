@@ -52,7 +52,7 @@
 #include <convert_basic_shapes_to_polygon.h>    // for enum RECT_CHAMFER_POSITIONS definition
 #include <kiface_i.h>
 
-#include <advanced_config.h>    // for pad pin function feature management
+#include <advanced_config.h>    // for pad pin function and pad property feature management
 
 using namespace PCB_KEYS_T;
 
@@ -1380,8 +1380,9 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         m_out->Print( 0, ")" );
     }
 
-    if( property )
+    if( property && ADVANCED_CFG::GetCfg().m_EnableUsePadProperty )
     {
+        // Add pad property, if exists.
         m_out->Print( 0, " (property %s)", property );
     }
 

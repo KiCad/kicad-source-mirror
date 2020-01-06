@@ -41,6 +41,8 @@
 #include <html_messagebox.h>
 #include <convert_basic_shapes_to_polygon.h>    // for enum RECT_CHAMFER_POSITIONS definition
 
+#include <advanced_config.h>    // for pad property feature management
+
 
 // list of pad shapes, ordered like the pad shape wxChoice in dialog.
 static PAD_SHAPE_T code_shape[] =
@@ -123,6 +125,13 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
                                 // from the footprint editor to set default pad setup
 
     m_board      = m_parent->GetBoard();
+
+    // Disable the pad property if not allowed in advanced config
+    if( !ADVANCED_CFG::GetCfg().m_EnableUsePadProperty )
+    {
+        m_staticTextFabProperty->Show( false );
+        m_choiceFabProperty->Show( false );
+    }
 
     m_PadNetSelector->SetNetInfo( &m_board->GetNetInfo() );
 

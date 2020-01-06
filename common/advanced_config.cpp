@@ -59,11 +59,16 @@ namespace AC_STACK
  */
 namespace AC_KEYS
 {
+/**
+ * In Pcbnew, pads can have a fabrication property
+ * Because this feature adds a new keyword in *.kicad_pcb and *.kicad_modfiles,
+ * this is an advanced feature until it is fully finalized
+ */
+static const wxChar UsePadProperty[] = wxT( "UsePadProperty" );
 
 /**
  * In Pcbnew, pads can handle a pin function info (this is the schematic pin name)
- * Because this feature needs some fixes (how to retrieve the info in netlist)
- * and because it adds a new keyword in *.kicad_pcb files, this is an advanced feature
+ * Because this feature adds a new keyword in *.kicad_pcb files, this is an advanced feature
  * until it is fully finalized
  */
 static const wxChar UsePinFunction[] = wxT( "UsePinFunction" );
@@ -165,6 +170,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     // Init defaults - this is done in case the config doesn't exist,
     // then the values will remain as set here.
+    m_EnableUsePadProperty = false;
     m_EnableUsePinFunction = false;
     m_allowLegacyCanvasInGtk3 = false;
     m_realTimeConnectivity = true;
@@ -201,6 +207,9 @@ void ADVANCED_CFG::loadFromConfigFile()
 void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 {
     PARAM_CFG_ARRAY configParams;
+
+    configParams.push_back(
+            new PARAM_CFG_BOOL( true, AC_KEYS::UsePadProperty, &m_EnableUsePadProperty, false ) );
 
     configParams.push_back(
             new PARAM_CFG_BOOL( true, AC_KEYS::UsePinFunction, &m_EnableUsePinFunction, false ) );
