@@ -45,6 +45,14 @@
 #include <wx/statusbr.h>
 #include <pcb_base_frame.h>
 
+// Flag for special keys
+// TODO Remove these when Action-ifying 3d viewer
+#define GR_KB_RIGHTSHIFT    ( 0x01000000U )
+#define GR_KB_LEFTSHIFT     ( 0x02000000U )
+#define GR_KB_CTRL          ( 0x04000000U )
+#define GR_KB_ALT           ( 0x08000000U )
+#define GR_KB_SHIFT         ( GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT )
+
 
 /**
  *  Implement a canvas based on a wxGLCanvas

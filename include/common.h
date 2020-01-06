@@ -63,24 +63,6 @@ class REPORTER;
  */
 typedef uint32_t timestamp_t;
 
-
-// Flag for special keys
-// This type could be extended to 64 bits to add room for more flags.
-// For compatibility with old code, keep flag bits out of the least
-// significant nibble (0xF).
-typedef uint32_t EDA_KEY;
-#define EDA_KEY_C UINT32_C
-
-#define GR_KB_RIGHTSHIFT    ( EDA_KEY_C( 0x01000000 ) )
-#define GR_KB_LEFTSHIFT     ( EDA_KEY_C( 0x02000000 ) )
-#define GR_KB_CTRL          ( EDA_KEY_C( 0x04000000 ) )
-#define GR_KB_ALT           ( EDA_KEY_C( 0x08000000 ) )
-#define GR_KB_SHIFT         ( GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT )
-#define GR_KB_SHIFTCTRL     ( GR_KB_SHIFT | GR_KB_CTRL )
-#define MOUSE_MIDDLE        ( EDA_KEY_C( 0x10000000 ) )
-#define GR_KEY_INVALID      ( EDA_KEY_C( 0x80000000 ) )
-#define GR_KEY_NONE         ( EDA_KEY_C( 0 ) )
-
 /// default name for nameless projects
 #define NAMELESS_PROJECT wxT( "noname" )
 
@@ -95,8 +77,6 @@ enum pseudokeys {
     EDA_ZOOM_OUT_FROM_MOUSE,
     EDA_ZOOM_CENTER_FROM_MOUSE
 };
-
-#define ESC 27
 
 /// Frequent text rotations, used with {Set,Get}TextAngle(),
 /// in 0.1 degrees for now, hoping to migrate to degrees eventually.
