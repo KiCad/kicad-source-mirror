@@ -26,7 +26,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <__hash_table>                      // for __hash_const_iterator
 #include <algorithm>
 #include <assert.h>                          // for assert
 #include <cmath>                             // for sqrt, cos, hypot, isinf
