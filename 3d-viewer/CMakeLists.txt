@@ -106,7 +106,7 @@ add_dependencies( 3d-viewer pcbcommon )
 
 target_link_libraries( 3d-viewer
                        gal
-                       polygon
+                       kimath
                        ${Boost_}
                        ${wxWidgets_LIBRARIES}
                        ${OPENGL_LIBRARIES}

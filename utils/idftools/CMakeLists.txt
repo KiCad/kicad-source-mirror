@@ -18,15 +18,29 @@ if( MINGW )
 endif( MINGW )
 
 add_library( idf3 STATIC ${IDF3_FILES} )
+target_link_libraries( idf3
+    kimath
+    )
 
 add_executable( idfcyl idf_cylinder.cpp )
 add_executable( idfrect idf_rect.cpp )
 add_executable( dxf2idf dxf2idfmain.cpp dxf2idf.cpp )
 add_executable( idf2vrml idf2vrml.cpp )
 
-target_link_libraries( dxf2idf dxflib_qcad idf3 ${wxWidgets_LIBRARIES} )
+target_link_libraries( dxf2idf
+    dxflib_qcad
+    idf3
+    kimath
+    ${OPENGL_LIBRARIES}
+    ${wxWidgets_LIBRARIES}
+    )
 
-target_link_libraries( idf2vrml idf3 common ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )
+target_link_libraries( idf2vrml
+    idf3
+    kimath
+    ${OPENGL_LIBRARIES}
+    ${wxWidgets_LIBRARIES}
+    )
 
 if( APPLE )
     # puts binaries into the *.app bundle while linking

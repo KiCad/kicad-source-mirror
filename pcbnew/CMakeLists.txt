@@ -399,6 +399,7 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         -I${CMAKE_CURRENT_SOURCE_DIR}/../include
         -I${CMAKE_CURRENT_SOURCE_DIR}/../scripting
         -I${CMAKE_CURRENT_SOURCE_DIR}/../common/swig
+        -I${CMAKE_CURRENT_SOURCE_DIR}/../libs/kimath/include
         -I${WXPYTHON_SWIG_DIR}
         )
 
