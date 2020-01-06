@@ -363,7 +363,7 @@
                         <property name="help"></property>
                         <property name="id">ID_MENU_DOTTED</property>
                         <property name="kind">wxITEM_CHECK</property>
-                        <property name="label">Dotted current/phase</property>
+                        <property name="label">Dotted Current/Phase</property>
                         <property name="name">m_showDotted</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>

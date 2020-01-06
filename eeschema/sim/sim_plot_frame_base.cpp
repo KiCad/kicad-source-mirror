@@ -100,7 +100,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_viewMenu->AppendSeparator();
 
 	wxMenuItem* m_showDotted;
-	m_showDotted = new wxMenuItem( m_viewMenu, ID_MENU_DOTTED, wxString( _("Dotted current/phase") ) , wxEmptyString, wxITEM_CHECK );
+	m_showDotted = new wxMenuItem( m_viewMenu, ID_MENU_DOTTED, wxString( _("Dotted Current/Phase") ) , wxEmptyString, wxITEM_CHECK );
 	m_viewMenu->Append( m_showDotted );
 
 	m_mainMenu->Append( m_viewMenu, _("View") );
