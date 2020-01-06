@@ -427,8 +427,10 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
     // Contains a closed polygon used to calc if points are inside
     SEGMENTS segments;
 
-    segments_and_normals.resize( path.PointCount() );
-    segments.resize( path.PointCount() );
+    segments_and_normals.reserve( path.PointCount() );
+    segments.reserve( path.PointCount() );
+
+    SFVEC2F prevPoint;
 
     for( int i = 0; i < path.PointCount(); i++ )
     {
@@ -437,9 +439,23 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
         const SFVEC2F point ( (float)( a.x) * aBiuTo3DunitsScale,
                               (float)(-a.y) * aBiuTo3DunitsScale );
 
-        bbox.Union( point );
-        segments_and_normals[i].m_Start = point;
-        segments[i].m_Start = point;
+        // Only add points that are not coincident
+        if( (i == 0) ||
+            (fabs(prevPoint.x - point.x) > FLT_EPSILON) ||
+            (fabs(prevPoint.y - point.y) > FLT_EPSILON) )
+        {
+            prevPoint = point;
+
+            bbox.Union( point );
+
+            SEGMENT_WITH_NORMALS sn;
+            sn.m_Start = point;
+            segments_and_normals.push_back( sn );
+
+            POLYSEGMENT ps;
+            ps.m_Start = point;
+            segments.push_back( ps );
+        }
     }
 
     bbox.ScaleNextUp();
@@ -515,13 +531,13 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
             segments_and_normals[i].m_Normals.m_Start = normalSeg;
         else
             segments_and_normals[i].m_Normals.m_Start =
-                glm::normalize( (((normalBeforeSeg * dotBefore ) + normalSeg) * 0.5f) );
+                glm::normalize( (normalBeforeSeg * dotBefore ) + normalSeg );
 
         if( dotAfter < 0.7f )
             segments_and_normals[i].m_Normals.m_End = normalSeg;
         else
             segments_and_normals[i].m_Normals.m_End =
-                glm::normalize( (((normalAfterSeg  * dotAfter  ) + normalSeg) * 0.5f) );
+                glm::normalize( (normalAfterSeg * dotAfter ) + normalSeg );
     }
 
     if( aDivFactor == 0.0f )
