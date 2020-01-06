@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <string>
 #include <cassert>
+#include <string>
 
 #include <geometry/shape.h>
 #include <geometry/shape_file_io.h>

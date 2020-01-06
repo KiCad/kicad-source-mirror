@@ -25,13 +25,15 @@
 #ifndef __SHAPE_H
 #define __SHAPE_H
 
-#include <string>
+#include <assert.h>         // for assert
 #include <sstream>
+#include <stddef.h>         // for NULL
+
+#include <geometry/seg.h>
 
 #include <math/vector2d.h>
 #include <math/box2.h>
 
-#include <geometry/seg.h>
 
 /**
  * Enum SHAPE_TYPE

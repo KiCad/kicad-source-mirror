@@ -26,6 +26,10 @@
 /************************************/
 
 #include <bezier_curves.h>
+#include <math/vector2d.h>  // for VECTOR2D, operator*, VECTOR2
+#include <wx/debug.h>       // for wxASSERT
+#include <wx/gdicmn.h>      // for wxPoint
+
 
 BEZIER_POLY::BEZIER_POLY( const std::vector<wxPoint>& aControlPoints )
 {

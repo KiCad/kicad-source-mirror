@@ -24,6 +24,7 @@
 
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
+#include <math/vector2d.h>
 
 // believe or not, X11 headers have a F****ING macro called Opposite...
 #undef Opposite

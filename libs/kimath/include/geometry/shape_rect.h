@@ -25,10 +25,11 @@
 #ifndef __SHAPE_RECT_H
 #define __SHAPE_RECT_H
 
+#include <geometry/seg.h>
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
-#include <geometry/shape_circle.h>
-#include <geometry/seg.h>
+#include <math/box2.h>
+#include <math/vector2d.h>
 
 class SHAPE_RECT : public SHAPE
 {

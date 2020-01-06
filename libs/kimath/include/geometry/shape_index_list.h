@@ -25,6 +25,12 @@
 #ifndef __SHAPE_INDEX_LIST_H
 #define __SHAPE_INDEX_LIST_H
 
+#include <vector>
+
+#include <geometry/shape.h>
+#include <math/box2.h>
+#include <math/vector2d.h>
+
 template <class T>
 const SHAPE* defaultShapeFunctor( const T aItem )
 {

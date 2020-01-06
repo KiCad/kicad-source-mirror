@@ -23,6 +23,8 @@
 #ifndef KIROUND_H_
 #define KIROUND_H_
 
+#include <limits>
+#include <typeinfo>
 #include <wx/log.h>
 
 /**

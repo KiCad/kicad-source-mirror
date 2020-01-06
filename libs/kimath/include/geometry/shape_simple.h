@@ -24,11 +24,11 @@
 #ifndef __SHAPE_SIMPLE_H
 #define __SHAPE_SIMPLE_H
 
-#include <vector>
-
-#include <geometry/shape.h>
 #include <geometry/seg.h>
+#include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
+#include <math/box2.h>
+#include <math/vector2d.h>
 
 /**
  * Class SHAPE_SIMPLE

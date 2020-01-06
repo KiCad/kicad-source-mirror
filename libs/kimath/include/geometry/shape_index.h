@@ -27,9 +27,10 @@
 #define __SHAPE_INDEX_H
 
 #include <vector>
-#include <geometry/shape.h>
-#include <geometry/rtree.h>
 
+#include <geometry/rtree.h>
+#include <geometry/shape.h>
+#include <math/box2.h>
 
 /**
  * shapeFunctor template function

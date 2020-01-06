@@ -22,7 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>        // for min
 #include <geometry/seg.h>
+#include <math/math_util.h> // for rescale
+#include <math/vector2d.h>  // for VECTOR2I, VECTOR2
 
 template <typename T>
 int sgn( T aVal )

@@ -22,16 +22,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <cmath>
-#include <math/vector2d.h>
 
+#include <assert.h>                               // for assert
+#include <cmath>
+#include <limits.h>                               // for INT_MAX
+#include <stdlib.h>                               // for abs
+
+#include <geometry/seg.h>                         // for SEG
 #include <geometry/shape.h>
 #include <geometry/shape_arc.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
-#include "../../include/geometry/shape_simple.h"
+#include <geometry/shape_simple.h>
+#include <math/box2.h>                            // for BOX2I
+#include <math/vector2d.h>
 
 typedef VECTOR2I::extended_type ecoord;
 

@@ -25,8 +25,10 @@
 #ifndef __SHAPE_ARC_H
 #define __SHAPE_ARC_H
 
-#include <geometry/shape.h>
 #include <geometry/seg.h>
+#include <geometry/shape.h>
+#include <math/box2.h>       // for BOX2I
+#include <math/vector2d.h>   // for VECTOR2I
 
 class SHAPE_LINE_CHAIN;
 

@@ -47,11 +47,14 @@
 #define __POLYGON_TRIANGULATION_H
 
 #include <algorithm>
+#include <deque>
 #include <cmath>
-#include <vector>
-#include <math/box2.h>
 
-#include "clipper.hpp"
+#include <clipper.hpp>
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_poly_set.h>
+#include <math/box2.h>
+#include <math/vector2d.h>
 
 class PolygonTriangulation
 {

@@ -25,14 +25,18 @@
 #ifndef __POLY_GRID_PARTITION_H
 #define __POLY_GRID_PARTITION_H
 
+
+#include <algorithm>
+#include <functional>
+#include <set>
+#include <unordered_map>
+#include <vector>
+
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
-
-#include <vector>
-#include <algorithm>
-#include <unordered_map>
-#include <set>
+#include <math/math_util.h>
+#include <math/vector2d.h>
 
 /**
  * Class POLY_GRID_PARTITION
@@ -422,7 +426,7 @@ public:
                 }
             }
         }
-        
+
         if( state.nearest < 0 )
             return 0;
 
@@ -439,7 +443,7 @@ public:
                 return 0;
             }
         }
-        
+
         if( state.dist_max > 0 )
         {
             return m_flags[state.nearest] & LEAD_H ? 1 : 0;

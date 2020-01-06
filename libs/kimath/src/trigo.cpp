@@ -27,10 +27,14 @@
  * @brief Trigonometric and geometric basic functions.
  */
 
+#include <limits>           // for numeric_limits
+#include <stdlib.h>         // for abs
+#include <type_traits>      // for swap
+
 #include <clamp.h>
 #include <geometry/seg.h>
 #include <kiround.h>
-#include <math_for_graphics.h>
+#include <math/vector2d.h>  // for VECTOR2I
 #include <trigo.h>
 
 // Returns true if the point P is on the segment S.

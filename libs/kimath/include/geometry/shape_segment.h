@@ -25,8 +25,10 @@
 #ifndef __SHAPE_SEGMENT_H
 #define __SHAPE_SEGMENT_H
 
-#include <geometry/shape.h>
 #include <geometry/seg.h>
+#include <geometry/shape.h>
+#include <math/box2.h>
+#include <math/vector2d.h>
 
 class SHAPE_SEGMENT : public SHAPE {
 

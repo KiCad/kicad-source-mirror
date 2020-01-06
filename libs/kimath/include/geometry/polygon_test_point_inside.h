@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#if 1   // Set to 0 to compile outside wxWidgets
+#ifdef WX_COMPATIBILITY
 #include <wx/gdicmn.h>      // for wxPoint definition
 #else
 // define here wxPoint if we want to compile outside wxWidgets

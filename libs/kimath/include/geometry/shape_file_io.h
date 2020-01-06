@@ -27,7 +27,7 @@
 #define __SHAPE_FILE_IO_H
 
 #include <cstdio>
-#include <string>
+#include <string>  // for string
 
 class SHAPE;
 

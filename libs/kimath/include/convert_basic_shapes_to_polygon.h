@@ -29,13 +29,8 @@
  * @file convert_basic_shapes_to_polygon.h
  */
 
-#include <vector>
-
-//#include <fctsys.h>
-#include <trigo.h>
-//#include <macros.h>
-
 #include <geometry/shape_poly_set.h>
+#include <wx/gdicmn.h>      // for wxPoint
 
 // The chamfer positions of chamfered rect shape.
 // the position is relative to a pad with orientation = 0

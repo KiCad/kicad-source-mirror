@@ -23,11 +23,17 @@
  */
 
 #include <algorithm>
+#include <limits.h>          // for INT_MAX
+#include <math.h>            // for hypot
+#include <string>            // for basic_string
 
+#include <clipper.hpp>
+#include <geometry/seg.h>    // for SEG, OPT_VECTOR2I
 #include <geometry/shape_line_chain.h>
-#include <geometry/shape_circle.h>
-#include <trigo.h>
-#include "clipper.hpp"
+#include <math/box2.h>       // for BOX2I
+#include <math/math_util.h>  // for rescale
+#include <math/vector2d.h>   // for VECTOR2, VECTOR2I
+class SHAPE;
 
 
 ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation ) const

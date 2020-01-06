@@ -25,7 +25,9 @@
 #ifndef __SHAPE_CIRCLE_H
 #define __SHAPE_CIRCLE_H
 
-#include "shape.h"
+#include <geometry/shape.h>
+#include <math/box2.h>
+#include <math/vector2d.h>
 
 class SHAPE_CIRCLE : public SHAPE
 {

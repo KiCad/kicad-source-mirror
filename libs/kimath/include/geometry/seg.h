@@ -25,11 +25,14 @@
 #ifndef __SEG_H
 #define __SEG_H
 
-#include <cstdio>
-#include <climits>
+#include <math.h>                       // for sqrt
+#include <stdlib.h>                     // for abs
+#include <ostream>                      // for operator<<, ostream, basic_os...
+#include <type_traits>                  // for swap
 
-#include <math/vector2d.h>
 #include <core/optional.h>
+#include <math/math_util.h>             // for rescale
+#include <math/vector2d.h>
 
 typedef OPT<VECTOR2I> OPT_VECTOR2I;
 

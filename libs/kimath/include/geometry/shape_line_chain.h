@@ -26,17 +26,20 @@
 #ifndef __SHAPE_LINE_CHAIN
 #define __SHAPE_LINE_CHAIN
 
+
+#include <algorithm>                    // for max
 #include <sstream>
 #include <vector>
-#include <wx/gdicmn.h>
+#include <wx/gdicmn.h>                  // for wxPoint
 
 #include <core/optional.h>
 
-#include <math/vector2d.h>
-#include <geometry/shape.h>
-#include <geometry/seg.h>
-
 #include <clipper.hpp>
+#include <geometry/seg.h>
+#include <geometry/shape.h>
+#include <math/box2.h>                  // for BOX2I
+#include <math/vector2d.h>
+
 
 /**
  * Class SHAPE_LINE_CHAIN

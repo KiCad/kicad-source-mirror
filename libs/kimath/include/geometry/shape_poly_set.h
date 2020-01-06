@@ -26,12 +26,21 @@
 #ifndef __SHAPE_POLY_SET_H
 #define __SHAPE_POLY_SET_H
 
-#include <vector>
 #include <cstdio>
+#include <deque>                        // for deque
+#include <iosfwd>                       // for string, stringstream
 #include <memory>
+#include <set>                          // for set
+#include <stdexcept>                    // for out_of_range
+#include <stdlib.h>                     // for abs
+#include <vector>
+
+#include <clipper.hpp>                  // for ClipType, PolyTree (ptr only)
+#include <geometry/seg.h>               // for SEG
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
-
+#include <math/box2.h>                  // for BOX2I
+#include <math/vector2d.h>              // for VECTOR2I
 #include <md5_hash.h>
 
 

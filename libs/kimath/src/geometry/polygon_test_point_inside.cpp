@@ -26,9 +26,6 @@
  * @file polygon_test_point_inside.cpp
  */
 
-#include <cmath>
-#include <vector>
-
 #include <geometry/polygon_test_point_inside.h>
 
 /* this algo uses the the Jordan curve theorem to find if a point is inside or outside a polygon:

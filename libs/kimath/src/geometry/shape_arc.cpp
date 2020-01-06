@@ -22,12 +22,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <algorithm>
+#include <assert.h>                     // for assert
+#include <math.h>                       // for cos, sin, M_PI, atan2, ceil
+#include <type_traits>                  // for swap
 #include <vector>
 
 #include <geometry/geometry_utils.h>
+#include <geometry/seg.h>               // for SEG
 #include <geometry/shape_arc.h>
 #include <geometry/shape_line_chain.h>
+#include <math/box2.h>                  // for BOX2I
+#include <math/vector2d.h>              // for VECTOR2I, VECTOR2D, VECTOR2
+
 
 bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance ) const
 {

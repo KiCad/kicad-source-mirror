@@ -35,7 +35,7 @@
 #include <math/math_util.h>
 
 #ifdef WX_COMPATIBILITY
-        #include <wx/gdicmn.h>
+#include <wx/gdicmn.h>
 #endif
 
 /**

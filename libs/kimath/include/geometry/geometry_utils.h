@@ -30,6 +30,9 @@
 #ifndef GEOMETRY_UTILS_H
 #define GEOMETRY_UTILS_H
 
+#include <math.h>           // for copysign
+#include <stdlib.h>         // for abs
+
 #include <math/vector2d.h>
 
 class EDA_RECT;

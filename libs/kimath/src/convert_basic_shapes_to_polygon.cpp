@@ -24,12 +24,18 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include <vector>
 
-#include <trigo.h>
+#include <algorithm>                    // for max, min
+#include <math.h>                       // for atan2
+#include <type_traits>                  // for swap
+
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
+#include <geometry/shape_line_chain.h>  // for SHAPE_LINE_CHAIN
+#include <geometry/shape_poly_set.h>    // for SHAPE_POLY_SET, SHAPE_POLY_SE...
 #include <kiround.h>
+#include <math/vector2d.h>              // for VECTOR2I
+#include <trigo.h>
 
 
 void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aBuffer,

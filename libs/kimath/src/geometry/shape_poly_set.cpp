@@ -26,23 +26,32 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#include <vector>
-#include <cstdio>
-#include <set>
-#include <list>
+#include <__hash_table>                      // for __hash_const_iterator
 #include <algorithm>
-#include <unordered_set>
+#include <assert.h>                          // for assert
+#include <cmath>                             // for sqrt, cos, hypot, isinf
+#include <cstdio>
+#include <istream>                           // for operator<<, operator>>
+#include <limits>                            // for numeric_limits
 #include <memory>
+#include <set>
+#include <string>                            // for char_traits, operator!=
+#include <type_traits>                       // for swap, move
+#include <unordered_set>
+#include <vector>
 
-#include <md5_hash.h>
-#include <map>
-
+#include <clipper.hpp>                       // for Clipper, PolyNode, Clipp...
 #include <geometry/geometry_utils.h>
+#include <geometry/polygon_triangulation.h>
+#include <geometry/seg.h>                    // for SEG, OPT_VECTOR2I
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
-#include <geometry/polygon_triangulation.h>
+#include <math/box2.h>                       // for BOX2I
+#include <math/math_util.h>                  // for round_nearest, rescale
+#include <math/vector2d.h>                   // for VECTOR2I, VECTOR2D, VECTOR2
+#include <md5_hash.h>
+
 
 using namespace ClipperLib;
 
