@@ -232,7 +232,8 @@ float SCH_PAINTER::getShadowWidth()
 
     // For best visuals the selection width must be a cross between the zoom level and the
     // default line width.
-    return static_cast<float>( fabs( matrix.GetScale().x * 2.75 ) + GetSelectionThickness() );
+    return static_cast<float>(
+            fabs( matrix.GetScale().x * 2.75 ) + Mils2iu( GetSelectionThickness() ) );
 }
 
 
