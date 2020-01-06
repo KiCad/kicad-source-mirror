@@ -38,11 +38,11 @@ public:
     virtual ~DEBUG_DECORATOR()
     {}
 
-    virtual void AddPoint( VECTOR2I aP, int aColor ) {};
-    virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, int aType = 0, int aWidth = 0 ) {};
-    virtual void AddSegment( SEG aS, int aColor ) {};
-    virtual void AddBox( BOX2I aB, int aColor ) {};
-    virtual void AddDirections( VECTOR2D aP, int aMask, int aColor ) {};
+    virtual void AddPoint( VECTOR2I aP, int aColor, const std::string aName = "" ) {};
+    virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, int aType = 0, int aWidth = 0, const std::string aName = "" ) {};
+    virtual void AddSegment( SEG aS, int aColor, const std::string aName = "" ) {};
+    virtual void AddBox( BOX2I aB, int aColor, const std::string aName = "" ) {};
+    virtual void AddDirections( VECTOR2D aP, int aMask, int aColor, const std::string aName = "" ) {};
     virtual void Clear() {};
 };
 

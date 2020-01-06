@@ -438,7 +438,7 @@ public:
         m_view->Add( m_items );
     }
 
-    void AddPoint( VECTOR2I aP, int aColor ) override
+    void AddPoint( VECTOR2I aP, int aColor,  const std::string aName = "") override
     {
         SHAPE_LINE_CHAIN l;
 
@@ -454,7 +454,7 @@ public:
         AddLine( l, aColor, 10000 );
     }
 
-    void AddBox( BOX2I aB, int aColor ) override
+    void AddBox( BOX2I aB, int aColor,  const std::string aName = "" ) override
     {
         SHAPE_LINE_CHAIN l;
 
@@ -470,7 +470,7 @@ public:
         AddLine( l, aColor, 10000 );
     }
 
-    void AddSegment( SEG aS, int aColor ) override
+    void AddSegment( SEG aS, int aColor,  const std::string aName = "") override
     {
         SHAPE_LINE_CHAIN l;
 
@@ -480,7 +480,7 @@ public:
         AddLine( l, aColor, 10000 );
     }
 
-    void AddDirections( VECTOR2D aP, int aMask, int aColor ) override
+    void AddDirections( VECTOR2D aP, int aMask, int aColor,  const std::string aName = "") override
     {
         BOX2I b( aP - VECTOR2I( 10000, 10000 ), VECTOR2I( 20000, 20000 ) );
 
@@ -495,7 +495,7 @@ public:
         }
     }
 
-    void AddLine( const SHAPE_LINE_CHAIN& aLine, int aType, int aWidth ) override
+    void AddLine( const SHAPE_LINE_CHAIN& aLine, int aType, int aWidth,  const std::string aName = "" ) override
     {
         ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( NULL, m_view );
 
@@ -991,8 +991,6 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aI
 {
     std::vector<SHAPE_SEGMENT*> segs;
 
-    printf("SyncGI: %p\n", aItem );
-
     if( aItem->GetLayer() != Edge_Cuts && !IsCopperLayer( aItem->GetLayer() ) )
         return false;
 
@@ -1147,11 +1145,8 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 {
     int worstPadClearance = 0;
 
-    printf("->syncWorld\n");
-
     if( !m_board )
     {
-        printf("no board\n");
         wxLogTrace( "PNS", "No board attached, aborting sync." );
         return;
     }
