@@ -200,7 +200,7 @@ void ACTION_MANAGER::UpdateHotKeys( bool aFullUpdate )
     m_actionHotKeys.clear();
     m_hotkeys.clear();
 
-    if( aFullUpdate )
+    if( aFullUpdate && m_toolMgr->GetEditFrame() )
     {
         ReadLegacyHotkeyConfig( m_toolMgr->GetEditFrame()->ConfigBaseName(), legacyHotKeyMap );
         ReadHotKeyConfig( wxEmptyString, userHotKeyMap );
