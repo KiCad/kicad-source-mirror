@@ -605,6 +605,8 @@ public:
      */
     virtual bool GetNextXY( double& x, double& y ) = 0;
 
+    virtual size_t GetCount() = 0;
+
     /** Layer plot handler.
      *  This implementation will plot the locus in the visible area and
      *  put a label according to the alignment specified.
@@ -1604,6 +1606,8 @@ protected:
      *  @param y Returns Y value
      */
     bool GetNextXY( double& x, double& y ) override;
+
+    size_t GetCount() override;
 
 public:
     /** Returns the actual minimum X data (loaded in SetData).
