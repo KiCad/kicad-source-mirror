@@ -261,28 +261,6 @@ void SCH_TEXT::SpinCW()
     switch( GetLabelSpinStyle() )
     {
     default:
-        wxLogWarning( "RotateCW encountered unknown current spin style" );
-    case LABEL_SPIN_STYLE::LEFT:
-        SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
-        break;
-    case LABEL_SPIN_STYLE::BOTTOM:
-        SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
-        break;
-    case LABEL_SPIN_STYLE::RIGHT:
-        SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
-        break;
-    case LABEL_SPIN_STYLE::UP:
-        SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
-        break;
-    }
-}
-
-
-void SCH_TEXT::SpinCCW()
-{
-    switch( GetLabelSpinStyle() )
-    {
-    default:
         wxLogWarning( "RotateCCW encountered unknown current spin style" );
     case LABEL_SPIN_STYLE::LEFT:
         SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
@@ -294,6 +272,28 @@ void SCH_TEXT::SpinCCW()
         SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
         break;
     case LABEL_SPIN_STYLE::BOTTOM:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+        break;
+    }
+}
+
+
+void SCH_TEXT::SpinCCW()
+{
+    switch( GetLabelSpinStyle() )
+    {
+    default:
+        wxLogWarning( "RotateCW encountered unknown current spin style" );
+    case LABEL_SPIN_STYLE::LEFT:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
+        break;
+    case LABEL_SPIN_STYLE::BOTTOM:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+        break;
+    case LABEL_SPIN_STYLE::RIGHT:
+        SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
+        break;
+    case LABEL_SPIN_STYLE::UP:
         SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
         break;
     }
