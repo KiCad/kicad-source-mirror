@@ -185,12 +185,6 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     double   dXpos = To_User_Unit( GetUserUnits(), cursorPos.x );
     double   dYpos = To_User_Unit( GetUserUnits(), cursorPos.y );
 
-    if( GetUserUnits() == EDA_UNITS::MILLIMETRES )
-    {
-        dXpos = RoundTo0( dXpos, 100.0 );
-        dYpos = RoundTo0( dYpos, 100.0 );
-    }
-
     wxString absformatter;
     wxString locformatter;
 
@@ -225,12 +219,6 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 
     dXpos = To_User_Unit( GetUserUnits(), dx );
     dYpos = To_User_Unit( GetUserUnits(), dy );
-
-    if( GetUserUnits() == EDA_UNITS::MILLIMETRES )
-    {
-        dXpos = RoundTo0( dXpos, 100.0 );
-        dYpos = RoundTo0( dYpos, 100.0 );
-    }
 
     // We already decided the formatter above
     line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );

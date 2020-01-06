@@ -218,16 +218,6 @@ int GetCommandOptions( const int argc, const char** argv,
                        int* optind );
 
 /**
- * Round to the nearest precision.
- *
- * Try to approximate a coordinate using a given precision to prevent
- * rounding errors when converting from inches to mm.
- *
- * ie round the unit value to 0 if unit is 1 or 2, or 8 or 9
- */
-double RoundTo0( double x, double precision );
-
-/**
  * Split \a aString to a string list separated at \a aSplitter.
  *
  * @param aText is the text to split

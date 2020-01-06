@@ -230,29 +230,6 @@ timestamp_t GetNewTimeStamp()
 }
 
 
-double RoundTo0( double x, double precision )
-{
-    assert( precision != 0 );
-
-    long long ix = KiROUND( x * precision );
-
-    if ( x < 0.0 )
-        ix = -ix;
-
-    int remainder = ix % 10;   // remainder is in precision mm
-
-    if( remainder <= 2 )
-        ix -= remainder;       // truncate to the near number
-    else if( remainder >= 8 )
-        ix += 10 - remainder;  // round to near number
-
-    if ( x < 0 )
-        ix = -ix;
-
-    return (double) ix / precision;
-}
-
-
 std::unique_ptr<wxConfigBase> GetNewConfig( const wxString& aProgName )
 {
     wxFileName configname;
