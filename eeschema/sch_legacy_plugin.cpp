@@ -1406,6 +1406,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
     text->SetPosition( position );
 
     int spinStyle = parseInt( aReader, line, &line );
+
     // Sadly we store the orientation of hierarchical and global labels using a different
     // int encoding than that for local labels:
     //                   Global      Local
@@ -1413,14 +1414,15 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
     // Up                  1           3
     // Right justified     2           0
     // Down                3           1
-    // So we must flip it as the enum is setup with the "local" numbering
-    if( text->Type() == SCH_GLOBAL_LABEL_T || text->Type() == SCH_HIER_LABEL_T )
+    // So we must flip it as the enum is setup with the "global" numbering
+    if( text->Type() != SCH_GLOBAL_LABEL_T && text->Type() != SCH_HIER_LABEL_T )
     {
         if( spinStyle == 0 )
             spinStyle = 2;
         else if( spinStyle == 2 )
             spinStyle = 0;
     }
+
     text->SetLabelSpinStyle( static_cast<LABEL_SPIN_STYLE>( spinStyle ) );
 
     int size = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -2329,9 +2331,17 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
             textType = "Label";
         }
 
+        // Local labels must have their spin style inverted for left and right
+        int spinStyle = static_cast<int>( aText->GetLabelSpinStyle() );
+
+        if (spinStyle == 0)
+            spinStyle = 2;
+        else if (spinStyle == 2)
+            spinStyle = 0;
+
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %d\n%s\n", textType,
                       Iu2Mils( aText->GetPosition().x ), Iu2Mils( aText->GetPosition().y ),
-                      static_cast<int>( aText->GetLabelSpinStyle() ),
+                      spinStyle,
                       Iu2Mils( aText->GetTextWidth() ),
                       italics, Iu2Mils( aText->GetThickness() ), TO_UTF8( text ) );
     }
@@ -2342,16 +2352,9 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
         auto shapeLabelIt = sheetLabelNames.find( aText->GetShape() );
         wxCHECK_RET( shapeLabelIt != sheetLabelNames.end(), "Shape not found in names list" );
 
-        int spinStyle = static_cast<int>( aText->GetLabelSpinStyle() );
-        //flip value 2 and 0 for specifically global and hierachal labels
-        if( spinStyle == 0 )
-            spinStyle = 2;
-        else if( spinStyle == 2 )
-            spinStyle = 0;
-
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %s %d\n%s\n", textType,
                       Iu2Mils( aText->GetPosition().x ), Iu2Mils( aText->GetPosition().y ),
-                      spinStyle,
+                      static_cast<int>( aText->GetLabelSpinStyle() ),
                       Iu2Mils( aText->GetTextWidth() ),
                       shapeLabelIt->second,
                       italics,
