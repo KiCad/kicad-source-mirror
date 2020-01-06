@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version 3.9.0 Dec 25 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -70,6 +70,7 @@ class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 		wxCheckBox* m_ZoomCenterOpt;
 		wxCheckBox* m_MousewheelPANOpt;
 		wxCheckBox* m_AutoPANOpt;
+		wxCheckBox* m_RightButtonPan;
 		wxCheckBox* m_PreferSelectToDrag;
 		wxCheckBox* m_warpMouseOnMove;
 		wxCheckBox* m_NonImmediateActions;

@@ -132,6 +132,9 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
     commonSettings->Read( ENBL_AUTO_PAN_KEY, &option );
     m_AutoPANOpt->SetValue( option );
 
+    commonSettings->Read( ENBL_RIGHT_BUTTON_PAN_KEY, &option );
+    m_RightButtonPan->SetValue( option );
+
     if( !commonSettings->Read( PREFER_SELECT_TO_DRAG_KEY, &option ) )
     {
         // Legacy versions stored the property only for PCBNew, so see if we have it there
@@ -179,6 +182,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     commonSettings->Write( ENBL_ZOOM_NO_CENTER_KEY, !m_ZoomCenterOpt->GetValue() );
     commonSettings->Write( ENBL_MOUSEWHEEL_PAN_KEY, m_MousewheelPANOpt->GetValue() );
     commonSettings->Write( ENBL_AUTO_PAN_KEY, m_AutoPANOpt->GetValue() );
+    commonSettings->Write( ENBL_RIGHT_BUTTON_PAN_KEY, m_RightButtonPan->GetValue() );
     commonSettings->Write( PREFER_SELECT_TO_DRAG_KEY, m_PreferSelectToDrag->GetValue() );
     commonSettings->Write( WARP_MOUSE_ON_MOVE_KEY, m_warpMouseOnMove->GetValue() );
     commonSettings->Write( IMMEDIATE_ACTIONS_KEY, !m_NonImmediateActions->GetValue() );

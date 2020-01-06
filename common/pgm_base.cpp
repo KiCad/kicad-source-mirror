@@ -541,6 +541,9 @@ void PGM_BASE::loadCommonSettings()
 
             pcbnewConfig->Read( ENBL_AUTO_PAN_KEY, &option, true );
             m_common_settings->Write( ENBL_AUTO_PAN_KEY, option );
+
+            pcbnewConfig->Read( ENBL_RIGHT_BUTTON_PAN_KEY, &option, false );
+            m_common_settings->Write( ENBL_RIGHT_BUTTON_PAN_KEY, option );
         }
 
         if( !m_common_settings->HasEntry( GAL_ANTIALIASING_MODE_KEY ) )

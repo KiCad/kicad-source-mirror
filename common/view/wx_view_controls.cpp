@@ -68,14 +68,17 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
     bool enableMousewheelPan = false;
     bool enableZoomNoCenter = false;
     bool enableAutoPan = true;
+    bool enableRightButtonPan = false;
 
     Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &enableMousewheelPan, false );
     Pgm().CommonSettings()->Read( ENBL_ZOOM_NO_CENTER_KEY, &enableZoomNoCenter, false );
     Pgm().CommonSettings()->Read( ENBL_AUTO_PAN_KEY, &enableAutoPan, true );
+    Pgm().CommonSettings()->Read( ENBL_RIGHT_BUTTON_PAN_KEY, &enableRightButtonPan, false );
 
     m_settings.m_enableMousewheelPan = enableMousewheelPan;
     m_settings.m_warpCursor = !enableZoomNoCenter;
     m_settings.m_autoPanSettingEnabled = enableAutoPan;
+    m_settings.m_panWithRightButton = enableRightButtonPan;
 
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );
@@ -139,6 +142,7 @@ WX_VIEW_CONTROLS::~WX_VIEW_CONTROLS()
         cfg->Write( ENBL_MOUSEWHEEL_PAN_KEY, m_settings.m_enableMousewheelPan );
         cfg->Write( ENBL_ZOOM_NO_CENTER_KEY, !m_settings.m_warpCursor );
         cfg->Write( ENBL_AUTO_PAN_KEY, m_settings.m_autoPanSettingEnabled );
+        cfg->Write( ENBL_RIGHT_BUTTON_PAN_KEY, m_settings.m_panWithRightButton );
     }
 }
 
