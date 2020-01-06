@@ -1,4 +1,3 @@
-
 set( KIMATH_SRCS
     src/bezier_curves.cpp
     src/convert_basic_shapes_to_polygon.cpp
@@ -7,16 +6,16 @@ set( KIMATH_SRCS
 
     src/geometry/convex_hull.cpp
     src/geometry/geometry_utils.cpp
+    src/geometry/polygon_test_point_inside.cpp
     src/geometry/seg.cpp
     src/geometry/shape.cpp
-    src/geometry/shape_collisions.cpp
     src/geometry/shape_arc.cpp
+    src/geometry/shape_collisions.cpp
     src/geometry/shape_file_io.cpp
     src/geometry/shape_line_chain.cpp
     src/geometry/shape_poly_set.cpp
 
     src/math/math_util.cpp
-
 )
 
 # Include the other smaller math libraries in this one for convenience

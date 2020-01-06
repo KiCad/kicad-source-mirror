@@ -30,7 +30,8 @@
 #include <math/vector2d.h>
 #include <limits>
 
-//#include <core/optional.h>
+// Needed for the OPT definition
+#include <core/optional.h>
 
 /**
  * Class BOX2
@@ -520,7 +521,7 @@ public:
 typedef BOX2<VECTOR2I>    BOX2I;
 typedef BOX2<VECTOR2D>    BOX2D;
 
-//typedef OPT<BOX2I> OPT_BOX2I;
+typedef OPT<BOX2I> OPT_BOX2I;
 
 // FIXME should be removed to avoid multiple typedefs for the same type
 typedef BOX2D             DBOX;

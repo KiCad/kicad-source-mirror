@@ -55,12 +55,14 @@
  *  Points in the result will be listed in counter-clockwise order.
  */
 
-#include <geometry/shape_poly_set.h>
 #include <geometry/convex_hull.h>
+#include <geometry/shape_line_chain.h>  // for SHAPE_LINE_CHAIN
+#include <geometry/shape_poly_set.h>
+#include <math/vector2d.h>              // for VECTOR2I
+#include <trigo.h>
 
 #include <algorithm>
 #include <wx/wx.h>
-#include <trigo.h>
 
 
 typedef long long coord2_t;     // must be big enough to hold 2*max(|coordinate|)^2
