@@ -55,8 +55,6 @@ using KIGFX::COLOR4D;
  *       application class.
  */
 
-COLOR4D        g_GhostColor;
-
 
 #if defined( _WIN32 ) && defined( DEBUG )
 // a wxAssertHandler_t function to filter wxWidgets alert messages when reading/writing a file

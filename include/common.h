@@ -48,10 +48,8 @@
 #include <type_traits>
 #include <typeinfo>
 
-class wxAboutDialogInfo;
 class SEARCH_STACK;
 class REPORTER;
-
 
 /**
  * timestamp_t is our type to represent unique IDs for all kinds of elements;
@@ -65,18 +63,6 @@ typedef uint32_t timestamp_t;
 
 /// default name for nameless projects
 #define NAMELESS_PROJECT wxT( "noname" )
-
-
-/// Pseudo key codes for command panning
-enum pseudokeys {
-    EDA_PANNING_UP_KEY = 1,
-    EDA_PANNING_DOWN_KEY,
-    EDA_PANNING_LEFT_KEY,
-    EDA_PANNING_RIGHT_KEY,
-    EDA_ZOOM_IN_FROM_MOUSE,
-    EDA_ZOOM_OUT_FROM_MOUSE,
-    EDA_ZOOM_CENTER_FROM_MOUSE
-};
 
 /// Frequent text rotations, used with {Set,Get}TextAngle(),
 /// in 0.1 degrees for now, hoping to migrate to degrees eventually.
@@ -118,10 +104,6 @@ enum class EDA_UNITS
     DEGREES = 3,
     PERCENT = 4,
 };
-
-
-/// Draw color for moving objects.
-extern KIGFX::COLOR4D  g_GhostColor;
 
 
 /**
