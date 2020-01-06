@@ -272,7 +272,7 @@
                         <property name="unchecked_bitmap"></property>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">View</property>
                     <property name="name">m_viewMenu</property>
                     <property name="permission">protected</property>
@@ -351,6 +351,25 @@
                         <property name="unchecked_bitmap"></property>
                         <event name="OnMenuSelection">menuShowLegend</event>
                         <event name="OnUpdateUI">menuShowLegendUpdate</event>
+                    </object>
+                    <object class="separator" expanded="1">
+                        <property name="name">m_separator21</property>
+                        <property name="permission">none</property>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">ID_MENU_DOTTED</property>
+                        <property name="kind">wxITEM_CHECK</property>
+                        <property name="label">Dotted current/phase</property>
+                        <property name="name">m_showDotted</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">menuShowDotted</event>
+                        <event name="OnUpdateUI">menuShowDottedUpdate</event>
                     </object>
                 </object>
             </object>

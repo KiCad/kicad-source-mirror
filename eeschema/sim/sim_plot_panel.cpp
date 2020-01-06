@@ -461,6 +461,16 @@ bool SIM_PLOT_PANEL::IsPlottable( SIM_TYPE aSimType )
 }
 
 
+void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
+{
+    int        flags    = trace->GetFlags();
+    wxPenStyle penStyle = ( ( flags & SPT_AC_PHASE || flags & SPT_CURRENT ) && m_dotted_cp ) ?
+                                  wxPENSTYLE_DOT :
+                                  wxPENSTYLE_SOLID;
+    trace->SetPen( wxPen( trace->GetTraceColour(), 2, penStyle ) );
+}
+
+
 bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
         const double* aX, const double* aY, SIM_PLOT_TYPE aFlags )
 {
@@ -494,9 +504,7 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
         // New entry
         trace = new TRACE( aName );
         trace->SetTraceColour( generateColor() );
-        wxPenStyle penStyle = ( aFlags & SPT_AC_PHASE || aFlags & SPT_CURRENT ) ? wxPENSTYLE_DOT :
-                                                                                  wxPENSTYLE_SOLID;
-        trace->SetPen( wxPen( trace->GetTraceColour(), 2, penStyle ) );
+        UpdateTraceStyle( trace );
         m_traces[aName] = trace;
 
         // It is a trick to keep legend & coords always on the top
