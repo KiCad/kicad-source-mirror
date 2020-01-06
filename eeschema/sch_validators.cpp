@@ -163,20 +163,23 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
 }
 
 
-SCH_NETNAME_VALIDATOR::SCH_NETNAME_VALIDATOR( wxString *aVal ) :
-        wxValidator(), m_allowSpaces( false )
+SCH_NETNAME_VALIDATOR::SCH_NETNAME_VALIDATOR( wxString *aVal )
+    : wxValidator(),
+      m_allowSpaces( false )
 {
 }
 
 
-SCH_NETNAME_VALIDATOR::SCH_NETNAME_VALIDATOR( const SCH_NETNAME_VALIDATOR& aValidator ) :
-        m_allowSpaces( aValidator.m_allowSpaces )
+SCH_NETNAME_VALIDATOR::SCH_NETNAME_VALIDATOR( const SCH_NETNAME_VALIDATOR& aValidator )
+    : wxValidator(),
+      m_allowSpaces( aValidator.m_allowSpaces )
 {
 }
 
 
-SCH_NETNAME_VALIDATOR::SCH_NETNAME_VALIDATOR( bool aAllowSpaces ) :
-        wxValidator(), m_allowSpaces( aAllowSpaces )
+SCH_NETNAME_VALIDATOR::SCH_NETNAME_VALIDATOR( bool aAllowSpaces )
+    : wxValidator(),
+      m_allowSpaces( aAllowSpaces )
 {
 }
 

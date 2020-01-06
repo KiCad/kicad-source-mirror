@@ -35,12 +35,12 @@
 class SELECTION : public KIGFX::VIEW_GROUP
 {
 public:
-    SELECTION()
+    SELECTION() : KIGFX::VIEW_GROUP::VIEW_GROUP()
     {
         m_isHover = false;
     }
 
-    SELECTION( const SELECTION& aOther )
+    SELECTION( const SELECTION& aOther ) : KIGFX::VIEW_GROUP::VIEW_GROUP()
     {
         m_items = aOther.m_items;
         m_isHover = aOther.m_isHover;
@@ -131,7 +131,7 @@ public:
     {
         return m_items;
     }
-    
+
     /// Returns the center point of the selection area bounding box.
     virtual VECTOR2I GetCenter() const
     {
@@ -165,7 +165,7 @@ public:
 
         return bbox;
     }
-    
+
     virtual EDA_ITEM* GetTopLeftItem( bool onlyModules = false ) const
     {
         return nullptr;
@@ -258,7 +258,7 @@ public:
     bool AreAllItemsIdentical() const
     {
         return ( std::all_of( m_items.begin() + 1, m_items.end(),
-                        [&]( const EDA_ITEM* r ) 
+                        [&]( const EDA_ITEM* r )
                         {
                             return r->Type() == m_items.front()->Type();
                         } ) );

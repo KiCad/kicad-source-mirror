@@ -137,9 +137,8 @@ public:
         compileRegEx( aRegEx, aFlags );
     }
 
-    REGEX_VALIDATOR( const REGEX_VALIDATOR& aOther )
+    REGEX_VALIDATOR( const REGEX_VALIDATOR& aOther ) : wxTextValidator( aOther )
     {
-        wxValidator::Copy( aOther );
         compileRegEx( aOther.m_regExString, aOther.m_regExFlags );
     }
 
