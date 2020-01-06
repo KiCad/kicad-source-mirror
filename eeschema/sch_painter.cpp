@@ -1234,22 +1234,16 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
         switch( aText->GetLabelSpinStyle() )
         {
-        case 0:
-            if( aText->Type() == SCH_LABEL_T || aText->Type() == SCH_TEXT_T )
-                text_offset.x -= getShadowWidth() / 2;
-            else
-                text_offset.x += getShadowWidth() / 2;
+        case LABEL_SPIN_STYLE::LEFT:
+            text_offset.x += getShadowWidth() / 2;
             break;
-        case 1:
+        case LABEL_SPIN_STYLE::UP:
             text_offset.y += getShadowWidth() / 2;
             break;
-        case 2:
-            if( aText->Type() == SCH_LABEL_T || aText->Type() == SCH_TEXT_T )
-                text_offset.x += getShadowWidth() / 2;
-            else
-                text_offset.x -= getShadowWidth() / 2;
+        case LABEL_SPIN_STYLE::RIGHT:
+            text_offset.x -= getShadowWidth() / 2;
             break;
-        case 3:
+        case LABEL_SPIN_STYLE::BOTTOM:
             text_offset.y -= getShadowWidth() / 2;
             break;
         }

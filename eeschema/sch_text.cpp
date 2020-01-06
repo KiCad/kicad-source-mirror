@@ -144,13 +144,13 @@ wxPoint SCH_TEXT::GetSchematicTextOffset() const
     switch( GetLabelSpinStyle() )
     {
     default:
-    case LABEL_SPIN_STYLE::LEFT:
+    case LABEL_SPIN_STYLE::RIGHT:
         text_offset.y = -thick_offset;
         break; // Horiz Normal Orientation (left justified)
     case LABEL_SPIN_STYLE::UP:
         text_offset.x = -thick_offset;
         break; // Vert Orientation UP
-    case LABEL_SPIN_STYLE::RIGHT:
+    case LABEL_SPIN_STYLE::LEFT:
         text_offset.y = -thick_offset;
         break; // Horiz Orientation - Right justified
     case LABEL_SPIN_STYLE::BOTTOM:
@@ -306,13 +306,15 @@ void SCH_TEXT::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 {
     m_spin_style = aSpinStyle;
 
+    // Assume "Right" and Left" mean which side of the anchor the text will be on
+    // Thus we want to left justify text up agaisnt the anchor if we are on the right
     switch( aSpinStyle )
     {
     default:
         wxASSERT_MSG( 1, "Bad spin style" );
-    case LABEL_SPIN_STYLE::LEFT: // Horiz Normal Orientation
+    case LABEL_SPIN_STYLE::RIGHT: // Horiz Normal Orientation
         //
-        m_spin_style = LABEL_SPIN_STYLE::LEFT; // Handle the error spin style by resetting
+        m_spin_style = LABEL_SPIN_STYLE::RIGHT; // Handle the error spin style by resetting
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
@@ -324,7 +326,7 @@ void SCH_TEXT::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
         SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
 
-    case LABEL_SPIN_STYLE::RIGHT: // Horiz Orientation - Right justified
+    case LABEL_SPIN_STYLE::LEFT: // Horiz Orientation - Right justified
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
@@ -1128,6 +1130,8 @@ void SCH_HIERLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 {
     m_spin_style = aSpinStyle;
 
+    // Assume "Right" and Left" mean which side of the port symbol the text will be on
+    // If we are left of the symbol, we want to right justify to line up with the symbol
     switch( aSpinStyle )
     {
     default:
