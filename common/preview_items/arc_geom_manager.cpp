@@ -23,7 +23,7 @@
 
 #include <preview_items/arc_geom_manager.h>
 
-#include <common.h> // KiROUND
+#include <math/util.h>      // for KiROUND
 
 using namespace KIGFX::PREVIEW;
 

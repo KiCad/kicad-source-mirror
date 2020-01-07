@@ -27,7 +27,7 @@
 
 #include "pcbnew_printout.h"
 #include <class_board.h>
-
+#include <math/util.h>      // for KiROUND
 #include <pcb_painter.h>
 #include <view/view.h>
 #include <pcbplot.h>

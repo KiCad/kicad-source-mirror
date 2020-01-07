@@ -45,6 +45,7 @@
 #include <connectivity/connectivity_data.h>
 #include <view/view.h>
 #include "specctra.h"
+#include <math/util.h>      // for KiROUND
 
 using namespace DSN;
 

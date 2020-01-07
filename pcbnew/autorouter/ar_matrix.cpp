@@ -29,6 +29,7 @@
 #include "ar_cell.h"
 
 #include <common.h>
+#include <math/util.h>      // for KiROUND
 #include <math_for_graphics.h>
 #include <trigo.h>
 

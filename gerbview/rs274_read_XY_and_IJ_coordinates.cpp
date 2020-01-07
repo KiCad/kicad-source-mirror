@@ -24,6 +24,7 @@
 
 #include <fctsys.h>
 #include <common.h>
+#include <math/util.h>      // for KiROUND
 
 #include <gerber_file_image.h>
 #include <base_units.h>

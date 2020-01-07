@@ -21,29 +21,52 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <common.h>
-#include <plotter.h>
+#include <algorithm>                          // for min
+#include <bitset>                             // for bitset, operator&, __bi...
+#include <math.h>                             // for abs
+#include <stddef.h>                           // for NULL, size_t
+#include <vector>                             // for vector, __vector_base<>...
+
 #include <base_struct.h>
-#include <gr_text.h>
+#include <common.h>
+#include <convert_basic_shapes_to_polygon.h>
+#include <geometry/seg.h>                     // for SEG
+#include <geometry/shape_line_chain.h>        // for SHAPE_LINE_CHAIN
+#include <geometry/shape_poly_set.h>          // for SHAPE_POLY_SET, SHAPE_P...
+#include <math/util.h>                        // for KiROUND, Clamp
+#include <math/vector2d.h>                    // for VECTOR2I
+#include <plotter.h>
 #include <trigo.h>
-#include <macros.h>
-#include <pcb_base_frame.h>
+
+#include <board_design_settings.h>            // for BOARD_DESIGN_SETTINGS
+#include <colors.h>                           // for LIGHTGRAY, WHITE
+#include <colors_design_settings.h>           // for COLORS_DESIGN_SETTINGS
+#include <core/typeinfo.h>                    // for dyn_cast, PCB_DIMENSION_T
+#include <eda_text.h>                         // for FILLED, EDA_DRAW_MODE_T
+#include <gal/color4d.h>                      // for COLOR4D, operator!=
+#include <gbr_metadata.h>
+#include <gbr_netlist_metadata.h>             // for GBR_NETLIST_METADATA
+#include <layers_id_colors_and_visibility.h>  // for LSET, IsCopperLayer
+#include <pad_shapes.h>                       // for PAD_ATTRIB_HOLE_NOT_PLATED
+#include <pcbplot.h>
+#include <pcb_plot_params.h>                  // for PCB_PLOT_PARAMS, PCB_PL...
 
 #include <class_board.h>
-#include <class_module.h>
-#include <class_track.h>
+#include <class_board_item.h>                 // for BOARD_ITEM, S_CIRCLE
+#include <class_dimension.h>
+#include <class_drawsegment.h>
 #include <class_edge_mod.h>
+#include <class_module.h>
+#include <class_text_mod.h>                   // for TEXTE_MODULE
+#include <class_track.h>
+#include <class_pad.h>                        // for D_PAD
+#include <class_pcb_target.h>
 #include <class_pcb_text.h>
 #include <class_zone.h>
-#include <class_drawsegment.h>
-#include <class_pcb_target.h>
-#include <class_dimension.h>
-#include <convert_basic_shapes_to_polygon.h>
 
-#include <pcbnew.h>
-#include <pcbplot.h>
-#include <gbr_metadata.h>
+#include <wx/debug.h>                         // for wxASSERT_MSG
+#include <wx/wx.h>                            // for wxPoint, wxSize, wxArra...
+
 
 /* class BRDITEMS_PLOTTER is a helper class to plot board items
  * and a group of board items

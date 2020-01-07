@@ -38,6 +38,7 @@
 #include <pcb_layer_box_selector.h>
 #include <pcbnew.h>
 #include <wx/valnum.h>
+#include <math/util.h>      // for KiROUND
 
 
 DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem ) :

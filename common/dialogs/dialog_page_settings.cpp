@@ -21,30 +21,30 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <common.h>
-#include <project.h>
-#include <confirm.h>
-#include <gr_basic.h>
-#include <base_struct.h>
-#include <title_block.h>
-#include <eda_draw_frame.h>
-#include <ws_data_model.h>
 #include <base_screen.h>
-#include <wildcards_and_files_ext.h>
+#include <base_struct.h>
+#include <common.h>
+#include <confirm.h>
+#include <dialog_page_settings.h>
+#include <eda_draw_frame.h>
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <kiface_i.h>
+#include <math/util.h>      // for KiROUND, Clamp
+#include <project.h>
+#include <title_block.h>
+#include <tool/actions.h>
 #include <tool/tool_manager.h>
+#include <wildcards_and_files_ext.h>
+#include <ws_data_model.h>
+#include <ws_painter.h>
 #include <wx/valgen.h>
 #include <wx/tokenzr.h>
 
 #ifdef EESCHEMA
-#include <sch_screen.h>
 #include <general.h>
+#include <sch_screen.h>
 #endif
-
-#include <ws_painter.h>
-#include <dialog_page_settings.h>
-#include <tool/actions.h>
-#include <kiface_i.h>
 
 #define MAX_PAGE_EXAMPLE_SIZE 200
 

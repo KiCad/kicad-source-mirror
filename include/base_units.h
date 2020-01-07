@@ -34,9 +34,10 @@
 
 #include <string>
 
-#include <math/vector2d.h>
 #include <common.h>
 #include <convert_to_biu.h>
+#include <math/util.h>      // for KiROUND
+#include <math/vector2d.h>
 
 //TODO: Abstract Base Units to a single class
 

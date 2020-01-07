@@ -25,6 +25,8 @@
 #include <vector>
 #include <stack>
 
+#include <math/box2.h>
+
 #include "pns_optimizer.h"
 #include "pns_routing_settings.h"
 #include "pns_algo_base.h"

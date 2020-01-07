@@ -26,6 +26,7 @@
 #include "tool/edit_points.h"
 
 #include <geometry/seg.h>
+#include <math/util.h>      // for KiROUND
 
 #include <common.h>
 

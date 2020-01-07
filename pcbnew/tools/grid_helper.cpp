@@ -37,6 +37,7 @@ using namespace std::placeholders;
 
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_line_chain.h>
+#include <math/util.h>      // for KiROUND
 #include <math/vector2d.h>
 #include <painter.h>
 #include <view/view.h>

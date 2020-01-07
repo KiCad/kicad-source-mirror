@@ -30,7 +30,7 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
-#include "../../include/geometry/shape_simple.h"
+#include <geometry/shape_simple.h>
 
 namespace PNS {
 
