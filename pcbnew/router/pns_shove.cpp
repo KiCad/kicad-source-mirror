@@ -21,6 +21,7 @@
 
 #include <deque>
 #include <cassert>
+#include <math/box2.h>
 
 #include "pns_line.h"
 #include "pns_node.h"
@@ -1345,7 +1346,7 @@ static VIA* findViaByHandle ( NODE *aNode, const VIA_HANDLE& handle )
 
     for( ITEM* item : jt->LinkList() )
     {
-        if ( item->OfKind( ITEM::VIA_T )) 
+        if ( item->OfKind( ITEM::VIA_T ))
         {
             if( item->Net() == handle.net && item->Layers().Overlaps(handle.layers) )
                 return static_cast<VIA*>( item );
@@ -1373,7 +1374,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( const VIA_HANDLE aOldVia, const VEC
 
     // Pop NODEs containing previous shoves which are no longer necessary
     ITEM_SET headSet;
-    
+
     VIA headVia ( *viaToDrag );
     headVia.SetPos( aWhere );
     headSet.Add( headVia );

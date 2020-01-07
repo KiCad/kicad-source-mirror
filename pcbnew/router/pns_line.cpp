@@ -21,6 +21,7 @@
 
 #include <core/optional.h>
 
+#include <math/box2.h>
 #include <math/vector2d.h>
 
 #include "pns_line.h"
@@ -682,7 +683,7 @@ void LINE::dragSegment45( const VECTOR2I& aP, int aIndex, int aSnappingThreshold
         }
         else
             guideB[0] = guideB[1] =    SEG( dragged.B, dragged.B + dir_next.ToVector() );
-        
+
     }
 
     SEG s_current( target, target + drag_dir.ToVector() );

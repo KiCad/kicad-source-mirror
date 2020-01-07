@@ -22,6 +22,7 @@
  */
 
 #include <dialogs/dialog_position_relative.h>
+#include <math/util.h>      // for KiROUND
 #include <tools/pcb_actions.h>
 #include <widgets/tab_traversal.h>
 #include <pcb_edit_frame.h>

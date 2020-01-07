@@ -31,6 +31,7 @@
 #include <wx/config.h>
 
 #include <common.h>
+#include <math/util.h>      // for KiROUND
 #include <trigo.h>
 
 #include <pcb_arc.h>

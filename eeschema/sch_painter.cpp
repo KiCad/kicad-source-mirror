@@ -59,6 +59,7 @@
 #include <connection_graph.h>
 #include <geometry/shape_line_chain.h>
 #include <bezier_curves.h>
+#include <math/util.h>      // for KiROUND
 
 #include "sch_painter.h"
 

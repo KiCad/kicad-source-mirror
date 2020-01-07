@@ -54,6 +54,7 @@
 #include <functional>
 #include <footprint_viewer_frame.h>
 #include <footprint_edit_frame.h>
+#include <math/util.h>      // for KiROUND
 
 using namespace std::placeholders;
 

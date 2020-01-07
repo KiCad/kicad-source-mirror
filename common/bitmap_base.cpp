@@ -26,16 +26,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "trigo.h"
-#include "common.h"
-#include "richio.h"
-#include "plotter.h"
-
-#include "bitmap_base.h"
-
+#include <bitmap_base.h>
+#include <eda_rect.h>     // for EDA_RECT
+#include <gal/color4d.h>  // for COLOR4D
+#include <gr_basic.h>
+#include <math/util.h>      // for KiROUND
+#include <memory>         // for make_unique, unique_ptr
+#include <plotter.h>
+#include <richio.h>
+#include <wx/bitmap.h>    // for wxBitmap
 #include <wx/mstream.h>
 
 

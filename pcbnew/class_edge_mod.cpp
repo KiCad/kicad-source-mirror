@@ -42,6 +42,7 @@
 #include <msgpanel.h>
 #include <base_units.h>
 #include <bitmaps.h>
+#include <math/util.h>      // for KiROUND
 
 #include <pcb_edit_frame.h>
 #include <class_board.h>

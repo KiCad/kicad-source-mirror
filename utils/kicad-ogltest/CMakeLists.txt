@@ -21,9 +21,10 @@ add_executable( kicad-ogltest WIN32
     ${OGLTEST_FILES} )
 
 target_link_libraries( kicad-ogltest
+    kimath
     gal
     common
-    polygon
+    ${OPENGL_LIBRARIES}
     ${wxWidgets_LIBRARIES} )
 
 if( APPLE )

@@ -45,13 +45,13 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_arc.h>
+#include <geometry/shape_simple.h>
 
 #include <memory>
 
 #include "tools/pcb_tool_base.h"
 
 #include "pns_kicad_iface.h"
-#include "../../include/geometry/shape_simple.h"
 #include "pns_routing_settings.h"
 #include "pns_item.h"
 #include "pns_solid.h"

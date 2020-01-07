@@ -34,6 +34,7 @@
 #include <wildcards_and_files_ext.h>
 #include <filter_reader.h>
 #include <trace_helpers.h>
+#include <math/util.h>      // for KiROUND
 
 #include <class_board.h>
 #include <class_module.h>

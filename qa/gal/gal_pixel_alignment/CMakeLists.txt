@@ -65,7 +65,7 @@ include_directories(
 
 target_link_libraries( test_gal_pixel_alignment
     qa_pcbnew_utils
-    polygon
+    kimath
     pnsrouter
     pcbcommon
     pcad2kicadpcb

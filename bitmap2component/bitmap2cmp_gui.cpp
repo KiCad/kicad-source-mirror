@@ -26,13 +26,9 @@
 #include "bitmap2component.h"
 #include <bitmap_io.h>
 #include <bitmaps.h>
-#include <build_version.h>
-#include <confirm.h>
-#include <fctsys.h>
-#include <gestfich.h>
 #include <kiface_i.h>
+#include <math/util.h>      // for KiROUND
 #include <kiway.h>
-#include <macros.h>
 #include <pgm_base.h>
 #include <potracelib.h>
 #include <wildcards_and_files_ext.h>

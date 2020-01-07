@@ -49,6 +49,7 @@
 #include <geometry/geometry_utils.h>
 #include <confirm.h>
 #include <convert_to_biu.h>
+#include <math/util.h>      // for KiROUND
 
 #include "zone_filler.h"
 

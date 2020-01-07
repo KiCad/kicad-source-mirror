@@ -22,6 +22,7 @@
 #ifndef __PNS_LINE_H
 #define __PNS_LINE_H
 
+#include <math/box2.h>
 #include <math/vector2d.h>
 
 #include <geometry/direction45.h>

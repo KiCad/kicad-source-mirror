@@ -27,15 +27,32 @@
  * @brief Implementation of base KiCad text object.
  */
 
-#include <eda_text.h>
-#include <gr_text.h>
-#include <eda_rect.h>
-#include <macros.h>
-#include <trigo.h>               // RotatePoint
+#include <algorithm>          // for max
+#include <stddef.h>           // for NULL
+#include <type_traits>        // for swap
+#include <vector>             // for vector
 
-#include <basic_gal.h>
+#include <base_struct.h>      // for EDA_ITEM
 #include <base_units.h>
-#include <convert_to_biu.h>
+#include <basic_gal.h>        // for BASIC_GAL, basic_gal
+#include <common.h>           // for wxStringSplit
+#include <convert_to_biu.h>   // for Mils2iu
+#include <core/typeinfo.h>    // for KICAD_T, SCH_LABEL_T, SCH_TEXT_T, SCH_G...
+#include <eda_rect.h>         // for EDA_RECT
+#include <eda_text.h>         // for EDA_TEXT, TEXT_EFFECTS, GR_TEXT_VJUSTIF...
+#include <gal/color4d.h>      // for COLOR4D, COLOR4D::BLACK
+#include <gal/stroke_font.h>  // for STROKE_FONT
+#include <gr_text.h>          // for GRText
+#include <kicad_string.h>     // for UnescapeString
+#include <math/util.h>          // for KiROUND
+#include <math/vector2d.h>    // for VECTOR2D
+#include <trigo.h>            // for RotatePoint
+
+#include <wx/debug.h>         // for wxASSERT
+#include <wx/wx.h>            // for wxPoint, wxString, wxArrayString, wxSize
+
+class OUTPUTFORMATTER;
+class wxFindReplaceData;
 
 // Sadly we store the orientation of hierarchical and global labels using a different
 // int encoding than that for local labels:

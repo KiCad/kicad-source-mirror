@@ -38,6 +38,7 @@
 #include <kicad_string.h>
 #include <wx/zstream.h>
 #include <wx/mstream.h>
+#include <math/util.h>      // for KiROUND
 
 
 /*

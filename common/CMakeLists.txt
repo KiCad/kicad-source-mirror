@@ -40,7 +40,7 @@ set( GAL_SRCS
     gal/graphics_abstraction_layer.cpp
     gal/hidpi_gl_canvas.cpp
     gal/stroke_font.cpp
-    geometry/hetriang.cpp
+
     view/view_controls.cpp
     view/view_overlay.cpp
     view/wx_view_controls.cpp
@@ -72,7 +72,8 @@ set( GAL_SRCS
 add_library( gal STATIC ${GAL_SRCS} )
 
 target_link_libraries( gal
-    polygon
+    ttl
+    kimath
     bitmaps
     ${GLEW_LIBRARIES}
     ${CAIRO_LIBRARIES}
@@ -258,7 +259,6 @@ set( COMMON_SRCS
     array_options.cpp
     base64.cpp
     base_struct.cpp
-    bezier_curves.cpp
     bin_mod.cpp
     bitmap.cpp
     bitmap_base.cpp
@@ -270,7 +270,6 @@ set( COMMON_SRCS
     common.cpp
     config_params.cpp
     confirm.cpp
-    convert_basic_shapes_to_polygon.cpp
     cursor_store.cpp
     dialog_shim.cpp
     displlst.cpp
@@ -313,7 +312,6 @@ set( COMMON_SRCS
     lib_tree_model_adapter.cpp
     lockfile.cpp
     marker_base.cpp
-    md5_hash.cpp
     msgpanel.cpp
     observable.cpp
     prependpath.cpp
@@ -364,8 +362,6 @@ set( COMMON_SRCS
     view/view_item.cpp
     view/view_group.cpp
 
-    math/math_util.cpp
-
     tool/action_manager.cpp
     tool/action_menu.cpp
     tool/action_toolbar.cpp
@@ -388,17 +384,6 @@ set( COMMON_SRCS
     tool/zoom_menu.cpp
     tool/zoom_tool.cpp
 
-    geometry/convex_hull.cpp
-    geometry/geometry_utils.cpp
-    geometry/seg.cpp
-    geometry/shape.cpp
-    geometry/shape_collisions.cpp
-    geometry/shape_arc.cpp
-    geometry/shape_file_io.cpp
-    geometry/shape_line_chain.cpp
-    geometry/shape_poly_set.cpp
-    geometry/trigo.cpp
-
     libeval/numeric_evaluator.cpp
     )
 
@@ -415,8 +400,8 @@ add_dependencies( common libcontext )
 add_dependencies( common version_header )
 
 target_link_libraries( common
+    kimath
     bitmaps
-    polygon
     gal
     ${Boost_LIBRARIES}
     ${CURL_LIBRARIES}
@@ -501,6 +486,7 @@ target_include_directories( pcbcommon PUBLIC
 
 target_link_libraries( pcbcommon PUBLIC
     common
+    kimath
 )
 
 

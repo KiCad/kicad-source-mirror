@@ -25,13 +25,14 @@
 #ifndef PANEL_SETUP_FEATURE_CONSTRAINTS_H
 #define PANEL_SETUP_FEATURE_CONSTRAINTS_H
 
-#include <class_board.h>
 #include <widgets/unit_binder.h>
-#include <widgets/paged_dialog.h>
 #include <panel_setup_feature_constraints_base.h>
 
-class PCB_EDIT_FRAME;
+class BOARD;
 class BOARD_DESIGN_SETTINGS;
+class PAGED_DIALOG;
+class PCB_EDIT_FRAME;
+class wxCommandEvent;
 
 
 class PANEL_SETUP_FEATURE_CONSTRAINTS : public PANEL_SETUP_FEATURE_CONSTRAINTS_BASE
