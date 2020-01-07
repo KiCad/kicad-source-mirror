@@ -32,7 +32,7 @@
 
 #include <eda_rect.h>
 #include <geometry/geometry_utils.h>
-#include <math/math_util.h>  // for round_nearest
+#include <math/util.h>  // for round_nearest
 
 // To approximate a circle by segments, a minimal seg count is mandatory
 #define MIN_SEGCOUNT_FOR_CIRCLE 6

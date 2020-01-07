@@ -31,9 +31,8 @@
 #include <stdlib.h>         // for abs
 #include <type_traits>      // for swap
 
-#include <clamp.h>
 #include <geometry/seg.h>
-#include <kiround.h>
+#include <math/util.h>
 #include <math/vector2d.h>  // for VECTOR2I
 #include <trigo.h>
 

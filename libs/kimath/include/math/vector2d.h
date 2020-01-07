@@ -32,7 +32,7 @@
 #include <iostream>
 #include <sstream>
 
-#include <math/math_util.h>
+#include <math/util.h>
 
 #ifdef WX_COMPATIBILITY
 #include <wx/gdicmn.h>

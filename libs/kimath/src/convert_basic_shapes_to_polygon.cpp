@@ -33,7 +33,7 @@
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_line_chain.h>  // for SHAPE_LINE_CHAIN
 #include <geometry/shape_poly_set.h>    // for SHAPE_POLY_SET, SHAPE_POLY_SE...
-#include <kiround.h>
+#include <math/util.h>
 #include <math/vector2d.h>              // for VECTOR2I
 #include <trigo.h>
 

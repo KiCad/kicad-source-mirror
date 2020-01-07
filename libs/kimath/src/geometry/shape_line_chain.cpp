@@ -31,7 +31,7 @@
 #include <geometry/seg.h>    // for SEG, OPT_VECTOR2I
 #include <geometry/shape_line_chain.h>
 #include <math/box2.h>       // for BOX2I
-#include <math/math_util.h>  // for rescale
+#include <math/util.h>  // for rescale
 #include <math/vector2d.h>   // for VECTOR2, VECTOR2I
 class SHAPE;
 

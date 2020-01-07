@@ -24,7 +24,7 @@
 
 #include <algorithm>        // for min
 #include <geometry/seg.h>
-#include <math/math_util.h> // for rescale
+#include <math/util.h>      // for rescale
 #include <math/vector2d.h>  // for VECTOR2I, VECTOR2
 
 template <typename T>

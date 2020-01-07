@@ -31,7 +31,7 @@
 #include <type_traits>                  // for swap
 
 #include <core/optional.h>
-#include <math/math_util.h>             // for rescale
+#include <math/util.h>                  // for rescale
 #include <math/vector2d.h>
 
 typedef OPT<VECTOR2I> OPT_VECTOR2I;

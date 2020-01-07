@@ -26,7 +26,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <climits>
-#include <math/math_util.h>
+#include <math/util.h>
 
 template<>
 int rescale( int aNumerator, int aValue, int aDenominator )

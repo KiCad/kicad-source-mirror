@@ -35,7 +35,7 @@
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
-#include <math/math_util.h>
+#include <math/util.h>
 #include <math/vector2d.h>
 
 /**

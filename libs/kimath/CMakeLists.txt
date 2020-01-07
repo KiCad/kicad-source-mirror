@@ -15,7 +15,7 @@ set( KIMATH_SRCS
     src/geometry/shape_line_chain.cpp
     src/geometry/shape_poly_set.cpp
 
-    src/math/math_util.cpp
+    src/math/util.cpp
 )
 
 # Include the other smaller math libraries in this one for convenience
