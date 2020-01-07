@@ -360,7 +360,11 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_ORTHO:
         m_settings.CameraGet().ToggleProjection();
-        m_canvas->Request_refresh();
+
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+            m_canvas->Request_refresh();
+        else
+            m_canvas->RenderRaytracingRequest();
         return;
 
     case ID_TOOL_SCREENCOPY_TOCLIBBOARD:
