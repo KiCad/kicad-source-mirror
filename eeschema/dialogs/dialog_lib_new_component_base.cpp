@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug 15 2019)
+// C++ code generated with wxFormBuilder (version v3.8.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -7,7 +7,7 @@
 
 #include "dialog_lib_new_component_base.h"
 
- ///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( DIALOG_LIB_NEW_COMPONENT_BASE, DIALOG_SHIM )
 	EVT_COMBOBOX( wxID_ANY, DIALOG_LIB_NEW_COMPONENT_BASE::_wxFB_OnParentSymbolSelect )
