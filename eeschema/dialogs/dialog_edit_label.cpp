@@ -319,8 +319,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
         return false;
     }
 
-    m_CurrentText->SetLabelSpinStyle(
-            static_cast<LABEL_SPIN_STYLE>( m_TextOrient->GetSelection() ) );
+    m_CurrentText->SetLabelSpinStyle( m_TextOrient->GetSelection() );
 
     m_CurrentText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
 

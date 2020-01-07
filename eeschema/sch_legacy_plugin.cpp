@@ -1423,7 +1423,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
             spinStyle = 0;
     }
 
-    text->SetLabelSpinStyle( static_cast<LABEL_SPIN_STYLE>( spinStyle ) );
+    text->SetLabelSpinStyle( spinStyle );
 
     int size = Mils2Iu( parseInt( aReader, line, &line ) );
 
@@ -2334,9 +2334,9 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
         // Local labels must have their spin style inverted for left and right
         int spinStyle = static_cast<int>( aText->GetLabelSpinStyle() );
 
-        if (spinStyle == 0)
+        if( spinStyle == 0 )
             spinStyle = 2;
-        else if (spinStyle == 2)
+        else if( spinStyle == 2 )
             spinStyle = 0;
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %d\n%s\n", textType,

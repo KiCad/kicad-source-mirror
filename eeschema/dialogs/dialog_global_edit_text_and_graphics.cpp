@@ -225,8 +225,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
     {
         if( m_orientation->GetStringSelection() != INDETERMINATE )
         {
-            sch_text->SetLabelSpinStyle(
-                    static_cast<LABEL_SPIN_STYLE>( m_orientation->GetSelection() ) );
+            sch_text->SetLabelSpinStyle( m_orientation->GetSelection() );
         }
     }
 

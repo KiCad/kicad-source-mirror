@@ -265,11 +265,7 @@ public:
      * Set a spin or rotation angle, along with specific horizontal and vertical justification
      * styles with each angle.
      *
-     * @param aSpinStyle =
-     *  0 = normal (horizontal, left justified).
-     *  1 = up (vertical)
-     *  2 = (horizontal, right justified). This can be seen as the mirrored position of 0
-     *  3 = bottom . This can be seen as the mirrored position of up
+     * @param aSpinStyle Spin style as per LABEL_SPIN_STYLE storage class, may be the enum values or int value
      */
     virtual void     SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle );
     LABEL_SPIN_STYLE GetLabelSpinStyle() const
