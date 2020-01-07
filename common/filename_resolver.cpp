@@ -185,9 +185,9 @@ bool FILENAME_RESOLVER::createPathList()
 
     if( GetKicadPaths( epaths ) )
     {
-        for( const auto& i : epaths )
+        for( const wxString& curr_path : epaths )
         {
-            wxString pathVal = ExpandEnvVarSubstitutions( i );
+            wxString pathVal = ExpandEnvVarSubstitutions( curr_path );
 
             if( pathVal.empty() )
             {
@@ -200,8 +200,8 @@ bool FILENAME_RESOLVER::createPathList()
                 lpath.m_pathexp = fndummy.GetFullPath();
             }
 
-            lpath.m_alias =  i;
-            lpath.m_pathvar = i;
+            lpath.m_alias =  curr_path;
+            lpath.m_pathvar = curr_path;
 
             if( !lpath.m_pathexp.empty() && psep == *lpath.m_pathexp.rbegin() )
                 lpath.m_pathexp.erase( --lpath.m_pathexp.end() );
@@ -219,9 +219,8 @@ bool FILENAME_RESOLVER::createPathList()
 #ifdef DEBUG
     wxLogTrace( MASK_3D_RESOLVER, " * [3D model] search paths:\n" );
     std::list< SEARCH_PATH >::const_iterator sPL = m_Paths.begin();
-    std::list< SEARCH_PATH >::const_iterator ePL = m_Paths.end();
 
-    while( sPL != ePL )
+    while( sPL != m_Paths.end() )
     {
         wxLogTrace( MASK_3D_RESOLVER, "   + %s : '%s'\n", (*sPL).m_alias.GetData(),
             (*sPL).m_pathexp.GetData() );
@@ -636,9 +635,9 @@ bool FILENAME_RESOLVER::writePathList()
 
     // skip all ${ENV_VAR} alias names
     std::list< SEARCH_PATH >::const_iterator sPL = m_Paths.begin();
-    std::list< SEARCH_PATH >::const_iterator ePL = m_Paths.end();
 
-    while( sPL != ePL && ( sPL->m_alias.StartsWith( "${" ) || sPL->m_alias.StartsWith( "$(" ) ) )
+    while( sPL != m_Paths.end() &&
+           ( sPL->m_alias.StartsWith( "${" ) || sPL->m_alias.StartsWith( "$(" ) ) )
         ++sPL;
 
     wxFileName cfgpath( m_ConfigDir, RESOLVER_CONFIG );
@@ -662,7 +661,7 @@ bool FILENAME_RESOLVER::writePathList()
     cfgFile << "#V" << CFGFILE_VERSION << "\n";
     std::string tstr;
 
-    while( sPL != ePL )
+    while( sPL != m_Paths.end() )
     {
         tstr = sPL->m_alias.ToUTF8();
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
@@ -762,10 +761,9 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
 
     wxCriticalSectionLocker lock( lock_resolver );
     std::list< SEARCH_PATH >::const_iterator sL = m_Paths.begin();
-    std::list< SEARCH_PATH >::const_iterator eL = m_Paths.end();
     size_t idx;
 
-    while( sL != eL )
+    while( sL != m_Paths.end() )
     {
         // undefined paths do not participate in the
         // file name shortening procedure
@@ -949,7 +947,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
 
     if( nchars > 0 )
     {
-        aResult = aString.substr( i2, nchars );
+        aResult = wxString::FromUTF8( aString.substr( i2, nchars ).c_str() );
         i2 += nchars;
     }
 
