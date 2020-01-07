@@ -39,7 +39,7 @@
 #include <msgpanel.h>
 #include <gal/stroke_font.h>
 #include <bitmaps.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 #include <sch_text.h>
 #include <netlist_object.h>

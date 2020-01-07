@@ -37,7 +37,7 @@
 #include <class_pcb_text.h>
 #include <class_dimension.h>
 #include <base_units.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent )

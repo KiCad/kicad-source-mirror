@@ -34,7 +34,7 @@
 #include <msgpanel.h>
 #include <base_units.h>
 #include <bitmaps.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 #include <geometry/geometry_utils.h>
 #include <pcbnew.h>

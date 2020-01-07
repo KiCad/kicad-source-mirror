@@ -41,7 +41,7 @@
 #include <class_edge_mod.h>
 #include <microwave/microwave_inductor.h>
 #include <pcbnew.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 static std::vector< wxRealPoint > PolyEdges;
 static double  ShapeScaleX, ShapeScaleY;

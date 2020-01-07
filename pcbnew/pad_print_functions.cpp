@@ -31,7 +31,7 @@
 #include <fctsys.h>
 #include <geometry/geometry_utils.h>
 #include <gr_basic.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 #include <layers_id_colors_and_visibility.h>
 #include <pcb_edit_frame.h>
 #include <pcb_screen.h>

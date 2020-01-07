@@ -28,7 +28,7 @@
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <dialog_text_entry.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 #include <general.h>
 #include <widgets/wx_grid.h>

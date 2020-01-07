@@ -30,7 +30,7 @@
 #include <common.h>
 #include <macros.h>
 #include <base_units.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 #include <gerbview.h>
 #include <gerber_file_image.h>

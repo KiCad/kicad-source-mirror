@@ -42,7 +42,7 @@
 #include <pcb_edit_frame.h>
 #include <pgm_base.h>
 #include <build_version.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 #include <pcbplot.h>
 #include <pcbnew.h>

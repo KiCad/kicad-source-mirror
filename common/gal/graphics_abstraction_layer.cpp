@@ -29,7 +29,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/definitions.h>
 
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 #include <cmath>
 

@@ -34,7 +34,7 @@
 #include <base_struct.h>
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 
 PL_EDIT_TOOL::PL_EDIT_TOOL() :

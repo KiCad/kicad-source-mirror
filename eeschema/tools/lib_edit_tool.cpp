@@ -41,7 +41,7 @@
 #include <sch_legacy_plugin.h>
 #include <lib_text.h>
 #include "lib_edit_tool.h"
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 
 LIB_EDIT_TOOL::LIB_EDIT_TOOL() :

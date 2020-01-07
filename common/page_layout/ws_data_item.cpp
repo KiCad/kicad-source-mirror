@@ -52,7 +52,7 @@
 #include <fctsys.h>
 #include <gr_text.h>
 #include <eda_rect.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 #include <view/view.h>
 #include <ws_painter.h>
 #include <title_block.h>

@@ -36,7 +36,7 @@
 #include <wx/graphics.h>
 #include <wx/tokenzr.h>
 #include <geometry/geometry_utils.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 static const bool FILLED = true;
 static const bool NOT_FILLED = false;

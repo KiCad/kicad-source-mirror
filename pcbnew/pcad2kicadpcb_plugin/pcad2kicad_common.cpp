@@ -33,7 +33,7 @@
 
 #include <common.h>
 #include <convert_to_biu.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 #include <pcad2kicad_common.h>
 

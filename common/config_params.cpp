@@ -28,7 +28,7 @@
 #include <common.h>              // for LOCALE_IO
 #include <config_params.h>       // for PARAM_CFG_INT_WITH_SCALE, PARAM_CFG_...
 #include <gal/color4d.h>         // for COLOR4D
-#include <kiround.h>             // for KiROUND
+#include <math/util.h>             // for KiROUND
 #include <wx/config.h>           // for wxConfigBase
 #include <wx/debug.h>            // for wxASSERT
 #include <wx/wx.h>               // for wxString, operator!=, operator==

@@ -36,7 +36,7 @@
 #include <common.h>
 #include <fctsys.h>
 #include <id.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 #include <macros.h>
 #include <trace_helpers.h>
 

@@ -30,7 +30,7 @@
 #include <widgets/layer_box_selector.h>
 #include <wx/colordlg.h>
 #include <wx/rawbmp.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 #include "panel_board_stackup.h"
 #include <panel_setup_layers.h>

@@ -30,7 +30,7 @@
 #include <tool/tool_manager.h>
 #include <id.h>
 #include <tool/common_tools.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 // Max values for grid size
 static const int MAX_GRID_SIZE = KiROUND( 1000.0 * IU_PER_MM );

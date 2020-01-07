@@ -35,7 +35,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <3d_math.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 #include <base_units.h>
 

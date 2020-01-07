@@ -34,7 +34,7 @@
 #include <class_pad.h>
 #include <class_edge_mod.h>
 #include <class_module.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 
 using namespace MWAVE;

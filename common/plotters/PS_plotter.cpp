@@ -36,7 +36,7 @@
 #include <macros.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 /* Forward declaration of the font width metrics
    (yes extern! this is the way to forward declare variables */

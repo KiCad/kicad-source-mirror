@@ -27,7 +27,7 @@
 #include <bitmap_io.h>
 #include <bitmaps.h>
 #include <kiface_i.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 #include <kiway.h>
 #include <pgm_base.h>
 #include <potracelib.h>

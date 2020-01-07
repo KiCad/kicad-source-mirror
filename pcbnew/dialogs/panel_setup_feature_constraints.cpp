@@ -22,9 +22,9 @@
  */
 
 #include <board_design_settings.h>
-#include <clamp.h>
 #include <class_board.h>                           // for BOARD
 #include <convert_to_biu.h>                        // for IU_PER_MM
+#include <math/util.h>
 #include <panel_setup_feature_constraints.h>
 #include <panel_setup_feature_constraints_base.h>  // for PANEL_SETUP_FEATUR...
 #include <pcb_edit_frame.h>

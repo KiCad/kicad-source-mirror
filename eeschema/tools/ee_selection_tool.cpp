@@ -46,7 +46,7 @@
 #include <painter.h>
 #include <eeschema_id.h>        // For MAX_SELECT_ITEM_IDS
 #include <menus_helpers.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 
 SELECTION_CONDITION EE_CONDITIONS::Empty = [] (const SELECTION& aSelection )

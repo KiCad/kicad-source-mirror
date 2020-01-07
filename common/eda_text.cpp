@@ -44,7 +44,7 @@
 #include <gal/stroke_font.h>  // for STROKE_FONT
 #include <gr_text.h>          // for GRText
 #include <kicad_string.h>     // for UnescapeString
-#include <kiround.h>          // for KiROUND
+#include <math/util.h>          // for KiROUND
 #include <math/vector2d.h>    // for VECTOR2D
 #include <trigo.h>            // for RotatePoint
 

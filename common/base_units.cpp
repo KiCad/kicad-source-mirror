@@ -37,7 +37,7 @@
 #include <base_struct.h>
 #include <base_units.h>
 #include <common.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 #include <macros.h>
 #include <title_block.h>
 

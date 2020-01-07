@@ -30,11 +30,10 @@
 #ifndef _PCBNEW_PARSER_H_
 #define _PCBNEW_PARSER_H_
 
-#include <clamp.h>                               // Clamp
 #include <convert_to_biu.h>                      // IU_PER_MM
 #include <hashtables.h>
 #include <layers_id_colors_and_visibility.h>     // PCB_LAYER_ID
-#include <kiround.h>                             // KiROUND
+#include <math/util.h>                           // KiROUND, Clamp
 #include <pcb_lexer.h>
 
 #include <unordered_map>

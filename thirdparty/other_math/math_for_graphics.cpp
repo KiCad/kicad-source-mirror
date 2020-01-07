@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <math_for_graphics.h>
 
-#include <kiround.h>
+#include <math/util.h>
 
 static bool InRange( double x, double xi, double xf );
 

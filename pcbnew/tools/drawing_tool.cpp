@@ -46,7 +46,7 @@
 #include "point_editor.h"
 #include <dialogs/dialog_text_properties.h>
 #include <preview_items/arc_assistant.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 #include <class_board.h>
 #include <class_edge_mod.h>

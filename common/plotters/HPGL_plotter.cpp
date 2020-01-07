@@ -203,7 +203,7 @@
 #include <macros.h>
 #include <kicad_string.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 
 // The hpgl command to close a polygon def, fill it and plot outline:

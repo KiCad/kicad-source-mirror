@@ -34,7 +34,7 @@
 #include <gal/gal_print.h>
 #include <view/view.h>
 #include <gerbview_painter.h>
-#include <kiround.h>      // for KiROUND
+#include <math/util.h>      // for KiROUND
 
 
 GERBVIEW_PRINTOUT::GERBVIEW_PRINTOUT( GBR_LAYOUT* aLayout, const BOARD_PRINTOUT_SETTINGS& aParams,
