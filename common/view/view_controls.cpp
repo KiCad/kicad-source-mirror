@@ -63,8 +63,9 @@ void VC_SETTINGS::Reset()
     m_grabMouse = false;
     m_autoPanEnabled = false;
     m_autoPanSettingEnabled = false;
-    m_autoPanMargin = 0.1f;
+    m_autoPanMargin = 0.02f;
     m_autoPanSpeed = 0.15f;
+    m_autoPanAcceleration = 1.5f;
     m_warpCursor = false;
     m_enableMousewheelPan = false;
     m_panWithRightButton = false;
@@ -82,5 +83,6 @@ void VIEW_CONTROLS::ApplySettings( const VC_SETTINGS& aSettings )
     SetAutoPan( aSettings.m_autoPanEnabled );
     SetAutoPanMargin( aSettings.m_autoPanMargin );
     SetAutoPanSpeed( aSettings.m_autoPanSpeed );
+    SetAutoPanAcceleration( aSettings.m_autoPanAcceleration );
     ForceCursorPosition( aSettings.m_forceCursorPosition, aSettings.m_forcedPosition );
 }

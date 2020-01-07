@@ -363,11 +363,13 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 
         VECTOR2D dir( m_panDirection );
 
-        if( dir.EuclideanNorm() > borderSize )
+        if( dir.EuclideanNorm() > borderSize / 2 )
+            dir = dir.Resize( pow( borderSize, m_settings.m_autoPanAcceleration ) );
+        else if( dir.EuclideanNorm() > borderSize )
             dir = dir.Resize( borderSize );
 
         dir = m_view->ToWorld( dir, false );
-        m_view->SetCenter( m_view->GetCenter() + dir * m_settings.m_autoPanSpeed );
+        m_view->SetCenter( m_view->GetCenter() + dir );
 
         refreshMouse();
     }
@@ -591,6 +593,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
     // Compute areas where autopanning is active
     int borderStart = std::min( m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().x,
                                    m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().y );
+    borderStart = std::max( borderStart, 2 );
     int borderEndX = m_view->GetScreenPixelSize().x - borderStart;
     int borderEndY = m_view->GetScreenPixelSize().y - borderStart;
 

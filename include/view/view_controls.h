@@ -81,6 +81,9 @@ struct VC_SETTINGS
     ///> How fast is panning when in auto mode
     float m_autoPanSpeed;
 
+    ///> How fast does panning accelerate when approaching the window boundary
+    float m_autoPanAcceleration;
+
     ///> If the cursor is allowed to be warped
     bool m_warpCursor;
 
@@ -179,6 +182,16 @@ public:
     virtual void SetAutoPanSpeed( float aSpeed )
     {
         m_settings.m_autoPanSpeed = aSpeed;
+    }
+
+    /**
+     * Function SetAutoPanSpeed()
+     * Sets speed of autopanning.
+     * @param aSpeed is a new speed for autopanning.
+     */
+    virtual void SetAutoPanAcceleration( float aAcceleration )
+    {
+        m_settings.m_autoPanAcceleration = aAcceleration;
     }
 
     /**
