@@ -296,7 +296,6 @@ __asm (
 "    movl  %eax, 0x4(%esp)\n"
 "    jmp  *%edx\n"
 ".size jump_fcontext,.-jump_fcontext\n"
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -330,7 +329,6 @@ __asm (
 "    call  _exit@PLT\n"
 "    hlt\n"
 ".size make_fcontext,.-make_fcontext\n"
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -373,7 +371,6 @@ __asm (
 "    movq  %rdx, %rdi\n"
 "    jmp  *%r8\n"
 ".size jump_fcontext,.-jump_fcontext\n"
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -399,7 +396,6 @@ __asm (
 "    call  _exit@PLT\n"
 "    hlt\n"
 ".size make_fcontext,.-make_fcontext\n"
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -573,8 +569,6 @@ __asm (
 "    pop {v1-v8,lr}\n"
 "    pop {pc}\n"
 ".size jump_fcontext,.-jump_fcontext\n"
-"@ Mark that we don't need executable stack.\n"
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -604,8 +598,6 @@ __asm (
 "    @ exit application\n"
 "    bl  _exit@PLT\n"
 ".size make_fcontext,.-make_fcontext\n"
-"@ Mark that we don't need executable stack.\n"
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -675,8 +667,6 @@ __asm (
 "    add  sp, sp, #0xb0\n"
 "    ret x4\n"
 ".size   jump_fcontext,.-jump_fcontext\n"
-"# Mark that we don't need executable stack.\n"
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -707,8 +697,6 @@ __asm (
 "    # exit application\n"
 "    bl  _exit\n"
 ".size   make_fcontext,.-make_fcontext\n"
-"# Mark that we don't need executable stack.\n"
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -777,7 +765,6 @@ __asm (
 "    nop\n"
 ".end jump_fcontext\n"
 ".size jump_fcontext, .-jump_fcontext\n"
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -824,7 +811,6 @@ __asm (
 "    nop\n"
 ".end make_fcontext\n"
 ".size make_fcontext, .-make_fcontext\n"
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -954,7 +940,6 @@ __asm (
 "    # jump to context\n"
 "    bctr\n"
 ".size jump_fcontext, .-jump_fcontext\n"
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -1005,7 +990,6 @@ __asm (
 "    # exit application\n"
 "    bl  _exit@plt\n"
 ".size make_fcontext, .-make_fcontext\n"
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -1167,7 +1151,6 @@ __asm (
 "  .size .jump_fcontext, .-.jump_fcontext\n"
 # endif
 #endif
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
@@ -1262,7 +1245,6 @@ __asm (
 "  .size .make_fcontext, .-.make_fcontext\n"
 # endif
 #endif
-".section .note.GNU-stack,\"\",%progbits\n"
 );
 
 #endif
