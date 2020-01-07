@@ -201,16 +201,16 @@ void SCH_LINE::ViewGetLayers( int aLayers[], int& aCount ) const
 
 const EDA_RECT SCH_LINE::GetBoundingBox() const
 {
-    int      width = 25;
+    int      width = m_size / 2;
+    int      extra = m_size & 0x1;
 
     int      xmin = std::min( m_start.x, m_end.x ) - width;
     int      ymin = std::min( m_start.y, m_end.y ) - width;
 
-    int      xmax = std::max( m_start.x, m_end.x ) + width;
-    int      ymax = std::max( m_start.y, m_end.y ) + width;
+    int      xmax = std::max( m_start.x, m_end.x ) + width + extra;
+    int      ymax = std::max( m_start.y, m_end.y ) + width + extra;
 
-    // return a rectangle which is [pos,dim) in nature.  therefore the +1
-    EDA_RECT ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+    EDA_RECT ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin, ymax - ymin ) );
 
     return ret;
 }
