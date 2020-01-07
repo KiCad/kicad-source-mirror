@@ -1000,15 +1000,13 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
 
     if( elabel.rot )
     {
-        label->SetLabelSpinStyle(
-                static_cast<LABEL_SPIN_STYLE>( int( elabel.rot->degrees / 90 ) % 4 ) );
+        label->SetLabelSpinStyle( LABEL_SPIN_STYLE( int( elabel.rot->degrees / 90 ) % 4 ) );
 
         if( elabel.rot->mirror
                 && ( label->GetLabelSpinStyle() == LABEL_SPIN_STYLE::LEFT
                            || label->GetLabelSpinStyle() == LABEL_SPIN_STYLE::RIGHT ) )
         {
-            label->SetLabelSpinStyle(
-                    static_cast<LABEL_SPIN_STYLE>( ( (int) label->GetLabelSpinStyle() + 2 ) % 4 ) );
+            label->SetLabelSpinStyle( label->GetLabelSpinStyle().MirrorY() );
         }
     }
 

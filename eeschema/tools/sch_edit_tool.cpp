@@ -408,9 +408,9 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
 
             if( clockwise )
-                textItem->SpinCW();
+                textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().RotateCW() );
             else
-                textItem->SpinCCW();
+                textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().RotateCCW() );
 
             break;
         }
@@ -596,9 +596,9 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
 
             if( xAxis )
-                textItem->SpinX();
+                textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().MirrorX() );
             else if( !xAxis )
-                textItem->SpinY();
+                textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().MirrorY() );
             break;
         }
 

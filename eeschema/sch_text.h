@@ -44,12 +44,151 @@ class NETLIST_OBJECT_LIST;
  * Spin style for text items of all kinds on schematics
  * Basically a higher level abstraction of rotation and justification of text
  */
-enum class LABEL_SPIN_STYLE
+class LABEL_SPIN_STYLE
 {
-    LEFT   = 0,
-    UP     = 1,
-    RIGHT  = 2,
-    BOTTOM = 3
+public:
+    enum SPIN : int
+    {
+        LEFT   = 0,
+        UP     = 1,
+        RIGHT  = 2,
+        BOTTOM = 3
+    };
+
+
+    LABEL_SPIN_STYLE() = default;
+    constexpr LABEL_SPIN_STYLE( SPIN aSpin ) : m_spin( aSpin )
+    {
+    }
+
+
+    LABEL_SPIN_STYLE( int aSpin )
+    {
+        m_spin = static_cast<SPIN>( aSpin );
+    }
+
+
+    constexpr bool operator==( SPIN a ) const
+    {
+        return m_spin == a;
+    }
+
+
+    constexpr bool operator!=( SPIN a ) const
+    {
+        return m_spin != a;
+    }
+
+
+    operator int() const
+    {
+        return static_cast<int>( m_spin );
+    }
+
+
+    LABEL_SPIN_STYLE RotateCW()
+    {
+        SPIN newSpin = m_spin;
+        switch( m_spin )
+        {
+        default:
+            wxLogWarning( "RotateCCW encountered unknown current spin style" );
+        case LABEL_SPIN_STYLE::LEFT:
+            newSpin = LABEL_SPIN_STYLE::UP;
+            break;
+        case LABEL_SPIN_STYLE::UP:
+            newSpin = LABEL_SPIN_STYLE::RIGHT;
+            break;
+        case LABEL_SPIN_STYLE::RIGHT:
+            newSpin = LABEL_SPIN_STYLE::BOTTOM;
+            break;
+        case LABEL_SPIN_STYLE::BOTTOM:
+            newSpin = LABEL_SPIN_STYLE::LEFT;
+            break;
+        }
+
+        return LABEL_SPIN_STYLE( newSpin );
+    }
+
+
+    LABEL_SPIN_STYLE RotateCCW()
+    {
+        SPIN newSpin = m_spin;
+        switch( m_spin )
+        {
+        default:
+            wxLogWarning( "RotateCCW encountered unknown current spin style" );
+        case LABEL_SPIN_STYLE::LEFT:
+            newSpin = LABEL_SPIN_STYLE::BOTTOM;
+            break;
+        case LABEL_SPIN_STYLE::BOTTOM:
+            newSpin = LABEL_SPIN_STYLE::RIGHT;
+            break;
+        case LABEL_SPIN_STYLE::RIGHT:
+            newSpin = LABEL_SPIN_STYLE::UP;
+            break;
+        case LABEL_SPIN_STYLE::UP:
+            newSpin = LABEL_SPIN_STYLE::LEFT;
+            break;
+        }
+
+        return LABEL_SPIN_STYLE( newSpin );
+    }
+
+
+    /*
+     * Mirrors the label spin style across the X axis or simply swaps up and bottom
+     */
+    LABEL_SPIN_STYLE MirrorX()
+    {
+        SPIN newSpin = m_spin;
+        switch( m_spin )
+        {
+        default:
+            wxLogWarning( "MirrorX encountered unknown current spin style" );
+        case LABEL_SPIN_STYLE::UP:
+            newSpin = LABEL_SPIN_STYLE::BOTTOM;
+            break;
+        case LABEL_SPIN_STYLE::BOTTOM:
+            newSpin = LABEL_SPIN_STYLE::UP;
+            break;
+        case LABEL_SPIN_STYLE::LEFT:
+            break;
+        case LABEL_SPIN_STYLE::RIGHT:
+            break;
+        }
+
+        return LABEL_SPIN_STYLE( newSpin );
+    }
+
+
+    /*
+     * Mirrors the label spin style across the Y axis or simply swaps left and right
+     */
+    LABEL_SPIN_STYLE MirrorY()
+    {
+        SPIN newSpin = m_spin;
+        switch( m_spin )
+        {
+        default:
+            wxLogWarning( "MirrorY encountered unknown current spin style" );
+        case LABEL_SPIN_STYLE::LEFT:
+            newSpin = LABEL_SPIN_STYLE::RIGHT;
+            break;
+        case LABEL_SPIN_STYLE::RIGHT:
+            newSpin = LABEL_SPIN_STYLE::LEFT;
+            break;
+        case LABEL_SPIN_STYLE::UP:
+            break;
+        case LABEL_SPIN_STYLE::BOTTOM:
+            break;
+        }
+
+        return LABEL_SPIN_STYLE( newSpin );
+    }
+
+private:
+    SPIN m_spin;
 };
 
 /* Shape/Type of SCH_HIERLABEL and SCH_GLOBALLABEL
@@ -180,26 +319,6 @@ public:
     void MirrorY( int aYaxis_position ) override;
     void MirrorX( int aXaxis_position ) override;
     void Rotate( wxPoint aPosition ) override;
-
-    /**
-     * Rotates the spin style just once clock wise
-     */
-    void SpinCW();
-
-    /**
-     * Rotates the spin style just once counter clock wise
-     */
-    void SpinCCW();
-
-    /**
-     * Mirrors the spin style over the X axis
-     */
-    void SpinX();
-
-    /**
-     * Mirrors the spin style over the Y axis
-     */
-    void SpinY();
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
     {
