@@ -32,7 +32,7 @@
 
 #include <eda_rect.h>
 #include <geometry/geometry_utils.h>
-#include <math/util.h>  // for round_nearest
+#include <math/util.h>      // for KiROUND
 
 // To approximate a circle by segments, a minimal seg count is mandatory
 #define MIN_SEGCOUNT_FOR_CIRCLE 6
@@ -51,7 +51,7 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
     // (360.0 degrees). For very small radius values, this is mandatory.
     arc_increment = std::min( 360.0/MIN_SEGCOUNT_FOR_CIRCLE, arc_increment );
 
-    int segCount = round_nearest( fabs( aArcAngleDegree ) / arc_increment );
+    int segCount = KiROUND( fabs( aArcAngleDegree ) / arc_increment );
 
     // Ensure at least one segment is used (can happen for small arcs)
     return std::max( segCount, 1 );

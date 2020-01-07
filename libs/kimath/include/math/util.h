@@ -99,9 +99,4 @@ int rescale( int aNumerator, int aValue, int aDenominator );
 template <>
 int64_t rescale( int64_t aNumerator, int64_t aValue, int64_t aDenominator );
 
-static inline int round_nearest( double v )
-{
-    return int( v < 0 ? v - 0.5 : v + 0.5 );
-}
-
 #endif // UTIL_H

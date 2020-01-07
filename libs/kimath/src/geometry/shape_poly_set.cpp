@@ -47,7 +47,7 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
 #include <math/box2.h>                       // for BOX2I
-#include <math/util.h>                  // for round_nearest, rescale
+#include <math/util.h>                       // for KiROUND, rescale
 #include <math/vector2d.h>                   // for VECTOR2I, VECTOR2D, VECTOR2
 #include <md5_hash.h>
 
@@ -1723,13 +1723,13 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
                 if( 0.5 * lenb < distance )
                     distance = 0.5 * lenb;
 
-                int nx1 = round_nearest( distance * xa / lena );
-                int ny1 = round_nearest( distance * ya / lena );
+                int nx1 = KiROUND( distance * xa / lena );
+                int ny1 = KiROUND( distance * ya / lena );
 
                 newContour.Append( x1 + nx1, y1 + ny1 );
 
-                int nx2 = round_nearest( distance * xb / lenb );
-                int ny2 = round_nearest( distance * yb / lenb );
+                int nx2 = KiROUND( distance * xb / lenb );
+                int ny2 = KiROUND( distance * yb / lenb );
 
                 newContour.Append( x1 + nx2, y1 + ny2 );
             }
@@ -1789,11 +1789,11 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
                 double  nx  = xc + xs;
                 double  ny  = yc + ys;
 
-                newContour.Append( round_nearest( nx ), round_nearest( ny ) );
+                newContour.Append( KiROUND( nx ), KiROUND( ny ) );
 
                 // Store the previous added corner to make a sanity check
-                int prevX   = round_nearest( nx );
-                int prevY   = round_nearest( ny );
+                int prevX   = KiROUND( nx );
+                int prevY   = KiROUND( ny );
 
                 for( int j = 0; j < segments; j++ )
                 {
@@ -1801,11 +1801,11 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
                     ny = yc - sin( startAngle + ( j + 1 ) * deltaAngle ) * radius;
 
                     // Sanity check: the rounding can produce repeated corners; do not add them.
-                    if( round_nearest( nx ) != prevX || round_nearest( ny ) != prevY )
+                    if( KiROUND( nx ) != prevX || KiROUND( ny ) != prevY )
                     {
-                        newContour.Append( round_nearest( nx ), round_nearest( ny ) );
-                        prevX   = round_nearest( nx );
-                        prevY   = round_nearest( ny );
+                        newContour.Append( KiROUND( nx ), KiROUND( ny ) );
+                        prevX   = KiROUND( nx );
+                        prevY   = KiROUND( ny );
                     }
                 }
             }
