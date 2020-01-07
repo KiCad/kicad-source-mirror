@@ -76,6 +76,9 @@ public:
         m_no_connect( nullptr ), m_bus_entry( nullptr ), m_driver( nullptr ), m_frame( aFrame ),
         m_driver_connection( nullptr ), m_hier_parent( nullptr )
     {}
+
+    ~CONNECTION_SUBGRAPH() = default;
+
     /**
      * Determines which potential driver should drive the subgraph.
      *
@@ -205,6 +208,11 @@ public:
     CONNECTION_GRAPH( SCH_EDIT_FRAME* aFrame) :
         m_frame( aFrame )
     {}
+
+    ~CONNECTION_GRAPH()
+    {
+        Reset();
+    }
 
     void Reset();
 

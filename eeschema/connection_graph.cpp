@@ -355,7 +355,7 @@ bool CONNECTION_GRAPH::m_allowRealTime = true;
 
 void CONNECTION_GRAPH::Reset()
 {
-    for( auto subgraph : m_subgraphs )
+    for( auto& subgraph : m_subgraphs )
         delete subgraph;
 
     m_items.clear();
@@ -1415,10 +1415,20 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         m_net_code_to_subgraphs_map[ code ].push_back( subgraph );
     }
 
+    // Clean up and deallocate stale subgraphs
     m_subgraphs.erase( std::remove_if( m_subgraphs.begin(), m_subgraphs.end(),
-                                 [&] ( const CONNECTION_SUBGRAPH* sg ) {
-                                         return sg->m_absorbed;
-                                     } ), m_subgraphs.end() );
+            [&]( const CONNECTION_SUBGRAPH* sg ) {
+                if( sg->m_absorbed )
+                {
+                    delete sg;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            } ),
+            m_subgraphs.end() );
 }
 
 
