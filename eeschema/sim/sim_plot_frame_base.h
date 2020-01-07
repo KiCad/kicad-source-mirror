@@ -42,6 +42,7 @@
 #define ID_MENU_SET_SIMUL 1007
 #define ID_MENU_SHOW_GRID 1008
 #define ID_MENU_SHOW_LEGEND 1009
+#define ID_MENU_DOTTED 1010
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class SIM_PLOT_FRAME_BASE
@@ -105,6 +106,8 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void menuShowGridUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void menuShowLegend( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuShowLegendUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void menuShowDotted( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuShowDottedUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onPlotChanged( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onPlotClose( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onSignalDblClick( wxMouseEvent& event ) { event.Skip(); }

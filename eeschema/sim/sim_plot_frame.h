@@ -257,6 +257,8 @@ private:
     void menuShowGridUpdate( wxUpdateUIEvent& event ) override;
     void menuShowLegend( wxCommandEvent& event ) override;
     void menuShowLegendUpdate( wxUpdateUIEvent& event ) override;
+    void menuShowDotted( wxCommandEvent& event ) override;
+    void menuShowDottedUpdate( wxUpdateUIEvent& event ) override;
 
     // Event handlers
     void onPlotChanged( wxAuiNotebookEvent& event ) override;
