@@ -112,28 +112,22 @@ int ALIGN_DISTRIBUTE_TOOL::selectTarget( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECT
     // unless we have a locked item, in which case we use that for the target
     int target = !aLocked.size() ? aGetValue( aItems.front() ): aGetValue( aLocked.front() );
 
-    // Iterate through both lists to find if we are mouse-over on one of the items.
-    for( auto sel = aLocked.begin(); sel != aItems.end(); sel++ )
+    // We take the first target that overlaps our cursor.
+    // This is deterministic because we assume sorted arrays
+    for( auto item : aLocked )
     {
-        // If there are locked items, prefer aligning to them over
-        // aligning to the cursor as they do not move
-        if( sel == aLocked.end() )
-        {
-            if( aLocked.size() == 0 )
-            {
-                sel = aItems.begin();
-                continue;
-            }
+        if( item.second.Contains( curPos ) )
+            return aGetValue( item );
+    }
 
-            break;
-        }
-
-        // We take the first target that overlaps our cursor.
-        // This is deterministic because we assume sorted arrays
-        if( sel->second.Contains( curPos ) )
+    // If there are locked items, prefer aligning to them over
+    // aligning to the cursor as they do not move
+    if( aLocked.empty() )
+    {
+        for( auto item : aItems )
         {
-            target = aGetValue( *sel );
-            break;
+            if( item.second.Contains( curPos ) )
+                return aGetValue( item );
         }
     }
 
