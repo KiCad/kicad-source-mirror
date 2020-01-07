@@ -163,7 +163,6 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_configure_paths_base.cpp
     dialogs/dialog_display_info_HTML_base.cpp
     dialogs/dialog_edit_library_tables.cpp
-    dialogs/dialog_file_dir_picker.cpp
     dialogs/dialog_global_lib_table_config.cpp
     dialogs/dialog_global_lib_table_config_base.cpp
     dialogs/dialog_hotkey_list.cpp
