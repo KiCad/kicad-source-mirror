@@ -1065,7 +1065,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
 
     if( nchars > 0 )
     {
-        aResult = aString.substr( i2, nchars );
+        aResult = wxString::FromUTF8( aString.substr( i2, nchars ).c_str() );
         i2 += nchars;
     }
 
