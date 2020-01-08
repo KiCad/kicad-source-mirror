@@ -128,21 +128,21 @@ public:
     {
         m_s += str.m_s;
         MAYBE_VERIFY_UTF8( c_str() );
-        return (UTF8&) *this;
+        return *this;
     }
 
     UTF8& operator+=( char ch )
     {
         m_s.operator+=( ch );
         MAYBE_VERIFY_UTF8( c_str() );
-        return (UTF8&) *this;
+        return *this;
     }
 
     UTF8& operator+=( const char* s )
     {
         m_s.operator+=( s );
         MAYBE_VERIFY_UTF8( c_str() );
-        return (UTF8&) *this;
+        return *this;
     }
 
     /// Append a wide (unicode) char to the UTF8 string.

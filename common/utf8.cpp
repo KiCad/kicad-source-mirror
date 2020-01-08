@@ -232,5 +232,5 @@ UTF8& UTF8::operator+=( unsigned w_ch )
         m_s += substr.m_s;
     }
 
-    return (UTF8&) *this;
+    return *this;
 }

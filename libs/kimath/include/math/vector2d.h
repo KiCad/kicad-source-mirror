@@ -107,6 +107,13 @@ public:
         y = (T) aVec.y;
     }
 
+    /// Copy a vector
+    VECTOR2( const VECTOR2<T>& aVec )
+    {
+        x = aVec.x;
+        y = aVec.y;
+    }
+
     /// Casts a vector to another specialized subclass. Beware of rouding
     /// issues.
     template <typename CastedType>

@@ -578,6 +578,9 @@ public:
         m_events.push_back( aSingleEvent );
     }
 
+    ///> Copy an existing TOOL_EVENT_LIST
+    TOOL_EVENT_LIST( const TOOL_EVENT_LIST& aEventList ) = default;
+
     /**
      * Function Format()
      * Returns information about event in form of a human-readable string.

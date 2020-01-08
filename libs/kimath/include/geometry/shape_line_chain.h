@@ -118,6 +118,8 @@ public:
     virtual ~SHAPE_LINE_CHAIN()
     {}
 
+    SHAPE_LINE_CHAIN& operator=(const SHAPE_LINE_CHAIN&) = default;
+
     SHAPE* Clone() const override;
 
     /**
