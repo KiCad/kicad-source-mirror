@@ -217,7 +217,7 @@ bool NETLIST_EXPORTER::addPinToComponentPinList( SCH_COMPONENT* aComponent,
     {
         NETLIST_OBJECT* pin = m_masterList->GetItem( ii );
 
-        if( pin->m_Type != NET_PIN )
+        if( pin->m_Type != NETLIST_ITEM::PIN )
             continue;
 
         if( pin->m_Link != aComponent )

@@ -839,7 +839,7 @@ void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
         item->m_SheetPath = *aSheetPath;
         item->m_Comp = sheetPin;
         item->m_Link = this;
-        item->m_Type = NET_SHEETLABEL;
+        item->m_Type = NETLIST_ITEM::SHEETLABEL;
         item->m_Label = sheetPin->GetText();
         item->m_Start = item->m_End = sheetPin->GetPosition();
         aNetListItems.push_back( item );

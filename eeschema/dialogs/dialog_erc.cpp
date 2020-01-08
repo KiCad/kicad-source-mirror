@@ -550,18 +550,18 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
         switch( item->m_Type )
         {
         // These items do not create erc problems
-        case NET_ITEM_UNSPECIFIED:
-        case NET_SEGMENT:
-        case NET_BUS:
-        case NET_JUNCTION:
-        case NET_LABEL:
-        case NET_BUSLABELMEMBER:
-        case NET_PINLABEL:
-        case NET_GLOBBUSLABELMEMBER:
+        case NETLIST_ITEM::ITEM_UNSPECIFIED:
+        case NETLIST_ITEM::SEGMENT:
+        case NETLIST_ITEM::BUS:
+        case NETLIST_ITEM::JUNCTION:
+        case NETLIST_ITEM::LABEL:
+        case NETLIST_ITEM::BUSLABELMEMBER:
+        case NETLIST_ITEM::PINLABEL:
+        case NETLIST_ITEM::GLOBBUSLABELMEMBER:
             break;
 
         // TODO(JE) Port this to the new system
-        case NET_PIN:
+        case NETLIST_ITEM::PIN:
         {
             // Check if this pin has appeared before on a different net
             if( item->m_Link )

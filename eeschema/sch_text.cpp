@@ -448,12 +448,12 @@ void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
     item->m_SheetPath = *aSheetPath;
     item->m_SheetPathInclude = *aSheetPath;
     item->m_Comp = (SCH_ITEM*) this;
-    item->m_Type = NET_LABEL;
+    item->m_Type = NETLIST_ITEM::LABEL;
 
     if( GetLayer() == LAYER_GLOBLABEL )
-        item->m_Type = NET_GLOBLABEL;
+        item->m_Type = NETLIST_ITEM::GLOBLABEL;
     else if( GetLayer() == LAYER_HIERLABEL )
-        item->m_Type = NET_HIERLABEL;
+        item->m_Type = NETLIST_ITEM::HIERLABEL;
 
     item->m_Label = GetText();
     item->m_Start = item->m_End = GetTextPos();

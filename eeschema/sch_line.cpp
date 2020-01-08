@@ -673,11 +673,11 @@ void SCH_LINE::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
 
     if( GetLayer() == LAYER_BUS )
     {
-        item->m_Type = NET_BUS;
+        item->m_Type = NETLIST_ITEM::BUS;
     }
     else            /* WIRE */
     {
-        item->m_Type = NET_SEGMENT;
+        item->m_Type = NETLIST_ITEM::SEGMENT;
     }
 
     aNetListItems.push_back( item );

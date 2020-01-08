@@ -41,41 +41,41 @@ class SCH_COMPONENT;
 
 
 /* Type of Net objects (wires, labels, pins...) */
-enum NETLIST_ITEM_T
+enum class NETLIST_ITEM
 {
-    NET_ITEM_UNSPECIFIED,           // only for not yet initialized instances
-    NET_SEGMENT,                    // connection by wire
-    NET_BUS,                        // connection by bus
-    NET_JUNCTION,                   // connection by junction: can connect to
+    ITEM_UNSPECIFIED,           // only for not yet initialized instances
+    SEGMENT,                    // connection by wire
+    BUS,                        // connection by bus
+    JUNCTION,                   // connection by junction: can connect to
                                     // or more crossing wires
-    NET_LABEL,                      // this is a local label
-    NET_GLOBLABEL,                  // this is a global label that connect all
+    LABEL,                      // this is a local label
+    GLOBLABEL,                  // this is a global label that connect all
                                     // others global label in whole hierarchy
-    NET_HIERLABEL,                  // element to indicate connection to a
+    HIERLABEL,                  // element to indicate connection to a
                                     // higher-level sheet
-    NET_SHEETLABEL,                 // element to indicate connection to a
+    SHEETLABEL,                 // element to indicate connection to a
                                     // lower-level sheet.
-    NET_BUSLABELMEMBER,             /* created when a bus label is found:
+    BUSLABELMEMBER,             /* created when a bus label is found:
                                      * the bus label (like DATA[0..7] is
                                      * converted to n single labels like
                                      * DATA0, DATA1 ...
                                      * These objects are living only in the current
                                      * NETLIST_OBJECT_LIST, not in shematic.
                                      */
-    NET_GLOBBUSLABELMEMBER,         // see NET_BUSLABELMEMBER, used when a
+    GLOBBUSLABELMEMBER,         // see NET_BUSLABELMEMBER, used when a
                                     // global bus label is found
-    NET_HIERBUSLABELMEMBER,         // see NET_BUSLABELMEMBER, used when a
+    HIERBUSLABELMEMBER,         // see NET_BUSLABELMEMBER, used when a
                                     // hierarchical bus label is found
-    NET_SHEETBUSLABELMEMBER,        // see NET_BUSLABELMEMBER, used when a
+    SHEETBUSLABELMEMBER,        // see NET_BUSLABELMEMBER, used when a
                                     // pin sheet label using bus notation
                                     // is found
-    NET_PINLABEL,                   /* created when a pin is POWER (IN or
+    PINLABEL,                   /* created when a pin is POWER (IN or
                                      * OUT) with invisible attribute is found:
                                      * these pins are equivalent to a global
                                      * label and are automatically connected
                                      */
-    NET_PIN,                        // this is an usual pin
-    NET_NOCONNECT                   // this is a no connect symbol
+    PIN,                        // this is an usual pin
+    NOCONNECT                   // this is a no connect symbol
 };
 
 
@@ -92,7 +92,7 @@ enum class NET_CONNECTION
 class NETLIST_OBJECT
 {
 public:
-    NETLIST_ITEM_T m_Type;              /* Type of item (see NETLIST_ITEM_T enum) */
+    NETLIST_ITEM m_Type;              /* Type of item (see NETLIST_ITEM_T enum) */
     EDA_ITEM* m_Comp;                   /* Pointer to the library item that
                                          * created this net object (the parent)
                                          */
@@ -342,7 +342,7 @@ public:
     /**
      * Acces to an item type
      */
-    NETLIST_ITEM_T GetItemType( unsigned aIdx ) const
+    NETLIST_ITEM GetItemType( unsigned aIdx ) const
     {
         return GetItem( aIdx )->m_Type;
     }

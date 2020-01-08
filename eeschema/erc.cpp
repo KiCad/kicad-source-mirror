@@ -362,14 +362,14 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMi
 
     wxString cmp_ref( "?" );
 
-    if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
+    if( aNetItemRef->m_Type == NETLIST_ITEM::PIN && aNetItemRef->m_Link )
         cmp_ref = aNetItemRef->GetComponentParent()->GetRef( &aNetItemRef->m_SheetPath );
 
     if( aNetItemTst == NULL )
     {
         if( aMinConn == NOD )    /* Nothing driving the net. */
         {
-            if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
+            if( aNetItemRef->m_Type == NETLIST_ITEM::PIN && aNetItemRef->m_Link )
                 cmp_ref = aNetItemRef->GetComponentParent()->GetRef(
                     &aNetItemRef->m_SheetPath );
 
@@ -396,7 +396,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMi
 
         wxString alt_cmp( "?" );
 
-        if( aNetItemTst->m_Type == NET_PIN && aNetItemTst->m_Link )
+        if( aNetItemTst->m_Type == NETLIST_ITEM::PIN && aNetItemTst->m_Link )
             alt_cmp = aNetItemTst->GetComponentParent()->GetRef( &aNetItemTst->m_SheetPath );
 
         msg.Printf( _( "Pin %s (%s) of component %s is connected to " ),
@@ -446,7 +446,7 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
                 bool seterr = true;
 
                 if( local_minconn == NOC &&
-                    aList->GetItemType( aNetItemRef ) == NET_PIN )
+                    aList->GetItemType( aNetItemRef ) == NETLIST_ITEM::PIN )
                 {
                     /* This pin is not connected: for multiple part per
                      * package, and duplicated pin,
@@ -458,7 +458,7 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
                      */
                     for( unsigned duplicate = 0; duplicate < aList->size(); duplicate++ )
                     {
-                        if( aList->GetItemType( duplicate ) != NET_PIN )
+                        if( aList->GetItemType( duplicate ) != NETLIST_ITEM::PIN )
                             continue;
 
                         if( duplicate == aNetItemRef )
@@ -500,26 +500,26 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
 
         switch( aList->GetItemType( netItemTst ) )
         {
-        case NET_ITEM_UNSPECIFIED:
-        case NET_SEGMENT:
-        case NET_BUS:
-        case NET_JUNCTION:
-        case NET_LABEL:
-        case NET_HIERLABEL:
-        case NET_BUSLABELMEMBER:
-        case NET_HIERBUSLABELMEMBER:
-        case NET_SHEETBUSLABELMEMBER:
-        case NET_SHEETLABEL:
-        case NET_GLOBLABEL:
-        case NET_GLOBBUSLABELMEMBER:
-        case NET_PINLABEL:
+        case NETLIST_ITEM::ITEM_UNSPECIFIED:
+        case NETLIST_ITEM::SEGMENT:
+        case NETLIST_ITEM::BUS:
+        case NETLIST_ITEM::JUNCTION:
+        case NETLIST_ITEM::LABEL:
+        case NETLIST_ITEM::HIERLABEL:
+        case NETLIST_ITEM::BUSLABELMEMBER:
+        case NETLIST_ITEM::HIERBUSLABELMEMBER:
+        case NETLIST_ITEM::SHEETBUSLABELMEMBER:
+        case NETLIST_ITEM::SHEETLABEL:
+        case NETLIST_ITEM::GLOBLABEL:
+        case NETLIST_ITEM::GLOBBUSLABELMEMBER:
+        case NETLIST_ITEM::PINLABEL:
             break;
 
-        case NET_NOCONNECT:
+        case NETLIST_ITEM::NOCONNECT:
             local_minconn = std::max( NET_NC, local_minconn );
             break;
 
-        case NET_PIN:
+        case NETLIST_ITEM::PIN:
             jj = aList->GetItem( netItemTst )->m_ElectricalPinType;
             local_minconn = std::max( MinimalReq[ref_elect_type][jj], local_minconn );
 
@@ -559,7 +559,7 @@ int NETLIST_OBJECT_LIST::CountPinsInNet( unsigned aNetStart )
         if( curr_net != GetItemNet( item ) )   // End of net
             break;
 
-        if( GetItemType( item ) == NET_PIN )
+        if( GetItemType( item ) == NETLIST_ITEM::PIN )
             count++;
     }
 
@@ -712,20 +712,20 @@ void NETLIST_OBJECT_LIST::TestforSimilarLabels()
     {
         switch( GetItemType( netItem ) )
         {
-        case NET_LABEL:
-        case NET_BUSLABELMEMBER:
-        case NET_PINLABEL:
-        case NET_GLOBBUSLABELMEMBER:
-        case NET_HIERLABEL:
-        case NET_HIERBUSLABELMEMBER:
-        case NET_GLOBLABEL:
+        case NETLIST_ITEM::LABEL:
+        case NETLIST_ITEM::BUSLABELMEMBER:
+        case NETLIST_ITEM::PINLABEL:
+        case NETLIST_ITEM::GLOBBUSLABELMEMBER:
+        case NETLIST_ITEM::HIERLABEL:
+        case NETLIST_ITEM::HIERBUSLABELMEMBER:
+        case NETLIST_ITEM::GLOBLABEL:
             // add this label in lists
             uniqueLabelList.insert( GetItem( netItem ) );
             fullLabelList.push_back( GetItem( netItem ) );
             break;
 
-        case NET_SHEETLABEL:
-        case NET_SHEETBUSLABELMEMBER:
+        case NETLIST_ITEM::SHEETLABEL:
+        case NETLIST_ITEM::SHEETBUSLABELMEMBER:
         default:
             break;
         }

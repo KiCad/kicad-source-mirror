@@ -1687,7 +1687,7 @@ void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
             item->m_SheetPathInclude = *aSheetPath;
             item->m_Comp = (SCH_ITEM*) pin;
             item->m_SheetPath = *aSheetPath;
-            item->m_Type = NET_PIN;
+            item->m_Type = NETLIST_ITEM::PIN;
             item->m_Link = (SCH_ITEM*) this;
             item->m_ElectricalPinType = pin->GetType();
             item->m_PinNum = pin->GetNumber();
@@ -1703,7 +1703,7 @@ void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                 item->m_SheetPathInclude = *aSheetPath;
                 item->m_Comp = NULL;
                 item->m_SheetPath = *aSheetPath;
-                item->m_Type  = NET_PINLABEL;
+                item->m_Type  = NETLIST_ITEM::PINLABEL;
                 item->m_Label = pin->GetName();
                 item->m_Start = pos;
                 item->m_End = item->m_Start;

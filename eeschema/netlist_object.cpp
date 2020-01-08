@@ -46,46 +46,46 @@ const char* ShowType( NETLIST_ITEM_T aType )
 
     switch( aType )
     {
-    case NET_SEGMENT:
+    case NETLIST_ITEM::SEGMENT:
         ret = "segment";            break;
 
-    case NET_BUS:
+    case NETLIST_ITEM::BUS:
         ret = "bus";                break;
 
-    case NET_JUNCTION:
+    case NETLIST_ITEM::JUNCTION:
         ret = "junction";           break;
 
-    case NET_LABEL:
+    case NETLIST_ITEM::LABEL:
         ret = "label";              break;
 
-    case NET_HIERLABEL:
+    case NETLIST_ITEM::HIERLABEL:
         ret = "hierlabel";          break;
 
-    case NET_GLOBLABEL:
+    case NETLIST_ITEM::GLOBLABEL:
         ret = "glabel";             break;
 
-    case NET_BUSLABELMEMBER:
+    case NETLIST_ITEM::BUSLABELMEMBER:
         ret = "buslblmember";       break;
 
-    case NET_HIERBUSLABELMEMBER:
+    case NETLIST_ITEM::HIERBUSLABELMEMBER:
         ret = "hierbuslblmember";   break;
 
-    case NET_GLOBBUSLABELMEMBER:
+    case NETLIST_ITEM::GLOBBUSLABELMEMBER:
         ret = "gbuslblmember";      break;
 
-    case NET_SHEETBUSLABELMEMBER:
+    case NETLIST_ITEM::SHEETBUSLABELMEMBER:
         ret = "sbuslblmember";      break;
 
-    case NET_SHEETLABEL:
+    case NETLIST_ITEM::SHEETLABEL:
         ret = "sheetlabel";         break;
 
-    case NET_PINLABEL:
+    case NETLIST_ITEM::PINLABEL:
         ret = "pinlabel";           break;
 
-    case NET_PIN:
+    case NETLIST_ITEM::PIN:
         ret = "pin";                break;
 
-    case NET_NOCONNECT:
+    case NETLIST_ITEM::NOCONNECT:
         ret = "noconnect";          break;
 
     default:
@@ -115,7 +115,7 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx ) const
 
     switch( m_Type )
     {
-    case NET_PIN:
+    case NETLIST_ITEM::PIN:
         /* GetRef() needs to be const
         out << " <refOfComp>" << GetComponentParent()->GetRef(&m_SheetPath).mb_str()
             << "</refOfComp>\n";
@@ -146,7 +146,7 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx ) const
 
 NETLIST_OBJECT::NETLIST_OBJECT()
 {
-    m_Type = NET_ITEM_UNSPECIFIED;  /* Type of this item (see NETLIST_ITEM_T enum) */
+    m_Type = NETLIST_ITEM::ITEM_UNSPECIFIED;  /* Type of this item (see NETLIST_ITEM_T enum) */
     m_Comp = NULL;                  /* Pointer on the library item that created this net object
                                      * (the parent)*/
     m_Link = NULL;                  /* For SCH_SHEET_PIN:
@@ -162,7 +162,7 @@ NETLIST_OBJECT::NETLIST_OBJECT()
                                      * label has as many net codes as bus members
                                      */
     m_BusNetCode = 0;               /* Used for BUS connections */
-    m_Member     = 0;               /* for labels type NET_BUSLABELMEMBER ( bus member created
+    m_Member     = 0;               /* for labels type NETLIST_ITEM::BUSLABELMEMBER ( bus member created
                                      * from the BUS label )  member number
                                      */
     m_ConnectionType    = NET_CONNECTION::UNCONNECTED;
@@ -187,11 +187,11 @@ NETLIST_OBJECT::~NETLIST_OBJECT()
 // return true if the object is a label of any type
 bool NETLIST_OBJECT::IsLabelType() const
 {
-    return m_Type == NET_LABEL
-        || m_Type == NET_GLOBLABEL || m_Type == NET_HIERLABEL
-        || m_Type == NET_BUSLABELMEMBER || m_Type == NET_GLOBBUSLABELMEMBER
-        || m_Type == NET_HIERBUSLABELMEMBER
-        || m_Type == NET_PINLABEL;
+    return m_Type == NETLIST_ITEM::LABEL
+        || m_Type == NETLIST_ITEM::GLOBLABEL || m_Type == NETLIST_ITEM::HIERLABEL
+        || m_Type == NETLIST_ITEM::BUSLABELMEMBER || m_Type == NETLIST_ITEM::GLOBBUSLABELMEMBER
+        || m_Type == NETLIST_ITEM::HIERBUSLABELMEMBER
+        || m_Type == NETLIST_ITEM::PINLABEL;
 }
 
 bool NETLIST_OBJECT::IsLabelConnected( NETLIST_OBJECT* aNetItem )
@@ -199,18 +199,18 @@ bool NETLIST_OBJECT::IsLabelConnected( NETLIST_OBJECT* aNetItem )
     if( aNetItem == this )   // Don't compare the same net list object.
         return false;
 
-    int at = m_Type;
-    int bt = aNetItem->m_Type;
+    NETLIST_ITEM at = m_Type;
+    NETLIST_ITEM bt = aNetItem->m_Type;
 
-    if(  ( at == NET_HIERLABEL || at == NET_HIERBUSLABELMEMBER )
-      && ( bt == NET_SHEETLABEL || bt == NET_SHEETBUSLABELMEMBER ) )
+    if(  ( at == NETLIST_ITEM::HIERLABEL || at == NETLIST_ITEM::HIERBUSLABELMEMBER )
+      && ( bt == NETLIST_ITEM::SHEETLABEL || bt == NETLIST_ITEM::SHEETBUSLABELMEMBER ) )
     {
         if( m_SheetPath == aNetItem->m_SheetPathInclude )
         {
             return true; //connected!
         }
     }
-    else if( ( at == NET_GLOBLABEL ) && ( bt == NET_GLOBLABEL ) )
+    else if( ( at == NETLIST_ITEM::GLOBLABEL ) && ( bt == NETLIST_ITEM::GLOBLABEL ) )
     {
         if( m_Label == aNetItem->m_Label )
             return true; //connected!
@@ -226,14 +226,14 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
     wxCHECK_RET( conn.IsBusLabel( m_Label ),
                  wxT( "<" ) + m_Label + wxT( "> is not a valid bus label." ) );
 
-    if( m_Type == NET_HIERLABEL )
-        m_Type = NET_HIERBUSLABELMEMBER;
-    else if( m_Type == NET_GLOBLABEL )
-        m_Type = NET_GLOBBUSLABELMEMBER;
-    else if( m_Type == NET_SHEETLABEL )
-        m_Type = NET_SHEETBUSLABELMEMBER;
-    else if( m_Type == NET_LABEL )
-        m_Type = NET_BUSLABELMEMBER;
+    if( m_Type == NETLIST_ITEM::HIERLABEL )
+        m_Type = NETLIST_ITEM::HIERBUSLABELMEMBER;
+    else if( m_Type == NETLIST_ITEM::GLOBLABEL )
+        m_Type = NETLIST_ITEM::GLOBBUSLABELMEMBER;
+    else if( m_Type == NETLIST_ITEM::SHEETLABEL )
+        m_Type = NETLIST_ITEM::SHEETBUSLABELMEMBER;
+    else if( m_Type == NETLIST_ITEM::LABEL )
+        m_Type = NETLIST_ITEM::BUSLABELMEMBER;
     else
         wxCHECK_RET( false, wxT( "Net list object type is not valid." ) );
 
@@ -357,9 +357,9 @@ bool NETLIST_OBJECT::IsLabelGlobal() const
     // return true if the object is a global label
     // * a actual global label
     // * a pin label coming from a invisible power pin
-    return ( m_Type == NET_PINLABEL ) ||
-           ( m_Type == NET_GLOBLABEL ) ||
-           ( m_Type == NET_GLOBBUSLABELMEMBER );
+    return ( m_Type == NETLIST_ITEM::PINLABEL ) ||
+           ( m_Type == NETLIST_ITEM::GLOBLABEL ) ||
+           ( m_Type == NETLIST_ITEM::GLOBBUSLABELMEMBER );
 }
 
 
@@ -370,10 +370,10 @@ bool NETLIST_OBJECT::IsLabelBusMemberType() const
     // They are labels with very specific properties, especially for connection
     // between them: 2 bus label members can be connected only
     // if they have the same member value.
-    return ( m_Type == NET_SHEETBUSLABELMEMBER ) ||
-           ( m_Type == NET_BUSLABELMEMBER ) ||
-           ( m_Type == NET_HIERBUSLABELMEMBER ) ||
-           ( m_Type == NET_GLOBBUSLABELMEMBER );
+    return ( m_Type == NETLIST_ITEM::SHEETBUSLABELMEMBER ) ||
+           ( m_Type == NETLIST_ITEM::BUSLABELMEMBER ) ||
+           ( m_Type == NETLIST_ITEM::HIERBUSLABELMEMBER ) ||
+           ( m_Type == NETLIST_ITEM::GLOBBUSLABELMEMBER );
 }
 
 
@@ -387,7 +387,7 @@ wxString NETLIST_OBJECT::GetNetName( bool adoptTimestamp ) const
 
     wxString netName;
 
-    if( m_netNameCandidate->m_Type == NET_PIN )
+    if( m_netNameCandidate->m_Type == NETLIST_ITEM::PIN )
         return GetShortNetName( adoptTimestamp );
 
     if( !m_netNameCandidate->IsLabelGlobal() )
@@ -413,7 +413,7 @@ wxString NETLIST_OBJECT::GetShortNetName( bool adoptTimestamp ) const
 
     wxString netName;
 
-    if( m_netNameCandidate->m_Type == NET_PIN )
+    if( m_netNameCandidate->m_Type == NETLIST_ITEM::PIN )
     {
         SCH_COMPONENT* link = m_netNameCandidate->GetComponentParent();
         if( link )  // Should be always true
@@ -445,13 +445,13 @@ void NETLIST_OBJECT::SetNetNameCandidate( NETLIST_OBJECT* aCandidate )
 {
     switch( aCandidate->m_Type )
     {
-        case NET_HIERLABEL:
-        case NET_LABEL:
-        case NET_PINLABEL:
-        case NET_GLOBLABEL:
-        case NET_GLOBBUSLABELMEMBER:
-        case NET_SHEETBUSLABELMEMBER:
-        case NET_PIN:
+        case NETLIST_ITEM::HIERLABEL:
+        case NETLIST_ITEM::LABEL:
+        case NETLIST_ITEM::PINLABEL:
+        case NETLIST_ITEM::GLOBLABEL:
+        case NETLIST_ITEM::GLOBBUSLABELMEMBER:
+        case NETLIST_ITEM::SHEETBUSLABELMEMBER:
+        case NETLIST_ITEM::PIN:
             m_netNameCandidate = aCandidate;
             break;
 
@@ -464,8 +464,8 @@ void NETLIST_OBJECT::SetNetNameCandidate( NETLIST_OBJECT* aCandidate )
 const wxString NETLIST_OBJECT::GetPinNameText() const
 {
     wxString name;
-    // returns the pin name, for NET_PIN (usual pin) item.
-    if( m_Type == NET_PIN )
+    // returns the pin name, for NETLIST_ITEM::PIN (usual pin) item.
+    if( m_Type == NETLIST_ITEM::PIN )
     {
         name = static_cast<LIB_PIN*>( m_Comp )->GetName();
 
