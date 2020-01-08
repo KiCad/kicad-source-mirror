@@ -814,7 +814,7 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 
     case LABEL_SPIN_STYLE::LEFT: // Horiz Orientation
         SetTextAngle( TEXT_ANGLE_HORIZ );
-        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
