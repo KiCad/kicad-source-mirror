@@ -143,19 +143,15 @@ wxPoint SCH_TEXT::GetSchematicTextOffset() const
 
     switch( GetLabelSpinStyle() )
     {
-    default:
-    case LABEL_SPIN_STYLE::RIGHT:
-        text_offset.y = -thick_offset;
-        break; // Horiz Normal Orientation (left justified)
     case LABEL_SPIN_STYLE::UP:
-        text_offset.x = -thick_offset;
-        break; // Vert Orientation UP
-    case LABEL_SPIN_STYLE::LEFT:
-        text_offset.y = -thick_offset;
-        break; // Horiz Orientation - Right justified
     case LABEL_SPIN_STYLE::BOTTOM:
         text_offset.x = -thick_offset;
-        break; // Vert Orientation BOTTOM
+        break; // Vert Orientation
+    default:
+    case LABEL_SPIN_STYLE::LEFT:
+    case LABEL_SPIN_STYLE::RIGHT:
+        text_offset.y = -thick_offset;
+        break; // Horiz Orientation
     }
 
     return text_offset;
@@ -195,18 +191,13 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
         switch( GetLabelSpinStyle() )
         {
         case LABEL_SPIN_STYLE::LEFT:
-            dy = GetTextHeight();
-            break;
-        case LABEL_SPIN_STYLE::UP:
-            dy = 0;
-            break;
         case LABEL_SPIN_STYLE::RIGHT:
             dy = GetTextHeight();
             break;
+        case LABEL_SPIN_STYLE::UP:
         case LABEL_SPIN_STYLE::BOTTOM:
-            dy = 0;
-            break;
         default:
+            dy = 0;
             dy = 0;
             break;
         }

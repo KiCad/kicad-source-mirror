@@ -597,7 +597,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
             if( xAxis )
                 textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().MirrorX() );
-            else if( !xAxis )
+            else
                 textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().MirrorY() );
             break;
         }

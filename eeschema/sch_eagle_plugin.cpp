@@ -1002,9 +1002,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
     {
         label->SetLabelSpinStyle( KiROUND( elabel.rot->degrees / 90 ) % 4 );
 
-        if( elabel.rot->mirror
-                && ( label->GetLabelSpinStyle() == LABEL_SPIN_STYLE::LEFT
-                           || label->GetLabelSpinStyle() == LABEL_SPIN_STYLE::RIGHT ) )
+        if( elabel.rot->mirror )
         {
             label->SetLabelSpinStyle( label->GetLabelSpinStyle().MirrorY() );
         }
