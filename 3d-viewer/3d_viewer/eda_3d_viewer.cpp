@@ -370,7 +370,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_ORTHO:
         m_settings.CameraGet().ToggleProjection();
 
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
             m_canvas->Request_refresh();
         else
             m_canvas->RenderRaytracingRequest();
