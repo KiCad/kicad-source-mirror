@@ -802,7 +802,7 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
         //
         m_spin_style = LABEL_SPIN_STYLE::RIGHT; // Handle the error spin style by resetting
         SetTextAngle( TEXT_ANGLE_HORIZ );
-        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
