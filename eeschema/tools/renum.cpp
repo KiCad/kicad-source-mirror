@@ -29,8 +29,6 @@
 
 void RenumberFromPCBNew(SCH_EDIT_FRAME *aFrame, std::string &aNetlist) {
 
-//    WX_HTML_REPORT_PANEL *reportwindowhtml = new WX_HTML_REPORT_PANEL(aFrame);
-
 wxString annotateerrors;
 
 WX_STRING_REPORTER reporter(&annotateerrors);
