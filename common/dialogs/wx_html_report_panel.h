@@ -128,10 +128,6 @@ private:
     int m_severities;
 
     bool m_lazyUpdate;
-
-    friend void GetTheReport(wxString &aReportString,
-            WX_HTML_REPORT_PANEL *aReporter,
-            const REPORTER::SEVERITY aSeverity);
 };
 
 #endif //__WX_HTML_REPORT_PANEL_H__
