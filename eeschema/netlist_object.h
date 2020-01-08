@@ -80,7 +80,7 @@ enum NETLIST_ITEM_T
 
 
 /* Values for .m_FlagOfConnection member */
-enum NET_CONNECTION_T
+enum class NET_CONNECTION
 {
     UNCONNECTED = 0,            /* Pin or Label not connected (error) */
     NOCONNECT_SYMBOL_PRESENT,   /* Pin not connected but have a  NoConnect
@@ -110,7 +110,7 @@ public:
     int m_Member;                       /* for labels type NET_BUSLABELMEMBER ( bus member
                                          * created from the BUS label ) member number.
                                          */
-    NET_CONNECTION_T m_ConnectionType;  // Used to store the connection type
+    NET_CONNECTION m_ConnectionType;  // Used to store the connection type
     wxString    m_PinNum;               // pin number
     wxString    m_Label;                // Label text (for labels) or Pin name (for pins)
     wxPoint     m_Start;                // Position of object or for segments: starting point
@@ -151,12 +151,12 @@ public:
      *                             symbol on it (no error)
      * PAD_CONNECT                 Normal connection (no error)
      */
-    void SetConnectionType( NET_CONNECTION_T aFlg = UNCONNECTED )
+    void SetConnectionType( NET_CONNECTION aFlg = NET_CONNECTION::UNCONNECTED )
     {
         m_ConnectionType = aFlg;
     }
 
-    NET_CONNECTION_T GetConnectionType() const
+    NET_CONNECTION GetConnectionType() const
     {
         return m_ConnectionType;
     }
@@ -355,7 +355,7 @@ public:
         return GetItem( aIdx )->GetNet();
     }
 
-    NET_CONNECTION_T GetConnectionType( unsigned aIdx )
+    NET_CONNECTION GetConnectionType( unsigned aIdx )
     {
         return GetItem( aIdx )->GetConnectionType();
     }
@@ -367,7 +367,7 @@ public:
      *                             symbol on it (no error)
      * PAD_CONNECT                 Normal connection (no error)
      */
-    void SetConnectionType( unsigned aIdx, NET_CONNECTION_T aFlg = UNCONNECTED )
+    void SetConnectionType( unsigned aIdx, NET_CONNECTION aFlg = NET_CONNECTION::UNCONNECTED )
     {
         GetItem( aIdx )->SetConnectionType( aFlg );
     }
@@ -381,7 +381,7 @@ public:
     void ResetConnectionsType()
     {
         for( unsigned ii = 0; ii < size(); ii++ )
-            GetItem( ii )->SetConnectionType( UNCONNECTED );
+            GetItem( ii )->SetConnectionType( NET_CONNECTION::UNCONNECTED );
     }
 
     /*

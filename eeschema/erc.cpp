@@ -532,12 +532,12 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
 
                 if( erc != OK )
                 {
-                    if( aList->GetConnectionType( netItemTst ) == UNCONNECTED )
+                    if( aList->GetConnectionType( netItemTst ) == NET_CONNECTION::UNCONNECTED )
                     {
                         Diagnose( aList->GetItem( aNetItemRef ),
                                   aList->GetItem( netItemTst ),
                                   0, erc );
-                        aList->SetConnectionType( netItemTst, NOCONNECT_SYMBOL_PRESENT );
+                        aList->SetConnectionType( netItemTst, NET_CONNECTION::NOCONNECT_SYMBOL_PRESENT );
                     }
                 }
             }

@@ -776,15 +776,15 @@ void NETLIST_OBJECT_LIST::setUnconnectedFlag()
 {
     NETLIST_OBJECT* NetItemRef;
     unsigned NetStart, NetEnd;
-    NET_CONNECTION_T StateFlag;
+    NET_CONNECTION StateFlag;
 
     NetStart  = NetEnd = 0;
-    StateFlag = UNCONNECTED;
+    StateFlag = NET_CONNECTION::UNCONNECTED;
     for( unsigned ii = 0; ii < size(); ii++ )
     {
         NetItemRef = GetItem( ii );
-        if( NetItemRef->m_Type == NET_NOCONNECT && StateFlag != PAD_CONNECT )
-            StateFlag = NOCONNECT_SYMBOL_PRESENT;
+        if( NetItemRef->m_Type == NET_NOCONNECT && StateFlag != NET_CONNECTION::PAD_CONNECT )
+            StateFlag = NET_CONNECTION::NOCONNECT_SYMBOL_PRESENT;
 
         // Analysis of current net.
         unsigned idxtoTest = ii + 1;
@@ -804,7 +804,7 @@ void NETLIST_OBJECT_LIST::setUnconnectedFlag()
                 return;
 
             // Start Analysis next Net
-            StateFlag = UNCONNECTED;
+            StateFlag = NET_CONNECTION::UNCONNECTED;
             NetStart  = idxtoTest;
             continue;
         }
@@ -845,13 +845,13 @@ void NETLIST_OBJECT_LIST::setUnconnectedFlag()
 
             case NET_PIN:
                 if( NetItemRef->m_Type == NET_PIN )
-                    StateFlag = PAD_CONNECT;
+                    StateFlag = NET_CONNECTION::PAD_CONNECT;
 
                 break;
 
             case NET_NOCONNECT:
-                if( StateFlag != PAD_CONNECT )
-                    StateFlag = NOCONNECT_SYMBOL_PRESENT;
+                if( StateFlag != NET_CONNECTION::PAD_CONNECT )
+                    StateFlag = NET_CONNECTION::NOCONNECT_SYMBOL_PRESENT;
 
                 break;
             }

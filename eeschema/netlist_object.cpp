@@ -165,7 +165,7 @@ NETLIST_OBJECT::NETLIST_OBJECT()
     m_Member     = 0;               /* for labels type NET_BUSLABELMEMBER ( bus member created
                                      * from the BUS label )  member number
                                      */
-    m_ConnectionType = UNCONNECTED;
+    m_ConnectionType    = NET_CONNECTION::UNCONNECTED;
     m_netNameCandidate = NULL;      /* a pointer to a NETLIST_OBJECT type label connected to this
                                      * object used to give a name to the net
                                      */
