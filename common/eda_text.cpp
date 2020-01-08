@@ -54,38 +54,6 @@
 class OUTPUTFORMATTER;
 class wxFindReplaceData;
 
-// Sadly we store the orientation of hierarchical and global labels using a different
-// int encoding than that for local labels:
-//                   Global      Local
-// Left justified      0           2
-// Up                  1           3
-// Right justified     2           0
-// Down                3           1
-int EDA_TEXT::MapOrientation( KICAD_T labelType, int aOrientation )
-{
-    if( labelType == SCH_LABEL_T )
-        return aOrientation;
-
-    switch( aOrientation )
-    {
-    case 0: return 2;
-    case 2: return 0;
-    default: return aOrientation;
-    }
-}
-
-
-int EDA_TEXT::MapOrientation( KICAD_T fromLabelType, KICAD_T toLabelType, int aOrientation )
-{
-    bool fromNormal = ( ( fromLabelType == SCH_TEXT_T ) || ( fromLabelType == SCH_LABEL_T ) );
-    bool toNormal =   ( ( toLabelType   == SCH_TEXT_T ) || ( toLabelType   == SCH_LABEL_T ) );
-
-    if( fromNormal != toNormal )
-        return MapOrientation( SCH_GLOBAL_LABEL_T, aOrientation );
-    else
-        return aOrientation;
-}
-
 
 EDA_TEXT_HJUSTIFY_T EDA_TEXT::MapHorizJustify( int aHorizJustify )
 {

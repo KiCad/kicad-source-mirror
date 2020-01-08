@@ -98,7 +98,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
                 {
                     auto p = static_cast<SCH_SHEET_PIN*>( c );
 
-                    if( p->GetShape() == NET_OUTPUT )
+                    if( p->GetShape() == PINSHEETLABEL_SHAPE::OUTPUT )
                     {
                         m_driver = c;
                         break;
