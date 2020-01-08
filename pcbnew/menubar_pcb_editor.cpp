@@ -472,6 +472,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     toolsMenu->AddItem( ACTIONS::updatePcbFromSchematic,     SELECTION_CONDITIONS::ShowAlways );
     toolsMenu->AddItem( PCB_ACTIONS::updateFootprints,       SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( PCB_ACTIONS::boardRenum,               SELECTION_CONDITIONS::ShowAlways );    //bjp
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     auto pythonConsoleShownCondition = [] ( const SELECTION& aSel ) {

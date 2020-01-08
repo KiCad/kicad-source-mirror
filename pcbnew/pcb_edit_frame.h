@@ -27,6 +27,8 @@
 #include "config_params.h"
 #include "undo_redo_container.h"
 #include "zones.h"
+#include "renum_type.h"
+#include <mail_type.h>
 
 /*  Forward declarations of classes. */
 class ACTION_PLUGIN;
@@ -892,6 +894,17 @@ public:
      */
     enum FETCH_NETLIST_MODE { NO_ANNOTATION, QUIET_ANNOTATION, ANNOTATION_DIALOG };
     bool FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode );
+
+    /**
+     * Function RenumberSchematic
+         * @param aNetlist a NETLIST filled in by the caller.
+         *        aMessage is the error message from eeSchem
+         *        if aCommit is false it just test, if true it updates the schematic
+\         * @return false if failed due to standalone mode, true if a reply.
+         */
+
+    bool RenumberSchematic( std::string& aNetlist, MAIL_T aMode  );
+    bool TestStandalone( void );
 
     /**
      * Function DoUpdatePCBFromNetlist

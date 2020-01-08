@@ -70,6 +70,8 @@
 #include <tools/pcbnew_control.h>
 #include <tools/pcb_editor_control.h>
 #include <tools/pcb_inspection_tool.h>
+#include <tools/pcb_renum_tool.h>                           //bjp
+#include <tools/placement_tool.h>
 #include <tools/placement_tool.h>
 #include <tools/pad_tool.h>
 #include <tools/microwave_tool.h>
@@ -86,6 +88,7 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <wx/wupdlock.h>
 #include <dialog_drc.h>     // for DIALOG_DRC_WINDOW_NAME definition
+#include "renum_type.h"
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -430,6 +433,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
     m_toolManager->RegisterTool( new PCB_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new PCB_INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new PCB_RENUM_TOOL );                  //bjp
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
     m_toolManager->RegisterTool( new MICROWAVE_TOOL );
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
@@ -954,12 +958,11 @@ bool PCB_EDIT_FRAME::SetCurrentNetClass( const wxString& aNetClassName )
     return change;
 }
 
-
-bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode )
+bool    PCB_EDIT_FRAME::TestStandalone( void )
 {
     if( Kiface().IsSingle() )
     {
-        DisplayError( this, _( "Cannot update the PCB because Pcbnew is opened in stand-alone "
+        DisplayErrorMessage( this, _( "Cannot update the PCB because Pcbnew is opened in stand-alone "
                                "mode. In order to create or update PCBs from schematics, you "
                                "must launch the KiCad project manager and create a project." ) );
         return false;
@@ -982,7 +985,25 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST
         // bring ourselves back to the front
         Raise();
     }
+    return true;            //Success!
+}
 
+//
+// Sends a Netlist packet to eeSchema. Either test (aCommit is false) or commit (aCommit is true )
+// The reply is in aNetlist so it is destroyed by this
+//
+bool PCB_EDIT_FRAME::RenumberSchematic( std::string& aNetlist, MAIL_T aMode )
+{
+        Kiway().ExpressMail( FRAME_SCH, aMode, aNetlist, this );
+    return true;
+}
+
+
+
+
+bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode )
+{
+    if( !TestStandalone( )) return false;       //Not in standalone mode
     std::string payload;
 
     if( aMode == NO_ANNOTATION )

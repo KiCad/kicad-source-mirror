@@ -46,6 +46,7 @@ enum MAIL_T
     MAIL_PCB_GET_NETLIST,           ///< Fetch a netlist from PCB layout
     MAIL_SCH_REFRESH,               ///< The the schematic editor to refresh the display.
 
+    MAIL_RENUMBER,                  ///< Renumber eeSchema
     MAIL_LIB_EDIT,
     MAIL_FP_EDIT
 };

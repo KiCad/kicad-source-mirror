@@ -927,6 +927,10 @@ TOOL_ACTION PCB_ACTIONS::boardStatistics( "pcbnew.InspectionTool.ShowStatisticsD
         0, LEGACY_HK_NAME( "Show Board Statistics" ), _( "Show Board Statistics" ),
         _( "Shows board statistics" ), pcbnew_xpm );
 
+//Geographic re-annotation tool
+TOOL_ACTION PCB_ACTIONS::boardRenum( "pcbnew.RenumTool.ShowRenumDialog", AS_GLOBAL,
+        0, LEGACY_HK_NAME( "Re-annotate PCB" ), _( "Re-annotate PCB" ),
+        _( "Re-annotate PCB" ), pcbnew_xpm );               //bjp
 
 // PLACEMENT_TOOL
 //

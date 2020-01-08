@@ -55,6 +55,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_board_setup.cpp
     dialogs/dialog_board_statistics.cpp
     dialogs/dialog_board_statistics_base.cpp
+    dialogs/dialog_board_renum.cpp              #bjp
+    dialogs/dialog_board_renum_base.cpp         #bjp
     dialogs/dialog_choose_footprint.cpp
     dialogs/dialog_cleanup_tracks_and_vias.cpp
     dialogs/dialog_cleanup_tracks_and_vias_base.cpp
@@ -316,6 +318,7 @@ set( PCBNEW_CLASS_SRCS
     tools/pcb_bright_box.cpp
     tools/pcb_editor_control.cpp
     tools/pcb_inspection_tool.cpp
+    tools/pcb_renum_tool.cpp            #bjp
     tools/pcb_selection_conditions.cpp
     tools/pcb_tool_base.cpp
     tools/pcbnew_control.cpp
