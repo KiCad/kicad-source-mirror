@@ -31,6 +31,9 @@
 #include <wx/imaglist.h>
 #include <wx/treectrl.h>
 
+// The window name of the hierarchy navigator, used to find it
+#define HIERARCHY_NAVIG_DLG_WNAME "hierarchy_navig_dlg"
+
 class SCH_EDIT_FRAME;
 class SCH_SHEET_PATH;
 
@@ -65,7 +68,9 @@ public:
     HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent );
 
     ~HIERARCHY_NAVIG_DLG();
-    void OnClose( wxCloseEvent& event );
+
+    void OnCloseNav( wxCloseEvent& event );
+
     /**
      * Update the hierarchical tree of the schematic.
      */

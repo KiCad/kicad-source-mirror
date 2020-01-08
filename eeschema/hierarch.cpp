@@ -80,7 +80,7 @@ HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
 
 HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent ) :
     DIALOG_SHIM( aParent, wxID_ANY, _( "Navigator" ), wxDefaultPosition, wxDefaultSize,
-                 wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+                 wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER, HIERARCHY_NAVIG_DLG_WNAME )
 {
     wxASSERT( dynamic_cast< SCH_EDIT_FRAME* >( aParent ) );
 
@@ -130,6 +130,9 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent ) :
     Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_DLG::onSelectSheetPath, this );
     // Manage a simple click on a selection, if the selection changes
     Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_DLG::onSelectSheetPath, this );
+
+	// Connect close event for the dialog:
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( HIERARCHY_NAVIG_DLG::OnCloseNav ) );
 }
 
 
@@ -138,6 +141,7 @@ HIERARCHY_NAVIG_DLG::~HIERARCHY_NAVIG_DLG()
     Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_DLG::onSelectSheetPath, this );
     Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_DLG::onSelectSheetPath, this );
     m_Tree->Disconnect( wxEVT_CHAR, wxKeyEventHandler( HIERARCHY_TREE::onChar ) );
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( HIERARCHY_NAVIG_DLG::OnCloseNav ) );
 }
 
 
@@ -184,12 +188,16 @@ void HIERARCHY_NAVIG_DLG::buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemI
 
 void HIERARCHY_NAVIG_DLG::UpdateHierarchyTree()
 {
+    Freeze();
+
     m_currSheet       = m_SchFrameEditor->GetCurrentSheet();
     wxTreeItemId root = m_Tree->GetRootItem();
     m_Tree->DeleteChildren( root );
     m_list.clear();
     m_list.push_back( g_RootSheet );
     buildHierarchyTree( &m_list, &root );
+
+    Thaw();
 }
 
 void HIERARCHY_NAVIG_DLG::onSelectSheetPath( wxTreeEvent& event )
@@ -200,14 +208,17 @@ void HIERARCHY_NAVIG_DLG::onSelectSheetPath( wxTreeEvent& event )
     wxTreeItemId ItemSel = m_Tree->GetSelection();
     m_SchFrameEditor->SetCurrentSheet(( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetPath );
     m_SchFrameEditor->DisplayCurrentSheet();
+
     if( m_SchFrameEditor->GetNavigatorStaysOpen() == false )
         Close( true );
 }
 
-void HIERARCHY_NAVIG_DLG::OnClose( wxCloseEvent& event )
+
+void HIERARCHY_NAVIG_DLG::OnCloseNav( wxCloseEvent& event )
 {
-    m_SchFrameEditor->CloseHierarchyNavigator();
+    Destroy();
 }
+
 
 void SCH_EDIT_FRAME::DisplayCurrentSheet()
 {

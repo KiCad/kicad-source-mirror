@@ -139,7 +139,6 @@ private:
 
     DIALOG_SCH_FIND*        m_findReplaceDialog;
     STATUS_TEXT_POPUP*      m_findReplaceStatusPopup;
-    HIERARCHY_NAVIG_DLG*    m_hierarchyDialog;
 
     /// Flag to indicate show hidden pins.
     bool        m_showAllPins;
@@ -357,10 +356,15 @@ public:
 
     /**
      * Run the Hierarchy Navigator dialog.
-     * @param aForceUpdate When true, creates a new dialog. And if a dialog
-     *                     already exist, it destroys it first.
+     * @param aForceUpdate: When true, creates a new dialog. And if a dialog
+     * already exist, it destroys it first.
      */
     void UpdateHierarchyNavigator( bool aForceUpdate = false );
+
+    /**
+      * @return a reference to the Hierarchy Navigator dialog if exists, or nullptr.
+     */
+    HIERARCHY_NAVIG_DLG* FindHierarchyNavigator();
 
     void ShowFindReplaceStatus( const wxString& aMsg );
     void ClearFindReplaceStatus();
@@ -374,11 +378,6 @@ public:
      * Notification that the Find dialog has closed.
      */
     void OnFindDialogClose();
-
-    /**
-     * Destroy the Hierarchy Navigator dialog.
-     */
-    void CloseHierarchyNavigator();
 
     /**
      * Breaks a single segment into two at the specified point.

@@ -248,7 +248,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_findReplaceDialog = nullptr;
     m_findReplaceStatusPopup = nullptr;
-    m_hierarchyDialog        = nullptr;
 
     SetForceHVLines( true );
     SetSpiceAdjustPassiveValues( false );
@@ -562,10 +561,9 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         m_findReplaceDialog = nullptr;
     }
 
-    if( m_hierarchyDialog )
+    if( FindHierarchyNavigator() )
     {
-        m_hierarchyDialog->Destroy();
-        m_hierarchyDialog = nullptr;
+        FindHierarchyNavigator()->Close( true );
     }
 
     SCH_SCREENS screens;
@@ -676,25 +674,32 @@ wxFindReplaceData* SCH_EDIT_FRAME::GetFindReplaceData()
     return nullptr;
 }
 
+
+HIERARCHY_NAVIG_DLG* SCH_EDIT_FRAME::FindHierarchyNavigator()
+{
+    wxWindow* navigator = wxWindow::FindWindowByName( HIERARCHY_NAVIG_DLG_WNAME );
+
+    return static_cast< HIERARCHY_NAVIG_DLG* >( navigator );
+}
+
 void SCH_EDIT_FRAME::UpdateHierarchyNavigator( bool aForceUpdate )
 {
-
     if( aForceUpdate )
     {
-        if( m_hierarchyDialog )
-            CloseHierarchyNavigator();
+        if( FindHierarchyNavigator() )
+            FindHierarchyNavigator()->Close();
 
-        m_hierarchyDialog = new HIERARCHY_NAVIG_DLG( this );
-        m_hierarchyDialog->Connect(
-                wxEVT_CLOSE_WINDOW, wxCloseEventHandler( HIERARCHY_NAVIG_DLG::OnClose ) );
-        m_hierarchyDialog->Show( true );
+        HIERARCHY_NAVIG_DLG* hierarchyDialog = new HIERARCHY_NAVIG_DLG( this );
+
+        hierarchyDialog->Show( true );
     }
     else
     {
-        if( m_hierarchyDialog )
-            m_hierarchyDialog->UpdateHierarchyTree();
+        if( FindHierarchyNavigator() )
+            FindHierarchyNavigator()->UpdateHierarchyTree();
     }
 }
+
 
 void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
 {
@@ -748,11 +753,6 @@ void SCH_EDIT_FRAME::OnFindDialogClose()
     m_findReplaceDialog = nullptr;
 }
 
-void SCH_EDIT_FRAME::CloseHierarchyNavigator()
-{
-    m_hierarchyDialog->Destroy();
-    m_hierarchyDialog = nullptr;
-}
 
 void SCH_EDIT_FRAME::OnLoadFile( wxCommandEvent& event )
 {
