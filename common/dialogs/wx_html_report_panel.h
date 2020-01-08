@@ -28,7 +28,6 @@
 
 #include "wx_html_report_panel_base.h"
 
-
 /**
  * Class WX_HTML_REPORT_PANEL
  *
@@ -38,16 +37,16 @@
  *
  * The messages are reported through a REPORTER object
  */
-class WX_HTML_REPORT_PANEL : public WX_HTML_REPORT_PANEL_BASE
-{
+class WX_HTML_REPORT_PANEL: public WX_HTML_REPORT_PANEL_BASE {
 public:
-    WX_HTML_REPORT_PANEL( wxWindow* parent, wxWindowID id = wxID_ANY,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+    WX_HTML_REPORT_PANEL(wxWindow *parent, wxWindowID id = wxID_ANY,
+            const wxPoint &pos = wxDefaultPosition,
+            const wxSize &size = wxSize(500, 300),
+            long style = wxTAB_TRAVERSAL);
     ~WX_HTML_REPORT_PANEL();
 
     ///> Set the min size of the area which displays html messages:
-    void MsgPanelSetMinSize( const wxSize& aMinSize );
+    void MsgPanelSetMinSize(const wxSize &aMinSize);
 
     ///> returns the reporter object that reports to this panel
     REPORTER& Reporter();
@@ -58,61 +57,60 @@ public:
      * @param aSeverity string classification level bitfield
      * @param aLocation REPORTER::LOCATION enum for placement of message
      */
-    void Report( const wxString& aText, REPORTER::SEVERITY aSeverity,
-            REPORTER::LOCATION aLocation = REPORTER::LOC_BODY );
+    void Report(const wxString &aText, REPORTER::SEVERITY aSeverity,
+            REPORTER::LOCATION aLocation = REPORTER::LOC_BODY);
 
     ///> clears the report panel
     void Clear();
 
     ///> return the number of messages matching the given severity mask.
-    int Count( int severityMask );
+    int Count(int severityMask);
 
     ///> sets the frame label
-    void SetLabel( const wxString& aLabel ) override;
+    void SetLabel(const wxString &aLabel) override;
 
     ///> Sets the lasy update. If this mode is on, messages are stored but the display
     ///> is not updated (Updating display can be very time consumming if there are many messages)
     ///> A call to Flush() will be needed after build the report
-    void SetLazyUpdate( bool aLazyUpdate );
+    void SetLazyUpdate(bool aLazyUpdate);
 
     ///> Forces updating the HTML page, after the report is built in lazy mode
     ///> If aSort = true, the body messages will be ordered by severity
-    void Flush( bool aSort = false );
+    void Flush(bool aSort = false);
 
     ///> Set the visible severity filter.
     ///> if aSeverities < 0 the m_showAll option is set
-    void SetVisibleSeverities( int aSeverities );
+    void SetVisibleSeverities(int aSeverities);
 
     ///> @return the visible severity filter.
     ///> If the m_showAll option is set, the mask is < 0
     int GetVisibleSeverities();
 
 private:
-    struct REPORT_LINE
-    {
+    struct REPORT_LINE {
         REPORTER::SEVERITY severity;
         wxString message;
     };
 
     typedef std::vector<REPORT_LINE> REPORT_LINES;
 
-    wxString addHeader( const wxString& aBody );
-    wxString generateHtml( const REPORT_LINE& aLine );
-    wxString generatePlainText( const REPORT_LINE& aLine );
+    wxString addHeader(const wxString &aBody);
+    wxString generateHtml(const REPORT_LINE &aLine);
+    wxString generatePlainText(const REPORT_LINE &aLine);
     void updateBadges();
 
     void scrollToBottom();
     void syncCheckboxes();
 
-    void onRightClick( wxMouseEvent& event ) override;
-    void onMenuEvent( wxMenuEvent& event );
-    void onCheckBoxShowAll( wxCommandEvent& event ) override;
-    void onCheckBoxShowWarnings( wxCommandEvent& event ) override;
-    void onCheckBoxShowErrors( wxCommandEvent& event ) override;
-    void onCheckBoxShowInfos( wxCommandEvent& event ) override;
-    void onCheckBoxShowActions( wxCommandEvent& event ) override;
+    void onRightClick(wxMouseEvent &event) override;
+    void onMenuEvent(wxMenuEvent &event);
+    void onCheckBoxShowAll(wxCommandEvent &event) override;
+    void onCheckBoxShowWarnings(wxCommandEvent &event) override;
+    void onCheckBoxShowErrors(wxCommandEvent &event) override;
+    void onCheckBoxShowInfos(wxCommandEvent &event) override;
+    void onCheckBoxShowActions(wxCommandEvent &event) override;
 
-    void onBtnSaveToFile( wxCommandEvent& event ) override;
+    void onBtnSaveToFile(wxCommandEvent &event) override;
 
     ///> copy of the report, stored for filtering
     REPORT_LINES m_report;
@@ -130,6 +128,10 @@ private:
     int m_severities;
 
     bool m_lazyUpdate;
+
+    friend void GetTheReport(wxString &aReportString,
+            WX_HTML_REPORT_PANEL *aReporter,
+            const REPORTER::SEVERITY aSeverity);
 };
 
 #endif //__WX_HTML_REPORT_PANEL_H__

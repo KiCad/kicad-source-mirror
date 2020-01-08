@@ -41,7 +41,7 @@
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <tools/ee_actions.h>
 #include <tools/sch_editor_control.h>
-
+#include <tools/renum.h>
 
 SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                                                     bool            aSearchHierarchy,
@@ -457,6 +457,10 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             payload = "success";
         break;
 
+    case MAIL_RENUMBER:  {               //Renumber the schematic as per the netlist.
+            RenumberFromPCBNew( this, payload );
+        break;
+    }
     default:
         ;
     }

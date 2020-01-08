@@ -232,6 +232,7 @@ set( EESCHEMA_SRCS
     tools/lib_edit_tool.cpp
     tools/lib_move_tool.cpp
     tools/lib_pin_tool.cpp
+    tools/renum.cpp
     tools/sch_drawing_tools.cpp
     tools/sch_edit_tool.cpp
     tools/sch_editor_control.cpp
