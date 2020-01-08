@@ -81,7 +81,7 @@ bool DIALOG_EDIT_SHEET_PIN::TransferDataToWindow()
     m_textName->SelectAll();
     m_textWidth.SetValue( m_sheetPin->GetTextWidth() );
     m_textHeight.SetValue( m_sheetPin->GetTextHeight() );
-    m_choiceConnectionType->SetSelection( m_sheetPin->GetShape() );
+    m_choiceConnectionType->SetSelection( static_cast<int>( m_sheetPin->GetShape() ) );
 
     return true;
 }

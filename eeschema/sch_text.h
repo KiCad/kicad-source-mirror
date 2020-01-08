@@ -40,16 +40,167 @@
 class LINE_READER;
 class NETLIST_OBJECT_LIST;
 
+/* 
+ * Spin style for text items of all kinds on schematics
+ * Basically a higher level abstraction of rotation and justification of text
+ */
+class LABEL_SPIN_STYLE
+{
+public:
+    enum SPIN : int
+    {
+        LEFT   = 0,
+        UP     = 1,
+        RIGHT  = 2,
+        BOTTOM = 3
+    };
+
+
+    LABEL_SPIN_STYLE() = default;
+    constexpr LABEL_SPIN_STYLE( SPIN aSpin ) : m_spin( aSpin )
+    {
+    }
+
+
+    LABEL_SPIN_STYLE( int aSpin )
+    {
+        m_spin = static_cast<SPIN>( aSpin );
+    }
+
+
+    constexpr bool operator==( SPIN a ) const
+    {
+        return m_spin == a;
+    }
+
+
+    constexpr bool operator!=( SPIN a ) const
+    {
+        return m_spin != a;
+    }
+
+
+    operator int() const
+    {
+        return static_cast<int>( m_spin );
+    }
+
+
+    LABEL_SPIN_STYLE RotateCW()
+    {
+        SPIN newSpin = m_spin;
+        switch( m_spin )
+        {
+        default:
+            wxLogWarning( "RotateCCW encountered unknown current spin style" );
+        case LABEL_SPIN_STYLE::LEFT:
+            newSpin = LABEL_SPIN_STYLE::UP;
+            break;
+        case LABEL_SPIN_STYLE::UP:
+            newSpin = LABEL_SPIN_STYLE::RIGHT;
+            break;
+        case LABEL_SPIN_STYLE::RIGHT:
+            newSpin = LABEL_SPIN_STYLE::BOTTOM;
+            break;
+        case LABEL_SPIN_STYLE::BOTTOM:
+            newSpin = LABEL_SPIN_STYLE::LEFT;
+            break;
+        }
+
+        return LABEL_SPIN_STYLE( newSpin );
+    }
+
+
+    LABEL_SPIN_STYLE RotateCCW()
+    {
+        SPIN newSpin = m_spin;
+        switch( m_spin )
+        {
+        default:
+            wxLogWarning( "RotateCCW encountered unknown current spin style" );
+        case LABEL_SPIN_STYLE::LEFT:
+            newSpin = LABEL_SPIN_STYLE::BOTTOM;
+            break;
+        case LABEL_SPIN_STYLE::BOTTOM:
+            newSpin = LABEL_SPIN_STYLE::RIGHT;
+            break;
+        case LABEL_SPIN_STYLE::RIGHT:
+            newSpin = LABEL_SPIN_STYLE::UP;
+            break;
+        case LABEL_SPIN_STYLE::UP:
+            newSpin = LABEL_SPIN_STYLE::LEFT;
+            break;
+        }
+
+        return LABEL_SPIN_STYLE( newSpin );
+    }
+
+
+    /*
+     * Mirrors the label spin style across the X axis or simply swaps up and bottom
+     */
+    LABEL_SPIN_STYLE MirrorX()
+    {
+        SPIN newSpin = m_spin;
+        switch( m_spin )
+        {
+        default:
+            wxLogWarning( "MirrorX encountered unknown current spin style" );
+        case LABEL_SPIN_STYLE::UP:
+            newSpin = LABEL_SPIN_STYLE::BOTTOM;
+            break;
+        case LABEL_SPIN_STYLE::BOTTOM:
+            newSpin = LABEL_SPIN_STYLE::UP;
+            break;
+        case LABEL_SPIN_STYLE::LEFT:
+            break;
+        case LABEL_SPIN_STYLE::RIGHT:
+            break;
+        }
+
+        return LABEL_SPIN_STYLE( newSpin );
+    }
+
+
+    /*
+     * Mirrors the label spin style across the Y axis or simply swaps left and right
+     */
+    LABEL_SPIN_STYLE MirrorY()
+    {
+        SPIN newSpin = m_spin;
+        switch( m_spin )
+        {
+        default:
+            wxLogWarning( "MirrorY encountered unknown current spin style" );
+        case LABEL_SPIN_STYLE::LEFT:
+            newSpin = LABEL_SPIN_STYLE::RIGHT;
+            break;
+        case LABEL_SPIN_STYLE::RIGHT:
+            newSpin = LABEL_SPIN_STYLE::LEFT;
+            break;
+        case LABEL_SPIN_STYLE::UP:
+            break;
+        case LABEL_SPIN_STYLE::BOTTOM:
+            break;
+        }
+
+        return LABEL_SPIN_STYLE( newSpin );
+    }
+
+private:
+    SPIN m_spin;
+};
 
 /* Shape/Type of SCH_HIERLABEL and SCH_GLOBALLABEL
  * mainly used to handle the graphic associated shape
  */
-enum PINSHEETLABEL_SHAPE {
-    NET_INPUT,
-    NET_OUTPUT,
-    NET_BIDI,
-    NET_TRISTATE,
-    NET_UNSPECIFIED
+enum class PINSHEETLABEL_SHAPE
+{
+    INPUT,
+    OUTPUT,
+    BIDI,
+    TRISTATE,
+    UNSPECIFIED
 };
 
 
@@ -76,7 +227,7 @@ protected:
      * This is a duplicattion of m_Orient, m_HJustified, and m_VJustified in #EDA_TEXT but is
      * easier to handle than 3 parameters when editing and reading and saving files.
      */
-    int m_spin_style;
+    LABEL_SPIN_STYLE m_spin_style;
 
 public:
     SCH_TEXT( const wxPoint& pos = wxPoint( 0, 0 ),
@@ -114,14 +265,13 @@ public:
      * Set a spin or rotation angle, along with specific horizontal and vertical justification
      * styles with each angle.
      *
-     * @param aSpinStyle =
-     *  0 = normal (horizontal, left justified).
-     *  1 = up (vertical)
-     *  2 = (horizontal, right justified). This can be seen as the mirrored position of 0
-     *  3 = bottom . This can be seen as the mirrored position of up
+     * @param aSpinStyle Spin style as per LABEL_SPIN_STYLE storage class, may be the enum values or int value
      */
-    virtual void SetLabelSpinStyle( int aSpinStyle );
-    int GetLabelSpinStyle() const               { return m_spin_style; }
+    virtual void     SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle );
+    LABEL_SPIN_STYLE GetLabelSpinStyle() const
+    {
+        return m_spin_style;
+    }
 
     PINSHEETLABEL_SHAPE GetShape() const        { return m_shape; }
 
@@ -278,7 +428,7 @@ public:
         return wxT( "SCH_GLOBALLABEL" );
     }
 
-    void SetLabelSpinStyle( int aSpinStyle ) override;
+    void SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle ) override;
 
     wxPoint GetSchematicTextOffset() const override;
 
@@ -328,7 +478,7 @@ public:
         return wxT( "SCH_HIERLABEL" );
     }
 
-    void SetLabelSpinStyle( int aSpinStyle ) override;
+    void SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle ) override;
 
     wxPoint GetSchematicTextOffset() const override;
 

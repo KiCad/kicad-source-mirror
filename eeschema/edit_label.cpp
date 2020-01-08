@@ -39,8 +39,8 @@
 
 #include "invoke_sch_dialog.h"
 
-static PINSHEETLABEL_SHAPE  lastGlobalLabelShape = NET_INPUT;
-static int                  lastTextOrientation = 0;
+static PINSHEETLABEL_SHAPE  lastGlobalLabelShape = PINSHEETLABEL_SHAPE::INPUT;
+static LABEL_SPIN_STYLE     lastTextOrientation  = LABEL_SPIN_STYLE::LEFT;
 static bool                 lastTextBold = false;
 static bool                 lastTextItalic = false;
 
@@ -197,10 +197,10 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
     if( oldType == aNewType )
         return;
 
-    SCH_TEXT*      newtext = nullptr;
-    const wxPoint& position = aText->GetPosition();
-    int            orientation = aText->GetLabelSpinStyle();
-    wxString       txt = UnescapeString( aText->GetText() );
+    SCH_TEXT*        newtext     = nullptr;
+    const wxPoint&   position    = aText->GetPosition();
+    LABEL_SPIN_STYLE orientation = aText->GetLabelSpinStyle();
+    wxString         txt         = UnescapeString( aText->GetText() );
 
     // There can be characters in a SCH_TEXT object that can break labels so we have to
     // fix them here.
@@ -234,7 +234,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
     //
     newtext->SetFlags( aText->GetEditFlags() );
     newtext->SetShape( aText->GetShape() );
-    newtext->SetLabelSpinStyle( EDA_TEXT::MapOrientation( oldType, aNewType, orientation ) );
+    newtext->SetLabelSpinStyle( orientation );
     newtext->SetTextSize( aText->GetTextSize() );
     newtext->SetThickness( aText->GetThickness() );
     newtext->SetItalic( aText->IsItalic() );

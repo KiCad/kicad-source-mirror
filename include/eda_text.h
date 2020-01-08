@@ -238,9 +238,6 @@ public:
 
     void Empty()                                { m_text.Empty(); }
 
-    static int MapOrientation( KICAD_T labelType, int aOrientation );
-    static int MapOrientation( KICAD_T fromLabelType, KICAD_T toLabelType, int aOrientation );
-
     static EDA_TEXT_HJUSTIFY_T MapHorizJustify( int aHorizJustify );
 
     static EDA_TEXT_VJUSTIFY_T MapVertJustify( int aVertJustify );

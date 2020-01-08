@@ -930,7 +930,7 @@ void SCH_EAGLE_PLUGIN::loadSegments(
                 label->SetPosition( firstWire->GetStartPoint() );
                 label->SetText( escapeName( netName ) );
                 label->SetTextSize( wxSize( Mils2iu( 10 ), Mils2iu( 10 ) ) );
-                label->SetLabelSpinStyle( 0 );
+                label->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
                 screen->Append( label.release() );
             }
         }
@@ -996,16 +996,16 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
     label->SetPosition( elabelpos );
     label->SetText( escapeName( elabel.netname ) );
     label->SetTextSize( wxSize( elabel.size.ToSchUnits(), elabel.size.ToSchUnits() ) );
-    label->SetLabelSpinStyle( global ? 2 : 0 );
+    label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
 
     if( elabel.rot )
     {
-        int offset = global ? 2 : 0;
-        label->SetLabelSpinStyle( int( elabel.rot->degrees / 90 + offset ) % 4 );
+        label->SetLabelSpinStyle( KiROUND( elabel.rot->degrees / 90 ) % 4 );
 
-        if( elabel.rot->mirror
-                && ( label->GetLabelSpinStyle() == 0 || label->GetLabelSpinStyle() == 2 ) )
-            label->SetLabelSpinStyle( ( label->GetLabelSpinStyle() + 2 ) % 4 );
+        if( elabel.rot->mirror )
+        {
+            label->SetLabelSpinStyle( label->GetLabelSpinStyle().MirrorY() );
+        }
     }
 
     return label.release();
@@ -2580,7 +2580,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections(
                 netLabel->SetPosition( aComponent->GetPinPhysicalPosition( pin ) );
                 netLabel->SetText( extractNetName( pin->GetName() ) );
                 netLabel->SetTextSize( wxSize( Mils2iu( 10 ), Mils2iu( 10 ) ) );
-                netLabel->SetLabelSpinStyle( 0 );
+                netLabel->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
                 aScreen->Append( netLabel );
             }
 
