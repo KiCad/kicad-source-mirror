@@ -22,16 +22,17 @@
  */
 
 #include <bitmaps.h>
+#include <board_commit.h>
 #include <class_zone.h>
-#include <tool/tool_manager.h>
-#include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
-#include <tools/edit_tool.h>
-#include <dialogs/dialog_track_via_properties.h>
 #include <dialogs/dialog_exchange_footprints.h>
 #include <dialogs/dialog_swap_layers.h>
+#include <dialogs/dialog_track_via_properties.h>
+#include <tool/tool_manager.h>
+#include <tools/edit_tool.h>
 #include <tools/global_edit_tool.h>
-#include <board_commit.h>
+#include <tools/pcb_actions.h>
+#include <tools/selection_tool.h>
+#include <wx/gdicmn.h>
 
 #include <memory>
 
@@ -172,6 +173,47 @@ int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+int GLOBAL_EDIT_TOOL::CenterBoardOnPage( const TOOL_EVENT& aEvent )
+{
+    BOARD* brd = frame()->GetBoard();
+    // Get page size
+    int pageWidth  = frame()->GetPageSettings().GetWidthMils();
+    int pageHeight = frame()->GetPageSettings().GetHeightMils();
+    // Page sizes are stored in mils, convert to multiple of 10 nm
+    pageHeight          = pageHeight * 25400;
+    pageWidth           = pageWidth * 25400;
+    wxPoint destination = wxPoint( pageWidth / 2, pageHeight / 2 );
+    // We can't base the displacement on the the board edges only
+    // If there are no board edges, ComputeBoundBox( true ) returns (0,0)
+    wxPoint brdCenter = brd->ComputeBoundingBox( false ).Centre();
+    // Do not send items somewhere inaccessible with the current grid
+    wxPoint delta = frame()->GetNearestGridPosition( destination - brdCenter );
+
+    // Move all items
+    for( BOARD_ITEM* track : brd->Tracks() )
+    {
+        m_commit->Modify( track );
+        track->Move( delta );
+    }
+    for( BOARD_ITEM* module : brd->Modules() )
+    {
+        m_commit->Modify( module );
+        module->Move( delta );
+    }
+    for( BOARD_ITEM* drawing : brd->Drawings() )
+    {
+        m_commit->Modify( drawing );
+        drawing->Move( delta );
+    }
+    for( BOARD_ITEM* zone : brd->Zones() )
+    {
+        m_commit->Modify( zone );
+        zone->Move( delta );
+    }
+    m_commit->Push( "Board centered" );
+    return 0;
+}
+
 
 void GLOBAL_EDIT_TOOL::setTransitions()
 {
@@ -182,6 +224,7 @@ void GLOBAL_EDIT_TOOL::setTransitions()
 
     Go( &GLOBAL_EDIT_TOOL::SwapLayers,           PCB_ACTIONS::swapLayers.MakeEvent() );
 
+    Go( &GLOBAL_EDIT_TOOL::CenterBoardOnPage, PCB_ACTIONS::centerBoardOnPage.MakeEvent() );
     Go( &GLOBAL_EDIT_TOOL::EditTracksAndVias,    PCB_ACTIONS::editTracksAndVias.MakeEvent() );
     Go( &GLOBAL_EDIT_TOOL::EditTextAndGraphics,  PCB_ACTIONS::editTextAndGraphics.MakeEvent() );
     Go( &GLOBAL_EDIT_TOOL::GlobalDeletions,      PCB_ACTIONS::globalDeletions.MakeEvent() );
