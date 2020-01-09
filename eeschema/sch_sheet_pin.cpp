@@ -50,7 +50,7 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
     else
         SetEdge( SHEET_LEFT_SIDE );
 
-    m_shape      = PINSHEETLABEL_SHAPE::INPUT;
+    m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
     m_isDangling = true;
     m_number     = 2;
 }
@@ -252,11 +252,11 @@ void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wx
 
     switch( m_shape )
     {
-    case PINSHEETLABEL_SHAPE::INPUT:
-        m_shape = PINSHEETLABEL_SHAPE::OUTPUT;
+    case PINSHEETLABEL_SHAPE::PS_INPUT:
+        m_shape = PINSHEETLABEL_SHAPE::PS_OUTPUT;
         break;
-    case PINSHEETLABEL_SHAPE::OUTPUT:
-        m_shape = PINSHEETLABEL_SHAPE::INPUT;
+    case PINSHEETLABEL_SHAPE::PS_OUTPUT:
+        m_shape = PINSHEETLABEL_SHAPE::PS_INPUT;
         break;
     default:
         break;

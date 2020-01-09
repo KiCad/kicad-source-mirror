@@ -40,7 +40,7 @@
 class LINE_READER;
 class NETLIST_OBJECT_LIST;
 
-/* 
+/*
  * Spin style for text items of all kinds on schematics
  * Basically a higher level abstraction of rotation and justification of text
  */
@@ -196,11 +196,12 @@ private:
  */
 enum class PINSHEETLABEL_SHAPE
 {
-    INPUT,
-    OUTPUT,
-    BIDI,
-    TRISTATE,
-    UNSPECIFIED
+    PS_INPUT,           // use "PS_INPUT" instead of "INPUT" to avoid colliding
+                        // with a Windows header on msys2
+    PS_OUTPUT,
+    PS_BIDI,
+    PS_TRISTATE,
+    PS_UNSPECIFIED
 };
 
 

@@ -1033,23 +1033,23 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
                 switch( parseChar( aReader, line, &line ) )
                 {
                 case 'I':
-                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::INPUT );
+                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );
                     break;
 
                 case 'O':
-                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::OUTPUT );
+                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );
                     break;
 
                 case 'B':
-                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::BIDI );
+                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );
                     break;
 
                 case 'T':
-                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::TRISTATE );
+                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_TRISTATE );
                     break;
 
                 case 'U':
-                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::UNSPECIFIED );
+                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
                     break;
                 default:
                     SCH_PARSE_ERROR( "invalid sheet pin type", aReader, line );
@@ -1364,11 +1364,11 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( LINE_READER& aReader )
 // clang-format off
 const std::map<PINSHEETLABEL_SHAPE, const char*> sheetLabelNames
 {
-    { PINSHEETLABEL_SHAPE::INPUT,       "Input" },
-    { PINSHEETLABEL_SHAPE::OUTPUT,      "Output" },
-    { PINSHEETLABEL_SHAPE::BIDI,        "BiDi" },
-    { PINSHEETLABEL_SHAPE::TRISTATE,    "3State" },
-    { PINSHEETLABEL_SHAPE::UNSPECIFIED, "UnSpc" },
+    { PINSHEETLABEL_SHAPE::PS_INPUT,       "Input" },
+    { PINSHEETLABEL_SHAPE::PS_OUTPUT,      "Output" },
+    { PINSHEETLABEL_SHAPE::PS_BIDI,        "BiDi" },
+    { PINSHEETLABEL_SHAPE::PS_TRISTATE,    "3State" },
+    { PINSHEETLABEL_SHAPE::PS_UNSPECIFIED, "UnSpc" },
 };
 // clang-format on
 
@@ -1434,8 +1434,8 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
     {
         auto resultIt = std::find_if( sheetLabelNames.begin(), sheetLabelNames.end(),
                 [ &line ]( const auto& it )
-                { 
-                    return strCompare( it.second, line, &line ); 
+                {
+                    return strCompare( it.second, line, &line );
                 } );
 
         if( resultIt != sheetLabelNames.end() )
@@ -2187,20 +2187,20 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
 
         switch( pin.GetShape() )
         {
-        case PINSHEETLABEL_SHAPE::INPUT:
+        case PINSHEETLABEL_SHAPE::PS_INPUT:
             type = 'I';
             break;
-        case PINSHEETLABEL_SHAPE::OUTPUT:
+        case PINSHEETLABEL_SHAPE::PS_OUTPUT:
             type = 'O';
             break;
-        case PINSHEETLABEL_SHAPE::BIDI:
+        case PINSHEETLABEL_SHAPE::PS_BIDI:
             type = 'B';
             break;
-        case PINSHEETLABEL_SHAPE::TRISTATE:
+        case PINSHEETLABEL_SHAPE::PS_TRISTATE:
             type = 'T';
             break;
         default:
-        case PINSHEETLABEL_SHAPE::UNSPECIFIED:
+        case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED:
             type = 'U';
             break;
         }

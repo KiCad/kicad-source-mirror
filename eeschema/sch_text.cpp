@@ -97,7 +97,7 @@ static int* TemplateShape[5][4] =
 
 
 SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType )
-        : SCH_ITEM( NULL, aType ), EDA_TEXT( text ), m_shape( PINSHEETLABEL_SHAPE::INPUT )
+        : SCH_ITEM( NULL, aType ), EDA_TEXT( text ), m_shape( PINSHEETLABEL_SHAPE::PS_INPUT )
 {
     m_Layer          = LAYER_NOTES;
     m_isDangling     = false;
@@ -587,19 +587,19 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
     {
         switch( GetShape() )
         {
-        case PINSHEETLABEL_SHAPE::INPUT:
+        case PINSHEETLABEL_SHAPE::PS_INPUT:
             msg = _( "Input" );
             break;
-        case PINSHEETLABEL_SHAPE::OUTPUT:
+        case PINSHEETLABEL_SHAPE::PS_OUTPUT:
             msg = _( "Output" );
             break;
-        case PINSHEETLABEL_SHAPE::BIDI:
+        case PINSHEETLABEL_SHAPE::PS_BIDI:
             msg = _( "Bidirectional" );
             break;
-        case PINSHEETLABEL_SHAPE::TRISTATE:
+        case PINSHEETLABEL_SHAPE::PS_TRISTATE:
             msg = _( "Tri-State" );
             break;
-        case PINSHEETLABEL_SHAPE::UNSPECIFIED:
+        case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED:
             msg = _( "Passive" );
             break;
         default:
@@ -647,7 +647,7 @@ SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text )
         : SCH_TEXT( pos, text, SCH_LABEL_T )
 {
     m_Layer      = LAYER_LOCLABEL;
-    m_shape      = PINSHEETLABEL_SHAPE::INPUT;
+    m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
     m_isDangling = true;
     SetMultilineAllowed( false );
 }
@@ -731,7 +731,7 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text )
         : SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T )
 {
     m_Layer      = LAYER_GLOBLABEL;
-    m_shape      = PINSHEETLABEL_SHAPE::BIDI;
+    m_shape      = PINSHEETLABEL_SHAPE::PS_BIDI;
     m_isDangling = true;
     SetMultilineAllowed( false );
 }
@@ -754,14 +754,14 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
 
     switch( m_shape )
     {
-    case PINSHEETLABEL_SHAPE::INPUT:
-    case PINSHEETLABEL_SHAPE::BIDI:
-    case PINSHEETLABEL_SHAPE::TRISTATE:
+    case PINSHEETLABEL_SHAPE::PS_INPUT:
+    case PINSHEETLABEL_SHAPE::PS_BIDI:
+    case PINSHEETLABEL_SHAPE::PS_TRISTATE:
         offset += halfSize;
         break;
 
-    case PINSHEETLABEL_SHAPE::OUTPUT:
-    case PINSHEETLABEL_SHAPE::UNSPECIFIED:
+    case PINSHEETLABEL_SHAPE::PS_OUTPUT:
+    case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED:
         offset += TXT_MARGIN;
         break;
 
@@ -895,23 +895,23 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 
     switch( m_shape )
     {
-    case PINSHEETLABEL_SHAPE::INPUT:
+    case PINSHEETLABEL_SHAPE::PS_INPUT:
         x_offset = -halfSize;
         aPoints[0].x += halfSize;
         break;
 
-    case PINSHEETLABEL_SHAPE::OUTPUT:
+    case PINSHEETLABEL_SHAPE::PS_OUTPUT:
         aPoints[3].x -= halfSize;
         break;
 
-    case PINSHEETLABEL_SHAPE::BIDI:
-    case PINSHEETLABEL_SHAPE::TRISTATE:
+    case PINSHEETLABEL_SHAPE::PS_BIDI:
+    case PINSHEETLABEL_SHAPE::PS_TRISTATE:
         x_offset = -halfSize;
         aPoints[0].x += halfSize;
         aPoints[3].x -= halfSize;
         break;
 
-    case PINSHEETLABEL_SHAPE::UNSPECIFIED:
+    case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED:
     default:
         break;
     }
@@ -1019,7 +1019,7 @@ SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T 
         : SCH_TEXT( pos, text, aType )
 {
     m_Layer      = LAYER_HIERLABEL;
-    m_shape      = PINSHEETLABEL_SHAPE::INPUT;
+    m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
     m_isDangling = true;
     SetMultilineAllowed( false );
 }
