@@ -180,7 +180,7 @@ void DIALOG_BOARD_RENUM::OnRenumberClick(wxCommandEvent &event) {
     std::vector<RefDesInfo> BadRefDes;
     BuildModuleList(BadRefDes);
 
-    if ( !BadRefDes.empty()) {
+    if (!BadRefDes.empty()) {
         message.Printf(
                 _(
                         "\n\nPCB has %d empty or invalid reference designations "
@@ -211,13 +211,13 @@ void DIALOG_BOARD_RENUM::OnRenumberClick(wxCommandEvent &event) {
                             mod->GetValue(), mod->GetPath()));
     }
     netlist.Format("pcb_netlist", &stringformatter, 0,
-            CTL_OMIT_FILTERS | CTL_OMIT_NETS | CTL_OMIT_FILTERS);
+    CTL_OMIT_FILTERS | CTL_OMIT_NETS | CTL_OMIT_FILTERS);
 
     std::string payload = stringformatter.GetString(); //write netlist back to payload (eeschema will receive that as payload is sent here as reference)
 
     bool attemptrenum = m_frame->RenumberSchematic(payload, MAIL_RENUMBER);
 
-KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
+    KIGFX::VIEW *view = m_frame->GetCanvas()->GetView();
 
     if ((false == attemptrenum) || (0 == payload.size())) { //Didn't get a valid reply
         ShowWarning(_("\nRenumber failed!\n"));
@@ -226,9 +226,10 @@ KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
             m_MessageWindow->AppendText(payload);         //Give the result
             for (auto mod : m_modules) {
                 newrefdes = GetNewRefDes(mod);
-                if (UpdateRefDes == newrefdes->Action)       //Ignore blanks
+                if (UpdateRefDes == newrefdes->Action) {     //Ignore blanks
                     mod->SetReference(newrefdes->NewRefDes); //Update the PCB reference
-                view->Update( mod );                         //Touch the module
+                    view->Update(mod);                       //Touch the module
+                }
             }
             message = _("\nPCB and schematic successfully renumbered\n"); //Give the result
             m_MessageWindow->AppendText(message);         //Give the result
@@ -385,8 +386,9 @@ void DIALOG_BOARD_RENUM::LogChangeArray(void) {
 
     this->m_ChangeFile = _("\n\n    Change Array\n"
             "***********************\n");
-    for (auto Change : this->m_ChangeArray) {       //Show all the types of refdes
-        this->m_ChangeFile += Change.OldRefDesString + " -> " + Change.NewRefDes;
+    for (auto Change : this->m_ChangeArray) {     //Show all the types of refdes
+        this->m_ChangeFile += Change.OldRefDesString + " -> "
+                + Change.NewRefDes;
 
         if (EmptyRefDes == Change.Action)
             this->m_ChangeFile += _(" Empty");
@@ -399,7 +401,7 @@ void DIALOG_BOARD_RENUM::LogChangeArray(void) {
 
         this->m_ChangeFile += "\n";
     }
-    LogMessage((wxString&) this->m_ChangeFile);          //Include in this->m_LogFile if logging
+    LogMessage((wxString&) this->m_ChangeFile); //Include in this->m_LogFile if logging
 }
 
 void DIALOG_BOARD_RENUM::LogExcludeList(void) {
@@ -408,7 +410,7 @@ void DIALOG_BOARD_RENUM::LogExcludeList(void) {
 
     wxString message = _("\nExcluding: ");
 
-    for (auto Exclude : m_ExcludeArray )       //Show the refdes we are excluding
+    for (auto Exclude : m_ExcludeArray)       //Show the refdes we are excluding
         message += Exclude + " ";
 
     message += _(" from reannotation\n\n");
@@ -463,8 +465,7 @@ RefDesChange* DIALOG_BOARD_RENUM::GetNewRefDes(MODULE *aMod) {
     if (i < this->m_ChangeArray.size())        //Found
         return (&this->m_ChangeArray[i]);
 
-    wxString warning = _("\nNot found: ")
-            + aMod->GetReference().ToStdString();
+    wxString warning = _("\nNot found: ") + aMod->GetReference().ToStdString();
     ShowWarning(warning);
     return (&this->m_ChangeArray[i]);
 }
@@ -531,7 +532,8 @@ void DIALOG_BOARD_RENUM::BuildModuleList(std::vector<RefDesInfo> &aBadRefDes) {
     }
 
     SetSortCodes(FrontDirectionsArray, s_savedDialogParameters.SortDir); //Determine the sort order for the front
-    sort(this->m_FrontModules.begin(), this->m_FrontModules.end(), ModuleCompare); //Sort the front modules
+    sort(this->m_FrontModules.begin(), this->m_FrontModules.end(),
+            ModuleCompare); //Sort the front modules
     SetSortCodes(BackDirectionsArray, s_savedDialogParameters.SortDir); //Determing the sort order for the back
     sort(this->m_BackModules.begin(), this->m_BackModules.end(), ModuleCompare); //Sort the back modules
 
@@ -576,8 +578,8 @@ void DIALOG_BOARD_RENUM::BuildModuleList(std::vector<RefDesInfo> &aBadRefDes) {
     this->m_ChangeArray.clear();
     BuildExcludeList();                 //Exclude these modules from renumbering
 
-    BuildChangeArray(this->m_FrontModules, s_savedDialogParameters.FrontStartRefDes,
-            aBadRefDes); //Create the ChangeArray from front
+    BuildChangeArray(this->m_FrontModules,
+            s_savedDialogParameters.FrontStartRefDes, aBadRefDes); //Create the ChangeArray from front
 
     if (0 != BackStartRefDes)               //If I don't carry on from the front
         for (auto Type : this->m_RefDesTypes)
@@ -586,7 +588,8 @@ void DIALOG_BOARD_RENUM::BuildModuleList(std::vector<RefDesInfo> &aBadRefDes) {
         BackStartRefDes = s_savedDialogParameters.FrontStartRefDes; //Otherwise a continuation from the front
 
     BuildChangeArray(this->m_BackModules, BackStartRefDes, aBadRefDes); //Add to the back
-    sort(this->m_ChangeArray.begin(), this->m_ChangeArray.end(), ChangeArrayCompare); //Sort the front modules
+    sort(this->m_ChangeArray.begin(), this->m_ChangeArray.end(),
+            ChangeArrayCompare); //Sort the front modules
 
     LogRefDesTypes();                              //Show the types of ref deses
     LogExcludeList();
@@ -654,7 +657,7 @@ void DIALOG_BOARD_RENUM::BuildChangeArray(std::vector<RefDesInfo> &aModules,
 
         thistype = change.OldRefDesString.substr(0, firstnum); //Get the type (R, C, etc)
 
-        for (auto exclude : this->m_ExcludeArray)  //Am I supposed to exclude this type?
+        for (auto exclude : this->m_ExcludeArray) //Am I supposed to exclude this type?
             if (exclude == thistype) {
                 change.Action = Exclude;
                 this->m_ChangeArray.push_back(change);
@@ -662,10 +665,10 @@ void DIALOG_BOARD_RENUM::BuildChangeArray(std::vector<RefDesInfo> &aModules,
             }
 
         for (i = 0; i < this->m_RefDesTypes.size(); i++) //See if it is in the types array
-            if (this->m_RefDesTypes[i].RefDesType == thistype)        //Found it!
+            if (this->m_RefDesTypes[i].RefDesType == thistype)       //Found it!
                 break;
 
-        if (i == this->m_RefDesTypes.size()) {  //Not found in the types array so add it
+        if (i == this->m_RefDesTypes.size()) { //Not found in the types array so add it
             newtype.RefDesType = thistype;
             newtype.RefDesCount = aStartRefDes;
             this->m_RefDesTypes.push_back(newtype);
@@ -687,7 +690,7 @@ void DIALOG_BOARD_RENUM::BuildChangeArray(std::vector<RefDesInfo> &aModules,
             if (removebackprefix)
                 change.NewRefDes.erase(0, backprefix.size());
         }
-        this->m_ChangeArray.push_back(change);                 //Add to the change array
+        this->m_ChangeArray.push_back(change);         //Add to the change array
     }  //Loop
 }   //void BuildChangeArray( )
 
