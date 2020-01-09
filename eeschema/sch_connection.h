@@ -38,10 +38,10 @@ class SCH_SHEET_PATH;
 
 enum class CONNECTION_TYPE
 {
-    NONE,    ///< No connection to this item
-    NET,     ///< This item represents a net
-    BUS,     ///< This item represents a bus vector
-    BUS_GROUP,   ///< This item represents a bus group
+    NONE,      ///< No connection to this item
+    NET,       ///< This item represents a net
+    BUS,       ///< This item represents a bus vector
+    BUS_GROUP, ///< This item represents a bus group
 };
 
 /**

@@ -317,8 +317,8 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
         return false;
 
     bool previousState = m_isDangling;
-    m_isDangling = true;
-    m_connectionType = CONNECTION_TYPE::NONE;
+    m_isDangling       = true;
+    m_connectionType   = CONNECTION_TYPE::NONE;
 
     for( unsigned ii = 0; ii < aItemList.size(); ii++ )
     {
@@ -447,8 +447,8 @@ void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
     NETLIST_OBJECT* item = new NETLIST_OBJECT();
     item->m_SheetPath = *aSheetPath;
     item->m_SheetPathInclude = *aSheetPath;
-    item->m_Comp = (SCH_ITEM*) this;
-    item->m_Type = NETLIST_ITEM::LABEL;
+    item->m_Comp             = (SCH_ITEM*) this;
+    item->m_Type             = NETLIST_ITEM::LABEL;
 
     if( GetLayer() == LAYER_GLOBLABEL )
         item->m_Type = NETLIST_ITEM::GLOBLABEL;

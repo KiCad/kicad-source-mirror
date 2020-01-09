@@ -271,7 +271,8 @@ void NETLIST_EXPORTER::eraseDuplicatePins()
             if( m_SortedComponentPinList[idxref]->m_PinNum != m_SortedComponentPinList[jj]->m_PinNum )
                 break;
 
-            if( m_SortedComponentPinList[idxref]->GetConnectionType() == NET_CONNECTION::PAD_CONNECT )
+            if( m_SortedComponentPinList[idxref]->GetConnectionType()
+                    == NET_CONNECTION::PAD_CONNECT )
             {
                 m_SortedComponentPinList[jj]->m_Flag = 1;
                 m_SortedComponentPinList[jj] = NULL;
@@ -279,7 +280,8 @@ void NETLIST_EXPORTER::eraseDuplicatePins()
             else /* the reference pin is not connected: remove this pin if the
                   * other pin is connected */
             {
-                if( m_SortedComponentPinList[jj]->GetConnectionType() == NET_CONNECTION::PAD_CONNECT )
+                if( m_SortedComponentPinList[jj]->GetConnectionType()
+                        == NET_CONNECTION::PAD_CONNECT )
                 {
                     m_SortedComponentPinList[idxref]->m_Flag = 1;
                     m_SortedComponentPinList[idxref] = NULL;

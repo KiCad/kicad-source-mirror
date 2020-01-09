@@ -139,10 +139,10 @@ void SCH_JUNCTION::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
 {
     NETLIST_OBJECT* item = new NETLIST_OBJECT();
 
-    item->m_SheetPath = *aSheetPath;
+    item->m_SheetPath        = *aSheetPath;
     item->m_SheetPathInclude = *aSheetPath;
-    item->m_Comp = (SCH_ITEM*) this;
-    item->m_Type = NETLIST_ITEM::JUNCTION;
+    item->m_Comp             = (SCH_ITEM*) this;
+    item->m_Type             = NETLIST_ITEM::JUNCTION;
     item->m_Start = item->m_End = m_pos;
 
     aNetListItems.push_back( item );

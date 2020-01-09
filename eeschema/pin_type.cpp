@@ -40,6 +40,7 @@ struct pinTypeStruct
 /*
 * Conversion map between PLOT_DASH_TYPE values and style names displayed
 */
+// clang-format off
 const std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> pinTypes = {
     { ELECTRICAL_PINTYPE::INPUT,        { _( "Input" ), pintype_input_xpm } },
     { ELECTRICAL_PINTYPE::OUTPUT,       { _( "Output" ), pintype_output_xpm } },
@@ -53,6 +54,7 @@ const std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> pinTypes = {
     { ELECTRICAL_PINTYPE::OPENEMITTER,  { _( "Open emitter" ), pintype_openemit_xpm } },
     { ELECTRICAL_PINTYPE::NC,           { _( "Not connected" ), pintype_noconnect_xpm } },
 };
+// clang-format on
 
 wxString GetText( ELECTRICAL_PINTYPE aType )
 {

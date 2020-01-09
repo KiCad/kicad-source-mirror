@@ -146,7 +146,7 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx ) const
 
 NETLIST_OBJECT::NETLIST_OBJECT()
 {
-    m_Type = NETLIST_ITEM::ITEM_UNSPECIFIED;  /* Type of this item (see NETLIST_ITEM_T enum) */
+    m_Type = NETLIST_ITEM::ITEM_UNSPECIFIED; /* Type of this item (see NETLIST_ITEM_T enum) */
     m_Comp = NULL;                  /* Pointer on the library item that created this net object
                                      * (the parent)*/
     m_Link = NULL;                  /* For SCH_SHEET_PIN:
@@ -155,9 +155,6 @@ NETLIST_OBJECT::NETLIST_OBJECT()
                                      * contains this pin
                                      */
     m_Flag = 0;                     /* flag used in calculations */
-    m_ElectricalPinType = ELECTRICAL_PINTYPE::INPUT;   /* Has meaning only for Pins: electrical type of the pin
-                                     * used to detect conflicts between pins in ERC
-                                     */
     m_netCode    = 0;               /* net code for all items except BUS labels because a BUS
                                      * label has as many net codes as bus members
                                      */
@@ -166,6 +163,9 @@ NETLIST_OBJECT::NETLIST_OBJECT()
                                      * from the BUS label )  member number
                                      */
     m_ConnectionType    = NET_CONNECTION::UNCONNECTED;
+    m_ElectricalPinType = ELECTRICAL_PINTYPE::INPUT;   /* Has meaning only for Pins: electrical type of the pin
+                                                       * used to detect conflicts between pins in ERC
+                                                       */
     m_netNameCandidate = NULL;      /* a pointer to a NETLIST_OBJECT type label connected to this
                                      * object used to give a name to the net
                                      */
@@ -187,11 +187,10 @@ NETLIST_OBJECT::~NETLIST_OBJECT()
 // return true if the object is a label of any type
 bool NETLIST_OBJECT::IsLabelType() const
 {
-    return m_Type == NETLIST_ITEM::LABEL
-        || m_Type == NETLIST_ITEM::GLOBLABEL || m_Type == NETLIST_ITEM::HIERLABEL
-        || m_Type == NETLIST_ITEM::BUSLABELMEMBER || m_Type == NETLIST_ITEM::GLOBBUSLABELMEMBER
-        || m_Type == NETLIST_ITEM::HIERBUSLABELMEMBER
-        || m_Type == NETLIST_ITEM::PINLABEL;
+    return m_Type == NETLIST_ITEM::LABEL || m_Type == NETLIST_ITEM::GLOBLABEL
+           || m_Type == NETLIST_ITEM::HIERLABEL || m_Type == NETLIST_ITEM::BUSLABELMEMBER
+           || m_Type == NETLIST_ITEM::GLOBBUSLABELMEMBER
+           || m_Type == NETLIST_ITEM::HIERBUSLABELMEMBER || m_Type == NETLIST_ITEM::PINLABEL;
 }
 
 bool NETLIST_OBJECT::IsLabelConnected( NETLIST_OBJECT* aNetItem )
@@ -202,8 +201,8 @@ bool NETLIST_OBJECT::IsLabelConnected( NETLIST_OBJECT* aNetItem )
     NETLIST_ITEM at = m_Type;
     NETLIST_ITEM bt = aNetItem->m_Type;
 
-    if(  ( at == NETLIST_ITEM::HIERLABEL || at == NETLIST_ITEM::HIERBUSLABELMEMBER )
-      && ( bt == NETLIST_ITEM::SHEETLABEL || bt == NETLIST_ITEM::SHEETBUSLABELMEMBER ) )
+    if( ( at == NETLIST_ITEM::HIERLABEL || at == NETLIST_ITEM::HIERBUSLABELMEMBER )
+            && ( bt == NETLIST_ITEM::SHEETLABEL || bt == NETLIST_ITEM::SHEETBUSLABELMEMBER ) )
     {
         if( m_SheetPath == aNetItem->m_SheetPathInclude )
         {
@@ -370,10 +369,10 @@ bool NETLIST_OBJECT::IsLabelBusMemberType() const
     // They are labels with very specific properties, especially for connection
     // between them: 2 bus label members can be connected only
     // if they have the same member value.
-    return ( m_Type == NETLIST_ITEM::SHEETBUSLABELMEMBER ) ||
-           ( m_Type == NETLIST_ITEM::BUSLABELMEMBER ) ||
-           ( m_Type == NETLIST_ITEM::HIERBUSLABELMEMBER ) ||
-           ( m_Type == NETLIST_ITEM::GLOBBUSLABELMEMBER );
+    return ( m_Type == NETLIST_ITEM::SHEETBUSLABELMEMBER )
+           || ( m_Type == NETLIST_ITEM::BUSLABELMEMBER )
+           || ( m_Type == NETLIST_ITEM::HIERBUSLABELMEMBER )
+           || ( m_Type == NETLIST_ITEM::GLOBBUSLABELMEMBER );
 }
 
 
@@ -445,18 +444,18 @@ void NETLIST_OBJECT::SetNetNameCandidate( NETLIST_OBJECT* aCandidate )
 {
     switch( aCandidate->m_Type )
     {
-        case NETLIST_ITEM::HIERLABEL:
-        case NETLIST_ITEM::LABEL:
-        case NETLIST_ITEM::PINLABEL:
-        case NETLIST_ITEM::GLOBLABEL:
-        case NETLIST_ITEM::GLOBBUSLABELMEMBER:
-        case NETLIST_ITEM::SHEETBUSLABELMEMBER:
-        case NETLIST_ITEM::PIN:
-            m_netNameCandidate = aCandidate;
-            break;
+    case NETLIST_ITEM::HIERLABEL:
+    case NETLIST_ITEM::LABEL:
+    case NETLIST_ITEM::PINLABEL:
+    case NETLIST_ITEM::GLOBLABEL:
+    case NETLIST_ITEM::GLOBBUSLABELMEMBER:
+    case NETLIST_ITEM::SHEETBUSLABELMEMBER:
+    case NETLIST_ITEM::PIN:
+        m_netNameCandidate = aCandidate;
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 }
 

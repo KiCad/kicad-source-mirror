@@ -240,7 +240,7 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
     for( unsigned ii = 0; ii < size(); ii++ )
     {
         if( GetItem( ii )->m_Type == NETLIST_ITEM::SHEETLABEL
-            || GetItem( ii )->m_Type == NETLIST_ITEM::SHEETBUSLABELMEMBER )
+                || GetItem( ii )->m_Type == NETLIST_ITEM::SHEETBUSLABELMEMBER )
             sheetLabelConnect( GetItem( ii ) );
     }
 
@@ -283,13 +283,20 @@ static int getPriority( const NETLIST_OBJECT* Objet )
 {
     switch( Objet->m_Type )
     {
-        case NETLIST_ITEM::PIN: return 1;
-        case NETLIST_ITEM::LABEL: return 2;
-        case NETLIST_ITEM::HIERLABEL: return 3;
-        case NETLIST_ITEM::PINLABEL: return 4;
-        case NETLIST_ITEM::GLOBBUSLABELMEMBER: return 5;
-        case NETLIST_ITEM::GLOBLABEL: return 6;
-        default: break;
+    case NETLIST_ITEM::PIN:
+        return 1;
+    case NETLIST_ITEM::LABEL:
+        return 2;
+    case NETLIST_ITEM::HIERLABEL:
+        return 3;
+    case NETLIST_ITEM::PINLABEL:
+        return 4;
+    case NETLIST_ITEM::GLOBBUSLABELMEMBER:
+        return 5;
+    case NETLIST_ITEM::GLOBLABEL:
+        return 6;
+    default:
+        break;
     }
 
     return 0;
@@ -501,7 +508,8 @@ void NETLIST_OBJECT_LIST::sheetLabelConnect( NETLIST_OBJECT* SheetLabel )
         if( ObjetNet->m_SheetPath != SheetLabel->m_SheetPathInclude )
             continue;  //use SheetInclude, not the sheet!!
 
-        if( (ObjetNet->m_Type != NETLIST_ITEM::HIERLABEL ) && (ObjetNet->m_Type != NETLIST_ITEM::HIERBUSLABELMEMBER ) )
+        if( ( ObjetNet->m_Type != NETLIST_ITEM::HIERLABEL )
+                && ( ObjetNet->m_Type != NETLIST_ITEM::HIERBUSLABELMEMBER ) )
             continue;
 
         if( ObjetNet->GetNet() == SheetLabel->GetNet() )
@@ -744,12 +752,12 @@ void NETLIST_OBJECT_LIST::labelConnect( NETLIST_OBJECT* aLabelRef )
         if( item->m_SheetPath != aLabelRef->m_SheetPath )
         {
             if( item->m_Type != NETLIST_ITEM::PINLABEL && item->m_Type != NETLIST_ITEM::GLOBLABEL
-                && item->m_Type != NETLIST_ITEM::GLOBBUSLABELMEMBER )
+                    && item->m_Type != NETLIST_ITEM::GLOBBUSLABELMEMBER )
                 continue;
 
-            if( (item->m_Type == NETLIST_ITEM::GLOBLABEL
-                 || item->m_Type == NETLIST_ITEM::GLOBBUSLABELMEMBER)
-               && item->m_Type != aLabelRef->m_Type )
+            if( ( item->m_Type == NETLIST_ITEM::GLOBLABEL
+                        || item->m_Type == NETLIST_ITEM::GLOBBUSLABELMEMBER )
+                    && item->m_Type != aLabelRef->m_Type )
                 //global labels only connect other global labels.
                 continue;
         }
@@ -775,15 +783,16 @@ void NETLIST_OBJECT_LIST::labelConnect( NETLIST_OBJECT* aLabelRef )
 void NETLIST_OBJECT_LIST::setUnconnectedFlag()
 {
     NETLIST_OBJECT* NetItemRef;
-    unsigned NetStart, NetEnd;
-    NET_CONNECTION StateFlag;
+    unsigned        NetStart, NetEnd;
+    NET_CONNECTION  StateFlag;
 
-    NetStart  = NetEnd = 0;
-    StateFlag = NET_CONNECTION::UNCONNECTED;
+    NetStart = NetEnd = 0;
+    StateFlag         = NET_CONNECTION::UNCONNECTED;
     for( unsigned ii = 0; ii < size(); ii++ )
     {
         NetItemRef = GetItem( ii );
-        if( NetItemRef->m_Type == NETLIST_ITEM::NOCONNECT && StateFlag != NET_CONNECTION::PAD_CONNECT )
+        if( NetItemRef->m_Type == NETLIST_ITEM::NOCONNECT
+                && StateFlag != NET_CONNECTION::PAD_CONNECT )
             StateFlag = NET_CONNECTION::NOCONNECT_SYMBOL_PRESENT;
 
         // Analysis of current net.

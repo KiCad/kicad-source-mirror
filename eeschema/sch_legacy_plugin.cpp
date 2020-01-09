@@ -3501,19 +3501,42 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
 
     switch( type )
     {
-    case 'I': pin->m_type = ELECTRICAL_PINTYPE::INPUT;         break;
-    case 'O': pin->m_type = ELECTRICAL_PINTYPE::OUTPUT;        break;
-    case 'B': pin->m_type = ELECTRICAL_PINTYPE::BIDI;          break;
-    case 'T': pin->m_type = ELECTRICAL_PINTYPE::TRISTATE;      break;
-    case 'P': pin->m_type = ELECTRICAL_PINTYPE::PASSIVE;       break;
-    case 'U': pin->m_type = ELECTRICAL_PINTYPE::UNSPECIFIED;   break;
-    case 'W': pin->m_type = ELECTRICAL_PINTYPE::POWER_IN;      break;
-    case 'w': pin->m_type = ELECTRICAL_PINTYPE::POWER_OUT;     break;
-    case 'C': pin->m_type = ELECTRICAL_PINTYPE::OPENCOLLECTOR; break;
-    case 'E': pin->m_type = ELECTRICAL_PINTYPE::OPENEMITTER;   break;
-    case 'N': pin->m_type = ELECTRICAL_PINTYPE::NC;            break;
-    default: THROW_PARSE_ERROR( "unknown pin type", aReader.GetSource(),
-                                aReader.Line(), aReader.LineNumber(), pos );
+    case 'I':
+        pin->m_type = ELECTRICAL_PINTYPE::INPUT;
+        break;
+    case 'O':
+        pin->m_type = ELECTRICAL_PINTYPE::OUTPUT;
+        break;
+    case 'B':
+        pin->m_type = ELECTRICAL_PINTYPE::BIDI;
+        break;
+    case 'T':
+        pin->m_type = ELECTRICAL_PINTYPE::TRISTATE;
+        break;
+    case 'P':
+        pin->m_type = ELECTRICAL_PINTYPE::PASSIVE;
+        break;
+    case 'U':
+        pin->m_type = ELECTRICAL_PINTYPE::UNSPECIFIED;
+        break;
+    case 'W':
+        pin->m_type = ELECTRICAL_PINTYPE::POWER_IN;
+        break;
+    case 'w':
+        pin->m_type = ELECTRICAL_PINTYPE::POWER_OUT;
+        break;
+    case 'C':
+        pin->m_type = ELECTRICAL_PINTYPE::OPENCOLLECTOR;
+        break;
+    case 'E':
+        pin->m_type = ELECTRICAL_PINTYPE::OPENEMITTER;
+        break;
+    case 'N':
+        pin->m_type = ELECTRICAL_PINTYPE::NC;
+        break;
+    default:
+        THROW_PARSE_ERROR( "unknown pin type", aReader.GetSource(), aReader.Line(),
+                aReader.LineNumber(), pos );
     }
 
     // Optional
@@ -3554,16 +3577,35 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
 
         switch( flags )
         {
-        case 0:                   pin->m_shape = GRAPHIC_PINSHAPE::LINE;               break;
-        case INVERTED:            pin->m_shape = GRAPHIC_PINSHAPE::INVERTED;           break;
-        case CLOCK:               pin->m_shape = GRAPHIC_PINSHAPE::CLOCK;              break;
-        case INVERTED | CLOCK:    pin->m_shape = GRAPHIC_PINSHAPE::INVERTED_CLOCK;     break;
-        case LOWLEVEL_IN:         pin->m_shape = GRAPHIC_PINSHAPE::INPUT_LOW;          break;
-        case LOWLEVEL_IN | CLOCK: pin->m_shape = GRAPHIC_PINSHAPE::CLOCK_LOW;          break;
-        case LOWLEVEL_OUT:        pin->m_shape = GRAPHIC_PINSHAPE::OUTPUT_LOW;         break;
-        case FALLING_EDGE:        pin->m_shape = GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK; break;
-        case NONLOGIC:            pin->m_shape = GRAPHIC_PINSHAPE::NONLOGIC;           break;
-        default: SCH_PARSE_ERROR( "pin attributes do not define a valid pin shape", aReader, line );
+        case 0:
+            pin->m_shape = GRAPHIC_PINSHAPE::LINE;
+            break;
+        case INVERTED:
+            pin->m_shape = GRAPHIC_PINSHAPE::INVERTED;
+            break;
+        case CLOCK:
+            pin->m_shape = GRAPHIC_PINSHAPE::CLOCK;
+            break;
+        case INVERTED | CLOCK:
+            pin->m_shape = GRAPHIC_PINSHAPE::INVERTED_CLOCK;
+            break;
+        case LOWLEVEL_IN:
+            pin->m_shape = GRAPHIC_PINSHAPE::INPUT_LOW;
+            break;
+        case LOWLEVEL_IN | CLOCK:
+            pin->m_shape = GRAPHIC_PINSHAPE::CLOCK_LOW;
+            break;
+        case LOWLEVEL_OUT:
+            pin->m_shape = GRAPHIC_PINSHAPE::OUTPUT_LOW;
+            break;
+        case FALLING_EDGE:
+            pin->m_shape = GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK;
+            break;
+        case NONLOGIC:
+            pin->m_shape = GRAPHIC_PINSHAPE::NONLOGIC;
+            break;
+        default:
+            SCH_PARSE_ERROR( "pin attributes do not define a valid pin shape", aReader, line );
         }
     }
 

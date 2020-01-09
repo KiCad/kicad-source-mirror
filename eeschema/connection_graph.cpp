@@ -496,7 +496,8 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             switch( item->Type() )
             {
             case SCH_LINE_T:
-                conn->SetType( item->GetLayer() == LAYER_BUS ? CONNECTION_TYPE::BUS : CONNECTION_TYPE::NET );
+                conn->SetType( item->GetLayer() == LAYER_BUS ? CONNECTION_TYPE::BUS :
+                                                               CONNECTION_TYPE::NET );
                 break;
 
             case SCH_BUS_BUS_ENTRY_T:

@@ -445,8 +445,7 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
                 /* Not connected or not driven pin. */
                 bool seterr = true;
 
-                if( local_minconn == NOC &&
-                    aList->GetItemType( aNetItemRef ) == NETLIST_ITEM::PIN )
+                if( local_minconn == NOC && aList->GetItemType( aNetItemRef ) == NETLIST_ITEM::PIN )
                 {
                     /* This pin is not connected: for multiple part per
                      * package, and duplicated pin,
@@ -520,24 +519,26 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
             break;
 
         case NETLIST_ITEM::PIN:
-            jj = aList->GetItem( netItemTst )->m_ElectricalPinType;
-            local_minconn = std::max( MinimalReq[ static_cast<int>( ref_elect_type ) ][ static_cast<int>( jj ) ], local_minconn );
+            jj            = aList->GetItem( netItemTst )->m_ElectricalPinType;
+            local_minconn = std::max(
+                    MinimalReq[static_cast<int>( ref_elect_type )][static_cast<int>( jj )],
+                    local_minconn );
 
             if( netItemTst <= aNetItemRef )
                 break;
 
             if( erc == OK )
             {
-                erc = DiagErc[ static_cast<int>( ref_elect_type )][ static_cast<int>( jj ) ];
+                erc = DiagErc[static_cast<int>( ref_elect_type )][static_cast<int>( jj )];
 
                 if( erc != OK )
                 {
                     if( aList->GetConnectionType( netItemTst ) == NET_CONNECTION::UNCONNECTED )
                     {
-                        Diagnose( aList->GetItem( aNetItemRef ),
-                                  aList->GetItem( netItemTst ),
-                                  0, erc );
-                        aList->SetConnectionType( netItemTst, NET_CONNECTION::NOCONNECT_SYMBOL_PRESENT );
+                        Diagnose( aList->GetItem( aNetItemRef ), aList->GetItem( netItemTst ), 0,
+                                erc );
+                        aList->SetConnectionType(
+                                netItemTst, NET_CONNECTION::NOCONNECT_SYMBOL_PRESENT );
                     }
                 }
             }

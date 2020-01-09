@@ -40,6 +40,7 @@ struct pinShapeStruct
 /*
 * Conversion map between PLOT_DASH_TYPE values and style names displayed
 */
+// clang-format off
 const std::map<GRAPHIC_PINSHAPE, struct pinShapeStruct> pinShapes = {
     { GRAPHIC_PINSHAPE::LINE,               { _( "Line" ), pinshape_normal_xpm } },
     { GRAPHIC_PINSHAPE::INVERTED,           { _( "Inverted" ), pinshape_invert_xpm } },
@@ -51,6 +52,7 @@ const std::map<GRAPHIC_PINSHAPE, struct pinShapeStruct> pinShapes = {
     { GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK, { _( "Falling edge clock" ), pinshape_clock_fall_xpm } },
     { GRAPHIC_PINSHAPE::NONLOGIC,           { _( "NonLogic" ), pinshape_nonlogic_xpm } },
 };
+// clang-format on
 
 
 wxString GetText( GRAPHIC_PINSHAPE aShape )

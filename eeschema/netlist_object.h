@@ -43,56 +43,56 @@ class SCH_COMPONENT;
 /* Type of Net objects (wires, labels, pins...) */
 enum class NETLIST_ITEM
 {
-    ITEM_UNSPECIFIED,           // only for not yet initialized instances
-    SEGMENT,                    // connection by wire
-    BUS,                        // connection by bus
-    JUNCTION,                   // connection by junction: can connect to
-                                    // or more crossing wires
-    LABEL,                      // this is a local label
-    GLOBLABEL,                  // this is a global label that connect all
-                                    // others global label in whole hierarchy
-    HIERLABEL,                  // element to indicate connection to a
-                                    // higher-level sheet
-    SHEETLABEL,                 // element to indicate connection to a
-                                    // lower-level sheet.
-    BUSLABELMEMBER,             /* created when a bus label is found:
-                                     * the bus label (like DATA[0..7] is
-                                     * converted to n single labels like
-                                     * DATA0, DATA1 ...
-                                     * These objects are living only in the current
-                                     * NETLIST_OBJECT_LIST, not in shematic.
-                                     */
-    GLOBBUSLABELMEMBER,         // see NET_BUSLABELMEMBER, used when a
-                                    // global bus label is found
-    HIERBUSLABELMEMBER,         // see NET_BUSLABELMEMBER, used when a
-                                    // hierarchical bus label is found
-    SHEETBUSLABELMEMBER,        // see NET_BUSLABELMEMBER, used when a
-                                    // pin sheet label using bus notation
-                                    // is found
-    PINLABEL,                   /* created when a pin is POWER (IN or
-                                     * OUT) with invisible attribute is found:
-                                     * these pins are equivalent to a global
-                                     * label and are automatically connected
-                                     */
-    PIN,                        // this is an usual pin
-    NOCONNECT                   // this is a no connect symbol
+    ITEM_UNSPECIFIED,    // only for not yet initialized instances
+    SEGMENT,             // connection by wire
+    BUS,                 // connection by bus
+    JUNCTION,            // connection by junction: can connect to
+                         // or more crossing wires
+    LABEL,               // this is a local label
+    GLOBLABEL,           // this is a global label that connect all
+                         // others global label in whole hierarchy
+    HIERLABEL,           // element to indicate connection to a
+                         // higher-level sheet
+    SHEETLABEL,          // element to indicate connection to a
+                         // lower-level sheet.
+    BUSLABELMEMBER,      /* created when a bus label is found:
+                          * the bus label (like DATA[0..7] is
+                          * converted to n single labels like
+                          * DATA0, DATA1 ...
+                          * These objects are living only in the current
+                          * NETLIST_OBJECT_LIST, not in shematic.
+                          */
+    GLOBBUSLABELMEMBER,  // see NET_BUSLABELMEMBER, used when a
+                         // global bus label is found
+    HIERBUSLABELMEMBER,  // see NET_BUSLABELMEMBER, used when a
+                         // hierarchical bus label is found
+    SHEETBUSLABELMEMBER, // see NET_BUSLABELMEMBER, used when a
+                         // pin sheet label using bus notation
+                         // is found
+    PINLABEL,            /* created when a pin is POWER (IN or
+                         * OUT) with invisible attribute is found:
+                         * these pins are equivalent to a global
+                         * label and are automatically connected
+                         */
+    PIN,                 // this is an usual pin
+    NOCONNECT            // this is a no connect symbol
 };
 
 
 /* Values for .m_FlagOfConnection member */
 enum class NET_CONNECTION
 {
-    UNCONNECTED = 0,            /* Pin or Label not connected (error) */
-    NOCONNECT_SYMBOL_PRESENT,   /* Pin not connected but have a  NoConnect
+    UNCONNECTED = 0,          /* Pin or Label not connected (error) */
+    NOCONNECT_SYMBOL_PRESENT, /* Pin not connected but have a  NoConnect
                                  * symbol on it (no error) */
-    PAD_CONNECT                 /* Normal connection (no error) */
+    PAD_CONNECT               /* Normal connection (no error) */
 };
 
 
 class NETLIST_OBJECT
 {
 public:
-    NETLIST_ITEM m_Type;              /* Type of item (see NETLIST_ITEM_T enum) */
+    NETLIST_ITEM       m_Type;          /* Type of item (see NETLIST_ITEM_T enum) */
     EDA_ITEM* m_Comp;                   /* Pointer to the library item that
                                          * created this net object (the parent)
                                          */
@@ -110,7 +110,7 @@ public:
     int m_Member;                       /* for labels type NET_BUSLABELMEMBER ( bus member
                                          * created from the BUS label ) member number.
                                          */
-    NET_CONNECTION m_ConnectionType;  // Used to store the connection type
+    NET_CONNECTION     m_ConnectionType;       // Used to store the connection type
     wxString    m_PinNum;               // pin number
     wxString    m_Label;                // Label text (for labels) or Pin name (for pins)
     wxPoint     m_Start;                // Position of object or for segments: starting point

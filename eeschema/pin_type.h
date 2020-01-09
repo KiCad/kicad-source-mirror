@@ -34,7 +34,8 @@
 /**
  * The component library pin object electrical types used in ERC tests.
  */
-enum class ELECTRICAL_PINTYPE {
+enum class ELECTRICAL_PINTYPE
+{
     INPUT,
     OUTPUT,
     BIDI,
@@ -45,11 +46,12 @@ enum class ELECTRICAL_PINTYPE {
     POWER_OUT,
     OPENCOLLECTOR,
     OPENEMITTER,
-    NC              /* No connect */
+    NC /* No connect */
 };
 
-enum {
-    PINTYPE_COUNT = static_cast<int>(ELECTRICAL_PINTYPE::NC) + 1
+enum
+{
+    PINTYPE_COUNT = static_cast<int>( ELECTRICAL_PINTYPE::NC ) + 1
 };
 
 // UI

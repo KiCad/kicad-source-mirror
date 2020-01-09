@@ -715,7 +715,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     const int diam = radius*2;
     const int clock_size = InternalPinDecoSize( *aPin );
 
-    if( aPin->GetType() == ELECTRICAL_PINTYPE::NC )              // Draw a N.C. symbol
+    if( aPin->GetType() == ELECTRICAL_PINTYPE::NC ) // Draw a N.C. symbol
     {
         m_gal->DrawLine( p0, pos );
 
@@ -739,7 +739,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             m_gal->DrawLine( p0 + dir * ( diam ), pos );
             break;
 
-       case GRAPHIC_PINSHAPE::INVERTED_CLOCK:
+        case GRAPHIC_PINSHAPE::INVERTED_CLOCK:
             pc = p0 - dir * clock_size ;
 
             triLine( p0 + VECTOR2D( dir.y, -dir.x) * clock_size,
@@ -748,7 +748,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 
             m_gal->DrawCircle( p0 + dir * radius, radius );
             m_gal->DrawLine( p0 + dir * ( diam ), pos );
-           break;
+            break;
 
         case GRAPHIC_PINSHAPE::CLOCK_LOW:
         case GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK:
@@ -808,7 +808,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             }
             break;
 
-        case GRAPHIC_PINSHAPE::OUTPUT_LOW:    // IEEE symbol "Active Low Output"
+        case GRAPHIC_PINSHAPE::OUTPUT_LOW: // IEEE symbol "Active Low Output"
             m_gal->DrawLine( p0, pos );
 
             if( !dir.y )    // Horizontal pin
@@ -817,7 +817,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
                 m_gal->DrawLine( p0 - VECTOR2D( diam, 0 ), p0 + VECTOR2D( 0, dir.y ) * diam );
             break;
 
-        case GRAPHIC_PINSHAPE::NONLOGIC:     // NonLogic pin symbol
+        case GRAPHIC_PINSHAPE::NONLOGIC: // NonLogic pin symbol
             m_gal->DrawLine( p0, pos );
 
             m_gal->DrawLine( p0 - VECTOR2D( dir.x + dir.y, dir.y - dir.x ) * radius,
