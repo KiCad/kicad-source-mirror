@@ -26,7 +26,7 @@ void PCB_RENUM_TOOL::Reset(RESET_REASON aReason) {
     m_frame = getEditFrame<PCB_EDIT_FRAME>();
 }
 
-int PCB_RENUM_TOOL::ShowRenumDialog(const TOOL_EVENT& aEvent) {
+int PCB_RENUM_TOOL::ShowRenumDialog(const TOOL_EVENT &aEvent) {
     DIALOG_BOARD_RENUM dialog(m_frame);
     dialog.ShowModal();
     return 0;

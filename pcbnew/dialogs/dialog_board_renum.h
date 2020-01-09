@@ -1,8 +1,25 @@
 /*
- * DIALOBOARD_RENUMGUI.h
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
- *  Created on: Mar. 29, 2019
- *      Author: BrianP
+ * Copyright (C) 2019 Brian Piccioni brian@documenteddesigns.com
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
 #ifndef DIALOG_BOARD_RENUM_H_
@@ -44,28 +61,25 @@
     DescendingSecond = (( DirArray[Code] & DESCENDINGSECOND ) != 0 ); \
  }
 
-enum    ActionCode  {
-    UpdateRefDes,
-    EmptyRefDes,
-    InvalidRefDes,
-    Exclude
+enum ActionCode {
+    UpdateRefDes, EmptyRefDes, InvalidRefDes, Exclude
 };
 
 struct RefDesChange {
     timestamp_t TimeStamp;     //Module unique ID
-    wxString    NewRefDes;         //The new reference designation (F_U21)
-    wxString    OldRefDesString;   //What the old refdes preamble + number was
-    bool        Front;             //True if on the front of the board
-    ActionCode  Action;            //Used to skip (if #, etc)
+    wxString NewRefDes;         //The new reference designation (F_U21)
+    wxString OldRefDesString;   //What the old refdes preamble + number was
+    bool Front;             //True if on the front of the board
+    ActionCode Action;            //Used to skip (if #, etc)
 };
 
 struct RefDesInfo {
-    bool        Front;                 //True if on the front of the board
+    bool Front;                 //True if on the front of the board
     timestamp_t TimeStamp;     //Module unique ID
-    wxString    RefDesString;      //What its refdes is
-    int         x, y;                   //The coordinates
-    int         roundedx, roundedy;     //The coordinates after rounding.
-    LIB_ID      FPID;
+    wxString RefDesString;      //What its refdes is
+    int x, y;                   //The coordinates
+    int roundedx, roundedy;     //The coordinates after rounding.
+    LIB_ID FPID;
 };
 
 struct RefDesTypeStr {
@@ -76,7 +90,7 @@ struct RefDesTypeStr {
 class DIALOG_BOARD_RENUM: public DIALOG_BOARD_RENUM_BASE {
 public:
 
-    DIALOG_BOARD_RENUM(PCB_EDIT_FRAME* aParentFrame);
+    DIALOG_BOARD_RENUM(PCB_EDIT_FRAME *aParentFrame);
     ~DIALOG_BOARD_RENUM();
 
     void ShowWarning(const wxString &aMessage);
@@ -87,8 +101,8 @@ public:
     int LoadPCBFile(struct KiCadFile &Schematic);
     void RenumKiCadPCB(void);
     void WriteLogFile(void);
-    PCB_EDIT_FRAME* m_frame;
-    BOARD* m_board;
+    PCB_EDIT_FRAME *m_frame;
+    BOARD *m_board;
     MODULES m_modules;
 
     wxString m_LogFile;
@@ -101,34 +115,32 @@ public:
 
 private:
 
-    void OnRenumberClick(wxCommandEvent& event) override;
-    void OKDone(wxCommandEvent& event) override;
+    void OnRenumberClick(wxCommandEvent &event) override;
+    void OKDone(wxCommandEvent &event) override;
 
-    void FlushFiles( void );
-    void WriteRenumFile(const char *aFileType, wxString& aBuffer);
-    void LogModules( wxString &aMessage, std::vector<RefDesInfo> &aModules);
+    void FlushFiles(void);
+    void WriteRenumFile(const char *aFileType, wxString &aBuffer);
+    void LogModules(wxString &aMessage, std::vector<RefDesInfo> &aModules);
     void LogRefDesTypes(void);
     void LogChangeArray(void);
     void LogExcludeList(void);
-    void LogMessage( wxString &aMessage);
-    void LogMessage( std::string &aMessage);
+    void LogMessage(wxString &aMessage);
+    void LogMessage(std::string &aMessage);
 
-    void BuildModuleList( std::vector <RefDesInfo> &aBadRefDes  );
-    void BuildChangeArray( std::vector<RefDesInfo> &aModules, unsigned int aStartRefDes, std::vector <RefDesInfo> &aBadRefDes );
+    void BuildModuleList(std::vector<RefDesInfo> &aBadRefDes);
+    void BuildChangeArray(std::vector<RefDesInfo> &aModules,
+            unsigned int aStartRefDes, std::vector<RefDesInfo> &aBadRefDes);
     void BuildExcludeList(void);
 
-    int    RoundToGrid( int aCoord );
-    RefDesChange* GetNewRefDes( MODULE * aMod );
-    std::string CoordTowxString( int aX, int aY );
+    int RoundToGrid(int aCoord);
+    RefDesChange* GetNewRefDes(MODULE *aMod);
+    std::string CoordTowxString(int aX, int aY);
 
 };
-
-
 
 class MyApp: public wxApp {
 public:
     virtual bool OnInit() override;
 };
-
 
 #endif /* DIALOG_BOARD_RENUMCLASSES_H_ */

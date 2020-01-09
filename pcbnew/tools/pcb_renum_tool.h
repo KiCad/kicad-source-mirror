@@ -12,13 +12,13 @@ public:
 
     bool Init() override;
     void Reset(RESET_REASON aReason) override;
-    int ShowRenumDialog(const TOOL_EVENT& aEvent);
+    int ShowRenumDialog(const TOOL_EVENT &aEvent);
 //
 private:
     void setTransitions() override; //> Bind handlers to corresponding TOOL_ACTIONs
 
 private:
-    PCB_EDIT_FRAME* m_frame;    // Pointer to the currently used edit frame.
+    PCB_EDIT_FRAME *m_frame;    // Pointer to the currently used edit frame.
 };
 
 #endif /* PCBRENUMTOOL_H_ */

@@ -40,11 +40,12 @@ class TOOL_MANAGER;
  * Gathers all the actions that are shared by tools. The instance of a subclass of
  * ACTIONS is created inside of ACTION_MANAGER object that registers the actions.
  */
-class ACTIONS
-{
+class ACTIONS {
 public:
 
-    virtual ~ACTIONS() {};
+    virtual ~ACTIONS() {
+    }
+    ;
 
     // Generic document actions
     static TOOL_ACTION doNew;           // sadly 'new' is a reserved word
@@ -98,10 +99,10 @@ public:
     static TOOL_ACTION toggleCursorStyle;
     static TOOL_ACTION highContrastMode;
 
-    static TOOL_ACTION refreshPreview;      // Similar to a synthetic mouseMoved event, but also
-                                            // used after a rotate, mirror, etc.
+    static TOOL_ACTION refreshPreview; // Similar to a synthetic mouseMoved event, but also
+                                       // used after a rotate, mirror, etc.
 
-    /// Cursor control with keyboard
+                                       /// Cursor control with keyboard
     static TOOL_ACTION cursorUp;
     static TOOL_ACTION cursorDown;
     static TOOL_ACTION cursorLeft;
@@ -175,25 +176,32 @@ public:
      * @return std::string is name of the corresponding TOOL_ACTION. It may be empty, if there is
      * no corresponding TOOL_ACTION.
      */
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) = 0;
+    virtual OPT<TOOL_EVENT> TranslateLegacyId(int aId) = 0;
 
     ///> Cursor control event types
-    enum CURSOR_EVENT_TYPE { CURSOR_UP, CURSOR_DOWN, CURSOR_LEFT, CURSOR_RIGHT,
-                             CURSOR_CLICK, CURSOR_DBL_CLICK, CURSOR_RIGHT_CLICK,
-                             CURSOR_FAST_MOVE = 0x8000 };
+    enum CURSOR_EVENT_TYPE {
+        CURSOR_UP,
+        CURSOR_DOWN,
+        CURSOR_LEFT,
+        CURSOR_RIGHT,
+        CURSOR_CLICK,
+        CURSOR_DBL_CLICK,
+        CURSOR_RIGHT_CLICK,
+        CURSOR_FAST_MOVE = 0x8000
+    };
 
     ///> Remove event modifier flags
-    enum class REMOVE_FLAGS { NORMAL = 0x00, ALT = 0x01, CUT = 0x02 };
+    enum class REMOVE_FLAGS {
+        NORMAL = 0x00, ALT = 0x01, CUT = 0x02
+    };
 };
-
 
 /**
  * Class EVENTS
  *
  * Gathers all the events that are shared by tools.
  */
-class EVENTS
-{
+class EVENTS {
 public:
     const static TOOL_EVENT SelectedEvent;
     const static TOOL_EVENT UnselectedEvent;
@@ -203,5 +211,4 @@ public:
 };
 
 #endif // __ACTIONS_H
-
 

@@ -22,10 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-//
-// To do
-//
-#include    <dialog_board_renum.h>				//
+#include    <dialog_board_renum.h>
 #include    <fstream>
 #include    <mail_type.h>
 #include    "renum_type.h"

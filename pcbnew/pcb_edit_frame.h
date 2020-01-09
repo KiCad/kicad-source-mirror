@@ -63,20 +63,20 @@ class FP_LIB_TABLE;
 class BOARD_NETLIST_UPDATER;
 class ACTION_MENU;
 
-namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
+namespace PCB {
+struct IFACE;
+}     // KIFACE_I is in pcbnew.cpp
 
 /**
  * Enum to signify the result of editing tracks and vias
  */
-enum TRACK_ACTION_RESULT
-{
-    TRACK_ACTION_DRC_ERROR = -1,//!< TRACK_ACTION_DRC_ERROR - Track not changed to to DRC
-    TRACK_ACTION_SUCCESS,       //!< TRACK_ACTION_SUCCESS - Track changed successfully
+enum TRACK_ACTION_RESULT {
+    TRACK_ACTION_DRC_ERROR = -1, //!< TRACK_ACTION_DRC_ERROR - Track not changed to to DRC
+    TRACK_ACTION_SUCCESS, //!< TRACK_ACTION_SUCCESS - Track changed successfully
     TRACK_ACTION_NONE           //!< TRACK_ACTION_NONE - Nothing to change
 };
 
-enum LAST_PATH_TYPE
-{
+enum LAST_PATH_TYPE {
     LAST_PATH_NETLIST = 0,
     LAST_PATH_STEP,
     LAST_PATH_IDF,
@@ -94,42 +94,37 @@ enum LAST_PATH_TYPE
  * See also class PCB_BASE_FRAME(): Basic class for Pcbnew and GerbView.
  */
 
-
-class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
-{
+class PCB_EDIT_FRAME: public PCB_BASE_EDIT_FRAME {
     friend struct PCB::IFACE;
     friend class PCB_LAYER_WIDGET;
 
     /// The auxiliary right vertical tool bar used to access the microwave tools.
-    ACTION_TOOLBAR*   m_microWaveToolBar;
+    ACTION_TOOLBAR *m_microWaveToolBar;
 
 protected:
-    PARAM_CFG_ARRAY   m_configParams;           // List of Pcbnew configuration settings.
-    PARAM_CFG_ARRAY   m_projectFileParams;
+    PARAM_CFG_ARRAY m_configParams;    // List of Pcbnew configuration settings.
+    PARAM_CFG_ARRAY m_projectFileParams;
 
-    wxString          m_lastPath[ LAST_PATH_SIZE ];
-
+    wxString m_lastPath[LAST_PATH_SIZE];
 
     /**
      * Store the previous layer toolbar icon state information
      */
-    struct LAYER_TOOLBAR_ICON_VALUES
-    {
-        int     previous_requested_scale;
+    struct LAYER_TOOLBAR_ICON_VALUES {
+        int previous_requested_scale;
         COLOR4D previous_active_layer_color;
         COLOR4D previous_Route_Layer_TOP_color;
         COLOR4D previous_Route_Layer_BOTTOM_color;
         COLOR4D previous_via_color;
         COLOR4D previous_background_color;
 
-        LAYER_TOOLBAR_ICON_VALUES()
-                : previous_requested_scale( 0 ),
-                  previous_active_layer_color( COLOR4D::UNSPECIFIED ),
-                  previous_Route_Layer_TOP_color( COLOR4D::UNSPECIFIED ),
-                  previous_Route_Layer_BOTTOM_color( COLOR4D::UNSPECIFIED ),
-                  previous_via_color( COLOR4D::UNSPECIFIED ),
-                  previous_background_color( COLOR4D::UNSPECIFIED )
-        {
+        LAYER_TOOLBAR_ICON_VALUES() :
+                previous_requested_scale(0), previous_active_layer_color(
+                        COLOR4D::UNSPECIFIED), previous_Route_Layer_TOP_color(
+                        COLOR4D::UNSPECIFIED), previous_Route_Layer_BOTTOM_color(
+                        COLOR4D::UNSPECIFIED), previous_via_color(
+                        COLOR4D::UNSPECIFIED), previous_background_color(
+                        COLOR4D::UNSPECIFIED) {
         }
     };
 
@@ -138,20 +133,20 @@ protected:
     // The Tool Framework initalization
     void setupTools();
 
-    wxString createBackupFile( const wxString& aFileName );
+    wxString createBackupFile(const wxString &aFileName);
 
     /**
      * switches currently used canvas (Cairo / OpenGL).
      * It also reinit the layers manager that slightly changes with canvases
      */
-    void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
+    void SwitchCanvas(EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType) override;
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     /**
      * Function buildActionPluginMenus
      * Fill action menu with all registered action plugins
      */
-    void buildActionPluginMenus( ACTION_MENU* aActionMenu );
+    void buildActionPluginMenus(ACTION_MENU *aActionMenu);
 
     /**
      * Function AddActionPluginTools
@@ -159,35 +154,34 @@ protected:
      */
     void AddActionPluginTools();
 
-	/**
-	 * Function RunActionPlugin
-	 * Executes action plugin's Run() method and updates undo buffer
-	 * @param aActionPlugin action plugin
-	 */
-	void RunActionPlugin( ACTION_PLUGIN* aActionPlugin );
+    /**
+     * Function RunActionPlugin
+     * Executes action plugin's Run() method and updates undo buffer
+     * @param aActionPlugin action plugin
+     */
+    void RunActionPlugin(ACTION_PLUGIN *aActionPlugin);
 
     /**
      * Function OnActionPluginMenu
      * Launched by the menu when an action is called
      * @param aEvent sent by wx
      */
-    void OnActionPluginMenu( wxCommandEvent& aEvent);
+    void OnActionPluginMenu(wxCommandEvent &aEvent);
 
     /**
      * Function OnActionPluginButton
      * Launched by the button when an action is called
      * @param aEvent sent by wx
      */
-    void OnActionPluginButton( wxCommandEvent& aEvent );
+    void OnActionPluginButton(wxCommandEvent &aEvent);
 
     /**
      * Function OnActionPluginRefresh
      * Refresh plugin list (reload Python plugins)
      * @param aEvent sent by wx
      */
-    void OnActionPluginRefresh( wxCommandEvent& aEvent)
-    {
-       PythonPluginsReload();
+    void OnActionPluginRefresh(wxCommandEvent &aEvent) {
+        PythonPluginsReload();
     }
 #endif
 
@@ -195,17 +189,15 @@ protected:
      * not defined
      * @return the frame name identifier for the python console frame
      */
-    static const wxChar * pythonConsoleNameId()
-    {
-        return wxT( "PythonConsole" );
+    static const wxChar* pythonConsoleNameId() {
+        return wxT("PythonConsole");
     }
 
     /**
      * @return a pointer to the python console frame, or NULL if not exist
      */
-    static wxWindow * findPythonConsole()
-    {
-       return FindWindowByName( pythonConsoleNameId() );
+    static wxWindow* findPythonConsole() {
+        return FindWindowByName(pythonConsoleNameId());
     }
 
     /**
@@ -260,30 +252,30 @@ protected:
      * @param full filepath of file to be imported.
      * @param aFileType PCB_FILE_T value for filetype
      */
-    bool importFile( const wxString& aFileName, int aFileType );
+    bool importFile(const wxString &aFileName, int aFileType);
 
     /**
      * Use the existing edge_cut line thicknesses to infer the edge clearace.
      */
-    int inferLegacyEdgeClearance( BOARD* aBoard );
+    int inferLegacyEdgeClearance(BOARD *aBoard);
 
     /**
      * Rematch orphaned zones and vias to schematic nets.
      */
-    bool fixEagleNets( const std::unordered_map<wxString, wxString>& aRemap );
+    bool fixEagleNets(const std::unordered_map<wxString, wxString> &aRemap);
 
     // protected so that PCB::IFACE::CreateWindow() is the only factory.
-    PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
+    PCB_EDIT_FRAME(KIWAY *aKiway, wxWindow *aParent);
 
 public:
-    PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
-    wxChoice* m_SelTrackWidthBox;           // a choice box to display and select current track width
-    wxChoice* m_SelViaSizeBox;              // a choice box to display and select current via diameter
+    PCB_LAYER_BOX_SELECTOR *m_SelLayerBox; // a combo box to display and select active layer
+    wxChoice *m_SelTrackWidthBox; // a choice box to display and select current track width
+    wxChoice *m_SelViaSizeBox; // a choice box to display and select current via diameter
 
     bool m_show_microwave_tools;
     bool m_show_layer_manager_tools;
 
-    bool m_ZoneFillsDirty;                  // Board has been modified since last zone fill.
+    bool m_ZoneFillsDirty;      // Board has been modified since last zone fill.
 
     virtual ~PCB_EDIT_FRAME();
 
@@ -296,9 +288,9 @@ public:
      * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
      *           occurs while reading footprint library files.
      */
-    void LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter );
+    void LoadFootprints(NETLIST &aNetlist, REPORTER &aReporter);
 
-    void OnQuit( wxCommandEvent& event );
+    void OnQuit(wxCommandEvent &event);
 
     /**
      * Get if the current board has been modified but not saved.
@@ -326,34 +318,35 @@ public:
      * this is a virtual function called by EDA_DRAW_FRAME::OnSockRequest().
      * @param cmdline = received command from socket
      */
-    void ExecuteRemoteCommand( const char* cmdline ) override;
+    void ExecuteRemoteCommand(const char *cmdline) override;
 
-    void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
+    void KiwayMailIn(KIWAY_EXPRESS &aEvent) override;
 
     /**
      * Function ToPlotter
      * Open a dialog frame to create plot and drill files relative to the current board.
      */
-    void ToPlotter( int aID );
+    void ToPlotter(int aID);
 
     /**
      * Function SVG_Print
      * Shows the Export to SVG file dialog.
      */
-    void ExportSVG( wxCommandEvent& event );
+    void ExportSVG(wxCommandEvent &event);
 
     // User interface update command event handlers.
-    void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
+    void OnUpdateLayerSelectBox(wxUpdateUIEvent &aEvent);
     bool LayerManagerShown();
     bool MicrowaveToolbarShown();
-    void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
-    void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
-    void OnLayerColorChange( wxCommandEvent& aEvent );
+    void OnUpdateSelectViaSize(wxUpdateUIEvent &aEvent);
+    void OnUpdateSelectTrackWidth(wxUpdateUIEvent &aEvent);
+    void OnLayerColorChange(wxCommandEvent &aEvent);
 
     void RunEeschema();
 
-    void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, bool aEdit = true );
-    void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aEdit = true );
+    void UpdateTrackWidthSelectBox(wxChoice *aTrackWidthSelectBox, bool aEdit =
+            true);
+    void UpdateViaSizeSelectBox(wxChoice *aViaSizeSelectBox, bool aEdit = true);
 
     /**
      * Function GetGridColor() , virtual
@@ -365,10 +358,10 @@ public:
      * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
-    void SetGridColor( COLOR4D aColor ) override;
+    void SetGridColor(COLOR4D aColor) override;
 
     // Configurations:
-    void Process_Config( wxCommandEvent& event );
+    void Process_Config(wxCommandEvent &event);
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
 
@@ -377,20 +370,22 @@ public:
      * Set a set of plugins that have visible buttons on toolbar
      * Plugins are identified by their module path
      */
-    void SetActionPluginSettings( const std::vector< std::pair<wxString, wxString> >& aPluginsWithButtons );
+    void SetActionPluginSettings(
+            const std::vector<std::pair<wxString, wxString> > &aPluginsWithButtons);
 
     /**
      * Function GetActionPluginSettings
      * Get a set of plugins that have visible buttons on toolbar
      */
-    std::vector< std::pair<wxString, wxString> > GetActionPluginSettings();
+    std::vector<std::pair<wxString, wxString> > GetActionPluginSettings();
 
     /**
      * Function GetActionPluginButtonVisible
      * Returns true if button visibility action plugin setting was set to true
      * or it is unset and plugin defaults to true.
      */
-    bool GetActionPluginButtonVisible( const wxString& aPluginPath, bool aPluginDefault );
+    bool GetActionPluginButtonVisible(const wxString &aPluginPath,
+            bool aPluginDefault);
 
     /**
      * Function GetOrderedActionPlugins
@@ -419,7 +414,7 @@ public:
      * saves changes to the project settings to the project (.pro) file.
      * @param aAskForSave = true to open a dialog before saving the settings
      */
-    void SaveProjectSettings( bool aAskForSave ) override;
+    void SaveProjectSettings(bool aAskForSave) override;
 
     /**
      * Load the current project's file configuration settings which are pertinent
@@ -446,17 +441,20 @@ public:
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings();
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
+    void LoadSettings(wxConfigBase *aCfg) override;
 
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings(wxConfigBase *aCfg) override;
 
-    wxConfigBase* GetSettings() { return config(); };
+    wxConfigBase* GetSettings() {
+        return config();
+    }
+    ;
 
     /**
      * Get the last path for a particular type.
      * @return - Absolute path and file name of the last file successfully read.
      */
-    wxString GetLastPath( LAST_PATH_TYPE aType );
+    wxString GetLastPath(LAST_PATH_TYPE aType);
 
     /**
      * Set the path of the last file successfully read.
@@ -469,11 +467,11 @@ public:
      *
      * @param aLastPath - The last file with full path successfully read.
      */
-    void SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPath );
+    void SetLastPath(LAST_PATH_TYPE aType, const wxString &aLastPath);
 
-    void OnCloseWindow( wxCloseEvent& Event ) override;
-    void Process_Special_Functions( wxCommandEvent& event );
-    void Tracks_and_Vias_Size_Event( wxCommandEvent& event );
+    void OnCloseWindow(wxCloseEvent &Event) override;
+    void Process_Special_Functions(wxCommandEvent &event);
+    void Tracks_and_Vias_Size_Event(wxCommandEvent &event);
 
     void ReCreateHToolbar() override;
     void ReCreateAuxiliaryToolbar() override;
@@ -489,8 +487,7 @@ public:
      * false if not needed (mainly in parent toolbar creation,
      * or when the layers names are not modified)
      */
-    void ReCreateLayerBox( bool aForceResizeToolbar = true );
-
+    void ReCreateLayerBox(bool aForceResizeToolbar = true);
 
     /**
      * Function SetCurrentNetClass
@@ -502,7 +499,7 @@ public:
      * @param aNetClassName = the new netclass name
      * @return true if lists of tracks and vias sizes are modified
      */
-    bool SetCurrentNetClass( const wxString& aNetClassName );
+    bool SetCurrentNetClass(const wxString &aNetClassName);
 
     /**
      * Function OnModify
@@ -519,14 +516,16 @@ public:
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
+    void SetActiveLayer(PCB_LAYER_ID aLayer) override;
 
-    PCB_LAYER_WIDGET* GetLayerManager() { return m_Layers; }
+    PCB_LAYER_WIDGET* GetLayerManager() {
+        return m_Layers;
+    }
 
     /**
      * Update the UI to reflect changes to the current layer's transparency.
      */
-    void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) override;
+    void OnUpdateLayerAlpha(wxUpdateUIEvent &aEvent) override;
 
     /**
      * Function IsElementVisible
@@ -536,7 +535,7 @@ public:
      * @return bool - true if the element is visible.
      * @see enum GAL_LAYER_ID
      */
-    bool IsElementVisible( GAL_LAYER_ID aElement ) const;
+    bool IsElementVisible(GAL_LAYER_ID aElement) const;
 
     /**
      * Function SetElementVisibility
@@ -545,7 +544,7 @@ public:
      * @param aNewState The new visibility state of the element category
      * @see enum PCB_LAYER_ID
      */
-    void SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState );
+    void SetElementVisibility(GAL_LAYER_ID aElement, bool aNewState);
 
     /**
      * Function SetVisibleAlls
@@ -566,12 +565,12 @@ public:
     /**
      * Function ShowBoardSetupDialog
      */
-    void DoShowBoardSetupDialog( const wxString& aInitialPage = wxEmptyString,
-                                 const wxString& aInitialParentPage = wxEmptyString );
+    void DoShowBoardSetupDialog(const wxString &aInitialPage = wxEmptyString,
+            const wxString &aInitialParentPage = wxEmptyString);
 
     /* toolbars update UI functions: */
 
-    void PrepareLayerIndicator( bool aForceRebuild = false );
+    void PrepareLayerIndicator(bool aForceRebuild = false);
 
     void ToggleLayersManager();
     void ToggleMicrowaveToolbar();
@@ -590,15 +589,16 @@ public:
      * @return the number of footprints found on aSide side,
      *    or -1 if the file could not be created
      */
-    int DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
-                                      bool aForceSmdItems, bool aTopSide, bool BottomSide, bool aFormatCSV = false );
+    int DoGenFootprintsPositionFile(const wxString &aFullFileName,
+            bool aUnitsMM, bool aForceSmdItems, bool aTopSide, bool BottomSide,
+            bool aFormatCSV = false);
 
     /**
      * Function GenFootprintsReport
      * Calls DoGenFootprintsReport to create a footprint reprot file
      * See DoGenFootprintsReport for file format
      */
-    void GenFootprintsReport( wxCommandEvent& event );
+    void GenFootprintsReport(wxCommandEvent &event);
 
     /**
      * Function DoGenFootprintsReport
@@ -608,11 +608,11 @@ public:
      * @param aUnitsMM = false to use inches, true to use mm in coordinates
      * @return true if OK, false if error
      */
-    bool DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM );
+    bool DoGenFootprintsReport(const wxString &aFullFilename, bool aUnitsMM);
 
-    void GenD356File( wxCommandEvent& event );
+    void GenD356File(wxCommandEvent &event);
 
-    void OnFileHistory( wxCommandEvent& event );
+    void OnFileHistory(wxCommandEvent &event);
 
     /**
      * Function Files_io
@@ -620,7 +620,7 @@ public:
      * do nothing else than call Files_io_from_id with the
      * wxCommandEvent id
      */
-    void Files_io( wxCommandEvent& event );
+    void Files_io(wxCommandEvent &event);
 
     /**
      * Function Files_io_from_id
@@ -635,7 +635,7 @@ public:
      * ID_SAVE_BOARD_AS
      * Files_io_from_id prepare parameters and calls the specialized function
      */
-    bool Files_io_from_id( int aId );
+    bool Files_io_from_id(int aId);
 
     /**
      * Function OpenProjectFiles    (was LoadOnePcbFile)
@@ -648,10 +648,11 @@ public:
      *                    @see #KIWAY_PLAYER for bit defines.
      *
      * @return bool - false if file load fails, otherwise true.
-    bool LoadOnePcbFile( const wxString& aFileName, bool aAppend = false,
-                         bool aForceFileDialog = false );
+     bool LoadOnePcbFile( const wxString& aFileName, bool aAppend = false,
+     bool aForceFileDialog = false );
      */
-    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
+    bool OpenProjectFiles(const std::vector<wxString> &aFileSet, int aCtl = 0)
+            override;
 
     /**
      * Function SavePcbFile
@@ -665,7 +666,8 @@ public:
      *                          are defined for improved code readability.
      * @return True if file was saved successfully.
      */
-    bool SavePcbFile( const wxString& aFileName, bool aCreateBackupFile = CREATE_BACKUP_FILE );
+    bool SavePcbFile(const wxString &aFileName, bool aCreateBackupFile =
+            CREATE_BACKUP_FILE);
 
     /**
      * Function SavePcbCopy
@@ -678,7 +680,7 @@ public:
      * @param aFileName The file name to write.
      * @return True if file was saved successfully.
      */
-    bool SavePcbCopy( const wxString& aFileName );
+    bool SavePcbCopy(const wxString &aFileName);
 
     // BOARD handling
 
@@ -688,16 +690,16 @@ public:
      * @param aQuery = true to prompt user for confirmation, false to initialize silently
      * @param aFinal = if true, we are clearing the board to exit, so don't run more events
      */
-    bool Clear_Pcb( bool aQuery, bool aFinal = false );
+    bool Clear_Pcb(bool aQuery, bool aFinal = false);
 
     ///> @copydoc PCB_BASE_FRAME::SetBoard()
-    void SetBoard( BOARD* aBoard ) override;
+    void SetBoard(BOARD *aBoard) override;
 
     ///> @copydoc PCB_BASE_EDIT_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
     ///> @copydoc PCB_BASE_FRAME::SetPageSettings()
-    void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
+    void SetPageSettings(const PAGE_INFO &aPageSettings) override;
 
     /**
      * Function RecreateBOMFileFromBoard
@@ -705,7 +707,7 @@ public:
      * this is the same as created by CvPcb.
      * can be used if this file is lost
      */
-    void RecreateCmpFileFromBoard( wxCommandEvent& aEvent );
+    void RecreateCmpFileFromBoard(wxCommandEvent &aEvent);
 
     /**
      * Function ArchiveModulesOnBoard
@@ -721,26 +723,26 @@ public:
      *              optional library name to create, stops dialog call.
      *              must be called with aStoreInNewLib as true
      */
-    void ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString,
-                                wxString* aLibPath = NULL );
+    void ArchiveModulesOnBoard(bool aStoreInNewLib, const wxString &aLibName =
+            wxEmptyString, wxString *aLibPath = NULL);
 
     /**
      * Function RecreateBOMFileFromBoard
      * Creates a BOM file from the current loaded board
      */
-    void RecreateBOMFileFromBoard( wxCommandEvent& aEvent );
+    void RecreateBOMFileFromBoard(wxCommandEvent &aEvent);
 
     /**
      * Function ExportToGenCAD
      * creates a file in  GenCAD 1.4 format from the current board.
      */
-    void ExportToGenCAD( wxCommandEvent& event );
+    void ExportToGenCAD(wxCommandEvent &event);
 
     /**
      * Function OnExportVRML
      * will export the current BOARD to a VRML file.
      */
-    void OnExportVRML( wxCommandEvent& event );
+    void OnExportVRML(wxCommandEvent &event);
 
     /**
      * Function ExportVRML_File
@@ -771,21 +773,21 @@ public:
      * @param aYRef = Y value of PCB (0,0) reference point
      * @return true if Ok.
      */
-    bool ExportVRML_File( const wxString & aFullFileName, double aMMtoWRMLunit,
-                          bool aExport3DFiles, bool aUseRelativePaths, bool aUsePlainPCB,
-                          const wxString & a3D_Subdir, double aXRef, double aYRef );
+    bool ExportVRML_File(const wxString &aFullFileName, double aMMtoWRMLunit,
+            bool aExport3DFiles, bool aUseRelativePaths, bool aUsePlainPCB,
+            const wxString &a3D_Subdir, double aXRef, double aYRef);
 
     /**
      * Function OnExportIDF3
      * will export the current BOARD to a IDFv3 board and lib files.
      */
-    void OnExportIDF3( wxCommandEvent& event );
+    void OnExportIDF3(wxCommandEvent &event);
 
     /**
      * Function OnExportHyperlynx
      * will export the current BOARD to a Hyperlynx HYP file.
      */
-    void OnExportHyperlynx( wxCommandEvent& event );
+    void OnExportHyperlynx(wxCommandEvent &event);
 
     /**
      * Function Export_IDF3
@@ -798,14 +800,14 @@ public:
      * @param aYRef = the board Reference Point in mm, Y value
      * @return true if OK
      */
-    bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
-                      bool aUseThou, double aXRef, double aYRef );
+    bool Export_IDF3(BOARD *aPcb, const wxString &aFullFileName, bool aUseThou,
+            double aXRef, double aYRef);
 
     /**
      * Function OnExportSTEP
      * Exports the current BOARD to a STEP assembly.
      */
-    void OnExportSTEP( wxCommandEvent& event );
+    void OnExportSTEP(wxCommandEvent &event);
 
     /**
      * Function ExportSpecctraFile
@@ -814,7 +816,7 @@ public:
      * specification.
      * @return true if OK
      */
-    bool ExportSpecctraFile( const wxString& aFullFilename );
+    bool ExportSpecctraFile(const wxString &aFullFilename);
 
     /**
      * Function ImportSpecctraSession
@@ -823,12 +825,13 @@ public:
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
      * specification.
      */
-    bool ImportSpecctraSession( const wxString& aFullFilename );
+    bool ImportSpecctraSession(const wxString &aFullFilename);
 
     // Footprint editing (see also PCB_BASE_FRAME)
-    void InstallFootprintPropertiesDialog( MODULE* Module );
+    void InstallFootprintPropertiesDialog(MODULE *Module);
 
-    int InstallExchangeModuleFrame( MODULE* aModule, bool updateMode, bool selectedMode );
+    int InstallExchangeModuleFrame(MODULE *aModule, bool updateMode,
+            bool selectedMode);
 
     /**
      * Function Exchange_Module
@@ -839,10 +842,9 @@ public:
      * @param aDest = footprint to put
      * @param aCommit = commit that should store the changes
      */
-    void Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT& aCommit,
-                          bool deleteExtraTexts = true,
-                          bool resetTextLayers = true, bool resetTextEffects = true,
-                          bool reset3DModels = true );
+    void Exchange_Module(MODULE *aSrc, MODULE *aDest, BOARD_COMMIT &aCommit,
+            bool deleteExtraTexts = true, bool resetTextLayers = true,
+            bool resetTextEffects = true, bool reset3DModels = true);
 
     // loading modules: see PCB_BASE_FRAME
 
@@ -852,9 +854,9 @@ public:
      * @param aDC = the current device context
      * @param aItem = a pointer to the BOARD_ITEM to edit
      */
-    void OnEditItemRequest( BOARD_ITEM* aItem ) override;
+    void OnEditItemRequest(BOARD_ITEM *aItem) override;
 
-    void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer ) override;
+    void SwitchLayer(wxDC *DC, PCB_LAYER_ID layer) override;
 
     /**
      * Function SetTrackSegmentWidth
@@ -871,20 +873,18 @@ public:
      *          -1 if there was a DRC error,
      *          1 if items were changed successfully
      */
-    int SetTrackSegmentWidth( TRACK*             aTrackItem,
-                               PICKED_ITEMS_LIST* aItemsListPicker,
-                               bool               aUseNetclassValue );
-
+    int SetTrackSegmentWidth(TRACK *aTrackItem,
+            PICKED_ITEMS_LIST *aItemsListPicker, bool aUseNetclassValue);
 
     /**
      * Function Edit_Zone_Params
      * Edit params (layer, clearance, ...) for a zone outline
      */
-    void Edit_Zone_Params( ZONE_CONTAINER* zone_container );
+    void Edit_Zone_Params(ZONE_CONTAINER *zone_container);
 
     // Properties dialogs
-    void ShowTargetOptionsDialog( PCB_TARGET* aTarget );
-    void ShowDimensionPropertyDialog( DIMENSION* aDimension );
+    void ShowTargetOptionsDialog(PCB_TARGET *aTarget);
+    void ShowDimensionPropertyDialog(DIMENSION *aDimension);
     void InstallNetlistFrame();
 
     /**
@@ -892,19 +892,21 @@ public:
      * @param aNetlist a NETLIST owned by the caller.  This function fills it in.
      * @return true if a netlist was fetched.
      */
-    enum FETCH_NETLIST_MODE { NO_ANNOTATION, QUIET_ANNOTATION, ANNOTATION_DIALOG };
-    bool FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode );
+    enum FETCH_NETLIST_MODE {
+        NO_ANNOTATION, QUIET_ANNOTATION, ANNOTATION_DIALOG
+    };
+    bool FetchNetlistFromSchematic(NETLIST &aNetlist, FETCH_NETLIST_MODE aMode);
 
     /**
      * Function RenumberSchematic
-         * @param aNetlist a NETLIST filled in by the caller.
-         *        aMessage is the error message from eeSchem
-         *        if aCommit is false it just test, if true it updates the schematic
-         * @return false if failed due to standalone mode, true if a reply.
-         */
+     * @param aNetlist a NETLIST filled in by the caller.
+     *        aMessage is the error message from eeSchem
+     *        if aCommit is false it just test, if true it updates the schematic
+     * @return false if failed due to standalone mode, true if a reply.
+     */
 
-    bool RenumberSchematic( std::string& aNetlist, MAIL_T aMode  );
-    bool TestStandalone( void );
+    bool RenumberSchematic(std::string &aNetlist, MAIL_T aMode);
+    bool TestStandalone(void);
 
     /**
      * Function DoUpdatePCBFromNetlist
@@ -912,7 +914,7 @@ public:
      * @param aNetlist
      * @param aUseTimestamps
      */
-    void DoUpdatePCBFromNetlist( NETLIST& aNetlist, bool aUseTimestamps );
+    void DoUpdatePCBFromNetlist(NETLIST &aNetlist, bool aUseTimestamps);
 
     /**
      * Reads a netlist from a file into a NETLIST object.
@@ -922,15 +924,16 @@ public:
      * @param aReporter is a #REPORTER object to display messages
      * @return true if the netlist was read successfully
      */
-    bool ReadNetlistFromFile( const wxString &aFilename, NETLIST& aNetlist, REPORTER& aReporter );
+    bool ReadNetlistFromFile(const wxString &aFilename, NETLIST &aNetlist,
+            REPORTER &aReporter);
 
     /**
      * Called after netlist is updated
      * @param aUpdater is the updater object that was run
      * @param aRunDragCommand is set to true if the drag command was invoked by this call
      */
-    void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand );
-
+    void OnNetlistChanged(BOARD_NETLIST_UPDATER &aUpdater,
+            bool *aRunDragCommand);
 
 #if defined( KICAD_SCRIPTING_WXPYTHON )
     /**
@@ -940,7 +943,7 @@ public:
     void ScriptingConsoleEnableDisable();
 #endif
 
-    void LockModule( MODULE* aModule, bool aLocked );
+    void LockModule(MODULE *aModule, bool aLocked);
 
     /**
      * Function SendMessageToEESCHEMA
@@ -948,14 +951,14 @@ public:
      * to a part with the same reference as the objectToSync
      * @param objectToSync The object whose reference is used to synchronize Eeschema.
      */
-    void SendMessageToEESCHEMA( BOARD_ITEM* objectToSync );
+    void SendMessageToEESCHEMA(BOARD_ITEM *objectToSync);
 
     /**
      * Sends a net name to eeschema for highlighting
      *
      * @param aNetName is the name of a net, or empty string to clear highlight
      */
-    void SendCrossProbeNetName( const wxString& aNetName );
+    void SendCrossProbeNetName(const wxString &aNetName);
 
     /**
      * Function CreateMuWaveBaseFootprint
@@ -966,7 +969,8 @@ public:
      * Pads settings are:
      *  PAD_ATTRIB_SMD, rectangular, H size = V size = current track width.
      */
-    MODULE* CreateMuWaveBaseFootprint( const wxString& aValue, int aTextSize, int aPadCount );
+    MODULE* CreateMuWaveBaseFootprint(const wxString &aValue, int aTextSize,
+            int aPadCount);
 
     /**
      * Create_MuWaveComponent
@@ -975,7 +979,7 @@ public:
      *  PAD_ATTRIB_SMD, rectangular, H size = V size = current track width.
      *  the "gap" is isolation created between this 2 pads
      */
-    MODULE* Create_MuWaveComponent( int shape_type );
+    MODULE* Create_MuWaveComponent(int shape_type);
 
     MODULE* Create_MuWavePolygonShape();
 
@@ -993,21 +997,22 @@ public:
      */
     void UpdateTitle();
 
-    void On3DShapeLibWizard( wxCommandEvent& event );
+    void On3DShapeLibWizard(wxCommandEvent &event);
 
     /**
      * Allows Pcbnew to install its preferences panel into the preferences dialog.
      */
-    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
+    void InstallPreferences(PAGED_DIALOG *aParent,
+            PANEL_HOTKEYS_EDITOR *aHotkeysPanel) override;
 
     /**
      * Called after the preferences dialog is run.
      */
-    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
+    void CommonSettingsChanged(bool aEnvVarsChanged) override;
 
     void SyncToolbars() override;
 
-    DECLARE_EVENT_TABLE()
+DECLARE_EVENT_TABLE()
 };
 
 #endif  // WXPCB_STRUCT_H_

@@ -61,7 +61,7 @@ void RenumberFromPCBNew(SCH_EDIT_FRAME *aFrame, std::string &aNetlist) {
 
     BACK_ANNOTATE backAnno(aFrame, settings);
 
-    if (true != backAnno.BackAnnotateSymbols(aNetlist )) {
+    if (true != backAnno.BackAnnotateSymbols(aNetlist)) {
         aNetlist = _("Errors reported by eeSchema:\n")
                 + reporter.m_string.ToStdString();     //Assume the worst
         aNetlist += _("\nAnnotation not performed!\n");
