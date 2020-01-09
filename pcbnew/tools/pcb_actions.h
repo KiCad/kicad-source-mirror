@@ -413,7 +413,7 @@ public:
     static TOOL_ACTION appendBoard;
     static TOOL_ACTION showEeschema;
     static TOOL_ACTION boardStatistics;
-    static TOOL_ACTION boardRenum;        //bjp
+    static TOOL_ACTION boardRenum;
 
     // Ratsnest
     static TOOL_ACTION localRatsnestTool;

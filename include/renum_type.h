@@ -10,13 +10,4 @@
 
 #define RENUM_OK _("No Errors ")
 
-#define RENUM_DRYRUN    true
-#define RENUM_COMMIT    false
-
-enum    REPORT_TYPE {
-        rpthead,
-        rpttail,
-        rptreport
-};
-
 #endif /* INCLUDE_RENUM_TYPE_H_ */

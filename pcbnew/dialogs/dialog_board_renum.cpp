@@ -107,19 +107,6 @@ SORTYFIRST + ASCENDINGFIRST + DESCENDINGSECOND, //"Top to bottom, left to right"
         SORTXFIRST + ASCENDINGFIRST + DESCENDINGSECOND //"Right to left, bottom to top",  //  001
 };
 
-/*
-bool SortYFirst;
-bool DescendingFirst;
-bool DescendingSecond;
-
-wxString this->m_LogFile;
-wxString this->m_ChangeFile;
-std::vector<RefDesChange> ChangeArray;
-std::vector<RefDesInfo> FrontModules;
-std::vector<RefDesInfo> BackModules;
-std::vector<RefDesTypeStr> RefDesTypes;
-std::vector<wxString> ExcludeArray;
-*/
 #define TraceReport( mess ) { std::cerr << mess << std::flush; }
 
 DIALOG_BOARD_RENUM::DIALOG_BOARD_RENUM(PCB_EDIT_FRAME *aParentFrame) :
@@ -179,13 +166,13 @@ void DIALOG_BOARD_RENUM::OnRenumberClick(wxCommandEvent &event) {
         return;
     }
 
+    if (!m_frame->TestStandalone())
+        return;       //Not in standalone mode
+
     if (!IsOK(m_frame,
             _(
                     "This operation will change the annotation of the PCB and schematic and cannot be undone. Proceed?")))
         return;
-
-    if (!m_frame->TestStandalone())
-        return;       //Not in standalone mode
 
     GetParameters();                         //Figure out how this is to be done
     this->m_LogFile.clear();
@@ -193,7 +180,7 @@ void DIALOG_BOARD_RENUM::OnRenumberClick(wxCommandEvent &event) {
     std::vector<RefDesInfo> BadRefDes;
     BuildModuleList(BadRefDes);
 
-    if (0 != BadRefDes.size()) {
+    if ( !BadRefDes.empty()) {
         message.Printf(
                 _(
                         "\n\nPCB has %d empty or invalid reference designations "
@@ -201,12 +188,12 @@ void DIALOG_BOARD_RENUM::OnRenumberClick(wxCommandEvent &event) {
                 (int) BadRefDes.size());
 
         wxString badrefdes;
-        for (auto Mod : BadRefDes) {
-            badrefdes += _("\nRefdes: \"") + Mod.RefDesString + _("\" Module:")
-                    + Mod.FPID.GetLibNickname() + ":"
-                    + Mod.FPID.GetLibItemName();
+        for (auto mod : BadRefDes) {
+            badrefdes += _("\nRefdes: \"") + mod.RefDesString + _("\" Module:")
+                    + mod.FPID.GetLibNickname() + ":"
+                    + mod.FPID.GetLibItemName();
             badrefdes += "at X, Y "
-                    + CoordTowxString(Mod.x, Mod.y) + _(" on PCB ");
+                    + CoordTowxString(mod.x, mod.y) + _(" on PCB ");
         }
         ShowWarning(message + badrefdes + "\n\n");
         message += _("Yes will attempt renumber. Proceed?");

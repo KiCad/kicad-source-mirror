@@ -900,7 +900,7 @@ public:
          * @param aNetlist a NETLIST filled in by the caller.
          *        aMessage is the error message from eeSchem
          *        if aCommit is false it just test, if true it updates the schematic
-\         * @return false if failed due to standalone mode, true if a reply.
+         * @return false if failed due to standalone mode, true if a reply.
          */
 
     bool RenumberSchematic( std::string& aNetlist, MAIL_T aMode  );

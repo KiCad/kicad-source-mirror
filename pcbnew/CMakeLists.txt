@@ -55,8 +55,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_board_setup.cpp
     dialogs/dialog_board_statistics.cpp
     dialogs/dialog_board_statistics_base.cpp
-    dialogs/dialog_board_renum.cpp              #bjp
-    dialogs/dialog_board_renum_base.cpp         #bjp
+    dialogs/dialog_board_renum.cpp
+    dialogs/dialog_board_renum_base.cpp
     dialogs/dialog_choose_footprint.cpp
     dialogs/dialog_cleanup_tracks_and_vias.cpp
     dialogs/dialog_cleanup_tracks_and_vias_base.cpp

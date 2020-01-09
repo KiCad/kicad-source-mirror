@@ -60,18 +60,15 @@ void RenumberFromPCBNew(SCH_EDIT_FRAME *aFrame, std::string &aNetlist) {
             false };    //dryRun (not required)
 
     BACK_ANNOTATE backAnno(aFrame, settings);
-    bool result = backAnno.BackAnnotateSymbols(aNetlist);
-    if (true != result) {
+
+    if (true != backAnno.BackAnnotateSymbols(aNetlist )) {
         aNetlist = _("Errors reported by eeSchema:\n")
                 + reporter.m_string.ToStdString();     //Assume the worst
         aNetlist += _("\nAnnotation not performed!\n");
     } else {
         aNetlist = RENUM_OK;                    //All is well
     }
-/*    aFrame->GetCanvas()->Refresh();        //Redraw
-    aFrame->GetCanvas()->ForceRefresh();
-    aFrame->OnModify();                           //Need to save file on exit.
-*/
+
     g_CurrentSheet->UpdateAllScreenReferences();
     aFrame->SetSheetNumberAndCount();
     aFrame->SyncView();
