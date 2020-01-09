@@ -808,6 +808,54 @@ DIALOG_FIELDS_EDITOR_GLOBAL::~DIALOG_FIELDS_EDITOR_GLOBAL()
 }
 
 
+bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataToWindow()
+{
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
+    TOOL_MANAGER*      toolMgr = m_parent->GetToolManager();
+    EE_SELECTION_TOOL* selectionTool = toolMgr->GetTool<EE_SELECTION_TOOL>();
+    EE_SELECTION&      selection = selectionTool->GetSelection();
+    SCH_COMPONENT* component = nullptr;
+
+    if( selection.GetSize() == 1 )
+    {
+        EDA_ITEM*      item = selection.Front();
+
+        if( item->Type() == SCH_COMPONENT_T )
+            component = (SCH_COMPONENT*) item;
+        else if( item->GetParent() && item->GetParent()->Type() == SCH_COMPONENT_T )
+            component = (SCH_COMPONENT*) item->GetParent();
+    }
+
+    if( component )
+    {
+        for( int row = 0; row < m_dataModel->GetNumberRows(); ++row )
+        {
+            std::vector<SCH_REFERENCE> references = m_dataModel->GetRowReferences( row );
+            bool                       found = false;
+
+            for( SCH_REFERENCE ref : references )
+            {
+                if( ref.GetComp() == component )
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if( found )
+            {
+                m_grid->GoToCell( row, 1 );
+                break;
+            }
+        }
+    }
+
+    return true;
+}
+
+
 bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataFromWindow()
 {
     if( !m_grid->CommitPendingChanges() )

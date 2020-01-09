@@ -40,6 +40,7 @@ public:
     DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent );
     virtual ~DIALOG_FIELDS_EDITOR_GLOBAL();
 
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
