@@ -65,6 +65,7 @@ struct supportedFileType
 {
     wxString m_Description; ///< Description shown in the file picker dialog
     wxString m_FileFilter;  ///< In case of folders it stands for extensions of files stored inside
+    wxString m_FolderSearchExtension;  ///< In case of folders it stands for extensions of files stored inside
     bool     m_IsFile;      ///< Whether the library is a folder or a file
     IO_MGR::PCB_FILE_T m_Plugin;
 };
@@ -84,12 +85,54 @@ enum {
  */
 static const std::map<int, supportedFileType> fileTypes =
 {
-    { ID_PANEL_FPLIB_ADD_KICADMOD,    { "KiCad (folder with .kicad_mod files)", "",                               false, IO_MGR::KICAD_SEXP } },
-    { ID_PANEL_FPLIB_ADD_EAGLE6,      { "Eagle 6.x (*.lbr)",                    EagleFootprintLibPathWildcard(),  true,  IO_MGR::EAGLE } },
-    { ID_PANEL_FPLIB_ADD_KICADLEGACY, { "KiCad legacy (*.mod)",                 LegacyFootprintLibPathWildcard(), true,  IO_MGR::LEGACY } },
-    { ID_PANEL_FPLIB_ADD_GEDA,        { "Geda (folder with *.fp files)",        "",                               false, IO_MGR::GEDA_PCB } },
+    { ID_PANEL_FPLIB_ADD_KICADMOD,    { "KiCad (folder with .kicad_mod files)", "",                               KiCadFootprintFileExtension,      false, IO_MGR::KICAD_SEXP } },
+    { ID_PANEL_FPLIB_ADD_EAGLE6,      { "Eagle 6.x (*.lbr)",                    EagleFootprintLibPathWildcard(),  "",                               true,  IO_MGR::EAGLE } },
+    { ID_PANEL_FPLIB_ADD_KICADLEGACY, { "KiCad legacy (*.mod)",                 LegacyFootprintLibPathWildcard(), "",                               true,  IO_MGR::LEGACY } },
+    { ID_PANEL_FPLIB_ADD_GEDA,        { "Geda (folder with *.fp files)",        "",                               GedaPcbFootprintLibFileExtension, false, IO_MGR::GEDA_PCB } },
 };
 // clang-format on
+
+
+/*
+ * Traverser implementation that looks to find any and all ".pretty" libraries by looking at the files contained inside
+ */
+class KICAD_MOD_TRAVERSER : public wxDirTraverser
+{
+public:
+    KICAD_MOD_TRAVERSER( wxString aSearchExtension ) : m_searchExtension( aSearchExtension )
+    {
+    }
+
+    virtual wxDirTraverseResult OnFile( const wxString& aFileName )
+    {
+        if( aFileName.EndsWith( m_searchExtension ) )
+        {
+            m_foundDirs.insert( { m_currentDir, 1 } );
+        }
+
+        return wxDIR_CONTINUE;
+    }
+
+    virtual wxDirTraverseResult OnDir( const wxString& aDirName )
+    {
+        m_currentDir = aDirName;
+        return wxDIR_CONTINUE;
+    }
+
+    void GetPaths( wxArrayString& aPathArray )
+    {
+        for( auto foundDirsPair : m_foundDirs )
+        {
+            aPathArray.Add( foundDirsPair.first );
+        }
+    }
+
+private:
+    wxString                          m_searchExtension;
+    wxString                          m_currentDir;
+    std::unordered_map<wxString, int> m_foundDirs;
+};
+
 
 /**
  * This class builds a wxGridTableBase by wrapping an #FP_LIB_TABLE object.
@@ -666,7 +709,20 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         if( result == wxID_CANCEL )
             return;
 
-        files.Add( dlg.GetPath() );
+        // is there a file extension configured to hunt out their containing folders?
+        if( fileType.m_FolderSearchExtension != "" )
+        {
+            wxDir rootDir( dlg.GetPath() );
+
+            KICAD_MOD_TRAVERSER traverser( fileType.m_FolderSearchExtension );
+            rootDir.Traverse( traverser );
+
+            traverser.GetPaths( files );
+        }
+        else
+        {
+            files.Add( dlg.GetPath() );
+        }
 
         m_lastBrowseDir = dlg.GetPath();
     }
