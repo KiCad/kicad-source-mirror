@@ -73,7 +73,7 @@ private:
 
     struct CACHE_ENTRY {
         LIB_ID fpid;
-        MODULE *module;
+        std::shared_ptr<MODULE> module;
         FOOTPRINT_STATUS status;
     };
 
@@ -93,7 +93,7 @@ private:
 
     void OnLoaderThreadUpdate( wxCommandEvent& aEvent );
 
-    void renderFootprint( MODULE *module );
+    void renderFootprint( std::shared_ptr<MODULE> aModule );
 
     FP_LOADER_THREAD*                   m_loader;
     std::shared_ptr<FP_THREAD_IFACE>    m_iface;
@@ -102,8 +102,9 @@ private:
     std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_DisplayOptions;
     std::unique_ptr<COLORS_DESIGN_SETTINGS>     m_colorsSettings;
 
-    LIB_ID      m_currentFPID;
-    bool        m_footprintDisplayed;
+    std::shared_ptr<MODULE> m_currentModule;
+    LIB_ID                  m_currentFPID;
+    bool                    m_footprintDisplayed;
 };
 
 #endif

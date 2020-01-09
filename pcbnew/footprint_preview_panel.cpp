@@ -19,25 +19,27 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <memory>
+#include <mutex>
+#include <utility>
+
+#include <class_board.h>
+#include <class_module.h>
+#include <colors_design_settings.h>
+#include <eda_draw_frame.h>
 #include <footprint_preview_panel.h>
-#include <pcb_draw_panel_gal.h>
+#include <fp_lib_table.h>
+#include <id.h>
+#include <io_mgr.h>
 #include <kiface_i.h>
 #include <kiway.h>
-#include <io_mgr.h>
-#include <fp_lib_table.h>
-#include <view/view.h>
 #include <math/box2.h>
-#include <class_module.h>
-#include <class_board.h>
-#include <mutex>
-#include <eda_draw_frame.h>
-#include <utility>
-#include <colors_design_settings.h>
-#include <pcb_edit_frame.h>
-#include <wx/stattext.h>
-#include <pgm_base.h>
 #include <painter.h>
-#include <id.h>
+#include <pcb_draw_panel_gal.h>
+#include <pcb_edit_frame.h>
+#include <pgm_base.h>
+#include <view/view.h>
+#include <wx/stattext.h>
 
 /**
  * Threadsafe interface class between loader thread and panel class.
@@ -67,7 +69,7 @@ class FP_THREAD_IFACE
         {
             std::lock_guard<std::mutex> lock( m_lock );
 
-            CACHE_ENTRY ent = { aEntry, NULL, FPS_LOADING };
+            CACHE_ENTRY ent            = { aEntry, nullptr, FPS_LOADING };
             m_cachedFootprints[aEntry] = ent;
             m_loaderQueue.push_back( ent );
 
@@ -199,10 +201,8 @@ public:
         if( !fptbl )
             return;
 
-        aEntry.module = NULL;
-
         try {
-            aEntry.module = fptbl->FootprintLoadWithOptionalNickname( aEntry.fpid );
+            aEntry.module.reset( fptbl->FootprintLoadWithOptionalNickname( aEntry.fpid ) );
 
             if( !aEntry.module )
                 aEntry.status = FPS_NOT_FOUND;
@@ -244,12 +244,12 @@ public:
 
 
 FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent,
-                                                  std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts,
-                                                  GAL_TYPE aGalType )
-    : PCB_DRAW_PANEL_GAL ( aParent, -1, wxPoint( 0, 0 ), wxSize(200, 200), *aOpts, aGalType  ),
-      KIWAY_HOLDER( aKiway, KIWAY_HOLDER::PANEL ),
-      m_DisplayOptions( std::move( aOpts ) ),
-      m_footprintDisplayed( true )
+        std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts, GAL_TYPE aGalType )
+        : PCB_DRAW_PANEL_GAL( aParent, -1, wxPoint( 0, 0 ), wxSize( 200, 200 ), *aOpts, aGalType ),
+          KIWAY_HOLDER( aKiway, KIWAY_HOLDER::PANEL ),
+          m_DisplayOptions( std::move( aOpts ) ),
+          m_currentModule( nullptr ),
+          m_footprintDisplayed( true )
 {
     m_iface = std::make_shared<FP_THREAD_IFACE>();
     m_iface->SetPanel( this );
@@ -277,6 +277,13 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
 
 FOOTPRINT_PREVIEW_PANEL::~FOOTPRINT_PREVIEW_PANEL( )
 {
+    if( m_currentModule )
+    {
+        GetView()->Remove( m_currentModule.get() );
+        GetView()->Clear();
+        m_currentModule->SetParent( nullptr );
+    }
+
     m_iface->SetPanel( nullptr );
 }
 
@@ -299,18 +306,28 @@ void FOOTPRINT_PREVIEW_PANEL::CacheFootprint( LIB_ID const& aFPID )
 }
 
 
-void FOOTPRINT_PREVIEW_PANEL::renderFootprint(  MODULE *module )
+void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<MODULE> aModule )
 {
-    GetView()->Clear();
-    module->SetParent( &*m_dummyBoard );
+    if( m_currentModule )
+    {
+        GetView()->Remove( m_currentModule.get() );
+        GetView()->Clear();
+        m_currentModule->SetParent( nullptr );
+    }
 
-    GetView()->Add( module );
-    GetView()->SetVisible( module, true );
-    GetView()->Update( module, KIGFX::ALL );
+    aModule->SetParent( m_dummyBoard.get() );
 
-    BOX2I bbox = module->ViewBBox();
-    bbox.Merge ( module->Value().ViewBBox() );
-    bbox.Merge ( module->Reference().ViewBBox() );
+    GetView()->Add( aModule.get() );
+    GetView()->SetVisible( aModule.get(), true );
+    GetView()->Update( aModule.get(), KIGFX::ALL );
+
+    // Save a reference to the module's shared pointer to say we are using it in the
+    // preview panel
+    m_currentModule = aModule;
+
+    BOX2I bbox = aModule->ViewBBox();
+    bbox.Merge( aModule->Value().ViewBBox() );
+    bbox.Merge( aModule->Reference().ViewBBox() );
 
     if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
     {
