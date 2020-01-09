@@ -46,12 +46,6 @@ class BITMAP_BASE;
 namespace KIGFX
 {
 
-enum TEXT_MARKUP_FLAGS
-{
-    ENABLE_SUBSCRIPT_MARKUP   = 1 << 0,
-    ENABLE_SUPERSCRIPT_MARKUP = 1 << 1
-};
-
 /**
  * @brief Class GAL is the abstract interface for drawing on a 2D-surface.
  *

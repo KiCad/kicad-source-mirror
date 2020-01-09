@@ -50,6 +50,15 @@
 
 class PLOTTER;
 
+enum TEXT_MARKUP_FLAGS
+{
+    ENABLE_SUBSCRIPT_MARKUP   = 1 << 0,
+    ENABLE_SUPERSCRIPT_MARKUP = 1 << 1
+};
+
+int GetTextMarkupFlags();
+void SetTextMarkupFlags( int aMarkupFlags );
+
 /**
  * Function  Clamp_Text_PenSize
  *As a rule, pen width should not be >1/4em, otherwise the character

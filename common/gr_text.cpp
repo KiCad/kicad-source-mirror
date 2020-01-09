@@ -42,6 +42,22 @@
 
 #include <basic_gal.h>
 
+
+static int s_textMarkupFlags = 0;
+
+
+void SetTextMarkupFlags( int aMarkupFlags )
+{
+    s_textMarkupFlags = aMarkupFlags;
+}
+
+
+int GetTextMarkupFlags()
+{
+    return s_textMarkupFlags;
+}
+
+
 /**
  * Function GetPensizeForBold
  * @return the "best" value for a pen size to draw/plot a bold text
@@ -165,7 +181,7 @@ void GRText( wxDC* aDC, const wxPoint& aPos, COLOR4D aColor, const wxString& aTe
     basic_gal.m_Color = aColor;
     basic_gal.SetClipBox( nullptr );
 
-    basic_gal.StrokeText( aText, VECTOR2D( aPos ), aOrient * M_PI/1800 );
+    basic_gal.StrokeText( aText, VECTOR2D( aPos ), aOrient * M_PI/1800, GetTextMarkupFlags() );
 }
 
 

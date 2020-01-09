@@ -30,6 +30,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <math/util.h>      // for KiROUND
 #include <wx/string.h>
+#include <gr_text.h>
 
 
 using namespace KIGFX;

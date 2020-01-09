@@ -27,7 +27,6 @@
 
 
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <trigo.h>
 #include <eda_base_frame.h>
 #include <base_struct.h>
@@ -879,7 +878,15 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
     if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
         aMultilineAllowed = false;  // the text has only one line.
 
-    if( textAsLines || containsNonAsciiChars( aText ) || aMultilineAllowed )
+    bool processSuperSub = false;
+
+    if( ( GetTextMarkupFlags() & ENABLE_SUBSCRIPT_MARKUP ) && aText.Contains( wxT( "#" ) ) )
+        processSuperSub = true;
+
+    if( ( GetTextMarkupFlags() & ENABLE_SUPERSCRIPT_MARKUP ) && aText.Contains( wxT( "^" ) ) )
+        processSuperSub = true;
+
+    if( textAsLines || containsNonAsciiChars( aText ) || aMultilineAllowed || processSuperSub )
     {
         // output text as graphics.
         // Perhaps multiline texts could be handled as DXF text entity

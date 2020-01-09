@@ -976,7 +976,7 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( shownText, position, aText->GetTextAngleRadians() );
+    m_gal->StrokeText( shownText, position, aText->GetTextAngleRadians(), GetTextMarkupFlags() );
 }
 
 
@@ -1008,7 +1008,7 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( shownText, position, aText->GetDrawRotationRadians() );
+    m_gal->StrokeText( shownText, position, aText->GetDrawRotationRadians(), GetTextMarkupFlags() );
 
     // Draw the umbilical line
     if( aText->IsSelected() )
@@ -1138,7 +1138,8 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
 
     m_gal->SetLineWidth( text.GetThickness() );
     m_gal->SetTextAttributes( &text );
-    m_gal->StrokeText( text.GetShownText(), position, text.GetTextAngleRadians() );
+    m_gal->StrokeText( text.GetShownText(), position, text.GetTextAngleRadians(),
+                       GetTextMarkupFlags() );
 }
 
 

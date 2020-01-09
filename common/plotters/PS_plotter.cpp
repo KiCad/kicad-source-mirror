@@ -998,9 +998,18 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
     if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
         aMultilineAllowed = false;  // the text has only one line.
 
+    bool processSuperSub = false;
+
+    if( ( GetTextMarkupFlags() & ENABLE_SUBSCRIPT_MARKUP ) && aText.Contains( wxT( "#" ) ) )
+        processSuperSub = true;
+
+    if( ( GetTextMarkupFlags() & ENABLE_SUPERSCRIPT_MARKUP ) && aText.Contains( wxT( "^" ) ) )
+        processSuperSub = true;
+
     // Draw the native postscript text (if requested)
     // Currently: does not work: disable it
-    bool use_native = false; // = m_textMode == PLOT_TEXT_MODE::NATIVE && !aMultilineAllowed;
+    bool use_native = false; // = m_textMode == PLOT_TEXT_MODE::NATIVE
+                             //        && !aMultilineAllowed && !processSuperSub;
 
     if( use_native )
     {

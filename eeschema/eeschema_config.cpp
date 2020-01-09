@@ -44,13 +44,13 @@
 #include <widgets/symbol_tree_pane.h>
 #include <dialogs/panel_libedit_settings.h>
 #include <sch_painter.h>
+#include <gr_text.h>
 #include "sch_junction.h"
 
 static int s_defaultBusThickness = DEFAULTBUSTHICKNESS;
 static int s_defaultWireThickness  = DEFAULTDRAWLINETHICKNESS;
 static int s_defaultTextSize = DEFAULT_SIZE_TEXT;
 static int s_drawDefaultLineThickness = -1;
-static int s_textMarkupFlags = 0;
 static bool s_selectTextAsBox = false;
 static bool s_selectDrawChildren = true;
 static bool s_selectFillShapes = false;
@@ -95,18 +95,6 @@ void SetDefaultTextSize( int aTextSize )
 int GetDefaultLineThickness()
 {
     return s_drawDefaultLineThickness;
-}
-
-
-void SetTextMarkupFlags( int aMarkupFlags )
-{
-    s_textMarkupFlags = aMarkupFlags;
-}
-
-
-int GetTextMarkupFlags()
-{
-    return s_textMarkupFlags;
 }
 
 

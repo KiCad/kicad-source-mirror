@@ -147,9 +147,6 @@ void SetSelectionFillShapes( bool aBool );
 int  GetSelectionThickness();
 void SetSelectionThickness( int aThickness );
 
-int GetTextMarkupFlags();
-void SetTextMarkupFlags( int aMarkupFlags );
-
 COLOR4D  GetLayerColor( SCH_LAYER_ID aLayer );
 void     SetLayerColor( COLOR4D aColor, SCH_LAYER_ID aLayer );
 

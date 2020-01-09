@@ -31,6 +31,7 @@
 #include <panel_eeschema_display_options.h>
 #include <widgets/gal_options_panel.h>
 #include <sch_junction.h>
+#include <gr_text.h>
 
 PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* aFrame,
                                                                 wxWindow* aWindow ) :
@@ -76,7 +77,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
     m_junctionSize.SetValue( SCH_JUNCTION::GetSymbolSize() );
     m_checkShowHiddenPins->SetValue( m_frame->GetShowAllPins() );
 
-    int superSubFlags = KIGFX::ENABLE_SUBSCRIPT_MARKUP | KIGFX::ENABLE_SUPERSCRIPT_MARKUP;
+    int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
 
     m_checkSuperSub->SetValue( GetTextMarkupFlags() & superSubFlags );
 
@@ -130,7 +131,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     // Update canvas
     m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
 
-    int superSubFlags = KIGFX::ENABLE_SUBSCRIPT_MARKUP | KIGFX::ENABLE_SUPERSCRIPT_MARKUP;
+    int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
 
     if( m_checkSuperSub->GetValue() )
         SetTextMarkupFlags( GetTextMarkupFlags() | superSubFlags );
