@@ -54,6 +54,7 @@ target_link_libraries( qa_pcbnew_tools
     pcbcommon
     pnsrouter
     pcad2kicadpcb
+    altium2kicadpcb
     gal
     dxflib_qcad
     tinyspline_lib

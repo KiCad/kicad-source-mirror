@@ -57,6 +57,7 @@ public:
         KICAD_SEXP,          ///< S-expression Pcbnew file format.
         EAGLE,
         PCAD,
+        ALTIUM,
         GEDA_PCB,       ///< Geda PCB file formats.
 
         //N.B. This needs to be commented out to ensure compile-type errors

@@ -30,6 +30,7 @@
 #include <kicad_plugin.h>
 #include <eagle_plugin.h>
 #include <pcad2kicadpcb_plugin/pcad_plugin.h>
+#include <altium2kicadpcb_plugin/altium_plugin.h>
 #include <gpcb_plugin.h>
 #include <config.h>
 
@@ -204,6 +205,7 @@ void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoar
 static IO_MGR::REGISTER_PLUGIN registerEaglePlugin( IO_MGR::EAGLE, wxT("Eagle"), []() -> PLUGIN* { return new EAGLE_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerKicadPlugin( IO_MGR::KICAD_SEXP, wxT("KiCad"), []() -> PLUGIN* { return new PCB_IO; } );
 static IO_MGR::REGISTER_PLUGIN registerPcadPlugin( IO_MGR::PCAD, wxT("P-Cad"), []() -> PLUGIN* { return new PCAD_PLUGIN; } );
+static IO_MGR::REGISTER_PLUGIN registerAltiumPlugin( IO_MGR::ALTIUM, wxT("Altium"), []() -> PLUGIN* { return new ALTIUM_PLUGIN; } );
 #ifdef BUILD_GITHUB_PLUGIN
 static IO_MGR::REGISTER_PLUGIN registerGithubPlugin( IO_MGR::GITHUB, wxT("Github"), []() -> PLUGIN* { return new GITHUB_PLUGIN; } );
 #endif /* BUILD_GITHUB_PLUGIN */
