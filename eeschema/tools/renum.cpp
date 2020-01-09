@@ -68,6 +68,14 @@ void RenumberFromPCBNew(SCH_EDIT_FRAME *aFrame, std::string &aNetlist) {
     } else {
         aNetlist = RENUM_OK;                    //All is well
     }
-//    aFrame->GetCanvas()->Refresh();        //Redraw
+/*    aFrame->GetCanvas()->Refresh();        //Redraw
     aFrame->GetCanvas()->ForceRefresh();
+    aFrame->OnModify();                           //Need to save file on exit.
+*/
+    g_CurrentSheet->UpdateAllScreenReferences();
+    aFrame->SetSheetNumberAndCount();
+    aFrame->SyncView();
+    aFrame->OnModify();
+    aFrame->GetCanvas()->Refresh();
+
 }

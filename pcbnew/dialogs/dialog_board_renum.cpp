@@ -230,6 +230,8 @@ void DIALOG_BOARD_RENUM::OnRenumberClick(wxCommandEvent &event) {
 
     bool attemptrenum = m_frame->RenumberSchematic(payload, MAIL_RENUMBER);
 
+KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
+
     if ((false == attemptrenum) || (0 == payload.size())) { //Didn't get a valid reply
         ShowWarning(_("\nRenumber failed!\n"));
     } else {
@@ -239,6 +241,7 @@ void DIALOG_BOARD_RENUM::OnRenumberClick(wxCommandEvent &event) {
                 newrefdes = GetNewRefDes(mod);
                 if (UpdateRefDes == newrefdes->Action)       //Ignore blanks
                     mod->SetReference(newrefdes->NewRefDes); //Update the PCB reference
+                view->Update( mod );                         //Touch the module
             }
             message = _("\nPCB and schematic successfully renumbered\n"); //Give the result
             m_MessageWindow->AppendText(message);         //Give the result
@@ -247,17 +250,8 @@ void DIALOG_BOARD_RENUM::OnRenumberClick(wxCommandEvent &event) {
             ShowWarning(payload);
         }
     }
-
-
-/*    m_frame->GetToolManager()->RunAction(ACTIONS::zoomRedraw, true);
-    m_frame->HardRedraw();
-    m_frame->RefreshCanvas();
-    m_frame->GetCanvas()->ForceRefresh();        //Redraw
-    m_frame->OnModify();                           //Need to save file on exit.
-    m_frame->GetCanvas()->ForceRefresh();
-*/
-    m_frame->GetCanvas()->Refresh();        //Redraw
-
+    m_frame->GetCanvas()->Refresh();                //Redraw
+    m_frame->OnModify();                            //Need to save file on exit.
     FlushFiles();
 }
 
