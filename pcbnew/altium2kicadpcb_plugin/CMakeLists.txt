@@ -12,4 +12,11 @@ set( ALTIUM2PCBNEW_SRCS
 
 add_library( altium2kicadpcb STATIC ${ALTIUM2PCBNEW_SRCS} )
 
+add_dependencies( altium2kicadpcb compoundfilereader )
+
 target_link_libraries( altium2kicadpcb pcbcommon )
+
+target_include_directories( altium2kicadpcb PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        $<TARGET_PROPERTY:compoundfilereader,INTERFACE_INCLUDE_DIRECTORIES>
+        )
