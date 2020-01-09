@@ -135,7 +135,7 @@ enum GROUP_TYPE
 
 struct DATA_MODEL_ROW
 {
-    DATA_MODEL_ROW( SCH_REFERENCE aFirstReference, GROUP_TYPE aType )
+    DATA_MODEL_ROW( const SCH_REFERENCE& aFirstReference, GROUP_TYPE aType )
     {
         m_Refs.push_back( aFirstReference );
         m_Flag = aType;
@@ -215,7 +215,7 @@ public:
     int GetNumberRows() override { return m_rows.size(); }
 
     // Columns are fieldNames + quantity column
-    int GetNumberCols() override { return m_fieldNames.size() + 1; }
+    int GetNumberCols() override { return (int) m_fieldNames.size() + 1; }
 
 
     wxString GetColLabelValue( int aCol ) override
@@ -835,7 +835,7 @@ bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataToWindow()
             std::vector<SCH_REFERENCE> references = m_dataModel->GetRowReferences( row );
             bool                       found = false;
 
-            for( SCH_REFERENCE ref : references )
+            for( const SCH_REFERENCE& ref : references )
             {
                 if( ref.GetComp() == component )
                 {
@@ -888,9 +888,9 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aName,
     m_config->Read( "SymbolFieldEditor/Show/" + aName, &defaultShow );
     m_config->Read( "SymbolFieldEditor/GroupBy/" + aName, &defaultSortBy );
 
-    fieldsCtrlRow.push_back( wxVariant( aName ) );
-    fieldsCtrlRow.push_back( wxVariant( defaultShow ) );
-    fieldsCtrlRow.push_back( wxVariant( defaultSortBy ) );
+    fieldsCtrlRow.emplace_back( wxVariant( aName ) );
+    fieldsCtrlRow.emplace_back( wxVariant( defaultShow ) );
+    fieldsCtrlRow.emplace_back( wxVariant( defaultSortBy ) );
 
     m_fieldsCtrl->AppendItem( fieldsCtrlRow );
 }
