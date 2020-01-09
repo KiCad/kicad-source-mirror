@@ -908,12 +908,31 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
             aPartBuf->SetOriginal( originalPart );
         }
     }
-    else if( !aLibTable->LoadSymbol( m_libName, part->GetName() ) )
+    else
     {
-        // TODO there is no way to check if symbol has been successfully saved
-        result = aLibTable->SaveSymbol( m_libName, new LIB_PART( *part ) );
-        wxCHECK( result == SYMBOL_LIB_TABLE::SAVE_OK, false );
-        aPartBuf->SetOriginal( new LIB_PART( *part ) );
+        wxArrayString derivedSymbols;
+
+        if( GetDerivedSymbolNames( part->GetName(), derivedSymbols ) == 0 )
+        {
+            result = aLibTable->SaveSymbol( m_libName, new LIB_PART( *part ) );
+            wxCHECK( result == SYMBOL_LIB_TABLE::SAVE_OK, false );
+            aPartBuf->SetOriginal( new LIB_PART( *part ) );
+        }
+        else
+        {
+            LIB_PART* parentSymbol = new LIB_PART( *part );
+
+            aLibTable->SaveSymbol( m_libName, parentSymbol );
+
+            for( auto entry : derivedSymbols )
+            {
+                LIB_MANAGER::PART_BUFFER::PTR symbol = GetBuffer( entry );
+                LIB_PART* derivedSymbol = new LIB_PART( *symbol->GetPart() );
+                derivedSymbol->SetParent( parentSymbol );
+                result = aLibTable->SaveSymbol( m_libName, derivedSymbol );
+                wxCHECK( result == SYMBOL_LIB_TABLE::SAVE_OK, false );
+            }
+        }
     }
 
     ++m_hash;
@@ -928,6 +947,8 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
     LIB_PART* part = aPartBuf->GetPart();
     wxCHECK( part, false );
 
+    wxString errorMsg = _( "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\"" );
+
     // set properties to prevent save file on every symbol save
     PROPERTIES properties;
     properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
@@ -940,14 +961,41 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
 
         wxCHECK( bufferedParent, false );
 
-        LIB_PART* cachedParent = aPlugin->LoadSymbol( m_libName, bufferedParent->GetName() );
+        LIB_PART* cachedParent = nullptr;
+
+        try
+        {
+            cachedParent = aPlugin->LoadSymbol( m_libName, bufferedParent->GetName() );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            return false;
+        }
 
         if( !cachedParent )
         {
             cachedParent = new LIB_PART( *bufferedParent.get() );
             newCachedPart->SetParent( cachedParent );
-            aPlugin->SaveSymbol( m_libName, cachedParent, aBuffer ? &properties : nullptr );
-            aPlugin->SaveSymbol( m_libName, newCachedPart, aBuffer ? &properties : nullptr );
+
+            try
+            {
+                aPlugin->SaveSymbol( m_libName, cachedParent, aBuffer ? &properties : nullptr );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxLogError( errorMsg, ioe.What(), cachedParent->GetName() );
+                return false;
+            }
+
+            try
+            {
+                aPlugin->SaveSymbol( m_libName, newCachedPart, aBuffer ? &properties : nullptr );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxLogError( errorMsg, ioe.What(), newCachedPart->GetName() );
+                return false;
+            }
 
             LIB_PART* originalParent = new LIB_PART( *bufferedParent.get() );
             aPartBuf->SetOriginal( originalParent );
@@ -958,7 +1006,16 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
         else
         {
             newCachedPart->SetParent( cachedParent );
-            aPlugin->SaveSymbol( m_libName, newCachedPart, aBuffer ? &properties : nullptr );
+
+            try
+            {
+                aPlugin->SaveSymbol( m_libName, newCachedPart, aBuffer ? &properties : nullptr );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxLogError( errorMsg, ioe.What(), newCachedPart->GetName() );
+                return false;
+            }
 
             LIB_MANAGER::PART_BUFFER::PTR originalBufferedParent =
                     GetBuffer( bufferedParent->GetName() );
@@ -968,11 +1025,62 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
             aPartBuf->SetOriginal( originalPart );
         }
     }
-    else if( !aPlugin->LoadSymbol( m_libName, part->GetName(), aBuffer ? &properties : nullptr ) )
+    else
     {
-        // TODO there is no way to check if symbol has been successfully saved
-        aPlugin->SaveSymbol( m_libName, new LIB_PART( *part ), aBuffer ? &properties : nullptr );
-        aPartBuf->SetOriginal( new LIB_PART( *part ) );
+        wxArrayString derivedSymbols;
+
+        if( GetDerivedSymbolNames( part->GetName(), derivedSymbols ) == 0 )
+        {
+            try
+            {
+                aPlugin->SaveSymbol( m_libName, new LIB_PART( *part ),
+                                     aBuffer ? &properties : nullptr );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxLogError( errorMsg, ioe.What(), part->GetName() );
+                return false;
+            }
+
+            aPartBuf->SetOriginal( new LIB_PART( *part ) );
+        }
+        else
+        {
+            LIB_PART* parentSymbol = new LIB_PART( *part );
+
+            // Save the modified root symbol.
+            try
+            {
+                aPlugin->SaveSymbol( m_libName, new LIB_PART( *part ),
+                                     aBuffer ? &properties : nullptr );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxLogError( errorMsg, ioe.What(), part->GetName() );
+                return false;
+            }
+
+            aPartBuf->SetOriginal( new LIB_PART( *part ) );
+
+            // Save the derived symbols.
+            for( auto entry : derivedSymbols )
+            {
+                LIB_MANAGER::PART_BUFFER::PTR symbol = GetBuffer( entry );
+                LIB_PART* derivedSymbol = new LIB_PART( *symbol->GetPart() );
+                derivedSymbol->SetParent( parentSymbol );
+
+                try
+                {
+                    aPlugin->SaveSymbol( m_libName, new LIB_PART( *derivedSymbol ),
+                                         aBuffer ? &properties : nullptr );
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    wxLogError( errorMsg, ioe.What(), derivedSymbol->GetName() );
+                    return false;
+                }
+            }
+        }
     }
 
     ++m_hash;
@@ -1021,6 +1129,29 @@ void LIB_MANAGER::LIB_BUFFER::GetRootSymbolNames( wxArrayString& aRootSymbolName
 
         aRootSymbolNames.Add( entry->GetPart()->GetName() );
     }
+}
+
+
+size_t LIB_MANAGER::LIB_BUFFER::GetDerivedSymbolNames( const wxString& aSymbolName,
+                                                       wxArrayString& aList )
+{
+    wxCHECK( !aSymbolName.IsEmpty(), 0 );
+
+    for( auto entry : m_parts )
+    {
+        if( entry->GetPart()->IsAlias() )
+        {
+            PART_SPTR parent = entry->GetPart()->GetParent().lock();
+
+            // Check for inherited part without a valid parent.
+            wxCHECK( parent, false );
+
+            if( parent->GetName() == aSymbolName )
+                aList.Add( entry->GetPart()->GetName() );
+        }
+    }
+
+    return aList.GetCount();
 }
 
 

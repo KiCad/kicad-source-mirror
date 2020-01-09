@@ -420,6 +420,17 @@ private:
          */
         void GetRootSymbolNames( wxArrayString& aRootSymbolNames );
 
+        /**
+         * Fetch all of the symbols derived from a \a aSymbolName into \a aList.
+         *
+         * @param aSymbolName is the name of the symbol to search for derived parts in this
+         *                    buffer.
+         * @param aList is the list of symbols names derived from \a aSymbolName.
+         *
+         * @return a size_t count of the number of symbols derived from \a aSymbolName.
+         */
+        size_t GetDerivedSymbolNames( const wxString& aSymbolName, wxArrayString& aList );
+
     private:
         /**
          * Remove all symbols derived from \a aParent from the library buffer.
