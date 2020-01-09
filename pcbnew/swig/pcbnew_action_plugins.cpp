@@ -374,8 +374,7 @@ void PCB_EDIT_FRAME::buildActionPluginMenus( ACTION_MENU* actionMenu )
         item = AddMenuItem( actionMenu, wxID_ANY,  ap->GetName(), ap->GetDescription(), bitmap );
 
         Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                 (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
-                 PCB_EDIT_FRAME::OnActionPluginMenu );
+                wxCommandEventHandler( PCB_EDIT_FRAME::OnActionPluginMenu ) );
 
         ACTION_PLUGINS::SetActionMenu( ii, item->GetId() );
     }
@@ -410,8 +409,7 @@ void PCB_EDIT_FRAME::AddActionPluginTools()
                     wxID_ANY, wxEmptyString, bitmap, ap->GetName() );
 
             Connect( button->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
-                    PCB_EDIT_FRAME::OnActionPluginButton );
+                    wxCommandEventHandler( PCB_EDIT_FRAME::OnActionPluginButton ) );
 
             // Link action plugin to button
             ACTION_PLUGINS::SetActionButton( ap, button->GetId() );

@@ -185,7 +185,7 @@ void ENV_VAR_NAME_VALIDATOR::OnChar( wxKeyEvent& aEvent  )
             if( textCtrl )
             {
                 textCtrl->Connect( textCtrl->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
-                        (wxObjectEventFunction) &ENV_VAR_NAME_VALIDATOR::OnTextChanged );
+                        wxCommandEventHandler( ENV_VAR_NAME_VALIDATOR::OnTextChanged ) );
             }
         }
 
