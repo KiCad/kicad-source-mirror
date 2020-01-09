@@ -715,7 +715,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     const int diam = radius*2;
     const int clock_size = InternalPinDecoSize( *aPin );
 
-    if( aPin->GetType() == PIN_NC )              // Draw a N.C. symbol
+    if( aPin->GetType() == ELECTRICAL_PINTYPE::NC )              // Draw a N.C. symbol
     {
         m_gal->DrawLine( p0, pos );
 

@@ -3501,17 +3501,17 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
 
     switch( type )
     {
-    case 'I': pin->m_type = PIN_INPUT;         break;
-    case 'O': pin->m_type = PIN_OUTPUT;        break;
-    case 'B': pin->m_type = PIN_BIDI;          break;
-    case 'T': pin->m_type = PIN_TRISTATE;      break;
-    case 'P': pin->m_type = PIN_PASSIVE;       break;
-    case 'U': pin->m_type = PIN_UNSPECIFIED;   break;
-    case 'W': pin->m_type = PIN_POWER_IN;      break;
-    case 'w': pin->m_type = PIN_POWER_OUT;     break;
-    case 'C': pin->m_type = PIN_OPENCOLLECTOR; break;
-    case 'E': pin->m_type = PIN_OPENEMITTER;   break;
-    case 'N': pin->m_type = PIN_NC;            break;
+    case 'I': pin->m_type = ELECTRICAL_PINTYPE::INPUT;         break;
+    case 'O': pin->m_type = ELECTRICAL_PINTYPE::OUTPUT;        break;
+    case 'B': pin->m_type = ELECTRICAL_PINTYPE::BIDI;          break;
+    case 'T': pin->m_type = ELECTRICAL_PINTYPE::TRISTATE;      break;
+    case 'P': pin->m_type = ELECTRICAL_PINTYPE::PASSIVE;       break;
+    case 'U': pin->m_type = ELECTRICAL_PINTYPE::UNSPECIFIED;   break;
+    case 'W': pin->m_type = ELECTRICAL_PINTYPE::POWER_IN;      break;
+    case 'w': pin->m_type = ELECTRICAL_PINTYPE::POWER_OUT;     break;
+    case 'C': pin->m_type = ELECTRICAL_PINTYPE::OPENCOLLECTOR; break;
+    case 'E': pin->m_type = ELECTRICAL_PINTYPE::OPENEMITTER;   break;
+    case 'N': pin->m_type = ELECTRICAL_PINTYPE::NC;            break;
     default: THROW_PARSE_ERROR( "unknown pin type", aReader.GetSource(),
                                 aReader.Line(), aReader.LineNumber(), pos );
     }
@@ -3976,47 +3976,47 @@ void SCH_LEGACY_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
     switch( aPin->GetType() )
     {
     default:
-    case PIN_INPUT:
+    case ELECTRICAL_PINTYPE::INPUT:
         Etype = 'I';
         break;
 
-    case PIN_OUTPUT:
+    case ELECTRICAL_PINTYPE::OUTPUT:
         Etype = 'O';
         break;
 
-    case PIN_BIDI:
+    case ELECTRICAL_PINTYPE::BIDI:
         Etype = 'B';
         break;
 
-    case PIN_TRISTATE:
+    case ELECTRICAL_PINTYPE::TRISTATE:
         Etype = 'T';
         break;
 
-    case PIN_PASSIVE:
+    case ELECTRICAL_PINTYPE::PASSIVE:
         Etype = 'P';
         break;
 
-    case PIN_UNSPECIFIED:
+    case ELECTRICAL_PINTYPE::UNSPECIFIED:
         Etype = 'U';
         break;
 
-    case PIN_POWER_IN:
+    case ELECTRICAL_PINTYPE::POWER_IN:
         Etype = 'W';
         break;
 
-    case PIN_POWER_OUT:
+    case ELECTRICAL_PINTYPE::POWER_OUT:
         Etype = 'w';
         break;
 
-    case PIN_OPENCOLLECTOR:
+    case ELECTRICAL_PINTYPE::OPENCOLLECTOR:
         Etype = 'C';
         break;
 
-    case PIN_OPENEMITTER:
+    case ELECTRICAL_PINTYPE::OPENEMITTER:
         Etype = 'E';
         break;
 
-    case PIN_NC:
+    case ELECTRICAL_PINTYPE::NC:
         Etype = 'N';
         break;
     }

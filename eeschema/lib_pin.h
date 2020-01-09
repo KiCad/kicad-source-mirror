@@ -347,7 +347,7 @@ public:
      * and of type POWER_IN.
      */
     bool IsPowerConnection() const {
-        return GetType() == PIN_POWER_IN && ( !IsVisible() || (LIB_PART*) GetParent()->IsPower() );
+        return GetType() == ELECTRICAL_PINTYPE::POWER_IN && ( !IsVisible() || (LIB_PART*) GetParent()->IsPower() );
     }
 
     int GetPenSize() const override;

@@ -1396,20 +1396,20 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
             std::unique_ptr<LIB_PIN> pin( loadPin( aPart, currentNode, &ePin, aGateNumber ) );
             pincount++;
 
-            pin->SetType( PIN_BIDI );
+            pin->SetType( ELECTRICAL_PINTYPE::BIDI );
 
             if( ePin.direction )
             {
                 const std::map<wxString, ELECTRICAL_PINTYPE> pinDirectionsMap = {
-                    { "sup", PIN_POWER_IN },
-                    { "pas", PIN_PASSIVE },
-                    { "out", PIN_OUTPUT },
-                    { "in", PIN_INPUT },
-                    { "nc", PIN_NC },
-                    { "io", PIN_BIDI },
-                    { "oc", PIN_OPENCOLLECTOR },
-                    { "hiz", PIN_TRISTATE },
-                    { "pwr", PIN_POWER_IN },
+                    { "sup", ELECTRICAL_PINTYPE::POWER_IN },
+                    { "pas", ELECTRICAL_PINTYPE::PASSIVE },
+                    { "out", ELECTRICAL_PINTYPE::OUTPUT },
+                    { "in", ELECTRICAL_PINTYPE::INPUT },
+                    { "nc", ELECTRICAL_PINTYPE::NC },
+                    { "io", ELECTRICAL_PINTYPE::BIDI },
+                    { "oc", ELECTRICAL_PINTYPE::OPENCOLLECTOR },
+                    { "hiz", ELECTRICAL_PINTYPE::TRISTATE },
+                    { "pwr", ELECTRICAL_PINTYPE::POWER_IN },
                 };
 
                 for( const auto& pinDir : pinDirectionsMap )
@@ -1449,7 +1449,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
                         // schematic netlist and leave out the multiple NC pins when stacked.
                         for( unsigned i = 0; i < pads.GetCount(); i++ )
                         {
-                            if( pin->GetType() == PIN_NC && i > 0 )
+                            if( pin->GetType() == ELECTRICAL_PINTYPE::NC && i > 0 )
                                 break;
 
                             LIB_PIN* apin = new LIB_PIN( *pin );
@@ -2523,7 +2523,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections(
     // Search all units for pins creating implicit connections
     for( const auto& pin : pins )
     {
-        if( pin->GetType() == PIN_POWER_IN )
+        if( pin->GetType() == ELECTRICAL_PINTYPE::POWER_IN )
         {
             bool pinInUnit = !unit || pin->GetUnit() == unit; // pin belongs to the tested unit
 

@@ -30,87 +30,45 @@
 
 #include <macros.h>
 
+
+struct pinTypeStruct
+{
+    wxString             name;
+    const BITMAP_OPAQUE* bitmap;
+};
+
+/*
+* Conversion map between PLOT_DASH_TYPE values and style names displayed
+*/
+const std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> pinTypes = {
+    { ELECTRICAL_PINTYPE::INPUT,        { _( "Input" ), pintype_input_xpm } },
+    { ELECTRICAL_PINTYPE::OUTPUT,       { _( "Output" ), pintype_output_xpm } },
+    { ELECTRICAL_PINTYPE::BIDI,         { _( "Bidirectional" ), pintype_bidi_xpm } },
+    { ELECTRICAL_PINTYPE::TRISTATE,     { _( "Tri-state" ), pintype_3states_xpm } },
+    { ELECTRICAL_PINTYPE::PASSIVE,      { _( "Passive" ), pintype_passive_xpm } },
+    { ELECTRICAL_PINTYPE::UNSPECIFIED,  { _( "Clock low" ), pintype_notspecif_xpm } },
+    { ELECTRICAL_PINTYPE::POWER_IN,     { _( "Power input" ), pintype_powerinput_xpm } },
+    { ELECTRICAL_PINTYPE::POWER_OUT,    { _( "Power output" ), pintype_poweroutput_xpm } },
+    { ELECTRICAL_PINTYPE::OPENCOLLECTOR,{ _( "Open collector" ), pintype_opencoll_xpm } },
+    { ELECTRICAL_PINTYPE::OPENEMITTER,  { _( "Open emitter" ), pintype_openemit_xpm } },
+    { ELECTRICAL_PINTYPE::NC,           { _( "Not connected" ), pintype_noconnect_xpm } },
+};
+
 wxString GetText( ELECTRICAL_PINTYPE aType )
 {
-    switch( aType )
-    {
-    case PIN_INPUT:
-        return _( "Input" );
+    auto findIt = pinTypes.find( aType );
 
-    case PIN_OUTPUT:
-        return _( "Output" );
+    wxCHECK_MSG( findIt != pinTypes.end(), wxT( "???" ), "Could not find pin type in lookup map" );
 
-    case PIN_BIDI:
-        return _( "Bidirectional" );
-
-    case PIN_TRISTATE:
-        return _( "Tri-state" );
-
-    case PIN_PASSIVE:
-        return _( "Passive" );
-
-    case PIN_UNSPECIFIED:
-        return _( "Unspecified" );
-
-    case PIN_POWER_IN:
-        return _( "Power input" );
-
-    case PIN_POWER_OUT:
-        return _( "Power output" );
-
-    case PIN_OPENCOLLECTOR:
-        return _( "Open collector" );
-
-    case PIN_OPENEMITTER:
-        return _( "Open emitter" );
-
-    case PIN_NC:
-        return _( "Not connected" );
-    };
-
-    assert( !"invalid pin type" );
-    return wxT( "???" );
+    return findIt->second.name;
 }
 
 
 BITMAP_DEF GetBitmap( ELECTRICAL_PINTYPE aType )
 {
-    switch( aType )
-    {
-    case PIN_INPUT:
-        return pintype_input_xpm;
+    auto findIt = pinTypes.find( aType );
 
-    case PIN_OUTPUT:
-        return pintype_output_xpm;
+    wxCHECK_MSG( findIt != pinTypes.end(), nullptr, "Could not find pin type in lookup map" );
 
-    case PIN_BIDI:
-        return pintype_bidi_xpm;
-
-    case PIN_TRISTATE:
-        return pintype_3states_xpm;
-
-    case PIN_PASSIVE:
-        return pintype_passive_xpm;
-
-    case PIN_UNSPECIFIED:
-        return pintype_notspecif_xpm;
-
-    case PIN_POWER_IN:
-        return pintype_powerinput_xpm;
-
-    case PIN_POWER_OUT:
-        return pintype_poweroutput_xpm;
-
-    case PIN_OPENCOLLECTOR:
-        return pintype_opencoll_xpm;
-
-    case PIN_OPENEMITTER:
-        return pintype_openemit_xpm;
-
-    case PIN_NC:
-        return pintype_noconnect_xpm;
-    };
-
-    assert( !"invalid pin type" );
-    return NULL;
+    return findIt->second.bitmap;
 }

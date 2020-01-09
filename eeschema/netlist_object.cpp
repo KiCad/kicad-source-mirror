@@ -155,7 +155,7 @@ NETLIST_OBJECT::NETLIST_OBJECT()
                                      * contains this pin
                                      */
     m_Flag = 0;                     /* flag used in calculations */
-    m_ElectricalPinType = PIN_INPUT;   /* Has meaning only for Pins: electrical type of the pin
+    m_ElectricalPinType = ELECTRICAL_PINTYPE::INPUT;   /* Has meaning only for Pins: electrical type of the pin
                                      * used to detect conflicts between pins in ERC
                                      */
     m_netCode    = 0;               /* net code for all items except BUS labels because a BUS

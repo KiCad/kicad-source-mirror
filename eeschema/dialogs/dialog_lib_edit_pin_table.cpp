@@ -117,7 +117,7 @@ public:
                 val = pin->GetName();
                 break;
             case COL_TYPE:
-                val = g_typeNames[ pin->GetType() ];
+                val = g_typeNames[ static_cast<int>( pin->GetType() ) ];
                 break;
             case COL_SHAPE:
                 val = g_shapeNames[ static_cast<int>( pin->GetShape() ) ];

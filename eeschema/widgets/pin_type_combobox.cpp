@@ -65,5 +65,5 @@ ELECTRICAL_PINTYPE PinTypeComboBox::GetPinTypeSelection()
 
 void PinTypeComboBox::SetSelection( ELECTRICAL_PINTYPE aType )
 {
-    wxBitmapComboBox::SetSelection( aType );
+    wxBitmapComboBox::SetSelection( static_cast<int>( aType ) );
 }
