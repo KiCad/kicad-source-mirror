@@ -49,8 +49,12 @@ class FP_THREAD_IFACE
     using CACHE_ENTRY = FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY;
 
     public:
+        FP_THREAD_IFACE() : m_panel( nullptr )
+        {
+        }
+
         /// Retrieve a cache entry by LIB_ID
-        OPT<CACHE_ENTRY> GetFromCache( LIB_ID const & aFPID )
+        OPT<CACHE_ENTRY> GetFromCache( const LIB_ID& aFPID )
         {
             std::lock_guard<std::mutex> lock( m_lock );
             auto it = m_cachedFootprints.find( aFPID );
@@ -65,7 +69,7 @@ class FP_THREAD_IFACE
          * Push an entry to the loading queue and a placeholder to the cache;
          * return the placeholder.
          */
-        CACHE_ENTRY AddToQueue( LIB_ID const & aEntry )
+        CACHE_ENTRY AddToQueue( const LIB_ID& aEntry )
         {
             std::lock_guard<std::mutex> lock( m_lock );
 
@@ -94,7 +98,7 @@ class FP_THREAD_IFACE
         }
 
         /// Add an entry to the cache.
-        void AddToCache( CACHE_ENTRY const & aEntry )
+        void AddToCache( const CACHE_ENTRY& aEntry )
         {
             std::lock_guard<std::mutex> lock( m_lock );
             m_cachedFootprints[aEntry.fpid] = aEntry;
@@ -140,7 +144,7 @@ class FP_THREAD_IFACE
          * Post an event to the panel, if the panel still exists. Return whether
          * the event was posted.
          */
-        bool QueueEvent( wxEvent const& aEvent )
+        bool QueueEvent( const wxEvent& aEvent )
         {
             std::lock_guard<std::mutex> lock( m_lock );
 
@@ -160,16 +164,16 @@ class FP_THREAD_IFACE
          */
         FP_LIB_TABLE* GetTable()
         {
-            std::lock_guard<std::mutex> locK( m_lock );
+            std::lock_guard<std::mutex> lock( m_lock );
             return m_panel ? m_panel->Prj().PcbFootprintLibs() : nullptr;
         }
 
     private:
-        std::deque<CACHE_ENTRY> m_loaderQueue;
+        std::deque<CACHE_ENTRY>       m_loaderQueue;
         std::map<LIB_ID, CACHE_ENTRY> m_cachedFootprints;
-        LIB_ID m_current_fp;
-        FOOTPRINT_PREVIEW_PANEL* m_panel = nullptr;
-        std::mutex m_lock;
+        LIB_ID                        m_current_fp;
+        FOOTPRINT_PREVIEW_PANEL*      m_panel;
+        std::mutex                    m_lock;
 };
 
 
@@ -177,21 +181,22 @@ class FP_THREAD_IFACE
  * Footprint loader thread to prevent footprint loading from locking the UI.
  * Interface is via a FP_THREAD_IFACE.
  */
-class FP_LOADER_THREAD: public wxThread
+class FP_LOADER_THREAD : public wxThread
 {
     using CACHE_ENTRY = FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY;
 
     std::shared_ptr<FP_THREAD_IFACE> m_iface;
 
 public:
-    FP_LOADER_THREAD( std::shared_ptr<FP_THREAD_IFACE> const& aIface ):
-        wxThread( wxTHREAD_DETACHED ),
-        m_iface( aIface )
-    {}
+    FP_LOADER_THREAD( const std::shared_ptr<FP_THREAD_IFACE>& aIface )
+            : wxThread( wxTHREAD_DETACHED ), m_iface( aIface )
+    {
+    }
 
 
     ~FP_LOADER_THREAD()
-    {}
+    {
+    }
 
 
     void ProcessEntry( CACHE_ENTRY& aEntry )
@@ -201,17 +206,17 @@ public:
         if( !fptbl )
             return;
 
-        try {
+        try
+        {
             aEntry.module.reset( fptbl->FootprintLoadWithOptionalNickname( aEntry.fpid ) );
 
             if( !aEntry.module )
                 aEntry.status = FPS_NOT_FOUND;
-
-        } catch( const IO_ERROR& )
+        }
+        catch( const IO_ERROR& )
         {
             aEntry.status = FPS_NOT_FOUND;
         }
-
 
         if( aEntry.status != FPS_NOT_FOUND )
             aEntry.status = FPS_READY;
@@ -247,7 +252,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
         std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts, GAL_TYPE aGalType )
         : PCB_DRAW_PANEL_GAL( aParent, -1, wxPoint( 0, 0 ), wxSize( 200, 200 ), *aOpts, aGalType ),
           KIWAY_HOLDER( aKiway, KIWAY_HOLDER::PANEL ),
-          m_DisplayOptions( std::move( aOpts ) ),
+          m_displayOptions( std::move( aOpts ) ),
           m_currentModule( nullptr ),
           m_footprintDisplayed( true )
 {
@@ -265,13 +270,14 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
     m_colorsSettings->Load( Kiface().KifaceSettings() );
 
     UseColorScheme( m_colorsSettings.get() );
-    SyncLayersVisibility( &*m_dummyBoard );
+    SyncLayersVisibility( m_dummyBoard.get() );
 
     Raise();
     Show( true );
     StartDrawing();
 
-    Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( FOOTPRINT_PREVIEW_PANEL::OnLoaderThreadUpdate ), NULL, this );
+    Connect( wxEVT_COMMAND_TEXT_UPDATED,
+            wxCommandEventHandler( FOOTPRINT_PREVIEW_PANEL::OnLoaderThreadUpdate ), NULL, this );
 }
 
 
@@ -300,7 +306,7 @@ FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY FOOTPRINT_PREVIEW_PANEL::CacheAndReturn( co
 
 
 // This is separate to avoid having to export CACHE_ENTRY to the global namespace
-void FOOTPRINT_PREVIEW_PANEL::CacheFootprint( LIB_ID const& aFPID )
+void FOOTPRINT_PREVIEW_PANEL::CacheFootprint( const LIB_ID& aFPID )
 {
     (void) CacheAndReturn( aFPID );
 }
@@ -348,14 +354,14 @@ void FOOTPRINT_PREVIEW_PANEL::DisplayFootprint ( const LIB_ID& aFPID )
     m_iface->SetCurrentFootprint( aFPID );
     m_footprintDisplayed = false;
 
-    CACHE_ENTRY fpe = CacheAndReturn ( m_currentFPID );
+    CACHE_ENTRY fpe = CacheAndReturn( m_currentFPID );
 
     if( m_handler )
         m_handler( fpe.status );
 
     if( fpe.status == FPS_READY )
     {
-        if ( !m_footprintDisplayed )
+        if( !m_footprintDisplayed )
         {
             renderFootprint( fpe.module );
             m_footprintDisplayed = true;
@@ -365,7 +371,7 @@ void FOOTPRINT_PREVIEW_PANEL::DisplayFootprint ( const LIB_ID& aFPID )
 }
 
 
-void FOOTPRINT_PREVIEW_PANEL::OnLoaderThreadUpdate( wxCommandEvent& event )
+void FOOTPRINT_PREVIEW_PANEL::OnLoaderThreadUpdate( wxCommandEvent& aEvent )
 {
     DisplayFootprint( m_currentFPID );
 }
@@ -385,8 +391,9 @@ wxWindow* FOOTPRINT_PREVIEW_PANEL::GetWindow()
 
 FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* aParent )
 {
-    PCB_EDIT_FRAME* pcbnew = static_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
-    wxConfigBase*   cfg = Kiface().KifaceSettings();
+    PCB_EDIT_FRAME* pcbnew =
+            static_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+    wxConfigBase*   cfg       = Kiface().KifaceSettings();
     wxConfigBase*   commonCfg = Pgm().CommonSettings();
     bool            btemp;
     int             itemp;

@@ -59,9 +59,9 @@ public:
 
     virtual ~FOOTPRINT_PREVIEW_PANEL( );
 
-    virtual void CacheFootprint( LIB_ID const& aFPID ) override;
+    virtual void CacheFootprint( const LIB_ID& aFPID ) override;
 
-    virtual void DisplayFootprint ( LIB_ID const& aFPID ) override;
+    virtual void DisplayFootprint( const LIB_ID& aFPID ) override;
 
     virtual void SetStatusHandler( FOOTPRINT_STATUS_HANDLER aHandler ) override;
 
@@ -70,11 +70,11 @@ public:
     static FOOTPRINT_PREVIEW_PANEL* New( KIWAY* aKiway, wxWindow* aParent );
 
 private:
-
-    struct CACHE_ENTRY {
-        LIB_ID fpid;
+    struct CACHE_ENTRY
+    {
+        LIB_ID                  fpid;
         std::shared_ptr<MODULE> module;
-        FOOTPRINT_STATUS status;
+        FOOTPRINT_STATUS        status;
     };
 
     /**
@@ -89,17 +89,18 @@ private:
             std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts, GAL_TYPE aGalType );
 
 
-    virtual CACHE_ENTRY CacheAndReturn ( LIB_ID const& aFPID );
+    virtual CACHE_ENTRY CacheAndReturn( const LIB_ID& aFPID );
 
     void OnLoaderThreadUpdate( wxCommandEvent& aEvent );
 
     void renderFootprint( std::shared_ptr<MODULE> aModule );
 
-    FP_LOADER_THREAD*                   m_loader;
-    std::shared_ptr<FP_THREAD_IFACE>    m_iface;
-    FOOTPRINT_STATUS_HANDLER            m_handler;
-    std::unique_ptr<BOARD>              m_dummyBoard;
-    std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_DisplayOptions;
+    FP_LOADER_THREAD*                m_loader;
+    std::shared_ptr<FP_THREAD_IFACE> m_iface;
+    FOOTPRINT_STATUS_HANDLER         m_handler;
+
+    std::unique_ptr<BOARD>                      m_dummyBoard;
+    std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_displayOptions;
     std::unique_ptr<COLORS_DESIGN_SETTINGS>     m_colorsSettings;
 
     std::shared_ptr<MODULE> m_currentModule;
