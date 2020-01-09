@@ -32,23 +32,22 @@
 #include <wx/string.h>
 #include <bitmaps.h>
 
-enum GRAPHIC_PINSHAPE
+enum class GRAPHIC_PINSHAPE
 {
-    PINSHAPE_LINE,
-    PINSHAPE_INVERTED,
-    PINSHAPE_CLOCK,
-    PINSHAPE_INVERTED_CLOCK,
-    PINSHAPE_INPUT_LOW,
-    PINSHAPE_CLOCK_LOW,
-    PINSHAPE_OUTPUT_LOW,
-    PINSHAPE_FALLING_EDGE_CLOCK,
-    PINSHAPE_NONLOGIC
+    LINE,
+    INVERTED,
+    CLOCK,
+    INVERTED_CLOCK,
+    INPUT_LOW,
+    CLOCK_LOW,
+    OUTPUT_LOW,
+    FALLING_EDGE_CLOCK,
+    NONLOGIC,
+
+    //this is the sentinel value, must be at the end
+    NUM_OPTIONS
 };
 
-enum
-{
-    PINSHAPE_COUNT = PINSHAPE_NONLOGIC + 1
-};
 
 // UI
 wxString    GetText( GRAPHIC_PINSHAPE shape );

@@ -1766,15 +1766,15 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(
 
         if( function == "dot" )
         {
-            pin->SetShape( PINSHAPE_INVERTED );
+            pin->SetShape( GRAPHIC_PINSHAPE::INVERTED );
         }
         else if( function == "clk" )
         {
-            pin->SetShape( PINSHAPE_CLOCK );
+            pin->SetShape( GRAPHIC_PINSHAPE::CLOCK );
         }
         else if( function == "dotclk" )
         {
-            pin->SetShape( PINSHAPE_INVERTED_CLOCK );
+            pin->SetShape( GRAPHIC_PINSHAPE::INVERTED_CLOCK );
         }
     }
 

@@ -3554,15 +3554,15 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
 
         switch( flags )
         {
-        case 0:                   pin->m_shape = PINSHAPE_LINE;               break;
-        case INVERTED:            pin->m_shape = PINSHAPE_INVERTED;           break;
-        case CLOCK:               pin->m_shape = PINSHAPE_CLOCK;              break;
-        case INVERTED | CLOCK:    pin->m_shape = PINSHAPE_INVERTED_CLOCK;     break;
-        case LOWLEVEL_IN:         pin->m_shape = PINSHAPE_INPUT_LOW;          break;
-        case LOWLEVEL_IN | CLOCK: pin->m_shape = PINSHAPE_CLOCK_LOW;          break;
-        case LOWLEVEL_OUT:        pin->m_shape = PINSHAPE_OUTPUT_LOW;         break;
-        case FALLING_EDGE:        pin->m_shape = PINSHAPE_FALLING_EDGE_CLOCK; break;
-        case NONLOGIC:            pin->m_shape = PINSHAPE_NONLOGIC;           break;
+        case 0:                   pin->m_shape = GRAPHIC_PINSHAPE::LINE;               break;
+        case INVERTED:            pin->m_shape = GRAPHIC_PINSHAPE::INVERTED;           break;
+        case CLOCK:               pin->m_shape = GRAPHIC_PINSHAPE::CLOCK;              break;
+        case INVERTED | CLOCK:    pin->m_shape = GRAPHIC_PINSHAPE::INVERTED_CLOCK;     break;
+        case LOWLEVEL_IN:         pin->m_shape = GRAPHIC_PINSHAPE::INPUT_LOW;          break;
+        case LOWLEVEL_IN | CLOCK: pin->m_shape = GRAPHIC_PINSHAPE::CLOCK_LOW;          break;
+        case LOWLEVEL_OUT:        pin->m_shape = GRAPHIC_PINSHAPE::OUTPUT_LOW;         break;
+        case FALLING_EDGE:        pin->m_shape = GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK; break;
+        case NONLOGIC:            pin->m_shape = GRAPHIC_PINSHAPE::NONLOGIC;           break;
         default: SCH_PARSE_ERROR( "pin attributes do not define a valid pin shape", aReader, line );
         }
     }
@@ -4033,7 +4033,7 @@ void SCH_LEGACY_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
                       Iu2Mils( aPin->GetNumberTextSize() ), Iu2Mils( aPin->GetNameTextSize() ),
                       aPin->GetUnit(), aPin->GetConvert(), Etype );
 
-    if( aPin->GetShape() || !aPin->IsVisible() )
+    if( aPin->GetShape() != GRAPHIC_PINSHAPE::LINE || !aPin->IsVisible() )
         aFormatter.Print( 0, " " );
 
     if( !aPin->IsVisible() )
@@ -4041,38 +4041,38 @@ void SCH_LEGACY_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
 
     switch( aPin->GetShape() )
     {
-    case PINSHAPE_LINE:
+    case GRAPHIC_PINSHAPE::LINE:
         break;
 
-    case PINSHAPE_INVERTED:
+    case GRAPHIC_PINSHAPE::INVERTED:
         aFormatter.Print( 0, "I" );
         break;
 
-    case PINSHAPE_CLOCK:
+    case GRAPHIC_PINSHAPE::CLOCK:
         aFormatter.Print( 0, "C" );
         break;
 
-    case PINSHAPE_INVERTED_CLOCK:
+    case GRAPHIC_PINSHAPE::INVERTED_CLOCK:
         aFormatter.Print( 0, "IC" );
         break;
 
-    case PINSHAPE_INPUT_LOW:
+    case GRAPHIC_PINSHAPE::INPUT_LOW:
         aFormatter.Print( 0, "L" );
         break;
 
-    case PINSHAPE_CLOCK_LOW:
+    case GRAPHIC_PINSHAPE::CLOCK_LOW:
         aFormatter.Print( 0, "CL" );
         break;
 
-    case PINSHAPE_OUTPUT_LOW:
+    case GRAPHIC_PINSHAPE::OUTPUT_LOW:
         aFormatter.Print( 0, "V" );
         break;
 
-    case PINSHAPE_FALLING_EDGE_CLOCK:
+    case GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK:
         aFormatter.Print( 0, "F" );
         break;
 
-    case PINSHAPE_NONLOGIC:
+    case GRAPHIC_PINSHAPE::NONLOGIC:
         aFormatter.Print( 0, "X" );
         break;
 

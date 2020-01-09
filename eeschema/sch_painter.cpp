@@ -730,16 +730,16 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     {
         switch( aPin->GetShape() )
         {
-        case PINSHAPE_LINE:
+        case GRAPHIC_PINSHAPE::LINE:
             m_gal->DrawLine( p0, pos );
             break;
 
-        case PINSHAPE_INVERTED:
+        case GRAPHIC_PINSHAPE::INVERTED:
             m_gal->DrawCircle( p0 + dir * radius, radius );
             m_gal->DrawLine( p0 + dir * ( diam ), pos );
             break;
 
-       case PINSHAPE_INVERTED_CLOCK:
+       case GRAPHIC_PINSHAPE::INVERTED_CLOCK:
             pc = p0 - dir * clock_size ;
 
             triLine( p0 + VECTOR2D( dir.y, -dir.x) * clock_size,
@@ -750,8 +750,8 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             m_gal->DrawLine( p0 + dir * ( diam ), pos );
            break;
 
-        case PINSHAPE_CLOCK_LOW:
-        case PINSHAPE_FALLING_EDGE_CLOCK:
+        case GRAPHIC_PINSHAPE::CLOCK_LOW:
+        case GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK:
             pc = p0 - dir * clock_size ;
 
             triLine( p0 + VECTOR2D( dir.y, -dir.x) * clock_size,
@@ -774,7 +774,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             m_gal->DrawLine( p0, pos );
             break;
 
-        case PINSHAPE_CLOCK:
+        case GRAPHIC_PINSHAPE::CLOCK:
             m_gal->DrawLine( p0, pos );
 
             if( !dir.y )
@@ -791,7 +791,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             }
             break;
 
-        case PINSHAPE_INPUT_LOW:
+        case GRAPHIC_PINSHAPE::INPUT_LOW:
             m_gal->DrawLine( p0, pos );
 
             if( !dir.y )
@@ -808,7 +808,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             }
             break;
 
-        case PINSHAPE_OUTPUT_LOW:    // IEEE symbol "Active Low Output"
+        case GRAPHIC_PINSHAPE::OUTPUT_LOW:    // IEEE symbol "Active Low Output"
             m_gal->DrawLine( p0, pos );
 
             if( !dir.y )    // Horizontal pin
@@ -817,7 +817,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
                 m_gal->DrawLine( p0 - VECTOR2D( diam, 0 ), p0 + VECTOR2D( 0, dir.y ) * diam );
             break;
 
-        case PINSHAPE_NONLOGIC:     // NonLogic pin symbol
+        case GRAPHIC_PINSHAPE::NONLOGIC:     // NonLogic pin symbol
             m_gal->DrawLine( p0, pos );
 
             m_gal->DrawLine( p0 - VECTOR2D( dir.x + dir.y, dir.y - dir.x ) * radius,
