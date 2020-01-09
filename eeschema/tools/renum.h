@@ -25,6 +25,26 @@
 #ifndef EESCHEMA_TOOLS_RENUM_H_
 #define EESCHEMA_TOOLS_RENUM_H_
 
+#include    <reporter.h>
+/**
+ * Class WX_STRING_REPORTER
+ * is a wrapper for reporting to a wxString object.
+ */
+class WX_STRING_REPORTER_FILTERED : public REPORTER
+{
+    SEVERITY m_MinSeverity;
+
+public:
+
+    WX_STRING_REPORTER_FILTERED( SEVERITY aSeverity  );
+    virtual ~WX_STRING_REPORTER_FILTERED();
+
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+    wxString m_string = "";
+    bool HasMessage() const override;
+};
+
+
 void RenumberFromPCBNew(SCH_EDIT_FRAME *m_frame, std::string &aNetlist);
 
 #endif /* EESCHEMA_TOOLS_RENUM_H_ */

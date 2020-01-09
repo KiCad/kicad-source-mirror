@@ -23,19 +23,36 @@
  */
 
 #include    <sch_edit_frame.h>
-#include    <reporter.h>
 #include    <tools/backannotate.h>
 #include    <renum_type.h>
+#include    <renum.h>
+
+WX_STRING_REPORTER_FILTERED::WX_STRING_REPORTER_FILTERED(SEVERITY aSeverity) :
+        m_MinSeverity(aSeverity) {
+}
+
+WX_STRING_REPORTER_FILTERED::~WX_STRING_REPORTER_FILTERED() {
+}
+
+REPORTER& WX_STRING_REPORTER_FILTERED::Report(const wxString &aText,
+        REPORTER::SEVERITY aSeverity) {
+    if (aSeverity < m_MinSeverity)
+        return *this;
+
+    m_string << aText << "\n";
+    return *this;
+}
+
+bool WX_STRING_REPORTER_FILTERED::HasMessage() const {
+    return !m_string.IsEmpty();
+}
 
 void RenumberFromPCBNew(SCH_EDIT_FRAME *aFrame, std::string &aNetlist) {
 
-wxString annotateerrors;
+    wxString annotateerrors;
+    WX_STRING_REPORTER_FILTERED reporter(REPORTER::SEVERITY::RPT_ERROR);
 
-WX_STRING_REPORTER reporter(&annotateerrors);
-
-    BACK_ANNOTATE::SETTINGS settings = {
-            reporter,
-            false,      //processFootprints
+    BACK_ANNOTATE::SETTINGS settings = { reporter, false,    //processFootprints
             false,      //processValues
             true,       //processReferences
             false,      //ignoreStandaloneFootprints
@@ -45,12 +62,12 @@ WX_STRING_REPORTER reporter(&annotateerrors);
     BACK_ANNOTATE backAnno(aFrame, settings);
     bool result = backAnno.BackAnnotateSymbols(aNetlist);
     if (true != result) {
-        aNetlist = _("\nErrors reported by eeSchema:\n")
-                + annotateerrors.ToStdString();     //Assume the worst
-        aNetlist += _(
-                "\nAnnotation not performed!\nFix errors and try again.\n");
+        aNetlist = _("Errors reported by eeSchema:\n")
+                + reporter.m_string.ToStdString();     //Assume the worst
+        aNetlist += _("\nAnnotation not performed!\n");
     } else {
-            aNetlist = RENUM_OK;                    //All is well
+        aNetlist = RENUM_OK;                    //All is well
     }
-    aFrame->GetCanvas()->Refresh();        //Redraw
+//    aFrame->GetCanvas()->Refresh();        //Redraw
+    aFrame->GetCanvas()->ForceRefresh();
 }

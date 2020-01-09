@@ -91,6 +91,14 @@ public:
     BOARD* m_board;
     MODULES m_modules;
 
+    wxString m_LogFile;
+    wxString m_ChangeFile;
+    std::vector<RefDesChange> m_ChangeArray;
+    std::vector<RefDesInfo> m_FrontModules;
+    std::vector<RefDesInfo> m_BackModules;
+    std::vector<RefDesTypeStr> m_RefDesTypes;
+    std::vector<wxString> m_ExcludeArray;
+
 private:
 
     void OnRenumberClick(wxCommandEvent& event) override;
