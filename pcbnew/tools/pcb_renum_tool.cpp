@@ -2,8 +2,8 @@
 #include <wx/wx.h>
 #include <wx/filedlg.h>
 
-#include <dialogs/DIALOG_BOARD_RENUM_base.h>
-#include <dialogs/DIALOG_BOARD_RENUM.h>
+#include <dialogs/dialog_board_renum_base.h>
+#include <dialogs/dialog_board_renum.h>
 #include <tools/pcb_renum_tool.h>
 
 #ifndef  __linux__      //Include Windows functions
