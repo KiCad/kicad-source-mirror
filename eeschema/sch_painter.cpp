@@ -1464,7 +1464,15 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
     for( auto p : pts )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
 
-    m_gal->SetIsFill( true );
+    // the text is drawn inside the graphic shape.
+    // On Cairo the graphic shape is filled by the background
+    // before drawing the text ().
+    // However if the text is selected, it is draw twice:
+    // first, on LAYER_SELECTION_SHADOWS
+    // second, on the text layer.
+    // the second must not erase the first drawing.
+    bool fillBg = ( aLayer == LAYER_SELECTION_SHADOWS ) || !aLabel->IsSelected();
+    m_gal->SetIsFill( fillBg );
     m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( getTextThickness( aLabel, drawingShadows ) );
