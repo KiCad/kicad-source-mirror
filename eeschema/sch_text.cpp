@@ -101,7 +101,7 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType )
 {
     m_Layer          = LAYER_NOTES;
     m_isDangling     = false;
-    m_connectionType = CONNECTION_NONE;
+    m_connectionType = CONNECTION_TYPE::NONE;
     m_spin_style     = LABEL_SPIN_STYLE::LEFT;
 
     SetTextPos( pos );
@@ -318,7 +318,7 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 
     bool previousState = m_isDangling;
     m_isDangling = true;
-    m_connectionType = CONNECTION_NONE;
+    m_connectionType = CONNECTION_TYPE::NONE;
 
     for( unsigned ii = 0; ii < aItemList.size(); ii++ )
     {
@@ -345,7 +345,7 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 
 
         case BUS_START_END:
-            m_connectionType = CONNECTION_BUS;
+            m_connectionType = CONNECTION_TYPE::BUS;
             // fall through
 
         case WIRE_START_END:
@@ -362,8 +362,8 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 
             if( !m_isDangling )
             {
-                if( m_connectionType != CONNECTION_BUS )
-                    m_connectionType = CONNECTION_NET;
+                if( m_connectionType != CONNECTION_TYPE::BUS )
+                    m_connectionType = CONNECTION_TYPE::NET;
 
                 // Add the line to the connected items, since it won't be picked
                 // up by a search of intersecting connection points
@@ -383,7 +383,7 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
     }
 
     if( m_isDangling )
-        m_connectionType = CONNECTION_NONE;
+        m_connectionType = CONNECTION_TYPE::NONE;
 
     return previousState != m_isDangling;
 }
