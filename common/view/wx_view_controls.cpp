@@ -129,6 +129,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
     this->Connect( wxEVT_TIMER, wxTimerEventHandler( WX_VIEW_CONTROLS::onTimer ), NULL, this );
 
     m_settings.m_lastKeyboardCursorPositionValid = false;
+    m_settings.m_lastKeyboardCursorPosition = { 0.0, 0.0 };
+    m_settings.m_lastKeyboardCursorCommand = 0;
 }
 
 
@@ -505,6 +507,8 @@ void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpV
     else
     {
         m_settings.m_lastKeyboardCursorPositionValid = false;
+        m_settings.m_lastKeyboardCursorPosition = { 0.0, 0.0 };
+        m_settings.m_lastKeyboardCursorCommand = 0;
         m_cursorWarped = true;
     }
 

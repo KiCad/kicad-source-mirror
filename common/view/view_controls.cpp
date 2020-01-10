@@ -71,6 +71,8 @@ void VC_SETTINGS::Reset()
     m_panWithRightButton = false;
     m_panWithLeftButton = false;
     m_lastKeyboardCursorPositionValid = false;
+    m_lastKeyboardCursorPosition = { 0.0, 0.0 };
+    m_lastKeyboardCursorCommand = 0;
 }
 
 
