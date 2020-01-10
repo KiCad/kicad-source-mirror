@@ -177,7 +177,7 @@ public:
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) = 0;
 
     ///> Cursor control event types
-    enum CURSOR_EVENT_TYPE { CURSOR_UP, CURSOR_DOWN, CURSOR_LEFT, CURSOR_RIGHT,
+    enum CURSOR_EVENT_TYPE { CURSOR_NONE, CURSOR_UP, CURSOR_DOWN, CURSOR_LEFT, CURSOR_RIGHT,
                              CURSOR_CLICK, CURSOR_DBL_CLICK, CURSOR_RIGHT_CLICK,
                              CURSOR_FAST_MOVE = 0x8000 };
 

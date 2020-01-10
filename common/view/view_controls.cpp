@@ -24,9 +24,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <gal/graphics_abstraction_layer.h>
+#include <tool/actions.h>
 #include <view/view.h>
 #include <view/view_controls.h>
-#include <gal/graphics_abstraction_layer.h>
 
 using namespace KIGFX;
 
@@ -72,7 +73,7 @@ void VC_SETTINGS::Reset()
     m_panWithLeftButton = false;
     m_lastKeyboardCursorPositionValid = false;
     m_lastKeyboardCursorPosition = { 0.0, 0.0 };
-    m_lastKeyboardCursorCommand = 0;
+    m_lastKeyboardCursorCommand = ACTIONS::CURSOR_NONE;
 }
 
 
