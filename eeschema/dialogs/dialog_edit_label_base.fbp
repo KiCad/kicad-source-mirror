@@ -750,7 +750,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">200,-1</property>
+                                <property name="minimum_size">250,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_comboOrientation</property>
                                 <property name="pane_border">1</property>
@@ -876,7 +876,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">200,-1</property>
+                                <property name="minimum_size">250,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_comboStyle</property>
                                 <property name="pane_border">1</property>
@@ -1002,7 +1002,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">200,-1</property>
+                                <property name="minimum_size">250,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_comboShape</property>
                                 <property name="pane_border">1</property>
