@@ -423,14 +423,14 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     if( m_parent->GetPrintMonochrome() )
         GRForceBlackPen( true );
 
-    aScreen->Print( dc );
-
     if( printReference )
     {
         m_parent->PrintWorkSheet( dc, aScreen, GetDefaultLineThickness(), IU_PER_MILS,
                                   aScreen->GetFileName(), wxEmptyString,
                                   GetLayerColor( ( SCH_LAYER_ID )LAYER_WORKSHEET ) );
     }
+
+    aScreen->Print( dc );
 
     m_parent->SetDrawBgColor( bgColor );
     aScreen->m_IsPrinting = false;

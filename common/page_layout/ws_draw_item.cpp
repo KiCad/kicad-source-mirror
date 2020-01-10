@@ -482,7 +482,17 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
  */
 void WS_DRAW_ITEM_LIST::Print( wxDC* aDC, COLOR4D aColor )
 {
+    std::vector<WS_DRAW_ITEM_BASE*> second_items;
+
     for( WS_DRAW_ITEM_BASE* item = GetFirst(); item; item = GetNext() )
+    {
+        if( item->Type() == WSG_BITMAP_T )
+            item->PrintWsItem( aDC, aColor );
+        else
+            second_items.push_back( item );
+    }
+
+    for( auto item : second_items )
         item->PrintWsItem( aDC, aColor );
 }
 
