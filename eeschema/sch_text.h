@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_text.h
- * @brief Definitions of the SCH_TEXT class and derivatives for Eeschema.
- */
-
 #ifndef CLASS_TEXT_LABEL_H
 #define CLASS_TEXT_LABEL_H
 
@@ -89,22 +84,14 @@ public:
     LABEL_SPIN_STYLE RotateCW()
     {
         SPIN newSpin = m_spin;
+
         switch( m_spin )
         {
-        default:
-            wxLogWarning( "RotateCCW encountered unknown current spin style" );
-        case LABEL_SPIN_STYLE::LEFT:
-            newSpin = LABEL_SPIN_STYLE::UP;
-            break;
-        case LABEL_SPIN_STYLE::UP:
-            newSpin = LABEL_SPIN_STYLE::RIGHT;
-            break;
-        case LABEL_SPIN_STYLE::RIGHT:
-            newSpin = LABEL_SPIN_STYLE::BOTTOM;
-            break;
-        case LABEL_SPIN_STYLE::BOTTOM:
-            newSpin = LABEL_SPIN_STYLE::LEFT;
-            break;
+        case LABEL_SPIN_STYLE::LEFT:   newSpin = LABEL_SPIN_STYLE::UP;     break;
+        case LABEL_SPIN_STYLE::UP:     newSpin = LABEL_SPIN_STYLE::RIGHT;  break;
+        case LABEL_SPIN_STYLE::RIGHT:  newSpin = LABEL_SPIN_STYLE::BOTTOM; break;
+        case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::LEFT;   break;
+        default: wxLogWarning( "RotateCCW encountered unknown current spin style" ); break;
         }
 
         return LABEL_SPIN_STYLE( newSpin );
@@ -114,22 +101,14 @@ public:
     LABEL_SPIN_STYLE RotateCCW()
     {
         SPIN newSpin = m_spin;
+
         switch( m_spin )
         {
-        default:
-            wxLogWarning( "RotateCCW encountered unknown current spin style" );
-        case LABEL_SPIN_STYLE::LEFT:
-            newSpin = LABEL_SPIN_STYLE::BOTTOM;
-            break;
-        case LABEL_SPIN_STYLE::BOTTOM:
-            newSpin = LABEL_SPIN_STYLE::RIGHT;
-            break;
-        case LABEL_SPIN_STYLE::RIGHT:
-            newSpin = LABEL_SPIN_STYLE::UP;
-            break;
-        case LABEL_SPIN_STYLE::UP:
-            newSpin = LABEL_SPIN_STYLE::LEFT;
-            break;
+        case LABEL_SPIN_STYLE::LEFT:   newSpin = LABEL_SPIN_STYLE::BOTTOM; break;
+        case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::RIGHT;  break;
+        case LABEL_SPIN_STYLE::RIGHT:  newSpin = LABEL_SPIN_STYLE::UP;     break;
+        case LABEL_SPIN_STYLE::UP:     newSpin = LABEL_SPIN_STYLE::LEFT;   break;
+        default: wxLogWarning( "RotateCCW encountered unknown current spin style" ); break;
         }
 
         return LABEL_SPIN_STYLE( newSpin );
@@ -142,20 +121,14 @@ public:
     LABEL_SPIN_STYLE MirrorX()
     {
         SPIN newSpin = m_spin;
+
         switch( m_spin )
         {
-        default:
-            wxLogWarning( "MirrorX encountered unknown current spin style" );
-        case LABEL_SPIN_STYLE::UP:
-            newSpin = LABEL_SPIN_STYLE::BOTTOM;
-            break;
-        case LABEL_SPIN_STYLE::BOTTOM:
-            newSpin = LABEL_SPIN_STYLE::UP;
-            break;
-        case LABEL_SPIN_STYLE::LEFT:
-            break;
-        case LABEL_SPIN_STYLE::RIGHT:
-            break;
+        case LABEL_SPIN_STYLE::UP:     newSpin = LABEL_SPIN_STYLE::BOTTOM; break;
+        case LABEL_SPIN_STYLE::BOTTOM: newSpin = LABEL_SPIN_STYLE::UP;     break;
+        case LABEL_SPIN_STYLE::LEFT:                                       break;
+        case LABEL_SPIN_STYLE::RIGHT:                                      break;
+        default: wxLogWarning( "MirrorX encountered unknown current spin style" ); break;
         }
 
         return LABEL_SPIN_STYLE( newSpin );
@@ -168,20 +141,14 @@ public:
     LABEL_SPIN_STYLE MirrorY()
     {
         SPIN newSpin = m_spin;
+
         switch( m_spin )
         {
-        default:
-            wxLogWarning( "MirrorY encountered unknown current spin style" );
-        case LABEL_SPIN_STYLE::LEFT:
-            newSpin = LABEL_SPIN_STYLE::RIGHT;
-            break;
-        case LABEL_SPIN_STYLE::RIGHT:
-            newSpin = LABEL_SPIN_STYLE::LEFT;
-            break;
-        case LABEL_SPIN_STYLE::UP:
-            break;
-        case LABEL_SPIN_STYLE::BOTTOM:
-            break;
+        case LABEL_SPIN_STYLE::LEFT:  newSpin = LABEL_SPIN_STYLE::RIGHT; break;
+        case LABEL_SPIN_STYLE::RIGHT: newSpin = LABEL_SPIN_STYLE::LEFT;  break;
+        case LABEL_SPIN_STYLE::UP:                                       break;
+        case LABEL_SPIN_STYLE::BOTTOM:                                   break;
+        default: wxLogWarning( "MirrorY encountered unknown current spin style" ); break;
         }
 
         return LABEL_SPIN_STYLE( newSpin );
@@ -231,8 +198,7 @@ protected:
     LABEL_SPIN_STYLE m_spin_style;
 
 public:
-    SCH_TEXT( const wxPoint& pos = wxPoint( 0, 0 ),
-              const wxString& text = wxEmptyString,
+    SCH_TEXT( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString,
               KICAD_T aType = SCH_TEXT_T );
 
     /**

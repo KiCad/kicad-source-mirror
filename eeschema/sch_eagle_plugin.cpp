@@ -327,6 +327,7 @@ static void eagleToKicadAlignment( EDA_TEXT* aText, int aEagleAlignment, int aRe
     default:
         aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
     }
 }
 

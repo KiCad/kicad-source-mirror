@@ -217,6 +217,8 @@ void SCH_TEXT::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
     {
     default:
         wxASSERT_MSG( 1, "Bad spin style" );
+        break;
+
     case LABEL_SPIN_STYLE::RIGHT: // Horiz Normal Orientation
         //
         m_spin_style = LABEL_SPIN_STYLE::RIGHT; // Handle the error spin style by resetting
@@ -798,6 +800,8 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
     {
     default:
         wxASSERT_MSG( 1, "Bad spin style" );
+        break;
+
     case LABEL_SPIN_STYLE::RIGHT: // Horiz Normal Orientation
         //
         m_spin_style = LABEL_SPIN_STYLE::RIGHT; // Handle the error spin style by resetting
@@ -1041,6 +1045,8 @@ void SCH_HIERLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
     {
     default:
         wxLogWarning( "SetLabelSpinStyle bad spin style" );
+        break;
+
     case LABEL_SPIN_STYLE::LEFT:
         //
         m_spin_style = LABEL_SPIN_STYLE::LEFT; // Handle the error spin style by resetting
