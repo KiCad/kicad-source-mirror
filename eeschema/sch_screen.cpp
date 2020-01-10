@@ -519,7 +519,10 @@ void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
 
 void SCH_SCREEN::Print( wxDC* aDC )
 {
+    // Ensure links are up to date, even if a library was reloaded for some reason:
     std::vector< SCH_ITEM* > junctions;
+    std::vector<SCH_ITEM*>   bitmaps;
+    std::vector<SCH_ITEM*>   other;
 
     // Ensure links are up to date, even if a library was reloaded for some reason:
     UpdateSymbolLinks();
@@ -531,9 +534,25 @@ void SCH_SCREEN::Print( wxDC* aDC )
 
         if( item->Type() == SCH_JUNCTION_T )
             junctions.push_back( item );
+        else if( item->Type() == SCH_BITMAP_T )
+            bitmaps.push_back( item );
         else
-            item->Print( aDC, wxPoint( 0, 0 ) );
+            other.push_back( item );
     }
+
+    /// Sort to ensure plot-order consistency with screen drawing
+    std::sort( other.begin(), other.end(), []( const SCH_ITEM* a, const SCH_ITEM* b ) {
+        if( a->Type() == b->Type() )
+            return a->GetLayer() > b->GetLayer();
+
+        return a->Type() > b->Type();
+    } );
+
+    for( auto item : bitmaps )
+        item->Print( aDC, wxPoint( 0, 0 ) );
+
+    for( auto item : other )
+        item->Print( aDC, wxPoint( 0, 0 ) );
 
     for( auto item : junctions )
         item->Print( aDC, wxPoint( 0, 0 ) );
@@ -560,10 +579,16 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter )
         else if( item->Type() == SCH_BITMAP_T )
             bitmaps.push_back( item );
         else
-            // uncomment line below when there is a virtual EDA_ITEM::GetBoundingBox()
-            // if( panel->GetClipBox().Intersects( item->GetBoundingBox() ) )
             other.push_back( item );
     }
+
+    /// Sort to ensure plot-order consistency with screen drawing
+    std::sort( other.begin(), other.end(), []( const SCH_ITEM* a, const SCH_ITEM* b ) {
+        if( a->Type() == b->Type() )
+            return a->GetLayer() > b->GetLayer();
+
+        return a->Type() > b->Type();
+    } );
 
     // Bitmaps are drawn first to ensure they are in the background
     // This is particularly important for the wxPostscriptDC (used in *nix printers) as
