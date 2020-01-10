@@ -48,8 +48,8 @@ BITMAP_BASE::BITMAP_BASE( const wxPoint& pos )
     m_bitmap = NULL;
     m_image  = NULL;
     m_ppi    = 300;                 // the bitmap definition. the default is 300PPI
-    m_pixelScaleFactor = 1000.0 / m_ppi;    // a value OK for bitmaps using 300 PPI
-                                            // for Eeschema which uses currently 1000PPI
+    m_pixelScaleFactor = 254000.0 / m_ppi;    // a value OK for bitmaps using 300 PPI
+                                              // for Eeschema which uses currently 254000PPI
 }
 
 
