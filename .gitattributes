@@ -1,4 +1,5 @@
-
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
 # Custom attribute to mark source files using KiCad C++ formatting
 [attr]kicad-cpp-source whitepace=tab-in-indent format.clang-format-kicad
 

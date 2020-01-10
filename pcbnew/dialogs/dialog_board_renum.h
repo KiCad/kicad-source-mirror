@@ -41,7 +41,6 @@
 #include    <tool/actions.h>
 #include    <frame_type.h>
 #include    <tool/tool_manager.h>
-#include    <unistd.h>
 
 #define SORTXFIRST          0b000       //Sort on X
 #define SORTYFIRST          0b100       //Sort on Y

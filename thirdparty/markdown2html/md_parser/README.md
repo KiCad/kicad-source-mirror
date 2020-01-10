@@ -1,4 +1,4 @@
-﻿Sundown
+Sundown
 =======
 
 `Sundown` is a Markdown parser based on the original code of the

@@ -1,4 +1,4 @@
-﻿Credits
+Credits
 =======
 
 The 3D-viewer contains parts, source code or adaptations or implementations that should give the following aknowledge:
