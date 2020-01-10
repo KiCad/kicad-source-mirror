@@ -123,7 +123,8 @@ public:
                 val = g_shapeNames[ pin->GetShape() ];
                 break;
             case COL_ORIENTATION:
-                val = g_orientationNames[ LIB_PIN::GetOrientationIndex( pin->GetOrientation() ) ];
+                if( LIB_PIN::GetOrientationIndex( pin->GetOrientation() ) >= 0 )
+                    val = g_orientationNames[ LIB_PIN::GetOrientationIndex( pin->GetOrientation() ) ];
                 break;
             case COL_NUMBER_SIZE:
                 val = StringFromValue( aUserUnits, pin->GetNumberTextSize(), true, true );
