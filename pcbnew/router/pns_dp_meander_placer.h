@@ -41,7 +41,7 @@ namespace PNS {
 class ROUTER;
 
 /**
- * Class DP_MEANDER_PLACER
+ * DP_MEANDER_PLACER
  *
  * Differential Pair length-matching/meandering tool.
  */

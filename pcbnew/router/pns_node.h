@@ -48,7 +48,7 @@ class ROUTER;
 class NODE;
 
 /**
- * Class RULE_RESOLVER
+ * RULE_RESOLVER
  *
  * An abstract function object, returning a design rule (clearance, diff pair gap, etc) required between two items.
  **/
@@ -126,7 +126,7 @@ protected:
 };
 
 /**
- * Class NODE
+ * NODE
  *
  * Keeps the router "world" - i.e. all the tracks, vias, solids in a
  * hierarchical and indexed way.

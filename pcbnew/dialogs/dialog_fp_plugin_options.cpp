@@ -41,7 +41,7 @@ using std::string;
 
 
 /**
- * Class DIALOG_FP_PLUGIN_OPTIONS
+ * DIALOG_FP_PLUGIN_OPTIONS
  * is an options editor in the form of a two column name/value
  * spreadsheet like (table) UI.  It takes hints from a pcbnew PLUGIN as to
  * supported options.

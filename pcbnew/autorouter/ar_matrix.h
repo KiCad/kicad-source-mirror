@@ -43,7 +43,7 @@ class MODULE;
 #define AR_SIDE_BOTTOM 1
 
 /**
- * class AR_MATRIX
+ * AR_MATRIX
  * handle the matrix routing that describes the actual board
  */
 class AR_MATRIX

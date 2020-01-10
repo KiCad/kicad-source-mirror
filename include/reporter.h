@@ -40,7 +40,7 @@ class WX_HTML_REPORT_PANEL;
 
 
 /**
- * Class REPORTER
+ * REPORTER
  * is a pure virtual class used to derive REPORTER objects from.
  *
  * The purpose of the REPORTER object is to offer a way for a procedural function
@@ -138,7 +138,7 @@ public:
 
 
 /**
- * Class WX_TEXT_CTRL_REPORTER
+ * WX_TEXT_CTRL_REPORTER
  * is wrapper for reporting to a wxTextCtrl object.
  */
 class WX_TEXT_CTRL_REPORTER : public REPORTER
@@ -159,7 +159,7 @@ public:
 
 
 /**
- * Class WX_STRING_REPORTER
+ * WX_STRING_REPORTER
  * is a wrapper for reporting to a wxString object.
  */
 class WX_STRING_REPORTER : public REPORTER
@@ -180,7 +180,7 @@ public:
 
 
 /**
- * Class WX_HTML_PANEL_REPORTER
+ * WX_HTML_PANEL_REPORTER
  * is a wrapper for reporting to a wx HTML window
  */
 class WX_HTML_PANEL_REPORTER : public REPORTER
@@ -204,7 +204,7 @@ public:
 };
 
 /**
- * Class NULL_REPORTER
+ * NULL_REPORTER
  *
  * A singleton reporter that reports to nowhere. Used as to simplify code by
  * avoiding the reportee to check for a non-NULL reporter object.
@@ -224,7 +224,7 @@ public:
 };
 
 /**
- * Class STDOUT_REPORTER
+ * STDOUT_REPORTER
  *
  * Debug type reporter, forwarding messages to std::cout.
  */

@@ -156,7 +156,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 typedef unsigned STATUS_FLAGS;
 
 /**
- * Class EDA_ITEM
+ * EDA_ITEM
  * is a base class for most all the KiCad significant classes, used in
  * schematics and boards.
  */

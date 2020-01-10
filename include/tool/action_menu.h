@@ -36,7 +36,7 @@
 class TOOL_INTERACTIVE;
 
 /**
- * Class ACTION_MENU
+ * ACTION_MENU
  *
  * Defines the structure of a menu based on ACTIONs.
  */

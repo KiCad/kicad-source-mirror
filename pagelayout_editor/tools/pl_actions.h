@@ -33,7 +33,7 @@ class TOOL_EVENT;
 class TOOL_MANAGER;
 
 /**
- * Class PL_ACTIONS
+ * PL_ACTIONS
  *
  * Gathers all the actions that are shared by tools. The instance of PL_ACTIONS is created
  * inside of ACTION_MANAGER object that registers the actions.

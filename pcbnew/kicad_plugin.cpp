@@ -74,7 +74,7 @@ void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )
 }
 
 /**
- * Class FP_CACHE_ITEM
+ * FP_CACHE_ITEM
  * is helper class for creating a footprint library cache.
  *
  * The new footprint library design is a file path of individual module files

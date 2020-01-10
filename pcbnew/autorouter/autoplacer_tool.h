@@ -28,7 +28,7 @@
 
 
 /**
- * Class AUTOPLACE_TOOL
+ * AUTOPLACE_TOOL
  *
  * Tool responsible for automagic placement of components.
  */

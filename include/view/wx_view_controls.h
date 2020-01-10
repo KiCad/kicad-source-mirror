@@ -45,7 +45,7 @@ namespace KIGFX
 class ZOOM_CONTROLLER;
 
 /**
- * Class WX_VIEW_CONTROLS
+ * WX_VIEW_CONTROLS
  * is a specific implementation of class VIEW_CONTROLS for wxWidgets library.
  */
 class WX_VIEW_CONTROLS : public VIEW_CONTROLS, public wxEvtHandler

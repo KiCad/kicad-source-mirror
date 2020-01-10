@@ -32,7 +32,7 @@
 
 
 /**
- * Class PCB_INSPECTION_TOOL
+ * PCB_INSPECTION_TOOL
  *
  * Tool for pcb inspection.
  */

@@ -816,7 +816,7 @@ void LAYER_WIDGET::UpdateLayerIcons()
 
 
 /**
- * Class MYFRAME
+ * MYFRAME
  * is a test class here to exercise the LAYER_WIDGET and explore use cases.
  * @see http://www.kirix.com/labs/wxaui/screenshots.html
  * for ideas.

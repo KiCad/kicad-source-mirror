@@ -104,7 +104,7 @@ typedef MODULE_MAP::const_iterator              MODULE_CITER;
 
 
 /**
- * Class GH_CACHE
+ * GH_CACHE
  * assists only within GITHUB_PLUGIN and holds a map of footprint name to wxZipEntry
  */
 struct GH_CACHE : public MODULE_MAP

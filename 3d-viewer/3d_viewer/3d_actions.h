@@ -34,7 +34,7 @@ class TOOL_EVENT;
 class TOOL_MANAGER;
 
 /**
- * Class EDA_3D_ACTIONS
+ * EDA_3D_ACTIONS
  *
  * Note: these aren't "real" actions; we just use them to see the hotkeys display.
  */

@@ -24,7 +24,7 @@
 class wxConfigBase;
 
 /**
- * Class PRINT_PARAMETERS
+ * PRINT_PARAMETERS
  * handles the parameters used to print a board drawing.
  */
 struct PRINTOUT_SETTINGS

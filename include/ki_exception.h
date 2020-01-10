@@ -38,7 +38,7 @@
 #define THROW_IO_ERROR( msg )   throw IO_ERROR( msg, __FILE__, __FUNCTION__, __LINE__ )
 
 /**
- * class KI_PARAM_ERROR
+ * KI_PARAM_ERROR
  * is a class used to hold a translatable error message and may be used when throwing exceptions
  * containing a translated error message.
  */

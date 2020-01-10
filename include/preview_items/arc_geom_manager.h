@@ -33,7 +33,7 @@ namespace PREVIEW {
 
 
 /**
- * Class ARC_GEOM_MANAGER
+ * ARC_GEOM_MANAGER
  *
  * A class to manage the construction of a circular arc though
  * sequential setting of critical points: centre, arc start

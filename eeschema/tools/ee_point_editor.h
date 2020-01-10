@@ -33,7 +33,7 @@ class EE_SELECTION_TOOL;
 class SCH_BASE_FRAME;
 
 /**
- * Class EE_POINT_EDITOR
+ * EE_POINT_EDITOR
  *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */

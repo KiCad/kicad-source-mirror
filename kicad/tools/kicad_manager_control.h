@@ -32,7 +32,7 @@ class KICAD_MANAGER_FRAME;
 
 
 /**
- * Class KICAD_MANAGER_CONTROL
+ * KICAD_MANAGER_CONTROL
  *
  * Handles actions in the kicad manager frame.
  */

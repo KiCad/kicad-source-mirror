@@ -36,7 +36,7 @@
 
 
 /**
- * Class XNODE
+ * XNODE
  * holds an XML or S-expression element.  It is used for eXporting
  * a document tree in EITHER XML or S-expression.
  */

@@ -40,7 +40,7 @@ class SHOVE;
 class OPTIMIZER;
 
 /**
- * Class DRAGGER
+ * DRAGGER
  *
  * Via, segment and corner dragging algorithm.
  */

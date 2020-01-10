@@ -35,7 +35,7 @@ class WRL2BASE;
 class SGNODE;
 
 /**
- * Class WRL2BOX
+ * WRL2BOX
  */
 class WRL2BOX : public WRL2NODE
 {

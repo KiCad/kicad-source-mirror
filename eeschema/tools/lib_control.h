@@ -32,7 +32,7 @@
 class LIB_EDIT_FRAME;
 
 /**
- * Class LIB_CONTROL
+ * LIB_CONTROL
  *
  * Handles actions for the various symbol editor and viewers.
  */

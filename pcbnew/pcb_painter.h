@@ -55,7 +55,7 @@ namespace KIGFX
 class GAL;
 
 /**
- * Class PCB_RENDER_SETTINGS
+ * PCB_RENDER_SETTINGS
  * Stores PCB specific render settings.
  */
 class PCB_RENDER_SETTINGS : public RENDER_SETTINGS
@@ -220,7 +220,7 @@ protected:
 
 
 /**
- * Class PCB_PAINTER
+ * PCB_PAINTER
  * Contains methods for drawing PCB-specific items.
  */
 class PCB_PAINTER : public PAINTER

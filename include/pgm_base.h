@@ -98,7 +98,7 @@ struct LANGUAGE_DESCR
 
 
 /**
- * Class ENV_VAR_ITEM
+ * ENV_VAR_ITEM
  *
  * is a simple helper class to store environment variable values and the status of whether
  * or not they were defined externally to the process created when any of the KiCad applications
@@ -139,7 +139,7 @@ typedef std::map<wxString, ENV_VAR_ITEM>::const_iterator ENV_VAR_MAP_CITER;
 
 
 /**
- * Class PGM_BASE
+ * PGM_BASE
  * keeps program (whole process) data for KiCad programs.
  * The VTBL_ENTRY functions are VTBL_ENTRY so we can do cross module calls
  * without linking to them.  This used to be a wxApp derivative, but that

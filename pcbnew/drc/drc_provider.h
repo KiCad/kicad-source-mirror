@@ -34,7 +34,7 @@
 
 
 /**
- * Class that represents a DRC "provider" which runs some
+ * that represents a DRC "provider" which runs some
  * DRC functions over a #BOARD and spits out #PCB_MARKERs as needed.
  */
 class DRC_PROVIDER

@@ -62,7 +62,7 @@ extern std::string GetCurlLibVersion();
 
 
 /*
- * Class DIALOG_ABOUT methods
+ * DIALOG_ABOUT methods
  */
 
 DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )

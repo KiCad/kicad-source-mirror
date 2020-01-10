@@ -25,7 +25,7 @@
  *
  * Usage:
  * [header]
- * class A {
+ * A {
  *     DEFINE_ENUM_VECTOR( COLORS, { RED, GREEN, BLUE } );
  * };
  *

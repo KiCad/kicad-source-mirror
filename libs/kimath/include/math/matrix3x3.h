@@ -30,7 +30,7 @@
 #include <math/vector2d.h>
 
 /**
- * Class MATRIX3x3 describes a general 3x3 matrix.
+ * MATRIX3x3 describes a general 3x3 matrix.
  *
  * Any linear transformation in 2D can be represented
  * by a homogeneous 3x3 transformation matrix. Given a vector x, the linear transformation

@@ -39,7 +39,7 @@ class EDA_TEXT;
 
 
 /**
- * Class DIALOG_EDIT_ONE_FIELD
+ * DIALOG_EDIT_ONE_FIELD
  * is a base class to edit schematic and component library fields.
  * <p>
  * This class is setup in expectation of its children
@@ -105,7 +105,7 @@ protected:
 
 
 /**
- * Class DIALOG_LIB_EDIT_ONE_FIELD
+ * DIALOG_LIB_EDIT_ONE_FIELD
  * is a the class to handle editing a single component field in the library editor.
  * <p>
  * @note Use ShowQuasiModal when calling this class!
@@ -133,7 +133,7 @@ public:
 
 
 /**
- * Class DIALOG_SCH_EDIT_ONE_FIELD
+ * DIALOG_SCH_EDIT_ONE_FIELD
  * is a the class to handle editing a single component field in the schematic editor.
  * <p>
  * @note Use ShowQuasiModal when calling this class!

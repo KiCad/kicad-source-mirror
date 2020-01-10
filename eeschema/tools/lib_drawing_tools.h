@@ -32,7 +32,7 @@ class LIB_EDIT_FRAME;
 
 
 /**
- * Class LIB_DRAWING_TOOLS
+ * LIB_DRAWING_TOOLS
  *
  * Tool responsible for drawing/placing items (body outlines, pins, etc.)
  */

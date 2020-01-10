@@ -31,7 +31,7 @@
 class PCB_PLOT_PARAMS_PARSER;
 
 /**
- * Class PCB_PLOT_PARAMS
+ * PCB_PLOT_PARAMS
  * handles plot parameters and options when plotting/printing a board.
  */
 class PCB_PLOT_PARAMS

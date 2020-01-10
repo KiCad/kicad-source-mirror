@@ -73,7 +73,7 @@ enum LAYER_T
 
 
 /**
- * Class LAYER
+ * LAYER
  * holds information pertinent to a layer of a BOARD.
  */
 struct LAYER
@@ -154,7 +154,7 @@ DECL_DEQ_FOR_SWIG( TRACKS, TRACK* )
 
 
 /**
- * Class BOARD
+ * BOARD
  * holds information pertinent to a Pcbnew printed circuit board.
  */
 class BOARD : public BOARD_ITEM_CONTAINER

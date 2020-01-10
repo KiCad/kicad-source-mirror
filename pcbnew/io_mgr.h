@@ -39,7 +39,7 @@ class PROPERTIES;
 
 
 /**
- * Class IO_MGR
+ * IO_MGR
  * is a factory which returns an instance of a PLUGIN.
  */
 class IO_MGR
@@ -72,7 +72,7 @@ public:
     };
 
     /**
-     * Class PLUGIN_REGISTRY
+     * PLUGIN_REGISTRY
      * Holds a list of available plugins, created using a singleton REGISTER_PLUGIN object.
      * This way, plugins can be added link-time.
      */
@@ -128,7 +128,7 @@ public:
     };
 
     /**
-     * Class REGISTER_PLUGIN
+     * REGISTER_PLUGIN
      * Registers a plugin. Declare as a static variable in an anonymous namespace.
      * @param aType: type of the plugin
      * @param aName: name of the file format
@@ -247,7 +247,7 @@ public:
 
 
 /**
- * Class PLUGIN
+ * PLUGIN
  * is a base class that BOARD loading and saving plugins should derive from.
  * Implementations can provide either Load() or Save() functions, or both.
  * PLUGINs throw exceptions, so it is best that you wrap your calls to these
@@ -570,7 +570,7 @@ public:
 
 #ifndef SWIG
     /**
-     * Class RELEASER
+     * RELEASER
      * releases a PLUGIN in the context of a potential thrown exception, through
      * its destructor.
      */

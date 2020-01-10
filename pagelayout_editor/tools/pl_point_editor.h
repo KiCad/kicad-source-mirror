@@ -34,7 +34,7 @@ class PL_SELECTION_TOOL;
 class PL_EDITOR_FRAME;
 
 /**
- * Class PL_POINT_EDITOR
+ * PL_POINT_EDITOR
  *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */

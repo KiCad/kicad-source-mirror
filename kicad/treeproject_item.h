@@ -32,7 +32,7 @@
 
 
 /**
- * Class TREEPROJECT_ITEM
+ * TREEPROJECT_ITEM
  * handles one item (a file or a directory name) for the tree file
  */
 class TREEPROJECT_ITEM : public wxTreeItemData

@@ -49,7 +49,7 @@ enum ID_WHKL_MENU_IDS
 
 
 /**
- * Class WIDGET_HOTKEY_CLIENT_DATA
+ * WIDGET_HOTKEY_CLIENT_DATA
  * Stores the hotkey change data associated with each row. To change a
  * hotkey, edit it via GetCurrentValue() in the row's client data, then call
  * WIDGET_HOTKEY_LIST::UpdateFromClientData().
@@ -68,7 +68,7 @@ public:
 
 
 /**
- * Class HK_PROMPT_DIALOG
+ * HK_PROMPT_DIALOG
  * Dialog to prompt the user to enter a key.
  */
 class HK_PROMPT_DIALOG : public DIALOG_SHIM
@@ -216,7 +216,7 @@ public:
 
 
 /**
- * Class HOTKEY_FILTER
+ * HOTKEY_FILTER
  *
  * Class to manage logic for filtering hotkeys based on user input
  */

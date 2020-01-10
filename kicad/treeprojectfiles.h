@@ -35,7 +35,7 @@
 #include "kicad_manager_frame.h"
 
 
-/** Class TREEPROJECTFILES
+/** TREEPROJECTFILES
  * This is the class to show (as a tree) the files in the project directory
  */
 class TREEPROJECTFILES : public wxTreeCtrl

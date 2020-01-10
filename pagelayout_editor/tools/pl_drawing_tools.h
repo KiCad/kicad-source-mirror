@@ -34,7 +34,7 @@ class PL_SELECTION_TOOL;
 
 
 /**
- * Class PL_DRAWING_TOOLS
+ * PL_DRAWING_TOOLS
  *
  * Tool responsible for drawing/placing items (lines, rectangles, text, etc.)
  */

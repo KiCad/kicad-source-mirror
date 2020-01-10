@@ -69,7 +69,7 @@ enum X3DNODES
 };
 
 /**
- * Class X3DNODE
+ * X3DNODE
  * represents the base class of all X3D nodes
  */
 class X3DNODE

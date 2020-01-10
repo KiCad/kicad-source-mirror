@@ -42,7 +42,7 @@ class wxString;
 class PARAM_CFG_ARRAY;
 
 /**
- * Class COLORS_DESIGN_SETTINGS
+ * COLORS_DESIGN_SETTINGS
  * is a list of color settings for designs in Pcbnew
  */
 class COLORS_DESIGN_SETTINGS : public SETTINGS

@@ -33,7 +33,7 @@
 class ACTION_MENU;
 
 /**
- * Class TOOL_MENU
+ * TOOL_MENU
  *
  * Manages a CONDITIONAL_MENU and some number of
  * CONTEXT_MENUs as sub-menus

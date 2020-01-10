@@ -36,7 +36,7 @@ class SELECTION_TOOL;
 class SHAPE_POLY_SET;
 
 /**
- * Class POINT_EDITOR
+ * POINT_EDITOR
  *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */

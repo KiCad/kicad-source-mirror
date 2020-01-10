@@ -35,7 +35,7 @@ class TRACK;
 class D_PAD;
 
 /**
- * Class BOARD_CONNECTED_ITEM
+ * BOARD_CONNECTED_ITEM
  * is a base class derived from BOARD_ITEM for items that can be connected
  * and have a net, a netname, a clearance ...
  * mainly: tracks, pads and zones

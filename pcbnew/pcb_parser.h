@@ -60,7 +60,7 @@ struct LAYER;
 
 
 /**
- * Class PCB_PARSER
+ * PCB_PARSER
  * reads a Pcbnew s-expression formatted #LINE_READER object and returns the appropriate
  * #BOARD_ITEM object.
  */

@@ -71,7 +71,7 @@ enum VIEW_VISIBILITY_FLAGS {
 };
 
 /**
- * Class VIEW_ITEM -
+ * VIEW_ITEM -
  * is an abstract base class for deriving all objects that can be added to a VIEW.
  * It's role is to:
  * - communicte geometry, appearance and visibility updates to the associated dynamic VIEW,

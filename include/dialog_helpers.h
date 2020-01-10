@@ -40,7 +40,7 @@ void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput
 class EDA_DRAW_FRAME;
 
 /**
- * class EDA_LIST_DIALOG
+ * EDA_LIST_DIALOG
  *
  * A dialog which shows:
  *   a list of elements for selection,

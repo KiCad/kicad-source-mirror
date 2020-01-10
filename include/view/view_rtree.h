@@ -34,7 +34,7 @@ namespace KIGFX
 typedef RTree<VIEW_ITEM*, int, 2, double> VIEW_RTREE_BASE;
 
 /**
- * Class VIEW_RTREE -
+ * VIEW_RTREE -
  * Implements an R-tree for fast spatial indexing of VIEW items.
  * Non-owning.
  */

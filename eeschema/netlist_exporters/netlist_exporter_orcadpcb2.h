@@ -29,7 +29,7 @@
 #include "netlist_exporter.h"
 
 /**
- * Class NETLIST_EXPORTER_ORCADPCB2
+ * NETLIST_EXPORTER_ORCADPCB2
  * generates a netlist compatible with OrCAD
  */
 class NETLIST_EXPORTER_ORCADPCB2 : public NETLIST_EXPORTER

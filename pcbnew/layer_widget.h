@@ -58,7 +58,7 @@
 using KIGFX::COLOR4D;
 
 /**
- * Class LAYER_WIDGET
+ * LAYER_WIDGET
  * is abstract and is used to manage a list of layers, with the notion of
  * a "current" layer, and layer specific visibility control.  You must derive from
  * it to use it so you can implement the abstract functions which recieve the
@@ -432,7 +432,7 @@ public:
     /**
      * Function OnLayerColorChange
      * is called to notify client code about a layer color change.  Derived
-     * classes will handle this accordingly.
+     *es will handle this accordingly.
      * @param aLayer is the board layer to change
      * @param aColor is the new color
      */

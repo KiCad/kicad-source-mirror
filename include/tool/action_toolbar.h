@@ -34,7 +34,7 @@ class TOOL_MANAGER;
 class TOOL_ACTION;
 
 /**
- * Class ACTION_TOOLBAR
+ * ACTION_TOOLBAR
  *
  * Defines the structure of a toolbar with buttons that invoke ACTIONs.
  */

@@ -30,7 +30,7 @@
 #undef Opposite
 
 /**
- * Class DIRECTION_45.
+ * DIRECTION_45.
  * Represents route directions & corner angles in a 45-degree metric.
  */
 

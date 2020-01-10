@@ -59,7 +59,7 @@ class PCB_BASE_FRAME;
 DECL_VEC_FOR_SWIG( D_PADS, D_PAD* )
 
 /**
- * Class NETINFO_ITEM
+ * NETINFO_ITEM
  * handles the data for a net
  */
 class NETINFO_ITEM : public BOARD_ITEM
@@ -402,7 +402,7 @@ DECL_MAP_FOR_SWIG( NETCODES_MAP, int,       NETINFO_ITEM* )
 #endif
 
 /**
- * Class NETINFO_LIST
+ * NETINFO_LIST
  * is a container class for NETINFO_ITEM elements, which are the nets.  That makes
  * this class a container for the nets.
  */

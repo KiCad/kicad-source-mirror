@@ -60,7 +60,7 @@ class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
 
 /**
- * class PCB_BASE_FRAME
+ * PCB_BASE_FRAME
  * basic PCB main window class for Pcbnew, Gerbview, and CvPcb footprint viewer.
  */
 class PCB_BASE_FRAME : public EDA_DRAW_FRAME

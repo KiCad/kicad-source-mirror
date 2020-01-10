@@ -41,7 +41,7 @@ class EDA_BASE_FRAME;
 
 
 /**
- * Class TOOL_MANAGER.
+ * TOOL_MANAGER.
  * Master controller class:
  * - registers editing tools
  * - pumps UI events to tools requesting them

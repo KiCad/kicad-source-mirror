@@ -50,7 +50,7 @@
 class wxConfigBase;
 
 /**
- * Class DIALOG_ANNOTATE: a dialog to set/clear reference designators,
+ * DIALOG_ANNOTATE: a dialog to set/clear reference designators,
  * of a schematic hierarchy, with different options
  */
 class DIALOG_ANNOTATE: public DIALOG_ANNOTATE_BASE

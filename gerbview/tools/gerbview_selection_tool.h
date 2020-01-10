@@ -40,7 +40,7 @@ namespace KIGFX
 
 
 /**
- * Class GERBVIEW_SELECTION_TOOL
+ * GERBVIEW_SELECTION_TOOL
  *
  * Selection tool for GerbView, based on the one in PcbNew
  */

@@ -34,7 +34,7 @@
 
 
 /**
- * Class IFSG_FACESET
+ * IFSG_FACESET
  * is the wrapper for the SGFACESET class
  */
 class SGLIB_API IFSG_FACESET : public IFSG_NODE

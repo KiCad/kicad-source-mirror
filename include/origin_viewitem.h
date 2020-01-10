@@ -34,7 +34,7 @@
 class PCB_BASE_FRAME;
 
 /**
- * Class ORIGIN_VIEWITEM
+ * ORIGIN_VIEWITEM
  *
  * View item to draw an origin marker.
  */

@@ -35,7 +35,7 @@ class TOOL_MANAGER;
 #define LEGACY_HK_NAME( x ) x
 
 /**
- * Class ACTIONS
+ * ACTIONS
  *
  * Gathers all the actions that are shared by tools. The instance of a subclass of
  * ACTIONS is created inside of ACTION_MANAGER object that registers the actions.
@@ -187,7 +187,7 @@ public:
 
 
 /**
- * Class EVENTS
+ * EVENTS
  *
  * Gathers all the events that are shared by tools.
  */

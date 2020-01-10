@@ -132,7 +132,7 @@ typedef boost::ptr_map< wxString, MERGE_SET >  MERGE_SETS;
 
 
 /**
- * Class FONTZ
+ * FONTZ
  * is the size of a font, and comes with a constructor which initializes
  * height and width to special values which defer font size decision to
  * a higher control.
@@ -583,7 +583,7 @@ protected:
 
 
 /**
- * Class PART_REF
+ * PART_REF
  * is an LPID with a pointer to the "looked up" PART, which is looked up lazily.
  */
 class PART_REF : public LPID
@@ -651,7 +651,7 @@ class SWEET_PARSER;
 
 
 /**
- * Class PART
+ * PART
  * will have to be unified with what Wayne is doing.  I want a separate copy
 
  * here until I can get the state management correct.  Since a PART only lives
@@ -669,7 +669,7 @@ public:
     /**
      * Enum PROP_ID
      * is the set of "mandatory" properties within a PART.  These are used by
-     * class PART as array indices into PART::mandatory[].
+     * PART as array indices into PART::mandatory[].
      */
     enum  PROP_ID
     {

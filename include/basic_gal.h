@@ -35,7 +35,7 @@ class PLOTTER;
 
 
 /*
- * class BASIC_GAL is a minimal GAL implementation to draw, plot and convert
+ * BASIC_GAL is a minimal GAL implementation to draw, plot and convert
  * stroke texts to a set of segments for DRC tests, and to calculate text sizes.
  *
  * Currently it allows one to use GAL and STROKE_FONT methods in legacy draw mode

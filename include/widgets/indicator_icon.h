@@ -27,7 +27,7 @@
 #include <wx/wx.h>
 
 /**
- * Class representing a row indicator icon for use in
+ * representing a row indicator icon for use in
  * places like the layer widget
  */
 class INDICATOR_ICON: public wxPanel

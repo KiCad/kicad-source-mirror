@@ -49,7 +49,7 @@
 
 
 /**
- * Class SWEET_EDIT
+ * SWEET_EDIT
  * implements an editor for SWEET, including support for inheritance and
  * LIB_TABLE configuration.
  */

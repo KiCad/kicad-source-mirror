@@ -33,7 +33,7 @@
 class SCH_EDIT_FRAME;
 
 /**
- * Class SCH_EDITOR_CONTROL
+ * SCH_EDITOR_CONTROL
  *
  * Handles actions specific to the schematic editor in eeschema.
  */

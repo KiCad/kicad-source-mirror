@@ -42,7 +42,7 @@ class REPORTER;
 
 
 /**
- * Class COMPONENT_NET
+ * COMPONENT_NET
  * is used to store the component pin name to net name (and pin function)
  * associations stored in a netlist.
  */
@@ -79,7 +79,7 @@ public:
 typedef std::vector< COMPONENT_NET > COMPONENT_NETS;
 
 /**
- * Class COMPONENT
+ * COMPONENT
  * is used to store components and all of their related information found in a netlist.
  */
 class COMPONENT
@@ -210,7 +210,7 @@ typedef COMPONENTS::const_iterator     COMPONENTS_CITER;
 
 
 /**
- * Class NETLIST
+ * NETLIST
  * stores all of information read from a netlist along with the flags used to update
  * the NETLIST in the #BOARD.
  */

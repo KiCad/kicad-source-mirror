@@ -33,7 +33,7 @@
 namespace PNS {
 
 /**
- * Class JOINT
+ * JOINT
  *
  * Represents a 2D point on a given set of layers and belonging to a certain
  * net, that links together a number of board items.

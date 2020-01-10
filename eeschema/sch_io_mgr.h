@@ -39,7 +39,7 @@ class PROPERTIES;
 
 
 /**
- * Class SCH_IO_MGR
+ * SCH_IO_MGR
  * is a factory which returns an instance of a #SCH_PLUGIN.
  */
 class SCH_IO_MGR

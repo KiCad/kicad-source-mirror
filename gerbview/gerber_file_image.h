@@ -102,7 +102,7 @@ private:
 };
 
 /**
- * Class GERBER_FILE_IMAGE
+ * GERBER_FILE_IMAGE
  * holds the Image data and parameters for one gerber file
  * and layer parameters (TODO: move them in GERBER_LAYER class
  */

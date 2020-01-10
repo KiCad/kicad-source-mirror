@@ -31,7 +31,7 @@ class LOGGER;
 class DEBUG_DECORATOR;
 
 /**
- * Class ALGO_BASE
+ * ALGO_BASE
  *
  * Base class for all P&S algorithms (shoving, walkaround, line placement, dragging, etc.)
  * Holds a bunch of objects commonly used by all algorithms (P&S settings, parent router instance, logging)

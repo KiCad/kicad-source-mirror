@@ -40,7 +40,7 @@ namespace PREVIEW
 class TWO_POINT_GEOMETRY_MANAGER;
 
 /**
- * Class CENTRELINE_RECT_ITEM
+ * CENTRELINE_RECT_ITEM
  *
  * Represents an area drawn by drawing a rectangle of a given aspect
  * along a vector, with the midpoiunt of one side on the start point

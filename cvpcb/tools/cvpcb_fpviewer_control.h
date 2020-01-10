@@ -31,7 +31,7 @@
 
 
 /**
- * Class CVPCB_FOOTPRINT_VIEWER_CONTROL
+ * CVPCB_FOOTPRINT_VIEWER_CONTROL
  *
  * Handles control actions for the cvpcb footprint display frame.
  */

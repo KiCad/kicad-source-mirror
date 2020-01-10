@@ -53,7 +53,7 @@ enum SHAPE_TYPE
 };
 
 /**
- * Class SHAPE
+ * SHAPE
  *
  * Represents an abstract shape on 2D plane.
  */

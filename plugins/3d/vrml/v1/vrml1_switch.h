@@ -35,7 +35,7 @@ class WRL1BASE;
 class SGNODE;
 
 /**
- * Class WRL1SWITCH
+ * WRL1SWITCH
  */
 class WRL1SWITCH : public WRL1NODE
 {

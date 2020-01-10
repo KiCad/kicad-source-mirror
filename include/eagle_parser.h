@@ -63,7 +63,7 @@ static inline wxXmlNode* getChildrenNodes( NODE_MAP& aMap, const wxString& aName
 
 
 /**
- * Class XML_PARSER_ERROR
+ * XML_PARSER_ERROR
  * implements a simple wrapper around runtime_error to isolate the errors thrown by the
  * Eagle XML parser.
  */
@@ -97,7 +97,7 @@ struct TRIPLET
 
 
 /**
- * Class XPATH
+ * XPATH
  * keeps track of what we are working on within a PTREE.
  * Then if an exception is thrown, the place within the tree that gave us
  * grief can be reported almost accurately.  To minimally impact
@@ -181,7 +181,7 @@ template <>
 wxString Convert<wxString>( const wxString& aValue );
 
 /**
- * Class OPTIONAL_XML_ATTRIBUTE
+ * OPTIONAL_XML_ATTRIBUTE
  * models an optional XML attribute.
  * This was implemented as an alternative to OPT. This class should be replaced with a
  * simple typedef per type using std::optional when C++17 is published.
@@ -600,7 +600,7 @@ struct ERECT
 
 
 /**
- * Class EATTR
+ * EATTR
  * parses an Eagle "attribute" XML element.  Note that an attribute element
  * is different than an XML element attribute.  The attribute element is a
  * full XML node in and of itself, and has attributes of its own.  Blame Eagle.

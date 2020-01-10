@@ -327,7 +327,7 @@ typedef std::vector<PCB_LAYER_ID>   BASE_SEQ;
 
 
 /**
- * Class LSEQ
+ * LSEQ
  * is a sequence (and therefore also a set) of PCB_LAYER_IDs.  A sequence provides
  * a certain order.
  * <p>
@@ -377,7 +377,7 @@ typedef std::bitset<PCB_LAYER_ID_COUNT>     BASE_SET;
 
 
 /**
- * Class LSET
+ * LSET
  * is a set of PCB_LAYER_IDs.  It can be converted to numerous purpose LSEQs using
  * the various member functions, most of which are based on Seq(). The advantage
  * of converting to LSEQ using purposeful code, is it removes any dependency

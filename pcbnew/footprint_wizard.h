@@ -46,7 +46,7 @@ const wxString WIZARD_PARAM_UNITS_PERCENT   = "%";           // Percent (0% -> 1
 const wxString WIZARD_PARAM_UNITS_STRING    = "string";      // String
 
 /**
- * Class FOOTPRINT_WIZARD
+ * FOOTPRINT_WIZARD
  * This is the parent class from where any footprint wizard class must
  * derive */
 class FOOTPRINT_WIZARD

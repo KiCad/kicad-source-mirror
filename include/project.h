@@ -50,7 +50,7 @@ class FILENAME_RESOLVER;
 #define VTBL_ENTRY      virtual
 
 /**
- * Class PROJECT
+ * PROJECT
  * holds project specific data.  Because it is in the neutral program top, which
  * is not linked to by subsidiarly DSOs, any functions in this interface must
  * be VTBL_ENTRYs.

@@ -46,7 +46,7 @@
 #include <macros.h>
 
 /*
- * class X2_ATTRIBUTE
+ * X2_ATTRIBUTE
  * The attribute value consists of a number of substrings separated by a comma
  */
 
@@ -154,7 +154,7 @@ bool X2_ATTRIBUTE::ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, ch
 }
 
 /*
- * class X2_ATTRIBUTE_FILEFUNCTION ( from %TF.FileFunction in Gerber file)
+ * X2_ATTRIBUTE_FILEFUNCTION ( from %TF.FileFunction in Gerber file)
  *  Example file function:
  *  %TF.FileFunction,Copper,L1,Top*%
  * - Type. Such as copper, solder mask etc.

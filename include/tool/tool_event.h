@@ -164,7 +164,7 @@ enum CONTEXT_MENU_TRIGGER
 };
 
 /**
- * Class TOOL_EVENT
+ * TOOL_EVENT
  *
  * Generic, UI-independent tool event.
  */
@@ -556,7 +556,7 @@ private:
 typedef OPT<TOOL_EVENT> OPT_TOOL_EVENT;
 
 /**
- * Class TOOL_EVENT_LIST
+ * TOOL_EVENT_LIST
  *
  * A list of TOOL_EVENTs, with overloaded || operators allowing for
  * concatenating TOOL_EVENTs with little code.

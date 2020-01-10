@@ -46,7 +46,7 @@ class SIZES_SETTINGS;
 
 
 /**
- * Class LINE_PLACER
+ * LINE_PLACER
  *
  * Single track placement algorithm. Interactively routes a track.
  * Applies shove and walkaround algorithms when needed.

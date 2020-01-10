@@ -35,7 +35,7 @@
 class WS_DATA_ITEM;
 
 /**
- * Class PROPERTIES_FRAME display properties of the current item.
+ * PROPERTIES_FRAME display properties of the current item.
  */
 
 class PROPERTIES_FRAME : public PANEL_PROPERTIES_BASE

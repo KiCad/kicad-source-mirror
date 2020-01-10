@@ -54,7 +54,7 @@ struct TEXT_EFFECTS;
 
 
 /**
- * Class SWEET_PARSER
+ * SWEET_PARSER
  * scans a Sweet string as input and stuffs a PART.
  * <p>
  * Most functions in this class throw IO_ERROR and PARSE_ERROR.  The IO_ERROR can

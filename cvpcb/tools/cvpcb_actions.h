@@ -32,7 +32,7 @@
 class TOOL_ACTION;
 
 /**
- * Class CVPCB_ACTIONS
+ * CVPCB_ACTIONS
  *
  * Gathers all the actions that are shared by tools. The instance of CVPCB_ACTIONS is created
  * inside of ACTION_MANAGER object that registers the actions.

@@ -43,7 +43,7 @@ class WX_EVENT_LOOP;
 
 
 /**
- * Class KIWAY_PLAYER
+ * KIWAY_PLAYER
  * is a wxFrame capable of the OpenProjectFiles function, meaning it can load
  * a portion of a KiCad project.  Because this class provides a dummy implementation,
  * it is not a certainty that all classes which inherit from this clas intend to

@@ -53,7 +53,7 @@ class SGNODE;
 class WRL2INLINE;
 
 /**
- * Class WRL2BASE
+ * WRL2BASE
  * represents the top node of a VRML2 model
  */
 class WRL2BASE : public WRL2NODE

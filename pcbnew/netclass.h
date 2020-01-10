@@ -47,7 +47,7 @@ DECL_SET_FOR_SWIG( STRINGSET, wxString )
 
 
 /**
- * Class NETCLASS
+ * NETCLASS
  * handles a collection of nets and the parameters used to route or
  * test these nets.
  */
@@ -216,7 +216,7 @@ DECL_MAP_FOR_SWIG( NETCLASS_MAP, wxString, NETCLASSPTR )
 
 
 /**
- * Class NETCLASSES
+ * NETCLASSES
  * is a container for NETCLASS instances.  It owns all its NETCLASSes
  * (=> it will delete them at time of destruction).  This container will always have
  * a default NETCLASS with the name given by const NETCLASS::Default.

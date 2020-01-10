@@ -74,7 +74,7 @@ std::string
 #define LINE_READER_LINE_INITIAL_SIZE       5000
 
 /**
- * Class LINE_READER
+ * LINE_READER
  * is an abstract class from which implementation specific LINE_READERs may
  * be derived to read single lines of text and manage a line number counter.
  */
@@ -173,7 +173,7 @@ public:
 
 
 /**
- * Class FILE_LINE_READER
+ * FILE_LINE_READER
  * is a LINE_READER that reads from an open file. File must be already open
  * so that this class can exist without any UI policy.
  */
@@ -248,7 +248,7 @@ public:
 
 
 /**
- * Class STRING_LINE_READER
+ * STRING_LINE_READER
  * is a LINE_READER that reads from a multiline 8 bit wide std::string
  */
 class STRING_LINE_READER : public LINE_READER
@@ -284,7 +284,7 @@ public:
 
 
 /**
- * Class INPUTSTREAM_LINE_READER
+ * INPUTSTREAM_LINE_READER
  * is a LINE_READER that reads from a wxInputStream object.
  */
 class INPUTSTREAM_LINE_READER : public LINE_READER
@@ -309,7 +309,7 @@ public:
 #define OUTPUTFMTBUFZ    500        ///< default buffer size for any OUTPUT_FORMATTER
 
 /**
- * Class OUTPUTFORMATTER
+ * OUTPUTFORMATTER
  * is an important interface (abstract class) used to output 8 bit text in
  * a convenient way. The primary interface is "printf() - like" but
  * with support for indentation control.  The destination of the 8 bit
@@ -438,7 +438,7 @@ public:
 
 
 /**
- * Class STRING_FORMATTER
+ * STRING_FORMATTER
  * implements OUTPUTFORMATTER to a memory buffer.  After Print()ing the
  * string is available through GetString()
 */
@@ -485,7 +485,7 @@ protected:
 
 
 /**
- * Class FILE_OUTPUTFORMATTER
+ * FILE_OUTPUTFORMATTER
  * may be used for text file output.  It is about 8 times faster than
  * STREAM_OUTPUTFORMATTER for file streams.
  */
@@ -519,7 +519,7 @@ protected:
 
 
 /**
- * Class STREAM_OUTPUTFORMATTER
+ * STREAM_OUTPUTFORMATTER
  * implements OUTPUTFORMATTER to a wxWidgets wxOutputStream.  The stream is
  * neither opened nor closed by this class.
  */

@@ -30,7 +30,7 @@
 
 
 /**
- * Class FILTER_READER
+ * FILTER_READER
  * reads lines of text from another LINE_READER, but only returns non-comment
  * lines and non-blank lines from its ReadLine() function.
  */
@@ -63,7 +63,7 @@ public:
 
 
 /**
- * Class WHITESPACE_FILTER_READER
+ * WHITESPACE_FILTER_READER
  * reads lines of text from another LINE_READER, but only returns non-comment
  * lines and non-blank lines with leading whitespace characters (space and tab)
  * removed from its ReadLine() function.

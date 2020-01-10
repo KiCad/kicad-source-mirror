@@ -39,7 +39,7 @@
 #include <math/vector2d.h>
 
 /**
- * Class POLY_GRID_PARTITION
+ * POLY_GRID_PARTITION
  *
  * Provides a fast test for point inside polygon by splitting the edges
  * of the polygon into a rectangular grid.

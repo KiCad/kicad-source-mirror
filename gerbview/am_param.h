@@ -210,7 +210,7 @@ private:
 typedef std::vector<AM_PARAM_EVAL> AM_PARAM_EVAL_STACK;
 
 /**
- * Class AM_PARAM
+ * AM_PARAM
  * holds an operand for an AM_PARAM as defined within
  * standard RS274X.  The \a value field can be a constant, i.e. "immediate"
  * parameter or it may not be used if this param is going to defer to the
@@ -275,7 +275,7 @@ public:
 };
 
 /**
- * Class AM_PARAM
+ * AM_PARAM
  * holds a parameter value for an "aperture macro" as defined within
  * standard RS274X.  The parameter can be a constant, i.e. "immediate" parameter,
  * or depend on some defered values, defined in a D_CODE, by the ADD command.

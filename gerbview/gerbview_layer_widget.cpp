@@ -39,7 +39,7 @@
 
 
 /*
- * Class GERBER_LAYER_WIDGET
+ * GERBER_LAYER_WIDGET
  * is here to implement the abtract functions of LAYER_WIDGET so they
  * may be tied into the GERBVIEW_FRAME's data and so we can add a popup
  * menu which is specific to Pcbnew's needs.

@@ -31,7 +31,7 @@
 class OUTPUTFORMATTER;
 
 /**
- * Class NETLIST_EXPORTER_KICAD
+ * NETLIST_EXPORTER_KICAD
  * generates the kicad netlist format supported by pcbnew. It is basically
  * the generic netlist format just formatted slightly different.
  */

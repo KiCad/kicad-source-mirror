@@ -48,7 +48,7 @@ enum WizardParameterColumnNames
 };
 
 /**
- * Class FOOTPRINT_WIZARD_FRAME
+ * FOOTPRINT_WIZARD_FRAME
  */
 class FOOTPRINT_WIZARD_FRAME : public PCB_BASE_FRAME
 {

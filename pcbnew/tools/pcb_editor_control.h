@@ -35,7 +35,7 @@ namespace KIGFX {
 class PCB_EDIT_FRAME;
 
 /**
- * Class PCB_EDITOR_CONTROL
+ * PCB_EDITOR_CONTROL
  *
  * Handles actions specific to the board editor in pcbnew.
  */

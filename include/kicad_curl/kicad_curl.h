@@ -58,7 +58,7 @@ struct DYN_LOOKUP;
 
 
 /**
- * Class KICAD_CURL
+ * KICAD_CURL
  * simple wrapper class to call curl_global_init and curl_global_cleanup for KiCad.
  */
 class KICAD_CURL

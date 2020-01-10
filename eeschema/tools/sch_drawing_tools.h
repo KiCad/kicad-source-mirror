@@ -38,7 +38,7 @@ class EE_SELECTION_TOOL;
 
 
 /**
- * Class SCH_DRAWING_TOOLS
+ * SCH_DRAWING_TOOLS
  *
  * Tool responsible for drawing/placing items (symbols, wires, busses, labels, etc.)
  */

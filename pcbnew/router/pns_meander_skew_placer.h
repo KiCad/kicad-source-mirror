@@ -32,7 +32,7 @@ class SHOVE;
 class OPTIMIZER;
 
 /**
- * Class MEANDER_SKEW_PLACER
+ * MEANDER_SKEW_PLACER
  *
  * Differential pair skew adjustment algorithm.
  */

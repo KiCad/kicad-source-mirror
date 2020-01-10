@@ -35,7 +35,7 @@ namespace PREVIEW
 {
 
 /**
- * Class TWO_POINT_GEOMETRY_MANAGER
+ * TWO_POINT_GEOMETRY_MANAGER
  *
  * Represents a very simple geometry manager for items that have
  * a start and end point.

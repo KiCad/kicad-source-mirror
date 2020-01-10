@@ -296,7 +296,7 @@ typedef std::vector<NETLIST_OBJECT*>    NETLIST_OBJECTS;
 
 
 /**
- * Class NETLIST_OBJECT_LIST
+ * NETLIST_OBJECT_LIST
  * is a container holding and _owning_ NETLIST_OBJECTs, which are connected items
  * in a full schematic hierarchy.  It is helpful for netlist and ERC calculations.
  */

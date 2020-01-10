@@ -27,7 +27,7 @@
 
 
 /**
- * Class GITHUB_GETLIBLIST
+ * GITHUB_GETLIBLIST
  * implements a portion of pcbnew's PLUGIN interface to provide read only access
  * to a github repo to extract pretty footprints library list, in json format,
  * or extract 3D shapes libraries list (.3dshapes folders) and download the 3d shapes files

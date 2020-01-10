@@ -58,7 +58,7 @@ struct LP_CACHE;
 
 
 /**
- * Class LEGACY_PLUGIN
+ * LEGACY_PLUGIN
  * is a PLUGIN derivation which could possibly be put into a DLL/DSO.
  * As with any PLUGIN, there is no UI, i.e. windowing calls allowed.
  */

@@ -38,7 +38,7 @@ class SGNODE;
 class SGCOLOR;
 
 /**
- * Class WRL1MATERIAL
+ * WRL1MATERIAL
  */
 class WRL1MATERIAL : public WRL1NODE
 {

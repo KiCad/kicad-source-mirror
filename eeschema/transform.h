@@ -35,7 +35,7 @@
 class EDA_RECT;
 
 /**
- * Class for transforming drawing coordinates for a wxDC device context.
+ * for transforming drawing coordinates for a wxDC device context.
  *
  * This probably should be a base class with all pure virtual methods and a WXDC_TRANSFORM
  * derived class.  Then in the future if some new device context is used, a new transform could

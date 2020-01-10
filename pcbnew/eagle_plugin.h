@@ -110,7 +110,7 @@ struct ERULES
 };
 
 /**
- * Class EAGLE_PLUGIN
+ * EAGLE_PLUGIN
  * works with Eagle 6.x XML board files and footprints to implement the
  * Pcbnew PLUGIN API, or a portion of it.
  */

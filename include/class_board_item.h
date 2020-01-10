@@ -61,7 +61,7 @@ enum STROKE_T
 
 
 /**
- * Class BOARD_ITEM
+ * BOARD_ITEM
  * is a base class for any item which can be embedded within the BOARD
  * container class, and therefore instances of derived classes should only be
  * found in Pcbnew or other programs that use class BOARD and its contents.

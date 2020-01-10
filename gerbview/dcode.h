@@ -76,7 +76,7 @@ struct APERTURE_MACRO;
 
 
 /**
- * Class D_CODE
+ * D_CODE
  * holds a gerber DCODE (also called Aperture) definition.
  */
 class D_CODE

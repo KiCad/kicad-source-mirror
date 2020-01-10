@@ -34,7 +34,7 @@
 
 
 /**
- * Class EE_COLLECTOR
+ * EE_COLLECTOR
  */
 class EE_COLLECTOR : public COLLECTOR
 {

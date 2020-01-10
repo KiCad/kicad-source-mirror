@@ -360,7 +360,7 @@ library in the new design is LIB.
 
 
 /**
- * Class HTTP_LIB_SOURCE
+ * HTTP_LIB_SOURCE
  * implements a LIB_SOURCE to access a remote document root repository using http protocol.
  */
 class HTTP_LIB_SOURCE : public LIB_SOURCE
@@ -387,7 +387,7 @@ protected:
 
 
 /**
- * Class SVN_LIB_SOURCE
+ * SVN_LIB_SOURCE
  * implements a LIB_SOURCE to access a [remote or local] subversion repository
  * using subversion client protocol.
  */
@@ -415,7 +415,7 @@ protected:
 
 
 /**
- * Class SCHEMATIC_LIB_SOURCE
+ * SCHEMATIC_LIB_SOURCE
  * implements a LIB_SOURCE in by reading a parts list from schematic file
  * unrelated to the schematic currently being edited.
  */
@@ -444,7 +444,7 @@ protected:
 
 
 /**
- * Class PARTS_LIST
+ * PARTS_LIST
  * is a LIB which resides in a SCHEMATIC, and it is a table model for a
  * spread sheet both.  When columns are added or removed to/from the spreadsheet,
  * this is adding or removing fields/properties to/from ALL the contained PARTS.

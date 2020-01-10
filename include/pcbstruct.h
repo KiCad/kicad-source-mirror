@@ -56,7 +56,7 @@ enum TRACE_CLEARANCE_DISPLAY_MODE_T {
 
 
 /**
- * Class DISPLAY_OPTIONS
+ * DISPLAY_OPTIONS
  * handles display options like enable/disable some optional drawings.
  */
 class DISPLAY_OPTIONS

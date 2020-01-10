@@ -24,7 +24,7 @@
 
 /**
  * @file class_pad_custom_shape_functions.cpp
- * class D_PAD functions specific to custom shaped pads.
+ * D_PAD functions specific to custom shaped pads.
  */
 
 #include <fctsys.h>

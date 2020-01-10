@@ -67,7 +67,7 @@ public:
      * Draws the preview - this is done by calling the two functions:
      * setupGal() and drawPreviewShape(). If you need more than this,
      * or direct access to the VIEW, you probably should make a new
-     * class.
+     *.
      */
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 

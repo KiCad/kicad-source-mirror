@@ -79,7 +79,7 @@ enum DRAG_MODE
     DM_ANY = 0x7
 };
 /**
- * Class ROUTER
+ * ROUTER
  *
  * Main router class.
  */

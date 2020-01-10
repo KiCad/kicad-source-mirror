@@ -34,7 +34,7 @@
 struct BITMAP_OPAQUE;
 
 /**
- * Class TOOL_ACTION
+ * TOOL_ACTION
  *
  * Represents a single user action. For instance:
  * - changing layer to top by pressing PgUp

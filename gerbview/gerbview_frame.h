@@ -49,7 +49,7 @@ class REPORTER;
 
 
 /**
- * Class GERBVIEW_FRAME
+ * GERBVIEW_FRAME
  * is the main window used in GerbView.
  */
 

@@ -32,7 +32,7 @@
 #include "3d_cache/sg/sg_index.h"
 
 /**
- * Class SGCOORDINDEX
+ * SGCOORDINDEX
  * is a class which maintains a coordinate index list. Users
  * must ensure that coordinate indices are specified as
  * triplets (triangular faces) since no checking is performed.

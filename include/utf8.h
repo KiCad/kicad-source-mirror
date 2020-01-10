@@ -49,7 +49,7 @@ bool IsUTF8( const char* aString );
 
 
 /**
- * Class UTF8
+ * UTF8
  * is an 8 bit string that is assuredly encoded in UTF8, and supplies special
  * conversion support to and from wxString, to and from std::string, and has
  * non-mutating iteration over unicode characters.
@@ -198,7 +198,7 @@ public:
 
 #ifndef SWIG
     /**
-     * class uni_iter
+     * uni_iter
      * is a non-mutating iterator that walks through unicode code points in the UTF8 encoded
      * string.  The normal ++(), ++(int), ->(), and *() operators are all supported
      * for read only access and some return an unsigned holding the unicode character

@@ -29,7 +29,7 @@
 namespace PNS {
 
 /**
- * Class ITEM_SET
+ * ITEM_SET
  *
  * Holds a list of board items, that can be filtered against net, kinds,
  * layers, etc.

@@ -30,7 +30,7 @@
 class ACTION_MENU;
 
 /**
- * Class PAD_TOOL
+ * PAD_TOOL
  *
  * Tools relating to pads and pad settings
  */

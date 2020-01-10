@@ -84,7 +84,7 @@ class IDF3_BOARD;
 
 
 /**
- * Class BOARD_OUTLINE
+ * BOARD_OUTLINE
  * supports the IDFv3 BOARD OUTLINE data and is the basis of other IDFv3 outline classes
  */
 class BOARD_OUTLINE
@@ -343,7 +343,7 @@ public:
 
 
 /**
- * Class OTHER_OUTLINE
+ * OTHER_OUTLINE
  * describes miscellaneous extrusions on the board
  */
 class OTHER_OUTLINE : public BOARD_OUTLINE
@@ -414,7 +414,7 @@ public:
 
 
 /**
- * Class ROUTE_OUTLINE
+ * ROUTE_OUTLINE
  * describes routing areas on the board
  */
 class ROUTE_OUTLINE : public BOARD_OUTLINE
@@ -466,7 +466,7 @@ public:
 };
 
 /**
- * Class PLACE_OUTLINE
+ * PLACE_OUTLINE
  * describes areas on the board for placing components
  */
 class PLACE_OUTLINE : public BOARD_OUTLINE
@@ -537,7 +537,7 @@ public:
 
 
 /**
- * Class ROUTE_KO_OUTLINE
+ * ROUTE_KO_OUTLINE
  * describes regions and layers where no electrical routing is permitted
  */
 class ROUTE_KO_OUTLINE : public ROUTE_OUTLINE
@@ -547,7 +547,7 @@ public:
 };
 
 /**
- * Class VIA_KO_OUTLINE
+ * VIA_KO_OUTLINE
  * describes regions in which vias are prohibited. Note: IDFv3 only considers
  * thru-hole vias and makes no statement regarding behavior with blind or buried
  * vias.
@@ -560,7 +560,7 @@ public:
 
 
 /**
- * Class PLACE_KO_OUTLINE
+ * PLACE_KO_OUTLINE
  * represents regions and layers in which no component may
  * be placed or on which a maximum component height is in effect.
  */
@@ -571,7 +571,7 @@ public:
 };
 
 /**
- * Class GROUP_OUTLINE
+ * GROUP_OUTLINE
  * represents regions and layers in which user-specified features or components
  * may be placed.
  */
@@ -643,7 +643,7 @@ public:
 
 
 /**
- * class IDF3_COMP_OUTLINE
+ * IDF3_COMP_OUTLINE
  * represents a component's outline as stored in an IDF library file
  */
 class IDF3_COMP_OUTLINE : public BOARD_OUTLINE

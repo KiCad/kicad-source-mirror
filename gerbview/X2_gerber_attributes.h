@@ -47,7 +47,7 @@
 #include <wx/arrstr.h>
 
 /**
- * class X2_ATTRIBUTE
+ * X2_ATTRIBUTE
  * The attribute value consists of a number of substrings separated by a comma
 */
 
@@ -132,7 +132,7 @@ public:
 };
 
 /**
- * class X2_ATTRIBUTE_FILEFUNCTION ( from %TF.FileFunction in Gerber file)
+ * X2_ATTRIBUTE_FILEFUNCTION ( from %TF.FileFunction in Gerber file)
  *  Example file function:
  *  %TF.FileFunction,Copper,L1,Top*%
  * - Type. Such as copper, solder mask etc.

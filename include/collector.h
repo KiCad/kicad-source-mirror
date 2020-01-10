@@ -41,7 +41,7 @@ class EDA_ITEM;
 
 
 /**
- * Class COLLECTOR
+ * COLLECTOR
  * is an abstract class that will find and hold all the objects according to
  * an inspection done by the Inspect() function which must be implemented by
  * any derived class.  When Inspect() finds an object that it wants to collect,

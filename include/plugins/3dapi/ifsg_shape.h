@@ -34,7 +34,7 @@
 
 
 /**
- * Class IFSG_SHAPE
+ * IFSG_SHAPE
  * is the wrapper for the SGSHAPE class
  */
 class SGLIB_API IFSG_SHAPE : public IFSG_NODE

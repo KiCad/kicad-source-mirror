@@ -35,7 +35,7 @@ class WRL1BASE;
 class SGNODE;
 
 /**
- * Class WRL1SEPARATOR
+ * WRL1SEPARATOR
  */
 class WRL1SEPARATOR : public WRL1NODE
 {

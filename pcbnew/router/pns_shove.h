@@ -40,7 +40,7 @@ class NODE;
 class ROUTER;
 
 /**
- * Class SHOVE
+ * SHOVE
  *
  * The actual Push and Shove algorithm.
  */

@@ -256,7 +256,7 @@ namespace IDF3 {
 
 
 /**
- * Class IDF_NOTE
+ * IDF_NOTE
  * represents an entry in the NOTE section of an IDF file
  */
 class IDF_NOTE

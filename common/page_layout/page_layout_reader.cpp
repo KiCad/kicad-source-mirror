@@ -43,7 +43,7 @@
 using namespace TB_READER_T;
 
 /**
- * Class PAGE_LAYOUT_READER_PARSER
+ * PAGE_LAYOUT_READER_PARSER
  * holds data and functions pertinent to parsing a S-expression file
  * for a WS_DATA_MODEL.
  */

@@ -57,7 +57,7 @@ namespace KIGFX {
 void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags );
 
 /**
- * Class EDIT_TOOL
+ * EDIT_TOOL
  *
  * The interactive edit tool. Allows one to move, rotate, flip and change properties of items selected
  * using the pcbnew.InteractiveSelection tool.

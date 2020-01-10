@@ -27,7 +27,7 @@
 
 
 /**
- * Class CVPCB_CONTROL
+ * CVPCB_CONTROL
  *
  * Handles actions in  main cvpcb window.
  */

@@ -42,7 +42,7 @@
 class GERBER_FILE_IMAGE_LIST;
 
 /**
- * Class GBR_LAYOUT
+ * GBR_LAYOUT
  * holds list of GERBER_DRAW_ITEM currently loaded.
  */
 class GBR_LAYOUT : public EDA_ITEM

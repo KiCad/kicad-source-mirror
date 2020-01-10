@@ -32,7 +32,7 @@
 class SHAPE;
 
 /**
- * Class SHAPE_FILE_IO
+ * SHAPE_FILE_IO
  *
  * Helper class for saving/loading shapes from a file.
  */

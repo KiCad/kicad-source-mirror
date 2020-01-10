@@ -29,7 +29,7 @@
 class EDA_BASE_FRAME;
 
 /**
- * Class COMMON_CONTROL
+ * COMMON_CONTROL
  *
  * Handles actions that are shared between different applications
  */

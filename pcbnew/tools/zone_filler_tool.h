@@ -31,7 +31,7 @@
 class PCB_EDIT_FRAME;
 
 /**
- * Class ZONE_FILLER_TOOL
+ * ZONE_FILLER_TOOL
  *
  * Handles actions specific to filling copper zones.
  */

@@ -37,7 +37,7 @@ class PART;
 class LIB_TABLE;
 
 /**
- * Class LIB_SOURCE
+ * LIB_SOURCE
  * is an abstract class from which implementation specific LIB_SOURCEs
  * may be derived, one for each kind of library type allowed in the library table.
  * The class name stems from the fact that this interface only provides READ ONLY
@@ -138,7 +138,7 @@ protected:
 
 
 /**
- * Class LIB_SINK
+ * LIB_SINK
  * is an abstract class from which implementation specific LIB_SINKs
  * may be derived, one for each kind of library type in the library table that
  * supports writing.  The class name stems from the fact that this interface
@@ -185,7 +185,7 @@ class PARTS;
 
 
 /**
- * Class LIB
+ * LIB
  * is a cache of parts, and because the LIB_SOURCE is abstracted, there
  * should be no need to extend from this class in any case except for the
  * PARTS_LIST.

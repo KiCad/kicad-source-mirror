@@ -33,7 +33,7 @@
 #include <pcb_edit_frame.h>
 
 /**
- * Class ACTION_PLUGIN
+ * ACTION_PLUGIN
  * This is the parent class from where any action plugin class must
  * derive
  */
@@ -116,7 +116,7 @@ public:
 
 
 /**
- * Class ACTION_PLUGINS
+ * ACTION_PLUGINS
  * Mainly static. Storing all plugins informations.
  */
 class ACTION_PLUGINS

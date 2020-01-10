@@ -32,7 +32,7 @@
 
 
 /**
- * Class SEARCH_STACK
+ * SEARCH_STACK
  * looks for files in a number of places.  Augments wxPathList.
  * I chose the name because it sounded like a stack of work, as a reminder
  * that anything you put in here means searching work at some point in time.

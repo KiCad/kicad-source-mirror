@@ -47,7 +47,7 @@ class EDA_MSG_PANEL;
 
 
 /**
- * Class EDA_MSG_ITEM
+ * EDA_MSG_ITEM
  * is used EDA_MSG_PANEL as the item type for displaying messages.
  */
 class MSG_PANEL_ITEM
@@ -105,7 +105,7 @@ typedef MSG_PANEL_ITEMS::const_iterator  MSG_PANEL_ITEMS_CITER;
 
 
 /**
- * class EDA_MSG_PANEL
+ * EDA_MSG_PANEL
  * is a panel to display various information messages.
  */
 class EDA_MSG_PANEL : public wxPanel

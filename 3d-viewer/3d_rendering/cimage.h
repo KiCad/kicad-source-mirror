@@ -83,7 +83,7 @@ typedef struct {
 
 
 /**
- * Class CIMAGE
+ * CIMAGE
  * manages a 8-bit channel image
  */
 class CIMAGE

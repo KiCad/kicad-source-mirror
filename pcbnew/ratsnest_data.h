@@ -53,7 +53,7 @@ struct RN_NODE_AND_FILTER;
 
 
 /**
- * Class RN_NET
+ * RN_NET
  * Describes ratsnest for a single net.
  */
 class RN_NET

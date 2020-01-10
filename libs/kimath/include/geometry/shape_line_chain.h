@@ -42,11 +42,11 @@
 
 
 /**
- * Class SHAPE_LINE_CHAIN
+ * SHAPE_LINE_CHAIN
  *
  * Represents a polyline (an zero-thickness chain of connected line segments).
  * I purposedly didn't name it "polyline" to avoid confusion with the existing CPolyLine
- * class in pcbnew.
+ * in pcbnew.
  *
  * SHAPE_LINE_CHAIN class shall not be used for polygons!
  */

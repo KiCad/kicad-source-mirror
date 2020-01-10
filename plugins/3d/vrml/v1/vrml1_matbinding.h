@@ -36,7 +36,7 @@ class WRL1BASE;
 class SGNODE;
 
 /**
- * Class WRL1MATBINDING
+ * WRL1MATBINDING
  */
 class WRL1MATBINDING : public WRL1NODE
 {

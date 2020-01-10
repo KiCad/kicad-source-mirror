@@ -105,7 +105,7 @@ struct WRL1STATUS
 
 
 /**
- * Class WRL1NODE
+ * WRL1NODE
  * represents the base class of all VRML1 nodes
  */
 class WRL1NODE

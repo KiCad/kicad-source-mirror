@@ -36,7 +36,7 @@ namespace KIGFX {
 class PCB_BASE_FRAME;
 class BOARD_ITEM;
 /**
- * Class PCBNEW_CONTROL
+ * PCBNEW_CONTROL
  *
  * Handles actions that are shared between different frames in pcbnew.
  */

@@ -86,7 +86,7 @@ enum LAST_PATH_TYPE
 };
 
 /**
- * Class PCB_EDIT_FRAME
+ * PCB_EDIT_FRAME
  * is the main frame for Pcbnew.
  *
  * See also class PCB_BASE_FRAME(): Basic class for Pcbnew and GerbView.

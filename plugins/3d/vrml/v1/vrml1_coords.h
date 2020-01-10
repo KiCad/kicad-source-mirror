@@ -37,7 +37,7 @@ class WRL1BASE;
 class SGNODE;
 
 /**
- * Class WRL1COORDS
+ * WRL1COORDS
  */
 class WRL1COORDS : public WRL1NODE
 {

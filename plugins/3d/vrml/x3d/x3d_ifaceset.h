@@ -36,7 +36,7 @@
 
 
 /**
- * Class X3DIFACESET
+ * X3DIFACESET
  */
 class X3DIFACESET : public X3DNODE
 {

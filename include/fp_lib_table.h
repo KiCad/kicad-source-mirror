@@ -34,7 +34,7 @@ class FP_LIB_TABLE_GRID;
 
 
 /**
- * Class FP_LIB_TABLE_ROW
+ * FP_LIB_TABLE_ROW
  *
  * holds a record identifying a library accessed by the appropriate footprint library #PLUGIN
  * object in the #FP_LIB_TABLE.

@@ -83,7 +83,7 @@ extern std::string toUTFTildaText( const wxString& txt );
 
 
 /**
- * Class SCH_COMPONENT
+ * SCH_COMPONENT
  * describes a real schematic component
  */
 class SCH_COMPONENT : public SCH_ITEM

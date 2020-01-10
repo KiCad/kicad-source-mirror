@@ -40,7 +40,7 @@
 class EE_SELECTION;
 
 /**
- * Class EE_TOOL_BASE
+ * EE_TOOL_BASE
  *
  * A foundation class for a tool operating on a schematic or symbol
 **/

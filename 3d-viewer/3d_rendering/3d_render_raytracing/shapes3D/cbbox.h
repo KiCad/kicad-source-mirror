@@ -34,7 +34,7 @@
 #include <fctsys.h>     // For the DBG(
 
 /**
- * Class CBBOX
+ * CBBOX
  * manages a bounding box defined by two SFVEC3F min max points.
  */
 struct CBBOX

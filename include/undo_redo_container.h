@@ -118,7 +118,7 @@ public:
 
 
 /**
- * Class PICKED_ITEMS_LIST
+ * PICKED_ITEMS_LIST
  * is a holder to handle information on schematic or board items.
  * The information held is a pointer on each item, and the command made.
  */
@@ -297,7 +297,7 @@ public:
 
 
 /**
- * Class UNDO_REDO_CONTAINER
+ * UNDO_REDO_CONTAINER
  * is a holder to handle alist of undo (or redo) command.
  * this class handles a list of ITEM_PICKER (each manage one schematic or board item).
  */

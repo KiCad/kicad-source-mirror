@@ -95,7 +95,7 @@ struct SPICE_ITEM
 
 
 /**
- * Class NETLIST_EXPORTER_PSPICE
+ * NETLIST_EXPORTER_PSPICE
  * generates a PSPICE compatible netlist
  */
 class NETLIST_EXPORTER_PSPICE : public NETLIST_EXPORTER

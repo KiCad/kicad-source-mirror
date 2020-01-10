@@ -32,7 +32,7 @@ class FOOTPRINT_EDIT_FRAME;
 
 
 /**
- * Class MODULE_EDITOR_TOOLS
+ * MODULE_EDITOR_TOOLS
  *
  * Module editor specific tools.
  */

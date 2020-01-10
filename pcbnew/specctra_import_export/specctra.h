@@ -187,7 +187,7 @@ typedef std::vector<PROPERTY>       PROPERTIES;
 class UNIT_RES;
 
 /**
- * Class ELEM
+ * ELEM
  * is a base class for any DSN element class.
  * See class ELEM_HOLDER also.
  */
@@ -274,7 +274,7 @@ public:
 
 
 /**
- * Class ELEM_HOLDER
+ * ELEM_HOLDER
  * is a holder for any DSN class.  It can contain other
  * class instances, including classes derived from this class.
  */
@@ -360,7 +360,7 @@ public:
 
 
 /**
- * Class PARSER
+ * PARSER
  * is simply a configuration record per the SPECCTRA DSN file spec.
  * It is not actually a parser, but rather corresponds to &lt;parser_descriptor&gt;
  */
@@ -394,7 +394,7 @@ public:
 
 
 /**
- * Class UNIT_RES
+ * UNIT_RES
  * is a holder for either a T_unit or T_resolution object which are usually
  * mutually exclusive in the dsn grammar, except within the T_pcb level.
  */
@@ -486,7 +486,7 @@ public:
 
 
 /**
- * Class RULE
+ * RULE
  * corresponds to the &lt;rule_descriptor&gt; in the specctra dsn spec.
  */
 class RULE : public ELEM
@@ -569,7 +569,7 @@ typedef boost::ptr_vector<LAYER_RULE>   LAYER_RULES;
 
 
 /**
- * Class PATH
+ * PATH
  * supports both the &lt;path_descriptor&gt; and the &lt;polygon_descriptor&gt; per
  * the specctra dsn spec.
  */
@@ -878,7 +878,7 @@ typedef boost::ptr_vector<WINDOW>   WINDOWS;
 
 
 /**
- * Class KEEPOUT
+ * KEEPOUT
  * is used for &lt;keepout_descriptor&gt; and &lt;plane_descriptor&gt;.
  */
 class KEEPOUT : public ELEM
@@ -1005,7 +1005,7 @@ typedef boost::ptr_vector<KEEPOUT>  KEEPOUTS;
 
 
 /**
- * Class VIA
+ * VIA
  * corresponds to the &lt;via_descriptor&gt; in the specctra dsn spec.
  */
 class VIA : public ELEM
@@ -1319,7 +1319,7 @@ public:
 
 
 /**
- * Class COPPER_PLANE
+ * COPPER_PLANE
  * corresponds to a &lt;plane_descriptor&gt; in the specctra dsn spec.
  */
 class COPPER_PLANE : public KEEPOUT
@@ -1335,7 +1335,7 @@ typedef boost::ptr_vector<COPPER_PLANE>    COPPER_PLANES;
 
 
 /**
- * Class TOKPROP
+ * TOKPROP
  * is a container for a single property whose value is another DSN_T token.
  * The name of the property is obtained from the DSN_T Type().
  */
@@ -1363,7 +1363,7 @@ public:
 
 
 /**
- * Class STRINGPROP
+ * STRINGPROP
  * is a container for a single property whose value is a string.
  * The name of the property is obtained from the DSN_T.
  */
@@ -1653,7 +1653,7 @@ public:
 
 
 /**
- * Class PLACE
+ * PLACE
  * implements the &lt;placement_reference&gt; in the specctra dsn spec.
  */
 class PLACE : public ELEM
@@ -1733,7 +1733,7 @@ typedef boost::ptr_vector<PLACE>    PLACES;
 
 
 /**
- * Class COMPONENT
+ * COMPONENT
  * implements the &lt;component_descriptor&gt; in the specctra dsn spec.
  */
 class COMPONENT : public ELEM
@@ -1854,7 +1854,7 @@ public:
 
 
 /**
- * Class SHAPE
+ * SHAPE
  * corresponds to the "(shape ..)" element in the specctra dsn spec.
  * It is not a &lt;shape_descriptor&gt;, which is one of things that this
  * elements contains, i.e. in its "shape" field.  This class also implements
@@ -2092,7 +2092,7 @@ typedef boost::ptr_vector<IMAGE>    IMAGES;
 
 
 /**
- * Class PADSTACK
+ * PADSTACK
  * holds either a via or a pad definition.
  */
 class PADSTACK : public ELEM_HOLDER
@@ -2223,7 +2223,7 @@ inline bool operator<( const PADSTACK& lhs, const PADSTACK& rhs )
 
 
 /**
- * Class LIBRARY
+ * LIBRARY
  * corresponds to the &lt;library_descriptor&gt; in the specctra dsn specification.
  * Only unit_descriptor, image_descriptors, and padstack_descriptors are
  * included as children at this time.
@@ -2422,7 +2422,7 @@ public:
 
 
 /**
- * Class PIN_REF
+ * PIN_REF
  * corresponds to the &lt;pin_reference&gt; definition in the specctra dsn spec.
  */
 struct PIN_REF : public ELEM
@@ -2528,7 +2528,7 @@ typedef boost::ptr_vector<FROMTO>       FROMTOS;
 
 
 /**
- * Class COMP_ORDER
+ * COMP_ORDER
  * corresponds to the &lt;component_order_descriptor&gt;
  */
 class COMP_ORDER : public ELEM
@@ -2561,7 +2561,7 @@ public:
 typedef boost::ptr_vector<COMP_ORDER>   COMP_ORDERS;
 
 /**
- * Class NET
+ * NET
  * corresponds to a &lt;net_descriptor&gt;
  * in the DSN spec.
  */
@@ -2715,7 +2715,7 @@ public:
 
 
 /**
- * Class CLASS
+ * CLASS
  * corresponds to the &lt;class_descriptor&gt; in the specctra spec.
  */
 class CLASS : public ELEM
@@ -2841,7 +2841,7 @@ public:
 
 
 /**
- * Class WIRE
+ * WIRE
  * corresponds to &lt;wire_shape_descriptor&gt; in the specctra dsn spec.
  */
 class WIRE : public ELEM
@@ -2951,7 +2951,7 @@ typedef boost::ptr_vector<WIRE>     WIRES;
 
 
 /**
- * Class WIRE_VIA
+ * WIRE_VIA
  * corresponds to &lt;wire_via_descriptor&gt; in the specctra dsn spec.
  */
 class WIRE_VIA : public ELEM
@@ -3087,7 +3087,7 @@ typedef boost::ptr_vector<WIRE_VIA>      WIRE_VIAS;
 
 
 /**
- * Class WIRING
+ * WIRING
  * corresponds to &lt;wiring_descriptor&gt; in the specctra dsn spec.
  */
 class WIRING : public ELEM
@@ -3307,7 +3307,7 @@ public:
 
 
 /**
- * Class SUPPLY_PIN
+ * SUPPLY_PIN
  * corresponds to the &lt;supply_pin_descriptor&gt; in the specctra dsn spec.
 */
 class SUPPLY_PIN : public ELEM
@@ -3355,7 +3355,7 @@ typedef boost::ptr_vector<SUPPLY_PIN>   SUPPLY_PINS;
 
 
 /**
- * Class NET_OUT
+ * NET_OUT
  * corresponds to the &lt;net_out_descriptor&gt; of the specctra dsn spec.
  */
 class NET_OUT : public ELEM
@@ -3497,7 +3497,7 @@ typedef std::vector<PIN_PAIR>   PIN_PAIRS;
 
 
 /**
- * Class WAS_IS
+ * WAS_IS
  * corresponds to the &lt;was_is_descriptor&gt; in the specctra dsn spec.
  */
 class WAS_IS : public ELEM
@@ -3527,7 +3527,7 @@ public:
 
 
 /**
- * Class SESSION
+ * SESSION
  * corresponds to the &lt;session_file_descriptor&gt; in the specctra dsn spec.
  */
 class SESSION : public ELEM
@@ -3600,7 +3600,7 @@ typedef boost::ptr_set<PADSTACK>    PADSTACKSET;
 
 
 /**
- * Class SPECCTRA_DB
+ * SPECCTRA_DB
  * holds a DSN data tree, usually coming from a DSN file. Is essentially a
  * SPECCTRA_PARSER class.
  */

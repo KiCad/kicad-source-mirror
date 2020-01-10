@@ -29,7 +29,7 @@
 
 
 /**
- * Class CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL
+ * CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL
  *
  * Selection tool for the footprint viewer in cvpcb.
  */

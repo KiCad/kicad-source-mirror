@@ -32,7 +32,7 @@
 #include <reporter.h>
  
 /**
- * Class STATUS_TEXT_REPORTER
+ * STATUS_TEXT_REPORTER
  * is a wrapper for reporting to a wxString in a wxFrame status text.
  */
 class STATUS_TEXT_REPORTER : public REPORTER

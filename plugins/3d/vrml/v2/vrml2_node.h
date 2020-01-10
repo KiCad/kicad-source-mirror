@@ -52,7 +52,7 @@ class WRL2BASE;
 class SGNODE;
 
 /**
- * Class WRL2NODE
+ * WRL2NODE
  * represents the base class of all VRML2 nodes
  */
 class WRL2NODE

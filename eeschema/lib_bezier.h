@@ -29,7 +29,7 @@
 
 
 /**
- * Class LIB_BEZIER
+ * LIB_BEZIER
  * defines bezier curve graphic body item.
  */
 class LIB_BEZIER : public LIB_ITEM

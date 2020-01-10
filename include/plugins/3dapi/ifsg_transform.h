@@ -34,7 +34,7 @@
 
 
 /**
- * Class IFSG_TRANSFORM
+ * IFSG_TRANSFORM
  * is the wrapper for the VRML compatible TRANSFORM block class SCENEGRAPH
  */
 class SGLIB_API IFSG_TRANSFORM : public IFSG_NODE

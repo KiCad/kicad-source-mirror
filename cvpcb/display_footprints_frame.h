@@ -35,7 +35,7 @@
 
 
 /**
- * Class DISPLAY_FOOTPRINTS_FRAME
+ * DISPLAY_FOOTPRINTS_FRAME
  * is used to display footprints.
  */
 class DISPLAY_FOOTPRINTS_FRAME : public PCB_BASE_FRAME

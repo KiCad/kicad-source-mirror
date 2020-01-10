@@ -169,7 +169,7 @@ enum
 
 
 /**
- * Class BOARD_DESIGN_SETTINGS
+ * BOARD_DESIGN_SETTINGS
  * contains design settings for a BOARD object.
  */
 class BOARD_DESIGN_SETTINGS

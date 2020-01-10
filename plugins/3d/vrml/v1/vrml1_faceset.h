@@ -37,7 +37,7 @@ class WRL1BASE;
 class SGNODE;
 
 /**
- * Class WRL1FACESET
+ * WRL1FACESET
  */
 class WRL1FACESET : public WRL1NODE
 {

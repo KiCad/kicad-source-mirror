@@ -30,7 +30,7 @@
 namespace KIGFX {
 namespace PREVIEW {
 /**
- * Class SELECTION_AREA
+ * SELECTION_AREA
  *
  * Represents an assitant draw when interactively drawing an
  * arc on a canvas.

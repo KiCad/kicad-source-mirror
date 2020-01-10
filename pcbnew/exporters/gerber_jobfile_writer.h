@@ -47,7 +47,7 @@ enum ONSIDE
 class BOARD;
 
 /**
- * class JOBFILE_PARAMS store the list of parameters written in Gerber job file
+ * JOBFILE_PARAMS store the list of parameters written in Gerber job file
  * especialy list of .gbr filenames and the corresponding layer id belonging the job
  */
 class JOBFILE_PARAMS

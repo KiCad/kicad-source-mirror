@@ -91,7 +91,7 @@ class TEXTE_PCB;
 
 
 /**
- * Class PCB_IO
+ * PCB_IO
  * is a PLUGIN derivation for saving and loading Pcbnew s-expression formatted files.
  *
  * @note This class is not thread safe, but it is re-entrant multiple times in sequence.

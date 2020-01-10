@@ -31,7 +31,7 @@
 
 
 /**
- * Class PGM_KICAD
+ * PGM_KICAD
  * extends PGM_BASE to bring in FileHistory() and PdfBrowser() which were moved
  * from EDA_APP into KIFACE_I.  KIFACE_I is not applicable in the project manager
  * since it is not a KIFACE.  This header is in the kicad directory since nobody

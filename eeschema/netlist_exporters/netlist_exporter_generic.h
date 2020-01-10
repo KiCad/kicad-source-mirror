@@ -53,7 +53,7 @@ enum GNL_T
 
 
 /**
- * Class NETLIST_EXPORTER_GENERIC
+ * NETLIST_EXPORTER_GENERIC
  * generates a generic XML based netlist file. This allows using XSLT or other methods to
  * transform the XML to other netlist formats outside of the C++ codebase.
  */

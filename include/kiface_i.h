@@ -29,7 +29,7 @@
 
 
 /**
- * Class KIFACE_I
+ * KIFACE_I
  * is a KIFACE (I)mplementation,
  * with some features useful for DSOs which implement a KIFACE.
  * It is abstract, a few functions must be implemented in derivations.

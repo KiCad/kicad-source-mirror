@@ -44,7 +44,7 @@ class COMPONENT;
 
 
 /**
- * Class CMP_READER
+ * CMP_READER
  * reads a component footprint link file (*.cmp) format.
  */
 class CMP_READER
@@ -105,7 +105,7 @@ public:
 
 
 /**
- * Class NETLIST_READER
+ * NETLIST_READER
  * is a pure virtual class to derive a specific type of netlist reader from.
  */
 class NETLIST_READER
@@ -200,7 +200,7 @@ protected:
 
 
 /**
- * Class LEGACY_NETLIST_READER
+ * LEGACY_NETLIST_READER
  * reads the KiCad legacy and the old Orcad netlist formats.
  *
  * The KiCad legacy netlist format was derived directly from an old Orcad netlist format.  The
@@ -288,7 +288,7 @@ public:
 
 
 /**
- * Class KICAD_NETLIST_PARSER
+ * KICAD_NETLIST_PARSER
  * is the parser for reading the KiCad s-expression netlist format.
  */
 class KICAD_NETLIST_PARSER : public NETLIST_LEXER
@@ -376,7 +376,7 @@ public:
 
 
 /**
- * Class KICAD_NETLIST_READER
+ * KICAD_NETLIST_READER
  * read the new s-expression based KiCad netlist format.
  */
 class KICAD_NETLIST_READER : public NETLIST_READER

@@ -35,7 +35,7 @@ class ITEM;
 class NODE;
 
 /**
- * Class PLACEMENT_ALGO
+ * PLACEMENT_ALGO
  *
  * Abstract class for a P&S placement/dragging algorithm.
  * All subtools (drag, single/diff pair routing and meandering)

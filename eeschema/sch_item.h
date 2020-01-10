@@ -60,7 +60,7 @@ enum DANGLING_END_T {
 
 
 /**
- * Class DANGLING_END_ITEM
+ * DANGLING_END_ITEM
  * is a helper class used to store the state of schematic  items that can be connected to
  * other schematic items.
  */
@@ -127,7 +127,7 @@ public:
 
 
 /**
- * Class SCH_ITEM
+ * SCH_ITEM
  * is a base class for any item which can be embedded within the SCHEMATIC
  * container class, and therefore instances of derived classes should only be
  * found in EESCHEMA or other programs that use class SCHEMATIC and its contents.

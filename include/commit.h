@@ -60,7 +60,7 @@ CHANGE_TYPE operator&( CHANGE_TYPE aTypeA, T aTypeB )
 
 
 /**
- * Class COMMIT
+ * COMMIT
  *
  * Represents a set of changes (additions, deletions or modifications)
  * of a data model (e.g. the BOARD) class.

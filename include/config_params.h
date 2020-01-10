@@ -88,7 +88,7 @@ enum paramcfg_id {
 
 
 /**
- * Class PARAM_CFG_BASE
+ * PARAM_CFG_BASE
  * is a base class which establishes the interface functions ReadParam and SaveParam,
  * which are implemented by a number of derived classes, and these function's
  * doxygen comments are inherited also.

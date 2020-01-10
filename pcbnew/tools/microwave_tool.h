@@ -30,7 +30,7 @@
 
 
 /**
- * Class MICROWAVE_TOOL
+ * MICROWAVE_TOOL
  *
  * Tool responsible for adding microwave features to PCBs
  */

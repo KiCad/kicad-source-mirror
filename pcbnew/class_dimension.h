@@ -41,7 +41,7 @@ class MSG_PANEL_ITEM;
 
 
 /**
- * Class DIMENSION
+ * DIMENSION
  *
  * For better understanding of the points that make a dimension:
  *

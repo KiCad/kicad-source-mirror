@@ -34,7 +34,7 @@ class BOARD_ITEM;
 
 
 /**
- * Class DRC_ITEM
+ * DRC_ITEM
  * is a holder for a DRC (in Pcbnew) or ERC (in Eeschema) error item.
  * It is generated when two objects are too close (DRC)
  * or two connected objects (pins) have incompatible electrical types (ERC).

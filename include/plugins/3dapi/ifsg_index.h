@@ -34,7 +34,7 @@
 
 
 /**
- * Class IFSG_INDEX
+ * IFSG_INDEX
  * is the wrapper for SGINDEX
  */
 class SGLIB_API IFSG_INDEX : public IFSG_NODE

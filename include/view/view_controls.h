@@ -108,7 +108,7 @@ struct VC_SETTINGS
 
 
 /**
- * Class VIEW_CONTROLS
+ * VIEW_CONTROLS
  * is an interface for classes handling user events controlling the view behaviour
  * (such as zooming, panning, mouse grab, etc.)
  */

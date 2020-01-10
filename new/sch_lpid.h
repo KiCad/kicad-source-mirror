@@ -32,7 +32,7 @@ namespace SCH {
 
 
 /**
- * Class LPID
+ * LPID
  * (aka GUID) is a Logical Part ID and consists of various portions much like a URI.
  * It is a container for the separated portions of a logical part id STRING so they
  * can be accessed individually.  The various portions of an LPID are:

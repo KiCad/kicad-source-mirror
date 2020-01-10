@@ -39,7 +39,7 @@ class VIEW;
 }
 
 /**
- * Class TOOL_DISPATCHER
+ * TOOL_DISPATCHER
  *
  * - takes wx events,
  * - fixes all wx quirks (mouse warping, panning, ordering problems, etc)

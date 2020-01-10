@@ -36,7 +36,7 @@
 
 
 /**
- * Class X3DCOORDS
+ * X3DCOORDS
  */
 class X3DCOORDS : public X3DNODE
 {

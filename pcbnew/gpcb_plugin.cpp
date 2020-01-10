@@ -99,7 +99,7 @@ static inline long parseInt( const wxString& aValue, double aScalar )
 
 
 /**
- * Class GPCB_FPL_CACHE_ITEM
+ * GPCB_FPL_CACHE_ITEM
  * is helper class for creating a footprint library cache.
  *
  * The new footprint library design is a file path of individual module files

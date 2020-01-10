@@ -27,7 +27,7 @@
 #include <preview_items/bright_box.h>
 
 /**
- * Class PCB_BRIGHT_BOX
+ * PCB_BRIGHT_BOX
  *
  * Draws a decoration to indicate a brightened item.
  */

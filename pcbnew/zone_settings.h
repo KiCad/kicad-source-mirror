@@ -50,7 +50,7 @@ enum class ZONE_HATCH_STYLE
 };
 
 /**
- * Class ZONE_SETTINGS
+ * ZONE_SETTINGS
  * handles zones parameters.
  * Because a zone can be on copper or non copper layers, and can be also
  * a keepout area, some parameters are irrelevant depending on the type of zone

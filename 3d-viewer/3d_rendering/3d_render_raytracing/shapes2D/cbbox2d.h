@@ -34,7 +34,7 @@
 
 
 /**
- * Class CBBOX
+ * CBBOX
  * manages a bounding box defined by two SFVEC2F min max points.
  */
 struct CBBOX2D

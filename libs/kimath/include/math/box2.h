@@ -34,7 +34,7 @@
 #include <core/optional.h>
 
 /**
- * Class BOX2
+ * BOX2
  * handles a 2-D bounding box, built on top of an origin point
  * and size vector, both of templated class Vec
  */

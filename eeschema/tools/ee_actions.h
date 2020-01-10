@@ -35,7 +35,7 @@ class TOOL_MANAGER;
 extern char g_lastBusEntryShape;
 
 /**
- * Class EESCHEMA_ACTIONS
+ * EESCHEMA_ACTIONS
  *
  * Gathers all the actions that are shared by tools. The instance of SCH_ACTIONS is created
  * inside of ACTION_MANAGER object that registers the actions.

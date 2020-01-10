@@ -97,7 +97,7 @@ class SCH_REFERENCE_LIST;
 typedef std::map<wxString, SCH_REFERENCE_LIST> SCH_MULTI_UNIT_REFERENCE_MAP;
 
 /**
- * Class SCH_SHEET_PATH
+ * SCH_SHEET_PATH
  *
  * handles access to a stack of flattened #SCH_SHEET objects by way of a path for
  * creating a flattened schematic hierarchy.
@@ -334,7 +334,7 @@ typedef SCH_SHEET_PATHS::const_reverse_iterator  SCH_SHEET_PATHS_CRITER;
 
 
 /**
- * Class SCH_SHEET_LIST
+ * SCH_SHEET_LIST
  *
  * handles a list of #SCH_SHEET_PATH objects in a flattened hierarchy.
  *

@@ -50,7 +50,7 @@ typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR& );
 
 
 /**
- * Class SELECTION_TOOL
+ * SELECTION_TOOL
  *
  * Our sample selection tool: currently supports:
  * - pick single objects (click LMB)

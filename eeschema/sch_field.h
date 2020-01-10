@@ -38,7 +38,7 @@ class LIB_FIELD;
 
 
 /**
- * Class SCH_FIELD
+ * SCH_FIELD
  * instances are attached to a component and provide a place for the component's value,
  * reference designator, footprint, and user definable name-value pairs of arbitrary purpose.
  *

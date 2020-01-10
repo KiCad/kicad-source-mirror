@@ -37,7 +37,7 @@ namespace PNS {
 
 
 /**
- * Class INDEX
+ * INDEX
  *
  * Custom spatial index, holding our board items and allowing for very fast searches. Items
  * are assigned to separate R-Tree subindices depending on their type and spanned layers, reducing

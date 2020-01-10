@@ -44,7 +44,7 @@ class VIEW_GROUP;
 class VIEW_RTREE;
 
 /**
- * Class VIEW.
+ * VIEW.
  * Holds a (potentially large) number of VIEW_ITEMs and renders them on a graphics device
  * provided by the GAL. VIEWs can exist in two flavors:
  * - dynamic - where items can be added, removed or changed anytime, intended for the main

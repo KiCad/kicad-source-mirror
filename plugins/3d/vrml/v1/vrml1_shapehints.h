@@ -36,7 +36,7 @@ class WRL1BASE;
 class SGNODE;
 
 /**
- * Class WRL1SHAPEHINTS
+ * WRL1SHAPEHINTS
  */
 class WRL1SHAPEHINTS : public WRL1NODE
 {

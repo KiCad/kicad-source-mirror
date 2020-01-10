@@ -40,7 +40,7 @@
 #include <wx/datetime.h>
 
 /**
- * Class DIALOG_BOARD_STATISTIC
+ * DIALOG_BOARD_STATISTIC
  *
  * Dialog to show common board info.
  */

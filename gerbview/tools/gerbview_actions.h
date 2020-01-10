@@ -29,7 +29,7 @@ class TOOL_EVENT;
 class TOOL_MANAGER;
 
 /**
- * Class GERBVIEW_ACTIONS
+ * GERBVIEW_ACTIONS
  *
  * Gathers all the actions that are shared by tools. The instance of GERBVIEW_ACTIONS is created
  * inside of ACTION_MANAGER object that registers the actions.

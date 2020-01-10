@@ -25,7 +25,7 @@
 #include <algorithm>
 
 /**
- * Class LAYER_RANGE
+ * LAYER_RANGE
  *
  * Represents a contiguous set of PCB layers.
  */

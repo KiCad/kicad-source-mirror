@@ -35,7 +35,7 @@ class WRL1BASE;
 class SGNODE;
 
 /**
- * Class WRL1GROUP
+ * WRL1GROUP
  */
 class WRL1GROUP : public WRL1NODE
 {

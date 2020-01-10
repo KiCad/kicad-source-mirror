@@ -41,7 +41,7 @@ class DRAWSEGMENT;
 class POLYGON_GEOM_MANAGER;
 
 /**
- * Class DRAWING_TOOL
+ * DRAWING_TOOL
  *
  * Tool responsible for drawing graphical elements like lines, arcs, circles, etc.
  */

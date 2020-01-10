@@ -40,7 +40,7 @@ namespace KIGFX
 {
 
 /**
- * Class WS_RENDER_SETTINGS
+ * WS_RENDER_SETTINGS
  * Stores page-layout-specific render settings.
  */
 class WS_RENDER_SETTINGS : public RENDER_SETTINGS
@@ -89,7 +89,7 @@ private:
 
 
 /**
- * Class WS_PAINTER
+ * WS_PAINTER
  * Contains methods for drawing worksheet items.
  */
 class WS_PAINTER : public PAINTER

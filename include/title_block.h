@@ -31,7 +31,7 @@
 class OUTPUTFORMATTER;
 
 /**
- * Class TITLE_BLOCK
+ * TITLE_BLOCK
  * holds the information shown in the lower right corner of a plot, printout, or
  * editing view.
  *

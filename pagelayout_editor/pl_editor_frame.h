@@ -38,7 +38,7 @@ class WS_DATA_ITEM;
 
 
 /**
- * Class PL_EDITOR_FRAME
+ * PL_EDITOR_FRAME
  * is the main window used in the page layout editor.
  */
 

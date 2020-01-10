@@ -32,7 +32,7 @@
 
 
 /**
- * Class DESIGN_INSPECTOR is the left window showing the list of items
+ * DESIGN_INSPECTOR is the left window showing the list of items
  */
 
 class DIALOG_INSPECTOR : public DIALOG_INSPECTOR_BASE

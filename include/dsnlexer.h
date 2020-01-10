@@ -71,7 +71,7 @@ enum DSN_SYNTAX_T {
 
 
 /**
- * Class DSNLEXER
+ * DSNLEXER
  * implements a lexical analyzer for the SPECCTRA DSN file format.  It
  * reads lexical tokens from the current LINE_READER through the NextTok()
  * function.

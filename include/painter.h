@@ -44,7 +44,7 @@ class GAL;
 class VIEW_ITEM;
 
 /**
- * Class RENDER_SETTINGS
+ * RENDER_SETTINGS
  * Contains all the knowledge about how graphical objects are drawn on
  * any output surface/device. This includes:
  * - color/transparency settings
@@ -299,7 +299,7 @@ protected:
 
 
 /**
- * Class PAINTER
+ * PAINTER
  * contains all the knowledge about how to draw graphical object onto
  * any particular output device.
  * This knowledge is held outside the individual graphical objects so that

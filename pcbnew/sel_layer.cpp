@@ -223,7 +223,7 @@ PCB_LAYER_ID PCB_BASE_FRAME::SelectLayer( PCB_LAYER_ID aDefaultLayer, LSET aNotA
 
 
 /**
- * Class SELECT_COPPER_LAYERS_PAIR_DIALOG
+ * SELECT_COPPER_LAYERS_PAIR_DIALOG
  * displays a double pcb copper layers list in a dialog,
  * to select a layer pair from these lists
  */

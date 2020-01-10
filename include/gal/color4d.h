@@ -33,7 +33,7 @@
 namespace KIGFX
 {
 /**
- * Class COLOR4D
+ * COLOR4D
  * is the color representation with 4 components: red, green, blue, alpha.
  */
 class COLOR4D

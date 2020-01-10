@@ -39,7 +39,7 @@ namespace PREVIEW
 {
 
 /**
- * Class POLYGON_ITEM
+ * POLYGON_ITEM
  *
  * A preview item which shows an in-progress polygon, which
  * can be used for zone outlines, etc

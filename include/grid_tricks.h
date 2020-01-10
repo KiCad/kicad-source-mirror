@@ -45,7 +45,7 @@ enum
 
 
 /**
- * Class GRID_TRICKS
+ * GRID_TRICKS
  * is used to add mouse and command handling (such as cut, copy, and paste) to a WX_GRID instance.
  */
 class GRID_TRICKS : public wxEvtHandler

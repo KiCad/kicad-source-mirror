@@ -31,7 +31,7 @@
 #include <math/vector2d.h>
 
 /**
- * Class SHAPE_SIMPLE
+ * SHAPE_SIMPLE
  *
  * Represents a simple polygon consisting of a zero-thickness closed chain of
  * connected line segments.

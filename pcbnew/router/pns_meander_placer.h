@@ -41,7 +41,7 @@ class SHOVE;
 class OPTIMIZER;
 
 /**
- * Class MEANDER_PLACER
+ * MEANDER_PLACER
  *
  * Single track length matching/meandering tool.
  */

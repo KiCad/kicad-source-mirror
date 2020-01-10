@@ -30,7 +30,7 @@
 
 
 /**
- * Class WX_HTML_REPORT_PANEL
+ * WX_HTML_REPORT_PANEL
  *
  * A widget for browsing a rich text error/status report. Used in numerous
  * dialogs in eeschema and pcbnew. Provides error filtering functionality

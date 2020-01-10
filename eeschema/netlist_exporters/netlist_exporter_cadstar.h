@@ -30,7 +30,7 @@
 
 
 /**
- * Class NETLIST_EXPORTER_CADSTAR
+ * NETLIST_EXPORTER_CADSTAR
  * generates a netlist compatible with CADSTAR
  */
 class NETLIST_EXPORTER_CADSTAR : public NETLIST_EXPORTER

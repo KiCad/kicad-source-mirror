@@ -40,7 +40,7 @@ class SEGMENT;
 class VIA;
 
 /**
- * Class LINE
+ * LINE
  *
  * Represents a track on a PCB, connecting two non-trivial joints (that is,
  * vias, pads, junctions between multiple traces or two traces different widths

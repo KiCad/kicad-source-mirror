@@ -31,7 +31,7 @@
 #define PCB_DISPLAY_OPTIONS_H_
 
 /**
- * Class PCB_DISPLAY_OPTIONS
+ * PCB_DISPLAY_OPTIONS
  * handles display options like enable/disable some optional drawings.
  */
 class PCB_DISPLAY_OPTIONS

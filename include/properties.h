@@ -27,7 +27,7 @@
 
 
 /**
- * Class PROPERTIES
+ * PROPERTIES
  * is a name/value tuple with unique names and optional values.  The names
  * may be iterated alphabetically.
  */

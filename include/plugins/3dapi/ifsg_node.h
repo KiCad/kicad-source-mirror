@@ -48,7 +48,7 @@
 class SGNODE;
 
 /**
- * Class IFSG_NODE
+ * IFSG_NODE
  * represents the base class of all DLL-safe Scene Graph nodes
  */
 class SGLIB_API IFSG_NODE

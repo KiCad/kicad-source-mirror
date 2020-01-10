@@ -39,7 +39,7 @@
 #endif
 
 /**
- * Class VECTOR2_TRAITS
+ * VECTOR2_TRAITS
  * traits class for VECTOR2.
  */
 template <class T>
@@ -63,7 +63,7 @@ template <class T>
 std::ostream& operator<<( std::ostream& aStream, const VECTOR2<T>& aVector );
 
 /**
- * Class VECTOR2
+ * VECTOR2
  * defines a general 2D-vector/point.
  *
  * This class uses templates to be universal. Several operators are provided to help

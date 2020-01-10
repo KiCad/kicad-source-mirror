@@ -32,7 +32,7 @@ class PROJECT;
 
 
 /**
- * Class KIWAY_HOLDER
+ * KIWAY_HOLDER
  * is a mix in class which holds the location of a wxWindow's KIWAY.  It allows calls to 
  * Kiway() and SetKiway().
  */

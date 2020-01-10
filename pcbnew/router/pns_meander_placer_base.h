@@ -40,7 +40,7 @@ class SHOVE;
 class OPTIMIZER;
 
 /**
- * Class MEANDER_PLACER_BASE
+ * MEANDER_PLACER_BASE
  *
  * Base class for Single trace & Differenial pair meandering tools, as
  * both of them share a lot of code.

@@ -50,7 +50,7 @@ enum MEANDER_STYLE {
 };
 
 /**
- * Class MEANDER_SETTINGS
+ * MEANDER_SETTINGS
  *
  * Holds dimensions for the meandering algorithm.
  */
@@ -100,7 +100,7 @@ public:
 class MEANDERED_LINE;
 
 /**
- * Class MEANDER_SETTINGS
+ * MEANDER_SETTINGS
  *
  * Holds the geometry of a single meander.
  */
@@ -391,7 +391,7 @@ private:
 
 
 /**
- * Class MEANDERED_LINE
+ * MEANDERED_LINE
  *
  * Represents a set of meanders fitted over a single or two lines.
  */

@@ -36,7 +36,7 @@
 
 
 /**
- * Class X3DAPP
+ * X3DAPP
  */
 class X3DAPP : public X3DNODE
 {

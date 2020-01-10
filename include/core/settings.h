@@ -31,7 +31,7 @@
 
 
 /**
- * Class TOOL_SETTINGS
+ * TOOL_SETTINGS
  *
  * Manages persistent settings for a tool (just a simple wrapper to wxConfigBase)
  */

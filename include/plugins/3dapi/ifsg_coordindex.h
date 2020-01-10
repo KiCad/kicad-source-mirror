@@ -34,7 +34,7 @@
 
 
 /**
- * Class IFSG_COORDINDEX
+ * IFSG_COORDINDEX
  * is the wrapper for SGCOORDINDEX
  */
 class SGLIB_API IFSG_COORDINDEX : public IFSG_INDEX

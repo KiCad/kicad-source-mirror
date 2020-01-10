@@ -39,7 +39,7 @@
 #include <tool/tool_menu.h>
 
 /**
- * Class PCB_TOOL_BASE
+ * PCB_TOOL_BASE
  *
  * A tool operating on a BOARD object
 **/

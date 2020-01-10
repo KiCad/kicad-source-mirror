@@ -43,7 +43,7 @@ namespace KIGFX
 class GAL;
 
 /**
- * Class GERBVIEW_RENDER_SETTINGS
+ * GERBVIEW_RENDER_SETTINGS
  * Stores GerbView specific render settings.
  */
 class GERBVIEW_RENDER_SETTINGS : public RENDER_SETTINGS
@@ -164,7 +164,7 @@ protected:
 
 
 /**
- * Class GERBVIEW_PAINTER
+ * GERBVIEW_PAINTER
  * Contains methods for drawing GerbView-specific items.
  */
 class GERBVIEW_PAINTER : public PAINTER

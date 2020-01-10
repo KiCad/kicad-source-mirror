@@ -36,7 +36,7 @@
 #include <sch_sheet.h>
 
 /**
- * Class UNIQUE_STRINGS
+ * UNIQUE_STRINGS
  * tracks unique wxStrings and is useful in telling if a string
  * has been seen before.
  */
@@ -81,7 +81,7 @@ struct LIB_PART_LESS_THAN
 };
 
 /**
- * Class NETLIST_EXPORTER
+ * NETLIST_EXPORTER
  * is a abstract class used for the netlist exporters that eeschema supports.
  */
 class NETLIST_EXPORTER

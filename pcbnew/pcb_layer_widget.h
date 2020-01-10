@@ -34,7 +34,7 @@
 #include <layer_widget.h>
 
 /**
- * Class PCB_LAYER_WIDGET
+ * PCB_LAYER_WIDGET
  * is here to implement the abstract functions of LAYER_WIDGET so they
  * may be tied into the PCB_EDIT_FRAME's data and so we can add a popup
  * menu which is specific to PCBNEW's needs.

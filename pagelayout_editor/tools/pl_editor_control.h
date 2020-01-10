@@ -32,7 +32,7 @@ class PL_EDITOR_FRAME;
 
 
 /**
- * Class PL_EDITOR_CONTROL
+ * PL_EDITOR_CONTROL
  *
  * Handles actions specific to the schematic editor in eeschema.
  */

@@ -45,7 +45,7 @@
 
 
 /**
- * Class SHAPE_POLY_SET
+ * SHAPE_POLY_SET
  *
  * Represents a set of closed polygons. Polygons may be nonconvex, self-intersecting
  * and have holes. Provides boolean operations (using Clipper library as the backend).
@@ -144,7 +144,7 @@ class SHAPE_POLY_SET : public SHAPE
         } VERTEX_INDEX;
 
         /**
-         * Class ITERATOR_TEMPLATE
+         * ITERATOR_TEMPLATE
          *
          * Base class for iterating over all vertices in a given SHAPE_POLY_SET.
          */
@@ -282,7 +282,7 @@ class SHAPE_POLY_SET : public SHAPE
         };
 
         /**
-         * Class SEGMENT_ITERATOR_TEMPLATE
+         * SEGMENT_ITERATOR_TEMPLATE
          *
          * Base class for iterating over all segments in a given SHAPE_POLY_SET.
          */

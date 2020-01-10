@@ -62,7 +62,7 @@ class SCH_PAINTER;
 
 
 /**
- * Class SCH_RENDER_SETTINGS
+ * SCH_RENDER_SETTINGS
  * Stores schematic-specific render settings.
  */
 
@@ -112,7 +112,7 @@ public:
 
 
 /**
- * Class SCH_PAINTER
+ * SCH_PAINTER
  * Contains methods for drawing schematic-specific items.
  */
 class SCH_PAINTER : public PAINTER

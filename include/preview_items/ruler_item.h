@@ -36,7 +36,7 @@ namespace PREVIEW
 class TWO_POINT_GEOMETRY_MANAGER;
 
 /**
- * Class RULER_ITEM
+ * RULER_ITEM
  *
  * A drawn ruler item for showing the distance between two points.
  */

@@ -30,7 +30,7 @@
 
 
 /**
- * Class KIWAY_MGR
+ * KIWAY_MGR
  * is a container for all KIWAYS [and PROJECTS].  This class needs to work both
  * for a C++ project manager and an a wxPython one (after being moved into a
  * header later).

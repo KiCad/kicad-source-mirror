@@ -30,7 +30,7 @@ class LINE_READER;
 
 
 /**
- * Class PCB_PLOT_PARAMS_PARSER
+ * PCB_PLOT_PARAMS_PARSER
  * is the parser class for PCB_PLOT_PARAMS.
  */
 class PCB_PLOT_PARAMS_PARSER : public PCB_PLOT_PARAMS_LEXER

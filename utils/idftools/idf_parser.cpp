@@ -82,7 +82,7 @@ static bool MatchCompOutline( IDF3_COMP_OUTLINE* aOutlineA, IDF3_COMP_OUTLINE* a
 
 
 /*
- * CLASS: IDF3_COMP_OUTLINE_DATA
+ * IDF3_COMP_OUTLINE_DATA
  * This represents the outline placement
  * information and other data specific to
  * each component instance.
@@ -816,7 +816,7 @@ void IDF3_COMP_OUTLINE_DATA::writePlaceData( std::ostream& aBoardFile,
 
 
 /*
- * CLASS: IDF3_COMPONENT
+ * IDF3_COMPONENT
  *
  * This represents a component and its associated
  * IDF outlines and ancillary data (position, etc)

@@ -60,7 +60,7 @@ struct BUS_UNFOLDING_T
 
 
 /**
- * Class SCH_LINE_DRAWING_TOOL
+ * SCH_LINE_DRAWING_TOOL
  *
  * Tool responsible for drawing/placing items (symbols, wires, busses, labels, etc.)
  */

@@ -31,7 +31,7 @@
 
 
 /**
- * Class CN_RTREE -
+ * CN_RTREE -
  * Implements an R-tree for fast spatial indexing of connectivity items.
  * Non-owning.
  */

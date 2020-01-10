@@ -33,7 +33,7 @@
 
 
 /**
- * Class KIWAY_EXPRESS
+ * KIWAY_EXPRESS
  * carries a payload from one KIWAY_PLAYER to another within a PROJECT.
  */
 class KIWAY_EXPRESS : public wxEvent

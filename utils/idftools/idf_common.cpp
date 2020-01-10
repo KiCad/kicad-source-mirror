@@ -312,7 +312,7 @@ void IDF_NOTE::GetSize( double& aHeight, double& aLength )
 
 
 /*
- * CLASS: IDF_DRILL_DATA
+ * IDF_DRILL_DATA
  */
 IDF_DRILL_DATA::IDF_DRILL_DATA()
 {

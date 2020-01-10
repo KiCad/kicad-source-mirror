@@ -33,7 +33,7 @@
 class EDA_DRAW_FRAME;
 
 /**
- * Class STATUS_POPUP
+ * STATUS_POPUP
  *
  * A tiny, headerless popup window used to display useful status (e.g. line length
  * tuning info) next to the mouse cursor.
@@ -72,7 +72,7 @@ protected:
 
 
 /**
- * Class STATUS_TEXT_POPUP
+ * STATUS_TEXT_POPUP
  *
  * Extension of STATUS_POPUP, displaying a single line text.
  */

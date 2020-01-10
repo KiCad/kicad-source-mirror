@@ -32,7 +32,7 @@
 #include <gal/color4d.h>
 
 /**
- * Class BRIGHT_BOX
+ * BRIGHT_BOX
  *
  * Draws a decoration to indicate a brightened item.
  */

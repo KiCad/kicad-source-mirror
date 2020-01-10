@@ -32,7 +32,7 @@
 #include <wx/html/htmlwin.h>
 
 /**
- * Class ERC_HTML_LISTFRAME
+ * ERC_HTML_LISTFRAME
  * is used to display a DRC_ITEM_LIST.
  */
 class ERC_HTML_LISTFRAME : public wxHtmlWindow

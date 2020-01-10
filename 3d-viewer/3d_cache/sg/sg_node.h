@@ -70,7 +70,7 @@ namespace S3D
 
 
 /**
- * Class SGNODE
+ * SGNODE
  * represents the base class of all Scene Graph nodes
  */
 class SGNODE

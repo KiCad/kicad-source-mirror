@@ -34,7 +34,7 @@
 #define DLG_WINDOW_NAME "plot_dialog-window"
 
 /**
- * Class DIALOG_PLOT is the dialog to set the plot options, and create plot files
+ * DIALOG_PLOT is the dialog to set the plot options, and create plot files
  * in various formats.
  */
 class DIALOG_PLOT : public DIALOG_PLOT_BASE

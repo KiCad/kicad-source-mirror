@@ -59,7 +59,7 @@ using TOOL_STATE_FUNC = std::function<int(const TOOL_EVENT&)>;
 
 
 /**
- * Class TOOL_BASE
+ * TOOL_BASE
  *
  * Base abstract interface for all kinds of tools.
  */

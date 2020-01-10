@@ -44,7 +44,7 @@ class PCB_EDIT_FRAME;
 #include <board_commit.h>
 
 /**
- * Class BOARD_NETLIST_UPDATER
+ * BOARD_NETLIST_UPDATER
  * updates the #BOARD with a new netlist.
  *
  * The changes are made to the board are as follows they are not disabled in the status

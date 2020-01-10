@@ -38,7 +38,7 @@ class LINE;
 class DIFF_PAIR;
 
 /**
- * Class COST_ESTIMATOR
+ * COST_ESTIMATOR
  *
  * Calculates the cost of a given line, taking corner angles and total length into account.
  **/
@@ -77,7 +77,7 @@ private:
 };
 
 /**
- * Class OPTIMIZER
+ * OPTIMIZER
  *
  * Performs various optimizations of the lines being routed, attempting to make the lines shorter
  * and less cornery. There are 3 kinds of optimizations so far:

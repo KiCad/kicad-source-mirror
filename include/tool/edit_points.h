@@ -38,7 +38,7 @@
 #include <view/view.h>
 
 /**
- * Class EDIT_POINT
+ * EDIT_POINT
  *
  * Represents a single point that can be used for modifying items. It is directly related to one
  * of points in a graphical item (e.g. vertex of a zone or center of a circle).
@@ -198,7 +198,7 @@ private:
 
 
 /**
- * Class EDIT_LINE
+ * EDIT_LINE
  *
  * Represents a line connecting two EDIT_POINTs. That allows one to move them
  * both by dragging the EDIT_POINT in the middle. As it uses references to
@@ -316,7 +316,7 @@ private:
 
 
 /**
- * Class EDIT_POINTS
+ * EDIT_POINTS
  *
  * EDIT_POINTS is a VIEW_ITEM that manages EDIT_POINTs and EDIT_LINEs and draws them.
  */

@@ -137,7 +137,7 @@ class wxTopLevelWindow;
 
 
 /**
- * Class KIFACE
+ * KIFACE
  * is used by a participant in the KIWAY alchemy.  KIWAY is a minimalistic
  * software bus for communications between various DLLs/DSOs (DSOs) within the same
  * KiCad process.  It makes it possible to call between DSOs without having to link
@@ -244,7 +244,7 @@ struct KIFACE
 
 
 /**
- * Class KIWAY
+ * KIWAY
  * is a minimalistic software bus for communications between various
  * DLLs/DSOs (DSOs) within the same KiCad process.  It makes it possible
  * to call between DSOs without having to link them together, and without

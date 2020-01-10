@@ -49,7 +49,7 @@ class MSG_PANEL_ITEM;
 typedef std::vector<SEG> ZONE_SEGMENT_FILL;
 
 /**
- * Class ZONE_CONTAINER
+ * ZONE_CONTAINER
  * handles a list of polygons defining a copper zone.
  * A zone is described by a main polygon, a time stamp, a layer or a lyer set, and a net name.
  * Other polygons inside the main polygon are holes in the zone.

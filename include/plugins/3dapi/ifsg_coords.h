@@ -34,7 +34,7 @@
 
 
 /**
- * Class IFSG_COORDS
+ * IFSG_COORDS
  * is the wrapper for SGCOORDS
  */
 class SGLIB_API IFSG_COORDS : public IFSG_NODE

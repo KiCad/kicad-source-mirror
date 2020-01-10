@@ -57,7 +57,7 @@ struct BOARD_PRINTOUT_SETTINGS : public PRINTOUT_SETTINGS
 };
 
 /**
- * Class BOARD_PRINTOUT
+ * BOARD_PRINTOUT
  * is a class derived from wxPrintout to handle the necessary information to control a printer
  * when printing a board
  */

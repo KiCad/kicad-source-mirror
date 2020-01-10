@@ -36,7 +36,7 @@
 
 
 /**
- * Class DRC_LIST_MARKERS
+ * DRC_LIST_MARKERS
  * is an implementation of the interface named DRC_ITEM_LIST which uses
  * a BOARD instance to fulfill the interface.  No ownership is taken of the
  * BOARD.
@@ -96,7 +96,7 @@ public:
 
 
 /**
- * Class DRC_LIST_GENERIC
+ * DRC_LIST_GENERIC
  * is an implementation of the interface named DRC_ITEM_LIST which uses
  * a vector of pointers to DRC_ITEMs to fulfill the interface.  No ownership is taken of the
  * vector, which will reside in class DRC
@@ -171,7 +171,7 @@ public:
 
 
 /**
- * Class DRCLISTBOX
+ * DRCLISTBOX
  * is used to display a DRC_ITEM_LIST.
  */
 class DRCLISTBOX : public wxHtmlListBox

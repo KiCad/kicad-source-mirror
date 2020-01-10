@@ -41,7 +41,7 @@ class LPID;
 class PART;
 
 /**
- * Class LIB_TABLE
+ * LIB_TABLE
  * holds LIB_TABLE::ROW records, and can be searched in a very high speed
  * way based on logical library name.
  * <p>
@@ -87,7 +87,7 @@ class MY_API LIB_TABLE
 public:
 
     /**
-     * Class ROW
+     * ROW
      * holds a record identifying a LIB in the LIB_TABLE.
      */
     class ROW

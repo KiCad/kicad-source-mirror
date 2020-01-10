@@ -54,7 +54,7 @@ enum class ZONE_MODE
 
 
 /**
- * Class PCB_ACTIONS
+ * PCB_ACTIONS
  *
  * Gathers all the actions that are shared by tools. The instance of PCB_ACTIONS is created
  * inside of ACTION_MANAGER object that registers the actions.

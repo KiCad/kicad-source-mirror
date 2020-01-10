@@ -64,7 +64,7 @@
  * X and Y are followed by + or - and m + n digits (not separated)
  * m = integer part
  * n = part after the comma
- * Classic formats: m = 2, n = 3 (size 2.3)
+ *ic formats: m = 2, n = 3 (size 2.3)
  * m = 3, n = 4 (size 3.4)
  * eg
  * GxxX00345Y-06123*

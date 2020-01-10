@@ -45,7 +45,7 @@ enum LineMarker {
 
 
 /**
- * Class ITEM
+ * ITEM
  *
  * Base class for PNS router board items. Implements the shared properties of all PCB items -
  * net, spanned layers, geometric shape & refererence to owning model.

@@ -36,7 +36,7 @@
 
 
 /**
- * Class X3DSHAPE
+ * X3DSHAPE
  */
 class X3DSHAPE : public X3DNODE
 {

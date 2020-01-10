@@ -50,7 +50,7 @@
 
 
 /*
- * class TRANSLINE_PRM
+ * TRANSLINE_PRM
  * A class to handle one parameter of transline
  */
 TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
@@ -121,7 +121,7 @@ double TRANSLINE_PRM::FromUserUnit()
 
 
 /*
- * class TRANSLINE_IDENT
+ * TRANSLINE_IDENT
  * A class to handle a list of parameters of a given transline
  */
 

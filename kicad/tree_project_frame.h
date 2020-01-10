@@ -41,7 +41,7 @@ class KICAD_MANAGER_FRAME;
 class TREEPROJECT_ITEM;
 class TREEPROJECTFILES;
 
-/** class TREE_PROJECT_FRAME
+/** TREE_PROJECT_FRAME
  * Window to display the tree files
  */
 class TREE_PROJECT_FRAME : public wxSashLayoutWindow

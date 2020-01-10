@@ -35,7 +35,7 @@
 
 
 /**
- * Class PL_EDITOR_LAYOUT
+ * PL_EDITOR_LAYOUT
  */
 class PL_EDITOR_LAYOUT
 {

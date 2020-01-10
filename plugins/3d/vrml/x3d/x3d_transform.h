@@ -36,7 +36,7 @@
 
 
 /**
- * Class X3DTRANSFORM
+ * X3DTRANSFORM
  */
 class X3DTRANSFORM : public X3DNODE
 {

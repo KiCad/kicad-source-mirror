@@ -37,7 +37,7 @@ class WRL2BASE;
 class SGNODE;
 
 /**
- * Class WRL2LINESET
+ * WRL2LINESET
  */
 class WRL2LINESET : public WRL2NODE
 {

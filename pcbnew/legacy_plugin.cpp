@@ -3202,7 +3202,7 @@ typedef MODULE_MAP::const_iterator              MODULE_CITER;
 
 
 /**
- * Class LP_CACHE
+ * LP_CACHE
  * assists only for the footprint portion of the PLUGIN API, and only for the
  * LEGACY_PLUGIN, so therefore is private to this implementation file, i.e. not placed
  * into a header.

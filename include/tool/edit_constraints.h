@@ -33,7 +33,7 @@ class EDIT_LINE;
 class EDIT_POINTS;
 
 /**
- * Class EDIT_CONSTRAINT
+ * EDIT_CONSTRAINT
  *
  * Allows one to describe constraints between two edit handles. After the constrained handle is changed,
  * Apply() has to be called to fix its coordinates according to the implemented constraint.
@@ -74,7 +74,7 @@ protected:
 
 
 /**
- * Class EC_VERTICAL.
+ * EC_VERTICAL.
  *
  * EDIT_CONSTRAINT that imposes a constraint that two points have to have the same X coordinate.
  */
@@ -100,7 +100,7 @@ private:
 
 
 /**
- * Class EC_HORIZONTAL.
+ * EC_HORIZONTAL.
  *
  * EDIT_CONSTRAINT that imposes a constraint that two points have to have the same Y coordinate.
  */
@@ -126,7 +126,7 @@ private:
 
 
 /**
- * Class EC_45DEGREE
+ * EC_45DEGREE
  *
  * EDIT_CONSTRAINT that imposes a constraint that two points have to be located at angle of 45
  * degree multiplicity.
@@ -153,7 +153,7 @@ private:
 
 
 /**
- * Class EC_LINE
+ * EC_LINE
  *
  * EDIT_CONSTRAINT that imposes a constraint that a point has to lie on a line (determined
  * by 2 points).
@@ -173,7 +173,7 @@ private:
 
 
 /**
- * Class EC_CIRCLE.
+ * EC_CIRCLE.
  *
  * EDIT_CONSTRAINT that imposes a constraint that a point has to lie on a circle.
  */
@@ -204,7 +204,7 @@ private:
 
 
 /**
- * Class EC_CONVERGING
+ * EC_CONVERGING
  *
  * EDIT_CONSTRAINT for 3 segments: dragged and two adjacent ones, enforcing to keep their slopes
  * and allows only to change ending points. Applied to zones.
@@ -239,7 +239,7 @@ private:
 
 
 /**
- * Class EC_SNAPLINE
+ * EC_SNAPLINE
  *
  * EDIT_CONSTRAINT for a EDIT_LINE, one of the ends is snapped to a spot determined by a
  * transform function passed as parameter (e.g. it can be snapped to a grid), instead of having

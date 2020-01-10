@@ -45,7 +45,7 @@ class SCH_REFERENCE;
 class SCH_REFERENCE_LIST;
 
 /**
- * Class SCH_REFERENCE
+ * SCH_REFERENCE
  * is used as a helper to define a component's reference designator in a schematic.  This
  * helper is required in a complex hierarchy because a component can be used more than
  * once and its reference depends on the sheet path.  This class is used to flatten the
@@ -195,7 +195,7 @@ public:
 
 
 /**
- * Class SCH_REFERENCE_LIST
+ * SCH_REFERENCE_LIST
  * is used to create a flattened list of components because in a complex hierarchy, a component
  * can be used more than once and its reference designator is dependent on the sheet path for
  * the same component.  This flattened list is used for netlist generation, BOM generation,

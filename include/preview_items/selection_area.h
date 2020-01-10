@@ -36,7 +36,7 @@ namespace PREVIEW
 {
 
 /**
- * Class SELECTION_AREA
+ * SELECTION_AREA
  *
  * Represents a selection area (currently a rectangle) in a VIEW,
  * drawn corner-to-corner between two points. This is useful when

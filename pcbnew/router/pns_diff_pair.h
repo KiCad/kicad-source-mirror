@@ -38,7 +38,7 @@ namespace PNS {
 class DIFF_PAIR;
 
 /**
- * Class DP_GATEWAY
+ * DP_GATEWAY
  *
  * Defines a "gateway" for routing a differential pair - e.g. a pair of points (anchors) with certain
  * orientation, spacing and (optionally) predefined entry paths. The routing algorithm connects such
@@ -129,7 +129,7 @@ private:
 };
 
 /**
- * Class DP_PRIMITIVE_PAIR
+ * DP_PRIMITIVE_PAIR
  *
  * Stores staring/ending primitives (pads, vias or segments) for a differential pair.
  **/
@@ -178,7 +178,7 @@ private:
 };
 
 /**
- * Class DP_GATEWAYS
+ * DP_GATEWAYS
  *
  * A set of gateways calculated for the cursor or starting/ending primitive pair.
  **/
@@ -257,7 +257,7 @@ class DP_GATEWAYS
 
 
 /**
- * Class DIFF_PAIR
+ * DIFF_PAIR
  *
  * Basic class for a differential pair. Stores two PNS_LINEs (for positive and negative nets, respectively),
  * the gap and coupling constraints.

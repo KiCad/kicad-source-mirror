@@ -25,7 +25,7 @@
 
 
 /**
- * Class PCBNEW_CONTROL
+ * PCBNEW_CONTROL
  *
  * Handles actions that are shared between different frames in pcbnew.
  */

@@ -57,7 +57,7 @@ using namespace SCH;
 
 
 /**
- * Class DIR_WRAP
+ * DIR_WRAP
  * provides a destructor which is invoked if an exception is thrown.
  */
 class DIR_WRAP
@@ -80,7 +80,7 @@ public:
 
 
 /**
- * Class FILE_WRAP
+ * FILE_WRAP
  * provides a destructor which is invoked if an exception is thrown.
  */
 class FILE_WRAP

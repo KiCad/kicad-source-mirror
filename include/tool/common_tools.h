@@ -30,7 +30,7 @@
 class EDA_DRAW_FRAME;
 
 /**
- * Class COMMON_TOOLS
+ * COMMON_TOOLS
  *
  * Handles actions that are shared between different applications
  */

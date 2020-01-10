@@ -37,7 +37,7 @@
 #include <common.h>
 
 /**
- * Class GRID_TYPE
+ * GRID_TYPE
  * is for grid arrays.
  */
 class GRID_TYPE
@@ -68,7 +68,7 @@ typedef std::vector<GRID_TYPE> GRIDS;
 
 
 /**
- * Class BASE_SCREEN
+ * BASE_SCREEN
  * handles how to draw a screen (a board, a schematic ...)
  */
 class BASE_SCREEN : public EDA_ITEM

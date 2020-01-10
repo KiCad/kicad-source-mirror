@@ -69,7 +69,7 @@ typedef std::set< STRING >          NAME_CACHE;
 namespace SCH {
 
 /**
- * Class DIR_LIB_SOURCE
+ * DIR_LIB_SOURCE
  * implements a LIB_SOURCE in a file system directory.
  *
  * @author Dick Hollenbeck

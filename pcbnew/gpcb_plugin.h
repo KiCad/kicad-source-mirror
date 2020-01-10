@@ -38,7 +38,7 @@ class GPCB_FPL_CACHE;
 
 
 /**
- * Class GPCB_PLUGIN
+ * GPCB_PLUGIN
  * is a PLUGIN derivation for saving and loading Geda PCB files.
  *
  * @note This class is not thread safe, but it is re-entrant multiple times in sequence.

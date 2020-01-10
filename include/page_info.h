@@ -42,7 +42,7 @@
 
 
 /**
- * Class PAGE_INFO
+ * PAGE_INFO
  * describes the page size and margins of a paper page on which to
  * eventually print or plot.  Paper sizes are often described in inches.
  * Here paper is described in 1/1000th of an inch (mils).  For convenience

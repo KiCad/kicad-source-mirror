@@ -23,7 +23,7 @@
 #include <collector.h>
 
 /**
- * Class GERBER_COLLECTOR
+ * GERBER_COLLECTOR
  * is intended for use when the right click button is pressed, or when the
  * plain "arrow" tool is in effect.
  */

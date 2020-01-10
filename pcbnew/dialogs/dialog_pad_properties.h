@@ -41,7 +41,7 @@
 #include <widgets/unit_binder.h>
 
 /**
- * class DIALOG_PAD_PROPERTIES, derived from DIALOG_PAD_PROPERTIES_BASE,
+ * DIALOG_PAD_PROPERTIES, derived from DIALOG_PAD_PROPERTIES_BASE,
  * created by wxFormBuilder
  */
 class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE

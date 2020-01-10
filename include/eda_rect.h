@@ -34,7 +34,7 @@
 #include <math/box2.h>
 
 /**
- * Class EDA_RECT
+ * EDA_RECT
  * handles the component boundary box.
  * This class is similar to wxRect, but some wxRect functions are very curious,
  * and are working only if dimensions are >= 0 (not always the case in KiCad)

@@ -38,7 +38,7 @@ typedef void CURL;
 struct curl_slist;
 
 /**
- * Class KICAD_CURL_EASY
+ * KICAD_CURL_EASY
  * wrapper interface around the curl_easy API
  *
  * Handling of using the curl_easy API to make a request and save the response to

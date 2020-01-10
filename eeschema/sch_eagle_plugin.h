@@ -72,7 +72,7 @@ typedef boost::ptr_map<wxString, EPART> EPART_LIST;
 
 
 /**
- * Class SCH_EAGLE_PLUGIN
+ * SCH_EAGLE_PLUGIN
  * is a #SCH_PLUGIN derivation for loading 6.x+ Eagle schematic files.
  *
  * As with all SCH_PLUGINs there is no UI dependencies i.e. windowing calls allowed.
