@@ -90,8 +90,6 @@ BOOST_AUTO_TEST_CASE( Empty )
     // These accessors return nullptr when empty (i.e. they don't crash)
     BOOST_CHECK_EQUAL( m_empty_path.Last(), nullptr );
     BOOST_CHECK_EQUAL( m_empty_path.LastScreen(), nullptr );
-    BOOST_CHECK_EQUAL( m_empty_path.LastDrawList(), nullptr );
-    BOOST_CHECK_EQUAL( m_empty_path.FirstDrawList(), nullptr );
 
     BOOST_CHECK_EQUAL( m_empty_path.Path(), "/" );
     BOOST_CHECK_EQUAL( m_empty_path.PathHumanReadable(), "/" );
@@ -113,8 +111,6 @@ BOOST_AUTO_TEST_CASE( NonEmpty )
 
     BOOST_CHECK_EQUAL( m_linear.Last(), &m_sheets[2] );
     BOOST_CHECK_EQUAL( m_linear.LastScreen(), nullptr );
-    BOOST_CHECK_EQUAL( m_linear.LastDrawList(), nullptr );
-    BOOST_CHECK_EQUAL( m_linear.FirstDrawList(), nullptr );
 
     // don't know what the timestamps will be, but we know the format: /<8 chars>/<8 chars>/
     BOOST_CHECK_PREDICATE(

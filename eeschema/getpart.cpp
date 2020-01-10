@@ -24,30 +24,31 @@
  */
 
 #include <algorithm>
-#include <fctsys.h>
-#include <pgm_base.h>
-#include <kiway.h>
-#include <gr_basic.h>
-#include <sch_draw_panel.h>
-#include <confirm.h>
-#include <sch_edit_frame.h>
-#include <msgpanel.h>
-#include <tool/tool_manager.h>
-#include <tools/ee_actions.h>
-#include <general.h>
 #include <class_library.h>
-#include <sch_component.h>
+#include <confirm.h>
+#include <eeschema_id.h>
+#include <fctsys.h>
+#include <general.h>
+#include <gr_basic.h>
+#include <kiway.h>
 #include <lib_edit_frame.h>
 #include <lib_view_frame.h>
+#include <msgpanel.h>
+#include <pgm_base.h>
+#include <project.h>
+#include <sch_component.h>
+#include <sch_draw_panel.h>
+#include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
+#include <tool/tool_manager.h>
+#include <tools/ee_actions.h>
 
 #include <dialog_choose_component.h>
 #include <symbol_tree_model_adapter.h>
 
 
-SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowser(
-        wxTopLevelWindow* aParent, const SCHLIB_FILTER* aFilter, const LIB_ID& aPreselectedLibId,
-        int aUnit, int aConvert )
+COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowser( wxTopLevelWindow* aParent,
+        const SCHLIB_FILTER* aFilter, const LIB_ID& aPreselectedLibId, int aUnit, int aConvert )
 {
     // Close any open non-modal Lib browser, and open a new one, in "modal" mode:
     LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
@@ -90,15 +91,9 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowse
 }
 
 
-SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree(
-        const SCHLIB_FILTER* aFilter,
-        std::vector<COMPONENT_SELECTION>& aHistoryList,
-        bool aUseLibBrowser,
-        int aUnit,
-        int aConvert,
-        bool aShowFootprints,
-        const LIB_ID* aHighlight,
-        bool aAllowFields )
+COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* aFilter,
+        std::vector<COMPONENT_SELECTION>& aHistoryList, bool aUseLibBrowser, int aUnit,
+        int aConvert, bool aShowFootprints, const LIB_ID* aHighlight, bool aAllowFields )
 {
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_COMPONENT::g_Mutex, std::defer_lock );
     wxString                     dialogTitle;

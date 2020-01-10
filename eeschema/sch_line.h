@@ -59,9 +59,6 @@ public:
 
     ~SCH_LINE() { }
 
-    SCH_LINE* Next() const { return (SCH_LINE*) Pnext; }
-    SCH_LINE* Back() const { return (SCH_LINE*) Pback; }
-
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && SCH_LINE_T == aItem->Type();
@@ -72,7 +69,7 @@ public:
         return wxT( "SCH_LINE" );
     }
 
-    bool IsType( const KICAD_T aScanTypes[] ) override
+    bool IsType( const KICAD_T aScanTypes[] ) const override
     {
         if( SCH_ITEM::IsType( aScanTypes ) )
             return true;

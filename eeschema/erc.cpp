@@ -174,23 +174,23 @@ static int MinimalReq[PINTYPE_COUNT][PINTYPE_COUNT] =
 int TestDuplicateSheetNames( bool aCreateMarker )
 {
     SCH_SCREEN* screen;
-    SCH_ITEM*   item;
-    SCH_ITEM*   test_item;
     int         err_count = 0;
     SCH_SCREENS screenList;      // Created the list of screen
 
     for( screen = screenList.GetFirst(); screen != NULL; screen = screenList.GetNext() )
     {
-        for( item = screen->GetDrawItems(); item != NULL; item = item->Next() )
-        {
-            // search for a sheet;
-            if( item->Type() != SCH_SHEET_T )
-                continue;
+        std::vector<SCH_SHEET*> list;
 
-            for(  test_item = item->Next(); test_item != NULL; test_item = test_item->Next() )
+        for( auto item : screen->Items().OfType( SCH_SHEET_T ) )
+            list.push_back( static_cast<SCH_SHEET*>( item ) );
+
+        for( size_t i = 0; i < list.size(); i++ )
+        {
+            auto item = list[i];
+
+            for( size_t j = i + 1; j < list.size(); j++ )
             {
-                if( test_item->Type() != SCH_SHEET_T )
-                    continue;
+                auto test_item = list[j];
 
                 // We have found a second sheet: compare names
                 // we are using case insensitive comparison to avoid mistakes between
@@ -584,12 +584,9 @@ bool WriteDiagnosticERC( EDA_UNITS aUnits, const wxString& aFullFileName )
         msg << wxString::Format( _( "\n***** Sheet %s\n" ),
                                  GetChars( sheetList[i].PathHumanReadable() ) );
 
-        for( SCH_ITEM* item = sheetList[i].LastDrawList(); item != NULL; item = item->Next() )
+        for( auto aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
-            if( item->Type() != SCH_MARKER_T )
-                continue;
-
-            SCH_MARKER* marker = (SCH_MARKER*) item;
+            auto marker = static_cast<const SCH_MARKER*>( aItem );
 
             if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
                 continue;

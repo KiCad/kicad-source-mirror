@@ -383,7 +383,7 @@ public:
         return wxT( "SCH_LABEL" );
     }
 
-    bool IsType( const KICAD_T aScanTypes[] ) override ;
+    bool IsType( const KICAD_T aScanTypes[] ) const override;
 
     const EDA_RECT GetBoundingBox() const override;
 

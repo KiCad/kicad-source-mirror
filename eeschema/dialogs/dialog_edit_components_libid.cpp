@@ -417,27 +417,6 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
 
     m_isModified = false;
 
-    // Build the component list:
-#if 0
-    // This option build a component list that works fine to edit LIB_ID fields, but does not display
-    // all components in a complex hierarchy.
-    // the list is shorter, but can be look like there are missing components in list
-    SCH_SCREENS screens;
-
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
-    {
-        for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
-        {
-            if( item->Type() == SCH_COMPONENT_T )
-            {
-                CMP_CANDIDATE candidate( static_cast< SCH_COMPONENT* >( item ) );
-                candidate.m_Screen = screen;
-                candidate.m_Reference = candidate.m_Component->GetField( REFERENCE )->GetFullyQualifiedText();
-                m_components.push_back( candidate );
-            }
-        }
-    }
-#else
     // This option build the full component list
     // In complex hierarchies, the same component is in fact duplicated, but
     // it is listed with different references (one by sheet instance)
@@ -460,7 +439,6 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
         candidate.m_IsOrphan = ( unitcount == 0 );
         m_components.push_back( candidate );
     }
-#endif
 
     if( m_components.size() == 0 )
         return;
@@ -734,7 +712,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::setLibIdByBrowser( int aRow )
     if( !current.IsEmpty() )
         aPreselectedLibid.Parse( current, LIB_ID::ID_SCH, true );
 
-    SCH_BASE_FRAME::COMPONENT_SELECTION sel =
+    COMPONENT_SELECTION sel =
             m_parent->SelectComponentFromLibBrowser( this, NULL, aPreselectedLibid, 0, 0 );
 #endif
 

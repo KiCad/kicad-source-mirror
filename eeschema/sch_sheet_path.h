@@ -195,22 +195,11 @@ public:
      * Function LastScreen
      * @return the SCH_SCREEN relative to the last sheet in list
      */
+    SCH_SCREEN* LastScreen();
+
+
+    ///> @copydoc SCH_SHEET_PATH::LastScreen()
     SCH_SCREEN* LastScreen() const;
-
-    /**
-     * Function LastDrawList
-     * @return a pointer to the first schematic item handled by the
-     * SCH_SCREEN relative to the last sheet in list
-     */
-    SCH_ITEM* LastDrawList() const;
-
-    /**
-     * Get the last schematic item relative to the first sheet in the list.
-     *
-     * @return Last schematic item relative to the first sheet in the list if list
-     *         is not empty.  Otherwise NULL.
-     */
-    SCH_ITEM* FirstDrawList() const;
 
     /**
      * Function Path
@@ -283,30 +272,6 @@ public:
      */
     bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
                                 bool aSetVisible );
-
-    /**
-     * Find the next schematic item in this sheet object.
-     *
-     * @param aType - The type of schematic item object to search for.
-     * @param aLastItem - Start search from aLastItem.  If no aLastItem, search from
-     *                    the beginning of the list.
-     * @param aWrap - Wrap around the end of the list to find the next item if aLastItem
-     *                is defined.
-     * @return - The next schematic item if found.  Otherwise, NULL is returned.
-     */
-    SCH_ITEM* FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
-
-    /**
-     * Find the previous schematic item in this sheet path object.
-     *
-     * @param aType - The type of schematic item object to search for.
-     * @param aLastItem - Start search from aLastItem.  If no aLastItem, search from
-     *                    the end of the list.
-     * @param aWrap - Wrap around the beginning of the list to find the next item if aLastItem
-     *                is defined.
-     * @return - The previous schematic item if found.  Otherwise, NULL is returned.
-     */
-    SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false ) const;
 
     /**
      * Function TestForRecursion
@@ -452,34 +417,6 @@ public:
      */
     void GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
                                  bool aIncludePowerSymbols = true );
-
-    /**
-     * Function FindNextItem
-     * searches the entire schematic for the next schematic object.
-     *
-     * @param aType - The type of schematic item to find.
-     * @param aSheetFound - The sheet the item was found in.  NULL if the next item
-     *                      is not found.
-     * @param aLastItem - Find next item after aLastItem if not NULL.
-     * @param aWrap - Wrap past around the end of the list of sheets.
-     * @return If found, Returns the next schematic item.  Otherwise, returns NULL.
-     */
-    SCH_ITEM* FindNextItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFound = NULL,
-                            SCH_ITEM* aLastItem = NULL, bool aWrap = true );
-
-    /**
-     * Function FindPreviousItem
-     * searches the entire schematic for the previous schematic item.
-     *
-     * @param aType - The type of schematic item to find.
-     * @param aSheetFound - The sheet the item was found in.  NULL if the previous item
-     *                      is not found.
-     * @param aLastItem - Find the previous item before aLastItem if not NULL.
-     * @param aWrap - Wrap past around the beginning of the list of sheets.
-     * @return If found, the previous schematic item.  Otherwise, NULL.
-     */
-    SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFound = NULL,
-                                SCH_ITEM* aLastItem = NULL, bool aWrap = true );
 
     /**
      * Function SetFootprintField

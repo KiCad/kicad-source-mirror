@@ -7,16 +7,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}
     )
 
-
-add_executable( container_test
-    EXCLUDE_FROM_ALL
-    container_test.cpp
-    )
-target_link_libraries( container_test
-    common
-    ${wxWidgets_LIBRARIES}
-    )
-
 add_executable( test-nm-biu-to-ascii-mm-round-tripping
     EXCLUDE_FROM_ALL
     test-nm-biu-to-ascii-mm-round-tripping.cpp

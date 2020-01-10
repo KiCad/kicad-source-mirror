@@ -36,7 +36,6 @@ class LINE_READER;
 class OUTPUTFORMATTER;
 class LIB_PART;
 class PLOTTER;
-class LIB_ITEM;
 class LIB_PIN;
 class MSG_PANEL_ITEM;
 

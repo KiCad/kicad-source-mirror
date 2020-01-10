@@ -104,7 +104,6 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 {
     wxASSERT( aSheet && aHierarchy );
 
-    int         i;
     wxString    msg;
     wxString    topLevelSheetPath;
     wxFileName  tmp;
@@ -448,14 +447,13 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
     // Check for duplicate sheet names in the current page.
     wxArrayString duplicateSheetNames;
-    EE_TYPE_COLLECTOR sheets;
 
-    sheets.Collect( currentScreen->GetDrawItems(), EE_COLLECTOR::SheetsOnly );
-
-    for( i = 0;  i < sheets.GetCount();  ++i )
+    for( auto item : currentScreen->Items().OfType( SCH_SHEET_T ) )
     {
-        if( newSheet->GetScreen()->GetSheet( ( ( SCH_SHEET* ) sheets[i] )->GetName() ) )
-            duplicateSheetNames.Add( ( ( SCH_SHEET* ) sheets[i] )->GetName() );
+        auto sheet = static_cast<SCH_SHEET*>( item );
+
+        if( newSheet->GetScreen()->GetSheet( sheet->GetName() ) )
+            duplicateSheetNames.Add( sheet->GetName() );
     }
 
     if( !duplicateSheetNames.IsEmpty() )
@@ -484,15 +482,11 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     }
 
     // Set all sheets loaded into the correct sheet file paths.
-    EE_TYPE_COLLECTOR newTopLevelSheets;
 
-    newTopLevelSheets.Collect( newSheet->GetScreen()->GetDrawItems(), EE_COLLECTOR::SheetsOnly );
-
-    for( i = 0;  i < newTopLevelSheets.GetCount();  ++i )
+    for( auto aItem : currentScreen->Items().OfType( SCH_SHEET_T ) )
     {
-        SCH_SHEET* tmpSheet = dynamic_cast< SCH_SHEET* >( newTopLevelSheets[i] );
-        wxCHECK2( tmpSheet != nullptr, continue );
-        tmpSheet->SetFileName( topLevelSheetPath + tmpSheet->GetFileName() );
+        auto sheet = static_cast<SCH_SHEET*>( aItem );
+        sheet->SetFileName( topLevelSheetPath + sheet->GetFileName() );
     }
 
     if( libTableChanged )
@@ -821,14 +815,11 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL*
 SCH_HIERLABEL* SCH_EDIT_FRAME::ImportHierLabel( SCH_SHEET* aSheet )
 {
     if( !aSheet->GetScreen() )
-        return NULL;
+        return nullptr;
 
-    for( EDA_ITEM* item = aSheet->GetScreen()->GetDrawItems(); item != NULL; item = item->Next() )
+    for( auto item : aSheet->GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
     {
-        if( item->Type() != SCH_HIER_LABEL_T )
-            continue;
-
-        SCH_HIERLABEL* label = (SCH_HIERLABEL*) item;
+        auto label = static_cast<SCH_HIERLABEL*>( item );
 
         /* A global label has been found: check if there a corresponding sheet label. */
         if( !aSheet->HasPin( label->GetText() ) )

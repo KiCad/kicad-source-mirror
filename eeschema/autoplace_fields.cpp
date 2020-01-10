@@ -266,18 +266,21 @@ protected:
      */
     void get_possible_colliders( std::vector<SCH_ITEM*>& aItems )
     {
-        wxASSERT_MSG( m_screen, "get_possible_colliders() with null m_screen" );
-        for( SCH_ITEM* item = m_screen->GetDrawItems(); item; item = item->Next() )
+        wxCHECK_RET( m_screen, "get_possible_colliders() with null m_screen" );
+
+        for( auto item : m_screen->Items().Overlapping( m_component->GetBoundingBox() ) )
         {
             if( SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( item ) )
             {
-                if( comp == m_component ) continue;
+                if( comp == m_component )
+                    continue;
 
                 std::vector<SCH_FIELD*> fields;
                 comp->GetFields( fields, /* aVisibleOnly */ true );
                 for( SCH_FIELD* field : fields )
                     aItems.push_back( field );
             }
+
             aItems.push_back( item );
         }
     }

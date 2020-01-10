@@ -1042,7 +1042,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
         {
             EE_COLLECTOR collector;
             collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-            collector.Collect( m_frame->GetScreen()->GetDrawItems(), deletableItems, (wxPoint) aPos );
+            collector.Collect( m_frame->GetScreen(), deletableItems, (wxPoint) aPos );
 
             EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
             selectionTool->GuessSelectionCandidates( collector, aPos );
@@ -1158,6 +1158,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 
     component->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
 
+    m_frame->GetScreen()->Update( component );
     updateView( component );
     m_frame->OnModify();
 
@@ -1169,11 +1170,9 @@ int SCH_EDIT_TOOL::UpdateFields( const TOOL_EVENT& aEvent )
 {
     std::list<SCH_COMPONENT*> components;
 
-    for( SCH_ITEM* item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
-    {
-        if( item->Type() == SCH_COMPONENT_T )
-            components.push_back( static_cast<SCH_COMPONENT*>( item ) );
-    }
+    for( auto item : m_frame->GetScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        components.push_back( static_cast<SCH_COMPONENT*>( item ) );
+
 
     if( InvokeDialogUpdateFields( m_frame, components, true ) == wxID_OK )
         m_frame->GetCanvas()->Refresh();
@@ -1360,6 +1359,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         wxFAIL_MSG( wxString( "Cannot edit schematic item type " ) + item->GetClass() );
     }
 
+    m_frame->GetScreen()->Update( item );
     updateView( item );
 
     if( selection.IsHover() )
@@ -1388,6 +1388,7 @@ int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
             entry->SetBusEntryShape( shape );
             m_frame->TestDanglingEnds();
 
+            m_frame->GetScreen()->Update( entry );
             updateView( entry );
             m_frame->OnModify( );
         }
@@ -1457,6 +1458,7 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 
     sheet->CleanupSheet();
 
+    m_frame->GetScreen()->Update( sheet );
     updateView( sheet );
     m_frame->OnModify();
 

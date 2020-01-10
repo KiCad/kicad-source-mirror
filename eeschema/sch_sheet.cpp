@@ -245,23 +245,17 @@ bool SCH_SHEET::HasUndefinedPins()
     for( const SCH_SHEET_PIN& pin : m_pins )
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
-        EDA_ITEM* DrawStruct  = m_screen->GetDrawItems();
-        const SCH_HIERLABEL* HLabel = NULL;
-
-        for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
+        const SCH_HIERLABEL* HLabel = nullptr;
+        for( auto aItem : m_screen->Items().OfType( SCH_HIER_LABEL_T ) )
         {
-            if( DrawStruct->Type() != SCH_HIER_LABEL_T )
-                continue;
-
-            HLabel = static_cast<SCH_HIERLABEL*>( DrawStruct );
-
-            if( pin.GetText().CmpNoCase( HLabel->GetText() ) == 0 )
-                break;  // Found!
-
-            HLabel = NULL;
+            if( !pin.GetText().CmpNoCase( static_cast<SCH_HIERLABEL*>( aItem )->GetText() ) )
+            {
+                HLabel = static_cast<SCH_HIERLABEL*>( aItem );
+                break;
+            }
         }
 
-        if( HLabel == NULL )   // Corresponding hierarchical label not found.
+        if( HLabel == nullptr ) // Corresponding hierarchical label not found.
             return true;
     }
 
@@ -355,20 +349,15 @@ void SCH_SHEET::CleanupSheet()
     while( i != m_pins.end() )
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
-        EDA_ITEM* DrawStruct = m_screen->GetDrawItems();
         const SCH_HIERLABEL* HLabel = NULL;
 
-        for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
+        for( auto aItem : m_screen->Items().OfType( SCH_HIER_LABEL_T ) )
         {
-            if( DrawStruct->Type() != SCH_HIER_LABEL_T )
-                continue;
-
-            HLabel = static_cast<SCH_HIERLABEL*>( DrawStruct );
-
-            if( i->GetText().CmpNoCase( HLabel->GetText() ) == 0 )
-                break;  // Found!
-
-            HLabel = NULL;
+            if( !i->GetText().CmpNoCase( static_cast<SCH_HIERLABEL*>( aItem )->GetText() ) )
+            {
+                HLabel = static_cast<SCH_HIERLABEL*>( aItem );
+                break;
+            }
         }
 
         if( HLabel == NULL )   // Hlabel not found: delete sheet label.
@@ -527,30 +516,22 @@ wxPoint SCH_SHEET::GetRotationCenter() const
 }
 
 
-int SCH_SHEET::ComponentCount()
+int SCH_SHEET::ComponentCount() const
 {
     int n = 0;
 
     if( m_screen )
     {
-        EDA_ITEM* bs;
-
-        for( bs = m_screen->GetDrawItems(); bs != NULL; bs = bs->Next() )
+        for( auto aItem : m_screen->Items().OfType( SCH_COMPONENT_T ) )
         {
-            if( bs->Type() == SCH_COMPONENT_T )
-            {
-                SCH_COMPONENT* Cmp = (SCH_COMPONENT*) bs;
+            SCH_COMPONENT* Cmp = (SCH_COMPONENT*) aItem;
 
-                if( Cmp->GetField( VALUE )->GetText().GetChar( 0 ) != '#' )
-                    n++;
-            }
-
-            if( bs->Type() == SCH_SHEET_T )
-            {
-                SCH_SHEET* sheet = (SCH_SHEET*) bs;
-                n += sheet->ComponentCount();
-            }
+            if( Cmp->GetField( VALUE )->GetText().GetChar( 0 ) != '#' )
+                n++;
         }
+
+        for( auto aItem : m_screen->Items().OfType( SCH_SHEET_T ) )
+            n += static_cast<const SCH_SHEET*>( aItem )->ComponentCount();
     }
 
     return n;
@@ -559,47 +540,33 @@ int SCH_SHEET::ComponentCount()
 
 bool SCH_SHEET::SearchHierarchy( const wxString& aFilename, SCH_SCREEN** aScreen )
 {
-    SCH_SHEET*  sheet = nullptr;
-    SCH_SCREEN* screen = nullptr;
-
     if( m_screen )
     {
         // Only check the root sheet once and don't recurse.
         if( !GetParent() )
         {
-            sheet = this;
-            screen = m_screen;
+            if( m_screen && m_screen->GetFileName().Cmp( aFilename ) == 0 )
+            {
+                *aScreen = m_screen;
+                return true;
+            }
+        }
 
+        for( auto aItem : m_screen->Items().OfType( SCH_SHEET_T ) )
+        {
+            SCH_SHEET*  sheet  = static_cast<SCH_SHEET*>( aItem );
+            SCH_SCREEN* screen = sheet->m_screen;
+
+            // Must use the screen's path (which is always absolute) rather than the
+            // sheet's (which could be relative).
             if( screen && screen->GetFileName().Cmp( aFilename ) == 0 )
             {
                 *aScreen = screen;
                 return true;
             }
-        }
 
-        EDA_ITEM* item = m_screen->GetDrawItems();
-
-        while( item )
-        {
-            if( item->Type() == SCH_SHEET_T )
-            {
-                // Must use the screen's path (which is always absolute) rather than the
-                // sheet's (which could be relative).
-                sheet = static_cast< SCH_SHEET* >( item );
-                screen = sheet->m_screen;
-
-                if( screen && screen->GetFileName().Cmp( aFilename ) == 0 )
-                {
-                    *aScreen = screen;
-                    return true;
-                }
-                else if( sheet->SearchHierarchy( aFilename, aScreen ) )
-                {
-                    return true;
-                }
-            }
-
-            item = item->Next();
+            if( sheet->SearchHierarchy( aFilename, aScreen ) )
+                return true;
         }
     }
 
@@ -616,19 +583,14 @@ bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
         if( m_screen == aScreen )
             return true;
 
-        EDA_ITEM* strct = m_screen->GetDrawItems();
-
-        while( strct )
+        for( auto item : m_screen->Items().OfType( SCH_SHEET_T ) )
         {
-            if( strct->Type() == SCH_SHEET_T )
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+            if( sheet->LocatePathOfScreen( aScreen, aList ) )
             {
-                SCH_SHEET* ss = (SCH_SHEET*) strct;
-
-                if( ss->LocatePathOfScreen( aScreen, aList ) )
-                    return true;
+                return true;
             }
-
-            strct = strct->Next();
         }
 
         aList->pop_back();
@@ -644,17 +606,10 @@ int SCH_SHEET::CountSheets()
 
     if( m_screen )
     {
-        EDA_ITEM* strct = m_screen->GetDrawItems();
-
-        for( ; strct; strct = strct->Next() )
-        {
-            if( strct->Type() == SCH_SHEET_T )
-            {
-                SCH_SHEET* subsheet = (SCH_SHEET*) strct;
-                count += subsheet->CountSheets();
-            }
-        }
+        for( auto aItem : m_screen->Items().OfType( SCH_SHEET_T ) )
+            count += static_cast<SCH_SHEET*>( aItem )->CountSheets();
     }
+
     return count;
 }
 

@@ -47,6 +47,7 @@ add_executable( qa_eeschema
     test_eagle_plugin.cpp
     test_lib_part.cpp
     test_sch_pin.cpp
+    test_sch_rtree.cpp
     test_sch_sheet.cpp
     test_sch_sheet_path.cpp
 

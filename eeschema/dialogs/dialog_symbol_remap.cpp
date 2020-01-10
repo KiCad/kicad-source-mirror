@@ -243,32 +243,25 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
     wxString msg;
     SCH_SCREENS schematic;
     SCH_COMPONENT* symbol;
-    SCH_ITEM* item;
-    SCH_ITEM* nextItem;
     SCH_SCREEN* screen;
 
     for( screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
     {
-        for( item = screen->GetDrawItems(); item; item = nextItem )
+        for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
-            nextItem = item->Next();
-
-            if( item->Type() != SCH_COMPONENT_T )
-                continue;
-
-            symbol = dynamic_cast< SCH_COMPONENT* >( item );
+            symbol = dynamic_cast<SCH_COMPONENT*>( item );
 
             if( !remapSymbolToLibTable( symbol ) )
             {
                 msg.Printf( _( "No symbol \"%s\" found in symbol library table." ),
-                            symbol->GetLibId().GetLibItemName().wx_str() );
+                        symbol->GetLibId().GetLibItemName().wx_str() );
                 aReporter.Report( msg, REPORTER::RPT_WARNING );
             }
             else
             {
                 msg.Printf( _( "Symbol \"%s\" mapped to symbol library \"%s\"." ),
-                            symbol->GetLibId().GetLibItemName().wx_str(),
-                            symbol->GetLibId().GetLibNickname().wx_str() );
+                        symbol->GetLibId().GetLibItemName().wx_str(),
+                        symbol->GetLibId().GetLibNickname().wx_str() );
                 aReporter.Report( msg, REPORTER::RPT_ACTION );
                 screen->SetModify();
             }

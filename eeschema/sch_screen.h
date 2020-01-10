@@ -25,29 +25,38 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
+#include <memory>
+#include <stddef.h>
 #include <unordered_set>
-#include <macros.h>
-#include <dlist.h>
-#include <sch_item.h>
-#include <lib_item.h>
-#include <base_screen.h>
-#include <title_block.h>
-#include <page_info.h>
-#include <kiway_holder.h>
-#include <sch_marker.h>
-#include <bus_alias.h>
+#include <vector>
+#include <wx/arrstr.h>
+#include <wx/chartype.h>
+#include <wx/gdicmn.h>
+#include <wx/string.h>
 
+#include <base_screen.h>
+#include <base_struct.h>
+#include <core/typeinfo.h>
+#include <kiway_holder.h>
+#include <layers_id_colors_and_visibility.h>
+#include <marker_base.h>
+#include <page_info.h>
+#include <template_fieldnames.h>
+#include <title_block.h>
+
+#include <lib_id.h>
+#include <sch_rtree.h>
+#include <sch_sheet.h>
+#include <sch_sheet_path.h>
+
+class BUS_ALIAS;
 
 class LIB_PIN;
 class SCH_COMPONENT;
-class SCH_SHEET_LIST;
-class SCH_SHEET_PATH;
-class SCH_SHEET_PIN;
 class SCH_LINE;
 class SCH_TEXT;
 class PLOTTER;
 class SCH_SHEET_LIST;
-
 
 enum SCH_LINE_TEST_T
 {
@@ -60,6 +69,18 @@ enum SCH_LINE_TEST_T
 /// Max number of sheets in a hierarchy project
 #define NB_MAX_SHEET    500
 
+struct COMPONENT_SELECTION
+{
+    LIB_ID LibId;
+    int    Unit;
+    int    Convert;
+
+    std::vector<std::pair<int, wxString>> Fields;
+
+    COMPONENT_SELECTION() : Unit( 1 ), Convert( 1 )
+    {
+    }
+};
 
 class SCH_SCREEN : public BASE_SCREEN, public KIWAY_HOLDER
 {
@@ -86,10 +107,10 @@ private:
     /// Origin of the auxiliary axis, which is used in exports mostly, but not yet in EESCHEMA
     wxPoint     m_aux_origin;
 
-    DLIST< SCH_ITEM > m_drawList;       ///< Object list for the screen.
+    EE_RTREE m_rtree;
 
-    int     m_modification_sync;        ///< inequality with PART_LIBS::GetModificationHash()
-                                        ///< will trigger ResolveAll().
+    int m_modification_sync; ///< inequality with PART_LIBS::GetModificationHash()
+                             ///< will trigger ResolveAll().
 
     /// List of bus aliases stored in this screen
     std::unordered_set< std::shared_ptr< BUS_ALIAS > > m_aliases;
@@ -103,7 +124,20 @@ public:
 
     ~SCH_SCREEN();
 
-    DLIST< SCH_ITEM > & GetDrawList() { return m_drawList; }
+    EE_RTREE& Items()
+    {
+        return m_rtree;
+    }
+
+    const EE_RTREE& Items() const
+    {
+        return m_rtree;
+    }
+
+    bool IsEmpty()
+    {
+        return m_rtree.empty();
+    }
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -126,7 +160,7 @@ public:
     void SetAuxOrigin( const wxPoint& aPosition )           { m_aux_origin = aPosition; }
 
     const TITLE_BLOCK& GetTitleBlock() const                { return m_titles; }
-    //TITLE_BLOCK& GetTitleBlock() const                      { return (TITLE_BLOCK&) m_titles; }
+
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )    { m_titles = aTitleBlock; }
 
     void DecRefCount();
@@ -146,16 +180,8 @@ public:
 
     wxArrayString& GetClientSheetPaths() { return m_clientSheetPathList; }
 
-    /**
-     * @return A pointer to the first item in the linked list of draw items.
-     */
-    SCH_ITEM* GetDrawItems() const                          { return m_drawList.begin(); }
 
-    void Append( SCH_ITEM* aItem )
-    {
-        m_drawList.Append( aItem );
-        --m_modification_sync;
-    }
+    void Append( SCH_ITEM* aItem );
 
     /**
      * Copy the contents of \a aScreen into this #SCH_SCREEN object.
@@ -170,20 +196,9 @@ public:
     void Append( SCH_SCREEN* aScreen );
 
     /**
-     * Add \a aList of SCH_ITEM objects to the list for draw items for the sheet.
-     *
-     * @param aList A reference to a #DLIST containing the #SCH_ITEM to add to the sheet.
-     */
-    void Append( DLIST< SCH_ITEM >& aList )
-    {
-        m_drawList.Append( aList );
-        --m_modification_sync;
-    }
-
-    /**
      * Delete all draw items and clears the project settings.
      */
-    void Clear();
+    void Clear( bool aFree = true );
 
     /**
      * Free all the items from the schematic associated with the screen.
@@ -200,8 +215,8 @@ public:
      * @param aType The type of item to find.
      * @return The item found that meets the search criteria or NULL if none found.
      */
-    SCH_ITEM* GetItem( const wxPoint& aPosition, int aAccuracy = 0,
-                       KICAD_T aType = SCH_LOCATE_ANY_T ) const;
+    SCH_ITEM* GetItem(
+            const wxPoint& aPosition, int aAccuracy = 0, KICAD_T aType = SCH_LOCATE_ANY_T );
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
 
@@ -249,6 +264,13 @@ public:
     void Remove( SCH_ITEM* aItem );
 
     /**
+     * Updates \a aItem's bounding box in the tree
+     *
+     * @param aItem Item that needs to be updated.
+     */
+    void Update( SCH_ITEM* aItem );
+
+    /**
      * Removes \a aItem from the linked list and deletes the object.
      *
      * If \a aItem is a schematic sheet label, it is removed from the screen associated with
@@ -267,19 +289,12 @@ public:
     bool TestDanglingEnds();
 
     /**
-     * Replace all of the wires, buses, and junctions in the screen with \a aWireList.
-     *
-     * @param aWireList List of wires to replace the existing wires with.
-     */
-    void ReplaceWires( DLIST< SCH_ITEM >& aWireList );
-
-    /**
-     * Add all wires and junctions connected to \a aSegment which are not connected any
-     * component pin to \a aItemList.
+     * Return all wires and junctions connected to \a aSegment which are not connected any
+     * component pin
      *
      * @param aSegment The segment to test for connections.
      */
-    void MarkConnections( SCH_LINE* aSegment );
+    std::set<SCH_ITEM*> MarkConnections( SCH_LINE* aSegment );
 
     /* full undo redo management : */
     // use BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aItem )
@@ -304,7 +319,7 @@ public:
      */
     void ClearDrawingState();
 
-    int CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) const;
+    size_t CountConnectedItems( const wxPoint& aPos, bool aTestJunctions );
 
     /**
      * Test if a junction is required for the items at \a aPosition on the screen.
@@ -343,7 +358,7 @@ public:
      * @return The pin item if found, otherwise NULL.
      */
     LIB_PIN* GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent = NULL,
-                     bool aEndPointOnly = false ) const;
+            bool aEndPointOnly = false );
 
     /**
      * Returns a sheet object pointer that is named \a aName.
@@ -388,14 +403,6 @@ public:
      */
     void GetHierarchicalItems( EDA_ITEMS& aItems );
 
-    /**
-     * Return a wire or bus item located at \a aPosition.
-     *
-     * @param aPosition The wxPoint to test for node items.
-     * @return The SCH_LINE* of the wire or bus item found at \a aPosition or NULL if item not
-     *         found.
-     */
-    SCH_LINE* GetWireOrBus( const wxPoint& aPosition );
 
     /**
      * Return a line item located at \a aPosition.

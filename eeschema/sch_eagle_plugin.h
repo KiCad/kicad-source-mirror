@@ -30,7 +30,6 @@
 #include <eagle_parser.h>
 #include <lib_item.h>
 #include <geometry/seg.h>
-#include <dlist.h>
 
 #include <boost/ptr_container/ptr_map.hpp>
 

@@ -659,7 +659,7 @@ EDA_ITEM* SCH_LABEL::Clone() const
 }
 
 
-bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] )
+bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
 {
     static KICAD_T wireTypes[] = { SCH_LINE_LOCATE_WIRE_T, EOT };
     static KICAD_T busTypes[] = { SCH_LINE_LOCATE_BUS_T, EOT };

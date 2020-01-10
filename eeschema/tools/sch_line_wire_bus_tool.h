@@ -105,7 +105,6 @@ private:
 
     /**
      * Searches for a sheet pin at a location
-     * TODO(snh): Move this to generalized search on RTree
      * @param aPosition grid point to search for existing sheet pin
      * @return Pointer to sheet pin or nullptr on failure
      */

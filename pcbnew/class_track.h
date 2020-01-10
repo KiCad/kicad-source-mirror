@@ -131,16 +131,6 @@ public:
         return SetState( TRACK_LOCKED, aLocked );
     }
 
-    /* Search (within the track linked list) the first segment matching the netcode
-     * ( the linked list is always sorted by net codes )
-     */
-    TRACK* GetStartNetCode( int NetCode );
-
-    /* Search (within the track linked list) the last segment matching the netcode
-     * ( the linked list is always sorted by net codes )
-     */
-    TRACK* GetEndNetCode( int NetCode );
-
     /**
      * Function GetLength
      * returns the length of the track using the hypotenuse calculation.

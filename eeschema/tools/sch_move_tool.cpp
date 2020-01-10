@@ -187,9 +187,10 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_dragAdditions.clear();
                 internalPoints.clear();
 
-                for( SCH_ITEM* it = m_frame->GetScreen()->GetDrawItems(); it; it = it->Next() )
+
+                for( auto it : m_frame->GetScreen()->Items() )
                 {
-                    it->ClearFlags(TEMP_SELECTED );
+                    it->ClearFlags( TEMP_SELECTED );
 
                     if( !it->IsSelected() )
                         it->ClearFlags( STARTPOINT | ENDPOINT );
@@ -432,14 +433,17 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : selection )
         item->ClearEditFlags();
 
-    m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
-
     if( restore_state )
     {
+        m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
         m_frame->RollbackSchematicFromUndo();
     }
     else
     {
+        // Moving items changes the RTree box bounds.
+        for( auto item : selection )
+            m_frame->GetScreen()->Update( static_cast<SCH_ITEM*>( item ) );
+
         // If we move items away from a junction, we _may_ want to add a junction there
         // to denote the state.
         for( auto it : internalPoints )
@@ -449,6 +453,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         }
 
         m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selection );
+        m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
 
         m_frame->SchematicCleanUp();
         m_frame->TestDanglingEnds();
@@ -471,7 +476,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoint,
                                            EDA_ITEMS& aList )
 {
-    for( SCH_ITEM* test = m_frame->GetScreen()->GetDrawItems(); test; test = test->Next() )
+    for( auto test : m_frame->GetScreen()->Items() )
     {
         if( test->IsSelected() || !test->IsConnectable() || !test->CanConnect( aOriginalItem ) )
             continue;
@@ -483,7 +488,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         case SCH_LINE_T:
         {
             // Select the connected end of wires/bus connections.
-            SCH_LINE* testLine = (SCH_LINE*) test;
+            SCH_LINE* testLine = static_cast<SCH_LINE*>( test );
 
             if( testLine->GetStartPoint() == aPoint )
             {

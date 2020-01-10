@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2018 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,6 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
     wxString footprint;
-    EDA_ITEM* DrawList;
     SCH_COMPONENT* component;
     wxString title = wxT( "Eeschema " ) + GetBuildVersion();
 
@@ -74,13 +73,16 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        for( DrawList = sheetList[i].LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
+        std::vector<SCH_COMPONENT*> cmps;
+
+        for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            DrawList = component = findNextComponentAndCreatePinList( DrawList, &sheetList[i] );
+            component = findNextComponent( item, &sheetList[i] );
 
-            if( component == NULL )
-                break;
+            if( !component )
+                continue;
 
+            CreatePinList( component, &sheetList[i] );
 
             if( !component->GetField( FOOTPRINT )->IsVoid() )
                 footprint = component->GetField( FOOTPRINT )->GetText();

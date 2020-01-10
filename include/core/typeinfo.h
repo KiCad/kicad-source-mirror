@@ -77,13 +77,13 @@ class EDA_ITEM;
  */
 enum KICAD_T
 {
-    NOT_USED = -1,          ///< the 3d code uses this value
+    NOT_USED = -1, ///< the 3d code uses this value
 
-    EOT = 0,                ///< search types array terminator (End Of Types)
+    EOT = 0, ///< search types array terminator (End Of Types)
 
     TYPE_NOT_INIT = 0,
     PCB_T,
-    SCREEN_T,               ///< not really an item, used to identify a screen
+    SCREEN_T, ///< not really an item, used to identify a screen
 
     // Items in pcb
     PCB_MODULE_T,           ///< class MODULE, a footprint
@@ -122,9 +122,10 @@ enum KICAD_T
     SCH_SHEET_T,
     SCH_PIN_T,
 
-    // Be prudent with these 3 types:
+    // Be prudent with these types:
     // they should be used only to locate a specific field type
     // among SCH_FIELD_T items types
+    // N.B. If you add a type here, be sure to add it below to the BaseType()
     SCH_FIELD_LOCATE_REFERENCE_T,
     SCH_FIELD_LOCATE_VALUE_T,
     SCH_FIELD_LOCATE_FOOTPRINT_T,
@@ -135,7 +136,7 @@ enum KICAD_T
     SCH_LINE_LOCATE_BUS_T,
     SCH_LINE_LOCATE_GRAPHIC_LINE_T,
 
-    // Same for picking labes attached to wires and/or busses
+    // Same for picking labels attached to wires and/or busses
     SCH_LABEL_LOCATE_WIRE_T,
     SCH_LABEL_LOCATE_BUS_T,
 
@@ -187,8 +188,8 @@ enum KICAD_T
     WSG_PAGE_T,
 
     // serialized layout used in undo/redo commands
-    WS_PROXY_UNDO_ITEM_T,  // serialized layout used in undo/redo commands
-    WS_PROXY_UNDO_ITEM_PLUS_T,   // serialized layout plus page and title block settings
+    WS_PROXY_UNDO_ITEM_T,      // serialized layout used in undo/redo commands
+    WS_PROXY_UNDO_ITEM_PLUS_T, // serialized layout plus page and title block settings
 
     /*
      * FOR PROJECT::_ELEMs
@@ -202,5 +203,35 @@ enum KICAD_T
     // End value
     MAX_STRUCT_TYPE_ID
 };
+
+/**
+ * Returns the underlying type of the given type.  This is useful for finding the
+ * element type given one of the "non-type" types such as SCH_LINE_LOCATE_WIRE_T
+ * @param aType Given type to resolve
+ * @return Base type
+ */
+constexpr KICAD_T BaseType( const KICAD_T aType )
+{
+    switch( aType )
+    {
+    case SCH_FIELD_LOCATE_REFERENCE_T:
+    case SCH_FIELD_LOCATE_VALUE_T:
+    case SCH_FIELD_LOCATE_FOOTPRINT_T:
+    case SCH_FIELD_LOCATE_DATASHEET_T:
+        return SCH_FIELD_T;
+
+    case SCH_LINE_LOCATE_WIRE_T:
+    case SCH_LINE_LOCATE_BUS_T:
+    case SCH_LINE_LOCATE_GRAPHIC_LINE_T:
+        return SCH_LINE_T;
+
+    case SCH_LABEL_LOCATE_WIRE_T:
+    case SCH_LABEL_LOCATE_BUS_T:
+        return SCH_LABEL_T;
+
+    default:
+        return aType;
+    }
+}
 
 #endif // __KICAD_TYPEINFO_H

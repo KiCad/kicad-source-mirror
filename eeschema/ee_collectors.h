@@ -26,11 +26,11 @@
 #ifndef EE_COLLECTORS_H
 #define EE_COLLECTORS_H
 
-
+#include <class_libentry.h>
 #include <collector.h>
+#include <dialogs/dialog_schematic_find.h>
 #include <sch_item.h>
 #include <sch_sheet_path.h>
-#include <dialogs/dialog_schematic_find.h>
 
 
 /**
@@ -70,7 +70,7 @@ public:
     /**
      * Function Collect
      * scans a EDA_ITEM using this class's Inspector method, which does the collection.
-     * @param aItem A EDA_ITEM to scan.
+     * @param aScreen The eeschema screen to use for scanning
      * @param aFilterList A list of #KICAD_T types with a terminating #EOT, that determines
      *                    what is to be collected and the priority order of the resulting
      *                    collection.
@@ -78,8 +78,22 @@ public:
      * @param aUnit A symbol unit filter (for symbol editor)
      * @param aConvert A DeMorgan filter (for symbol editor)
      */
-    void Collect( EDA_ITEM* aItem, const KICAD_T aFilterList[], const wxPoint& aPos,
-                  int aUnit = 0, int aConvert = 0 );
+    void Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], const wxPoint& aPos,
+            int aUnit = 0, int aConvert = 0 );
+
+    /**
+     * Function Collect
+     * scans a EDA_ITEM using this class's Inspector method, which does the collection.
+     * @param aItems The LIB_PART multivector holding the part components
+     * @param aFilterList A list of #KICAD_T types with a terminating #EOT, that determines
+     *                    what is to be collected and the priority order of the resulting
+     *                    collection.
+     * @param aPos A wxPoint to use in hit-testing.
+     * @param aUnit A symbol unit filter (for symbol editor)
+     * @param aConvert A DeMorgan filter (for symbol editor)
+     */
+    void Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterList[], const wxPoint& aPos,
+            int aUnit = 0, int aConvert = 0 );
 
     /**
      * Function IsCorner
@@ -106,37 +120,6 @@ public:
 public:
     int      m_Unit;            // Fixed symbol unit filter (for symbol editor)
     int      m_Convert;         // Fixed DeMorgan filter (for symbol editor)
-};
-
-
-/**
- * Class EE_TYPE_COLLECTOR
- * merely gathers up all SCH_ITEMs of a given set of KICAD_T type(s).  It does
- * no hit-testing.
- *
- * @see class COLLECTOR
- */
-class EE_TYPE_COLLECTOR : public EE_COLLECTOR
-{
-public:
-    /**
-     * Function Inspect
-     * is the examining function within the INSPECTOR which is passed to the Iterate function.
-     *
-     * @param testItem An EDA_ITEM to examine.
-     * @param testData is not used in this class.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *   else SCAN_CONTINUE;
-     */
-    SEARCH_RESULT Inspect( EDA_ITEM* testItem, void* testData ) override;
-
-    /**
-     * Function Collect
-     * scans a DLIST using this class's Inspector method, which does the collection.
-     * @param aItem The head of a DLIST to scan.
-     * @param aScanList The KICAD_Ts to gather up.
-     */
-    void Collect( EDA_ITEM* aItem, const KICAD_T aScanList[] );
 };
 
 

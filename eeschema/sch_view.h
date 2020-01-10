@@ -24,13 +24,13 @@
 #ifndef SCH_VIEW_H_
 #define SCH_VIEW_H_
 
-#include <memory>
-#include <view/view.h>
-#include <math/box2.h>
-
-#include <view/wx_view_controls.h>
-#include <ws_proxy_view_item.h>
+#include <base_struct.h>
 #include <layers_id_colors_and_visibility.h>
+#include <math/vector2d.h>
+#include <view/view.h>
+
+#include <memory>
+#include <vector>
 
 class SCH_SHEET;
 class SCH_SCREEN;

@@ -14,6 +14,7 @@
 //    * 1995 Sphere volume fix for degeneracy problem submitted by Paul Brook
 //    * 2004 Templated C++ port by Greg Douglas
 //    * 2013 CERN (www.cern.ch)
+//    * 2020 KiCad Developers - Add std::iterator support for searching
 //
 //LICENSE:
 //
@@ -31,9 +32,15 @@
 #include <cstdlib>
 
 #include <algorithm>
+#include <array>
 #include <functional>
+#include <iterator>
 
+#ifdef DEBUG
 #define ASSERT assert    // RTree uses ASSERT( condition )
+#else
+#define ASSERT( _x )
+#endif
 
 //
 // RTree.h
@@ -78,7 +85,14 @@ class RTree
 protected:
 
     struct Node; // Fwd decl.  Used by other internal structs and iterator
+
 public:
+    /// Minimal bounding rectangle (n-dimensional)
+    struct Rect
+    {
+        ELEMTYPE m_min[NUMDIMS]; ///< Min dimensions of bounding box
+        ELEMTYPE m_max[NUMDIMS]; ///< Max dimensions of bounding box
+    };
 
     // These constant must be declared after Branch and before Node struct
     // Stuck up here for MSVC 6 compiler.  NSVC .NET 2003 is much happier.
@@ -126,6 +140,15 @@ public:
     int Search( const ELEMTYPE a_min[NUMDIMS],
                 const ELEMTYPE a_max[NUMDIMS],
                 std::function<bool (const DATATYPE&)> a_callback ) const;
+
+    /// Find all within search rectangle
+    /// \param a_min Min of search bounding rect
+    /// \param a_max Max of search bounding rect
+    /// \param a_callback Callback function to return result.  Callback should return 'true' to continue searching
+    /// \param aFinished This is set to true if the search completed and false if it was interupted
+    /// \return Returns the number of entries found
+    int Search( const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDIMS],
+            std::function<bool( const DATATYPE& )> a_callback, bool& aFinished ) const;
 
     template <class VISITOR>
     int Search( const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDIMS], VISITOR& a_visitor )
@@ -197,29 +220,52 @@ public:
                               ELEMTYPE a_squareDistanceCallback( const ELEMTYPE a_point[NUMDIMS], DATATYPE a_data ),
                               ELEMTYPE* a_squareDistance );
 
+public:
     /// Iterator is not remove safe.
     class Iterator
     {
     private:
-
-        enum { MAX_STACK = 32 }; // Max stack size. Allows almost n^32 where n is number of branches in node
+        enum
+        {
+            MAX_STACK = 32
+        }; // Max stack size. Allows almost n^32 where n is number of branches in node
 
         struct StackElement
         {
-            Node*   m_node;
-            int     m_branchIndex;
+            Node* m_node;
+            int   m_branchIndex;
         };
+
     public:
+        typedef std::forward_iterator_tag iterator_category;
+        typedef DATATYPE                  value_type;
+        typedef ptrdiff_t                 difference_type;
+        typedef DATATYPE*                 pointer;
+        typedef DATATYPE&                 reference;
 
-        Iterator()                                    { Init(); }
+    public:
+        Iterator() : m_stack( {} ), m_tos( 0 )
+        {
+            for( int i = 0; i < NUMDIMS; ++i )
+            {
+                m_rect.m_min[i] = std::numeric_limits<ELEMTYPE>::min();
+                m_rect.m_max[i] = std::numeric_limits<ELEMTYPE>::max();
+            }
+        }
 
-        ~Iterator()                                   { }
+        Iterator( Rect& aRect ) : m_stack( {} ), m_tos( 0 ), m_rect( aRect )
+        {
+        }
 
-        /// Is iterator invalid
-        bool IsNull()                                 { return m_tos <= 0;  }
+        ~Iterator()
+        {
+        }
 
         /// Is iterator pointing to valid data
-        bool IsNotNull()                              { return m_tos > 0;  }
+        bool IsNotNull()
+        {
+            return m_tos > 0;
+        }
 
         /// Access the current data element. Caller must be sure iterator is not NULL first.
         DATATYPE& operator*()
@@ -237,70 +283,91 @@ public:
             return curTos.m_node->m_branch[curTos.m_branchIndex].m_data;
         }
 
-        /// Find the next data element
-        bool operator++()                             { return FindNextData(); }
-
-        /// Get the bounds for this node
-        void GetBounds( ELEMTYPE a_min[NUMDIMS], ELEMTYPE a_max[NUMDIMS] )
+        DATATYPE* operator->()
         {
             ASSERT( IsNotNull() );
-            StackElement&   curTos = m_stack[m_tos - 1];
-            Branch&         curBranch = curTos.m_node->m_branch[curTos.m_branchIndex];
+            StackElement& curTos = m_stack[m_tos - 1];
+            return &( curTos.m_node->m_branch[curTos.m_branchIndex].m_data );
+        }
 
-            for( int index = 0; index < NUMDIMS; ++index )
-            {
-                a_min[index]    = curBranch.m_rect.m_min[index];
-                a_max[index]    = curBranch.m_rect.m_max[index];
-            }
+        /// Prefix ++ operator
+        Iterator& operator++()
+        {
+            FindNextData();
+            return *this;
+        }
+
+        /// Postfix ++ operator
+        Iterator operator++( int )
+        {
+            Iterator retval = *this;
+            FindNextData();
+            return retval;
+        }
+
+        bool operator==( const Iterator& rhs ) const
+        {
+            return ( ( m_tos <= 0 && rhs.m_tos <= 0 )
+                     || ( m_tos == rhs.m_tos && m_stack[m_tos].m_node == rhs.m_stack[m_tos].m_node
+                                && m_stack[m_tos].m_branchIndex
+                                           == rhs.m_stack[m_tos].m_branchIndex ) );
+        }
+
+        bool operator!=( const Iterator& rhs ) const
+        {
+            return ( ( m_tos > 0 || rhs.m_tos > 0 )
+                     && ( m_tos != rhs.m_tos || m_stack[m_tos].m_node != rhs.m_stack[m_tos].m_node
+                                || m_stack[m_tos].m_branchIndex
+                                           != rhs.m_stack[m_tos].m_branchIndex ) );
         }
 
     private:
-
-        /// Reset iterator
-        void Init()                                   { m_tos = 0; }
-
         /// Find the next data element in the tree (For internal use only)
-        bool FindNextData()
+        void FindNextData()
         {
-            for( ; ; )
+            while( m_tos > 0 )
             {
-                if( m_tos <= 0 )
-                {
-                    return false;
-                }
-
-                StackElement curTos = Pop(); // Copy stack top cause it may change as we use it
+                StackElement curTos     = Pop();
+                int          nextBranch = curTos.m_branchIndex + 1;
 
                 if( curTos.m_node->IsLeaf() )
                 {
-                    // Keep walking through data while we can
-                    if( curTos.m_branchIndex + 1 < curTos.m_node->m_count )
+                    // Keep walking through siblings until we find an overlapping leaf
+                    for( int i = nextBranch; i < curTos.m_node->m_count; i++ )
                     {
-                        // There is more data, just point to the next one
-                        Push( curTos.m_node, curTos.m_branchIndex + 1 );
-                        return true;
+                        if( RTree::Overlap( &m_rect, &curTos.m_node->m_branch[i].m_rect ) )
+                        {
+                            Push( curTos.m_node, i );
+                            return;
+                        }
                     }
-
                     // No more data, so it will fall back to previous level
                 }
                 else
                 {
-                    if( curTos.m_branchIndex + 1 < curTos.m_node->m_count )
+                    // Look for an overlapping sibling that we can use as the fall-back node
+                    // when we've iterated down the current branch
+                    for( int i = nextBranch; i < curTos.m_node->m_count; i++ )
                     {
-                        // Push sibling on for future tree walk
-                        // This is the 'fall back' node when we finish with the current level
-                        Push( curTos.m_node, curTos.m_branchIndex + 1 );
+                        if( RTree::Overlap( &m_rect, &curTos.m_node->m_branch[i].m_rect ) )
+                        {
+                            Push( curTos.m_node, i );
+                            break;
+                        }
                     }
 
-                    // Since cur node is not a leaf, push first of next level to get deeper into the tree
                     Node* nextLevelnode = curTos.m_node->m_branch[curTos.m_branchIndex].m_child;
+
+                    // Since cur node is not a leaf, push first of next level,
+                    // zero-th branch to get deeper into the tree
                     Push( nextLevelnode, 0 );
 
-                    // If we pushed on a new leaf, exit as the data is ready at TOS
-                    if( nextLevelnode->IsLeaf() )
-                    {
-                        return true;
-                    }
+                    // If the branch is a leaf, and it overlaps, then break with the current data
+                    // Otherwise, we allow it to seed our next iteration as it may have siblings that
+                    // do overlap
+                    if( nextLevelnode->IsLeaf()
+                            && RTree::Overlap( &m_rect, &nextLevelnode->m_branch[0].m_rect ) )
+                        return;
                 }
             }
         }
@@ -322,56 +389,55 @@ public:
             return m_stack[m_tos];
         }
 
-        StackElement    m_stack[MAX_STACK]; ///< Stack as we are doing iteration instead of recursion
-        int             m_tos;              ///< Top Of Stack index
+        std::array<StackElement, MAX_STACK> m_stack; ///< Stack for iteration
+        int                                 m_tos;   ///< Top Of Stack index
+        Rect                                m_rect;  ///< Search rectangle
 
-        friend class RTree;                 // Allow hiding of non-public functions while allowing manipulation by logical owner
+        friend class RTree;
+        // Allow hiding of non-public functions while allowing manipulation by logical owner
     };
 
+    using iterator       = Iterator;
+    using const_iterator = const Iterator;
 
-    /// Get 'first' for iteration
-    void GetFirst( Iterator& a_it )
+    iterator begin( Rect& aRect )
     {
-        a_it.Init();
-        Node* first = m_root;
+        iterator retval( aRect );
 
-        while( first )
+        // Only a single element in the tree
+        if( m_root->IsLeaf() )
         {
-            if( first->IsInternalNode() && first->m_count > 1 )
-            {
-                a_it.Push( first, 1 ); // Descend sibling branch later
-            }
-            else if( first->IsLeaf() )
-            {
-                if( first->m_count )
-                {
-                    a_it.Push( first, 0 );
-                }
+            if( m_root->m_count && Overlap( &aRect, &m_root->m_branch[0].m_rect ) )
+                retval.Push( m_root, 0 );
 
-                break;
-            }
-
-            first = first->m_branch[0].m_child;
+            return retval;
         }
+
+        retval.Push( m_root, 0 );
+        ++retval;
+
+        return retval;
     }
 
-    /// Get Next for iteration
-    void GetNext( Iterator& a_it )                    { ++a_it; }
-
-    /// Is iterator NULL, or at end?
-    bool IsNull( Iterator& a_it )                     { return a_it.IsNull(); }
-
-    /// Get object at iterator position
-    DATATYPE& GetAt( Iterator& a_it )                 { return *a_it; }
-protected:
-
-    /// Minimal bounding rectangle (n-dimensional)
-    struct Rect
+    iterator begin()
     {
-        ELEMTYPE    m_min[NUMDIMS];                 ///< Min dimensions of bounding box
-        ELEMTYPE    m_max[NUMDIMS];                 ///< Max dimensions of bounding box
-    };
+        Rect full_rect( { { INT_MIN, INT_MIN, INT_MIN }, { INT_MAX, INT_MAX, INT_MAX } } );
+        return begin( full_rect );
+    }
 
+    iterator end()
+    {
+        iterator retval;
+        return retval;
+    }
+
+    iterator end( Rect& aRect )
+    {
+        return end();
+    }
+
+
+protected:
     /// May be data or may be another subtree
     /// The parents level determines this.
     /// If the parents level is 0, then this is data
@@ -460,7 +526,7 @@ protected:
                                    ListNode**       a_listNode );
     ListNode*       AllocListNode();
     void            FreeListNode( ListNode* a_listNode );
-    bool            Overlap( Rect* a_rectA, Rect* a_rectB ) const;
+    static bool     Overlap( Rect* a_rectA, Rect* a_rectB );
     void            ReInsert( Node* a_node, ListNode** a_listNode );
     ELEMTYPE        MinDist( const ELEMTYPE a_point[NUMDIMS], Rect* a_rect );
     void            InsertNNListSorted( std::vector<NNNode*>* nodeList, NNNode* newNode );
@@ -717,6 +783,35 @@ int RTREE_QUAL::Search( const ELEMTYPE a_min[NUMDIMS],
 
 
 RTREE_TEMPLATE
+int RTREE_QUAL::Search( const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDIMS],
+        std::function<bool( const DATATYPE& )> a_callback, bool& aFinished ) const
+{
+#ifdef _DEBUG
+
+    for( int index = 0; index < NUMDIMS; ++index )
+    {
+        ASSERT( a_min[index] <= a_max[index] );
+    }
+
+#endif // _DEBUG
+
+    Rect rect;
+
+    for( int axis = 0; axis < NUMDIMS; ++axis )
+    {
+        rect.m_min[axis] = a_min[axis];
+        rect.m_max[axis] = a_max[axis];
+    }
+
+    // NOTE: May want to return search result another way, perhaps returning the number of found elements here.
+
+    int foundCount = 0;
+    aFinished      = Search( m_root, &rect, foundCount, a_callback );
+    return foundCount;
+}
+
+
+RTREE_TEMPLATE
 DATATYPE RTREE_QUAL::NearestNeighbor( const ELEMTYPE a_point[NUMDIMS] )
 {
     return this->NearestNeighbor( a_point, 0, 0 );
@@ -728,7 +823,6 @@ DATATYPE RTREE_QUAL::NearestNeighbor( const ELEMTYPE a_point[NUMDIMS],
                                       ELEMTYPE a_squareDistanceCallback( const ELEMTYPE a_point[NUMDIMS], DATATYPE a_data ),
                                       ELEMTYPE* a_squareDistance )
 {
-    typedef typename std::vector<NNNode*>::iterator iterator;
     std::vector<NNNode*> nodeList;
     Node* node = m_root;
     NNNode* closestNode = 0;
@@ -759,9 +853,9 @@ DATATYPE RTREE_QUAL::NearestNeighbor( const ELEMTYPE a_point[NUMDIMS],
     }
 
     // free memory used for remaining NNNodes in nodeList
-    for( iterator iter = nodeList.begin(); iter != nodeList.end(); ++iter )
+    for( auto node_it : nodeList )
     {
-        NNNode* nnode = *iter;
+        NNNode* nnode = node_it;
         free(nnode);
     }
 
@@ -1767,7 +1861,7 @@ bool RTREE_QUAL::RemoveRectRec( Rect*           a_rect,
 
 // Decide whether two rectangles overlap.
 RTREE_TEMPLATE
-bool RTREE_QUAL::Overlap( Rect* a_rectA, Rect* a_rectB ) const
+bool RTREE_QUAL::Overlap( Rect* a_rectA, Rect* a_rectB )
 {
     ASSERT( a_rectA && a_rectB );
 
@@ -1873,12 +1967,12 @@ ELEMTYPE RTREE_QUAL::MinDist( const ELEMTYPE a_point[NUMDIMS], Rect* a_rect )
 RTREE_TEMPLATE
 void RTREE_QUAL::InsertNNListSorted( std::vector<NNNode*>* nodeList, NNNode* newNode )
 {
-    typedef typename std::vector<NNNode*>::iterator iterator;
-    iterator iter = nodeList->begin();
+    auto iter = nodeList->begin();
     while( iter != nodeList->end() && (*iter)->minDist > newNode->minDist )
     {
         ++iter;
     }
+
     nodeList->insert(iter, newNode);
 }
 

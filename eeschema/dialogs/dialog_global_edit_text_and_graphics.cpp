@@ -346,7 +346,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 
         if( screen )
         {
-            for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
+            for( auto item : screen->Items() )
                 visitItem( sheetPath, item );
         }
     }

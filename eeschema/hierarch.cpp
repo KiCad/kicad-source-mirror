@@ -158,31 +158,26 @@ void HIERARCHY_NAVIG_DLG::buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemI
 {
     wxCHECK_RET( m_nbsheets < NB_MAX_SHEET, "Maximum number of sheets exceeded." );
 
-    SCH_ITEM* schitem = aList->LastDrawList();
-
-    while( schitem && m_nbsheets < NB_MAX_SHEET )
+    for( auto aItem : aList->LastScreen()->Items().OfType( SCH_SHEET_T ) )
     {
-        if( schitem->Type() == SCH_SHEET_T )
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
+        m_nbsheets++;
+        wxTreeItemId menu;
+        menu = m_Tree->AppendItem( *aPreviousmenu, sheet->GetName(), 0, 1 );
+        aList->push_back( sheet );
+        m_Tree->SetItemData( menu, new TreeItemData( *aList ) );
+
+        if( *aList == m_currSheet )
         {
-            SCH_SHEET* sheet = (SCH_SHEET*) schitem;
-            m_nbsheets++;
-            wxTreeItemId menu;
-            menu = m_Tree->AppendItem( *aPreviousmenu, sheet->GetName(), 0, 1 );
-            aList->push_back( sheet );
-            m_Tree->SetItemData( menu, new TreeItemData( *aList ) );
-
-            if( *aList == m_currSheet )
-            {
-                m_Tree->EnsureVisible( menu );
-                m_Tree->SelectItem( menu );
-            }
-
-            buildHierarchyTree( aList, &menu );
-
-            aList->pop_back();
+            m_Tree->EnsureVisible( menu );
+            m_Tree->SelectItem( menu );
         }
 
-        schitem = schitem->Next();
+        buildHierarchyTree( aList, &menu );
+        aList->pop_back();
+
+        if( m_nbsheets >= NB_MAX_SHEET )
+            break;
     }
 }
 

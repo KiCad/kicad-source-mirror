@@ -23,30 +23,32 @@
  */
 
 
-#include <ee_actions.h>
+#include <class_libentry.h>
 #include <core/typeinfo.h>
-#include <sch_item.h>
+#include <ee_actions.h>
+#include <ee_collectors.h>
 #include <ee_selection_tool.h>
-#include <sch_base_frame.h>
-#include <sch_edit_frame.h>
+#include <eeschema_id.h> // For MAX_SELECT_ITEM_IDS
 #include <lib_edit_frame.h>
+#include <lib_item.h>
 #include <lib_view_frame.h>
-#include <sch_component.h>
-#include <sch_sheet.h>
-#include <sch_field.h>
-#include <sch_line.h>
-#include <view/view.h>
-#include <view/view_controls.h>
-#include <view/view_group.h>
+#include <math/util.h>
+#include <menus_helpers.h>
+#include <painter.h>
 #include <preview_items/selection_area.h>
+#include <sch_base_frame.h>
+#include <sch_component.h>
+#include <sch_edit_frame.h>
+#include <sch_field.h>
+#include <sch_item.h>
+#include <sch_line.h>
+#include <sch_sheet.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_line_wire_bus_tool.h>
-#include <ee_collectors.h>
-#include <painter.h>
-#include <eeschema_id.h>        // For MAX_SELECT_ITEM_IDS
-#include <menus_helpers.h>
-#include <math/util.h>      // for KiROUND
+#include <view/view.h>
+#include <view/view_controls.h>
+#include <view/view_group.h>
 
 
 SELECTION_CONDITION EE_CONDITIONS::Empty = [] (const SELECTION& aSelection )
@@ -419,20 +421,21 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
                                           bool* aSelectionCancelledFlag, bool aCheckLocked,
                                           bool aAdd, bool aSubtract, bool aExclusiveOr )
 {
-    EDA_ITEM*    start;
     EE_COLLECTOR collector;
 
-    if( m_isLibEdit )
-        start = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
-    else
-        start = m_frame->GetScreen()->GetDrawItems();
-
-    // Empty schematics have no draw items
-    if( !start )
-        return nullptr;
-
     collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-    collector.Collect( start, aFilterList, (wxPoint) aWhere, m_unit, m_convert );
+
+    if( m_isLibEdit )
+    {
+        auto part = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
+
+        if( !part )
+            return nullptr;
+
+        collector.Collect( part->GetDrawItems(), aFilterList, (wxPoint) aWhere, m_unit, m_convert );
+    }
+    else
+        collector.Collect( m_frame->GetScreen(), aFilterList, (wxPoint) aWhere, m_unit, m_convert );
 
     // Post-process collected items
     for( int i = collector.GetCount() - 1; i >= 0; --i )
@@ -804,17 +807,15 @@ static KICAD_T nodeTypes[] =
 
 EDA_ITEM* EE_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
 {
-    if( m_frame->GetScreen()->GetDrawItems() == nullptr )   // Empty schematics
-        return nullptr;
-
     EE_COLLECTOR collector;
 
+    //TODO(snh): Reimplement after exposing KNN interface
     int thresholdMax = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
 
     for( int threshold : { 0, thresholdMax/2, thresholdMax } )
     {
         collector.m_Threshold = threshold;
-        collector.Collect( m_frame->GetScreen()->GetDrawItems(), nodeTypes, (wxPoint) aPosition );
+        collector.Collect( m_frame->GetScreen(), nodeTypes, (wxPoint) aPosition );
 
         if( collector.GetCount() > 0 )
             break;
@@ -847,13 +848,10 @@ int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
     EDA_ITEMS items;
 
     m_frame->GetScreen()->ClearDrawingState();
-    m_frame->GetScreen()->MarkConnections( line );
+    auto conns = m_frame->GetScreen()->MarkConnections( line );
 
-    for( EDA_ITEM* item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
-    {
-        if( item->HasFlag( CANDIDATE ) )
-            select( item );
-    }
+    for( auto item : conns )
+        select( item );
 
     if( m_selection.GetSize() > 1 )
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
@@ -972,26 +970,29 @@ void EE_SELECTION_TOOL::RebuildSelection()
 {
     m_selection.Clear();
 
-    EDA_ITEM* start = nullptr;
-
     if( m_isLibEdit )
-        start = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
-    else
-        start = m_frame->GetScreen()->GetDrawItems();
-
-    INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* testData )
     {
-        // If the field and component are selected, only use the component
-        if( item->IsSelected() &&  !( item->Type() == SCH_FIELD_T && item->GetParent()
-                && item->GetParent()->IsSelected() ) )
+        LIB_PART* start = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
+
+        for( auto& item : start->GetDrawItems() )
         {
-            select( item );
+            if( item.IsSelected() )
+                select( static_cast<EDA_ITEM*>( &item ) );
         }
-
-        return SEARCH_RESULT::CONTINUE;
-    };
-
-    EDA_ITEM::IterateForward( start, inspector, nullptr, EE_COLLECTOR::AllItems );
+    }
+    else
+    {
+        for( auto item : m_frame->GetScreen()->Items() )
+        {
+            // If the field and component are selected, only use the component
+            if( item->IsSelected()
+                    && !( item->Type() == SCH_FIELD_T && item->GetParent()
+                               && item->GetParent()->IsSelected() ) )
+            {
+                select( item );
+            }
+        }
+    }
 
     updateReferencePoint();
 

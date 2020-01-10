@@ -178,9 +178,18 @@ private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
+    /**
+     * Advances the search and returns the next matching item after aAfter
+     * @param aScreen Pointer to the screen used for searching
+     * @param aAfter Starting match to compare
+     * @param aData Search data to compare against or NULL to match the first item found
+     * @return pointer to the next search item found or NULL if nothing found
+     */
+    SCH_ITEM* nextMatch( SCH_SCREEN* aScreen, SCH_ITEM* aAfter, wxFindReplaceData* aData );
+
 private:
-    bool      m_probingPcbToSch;    // Recursion guard when cross-probing to PCBNew
-    EDA_ITEM* m_pickerItem;         // Current item for picker highlighting.
+    bool      m_probingPcbToSch; // Recursion guard when cross-probing to PCBNew
+    EDA_ITEM* m_pickerItem;      // Current item for picker highlighting.
 
     // A map of sheet paths --> screens for the clipboard contents.  We use these to hook up
     // cut/paste operations for unsaved sheet content.

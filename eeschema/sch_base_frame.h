@@ -25,12 +25,21 @@
 #ifndef SCH_BASE_FRAME_H_
 #define SCH_BASE_FRAME_H_
 
-#include <lib_id.h>
 #include <eda_draw_frame.h>
-
-#include <sch_screen.h>
+#include <frame_type.h>
+#include <lib_id.h>
+#include <page_info.h>
 #include <sch_draw_panel.h>
-#include "template_fieldnames.h"
+#include <sch_screen.h>
+
+#include <stddef.h>
+#include <utility>
+#include <vector>
+#include <wx/event.h>
+#include <wx/gdicmn.h>
+#include <wx/string.h>
+
+#include <template_fieldnames.h>
 
 
 namespace KIGFX
@@ -47,7 +56,6 @@ class PART_LIB;
 class SCHLIB_FILTER;
 class LIB_ID;
 class SYMBOL_LIB_TABLE;
-class SCH_DRAW_PANEL;
 
 /**
  * Load symbol from symbol library table.
@@ -204,21 +212,6 @@ public:
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
     void UpdateStatusBar() override;
-
-
-    struct COMPONENT_SELECTION
-    {
-        LIB_ID      LibId;
-        int         Unit;
-        int         Convert;
-
-        std::vector<std::pair<int, wxString>>   Fields;
-
-        COMPONENT_SELECTION():
-            Unit( 1 ),
-            Convert( 1 )
-        {}
-    };
 
     typedef std::vector<COMPONENT_SELECTION> HISTORY_LIST;
 

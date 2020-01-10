@@ -80,7 +80,6 @@ class wxFindReplaceData;
 class EDA_ITEM;
 class EDA_DRAW_FRAME;
 class EDA_RECT;
-class DHEAD;
 class MSG_PANEL_ITEM;
 
 
@@ -174,9 +173,6 @@ private:
     STATUS_FLAGS  m_Status;
 
 protected:
-    EDA_ITEM*     Pnext;          ///< next in linked list
-    EDA_ITEM*     Pback;          ///< previous in linked list
-    DHEAD*        m_List;         ///< which DLIST I am on.
 
     EDA_ITEM*     m_Parent;       ///< Linked list: Link (parent struct)
     timestamp_t   m_TimeStamp;    ///< Time stamp used for logical links
@@ -216,15 +212,8 @@ public:
     void SetTimeStamp( timestamp_t aNewTimeStamp ) { m_TimeStamp = aNewTimeStamp; }
     timestamp_t GetTimeStamp() const { return m_TimeStamp; }
 
-    EDA_ITEM* Next() const { return Pnext; }
-    EDA_ITEM* Back() const { return Pback; }
     EDA_ITEM* GetParent() const { return m_Parent; }
-    DHEAD* GetList() const { return m_List; }
-
-    void SetNext( EDA_ITEM* aNext )       { Pnext = aNext; }
-    void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
     void SetParent( EDA_ITEM* aParent )   { m_Parent = aParent; }
-    void SetList( DHEAD* aList )          { m_List = aList; }
 
     inline bool IsNew() const { return m_Flags & IS_NEW; }
     inline bool IsModified() const { return m_Flags & IS_CHANGED; }
@@ -292,7 +281,7 @@ public:
      * @param aScanTypes List of item types
      * @return true if the item type is contained in the list aScanTypes
      */
-    virtual bool IsType( const KICAD_T aScanTypes[] )
+    virtual bool IsType( const KICAD_T aScanTypes[] ) const
     {
         if( aScanTypes[0] == SCH_LOCATE_ANY_T )
             return true;
@@ -398,38 +387,6 @@ public:
      *                       else SCAN_CONTINUE, and determined by the inspector.
      */
     virtual SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] );
-
-    /**
-     * Function IterateForward
-     * walks through the object tree calling the inspector() on each object
-     * type requested in scanTypes.
-     *
-     * @param listStart The first in a list of EDA_ITEMs to iterate over.
-     * @param inspector Is an INSPECTOR to call on each object that is one of
-     *                  the requested scanTypes.
-     * @param testData Is an aid to testFunc, and should be sufficient to allow
-     *                 it to fully determine if an item meets the match criteria,
-     *                 but it may also be used to collect output.
-     * @param scanTypes A KICAD_T array that is EOT terminated, and provides both
-     *                  the order and interest level of of the types of objects to
-     *                  be iterated over.
-     * @return SEARCH_RESULT SEARCH_QUIT if the called INSPECTOR returned
-     *                       SEARCH_QUIT, else SCAN_CONTINUE;
-     */
-    static SEARCH_RESULT IterateForward( EDA_ITEM*      listStart,
-                                         INSPECTOR      inspector,
-                                         void*          testData,
-                                         const KICAD_T  scanTypes[] )
-
-    {
-        for( EDA_ITEM* p = listStart; p; p = p->Pnext )
-        {
-            if( SEARCH_RESULT::QUIT == p->Visit( inspector, testData, scanTypes ) )
-                return SEARCH_RESULT::QUIT;
-        }
-
-        return SEARCH_RESULT::CONTINUE;
-    }
 
     /**
      * @copydoc SEARCH_RESULT IterateForward( EDA_ITEM*, INSPECTOR, void*, const KICAD_T )

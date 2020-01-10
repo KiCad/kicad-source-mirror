@@ -29,32 +29,36 @@
  * @brief Implementation of SCH_SCREEN and SCH_SCREENS classes.
  */
 
+#include <common.h>
+#include <eda_rect.h>
+#include <eeschema_id.h>
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <common.h>
-#include <kicad_string.h>
-#include <id.h>
-#include <pgm_base.h>
-#include <kiway.h>
-#include <sch_draw_panel.h>
-#include <sch_item.h>
 #include <gr_text.h>
-#include <sch_edit_frame.h>
+#include <id.h>
+#include <kicad_string.h>
+#include <kiway.h>
+#include <pgm_base.h>
 #include <plotter.h>
+#include <project.h>
+#include <sch_draw_panel.h>
+#include <sch_edit_frame.h>
+#include <sch_item.h>
 
-#include <netlist.h>
-#include <netlist_object.h>
 #include <class_library.h>
 #include <connection_graph.h>
-#include <sch_junction.h>
+#include <lib_pin.h>
+#include <netlist.h>
+#include <netlist_object.h>
 #include <sch_bus_entry.h>
+#include <sch_component.h>
+#include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_marker.h>
 #include <sch_no_connect.h>
+#include <sch_rtree.h>
 #include <sch_sheet.h>
-#include <sch_component.h>
 #include <sch_text.h>
-#include <lib_pin.h>
 #include <symbol_lib_table.h>
 #include <tool/common_tools.h>
 
@@ -65,8 +69,6 @@
 
 // TODO(JE) Debugging only
 #include <profile.h>
-
-#include <boost/foreach.hpp>
 
 #define EESCHEMA_FILE_STAMP   "EESchema"
 #define ZOOM_FACTOR( x )       ( x * IU_PER_MILS )
@@ -152,13 +154,7 @@ SCH_SCREEN::SCH_SCREEN( KIWAY* aKiway ) :
 SCH_SCREEN::~SCH_SCREEN()
 {
     ClearUndoRedoList();
-
-    // Now delete items in draw list.  We do that only if the list is not empty, because if the
-    // list was appended to another list (see SCH_SCREEN::Append( SCH_SCREEN* aScreen ) it is
-    // empty but as no longer the ownership (m_drawList.meOwner == false) of items, and calling
-    // FreeDrawList() with m_drawList.meOwner == false will generate a debug alert in debug mode
-    if( GetDrawItems() )
-        FreeDrawList();
+    FreeDrawList();
 }
 
 
@@ -176,23 +172,33 @@ void SCH_SCREEN::DecRefCount()
 }
 
 
+void SCH_SCREEN::Append( SCH_ITEM* aItem )
+{
+    m_rtree.insert( aItem );
+    --m_modification_sync;
+}
+
+
 void SCH_SCREEN::Append( SCH_SCREEN* aScreen )
 {
     wxCHECK_RET( aScreen, "Invalid screen object." );
 
-    // No need to decend the hierarchy.  Once the top level screen is copied, all of it's
+    // No need to descend the hierarchy.  Once the top level screen is copied, all of it's
     // children are copied as well.
-    m_drawList.Append( aScreen->m_drawList );
+    for( auto aItem : aScreen->m_rtree )
+        m_rtree.insert( aItem );
 
-    // This screen owns the objects now.  This prevents the object from being delete when
-    // aSheet is deleted.
-    aScreen->m_drawList.SetOwnership( false );
+    --m_modification_sync;
+    aScreen->Clear( false );
 }
 
 
-void SCH_SCREEN::Clear()
+void SCH_SCREEN::Clear( bool aFree )
 {
-    FreeDrawList();
+    if( aFree )
+        FreeDrawList();
+    else
+        m_rtree.clear();
 
     // Clear the project settings
     m_ScreenNumber = m_NumberOfScreens = 1;
@@ -203,13 +209,32 @@ void SCH_SCREEN::Clear()
 
 void SCH_SCREEN::FreeDrawList()
 {
-    m_drawList.DeleteAll();
+    // We don't know which order we will encounter dependent items (e.g. pins or fields), so
+    // we store the items to be deleted until we've fully cleared the tree before deleting
+    std::vector<SCH_ITEM*> delete_list;
+
+    std::copy_if( m_rtree.begin(), m_rtree.end(), std::back_inserter( delete_list ),
+            []( SCH_ITEM* aItem ) {
+                return ( aItem->Type() != SCH_SHEET_PIN_T && aItem->Type() != SCH_FIELD_T );
+            } );
+
+    m_rtree.clear();
+
+    for( auto item : delete_list )
+        delete item;
+}
+
+
+void SCH_SCREEN::Update( SCH_ITEM* aItem )
+{
+    Remove( aItem );
+    Append( aItem );
 }
 
 
 void SCH_SCREEN::Remove( SCH_ITEM* aItem )
 {
-    m_drawList.Remove( aItem );
+    m_rtree.remove( aItem );
 }
 
 
@@ -218,6 +243,7 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
     wxCHECK_RET( aItem, wxT( "Cannot delete invalid item from screen." ) );
 
     SetModify();
+    Remove( aItem );
 
     if( aItem->Type() == SCH_SHEET_PIN_T )
     {
@@ -230,7 +256,6 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
     }
     else
     {
-        m_drawList.Remove( aItem );
         delete aItem;
     }
 }
@@ -238,130 +263,69 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
 
 bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* aItem )
 {
-    SCH_ITEM* itemList = m_drawList.begin();
-
-    while( itemList )
-    {
-        if( itemList == aItem )
-            return true;
-
-        itemList = itemList->Next();
-    }
-
-    return false;
+    return m_rtree.contains( aItem, true );
 }
 
 
-SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T aType ) const
+SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T aType )
 {
-    KICAD_T types[] = { aType, EOT };
+    EDA_RECT bbox;
+    bbox.SetOrigin( aPosition );
+    bbox.Inflate( aAccuracy );
 
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items().Overlapping( aType, bbox ) )
     {
-        switch( item->Type() )
-        {
-        case SCH_COMPONENT_T:
-        {
-            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
-
-            for( int i = REFERENCE; i < component->GetFieldCount(); i++ )
-            {
-                SCH_FIELD* field = component->GetField( i );
-
-                if( field->IsType( types ) && field->HitTest( aPosition, aAccuracy ) )
-                    return field;
-            }
-
-            break;
-        }
-        case SCH_SHEET_T:
-        {
-            SCH_SHEET* sheet = (SCH_SHEET*)item;
-
-            SCH_SHEET_PIN* pin = sheet->GetPin( aPosition );
-
-            if( pin && pin->IsType( types ) )
-                return pin;
-
-            break;
-        }
-        default:
-            break;
-        }
-
-        if( item->IsType( types ) && item->HitTest( aPosition, aAccuracy ) )
+        if( item->HitTest( aPosition, aAccuracy ) )
             return item;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
-void SCH_SCREEN::ReplaceWires( DLIST< SCH_ITEM >& aWireList )
+std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 {
-    SCH_ITEM* item;
-    SCH_ITEM* next_item;
+    std::set<SCH_ITEM*>   retval;
+    std::stack<SCH_LINE*> to_search;
 
-    for( item = m_drawList.begin(); item; item = next_item )
+    wxCHECK_MSG( ( aSegment ) && ( aSegment->Type() == SCH_LINE_T ), retval,
+            wxT( "Invalid object pointer." ) );
+
+    to_search.push( aSegment );
+
+    while( !to_search.empty() )
     {
-        next_item = item->Next();
+        auto test_item = to_search.top();
+        to_search.pop();
 
-        switch( item->Type() )
+        for( auto item : Items().Overlapping( SCH_JUNCTION_T, test_item->GetBoundingBox() ) )
         {
-        case SCH_JUNCTION_T:
-        case SCH_LINE_T:
-            Remove( item );
-            delete item;
-            break;
+            if( test_item->IsEndPoint( item->GetPosition() ) )
+                retval.insert( item );
+        }
 
-        default:
-            break;
+        for( auto item : Items().Overlapping( SCH_LINE_T, test_item->GetBoundingBox() ) )
+        {
+            // Skip connecting lines on different layers (e.g. busses)
+            if( test_item->GetLayer() != item->GetLayer() )
+                continue;
+
+            auto line = static_cast<SCH_LINE*>( item );
+
+            if( ( test_item->IsEndPoint( line->GetStartPoint() )
+                        && !GetPin( line->GetStartPoint(), NULL, true ) )
+                    || ( test_item->IsEndPoint( line->GetEndPoint() )
+                               && !GetPin( line->GetEndPoint(), nullptr, true ) ) )
+            {
+                auto result = retval.insert( line );
+
+                if( result.second )
+                    to_search.push( line );
+            }
         }
     }
 
-    m_drawList.Append( aWireList );
-}
-
-
-void SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
-{
-    wxCHECK_RET( (aSegment) && (aSegment->Type() == SCH_LINE_T),
-                 wxT( "Invalid object pointer." ) );
-
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
-    {
-        if( item->HasFlag( CANDIDATE ) )
-            continue;
-
-        if( item->Type() == SCH_JUNCTION_T )
-        {
-            SCH_JUNCTION* junction = (SCH_JUNCTION*) item;
-
-            if( aSegment->IsEndPoint( junction->GetPosition() ) )
-                item->SetFlags( CANDIDATE );
-
-            continue;
-        }
-
-        if( item->Type() != SCH_LINE_T )
-            continue;
-
-        SCH_LINE* segment = (SCH_LINE*) item;
-
-        if( aSegment->IsEndPoint( segment->GetStartPoint() )
-            && !GetPin( segment->GetStartPoint(), NULL, true ) )
-        {
-            item->SetFlags( CANDIDATE );
-            MarkConnections( segment );
-        }
-
-        if( aSegment->IsEndPoint( segment->GetEndPoint() )
-            && !GetPin( segment->GetEndPoint(), NULL, true ) )
-        {
-            item->SetFlags( CANDIDATE );
-            MarkConnections( segment );
-        }
-    }
+    return retval;
 }
 
 
@@ -375,7 +339,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
 
     std::vector<SCH_LINE*> lines[ sizeof( layers ) ];
 
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items().Overlapping( aPosition ) )
     {
         if( item->GetEditFlags() & STRUCT_DELETED )
             continue;
@@ -386,9 +350,9 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
         if( ( item->Type() == SCH_LINE_T ) && ( item->HitTest( aPosition, 0 ) ) )
         {
             if( item->GetLayer() == LAYER_WIRE )
-                lines[ WIRES ].push_back( (SCH_LINE*) item );
+                lines[WIRES].push_back( (SCH_LINE*) item );
             else if( item->GetLayer() == LAYER_BUS )
-                lines[ BUSSES ].push_back( (SCH_LINE*) item );
+                lines[BUSSES].push_back( (SCH_LINE*) item );
         }
 
         if( ( item->Type() == SCH_COMPONENT_T ) && ( item->IsConnected( aPosition ) ) )
@@ -525,25 +489,30 @@ void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
     // Initialize or reinitialize the pointer to the LIB_PART for each component
     // found in m_drawList, but only if needed (change in lib or schematic)
     // therefore the calculation time is usually very low.
-    if( m_drawList.GetCount() )
+    if( !IsEmpty() )
     {
+        std::vector<SCH_COMPONENT*> cmps;
         SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
         int mod_hash = libs->GetModifyHash();
-        EE_TYPE_COLLECTOR c;
 
-        c.Collect( GetDrawItems(), EE_COLLECTOR::ComponentsOnly );
+        for( auto aItem : Items().OfType( SCH_COMPONENT_T ) )
+            cmps.push_back( static_cast<SCH_COMPONENT*>( aItem ) );
+
 
         // Must we resolve?
         if( (m_modification_sync != mod_hash) || aForce )
         {
-            SCH_COMPONENT::ResolveAll( c, *libs, Prj().SchLibs()->GetCacheLibrary() );
+            SCH_COMPONENT::ResolveAll( cmps, *libs, Prj().SchLibs()->GetCacheLibrary() );
 
             m_modification_sync = mod_hash;     // note the last mod_hash
         }
         // Resolving will update the pin caches but we must ensure that this happens
         // even if the libraries don't change.
         else
-            SCH_COMPONENT::UpdatePins( c );
+        {
+            for( auto cmp : cmps )
+                cmp->UpdatePins();
+        }
     }
 }
 
@@ -555,7 +524,7 @@ void SCH_SCREEN::Print( wxDC* aDC )
     // Ensure links are up to date, even if a library was reloaded for some reason:
     UpdateSymbolLinks();
 
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items() )
     {
         if( item->IsMoving() || item->IsResized() )
             continue;
@@ -581,7 +550,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter )
     // Ensure links are up to date, even if a library was reloaded for some reason:
     UpdateSymbolLinks();
 
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items() )
     {
         if( item->IsMoving() || item->IsResized() )
             continue;
@@ -636,24 +605,20 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
 
 void SCH_SCREEN::ClearDrawingState()
 {
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items() )
         item->ClearTempFlags();
 }
 
 
-LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent,
-                             bool aEndPointOnly ) const
+LIB_PIN* SCH_SCREEN::GetPin(
+        const wxPoint& aPosition, SCH_COMPONENT** aComponent, bool aEndPointOnly )
 {
-    SCH_ITEM*       item;
     SCH_COMPONENT*  component = NULL;
     LIB_PIN*        pin = NULL;
 
-    for( item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items().Overlapping( SCH_COMPONENT_T, aPosition ) )
     {
-        if( item->Type() != SCH_COMPONENT_T )
-            continue;
-
-        component = (SCH_COMPONENT*) item;
+        component = static_cast<SCH_COMPONENT*>( item );
 
         if( aEndPointOnly )
         {
@@ -698,12 +663,9 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
 
 SCH_SHEET* SCH_SCREEN::GetSheet( const wxString& aName )
 {
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items().OfType( SCH_SHEET_T ) )
     {
-        if( item->Type() != SCH_SHEET_T )
-            continue;
-
-        SCH_SHEET* sheet = (SCH_SHEET*) item;
+        auto sheet = static_cast<SCH_SHEET*>( item );
 
         if( aName.CmpNoCase( sheet->GetName() ) == 0 )
             return sheet;
@@ -715,14 +677,12 @@ SCH_SHEET* SCH_SCREEN::GetSheet( const wxString& aName )
 
 SCH_SHEET_PIN* SCH_SCREEN::GetSheetLabel( const wxPoint& aPosition )
 {
-    SCH_SHEET_PIN* sheetPin = NULL;
+    SCH_SHEET_PIN* sheetPin = nullptr;
 
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items().OfType( SCH_SHEET_T ) )
     {
-        if( item->Type() != SCH_SHEET_T )
-            continue;
+        auto sheet = static_cast<SCH_SHEET*>( item );
 
-        SCH_SHEET* sheet = (SCH_SHEET*) item;
         sheetPin = sheet->GetPin( aPosition );
 
         if( sheetPin )
@@ -733,17 +693,13 @@ SCH_SHEET_PIN* SCH_SCREEN::GetSheetLabel( const wxPoint& aPosition )
 }
 
 
-int SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) const
+size_t SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions )
 {
-    SCH_ITEM* item;
-    int       count = 0;
+    size_t count = 0;
 
-    for( item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items() )
     {
-        if( item->Type() == SCH_JUNCTION_T  && !aTestJunctions )
-            continue;
-
-        if( item->IsConnected( aPos ) )
+        if( ( item->Type() != SCH_JUNCTION_T || aTestJunctions ) && item->IsConnected( aPos ) )
             count++;
     }
 
@@ -753,19 +709,17 @@ int SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) 
 
 void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+
+    for( auto item : Items().OfType( SCH_COMPONENT_T ) )
     {
-        if( item->Type() == SCH_COMPONENT_T )
-        {
-            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+        auto component = static_cast<SCH_COMPONENT*>( item );
 
-            component->ClearAnnotation( aSheetPath );
+        component->ClearAnnotation( aSheetPath );
 
-            // Clear the modified component flag set by component->ClearAnnotation
-            // because we do not use it here and we should not leave this flag set,
-            // when an editing is finished:
-            component->ClearFlags();
-        }
+        // Clear the modified component flag set by component->ClearAnnotation
+        // because we do not use it here and we should not leave this flag set,
+        // when an editing is finished:
+        component->ClearFlags();
     }
 }
 
@@ -775,42 +729,36 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
     if( GetClientSheetPathsCount() <= 1 )   // No need for alternate reference
         return;
 
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items().OfType( SCH_COMPONENT_T ) )
     {
-        if( item->Type() != SCH_COMPONENT_T )
-            continue;
+        auto component = static_cast<SCH_COMPONENT*>( item );
 
         // Add (when not existing) all sheet path entries
         for( unsigned int ii = 0; ii < m_clientSheetPathList.GetCount(); ii++ )
-            ((SCH_COMPONENT*)item)->AddSheetPathReferenceEntryIfMissing( m_clientSheetPathList[ii] );
+            component->AddSheetPathReferenceEntryIfMissing( m_clientSheetPathList[ii] );
     }
 }
 
 
 void SCH_SCREEN::GetHierarchicalItems( EDA_ITEMS& aItems )
 {
-    SCH_ITEM* item = m_drawList.begin();
-
-    while( item )
+    for( auto item : Items() )
     {
         if( ( item->Type() == SCH_SHEET_T ) || ( item->Type() == SCH_COMPONENT_T ) )
             aItems.push_back( item );
-
-        item = item->Next();
     }
 }
 
 
 bool SCH_SCREEN::TestDanglingEnds()
 {
-    SCH_ITEM* item;
     std::vector< DANGLING_END_ITEM > endPoints;
     bool hasStateChanged = false;
 
-    for( item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items() )
         item->GetEndPoints( endPoints );
 
-    for( item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items() )
     {
         if( item->UpdateDanglingState( endPoints ) )
             hasStateChanged = true;
@@ -820,24 +768,10 @@ bool SCH_SCREEN::TestDanglingEnds()
 }
 
 
-SCH_LINE* SCH_SCREEN::GetWireOrBus( const wxPoint& aPosition )
-{
-    static KICAD_T types[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
-
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
-    {
-        if( item->IsType( types ) && item->HitTest( aPosition ) )
-            return (SCH_LINE*) item;
-    }
-
-    return nullptr;
-}
-
-
 SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLayer,
                                SCH_LINE_TEST_T aSearchType )
 {
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items() )
     {
         if( item->Type() != SCH_LINE_T )
             continue;
@@ -870,7 +804,7 @@ SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLay
 
 SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy )
 {
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items().Overlapping( aPosition, aAccuracy ) )
     {
         switch( item->Type() )
         {
@@ -895,12 +829,9 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
     SCH_COMPONENT* component;
     bool           found = false;
 
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+    for( auto item : Items().OfType( SCH_COMPONENT_T ) )
     {
-        if( item->Type() != SCH_COMPONENT_T )
-            continue;
-
-        component = (SCH_COMPONENT*) item;
+        component = static_cast<SCH_COMPONENT*>( item );
 
         if( aReference.CmpNoCase( component->GetRef( aSheetPath ) ) == 0 )
         {
@@ -982,10 +913,9 @@ void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
     // for now, make it look like XML, expand on this later.
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
-
-    for( EDA_ITEM* item = m_drawList.begin();  item;  item = item->Next() )
+    for( const auto item : Items() )
     {
-        item->Show( nestLevel+1, os );
+        item->Show( nestLevel + 1, os );
     }
 
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
@@ -1057,17 +987,8 @@ void SCH_SCREENS::buildScreenList( SCH_SHEET* aSheet )
 
         addScreenToList( screen );
 
-        EDA_ITEM* strct = screen->GetDrawItems();
-
-        while( strct )
-        {
-            if( strct->Type() == SCH_SHEET_T )
-            {
-                buildScreenList( ( SCH_SHEET* )strct );
-            }
-
-            strct = strct->Next();
-        }
+        for( auto item : screen->Items().OfType( SCH_SHEET_T ) )
+            buildScreenList( static_cast<SCH_SHEET*>( item ) );
     }
 }
 
@@ -1167,26 +1088,20 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
 
 void SCH_SCREENS::DeleteAllMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType )
 {
-    SCH_ITEM* item;
-    SCH_ITEM* nextItem;
-    SCH_MARKER* marker;
-    SCH_SCREEN* screen;
-
-    for( screen = GetFirst(); screen; screen = GetNext() )
+    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( item = screen->GetDrawItems(); item; item = nextItem )
+        std::vector<SCH_ITEM*> markers;
+
+        for( auto item : screen->Items().OfType( SCH_MARKER_T ) )
         {
-            nextItem = item->Next();
+            if( static_cast<SCH_MARKER*>( item )->GetMarkerType() == aMarkerType )
+                markers.push_back( item );
+        }
 
-            if( item->Type() != SCH_MARKER_T )
-                continue;
-
-            marker = (SCH_MARKER*) item;
-
-            if( marker->GetMarkerType() != aMarkerType )
-                continue;
-
-            screen->DeleteItem( marker );
+        for( auto marker : markers )
+        {
+            screen->Remove( marker );
+            delete marker;
         }
     }
 }
@@ -1199,12 +1114,9 @@ int SCH_SCREENS::GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType,
 
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
+        for( auto item : screen->Items().OfType( SCH_MARKER_T ) )
         {
-            if( item->Type() != SCH_MARKER_T )
-                continue;
-
-            SCH_MARKER* marker = (SCH_MARKER*) item;
+            auto marker = static_cast<SCH_MARKER*>( item );
 
             if( ( aMarkerType != MARKER_BASE::MARKER_UNSPEC ) &&
                 ( marker->GetMarkerType() != aMarkerType ) )
@@ -1270,64 +1182,36 @@ void SCH_SCREENS::TestDanglingEnds()
 
 bool SCH_SCREENS::HasNoFullyDefinedLibIds()
 {
-    SCH_COMPONENT* symbol;
-    SCH_ITEM* item;
-    SCH_ITEM* nextItem;
     SCH_SCREEN* screen;
     unsigned cnt = 0;
 
     for( screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( item = screen->GetDrawItems(); item; item = nextItem )
+        for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
-            nextItem = item->Next();
-
-            if( item->Type() != SCH_COMPONENT_T )
-                continue;
-
-            cnt += 1;
-            symbol = dynamic_cast< SCH_COMPONENT* >( item );
-            wxASSERT( symbol );
+            cnt++;
+            auto symbol = static_cast<SCH_COMPONENT*>( item );
 
             if( !symbol->GetLibId().GetLibNickname().empty() )
                 return false;
         }
     }
 
-    if( cnt == 0 )
-        return false;
-
-    return true;
+    return cnt != 0;
 }
 
 
 size_t SCH_SCREENS::GetLibNicknames( wxArrayString& aLibNicknames )
 {
-    SCH_COMPONENT* symbol;
-    SCH_ITEM* item;
-    SCH_ITEM* nextItem;
-    SCH_SCREEN* screen;
-    wxString nickname;
-
-    for( screen = GetFirst(); screen; screen = GetNext() )
+    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( item = screen->GetDrawItems(); item; item = nextItem )
+        for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
-            nextItem = item->Next();
-
-            if( item->Type() != SCH_COMPONENT_T )
-                continue;
-
-            symbol = dynamic_cast< SCH_COMPONENT* >( item );
-            wxASSERT( symbol );
-
-            if( !symbol )
-                continue;
-
-            nickname = symbol->GetLibId().GetLibNickname();
+            auto  symbol   = static_cast<SCH_COMPONENT*>( item );
+            auto& nickname = symbol->GetLibId().GetLibNickname();
 
             if( !nickname.empty() && ( aLibNicknames.Index( nickname ) == wxNOT_FOUND ) )
-                aLibNicknames.Add( nickname );;
+                aLibNicknames.Add( nickname );
         }
     }
 
@@ -1337,23 +1221,14 @@ size_t SCH_SCREENS::GetLibNicknames( wxArrayString& aLibNicknames )
 
 int SCH_SCREENS::ChangeSymbolLibNickname( const wxString& aFrom, const wxString& aTo )
 {
-    SCH_COMPONENT* symbol;
-    SCH_ITEM* item;
-    SCH_ITEM* nextItem;
     SCH_SCREEN* screen;
     int cnt = 0;
 
     for( screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( item = screen->GetDrawItems(); item; item = nextItem )
+        for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
-            nextItem = item->Next();
-
-            if( item->Type() != SCH_COMPONENT_T )
-                continue;
-
-            symbol = dynamic_cast< SCH_COMPONENT* >( item );
-            wxASSERT( symbol );
+            auto symbol = static_cast<SCH_COMPONENT*>( item );
 
             if( symbol->GetLibId().GetLibNickname() != aFrom )
                 continue;

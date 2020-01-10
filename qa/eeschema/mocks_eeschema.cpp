@@ -23,6 +23,7 @@
 
 #include <kiface_i.h>
 #include <pgm_base.h>
+#include <transform.h>
 
 #include <sch_edit_frame.h>
 

@@ -29,10 +29,11 @@
 #include <advanced_config.h>
 #include <common.h>
 #include <erc.h>
-#include <sch_edit_frame.h>
 #include <sch_bus_entry.h>
 #include <sch_component.h>
+#include <sch_edit_frame.h>
 #include <sch_line.h>
+#include <sch_marker.h>
 #include <sch_pin.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
@@ -388,14 +389,10 @@ void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUncondition
     {
         std::vector<SCH_ITEM*> items;
 
-        for( auto item = sheet.LastScreen()->GetDrawItems();
-             item; item = item->Next() )
+        for( auto item : sheet.LastScreen()->Items() )
         {
-            if( item->IsConnectable() &&
-                ( aUnconditional || item->IsConnectivityDirty() ) )
-            {
+            if( item->IsConnectable() && ( aUnconditional || item->IsConnectivityDirty() ) )
                 items.push_back( item );
-            }
         }
 
         updateItemConnectivity( sheet, items );

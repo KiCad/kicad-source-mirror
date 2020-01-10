@@ -99,6 +99,11 @@ public:
 
     const SCH_SHEET_PATH& GetSheetPath() const { return m_SheetPath; }
 
+    SCH_SHEET_PATH& GetSheetPath()
+    {
+        return m_SheetPath;
+    }
+
     int GetUnit() const                     { return m_Unit; }
 
     void SetSheetNumber( int aSheetNumber ) { m_SheetNum = aSheetNumber; }

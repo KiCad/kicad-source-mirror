@@ -426,7 +426,7 @@ public:
      *
      *  @return the component count.
      */
-    int ComponentCount();
+    int ComponentCount() const;
 
     /**
      * Search the existing hierarchy for an instance of screen loaded from \a aFileName.

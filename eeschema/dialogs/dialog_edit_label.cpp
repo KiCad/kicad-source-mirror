@@ -195,12 +195,13 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
         SCH_SCREENS        allScreens;
 
         for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
-            for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
-                if( item->Type() == m_CurrentText->Type() )
-                {
-                    auto textItem = static_cast<SCH_TEXT*>( item );
-                    existingLabels.insert( UnescapeString( textItem->GetText() ) );
-                }
+        {
+            for( auto item : screen->Items().OfType( m_CurrentText->Type() ) )
+            {
+                auto textItem = static_cast<const SCH_TEXT*>( item );
+                existingLabels.insert( UnescapeString( textItem->GetText() ) );
+            }
+        }
 
         wxArrayString existingLabelArray;
 

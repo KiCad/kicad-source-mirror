@@ -48,13 +48,11 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                                                     const wxString& aSearchText )
 {
     SCH_SHEET_PATH* sheetWithComponentFound = NULL;
-    SCH_ITEM*       item = NULL;
     SCH_COMPONENT*  Component = NULL;
     wxPoint         pos;
-    bool            notFound = true;
     LIB_PIN*        pin = nullptr;
     SCH_SHEET_LIST  sheetList( g_RootSheet );
-    EDA_ITEM*       foundItem = nullptr;
+    SCH_ITEM*       foundItem = nullptr;
 
     if( !aSearchHierarchy )
         sheetList.push_back( *g_CurrentSheet );
@@ -63,12 +61,11 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
     for( SCH_SHEET_PATH& sheet : sheetList)
     {
-        for( item = sheet.LastDrawList(); item && notFound; item = item->Next() )
-        {
-            if( item->Type() != SCH_COMPONENT_T )
-                continue;
+        SCH_SCREEN* screen = sheet.LastScreen();
 
-            SCH_COMPONENT* pSch = (SCH_COMPONENT*) item;
+        for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
+        {
+            SCH_COMPONENT* pSch = static_cast<SCH_COMPONENT*>( item );
 
             if( aReference.CmpNoCase( pSch->GetRef( &sheet ) ) == 0 )
             {
@@ -82,21 +79,21 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
                     if( pin )
                     {
-                        notFound = false;
                         pos += pin->GetPosition();
                         foundItem = Component;
+                        break;
                     }
                 }
                 else
                 {
-                    notFound = false;
                     pos = pSch->GetPosition();
                     foundItem = Component;
+                    break;
                 }
             }
         }
 
-        if( notFound == false )
+        if( foundItem )
             break;
     }
 
@@ -129,7 +126,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
     if( Component )
     {
-        if( !notFound )
+        if( foundItem )
             msg.Printf( _( "%s %s found" ), aReference, msg_item );
         else
             msg.Printf( _( "%s found but %s not found" ), aReference, msg_item );
@@ -152,7 +149,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
     m_frame->GetCanvas()->Refresh();
 
-    return item;
+    return foundItem;
 }
 
 

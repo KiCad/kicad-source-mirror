@@ -649,18 +649,14 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
 
             GetScreen()->m_Initialized = true;
-
-            EE_TYPE_COLLECTOR components;
             SCH_SCREENS allScreens;
 
             for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
             {
-                components.Collect( screen->GetDrawItems(), EE_COLLECTOR::ComponentsOnly );
-
-                for( int cmpIdx = 0; cmpIdx < components.GetCount(); ++cmpIdx )
+                for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
                 {
                     std::vector<wxPoint> pts;
-                    SCH_COMPONENT* cmp = static_cast<SCH_COMPONENT*>( components[cmpIdx] );
+                    SCH_COMPONENT*       cmp = static_cast<SCH_COMPONENT*>( item );
 
                     // Update footprint LIB_ID to point to the imported Eagle library
                     auto fpField = cmp->GetField( FOOTPRINT );

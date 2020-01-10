@@ -78,10 +78,8 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
     {
         sheet = &aSheets[i];
 
-        for( SCH_ITEM* item = sheet->LastScreen()->GetDrawItems(); item; item = item->Next() )
-        {
+        for( auto item : sheet->LastScreen()->Items() )
             item->GetNetListItem( *this, sheet );
-        }
     }
 
     if( size() == 0 )

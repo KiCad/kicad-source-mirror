@@ -48,8 +48,6 @@ public:
     GBR_SCREEN( const wxSize& aPageSizeIU );
     ~GBR_SCREEN();
 
-    GBR_SCREEN* Next() const { return static_cast<GBR_SCREEN*>( Pnext ); }
-
     /**
      * Function ClearUndoORRedoList
      * virtual pure in BASE_SCREEN, so it must be defined here

@@ -102,46 +102,40 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_P
 {
     wxString    ref;
 
-    // continue searching from the middle of a linked list (the draw list)
-    for(  ; aItem;  aItem = aItem->Next() )
+    if( aItem->Type() != SCH_COMPONENT_T )
+        return nullptr;
+
+    // found next component
+    SCH_COMPONENT* comp = (SCH_COMPONENT*) aItem;
+
+    // Power symbols and other components which have the reference starting
+    // with "#" are not included in netlist (pseudo or virtual components)
+    ref = comp->GetRef( aSheetPath );
+
+    if( ref[0] == wxChar( '#' ) )
+        return nullptr;
+
+    // if( Component->m_FlagControlMulti == 1 )
+    //    continue;                                      /* yes */
+    // removed because with multiple instances of one schematic
+    // (several sheets pointing to 1 screen), this will be erroneously be
+    // toggled.
+
+    if( !comp->GetPartRef() )
+        return nullptr;
+
+    // If component is a "multi parts per package" type
+    if( comp->GetPartRef()->GetUnitCount() > 1 )
     {
-        if( aItem->Type() != SCH_COMPONENT_T )
-            continue;
-
-        // found next component
-        SCH_COMPONENT* comp = (SCH_COMPONENT*) aItem;
-
-        // Power symbols and other components which have the reference starting
-        // with "#" are not included in netlist (pseudo or virtual components)
-        ref = comp->GetRef( aSheetPath );
-
-        if( ref[0] == wxChar( '#' ) )
-            continue;
-
-        // if( Component->m_FlagControlMulti == 1 )
-        //    continue;                                      /* yes */
-        // removed because with multiple instances of one schematic
-        // (several sheets pointing to 1 screen), this will be erroneously be
-        // toggled.
-
-        if( !comp->GetPartRef() )
-            continue;
-
-        // If component is a "multi parts per package" type
-        if( comp->GetPartRef()->GetUnitCount() > 1 )
-        {
-            // test if this reference has already been processed, and if so skip
-            if( m_ReferencesAlreadyFound.Lookup( ref ) )
-                continue;
-        }
-
-        // record the usage of this library component entry.
-        m_LibParts.insert( comp->GetPartRef().get() );     // rejects non-unique pointers
-
-        return comp;
+        // test if this reference has already been processed, and if so skip
+        if( m_ReferencesAlreadyFound.Lookup( ref ) )
+            return nullptr;
     }
 
-    return NULL;
+    // record the usage of this library component entry.
+    m_LibParts.insert( comp->GetPartRef().get() ); // rejects non-unique pointers
+
+    return comp;
 }
 
 
@@ -153,82 +147,65 @@ static bool sortPinsByNum( NETLIST_OBJECT* aPin1, NETLIST_OBJECT* aPin2 )
 }
 
 
-SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList(
-    EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath )
+void NETLIST_EXPORTER::CreatePinList( SCH_COMPONENT* comp, SCH_SHEET_PATH* aSheetPath )
 {
-    wxString    ref;
+    wxString ref( comp->GetRef( aSheetPath ) );
+
+    // Power symbols and other components which have the reference starting
+    // with "#" are not included in netlist (pseudo or virtual components)
+
+    if( ref[0] == wxChar( '#' ) )
+        return;
+
+    // if( Component->m_FlagControlMulti == 1 )
+    //    continue;                                      /* yes */
+    // removed because with multiple instances of one schematic
+    // (several sheets pointing to 1 screen), this will be erroneously be
+    // toggled.
+
+    if( !comp->GetPartRef() )
+        return;
 
     m_SortedComponentPinList.clear();
 
-    // continue searching from the middle of a linked list (the draw list)
-    for(  ; aItem;  aItem = aItem->Next() )
+    // If component is a "multi parts per package" type
+    if( comp->GetPartRef()->GetUnitCount() > 1 )
     {
-        if( aItem->Type() != SCH_COMPONENT_T )
-            continue;
+        // test if this reference has already been processed, and if so skip
+        if( m_ReferencesAlreadyFound.Lookup( ref ) )
+            return;
 
-        // found next component
-        SCH_COMPONENT* comp = (SCH_COMPONENT*) aItem;
-
-        // Power symbols and other components which have the reference starting
-        // with "#" are not included in netlist (pseudo or virtual components)
-        ref = comp->GetRef( aSheetPath );
-
-        if( ref[0] == wxChar( '#' ) )
-            continue;
-
-        // if( Component->m_FlagControlMulti == 1 )
-        //    continue;                                      /* yes */
-        // removed because with multiple instances of one schematic
-        // (several sheets pointing to 1 screen), this will be erroneously be
-        // toggled.
-
-        if( !comp->GetPartRef() )
-            continue;
-
-        // If component is a "multi parts per package" type
-        if( comp->GetPartRef()->GetUnitCount() > 1 )
-        {
-            // test if this reference has already been processed, and if so skip
-            if( m_ReferencesAlreadyFound.Lookup( ref ) )
-                continue;
-
-            // Collect all pins for this reference designator by searching
-            // the entire design for other parts with the same reference designator.
-            // This is only done once, it would be too expensive otherwise.
-            findAllUnitsOfComponent( comp, comp->GetPartRef().get(), aSheetPath );
-        }
-
-        else    // entry->GetUnitCount() <= 1 means one part per package
-        {
-            LIB_PINS pins;      // constructed once here
-
-            comp->GetPartRef()->GetPins( pins, comp->GetUnitSelection( aSheetPath ),
-                                         comp->GetConvert() );
-
-            for( size_t i = 0; i < pins.size(); i++ )
-            {
-                LIB_PIN* pin = pins[i];
-
-                wxASSERT( pin->Type() == LIB_PIN_T );
-
-                addPinToComponentPinList( comp, aSheetPath, pin );
-            }
-        }
-
-        // Sort pins in m_SortedComponentPinList by pin number
-        sort( m_SortedComponentPinList.begin(),
-              m_SortedComponentPinList.end(), sortPinsByNum );
-
-        // Remove duplicate Pins in m_SortedComponentPinList
-        eraseDuplicatePins();
-
-        // record the usage of this library component entry.
-        m_LibParts.insert( comp->GetPartRef().get() );     // rejects non-unique pointers
-
-        return comp;
+        // Collect all pins for this reference designator by searching
+        // the entire design for other parts with the same reference designator.
+        // This is only done once, it would be too expensive otherwise.
+        findAllUnitsOfComponent( comp, comp->GetPartRef().get(), aSheetPath );
     }
 
-    return NULL;
+    else // entry->GetUnitCount() <= 1 means one part per package
+    {
+        LIB_PINS pins; // constructed once here
+
+        comp->GetPartRef()->GetPins(
+                pins, comp->GetUnitSelection( aSheetPath ), comp->GetConvert() );
+
+        for( size_t i = 0; i < pins.size(); i++ )
+        {
+            LIB_PIN* pin = pins[i];
+
+            wxASSERT( pin->Type() == LIB_PIN_T );
+
+            addPinToComponentPinList( comp, aSheetPath, pin );
+        }
+    }
+
+    // Sort pins in m_SortedComponentPinList by pin number
+    sort( m_SortedComponentPinList.begin(), m_SortedComponentPinList.end(), sortPinsByNum );
+
+    // Remove duplicate Pins in m_SortedComponentPinList
+    eraseDuplicatePins();
+
+    // record the usage of this library component entry.
+    m_LibParts.insert( comp->GetPartRef().get() ); // rejects non-unique pointers
 }
 
 
@@ -329,12 +306,9 @@ void NETLIST_EXPORTER::findAllUnitsOfComponent( SCH_COMPONENT* aComponent,
 
     for( unsigned i = 0;  i < sheetList.size();  i++ )
     {
-        for( EDA_ITEM* item = sheetList[i].LastDrawList();  item;  item = item->Next() )
+        for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            if( item->Type() != SCH_COMPONENT_T )
-                continue;
-
-            SCH_COMPONENT*  comp2 = (SCH_COMPONENT*) item;
+            SCH_COMPONENT* comp2 = static_cast<SCH_COMPONENT*>( item );
 
             ref2 = comp2->GetRef( &sheetList[i] );
 
