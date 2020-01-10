@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -68,9 +68,8 @@ class DIALOG_EDIT_LINE_STYLE_BASE : public DIALOG_SHIM
 
 
 	public:
-		bool m_isValid;
 
-		DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Style"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 349,194 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Style"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_EDIT_LINE_STYLE_BASE();
 
 };

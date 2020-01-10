@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,9 +21,6 @@ DIALOG_EDIT_LINE_STYLE_BASE::DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 
-
-	mainSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	wxFlexGridSizer* fgSizerGeneral;
 	fgSizerGeneral = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizerGeneral->AddGrowableCol( 1 );
@@ -35,8 +32,6 @@ DIALOG_EDIT_LINE_STYLE_BASE::DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWi
 	fgSizerGeneral->Add( m_staticTextWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 
 	m_lineWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	m_lineWidth->SetMinSize( wxSize( 80,-1 ) );
-
 	fgSizerGeneral->Add( m_lineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 
 	m_staticWidthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -67,10 +62,7 @@ DIALOG_EDIT_LINE_STYLE_BASE::DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWi
 	fgSizerGeneral->Add( m_typeCombo, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 
 
-	mainSizer->Add( fgSizerGeneral, 3, wxEXPAND, 5 );
-
-
-	mainSizer->Add( 0, 0, 1, wxALL|wxEXPAND, 1 );
+	mainSizer->Add( fgSizerGeneral, 1, wxEXPAND|wxALL, 5 );
 
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	mainSizer->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
@@ -89,6 +81,7 @@ DIALOG_EDIT_LINE_STYLE_BASE::DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWi
 
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 }
