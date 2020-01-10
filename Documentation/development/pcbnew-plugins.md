@@ -19,7 +19,7 @@ interpreter installed on the system.
 The Pcbnew Python API can be used stand-alone, i.e. no instance of Pcbnew is
 running and the board project to be manipulated is loaded and saved from and to
 file.  This approach is shown with some examples in the [user's
-documentation](https://docs.kicad-pcb.org/master/en/pcbnew/pcbnew.html#kicad_scripting_reference).
+documentation](http://docs.kicad-pcb.org/stable/en/pcbnew.html#_kicad_scripting_reference).
 
 Another documentation source is the auto-generated Doxygen reference of the
 API. It can be found
