@@ -123,6 +123,21 @@ SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
 }
 
 
+bool supportsMultiEdit(KICAD_T type)
+{
+    switch (type)
+    {
+    case SCH_LINE_T:
+    case SCH_TEXT_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
+        return true;
+    default:
+        return false;
+    }
+}
+
 using E_C = EE_CONDITIONS;
 
 bool SCH_EDIT_TOOL::Init()
@@ -179,8 +194,8 @@ bool SCH_EDIT_TOOL::Init()
 
     auto propertiesCondition = []( const SELECTION& aSel ) {
         if( aSel.GetSize() != 1
-                && !( aSel.GetSize() >= 1 && aSel.Front()->Type() == SCH_LINE_T
-                           && aSel.AreAllItemsIdentical() ) )
+                && !( aSel.GetSize() >= 1 && supportsMultiEdit( aSel.Front()->Type() )
+                        && aSel.AreAllItemsIdentical() ) )
             return false;
 
         auto item = static_cast<EDA_ITEM*>( aSel.Front() );
@@ -1289,13 +1304,26 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
-        if( InvokeDialogLabelEditor( m_frame, (SCH_TEXT*) item ) == wxID_OK )
+    {
+        if( !selection.AreAllItemsIdentical() )
+            break;
+
+        std::deque<SCH_TEXT*> texts;
+        for( auto selItem : selection.Items() )
+        {
+            SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( selItem );
+
+            if( text )
+                texts.push_back( text );
+        }
+
+        if( InvokeDialogLabelEditor( m_frame, texts ) == wxID_OK )
         {
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->OnModify();
         }
-
-        break;
+    }
+    break;
 
     case SCH_FIELD_T:
         editComponentFieldText( (SCH_FIELD*) item );

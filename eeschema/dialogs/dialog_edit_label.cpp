@@ -36,6 +36,7 @@
 #include <dialog_edit_label_base.h>
 #include <kicad_string.h>
 #include <tool/actions.h>
+#include <bitmaps.h>
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
@@ -44,7 +45,7 @@ class SCH_TEXT;
 class DIALOG_LABEL_EDITOR : public DIALOG_LABEL_EDITOR_BASE
 {
 public:
-    DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
+    DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* parent, std::deque<SCH_TEXT*> aTextItems);
     ~DIALOG_LABEL_EDITOR();
 
     void SetTitle( const wxString& aTitle ) override
@@ -52,7 +53,7 @@ public:
         // This class is shared for numerous tasks: a couple of single line labels and
         // multi-line text fields.  Since the desired size of the multi-line text field editor
         // is often larger, we retain separate sizes based on the dialog titles.
-        switch( m_CurrentText->Type() )
+        switch( m_textItems.front()->Type() )
         {
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
@@ -62,7 +63,7 @@ public:
 
         default:
             m_hash_key = TO_UTF8( aTitle );
-            m_hash_key += typeid(*this).name();
+            m_hash_key += typeid( *this ).name();
         }
 
         DIALOG_LABEL_EDITOR_BASE::SetTitle( aTitle );
@@ -75,8 +76,8 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    std::deque<SCH_TEXT*> m_textItems;
     SCH_EDIT_FRAME* m_Parent;
-    SCH_TEXT*       m_CurrentText;
     wxWindow*       m_activeTextCtrl;
     wxTextEntry*    m_activeTextEntry;
     UNIT_BINDER     m_textSize;
@@ -84,12 +85,73 @@ private:
 };
 
 
-int InvokeDialogLabelEditor( SCH_EDIT_FRAME* aCaller, SCH_TEXT* aTextItem )
+int InvokeDialogLabelEditor( SCH_EDIT_FRAME* aCaller, std::deque<SCH_TEXT*> aTextItems )
 {
-    DIALOG_LABEL_EDITOR dialog( aCaller, aTextItem );
+    DIALOG_LABEL_EDITOR dialog( aCaller, aTextItems);
 
     return dialog.ShowModal();
 }
+
+int InvokeDialogLabelEditor(SCH_EDIT_FRAME* aCaller, SCH_TEXT* aTextItem)
+{
+    std::deque<SCH_TEXT*> list;
+    list.push_back( aTextItem );
+    DIALOG_LABEL_EDITOR dialog( aCaller, list );
+
+    return dialog.ShowModal();
+}
+
+
+struct shapeTypeStruct
+{
+    wxString             name;
+    const BITMAP_OPAQUE* bitmap;
+};
+
+/*
+ * Conversion map between PLOT_DASH_TYPE values and style names displayed
+ */
+const std::map<PINSHEETLABEL_SHAPE, struct shapeTypeStruct> shapeTypeNames = {
+    { PINSHEETLABEL_SHAPE::PS_INPUT, { _( "Input" ), pintype_input_xpm } },
+    { PINSHEETLABEL_SHAPE::PS_OUTPUT, { _( "Output" ), pintype_output_xpm } },
+    { PINSHEETLABEL_SHAPE::PS_BIDI, { _( "Bidirectional" ), pintype_bidi_xpm } },
+    { PINSHEETLABEL_SHAPE::PS_TRISTATE, { _( "Tri-state" ), pintype_3states_xpm } },
+    { PINSHEETLABEL_SHAPE::PS_UNSPECIFIED, { _( "Passive" ), stroke_dashdot_xpm } },
+};
+
+
+struct orientationTypeStruct
+{
+    wxString             name;
+    const BITMAP_OPAQUE* bitmap;
+};
+
+/*
+ * Conversion map between PLOT_DASH_TYPE values and style names displayed
+ */
+const std::map<LABEL_SPIN_STYLE, struct orientationTypeStruct> orientationOptionsMap = {
+    { LABEL_SPIN_STYLE::LEFT, { _("Left"), pintype_input_xpm } },
+    { LABEL_SPIN_STYLE::UP, { _("Up"), pintype_output_xpm } },
+    { LABEL_SPIN_STYLE::RIGHT, { _("Right"), pintype_bidi_xpm } },
+    { LABEL_SPIN_STYLE::BOTTOM, { _("Down"), pintype_3states_xpm } },
+};
+
+struct textStyleStruct
+{
+    wxString             name;
+    const BITMAP_OPAQUE* bitmap;
+};
+
+/*
+ * Conversion map between PLOT_DASH_TYPE values and style names displayed
+ */
+const std::map<int, struct textStyleStruct> textStylesMap = {
+    { 0, { _("Normal"), pintype_input_xpm } },
+    { 1, { _("Italic"), pintype_output_xpm } },
+    { 2, { _("Bold"), pintype_bidi_xpm } },
+    { 3, { _("Bold and italic"), pintype_bidi_xpm } },
+};
+
 
 
 // Don't allow text to disappear; it can be difficult to correct if you can't select it
@@ -97,54 +159,76 @@ const int MIN_TEXTSIZE = (int)( 0.01 * IU_PER_MM );
 const int MAX_TEXTSIZE = INT_MAX;
 
 
-DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
+DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, std::deque<SCH_TEXT*> aTextItems ) :
     DIALOG_LABEL_EDITOR_BASE( aParent ),
     m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
     m_netNameValidator( true )
 {
     m_Parent = aParent;
-    m_CurrentText = aTextItem;
+    m_textItems = aTextItems;
 
-    switch( m_CurrentText->Type() )
+    wxASSERT( m_textItems.size() > 0 );
+
+    SCH_TEXT* firstItem = m_textItems.front();
+    switch( firstItem->Type() )
     {
-    case SCH_GLOBAL_LABEL_T:       SetTitle( _( "Global Label Properties" ) );           break;
-    case SCH_HIER_LABEL_T:         SetTitle( _( "Hierarchical Label Properties" ) );     break;
-    case SCH_LABEL_T:              SetTitle( _( "Label Properties" ) );                  break;
-    case SCH_SHEET_PIN_T:          SetTitle( _( "Hierarchical Sheet Pin Properties" ) ); break;
-    default:                       SetTitle( _( "Text Properties" ) );                   break;
+    case SCH_GLOBAL_LABEL_T:
+        SetTitle( _( "Global Label Properties" ) );
+        break;
+    case SCH_HIER_LABEL_T:
+        SetTitle( _( "Hierarchical Label Properties" ) );
+        break;
+    case SCH_LABEL_T:
+        SetTitle( _( "Label Properties" ) );
+        break;
+    case SCH_SHEET_PIN_T:
+        SetTitle( _( "Hierarchical Sheet Pin Properties" ) );
+        break;
+    default:
+        SetTitle( _( "Text Properties" ) );
+        break;
     }
 
     m_valueMultiLine->SetEOLMode( wxSTC_EOL_LF );
 
-    if( m_CurrentText->IsMultilineAllowed() )
+    if( firstItem->IsMultilineAllowed() )
     {
-        m_activeTextCtrl = m_valueMultiLine;
+        m_activeTextCtrl  = m_valueMultiLine;
         m_activeTextEntry = nullptr;
 
-        m_labelSingleLine->Show( false );  m_valueSingleLine->Show( false );
-        m_labelCombo->Show( false );       m_valueCombo->Show( false );
+        m_labelSingleLine->Show( false );
+        m_valueSingleLine->Show( false );
+
+        m_labelCombo->Show( false );
+        m_valueCombo->Show( false );
 
         m_textEntrySizer->AddGrowableRow( 0 );
     }
-    else if( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T || m_CurrentText->Type() == SCH_LABEL_T )
+    else if( firstItem->Type() == SCH_GLOBAL_LABEL_T || firstItem->Type() == SCH_LABEL_T )
     {
-        m_activeTextCtrl = m_valueCombo;
+        m_activeTextCtrl  = m_valueCombo;
         m_activeTextEntry = m_valueCombo;
 
-        m_labelSingleLine->Show( false );  m_valueSingleLine->Show( false );
-        m_labelMultiLine->Show( false );   m_valueMultiLine->Show( false );
+        m_labelSingleLine->Show( false );
+        m_valueSingleLine->Show( false );
+
+        m_labelMultiLine->Show( false );
+        m_valueMultiLine->Show( false );
 
         m_valueCombo->SetValidator( m_netNameValidator );
     }
     else
     {
-        m_activeTextCtrl = m_valueSingleLine;
+        m_activeTextCtrl  = m_valueSingleLine;
         m_activeTextEntry = m_valueSingleLine;
 
-        m_labelCombo->Show( false );       m_valueCombo->Show( false );
-        m_labelMultiLine->Show( false );   m_valueMultiLine->Show( false );
+        m_labelCombo->Show( false );
+        m_valueCombo->Show( false );
 
-        if( m_CurrentText->Type() != SCH_TEXT_T )
+        m_labelMultiLine->Show( false );
+        m_valueMultiLine->Show( false );
+
+        if( firstItem->Type() != SCH_TEXT_T )
             m_valueSingleLine->SetValidator( m_netNameValidator );
 
         m_valueCombo->SetValidator( m_netNameValidator );
@@ -152,8 +236,30 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
     SetInitialFocus( m_activeTextCtrl );
 
-    m_TextShape->Show( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T ||
-                       m_CurrentText->Type() == SCH_HIER_LABEL_T );
+    bool isShapableLabel =
+            ( firstItem->Type() == SCH_GLOBAL_LABEL_T || firstItem->Type() == SCH_HIER_LABEL_T );
+
+    m_labelShape->Show( isShapableLabel );
+    m_comboShape->Show( isShapableLabel );
+
+    if( isShapableLabel )
+    {
+        for( auto& shapeEntry : shapeTypeNames )
+        {
+            m_comboShape->Append( shapeEntry.second.name, KiBitmap( shapeEntry.second.bitmap ) );
+        }
+    }
+
+    for( auto& orientationEntry : orientationOptionsMap )
+    {
+        m_comboOrientation->Append(
+                orientationEntry.second.name, KiBitmap( orientationEntry.second.bitmap ) );
+    }
+
+    for( auto& styleEntry : textStylesMap )
+    {
+        m_comboStyle->Append( styleEntry.second.name, KiBitmap( styleEntry.second.bitmap ) );
+    }
 
     m_sdbSizer1OK->SetDefault();
     Layout();
@@ -183,10 +289,26 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    if( m_activeTextEntry )
-        m_activeTextEntry->SetValue( UnescapeString( m_CurrentText->GetText() ) );
+    wxASSERT(m_textItems.size() > 0);
+
+    SCH_TEXT* firstItem = m_textItems.front();
+
+    if( std::all_of( m_textItems.begin() + 1, m_textItems.end(),
+                [&]( const SCH_TEXT* r ) { return r->GetText() == firstItem->GetText(); } ) )
+    {
+        if( m_activeTextEntry )
+            m_activeTextEntry->SetValue( UnescapeString( firstItem->GetText() ) );
+        else
+            m_valueMultiLine->SetValue( UnescapeString( firstItem->GetText() ) );
+    }
     else
-        m_valueMultiLine->SetValue( UnescapeString( m_CurrentText->GetText() ) );
+    {
+        if( m_activeTextEntry )
+            m_activeTextEntry->SetValue( "" );
+        else
+            m_valueMultiLine->SetValue( "" );
+    }
+
 
     if( m_valueCombo->IsShown() )
     {
@@ -213,21 +335,70 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     }
 
     // Set text options:
-    m_TextOrient->SetSelection( static_cast<int>( m_CurrentText->GetLabelSpinStyle() ) );
+    if( std::all_of( m_textItems.begin() + 1, m_textItems.end(), [&]( const SCH_TEXT* r ) {
+            return r->GetLabelSpinStyle() == firstItem->GetLabelSpinStyle();
+        } ) )
+    {
+        int spin = static_cast<int>( firstItem->GetShape() );
+        wxCHECK_MSG( spin < (int) orientationOptionsMap.size(), false,
+                "Text orientation not found in the orientation options map" );
 
-    m_TextShape->SetSelection( static_cast<int>( m_CurrentText->GetShape() ) );
+        m_comboOrientation->SetSelection( spin );
+    }
+    else
+    {
+        m_comboOrientation->SetSelection( wxNOT_FOUND );
+    }
 
-    int style = 0;
+    if( m_comboShape->IsShown() )
+    {
+        if( std::all_of( m_textItems.begin() + 1, m_textItems.end(),
+                    [&]( const SCH_TEXT* r ) { return r->GetShape() == firstItem->GetShape(); } ) )
+        {
+            int shape = static_cast<int>( firstItem->GetShape() );
+            wxCHECK_MSG( shape < (int) shapeTypeNames.size(), false,
+                    "Text shape not found in the shape definition map" );
+            m_comboShape->SetSelection( shape );
+        }
+        else
+        {
+            m_comboShape->SetSelection( wxNOT_FOUND );
+        }
+    }
 
-    if( m_CurrentText->IsItalic() )
-        style = 1;
 
-    if( m_CurrentText->IsBold() )
-        style += 2;
+    if( std::all_of( m_textItems.begin() + 1, m_textItems.end(), [&]( const SCH_TEXT* r ) {
+            return r->IsItalic() == firstItem->IsItalic() && r->IsBold() == firstItem->IsBold();
+        } ) )
+    {
+        int style = 0;
 
-    m_TextStyle->SetSelection( style );
+        if( firstItem->IsItalic() )
+            style = 1;
 
-    m_textSize.SetValue( m_CurrentText->GetTextWidth() );
+        if( firstItem->IsBold() )
+            style += 2;
+
+        m_comboStyle->SetSelection( style );
+    }
+    else
+    {
+        m_comboStyle->SetSelection( wxNOT_FOUND );
+    }
+
+
+    if( std::all_of( m_textItems.begin() + 1, m_textItems.end(), [&]( const SCH_TEXT* r ) {
+            return r->GetTextWidth() == firstItem->GetTextWidth();
+        } ) )
+    {
+        m_textSize.SetValue( firstItem->GetTextWidth() );
+    }
+    else
+    {
+        m_textSize.SetValue( INDETERMINATE );
+    }
+
+
 
     return true;
 }
@@ -300,55 +471,85 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
 
     wxString text;
 
-    /* save old text in undo list if not already in edit */
-    if( m_CurrentText->GetEditFlags() == 0 )
-        m_Parent->SaveCopyInUndoList( m_CurrentText, UR_CHANGED );
-
-    m_Parent->GetCanvas()->Refresh();
-
-    // Escape string only if is is a label. For a simple graphic text do not change anything
-    if( m_CurrentText->Type() == SCH_TEXT_T )
-        text = m_valueMultiLine->GetValue();
-    else
-        text = EscapeString( m_activeTextEntry->GetValue(), CTX_NETNAME );
-
-    if( !text.IsEmpty() )
-        m_CurrentText->SetText( text );
-    else if( !m_CurrentText->IsNew() )
+    for( auto& textItem : m_textItems )
     {
-        DisplayError( this, _( "Empty Text!" ) );
-        return false;
+        /* save old text in undo list if not already in edit */
+        if( textItem->GetEditFlags() == 0 )
+            m_Parent->SaveCopyInUndoList( textItem, UR_CHANGED );
+
+        m_Parent->GetCanvas()->Refresh();
+
+        // Escape string only if is is a label. For a simple graphic text do not change anything
+        if( textItem->Type() == SCH_TEXT_T )
+            text = m_valueMultiLine->GetValue();
+        else
+            text = EscapeString( m_activeTextEntry->GetValue(), CTX_NETNAME );
+
+        if( !text.IsEmpty() )
+            textItem->SetText( text );
+        else if( !textItem->IsNew() && m_textItems.size() == 1 )
+        {
+            DisplayError( this, _( "Empty Text!" ) );
+            return false;
+        }
+
+        if( m_comboOrientation->GetSelection() != wxNOT_FOUND )
+        {
+            int selection = m_comboOrientation->GetSelection();
+
+            wxCHECK_MSG( selection < (int) orientationOptionsMap.size(), false,
+                    "Selected line type index exceeds size of line type lookup map" );
+
+            auto it = orientationOptionsMap.begin();
+            std::advance( it, selection );
+
+            textItem->SetLabelSpinStyle( it->first );
+        }
+
+        if( !m_textSize.IsIndeterminate() )
+        {
+            textItem->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
+        }
+
+        if( m_comboShape->IsShown() && m_comboShape->GetSelection() != wxNOT_FOUND )
+        {
+            int selection = m_comboShape->GetSelection();
+
+            wxCHECK_MSG(selection < (int)shapeTypeNames.size(), false,
+                "Selected line type index exceeds size of line type lookup map");
+
+            auto it = shapeTypeNames.begin();
+            std::advance(it, selection);
+
+            textItem->SetShape( it->first );
+        }
+
+        if (m_comboStyle->GetSelection() != wxNOT_FOUND)
+        {
+            int style = m_comboStyle->GetSelection();
+
+            textItem->SetItalic( ( style & 1 ) );
+
+            if( ( style & 2 ) )
+            {
+                textItem->SetBold( true );
+                textItem->SetThickness( GetPenSizeForBold( textItem->GetTextWidth() ) );
+            }
+            else
+            {
+                textItem->SetBold( false );
+                textItem->SetThickness( 0 );
+            }
+        }
+
+        m_Parent->RefreshItem( textItem );
+        m_Parent->GetCanvas()->Refresh();
+        m_Parent->OnModify();
+
+        // Make the text size the new default size ( if it is a new text ):
+        if( textItem->IsNew() )
+            SetDefaultTextSize( textItem->GetTextWidth() );
     }
-
-    m_CurrentText->SetLabelSpinStyle( m_TextOrient->GetSelection() );
-
-    m_CurrentText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
-
-    if( m_TextShape )
-        m_CurrentText->SetShape( static_cast<PINSHEETLABEL_SHAPE>( m_TextShape->GetSelection() ) );
-
-    int style = m_TextStyle->GetSelection();
-
-    m_CurrentText->SetItalic( ( style & 1 ) );
-
-    if( ( style & 2 ) )
-    {
-        m_CurrentText->SetBold( true );
-        m_CurrentText->SetThickness( GetPenSizeForBold( m_CurrentText->GetTextWidth() ) );
-    }
-    else
-    {
-        m_CurrentText->SetBold( false );
-        m_CurrentText->SetThickness( 0 );
-    }
-
-    m_Parent->RefreshItem( m_CurrentText );
-    m_Parent->GetCanvas()->Refresh();
-    m_Parent->OnModify();
-
-    // Make the text size the new default size ( if it is a new text ):
-    if( m_CurrentText->IsNew() )
-        SetDefaultTextSize( m_CurrentText->GetTextWidth() );
 
     return true;
 }

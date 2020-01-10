@@ -16,7 +16,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_textEntrySizer = new wxFlexGridSizer( 4, 2, 3, 3 );
+	m_textEntrySizer = new wxFlexGridSizer( 7, 2, 3, 3 );
 	m_textEntrySizer->AddGrowableCol( 1 );
 	m_textEntrySizer->AddGrowableRow( 1 );
 	m_textEntrySizer->SetFlexibleDirection( wxBOTH );
@@ -68,7 +68,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_valueMultiLine->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
 	m_valueMultiLine->SetMinSize( wxSize( 480,100 ) );
 
-	m_textEntrySizer->Add( m_valueMultiLine, 1, wxEXPAND | wxALL, 5 );
+	m_textEntrySizer->Add( m_valueMultiLine, 1, wxBOTTOM|wxEXPAND|wxLEFT, 3 );
 
 	m_labelCombo = new wxStaticText( this, wxID_ANY, _("Label:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCombo->Wrap( -1 );
@@ -77,7 +77,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_valueCombo = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
 	m_valueCombo->SetMinSize( wxSize( 360,-1 ) );
 
-	m_textEntrySizer->Add( m_valueCombo, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_textEntrySizer->Add( m_valueCombo, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
 	m_textSizeLabel = new wxStaticText( this, wxID_ANY, _("Text Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
@@ -94,34 +94,31 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	bSizeCtrlSizer->Add( m_textSizeUnits, 0, wxALIGN_CENTER_VERTICAL, 2 );
 
 
-	m_textEntrySizer->Add( bSizeCtrlSizer, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 3 );
+	m_textEntrySizer->Add( bSizeCtrlSizer, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
+
+	m_labelOrientation = new wxStaticText( this, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelOrientation->Wrap( -1 );
+	m_textEntrySizer->Add( m_labelOrientation, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+
+	m_comboOrientation = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_textEntrySizer->Add( m_comboOrientation, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 3 );
+
+	m_labelStyle = new wxStaticText( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelStyle->Wrap( -1 );
+	m_textEntrySizer->Add( m_labelStyle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+
+	m_comboStyle = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_textEntrySizer->Add( m_comboStyle, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 3 );
+
+	m_labelShape = new wxStaticText( this, wxID_ANY, _("Shape:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelShape->Wrap( -1 );
+	m_textEntrySizer->Add( m_labelShape, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+
+	m_comboShape = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_textEntrySizer->Add( m_comboShape, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 3 );
 
 
 	bMainSizer->Add( m_textEntrySizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 12 );
-
-	wxBoxSizer* m_OptionsSizer;
-	m_OptionsSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	wxString m_TextOrientChoices[] = { _("Left"), _("Up"), _("Right"), _("Down") };
-	int m_TextOrientNChoices = sizeof( m_TextOrientChoices ) / sizeof( wxString );
-	m_TextOrient = new wxRadioBox( this, wxID_ANY, _("Orientation"), wxDefaultPosition, wxDefaultSize, m_TextOrientNChoices, m_TextOrientChoices, 1, wxRA_SPECIFY_COLS );
-	m_TextOrient->SetSelection( 0 );
-	m_OptionsSizer->Add( m_TextOrient, 1, wxRIGHT|wxTOP|wxEXPAND, 3 );
-
-	wxString m_TextStyleChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold and italic") };
-	int m_TextStyleNChoices = sizeof( m_TextStyleChoices ) / sizeof( wxString );
-	m_TextStyle = new wxRadioBox( this, wxID_ANY, _("Style"), wxDefaultPosition, wxDefaultSize, m_TextStyleNChoices, m_TextStyleChoices, 1, wxRA_SPECIFY_COLS );
-	m_TextStyle->SetSelection( 3 );
-	m_OptionsSizer->Add( m_TextStyle, 1, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 3 );
-
-	wxString m_TextShapeChoices[] = { _("Input"), _("Output"), _("Bidirectional"), _("Tri-state"), _("Passive") };
-	int m_TextShapeNChoices = sizeof( m_TextShapeChoices ) / sizeof( wxString );
-	m_TextShape = new wxRadioBox( this, wxID_ANY, _("Shape"), wxDefaultPosition, wxDefaultSize, m_TextShapeNChoices, m_TextShapeChoices, 1, wxRA_SPECIFY_COLS );
-	m_TextShape->SetSelection( 3 );
-	m_OptionsSizer->Add( m_TextShape, 1, wxEXPAND|wxTOP|wxLEFT, 3 );
-
-
-	bMainSizer->Add( m_OptionsSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
