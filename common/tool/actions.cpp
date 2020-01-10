@@ -527,6 +527,10 @@ TOOL_ACTION ACTIONS::updatePcbFromSchematic( "common.Control.updatePcbFromSchema
         _( "Update PCB from Schematic..." ), _( "Push changes from schematic to PCB" ),
         update_pcb_from_sch_xpm );
 
+TOOL_ACTION ACTIONS::updateSchematicFromPcb( "common.Control.updateSchematicFromPCB", AS_GLOBAL, 0,
+        LEGACY_HK_NAME( "Update Schematic from PCB" ), _( "Update Schematic from PCB..." ),
+        _( "Push changes from PCB to Schematic" ), update_pcb_from_sch_xpm );
+
 TOOL_ACTION ACTIONS::acceleratedGraphics( "common.Control.acceleratedGraphics",
         AS_GLOBAL,
 #ifdef __WXMAC__

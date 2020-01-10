@@ -42,7 +42,8 @@ enum MAIL_T
     MAIL_EESCHEMA_NETLIST,          ///< SCH->CVPCB netlist immediately after launching CVPCB
     MAIL_PCB_UPDATE,                ///< SCH->PCB forward update
     MAIL_IMPORT_FILE,               ///< Import a different format file
-    MAIL_SCH_GET_NETLIST,           ///< Fetch a netlist
+    MAIL_SCH_GET_NETLIST,           ///< Fetch a netlist from schematics
+    MAIL_PCB_GET_NETLIST,           ///< Fetch a netlist from PCB layout
     MAIL_SCH_REFRESH,               ///< The the schematic editor to refresh the display.
 
     MAIL_LIB_EDIT,

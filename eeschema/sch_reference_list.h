@@ -93,15 +93,21 @@ public:
     SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent,
                    SCH_SHEET_PATH& aSheetPath );
 
-    SCH_COMPONENT* GetComp() const          { return m_RootCmp; }
+    SCH_COMPONENT* GetComp() const             { return m_RootCmp; }
 
-    LIB_PART*      GetLibPart() const       { return m_Entry; }
+    LIB_PART*      GetLibPart() const          { return m_Entry; }
 
     const SCH_SHEET_PATH& GetSheetPath() const { return m_SheetPath; }
 
-    int GetUnit() const                     { return m_Unit; }
+    int GetUnit() const                        { return m_Unit; }
 
-    void SetSheetNumber( int aSheetNumber ) { m_SheetNum = aSheetNumber; }
+    void SetSheetNumber( int aSheetNumber )    { m_SheetNum = aSheetNumber; }
+
+    const wxString GetPath() const
+    {
+        return m_RootCmp ? m_RootCmp->GetPath( &m_SheetPath ) : "";
+    }
+
 
     /**
      * Function Annotate
@@ -138,6 +144,15 @@ public:
     const char* GetRefStr() const
     {
         return m_Ref.c_str();
+    }
+
+    ///> Return reference name with unit altogether
+    wxString GetFullRef()
+    {
+        if( GetComp()->GetUnitCount() > 1 )
+            return GetRef() + LIB_PART::SubReference( GetUnit() );
+        else
+            return GetRef();
     }
 
     wxString GetRefNumber() const
@@ -335,6 +350,14 @@ public:
     int CheckAnnotation( REPORTER& aReporter );
 
     /**
+     * @brief Check components having same references designator. Must be called with references
+     * sorted by timestamp \ref SortByTimeStamp()
+     * @param aReporter A sink for error messages.  Use NULL_REPORTER if you don't need errors.
+     * @return The number of errors found.
+     */
+    int checkForDuplicatedElements( REPORTER& aReporter );
+
+    /**
      * Function sortByXCoordinate
      * sorts the list of references by X position.
      * <p>
@@ -374,7 +397,7 @@ public:
 
     /**
      * Function SortComponentsByTimeStamp
-     * sort the flat list by Time Stamp.
+     * sort the flat list by Time Stamp (sheet path + timestamp).
      * Useful to detect duplicate Time Stamps
      */
     void SortByTimeStamp()
@@ -429,6 +452,13 @@ public:
     int FindUnit( size_t aIndex, int aUnit );
 
     /**
+     * @brief Searches unit with designated path
+     * @param aPath path to search
+     * @return index in aComponentsList if found or -1 if not found
+     */
+    int FindRefByPath( const wxString& aPath ) const;
+
+    /**
      * Function GetRefsInUse
      * adds all the reference designator numbers greater than \a aMinRefId to \a aIdList
      * skipping the reference at \a aIndex.
@@ -476,6 +506,7 @@ public:
      */
     static wxString Shorthand( std::vector<SCH_REFERENCE> aList );
 
+    friend class BACK_ANNOTATION;
 
 private:
     /* sort functions used to sort componentFlatList
@@ -503,6 +534,9 @@ private:
      * @return The first free (not yet used) value.
      */
     int CreateFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue );
+
+    // Used for sorting static sortByTimeStamp function
+    friend class BACK_ANNOTATE;
 };
 
 #endif    // _SCH_REFERENCE_LIST_H_
