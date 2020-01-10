@@ -179,7 +179,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 SCH_ITEM* sch_item = (SCH_ITEM*) selection.Front();
                 bool      appendUndo = sch_item && sch_item->IsNew();
-                bool      placingNewItems = sch_item->IsNew();
+                bool      placingNewItems = sch_item && sch_item->IsNew();
 
                 //------------------------------------------------------------------------
                 // Setup a drag or a move
