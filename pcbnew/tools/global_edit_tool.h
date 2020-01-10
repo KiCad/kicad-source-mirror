@@ -56,6 +56,15 @@ public:
 
     int SwapLayers( const TOOL_EVENT& aEvent );
 
+    /**
+     * Function CenterBoardOnPage
+     * @brief Center board items on page
+     * 
+     * Move all board items (tracks, via, modules, etc... ) with the same displacement vector.
+     * This vector is defined as : ( center of page ) - ( center of board ).
+     * The displacement vector is rounded to the closest vector matching the current grid.
+     */
+    int CenterBoardOnPage( const TOOL_EVENT& aEvent );
     int EditTracksAndVias( const TOOL_EVENT& aEvent );
     int EditTextAndGraphics( const TOOL_EVENT& aEvent );
     int GlobalDeletions( const TOOL_EVENT& aEvent );

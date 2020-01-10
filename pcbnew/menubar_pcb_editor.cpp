@@ -225,6 +225,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ACTIONS::find,                       SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
+    editMenu->AddItem( PCB_ACTIONS::centerBoardOnPage, SELECTION_CONDITIONS::ShowAlways );
     editMenu->AddItem( PCB_ACTIONS::editTracksAndVias,      SELECTION_CONDITIONS::ShowAlways );
     editMenu->AddItem( PCB_ACTIONS::editTextAndGraphics,    SELECTION_CONDITIONS::ShowAlways );
     editMenu->AddItem( PCB_ACTIONS::changeFootprints,       SELECTION_CONDITIONS::ShowAlways );
