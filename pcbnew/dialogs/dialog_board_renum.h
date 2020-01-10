@@ -52,8 +52,6 @@
 #define MINGRID             0.001
 #define DEFAULT_GRID        1.000
 
-#define LOGFILENAME         "RenumberLog.txt"
-
 #define SetSortCodes( DirArray, Code ) { \
     SortYFirst = (( DirArray[Code] & SORTYFIRST ) != 0 ); \
     DescendingFirst = (( DirArray[Code] & DESCENDINGFIRST ) != 0 ); \

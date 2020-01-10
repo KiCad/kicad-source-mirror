@@ -548,7 +548,11 @@ void DIALOG_BOARD_RENUM::BuildModuleList(std::vector<RefDesInfo> &aBadRefDes) {
 
     if ((!backprefixempty && removebackprefix) //If removing prefix have an error
     || (!FrontPrefix.empty() && removefrontprefix)) {
-
+//
+// If removing back prefrix, you can end up with (for example) two R1s because the former
+// B_R1 can become the R1. So I reset the back refdes start to front max + 1 and warn to do it
+// again.
+//
         warning =
                 _(
                         "**** \nRemoving Prefixes takes two passes ****\n"
@@ -564,8 +568,8 @@ void DIALOG_BOARD_RENUM::BuildModuleList(std::vector<RefDesInfo> &aBadRefDes) {
 
             warning =
                     _(
-                            "\nWarning: Back Ref Des Start < highest Front Ref Des\nStarting Back at %d\n")
-                            + std::to_string(maxrefdes);
+                            "\nWarning: Back Ref Des Start < highest Front Ref Des\nStarting Back at ")
+                            + std::to_string(maxrefdes) + "\n";
             ShowWarning(warning);
             BackStartRefDes = maxrefdes + 1;
         }
