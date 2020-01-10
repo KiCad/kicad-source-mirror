@@ -26,13 +26,17 @@
  * @brief Pcbnew PLUGIN for Altium *.PcbDoc format.
  */
 
-#include <cerrno>
+#include <iomanip>
 
 #include <wx/string.h>
 
 #include <altium_plugin.h>
+#include <altium_pcb.h>
 
 #include <class_board.h>
+
+#include <compoundfilereader.h>
+#include <utf.h>
 
 ALTIUM_PLUGIN::ALTIUM_PLUGIN()
 {
@@ -68,7 +72,28 @@ BOARD* ALTIUM_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, const
     if( !aAppendToMe )
         m_board->SetFileName( aFileName );
 
-    // TODO: parse board
+    // Open file
+    FILE* fp = fopen(aFileName, "rb");
+    if (fp == nullptr)
+    {
+        std::cerr << "read file error" << std::endl;
+        return m_board;
+    }
+
+    fseek(fp, 0, SEEK_END);
+    size_t len = ftell(fp);
+    std::unique_ptr<unsigned char> buffer(new unsigned char[len]);
+    fseek(fp, 0, SEEK_SET);
+
+    len = fread(buffer.get(), 1, len, fp);
+    CFB::CompoundFileReader reader(buffer.get(), len);
+
+    // Parse File
+    ALTIUM_PCB pcb(m_board);
+    pcb.Parse(reader);
+
+    // Close File
+    fclose(fp);
 
     return m_board;
 }
