@@ -590,7 +590,13 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
     fprintf( fp, "\n** Found %d unconnected pads **\n", count );
 
     for( int i = 0;  i<count;  ++i )
-        fprintf( fp, "%s", TO_UTF8( m_UnconnectedListBox->GetItem( i )->ShowReport( units ) ) );
+        fprintf( fp, "%s", TO_UTF8( m_UnconnectedListBox->GetItem( i )->ShowReport( units ) ) )
+    count = m_FootprintsListBox->GetItemCount();
+
+    fprintf( fp, "\n** Found %d Footprint errors **\n", count );
+
+    for( int i = 0;  i<count;  ++i )
+        fprintf( fp, "%s", TO_UTF8( m_FootprintsListBox->GetItem( i )->ShowReport( units ) ) );
 
     fprintf( fp, "\n** End of Report **\n" );
 
