@@ -123,9 +123,9 @@ SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
 }
 
 
-bool supportsMultiEdit(KICAD_T type)
+bool supportsMultiEdit( KICAD_T type )
 {
-    switch (type)
+    switch( type )
     {
     case SCH_LINE_T:
     case SCH_TEXT_T:
@@ -137,6 +137,7 @@ bool supportsMultiEdit(KICAD_T type)
         return false;
     }
 }
+
 
 using E_C = EE_CONDITIONS;
 
@@ -195,7 +196,7 @@ bool SCH_EDIT_TOOL::Init()
     auto propertiesCondition = []( const SELECTION& aSel ) {
         if( aSel.GetSize() != 1
                 && !( aSel.GetSize() >= 1 && supportsMultiEdit( aSel.Front()->Type() )
-                        && aSel.AreAllItemsIdentical() ) )
+                           && aSel.AreAllItemsIdentical() ) )
             return false;
 
         auto item = static_cast<EDA_ITEM*>( aSel.Front() );

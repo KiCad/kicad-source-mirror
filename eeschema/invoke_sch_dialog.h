@@ -39,11 +39,11 @@
 #ifndef INVOKE_SCH_DIALOG_H_
 #define INVOKE_SCH_DIALOG_H_
 
-#include <set>
-#include <vector>
+#include <class_draw_panel_gal.h>
 #include <deque>
 #include <list>
-#include <class_draw_panel_gal.h>
+#include <set>
+#include <vector>
 
 class wxFrame;
 class wxDialog;

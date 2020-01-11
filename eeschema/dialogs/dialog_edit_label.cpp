@@ -23,20 +23,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <sch_edit_frame.h>
 #include <base_units.h>
-#include <sch_validators.h>
-#include <tool/tool_manager.h>
+#include <bitmaps.h>
+#include <confirm.h>
+#include <dialog_edit_label_base.h>
+#include <fctsys.h>
 #include <general.h>
 #include <gr_text.h>
-#include <confirm.h>
-#include <sch_text.h>
-#include <widgets/unit_binder.h>
-#include <dialog_edit_label_base.h>
 #include <kicad_string.h>
+#include <sch_edit_frame.h>
+#include <sch_text.h>
+#include <sch_validators.h>
 #include <tool/actions.h>
-#include <bitmaps.h>
+#include <tool/tool_manager.h>
+#include <widgets/unit_binder.h>
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
@@ -87,12 +87,13 @@ private:
 
 int InvokeDialogLabelEditor( SCH_EDIT_FRAME* aCaller, std::deque<SCH_TEXT*> aTextItems )
 {
-    DIALOG_LABEL_EDITOR dialog( aCaller, aTextItems);
+    DIALOG_LABEL_EDITOR dialog( aCaller, aTextItems );
 
     return dialog.ShowModal();
 }
 
-int InvokeDialogLabelEditor(SCH_EDIT_FRAME* aCaller, SCH_TEXT* aTextItem)
+
+int InvokeDialogLabelEditor( SCH_EDIT_FRAME* aCaller, SCH_TEXT* aTextItem )
 {
     std::deque<SCH_TEXT*> list;
     list.push_back( aTextItem );
