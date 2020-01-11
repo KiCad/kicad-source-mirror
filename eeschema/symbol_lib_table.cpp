@@ -286,12 +286,8 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname )
 
     if( !row )
     {
-        wxString msg;
-
-        msg.Printf( _( "sym-lib-table files contain no library with nickname \"%s\"" ),
-                    aNickname );
-
-        THROW_IO_ERROR( msg );
+        wxFAIL_MSG( "sym-lib-table files contain no library with nickname " + aNickname );
+        return nullptr;
     }
 
     // We've been 'lazy' up until now, but it cannot be deferred any longer,
