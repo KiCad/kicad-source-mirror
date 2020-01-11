@@ -178,7 +178,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
         wxSize midsize = reader.read_size();
         wxSize botsize = reader.read_size();
 
-        u_int32_t holesize = reader.read<u_int32_t>();
+        u_int32_t holesize = ALTIUM_PARSER_BINARY::kicad_unit( reader.read<u_int32_t>() );
         u_int8_t topshape = reader.read<u_int8_t>();
         u_int8_t midshape = reader.read<u_int8_t>();
         u_int8_t botshape = reader.read<u_int8_t>();

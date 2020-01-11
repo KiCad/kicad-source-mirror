@@ -65,17 +65,28 @@ public:
     }
 
     wxPoint read_point() {
-        int32_t x = read<int32_t>();
-        int32_t y = read<int32_t>();
+        int32_t x = kicad_x( read<int32_t>() );
+        int32_t y = kicad_y( read<int32_t>()) ;
         return {x, y};
     }
 
     wxSize read_size() {
-        int32_t x = read<int32_t>();
-        int32_t y = read<int32_t>();
+        int32_t x = kicad_unit( read<int32_t>() );
+        int32_t y = kicad_unit( read<int32_t>() );
         return {x, y};
     }
 
+    static int32_t kicad_unit( const int32_t x ) {
+        return (((int64_t) x) * 256L) / 100;
+    }
+
+    static int32_t kicad_x( const int32_t x ) {
+        return kicad_unit( x );
+    }
+
+    static int32_t kicad_y( const int32_t y ) {
+        return -kicad_unit( y );
+    }
 
     void skip(size_t len) {
         if( bytes_remaining() >= len )
