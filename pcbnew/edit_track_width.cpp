@@ -34,7 +34,6 @@ int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
                                           PICKED_ITEMS_LIST* aItemsListPicker,
                                           bool               aUseNetclassValue )
 {
-    int           return_code = TRACK_ACTION_NONE;
     int           initial_width;
     int           new_width;
     int           initial_drill = -1;
@@ -98,29 +97,7 @@ int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
         }
     }
 
-    aTrackItem->SetWidth( new_width );
-
-    // make a DRC test because the new size is bigger than the old size
-    if( initial_width < new_width )
-    {
-        int diagdrc = OK_DRC;
-        return_code = TRACK_ACTION_SUCCESS;
-
-        if( diagdrc != OK_DRC )
-            return_code = TRACK_ACTION_DRC_ERROR;
-    }
-    else if( initial_width > new_width )
-    {
-        return_code = TRACK_ACTION_SUCCESS;
-    }
-    else if( (aTrackItem->Type() == PCB_VIA_T) )
-    {
-        // if a via has its drill value changed, force change
-        if( initial_drill != new_drill )
-            return_code = TRACK_ACTION_SUCCESS;
-    }
-
-    if( return_code == TRACK_ACTION_SUCCESS )
+    if( initial_width != new_width || initial_drill != new_drill )
     {
         OnModify();
 
@@ -142,13 +119,13 @@ int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
                     via->SetDrillDefault();
             }
         }
+
+        return TRACK_ACTION_SUCCESS;
     }
     else
     {
-        aTrackItem->SetWidth( initial_width );
+        return TRACK_ACTION_NONE;
     }
-
-    return return_code;
 }
 
 
