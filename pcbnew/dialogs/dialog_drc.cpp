@@ -571,8 +571,7 @@ void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
     int     curTab = m_Notebook->GetSelection();
 
     if( curTab == 0 )
-    {
-        selectedIndex = m_ClearanceListBox->GetSelection();
+    {selectedIndex = m_ClearanceListBox->GetSelection();
 
         if( selectedIndex != wxNOT_FOUND )
         {
