@@ -119,6 +119,7 @@ private:
 SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveEdit" )
 {
+    m_pickerItem = nullptr;
 }
 
 

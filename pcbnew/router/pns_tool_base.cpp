@@ -73,6 +73,8 @@ TOOL_BASE::TOOL_BASE( const std::string& aToolName ) :
 
     m_endItem = nullptr;
     m_gridHelper = nullptr;
+
+    m_cancelled = false;
 }
 
 
