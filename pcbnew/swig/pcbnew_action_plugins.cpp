@@ -355,6 +355,10 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         OnModify();
         GetScreen()->PushCommandToUndoList( oldBuffer );
     }
+    else
+    {
+        delete oldBuffer;
+    }
 
     ActivateGalCanvas();
 }
