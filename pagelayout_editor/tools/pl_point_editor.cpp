@@ -101,6 +101,8 @@ private:
 
 PL_POINT_EDITOR::PL_POINT_EDITOR() :
     TOOL_INTERACTIVE( "plEditor.PointEditor" ),
+    m_frame( nullptr ),
+    m_selectionTool( nullptr ),
     m_editedPoint( nullptr )
 {
 }
