@@ -266,9 +266,18 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const wxPoint& aPos )
     pos.y  = KiROUND( pos.y / GetScalingFactor() );
     size.x = KiROUND( size.x / GetScalingFactor() );
     size.y = KiROUND( size.y / GetScalingFactor() );
-
     aDC->SetClippingRegion( pos, size );
-    aDC->DrawBitmap( *m_bitmap, pos.x, pos.y, true );
+
+    if( GetGRForceBlackPenState() )
+    {
+        wxBitmap result( m_bitmap->ConvertToImage().ConvertToGreyscale() );
+        aDC->DrawBitmap( result, pos.x, pos.y, true );
+    }
+    else
+    {
+        aDC->DrawBitmap( *m_bitmap, pos.x, pos.y, true );
+    }
+
     aDC->DestroyClippingRegion();
     aDC->SetUserScale( scale, scale );
     aDC->SetLogicalOrigin( logicalOriginX, logicalOriginY );
