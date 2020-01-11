@@ -843,7 +843,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
             if( result == SEARCH_RESULT::QUIT )
                 break;
 
-        // m_Drawings can hold TYPETEXTMODULE also, so fall thru
+        // Intentionally fall through since m_Drawings can hold TYPETEXTMODULE also
 
         case PCB_MODULE_EDGE_T:
             result = IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, p );

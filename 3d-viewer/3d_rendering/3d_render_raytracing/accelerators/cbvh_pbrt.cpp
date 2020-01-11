@@ -555,11 +555,11 @@ BVHBuildNode *CBVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo> &primiti
                           (mid <= end) );
 
                 if( (mid != start) && (mid != end) )
-                    // for lots of prims with large overlapping bounding boxes, this
-                    // may fail to partition; in that case don't break and fall through
-                    // to SPLITMETHOD::EQUAL_COUNTS
                     break;
             }
+
+            // Intentionally fall through to SPLITMETHOD::EQUAL_COUNTS since prims
+            // with large overlapping bounding boxes may fail to partition
 
             case SPLITMETHOD::EQUALCOUNTS:
             {

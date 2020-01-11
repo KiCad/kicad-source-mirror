@@ -358,7 +358,7 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
             toggleExpand( sel );
             break;
         }
-        /* fall through, so the selected component will be treated as the selected one */
+        // Intentionally fall through, so the selected component will be treated as the selected one
 
     default:
         aKeyStroke.Skip(); // Any other key: pass on to search box directly.

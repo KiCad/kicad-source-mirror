@@ -566,6 +566,8 @@ void CVPCB_MAINFRAME::SetFootprintFilter(
         // Extract the current search patten when needed
         m_currentSearchPattern = m_tcFilterString->GetValue();
 
+        // Intentionally fall through since this uses the filter options passed in
+
     case FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST:
     case FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT:
     case FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY:

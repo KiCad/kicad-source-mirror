@@ -753,7 +753,7 @@ void GPCB_FPL_CACHE::parseParameters( wxArrayString& aParameterList, LINE_READER
             // Element descriptions can span multiple lines.
             line = aLineReader->ReadLine();
 
-            // Fall through is intentional.
+            // Intentionally fall through
 
         case '\t':
         case ' ':

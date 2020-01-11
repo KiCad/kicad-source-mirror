@@ -114,6 +114,8 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
             if( net_item->GetNet() != 0 )
                 break;
 
+            // Intentionally fall through if there is no net assigned
+
         case NET_SEGMENT:
             // Test connections point to point type without bus.
             if( net_item->GetNet() == 0 )
@@ -161,6 +163,8 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
         case NET_SHEETBUSLABELMEMBER:
             if( net_item->m_BusNetCode != 0 )
                 break;
+
+            // Intentionally fall through if there is no bus assigned
 
         case NET_BUS:
             // Control type connections point to point mode bus

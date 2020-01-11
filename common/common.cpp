@@ -415,7 +415,7 @@ wxString KIwxExpandEnvVars(const wxString& str)
 
                 break;
             }
-            //else: fall through
+            // else fall through
 
         default:
             strResult += str_n;

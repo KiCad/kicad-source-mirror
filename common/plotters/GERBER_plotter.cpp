@@ -824,7 +824,7 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
     case 900:
     case 2700:        // rotation of 90 degrees or 270 swaps sizes
         std::swap( size.x, size.y );
-        // Pass through
+        // Intentionally fall through
     case 0:
     case 1800:
         if( trace_mode == SKETCH )

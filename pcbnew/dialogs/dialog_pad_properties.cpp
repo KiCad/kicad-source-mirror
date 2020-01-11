@@ -1282,7 +1282,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         if( padlayers_mask[B_Paste] || padlayers_mask[F_Paste] )
             error_msgs.Add( _( "Error: Connector pads are not on the solder paste layer\n"
                                "Use SMD pads instead" ) );
-        // Fall trough
+        // Intentionally fall through
     case PAD_ATTRIB_SMD:       // SMD and Connector pads (One external copper layer only)
         {
         LSET innerlayers_mask = padlayers_mask & LSET::InternalCuMask();
