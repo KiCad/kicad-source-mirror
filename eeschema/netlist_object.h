@@ -92,29 +92,29 @@ enum class NET_CONNECTION
 class NETLIST_OBJECT
 {
 public:
-    NETLIST_ITEM m_Type;                         /* Type of item (see NETLIST_ITEM_T enum) */
-    EDA_ITEM* m_Comp;                   /* Pointer to the library item that
-                                         * created this net object (the parent)
-                                         */
-    SCH_ITEM* m_Link;                   /* For SCH_SHEET_PIN:
-                                         * Pointer to the hierarchy sheet that
-                                         * contains this SCH_SHEET_PIN
-                                         * For Pins: pointer to the schematic component
-                                         * that contains this pin
-                                         */
-    int m_Flag;                         /* flag used in calculations */
-    SCH_SHEET_PATH  m_SheetPath;        // the sheet path which contains this item
-    SCH_SHEET_PATH  m_SheetPathInclude; // sheet path which contains the hierarchical label
+    NETLIST_ITEM m_Type;                    /* Type of item (see NETLIST_ITEM_T enum) */
+    EDA_ITEM*    m_Comp;                    /* Pointer to the library item that
+                                             * created this net object (the parent)
+                                             */
+    SCH_ITEM* m_Link;                       /* For SCH_SHEET_PIN:
+                                             * Pointer to the hierarchy sheet that
+                                             * contains this SCH_SHEET_PIN
+                                             * For Pins: pointer to the schematic component
+                                             * that contains this pin
+                                             */
+    int                m_Flag;              /* flag used in calculations */
+    SCH_SHEET_PATH     m_SheetPath;         // the sheet path which contains this item
+    SCH_SHEET_PATH     m_SheetPathInclude;  // sheet path which contains the hierarchical label
     ELECTRICAL_PINTYPE m_ElectricalPinType; // Has meaning only for Pins: electrical type of the pin
-    int m_BusNetCode;                   /* Used for BUS connections */
-    int m_Member;                       /* for labels type NET_BUSLABELMEMBER ( bus member
-                                         * created from the BUS label ) member number.
-                                         */
-    NET_CONNECTION m_ConnectionType;       // Used to store the connection type
-    wxString    m_PinNum;               // pin number
-    wxString    m_Label;                // Label text (for labels) or Pin name (for pins)
-    wxPoint     m_Start;                // Position of object or for segments: starting point
-    wxPoint     m_End;                  // For segments (wire and buses): ending point
+    int                m_BusNetCode;        /* Used for BUS connections */
+    int                m_Member;            /* for labels type NET_BUSLABELMEMBER ( bus member
+                                             * created from the BUS label ) member number.
+                                             */
+    NET_CONNECTION m_ConnectionType;        // Used to store the connection type
+    wxString       m_PinNum;                // pin number
+    wxString       m_Label;                 // Label text (for labels) or Pin name (for pins)
+    wxPoint        m_Start;                 // Position of object or for segments: starting point
+    wxPoint        m_End;                   // For segments (wire and buses): ending point
 
 private:
     int m_netCode;                      /* net code for all items except BUS

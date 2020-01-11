@@ -960,7 +960,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     }
 
 
-    if( m_shape == GRAPHIC_PINSHAPE::OUTPUT_LOW )    /* IEEE symbol "Active Low Output" */
+    if( m_shape == GRAPHIC_PINSHAPE::OUTPUT_LOW ) /* IEEE symbol "Active Low Output" */
     {
         const int symbol_size = ExternalPinDecoSize( *this );
 
