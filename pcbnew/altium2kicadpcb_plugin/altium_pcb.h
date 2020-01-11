@@ -26,6 +26,7 @@
 
 #include <vector>
 #include <zconf.h>
+#include <layers_id_colors_and_visibility.h>
 
 class BOARD;
 class MODULE;
@@ -45,11 +46,14 @@ public:
     void Parse( const CFB::CompoundFileReader& aReader );
 
 private:
+    PCB_LAYER_ID kicad_layer( int aAltiumLayer ) const;
+
     MODULE* GetComponent( const u_int16_t id);
 
     void ParseFileHeader( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
 
     void ParsePads6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseTracks6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
 
     BOARD*                  m_board;
     std::vector<MODULE*>    m_components;

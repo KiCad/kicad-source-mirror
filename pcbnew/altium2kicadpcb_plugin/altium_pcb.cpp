@@ -25,6 +25,7 @@
 #include "altium_parser_binary.h"
 
 #include <class_board.h>
+#include <class_drawsegment.h>
 
 #include <compoundfilereader.h>
 #include <utf.h>
@@ -106,11 +107,46 @@ struct ALTIUM_LAYER
     enum
     {
         F_CU                = 1,
+        IN4_CU              = 2,
+        IN2_CU              = 3,
+        IN3_CU              = 4,
+        IN5_CU              = 6,
+        IN6_CU              = 11,
+        IN7_CU              = 12,
         B_CU                = 32,
+
+        F_SILKS             = 33,
+        B_SILKS             = 34,
+        F_PASTE             = 35,
+        B_PASTE             = 36,
+
+        EDGE_CUTS           = 56,
+
         MULTILAYER          = 74
     };
 };
 
+PCB_LAYER_ID ALTIUM_PCB::kicad_layer( int aAltiumLayer ) const {
+    switch( aAltiumLayer )
+    {
+        case ALTIUM_LAYER::F_CU:            return F_Cu;
+        case ALTIUM_LAYER::IN2_CU:          return In2_Cu;
+        case ALTIUM_LAYER::IN3_CU:          return In3_Cu;
+        case ALTIUM_LAYER::IN4_CU:          return In4_Cu;
+        case ALTIUM_LAYER::IN5_CU:          return In5_Cu;
+        case ALTIUM_LAYER::IN6_CU:          return In6_Cu;
+        case ALTIUM_LAYER::IN7_CU:          return In7_Cu;
+        case ALTIUM_LAYER::B_CU:            return B_Cu;
+
+        case ALTIUM_LAYER::F_SILKS:         return F_SilkS;
+        case ALTIUM_LAYER::B_SILKS:         return B_SilkS;
+        case ALTIUM_LAYER::F_PASTE:         return F_Paste;
+        case ALTIUM_LAYER::B_PASTE:         return B_Paste;
+        case ALTIUM_LAYER::EDGE_CUTS:       return Edge_Cuts;
+
+        default:                            return UNDEFINED_LAYER;
+    }
+}
 
 ALTIUM_PCB::ALTIUM_PCB(BOARD *aBoard) {
     m_board = aBoard;
@@ -135,6 +171,14 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader ) {
     if (pads6 != nullptr)
     {
         ParsePads6Data(aReader, pads6);
+    }
+
+    // Parse tracks
+    const CFB::COMPOUND_FILE_ENTRY* tracks6 = FindStream(aReader, "Tracks6\\Data");
+    wxASSERT( tracks6 != nullptr );
+    if (pads6 != nullptr)
+    {
+        ParseTracks6Data(aReader, tracks6);
     }
 }
 
@@ -300,6 +344,50 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
             }
         }
     }
+    wxASSERT(!reader.parser_error());
+    wxASSERT(reader.bytes_remaining() == 0);
+}
+
+void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
+    ALTIUM_PARSER_BINARY reader(aReader, aEntry);
+
+    while( !reader.parser_error() && reader.bytes_remaining() > 49 /* TODO: use Header section of file */ ) {
+        u_int8_t recordtype = reader.read<u_int8_t>();
+        wxASSERT(recordtype == ALTIUM_RECORD::TRACK);
+
+        reader.skip( 4 );
+        u_int8_t layer = reader.read<u_int8_t>();
+        reader.skip( 12 );
+        wxPoint start = reader.read_point();
+        wxPoint end = reader.read_point();
+        u_int32_t width = ALTIUM_PARSER_BINARY::kicad_unit( reader.read<u_int32_t>() );
+
+        PCB_LAYER_ID klayer = kicad_layer( layer );
+        if( klayer >= F_Cu && klayer <= B_Cu )
+        {
+            TRACK* track = new TRACK(m_board);
+            m_board->Add(track);
+
+            track->SetStart(start);
+            track->SetEnd(end);
+            track->SetWidth(width);
+            track->SetLayer( klayer );
+        }
+        else
+        {
+            DRAWSEGMENT* ds = new DRAWSEGMENT(m_board);
+            m_board->Add(ds);
+
+            ds->SetStart(start);
+            ds->SetEnd(end);
+            ds->SetWidth(width);
+
+            ds->SetLayer( klayer != UNDEFINED_LAYER ? klayer : Eco1_User );
+        }
+
+        reader.skip( 12 );
+    }
+
     wxASSERT(!reader.parser_error());
     wxASSERT(reader.bytes_remaining() == 0);
 }
