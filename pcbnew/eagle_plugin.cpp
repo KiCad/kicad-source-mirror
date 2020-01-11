@@ -1820,15 +1820,19 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
             double radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 )
                                 + pow( center.y - kicad_y( v1.y ), 2 ) );
 
-            // If we are curving, we need at least 2 segments otherwise
-            // delta_angle == angle
-            double delta_angle = angle / std::max(
-                            2, GetArcToSegmentCount( KiROUND( radius ),
-                            ARC_HIGH_DEF, *v1.curve ) - 1 );
+            // Don't allow a zero-radius curve
+            if( KiROUND( radius ) == 0 )
+                radius = 1.0;
 
-            for( double a = end_angle + angle;
-                    fabs( a - end_angle ) > fabs( delta_angle );
-                    a -= delta_angle )
+            int segCount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF, *v1.curve ) - 1;
+
+            // If we are curving, we need at least 2 segments otherwise delta == angle
+            if( segCount < 2 )
+                segCount = 2;
+
+            double delta = angle / segCount;
+
+            for( double a = end_angle + angle; fabs( a - end_angle ) > fabs( delta ); a -= delta )
             {
                 pts.push_back(
                         wxPoint( KiROUND( radius * cos( a ) ),
