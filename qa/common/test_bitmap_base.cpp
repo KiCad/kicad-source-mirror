@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE( Empty )
     BOOST_CHECK_EQUAL( cempty.GetImageData(), nullptr );
     BOOST_CHECK_EQUAL( cempty.GetPPI(), 300 );
     BOOST_CHECK_EQUAL( cempty.GetScale(), 1.0 );
-    BOOST_CHECK_EQUAL( cempty.GetPixelScaleFactor(), 1000.0 / 300.0 );
+    BOOST_CHECK_EQUAL( cempty.GetPixelScaleFactor(), 254000.0 / 300.0 );
 
     // can do this on an empty image
     empty.Rotate( true );
