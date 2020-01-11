@@ -108,6 +108,11 @@ void WS_DATA_ITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aV
             item = new WS_DRAW_ITEM_LINE( this, j, GetStartPosUi( j ), GetEndPosUi( j ), pensize );
         else if( m_type == WS_RECT )
             item = new WS_DRAW_ITEM_RECT( this, j, GetStartPosUi( j ), GetEndPosUi( j ), pensize );
+        else
+        {
+            wxFAIL_MSG( "Unknown worksheet draw item type" );
+            continue;
+        }
 
         item->SetFlags( itemFlags[ j ] );
         m_drawItems.push_back( item );
