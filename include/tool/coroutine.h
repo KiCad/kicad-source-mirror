@@ -87,6 +87,11 @@ private:
     class CALL_CONTEXT
     {
     public:
+        CALL_CONTEXT() :
+            m_mainStackContext( nullptr )
+        {
+        }
+
         void SetMainStack( CONTEXT_T* aStack )
         {
             m_mainStackContext = aStack;
@@ -181,16 +186,6 @@ public:
     {
         m_retVal = aRetVal;
         jumpOut();
-    }
-
-    /**
-     * Function SetEntry()
-     *
-     * Defines the entry point for the coroutine, if not set in the constructor.
-     */
-    void SetEntry( std::function<ReturnType(ArgType)> aEntry )
-    {
-        m_func = std::move( aEntry );
     }
 
     /**
