@@ -117,7 +117,7 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncl
         TOOL_ACTION* entryAction = entry.second.m_Actions[ 0 ];
         wxString     entryApp = GetAppName( entryAction );
 
-        if( entryApp != currentApp )
+        if( !currentSection || entryApp != currentApp )
         {
             m_hk_sections.emplace_back( HOTKEY_SECTION() );
             currentApp = entryApp;

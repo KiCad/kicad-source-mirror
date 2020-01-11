@@ -439,13 +439,10 @@ void CVPCB_MAINFRAME::RedoAssociation()
 void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
                                           bool aNewEntry, bool aAddUndoItem )
 {
-    // Ensure there is data to work with
-    COMPONENT* component;
-
     if( m_netlist.IsEmpty() )
         return;
 
-    component = m_netlist.GetComponent( aAssociation.GetComponentIndex() );
+    COMPONENT* component = m_netlist.GetComponent( aAssociation.GetComponentIndex() );
 
     if( component == NULL )
         return;
@@ -466,9 +463,11 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
     component->SetFPID( fpid );
 
     // create the new component description and set it
-    wxString description = wxString::Format( CMP_FORMAT, aAssociation.GetComponentIndex() + 1,
-            GetChars( component->GetReference() ), GetChars( component->GetValue() ),
-            GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+    wxString description = wxString::Format( CMP_FORMAT,
+                                             aAssociation.GetComponentIndex() + 1,
+                                             component->GetReference(),
+                                             component->GetValue(),
+                                             component->GetFPID().Format().wx_str() );
     m_compListBox->SetString( aAssociation.GetComponentIndex(), description );
 
     // Mark the data as being modified
@@ -487,7 +486,7 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
         // Create a new entry for this association
         CVPCB_UNDO_REDO_ENTRIES newEntry;
         newEntry.emplace_back(  CVPCB_ASSOCIATION( aAssociation.GetComponentIndex(), oldFpid,
-                aAssociation.GetNewFootprint() ) );
+                                                   aAssociation.GetNewFootprint() ) );
         m_undoList.emplace_back( newEntry );
 
         // Clear the redo list
@@ -495,7 +494,7 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
     }
     else
         m_undoList.back().emplace_back( CVPCB_ASSOCIATION( aAssociation.GetComponentIndex(),
-                oldFpid, aAssociation.GetNewFootprint() ) );
+                                                           oldFpid, aAssociation.GetNewFootprint() ) );
 
 }
 
@@ -554,26 +553,14 @@ void CVPCB_MAINFRAME::refreshAfterComponentSearch( COMPONENT* component )
 }
 
 
-void CVPCB_MAINFRAME::SetFootprintFilter(
-        FOOTPRINTS_LISTBOX::FP_FILTER_T aFilter, CVPCB_MAINFRAME::CVPCB_FILTER_ACTION aAction )
+void CVPCB_MAINFRAME::SetFootprintFilter( FOOTPRINTS_LISTBOX::FP_FILTER_T aFilter,
+                                          CVPCB_MAINFRAME::CVPCB_FILTER_ACTION aAction )
 {
-    int option = FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST;
+    int option = aFilter;
 
-    // Extract the needed information about the filter
-    switch( aFilter )
-    {
-    case FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN:
-        // Extract the current search patten when needed
+    // Extract the current search patten when needed
+    if( option == FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN )
         m_currentSearchPattern = m_tcFilterString->GetValue();
-
-        // Intentionally fall through since this uses the filter options passed in
-
-    case FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST:
-    case FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT:
-    case FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY:
-    case FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS:
-        option = aFilter;
-    }
 
     // Apply the filter accordingly
     switch( aAction )
@@ -812,12 +799,9 @@ void CVPCB_MAINFRAME::BuildFOOTPRINTS_LISTBOX()
 
     if( m_footprintListBox == NULL )
     {
-        m_footprintListBox = new FOOTPRINTS_LISTBOX( this, ID_CVPCB_FOOTPRINT_LIST,
-                                                     wxDefaultPosition, wxDefaultSize );
-        m_footprintListBox->SetFont( wxFont( guiFont.GetPointSize(),
-                                             wxFONTFAMILY_MODERN,
-                                             wxFONTSTYLE_NORMAL,
-                                             wxFONTWEIGHT_NORMAL ) );
+        m_footprintListBox = new FOOTPRINTS_LISTBOX( this, ID_CVPCB_FOOTPRINT_LIST );
+        m_footprintListBox->SetFont( wxFont( guiFont.GetPointSize(), wxFONTFAMILY_MODERN,
+                                             wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ) );
     }
 
     m_footprintListBox->SetFootprints( *m_FootprintsList, wxEmptyString, NULL,
@@ -834,12 +818,9 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
 
     if( m_compListBox == NULL )
     {
-        m_compListBox = new COMPONENTS_LISTBOX( this, ID_CVPCB_COMPONENT_LIST,
-                                                wxDefaultPosition, wxDefaultSize );
-        m_compListBox->SetFont( wxFont( guiFont.GetPointSize(),
-                                        wxFONTFAMILY_MODERN,
-                                        wxFONTSTYLE_NORMAL,
-                                        wxFONTWEIGHT_NORMAL ) );
+        m_compListBox = new COMPONENTS_LISTBOX( this, ID_CVPCB_COMPONENT_LIST );
+        m_compListBox->SetFont( wxFont( guiFont.GetPointSize(), wxFONTFAMILY_MODERN,
+                                        wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ) );
     }
 
     m_compListBox->m_ComponentList.Clear();
@@ -848,10 +829,11 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
     {
         component = m_netlist.GetComponent( i );
 
-        msg.Printf( CMP_FORMAT, m_compListBox->GetCount() + 1,
-                    GetChars( component->GetReference() ),
-                    GetChars( component->GetValue() ),
-                    GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+        msg.Printf( CMP_FORMAT,
+                    m_compListBox->GetCount() + 1,
+                    component->GetReference(),
+                    component->GetValue(),
+                    component->GetFPID().Format().wx_str() );
         m_compListBox->m_ComponentList.Add( msg );
     }
 
@@ -871,12 +853,9 @@ void CVPCB_MAINFRAME::BuildLIBRARY_LISTBOX()
 
     if( m_libListBox == NULL )
     {
-        m_libListBox = new LIBRARY_LISTBOX( this, ID_CVPCB_LIBRARY_LIST,
-                                            wxDefaultPosition, wxDefaultSize );
-        m_libListBox->SetFont( wxFont( guiFont.GetPointSize(),
-                                       wxFONTFAMILY_MODERN,
-                                       wxFONTSTYLE_NORMAL,
-                                       wxFONTWEIGHT_NORMAL ) );
+        m_libListBox = new LIBRARY_LISTBOX( this, ID_CVPCB_LIBRARY_LIST );
+        m_libListBox->SetFont( wxFont( guiFont.GetPointSize(), wxFONTFAMILY_MODERN,
+                                       wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ) );
     }
 
     FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs( Kiway() );
@@ -887,8 +866,8 @@ void CVPCB_MAINFRAME::BuildLIBRARY_LISTBOX()
 
         std::vector< wxString > libNickNames = tbl->GetLogicalLibs();
 
-        for( unsigned ii = 0; ii < libNickNames.size(); ii++ )
-            libNames.Add( libNickNames[ii] );
+        for( const wxString& libNickName : libNickNames )
+            libNames.Add( libNickName );
 
         m_libListBox->SetLibraryList( libNames );
     }
@@ -1021,20 +1000,10 @@ void CVPCB_MAINFRAME::SetFocusedControl( CVPCB_MAINFRAME::CONTROL_TYPE aLB )
 {
     switch( aLB )
     {
-    case CVPCB_MAINFRAME::CONTROL_LIBRARY:
-        m_libListBox->SetFocus();
-        break;
-
-    case CVPCB_MAINFRAME::CONTROL_COMPONENT:
-        m_compListBox->SetFocus();
-        break;
-
-    case CVPCB_MAINFRAME::CONTROL_FOOTPRINT:
-        m_footprintListBox->SetFocus();
-        break;
-
-    default:
-        break;
+    case CVPCB_MAINFRAME::CONTROL_LIBRARY:   m_libListBox->SetFocus();       break;
+    case CVPCB_MAINFRAME::CONTROL_COMPONENT: m_compListBox->SetFocus();      break;
+    case CVPCB_MAINFRAME::CONTROL_FOOTPRINT: m_footprintListBox->SetFocus(); break;
+    default:                                                                 break;
     }
 }
 
@@ -1051,20 +1020,10 @@ void CVPCB_MAINFRAME::SetStatusText( const wxString& aText, int aNumber )
 {
     switch( aNumber )
     {
-    case 0:
-        m_statusLine1->SetLabel( aText );
-        break;
-
-    case 1:
-        m_statusLine2->SetLabel( aText );
-        break;
-
-    case 2:
-        m_statusLine3->SetLabel( aText );
-        break;
-
-    default:
-        wxASSERT_MSG( false, "Invalid status row number" );
+    case 0:  m_statusLine1->SetLabel( aText );          break;
+    case 1:  m_statusLine2->SetLabel( aText );          break;
+    case 2:  m_statusLine3->SetLabel( aText );          break;
+    default: wxFAIL_MSG( "Invalid status row number" ); break;
     }
 }
 

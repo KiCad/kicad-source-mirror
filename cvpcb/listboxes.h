@@ -21,10 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file listboxes.h
- */
-
 #ifndef LISTBOXES_H
 #define LISTBOXES_H
 
@@ -46,8 +42,8 @@ class ITEMS_LISTBOX_BASE : public wxListView
 {
 public:
     ITEMS_LISTBOX_BASE( CVPCB_MAINFRAME* aParent, wxWindowID aId,
-                        const wxPoint& aLocation, const wxSize& aSize,
-                        long aStyle = 0 );
+                        const wxPoint& aLocation = wxDefaultPosition,
+                        const wxSize& aSize = wxDefaultSize, long aStyle = 0 );
 
     ~ITEMS_LISTBOX_BASE();
 
@@ -104,8 +100,7 @@ public:
         FILTERING_BY_TEXT_PATTERN         = 0x0008
     };
 
-    FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,
-                        const wxPoint& loc, const wxSize& size );
+    FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id );
     ~FOOTPRINTS_LISTBOX();
 
     int      GetCount();
@@ -126,8 +121,8 @@ public:
      * @param aFootPrintFilterPattern = a filter used to filter list by names
      * @param aFilterType defines the criteria to filter \a aList.
      */
-    void     SetFootprints( FOOTPRINT_LIST& aList, const wxString& aLibName,
-                            COMPONENT* aComponent, const wxString &aFootPrintFilterPattern, int aFilterType );
+    void     SetFootprints( FOOTPRINT_LIST& aList, const wxString& aLibName, COMPONENT* aComponent,
+                            const wxString &aFootPrintFilterPattern, int aFilterType );
 
     wxString GetSelectedFootprint();
 
@@ -155,8 +150,7 @@ class LIBRARY_LISTBOX : public ITEMS_LISTBOX_BASE
     wxArrayString  m_libraryList;
 
 public:
-    LIBRARY_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,
-                     const wxPoint& loc, const wxSize& size );
+    LIBRARY_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id );
     ~LIBRARY_LISTBOX();
 
     int      GetCount();
@@ -201,8 +195,7 @@ public:
 
 public:
 
-    COMPONENTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,
-                        const wxPoint& loc, const wxSize& size );
+    COMPONENTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id );
 
     ~COMPONENTS_LISTBOX();
 

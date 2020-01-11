@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file footprints_listbox.cpp
- * class to display the list of available footprints
- */
-
 #include <footprint_filter.h>
 #include <tool/tool_manager.h>
 #include <trace_helpers.h>
@@ -37,10 +32,8 @@
 #include <listboxes.h>
 #include <tools/cvpcb_actions.h>
 
-FOOTPRINTS_LISTBOX::FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent,
-                                        wxWindowID id, const wxPoint& loc,
-                                        const wxSize& size ) :
-    ITEMS_LISTBOX_BASE( parent, id, loc, size, wxLC_SINGLE_SEL | wxNO_BORDER )
+FOOTPRINTS_LISTBOX::FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id ) :
+    ITEMS_LISTBOX_BASE( parent, id, wxDefaultPosition, wxDefaultSize, wxLC_SINGLE_SEL|wxNO_BORDER )
 {
 }
 
@@ -63,6 +56,7 @@ void FOOTPRINTS_LISTBOX::SetString( unsigned linecount, const wxString& text )
     {
         if( linecount >= count )
             linecount = count - 1;
+
         m_footprintList[linecount] = text;
     }
     UpdateWidth( linecount );
@@ -120,9 +114,7 @@ void FOOTPRINTS_LISTBOX::SetSelection( int index, bool State )
 
 void FOOTPRINTS_LISTBOX::SetSelectedFootprint( const LIB_ID& aFPID )
 {
-    wxString id = wxString::Format( "%s:%s",
-                                    GetChars( aFPID.GetLibNickname() ),
-                                    GetChars( aFPID.GetLibItemName() ) );
+    wxString id = aFPID.Format().wx_str();
 
     for( int i = 0; i < GetCount(); ++i )
     {
@@ -165,9 +157,10 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
 
     for( auto& i: filter )
     {
-        msg.Printf( "%3d %s:%s", int( newList.GetCount() + 1 ),
-                    GetChars( i.GetLibNickname() ),
-                    GetChars( i.GetFootprintName() ) );
+        msg.Printf( "%3d %s:%s",
+                    int( newList.GetCount() + 1 ),
+                    i.GetLibNickname(),
+                    i.GetFootprintName() );
         newList.Add( msg );
     }
 
