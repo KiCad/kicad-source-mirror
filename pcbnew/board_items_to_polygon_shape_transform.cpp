@@ -646,15 +646,22 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
     case PAD_SHAPE_CUSTOM:
     {
-        int    numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
-                                                         pad_min_seg_per_circle_count );
-        double correction = GetCircletoPolyCorrectionFactor( numSegs );
-        int    clearance = KiROUND( aClearanceValue * correction );
         SHAPE_POLY_SET outline;     // Will contain the corners in board coordinates
         outline.Append( m_customShapeAsPolygon );
         CustomShapeAsPolygonToBoardPosition( &outline, GetPosition(), GetOrientation() );
+        // TODO: do we need the Simplify() & Fracture() if we're not inflating?
         outline.Simplify( SHAPE_POLY_SET::PM_FAST );
-        outline.Inflate( clearance, numSegs );
+
+        if( aClearanceValue )
+        {
+            int    numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
+                                                             pad_min_seg_per_circle_count );
+            double correction = GetCircletoPolyCorrectionFactor( numSegs );
+            int    clearance = KiROUND( aClearanceValue * correction );
+
+            outline.Inflate( clearance, numSegs );
+        }
+
         outline.Fracture( SHAPE_POLY_SET::PM_FAST );
         aCornerBuffer.Append( outline );
     }
