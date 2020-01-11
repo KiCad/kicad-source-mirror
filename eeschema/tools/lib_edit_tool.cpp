@@ -45,7 +45,8 @@
 
 
 LIB_EDIT_TOOL::LIB_EDIT_TOOL() :
-        EE_TOOL_BASE( "eeschema.SymbolEditTool" )
+        EE_TOOL_BASE( "eeschema.SymbolEditTool" ),
+        m_pickerItem( nullptr )
 {
 }
 

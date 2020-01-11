@@ -40,7 +40,11 @@
 PL_EDIT_TOOL::PL_EDIT_TOOL() :
         TOOL_INTERACTIVE( "plEditor.InteractiveEdit" ),
         m_frame( nullptr ),
-        m_selectionTool( nullptr )
+        m_selectionTool( nullptr ),
+        m_moveInProgress( false ),
+        m_moveOffset( 0, 0 ),
+        m_cursor( 0, 0 ),
+        m_pickerItem( nullptr )
 {
 }
 

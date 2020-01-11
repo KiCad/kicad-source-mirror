@@ -38,7 +38,8 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                           const wxPoint& aPos, const wxSize& aSize, long aStyle,
                                           const wxString& aFrameName ) :
         PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-                        m_rotationAngle( 900 ), m_undoRedoBlocked( false )
+                        m_rotationAngle( 900 ), m_undoRedoBlocked( false ),
+        m_Layers( nullptr )
 {
     if( !GFootprintList.GetCount() )
     {
