@@ -141,8 +141,11 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         aggregateArea.BooleanAdd( candidate->GetFilledPolysList(), SHAPE_POLY_SET::PM_FAST );
     }
 
-    aggregateArea.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-    itemplotter.PlotFilledAreas( zone, aggregateArea );
+    if( zone )
+    {
+        aggregateArea.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        itemplotter.PlotFilledAreas( zone, aggregateArea );
+    }
 
     aPlotter->EndBlock( NULL );
 }
