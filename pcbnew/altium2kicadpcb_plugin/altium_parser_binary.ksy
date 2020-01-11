@@ -12,7 +12,7 @@ meta:
   encoding: UTF-8
 
 seq:
-  - id: pad
+  - id: record
     type: record
     repeat: eos
 
@@ -26,6 +26,10 @@ types:
       - id: pad
         type: pad
         if: recordtype == record_id::pad6
+      - id: via
+        size: 213
+        type: via
+        if: recordtype == record_id::via6
       - id: track
         type: track
         size: 49
@@ -134,6 +138,16 @@ types:
       - size: record_len
         if: some_len == 171
 
+  via:
+    seq:
+      - size: 17
+      - id: pos  # 13
+        type: xy
+      - id: diameter # 21
+        type: s4
+      - id: holesize # 29
+        type: s4
+
   track:
     seq:
       - size: 4
@@ -158,6 +172,7 @@ types:
 enums:
   record_id:
     0x02: pad6
+    0x03: via6
     0x04: track6
 
   boolean:

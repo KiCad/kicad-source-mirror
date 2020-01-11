@@ -173,10 +173,18 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader ) {
         ParsePads6Data(aReader, pads6);
     }
 
+    // Parse vias
+    const CFB::COMPOUND_FILE_ENTRY* vias6 = FindStream(aReader, "Vias6\\Data");
+    wxASSERT( vias6 != nullptr );
+    if (vias6 != nullptr)
+    {
+        ParseVias6Data(aReader, vias6);
+    }
+
     // Parse tracks
     const CFB::COMPOUND_FILE_ENTRY* tracks6 = FindStream(aReader, "Tracks6\\Data");
     wxASSERT( tracks6 != nullptr );
-    if (pads6 != nullptr)
+    if (tracks6 != nullptr)
     {
         ParseTracks6Data(aReader, tracks6);
     }
@@ -348,10 +356,36 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
     wxASSERT(reader.bytes_remaining() == 0);
 }
 
+void ALTIUM_PCB::ParseVias6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
+    ALTIUM_PARSER_BINARY reader(aReader, aEntry);
+
+    while( !reader.parser_error() && reader.bytes_remaining() >= 213 /* TODO: use Header section of file */ ) {
+        u_int8_t recordtype = reader.read<u_int8_t>();
+        wxASSERT(recordtype == ALTIUM_RECORD::VIA);
+
+        reader.skip( 17 );
+        wxPoint position = reader.read_point();
+        u_int32_t diameter = ALTIUM_PARSER_BINARY::kicad_unit( reader.read<u_int32_t>() );
+        u_int32_t holesize = ALTIUM_PARSER_BINARY::kicad_unit( reader.read<u_int32_t>() );
+        reader.skip( 180 );
+
+        VIA *via = new VIA(m_board);
+        m_board->Add(via);
+
+        via->SetPosition(position);
+        via->SetWidth(diameter);
+        via->SetDrill(holesize);
+        via->SetViaType(VIATYPE::THROUGH); // TODO
+    }
+
+    wxASSERT(!reader.parser_error());
+    wxASSERT(reader.bytes_remaining() == 0);
+}
+
 void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
     ALTIUM_PARSER_BINARY reader(aReader, aEntry);
 
-    while( !reader.parser_error() && reader.bytes_remaining() > 49 /* TODO: use Header section of file */ ) {
+    while( !reader.parser_error() && reader.bytes_remaining() >= 49 /* TODO: use Header section of file */ ) {
         u_int8_t recordtype = reader.read<u_int8_t>();
         wxASSERT(recordtype == ALTIUM_RECORD::TRACK);
 
