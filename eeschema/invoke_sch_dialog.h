@@ -111,7 +111,7 @@ bool InvokeDialogEditComponentsLibId( SCH_EDIT_FRAME* aCaller );
  * Launches the "Edit Text/Label" dialog
  * @return the ShowModal() result (wxID_OK, wxID_CANCEL, etc.)
  */
-int InvokeDialogLabelEditor(SCH_EDIT_FRAME* aCaller, SCH_TEXT* aText);
+int InvokeDialogLabelEditor( SCH_EDIT_FRAME* aCaller, SCH_TEXT* aText );
 
 /**
  * Launches the "Edit Text/Label" dialog
