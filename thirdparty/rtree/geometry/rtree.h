@@ -421,7 +421,11 @@ public:
 
     iterator begin()
     {
-        Rect full_rect( { { INT_MIN, INT_MIN, INT_MIN }, { INT_MAX, INT_MAX, INT_MAX } } );
+        Rect full_rect;
+
+        std::fill_n( full_rect.m_min, NUMDIMS, INT_MIN );
+        std::fill_n( full_rect.m_max, NUMDIMS, INT_MAX );
+
         return begin( full_rect );
     }
 
