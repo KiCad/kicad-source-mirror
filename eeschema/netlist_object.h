@@ -92,7 +92,7 @@ enum class NET_CONNECTION
 class NETLIST_OBJECT
 {
 public:
-    NETLIST_ITEM       m_Type;          /* Type of item (see NETLIST_ITEM_T enum) */
+    NETLIST_ITEM m_Type;                         /* Type of item (see NETLIST_ITEM_T enum) */
     EDA_ITEM* m_Comp;                   /* Pointer to the library item that
                                          * created this net object (the parent)
                                          */
@@ -110,7 +110,7 @@ public:
     int m_Member;                       /* for labels type NET_BUSLABELMEMBER ( bus member
                                          * created from the BUS label ) member number.
                                          */
-    NET_CONNECTION     m_ConnectionType;       // Used to store the connection type
+    NET_CONNECTION m_ConnectionType;       // Used to store the connection type
     wxString    m_PinNum;               // pin number
     wxString    m_Label;                // Label text (for labels) or Pin name (for pins)
     wxPoint     m_Start;                // Position of object or for segments: starting point

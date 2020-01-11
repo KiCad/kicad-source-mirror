@@ -147,28 +147,29 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx ) const
 NETLIST_OBJECT::NETLIST_OBJECT()
 {
     m_Type = NETLIST_ITEM::ITEM_UNSPECIFIED; /* Type of this item (see NETLIST_ITEM_T enum) */
-    m_Comp = NULL;                  /* Pointer on the library item that created this net object
-                                     * (the parent)*/
-    m_Link = NULL;                  /* For SCH_SHEET_PIN:
-                                     * Pointer to the hierarchy sheet that contains this
-                                     * SCH_SHEET_PIN For Pins: pointer to the component that
-                                     * contains this pin
-                                     */
-    m_Flag = 0;                     /* flag used in calculations */
-    m_netCode    = 0;               /* net code for all items except BUS labels because a BUS
-                                     * label has as many net codes as bus members
-                                     */
-    m_BusNetCode = 0;               /* Used for BUS connections */
-    m_Member     = 0;               /* for labels type NETLIST_ITEM::BUSLABELMEMBER ( bus member created
-                                     * from the BUS label )  member number
-                                     */
-    m_ConnectionType    = NET_CONNECTION::UNCONNECTED;
-    m_ElectricalPinType = ELECTRICAL_PINTYPE::INPUT;   /* Has meaning only for Pins: electrical type of the pin
-                                                       * used to detect conflicts between pins in ERC
-                                                       */
-    m_netNameCandidate = NULL;      /* a pointer to a NETLIST_OBJECT type label connected to this
-                                     * object used to give a name to the net
-                                     */
+    m_Comp = NULL;    /* Pointer on the library item that created this net object
+                       * (the parent)*/
+    m_Link = NULL;    /* For SCH_SHEET_PIN:
+                       * Pointer to the hierarchy sheet that contains this
+                       * SCH_SHEET_PIN For Pins: pointer to the component that
+                       * contains this pin
+                       */
+    m_Flag    = 0;    /* flag used in calculations */
+    m_netCode = 0;    /* net code for all items except BUS labels because a BUS
+                       * label has as many net codes as bus members
+                       */
+    m_BusNetCode = 0; /* Used for BUS connections */
+    m_Member     = 0; /* for labels type NETLIST_ITEM::BUSLABELMEMBER ( bus member created
+                       * from the BUS label )  member number
+                       */
+    m_ConnectionType = NET_CONNECTION::UNCONNECTED;
+    m_ElectricalPinType =
+            ELECTRICAL_PINTYPE::INPUT; /* Has meaning only for Pins: electrical type of the pin
+                                        * used to detect conflicts between pins in ERC
+                                        */
+    m_netNameCandidate = NULL;         /* a pointer to a NETLIST_OBJECT type label connected to this
+                                        * object used to give a name to the net
+                                        */
 }
 
 
@@ -356,9 +357,8 @@ bool NETLIST_OBJECT::IsLabelGlobal() const
     // return true if the object is a global label
     // * a actual global label
     // * a pin label coming from a invisible power pin
-    return ( m_Type == NETLIST_ITEM::PINLABEL ) ||
-           ( m_Type == NETLIST_ITEM::GLOBLABEL ) ||
-           ( m_Type == NETLIST_ITEM::GLOBBUSLABELMEMBER );
+    return ( m_Type == NETLIST_ITEM::PINLABEL ) || ( m_Type == NETLIST_ITEM::GLOBLABEL )
+           || ( m_Type == NETLIST_ITEM::GLOBBUSLABELMEMBER );
 }
 
 
