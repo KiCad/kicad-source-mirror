@@ -482,8 +482,10 @@ void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit )
             }
 
             if( n_changed )
+            {
                 wxLogTrace( "CN", "Cluster %p : net : %d %s\n", cluster.get(),
                         cluster->OriginNet(), (const char*) cluster->OriginNetName().c_str() );
+            }
             else
                 wxLogTrace( "CN", "Cluster %p : nothing to propagate\n", cluster.get() );
         }
