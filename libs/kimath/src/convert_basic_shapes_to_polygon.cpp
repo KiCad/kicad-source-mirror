@@ -47,7 +47,7 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aBuffer,
     int     delta = 3600 / numSegs;   // rotate angle in 0.1 degree
     double  correction = GetCircletoPolyCorrectionFactor( numSegs );
     int     radius = aRadius * correction;    // make segments outside the circles
-    double  halfstep = delta/2;    // the starting value for rot angles
+    double  halfstep = delta/2.0;    // the starting value for rot angles
 
     for( int ii = 0; ii < numSegs; ii++ )
     {
@@ -71,7 +71,7 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, i
     int     delta = 3600 / numSegs;   // rotate angle in 0.1 degree
     double  correction = GetCircletoPolyCorrectionFactor( numSegs );
     int     radius = aRadius * correction;    // make segments outside the circles
-    double  halfstep = delta/2;    // the starting value for rot angles
+    double  halfstep = delta/2.0;    // the starting value for rot angles
 
     aCornerBuffer.NewOutline();
 

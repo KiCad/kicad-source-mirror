@@ -54,6 +54,8 @@ public:
         return new SHAPE_CIRCLE( *this );
     }
 
+    SHAPE_CIRCLE& operator=( const SHAPE_CIRCLE& ) = default;
+
     const BOX2I BBox( int aClearance = 0 ) const override
     {
         const VECTOR2I rc( m_radius + aClearance, m_radius + aClearance );

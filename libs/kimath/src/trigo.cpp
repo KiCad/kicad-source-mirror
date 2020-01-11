@@ -387,16 +387,16 @@ const VECTOR2I GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const
                       bSlope * ( aStart.x + aMid.x ) -
                       aSlope * ( aMid.x + aEnd.x ) ) / ( 2 * ( bSlope - aSlope ) );
 
-    center.x = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2 ),
+    center.x = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
                                        result,
-                                       double( std::numeric_limits<int>::max() / 2 ) ) );
+                                       double( std::numeric_limits<int>::max() / 2.0 ) ) );
 
     result = ( ( ( aStart.x + aMid.x ) / 2.0 - center.x ) / aSlope +
                  ( aStart.y + aMid.y ) / 2.0 );
 
-    center.y = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2 ),
+    center.y = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
                                        result,
-                                       double( std::numeric_limits<int>::max() / 2 ) ) );
+                                       double( std::numeric_limits<int>::max() / 2.0 ) ) );
 
     return center;
 }
