@@ -47,6 +47,7 @@ public:
             pos += sizeof(Type);
             return val;
         } else {
+            error = true;
             return 0;
         }
     }
@@ -58,6 +59,7 @@ public:
             pos += len;
             return val;
         } else {
+            error = true;
             return "";
         }
     }
@@ -76,11 +78,22 @@ public:
 
 
     void skip(size_t len) {
-        pos += bytes_remaining() >= len ? len : bytes_remaining();
+        if( bytes_remaining() >= len )
+        {
+            pos += len;
+        }
+        else
+        {
+            error = true;
+        }
     }
 
     size_t bytes_remaining() const {
         return pos == nullptr ? 0 : size - (pos - content.get());
+    }
+
+    bool parser_error() {
+        return error;
     }
 
 private:
@@ -89,6 +102,7 @@ private:
     size_t size;
 
     char* pos;  // current read pointer
+    bool error;
 };
 
 

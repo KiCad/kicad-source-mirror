@@ -93,35 +93,81 @@ void ALTIUM_PCB::ParseFileHeader( const CFB::CompoundFileReader& aReader, const 
 
     reader.skip(4);
     std::cout << "HEADER: " << reader.read_string() << std::endl;  // tells me: PCB 5.0 Binary File
+
+    // TODO: does not seem to work all the time at the moment
+    // wxASSERT(!reader.parser_error());
+    // wxASSERT(reader.bytes_remaining() == 0);
 }
 
 void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
     ALTIUM_PARSER_BINARY reader(aReader, aEntry);
 
-    while( reader.bytes_remaining() > 5 + 147 ) {
+    while( !reader.parser_error() && reader.bytes_remaining() > 5 + 147 /* TODO: use Header section of file */ ) {
         u_int8_t recordtype = reader.read<u_int8_t>();
         wxASSERT( recordtype == 0x02 );
 
         u_int32_t len = reader.read<u_int32_t>();
         std::string name = reader.read_string();
         wxASSERT( len-1 == name.size() );
-        std::cout << "Pad: '" << name << "'" << std::endl;
 
-        reader.skip(30);
-
+        reader.skip(19);
+        u_int8_t length_bytes = reader.read<u_int8_t>();
+        reader.skip(10);
         u_int16_t component = reader.read<u_int16_t>();
-        std::cout << "  component: " << component << std::endl;
-
         reader.skip(4);
 
         wxPoint position = reader.read_point();
-        std::cout << "  position: " << position << std::endl;
         wxSize topsize = reader.read_size();
-        std::cout << "  topsize: " << topsize << std::endl;
         wxSize midsize = reader.read_size();
-        std::cout << "  midsize: " << midsize << std::endl;
         wxSize botsize = reader.read_size();
+
+        u_int32_t holesize = reader.read<u_int32_t>();
+        u_int8_t topshape = reader.read<u_int8_t>();
+        u_int8_t midshape = reader.read<u_int8_t>();
+        u_int8_t botshape = reader.read<u_int8_t>();
+
+        double direction = reader.read<double>();
+        u_int8_t plated = reader.read<u_int8_t>();
+        reader.skip(1);
+        u_int8_t padmode = reader.read<u_int8_t>();
+        reader.skip(38);
+        u_int8_t pastemaskexpansionmode = reader.read<u_int8_t>();
+        u_int8_t soldermaskexpansion = reader.read<u_int8_t>();
+        reader.skip(3);
+        double holerotation = reader.read<double>();
+
+        std::cout << "Pad: '" << name << "'" << std::endl;
+        std::cout << "  component: " << component << std::endl;
+        std::cout << "  position: " << position << std::endl;
+        std::cout << "  topsize: " << topsize << std::endl;
+        std::cout << "  midsize: " << midsize << std::endl;
         std::cout << "  botsize: " << botsize << std::endl;
+        std::cout << "  direction: " << direction << std::endl;
+        std::cout << "  holerotation: " << holerotation << std::endl;
+
+        if( length_bytes > 106 )
+        {
+            if (length_bytes == 114)
+            {
+                reader.skip(4);
+            }
+            else if (length_bytes == 120)
+            {
+                u_int8_t tolayer = reader.read<u_int8_t>();
+                reader.skip(2);
+                u_int8_t fromlayer = reader.read<u_int8_t>();
+                reader.skip(2);
+            }
+
+            u_int32_t last_section_length = reader.read<u_int32_t>();  // TODO: from libopenaltium, no idea how to interpret
+
+            if (length_bytes == 171)
+            {
+                reader.skip(53);
+                u_int32_t unknown171_length = reader.read<u_int32_t>();
+                reader.skip(unknown171_length);
+            }
+        }
 
         MODULE* module = new MODULE(m_board);
         m_board->Add(module);
@@ -136,9 +182,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
         pad->SetLayer(PCB_LAYER_ID::F_Cu);  // TODO?
         pad->SetShape(PAD_SHAPE_T::PAD_SHAPE_RECT);
         pad->SetAttribute(PAD_ATTR_T::PAD_ATTRIB_SMD);
-
-        reader.skip(147-60-8);
-
-        // TODO: in special cases we need to skip more!
     }
+    wxASSERT(!reader.parser_error());
+    wxASSERT(reader.bytes_remaining() == 0);
 }
