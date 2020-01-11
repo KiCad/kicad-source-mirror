@@ -46,7 +46,7 @@ struct DIALOG_BOARD_RENUM_PARAMETERS
               RemoveFrontPrefix( false ),
               RemoveBackPrefix( false ),
               WriteLogFile( false ),
-              WriteChangeFile( false ),
+              WriteChangeFile( false),
 
               FrontStartRefDes( 1 ),
               BackStartRefDes( 0 ),
