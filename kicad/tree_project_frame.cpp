@@ -290,8 +290,8 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
 }
 
 
-wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
-                                               wxTreeItemId& aRoot, bool aRecurse )
+wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
+        const wxString& aName, wxTreeItemId& aRoot, bool aCanResetFileWatcher, bool aRecurse )
 {
     wxTreeItemId newItemId;
     TreeFileType    type = TREE_UNKNOWN;
@@ -439,6 +439,10 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
     else
         data->SetRootFile( false );
 
+#ifndef __WINDOWS__
+    bool subdir_populated = false;
+#endif
+
     // This section adds dirs and files found in the subdirs
     // in this case AddFile is recursive, but for the first level only.
     if( TREE_DIRECTORY == type && aRecurse )
@@ -450,13 +454,16 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
             wxString        dir_filename;
 
             data->SetPopulated( true );
+#ifndef __WINDOWS__
+            subdir_populated = aCanResetFileWatcher;
+#endif
 
             if( dir.GetFirst( &dir_filename ) )
             {
                 do    // Add name in tree, but do not recurse
                 {
                     wxString path = aName + wxFileName::GetPathSeparator() + dir_filename;
-                    AddItemToTreeProject( path, newItemId, false );
+                    AddItemToTreeProject( path, newItemId, false, false );
                 } while( dir.GetNext( &dir_filename ) );
             }
         }
@@ -464,6 +471,11 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
         // Sort filenames by alphabetic order
         m_TreeProject->SortChildren( newItemId );
     }
+
+#ifndef __WINDOWS__
+    if( subdir_populated )
+        FileWatcherReset();
+#endif
 
     return newItemId;
 }
@@ -515,7 +527,7 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
                 if( filename != fn.GetFullName() )
                 {
                     wxString name = dir.GetName() + wxFileName::GetPathSeparator() + filename;
-                    AddItemToTreeProject( name, m_root );
+                    AddItemToTreeProject( name, m_root, false );
                 }
 
                 cont = dir.GetNext( &filename );
@@ -957,7 +969,7 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
     {
     case wxFSW_EVENT_CREATE:
         {
-            wxTreeItemId newitem = AddItemToTreeProject( pathModified.GetFullPath(), root_id, false );
+            wxTreeItemId newitem = AddItemToTreeProject( pathModified.GetFullPath(), root_id );
 
             // If we are in the process of renaming a file, select the new one
             // This is needed for MSW and OSX, since we don't get RENAME events from them, just a
@@ -1004,7 +1016,7 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
             }
 
             wxTreeItemId newroot_id = findSubdirTreeItem( newdir );
-            wxTreeItemId newitem = AddItemToTreeProject( newfn, newroot_id, false );
+            wxTreeItemId newitem = AddItemToTreeProject( newfn, newroot_id );
 
             // If the item exists, select it
             if( newitem.IsOk() )
