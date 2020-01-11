@@ -34,30 +34,37 @@ PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType ) :
         m_frameType( aFrameType ),
         m_colorsSettings( aFrameType )
 {
-    switch( m_frameType )
+    try
     {
-    case FRAME_PCB_EDITOR:
-        Add( "Use45DegreeGraphicSegments", &m_Use45DegreeGraphicSegments, false);
-        Add( "MagneticPads", reinterpret_cast<int*>( &m_MagneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
-        Add( "MagneticTracks", reinterpret_cast<int*>( &m_MagneticTracks ), CAPTURE_CURSOR_IN_TRACK_TOOL );
-        Add( "MagneticGraphics", &m_MagneticGraphics, true );
-        Add( "FlipLeftRight", &m_FlipLeftRight, false );
-        break;
+        switch( m_frameType )
+        {
+        case FRAME_PCB_EDITOR:
+            Add( "Use45DegreeGraphicSegments", &m_Use45DegreeGraphicSegments, false);
+            Add( "MagneticPads", reinterpret_cast<int*>( &m_MagneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
+            Add( "MagneticTracks", reinterpret_cast<int*>( &m_MagneticTracks ), CAPTURE_CURSOR_IN_TRACK_TOOL );
+            Add( "MagneticGraphics", &m_MagneticGraphics, true );
+            Add( "FlipLeftRight", &m_FlipLeftRight, false );
+            break;
 
-    case FRAME_FOOTPRINT_EDITOR:
-        m_params.push_back( new PARAM_CFG_BOOL( "FpEditorUse45DegreeGraphicSegments",
-                &m_Use45DegreeGraphicSegments, false,
-                nullptr, "Use45DegreeGraphicSegments" ) );   // legacy location
-        m_params.push_back( new PARAM_CFG_INT( "FpEditorMagneticPads",
-                reinterpret_cast<int*>( &m_MagneticPads ),
-                CAPTURE_CURSOR_IN_TRACK_TOOL,               // default
-                NO_EFFECT,                                  // min
-                CAPTURE_ALWAYS,                             // max
-                nullptr, "MagneticPads" ) );                // legacy location
-        break;
+        case FRAME_FOOTPRINT_EDITOR:
+            m_params.push_back( new PARAM_CFG_BOOL( "FpEditorUse45DegreeGraphicSegments",
+                    &m_Use45DegreeGraphicSegments, false,
+                    nullptr, "Use45DegreeGraphicSegments" ) );   // legacy location
+            m_params.push_back( new PARAM_CFG_INT( "FpEditorMagneticPads",
+                    reinterpret_cast<int*>( &m_MagneticPads ),
+                    CAPTURE_CURSOR_IN_TRACK_TOOL,               // default
+                    NO_EFFECT,                                  // min
+                    CAPTURE_ALWAYS,                             // max
+                    nullptr, "MagneticPads" ) );                // legacy location
+            break;
 
-    default:
-        break;
+        default:
+            break;
+        }
+    }
+    catch( boost::bad_pointer& )
+    {
+        // Out of memory?  Ship's going down anyway....
     }
 }
 

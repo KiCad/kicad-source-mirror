@@ -430,11 +430,18 @@ void PART_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
 
     PARAM_CFG_ARRAY ca;
 
-    if( aPaths )
-        ca.push_back( new PARAM_CFG_FILENAME( "LibDir", aPaths ) );
+    try
+    {
+        if( aPaths )
+            ca.push_back( new PARAM_CFG_FILENAME( "LibDir", aPaths ) );
 
-    if( aNames )
-        ca.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),  aNames, GROUP_SCH_LIBS ) );
+        if( aNames )
+            ca.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),  aNames, GROUP_SCH_LIBS ) );
+    }
+    catch( boost::bad_pointer& )
+    {
+        // Out of memory?  Ship's going down anyway....
+    }
 
     if( doSave )
     {

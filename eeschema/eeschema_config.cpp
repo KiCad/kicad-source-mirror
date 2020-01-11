@@ -187,45 +187,52 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;
 
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
-                                        &BASE_SCREEN::m_PageLayoutDescrFileName ) );
+    try
+    {
+        m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
+                                            &BASE_SCREEN::m_PageLayoutDescrFileName ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "PlotDirectoryName" ),
-                                        &m_plotDirectoryName ) );
+        m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "PlotDirectoryName" ),
+                                            &m_plotDirectoryName ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartIdSeparator" ),
-                                        LIB_PART::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartFirstId" ),
-                                        LIB_PART::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
+        m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartIdSeparator" ),
+                                            LIB_PART::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
+        m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartFirstId" ),
+                                            LIB_PART::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
-                                            &m_netListFormat) );
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "SpiceAjustPassiveValues" ),
-                                            &m_spiceAjustPassiveValues, false ) );
+        m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
+                                                &m_netListFormat) );
+        m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "SpiceAjustPassiveValues" ),
+                                                &m_spiceAjustPassiveValues, false ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "LabSize" ),
-                                            &s_defaultTextSize, DEFAULT_SIZE_TEXT, 5, 1000 ) );
+        m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "LabSize" ),
+                                                &s_defaultTextSize, DEFAULT_SIZE_TEXT, 5, 1000 ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_WriteFile" ),
-                                   &m_ercSettings.write_erc_file, false ) );
+        m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_WriteFile" ),
+                                       &m_ercSettings.write_erc_file, false ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_TestSimilarLabels" ),
-                                   &m_ercSettings.check_similar_labels, true ) );
+        m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_TestSimilarLabels" ),
+                                       &m_ercSettings.check_similar_labels, true ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckUniqueGlobalLabels" ),
-                                   &m_ercSettings.check_unique_global_labels, true ) );
+        m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckUniqueGlobalLabels" ),
+                                       &m_ercSettings.check_unique_global_labels, true ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckBusDriverConflicts" ),
-                                   &m_ercSettings.check_bus_driver_conflicts, true ) );
+        m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckBusDriverConflicts" ),
+                                       &m_ercSettings.check_bus_driver_conflicts, true ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckBusEntryConflicts" ),
-                                   &m_ercSettings.check_bus_entry_conflicts, true ) );
+        m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckBusEntryConflicts" ),
+                                       &m_ercSettings.check_bus_entry_conflicts, true ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckBusToBusConflicts" ),
-                                   &m_ercSettings.check_bus_to_bus_conflicts, true ) );
+        m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckBusToBusConflicts" ),
+                                       &m_ercSettings.check_bus_to_bus_conflicts, true ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckBusToNetConflicts" ),
-                                   &m_ercSettings.check_bus_to_net_conflicts, true ) );
+        m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckBusToNetConflicts" ),
+                                       &m_ercSettings.check_bus_to_net_conflicts, true ) );
+    }
+    catch( boost::bad_pointer& )
+    {
+        // Out of memory?  Ship's going down anyway....
+    }
 
     return m_projectFileParams;
 }
@@ -343,24 +350,32 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
     if( !m_configSettings.empty() )
         return m_configSettings;
 
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, ShowPageLimitsEntry,
-                                                    &m_showPageLimits, true ) );
-    m_configSettings.push_back( new PARAM_CFG_INT(
-            true, UnitsEntry, (int*) &m_userUnits, (int) EDA_UNITS::MILLIMETRES ) );
+    try
+    {
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, ShowPageLimitsEntry,
+                                                        &m_showPageLimits, true ) );
+        m_configSettings.push_back( new PARAM_CFG_INT(
+                true, UnitsEntry, (int*) &m_userUnits, (int) EDA_UNITS::MILLIMETRES ) );
 
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, PrintMonochromeEntry,
-                                                    &m_printMonochrome, true ) );
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, PrintSheetRefEntry,
-                                                    &m_printSheetReference, true ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, PrintMonochromeEntry,
+                                                        &m_printMonochrome, true ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, PrintSheetRefEntry,
+                                                        &m_printSheetReference, true ) );
 
-    m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatLabelIncrementEntry,
-                                                   &m_repeatDeltaLabel, DEFAULT_REPEAT_LABEL_INC,
-                                                   -10, +10 ) );
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, ShowIllegalSymboLibDialog,
-                                                    &m_showIllegalSymbolLibDialog, true ) );
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, showSheetFileNameCaseSensitivityDlg,
-                                                    &m_showSheetFileNameCaseSensitivityDlg,
-                                                    true ) );
+        m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatLabelIncrementEntry,
+                                                       &m_repeatDeltaLabel, DEFAULT_REPEAT_LABEL_INC,
+                                                       -10, +10 ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, ShowIllegalSymboLibDialog,
+                                                        &m_showIllegalSymbolLibDialog, true ) );
+        m_configSettings.push_back( new PARAM_CFG_BOOL( true, showSheetFileNameCaseSensitivityDlg,
+                                                        &m_showSheetFileNameCaseSensitivityDlg,
+                                                        true ) );
+    }
+    catch( boost::bad_pointer& )
+    {
+        // Out of memory?  Ship's going down anyway....
+    }
+
     return m_configSettings;
 }
 

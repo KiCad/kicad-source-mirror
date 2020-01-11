@@ -531,174 +531,181 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
 // values are saved in mm
 void BOARD_DESIGN_SETTINGS::AppendConfigs( BOARD* aBoard, PARAM_CFG_ARRAY* aResult )
 {
-    aResult->push_back( new PARAM_CFG_LAYERS( aBoard ) );
+    try
+    {
+        aResult->push_back( new PARAM_CFG_LAYERS( aBoard ) );
 
-    aResult->push_back( new PARAM_CFG_BOOL( wxT( "AllowMicroVias" ),
-          &m_MicroViasAllowed, false ) );
+        aResult->push_back( new PARAM_CFG_BOOL( wxT( "AllowMicroVias" ),
+              &m_MicroViasAllowed, false ) );
 
-    aResult->push_back( new PARAM_CFG_BOOL( wxT( "AllowBlindVias" ),
-          &m_BlindBuriedViaAllowed, false ) );
+        aResult->push_back( new PARAM_CFG_BOOL( wxT( "AllowBlindVias" ),
+              &m_BlindBuriedViaAllowed, false ) );
 
-    aResult->push_back( new PARAM_CFG_BOOL( wxT( "RequireCourtyardDefinitions" ),
-          &m_RequireCourtyards, false ) );
+        aResult->push_back( new PARAM_CFG_BOOL( wxT( "RequireCourtyardDefinitions" ),
+              &m_RequireCourtyards, false ) );
 
-    aResult->push_back( new PARAM_CFG_BOOL( wxT( "ProhibitOverlappingCourtyards" ),
-          &m_ProhibitOverlappingCourtyards, true ) );
+        aResult->push_back( new PARAM_CFG_BOOL( wxT( "ProhibitOverlappingCourtyards" ),
+              &m_ProhibitOverlappingCourtyards, true ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinTrackWidth" ),
-          &m_TrackMinWidth,
-          Millimeter2iu( DEFAULT_TRACKMINWIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinTrackWidth" ),
+              &m_TrackMinWidth,
+              Millimeter2iu( DEFAULT_TRACKMINWIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinViaDiameter" ),
-          &m_ViasMinSize,
-          Millimeter2iu( DEFAULT_VIASMINSIZE ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinViaDiameter" ),
+              &m_ViasMinSize,
+              Millimeter2iu( DEFAULT_VIASMINSIZE ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinViaDrill" ),
-          &m_ViasMinDrill,
-          Millimeter2iu( DEFAULT_VIASMINDRILL ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinViaDrill" ),
+              &m_ViasMinDrill,
+              Millimeter2iu( DEFAULT_VIASMINDRILL ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinMicroViaDiameter" ),
-          &m_MicroViasMinSize,
-          Millimeter2iu( DEFAULT_MICROVIASMINSIZE ), Millimeter2iu( 0.01 ), Millimeter2iu( 10.0 ),
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinMicroViaDiameter" ),
+              &m_MicroViasMinSize,
+              Millimeter2iu( DEFAULT_MICROVIASMINSIZE ), Millimeter2iu( 0.01 ), Millimeter2iu( 10.0 ),
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinMicroViaDrill" ),
-          &m_MicroViasMinDrill,
-          Millimeter2iu( DEFAULT_MICROVIASMINDRILL ), Millimeter2iu( 0.01 ), Millimeter2iu( 10.0 ),
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinMicroViaDrill" ),
+              &m_MicroViasMinDrill,
+              Millimeter2iu( DEFAULT_MICROVIASMINDRILL ), Millimeter2iu( 0.01 ), Millimeter2iu( 10.0 ),
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinHoleToHole" ),
-          &m_HoleToHoleMin,
-          Millimeter2iu( DEFAULT_HOLETOHOLEMIN ), Millimeter2iu( 0.0 ), Millimeter2iu( 10.0 ),
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinHoleToHole" ),
+              &m_HoleToHoleMin,
+              Millimeter2iu( DEFAULT_HOLETOHOLEMIN ), Millimeter2iu( 0.0 ), Millimeter2iu( 10.0 ),
+              nullptr, MM_PER_IU ) );
 
-    // Note: a clearance of -0.01 is a flag indicating we should use the legacy (pre-6.0) method
-    // based on the edge cut thicknesses.
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperEdgeClearance" ),
-          &m_CopperEdgeClearance,
-          Millimeter2iu( LEGACY_COPPEREDGECLEARANCE ), Millimeter2iu( -0.01 ), Millimeter2iu( 25.0 ),
-          nullptr, MM_PER_IU ) );
+        // Note: a clearance of -0.01 is a flag indicating we should use the legacy (pre-6.0) method
+        // based on the edge cut thicknesses.
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperEdgeClearance" ),
+              &m_CopperEdgeClearance,
+              Millimeter2iu( LEGACY_COPPEREDGECLEARANCE ), Millimeter2iu( -0.01 ), Millimeter2iu( 25.0 ),
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_TRACKWIDTHS( &m_TrackWidthList ) );
-    aResult->push_back( new PARAM_CFG_VIADIMENSIONS( &m_ViasDimensionsList ) );
-    aResult->push_back( new PARAM_CFG_DIFFPAIRDIMENSIONS( &m_DiffPairDimensionsList ) );
+        aResult->push_back( new PARAM_CFG_TRACKWIDTHS( &m_TrackWidthList ) );
+        aResult->push_back( new PARAM_CFG_VIADIMENSIONS( &m_ViasDimensionsList ) );
+        aResult->push_back( new PARAM_CFG_DIFFPAIRDIMENSIONS( &m_DiffPairDimensionsList ) );
 
-    aResult->push_back( new PARAM_CFG_NETCLASSES( wxT( "Netclasses" ), &m_NetClasses ) );
+        aResult->push_back( new PARAM_CFG_NETCLASSES( wxT( "Netclasses" ), &m_NetClasses ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SilkLineWidth" ),
-          &m_LineThickness[ LAYER_CLASS_SILK ],
-          Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
-          nullptr, MM_PER_IU, wxT( "ModuleOutlineThickness" ) ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SilkLineWidth" ),
+              &m_LineThickness[ LAYER_CLASS_SILK ],
+              Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+              nullptr, MM_PER_IU, wxT( "ModuleOutlineThickness" ) ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SilkTextSizeV" ),
-          &m_TextSize[ LAYER_CLASS_SILK ].y,
-          Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
-          nullptr, MM_PER_IU, wxT( "ModuleTextSizeV" ) ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SilkTextSizeV" ),
+              &m_TextSize[ LAYER_CLASS_SILK ].y,
+              Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+              nullptr, MM_PER_IU, wxT( "ModuleTextSizeV" ) ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SilkTextSizeH" ),
-          &m_TextSize[ LAYER_CLASS_SILK ].x,
-          Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
-          nullptr, MM_PER_IU, wxT( "ModuleTextSizeH" ) ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SilkTextSizeH" ),
+              &m_TextSize[ LAYER_CLASS_SILK ].x,
+              Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+              nullptr, MM_PER_IU, wxT( "ModuleTextSizeH" ) ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SilkTextSizeThickness" ),
-          &m_TextThickness[ LAYER_CLASS_SILK ],
-          Millimeter2iu( DEFAULT_SILK_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH,
-          nullptr, MM_PER_IU, wxT( "ModuleTextSizeThickness" ) ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SilkTextSizeThickness" ),
+              &m_TextThickness[ LAYER_CLASS_SILK ],
+              Millimeter2iu( DEFAULT_SILK_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH,
+              nullptr, MM_PER_IU, wxT( "ModuleTextSizeThickness" ) ) );
 
-    aResult->push_back( new PARAM_CFG_BOOL( wxT( "SilkTextItalic" ),
-          &m_TextItalic[ LAYER_CLASS_SILK ], false ) );
+        aResult->push_back( new PARAM_CFG_BOOL( wxT( "SilkTextItalic" ),
+              &m_TextItalic[ LAYER_CLASS_SILK ], false ) );
 
-    aResult->push_back( new PARAM_CFG_BOOL( wxT( "SilkTextUpright" ),
-          &m_TextUpright[ LAYER_CLASS_SILK ], true ) );
+        aResult->push_back( new PARAM_CFG_BOOL( wxT( "SilkTextUpright" ),
+              &m_TextUpright[ LAYER_CLASS_SILK ], true ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperLineWidth" ),
-          &m_LineThickness[ LAYER_CLASS_COPPER ],
-          Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
-          nullptr, MM_PER_IU, wxT( "DrawSegmentWidth" ) ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperLineWidth" ),
+              &m_LineThickness[ LAYER_CLASS_COPPER ],
+              Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+              nullptr, MM_PER_IU, wxT( "DrawSegmentWidth" ) ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperTextSizeV" ),
-          &m_TextSize[ LAYER_CLASS_COPPER ].y,
-          Millimeter2iu( DEFAULT_COPPER_TEXT_SIZE  ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
-          nullptr, MM_PER_IU, wxT( "PcbTextSizeV" ) ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperTextSizeV" ),
+              &m_TextSize[ LAYER_CLASS_COPPER ].y,
+              Millimeter2iu( DEFAULT_COPPER_TEXT_SIZE  ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+              nullptr, MM_PER_IU, wxT( "PcbTextSizeV" ) ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperTextSizeH" ),
-          &m_TextSize[ LAYER_CLASS_COPPER ].x,
-          Millimeter2iu( DEFAULT_COPPER_TEXT_SIZE  ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
-          nullptr, MM_PER_IU, wxT( "PcbTextSizeH" ) ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperTextSizeH" ),
+              &m_TextSize[ LAYER_CLASS_COPPER ].x,
+              Millimeter2iu( DEFAULT_COPPER_TEXT_SIZE  ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+              nullptr, MM_PER_IU, wxT( "PcbTextSizeH" ) ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperTextThickness" ),
-          &m_TextThickness[ LAYER_CLASS_COPPER ],
-          Millimeter2iu( DEFAULT_COPPER_TEXT_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
-          nullptr, MM_PER_IU, wxT( "PcbTextThickness" ) ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperTextThickness" ),
+              &m_TextThickness[ LAYER_CLASS_COPPER ],
+              Millimeter2iu( DEFAULT_COPPER_TEXT_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+              nullptr, MM_PER_IU, wxT( "PcbTextThickness" ) ) );
 
-    aResult->push_back( new PARAM_CFG_BOOL( wxT( "CopperTextItalic" ),
-          &m_TextItalic[ LAYER_CLASS_COPPER ], false ) );
+        aResult->push_back( new PARAM_CFG_BOOL( wxT( "CopperTextItalic" ),
+              &m_TextItalic[ LAYER_CLASS_COPPER ], false ) );
 
-    aResult->push_back( new PARAM_CFG_BOOL( wxT( "CopperTextUpright" ),
-          &m_TextUpright[ LAYER_CLASS_COPPER ], true ) );
+        aResult->push_back( new PARAM_CFG_BOOL( wxT( "CopperTextUpright" ),
+              &m_TextUpright[ LAYER_CLASS_COPPER ], true ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "EdgeCutLineWidth" ),
-          &m_LineThickness[ LAYER_CLASS_EDGES ],
-          Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
-          nullptr, MM_PER_IU, wxT( "BoardOutlineThickness" ) ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "EdgeCutLineWidth" ),
+              &m_LineThickness[ LAYER_CLASS_EDGES ],
+              Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+              nullptr, MM_PER_IU, wxT( "BoardOutlineThickness" ) ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CourtyardLineWidth" ),
-          &m_LineThickness[ LAYER_CLASS_COURTYARD ],
-          Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CourtyardLineWidth" ),
+              &m_LineThickness[ LAYER_CLASS_COURTYARD ],
+              Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersLineWidth" ),
-          &m_LineThickness[ LAYER_CLASS_OTHERS ],
-          Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
-          nullptr, MM_PER_IU, wxT( "ModuleOutlineThickness" ) ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersLineWidth" ),
+              &m_LineThickness[ LAYER_CLASS_OTHERS ],
+              Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+              nullptr, MM_PER_IU, wxT( "ModuleOutlineThickness" ) ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersTextSizeV" ),
-          &m_TextSize[ LAYER_CLASS_OTHERS ].x,
-          Millimeter2iu( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersTextSizeV" ),
+              &m_TextSize[ LAYER_CLASS_OTHERS ].x,
+              Millimeter2iu( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersTextSizeH" ),
-          &m_TextSize[ LAYER_CLASS_OTHERS ].y,
-          Millimeter2iu( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersTextSizeH" ),
+              &m_TextSize[ LAYER_CLASS_OTHERS ].y,
+              Millimeter2iu( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersTextSizeThickness" ),
-          &m_TextThickness[ LAYER_CLASS_OTHERS ],
-          Millimeter2iu( DEFAULT_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH,
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersTextSizeThickness" ),
+              &m_TextThickness[ LAYER_CLASS_OTHERS ],
+              Millimeter2iu( DEFAULT_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH,
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_BOOL( wxT( "OthersTextItalic" ),
-          &m_TextItalic[ LAYER_CLASS_OTHERS ], false ) );
+        aResult->push_back( new PARAM_CFG_BOOL( wxT( "OthersTextItalic" ),
+              &m_TextItalic[ LAYER_CLASS_OTHERS ], false ) );
 
-    aResult->push_back( new PARAM_CFG_BOOL( wxT( "OthersTextUpright" ),
-          &m_TextUpright[ LAYER_CLASS_OTHERS ], true ) );
+        aResult->push_back( new PARAM_CFG_BOOL( wxT( "OthersTextUpright" ),
+              &m_TextUpright[ LAYER_CLASS_OTHERS ], true ) );
 
-    aResult->push_back( new PARAM_CFG_INT( wxT( "DimensionUnits" ),
-          &m_DimensionUnits, 0, 0, 2 ) );
-    aResult->push_back( new PARAM_CFG_INT( wxT( "DimensionPrecision" ),
-          &m_DimensionPrecision, 1, 0, 2 ) );
+        aResult->push_back( new PARAM_CFG_INT( wxT( "DimensionUnits" ),
+              &m_DimensionUnits, 0, 0, 2 ) );
+        aResult->push_back( new PARAM_CFG_INT( wxT( "DimensionPrecision" ),
+              &m_DimensionPrecision, 1, 0, 2 ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderMaskClearance" ),
-          &m_SolderMaskMargin,
-          Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE ), Millimeter2iu( -1.0 ), Millimeter2iu( 1.0 ),
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderMaskClearance" ),
+              &m_SolderMaskMargin,
+              Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE ), Millimeter2iu( -1.0 ), Millimeter2iu( 1.0 ),
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderMaskMinWidth" ),
-          &m_SolderMaskMinWidth,
-          Millimeter2iu( DEFAULT_SOLDERMASK_MIN_WIDTH ), 0, Millimeter2iu( 1.0 ),
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderMaskMinWidth" ),
+              &m_SolderMaskMinWidth,
+              Millimeter2iu( DEFAULT_SOLDERMASK_MIN_WIDTH ), 0, Millimeter2iu( 1.0 ),
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderPasteClearance" ),
-          &m_SolderPasteMargin,
-          Millimeter2iu( DEFAULT_SOLDERPASTE_CLEARANCE ), Millimeter2iu( -1.0 ), Millimeter2iu( 1.0 ),
-          nullptr, MM_PER_IU ) );
+        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderPasteClearance" ),
+              &m_SolderPasteMargin,
+              Millimeter2iu( DEFAULT_SOLDERPASTE_CLEARANCE ), Millimeter2iu( -1.0 ), Millimeter2iu( 1.0 ),
+              nullptr, MM_PER_IU ) );
 
-    aResult->push_back( new PARAM_CFG_DOUBLE( wxT( "SolderPasteRatio" ),
-          &m_SolderPasteMarginRatio,
-          DEFAULT_SOLDERPASTE_RATIO, -0.5, 1.0 ) );
+        aResult->push_back( new PARAM_CFG_DOUBLE( wxT( "SolderPasteRatio" ),
+              &m_SolderPasteMarginRatio,
+              DEFAULT_SOLDERPASTE_RATIO, -0.5, 1.0 ) );
+    }
+    catch( boost::bad_pointer& )
+    {
+        // Out of memory?  Ship's going down anyway....
+    }
 }
 
 

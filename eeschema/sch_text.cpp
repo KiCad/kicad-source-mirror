@@ -554,21 +554,11 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 
     switch( GetLabelSpinStyle() )
     {
-    case LABEL_SPIN_STYLE::LEFT:
-        msg = _( "Horizontal left" );
-        break;
-    case LABEL_SPIN_STYLE::UP:
-        msg = _( "Vertical up" );
-        break;
-    case LABEL_SPIN_STYLE::RIGHT:
-        msg = _( "Horizontal right" );
-        break;
-    case LABEL_SPIN_STYLE::BOTTOM:
-        msg = _( "Vertical down" );
-        break;
-    default:
-        msg = wxT( "???" );
-        break;
+    case LABEL_SPIN_STYLE::LEFT:   msg = _( "Horizontal left" );  break;
+    case LABEL_SPIN_STYLE::UP:     msg = _( "Vertical up" );      break;
+    case LABEL_SPIN_STYLE::RIGHT:  msg = _( "Horizontal right" ); break;
+    case LABEL_SPIN_STYLE::BOTTOM: msg = _( "Vertical down" );    break;
+    default:                       msg = wxT( "???" );            break;
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), msg, BROWN ) );
@@ -589,24 +579,12 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
     {
         switch( GetShape() )
         {
-        case PINSHEETLABEL_SHAPE::PS_INPUT:
-            msg = _( "Input" );
-            break;
-        case PINSHEETLABEL_SHAPE::PS_OUTPUT:
-            msg = _( "Output" );
-            break;
-        case PINSHEETLABEL_SHAPE::PS_BIDI:
-            msg = _( "Bidirectional" );
-            break;
-        case PINSHEETLABEL_SHAPE::PS_TRISTATE:
-            msg = _( "Tri-State" );
-            break;
-        case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED:
-            msg = _( "Passive" );
-            break;
-        default:
-            msg = wxT( "???" );
-            break;
+        case PINSHEETLABEL_SHAPE::PS_INPUT:       msg = _( "Input" );         break;
+        case PINSHEETLABEL_SHAPE::PS_OUTPUT:      msg = _( "Output" );        break;
+        case PINSHEETLABEL_SHAPE::PS_BIDI:        msg = _( "Bidirectional" ); break;
+        case PINSHEETLABEL_SHAPE::PS_TRISTATE:    msg = _( "Tri-State" );     break;
+        case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED: msg = _( "Passive" );       break;
+        default:                                  msg = wxT( "???" );         break;
         }
 
         aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, BLUE ) );

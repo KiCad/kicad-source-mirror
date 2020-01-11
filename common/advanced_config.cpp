@@ -81,13 +81,6 @@ static const wxChar UsePinFunction[] = wxT( "UsePinFunction" );
 static const wxChar RealtimeConnectivity[] = wxT( "RealtimeConnectivity" );
 
 /**
- * Allow legacy canvas to be shown in GTK3. Legacy canvas is generally pretty
- * broken, but this avoids code in an ifdef where it could become broken
- * on other platforms
- */
-static const wxChar AllowLegacyCanvasInGtk3[] = wxT( "AllowLegacyCanvasInGtk3" );
-
-/**
  * Configure the coroutine stack size in bytes.  This should be allocated in multiples of
  * the system page size (n*4096 is generally safe)
  */
@@ -172,7 +165,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     // then the values will remain as set here.
     m_EnableUsePadProperty = false;
     m_EnableUsePinFunction = false;
-    m_allowLegacyCanvasInGtk3 = false;
     m_realTimeConnectivity = true;
     m_coroutineStackSize = AC_STACK::default_stack;
 
@@ -208,21 +200,25 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 {
     PARAM_CFG_ARRAY configParams;
 
-    configParams.push_back(
-            new PARAM_CFG_BOOL( true, AC_KEYS::UsePadProperty, &m_EnableUsePadProperty, false ) );
+    try
+    {
+        configParams.push_back(
+                new PARAM_CFG_BOOL( true, AC_KEYS::UsePadProperty, &m_EnableUsePadProperty, false ) );
 
-    configParams.push_back(
-            new PARAM_CFG_BOOL( true, AC_KEYS::UsePinFunction, &m_EnableUsePinFunction, false ) );
+        configParams.push_back(
+                new PARAM_CFG_BOOL( true, AC_KEYS::UsePinFunction, &m_EnableUsePinFunction, false ) );
 
-    configParams.push_back( new PARAM_CFG_BOOL(
-            true, AC_KEYS::AllowLegacyCanvasInGtk3, &m_allowLegacyCanvasInGtk3, false ) );
+        configParams.push_back(
+                new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity, &m_realTimeConnectivity, false ) );
 
-    configParams.push_back(
-            new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity, &m_realTimeConnectivity, false ) );
-
-    configParams.push_back(
-            new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize, &m_coroutineStackSize,
-                    AC_STACK::default_stack, AC_STACK::min_stack, AC_STACK::max_stack ) );
+        configParams.push_back(
+                new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize, &m_coroutineStackSize,
+                        AC_STACK::default_stack, AC_STACK::min_stack, AC_STACK::max_stack ) );
+    }
+    catch( boost::bad_pointer& )
+    {
+        // Out of memory?  Ship's going down anyway....
+    }
 
     wxConfigLoadSetups( &aCfg, configParams );
 
@@ -230,15 +226,3 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 }
 
 
-bool ADVANCED_CFG::AllowLegacyCanvas() const
-{
-    // default is to allow
-    bool allow = true;
-
-    // on GTK3, check the config
-#ifdef __WXGTK3__
-    allow = m_allowLegacyCanvasInGtk3;
-#endif
-
-    return allow;
-}
