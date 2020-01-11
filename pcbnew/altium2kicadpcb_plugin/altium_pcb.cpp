@@ -62,6 +62,40 @@ const CFB::COMPOUND_FILE_ENTRY* FindStream(const CFB::CompoundFileReader& reader
 }
 
 
+struct ALTIUM_PAD_SHAPE
+{
+    enum
+    {
+        UNKNOWN             = 0,
+        CIRCLE              = 1,
+        RECT                = 2,
+        OVAL                = 3
+    };
+};
+
+
+struct ALTIUM_PAD_MODE
+{
+    enum
+    {
+        SIMPLE              = 0,
+        TOP_MIDDLE_BOTTOM   = 1,
+        FULL_STACK          = 2
+    };
+};
+
+
+struct ALTIUM_LAYER
+{
+    enum
+    {
+        F_CU                = 1,
+        B_CU                = 32,
+        MULTILAYER          = 74
+    };
+};
+
+
 ALTIUM_PCB::ALTIUM_PCB(BOARD *aBoard) {
     m_board = aBoard;
 }
@@ -133,7 +167,9 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
 
         reader.skip( 19);
         u_int8_t length_bytes = reader.read<u_int8_t>();
-        reader.skip( 10);
+        reader.skip( 3);
+        u_int8_t layer = reader.read<u_int8_t>();
+        reader.skip( 6);
         u_int16_t component = reader.read<u_int16_t>();
         reader.skip( 4);
 
@@ -159,6 +195,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
 
         std::cout << "Pad: '" << name << "'" << std::endl;
         std::cout << "  component: " << component << std::endl;
+        std::cout << "  layer: " << (int)layer << std::endl;
         std::cout << "  position: " << position << std::endl;
         std::cout << "  topsize: " << topsize << std::endl;
         std::cout << "  midsize: " << midsize << std::endl;
@@ -177,14 +214,51 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
         pad->SetOrientation( direction * 10. );
         if( holesize == 0 )
         {
+            wxASSERT( layer != ALTIUM_LAYER::MULTILAYER );
             pad->SetAttribute(PAD_ATTR_T::PAD_ATTRIB_SMD );
         }
         else
         {
+            wxASSERT( layer == ALTIUM_LAYER::MULTILAYER );  // TODO: I assume other values are possible as well?
+            pad->SetAttribute(plated ? PAD_ATTR_T::PAD_ATTRIB_STANDARD : PAD_ATTR_T::PAD_ATTRIB_HOLE_NOT_PLATED );
             pad->SetDrillSize( wxSize( holesize, holesize ) );
         }
-        pad->SetLayer(PCB_LAYER_ID::F_Cu );  // TODO?
-        pad->SetShape(PAD_SHAPE_T::PAD_SHAPE_RECT );
+
+        wxASSERT( padmode == ALTIUM_PAD_MODE::SIMPLE );
+        // wxASSERT( topshape == midshape == botshape );
+        switch( topshape )
+        {
+            case ALTIUM_PAD_SHAPE::RECT:
+                pad->SetShape(PAD_SHAPE_T::PAD_SHAPE_RECT );
+                break;
+            case ALTIUM_PAD_SHAPE::CIRCLE:
+                pad->SetShape(PAD_SHAPE_T::PAD_SHAPE_CIRCLE );
+                break;
+            case ALTIUM_PAD_SHAPE::OVAL:
+                pad->SetShape(PAD_SHAPE_T::PAD_SHAPE_OVAL );
+                break;
+            case ALTIUM_PAD_SHAPE::UNKNOWN:
+            default:
+                wxFAIL_MSG( "unknown shape" );
+                break;
+        }
+
+        switch ( layer )
+        {
+            case ALTIUM_LAYER::F_CU:
+                pad->SetLayer(F_Cu);
+                pad->SetLayerSet( LSET( 3, F_Cu, F_Paste, F_Mask ) );
+                break;
+            case ALTIUM_LAYER::B_CU:
+                pad->SetLayer(B_Cu);
+                pad->SetLayerSet( LSET( 3, B_Cu, B_Paste, B_Mask ) );
+                break;
+            case ALTIUM_LAYER::MULTILAYER:
+            default:
+                pad->SetLayerSet( LSET::AllCuMask() );
+                pad->SetLayerSet( pad->GetLayerSet().set( B_Mask ).set( F_Mask ) ); // Solder Mask
+                break;
+        }
 
         if( length_bytes > 106 )
         {
