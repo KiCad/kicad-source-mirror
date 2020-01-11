@@ -62,6 +62,22 @@ const CFB::COMPOUND_FILE_ENTRY* FindStream(const CFB::CompoundFileReader& reader
 }
 
 
+struct ALTIUM_RECORD
+{
+    enum
+    {
+        ARC                 = 1,
+        PAD                 = 2,
+        VIA                 = 3,
+        TRACK               = 4,
+        TEXT                = 5,
+        FILL                = 6,
+        REGION              = 11,
+        MODEL               = 12
+    };
+};
+
+
 struct ALTIUM_PAD_SHAPE
 {
     enum
@@ -159,7 +175,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
 
     while( !reader.parser_error() && reader.bytes_remaining() > 5 + 147 /* TODO: use Header section of file */ ) {
         u_int8_t recordtype = reader.read<u_int8_t>();
-        wxASSERT( recordtype == 0x02 );
+        wxASSERT( recordtype == ALTIUM_RECORD::PAD );
 
         u_int32_t len = reader.read<u_int32_t>();
         std::string name = reader.read_string();
