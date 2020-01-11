@@ -24,37 +24,35 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <eda_dde.h>
+#include <eeschema_id.h>
 #include <fctsys.h>
-#include <pgm_base.h>
+#include <general.h>
 #include <kiface_i.h>
 #include <kiway_express.h>
-#include <macros.h>
-#include <eda_dde.h>
-#include <sch_edit_frame.h>
-#include <general.h>
-#include <eeschema_id.h>
 #include <lib_item.h>
 #include <lib_pin.h>
+#include <macros.h>
+#include <netlist_exporters/netlist_exporter_kicad.h>
+#include <pgm_base.h>
+#include <reporter.h>
 #include <sch_component.h>
+#include <sch_edit_frame.h>
 #include <sch_sheet.h>
 #include <sch_view.h>
-#include <reporter.h>
-#include <netlist_exporters/netlist_exporter_kicad.h>
 #include <tools/ee_actions.h>
-#include <tools/sch_editor_control.h>
 #include <tools/renum.h>
+#include <tools/sch_editor_control.h>
 
 SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
-                                                    bool            aSearchHierarchy,
-                                                    SCH_SEARCH_T    aSearchType,
-                                                    const wxString& aSearchText )
+        bool aSearchHierarchy, SCH_SEARCH_T aSearchType, const wxString& aSearchText )
 {
     SCH_SHEET_PATH* sheetWithComponentFound = NULL;
-    SCH_ITEM*       item = NULL;
-    SCH_COMPONENT*  Component = NULL;
+    SCH_ITEM*       item                    = NULL;
+    SCH_COMPONENT*  Component               = NULL;
     wxPoint         pos;
     bool            notFound = true;
-    LIB_PIN*        pin = nullptr;
+    LIB_PIN*        pin      = nullptr;
     SCH_SHEET_LIST  sheetList( g_RootSheet );
     EDA_ITEM*       foundItem = nullptr;
 
@@ -63,7 +61,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
     else
         sheetList.BuildSheetList( g_RootSheet );
 
-    for( SCH_SHEET_PATH& sheet : sheetList)
+    for( SCH_SHEET_PATH& sheet : sheetList )
     {
         for( item = sheet.LastDrawList(); item && notFound; item = item->Next() )
         {
@@ -74,12 +72,12 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
             if( aReference.CmpNoCase( pSch->GetRef( &sheet ) ) == 0 )
             {
-                Component = pSch;
+                Component               = pSch;
                 sheetWithComponentFound = &sheet;
 
                 if( aSearchType == HIGHLIGHT_PIN )
                 {
-                    pos = pSch->GetPosition();  // temporary: will be changed if the pin is found.
+                    pos = pSch->GetPosition(); // temporary: will be changed if the pin is found.
                     pin = pSch->GetPin( aSearchText );
 
                     if( pin )
@@ -91,8 +89,8 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                 }
                 else
                 {
-                    notFound = false;
-                    pos = pSch->GetPosition();
+                    notFound  = false;
+                    pos       = pSch->GetPosition();
                     foundItem = Component;
                 }
             }
@@ -112,7 +110,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
         }
 
         wxPoint delta;
-        pos  -= Component->GetPosition();
+        pos -= Component->GetPosition();
         delta = Component->GetTransform().TransformCoordinate( pos );
         pos   = delta + Component->GetPosition();
 
@@ -141,7 +139,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
     m_frame->SetStatusText( msg );
 
-    m_probingPcbToSch = true;   // recursion guard
+    m_probingPcbToSch = true; // recursion guard
     {
         // Clear any existing highlighting
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
@@ -181,8 +179,8 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     SCH_EDITOR_CONTROL* editor = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
     char                line[1024];
 
-    strncpy( line, cmdline, sizeof(line) - 1 );
-    line[ sizeof(line) - 1 ] = '\0';
+    strncpy( line, cmdline, sizeof( line ) - 1 );
+    line[sizeof( line ) - 1] = '\0';
 
     char* idcmd = strtok( line, " \n\r" );
     char* text  = strtok( NULL, "\"\n\r" );
@@ -221,7 +219,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     /* look for a complement */
     idcmd = strtok( NULL, " \n\r" );
 
-    if( idcmd == NULL )    // Highlight component only (from Cvpcb or Pcbnew)
+    if( idcmd == NULL ) // Highlight component only (from Cvpcb or Pcbnew)
     {
         // Highlight component part_ref, or clear Highlight, if part_ref is not existing
         editor->FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
@@ -275,28 +273,26 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aComp )
         return StrPrintf( "$PART: \"%s\"", TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
 
     case SCH_SHEET_T:
-        {
-        SCH_SHEET* sheet = (SCH_SHEET*)aItem;
+    {
+        SCH_SHEET* sheet = (SCH_SHEET*) aItem;
         return StrPrintf( "$SHEET: \"%8.8lX\"", (unsigned long) sheet->GetTimeStamp() );
-        }
+    }
 
     case SCH_PIN_T:
-        {
-            SCH_PIN* pin = (SCH_PIN*) aItem;
-            aComp = pin->GetParentComponent();
+    {
+        SCH_PIN* pin = (SCH_PIN*) aItem;
+        aComp        = pin->GetParentComponent();
 
-            if( !pin->GetNumber().IsEmpty() )
-            {
-                return StrPrintf( "$PIN: \"%s\" $PART: \"%s\"",
-                                  TO_UTF8( pin->GetNumber() ),
-                                  TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
-            }
-            else
-            {
-                return StrPrintf( "$PART: \"%s\"",
-                                  TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
-            }
+        if( !pin->GetNumber().IsEmpty() )
+        {
+            return StrPrintf( "$PIN: \"%s\" $PART: \"%s\"", TO_UTF8( pin->GetNumber() ),
+                    TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
         }
+        else
+        {
+            return StrPrintf( "$PART: \"%s\"", TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
+        }
+    }
 
     default:
         break;
@@ -308,7 +304,7 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aComp )
 
 void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT* aLibItem )
 {
-    wxASSERT( aObjectToSync );     // fix the caller
+    wxASSERT( aObjectToSync ); // fix the caller
 
     if( !aObjectToSync )
         return;
@@ -385,7 +381,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             SCH_SHEET_LIST sheets( g_RootSheet );
             sheets.AnnotatePowerSymbols();
             AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, 0, false, false, true,
-                                NULL_REPORTER::GetInstance() );
+                    NULL_REPORTER::GetInstance() );
         }
 
         if( payload.find( "no-annotate" ) == std::string::npos )
@@ -396,9 +392,9 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         }
 
         {
-            NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
+            NETLIST_OBJECT_LIST*   net_atoms = BuildNetListBase();
             NETLIST_EXPORTER_KICAD exporter( this, net_atoms, g_ConnectionGraph );
-            STRING_FORMATTER formatter;
+            STRING_FORMATTER       formatter;
 
             exporter.Format( &formatter, GNL_ALL );
 
@@ -414,7 +410,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         }
         catch( const IO_ERROR& DBG( ioe ) )
         {
-            DBG( printf( "%s: ioe:%s\n", __func__, TO_UTF8( ioe.What() ) );)
+            DBG( printf( "%s: ioe:%s\n", __func__, TO_UTF8( ioe.What() ) ); )
         }
         break;
 
@@ -451,18 +447,18 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         if( importFormat >= 0 )
             importFile( path, importFormat );
     }
-        break;
+    break;
 
     case MAIL_SCH_SAVE:
         if( SaveProject() )
             payload = "success";
         break;
 
-    case MAIL_RENUMBER:  {               //Renumber the schematic as per the netlist.
-            RenumberFromPCBNew( this, payload );
+    case MAIL_RENUMBER:
+    { //Renumber the schematic as per the netlist.
+        RenumberFromPCBNew( this, payload );
         break;
     }
-    default:
-        ;
+    default:;
     }
 }

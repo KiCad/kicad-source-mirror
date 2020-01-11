@@ -22,23 +22,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "footprint_info_impl.h"
+#include <class_board.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <pcb_base_edit_frame.h>
-#include <tool/tool_manager.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_layer_widget.h>
-#include <gal/graphics_abstraction_layer.h>
-#include <class_board.h>
-#include <view/view.h>
-#include "footprint_info_impl.h"
 #include <project.h>
+#include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <view/view.h>
 
-PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
-                                          FRAME_T aFrameType, const wxString& aTitle,
-                                          const wxPoint& aPos, const wxSize& aSize, long aStyle,
-                                          const wxString& aFrameName ) :
-        PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-                        m_rotationAngle( 900 ), m_undoRedoBlocked( false )
+PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
+        const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize, long aStyle,
+        const wxString& aFrameName )
+        : PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
+          m_rotationAngle( 900 ),
+          m_undoRedoBlocked( false )
 {
     if( !GFootprintList.GetCount() )
     {
@@ -62,7 +62,7 @@ PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()
 void PCB_BASE_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
 {
     wxCHECK2_MSG( aRotationAngle > 0 && aRotationAngle <= 900, aRotationAngle = 900,
-                  wxT( "Invalid rotation angle, defaulting to 90." ) );
+            wxT( "Invalid rotation angle, defaulting to 90." ) );
 
     m_rotationAngle = aRotationAngle;
 }
@@ -97,8 +97,8 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
     {
         GetCanvas()->DisplayBoard( aBoard );
         GetCanvas()->UseColorScheme( &Settings().Colors() );
-        m_toolManager->SetEnvironment( aBoard, GetCanvas()->GetView(),
-                                       GetCanvas()->GetViewControls(), this );
+        m_toolManager->SetEnvironment(
+                aBoard, GetCanvas()->GetView(), GetCanvas()->GetViewControls(), this );
 
         if( new_board )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );

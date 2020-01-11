@@ -37,8 +37,8 @@ class PCB_BASE_EDIT_FRAME : public PCB_BASE_FRAME
 {
 public:
     PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
-                const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-                long aStyle, const wxString& aFrameName );
+            const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize, long aStyle,
+            const wxString& aFrameName );
 
     virtual ~PCB_BASE_EDIT_FRAME();
 
@@ -59,7 +59,7 @@ public:
      * @return wxString - the newly created library path if library was successfully
      *   created, else wxEmptyString because user aborted or error.
      */
-    wxString CreateNewLibrary(const wxString& aLibName = wxEmptyString);
+    wxString CreateNewLibrary( const wxString& aLibName = wxEmptyString );
 
     /**
      * Function AddLibrary
@@ -67,7 +67,7 @@ public:
      * @param aFileName the library to add; a file open dialog will be displayed if empty.
      * @return true if successfully added
      */
-    bool AddLibrary(const wxString& aLibName = wxEmptyString);
+    bool AddLibrary( const wxString& aLibName = wxEmptyString );
 
     /**
      * Function OnEditItemRequest
@@ -89,7 +89,7 @@ public:
      *                          commands like move
      */
     void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy, UNDO_REDO_T aTypeCommand,
-                            const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
+            const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
 
     /**
      * Function SaveCopyInUndoList
@@ -101,7 +101,7 @@ public:
      *                          for commands like move
      */
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO_T aTypeCommand,
-                            const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
+            const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
 
     /**
      * Function RestoreCopyFromRedoList
@@ -136,9 +136,8 @@ public:
      * @param aRebuildRatsnet = a bool: true to rebuild ratsnest (normal use), false to just
      * retrieve last state (used in abort commands that do not need to rebuild ratsnest)
      */
-    void PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
-                                 bool               aRedoCommand,
-                                 bool               aRebuildRatsnet = true );
+    void PutDataInPreviousState(
+            PICKED_ITEMS_LIST* aList, bool aRedoCommand, bool aRebuildRatsnet = true );
 
     /**
      * Function UndoRedoBlocked
@@ -171,7 +170,10 @@ public:
      * Function GetRotationAngle()
      * Returns the angle used for rotate operations.
      */
-    int GetRotationAngle() const { return m_rotationAngle; }
+    int GetRotationAngle() const
+    {
+        return m_rotationAngle;
+    }
 
     /**
      * Function SetRotationAngle()

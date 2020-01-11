@@ -28,14 +28,14 @@
 
 #include <algorithm>
 
-#include <fctsys.h>
-#include <sch_draw_panel.h>
 #include <confirm.h>
+#include <fctsys.h>
 #include <reporter.h>
+#include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 
-#include <sch_reference_list.h>
 #include <class_library.h>
+#include <sch_reference_list.h>
 
 
 void mapExistingAnnotation( std::map<timestamp_t, wxString>& aMap )
@@ -47,11 +47,11 @@ void mapExistingAnnotation( std::map<timestamp_t, wxString>& aMap )
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
-        SCH_COMPONENT* comp = references[ i ].GetComp();
-        wxString       ref = comp->GetField( REFERENCE )->GetFullyQualifiedText();
+        SCH_COMPONENT* comp = references[i].GetComp();
+        wxString       ref  = comp->GetField( REFERENCE )->GetFullyQualifiedText();
 
         if( !ref.Contains( wxT( "?" ) ) )
-            aMap[ comp->GetTimeStamp() ] = ref;
+            aMap[comp->GetTimeStamp()] = ref;
     }
 }
 
@@ -79,14 +79,9 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
 }
 
 
-void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
-                                         ANNOTATE_ORDER_T  aSortOption,
-                                         ANNOTATE_OPTION_T aAlgoOption,
-                                         int               aStartNumber,
-                                         bool              aResetAnnotation,
-                                         bool              aRepairTimestamps,
-                                         bool              aLockUnits,
-                                         REPORTER&         aReporter )
+void SCH_EDIT_FRAME::AnnotateComponents( bool aAnnotateSchematic, ANNOTATE_ORDER_T aSortOption,
+        ANNOTATE_OPTION_T aAlgoOption, int aStartNumber, bool aResetAnnotation,
+        bool aRepairTimestamps, bool aLockUnits, REPORTER& aReporter )
 {
     SCH_REFERENCE_LIST references;
 
@@ -166,7 +161,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     }
 
     bool useSheetNum = false;
-    int idStep = 100;
+    int  idStep      = 100;
 
     switch( aAlgoOption )
     {
@@ -180,7 +175,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
     case SHEET_NUMBER_X_1000:
         useSheetNum = true;
-        idStep = 1000;
+        idStep      = 1000;
         break;
     }
 
@@ -190,8 +185,8 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
-        SCH_COMPONENT* comp = references[ i ].GetComp();
-        wxString       prevRef = previousAnnotation[ comp->GetTimeStamp() ];
+        SCH_COMPONENT* comp    = references[i].GetComp();
+        wxString       prevRef = previousAnnotation[comp->GetTimeStamp()];
         wxString       newRef  = comp->GetField( REFERENCE )->GetFullyQualifiedText();
         wxString       msg;
 
@@ -202,27 +197,23 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
             if( comp->GetUnitCount() > 1 )
                 msg.Printf( _( "Updated %s (unit %s) from %s to %s" ),
-                            GetChars( comp->GetField( VALUE )->GetShownText() ),
-                            LIB_PART::SubReference( comp->GetUnit(), false ),
-                            GetChars( prevRef ),
-                            GetChars( newRef ) );
+                        GetChars( comp->GetField( VALUE )->GetShownText() ),
+                        LIB_PART::SubReference( comp->GetUnit(), false ), GetChars( prevRef ),
+                        GetChars( newRef ) );
             else
                 msg.Printf( _( "Updated %s from %s to %s" ),
-                            GetChars( comp->GetField( VALUE )->GetShownText() ),
-                            GetChars( prevRef ),
-                            GetChars( newRef ) );
+                        GetChars( comp->GetField( VALUE )->GetShownText() ), GetChars( prevRef ),
+                        GetChars( newRef ) );
         }
         else
         {
             if( comp->GetUnitCount() > 1 )
                 msg.Printf( _( "Annotated %s (unit %s) as %s" ),
-                            GetChars( comp->GetField( VALUE )->GetShownText() ),
-                            LIB_PART::SubReference( comp->GetUnit(), false ),
-                            GetChars( newRef ) );
+                        GetChars( comp->GetField( VALUE )->GetShownText() ),
+                        LIB_PART::SubReference( comp->GetUnit(), false ), GetChars( newRef ) );
             else
                 msg.Printf( _( "Annotated %s as %s" ),
-                            GetChars( comp->GetField( VALUE )->GetShownText() ),
-                            GetChars( newRef ) );
+                        GetChars( comp->GetField( VALUE )->GetShownText() ), GetChars( newRef ) );
         }
 
         aReporter.Report( msg, REPORTER::RPT_ACTION );
@@ -245,8 +236,8 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 int SCH_EDIT_FRAME::CheckAnnotate( REPORTER& aReporter, bool aOneSheetOnly )
 {
     // build the screen list
-    SCH_SHEET_LIST      sheetList( g_RootSheet );
-    SCH_REFERENCE_LIST  componentsList;
+    SCH_SHEET_LIST     sheetList( g_RootSheet );
+    SCH_REFERENCE_LIST componentsList;
 
     // Build the list of components
     if( !aOneSheetOnly )

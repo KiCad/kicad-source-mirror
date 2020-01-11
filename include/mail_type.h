@@ -33,20 +33,21 @@
  * KIWAY_PLAYER::KiwayMailIn( KIWAY_EXPRESS& aEvent ) and aEvent.Command() will
  * match aCommand to KIWAY::ExpressMail().
  */
-enum MAIL_T {
-    MAIL_CROSS_PROBE,               ///< PCB<->SCH, CVPCB->SCH cross-probing.
-    MAIL_BACKANNOTATE_FOOTPRINTS,   ///< CVPCB->SCH footprint stuffing
-    MAIL_SCH_SAVE,                  ///< CVPCB->SCH save the schematic
-    MAIL_EESCHEMA_NETLIST, ///< SCH->CVPCB netlist immediately after launching CVPCB
-    MAIL_PCB_UPDATE,                ///< SCH->PCB forward update
-    MAIL_IMPORT_FILE,               ///< Import a different format file
-    MAIL_SCH_GET_NETLIST,           ///< Fetch a netlist from schematics
-    MAIL_PCB_GET_NETLIST,           ///< Fetch a netlist from PCB layout
-    MAIL_SCH_REFRESH,      ///< The the schematic editor to refresh the display.
+enum MAIL_T
+{
+    MAIL_CROSS_PROBE,             ///< PCB<->SCH, CVPCB->SCH cross-probing.
+    MAIL_BACKANNOTATE_FOOTPRINTS, ///< CVPCB->SCH footprint stuffing
+    MAIL_SCH_SAVE,                ///< CVPCB->SCH save the schematic
+    MAIL_EESCHEMA_NETLIST,        ///< SCH->CVPCB netlist immediately after launching CVPCB
+    MAIL_PCB_UPDATE,              ///< SCH->PCB forward update
+    MAIL_IMPORT_FILE,             ///< Import a different format file
+    MAIL_SCH_GET_NETLIST,         ///< Fetch a netlist from schematics
+    MAIL_PCB_GET_NETLIST,         ///< Fetch a netlist from PCB layout
+    MAIL_SCH_REFRESH,             ///< The the schematic editor to refresh the display.
 
-    MAIL_RENUMBER,                  ///< Renumber eeSchema
+    MAIL_RENUMBER, ///< Renumber eeSchema
     MAIL_LIB_EDIT,
     MAIL_FP_EDIT
 };
 
-#endif  // MAIL_TYPE_H_
+#endif // MAIL_TYPE_H_

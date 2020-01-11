@@ -26,23 +26,28 @@
 #ifndef __PCB_ACTIONS_H
 #define __PCB_ACTIONS_H
 
-#include <tool/tool_action.h>
-#include <tool/actions.h>
 #include <core/optional.h>
+#include <tool/actions.h>
+#include <tool/tool_action.h>
 
 class TOOL_EVENT;
 class TOOL_MANAGER;
 
 // Type of microwave items that are "simple" - just get placed on the board directly,
 // without a graphical interactive setup stage
-enum MWAVE_TOOL_SIMPLE_ID {
-    GAP, STUB, STUB_ARC, FUNCTION_SHAPE,
+enum MWAVE_TOOL_SIMPLE_ID
+{
+    GAP,
+    STUB,
+    STUB_ARC,
+    FUNCTION_SHAPE,
 };
 
-enum class ZONE_MODE {
-    ADD,             ///< Add a new zone/keepout with fresh settings
-    CUTOUT,          ///< Make a cutout to an existing zone
-    SIMILAR,       ///< Add a new zone with the same settings as an existing one
+enum class ZONE_MODE
+{
+    ADD,     ///< Add a new zone/keepout with fresh settings
+    CUTOUT,  ///< Make a cutout to an existing zone
+    SIMILAR, ///< Add a new zone with the same settings as an existing one
     GRAPHIC_POLYGON
 };
 
@@ -52,7 +57,8 @@ enum class ZONE_MODE {
  * Gathers all the actions that are shared by tools. The instance of PCB_ACTIONS is created
  * inside of ACTION_MANAGER object that registers the actions.
  */
-class PCB_ACTIONS: public ACTIONS {
+class PCB_ACTIONS : public ACTIONS
+{
 public:
     // Selection Tool
     /// Activation of the selection tool
@@ -262,7 +268,7 @@ public:
     static TOOL_ACTION layerAlphaDec;
     static TOOL_ACTION layerToggle;
 
-    static TOOL_ACTION layerChanged;        // notification
+    static TOOL_ACTION layerChanged; // notification
 
     static TOOL_ACTION flipBoard;
 
@@ -272,7 +278,7 @@ public:
     static TOOL_ACTION viaSizeInc;
     static TOOL_ACTION viaSizeDec;
 
-    static TOOL_ACTION trackViaSizeChanged;   // notification
+    static TOOL_ACTION trackViaSizeChanged; // notification
 
     // Zone actions
     static TOOL_ACTION zoneFill;
@@ -420,7 +426,7 @@ public:
     static TOOL_ACTION autoplaceSelectedComponents;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
-    virtual OPT<TOOL_EVENT> TranslateLegacyId(int aId) override;
+    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override;
 };
 
 #endif
