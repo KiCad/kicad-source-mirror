@@ -328,7 +328,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
 
         for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
         {
-            for( auto item : screen->Items().OfType( m_CurrentText->Type() ) )
+            for( auto item : screen->Items().OfType( firstItem->Type() ) )
             {
                 auto textItem = static_cast<const SCH_TEXT*>( item );
                 existingLabels.insert( UnescapeString( textItem->GetText() ) );
