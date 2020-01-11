@@ -24,7 +24,11 @@
 #ifndef ALTIUM_PCB_H
 #define ALTIUM_PCB_H
 
+#include <vector>
+#include <zconf.h>
+
 class BOARD;
+class MODULE;
 
 namespace CFB {
     class CompoundFileReader;
@@ -41,11 +45,14 @@ public:
     void Parse( const CFB::CompoundFileReader& aReader );
 
 private:
+    MODULE* GetComponent( const u_int16_t id);
+
     void ParseFileHeader( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
 
     void ParsePads6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
 
-    BOARD*              m_board;
+    BOARD*                  m_board;
+    std::vector<MODULE*>    m_components;
 };
 
 

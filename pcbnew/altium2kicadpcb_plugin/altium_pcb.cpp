@@ -88,6 +88,27 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader ) {
     }
 }
 
+MODULE* ALTIUM_PCB::GetComponent( const u_int16_t id) {
+    // I asume this is a special case where a elements belongs to the board.
+    if( id == std::numeric_limits<u_int16_t>::max() ) {
+        MODULE *module = new MODULE(m_board );
+        m_board->Add(module);
+        return module;  // TODO: return board?
+    }
+
+    MODULE *module = m_components.size() > id ? m_components.at( id ) : nullptr;
+    if ( module == nullptr )
+    {
+        module = new MODULE(m_board );
+        m_board->Add(module);
+        if (id >= m_components.size()) {
+            m_components.resize(id + 1, nullptr);
+        }
+        m_components.insert(m_components.begin() + id, module );
+    }
+    return module;
+}
+
 void ALTIUM_PCB::ParseFileHeader( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
     ALTIUM_PARSER_BINARY reader(aReader, aEntry);
 
@@ -110,11 +131,11 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
         std::string name = reader.read_string();
         wxASSERT( len-1 == name.size() );
 
-        reader.skip(19);
+        reader.skip( 19);
         u_int8_t length_bytes = reader.read<u_int8_t>();
-        reader.skip(10);
+        reader.skip( 10);
         u_int16_t component = reader.read<u_int16_t>();
-        reader.skip(4);
+        reader.skip( 4);
 
         wxPoint position = reader.read_point();
         wxSize topsize = reader.read_size();
@@ -128,12 +149,12 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
 
         double direction = reader.read<double>();
         u_int8_t plated = reader.read<u_int8_t>();
-        reader.skip(1);
+        reader.skip( 1 );
         u_int8_t padmode = reader.read<u_int8_t>();
-        reader.skip(38);
+        reader.skip( 38 );
         u_int8_t pastemaskexpansionmode = reader.read<u_int8_t>();
         u_int8_t soldermaskexpansion = reader.read<u_int8_t>();
-        reader.skip(3);
+        reader.skip( 3 );
         double holerotation = reader.read<double>();
 
         std::cout << "Pad: '" << name << "'" << std::endl;
@@ -145,43 +166,49 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
         std::cout << "  direction: " << direction << std::endl;
         std::cout << "  holerotation: " << holerotation << std::endl;
 
+        // Create Pad
+        MODULE* module = GetComponent( component );
+        D_PAD* pad = new D_PAD( module );
+        module->Add( pad );
+
+        pad->SetName( name );
+        pad->SetPosition( position );
+        pad->SetSize( topsize );
+        pad->SetOrientation( direction * 10. );
+        if( holesize == 0 )
+        {
+            pad->SetAttribute(PAD_ATTR_T::PAD_ATTRIB_SMD );
+        }
+        else
+        {
+            pad->SetDrillSize( wxSize( holesize, holesize ) );
+        }
+        pad->SetLayer(PCB_LAYER_ID::F_Cu );  // TODO?
+        pad->SetShape(PAD_SHAPE_T::PAD_SHAPE_RECT );
+
         if( length_bytes > 106 )
         {
-            if (length_bytes == 114)
+            if ( length_bytes == 114 )
             {
-                reader.skip(4);
+                reader.skip( 4);
             }
-            else if (length_bytes == 120)
+            else if ( length_bytes == 120 )
             {
                 u_int8_t tolayer = reader.read<u_int8_t>();
-                reader.skip(2);
+                reader.skip( 2 );
                 u_int8_t fromlayer = reader.read<u_int8_t>();
-                reader.skip(2);
+                reader.skip( 2 );
             }
 
             u_int32_t last_section_length = reader.read<u_int32_t>();  // TODO: from libopenaltium, no idea how to interpret
 
-            if (length_bytes == 171)
+            if ( length_bytes == 171 )
             {
-                reader.skip(53);
+                reader.skip( 53 );
                 u_int32_t unknown171_length = reader.read<u_int32_t>();
-                reader.skip(unknown171_length);
+                reader.skip( unknown171_length );
             }
         }
-
-        MODULE* module = new MODULE(m_board);
-        m_board->Add(module);
-
-        module->SetPosition(position);
-
-        D_PAD* pad = new D_PAD(module);
-        module->Add(pad);
-
-        pad->SetName(name);
-        pad->SetSize(topsize);
-        pad->SetLayer(PCB_LAYER_ID::F_Cu);  // TODO?
-        pad->SetShape(PAD_SHAPE_T::PAD_SHAPE_RECT);
-        pad->SetAttribute(PAD_ATTR_T::PAD_ATTRIB_SMD);
     }
     wxASSERT(!reader.parser_error());
     wxASSERT(reader.bytes_remaining() == 0);
