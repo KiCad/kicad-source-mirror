@@ -70,7 +70,8 @@ void GRID_CELL_TEXT_BUTTON::StartingKey( wxKeyEvent& event )
     // Do it ourselves instead.  We know that if we get this far that we have
     // a valid character, so not a whole lot of testing needs to be done.
 
-    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( Combo() );
+    // wxComboCtrl inherits from wxTextEntry, so can staticly cast
+    wxTextEntry* textEntry = static_cast<wxTextEntry*>( Combo() );
     int ch;
 
     bool isPrintable;

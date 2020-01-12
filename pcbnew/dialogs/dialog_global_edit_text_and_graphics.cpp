@@ -369,6 +369,8 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         {
             if( boardItem->Type() == PCB_MODULE_TEXT_T )
             {
+                // We are guaranteed to always get an EDA_TEXT in this statement, but we must
+                // use the dynamic_cast to move through the type tree anyway.
                 const wxString text = dynamic_cast<EDA_TEXT*>( boardItem )->GetText();
 
                 if( m_references->GetValue() && text == wxT( "%R" ) )
@@ -412,7 +414,7 @@ int GLOBAL_EDIT_TOOL::EditTextAndGraphics( const TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
     DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS dlg( editFrame );
-    
+
     dlg.ShowModal();
     return 0;
 }

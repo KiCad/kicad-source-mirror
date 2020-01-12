@@ -46,6 +46,8 @@ DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxS
     m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
     m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true )
 {
+    wxASSERT( aTextItem );
+
     SetTitle( aTitle );
 
     // The field ID and power status are Initialized in the derived object's ctor.
@@ -201,10 +203,9 @@ void DIALOG_EDIT_ONE_FIELD::updateText( EDA_TEXT* aText )
 }
 
 
-DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
-                                                      const wxString& aTitle,
-                                                      const LIB_FIELD* aField ) :
-    DIALOG_EDIT_ONE_FIELD( aParent, aTitle, dynamic_cast< const EDA_TEXT* >( aField ) )
+DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD(
+        SCH_BASE_FRAME* aParent, const wxString& aTitle, const LIB_FIELD* aField )
+        : DIALOG_EDIT_ONE_FIELD( aParent, aTitle, static_cast<const EDA_TEXT*>( aField ) )
 {
     m_fieldId = aField->GetId();
 
@@ -214,10 +215,9 @@ DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 }
 
 
-DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
-                                                      const wxString& aTitle,
-                                                      const SCH_FIELD* aField ) :
-    DIALOG_EDIT_ONE_FIELD( aParent, aTitle, dynamic_cast< const EDA_TEXT* >( aField ) )
+DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD(
+        SCH_BASE_FRAME* aParent, const wxString& aTitle, const SCH_FIELD* aField )
+        : DIALOG_EDIT_ONE_FIELD( aParent, aTitle, static_cast<const EDA_TEXT*>( aField ) )
 {
     m_fieldId = aField->GetId();
 
@@ -242,11 +242,11 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
 {
     if( aField->GetId() == REFERENCE )
     {
-        wxASSERT( aSheetPath  );
+        wxASSERT( aSheetPath );
 
         SCH_COMPONENT* component = dynamic_cast< SCH_COMPONENT* >( aField->GetParent() );
 
-        wxASSERT( component  );
+        wxASSERT( component );
 
         if( component )
             component->SetRef( aSheetPath, m_text );
