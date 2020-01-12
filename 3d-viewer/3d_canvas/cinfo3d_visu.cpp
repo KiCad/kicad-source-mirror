@@ -104,13 +104,15 @@ CINFO3D_VISU::CINFO3D_VISU() :
     SetFlag( FL_SILKSCREEN, true );
     SetFlag( FL_SOLDERMASK, true );
 
-    m_BgColorBot        = SFVEC3D( 0.4, 0.4, 0.5 );
-    m_BgColorTop        = SFVEC3D( 0.8, 0.8, 0.9 );
-    m_BoardBodyColor    = SFVEC3D( 0.4, 0.4, 0.5 );
-    m_SolderMaskColor   = SFVEC3D( 0.1, 0.2, 0.1 );
-    m_SolderPasteColor  = SFVEC3D( 0.4, 0.4, 0.4 );
-    m_SilkScreenColor   = SFVEC3D( 0.9, 0.9, 0.9 );
-    m_CopperColor       = SFVEC3D( 0.75, 0.61, 0.23 );
+    m_BgColorBot         = SFVEC3D( 0.4, 0.4, 0.5 );
+    m_BgColorTop         = SFVEC3D( 0.8, 0.8, 0.9 );
+    m_BoardBodyColor     = SFVEC3D( 0.4, 0.4, 0.5 );
+    m_SolderMaskColorTop = SFVEC3D( 0.1, 0.2, 0.1 );
+    m_SolderMaskColorBot = SFVEC3D( 0.1, 0.2, 0.1 );
+    m_SolderPasteColor   = SFVEC3D( 0.4, 0.4, 0.4 );
+    m_SilkScreenColorTop = SFVEC3D( 0.9, 0.9, 0.9 );
+    m_SilkScreenColorBot = SFVEC3D( 0.9, 0.9, 0.9 );
+    m_CopperColor        = SFVEC3D( 0.75, 0.61, 0.23 );
 }
 
 

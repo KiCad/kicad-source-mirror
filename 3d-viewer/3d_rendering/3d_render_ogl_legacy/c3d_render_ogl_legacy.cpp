@@ -219,32 +219,27 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
 
 
         // Silk screen material mixed with silk screen color
-        m_materials.m_SilkS.m_Ambient = SFVEC3F( m_settings.m_SilkScreenColor.r,
-                                                 m_settings.m_SilkScreenColor.g,
-                                                 m_settings.m_SilkScreenColor.b );
+        m_materials.m_SilkS.m_Ambient = SFVEC3F( m_settings.m_SilkScreenColorTop.r,
+                m_settings.m_SilkScreenColorTop.g, m_settings.m_SilkScreenColorTop.b );
 
-        m_materials.m_SilkS.m_Specular = SFVEC3F( m_settings.m_SilkScreenColor.r *
-                                                  m_settings.m_SilkScreenColor.r + 0.10f,
-                                                  m_settings.m_SilkScreenColor.g *
-                                                  m_settings.m_SilkScreenColor.g + 0.10f,
-                                                  m_settings.m_SilkScreenColor.b *
-                                                  m_settings.m_SilkScreenColor.b + 0.10f );
+        m_materials.m_SilkS.m_Specular = SFVEC3F(
+                m_settings.m_SilkScreenColorTop.r * m_settings.m_SilkScreenColorTop.r + 0.10f,
+                m_settings.m_SilkScreenColorTop.g * m_settings.m_SilkScreenColorTop.g + 0.10f,
+                m_settings.m_SilkScreenColorTop.b * m_settings.m_SilkScreenColorTop.b + 0.10f );
 
         m_materials.m_SilkS.m_Shininess = 0.078125f * 128.0f;
         m_materials.m_SilkS.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
 
         // Solder mask material mixed with solder mask color
-        m_materials.m_SolderMask.m_Ambient = SFVEC3F( m_settings.m_SolderMaskColor.r * 0.3f,
-                                                      m_settings.m_SolderMaskColor.g * 0.3f,
-                                                      m_settings.m_SolderMaskColor.b * 0.3f );
+        m_materials.m_SolderMask.m_Ambient = SFVEC3F( m_settings.m_SolderMaskColorTop.r * 0.3f,
+                m_settings.m_SolderMaskColorTop.g * 0.3f,
+                m_settings.m_SolderMaskColorTop.b * 0.3f );
 
-        m_materials.m_SolderMask.m_Specular = SFVEC3F( m_settings.m_SolderMaskColor.r *
-                                                       m_settings.m_SolderMaskColor.r,
-                                                       m_settings.m_SolderMaskColor.g *
-                                                       m_settings.m_SolderMaskColor.g,
-                                                       m_settings.m_SolderMaskColor.b *
-                                                       m_settings.m_SolderMaskColor.b );
+        m_materials.m_SolderMask.m_Specular =
+                SFVEC3F( m_settings.m_SolderMaskColorTop.r * m_settings.m_SolderMaskColorTop.r,
+                        m_settings.m_SolderMaskColorTop.g * m_settings.m_SolderMaskColorTop.g,
+                        m_settings.m_SolderMaskColorTop.b * m_settings.m_SolderMaskColorTop.b );
 
         m_materials.m_SolderMask.m_Shininess = 0.8f * 128.0f;
         m_materials.m_SolderMask.m_Transparency = 0.17f;
@@ -382,22 +377,22 @@ SFVEC3F C3D_RENDER_OGL_LEGACY::get_layer_color( PCB_LAYER_ID aLayerID )
         {
             case B_Adhes:
             case F_Adhes:
-            break;
+                break;
 
             case B_Mask:
             case F_Mask:
-                layerColor = m_settings.m_SolderMaskColor;
-            break;
+                layerColor = m_settings.m_SolderMaskColorTop;
+                break;
 
             case B_Paste:
             case F_Paste:
                 layerColor = m_settings.m_SolderPasteColor;
-            break;
+                break;
 
             case B_SilkS:
             case F_SilkS:
-                layerColor = m_settings.m_SilkScreenColor;
-            break;
+                layerColor = m_settings.m_SilkScreenColorTop;
+                break;
 
             case Dwgs_User:
             case Cmts_User:
@@ -405,19 +400,19 @@ SFVEC3F C3D_RENDER_OGL_LEGACY::get_layer_color( PCB_LAYER_ID aLayerID )
             case Eco2_User:
             case Edge_Cuts:
             case Margin:
-            break;
+                break;
 
             case B_CrtYd:
             case F_CrtYd:
-            break;
+                break;
 
             case B_Fab:
             case F_Fab:
-            break;
+                break;
 
             default:
                 layerColor = m_settings.m_CopperColor;
-            break;
+                break;
         }
     }
 
