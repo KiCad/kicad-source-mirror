@@ -140,7 +140,7 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
         if( item.Type() != LIB_FIELD_T )
             continue;
 
-        LIB_FIELD* field = dynamic_cast< LIB_FIELD* >( &item );
+        LIB_FIELD* field = static_cast< LIB_FIELD* >( &item );
 
         if( field->GetId() < MANDATORY_FIELDS )
             Add( &item );
