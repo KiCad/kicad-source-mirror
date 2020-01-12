@@ -46,6 +46,7 @@
 #define DrcTrackToZoneTestKey wxT( "DrcTrackToZoneTest" )
 #define DrcTestFootprintsKey wxT( "DrcTestFootprints" )
 
+
 DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL(
         DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent )
         : DIALOG_DRC_CONTROL_BASE( aParent ),
@@ -77,12 +78,14 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL(
     FinishDialogSettings();
 }
 
+
 DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
 {
     m_config->Write( DrcRefillZonesKey, m_cbRefillZones->GetValue() );
     m_config->Write( DrcTrackToZoneTestKey, m_cbReportTracksToZonesErrors->GetValue() );
     m_config->Write( DrcTestFootprintsKey, m_cbTestFootprints->GetValue() );
 }
+
 
 void DIALOG_DRC_CONTROL::OnActivateDlg( wxActivateEvent& event )
 {
@@ -104,12 +107,14 @@ void DIALOG_DRC_CONTROL::OnActivateDlg( wxActivateEvent& event )
     DisplayDRCValues();
 }
 
+
 void DIALOG_DRC_CONTROL::DisplayDRCValues()
 {
     m_trackMinWidth.SetValue( m_BrdSettings.m_TrackMinWidth );
     m_viaMinSize.SetValue( m_BrdSettings.m_ViasMinSize );
     m_uviaMinSize.SetValue( m_BrdSettings.m_MicroViasMinSize );
 }
+
 
 void DIALOG_DRC_CONTROL::InitValues()
 {
@@ -135,6 +140,7 @@ void DIALOG_DRC_CONTROL::InitValues()
     SetFocus();
 }
 
+
 void DIALOG_DRC_CONTROL::SetDRCParameters()
 {
     m_BrdSettings.m_TrackMinWidth    = m_trackMinWidth.GetValue();
@@ -144,17 +150,20 @@ void DIALOG_DRC_CONTROL::SetDRCParameters()
     m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
 }
 
+
 void DIALOG_DRC_CONTROL::SetRptSettings( bool aEnable, const wxString& aFileName )
 {
     m_RptFilenameCtrl->SetValue( aFileName );
     m_CreateRptCtrl->SetValue( aEnable );
 }
 
+
 void DIALOG_DRC_CONTROL::GetRptSettings( bool* aEnable, wxString& aFileName )
 {
     *aEnable  = m_CreateRptCtrl->GetValue();
     aFileName = m_RptFilenameCtrl->GetValue();
 }
+
 
 void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
 {
@@ -216,12 +225,14 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
     RedrawDrawPanel();
 }
 
+
 void DIALOG_DRC_CONTROL::OnDeleteAllClick( wxCommandEvent& event )
 {
     DelDRCMarkers();
     RedrawDrawPanel();
     UpdateDisplayedCounts();
 }
+
 
 void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent& )
 {
@@ -239,6 +250,7 @@ void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent& )
     m_RptFilenameCtrl->SetValue( dlg.GetPath() );
 }
 
+
 void DIALOG_DRC_CONTROL::OnCancelClick( wxCommandEvent& event )
 {
     SetReturnCode( wxID_CANCEL );
@@ -249,16 +261,19 @@ void DIALOG_DRC_CONTROL::OnCancelClick( wxCommandEvent& event )
     m_tester->DestroyDRCDialog( wxID_CANCEL );
 }
 
+
 void DIALOG_DRC_CONTROL::OnReportCheckBoxClicked( wxCommandEvent& event )
 {
     if( m_CreateRptCtrl->IsChecked() )
         m_RptFilenameCtrl->SetFocus();
 }
 
+
 void DIALOG_DRC_CONTROL::OnReportFilenameEdited( wxCommandEvent& event )
 {
     m_CreateRptCtrl->SetValue( event.GetString().Length() );
 }
+
 
 void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
 {
@@ -278,6 +293,7 @@ void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
     }
 }
 
+
 void DIALOG_DRC_CONTROL::OnRightUpFootprints( wxMouseEvent& event )
 {
     int selection = rightUpClicSelection( m_FootprintsListBox, event );
@@ -285,6 +301,7 @@ void DIALOG_DRC_CONTROL::OnRightUpFootprints( wxMouseEvent& event )
     if( selection != wxNOT_FOUND )
         doSelectionMenu( m_FootprintsListBox->GetItem( selection ) );
 }
+
 
 void DIALOG_DRC_CONTROL::OnLeftUpClearance( wxMouseEvent& event )
 {
@@ -339,6 +356,7 @@ int DIALOG_DRC_CONTROL::rightUpClicSelection( DRCLISTBOX* aListBox, wxMouseEvent
     return selection;
 }
 
+
 void DIALOG_DRC_CONTROL::OnRightUpUnconnected( wxMouseEvent& event )
 {
     // popup menu to go to either of the items listed in the DRC_ITEM.
@@ -348,6 +366,7 @@ void DIALOG_DRC_CONTROL::OnRightUpUnconnected( wxMouseEvent& event )
         doSelectionMenu( m_UnconnectedListBox->GetItem( selection ) );
 }
 
+
 void DIALOG_DRC_CONTROL::OnRightUpClearance( wxMouseEvent& event )
 {
     // popup menu to go to either of the items listed in the DRC_ITEM.
@@ -356,6 +375,7 @@ void DIALOG_DRC_CONTROL::OnRightUpClearance( wxMouseEvent& event )
     if( selection != wxNOT_FOUND )
         doSelectionMenu( m_ClearanceListBox->GetItem( selection ) );
 }
+
 
 void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
 {
@@ -387,6 +407,7 @@ void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
     m_brdEditor->GetCanvas()->Refresh();
 }
 
+
 void DIALOG_DRC_CONTROL::OnLeftDClickFootprints( wxMouseEvent& event )
 {
     event.Skip();
@@ -404,6 +425,7 @@ void DIALOG_DRC_CONTROL::OnLeftDClickFootprints( wxMouseEvent& event )
         }
     }
 }
+
 
 void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
 {
@@ -423,6 +445,7 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
     }
 }
 
+
 void DIALOG_DRC_CONTROL::OnLeftUpUnconnected( wxMouseEvent& event )
 {
     int selection = m_UnconnectedListBox->GetSelection();
@@ -430,6 +453,7 @@ void DIALOG_DRC_CONTROL::OnLeftUpUnconnected( wxMouseEvent& event )
     if( selection != wxNOT_FOUND )
         focusOnItem( m_UnconnectedListBox->GetItem( selection ) );
 }
+
 
 void DIALOG_DRC_CONTROL::OnChangingMarkerList( wxNotebookEvent& event )
 {
@@ -441,6 +465,7 @@ void DIALOG_DRC_CONTROL::OnChangingMarkerList( wxNotebookEvent& event )
     m_ClearanceListBox->SetSelection( -1 );
     m_UnconnectedListBox->SetSelection( -1 );
 }
+
 
 void DIALOG_DRC_CONTROL::OnMarkerSelectionEvent( wxCommandEvent& event )
 {
@@ -458,6 +483,7 @@ void DIALOG_DRC_CONTROL::OnMarkerSelectionEvent( wxCommandEvent& event )
     event.Skip();
 }
 
+
 void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 {
     int selection = event.GetSelection();
@@ -473,6 +499,7 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 
     event.Skip();
 }
+
 
 void DIALOG_DRC_CONTROL::OnFootprintsSelectionEvent( wxCommandEvent& event )
 {
@@ -490,12 +517,14 @@ void DIALOG_DRC_CONTROL::OnFootprintsSelectionEvent( wxCommandEvent& event )
     event.Skip();
 }
 
+
 void DIALOG_DRC_CONTROL::RedrawDrawPanel()
 {
     WINDOW_THAWER thawer( m_brdEditor );
 
     m_brdEditor->GetCanvas()->Refresh();
 }
+
 
 void DIALOG_DRC_CONTROL::DelDRCMarkers()
 {
@@ -571,6 +600,7 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
     return true;
 }
 
+
 void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
 {
     ssize_t selectedIndex;
@@ -621,6 +651,7 @@ void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
 
     UpdateDisplayedCounts();
 }
+
 
 void DIALOG_DRC_CONTROL::UpdateDisplayedCounts()
 {
