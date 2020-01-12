@@ -535,41 +535,34 @@ void D_PAD::MirrorXPrimitives( int aX )
 }
 
 
-void D_PAD::AppendConfigs( PARAM_CFG_ARRAY* aResult )
+void D_PAD::AppendConfigs( std::vector<PARAM_CFG*>* aResult )
 {
     // Parameters stored in config are only significant parameters
     // for a template.
     // So not all parameters are stored, just few.
-    try
-    {
-        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PadDrill" ),
-                                &m_Drill.x,
-                                Millimeter2iu( 0.6 ),
-                                Millimeter2iu( 0.1 ), Millimeter2iu( 10.0 ),
-                                NULL, MM_PER_IU ) );
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PadDrill" ),
+                                                      &m_Drill.x,
+                                                      Millimeter2iu( 0.6 ),
+                                                      Millimeter2iu( 0.1 ), Millimeter2iu( 10.0 ),
+                                                      NULL, MM_PER_IU ) );
 
-        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PadDrillOvalY" ),
-                                &m_Drill.y,
-                                Millimeter2iu( 0.6 ),
-                                Millimeter2iu( 0.1 ), Millimeter2iu( 10.0 ),
-                                NULL, MM_PER_IU ) );
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PadDrillOvalY" ),
+                                                      &m_Drill.y,
+                                                      Millimeter2iu( 0.6 ),
+                                                      Millimeter2iu( 0.1 ), Millimeter2iu( 10.0 ),
+                                                      NULL, MM_PER_IU ) );
 
-        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PadSizeH" ),
-                                &m_Size.x,
-                                Millimeter2iu( 1.4 ),
-                                Millimeter2iu( 0.1 ), Millimeter2iu( 20.0 ),
-                                NULL, MM_PER_IU ) );
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PadSizeH" ),
+                                                      &m_Size.x,
+                                                      Millimeter2iu( 1.4 ),
+                                                      Millimeter2iu( 0.1 ), Millimeter2iu( 20.0 ),
+                                                      NULL, MM_PER_IU ) );
 
-        aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PadSizeV" ),
-                                &m_Size.y,
-                                Millimeter2iu( 1.4 ),
-                                Millimeter2iu( 0.1 ), Millimeter2iu( 20.0 ),
-                                NULL, MM_PER_IU ) );
-    }
-    catch( boost::bad_pointer& )
-    {
-        // Out of memory?  Ship's going down anyway....
-    }
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "PadSizeV" ),
+                                                      &m_Size.y,
+                                                      Millimeter2iu( 1.4 ),
+                                                      Millimeter2iu( 0.1 ), Millimeter2iu( 20.0 ),
+                                                      NULL, MM_PER_IU ) );
 }
 
 

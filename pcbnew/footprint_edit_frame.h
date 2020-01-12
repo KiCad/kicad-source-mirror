@@ -92,7 +92,7 @@ public:
      *
      * @return - Reference to the list of applications settings.
      */
-    PARAM_CFG_ARRAY& GetConfigurationSettings();
+    std::vector<PARAM_CFG*>& GetConfigurationSettings();
 
     void OnCloseWindow( wxCloseEvent& Event ) override;
     void CloseModuleEditor( wxCommandEvent& Event );
@@ -352,7 +352,7 @@ protected:
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent, EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend );
 
     PCB_LAYER_BOX_SELECTOR* m_selLayerBox;  // a combo box to display and select active layer
-    PARAM_CFG_ARRAY         m_configParams; // List of footprint editor configuration parameters.
+    std::vector<PARAM_CFG*> m_configParams; // List of footprint editor configuration parameters.
 
     /**
      * Make sure the footprint info list is loaded (with a progress dialog) and then initialize

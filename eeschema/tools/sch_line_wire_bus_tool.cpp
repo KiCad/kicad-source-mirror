@@ -387,12 +387,10 @@ const SCH_SHEET_PIN* SCH_LINE_WIRE_BUS_TOOL::getSheetPin( const wxPoint& aPositi
     {
         auto sheet = static_cast<SCH_SHEET*>( item );
 
-        for( const SCH_SHEET_PIN& pin : sheet->GetPins() )
+        for( SCH_SHEET_PIN* pin : sheet->GetPins() )
         {
-            if( pin.GetPosition() == aPosition )
-            {
-                return &pin;
-            }
+            if( pin->GetPosition() == aPosition )
+                return pin;
         }
     }
 

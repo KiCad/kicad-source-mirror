@@ -738,20 +738,20 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         }
         else if( item->Type() == SCH_SHEET_T )
         {
-            for( SCH_SHEET_PIN& pin : static_cast<SCH_SHEET*>( item )->GetPins() )
+            for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
             {
-                auto pin_conn = pin.Connection( *g_CurrentSheet );
-                bool redrawPin = pin.IsBrightened();
+                auto pin_conn = pin->Connection( *g_CurrentSheet );
+                bool redrawPin = pin->IsBrightened();
 
                 if( pin_conn && pin_conn->Name() == selectedNetName )
-                    pin.SetBrightened();
+                    pin->SetBrightened();
                 else
-                    pin.ClearBrightened();
+                    pin->ClearBrightened();
 
-                redrawPin |= pin.IsBrightened();
+                redrawPin |= pin->IsBrightened();
 
                 if( redrawPin )
-                    itemsToRedraw.push_back( &pin );
+                    itemsToRedraw.push_back( pin );
             }
         }
 

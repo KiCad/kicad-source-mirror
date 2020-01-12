@@ -200,9 +200,6 @@ public:
 };
 
 
-typedef boost::ptr_vector<SCH_SHEET_PIN> SCH_SHEET_PINS;
-
-
 /**
  * Sheet symbol placed in a schematic, and is the entry point for a sub schematic.
  */
@@ -215,7 +212,7 @@ class SCH_SHEET : public SCH_ITEM
     SCH_SCREEN* m_screen;
 
     /// The list of sheet connection points.
-    SCH_SHEET_PINS m_pins;
+    std::vector<SCH_SHEET_PIN*> m_pins;
 
     /// The file name is also in the #SCH_SCREEN object associated with the sheet.  It is
     /// also needed here for loading after reading the sheet description from file.
@@ -332,11 +329,11 @@ public:
      */
     void AddPin( SCH_SHEET_PIN* aSheetPin );
 
-    SCH_SHEET_PINS& GetPins() { return m_pins; }
+    std::vector<SCH_SHEET_PIN*>& GetPins() { return m_pins; }
 
-    SCH_SHEET_PINS& GetPins() const
+    std::vector<SCH_SHEET_PIN*>& GetPins() const
     {
-        return const_cast< SCH_SHEET_PINS& >( m_pins );
+        return const_cast< std::vector<SCH_SHEET_PIN*>& >( m_pins );
     }
 
     /**
@@ -479,10 +476,8 @@ public:
     {
         m_pos += aMoveVector;
 
-        for( SCH_SHEET_PIN& pin : m_pins )
-        {
-            pin.Move( aMoveVector );
-        }
+        for( SCH_SHEET_PIN* pin : m_pins )
+            pin->Move( aMoveVector );
     }
 
     void MirrorY( int aYaxis_position ) override;
@@ -536,7 +531,7 @@ public:
     void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                          SCH_SHEET_PATH*      aSheetPath ) override;
 
-    SCH_ITEM& operator=( const SCH_ITEM& aSheet );
+    SCH_SHEET& operator=( const SCH_ITEM& aSheet );
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 

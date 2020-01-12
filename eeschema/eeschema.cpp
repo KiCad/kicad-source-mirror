@@ -184,9 +184,9 @@ void SetLayerColor( COLOR4D aColor, SCH_LAYER_ID aLayer )
 }
 
 
-static PARAM_CFG_ARRAY& cfg_params()
+static std::vector<PARAM_CFG*>& cfg_params()
 {
-    static PARAM_CFG_ARRAY ca;
+    static std::vector<PARAM_CFG*> ca;
 
     if( !ca.size() )
     {

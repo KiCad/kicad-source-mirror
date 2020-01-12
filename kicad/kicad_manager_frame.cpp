@@ -60,7 +60,7 @@
 // for new projects
 #define     GeneralGroupName            wxT( "/general" )
 
-PARAM_CFG_ARRAY     s_KicadManagerParams;
+std::vector<PARAM_CFG*>     s_KicadManagerParams;
 
 
 // Menubar and toolbar event table

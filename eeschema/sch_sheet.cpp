@@ -72,10 +72,12 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
     m_screen = aSheet.m_screen;
     m_name = aSheet.m_name;
     m_fileName = aSheet.m_fileName;
-    m_pins = aSheet.m_pins;
 
-    for( size_t i = 0;  i < m_pins.size();  i++ )
-        m_pins[i].SetParent( this );
+    for( SCH_SHEET_PIN* pin : aSheet.m_pins )
+    {
+        m_pins.emplace_back( new SCH_SHEET_PIN( *pin ) );
+        m_pins.back()->SetParent( this );
+    }
 
     if( m_screen )
         m_screen->IncRefCount();
@@ -93,6 +95,10 @@ SCH_SHEET::~SCH_SHEET()
         if( m_screen->GetRefCount() == 0 )
             delete m_screen;
     }
+
+    // We own our pins; delete them
+    for( SCH_SHEET_PIN* pin : m_pins )
+        delete pin;
 }
 
 
@@ -161,17 +167,12 @@ void SCH_SHEET::SwapData( SCH_ITEM* aItem )
     std::swap( m_fileNameSize, sheet->m_fileNameSize );
     m_pins.swap( sheet->m_pins );
 
-    // Ensure sheet labels have their .m_Parent member pointing really on their
-    // parent, after swapping.
-    for( SCH_SHEET_PIN& sheetPin : m_pins )
-    {
-        sheetPin.SetParent( this );
-    }
+    // Update parent pointers after swapping.
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+        sheetPin->SetParent( this );
 
-    for( SCH_SHEET_PIN& sheetPin : sheet->m_pins )
-    {
-        sheetPin.SetParent( sheet );
-    }
+    for( SCH_SHEET_PIN* sheetPin : sheet->m_pins )
+        sheetPin->SetParent( sheet );
 }
 
 
@@ -190,9 +191,7 @@ void SCH_SHEET::RemovePin( SCH_SHEET_PIN* aSheetPin )
     wxASSERT( aSheetPin != NULL );
     wxASSERT( aSheetPin->Type() == SCH_SHEET_PIN_T );
 
-    SCH_SHEET_PINS::iterator i;
-
-    for( i = m_pins.begin();  i < m_pins.end();  ++i )
+    for( auto i = m_pins.begin();  i < m_pins.end();  ++i )
     {
         if( *i == aSheetPin )
         {
@@ -209,9 +208,9 @@ void SCH_SHEET::RemovePin( SCH_SHEET_PIN* aSheetPin )
 
 bool SCH_SHEET::HasPin( const wxString& aName )
 {
-    for( const SCH_SHEET_PIN& pin : m_pins )
+    for( SCH_SHEET_PIN* pin : m_pins )
     {
-        if( pin.GetText().CmpNoCase( aName ) == 0 )
+        if( pin->GetText().CmpNoCase( aName ) == 0 )
             return true;
     }
 
@@ -224,9 +223,9 @@ bool SCH_SHEET::IsVerticalOrientation() const
     int leftRight = 0;
     int topBottom = 0;
 
-    for( const SCH_SHEET_PIN& pin : m_pins )
+    for( SCH_SHEET_PIN* pin : m_pins )
     {
-        switch( pin.GetEdge() )
+        switch( pin->GetEdge() )
         {
         case SHEET_LEFT_SIDE:   leftRight++; break;
         case SHEET_RIGHT_SIDE:  leftRight++; break;
@@ -242,13 +241,13 @@ bool SCH_SHEET::IsVerticalOrientation() const
 
 bool SCH_SHEET::HasUndefinedPins()
 {
-    for( const SCH_SHEET_PIN& pin : m_pins )
+    for( SCH_SHEET_PIN* pin : m_pins )
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
         const SCH_HIERLABEL* HLabel = nullptr;
         for( auto aItem : m_screen->Items().OfType( SCH_HIER_LABEL_T ) )
         {
-            if( !pin.GetText().CmpNoCase( static_cast<SCH_HIERLABEL*>( aItem )->GetText() ) )
+            if( !pin->GetText().CmpNoCase( static_cast<SCH_HIERLABEL*>( aItem )->GetText() ) )
             {
                 HLabel = static_cast<SCH_HIERLABEL*>( aItem );
                 break;
@@ -269,8 +268,8 @@ int SCH_SHEET::GetMinWidth() const
 
     for( size_t i = 0; i < m_pins.size();  i++ )
     {
-        int edge = m_pins[i].GetEdge();
-        EDA_RECT pinRect = m_pins[i].GetBoundingBox();
+        int edge = m_pins[i]->GetEdge();
+        EDA_RECT pinRect = m_pins[i]->GetBoundingBox();
 
         wxASSERT( edge != SHEET_UNDEFINED_SIDE );
 
@@ -287,12 +286,12 @@ int SCH_SHEET::GetMinWidth() const
             for( size_t j = 0; j < m_pins.size(); j++ )
             {
                 // Check for pin directly across from the current pin.
-                if( (i == j) || (m_pins[i].GetPosition().y != m_pins[j].GetPosition().y) )
+                if( (i == j) || (m_pins[i]->GetPosition().y != m_pins[j]->GetPosition().y) )
                     continue;
 
-                if( width < pinRect.GetWidth() + m_pins[j].GetBoundingBox().GetWidth() )
+                if( width < pinRect.GetWidth() + m_pins[j]->GetBoundingBox().GetWidth() )
                 {
-                    width = pinRect.GetWidth() + m_pins[j].GetBoundingBox().GetWidth();
+                    width = pinRect.GetWidth() + m_pins[j]->GetBoundingBox().GetWidth();
                     break;
                 }
             }
@@ -309,8 +308,8 @@ int SCH_SHEET::GetMinHeight() const
 
     for( size_t i = 0; i < m_pins.size();  i++ )
     {
-        int edge = m_pins[i].GetEdge();
-        EDA_RECT pinRect = m_pins[i].GetBoundingBox();
+        int edge = m_pins[i]->GetEdge();
+        EDA_RECT pinRect = m_pins[i]->GetBoundingBox();
 
         // Make sure pin is on top or bottom side of sheet.
         if( edge == SHEET_RIGHT_SIDE || edge == SHEET_LEFT_SIDE )
@@ -326,12 +325,12 @@ int SCH_SHEET::GetMinHeight() const
             for( size_t j = 0; j < m_pins.size(); j++ )
             {
                 // Check for pin directly above or below the current pin.
-                if( (i == j) || (m_pins[i].GetPosition().x != m_pins[j].GetPosition().x) )
+                if( (i == j) || (m_pins[i]->GetPosition().x != m_pins[j]->GetPosition().x) )
                     continue;
 
-                if( height < pinRect.GetHeight() + m_pins[j].GetBoundingBox().GetHeight() )
+                if( height < pinRect.GetHeight() + m_pins[j]->GetBoundingBox().GetHeight() )
                 {
-                    height = pinRect.GetHeight() + m_pins[j].GetBoundingBox().GetHeight();
+                    height = pinRect.GetHeight() + m_pins[j]->GetBoundingBox().GetHeight();
                     break;
                 }
             }
@@ -344,16 +343,16 @@ int SCH_SHEET::GetMinHeight() const
 
 void SCH_SHEET::CleanupSheet()
 {
-    SCH_SHEET_PINS::iterator i = m_pins.begin();
+    auto i = m_pins.begin();
 
     while( i != m_pins.end() )
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
         const SCH_HIERLABEL* HLabel = NULL;
 
-        for( auto aItem : m_screen->Items().OfType( SCH_HIER_LABEL_T ) )
+        for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_HIER_LABEL_T ) )
         {
-            if( !i->GetText().CmpNoCase( static_cast<SCH_HIERLABEL*>( aItem )->GetText() ) )
+            if( (*i)->GetText().CmpNoCase( static_cast<SCH_HIERLABEL*>( aItem )->GetText() ) == 0 )
             {
                 HLabel = static_cast<SCH_HIERLABEL*>( aItem );
                 break;
@@ -370,10 +369,10 @@ void SCH_SHEET::CleanupSheet()
 
 SCH_SHEET_PIN* SCH_SHEET::GetPin( const wxPoint& aPosition )
 {
-    for( SCH_SHEET_PIN& pin : m_pins )
+    for( SCH_SHEET_PIN* pin : m_pins )
     {
-        if( pin.HitTest( aPosition ) )
-            return &pin;
+        if( pin->HitTest( aPosition ) )
+            return pin;
     }
 
     return NULL;
@@ -470,8 +469,8 @@ void SCH_SHEET::Print( wxDC* aDC, const wxPoint& aOffset )
             textSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, textWidth, false, false );
 
     /* Draw text : SheetLabel */
-    for( SCH_SHEET_PIN& sheetPin : m_pins )
-        sheetPin.Print( aDC, aOffset );
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+        sheetPin->Print( aDC, aOffset );
 }
 
 
@@ -650,10 +649,8 @@ void SCH_SHEET::Rotate(wxPoint aPosition)
         m_size.y = -m_size.y;
     }
 
-    for( SCH_SHEET_PIN& sheetPin : m_pins )
-    {
-        sheetPin.Rotate( aPosition );
-    }
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+        sheetPin->Rotate( aPosition );
 }
 
 
@@ -662,10 +659,8 @@ void SCH_SHEET::MirrorX( int aXaxis_position )
     MIRROR( m_pos.y, aXaxis_position );
     m_pos.y -= m_size.y;
 
-    for( SCH_SHEET_PIN& sheetPin : m_pins )
-    {
-        sheetPin.MirrorX( aXaxis_position );
-    }
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+        sheetPin->MirrorX( aXaxis_position );
 }
 
 
@@ -674,10 +669,8 @@ void SCH_SHEET::MirrorY( int aYaxis_position )
     MIRROR( m_pos.x, aYaxis_position );
     m_pos.x -= m_size.x;
 
-    for( SCH_SHEET_PIN& label : m_pins )
-    {
-        label.MirrorY( aYaxis_position );
-    }
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+        sheetPin->MirrorY( aYaxis_position );
 }
 
 void SCH_SHEET::SetPosition( const wxPoint& aPosition )
@@ -697,10 +690,8 @@ void SCH_SHEET::Resize( const wxSize& aSize )
     m_size = aSize;
 
     /* Move the sheet labels according to the new sheet size. */
-    for( SCH_SHEET_PIN& label : m_pins )
-    {
-        label.ConstrainOnEdge( label.GetPosition() );
-    }
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+        sheetPin->ConstrainOnEdge( sheetPin->GetPosition() );
 }
 
 
@@ -734,9 +725,9 @@ void SCH_SHEET::renumberPins()
 {
     int id = 2;
 
-    for( SCH_SHEET_PIN& pin : m_pins )
+    for( SCH_SHEET_PIN* pin : m_pins )
     {
-        pin.SetNumber( id );
+        pin->SetNumber( id );
         id++;
     }
 }
@@ -744,14 +735,12 @@ void SCH_SHEET::renumberPins()
 
 void SCH_SHEET::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
-    for( unsigned ii = 0; ii < GetPins().size(); ii++ )
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
     {
-        SCH_SHEET_PIN &pinsheet = GetPins()[ii];
-
-        wxCHECK2_MSG( pinsheet.Type() == SCH_SHEET_PIN_T, continue,
+        wxCHECK2_MSG( sheetPin->Type() == SCH_SHEET_PIN_T, continue,
                       wxT( "Invalid item in schematic sheet pin list.  Bad programmer!" ) );
 
-        pinsheet.GetEndPoints( aItemList );
+        sheetPin->GetEndPoints( aItemList );
     }
 }
 
@@ -760,8 +749,8 @@ bool SCH_SHEET::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 {
     bool changed = false;
 
-    for( SCH_SHEET_PIN& pinsheet : GetPins() )
-        changed |= pinsheet.UpdateDanglingState( aItemList );
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+        changed |= sheetPin->UpdateDanglingState( aItemList );
 
     return changed;
 }
@@ -769,8 +758,8 @@ bool SCH_SHEET::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 
 void SCH_SHEET::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
-    for( size_t i = 0; i < GetPins().size(); i++ )
-        aPoints.push_back( GetPins()[i].GetPosition() );
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+        aPoints.push_back( sheetPin->GetPosition() );
 }
 
 
@@ -790,9 +779,9 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICA
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_SHEET_PIN_T )
         {
             // Test the sheet labels.
-            for( size_t i = 0;  i < m_pins.size();  i++ )
+            for( SCH_SHEET_PIN* sheetPin : m_pins )
             {
-                if( SEARCH_RESULT::QUIT == aInspector( &m_pins[i], this ) )
+                if( SEARCH_RESULT::QUIT == aInspector( sheetPin, this ) )
                     return SEARCH_RESULT::QUIT;
             }
         }
@@ -843,20 +832,20 @@ void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
     SCH_SHEET_PATH sheetPath = *aSheetPath;
     sheetPath.push_back( this );
 
-    for( size_t i = 0;  i < m_pins.size();  i++ )
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
     {
         NETLIST_OBJECT* item = new NETLIST_OBJECT();
         item->m_SheetPathInclude = sheetPath;
         item->m_SheetPath = *aSheetPath;
-        item->m_Comp = &m_pins[i];
+        item->m_Comp = sheetPin;
         item->m_Link = this;
         item->m_Type = NET_SHEETLABEL;
-        item->m_Label = m_pins[i].GetText();
-        item->m_Start = item->m_End = m_pins[i].GetPosition();
+        item->m_Label = sheetPin->GetText();
+        item->m_Start = item->m_End = sheetPin->GetPosition();
         aNetListItems.push_back( item );
 
         SCH_CONNECTION conn;
-        if( conn.IsBusLabel( m_pins[i].GetText() ) )
+        if( conn.IsBusLabel( sheetPin->GetText() ) )
             item->ConvertBusToNetListItems( aNetListItems );
     }
 }
@@ -933,14 +922,12 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     aPlotter->SetColor( GetLayerColor( GetLayer() ) );
 
     /* Draw texts : SheetLabel */
-    for( size_t i = 0; i < m_pins.size(); i++ )
-    {
-        m_pins[i].Plot( aPlotter );
-    }
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+        sheetPin->Plot( aPlotter );
 }
 
 
-SCH_ITEM& SCH_SHEET::operator=( const SCH_ITEM& aItem )
+SCH_SHEET& SCH_SHEET::operator=( const SCH_ITEM& aItem )
 {
     wxLogDebug( wxT( "Sheet assignment operator." ) );
 
@@ -959,13 +946,11 @@ SCH_ITEM& SCH_SHEET::operator=( const SCH_ITEM& aItem )
         m_name = sheet->m_name;
         m_sheetNameSize = sheet->m_sheetNameSize;
         m_fileNameSize = sheet->m_fileNameSize;
-        m_pins = sheet->m_pins;
 
-        // Ensure sheet labels have their #m_Parent member pointing really on their
-        // parent, after assigning.
-        for( SCH_SHEET_PIN& sheetPin : m_pins )
+        for( SCH_SHEET_PIN* pin : sheet->m_pins )
         {
-            sheetPin.SetParent( this );
+            m_pins.emplace_back( new SCH_SHEET_PIN( *pin ) );
+            m_pins.back()->SetParent( this );
         }
     }
 
@@ -984,10 +969,8 @@ void SCH_SHEET::Show( int nestLevel, std::ostream& os ) const
                                  << TO_UTF8( m_name ) << '"' << ">\n";
 
     // show all the pins, and check the linked list integrity
-    for( const SCH_SHEET_PIN& label : m_pins )
-    {
-        label.Show( nestLevel + 1, os );
-    }
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+        sheetPin->Show( nestLevel + 1, os );
 
     NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n" << std::flush;
 }

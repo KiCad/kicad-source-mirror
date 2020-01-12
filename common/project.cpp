@@ -321,7 +321,7 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList,
 
 
 void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName,
-        const PARAM_CFG_ARRAY& aParams, const wxString& aFileName )
+                          const std::vector<PARAM_CFG*>& aParams, const wxString& aFileName )
 {
     std::unique_ptr<wxConfigBase> cfg( configCreate( aSList, aGroupName, aFileName ) );
 
@@ -356,7 +356,8 @@ void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName
 
 
 bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString&  aGroupName,
-        const PARAM_CFG_ARRAY& aParams, const wxString& aForeignProjectFileName )
+                          const std::vector<PARAM_CFG*>& aParams,
+                          const wxString& aForeignProjectFileName )
 {
     std::unique_ptr<wxConfigBase> cfg( configCreate( aSList, aGroupName,
                                                      aForeignProjectFileName ) );

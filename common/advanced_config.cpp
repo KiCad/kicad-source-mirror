@@ -95,7 +95,7 @@ static const wxChar CoroutineStackSize[] = wxT( "CoroutineStackSize" );
  * This isn't exhaustive, but it covers most common types that might be
  * used in the advance config
  */
-wxString dumpParamCfg( const PARAM_CFG_BASE& aParam )
+wxString dumpParamCfg( const PARAM_CFG& aParam )
 {
     wxString s = aParam.m_Ident + ": ";
 
@@ -132,15 +132,15 @@ wxString dumpParamCfg( const PARAM_CFG_BASE& aParam )
 /**
  * Dump the configs in the given array to trace.
  */
-static void dumpCfg( const PARAM_CFG_ARRAY& aArray )
+static void dumpCfg( const std::vector<PARAM_CFG*>& aArray )
 {
     // only dump if we need to
     if( !wxLog::IsAllowedTraceMask( AdvancedConfigMask ) )
         return;
 
-    for( const auto& param : aArray )
+    for( const PARAM_CFG* param : aArray )
     {
-        wxLogTrace( AdvancedConfigMask, dumpParamCfg( param ) );
+        wxLogTrace( AdvancedConfigMask, dumpParamCfg( *param ) );
     }
 }
 
@@ -198,27 +198,20 @@ void ADVANCED_CFG::loadFromConfigFile()
 
 void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 {
-    PARAM_CFG_ARRAY configParams;
+    std::vector<PARAM_CFG*> configParams;
 
-    try
-    {
-        configParams.push_back(
-                new PARAM_CFG_BOOL( true, AC_KEYS::UsePadProperty, &m_EnableUsePadProperty, false ) );
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::UsePadProperty,
+                                                &m_EnableUsePadProperty, false ) );
 
-        configParams.push_back(
-                new PARAM_CFG_BOOL( true, AC_KEYS::UsePinFunction, &m_EnableUsePinFunction, false ) );
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::UsePinFunction,
+                                                &m_EnableUsePinFunction, false ) );
 
-        configParams.push_back(
-                new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity, &m_realTimeConnectivity, false ) );
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity,
+                                                &m_realTimeConnectivity, false ) );
 
-        configParams.push_back(
-                new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize, &m_coroutineStackSize,
-                        AC_STACK::default_stack, AC_STACK::min_stack, AC_STACK::max_stack ) );
-    }
-    catch( boost::bad_pointer& )
-    {
-        // Out of memory?  Ship's going down anyway....
-    }
+    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize,
+                                               &m_coroutineStackSize, AC_STACK::default_stack,
+                                               AC_STACK::min_stack, AC_STACK::max_stack ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 

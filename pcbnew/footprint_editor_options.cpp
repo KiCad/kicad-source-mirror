@@ -31,7 +31,7 @@
 #include <layers_id_colors_and_visibility.h>
 
 
-PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
+std::vector<PARAM_CFG*>& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
 {
     auto& displ_opts = m_DisplayOptions;
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
@@ -41,17 +41,17 @@ PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
 
     // Display options:
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorDisplayPolarCoords" ),
-                                                    &m_PolarCoords, false ) );
+                                                  &m_PolarCoords, false ) );
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorPadDisplayMode" ),
-                                                    &displ_opts.m_DisplayPadFill, true ) );
+                                                  &displ_opts.m_DisplayPadFill, true ) );
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorGraphicLinesDisplayMode" ),
-                                                    &displ_opts.m_DisplayModEdgeFill, FILLED ) );
+                                                  &displ_opts.m_DisplayModEdgeFill, FILLED ) );
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorTextsDisplayMode" ),
-                                                    &displ_opts.m_DisplayModTextFill, FILLED ) );
+                                                  &displ_opts.m_DisplayModTextFill, FILLED ) );
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorTextsDisplayMode" ),
-                                                    &displ_opts.m_DisplayModTextFill, FILLED ) );
+                                                  &displ_opts.m_DisplayModTextFill, FILLED ) );
     m_configParams.push_back( new PARAM_CFG_WXSTRING( true, wxT( "FpEditorTextsRefDefaultText" ),
-                                                    &settings.m_RefDefaultText, wxT( "REF**" ) ) );
+                                                      &settings.m_RefDefaultText, wxT( "REF**" ) ) );
 
     // design settings
     m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorSilkLineWidth" ),

@@ -109,9 +109,8 @@ BOOST_AUTO_TEST_CASE( AddPins )
     BOOST_CHECK_EQUAL( m_sheet.GetPin( pinPos ), &pinRef );
 
     // check the actual list can be retrieved
-    // this should be const...
-    SCH_SHEET_PINS& pins = m_sheet.GetPins();
-    BOOST_CHECK_EQUAL( &pins[0], &pinRef );
+    std::vector<SCH_SHEET_PIN*>& pins = m_sheet.GetPins();
+    BOOST_CHECK_EQUAL( pins[0], &pinRef );
 
     // catch the bad call
     CHECK_WX_ASSERT( m_sheet.RemovePin( nullptr ) );
@@ -131,22 +130,20 @@ BOOST_AUTO_TEST_CASE( PinRenumbering )
 {
     for( int i = 0; i < 5; ++i )
     {
-        auto pin = std::make_unique<SCH_SHEET_PIN>( &m_sheet, wxPoint{ i, i }, "name" );
+        SCH_SHEET_PIN* pin = new SCH_SHEET_PIN( &m_sheet, wxPoint{ i, i }, "name" );
 
         // set the pins to have the same number going in
         pin->SetNumber( 2 );
 
-        m_sheet.AddPin( pin.release() );
+        m_sheet.AddPin( pin );
     }
 
-    SCH_SHEET_PINS& pins = m_sheet.GetPins();
+    std::vector<SCH_SHEET_PIN*>& pins = m_sheet.GetPins();
 
     std::vector<int> numbers;
 
-    for( const auto& pin : pins )
-    {
-        numbers.push_back( pin.GetNumber() );
-    }
+    for( SCH_SHEET_PIN* pin : pins )
+        numbers.push_back( pin->GetNumber() );
 
     // and now...they are all unique
     BOOST_CHECK_PREDICATE( KI_TEST::CollectionHasNoDuplicates<decltype( numbers )>, ( numbers ) );
@@ -180,12 +177,9 @@ BOOST_AUTO_TEST_CASE( EndconnectionPoints )
 
     // Insert the pins into the sheet
     for( const auto& pin : pin_defs )
-    {
-        m_sheet.AddPin(
-                std::make_unique<SCH_SHEET_PIN>( &m_sheet, pin.m_pos, pin.m_pin_name ).release() );
-    }
+        m_sheet.AddPin( new SCH_SHEET_PIN( &m_sheet, pin.m_pos, pin.m_pin_name ) );
 
-    SCH_SHEET_PINS& pins = m_sheet.GetPins();
+    std::vector<SCH_SHEET_PIN*>& pins = m_sheet.GetPins();
 
     // make sure the pins made it in
     BOOST_CHECK_EQUAL( pins.size(), pin_defs.size() );
@@ -195,17 +189,17 @@ BOOST_AUTO_TEST_CASE( EndconnectionPoints )
         std::vector<DANGLING_END_ITEM> expectedDangling;
 
         // Construct expected from the pin, not defs, as we need the pin address
-        for( auto& pin : pins )
+        for( SCH_SHEET_PIN* pin : pins )
         {
-            expectedDangling.emplace_back(
-                    DANGLING_END_T::SHEET_LABEL_END, &pin, pin.GetPosition(), &pin );
+            expectedDangling.emplace_back( DANGLING_END_T::SHEET_LABEL_END, pin,
+                                           pin->GetPosition(), pin );
         }
 
         std::vector<DANGLING_END_ITEM> dangling;
         m_sheet.GetEndPoints( dangling );
 
-        BOOST_CHECK_EQUAL_COLLECTIONS( dangling.begin(), dangling.end(), expectedDangling.begin(),
-                expectedDangling.end() );
+        BOOST_CHECK_EQUAL_COLLECTIONS( dangling.begin(), dangling.end(),
+                                       expectedDangling.begin(), expectedDangling.end() );
     }
 
     // And check the connection getter
@@ -222,7 +216,7 @@ BOOST_AUTO_TEST_CASE( EndconnectionPoints )
         m_sheet.GetConnectionPoints( connections );
 
         BOOST_CHECK_EQUAL_COLLECTIONS( connections.begin(), connections.end(),
-                expectedConnections.begin(), expectedConnections.end() );
+                                       expectedConnections.begin(), expectedConnections.end() );
     }
 }
 

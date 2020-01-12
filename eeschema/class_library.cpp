@@ -428,7 +428,7 @@ void PART_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
 {
     wxString pro = aProject->GetProjectFullName();
 
-    PARAM_CFG_ARRAY ca;
+    std::vector<PARAM_CFG*> ca;
 
     try
     {

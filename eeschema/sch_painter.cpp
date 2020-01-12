@@ -1522,20 +1522,20 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
     if( aLayer == LAYER_HIERLABEL || drawingShadows )
     {
-        for( auto& sheetPin : aSheet->GetPins() )
+        for( SCH_SHEET_PIN* sheetPin : aSheet->GetPins() )
         {
-            if( drawingShadows && !aSheet->IsSelected() && !sheetPin.IsSelected() )
+            if( drawingShadows && !aSheet->IsSelected() && !sheetPin->IsSelected() )
                 continue;
 
             if( drawingShadows && !GetSelectionDrawChildItems() && aSheet->IsSelected() )
                 break;
 
             int     width = aSheet->GetPenSize();
-            wxPoint initial_pos = sheetPin.GetTextPos();
+            wxPoint initial_pos = sheetPin->GetTextPos();
             wxPoint offset_pos = initial_pos;
 
             // For aesthetic reasons, the SHEET_PIN is drawn with a small offset of width / 2
-            switch( sheetPin.GetEdge() )
+            switch( sheetPin->GetEdge() )
             {
             case SHEET_TOP_SIDE:    offset_pos.y += KiROUND( width / 2.0 ); break;
             case SHEET_BOTTOM_SIDE: offset_pos.y -= KiROUND( width / 2.0 ); break;
@@ -1544,10 +1544,10 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
             default: break;
             }
 
-            sheetPin.SetTextPos( offset_pos );
-            draw( static_cast<SCH_HIERLABEL*>( &sheetPin ), aLayer );
+            sheetPin->SetTextPos( offset_pos );
+            draw( static_cast<SCH_HIERLABEL*>( sheetPin ), aLayer );
             m_gal->DrawLine( offset_pos, initial_pos );
-            sheetPin.SetTextPos( initial_pos );
+            sheetPin->SetTextPos( initial_pos );
         }
     }
 

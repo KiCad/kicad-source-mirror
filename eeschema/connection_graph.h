@@ -225,7 +225,7 @@ public:
      * @param aSheetList is the list of possibly modified sheets
      * @param aUnconditional is true if an unconditional full recalculation should be done
      */
-    void Recalculate( SCH_SHEET_LIST aSheetList, bool aUnconditional = false );
+    void Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnconditional = false );
 
     /**
      * Returns a bus alias pointer for the given name if it exists (from cache)
@@ -330,7 +330,7 @@ private:
      * @param aItemList is a list of items to consider
      */
     void updateItemConnectivity( SCH_SHEET_PATH aSheet,
-                                 std::vector<SCH_ITEM*> aItemList );
+                                 const std::vector<SCH_ITEM*>& aItemList );
 
     /**
      * Generates the connection graph (after all item connectivity has been updated)

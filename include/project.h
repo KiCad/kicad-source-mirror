@@ -38,7 +38,7 @@
 
 
 class wxConfigBase;
-class PARAM_CFG_ARRAY;
+class PARAM_CFG;
 class FP_LIB_TABLE;
 class PART_LIBS;
 class SEARCH_STACK;
@@ -130,14 +130,15 @@ public:
      *
      * @param aSList a SEARCH_STACK
      * @param aGroupName is the name of the group inside the config which contains parameters
-     * @param aParams is a ptr vector of PARAM_CFG_BASE derivatives.
+     * @param aParams is a ptr vector of PARAM_CFG derivatives.
      *  Saved parameters are the subset in this array having the .m_Setup member
      *  set to false.
      * @param aFileName is where to save the *.pro file and if NULL means use this PROJECT's
      *   @a m_project_name.
      */
     VTBL_ENTRY void ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName,
-        const PARAM_CFG_ARRAY& aParams, const wxString& aFileName = wxEmptyString );
+                                const std::vector<PARAM_CFG*>& aParams,
+                                const wxString& aFileName = wxEmptyString );
 
     /**
      * Function ConfigLoad
@@ -151,14 +152,15 @@ public:
      *
      * @param aSearchS a SEARCH_STACK where a kicad.pro template file may be found.
      * @param aGroupName
-     * @param aParams is ptr vector of PARAM_CFG_BASE derivatives.
+     * @param aParams is ptr vector of PARAM_CFG derivatives.
      * @param aForeignConfigFileName when NULL means load the *.pro filename given
      *  in this PROJECT's @a m_project_name field, otherwise load the provided filename.
      *
      * @return bool - true if loaded OK.
      */
     VTBL_ENTRY bool ConfigLoad( const SEARCH_STACK& aSearchS, const wxString& aGroupName,
-            const PARAM_CFG_ARRAY& aParams, const wxString& aForeignConfigFileName = wxEmptyString );
+                                const std::vector<PARAM_CFG*>& aParams,
+                                const wxString& aForeignConfigFileName = wxEmptyString );
 
     /// Retain a number of project specific wxStrings, enumerated here:
     enum RSTRING_T

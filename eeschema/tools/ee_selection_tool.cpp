@@ -718,8 +718,8 @@ bool EE_SELECTION_TOOL::selectMultiple()
                 {
                     int layer = pair.second;
 
-                    for( SCH_SHEET_PIN& pin : sheet->GetPins() )
-                        sheetPins.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( &pin, layer ) );
+                    for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                        sheetPins.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( pin, layer ) );
                 }
             }
 
@@ -1223,14 +1223,14 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
     }
     else if( itemType == SCH_SHEET_T )
     {
-        SCH_SHEET_PINS& pins = static_cast<SCH_SHEET*>( aItem )->GetPins();
+        std::vector<SCH_SHEET_PIN*>& pins = static_cast<SCH_SHEET*>( aItem )->GetPins();
 
-        for( SCH_SHEET_PIN& pin : pins )
+        for( SCH_SHEET_PIN* pin : pins )
         {
             if( aMode == SELECTED )
-                pin.SetSelected();
+                pin->SetSelected();
             else if( aMode == BRIGHTENED )
-                pin.SetBrightened();
+                pin->SetBrightened();
         }
     }
 
@@ -1280,14 +1280,14 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
     }
     else if( itemType == SCH_SHEET_T )
     {
-        SCH_SHEET_PINS& pins = static_cast<SCH_SHEET*>( aItem )->GetPins();
+        std::vector<SCH_SHEET_PIN*>& pins = static_cast<SCH_SHEET*>( aItem )->GetPins();
 
-        for( SCH_SHEET_PIN& pin : pins )
+        for( SCH_SHEET_PIN* pin : pins )
         {
             if( aMode == SELECTED )
-                pin.ClearSelected();
+                pin->ClearSelected();
             else if( aMode == BRIGHTENED )
-                pin.ClearBrightened();
+                pin->ClearBrightened();
         }
     }
 

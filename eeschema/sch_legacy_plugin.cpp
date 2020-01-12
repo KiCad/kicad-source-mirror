@@ -1011,6 +1011,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
             }
             else                                   // Sheet pin.
             {
+                // Use a unique_ptr so that we clean up in the case of a throw
                 std::unique_ptr< SCH_SHEET_PIN > sheetPin( new SCH_SHEET_PIN( sheet.get() ) );
 
                 sheetPin->SetNumber( fieldId );
@@ -2162,14 +2163,14 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
         m_out->Print( 0, "F1 %s %d\n", EscapedUTF8( aSheet->GetFileName() ).c_str(),
                       Iu2Mils( aSheet->GetFileNameSize() ) );
 
-    for( const SCH_SHEET_PIN& pin : aSheet->GetPins() )
+    for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
     {
         int type, side;
 
-        if( pin.GetText().IsEmpty() )
+        if( pin->GetText().IsEmpty() )
             break;
 
-        switch( pin.GetEdge() )
+        switch( pin->GetEdge() )
         {
         default:
         case SHEET_LEFT_SIDE:   side = 'L'; break;
@@ -2178,7 +2179,7 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
         case SHEET_BOTTOM_SIDE: side = 'B'; break;
         }
 
-        switch( pin.GetShape() )
+        switch( pin->GetShape() )
         {
         case PINSHEETLABEL_SHAPE::PS_INPUT:
             type = 'I';
@@ -2198,11 +2199,11 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
             break;
         }
 
-        m_out->Print( 0, "F%d %s %c %c %-3d %-3d %-3d\n", pin.GetNumber(),
-                      EscapedUTF8( pin.GetText() ).c_str(),     // supplies wrapping quotes
-                      type, side, Iu2Mils( pin.GetPosition().x ),
-                      Iu2Mils( pin.GetPosition().y ),
-                      Iu2Mils( pin.GetTextWidth() ) );
+        m_out->Print( 0, "F%d %s %c %c %-3d %-3d %-3d\n", pin->GetNumber(),
+                      EscapedUTF8( pin->GetText() ).c_str(),     // supplies wrapping quotes
+                      type, side, Iu2Mils( pin->GetPosition().x ),
+                      Iu2Mils( pin->GetPosition().y ),
+                      Iu2Mils( pin->GetTextWidth() ) );
     }
 
     m_out->Print( 0, "$EndSheet\n" );

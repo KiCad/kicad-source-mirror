@@ -33,13 +33,13 @@
 #include "zones.h"
 #include <board_connected_item.h>
 #include <class_board_item.h>
-#include <config_params.h> // PARAM_CFG_ARRAY
 #include <convert_to_biu.h>
 #include <geometry/shape_poly_set.h>
 #include <pad_shapes.h>
 #include <pcbnew.h>
 
 class DRAWSEGMENT;
+class PARAM_CFG;
 
 enum CUST_PAD_SHAPE_IN_ZONE
 {
@@ -799,7 +799,7 @@ public:
      * allow reading or writing of configuration file information directly into
      * this object.
      */
-    void AppendConfigs( PARAM_CFG_ARRAY* aResult );
+    void AppendConfigs( std::vector<PARAM_CFG*>* aResult );
 
     EDA_ITEM* Clone() const override;
 

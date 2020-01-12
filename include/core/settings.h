@@ -118,8 +118,8 @@ class SETTINGS
             return aEntryName;
         }
 
-        wxString m_prefix;
-        PARAM_CFG_ARRAY m_params;
+        wxString                m_prefix;
+        std::vector<PARAM_CFG*> m_params;
 };
 
 

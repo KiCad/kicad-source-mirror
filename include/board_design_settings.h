@@ -828,7 +828,7 @@ public:
      * allow reading or writing of configuration file information directly into
      * this object.
      */
-    void AppendConfigs( BOARD* aBoard, PARAM_CFG_ARRAY* aResult );
+    void AppendConfigs( BOARD* aBoard, std::vector<PARAM_CFG*>* aResult );
 
     inline int GetBoardThickness() const { return m_boardThickness; }
     inline void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }

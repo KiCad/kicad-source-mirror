@@ -113,7 +113,7 @@ void PCB_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
 }
 
 
-PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
+std::vector<PARAM_CFG*>& PCB_EDIT_FRAME::GetProjectFileParameters()
 {
     m_projectFileParams.clear();
 
@@ -147,7 +147,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
 }
 
 
-PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
+std::vector<PARAM_CFG*>& PCB_EDIT_FRAME::GetConfigurationSettings()
 {
     PCB_DISPLAY_OPTIONS& displ_opts = m_DisplayOptions;
 

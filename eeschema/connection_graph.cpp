@@ -377,7 +377,7 @@ void CONNECTION_GRAPH::Reset()
 }
 
 
-void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUnconditional )
+void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnconditional )
 {
     PROF_COUNTER recalc_time;
     PROF_COUNTER update_items;
@@ -385,7 +385,7 @@ void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUncondition
     if( aUnconditional )
         Reset();
 
-    for( const auto& sheet : aSheetList )
+    for( const SCH_SHEET_PATH& sheet : aSheetList )
     {
         std::vector<SCH_ITEM*> items;
 
@@ -434,7 +434,7 @@ void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUncondition
 
 
 void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
-                                               std::vector<SCH_ITEM*> aItemList )
+                                               const std::vector<SCH_ITEM*>& aItemList )
 {
     std::unordered_map< wxPoint, std::vector<SCH_ITEM*> > connection_map;
 
@@ -446,18 +446,18 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
 
         if( item->Type() == SCH_SHEET_T )
         {
-            for( auto& pin : static_cast<SCH_SHEET*>( item )->GetPins() )
+            for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
             {
-                if( !pin.Connection( aSheet ) )
+                if( !pin->Connection( aSheet ) )
                 {
-                    pin.InitializeConnection( aSheet );
+                    pin->InitializeConnection( aSheet );
                 }
 
-                pin.ConnectedItems().clear();
-                pin.Connection( aSheet )->Reset();
+                pin->ConnectedItems().clear();
+                pin->Connection( aSheet )->Reset();
 
-                connection_map[ pin.GetTextPos() ].push_back( &pin );
-                m_items.insert( &pin );
+                connection_map[ pin->GetTextPos() ].push_back( pin );
+                m_items.insert( pin );
             }
         }
         else if( item->Type() == SCH_COMPONENT_T )

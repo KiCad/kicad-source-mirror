@@ -81,12 +81,13 @@ public:
     FOOTPRINT_LIST*           m_FootprintsList;
 
 protected:
-    bool            m_modified;
-    bool            m_skipComponentSelect;      // true to skip OnSelectComponent event
-                                                // (in automatic selection/deletion of associations)
-    PARAM_CFG_ARRAY m_projectFileParams;
+    bool                      m_modified;
+    bool                      m_skipComponentSelect;   // skip component selection event during
+                                                       // automatic selection/deletion of
+                                                       // associations
+    std::vector<PARAM_CFG*>   m_projectFileParams;
 
-    bool            m_initialized;
+    bool                      m_initialized;
 
     CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent );
 
@@ -334,9 +335,9 @@ public:
      * at compile time requiring global variable definitions.
      * </p>
      *
-     * @return A reference to a PARAM_CFG_ARRAY contain the project settings for CvPcb.
+     * @return reference to a std::vector<PARAM_CFG*> contain the project settings for CvPcb.
      */
-    PARAM_CFG_ARRAY& GetProjectFileParameters( void );
+    std::vector<PARAM_CFG*>& GetProjectFileParameters( void );
 
     /**
      * Function SendMessageToEESCHEMA

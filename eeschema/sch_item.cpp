@@ -99,8 +99,8 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone )
     {
         SCH_SHEET* sheet = (SCH_SHEET*) newItem;
 
-        for( SCH_SHEET_PIN& pin : sheet->GetPins() )
-            pin.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+        for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+            pin->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
     }
 
     return newItem;

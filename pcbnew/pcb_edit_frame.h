@@ -99,13 +99,13 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     friend class PCB_LAYER_WIDGET;
 
     /// The auxiliary right vertical tool bar used to access the microwave tools.
-    ACTION_TOOLBAR*   m_microWaveToolBar;
+    ACTION_TOOLBAR*         m_microWaveToolBar;
 
 protected:
-    PARAM_CFG_ARRAY   m_configParams;           // List of Pcbnew configuration settings.
-    PARAM_CFG_ARRAY   m_projectFileParams;
+    std::vector<PARAM_CFG*> m_configParams;           // List of Pcbnew configuration settings.
+    std::vector<PARAM_CFG*> m_projectFileParams;
 
-    wxString          m_lastPath[ LAST_PATH_SIZE ];
+    wxString                m_lastPath[ LAST_PATH_SIZE ];
 
 
     /**
@@ -407,10 +407,10 @@ public:
      * to define local variables.  The old method of statically building the array
      * at compile time requiring global variable definitions by design.
      * </p>
-     * @return PARAM_CFG_ARRAY - it is only good until SetBoard() is called, so
-     *   don't keep it around past that event.
+     * @return std::vector<PARAM_CFG*> - it is only good until SetBoard() is called, so
+     *         don't keep it around past that event.
      */
-    PARAM_CFG_ARRAY& GetProjectFileParameters();
+    std::vector<PARAM_CFG*>& GetProjectFileParameters();
 
     /**
      * Function SaveProjectSettings
@@ -442,7 +442,7 @@ public:
      *
      * @return - Reference to the list of applications settings.
      */
-    PARAM_CFG_ARRAY& GetConfigurationSettings();
+    std::vector<PARAM_CFG*>& GetConfigurationSettings();
 
     void LoadSettings( wxConfigBase* aCfg ) override;
 

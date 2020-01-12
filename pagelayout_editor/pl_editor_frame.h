@@ -62,7 +62,7 @@ protected:
 
 private:
     // list of PARAM_CFG_xxx to read/write parameters saved in config
-    PARAM_CFG_ARRAY         m_configSettings;
+    std::vector<PARAM_CFG*> m_configSettings;
 
 public:
     PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -221,7 +221,7 @@ public:
      * source code (mainly in dialogs).  If you need to define a configuration
      * setting that need to be loaded at run time, this is the place to define it.
      */
-    PARAM_CFG_ARRAY& GetConfigurationSettings() { return m_configSettings; }
+    std::vector<PARAM_CFG*>& GetConfigurationSettings() { return m_configSettings; }
 
     void LoadSettings( wxConfigBase* aCfg ) override;
 

@@ -170,10 +170,9 @@ public:
     COLORS_DESIGN_SETTINGS* m_colorsSettings;
 
 private:
-    // list of PARAM_CFG_xxx to read/write parameters saved in config
-    PARAM_CFG_ARRAY         m_configSettings;
+    std::vector<PARAM_CFG*> m_configSettings;
 
-    int m_displayMode;                  // Gerber images ("layers" in Gerbview) can be drawn:
+    int             m_displayMode;      // Gerber images ("layers" in Gerbview) can be drawn:
                                         // - in fast mode (write mode) but if there are negative
                                         // items only the last image is correctly drawn (no
                                         // problem to see only one image or when no negative items)
@@ -420,7 +419,7 @@ public:
      * GerbView source code (mainly in dialogs).  If you need to define a configuration
      * setting that need to be loaded at run time, this is the place to define it.
      */
-    PARAM_CFG_ARRAY& GetConfigurationSettings( void );
+    std::vector<PARAM_CFG*>& GetConfigurationSettings( void );
 
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;

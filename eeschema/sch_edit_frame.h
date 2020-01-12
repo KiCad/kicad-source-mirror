@@ -122,8 +122,8 @@ class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 private:
     wxString                m_SelectedNetName;
 
-    PARAM_CFG_ARRAY         m_projectFileParams;
-    PARAM_CFG_ARRAY         m_configSettings;
+    std::vector<PARAM_CFG*> m_projectFileParams;
+    std::vector<PARAM_CFG*> m_configSettings;
     ERC_SETTINGS            m_ercSettings;
     wxPageSetupDialogData   m_pageSetupData;
     bool                    m_printMonochrome;    ///< Print monochrome instead of grey scale.
@@ -149,29 +149,23 @@ private:
     DIALOG_SCH_FIND*        m_findReplaceDialog;
     STATUS_TEXT_POPUP*      m_findReplaceStatusPopup;
 
-    /// Flag to indicate show hidden pins.
-    bool        m_showAllPins;
+    bool                    m_showAllPins;            // show hidden pins
+    bool                    m_selectPinSelectSymbol;  // select parent when clicking on pin
 
-    /// Flag to indicate the pin selection (on a left click) select the paren symbol.
-    bool m_selectPinSelectSymbol;
-
-    /// The name of the destination directory to use when generating plot files.
-    wxString    m_plotDirectoryName;
-
-    /// The name of the format to use when generating a net list.
-    wxString    m_netListFormat;
+    wxString                m_plotDirectoryName;
+    wxString                m_netListFormat;
 
     /// Use netcodes (net number) as net names when generating spice net lists.
-    bool        m_spiceAjustPassiveValues;
+    bool                    m_spiceAjustPassiveValues;
 
     /*  these are PROJECT specific, not schematic editor specific
-    wxString        m_userLibraryPath;
-    wxArrayString   m_componentLibFiles;
+    wxString                m_userLibraryPath;
+    wxArrayString           m_componentLibFiles;
     */
 
-    static PINSHEETLABEL_SHAPE m_lastSheetPinType;  ///< Last sheet pin type.
-    static wxSize   m_lastSheetPinTextSize;         ///< Last sheet pin text size.
-    static wxPoint  m_lastSheetPinPosition;         ///< Last sheet pin position.
+    static PINSHEETLABEL_SHAPE m_lastSheetPinType;    ///< Last sheet pin type.
+    static wxSize           m_lastSheetPinTextSize;   ///< Last sheet pin text size.
+    static wxPoint          m_lastSheetPinPosition;   ///< Last sheet pin position.
 
 protected:
     /**
@@ -258,7 +252,7 @@ public:
      * Populate the project file parameter array specific to Eeschema if it hasn't
      * already been populated and return a reference to the array to the caller.
      */
-    PARAM_CFG_ARRAY& GetProjectFileParameters();
+    std::vector<PARAM_CFG*>& GetProjectFileParameters();
 
     /**
      * Save changes to the project settings to the project (.pro) file.
@@ -313,7 +307,7 @@ public:
      * setting that need to be loaded at run time, this is the place to define it.
      * </p>
      */
-    PARAM_CFG_ARRAY& GetConfigurationSettings();
+    std::vector<PARAM_CFG*>& GetConfigurationSettings();
 
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;

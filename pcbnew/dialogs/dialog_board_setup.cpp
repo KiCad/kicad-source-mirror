@@ -95,7 +95,7 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
     cfg->SetPath( wxCONFIG_PATH_SEPARATOR );
 
     BOARD* dummyBoard = new BOARD();
-    PARAM_CFG_ARRAY designSettingsConfig;
+    std::vector<PARAM_CFG*> designSettingsConfig;
 
     dummyBoard->GetDesignSettings().AppendConfigs( dummyBoard, &designSettingsConfig );
     wxConfigLoadParams( cfg, designSettingsConfig, GROUP_PCB );

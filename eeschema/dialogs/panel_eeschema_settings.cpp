@@ -68,7 +68,7 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
     m_frame->SetUserUnits(
             m_choiceUnits->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES );
 
-    int textSize = ValueFromString( EDA_UNITS::INCHES, m_textSizeCtrl->GetValue(), true );
+    int textSize = (int) ValueFromString( EDA_UNITS::INCHES, m_textSizeCtrl->GetValue(), true );
 
     if( textSize != GetDefaultTextSize() )
     {
@@ -77,8 +77,8 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
     }
 
     m_frame->SetRepeatStep(
-            wxPoint( ValueFromString( EDA_UNITS::INCHES, m_hPitchCtrl->GetValue(), true ),
-                    ValueFromString( EDA_UNITS::INCHES, m_vPitchCtrl->GetValue(), true ) ) );
+            wxPoint( (int) ValueFromString( EDA_UNITS::INCHES, m_hPitchCtrl->GetValue(), true ),
+                     (int) ValueFromString( EDA_UNITS::INCHES, m_vPitchCtrl->GetValue(), true ) ) );
     m_frame->SetRepeatDeltaLabel( m_spinRepeatLabel->GetValue() );
 
     m_frame->SetForceHVLines( m_checkHVOrientation->GetValue() );

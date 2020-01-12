@@ -88,7 +88,7 @@ enum paramcfg_id {
 
 
 /**
- * PARAM_CFG_BASE
+ * PARAM_CFG
  * is a base class which establishes the interface functions ReadParam and SaveParam,
  * which are implemented by a number of derived classes, and these function's
  * doxygen comments are inherited also.
@@ -96,7 +96,7 @@ enum paramcfg_id {
  * See kicad.odt or kicad.pdf, chapter 2 :
  * "Installation and configuration/Initialization of the default config".
  */
-class PARAM_CFG_BASE
+class PARAM_CFG
 {
 public:
     wxString    m_Ident;  ///<  Keyword in config data
@@ -109,9 +109,9 @@ public:
     wxString    m_Ident_legacy;
 
 public:
-    PARAM_CFG_BASE( const wxString& ident, const paramcfg_id type, const wxChar* group = NULL,
-                    const wxString& legacy_ident = wxEmptyString );
-    virtual ~PARAM_CFG_BASE() {}
+    PARAM_CFG( const wxString& ident, const paramcfg_id type, const wxChar* group = NULL,
+               const wxString& legacy_ident = wxEmptyString );
+    virtual ~PARAM_CFG() {}
 
     /**
      * Function ReadParam
@@ -133,7 +133,7 @@ public:
  * Configuration parameter - Integer Class
  *
  */
-class PARAM_CFG_INT      : public PARAM_CFG_BASE
+class PARAM_CFG_INT      : public PARAM_CFG
 {
 public:
     int* m_Pt_param;    ///<  Pointer to the parameter value
@@ -190,7 +190,7 @@ public:
  * Configuration parameter - SetColor Class
  *
  */
-class PARAM_CFG_SETCOLOR : public PARAM_CFG_BASE
+class PARAM_CFG_SETCOLOR : public PARAM_CFG
 {
 public:
     COLOR4D* m_Pt_param;    ///<  Pointer to the parameter value
@@ -211,7 +211,7 @@ public:
  * Configuration parameter - Double Precision Class
  *
  */
-class PARAM_CFG_DOUBLE   : public PARAM_CFG_BASE
+class PARAM_CFG_DOUBLE   : public PARAM_CFG
 {
 public:
     double* m_Pt_param;     ///<  Pointer to the parameter value
@@ -235,7 +235,7 @@ public:
  * Configuration parameter - Boolean Class
  *
  */
-class PARAM_CFG_BOOL     : public PARAM_CFG_BASE
+class PARAM_CFG_BOOL     : public PARAM_CFG
 {
 public:
     bool* m_Pt_param;       ///<  Pointer to the parameter value
@@ -258,7 +258,7 @@ public:
  * Configuration parameter - wxString Class
  *
  */
-class PARAM_CFG_WXSTRING : public PARAM_CFG_BASE
+class PARAM_CFG_WXSTRING : public PARAM_CFG
 {
 public:
     wxString* m_Pt_param;       ///<  Pointer to the parameter value
@@ -284,7 +284,7 @@ public:
  * and replace "/" by "\" under Windows.
  * Used to store paths and filenames in config files
  */
-class PARAM_CFG_FILENAME     : public PARAM_CFG_BASE
+class PARAM_CFG_FILENAME     : public PARAM_CFG
 {
 public:
     wxString* m_Pt_param;    ///<  Pointer to the parameter value
@@ -297,7 +297,7 @@ public:
 };
 
 
-class PARAM_CFG_LIBNAME_LIST : public PARAM_CFG_BASE
+class PARAM_CFG_LIBNAME_LIST : public PARAM_CFG
 {
 public:
     wxArrayString* m_Pt_param;     ///<  Pointer to the parameter value
@@ -312,68 +312,52 @@ public:
 };
 
 
-/** A list of parameters type */
-//typedef boost::ptr_vector<PARAM_CFG_BASE> PARAM_CFG_ARRAY;
-class  PARAM_CFG_ARRAY : public boost::ptr_vector<PARAM_CFG_BASE>
-{
-};
-
-
 /**
  * Function wxConfigSaveSetups
- * writes @a aList of PARAM_CFG_ARRAY elements to save configuration values
- * to @a aCfg.  Only elements with m_Setup set true will be saved, hence the
- * function name.
+ * writes @a aList of PARAM_CFG to save configuration values to @a aCfg.
+ * Only elements with m_Setup set true will be saved, hence the function name.
  *
  * @param aCfg where to save
  * @param aList holds some configuration parameters, not all of which will
  *  necessarily be saved.
  */
-void wxConfigSaveSetups( wxConfigBase* aCfg, const PARAM_CFG_ARRAY& aList );
+void wxConfigSaveSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList );
 
 /**
  * Function wxConfigSaveParams
- * writes @a aList of PARAM_CFG_ARRAY elements to save configuration values
- * to @a aCfg.  Only elements with m_Setup set false will be saved, hence the
- * function name.
+ * writes @a aList of PARAM_CFG to save configuration values to @a aCfg.
+ * Only elements with m_Setup set false will be saved, hence the function name.
  *
  * @param aCfg where to save
- * @param aList holds some configuration parameters, not all of which will
- *  necessarily be saved.
- * @param aGroup indicates in which group the value should be saved,
- *  unless the PARAM_CFG_ARRAY element provides its own group, in which case it will
- *  take precedence.  aGroup may be empty.
+ * @param aList holds some configuration parameters, not all of which will necessarily be saved.
+ * @param aGroup indicates in which group the value should be saved, unless the PARAM_CFG provides
+ *               its own group, in which case it will take precedence.  aGroup may be empty.
  */
-void wxConfigSaveParams( wxConfigBase* aCfg,
-            const PARAM_CFG_ARRAY& aList, const wxString& aGroup );
+void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList,
+                         const wxString& aGroup );
 
 /**
  * Function wxConfigLoadSetups
- * uses @a aList of PARAM_CFG_ARRAY elements to load configuration values
- * from @a aCfg.  Only elements whose m_Setup field is true will be loaded.
+ * uses @a aList of PARAM_CFG to load configuration values from @a aCfg.
+ * Only elements whose m_Setup field is true will be loaded.
  *
  * @param aCfg where to load from.
- * @param aList holds some configuration parameters, not all of which will
- *  necessarily be loaded.
+ * @param aList holds some configuration parameters, not all of which will necessarily be loaded.
  */
-void wxConfigLoadSetups( wxConfigBase* aCfg, const PARAM_CFG_ARRAY& aList );
+void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList );
 
 /**
  * Function wxConfigLoadParams
- * uses @a aList of PARAM_CFG_ARRAY elements to load configuration values
- * from @a aCfg.  Only elements whose m_Setup field is false will be loaded.
+ * uses @a aList of PARAM_CFG to load configuration values from @a aCfg.
+ * Only elements whose m_Setup field is false will be loaded.
  *
  * @param aCfg where to load from.
- *
- * @param aList holds some configuration parameters, not all of which will
- *  necessarily be loaded.
- *
- * @param aGroup indicates in which group the value should be saved,
- *  unless the PARAM_CFG_ARRAY element provides its own group, in which case it will
- *  take precedence.  aGroup may be empty.
+ * @param aList holds some configuration parameters, not all of which will necessarily be loaded.
+ * @param aGroup indicates in which group the value should be saved, unless the PARAM_CFG provides
+ *               its own group, in which case it will take precedence.  aGroup may be empty.
  */
-void wxConfigLoadParams( wxConfigBase* aCfg,
-        const PARAM_CFG_ARRAY& aList, const wxString& aGroup );
+void wxConfigLoadParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList,
+                         const wxString& aGroup );
 
 
 #endif  // CONFIG_PARAMS_H_

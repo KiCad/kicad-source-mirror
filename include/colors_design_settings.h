@@ -39,7 +39,7 @@ class wxConfigBase;
 class wxString;
 #include <frame_type.h>
 
-class PARAM_CFG_ARRAY;
+class PARAM_CFG;
 
 /**
  * COLORS_DESIGN_SETTINGS

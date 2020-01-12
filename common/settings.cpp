@@ -25,26 +25,26 @@
 
 void SETTINGS::Load( wxConfigBase *aConfig )
 {
-    for( const PARAM_CFG_BASE& param : m_params )
+    for( PARAM_CFG* param : m_params )
     {
-        if( !!param.m_Group )
-            aConfig->SetPath( param.m_Group );
+        if( !!param->m_Group )
+            aConfig->SetPath( param->m_Group );
         else
             aConfig->SetPath( wxT("") );
 
-        param.ReadParam( aConfig );
+        param->ReadParam( aConfig );
     }
 }
 
 void SETTINGS::Save( wxConfigBase *aConfig )
 {
-    for( PARAM_CFG_BASE& param : m_params )
+    for( PARAM_CFG* param : m_params )
     {
-        if( !!param.m_Group )
-            aConfig->SetPath( param.m_Group );
+        if( !!param->m_Group )
+            aConfig->SetPath( param->m_Group );
         else
             aConfig->SetPath( wxT("") );
 
-        param.SaveParam( aConfig );
+        param->SaveParam( aConfig );
     }
 }
