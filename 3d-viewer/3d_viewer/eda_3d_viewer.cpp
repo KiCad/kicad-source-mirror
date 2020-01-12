@@ -419,6 +419,11 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         Set3DBoardBodyColorFromUser();
         break;
 
+    case ID_MENU3D_STACKUP_COLORS:
+        SynchroniseColoursWithBoard();
+        NewDisplay( true );
+        break;
+
     case ID_MENU3D_REALISTIC_MODE:
         m_settings.SetFlag( FL_USE_REALISTIC_MODE, isChecked );
         NewDisplay( true );
@@ -554,7 +559,6 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         // Tell canvas that we (may have) changed the render engine
         RenderEngineChanged();
 
-        SynchroniseColoursWithBoard();
         NewDisplay( true );
     }
         return;
