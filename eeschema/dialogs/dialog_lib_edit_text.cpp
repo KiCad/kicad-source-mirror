@@ -93,7 +93,7 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
 
         m_CommonUnit->SetValue( !m_parent->m_DrawSpecificUnit );
         m_CommonConvert->SetValue( !m_parent->m_DrawSpecificConvert );
-        m_orientChoice->SetSelection( m_graphicText->GetTextAngle() == TEXT_ANGLE_HORIZ ? 0 : 1 );
+        m_orientChoice->SetSelection( m_parent->g_LastTextAngle == TEXT_ANGLE_HORIZ ? 0 : 1 );
     }
 
     return true;
