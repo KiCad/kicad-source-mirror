@@ -127,17 +127,20 @@ protected:
         if( m_isLibEdit )
         {
             LIB_EDIT_FRAME* editFrame = dynamic_cast<LIB_EDIT_FRAME*>( m_frame );
-            editFrame->SaveCopyInUndoList( (LIB_ITEM*) aItem, aType, aAppend );
+            wxASSERT( editFrame );
+
+            editFrame->SaveCopyInUndoList( dynamic_cast<LIB_ITEM*>( aItem ), aType, aAppend );
         }
         else
         {
             SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+            wxASSERT( editFrame );
 
             if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
-                editFrame->SaveCopyInUndoList( (SCH_ITEM*) aItem->GetParent(), UR_CHANGED,
-                        aAppend );
+                editFrame->SaveCopyInUndoList(
+                        dynamic_cast<SCH_ITEM*>( aItem->GetParent() ), UR_CHANGED, aAppend );
             else
-                editFrame->SaveCopyInUndoList( (SCH_ITEM*) aItem, aType, aAppend );
+                editFrame->SaveCopyInUndoList( dynamic_cast<SCH_ITEM*>( aItem ), aType, aAppend );
         }
 
         if( selected && aItem->HasFlag( TEMP_SELECTED ) )

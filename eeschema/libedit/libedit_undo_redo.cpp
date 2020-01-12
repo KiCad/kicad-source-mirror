@@ -38,6 +38,9 @@ void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoT
 {
     wxASSERT_MSG( !aAppend, "Append not needed/supported for LibEdit" );
 
+    if( !ItemToCopy )
+        return;
+
     LIB_PART*          CopyItem;
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
 
