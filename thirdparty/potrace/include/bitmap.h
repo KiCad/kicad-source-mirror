@@ -161,7 +161,8 @@ static inline void bm_clear( potrace_bitmap_t* bm, int c )
      *  guaranteed that size will fit into the ptrdiff_t type. */
     ptrdiff_t size = bm_size( bm );
 
-    memset( bm_base( bm ), c ? -1 : 0, size );
+    if( size > 0 )
+        memset( bm_base( bm ), c ? -1 : 0, size );
 }
 
 

@@ -176,21 +176,26 @@ void DIALOG_FIND::onClose( wxCommandEvent& aEvent )
 }
 
 
-DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent,
-        wxWindowID id,
-        const wxString& title,
-        const wxPoint& pos,
-        const wxSize& size,
-        long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxString& title,
+                                    const wxPoint& pos, const wxSize& size, long style ) :
+        DIALOG_SHIM( parent, id, title, pos, size, style )
 {
     // these members are initialized only to avoid warnings about non initialized vars
-    /*
-    m_staticText1 = nullptr;
-    m_SearchCombo = nullptr;
-    m_button1 = nullptr;
-    m_button2 = nullptr;
-    m_button3 = nullptr;
-    */
+    searchStringLabel = nullptr;
+    m_searchCombo = nullptr;
+    m_matchCase = nullptr;
+    m_matchWords = nullptr;
+    m_wildcards = nullptr;
+    m_wrap = nullptr;
+    m_includeValues = nullptr;
+    m_includeReferences = nullptr;
+    m_includeTexts = nullptr;
+    m_includeMarkers = nullptr;
+    m_includeVias = nullptr;
+    m_findNext = nullptr;
+    m_findPrevious = nullptr;
+    m_searchAgain = nullptr;
+    m_closeButton = nullptr;
 }
 
 
