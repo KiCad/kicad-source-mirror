@@ -1463,9 +1463,18 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
     }
 
     SHAPE_POLY_SET uncoveredRegion;
-    uncoveredRegion.BooleanSubtract( coveredRegion, holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-    uncoveredRegion.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-    uncoveredRegion.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+    try
+    {
+        uncoveredRegion.BooleanSubtract( coveredRegion, holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        uncoveredRegion.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        uncoveredRegion.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    }
+    catch( ClipperLib::clipperException& )
+    {
+        // better to be conservative (this will result in the disambiguate dialog)
+        return 1.0;
+    }
 
     double uncoveredRegionArea = polygonArea( uncoveredRegion );
     double coveredArea = moduleArea - uncoveredRegionArea;

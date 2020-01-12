@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Włostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -23,9 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <cstdint>
 #include <thread>
-#include <mutex>
 #include <algorithm>
 #include <future>
 
@@ -34,15 +32,11 @@
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <class_drawsegment.h>
-#include <class_track.h>
 #include <class_pcb_text.h>
 #include <class_pcb_target.h>
-
 #include <connectivity/connectivity_data.h>
 #include <board_commit.h>
-
 #include <widgets/progress_reporter.h>
-
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_file_io.h>
 #include <geometry/convex_hull.h>
@@ -52,8 +46,6 @@
 #include <math/util.h>      // for KiROUND
 
 #include "zone_filler.h"
-
-#include <advanced_config.h>        // To be removed later, when the zone fill option will be always allowed
 
 class PROGRESS_REPORTER_HIDER
 {
@@ -82,8 +74,12 @@ static const bool s_DumpZonesWhenFilling = false;
 
 
 ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
-    m_board( aBoard ), m_brdOutlinesValid( false ), m_commit( aCommit ),
-    m_progressReporter( nullptr )
+    m_board( aBoard ),
+    m_brdOutlinesValid( false ),
+    m_commit( aCommit ),
+    m_progressReporter( nullptr ),
+    m_high_def( 9 ),
+    m_low_def( 6 )
 {
 }
 
