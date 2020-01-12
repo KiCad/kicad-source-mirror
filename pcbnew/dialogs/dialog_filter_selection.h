@@ -21,14 +21,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_BLOCK_OPTIONS_H_
-#define DIALOG_BLOCK_OPTIONS_H_
+#ifndef DIALOG_FILTER_SELECTION_H
+#define DIALOG_FILTER_SELECTION_H
 
-#include <dialogs/dialog_block_options_base.h>
+#include <dialogs/dialog_filter_selection_base.h>
 
 class PCB_BASE_FRAME;
 
-class DIALOG_BLOCK_OPTIONS : public DIALOG_BLOCK_OPTIONS_BASE
+class DIALOG_FILTER_SELECTION : public DIALOG_BLOCK_OPTIONS_BASE
 {
 public:
 
@@ -50,11 +50,11 @@ public:
         bool includeItemsOnInvisibleLayers = false;
     };
 
-    DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* aParent, OPTIONS& aOptions,
-                          bool aShowLegacyOptions,
-                          const wxString& aTitle );
+    DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent, OPTIONS& aOptions,
+                             bool aShowLegacyOptions,
+                             const wxString& aTitle );
 
-    ~DIALOG_BLOCK_OPTIONS()
+    ~DIALOG_FILTER_SELECTION()
     {
     }
 

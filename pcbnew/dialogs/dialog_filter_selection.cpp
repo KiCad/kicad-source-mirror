@@ -22,14 +22,14 @@
  */
 
 
-#include <dialog_block_options.h>
+#include <dialog_filter_selection.h>
 
 #include <pcb_edit_frame.h>
 
 
-DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* aParent,
-        OPTIONS& aOptions, bool aShowLegacyOptions,
-        const wxString& aTitle ) :
+DIALOG_FILTER_SELECTION::DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent,
+                                                  OPTIONS& aOptions, bool aShowLegacyOptions,
+                                                  const wxString& aTitle ) :
     DIALOG_BLOCK_OPTIONS_BASE( aParent, -1, aTitle ),
     m_options( aOptions )
 {
@@ -64,7 +64,7 @@ DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* aParent,
 }
 
 
-void DIALOG_BLOCK_OPTIONS::checkBoxClicked( wxCommandEvent& aEvent )
+void DIALOG_FILTER_SELECTION::checkBoxClicked( wxCommandEvent& aEvent )
 {
     if( m_Include_Modules->GetValue() )
         m_IncludeLockedModules->Enable();
@@ -73,7 +73,7 @@ void DIALOG_BLOCK_OPTIONS::checkBoxClicked( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_BLOCK_OPTIONS::ExecuteCommand( wxCommandEvent& event )
+void DIALOG_FILTER_SELECTION::ExecuteCommand( wxCommandEvent& event )
 {
     m_options.includeModules     = m_Include_Modules->GetValue();
     m_options.includeLockedModules = m_IncludeLockedModules->GetValue();

@@ -50,8 +50,8 @@ include_directories(
     )
 
 set( PCBNEW_DIALOGS
-    dialogs/dialog_block_options.cpp
-    dialogs/dialog_block_options_base.cpp
+    dialogs/dialog_filter_selection.cpp
+    dialogs/dialog_filter_selection_base.cpp
     dialogs/dialog_board_setup.cpp
     dialogs/dialog_board_statistics.cpp
     dialogs/dialog_board_statistics_base.cpp

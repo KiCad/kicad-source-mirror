@@ -36,7 +36,7 @@ using namespace std::placeholders;
 #include <collectors.h>
 #include <confirm.h>
 #include <dialog_find.h>
-#include <dialog_block_options.h>
+#include <dialog_filter_selection.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <preview_items/selection_area.h>
@@ -103,7 +103,7 @@ private:
 class SELECTION_TOOL::PRIV
 {
 public:
-    DIALOG_BLOCK_OPTIONS::OPTIONS m_filterOpts;
+    DIALOG_FILTER_SELECTION::OPTIONS m_filterOpts;
 };
 
 
@@ -1179,7 +1179,7 @@ int SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
  */
 static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
                                     const BOARD& aBoard,
-                                    const DIALOG_BLOCK_OPTIONS::OPTIONS& aBlockOpts )
+                                    const DIALOG_FILTER_SELECTION::OPTIONS& aBlockOpts )
 {
     bool include = true;
     const PCB_LAYER_ID layer = aItem.GetLayer();
@@ -1255,8 +1255,8 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
 int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 {
     const BOARD&                   board = *getModel<BOARD>();
-    DIALOG_BLOCK_OPTIONS::OPTIONS& opts = m_priv->m_filterOpts;
-    DIALOG_BLOCK_OPTIONS           dlg( m_frame, opts, false, _( "Filter selection" ) );
+    DIALOG_FILTER_SELECTION::OPTIONS& opts = m_priv->m_filterOpts;
+    DIALOG_FILTER_SELECTION           dlg( m_frame, opts, false, _( "Filter selection" ) );
 
     const int cmd = dlg.ShowModal();
 
