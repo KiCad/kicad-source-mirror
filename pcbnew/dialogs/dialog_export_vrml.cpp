@@ -28,12 +28,12 @@
  */
 #include <wx/dir.h>
 
-#include <fctsys.h>
-#include <pcb_edit_frame.h>
-#include <kiface_i.h>
-
-#include <pcbnew.h>
 #include <class_board.h>
+#include <confirm.h>
+#include <fctsys.h>
+#include <kiface_i.h>
+#include <pcb_edit_frame.h>
+#include <pcbnew.h>
 
 
 /* the dialog to create VRML files, derived from DIALOG_EXPORT_3DFILE_BASE,
@@ -239,15 +239,20 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
 
     if( export3DFiles && !modelPath.DirExists() )
     {
-        modelPath.Mkdir();
+        if( !modelPath.Mkdir() )
+        {
+            wxString msg = wxString::Format(
+                    _( "Unable to create directory \"%s\"" ), modelPath.GetPath() );
+            DisplayErrorMessage( this, msg );
+            return;
+        }
     }
 
     if( !ExportVRML_File( path, scale, export3DFiles, useRelativePaths,
                           usePlainPCB, modelPath.GetPath(), aXRef, aYRef ) )
     {
-        wxString msg;
-        msg.Printf( _( "Unable to create file \"%s\"" ), path );
-        wxMessageBox( msg );
+        wxString msg = wxString::Format( _( "Unable to create file \"%s\"" ), path );
+        DisplayErrorMessage( this, msg );
         return;
     }
 }
