@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -901,11 +901,12 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
     // but given two, equally valid costs, we want to pick the longer pad exit.  The logic
     // here is that if the pad is oblong, the track should not exit the shorter side and parallel
     // the pad but should follow the pad's preferential direction before exiting.
-    int min_cost = INT_MAX;
-    int max_length = 0;
+    // The baseline guess is to start with the existing line the user has drawn.
+    int              min_cost   = COST_ESTIMATOR::CornerCost( *aLine );
+    long long int    max_length = 0;
+    bool             found      = false;
+    int              p_best     = -1;
     SHAPE_LINE_CHAIN l_best;
-    bool found = false;
-    int p_best = -1;
 
     for( RtVariant& vp : variants )
     {
