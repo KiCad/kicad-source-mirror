@@ -30,6 +30,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_tool_base.h>
 
+
 class PCB_RENUM_TOOL : public wxEvtHandler, public PCB_TOOL_BASE
 {
 public:

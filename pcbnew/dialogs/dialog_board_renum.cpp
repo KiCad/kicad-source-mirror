@@ -39,6 +39,7 @@
     }
 
 //
+
 struct DIALOG_BOARD_RENUM_PARAMETERS
 {
     DIALOG_BOARD_RENUM_PARAMETERS()
@@ -46,7 +47,7 @@ struct DIALOG_BOARD_RENUM_PARAMETERS
               RemoveFrontPrefix( false ),
               RemoveBackPrefix( false ),
               WriteLogFile( false ),
-              WriteChangeFile( false),
+              WriteChangeFile( false ),
 
               FrontStartRefDes( 1 ),
               BackStartRefDes( 0 ),
@@ -121,6 +122,7 @@ int BackDirectionsArray[8] = {
         std::cerr << mess << std::flush; \
     }
 
+
 DIALOG_BOARD_RENUM::DIALOG_BOARD_RENUM( PCB_EDIT_FRAME* aParentFrame )
         : DIALOG_BOARD_RENUM_BASE( aParentFrame ), m_modules( aParentFrame->GetBoard()->Modules() )
 {
@@ -155,6 +157,12 @@ DIALOG_BOARD_RENUM::DIALOG_BOARD_RENUM( PCB_EDIT_FRAME* aParentFrame )
     // Make labels for dialog to allow translation.
     //
 }
+
+
+DIALOG_BOARD_RENUM::~DIALOG_BOARD_RENUM()
+{
+}
+
 
 void DIALOG_BOARD_RENUM::OnRenumberClick( wxCommandEvent& event )
 {
@@ -257,11 +265,13 @@ void DIALOG_BOARD_RENUM::OnRenumberClick( wxCommandEvent& event )
     FlushFiles();
 }
 
+
 void DIALOG_BOARD_RENUM::OKDone( wxCommandEvent& event )
 {
     (void) event;
     Close( true );
 }
+
 
 void DIALOG_BOARD_RENUM::ShowWarning( const wxString& aMessage )
 {
@@ -271,9 +281,6 @@ void DIALOG_BOARD_RENUM::ShowWarning( const wxString& aMessage )
     LogMessage( (wxString&) aMessage );
 }
 
-DIALOG_BOARD_RENUM::~DIALOG_BOARD_RENUM()
-{
-}
 
 void DIALOG_BOARD_RENUM::GetParameters( void )
 {
@@ -295,6 +302,8 @@ void DIALOG_BOARD_RENUM::GetParameters( void )
     s_savedDialogParameters.SortGrid =
             s_savedDialogParameters.SortGrid < MINGRID ? MINGRID : s_savedDialogParameters.SortGrid;
 }
+
+
 //
 // Round an int coordinate to a suitable grid
 //
@@ -308,6 +317,8 @@ int DIALOG_BOARD_RENUM::RoundToGrid( int aCoord )
         aCoord += ( aCoord < 0 ? -sortgrid : sortgrid );
     return ( aCoord );
 }
+
+
 //
 // Used to compare ChangeArray element for sort
 //
@@ -316,11 +327,11 @@ static bool ChangeArrayCompare( const RefDesChange& aA, const RefDesChange& aB )
     return ( aA.OldRefDesString < aB.OldRefDesString );
 }
 
+
 //
 // Use std::sort() to sort modules. Because it is a structure a compare function is needed
 // Returns true if the first coordinate should be before the second coordinate
 //
-
 static bool ModuleCompare( const RefDesInfo& aA, const RefDesInfo& aB )
 {
     int X0 = aA.roundedx, X1 = aB.roundedx, Y0 = aA.roundedy, Y1 = aB.roundedy;
@@ -345,6 +356,7 @@ static bool ModuleCompare( const RefDesInfo& aA, const RefDesInfo& aB )
     return ( false );
 }
 
+
 std::string DIALOG_BOARD_RENUM::CoordTowxString( int aX, int aY )
 {
     EDA_UNITS units = s_savedDialogParameters.RenumDialog->m_frame->GetUserUnits();
@@ -354,6 +366,7 @@ std::string DIALOG_BOARD_RENUM::CoordTowxString( int aX, int aY )
     return coordstr;
 }
 
+
 void DIALOG_BOARD_RENUM::FlushFiles( void )
 {
     if( s_savedDialogParameters.WriteLogFile )
@@ -362,6 +375,7 @@ void DIALOG_BOARD_RENUM::FlushFiles( void )
     if( s_savedDialogParameters.WriteChangeFile )
         WriteRenumFile( "_renumchange", this->m_ChangeFile ); //Write out the change file
 }
+
 
 //
 //Write the string to filename
@@ -387,6 +401,7 @@ void DIALOG_BOARD_RENUM::WriteRenumFile( const char* aFileType, wxString& aBuffe
     tmphandle.close();
 }
 
+
 void DIALOG_BOARD_RENUM::LogMessage( std::string& aMessage )
 {
     if( !s_savedDialogParameters.WriteLogFile )
@@ -394,12 +409,14 @@ void DIALOG_BOARD_RENUM::LogMessage( std::string& aMessage )
     this->m_LogFile += wxString( aMessage );
 }
 
+
 void DIALOG_BOARD_RENUM::LogMessage( wxString& aMessage )
 {
     if( !s_savedDialogParameters.WriteLogFile )
         return;
     this->m_LogFile += aMessage;
 }
+
 
 void DIALOG_BOARD_RENUM::LogChangeArray( void )
 {
@@ -427,6 +444,7 @@ void DIALOG_BOARD_RENUM::LogChangeArray( void )
     LogMessage( (wxString&) this->m_ChangeFile ); //Include in this->m_LogFile if logging
 }
 
+
 void DIALOG_BOARD_RENUM::LogExcludeList( void )
 {
     if( 0 == this->m_ExcludeArray.size() )
@@ -440,6 +458,7 @@ void DIALOG_BOARD_RENUM::LogExcludeList( void )
     message += _( " from reannotation\n\n" );
     LogMessage( message );
 }
+
 
 void DIALOG_BOARD_RENUM::LogRefDesTypes( void )
 {
@@ -456,6 +475,7 @@ void DIALOG_BOARD_RENUM::LogRefDesTypes( void )
     message += "\n";
     LogMessage( message );
 }
+
 
 void DIALOG_BOARD_RENUM::LogModules( wxString& aMessage, std::vector<RefDesInfo>& aModules )
 {
@@ -478,7 +498,7 @@ void DIALOG_BOARD_RENUM::LogModules( wxString& aMessage, std::vector<RefDesInfo>
     }
     LogMessage( message );
 }
-//CoordTowxStrin g(mod.x)
+
 
 RefDesChange* DIALOG_BOARD_RENUM::GetNewRefDes( MODULE* aMod )
 {
@@ -495,6 +515,7 @@ RefDesChange* DIALOG_BOARD_RENUM::GetNewRefDes( MODULE* aMod )
     ShowWarning( warning );
     return ( &this->m_ChangeArray[i] );
 }
+
 
 void DIALOG_BOARD_RENUM::BuildExcludeList( void )
 {
@@ -513,6 +534,7 @@ void DIALOG_BOARD_RENUM::BuildExcludeList( void )
             this->m_ExcludeArray.push_back( excludethis );
     }
 }
+
 
 void DIALOG_BOARD_RENUM::BuildModuleList( std::vector<RefDesInfo>& aBadRefDes )
 {
@@ -635,6 +657,7 @@ void DIALOG_BOARD_RENUM::BuildModuleList( std::vector<RefDesInfo>& aBadRefDes )
     LogExcludeList();
     LogChangeArray(); //Show the Change Array
 } //void BuildModuleList(  )
+
 
 //
 // Scan through the module arrays and create the from -> to array

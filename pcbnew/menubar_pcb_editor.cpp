@@ -41,6 +41,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
 
+
 void PCB_EDIT_FRAME::ReCreateMenuBar()
 {
     SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();

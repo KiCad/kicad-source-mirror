@@ -30,6 +30,7 @@
 #include <router/pns_router.h>
 #include <tool/tool_manager.h>
 
+
 OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )

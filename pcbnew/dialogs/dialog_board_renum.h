@@ -92,6 +92,7 @@ struct RefDesTypeStr
     unsigned int RefDesCount;
 };
 
+
 class DIALOG_BOARD_RENUM : public DIALOG_BOARD_RENUM_BASE
 {
 public:
@@ -141,10 +142,12 @@ private:
     std::string   CoordTowxString( int aX, int aY );
 };
 
+
 class MyApp : public wxApp
 {
 public:
     virtual bool OnInit() override;
 };
+
 
 #endif /* DIALOG_BOARD_RENUMCLASSES_H_ */

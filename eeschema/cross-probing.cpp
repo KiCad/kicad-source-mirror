@@ -44,6 +44,7 @@
 #include <tools/renum.h>
 #include <tools/sch_editor_control.h>
 
+
 SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
         bool aSearchHierarchy, SCH_SEARCH_T aSearchType, const wxString& aSearchText )
 {
