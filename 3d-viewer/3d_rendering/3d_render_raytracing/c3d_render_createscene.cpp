@@ -483,6 +483,13 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
             break;
 
             case B_SilkS:
+                materialLayer = &m_materials.m_SilkS;
+
+                if( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) )
+                    layerColor = m_settings.m_SilkScreenColorBot;
+                else
+                    layerColor = m_settings.GetLayerColor( layer_id );
+                break;
             case F_SilkS:
                 materialLayer = &m_materials.m_SilkS;
 
