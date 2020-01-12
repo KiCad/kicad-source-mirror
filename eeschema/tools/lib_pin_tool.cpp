@@ -339,9 +339,10 @@ LIB_PIN* LIB_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
     if( m_frame->SynchronizePins() )
         pin->SetFlags( IS_LINKED );
 
-    PlacePin( pin );
+    if( PlacePin( pin ) )
+        return pin;
 
-    return pin;
+    return nullptr;
 }
 
 
