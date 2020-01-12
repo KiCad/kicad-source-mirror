@@ -707,48 +707,48 @@ void EDA_3D_VIEWER::LoadSettings( wxConfigBase *aCfg )
 
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::LoadSettings" );
 
-    aCfg->Read( keyBgColor_Red,   &m_settings.m_BgColorBot.r, 0.4 );
+    aCfg->Read( keyBgColor_Red, &m_settings.m_BgColorBot.r, 0.4 );
     aCfg->Read( keyBgColor_Green, &m_settings.m_BgColorBot.g, 0.4 );
-    aCfg->Read( keyBgColor_Blue,  &m_settings.m_BgColorBot.b, 0.5 );
+    aCfg->Read( keyBgColor_Blue, &m_settings.m_BgColorBot.b, 0.5 );
 
-    aCfg->Read( keyBgColor_Red_Top,   &m_settings.m_BgColorTop.r, 0.8 );
+    aCfg->Read( keyBgColor_Red_Top, &m_settings.m_BgColorTop.r, 0.8 );
     aCfg->Read( keyBgColor_Green_Top, &m_settings.m_BgColorTop.g, 0.8 );
-    aCfg->Read( keyBgColor_Blue_Top,  &m_settings.m_BgColorTop.b, 0.9 );
+    aCfg->Read( keyBgColor_Blue_Top, &m_settings.m_BgColorTop.b, 0.9 );
 
     // m_SolderMaskColorTop default value = dark grey-green
-    aCfg->Read( keySMaskColor_Red,   &m_settings.m_SolderMaskColorTop.r, 100.0 * 0.2 / 255.0 );
+    aCfg->Read( keySMaskColor_Red, &m_settings.m_SolderMaskColorTop.r, 100.0 * 0.2 / 255.0 );
     aCfg->Read( keySMaskColor_Green, &m_settings.m_SolderMaskColorTop.g, 255.0 * 0.2 / 255.0 );
-    aCfg->Read( keySMaskColor_Blue,  &m_settings.m_SolderMaskColorTop.b, 180.0 * 0.2 / 255.0 );
+    aCfg->Read( keySMaskColor_Blue, &m_settings.m_SolderMaskColorTop.b, 180.0 * 0.2 / 255.0 );
 
     // m_SolderMaskColorBot default value = dark grey-green
-    aCfg->Read( keySMaskColor_Red,   &m_settings.m_SolderMaskColorBot.r, 100.0 * 0.2 / 255.0 );
+    aCfg->Read( keySMaskColor_Red, &m_settings.m_SolderMaskColorBot.r, 100.0 * 0.2 / 255.0 );
     aCfg->Read( keySMaskColor_Green, &m_settings.m_SolderMaskColorBot.g, 255.0 * 0.2 / 255.0 );
-    aCfg->Read( keySMaskColor_Blue,  &m_settings.m_SolderMaskColorBot.b, 180.0 * 0.2 / 255.0 );
+    aCfg->Read( keySMaskColor_Blue, &m_settings.m_SolderMaskColorBot.b, 180.0 * 0.2 / 255.0 );
 
     // m_SolderPasteColor default value = light grey
-    aCfg->Read( keySPasteColor_Red,   &m_settings.m_SolderPasteColor.r, 128.0 /255.0 );
-    aCfg->Read( keySPasteColor_Green, &m_settings.m_SolderPasteColor.g, 128.0 /255.0 );
-    aCfg->Read( keySPasteColor_Blue,  &m_settings.m_SolderPasteColor.b, 128.0 /255.0 );
+    aCfg->Read( keySPasteColor_Red, &m_settings.m_SolderPasteColor.r, 128.0 / 255.0 );
+    aCfg->Read( keySPasteColor_Green, &m_settings.m_SolderPasteColor.g, 128.0 / 255.0 );
+    aCfg->Read( keySPasteColor_Blue, &m_settings.m_SolderPasteColor.b, 128.0 / 255.0 );
 
     // m_SilkScreenColorTop default value = white
-    aCfg->Read( keySilkColor_Red,   &m_settings.m_SilkScreenColorTop.r, 0.9 );
+    aCfg->Read( keySilkColor_Red, &m_settings.m_SilkScreenColorTop.r, 0.9 );
     aCfg->Read( keySilkColor_Green, &m_settings.m_SilkScreenColorTop.g, 0.9 );
-    aCfg->Read( keySilkColor_Blue,  &m_settings.m_SilkScreenColorTop.b, 0.9 );
+    aCfg->Read( keySilkColor_Blue, &m_settings.m_SilkScreenColorTop.b, 0.9 );
 
     // m_SilkScreenColorBot default value = white
-    aCfg->Read( keySilkColor_Red,   &m_settings.m_SilkScreenColorBot.r, 0.9 );
+    aCfg->Read( keySilkColor_Red, &m_settings.m_SilkScreenColorBot.r, 0.9 );
     aCfg->Read( keySilkColor_Green, &m_settings.m_SilkScreenColorBot.g, 0.9 );
-    aCfg->Read( keySilkColor_Blue,  &m_settings.m_SilkScreenColorBot.b, 0.9 );
+    aCfg->Read( keySilkColor_Blue, &m_settings.m_SilkScreenColorBot.b, 0.9 );
 
     // m_CopperColor default value = gold
-    aCfg->Read( keyCopperColor_Red,  &m_settings.m_CopperColor.r, 255.0 * 0.7 / 255.0 );
+    aCfg->Read( keyCopperColor_Red, &m_settings.m_CopperColor.r, 255.0 * 0.7 / 255.0 );
     aCfg->Read( keyCopperColor_Green, &m_settings.m_CopperColor.g, 223.0 * 0.7 / 255.0 );
-    aCfg->Read( keyCopperColor_Blue,  &m_settings.m_CopperColor.b, 0.0 );
+    aCfg->Read( keyCopperColor_Blue, &m_settings.m_CopperColor.b, 0.0 );
 
     // m_BoardBodyColor default value = FR4, in realistic mode
-    aCfg->Read( keyBoardBodyColor_Red,  &m_settings.m_BoardBodyColor.r, 51.0 / 255.0 );
+    aCfg->Read( keyBoardBodyColor_Red, &m_settings.m_BoardBodyColor.r, 51.0 / 255.0 );
     aCfg->Read( keyBoardBodyColor_Green, &m_settings.m_BoardBodyColor.g, 43.0 / 255.0 );
-    aCfg->Read( keyBoardBodyColor_Blue,  &m_settings.m_BoardBodyColor.b, 22.0 /255.0 );
+    aCfg->Read( keyBoardBodyColor_Blue, &m_settings.m_BoardBodyColor.b, 22.0 / 255.0 );
 
 
     bool tmp;
@@ -841,43 +841,43 @@ void EDA_3D_VIEWER::SaveSettings( wxConfigBase *aCfg )
 
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::SaveSettings" );
 
-    aCfg->Write( keyBgColor_Red,            m_settings.m_BgColorBot.r );
-    aCfg->Write( keyBgColor_Green,          m_settings.m_BgColorBot.g );
-    aCfg->Write( keyBgColor_Blue,           m_settings.m_BgColorBot.b );
+    aCfg->Write( keyBgColor_Red, m_settings.m_BgColorBot.r );
+    aCfg->Write( keyBgColor_Green, m_settings.m_BgColorBot.g );
+    aCfg->Write( keyBgColor_Blue, m_settings.m_BgColorBot.b );
 
-    aCfg->Write( keyBgColor_Red_Top,        m_settings.m_BgColorTop.r );
-    aCfg->Write( keyBgColor_Green_Top,      m_settings.m_BgColorTop.g );
-    aCfg->Write( keyBgColor_Blue_Top,       m_settings.m_BgColorTop.b );
+    aCfg->Write( keyBgColor_Red_Top, m_settings.m_BgColorTop.r );
+    aCfg->Write( keyBgColor_Green_Top, m_settings.m_BgColorTop.g );
+    aCfg->Write( keyBgColor_Blue_Top, m_settings.m_BgColorTop.b );
 
-    aCfg->Write( keySMaskColor_Red,         m_settings.m_SolderMaskColorTop.r );
-    aCfg->Write( keySMaskColor_Green,       m_settings.m_SolderMaskColorTop.g );
-    aCfg->Write( keySMaskColor_Blue,        m_settings.m_SolderMaskColorTop.b );
+    aCfg->Write( keySMaskColor_Red, m_settings.m_SolderMaskColorTop.r );
+    aCfg->Write( keySMaskColor_Green, m_settings.m_SolderMaskColorTop.g );
+    aCfg->Write( keySMaskColor_Blue, m_settings.m_SolderMaskColorTop.b );
 
-    aCfg->Write( keySMaskColor_Red,         m_settings.m_SolderMaskColorBot.r );
-    aCfg->Write( keySMaskColor_Green,       m_settings.m_SolderMaskColorBot.g );
-    aCfg->Write( keySMaskColor_Blue,        m_settings.m_SolderMaskColorBot.b );
+    aCfg->Write( keySMaskColor_Red, m_settings.m_SolderMaskColorBot.r );
+    aCfg->Write( keySMaskColor_Green, m_settings.m_SolderMaskColorBot.g );
+    aCfg->Write( keySMaskColor_Blue, m_settings.m_SolderMaskColorBot.b );
 
-    aCfg->Write( keySPasteColor_Red,        m_settings.m_SolderPasteColor.r );
-    aCfg->Write( keySPasteColor_Green,      m_settings.m_SolderPasteColor.g );
-    aCfg->Write( keySPasteColor_Blue,       m_settings.m_SolderPasteColor.b );
+    aCfg->Write( keySPasteColor_Red, m_settings.m_SolderPasteColor.r );
+    aCfg->Write( keySPasteColor_Green, m_settings.m_SolderPasteColor.g );
+    aCfg->Write( keySPasteColor_Blue, m_settings.m_SolderPasteColor.b );
 
-    aCfg->Write( keySilkColor_Red,          m_settings.m_SilkScreenColorTop.r );
-    aCfg->Write( keySilkColor_Green,        m_settings.m_SilkScreenColorTop.g );
-    aCfg->Write( keySilkColor_Blue,         m_settings.m_SilkScreenColorTop.b );
+    aCfg->Write( keySilkColor_Red, m_settings.m_SilkScreenColorTop.r );
+    aCfg->Write( keySilkColor_Green, m_settings.m_SilkScreenColorTop.g );
+    aCfg->Write( keySilkColor_Blue, m_settings.m_SilkScreenColorTop.b );
 
-    aCfg->Write( keySilkColor_Red,          m_settings.m_SilkScreenColorBot.r );
-    aCfg->Write( keySilkColor_Green,        m_settings.m_SilkScreenColorBot.g );
-    aCfg->Write( keySilkColor_Blue,         m_settings.m_SilkScreenColorBot.b );
+    aCfg->Write( keySilkColor_Red, m_settings.m_SilkScreenColorBot.r );
+    aCfg->Write( keySilkColor_Green, m_settings.m_SilkScreenColorBot.g );
+    aCfg->Write( keySilkColor_Blue, m_settings.m_SilkScreenColorBot.b );
 
-    aCfg->Write( keyCopperColor_Red,        m_settings.m_CopperColor.r );
-    aCfg->Write( keyCopperColor_Green,      m_settings.m_CopperColor.g );
-    aCfg->Write( keyCopperColor_Blue,       m_settings.m_CopperColor.b );
+    aCfg->Write( keyCopperColor_Red, m_settings.m_CopperColor.r );
+    aCfg->Write( keyCopperColor_Green, m_settings.m_CopperColor.g );
+    aCfg->Write( keyCopperColor_Blue, m_settings.m_CopperColor.b );
 
-    aCfg->Write( keyBoardBodyColor_Red,     m_settings.m_BoardBodyColor.r );
-    aCfg->Write( keyBoardBodyColor_Green,   m_settings.m_BoardBodyColor.g );
-    aCfg->Write( keyBoardBodyColor_Blue,    m_settings.m_BoardBodyColor.b );
+    aCfg->Write( keyBoardBodyColor_Red, m_settings.m_BoardBodyColor.r );
+    aCfg->Write( keyBoardBodyColor_Green, m_settings.m_BoardBodyColor.g );
+    aCfg->Write( keyBoardBodyColor_Blue, m_settings.m_BoardBodyColor.b );
 
-    aCfg->Write( keyShowRealisticMode,      m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
+    aCfg->Write( keyShowRealisticMode, m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
 
     aCfg->Write( keyRenderEngine, static_cast<int>( m_settings.RenderEngineGet() ) );
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::SaveSettings render setting %s",
@@ -893,29 +893,32 @@ void EDA_3D_VIEWER::SaveSettings( wxConfigBase *aCfg )
                  m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
 
     // Raytracing options
-    aCfg->Write( keyRenderRAY_Shadows,      m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
-    aCfg->Write( keyRenderRAY_Backfloor,    m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) );
-    aCfg->Write( keyRenderRAY_Refractions,  m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) );
-    aCfg->Write( keyRenderRAY_Reflections,  m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) );
-    aCfg->Write( keyRenderRAY_PostProcess,  m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
-    aCfg->Write( keyRenderRAY_AAliasing,    m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
-    aCfg->Write( keyRenderRAY_ProceduralT,  m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
+    aCfg->Write( keyRenderRAY_Shadows, m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
+    aCfg->Write( keyRenderRAY_Backfloor, m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) );
+    aCfg->Write( keyRenderRAY_Refractions, m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) );
+    aCfg->Write( keyRenderRAY_Reflections, m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) );
+    aCfg->Write(
+            keyRenderRAY_PostProcess, m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
+    aCfg->Write( keyRenderRAY_AAliasing, m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
+    aCfg->Write( keyRenderRAY_ProceduralT,
+            m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
 
-    aCfg->Write( keyShowAxis,               m_settings.GetFlag( FL_AXIS ) );
-    aCfg->Write( keyShowGrid,               (int)m_settings.GridGet() );
+    aCfg->Write( keyShowAxis, m_settings.GetFlag( FL_AXIS ) );
+    aCfg->Write( keyShowGrid, (int) m_settings.GridGet() );
 
-    aCfg->Write( keyShowFootprints_Normal,  m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
-    aCfg->Write( keyShowFootprints_Insert,  m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
+    aCfg->Write( keyShowFootprints_Normal, m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
+    aCfg->Write(
+            keyShowFootprints_Insert, m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
     aCfg->Write( keyShowFootprints_Virtual, m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) );
 
-    aCfg->Write( keyShowZones,              m_settings.GetFlag( FL_ZONE ) );
-    aCfg->Write( keyShowAdhesiveLayers,     m_settings.GetFlag( FL_ADHESIVE ) );
-    aCfg->Write( keyShowSilkScreenLayers,   m_settings.GetFlag( FL_SILKSCREEN ) );
-    aCfg->Write( keyShowSolderMaskLayers,   m_settings.GetFlag( FL_SOLDERMASK ) );
-    aCfg->Write( keyShowSolderPasteLayers,  m_settings.GetFlag( FL_SOLDERPASTE ) );
-    aCfg->Write( keyShowCommentsLayer,      m_settings.GetFlag( FL_COMMENTS ) );
-    aCfg->Write( keyShowEcoLayers,          m_settings.GetFlag( FL_ECO ) );
-    aCfg->Write( keyShowBoardBody,          m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
+    aCfg->Write( keyShowZones, m_settings.GetFlag( FL_ZONE ) );
+    aCfg->Write( keyShowAdhesiveLayers, m_settings.GetFlag( FL_ADHESIVE ) );
+    aCfg->Write( keyShowSilkScreenLayers, m_settings.GetFlag( FL_SILKSCREEN ) );
+    aCfg->Write( keyShowSolderMaskLayers, m_settings.GetFlag( FL_SOLDERMASK ) );
+    aCfg->Write( keyShowSolderPasteLayers, m_settings.GetFlag( FL_SOLDERPASTE ) );
+    aCfg->Write( keyShowCommentsLayer, m_settings.GetFlag( FL_COMMENTS ) );
+    aCfg->Write( keyShowEcoLayers, m_settings.GetFlag( FL_ECO ) );
+    aCfg->Write( keyShowBoardBody, m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
 }
 
 
@@ -947,7 +950,7 @@ void EDA_3D_VIEWER::SynchroniseColoursWithBoard( void )
                     }
                 }
             }
-            
+
             if( color.IsOk() )
             {
                 switch( stckpItem->GetBrdLayerId() )
