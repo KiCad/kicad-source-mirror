@@ -947,6 +947,7 @@ void EDA_3D_VIEWER::SynchroniseColoursWithBoard( void )
                     }
                 }
             }
+            
             if( color.IsOk() )
             {
                 switch( stckpItem->GetBrdLayerId() )
