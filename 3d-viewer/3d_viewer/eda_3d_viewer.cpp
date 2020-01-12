@@ -24,19 +24,24 @@
 
 #include "eda_3d_viewer.h"
 
+#include "../../pcbnew/board_stackup_manager/class_board_stackup.h"
+#include "../../pcbnew/board_stackup_manager/stackup_predefined_prms.h"
+#include "../../pcbnew/class_board.h"
 #include "../3d_viewer_id.h"
 #include "../common_ogl/cogl_att_list.h"
 #include <3d_actions.h>
 #include <bitmaps.h>
 #include <dpi_scaling.h>
 #include <gestfich.h>
+#include <hotkeys_basic.h>
 #include <pgm_base.h>
 #include <project.h>
-#include <wildcards_and_files_ext.h>
-#include <tool/tool_manager.h>
 #include <tool/common_control.h>
-#include <hotkeys_basic.h>
+#include <tool/tool_manager.h>
+#include <wildcards_and_files_ext.h>
 #include <wx/colordlg.h>
+#include <wx/colour.h>
+#include <wx/string.h>
 #include <wx/toolbar.h>
 
 
@@ -549,6 +554,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         // Tell canvas that we (may have) changed the render engine
         RenderEngineChanged();
 
+        SynchroniseColoursWithBoard();
         NewDisplay( true );
     }
         return;
@@ -890,6 +896,57 @@ void EDA_3D_VIEWER::SaveSettings( wxConfigBase *aCfg )
     aCfg->Write( keyShowBoardBody,          m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
 }
 
+
+void EDA_3D_VIEWER::SynchroniseColoursWithBoard( void )
+{
+    BOARD*                 brd       = GetBoard();
+    const FAB_LAYER_COLOR* stdColors = GetColorStandardList();
+    wxColour               color;
+    if( brd )
+    {
+        BOARD_STACKUP stckp = brd->GetDesignSettings().GetStackupDescriptor();
+
+        for( BOARD_STACKUP_ITEM* stckpItem : stckp.GetList() )
+        {
+            wxString colorName = stckpItem->GetColor();
+
+            if( colorName.StartsWith( "#" ) ) // This is a user defined color.
+            {
+                color.Set( colorName );
+            }
+            else
+            {
+                for( int i = 0; i < GetColorStandardListCount(); i++ )
+                {
+                    if( stdColors[i].m_ColorName == colorName )
+                    {
+                        color = stdColors[i].m_Color;
+                        break;
+                    }
+                }
+            }
+            if( color.IsOk() )
+            {
+                switch( stckpItem->GetBrdLayerId() )
+                {
+                case F_SilkS:
+                    m_settings.m_SilkScreenColor.r = color.Red();
+                    m_settings.m_SilkScreenColor.g = color.Green();
+                    m_settings.m_SilkScreenColor.b = color.Blue();
+                    break;
+                case B_SilkS:
+                    break;
+                case F_Mask:
+                    break;
+                case B_Mask:
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+    }
+}
 
 void EDA_3D_VIEWER::CommonSettingsChanged( bool aEnvVarsChanged )
 {
