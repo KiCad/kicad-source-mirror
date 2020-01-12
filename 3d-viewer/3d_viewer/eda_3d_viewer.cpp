@@ -930,15 +930,24 @@ void EDA_3D_VIEWER::SynchroniseColoursWithBoard( void )
                 switch( stckpItem->GetBrdLayerId() )
                 {
                 case F_SilkS:
-                    m_settings.m_SilkScreenColor.r = color.Red();
-                    m_settings.m_SilkScreenColor.g = color.Green();
-                    m_settings.m_SilkScreenColor.b = color.Blue();
+                    m_settings.m_SilkScreenColor.r = color.Red() / 255.0;
+                    m_settings.m_SilkScreenColor.g = color.Green() / 255.0;
+                    m_settings.m_SilkScreenColor.b = color.Blue() / 255.0;
                     break;
                 case B_SilkS:
+                    m_settings.m_SilkScreenColor.r = color.Red() / 255.0;
+                    m_settings.m_SilkScreenColor.g = color.Green() / 255.0;
+                    m_settings.m_SilkScreenColor.b = color.Blue() / 255.0;
                     break;
                 case F_Mask:
+                    m_settings.m_SolderMaskColor.r = color.Red() / 255.0;
+                    m_settings.m_SolderMaskColor.g = color.Green() / 255.0;
+                    m_settings.m_SolderMaskColor.b = color.Blue() / 255.0;
                     break;
                 case B_Mask:
+                    m_settings.m_SolderMaskColor.r = color.Red() / 255.0;
+                    m_settings.m_SolderMaskColor.g = color.Green() / 255.0;
+                    m_settings.m_SolderMaskColor.b = color.Blue() / 255.0;
                     break;
                 default:
                     break;
