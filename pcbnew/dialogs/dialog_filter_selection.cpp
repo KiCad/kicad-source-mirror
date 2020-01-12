@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,25 +21,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #include <dialog_filter_selection.h>
-
 #include <pcb_edit_frame.h>
 
 
-DIALOG_FILTER_SELECTION::DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent,
-                                                  OPTIONS& aOptions, bool aShowLegacyOptions,
-                                                  const wxString& aTitle ) :
-    DIALOG_BLOCK_OPTIONS_BASE( aParent, -1, aTitle ),
+DIALOG_FILTER_SELECTION::DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent, OPTIONS& aOptions ) :
+    DIALOG_FILTER_SELECTION_BASE( aParent ),
     m_options( aOptions )
 {
-    if( !aShowLegacyOptions )
-    {
-        m_DrawBlockItems->Hide();
-        m_checkBoxIncludeInvisible->Hide();
-        m_staticline1->Hide();
-    }
-
     m_Include_Modules->SetValue( m_options.includeModules );
     m_IncludeLockedModules->SetValue( m_options.includeLockedModules );
 
@@ -54,8 +43,6 @@ DIALOG_FILTER_SELECTION::DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent,
     m_Include_Draw_Items->SetValue( m_options.includeItemsOnTechLayers );
     m_Include_Edges_Items->SetValue( m_options.includeBoardOutlineLayer );
     m_Include_PcbTextes->SetValue( m_options.includePcbTexts );
-    m_DrawBlockItems->SetValue( m_options.drawItems );
-    m_checkBoxIncludeInvisible->SetValue( m_options.includeItemsOnInvisibleLayers );
 
     m_sdbSizer1OK->SetDefault();
     SetFocus();
@@ -75,16 +62,14 @@ void DIALOG_FILTER_SELECTION::checkBoxClicked( wxCommandEvent& aEvent )
 
 void DIALOG_FILTER_SELECTION::ExecuteCommand( wxCommandEvent& event )
 {
-    m_options.includeModules     = m_Include_Modules->GetValue();
-    m_options.includeLockedModules = m_IncludeLockedModules->GetValue();
-    m_options.includeTracks      = m_Include_Tracks->GetValue();
-    m_options.includeVias        = m_Include_Vias->GetValue();
-    m_options.includeZones       = m_Include_Zones->GetValue();
-    m_options.includeItemsOnTechLayers  = m_Include_Draw_Items->GetValue();
+    m_options.includeModules           = m_Include_Modules->GetValue();
+    m_options.includeLockedModules     = m_IncludeLockedModules->GetValue();
+    m_options.includeTracks            = m_Include_Tracks->GetValue();
+    m_options.includeVias              = m_Include_Vias->GetValue();
+    m_options.includeZones             = m_Include_Zones->GetValue();
+    m_options.includeItemsOnTechLayers = m_Include_Draw_Items->GetValue();
     m_options.includeBoardOutlineLayer = m_Include_Edges_Items->GetValue();
-    m_options.includePcbTexts   = m_Include_PcbTextes->GetValue();
-    m_options.drawItems = m_DrawBlockItems->GetValue();
-    m_options.includeItemsOnInvisibleLayers = m_checkBoxIncludeInvisible->GetValue();
+    m_options.includePcbTexts          = m_Include_PcbTextes->GetValue();
 
     EndModal( wxID_OK );
 }

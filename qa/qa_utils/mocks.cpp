@@ -205,12 +205,11 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 }
 
 
-DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent,
-        wxWindowID id,
-        const wxString& title,
-        const wxPoint& pos,
-        const wxSize& size,
-        long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_FILTER_SELECTION_BASE::DIALOG_FILTER_SELECTION_BASE( wxWindow* parent, wxWindowID id,
+                                                            const wxString& title,
+                                                            const wxPoint& pos, const wxSize& size,
+                                                            long style ) :
+        DIALOG_SHIM( parent, id, title, pos, size, style )
 {
     // these members are initialized only to avoid warnings about non initialized vars
     m_Include_Modules = nullptr;
@@ -221,29 +220,26 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent,
     m_Include_Vias = nullptr;
     m_Include_Edges_Items = nullptr;
     m_Include_Zones = nullptr;
-    m_DrawBlockItems = nullptr;
-    m_staticline1 = nullptr;
-    m_checkBoxIncludeInvisible = nullptr;
     m_sdbSizer1 = nullptr;
+    m_staticLine = nullptr;
     m_sdbSizer1OK = nullptr;
     m_sdbSizer1Cancel = nullptr;
 }
 
 
-DIALOG_BLOCK_OPTIONS_BASE::~DIALOG_BLOCK_OPTIONS_BASE()
+DIALOG_FILTER_SELECTION_BASE::~DIALOG_FILTER_SELECTION_BASE()
 {
 }
 
 
-DIALOG_FILTER_SELECTION::DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent,
-                                                  OPTIONS& aOptions, bool aShowLegacyOptions,
-                                                  const wxString& aTitle ) :
-    DIALOG_BLOCK_OPTIONS_BASE( aParent, -1, aTitle ),
-    m_options( aOptions )
+DIALOG_FILTER_SELECTION::DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent, OPTIONS& aOptions ) :
+        DIALOG_FILTER_SELECTION_BASE( aParent ),
+        m_options( aOptions )
 {
     // silence another compiler warning about m_options not being used
     if( m_options.includeModules )
-        ;
+    {
+    }
 }
 
 

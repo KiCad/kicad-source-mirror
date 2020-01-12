@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,31 +28,26 @@
 
 class PCB_BASE_FRAME;
 
-class DIALOG_FILTER_SELECTION : public DIALOG_BLOCK_OPTIONS_BASE
+class DIALOG_FILTER_SELECTION : public DIALOG_FILTER_SELECTION_BASE
 {
 public:
 
     /**
-     * Struct that will be set with the result of the user choices
-     * in the dialog
+     * Struct that will be set with the result of the user choices in the dialog
      */
     struct OPTIONS
     {
-        bool includeModules     = true;
-        bool includeLockedModules = true;
-        bool includeTracks      = true;
-        bool includeVias        = true;
-        bool includeZones       = true;
-        bool includeItemsOnTechLayers  = true;
+        bool includeModules           = true;
+        bool includeLockedModules     = true;
+        bool includeTracks            = true;
+        bool includeVias              = true;
+        bool includeZones             = true;
+        bool includeItemsOnTechLayers = true;
         bool includeBoardOutlineLayer = true;
-        bool includePcbTexts   = true;
-        bool drawItems = true;
-        bool includeItemsOnInvisibleLayers = false;
+        bool includePcbTexts          = true;
     };
 
-    DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent, OPTIONS& aOptions,
-                             bool aShowLegacyOptions,
-                             const wxString& aTitle );
+    DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent, OPTIONS& aOptions );
 
     ~DIALOG_FILTER_SELECTION()
     {
@@ -72,4 +67,4 @@ private:
     OPTIONS& m_options;
 };
 
-#endif // DIALOG_EXCHANGE_MODULES_H_
+#endif // DIALOG_FILTER_SELECTION_H

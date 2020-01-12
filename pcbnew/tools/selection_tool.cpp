@@ -1174,23 +1174,13 @@ int SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
  *
  * Determine if an item is included by the filter specified
  *
- * @return true if the parameter indicate the items should be selected
- * by this filter (i..e not filtered out)
+ * @return true if aItem should be selected by this filter (i..e not filtered out)
  */
-static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
-                                    const BOARD& aBoard,
-                                    const DIALOG_FILTER_SELECTION::OPTIONS& aBlockOpts )
+static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard,
+                                    const DIALOG_FILTER_SELECTION::OPTIONS& aFilterOptions )
 {
     bool include = true;
     const PCB_LAYER_ID layer = aItem.GetLayer();
-
-    // can skip without even checking item type
-    // fixme: selecting items on invisible layers does not work in GAL
-    if( !aBlockOpts.includeItemsOnInvisibleLayers
-        && !aBoard.IsLayerVisible( layer ) )
-    {
-        include = false;
-    }
 
     // if the item needs to be checked against the options
     if( include )
@@ -1201,9 +1191,9 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
         {
             const auto& module = static_cast<const MODULE&>( aItem );
 
-            include = aBlockOpts.includeModules;
+            include = aFilterOptions.includeModules;
 
-            if( include && !aBlockOpts.includeLockedModules )
+            if( include && !aFilterOptions.includeLockedModules )
             {
                 include = !module.IsLocked();
             }
@@ -1212,17 +1202,17 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
         }
         case PCB_TRACE_T:
         {
-            include = aBlockOpts.includeTracks;
+            include = aFilterOptions.includeTracks;
             break;
         }
         case PCB_VIA_T:
         {
-            include = aBlockOpts.includeVias;
+            include = aFilterOptions.includeVias;
             break;
         }
         case PCB_ZONE_AREA_T:
         {
-            include = aBlockOpts.includeZones;
+            include = aFilterOptions.includeZones;
             break;
         }
         case PCB_LINE_T:
@@ -1230,14 +1220,14 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
         case PCB_DIMENSION_T:
         {
             if( layer == Edge_Cuts )
-                include = aBlockOpts.includeBoardOutlineLayer;
+                include = aFilterOptions.includeBoardOutlineLayer;
             else
-                include = aBlockOpts.includeItemsOnTechLayers;
+                include = aFilterOptions.includeItemsOnTechLayers;
             break;
         }
         case PCB_TEXT_T:
         {
-            include = aBlockOpts.includePcbTexts;
+            include = aFilterOptions.includePcbTexts;
             break;
         }
         default:
@@ -1254,9 +1244,9 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
 
 int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 {
-    const BOARD&                   board = *getModel<BOARD>();
+    const BOARD&                      board = *getModel<BOARD>();
     DIALOG_FILTER_SELECTION::OPTIONS& opts = m_priv->m_filterOpts;
-    DIALOG_FILTER_SELECTION           dlg( m_frame, opts, false, _( "Filter selection" ) );
+    DIALOG_FILTER_SELECTION           dlg( m_frame, opts );
 
     const int cmd = dlg.ShowModal();
 
