@@ -205,7 +205,7 @@ void DIALOG_EDIT_ONE_FIELD::updateText( EDA_TEXT* aText )
 
 DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD(
         SCH_BASE_FRAME* aParent, const wxString& aTitle, const LIB_FIELD* aField )
-        : DIALOG_EDIT_ONE_FIELD( aParent, aTitle, static_cast<const EDA_TEXT*>( aField ) )
+        : DIALOG_EDIT_ONE_FIELD( aParent, aTitle, aField )
 {
     m_fieldId = aField->GetId();
 
@@ -217,7 +217,7 @@ DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD(
 
 DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD(
         SCH_BASE_FRAME* aParent, const wxString& aTitle, const SCH_FIELD* aField )
-        : DIALOG_EDIT_ONE_FIELD( aParent, aTitle, static_cast<const EDA_TEXT*>( aField ) )
+        : DIALOG_EDIT_ONE_FIELD( aParent, aTitle, aField )
 {
     m_fieldId = aField->GetId();
 
