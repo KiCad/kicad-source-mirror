@@ -94,17 +94,17 @@ void ARRAY_CREATOR::Invoke()
             else
             {
                 // Need to create a new item
-                std::unique_ptr<BOARD_ITEM> new_item;
+                BOARD_ITEM* new_item;
 
                 if( m_editModules )
                 {
                     // Don't bother incrementing pads: the module won't update
                     // until commit, so we can only do this once
-                    new_item.reset( module->Duplicate( item, false ) );
+                    new_item = module->Duplicate( item, false );
                 }
                 else
                 {
-                    new_item.reset( m_parent.GetBoard()->Duplicate( item ) );
+                    new_item = m_parent.GetBoard()->Duplicate( item );
 
                     // PCB items keep the same numbering
 
@@ -118,7 +118,7 @@ void ARRAY_CREATOR::Invoke()
                     // the undo command needs saving old area, if it is merged.
                 }
 
-                this_item = new_item.get();
+                this_item = new_item;
 
                 if( new_item )
                 {
@@ -134,7 +134,7 @@ void ARRAY_CREATOR::Invoke()
                         });
                     }
 
-                    commit.Add( new_item.release() );
+                    commit.Add( new_item );
                 }
             }
 
