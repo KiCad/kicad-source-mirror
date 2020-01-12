@@ -57,11 +57,11 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL(
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
 
-    m_config = Kiface().KifaceSettings();
-    m_tester = aTester;
-    m_brdEditor = aEditorFrame;
+    m_config       = Kiface().KifaceSettings();
+    m_tester       = aTester;
+    m_brdEditor    = aEditorFrame;
     m_currentBoard = m_brdEditor->GetBoard();
-    m_BrdSettings = m_brdEditor->GetBoard()->GetDesignSettings();
+    m_BrdSettings  = m_brdEditor->GetBoard()->GetDesignSettings();
 
     m_BrowseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
@@ -113,9 +113,9 @@ void DIALOG_DRC_CONTROL::DisplayDRCValues()
 
 void DIALOG_DRC_CONTROL::InitValues()
 {
-    m_markersTitleTemplate = m_Notebook->GetPageText( 0 );
+    m_markersTitleTemplate     = m_Notebook->GetPageText( 0 );
     m_unconnectedTitleTemplate = m_Notebook->GetPageText( 1 );
-    m_footprintsTitleTemplate = m_Notebook->GetPageText( 2 );
+    m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
 
     m_DeleteCurrentMarkerButton->Enable( false );
 
@@ -137,8 +137,8 @@ void DIALOG_DRC_CONTROL::InitValues()
 
 void DIALOG_DRC_CONTROL::SetDRCParameters()
 {
-    m_BrdSettings.m_TrackMinWidth = m_trackMinWidth.GetValue();
-    m_BrdSettings.m_ViasMinSize = m_viaMinSize.GetValue();
+    m_BrdSettings.m_TrackMinWidth    = m_trackMinWidth.GetValue();
+    m_BrdSettings.m_ViasMinSize      = m_viaMinSize.GetValue();
     m_BrdSettings.m_MicroViasMinSize = m_uviaMinSize.GetValue();
 
     m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
@@ -152,7 +152,7 @@ void DIALOG_DRC_CONTROL::SetRptSettings( bool aEnable, const wxString& aFileName
 
 void DIALOG_DRC_CONTROL::GetRptSettings( bool* aEnable, wxString& aFileName )
 {
-    *aEnable = m_CreateRptCtrl->GetValue();
+    *aEnable  = m_CreateRptCtrl->GetValue();
     aFileName = m_RptFilenameCtrl->GetValue();
 }
 
@@ -177,12 +177,12 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
     }
 
     SetDRCParameters();
-    m_tester->m_doZonesTest = m_cbReportTracksToZonesErrors->GetValue();
-    m_tester->m_rptFilename = reportName;
-    m_tester->m_doCreateRptFile = make_report;
-    m_tester->m_refillZones = m_cbRefillZones->GetValue();
+    m_tester->m_doZonesTest          = m_cbReportTracksToZonesErrors->GetValue();
+    m_tester->m_rptFilename          = reportName;
+    m_tester->m_doCreateRptFile      = make_report;
+    m_tester->m_refillZones          = m_cbRefillZones->GetValue();
     m_tester->m_reportAllTrackErrors = m_cbReportAllTrackErrors->GetValue();
-    m_tester->m_testFootprints = m_cbTestFootprints->GetValue();
+    m_tester->m_testFootprints       = m_cbTestFootprints->GetValue();
 
     DelDRCMarkers();
 
@@ -300,8 +300,8 @@ bool DIALOG_DRC_CONTROL::focusOnItem( const DRC_ITEM* aItem )
         return false;
 
     auto toolmgr = m_brdEditor->GetToolManager();
-    auto pos = aItem->GetPointA();
-    auto marker = static_cast<MARKER_PCB*>( aItem->GetParent() );
+    auto pos     = aItem->GetPointA();
+    auto marker  = static_cast<MARKER_PCB*>( aItem->GetParent() );
 
     if( marker )
     {
@@ -361,7 +361,7 @@ void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
 {
     // popup menu to go to either of the items listed in the DRC_ITEM.
 
-    BOARD_ITEM* first = aItem->GetMainItem( m_brdEditor->GetBoard() );
+    BOARD_ITEM* first  = aItem->GetMainItem( m_brdEditor->GetBoard() );
     BOARD_ITEM* second = nullptr;
 
     GENERAL_COLLECTOR items;
