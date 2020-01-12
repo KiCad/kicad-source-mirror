@@ -113,7 +113,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
 
         // If someone went to the trouble of setting the layer in a text editor, then there's
         // very little sense in nagging them about it.
-        forbiddenLayers.set( m_item->GetLayer(), false );
+        forbiddenLayers.set( m_moduleItem->GetLayer(), false );
 
         m_LayerSelectionCtrl->SetNotAllowedLayerSet( forbiddenLayers );
     }
