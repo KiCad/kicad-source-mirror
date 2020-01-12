@@ -354,6 +354,7 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
         case B_Mask:
             m_materials.m_SolderMaskBot.m_Diffuse = get_layer_color( aLayerID );
             OGL_SetMaterial( m_materials.m_SolderMaskBot );
+            break;
         case F_Mask:
             m_materials.m_SolderMaskTop.m_Diffuse = get_layer_color( aLayerID );
             OGL_SetMaterial( m_materials.m_SolderMaskTop );
