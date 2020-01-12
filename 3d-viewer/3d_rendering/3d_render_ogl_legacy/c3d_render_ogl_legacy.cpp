@@ -228,7 +228,7 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
                 m_settings.m_SilkScreenColorTop.b * m_settings.m_SilkScreenColorTop.b + 0.10f );
 
         m_materials.m_SilkSTop.m_Shininess = 0.078125f * 128.0f;
-        m_materials.m_SilkSTop.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
+        m_materials.m_SilkSTop.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Silk screen material mixed with silk screen color
         m_materials.m_SilkSBot.m_Ambient = SFVEC3F( m_settings.m_SilkScreenColorBot.r,
@@ -240,7 +240,7 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
                 m_settings.m_SilkScreenColorBot.b * m_settings.m_SilkScreenColorBot.b + 0.10f );
 
         m_materials.m_SilkSBot.m_Shininess = 0.078125f * 128.0f;
-        m_materials.m_SilkSBot.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
+        m_materials.m_SilkSBot.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
 
         // Solder mask material mixed with solder mask color
@@ -253,9 +253,9 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
                         m_settings.m_SolderMaskColorTop.g * m_settings.m_SolderMaskColorTop.g,
                         m_settings.m_SolderMaskColorTop.b * m_settings.m_SolderMaskColorTop.b );
 
-        m_materials.m_SolderMaskTop.m_Shininess = 0.8f * 128.0f;
+        m_materials.m_SolderMaskTop.m_Shininess    = 0.8f * 128.0f;
         m_materials.m_SolderMaskTop.m_Transparency = 0.17f;
-        m_materials.m_SolderMaskTop.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
+        m_materials.m_SolderMaskTop.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Solder mask material mixed with solder mask color
         m_materials.m_SolderMaskBot.m_Ambient = SFVEC3F( m_settings.m_SolderMaskColorBot.r * 0.3f,
@@ -267,9 +267,9 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
                         m_settings.m_SolderMaskColorBot.g * m_settings.m_SolderMaskColorBot.g,
                         m_settings.m_SolderMaskColorBot.b * m_settings.m_SolderMaskColorBot.b );
 
-        m_materials.m_SolderMaskBot.m_Shininess = 0.8f * 128.0f;
+        m_materials.m_SolderMaskBot.m_Shininess    = 0.8f * 128.0f;
         m_materials.m_SolderMaskBot.m_Transparency = 0.17f;
-        m_materials.m_SolderMaskBot.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
+        m_materials.m_SolderMaskBot.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
 
         // Epoxy material
@@ -317,18 +317,18 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
         m_materials.m_SilkSBot.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Solder mask material
-        m_materials.m_SolderMaskTop.m_Ambient   = matAmbientColor;
-        m_materials.m_SolderMaskTop.m_Specular  = matSpecularColor;
-        m_materials.m_SolderMaskTop.m_Shininess = matShininess;
+        m_materials.m_SolderMaskTop.m_Ambient      = matAmbientColor;
+        m_materials.m_SolderMaskTop.m_Specular     = matSpecularColor;
+        m_materials.m_SolderMaskTop.m_Shininess    = matShininess;
         m_materials.m_SolderMaskTop.m_Transparency = 0.17f;
-        m_materials.m_SolderMaskTop.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
+        m_materials.m_SolderMaskTop.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Solder mask material
-        m_materials.m_SolderMaskBot.m_Ambient   = matAmbientColor;
-        m_materials.m_SolderMaskBot.m_Specular  = matSpecularColor;
-        m_materials.m_SolderMaskBot.m_Shininess = matShininess;
+        m_materials.m_SolderMaskBot.m_Ambient      = matAmbientColor;
+        m_materials.m_SolderMaskBot.m_Specular     = matSpecularColor;
+        m_materials.m_SolderMaskBot.m_Shininess    = matShininess;
         m_materials.m_SolderMaskBot.m_Transparency = 0.17f;
-        m_materials.m_SolderMaskBot.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
+        m_materials.m_SolderMaskBot.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Epoxy material
         m_materials.m_EpoxyBoard.m_Ambient   = matAmbientColor;
@@ -357,7 +357,7 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
         case F_Mask:
             m_materials.m_SolderMaskTop.m_Diffuse = get_layer_color( aLayerID );
             OGL_SetMaterial( m_materials.m_SolderMaskTop );
-        break;
+            break;
 
         case B_Paste:
         case F_Paste:
@@ -371,7 +371,7 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
         case F_SilkS:
             m_materials.m_SilkSTop.m_Diffuse = get_layer_color( aLayerID );
             OGL_SetMaterial( m_materials.m_SilkSTop );
-        break;
+            break;
 
         case B_Adhes:
         case F_Adhes:
