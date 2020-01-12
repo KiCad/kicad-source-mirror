@@ -205,8 +205,11 @@ public:
 class CONNECTION_GRAPH
 {
 public:
-    CONNECTION_GRAPH( SCH_EDIT_FRAME* aFrame) :
-        m_frame( aFrame )
+    CONNECTION_GRAPH( SCH_EDIT_FRAME* aFrame )
+            : m_last_net_code( 1 ),
+              m_last_bus_code( 1 ),
+              m_last_subgraph_code( 1 ),
+              m_frame( aFrame )
     {}
 
     ~CONNECTION_GRAPH()

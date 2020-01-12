@@ -53,9 +53,8 @@
  */
 
 
-DIALOG_MIGRATE_BUSES::DIALOG_MIGRATE_BUSES( SCH_EDIT_FRAME* aParent ) :
-    DIALOG_MIGRATE_BUSES_BASE( aParent ),
-    m_frame( aParent )
+DIALOG_MIGRATE_BUSES::DIALOG_MIGRATE_BUSES( SCH_EDIT_FRAME* aParent )
+        : DIALOG_MIGRATE_BUSES_BASE( aParent ), m_frame( aParent ), m_selected_index( 0 )
 {
     m_migration_list->Bind( wxEVT_LIST_ITEM_SELECTED,
                             &DIALOG_MIGRATE_BUSES::onItemSelected, this );

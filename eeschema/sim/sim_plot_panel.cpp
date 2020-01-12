@@ -362,9 +362,14 @@ void CURSOR::UpdateReference()
 
 
 SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id, const wxPoint& pos,
-                const wxSize& size, long style, const wxString& name )
-    : mpWindow( parent, id, pos, size, style ), m_colorIdx( 0 ),
-        m_axis_x( nullptr ), m_axis_y1( nullptr ), m_axis_y2( nullptr ), m_type( aType )
+        const wxSize& size, long style, const wxString& name )
+        : mpWindow( parent, id, pos, size, style ),
+          m_colorIdx( 0 ),
+          m_axis_x( nullptr ),
+          m_axis_y1( nullptr ),
+          m_axis_y2( nullptr ),
+          m_dotted_cp( false ),
+          m_type( aType )
 {
     LimitView( true );
     SetMargins( 50, 80, 50, 80 );

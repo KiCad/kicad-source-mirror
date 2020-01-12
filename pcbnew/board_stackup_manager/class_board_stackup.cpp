@@ -320,11 +320,12 @@ BOARD_STACKUP::BOARD_STACKUP()
 
 BOARD_STACKUP::BOARD_STACKUP( BOARD_STACKUP& aOther )
 {
-    m_HasDielectricConstrains = aOther.m_HasDielectricConstrains;
+    m_HasDielectricConstrains  = aOther.m_HasDielectricConstrains;
+    m_HasThicknessConstrains   = aOther.m_HasThicknessConstrains;
     m_EdgeConnectorConstraints = aOther.m_EdgeConnectorConstraints;
-    m_CastellatedPads = aOther.m_CastellatedPads;
-    m_EdgePlating = aOther.m_EdgePlating;
-    m_FinishType = aOther.m_FinishType;
+    m_CastellatedPads          = aOther.m_CastellatedPads;
+    m_EdgePlating              = aOther.m_EdgePlating;
+    m_FinishType               = aOther.m_FinishType;
 
     // All items in aOther.m_list have to be duplicated, because aOther.m_list
     // manage pointers to these items
@@ -338,11 +339,12 @@ BOARD_STACKUP::BOARD_STACKUP( BOARD_STACKUP& aOther )
 
 BOARD_STACKUP& BOARD_STACKUP::operator=( const BOARD_STACKUP& aOther )
 {
-    m_HasDielectricConstrains = aOther.m_HasDielectricConstrains;
+    m_HasDielectricConstrains  = aOther.m_HasDielectricConstrains;
+    m_HasThicknessConstrains   = aOther.m_HasThicknessConstrains;
     m_EdgeConnectorConstraints = aOther.m_EdgeConnectorConstraints;
-    m_CastellatedPads = aOther.m_CastellatedPads;
-    m_EdgePlating = aOther.m_EdgePlating;
-    m_FinishType = aOther.m_FinishType;
+    m_CastellatedPads          = aOther.m_CastellatedPads;
+    m_EdgePlating              = aOther.m_EdgePlating;
+    m_FinishType               = aOther.m_FinishType;
 
     RemoveAll();
 

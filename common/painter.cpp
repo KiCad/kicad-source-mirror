@@ -32,16 +32,17 @@ using namespace KIGFX;
 RENDER_SETTINGS::RENDER_SETTINGS()
 {
     // Set the default initial values
-    m_highlightFactor = 0.5f;
-    m_selectFactor = 0.5f;
-    m_layerOpacity = 0.8f;
-    m_highlightEnabled = false;
-    m_hiContrastEnabled = false;
-    m_hiContrastFactor = 0.2f; //TODO: Make this user-configurable
-    m_highlightNetcode = -1;
-    m_outlineWidth = 1;
+    m_highlightFactor    = 0.5f;
+    m_selectFactor       = 0.5f;
+    m_layerOpacity       = 0.8f;
+    m_highlightItems     = false;
+    m_highlightEnabled   = false;
+    m_hiContrastEnabled  = false;
+    m_hiContrastFactor   = 0.2f; //TODO: Make this user-configurable
+    m_highlightNetcode   = -1;
+    m_outlineWidth       = 1;
     m_worksheetLineWidth = 100000;
-    m_showPageLimits = false;
+    m_showPageLimits     = false;
 }
 
 

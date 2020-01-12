@@ -517,6 +517,10 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_trackWidthIndex = 0;
     m_diffPairIndex = 0;
 
+    // Courtyard defaults
+    m_RequireCourtyards             = false;
+    m_ProhibitOverlappingCourtyards = true;
+
     // Default ref text on fp creation. If empty, use footprint name as default
     m_RefDefaultText = wxT( "REF**" );
     m_RefDefaultVisibility = true;

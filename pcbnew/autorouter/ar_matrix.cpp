@@ -39,17 +39,22 @@
 
 AR_MATRIX::AR_MATRIX()
 {
-    m_BoardSide[0] = m_BoardSide[1] = nullptr;
-    m_DistSide[0] = m_DistSide[1] = nullptr;
-    m_DirSide[0] = m_DirSide[1] = nullptr;
-    m_opWriteCell = nullptr;
-    m_InitMatrixDone = false;
-    m_Nrows = 0;
-    m_Ncols = 0;
-    m_MemSize = 0;
+    m_BoardSide[0]       = nullptr;
+    m_BoardSide[1]       = nullptr;
+    m_DistSide[0]        = nullptr;
+    m_DistSide[1]        = nullptr;
+    m_DirSide[0]         = nullptr;
+    m_DirSide[1]         = nullptr;
+    m_opWriteCell        = nullptr;
+    m_InitMatrixDone     = false;
+    m_Nrows              = 0;
+    m_Ncols              = 0;
+    m_MemSize            = 0;
     m_RoutingLayersCount = 1;
-    m_GridRouting = 0;
-    m_RouteCount = 0;
+    m_GridRouting        = 0;
+    m_RouteCount         = 0;
+    m_routeLayerBottom   = B_Cu;
+    m_routeLayerTop      = F_Cu;
 }
 
 

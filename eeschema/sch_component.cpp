@@ -171,11 +171,12 @@ SCH_COMPONENT::SCH_COMPONENT(
 SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     SCH_ITEM( aComponent )
 {
-    m_Parent    = aComponent.m_Parent;
-    m_Pos       = aComponent.m_Pos;
-    m_unit      = aComponent.m_unit;
-    m_convert   = aComponent.m_convert;
-    m_lib_id    = aComponent.m_lib_id;
+    m_Parent      = aComponent.m_Parent;
+    m_Pos         = aComponent.m_Pos;
+    m_unit        = aComponent.m_unit;
+    m_convert     = aComponent.m_convert;
+    m_lib_id      = aComponent.m_lib_id;
+    m_isInNetlist = aComponent.m_isInNetlist;
 
     if( aComponent.m_part )
         m_part.reset( new LIB_PART( *aComponent.m_part.get() ) );

@@ -36,13 +36,16 @@ namespace PNS {
 DP_MEANDER_PLACER::DP_MEANDER_PLACER( ROUTER* aRouter ) :
     MEANDER_PLACER_BASE( aRouter )
 {
-    m_world = NULL;
+    m_world       = NULL;
     m_currentNode = NULL;
+
+    m_padToDieP = 0;
+    m_padToDieN = 0;
 
     // Init temporary variables (do not leave uninitialized members)
     m_initialSegment = NULL;
-    m_lastLength = 0;
-    m_lastStatus = TOO_SHORT;
+    m_lastLength     = 0;
+    m_lastStatus     = TOO_SHORT;
 }
 
 

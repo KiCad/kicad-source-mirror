@@ -74,9 +74,10 @@ PLACE_FILE_EXPORTER::PLACE_FILE_EXPORTER( BOARD* aBoard, bool aUnitsMM,
                                           bool aForceSmdItems, bool aTopSide,
                                           bool aBottomSide, bool aFormatCSV )
 {
-    m_board = aBoard;
-    m_unitsMM = aUnitsMM;
+    m_board         = aBoard;
+    m_unitsMM       = aUnitsMM;
     m_forceSmdItems = aForceSmdItems;
+    m_fpCount       = 0;
 
     if( aTopSide && aBottomSide )
         m_side = PCB_BOTH_SIDES;

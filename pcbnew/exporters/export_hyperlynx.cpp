@@ -148,7 +148,10 @@ private:
 class HYPERLYNX_EXPORTER : public BOARD_EXPORTER_BASE
 {
 public:
-    HYPERLYNX_EXPORTER(){};
+    HYPERLYNX_EXPORTER() : m_polyId( 1 )
+    {
+    }
+
     ~HYPERLYNX_EXPORTER(){};
 
     virtual bool Run() override;
@@ -226,8 +229,8 @@ private:
 HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const D_PAD* aPad )
 {
     m_board = aBoard;
-    m_sx = aPad->GetSize().x;
-    m_sy = aPad->GetSize().y;
+    m_sx    = aPad->GetSize().x;
+    m_sy    = aPad->GetSize().y;
     m_angle = 180.0 - ( aPad->GetOrientation() / 10.0 );
 
     if( m_angle < 0.0 )
@@ -236,21 +239,24 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const D_PAD* aPad )
     }
 
     m_layers = aPad->GetLayerSet();
-    m_drill = aPad->GetDrillSize().x;
-    m_shape = aPad->GetShape();
-    m_type = PAD_ATTRIB_STANDARD;
+    m_drill  = aPad->GetDrillSize().x;
+    m_shape  = aPad->GetShape();
+    m_type   = PAD_ATTRIB_STANDARD;
+    m_id     = 0;
 }
 
 
 HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const VIA* aVia )
 {
-    m_board = aBoard;
-    m_sx = m_sy = aVia->GetWidth();
-    m_angle = 0;
+    m_board  = aBoard;
+    m_sx     = aVia->GetWidth();
+    m_sy     = aVia->GetWidth();
+    m_angle  = 0;
     m_layers = LSET::AllCuMask();
-    m_drill = aVia->GetDrillValue();
-    m_shape = PAD_SHAPE_CIRCLE;
-    m_type = PAD_ATTRIB_STANDARD;
+    m_drill  = aVia->GetDrillValue();
+    m_shape  = PAD_SHAPE_CIRCLE;
+    m_type   = PAD_ATTRIB_STANDARD;
+    m_id     = 0;
 }
 
 
