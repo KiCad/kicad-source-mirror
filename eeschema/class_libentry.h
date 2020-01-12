@@ -178,7 +178,7 @@ public:
      * For symbols derived from other symbols, IsRoot() indicates no derivation.
      */
     bool IsRoot() const override { return m_parent.use_count() == 0; }
-    bool IsAlias() const { return !IsRoot(); }
+    bool IsAlias() const { return !m_parent.expired() && m_parent.use_count() > 0; }
 
     const wxString GetLibraryName() const;
 
