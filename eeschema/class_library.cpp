@@ -270,11 +270,17 @@ PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName )
     if( lib )
         return lib;
 
-    lib = PART_LIB::LoadLibrary( aFileName );
+    try
+    {
+        lib = PART_LIB::LoadLibrary( aFileName );
+        push_back( lib );
 
-    push_back( lib );
-
-    return lib;
+        return lib;
+    }
+    catch( ... )
+    {
+        return nullptr;
+    }
 }
 
 
@@ -287,14 +293,21 @@ PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName, PART_LIBS::iterator&
     if( lib )
         return lib;
 
-    lib = PART_LIB::LoadLibrary( aFileName );
+    try
+    {
+        lib = PART_LIB::LoadLibrary( aFileName );
 
-    if( aIterator >= begin() && aIterator < end() )
-        insert( aIterator, lib );
-    else
-        push_back( lib );
+        if( aIterator >= begin() && aIterator < end() )
+            insert( aIterator, lib );
+        else
+            push_back( lib );
 
-    return lib;
+        return lib;
+    }
+    catch( ... )
+    {
+        return nullptr;
+    }
 }
 
 
