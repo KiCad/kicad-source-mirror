@@ -886,7 +886,10 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnUpdateUI( wxUpdateUIEvent&  )
             if( grid == m_itemsGrid && row == 0 && col == 0 )
             {
                 auto referenceEditor = grid->GetCellEditor( 0, 0 );
-                SelectReferenceNumber( dynamic_cast<wxTextEntry*>( referenceEditor->GetControl() ) );
+
+                if( auto textEntry = dynamic_cast<wxTextEntry*>( referenceEditor->GetControl() ) )
+                    SelectReferenceNumber( textEntry );
+
                 referenceEditor->DecRef();
             }
         }
