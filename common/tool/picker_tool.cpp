@@ -28,8 +28,9 @@
 #include <eda_draw_frame.h>
 
 
-PICKER_TOOL::PICKER_TOOL()
-    : TOOL_INTERACTIVE( "common.InteractivePicker" )
+PICKER_TOOL::PICKER_TOOL() :
+        TOOL_INTERACTIVE( "common.InteractivePicker" ),
+        m_frame( nullptr )
 {
     resetPicker();
 }

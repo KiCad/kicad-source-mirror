@@ -37,7 +37,8 @@
 
 
 GLOBAL_EDIT_TOOL::GLOBAL_EDIT_TOOL() :
-    PCB_TOOL_BASE( "pcbnew.GlobalEdit" )
+        PCB_TOOL_BASE( "pcbnew.GlobalEdit" ),
+        m_selectionTool( nullptr )
 {
 }
 
