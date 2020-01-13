@@ -112,13 +112,19 @@ int UTF8::uni_forward( const unsigned char* aSequence, unsigned* aResult )
     {
     default:
     case 0:
-        THROW_IO_ERROR( "invalid start byte" );
+        if( aResult )
+            wxFAIL_MSG( "uni_forward: invalid start byte" );
+
+        return 0;
         break;
 
     case 2:
         if( ( s[1] & 0xc0 ) != 0x80 )
         {
-            THROW_IO_ERROR( "invalid continuation byte" );
+            if( aResult )
+                wxFAIL_MSG( "uni_forward: invalid continuation byte" );
+
+            return 0;
         }
 
         ch =    ((s[0] & 0x1f) << 6) +
@@ -134,7 +140,10 @@ int UTF8::uni_forward( const unsigned char* aSequence, unsigned* aResult )
             // || (s[0] == 0xED && s[1] > 0x9F)
         )
         {
-            THROW_IO_ERROR( "invalid continuation byte" );
+            if( aResult )
+                wxFAIL_MSG( "uni_forward: invalid continuation byte" );
+
+            return 0;
         }
 
         ch =    ((s[0] & 0x0f) << 12) +
@@ -151,7 +160,10 @@ int UTF8::uni_forward( const unsigned char* aSequence, unsigned* aResult )
             (s[0] == 0xF0 && s[1] < 0x90) ||
             (s[0] == 0xF4 && s[1] > 0x8F) )
         {
-            THROW_IO_ERROR( "invalid continuation byte" );
+            if( aResult )
+                wxFAIL_MSG( "uni_forward: invalid continuation byte" );
+
+            return 0;
         }
 
         ch =    ((s[0] & 0x7)  << 18) +
@@ -179,21 +191,19 @@ bool IsUTF8( const char* aString )
         const unsigned char* next = (unsigned char*) aString;
         const unsigned char* end  = next + len;
 
-        try
+        while( next < end )
         {
-            while( next < end )
-            {
-                next += UTF8::uni_forward( next, NULL );
-            }
+            int charLen = UTF8::uni_forward( next, NULL );
 
-            // uni_forward() should find the exact end if it is truly UTF8
-            if( next > end )
+            if( charLen == 0 )
                 return false;
+
+            next += charLen;
         }
-        catch( const IO_ERROR& )
-        {
+
+        // uni_forward() should find the exact end if it is truly UTF8
+        if( next > end )
             return false;
-        }
     }
 
     return true;
