@@ -23,31 +23,52 @@ types:
       - id: recordtype
         type: u1
         enum: record_id
-      - id: pad
-        type: pad
-        if: recordtype == record_id::pad6
-      - id: via
-        size: 213
-        type: via
-        if: recordtype == record_id::via6
-      - id: track
-        type: track
-        size: 49
-        if: recordtype == record_id::track6
+      - id: record
+        type:
+          switch-on: recordtype
+          cases:
+            record_id::pad6: pad
+            record_id::via6: via
+            record_id::track6: track
 
   pad:
     seq:
-      - id: len  # TODO: what len?
-        type: u4
+    - id: sub1_len
+      type: u4
+    - id: designator
+      type: pad_sub1
+      size: sub1_len
+    - id: sub2_len
+      type: u4
+    - size: sub2_len
+    - id: sub3_len
+      type: u4
+    - size: sub3_len
+    - id: sub4_len
+      type: u4
+    - size: sub4_len
+    - id: sub5_len
+      type: u4
+    - id: size_and_shape
+      type: pad_sub5
+      size: sub5_len
+    - id: sub6_len
+      type: u4
+    - id: size_and_shape_by_layer
+      type: pad_sub6
+      size: sub6_len
+      if: sub6_len > 0
+
+  pad_sub1:
+    seq:
       - id: name_len  # = len-1?
         type: u1
       - id: name
         type: str
         size: name_len
-      - size: 19
-      - id: some_len
-        type: u1
-      - size: 3
+
+  pad_sub5:
+    seq:
       - id: altlayer  # $pos+23
         type: u1
         enum: layer
@@ -113,34 +134,62 @@ types:
       - size: 3
       - id: holerotation  # $pos+129
         type: f8
-      - size: 4
-        if: some_len == 114
-      - id: tolayer
-        type: u1
-        enum: layer
-        if: some_len == 120
-      - size: 2
-        if: some_len == 120
-      - id: fromlayer
-        type: u1
-        enum: layer
-        if: some_len == 120
-      - size: 2
-        if: some_len == 120
-      - id: last_section_length
-        type: u4
-        if: some_len > 106
-      - size: 53
-        if: some_len == 171
-      - id: record_len
-        type: u4
-        if: some_len == 171
-      - size: record_len
-        if: some_len == 171
+      #- id: tolayer
+      #  type: u1
+      #  enum: layer
+      #  if: some_len == 120
+      #- size: 2
+      #  if: some_len == 120
+      #- id: fromlayer
+      #  type: u1
+      #  enum: layer
+      #  if: some_len == 120
+      #- size: 2
+      #  if: some_len == 120
+
+  pad_sub6:
+    seq:
+    - id: x
+      type: s4
+      repeat: expr
+      repeat-expr: 29
+    - id: y
+      type: s4
+      repeat: expr
+      repeat-expr: 29
+    - id: shape
+      type: u1
+      enum: pad_shape
+      repeat: expr
+      repeat-expr: 29
+    - size: 14
+    - id: holeoffset_x
+      type: s4
+      repeat: expr
+      repeat-expr: 32
+    - id: holeoffset_y
+      type: s4
+      repeat: expr
+      repeat-expr: 32
+    - size: 1
+    - size: 32
+    - id: corner_radius
+      type: u1
+      repeat: expr
+      repeat-expr: 32
+    - size: 32
 
   via:
     seq:
-      - size: 17
+    - id: sub1_len
+      type: u4
+    - id: data
+      type: via_sub1
+      size: sub1_len
+
+  via_sub1:
+    seq:
+      - size: 13
       - id: pos  # 13
         type: xy
       - id: diameter # 21
@@ -150,7 +199,14 @@ types:
 
   track:
     seq:
-      - size: 4
+    - id: sub1_len
+      type: u4
+    - id: data
+      type: track_sub1
+      size: sub1_len
+
+  track_sub1:
+    seq:
       - id: layer
         type: u1
         enum: layer
