@@ -27,7 +27,6 @@
 #include <wx/string.h>
 #include <wx/display.h>
 #include <dialog_shim.h>
-#include <eda_doc.h>
 #include <id.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
@@ -82,7 +81,12 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxString& aFrameName, KIWAY* aKiway ) :
         wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName ),
-        KIWAY_HOLDER( aKiway, KIWAY_HOLDER::FRAME )
+        KIWAY_HOLDER( aKiway, KIWAY_HOLDER::FRAME ),
+        m_actions( nullptr ),
+        m_immediateActions( true ),
+        m_dragSelects( true ),
+        m_moveWarpsCursor( true ),
+        m_userUnits( EDA_UNITS::MILLIMETRES )
 {
     m_Ident = aFrameType;
     m_hasAutoSave = false;

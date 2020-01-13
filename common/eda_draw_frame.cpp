@@ -111,7 +111,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
                                                 // BLACK for Pcbnew, BLACK or WHITE for eeschema
     m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
     m_zoomLevelCoeff      = 1.0;
-    m_userUnits = EDA_UNITS::MILLIMETRES;
+    m_userUnits           = EDA_UNITS::MILLIMETRES;
     m_PolarCoords         = false;
     m_findReplaceData     = new wxFindReplaceData( wxFR_DOWN );
 

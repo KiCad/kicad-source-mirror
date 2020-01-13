@@ -61,10 +61,12 @@
 #include "zone_filler_tool.h"
 
 DRC::DRC() :
-        PCB_TOOL_BASE( "pcbnew.DRCTool" )
+        PCB_TOOL_BASE( "pcbnew.DRCTool" ),
+        m_currentMarker( nullptr ),
+        m_pcbEditorFrame( nullptr ),
+        m_pcb( nullptr ),
+        m_drcDialog( nullptr )
 {
-    m_drcDialog  = NULL;
-
     // establish initial values for everything:
     m_doPad2PadTest     = true;         // enable pad to pad clearance tests
     m_doUnconnectedTest = true;         // enable unconnected tests
@@ -79,8 +81,6 @@ DRC::DRC() :
 
     m_doCreateRptFile = false;
     // m_rptFilename set to empty by its constructor
-
-    m_currentMarker = NULL;
 
     m_segmAngle  = 0;
     m_segmLength = 0;
