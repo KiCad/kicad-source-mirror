@@ -766,9 +766,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         m_menuOwner = toolId;
         m_menuActive = true;
 
-        auto frame = dynamic_cast<wxFrame*>( m_frame );
-
-        if( frame )
+        if( auto frame = dynamic_cast<wxFrame*>( m_frame ) )
             frame->PopupMenu( menu.get() );
 
         // Warp the cursor if a menu item was selected

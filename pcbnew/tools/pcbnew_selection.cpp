@@ -116,9 +116,7 @@ const LSET PCBNEW_SELECTION::GetSelectionLayers()
 
     for( auto item : m_items )
     {
-        auto board_item = dynamic_cast<BOARD_ITEM*>( item );
-
-        if( board_item )
+        if( auto board_item = dynamic_cast<BOARD_ITEM*>( item ) )
             retval |= board_item->GetLayerSet();
     }
 
