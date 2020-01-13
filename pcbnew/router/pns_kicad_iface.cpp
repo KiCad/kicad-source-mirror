@@ -1166,7 +1166,7 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
             }
             else if( mgitem->Type() == PCB_MODULE_TEXT_T )
             {
-                syncTextItem( aWorld, dynamic_cast<TEXTE_MODULE*>( mgitem ), mgitem->GetLayer() );
+                syncTextItem( aWorld, static_cast<TEXTE_MODULE*>( mgitem ), mgitem->GetLayer() );
             }
         }
     }
