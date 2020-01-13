@@ -1046,9 +1046,8 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         msgItems.emplace_back( MSG_PANEL_ITEM( _( "Selected Items" ), msg, DARKCYAN ) );
         m_frame->SetMsgPanel( msgItems );
     }
-    else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
+    else if( auto editFrame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
     {
-        FOOTPRINT_EDIT_FRAME* editFrame = static_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
         MODULE*               footprint = (MODULE*) editFrame->GetModel();
 
         if( !footprint )

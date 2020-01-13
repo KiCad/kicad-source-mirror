@@ -587,10 +587,10 @@ wxString PANEL_SETUP_LAYERS::GetLayerName( LAYER_NUM aLayer )
 {
     wxControl* control = getName( aLayer );
 
-    if( dynamic_cast<wxTextCtrl*>( control ) )
-        return static_cast<wxTextCtrl*>( control )->GetValue().Trim();
+    if( auto textCtl = dynamic_cast<wxTextCtrl*>( control ) )
+        return textCtl->GetValue().Trim();
     else
-        return static_cast<wxStaticText*>( control )->GetLabel();
+        return control->GetLabel();
 }
 
 

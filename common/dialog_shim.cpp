@@ -280,14 +280,11 @@ static void selectAllInTextCtrls( wxWindowList& children )
 {
     for( wxWindow* child : children )
     {
-        wxTextCtrl* childTextCtrl = dynamic_cast<wxTextCtrl*>( child );
-        if( childTextCtrl )
+        if( auto childTextCtrl = dynamic_cast<wxTextCtrl*>( child ) )
         {
-            wxTextEntry* asTextEntry = dynamic_cast<wxTextEntry*>( childTextCtrl );
-
             // Respect an existing selection
-            if( asTextEntry->GetStringSelection().IsEmpty() )
-                asTextEntry->SelectAll();
+            if( childTextCtrl->GetStringSelection().IsEmpty() )
+                childTextCtrl->SelectAll();
         }
         else
             selectAllInTextCtrls( child->GetChildren() );
