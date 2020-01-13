@@ -31,6 +31,17 @@
 #include <wx/log.h>
 
 
+// A helper function to normalize aAngle between -2PI and +2PI
+inline void normalise2PI( float& aAngle )
+{
+    while( aAngle > 0.0 )
+        aAngle -= M_PI*2;
+
+    while( aAngle < 0.0 )
+        aAngle += M_PI*2;
+}
+
+
 /**
  *  Trace mask used to enable or disable the trace output of this class.
  *  The debug output can be turned on by setting the WXTRACE environment variable to
@@ -108,14 +119,17 @@ void CCAMERA::updateViewMatrix()
 
 void CCAMERA::updateRotationMatrix()
 {
+    normalise2PI( m_rotate_aux.x );
     m_rotationMatrixAux = glm::rotate( glm::mat4( 1.0f ),
                                        m_rotate_aux.x,
                                        SFVEC3F( 1.0f, 0.0f, 0.0f ) );
 
+    normalise2PI( m_rotate_aux.y );
     m_rotationMatrixAux = glm::rotate( m_rotationMatrixAux,
                                        m_rotate_aux.y,
                                        SFVEC3F( 0.0f, 1.0f, 0.0f ) );
 
+    normalise2PI( m_rotate_aux.z );
     m_rotationMatrixAux = glm::rotate( m_rotationMatrixAux,
                                        m_rotate_aux.z,
                                        SFVEC3F( 0.0f, 0.0f, 1.0f ) );
@@ -519,18 +533,21 @@ void CCAMERA::RotateZ( float aAngleInRadians )
 void CCAMERA::RotateX_T1( float aAngleInRadians )
 {
     m_rotate_aux_t1.x += aAngleInRadians;
+    normalise2PI(  m_rotate_aux_t1.x );
 }
 
 
 void CCAMERA::RotateY_T1( float aAngleInRadians )
 {
     m_rotate_aux_t1.y += aAngleInRadians;
+    normalise2PI(  m_rotate_aux_t1.y );
 }
 
 
 void CCAMERA::RotateZ_T1( float aAngleInRadians )
 {
     m_rotate_aux_t1.z += aAngleInRadians;
+    normalise2PI(  m_rotate_aux_t1.z );
 }
 
 
