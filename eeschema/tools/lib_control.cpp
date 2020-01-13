@@ -372,10 +372,12 @@ int LIB_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
         }
         else
         {
-            part = viewFrame->GetSelectedSymbol();
-            libId = part->GetLibId();
-            unit = viewFrame->GetUnit();
+            part    = viewFrame->GetSelectedSymbol();
+            unit    = viewFrame->GetUnit();
             convert = viewFrame->GetConvert();
+
+            if( part )
+                libId = part->GetLibId();
         }
     }
 
@@ -389,7 +391,7 @@ int LIB_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
             return 0;
         }
 
-        SCH_COMPONENT* comp = new SCH_COMPONENT( *part, libId,g_CurrentSheet, unit, convert );
+        SCH_COMPONENT* comp = new SCH_COMPONENT( *part, libId, g_CurrentSheet, unit, convert );
 
         // Be sure the link to the corresponding LIB_PART is OK:
         comp->Resolve( *m_frame->Prj().SchSymbolLibTable() );
