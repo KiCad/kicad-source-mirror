@@ -643,7 +643,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
     {
         case PCB_T:
         {
-            BOARD* clipBoard = (BOARD*) clipItem;
+            BOARD* clipBoard = static_cast<BOARD*>( clipItem );
 
             if( editModules )
             {
@@ -675,7 +675,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 {
                     if( clipDrawItem->Type() == PCB_LINE_T )
                     {
-                        DRAWSEGMENT* clipDrawSeg = (DRAWSEGMENT*) clipDrawItem;
+                        DRAWSEGMENT* clipDrawSeg = static_cast<DRAWSEGMENT*>( clipDrawItem );
 
                         // Convert to PCB_MODULE_EDGE_T
                         EDGE_MODULE* pastedDrawSeg = new EDGE_MODULE( editModule );
@@ -686,7 +686,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     }
                     else if( clipDrawItem->Type() == PCB_TEXT_T )
                     {
-                        TEXTE_PCB* clipTextItem = (TEXTE_PCB*) clipDrawItem;
+                        TEXTE_PCB* clipTextItem = static_cast<TEXTE_PCB*>( clipDrawItem );
 
                         // Convert to PCB_MODULE_TEXT_T
                         TEXTE_MODULE* pastedTextItem = new TEXTE_MODULE( editModule );
@@ -714,7 +714,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         case PCB_MODULE_T:
         {
-            MODULE* clipModule = (MODULE*) clipItem;
+            MODULE* clipModule = static_cast<MODULE*>( clipItem );
             std::vector<BOARD_ITEM*> pastedItems;
 
             if( editModules )
@@ -879,7 +879,7 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
         }
         else
         {
-            BOARD_ITEM* item = (BOARD_ITEM*) selection.GetTopLeftItem();
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.GetTopLeftItem() );
             selection.SetReferencePoint( item->GetPosition() );
         }
 
@@ -1032,7 +1032,7 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
     if( selection.GetSize() == 1 )
     {
-        EDA_ITEM*       item = (EDA_ITEM*) selection.Front();
+        EDA_ITEM*       item = selection.Front();
         MSG_PANEL_ITEMS msgItems;
 
         item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );
@@ -1048,7 +1048,7 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     }
     else if( auto editFrame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
     {
-        MODULE*               footprint = (MODULE*) editFrame->GetModel();
+        MODULE* footprint = static_cast<MODULE*>( editFrame->GetModel() );
 
         if( !footprint )
             return 0;
