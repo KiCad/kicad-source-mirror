@@ -21,7 +21,7 @@
 #include <wx/stc/stc.h>
 #include <wx/combobox.h>
 #include <wx/sizer.h>
-#include <wx/radiobox.h>
+#include <wx/bmpcbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -51,9 +51,12 @@ class DIALOG_LABEL_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
-		wxRadioBox* m_TextOrient;
-		wxRadioBox* m_TextStyle;
-		wxRadioBox* m_TextShape;
+		wxStaticText* m_labelOrientation;
+		wxBitmapComboBox* m_comboOrientation;
+		wxStaticText* m_labelStyle;
+		wxBitmapComboBox* m_comboStyle;
+		wxStaticText* m_labelShape;
+		wxBitmapComboBox* m_comboShape;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

@@ -39,10 +39,11 @@
 #ifndef INVOKE_SCH_DIALOG_H_
 #define INVOKE_SCH_DIALOG_H_
 
+#include <class_draw_panel_gal.h>
+#include <deque>
+#include <list>
 #include <set>
 #include <vector>
-#include <list>
-#include <class_draw_panel_gal.h>
 
 class wxFrame;
 class wxDialog;
@@ -111,6 +112,12 @@ bool InvokeDialogEditComponentsLibId( SCH_EDIT_FRAME* aCaller );
  * @return the ShowModal() result (wxID_OK, wxID_CANCEL, etc.)
  */
 int InvokeDialogLabelEditor( SCH_EDIT_FRAME* aCaller, SCH_TEXT* aText );
+
+/**
+ * Launches the "Edit Text/Label" dialog
+ * @return the ShowModal() result (wxID_OK, wxID_CANCEL, etc.)
+ */
+int InvokeDialogLabelEditor( SCH_EDIT_FRAME* aCaller, std::deque<SCH_TEXT*> aText );
 
 
 #endif  // INVOKE_SCH_DIALOG_H_
