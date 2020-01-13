@@ -139,9 +139,16 @@ LIB_PART::LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary ) :
         if( ( oldItem.GetFlags() & ( IS_NEW | STRUCT_DELETED ) ) != 0 )
             continue;
 
-        newItem = (LIB_ITEM*) oldItem.Clone();
-        newItem->SetParent( this );
-        m_drawings.push_back( newItem );
+        try
+        {
+            newItem = (LIB_ITEM*) oldItem.Clone();
+            newItem->SetParent( this );
+            m_drawings.push_back( newItem );
+        }
+        catch( ... )
+        {
+            wxFAIL_MSG( "Failed to clone LIB_ITEM." );
+        }
     }
 
     PART_SPTR parent = aPart.m_parent.lock();
