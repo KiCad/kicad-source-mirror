@@ -865,25 +865,40 @@ long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
             std::string entry_path = dir_path + '/' + dir_entry->d_name;
             struct stat entry_stat;
 
-            wxCRT_Lstat( entry_path.c_str(), &entry_stat );
-
-            // Timestamp the source file, not the symlink
-            if( S_ISLNK( entry_stat.st_mode ) )    // wxFILE_EXISTS_SYMLINK
+            if( wxCRT_Lstat( entry_path.c_str(), &entry_stat ) == 0 )
             {
-                char buffer[ PATH_MAX + 1 ];
-                ssize_t pathLen = readlink( entry_path.c_str(), buffer, PATH_MAX );
-
-                if( pathLen > 0 )
+                // Timestamp the source file, not the symlink
+                if( S_ISLNK( entry_stat.st_mode ) )    // wxFILE_EXISTS_SYMLINK
                 {
-                    buffer[ pathLen ] = '\0';
-                    entry_path = dir_path + buffer;
+                    char buffer[ PATH_MAX + 1 ];
+                    ssize_t pathLen = readlink( entry_path.c_str(), buffer, PATH_MAX );
 
-                    wxCRT_Lstat( entry_path.c_str(), &entry_stat );
+                    if( pathLen > 0 )
+                    {
+                        struct stat linked_stat;
+                        buffer[ pathLen ] = '\0';
+                        entry_path = dir_path + buffer;
+
+                        if( wxCRT_Lstat( entry_path.c_str(), &linked_stat ) == 0 )
+                        {
+                            entry_stat = linked_stat;
+                        }
+                        else
+                        {
+                            // if we couldn't lstat the linked file we'll have to just use
+                            // the symbolic link info
+                        }
+                    }
                 }
-            }
 
-            if( S_ISREG( entry_stat.st_mode ) )    // wxFileExists()
-                timestamp += entry_stat.st_mtime * 1000;
+                if( S_ISREG( entry_stat.st_mode ) )    // wxFileExists()
+                    timestamp += entry_stat.st_mtime * 1000;
+            }
+            else
+            {
+                // if we couldn't lstat the file itself all we can do is use the name
+                timestamp += (signed) std::hash<std::string>{}( std::string( dir_entry->d_name ) );
+            }
         }
 
         closedir( dir );
