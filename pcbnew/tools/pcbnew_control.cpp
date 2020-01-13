@@ -67,7 +67,8 @@ extern IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl );
 
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.Control" ),
-    m_frame( nullptr )
+    m_frame( nullptr ),
+    m_pickerItem( nullptr )
 {
     m_gridOrigin.reset( new KIGFX::ORIGIN_VIEWITEM() );
 }
