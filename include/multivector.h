@@ -260,7 +260,12 @@ public:
     ITEM_PTR_VECTOR& operator[]( int aType )
     {
         if( ( aType < FIRST_TYPE ) || ( aType > LAST_TYPE ) )
-            throw std::out_of_range( "MULTIVECTOR out of range" );
+        {
+            wxFAIL_MSG( "Attempted access to type not within MULTIVECTOR" );
+
+            // return type is a reference so we have to return something...
+            aType = FIRST_TYPE;
+        }
 
         return m_data[ aType - FIRST_TYPE ];
     }
@@ -268,7 +273,12 @@ public:
     const ITEM_PTR_VECTOR& operator[]( int aType ) const
     {
         if( ( aType < FIRST_TYPE ) || ( aType > LAST_TYPE ) )
-            throw std::out_of_range( "MULTIVECTOR out of range" );
+        {
+            wxFAIL_MSG( "Attempted access to type not within MULTIVECTOR" );
+
+            // return type is a reference so we have to return something...
+            aType = FIRST_TYPE;
+        }
 
         return m_data[ aType - FIRST_TYPE ];
     }
