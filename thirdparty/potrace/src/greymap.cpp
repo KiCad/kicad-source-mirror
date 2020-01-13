@@ -177,7 +177,7 @@ void gm_clear( greymap_t* gm, int b )
 
 /* turn the given greymap upside down. This does not move the pixel
  *  data or change the base address. */
-static inline void GM_FLIP( greymap_t* gm )
+static inline void gm_flip( greymap_t* gm )
 {
     int dy = gm->dy;
 
