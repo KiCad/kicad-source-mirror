@@ -186,6 +186,11 @@ TOOL_ACTION PCB_ACTIONS::getAndPlace( "pcbnew.InteractiveEdit.FindMove",
         _( "Selects a footprint by reference and places it under the cursor for moving"),
         move_xpm );
 
+TOOL_ACTION PCB_ACTIONS::centerBoardOnPage( "pcbnew.InteractiveEdit.centerBoard", AS_GLOBAL, 0,
+        LEGACY_HK_NAME( "Center board on page" ), _( "Center board on page" ),
+        _( "Move all components, tracks, vias, silkscren, etc, to center the board on page" ),
+        NULL );
+
 TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveMove.move",
         AS_GLOBAL,
         'M', LEGACY_HK_NAME( "Move Item" ),

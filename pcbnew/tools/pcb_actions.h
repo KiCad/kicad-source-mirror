@@ -425,6 +425,9 @@ public:
     /// Find an item and start moving
     static TOOL_ACTION getAndPlace;
 
+    /// Center board on page
+    static TOOL_ACTION centerBoardOnPage;
+
     static TOOL_ACTION autoplaceOffboardComponents;
     static TOOL_ACTION autoplaceSelectedComponents;
 

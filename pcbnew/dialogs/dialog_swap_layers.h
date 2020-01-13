@@ -25,6 +25,7 @@
 #define _DIALOG_SCRIPTING_H_
 
 #include "dialog_swap_layers_base.h"
+#include <tools/edit_tool.h>
 
 class PCB_EDIT_FRAME;
 class LAYER_GRID_TABLE;
