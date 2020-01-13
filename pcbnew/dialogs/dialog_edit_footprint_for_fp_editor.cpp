@@ -834,8 +834,8 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
     {
         m_delayedFocusCtrl->SetFocus();
 
-        if( dynamic_cast<wxTextEntry*>( m_delayedFocusCtrl ) )
-            dynamic_cast<wxTextEntry*>( m_delayedFocusCtrl )->SelectAll();
+        if( auto textEntry = dynamic_cast<wxTextEntry*>( m_delayedFocusCtrl ) )
+            textEntry->SelectAll();
 
         m_delayedFocusCtrl = nullptr;
     }

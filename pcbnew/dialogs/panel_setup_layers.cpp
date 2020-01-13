@@ -285,10 +285,10 @@ void PANEL_SETUP_LAYERS::showBoardLayerNames()
         {
             wxString lname = m_pcb->GetLayerName( layer );
 
-            if( dynamic_cast<wxTextCtrl*>( ctl ) )
-                dynamic_cast<wxTextCtrl*>( ctl )->SetValue( lname );     // wxTextCtrl
+            if( auto textCtl = dynamic_cast<wxTextCtrl*>( ctl ) )
+                textCtl->SetValue( lname );     // wxTextCtrl
             else
-                ctl->SetLabel( lname );                                  // wxStaticText
+                ctl->SetLabel( lname );         // wxStaticText
         }
     }
 }

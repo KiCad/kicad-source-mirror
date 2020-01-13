@@ -247,18 +247,14 @@ void PAGED_DIALOG::OnUpdateUI( wxUpdateUIEvent& event )
 
         DisplayErrorMessage( this, m_errorMessage );
 
-        auto textCtrl = dynamic_cast<wxTextCtrl*>( ctrl );
-        if( textCtrl )
+        if( auto textCtrl = dynamic_cast<wxTextCtrl*>( ctrl ) )
         {
-            auto textEntry = dynamic_cast<wxTextEntry*>( textCtrl );
-            textEntry->SetSelection( -1, -1 );
+            textCtrl->SetSelection( -1, -1 );
             textCtrl->SetFocus();
             return;
         }
 
-        auto grid = dynamic_cast<wxGrid*>( ctrl );
-
-        if( grid )
+        if( auto grid = dynamic_cast<wxGrid*>( ctrl ) )
         {
             grid->SetFocus();
             grid->MakeCellVisible( m_errorRow, m_errorCol );

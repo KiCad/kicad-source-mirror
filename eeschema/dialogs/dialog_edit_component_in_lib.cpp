@@ -671,8 +671,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateUI( wxUpdateUIEvent& event )
     {
         m_delayedFocusCtrl->SetFocus();
 
-        if( dynamic_cast<wxTextEntry*>( m_delayedFocusCtrl ) )
-            dynamic_cast<wxTextEntry*>( m_delayedFocusCtrl )->SelectAll();
+        if( auto textEntry = dynamic_cast<wxTextEntry*>( m_delayedFocusCtrl ) )
+            textEntry->SelectAll();
 
         m_delayedFocusCtrl = nullptr;
     }
