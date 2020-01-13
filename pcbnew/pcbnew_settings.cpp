@@ -1,0 +1,630 @@
+/*
+* This program source code file is part of KiCad, a free EDA CAD application.
+*
+* Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+*
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License
+* as published by the Free Software Foundation; either version 2
+* of the License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, you may find one here:
+* http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+* or you may search the http://www.gnu.org website for the version 2 license,
+* or you may write to the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+*/
+
+#include <common.h>
+#include <footprint_editor_settings.h>
+#include <layers_id_colors_and_visibility.h>
+#include <pcbnew_settings.h>
+#include <pgm_base.h>
+#include <router/pns_routing_settings.h>
+#include <settings/common_settings.h>
+#include <settings/nested_settings.h>
+#include <settings/parameters.h>
+#include <settings/settings_manager.h>
+#include <wx/config.h>
+#include <wx/tokenzr.h>
+#include <zones.h>
+
+#include "../3d-viewer/3d_viewer/3d_viewer_settings.h"
+
+
+///! Update the schema version whenever a migration is required
+const int pcbnewSchemaVersion = 0;
+
+
+PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVersion ),
+        m_Use45DegreeGraphicSegments( false ),
+        m_FlipLeftRight( false ),
+        m_MagneticPads( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
+        m_MagneticTracks( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
+        m_MagneticGraphics( true ),
+        m_PnsSettings( nullptr )
+{
+    m_params.emplace_back( new PARAM<bool>( "aui.show_layer_manager",
+            &m_AuiPanels.show_layer_manager, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "aui.show_microwave_tools",
+            &m_AuiPanels.show_microwave_tools, false ) );
+
+    m_params.emplace_back( new PARAM<int>( "footprint_chooser.width",
+            &m_FootprintChooser.width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "footprint_chooser.height",
+            &m_FootprintChooser.height, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "footprint_chooser.sash_h",
+            &m_FootprintChooser.sash_h, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "footprint_chooser.sash_v",
+            &m_FootprintChooser.sash_v, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "grid.fast_grid_1", &m_FastGrid1, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "grid.fast_grid_2", &m_FastGrid2, 0 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "window.auto_zoom", &m_Window.auto_zoom, true ) );
+
+    m_params.emplace_back( new PARAM<double>( "window.zoom", &m_Window.zoom, 10.0 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.flip_left_right", &m_FlipLeftRight, true ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "editing.magnetic_graphics", &m_MagneticGraphics, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "editing.magnetic_pads",
+            reinterpret_cast<int*>( &m_MagneticPads ),
+            static_cast<int>( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ) ) );
+
+    m_params.emplace_back( new PARAM<int>( "editing.magnetic_tracks",
+            reinterpret_cast<int*>( &m_MagneticTracks ),
+            static_cast<int>( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ) ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.polar_coords", &m_PolarCoords, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.use_45_degree_graphic_segments",
+            &m_Use45DegreeGraphicSegments, false ) );
+
+    m_params.emplace_back( new PARAM<int>( "grid.user.units",
+            &m_UserGrid.units, static_cast<int>( EDA_UNITS::INCHES ) ) );
+
+    m_params.emplace_back( new PARAM<double>( "grid.user.size_x", &m_UserGrid.size_x, 0.01 ) );
+
+    m_params.emplace_back( new PARAM<double>( "grid.user.size_y", &m_UserGrid.size_y, 0.01 ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "pcb_display.graphic_items_fill", &m_Display.m_DisplayDrawItemsFill, true ) );
+
+    m_params.emplace_back( new PARAM<int>(
+            "pcb_display.max_links_shown", &m_Display.m_MaxLinksShowed, 3, 0, 15 ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "pcb_display.footprint_edge_fill", &m_Display.m_DisplayModEdgeFill, true ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "pcb_display.footprint_text_fill", &m_Display.m_DisplayModTextFill, true ) );
+
+    m_params.emplace_back( new PARAM<int>(
+            "pcb_display.net_names_mode", &m_Display.m_DisplayNetNamesMode, 3, 0, 3 ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "pcb_display.pad_clearance", &m_Display.m_DisplayPadIsol, true ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "pcb_display.pad_fill", &m_Display.m_DisplayPadFill, true ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "pcb_display.pad_numbers", &m_Display.m_DisplayPadNum, true ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "pcb_display.ratsnest_global", &m_Display.m_ShowGlobalRatsnest, true ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "pcb_display.ratsnest_footprint", &m_Display.m_ShowModuleRatsnest, true ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "pcb_display.ratsnest_curved", &m_Display.m_DisplayRatsnestLinesCurved, false ) );
+
+    m_params.emplace_back( new PARAM<int>(
+            "pcb_display.rotation_angle", &m_RotationAngle, 900, 1, 900 ) );
+
+    m_params.emplace_back( new PARAM<int>( "pcb_display.track_clearance_mode",
+            reinterpret_cast<int*>( &m_Display.m_ShowTrackClearanceMode ),
+            PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "pcb_display.track_fill", &m_Display.m_DisplayPcbTrackFill, true ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "pcb_display.via_fill", &m_Display.m_DisplayViaFill, true ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "pcb_display.zone_mode", &m_Display.m_DisplayZonesMode, 0, 0, 2 ) );
+
+    m_params.emplace_back(
+            new PARAM<double>( "plot.line_width", &m_PlotLineWidth, 0.1, 0.01, 5.0 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_vias",
+            &m_Cleanup.cleanup_vias, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "cleanup.merge_segments",
+            &m_Cleanup.merge_segments, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_unconnected",
+            &m_Cleanup.cleanup_unconnected, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_short_circuits",
+            &m_Cleanup.cleanup_short_circuits, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_tracks_in_pad",
+            &m_Cleanup.cleanup_tracks_in_pad, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "drc_dialog.refill_zones",
+            &m_DrcDialog.refill_zones, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "drc_dialog.test_track_to_zone",
+            &m_DrcDialog.test_track_to_zone, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "drc_dialog.test_footprints",
+            &m_DrcDialog.test_footprints, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "gen_drill.merge_pth_npth",
+            &m_GenDrill.merge_pth_npth, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "gen_drill.minimal_header",
+            &m_GenDrill.minimal_header, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "gen_drill.mirror", &m_GenDrill.mirror, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "gen_drill.unit_drill_is_inch",
+            &m_GenDrill.unit_drill_is_inch, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "gen_drill.use_route_for_oval_holes",
+            &m_GenDrill.use_route_for_oval_holes, true ) );
+
+    m_params.emplace_back( new PARAM<int>(
+            "gen_drill.drill_file_type", &m_GenDrill.drill_file_type, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>(
+            "gen_drill.map_file_type", &m_GenDrill.map_file_type, 1 ) );
+
+    m_params.emplace_back( new PARAM<int>(
+            "gen_drill.zeros_format", &m_GenDrill.zeros_format, 0, 0, 3 ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "export_idf.auto_adjust", &m_ExportIdf.auto_adjust, false ) );
+
+    m_params.emplace_back( new PARAM<int>( "export_idf.ref_units", &m_ExportIdf.ref_units, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "export_idf.ref_x", &m_ExportIdf.ref_x, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "export_idf.ref_y", &m_ExportIdf.ref_y, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "export_idf.units_mils", &m_ExportIdf.units_mils, false ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "export_step.origin_mode", &m_ExportStep.origin_mode, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "export_step.origin_units", &m_ExportStep.origin_units, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "export_step.origin_x", &m_ExportStep.origin_x, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "export_step.origin_y", &m_ExportStep.origin_y, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "export_step.no_virtual", &m_ExportStep.no_virtual, false ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "export_svg.black_and_white", &m_ExportSvg.black_and_white, false ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "export_svg.mirror", &m_ExportSvg.mirror, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "export_svg.one_file", &m_ExportSvg.one_file, false ) );
+
+    m_params.emplace_back(new PARAM<bool>(
+            "export_svg.plot_board_edges", &m_ExportSvg.plot_board_edges, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "export_svg.page_size", &m_ExportSvg.page_size, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<wxString>( "export_svg.output_dir", &m_ExportSvg.output_dir, "" ) );
+
+    m_params.emplace_back( new PARAM_LIST<int>( "export_svg.layers", &m_ExportSvg.layers, {} ) );
+
+    m_params.emplace_back( new PARAM<int>( "export_vrml.units", &m_ExportVrml.units, 1 ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "export_vrml.copy_3d_models", &m_ExportVrml.copy_3d_models, false ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "export_vrml.use_relative_paths", &m_ExportVrml.use_relative_paths, false ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "export_vrml.use_plain_pcb", &m_ExportVrml.use_plain_pcb, false ) );
+
+    m_params.emplace_back( new PARAM<int>( "export_vrml.ref_units", &m_ExportVrml.ref_units, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "export_vrml.ref_x", &m_ExportVrml.ref_x, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "export_vrml.ref_y", &m_ExportVrml.ref_y, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "zones.hatching_style", &m_Zones.hatching_style, 0 ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "zones.net_filter", &m_Zones.net_filter, "" ) );
+
+    m_params.emplace_back( new PARAM<int>( "zones.net_sort_mode", &m_Zones.net_sort_mode, 1 ) );
+
+    m_params.emplace_back(
+            new PARAM<double>( "zones.clearance", &m_Zones.clearance, ZONE_CLEARANCE_MIL ) );
+
+    m_params.emplace_back( new PARAM<double>( "zones.min_thickness",
+            &m_Zones.min_thickness, ZONE_THICKNESS_MIL ) );
+
+    m_params.emplace_back( new PARAM<double>( "zones.thermal_relief_gap",
+            &m_Zones.thermal_relief_gap, ZONE_THERMAL_RELIEF_GAP_MIL ) );
+
+    m_params.emplace_back( new PARAM<double>( "zones.thermal_relief_copper_width",
+            &m_Zones.thermal_relief_copper_width, ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "import_graphics.layer", &m_ImportGraphics.layer, Dwgs_User ) );
+
+    m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
+            &m_ImportGraphics.interactive_placement, true ) );
+
+    m_params.emplace_back( new PARAM<int>(
+            "import_graphics.line_width_units", &m_ImportGraphics.line_width_units, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<double>( "import_graphics.line_width", &m_ImportGraphics.line_width, 0.2 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "import_graphics.origin_units", &m_ImportGraphics.origin_units, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<double>( "import_graphics.origin_x", &m_ImportGraphics.origin_x, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<double>( "import_graphics.origin_y", &m_ImportGraphics.origin_y, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "netlist.report_filter", &m_NetlistDialog.report_filter, -1 ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "netlist.update_footprints", &m_NetlistDialog.update_footprints, false ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "netlist.delete_shorting_tracks", &m_NetlistDialog.delete_shorting_tracks, false ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "netlist.delete_extra_footprints", &m_NetlistDialog.delete_extra_footprints, false ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "netlist.delete_single_pad_nets", &m_NetlistDialog.delete_single_pad_nets, false ) );
+
+    m_params.emplace_back(new PARAM<int>( "place_file.units", &m_PlaceFile.units, 1 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "place_file.file_options", &m_PlaceFile.file_options, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "place_file.file_format", &m_PlaceFile.file_format, 0 ) );
+
+    m_params.emplace_back( new PARAM<bool>(
+            "place_file.include_board_edge", &m_PlaceFile.include_board_edge, false ) );
+
+    m_params.emplace_back( new PARAM<int>( "plot.one_page_per_layer",
+            &m_Plot.one_page_per_layer, 1 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "plot.pads_drill_mode", &m_Plot.pads_drill_mode, 2 ) );
+
+    m_params.emplace_back( new PARAM<double>( "plot.fine_scale_x", &m_Plot.fine_scale_x, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "plot.fine_scale_y", &m_Plot.fine_scale_y, 0 ) );
+
+    m_params.emplace_back(
+            new PARAM<double>( "plot.ps_fine_width_adjust", &m_Plot.ps_fine_width_adjust, 0 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "plot.check_zones_before_plotting",
+            &m_Plot.check_zones_before_plotting, true ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "window.footprint_text_shown_columns",
+            &m_FootprintTextShownColumns, "0 1 2 3 4 5 6" ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "footprint_wizard_list.width", &m_FootprintWizardList.width, -1 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "footprint_wizard_list.height", &m_FootprintWizardList.height, -1 ) );
+
+#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
+    m_params.emplace_back(
+            new PARAM_LIST<wxString>( "action_plugins.visible", &m_VisibleActionPlugins, {} ) );
+#endif
+
+    addParamsForWindow( &m_FootprintViewer, "footprint_viewer" );
+
+    addParamsForWindow( &m_FootprintWizard, "footprint_wizard" );
+}
+
+
+bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
+{
+    bool ret = APP_SETTINGS_BASE::MigrateFromLegacy( aCfg );
+
+    const std::string f = getLegacyFrameName();
+
+    ret &= fromLegacy<bool>( aCfg, "ShowLayerManagerTools",    "aui.show_layer_manager" );
+    ret &= fromLegacy<bool>( aCfg, "ShowMicrowaveTools",       "aui.show_microwave_tools" );
+
+    ret &= fromLegacy<int>(  aCfg, "FootprintChooserHSashPosition", "footprint_chooser.sash_h" );
+    ret &= fromLegacy<int>(  aCfg, "FootprintChooserVSashPosition", "footprint_chooser.sash_v" );
+    ret &= fromLegacy<int>(  aCfg, "FootprintChooserWidth",         "footprint_chooser.width" );
+    ret &= fromLegacy<int>(  aCfg, "FootprintChooserHeight",        "footprint_chooser.height" );
+
+    ret &= fromLegacy<int>(  aCfg, f + "FastGrid1",            "grid.fast_grid_1" );
+    ret &= fromLegacy<int>(  aCfg, f + "FastGrid2",            "grid.fast_grid_2" );
+
+    ret &= fromLegacy<bool>(  aCfg, "FlipLeftRight",           "editing.flip_left_right" );
+    ret &= fromLegacy<bool>(  aCfg, "MagneticGraphics",        "editing.magnetic_graphics" );
+    ret &= fromLegacy<int>(   aCfg, "MagneticPads",            "editing.magnetic_pads" );
+    ret &= fromLegacy<int>(   aCfg, "MagneticTracks",          "editing.magnetic_tracks" );
+    ret &= fromLegacy<bool>(  aCfg, "DisplayPolarCoords",      "editing.polar_coords" );
+    ret &= fromLegacy<bool>(  aCfg, "Use45DegreeGraphicSegments",
+                              "editing.use_45_degree_graphic_segments" );
+
+    ret &= fromLegacy<int>(  aCfg, f + "PcbUserGrid_X",        "grid.user.size_x" );
+    ret &= fromLegacy<int>(  aCfg, f + "PcbUserGrid_Y",        "grid.user.size_y" );
+    ret &= fromLegacy<int>(  aCfg, f + "PcbUserGrid_Unit",     "grid.user.units" );
+
+    ret &= fromLegacy<bool>(  aCfg, "PcbAffT",                 "pcb_display.graphic_items_fill" );
+    ret &= fromLegacy<int>(   aCfg, "MaxLnkS",                 "pcb_display.max_links_shown" );
+    ret &= fromLegacy<bool>(  aCfg, "ModAffC",                 "pcb_display.footprint_edge_fill" );
+    ret &= fromLegacy<bool>(  aCfg, "ModAffT",                 "pcb_display.footprint_text_fill" );
+    ret &= fromLegacy<int>(   aCfg, "ShowNetNamesMode",        "pcb_display.net_names_mode" );
+    ret &= fromLegacy<bool>(  aCfg, "PadAffG",                 "pcb_display.pad_clearance" );
+    ret &= fromLegacy<bool>(  aCfg, "PadFill",                 "pcb_display.pad_fill" );
+    ret &= fromLegacy<bool>(  aCfg, "PadSNum",                 "pcb_display.pad_numbers" );
+    ret &= fromLegacy<bool>(  aCfg, "ShowRatsnestLines",       "pcb_display.ratsnest_global" );
+    ret &= fromLegacy<bool>(  aCfg, "ShowRatsnestModuleLines", "pcb_display.ratsnest_footprint" );
+    ret &= fromLegacy<bool>(  aCfg, "CurvedRatsnestLines",     "pcb_display.ratsnest_curved" );
+    ret &= fromLegacy<int>(   aCfg, "RotationAngle",           "pcb_display.rotation_angle" );
+    ret &= fromLegacy<int>(   aCfg, "TrackDisplayClearance",   "pcb_display.track_clearance_mode" );
+    ret &= fromLegacy<bool>(  aCfg, "DisplayTrackFilled",      "pcb_display.track_fill" );
+    ret &= fromLegacy<bool>(  aCfg, "ViaFill",                 "pcb_display.via_fill" );
+    ret &= fromLegacy<int>(   aCfg, "PcbShowZonesMode",        "pcb_display.zone_mode" );
+
+    ret &= fromLegacy<double>( aCfg, "PlotLineWidth_mm",       "plot.line_width" );
+
+    aCfg->SetPath( "/dialogs/cleanup_tracks" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupVias",         "cleanup.cleanup_vias" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupMergeSegments", "cleanup.merge_segments" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupUnconnected",  "cleanup.cleanup_unconnected" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupShortCircuit", "cleanup.cleanup_short_circuits" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupTracksInPads", "cleanup.cleanup_tracks_in_pad" );
+    aCfg->SetPath( "../.." );
+
+    ret &= fromLegacy<bool>(   aCfg, "RefillZonesBeforeDrc", "drc_dialog.refill_zones" );
+    ret &= fromLegacy<bool>(   aCfg, "DrcTrackToZoneTest",   "drc_dialog.test_track_to_zone" );
+    ret &= fromLegacy<bool>(   aCfg, "DrcTestFootprints",    "drc_dialog.test_footprints" );
+
+    ret &= fromLegacy<bool>(   aCfg, "DrillMergePTHNPTH",   "gen_drill.merge_pth_npth" );
+    ret &= fromLegacy<bool>(   aCfg, "DrillMinHeader",      "gen_drill.minimal_header" );
+    ret &= fromLegacy<bool>(   aCfg, "DrillMirrorYOpt",     "gen_drill.mirror" );
+    ret &= fromLegacy<bool>(   aCfg, "DrillUnit",           "gen_drill.unit_drill_is_inch" );
+    ret &= fromLegacy<bool>(   aCfg, "OvalHolesRouteMode",  "gen_drill.use_route_for_oval_holes" );
+    ret &= fromLegacy<int>(    aCfg, "DrillFileType",       "gen_drill.drill_file_type" );
+    ret &= fromLegacy<int>(    aCfg, "DrillMapFileType",    "gen_drill.map_file_type" );
+    ret &= fromLegacy<int>(    aCfg, "DrillZerosFormat",    "gen_drill.zeros_format" );
+
+    ret &= fromLegacy<bool>(   aCfg, "IDFRefAutoAdj",       "export_idf.auto_adjust" );
+    ret &= fromLegacy<int>(    aCfg, "IDFRefUnits",         "export_idf.ref_units" );
+    ret &= fromLegacy<double>( aCfg, "IDFRefX",             "export_idf.ref_x" );
+    ret &= fromLegacy<double>( aCfg, "IDFRefY",             "export_idf.ref_y" );
+    ret &= fromLegacy<bool>(   aCfg, "IDFExportThou",       "export_idf.units_mils" );
+
+    ret &= fromLegacy<int>(    aCfg, "STEP_Origin_Opt",      "export_step.origin_mode" );
+    ret &= fromLegacy<int>(    aCfg, "STEP_UserOriginUnits", "export_step.origin_units" );
+    ret &= fromLegacy<double>( aCfg, "STEP_UserOriginX",     "export_step.origin_x" );
+    ret &= fromLegacy<double>( aCfg, "STEP_UserOriginY",     "export_step.origin_y" );
+    ret &= fromLegacy<bool>(   aCfg, "STEP_NoVirtual",       "export_step.no_virtual" );
+
+    ret &= fromLegacy<bool>(   aCfg, "PlotSVGModeColor",     "export_svg.black_and_white" );
+    ret &= fromLegacy<bool>(   aCfg, "PlotSVGModeMirror",    "export_svg.mirror" );
+    ret &= fromLegacy<bool>(   aCfg, "PlotSVGModeOneFile",   "export_svg.one_file" );
+    ret &= fromLegacy<bool>(   aCfg, "PlotSVGBrdEdge",       "export_svg.plot_board_edges" );
+    ret &= fromLegacy<int>(    aCfg, "PlotSVGPageOpt",       "export_svg.page_size" );
+    ret &= fromLegacyString(   aCfg, "PlotSVGDirectory",     "export_svg.output_dir" );
+
+    {
+        nlohmann::json js = nlohmann::json::array();
+        wxString       key;
+        bool           val = false;
+
+        for( unsigned i = 0; i < PCB_LAYER_ID_COUNT; ++i  )
+        {
+            key.Printf( wxT( "PlotSVGLayer_%d" ), i );
+
+            if( aCfg->Read( key, &val ) && val )
+                js.push_back( i );
+        }
+
+        ( *this )[PointerFromString( "export_svg.layers" ) ] = js;
+    }
+
+    {
+        nlohmann::json js = nlohmann::json::array();
+
+        wxString packed;
+
+        if( aCfg->Read( "ActionPluginButtons", &packed ) )
+        {
+            wxStringTokenizer pluginSettingsTokenizer = wxStringTokenizer( packed, ";" );
+
+            while( pluginSettingsTokenizer.HasMoreTokens() )
+            {
+                wxString plugin = pluginSettingsTokenizer.GetNextToken();
+                wxStringTokenizer pluginTokenizer = wxStringTokenizer( plugin, "=" );
+
+                if( pluginTokenizer.CountTokens() != 2 )
+                {
+                    // Bad config
+                    continue;
+                }
+
+                plugin = pluginTokenizer.GetNextToken();
+
+                if( pluginTokenizer.GetNextToken().Cmp( wxT( "Visible" ) ) == 0 )
+                    js.push_back( plugin.ToUTF8() );
+            }
+        }
+
+        ( *this )[PointerFromString( "action_plugins.visible" ) ] = js;
+    }
+
+    ret &= fromLegacy<int>(    aCfg, "VrmlExportUnit",       "export_vrml.units" );
+    ret &= fromLegacy<bool>(   aCfg, "VrmlExportCopyFiles",  "export_vrml.copy_3d_models" );
+    ret &= fromLegacy<bool>(   aCfg, "VrmlUseRelativePaths", "export_vrml.use_relative_paths" );
+    ret &= fromLegacy<bool>(   aCfg, "VrmlUsePlainPCB",      "export_vrml.use_plain_pcb" );
+    ret &= fromLegacy<int>(    aCfg, "VrmlRefUnits",         "export_vrml.ref_units" );
+    ret &= fromLegacy<double>( aCfg, "VrmlRefX",             "export_vrml.ref_x" );
+    ret &= fromLegacy<double>( aCfg, "VrmlRefY",             "export_vrml.ref_y" );
+
+    ret &= fromLegacy<int>(    aCfg, "Zone_Ouline_Hatch_Opt", "zones.hatching_style" );
+    ret &= fromLegacyString(   aCfg, "Zone_Filter_Opt",       "zones.net_filter" );
+    ret &= fromLegacy<int>(    aCfg, "Zone_NetSort_Opt",      "zones.net_sort_mode" );
+    ret &= fromLegacy<double>( aCfg, "Zone_Clearance",        "zones.clearance" );
+    ret &= fromLegacy<double>( aCfg, "Zone_Thickness",        "zones.min_thickness" );
+    ret &= fromLegacy<double>( aCfg, "Zone_TH_Gap",           "zones.thermal_relief_gap" );
+    ret &= fromLegacy<double>( aCfg, "Zone_TH_Copper_Width",  "zones.thermal_relief_copper_width" );
+
+    aCfg->SetPath( "ImportGraphics" );
+    ret &= fromLegacy<int>(    aCfg, "BoardLayer",          "import_graphics.layer" );
+    ret &= fromLegacy<bool>(
+            aCfg, "InteractivePlacement", "import_graphics.interactive_placement" );
+    ret &= fromLegacyString(   aCfg, "LastFile",            "import_graphics.last_file" );
+    ret &= fromLegacy<double>( aCfg, "LineWidth",           "import_graphics.line_width" );
+    ret &= fromLegacy<int>(    aCfg, "LineWidthUnits",      "import_graphics.line_width_units" );
+    ret &= fromLegacy<int>(    aCfg, "PositionUnits",       "import_graphics.origin_units" );
+    ret &= fromLegacy<double>( aCfg, "PositionX",           "import_graphics.origin_x" );
+    ret &= fromLegacy<double>( aCfg, "PositionY",           "import_graphics.origin_y" );
+    aCfg->SetPath( ".." );
+
+    ret &= fromLegacy<int>(  aCfg, "NetlistReportFilterMsg",  "netlist.report_filter" );
+    ret &= fromLegacy<bool>( aCfg, "NetlistUpdateFootprints", "netlist.update_footprints" );
+    ret &= fromLegacy<bool>( aCfg,
+            "NetlistDeleteShortingTracks", "netlist.delete_shorting_tracks" );
+    ret &= fromLegacy<bool>( aCfg,
+            "NetlistDeleteExtraFootprints", "netlist.delete_extra_footprints" );
+    ret &= fromLegacy<bool>( aCfg, "NetlistDeleteSinglePadNets", "netlist.delete_single_pad_nets" );
+
+    ret &= fromLegacy<int>(    aCfg, "PlaceFileUnits",          "place_file.units" );
+    ret &= fromLegacy<int>(    aCfg, "PlaceFileOpts",           "place_file.file_options" );
+    ret &= fromLegacy<int>(    aCfg, "PlaceFileFormat",         "place_file.file_format" );
+    ret &= fromLegacy<bool>(   aCfg, "PlaceFileIncludeBrdEdge", "place_file.include_board_edge" );
+
+    ret &= fromLegacy<int>(    aCfg, "PrintSinglePage",        "plot.one_page_per_layer" );
+    ret &= fromLegacy<int>(    aCfg, "PrintPadsDrillOpt",      "plot.pads_drill_mode" );
+    ret &= fromLegacy<double>( aCfg, "PlotXFineScaleAdj",      "plot.fine_scale_x" );
+    ret &= fromLegacy<double>( aCfg, "PlotYFineScaleAdj",      "plot.fine_scale_y" );
+    ret &= fromLegacy<double>( aCfg, "PSPlotFineWidthAdj",     "plot.ps_fine_width_adjust" );
+    ret &= fromLegacy<bool>( aCfg, "CheckZonesBeforePlotting", "plot.check_zones_before_plotting" );
+
+    ret &= fromLegacyString( aCfg,
+            "FootprintTextShownColumns", "window.footprint_text_shown_columns" );
+
+    ret &= fromLegacy<int>(    aCfg, "FpWizardListWidth",        "footprint_wizard_list.width" );
+    ret &= fromLegacy<int>(    aCfg, "FpWizardListHeight",       "footprint_wizard_list.height" );
+
+    migrateWindowConfig( aCfg, "ModViewFrame", "footprint_viewer" );
+
+    migrateWindowConfig( aCfg, "FootprintWizard", "footprint_wizard" );
+    ret &= fromLegacyString( aCfg, "Fpwizard_auiPerspective", "footprint_wizard.perspective" );
+
+
+    const std::string p = "pcbnew.InteractiveRouter.";
+
+    ( *this )[PointerFromString( "tools.pns.meta" ) ] = nlohmann::json( {
+                { "filename", "pns" },
+                { "version", 0 }
+            } );
+
+    ret &= fromLegacy<int>(  aCfg, p + "Mode",                  "tools.pns.mode" );
+    ret &= fromLegacy<int>(  aCfg, p + "OptimizerEffort",       "tools.pns.effort" );
+    ret &= fromLegacy<bool>( aCfg, p + "RemoveLoops",           "tools.pns.remove_loops" );
+    ret &= fromLegacy<bool>( aCfg, p + "SmartPads",             "tools.pns.smart_pads" );
+    ret &= fromLegacy<bool>( aCfg, p + "ShoveVias",             "tools.pns.shove_vias" );
+    ret &= fromLegacy<bool>( aCfg, p + "StartDiagonal",         "tools.pns.start_diagonal" );
+    ret &= fromLegacy<int>(  aCfg, p + "ShoveTimeLimit",        "tools.pns.shove_time_limit" );
+    ret &= fromLegacy<int>(  aCfg, p + "ShoveIterationLimit",   "tools.pns.shove_iteration_limit" );
+    ret &= fromLegacy<int>(  aCfg,
+            p + "WalkaroundIterationLimit", "tools.pns.walkaround_iteration_limit" );
+    ret &= fromLegacy<bool>( aCfg, p + "JumpOverObstacles",     "tools.pns.jump_over_obstacles" );
+    ret &= fromLegacy<bool>( aCfg,
+            p + "SmoothDraggedSegments", "tools.pns.smooth_dragged_segments" );
+    ret &= fromLegacy<bool>( aCfg, p + "CanViolateDRC",         "tools.pns.can_violate_drc" );
+    ret &= fromLegacy<bool>( aCfg, p + "SuggestFinish",         "tools.pns.suggest_finish" );
+    ret &= fromLegacy<bool>( aCfg, p + "FreeAngleMode",         "tools.pns.free_angle_mode" );
+    ret &= fromLegacy<bool>( aCfg, p + "InlineDragEnabled",     "tools.pns.inline_drag" );
+
+    // Migrate color settings that were stored in the pcbnew config file
+
+    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
+
+    auto migrateLegacyColor = [&] ( const std::string& aKey, int aLayerId ) {
+        wxString str;
+
+        if( aCfg->Read( aKey, &str ) )
+            cs->SetColor( aLayerId, COLOR4D( str ) );
+    };
+
+    for( int i = 0; i < PCB_LAYER_ID_COUNT; ++i )
+    {
+        wxString layer = LSET::Name( PCB_LAYER_ID( i ) );
+        migrateLegacyColor( "Color4DPCBLayer_" + layer.ToStdString(), PCB_LAYER_ID( i ) );
+    }
+
+    migrateLegacyColor( "Color4DAnchorEx",           LAYER_ANCHOR );
+    migrateLegacyColor( "Color4DAuxItems",           LAYER_AUX_ITEMS );
+    migrateLegacyColor( "Color4DGrid",               LAYER_GRID );
+    migrateLegacyColor( "Color4DNoNetPadMarker",     LAYER_NO_CONNECTS );
+    migrateLegacyColor( "Color4DNonPlatedEx",        LAYER_NON_PLATEDHOLES );
+    migrateLegacyColor( "Color4DPadBackEx",          LAYER_PAD_BK );
+    migrateLegacyColor( "Color4DPadFrontEx",         LAYER_PAD_FR );
+    migrateLegacyColor( "Color4DPadThruHoleEx",      LAYER_PADS_TH );
+    migrateLegacyColor( "Color4DPCBBackground",      LAYER_PCB_BACKGROUND );
+    migrateLegacyColor( "Color4DPCBCursor",          LAYER_CURSOR );
+    migrateLegacyColor( "Color4DRatsEx",             LAYER_RATSNEST );
+    migrateLegacyColor( "Color4DTxtBackEx",          LAYER_MOD_TEXT_BK );
+    migrateLegacyColor( "Color4DTxtFrontEx",         LAYER_MOD_TEXT_FR );
+    migrateLegacyColor( "Color4DTxtInvisEx",         LAYER_MOD_TEXT_INVISIBLE );
+    migrateLegacyColor( "Color4DViaBBlindEx",        LAYER_VIA_BBLIND );
+    migrateLegacyColor( "Color4DViaMicroEx",         LAYER_VIA_MICROVIA );
+    migrateLegacyColor( "Color4DViaThruEx",          LAYER_VIA_THROUGH );
+    migrateLegacyColor( "Color4DWorksheet",          LAYER_WORKSHEET );
+
+    // Footprint editor settings were stored in pcbnew config file.  Migrate them here.
+    auto fpedit = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( false );
+    fpedit->MigrateFromLegacy( aCfg );
+    fpedit->Load();
+
+    // Same with 3D viewer
+    auto viewer3d = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>( false );
+    viewer3d->MigrateFromLegacy( aCfg );
+    viewer3d->Load();
+
+    return ret;
+}

@@ -36,7 +36,6 @@
 #include <wx/uri.h>
 #include <wx/dir.h>
 #include <wx/progdlg.h>
-#include <wx/config.h>
 
 #include <pgm_base.h>
 #include <project.h>
@@ -44,6 +43,7 @@
 #include <confirm.h>
 #include <3d_viewer/eda_3d_viewer.h>
 #include <bitmaps.h>
+#include <settings/common_settings.h>
 
 #include <../github/github_getliblist.h>
 
@@ -73,14 +73,12 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER::WIZARD_3DSHAPE_LIBS_DOWNLOADER( wxWindow* aParen
     wxString default_path;
     wxGetEnv( KISYS3DMOD, &default_path );
 
-    wxConfigBase* cfg = Pgm().CommonSettings();
-    wxString tmp;
-    cfg->Read( KICAD_3DLIBS_LAST_DOWNLOAD_DIR, &tmp, default_path );
-    setDownloadDir( tmp );
+    auto cfg = Pgm().GetCommonSettings();
+
+    setDownloadDir( cfg->m_3DLibsDownloadPath.empty() ? default_path : cfg->m_3DLibsDownloadPath );
 
     // Restore the Github 3D shapes libs url
-    wxString githubUrl;
-    cfg->Read( KICAD_3DLIBS_URL_KEY, &githubUrl );
+    wxString githubUrl = cfg->m_3DLibsUrl;
 
     if( githubUrl.IsEmpty() )
         githubUrl = DEFAULT_GITHUB_3DSHAPES_LIBS_URL;
@@ -120,13 +118,10 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER::WIZARD_3DSHAPE_LIBS_DOWNLOADER( wxWindow* aParen
 
 WIZARD_3DSHAPE_LIBS_DOWNLOADER::~WIZARD_3DSHAPE_LIBS_DOWNLOADER()
 {
-    // Use this if you want to store kicad lib URL in pcbnew/cvpcb section config:
-    // wxConfigBase* cfg = Kiface().KifaceSettings();
+    auto cfg = Pgm().GetCommonSettings();
 
-    // Use this if you want to store kicad lib URL in common section config:
-    wxConfigBase* cfg = Pgm().CommonSettings();
-    cfg->Write( KICAD_3DLIBS_URL_KEY, GetGithubURL() );
-    cfg->Write( KICAD_3DLIBS_LAST_DOWNLOAD_DIR, getDownloadDir() );
+    cfg->m_3DLibsUrl          = GetGithubURL().ToStdString();
+    cfg->m_3DLibsDownloadPath = getDownloadDir().ToStdString();
 }
 
 

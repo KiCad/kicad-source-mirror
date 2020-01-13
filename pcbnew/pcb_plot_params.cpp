@@ -21,14 +21,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcb_plot_params_parser.h>
-#include <pcb_plot_params.h>
-#include <layers_id_colors_and_visibility.h>
-#include <plotter.h>
-#include <macros.h>
-#include <convert_to_biu.h>
 #include <board_design_settings.h>
-#include <math/util.h>      // for KiROUND
+#include <convert_to_biu.h>
+#include <layers_id_colors_and_visibility.h>
+#include <macros.h>
+#include <math/util.h> // for KiROUND
+#include <pcb_plot_params.h>
+#include <pcb_plot_params_parser.h>
+#include <pgm_base.h>
+#include <plotter.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 
 
 #define PLOT_LINEWIDTH_MIN        ( 0.02 * IU_PER_MM )  // min value for default line thickness
@@ -134,6 +137,9 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     // This parameter controls if the NPTH pads will be plotted or not
     // it is a "local" parameter
     m_skipNPTH_Pads              = false;
+
+    // TODO(JE) Is it an issue for this to be tied to Pgm()?
+    m_colors = Pgm().GetSettingsManager().GetColorSettings();
 }
 
 void PCB_PLOT_PARAMS::SetGerberPrecision( int aPrecision )

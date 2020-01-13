@@ -43,6 +43,7 @@ class SYMBOL_TREE_PANE;
 class LIB_TREE_NODE;
 class LIB_ID;
 class LIB_MANAGER;
+class LIBEDIT_SETTINGS;
 
 
 /**
@@ -56,6 +57,7 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
                                             // has multiple units)
     SYMBOL_TREE_PANE*  m_treePane;          // component search tree widget
     LIB_MANAGER*       m_libMgr;            // manager taking care of temporary modifications
+    LIBEDIT_SETTINGS*  m_settings;          // Handle to the settings
 
     // The unit number to edit and show
     int m_unit;
@@ -255,8 +257,13 @@ public:
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override;
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+    LIBEDIT_SETTINGS* GetSettings()
+    {
+        return m_settings;
+    }
 
     /**
      * Trigger the wxCloseEvent, which is handled by the function given to EVT_CLOSE() macro:

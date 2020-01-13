@@ -38,6 +38,9 @@
 #include <class_module.h>
 #include <view/view.h>
 #include <pcbnew.h>
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 
 
 TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
@@ -263,7 +266,7 @@ void TEXTE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOff
     wxASSERT( m_Parent );
 
     BOARD*         brd = GetBoard( );
-    KIGFX::COLOR4D color = aFrame->Settings().Colors().GetLayerColor( GetLayer() );
+    KIGFX::COLOR4D color = Pgm().GetSettingsManager().GetColorSettings()->GetColor( GetLayer() );
     PCB_LAYER_ID   text_layer = GetLayer();
 
     if( !brd->IsLayerVisible( m_Layer )
@@ -284,7 +287,7 @@ void TEXTE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOff
         if( !brd->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) )
             return;
 
-        color = aFrame->Settings().Colors().GetItemColor( LAYER_MOD_TEXT_INVISIBLE );
+        color = Pgm().GetSettingsManager().GetColorSettings()->GetColor( LAYER_MOD_TEXT_INVISIBLE );
     }
 
     // Draw mode compensation for the width

@@ -31,6 +31,7 @@
 #include <class_board.h>
 #include <dialogs/dialog_layer_selection_base.h>
 #include <router/router_tool.h>
+#include <settings/color_settings.h>
 
 
 // Column position by function:
@@ -63,7 +64,7 @@ protected:
     // Virtual function
     COLOR4D GetLayerColor( LAYER_NUM aLayer ) const override
     {
-        return m_frame->Settings().Colors().GetLayerColor( aLayer );
+        return m_frame->ColorSettings()->GetColor( aLayer );
     }
 
     // Returns the name of the layer id

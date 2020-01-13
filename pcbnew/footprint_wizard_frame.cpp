@@ -36,6 +36,7 @@
 #include <class_board.h>
 #include <footprint_edit_frame.h>
 #include <pcbnew_id.h>
+#include <pcbnew_settings.h>
 #include "footprint_wizard_frame.h"
 #include <wx/tokenzr.h>
 #include <wx/numformatter.h>
@@ -291,7 +292,7 @@ void FOOTPRINT_WIZARD_FRAME::OnSize( wxSizeEvent& SizeEv )
 
 void FOOTPRINT_WIZARD_FRAME::updateView()
 {
-    GetCanvas()->UseColorScheme( &Settings().Colors() );
+    GetCanvas()->UpdateColors();
     GetCanvas()->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
@@ -506,22 +507,33 @@ void FOOTPRINT_WIZARD_FRAME::ClickOnPageList( wxCommandEvent& event )
 }
 
 
-#define AUI_PERSPECTIVE_KEY  wxT( "Fpwizard_auiPerspective" )
-
-
-void FOOTPRINT_WIZARD_FRAME::LoadSettings( wxConfigBase* aCfg )
+void FOOTPRINT_WIZARD_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    EDA_DRAW_FRAME::LoadSettings( aCfg );
+    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
 
-    aCfg->Read( AUI_PERSPECTIVE_KEY, &m_auiPerspective );
+    EDA_DRAW_FRAME::LoadSettings( cfg );
+
+    m_auiPerspective = cfg->m_FootprintViewer.perspective;
 }
 
 
-void FOOTPRINT_WIZARD_FRAME::SaveSettings( wxConfigBase* aCfg )
+void FOOTPRINT_WIZARD_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    EDA_DRAW_FRAME::SaveSettings( aCfg );
+    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
 
-    aCfg->Write( AUI_PERSPECTIVE_KEY, m_auimgr.SavePerspective() );
+    EDA_DRAW_FRAME::SaveSettings( cfg );
+
+    cfg->m_FootprintViewer.perspective = m_auimgr.SavePerspective().ToStdString();
+}
+
+
+WINDOW_SETTINGS* FOOTPRINT_WIZARD_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
+{
+    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
+    return &cfg->m_FootprintWizard;
 }
 
 

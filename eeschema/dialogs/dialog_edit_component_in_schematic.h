@@ -49,8 +49,6 @@ public:
     SCH_EDIT_FRAME* GetParent();
 
 private:
-    wxConfigBase* m_config;
-
     SCH_COMPONENT* m_cmp;
     LIB_PART*      m_part;
 

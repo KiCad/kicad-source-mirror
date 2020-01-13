@@ -33,6 +33,7 @@
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>
+#include <settings/color_settings.h>
 
 #include <class_board.h>
 #include <pcb_layer_box_selector.h>
@@ -141,7 +142,7 @@ COLOR4D PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
 {
     wxASSERT( m_boardFrame );
 
-    return m_boardFrame->Settings().Colors().GetLayerColor( aLayer );
+    return m_boardFrame->ColorSettings()->GetColor( aLayer );
 }
 
 

@@ -44,6 +44,8 @@
 #include <wx/snglinst.h>
 #include <gestfich.h>
 #include <pcbnew.h>
+#include <pcbnew_settings.h>
+#include <settings/settings_manager.h>
 #include <class_board.h>
 #include <class_draw_panel_gal.h>
 #include <fp_lib_table.h>
@@ -321,6 +323,8 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
     // This is process-level-initialization, not project-level-initialization of the DSO.
     // Do nothing in here pertinent to a project!
+    InitSettings( new PCBNEW_SETTINGS );
+    aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
 
     start_common( aCtlBits );
 

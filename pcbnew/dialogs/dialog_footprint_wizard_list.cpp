@@ -29,6 +29,9 @@
 #include <wx/grid.h>
 
 #include <pcbnew.h>
+#include <pcbnew_settings.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <kiface_i.h>
 #include <dialog_footprint_wizard_list.h>
 #include <footprint_wizard_frame.h>
@@ -49,22 +52,18 @@ enum FPGeneratorRowNames
     FP_GEN_ROW_DESCR,
 };
 
-#define FPWIZARTDLIST_HEIGHT_KEY wxT( "FpWizardListHeight" )
-#define FPWIZARTDLIST_WIDTH_KEY  wxT( "FpWizardListWidth" )
 
 DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
     : DIALOG_FOOTPRINT_WIZARD_LIST_BASE( aParent )
 {
-    m_config = Kiface().KifaceSettings();
     initLists();
 
-    if( m_config )
-    {
-        wxSize size;
-        m_config->Read( FPWIZARTDLIST_WIDTH_KEY, &size.x, -1 );
-        m_config->Read( FPWIZARTDLIST_HEIGHT_KEY, &size.y, -1 );
-        SetSize( size );
-    }
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+
+    wxSize size;
+    size.x = cfg->m_FootprintWizardList.width;
+    size.y = cfg->m_FootprintWizardList.height;
+    SetSize( size );
 
     m_sdbSizerOK->SetDefault();
     FinishDialogSettings();
@@ -75,10 +74,12 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
 
 DIALOG_FOOTPRINT_WIZARD_LIST::~DIALOG_FOOTPRINT_WIZARD_LIST()
 {
-    if( m_config && !IsIconized() )
+    if( !IsIconized() )
     {
-        m_config->Write( FPWIZARTDLIST_WIDTH_KEY, GetSize().x );
-        m_config->Write( FPWIZARTDLIST_HEIGHT_KEY, GetSize().y );
+        auto cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+
+        cfg->m_FootprintWizardList.width  = GetSize().x;
+        cfg->m_FootprintWizardList.height = GetSize().y;
     }
 }
 

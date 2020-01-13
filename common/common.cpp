@@ -35,6 +35,7 @@
 #include <base_units.h>
 #include <reporter.h>
 #include <mutex>
+#include <settings/settings_manager.h>
 
 #include <wx/process.h>
 #include <wx/config.h>
@@ -243,60 +244,6 @@ timestamp_t GetNewTimeStamp()
     oldTimeStamp = newTimeStamp;
 
     return newTimeStamp;
-}
-
-
-std::unique_ptr<wxConfigBase> GetNewConfig( const wxString& aProgName )
-{
-    wxFileName configname;
-    configname.AssignDir( GetKicadConfigPath() );
-    configname.SetFullName( aProgName );
-
-    // explicitly use wxFileConfig to prevent storing any settings in the system registry on Windows
-    return std::make_unique<wxFileConfig>( wxT( "" ), wxT( "" ), configname.GetFullPath() );
-}
-
-
-wxString GetKicadConfigPath()
-{
-    wxFileName cfgpath;
-
-    // http://docs.wxwidgets.org/3.0/classwx_standard_paths.html#a7c7cf595d94d29147360d031647476b0
-    cfgpath.AssignDir( wxStandardPaths::Get().GetUserConfigDir() );
-
-    // GetUserConfigDir() does not default to ~/.config which is the current standard
-    // configuration file location on Linux.  This has been fixed in later versions of wxWidgets.
-#if !defined( __WXMSW__ ) && !defined( __WXMAC__ )
-    wxArrayString dirs = cfgpath.GetDirs();
-
-    if( dirs.Last() != ".config" )
-        cfgpath.AppendDir( ".config" );
-#endif
-
-    wxString envstr;
-
-    // This shouldn't cause any issues on Windows or MacOS.
-    if( wxGetEnv( wxT( "XDG_CONFIG_HOME" ), &envstr ) && !envstr.IsEmpty() )
-    {
-        // Override the assignment above with XDG_CONFIG_HOME
-        cfgpath.AssignDir( envstr );
-    }
-
-    cfgpath.AppendDir( TO_STR( KICAD_CONFIG_DIR ) );
-
-    // Use KICAD_CONFIG_HOME to allow the user to force a specific configuration path.
-    if( wxGetEnv( wxT( "KICAD_CONFIG_HOME" ), &envstr ) && !envstr.IsEmpty() )
-    {
-        // Override the assignment above with KICAD_CONFIG_HOME
-        cfgpath.AssignDir( envstr );
-    }
-
-    if( !cfgpath.DirExists() )
-    {
-        cfgpath.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-    }
-
-    return cfgpath.GetPath();
 }
 
 

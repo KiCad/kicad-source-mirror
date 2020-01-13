@@ -57,6 +57,7 @@
 #include <filename_resolver.h>
 #include <pgm_base.h>
 #include <project.h>
+#include <settings/settings_manager.h>
 
 
 #define MASK_3D_CACHE "3D_CACHE"
@@ -793,7 +794,7 @@ S3D_CACHE* PROJECT::Get3DCacheManager( bool aUpdateProjDir )
         cache = new S3D_CACHE();
 
         wxFileName cfgpath;
-        cfgpath.AssignDir( GetKicadConfigPath() );
+        cfgpath.AssignDir( SETTINGS_MANAGER::GetUserSettingsPath() );
         cfgpath.AppendDir( wxT( "3d" ) );
 
         cache->SetProgramBase( &Pgm() );

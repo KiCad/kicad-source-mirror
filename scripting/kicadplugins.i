@@ -182,7 +182,7 @@ def LoadPlugins(bundlepath=None):
         importlib.invalidate_caches()
 
     kicad_path = os.environ.get('KICAD_PATH')
-    config_path = pcbnew.GetKicadConfigPath()
+    config_path = pcbnew.SETTINGS_MANAGER.GetUserSettingsPath()
     plugin_directories=[]
 
     """

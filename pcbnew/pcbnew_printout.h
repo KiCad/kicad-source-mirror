@@ -42,8 +42,8 @@ struct PCBNEW_PRINTOUT_SETTINGS : BOARD_PRINTOUT_SETTINGS
 
     bool m_noEdgeLayer;         ///< Disable board outline on each page
 
-    void Load( wxConfigBase* aConfig ) override;
-    void Save( wxConfigBase* aConfig ) override;
+    void Load( APP_SETTINGS_BASE* aConfig ) override;
+    void Save( APP_SETTINGS_BASE* aConfig ) override;
 };
 
 

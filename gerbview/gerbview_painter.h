@@ -53,8 +53,7 @@ public:
 
     GERBVIEW_RENDER_SETTINGS();
 
-    /// @copydoc RENDER_SETTINGS::ImportLegacyColors()
-    void ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings ) override;
+    void LoadColors( const COLOR_SETTINGS* aSettings ) override;
 
     /**
      * Function LoadDisplayOptions
@@ -89,14 +88,14 @@ public:
         update();       // recompute other shades of the color
     }
 
-    const COLOR4D& GetBackgroundColor() override { return m_layerColors[ LAYER_PCB_BACKGROUND ]; }
+    const COLOR4D& GetBackgroundColor() override { return m_layerColors[ LAYER_GERBVIEW_BACKGROUND ]; }
 
     void SetBackgroundColor( const COLOR4D& aColor ) override
     {
-        m_layerColors[ LAYER_PCB_BACKGROUND ] = aColor;
+        m_layerColors[ LAYER_GERBVIEW_BACKGROUND ] = aColor;
     }
 
-    const COLOR4D& GetGridColor() override { return m_layerColors[ LAYER_GRID ]; }
+    const COLOR4D& GetGridColor() override { return m_layerColors[ LAYER_GERBVIEW_GRID ]; }
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_CURSOR ]; }
 

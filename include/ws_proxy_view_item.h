@@ -106,6 +106,15 @@ public:
         m_sheetCount = aSheetCount;
     }
 
+    /**
+     * Can be used to override which layer ID is used for worksheet item colors
+     * @param aLayerId is the color to use (will default to LAYER_WORKSHEET if this is not called)
+     */
+    void SetColorLayer( int aLayerId )
+    {
+        m_colorLayer = aLayerId;
+    }
+
     /// @copydoc VIEW_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
 
@@ -150,6 +159,9 @@ protected:
 
     /// Sheets count number displayed in the title block.
     int m_sheetCount;
+
+    /// Layer that is used for worksheet color (LAYER_WORKSHEET is always used for visibility)
+    int m_colorLayer;
 };
 }
 

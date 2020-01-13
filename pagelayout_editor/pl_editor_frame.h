@@ -213,19 +213,9 @@ public:
 
     void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
-    /**
-     * Populates the applicatios settings list.
-     * (list of parameters that must be saved in project parameters)
-     * Currently, only the settings that are needed at start up by the main window are
-     * defined here.  There are other locally used settings scattered throughout the
-     * source code (mainly in dialogs).  If you need to define a configuration
-     * setting that need to be loaded at run time, this is the place to define it.
-     */
-    std::vector<PARAM_CFG*>& GetConfigurationSettings() { return m_configSettings; }
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
-
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void OnSelectPage( wxCommandEvent& event );
 

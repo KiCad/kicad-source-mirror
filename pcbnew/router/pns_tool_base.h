@@ -63,7 +63,6 @@ protected:
 
     MSG_PANEL_ITEMS m_panelItems;
 
-    ROUTING_SETTINGS m_savedSettings;     ///< Stores routing settings between router invocations
     SIZES_SETTINGS m_savedSizes;          ///< Stores sizes settings between router invocations
     ITEM* m_startItem;
     int m_startLayer;

@@ -29,6 +29,7 @@
 #include <class_board.h>
 #include <math/util.h>      // for KiROUND
 #include <pcb_painter.h>
+#include <pcbnew_settings.h>
 #include <view/view.h>
 #include <pcbplot.h>
 
@@ -41,19 +42,27 @@ PCBNEW_PRINTOUT_SETTINGS::PCBNEW_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
 }
 
 
-void PCBNEW_PRINTOUT_SETTINGS::Load( wxConfigBase* aConfig )
+void PCBNEW_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
 {
     BOARD_PRINTOUT_SETTINGS::Load( aConfig );
-    aConfig->Read( OPTKEY_PRINT_PADS_DRILL, (int*) &m_drillMarks, FULL_DRILL_SHAPE );
-    aConfig->Read( OPTKEY_PRINT_PAGE_PER_LAYER, (int*) &m_pagination, ALL_LAYERS );
+
+    if( auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
+    {
+        m_drillMarks = static_cast<DRILL_MARK_SHAPE_T>( cfg->m_Plot.pads_drill_mode );
+        m_pagination = static_cast<PAGINATION_T>( cfg->m_Plot.one_page_per_layer );
+    }
 }
 
 
-void PCBNEW_PRINTOUT_SETTINGS::Save( wxConfigBase* aConfig )
+void PCBNEW_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 {
     BOARD_PRINTOUT_SETTINGS::Save( aConfig );
-    aConfig->Write( OPTKEY_PRINT_PADS_DRILL, (int) m_drillMarks );
-    aConfig->Write( OPTKEY_PRINT_PAGE_PER_LAYER, (int) m_pagination );
+
+    if( auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aConfig ) )
+    {
+        cfg->m_Plot.pads_drill_mode    = m_drillMarks;
+        cfg->m_Plot.one_page_per_layer = m_pagination;
+    }
 }
 
 

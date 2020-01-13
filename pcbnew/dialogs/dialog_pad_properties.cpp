@@ -24,22 +24,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <gal/graphics_abstraction_layer.h>
-#include <view/view_controls.h>
-#include <confirm.h>
-#include <pcbnew.h>
-#include <pcb_base_frame.h>
 #include <base_units.h>
-#include <board_commit.h>
 #include <bitmaps.h>
+#include <board_commit.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <pcb_painter.h>
-#include <widgets/net_selector.h>
+#include <confirm.h>
+#include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
 #include <dialog_pad_properties.h>
-#include <dialog_pad_properties.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <html_messagebox.h>
-#include <convert_basic_shapes_to_polygon.h>    // for enum RECT_CHAMFER_POSITIONS definition
+#include <pcb_base_frame.h>
+#include <pcb_painter.h>
+#include <pcbnew.h>
+#include <pcbnew_settings.h>
+#include <settings/color_settings.h>
+#include <view/view_controls.h>
+#include <widgets/net_selector.h>
 
 #include <advanced_config.h>    // for pad property feature management
 
@@ -245,7 +246,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
                                                VECTOR2D( m_dummyPad->GetPosition() ) );
     m_axisOrigin->SetDrawAtZero( true );
 
-    m_panelShowPadGal->UseColorScheme( &m_parent->Settings().Colors() );
+    m_panelShowPadGal->UpdateColors();
     m_panelShowPadGal->SwitchBackend( m_parent->GetCanvas()->GetBackend() );
     m_panelShowPadGal->SetStealsFocus( false );
 
@@ -286,10 +287,10 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     COLOR4D color = COLOR4D::BLACK;
 
     if( m_dummyPad->GetLayerSet()[F_Cu] )
-        color = m_parent->Settings().Colors().GetItemColor( LAYER_PAD_FR );
+        color = m_parent->ColorSettings()->GetColor( LAYER_PAD_FR );
 
     if( m_dummyPad->GetLayerSet()[B_Cu] )
-        color = color.LegacyMix( m_parent->Settings().Colors().GetItemColor( LAYER_PAD_BK ) );
+        color = color.LegacyMix( m_parent->ColorSettings()->GetColor( LAYER_PAD_BK ) );
 
     // What could happen: the pad color is *actually* black, or no copper was selected
     if( color == BLACK )

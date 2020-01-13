@@ -23,6 +23,7 @@ set( PL_EDITOR_SRCS
     pl_editor_layout.cpp
     files.cpp
     pl_editor_frame.cpp
+    pl_editor_settings.cpp
     pl_draw_panel_gal.cpp
     pl_editor_undo_redo.cpp
     properties_frame.cpp

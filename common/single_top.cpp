@@ -46,6 +46,7 @@
 #include <pgm_base.h>
 #include <kiway_player.h>
 #include <confirm.h>
+#include <settings/settings_manager.h>
 
 
 // Only a single KIWAY is supported in this single_top top level component,
@@ -67,7 +68,11 @@ static struct PGM_SINGLE_TOP : public PGM_BASE
     {
         Kiway.OnKiwayEnd();
 
-        SaveCommonSettings();
+        if( m_settings_manager && m_settings_manager->IsOK() )
+        {
+            SaveCommonSettings();
+            m_settings_manager->Save();
+        }
 
         // Destroy everything in PGM_BASE, especially wxSingleInstanceCheckerImpl
         // earlier than wxApp and earlier than static destruction would.
@@ -157,7 +162,13 @@ struct APP_SINGLE_TOP : public wxApp
 
         try
         {
-            return program.OnPgmInit();
+            if( !program.OnPgmInit() )
+            {
+                program.OnPgmExit();
+                return false;
+            }
+
+            return true;
         }
         catch( const std::exception& e )
         {

@@ -43,6 +43,7 @@
 #include <zones.h>
 #include <kicad_plugin.h>
 #include <pcb_parser.h>
+#include <pcbnew_settings.h>
 #include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/wfstream.h>
@@ -52,7 +53,7 @@
 #include <convert_basic_shapes_to_polygon.h>    // for enum RECT_CHAMFER_POSITIONS definition
 #include <kiface_i.h>
 
-#include <advanced_config.h>    // for pad pin function and pad property feature management
+#include <advanced_config.h> // for pad pin function and pad property feature management
 
 using namespace PCB_KEYS_T;
 
@@ -2275,10 +2276,12 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 
     if( module->GetLayer() != F_Cu )
     {
-	if( m_board != nullptr )
-            module->Flip( module->GetPosition(), m_board->GeneralSettings().m_FlipLeftRight );
-	else
-	   module->Flip( module->GetPosition(), false );
+        auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+
+        if( cfg != nullptr )
+            module->Flip( module->GetPosition(), cfg->m_FlipLeftRight );
+        else
+            module->Flip( module->GetPosition(), false );
     }
 
     wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expr footprint file '%s'." ), fullPath );

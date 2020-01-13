@@ -152,8 +152,8 @@ private:
     void OnFormatChange( wxCommandEvent& event ) override;
     void exportBitmap( OUTPUT_FMT_ID aFormat );
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
 private:
     wxImage  m_Pict_Image;
@@ -167,9 +167,6 @@ private:
     bool                          m_Negative;
     wxString                      m_BitmapFileName;
     wxString                      m_ConvertedFileName;
-    wxSize                        m_frameSize;
-    wxPoint                       m_framePos;
-    std::unique_ptr<wxConfigBase> m_config;
     bool                          m_exportToClipboard;
     bool                          m_AspectRatioLocked;
     double                        m_AspectRatio;

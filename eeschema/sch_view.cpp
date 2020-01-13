@@ -101,6 +101,7 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
     m_worksheet->SetSheetNumber( aScreen->m_ScreenNumber );
     m_worksheet->SetSheetCount( aScreen->m_NumberOfScreens );
     m_worksheet->SetFileName( TO_UTF8( aScreen->GetFileName() ) );
+    m_worksheet->SetColorLayer( LAYER_SCHEMATIC_WORKSHEET );
 
     if( m_frame && m_frame->IsType( FRAME_SCH ) )
         m_worksheet->SetSheetName( TO_UTF8( m_frame->GetScreenDesc() ) );

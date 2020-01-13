@@ -24,6 +24,7 @@
 
 #include <filehistory.h>
 #include <id.h>
+#include <settings/app_settings.h>
 #include <tool/action_menu.h>
 #include <tool/selection_conditions.h>
 #include <wx/menu.h>
@@ -36,6 +37,45 @@ FILE_HISTORY::FILE_HISTORY( size_t aMaxFiles, int aBaseFileId ) :
         wxFileHistory( std::min( aMaxFiles, (size_t) MAX_FILE_HISTORY_SIZE ) )
 {
     SetBaseId( aBaseFileId );
+}
+
+
+void FILE_HISTORY::Load( const APP_SETTINGS_BASE& aSettings )
+{
+    m_fileHistory.clear();
+
+    // file_history stores the most recent file first
+    for( auto it = aSettings.m_System.file_history.rbegin();
+         it != aSettings.m_System.file_history.rend(); ++it )
+        AddFileToHistory( *it );
+}
+
+
+void FILE_HISTORY::Load( const std::vector<wxString>& aList )
+{
+    m_fileHistory.clear();
+
+    for( const auto& file : aList )
+        AddFileToHistory( file );
+}
+
+
+void FILE_HISTORY::Save( APP_SETTINGS_BASE& aSettings )
+{
+    aSettings.m_System.file_history.clear();
+
+    for( const auto& file : m_fileHistory )
+        aSettings.m_System.file_history.insert( aSettings.m_System.file_history.begin(),
+                                                file.ToStdString() );
+}
+
+
+void FILE_HISTORY::Save( std::vector<wxString>* aList )
+{
+    aList->clear();
+
+    for( const auto& file : m_fileHistory )
+        aList->push_back( file );
 }
 
 

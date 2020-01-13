@@ -19,15 +19,18 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <tool/tool_settings.h>
-
 #include <geometry/direction45.h>
+#include <settings/parameters.h>
 
 #include "pns_routing_settings.h"
 
 namespace PNS {
 
-ROUTING_SETTINGS::ROUTING_SETTINGS()
+const int pnsSchemaVersion = 0;
+
+
+ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
+        NESTED_SETTINGS( "pns", pnsSchemaVersion, aParent, aPath )
 {
     m_routingMode = RM_Walkaround;
     m_optimizerEffort = OE_MEDIUM;
@@ -47,46 +50,39 @@ ROUTING_SETTINGS::ROUTING_SETTINGS()
     m_inlineDragEnabled = false;
     m_snapToTracks = false;
     m_snapToPads = false;
-}
 
+    m_params.emplace_back( new PARAM<int>( "mode", reinterpret_cast<int*>( &m_routingMode ),
+            static_cast<int>( RM_Walkaround ) ) );
 
-void ROUTING_SETTINGS::Save( TOOL_SETTINGS& aSettings ) const
-{
-    aSettings.Set( "Mode", (int) m_routingMode );
-    aSettings.Set( "OptimizerEffort", (int) m_optimizerEffort );
-    aSettings.Set( "RemoveLoops", m_removeLoops );
-    aSettings.Set( "SmartPads", m_smartPads );
-    aSettings.Set( "ShoveVias", m_shoveVias );
-    aSettings.Set( "StartDiagonal", m_startDiagonal );
-    aSettings.Set( "ShoveTimeLimit", m_shoveTimeLimit.Get() );
-    aSettings.Set( "ShoveIterationLimit", m_shoveIterationLimit );
-    aSettings.Set( "WalkaroundIterationLimit", m_walkaroundIterationLimit );
-    aSettings.Set( "JumpOverObstacles", m_jumpOverObstacles );
-    aSettings.Set( "SmoothDraggedSegments", m_smoothDraggedSegments );
-    aSettings.Set( "CanViolateDRC", m_canViolateDRC );
-    aSettings.Set( "SuggestFinish", m_suggestFinish );
-    aSettings.Set( "FreeAngleMode", m_freeAngleMode );
-    aSettings.Set( "InlineDragEnabled", m_inlineDragEnabled );
-}
+    m_params.emplace_back( new PARAM<int>( "effort", reinterpret_cast<int*>( &m_optimizerEffort ),
+            static_cast<int>( OE_MEDIUM ) ) );
 
+    m_params.emplace_back( new PARAM<bool>( "remove_loops",     &m_removeLoops,     true ) );
+    m_params.emplace_back( new PARAM<bool>( "smart_pads",       &m_smartPads,       true ) );
+    m_params.emplace_back( new PARAM<bool>( "shove_vias",       &m_shoveVias,       true ) );
+    m_params.emplace_back( new PARAM<bool>( "suggest_finish",   &m_suggestFinish,   false ) );
+    m_params.emplace_back( new PARAM<bool>( "follow_mouse",     &m_followMouse,     true ) );
+    m_params.emplace_back( new PARAM<bool>( "start_diagonal",   &m_startDiagonal,   false ) );
+    m_params.emplace_back( new PARAM<int>( "shove_iteration_limit", &m_shoveIterationLimit, 250 ) );
 
-void ROUTING_SETTINGS::Load( const TOOL_SETTINGS& aSettings )
-{
-    m_routingMode = (PNS_MODE) aSettings.Get( "Mode", (int) RM_Walkaround );
-    m_optimizerEffort = (PNS_OPTIMIZATION_EFFORT) aSettings.Get( "OptimizerEffort", (int) OE_MEDIUM );
-    m_removeLoops = aSettings.Get( "RemoveLoops", true );
-    m_smartPads = aSettings.Get( "SmartPads", true );
-    m_shoveVias = aSettings.Get( "ShoveVias", true );
-    m_startDiagonal = aSettings.Get( "StartDiagonal", false );
-    m_shoveTimeLimit.Set( aSettings.Get( "ShoveTimeLimit", 1000 ) );
-    m_shoveIterationLimit = aSettings.Get( "ShoveIterationLimit", 250 );
-    m_walkaroundIterationLimit = aSettings.Get( "WalkaroundIterationLimit", 50 );
-    m_jumpOverObstacles = aSettings.Get( "JumpOverObstacles", false  );
-    m_smoothDraggedSegments = aSettings.Get( "SmoothDraggedSegments", true );
-    m_canViolateDRC = aSettings.Get( "CanViolateDRC", false );
-    m_suggestFinish = aSettings.Get( "SuggestFinish", false );
-    m_freeAngleMode = aSettings.Get( "FreeAngleMode", false );
-    m_inlineDragEnabled = aSettings.Get( "InlineDragEnabled", false );
+    m_params.emplace_back( new PARAM_LAMBDA<int>( "shove_time_limit", [this] () -> int {
+                return m_shoveTimeLimit.Get();
+            }, [this] ( int aVal ) {
+                m_shoveTimeLimit.Set( aVal );
+            }, 1000 ) );
+
+    m_params.emplace_back(
+            new PARAM<int>( "walkaround_iteration_limit", &m_walkaroundIterationLimit, 40 ) );
+    m_params.emplace_back( new PARAM<bool>( "jump_over_obstacles", &m_jumpOverObstacles, false ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "smooth_dragged_segments", &m_smoothDraggedSegments, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "can_violate_drc",  &m_canViolateDRC,     false ) );
+    m_params.emplace_back( new PARAM<bool>( "free_angle_mode",  &m_freeAngleMode,     false ) );
+    m_params.emplace_back( new PARAM<bool>( "inline_drag",      &m_inlineDragEnabled, false ) );
+    m_params.emplace_back( new PARAM<bool>( "snap_to_tracks",   &m_snapToTracks,      false ) );
+    m_params.emplace_back( new PARAM<bool>( "snap_to_pads",     &m_snapToPads,        false ) );
 }
 
 

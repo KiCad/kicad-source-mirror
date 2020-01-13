@@ -133,8 +133,6 @@ protected:
      */
     void OnComponentSelected( wxCommandEvent& aEvent );
 
-    wxConfigBase*             m_config;
-
     wxTimer*                  m_dbl_click_timer;
     wxButton*                 m_browser_button;
     wxSplitterWindow*         m_hsplitter;

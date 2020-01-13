@@ -44,6 +44,8 @@
 #include <kicad_plugin.h>
 #include <legacy_plugin.h>
 #include <env_paths.h>
+#include <settings/settings_manager.h>
+#include <footprint_editor_settings.h>
 #include "footprint_viewer_frame.h"
 
 
@@ -77,9 +79,6 @@ static const wxString INFO_LEGACY_LIB_WARN_DELETE(
             "Please save the current library under the new .pretty format\n"\
             "and update your footprint lib table\n"\
             "before deleting a footprint" ) );
-
-
-#define EXPORT_IMPORT_LASTPATH_KEY wxT( "import_last_path" )
 
 
 /**
@@ -243,11 +242,11 @@ MODULE* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFil
 
 MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
 {
-    wxString        lastOpenedPathForLoading = m_mruPath;
-    wxConfigBase*   cfg = Kiface().KifaceSettings();
+    wxString lastOpenedPathForLoading = m_mruPath;
+    FOOTPRINT_EDITOR_SETTINGS* cfg    = GetSettings();
 
-    if( cfg )
-        cfg->Read( EXPORT_IMPORT_LASTPATH_KEY, &lastOpenedPathForLoading );
+    if( !cfg->m_LastImportExportPath.empty() )
+        lastOpenedPathForLoading = cfg->m_LastImportExportPath;
 
     wxFileName fn;
 
@@ -268,11 +267,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
         return NULL;
     }
 
-    if( cfg )    // Save file path
-    {
-        lastOpenedPathForLoading = fn.GetPath();
-        cfg->Write( EXPORT_IMPORT_LASTPATH_KEY, lastOpenedPathForLoading );
-    }
+    cfg->m_LastImportExportPath = lastOpenedPathForLoading;
 
     wxString    moduleName;
     IO_MGR::PCB_FILE_T fileType = detect_file_type( fp, fn.GetFullPath(), &moduleName );
@@ -330,8 +325,8 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
 
 void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
 {
-    wxFileName      fn;
-    wxConfigBase*   cfg = Kiface().KifaceSettings();
+    wxFileName fn;
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
 
     if( !aModule )
         return;
@@ -342,12 +337,10 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
 
     fn.SetExt( KiCadFootprintFileExtension );
 
-    if( cfg )
-    {
-        wxString    path;
-        cfg->Read( EXPORT_IMPORT_LASTPATH_KEY, &path, m_mruPath );
-        fn.SetPath( path );
-    }
+    if( !cfg->m_LastImportExportPath.empty() )
+        fn.SetPath( cfg->m_LastImportExportPath );
+    else
+        fn.SetPath( m_mruPath );
 
     wxFileDialog dlg( this, FMT_EXPORT_MODULE, fn.GetPath(), fn.GetFullName(),
                       wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -356,11 +349,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
         return;
 
     fn = dlg.GetPath();
-
-    if( cfg )  // Save file path
-    {
-        cfg->Write( EXPORT_IMPORT_LASTPATH_KEY, fn.GetPath() );
-    }
+    cfg->m_LastImportExportPath = fn.GetPath();
 
     try
     {
@@ -1065,7 +1054,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
     // Update reference:
-    if( settings.m_RefDefaultText.IsEmpty() )
+    if( settings.m_RefDefaultText.empty() )
         module->SetReference( moduleName );
     else
         module->SetReference( settings.m_RefDefaultText );
@@ -1081,7 +1070,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     module->Reference().SetVisible( settings.m_RefDefaultVisibility );
 
     // Set the value field to a default value
-    if( settings.m_ValueDefaultText.IsEmpty() )
+    if( settings.m_ValueDefaultText.empty() )
         module->SetValue( moduleName );
     else
         module->SetValue( settings.m_ValueDefaultText );

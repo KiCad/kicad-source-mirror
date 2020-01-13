@@ -22,21 +22,20 @@
  */
 
 #include "dialog_lib_edit_pin_table.h"
+#include "grid_tricks.h"
 #include "lib_pin.h"
 #include "pin_number.h"
-#include "grid_tricks.h"
-#include <widgets/grid_icon_text_helpers.h>
-#include <widgets/wx_grid.h>
-#include <queue>
 #include <base_units.h>
 #include <bitmaps.h>
-#include <wx/bmpcbox.h>
-#include <kiface_i.h>
-#include <kicad_string.h>
 #include <confirm.h>
+#include <kicad_string.h>
+#include <kiface_i.h>
 #include <lib_edit_frame.h>
-
-#define PinTableShownColumnsKey    wxT( "PinTableShownColumns" )
+#include <libedit_settings.h>
+#include <queue>
+#include <widgets/grid_icon_text_helpers.h>
+#include <widgets/wx_grid.h>
+#include <wx/bmpcbox.h>
 
 
 static std::vector<BITMAP_DEF> g_typeIcons;
@@ -393,8 +392,6 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( LIB_EDIT_FRAME* parent, LI
     m_editFrame( parent ),
     m_part( aPart )
 {
-    m_config = Kiface().KifaceSettings();
-
     if( g_typeNames.empty())
     {
         for( unsigned i = 0; i < ELECTRICAL_PINTYPES_TOTAL; ++i )
@@ -428,7 +425,9 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( LIB_EDIT_FRAME* parent, LI
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
     // Show/hide columns according to the user's preference
-    m_config->Read( PinTableShownColumnsKey, &m_columnsShown, wxT( "0 1 2 3 4 8 9" ) );
+    auto cfg = parent->GetSettings();
+    m_columnsShown = cfg->m_PinTableVisibleColumns;
+
     m_grid->ShowHideColumns( m_columnsShown );
 
     // Set special attributes
@@ -480,7 +479,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( LIB_EDIT_FRAME* parent, LI
 
 DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 {
-    m_config->Write( PinTableShownColumnsKey, m_grid->GetShownColumns() );
+    auto cfg = m_editFrame->GetSettings();
+    cfg->m_PinTableVisibleColumns = m_grid->GetShownColumns().ToStdString();
 
     // Disconnect Events
     m_grid->Disconnect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );

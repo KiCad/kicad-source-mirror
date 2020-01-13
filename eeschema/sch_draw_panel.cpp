@@ -40,6 +40,8 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <layers_id_colors_and_visibility.h>
 #include <math/vector2d.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <view/wx_view_controls.h>
@@ -61,6 +63,7 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     m_gal->SetWorldUnitLength( SCH_WORLD_UNIT );
 
     m_painter.reset( new KIGFX::SCH_PAINTER( m_gal ) );
+    m_painter->GetSettings()->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
 
     m_view->SetPainter( m_painter.get() );
     m_view->SetScaleLimits( 1000.0, 0.0001 );    // This fixes the zoom in and zoom out limits
@@ -203,9 +206,6 @@ void SCH_DRAW_PANEL::onPaint( wxPaintEvent& aEvent )
     // (depending on platforms). Do nothing in this case
     if( !m_gal->IsInitialized() || !m_gal->IsVisible() )
         return;
-
-    if( m_painter )
-        static_cast<KIGFX::SCH_PAINTER*>( m_painter.get() )->GetSettings()->ImportLegacyColors( nullptr );
 
     EDA_DRAW_PANEL_GAL::onPaint( aEvent );
 }

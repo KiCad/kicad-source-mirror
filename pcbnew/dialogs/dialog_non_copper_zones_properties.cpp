@@ -30,6 +30,7 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <widgets/unit_binder.h>
 #include <class_zone.h>
 #include <zones.h>
@@ -259,10 +260,8 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     m_settings.m_HatchFillTypeSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
     m_settings.m_HatchFillTypeSmoothingValue = m_spinCtrlSmoothValue->GetValue();
 
-    wxConfigBase* cfg = Kiface().KifaceSettings();
-    wxASSERT( cfg );
-
-    cfg->Write( ZONE_NET_OUTLINES_STYLE_KEY, (long) m_settings.m_Zone_HatchingStyle );
+    auto cfg = m_parent->GetSettings();
+    cfg->m_Zones.hatching_style = static_cast<int>( m_settings.m_Zone_HatchingStyle );
 
     m_settings.m_Zone_45_Only = m_ConstrainOpt->GetValue();
 

@@ -50,6 +50,8 @@ public:
 
     WS_RENDER_SETTINGS();
 
+    void LoadColors( const COLOR_SETTINGS* aSettings ) override;
+
     /// @copydoc RENDER_SETTINGS::GetColor()
     virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
 

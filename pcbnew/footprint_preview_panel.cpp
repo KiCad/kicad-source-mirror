@@ -23,9 +23,9 @@
 #include <mutex>
 #include <utility>
 
+#include "pcbnew_settings.h"
 #include <class_board.h>
 #include <class_module.h>
-#include <colors_design_settings.h>
 #include <eda_draw_frame.h>
 #include <footprint_preview_panel.h>
 #include <fp_lib_table.h>
@@ -38,6 +38,7 @@
 #include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
 #include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <view/view.h>
 #include <wx/stattext.h>
 
@@ -266,10 +267,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 
     m_dummyBoard = std::make_unique<BOARD>();
-    m_colorsSettings = std::make_unique<COLORS_DESIGN_SETTINGS>( FRAME_FOOTPRINT_PREVIEW );
-    m_colorsSettings->Load( Kiface().KifaceSettings() );
-
-    UseColorScheme( m_colorsSettings.get() );
+    UpdateColors();
     SyncLayersVisibility( m_dummyBoard.get() );
 
     Raise();
@@ -393,12 +391,8 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
 {
     PCB_EDIT_FRAME* pcbnew =
             static_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
-    wxConfigBase*   cfg       = Kiface().KifaceSettings();
-    wxConfigBase*   commonCfg = Pgm().CommonSettings();
-    bool            btemp;
-    int             itemp;
-    wxString        msg;
-    COLOR4D         ctemp;
+
+    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
     // Fetch grid & display settings from PCBNew if it's running; otherwise fetch them
     // from PCBNew's config settings.
@@ -415,21 +409,13 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
     }
     else
     {
+
         // Make and populate a new one from config
         gal_opts = std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>();
-
-        gal_opts->ReadConfig( *commonCfg, *cfg, wxString( PCB_EDIT_FRAME_NAME ), aParent );
+        gal_opts->ReadConfig( *Pgm().GetCommonSettings(), cfg->m_Window, aParent );
     }
 
-#ifdef __WXMAC__
-    // Cairo renderer doesn't handle Retina displays so default to OpenGL
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = (EDA_DRAW_PANEL_GAL::GAL_TYPE)
-                        cfg->ReadLong( CanvasTypeKeyBase, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-#else
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = (EDA_DRAW_PANEL_GAL::GAL_TYPE)
-                        cfg->ReadLong( CanvasTypeKeyBase, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-#endif
-
+    auto canvasType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( cfg->m_Graphics.canvas_type );
     auto panel = new FOOTPRINT_PREVIEW_PANEL( aKiway, aParent, std::move( gal_opts ), canvasType );
 
     if( pcbnew )
@@ -443,19 +429,12 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
     }
     else
     {
-        btemp = cfg->ReadBool( wxString( PCB_EDIT_FRAME_NAME ) + ShowGridEntryKeyword, true );
-        panel->GetGAL()->SetGridVisibility( btemp );
+        panel->GetGAL()->SetGridVisibility( cfg->m_Window.grid.show );
 
         // Read grid size:
         std::unique_ptr<PCB_SCREEN> temp_screen = std::make_unique<PCB_SCREEN>( wxSize() );
-        cfg->Read( wxString( PCB_EDIT_FRAME_NAME ) + LastGridSizeIdKeyword, &itemp, 0L );
-        temp_screen->SetGrid( itemp + ID_POPUP_GRID_LEVEL_1000 );
+        temp_screen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + cfg->m_Window.grid.last_size );
         panel->GetGAL()->SetGridSize( VECTOR2D( temp_screen->GetGridSize() ) );
-
-        // Read grid color:
-        msg = cfg->Read( wxString( PCB_EDIT_FRAME_NAME ) + GridColorEntryKeyword, wxT( "NONE" ) );
-        ctemp.SetFromWxString( msg );
-        panel->GetGAL()->SetGridColor( ctemp );
     }
 
     return panel;

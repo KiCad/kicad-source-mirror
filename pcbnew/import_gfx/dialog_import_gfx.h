@@ -26,6 +26,7 @@
 #define __DIALOG_IMPORT_GFX_H__
 
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include "dialog_import_gfx_base.h"
 #include <import_gfx/graphics_importer_pcbnew.h>
 
@@ -59,7 +60,6 @@ public:
 
 private:
     PCB_BASE_FRAME*      m_parent;
-    wxConfigBase*        m_config;              // Current config
     std::unique_ptr<GRAPHICS_IMPORTER_PCBNEW> m_importer;
     std::unique_ptr<GRAPHICS_IMPORT_MGR>      m_gfxImportMgr;
     static int           m_originUnits;

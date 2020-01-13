@@ -32,7 +32,6 @@ class DIALOG_FOOTPRINT_WIZARD_LIST: public DIALOG_FOOTPRINT_WIZARD_LIST_BASE
 {
 private:
     FOOTPRINT_WIZARD* m_footprintWizard;    ///< The selected python script wizard
-    wxConfigBase*     m_config;
 
 public:
     DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow * aParent );

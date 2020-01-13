@@ -40,32 +40,26 @@
 #include <wx/sysopt.h>
 #include <wx/richmsgdlg.h>
 
-#include <pgm_base.h>
-#include <eda_draw_frame.h>
-#include <eda_base_frame.h>
-#include <macros.h>
-#include <config_params.h>
-#include <id.h>
 #include <build_version.h>
-#include <hotkeys_basic.h>
-#include <gestfich.h>
-#include <menus_helpers.h>
+#include <config_params.h>
 #include <confirm.h>
 #include <dialog_configure_paths.h>
+#include <eda_base_frame.h>
+#include <eda_draw_frame.h>
+#include <gal/gal_display_options.h>
+#include <gestfich.h>
+#include <hotkeys_basic.h>
+#include <id.h>
 #include <lockfile.h>
+#include <macros.h>
+#include <menus_helpers.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
+#include <settings/settings_manager.h>
 #include <systemdirsappend.h>
 #include <trace_helpers.h>
-#include <gal/gal_display_options.h>
 
-#define KICAD_COMMON                     wxT( "kicad_common" )
 
-// some key strings used to store parameters in KICAD_COMMON
-
-const wxChar PGM_BASE::workingDirKey[] = wxT( "WorkingDir" );     // public
-
-static const wxChar languageCfgKey[]   = wxT( "LanguageID" );
-static const wxChar pathEnvVariables[] = wxT( "EnvironmentVariables" );
-static const wxChar showEnvVarWarningDialog[] = wxT( "ShowEnvVarWarningDialog" );
 static const wxChar traceEnvVars[]     = wxT( "KIENVVARS" );
 
 
@@ -133,8 +127,6 @@ PGM_BASE::~PGM_BASE()
 void PGM_BASE::Destroy()
 {
     // unlike a normal destructor, this is designed to be called more than once safely:
-    m_common_settings.reset();
-
     delete m_pgm_checker;
     m_pgm_checker = 0;
 
@@ -153,8 +145,8 @@ wxApp& PGM_BASE::App()
 void PGM_BASE::SetEditorName( const wxString& aFileName )
 {
     m_editor_name = aFileName;
-    wxASSERT( m_common_settings );
-    m_common_settings->Write( "Editor", aFileName );
+    wxASSERT( GetCommonSettings() );
+    GetCommonSettings()->m_System.editor_name = aFileName;
 }
 
 
@@ -222,8 +214,6 @@ bool PGM_BASE::InitPgm()
 {
     wxFileName pgm_name( App().argv[0] );
 
-    wxConfigBase::DontCreateOnDemand();
-
     wxInitAllImageHandlers();
 
     m_pgm_checker = new wxSingleInstanceChecker( pgm_name.GetName().Lower() + wxT( "-" ) +
@@ -239,6 +229,12 @@ bool PGM_BASE::InitPgm()
         if( !IsOK( NULL, quiz ) )
             return false;
     }
+
+    m_settings_manager = std::unique_ptr<SETTINGS_MANAGER>( new SETTINGS_MANAGER );
+
+    // Something got in the way of settings load: can't continue
+    if( !m_settings_manager->IsOK() )
+        return false;
 
     // Init KiCad environment
     // the environment variable KICAD (if exists) gives the kicad path:
@@ -273,9 +269,6 @@ bool PGM_BASE::InitPgm()
     setExecutablePath();
 
     SetLanguagePath();
-
-    // OS specific instantiation of wxConfigBase derivative:
-    m_common_settings = GetNewConfig( KICAD_COMMON );
 
     wxString envVarName = wxT( "KIGITHUB" );
     ENV_VAR_ITEM envVarItem;
@@ -433,7 +426,7 @@ bool PGM_BASE::InitPgm()
     envVarItem.SetValue( tmpFileName.GetPath() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
-    ReadPdfBrowserInfos();      // needs m_common_settings
+    GetSettingsManager().Load( GetCommonSettings() );
 
     // Init user language *before* calling loadCommonSettings, because
     // env vars could be incorrectly initialized on Linux
@@ -441,6 +434,8 @@ bool PGM_BASE::InitPgm()
     SetLanguage( true );
 
     loadCommonSettings();
+
+    ReadPdfBrowserInfos();      // needs GetCommonSettings()
 
 #ifdef __WXMAC__
     // Always show filters on Open dialog to be able to choose plugin
@@ -495,138 +490,62 @@ bool PGM_BASE::setExecutablePath()
 
 void PGM_BASE::loadCommonSettings()
 {
-    wxASSERT( m_common_settings );
-
     m_help_size.x = 500;
     m_help_size.y = 400;
 
-    // This only effect the first time KiCad is run.  The user's setting will be used for all
-    // subsequent runs.  Menu icons are off by default on OSX and on for all other platforms.
-#if defined( __WXMAC__ )
-    bool defaultUseIconsInMenus = false;
-#else
-    bool defaultUseIconsInMenus = true;
-#endif
+    m_show_env_var_dialog = GetCommonSettings()->m_Env.show_warning_dialog;
+    m_editor_name = GetCommonSettings()->m_System.editor_name;
 
-    m_common_settings->Read( showEnvVarWarningDialog, &m_show_env_var_dialog );
-
-    if( !m_common_settings->HasEntry( USE_ICONS_IN_MENUS_KEY ) )
-        m_common_settings->Write( USE_ICONS_IN_MENUS_KEY, defaultUseIconsInMenus );
-
-    if( !m_common_settings->HasEntry( ICON_SCALE_KEY )
-        || !m_common_settings->HasEntry( GAL_ANTIALIASING_MODE_KEY )
-        || !m_common_settings->HasEntry( CAIRO_ANTIALIASING_MODE_KEY )  )
+    for( const auto& it : GetCommonSettings()->m_Env.vars )
     {
-        // 5.0 and earlier saved common settings in each app, and saved hardware antialiasing
-        // options only in pcbnew (which was the only canvas to support them).  Since there's
-        // no single right answer to where to pull the common settings from, we might as well
-        // get them along with the hardware antialiasing option from pcbnew.
-        auto pcbnewConfig = GetNewConfig( wxString::FromUTF8( "pcbnew" ) );
-        wxString pcbFrameKey( PCB_EDIT_FRAME_NAME );
-
-        if( !m_common_settings->HasEntry( ICON_SCALE_KEY ) )
-        {
-            int temp;
-            wxString msg;
-            bool option;
-
-            pcbnewConfig->Read( "PcbIconScale", &temp, 0 );
-            m_common_settings->Write( ICON_SCALE_KEY, temp );
-
-            pcbnewConfig->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option, false );
-            m_common_settings->Write( ENBL_MOUSEWHEEL_PAN_KEY, option );
-
-            pcbnewConfig->Read( ENBL_ZOOM_NO_CENTER_KEY, &option, false );
-            m_common_settings->Write( ENBL_ZOOM_NO_CENTER_KEY, option );
-
-            pcbnewConfig->Read( ENBL_AUTO_PAN_KEY, &option, true );
-            m_common_settings->Write( ENBL_AUTO_PAN_KEY, option );
-        }
-
-        if( !m_common_settings->HasEntry( GAL_ANTIALIASING_MODE_KEY ) )
-        {
-            int temp;
-            pcbnewConfig->Read( pcbFrameKey + GAL_DISPLAY_OPTIONS_KEY + GAL_ANTIALIASING_MODE_KEY,
-                                &temp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
-            m_common_settings->Write( GAL_ANTIALIASING_MODE_KEY, temp );
-        }
-
-        if( !m_common_settings->HasEntry( CAIRO_ANTIALIASING_MODE_KEY ) )
-        {
-            int temp;
-            pcbnewConfig->Read( pcbFrameKey + GAL_DISPLAY_OPTIONS_KEY + CAIRO_ANTIALIASING_MODE_KEY,
-                                &temp, (int) KIGFX::CAIRO_ANTIALIASING_MODE::NONE );
-            m_common_settings->Write( CAIRO_ANTIALIASING_MODE_KEY, temp );
-        }
-    }
-
-    m_editor_name = m_common_settings->Read( "Editor" );
-
-    wxString entry, oldPath;
-    wxArrayString entries;
-    long index = 0L;
-
-    oldPath = m_common_settings->GetPath();
-    m_common_settings->SetPath( pathEnvVariables );
-
-    while( m_common_settings->GetNextEntry( entry, index ) )
-    {
-        wxLogTrace( traceEnvVars,
-                    "Enumerating over entry %s, %ld.", GetChars( entry ), index );
+        wxString key( it.first.c_str(), wxConvUTF8 );
+        wxLogTrace( traceEnvVars, "Enumerating over entry %s = %s.", key, it.second );
 
         // Do not store the env var PROJECT_VAR_NAME ("KIPRJMOD") definition if for some reason
         // it is found in config. (It is reserved and defined as project path)
-        if( entry == PROJECT_VAR_NAME )
+        if( key == PROJECT_VAR_NAME )
             continue;
 
-        entries.Add( entry );
-    }
-
-    for( unsigned i = 0;  i < entries.GetCount();  i++ )
-    {
-        wxString val = m_common_settings->Read( entries[i], wxEmptyString );
-
-        if( m_local_env_vars[ entries[i] ].GetDefinedExternally() )
+        if( m_local_env_vars[ key ].GetDefinedExternally() )
             continue;
 
-        m_local_env_vars[ entries[i]  ] = ENV_VAR_ITEM( val, wxGetEnv( entries[i], NULL ) );
+        m_local_env_vars[ key ] = ENV_VAR_ITEM( it.second, wxGetEnv( it.first, nullptr ) );
     }
 
-    for( ENV_VAR_MAP_ITER it = m_local_env_vars.begin(); it != m_local_env_vars.end(); ++it )
-    {
-        SetLocalEnvVariable( it->first, it->second.GetValue() );
-    }
-
-    m_common_settings->SetPath( oldPath );
+    for( auto& m_local_env_var : m_local_env_vars )
+        SetLocalEnvVariable( m_local_env_var.first, m_local_env_var.second.GetValue() );
 }
 
 
 void PGM_BASE::SaveCommonSettings()
 {
-    // m_common_settings is not initialized until fairly late in the
+    // GetCommonSettings() is not initialized until fairly late in the
     // process startup: InitPgm(), so test before using:
-    if( m_common_settings )
+    if( GetCommonSettings() )
     {
-        wxString cur_dir = wxGetCwd();
-
-        m_common_settings->Write( workingDirKey, cur_dir );
-        m_common_settings->Write( showEnvVarWarningDialog, m_show_env_var_dialog );
+        GetCommonSettings()->m_System.working_dir = wxGetCwd().ToStdString();
+        GetCommonSettings()->m_Env.show_warning_dialog = m_show_env_var_dialog;
 
         // Save the local environment variables.
-        m_common_settings->SetPath( pathEnvVariables );
-
-        for( ENV_VAR_MAP_ITER it = m_local_env_vars.begin(); it != m_local_env_vars.end(); ++it )
+        for( auto& m_local_env_var : m_local_env_vars )
         {
-            if( it->second.GetDefinedExternally() )
+            if( m_local_env_var.second.GetDefinedExternally() )
                 continue;
 
             wxLogTrace( traceEnvVars, "Saving environment variable config entry %s as %s",
-                        GetChars( it->first ),  GetChars( it->second.GetValue() ) );
-            m_common_settings->Write( it->first, it->second.GetValue() );
-        }
+                        GetChars( m_local_env_var.first ),
+                        GetChars( m_local_env_var.second.GetValue() ) );
 
-        m_common_settings->SetPath( ".." );
+            std::string key( m_local_env_var.first.ToUTF8() );
+            GetCommonSettings()->m_Env.vars[ key ] = m_local_env_var.second.GetValue();
+        }
     }
+}
+
+
+COMMON_SETTINGS* PGM_BASE::GetCommonSettings() const
+{
+    return GetSettingsManager().GetCommonSettings();
 }
 
 
@@ -638,10 +557,8 @@ bool PGM_BASE::SetLanguage( bool first_time )
     {
         setLanguageId( wxLANGUAGE_DEFAULT );
         // First time SetLanguage is called, the user selected language id is set
-        // from commun user config settings
-        wxString languageSel;
-
-        m_common_settings->Read( languageCfgKey, &languageSel );
+        // from common user config settings
+        wxString languageSel = GetCommonSettings()->m_System.language;
 
         // Search for the current selection
         for( unsigned ii = 0; LanguagesList[ii].m_KI_Lang_Identifier != 0; ii++ )
@@ -695,7 +612,7 @@ bool PGM_BASE::SetLanguage( bool first_time )
             }
         }
 
-        m_common_settings->Write( languageCfgKey, languageSel );
+        GetCommonSettings()->m_System.language = languageSel;
     }
 
     // Test if floating point notation is working (bug encountered in cross compilation)
@@ -797,17 +714,15 @@ void PGM_BASE::SetLocalEnvVariables( const ENV_VAR_MAP& aEnvVarMap )
     m_local_env_vars.clear();
     m_local_env_vars = aEnvVarMap;
 
-    if( m_common_settings )
-        m_common_settings->DeleteGroup( pathEnvVariables );
-
     SaveCommonSettings();
 
     // Overwrites externally defined environment variable until the next time the application
     // is run.
-    for( ENV_VAR_MAP_ITER it = m_local_env_vars.begin(); it != m_local_env_vars.end(); ++it )
+    for( auto& m_local_env_var : m_local_env_vars )
     {
         wxLogTrace( traceEnvVars, "Setting local environment variable %s to %s.",
-                    GetChars( it->first ), GetChars( it->second.GetValue() ) );
-        wxSetEnv( it->first, it->second.GetValue() );
+                    GetChars( m_local_env_var.first ),
+                    GetChars( m_local_env_var.second.GetValue() ) );
+        wxSetEnv( m_local_env_var.first, m_local_env_var.second.GetValue() );
     }
 }

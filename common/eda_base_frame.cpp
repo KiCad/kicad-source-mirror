@@ -23,48 +23,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/stdpaths.h>
-#include <wx/string.h>
-#include <wx/display.h>
+#include <bitmaps.h>
 #include <dialog_shim.h>
+#include <dialogs/panel_common_settings.h>
+#include <filehistory.h>
 #include <id.h>
 #include <kiface_i.h>
-#include <pgm_base.h>
-#include <trace_helpers.h>
+#include <menus_helpers.h>
 #include <panel_hotkeys_editor.h>
-#include <dialogs/panel_common_settings.h>
-#include <widgets/paged_dialog.h>
-#include <bitmaps.h>
+#include <pgm_base.h>
+#include <settings/app_settings.h>
+#include <settings/common_settings.h>
+#include <settings/settings_manager.h>
+#include <tool/action_manager.h>
 #include <tool/action_menu.h>
+#include <tool/actions.h>
 #include <tool/common_control.h>
 #include <tool/tool_manager.h>
-#include <tool/action_manager.h>
-#include <menus_helpers.h>
-#include <tool/actions.h>
-#include <filehistory.h>
-
-
-/// The default auto save interval is 10 minutes.
-#define DEFAULT_AUTO_SAVE_INTERVAL 600
-
-///@{
-/// \ingroup config
-
-/// Configuration file entry name for auto save interval.
-static const wxString entryAutoSaveInterval = "AutoSaveInterval";
-
-/// Configuration file entry for wxAuiManger perspective.
-static const wxString entryPerspective = "Perspective";
-
-/// Configuration file entry for most recently used path.
-static const wxString entryMruPath = "MostRecentlyUsedPath";
-
-static const wxString entryPosY = "Pos_y";   ///< Y position of frame, in pixels (suffix)
-static const wxString entryPosX = "Pos_x";   ///< X position of frame, in pixels (suffix)
-static const wxString entrySizeY = "Size_y"; ///< Height of frame, in pixels (suffix)
-static const wxString entrySizeX = "Size_x"; ///< Width of frame, in pixels (suffix)
-static const wxString entryMaximized = "Maximized";  ///< Nonzero iff frame is maximized (suffix)
-///@}
+#include <trace_helpers.h>
+#include <widgets/paged_dialog.h>
+#include <wx/display.h>
+#include <wx/stdpaths.h>
+#include <wx/string.h>
 
 
 BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
@@ -95,6 +75,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
     m_mruPath = wxStandardPaths::Get().GetDocumentsDir();
     m_toolManager = nullptr;
+    m_settingsManager = nullptr;
 
     // Gives a reasonable minimal size to the frame:
     const int minsize_x = 500;
@@ -151,7 +132,7 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
         return;
     }
 
-    wxConfigBase* cfg = config();
+    APP_SETTINGS_BASE* cfg = config();
 
     if( cfg )
         SaveSettings( cfg );    // virtual, wxFrame specific
@@ -450,40 +431,30 @@ void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
         GetMenuBar()->Refresh();
     }
 
-    wxConfigBase* settings = Pgm().CommonSettings();
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
-    settings->Read( WARP_MOUSE_ON_MOVE_KEY, &m_moveWarpsCursor );
-    settings->Read( PREFER_SELECT_TO_DRAG_KEY, &m_dragSelects );
-    settings->Read( IMMEDIATE_ACTIONS_KEY, &m_immediateActions );
+    m_moveWarpsCursor = settings->m_Input.warp_mouse_on_move;
+    m_dragSelects = settings->m_Input.prefer_select_to_drag;
+    m_immediateActions = settings->m_Input.immediate_actions;
 }
 
 
-void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
+void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
 {
-    int maximized = 0;
+    m_FramePos.x = aCfg->pos_x;
+    m_FramePos.y = aCfg->pos_y;
+    m_FrameSize.x = aCfg->size_x;
+    m_FrameSize.y = aCfg->size_y;
 
-    wxString baseCfgName = ConfigBaseName();
-
-    wxString text = baseCfgName + entryPosX;
-    aCfg->Read( text, &m_FramePos.x, m_FramePos.x );
-
-    text = baseCfgName + entryPosY;
-    aCfg->Read( text, &m_FramePos.y, m_FramePos.y );
-
-    text = baseCfgName + entrySizeX;
-    aCfg->Read( text, &m_FrameSize.x, m_FrameSize.x );
-
-    text = baseCfgName + entrySizeY;
-    aCfg->Read( text, &m_FrameSize.y, m_FrameSize.y );
-
-    text = baseCfgName + entryMaximized;
-    aCfg->Read( text, &maximized, 0 );
+    // Ensure minimum size is set if the stored config was zero-initialized
+    if( m_FrameSize.x < GetMinWidth() || m_FrameSize.y < GetMinHeight() )
+    {
+        m_FrameSize.x = GetMinWidth();
+        m_FrameSize.y = GetMinHeight();
+    }
 
     if( m_hasAutoSave )
-    {
-        text = baseCfgName + entryAutoSaveInterval;
-        aCfg->Read( text, &m_autoSaveInterval, DEFAULT_AUTO_SAVE_INTERVAL );
-    }
+        m_autoSaveInterval = Pgm().GetCommonSettings()->m_System.autosave_interval;
 
     // Ensure the window is on a connected display, and is visible.
     // (at least a corner of the frame must be visible on screen)
@@ -510,33 +481,21 @@ void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     if( m_FramePos.y < Ypos_min )
         m_FramePos.y = Ypos_min;
 
-    if( maximized )
+    if( aCfg->maximized )
         Maximize();
 
-    aCfg->Read( baseCfgName + entryPerspective, &m_perspective );
-    aCfg->Read( baseCfgName + entryMruPath, &m_mruPath );
+    m_perspective = aCfg->perspective;
+    m_mruPath = aCfg->mru_path;
 
-    wxConfigBase* settings = Pgm().CommonSettings();
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
-    if( !settings->Read( WARP_MOUSE_ON_MOVE_KEY, &m_moveWarpsCursor ) )
-    {
-        // Legacy versions stored the property only for Eeschema, so see if we have it there
-        std::unique_ptr<wxConfigBase> pcbSettings = GetNewConfig( wxT( "eeschema" ) );
-        pcbSettings->Read( "MoveWarpsCursor", &m_moveWarpsCursor, true );
-    }
-
-    if( !settings->Read( PREFER_SELECT_TO_DRAG_KEY, &m_dragSelects ) )
-    {
-        // Legacy versions stored the property only for PCBNew, so see if we have it there
-        std::unique_ptr<wxConfigBase> pcbSettings = GetNewConfig( wxT( "pcbnew" ) );
-        pcbSettings->Read( "DragSelects", &m_dragSelects, true );
-    }
-
-    settings->Read( IMMEDIATE_ACTIONS_KEY, &m_immediateActions, false );
+    m_moveWarpsCursor = settings->m_Input.warp_mouse_on_move;
+    m_dragSelects = settings->m_Input.prefer_select_to_drag;
+    m_immediateActions = settings->m_Input.immediate_actions;
 }
 
 
-void EDA_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
+void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
 {
     wxString        text;
 
@@ -548,43 +507,47 @@ void EDA_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
     m_FrameSize = GetSize();
     m_FramePos  = GetPosition();
 
-    text = baseCfgName + wxT( "Pos_x" );
-    aCfg->Write( text, (long) m_FramePos.x );
+    aCfg->pos_x = m_FramePos.x;
+    aCfg->pos_y = m_FramePos.y;
+    aCfg->size_x = m_FrameSize.x;
+    aCfg->size_y = m_FrameSize.y;
+    aCfg->maximized = IsMaximized();
 
-    text = baseCfgName + wxT( "Pos_y" );
-    aCfg->Write( text, (long) m_FramePos.y );
-
-    text = baseCfgName + wxT( "Size_x" );
-    aCfg->Write( text, (long) m_FrameSize.x );
-
-    text = baseCfgName + wxT( "Size_y" );
-    aCfg->Write( text, (long) m_FrameSize.y );
-
-    text = baseCfgName + wxT( "Maximized" );
-    aCfg->Write( text, IsMaximized() );
-
+    // TODO(JE) should auto-save in common settings be overwritten by every app?
     if( m_hasAutoSave )
-    {
-        text = baseCfgName + entryAutoSaveInterval;
-        aCfg->Write( text, m_autoSaveInterval );
-    }
+        Pgm().GetCommonSettings()->m_System.autosave_interval = m_autoSaveInterval;
 
     // Once this is fully implemented, wxAuiManager will be used to maintain
     // the persistance of the main frame and all it's managed windows and
     // all of the legacy frame persistence position code can be removed.
-    wxString perspective = m_auimgr.SavePerspective();
+    aCfg->perspective = m_auimgr.SavePerspective().ToStdString();
 
-    // printf( "perspective(%s): %s\n",
-    //    TO_UTF8( m_FrameName + entryPerspective ), TO_UTF8( perspective ) );
-    aCfg->Write( baseCfgName + entryPerspective, perspective );
-    aCfg->Write( baseCfgName + entryMruPath, m_mruPath );
+    aCfg->mru_path = m_mruPath;
 }
 
 
-wxConfigBase* EDA_BASE_FRAME::config()
+void EDA_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
+{
+    LoadWindowSettings( GetWindowSettings( aCfg ) );
+}
+
+
+void EDA_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
+{
+    SaveWindowSettings( GetWindowSettings( aCfg ) );
+}
+
+
+WINDOW_SETTINGS* EDA_BASE_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
+{
+    return &aCfg->m_Window;
+}
+
+
+APP_SETTINGS_BASE* EDA_BASE_FRAME::config()
 {
     // KICAD_MANAGER_FRAME overrides this
-    wxConfigBase* ret = Kiface().KifaceSettings();
+    APP_SETTINGS_BASE* ret = Kiface().KifaceSettings();
     //wxASSERT( ret );
     return ret;
 }

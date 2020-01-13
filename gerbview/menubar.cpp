@@ -24,16 +24,16 @@
  */
 #include "gerbview_frame.h"
 
-#include <advanced_config.h>
-#include <kiface_i.h>
-#include <pgm_base.h>
 #include "gerbview_id.h"
+#include <kiface_i.h>
 #include <menus_helpers.h>
+#include <pgm_base.h>
+#include <advanced_config.h>
 #include <tool/actions.h>
-#include <tool/tool_manager.h>
 #include <tool/conditional_menu.h>
-#include <tools/gerbview_selection_tool.h>
+#include <tool/tool_manager.h>
 #include <tools/gerbview_actions.h>
+#include <tools/gerbview_selection_tool.h>
 
 
 void GERBVIEW_FRAME::ReCreateMenuBar()

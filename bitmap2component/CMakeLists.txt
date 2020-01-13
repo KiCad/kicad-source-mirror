@@ -12,6 +12,7 @@ set( BITMAP2COMPONENT_SRCS
     ${CMAKE_SOURCE_DIR}/common/single_top.cpp
 
     bitmap2cmp_main.cpp
+    bitmap2cmp_settings.cpp
     bitmap2component.cpp
     bitmap2cmp_gui_base.cpp
     bitmap2cmp_gui.cpp

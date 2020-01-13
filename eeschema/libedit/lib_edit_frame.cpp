@@ -23,41 +23,44 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <base_screen.h>
+#include <class_library.h>
+#include <confirm.h>
+#include <eeschema_id.h>
+#include <eeschema_settings.h>
 #include <fctsys.h>
-#include <pgm_base.h>
+#include <general.h>
 #include <kiface_i.h>
 #include <kiway_express.h>
-#include <sch_draw_panel.h>
-#include <base_screen.h>
-#include <confirm.h>
-#include <general.h>
-#include <eeschema_id.h>
 #include <lib_edit_frame.h>
-#include <class_library.h>
 #include <lib_manager.h>
-#include <widgets/symbol_tree_pane.h>
-#include <widgets/lib_tree.h>
+#include <libedit_settings.h>
+#include <pgm_base.h>
+#include <sch_draw_panel.h>
+#include <sch_painter.h>
+#include <sch_view.h>
+#include <settings/settings_manager.h>
 #include <symbol_lib_table.h>
-#include <wildcards_and_files_ext.h>
-#include <wx/progdlg.h>
-#include <tool/tool_manager.h>
-#include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
-#include <tool/picker_tool.h>
 #include <tool/common_tools.h>
+#include <tool/picker_tool.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
 #include <tools/ee_actions.h>
-#include <tools/ee_selection_tool.h>
 #include <tools/ee_inspection_tool.h>
-#include <tools/lib_pin_tool.h>
+#include <tools/ee_point_editor.h>
+#include <tools/ee_selection_tool.h>
+#include <tools/lib_control.h>
+#include <tools/lib_drawing_tools.h>
 #include <tools/lib_edit_tool.h>
 #include <tools/lib_move_tool.h>
-#include <tools/lib_drawing_tools.h>
-#include <tools/lib_control.h>
-#include <tools/ee_point_editor.h>
-#include <sch_view.h>
-#include <sch_painter.h>
+#include <tools/lib_pin_tool.h>
+#include <widgets/lib_tree.h>
+#include <widgets/symbol_tree_pane.h>
+#include <wildcards_and_files_ext.h>
+#include <wx/progdlg.h>
 
 
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
@@ -123,7 +126,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     icon.CopyFromBitmap( KiBitmap( icon_libedit_xpm ) );
     SetIcon( icon );
 
-    LoadSettings( config() );
+    m_settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    LoadSettings( m_settings );
 
     // Ensure axis are always drawn
     KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = GetGalDisplayOptions();
@@ -203,7 +207,79 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
     // current screen is destroyed in EDA_DRAW_FRAME
     SetScreen( m_dummyScreen );
 
+    auto libedit = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    Pgm().GetSettingsManager().Save( libedit );
+
     delete m_libMgr;
+}
+
+
+void LIB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
+{
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
+
+    auto cfg = dynamic_cast<LIBEDIT_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
+
+    SetDefaultLineThickness( Mils2iu( cfg->m_Defaults.line_width ) );
+    SetDefaultPinLength( Mils2iu( cfg->m_Defaults.pin_length ) );
+    m_textPinNameDefaultSize = Mils2iu( cfg->m_Defaults.pin_name_size );
+    m_textPinNumDefaultSize = Mils2iu( cfg->m_Defaults.pin_num_size );
+    SetRepeatDeltaLabel( cfg->m_Repeat.label_delta );
+    SetRepeatPinStep( Mils2iu( cfg->m_Repeat.pin_step ) );
+    SetRepeatStep( wxPoint( cfg->m_Repeat.x_step, cfg->m_Repeat.y_step ) );
+    m_showPinElectricalTypeName = cfg->m_ShowPinElectricalType;
+    m_defaultLibWidth = cfg->m_LibWidth;
+
+    // TODO(JE) does libedit need its own TemplateFieldNames?
+    auto ee_settings = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    wxASSERT( ee_settings );
+    wxString templateFieldNames = ee_settings->m_Drawing.field_names;
+
+    if( !templateFieldNames.IsEmpty() )
+    {
+        TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
+
+        try
+        {
+            m_templateFieldNames.Parse( &lexer );
+        }
+        catch( const IO_ERROR& DBG( e ) )
+        {
+            // @todo show error msg
+            DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
+        }
+    }
+
+    auto painter = static_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
+    KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
+    settings->m_ShowPinsElectricalType = m_showPinElectricalTypeName;
+
+    // Hidden elements must be editable
+    settings->m_ShowHiddenText = true;
+    settings->m_ShowHiddenPins = true;
+    settings->m_ShowUmbilicals = false;
+}
+
+
+void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
+{
+    // aCfg will be EESCHEMA_SETTINGS because that's the parent FACE
+    // so we throw it away here and get our own settings
+
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    EDA_DRAW_FRAME::SaveSettings( cfg );
+
+    cfg->m_Defaults.line_width    = Iu2Mils( GetDefaultLineThickness() );
+    cfg->m_Defaults.pin_length    = Iu2Mils( GetDefaultPinLength() );
+    cfg->m_Defaults.pin_name_size = Iu2Mils( GetPinNameDefaultSize() );
+    cfg->m_Defaults.pin_num_size  = Iu2Mils( GetPinNumDefaultSize() );
+    cfg->m_Repeat.label_delta     = GetRepeatDeltaLabel();
+    cfg->m_Repeat.pin_step        = Iu2Mils( GetRepeatPinStep() );
+    cfg->m_Repeat.x_step          = Iu2Mils( GetRepeatStep().x );
+    cfg->m_Repeat.y_step          = Iu2Mils( GetRepeatStep().y );
+    cfg->m_ShowPinElectricalType  = GetShowElectricalType();
+    cfg->m_LibWidth               = m_treePane->GetSize().x;
 }
 
 

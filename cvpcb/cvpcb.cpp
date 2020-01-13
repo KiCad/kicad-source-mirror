@@ -31,8 +31,10 @@
 #include <fp_lib_table.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
+#include <settings/settings_manager.h>
 
 #include <cvpcb_mainframe.h>
+#include <cvpcb_settings.h>
 #include <display_footprints_frame.h>
 
 
@@ -127,6 +129,9 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // This is process level, not project level, initialization of the DSO.
 
     // Do nothing in here pertinent to a project!
+
+    InitSettings( new CVPCB_SETTINGS );
+    aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
 
     start_common( aCtlBits );
 

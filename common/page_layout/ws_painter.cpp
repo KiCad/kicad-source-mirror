@@ -31,6 +31,7 @@
 #include <eda_draw_frame.h>
 #include <title_block.h>
 #include <build_version.h>
+#include <settings/color_settings.h>
 #include <ws_draw_item.h>
 #include <gal/graphics_abstraction_layer.h>
 
@@ -49,6 +50,18 @@ WS_RENDER_SETTINGS::WS_RENDER_SETTINGS()
     m_brightenedColor = COLOR4D( 0.0, 1.0, 0.0, 0.9 );
 
     update();
+}
+
+
+void WS_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
+{
+    for( int layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; layer ++)
+        m_layerColors[ layer ] = aSettings->GetColor( layer );
+
+    for( int layer = GAL_LAYER_ID_START; layer < GAL_LAYER_ID_END; layer ++)
+        m_layerColors[ layer ] = aSettings->GetColor( layer );
+
+    m_backgroundColor = aSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 }
 
 

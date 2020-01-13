@@ -31,40 +31,21 @@
 #ifndef  PGM_BASE_H_
 #define  PGM_BASE_H_
 
+#include <bitmaps_png/bitmap_def.h>
 #include <map>
 #include <memory>
-#include <wx/filename.h>
 #include <search_stack.h>
+#include <wx/filename.h>
 #include <wx/gdicmn.h>
-#include <bitmaps_png/bitmap_def.h>
 
 
-///@{
-/// \ingroup config
-
-#define USE_ICONS_IN_MENUS_KEY          wxT( "UseIconsInMenus" )
-#define ICON_SCALE_KEY                  wxT( "IconScale" )
-#define CANVAS_SCALE_KEY                wxT( "CanvasScale" )
-#define AUTOSAVE_INTERVAL_KEY           wxT( "AutoSaveInterval" )
-#define ENBL_ZOOM_NO_CENTER_KEY         wxT( "ZoomNoCenter" )
-#define ENBL_MOUSEWHEEL_PAN_KEY         wxT( "MousewheelPAN" )
-#define MIDDLE_BUTT_PAN_LIMITED_KEY     wxT( "MiddleBtnPANLimited" )
-#define ENBL_AUTO_PAN_KEY               wxT( "AutoPAN" )
-#define FILE_HISTORY_SIZE_KEY           wxT( "FileHistorySize" )
-#define GAL_DISPLAY_OPTIONS_KEY         wxT( "GalDisplayOptions" )
-#define GAL_ANTIALIASING_MODE_KEY       wxT( "OpenGLAntialiasingMode" )
-#define CAIRO_ANTIALIASING_MODE_KEY     wxT( "CairoAntialiasingMode" )
-#define WARP_MOUSE_ON_MOVE_KEY           wxT( "MoveWarpsCursor" )
-#define IMMEDIATE_ACTIONS_KEY           wxT( "ImmediateActions" )
-#define PREFER_SELECT_TO_DRAG_KEY       wxT( "PreferSelectionToDragging" )
-
-///@}
-
-class wxConfigBase;
 class wxSingleInstanceChecker;
 class wxApp;
 class wxMenu;
 class wxWindow;
+
+class COMMON_SETTINGS;
+class SETTINGS_MANAGER;
 
 /**
  *   A small class to handle the list of existing translations.
@@ -191,7 +172,9 @@ public:
      */
     VTBL_ENTRY void MacOpenFile( const wxString& aFileName ) = 0;
 
-    VTBL_ENTRY wxConfigBase* CommonSettings() const { return m_common_settings.get(); }
+    VTBL_ENTRY SETTINGS_MANAGER& GetSettingsManager() const { return *m_settings_manager; }
+
+    VTBL_ENTRY COMMON_SETTINGS* GetCommonSettings() const;
 
     VTBL_ENTRY void SetEditorName( const wxString& aFileName );
 
@@ -359,18 +342,13 @@ public:
 
 protected:
 
-    /**
-     * Function loadCommonSettings
-     * loads the program (process) settings subset which are stored in .kicad_common
-     */
+    /// Loads internal settings from COMMON_SETTINGS
     void loadCommonSettings();
+
+    std::unique_ptr<SETTINGS_MANAGER> m_settings_manager;
 
     /// prevents multiple instances of a program from being run at the same time.
     wxSingleInstanceChecker* m_pgm_checker;
-
-    /// Configuration settings common to all KiCad program modules,
-    /// like as in $HOME/.kicad_common
-    std::unique_ptr<wxConfigBase> m_common_settings;
 
     /// full path to this program
     wxString        m_bin_dir;

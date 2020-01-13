@@ -31,6 +31,7 @@
 #include <sch_view.h>
 #include <sch_painter.h>
 #include <sch_edit_frame.h>
+#include <settings/settings_manager.h>
 #include <preview_items/selection_area.h>
 
 #include <functional>
@@ -52,6 +53,7 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
     m_gal->SetWorldUnitLength( SCH_WORLD_UNIT );
 
     m_painter.reset( new KIGFX::SCH_PAINTER( m_gal ) );
+    m_painter->GetSettings()->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
 
     m_view->SetPainter( m_painter.get() );
     m_view->SetScaleLimits( 20000.0, 0.002 );
@@ -136,9 +138,6 @@ void SCH_PREVIEW_PANEL::Refresh( bool aEraseBackground, const wxRect* aRect )
 
 void SCH_PREVIEW_PANEL::onPaint( wxPaintEvent& aEvent )
 {
-    if( m_painter )
-        static_cast<KIGFX::SCH_PAINTER*>(m_painter.get())->GetSettings()->ImportLegacyColors( nullptr );
-
     if( IsShown() )
         EDA_DRAW_PANEL_GAL::onPaint( aEvent );
 }

@@ -41,6 +41,9 @@
 #include <class_board.h>
 #include <class_pcb_target.h>
 #include <base_units.h>
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 
 
 PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :
@@ -86,7 +89,7 @@ void PCB_TARGET::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset 
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    auto gcolor = aFrame->Settings().Colors().GetLayerColor( m_Layer );
+    COLOR4D gcolor = Pgm().GetSettingsManager().GetColorSettings()->GetColor( m_Layer );
     auto displ_opts = aFrame->GetDisplayOptions();
     bool filled = displ_opts.m_DisplayDrawItemsFill;
     width = m_Width;

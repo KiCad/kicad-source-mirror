@@ -28,7 +28,6 @@
  */
 
 #include <wx/wx.h>
-#include <wx/config.h>
 #include <trigo.h>
 
 #include <pcb_pad.h>

@@ -21,11 +21,11 @@
 #include <regex>
 #include <wx/tokenzr.h>
 
-#include <advanced_config.h>
 #include <connection_graph.h>
 #include <sch_component.h>
 #include <sch_pin.h>
 #include <sch_screen.h>
+#include <advanced_config.h>
 
 #include <sch_connection.h>
 

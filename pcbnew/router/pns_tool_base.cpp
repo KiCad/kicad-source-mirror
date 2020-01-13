@@ -32,6 +32,7 @@ using namespace std::placeholders;
 #include <macros.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
+#include <pcbnew_settings.h>
 #include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>
 #include <dialogs/dialog_pns_length_tuning_settings.h>
@@ -103,8 +104,12 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
     m_router->SetInterface( m_iface );
     m_router->ClearWorld();
     m_router->SyncWorld();
-    m_router->LoadSettings( m_savedSettings );
+
     m_router->UpdateSizes( m_savedSizes );
+
+    auto settings = new PNS::ROUTING_SETTINGS( frame()->GetSettings(), "tools.pns" );
+    frame()->GetSettings()->m_PnsSettings = settings;
+    m_router->LoadSettings( frame()->GetSettings()->m_PnsSettings );
 
     m_gridHelper = new GRID_HELPER( frame() );
 }
@@ -241,11 +246,13 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
     // Sync PNS engine settings with the general PCB editor options.
     auto& pnss = m_router->Settings();
 
-    pnss.SetSnapToPads( frame()->Settings().m_MagneticPads == CAPTURE_CURSOR_IN_TRACK_TOOL
-                     || frame()->Settings().m_MagneticPads == CAPTURE_ALWAYS );
+    pnss.SetSnapToPads(
+            frame()->Settings().m_MagneticPads == MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ||
+            frame()->Settings().m_MagneticPads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
 
-    pnss.SetSnapToTracks( frame()->Settings().m_MagneticTracks == CAPTURE_CURSOR_IN_TRACK_TOOL
-                       || frame()->Settings().m_MagneticTracks == CAPTURE_ALWAYS );
+    pnss.SetSnapToTracks(
+            frame()->Settings().m_MagneticTracks == MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL
+            || frame()->Settings().m_MagneticTracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
 
     if( aItem )
     {

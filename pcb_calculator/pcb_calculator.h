@@ -82,8 +82,8 @@ private:
     void OnPaintAttenuatorPanel( wxPaintEvent& event ) override;
 
     // Config read-write, virtual from EDA_BASE_FRAME
-    void LoadSettings( wxConfigBase* aCfg ) override;
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     // R/W data files:
     bool ReadDataFile();
@@ -107,13 +107,13 @@ private:
      * Function TW_Init
      * Read config and init dialog widgets values
      */
-    void TW_Init( wxConfigBase* aCfg );
+    void TW_Init();
 
     /**
      * Function TW_WriteConfig
      * Write Track width prameters in config
      */
-    void TW_WriteConfig( wxConfigBase* aCfg );
+    void TW_WriteConfig();
 
     /**
      * Function OnTWParametersChanged
@@ -185,13 +185,13 @@ private:
      * Function VS_Init
      * Read config and init dialog widgets values
      */
-    void VS_Init( wxConfigBase* aCfg );
+    void VS_Init();
 
     /**
      * Function VS_WriteConfig
      * Write Via Size prameters in config
      */
-    void VS_WriteConfig( wxConfigBase* aCfg );
+    void VS_WriteConfig();
 
     /**
      * Function OnViaCalculate

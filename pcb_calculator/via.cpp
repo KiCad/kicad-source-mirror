@@ -44,36 +44,16 @@
 
 #include <cmath>
 #include <wx/wx.h>
-#include <wx/config.h>
 
-#include <pcb_calculator_frame_base.h>
-
+#include <kiface_i.h>
 #include <pcb_calculator.h>
+#include <pcb_calculator_settings.h>
 #include <UnitSelector.h>
 #include <units_scales.h>
 
 #include <common_data.h>
 
 extern double DoubleFromString( const wxString& TextValue );
-
-// Key words to read/write some parameters in config:
-#define KEYWORD_VS_HOLE_DIA           wxT( "VS_Hole_Dia" )
-#define KEYWORD_VS_HOLE_DIA_UNIT      wxT( "VS_Hole_Dia_Unit" )
-#define KEYWORD_VS_THICKNESS          wxT( "VS_Plating_Thickness" )
-#define KEYWORD_VS_THICKNESS_UNIT     wxT( "VS_Plating_Thickness_Unit" )
-#define KEYWORD_VS_LENGTH             wxT( "VS_Via_Length" )
-#define KEYWORD_VS_LENGTH_UNIT        wxT( "VS_Via_Length_Unit" )
-#define KEYWORD_VS_PAD_DIA            wxT( "VS_Pad_Dia" )
-#define KEYWORD_VS_PAD_DIA_UNIT       wxT( "VS_Pad_Dia_Unit" )
-#define KEYWORD_VS_CLEARANCE_DIA      wxT( "VS_Clearance_Dia" )
-#define KEYWORD_VS_CLEARANCE_DIA_UNIT wxT( "VS_Clearance_Dia_Unit" )
-#define KEYWORD_VS_CH_IMPEDANCE       wxT( "VS_Characteristic_Impedance" )
-#define KEYWORD_VS_CH_IMPEDANCE_UNIT  wxT( "VS_Characteristic_Impedance_Unit" )
-#define KEYWORD_VS_CURRENT            wxT( "VS_Current" )
-#define KEYWORD_VS_RESISTIVITY        wxT( "VS_Resistivity" )
-#define KEYWORD_VS_PERMITTIVITY       wxT( "VS_Permittivity" )
-#define KEYWORD_VS_TEMP_DIFF          wxT( "VS_Temperature_Differential" )
-#define KEYWORD_VS_PULSE_RISE_TIME    wxT( "VS_Pulse_Rise_Time" )
 
 /**
  * Shows a list of current relative dielectric constant(Er)
@@ -142,75 +122,56 @@ void PCB_CALCULATOR_FRAME::OnViaResetButtonClick( wxCommandEvent& event )
 }
 
 
-void PCB_CALCULATOR_FRAME::VS_Init( wxConfigBase* aCfg )
+void PCB_CALCULATOR_FRAME::VS_Init()
 {
-    int      tmp;
-    wxString msg;
+    auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
 
-    #define DEFAULT_UNIT_SEL_MM 0
-    // Read parameter values
-    aCfg->Read( KEYWORD_VS_HOLE_DIA,                &msg, wxT( "0.4" ) );
-    m_textCtrlHoleDia->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_HOLE_DIA_UNIT,           &tmp, DEFAULT_UNIT_SEL_MM );
-    m_choiceHoleDia->SetSelection( tmp );
+    m_textCtrlHoleDia->SetValue( cfg->m_ViaSize.hole_diameter );
+    m_choiceHoleDia->SetSelection( cfg->m_ViaSize.hole_diameter_units );
 
-    aCfg->Read( KEYWORD_VS_THICKNESS,               &msg, wxT( "0.035" ) );
-    m_textCtrlPlatingThickness->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_THICKNESS_UNIT,          &tmp, DEFAULT_UNIT_SEL_MM );
-    m_choicePlatingThickness->SetSelection( tmp );
+    m_textCtrlPlatingThickness->SetValue( cfg->m_ViaSize.thickness );
+    m_choicePlatingThickness->SetSelection( cfg->m_ViaSize.thickness_units );
 
-    aCfg->Read( KEYWORD_VS_LENGTH,                  &msg, wxT( "1.6" ) );
-    m_textCtrlViaLength->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_LENGTH_UNIT,             &tmp, DEFAULT_UNIT_SEL_MM );
-    m_choiceViaLength->SetSelection( tmp );
+    m_textCtrlViaLength->SetValue( cfg->m_ViaSize.length );
+    m_choiceViaLength->SetSelection( cfg->m_ViaSize.length_units );
 
-    aCfg->Read( KEYWORD_VS_PAD_DIA,                 &msg, wxT( "0.6" ) );
-    m_textCtrlViaPadDia->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_PAD_DIA_UNIT,            &tmp, DEFAULT_UNIT_SEL_MM );
-    m_choiceViaPadDia->SetSelection( tmp );
+    m_textCtrlViaPadDia->SetValue( cfg->m_ViaSize.pad_diameter );
+    m_choiceViaPadDia->SetSelection( cfg->m_ViaSize.pad_diameter_units );
 
-    aCfg->Read( KEYWORD_VS_CLEARANCE_DIA,           &msg, wxT( "1.0" ) );
-    m_textCtrlClearanceDia->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_CLEARANCE_DIA_UNIT,      &tmp, DEFAULT_UNIT_SEL_MM );
-    m_choiceClearanceDia->SetSelection( tmp );
+    m_textCtrlClearanceDia->SetValue( cfg->m_ViaSize.clearance_diameter );
+    m_choiceClearanceDia->SetSelection( cfg->m_ViaSize.clearance_diameter_units );
 
-    aCfg->Read( KEYWORD_VS_CH_IMPEDANCE,            &msg, wxT( "50" ) );
-    m_textCtrlImpedance->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_CH_IMPEDANCE_UNIT ,      &tmp, DEFAULT_UNIT_SEL_MM );
-    m_choiceImpedance->SetSelection( tmp );
+    m_textCtrlImpedance->SetValue( cfg->m_ViaSize.characteristic_impedance );
+    m_choiceImpedance->SetSelection( cfg->m_ViaSize.characteristic_impedance_units );
 
-    aCfg->Read( KEYWORD_VS_CURRENT,                 &msg, wxT( "1" ) );
-    m_textCtrlAppliedCurrent->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_RESISTIVITY,             &msg, wxT( "1.72e-8" ) );
-    m_textCtrlPlatingResistivity->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_PERMITTIVITY,            &msg, wxT( "4.5" ) );
-    m_textCtrlPlatingPermittivity->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_TEMP_DIFF,               &msg, wxT( "10" ) );
-    m_textCtrlTemperatureDiff->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_PULSE_RISE_TIME,         &msg, wxT( "1" ) );
-    m_textCtrlRiseTime->SetValue( msg );
+    m_textCtrlAppliedCurrent->SetValue( cfg->m_ViaSize.applied_current );
+    m_textCtrlPlatingResistivity->SetValue( cfg->m_ViaSize.plating_resistivity );
+    m_textCtrlPlatingPermittivity->SetValue( cfg->m_ViaSize.permittivity );
+    m_textCtrlTemperatureDiff->SetValue( cfg->m_ViaSize.temp_rise );
+    m_textCtrlRiseTime->SetValue( cfg->m_ViaSize.pulse_rise_time );
 }
 
-void PCB_CALCULATOR_FRAME::VS_WriteConfig( wxConfigBase* aCfg )
+void PCB_CALCULATOR_FRAME::VS_WriteConfig()
 {
-    // Save current parameters values in config
-    aCfg->Write( KEYWORD_VS_HOLE_DIA,               m_textCtrlHoleDia->GetValue() );
-    aCfg->Write( KEYWORD_VS_HOLE_DIA_UNIT,          m_choiceHoleDia->GetSelection() );
-    aCfg->Write( KEYWORD_VS_THICKNESS,              m_textCtrlPlatingThickness->GetValue() );
-    aCfg->Write( KEYWORD_VS_THICKNESS_UNIT,         m_choicePlatingThickness->GetSelection() );
-    aCfg->Write( KEYWORD_VS_LENGTH,                 m_textCtrlViaLength->GetValue() );
-    aCfg->Write( KEYWORD_VS_LENGTH_UNIT,            m_choiceViaLength->GetSelection() );
-    aCfg->Write( KEYWORD_VS_PAD_DIA,                m_textCtrlViaPadDia->GetValue() );
-    aCfg->Write( KEYWORD_VS_PAD_DIA_UNIT,           m_choiceViaPadDia->GetSelection() );
-    aCfg->Write( KEYWORD_VS_CLEARANCE_DIA,          m_textCtrlClearanceDia->GetValue() );
-    aCfg->Write( KEYWORD_VS_CLEARANCE_DIA_UNIT,     m_choiceClearanceDia->GetSelection() );
-    aCfg->Write( KEYWORD_VS_CH_IMPEDANCE,           m_textCtrlImpedance->GetValue() );
-    aCfg->Write( KEYWORD_VS_CH_IMPEDANCE_UNIT,      m_choiceImpedance->GetSelection() );
-    aCfg->Write( KEYWORD_VS_CURRENT,                m_textCtrlAppliedCurrent->GetValue() );
-    aCfg->Write( KEYWORD_VS_RESISTIVITY,            m_textCtrlPlatingResistivity->GetValue() );
-    aCfg->Write( KEYWORD_VS_PERMITTIVITY,           m_textCtrlPlatingPermittivity->GetValue() );
-    aCfg->Write( KEYWORD_VS_TEMP_DIFF,              m_textCtrlTemperatureDiff->GetValue() );
-    aCfg->Write( KEYWORD_VS_PULSE_RISE_TIME,        m_textCtrlRiseTime->GetValue() );
+    auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
+
+    cfg->m_ViaSize.hole_diameter                  = m_textCtrlHoleDia->GetValue();
+    cfg->m_ViaSize.hole_diameter_units            = m_choiceHoleDia->GetSelection();
+    cfg->m_ViaSize.thickness                      = m_textCtrlPlatingThickness->GetValue();
+    cfg->m_ViaSize.thickness_units                = m_choicePlatingThickness->GetSelection();
+    cfg->m_ViaSize.length                         = m_textCtrlViaLength->GetValue();
+    cfg->m_ViaSize.length_units                   = m_choiceViaLength->GetSelection();
+    cfg->m_ViaSize.pad_diameter                   = m_textCtrlViaPadDia->GetValue();
+    cfg->m_ViaSize.pad_diameter_units             = m_choiceViaPadDia->GetSelection();
+    cfg->m_ViaSize.clearance_diameter             = m_textCtrlClearanceDia->GetValue();
+    cfg->m_ViaSize.clearance_diameter_units       = m_choiceClearanceDia->GetSelection();
+    cfg->m_ViaSize.characteristic_impedance       = m_textCtrlImpedance->GetValue();
+    cfg->m_ViaSize.characteristic_impedance_units = m_choiceImpedance->GetSelection();
+    cfg->m_ViaSize.applied_current                = m_textCtrlAppliedCurrent->GetValue();
+    cfg->m_ViaSize.plating_resistivity            = m_textCtrlPlatingResistivity->GetValue();
+    cfg->m_ViaSize.permittivity                   = m_textCtrlPlatingPermittivity->GetValue();
+    cfg->m_ViaSize.temp_rise                      = m_textCtrlTemperatureDiff->GetValue();
+    cfg->m_ViaSize.pulse_rise_time                = m_textCtrlRiseTime->GetValue();
 }
 
 void PCB_CALCULATOR_FRAME::OnViaCalculate( wxCommandEvent& event )

@@ -35,6 +35,7 @@
 #include <pcbnew.h>
 #include <pcb_base_frame.h>
 #include <class_board.h>
+#include <settings/color_settings.h>
 #include <zones.h>
 
 #include <class_zone.h>
@@ -175,7 +176,7 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
                                      bool aShowCopper, bool aFpEditorMode )
 {
     BOARD* board = aFrame->GetBoard();
-    COLOR4D backgroundColor = aFrame->Settings().Colors().GetLayerColor( LAYER_PCB_BACKGROUND );
+    COLOR4D backgroundColor = aFrame->ColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
     LSET layers = aShowCopper ? LSET::AllCuMask( board->GetCopperLayerCount() )
                               : LSET::AllNonCuMask();
 
@@ -196,7 +197,7 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
         // wxCOL_WIDTH_AUTOSIZE doesn't work on all platforms, so we calculate width here
         textWidth = std::max( textWidth, GetTextSize( layerName, aList ).x );
 
-        COLOR4D layerColor = aFrame->Settings().Colors().GetLayerColor( layerID );
+        COLOR4D layerColor = aFrame->ColorSettings()->GetColor( layerID );
         auto bitmap = COLOR_SWATCH::MakeBitmap( layerColor, backgroundColor, LAYER_BITMAP_SIZE );
         wxIcon icon;
         icon.CopyFromBitmap( bitmap );

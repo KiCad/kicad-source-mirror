@@ -33,6 +33,7 @@
 class TREEPROJECTFILES;
 class TREE_PROJECT_FRAME;
 class ACTION_TOOLBAR;
+class KICAD_SETTINGS;
 
 // Identify the type of files handled by Kicad manager
 //
@@ -132,9 +133,9 @@ public:
     void LoadProject( const wxFileName& aProjectFileName );
 
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void ShowChangedLanguage() override;
     void CommonSettingsChanged( bool aEnvVarsChanged ) override;
@@ -162,7 +163,7 @@ public:
     DECLARE_EVENT_TABLE()
 
 private:
-    wxConfigBase* config() override;
+    APP_SETTINGS_BASE* config() override;
 
     const SEARCH_STACK& sys_search() override;
 

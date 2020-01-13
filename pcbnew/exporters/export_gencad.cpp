@@ -29,22 +29,23 @@
  * @brief Export GenCAD 1.4 format.
  */
 
-#include <fctsys.h>
-#include <confirm.h>
-#include <gestfich.h>
-#include <pgm_base.h>
-#include <pcb_edit_frame.h>
-#include <trigo.h>
 #include <build_version.h>
-#include <macros.h>
-#include <pcbnew.h>
-#include <dialogs/dialog_gencad_export_options.h>
 #include <class_board.h>
+#include <class_edge_mod.h>
 #include <class_module.h>
 #include <class_track.h>
-#include <class_edge_mod.h>
+#include <confirm.h>
+#include <dialogs/dialog_gencad_export_options.h>
+#include <fctsys.h>
+#include <gestfich.h>
 #include <hash_eda.h>
-#include <math/util.h>      // for KiROUND
+#include <macros.h>
+#include <math/util.h> // for KiROUND
+#include <pcb_edit_frame.h>
+#include <pcbnew.h>
+#include <pcbnew_settings.h>
+#include <pgm_base.h>
+#include <trigo.h>
 
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* frame );
 static void CreateArtworksSection( FILE* aFile );

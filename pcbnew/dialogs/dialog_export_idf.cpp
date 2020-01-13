@@ -24,44 +24,40 @@
 
 #include <pcb_edit_frame.h>
 #include <kiface_i.h>
-#include <pcbnew.h>
 #include <class_board.h>
 #include <convert_to_biu.h>
 #include <widgets/text_ctrl_eval.h>
 #include <dialog_export_idf_base.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <confirm.h>
-
-#define OPTKEY_IDF_THOU wxT( "IDFExportThou" )
-#define OPTKEY_IDF_REF_AUTOADJ wxT( "IDFRefAutoAdj" )
-#define OPTKEY_IDF_REF_UNITS wxT( "IDFRefUnits" )
-#define OPTKEY_IDF_REF_X wxT( "IDFRefX" )
-#define OPTKEY_IDF_REF_Y wxT( "IDFRefY" )
 
 
 class DIALOG_EXPORT_IDF3: public DIALOG_EXPORT_IDF3_BASE
 {
 private:
-    wxConfigBase* m_config;
     bool   m_idfThouOpt;    // remember last preference for units in THOU
     bool   m_AutoAdjust;    // remember last Reference Point AutoAdjust setting
     int    m_RefUnits;      // remember last units for Reference Point
     double m_XRef;          // remember last X Reference Point
     double m_YRef;          // remember last Y Reference Point
 
+    PCB_EDIT_FRAME* m_parent;
+
 public:
     DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* parent ) :
-            DIALOG_EXPORT_IDF3_BASE( parent )
+            DIALOG_EXPORT_IDF3_BASE( parent ), m_parent( parent )
     {
-        m_config = Kiface().KifaceSettings();
         SetFocus();
-        m_idfThouOpt = false;
-        m_config->Read( OPTKEY_IDF_THOU, &m_idfThouOpt );
+
+        auto cfg = m_parent->GetSettings();
+
+        m_idfThouOpt = cfg->m_ExportIdf.units_mils;
         m_rbUnitSelection->SetSelection( m_idfThouOpt ? 1 : 0 );
-        m_config->Read( OPTKEY_IDF_REF_AUTOADJ, &m_AutoAdjust, false );
-        m_config->Read( OPTKEY_IDF_REF_UNITS, &m_RefUnits, 0 );
-        m_config->Read( OPTKEY_IDF_REF_X, &m_XRef, 0.0 );
-        m_config->Read( OPTKEY_IDF_REF_Y, &m_YRef, 0.0 );
+        m_AutoAdjust = cfg->m_ExportIdf.auto_adjust;
+        m_RefUnits   = cfg->m_ExportIdf.ref_units;
+        m_XRef       = cfg->m_ExportIdf.ref_x;
+        m_YRef       = cfg->m_ExportIdf.ref_y;
 
         m_cbAutoAdjustOffset->SetValue( m_AutoAdjust );
         m_cbAutoAdjustOffset->Bind( wxEVT_CHECKBOX, &DIALOG_EXPORT_IDF3::OnAutoAdjustOffset, this );
@@ -96,11 +92,14 @@ public:
     ~DIALOG_EXPORT_IDF3()
     {
         m_idfThouOpt = m_rbUnitSelection->GetSelection() == 1;
-        m_config->Write( OPTKEY_IDF_THOU, m_idfThouOpt );
-        m_config->Write( OPTKEY_IDF_REF_AUTOADJ, GetAutoAdjustOffset() );
-        m_config->Write( OPTKEY_IDF_REF_UNITS, m_IDF_RefUnitChoice->GetSelection() );
-        m_config->Write( OPTKEY_IDF_REF_X, m_IDF_Xref->GetValue() );
-        m_config->Write( OPTKEY_IDF_REF_Y, m_IDF_Yref->GetValue() );
+
+        auto cfg = m_parent->GetSettings();
+
+        cfg->m_ExportIdf.units_mils  = m_idfThouOpt;
+        cfg->m_ExportIdf.auto_adjust = m_AutoAdjust;
+        cfg->m_ExportIdf.ref_units   = m_RefUnits;
+        cfg->m_ExportIdf.ref_x       = m_XRef;
+        cfg->m_ExportIdf.ref_y       = m_YRef;
     }
 
     bool GetThouOption()

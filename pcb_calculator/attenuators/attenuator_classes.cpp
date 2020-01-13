@@ -9,12 +9,14 @@
 
 #include <attenuator_classes.h>
 #include <i18n_utility.h>
+#include <kiface_i.h>
+#include <pcb_calculator_settings.h>
 
 // Bitmaps:
-#include <att_pi.xpm>
-#include <att_tee.xpm>
 #include <att_bridge.xpm>
+#include <att_pi.xpm>
 #include <att_splitter.xpm>
+#include <att_tee.xpm>
 
 
 // Html texts showing the formulas
@@ -68,29 +70,27 @@ ATTENUATOR::~ATTENUATOR()
 }
 
 
-#define KEYWORD_ATTENUATOR_ATT  wxT( "Attenuation" )
-#define KEYWORD_ATTENUATOR_ZIN  wxT( "Zin" )
-#define KEYWORD_ATTENUATOR_ZOUT wxT( "Zout" )
-#define KEYWORD_ATTENUATORS     wxT( "Attenuators/" )
-
-void ATTENUATOR::ReadConfig( wxConfigBase* aConfig )
+void ATTENUATOR::ReadConfig()
 {
-    aConfig->SetPath( KEYWORD_ATTENUATORS + m_Name );
-    if( m_Attenuation_Enable )
-        aConfig->Read( KEYWORD_ATTENUATOR_ATT, &m_Attenuation, 6.0 );
-    aConfig->Read( KEYWORD_ATTENUATOR_ZIN, &m_Zin, 50.0 );
-    aConfig->Read( KEYWORD_ATTENUATOR_ZOUT, &m_Zout, 50.0 );
-    aConfig->SetPath( wxT( "../.." ) );
+    auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
+    std::string name = m_Name.ToStdString();
+
+    wxASSERT( cfg->m_Attenuators.attenuators.count( name ) );
+
+    m_Attenuation = cfg->m_Attenuators.attenuators.at( name ).attenuation;
+    m_Zin         = cfg->m_Attenuators.attenuators.at( name ).zin;
+    m_Zout        = cfg->m_Attenuators.attenuators.at( name ).zout;
 }
 
 
-void ATTENUATOR::WriteConfig( wxConfigBase* aConfig )
+void ATTENUATOR::WriteConfig()
 {
-    aConfig->SetPath( KEYWORD_ATTENUATORS + m_Name );
-    aConfig->Write( KEYWORD_ATTENUATOR_ATT, m_Attenuation );
-    aConfig->Write( KEYWORD_ATTENUATOR_ZIN, m_Zin );
-    aConfig->Write( KEYWORD_ATTENUATOR_ZOUT, m_Zout );
-    aConfig->SetPath( wxT( "../.." ) );
+    auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
+    std::string name = m_Name.ToStdString();
+
+    cfg->m_Attenuators.attenuators[ name ].attenuation = m_Attenuation;
+    cfg->m_Attenuators.attenuators[ name ].zin         = m_Zin;
+    cfg->m_Attenuators.attenuators[ name ].zout        = m_Zout;
 }
 
 

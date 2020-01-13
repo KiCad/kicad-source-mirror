@@ -41,7 +41,6 @@ class PANEL_PREV_3D;
 class DIALOG_FOOTPRINT_BOARD_EDITOR: public DIALOG_FOOTPRINT_BOARD_EDITOR_BASE
 {
 private:
-    wxConfigBase*                    m_config;
     PCB_EDIT_FRAME*                  m_frame;
     MODULE*                          m_footprint;
 

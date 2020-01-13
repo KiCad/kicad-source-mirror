@@ -29,12 +29,13 @@
 
 #include <set>
 
-#include <fctsys.h>
 #include <common.h>
-#include <macros.h>
+#include <fctsys.h>
 #include <kiface_i.h>
-#include <lib_table_lexer.h>
 #include <lib_table_base.h>
+#include <lib_table_lexer.h>
+#include <macros.h>
+#include <settings/app_settings.h>
 
 
 #define OPT_SEP     '|'         ///< options separator character

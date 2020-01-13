@@ -30,7 +30,6 @@
 #include <board_item_container.h>
 #include <class_module.h>
 #include <class_pad.h>
-#include <pcb_general_settings.h>
 #include <common.h> // PAGE_INFO
 #include <eda_rect.h>
 #include <layers_id_colors_and_visibility.h>
@@ -45,6 +44,7 @@ using std::unique_ptr;
 
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
+class PCBNEW_SETTINGS;
 class PICKED_ITEMS_LIST;
 class BOARD;
 class ZONE_CONTAINER;
@@ -191,7 +191,7 @@ private:
     std::shared_ptr<CONNECTIVITY_DATA>      m_connectivity;
 
     BOARD_DESIGN_SETTINGS   m_designSettings;
-    PCB_GENERAL_SETTINGS*   m_generalSettings;      ///< reference only; I have no ownership
+    PCBNEW_SETTINGS*        m_generalSettings;      ///< reference only; I have no ownership
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;               ///< text in lower right of screen and plots
     PCB_PLOT_PARAMS         m_plotOptions;
@@ -553,17 +553,11 @@ public:
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
-    /**
-     * Function GetColorSettings
-     * @return the current COLORS_DESIGN_SETTINGS in use
-     */
-    const COLORS_DESIGN_SETTINGS& Colors() const { return m_generalSettings->Colors(); }
+    const PCBNEW_SETTINGS& GeneralSettings() const { return *m_generalSettings; }
 
-    const PCB_GENERAL_SETTINGS& GeneralSettings() const { return *m_generalSettings; }
-
-    void SetGeneralSettings( PCB_GENERAL_SETTINGS* aGeneralSettings )
+    void SetGeneralSettings( PCBNEW_SETTINGS* aSettings )
     {
-        m_generalSettings = aGeneralSettings;
+        m_generalSettings = aSettings;
     }
 
     /**

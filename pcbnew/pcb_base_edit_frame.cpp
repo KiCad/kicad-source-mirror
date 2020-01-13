@@ -31,6 +31,7 @@
 #include <view/view.h>
 #include "footprint_info_impl.h"
 #include <project.h>
+#include <settings/color_settings.h>
 #include <tools/pcb_actions.h>
 
 PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -97,7 +98,8 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
     if( m_toolManager )
     {
         GetCanvas()->DisplayBoard( aBoard );
-        GetCanvas()->UseColorScheme( &Settings().Colors() );
+
+        GetCanvas()->UpdateColors();
         m_toolManager->SetEnvironment( aBoard, GetCanvas()->GetView(),
                                        GetCanvas()->GetViewControls(), this );
 

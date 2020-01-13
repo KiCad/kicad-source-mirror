@@ -16,21 +16,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <printout.h>
 #include <pcbplot.h>
-#include <wx/config.h>
+#include <printout.h>
+#include <settings/app_settings.h>
 
-void PRINTOUT_SETTINGS::Save( wxConfigBase* aConfig )
+
+void PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 {
-    aConfig->Write( OPTKEY_PRINT_SCALE, m_scale );
-    aConfig->Write( OPTKEY_PRINT_PAGE_FRAME, m_titleBlock );
-    aConfig->Write( OPTKEY_PRINT_MONOCHROME_MODE, m_blackWhite );
+    aConfig->m_Printing.monochrome  = m_blackWhite;
+    aConfig->m_Printing.title_block = m_titleBlock;
+    aConfig->m_Printing.scale       = m_scale;
 }
 
 
-void PRINTOUT_SETTINGS::Load( wxConfigBase* aConfig )
+void PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
 {
-    aConfig->Read( OPTKEY_PRINT_SCALE, &m_scale, 1.0 );
-    aConfig->Read( OPTKEY_PRINT_PAGE_FRAME, &m_titleBlock, false );
-    aConfig->Read( OPTKEY_PRINT_MONOCHROME_MODE, &m_blackWhite, 1 );
+    m_blackWhite = aConfig->m_Printing.monochrome;
+    m_titleBlock = aConfig->m_Printing.title_block;
+    m_scale      = aConfig->m_Printing.scale;
 }

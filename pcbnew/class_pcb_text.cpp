@@ -40,6 +40,9 @@
 #include <msgpanel.h>
 #include <base_units.h>
 #include <bitmaps.h>
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>
@@ -71,9 +74,9 @@ void TEXTE_PCB::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    auto                 color = aFrame->Settings().Colors().GetLayerColor( m_Layer );
-    EDA_DRAW_MODE_T      fillmode = FILLED;
-    auto&                displ_opts = aFrame->GetDisplayOptions();
+    auto            color      = Pgm().GetSettingsManager().GetColorSettings()->GetColor( m_Layer );
+    EDA_DRAW_MODE_T fillmode   = FILLED;
+    auto&           displ_opts = aFrame->GetDisplayOptions();
 
     if( displ_opts.m_DisplayDrawItemsFill == SKETCH )
         fillmode = SKETCH;

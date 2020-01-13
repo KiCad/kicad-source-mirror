@@ -20,51 +20,54 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <fctsys.h>
-#include <kiface_i.h>
-#include <kiway.h>
-#include <project.h>
-#include <kicad_plugin.h>
-#include <pcb_draw_panel_gal.h>
-#include <confirm.h>
-#include <pcb_edit_frame.h>
+#include "tools/drawing_tool.h"
+#include "tools/edit_tool.h"
+#include "tools/footprint_editor_tools.h"
+#include "tools/pad_tool.h"
+#include "tools/pcb_actions.h"
+#include "tools/pcbnew_control.h"
+#include "tools/pcbnew_picker_tool.h"
+#include "tools/placement_tool.h"
+#include "tools/point_editor.h"
+#include "tools/selection_tool.h"
 #include <3d_viewer/eda_3d_viewer.h>
-#include <fp_lib_table.h>
 #include <bitmaps.h>
 #include <class_board.h>
 #include <class_module.h>
+#include <confirm.h>
+#include <dialogs/panel_modedit_defaults.h>
+#include <dialogs/panel_modedit_display_options.h>
+#include <dialogs/panel_modedit_settings.h>
+#include <fctsys.h>
+#include <footprint_edit_frame.h>
+#include <footprint_editor_settings.h>
+#include <footprint_info_impl.h>
+#include <footprint_tree_pane.h>
+#include <footprint_viewer_frame.h>
+#include <fp_lib_table.h>
+#include <kicad_plugin.h>
+#include <kiface_i.h>
+#include <kiway.h>
+#include <panel_hotkeys_editor.h>
+#include <pcb_draw_panel_gal.h>
+#include <pcb_edit_frame.h>
+#include <pcb_layer_widget.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <footprint_edit_frame.h>
-#include <footprint_viewer_frame.h>
-#include <wildcards_and_files_ext.h>
-#include <pcb_layer_widget.h>
-#include <tool/tool_manager.h>
+#include <pgm_base.h>
+#include <project.h>
+#include <settings/settings_manager.h>
+#include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
 #include <tool/tool_dispatcher.h>
-#include <tool/action_toolbar.h>
+#include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
-#include <footprint_tree_pane.h>
-#include <widgets/lib_tree.h>
-#include <footprint_info_impl.h>
-#include <widgets/paged_dialog.h>
-#include <dialogs/panel_modedit_settings.h>
-#include <dialogs/panel_modedit_defaults.h>
-#include <dialogs/panel_modedit_display_options.h>
-#include <panel_hotkeys_editor.h>
 #include <tools/position_relative_tool.h>
+#include <widgets/lib_tree.h>
+#include <widgets/paged_dialog.h>
 #include <widgets/progress_reporter.h>
-#include "tools/selection_tool.h"
-#include "tools/edit_tool.h"
-#include "tools/drawing_tool.h"
-#include "tools/point_editor.h"
-#include "tools/pcbnew_control.h"
-#include "tools/footprint_editor_tools.h"
-#include "tools/placement_tool.h"
-#include "tools/pcbnew_picker_tool.h"
-#include "tools/pad_tool.h"
-#include "tools/pcb_actions.h"
+#include <wildcards_and_files_ext.h>
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
@@ -97,7 +100,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 
 END_EVENT_TABLE()
 
-static const wxChar defaultLibWidthEntry[] =        wxT( "ModeditLibWidth" );
 
 FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                             EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend ) :
@@ -110,6 +112,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_canvasType = aBackend;
     m_AboutTitle = "ModEdit";
     m_selLayerBox = nullptr;
+    m_settings = nullptr;
 
     // Give an icon
     wxIcon icon;
@@ -162,7 +165,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
-    LoadSettings( config() );
+    // NOTE: KifaceSettings() will return PCBNEW_SETTINGS if we started from pcbnew
+    LoadSettings( GetSettings() );
     GetGalDisplayOptions().m_axesEnabled = true;
 
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
@@ -418,15 +422,31 @@ void FOOTPRINT_EDIT_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
+FOOTPRINT_EDITOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetSettings()
 {
-    PCB_BASE_FRAME::LoadSettings( aCfg );
-    wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
+    if( !m_settings )
+        m_settings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 
-    m_configSettings.Load( aCfg );  // mainly, load the color config
+    return m_settings;
+}
+
+
+void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
+{
+    // aCfg will be the PCBNEW_SETTINGS
+    auto cfg = GetSettings();
+
+    EDA_BASE_FRAME::LoadSettings( cfg );
+
+    // TODO(JE) remove once color themes exist
+    COLOR_SETTINGS* cs = ColorSettings();
+    cs->SetColorContext( COLOR_CONTEXT::FOOTPRINT );
+    cs->Load();
 
     // Ensure some params are valid
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
+
+    settings = cfg->m_DesignSettings;
 
     // Usually, graphic items are drawn on F_SilkS or F_Fab layer
     // Force these layers if not default
@@ -436,18 +456,27 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     if( ( settings.m_ValueDefaultlayer != F_SilkS ) && ( settings.m_ValueDefaultlayer != F_Fab ) )
         settings.m_ValueDefaultlayer = F_Fab;
 
-    aCfg->Read( defaultLibWidthEntry, &m_defaultLibWidth, 250 );
+    m_DisplayOptions = cfg->m_Display;
+    m_defaultLibWidth = cfg->m_LibWidth;
 }
 
 
-void FOOTPRINT_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
+void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    m_configSettings.Save( aCfg );
+    // aCfg will be the PCBNEW_SETTINGS
+    auto cfg = GetSettings();
 
-    PCB_BASE_FRAME::SaveSettings( aCfg );
-    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
+    EDA_BASE_FRAME::SaveSettings( cfg );
 
-    aCfg->Write( defaultLibWidthEntry, m_treePane->GetSize().x );
+    cfg->m_DesignSettings = GetDesignSettings();
+    cfg->m_Display = m_DisplayOptions;
+    cfg->m_LibWidth = m_treePane->GetSize().x;
+
+    // TODO(JE) remove once color themes exist
+    // Ensure footprint editor color settings get flushed to disk before context is changed
+    COLOR_SETTINGS* cs = ColorSettings();
+    cs->SetColorContext( COLOR_CONTEXT::FOOTPRINT );
+    Pgm().GetSettingsManager().SaveColorSettings( cs, "fpedit" );
 }
 
 
@@ -672,7 +701,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateUserInterface()
 
 void FOOTPRINT_EDIT_FRAME::updateView()
 {
-    GetCanvas()->UseColorScheme( &Settings().Colors() );
+    GetCanvas()->UpdateColors();
     GetCanvas()->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );

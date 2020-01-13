@@ -27,15 +27,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
+#include <wx/file.h>
+#include <wx/snglinst.h>
+
 #include <kiface_i.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <ws_draw_item.h>
+#include <pgm_base.h>
 #include <pl_editor_frame.h>
-#include <build_version.h>
-#include <wx/file.h>
-#include <wx/snglinst.h>
+#include <pl_editor_settings.h>
+#include <settings/settings_manager.h>
 
 
 namespace PGE {
@@ -125,6 +126,8 @@ PGM_BASE& Pgm()
 
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
+    InitSettings( new PL_EDITOR_SETTINGS );
+    aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
     start_common( aCtlBits );
     return true;
 }

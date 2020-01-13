@@ -21,20 +21,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <connection_graph.h>
+#include <dialog_global_edit_text_and_graphics_base.h>
 #include <fctsys.h>
 #include <kicad_string.h>
-#include <widgets/unit_binder.h>
+#include <sch_component.h>
+#include <sch_connection.h>
+#include <sch_edit_frame.h>
+#include <sch_line.h>
+#include <sch_sheet.h>
+#include <advanced_config.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_edit_tool.h>
-#include <sch_edit_frame.h>
-#include <sch_component.h>
-#include <sch_line.h>
-#include <sch_connection.h>
-#include <sch_sheet.h>
-#include <connection_graph.h>
-#include <dialog_global_edit_text_and_graphics_base.h>
-#include <advanced_config.h>
+#include <widgets/unit_binder.h>
 
 static bool       g_modifyReferences;
 static bool       g_modifyValues;

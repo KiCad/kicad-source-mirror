@@ -101,10 +101,13 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 COLOR4D color = COLOR4D::BLACK;
 
                 if( layersmask_plotpads[B_SilkS] )
-                   color = aBoard->Colors().GetLayerColor( B_SilkS );
+                   color = aPlotter->ColorSettings()->GetColor( B_SilkS );
 
                 if( layersmask_plotpads[F_SilkS] )
-                    color = ( color == COLOR4D::BLACK) ? aBoard->Colors().GetLayerColor( F_SilkS ) : color;
+                {
+                    color = ( color == COLOR4D::BLACK ) ?
+                            aPlotter->ColorSettings()->GetColor( F_SilkS ) : color;
+                }
 
                 itemplotter.PlotPad( pad, color, SKETCH );
             }
@@ -404,10 +407,10 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             COLOR4D color = COLOR4D::BLACK;
 
             if( pad->GetLayerSet()[B_Cu] )
-               color = aBoard->Colors().GetItemColor( LAYER_PAD_BK );
+               color = aPlotOpt.ColorSettings()->GetColor( LAYER_PAD_BK );
 
             if( pad->GetLayerSet()[F_Cu] )
-                color = color.LegacyMix( aBoard->Colors().GetItemColor( LAYER_PAD_FR ) );
+                color = color.LegacyMix( aPlotOpt.ColorSettings()->GetColor( LAYER_PAD_FR ) );
 
             // Temporary set the pad size to the required plot size:
             wxSize tmppadsize = pad->GetSize();
@@ -530,11 +533,11 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
         gbr_metadata.SetNetName( Via->GetNetname() );
 
-        COLOR4D color =
-                aBoard->Colors().GetItemColor( LAYER_VIAS + static_cast<int>( Via->GetViaType() ) );
+        COLOR4D color = aPlotOpt.ColorSettings()->GetColor(
+                LAYER_VIAS + static_cast<int>( Via->GetViaType() ) );
         // Set plot color (change WHITE to LIGHTGRAY because the white items are not seen on a
         // white paper or screen
-        aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
+        aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY );
         aPlotter->FlashPadCircle( Via->GetStart(), diameter, plotMode, &gbr_metadata );
     }
 
@@ -997,6 +1000,8 @@ static void initializePlotter( PLOTTER *aPlotter, BOARD * aBoard,
     aPlotter->SetCreator( wxT( "PCBNEW" ) );
     aPlotter->SetColorMode( false );        // default is plot in Black and White.
     aPlotter->SetTextMode( aPlotOpts->GetTextMode() );
+
+    aPlotter->SetColorSettings( aPlotOpts->ColorSettings() );
 }
 
 

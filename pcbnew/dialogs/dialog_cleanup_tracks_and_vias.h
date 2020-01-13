@@ -28,7 +28,6 @@
 #include <dialog_cleanup_tracks_and_vias_base.h>
 
 #include <drc/drc.h>
-#include <wx/config.h>
 
 
 class PCB_EDIT_FRAME;
@@ -38,7 +37,6 @@ class DIALOG_CLEANUP_TRACKS_AND_VIAS: public DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE
 {
     PCB_EDIT_FRAME* m_parentFrame;
     DRC_LIST        m_items;
-    wxConfigBase*   m_config;
 
     void doCleanup( bool aDryRun );
 

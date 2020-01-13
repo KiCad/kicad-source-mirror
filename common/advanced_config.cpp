@@ -25,6 +25,7 @@
 
 #include <common.h>
 #include <config_params.h>
+#include <settings/settings_manager.h>
 
 #include <wx/config.h>
 #include <wx/filename.h>
@@ -153,7 +154,7 @@ static void dumpCfg( const std::vector<PARAM_CFG*>& aArray )
 static wxFileName getAdvancedCfgFilename()
 {
     const static wxString cfg_filename{ "kicad_advanced" };
-    return wxFileName( GetKicadConfigPath(), cfg_filename );
+    return wxFileName( SETTINGS_MANAGER::GetUserSettingsPath(), cfg_filename );
 }
 
 

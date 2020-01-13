@@ -44,6 +44,8 @@
 #include <bitmaps.h>
 #include <hotkeys_basic.h>
 #include <menus_helpers.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 
 #include <widgets/wx_busy_indicator.h>
 
@@ -152,6 +154,8 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow *aParent,
 
     wxASSERT( aBoard != NULL );
     m_settings.SetBoard( aBoard );
+
+    m_settings.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
 
     wxASSERT( a3DCachePointer != NULL );
     m_settings.Set3DCacheManager( a3DCachePointer );
@@ -284,6 +288,8 @@ void EDA_3D_CANVAS::ReloadRequest( BOARD *aBoard , S3D_CACHE *aCachePointer )
 
     if( aBoard != NULL )
         m_settings.SetBoard( aBoard );
+
+    m_settings.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
 
     if( m_3d_render )
         m_3d_render->ReloadRequest();

@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -40,11 +41,6 @@
 /* class DIALOG_DRC_CONTROL: a dialog to set DRC parameters (clearance, min cooper size)
  * and run DRC tests
  */
-
-// Keywords for read and write config
-#define DrcRefillZonesKey       wxT( "RefillZonesBeforeDrc" )
-#define DrcTrackToZoneTestKey   wxT( "DrcTrackToZoneTest" )
-#define DrcTestFootprintsKey    wxT( "DrcTestFootprints" )
 
 
 DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL(
@@ -58,7 +54,6 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL(
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
 
-    m_config       = Kiface().KifaceSettings();
     m_tester       = aTester;
     m_brdEditor    = aEditorFrame;
     m_currentBoard = m_brdEditor->GetBoard();
@@ -81,9 +76,11 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL(
 
 DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
 {
-    m_config->Write( DrcRefillZonesKey, m_cbRefillZones->GetValue() );
-    m_config->Write( DrcTrackToZoneTestKey, m_cbReportTracksToZonesErrors->GetValue() );
-    m_config->Write( DrcTestFootprintsKey, m_cbTestFootprints->GetValue() );
+    auto cfg = m_brdEditor->GetSettings();
+
+    cfg->m_DrcDialog.refill_zones       = m_cbRefillZones->GetValue();
+    cfg->m_DrcDialog.test_track_to_zone = m_cbReportAllTrackErrors->GetValue();
+    cfg->m_DrcDialog.test_footprints    = m_cbTestFootprints->GetValue();
 }
 
 
@@ -126,14 +123,11 @@ void DIALOG_DRC_CONTROL::InitValues()
 
     DisplayDRCValues();
 
-    // read options
-    bool value;
-    m_config->Read( DrcRefillZonesKey, &value, false );
-    m_cbRefillZones->SetValue( value );
-    m_config->Read( DrcTrackToZoneTestKey, &value, false );
-    m_cbReportTracksToZonesErrors->SetValue( value );
-    m_config->Read( DrcTestFootprintsKey, &value, false );
-    m_cbTestFootprints->SetValue( value );
+    auto cfg = m_brdEditor->GetSettings();
+
+    m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
+    m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_track_to_zone );
+    m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
 
     Layout(); // adding the units above expanded Clearance text, now resize.
 

@@ -28,21 +28,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pgm_base.h>
-#include <kiface_i.h>
 #include <bitmaps.h>
-#include <ws_painter.h>
-#include <sch_sheet.h>
 #include <dialog_plot_schematic.h>
-
-
-// Keys for configuration
-#define PLOT_FORMAT_KEY wxT( "PlotFormat" )
-#define PLOT_MODECOLOR_KEY wxT( "PlotModeColor" )
-#define PLOT_FRAME_REFERENCE_KEY wxT( "PlotFrameRef" )
-#define PLOT_HPGL_ORIGIN_KEY wxT( "PlotHPGLOrg" )
-#define PLOT_HPGL_PAPERSIZE_KEY wxT( "PlotHPGLPaperSize" )
-#define PLOT_HPGL_PEN_SIZE_KEY wxT( "PlotHPGLPenSize" )
+#include <eeschema_settings.h>
+#include <kiface_i.h>
+#include <pgm_base.h>
+#include <sch_sheet.h>
+#include <ws_painter.h>
 
 
 // static members (static to remember last state):
@@ -69,7 +61,6 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent )
           m_defaultLineWidth( parent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
           m_penWidth( parent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
 {
-    m_config = Kiface().KifaceSettings();
     m_configChanged = false;
 
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
@@ -92,30 +83,24 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent )
 // Initialize the dialog options:
 void DIALOG_PLOT_SCHEMATIC::initDlg()
 {
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
     // Set color or B&W plot option
-    bool tmp;
-    m_config->Read( PLOT_MODECOLOR_KEY, &tmp, true );
-    setModeColor( tmp );
+    setModeColor( cfg->m_PlotPanel.color );
 
     // Set plot or not frame reference option
-    m_config->Read( PLOT_FRAME_REFERENCE_KEY, &tmp, true );
-    setPlotFrameRef( tmp );
+    setPlotFrameRef( cfg->m_PlotPanel.frame_reference );
 
     // Set HPGL plot origin to center of paper of left bottom corner
-    m_config->Read( PLOT_HPGL_ORIGIN_KEY, &tmp, false );
-    SetPlotOriginCenter( tmp );
+    SetPlotOriginCenter( cfg->m_PlotPanel.hpgl_origin );
 
-    m_config->Read( PLOT_HPGL_PAPERSIZE_KEY, &m_HPGLPaperSizeSelect, 0 );
+    m_HPGLPaperSizeSelect = cfg->m_PlotPanel.hpgl_paper_size;
 
     // HPGL Pen Size is stored in mm in config
-    m_config->Read( PLOT_HPGL_PEN_SIZE_KEY, &m_HPGLPenSize, 0.5 );
-    m_HPGLPenSize *= IU_PER_MM;
+    m_HPGLPenSize = cfg->m_PlotPanel.hpgl_pen_size * IU_PER_MM;
 
     // Switch to the last save plot format
-    int plotfmt;
-    m_config->Read( PLOT_FORMAT_KEY, &plotfmt, 0 );
-
-    switch( static_cast<PLOT_FORMAT>( plotfmt ) )
+    switch( static_cast<PLOT_FORMAT>( cfg->m_PlotPanel.format ) )
     {
     default:
     case PLOT_FORMAT::POST:
@@ -270,14 +255,16 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
 {
     m_HPGLPenSize = m_penWidth.GetValue();
 
-    m_config->Write( PLOT_MODECOLOR_KEY, getModeColor() );
-    m_config->Write( PLOT_FRAME_REFERENCE_KEY, getPlotFrameRef() );
-    m_config->Write( PLOT_FORMAT_KEY, (long) GetPlotFileFormat() );
-    m_config->Write( PLOT_HPGL_ORIGIN_KEY, GetPlotOriginCenter() );
-    m_config->Write( PLOT_HPGL_PAPERSIZE_KEY, m_HPGLPaperSizeSelect );
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+    cfg->m_PlotPanel.color = getModeColor();
+    cfg->m_PlotPanel.frame_reference = getPlotFrameRef();
+    cfg->m_PlotPanel.format = static_cast<int>( GetPlotFileFormat() );
+    cfg->m_PlotPanel.hpgl_origin = GetPlotOriginCenter();
+    cfg->m_PlotPanel.hpgl_paper_size = m_HPGLPaperSizeSelect;
 
     // HPGL Pen Size is stored in mm in config
-    m_config->Write( PLOT_HPGL_PEN_SIZE_KEY, m_HPGLPenSize/IU_PER_MM );
+    cfg->m_PlotPanel.hpgl_pen_size = m_HPGLPenSize / IU_PER_MM;
 
     SetDefaultLineThickness( m_defaultLineWidth.GetValue() );
 

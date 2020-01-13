@@ -35,6 +35,7 @@
 #include <kiway_express.h>
 #include <kiway_player.h>
 #include <panel_hotkeys_editor.h>
+#include <settings/common_settings.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/tool_manager.h>
@@ -48,9 +49,8 @@
 #endif
 
 #include "kicad_manager_frame.h"
+#include "kicad_settings.h"
 
-
-#define TREE_FRAME_WIDTH_ENTRY     wxT( "LeftWinWidth" )
 
 #define SEP()   wxFileName::GetPathSeparator()
 
@@ -183,9 +183,9 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 }
 
 
-wxConfigBase* KICAD_MANAGER_FRAME::config()
+APP_SETTINGS_BASE* KICAD_MANAGER_FRAME::config()
 {
-    wxConfigBase* ret = PgmTop().PgmSettings();
+    APP_SETTINGS_BASE* ret = PgmTop().PgmSettings();
     wxASSERT( ret );
     return ret;
 }
@@ -480,8 +480,7 @@ void KICAD_MANAGER_FRAME::ShowChangedLanguage()
 
 void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
-    int historySize;
-    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &historySize, DEFAULT_FILE_HISTORY_SIZE );
+    int historySize = Pgm().GetCommonSettings()->m_System.file_history_size;
     PgmTop().GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );
 }
 
@@ -492,17 +491,21 @@ void KICAD_MANAGER_FRAME::ClearMsg()
 }
 
 
-void KICAD_MANAGER_FRAME::LoadSettings( wxConfigBase* aCfg )
+void KICAD_MANAGER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
-    aCfg->Read( TREE_FRAME_WIDTH_ENTRY, &m_leftWinWidth );
+
+    auto settings = dynamic_cast<KICAD_SETTINGS*>( aCfg );
+    m_leftWinWidth = settings->m_LeftWinWidth;
 }
 
 
-void KICAD_MANAGER_FRAME::SaveSettings( wxConfigBase* aCfg )
+void KICAD_MANAGER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::SaveSettings( aCfg );
-    aCfg->Write( TREE_FRAME_WIDTH_ENTRY, m_leftWin->GetSize().x );
+
+    auto settings = dynamic_cast<KICAD_SETTINGS*>( aCfg );
+    settings->m_LeftWinWidth = m_leftWin->GetSize().x;
 }
 
 

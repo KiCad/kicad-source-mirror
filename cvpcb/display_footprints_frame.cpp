@@ -28,6 +28,7 @@
 #include <class_module.h>
 #include <common.h>
 #include <confirm.h>
+#include <cvpcb_settings.h>
 #include <fp_lib_table.h>
 #include <id.h>
 #include <lib_id.h>
@@ -45,9 +46,6 @@
 #include <tools/cvpcb_actions.h>
 #include <tools/cvpcb_fpviewer_control.h>
 #include <tools/cvpcb_fpviewer_selection_tool.h>
-
-// Colors for layers and items
-COLORS_DESIGN_SETTINGS g_ColorsSettings( FRAME_CVPCB_DISPLAY );
 
 
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
@@ -262,23 +260,39 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::LoadSettings( wxConfigBase* aCfg )
+void DISPLAY_FOOTPRINTS_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    PCB_BASE_FRAME::LoadSettings( aCfg );
+    auto cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
 
-    m_configSettings.Load( aCfg );  // mainly, load the color config
+    EDA_DRAW_FRAME::LoadSettings( cfg );
 
-    aCfg->Read( ConfigBaseName() + AUTO_ZOOM_KEY, &m_autoZoom, true );
-    aCfg->Read( ConfigBaseName() + ZOOM_KEY, &m_lastZoom, 10.0 );
+    SetDisplayOptions( cfg->m_FootprintViewerDisplayOptions );
+
+    m_autoZoom = cfg->m_FootprintViewer.auto_zoom;
+    m_lastZoom = cfg->m_FootprintViewer.zoom;
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( wxConfigBase* aCfg )
+void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    PCB_BASE_FRAME::SaveSettings( aCfg );
+    auto cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
 
-    aCfg->Write( ConfigBaseName() + AUTO_ZOOM_KEY, m_autoZoom );
-    aCfg->Write( ConfigBaseName() + ZOOM_KEY, GetCanvas()->GetView()->GetScale() );
+    EDA_DRAW_FRAME::SaveSettings( cfg );
+
+    cfg->m_FootprintViewerDisplayOptions = GetDisplayOptions();
+
+    cfg->m_FootprintViewer.auto_zoom = m_autoZoom;
+    cfg->m_FootprintViewer.zoom      = GetCanvas()->GetView()->GetScale();
+}
+
+
+WINDOW_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
+{
+    auto cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
+    return &cfg->m_FootprintViewer;
 }
 
 
@@ -401,7 +415,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 void DISPLAY_FOOTPRINTS_FRAME::updateView()
 {
     PCB_DRAW_PANEL_GAL* dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetCanvas() );
-    dp->UseColorScheme( &Settings().Colors() );
+    dp->UpdateColors();
     dp->DisplayBoard( GetBoard() );
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );

@@ -26,6 +26,7 @@
 #include <plotter.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <pcbplot.h>
 #include <gerber_jobfile_writer.h>
 #include <reporter.h>
@@ -49,7 +50,6 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     m_trackWidthCorrection( aParent, m_widthAdjustLabel, m_widthAdjustCtrl, m_widthAdjustUnits, true )
 {
     SetName( DLG_WINDOW_NAME );
-    m_config = Kiface().KifaceSettings();
     m_plotOpts = aParent->GetPlotSettings();
     init_Dialog();
 
@@ -72,19 +72,17 @@ void DIALOG_PLOT::init_Dialog()
     BOARD*      board = m_parent->GetBoard();
     wxFileName  fileName;
 
-    m_config->Read( OPTKEY_PLOT_X_FINESCALE_ADJ, &m_XScaleAdjust );
-    m_config->Read( OPTKEY_PLOT_Y_FINESCALE_ADJ, &m_YScaleAdjust );
+    auto cfg = m_parent->GetSettings();
 
-    bool checkZones;
-    m_config->Read( OPTKEY_PLOT_CHECK_ZONES, &checkZones, true );
-    m_zoneFillCheck->SetValue( checkZones );
+    m_XScaleAdjust = cfg->m_Plot.fine_scale_x;
+    m_YScaleAdjust = cfg->m_Plot.fine_scale_y;
+
+    m_zoneFillCheck->SetValue( cfg->m_Plot.check_zones_before_plotting );
 
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
     // m_PSWidthAdjust is stored in mm in user config
-    double dtmp;
-    m_config->Read( CONFIG_PS_FINEWIDTH_ADJ, &dtmp, 0 );
-    m_PSWidthAdjust = KiROUND( dtmp * IU_PER_MM );
+    m_PSWidthAdjust = KiROUND( cfg->m_Plot.ps_fine_width_adjust * IU_PER_MM );
 
     // The reasonable width correction value must be in a range of
     // [-(MinTrackWidth-1), +(MinClearanceValue-1)] decimils.
@@ -642,8 +640,6 @@ void DIALOG_PLOT::applyPlotSettings()
         reporter.Report( msg, REPORTER::RPT_INFO );
     }
 
-    ConfigBaseWriteDouble( m_config, OPTKEY_PLOT_X_FINESCALE_ADJ, m_XScaleAdjust );
-
     // Y scale
     msg = m_fineAdjustYCtrl->GetValue();
     msg.ToDouble( &tmpDouble );
@@ -656,9 +652,12 @@ void DIALOG_PLOT::applyPlotSettings()
         reporter.Report( msg, REPORTER::RPT_INFO );
     }
 
-    ConfigBaseWriteDouble( m_config, OPTKEY_PLOT_Y_FINESCALE_ADJ, m_YScaleAdjust );
+    auto cfg = m_parent->GetSettings();
 
-    m_config->Write( OPTKEY_PLOT_CHECK_ZONES, m_zoneFillCheck->GetValue() );
+    cfg->m_Plot.fine_scale_x = m_XScaleAdjust;
+    cfg->m_Plot.fine_scale_y = m_YScaleAdjust;
+
+    cfg->m_Plot.check_zones_before_plotting = m_zoneFillCheck->GetValue();
 
     // PS Width correction
     if( !setInt( &m_PSWidthAdjust, m_trackWidthCorrection.GetValue(),
@@ -675,8 +674,7 @@ void DIALOG_PLOT::applyPlotSettings()
     }
 
     // Store m_PSWidthAdjust in mm in user config
-    ConfigBaseWriteDouble( m_config, CONFIG_PS_FINEWIDTH_ADJ,
-                           (double)m_PSWidthAdjust / IU_PER_MM );
+    cfg->m_Plot.ps_fine_width_adjust = Iu2Millimeter( m_PSWidthAdjust );
 
     tempOptions.SetFormat( getPlotFormat() );
 

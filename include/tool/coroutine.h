@@ -34,9 +34,9 @@
 #include <valgrind/valgrind.h>
 #endif
 
-#include <advanced_config.h>
 #include <libcontext.h>
 #include <memory>
+#include <advanced_config.h>
 
 /**
  *  Class COROUNTINE.

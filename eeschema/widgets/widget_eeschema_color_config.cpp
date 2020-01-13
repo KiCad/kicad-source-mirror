@@ -30,6 +30,9 @@
 #include <sch_draw_panel.h>
 #include <sch_view.h>
 #include <general.h>
+#include <painter.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 
 #include "widget_eeschema_color_config.h"
 #include <dialogs/dialog_color_picker.h>
@@ -92,7 +95,7 @@ static COLORBUTTON miscColorButtons[] = {
     { _( "ERC error" ),           LAYER_ERC_ERR },
     { _( "Brightened" ),          LAYER_BRIGHTENED },
     { _( "Hidden items" ),        LAYER_HIDDEN },
-    { _( "Worksheet" ),           LAYER_WORKSHEET },
+    { _( "Worksheet" ),           LAYER_SCHEMATIC_WORKSHEET },
     { _( "Cursor" ),              LAYER_SCHEMATIC_CURSOR },
     { _( "Grid" ),                LAYER_SCHEMATIC_GRID },
     { _( "Background" ),          LAYER_SCHEMATIC_BACKGROUND },
@@ -159,7 +162,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
             rowBoxSizer = new wxBoxSizer( wxHORIZONTAL );
             columnBoxSizer->Add( rowBoxSizer, 0, wxGROW | wxALL, 0 );
 
-            COLOR4D color = GetLayerColor( SCH_LAYER_ID( buttons->m_Layer ) );
+            COLOR4D color = m_drawFrame->GetLayerColor( SCH_LAYER_ID( buttons->m_Layer ) );
             currentColors[ buttons->m_Layer ] = color;
 
             wxMemoryDC iconDC;
@@ -260,10 +263,24 @@ bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
         }
     }
 
-    for( SCH_LAYER_ID clyr = SCH_LAYER_ID_START; clyr < SCH_LAYER_ID_END; ++clyr )
-        SetLayerColor( currentColors[ clyr ], clyr );
+    COLOR_SETTINGS* color_settings = Pgm().GetSettingsManager().GetColorSettings();
 
-    SetLayerColor( currentColors[ LAYER_WORKSHEET ], (SCH_LAYER_ID) LAYER_WORKSHEET );
+    for( SCH_LAYER_ID clyr = SCH_LAYER_ID_START; clyr < SCH_LAYER_ID_END; ++clyr )
+    {
+        // Do not allow non-background layers to be completely white.
+        // This ensures the BW printing recognizes that the colors should be printed black.
+        if( currentColors[ clyr ] == COLOR4D::WHITE && clyr != LAYER_SCHEMATIC_BACKGROUND )
+            currentColors[ clyr ].Darken( 0.01 );
+
+        color_settings->SetColor( clyr, currentColors[ clyr ] );
+    }
+
+    auto settings = m_drawFrame->GetCanvas()->GetView()->GetPainter()->GetSettings();
+    settings->LoadColors( color_settings );
+
+    Pgm().GetSettingsManager().SaveColorSettings( color_settings, "schematic" );
+
+    OnColorsChanged();
 
     return true;
 }

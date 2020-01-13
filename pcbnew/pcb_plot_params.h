@@ -28,6 +28,7 @@
 #include <plotter.h>
 #include <layers_id_colors_and_visibility.h>
 
+class COLOR_SETTINGS;
 class PCB_PLOT_PARAMS_PARSER;
 
 /**
@@ -171,6 +172,9 @@ private:
                                         ///< However, it is in mm in hpgl files.
     COLOR4D     m_color;                ///< Color for plotting the current layer. Provided, but not really used
 
+    /// Pointer to active color settings to be used for plotting
+    COLOR_SETTINGS* m_colors;
+
 public:
     PCB_PLOT_PARAMS();
 
@@ -191,6 +195,10 @@ public:
 
     void        SetColor( COLOR4D aVal ) { m_color = aVal; }
     COLOR4D     GetColor() const { return m_color; }
+
+    void SetColorSettings( COLOR_SETTINGS* aSettings ) { m_colors = aSettings; }
+
+    COLOR_SETTINGS* ColorSettings() const { return m_colors; }
 
     void SetTextMode( PLOT_TEXT_MODE aVal )
     {

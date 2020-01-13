@@ -34,20 +34,6 @@
 
 #include <memory>
 
-// Configuration path (group) to store entry keys below.
-#define IMPORT_GFX_GROUP                        "ImportGraphics"
-
-// Entry keys to store setup in config
-#define IMPORT_GFX_LAYER_OPTION_KEY             "BoardLayer"
-#define IMPORT_GFX_PLACEMENT_INTERACTIVE_KEY    "InteractivePlacement"
-#define IMPORT_GFX_LAST_FILE_KEY                "LastFile"
-#define IMPORT_GFX_POSITION_UNITS_KEY           "PositionUnits"
-#define IMPORT_GFX_POSITION_X_KEY               "PositionX"
-#define IMPORT_GFX_POSITION_Y_KEY               "PositionY"
-#define IMPORT_GFX_LINEWIDTH_UNITS_KEY          "LineWidthUnits"
-#define IMPORT_GFX_LINEWIDTH_KEY                "LineWidth"
-
-
 // Static members of DIALOG_IMPORT_GFX, to remember the user's choices during the session
 wxString DIALOG_IMPORT_GFX::m_filename;
 bool DIALOG_IMPORT_GFX::m_placementInteractive = true;
@@ -83,27 +69,22 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
         m_gfxImportMgr = std::make_unique<GRAPHICS_IMPORT_MGR>( blacklist );
     }
 
-    m_config = Kiface().KifaceSettings();
     m_originUnits = 0;
     m_origin.x = 0.0;              // always in mm
     m_origin.y = 0.0;              // always in mm
     m_lineWidth = 0.2;             // always in mm
     m_lineWidthUnits = 0;
 
-    if( m_config )
-    {
-        wxString tmp = m_config->GetPath();
-        m_config->SetPath( IMPORT_GFX_GROUP );
-        m_layer = m_config->Read( IMPORT_GFX_LAYER_OPTION_KEY, (long)Dwgs_User );
-        m_placementInteractive = m_config->Read( IMPORT_GFX_PLACEMENT_INTERACTIVE_KEY, true );
-        m_filename =  m_config->Read( IMPORT_GFX_LAST_FILE_KEY, wxEmptyString );
-        m_config->Read( IMPORT_GFX_LINEWIDTH_KEY, &m_lineWidth, 0.2 );
-        m_config->Read( IMPORT_GFX_LINEWIDTH_UNITS_KEY, &m_lineWidthUnits, 0 );
-        m_config->Read( IMPORT_GFX_POSITION_UNITS_KEY, &m_originUnits, 0 );
-        m_config->Read( IMPORT_GFX_POSITION_X_KEY, &m_origin.x, 0.0 );
-        m_config->Read( IMPORT_GFX_POSITION_Y_KEY, &m_origin.y, 0.0 );
-        m_config->SetPath( tmp );
-    }
+    auto cfg = m_parent->GetSettings();
+
+    m_layer                = cfg->m_ImportGraphics.layer;
+    m_placementInteractive = cfg->m_ImportGraphics.interactive_placement;
+    m_filename             = cfg->m_ImportGraphics.last_file;
+    m_lineWidth            = cfg->m_ImportGraphics.line_width;
+    m_lineWidthUnits       = cfg->m_ImportGraphics.line_width_units;
+    m_originUnits          = cfg->m_ImportGraphics.origin_units;
+    m_origin.x             = cfg->m_ImportGraphics.origin_x;
+    m_origin.y             = cfg->m_ImportGraphics.origin_y;
 
     m_choiceUnitLineWidth->SetSelection( m_lineWidthUnits );
     showPCBdefaultLineWidth();
@@ -139,22 +120,16 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
 
 DIALOG_IMPORT_GFX::~DIALOG_IMPORT_GFX()
 {
-    if( m_config )
-    {
-        wxString tmp = m_config->GetPath();
-        m_config->SetPath( IMPORT_GFX_GROUP );
-        m_config->Write( IMPORT_GFX_LAYER_OPTION_KEY, (long)m_layer );
-        m_config->Write( IMPORT_GFX_PLACEMENT_INTERACTIVE_KEY, m_placementInteractive );
-        m_config->Write( IMPORT_GFX_LAST_FILE_KEY, m_filename );
+    auto cfg = m_parent->GetSettings();
 
-        m_config->Write( IMPORT_GFX_POSITION_UNITS_KEY, m_originUnits );
-        m_config->Write( IMPORT_GFX_POSITION_X_KEY, m_origin.x );
-        m_config->Write( IMPORT_GFX_POSITION_Y_KEY, m_origin.y );
-
-        m_config->Write( IMPORT_GFX_LINEWIDTH_KEY, m_lineWidth );
-        m_config->Write( IMPORT_GFX_LINEWIDTH_UNITS_KEY, m_lineWidthUnits );
-        m_config->SetPath( tmp );
-    }
+    cfg->m_ImportGraphics.layer                 = m_layer;
+    cfg->m_ImportGraphics.interactive_placement = m_placementInteractive;
+    cfg->m_ImportGraphics.last_file             = m_filename;
+    cfg->m_ImportGraphics.line_width            = m_lineWidth;
+    cfg->m_ImportGraphics.line_width_units      = m_lineWidthUnits;
+    cfg->m_ImportGraphics.origin_units          = m_originUnits;
+    cfg->m_ImportGraphics.origin_x              = m_origin.x;
+    cfg->m_ImportGraphics.origin_y              = m_origin.y;
 }
 
 

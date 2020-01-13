@@ -22,7 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <advanced_config.h>
 #include <base_units.h>
 #include <class_library.h>
 #include <confirm.h>
@@ -50,6 +49,7 @@
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
 #include <sch_sheet.h>
+#include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
 #include <symbol_lib_table.h>
 #include <tool/action_toolbar.h>
@@ -83,22 +83,6 @@ static void add_search_paths( SEARCH_STACK* aDst, const SEARCH_STACK& aSrc, int 
         aDst->AddPaths( aSrc[i], aIndex );
 }
 
-
-// non-member so it can be moved easily, and kept REALLY private.
-// Do NOT Clear() in here.
-static void add_search_paths( SEARCH_STACK* aDst, wxConfigBase* aCfg, int aIndex )
-{
-    for( int i=1;  true;  ++i )
-    {
-        wxString key   = wxString::Format( wxT( "LibraryPath%d" ), i );
-        wxString upath = aCfg->Read( key, wxEmptyString );
-
-        if( !upath )
-            break;
-
-        aDst->AddPaths( upath, aIndex );
-    }
-}
 
 //-----<SCH "data on demand" functions>-------------------------------------------
 
@@ -146,11 +130,6 @@ SEARCH_STACK* PROJECT::SchSearchS()
 
         // append all paths from aSList
         add_search_paths( ss, Kiface().KifaceSearch(), -1 );
-
-        // addLibrarySearchPaths( SEARCH_STACK* aSP, wxConfigBase* aCfg )
-        // This is undocumented, but somebody wanted to store !schematic!
-        // library search paths in the .kicad_common file?
-        add_search_paths( ss, Pgm().CommonSettings(), -1 );
     }
 
     return ss;

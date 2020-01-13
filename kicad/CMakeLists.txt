@@ -20,6 +20,7 @@ set( KICAD_SRCS
     import_project.cpp
     kicad.cpp
     kicad_manager_frame.cpp
+    kicad_settings.cpp
     menubar.cpp
     project_template.cpp
     tree_project_frame.cpp
@@ -54,6 +55,10 @@ add_executable( kicad WIN32 MACOSX_BUNDLE
     ${KICAD_EXTRA_SRCS}
     ${KICAD_RESOURCES}
     )
+
+target_include_directories( kicad PRIVATE
+        $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
+        )
 
 if( UNIX )
     # for build directory: create kiface symlinks so kicad (exe) can be run in-situ

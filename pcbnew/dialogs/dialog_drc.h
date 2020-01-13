@@ -162,7 +162,6 @@ private:
     BOARD*              m_currentBoard;     // the board currently on test
     DRC*                m_tester;
     PCB_EDIT_FRAME*     m_brdEditor;
-    wxConfigBase*       m_config;
 
     wxString            m_markersTitleTemplate;
     wxString            m_unconnectedTitleTemplate;

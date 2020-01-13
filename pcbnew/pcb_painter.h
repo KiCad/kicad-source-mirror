@@ -89,9 +89,6 @@ public:
 
     PCB_RENDER_SETTINGS();
 
-    /// @copydoc RENDER_SETTINGS::ImportLegacyColors()
-    void ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings ) override;
-
     /**
      * Function LoadDisplayOptions
      * Loads settings related to display options (high-contrast mode, full or outline modes
@@ -99,6 +96,8 @@ public:
      * @param aOptions are settings that you want to use for displaying items.
      */
     void LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, bool aShowPageLimits );
+
+    virtual void LoadColors( const COLOR_SETTINGS* aSettings ) override;
 
     /// @copydoc RENDER_SETTINGS::GetColor()
     virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;

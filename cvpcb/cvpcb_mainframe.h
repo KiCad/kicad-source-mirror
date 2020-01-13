@@ -293,9 +293,9 @@ public:
      */
     void SaveProjectFile();
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     /**
      * Function DisplayStatus

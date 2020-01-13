@@ -43,6 +43,9 @@
 #include <base_units.h>
 #include <bitmaps.h>
 #include <math/util.h>      // for KiROUND
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 
 #include <pcb_edit_frame.h>
 #include <class_board.h>
@@ -127,7 +130,7 @@ void EDGE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset
     if( !module || !brd->IsLayerVisible( m_Layer ) )
         return;
 
-    auto color = aFrame->Settings().Colors().GetLayerColor( m_Layer );
+    COLOR4D color = Pgm().GetSettingsManager().GetColorSettings()->GetColor( m_Layer );
     auto displ_opts = aFrame->GetDisplayOptions();
 
     ux0 = m_Start.x - offset.x;

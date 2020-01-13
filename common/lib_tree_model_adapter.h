@@ -89,6 +89,7 @@
  * - `HasDefaultCompare()` - whether sorted by default
  */
 
+class APP_SETTINGS_BASE;
 class TOOL_INTERACTIVE;
 class PARAM_CFG;
 
@@ -359,8 +360,6 @@ private:
     wxDataViewColumn*       m_col_desc;
     wxDataViewCtrl*         m_widget;
 
-    wxConfigBase*           m_config;
-    wxString                m_configPrefix;
     std::vector<PARAM_CFG*> m_projectFileParams;
 
     int                     m_colWidths[NUM_COLS];

@@ -17,6 +17,7 @@ set( PCB_CALCULATOR_SRCS
     electrical_spacing_values.cpp
     params_read_write.cpp
     pcb_calculator_frame.cpp
+    pcb_calculator_settings.cpp
     datafile_read_write.cpp
     regulators_funct.cpp
     tracks_width_versus_current.cpp

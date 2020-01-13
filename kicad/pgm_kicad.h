@@ -25,10 +25,9 @@
 #ifndef PGM_KICAD_H_
 #define PGM_KICAD_H_
 
-
 #include <pgm_base.h>
 #include <bin_mod.h>
-
+#include "kicad_settings.h"
 
 /**
  * PGM_KICAD
@@ -54,13 +53,13 @@ public:
 
     void MacOpenFile( const wxString& aFileName ) override;
 
-    FILE_HISTORY&   GetFileHistory()            { return *m_bm.m_history; }
+    FILE_HISTORY&      GetFileHistory()    { return *m_bm.m_history; }
 
-    wxConfigBase*   PgmSettings()               { return m_bm.m_config.get(); }
+    APP_SETTINGS_BASE* PgmSettings()       { return m_bm.m_config; }
 
-    SEARCH_STACK&   SysSearch()                 { return m_bm.m_search; }
+    SEARCH_STACK&      SysSearch()         { return m_bm.m_search; }
 
-    wxString        GetHelpFileName()           { return m_bm.m_help_file; }
+    wxString           GetHelpFileName()   { return m_bm.m_help_file; }
 
     // The PGM_* classes can have difficulties at termination if they
     // are not destroyed soon enough.  Relying on a static destructor can be

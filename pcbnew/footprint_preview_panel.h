@@ -42,7 +42,6 @@ class IO_MGR;
 class BOARD;
 class FP_LOADER_THREAD;
 class FP_THREAD_IFACE;
-class COLORS_DESIGN_SETTINGS;
 
 
 /**
@@ -101,7 +100,6 @@ private:
 
     std::unique_ptr<BOARD>                      m_dummyBoard;
     std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_displayOptions;
-    std::unique_ptr<COLORS_DESIGN_SETTINGS>     m_colorsSettings;
 
     std::shared_ptr<MODULE> m_currentModule;
     LIB_ID                  m_currentFPID;

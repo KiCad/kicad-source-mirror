@@ -522,11 +522,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_ProhibitOverlappingCourtyards = true;
 
     // Default ref text on fp creation. If empty, use footprint name as default
-    m_RefDefaultText = wxT( "REF**" );
+    m_RefDefaultText = "REF**";
     m_RefDefaultVisibility = true;
     m_RefDefaultlayer = int( F_SilkS );
     // Default value text on fp creation. If empty, use footprint name as default
-    m_ValueDefaultText = wxEmptyString;
+    m_ValueDefaultText = "";
     m_ValueDefaultVisibility = true;
     m_ValueDefaultlayer = int( F_Fab );
 }

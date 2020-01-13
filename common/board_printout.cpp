@@ -30,6 +30,7 @@
 #include <gal/gal_print.h>
 #include <painter.h>
 #include <pcbplot.h>
+#include <settings/app_settings.h>
 
 
 BOARD_PRINTOUT_SETTINGS::BOARD_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
@@ -40,29 +41,26 @@ BOARD_PRINTOUT_SETTINGS::BOARD_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
 }
 
 
-void BOARD_PRINTOUT_SETTINGS::Load( wxConfigBase* aConfig )
+void BOARD_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
 {
     PRINTOUT_SETTINGS::Load( aConfig );
 
-    for( unsigned layer = 0; layer < m_layerSet.size(); ++layer )
-    {
-        int tmp;
-        wxString key = wxString::Format( OPTKEY_LAYERBASE, layer );
-        aConfig->Read( key, &tmp, 1 );
-        m_layerSet.set( layer, tmp );
-    }
+    m_layerSet.reset();
+
+    for( int layer : aConfig->m_Printing.layers )
+        m_layerSet.set( layer, true );
 }
 
 
-void BOARD_PRINTOUT_SETTINGS::Save( wxConfigBase* aConfig )
+void BOARD_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 {
     PRINTOUT_SETTINGS::Save( aConfig );
 
+    aConfig->m_Printing.layers.clear();
+
     for( unsigned layer = 0; layer < m_layerSet.size(); ++layer )
-    {
-        wxString key = wxString::Format( OPTKEY_LAYERBASE, layer );
-        aConfig->Write( key, m_layerSet.test( layer ) );
-    }
+        if( m_layerSet.test( layer ) )
+            aConfig->m_Printing.layers.push_back( layer );
 }
 
 

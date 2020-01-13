@@ -33,6 +33,7 @@
 #include <kiway.h>
 #include <footprint_edit_frame.h>
 #include <array_creator.h>
+#include <pcbnew_settings.h>
 #include <status_popup.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>

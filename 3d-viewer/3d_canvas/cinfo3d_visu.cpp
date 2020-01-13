@@ -35,6 +35,8 @@
 #include "3d_fastmath.h"
 #include <geometry/geometry_utils.h>
 #include <math/util.h>      // for KiROUND
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 
 /**
  *  Trace mask used to enable or disable the trace output of this class.
@@ -58,6 +60,9 @@ CINFO3D_VISU::CINFO3D_VISU() :
     m_3d_model_manager = NULL;
     m_3D_grid_type     = GRID3D_TYPE::NONE;
     m_drawFlags.resize( FL_LAST, false );
+
+    if( PgmOrNull() )
+        m_colors = Pgm().GetSettingsManager().GetColorSettings();
 
     m_render_engine = RENDER_ENGINE::OPENGL_LEGACY;
     m_material_mode = MATERIAL_MODE::NORMAL;
@@ -504,7 +509,7 @@ SFVEC3F CINFO3D_VISU::GetLayerColor( PCB_LAYER_ID aLayerId ) const
 {
     wxASSERT( aLayerId < PCB_LAYER_ID_COUNT );
 
-    const COLOR4D color = m_board->Colors().GetLayerColor( aLayerId );
+    const COLOR4D color = m_colors->GetColor( aLayerId );
 
     return SFVEC3F( color.r, color.g, color.b );
 }
@@ -512,7 +517,7 @@ SFVEC3F CINFO3D_VISU::GetLayerColor( PCB_LAYER_ID aLayerId ) const
 
 SFVEC3F CINFO3D_VISU::GetItemColor( int aItemId ) const
 {
-    return GetColor( m_board->Colors().GetItemColor( aItemId ) );
+    return GetColor( m_colors->GetColor( aItemId ) );
 }
 
 

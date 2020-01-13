@@ -48,6 +48,7 @@
 #include <painter.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
+#include <pcbnew_settings.h>
 #include <project.h>
 #include <tool/tool_manager.h>
 #include <tools/tool_event_utils.h>

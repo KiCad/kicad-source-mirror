@@ -22,15 +22,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <pcbnew.h>
-#include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <class_board.h>
+#include <fctsys.h>
 #include <panel_pcbnew_settings.h>
-#include <widgets/paged_dialog.h>
-#include <pcb_view.h>
+#include <pcb_edit_frame.h>
 #include <pcb_painter.h>
+#include <pcb_view.h>
+#include <pcbnew.h>
+#include <pcbnew_settings.h>
+#include <widgets/paged_dialog.h>
 
 PANEL_PCBNEW_SETTINGS::PANEL_PCBNEW_SETTINGS( PCB_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent ) :
         PANEL_PCBNEW_SETTINGS_BASE( aParent->GetTreebook() ),
@@ -41,7 +42,7 @@ PANEL_PCBNEW_SETTINGS::PANEL_PCBNEW_SETTINGS( PCB_EDIT_FRAME* aFrame, PAGED_DIAL
 bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
 {
     const PCB_DISPLAY_OPTIONS&  displ_opts = m_Frame->GetDisplayOptions();
-    const PCB_GENERAL_SETTINGS& general_opts = m_Frame->Settings();
+    const PCBNEW_SETTINGS& general_opts = m_Frame->Settings();
 
     /* Set display options */
     m_PolarDisplay->SetSelection( m_Frame->GetShowPolarCoords() ? 1 : 0 );
@@ -56,8 +57,8 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
     m_RotationAngle->SetValue( rotationAngle );
 
     m_Segments_45_Only_Ctrl->SetValue( general_opts.m_Use45DegreeGraphicSegments );
-    m_magneticPadChoice->SetSelection( general_opts.m_MagneticPads );
-    m_magneticTrackChoice->SetSelection( general_opts.m_MagneticTracks );
+    m_magneticPadChoice->SetSelection( static_cast<int>( general_opts.m_MagneticPads ) );
+    m_magneticTrackChoice->SetSelection( static_cast<int>( general_opts.m_MagneticTracks ) );
     m_magneticGraphicsChoice->SetSelection( !general_opts.m_MagneticGraphics );
     m_FlipLeftRight->SetValue( general_opts.m_FlipLeftRight );
 

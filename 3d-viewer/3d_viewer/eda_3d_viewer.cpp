@@ -23,7 +23,7 @@
  */
 
 #include "eda_3d_viewer.h"
-
+#include "3d_viewer_settings.h"
 
 #include "../3d_viewer_id.h"
 #include "../common_ogl/cogl_att_list.h"
@@ -35,8 +35,11 @@
 #include <dpi_scaling.h>
 #include <gestfich.h>
 #include <hotkeys_basic.h>
+#include <layers_id_colors_and_visibility.h>
 #include <pgm_base.h>
 #include <project.h>
+#include <settings/common_settings.h>
+#include <settings/settings_manager.h>
 #include <tool/common_control.h>
 #include <tool/tool_manager.h>
 #include <wildcards_and_files_ext.h>
@@ -54,67 +57,6 @@
  * @ingroup trace_env_vars
  */
 const wxChar * EDA_3D_VIEWER::m_logTrace = wxT( "KI_TRACE_EDA_3D_VIEWER" );
-
-
-// Key to store 3D Viewer config
-
-static const wxChar keyBgColor_Red[]            = wxT( "BgColor_Red" );
-static const wxChar keyBgColor_Green[]          = wxT( "BgColor_Green" );
-static const wxChar keyBgColor_Blue[]           = wxT( "BgColor_Blue" );
-
-static const wxChar keyBgColor_Red_Top[]        = wxT( "BgColor_Red_Top" );
-static const wxChar keyBgColor_Green_Top[]      = wxT( "BgColor_Green_Top" );
-static const wxChar keyBgColor_Blue_Top[]       = wxT( "BgColor_Blue_Top" );
-
-static const wxChar keySMaskColor_Red[]         = wxT( "SMaskColor_Red" );
-static const wxChar keySMaskColor_Green[]       = wxT( "SMaskColor_Green" );
-static const wxChar keySMaskColor_Blue[]        = wxT( "SMaskColor_Blue" );
-
-static const wxChar keySPasteColor_Red[]        = wxT( "SPasteColor_Red" );
-static const wxChar keySPasteColor_Green[]      = wxT( "SPasteColor_Green" );
-static const wxChar keySPasteColor_Blue[]       = wxT( "SPasteColor_Blue" );
-
-static const wxChar keySilkColor_Red[]          = wxT( "SilkColor_Red" );
-static const wxChar keySilkColor_Green[]        = wxT( "SilkColor_Green" );
-static const wxChar keySilkColor_Blue[]         = wxT( "SilkColor_Blue" );
-
-static const wxChar keyCopperColor_Red[]        = wxT( "CopperColor_Red" );
-static const wxChar keyCopperColor_Green[]      = wxT( "CopperColor_Green" );
-static const wxChar keyCopperColor_Blue[]       = wxT( "CopperColor_Blue" );
-
-static const wxChar keyBoardBodyColor_Red[]     = wxT( "BoardBodyColor_Red" );
-static const wxChar keyBoardBodyColor_Green[]   = wxT( "BoardBodyColor_Green" );
-static const wxChar keyBoardBodyColor_Blue[]    = wxT( "BoardBodyColor_Blue" );
-
-static const wxChar keyShowRealisticMode[]      = wxT( "ShowRealisticMode" );
-static const wxChar keySubtractMaskFromSilk[]   = wxT( "SubtractMaskFromSilk" );
-static const wxChar keyRenderEngine[]           = wxT( "RenderEngine" );
-static const wxChar keyRenderMaterial[]         = wxT( "Render_Material" );
-
-static const wxChar keyRenderOGL_ShowCopperTck[]= wxT( "Render_OGL_ShowCopperThickness" );
-static const wxChar keyRenderOGL_ShowModelBBox[]= wxT( "Render_OGL_ShowModelBoudingBoxes" );
-
-static const wxChar keyRenderRAY_Shadows[]      = wxT( "Render_RAY_Shadows" );
-static const wxChar keyRenderRAY_Backfloor[]    = wxT( "Render_RAY_Backfloor" );
-static const wxChar keyRenderRAY_Refractions[]  = wxT( "Render_RAY_Refractions" );
-static const wxChar keyRenderRAY_Reflections[]  = wxT( "Render_RAY_Reflections" );
-static const wxChar keyRenderRAY_PostProcess[]  = wxT( "Render_RAY_PostProcess" );
-static const wxChar keyRenderRAY_AAliasing[]    = wxT( "Render_RAY_AntiAliasing" );
-static const wxChar keyRenderRAY_ProceduralT[]  = wxT( "Render_RAY_ProceduralTextures" );
-
-static const wxChar keyShowAxis[]               = wxT( "ShowAxis" );
-static const wxChar keyShowGrid[]               = wxT( "ShowGrid3D" );
-static const wxChar keyShowZones[]              = wxT( "ShowZones" );
-static const wxChar keyShowFootprints_Normal[]  = wxT( "ShowFootprints_Normal" );
-static const wxChar keyShowFootprints_Insert[]  = wxT( "ShowFootprints_Insert" );
-static const wxChar keyShowFootprints_Virtual[] = wxT( "ShowFootprints_Virtual" );
-static const wxChar keyShowAdhesiveLayers[]     = wxT( "ShowAdhesiveLayers" );
-static const wxChar keyShowSilkScreenLayers[]   = wxT( "ShowSilkScreenLayers" );
-static const wxChar keyShowSolderMaskLayers[]   = wxT( "ShowSolderMasLayers" );
-static const wxChar keyShowSolderPasteLayers[]  = wxT( "ShowSolderPasteLayers" );
-static const wxChar keyShowCommentsLayer[]      = wxT( "ShowCommentsLayers" );
-static const wxChar keyShowBoardBody[]          = wxT( "ShowBoardBody" );
-static const wxChar keyShowEcoLayers[]          = wxT( "ShowEcoLayers" );
 
 
 BEGIN_EVENT_TABLE( EDA_3D_VIEWER, EDA_BASE_FRAME )
@@ -163,7 +105,8 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
     icon.CopyFromBitmap( KiBitmap( icon_3d_xpm ) );
     SetIcon( icon );
 
-    LoadSettings( config() );
+    auto config = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    LoadSettings( config );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Create the status line
@@ -264,6 +207,9 @@ void EDA_3D_VIEWER::OnCloseWindow( wxCloseEvent &event )
     // m_canvas delete will be called by wxWidget manager
     //delete m_canvas;
     //m_canvas = nullptr;
+
+    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
+    Pgm().GetSettingsManager().SaveColorSettings( colors, "3d_viewer" );
 
     Destroy();
     event.Skip( true );
@@ -553,10 +499,9 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_MENU3D_RESET_DEFAULTS:
     {
-        // Reload settings with a dummy config, so it will load the defaults
-        wxConfig *fooconfig = new wxConfig( "FooBarApp" );
-        LoadSettings( fooconfig );
-        delete fooconfig;
+        auto cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+        cfg->ResetToDefaults();
+        LoadSettings( cfg );
 
         // Tell canvas that we (may have) changed the render engine
         RenderEngineChanged();
@@ -703,228 +648,152 @@ void EDA_3D_VIEWER::OnSetFocus(wxFocusEvent &event)
 }
 
 
-void EDA_3D_VIEWER::LoadSettings( wxConfigBase *aCfg )
+void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
+    auto cfg = dynamic_cast<EDA_3D_VIEWER_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
+
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::LoadSettings" );
 
-    aCfg->Read( keyBgColor_Red, &m_settings.m_BgColorBot.r, 0.4 );
-    aCfg->Read( keyBgColor_Green, &m_settings.m_BgColorBot.g, 0.4 );
-    aCfg->Read( keyBgColor_Blue, &m_settings.m_BgColorBot.b, 0.5 );
+    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
 
-    aCfg->Read( keyBgColor_Red_Top, &m_settings.m_BgColorTop.r, 0.8 );
-    aCfg->Read( keyBgColor_Green_Top, &m_settings.m_BgColorTop.g, 0.8 );
-    aCfg->Read( keyBgColor_Blue_Top, &m_settings.m_BgColorTop.b, 0.9 );
+    auto set_color = [] ( const COLOR4D& aColor, SFVEC3D& aTarget )
+    {
+        aTarget.r = aColor.r;
+        aTarget.g = aColor.g;
+        aTarget.b = aColor.b;
+    };
 
-    // m_SolderMaskColorTop default value = dark grey-green
-    aCfg->Read( keySMaskColor_Red, &m_settings.m_SolderMaskColorTop.r, 100.0 * 0.2 / 255.0 );
-    aCfg->Read( keySMaskColor_Green, &m_settings.m_SolderMaskColorTop.g, 255.0 * 0.2 / 255.0 );
-    aCfg->Read( keySMaskColor_Blue, &m_settings.m_SolderMaskColorTop.b, 180.0 * 0.2 / 255.0 );
+    set_color( colors->GetColor( LAYER_3D_BACKGROUND_BOTTOM ), m_settings.m_BgColorBot );
+    set_color( colors->GetColor( LAYER_3D_BACKGROUND_TOP ),    m_settings.m_BgColorTop );
+    set_color( colors->GetColor( LAYER_3D_BOARD ),             m_settings.m_BoardBodyColor );
+    set_color( colors->GetColor( LAYER_3D_COPPER ),            m_settings.m_CopperColor );
+    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ), m_settings.m_SilkScreenColorBot );
+    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_TOP ),    m_settings.m_SilkScreenColorTop );
+    set_color( colors->GetColor( LAYER_3D_SOLDERMASK ),        m_settings.m_SolderMaskColorBot );
+    set_color( colors->GetColor( LAYER_3D_SOLDERMASK ),        m_settings.m_SolderMaskColorTop );
+    set_color( colors->GetColor( LAYER_3D_SOLDERPASTE ),       m_settings.m_SolderPasteColor );
 
-    // m_SolderMaskColorBot default value = dark grey-green
-    aCfg->Read( keySMaskColor_Red, &m_settings.m_SolderMaskColorBot.r, 100.0 * 0.2 / 255.0 );
-    aCfg->Read( keySMaskColor_Green, &m_settings.m_SolderMaskColorBot.g, 255.0 * 0.2 / 255.0 );
-    aCfg->Read( keySMaskColor_Blue, &m_settings.m_SolderMaskColorBot.b, 180.0 * 0.2 / 255.0 );
+    m_settings.SetFlag( FL_USE_REALISTIC_MODE, cfg->m_Render.realistic );
 
-    // m_SolderPasteColor default value = light grey
-    aCfg->Read( keySPasteColor_Red, &m_settings.m_SolderPasteColor.r, 128.0 / 255.0 );
-    aCfg->Read( keySPasteColor_Green, &m_settings.m_SolderPasteColor.g, 128.0 / 255.0 );
-    aCfg->Read( keySPasteColor_Blue, &m_settings.m_SolderPasteColor.b, 128.0 / 255.0 );
-
-    // m_SilkScreenColorTop default value = white
-    aCfg->Read( keySilkColor_Red, &m_settings.m_SilkScreenColorTop.r, 0.9 );
-    aCfg->Read( keySilkColor_Green, &m_settings.m_SilkScreenColorTop.g, 0.9 );
-    aCfg->Read( keySilkColor_Blue, &m_settings.m_SilkScreenColorTop.b, 0.9 );
-
-    // m_SilkScreenColorBot default value = white
-    aCfg->Read( keySilkColor_Red, &m_settings.m_SilkScreenColorBot.r, 0.9 );
-    aCfg->Read( keySilkColor_Green, &m_settings.m_SilkScreenColorBot.g, 0.9 );
-    aCfg->Read( keySilkColor_Blue, &m_settings.m_SilkScreenColorBot.b, 0.9 );
-
-    // m_CopperColor default value = gold
-    aCfg->Read( keyCopperColor_Red, &m_settings.m_CopperColor.r, 255.0 * 0.7 / 255.0 );
-    aCfg->Read( keyCopperColor_Green, &m_settings.m_CopperColor.g, 223.0 * 0.7 / 255.0 );
-    aCfg->Read( keyCopperColor_Blue, &m_settings.m_CopperColor.b, 0.0 );
-
-    // m_BoardBodyColor default value = FR4, in realistic mode
-    aCfg->Read( keyBoardBodyColor_Red, &m_settings.m_BoardBodyColor.r, 51.0 / 255.0 );
-    aCfg->Read( keyBoardBodyColor_Green, &m_settings.m_BoardBodyColor.g, 43.0 / 255.0 );
-    aCfg->Read( keyBoardBodyColor_Blue, &m_settings.m_BoardBodyColor.b, 22.0 / 255.0 );
-
-
-    bool tmp;
-    aCfg->Read( keyShowRealisticMode, &tmp, true );
-    m_settings.SetFlag( FL_USE_REALISTIC_MODE, tmp );
-
-    aCfg->Read( keySubtractMaskFromSilk, &tmp, false );
-    m_settings.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, tmp );
+    m_settings.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, cfg->m_Render.subtract_mask_from_silk );
 
     // OpenGL options
-    aCfg->Read( keyRenderOGL_ShowCopperTck, &tmp, true );
-    m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, tmp );
+    m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS,  cfg->m_Render.opengl_copper_thickness );
 
-    aCfg->Read( keyRenderOGL_ShowModelBBox, &tmp, false );
-    m_settings.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, tmp );
+    m_settings.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX,   cfg->m_Render.opengl_show_model_bbox );
 
     // Raytracing options
-    aCfg->Read( keyRenderRAY_Shadows, &tmp, true );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_SHADOWS, tmp );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_SHADOWS,       cfg->m_Render.raytrace_shadows );
 
-    aCfg->Read( keyRenderRAY_Backfloor, &tmp, false );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_BACKFLOOR, tmp );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_BACKFLOOR,     cfg->m_Render.raytrace_backfloor );
 
-    aCfg->Read( keyRenderRAY_Refractions, &tmp, true );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFRACTIONS, tmp );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFRACTIONS,   cfg->m_Render.raytrace_refractions );
 
-    aCfg->Read( keyRenderRAY_Reflections, &tmp, true );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFLECTIONS, tmp );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFLECTIONS,   cfg->m_Render.raytrace_reflections );
 
-    aCfg->Read( keyRenderRAY_PostProcess, &tmp, true );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING, tmp );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING,
+            cfg->m_Render.raytrace_post_processing );
 
-    aCfg->Read( keyRenderRAY_AAliasing, &tmp, true );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING, tmp );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING, cfg->m_Render.raytrace_anti_aliasing );
 
-    aCfg->Read( keyRenderRAY_ProceduralT, &tmp, true );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, tmp );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES,
+            cfg->m_Render.raytrace_procedural_textures );
 
-    aCfg->Read( keyShowAxis, &tmp, true );
-    m_settings.SetFlag( FL_AXIS, tmp );
+    m_settings.SetFlag( FL_AXIS, cfg->m_Render.show_axis );
 
-    aCfg->Read( keyShowFootprints_Normal, &tmp, true );
-    m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, tmp );
+    m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, cfg->m_Render.show_footprints_normal );
 
-    aCfg->Read( keyShowFootprints_Insert, &tmp, true );
-    m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, tmp );
+    m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, cfg->m_Render.show_footprints_insert );
 
-    aCfg->Read( keyShowFootprints_Virtual, &tmp, true );
-    m_settings.SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL, tmp );
+    m_settings.SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL, cfg->m_Render.show_footprints_virtual );
 
-    aCfg->Read( keyShowZones, &tmp, true );
-    m_settings.SetFlag( FL_ZONE, tmp );
+    m_settings.SetFlag( FL_ZONE, cfg->m_Render.show_zones );
 
-    aCfg->Read( keyShowAdhesiveLayers, &tmp, true );
-    m_settings.SetFlag( FL_ADHESIVE, tmp );
+    m_settings.SetFlag( FL_ADHESIVE, cfg->m_Render.show_adhesive );
 
-    aCfg->Read( keyShowSilkScreenLayers, &tmp, true );
-    m_settings.SetFlag( FL_SILKSCREEN, tmp );
+    m_settings.SetFlag( FL_SILKSCREEN, cfg->m_Render.show_silkscreen );
 
-    aCfg->Read( keyShowSolderMaskLayers, &tmp, true );
-    m_settings.SetFlag( FL_SOLDERMASK, tmp );
+    m_settings.SetFlag( FL_SOLDERMASK, cfg->m_Render.show_soldermask );
 
-    aCfg->Read( keyShowSolderPasteLayers, &tmp, true );
-    m_settings.SetFlag( FL_SOLDERPASTE, tmp );
+    m_settings.SetFlag( FL_SOLDERPASTE, cfg->m_Render.show_solderpaste );
 
-    aCfg->Read( keyShowCommentsLayer, &tmp, true );
-    m_settings.SetFlag( FL_COMMENTS, tmp );
+    m_settings.SetFlag( FL_COMMENTS, cfg->m_Render.show_comments );
 
-    aCfg->Read( keyShowEcoLayers, &tmp, true );
-    m_settings.SetFlag( FL_ECO, tmp );
+    m_settings.SetFlag( FL_ECO, cfg->m_Render.show_eco );
 
-    aCfg->Read( keyShowBoardBody, &tmp, true );
-    m_settings.SetFlag( FL_SHOW_BOARD_BODY, tmp );
+    m_settings.SetFlag( FL_SHOW_BOARD_BODY, cfg->m_Render.show_board_body );
 
-    int tmpi;
-    aCfg->Read( keyShowGrid, &tmpi, static_cast<int>( GRID3D_TYPE::NONE ) );
-    m_settings.GridSet( static_cast<GRID3D_TYPE>( tmpi ) );
+    m_settings.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
 
-    aCfg->Read( keyRenderEngine, &tmpi, static_cast<int>( RENDER_ENGINE::OPENGL_LEGACY ) );
+    RENDER_ENGINE engine = static_cast<RENDER_ENGINE>( cfg->m_Render.engine );
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::LoadSettings render setting %s",
-            ( static_cast<RENDER_ENGINE>( tmpi ) == RENDER_ENGINE::RAYTRACING ) ? "Ray Trace" :
-                                                                                  "OpenGL" );
-    m_settings.RenderEngineSet( static_cast<RENDER_ENGINE>( tmpi ) );
+            ( engine == RENDER_ENGINE::RAYTRACING ) ? "Ray Trace" : "OpenGL" );
+    m_settings.RenderEngineSet( engine );
 
-    aCfg->Read( keyRenderMaterial, &tmpi, static_cast<int>( MATERIAL_MODE::NORMAL ) );
-    m_settings.MaterialModeSet( static_cast<MATERIAL_MODE>( tmpi ) );
+    m_settings.MaterialModeSet( static_cast<MATERIAL_MODE>( cfg->m_Render.material_mode ) );
 }
 
 
-void EDA_3D_VIEWER::SaveSettings( wxConfigBase *aCfg )
+void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
 {
-    EDA_BASE_FRAME::SaveSettings( aCfg );
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+
+    EDA_BASE_FRAME::SaveSettings( cfg );
 
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::SaveSettings" );
 
-    aCfg->Write( keyBgColor_Red, m_settings.m_BgColorBot.r );
-    aCfg->Write( keyBgColor_Green, m_settings.m_BgColorBot.g );
-    aCfg->Write( keyBgColor_Blue, m_settings.m_BgColorBot.b );
+    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
 
-    aCfg->Write( keyBgColor_Red_Top, m_settings.m_BgColorTop.r );
-    aCfg->Write( keyBgColor_Green_Top, m_settings.m_BgColorTop.g );
-    aCfg->Write( keyBgColor_Blue_Top, m_settings.m_BgColorTop.b );
+    auto save_color = [colors] ( SFVEC3D& aSource, LAYER_3D_ID aTarget )
+    {
+        colors->SetColor( aTarget, COLOR4D( aSource.r, aSource.g, aSource.b, 1.0 ) );
+    };
 
-    aCfg->Write( keySMaskColor_Red, m_settings.m_SolderMaskColorTop.r );
-    aCfg->Write( keySMaskColor_Green, m_settings.m_SolderMaskColorTop.g );
-    aCfg->Write( keySMaskColor_Blue, m_settings.m_SolderMaskColorTop.b );
+    save_color( m_settings.m_BgColorBot,         LAYER_3D_BACKGROUND_BOTTOM );
+    save_color( m_settings.m_BgColorTop,         LAYER_3D_BACKGROUND_TOP );
+    save_color( m_settings.m_BoardBodyColor,     LAYER_3D_BOARD );
+    save_color( m_settings.m_CopperColor,        LAYER_3D_COPPER );
+    save_color( m_settings.m_SilkScreenColorBot, LAYER_3D_SILKSCREEN_BOTTOM );
+    save_color( m_settings.m_SilkScreenColorTop, LAYER_3D_SILKSCREEN_TOP );
+    save_color( m_settings.m_SolderMaskColorTop, LAYER_3D_SOLDERMASK );
+    save_color( m_settings.m_SolderPasteColor,   LAYER_3D_SOLDERPASTE );
 
-    aCfg->Write( keySMaskColor_Red, m_settings.m_SolderMaskColorBot.r );
-    aCfg->Write( keySMaskColor_Green, m_settings.m_SolderMaskColorBot.g );
-    aCfg->Write( keySMaskColor_Blue, m_settings.m_SolderMaskColorBot.b );
-
-    aCfg->Write( keySPasteColor_Red, m_settings.m_SolderPasteColor.r );
-    aCfg->Write( keySPasteColor_Green, m_settings.m_SolderPasteColor.g );
-    aCfg->Write( keySPasteColor_Blue, m_settings.m_SolderPasteColor.b );
-
-    aCfg->Write( keySilkColor_Red, m_settings.m_SilkScreenColorTop.r );
-    aCfg->Write( keySilkColor_Green, m_settings.m_SilkScreenColorTop.g );
-    aCfg->Write( keySilkColor_Blue, m_settings.m_SilkScreenColorTop.b );
-
-    aCfg->Write( keySilkColor_Red, m_settings.m_SilkScreenColorBot.r );
-    aCfg->Write( keySilkColor_Green, m_settings.m_SilkScreenColorBot.g );
-    aCfg->Write( keySilkColor_Blue, m_settings.m_SilkScreenColorBot.b );
-
-    aCfg->Write( keyCopperColor_Red, m_settings.m_CopperColor.r );
-    aCfg->Write( keyCopperColor_Green, m_settings.m_CopperColor.g );
-    aCfg->Write( keyCopperColor_Blue, m_settings.m_CopperColor.b );
-
-    aCfg->Write( keyBoardBodyColor_Red, m_settings.m_BoardBodyColor.r );
-    aCfg->Write( keyBoardBodyColor_Green, m_settings.m_BoardBodyColor.g );
-    aCfg->Write( keyBoardBodyColor_Blue, m_settings.m_BoardBodyColor.b );
-
-    aCfg->Write( keyShowRealisticMode, m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
-    aCfg->Write( keySubtractMaskFromSilk, m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
-
-    aCfg->Write( keyRenderEngine, static_cast<int>( m_settings.RenderEngineGet() ) );
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::SaveSettings render setting %s",
             ( m_settings.RenderEngineGet() == RENDER_ENGINE::RAYTRACING ) ? "Ray Trace" :
                                                                             "OpenGL" );
 
-    aCfg->Write( keyRenderMaterial, (int) m_settings.MaterialModeGet() );
+    cfg->m_Render.engine        = static_cast<int>( m_settings.RenderEngineGet() );
+    cfg->m_Render.grid_type     = static_cast<int>( m_settings.GridGet() );
+    cfg->m_Render.material_mode = static_cast<int>( m_settings.MaterialModeGet() );
 
-    // OpenGL options
-    aCfg->Write( keyRenderOGL_ShowCopperTck,
-                 m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
-    aCfg->Write( keyRenderOGL_ShowModelBBox,
-                 m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
-
-    // Raytracing options
-    aCfg->Write( keyRenderRAY_Shadows, m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
-    aCfg->Write( keyRenderRAY_Backfloor, m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) );
-    aCfg->Write( keyRenderRAY_Refractions, m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) );
-    aCfg->Write( keyRenderRAY_Reflections, m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) );
-    aCfg->Write(
-            keyRenderRAY_PostProcess, m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
-    aCfg->Write( keyRenderRAY_AAliasing, m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
-    aCfg->Write( keyRenderRAY_ProceduralT,
-            m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
-
-    aCfg->Write( keyShowAxis, m_settings.GetFlag( FL_AXIS ) );
-    aCfg->Write( keyShowGrid, (int) m_settings.GridGet() );
-
-    aCfg->Write( keyShowFootprints_Normal, m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
-    aCfg->Write(
-            keyShowFootprints_Insert, m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
-    aCfg->Write( keyShowFootprints_Virtual, m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) );
-
-    aCfg->Write( keyShowZones, m_settings.GetFlag( FL_ZONE ) );
-    aCfg->Write( keyShowAdhesiveLayers, m_settings.GetFlag( FL_ADHESIVE ) );
-    aCfg->Write( keyShowSilkScreenLayers, m_settings.GetFlag( FL_SILKSCREEN ) );
-    aCfg->Write( keyShowSolderMaskLayers, m_settings.GetFlag( FL_SOLDERMASK ) );
-    aCfg->Write( keyShowSolderPasteLayers, m_settings.GetFlag( FL_SOLDERPASTE ) );
-    aCfg->Write( keyShowCommentsLayer, m_settings.GetFlag( FL_COMMENTS ) );
-    aCfg->Write( keyShowEcoLayers, m_settings.GetFlag( FL_ECO ) );
-    aCfg->Write( keyShowBoardBody, m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
+    cfg->m_Render.opengl_copper_thickness = m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS );
+    cfg->m_Render.opengl_show_model_bbox = m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
+    cfg->m_Render.raytrace_anti_aliasing = m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING );
+    cfg->m_Render.raytrace_backfloor     = m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR );
+    cfg->m_Render.raytrace_post_processing =
+            m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING );
+    cfg->m_Render.raytrace_procedural_textures =
+            m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES );
+    cfg->m_Render.raytrace_reflections    = m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS );
+    cfg->m_Render.raytrace_refractions    = m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS );
+    cfg->m_Render.raytrace_shadows        = m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS );
+    cfg->m_Render.realistic               = m_settings.GetFlag( FL_USE_REALISTIC_MODE );
+    cfg->m_Render.show_adhesive           = m_settings.GetFlag( FL_ADHESIVE );
+    cfg->m_Render.show_axis               = m_settings.GetFlag( FL_AXIS );
+    cfg->m_Render.show_board_body         = m_settings.GetFlag( FL_SHOW_BOARD_BODY );
+    cfg->m_Render.show_comments           = m_settings.GetFlag( FL_COMMENTS );
+    cfg->m_Render.show_eco                = m_settings.GetFlag( FL_ECO );
+    cfg->m_Render.show_footprints_insert = m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT );
+    cfg->m_Render.show_footprints_normal  = m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL );
+    cfg->m_Render.show_footprints_virtual = m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL );
+    cfg->m_Render.show_silkscreen         = m_settings.GetFlag( FL_SILKSCREEN );
+    cfg->m_Render.show_soldermask         = m_settings.GetFlag( FL_SOLDERMASK );
+    cfg->m_Render.show_solderpaste        = m_settings.GetFlag( FL_SOLDERPASTE );
+    cfg->m_Render.show_zones              = m_settings.GetFlag( FL_ZONE );
+    cfg->m_Render.subtract_mask_from_silk = m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK );
 }
 
 
@@ -1269,16 +1138,9 @@ void EDA_3D_VIEWER::loadCommonSettings()
 {
     wxCHECK_RET( m_canvas, "Cannot load settings to null canvas" );
 
-    wxConfigBase& cmnCfg = *Pgm().CommonSettings();
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
-    {
-        const DPI_SCALING dpi{ &cmnCfg, this };
-        m_canvas->SetScaleFactor( dpi.GetScaleFactor() );
-    }
-
-    {
-        bool option;
-        cmnCfg.Read( ENBL_MOUSEWHEEL_PAN_KEY, &option, false );
-        m_settings.SetFlag( FL_MOUSEWHEEL_PANNING, option );
-    }
+    const DPI_SCALING dpi{ settings, this };
+    m_canvas->SetScaleFactor( dpi.GetScaleFactor() );
+    m_settings.SetFlag( FL_MOUSEWHEEL_PANNING, settings->m_Input.mousewheel_pan );
 }

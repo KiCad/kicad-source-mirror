@@ -27,6 +27,7 @@
 
 #include <common.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <dialog_update_pcb.h>
 #include <wx_html_report_panel.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -43,11 +44,6 @@
 
 using namespace std::placeholders;
 
-#define NETLIST_FILTER_MESSAGES_KEY wxT("NetlistReportFilterMsg")
-#define NETLIST_UPDATEFOOTPRINTS_KEY wxT("NetlistUpdateFootprints")
-#define NETLIST_DELETESHORTINGTRACKS_KEY wxT("NetlistDeleteShortingTracks")
-#define NETLIST_DELETEEXTRAFOOTPRINTS_KEY wxT("NetlistDeleteExtraFootprints")
-#define NETLIST_DELETESINGLEPADNETS_KEY wxT("NetlistDeleteSinglePadNets")
 
 bool DIALOG_UPDATE_PCB::m_warnForNoNetPads = false;
 
@@ -58,18 +54,18 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
     m_netlist( aNetlist ),
     m_initialized( false )
 {
-    m_config = Kiface().KifaceSettings();
+    auto cfg = m_frame->GetSettings();
 
-    m_cbUpdateFootprints->SetValue( m_config->Read( NETLIST_UPDATEFOOTPRINTS_KEY, 0l ) );
-    m_cbDeleteExtraFootprints->SetValue( m_config->Read( NETLIST_DELETEEXTRAFOOTPRINTS_KEY, 0l ) );
-    m_cbDeleteSinglePadNets->SetValue( m_config->Read( NETLIST_DELETESINGLEPADNETS_KEY, 0l ) );
+    m_cbUpdateFootprints->SetValue( cfg->m_NetlistDialog.update_footprints );
+    m_cbDeleteExtraFootprints->SetValue( cfg->m_NetlistDialog.delete_extra_footprints );
+    m_cbDeleteSinglePadNets->SetValue( cfg->m_NetlistDialog.delete_single_pad_nets );
     m_cbWarnNoNetPad->SetValue( m_warnForNoNetPads );
 
     m_messagePanel->SetLabel( _("Changes To Be Applied") );
     m_messagePanel->SetLazyUpdate( true );
     m_netlist->SortByReference();
 
-    m_messagePanel->SetVisibleSeverities( m_config->Read( NETLIST_FILTER_MESSAGES_KEY, -1l ) );
+    m_messagePanel->SetVisibleSeverities( cfg->m_NetlistDialog.report_filter );
 
     m_messagePanel->GetSizer()->SetSizeHints( this );
 
@@ -91,10 +87,12 @@ DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
 {
     m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
 
-    m_config->Write( NETLIST_UPDATEFOOTPRINTS_KEY, m_cbUpdateFootprints->GetValue() );
-    m_config->Write( NETLIST_DELETEEXTRAFOOTPRINTS_KEY, m_cbDeleteExtraFootprints->GetValue() );
-    m_config->Write( NETLIST_DELETESINGLEPADNETS_KEY, m_cbDeleteSinglePadNets->GetValue() );
-    m_config->Write( NETLIST_FILTER_MESSAGES_KEY, (long) m_messagePanel->GetVisibleSeverities() );
+    auto cfg = m_frame->GetSettings();
+
+    cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();
+    cfg->m_NetlistDialog.delete_extra_footprints = m_cbDeleteExtraFootprints->GetValue();
+    cfg->m_NetlistDialog.delete_single_pad_nets  = m_cbDeleteSinglePadNets->GetValue();
+    cfg->m_NetlistDialog.report_filter           = m_messagePanel->GetVisibleSeverities();
 
     if( m_runDragCommand )
     {

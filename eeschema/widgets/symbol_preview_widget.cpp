@@ -29,6 +29,8 @@
 #include <pgm_base.h>
 #include <sch_painter.h>
 #include <eda_draw_frame.h>
+#include <eeschema_settings.h>
+#include <settings/settings_manager.h>
 
 
 SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
@@ -37,12 +39,10 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
     m_kiway( aKiway ),
     m_preview( nullptr ), m_status( nullptr ), m_statusSizer( nullptr ), m_previewItem( nullptr )
 {
-    wxString eeschemaFrameKey( SCH_EDIT_FRAME_NAME );
+    auto common_settings = Pgm().GetCommonSettings();
+    auto app_settings = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
-    std::unique_ptr<wxConfigBase> eeschemaConfig = GetNewConfig( Pgm().App().GetAppName() );
-    wxConfigBase&                 commonConfig = *Pgm().CommonSettings();
-
-    m_galDisplayOptions.ReadConfig( commonConfig, *eeschemaConfig, eeschemaFrameKey, this );
+    m_galDisplayOptions.ReadConfig( *common_settings, app_settings->m_Window, this );
 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = aCanvasType;
 

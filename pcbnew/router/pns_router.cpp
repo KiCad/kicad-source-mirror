@@ -29,7 +29,11 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/color4d.h>
 
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+
 #include <pcb_painter.h>
+#include <pcbnew_settings.h>
 
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
@@ -67,6 +71,7 @@ ROUTER::ROUTER()
     // Initialize all other variables:
     m_lastNode = nullptr;
     m_iterLimit = 0;
+    m_settings = nullptr;
     m_showInterSteps = false;
     m_snapshotIter = 0;
     m_violation = false;

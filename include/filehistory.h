@@ -31,6 +31,8 @@
 #include <wx/menu.h>
 
 
+class APP_SETTINGS_BASE;
+
 /**
  * This class implements a file history object to store a list of files, that can then
  * be added to a menu.
@@ -47,6 +49,34 @@ public:
      * @param aBaseFileId is the ID to use for the first file menu item
      */
     FILE_HISTORY( size_t aMaxFiles, int aBaseFileId );
+
+    /**
+     * Loads history from a JSON settings object
+     * @param aSettings is the settings object for this application
+     */
+    void Load( const APP_SETTINGS_BASE& aSettings );
+
+    /**
+     * Loads history from a list of strings
+     * @param aList is a list of filenames to load
+     */
+    void Load( const std::vector<wxString>& aList );
+
+    /**
+     * Saves history into a JSON settings object
+     * @param aSettings is the settings object to save into
+     */
+    void Save( APP_SETTINGS_BASE& aSettings );
+
+    /**
+     * Saves history into a list of strings
+     * @param aList is a pointer to a string vector to clear and fill with the file history
+     */
+    void Save( std::vector<wxString>* aList );
+
+    // Hide warnings about these virtual functions
+    using wxFileHistory::Load;
+    using wxFileHistory::Save;
 
     /**
      * Adds a file to the history.

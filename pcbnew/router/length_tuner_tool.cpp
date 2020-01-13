@@ -305,7 +305,6 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     frame()->UndoRedoBlock( false );
 
     // Store routing settings till the next invocation
-    m_savedSettings = m_router->Settings();
     m_savedSizes = m_router->Sizes();
 
     frame()->PopTool( tool );

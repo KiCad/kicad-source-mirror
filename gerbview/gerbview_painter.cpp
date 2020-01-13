@@ -18,10 +18,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <colors_design_settings.h>
-
 #include <gerbview_painter.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <settings/color_settings.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <convert_to_biu.h>
 #include <gerbview.h>
@@ -51,12 +50,18 @@ GERBVIEW_RENDER_SETTINGS::GERBVIEW_RENDER_SETTINGS()
 }
 
 
-void GERBVIEW_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings )
+void GERBVIEW_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 {
+    size_t palette_size = aSettings->m_Palette.size();
+    size_t palette_idx = 0;
+
     for( int i = GERBVIEW_LAYER_ID_START;
          i < GERBVIEW_LAYER_ID_START + GERBER_DRAWLAYERS_COUNT; i++ )
     {
-        COLOR4D baseColor = aSettings->GetLayerColor( i );
+        COLOR4D baseColor = aSettings->GetColor( i );
+
+        if( baseColor == COLOR4D::UNSPECIFIED )
+            baseColor = aSettings->m_Palette[ ( palette_idx++ ) % palette_size ];
 
         if( m_diffMode )
             baseColor.a = 0.75;
@@ -68,10 +73,10 @@ void GERBVIEW_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS*
     }
 
     for( int i = LAYER_DCODES; i < GERBVIEW_LAYER_ID_END; i++ )
-        m_layerColors[i] = aSettings->GetLayerColor( i );
+        m_layerColors[i] = aSettings->GetColor( i );
 
     for( int i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; i++ )
-        m_layerColors[i] = aSettings->GetLayerColor( i );
+        m_layerColors[i] = aSettings->GetColor( i );
 
     update();
 }
@@ -79,7 +84,6 @@ void GERBVIEW_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS*
 
 void GERBVIEW_RENDER_SETTINGS::LoadDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
 {
-
     m_spotFill          = aOptions.m_DisplayFlashedItemsFill;
     m_lineFill          = aOptions.m_DisplayLinesFill;
     m_polygonFill       = aOptions.m_DisplayPolygonsFill;

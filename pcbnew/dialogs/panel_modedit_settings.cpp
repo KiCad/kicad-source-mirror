@@ -21,12 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <pcbnew.h>
-#include <pcb_edit_frame.h>
 #include <board_design_settings.h>
-#include <widgets/paged_dialog.h>
+#include <fctsys.h>
 #include <footprint_edit_frame.h>
+#include <pcb_edit_frame.h>
+#include <pcbnew.h>
+#include <pcbnew_settings.h>
+#include <widgets/paged_dialog.h>
 
 #include <panel_modedit_settings.h>
 
@@ -46,7 +47,8 @@ bool PANEL_MODEDIT_SETTINGS::TransferDataToWindow()
 
     // Editing options
     m_Segments_45_Only_Ctrl->SetValue( m_frame->Settings().m_Use45DegreeGraphicSegments );
-    m_MagneticPads->SetValue( m_frame->Settings().m_MagneticPads == CAPTURE_ALWAYS );
+    m_MagneticPads->SetValue(
+            m_frame->Settings().m_MagneticPads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
 
     return true;
 }
@@ -61,7 +63,8 @@ bool PANEL_MODEDIT_SETTINGS::TransferDataFromWindow()
 
     // Editing options
     m_frame->Settings().m_Use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
-    m_frame->Settings().m_MagneticPads = m_MagneticPads->GetValue() ? CAPTURE_ALWAYS : NO_EFFECT;
+    m_frame->Settings().m_MagneticPads = m_MagneticPads->GetValue() ?
+            MAGNETIC_OPTIONS::CAPTURE_ALWAYS : MAGNETIC_OPTIONS::NO_EFFECT;
 
     return true;
 }

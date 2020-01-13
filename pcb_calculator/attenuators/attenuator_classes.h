@@ -12,7 +12,6 @@
 #ifndef ATTENUATORFUNC_H
 #define ATTENUATORFUNC_H
 
-#include <wx/config.h>
 #include <wx/bitmap.h>
 
 enum ATTENUATORS_TYPE {
@@ -62,16 +61,14 @@ public:
     /**
      * Function ReadConfig
      * Read values stored in config for this attenuator
-     * @param aConfig = the config to use
      */
-    void         ReadConfig( wxConfigBase* aConfig );
+    void         ReadConfig();
 
     /**
      * Function WriteConfig
      * Read values stored in config for this attenuator
-     * @param aConfig = the config to use
      */
-    void         WriteConfig( wxConfigBase* aConfig );
+    void         WriteConfig();
 };
 
 class ATTENUATOR_PI : public ATTENUATOR

@@ -31,12 +31,13 @@
 #include <ratsnest_data.h>
 #include <connectivity/connectivity_data.h>
 
-#include <colors_design_settings.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_marker_pcb.h>
 #include <pcb_base_frame.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <confirm.h>
 
 #include <gal/graphics_abstraction_layer.h>
@@ -203,15 +204,23 @@ void PCB_DRAW_PANEL_GAL::SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
 }
 
 
-void PCB_DRAW_PANEL_GAL::UseColorScheme( const COLORS_DESIGN_SETTINGS* aSettings )
+void PCB_DRAW_PANEL_GAL::UpdateColors()
 {
-    KIGFX::PCB_RENDER_SETTINGS* rs;
-    rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
-    rs->ImportLegacyColors( aSettings );
-    m_gal->SetGridColor( aSettings->GetLayerColor( LAYER_GRID ) );
-    m_gal->SetCursorColor( aSettings->GetItemColor( LAYER_CURSOR ) );
-}
+    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
 
+    auto frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
+
+    if( frame && frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
+        cs->SetColorContext( COLOR_CONTEXT::FOOTPRINT );
+    else
+        cs->SetColorContext( COLOR_CONTEXT::PCB );
+
+    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
+    rs->LoadColors( cs );
+
+    m_gal->SetGridColor( cs->GetColor( LAYER_GRID ) );
+    m_gal->SetCursorColor( cs->GetColor( LAYER_CURSOR ) );
+}
 
 void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
 {

@@ -233,14 +233,14 @@ public:
 
     // Variables used in footprint editing (default value in item/footprint creation)
 
-    wxString   m_RefDefaultText;            ///< Default ref text on fp creation
+    wxString   m_RefDefaultText;           ///< Default ref text on fp creation
                                             // if empty, use footprint name as default
     bool       m_RefDefaultVisibility;      ///< Default ref text visibility on fp creation
     int        m_RefDefaultlayer;           ///< Default ref text layer on fp creation
                                             // should be a PCB_LAYER_ID, but use an int
                                             // to save this param in config
 
-    wxString   m_ValueDefaultText;          ///< Default value text on fp creation
+    wxString   m_ValueDefaultText;         ///< Default value text on fp creation
                                             // if empty, use footprint name as default
     bool       m_ValueDefaultVisibility;    ///< Default value text visibility on fp creation
     int        m_ValueDefaultlayer;         ///< Default value text layer on fp creation

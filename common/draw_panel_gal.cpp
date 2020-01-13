@@ -24,9 +24,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <confirm.h>
 #include <eda_draw_frame.h>
 #include <kiface_i.h>
-#include <confirm.h>
+#include <settings/app_settings.h>
 
 #include <class_draw_panel_gal.h>
 #include <view/view.h>

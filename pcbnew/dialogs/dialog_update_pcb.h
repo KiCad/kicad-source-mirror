@@ -34,7 +34,6 @@ class DIALOG_UPDATE_PCB : public DIALOG_UPDATE_PCB_BASE
 private:
     PCB_EDIT_FRAME* m_frame;
     NETLIST*        m_netlist;
-    wxConfigBase*   m_config;
     bool            m_initialized;
     bool            m_runDragCommand;
     static bool     m_warnForNoNetPads;

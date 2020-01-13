@@ -24,7 +24,7 @@
  */
 
 #include <map>
-
+#include <nlohmann/json.hpp>
 #include <gal/color4d.h>
 
 using namespace KIGFX;
@@ -144,6 +144,17 @@ const bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs )
 std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor )
 {
     return aStream << aColor.ToWxString( wxC2S_CSS_SYNTAX );
+}
+
+void to_json( nlohmann::json& aJson, const COLOR4D& aColor )
+{
+    aJson = nlohmann::json( aColor.ToWxString( wxC2S_CSS_SYNTAX ).ToStdString() );
+}
+
+
+void from_json( const nlohmann::json& aJson, COLOR4D& aColor )
+{
+    aColor.SetFromWxString( aJson.get<std::string>() );
 }
 
 }

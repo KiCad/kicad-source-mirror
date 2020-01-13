@@ -210,35 +210,6 @@ bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
 const wxString PrePendPath( const wxString& aEnvVar, const wxString& aPriorityPath );
 
 /**
- * Create a new wxConfig so we can put configuration files in a more proper place for each
- * platform.
- *
- * This is generally $HOME/.config/kicad/ in Linux according to the FreeDesktop specification at
- * http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
- * The config object created here should be destroyed by the caller.
- *
- * @param aProgName is the name of the program calling this function - can be obtained by
- *  calling Pgm().App().GetAppName().  This will be the actual file name of the config file.
- * @return A pointer to a new wxConfigBase derived object is returned.  The caller is in charge
- *  of deleting it.
- */
-std::unique_ptr<wxConfigBase> GetNewConfig( const wxString& aProgName );
-
-/**
- * Return the user configuration path used to store KiCad's configuration files.
- *
- * The configuration path order of precedence is determined by the following criteria:
- *
- * - The value of the KICAD_CONFIG_HOME environment variable
- * - The value of the XDG_CONFIG_HOME environment variable.
- * - The result of the call to wxStandardPaths::GetUserConfigDir() with ".config" appended
- *   as required on Linux builds.
- *
- * @return A wxString containing the config path for Kicad
- */
-wxString GetKicadConfigPath();
-
-/**
  * Replace any environment variable references with their values.
  *
  * @param aString = a string containing (perhaps) references to env var

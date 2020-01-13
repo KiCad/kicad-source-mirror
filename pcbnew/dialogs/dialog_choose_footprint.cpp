@@ -31,16 +31,14 @@
 #include <wx/splitter.h>
 #include <wx/timer.h>
 #include <pcb_base_frame.h>
+#include <pcbnew_settings.h>
+#include <pgm_base.h>
 #include <fp_lib_table.h>
+#include <settings/settings_manager.h>
 #include <widgets/lib_tree.h>
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
 #include <kiface_i.h>
-
-#define FP_CHOOSER_HSASH       wxT( "FootprintChooserHSashPosition" )
-#define FP_CHOOSER_VSASH       wxT( "FootprintChooserVSashPosition" )
-#define FP_CHOOSER_WIDTH_KEY   wxT( "FootprintChooserWidth" )
-#define FP_CHOOSER_HEIGHT_KEY  wxT( "FootprintChooserHeight" )
 
 
 DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
@@ -54,8 +52,6 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
           m_parent( aParent ),
           m_external_browser_requested( false )
 {
-    m_config = Kiface().KifaceSettings();
-
     auto          sizer = new wxBoxSizer( wxVERTICAL );
     wxHtmlWindow* details = nullptr;
 
@@ -117,16 +113,26 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
 
     Layout();
 
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+
     // We specify the width of the right window (m_symbol_view_panel), because specify
     // the width of the left window does not work as expected when SetSashGravity() is called
-    m_hsplitter->SetSashPosition( m_config->Read( FP_CHOOSER_HSASH, HorizPixelsFromDU( 220 ) ) );
+    if( cfg->m_FootprintChooser.sash_h < 0 )
+        cfg->m_FootprintChooser.sash_h = HorizPixelsFromDU( 220 );
+
+    m_hsplitter->SetSashPosition( cfg->m_FootprintChooser.sash_h );
+
+    if( cfg->m_FootprintChooser.sash_v < 0 )
+        cfg->m_FootprintChooser.sash_v = HorizPixelsFromDU( 230 );
 
     if( m_vsplitter )
-        m_vsplitter->SetSashPosition( m_config->Read( FP_CHOOSER_VSASH, VertPixelsFromDU( 230 ) ) );
+        m_vsplitter->SetSashPosition( cfg->m_FootprintChooser.sash_v );
 
-    wxSize dlgSize( m_config->Read( FP_CHOOSER_WIDTH_KEY, HorizPixelsFromDU( 440 ) ),
-                    m_config->Read( FP_CHOOSER_HEIGHT_KEY, VertPixelsFromDU( 340 ) ) );
-    SetSize( dlgSize );
+    int w = cfg->m_FootprintChooser.width < 0 ?
+            HorizPixelsFromDU( 440 ) : cfg->m_FootprintChooser.width;
+    int h = cfg->m_FootprintChooser.height < 0 ?
+            HorizPixelsFromDU( 340 ) : cfg->m_FootprintChooser.height;
+    SetSize( wxSize( w, h ) );
 
     SetInitialFocus( m_tree );
     okButton->SetDefault();
@@ -145,13 +151,14 @@ DIALOG_CHOOSE_FOOTPRINT::~DIALOG_CHOOSE_FOOTPRINT()
     m_dbl_click_timer->Stop();
     delete m_dbl_click_timer;
 
-    m_config->Write( FP_CHOOSER_WIDTH_KEY, GetSize().x );
-    m_config->Write( FP_CHOOSER_HEIGHT_KEY, GetSize().y );
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
-    m_config->Write( FP_CHOOSER_HSASH, m_hsplitter->GetSashPosition() );
+    cfg->m_FootprintChooser.width = GetSize().x;
+    cfg->m_FootprintChooser.height = GetSize().y;
+    cfg->m_FootprintChooser.sash_h = m_hsplitter->GetSashPosition();
 
     if( m_vsplitter )
-        m_config->Write( FP_CHOOSER_VSASH, m_vsplitter->GetSashPosition() );
+        cfg->m_FootprintChooser.sash_v = m_vsplitter->GetSashPosition();
 }
 
 

@@ -28,8 +28,6 @@
  */
 
 #include <wx/wx.h>
-#include <wx/config.h>
-
 #include <common.h>
 
 #include <pcb_via_shape.h>

@@ -35,7 +35,6 @@ class DIALOG_CONFIG_EQUFILES : public DIALOG_CONFIG_EQUFILES_BASE
 {
 private:
     CVPCB_MAINFRAME* m_Parent;
-    wxConfigBase*    m_Config;
     wxString         m_UserLibDirBufferImg;
 
     bool m_ListChanged;

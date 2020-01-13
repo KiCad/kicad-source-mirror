@@ -88,6 +88,7 @@ public:
      */
     int m_coroutineStackSize;
 
+
 private:
     ADVANCED_CFG();
 

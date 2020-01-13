@@ -24,24 +24,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <kiface_i.h>
-#include <help_common_strings.h>
-#include <dialog_helpers.h>
-#include <pcb_edit_frame.h>
-#include <confirm.h>
 #include <bitmaps.h>
 #include <class_board.h>
+#include <confirm.h>
+#include <dialog_helpers.h>
+#include <fctsys.h>
+#include <help_common_strings.h>
+#include <kiface_i.h>
+#include <memory>
+#include <pcb_edit_frame.h>
+#include <pcb_layer_box_selector.h>
+#include <pcbnew.h>
+#include <pcbnew_id.h>
+#include <pcbnew_settings.h>
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <settings/common_settings.h>
 #include <tool/action_toolbar.h>
 #include <tool/actions.h>
-#include <pcbnew.h>
-#include <pcb_layer_box_selector.h>
+#include <tools/pcb_actions.h>
 #include <view/view.h>
 #include <wx/wupdlock.h>
-#include <memory>
-#include <pgm_base.h>
-#include <tools/pcb_actions.h>
-#include <pcbnew_id.h>
 
 extern bool IsWxPythonLoaded();
 
@@ -90,8 +93,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
     COLOR4D    active_layer_color, top_color, bottom_color, via_color, background_color;
     bool       change = aForceRebuild;
 
-    int requested_scale;
-    Pgm().CommonSettings()->Read( ICON_SCALE_KEY, &requested_scale, 0 );
+    int requested_scale = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
 
     if( m_prevIconVal.previous_requested_scale != requested_scale )
     {
@@ -99,7 +101,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         change = true;
     }
 
-    active_layer_color = Settings().Colors().GetLayerColor( GetActiveLayer() );
+    active_layer_color = ColorSettings()->GetColor( GetActiveLayer() );
 
     if( m_prevIconVal.previous_active_layer_color != active_layer_color )
     {
@@ -107,7 +109,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         change = true;
     }
 
-    top_color = Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_TOP );
+    top_color = ColorSettings()->GetColor( GetScreen()->m_Route_Layer_TOP );
 
     if( m_prevIconVal.previous_Route_Layer_TOP_color != top_color )
     {
@@ -115,7 +117,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         change = true;
     }
 
-    bottom_color = Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_BOTTOM );
+    bottom_color = ColorSettings()->GetColor( GetScreen()->m_Route_Layer_BOTTOM );
 
     if( m_prevIconVal.previous_Route_Layer_BOTTOM_color != bottom_color )
     {
@@ -124,7 +126,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
     }
 
     int via_type = static_cast<int>( GetDesignSettings().m_CurrentViaType );
-    via_color = Settings().Colors().GetItemColor( LAYER_VIAS + via_type );
+    via_color = ColorSettings()->GetColor( LAYER_VIAS + via_type );
 
     if( m_prevIconVal.previous_via_color != via_color )
     {
@@ -132,7 +134,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         change = true;
     }
 
-    background_color = Settings().Colors().GetItemColor( LAYER_PCB_BACKGROUND );
+    background_color = ColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
 
     if( m_prevIconVal.previous_background_color != background_color )
     {

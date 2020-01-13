@@ -36,6 +36,7 @@
 #include <view/view.h>
 #include <gerbview_painter.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <settings/settings_manager.h>
 
 
 /*
@@ -97,13 +98,13 @@ void GERBER_LAYER_WIDGET::ReFillRender()
 
 #define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
 
-             // text                 id                      color     tooltip                 checked
-        RR( _( "DCodes" ),           LAYER_DCODES,           WHITE,    _( "Show DCodes identification" ) ),
-        RR( _( "Negative Objects" ), LAYER_NEGATIVE_OBJECTS, DARKGRAY, _( "Show negative objects in this color" ) ),
+             // text                 id                         color     tooltip                 checked
+        RR( _( "DCodes" ),           LAYER_DCODES,              WHITE,    _( "Show DCodes identification" ) ),
+        RR( _( "Negative Objects" ), LAYER_NEGATIVE_OBJECTS,    DARKGRAY, _( "Show negative objects in this color" ) ),
         RR(),
-        RR( _( "Grid" ),             LAYER_GERBVIEW_GRID,    WHITE,    _( "Show the (x,y) grid dots" ) ),
-        RR( _( "Worksheet" ),        LAYER_WORKSHEET,        DARKRED,  _( "Show worksheet") ),
-        RR( _( "Background" ),       LAYER_PCB_BACKGROUND,   BLACK,    _( "PCB Background" ), true, false )
+        RR( _( "Grid" ),             LAYER_GERBVIEW_GRID,       WHITE,    _( "Show the (x,y) grid dots" ) ),
+        RR( _( "Worksheet" ),        LAYER_GERBVIEW_WORKSHEET,  DARKRED,  _( "Show worksheet") ),
+        RR( _( "Background" ),       LAYER_GERBVIEW_BACKGROUND, BLACK,    _( "PCB Background" ), true, false )
     };
 
     for( unsigned row=0;  row<arrayDim(renderRows);  ++row )
@@ -254,7 +255,8 @@ void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
     myframe->m_SelLayerBox->ResyncBitmapOnly();
 
     KIGFX::VIEW* view = myframe->GetCanvas()->GetView();
-    view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
+    auto settings = Pgm().GetSettingsManager().GetColorSettings();
+    view->GetPainter()->GetSettings()->LoadColors( settings );
     view->UpdateLayerColor( GERBER_DRAW_LAYER( aLayer ) );
 
     myframe->GetCanvas()->Refresh();
@@ -298,8 +300,9 @@ void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
     myframe->SetVisibleElementColor( aId, aColor );
 
     auto view = myframe->GetCanvas()->GetView();
+    auto settings = Pgm().GetSettingsManager().GetColorSettings();
 
-    view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
+    view->GetPainter()->GetSettings()->LoadColors( settings );
     view->UpdateLayerColor( aId );
 
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );

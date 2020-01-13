@@ -33,11 +33,10 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 
-#include <common.h>
 #include <filehistory.h>
 #include <hotkeys_basic.h>
 #include <kiway.h>
-#include <richio.h>
+#include <settings/settings_manager.h>
 #include <systemdirsappend.h>
 #include <wildcards_and_files_ext.h>
 
@@ -45,6 +44,7 @@
 
 #include "pgm_kicad.h"
 #include "kicad_manager_frame.h"
+#include "kicad_settings.h"
 
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
@@ -90,6 +90,8 @@ bool PGM_KICAD::OnPgmInit()
     if( !InitPgm() )
         return false;
 
+    m_bm.InitSettings( new KICAD_SETTINGS );
+    GetSettingsManager().RegisterSettings( PgmSettings() );
     m_bm.Init();
 
     // Add search paths to feed the PGM_KICAD::SysSearch() function,
@@ -175,9 +177,13 @@ void PGM_KICAD::OnPgmExit()
 {
     Kiway.OnKiwayEnd();
 
-    SaveCommonSettings();
+    if( m_settings_manager && m_settings_manager->IsOK() )
+    {
+        SaveCommonSettings();
+        m_settings_manager->Save();
+    }
 
-    // write common settings to disk, and destroy everything in PGM_KICAD,
+    // Destroy everything in PGM_KICAD,
     // especially wxSingleInstanceCheckerImpl earlier than wxApp and earlier
     // than static destruction would.
     Destroy();
@@ -245,7 +251,13 @@ struct APP_KICAD : public wxApp
 
     bool OnInit()           override
     {
-        return program.OnPgmInit();
+        if( !program.OnPgmInit() )
+        {
+            program.OnPgmExit();
+            return false;
+        }
+
+        return true;
     }
 
     int  OnExit()           override

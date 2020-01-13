@@ -29,6 +29,7 @@
 
 #include <colors.h>
 #include <cassert>
+#include <nlohmann/json_fwd.hpp>
 
 namespace KIGFX
 {
@@ -319,6 +320,12 @@ const bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs );
 
 /// Syntactic sugar for outputting colors to strings
 std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor );
+
+// to allow json( COLOR4D )
+void to_json( nlohmann::json& aJson, const COLOR4D& aColor );
+
+// To allow json::get<COLOR4D>()
+void from_json( const nlohmann::json& aJson, COLOR4D& aColor );
 
 } // namespace KIGFX
 

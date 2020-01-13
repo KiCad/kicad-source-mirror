@@ -21,31 +21,33 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <pgm_base.h>
-#include <kiface_i.h>
-#include <confirm.h>
-#include <gestfich.h>
-#include <sch_edit_frame.h>
-#include <sch_sheet.h>
-#include <lib_edit_frame.h>
-#include <eeschema_config.h>
-#include <ws_data_model.h>
 #include <class_library.h>
-#include <symbol_lib_table.h>
-#include <wildcards_and_files_ext.h>
-#include <widgets/paged_dialog.h>
-#include <dialogs/panel_eeschema_template_fieldnames.h>
-#include <dialogs/panel_eeschema_settings.h>
+#include <confirm.h>
 #include <dialogs/panel_eeschema_display_options.h>
+#include <dialogs/panel_eeschema_settings.h>
+#include <dialogs/panel_eeschema_template_fieldnames.h>
+#include <dialogs/panel_libedit_settings.h>
+#include <eeschema_config.h>
+#include <eeschema_settings.h>
+#include <fctsys.h>
+#include <gestfich.h>
+#include <gr_text.h>
+#include <kiface_i.h>
+#include <lib_edit_frame.h>
 #include <panel_display_options.h>
 #include <panel_hotkeys_editor.h>
-#include <widgets/widget_eeschema_color_config.h>
-#include <widgets/symbol_tree_pane.h>
-#include <dialogs/panel_libedit_settings.h>
+#include <pgm_base.h>
+#include <sch_edit_frame.h>
+#include <sch_junction.h>
 #include <sch_painter.h>
-#include <gr_text.h>
-#include "sch_junction.h"
+#include <sch_sheet.h>
+#include <settings/app_settings.h>
+#include <symbol_lib_table.h>
+#include <widgets/paged_dialog.h>
+#include <widgets/symbol_tree_pane.h>
+#include <widgets/widget_eeschema_color_config.h>
+#include <wildcards_and_files_ext.h>
+#include <ws_data_model.h>
 
 static int s_defaultBusThickness = Mils2iu( DEFAULTBUSTHICKNESS );
 static int s_defaultWireThickness  = Mils2iu( DEFAULTDRAWLINETHICKNESS );
@@ -293,134 +295,46 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
     SetDefaultTextSize( Mils2iu( GetDefaultTextSize() ) );
 }
 
-///@{
-/// \ingroup config
 
-const wxChar RescueNeverShowEntry[] =               wxT( "RescueNeverShow" );
-const wxChar AutoplaceFieldsEntry[] =               wxT( "AutoplaceFields" );
-const wxChar AutoplaceJustifyEntry[] =              wxT( "AutoplaceJustify" );
-const wxChar AutoplaceAlignEntry[] =                wxT( "AutoplaceAlign" );
-static const wxChar DragActionIsMoveEntry[] =       wxT( "DragActionIsMove" );
-static const wxChar FootprintPreviewEntry[] =       wxT( "FootprintPreview" );
-static const wxChar NavigatorStaysOpenEntry[] =     wxT( "NavigatorStaysOpen" );
-static const wxChar DefaultBusWidthEntry[] =        wxT( "DefaultBusWidth" );
-static const wxChar DefaultWireWidthEntry[] =       wxT( "DefaultWireWidth" );
-static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" );
-static const wxChar DefaultJctSizeEntry[] =         wxT( "DefaultJunctionSize" );
-static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
-static const wxChar HorzVertLinesOnlyEntry[] =      wxT( "HorizVertLinesOnly" );
-static const wxChar FieldNamesEntry[] =             wxT( "FieldNames" );
-static const wxString TextMarkupFlagsEntry =        "TextMarkupFlags";
-static const wxString ShowPageLimitsEntry =         "ShowPageLimits";
-static const wxString UnitsEntry =                  "Units";
-static const wxString PrintMonochromeEntry =        "PrintMonochrome";
-static const wxString PrintSheetRefEntry =          "PrintSheetReferenceAndTitleBlock";
-static const wxString RepeatStepXEntry =            "RepeatStepX";
-static const wxString RepeatStepYEntry =            "RepeatStepY";
-static const wxString RepeatLabelIncrementEntry =   "RepeatLabelIncrement";
-static const wxString ShowIllegalSymboLibDialog =   "ShowIllegalSymbolLibDialog";
-static const wxString showSheetFileNameCaseSensitivityDlg = "ShowSheetFileNameCaseSensitivityDlg";
-static const wxString SelectPinSelectSymbolEntry =  "SelectPinSelectSymbolOpt";
-
-// Library editor wxConfig entry names.
-static const wxChar defaultLibWidthEntry[] =        wxT( "LibeditLibWidth" );
-static const wxChar defaultPinNumSizeEntry[] =      wxT( "LibeditPinNumSize" );
-static const wxChar defaultPinNameSizeEntry[] =     wxT( "LibeditPinNameSize" );
-static const wxChar DefaultPinLengthEntry[] =       wxT( "DefaultPinLength" );
-static const wxChar repeatLibLabelIncEntry[] =      wxT( "LibeditRepeatLabelInc" );
-static const wxChar pinRepeatStepEntry[] =          wxT( "LibeditPinRepeatStep" );
-static const wxChar repeatLibStepXEntry[] =         wxT( "LibeditRepeatStepX" );
-static const wxChar repeatLibStepYEntry[] =         wxT( "LibeditRepeatStepY" );
-static const wxChar showPinElectricalType[] =       wxT( "LibeditShowPinElectricalType" );
-
-static const wxChar boxedSelectedText[] =           wxT( "SelectionTextAsBox" );
-static const wxChar drawSelectedChildren[] =        wxT( "SelectionDrawChildItems" );
-static const wxChar selectionFillShapes[] =         wxT( "SelectionFillShapes" );
-static const wxChar selectionThickness[] =          wxT( "SelectionThickness" );
-
-///@}
-
-std::vector<PARAM_CFG*>& SCH_EDIT_FRAME::GetConfigurationSettings()
-{
-    if( !m_configSettings.empty() )
-        return m_configSettings;
-
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, ShowPageLimitsEntry,
-                                                    &m_showPageLimits, true ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, UnitsEntry,
-                                                   (int*) &m_userUnits,
-                                                   (int) EDA_UNITS::MILLIMETRES ) );
-
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, PrintMonochromeEntry,
-                                                    &m_printMonochrome, true ) );
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, PrintSheetRefEntry,
-                                                    &m_printSheetReference, true ) );
-
-    m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatLabelIncrementEntry,
-                                                   &m_repeatDeltaLabel, DEFAULT_REPEAT_LABEL_INC,
-                                                   -10, +10 ) );
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, ShowIllegalSymboLibDialog,
-                                                    &m_showIllegalSymbolLibDialog, true ) );
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, showSheetFileNameCaseSensitivityDlg,
-                                                    &m_showSheetFileNameCaseSensitivityDlg,
-                                                    true ) );
-
-    return m_configSettings;
-}
-
-
-void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
+void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    long tmp;
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
 
-    wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
-
-    aCfg->Read( RepeatStepXEntry, &tmp, DEFAULT_REPEAT_OFFSET_X );
-    m_repeatStep.x = Mils2iu( static_cast< int >( tmp ) );
-    aCfg->Read( RepeatStepYEntry, &tmp, DEFAULT_REPEAT_OFFSET_Y );
-    m_repeatStep.y = Mils2iu( static_cast< int >( tmp ) );
+    m_repeatStep.x = Mils2iu( cfg->m_Drawing.default_repeat_offset_x );
+    m_repeatStep.y = Mils2iu( cfg->m_Drawing.default_repeat_offset_y );
 
     // LibEdit owns this one, but we must read it in if LibEdit hasn't set it yet
     if( GetDefaultLineThickness() < 0 )
-    {
-        SetDefaultLineThickness( Mils2iu( (int) aCfg->Read( DefaultDrawLineWidthEntry,
-                                                            DEFAULTDRAWLINETHICKNESS ) ) );
-    }
+        SetDefaultLineThickness( Mils2iu( cfg->m_Drawing.default_line_thickness ) );
 
-    SetDefaultBusThickness( Mils2iu( (int) aCfg->Read( DefaultBusWidthEntry,
-                                                       DEFAULTBUSTHICKNESS ) ) );
+    SetDefaultBusThickness( Mils2iu( cfg->m_Drawing.default_bus_thickness ) );
 
     // Property introduced in 6.0; use DefaultLineWidth for earlier projects
-    if( !aCfg->Read( DefaultWireWidthEntry, &tmp ) )
-        aCfg->Read( DefaultDrawLineWidthEntry, &tmp, DEFAULTDRAWLINETHICKNESS );
+    SetDefaultWireThickness( Mils2iu( cfg->m_Drawing.default_wire_thickness) );
 
-    SetDefaultWireThickness( Mils2iu( (int) tmp ) );
+    SetSelectionTextAsBox( cfg->m_Selection.text_as_box );
+    SetSelectionDrawChildItems( cfg->m_Selection.draw_selected_children );
+    SetSelectionFillShapes( cfg->m_Selection.fill_shapes );
+    SetSelectionThickness( Mils2iu( cfg->m_Selection.thickness ) );
 
-    SetSelectionTextAsBox( aCfg->ReadBool( boxedSelectedText, false ) );
-    SetSelectionDrawChildItems( aCfg->ReadBool( drawSelectedChildren, true ) );
-    SetSelectionFillShapes( aCfg->ReadBool( selectionFillShapes, false ) );
-    SetSelectionThickness(
-        Mils2iu( static_cast<int>( aCfg->Read( selectionThickness,
-                                       DEFAULTSELECTIONTHICKNESS ) ) ) );
+    SetTextMarkupFlags( cfg->m_Drawing.text_markup_flags );
 
-    SetTextMarkupFlags( (int) aCfg->Read( TextMarkupFlagsEntry, 0L ) );
+    SCH_JUNCTION::SetSymbolSize( Mils2iu( cfg->m_Drawing.default_junction_size ) );
 
-    if( aCfg->Read( DefaultJctSizeEntry, &tmp ) )
-        SCH_JUNCTION::SetSymbolSize( Mils2iu( (int) tmp ) );
+    m_footprintPreview      = cfg->m_Appearance.footprint_preview;
+    m_navigatorStaysOpen    = cfg->m_Appearance.navigator_stays_open;
+    m_showAllPins           = cfg->m_Appearance.show_hidden_pins;
+    m_autoplaceFields       = cfg->m_AutoplaceFields.enable;
+    m_autoplaceAlign        = cfg->m_AutoplaceFields.align_to_grid;
+    m_autoplaceJustify      = cfg->m_AutoplaceFields.allow_rejustify;
+    m_forceHVLines          = cfg->m_Drawing.hv_lines_only;
+    m_dragActionIsMove      = cfg->m_Input.drag_is_move;
+    m_selectPinSelectSymbol = cfg->m_Selection.select_pin_selects_symbol;
+    m_repeatDeltaLabel      = cfg->m_Drawing.repeat_label_increment;
 
-    aCfg->Read( DragActionIsMoveEntry, &m_dragActionIsMove, true );
-    aCfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
-    aCfg->Read( SelectPinSelectSymbolEntry, &m_selectPinSelectSymbol, true );
-    aCfg->Read( HorzVertLinesOnlyEntry, &m_forceHVLines, true );
-    aCfg->Read( AutoplaceFieldsEntry, &m_autoplaceFields, true );
-    aCfg->Read( AutoplaceJustifyEntry, &m_autoplaceJustify, true );
-    aCfg->Read( AutoplaceAlignEntry, &m_autoplaceAlign, false );
-    aCfg->Read( FootprintPreviewEntry, &m_footprintPreview, false );
-    aCfg->Read( NavigatorStaysOpenEntry, &m_navigatorStaysOpen, false );
-
-    wxString templateFieldNames = aCfg->Read( FieldNamesEntry, wxEmptyString );
+    wxString templateFieldNames = cfg->m_Drawing.field_names;
 
     if( !templateFieldNames.IsEmpty() )
     {
@@ -446,30 +360,49 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 }
 
 
-void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
+void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
 
-    aCfg->Write( RepeatStepXEntry, static_cast< long >( Iu2Mils( m_repeatStep.x ) ) );
-    aCfg->Write( RepeatStepYEntry, static_cast< long >( Iu2Mils( m_repeatStep.y ) ) );
-    aCfg->Write( DragActionIsMoveEntry, m_dragActionIsMove );
-    aCfg->Write( DefaultBusWidthEntry, (long) Iu2Mils( GetDefaultBusThickness() ) );
-    aCfg->Write( DefaultWireWidthEntry, (long) Iu2Mils( GetDefaultWireThickness() ) );
-    aCfg->Write( DefaultJctSizeEntry, (long) Iu2Mils( SCH_JUNCTION::GetSymbolSize() ) );
-    aCfg->Write( ShowHiddenPinsEntry, m_showAllPins );
-    aCfg->Write( SelectPinSelectSymbolEntry, GetSelectPinSelectSymbol() );
-    aCfg->Write( HorzVertLinesOnlyEntry, GetForceHVLines() );
-    aCfg->Write( AutoplaceFieldsEntry, m_autoplaceFields );
-    aCfg->Write( AutoplaceJustifyEntry, m_autoplaceJustify );
-    aCfg->Write( AutoplaceAlignEntry, m_autoplaceAlign );
-    aCfg->Write( FootprintPreviewEntry, m_footprintPreview );
-    aCfg->Write( boxedSelectedText, GetSelectionTextAsBox() );
-    aCfg->Write( drawSelectedChildren, GetSelectionDrawChildItems() );
-    aCfg->Write( selectionFillShapes, GetSelectionFillShapes() );
-    aCfg->Write( selectionThickness, Iu2Mils( GetSelectionThickness() ) );
-    aCfg->Write( NavigatorStaysOpenEntry, m_navigatorStaysOpen );
+    // TODO(JE) do most of these need to live as class members here, or can the sites that need
+    // the setting just grab a pointer to the EESCHEMA_SETTINGS and look them up directly?
+
+    cfg->m_Appearance.footprint_preview         = m_footprintPreview;
+    cfg->m_Appearance.navigator_stays_open      = m_navigatorStaysOpen;
+    cfg->m_Appearance.print_sheet_reference     = m_printSheetReference;
+    cfg->m_Appearance.show_hidden_pins          = m_showAllPins;
+    cfg->m_Appearance.show_illegal_symbol_lib_dialog = m_showIllegalSymbolLibDialog;
+    cfg->m_Appearance.show_page_limits          = m_showPageLimits;
+    cfg->m_Appearance.show_sheet_filename_case_sensitivity_dialog =
+            m_showSheetFileNameCaseSensitivityDlg;
+
+    cfg->m_AutoplaceFields.enable               = m_autoplaceFields;
+    cfg->m_AutoplaceFields.allow_rejustify      = m_autoplaceJustify;
+    cfg->m_AutoplaceFields.align_to_grid        = m_autoplaceAlign;
+
+    cfg->m_Drawing.default_bus_thickness        = Iu2Mils( GetDefaultBusThickness() );
+    cfg->m_Drawing.default_line_thickness       = Iu2Mils( GetDefaultLineThickness() );
+    cfg->m_Drawing.default_junction_size        = Iu2Mils( SCH_JUNCTION::GetSymbolSize() );
+    cfg->m_Drawing.default_repeat_offset_x      = Iu2Mils( m_repeatStep.x );
+    cfg->m_Drawing.default_repeat_offset_y      = Iu2Mils( m_repeatStep.y );
+    cfg->m_Drawing.default_wire_thickness       = Iu2Mils( GetDefaultWireThickness() );
+    cfg->m_Drawing.hv_lines_only                = GetForceHVLines();
+    cfg->m_Drawing.repeat_label_increment       = m_repeatDeltaLabel;
+    cfg->m_Drawing.text_markup_flags            = GetTextMarkupFlags();
+
+    cfg->m_Input.drag_is_move                   = m_dragActionIsMove;
+
+    cfg->m_Printing.monochrome                  = m_printMonochrome;
+
+    cfg->m_Selection.thickness                  = Iu2Mils( GetSelectionThickness() );
+    cfg->m_Selection.draw_selected_children     = GetSelectionDrawChildItems();
+    cfg->m_Selection.fill_shapes                = GetSelectionFillShapes();
+    cfg->m_Selection.select_pin_selects_symbol  = GetSelectPinSelectSymbol();
+    cfg->m_Selection.text_as_box                = GetSelectionTextAsBox();
+
+    cfg->m_System.units                         = static_cast<int>( m_userUnits );
 
     // Save template fieldnames
     STRING_FORMATTER sf;
@@ -479,80 +412,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
     record.Replace( wxT("  "), wxT(" "), true );  // double space to single
 
-    aCfg->Write( FieldNamesEntry, record );
-
-    aCfg->Write( TextMarkupFlagsEntry, GetTextMarkupFlags() );
-    aCfg->Write( showSheetFileNameCaseSensitivityDlg, m_showSheetFileNameCaseSensitivityDlg );
-}
-
-
-void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
-{
-    EDA_DRAW_FRAME::LoadSettings( aCfg );
-
-    SetDefaultLineThickness( Mils2iu( (int) aCfg->Read( DefaultDrawLineWidthEntry,
-                                                        DEFAULTDRAWLINETHICKNESS ) ) );
-    SetDefaultPinLength( Mils2iu( (int) aCfg->Read( DefaultPinLengthEntry, DEFAULTPINLENGTH ) ) );
-    m_textPinNumDefaultSize = Mils2iu( (int) aCfg->Read( defaultPinNumSizeEntry,
-                                                         DEFAULTPINNUMSIZE ) );
-    m_textPinNameDefaultSize = Mils2iu( (int) aCfg->Read( defaultPinNameSizeEntry,
-                                                          DEFAULTPINNAMESIZE ) );
-    SetRepeatDeltaLabel( (int) aCfg->Read( repeatLibLabelIncEntry, DEFAULT_REPEAT_LABEL_INC ) );
-    SetRepeatPinStep( Mils2iu( (int) aCfg->Read( pinRepeatStepEntry,
-                                                 DEFAULT_REPEAT_OFFSET_PIN ) ) );
-
-    wxPoint step;
-    step.x = Mils2iu( static_cast< int >( aCfg->Read( repeatLibStepXEntry,
-            static_cast< long >( DEFAULT_REPEAT_OFFSET_X ) ) ) );
-    step.y = Mils2iu( static_cast< int >( aCfg->Read( repeatLibStepYEntry,
-            static_cast< long >( DEFAULT_REPEAT_OFFSET_Y ) ) ) );
-
-    SetRepeatStep( step );
-    m_showPinElectricalTypeName = aCfg->ReadBool( showPinElectricalType, true );
-    aCfg->Read( defaultLibWidthEntry, &m_defaultLibWidth, DEFAULTLIBWIDTH );
-
-    wxString templateFieldNames = aCfg->Read( FieldNamesEntry, wxEmptyString );
-
-    if( !templateFieldNames.IsEmpty() )
-    {
-        TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
-
-        try
-        {
-            m_templateFieldNames.Parse( &lexer );
-        }
-        catch( const IO_ERROR& DBG( e ) )
-        {
-            // @todo show error msg
-            DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
-        }
-    }
-
-    auto painter = static_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
-    KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
-    settings->m_ShowPinsElectricalType = m_showPinElectricalTypeName;
-
-    // Hidden elements must be editable
-    settings->m_ShowHiddenText = true;
-    settings->m_ShowHiddenPins = true;
-    settings->m_ShowUmbilicals = false;
-}
-
-
-void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
-{
-    EDA_DRAW_FRAME::SaveSettings( aCfg );
-
-    aCfg->Write( DefaultDrawLineWidthEntry, Iu2Mils( GetDefaultLineThickness() ) );
-    aCfg->Write( DefaultPinLengthEntry, Iu2Mils( GetDefaultPinLength() ) );
-    aCfg->Write( defaultPinNumSizeEntry, Iu2Mils( GetPinNumDefaultSize() ) );
-    aCfg->Write( defaultPinNameSizeEntry, Iu2Mils( GetPinNameDefaultSize() ) );
-    aCfg->Write( repeatLibLabelIncEntry, GetRepeatDeltaLabel() );
-    aCfg->Write( pinRepeatStepEntry, Iu2Mils( GetRepeatPinStep() ) );
-    aCfg->Write( repeatLibStepXEntry, Iu2Mils( GetRepeatStep().x ) );
-    aCfg->Write( repeatLibStepYEntry, Iu2Mils( GetRepeatStep().y ) );
-    aCfg->Write( showPinElectricalType, GetShowElectricalType() );
-    aCfg->Write( defaultLibWidthEntry, m_treePane->GetSize().x );
+    cfg->m_Drawing.field_names = record.ToStdString();
 }
 
 

@@ -148,7 +148,12 @@ int  GetSelectionThickness();
 void SetSelectionThickness( int aThickness );
 
 COLOR4D  GetLayerColor( SCH_LAYER_ID aLayer );
-void     SetLayerColor( COLOR4D aColor, SCH_LAYER_ID aLayer );
+
+/**
+ * Update the static layer color cache used by GetLayerColor()
+ * TODO(JE) Remove this once eeschema is refactored to not need s_layerColor[]
+ */
+void OnColorsChanged();
 
 // Color to draw selected items
 COLOR4D GetItemSelectedColor();

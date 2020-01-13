@@ -102,7 +102,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     ACTION_TOOLBAR*         m_microWaveToolBar;
 
 protected:
-    std::vector<PARAM_CFG*> m_configParams;           // List of Pcbnew configuration settings.
     std::vector<PARAM_CFG*> m_projectFileParams;
 
     wxString                m_lastPath[ LAST_PATH_SIZE ];
@@ -371,17 +370,15 @@ public:
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
 
     /**
-     * Function SetActionPluginSettings
      * Set a set of plugins that have visible buttons on toolbar
      * Plugins are identified by their module path
      */
-    void SetActionPluginSettings( const std::vector< std::pair<wxString, wxString> >& aPluginsWithButtons );
+    void SetActionPluginSettings( const std::vector<wxString>& aPluginsWithButtons );
 
     /**
-     * Function GetActionPluginSettings
      * Get a set of plugins that have visible buttons on toolbar
      */
-    std::vector< std::pair<wxString, wxString> > GetActionPluginSettings();
+    std::vector<wxString> GetActionPluginSettings();
 
     /**
      * Function GetActionPluginButtonVisible
@@ -427,28 +424,9 @@ public:
      */
     bool LoadProjectSettings();
 
-    /**
-     * Function GetConfigurationSettings
-     * returns the Pcbnew applications settings list.
-     *
-     * This replaces the old statically defined list that had the project
-     * file settings and the application settings mixed together.  This
-     * was confusing and caused some settings to get saved and loaded
-     * incorrectly.  Currently, only the settings that are needed at start
-     * up by the main window are defined here.  There are other locally used
-     * settings that are scattered throughout the Pcbnew source code.  If you need
-     * to define a configuration setting that needs to be loaded at run time,
-     * this is the place to define it.
-     *
-     * @return - Reference to the list of applications settings.
-     */
-    std::vector<PARAM_CFG*>& GetConfigurationSettings();
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
-
-    void SaveSettings( wxConfigBase* aCfg ) override;
-
-    wxConfigBase* GetSettings() { return config(); };
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     /**
      * Get the last path for a particular type.

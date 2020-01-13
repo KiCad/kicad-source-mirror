@@ -24,7 +24,6 @@
  */
 
 #include <macros.h>             // FROM_UTF8()
-#include <wx/config.h>
 #include <wx/stdpaths.h>
 
 #include <kiface_i.h>

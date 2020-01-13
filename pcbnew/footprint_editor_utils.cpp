@@ -21,45 +21,47 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <3d_viewer/eda_3d_viewer.h>
+#include <board_commit.h>
+#include <class_board.h>
+#include <class_edge_mod.h>
+#include <class_module.h>
+#include <collectors.h>
+#include <config_params.h>
+#include <confirm.h>
+#include <dialog_create_array.h>
+#include <dialog_edit_footprint_for_fp_editor.h>
+#include <dialog_move_exact.h>
 #include <fctsys.h>
+#include <footprint_edit_frame.h>
+#include <footprint_tree_pane.h>
+#include <footprint_viewer_frame.h>
+#include <footprint_wizard_frame.h>
+#include <fp_lib_table.h>
+#include <functional>
+#include <gestfich.h>
+#include <invoke_pcb_dialog.h>
 #include <kiface_i.h>
 #include <kiway.h>
 #include <kiway_express.h>
-#include <pcb_draw_panel_gal.h>
-#include <confirm.h>
-#include <gestfich.h>
-#include <pgm_base.h>
-#include <trigo.h>
-#include <3d_viewer/eda_3d_viewer.h>
 #include <macros.h>
-#include <invoke_pcb_dialog.h>
-#include <pcb_layer_widget.h>
-#include <board_commit.h>
-#include <view/view.h>
-#include <class_board.h>
-#include <class_module.h>
-#include <class_edge_mod.h>
+#include <menus_helpers.h>
+#include <pcb_draw_panel_gal.h>
 #include <pcb_layer_box_selector.h>
-#include <ratsnest_data.h>
+#include <pcb_layer_widget.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <footprint_edit_frame.h>
-#include <footprint_viewer_frame.h>
-#include <footprint_tree_pane.h>
-#include <fp_lib_table.h>
-#include <widgets/lib_tree.h>
-#include <collectors.h>
+#include <pcbnew_settings.h>
+#include <pgm_base.h>
+#include <ratsnest_data.h>
+#include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <dialog_edit_footprint_for_fp_editor.h>
-#include <dialog_move_exact.h>
-#include <dialog_create_array.h>
+#include <trigo.h>
+#include <view/view.h>
+#include <widgets/lib_tree.h>
 #include <wildcards_and_files_ext.h>
-#include <menus_helpers.h>
-#include <footprint_wizard_frame.h>
-#include <config_params.h>
 
-#include <functional>
 using namespace std::placeholders;
 
 
@@ -428,7 +430,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 
 COLOR4D FOOTPRINT_EDIT_FRAME::GetGridColor()
 {
-    return Settings().Colors().GetItemColor( LAYER_GRID );
+    return ColorSettings()->GetColor( LAYER_GRID );
 }
 
 

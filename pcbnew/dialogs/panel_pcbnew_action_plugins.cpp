@@ -136,15 +136,14 @@ void PANEL_PCBNEW_ACTION_PLUGINS::OnReloadButtonClick( wxCommandEvent& event )
 
 bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataFromWindow()
 {
-    std::vector< std::pair<wxString, wxString> > pluginSettings;
+    std::vector<wxString> pluginSettings;
 
     pluginSettings.reserve( m_grid->GetNumberRows() );
+
     for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
     {
-        pluginSettings.emplace_back(
-                                    m_grid->GetCellValue( ii, COLUMN_PATH ),
-                                    m_grid->GetCellValue( ii, COLUMN_VISIBLE ) == wxT("1") ? wxT( "Visible" ) : wxT( "Hidden" )
-                                );
+        if( m_grid->GetCellValue( ii, COLUMN_VISIBLE ) == wxT( "1" ) )
+            pluginSettings.emplace_back( m_grid->GetCellValue( ii, COLUMN_PATH ) );
     }
 
     m_frame->SetActionPluginSettings( pluginSettings );

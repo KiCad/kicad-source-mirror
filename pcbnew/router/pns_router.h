@@ -187,7 +187,7 @@ public:
     bool GetShowIntermediateSteps() const { return m_showInterSteps; }
     int GetShapshotIter() const { return m_snapshotIter; }
 
-    ROUTING_SETTINGS& Settings() { return m_settings; }
+    ROUTING_SETTINGS& Settings() { return *m_settings; }
 
     void CommitRouting( NODE* aNode );
 
@@ -201,7 +201,7 @@ public:
      * Changes routing settings to ones passed in the parameter.
      * @param aSettings are the new settings.
      */
-    void LoadSettings( const ROUTING_SETTINGS& aSettings )
+    void LoadSettings( ROUTING_SETTINGS* aSettings )
     {
         m_settings = aSettings;
     }
@@ -268,7 +268,7 @@ private:
     bool m_violation;
     bool m_forceMarkObstaclesMode = false;
 
-    ROUTING_SETTINGS m_settings;
+    ROUTING_SETTINGS* m_settings;
     SIZES_SETTINGS m_sizes;
     ROUTER_MODE m_mode;
 

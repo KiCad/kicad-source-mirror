@@ -190,9 +190,13 @@ public:
      */
     int GetPlotColorCount() { return m_colorList.size(); }
 
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+    WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
+
 private:
-    void LoadSettings( wxConfigBase* aCfg ) override;
-    void SaveSettings( wxConfigBase* aCfg ) override;
 
     /** Give icons to menuitems of the main menubar
      */

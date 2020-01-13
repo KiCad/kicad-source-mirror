@@ -82,6 +82,10 @@ target_link_libraries( gal
     ${GDI_PLUS_LIBRARIES}
 )
 
+target_include_directories( gal PRIVATE
+    $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+
 
 # Only for win32 cross compilation using MXE
 if( WIN32 AND MSYS )
@@ -168,6 +172,8 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_image_editor.cpp
     dialogs/dialog_image_editor_base.cpp
     dialogs/dialog_list_selector_base.cpp
+    dialogs/dialog_migrate_settings.cpp
+    dialogs/dialog_migrate_settings_base.cpp
     dialogs/dialog_page_settings_base.cpp
     dialogs/dialog_text_entry_base.cpp
     dialogs/dialog_print_generic.cpp
@@ -262,7 +268,6 @@ set( COMMON_SRCS
     bitmap_base.cpp
     board_printout.cpp
     build_version.cpp
-    colors_design_settings.cpp
     colors.cpp
     commit.cpp
     common.cpp
@@ -322,7 +327,6 @@ set( COMMON_SRCS
     richio.cpp
     search_stack.cpp
     searchhelpfilefullpath.cpp
-    settings.cpp
     status_popup.cpp
     systemdirsappend.cpp
     trace_helpers.cpp
@@ -382,6 +386,13 @@ set( COMMON_SRCS
     tool/zoom_menu.cpp
     tool/zoom_tool.cpp
 
+    settings/app_settings.cpp
+    settings/color_settings.cpp
+    settings/common_settings.cpp
+    settings/json_settings.cpp
+    settings/nested_settings.cpp
+    settings/settings_manager.cpp
+
     libeval/numeric_evaluator.cpp
     )
 
@@ -405,6 +416,10 @@ target_link_libraries( common
     ${CURL_LIBRARIES}
     ${OPENSSL_LIBRARIES}        # empty on Apple
     ${wxWidgets_LIBRARIES}
+    )
+
+target_include_directories( common PUBLIC
+    $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 
@@ -445,6 +460,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/convert_drawsegment_list_to_polygon.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/eagle_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/footprint_editor_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/gpcb_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/io_mgr.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/kicad_clipboard.cpp
@@ -452,18 +468,18 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/kicad_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/legacy_netlist_reader.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/legacy_plugin.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew//netlist_reader/netlist_reader.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/netlist_reader.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pad_custom_shape_functions.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pad_print_functions.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_display_options.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_draw_panel_gal.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_general_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/pcb_netlist.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_painter.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_parser.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_plot_params.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_screen.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_view.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcbnew_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest_data.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest_viewitem.cpp

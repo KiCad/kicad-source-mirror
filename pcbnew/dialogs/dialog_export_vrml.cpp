@@ -33,6 +33,7 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <pcbnew.h>
 
 
@@ -41,19 +42,11 @@
  */
 #include <dialog_export_vrml_base.h> // the wxFormBuilder header file
 
-#define OPTKEY_OUTPUT_UNIT wxT( "VrmlExportUnit" )
-#define OPTKEY_3DFILES_OPT wxT( "VrmlExportCopyFiles" )
-#define OPTKEY_USE_RELATIVE_PATHS wxT( "VrmlUseRelativePaths" )
-#define OPTKEY_USE_PLAIN_PCB wxT( "VrmlUsePlainPCB" )
-#define OPTKEY_VRML_REF_UNITS wxT( "VrmlRefUnits" )
-#define OPTKEY_VRML_REF_X wxT( "VrmlRefX" )
-#define OPTKEY_VRML_REF_Y wxT( "VrmlRefY" )
-
 
 class DIALOG_EXPORT_3DFILE : public DIALOG_EXPORT_3DFILE_BASE
 {
 private:
-    wxConfigBase*   m_config;
+    PCB_EDIT_FRAME* m_parent;
     int             m_unitsOpt;             // Remember last units option
     bool            m_copy3DFilesOpt;       // Remember last copy model files option
     bool            m_useRelativePathsOpt;  // Remember last use absolute paths option
@@ -64,17 +57,20 @@ private:
 
 public:
     DIALOG_EXPORT_3DFILE( PCB_EDIT_FRAME* parent ) :
-        DIALOG_EXPORT_3DFILE_BASE( parent )
+        DIALOG_EXPORT_3DFILE_BASE( parent ), m_parent( parent )
     {
-        m_config = Kiface().KifaceSettings();
         m_filePicker->SetFocus();
-        m_config->Read( OPTKEY_OUTPUT_UNIT, &m_unitsOpt, 1 );
-        m_config->Read( OPTKEY_3DFILES_OPT, &m_copy3DFilesOpt, false );
-        m_config->Read( OPTKEY_USE_RELATIVE_PATHS, &m_useRelativePathsOpt, false );
-        m_config->Read( OPTKEY_USE_PLAIN_PCB, &m_usePlainPCBOpt, false );
-        m_config->Read( OPTKEY_VRML_REF_UNITS, &m_RefUnits, 0 );
-        m_config->Read( OPTKEY_VRML_REF_X, &m_XRef, 0.0 );
-        m_config->Read( OPTKEY_VRML_REF_Y, &m_YRef, 0.0 );
+
+        auto cfg = m_parent->GetSettings();
+
+        m_unitsOpt            = cfg->m_ExportVrml.units;
+        m_copy3DFilesOpt      = cfg->m_ExportVrml.copy_3d_models;
+        m_useRelativePathsOpt = cfg->m_ExportVrml.use_relative_paths;
+        m_usePlainPCBOpt      = cfg->m_ExportVrml.use_plain_pcb;
+        m_RefUnits            = cfg->m_ExportVrml.ref_units;
+        m_XRef                = cfg->m_ExportVrml.ref_x;
+        m_YRef                = cfg->m_ExportVrml.ref_y;
+
         m_rbSelectUnits->SetSelection( m_unitsOpt );
         m_cbCopyFiles->SetValue( m_copy3DFilesOpt );
         m_cbUseRelativePaths->SetValue( m_useRelativePathsOpt );
@@ -99,13 +95,21 @@ public:
     {
         m_unitsOpt = GetUnits();
         m_copy3DFilesOpt = GetCopyFilesOption();
-        m_config->Write( OPTKEY_OUTPUT_UNIT, m_unitsOpt );
-        m_config->Write( OPTKEY_3DFILES_OPT, m_copy3DFilesOpt );
-        m_config->Write( OPTKEY_USE_RELATIVE_PATHS, m_useRelativePathsOpt );
-        m_config->Write( OPTKEY_USE_PLAIN_PCB, m_usePlainPCBOpt );
-        m_config->Write( OPTKEY_VRML_REF_UNITS, m_VRML_RefUnitChoice->GetSelection() );
-        m_config->Write( OPTKEY_VRML_REF_X, m_VRML_Xref->GetValue() );
-        m_config->Write( OPTKEY_VRML_REF_Y, m_VRML_Yref->GetValue() );
+
+        auto cfg = m_parent->GetSettings();
+
+        cfg->m_ExportVrml.units              = m_unitsOpt;
+        cfg->m_ExportVrml.copy_3d_models     = m_copy3DFilesOpt;
+        cfg->m_ExportVrml.use_relative_paths = m_useRelativePathsOpt;
+        cfg->m_ExportVrml.use_plain_pcb      = m_usePlainPCBOpt;
+        cfg->m_ExportVrml.ref_units          = m_VRML_RefUnitChoice->GetSelection();
+
+        double val = 0.0;
+        m_VRML_Xref->GetValue().ToDouble( &val );
+        cfg->m_ExportVrml.ref_x = val;
+
+        m_VRML_Yref->GetValue().ToDouble( &val );
+        cfg->m_ExportVrml.ref_y = val;
     };
 
     void SetSubdir( const wxString & aDir )

@@ -33,11 +33,14 @@
 #include <bitmaps.h>
 #include <pcb_edit_frame.h>
 
-#include <class_board.h>
-#include <class_pcb_text.h>
-#include <class_dimension.h>
 #include <base_units.h>
-#include <math/util.h>      // for KiROUND
+#include <class_board.h>
+#include <class_dimension.h>
+#include <class_pcb_text.h>
+#include <math/util.h> // for KiROUND
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent )
@@ -362,7 +365,7 @@ void DIMENSION::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 
     m_Text.Print( aFrame, DC, offset );
 
-    auto gcolor = aFrame->Settings().Colors().GetLayerColor( m_Layer );
+    COLOR4D gcolor = Pgm().GetSettingsManager().GetColorSettings()->GetColor( m_Layer );
     auto displ_opts = aFrame->GetDisplayOptions();
     bool filled = displ_opts.m_DisplayDrawItemsFill;
     int  width   = m_Width;

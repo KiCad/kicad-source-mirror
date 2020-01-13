@@ -34,6 +34,7 @@
 #include <widgets/wx_grid.h>
 
 #include <class_library.h>
+#include <eeschema_settings.h>
 #include <fields_grid_table.h>
 #include <invoke_sch_dialog.h>
 #include <sch_draw_panel.h>
@@ -48,15 +49,10 @@
 #endif /* KICAD_SPICE */
 
 
-#define SymbolFieldsShownColumnsKey   wxT( "SymbolFieldsShownColumns" )
-
-
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT_FRAME* aParent,
                                                                         SCH_COMPONENT* aComponent ) :
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE( aParent )
 {
-    m_config = Kiface().KifaceSettings();
-
     m_cmp = aComponent;
     m_part = m_cmp->GetPartRef().get();
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_part );
@@ -84,7 +80,8 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this ) );
 
     // Show/hide columns according to user's preference
-    m_config->Read( SymbolFieldsShownColumnsKey, &m_shownColumns, wxT( "0 1 2 3 4 5 6 7" ) );
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    m_shownColumns = cfg->m_Appearance.edit_component_visible_columns;
     m_grid->ShowHideColumns( m_shownColumns );
 
     wxToolTip::Enable( true );
@@ -108,7 +105,8 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
 
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC()
 {
-    m_config->Write( SymbolFieldsShownColumnsKey, m_grid->GetShownColumns() );
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    cfg->m_Appearance.edit_component_visible_columns = m_grid->GetShownColumns();
 
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );

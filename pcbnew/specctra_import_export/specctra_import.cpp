@@ -46,6 +46,7 @@
 #include <view/view.h>
 #include "specctra.h"
 #include <math/util.h>      // for KiROUND
+#include <pcbnew_settings.h>
 
 using namespace DSN;
 

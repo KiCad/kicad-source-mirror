@@ -39,6 +39,7 @@
 #include <pgm_base.h>
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>
+#include <settings/common_settings.h>
 
 
 struct SCALED_BITMAP_ID {
@@ -103,8 +104,7 @@ int KiIconScale( wxWindow* aWindow )
 
 static int get_scale_factor( EDA_BASE_FRAME* aWindow )
 {
-    int requested_scale;
-    Pgm().CommonSettings()->Read( ICON_SCALE_KEY, &requested_scale, 0 );
+    int requested_scale = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
 
     if( requested_scale > 0 )
         return requested_scale;
@@ -223,8 +223,7 @@ bool SaveCanvasImageToFile( EDA_DRAW_FRAME* aFrame, const wxString& aFileName,
 void AddBitmapToMenuItem( wxMenuItem* aMenu, const wxBitmap& aImage )
 {
     // Retrieve the global applicaton show icon option:
-    bool useImagesInMenus;
-    Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
+    bool useImagesInMenus = Pgm().GetCommonSettings()->m_Appearance.use_icons_in_menus;
 
     wxItemKind menu_type = aMenu->GetKind();
 

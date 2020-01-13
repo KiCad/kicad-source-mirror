@@ -21,7 +21,7 @@
 
 #include <page_info.h>
 
-class wxConfigBase;
+class APP_SETTINGS_BASE;
 
 /**
  * PRINT_PARAMETERS
@@ -42,8 +42,8 @@ struct PRINTOUT_SETTINGS
     {
     }
 
-    virtual void Save( wxConfigBase* aConfig );
-    virtual void Load( wxConfigBase* aConfig );
+    virtual void Save( APP_SETTINGS_BASE* aConfig );
+    virtual void Load( APP_SETTINGS_BASE* aConfig );
 
     double m_scale;         ///< Printing scale
     bool   m_titleBlock;    ///< Print frame and title block

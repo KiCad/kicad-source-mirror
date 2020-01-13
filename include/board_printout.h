@@ -56,8 +56,8 @@ struct BOARD_PRINTOUT_SETTINGS : public PRINTOUT_SETTINGS
     LSET m_layerSet;                   ///< Layers to print
     bool m_mirror;                      ///< Print mirrored
 
-    void Load( wxConfigBase* aConfig ) override;
-    void Save( wxConfigBase* aConfig ) override;
+    void Load( APP_SETTINGS_BASE* aConfig ) override;
+    void Save( APP_SETTINGS_BASE* aConfig ) override;
 };
 
 /**

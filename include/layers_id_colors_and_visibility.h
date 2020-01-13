@@ -266,6 +266,7 @@ enum SCH_LAYER_ID: int
     LAYER_BRIGHTENED,
     LAYER_HIDDEN,
     LAYER_SELECTION_SHADOWS,
+    LAYER_SCHEMATIC_WORKSHEET,
 
     SCH_LAYER_ID_END
 };
@@ -296,6 +297,7 @@ enum GERBVIEW_LAYER_ID: int
     LAYER_GERBVIEW_GRID,
     LAYER_GERBVIEW_AXES,
     LAYER_GERBVIEW_BACKGROUND,
+    LAYER_GERBVIEW_WORKSHEET,
 
     GERBVIEW_LAYER_ID_END
 };
@@ -306,8 +308,40 @@ enum GERBVIEW_LAYER_ID: int
 
 #define GERBER_DRAW_LAYER_INDEX( x ) ( x - GERBVIEW_LAYER_ID_START )
 
+// TODO(JE) Remove after we have color themes
+// Temporary virtual layers to store color themes for footprint editor
+enum FPEDIT_LAYER_ID : int
+{
+    FPEDIT_LAYER_ID_START = GERBVIEW_LAYER_ID_END,
+
+    // Reserve a copy of the board and netname layers...
+    FPEDIT_LAYER_ID_RESERVED = FPEDIT_LAYER_ID_START + ( 2 * PCB_LAYER_ID_COUNT ),
+
+    // And a copy of the GAL layers
+    FPEDIT_GAL_RESERVED = FPEDIT_LAYER_ID_RESERVED + ( GAL_LAYER_ID_END - GAL_LAYER_ID_START ),
+
+    FPEDIT_LAYER_ID_END
+};
+
+/// 3D Viewer virtual layers for color settings
+enum LAYER_3D_ID : int
+{
+        LAYER_3D_START = FPEDIT_LAYER_ID_END,
+
+        LAYER_3D_BACKGROUND_BOTTOM,
+        LAYER_3D_BACKGROUND_TOP,
+        LAYER_3D_BOARD,
+        LAYER_3D_COPPER,
+        LAYER_3D_SILKSCREEN_BOTTOM,
+        LAYER_3D_SILKSCREEN_TOP,
+        LAYER_3D_SOLDERMASK,
+        LAYER_3D_SOLDERPASTE,
+
+        LAYER_3D_END = LAYER_3D_SOLDERPASTE
+};
+
 /// Must update this if you add any enums after GerbView!
-#define LAYER_ID_COUNT GERBVIEW_LAYER_ID_END
+#define LAYER_ID_COUNT FPEDIT_LAYER_ID_END
 
 
 // Some elements do not have yet a visibility control

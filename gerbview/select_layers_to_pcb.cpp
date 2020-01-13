@@ -31,6 +31,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
+#include <gerbview_settings.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 
@@ -275,34 +276,30 @@ void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
  */
 void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
 {
-    wxConfigBase* config = Kiface().KifaceSettings();
-    config->Write( wxT("BrdLayersCount"), m_exportBoardCopperLayersCount );
+    auto config = dynamic_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
+    config->m_BoardLayersCount = m_exportBoardCopperLayersCount;
 
-    wxString key;
+    config->m_GerberToPcbLayerMapping.clear();
+
     for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
     {
-        key.Printf( wxT("GbrLyr%dToPcb"), ii );
-        config->Write( key, m_layersLookUpTable[ii] );
+        config->m_GerberToPcbLayerMapping.push_back( m_layersLookUpTable[ii] );
     }
 }
 
 void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
 {
-    wxConfigBase* config = Kiface().KifaceSettings();
+    auto config = dynamic_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
 
-    config->Read( wxT("BrdLayersCount"), &m_exportBoardCopperLayersCount );
+    m_exportBoardCopperLayersCount = config->m_BoardLayersCount;
     normalizeBrdLayersCount();
 
     int idx = ( m_exportBoardCopperLayersCount / 2 ) - 1;
     m_comboCopperLayersCount->SetSelection( idx );
 
-    wxString key;
     for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
     {
-        key.Printf( wxT("GbrLyr%dToPcb"), ii );
-        int ilayer;
-        config->Read( key, &ilayer);
-        m_layersLookUpTable[ii] = ilayer;
+        m_layersLookUpTable[ii] = config->m_GerberToPcbLayerMapping[ ii ];
     }
 
     for( int ii = 0; ii < m_gerberActiveLayersCount; ii++ )

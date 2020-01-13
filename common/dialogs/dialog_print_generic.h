@@ -23,7 +23,6 @@
 #include <wx/valnum.h>
 #include <widgets/unit_binder.h>
 
-class wxConfigBase;
 class EDA_DRAW_FRAME;
 struct PRINTOUT_SETTINGS;
 
@@ -78,7 +77,7 @@ protected:
     // even if the dialog is closed without printing
     bool TransferDataToWindow() override;
 
-    wxConfigBase* m_config;
+    APP_SETTINGS_BASE* m_config;
 
     PRINTOUT_SETTINGS* m_settings;
 

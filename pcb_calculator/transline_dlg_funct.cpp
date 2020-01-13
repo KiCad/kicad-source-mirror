@@ -18,7 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <wx/wx.h>
-#include <wx/config.h>
 #include <wx/filename.h>
 
 #include <pcb_calculator_frame_base.h>

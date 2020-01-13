@@ -36,7 +36,6 @@
 
 #include <wx/socket.h>
 #include <wx/log.h>
-#include <wx/config.h>
 #include <wx/wxhtml.h>
 #include <wx/laywin.h>
 #include <wx/aui/aui.h>
@@ -76,7 +75,9 @@ class PAGED_DIALOG;
 class DIALOG_EDIT_LIBRARY_TABLES;
 class PANEL_HOTKEYS_EDITOR;
 class FILE_HISTORY;
-
+class SETTINGS_MANAGER;
+class APP_SETTINGS_BASE;
+struct WINDOW_SETTINGS;
 
 enum id_librarytype {
     LIBRARY_TYPE_EESCHEMA,
@@ -125,6 +126,8 @@ protected:
 
     wxString        m_configName;           // Prefix used to identify some params (frame size...)
                                             // and to name some config files (legacy hotkey files)
+
+    SETTINGS_MANAGER* m_settingsManager;
 
     TOOL_MANAGER*   m_toolManager;
     ACTIONS*        m_actions;
@@ -224,6 +227,8 @@ public:
         unitsChangeRefresh();
     }
 
+    SETTINGS_MANAGER* GetSettingsManager() const { return m_settingsManager; }
+
     /**
      * Return the MVC controller.
      */
@@ -306,10 +311,10 @@ public:
     void PrintMsg( const wxString& text );
 
     /**
-     * Returns the wxConfigBase used in SaveSettings(), and is overloaded in
+     * Returns the settings object used in SaveSettings(), and is overloaded in
      * KICAD_MANAGER_FRAME
      */
-    virtual wxConfigBase* config();
+    virtual APP_SETTINGS_BASE* config();
 
     /**
      * Function InstallPreferences
@@ -319,12 +324,26 @@ public:
     virtual void InstallPreferences( PAGED_DIALOG* , PANEL_HOTKEYS_EDITOR* ) { }
 
     /**
+     * Loads window settings from the given settings object
+     * Normally called by LoadSettings unless the window in question is a child window that
+     * stores its settings somewhere other than APP_SETTINGS_BASE::m_Window
+     */
+    void LoadWindowSettings( WINDOW_SETTINGS* aCfg );
+
+    /**
+     * Saves window settings to the given settings object
+     * Normally called by SaveSettings unless the window in question is a child window that
+     * stores its settings somewhere other than APP_SETTINGS_BASE::m_Window
+     */
+    void SaveWindowSettings( WINDOW_SETTINGS* aCfg );
+
+    /**
      * Load common frame parameters from a configuration file.
      *
      * Don't forget to call the base method or your frames won't
      * remember their positions and sizes.
      */
-    virtual void LoadSettings( wxConfigBase* aCfg );
+    virtual void LoadSettings( APP_SETTINGS_BASE* aCfg );
 
     /**
      * Saves common frame parameters to a configuration data file.
@@ -333,7 +352,14 @@ public:
      * your derived SaveSettings() otherwise the frames won't remember their
      * positions and sizes.
      */
-    virtual void SaveSettings( wxConfigBase* aCfg );
+    virtual void SaveSettings( APP_SETTINGS_BASE* aCfg );
+
+    /**
+     * Returns a pointer to the window settings for this frame.
+     * By default, points to aCfg->m_Window for top-level frames.
+     * @param aCfg is this frame's config object
+     */
+    virtual WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg );
 
     /**
      * @return a base name prefix used in Load/Save settings to build the full name of keys

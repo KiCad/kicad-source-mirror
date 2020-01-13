@@ -36,7 +36,7 @@
 #include <memory>
 
 class EDA_ITEM;
-class COLORS_DESIGN_SETTINGS;
+class COLOR_SETTINGS;
 
 namespace KIGFX
 {
@@ -59,12 +59,7 @@ public:
     RENDER_SETTINGS();
     virtual ~RENDER_SETTINGS();
 
-    /**
-     * Function ImportLegacyColors
-     * Loads a list of color settings for layers.
-     * @param aSettings is a list of color settings.
-     */
-    virtual void ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings ) { }
+    virtual void LoadColors( const COLOR_SETTINGS* aSettings ) { }
 
     /**
      * Function SetActiveLayer

@@ -57,7 +57,6 @@ public:
 
 private:
     PCB_EDIT_FRAME*  m_pcbEditFrame;
-    wxConfigBase*    m_config;
     BOARD*           m_board;
     PCB_PLOT_PARAMS  m_plotOpts;
     bool             m_drillOriginIsAuxAxis;     // Axis selection (main / auxiliary)

@@ -23,11 +23,12 @@
 
 #include <grid_layer_box_helpers.h>
 
-#include <pcb_edit_frame.h>
 #include <class_board.h>
-#include <wx/textctrl.h>
-#include <widgets/layer_box_selector.h>
+#include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
+#include <settings/color_settings.h>
+#include <widgets/layer_box_selector.h>
+#include <wx/textctrl.h>
 
 
 //-------- Custom wxGridCellRenderers --------------------------------------------------
@@ -57,10 +58,10 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
 
     // draw the swatch
     wxBitmap bitmap( 14, 14 );
-    const COLORS_DESIGN_SETTINGS& cds = m_frame->Settings().Colors();
+    COLOR_SETTINGS* cs = m_frame->ColorSettings();
     LAYER_SELECTOR::DrawColorSwatch( bitmap,
-                                     cds.GetLayerColor( ToLAYER_ID( LAYER_PCB_BACKGROUND ) ),
-                                     cds.GetLayerColor( ToLAYER_ID( value ) ) );
+                                     cs->GetColor( ToLAYER_ID( LAYER_PCB_BACKGROUND ) ),
+                                     cs->GetColor( ToLAYER_ID( value ) ) );
     aDC.DrawBitmap( bitmap, rect.GetLeft() + 4, rect.GetTop() + 3, true );
 
     // draw the text

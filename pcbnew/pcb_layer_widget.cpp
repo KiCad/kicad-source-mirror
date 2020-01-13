@@ -24,29 +24,30 @@
  */
 
 
-#include <fctsys.h>
-#include <pgm_base.h>
-#include <pcb_draw_panel_gal.h>
-#include <view/view.h>
-#include <painter.h>
-#include <confirm.h>
-#include <pcb_edit_frame.h>
-#include <pcb_display_options.h>
-#include <tool/tool_manager.h>
-#include <layer_widget.h>
+#include <class_board.h>
 #include <class_text_mod.h>
-#include <widgets/indicator_icon.h>
+#include <collectors.h>
+#include <confirm.h>
+#include <fctsys.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <layer_widget.h>
 #include <macros.h>
 #include <menus_helpers.h>
-#include <gal/graphics_abstraction_layer.h>
+#include <painter.h>
+#include <pcb_display_options.h>
+#include <pcb_draw_panel_gal.h>
+#include <pcb_edit_frame.h>
+#include <pcb_layer_widget.h>
 #include <pcb_painter.h>
 #include <pcb_view.h>
-#include <class_board.h>
-#include <pcb_layer_widget.h>
 #include <pcbnew.h>
-#include <collectors.h>
 #include <pcbnew_id.h>
-#include <gal/graphics_abstraction_layer.h>
+#include <pcbnew_settings.h>
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <tool/tool_manager.h>
+#include <view/view.h>
+#include <widgets/indicator_icon.h>
 
 
 /// This is a read only template that is copied and modified before adding to LAYER_WIDGET
@@ -126,7 +127,9 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwn
 
 COLOR4D PCB_LAYER_WIDGET::getBackgroundLayerColor()
 {
-    return myframe->Settings().Colors().GetLayerColor( LAYER_PCB_BACKGROUND );
+    myframe->ColorSettings()->SetColorContext( m_fp_editor_mode ?
+                                               COLOR_CONTEXT::FOOTPRINT : COLOR_CONTEXT::PCB );
+    return myframe->ColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
 }
 
 
@@ -375,6 +378,9 @@ void PCB_LAYER_WIDGET::ReFillRender()
     BOARD* board = myframe->GetBoard();
     auto settings = board->GetDesignSettings();
 
+    myframe->ColorSettings()->SetColorContext( m_fp_editor_mode ?
+                                               COLOR_CONTEXT::FOOTPRINT : COLOR_CONTEXT::PCB );
+
     ClearRenderRows();
 
     // Add "Items" tab rows to LAYER_WIDGET, after setting color and checkbox state.
@@ -402,9 +408,9 @@ void PCB_LAYER_WIDGET::ReFillRender()
             if( renderRow.color != COLOR4D::UNSPECIFIED )       // does this row show a color?
             {
                 // this window frame must have an established BOARD, i.e. after SetBoard()
-                renderRow.color = myframe->Settings().Colors().GetItemColor(
+                renderRow.color = myframe->ColorSettings()->GetColor(
                         static_cast<GAL_LAYER_ID>( renderRow.id ) );
-                renderRow.defaultColor = myframe->Settings().Colors().GetDefaultItemColor(
+                renderRow.defaultColor = myframe->ColorSettings()->GetDefaultColor(
                         static_cast<GAL_LAYER_ID>( renderRow.id ) );
             }
 
@@ -485,6 +491,9 @@ void PCB_LAYER_WIDGET::ReFill()
     BOARD*  brd = myframe->GetBoard();
     LSET    enabled = brd->GetEnabledLayers();
 
+    myframe->ColorSettings()->SetColorContext( m_fp_editor_mode ?
+                                               COLOR_CONTEXT::FOOTPRINT : COLOR_CONTEXT::PCB );
+
     ClearLayerRows();
 
     wxString dsc;
@@ -510,8 +519,8 @@ void PCB_LAYER_WIDGET::ReFill()
         }
 
         AppendLayerRow( LAYER_WIDGET::ROW( brd->GetLayerName( layer ), layer,
-                myframe->Settings().Colors().GetLayerColor( layer ), dsc, true, true,
-                myframe->Settings().Colors().GetDefaultLayerColor( layer ) ) );
+                myframe->ColorSettings()->GetColor( layer ), dsc, true, true,
+                myframe->ColorSettings()->GetDefaultColor( layer ) ) );
 
         if( m_fp_editor_mode && LSET::ForbiddenFootprintLayers().test( layer ) )
         {
@@ -558,9 +567,9 @@ void PCB_LAYER_WIDGET::ReFill()
             continue;
 
         AppendLayerRow( LAYER_WIDGET::ROW( brd->GetLayerName( layer ), layer,
-                myframe->Settings().Colors().GetLayerColor( layer ),
+                myframe->ColorSettings()->GetColor( layer ),
                 wxGetTranslation( non_cu_seq[i].tooltip ), true, true,
-                myframe->Settings().Colors().GetDefaultLayerColor( layer ) ) );
+                myframe->ColorSettings()->GetDefaultColor( layer ) ) );
 
         if( m_fp_editor_mode && LSET::ForbiddenFootprintLayers().test( layer ) )
         {
@@ -575,10 +584,12 @@ void PCB_LAYER_WIDGET::ReFill()
 
 void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 {
-    myframe->Settings().Colors().SetLayerColor( aLayer, aColor );
+    myframe->ColorSettings()->SetColorContext( m_fp_editor_mode ?
+                                               COLOR_CONTEXT::FOOTPRINT : COLOR_CONTEXT::PCB );
+    myframe->ColorSettings()->SetColor( aLayer, aColor );
+    myframe->GetCanvas()->UpdateColors();
 
     KIGFX::VIEW* view = myframe->GetCanvas()->GetView();
-    view->GetPainter()->GetSettings()->ImportLegacyColors( &myframe->Settings().Colors() );
     view->UpdateLayerColor( aLayer );
     view->UpdateLayerColor( GetNetnameLayer( aLayer ) );
 
@@ -661,13 +672,12 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 {
     wxASSERT( aId > GAL_LAYER_ID_START && aId < GAL_LAYER_ID_END );
 
-    myframe->Settings().Colors().SetItemColor( static_cast<GAL_LAYER_ID>( aId ), aColor );
-
-    if( aId == LAYER_GRID )
-        myframe->GetCanvas()->GetGAL()->SetGridColor( aColor );
+    myframe->ColorSettings()->SetColorContext( m_fp_editor_mode ?
+                                               COLOR_CONTEXT::FOOTPRINT : COLOR_CONTEXT::PCB );
+    myframe->ColorSettings()->SetColor( aId, aColor );
+    myframe->GetCanvas()->UpdateColors();
 
     KIGFX::VIEW* view = myframe->GetCanvas()->GetView();
-    view->GetPainter()->GetSettings()->ImportLegacyColors( &myframe->Settings().Colors() );
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );   // useful to update rastnest
     view->UpdateLayerColor( aId );
 

@@ -27,8 +27,8 @@
 
 #include <env_vars.h>
 #include <pgm_base.h>
+#include <settings/common_settings.h>
 
-#include <wx/config.h>
 #include <wx/log.h>
 
 
@@ -47,11 +47,10 @@ const wxChar* const traceHiDpi = wxT( "KICAD_TRACE_HIGH_DPI" );
  *
  * @return the scale factor, if set
  */
-static OPT<double> getKiCadConfiguredScale( const wxConfigBase& aConfig )
+static OPT<double> getKiCadConfiguredScale( const COMMON_SETTINGS& aConfig )
 {
     OPT<double> scale;
-    double      canvas_scale = 0.0;
-    aConfig.Read( CANVAS_SCALE_KEY, &canvas_scale, 0.0 );
+    double      canvas_scale = aConfig.m_Appearance.canvas_scale;
 
     if( canvas_scale > 0.0 )
     {
@@ -93,7 +92,7 @@ static OPT<double> getEnviromentScale()
 }
 
 
-DPI_SCALING::DPI_SCALING( wxConfigBase* aConfig, const wxWindow* aWindow )
+DPI_SCALING::DPI_SCALING( COMMON_SETTINGS* aConfig, const wxWindow* aWindow )
         : m_config( aConfig ), m_window( aWindow )
 {
 }
@@ -153,7 +152,7 @@ void DPI_SCALING::SetDpiConfig( bool aAuto, double aValue )
 
     const double value = aAuto ? 0.0 : aValue;
 
-    m_config->Write( CANVAS_SCALE_KEY, value );
+    m_config->m_Appearance.canvas_scale = value;
 }
 
 

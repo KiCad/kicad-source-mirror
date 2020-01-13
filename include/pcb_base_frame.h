@@ -40,13 +40,14 @@
 #include <richio.h>
 #include <pcb_screen.h>
 #include <pcb_display_options.h>
-#include <pcb_general_settings.h>
 #include <pcb_draw_panel_gal.h>
 #include <lib_id.h>
 
 /* Forward declarations of classes. */
+class APP_SETTINGS_BASE;
 class BOARD;
 class BOARD_CONNECTED_ITEM;
+class COLOR_SETTINGS;
 class MODULE;
 class TRACK;
 class D_PAD;
@@ -58,6 +59,7 @@ class BOARD_DESIGN_SETTINGS;
 class ZONE_SETTINGS;
 class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
+class PCBNEW_SETTINGS;
 
 /**
  * PCB_BASE_FRAME
@@ -76,7 +78,7 @@ protected:
 
     PCB_DISPLAY_OPTIONS     m_DisplayOptions;
 
-    PCB_GENERAL_SETTINGS    m_configSettings;
+    PCBNEW_SETTINGS*        m_Settings; // No ownership, just a shortcut
 
     void updateZoomSelectBox();
     virtual void unitsChangeRefresh() override;
@@ -157,6 +159,14 @@ public:
      */
     virtual BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
     virtual void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );
+
+    /**
+     * Helper to retrieve the current color settings
+     * @return a pointer to the active COLOR_SETTINGS
+     */
+    COLOR_SETTINGS* ColorSettings();
+
+    PCBNEW_SETTINGS& Settings() { return *m_Settings; }
 
     void SetDrawBgColor( COLOR4D aColor ) override;
 
@@ -385,8 +395,10 @@ public:
         return GetScreen()->m_Active_Layer;
     }
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+    PCBNEW_SETTINGS* GetSettings();
 
     void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
@@ -442,15 +454,6 @@ public:
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
     virtual void ActivateGalCanvas() override;
-
-    PCB_GENERAL_SETTINGS& Settings()
-    {
-        return m_configSettings;
-    }
-
-    ///> Key in KifaceSettings to store the canvas type.
-    static const wxChar AUTO_ZOOM_KEY[];
-    static const wxChar ZOOM_KEY[];
 
     DECLARE_EVENT_TABLE()
 };

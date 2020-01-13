@@ -21,26 +21,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <kiway.h>
+#include <bitmaps.h>
+#include <class_libentry.h>
 #include <common.h>
 #include <confirm.h>
-#include <pgm_base.h>
-#include <kiface_i.h>
+#include <dialog_helpers.h>
 #include <dialog_text_entry.h>
-#include <math/util.h>      // for KiROUND
-
+#include <eeschema_settings.h>
+#include <fctsys.h>
 #include <general.h>
-#include <widgets/wx_grid.h>
-#include <widgets/grid_text_button_helpers.h>
+#include <kiface_i.h>
+#include <kiway.h>
 #include <lib_edit_frame.h>
 #include <lib_manager.h>
-#include <class_libentry.h>
-#include <symbol_lib_table.h>
-#include <sch_item.h>
+#include <math/util.h> // for KiROUND
+#include <pgm_base.h>
 #include <sch_component.h>
-#include <dialog_helpers.h>
-#include <bitmaps.h>
+#include <sch_item.h>
+#include <symbol_lib_table.h>
+#include <widgets/grid_text_button_helpers.h>
+#include <widgets/wx_grid.h>
 
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
@@ -48,9 +48,9 @@
 #endif /* KICAD_SPICE */
 
 #include <dialog_edit_component_in_lib.h>
+#include <settings/settings_manager.h>
+#include <libedit_settings.h>
 
-
-#define LibEditFieldsShownColumnsKey   wxT( "LibEditFieldsShownColumns" )
 
 int DIALOG_EDIT_COMPONENT_IN_LIBRARY::m_lastOpenedPage = 0;
 DIALOG_EDIT_COMPONENT_IN_LIBRARY::LAST_LAYOUT
@@ -70,8 +70,6 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     m_delayedFocusPage( -1 ),
     m_width( 0 )
 {
-    m_config = Kiface().KifaceSettings();
-
     // Give a bit more room for combobox editors
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
     m_fields = new FIELDS_GRID_TABLE<LIB_FIELD>( this, aParent, m_libEntry );
@@ -79,8 +77,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this ) );
 
     // Show/hide columns according to the user's preference
-    m_config->Read( LibEditFieldsShownColumnsKey, &m_shownColumns, wxT( "0 1 2 3 4 5 6 7" ) );
-    m_grid->ShowHideColumns( m_shownColumns );
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    m_grid->ShowHideColumns( cfg->m_EditComponentVisibleColumns );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_URL_EDITOR( this ) );
@@ -132,7 +130,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::~DIALOG_EDIT_COMPONENT_IN_LIBRARY()
 {
     m_lastOpenedPage = m_NoteBook->GetSelection( );
 
-    m_config->Write( LibEditFieldsShownColumnsKey, m_grid->GetShownColumns() );
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    cfg->m_EditComponentVisibleColumns = m_grid->GetShownColumns();
 
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );

@@ -30,6 +30,7 @@
 #define DIALOG_GET_FOOTPRINT_BY_NAME_H
 
 #include <dialog_get_footprint_by_name_base.h>
+#include <pcb_base_frame.h>
 
 /**
  * DIALOG_GET_FOOTPRINT_BY_NAME is a helper dialog to select a footprint by its reference

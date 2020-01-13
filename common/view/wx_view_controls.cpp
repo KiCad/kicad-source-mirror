@@ -32,6 +32,7 @@
 #include <view/zoom_controller.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_dispatcher.h>
+#include <settings/common_settings.h>
 #include <math/util.h>      // for KiROUND
 
 
@@ -67,13 +68,9 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
         m_cursorPos( 0, 0 ),
         m_updateCursor( true )
 {
-    bool enableMousewheelPan = false;
-    bool enableZoomNoCenter = false;
-    bool enableAutoPan = true;
-
-    Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &enableMousewheelPan, false );
-    Pgm().CommonSettings()->Read( ENBL_ZOOM_NO_CENTER_KEY, &enableZoomNoCenter, false );
-    Pgm().CommonSettings()->Read( ENBL_AUTO_PAN_KEY, &enableAutoPan, true );
+    bool enableMousewheelPan = Pgm().GetCommonSettings()->m_Input.mousewheel_pan;
+    bool enableZoomNoCenter = !Pgm().GetCommonSettings()->m_Input.center_on_zoom;
+    bool enableAutoPan = Pgm().GetCommonSettings()->m_Input.auto_pan;
 
     m_settings.m_enableMousewheelPan = enableMousewheelPan;
     m_settings.m_warpCursor = !enableZoomNoCenter;
@@ -136,13 +133,13 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
 
 WX_VIEW_CONTROLS::~WX_VIEW_CONTROLS()
 {
-    wxConfigBase* cfg = Pgm().CommonSettings();
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
 
     if( cfg )
     {
-        cfg->Write( ENBL_MOUSEWHEEL_PAN_KEY, m_settings.m_enableMousewheelPan );
-        cfg->Write( ENBL_ZOOM_NO_CENTER_KEY, !m_settings.m_warpCursor );
-        cfg->Write( ENBL_AUTO_PAN_KEY, m_settings.m_autoPanSettingEnabled );
+        cfg->m_Input.mousewheel_pan = m_settings.m_enableMousewheelPan;
+        cfg->m_Input.center_on_zoom = m_settings.m_warpCursor;
+        cfg->m_Input.auto_pan = m_settings.m_autoPanSettingEnabled;
     }
 }
 

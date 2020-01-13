@@ -40,13 +40,6 @@ public:
 
     virtual ~GERBVIEW_DRAW_PANEL_GAL();
 
-    /**
-     * Function UseColorScheme
-     * Applies layer color settings.
-     * @param aSettings are the new settings.
-     */
-    void UseColorScheme( const COLORS_DESIGN_SETTINGS* aSettings );
-
     ///> @copydoc EDA_DRAW_PANEL_GAL::SetHighContrastLayer()
     virtual void SetHighContrastLayer( int aLayer ) override;
 

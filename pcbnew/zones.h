@@ -25,15 +25,6 @@
 #ifndef ZONES_H_
 #define ZONES_H_
 
-// keys used to store net sort option in config file :
-#define ZONE_NET_OUTLINES_STYLE_KEY                 wxT( "Zone_Ouline_Hatch_Opt" )
-#define ZONE_NET_SORT_OPTION_KEY                    wxT( "Zone_NetSort_Opt" )
-#define ZONE_NET_FILTER_STRING_KEY                  wxT( "Zone_Filter_Opt" )
-#define ZONE_THERMAL_RELIEF_GAP_STRING_KEY          wxT( "Zone_TH_Gap" )
-#define ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY wxT( "Zone_TH_Copper_Width" )
-#define ZONE_CLEARANCE_WIDTH_STRING_KEY             wxT( "Zone_Clearance" )
-#define ZONE_MIN_THICKNESS_WIDTH_STRING_KEY         wxT( "Zone_Thickness" )
-
 // Default values in mils for parameters in ZONE_CONTAINER
 #define ZONE_THERMAL_RELIEF_GAP_MIL 20     // default value for ZONE_SETTINGS::m_ThermalReliefGap
 #define ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL 20 // default value for ZONE_SETTINGS::m_ThermalReliefCopperBridge

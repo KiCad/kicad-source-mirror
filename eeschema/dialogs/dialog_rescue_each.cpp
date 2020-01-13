@@ -21,19 +21,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sch_edit_frame.h>
-#include <sch_component.h>
-#include <invoke_sch_dialog.h>
-#include <dialog_rescue_each_base.h>
-#include <kiface_i.h>
-#include <class_library.h>
-#include <class_libentry.h>
-#include <set>
-#include <vector>
-#include <project_rescue.h>
-#include <eeschema_config.h>
-#include <symbol_preview_widget.h>
 #include <class_draw_panel_gal.h>
+#include <class_libentry.h>
+#include <class_library.h>
+#include <dialog_rescue_each_base.h>
+#include <eeschema_settings.h>
+#include <invoke_sch_dialog.h>
+#include <kiface_i.h>
+#include <project_rescue.h>
+#include <sch_component.h>
+#include <sch_edit_frame.h>
+#include <set>
+#include <symbol_preview_widget.h>
+#include <vector>
 
 
 class DIALOG_RESCUE_EACH: public DIALOG_RESCUE_EACH_BASE
@@ -58,7 +58,6 @@ public:
 private:
     SYMBOL_PREVIEW_WIDGET* m_previewNewWidget;
     SYMBOL_PREVIEW_WIDGET* m_previewOldWidget;
-    wxConfigBase*   m_Config;
     RESCUER*        m_Rescuer;
     SCH_SHEET_PATH* m_currentSheet;
     bool            m_AskShowAgain;
@@ -95,7 +94,6 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
     m_previewNewWidget = new SYMBOL_PREVIEW_WIDGET( m_previewNewPanel,  Kiway(), aGalBackEndType );
 	m_SizerNewPanel->Add( m_previewNewWidget, 1, wxEXPAND | wxALL, 5 );
 
-    m_Config = Kiface().KifaceSettings();
     m_stdButtonsOK->SetDefault();
 
     // Set the info message, customized to include the proper suffix.
@@ -294,7 +292,8 @@ void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
 
     if( resp == wxID_YES )
     {
-        m_Config->Write( RescueNeverShowEntry, true );
+        auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+        cfg->m_RescueNeverShow = true;
         m_Rescuer->m_chosen_candidates.clear();
         Close();
     }

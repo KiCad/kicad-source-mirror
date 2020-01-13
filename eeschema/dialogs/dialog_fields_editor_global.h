@@ -44,7 +44,6 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    wxConfigBase*                  m_config;
     SCH_EDIT_FRAME*                m_parent;
     int                            m_showColWidth;
     int                            m_groupByColWidth;

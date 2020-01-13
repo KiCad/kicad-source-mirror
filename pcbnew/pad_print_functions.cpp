@@ -33,6 +33,7 @@
 #include <gr_basic.h>
 #include <math/util.h>      // for KiROUND
 #include <layers_id_colors_and_visibility.h>
+#include <settings/color_settings.h>
 #include <pcb_edit_frame.h>
 #include <pcb_screen.h>
 #include <pcbnew.h>
@@ -79,8 +80,6 @@ void D_PAD::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 
     BOARD* brd = GetBoard();
 
-    const auto& cds = aFrame->Settings().Colors();
-
     bool   frontVisible = brd->IsElementVisible( LAYER_PAD_FR );
     bool   backVisible  = brd->IsElementVisible( LAYER_PAD_BK );
 
@@ -110,12 +109,12 @@ void D_PAD::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 
     if( m_layerMask[F_Cu] )
     {
-        color = cds.GetItemColor( LAYER_PAD_FR );
+        color = aFrame->ColorSettings()->GetColor( LAYER_PAD_FR );
     }
 
     if( m_layerMask[B_Cu] )
     {
-        color = color.LegacyMix( cds.GetItemColor( LAYER_PAD_BK ) );
+        color = color.LegacyMix( aFrame->ColorSettings()->GetColor( LAYER_PAD_BK ) );
     }
 
     if( color == BLACK ) // Not on a visible copper layer (i.e. still nothing to show)
@@ -135,7 +134,7 @@ void D_PAD::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
             break;
 
         default:
-            color = cds.GetLayerColor( pad_layer );
+            color = aFrame->ColorSettings()->GetColor( pad_layer );
         }
     }
 
@@ -161,17 +160,17 @@ void D_PAD::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
         brd->IsElementVisible( LAYER_NON_PLATEDHOLES ) )
     {
         drawInfo.m_ShowNotPlatedHole = true;
-        drawInfo.m_NPHoleColor = cds.GetItemColor( LAYER_NON_PLATEDHOLES );
+        drawInfo.m_NPHoleColor = aFrame->ColorSettings()->GetColor( LAYER_NON_PLATEDHOLES );
     }
     // Don't let pads that *should* be NPTHs get lost
     else if ( PadShouldBeNPTH() )
     {
         drawInfo.m_ShowNotPlatedHole = true;
-        drawInfo.m_NPHoleColor = cds.GetItemColor( LAYER_MOD_TEXT_INVISIBLE );
+        drawInfo.m_NPHoleColor = aFrame->ColorSettings()->GetColor( LAYER_MOD_TEXT_INVISIBLE );
     }
 
     drawInfo.m_Color          = color;
-    drawInfo.m_NoNetMarkColor = cds.GetItemColor( LAYER_NO_CONNECTS );
+    drawInfo.m_NoNetMarkColor = aFrame->ColorSettings()->GetColor( LAYER_NO_CONNECTS );
     drawInfo.m_Mask_margin    = mask_margin;
     drawInfo.m_ShowNCMark     = brd->IsElementVisible( LAYER_NO_CONNECTS );
     drawInfo.m_IsPrinting     = screen->m_IsPrinting;

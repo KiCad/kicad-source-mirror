@@ -38,6 +38,7 @@
 #include <page_info.h>
 #include <eda_text.h>       // FILL_T
 
+class COLOR_SETTINGS;
 class SHAPE_POLY_SET;
 class SHAPE_LINE_CHAIN;
 class GBR_NETLIST_METADATA;
@@ -138,6 +139,10 @@ public:
     {
         return colorMode;
     }
+
+    void SetColorSettings( COLOR_SETTINGS* aSettings ) { m_colors = aSettings; }
+
+    COLOR_SETTINGS* ColorSettings() { return m_colors; }
 
     virtual void SetPageSettings( const PAGE_INFO& aPageSettings );
 
@@ -600,6 +605,9 @@ protected:      // variables used in most of plotters:
     wxSize        paperSize;
 
     wxArrayString m_headerExtraLines;  /// a set of string to print in header file
+
+    /// Pointer to active color settings that is used for plotting
+    COLOR_SETTINGS* m_colors;
 };
 
 

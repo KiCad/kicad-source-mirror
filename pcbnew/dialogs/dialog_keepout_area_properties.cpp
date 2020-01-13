@@ -27,6 +27,7 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <footprint_edit_frame.h>
 #include <class_zone.h>
 #include <zones.h>
@@ -45,7 +46,6 @@ public:
 
 private:
     PCB_BASE_FRAME* m_parent;
-    wxConfigBase*   m_config;               ///< Current config
     ZONE_SETTINGS   m_zonesettings;         ///< the working copy of zone settings
     ZONE_SETTINGS*  m_ptr;                  ///< the pointer to the zone settings
                                             ///< of the zone to edit
@@ -71,7 +71,6 @@ DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* 
     DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( aParent )
 {
     m_parent = aParent;
-    m_config = Kiface().KifaceSettings();
 
     m_ptr = aSettings;
     m_zonesettings = *aSettings;
@@ -176,8 +175,8 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataFromWindow()
         break;
     }
 
-    if( m_config )
-        m_config->Write( ZONE_NET_OUTLINES_STYLE_KEY, (long) m_zonesettings.m_Zone_HatchingStyle );
+    auto cfg = m_parent->GetSettings();
+    cfg->m_Zones.hatching_style = static_cast<int>( m_zonesettings.m_Zone_HatchingStyle );
 
     m_zonesettings.m_Zone_45_Only = m_cbConstrainCtrl->GetValue();
     m_zonesettings.m_ZonePriority = 0;  // for a keepout, this param is not used.

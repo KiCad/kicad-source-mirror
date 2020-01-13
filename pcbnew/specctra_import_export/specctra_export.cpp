@@ -53,6 +53,7 @@
 #include <geometry/convex_hull.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
+#include <pcbnew_settings.h>
 
 #include "specctra.h"
 

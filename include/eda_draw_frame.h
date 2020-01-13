@@ -38,6 +38,7 @@
 class wxSingleInstanceChecker;
 class ACTION_TOOLBAR;
 class TOOL_MENU;
+class APP_SETTINGS_BASE;
 
 using KIGFX::COLOR4D;
 
@@ -56,24 +57,6 @@ namespace KIGFX
 #define FOOTPRINT_VIEWER_FRAME_NAME         wxT( "ModViewFrame" )
 #define FOOTPRINT_VIEWER_FRAME_NAME_MODAL   wxT( "ModViewFrameModal" )
 #define PCB_EDIT_FRAME_NAME                 wxT( "PcbFrame" )
-
-
-///@{
-/// \ingroup config
-
-/// User units
-#define UserUnitsEntryKeyword "Units"
-/// Nonzero to show grid (suffix)
-#define ShowGridEntryKeyword "ShowGrid"
-/// Grid color ID (suffix)
-#define GridColorEntryKeyword "GridColor"
-/// Most recently used grid size (suffix)
-#define LastGridSizeIdKeyword "_LastGridSize"
-
-/// The key to store the canvas type in config. This is the base key.
-/// can be a suffix if the canvas_type in config is specific to a frame
-#define CanvasTypeKeyBase "canvas_type"
-///@}
 
 
 /**
@@ -163,12 +146,6 @@ protected:
      */
     bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
-    /** @return the key in KifaceSettings to store the canvas type.
-     * the base version returns only CanvasTypeKeyBase.
-     * Can be overriden to return a key specific of a frame name
-     */
-    virtual wxString GetCanvasTypeKey() { return CanvasTypeKeyBase; }
-
 public:
     EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
                     FRAME_T aFrameType,
@@ -249,6 +226,11 @@ public:
      * @param aColor: the COLOR4D for the canvas background
      */
     virtual void SetDrawBgColor( COLOR4D aColor) { m_drawBgColor= aColor ; }
+
+    /**
+     * Helper to retrieve a layer color from the global color settings
+     */
+    COLOR4D GetLayerColor( SCH_LAYER_ID aLayer );
 
     bool ShowPageLimits() const { return m_showPageLimits; }
     void SetShowPageLimits( bool aShow ) { m_showPageLimits = aShow; }
@@ -418,9 +400,9 @@ public:
     void OnSockRequest( wxSocketEvent& evt );
     void OnSockRequestServer( wxSocketEvent& evt );
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     /**
      * Append a message to the message panel.

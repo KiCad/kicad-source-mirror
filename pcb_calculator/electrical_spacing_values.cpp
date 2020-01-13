@@ -23,7 +23,6 @@
  */
 
 #include <wx/app.h>
-#include <wx/config.h>
 
 #include <pcb_calculator_frame_base.h>
 #include <pcb_calculator.h>

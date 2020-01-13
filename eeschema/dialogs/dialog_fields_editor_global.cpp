@@ -23,23 +23,24 @@
  */
 
 
-#include <wx/msgdlg.h>
-#include <wx/grid.h>
-#include <widgets/wx_grid.h>
 #include <base_units.h>
-#include <confirm.h>
 #include <bitmaps.h>
+#include <class_library.h>
+#include <confirm.h>
+#include <eda_doc.h>
+#include <eeschema_settings.h>
+#include <general.h>
 #include <grid_tricks.h>
 #include <kicad_string.h>
+#include <kiface_i.h>
 #include <refdes_utils.h>
-#include <general.h>
-#include <class_library.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <tools/sch_editor_control.h>
-#include <kiface_i.h>
-#include <eda_doc.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <widgets/wx_grid.h>
+#include <wx/grid.h>
+#include <wx/msgdlg.h>
 
 #include "dialog_fields_editor_global.h"
 
@@ -666,7 +667,6 @@ public:
 
 DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent ) :
         DIALOG_FIELDS_EDITOR_GLOBAL_BASE( parent ),
-        m_config( Kiface().KifaceSettings() ),
         m_parent( parent )
 {
     wxSize defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
@@ -884,12 +884,31 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aName,
 
     wxVector<wxVariant> fieldsCtrlRow;
 
-    m_config->Read( "SymbolFieldEditor/Show/" + aName, &defaultShow );
-    m_config->Read( "SymbolFieldEditor/GroupBy/" + aName, &defaultSortBy );
+    auto cfg     = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    bool show    = defaultShow;
+    bool sort_by = defaultSortBy;
+
+    std::string key( aName.ToUTF8() );
+
+    try
+    {
+        show = cfg->m_FieldEditorPanel.fields_show.at( key );
+    }
+    catch( std::out_of_range& )
+    {
+    }
+
+    try
+    {
+        show = cfg->m_FieldEditorPanel.fields_group_by.at( key );
+    }
+    catch( std::out_of_range& )
+    {
+    }
 
     fieldsCtrlRow.push_back( wxVariant( aName ) );
-    fieldsCtrlRow.push_back( wxVariant( defaultShow ) );
-    fieldsCtrlRow.push_back( wxVariant( defaultSortBy ) );
+    fieldsCtrlRow.push_back( wxVariant( show ) );
+    fieldsCtrlRow.push_back( wxVariant( sort_by ) );
 
     m_fieldsCtrl->AppendItem( fieldsCtrlRow );
 }
@@ -912,7 +931,8 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
     }
 
     // Force References to always be shown
-    m_config->Write( "SymbolFieldEditor/Show/Reference", true );
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    cfg->m_FieldEditorPanel.fields_show["Reference"] = true;
 
     // *DO NOT* use translated mandatory field names:
     // They are also used as keyword to find fields in component list.
@@ -964,7 +984,10 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
         }
     }
 
-    m_config->Write( "SymbolFieldEditor/Show/" + fieldName, true );
+    std::string key( fieldName.ToUTF8() );
+
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    cfg->m_FieldEditorPanel.fields_show[key] = true;
 
     AddField( fieldName, true, false );
 
@@ -983,6 +1006,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
 
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
 {
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxDataViewItem item = event.GetItem();
 
     int row = m_fieldsCtrl->ItemToRow( item );
@@ -1005,8 +1029,8 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
             m_fieldsCtrl->SetToggleValue( value, row, col );
         }
 
-        wxString fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
-        m_config->Write( "SymbolFieldEditor/Show/" + fieldName, value );
+        std::string fieldName( m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ).ToUTF8() );
+        cfg->m_FieldEditorPanel.fields_show[fieldName] = value;
 
         if( value )
             m_grid->ShowCol( row );
@@ -1018,8 +1042,9 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
     case GROUP_BY_COLUMN:
     {
         bool value = m_fieldsCtrl->GetToggleValue( row, col );
-        wxString fieldName = m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN );
-        m_config->Write( "SymbolFieldEditor/GroupBy/" + fieldName, value );
+        std::string fieldName( m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ).ToUTF8() );
+        cfg->m_FieldEditorPanel.fields_group_by[fieldName] = value;
+
         m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
         m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
         m_grid->ForceRefresh();

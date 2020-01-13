@@ -23,37 +23,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <pgm_base.h>
-#include <kiway.h>
-#include <pcb_draw_panel_gal.h>
 #include <3d_viewer/eda_3d_viewer.h>
-#include <dialog_helpers.h>
-#include <msgpanel.h>
-#include <fp_lib_table.h>
-#include <lib_id.h>
-#include <confirm.h>
 #include <bitmaps.h>
-#include <pcb_painter.h>
+#include <board_commit.h>
 #include <class_board.h>
 #include <class_module.h>
+#include <confirm.h>
+#include <dialog_helpers.h>
+#include <eda_pattern_match.h>
+#include <fctsys.h>
+#include <footprint_info.h>
+#include <footprint_viewer_frame.h>
+#include <fp_lib_table.h>
+#include <kiway.h>
+#include <lib_id.h>
+#include <memory>
+#include <msgpanel.h>
+#include <pcb_draw_panel_gal.h>
+#include <pcb_painter.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <footprint_viewer_frame.h>
-#include <footprint_info.h>
-#include <wildcards_and_files_ext.h>
-#include <tool/tool_manager.h>
-#include <tool/tool_dispatcher.h>
+#include <pcbnew_settings.h>
+#include <footprint_editor_settings.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <tool/action_toolbar.h>
-#include <tool/common_tools.h>
 #include <tool/common_control.h>
-#include <tools/selection_tool.h>
-#include <tools/pcbnew_control.h>
+#include <tool/common_tools.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include "tools/pcbnew_picker_tool.h"
-#include <board_commit.h>
-#include <memory>
-#include <eda_pattern_match.h>
+#include <tools/pcbnew_control.h>
+#include <tools/pcbnew_picker_tool.h>
+#include <tools/selection_tool.h>
+#include <wildcards_and_files_ext.h>
 #include <wx/tokenzr.h>
 
 using namespace std::placeholders;
@@ -690,38 +693,44 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::LoadSettings( wxConfigBase* aCfg )
+void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
+    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
+
     PCB_BASE_FRAME::LoadSettings( aCfg );
 
     // Fetch grid settings from Footprint Editor
-    wxString footprintEditor = FOOTPRINT_EDIT_FRAME_NAME;
-    bool     btmp;
-    COLOR4D  wtmp;
+    auto fpedit = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 
-    if( aCfg->Read( footprintEditor + ShowGridEntryKeyword, &btmp ) )
-        SetGridVisibility( btmp );
+    SetGridVisibility( fpedit->m_Window.grid.show );
 
-    if( wtmp.SetFromWxString( aCfg->Read( footprintEditor + GridColorEntryKeyword,
-                                          wxT( "NONE" ) ) ) )
-        SetGridColor( wtmp );
+    GetGalDisplayOptions().ReadWindowSettings( fpedit->m_Window );
 
-    // Grid shape, etc.
-    GetGalDisplayOptions().ReadAppConfig( *aCfg, footprintEditor );
-
-    m_configSettings.Load( aCfg );  // mainly, load the color config
-
-    aCfg->Read( ConfigBaseName() + AUTO_ZOOM_KEY, &m_autoZoom, true );
-    aCfg->Read( ConfigBaseName() + ZOOM_KEY, &m_lastZoom, 10.0 );
+    m_autoZoom = cfg->m_FootprintViewer.auto_zoom;
+    m_lastZoom = cfg->m_FootprintViewer.zoom;
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::SaveSettings( wxConfigBase* aCfg )
+void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    PCB_BASE_FRAME::SaveSettings( aCfg );
+    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
 
-    aCfg->Write( ConfigBaseName() + AUTO_ZOOM_KEY, m_autoZoom );
-    aCfg->Write( ConfigBaseName() + ZOOM_KEY, GetCanvas()->GetView()->GetScale() );
+    // We don't want to store anything other than the window settings
+    EDA_BASE_FRAME::SaveSettings( cfg );
+
+    cfg->m_FootprintViewer.auto_zoom = m_autoZoom;
+    cfg->m_FootprintViewer.zoom      = GetCanvas()->GetView()->GetScale();
+}
+
+
+WINDOW_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
+{
+    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
+
+    return &cfg->m_FootprintViewer;
 }
 
 
@@ -857,7 +866,7 @@ void FOOTPRINT_VIEWER_FRAME::Update3DView( bool aForceReload, const wxString* aT
 
 COLOR4D FOOTPRINT_VIEWER_FRAME::GetGridColor()
 {
-    return Settings().Colors().GetItemColor( LAYER_GRID );
+    return ColorSettings()->GetColor( LAYER_GRID );
 }
 
 
@@ -961,7 +970,7 @@ void FOOTPRINT_VIEWER_FRAME::ApplyDisplaySettingsToGAL()
 
 void FOOTPRINT_VIEWER_FRAME::updateView()
 {
-    GetCanvas()->UseColorScheme( &Settings().Colors() );
+    GetCanvas()->UpdateColors();
     GetCanvas()->DisplayBoard( GetBoard() );
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );

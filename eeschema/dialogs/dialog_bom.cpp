@@ -28,28 +28,26 @@
  */
 
 
-#include <fctsys.h>
-#include <pgm_base.h>
-#include <kiface_i.h>
+#include <bom_plugins.h>
 #include <confirm.h>
+#include <dialog_bom_base.h>
+#include <dialog_helpers.h>
+#include <eeschema_settings.h>
+#include <fctsys.h>
 #include <gestfich.h>
-#include <sch_edit_frame.h>
+#include <html_messagebox.h>
+#include <i18n_utility.h> // for _HKI definition used in dialog_bom_help_md.h
+#include <invoke_sch_dialog.h>
+#include <kiface_i.h>
 #include <netlist.h>
 #include <netlist_exporter_generic.h>
-#include <invoke_sch_dialog.h>
-#include <dialog_helpers.h>
-#include <dialog_bom_base.h>
-#include <html_messagebox.h>
+#include <pgm_base.h>
 #include <reporter.h>
-#include <bom_plugins.h>
-#include <i18n_utility.h>   // for _HKI definition used in dialog_bom_help_md.h
+#include <sch_edit_frame.h>
 
 #include <dialogs/dialog_bom_cfg_lexer.h>
 
 static constexpr wxChar BOM_TRACE[] = wxT( "BOM_GENERATORS" );
-
-static constexpr wxChar BOM_GENERATORS_KEY[] = wxT( "bom_plugins" );
-static constexpr wxChar BOM_GENERATOR_SELECTED_KEY[] =  wxT( "bom_plugin_selected" );
 
 wxString s_bomHelpInfo =
 #include <dialog_bom_help_md.h>
@@ -175,7 +173,6 @@ class DIALOG_BOM : public DIALOG_BOM_BASE
 private:
     SCH_EDIT_FRAME*   m_parent;
     BOM_GENERATOR_ARRAY  m_generators;
-    wxConfigBase*     m_config;         // to store the "plugins"
     bool              m_initialized;
 
 public:
@@ -225,7 +222,6 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
     DIALOG_BOM_BASE( parent )
 {
     m_parent = parent;
-    m_config = Kiface().KifaceSettings();
     m_initialized = false;
 
     m_buttonAddGenerator->SetBitmap( KiBitmap( small_plus_xpm ) );
@@ -251,6 +247,8 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
 
 DIALOG_BOM::~DIALOG_BOM()
 {
+    // TODO(JE) maybe unpack this into JSON instead of sexpr
+
     // Save the plugin descriptions in config.
     // The config stores only one string, so we save the plugins inside a S-expr:
     // ( plugins
@@ -289,19 +287,20 @@ DIALOG_BOM::~DIALOG_BOM()
 
     wxString list( FROM_UTF8( writer.GetString().c_str() ) );
 
-    m_config->Write( BOM_GENERATORS_KEY, list );
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
-    wxString active_plugin_name = m_lbGenerators->GetStringSelection( );
-    m_config->Write( BOM_GENERATOR_SELECTED_KEY, active_plugin_name );
+    cfg->m_BomPanel.plugins = list.ToStdString();
+    cfg->m_BomPanel.selected_plugin = m_lbGenerators->GetStringSelection().ToStdString();
 }
 
 
 // Read the initialized plugins in config and fill the list of names
 void DIALOG_BOM::installGeneratorsList()
 {
-    wxString list, active_plugin_name;
-    m_config->Read( BOM_GENERATORS_KEY, &list );
-    m_config->Read( BOM_GENERATOR_SELECTED_KEY, &active_plugin_name );
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+    wxString list               = cfg->m_BomPanel.plugins;
+    wxString active_plugin_name = cfg->m_BomPanel.selected_plugin;
 
     if( !list.IsEmpty() )
     {

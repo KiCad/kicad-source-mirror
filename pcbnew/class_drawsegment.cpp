@@ -39,6 +39,9 @@
 #include <class_drawsegment.h>
 #include <base_units.h>
 #include <math/util.h>      // for KiROUND
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 
 
 DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
@@ -350,7 +353,7 @@ void DRAWSEGMENT::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& aOffse
     if( brd->IsLayerVisible( GetLayer() ) == false )
         return;
 
-    auto color = aFrame->Settings().Colors().GetLayerColor( GetLayer() );
+    COLOR4D color = Pgm().GetSettingsManager().GetColorSettings()->GetColor( GetLayer() );
     auto displ_opts = aFrame->GetDisplayOptions();
 
     l_trace = m_Width >> 1;         // half trace width

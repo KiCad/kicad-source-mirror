@@ -46,6 +46,7 @@
 
 class STATUS_TEXT_POPUP;
 
+class APP_SETTINGS_BASE;
 class SCH_ITEM;
 class EDA_ITEM;
 class SCH_LINE;
@@ -296,21 +297,8 @@ public:
         m_templateFieldNames.DeleteAllTemplateFieldNames();
     }
 
-    /**
-     * Return the Eeschema applications settings.
-     * <p>
-     * This replaces the old statically define list that had the project file settings and
-     * the application settings mixed together.  This was confusing and caused some settings
-     * to get saved and loaded incorrectly.  Currently, only the settings that are needed at
-     * start up by the main window are defined here.  There are other locally used settings
-     * scattered throughout the Eeschema source code.  If you need to define a configuration
-     * setting that need to be loaded at run time, this is the place to define it.
-     * </p>
-     */
-    std::vector<PARAM_CFG*>& GetConfigurationSettings();
-
-    void LoadSettings( wxConfigBase* aCfg ) override;
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void CreateScreens();
     void ReCreateHToolbar() override;

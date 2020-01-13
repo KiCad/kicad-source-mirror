@@ -26,13 +26,14 @@
 
 #include "panel_prev_model.h"
 #include <3d_canvas/eda_3d_canvas.h>
-#include <common_ogl/cogl_att_list.h>
-#include <class_board.h>
 #include <base_units.h>
 #include <bitmaps.h>
+#include <class_board.h>
+#include <common_ogl/cogl_att_list.h>
 #include <dpi_scaling.h>
 #include <pgm_base.h>
 #include <project.h>
+#include <settings/common_settings.h>
 
 
 PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aModule,
@@ -42,9 +43,6 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
     m_userUnits = aFrame->GetUserUnits();
 
     initPanel();
-
-    // Initialize the color settings to draw the board and the footprint
-    m_dummyBoard->SetGeneralSettings( &aFrame->Settings() );
 
     m_parentModelList = aParentModelList;
 
@@ -109,18 +107,12 @@ void PANEL_PREV_3D::loadCommonSettings()
 {
     wxCHECK_RET( m_previewPane, "Cannot load settings to null canvas" );
 
-    wxConfigBase& cmnCfg = *Pgm().CommonSettings();
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
-    {
-        const DPI_SCALING dpi{ &cmnCfg, this };
-        m_previewPane->SetScaleFactor( dpi.GetScaleFactor() );
-    }
+    const DPI_SCALING dpi{ settings, this };
+    m_previewPane->SetScaleFactor( dpi.GetScaleFactor() );
 
-    {
-        bool option;
-        cmnCfg.Read( ENBL_MOUSEWHEEL_PAN_KEY, &option, false );
-        m_settings3Dviewer->SetFlag( FL_MOUSEWHEEL_PANNING, option );
-    }
+    m_settings3Dviewer->SetFlag( FL_MOUSEWHEEL_PANNING, settings->m_Input.mousewheel_pan );
 }
 
 

@@ -26,7 +26,8 @@
 
 #include <observable.h>
 
-class wxConfigBase;
+class COMMON_SETTINGS;
+struct WINDOW_SETTINGS;
 class wxString;
 class wxWindow;
 
@@ -78,17 +79,16 @@ namespace KIGFX
 
         /**
          * Read GAL config options from applicaton-level config
-         * @param aCfg      the application config base
-         * @param aBaseName the application's GAL options key prefix
+         * @param aCfg      the window settings to load from
          */
-        void ReadAppConfig( wxConfigBase& aCfg, const wxString& aBaseName );
+        void ReadWindowSettings( WINDOW_SETTINGS& aCfg );
 
         /**
          * Read GAL config options from the common config store
-         * @param aCommonConfig the common config store
-         * @param aWindow       the wx parent window (used for DPI scaling)
+         * @param aCommonSettings the common config store
+         * @param aWindow         the wx parent window (used for DPI scaling)
          */
-        void ReadCommonConfig( wxConfigBase& aCommonConfig, wxWindow* aWindow );
+        void ReadCommonConfig( COMMON_SETTINGS& aCommonSettings, wxWindow* aWindow );
 
         /**
          * Read application and common configs
@@ -97,10 +97,10 @@ namespace KIGFX
          * @param aBaseName     the application's GAL options key prefix
          * @param aWindow       the wx parent window (used for DPI scaling)
          */
-        void ReadConfig( wxConfigBase& aCommonConfig, wxConfigBase& aAppCondfig,
-                const wxString& aBaseCfgName, wxWindow* aWindow );
+        void ReadConfig( COMMON_SETTINGS& aCommonConfig, WINDOW_SETTINGS& aWindowConfig,
+                wxWindow* aWindow );
 
-        void WriteConfig( wxConfigBase& aCfg, const wxString& aBaseName );
+        void WriteConfig( WINDOW_SETTINGS& aCfg );
 
         void NotifyChanged();
 

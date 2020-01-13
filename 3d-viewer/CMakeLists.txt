@@ -94,6 +94,7 @@ set(3D-VIEWER_SRCS
     3d_viewer/dialogs/dialog_3D_view_option.cpp
     3d_viewer/dialogs/dialog_3D_view_option_base.cpp
     3d_viewer/eda_3d_viewer.cpp
+    3d_viewer/3d_viewer_settings.cpp
     common_ogl/cogl_att_list.cpp
     common_ogl/ogl_utils.cpp
     3d_fastmath.cpp
@@ -110,5 +111,9 @@ target_link_libraries( 3d-viewer
                        ${wxWidgets_LIBRARIES}
                        ${OPENGL_LIBRARIES}
                        kicad_3dsg )
+
+target_include_directories( 3d-viewer PRIVATE
+    $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
+    )
 
 add_subdirectory( 3d_cache )

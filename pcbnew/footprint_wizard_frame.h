@@ -180,14 +180,16 @@ private:
     void                ReCreateVToolbar() override;
     void                ClickOnPageList( wxCommandEvent& event );
 
-    void                LoadSettings( wxConfigBase* aCfg ) override;
-    void                SaveSettings( wxConfigBase* aCfg ) override;
+    void                LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void                SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    /**
-     * Function OnActivate
-     * is called when the frame frame is activate to reload the libraries and component lists
-     * that can be changed by the schematic editor or the library editor.
-     */
+    WINDOW_SETTINGS*    GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+            /**
+             * Function OnActivate
+             * is called when the frame frame is activate to reload the libraries and component lists
+             * that can be changed by the schematic editor or the library editor.
+             */
     void                OnActivate( wxActivateEvent& event );
 
     void                SelectCurrentWizard( wxCommandEvent& event );

@@ -26,7 +26,6 @@
 #define TRANSLINE_IDENT_H
 
 #include <vector>
-#include <wx/config.h>
 #include <wx/bitmap.h>
 
 #include <transline.h>
@@ -74,8 +73,6 @@ public: TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
                        double aValue = 0.0,
                        bool aConvUnit = false );
 
-    void   ReadConfig( wxConfigBase* aConfig );
-    void   WriteConfig( wxConfigBase* aConfig );
     double ToUserUnit();
     double FromUserUnit();
 };
@@ -121,8 +118,8 @@ public:
     }
 
 
-    void ReadConfig( wxConfigBase* aConfig );
-    void WriteConfig( wxConfigBase* aConfig );
+    void ReadConfig();
+    void WriteConfig();
 };
 
 #endif      //  TRANSLINE_IDENT_H

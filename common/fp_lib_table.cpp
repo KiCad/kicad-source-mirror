@@ -25,13 +25,13 @@
 
 
 #include <fctsys.h>
-#include <common.h>
 #include <kiface_i.h>
 #include <footprint_info.h>
 #include <lib_id.h>
 #include <lib_table_lexer.h>
 #include <pgm_base.h>
 #include <search_stack.h>
+#include <settings/settings_manager.h>
 #include <systemdirsappend.h>
 #include <fp_lib_table.h>
 #include <class_module.h>
@@ -513,7 +513,7 @@ wxString FP_LIB_TABLE::GetGlobalTableFileName()
 {
     wxFileName fn;
 
-    fn.SetPath( GetKicadConfigPath() );
+    fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
     fn.SetName( global_tbl_name );
 
     return fn.GetFullPath();

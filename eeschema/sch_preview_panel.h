@@ -50,13 +50,6 @@ public:
 
     ~SCH_PREVIEW_PANEL() override;
 
-    /**
-     * Function UseColorScheme
-     * Applies layer color settings.
-     * @param aSettings are the new settings.
-     */
-    void UseColorScheme( const COLORS_DESIGN_SETTINGS* aSettings );
-
     ///> @copydoc EDA_DRAW_PANEL_GAL::OnShow()
     void OnShow() override;
 

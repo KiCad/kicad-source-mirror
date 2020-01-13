@@ -40,7 +40,6 @@ class DIALOG_NETLIST : public DIALOG_NETLIST_BASE
 private:
     PCB_EDIT_FRAME* m_parent;
     wxString&       m_netlistPath;
-    wxConfigBase*   m_config;
     bool            m_initialized;
     bool            m_runDragCommand;
     static bool     m_warnForNoNetPads;

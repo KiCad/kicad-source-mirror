@@ -32,7 +32,6 @@
 #define GBR_LAYOUT_H
 
 
-#include <colors_design_settings.h>
 #include <common.h>                         // PAGE_INFO
 #include <gerbview.h>                       // GERBER_DRAWLAYERS_COUNT
 #include <title_block.h>

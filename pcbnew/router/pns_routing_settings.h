@@ -24,6 +24,8 @@
 
 #include <cstdio>
 
+#include <settings/nested_settings.h>
+
 #include "time_limit.h"
 
 class DIRECTION_45;
@@ -54,13 +56,10 @@ enum PNS_OPTIMIZATION_EFFORT
  * Contains all persistent settings of the router, such as the mode, optimization effort, etc.
  */
 
-class ROUTING_SETTINGS
+class ROUTING_SETTINGS : public NESTED_SETTINGS
 {
 public:
-    ROUTING_SETTINGS();
-
-    void Load( const TOOL_SETTINGS& where );
-    void Save( TOOL_SETTINGS& where ) const;
+    ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
 
     ///> Returns the routing mode.
     PNS_MODE Mode() const { return m_routingMode; }

@@ -39,7 +39,6 @@ class FOOTPRINT_EDIT_FRAME;
 class DIALOG_FOOTPRINT_FP_EDITOR : public DIALOG_FOOTPRINT_FP_EDITOR_BASE
 {
 private:
-    wxConfigBase*                    m_config;
     FOOTPRINT_EDIT_FRAME*            m_frame;
     MODULE*                          m_footprint;
 

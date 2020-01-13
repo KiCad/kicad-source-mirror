@@ -22,26 +22,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_choose_component.h>
 #include <algorithm>
-#include <wx/utils.h>
+#include <class_libentry.h>
+#include <class_library.h>
+#include <dialog_choose_component.h>
+#include <eeschema_settings.h>
+#include <kiface_i.h>
+#include <sch_base_frame.h>
+#include <symbol_lib_table.h>
+#include <template_fieldnames.h>
+#include <widgets/footprint_preview_widget.h>
+#include <widgets/footprint_select_widget.h>
+#include <widgets/lib_tree.h>
+#include <widgets/symbol_preview_widget.h>
 #include <wx/button.h>
+#include <wx/clipbrd.h>
 #include <wx/dataview.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 #include <wx/timer.h>
-#include <class_library.h>
-#include <sch_base_frame.h>
-#include <template_fieldnames.h>
-#include <symbol_lib_table.h>
-#include <widgets/lib_tree.h>
-#include <widgets/footprint_preview_widget.h>
-#include <widgets/footprint_select_widget.h>
-#include <widgets/symbol_preview_widget.h>
-#include <wx/clipbrd.h>
-#include <kiface_i.h>
-#include <class_libentry.h>
+#include <wx/utils.h>
 
 #define SYM_CHOOSER_HSASH           wxT( "SymbolChooserHSashPosition" )
 #define SYM_CHOOSER_VSASH           wxT( "SymbolChooserVSashPosition" )
@@ -73,8 +74,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
           m_show_footprints( aShowFootprints ),
           m_external_browser_requested( false )
 {
-    m_config = Kiface().KifaceSettings();
-
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     // Use a slightly different layout, with a details pane spanning the entire window,
@@ -148,16 +147,21 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
     Layout();
 
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
     // We specify the width of the right window (m_symbol_view_panel), because specify
     // the width of the left window does not work as expected when SetSashGravity() is called
-    m_hsplitter->SetSashPosition( m_config->Read( SYM_CHOOSER_HSASH, HorizPixelsFromDU( 220 ) ) );
+    m_hsplitter->SetSashPosition( cfg->m_SymChooserPanel.sash_pos_h > 0 ?
+                                  cfg->m_SymChooserPanel.sash_pos_h : HorizPixelsFromDU( 220 ) );
 
     if( m_vsplitter )
-        m_vsplitter->SetSashPosition( m_config->Read( SYM_CHOOSER_VSASH,
-                                                      VertPixelsFromDU( 230 ) ) );
+        m_vsplitter->SetSashPosition( cfg->m_SymChooserPanel.sash_pos_v > 0 ?
+                                      cfg->m_SymChooserPanel.sash_pos_v : VertPixelsFromDU( 230 ) );
 
-    wxSize dlgSize( m_config->Read( SYM_CHOOSER_WIDTH_KEY, HorizPixelsFromDU( 390 ) ),
-                    m_config->Read( SYM_CHOOSER_HEIGHT_KEY, VertPixelsFromDU( 300 ) ) );
+    wxSize dlgSize( cfg->m_SymChooserPanel.width > 0 ?
+                    cfg->m_SymChooserPanel.width : HorizPixelsFromDU( 390 ),
+                    cfg->m_SymChooserPanel.height > 0 ?
+                    cfg->m_SymChooserPanel.height : VertPixelsFromDU( 300 ) );
     SetSize( dlgSize );
 
     SetInitialFocus( m_tree );
@@ -207,16 +211,18 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
     m_dbl_click_timer->Stop();
     delete m_dbl_click_timer;
 
-    m_config->Write( SYM_CHOOSER_WIDTH_KEY, GetSize().x );
-    m_config->Write( SYM_CHOOSER_HEIGHT_KEY, GetSize().y );
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
-    m_config->Write( SYM_CHOOSER_KEEP_SYM_KEY, m_keepSymbol->GetValue() );
-    m_config->Write( SYM_CHOOSER_USE_UNITS_KEY, m_useUnits->GetValue() );
+    cfg->m_SymChooserPanel.width = GetSize().x;
+    cfg->m_SymChooserPanel.height = GetSize().y;
 
-    m_config->Write( SYM_CHOOSER_HSASH, m_hsplitter->GetSashPosition() );
+    cfg->m_SymChooserPanel.keep_symbol = m_keepSymbol->GetValue();
+    cfg->m_SymChooserPanel.place_all_units = m_useUnits->GetValue();
+
+    cfg->m_SymChooserPanel.sash_pos_h = m_hsplitter->GetSashPosition();
 
     if( m_vsplitter )
-        m_config->Write( SYM_CHOOSER_VSASH, m_vsplitter->GetSashPosition() );
+        cfg->m_SymChooserPanel.sash_pos_v = m_vsplitter->GetSashPosition();
 }
 
 
@@ -254,14 +260,16 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
         sizer->Add( m_symbol_preview, 1, wxEXPAND | wxTOP | wxRIGHT, 5 );
     }
 
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
     m_keepSymbol = new wxCheckBox( panel, 1000, _("Multi-Symbol Placement"), wxDefaultPosition,
             wxDefaultSize, wxALIGN_RIGHT );
-    m_keepSymbol->SetValue( m_config->ReadBool( SYM_CHOOSER_KEEP_SYM_KEY, false ) );
+    m_keepSymbol->SetValue( cfg->m_SymChooserPanel.keep_symbol );
     m_keepSymbol->SetToolTip( _( "Place multiple copies of the symbol." ) );
 
     m_useUnits = new wxCheckBox( panel, 1000, _("Place all units"), wxDefaultPosition,
             wxDefaultSize, wxALIGN_RIGHT );
-    m_useUnits->SetValue( m_config->ReadBool( SYM_CHOOSER_USE_UNITS_KEY, true ) );
+    m_useUnits->SetValue( cfg->m_SymChooserPanel.place_all_units );
     m_useUnits->SetToolTip( _( "Sequentially place all units of the symbol." ) );
 
     auto fgSizer = new wxFlexGridSizer( 0, 2, 0, 1 );

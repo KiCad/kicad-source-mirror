@@ -129,7 +129,6 @@ as such!  As such, it is OK to use UTF8 characters:
 
 class wxConfigBase;
 class wxWindow;
-class wxConfigBase;
 class PGM_BASE;
 class KIWAY;
 class KIWAY_PLAYER;

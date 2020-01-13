@@ -31,6 +31,7 @@
 #include <common.h>
 #include <confirm.h>
 #include <gestfich.h>
+#include <settings/common_settings.h>
 
 #include <wx/mimetype.h>
 #include <wx/tokenzr.h>
@@ -41,23 +42,15 @@
 
 void PGM_BASE::ReadPdfBrowserInfos()
 {
-    wxASSERT( m_common_settings );
-
-    wxString browser = m_common_settings->Read( wxT( "PdfBrowserName" ), wxEmptyString );
-    SetPdfBrowserName( browser );
-
-    int tmp;
-    m_common_settings->Read( wxT( "UseSystemBrowser" ), &tmp, 0 );
-    m_use_system_pdf_browser = bool( tmp );
+    SetPdfBrowserName( GetCommonSettings()->m_System.pdf_viewer_name );
+    m_use_system_pdf_browser = GetCommonSettings()->m_System.use_system_pdf_viewer;
 }
 
 
 void PGM_BASE::WritePdfBrowserInfos()
 {
-    wxASSERT( m_common_settings );
-
-    m_common_settings->Write( wxT( "PdfBrowserName" ), GetPdfBrowserName() );
-    m_common_settings->Write( wxT( "UseSystemBrowser" ), m_use_system_pdf_browser );
+    GetCommonSettings()->m_System.pdf_viewer_name = GetPdfBrowserName();
+    GetCommonSettings()->m_System.use_system_pdf_viewer = m_use_system_pdf_browser;
 }
 
 

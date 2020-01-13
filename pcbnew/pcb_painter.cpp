@@ -30,7 +30,6 @@
 #include <class_drawsegment.h>
 #include <class_zone.h>
 #include <class_pcb_text.h>
-#include <colors_design_settings.h>
 #include <class_marker_pcb.h>
 #include <class_dimension.h>
 #include <class_pcb_target.h>
@@ -39,6 +38,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <pcb_painter.h>
 #include <pcb_display_options.h>
+#include <settings/color_settings.h>
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -69,19 +69,18 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
         m_sketchMode[i] = false;
     }
 
-    COLORS_DESIGN_SETTINGS dummyCds( FRAME_PCB_EDITOR );
-    ImportLegacyColors( &dummyCds );
-
     update();
 }
 
 
-void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings )
+void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 {
+    SetBackgroundColor( aSettings->GetColor( LAYER_PCB_BACKGROUND ) );
+
     // Init board layers colors:
     for( int i = 0; i < PCB_LAYER_ID_COUNT; i++ )
     {
-        m_layerColors[i] = aSettings->GetLayerColor( i );
+        m_layerColors[i] = aSettings->GetColor( i );
 
         // Guard: if the alpah channel is too small, the layer is not visible.
         // clamp it to 0.2
@@ -91,11 +90,11 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
 
     // Init specific graphic layers colors:
     for( int i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; i++ )
-        m_layerColors[i] = aSettings->GetItemColor( i );
+        m_layerColors[i] = aSettings->GetColor( i );
 
     // Default colors for specific layers (not really board layers).
     m_layerColors[LAYER_VIAS_HOLES]         = COLOR4D( 0.5, 0.4, 0.0, 0.8 );
-    m_layerColors[LAYER_PADS_PLATEDHOLES]   = aSettings->GetItemColor( LAYER_PCB_BACKGROUND );
+    m_layerColors[LAYER_PADS_PLATEDHOLES]   = aSettings->GetColor( LAYER_PCB_BACKGROUND );
     m_layerColors[LAYER_VIAS_NETNAMES]      = COLOR4D( 0.2, 0.2, 0.2, 0.9 );
     m_layerColors[LAYER_PADS_NETNAMES]      = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[LAYER_PAD_FR_NETNAMES]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );

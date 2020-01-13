@@ -30,7 +30,6 @@
 #include <bezier_curves.h>
 #include <class_libentry.h>
 #include <class_library.h>
-#include <colors_design_settings.h>
 #include <connection_graph.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/geometry_utils.h>
@@ -59,6 +58,7 @@
 #include <sch_no_connect.h>
 #include <sch_sheet.h>
 #include <sch_text.h>
+#include <settings/color_settings.h>
 #include <template_fieldnames.h>
 #include <view/view.h>
 
@@ -71,8 +71,6 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
     m_ShowUnit( 0 ),
     m_ShowConvert( 0 )
 {
-    ImportLegacyColors( nullptr );
-
     m_ShowHiddenText = true;
     m_ShowHiddenPins = true;
     m_ShowPinsElectricalType = true;
@@ -81,15 +79,15 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
 }
 
 
-void SCH_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings )
+void SCH_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 {
     for( int layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; layer ++)
-        m_layerColors[ layer ] = ::GetLayerColor( static_cast<SCH_LAYER_ID>( layer ) );
+        m_layerColors[ layer ] = aSettings->GetColor( layer );
 
     for( int layer = GAL_LAYER_ID_START; layer < GAL_LAYER_ID_END; layer ++)
-        m_layerColors[ layer ] = ::GetLayerColor( static_cast<SCH_LAYER_ID>( layer ) );
+        m_layerColors[ layer ] = aSettings->GetColor( layer );
 
-    m_backgroundColor = ::GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
+    m_backgroundColor = aSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 }
 
 
@@ -151,8 +149,6 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 {
     auto item2 = static_cast<const EDA_ITEM*>( aItem );
     auto item = const_cast<EDA_ITEM*>( item2 );
-
-    m_schSettings.ImportLegacyColors( nullptr );
 
 #ifdef CONNECTIVITY_DEBUG
 

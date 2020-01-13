@@ -60,43 +60,4 @@ EDA_ITEM* TOOL_BASE::getModelInt() const
 void TOOL_BASE::attachManager( TOOL_MANAGER* aManager )
 {
     m_toolMgr = aManager;
-    m_toolSettings = TOOL_SETTINGS( this );
-}
-
-
-TOOL_SETTINGS::TOOL_SETTINGS( TOOL_BASE* aTool ) :
-    m_tool( aTool )
-{
-}
-
-
-TOOL_SETTINGS::~TOOL_SETTINGS()
-{
-}
-
-
-TOOL_SETTINGS& TOOL_BASE::GetSettings()
-{
-    return m_toolSettings;
-}
-
-
-wxString TOOL_SETTINGS::getKeyName( const wxString& aEntryName ) const
-{
-    wxString key( m_tool->GetName() );
-    key += wxT( "." );
-    key += aEntryName;
-    return key;
-}
-
-
-wxConfigBase* TOOL_SETTINGS::getConfigBase() const
-{
-    if( !m_tool )
-        return NULL;
-
-    if( EDA_BASE_FRAME* frame = m_tool->getEditFrame<EDA_BASE_FRAME>() )
-        return frame->config();
-
-    return NULL;
 }

@@ -100,7 +100,9 @@ public:
 
     const wxString Name()                               { return wxString::FromUTF8( m_bm.m_name ); }
 
-    wxConfigBase* KifaceSettings() const                { return m_bm.m_config.get(); }
+    APP_SETTINGS_BASE* KifaceSettings() const           { return m_bm.m_config; }
+
+    void InitSettings( APP_SETTINGS_BASE* aSettings )   { m_bm.InitSettings( aSettings ); }
 
     /**
      * Function StartFlags

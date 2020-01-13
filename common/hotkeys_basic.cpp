@@ -34,6 +34,7 @@
 #include <macros.h>
 #include <menus_helpers.h>
 #include <eda_draw_frame.h>
+#include <settings/settings_manager.h>
 
 #include <tool/tool_manager.h>
 #include "dialogs/dialog_hotkey_list.h"
@@ -314,7 +315,7 @@ void ReadHotKeyConfig( wxString fileName, std::map<std::string, int>& aHotKeys )
     {
         wxFileName fn( "user" );
         fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
-        fn.SetPath( GetKicadConfigPath() );
+        fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
         fileName = fn.GetFullPath();
     }
     
@@ -350,7 +351,7 @@ int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap )
     wxFileName fn( "user" );
 
     fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
-    fn.SetPath( GetKicadConfigPath() );
+    fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
 
     // Read the existing config (all hotkeys)
     //
@@ -394,7 +395,7 @@ int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string,
     wxFileName fn( aFilename );
 
     fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
-    fn.SetPath( GetKicadConfigPath() );
+    fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
 
     if( !wxFile::Exists( fn.GetFullPath() ) )
         return 0;

@@ -24,6 +24,7 @@
 #include <kiface_i.h>
 #include <config_params.h>
 #include <lib_tree_model_adapter.h>
+#include <settings/app_settings.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
 
@@ -87,14 +88,8 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent ) :
     m_colWidths[PART_COL] = 360;
     m_colWidths[DESC_COL] = 2000;
 
-    m_config = Kiface().KifaceSettings();
-    m_configPrefix = typeid( this ).name();
-
-    // Read the column width from the global config
-    int colWidth = 0;
-
-    if( m_config->Read( m_configPrefix + LIST_COLUMN_WIDTH_KEY, &colWidth ) )
-        m_colWidths[PART_COL] = colWidth;
+    auto cfg = Kiface().KifaceSettings();
+    m_colWidths[PART_COL] = cfg->m_LibTree.column_width;
 
     // Read the pinned entries from the project config
     m_parent->Kiway().Prj().ConfigLoad( Kiface().KifaceSearch(), m_parent->GetName(),
@@ -110,8 +105,8 @@ void LIB_TREE_MODEL_ADAPTER::SaveColWidths()
 {
     if( m_widget )
     {
-        int colWidth = m_widget->GetColumn( PART_COL )->GetWidth();
-        m_config->Write( m_configPrefix + LIST_COLUMN_WIDTH_KEY, colWidth );
+        auto cfg = Kiface().KifaceSettings();
+        cfg->m_LibTree.column_width = m_widget->GetColumn( PART_COL )->GetWidth();
     }
     else
     {

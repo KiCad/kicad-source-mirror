@@ -27,12 +27,13 @@
 #include <cassert>
 #include <cmath>
 #include <wx/wx.h>
-#include <wx/config.h>
+#include <kiface_i.h>
 #include <dialog_helpers.h>
 
 #include <pcb_calculator_frame_base.h>
 
 #include <pcb_calculator.h>
+#include <pcb_calculator_settings.h>
 #include <UnitSelector.h>
 #include <units_scales.h>
 
@@ -41,37 +42,25 @@ wxString tracks_width_versus_current_formula =
 
 extern double DoubleFromString( const wxString& TextValue );
 
-// Key words to read/write some parameters in config:
-#define KEYWORD_TW_CURRENT                     wxT( "TW_Track_Current" )
-#define KEYWORD_TW_DELTA_TC                    wxT( "TW_Delta_TC" )
-#define KEYWORD_TW_TRACK_LEN                   wxT( "TW_Track_Len" )
-#define KEYWORD_TW_TRACK_LEN_UNIT              wxT( "TW_Track_Len_Unit" )
-#define KEYWORD_TW_RESISTIVITY                 wxT( "TW_Resistivity" )
-#define KEYWORD_TW_EXTTRACK_WIDTH              wxT( "TW_ExtTrack_Width" )
-#define KEYWORD_TW_EXTTRACK_WIDTH_UNIT         wxT( "TW_ExtTrack_Width_Unit" )
-#define KEYWORD_TW_EXTTRACK_THICKNESS          wxT( "TW_ExtTrack_Thickness" )
-#define KEYWORD_TW_EXTTRACK_THICKNESS_UNIT     wxT( "TW_ExtTrack_Thickness_Unit" )
-#define KEYWORD_TW_INTTRACK_WIDTH              wxT( "TW_IntTrack_Width" )
-#define KEYWORD_TW_INTTRACK_WIDTH_UNIT         wxT( "TW_IntTrack_Width_Unit" )
-#define KEYWORD_TW_INTTRACK_THICKNESS          wxT( "TW_IntTrack_Thickness" )
-#define KEYWORD_TW_INTTRACK_THICKNESS_UNIT     wxT( "TW_IntTrack_Thickness_Unit" )
 
-void PCB_CALCULATOR_FRAME::TW_WriteConfig( wxConfigBase* aCfg )
+void PCB_CALCULATOR_FRAME::TW_WriteConfig()
 {
     // Save current parameters values in config.
-    aCfg->Write( KEYWORD_TW_CURRENT,                 m_TrackCurrentValue->GetValue() );
-    aCfg->Write( KEYWORD_TW_DELTA_TC,                m_TrackDeltaTValue->GetValue() );
-    aCfg->Write( KEYWORD_TW_TRACK_LEN,               m_TrackLengthValue->GetValue() );
-    aCfg->Write( KEYWORD_TW_TRACK_LEN_UNIT,          m_TW_CuLength_choiceUnit->GetSelection() );
-    aCfg->Write( KEYWORD_TW_RESISTIVITY,             m_TWResistivity->GetValue() );
-    aCfg->Write( KEYWORD_TW_EXTTRACK_WIDTH,          m_ExtTrackWidthValue->GetValue() );
-    aCfg->Write( KEYWORD_TW_EXTTRACK_WIDTH_UNIT,     m_TW_ExtTrackWidth_choiceUnit->GetSelection() );
-    aCfg->Write( KEYWORD_TW_EXTTRACK_THICKNESS,      m_ExtTrackThicknessValue->GetValue() );
-    aCfg->Write( KEYWORD_TW_EXTTRACK_THICKNESS_UNIT, m_ExtTrackThicknessUnit->GetSelection() );
-    aCfg->Write( KEYWORD_TW_INTTRACK_WIDTH,          m_IntTrackWidthValue->GetValue() );
-    aCfg->Write( KEYWORD_TW_INTTRACK_WIDTH_UNIT,     m_TW_IntTrackWidth_choiceUnit->GetSelection() );
-    aCfg->Write( KEYWORD_TW_INTTRACK_THICKNESS,      m_IntTrackThicknessValue->GetValue() );
-    aCfg->Write( KEYWORD_TW_INTTRACK_THICKNESS_UNIT, m_IntTrackThicknessUnit->GetSelection() );
+    auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
+
+    cfg->m_TrackWidth.current                   = m_TrackCurrentValue->GetValue();
+    cfg->m_TrackWidth.delta_tc                  = m_TrackDeltaTValue->GetValue();
+    cfg->m_TrackWidth.track_len                 = m_TrackLengthValue->GetValue();
+    cfg->m_TrackWidth.track_len_units           = m_TW_CuLength_choiceUnit->GetSelection();
+    cfg->m_TrackWidth.resistivity               = m_TWResistivity->GetValue();
+    cfg->m_TrackWidth.ext_track_width           = m_ExtTrackWidthValue->GetValue();
+    cfg->m_TrackWidth.ext_track_width_units     = m_TW_ExtTrackWidth_choiceUnit->GetSelection();
+    cfg->m_TrackWidth.ext_track_thickness       = m_ExtTrackThicknessValue->GetValue();
+    cfg->m_TrackWidth.ext_track_thickness_units = m_ExtTrackThicknessUnit->GetSelection();
+    cfg->m_TrackWidth.int_track_width           = m_IntTrackWidthValue->GetValue();
+    cfg->m_TrackWidth.int_track_width_units     = m_TW_IntTrackWidth_choiceUnit->GetSelection();
+    cfg->m_TrackWidth.int_track_thickness       = m_IntTrackThicknessValue->GetValue();
+    cfg->m_TrackWidth.int_track_thickness_units = m_IntTrackThicknessUnit->GetSelection();
 }
 
 
@@ -426,41 +415,29 @@ double PCB_CALCULATOR_FRAME::TWCalculateCurrent( double aWidth, double aThicknes
 }
 
 
-void PCB_CALCULATOR_FRAME::TW_Init( wxConfigBase* aCfg )
+void PCB_CALCULATOR_FRAME::TW_Init()
 {
-    int      tmp;
     wxString msg;
 
     // Disable calculations while we initialise.
     m_TWNested = true;
 
     // Read parameter values.
-    aCfg->Read( KEYWORD_TW_CURRENT,                 &msg, wxT( "1.0" ) );
-    m_TrackCurrentValue->SetValue( msg );
-    aCfg->Read( KEYWORD_TW_DELTA_TC,                &msg, wxT( "10.0" ) );
-    m_TrackDeltaTValue->SetValue( msg );
-    aCfg->Read( KEYWORD_TW_TRACK_LEN,               &msg, wxT( "20" ) );
-    m_TrackLengthValue->SetValue( msg );
-    aCfg->Read( KEYWORD_TW_TRACK_LEN_UNIT,          &tmp, 0 );
-    m_TW_CuLength_choiceUnit->SetSelection( tmp );
-    aCfg->Read( KEYWORD_TW_RESISTIVITY,             &msg, wxT( "1.72e-8" ) );
-    m_TWResistivity->SetValue( msg );
-    aCfg->Read( KEYWORD_TW_EXTTRACK_WIDTH,          &msg, wxT( "0.2" ) );
-    m_ExtTrackWidthValue->SetValue( msg );
-    aCfg->Read( KEYWORD_TW_EXTTRACK_WIDTH_UNIT,     &tmp, 0 );
-    m_TW_ExtTrackWidth_choiceUnit->SetSelection( tmp );
-    aCfg->Read( KEYWORD_TW_EXTTRACK_THICKNESS,      &msg, wxT( "0.035" ) );
-    m_ExtTrackThicknessValue->SetValue( msg );
-    aCfg->Read( KEYWORD_TW_EXTTRACK_THICKNESS_UNIT, &tmp, 0 );
-    m_ExtTrackThicknessUnit->SetSelection( tmp );
-    aCfg->Read( KEYWORD_TW_INTTRACK_WIDTH,          &msg, wxT( "0.2" ) );
-    m_IntTrackWidthValue->SetValue( msg );
-    aCfg->Read( KEYWORD_TW_INTTRACK_WIDTH_UNIT,     &tmp, 0 );
-    m_TW_IntTrackWidth_choiceUnit->SetSelection( tmp );
-    aCfg->Read( KEYWORD_TW_INTTRACK_THICKNESS,      &msg, wxT( "0.035" ) );
-    m_IntTrackThicknessValue->SetValue( msg );
-    aCfg->Read( KEYWORD_TW_INTTRACK_THICKNESS_UNIT, &tmp, 0 );
-    m_IntTrackThicknessUnit->SetSelection( tmp );
+    auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
+   
+    m_TrackCurrentValue->SetValue( cfg->m_TrackWidth.current );
+    m_TrackDeltaTValue->SetValue( cfg->m_TrackWidth.delta_tc );
+    m_TrackLengthValue->SetValue( cfg->m_TrackWidth.track_len );
+    m_TW_CuLength_choiceUnit->SetSelection( cfg->m_TrackWidth.track_len_units );
+    m_TWResistivity->SetValue( cfg->m_TrackWidth.resistivity );
+    m_ExtTrackWidthValue->SetValue( cfg->m_TrackWidth.ext_track_width );
+    m_TW_ExtTrackWidth_choiceUnit->SetSelection( cfg->m_TrackWidth.ext_track_width_units );
+    m_ExtTrackThicknessValue->SetValue( cfg->m_TrackWidth.ext_track_thickness );
+    m_ExtTrackThicknessUnit->SetSelection( cfg->m_TrackWidth.ext_track_thickness_units );
+    m_IntTrackWidthValue->SetValue( cfg->m_TrackWidth.int_track_width );
+    m_TW_IntTrackWidth_choiceUnit->SetSelection( cfg->m_TrackWidth.int_track_width_units );
+    m_IntTrackThicknessValue->SetValue( cfg->m_TrackWidth.int_track_thickness );
+    m_IntTrackThicknessUnit->SetSelection( cfg->m_TrackWidth.int_track_thickness_units );
 
     if( tracks_width_versus_current_formula.StartsWith( "<!" ) )
         m_htmlWinFormulas->SetPage( tracks_width_versus_current_formula );

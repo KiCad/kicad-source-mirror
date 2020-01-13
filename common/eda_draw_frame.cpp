@@ -23,64 +23,43 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <pgm_base.h>
-#include <kiface_i.h>
-#include <bitmaps.h>
-#include <macros.h>
-#include <id.h>
 #include <base_screen.h>
-#include <msgpanel.h>
-#include <eda_draw_frame.h>
+#include <bitmaps.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
-#include <lockfile.h>
-#include <trace_helpers.h>
-#include <wx/snglinst.h>
-#include <view/view.h>
-#include <tool/tool_manager.h>
-#include <tool/action_manager.h>
-#include <tool/tool_dispatcher.h>
-#include <tool/actions.h>
-#include <ws_draw_item.h>
-#include <page_info.h>
-#include <title_block.h>
-#include <tool/tool_menu.h>
-#include <tool/selection_conditions.h>
-#include <tool/zoom_menu.h>
-#include <tool/grid_menu.h>
-#include <tool/common_tools.h>
 #include <dialog_shim.h>
+#include <eda_draw_frame.h>
+#include <fctsys.h>
 #include <filehistory.h>
+#include <id.h>
+#include <kiface_i.h>
+#include <lockfile.h>
+#include <macros.h>
+#include <msgpanel.h>
+#include <page_info.h>
+#include <pgm_base.h>
+#include <settings/app_settings.h>
+#include <settings/color_settings.h>
+#include <settings/common_settings.h>
+#include <settings/settings_manager.h>
+#include <title_block.h>
+#include <tool/action_manager.h>
+#include <tool/actions.h>
+#include <tool/common_tools.h>
+#include <tool/grid_menu.h>
+#include <tool/selection_conditions.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/tool_manager.h>
+#include <tool/tool_menu.h>
+#include <tool/zoom_menu.h>
+#include <trace_helpers.h>
+#include <view/view.h>
+#include <ws_draw_item.h>
+#include <wx/snglinst.h>
 
-
-///@{
-/// \ingroup config
-static const wxChar FirstRunShownKeyword[] =        wxT( "FirstRunShown" );
-
-static const wxChar FindReplaceFlagsEntry[] =       wxT( "LastFindReplaceFlags" );
-static const wxChar FindStringEntry[] =             wxT( "LastFindString" );
-static const wxChar ReplaceStringEntry[] =          wxT( "LastReplaceString" );
-static const wxChar FindStringHistoryEntry[] =      wxT( "FindStringHistoryList%d" );
-static const wxChar ReplaceStringHistoryEntry[] =   wxT( "ReplaceStringHistoryList%d" );
-///@}
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum size of the find/replace history stacks.
 
-/**
- * Integer to set the maximum number of undo items on the stack. If zero,
- * undo items are unlimited.
- *
- * Present as:
- *
- * - SchematicFrameDevelMaxUndoItems (file: eeschema)
- * - LibeditFrameDevelMaxUndoItems (file: eeschema)
- * - PcbFrameDevelMaxUndoItems (file: pcbnew)
- * - ModEditFrameDevelMaxUndoItems (file: pcbnew)
- *
- * \ingroup develconfig
- */
-static const wxString MaxUndoItemsEntry(wxT( "DevelMaxUndoItems" ) );
 
 EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
@@ -217,26 +196,17 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     EDA_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
 
-    wxConfigBase*         settings = Pgm().CommonSettings();
+    COMMON_SETTINGS*      settings = Pgm().GetCommonSettings();
     KIGFX::VIEW_CONTROLS* viewControls = GetCanvas()->GetViewControls();
 
-    int autosaveInterval;
-    settings->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
-    SetAutoSaveInterval( autosaveInterval );
+    SetAutoSaveInterval( settings->m_System.autosave_interval );
 
-    int historySize;
-    settings->Read( FILE_HISTORY_SIZE_KEY, &historySize, DEFAULT_FILE_HISTORY_SIZE );
+    int historySize = settings->m_System.file_history_size;
     Kiface().GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );
 
-    bool option;
-    settings->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option );
-    viewControls->EnableMousewheelPan( option );
-
-    settings->Read( ENBL_ZOOM_NO_CENTER_KEY, &option );
-    viewControls->EnableCursorWarping( !option );
-
-    settings->Read( ENBL_AUTO_PAN_KEY, &option );
-    viewControls->EnableAutoPan( option );
+    viewControls->EnableMousewheelPan( settings->m_Input.mousewheel_pan );
+    viewControls->EnableCursorWarping( settings->m_Input.center_on_zoom );
+    viewControls->EnableAutoPan( settings->m_Input.auto_pan );
 
     m_galDisplayOptions.ReadCommonConfig( *settings, this );
 }
@@ -457,102 +427,73 @@ const wxString EDA_DRAW_FRAME::GetZoomLevelIndicator() const
 }
 
 
-void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
+void EDA_DRAW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    wxString baseCfgName = ConfigBaseName();
-    wxConfigBase* cmnCfg = Pgm().CommonSettings();
+    wxString         baseCfgName = ConfigBaseName();
+    COMMON_SETTINGS* cmnCfg      = Pgm().GetCommonSettings();
+    WINDOW_SETTINGS* window      = GetWindowSettings( aCfg );
 
     // Read units used in dialogs and toolbars
-    EDA_UNITS unitsTmp;
-
-    if( aCfg->Read( baseCfgName + UserUnitsEntryKeyword, (int*) &unitsTmp ) )
-        SetUserUnits( unitsTmp );
-    else
-        SetUserUnits( EDA_UNITS::MILLIMETRES );
+    SetUserUnits( static_cast<EDA_UNITS>( aCfg->m_System.units ) );
 
     // Read show/hide grid entry
-    bool btmp;
-    if( aCfg->Read( baseCfgName + ShowGridEntryKeyword, &btmp ) )
-        SetGridVisibility( btmp );
+    SetGridVisibility( window->grid.show );
 
-    aCfg->Read( baseCfgName + LastGridSizeIdKeyword, &m_LastGridSizeId, m_LastGridSizeId );
+    m_LastGridSizeId = window->grid.last_size;
 
     // m_LastGridSizeId is an offset, expected to be >= 0
     if( m_LastGridSizeId < 0 )
         m_LastGridSizeId = 0;
 
-    m_UndoRedoCountMax = aCfg->Read( baseCfgName + MaxUndoItemsEntry,
-                                     long( DEFAULT_MAX_UNDO_ITEMS ) );
+    m_UndoRedoCountMax = aCfg->m_System.max_undo_items;
+    m_firstRunDialogSetting = aCfg->m_System.first_run_shown;
 
-    aCfg->Read( baseCfgName + FirstRunShownKeyword, &m_firstRunDialogSetting, 0L );
+    m_galDisplayOptions.ReadConfig( *cmnCfg, *window, this );
 
-    m_galDisplayOptions.ReadConfig( *cmnCfg, *aCfg, baseCfgName, this );
+    m_findReplaceData->SetFlags( aCfg->m_FindReplace.flags );
+    m_findReplaceData->SetFindString( aCfg->m_FindReplace.find_string );
+    m_findReplaceData->SetReplaceString( aCfg->m_FindReplace.replace_string );
 
-    long tmp;
-    aCfg->Read( FindReplaceFlagsEntry, &tmp, (long) wxFR_DOWN );
-    m_findReplaceData->SetFlags( (wxUint32) tmp & ~FR_REPLACE_ITEM_FOUND );
-    m_findReplaceData->SetFindString( aCfg->Read( FindStringEntry, wxEmptyString ) );
-    m_findReplaceData->SetReplaceString( aCfg->Read( ReplaceStringEntry, wxEmptyString ) );
+    for( auto& s : aCfg->m_FindReplace.find_history )
+        m_findStringHistoryList.Add( s );
 
-    // Load the find and replace string history list.
-    for( int i = 0; i < FR_HISTORY_LIST_CNT; ++i )
-    {
-        wxString tmpHistory;
-        wxString entry;
-        entry.Printf( FindStringHistoryEntry, i );
-        tmpHistory = aCfg->Read( entry, wxEmptyString );
-
-        if( !tmpHistory.IsEmpty() )
-            m_findStringHistoryList.Add( tmpHistory );
-
-        entry.Printf( ReplaceStringHistoryEntry, i );
-        tmpHistory = aCfg->Read( entry, wxEmptyString );
-
-        if( !tmpHistory.IsEmpty() )
-            m_replaceStringHistoryList.Add( tmpHistory );
-    }
+    for( auto& s : aCfg->m_FindReplace.replace_history )
+        m_replaceStringHistoryList.Add( s );
 }
 
 
-void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
+void EDA_DRAW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    wxString baseCfgName = ConfigBaseName();
+    WINDOW_SETTINGS* window = GetWindowSettings( aCfg );
 
-    aCfg->Write( baseCfgName + UserUnitsEntryKeyword, (int) m_userUnits );
-    aCfg->Write( baseCfgName + ShowGridEntryKeyword, IsGridVisible() );
-    aCfg->Write( baseCfgName + LastGridSizeIdKeyword, ( long ) m_LastGridSizeId );
-    aCfg->Write( baseCfgName + FirstRunShownKeyword, m_firstRunDialogSetting );
+    aCfg->m_System.units = static_cast<int>( m_userUnits );
+    aCfg->m_System.first_run_shown = m_firstRunDialogSetting;
+
+    window->grid.show = IsGridVisible();
+    window->grid.last_size = m_LastGridSizeId;
 
     if( GetScreen() )
-        aCfg->Write( baseCfgName + MaxUndoItemsEntry, long( GetScreen()->GetMaxUndoItems() ) );
+        aCfg->m_System.max_undo_items = GetScreen()->GetMaxUndoItems();
 
-    m_galDisplayOptions.WriteConfig( *aCfg, baseCfgName );
+    m_galDisplayOptions.WriteConfig( *window );
 
-    // Save find dialog session setting.
-    aCfg->Write( FindReplaceFlagsEntry, (long) m_findReplaceData->GetFlags() );
-    aCfg->Write( FindStringEntry, m_findReplaceData->GetFindString() );
-    aCfg->Write( ReplaceStringEntry, m_findReplaceData->GetReplaceString() );
+    aCfg->m_FindReplace.flags = m_findReplaceData->GetFlags();
+    aCfg->m_FindReplace.find_string = m_findReplaceData->GetFindString();
+    aCfg->m_FindReplace.replace_string = m_findReplaceData->GetReplaceString();
 
-    // Save the find and replace string history list.
-    unsigned i;
-    wxString tmpHistory;
-    wxString entry;     // invoke constructor outside of any loops
+    aCfg->m_FindReplace.find_history.clear();
+    aCfg->m_FindReplace.replace_history.clear();
 
-    for( i = 0; i < m_findStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
-    {
-        entry.Printf( FindStringHistoryEntry, i );
-        aCfg->Write( entry, m_findStringHistoryList[ i ] );
-    }
+    for( size_t i = 0; i < m_findStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
+        aCfg->m_FindReplace.find_history.push_back( m_findStringHistoryList[ i ].ToStdString() );
 
-    for( i = 0; i < m_replaceStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
-    {
-        entry.Printf( ReplaceStringHistoryEntry, i );
-        aCfg->Write( entry, m_replaceStringHistoryList[ i ] );
-    }
+    for( size_t i = 0; i < m_replaceStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
+        aCfg->m_FindReplace.replace_history.push_back(
+                m_replaceStringHistoryList[ i ].ToStdString() );
 }
 
 
@@ -618,13 +559,10 @@ void EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting()
 {
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    wxConfigBase* cfg = Kiface().KifaceSettings();
+    APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
 
     if( cfg )
-    {
-        canvasType = (EDA_DRAW_PANEL_GAL::GAL_TYPE)
-                          cfg->ReadLong( GetCanvasTypeKey(), EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
-    }
+        canvasType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( cfg->m_Graphics.canvas_type );
 
     if( canvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
             || canvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
@@ -682,10 +620,12 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
         return false;
     }
 
-    wxConfigBase* cfg = Kiface().KifaceSettings();
+    APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
 
     if( cfg )
-        return cfg->Write( GetCanvasTypeKey(), (long) aCanvasType );
+        cfg->m_Graphics.canvas_type = static_cast<int>( aCanvasType );
+
+    Pgm().GetSettingsManager().Save( cfg );
 
     return false;
 }
@@ -861,4 +801,10 @@ void EDA_DRAW_FRAME::RecreateToolbars()
 
     // Update the checked state of tools
     SyncToolbars();
+}
+
+
+COLOR4D EDA_DRAW_FRAME::GetLayerColor( SCH_LAYER_ID aLayer )
+{
+    return Pgm().GetSettingsManager().GetColorSettings()->GetColor( aLayer );
 }

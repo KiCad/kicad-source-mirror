@@ -27,6 +27,7 @@
 #include <confirm.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <pcbplot.h>
 #include <gendrill_Excellon_writer.h>
 #include <gendrill_gerber_writer.h>
@@ -40,16 +41,6 @@
 #include <reporter.h>
 #include <wx/stdpaths.h>
 
-
-// Keywords for read and write parameters in project config
-#define ZerosFormatKey          wxT( "DrillZerosFormat" )
-#define MirrorKey               wxT( "DrillMirrorYOpt" )
-#define MinimalHeaderKey        wxT( "DrillMinHeader" )
-#define MergePTHNPTHKey         wxT( "DrillMergePTHNPTH" )
-#define UnitDrillInchKey        wxT( "DrillUnit" )
-#define DrillMapFileTypeKey     wxT( "DrillMapFileType" )
-#define DrillFileFormatKey      wxT( "DrillFileType" )
-#define OvalHolesRouteModeKey   wxT( "OvalHolesRouteMode" )
 
 // list of allowed precision for EXCELLON files, for integer format:
 // Due to difference between inches and mm,
@@ -76,7 +67,6 @@ DIALOG_GENDRILL::DIALOG_GENDRILL(  PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aPar
 {
     m_pcbEditFrame = aPcbEditFrame;
     m_board  = m_pcbEditFrame->GetBoard();
-    m_config = Kiface().KifaceSettings();
     m_plotOpts = m_pcbEditFrame->GetPlotSettings();
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
@@ -110,15 +100,18 @@ DIALOG_GENDRILL::~DIALOG_GENDRILL()
 
 void DIALOG_GENDRILL::initDialog()
 {
-    m_config->Read( ZerosFormatKey, &m_ZerosFormat );
-    m_config->Read( MirrorKey, &m_Mirror );
-    m_config->Read( MergePTHNPTHKey, &m_Merge_PTH_NPTH );
-    m_config->Read( MinimalHeaderKey, &m_MinimalHeader );
-    m_config->Read( UnitDrillInchKey, &m_UnitDrillIsInch );
+    auto cfg = m_pcbEditFrame->GetSettings();
+
+    m_Merge_PTH_NPTH           = cfg->m_GenDrill.merge_pth_npth;
+    m_MinimalHeader            = cfg->m_GenDrill.minimal_header;
+    m_Mirror                   = cfg->m_GenDrill.mirror;
+    m_UnitDrillIsInch          = cfg->m_GenDrill.unit_drill_is_inch;
+    m_UseRouteModeForOvalHoles = cfg->m_GenDrill.use_route_for_oval_holes;
+    m_drillFileType            = cfg->m_GenDrill.drill_file_type;
+    m_mapFileType              = cfg->m_GenDrill.map_file_type;
+    m_ZerosFormat              = cfg->m_GenDrill.zeros_format;
+
     m_drillOriginIsAuxAxis = m_plotOpts.GetUseAuxOrigin();
-    m_config->Read( DrillMapFileTypeKey, &m_mapFileType );
-    m_config->Read( DrillFileFormatKey, &m_drillFileType );
-    m_config->Read( OvalHolesRouteModeKey, &m_UseRouteModeForOvalHoles );
 
     InitDisplayParams();
 }
@@ -243,14 +236,16 @@ void DIALOG_GENDRILL::UpdateConfig()
 {
     UpdateDrillParams();
 
-    m_config->Write( ZerosFormatKey, m_ZerosFormat );
-    m_config->Write( MirrorKey, m_Mirror );
-    m_config->Write( MergePTHNPTHKey, m_Merge_PTH_NPTH );
-    m_config->Write( MinimalHeaderKey, m_MinimalHeader );
-    m_config->Write( UnitDrillInchKey, m_UnitDrillIsInch );
-    m_config->Write( DrillMapFileTypeKey, m_mapFileType );
-    m_config->Write( DrillFileFormatKey, m_drillFileType );
-    m_config->Write( OvalHolesRouteModeKey, m_UseRouteModeForOvalHoles );
+    auto cfg = m_pcbEditFrame->GetSettings();
+
+    cfg->m_GenDrill.merge_pth_npth           = m_Merge_PTH_NPTH;
+    cfg->m_GenDrill.minimal_header           = m_MinimalHeader;
+    cfg->m_GenDrill.mirror                   = m_Mirror;
+    cfg->m_GenDrill.unit_drill_is_inch       = m_UnitDrillIsInch;
+    cfg->m_GenDrill.use_route_for_oval_holes = m_UseRouteModeForOvalHoles;
+    cfg->m_GenDrill.drill_file_type          = m_drillFileType;
+    cfg->m_GenDrill.map_file_type            = m_mapFileType;
+    cfg->m_GenDrill.zeros_format             = m_ZerosFormat;
 }
 
 

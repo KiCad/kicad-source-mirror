@@ -24,18 +24,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <kicad_string.h>
-#include <pcb_edit_frame.h>
-#include <macros.h>
-#include <board_commit.h>
 #include <bitmaps.h>
+#include <board_commit.h>
 #include <class_board.h>
 #include <class_module.h>
+#include <dialog_exchange_footprints.h>
+#include <fctsys.h>
+#include <kicad_string.h>
+#include <kiway.h>
+#include <macros.h>
+#include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <project.h>
 #include <wx_html_report_panel.h>
-#include <kiway.h>
-#include <dialog_exchange_footprints.h>
 
 
 #define ID_MATCH_FP_ALL     4200
@@ -434,7 +435,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
     aDest->SetPosition( aSrc->GetPosition() );
 
     if( aDest->GetLayer() != aSrc->GetLayer() )
-        aDest->Flip( aDest->GetPosition(), m_configSettings.m_FlipLeftRight );
+        aDest->Flip( aDest->GetPosition(), m_Settings->m_FlipLeftRight );
 
     if( aDest->GetOrientation() != aSrc->GetOrientation() )
         aDest->Rotate( aDest->GetPosition(), aSrc->GetOrientation() );

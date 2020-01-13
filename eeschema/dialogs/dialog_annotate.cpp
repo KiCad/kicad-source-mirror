@@ -36,18 +36,13 @@
 
 #include <invoke_sch_dialog.h>
 #include <dialog_annotate_base.h>
+#include <eeschema_settings.h>
 #include <kiface_i.h>
 #include <wx_html_report_panel.h>
-
-#define KEY_ANNOTATE_SORT_OPTION          wxT( "AnnotateSortOption" )
-#define KEY_ANNOTATE_ALGO_OPTION          wxT( "AnnotateAlgoOption" )
-#define KEY_ANNOTATE_MESSAGES_FILTER      wxT( "AnnotateFilterMsg" )
 
 // A window name for the annotate dialog to retrieve is if not destroyed
 #define DLG_WINDOW_NAME "DialogAnnotateWindowName"
 
-
-class wxConfigBase;
 
 /**
  * DIALOG_ANNOTATE: a dialog to set/clear reference designators,
@@ -61,7 +56,6 @@ public:
 
 private:
     SCH_EDIT_FRAME* m_Parent;
-    wxConfigBase*   m_Config;
 
     /// Initialises member variables
     void InitValues();
@@ -128,24 +122,24 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
 
 DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
 {
-    m_Config->Write( KEY_ANNOTATE_SORT_OPTION, GetSortOrder() );
-    m_Config->Write( KEY_ANNOTATE_ALGO_OPTION, GetAnnotateAlgo() );
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
-    m_Config->Write( KEY_ANNOTATE_MESSAGES_FILTER,
-                    (long) m_MessageWindow->GetVisibleSeverities() );
+    cfg->m_AnnotatePanel.sort_order = GetSortOrder();
+    cfg->m_AnnotatePanel.method = GetAnnotateAlgo();
+    cfg->m_AnnotatePanel.messages_filter = m_MessageWindow->GetVisibleSeverities();
 }
 
 
 void DIALOG_ANNOTATE::InitValues()
 {
-    m_Config = Kiface().KifaceSettings();
-    long option;
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    int option;
 
     // These are always reset to attempt to keep the user out of trouble...
     m_rbScope->SetSelection( 0 );
     m_rbOptions->SetSelection( 0 );
 
-    m_Config->Read( KEY_ANNOTATE_SORT_OPTION, &option, 0L );
+    option = cfg->m_AnnotatePanel.sort_order;
 
     switch( option )
     {
@@ -158,7 +152,7 @@ void DIALOG_ANNOTATE::InitValues()
         break;
     }
 
-    m_Config->Read( KEY_ANNOTATE_ALGO_OPTION, &option, 0L );
+    option = cfg->m_AnnotatePanel.method;
 
     switch( option )
     {
@@ -179,8 +173,7 @@ void DIALOG_ANNOTATE::InitValues()
     annotate_down_right_bitmap->SetBitmap( KiBitmap( annotate_down_right_xpm ) );
     annotate_right_down_bitmap->SetBitmap( KiBitmap( annotate_right_down_xpm ) );
 
-    int severities = m_Config->Read( KEY_ANNOTATE_MESSAGES_FILTER, -1l );
-    m_MessageWindow->SetVisibleSeverities( severities );
+    m_MessageWindow->SetVisibleSeverities( cfg->m_AnnotatePanel.messages_filter );
 
     m_MessageWindow->MsgPanelSetMinSize( wxSize( -1, 160 ) );
 }

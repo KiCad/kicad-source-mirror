@@ -37,6 +37,7 @@
 #include <macros.h>
 #include <menus_helpers.h>
 #include <pcbnew_id.h>
+#include <pcbnew_settings.h>
 #include <python_scripting.h>
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
@@ -422,47 +423,45 @@ void PCB_EDIT_FRAME::AddActionPluginTools()
 }
 
 
-void PCB_EDIT_FRAME::SetActionPluginSettings( const std::vector< std::pair<wxString, wxString> >& aPluginSettings )
+void PCB_EDIT_FRAME::SetActionPluginSettings( const std::vector<wxString>& aPluginSettings )
 {
-    m_configSettings.m_pluginSettings = aPluginSettings;
+    m_Settings->m_VisibleActionPlugins = aPluginSettings;
 }
 
 
-std::vector< std::pair<wxString, wxString> > PCB_EDIT_FRAME::GetActionPluginSettings()
+std::vector<wxString> PCB_EDIT_FRAME::GetActionPluginSettings()
 {
-    return m_configSettings.m_pluginSettings;
+    return m_Settings->m_VisibleActionPlugins;
 }
 
 
 std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
 {
+    std::vector<ACTION_PLUGIN*> plugins;
     std::vector<ACTION_PLUGIN*> orderedPlugins;
-    const auto& pluginSettings = GetActionPluginSettings();
+
+    for( int i = 0; i < ACTION_PLUGINS::GetActionsCount(); i++ )
+        plugins.push_back( ACTION_PLUGINS::GetAction( i ) );
 
     // First add plugins that have entries in settings
-    for( size_t ii = 0; ii < pluginSettings.size(); ii++ )
+    for( auto visble_plugin : GetActionPluginSettings() )
     {
-        for( int jj = 0; jj < ACTION_PLUGINS::GetActionsCount(); jj++ )
+        auto loc = std::find_if( plugins.begin(), plugins.end(),
+                [visble_plugin] ( ACTION_PLUGIN* plugin )
+                {
+                    return plugin->GetPluginPath().ToStdString() == visble_plugin;
+                } );
+
+        if( loc != plugins.end() )
         {
-            if( ACTION_PLUGINS::GetAction( jj )->GetPluginPath() == pluginSettings[ii].first )
-                orderedPlugins.push_back( ACTION_PLUGINS::GetAction( jj ) );
+            orderedPlugins.push_back( *loc );
+            plugins.erase( loc );
         }
     }
 
     // Now append new plugins that have not been configured yet
-    for( int ii = 0; ii < ACTION_PLUGINS::GetActionsCount(); ii++ )
-    {
-        bool found = false;
-
-        for( size_t jj = 0; jj < orderedPlugins.size(); jj++ )
-        {
-            if( ACTION_PLUGINS::GetAction( ii ) == orderedPlugins[jj] )
-                found = true;
-        }
-
-        if ( !found )
-            orderedPlugins.push_back( ACTION_PLUGINS::GetAction( ii ) );
-    }
+    for( auto remaining_plugin : plugins )
+        orderedPlugins.push_back( remaining_plugin );
 
     return orderedPlugins;
 }
@@ -470,12 +469,12 @@ std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
 
 bool PCB_EDIT_FRAME::GetActionPluginButtonVisible( const wxString& aPluginPath, bool aPluginDefault )
 {
-    auto& settings = m_configSettings.m_pluginSettings;
+    auto& settings = m_Settings->m_VisibleActionPlugins;
 
-    for(const auto& entry : settings )
+    for( const auto& entry : settings )
     {
-        if (entry.first == aPluginPath )
-            return entry.second == wxT( "Visible" );
+        if( entry == aPluginPath.ToStdString() )
+            return true;
     }
 
     // Plugin is not in settings, return default.

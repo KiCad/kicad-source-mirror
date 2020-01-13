@@ -32,9 +32,9 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <drc/drc.h>
+#include <pcbnew_settings.h>
 #include <layer_widget.h>
 #include <pcb_layer_widget.h>
-#include <config_params.h>
 #include <footprint_edit_frame.h>
 #include <dialog_plot.h>
 #include <dialog_edit_footprint_for_BoardEditor.h>
@@ -54,6 +54,7 @@
 #include <kicad_string.h>
 #include <pcb_draw_panel_gal.h>
 #include <functional>
+#include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
@@ -93,16 +94,6 @@
 
 
 using namespace std::placeholders;
-
-///@{
-/// \ingroup config
-
-static const wxString PlotLineWidthEntry =      "PlotLineWidth_mm";
-static const wxString ShowMicrowaveEntry =      "ShowMicrowaveTools";
-static const wxString ShowLayerManagerEntry =   "ShowLayerManagerTools";
-static const wxString ShowPageLimitsEntry =     "ShowPageLimits";
-
-///@}
 
 
 BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
@@ -562,10 +553,8 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 void PCB_EDIT_FRAME::ActivateGalCanvas()
 {
     PCB_BASE_EDIT_FRAME::ActivateGalCanvas();
-    COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
-
-    GetCanvas()->GetGAL()->SetGridColor( cds.GetLayerColor( LAYER_GRID ) );
-    GetCanvas()->GetView()->GetPainter()->GetSettings()->ImportLegacyColors( &cds );
+    ColorSettings()->SetColorContext( COLOR_CONTEXT::PCB );
+    GetCanvas()->UpdateColors();
     GetCanvas()->Refresh();
 }
 
@@ -600,53 +589,59 @@ void PCB_EDIT_FRAME::DoShowBoardSetupDialog( const wxString& aInitialPage,
 }
 
 
-void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
+void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     PCB_BASE_FRAME::LoadSettings( aCfg );
 
-    wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
+    // TODO(JE) remove once color themes exist
+    COLOR_SETTINGS* cs = ColorSettings();
+    cs->SetColorContext( COLOR_CONTEXT::PCB );
+    cs->Load();
 
-    m_configSettings.Load( aCfg );
+    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
 
-    double dtmp;
-    aCfg->Read( PlotLineWidthEntry, &dtmp, 0.1 ); // stored in mm
-    dtmp = std::max( 0.01, std::min( dtmp, 5.0 ) );
-
-    g_DrawDefaultLineThickness = Millimeter2iu( dtmp );
-
-    aCfg->Read( ShowMicrowaveEntry, &m_show_microwave_tools );
-    aCfg->Read( ShowLayerManagerEntry, &m_show_layer_manager_tools );
-
-    aCfg->Read( ShowPageLimitsEntry, &m_showPageLimits );
+    m_rotationAngle            = cfg->m_RotationAngle;
+    g_DrawDefaultLineThickness = Millimeter2iu( cfg->m_PlotLineWidth );
+    m_show_microwave_tools     = cfg->m_AuiPanels.show_microwave_tools;
+    m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
+    m_showPageLimits           = cfg->m_ShowPageLimits;
 }
 
 
-void PCB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
+void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    m_configSettings.Save( aCfg );
-
     PCB_BASE_FRAME::SaveSettings( aCfg );
 
-    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
+    // TODO(JE) remove once color themes exist
+    COLOR_SETTINGS* cs = ColorSettings();
+    cs->SetColorContext( COLOR_CONTEXT::PCB );
+    cs->Store();
 
-    // This value is stored in mm )
-    aCfg->Write( PlotLineWidthEntry, MM_PER_IU * g_DrawDefaultLineThickness );
-    aCfg->Write( ShowMicrowaveEntry, (long) m_show_microwave_tools );
-    aCfg->Write( ShowLayerManagerEntry, (long)m_show_layer_manager_tools );
-    aCfg->Write( ShowPageLimitsEntry, m_showPageLimits );
+    // Ensure pcbnew color settings get flushed to disk before context is changed
+    Pgm().GetSettingsManager().SaveColorSettings( cs, "board" );
+
+    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
+
+    cfg->m_RotationAngle                  = m_rotationAngle;
+    cfg->m_PlotLineWidth                  = Iu2Millimeter( g_DrawDefaultLineThickness );
+    cfg->m_AuiPanels.show_microwave_tools = m_show_microwave_tools;
+    cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
+    cfg->m_ShowPageLimits                 = m_showPageLimits;
 }
 
 
 COLOR4D PCB_EDIT_FRAME::GetGridColor()
 {
-    return Settings().Colors().GetItemColor( LAYER_GRID );
+    return ColorSettings()->GetColor( LAYER_GRID );
 }
 
 
 void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
 {
 
-    Settings().Colors().SetItemColor( LAYER_GRID, aColor );
+    ColorSettings()->SetColor( LAYER_GRID, aColor );
     GetCanvas()->GetGAL()->SetGridColor( aColor );
 }
 

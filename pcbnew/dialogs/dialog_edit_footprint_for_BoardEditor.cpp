@@ -24,25 +24,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <kiface_i.h>
-#include <confirm.h>
-#include <pcbnew.h>
-#include <pgm_base.h>
-#include <pcb_edit_frame.h>
+#include <3d_viewer/eda_3d_viewer.h>
+#include <bitmaps.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
-#include <dialog_text_entry.h>
 #include <class_module.h>
-#include <validators.h>
-#include <widgets/wx_grid.h>
-#include <widgets/text_ctrl_eval.h>
+#include <confirm.h>
+#include <dialog_text_entry.h>
+#include <fctsys.h>
 #include <filename_resolver.h>
-#include "3d_cache/dialogs/panel_prev_model.h"
+#include <kiface_i.h>
+#include <math/util.h> // for KiROUND
+#include <pcb_edit_frame.h>
+#include <pcbnew.h>
+#include <pcbnew_settings.h>
+#include <pgm_base.h>
+#include <validators.h>
+#include <widgets/text_ctrl_eval.h>
+#include <widgets/wx_grid.h>
+
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
-#include <bitmaps.h>
-#include <3d_viewer/eda_3d_viewer.h>
-#include <math/util.h>      // for KiROUND
+#include "3d_cache/dialogs/panel_prev_model.h"
 
 #include <dialog_edit_footprint_for_BoardEditor.h>
 
@@ -64,8 +66,6 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_initialFocus( true ),
     m_inSelect( false )
 {
-    m_config = Kiface().KifaceSettings();
-
     m_frame     = aParent;
     m_footprint = aModule;
 
@@ -90,9 +90,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_modelsGrid->PushEventHandler( new GRID_TRICKS( m_modelsGrid ) );
 
     // Show/hide text item columns according to the user's preference
-    wxString shownColumns;
-    m_config->Read( FootprintTextShownColumnsKey, &shownColumns, wxT( "0 1 2 3 4 5 6" ) );
-    m_itemsGrid->ShowHideColumns( shownColumns );
+    m_itemsGrid->ShowHideColumns( m_frame->GetSettings()->m_FootprintTextShownColumns );
 
     // Set up the 3D models grid
     wxGridCellAttr* attr = new wxGridCellAttr;
@@ -158,7 +156,8 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
 
 DIALOG_FOOTPRINT_BOARD_EDITOR::~DIALOG_FOOTPRINT_BOARD_EDITOR()
 {
-    m_config->Write( FootprintTextShownColumnsKey, m_itemsGrid->GetShownColumns() );
+    m_frame->GetSettings()->m_FootprintTextShownColumns =
+            m_itemsGrid->GetShownColumns().ToStdString();
 
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_texts );

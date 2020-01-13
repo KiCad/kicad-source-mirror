@@ -91,12 +91,13 @@ principle should be easily implemented by adapting the current STL containers.
     #include <bitset>
 
     #include <title_block.h>
-    #include <colors_design_settings.h>
     #include <marker_base.h>
     #include <eda_text.h>
     #include <convert_to_biu.h>
     #include <id.h>
     #include <build_version.h>
+    #include <layers_id_colors_and_visibility.h>
+    #include <settings/settings_manager.h>
 %}
 
 // all the wx wrappers for wxString, wxPoint, wxRect, wxChar ..
@@ -113,11 +114,10 @@ principle should be easily implemented by adapting the current STL containers.
 %include common.h
 %include title_block.h
 %include gal/color4d.h
-%include core/settings.h
-%include colors_design_settings.h
 %include marker_base.h
 %include eda_text.h
 %include build_version.h
+%include settings/settings_manager.h
 
 // Cast time_t to known type for Python
 typedef long time_t;

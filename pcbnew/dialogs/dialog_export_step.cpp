@@ -31,14 +31,9 @@
 #include "reporter.h"
 #include "class_board.h"
 #include "dialog_export_step_base.h"
+#include <pcbnew_settings.h>
 #include <widgets/text_ctrl_eval.h>
 #include <wx_html_report_panel.h>
-
-#define OPTKEY_STEP_ORIGIN_OPT      "STEP_Origin_Opt"
-#define OPTKEY_STEP_UORG_UNITS      "STEP_UserOriginUnits"
-#define OPTKEY_STEP_UORG_X          "STEP_UserOriginX"
-#define OPTKEY_STEP_UORG_Y          "STEP_UserOriginY"
-#define OPTKEY_STEP_NOVIRT          "STEP_NoVirtual"
 
 
 class DIALOG_EXPORT_STEP: public DIALOG_EXPORT_STEP_BASE
@@ -55,7 +50,6 @@ public:
 
 private:
     PCB_EDIT_FRAME* m_parent;
-    wxConfigBase* m_config;
     // The last preference for STEP Origin:
     STEP_ORG_OPT m_STEP_org_opt;
     bool   m_noVirtual;     // remember last preference for No Virtual Component
@@ -98,11 +92,21 @@ public:
     ~DIALOG_EXPORT_STEP()
     {
         GetOriginOption(); // Update m_STEP_org_opt member.
-        m_config->Write( OPTKEY_STEP_ORIGIN_OPT, (int)m_STEP_org_opt );
-        m_config->Write( OPTKEY_STEP_NOVIRT, m_cbRemoveVirtual->GetValue() );
-        m_config->Write( OPTKEY_STEP_UORG_UNITS, m_STEP_OrgUnitChoice->GetSelection() );
-        m_config->Write( OPTKEY_STEP_UORG_X, m_STEP_Xorg->GetValue() );
-        m_config->Write( OPTKEY_STEP_UORG_Y, m_STEP_Yorg->GetValue() );
+
+        auto cfg = m_parent->GetSettings();
+
+        cfg->m_ExportStep.origin_mode = static_cast<int>( m_STEP_org_opt );
+        cfg->m_ExportStep.origin_units = m_STEP_OrgUnitChoice->GetSelection();
+
+        double val = 0.0;
+
+        m_STEP_Xorg->GetValue().ToDouble( &val );
+        cfg->m_ExportStep.origin_x = val;
+
+        m_STEP_Yorg->GetValue().ToDouble( &val );
+        cfg->m_ExportStep.origin_y = val;
+
+        cfg->m_ExportStep.no_virtual = m_cbRemoveVirtual->GetValue();
     }
 };
 
@@ -112,7 +116,6 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
 {
     m_parent = aParent;
     m_boardPath = aBoardPath;
-    m_config = Kiface().KifaceSettings();
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
     m_sdbSizerOK->SetLabel( _( "Export" ) );
     m_sdbSizer->Layout();
@@ -131,11 +134,9 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
 
     SetFocus();
 
-    m_STEP_org_opt = STEP_ORG_0;;
-    int tmp = STEP_ORG_0;
+    auto cfg = m_parent->GetSettings();
 
-    if( m_config->Read( OPTKEY_STEP_ORIGIN_OPT, &tmp ) )
-        m_STEP_org_opt = (STEP_ORG_OPT) tmp;
+    m_STEP_org_opt = static_cast<STEP_ORG_OPT>( cfg->m_ExportStep.origin_mode );
 
     switch( m_STEP_org_opt )
     {
@@ -146,10 +147,11 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
         case STEP_ORG_BOARD_CENTER: m_rbBoardCenterOrigin->SetValue( true ); break;
     }
 
-    m_config->Read( OPTKEY_STEP_UORG_UNITS, &m_OrgUnits, 0 );
-    m_config->Read( OPTKEY_STEP_UORG_X, &m_XOrg, 0.0 );
-    m_config->Read( OPTKEY_STEP_UORG_Y, &m_YOrg, 0.0 );
-    m_config->Read( OPTKEY_STEP_NOVIRT, &m_noVirtual );
+    m_OrgUnits  = cfg->m_ExportStep.origin_units;
+    m_XOrg      = cfg->m_ExportStep.origin_x;
+    m_YOrg      = cfg->m_ExportStep.origin_y;
+    m_noVirtual = cfg->m_ExportStep.no_virtual;
+
     m_cbRemoveVirtual->SetValue( m_noVirtual );
 
     m_STEP_OrgUnitChoice->SetSelection( m_OrgUnits );

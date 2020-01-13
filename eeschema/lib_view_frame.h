@@ -99,8 +99,11 @@ public:
     void ClickOnCmpList( wxCommandEvent& event );
     void OnSelectSymbol( wxCommandEvent& aEvent );
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+    WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
+
     void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
     /**

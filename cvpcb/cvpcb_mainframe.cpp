@@ -42,6 +42,7 @@
 #include <cvpcb_association.h>
 #include <cvpcb_id.h>
 #include <cvpcb_mainframe.h>
+#include <cvpcb_settings.h>
 #include <display_footprints_frame.h>
 #include <listboxes.h>
 #include <tools/cvpcb_actions.h>
@@ -50,12 +51,6 @@
 
 wxSize const FRAME_MIN_SIZE_DU( 400, 300 );
 wxSize const FRAME_DEFAULT_SIZE_DU( 500, 400 );
-
-///@{
-/// \ingroup config
-
-static const wxString FilterFootprintEntry = "FilterFootprint";
-///@}
 
 #define CVPCB_MAINFRAME_NAME wxT( "CvpcbFrame" )
 
@@ -376,7 +371,7 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
 }
 
 
-void CVPCB_MAINFRAME::LoadSettings( wxConfigBase* aCfg )
+void CVPCB_MAINFRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
@@ -385,15 +380,18 @@ void CVPCB_MAINFRAME::LoadSettings( wxConfigBase* aCfg )
     if( m_FrameSize == wxDefaultSize )
         m_FrameSize = frame_default;
 
-    aCfg->Read( FilterFootprintEntry, &m_filteringOptions, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
+    auto cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
+
+    m_filteringOptions = cfg->m_FilterFootprint;
 }
 
 
-void CVPCB_MAINFRAME::SaveSettings( wxConfigBase* aCfg )
+void CVPCB_MAINFRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    aCfg->Write( FilterFootprintEntry, m_filteringOptions );
+    auto cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
+    cfg->m_FilterFootprint = m_filteringOptions;
 }
 
 

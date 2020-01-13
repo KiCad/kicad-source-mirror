@@ -41,7 +41,8 @@ WS_PROXY_VIEW_ITEM::WS_PROXY_VIEW_ITEM( int aMils2IUscalefactor, const PAGE_INFO
         m_titleBlock( aTitleBlock ),
         m_pageInfo( aPageInfo ),
         m_sheetNumber( 1 ),
-        m_sheetCount( 1 )
+        m_sheetCount( 1 ),
+        m_colorLayer( LAYER_WORKSHEET )
 {
 }
 
@@ -110,7 +111,7 @@ void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
     WS_PAINTER   ws_painter( gal );
     WS_RENDER_SETTINGS* ws_settings =static_cast<WS_RENDER_SETTINGS*>( ws_painter.GetSettings() );
 
-    ws_settings->SetNormalColor( settings->GetLayerColor( LAYER_WORKSHEET ) );
+    ws_settings->SetNormalColor( settings->GetLayerColor( m_colorLayer ) );
     ws_settings->SetSelectedColor( settings->GetLayerColor( LAYER_SELECT_OVERLAY ) );
     ws_settings->SetBrightenedColor( settings->GetLayerColor( LAYER_BRIGHTENED ) );
 

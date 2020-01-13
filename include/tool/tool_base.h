@@ -30,7 +30,6 @@
 #include <base_struct.h>    // for KICAD_T
 
 #include <tool/tool_event.h>
-#include <tool/tool_settings.h>
 
 #include <functional>
 
@@ -145,7 +144,7 @@ public:
         return m_toolMgr;
     }
 
-    TOOL_SETTINGS& GetSettings();
+    //TOOL_SETTINGS& GetSettings();
 
     bool IsToolActive() const;
     
@@ -217,7 +216,7 @@ protected:
     ///> (eg. pcbnew.InteractiveSelection).
     std::string m_toolName;
     TOOL_MANAGER* m_toolMgr;
-    TOOL_SETTINGS m_toolSettings;
+    //TOOL_SETTINGS m_toolSettings;
 
 private:
     // hide the implementation to avoid spreading half of

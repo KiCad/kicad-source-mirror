@@ -39,6 +39,7 @@
 #include <widgets/text_ctrl_eval.h>
 #include <class_module.h>
 #include <footprint_edit_frame.h>
+#include <footprint_editor_settings.h>
 #include <dialog_edit_footprint_for_fp_editor.h>
 #include "filename_resolver.h"
 #include <pgm_base.h>
@@ -47,7 +48,6 @@
 
 #include <fp_lib_table.h>
 
-#define LibFootprintTextShownColumnsKey   wxT( "LibFootprintTextShownColumns" )
 
 int DIALOG_FOOTPRINT_FP_EDITOR::m_page = 0;     // remember the last open page during session
 
@@ -60,8 +60,6 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
     m_inSelect( false )
 {
-    m_config = Kiface().KifaceSettings();
-
     m_frame = aParent;
     m_footprint = aModule;
 
@@ -88,9 +86,7 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_modelsGrid->PushEventHandler( new GRID_TRICKS( m_modelsGrid ) );
 
     // Show/hide columns according to the user's preference
-    wxString shownColumns;
-    m_config->Read( LibFootprintTextShownColumnsKey, &shownColumns, wxT( "0 1 2 3 4 5 6" ) );
-    m_itemsGrid->ShowHideColumns( shownColumns );
+    m_itemsGrid->ShowHideColumns( m_frame->GetSettings()->m_FootprintTextShownColumns );
 
     // Set up the 3D models grid
     wxGridCellAttr* attr = new wxGridCellAttr;
@@ -158,7 +154,8 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
 
 DIALOG_FOOTPRINT_FP_EDITOR::~DIALOG_FOOTPRINT_FP_EDITOR()
 {
-    m_config->Write( LibFootprintTextShownColumnsKey, m_itemsGrid->GetShownColumns() );
+    m_frame->GetSettings()->m_FootprintTextShownColumns =
+            m_itemsGrid->GetShownColumns().ToStdString();
 
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_texts );

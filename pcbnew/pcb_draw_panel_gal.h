@@ -35,7 +35,6 @@ namespace KIGFX
     class WS_PROXY_VIEW_ITEM;
     class RATSNEST_VIEWITEM;
 }
-class COLORS_DESIGN_SETTINGS;
 
 class PCB_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
 {
@@ -61,12 +60,11 @@ public:
      */
     void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet );
 
+    // TODO(JE) Look at optimizing this out
     /**
-     * Function UseColorScheme
-     * Applies layer color settings.
-     * @param aSettings are the new settings.
+     * Updates the color settings in the painter and GAL
      */
-    void UseColorScheme( const COLORS_DESIGN_SETTINGS* aSettings );
+    void UpdateColors();
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::SetHighContrastLayer()
     virtual void SetHighContrastLayer( int aLayer ) override

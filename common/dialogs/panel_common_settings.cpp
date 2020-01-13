@@ -30,6 +30,8 @@
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <id.h>
+#include <settings/common_settings.h>
+#include <settings/settings_manager.h>
 
 static constexpr int dpi_scaling_precision = 1;
 static constexpr double dpi_scaling_increment = 0.5;
@@ -79,28 +81,20 @@ PANEL_COMMON_SETTINGS::~PANEL_COMMON_SETTINGS()
 
 bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
 {
-    wxConfigBase* commonSettings = Pgm().CommonSettings();
+    COMMON_SETTINGS* commonSettings = Pgm().GetCommonSettings();
 
-    int timevalue;
+    int timevalue = commonSettings->m_System.autosave_interval;
     wxString msg;
 
-    commonSettings->Read( AUTOSAVE_INTERVAL_KEY, &timevalue );
     msg << timevalue / 60;
     m_SaveTime->SetValue( msg );
 
-    int fileHistorySize;
-    commonSettings->Read( FILE_HISTORY_SIZE_KEY, &fileHistorySize, DEFAULT_FILE_HISTORY_SIZE );
-    m_fileHistorySize->SetValue( fileHistorySize );
+    m_fileHistorySize->SetValue( commonSettings->m_System.file_history_size );
 
-    int antialiasingMode;
-    commonSettings->Read( GAL_ANTIALIASING_MODE_KEY, &antialiasingMode, 0 );
-    m_antialiasing->SetSelection( antialiasingMode );
+    m_antialiasing->SetSelection( commonSettings->m_Graphics.opengl_aa_mode );
+    m_antialiasingFallback->SetSelection( commonSettings->m_Graphics.cairo_aa_mode );
 
-    commonSettings->Read( CAIRO_ANTIALIASING_MODE_KEY, &antialiasingMode, 0 );
-    m_antialiasingFallback->SetSelection( antialiasingMode );
-
-    int icon_scale_fourths;
-    commonSettings->Read( ICON_SCALE_KEY, &icon_scale_fourths );
+    int icon_scale_fourths = commonSettings->m_Appearance.icon_scale;
 
     if( icon_scale_fourths <= 0 )
     {
@@ -119,33 +113,16 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
         m_canvasScaleAuto->SetValue( dpi.GetCanvasIsAutoScaled() );
     }
 
-    bool option;
-    commonSettings->Read( USE_ICONS_IN_MENUS_KEY, &option );
-    m_checkBoxIconsInMenus->SetValue( option );
+    m_checkBoxIconsInMenus->SetValue( commonSettings->m_Appearance.use_icons_in_menus );
+    m_ZoomCenterOpt->SetValue( commonSettings->m_Input.center_on_zoom );
+    m_MousewheelPANOpt->SetValue( commonSettings->m_Input.mousewheel_pan );
+    m_AutoPANOpt->SetValue( commonSettings->m_Input.auto_pan );
 
-    commonSettings->Read( ENBL_ZOOM_NO_CENTER_KEY, &option );
-    m_ZoomCenterOpt->SetValue( !option );
+    m_PreferSelectToDrag->SetValue( commonSettings->m_Input.prefer_select_to_drag );
+    m_warpMouseOnMove->SetValue( commonSettings->m_Input.warp_mouse_on_move );
+    m_NonImmediateActions->SetValue( !commonSettings->m_Input.immediate_actions );
 
-    commonSettings->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option );
-    m_MousewheelPANOpt->SetValue( option );
-
-    commonSettings->Read( ENBL_AUTO_PAN_KEY, &option );
-    m_AutoPANOpt->SetValue( option );
-
-    if( !commonSettings->Read( PREFER_SELECT_TO_DRAG_KEY, &option ) )
-    {
-        // Legacy versions stored the property only for PCBNew, so see if we have it there
-        std::unique_ptr<wxConfigBase> pcbSettings = GetNewConfig( wxT( "pcbnew" ) );
-        pcbSettings->Read( "DragSelects", &option, true );
-    }
-    m_PreferSelectToDrag->SetValue( option );
-
-    commonSettings->Read( WARP_MOUSE_ON_MOVE_KEY, &option );
-    m_warpMouseOnMove->SetValue( option );
-
-    commonSettings->Read( IMMEDIATE_ACTIONS_KEY, &option );
-    m_NonImmediateActions->SetValue( !option );
-
+    // TODO(JE) Move these into COMMON_SETTINGS probably
     m_textEditorPath->SetValue( Pgm().GetEditorName( false ) );
     m_defaultPDFViewer->SetValue( Pgm().UseSystemPdfBrowser() );
     m_otherPDFViewer->SetValue( !Pgm().UseSystemPdfBrowser() );
@@ -157,37 +134,38 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
 
 bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 {
-    wxConfigBase* commonSettings = Pgm().CommonSettings();
+    COMMON_SETTINGS* commonSettings = Pgm().GetCommonSettings();
 
-    commonSettings->Write( AUTOSAVE_INTERVAL_KEY, m_SaveTime->GetValue() * 60 );
+    commonSettings->m_System.autosave_interval = m_SaveTime->GetValue() * 60;
+    commonSettings->m_System.file_history_size = m_fileHistorySize->GetValue();
 
-    commonSettings->Write( FILE_HISTORY_SIZE_KEY, m_fileHistorySize->GetValue() );
-
-    commonSettings->Write( GAL_ANTIALIASING_MODE_KEY, m_antialiasing->GetSelection() );
-
-    commonSettings->Write( CAIRO_ANTIALIASING_MODE_KEY, m_antialiasingFallback->GetSelection() );
+    commonSettings->m_Graphics.opengl_aa_mode = m_antialiasing->GetSelection();
+    commonSettings->m_Graphics.cairo_aa_mode = m_antialiasingFallback->GetSelection();
 
     const int scale_fourths = m_iconScaleAuto->GetValue() ? -1 : m_iconScaleSlider->GetValue() / 25;
-    commonSettings->Write( ICON_SCALE_KEY, scale_fourths );
+    commonSettings->m_Appearance.icon_scale = scale_fourths;
 
     {
         DPI_SCALING dpi( commonSettings, this );
         dpi.SetDpiConfig( m_canvasScaleAuto->GetValue(), m_canvasScaleCtrl->GetValue() );
     }
 
-    commonSettings->Write( USE_ICONS_IN_MENUS_KEY, m_checkBoxIconsInMenus->GetValue() );
-    commonSettings->Write( ENBL_ZOOM_NO_CENTER_KEY, !m_ZoomCenterOpt->GetValue() );
-    commonSettings->Write( ENBL_MOUSEWHEEL_PAN_KEY, m_MousewheelPANOpt->GetValue() );
-    commonSettings->Write( ENBL_AUTO_PAN_KEY, m_AutoPANOpt->GetValue() );
-    commonSettings->Write( PREFER_SELECT_TO_DRAG_KEY, m_PreferSelectToDrag->GetValue() );
-    commonSettings->Write( WARP_MOUSE_ON_MOVE_KEY, m_warpMouseOnMove->GetValue() );
-    commonSettings->Write( IMMEDIATE_ACTIONS_KEY, !m_NonImmediateActions->GetValue() );
+    commonSettings->m_Appearance.use_icons_in_menus = m_checkBoxIconsInMenus->GetValue();
+
+    commonSettings->m_Input.auto_pan = m_AutoPANOpt->GetValue();
+    commonSettings->m_Input.center_on_zoom = m_ZoomCenterOpt->GetValue();
+    commonSettings->m_Input.immediate_actions = !m_NonImmediateActions->GetValue();
+    commonSettings->m_Input.mousewheel_pan = m_MousewheelPANOpt->GetValue();
+    commonSettings->m_Input.prefer_select_to_drag = m_PreferSelectToDrag->GetValue();
+    commonSettings->m_Input.warp_mouse_on_move = m_warpMouseOnMove->GetValue();
 
     Pgm().SetEditorName( m_textEditorPath->GetValue() );
 
     Pgm().SetPdfBrowserName( m_PDFViewerPath->GetValue() );
     Pgm().ForceSystemPdfBrowser( m_defaultPDFViewer->GetValue() );
     Pgm().WritePdfBrowserInfos();
+
+    Pgm().GetSettingsManager().Save( commonSettings );
 
     return true;
 }

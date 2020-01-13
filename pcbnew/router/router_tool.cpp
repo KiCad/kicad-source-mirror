@@ -428,13 +428,11 @@ private:
 
 ROUTER_TOOL::~ROUTER_TOOL()
 {
-    m_savedSettings.Save( GetSettings() );
 }
 
 
 bool ROUTER_TOOL::Init()
 {
-    m_savedSettings.Load( GetSettings() );
     return true;
 }
 
@@ -857,8 +855,7 @@ int ROUTER_TOOL::SettingsDialog( const TOOL_EVENT& aEvent )
 {
     DIALOG_PNS_SETTINGS settingsDlg( frame(), m_router->Settings() );
 
-    if( settingsDlg.ShowModal() == wxID_OK )
-        m_savedSettings = m_router->Settings();
+    settingsDlg.ShowModal();
 
     return 0;
 }
@@ -995,7 +992,6 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     SetContextMenu( nullptr );
 
     // Store routing settings till the next invocation
-    m_savedSettings = m_router->Settings();
     m_savedSizes = m_router->Sizes();
 
     return 0;

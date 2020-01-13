@@ -42,7 +42,6 @@ DIALOG_CONFIG_EQUFILES::DIALOG_CONFIG_EQUFILES( CVPCB_MAINFRAME* aParent ) :
     DIALOG_CONFIG_EQUFILES_BASE( aParent )
 {
     m_Parent = aParent;
-    m_Config = Pgm().CommonSettings();
 
     PROJECT&    prj = Prj();
     SetTitle( wxString::Format( _( "Project file: \"%s\"" ),

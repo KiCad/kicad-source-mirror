@@ -43,6 +43,7 @@
 #include <wildcards_and_files_ext.h>
 #include <project_rescue.h>
 #include <eeschema_config.h>
+#include <eeschema_settings.h>
 #include <sch_legacy_plugin.h>
 #include <sch_eagle_plugin.h>
 #include <symbol_lib_table.h>
@@ -382,11 +383,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             // Check to see whether some old library parts need to be rescued
             // Only do this if RescueNeverShow was not set.
-            wxConfigBase *config = Kiface().KifaceSettings();
-            bool rescueNeverShow = false;
-            config->Read( RescueNeverShowEntry, &rescueNeverShow, false );
+            auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
-            if( !rescueNeverShow )
+            if( !cfg->m_RescueNeverShow )
                 RescueSymbolLibTableProject( false );
         }
 

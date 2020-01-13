@@ -31,6 +31,7 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <bitmaps.h>
 #include <build_version.h>
@@ -46,12 +47,6 @@
 #include <dialog_gen_footprint_position_file_base.h>
 #include <export_footprints_placefile.h>
 #include "gerber_placefile_writer.h"
-
-
-#define PLACEFILE_UNITS_KEY  wxT( "PlaceFileUnits" )
-#define PLACEFILE_OPT_KEY    wxT( "PlaceFileOpts" )
-#define PLACEFILE_FORMAT_KEY wxT( "PlaceFileFormat" )
-#define PLACEFILE_INCLUDE_BRD_EDGE_KEY wxT( "PlaceFileIncludeBrdEdge" )
 
 
 /**
@@ -84,7 +79,6 @@ public:
 private:
     PCB_EDIT_FRAME* m_parent;
     PCB_PLOT_PARAMS m_plotOpts;
-    wxConfigBase* m_config;
     REPORTER* m_reporter;
 
     static int m_unitsOpt;
@@ -159,11 +153,12 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 {
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
-    m_config = Kiface().KifaceSettings();
-    m_config->Read( PLACEFILE_UNITS_KEY, &m_unitsOpt, 1 );
-    m_config->Read( PLACEFILE_OPT_KEY, &m_fileOpt, 0 );
-    m_config->Read( PLACEFILE_FORMAT_KEY, &m_fileFormat, 0 );
-    m_config->Read( PLACEFILE_INCLUDE_BRD_EDGE_KEY, &m_includeBoardEdge, false );
+    auto cfg = m_parent->GetSettings();
+
+    m_units            = static_cast<EDA_UNITS>( cfg->m_PlaceFile.units );
+    m_fileOpt          = cfg->m_PlaceFile.file_options;
+    m_fileFormat       = cfg->m_PlaceFile.file_format;
+    m_includeBoardEdge = cfg->m_PlaceFile.include_board_edge;
 
     // Output directory
     m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
@@ -216,10 +211,12 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
     m_fileFormat = m_rbFormat->GetSelection();
     m_includeBoardEdge = m_cbIncludeBoardEdge->GetValue();
 
-    m_config->Write( PLACEFILE_UNITS_KEY, m_unitsOpt );
-    m_config->Write( PLACEFILE_OPT_KEY, m_fileOpt );
-    m_config->Write( PLACEFILE_FORMAT_KEY, m_fileFormat );
-    m_config->Write( PLACEFILE_INCLUDE_BRD_EDGE_KEY, m_includeBoardEdge );
+    auto cfg = m_parent->GetSettings();
+
+    cfg->m_PlaceFile.units              = static_cast<int>( m_units );
+    cfg->m_PlaceFile.file_options       = m_fileOpt;
+    cfg->m_PlaceFile.file_format        = m_fileFormat;
+    cfg->m_PlaceFile.include_board_edge = m_includeBoardEdge;
 
     // Set output directory and replace backslashes with forward ones
     // (Keep unix convention in cfg files)

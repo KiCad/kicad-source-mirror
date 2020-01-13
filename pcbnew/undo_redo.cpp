@@ -43,6 +43,7 @@ using namespace std::placeholders;
 #include <class_edge_mod.h>
 #include <origin_viewitem.h>
 #include <connectivity/connectivity_data.h>
+#include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <tools/selection_tool.h>
@@ -521,7 +522,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         case UR_FLIPPED:
         {
             BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
-            item->Flip( aList->m_TransformPoint, m_configSettings.m_FlipLeftRight );
+            item->Flip( aList->m_TransformPoint, m_Settings->m_FlipLeftRight );
             view->Update( item, KIGFX::LAYERS );
             connectivity->Update( item );
         }

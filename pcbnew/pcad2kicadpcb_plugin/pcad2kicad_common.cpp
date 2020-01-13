@@ -28,7 +28,6 @@
  */
 
 #include <wx/wx.h>
-#include <wx/config.h>
 #include <wx/regex.h>
 
 #include <common.h>

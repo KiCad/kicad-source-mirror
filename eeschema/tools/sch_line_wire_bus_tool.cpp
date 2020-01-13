@@ -40,14 +40,14 @@
 #include <utility>
 #include <vector>
 
-#include <bitmaps.h>
-#include <advanced_config.h>
 #include <base_screen.h>
 #include <base_struct.h>
+#include <bitmaps.h>
 #include <core/typeinfo.h>
 #include <eda_text.h>
 #include <layers_id_colors_and_visibility.h>
 #include <math/vector2d.h>
+#include <advanced_config.h>
 #include <tool/actions.h>
 #include <tool/conditional_menu.h>
 #include <tool/selection.h>

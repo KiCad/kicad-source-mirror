@@ -29,6 +29,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <eda_dde.h>
+#include <eeschema_settings.h>
 #include <sch_edit_frame.h>
 #include <lib_edit_frame.h>
 #include <lib_view_frame.h>
@@ -40,6 +41,7 @@
 #include <dialogs/panel_sym_lib_table.h>
 #include <kiway.h>
 #include <sim/sim_plot_frame.h>
+#include <settings/settings_manager.h>
 #include <sexpr/sexpr.h>
 #include <sexpr/sexpr_parser.h>
 
@@ -162,6 +164,7 @@ PGM_BASE& Pgm()
 }
 
 
+// TODO(JE) Get rid of this on a second pass through eeschema
 static COLOR4D s_layerColor[LAYER_ID_COUNT];
 
 COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
@@ -171,70 +174,13 @@ COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
     return s_layerColor[layer];
 }
 
-void SetLayerColor( COLOR4D aColor, SCH_LAYER_ID aLayer )
+
+void OnColorsChanged()
 {
-    // Do not allow non-background layers to be completely white.
-    // This ensures the BW printing recognizes that the colors should be printed black.
-    if( aColor == COLOR4D::WHITE && aLayer != LAYER_SCHEMATIC_BACKGROUND )
-        aColor.Darken( 0.01 );
+    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
 
-    unsigned layer = aLayer;
-    wxASSERT( layer < arrayDim( s_layerColor ) );
-    s_layerColor[layer] = aColor;
-}
-
-
-static std::vector<PARAM_CFG*>& cfg_params()
-{
-    static std::vector<PARAM_CFG*> ca;
-
-    if( !ca.size() )
-    {
-        // These are KIFACE specific, they need to be loaded once when the
-        // eeschema KIFACE comes in.
-
-#define CLR(x, y, z)\
-    ca.push_back( new PARAM_CFG_SETCOLOR( true, wxT( x ),\
-                                          &s_layerColor[( y )], z ) );
-
-        CLR( "Color4DWireEx",             LAYER_WIRE,                 COLOR4D( GREEN ) )
-        CLR( "Color4DBusEx",              LAYER_BUS,                  COLOR4D( BLUE ) )
-        CLR( "Color4DConnEx",             LAYER_JUNCTION,             COLOR4D( GREEN ) )
-        CLR( "Color4DLLabelEx",           LAYER_LOCLABEL,             COLOR4D( BLACK ) )
-        CLR( "Color4DHLabelEx",           LAYER_HIERLABEL,            COLOR4D( BROWN ) )
-        CLR( "Color4DGLabelEx",           LAYER_GLOBLABEL,            COLOR4D( RED ) )
-        CLR( "Color4DPinNumEx",           LAYER_PINNUM,               COLOR4D( RED ) )
-        CLR( "Color4DPinNameEx",          LAYER_PINNAM,               COLOR4D( CYAN ) )
-        CLR( "Color4DFieldEx",            LAYER_FIELDS,               COLOR4D( MAGENTA ) )
-        CLR( "Color4DReferenceEx",        LAYER_REFERENCEPART,        COLOR4D( CYAN ) )
-        CLR( "Color4DValueEx",            LAYER_VALUEPART,            COLOR4D( CYAN ) )
-        CLR( "Color4DNoteEx",             LAYER_NOTES,                COLOR4D( LIGHTBLUE ) )
-        CLR( "Color4DBodyEx",             LAYER_DEVICE,               COLOR4D( RED ) )
-        CLR( "Color4DBodyBgEx",           LAYER_DEVICE_BACKGROUND,    COLOR4D( LIGHTYELLOW ) )
-        CLR( "Color4DNetNameEx",          LAYER_NETNAM,               COLOR4D( DARKGRAY ) )
-        CLR( "Color4DPinEx",              LAYER_PIN,                  COLOR4D( RED ) )
-        CLR( "Color4DSheetEx",            LAYER_SHEET,                COLOR4D( MAGENTA ) )
-        CLR( "Color4DSheetFileNameEx",    LAYER_SHEETFILENAME,        COLOR4D( BROWN ) )
-        CLR( "Color4DSheetNameEx",        LAYER_SHEETNAME,            COLOR4D( CYAN ) )
-        CLR( "Color4DSheetLabelEx",       LAYER_SHEETLABEL,           COLOR4D( BROWN ) )
-        CLR( "Color4DNoConnectEx",        LAYER_NOCONNECT,            COLOR4D( BLUE ) )
-        CLR( "Color4DErcWEx",             LAYER_ERC_WARN,             COLOR4D( GREEN ).WithAlpha(0.8 ) )
-        CLR( "Color4DErcEEx",             LAYER_ERC_ERR,              COLOR4D( RED ).WithAlpha(0.8 ) )
-        CLR( "Color4DGridEx",             LAYER_SCHEMATIC_GRID,       COLOR4D( DARKGRAY ) )
-        CLR( "Color4DBgCanvasEx",         LAYER_SCHEMATIC_BACKGROUND, COLOR4D( WHITE ) )
-        CLR( "Color4DCursorEx",           LAYER_SCHEMATIC_CURSOR,     COLOR4D( BLACK ) )
-        CLR( "Color4DBrightenedEx",       LAYER_BRIGHTENED,           COLOR4D( PUREMAGENTA ) )
-        CLR( "Color4DHiddenEx",           LAYER_HIDDEN,               COLOR4D( LIGHTGRAY ) )
-        CLR( "Color4DWorksheetEx",        LAYER_WORKSHEET,            COLOR4D( RED ) )
-// Macs look better with a lighter shadow
-#ifdef __WXMAC__
-        CLR( "Color4DShadowEx",           LAYER_SELECTION_SHADOWS,    COLOR4D( .78, .92, 1.0, 0.8 ) )
-#else
-        CLR( "Color4DShadowEx",           LAYER_SELECTION_SHADOWS,    COLOR4D( .4, .7, 1.0, 0.8 ) )
-#endif
-    }
-
-    return ca;
+    for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
+        s_layerColor[layer] = cs->GetColor( layer );
 }
 
 
@@ -242,17 +188,12 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
     // This is process-level-initialization, not project-level-initialization of the DSO.
     // Do nothing in here pertinent to a project!
+    InitSettings( new EESCHEMA_SETTINGS );
+    aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
 
     start_common( aCtlBits );
 
-    // Give a default colour for all layers (actual color will be initialized by config)
-    for( SCH_LAYER_ID ii = SCH_LAYER_ID_START; ii < SCH_LAYER_ID_END; ++ii )
-        SetLayerColor( COLOR4D( DARKGRAY ), ii );
-
-    SetLayerColor( COLOR4D::WHITE, LAYER_SCHEMATIC_BACKGROUND );
-    SetLayerColor( COLOR4D::BLACK, LAYER_SCHEMATIC_CURSOR );
-
-    wxConfigLoadSetups( KifaceSettings(), cfg_params() );
+    OnColorsChanged();
 
     wxFileName fn = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
 
@@ -292,7 +233,13 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
 void IFACE::OnKifaceEnd()
 {
-    wxConfigSaveSetups( KifaceSettings(), cfg_params() );
+    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
+
+    for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
+    {
+        cs->SetColor( layer, GetLayerColor( layer ) );
+    }
+
     end_common();
 }
 

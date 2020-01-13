@@ -26,6 +26,7 @@
 #include <transform.h>
 
 #include <sch_edit_frame.h>
+#include <settings/settings_manager.h>
 
 // The main sheet of the project
 SCH_SHEET* g_RootSheet = nullptr;
@@ -128,15 +129,11 @@ COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
     return s_layerColor[layer];
 }
 
-void SetLayerColor( COLOR4D aColor, SCH_LAYER_ID aLayer )
-{
-    // Do not allow non-background layers to be completely white.
-    // This ensures the BW printing recognizes that the colors should be
-    // printed black.
-    if( aColor == COLOR4D::WHITE && aLayer != LAYER_SCHEMATIC_BACKGROUND )
-        aColor.Darken( 0.01 );
 
-    unsigned layer = aLayer;
-    wxASSERT( layer < arrayDim( s_layerColor ) );
-    s_layerColor[layer] = aColor;
+void OnColorsChanged()
+{
+    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
+
+    for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
+        s_layerColor[layer] = cs->GetColor( layer );
 }

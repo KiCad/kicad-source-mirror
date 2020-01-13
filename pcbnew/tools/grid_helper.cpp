@@ -40,6 +40,7 @@ using namespace std::placeholders;
 #include <math/util.h>      // for KiROUND
 #include <math/vector2d.h>
 #include <painter.h>
+#include <pcbnew_settings.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 
@@ -366,7 +367,8 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
             for( auto pad : mod->Pads() )
             {
                 // Getting pads from the module requires re-checking that the pad is shown
-                if( ( aFrom || m_frame->Settings().m_MagneticPads == CAPTURE_ALWAYS )
+                if( ( aFrom ||
+                      m_frame->Settings().m_MagneticPads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
                         && pad->GetBoundingBox().Contains( wxPoint( aRefPos.x, aRefPos.y ) )
                         && view->IsVisible( pad )
                         && ( !isHighContrast || activeLayers.count( pad->GetLayer() ) )
@@ -384,7 +386,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
 
         case PCB_PAD_T:
         {
-            if( aFrom || m_frame->Settings().m_MagneticPads == CAPTURE_ALWAYS )
+            if( aFrom || m_frame->Settings().m_MagneticPads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
             {
                 D_PAD* pad = static_cast<D_PAD*>( aItem );
                 addAnchor( pad->GetPosition(), CORNER | SNAPPABLE, pad );
@@ -459,7 +461,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
 
         case PCB_TRACE_T:
         {
-            if( aFrom || m_frame->Settings().m_MagneticTracks == CAPTURE_ALWAYS )
+            if( aFrom || m_frame->Settings().m_MagneticTracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
             {
                 TRACK* track = static_cast<TRACK*>( aItem );
                 VECTOR2I start = track->GetStart();
@@ -481,7 +483,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
 
         case PCB_VIA_T:
         {
-            if( aFrom || m_frame->Settings().m_MagneticTracks == CAPTURE_ALWAYS )
+            if( aFrom || m_frame->Settings().m_MagneticTracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
                 addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem );
 
             break;

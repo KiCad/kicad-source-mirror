@@ -40,6 +40,9 @@
 #include <bitmaps.h>
 #include <view/view.h>
 #include <math/util.h>      // for KiROUND
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 
 /**
  * Function ShowClearance
@@ -393,7 +396,7 @@ void VIA::SanitizeLayers()
 void TRACK::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
     BOARD* brd = GetBoard();
-    auto   color = aFrame->Settings().Colors().GetLayerColor( m_Layer );
+    auto   color = Pgm().GetSettingsManager().GetColorSettings()->GetColor( m_Layer );
 
     if( !brd->IsLayerVisible( m_Layer ) || !brd->IsElementVisible( LAYER_TRACKS ) )
         return;
@@ -463,7 +466,7 @@ void VIA::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
     PCB_SCREEN* screen     = aFrame->GetScreen();
     auto&       displ_opts = aFrame->GetDisplayOptions();
     BOARD*      brd        = GetBoard();
-    COLOR4D     color      = aFrame->Settings().Colors().GetItemColor(
+    COLOR4D     color      = Pgm().GetSettingsManager().GetColorSettings()->GetColor(
             LAYER_VIAS + static_cast<int>( GetViaType() ) );
 
     if( displ_opts.m_DisplayViaFill == FILLED )

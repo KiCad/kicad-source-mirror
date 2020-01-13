@@ -50,8 +50,6 @@ protected:
 public:
     ~FOOTPRINT_VIEWER_FRAME();
 
-    PCB_GENERAL_SETTINGS& GetConfigSettings() { return m_configSettings; }
-
     /// Updates the GAL with display settings changes
     void ApplyDisplaySettingsToGAL();
 
@@ -128,8 +126,11 @@ private:
 
     void InstallDisplayOptions( wxCommandEvent& aEvent );
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+    WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
+
     void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
     /**

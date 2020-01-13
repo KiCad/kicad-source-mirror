@@ -36,7 +36,10 @@
 #include <DCodeSelectionbox.h>
 #include <gerbview_layer_widget.h>
 #include <gerbview_draw_panel_gal.h>
+#include <gerbview_settings.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <settings/common_settings.h>
+#include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_dispatcher.h>
@@ -49,16 +52,11 @@
 #include <view/view.h>
 #include <gerbview_painter.h>
 #include <geometry/shape_poly_set.h>
+#include <widgets/paged_dialog.h>
+#include <dialogs/panel_gerbview_settings.h>
+#include <dialogs/panel_gerbview_display_options.h>
+#include <panel_hotkeys_editor.h>
 
-
-// Config keywords
-static const wxString   cfgShowPageSizeOption( wxT( "PageSizeOpt" ) );
-static const wxString   cfgShowDCodes( wxT( "ShowDCodesOpt" ) );
-static const wxString   cfgShowNegativeObjects( wxT( "ShowNegativeObjectsOpt" ) );
-static const wxString   cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBlock" ) );
-
-// Colors for layers and items
-COLORS_DESIGN_SETTINGS g_ColorsSettings( FRAME_GERBER );
 
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ),
@@ -67,7 +65,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_drillFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_DRILL_FILE1 ),
     m_jobFileHistory( DEFAULT_FILE_HISTORY_SIZE, ID_GERBVIEW_JOB_FILE1 )
 {
-    m_colorsSettings = &g_ColorsSettings;
     m_gerberLayout = NULL;
     m_zoomLevelCoeff = ZOOM_FACTOR( 110 );   // Adjusted to roughly displays zoom level = 1
                                              // when the screen shows a 1:1 image
@@ -88,9 +85,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
                             // some methods in code and avoid link errors
 
-    int fileHistorySize;
-    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &fileHistorySize,
-                                  DEFAULT_FILE_HISTORY_SIZE );
+    int fileHistorySize = Pgm().GetCommonSettings()->m_System.file_history_size;
     m_drillFileHistory.SetMaxFiles( fileHistorySize );
     m_zipFileHistory.SetMaxFiles( fileHistorySize );
     m_jobFileHistory.SetMaxFiles( fileHistorySize );
@@ -312,77 +307,44 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 }
 
 
-void GERBVIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
+void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    // was: wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
-    wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
+    GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg );
 
-    bool tmp;
-    aCfg->Read( cfgShowBorderAndTitleBlock, &tmp, false );
-    SetElementVisibility( LAYER_WORKSHEET, tmp );
+    SetElementVisibility( LAYER_WORKSHEET, cfg->m_Appearance.show_border_and_titleblock );
 
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
-    wxString pageType;
-
-    aCfg->Read( cfgShowPageSizeOption, &pageType, wxT( "GERBER" ) );
-    pageInfo.SetType( pageType );
+    pageInfo.SetType( cfg->m_Appearance.page_type );
     SetPageSettings( pageInfo );
 
-    aCfg->Read( cfgShowDCodes, &tmp, true );
-    SetElementVisibility( LAYER_DCODES, tmp );
-    aCfg->Read( cfgShowNegativeObjects, &tmp, false );
-    SetElementVisibility( LAYER_NEGATIVE_OBJECTS, tmp );
+    SetElementVisibility( LAYER_DCODES, cfg->m_Appearance.show_dcodes );
+    SetElementVisibility( LAYER_NEGATIVE_OBJECTS, cfg->m_Appearance.show_negative_objects );
 
-    // because we have more than one file history, we must read this one
-    // using a specific path
-    aCfg->SetPath( wxT( "drl_files" ) );
-    m_drillFileHistory.Load( *aCfg );
-    aCfg->SetPath( wxT( ".." ) );
-
-    // because we have more than one file history, we must read this one
-    // using a specific path
-    aCfg->SetPath( wxT( "zip_files" ) );
-    m_zipFileHistory.Load( *aCfg );
-    aCfg->SetPath( wxT( ".." ) );
-
-    // because we have more than one file history, we must read this one
-    // using a specific path
-    aCfg->SetPath( "job_files" );
-    m_jobFileHistory.Load( *aCfg );
-    aCfg->SetPath( wxT( ".." ) );
+    m_drillFileHistory.Load( cfg->m_DrillFileHistory );
+    m_zipFileHistory.Load( cfg->m_ZipFileHistory );
+    m_jobFileHistory.Load( cfg->m_JobFileHistory );
 }
 
 
-void GERBVIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
+void GERBVIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    // was: wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
-    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
+    GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg );
 
-    aCfg->Write( cfgShowPageSizeOption, GetPageSettings().GetType() );
-    aCfg->Write( cfgShowBorderAndTitleBlock, m_showBorderAndTitleBlock );
-    aCfg->Write( cfgShowDCodes, IsElementVisible( LAYER_DCODES ) );
-    aCfg->Write( cfgShowNegativeObjects, IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
+    cfg->m_Appearance.page_type = GetPageSettings().GetType();
+    cfg->m_Appearance.show_border_and_titleblock = m_showBorderAndTitleBlock;
+    cfg->m_Appearance.show_dcodes = IsElementVisible( LAYER_DCODES );
+    cfg->m_Appearance.show_negative_objects = IsElementVisible( LAYER_NEGATIVE_OBJECTS );
 
-    // Save the drill file history list.
-    // Because we have  more than one file history, we must save this one
-    // in a specific path
-    aCfg->SetPath( wxT( "drl_files" ) );
-    m_drillFileHistory.Save( *aCfg );
-    aCfg->SetPath( wxT( ".." ) );
+    m_drillFileHistory.Save( &cfg->m_DrillFileHistory );
+    m_zipFileHistory.Save( &cfg->m_ZipFileHistory );
+    m_jobFileHistory.Save( &cfg->m_JobFileHistory );
 
-    // Save the zip file history list.
-    aCfg->SetPath( wxT( "zip_files" ) );
-    m_zipFileHistory.Save( *aCfg );
-    aCfg->SetPath( wxT( ".." ) );
-
-    // Save the job file history list.
-    aCfg->SetPath( "job_files" );
-    m_jobFileHistory.Save( *aCfg );
-    aCfg->SetPath( ".." );
+    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
+    Pgm().GetSettingsManager().SaveColorSettings( cs, "gerbview" );
 }
 
 
@@ -438,8 +400,10 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
         break;
     }
 
-    case LAYER_WORKSHEET:
+    case LAYER_GERBVIEW_WORKSHEET:
         m_showBorderAndTitleBlock = aNewState;
+        // NOTE: LAYER_WORKSHEET always used for visibility, but the layer manager passes
+        // LAYER_GERBVIEW_WORKSHEET because of independent color control
         GetCanvas()->GetView()->SetLayerVisible( LAYER_WORKSHEET, aNewState );
         break;
 
@@ -473,8 +437,7 @@ void GERBVIEW_FRAME::applyDisplaySettingsToGAL()
     auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
     KIGFX::GERBVIEW_RENDER_SETTINGS* settings = painter->GetSettings();
     settings->LoadDisplayOptions( m_DisplayOptions );
-
-    settings->ImportLegacyColors( m_colorsSettings );
+    settings->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
 
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
@@ -746,11 +709,11 @@ bool GERBVIEW_FRAME::IsElementVisible( int aLayerID ) const
 {
     switch( aLayerID )
     {
-    case LAYER_DCODES:           return m_DisplayOptions.m_DisplayDCodes;
-    case LAYER_NEGATIVE_OBJECTS: return m_DisplayOptions.m_DisplayNegativeObjects;
-    case LAYER_GERBVIEW_GRID:    return IsGridVisible();
-    case LAYER_WORKSHEET:        return m_showBorderAndTitleBlock;
-    case LAYER_PCB_BACKGROUND:   return true;
+    case LAYER_DCODES:              return m_DisplayOptions.m_DisplayDCodes;
+    case LAYER_NEGATIVE_OBJECTS:    return m_DisplayOptions.m_DisplayNegativeObjects;
+    case LAYER_GERBVIEW_GRID:       return IsGridVisible();
+    case LAYER_WORKSHEET:           return m_showBorderAndTitleBlock;
+    case LAYER_GERBVIEW_BACKGROUND: return true;
 
     default:
         wxLogDebug( wxT( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d" ), aLayerID );
@@ -804,9 +767,9 @@ COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( int aLayerID )
     {
     case LAYER_NEGATIVE_OBJECTS:
     case LAYER_DCODES:
-    case LAYER_WORKSHEET:
-    case LAYER_PCB_BACKGROUND:
-        color = m_colorsSettings->GetItemColor( aLayerID );
+    case LAYER_GERBVIEW_WORKSHEET:
+    case LAYER_GERBVIEW_BACKGROUND:
+        color = Pgm().GetSettingsManager().GetColorSettings()->GetColor( aLayerID );
         break;
 
     case LAYER_GERBVIEW_GRID:
@@ -830,22 +793,24 @@ void GERBVIEW_FRAME::SetGridVisibility( bool aVisible )
 
 void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, COLOR4D aColor )
 {
+    COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
+
     switch( aLayerID )
     {
     case LAYER_NEGATIVE_OBJECTS:
     case LAYER_DCODES:
-    case LAYER_WORKSHEET:
-        m_colorsSettings->SetItemColor( aLayerID, aColor );
+    case LAYER_GERBVIEW_WORKSHEET:
+        settings->SetColor( aLayerID, aColor );
         break;
 
     case LAYER_GERBVIEW_GRID:
         SetGridColor( aColor );
-        m_colorsSettings->SetItemColor( aLayerID, aColor );
+        settings->SetColor( aLayerID, aColor );
         break;
 
-    case LAYER_PCB_BACKGROUND:
+    case LAYER_GERBVIEW_BACKGROUND:
         SetDrawBgColor( aColor );
-        m_colorsSettings->SetItemColor( aLayerID, aColor );
+        settings->SetColor( aLayerID, aColor );
         break;
 
     default:
@@ -865,13 +830,13 @@ COLOR4D GERBVIEW_FRAME::GetNegativeItemsColor()
 
 COLOR4D GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
 {
-    return m_colorsSettings->GetLayerColor( aLayer );
+    return Pgm().GetSettingsManager().GetColorSettings()->GetColor( aLayer );
 }
 
 
 void GERBVIEW_FRAME::SetLayerColor( int aLayer, COLOR4D aColor )
 {
-    m_colorsSettings->SetLayerColor( aLayer, aColor );
+    Pgm().GetSettingsManager().GetColorSettings()->SetColor( aLayer, aColor );
     applyDisplaySettingsToGAL();
 }
 
@@ -919,7 +884,9 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
         worksheet->SetSheetCount( 1 );
     }
 
-    // PCB_DRAW_PANEL_GAL takes ownership of the worksheet
+    worksheet->SetColorLayer( LAYER_GERBVIEW_WORKSHEET );
+
+    // Draw panel takes ownership of the worksheet
     drawPanel->SetWorksheet( worksheet );
 }
 
@@ -1153,6 +1120,20 @@ void GERBVIEW_FRAME::ActivateGalCanvas()
     // Update the checked state of tools
     SyncToolbars();
 }
+
+
+void GERBVIEW_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
+                                         PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
+{
+    wxTreebook* book = aParent->GetTreebook();
+
+    book->AddPage( new wxPanel( book ), _( "Gerbview" ) );
+    book->AddSubPage( new PANEL_GERBVIEW_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_GERBVIEW_SETTINGS( this, book ), _( "Editing Options" ) );
+
+    aHotkeysPanel->AddHotKeys( GetToolManager() );
+}
+
 
 
 void GERBVIEW_FRAME::setupTools()

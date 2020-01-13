@@ -118,6 +118,7 @@ set( EESCHEMA_WIDGETS
 set ( EESCHEMA_LIBEDIT_SRCS
     libedit/libedit.cpp
     libedit/libedit_plot_component.cpp
+    libedit/libedit_settings.cpp
     libedit/libedit_undo_redo.cpp
     libedit/lib_edit_frame.cpp
     libedit/menubar_libedit.cpp
@@ -147,6 +148,7 @@ set( EESCHEMA_SRCS
     drc_erc_item.cpp
     edit_label.cpp
     eeschema_config.cpp
+    eeschema_settings.cpp
     erc.cpp
     fields_grid_table.cpp
     files-io.cpp

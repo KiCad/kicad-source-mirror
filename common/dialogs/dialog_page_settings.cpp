@@ -44,24 +44,10 @@
 #ifdef EESCHEMA
 #include <general.h>
 #include <sch_screen.h>
+#include <eeschema_settings.h>
 #endif
 
 #define MAX_PAGE_EXAMPLE_SIZE 200
-
-
-#define KEY_EXPORT_REVISION      wxT( "PageSettingsExportRevision" )
-#define KEY_EXPORT_DATE          wxT( "PageSettingsExportDate" )
-#define KEY_EXPORT_TITLE         wxT( "PageSettingsExportTitle" )
-#define KEY_EXPORT_COMPANY       wxT( "PageSettingsExportCompany" )
-#define KEY_EXPORT_COMMENT1      wxT( "PageSettingsExportComment1" )
-#define KEY_EXPORT_COMMENT2      wxT( "PageSettingsExportComment2" )
-#define KEY_EXPORT_COMMENT3      wxT( "PageSettingsExportComment3" )
-#define KEY_EXPORT_COMMENT4      wxT( "PageSettingsExportComment4" )
-#define KEY_EXPORT_COMMENT5      wxT( "PageSettingsExportComment5" )
-#define KEY_EXPORT_COMMENT6      wxT( "PageSettingsExportComment6" )
-#define KEY_EXPORT_COMMENT7      wxT( "PageSettingsExportComment7" )
-#define KEY_EXPORT_COMMENT8      wxT( "PageSettingsExportComment8" )
-#define KEY_EXPORT_COMMENT9      wxT( "PageSettingsExportComment9" )
 
 
 // List of page formats.
@@ -135,20 +121,22 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent, wxSize aMa
 DIALOG_PAGES_SETTINGS::~DIALOG_PAGES_SETTINGS()
 {
 #ifdef EESCHEMA
-    wxConfigBase* config = Kiface().KifaceSettings();
-    config->Write( KEY_EXPORT_REVISION, m_RevisionExport->GetValue() );
-    config->Write( KEY_EXPORT_DATE, m_DateExport->GetValue() );
-    config->Write( KEY_EXPORT_TITLE, m_TitleExport->GetValue() );
-    config->Write( KEY_EXPORT_COMPANY, m_CompanyExport->GetValue() );
-    config->Write( KEY_EXPORT_COMMENT1, m_Comment1Export->GetValue() );
-    config->Write( KEY_EXPORT_COMMENT2, m_Comment2Export->GetValue() );
-    config->Write( KEY_EXPORT_COMMENT3, m_Comment3Export->GetValue() );
-    config->Write( KEY_EXPORT_COMMENT4, m_Comment4Export->GetValue() );
-    config->Write( KEY_EXPORT_COMMENT5, m_Comment5Export->GetValue() );
-    config->Write( KEY_EXPORT_COMMENT6, m_Comment6Export->GetValue() );
-    config->Write( KEY_EXPORT_COMMENT7, m_Comment7Export->GetValue() );
-    config->Write( KEY_EXPORT_COMMENT8, m_Comment8Export->GetValue() );
-    config->Write( KEY_EXPORT_COMMENT9, m_Comment9Export->GetValue() );
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    wxASSERT( cfg );
+
+    cfg->m_PageSettings.export_revision = m_RevisionExport->GetValue();
+    cfg->m_PageSettings.export_date     = m_DateExport->GetValue();
+    cfg->m_PageSettings.export_title    = m_TitleExport->GetValue();
+    cfg->m_PageSettings.export_company  = m_CompanyExport->GetValue();
+    cfg->m_PageSettings.export_comment1 = m_Comment1Export->GetValue();
+    cfg->m_PageSettings.export_comment2 = m_Comment2Export->GetValue();
+    cfg->m_PageSettings.export_comment3 = m_Comment3Export->GetValue();
+    cfg->m_PageSettings.export_comment4 = m_Comment4Export->GetValue();
+    cfg->m_PageSettings.export_comment5 = m_Comment5Export->GetValue();
+    cfg->m_PageSettings.export_comment6 = m_Comment6Export->GetValue();
+    cfg->m_PageSettings.export_comment7 = m_Comment7Export->GetValue();
+    cfg->m_PageSettings.export_comment8 = m_Comment8Export->GetValue();
+    cfg->m_PageSettings.export_comment9 = m_Comment9Export->GetValue();
 #endif
 
     delete m_page_bitmap;
@@ -221,20 +209,22 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     m_TextComment9->SetValue( m_tb.GetComment( 8 ) );
 
 #ifdef EESCHEMA
-    wxConfigBase* config = Kiface().KifaceSettings();
-    m_RevisionExport->SetValue( config->ReadBool( KEY_EXPORT_REVISION, false ) );
-    m_DateExport->SetValue( config->ReadBool( KEY_EXPORT_DATE, false ) );
-    m_TitleExport->SetValue( config->ReadBool( KEY_EXPORT_TITLE, false ) );
-    m_CompanyExport->SetValue( config->ReadBool( KEY_EXPORT_COMPANY, false ) );
-    m_Comment1Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT1, false ) );
-    m_Comment2Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT2, false ) );
-    m_Comment3Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT3, false ) );
-    m_Comment4Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT4, false ) );
-    m_Comment5Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT5, false ) );
-    m_Comment6Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT6, false ) );
-    m_Comment7Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT7, false ) );
-    m_Comment8Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT8, false ) );
-    m_Comment9Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT9, false ) );
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    wxASSERT( cfg );
+
+    m_RevisionExport->SetValue( cfg->m_PageSettings.export_revision );
+    m_DateExport->SetValue( cfg->m_PageSettings.export_date );
+    m_TitleExport->SetValue( cfg->m_PageSettings.export_title );
+    m_CompanyExport->SetValue( cfg->m_PageSettings.export_company  );
+    m_Comment1Export->SetValue( cfg->m_PageSettings.export_comment1 );
+    m_Comment2Export->SetValue( cfg->m_PageSettings.export_comment2 );
+    m_Comment3Export->SetValue( cfg->m_PageSettings.export_comment3 );
+    m_Comment4Export->SetValue( cfg->m_PageSettings.export_comment4 );
+    m_Comment5Export->SetValue( cfg->m_PageSettings.export_comment5 );
+    m_Comment6Export->SetValue( cfg->m_PageSettings.export_comment6 );
+    m_Comment7Export->SetValue( cfg->m_PageSettings.export_comment7 );
+    m_Comment8Export->SetValue( cfg->m_PageSettings.export_comment8 );
+    m_Comment9Export->SetValue( cfg->m_PageSettings.export_comment9 );
 #else
     m_RevisionExport->Show( false );
     m_DateExport->Show( false );

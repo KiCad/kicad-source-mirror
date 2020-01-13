@@ -72,7 +72,6 @@ protected:
     void adjustGridColumns( int aWidth );
 
     LIB_EDIT_FRAME*       m_editFrame;
-    wxConfigBase*         m_config;
     bool                  m_initialized = false;
     int                   m_originalColWidths[ COL_COUNT ];
     wxString              m_columnsShown;

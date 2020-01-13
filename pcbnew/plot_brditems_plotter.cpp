@@ -40,7 +40,6 @@
 
 #include <board_design_settings.h>            // for BOARD_DESIGN_SETTINGS
 #include <colors.h>                           // for LIGHTGRAY, WHITE
-#include <colors_design_settings.h>           // for COLORS_DESIGN_SETTINGS
 #include <core/typeinfo.h>                    // for dyn_cast, PCB_DIMENSION_T
 #include <eda_text.h>                         // for FILLED, EDA_DRAW_MODE_T
 #include <gal/color4d.h>                      // for COLOR4D, operator!=
@@ -74,7 +73,7 @@
 
 COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 {
-    COLOR4D color = m_board->Colors().GetLayerColor( aLayer );
+    COLOR4D color = m_colors->GetColor( aLayer );
 
     // A hack to avoid plotting ahite itmen in white color, expecting the paper
     // is also white: use a non white color:
@@ -394,7 +393,7 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
     draw.SetWidth( aDim->GetWidth() );
     draw.SetLayer( aDim->GetLayer() );
 
-    COLOR4D color = m_board->Colors().GetLayerColor( aDim->GetLayer() );
+    COLOR4D color = m_colors->GetColor( aDim->GetLayer() );
 
     // Set plot color (change WHITE to LIGHTGRAY because
     // the white items are not seen on a white paper or screen

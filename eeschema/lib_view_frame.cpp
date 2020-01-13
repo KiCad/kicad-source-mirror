@@ -31,6 +31,7 @@
 #include <dialog_choose_component.h>
 #include <eda_doc.h>
 #include <eeschema_id.h>
+#include <eeschema_settings.h>
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <kiway.h>
@@ -42,6 +43,7 @@
 #include <symbol_lib_table.h>
 #include <symbol_tree_model_adapter.h>
 #include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_dispatcher.h>
@@ -601,33 +603,18 @@ void LIB_VIEW_FRAME::DClickOnCmpList( wxCommandEvent& event )
 }
 
 
-#define LIBLIST_WIDTH_KEY "ViewLiblistWidth"
-#define CMPLIST_WIDTH_KEY "ViewCmplistWidth"
-#define CMPVIEW_SHOW_PINELECTRICALTYPE_KEY "ViewCmpShowPinElectricalType"
-
-
-void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
+void LIB_VIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    EDA_DRAW_FRAME::LoadSettings( aCfg );
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
-    // Fetch display settings from Symbol Editor as the Symbol Viewer
-    // doesn't have its own config
-    wxString symbolEditor = LIB_EDIT_FRAME_NAME;
-    bool     btmp;
-    COLOR4D  wtmp;
-
-    if( aCfg->Read( symbolEditor + ShowGridEntryKeyword, &btmp ) )
-        SetGridVisibility( btmp );
-
-    if( wtmp.SetFromWxString( aCfg->Read( symbolEditor + GridColorEntryKeyword, wxT( "NONE" ) ) ) )
-        SetGridColor( wtmp );
+    EDA_DRAW_FRAME::LoadSettings( cfg );
 
     // Grid shape, etc.
-    GetGalDisplayOptions().ReadAppConfig( *aCfg, symbolEditor );
+    GetGalDisplayOptions().ReadWindowSettings( cfg->m_LibViewPanel.window );
 
-    aCfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 150 );
-    aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 150 );
-    m_showPinElectricalTypeName = aCfg->Read( CMPVIEW_SHOW_PINELECTRICALTYPE_KEY, true );
+    m_libListWidth = cfg->m_LibViewPanel.lib_list_width;
+    m_cmpListWidth = cfg->m_LibViewPanel.cmp_list_width;
+    m_showPinElectricalTypeName = cfg->m_LibViewPanel.show_pin_electrical_type;
 
     // Set parameters to a reasonable value.
     if( m_libListWidth > m_FrameSize.x/2 )
@@ -638,20 +625,28 @@ void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 }
 
 
-void LIB_VIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
+void LIB_VIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
 {
-    EDA_DRAW_FRAME::SaveSettings( aCfg );
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+
+    EDA_DRAW_FRAME::SaveSettings( cfg );
 
     if( m_libListWidth && m_libList )
-    {
         m_libListWidth = m_libList->GetSize().x;
-        aCfg->Write( LIBLIST_WIDTH_KEY, m_libListWidth );
-    }
 
     m_cmpListWidth = m_cmpList->GetSize().x;
-    aCfg->Write( CMPLIST_WIDTH_KEY, m_cmpListWidth );
 
-    aCfg->Write( CMPVIEW_SHOW_PINELECTRICALTYPE_KEY, m_showPinElectricalTypeName );
+    cfg->m_LibViewPanel.lib_list_width = m_libListWidth;
+    cfg->m_LibViewPanel.cmp_list_width = m_cmpListWidth;
+    cfg->m_LibViewPanel.show_pin_electrical_type = m_showPinElectricalTypeName;
+}
+
+
+WINDOW_SETTINGS* LIB_VIEW_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
+{
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
+    return &cfg->m_LibViewPanel.window;
 }
 
 

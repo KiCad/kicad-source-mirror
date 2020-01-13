@@ -22,11 +22,12 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <gestfich.h>
+#include <settings/settings_manager.h>
 
 #include <wx/wx.h>
-#include <wx/config.h>
 
 #include <pcb_calculator_frame_base.h>
+#include <pcb_calculator_settings.h>
 #include <pcb_calculator.h>
 
 #include <bitmaps.h>
@@ -103,6 +104,8 @@ PGM_BASE& Pgm()
 
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
+    InitSettings( new PCB_CALCULATOR_SETTINGS );
+    aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
     start_common( aCtlBits );
 
     return true;

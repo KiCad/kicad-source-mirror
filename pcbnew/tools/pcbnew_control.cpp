@@ -48,7 +48,9 @@
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
 #include <pcb_screen.h>
+#include <pcbnew_settings.h>
 #include <properties.h>
+#include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <functional>
@@ -401,18 +403,18 @@ int PCBNEW_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 {
-    auto& settings = m_frame->Settings().Colors();
+    auto settings = m_frame->ColorSettings();
 
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
-    KIGFX::COLOR4D currentColor = settings.GetLayerColor( currentLayer );
+    KIGFX::COLOR4D currentColor = settings->GetColor( currentLayer );
 
     if( currentColor.a <= ALPHA_MAX - ALPHA_STEP )
     {
         currentColor.a += ALPHA_STEP;
-        settings.SetLayerColor( currentLayer, currentColor );
+        settings->SetColor( currentLayer, currentColor );
+        m_frame->GetCanvas()->UpdateColors();
 
         KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
-        view->GetPainter()->GetSettings()->ImportLegacyColors( &settings );
         view->UpdateLayerColor( currentLayer );
 
         wxUpdateUIEvent dummy;
@@ -427,18 +429,18 @@ int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 {
-    auto& settings = m_frame->Settings().Colors();
+    auto settings = m_frame->ColorSettings();
 
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
-    KIGFX::COLOR4D currentColor = settings.GetLayerColor( currentLayer );
+    KIGFX::COLOR4D currentColor = settings->GetColor( currentLayer );
 
     if( currentColor.a >= ALPHA_MIN + ALPHA_STEP )
     {
         currentColor.a -= ALPHA_STEP;
-        settings.SetLayerColor( currentLayer, currentColor );
+        settings->SetColor( currentLayer, currentColor );
+        m_frame->GetCanvas()->UpdateColors();
 
         KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
-        view->GetPainter()->GetSettings()->ImportLegacyColors( &settings );
         view->UpdateLayerColor( currentLayer );
 
         wxUpdateUIEvent dummy;

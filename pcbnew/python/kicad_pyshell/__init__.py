@@ -71,7 +71,7 @@ class PcbnewPyShell(editor.EditorNotebookFrame):
             module.__dict__['__builtins__'] = __builtin__
         namespace = module.__dict__.copy()
 
-        self.config_dir = pcbnew.GetKicadConfigPath()
+        self.config_dir = pcbnew.SETTINGS_MANAGER.GetUserSettingsPath()
         self.dataDir = self.config_dir
 
         self._setup_startup()

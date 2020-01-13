@@ -262,7 +262,7 @@ set( PCBNEW_CLASS_SRCS
     footprint_info_impl.cpp
     footprint_wizard.cpp
     footprint_editor_utils.cpp
-    footprint_editor_options.cpp
+    footprint_editor_settings.cpp
     fp_tree_synchronizing_adapter.cpp
     footprint_edit_frame.cpp
     footprint_libraries_utils.cpp
@@ -286,6 +286,7 @@ set( PCBNEW_CLASS_SRCS
     pcb_edit_frame.cpp
     pcbnew_config.cpp
     pcbnew_printout.cpp
+    pcbnew_settings.cpp
     pcb_legacy_draw_utils.cpp
     pcbplot.cpp
     plot_board_layers.cpp
@@ -590,6 +591,10 @@ target_link_libraries( pcbnew
     common
     gal
     ${wxWidgets_LIBRARIES}
+    )
+
+target_include_directories( pcbnew INTERFACE
+    $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 if( PCBNEW_LINK_MAPS )

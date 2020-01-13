@@ -29,10 +29,12 @@
 #include <fctsys.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
+#include <gerbview_settings.h>
 #include <gestfich.h>
 #include <kiface_i.h>
 #include <nlohmann/json.hpp>
 #include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 
 using json = nlohmann::json;
@@ -133,6 +135,8 @@ PGM_BASE& Pgm()
 
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
+    InitSettings( new GERBVIEW_SETTINGS );
+    aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
     start_common( aCtlBits );
     return true;
 }

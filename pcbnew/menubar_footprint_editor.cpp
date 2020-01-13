@@ -26,17 +26,17 @@
 
 #include "footprint_edit_frame.h"
 
-#include <advanced_config.h>
-#include <menus_helpers.h>
-#include <pgm_base.h>
-#include <tool/tool_manager.h>
-#include <tool/conditional_menu.h>
-#include <tool/actions.h>
-#include <tools/selection_tool.h>
-#include <tools/pcb_actions.h>
 #include "help_common_strings.h"
 #include "pcbnew.h"
 #include "pcbnew_id.h"
+#include <menus_helpers.h>
+#include <pgm_base.h>
+#include <advanced_config.h>
+#include <tool/actions.h>
+#include <tool/conditional_menu.h>
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+#include <tools/selection_tool.h>
 
 
 void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()

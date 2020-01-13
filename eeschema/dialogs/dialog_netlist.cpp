@@ -44,6 +44,7 @@
 #include <wildcards_and_files_ext.h>
 #include <invoke_sch_dialog.h>
 #include <netlist_exporters/netlist_exporter_pspice.h>
+#include <eeschema_settings.h>
 
 #include <eeschema_id.h>
 #include <wx/regex.h>
@@ -113,7 +114,6 @@ public:
 
 protected:
     bool                 m_asFormatSelected;
-    wxConfigBase*        m_config;
 
 public:
     // Constructor and destructor
@@ -152,16 +152,6 @@ private:
      * Write the current netlist options setup in the configuration
      */
     void WriteCurrentNetlistSetup();
-
-    /**
-     * Function UserNetlistTypeName
-     * to retrieve user netlist type names
-     * @param first_item = true: return first name of the list, false = return next
-     * @return a wxString : name of the type netlist or empty string
-     * this function must be called first with "first_item" = true
-     * and after with "first_item" = false to get all the other existing netlist names
-     */
-    const wxString UserNetlistTypeName( bool first_item );
 
     /**
      * Function FilenamePrms
@@ -211,13 +201,6 @@ enum id_netlist {
     ID_ADD_SUBCIRCUIT_PREFIX,
     ID_USE_NETCODE_AS_NETNAME
 };
-
-
-// keywords for configuration:
-#define CUSTOM_NETLIST_TITLE   wxT( "CustomNetlistTitle" )
-#define CUSTOM_NETLIST_COMMAND wxT( "CustomNetlistCommand" )
-#define NETLIST_USE_DEFAULT_NETNAME wxT( "NetlistUseDefaultNetname" )
-#define NETLIST_PSPICE_USE_NETNAME  wxT( "SpiceUseNetNames" )
 
 
 BEGIN_EVENT_TABLE( NETLIST_DIALOG, NETLIST_DIALOG_BASE )
@@ -275,10 +258,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     NETLIST_DIALOG_BASE( parent )
 {
     m_Parent = parent;
-    m_config = Kiface().KifaceSettings();
 
-    long tmp;
-    m_config->Read( NETLIST_USE_DEFAULT_NETNAME, &tmp, 0l );
     m_DefaultNetFmtName = m_Parent->GetNetListFormatName();
 
     for( NETLIST_PAGE_DIALOG*& page : m_PanelNetType)
@@ -323,22 +303,6 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
 }
 
 
-const wxString NETLIST_DIALOG::UserNetlistTypeName( bool first_item )
-{
-    static int index;
-
-    if( first_item )
-        index = 0;
-    else
-        index++;
-
-    wxString msg = CUSTOM_NETLIST_TITLE;
-    msg << index + 1;
-
-    return m_config->Read( msg );
-}
-
-
 void NETLIST_DIALOG::InstallPageSpice()
 {
     NETLIST_PAGE_DIALOG* page = m_PanelNetType[PANELSPICE] =
@@ -354,24 +318,25 @@ void NETLIST_DIALOG::InstallPageSpice()
 
 void NETLIST_DIALOG::InstallCustomPages()
 {
-    int                  ii;
-    wxString             title;
     NETLIST_PAGE_DIALOG* currPage;
 
-    for( ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
-    {
-        title = UserNetlistTypeName( ii == 0 ? true : false );
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
-        if( title.IsEmpty() )
+    for( size_t i = 0;
+         i < CUSTOMPANEL_COUNTMAX && i < cfg->m_NetlistPanel.custom_command_titles.size(); i++ )
+    {
+        // pairs of (title, command) are stored
+        wxString title = cfg->m_NetlistPanel.custom_command_titles[i];
+
+        if( i >= cfg->m_NetlistPanel.custom_command_paths.size() )
             break; // No more panel to install
 
-        // Install a plugin panel
-        wxString msg = CUSTOM_NETLIST_COMMAND;
-        msg << ii + 1;
-        wxString command = m_config->Read( msg );
+        wxString command = cfg->m_NetlistPanel.custom_command_paths[i];
 
-        currPage = AddOneCustomPage( title, command, (NETLIST_TYPE_ID)(NET_TYPE_CUSTOM1 + ii) );
-        m_PanelNetType[PANELCUSTOMBASE + ii] = currPage;
+        currPage = AddOneCustomPage( title, command,
+                static_cast<NETLIST_TYPE_ID>( NET_TYPE_CUSTOM1 + i ) );
+
+        m_PanelNetType[PANELCUSTOMBASE + i] = currPage;
     }
 }
 
@@ -585,8 +550,12 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup()
 
     NetlistUpdateOpt();
 
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+    cfg->m_NetlistPanel.custom_command_titles.clear();
+    cfg->m_NetlistPanel.custom_command_paths.clear();
+
     // Update existing custom pages
-    int jj = 0;
     for( int ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
     {
         NETLIST_PAGE_DIALOG* currPage = m_PanelNetType[ii + PANELCUSTOMBASE];
@@ -599,27 +568,9 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup()
         if( title.IsEmpty() )
             continue;
 
-        msg = CUSTOM_NETLIST_TITLE;
-        msg << jj + 1;
-        m_config->Write( msg, title );
-
-        wxString Command = currPage->m_CommandStringCtrl->GetValue();
-        msg = CUSTOM_NETLIST_COMMAND;
-        msg << jj + 1;
-        m_config->Write( msg, Command );
-        jj++;
-    }
-
-    // Ensure all other pages are void
-    for( ; jj < CUSTOMPANEL_COUNTMAX; jj++ )
-    {
-        msg = CUSTOM_NETLIST_TITLE;
-        msg << jj + 1;
-        m_config->Write( msg, wxEmptyString );
-
-        msg = CUSTOM_NETLIST_COMMAND;
-        msg << jj + 1;
-        m_config->Write( msg, wxEmptyString );
+        cfg->m_NetlistPanel.custom_command_titles.push_back( title.ToStdString() );
+        cfg->m_NetlistPanel.custom_command_paths.push_back(
+                currPage->m_CommandStringCtrl->GetValue().ToStdString() );
     }
 }
 

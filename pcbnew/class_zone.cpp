@@ -41,6 +41,9 @@
 #include <math_for_graphics.h>
 #include <geometry/polygon_test_point_inside.h>
 #include <math/util.h>      // for KiROUND
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
@@ -376,7 +379,7 @@ void ZONE_CONTAINER::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& off
 
     assert( draw_layer != UNDEFINED_LAYER );
 
-    auto color = aFrame->Settings().Colors().GetLayerColor( draw_layer );
+    COLOR4D color = Pgm().GetSettingsManager().GetColorSettings()->GetColor( draw_layer );
 
     auto displ_opts = aFrame->GetDisplayOptions();
 
@@ -424,10 +427,10 @@ void ZONE_CONTAINER::PrintFilledArea( PCB_BASE_FRAME* aFrame, wxDC* DC, const wx
 {
     static std::vector <wxPoint> CornersBuffer;
 
-    BOARD*               brd = GetBoard();
-    KIGFX::COLOR4D       color = aFrame->Settings().Colors().GetLayerColor( GetLayer() );
-    auto&                displ_opts = aFrame->GetDisplayOptions();
-    bool                 outline_mode = displ_opts.m_DisplayZonesMode == 2;
+    BOARD*  brd          = GetBoard();
+    COLOR4D color        = Pgm().GetSettingsManager().GetColorSettings()->GetColor( GetLayer() );
+    auto&   displ_opts   = aFrame->GetDisplayOptions();
+    bool    outline_mode = displ_opts.m_DisplayZonesMode == 2;
 
     if( DC == NULL )
         return;

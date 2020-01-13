@@ -22,26 +22,15 @@
 */
 
 #include <gal/gal_display_options.h>
+#include <settings/app_settings.h>
+#include <settings/common_settings.h>
 
-#include <wx/config.h>
 #include <wx/log.h>
 
 #include <config_map.h>
 #include <dpi_scaling.h>
-#include <pgm_base.h>
 
 using namespace KIGFX;
-
-/*
- * Config option strings
- */
-static const wxString GalGridStyleConfig( "GridStyle" );
-static const wxString GalGridLineWidthConfig( "GridLineWidth" );
-static const wxString GalGridMaxDensityConfig( "GridMaxDensity" );
-static const wxString GalGridAxesEnabledConfig( "GridAxesEnabled" );
-static const wxString GalFullscreenCursorConfig( "CursorFullscreen" );
-static const wxString GalForceDisplayCursorConfig( "ForceDisplayCursor" );
-
 
 static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleConfigVals =
 {
@@ -74,43 +63,34 @@ GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
 {}
 
 
-void GAL_DISPLAY_OPTIONS::ReadAppConfig( wxConfigBase& aCfg, const wxString& aBaseName )
+void GAL_DISPLAY_OPTIONS::ReadWindowSettings( WINDOW_SETTINGS& aCfg )
 {
-    const wxString baseName = aBaseName + GAL_DISPLAY_OPTIONS_KEY;
+    wxLogTrace( traceGalDispOpts, "Reading app-specific options" );
 
-    wxLogTrace( traceGalDispOpts, "Reading options with base name '%s'", baseName );
+    m_gridStyle = UTIL::GetValFromConfig( gridStyleConfigVals, aCfg.grid.style );
+    m_gridLineWidth = aCfg.grid.line_width;
+    m_gridMinSpacing = aCfg.grid.min_spacing;
+    m_axesEnabled = aCfg.grid.axes_enabled;
 
-    long readLong; // Temp value buffer
-
-    aCfg.Read( baseName + GalGridStyleConfig, &readLong,
-            static_cast<long>( KIGFX::GRID_STYLE::DOTS ) );
-    m_gridStyle = UTIL::GetValFromConfig( gridStyleConfigVals, readLong );
-
-    aCfg.Read( baseName + GalGridLineWidthConfig, &m_gridLineWidth, 1.0 );
-    aCfg.Read( baseName + GalGridMaxDensityConfig, &m_gridMinSpacing, 10 );
-    aCfg.Read( baseName + GalGridAxesEnabledConfig, &m_axesEnabled, false );
-    aCfg.Read( baseName + GalFullscreenCursorConfig, &m_fullscreenCursor, false );
-    aCfg.Read( baseName + GalForceDisplayCursorConfig, &m_forceDisplayCursor, true );
+    m_fullscreenCursor = aCfg.cursor.fullscreen_cursor;
+    m_forceDisplayCursor = aCfg.cursor.always_show_cursor;
 
     NotifyChanged();
 }
 
 
-void GAL_DISPLAY_OPTIONS::ReadCommonConfig( wxConfigBase& aCommonConfig, wxWindow* aWindow )
+void GAL_DISPLAY_OPTIONS::ReadCommonConfig( COMMON_SETTINGS& aSettings, wxWindow* aWindow )
 {
     wxLogTrace( traceGalDispOpts, "Reading common config" );
 
-    int temp;
-    aCommonConfig.Read(
-            GAL_ANTIALIASING_MODE_KEY, &temp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
-    gl_antialiasing_mode = (KIGFX::OPENGL_ANTIALIASING_MODE) temp;
+    gl_antialiasing_mode = static_cast<KIGFX::OPENGL_ANTIALIASING_MODE>(
+            aSettings.m_Graphics.opengl_aa_mode );
 
-    aCommonConfig.Read(
-            CAIRO_ANTIALIASING_MODE_KEY, &temp, (int) KIGFX::CAIRO_ANTIALIASING_MODE::NONE );
-    cairo_antialiasing_mode = (KIGFX::CAIRO_ANTIALIASING_MODE) temp;
+    cairo_antialiasing_mode = static_cast<KIGFX::CAIRO_ANTIALIASING_MODE>(
+            aSettings.m_Graphics.cairo_aa_mode );
 
     {
-        const DPI_SCALING dpi{ &aCommonConfig, aWindow };
+        const DPI_SCALING dpi{ &aSettings, aWindow };
         m_scaleFactor = dpi.GetScaleFactor();
     }
 
@@ -118,31 +98,27 @@ void GAL_DISPLAY_OPTIONS::ReadCommonConfig( wxConfigBase& aCommonConfig, wxWindo
 }
 
 
-void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase& aCommonConfig, wxConfigBase& aAppConfig,
-        const wxString& aBaseCfgName, wxWindow* aWindow )
+void GAL_DISPLAY_OPTIONS::ReadConfig( COMMON_SETTINGS& aCommonConfig,
+                                      WINDOW_SETTINGS& aWindowConfig, wxWindow* aWindow )
 {
-    wxLogTrace( traceGalDispOpts, "Reading common and app config (%s)", aBaseCfgName );
+    wxLogTrace( traceGalDispOpts, "Reading common and app config" );
 
-    ReadAppConfig( aAppConfig, aBaseCfgName );
+    ReadWindowSettings( aWindowConfig );
 
     ReadCommonConfig( aCommonConfig, aWindow );
 }
 
 
-void GAL_DISPLAY_OPTIONS::WriteConfig( wxConfigBase& aCfg, const wxString& aBaseName )
+void GAL_DISPLAY_OPTIONS::WriteConfig( WINDOW_SETTINGS& aCfg )
 {
-    const wxString baseName = aBaseName + GAL_DISPLAY_OPTIONS_KEY;
+    wxLogTrace( traceGalDispOpts, "Writing window settings" );
 
-    wxLogTrace( traceGalDispOpts, "Writing app config (%s)", baseName );
-
-    aCfg.Write( baseName + GalGridStyleConfig,
-                 UTIL::GetConfigForVal( gridStyleConfigVals, m_gridStyle ) );
-
-    aCfg.Write( baseName + GalGridLineWidthConfig, m_gridLineWidth );
-    aCfg.Write( baseName + GalGridMaxDensityConfig, m_gridMinSpacing );
-    aCfg.Write( baseName + GalGridAxesEnabledConfig, m_axesEnabled );
-    aCfg.Write( baseName + GalFullscreenCursorConfig, m_fullscreenCursor );
-    aCfg.Write( baseName + GalForceDisplayCursorConfig, m_forceDisplayCursor );
+    aCfg.grid.style = UTIL::GetConfigForVal( gridStyleConfigVals, m_gridStyle );
+    aCfg.grid.line_width = m_gridLineWidth;
+    aCfg.grid.min_spacing = m_gridMinSpacing;
+    aCfg.grid.axes_enabled = m_axesEnabled;
+    aCfg.cursor.fullscreen_cursor = m_fullscreenCursor;
+    aCfg.cursor.always_show_cursor = m_forceDisplayCursor;
 }
 
 

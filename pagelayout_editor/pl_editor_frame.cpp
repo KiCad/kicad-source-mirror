@@ -31,6 +31,7 @@
 #include <bitmaps.h>
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
+#include <pl_editor_settings.h>
 #include <pl_draw_panel_gal.h>
 #include <pl_editor_screen.h>
 #include <ws_data_model.h>
@@ -298,8 +299,6 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     // do not show the window because we do not want any paint event
     Show( false );
 
-    wxConfigSaveSetups( Kiface().KifaceSettings(), m_configSettings );
-
     // On Linux, m_propertiesPagelayout must be destroyed
     // before deleting the main frame to avoid a crash when closing
     m_propertiesPagelayout->Destroy();
@@ -412,56 +411,41 @@ void PL_EDITOR_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 }
 
 
-static const wxChar propertiesFrameWidthKey[] = wxT( "PropertiesFrameWidth" );
-static const wxChar cornerOriginChoiceKey[] = wxT( "CornerOriginChoice" );
-static const wxChar blackBgColorKey[] = wxT( "BlackBgColor" );
-static const wxChar lastUsedPaperSizeKey[] = wxT( "LastUsedPaperSize" );
-static const wxChar lastUsedCustomWidthKey[] = wxT( "LastUsedCustomWidth" );
-static const wxChar lastUsedCustomHeightKey[] = wxT( "LastUsedCustomHeight" );
-static const wxChar lastUsedPortraitKey[] = wxT( "LastUsedWasPortrait" );
-
-
-void PL_EDITOR_FRAME::LoadSettings( wxConfigBase* aCfg )
+void PL_EDITOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    aCfg->Read( propertiesFrameWidthKey, &m_propertiesFrameWidth, 150 );
-    aCfg->Read( cornerOriginChoiceKey, &m_originSelectChoice );
+    auto cfg = static_cast<PL_EDITOR_SETTINGS*>( aCfg );
 
-    bool flag;
-    aCfg->Read( blackBgColorKey, &flag, false );
-    SetDrawBgColor( flag ? BLACK : WHITE );
+    m_propertiesFrameWidth = cfg->m_PropertiesFrameWidth;
+    m_originSelectChoice = cfg->m_CornerOrigin;
 
-    int i;
-    aCfg->Read( lastUsedCustomWidthKey, &i, 17000 );
-    PAGE_INFO::SetCustomWidthMils( i );
-    aCfg->Read( lastUsedCustomHeightKey, &i, 11000 );
-    PAGE_INFO::SetCustomHeightMils( i );
+    SetDrawBgColor( cfg->m_BlackBackground ? BLACK : WHITE );
+
+    PAGE_INFO::SetCustomWidthMils( cfg->m_LastCustomWidth );
+    PAGE_INFO::SetCustomHeightMils( cfg->m_LastCustomHeight );
 
     PAGE_INFO pageInfo = GetPageSettings();
-    wxString msg;
-    aCfg->Read( lastUsedPaperSizeKey, &msg, "A3" );
-    aCfg->Read( lastUsedPortraitKey, &flag, false );
-    pageInfo.SetType( msg, flag );
+    pageInfo.SetType( cfg->m_LastPaperSize, cfg->m_LastWasPortrait );
     SetPageSettings( pageInfo );
 }
 
 
-void PL_EDITOR_FRAME::SaveSettings( wxConfigBase* aCfg )
+void PL_EDITOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
+    auto cfg = static_cast<PL_EDITOR_SETTINGS*>( aCfg );
+
     m_propertiesFrameWidth = m_propertiesPagelayout->GetSize().x;
 
-    aCfg->Write( propertiesFrameWidthKey, m_propertiesFrameWidth);
-    aCfg->Write( cornerOriginChoiceKey, m_originSelectChoice );
-    aCfg->Write( blackBgColorKey, GetDrawBgColor() == BLACK );
-    aCfg->Write( lastUsedPaperSizeKey, GetPageSettings().GetType() );
-    aCfg->Write( lastUsedPortraitKey, GetPageSettings().IsPortrait() );
-    aCfg->Write( lastUsedCustomWidthKey, PAGE_INFO::GetCustomWidthMils() );
-    aCfg->Write( lastUsedCustomHeightKey, PAGE_INFO::GetCustomHeightMils() );
-
-    wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
+    cfg->m_PropertiesFrameWidth = m_propertiesFrameWidth;
+    cfg->m_CornerOrigin         = m_originSelectChoice;
+    cfg->m_BlackBackground      = GetDrawBgColor() == BLACK;
+    cfg->m_LastPaperSize        = GetPageSettings().GetType();
+    cfg->m_LastWasPortrait      = GetPageSettings().IsPortrait();
+    cfg->m_LastCustomWidth      = PAGE_INFO::GetCustomWidthMils();
+    cfg->m_LastCustomHeight     = PAGE_INFO::GetCustomHeightMils();
 }
 
 

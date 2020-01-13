@@ -26,36 +26,32 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include <fctsys.h>
-#include <pcb_draw_panel_gal.h>
-#include <confirm.h>
-#include <eda_doc.h>
-#include <kicad_string.h>
-#include <pgm_base.h>
-#include <kiway.h>
-#include <view/view_controls.h>
-#include <pcb_edit_frame.h>
-#include <dialog_helpers.h>
-#include <filter_reader.h>
-#include <gr_basic.h>
-#include <macros.h>
-#include <fp_lib_table.h>
-#include <lib_id.h>
-#include <footprint_tree_pane.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <io_mgr.h>
+#include <confirm.h>
 #include <connectivity/connectivity_data.h>
-#include <pcbnew.h>
-#include <footprint_edit_frame.h>
-#include <footprint_info.h>
-#include <footprint_info_impl.h>
 #include <dialog_choose_footprint.h>
 #include <dialog_get_footprint_by_name.h>
+#include <dialog_helpers.h>
+#include <footprint_edit_frame.h>
+#include <footprint_info_impl.h>
+#include <footprint_tree_pane.h>
 #include <footprint_viewer_frame.h>
-#include <wildcards_and_files_ext.h>
-#include <widgets/progress_reporter.h>
+#include <fp_lib_table.h>
+#include <io_mgr.h>
+#include <kicad_string.h>
+#include <kiway.h>
+#include <lib_id.h>
+#include <macros.h>
+#include <pcb_draw_panel_gal.h>
+#include <pcb_edit_frame.h>
+#include <pcbnew.h>
+#include <pcbnew_settings.h>
+#include <pgm_base.h>
+#include <view/view_controls.h>
 #include <widgets/lib_tree.h>
+#include <widgets/progress_reporter.h>
+
 #include "fp_tree_model_adapter.h"
 
 

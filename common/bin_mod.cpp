@@ -27,29 +27,26 @@
 #include <filehistory.h>
 #include <id.h>         // for ID_FILE1 and FILE_HISTORY_SIZE
 #include <pgm_base.h>
+#include <settings/app_settings.h>
+#include <settings/common_settings.h>
+#include <settings/settings_manager.h>
 
 
 BIN_MOD::BIN_MOD( const char* aName ) :
     m_name( aName ),
-    m_history( 0 )
+    m_config( nullptr ),
+    m_history( nullptr )
 {
 }
 
 
 void BIN_MOD::Init()
 {
-    // do an OS specific wxConfig instantiation, using the bin_mod (EXE/DLL/DSO) name.
-    m_config = GetNewConfig( wxString::FromUTF8( m_name ) );
-
-    // wxWidgets' implementation of this is *very* expensive, and we don't use them anyway.
-    m_config->SetExpandEnvVars( false );
-
     // get file history size from common settings
-    int fileHistorySize;
-    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &fileHistorySize, DEFAULT_FILE_HISTORY_SIZE );
+    int fileHistorySize = Pgm().GetCommonSettings()->m_System.file_history_size;
 
     m_history = new FILE_HISTORY( (unsigned) std::max( 0, fileHistorySize ), ID_FILE1 );
-    m_history->Load( *m_config.get() );
+    m_history->Load( *m_config );
 
     // Prepare On Line Help. Use only lower case for help file names, in order to
     // avoid problems with upper/lower case file names under windows and unix.
@@ -65,17 +62,22 @@ void BIN_MOD::End()
 {
     if( m_config )
     {
-        m_history->Save( *m_config.get() );
-        delete m_history;
+        if( m_history )
+        {
+            m_history->Save( *m_config );
+            delete m_history;
+            m_history = nullptr;
+        }
 
-        // Deleting a wxConfigBase writes its contents to disk if changed.
-        m_config.reset();
+        // The settings manager will outlive this module so we need to clean up the module level
+        // settings here instead of leaving it up to the manager
+        Pgm().GetSettingsManager().FlushAndRelease( m_config );
+        m_config = nullptr;
     }
 }
 
 
 BIN_MOD::~BIN_MOD()
 {
-    End();
 }
 

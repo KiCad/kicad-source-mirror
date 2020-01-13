@@ -48,8 +48,6 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY: public DIALOG_EDIT_COMPONENT_IN_LIBRARY_
     static LAST_LAYOUT m_lastLayout;
 
 public:
-    wxConfigBase*   m_config;
-
     LIB_EDIT_FRAME* m_Parent;
     LIB_PART*       m_libEntry;
 

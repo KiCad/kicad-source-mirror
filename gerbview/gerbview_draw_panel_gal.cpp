@@ -23,10 +23,10 @@
 #include <gerbview_painter.h>
 #include <ws_proxy_view_item.h>
 
-#include <colors_design_settings.h>
 #include <gerbview_frame.h>
 #include <gbr_display_options.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <settings/settings_manager.h>
 
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
@@ -52,30 +52,23 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 
     setDefaultLayerDeps();
 
-
     // Load display options (such as filled/outline display of items).
     auto frame = static_cast< GERBVIEW_FRAME* >( GetParentEDAFrame() );
 
     if( frame )
     {
         auto& displ_opts = frame->GetDisplayOptions();
-        static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() )
-                                                     ->LoadDisplayOptions( displ_opts );
-        UseColorScheme( frame->m_colorsSettings );
+        auto rs = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>(
+                m_view->GetPainter()->GetSettings() );
+
+        rs->LoadDisplayOptions( displ_opts );
+        rs->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
     }
 }
 
 
 GERBVIEW_DRAW_PANEL_GAL::~GERBVIEW_DRAW_PANEL_GAL()
 {
-}
-
-
-void GERBVIEW_DRAW_PANEL_GAL::UseColorScheme( const COLORS_DESIGN_SETTINGS* aSettings )
-{
-    KIGFX::GERBVIEW_RENDER_SETTINGS* rs;
-    rs = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
-    rs->ImportLegacyColors( aSettings );
 }
 
 

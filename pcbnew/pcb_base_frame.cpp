@@ -48,24 +48,11 @@
 #include <math/vector2d.h>
 #include <trigo.h>
 #include <pcb_painter.h>
+#include <settings/settings_manager.h>
+#include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_actions.h>
-
-const wxChar PCB_BASE_FRAME::AUTO_ZOOM_KEY[] = wxT( "AutoZoom" );
-const wxChar PCB_BASE_FRAME::ZOOM_KEY[] = wxT( "Zoom" );
-
-// Configuration entry names.
-static const wxChar UserGridSizeXEntry[] = wxT( "PcbUserGrid_X" );
-static const wxChar UserGridSizeYEntry[] = wxT( "PcbUserGrid_Y" );
-static const wxChar UserGridUnitsEntry[] = wxT( "PcbUserGrid_Unit" );
-static const wxChar DisplayPadFillEntry[] = wxT( "DiPadFi" );
-static const wxChar DisplayViaFillEntry[] = wxT( "DiViaFi" );
-static const wxChar DisplayPadNumberEntry[] = wxT( "DiPadNu" );
-static const wxChar DisplayModuleEdgeEntry[] = wxT( "DiModEd" );
-static const wxChar DisplayModuleTextEntry[] = wxT( "DiModTx" );
-static const wxChar FastGrid1Entry[] = wxT( "FastGrid1" );
-static const wxChar FastGrid2Entry[] = wxT( "FastGrid2" );
 
 
 BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
@@ -85,8 +72,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
         long aStyle, const wxString & aFrameName ) :
     EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-    m_Pcb( nullptr ),
-    m_configSettings( aFrameType )
+    m_Pcb( nullptr )
 {
     m_UserGridSize        = wxPoint( (int) 10 * IU_PER_MILS, (int) 10 * IU_PER_MILS );
 
@@ -97,6 +83,8 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
                                         // when the screen shows a 1:1 image
                                         // obviously depends on the monitor,
                                         // but this is an acceptable value
+
+    m_Settings = static_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 }
 
 
@@ -171,7 +159,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
     {
         delete m_Pcb;
         m_Pcb = aBoard;
-        m_Pcb->SetGeneralSettings( &Settings() );
+        m_Pcb->SetGeneralSettings( m_Settings );
     }
 }
 
@@ -191,7 +179,7 @@ void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
         // Put it on FRONT layer (note that it might be stored flipped if the lib is an archive
         // built from a board)
         if( module->IsFlipped() )
-            module->Flip( module->GetPosition(), m_configSettings.m_FlipLeftRight );
+            module->Flip( module->GetPosition(), m_Settings->m_FlipLeftRight );
 
         // Place it in orientation 0 even if it is not saved with orientation 0 in lib (note that
         // it might be stored in another orientation if the lib is an archive built from a board)
@@ -281,6 +269,12 @@ void PCB_BASE_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
 {
     wxASSERT( m_Pcb );
     m_Pcb->SetDesignSettings( aSettings );
+}
+
+
+COLOR_SETTINGS* PCB_BASE_FRAME::ColorSettings()
+{
+    return Pgm().GetSettingsManager().GetColorSettings();
 }
 
 
@@ -684,58 +678,52 @@ void PCB_BASE_FRAME::unitsChangeRefresh()
 }
 
 
-void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
+void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
+
+    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
 
     // Ensure grid id is an existent grid id:
     if( (m_LastGridSizeId <= 0) ||
         (m_LastGridSizeId > (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
 
-    wxString baseCfgName = GetName();
+    EDA_UNITS userGridUnits = static_cast<EDA_UNITS>( cfg->m_UserGrid.units );
+    m_UserGridSize.x = (int) From_User_Unit( userGridUnits, cfg->m_UserGrid.size_x );
+    m_UserGridSize.y = (int) From_User_Unit( userGridUnits, cfg->m_UserGrid.size_y );
 
-    EDA_UNITS userGridUnits;
-    aCfg->Read( baseCfgName + UserGridUnitsEntry, (int*) &userGridUnits, (int) EDA_UNITS::INCHES );
+    m_DisplayOptions = cfg->m_Display;
+    m_PolarCoords = cfg->m_PolarCoords;
 
-    double tmp;
-    aCfg->Read( baseCfgName + UserGridSizeXEntry, &tmp, 0.01 );
-    m_UserGridSize.x = (int) From_User_Unit( userGridUnits, tmp );
-
-    aCfg->Read( baseCfgName + UserGridSizeYEntry, &tmp, 0.01 );
-    m_UserGridSize.y = (int) From_User_Unit( userGridUnits, tmp );
-
-    aCfg->Read( baseCfgName + DisplayPadFillEntry, &m_DisplayOptions.m_DisplayPadFill, true );
-    aCfg->Read( baseCfgName + DisplayViaFillEntry, &m_DisplayOptions.m_DisplayViaFill, true );
-    aCfg->Read( baseCfgName + DisplayPadNumberEntry, &m_DisplayOptions.m_DisplayPadNum, true );
-    aCfg->Read( baseCfgName + DisplayModuleEdgeEntry, &m_DisplayOptions.m_DisplayModEdgeFill, true );
-
-    long itmp;
-    aCfg->Read( baseCfgName + FastGrid1Entry, &itmp, ( long )0);
-    m_FastGrid1 = itmp;
-    aCfg->Read( baseCfgName + FastGrid2Entry, &itmp, ( long )0);
-    m_FastGrid2 = itmp;
-
-    aCfg->Read( baseCfgName + DisplayModuleTextEntry, &m_DisplayOptions.m_DisplayModTextFill, true );
+    m_FastGrid1 = cfg->m_FastGrid1;
+    m_FastGrid2 = cfg->m_FastGrid2;
 }
 
 
-void PCB_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
+void PCB_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    wxString baseCfgName = GetName();
+    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
 
-    aCfg->Write( baseCfgName + UserGridSizeXEntry, To_User_Unit( m_userUnits, m_UserGridSize.x ) );
-    aCfg->Write( baseCfgName + UserGridSizeYEntry, To_User_Unit( m_userUnits, m_UserGridSize.y ) );
-    aCfg->Write( baseCfgName + UserGridUnitsEntry, ( long )m_userUnits );
-    aCfg->Write( baseCfgName + DisplayPadFillEntry, m_DisplayOptions.m_DisplayPadFill );
-    aCfg->Write( baseCfgName + DisplayViaFillEntry, m_DisplayOptions.m_DisplayViaFill );
-    aCfg->Write( baseCfgName + DisplayPadNumberEntry, m_DisplayOptions.m_DisplayPadNum );
-    aCfg->Write( baseCfgName + DisplayModuleEdgeEntry, m_DisplayOptions.m_DisplayModEdgeFill );
-    aCfg->Write( baseCfgName + DisplayModuleTextEntry, m_DisplayOptions.m_DisplayModTextFill );
-    aCfg->Write( baseCfgName + FastGrid1Entry, ( long )m_FastGrid1 );
-    aCfg->Write( baseCfgName + FastGrid2Entry, ( long )m_FastGrid2 );
+    cfg->m_UserGrid.size_x = To_User_Unit( m_userUnits, m_UserGridSize.x );
+    cfg->m_UserGrid.size_y = To_User_Unit( m_userUnits, m_UserGridSize.y );
+    cfg->m_UserGrid.units = static_cast<int>( m_userUnits );
+
+    cfg->m_Display = m_DisplayOptions;
+    cfg->m_PolarCoords = m_PolarCoords;
+
+    cfg->m_FastGrid1 = m_FastGrid1;
+    cfg->m_FastGrid2 = m_FastGrid2;
+}
+
+
+PCBNEW_SETTINGS* PCB_BASE_FRAME::GetSettings()
+{
+    return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 }
 
 
@@ -896,6 +884,7 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
     auto settings = painter->GetSettings();
     auto displ_opts = GetDisplayOptions();
     settings->LoadDisplayOptions( displ_opts, ShowPageLimits() );
+    settings->LoadColors( ColorSettings() );
 
     canvas->GetView()->RecacheAllItems();
     canvas->SetEventDispatcher( m_toolDispatcher );

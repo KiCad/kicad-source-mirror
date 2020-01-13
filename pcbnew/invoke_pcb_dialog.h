@@ -98,10 +98,10 @@ void InvokePluginOptionsEditor( wxWindow* aCaller, const wxString& aNickname,
 /**
  * Function InvokeExportSVG
  * shows the Export SVG dialog
- * @param aCaller is the PCB_BASE_FRAME which is invoking the dialog.
+ * @param aCaller is the PCB_EDIT_FRAME which is invoking the dialog.
  * @param aBoard is the currently edited board.
  * @return bool - true if user pressed OK (did not abort), else false.
  */
-bool InvokeExportSVG( PCB_BASE_FRAME* aCaller, BOARD* aBoard );
+bool InvokeExportSVG( PCB_EDIT_FRAME* aCaller, BOARD* aBoard );
 
 #endif  // INVOKE_A_DIALOG_H_

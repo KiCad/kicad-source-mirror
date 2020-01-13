@@ -26,7 +26,6 @@
 #include <unordered_map>
 #include <profile.h>
 
-#include <advanced_config.h>
 #include <common.h>
 #include <erc.h>
 #include <sch_bus_entry.h>
@@ -39,6 +38,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_text.h>
+#include <advanced_config.h>
 
 #include <connection_graph.h>
 

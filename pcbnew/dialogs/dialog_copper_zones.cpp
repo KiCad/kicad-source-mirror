@@ -27,6 +27,7 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <zones.h>
 #include <bitmaps.h>
 #include <widgets/unit_binder.h>
@@ -43,7 +44,6 @@ public:
 
 private:
     PCB_BASE_FRAME* m_Parent;
-    wxConfigBase*   m_Config;               // Current config
 
     bool            m_settingsExported;     // settings will be written to all other zones
 
@@ -117,7 +117,6 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
     m_gridStyleGap( aParent, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits, false )
 {
     m_Parent = aParent;
-    m_Config = Kiface().KifaceSettings();
     m_bitmapNoNetWarning->SetBitmap( KiBitmap( dialog_warning_xpm ) );
 
     m_ptr = aSettings;
@@ -184,13 +183,13 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     m_NetFiltering = false;
     m_NetSortingByPadCount = true;
 
-    if( m_Config )
-    {
-        int opt = m_Config->Read( ZONE_NET_SORT_OPTION_KEY, 1l );
-        m_NetFiltering = opt >= 2;
-        m_NetSortingByPadCount = opt % 2;
-        m_Config->Read( ZONE_NET_FILTER_STRING_KEY, netNameDoNotShowFilter );
-    }
+    auto cfg = m_Parent->GetSettings();
+
+    int opt = cfg->m_Zones.net_sort_mode;
+    m_NetFiltering = opt >= 2;
+    m_NetSortingByPadCount = opt % 2;
+
+    netNameDoNotShowFilter = cfg->m_Zones.net_filter;
 
     m_ShowNetNameFilter->SetValue( m_netNameShowFilter );
     m_DoNotShowNetNameFilter->SetValue( netNameDoNotShowFilter );
@@ -358,12 +357,10 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
         break;
     }
 
-    if( m_Config )
-    {
-        m_Config->Write( ZONE_NET_OUTLINES_STYLE_KEY, (long) m_settings.m_Zone_HatchingStyle );
-        wxString filter = m_DoNotShowNetNameFilter->GetValue();
-        m_Config->Write( ZONE_NET_FILTER_STRING_KEY, filter );
-    }
+    auto cfg = m_Parent->GetSettings();
+
+    cfg->m_Zones.hatching_style = static_cast<int>( m_settings.m_Zone_HatchingStyle );
+    cfg->m_Zones.net_filter = m_DoNotShowNetNameFilter->GetValue().ToStdString();
 
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
 
@@ -388,17 +385,10 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
         return false;
     }
 
-    if( m_Config )
-    {
-        ConfigBaseWriteDouble( m_Config, ZONE_CLEARANCE_WIDTH_STRING_KEY,
-                               (double) m_settings.m_ZoneClearance / IU_PER_MILS );
-        ConfigBaseWriteDouble( m_Config, ZONE_MIN_THICKNESS_WIDTH_STRING_KEY,
-                               (double) m_settings.m_ZoneMinThickness / IU_PER_MILS );
-        ConfigBaseWriteDouble( m_Config, ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
-                               (double) m_settings.m_ThermalReliefGap / IU_PER_MILS );
-        ConfigBaseWriteDouble( m_Config, ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
-                               (double) m_settings.m_ThermalReliefCopperBridge / IU_PER_MILS );
-    }
+    cfg->m_Zones.clearance                   = Iu2Mils( m_settings.m_ZoneClearance );
+    cfg->m_Zones.min_thickness               = Iu2Mils( m_settings.m_ZoneMinThickness );
+    cfg->m_Zones.thermal_relief_gap          = Iu2Mils( m_settings.m_ThermalReliefGap );
+    cfg->m_Zones.thermal_relief_copper_width = Iu2Mils( m_settings.m_ThermalReliefCopperBridge );
 
     // If we use only exportable to others zones parameters, exit here:
     if( aUseExportableSetupOnly )
@@ -478,17 +468,15 @@ void DIALOG_COPPER_ZONE::OnNetSortingOptionSelected( wxCommandEvent& event )
 
     buildAvailableListOfNets();
 
-    if( m_Config )
-    {
-        long configValue = m_NetFiltering ? 2 : 0;
+    auto cfg = m_Parent->GetSettings();
 
-        if( m_NetSortingByPadCount )
-            configValue += 1;
+    int configValue = m_NetFiltering ? 2 : 0;
 
-        m_Config->Write( ZONE_NET_SORT_OPTION_KEY, configValue );
-        wxString Filter = m_DoNotShowNetNameFilter->GetValue();
-        m_Config->Write( ZONE_NET_FILTER_STRING_KEY, Filter );
-    }
+    if( m_NetSortingByPadCount )
+        configValue += 1;
+
+    cfg->m_Zones.net_sort_mode = configValue;
+    cfg->m_Zones.net_filter = m_DoNotShowNetNameFilter->GetValue().ToStdString();
 }
 
 

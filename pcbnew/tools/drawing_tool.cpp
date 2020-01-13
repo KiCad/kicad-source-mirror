@@ -28,6 +28,7 @@
 
 #include <pcb_edit_frame.h>
 #include <project.h>
+#include <pcbnew_settings.h>
 #include <id.h>
 #include <confirm.h>
 #include <import_gfx/dialog_import_gfx.h>

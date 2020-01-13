@@ -51,6 +51,9 @@
 #include <class_module.h>
 #include <reporter.h>
 
+
+class COLOR_SETTINGS;
+
 /// A type that stores a container of 2d objects for each layer id
 typedef std::map< PCB_LAYER_ID, CBVHCONTAINER2D *> MAP_CONTAINER_2D;
 
@@ -126,6 +129,8 @@ class CINFO3D_VISU
      * @return BOARD pointer
      */
     const BOARD *GetBoard() const { return m_board; }
+
+    void SetColorSettings( COLOR_SETTINGS* aSettings ) { m_colors = aSettings; }
 
     /**
      * @brief InitSettings - Function to be called by the render when it need to
@@ -519,6 +524,8 @@ private:
     /// pointer to the 3d model manager
     S3D_CACHE *m_3d_model_manager;
 
+    /// pointer to current color settings
+    COLOR_SETTINGS* m_colors;
 
     // Render options
 

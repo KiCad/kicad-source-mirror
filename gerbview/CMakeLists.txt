@@ -45,7 +45,7 @@ set( GERBVIEW_SRCS
     excellon_read_drill_file.cpp
     export_to_pcbnew.cpp
     files.cpp
-    gerbview_config.cpp
+    gerbview_settings.cpp
     gerbview_frame.cpp
     job_file_reader.cpp
     menubar.cpp
@@ -72,7 +72,6 @@ set( GERBVIEW_EXTRA_SRCS
     ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
     ${CMAKE_SOURCE_DIR}/common/widgets/layer_box_selector.cpp
     ${CMAKE_SOURCE_DIR}/common/lset.cpp
-    ${CMAKE_SOURCE_DIR}/common/settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/layer_widget.cpp
     ${CMAKE_SOURCE_DIR}/common/page_info.cpp
 )

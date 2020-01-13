@@ -26,7 +26,8 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <common.h>
-#include <pcb_base_frame.h>
+#include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
 #include <confirm.h>
@@ -43,12 +44,12 @@
 class DIALOG_EXPORT_SVG : public DIALOG_EXPORT_SVG_BASE
 {
 public:
-    DIALOG_EXPORT_SVG( PCB_BASE_FRAME* aParent, BOARD* aBoard );
+    DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard );
     ~DIALOG_EXPORT_SVG() override;
 
 private:
     BOARD*            m_board;
-    wxConfigBase*     m_config;
+    PCB_EDIT_FRAME*   m_parent;
     LSET              m_printMaskLayer;
     // the list of existing board layers in wxCheckListBox, with the
     // board layers id:
@@ -72,24 +73,14 @@ private:
 };
 
 
-// Keys for configuration
-#define PLOTSVGMODECOLOR_KEY        wxT( "PlotSVGModeColor" )
-#define PLOTSVGMODEMIRROR_KEY       wxT( "PlotSVGModeMirror" )
-#define PLOTSVGMODEONEFILE_KEY      wxT( "PlotSVGModeOneFile" )
-#define PLOTSVGPAGESIZEOPT_KEY      wxT( "PlotSVGPageOpt" )
-#define PLOTSVGPLOT_BRD_EDGE_KEY    wxT( "PlotSVGBrdEdge" )
-#define PLOTSVG_LAYERBASE           wxT( "PlotSVGLayer_%d" )
-#define PLOTSVG_DIR_KEY             wxT( "PlotSVGDirectory" )
-
 /*
  * DIALOG_EXPORT_SVG functions
  */
-DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_BASE_FRAME* aParent, BOARD* aBoard ) :
-    DIALOG_EXPORT_SVG_BASE( aParent ),
+DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
+    DIALOG_EXPORT_SVG_BASE( aParent ), m_parent( aParent ),
     m_lineWidth( aParent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
 {
     m_board  = aBoard;
-    m_config = Kiface().KifaceSettings();
 
     memset( m_boxSelectLayer, 0, sizeof( m_boxSelectLayer ) );
 
@@ -115,43 +106,39 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
     m_outputDirectory = m_outputDirectoryName->GetValue();
     m_outputDirectory.Replace( wxT( "\\" ), wxT( "/" ) );
 
-    if( m_config )
+    auto cfg = m_parent->GetSettings();
+
+    cfg->m_ExportSvg.black_and_white  = m_printBW;
+    cfg->m_ExportSvg.mirror           = m_printMirror;
+    cfg->m_ExportSvg.one_file         = m_oneFileOnly;
+    cfg->m_ExportSvg.plot_board_edges = m_PrintBoardEdgesCtrl->GetValue();
+    cfg->m_ExportSvg.page_size        = m_rbSvgPageSizeOpt->GetSelection();
+    cfg->m_ExportSvg.output_dir       = m_outputDirectory.ToStdString();
+
+    cfg->m_ExportSvg.layers.clear();
+
+    for( unsigned layer = 0; layer < arrayDim( m_boxSelectLayer ); ++layer )
     {
-        m_config->Write( PLOTSVG_DIR_KEY, m_outputDirectory );
-        m_config->Write( PLOTSVGMODECOLOR_KEY, m_printBW );
-        m_config->Write( PLOTSVGMODEMIRROR_KEY, m_printMirror );
-        m_config->Write( PLOTSVGMODEONEFILE_KEY, m_oneFileOnly );
-        m_config->Write( PLOTSVGPAGESIZEOPT_KEY, m_rbSvgPageSizeOpt->GetSelection() );
-        m_config->Write( PLOTSVGPLOT_BRD_EDGE_KEY, m_PrintBoardEdgesCtrl->GetValue() );
+        if( !m_boxSelectLayer[layer].first )
+            continue;
 
-        wxString layerKey;
-
-        for( unsigned layer = 0; layer < arrayDim(m_boxSelectLayer);  ++layer )
-        {
-            if( !m_boxSelectLayer[layer].first )
-                continue;
-
-            layerKey.Printf( PLOTSVG_LAYERBASE, layer );
-            m_config->Write( layerKey, m_boxSelectLayer[layer].first->IsChecked( m_boxSelectLayer[layer].second ) );
-        }
+        if( m_boxSelectLayer[layer].first->IsChecked( m_boxSelectLayer[layer].second ) )
+            cfg->m_ExportSvg.layers.push_back( m_boxSelectLayer[layer].second );
     }
 }
 
 
 void DIALOG_EXPORT_SVG::initDialog()
 {
-    if( m_config )
-    {
-        m_config->Read( PLOTSVG_DIR_KEY, &m_outputDirectory, wxEmptyString );
-        m_config->Read( PLOTSVGMODECOLOR_KEY, &m_printBW, false );
-        long ltmp;
-        m_config->Read( PLOTSVGPAGESIZEOPT_KEY, &ltmp, 0 );
-        m_rbSvgPageSizeOpt->SetSelection( ltmp );
-        m_config->Read( PLOTSVGMODEMIRROR_KEY, &m_printMirror, false );
-        m_config->Read( PLOTSVGMODEONEFILE_KEY, &m_oneFileOnly, false);
-        m_config->Read( PLOTSVGPLOT_BRD_EDGE_KEY, &ltmp, 1 );
-        m_PrintBoardEdgesCtrl->SetValue( ltmp );
-    }
+    auto cfg = m_parent->GetSettings();
+
+    m_printBW         = cfg->m_ExportSvg.black_and_white;
+    m_printMirror     = cfg->m_ExportSvg.mirror;
+    m_oneFileOnly     = cfg->m_ExportSvg.one_file;
+    m_outputDirectory = cfg->m_ExportSvg.output_dir;
+
+    m_rbSvgPageSizeOpt->SetSelection( cfg->m_ExportSvg.page_size );
+    m_PrintBoardEdgesCtrl->SetValue( cfg->m_ExportSvg.plot_board_edges );
 
     m_outputDirectoryName->SetValue( m_outputDirectory );
 
@@ -177,15 +164,9 @@ void DIALOG_EXPORT_SVG::initDialog()
             m_boxSelectLayer[layer] = std::make_pair( m_TechnicalLayersList, checkIndex );
         }
 
-        if( m_config )
-        {
-            wxString layerKey;
-            layerKey.Printf( PLOTSVG_LAYERBASE, layer );
-            bool option;
-
-            if( m_config && m_config->Read( layerKey, &option ) )
-                m_boxSelectLayer[layer].first->Check( checkIndex, option );
-        }
+        if( std::find( cfg->m_ExportSvg.layers.begin(), cfg->m_ExportSvg.layers.end(), layer ) !=
+            cfg->m_ExportSvg.layers.end() )
+            m_boxSelectLayer[layer].first->Check( checkIndex, true );
     }
 }
 
@@ -361,7 +342,7 @@ void DIALOG_EXPORT_SVG::OnButtonPlot( wxCommandEvent& event )
 }
 
 
-bool InvokeExportSVG( PCB_BASE_FRAME* aCaller, BOARD* aBoard )
+bool InvokeExportSVG( PCB_EDIT_FRAME* aCaller, BOARD* aBoard )
 {
     DIALOG_EXPORT_SVG dlg( aCaller, aBoard );
 

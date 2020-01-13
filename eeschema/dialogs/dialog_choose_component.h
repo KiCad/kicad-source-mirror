@@ -200,8 +200,6 @@ protected:
      */
     void PopulateFootprintSelector( LIB_ID const& aLibId );
 
-    wxConfigBase*             m_config;
-
     wxTimer*                  m_dbl_click_timer;
     SYMBOL_PREVIEW_WIDGET*    m_symbol_preview;
     wxButton*                 m_browser_button;

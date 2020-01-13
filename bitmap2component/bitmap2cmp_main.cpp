@@ -22,10 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "bitmap2cmp_gui.h"
+#include <bitmap2cmp_gui.h>
+#include <bitmap2cmp_settings.h>
 #include <kiface_i.h>
 #include <kiway.h>
 #include <pgm_base.h>
+#include <settings/settings_manager.h>
 
 
 //-----<KIFACE>-----------------------------------------------------------------
@@ -38,6 +40,8 @@ static struct IFACE : public KIFACE_I
 
     wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
     {
+        InitSettings( new BITMAP2CMP_SETTINGS );
+        Pgm().GetSettingsManager().RegisterSettings( KifaceSettings() );
         return new BM2CMP_FRAME( aKiway, aParent );
     }
 

@@ -45,8 +45,10 @@
 #include <stripline.h>
 #include <twistedpair.h>
 
-#include <transline_ident.h>
+#include <kiface_i.h>
+#include <pcb_calculator_settings.h>
 #include <UnitSelector.h>
+#include <transline_ident.h>
 
 
 /*
@@ -70,36 +72,6 @@ TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId,
     m_UnitSelection = 0;
     m_NormalizedValue = 0;
  }
-
-
-#define TRANSLINE_PRM_KEY wxT( "translineprm%d" )
-
-void TRANSLINE_PRM::ReadConfig( wxConfigBase* aConfig )
-{
-    if( m_Id == UNKNOWN_ID || m_Id == DUMMY_PRM )
-        return;
-
-    wxString key;
-    key.Printf( TRANSLINE_PRM_KEY, (int) m_Id );
-    aConfig->Read( key, &m_Value );
-
-    key += wxT( "unit" );
-    aConfig->Read( key, &m_UnitSelection );
-}
-
-
-void TRANSLINE_PRM::WriteConfig( wxConfigBase* aConfig )
-{
-    if( m_Id == UNKNOWN_ID || m_Id == DUMMY_PRM )
-        return;
-
-    wxString key;
-    key.Printf( TRANSLINE_PRM_KEY, (int) m_Id );
-    aConfig->Write( key, m_Value );
-
-    key += wxT( "unit" );
-    aConfig->Write( key, m_UnitSelection );
-}
 
 
 double TRANSLINE_PRM::ToUserUnit()
@@ -433,31 +405,49 @@ TRANSLINE_IDENT::~TRANSLINE_IDENT()
 {
     delete m_TLine;
     delete m_Icon;
-    for( unsigned ii = 0; ii < m_prms_List.size(); ii++ )
-        delete m_prms_List[ii];
+
+    for( auto& ii : m_prms_List )
+        delete ii;
 
     m_prms_List.clear();
 }
 
 
-void TRANSLINE_IDENT::ReadConfig( wxConfigBase* aConfig )
+void TRANSLINE_IDENT::ReadConfig()
 {
-    wxString text = wxString::FromUTF8( m_TLine->m_Name );
-    aConfig->SetPath( text );
-    for( unsigned ii = 0; ii < m_prms_List.size(); ii++ )
-        m_prms_List[ii]->ReadConfig( aConfig );
+    auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
+    std::string name( m_TLine->m_Name );
 
-    aConfig->SetPath( wxT( ".." ) );
+    if( cfg->m_TransLine.param_values.count( name ) )
+    {
+        wxASSERT( cfg->m_TransLine.param_units.count( name ) );
+
+        for( auto& param : m_prms_List )
+        {
+            std::string id = std::to_string( param->m_Id );
+
+            try
+            {
+                param->m_Value = cfg->m_TransLine.param_values.at( name ).at( id );
+                param->m_UnitSelection = cfg->m_TransLine.param_units.at( name ).at( id );
+            }
+            catch( ... )
+            {}
+        }
+    }
 }
 
 
-void TRANSLINE_IDENT::WriteConfig( wxConfigBase* aConfig )
+void TRANSLINE_IDENT::WriteConfig()
 {
-    wxString text = wxString::FromUTF8( m_TLine->m_Name );
-    aConfig->SetPath( text );
-    for( unsigned ii = 0; ii < m_prms_List.size(); ii++ )
-        m_prms_List[ii]->WriteConfig( aConfig );
+    auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
+    std::string name( m_TLine->m_Name );
 
-    aConfig->SetPath( wxT( ".." ) );
+    for( auto& param : m_prms_List )
+    {
+        std::string id = std::to_string( param->m_Id );
+        cfg->m_TransLine.param_values[ name ][ id ] = param->m_Value;
+        cfg->m_TransLine.param_units[ name ][ id ] = param->m_UnitSelection;
+    }
 }
 

@@ -31,6 +31,7 @@ class FP_LIB_TABLE;
 class EDGE_MODULE;
 class FOOTPRINT_TREE_PANE;
 class LIB_MANAGER;
+class FOOTPRINT_EDITOR_SETTINGS;
 
 namespace PCB { struct IFACE; }     // A KIFACE_I coded in pcbnew.c
 
@@ -70,29 +71,18 @@ public:
 
     bool IsCurrentFPFromBoard() const;
 
+    FOOTPRINT_EDITOR_SETTINGS* GetSettings();
+
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const override;
     void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings ) override;
 
     const PCB_PLOT_PARAMS& GetPlotSettings() const override;
     void SetPlotSettings( const PCB_PLOT_PARAMS& aSettings ) override;
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     const BOX2I GetDocumentExtents() const override;
-
-    /**
-     * Return the footprint editor settings list.
-     *
-     * Currently, only the settings that are needed at start
-     * up by the main window are defined here.  There are other locally used
-     * settings that are scattered throughout the Pcbnew source code.  If you need
-     * to define a configuration setting that needs to be loaded at run time,
-     * this is the place to define it.
-     *
-     * @return - Reference to the list of applications settings.
-     */
-    std::vector<PARAM_CFG*>& GetConfigurationSettings();
 
     void OnCloseWindow( wxCloseEvent& Event ) override;
     void CloseModuleEditor( wxCommandEvent& Event );
@@ -356,7 +346,8 @@ protected:
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent, EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend );
 
     PCB_LAYER_BOX_SELECTOR* m_selLayerBox;  // a combo box to display and select active layer
-    std::vector<PARAM_CFG*> m_configParams; // List of footprint editor configuration parameters.
+
+    FOOTPRINT_EDITOR_SETTINGS* m_settings;
 
     /**
      * Make sure the footprint info list is loaded (with a progress dialog) and then initialize

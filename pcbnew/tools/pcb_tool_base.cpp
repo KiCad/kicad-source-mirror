@@ -29,6 +29,7 @@
 #include <board_commit.h>
 #include <class_module.h>
 #include <pcb_draw_panel_gal.h>
+#include <pcbnew_settings.h>
 #include "selection_tool.h"
 #include "pcb_actions.h"
 #include "tool_event_utils.h"

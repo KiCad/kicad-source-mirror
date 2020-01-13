@@ -52,6 +52,7 @@
 #include <class_pcb_target.h>
 #include <connectivity/connectivity_data.h>
 #include <pgm_base.h>
+#include <pcbnew_settings.h>
 
 /**
  * A singleton item of this class is returned for a weak reference that no longer exists.
@@ -92,11 +93,11 @@ DELETED_BOARD_ITEM g_DeletedItem;
  */
 wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
-// Dummy general settings (defined colors are the default values) used to initialize the board.
-// These settings will be overriden later, depending on the draw frame that displays the board.
-// However, when a board is created by a python script, outside a frame, the colors must be set
-// so dummyColorsSettings provide this default initialization
-static PCB_GENERAL_SETTINGS dummyGeneralSettings( FRAME_PCB_EDITOR );
+// Dummy settings used to initialize the board.
+// This is needed because some APIs that make use of BOARD without the context of a frame or
+// application, and so the BOARD needs to store a valid pointer to a PCBNEW_SETTINGS even if
+// one hasn't been provided by the application.
+static PCBNEW_SETTINGS dummyGeneralSettings;
 
 BOARD::BOARD() :
     BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),

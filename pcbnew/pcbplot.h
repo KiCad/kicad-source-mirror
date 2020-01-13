@@ -29,11 +29,14 @@
 #ifndef PCBPLOT_H_
 #define PCBPLOT_H_
 
-#include <wx/filename.h>
+#include <layers_id_colors_and_visibility.h>
+#include <math/util.h> // for KiROUND
 #include <pad_shapes.h>
 #include <pcb_plot_params.h>
-#include <layers_id_colors_and_visibility.h>
-#include <math/util.h>      // for KiROUND
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
+#include <wx/filename.h>
 
 class PLOTTER;
 class TEXTE_PCB;
@@ -48,22 +51,6 @@ class ZONE_CONTAINER;
 class BOARD;
 class REPORTER;
 
-///@{
-/// \ingroup config
-
-#define OPTKEY_LAYERBASE             wxT( "PlotLayer_%d" )
-#define OPTKEY_PRINT_LINE_WIDTH      wxT( "PrintLineWidth" )
-#define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
-#define OPTKEY_PRINT_PAGE_FRAME      wxT( "PrintPageFrame" )
-#define OPTKEY_PRINT_MONOCHROME_MODE wxT( "PrintMonochrome" )
-#define OPTKEY_PRINT_PAGE_PER_LAYER  wxT( "PrintSinglePage" )
-#define OPTKEY_PRINT_PADS_DRILL      wxT( "PrintPadsDrillOpt" )
-#define OPTKEY_PLOT_X_FINESCALE_ADJ  wxT( "PlotXFineScaleAdj" )
-#define OPTKEY_PLOT_Y_FINESCALE_ADJ  wxT( "PlotYFineScaleAdj" )
-#define CONFIG_PS_FINEWIDTH_ADJ      wxT( "PSPlotFineWidthAdj" )
-#define OPTKEY_PLOT_CHECK_ZONES      wxT( "CheckZonesBeforePlotting" )
-
-///@}
 
 // Define min and max reasonable values for plot/print scale
 #define PLOT_MIN_SCALE 0.01
@@ -80,12 +67,18 @@ class BRDITEMS_PLOTTER : public PCB_PLOT_PARAMS
     BOARD*      m_board;
     LSET        m_layerMask;
 
+    /// Pointer to color settings that should be used for plotting
+    COLOR_SETTINGS* m_colors;
+
 public:
     BRDITEMS_PLOTTER( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS& aPlotOpts ) :
         PCB_PLOT_PARAMS( aPlotOpts )
     {
         m_plotter = aPlotter;
         m_board = aBoard;
+
+        // TODO(JE) do we ever need to plot outside the context of Pgm()?
+        m_colors = Pgm().GetSettingsManager().GetColorSettings();
     }
 
     /**

@@ -38,17 +38,8 @@
 #include <tools/gerbview_actions.h>
 #include <tools/gerbview_control.h>
 
-///@{
-/// \ingroup config
-
+// TODO(JE)
 #define OPTKEY_LAYERBASE             wxT( "PlotLayer_%d" )
-#define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
-#define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
-#define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
-#define OPTKEY_PRINT_PAGE_FRAME      wxT( "PrintPageFrame" )
-#define OPTKEY_PRINT_MONOCHROME_MODE wxT( "PrintMonochrome" )
-
-///@}
 
 
 class DIALOG_PRINT_GERBVIEW : public DIALOG_PRINT_GENERIC

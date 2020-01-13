@@ -65,6 +65,7 @@
 #include <algorithm>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
+#include <eeschema_settings.h>
 
 #define FIELD_PADDING Mils2iu( 10 )            // arbitrarily chosen for aesthetics
 #define FIELD_PADDING_ALIGNED Mils2iu( 18 )    // aligns 50 mil text to a 100 mil grid
@@ -126,8 +127,10 @@ public:
         :m_screen( aScreen ), m_component( aComponent )
     {
         m_component->GetFields( m_fields, /* aVisibleOnly */ true );
-        Kiface().KifaceSettings()->Read( AutoplaceJustifyEntry, &m_allow_rejustify, true );
-        Kiface().KifaceSettings()->Read( AutoplaceAlignEntry, &m_align_to_grid, false );
+
+        auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+        m_allow_rejustify = cfg->m_AutoplaceFields.allow_rejustify;
+        m_align_to_grid = cfg->m_AutoplaceFields.align_to_grid;
 
         m_comp_bbox = m_component->GetBodyBoundingBox();
         m_fbox_size = ComputeFBoxSize( /* aDynamic */ true );

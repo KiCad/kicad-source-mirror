@@ -443,7 +443,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     {
         m_parent->PrintWorkSheet( dc, aScreen, GetDefaultLineThickness(), IU_PER_MILS,
                                   aScreen->GetFileName(), wxEmptyString,
-                                  GetLayerColor( ( SCH_LAYER_ID )LAYER_WORKSHEET ) );
+                                  m_parent->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) );
     }
 
     aScreen->Print( dc );

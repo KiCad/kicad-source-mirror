@@ -33,9 +33,6 @@
 #include <gbr_screen.h>
 #include <page_info.h>
 #include <gbr_display_options.h>
-#include <colors_design_settings.h>
-
-extern COLORS_DESIGN_SETTINGS g_ColorsSettings;
 
 #define NO_AVAILABLE_LAYERS UNDEFINED_LAYER
 
@@ -166,8 +163,6 @@ public:
     DCODE_SELECTION_BOX*    m_DCodeSelector;    // a list box to select the dcode Id to highlight.
     wxTextCtrl*             m_TextInfo;         // a wxTextCtrl used to display some info about
                                                 // gerber data (format..)
-
-    COLORS_DESIGN_SETTINGS* m_colorsSettings;
 
 private:
     std::vector<PARAM_CFG*> m_configSettings;
@@ -410,19 +405,9 @@ public:
      */
     void DisplayGridMsg();
 
-    /**
-     * Function GetConfigurationSettings
-     * Populates the GerbView applications settings list.
-     * (list of parameters that must be saved in GerbView parameters)
-     * Currently, only the settings that are needed at start up by the main window are
-     * defined here.  There are other locally used settings scattered throughout the
-     * GerbView source code (mainly in dialogs).  If you need to define a configuration
-     * setting that need to be loaded at run time, this is the place to define it.
-     */
-    std::vector<PARAM_CFG*>& GetConfigurationSettings( void );
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    void LoadSettings( wxConfigBase* aCfg ) override;
-    void SaveSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void OnToggleShowLayerManager( wxCommandEvent& aEvent );
 
