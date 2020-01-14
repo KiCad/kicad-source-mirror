@@ -31,10 +31,12 @@
 
 ALTIUM_PARSER_BINARY::ALTIUM_PARSER_BINARY(const CFB::CompoundFileReader &aReader,
                                            const CFB::COMPOUND_FILE_ENTRY *aEntry) {
+    subrecord_end = nullptr;
     if (aEntry->size > std::numeric_limits<size_t>::max())
     {
         std::cerr << "error: stream too large" << std::endl;
         pos = nullptr;
+
         size = 0;
         error = true;
         return;

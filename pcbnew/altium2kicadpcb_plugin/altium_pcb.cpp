@@ -214,32 +214,50 @@ MODULE* ALTIUM_PCB::GetComponent( const u_int16_t id) {
 void ALTIUM_PCB::ParseFileHeader( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
     ALTIUM_PARSER_BINARY reader(aReader, aEntry);
 
-    reader.skip(4);
+    reader.read_subrecord_length();
     std::cout << "HEADER: " << reader.read_string() << std::endl;  // tells me: PCB 5.0 Binary File
 
+    //reader.subrecord_skip();
+
     // TODO: does not seem to work all the time at the moment
-    // wxASSERT(!reader.parser_error());
-    // wxASSERT(reader.bytes_remaining() == 0);
+    //wxASSERT(!reader.parser_error());
+    //wxASSERT(reader.bytes_remaining() == 0);
 }
 
 void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
-    ALTIUM_PARSER_BINARY reader(aReader, aEntry);
+    ALTIUM_PARSER_BINARY reader( aReader, aEntry );
 
-    while( !reader.parser_error() && reader.bytes_remaining() > 5 + 147 /* TODO: use Header section of file */ ) {
+    while( !reader.parser_error() && reader.bytes_remaining() >= 4*6 /* TODO: use Header section of file */ ) {
         u_int8_t recordtype = reader.read<u_int8_t>();
         wxASSERT( recordtype == ALTIUM_RECORD::PAD );
 
-        u_int32_t len = reader.read<u_int32_t>();
+        // Subrecord 1
+        size_t subrecord1 = reader.read_subrecord_length();
+        wxASSERT( subrecord1 > 0 );
         std::string name = reader.read_string();
-        wxASSERT( len-1 == name.size() );
+        wxASSERT( reader.subrecord_remaining() == 0 );
+        reader.subrecord_skip();
 
-        reader.skip( 19);
-        u_int8_t length_bytes = reader.read<u_int8_t>();
-        reader.skip( 3);
+        // Subrecord 2
+        reader.read_subrecord_length();
+        reader.subrecord_skip();
+
+        // Subrecord 3
+        reader.read_subrecord_length();
+        reader.subrecord_skip();
+
+        // Subrecord 4
+        reader.read_subrecord_length();
+        reader.subrecord_skip();
+
+        // Subrecord 5
+        size_t subrecord5 = reader.read_subrecord_length();
+        wxASSERT( subrecord5 >= 120 );  // TODO: exact minimum length we know?
+
         u_int8_t layer = reader.read<u_int8_t>();
-        reader.skip( 6);
+        reader.skip( 6 );
         u_int16_t component = reader.read<u_int16_t>();
-        reader.skip( 4);
+        reader.skip( 4 );
 
         wxPoint position = reader.read_point();
         wxSize topsize = reader.read_size();
@@ -263,7 +281,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
 
         std::cout << "Pad: '" << name << "'" << std::endl;
         std::cout << "  component: " << component << std::endl;
-        std::cout << "  layer: " << (int)layer << std::endl;
+        std::cout << "  layer: " << (int) layer << std::endl;
         std::cout << "  position: " << position << std::endl;
         std::cout << "  topsize: " << topsize << std::endl;
         std::cout << "  midsize: " << midsize << std::endl;
@@ -272,124 +290,115 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
         std::cout << "  holerotation: " << holerotation << std::endl;
 
         // Create Pad
-        MODULE* module = GetComponent( component );
-        D_PAD* pad = new D_PAD( module );
+        MODULE *module = GetComponent( component );
+        D_PAD *pad = new D_PAD( module );
         module->Add( pad );
 
         pad->SetName( name );
         pad->SetPosition( position );
         pad->SetSize( topsize );
         pad->SetOrientation( direction * 10. );
-        if( holesize == 0 )
-        {
+        if ( holesize == 0 ) {
             wxASSERT( layer != ALTIUM_LAYER::MULTILAYER );
-            pad->SetAttribute(PAD_ATTR_T::PAD_ATTRIB_SMD );
-        }
-        else
-        {
+            pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
+        } else {
             wxASSERT( layer == ALTIUM_LAYER::MULTILAYER );  // TODO: I assume other values are possible as well?
-            pad->SetAttribute(plated ? PAD_ATTR_T::PAD_ATTRIB_STANDARD : PAD_ATTR_T::PAD_ATTRIB_HOLE_NOT_PLATED );
-            pad->SetDrillSize( wxSize( holesize, holesize ) );
+            pad->SetAttribute( plated ? PAD_ATTR_T::PAD_ATTRIB_STANDARD : PAD_ATTR_T::PAD_ATTRIB_HOLE_NOT_PLATED );
+            pad->SetDrillSize( wxSize(holesize, holesize) );
         }
 
         wxASSERT( padmode == ALTIUM_PAD_MODE::SIMPLE );
         // wxASSERT( topshape == midshape == botshape );
-        switch( topshape )
-        {
+        switch ( topshape ) {
             case ALTIUM_PAD_SHAPE::RECT:
-                pad->SetShape(PAD_SHAPE_T::PAD_SHAPE_RECT );
+                pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_RECT );
                 break;
             case ALTIUM_PAD_SHAPE::CIRCLE:
-                pad->SetShape(PAD_SHAPE_T::PAD_SHAPE_CIRCLE );
+                pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_CIRCLE );
                 break;
             case ALTIUM_PAD_SHAPE::OVAL:
-                pad->SetShape(PAD_SHAPE_T::PAD_SHAPE_OVAL );
+                pad->SetShape( PAD_SHAPE_T::PAD_SHAPE_OVAL );
                 break;
             case ALTIUM_PAD_SHAPE::UNKNOWN:
             default:
-                wxFAIL_MSG( "unknown shape" );
+                wxFAIL_MSG("unknown shape");
                 break;
         }
 
-        switch ( layer )
-        {
+        switch ( layer ) {
             case ALTIUM_LAYER::F_CU:
-                pad->SetLayer(F_Cu);
+                pad->SetLayer( F_Cu );
                 pad->SetLayerSet( LSET( 3, F_Cu, F_Paste, F_Mask ) );
                 break;
             case ALTIUM_LAYER::B_CU:
-                pad->SetLayer(B_Cu);
+                pad->SetLayer( B_Cu );
                 pad->SetLayerSet( LSET( 3, B_Cu, B_Paste, B_Mask ) );
                 break;
             case ALTIUM_LAYER::MULTILAYER:
             default:
                 pad->SetLayerSet( LSET::AllCuMask() );
-                pad->SetLayerSet( pad->GetLayerSet().set( B_Mask ).set( F_Mask ) ); // Solder Mask
+                pad->SetLayerSet( pad->GetLayerSet().set( B_Mask).set( F_Mask ) ); // Solder Mask
                 break;
         }
 
-        if( length_bytes > 106 )
-        {
-            if ( length_bytes == 114 )
-            {
-                reader.skip( 4);
-            }
-            else if ( length_bytes == 120 )
-            {
-                u_int8_t tolayer = reader.read<u_int8_t>();
-                reader.skip( 2 );
-                u_int8_t fromlayer = reader.read<u_int8_t>();
-                reader.skip( 2 );
-            }
+        if ( subrecord5 == 120 ) {
+            u_int8_t tolayer = reader.read<u_int8_t>();
+            reader.skip( 2 );
+            u_int8_t fromlayer = reader.read<u_int8_t>();
+            //reader.skip( 2 );
+        } else if ( subrecord5 == 171 ) {
 
-            u_int32_t last_section_length = reader.read<u_int32_t>();  // TODO: from libopenaltium, no idea how to interpret
-
-            if ( length_bytes == 171 )
-            {
-                reader.skip( 53 );
-                u_int32_t unknown171_length = reader.read<u_int32_t>();
-                reader.skip( unknown171_length );
-            }
         }
+        reader.subrecord_skip();
+
+        // Subrecord 6
+        reader.read_subrecord_length();
+        reader.subrecord_skip();
+
+        wxASSERT(!reader.parser_error());
     }
-    wxASSERT(!reader.parser_error());
-    wxASSERT(reader.bytes_remaining() == 0);
+
+    wxASSERT( !reader.parser_error() );
+    wxASSERT( reader.bytes_remaining() == 0 );
 }
 
 void ALTIUM_PCB::ParseVias6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
-    ALTIUM_PARSER_BINARY reader(aReader, aEntry);
+    ALTIUM_PARSER_BINARY reader( aReader, aEntry );
 
     while( !reader.parser_error() && reader.bytes_remaining() >= 213 /* TODO: use Header section of file */ ) {
         u_int8_t recordtype = reader.read<u_int8_t>();
-        wxASSERT(recordtype == ALTIUM_RECORD::VIA);
+        wxASSERT( recordtype == ALTIUM_RECORD::VIA );
 
-        reader.skip( 17 );
+        reader.read_subrecord_length();
+        reader.skip( 13 );
         wxPoint position = reader.read_point();
         u_int32_t diameter = ALTIUM_PARSER_BINARY::kicad_unit( reader.read<u_int32_t>() );
         u_int32_t holesize = ALTIUM_PARSER_BINARY::kicad_unit( reader.read<u_int32_t>() );
-        reader.skip( 180 );
 
-        VIA *via = new VIA(m_board);
-        m_board->Add(via);
+        VIA *via = new VIA( m_board );
+        m_board->Add( via );
 
-        via->SetPosition(position);
-        via->SetWidth(diameter);
-        via->SetDrill(holesize);
-        via->SetViaType(VIATYPE::THROUGH); // TODO
+        via->SetPosition( position );
+        via->SetWidth( diameter );
+        via->SetDrill( holesize );
+        via->SetViaType( VIATYPE::THROUGH ); // TODO
+
+        reader.subrecord_skip();
+        wxASSERT( !reader.parser_error() );
     }
 
-    wxASSERT(!reader.parser_error());
-    wxASSERT(reader.bytes_remaining() == 0);
+    wxASSERT( !reader.parser_error() );
+    wxASSERT( reader.bytes_remaining() == 0 );
 }
 
 void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
-    ALTIUM_PARSER_BINARY reader(aReader, aEntry);
+    ALTIUM_PARSER_BINARY reader( aReader, aEntry );
 
     while( !reader.parser_error() && reader.bytes_remaining() >= 49 /* TODO: use Header section of file */ ) {
         u_int8_t recordtype = reader.read<u_int8_t>();
-        wxASSERT(recordtype == ALTIUM_RECORD::TRACK);
+        wxASSERT( recordtype == ALTIUM_RECORD::TRACK );
 
-        reader.skip( 4 );
+        reader.read_subrecord_length();
         u_int8_t layer = reader.read<u_int8_t>();
         reader.skip( 12 );
         wxPoint start = reader.read_point();
@@ -399,29 +408,29 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader, const
         PCB_LAYER_ID klayer = kicad_layer( layer );
         if( klayer >= F_Cu && klayer <= B_Cu )
         {
-            TRACK* track = new TRACK(m_board);
-            m_board->Add(track);
+            TRACK* track = new TRACK( m_board );
+            m_board->Add( track );
 
-            track->SetStart(start);
-            track->SetEnd(end);
-            track->SetWidth(width);
+            track->SetStart( start );
+            track->SetEnd( end );
+            track->SetWidth( width );
             track->SetLayer( klayer );
         }
         else
         {
-            DRAWSEGMENT* ds = new DRAWSEGMENT(m_board);
-            m_board->Add(ds);
+            DRAWSEGMENT* ds = new DRAWSEGMENT( m_board );
+            m_board->Add( ds );
 
-            ds->SetStart(start);
-            ds->SetEnd(end);
-            ds->SetWidth(width);
+            ds->SetStart( start );
+            ds->SetEnd( end );
+            ds->SetWidth( width );
 
             ds->SetLayer( klayer != UNDEFINED_LAYER ? klayer : Eco1_User );
         }
 
-        reader.skip( 12 );
+        reader.subrecord_skip();
     }
 
-    wxASSERT(!reader.parser_error());
-    wxASSERT(reader.bytes_remaining() == 0);
+    wxASSERT( !reader.parser_error() );
+    wxASSERT( reader.bytes_remaining() == 0 );
 }

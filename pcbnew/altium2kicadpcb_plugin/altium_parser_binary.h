@@ -76,6 +76,12 @@ public:
         return {x, y};
     }
 
+    size_t read_subrecord_length() {
+        u_int32_t length = read<u_int32_t>();
+        subrecord_end = pos + length;
+        return length;
+    }
+
     static int32_t kicad_unit( const int32_t x ) {
         return (((int64_t) x) * 256L) / 100;
     }
@@ -99,9 +105,21 @@ public:
         }
     }
 
+    void subrecord_skip() {
+        if(subrecord_end == nullptr || subrecord_end < pos) {
+            error = true;
+        } else {
+            pos = subrecord_end;
+        }
+    };
+
     size_t bytes_remaining() const {
         return pos == nullptr ? 0 : size - (pos - content.get());
     }
+
+    size_t subrecord_remaining() const {
+        return pos == nullptr || subrecord_end == nullptr || subrecord_end <= pos ? 0 : subrecord_end - pos;
+    };
 
     bool parser_error() {
         return error;
@@ -113,6 +131,7 @@ private:
     size_t size;
 
     char* pos;  // current read pointer
+    char* subrecord_end; // pointer which points to next subrecord start
     bool error;
 };
 
