@@ -241,4 +241,34 @@ BOOST_AUTO_TEST_CASE( MixedElements )
     BOOST_CHECK_EQUAL( count, 1 );
 }
 
+// This tests the case where the tree has no branches but we want to iterator over a subset
+// where the first case may or may not match
+BOOST_AUTO_TEST_CASE( SingleElementTree )
+{
+    SCH_JUNCTION* junction = new SCH_JUNCTION( wxPoint( Mils2iu( 100 ), Mils2iu( 100 ) ) );
+    m_tree.insert( junction );
+
+    SCH_NO_CONNECT* nc = new SCH_NO_CONNECT( wxPoint( Mils2iu( 150 ), Mils2iu( 150 ) ) );
+    m_tree.insert( nc );
+
+    int count = 0;
+
+    for( auto item : m_tree.OfType( SCH_JUNCTION_T ) )
+    {
+        static_cast<void>( item );
+        count++;
+    }
+
+    BOOST_CHECK_EQUAL( count, 1 );
+
+    count = 0;
+    for( auto item : m_tree.OfType( SCH_NO_CONNECT_T ) )
+    {
+        static_cast<void>( item );
+        count++;
+    }
+
+    BOOST_CHECK_EQUAL( count, 1 );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
