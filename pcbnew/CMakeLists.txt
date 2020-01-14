@@ -569,6 +569,7 @@ endif()
 
 
 add_subdirectory( pcad2kicadpcb_plugin )
+add_subdirectory( altium2kicadpcb_plugin )
 
 if( BUILD_GITHUB_PLUGIN )
     add_subdirectory( github )
@@ -662,6 +663,7 @@ set( PCBNEW_KIFACE_LIBRARIES
     pcbcommon
     pnsrouter
     pcad2kicadpcb
+    altium2kicadpcb
     common
     gal
     dxflib_qcad

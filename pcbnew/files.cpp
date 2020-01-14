@@ -86,6 +86,7 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
         { LegacyPcbFileWildcard(),    IO_MGR::LEGACY },       // Old Kicad board files
         { EaglePcbFileWildcard(),     IO_MGR::EAGLE },        // Import board files
         { PCadPcbFileWildcard(),      IO_MGR::PCAD },         // Import board files
+        { AltiumPcbFileWildcard(),    IO_MGR::ALTIUM },       // Import board files
     };
 
     wxFileName  fileName( *aFileName );
@@ -352,7 +353,7 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
 
     wxFileName fn = aFileName;
 
-    // Note: file extensions are expected to be in ower case.
+    // Note: file extensions are expected to be in lower case.
     // This is not always true, especially when importing files, so the string
     // comparisons are case insensitive to try to find the suitable plugin.
 
@@ -364,6 +365,10 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
     else if( fn.GetExt().CmpNoCase(  IO_MGR::GetFileExtension( IO_MGR::PCAD ) ) == 0 )
     {
         pluginType = IO_MGR::PCAD;
+    }
+    else if( fn.GetExt().CmpNoCase(  IO_MGR::GetFileExtension( IO_MGR::ALTIUM ) ) == 0 )
+    {
+        pluginType = IO_MGR::ALTIUM;
     }
     else
     {

@@ -232,6 +232,10 @@ wxString PCadPcbFileWildcard()
     return _( "P-Cad 200x ASCII PCB files" ) + AddFileExtListToFilter( { "pcb" } );
 }
 
+wxString AltiumPcbFileWildcard()
+{
+    return _( "Altium PCB files" ) + AddFileExtListToFilter( { "PcbDoc" } );
+}
 
 wxString PcbFileWildcard()
 {
