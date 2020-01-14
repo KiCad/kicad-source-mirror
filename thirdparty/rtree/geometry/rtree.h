@@ -404,18 +404,17 @@ public:
     {
         iterator retval( aRect );
 
-        // Only a single element in the tree
-        if( m_root->IsLeaf() )
-        {
-            if( m_root->m_count && Overlap( &aRect, &m_root->m_branch[0].m_rect ) )
-                retval.Push( m_root, 0 );
-
+        if( !m_root->m_count )
             return retval;
-        }
 
         retval.Push( m_root, 0 );
-        ++retval;
 
+        // If the first leaf matches, return the root pointer, otherwise,
+        // increment to the first match or empty if none.
+        if( m_root->IsLeaf() && Overlap( &aRect, &m_root->m_branch[0].m_rect ) )
+            return retval;
+
+        ++retval;
         return retval;
     }
 
