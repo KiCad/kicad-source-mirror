@@ -94,12 +94,12 @@ static const std::map<int, supportedFileType> fileTypes =
 
 
 /*
- * Traverser implementation that looks to find any and all ".pretty" libraries by looking at the files contained inside
+ * Traverser implementation that looks to find any and all libraries by looking at the files contained inside
  */
-class KICAD_MOD_TRAVERSER : public wxDirTraverser
+class LIBRARY_TRAVERSER : public wxDirTraverser
 {
 public:
-    KICAD_MOD_TRAVERSER( wxString aSearchExtension ) : m_searchExtension( aSearchExtension )
+    LIBRARY_TRAVERSER( wxString aSearchExtension ) : m_searchExtension( aSearchExtension )
     {
     }
 
@@ -714,7 +714,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         {
             wxDir rootDir( dlg.GetPath() );
 
-            KICAD_MOD_TRAVERSER traverser( fileType.m_FolderSearchExtension );
+            LIBRARY_TRAVERSER traverser( fileType.m_FolderSearchExtension );
             rootDir.Traverse( traverser );
 
             traverser.GetPaths( files );
