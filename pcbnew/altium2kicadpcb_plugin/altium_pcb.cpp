@@ -110,45 +110,188 @@ struct ALTIUM_LAYER
 {
     enum
     {
-        F_CU                = 1,
-        IN4_CU              = 2,
-        IN2_CU              = 3,
-        IN3_CU              = 4,
-        IN5_CU              = 6,
-        IN6_CU              = 11,
-        IN7_CU              = 12,
-        B_CU                = 32,
+        TOP_LAYER           = 1,
+        MID_LAYER_1         = 2,
+        MID_LAYER_2         = 3,
+        MID_LAYER_3         = 4,
+        MID_LAYER_4         = 5,
+        MID_LAYER_5         = 6,
+        MID_LAYER_6         = 7,
+        MID_LAYER_7         = 8,
+        MID_LAYER_8         = 9,
+        MID_LAYER_9         = 10,
+        MID_LAYER_10        = 11,
+        MID_LAYER_11        = 12,
+        MID_LAYER_12        = 13,
+        MID_LAYER_13        = 14,
+        MID_LAYER_14        = 15,
+        MID_LAYER_15        = 16,
+        MID_LAYER_16        = 17,
+        MID_LAYER_17        = 18,
+        MID_LAYER_18        = 19,
+        MID_LAYER_19        = 20,
+        MID_LAYER_20        = 21,
+        MID_LAYER_21        = 22,
+        MID_LAYER_22        = 23,
+        MID_LAYER_23        = 24,
+        MID_LAYER_24        = 25,
+        MID_LAYER_25        = 26,
+        MID_LAYER_26        = 27,
+        MID_LAYER_27        = 28,
+        MID_LAYER_28        = 29,
+        MID_LAYER_29        = 30,
+        MID_LAYER_30        = 31,
+        BOTTOM_LAYER        = 32,
 
-        F_SILKS             = 33,
-        B_SILKS             = 34,
-        F_PASTE             = 35,
-        B_PASTE             = 36,
+        TOP_OVERLAY         = 33,
+        BOTTOM_OVERLAY      = 34,
+        TOP_PASTE           = 35,
+        BOTTOM_PASTE        = 36,
+        TOP_SOLDER          = 37,
+        BOTTOM_SOLDER       = 38,
 
-        EDGE_CUTS           = 56,
+        INTERNAL_PLANE_1    = 39,
+        INTERNAL_PLANE_2    = 40,
+        INTERNAL_PLANE_3    = 41,
+        INTERNAL_PLANE_4    = 42,
+        INTERNAL_PLANE_5    = 43,
+        INTERNAL_PLANE_6    = 44,
+        INTERNAL_PLANE_7    = 45,
+        INTERNAL_PLANE_8    = 46,
+        INTERNAL_PLANE_9    = 47,
+        INTERNAL_PLANE_10   = 48,
+        INTERNAL_PLANE_11   = 49,
+        INTERNAL_PLANE_12   = 50,
+        INTERNAL_PLANE_13   = 51,
+        INTERNAL_PLANE_14   = 52,
+        INTERNAL_PLANE_15   = 53,
+        INTERNAL_PLANE_16   = 54,
 
-        MULTILAYER          = 74
+        DRILL_GUIDE         = 55,
+        KEEP_OUT_LAYER      = 56,
+
+        MECHANICAL_1        = 57,
+        MECHANICAL_2        = 58,
+        MECHANICAL_3        = 59,
+        MECHANICAL_4        = 60,
+        MECHANICAL_5        = 61,
+        MECHANICAL_6        = 62,
+        MECHANICAL_7        = 63,
+        MECHANICAL_8        = 64,
+        MECHANICAL_9        = 65,
+        MECHANICAL_10       = 66,
+        MECHANICAL_11       = 67,
+        MECHANICAL_12       = 68,
+        MECHANICAL_13       = 69,
+        MECHANICAL_14       = 70,
+        MECHANICAL_15       = 71,
+        MECHANICAL_16       = 72,
+
+        DRILL_DRAWING       = 73,
+        MULTI_LAYER         = 74,
+        CONNECTIONS         = 75,
+        BACKGROUND          = 76,
+        DRC_ERROR_MARKERS   = 77,
+        SELECTIONS          = 78,
+        VISIBLE_GRID_1      = 79,
+        VISIBLE_GRID_2      = 80,
+        PAD_HOLES           = 81,
+        VIA_HOLES           = 82,
     };
 };
 
 PCB_LAYER_ID ALTIUM_PCB::kicad_layer( int aAltiumLayer ) const {
     switch( aAltiumLayer )
     {
-        case ALTIUM_LAYER::F_CU:            return F_Cu;
-        case ALTIUM_LAYER::IN2_CU:          return In2_Cu;
-        case ALTIUM_LAYER::IN3_CU:          return In3_Cu;
-        case ALTIUM_LAYER::IN4_CU:          return In4_Cu;
-        case ALTIUM_LAYER::IN5_CU:          return In5_Cu;
-        case ALTIUM_LAYER::IN6_CU:          return In6_Cu;
-        case ALTIUM_LAYER::IN7_CU:          return In7_Cu;
-        case ALTIUM_LAYER::B_CU:            return B_Cu;
+        case ALTIUM_LAYER::TOP_LAYER:           return F_Cu;
+        case ALTIUM_LAYER::MID_LAYER_1:         return In1_Cu; // TODO: stackup same as in KiCad?
+        case ALTIUM_LAYER::MID_LAYER_2:         return In2_Cu;
+        case ALTIUM_LAYER::MID_LAYER_3:         return In3_Cu;
+        case ALTIUM_LAYER::MID_LAYER_4:         return In4_Cu;
+        case ALTIUM_LAYER::MID_LAYER_5:         return In5_Cu;
+        case ALTIUM_LAYER::MID_LAYER_6:         return In6_Cu;
+        case ALTIUM_LAYER::MID_LAYER_7:         return In7_Cu;
+        case ALTIUM_LAYER::MID_LAYER_8:         return In8_Cu;
+        case ALTIUM_LAYER::MID_LAYER_9:         return In9_Cu;
+        case ALTIUM_LAYER::MID_LAYER_10:        return In10_Cu;
+        case ALTIUM_LAYER::MID_LAYER_11:        return In11_Cu;
+        case ALTIUM_LAYER::MID_LAYER_12:        return In12_Cu;
+        case ALTIUM_LAYER::MID_LAYER_13:        return In13_Cu;
+        case ALTIUM_LAYER::MID_LAYER_14:        return In14_Cu;
+        case ALTIUM_LAYER::MID_LAYER_15:        return In15_Cu;
+        case ALTIUM_LAYER::MID_LAYER_16:        return In16_Cu;
+        case ALTIUM_LAYER::MID_LAYER_17:        return In17_Cu;
+        case ALTIUM_LAYER::MID_LAYER_18:        return In18_Cu;
+        case ALTIUM_LAYER::MID_LAYER_19:        return In19_Cu;
+        case ALTIUM_LAYER::MID_LAYER_20:        return In20_Cu;
+        case ALTIUM_LAYER::MID_LAYER_21:        return In21_Cu;
+        case ALTIUM_LAYER::MID_LAYER_22:        return In22_Cu;
+        case ALTIUM_LAYER::MID_LAYER_23:        return In23_Cu;
+        case ALTIUM_LAYER::MID_LAYER_24:        return In24_Cu;
+        case ALTIUM_LAYER::MID_LAYER_25:        return In25_Cu;
+        case ALTIUM_LAYER::MID_LAYER_26:        return In26_Cu;
+        case ALTIUM_LAYER::MID_LAYER_27:        return In27_Cu;
+        case ALTIUM_LAYER::MID_LAYER_28:        return In28_Cu;
+        case ALTIUM_LAYER::MID_LAYER_29:        return In29_Cu;
+        case ALTIUM_LAYER::MID_LAYER_30:        return In30_Cu;
+        case ALTIUM_LAYER::BOTTOM_LAYER:        return B_Cu;
 
-        case ALTIUM_LAYER::F_SILKS:         return F_SilkS;
-        case ALTIUM_LAYER::B_SILKS:         return B_SilkS;
-        case ALTIUM_LAYER::F_PASTE:         return F_Paste;
-        case ALTIUM_LAYER::B_PASTE:         return B_Paste;
-        case ALTIUM_LAYER::EDGE_CUTS:       return Edge_Cuts;
+        case ALTIUM_LAYER::TOP_OVERLAY:         return F_SilkS;
+        case ALTIUM_LAYER::BOTTOM_OVERLAY:      return B_SilkS;
+        case ALTIUM_LAYER::TOP_PASTE:           return F_Paste;
+        case ALTIUM_LAYER::BOTTOM_PASTE:        return B_Paste;
+        case ALTIUM_LAYER::TOP_SOLDER:          return F_Mask;
+        case ALTIUM_LAYER::BOTTOM_SOLDER:       return B_Mask;
 
-        default:                            return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_1:    return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_2:    return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_3:    return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_4:    return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_5:    return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_6:    return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_7:    return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_8:    return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_9:    return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_10:   return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_11:   return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_12:   return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_13:   return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_14:   return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_15:   return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::INTERNAL_PLANE_16:   return UNDEFINED_LAYER;
+
+        case ALTIUM_LAYER::DRILL_GUIDE:         return Dwgs_User;
+        case ALTIUM_LAYER::KEEP_OUT_LAYER:      return UNDEFINED_LAYER;
+
+        case ALTIUM_LAYER::MECHANICAL_1:        return Edge_Cuts;
+        case ALTIUM_LAYER::MECHANICAL_2:        return Dwgs_User;
+        case ALTIUM_LAYER::MECHANICAL_3:        return Dwgs_User;
+        case ALTIUM_LAYER::MECHANICAL_4:        return Dwgs_User;
+        case ALTIUM_LAYER::MECHANICAL_5:        return Dwgs_User;
+        case ALTIUM_LAYER::MECHANICAL_6:        return Dwgs_User;
+        case ALTIUM_LAYER::MECHANICAL_7:        return Dwgs_User;
+        case ALTIUM_LAYER::MECHANICAL_8:        return Dwgs_User;
+        case ALTIUM_LAYER::MECHANICAL_9:        return Dwgs_User;
+        case ALTIUM_LAYER::MECHANICAL_10:       return Dwgs_User;
+        case ALTIUM_LAYER::MECHANICAL_11:       return Dwgs_User;
+        case ALTIUM_LAYER::MECHANICAL_12:       return Dwgs_User;
+        case ALTIUM_LAYER::MECHANICAL_13:       return F_Fab;
+        case ALTIUM_LAYER::MECHANICAL_14:       return B_Fab;
+        case ALTIUM_LAYER::MECHANICAL_15:       return F_CrtYd;
+        case ALTIUM_LAYER::MECHANICAL_16:       return B_CrtYd;
+
+        case ALTIUM_LAYER::DRILL_DRAWING:       return Dwgs_User;
+        case ALTIUM_LAYER::MULTI_LAYER:         return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::CONNECTIONS:         return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::BACKGROUND:          return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::DRC_ERROR_MARKERS:   return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::SELECTIONS:          return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::VISIBLE_GRID_1:      return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::VISIBLE_GRID_2:      return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::PAD_HOLES:           return UNDEFINED_LAYER;
+        case ALTIUM_LAYER::VIA_HOLES:           return UNDEFINED_LAYER;
+
+        default:                                return UNDEFINED_LAYER;
     }
 }
 
@@ -373,10 +516,10 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
         pad->SetSize( topsize );
         pad->SetOrientation( direction * 10. );
         if ( holesize == 0 ) {
-            wxASSERT( layer != ALTIUM_LAYER::MULTILAYER );
+            wxASSERT( layer != ALTIUM_LAYER::MULTI_LAYER );
             pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
         } else {
-            wxASSERT( layer == ALTIUM_LAYER::MULTILAYER );  // TODO: I assume other values are possible as well?
+            wxASSERT( layer == ALTIUM_LAYER::MULTI_LAYER );  // TODO: I assume other values are possible as well?
             pad->SetAttribute( plated ? PAD_ATTR_T::PAD_ATTRIB_STANDARD : PAD_ATTR_T::PAD_ATTRIB_HOLE_NOT_PLATED );
             pad->SetDrillSize( wxSize(holesize, holesize) );
         }
@@ -400,15 +543,15 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
         }
 
         switch ( layer ) {
-            case ALTIUM_LAYER::F_CU:
+            case ALTIUM_LAYER::TOP_LAYER:
                 pad->SetLayer( F_Cu );
                 pad->SetLayerSet( LSET( 3, F_Cu, F_Paste, F_Mask ) );
                 break;
-            case ALTIUM_LAYER::B_CU:
+            case ALTIUM_LAYER::BOTTOM_LAYER:
                 pad->SetLayer( B_Cu );
                 pad->SetLayerSet( LSET( 3, B_Cu, B_Paste, B_Mask ) );
                 break;
-            case ALTIUM_LAYER::MULTILAYER:
+            case ALTIUM_LAYER::MULTI_LAYER:
             default:
                 pad->SetLayerSet( LSET::AllCuMask() );
                 pad->SetLayerSet( pad->GetLayerSet().set( B_Mask).set( F_Mask ) ); // Solder Mask
