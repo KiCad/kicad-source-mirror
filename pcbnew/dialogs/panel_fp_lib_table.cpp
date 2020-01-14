@@ -105,7 +105,8 @@ public:
 
     virtual wxDirTraverseResult OnFile( const wxString& aFileName )
     {
-        if( aFileName.EndsWith( m_searchExtension ) )
+        wxFileName file( aFileName );
+        if( m_searchExtension.IsSameAs( file.GetExt(), false ) )
         {
             m_foundDirs.insert( { m_currentDir, 1 } );
         }
