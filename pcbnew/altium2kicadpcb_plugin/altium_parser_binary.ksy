@@ -27,9 +27,33 @@ types:
         type:
           switch-on: recordtype
           cases:
+            record_id::arc6: arc
             record_id::pad6: pad
             record_id::via6: via
             record_id::track6: track
+            record_id::text6: text
+
+  arc:
+    seq:
+    - id: sub1_len
+      type: u4
+    - id: data
+      type: arc_sub1
+      size: sub1_len
+
+  arc_sub1:
+    seq:
+      - size: 13
+      - id: center
+        type: xy
+      - id: radius
+        type: u4
+      - id: start_angle
+        type: f8
+      - id: end_angle
+        type: f8
+      - id: width
+        type: u4
 
   pad:
     seq:
@@ -218,6 +242,40 @@ types:
       - id: width # 29
         type: s4
 
+  text:
+    seq:
+    - id: sub1_len
+      type: u4
+    - id: properties
+      type: text_sub1
+      size: sub1_len
+    - id: sub2_len
+      type: u4
+    - id: text
+      type: text_sub2
+      size: sub2_len
+
+  text_sub1:
+    seq:
+      - size: 13
+      - id: pos
+        type: xy
+      - id: height
+        type: u4
+      - id: font_name_id
+        type: u1
+      - size: 1
+      - id: rotation
+        type: f8
+
+  text_sub2:
+    seq:
+      - id: len
+        type: u1
+      - id: name
+        type: str
+        size: len
+
   xy:
     seq:
       - id: x
@@ -227,9 +285,11 @@ types:
 
 enums:
   record_id:
+    0x01: arc6
     0x02: pad6
     0x03: via6
     0x04: track6
+    0x05: text6
 
   boolean:
     0: false
