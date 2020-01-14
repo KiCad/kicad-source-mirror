@@ -79,8 +79,13 @@ const wxPoint DRAWSEGMENT::GetPosition() const
 
 void DRAWSEGMENT::Move( const wxPoint& aMoveVector )
 {
-    m_Start += aMoveVector;
-    m_End   += aMoveVector;
+    // Move vector should not affect start/end for polygon since it will
+    // be applied directly to polygon outline.
+    if( m_Shape != S_POLYGON )
+    {
+        m_Start += aMoveVector;
+        m_End += aMoveVector;
+    }
 
     switch ( m_Shape )
     {
