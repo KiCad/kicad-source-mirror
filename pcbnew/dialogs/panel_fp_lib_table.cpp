@@ -712,7 +712,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             return;
 
         // is there a file extension configured to hunt out their containing folders?
-        if( fileType.m_FolderSearchExtension != "" )
+        if( !fileType.m_FolderSearchExtension.IsEmpty() )
         {
             wxDir rootDir( dlg.GetPath() );
 
