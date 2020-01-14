@@ -81,6 +81,7 @@ static const wxChar keyBoardBodyColor_Green[]   = wxT( "BoardBodyColor_Green" );
 static const wxChar keyBoardBodyColor_Blue[]    = wxT( "BoardBodyColor_Blue" );
 
 static const wxChar keyShowRealisticMode[]      = wxT( "ShowRealisticMode" );
+static const wxChar keySubtractMaskFromSilk[]   = wxT( "SubtractMaskFromSilk" );
 static const wxChar keyRenderEngine[]           = wxT( "RenderEngine" );
 static const wxChar keyRenderMaterial[]         = wxT( "Render_Material" );
 
@@ -735,6 +736,9 @@ void EDA_3D_VIEWER::LoadSettings( wxConfigBase *aCfg )
     aCfg->Read( keyShowRealisticMode, &tmp, true );
     m_settings.SetFlag( FL_USE_REALISTIC_MODE, tmp );
 
+    aCfg->Read( keySubtractMaskFromSilk, &tmp, false );
+    m_settings.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, tmp );
+
     // OpenGL options
     aCfg->Read( keyRenderOGL_ShowCopperTck, &tmp, true );
     m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, tmp );
@@ -850,6 +854,7 @@ void EDA_3D_VIEWER::SaveSettings( wxConfigBase *aCfg )
     aCfg->Write( keyBoardBodyColor_Blue,    m_settings.m_BoardBodyColor.b );
 
     aCfg->Write( keyShowRealisticMode,      m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
+    aCfg->Write( keySubtractMaskFromSilk,   m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
 
     aCfg->Write( keyRenderEngine, static_cast<int>( m_settings.RenderEngineGet() ) );
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::SaveSettings render setting %s",

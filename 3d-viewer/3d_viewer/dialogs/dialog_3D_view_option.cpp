@@ -87,6 +87,7 @@ void DIALOG_3D_VIEW_OPTIONS::initDialog()
     m_bitmapAdhesive->SetBitmap( KiBitmap( tools_xpm ) );
     m_bitmapComments->SetBitmap( KiBitmap( editor_xpm ) );
     m_bitmapECO->SetBitmap( KiBitmap( editor_xpm ) );
+    m_bitmapSubtractMaskFromSilk->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
 }
 
 
@@ -109,6 +110,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
     m_checkBoxAdhesive->SetValue( m_3Dprms.GetFlag( FL_ADHESIVE ) );
     m_checkBoxComments->SetValue( m_3Dprms.GetFlag( FL_COMMENTS ) );
     m_checkBoxECO->SetValue( m_3Dprms.GetFlag( FL_ECO ) );
+    m_checkBoxSubtractMaskFromSilk->SetValue( m_3Dprms.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
 
     return true;
 }
@@ -124,6 +126,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     m_3Dprms.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
     m_3Dprms.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
     m_3Dprms.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, m_checkBoxBoundingBoxes->GetValue() );
+    m_3Dprms.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, m_checkBoxSubtractMaskFromSilk->GetValue() );
 
     // Set 3D shapes visibility
     m_3Dprms.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, m_checkBox3DshapesTH->GetValue() );

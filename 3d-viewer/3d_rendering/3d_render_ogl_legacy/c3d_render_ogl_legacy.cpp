@@ -692,8 +692,38 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving,
         }
         else
         {
-            pLayerDispList->DrawAllCameraCulled( m_settings.CameraGet().GetPos().z,
-                                                 (aIsMoving == false) );
+            if( m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) &&
+                ( ( ( layer_id == B_SilkS ) &&
+                    ( m_ogl_disp_lists_layers.find( B_Mask ) != m_ogl_disp_lists_layers.end() ) ) ||
+                  ( ( layer_id == F_SilkS ) &&
+                    ( m_ogl_disp_lists_layers.find( F_Mask ) != m_ogl_disp_lists_layers.end() ) ) ) )
+            {
+                const PCB_LAYER_ID layerMask_id = (layer_id == B_SilkS)?B_Mask:F_Mask;
+
+                const CLAYERS_OGL_DISP_LISTS *pLayerDispListMask = m_ogl_disp_lists_layers.at( layerMask_id );
+
+                pLayerDispList->DrawAllCameraCulledSubtractLayer(
+                            pLayerDispListMask,
+                            m_ogl_disp_list_through_holes_vias_outer,
+                            (aIsMoving == false) );
+            }
+            else
+            {
+                if( m_ogl_disp_list_through_holes_vias_outer &&
+                    ( ( layer_id == B_SilkS ) || ( layer_id == F_SilkS ) ||
+                      ( layer_id == B_Paste ) || ( layer_id == F_Paste ) ) )
+                {
+                    pLayerDispList->DrawAllCameraCulledSubtractLayer(
+                                NULL,
+                                m_ogl_disp_list_through_holes_vias_outer,
+                                (aIsMoving == false) );
+                }
+                else
+                {
+                    pLayerDispList->DrawAllCameraCulled( m_settings.CameraGet().GetPos().z,
+                                                         (aIsMoving == false) );
+                }
+            }
         }
 
         glPopMatrix();
@@ -719,6 +749,11 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving,
         //setLight_Top( true );
         //setLight_Bottom( true );
 
+        // add a depth buffer offset, it will help to hide some artifacts
+        // on silkscreen where the SolderMask is removed
+        glEnable( GL_POLYGON_OFFSET_FILL );
+        glPolygonOffset( 0.0f, -1.0f );
+
         if( m_settings.CameraGet().GetPos().z > 0 )
         {
             render_solder_mask_layer( B_Mask, m_settings.GetLayerTopZpos3DU( B_Mask ),
@@ -735,6 +770,9 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving,
             render_solder_mask_layer( B_Mask, m_settings.GetLayerTopZpos3DU( B_Mask ),
                                       aIsMoving );
         }
+
+        glDisable( GL_POLYGON_OFFSET_FILL );
+        glPolygonOffset( 0.0f, 0.0f );
     }
 
 
