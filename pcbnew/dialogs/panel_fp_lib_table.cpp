@@ -63,10 +63,10 @@
 // clang-format off
 struct supportedFileType
 {
-    wxString m_Description; ///< Description shown in the file picker dialog
-    wxString m_FileFilter;  ///< In case of folders it stands for extensions of files stored inside
+    wxString m_Description;            ///< Description shown in the file picker dialog
+    wxString m_FileFilter;             ///< Filter used for file pickers if m_IsFile is true
     wxString m_FolderSearchExtension;  ///< In case of folders it stands for extensions of files stored inside
-    bool     m_IsFile;      ///< Whether the library is a folder or a file
+    bool     m_IsFile;                 ///< Whether the library is a folder or a file
     IO_MGR::PCB_FILE_T m_Plugin;
 };
 
@@ -94,7 +94,8 @@ static const std::map<int, supportedFileType> fileTypes =
 
 
 /*
- * Traverser implementation that looks to find any and all libraries by looking at the files contained inside
+ * Traverser implementation that looks to find any and all "folder" libraries by looking for files
+ * with a specific extension inside folders
  */
 class LIBRARY_TRAVERSER : public wxDirTraverser
 {
