@@ -28,6 +28,9 @@
 #include <class_drawsegment.h>
 #include <class_pcb_text.h>
 
+#include <class_edge_mod.h>
+#include <class_text_mod.h>
+
 #include <compoundfilereader.h>
 #include <utf.h>
 
@@ -261,15 +264,20 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader, const C
         double endangle = reader.read<double>();
         u_int32_t width = ALTIUM_PARSER_BINARY::kicad_unit( reader.read<u_int32_t>() );
 
+        reader.subrecord_skip();
+
+        wxASSERT(!reader.parser_error());
+
         // TODO: better approach to select if item belongs to a MODULE
         DRAWSEGMENT* ds = nullptr;
+
         if (component == std::numeric_limits<u_int16_t>::max()) {
             ds = new DRAWSEGMENT( m_board );
             m_board->Add( ds );
         } else {
             MODULE* module = GetComponent( component );
-            ds = new DRAWSEGMENT( module );
-            m_board->Add( ds );  // TODO: why cannot I add it to MODULE?
+            ds = new EDGE_MODULE( module );
+            module->Add( ds );
         }
 
         ds->SetCenter( center );
@@ -284,19 +292,16 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader, const C
             ds->SetShape( STROKE_T::S_ARC );
 
             // TODO: something of this calculation seems wrong. Sometimes start is 90, sometimes 180deg wrong
-            double angle = endangle < startangle ? 360. + endangle - startangle : endangle - startangle;
-            ds->SetAngle( angle * 10. );
+            //double angle = endangle < startangle ? 360. + endangle - startangle : endangle - startangle;
+            double angle = endangle - startangle;
+            ds->SetAngle( - angle * 10. );
 
             double startradiant = startangle * M_PI / 180;
             wxPoint arcStartOffset = wxPoint(
                     static_cast<int32_t>(std::cos(startradiant) * radius),
-                    static_cast<int32_t>(std::sin(startradiant) * radius) );
+                    -static_cast<int32_t>(std::sin(startradiant) * radius) );
             ds->SetArcStart( center + arcStartOffset);  // TODO
         }
-
-        reader.subrecord_skip();
-
-        wxASSERT(!reader.parser_error());
     }
 
     wxASSERT( !reader.parser_error() );
@@ -534,21 +539,27 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader, const 
         wxASSERT( reader.subrecord_remaining() == 0 );
 
         // TODO: better approach to select if item belongs to a MODULE
-        TEXTE_PCB* tx = nullptr;
+        EDA_TEXT* tx = nullptr;
+        BOARD_ITEM* itm = nullptr;
         if (component == std::numeric_limits<u_int16_t>::max()) {
-            tx = new TEXTE_PCB(m_board );
-            m_board->Add(tx );
+            TEXTE_PCB* txp = new TEXTE_PCB(m_board );
+            tx = txp;
+            itm = txp;
+            m_board->Add( txp );
         } else {
             MODULE* module = GetComponent( component );
-            tx = new TEXTE_PCB(module );
-            m_board->Add(tx );  // TODO: why cannot I add it to MODULE?
+            TEXTE_MODULE* txm = new TEXTE_MODULE( module );
+            tx = txm;
+            itm = txm;
+            module->Add( txm );
         }
 
-        tx->SetPosition( position );
+        itm->SetPosition( position );
+        PCB_LAYER_ID klayer = kicad_layer( layer );
+        itm->SetLayer( klayer != UNDEFINED_LAYER ? klayer : Eco1_User );
+
         tx->SetTextHeight( height );
         tx->SetTextAngle( rotation * 10. );
-        PCB_LAYER_ID klayer = kicad_layer( layer );
-        tx->SetLayer( klayer != UNDEFINED_LAYER ? klayer : Eco1_User );
         tx->SetText( text );
         tx->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT ); // TODO: what byte
 
