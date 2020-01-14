@@ -43,7 +43,12 @@ types:
 
   arc_sub1:
     seq:
-      - size: 13
+      - id: layer
+        type: u1
+      - size: 6
+      - id: component
+        type: u2
+      - size: 4
       - id: center
         type: xy
       - id: radius
@@ -257,7 +262,12 @@ types:
 
   text_sub1:
     seq:
-      - size: 13
+      - id: layer
+        type: u1
+      - size: 6
+      - id: component
+        type: u2
+      - size: 4
       - id: pos
         type: xy
       - id: height

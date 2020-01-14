@@ -26,6 +26,7 @@
 
 #include <class_board.h>
 #include <class_drawsegment.h>
+#include <class_pcb_text.h>
 
 #include <compoundfilereader.h>
 #include <utf.h>
@@ -165,6 +166,14 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader ) {
         ParseFileHeader(aReader, fileHeader);
     }
 
+    // Parse arcs
+    const CFB::COMPOUND_FILE_ENTRY* arcs6 = FindStream(aReader, "Arcs6\\Data");
+    wxASSERT( arcs6 != nullptr );
+    if (arcs6 != nullptr)
+    {
+        ParseArcs6Data(aReader, arcs6);
+    }
+
     // Parse pads
     const CFB::COMPOUND_FILE_ENTRY* pads6 = FindStream(aReader, "Pads6\\Data");
     wxASSERT( pads6 != nullptr );
@@ -188,14 +197,22 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader ) {
     {
         ParseTracks6Data(aReader, tracks6);
     }
+
+    // Parse texts
+    const CFB::COMPOUND_FILE_ENTRY* texts6 = FindStream(aReader, "Texts6\\Data");
+    wxASSERT( texts6 != nullptr );
+    if (texts6 != nullptr)
+    {
+        ParseTexts6Data(aReader, texts6);
+    }
 }
 
 MODULE* ALTIUM_PCB::GetComponent( const u_int16_t id) {
     // I asume this is a special case where a elements belongs to the board.
     if( id == std::numeric_limits<u_int16_t>::max() ) {
-        MODULE *module = new MODULE(m_board );
+        MODULE* module = new MODULE( m_board );
         m_board->Add(module);
-        return module;  // TODO: return board?
+        return module;
     }
 
     MODULE *module = m_components.size() > id ? m_components.at( id ) : nullptr;
@@ -222,6 +239,68 @@ void ALTIUM_PCB::ParseFileHeader( const CFB::CompoundFileReader& aReader, const 
     // TODO: does not seem to work all the time at the moment
     //wxASSERT(!reader.parser_error());
     //wxASSERT(reader.bytes_remaining() == 0);
+}
+
+void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
+    ALTIUM_PARSER_BINARY reader( aReader, aEntry );
+
+    while( !reader.parser_error() && reader.bytes_remaining() >= 4 /* TODO: use Header section of file */ ) {
+        u_int8_t recordtype = reader.read<u_int8_t>();
+        wxASSERT( recordtype == ALTIUM_RECORD::ARC );
+
+        // Subrecord 1
+        reader.read_subrecord_length();
+
+        u_int8_t layer = reader.read<u_int8_t>();
+        reader.skip(6);
+        u_int16_t component = reader.read<u_int16_t>();
+        reader.skip(4);
+        wxPoint center = reader.read_point();
+        u_int32_t radius = ALTIUM_PARSER_BINARY::kicad_unit( reader.read<u_int32_t>() );
+        double startangle = reader.read<double>();
+        double endangle = reader.read<double>();
+        u_int32_t width = ALTIUM_PARSER_BINARY::kicad_unit( reader.read<u_int32_t>() );
+
+        // TODO: better approach to select if item belongs to a MODULE
+        DRAWSEGMENT* ds = nullptr;
+        if (component == std::numeric_limits<u_int16_t>::max()) {
+            ds = new DRAWSEGMENT( m_board );
+            m_board->Add( ds );
+        } else {
+            MODULE* module = GetComponent( component );
+            ds = new DRAWSEGMENT( module );
+            m_board->Add( ds );  // TODO: why cannot I add it to MODULE?
+        }
+
+        ds->SetCenter( center );
+        ds->SetWidth( width );
+        PCB_LAYER_ID klayer = kicad_layer( layer );
+        ds->SetLayer( klayer != UNDEFINED_LAYER ? klayer : Eco1_User );
+
+        if (startangle == 0. && endangle == 360. ) {  // TODO: other variants to define circle?
+            ds->SetShape( STROKE_T::S_CIRCLE );
+            ds->SetArcStart( center -  wxPoint( 0, radius ));
+        } else {
+            ds->SetShape( STROKE_T::S_ARC );
+
+            // TODO: something of this calculation seems wrong. Sometimes start is 90, sometimes 180deg wrong
+            double angle = endangle < startangle ? 360. + endangle - startangle : endangle - startangle;
+            ds->SetAngle( angle * 10. );
+
+            double startradiant = startangle * M_PI / 180;
+            wxPoint arcStartOffset = wxPoint(
+                    static_cast<int32_t>(std::cos(startradiant) * radius),
+                    static_cast<int32_t>(std::sin(startradiant) * radius) );
+            ds->SetArcStart( center + arcStartOffset);  // TODO
+        }
+
+        reader.subrecord_skip();
+
+        wxASSERT(!reader.parser_error());
+    }
+
+    wxASSERT( !reader.parser_error() );
+    wxASSERT( reader.bytes_remaining() == 0 );
 }
 
 void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
@@ -278,16 +357,6 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader, const C
         u_int8_t soldermaskexpansion = reader.read<u_int8_t>();
         reader.skip( 3 );
         double holerotation = reader.read<double>();
-
-        std::cout << "Pad: '" << name << "'" << std::endl;
-        std::cout << "  component: " << component << std::endl;
-        std::cout << "  layer: " << (int) layer << std::endl;
-        std::cout << "  position: " << position << std::endl;
-        std::cout << "  topsize: " << topsize << std::endl;
-        std::cout << "  midsize: " << midsize << std::endl;
-        std::cout << "  botsize: " << botsize << std::endl;
-        std::cout << "  direction: " << direction << std::endl;
-        std::cout << "  holerotation: " << holerotation << std::endl;
 
         // Create Pad
         MODULE *module = GetComponent( component );
@@ -394,7 +463,7 @@ void ALTIUM_PCB::ParseVias6Data( const CFB::CompoundFileReader& aReader, const C
 void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
     ALTIUM_PARSER_BINARY reader( aReader, aEntry );
 
-    while( !reader.parser_error() && reader.bytes_remaining() >= 49 /* TODO: use Header section of file */ ) {
+    while( !reader.parser_error() && reader.bytes_remaining() >= 4 /* TODO: use Header section of file */ ) {
         u_int8_t recordtype = reader.read<u_int8_t>();
         wxASSERT( recordtype == ALTIUM_RECORD::TRACK );
 
@@ -429,6 +498,61 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader, const
         }
 
         reader.subrecord_skip();
+    }
+
+    wxASSERT( !reader.parser_error() );
+    wxASSERT( reader.bytes_remaining() == 0 );
+}
+
+void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry ) {
+    ALTIUM_PARSER_BINARY reader( aReader, aEntry );
+
+    while( !reader.parser_error() && reader.bytes_remaining() >= 4 /* TODO: use Header section of file */ ) {
+        u_int8_t recordtype = reader.read<u_int8_t>();
+        wxASSERT( recordtype == ALTIUM_RECORD::TEXT );
+
+        // Subrecord 1 - Properties
+        reader.read_subrecord_length();
+
+        u_int8_t layer = reader.read<u_int8_t>();
+        reader.skip(6);
+        u_int16_t component = reader.read<u_int16_t>();
+        reader.skip(4);
+        wxPoint position = reader.read_point();
+        u_int32_t height = ALTIUM_PARSER_BINARY::kicad_unit( reader.read<u_int32_t>() );
+        reader.skip(2);
+        double rotation = reader.read<double>();
+
+        reader.subrecord_skip();
+
+        // Subrecord 2 - String
+        reader.read_subrecord_length();
+
+        std::string text = reader.read_string(); // TODO: what about strings with length > 255?
+
+        reader.subrecord_skip();
+        wxASSERT( reader.subrecord_remaining() == 0 );
+
+        // TODO: better approach to select if item belongs to a MODULE
+        TEXTE_PCB* tx = nullptr;
+        if (component == std::numeric_limits<u_int16_t>::max()) {
+            tx = new TEXTE_PCB(m_board );
+            m_board->Add(tx );
+        } else {
+            MODULE* module = GetComponent( component );
+            tx = new TEXTE_PCB(module );
+            m_board->Add(tx );  // TODO: why cannot I add it to MODULE?
+        }
+
+        tx->SetPosition( position );
+        tx->SetTextHeight( height );
+        tx->SetTextAngle( rotation * 10. );
+        PCB_LAYER_ID klayer = kicad_layer( layer );
+        tx->SetLayer( klayer != UNDEFINED_LAYER ? klayer : Eco1_User );
+        tx->SetText( text );
+        tx->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT ); // TODO: what byte
+
+        wxASSERT(!reader.parser_error());
     }
 
     wxASSERT( !reader.parser_error() );
