@@ -494,13 +494,15 @@ class CINFO3D_VISU
 
 
 public:
-    SFVEC3D m_BgColorBot;       ///< background bottom color
-    SFVEC3D m_BgColorTop;       ///< background top color
-    SFVEC3D m_BoardBodyColor;   ///< in realistic mode: FR4 board color
-    SFVEC3D m_SolderMaskColor;  ///< in realistic mode: solder mask color
-    SFVEC3D m_SolderPasteColor; ///< in realistic mode: solder paste color
-    SFVEC3D m_SilkScreenColor;  ///< in realistic mode: SilkScreen color
-    SFVEC3D m_CopperColor;      ///< in realistic mode: copper color
+    SFVEC3D m_BgColorBot;         ///< background bottom color
+    SFVEC3D m_BgColorTop;         ///< background top color
+    SFVEC3D m_BoardBodyColor;     ///< in realistic mode: FR4 board color
+    SFVEC3D m_SolderMaskColorBot; ///< in realistic mode: solder mask color ( bot )
+    SFVEC3D m_SolderMaskColorTop; ///< in realistic mode: solder mask color ( top )
+    SFVEC3D m_SolderPasteColor;   ///< in realistic mode: solder paste color
+    SFVEC3D m_SilkScreenColorBot; ///< in realistic mode: SilkScreen color ( bot )
+    SFVEC3D m_SilkScreenColorTop; ///< in realistic mode: SilkScreen color ( top )
+    SFVEC3D m_CopperColor;        ///< in realistic mode: copper color
 
 
 private:

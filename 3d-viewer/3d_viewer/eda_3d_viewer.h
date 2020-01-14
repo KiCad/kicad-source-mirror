@@ -151,7 +151,10 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
      */
     void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
- private:
+
+    void SynchroniseColoursWithBoard( void );
+
+private:
     /// Called when user press the File->Exit
     void Exit3DFrame( wxCommandEvent &event );
 

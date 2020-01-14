@@ -308,6 +308,9 @@ void EDA_3D_VIEWER::CreateMenuBar()
     colorSubmenu->AddItem( ID_MENU3D_PCB_BODY_COLOR, _( "Board Body Color..." ), "",
                            setcolor_board_body_xpm,            SELECTION_CONDITIONS::ShowAlways );
 
+    colorSubmenu->AddItem( ID_MENU3D_STACKUP_COLORS, _( "Get colors from physical stackup" ), "",
+            None, SELECTION_CONDITIONS::ShowAlways );
+
     prefsMenu->AddMenu( colorSubmenu );
 
     prefsMenu->AddCheckItem( ID_MENU3D_AXIS_ONOFF, _( "Show 3D &Axis" ), "",
