@@ -50,33 +50,33 @@
 
 /*
  *  Electrical type of pins:
- *  ELECTRICAL_PINTYPE::INPUT = usual pin input: must be connected
- *  ELECTRICAL_PINTYPE::OUTPUT = usual output
- *  ELECTRICAL_PINTYPE::BIDI = input or output (like port for a microprocessor)
- *  ELECTRICAL_PINTYPE::TRISTATE = tris state bus pin
- *  ELECTRICAL_PINTYPE::PASSIVE = pin for passive components: must be connected, and can be
+ *  ELECTRICAL_PINTYPE::PT_INPUT = usual pin input: must be connected
+ *  ELECTRICAL_PINTYPE::PT_OUTPUT = usual output
+ *  ELECTRICAL_PINTYPE::PT_BIDI = input or output (like port for a microprocessor)
+ *  ELECTRICAL_PINTYPE::PT_TRISTATE = tris state bus pin
+ *  ELECTRICAL_PINTYPE::PT_PASSIVE = pin for passive components: must be connected, and can be
  * connected to any pin
- *  ELECTRICAL_PINTYPE::UNSPECIFIED = unknown electrical properties: creates always a warning
+ *  ELECTRICAL_PINTYPE::PT_UNSPECIFIED = unknown electrical properties: creates always a warning
  * when connected
- *  ELECTRICAL_PINTYPE::POWER_IN = power input (GND, VCC for ICs). Must be connected to a power
+ *  ELECTRICAL_PINTYPE::PT_POWER_IN = power input (GND, VCC for ICs). Must be connected to a power
  * output.
- *  ELECTRICAL_PINTYPE::POWER_OUT = output of a regulator: intended to be connected to power
+ *  ELECTRICAL_PINTYPE::PT_POWER_OUT = output of a regulator: intended to be connected to power
  * input pins
- *  ELECTRICAL_PINTYPE::OPENCOLLECTOR = pin type open collector
- *  ELECTRICAL_PINTYPE::OPENEMITTER = pin type open emitter
- *  ELECTRICAL_PINTYPE::NC = not connected (must be left open)
+ *  ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR = pin type open collector
+ *  ELECTRICAL_PINTYPE::PT_OPENEMITTER = pin type open emitter
+ *  ELECTRICAL_PINTYPE::PT_NC = not connected (must be left open)
  *
  *  Minimal requirements:
- *  All pins *must* be connected (except ELECTRICAL_PINTYPE::NC).
+ *  All pins *must* be connected (except ELECTRICAL_PINTYPE::PT_NC).
  *  When a pin is not connected in schematic, the user must place a "non
  * connected" symbol to this pin.
  *  This ensures a forgotten connection will be detected.
  */
 
 /* Messages for conflicts :
- *  ELECTRICAL_PINTYPE::INPUT, ELECTRICAL_PINTYPE::OUTPUT, ELECTRICAL_PINTYPE::BIDI, ELECTRICAL_PINTYPE::TRISTATE, ELECTRICAL_PINTYPE::PASSIVE,
+ *  ELECTRICAL_PINTYPE::PT_INPUT, ELECTRICAL_PINTYPE::PT_OUTPUT, ELECTRICAL_PINTYPE::BIDI, ELECTRICAL_PINTYPE::TRISTATE, ELECTRICAL_PINTYPE::PASSIVE,
  *  ELECTRICAL_PINTYPE::UNSPECIFIED, ELECTRICAL_PINTYPE::POWER_IN, ELECTRICAL_PINTYPE::POWER_OUT, ELECTRICAL_PINTYPE::OPENCOLLECTOR,
- *  ELECTRICAL_PINTYPE::OPENEMITTER, ELECTRICAL_PINTYPE::NC
+ *  ELECTRICAL_PINTYPE::PT_OPENEMITTER, ELECTRICAL_PINTYPE::PT_NC
  *  These messages are used to show the ERC matrix in ERC dialog
  */
 
@@ -129,7 +129,7 @@ int  DiagErc[PINTYPE_COUNT][PINTYPE_COUNT];
  */
 int DefaultDiagErc[PINTYPE_COUNT][PINTYPE_COUNT] =
 {
-/*         I,   O,    Bi,   3S,   Pas,  UnS,  PwrI, PwrO, OC,   OE,   NC */
+/*         I,   O,    Bi,   3S,   Pas,  UnS,  PwrI, PwrO, OC,   OE,   PT_NC */
 /* I */  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
 /* O */  { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
 /* Bi*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   WAR,  OK,   WAR,  ERR },
@@ -140,7 +140,7 @@ int DefaultDiagErc[PINTYPE_COUNT][PINTYPE_COUNT] =
 /*PwrO*/ { OK,  ERR,  WAR,  ERR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
 /* OC */ { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
 /* OE */ { OK,  ERR,  WAR,  WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
-/* NC */ { ERR, ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR }
+/* PT_NC */ { ERR, ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR }
 };
 
 
@@ -156,7 +156,7 @@ int DefaultDiagErc[PINTYPE_COUNT][PINTYPE_COUNT] =
  */
 static int MinimalReq[PINTYPE_COUNT][PINTYPE_COUNT] =
 {
-/*         In   Out, Bi,  3S,  Pas, UnS, PwrI,PwrO,OC,  OE,  NC */
+/*         In   Out, Bi,  3S,  Pas, UnS, PwrI,PwrO,OC,  OE,  PT_NC */
 /* In*/  { NOD, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
 /*Out*/  { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NPI },
 /* Bi*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
@@ -167,7 +167,7 @@ static int MinimalReq[PINTYPE_COUNT][PINTYPE_COUNT] =
 /*PwrO*/ { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NPI },
 /* OC*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
 /* OE*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/* NC*/  { NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI }
+/* PT_NC*/  { NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI }
 };
 
 
@@ -425,7 +425,7 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
     ELECTRICAL_PINTYPE ref_elect_type = aList->GetItem( aNetItemRef )->m_ElectricalPinType;
     int local_minconn = NOC;
 
-    if( ref_elect_type == ELECTRICAL_PINTYPE::NC )
+    if( ref_elect_type == ELECTRICAL_PINTYPE::PT_NC )
         local_minconn = NPI;
 
     /* Test pins connected to NetItemRef */

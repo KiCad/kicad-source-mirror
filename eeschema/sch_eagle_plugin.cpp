@@ -1396,20 +1396,20 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
             std::unique_ptr<LIB_PIN> pin( loadPin( aPart, currentNode, &ePin, aGateNumber ) );
             pincount++;
 
-            pin->SetType( ELECTRICAL_PINTYPE::BIDI );
+            pin->SetType( ELECTRICAL_PINTYPE::PT_BIDI );
 
             if( ePin.direction )
             {
                 const std::map<wxString, ELECTRICAL_PINTYPE> pinDirectionsMap = {
-                    { "sup",    ELECTRICAL_PINTYPE::POWER_IN },
-                    { "pas",    ELECTRICAL_PINTYPE::PASSIVE },
-                    { "out",    ELECTRICAL_PINTYPE::OUTPUT },
-                    { "in",     ELECTRICAL_PINTYPE::INPUT },
-                    { "nc",     ELECTRICAL_PINTYPE::NC },
-                    { "io",     ELECTRICAL_PINTYPE::BIDI },
-                    { "oc",     ELECTRICAL_PINTYPE::OPENCOLLECTOR },
-                    { "hiz",    ELECTRICAL_PINTYPE::TRISTATE },
-                    { "pwr",    ELECTRICAL_PINTYPE::POWER_IN },
+                    { "sup",    ELECTRICAL_PINTYPE::PT_POWER_IN },
+                    { "pas",    ELECTRICAL_PINTYPE::PT_PASSIVE },
+                    { "out",    ELECTRICAL_PINTYPE::PT_OUTPUT },
+                    { "in",     ELECTRICAL_PINTYPE::PT_INPUT },
+                    { "nc",     ELECTRICAL_PINTYPE::PT_NC },
+                    { "io",     ELECTRICAL_PINTYPE::PT_BIDI },
+                    { "oc",     ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR },
+                    { "hiz",    ELECTRICAL_PINTYPE::PT_TRISTATE },
+                    { "pwr",    ELECTRICAL_PINTYPE::PT_POWER_IN },
                 };
 
                 for( const auto& pinDir : pinDirectionsMap )
@@ -1444,12 +1444,12 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
                             pin->SetNumberTextSize( 0 );
                         }
 
-                        // Eagle does not connect multiple NC pins together when they are stacked.
+                        // Eagle does not connect multiple PT_NC pins together when they are stacked.
                         // KiCad will do this for pins that are coincident.  We opt here for correct
-                        // schematic netlist and leave out the multiple NC pins when stacked.
+                        // schematic netlist and leave out the multiple PT_NC pins when stacked.
                         for( unsigned i = 0; i < pads.GetCount(); i++ )
                         {
-                            if( pin->GetType() == ELECTRICAL_PINTYPE::NC && i > 0 )
+                            if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC && i > 0 )
                                 break;
 
                             LIB_PIN* apin = new LIB_PIN( *pin );
@@ -2523,7 +2523,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections(
     // Search all units for pins creating implicit connections
     for( const auto& pin : pins )
     {
-        if( pin->GetType() == ELECTRICAL_PINTYPE::POWER_IN )
+        if( pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN )
         {
             bool pinInUnit = !unit || pin->GetUnit() == unit; // pin belongs to the tested unit
 

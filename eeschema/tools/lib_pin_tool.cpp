@@ -33,7 +33,7 @@
 #include "lib_pin_tool.h"
 
 
-static ELECTRICAL_PINTYPE g_LastPinType          = ELECTRICAL_PINTYPE::INPUT;
+static ELECTRICAL_PINTYPE g_LastPinType          = ELECTRICAL_PINTYPE::PT_INPUT;
 static int                g_LastPinOrient        = PIN_RIGHT;
 static GRAPHIC_PINSHAPE   g_LastPinShape         = GRAPHIC_PINSHAPE::LINE;
 static bool               g_LastPinCommonConvert = false;

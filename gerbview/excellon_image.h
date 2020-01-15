@@ -246,7 +246,7 @@ private:
  *  METRIC          Measure Everything in Metric
  *  M48             Beginning of Part Program Header
  *  M95             End of Header
- *  NCSL            NC Slope Enable/Disable
+ *  NCSL            PT_NC Slope Enable/Disable
  *  OM48            Override Part Program Header
  *  OSTOP           Optional Stop Switch
  *  OTCLMP          Override Table Clamp

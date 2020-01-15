@@ -198,7 +198,7 @@ static EXCELLON_CMD excellonHeaderCmdList[] =
     { "M15",    DRILL_M_TOOL_DOWN,            0 },  // tool down (starting a routed hole)
     { "M16",    DRILL_M_TOOL_UP,              0 },  // tool up (ending a routed hole)
     { "M17",    DRILL_M_TOOL_UP,              0 },  // tool up similar to M16 for a viewer
-    { "M30",    DRILL_M_ENDFILE,             -1 },  // End of File (last line of NC drill)
+    { "M30",    DRILL_M_ENDFILE,             -1 },  // End of File (last line of PT_NC drill)
     { "M47",    DRILL_M_MESSAGE,             -1 },  // Operator Message
     { "M45",    DRILL_M_LONGMESSAGE,         -1 },  // Long Operator message (use more than one line)
     { "M48",    DRILL_M_HEADER,               0 },  // beginning of a header

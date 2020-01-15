@@ -164,7 +164,7 @@ NETLIST_OBJECT::NETLIST_OBJECT()
                        */
     m_ConnectionType = NET_CONNECTION::UNCONNECTED;
     m_ElectricalPinType =
-            ELECTRICAL_PINTYPE::INPUT; /* Has meaning only for Pins: electrical type of the pin
+            ELECTRICAL_PINTYPE::PT_INPUT; /* Has meaning only for Pins: electrical type of the pin
                                         * used to detect conflicts between pins in ERC
                                         */
     m_netNameCandidate = NULL;         /* a pointer to a NETLIST_OBJECT type label connected to this

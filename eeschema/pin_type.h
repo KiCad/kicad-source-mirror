@@ -36,22 +36,22 @@
  */
 enum class ELECTRICAL_PINTYPE
 {
-    INPUT,
-    OUTPUT,
-    BIDI,
-    TRISTATE,
-    PASSIVE,
-    UNSPECIFIED,
-    POWER_IN,
-    POWER_OUT,
-    OPENCOLLECTOR,
-    OPENEMITTER,
-    NC /* No connect */
+    PT_INPUT,
+    PT_OUTPUT,
+    PT_BIDI,
+    PT_TRISTATE,
+    PT_PASSIVE,
+    PT_UNSPECIFIED,
+    PT_POWER_IN,
+    PT_POWER_OUT,
+    PT_OPENCOLLECTOR,
+    PT_OPENEMITTER,
+    PT_NC /* No connect */
 };
 
 enum
 {
-    PINTYPE_COUNT = static_cast<int>( ELECTRICAL_PINTYPE::NC ) + 1
+    PINTYPE_COUNT = static_cast<int>( ELECTRICAL_PINTYPE::PT_NC ) + 1
 };
 
 // UI

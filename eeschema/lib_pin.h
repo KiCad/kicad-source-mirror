@@ -348,7 +348,7 @@ public:
      */
     bool IsPowerConnection() const
     {
-        return GetType() == ELECTRICAL_PINTYPE::POWER_IN
+        return GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
                && ( !IsVisible() || (LIB_PART*) GetParent()->IsPower() );
     }
 

@@ -199,10 +199,10 @@ private:
     void applyDisplaySettingsToGAL();
 
     /**
-     * Loads a list of Gerber and NC drill files and updates the view based on them
+     * Loads a list of Gerber and PT_NC drill files and updates the view based on them
      * @param aPath is the base path for the filenames if they are relative
      * @param aFilenameList is a list of filenames to load
-     * @param aFileType is a list of type of files to load (0 = Gerber, 1 = NC drill)
+     * @param aFileType is a list of type of files to load (0 = Gerber, 1 = PT_NC drill)
      * if nullptr, files are expected Gerber type.
      * @return true if every file loaded successfully
      */

@@ -148,7 +148,7 @@ LIB_PIN::LIB_PIN( LIB_PART* aParent )
 {
     m_length       = LIB_EDIT_FRAME::GetDefaultPinLength();
     m_orientation  = PIN_RIGHT;                       // Pin orient: Up, Down, Left, Right
-    m_type         = ELECTRICAL_PINTYPE::UNSPECIFIED; // electrical type of pin
+    m_type         = ELECTRICAL_PINTYPE::PT_UNSPECIFIED; // electrical type of pin
     m_attributes   = 0;                               // bit 0 != 0: pin invisible
     m_numTextSize  = LIB_EDIT_FRAME::GetPinNumDefaultSize();
     m_nameTextSize = LIB_EDIT_FRAME::GetPinNameDefaultSize();
@@ -666,7 +666,7 @@ void LIB_PIN::PrintPinSymbol( wxDC* aDC, const wxPoint& aPos, int aOrient )
                   color );
     }
 
-    if( m_type == ELECTRICAL_PINTYPE::NC ) // Draw a N.C. symbol
+    if( m_type == ELECTRICAL_PINTYPE::PT_NC ) // Draw a N.C. symbol
     {
         const int deco_size = TARGET_PIN_RADIUS;
         GRLine( nullptr, aDC, posX - deco_size, posY - deco_size, posX + deco_size, posY + deco_size, width, color );
@@ -979,7 +979,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
         aPlotter->MoveTo( wxPoint( x1 - (MapX1 - MapY1) * deco_size, y1 - (MapY1 + MapX1) * deco_size ) );
         aPlotter->FinishTo( wxPoint( x1 + (MapX1 - MapY1) * deco_size, y1 + (MapY1 + MapX1) * deco_size ) );
     }
-    if( m_type == ELECTRICAL_PINTYPE::NC ) // Draw a N.C. symbol
+    if( m_type == ELECTRICAL_PINTYPE::PT_NC ) // Draw a N.C. symbol
     {
         const int deco_size = TARGET_PIN_RADIUS;
         const int ex1 = aPosition.x;

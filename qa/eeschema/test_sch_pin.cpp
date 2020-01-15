@@ -50,7 +50,7 @@ public:
         // give the pin some kind of data we can use to test
         m_lib_pin.SetNumber( "42" );
         m_lib_pin.SetName( "pinname" );
-        m_lib_pin.SetType( ELECTRICAL_PINTYPE::INPUT );
+        m_lib_pin.SetType( ELECTRICAL_PINTYPE::PT_INPUT );
 
         SCH_SHEET_PATH path;
         m_parent_comp.SetRef( &path, "U2" );
@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_CASE( PinNumbering )
 BOOST_AUTO_TEST_CASE( PinNumberingPower )
 {
     // but if we set is power...
-    m_lib_pin.SetType( ELECTRICAL_PINTYPE::POWER_IN );
+    m_lib_pin.SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
     m_parent_part.SetPower();
 
     // the name is just the pin name

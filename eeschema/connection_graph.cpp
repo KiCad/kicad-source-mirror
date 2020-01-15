@@ -779,7 +779,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 {
                     auto pin = static_cast<SCH_PIN*>( item );
 
-                    if( pin->GetType() == ELECTRICAL_PINTYPE::NC )
+                    if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
                         subgraph->m_no_connect = item;
 
                     break;
@@ -2232,7 +2232,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
             }
         }
 
-        if( pin && !has_other_connections && pin->GetType() != ELECTRICAL_PINTYPE::NC )
+        if( pin && !has_other_connections && pin->GetType() != ELECTRICAL_PINTYPE::PT_NC )
         {
             if( aCreateMarkers )
             {
