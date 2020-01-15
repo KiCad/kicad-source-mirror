@@ -82,7 +82,7 @@ bool KIDIALOG::Show( bool aShow )
             return it->second;
     }
 
-    bool ret = wxRichMessageDialog::Show( aShow );
+    int ret = wxRichMessageDialog::Show( aShow );
 
     // Has the user asked not to show the dialog again and it was confirmed
     if( IsCheckBoxChecked() && ret != wxID_CANCEL )
