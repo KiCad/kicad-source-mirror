@@ -108,6 +108,7 @@ public:
     {
     }
 
+
     virtual wxDirTraverseResult OnFile( const wxString& aFileName )
     {
         wxFileName file( aFileName );
@@ -119,11 +120,26 @@ public:
         return wxDIR_CONTINUE;
     }
 
+
+    virtual wxDirTraverseResult OnOpenError( const wxString& aOpenErrorName )
+    {
+        m_failedDirs.insert( { aOpenErrorName, 1 } );
+        return wxDIR_CONTINUE;
+    }
+
+
+    bool HasDirectoryOpenFailures()
+    {
+        return m_failedDirs.size() > 0;
+    }
+
+
     virtual wxDirTraverseResult OnDir( const wxString& aDirName )
     {
         m_currentDir = aDirName;
         return wxDIR_CONTINUE;
     }
+
 
     void GetPaths( wxArrayString& aPathArray )
     {
@@ -133,10 +149,20 @@ public:
         }
     }
 
+
+    void GetFailedPaths( wxArrayString& aPathArray )
+    {
+        for( auto failedDirsPair : m_failedDirs )
+        {
+            aPathArray.Add( failedDirsPair.first );
+        }
+    }
+
 private:
     wxString                          m_searchExtension;
     wxString                          m_currentDir;
     std::unordered_map<wxString, int> m_foundDirs;
+    std::unordered_map<wxString, int> m_failedDirs;
 };
 
 
@@ -716,7 +742,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             return;
 
         // is there a file extension configured to hunt out their containing folders?
-        if( !fileType.m_FolderSearchExtension.IsEmpty() )
+        if( fileType.m_FolderSearchExtension != "" )
         {
             wxDir rootDir( dlg.GetPath() );
 
@@ -724,6 +750,19 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             rootDir.Traverse( traverser );
 
             traverser.GetPaths( files );
+
+            if( traverser.HasDirectoryOpenFailures() )
+            {
+                wxArrayString failedDirs;
+                traverser.GetPaths( failedDirs );
+                wxString detailedMsg = _( "The following directories could not be opened: \n" );
+
+                for( auto& path : failedDirs )
+                    detailedMsg << path << "\n";
+
+                DisplayErrorMessage( this, _( "Failed to open directories to look for libraries" ),
+                        detailedMsg );
+            }
         }
         else
         {
