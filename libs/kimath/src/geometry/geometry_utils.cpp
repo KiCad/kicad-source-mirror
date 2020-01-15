@@ -42,6 +42,9 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
     // calculate the number of segments to approximate a circle by segments
     // given the max distance between the middle of a segment and the circle
 
+    // avoid divide-by-zero
+    aRadius = std::max( 1, aRadius );
+
     // error relative to the radius value:
     double rel_error = (double)aErrorMax / aRadius;
     // minimal arc increment in degrees:
@@ -67,8 +70,7 @@ double GetCircletoPolyCorrectionFactor( int aSegCountforCircle )
      * therefore, to move the middle of the segment to the circle (distance = radius)
      * the correctionFactor is 1 /cos( PI/aSegCountforCircle  )
      */
-    if( aSegCountforCircle < MIN_SEGCOUNT_FOR_CIRCLE )
-        aSegCountforCircle = MIN_SEGCOUNT_FOR_CIRCLE;
+    aSegCountforCircle = std::max( MIN_SEGCOUNT_FOR_CIRCLE, aSegCountforCircle );
 
     return 1.0 / cos( M_PI / aSegCountforCircle );
 }

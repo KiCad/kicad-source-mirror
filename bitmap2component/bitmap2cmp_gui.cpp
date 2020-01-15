@@ -63,6 +63,9 @@ IMAGE_SIZE::IMAGE_SIZE()
 
 void IMAGE_SIZE::SetOutputSizeFromInitialImageSize()
 {
+    // Safety-check to guarantee no divide-by-zero
+    m_originalDPI = std::max( 1, m_originalDPI );
+
     // Set the m_outputSize value from the m_originalSizePixels and the selected unit
     if( m_unit == EDA_UNITS::MILLIMETRES )
     {
@@ -96,6 +99,9 @@ int IMAGE_SIZE::GetOutputDPI()
     {
         outputDPI = KiROUND( m_outputSize );
     }
+
+    // Zero is not a DPI, and may cause divide-by-zero errors...
+    outputDPI = std::max( 1, outputDPI );
 
     return outputDPI;
 }

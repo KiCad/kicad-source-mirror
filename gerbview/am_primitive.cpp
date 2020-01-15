@@ -556,7 +556,12 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
         // params = center.x (unused here), center.y (unused here), outside diam, inside diam, crosshair thickness
         int outerRadius   = scaletoIU( params[2].GetValue( tool ), m_GerbMetric ) / 2;
         int innerRadius   = scaletoIU( params[3].GetValue( tool ), m_GerbMetric ) / 2;
-        int halfthickness = scaletoIU( params[4].GetValue( tool ), m_GerbMetric ) / 2;
+
+        // Safety checks to guarantee no divide-by-zero
+        outerRadius = std::max( 1, outerRadius );
+        innerRadius = std::max( 1, innerRadius );
+
+        int halfthickness  = scaletoIU( params[4].GetValue( tool ), m_GerbMetric ) / 2;
         double angle_start = RAD2DECIDEG( asin( (double) halfthickness / innerRadius ) );
 
         // Draw shape in the first cadrant (X and Y > 0)
