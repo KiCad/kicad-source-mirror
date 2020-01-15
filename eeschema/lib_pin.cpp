@@ -322,10 +322,6 @@ void LIB_PIN::SetShape( GRAPHIC_PINSHAPE aShape )
 
 void LIB_PIN::SetType( ELECTRICAL_PINTYPE aType, bool aTestOtherPins )
 {
-    if( aType < ELECTRICAL_PINTYPE::INPUT )
-        aType = ELECTRICAL_PINTYPE::INPUT;
-
-
     if( m_type != aType )
     {
         m_type = aType;
