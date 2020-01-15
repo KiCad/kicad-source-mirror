@@ -431,6 +431,10 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
             DisplayErrorMessage( NULL, _( "Error loading project footprint library table" ),
                                  ioe.What() );
         }
+        catch( ... )
+        {
+            DisplayErrorMessage( NULL, _( "Error loading project footprint library table" ) );
+        }
     }
 
     return tbl;
