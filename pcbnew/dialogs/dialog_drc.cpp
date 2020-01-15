@@ -42,9 +42,9 @@
  */
 
 // Keywords for read and write config
-#define DrcRefillZonesKey wxT( "RefillZonesBeforeDrc" )
-#define DrcTrackToZoneTestKey wxT( "DrcTrackToZoneTest" )
-#define DrcTestFootprintsKey wxT( "DrcTestFootprints" )
+#define DrcRefillZonesKey       wxT( "RefillZonesBeforeDrc" )
+#define DrcTrackToZoneTestKey   wxT( "DrcTrackToZoneTest" )
+#define DrcTestFootprintsKey    wxT( "DrcTestFootprints" )
 
 
 DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL(
@@ -311,6 +311,7 @@ void DIALOG_DRC_CONTROL::OnLeftUpClearance( wxMouseEvent& event )
         focusOnItem( m_ClearanceListBox->GetItem( selection ) );
 }
 
+
 bool DIALOG_DRC_CONTROL::focusOnItem( const DRC_ITEM* aItem )
 {
     if( !aItem )
@@ -333,6 +334,7 @@ bool DIALOG_DRC_CONTROL::focusOnItem( const DRC_ITEM* aItem )
 
     return true;
 }
+
 
 int DIALOG_DRC_CONTROL::rightUpClicSelection( DRCLISTBOX* aListBox, wxMouseEvent& event )
 {
@@ -536,6 +538,7 @@ void DIALOG_DRC_CONTROL::DelDRCMarkers()
     m_DeleteCurrentMarkerButton->Enable( false );
 }
 
+
 const wxString DIALOG_DRC_CONTROL::makeValidFileNameReport()
 {
     wxFileName fn = m_RptFilenameCtrl->GetValue();
@@ -556,6 +559,7 @@ const wxString DIALOG_DRC_CONTROL::makeValidFileNameReport()
 
     return fn.GetFullPath();
 }
+
 
 bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
 {
