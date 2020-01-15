@@ -42,17 +42,17 @@ struct pinTypeStruct
 */
 // clang-format off
 const std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> pinTypes = {
-    { ELECTRICAL_PINTYPE::INPUT,        { _( "Input" ), pintype_input_xpm } },
-    { ELECTRICAL_PINTYPE::OUTPUT,       { _( "Output" ), pintype_output_xpm } },
-    { ELECTRICAL_PINTYPE::BIDI,         { _( "Bidirectional" ), pintype_bidi_xpm } },
-    { ELECTRICAL_PINTYPE::TRISTATE,     { _( "Tri-state" ), pintype_3states_xpm } },
-    { ELECTRICAL_PINTYPE::PASSIVE,      { _( "Passive" ), pintype_passive_xpm } },
-    { ELECTRICAL_PINTYPE::UNSPECIFIED,  { _( "Clock low" ), pintype_notspecif_xpm } },
-    { ELECTRICAL_PINTYPE::POWER_IN,     { _( "Power input" ), pintype_powerinput_xpm } },
-    { ELECTRICAL_PINTYPE::POWER_OUT,    { _( "Power output" ), pintype_poweroutput_xpm } },
-    { ELECTRICAL_PINTYPE::OPENCOLLECTOR,{ _( "Open collector" ), pintype_opencoll_xpm } },
-    { ELECTRICAL_PINTYPE::OPENEMITTER,  { _( "Open emitter" ), pintype_openemit_xpm } },
-    { ELECTRICAL_PINTYPE::NC,           { _( "Not connected" ), pintype_noconnect_xpm } },
+    { ELECTRICAL_PINTYPE::INPUT,        { _( "Input" ),             pintype_input_xpm } },
+    { ELECTRICAL_PINTYPE::OUTPUT,       { _( "Output" ),            pintype_output_xpm } },
+    { ELECTRICAL_PINTYPE::BIDI,         { _( "Bidirectional" ),     pintype_bidi_xpm } },
+    { ELECTRICAL_PINTYPE::TRISTATE,     { _( "Tri-state" ),         pintype_3states_xpm } },
+    { ELECTRICAL_PINTYPE::PASSIVE,      { _( "Passive" ),           pintype_passive_xpm } },
+    { ELECTRICAL_PINTYPE::UNSPECIFIED,  { _( "Clock low" ),         pintype_notspecif_xpm } },
+    { ELECTRICAL_PINTYPE::POWER_IN,     { _( "Power input" ),       pintype_powerinput_xpm } },
+    { ELECTRICAL_PINTYPE::POWER_OUT,    { _( "Power output" ),      pintype_poweroutput_xpm } },
+    { ELECTRICAL_PINTYPE::OPENCOLLECTOR,{ _( "Open collector" ),    pintype_opencoll_xpm } },
+    { ELECTRICAL_PINTYPE::OPENEMITTER,  { _( "Open emitter" ),      pintype_openemit_xpm } },
+    { ELECTRICAL_PINTYPE::NC,           { _( "Not connected" ),     pintype_noconnect_xpm } },
 };
 // clang-format on
 
