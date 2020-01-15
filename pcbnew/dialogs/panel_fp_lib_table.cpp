@@ -124,7 +124,7 @@ public:
     virtual wxDirTraverseResult OnOpenError( const wxString& aOpenErrorName )
     {
         m_failedDirs.insert( { aOpenErrorName, 1 } );
-        return wxDIR_CONTINUE;
+        return wxDIR_IGNORE;
     }
 
 
