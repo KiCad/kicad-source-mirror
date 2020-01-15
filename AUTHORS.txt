@@ -75,6 +75,7 @@ Spanish (ES) Pedro Martin del Valle <pkicad[at]yahoo-dot-es>
 Spanish (ES) Iñigo Zuluaga <inigo_zuluaga[at]yahoo-dot-es>
 German (DE) Rafael Sokolowski <Rafael.Sokolowski[at]web-dot-de
 Japanese (JA) Kenta Yonekura <yoneken[at]kicad-dot-jp>
+Simplified Chinese (zh_CN) taotieren <admin[at]taotieren-dot-com>
 
 Remy Halvick, David Briscoe, Dominique Laigle, Paul Burke
 
