@@ -42,7 +42,7 @@ PinShapeComboBox::PinShapeComboBox( wxWindow* parent,
         const wxString& name ) :
     wxBitmapComboBox( parent, id, value, pos, size, n, choices, style, validator, name )
 {
-    for( unsigned ii = 0; ii < static_cast<int>( GRAPHIC_PINSHAPE::NUM_OPTIONS ); ++ii )
+    for( unsigned ii = 0; ii < GRAPHIC_PINSHAPES_TOTAL; ++ii )
     {
         GRAPHIC_PINSHAPE shape = static_cast<GRAPHIC_PINSHAPE>( ii );
 

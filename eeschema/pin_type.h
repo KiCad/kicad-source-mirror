@@ -46,13 +46,12 @@ enum class ELECTRICAL_PINTYPE
     PT_POWER_OUT,     ///< output of a regulator: intended to be connected to power input pins
     PT_OPENCOLLECTOR, ///< pin type open collector
     PT_OPENEMITTER,   ///< pin type open emitter
-    PT_NC             ///< not connected (must be left open)
+    PT_NC,            ///< not connected (must be left open)
+
+    PT_LAST_OPTION = PT_NC ///< sentinel value, set to last usable enum option
 };
 
-enum
-{
-    PINTYPE_COUNT = static_cast<int>( ELECTRICAL_PINTYPE::PT_NC ) + 1
-};
+#define ELECTRICAL_PINTYPES_TOTAL ( static_cast<int>( ELECTRICAL_PINTYPE::PT_LAST_OPTION ) + 1 )
 
 // UI
 wxString GetText( ELECTRICAL_PINTYPE );

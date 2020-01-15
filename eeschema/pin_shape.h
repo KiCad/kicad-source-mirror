@@ -44,9 +44,10 @@ enum class GRAPHIC_PINSHAPE
     FALLING_EDGE_CLOCK,
     NONLOGIC,
 
-    //this is the sentinel value, must be at the end
-    NUM_OPTIONS
+    LAST_OPTION = NONLOGIC ///< this is the sentinel value, must be set to last enum value
 };
+
+#define GRAPHIC_PINSHAPES_TOTAL ( static_cast<int>( GRAPHIC_PINSHAPE::LAST_OPTION ) + 1 )
 
 
 // UI

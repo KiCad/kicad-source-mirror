@@ -48,8 +48,8 @@
 #include <id.h>
 
 
-extern int           DiagErc[PINTYPE_COUNT][PINTYPE_COUNT];
-extern int           DefaultDiagErc[PINTYPE_COUNT][PINTYPE_COUNT];
+extern int DiagErc[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
+extern int DefaultDiagErc[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
 
 
 bool DIALOG_ERC::m_diagErcTableInit = false;        // saved only for the current session
@@ -59,7 +59,7 @@ bool DIALOG_ERC::m_diagErcTableInit = false;        // saved only for the curren
 
 
 BEGIN_EVENT_TABLE( DIALOG_ERC, DIALOG_ERC_BASE )
-    EVT_COMMAND_RANGE( ID_MATRIX_0, ID_MATRIX_0 + ( PINTYPE_COUNT * PINTYPE_COUNT ) - 1,
+    EVT_COMMAND_RANGE( ID_MATRIX_0, ID_MATRIX_0 + ( ELECTRICAL_PINTYPES_TOTAL * ELECTRICAL_PINTYPES_TOTAL ) - 1,
                        wxEVT_COMMAND_BUTTON_CLICKED, DIALOG_ERC::ChangeErrorLevel )
 END_EVENT_TABLE()
 
@@ -339,7 +339,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
         std::vector<wxStaticText*> labels;
 
         // Print row labels
-        for( int ii = 0; ii < PINTYPE_COUNT; ii++ )
+        for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
         {
             int y = pos.y + (ii * bitmap_size.y);
             text = new wxStaticText( m_matrixPanel, -1, CommentERC_H[ii],
@@ -351,7 +351,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
         }
 
         // Right-align
-        for( int ii = 0; ii < PINTYPE_COUNT; ii++ )
+        for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
         {
             wxPoint labelPos = labels[ ii ]->GetPosition();
             labelPos.x = pos.x - labels[ ii ]->GetRect().GetWidth();
@@ -363,7 +363,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
     else
         pos = m_buttonList[0][0]->GetPosition();
 
-    for( int ii = 0; ii < PINTYPE_COUNT; ii++ )
+    for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
     {
         int y = pos.y + (ii * bitmap_size.y);
 
@@ -381,7 +381,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
                 text     = new wxStaticText( m_matrixPanel, -1, CommentERC_V[ii], txtpos );
             }
 
-            int event_id = ID_MATRIX_0 + ii + ( jj * PINTYPE_COUNT );
+            int event_id = ID_MATRIX_0 + ii + ( jj * ELECTRICAL_PINTYPES_TOTAL );
             BITMAP_DEF bitmap_butt = erc_green_xpm;
 
             delete m_buttonList[ii][jj];
@@ -464,8 +464,8 @@ void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
 {
     int id = event.GetId();
     int ii = id - ID_MATRIX_0;
-    int x = ii / PINTYPE_COUNT;
-    int y = ii % PINTYPE_COUNT;
+    int x = ii / ELECTRICAL_PINTYPES_TOTAL;
+    int y = ii % ELECTRICAL_PINTYPES_TOTAL;
     wxBitmapButton* butt = (wxBitmapButton*) event.GetEventObject();
 
     int level = ( DiagErc[y][x] + 1 ) % 3;

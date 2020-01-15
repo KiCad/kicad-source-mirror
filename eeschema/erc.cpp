@@ -101,7 +101,7 @@ const wxString CommentERC_V[] =
  *  at start up: must be loaded by DefaultDiagErc
  *  Can be modified in dialog ERC
  */
-int  DiagErc[PINTYPE_COUNT][PINTYPE_COUNT];
+int DiagErc[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
 
 /**
  * Default Look up table which gives the ERC error level for a pair of connected pins
@@ -110,7 +110,7 @@ int  DiagErc[PINTYPE_COUNT][PINTYPE_COUNT];
  *  note also, to avoid inconsistancy:
  *    DefaultDiagErc[i][j] = DefaultDiagErc[j][i]
  */
-int DefaultDiagErc[PINTYPE_COUNT][PINTYPE_COUNT] =
+int DefaultDiagErc[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
 {
 /*         I,   O,    Bi,   3S,   Pas,  UnS,  PwrI, PwrO, OC,   OE,   PT_NC */
 /* I */  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
@@ -123,7 +123,7 @@ int DefaultDiagErc[PINTYPE_COUNT][PINTYPE_COUNT] =
 /*PwrO*/ { OK,  ERR,  WAR,  ERR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
 /* OC */ { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
 /* OE */ { OK,  ERR,  WAR,  WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
-/* PT_NC */ { ERR, ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR }
+/* NC */ { ERR, ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR }
 };
 
 
@@ -137,7 +137,7 @@ int DefaultDiagErc[PINTYPE_COUNT][PINTYPE_COUNT] =
  * in net.  Nets are OK when their final state is NET_NC or DRV.   Nets with the state
  * NOD have no valid source signal.
  */
-static int MinimalReq[PINTYPE_COUNT][PINTYPE_COUNT] =
+static int MinimalReq[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
 {
 /*         In   Out, Bi,  3S,  Pas, UnS, PwrI,PwrO,OC,  OE,  PT_NC */
 /* In*/  { NOD, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
@@ -150,7 +150,7 @@ static int MinimalReq[PINTYPE_COUNT][PINTYPE_COUNT] =
 /*PwrO*/ { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NPI },
 /* OC*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
 /* OE*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
-/* PT_NC*/  { NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI }
+/* NC*/  { NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI }
 };
 
 
