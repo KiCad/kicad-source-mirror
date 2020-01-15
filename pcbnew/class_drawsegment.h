@@ -149,7 +149,9 @@ public:
     int GetRadius() const
     {
         double radius = GetLineLength( m_Start, m_End );
-        return KiROUND( radius );
+
+        // don't allow degenerate arcs
+        return std::max( 1, KiROUND( radius ) );
     }
 
     /**
