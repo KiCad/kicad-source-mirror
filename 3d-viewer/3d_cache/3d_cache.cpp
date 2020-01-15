@@ -27,6 +27,7 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <mutex>
 #include <sstream>
 #include <utility>
 
@@ -60,8 +61,8 @@
 
 #define MASK_3D_CACHE "3D_CACHE"
 
-static wxCriticalSection lock3D_cache;
-static wxCriticalSection lock3D_cacheManager;
+static std::mutex mutex3D_cache;
+static std::mutex mutex3D_cacheManager;
 
 
 static bool isSHA1Same( const unsigned char* shaA, const unsigned char* shaB )
@@ -225,7 +226,8 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
     }
 
     // check cache if file is already loaded
-    wxCriticalSectionLocker lock( lock3D_cache );
+    std::lock_guard<std::mutex> lock( mutex3D_cache );
+
     std::map< wxString, S3D_CACHE_ENTRY*, rsort_wxString >::iterator mi;
     mi = m_CacheMap.find( full3Dpath );
 
@@ -780,7 +782,7 @@ wxString S3D_CACHE::GetModelHash( const wxString& aModelFileName )
 
 S3D_CACHE* PROJECT::Get3DCacheManager( bool aUpdateProjDir )
 {
-    wxCriticalSectionLocker lock( lock3D_cacheManager );
+    std::lock_guard<std::mutex> lock( mutex3D_cacheManager );
 
     // Get the existing cache from the project
     S3D_CACHE* cache = dynamic_cast<S3D_CACHE*>( GetElem( ELEM_3DCACHE ) );

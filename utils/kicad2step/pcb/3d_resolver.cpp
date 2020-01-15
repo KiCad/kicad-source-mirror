@@ -21,12 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <iostream>
-#include <sstream>
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
+#include <iostream>
+#include <mutex>
 #include <sstream>
+
 #include <wx/fileconf.h>
 #include <wx/filename.h>
 #include <wx/log.h>
@@ -48,7 +49,7 @@
 
 #define MASK_3D_RESOLVER "3D_RESOLVER"
 
-static wxCriticalSection lock3D_resolver;
+static std::mutex mutex3D_resolver;
 
 static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& aResult );
 
@@ -326,7 +327,7 @@ bool S3D_RESOLVER::UpdatePathList( std::vector< SEARCH_PATH >& aPathList )
 
 wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
 {
-    wxCriticalSectionLocker lock( lock3D_resolver );
+    std::lock_guard<std::mutex> lock( mutex3D_resolver );
 
     if( aFileName.empty() )
         return wxEmptyString;
@@ -524,7 +525,7 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
     if( aPath.m_alias.empty() || aPath.m_pathvar.empty() )
         return false;
 
-    wxCriticalSectionLocker lock( lock3D_resolver );
+    std::lock_guard<std::mutex> lock( mutex3D_resolver );
 
     SEARCH_PATH tpath = aPath;
 
@@ -895,7 +896,8 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
     if( m_Paths.empty() )
         createPathList();
 
-    wxCriticalSectionLocker lock( lock3D_resolver );
+    std::lock_guard<std::mutex> lock( mutex3D_resolver );
+
     std::list< SEARCH_PATH >::const_iterator sL = m_Paths.begin();
     std::list< SEARCH_PATH >::const_iterator eL = m_Paths.end();
     size_t idx;
