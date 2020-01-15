@@ -66,6 +66,22 @@
 using namespace std;
 
 /**
+ * Map of EAGLE pin type values to KiCad pin type values
+ */
+static const std::map<wxString, ELECTRICAL_PINTYPE> pinDirectionsMap = {
+    { "sup",    ELECTRICAL_PINTYPE::PT_POWER_IN },
+    { "pas",    ELECTRICAL_PINTYPE::PT_PASSIVE },
+    { "out",    ELECTRICAL_PINTYPE::PT_OUTPUT },
+    { "in",     ELECTRICAL_PINTYPE::PT_INPUT },
+    { "nc",     ELECTRICAL_PINTYPE::PT_NC },
+    { "io",     ELECTRICAL_PINTYPE::PT_BIDI },
+    { "oc",     ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR },
+    { "hiz",    ELECTRICAL_PINTYPE::PT_TRISTATE },
+    { "pwr",    ELECTRICAL_PINTYPE::PT_POWER_IN },
+};
+
+
+/**
  * Provides an easy access to the children of an XML node via their names.
  * @param aCurrentNode is a pointer to a wxXmlNode, whose children will be mapped.
  * @param aName the name of the specific child names to be counted.
@@ -1400,18 +1416,6 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
 
             if( ePin.direction )
             {
-                const std::map<wxString, ELECTRICAL_PINTYPE> pinDirectionsMap = {
-                    { "sup",    ELECTRICAL_PINTYPE::PT_POWER_IN },
-                    { "pas",    ELECTRICAL_PINTYPE::PT_PASSIVE },
-                    { "out",    ELECTRICAL_PINTYPE::PT_OUTPUT },
-                    { "in",     ELECTRICAL_PINTYPE::PT_INPUT },
-                    { "nc",     ELECTRICAL_PINTYPE::PT_NC },
-                    { "io",     ELECTRICAL_PINTYPE::PT_BIDI },
-                    { "oc",     ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR },
-                    { "hiz",    ELECTRICAL_PINTYPE::PT_TRISTATE },
-                    { "pwr",    ELECTRICAL_PINTYPE::PT_POWER_IN },
-                };
-
                 for( const auto& pinDir : pinDirectionsMap )
                 {
                     if( ePin.direction->Lower() == pinDir.first )
