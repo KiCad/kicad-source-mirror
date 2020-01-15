@@ -89,10 +89,10 @@ enum {
  */
 static const std::map<int, supportedFileType> fileTypes =
 {
-    { ID_PANEL_FPLIB_ADD_KICADMOD,    { "KiCad (folder with .kicad_mod files)", "",                               KiCadFootprintFileExtension,      false, IO_MGR::KICAD_SEXP } },
-    { ID_PANEL_FPLIB_ADD_EAGLE6,      { "Eagle 6.x (*.lbr)",                    EagleFootprintLibPathWildcard(),  "",                               true,  IO_MGR::EAGLE } },
-    { ID_PANEL_FPLIB_ADD_KICADLEGACY, { "KiCad legacy (*.mod)",                 LegacyFootprintLibPathWildcard(), "",                               true,  IO_MGR::LEGACY } },
-    { ID_PANEL_FPLIB_ADD_GEDA,        { "Geda (folder with *.fp files)",        "",                               GedaPcbFootprintLibFileExtension, false, IO_MGR::GEDA_PCB } },
+    { ID_PANEL_FPLIB_ADD_KICADMOD,    { "KiCad (folder with .kicad_mod files)", "",                               "kicad_mod",      false, IO_MGR::KICAD_SEXP } },
+    { ID_PANEL_FPLIB_ADD_EAGLE6,      { "Eagle 6.x (*.lbr)",                    EagleFootprintLibPathWildcard(),  "",               true,  IO_MGR::EAGLE } },
+    { ID_PANEL_FPLIB_ADD_KICADLEGACY, { "KiCad legacy (*.mod)",                 LegacyFootprintLibPathWildcard(), "",               true,  IO_MGR::LEGACY } },
+    { ID_PANEL_FPLIB_ADD_GEDA,        { "Geda (folder with *.fp files)",        "",                               "fp",             false, IO_MGR::GEDA_PCB } },
 };
 // clang-format on
 
