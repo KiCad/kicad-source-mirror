@@ -1150,7 +1150,12 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
         padCountListByNet.assign( max_netcode + 1, 0 );
 
         for( D_PAD* pad : pads )
-            padCountListByNet[pad->GetNetCode()]++;
+        {
+            int netCode = pad->GetNetCode();
+
+            if( netCode >= 0 )
+                padCountListByNet[ netCode ]++;
+        }
 
         sort( netBuffer.begin(), netBuffer.end(), sortNetsByNodes );
     }
