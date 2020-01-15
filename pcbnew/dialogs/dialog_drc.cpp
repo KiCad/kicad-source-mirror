@@ -23,46 +23,46 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <base_units.h>
+#include <bitmaps.h>
+#include <collectors.h>
+#include <confirm.h>
+#include <dialog_drc.h>
 #include <fctsys.h>
 #include <kiface_i.h>
-#include <confirm.h>
-#include <wildcards_and_files_ext.h>
-#include <bitmaps.h>
-#include <pgm_base.h>
-#include <dialog_drc.h>
 #include <pcb_edit_frame.h>
-#include <base_units.h>
-#include <view/view.h>
-#include <collectors.h>
+#include <pgm_base.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <view/view.h>
+#include <wildcards_and_files_ext.h>
 
 /* class DIALOG_DRC_CONTROL: a dialog to set DRC parameters (clearance, min cooper size)
  * and run DRC tests
  */
 
 // Keywords for read and write config
-#define DrcRefillZonesKey        wxT( "RefillZonesBeforeDrc" )
-#define DrcTrackToZoneTestKey    wxT( "DrcTrackToZoneTest" )
-#define DrcTestFootprintsKey     wxT( "DrcTestFootprints" )
+#define DrcRefillZonesKey       wxT( "RefillZonesBeforeDrc" )
+#define DrcTrackToZoneTestKey   wxT( "DrcTrackToZoneTest" )
+#define DrcTestFootprintsKey    wxT( "DrcTestFootprints" )
 
 
-DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame,
-                                        wxWindow* aParent ) :
-    DIALOG_DRC_CONTROL_BASE( aParent ),
-    m_trackMinWidth( aEditorFrame, m_TrackMinWidthTitle, m_SetTrackMinWidthCtrl,
-                     m_TrackMinWidthUnit, true ),
-    m_viaMinSize( aEditorFrame, m_ViaMinTitle, m_SetViaMinSizeCtrl, m_ViaMinUnit, true ),
-    m_uviaMinSize( aEditorFrame, m_MicroViaMinTitle, m_SetMicroViakMinSizeCtrl,
-                   m_MicroViaMinUnit, true )
+DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL(
+        DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent )
+        : DIALOG_DRC_CONTROL_BASE( aParent ),
+          m_trackMinWidth( aEditorFrame, m_TrackMinWidthTitle, m_SetTrackMinWidthCtrl,
+                  m_TrackMinWidthUnit, true ),
+          m_viaMinSize( aEditorFrame, m_ViaMinTitle, m_SetViaMinSizeCtrl, m_ViaMinUnit, true ),
+          m_uviaMinSize( aEditorFrame, m_MicroViaMinTitle, m_SetMicroViakMinSizeCtrl,
+                  m_MicroViaMinUnit, true )
 {
-    SetName( DIALOG_DRC_WINDOW_NAME );  // Set a window name to be able to find it
+    SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
 
-    m_config = Kiface().KifaceSettings();
-    m_tester = aTester;
-    m_brdEditor = aEditorFrame;
+    m_config       = Kiface().KifaceSettings();
+    m_tester       = aTester;
+    m_brdEditor    = aEditorFrame;
     m_currentBoard = m_brdEditor->GetBoard();
-    m_BrdSettings = m_brdEditor->GetBoard()->GetDesignSettings();
+    m_BrdSettings  = m_brdEditor->GetBoard()->GetDesignSettings();
 
     m_BrowseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
@@ -118,9 +118,9 @@ void DIALOG_DRC_CONTROL::DisplayDRCValues()
 
 void DIALOG_DRC_CONTROL::InitValues()
 {
-    m_markersTitleTemplate = m_Notebook->GetPageText( 0 );
+    m_markersTitleTemplate     = m_Notebook->GetPageText( 0 );
     m_unconnectedTitleTemplate = m_Notebook->GetPageText( 1 );
-    m_footprintsTitleTemplate = m_Notebook->GetPageText( 2 );
+    m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
 
     m_DeleteCurrentMarkerButton->Enable( false );
 
@@ -135,16 +135,16 @@ void DIALOG_DRC_CONTROL::InitValues()
     m_config->Read( DrcTestFootprintsKey, &value, false );
     m_cbTestFootprints->SetValue( value );
 
-    Layout();      // adding the units above expanded Clearance text, now resize.
+    Layout(); // adding the units above expanded Clearance text, now resize.
 
     SetFocus();
 }
 
 
-void DIALOG_DRC_CONTROL::SetDRCParameters( )
+void DIALOG_DRC_CONTROL::SetDRCParameters()
 {
-    m_BrdSettings.m_TrackMinWidth = m_trackMinWidth.GetValue();
-    m_BrdSettings.m_ViasMinSize = m_viaMinSize.GetValue();
+    m_BrdSettings.m_TrackMinWidth    = m_trackMinWidth.GetValue();
+    m_BrdSettings.m_ViasMinSize      = m_viaMinSize.GetValue();
     m_BrdSettings.m_MicroViasMinSize = m_uviaMinSize.GetValue();
 
     m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
@@ -160,7 +160,7 @@ void DIALOG_DRC_CONTROL::SetRptSettings( bool aEnable, const wxString& aFileName
 
 void DIALOG_DRC_CONTROL::GetRptSettings( bool* aEnable, wxString& aFileName )
 {
-    *aEnable = m_CreateRptCtrl->GetValue();
+    *aEnable  = m_CreateRptCtrl->GetValue();
     aFileName = m_RptFilenameCtrl->GetValue();
 }
 
@@ -171,7 +171,7 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
 
     bool make_report = m_CreateRptCtrl->IsChecked();
 
-    if( make_report )      // Create a rpt file
+    if( make_report ) // Create a rpt file
     {
         reportName = m_RptFilenameCtrl->GetValue();
 
@@ -186,12 +186,12 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
     }
 
     SetDRCParameters();
-    m_tester->m_doZonesTest            = m_cbReportTracksToZonesErrors->GetValue();
-    m_tester->m_rptFilename            = reportName;
-    m_tester->m_doCreateRptFile        = make_report;
-    m_tester->m_refillZones            = m_cbRefillZones->GetValue();
-    m_tester->m_reportAllTrackErrors   = m_cbReportAllTrackErrors->GetValue();
-    m_tester->m_testFootprints         = m_cbTestFootprints->GetValue();
+    m_tester->m_doZonesTest          = m_cbReportTracksToZonesErrors->GetValue();
+    m_tester->m_rptFilename          = reportName;
+    m_tester->m_doCreateRptFile      = make_report;
+    m_tester->m_refillZones          = m_cbRefillZones->GetValue();
+    m_tester->m_reportAllTrackErrors = m_cbReportAllTrackErrors->GetValue();
+    m_tester->m_testFootprints       = m_cbTestFootprints->GetValue();
 
     DelDRCMarkers();
 
@@ -200,9 +200,9 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
 
     // run all the tests, with no UI at this time.
     m_Messages->Clear();
-    wxSafeYield();                             // Allows time slice to refresh the Messages
-    m_tester->RunTests(m_Messages);
-    m_Notebook->ChangeSelection( 0 );          // display the "Problems/Markers" tab
+    wxSafeYield(); // Allows time slice to refresh the Messages
+    m_tester->RunTests( m_Messages );
+    m_Notebook->ChangeSelection( 0 ); // display the "Problems/Markers" tab
 
     // Generate the report
     if( !reportName.IsEmpty() )
@@ -234,14 +234,14 @@ void DIALOG_DRC_CONTROL::OnDeleteAllClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent&  )
+void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent& )
 {
     wxFileName fn = m_brdEditor->GetBoard()->GetFileName();
     fn.SetExt( ReportFileExtension );
-    wxString prj_path =  Prj().GetProjectPath();
+    wxString prj_path = Prj().GetProjectPath();
 
     wxFileDialog dlg( this, _( "Save DRC Report File" ), prj_path, fn.GetFullName(),
-                      ReportFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+            ReportFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -269,7 +269,7 @@ void DIALOG_DRC_CONTROL::OnReportCheckBoxClicked( wxCommandEvent& event )
 }
 
 
-void DIALOG_DRC_CONTROL::OnReportFilenameEdited( wxCommandEvent &event )
+void DIALOG_DRC_CONTROL::OnReportFilenameEdited( wxCommandEvent& event )
 {
     m_CreateRptCtrl->SetValue( event.GetString().Length() );
 }
@@ -318,8 +318,8 @@ bool DIALOG_DRC_CONTROL::focusOnItem( const DRC_ITEM* aItem )
         return false;
 
     auto toolmgr = m_brdEditor->GetToolManager();
-    auto pos = aItem->GetPointA();
-    auto marker = static_cast<MARKER_PCB*>( aItem->GetParent() );
+    auto pos     = aItem->GetPointA();
+    auto marker  = static_cast<MARKER_PCB*>( aItem->GetParent() );
 
     if( marker )
     {
@@ -347,7 +347,7 @@ int DIALOG_DRC_CONTROL::rightUpClicSelection( DRCLISTBOX* aListBox, wxMouseEvent
     // Check if user right-clicked on a different item, and select the right clicked item
     int selection = aListBox->HitTest( event.GetPosition() );
 
-    if( selection >= (int)aListBox->GetItemCount() )    // Should not happen.
+    if( selection >= (int) aListBox->GetItemCount() ) // Should not happen.
         selection = wxNOT_FOUND;
 #endif
     if( selection == wxNOT_FOUND )
@@ -383,7 +383,7 @@ void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
 {
     // popup menu to go to either of the items listed in the DRC_ITEM.
 
-    BOARD_ITEM* first = aItem->GetMainItem( m_brdEditor->GetBoard() );
+    BOARD_ITEM* first  = aItem->GetMainItem( m_brdEditor->GetBoard() );
     BOARD_ITEM* second = nullptr;
 
     GENERAL_COLLECTOR items;
@@ -553,7 +553,7 @@ const wxString DIALOG_DRC_CONTROL::makeValidFileNameReport()
     // it will be made relative to the project
     if( !fn.IsAbsolute() )
     {
-        wxString prj_path =  Prj().GetProjectPath();
+        wxString prj_path = Prj().GetProjectPath();
         fn.MakeAbsolute( prj_path );
     }
 
@@ -568,11 +568,10 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
     if( fp == NULL )
         return false;
 
-    int count;
+    int       count;
     EDA_UNITS units = GetUserUnits();
 
-    fprintf( fp, "** Drc report for %s **\n",
-             TO_UTF8( m_brdEditor->GetBoard()->GetFileName() ) );
+    fprintf( fp, "** Drc report for %s **\n", TO_UTF8( m_brdEditor->GetBoard()->GetFileName() ) );
 
     wxDateTime now = wxDateTime::Now();
 
@@ -582,15 +581,23 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
 
     fprintf( fp, "\n** Found %d DRC errors **\n", count );
 
-    for( int i = 0;  i<count;  ++i )
+    for( int i = 0; i < count; ++i )
         fprintf( fp, "%s", TO_UTF8( m_ClearanceListBox->GetItem( i )->ShowReport( units ) ) );
 
     count = m_UnconnectedListBox->GetItemCount();
 
     fprintf( fp, "\n** Found %d unconnected pads **\n", count );
 
-    for( int i = 0;  i<count;  ++i )
+    for( int i = 0; i < count; ++i )
         fprintf( fp, "%s", TO_UTF8( m_UnconnectedListBox->GetItem( i )->ShowReport( units ) ) );
+
+    count = m_FootprintsListBox->GetItemCount();
+
+    fprintf( fp, "\n** Found %d Footprint errors **\n", count );
+
+    for( int i = 0; i < count; ++i )
+        fprintf( fp, "%s", TO_UTF8( m_FootprintsListBox->GetItem( i )->ShowReport( units ) ) );
+
 
     fprintf( fp, "\n** End of Report **\n" );
 
@@ -603,7 +610,7 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
 void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
 {
     ssize_t selectedIndex;
-    int curTab = m_Notebook->GetSelection();
+    int     curTab = m_Notebook->GetSelection();
 
     if( curTab == 0 )
     {
