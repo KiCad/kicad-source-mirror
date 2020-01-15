@@ -27,13 +27,9 @@
 
 #include "ngspice.h"
 #include "spice_reporter.h"
-
-#include <config.h>
 #include <common.h>     // LOCALE_IO
 #include <wx/stdpaths.h>
 #include <wx/dir.h>
-
-#include <sstream>
 #include <stdexcept>
 
 using namespace std;
@@ -41,7 +37,14 @@ using namespace std;
 static const wxChar* const traceNgspice = wxT( "KICAD_NGSPICE" );
 
 NGSPICE::NGSPICE() :
-    m_error( false )
+        m_ngSpice_Init( nullptr ),
+        m_ngSpice_Circ( nullptr ),
+        m_ngSpice_Command( nullptr ),
+        m_ngGet_Vec_Info( nullptr ),
+        m_ngSpice_AllPlots( nullptr ),
+        m_ngSpice_AllVecs( nullptr ),
+        m_ngSpice_Running( nullptr ),
+        m_error( false )
 {
     init_dll();
 }
