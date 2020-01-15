@@ -132,7 +132,6 @@ public:
 
 #if defined(DEBUG)
     void Show( std::ostream& out, int ndx ) const;
-
 #endif
 
     NETLIST_OBJECT();

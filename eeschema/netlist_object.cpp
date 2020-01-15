@@ -40,7 +40,7 @@
 #if defined(DEBUG)
 
 #include <iostream>
-const char* ShowType( NETLIST_ITEM_T aType )
+const char* ShowType( NETLIST_ITEM aType )
 {
     const char* ret;
 
