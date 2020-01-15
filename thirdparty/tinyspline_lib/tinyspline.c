@@ -1307,6 +1307,11 @@ int ts_fequals( tsReal x, tsReal y )
     {
         return 1;
     }
+    // KIDAD FIX for divide-by-zero
+    else if( y == 0.0 )
+    {
+        return x == 0.0;
+    }
     else
     {
         const tsReal r = (tsReal) fabs( x ) > (tsReal) fabs( y ) ?
