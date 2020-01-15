@@ -315,7 +315,7 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
         if( aFileType && (*aFileType)[ii] == 1 )
         {
             LoadExcellonFiles( filename.GetFullPath() );
-            layer = GetActiveLayer();   // Loading NC drill file changes the active layer
+            layer = GetActiveLayer();   // Loading PT_NC drill file changes the active layer
         }
         else
         {

@@ -36,12 +36,12 @@ class SCH_ITEM;
 class SCH_SHEET_PATH;
 
 
-enum CONNECTION_TYPE
+enum class CONNECTION_TYPE
 {
-    CONNECTION_NONE,    ///< No connection to this item
-    CONNECTION_NET,     ///< This item represents a net
-    CONNECTION_BUS,     ///< This item represents a bus vector
-    CONNECTION_BUS_GROUP,   ///< This item represents a bus group
+    NONE,      ///< No connection to this item
+    NET,       ///< This item represents a net
+    BUS,       ///< This item represents a bus vector
+    BUS_GROUP, ///< This item represents a bus group
 };
 
 /**
@@ -122,12 +122,12 @@ public:
 
     bool IsBus() const
     {
-        return ( m_type == CONNECTION_BUS || m_type == CONNECTION_BUS_GROUP );
+        return ( m_type == CONNECTION_TYPE::BUS || m_type == CONNECTION_TYPE::BUS_GROUP );
     }
 
     bool IsNet() const
     {
-        return ( m_type == CONNECTION_NET );
+        return ( m_type == CONNECTION_TYPE::NET );
     }
 
     bool IsDirty() const

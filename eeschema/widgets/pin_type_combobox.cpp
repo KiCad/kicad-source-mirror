@@ -42,7 +42,7 @@ PinTypeComboBox::PinTypeComboBox( wxWindow* parent,
         const wxString& name ) :
     wxBitmapComboBox( parent, id, value, pos, size, n, choices, style, validator, name )
 {
-    for( unsigned ii = 0; ii < PINTYPE_COUNT; ++ii )
+    for( unsigned ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ++ii )
     {
         ELECTRICAL_PINTYPE type = static_cast<ELECTRICAL_PINTYPE>( ii );
 
@@ -65,5 +65,5 @@ ELECTRICAL_PINTYPE PinTypeComboBox::GetPinTypeSelection()
 
 void PinTypeComboBox::SetSelection( ELECTRICAL_PINTYPE aType )
 {
-    wxBitmapComboBox::SetSelection( aType );
+    wxBitmapComboBox::SetSelection( static_cast<int>( aType ) );
 }

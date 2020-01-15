@@ -40,11 +40,11 @@
  * date and time format, including time and time zone. Note that this is
  * the date the Gerber file is effectively created,
  * not the time the project of PCB was started
- * @param aFormat = string compatibility: X1, X2, GBRJOB or NC drill synthax.
+ * @param aFormat = string compatibility: X1, X2, GBRJOB or PT_NC drill synthax.
  * exemple of structured comment (compatible X1 gerber)
  *  G04 #@! TF.CreationDate,2018-11-21T08:49:16+01:00* (exemple of X1 attribute)
- * exemple NC drill files
- *  ; #@! TF.CreationDate,2018-11-21T08:49:16+01:00*    (exemple of NC drill comment)
+ * exemple PT_NC drill files
+ *  ; #@! TF.CreationDate,2018-11-21T08:49:16+01:00*    (exemple of PT_NC drill comment)
  * exemple of X2 attribute:
  *  %TF.CreationDate,2018-11-06T08:25:24+01:00*%
  */

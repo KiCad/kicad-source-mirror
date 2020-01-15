@@ -117,10 +117,10 @@ public:
                 val = pin->GetName();
                 break;
             case COL_TYPE:
-                val = g_typeNames[ pin->GetType() ];
+                val = g_typeNames[static_cast<int>( pin->GetType() )];
                 break;
             case COL_SHAPE:
-                val = g_shapeNames[ pin->GetShape() ];
+                val = g_shapeNames[static_cast<int>( pin->GetShape() )];
                 break;
             case COL_ORIENTATION:
                 if( LIB_PIN::GetOrientationIndex( pin->GetOrientation() ) >= 0 )
@@ -397,15 +397,15 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( LIB_EDIT_FRAME* parent, LI
 
     if( g_typeNames.empty())
     {
-        for( unsigned i = 0; i < PINTYPE_COUNT; ++i )
+        for( unsigned i = 0; i < ELECTRICAL_PINTYPES_TOTAL; ++i )
             g_typeIcons.push_back( GetBitmap( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
-        for( unsigned i = 0; i < PINTYPE_COUNT; ++i )
+        for( unsigned i = 0; i < ELECTRICAL_PINTYPES_TOTAL; ++i )
             g_typeNames.push_back( GetText( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
         g_typeNames.push_back( INDETERMINATE );
 
-        for( unsigned i = 0; i < PINSHAPE_COUNT; ++i )
+        for( unsigned i = 0; i < GRAPHIC_PINSHAPES_TOTAL; ++i )
             g_shapeIcons.push_back( GetBitmap( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
-        for( unsigned i = 0; i < PINSHAPE_COUNT; ++i )
+        for( unsigned i = 0; i < GRAPHIC_PINSHAPES_TOTAL; ++i )
             g_shapeNames.push_back( GetText( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
         g_shapeNames.push_back( INDETERMINATE );
 

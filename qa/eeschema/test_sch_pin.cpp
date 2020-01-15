@@ -50,7 +50,7 @@ public:
         // give the pin some kind of data we can use to test
         m_lib_pin.SetNumber( "42" );
         m_lib_pin.SetName( "pinname" );
-        m_lib_pin.SetType( ELECTRICAL_PINTYPE::PIN_INPUT );
+        m_lib_pin.SetType( ELECTRICAL_PINTYPE::PT_INPUT );
 
         SCH_SHEET_PATH path;
         m_parent_comp.SetRef( &path, "U2" );
@@ -84,7 +84,9 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
     BOOST_CHECK_EQUAL( m_sch_pin.IsVisible(), m_lib_pin.IsVisible() );
     BOOST_CHECK_EQUAL( m_sch_pin.GetName(), m_lib_pin.GetName() );
     BOOST_CHECK_EQUAL( m_sch_pin.GetNumber(), m_lib_pin.GetNumber() );
-    BOOST_CHECK_EQUAL( m_sch_pin.GetType(), m_lib_pin.GetType() );
+
+    BOOST_CHECK( ( m_sch_pin.GetType() == m_lib_pin.GetType() ) );
+
     BOOST_CHECK_EQUAL( m_sch_pin.IsPowerConnection(), m_lib_pin.IsPowerConnection() );
 }
 
@@ -147,7 +149,7 @@ BOOST_AUTO_TEST_CASE( PinNumbering )
 BOOST_AUTO_TEST_CASE( PinNumberingPower )
 {
     // but if we set is power...
-    m_lib_pin.SetType( ELECTRICAL_PINTYPE::PIN_POWER_IN );
+    m_lib_pin.SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
     m_parent_part.SetPower();
 
     // the name is just the pin name

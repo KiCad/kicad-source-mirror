@@ -350,10 +350,10 @@ protected:
      * the standard X2 FileFunction for drill files is
      * %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],Drill[Route][Mixed]*%
      * There is no X1 version, as the Gerber drill files uses only X2 format
-     * There is a compatible NC drill version.
+     * There is a compatible PT_NC drill version.
      * @param aLayerPair is the layer pair (Drill from rom first layer to second layer)
      * @param aIsNpth is true when generating NPTH drill file
-     * @param aCompatNCdrill is true when generating NC (Excellon) compatible drill file
+     * @param aCompatNCdrill is true when generating PT_NC (Excellon) compatible drill file
      */
     const wxString BuildFileFunctionAttributeString( DRILL_LAYER_PAIR aLayerPair,
                                                      bool aIsNpth, bool aCompatNCdrill = false ) const;
