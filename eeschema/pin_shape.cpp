@@ -42,15 +42,15 @@ struct pinShapeStruct
 */
 // clang-format off
 const std::map<GRAPHIC_PINSHAPE, struct pinShapeStruct> pinShapes = {
-    { GRAPHIC_PINSHAPE::LINE,               { _( "Line" ), pinshape_normal_xpm } },
-    { GRAPHIC_PINSHAPE::INVERTED,           { _( "Inverted" ), pinshape_invert_xpm } },
-    { GRAPHIC_PINSHAPE::CLOCK,              { _( "Clock" ), pinshape_clock_normal_xpm } },
-    { GRAPHIC_PINSHAPE::INVERTED_CLOCK,     { _( "Inverted clock" ), pinshape_clock_invert_xpm } },
-    { GRAPHIC_PINSHAPE::INPUT_LOW,          { _( "Input low" ), pinshape_active_low_input_xpm } },
-    { GRAPHIC_PINSHAPE::CLOCK_LOW,          { _( "Clock low" ), pinshape_clock_active_low_xpm } },
-    { GRAPHIC_PINSHAPE::OUTPUT_LOW,         { _( "Output low" ), pinshape_active_low_output_xpm } },
+    { GRAPHIC_PINSHAPE::LINE,               { _( "Line" ),               pinshape_normal_xpm } },
+    { GRAPHIC_PINSHAPE::INVERTED,           { _( "Inverted" ),           pinshape_invert_xpm } },
+    { GRAPHIC_PINSHAPE::CLOCK,              { _( "Clock" ),              pinshape_clock_normal_xpm } },
+    { GRAPHIC_PINSHAPE::INVERTED_CLOCK,     { _( "Inverted clock" ),     pinshape_clock_invert_xpm } },
+    { GRAPHIC_PINSHAPE::INPUT_LOW,          { _( "Input low" ),          pinshape_active_low_input_xpm } },
+    { GRAPHIC_PINSHAPE::CLOCK_LOW,          { _( "Clock low" ),          pinshape_clock_active_low_xpm } },
+    { GRAPHIC_PINSHAPE::OUTPUT_LOW,         { _( "Output low" ),         pinshape_active_low_output_xpm } },
     { GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK, { _( "Falling edge clock" ), pinshape_clock_fall_xpm } },
-    { GRAPHIC_PINSHAPE::NONLOGIC,           { _( "NonLogic" ), pinshape_nonlogic_xpm } },
+    { GRAPHIC_PINSHAPE::NONLOGIC,           { _( "NonLogic" ),           pinshape_nonlogic_xpm } },
 };
 // clang-format on
 
