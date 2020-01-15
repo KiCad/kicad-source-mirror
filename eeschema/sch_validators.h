@@ -34,6 +34,7 @@
 
 
 #define FIELD_NAME  -1
+#define FIELD_VALUE -2
 
 
 /**

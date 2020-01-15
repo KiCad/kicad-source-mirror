@@ -82,13 +82,13 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
     m_urlAttr = new wxGridCellAttr;
     GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( aDialog );
     urlEditor->SetValidator( SCH_FIELD_VALIDATOR( aFrame->IsType( FRAME_SCH_LIB_EDITOR ),
-                                                  DATASHEET ) );
+                                                  FIELD_VALUE ) );
     m_urlAttr->SetEditor( urlEditor );
 
     m_nonUrlAttr = new wxGridCellAttr;
     wxGridCellTextEditor* nonUrlEditor = new wxGridCellTextEditor();
     nonUrlEditor->SetValidator( SCH_FIELD_VALIDATOR( aFrame->IsType( FRAME_SCH_LIB_EDITOR ),
-                                                     DATASHEET ) );
+                                                     FIELD_VALUE ) );
     m_nonUrlAttr->SetEditor( nonUrlEditor );
 
     m_boolAttr = new wxGridCellAttr;
