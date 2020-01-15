@@ -61,6 +61,10 @@
 #include <pcbnew_id.h>          // For ID_PCBNEW_END_LIST
 
 // clang-format off
+
+/**
+* Container that describes file type info for the add a library options
+*/
 struct supportedFileType
 {
     wxString m_Description;            ///< Description shown in the file picker dialog
@@ -70,8 +74,8 @@ struct supportedFileType
     IO_MGR::PCB_FILE_T m_Plugin;
 };
 
-/*
- * Event IDs for the menu items in the split button menu
+/**
+ * Event IDs for the menu items in the split button menu for add a library
  */
 enum {
     ID_PANEL_FPLIB_ADD_KICADMOD = ID_PCBNEW_END_LIST,
@@ -80,8 +84,8 @@ enum {
     ID_PANEL_FPLIB_ADD_GEDA,
 };
 
-/*
- * Map of event id as key to the file type struct
+/**
+ * Map with event id as the key to supported file types that will be listed for the add a library option
  */
 static const std::map<int, supportedFileType> fileTypes =
 {
@@ -93,7 +97,7 @@ static const std::map<int, supportedFileType> fileTypes =
 // clang-format on
 
 
-/*
+/**
  * Traverser implementation that looks to find any and all "folder" libraries by looking for files
  * with a specific extension inside folders
  */
