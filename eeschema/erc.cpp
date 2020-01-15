@@ -49,24 +49,7 @@
 
 
 /*
- *  Electrical type of pins:
- *  ELECTRICAL_PINTYPE::PT_INPUT = usual pin input: must be connected
- *  ELECTRICAL_PINTYPE::PT_OUTPUT = usual output
- *  ELECTRICAL_PINTYPE::PT_BIDI = input or output (like port for a microprocessor)
- *  ELECTRICAL_PINTYPE::PT_TRISTATE = tris state bus pin
- *  ELECTRICAL_PINTYPE::PT_PASSIVE = pin for passive components: must be connected, and can be
- * connected to any pin
- *  ELECTRICAL_PINTYPE::PT_UNSPECIFIED = unknown electrical properties: creates always a warning
- * when connected
- *  ELECTRICAL_PINTYPE::PT_POWER_IN = power input (GND, VCC for ICs). Must be connected to a power
- * output.
- *  ELECTRICAL_PINTYPE::PT_POWER_OUT = output of a regulator: intended to be connected to power
- * input pins
- *  ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR = pin type open collector
- *  ELECTRICAL_PINTYPE::PT_OPENEMITTER = pin type open emitter
- *  ELECTRICAL_PINTYPE::PT_NC = not connected (must be left open)
- *
- *  Minimal requirements:
+ *  Minimal ERC requirements:
  *  All pins *must* be connected (except ELECTRICAL_PINTYPE::PT_NC).
  *  When a pin is not connected in schematic, the user must place a "non
  * connected" symbol to this pin.
@@ -74,8 +57,8 @@
  */
 
 /* Messages for conflicts :
- *  ELECTRICAL_PINTYPE::PT_INPUT, ELECTRICAL_PINTYPE::PT_OUTPUT, ELECTRICAL_PINTYPE::BIDI, ELECTRICAL_PINTYPE::TRISTATE, ELECTRICAL_PINTYPE::PASSIVE,
- *  ELECTRICAL_PINTYPE::UNSPECIFIED, ELECTRICAL_PINTYPE::POWER_IN, ELECTRICAL_PINTYPE::POWER_OUT, ELECTRICAL_PINTYPE::OPENCOLLECTOR,
+ *  ELECTRICAL_PINTYPE::PT_INPUT, ELECTRICAL_PINTYPE::PT_OUTPUT, ELECTRICAL_PINTYPE:PT_:BIDI, ELECTRICAL_PINTYPE::PT_TRISTATE, ELECTRICAL_PINTYPE::PT_PASSIVE,
+ *  ELECTRICAL_PINTYPE::PT_UNSPECIFIED, ELECTRICAL_PINTYPE::PT_POWER_IN, ELECTRICAL_PINTYPE::PT_POWER_OUT, ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR,
  *  ELECTRICAL_PINTYPE::PT_OPENEMITTER, ELECTRICAL_PINTYPE::PT_NC
  *  These messages are used to show the ERC matrix in ERC dialog
  */

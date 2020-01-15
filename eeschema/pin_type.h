@@ -36,17 +36,17 @@
  */
 enum class ELECTRICAL_PINTYPE
 {
-    PT_INPUT,
-    PT_OUTPUT,
-    PT_BIDI,
-    PT_TRISTATE,
-    PT_PASSIVE,
-    PT_UNSPECIFIED,
-    PT_POWER_IN,
-    PT_POWER_OUT,
-    PT_OPENCOLLECTOR,
-    PT_OPENEMITTER,
-    PT_NC /* No connect */
+    PT_INPUT,         ///< usual pin input: must be connected
+    PT_OUTPUT,        ///< usual output
+    PT_BIDI,          ///< input or output (like port for a microprocessor)
+    PT_TRISTATE,      ///< tris state bus pin
+    PT_PASSIVE,       ///< pin for passive components: must be connected, and can be connected to any pin
+    PT_UNSPECIFIED,   ///< unknown electrical properties: creates always a warning when connected
+    PT_POWER_IN,      ///< power input (GND, VCC for ICs). Must be connected to a power output.
+    PT_POWER_OUT,     ///< output of a regulator: intended to be connected to power input pins
+    PT_OPENCOLLECTOR, ///< pin type open collector
+    PT_OPENEMITTER,   ///< pin type open emitter
+    PT_NC             ///< not connected (must be left open)
 };
 
 enum
