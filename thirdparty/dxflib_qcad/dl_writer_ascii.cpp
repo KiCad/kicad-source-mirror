@@ -140,6 +140,9 @@ void DL_WriterA::dxfString( int gc, const char* value ) const
 #ifndef __GCC2x__
         // throw DL_NullStrExc();
 #endif
+        // KIDCAD CHANGE: if we're not going to throw we at least need to
+        // exit before dereferencing the null value.
+        return;
     }
 
     m_ofile << ( gc<10 ? "  " : (gc<100 ? " " : "") ) << gc << "\n"
