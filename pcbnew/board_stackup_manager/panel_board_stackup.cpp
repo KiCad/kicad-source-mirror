@@ -887,7 +887,7 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
 
     // The board thickness and the thickness from stackup settings should be compatible
     // so verify that compatibility
-    int pcbTickness = GetPcbThickness() ;
+    int pcbThickness = GetPcbThickness() ;
     int stackup_thickness = 0;
 
     wxString txt;
@@ -1017,8 +1017,8 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
         row++;
     }
 
-    int delta = std::abs( stackup_thickness - pcbTickness );
-    double relative_error = (double)delta/pcbTickness;
+    int delta = std::abs( stackup_thickness - pcbThickness );
+    double relative_error = pcbThickness ? (double)delta / pcbThickness : 1;
     const double relative_error_max = 0.01;
 
     // warn user if relative_error > 0.01
@@ -1027,9 +1027,9 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
         wxString msg;
         msg.Printf( _( "Board thickness %s differs from stackup thickness %s\n"
                        "Allowed max error %s" ),
-                    StringFromValue( m_units, pcbTickness, true, true ),
+                    StringFromValue( m_units, pcbThickness, true, true ),
                     StringFromValue( m_units, stackup_thickness, true, true ),
-                    StringFromValue( m_units, KiROUND( relative_error_max*pcbTickness),
+                    StringFromValue( m_units, KiROUND( relative_error_max * pcbThickness),
                                      true, true ) );
 
         if( !error_msg.IsEmpty() )
