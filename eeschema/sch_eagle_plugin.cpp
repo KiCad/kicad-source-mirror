@@ -1401,15 +1401,15 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
             if( ePin.direction )
             {
                 const std::map<wxString, ELECTRICAL_PINTYPE> pinDirectionsMap = {
-                    { "sup", ELECTRICAL_PINTYPE::POWER_IN },
-                    { "pas", ELECTRICAL_PINTYPE::PASSIVE },
-                    { "out", ELECTRICAL_PINTYPE::OUTPUT },
-                    { "in", ELECTRICAL_PINTYPE::INPUT },
-                    { "nc", ELECTRICAL_PINTYPE::NC },
-                    { "io", ELECTRICAL_PINTYPE::BIDI },
-                    { "oc", ELECTRICAL_PINTYPE::OPENCOLLECTOR },
-                    { "hiz", ELECTRICAL_PINTYPE::TRISTATE },
-                    { "pwr", ELECTRICAL_PINTYPE::POWER_IN },
+                    { "sup",    ELECTRICAL_PINTYPE::POWER_IN },
+                    { "pas",    ELECTRICAL_PINTYPE::PASSIVE },
+                    { "out",    ELECTRICAL_PINTYPE::OUTPUT },
+                    { "in",     ELECTRICAL_PINTYPE::INPUT },
+                    { "nc",     ELECTRICAL_PINTYPE::NC },
+                    { "io",     ELECTRICAL_PINTYPE::BIDI },
+                    { "oc",     ELECTRICAL_PINTYPE::OPENCOLLECTOR },
+                    { "hiz",    ELECTRICAL_PINTYPE::TRISTATE },
+                    { "pwr",    ELECTRICAL_PINTYPE::POWER_IN },
                 };
 
                 for( const auto& pinDir : pinDirectionsMap )
