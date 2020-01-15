@@ -198,7 +198,7 @@ enum KICAD_T
     FP_LIB_TABLE_T,
     PART_LIBS_T,
     SEARCH_STACK_T,
-    CACHE_WRAPPER_T,
+    S3D_CACHE_T,
 
     // End value
     MAX_STRUCT_TYPE_ID

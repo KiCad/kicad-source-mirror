@@ -40,6 +40,7 @@
 #include "class_track.h"
 #include "class_zone.h"
 #include "convert_to_biu.h"
+#include <filename_resolver.h>
 #include "gr_text.h"
 #include "macros.h"
 #include "pgm_base.h"

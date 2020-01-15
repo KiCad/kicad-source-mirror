@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,11 +24,11 @@
 
 #define GLM_FORCE_RADIANS
 
-#include <iostream>
-#include <sstream>
 #include <fstream>
-#include <utility>
+#include <iostream>
 #include <iterator>
+#include <sstream>
+#include <utility>
 
 #include <wx/datetime.h>
 #include <wx/filename.h>
@@ -46,18 +46,22 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-#include "common.h"
 #include "3d_cache.h"
 #include "3d_info.h"
-#include "sg/scenegraph.h"
-#include "filename_resolver.h"
 #include "3d_plugin_manager.h"
+#include "sg/scenegraph.h"
 #include "plugins/3dapi/ifsg_api.h"
+
+#include <common.h>
+#include <filename_resolver.h>
+#include <pgm_base.h>
+#include <project.h>
 
 
 #define MASK_3D_CACHE "3D_CACHE"
 
 static wxCriticalSection lock3D_cache;
+static wxCriticalSection lock3D_cacheManager;
 
 
 static bool isSHA1Same( const unsigned char* shaA, const unsigned char* shaB )
@@ -771,4 +775,40 @@ wxString S3D_CACHE::GetModelHash( const wxString& aModelFileName )
         return cp->GetCacheBaseName();
 
     return wxEmptyString;
+}
+
+
+S3D_CACHE* PROJECT::Get3DCacheManager( bool aUpdateProjDir )
+{
+    wxCriticalSectionLocker lock( lock3D_cacheManager );
+
+    // Get the existing cache from the project
+    S3D_CACHE* cache = dynamic_cast<S3D_CACHE*>( GetElem( ELEM_3DCACHE ) );
+
+    if( !cache )
+    {
+        // Create a cache if there is not one already
+        cache = new S3D_CACHE();
+
+        wxFileName cfgpath;
+        cfgpath.AssignDir( GetKicadConfigPath() );
+        cfgpath.AppendDir( wxT( "3d" ) );
+
+        cache->SetProgramBase( &Pgm() );
+        cache->Set3DConfigDir( cfgpath.GetFullPath() );
+
+        SetElem( ELEM_3DCACHE, cache );
+        aUpdateProjDir = true;
+    }
+
+    if( aUpdateProjDir )
+        cache->SetProjectDir( GetProjectPath() );
+
+    return cache;
+}
+
+
+FILENAME_RESOLVER* PROJECT::Get3DFilenameResolver()
+{
+    return Get3DCacheManager()->GetResolver();
 }

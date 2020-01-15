@@ -29,24 +29,29 @@
 #ifndef CACHE_3D_H
 #define CACHE_3D_H
 
+#include "3d_info.h"
+#include <core/typeinfo.h>
+#include "kicad_string.h"
 #include <list>
 #include <map>
-#include <wx/string.h>
-#include "kicad_string.h"
-#include "filename_resolver.h"
-#include "3d_info.h"
 #include "plugins/3dapi/c3dmodel.h"
-
+#include <project.h>
+#include <wx/string.h>
 
 class  PGM_BASE;
-class  S3D_CACHE;
 class  S3D_CACHE_ENTRY;
 class  SCENEGRAPH;
 class  FILENAME_RESOLVER;
 class  S3D_PLUGIN_MANAGER;
 
 
-class S3D_CACHE
+/**
+ * S3D_CACHE
+ *
+ * Cache for storing the 3D shapes. This cache is able to be stored as a project
+ * element (since it inherits from PROJECT::_ELEM).
+ */
+class S3D_CACHE : public PROJECT::_ELEM
 {
 private:
     /// cache entries
@@ -109,6 +114,11 @@ private:
 public:
     S3D_CACHE();
     virtual ~S3D_CACHE();
+
+    KICAD_T Type() override
+    {
+        return S3D_CACHE_T;
+    }
 
     /**
      * Function Set3DConfigDir

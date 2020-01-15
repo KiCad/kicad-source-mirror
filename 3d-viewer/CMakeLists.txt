@@ -29,7 +29,6 @@ set( DIR_3D_PLUGINS ${CMAKE_SOURCE_DIR}/plugins/ldr )
 set(3D-VIEWER_SRCS
     ${DIR_3D_PLUGINS}/pluginldr.cpp
     ${DIR_3D_PLUGINS}/3d/pluginldr3D.cpp
-    3d_cache/3d_cache_wrapper.cpp
     3d_cache/3d_cache.cpp
     3d_cache/3d_plugin_manager.cpp
     ${DIR_DLG}/3d_cache_dialogs.cpp

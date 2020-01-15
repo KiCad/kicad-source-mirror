@@ -32,6 +32,7 @@
 #include "3d_cache_dialogs.h"
 #include <3d_model_viewer/c3d_model_viewer.h>
 #include <common_ogl/cogl_att_list.h>
+#include <filename_resolver.h>
 #include <pcbnew/class_module.h>
 
 #define ID_FILE_TREE    ( wxID_LAST + 1 )
