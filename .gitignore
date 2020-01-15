@@ -78,7 +78,9 @@ pcbnew/Info.plist
 *.png
 *.kiface
 *.o
+*.o.*
 *.a
+*.a.*
 *.cmake
 *.orig
 *.rej
