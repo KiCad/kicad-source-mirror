@@ -3024,20 +3024,31 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
 
         case T_net:
             if( ! pad->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
-                THROW_IO_ERROR(
-                    wxString::Format( _( "Invalid net ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
-                                      CurSource(), CurLineNumber(), CurOffset() )
-                    );
+            {
+                wxLogError( wxString::Format( _( "Invalid net ID in\n"
+                                                 "file: '%s'\n"
+                                                 "line: %d\n"
+                                                 "offset: %d" ),
+                                              CurSource(),
+                                              CurLineNumber(),
+                                              CurOffset() ) );
+            }
 
             NeedSYMBOLorNUMBER();
 
             // Test validity of the netname in file for netcodes expected having a net name
             if( m_board && pad->GetNetCode() > 0 &&
                 FromUTF8() != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
-                THROW_IO_ERROR(
-                    wxString::Format( _( "Invalid net ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
-                                      CurSource(), CurLineNumber(), CurOffset() )
-                    );
+            {
+                pad->SetNetCode( NETINFO_LIST::ORPHANED, /* aNoAssert */ true );
+                wxLogError( wxString::Format( _( "Net name doesn't match net ID in\n"
+                                                 "file: '%s'\n"
+                                                 "line: %d\n"
+                                                 "offset: %d" ),
+                                              CurSource(),
+                                              CurLineNumber(),
+                                              CurOffset() ) );
+            }
 
             NeedRIGHT();
             break;
