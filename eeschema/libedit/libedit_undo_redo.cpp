@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,6 +162,11 @@ void LIB_EDIT_FRAME::RollbackPartFromUndo()
 
     // Load the last undo entry
     PICKED_ITEMS_LIST* undoCommand = GetScreen()->PopCommandFromUndoList();
+
+    // Check if we were already at the top of the stack
+    if( !undoCommand )
+        return;
+
     ITEM_PICKER undoWrapper = undoCommand->PopItem();
     delete undoCommand;
     LIB_PART* part = (LIB_PART*) undoWrapper.GetItem();

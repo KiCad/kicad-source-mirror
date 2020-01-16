@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,7 +129,7 @@ protected:
             LIB_EDIT_FRAME* editFrame = dynamic_cast<LIB_EDIT_FRAME*>( m_frame );
             wxASSERT( editFrame );
 
-            editFrame->SaveCopyInUndoList( dynamic_cast<LIB_ITEM*>( aItem ), aType, aAppend );
+            editFrame->SaveCopyInUndoList( static_cast<LIB_ITEM*>( aItem ), aType, aAppend );
         }
         else
         {
@@ -138,9 +138,9 @@ protected:
 
             if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
                 editFrame->SaveCopyInUndoList(
-                        dynamic_cast<SCH_ITEM*>( aItem->GetParent() ), UR_CHANGED, aAppend );
+                        static_cast<SCH_ITEM*>( aItem->GetParent() ), UR_CHANGED, aAppend );
             else
-                editFrame->SaveCopyInUndoList( dynamic_cast<SCH_ITEM*>( aItem ), aType, aAppend );
+                editFrame->SaveCopyInUndoList( static_cast<SCH_ITEM*>( aItem ), aType, aAppend );
         }
 
         if( selected && aItem->HasFlag( TEMP_SELECTED ) )
