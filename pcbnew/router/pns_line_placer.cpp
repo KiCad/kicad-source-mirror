@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -452,7 +452,10 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
             if( ( nearest - aP ).EuclideanNorm() < newHead.Width() + cl )
             {
                 buildInitialLine( nearest, newHead );
-                if ( newHead.CLine().Length() > bestHead.CLine().Length() )
+
+                // We want the shortest line here to ensure we don't break a clearance
+                // rule on larger, overlapping items (e.g. vias)
+                if( newHead.CLine().Length() < bestHead.CLine().Length() )
                 {
                     bestHead = newHead;
                     hasBest = true;
