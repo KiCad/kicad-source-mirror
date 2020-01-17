@@ -85,13 +85,12 @@ int GERBVIEW_PRINTOUT::milsToIU( double aMils ) const
 }
 
 
-void GERBVIEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
-        const LSET& aLayerSet )
+void GERBVIEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet )
 {
     BOARD_PRINTOUT::setupViewLayers( aView, aLayerSet );
 
     for( LSEQ layerSeq = m_settings.m_layerSet.Seq(); layerSeq; ++layerSeq )
-        aView->SetLayerVisible( GERBVIEW_LAYER_ID_START + *layerSeq, true );
+        aView.SetLayerVisible( GERBVIEW_LAYER_ID_START + *layerSeq, true );
 }
 
 

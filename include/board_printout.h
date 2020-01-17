@@ -96,10 +96,10 @@ protected:
     virtual int milsToIU( double aMils ) const = 0;
 
     ///> Enables layers visibility for a printout
-    virtual void setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView, const LSET& aLayerSet );
+    virtual void setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet );
 
     ///> Configures PAINTER object for a printout
-    virtual void setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter );
+    virtual void setupPainter( KIGFX::PAINTER& aPainter );
 
     ///> Configures GAL object for a printout
     virtual void setupGal( KIGFX::GAL* aGal );

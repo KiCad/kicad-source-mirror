@@ -58,9 +58,9 @@ public:
 protected:
     int milsToIU( double aMils ) const override;
 
-    void setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView, const LSET& aLayerSet ) override;
+    void setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet ) override;
 
-    void setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter ) override;
+    void setupPainter( KIGFX::PAINTER& aPainter ) override;
 
     void setupGal( KIGFX::GAL* aGal ) override;
 

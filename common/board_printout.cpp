@@ -125,8 +125,8 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
         }
     }
 
-    setupViewLayers( view, m_settings.m_layerSet );
-    setupPainter( painter );
+    setupViewLayers( *view, m_settings.m_layerSet );
+    setupPainter( *painter );
 
     auto sheetSizeMils = m_settings.m_pageInfo.GetSizeMils();
     VECTOR2I sheetSizeIU( milsToIU( sheetSizeMils.GetWidth() ), milsToIU( sheetSizeMils.GetHeight() ) );
@@ -181,23 +181,22 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
 }
 
 
-void BOARD_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
-        const LSET& aLayerSet )
+void BOARD_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet )
 {
     // Disable all layers by default, let specific implementions enable required layers
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
     {
-        aView->SetLayerVisible( i, false );
-        aView->SetTopLayer( i, false );
-        aView->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
+        aView.SetLayerVisible( i, false );
+        aView.SetTopLayer( i, false );
+        aView.SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
     }
 }
 
 
-void BOARD_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter )
+void BOARD_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
 {
     if( !m_settings.m_background )
-        aPainter->GetSettings()->SetBackgroundColor( COLOR4D::WHITE );
+        aPainter.GetSettings()->SetBackgroundColor( COLOR4D::WHITE );
 }
 
 

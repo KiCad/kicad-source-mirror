@@ -124,27 +124,26 @@ int PCBNEW_PRINTOUT::milsToIU( double aMils ) const
 }
 
 
-void PCBNEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
-                                       const LSET& aLayerSet )
+void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet )
 {
     BOARD_PRINTOUT::setupViewLayers( aView, aLayerSet );
 
     for( LSEQ layerSeq = m_settings.m_layerSet.Seq(); layerSeq; ++layerSeq )
-        aView->SetLayerVisible( PCBNEW_LAYER_ID_START + *layerSeq, true );
+        aView.SetLayerVisible( PCBNEW_LAYER_ID_START + *layerSeq, true );
 
     // Enable pad layers corresponding to the selected copper layers
     if( aLayerSet.test( F_Cu ) )
-        aView->SetLayerVisible( LAYER_PAD_FR, true );
+        aView.SetLayerVisible( LAYER_PAD_FR, true );
 
     if( aLayerSet.test( B_Cu ) )
-        aView->SetLayerVisible( LAYER_PAD_BK, true );
+        aView.SetLayerVisible( LAYER_PAD_BK, true );
 
     if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
     {
         // Enable items on copper layers, but do not draw holes
         for( GAL_LAYER_ID item : { LAYER_PADS_TH, LAYER_VIAS } )
         {
-            aView->SetLayerVisible( item, true );
+            aView.SetLayerVisible( item, true );
         }
 
         if( m_pcbnewSettings.m_drillMarks != PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE )
@@ -153,8 +152,8 @@ void PCBNEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView
             for( GAL_LAYER_ID holeLayer : { LAYER_PADS_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
                                             LAYER_VIAS_HOLES } )
             {
-                aView->SetLayerVisible( holeLayer, true );
-                aView->SetTopLayer( holeLayer, true );
+                aView.SetLayerVisible( holeLayer, true );
+                aView.SetTopLayer( holeLayer, true );
             }
         }
     }
@@ -168,37 +167,37 @@ void PCBNEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView
     };
 
     for( int item : alwaysEnabled )
-        aView->SetLayerVisible( item, true );
+        aView.SetLayerVisible( item, true );
 }
 
 
-void PCBNEW_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter )
+void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
 {
     BOARD_PRINTOUT::setupPainter( aPainter );
 
-    KIGFX::PCB_PRINT_PAINTER* painter = static_cast<KIGFX::PCB_PRINT_PAINTER*>( aPainter.get() );
+    KIGFX::PCB_PRINT_PAINTER& painter = dynamic_cast<KIGFX::PCB_PRINT_PAINTER&>( aPainter );
 
     switch( m_pcbnewSettings.m_drillMarks )
     {
         case PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE:
-            painter->SetDrillMarks( false, 0 );
+            painter.SetDrillMarks( false, 0 );
             break;
 
         case PCBNEW_PRINTOUT_SETTINGS::SMALL_DRILL_SHAPE:
-            painter->SetDrillMarks( false, Millimeter2iu( 0.3 ) );
+            painter.SetDrillMarks( false, Millimeter2iu( 0.3 ) );
             break;
 
         case PCBNEW_PRINTOUT_SETTINGS::FULL_DRILL_SHAPE:
-            painter->SetDrillMarks( true );
+            painter.SetDrillMarks( true );
             break;
     }
 
-    painter->GetSettings()->SetDrawIndividualViaLayers(
+    painter.GetSettings()->SetDrawIndividualViaLayers(
             m_pcbnewSettings.m_pagination == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE );
 
-    painter->GetSettings()->SetLayerColor( LAYER_PADS_PLATEDHOLES, COLOR4D::WHITE );
-    painter->GetSettings()->SetLayerColor( LAYER_NON_PLATEDHOLES, COLOR4D::WHITE );
-    painter->GetSettings()->SetLayerColor( LAYER_VIAS_HOLES, COLOR4D::WHITE );
+    painter.GetSettings()->SetLayerColor( LAYER_PADS_PLATEDHOLES, COLOR4D::WHITE );
+    painter.GetSettings()->SetLayerColor( LAYER_NON_PLATEDHOLES, COLOR4D::WHITE );
+    painter.GetSettings()->SetLayerColor( LAYER_VIAS_HOLES, COLOR4D::WHITE );
 }
 
 
