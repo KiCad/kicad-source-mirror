@@ -1329,17 +1329,17 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     // Copy the pin info from the component to the temp pins
     LIB_PINS tempPins;
     tempPart.GetPins( tempPins, aComp->GetUnit(), aComp->GetConvert() );
-    const SCH_PINS& compPins = aComp->GetPins();
+    const SCH_PIN_PTRS compPins = aComp->GetSchPins();
 
     for( unsigned i = 0; i < tempPins.size() && i < compPins.size(); ++ i )
     {
         LIB_PIN* tempPin = tempPins[ i ];
-        const SCH_PIN& compPin = compPins[ i ];
+        const SCH_PIN* compPin = compPins[ i ];
 
         tempPin->ClearFlags();
-        tempPin->SetFlags( compPin.GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
+        tempPin->SetFlags( compPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
 
-        if( compPin.IsDangling() )
+        if( compPin->IsDangling() )
             tempPin->SetFlags( IS_DANGLING );
     }
 

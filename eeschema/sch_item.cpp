@@ -85,8 +85,8 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone )
     {
         SCH_COMPONENT* component = (SCH_COMPONENT*) newItem;
 
-        for( SCH_PIN& pin : component->GetPins() )
-            pin.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+        for( SCH_PIN* pin : component->GetSchPins() )
+            pin->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
 
         std::vector<SCH_FIELD*> fields;
         component->GetFields( fields, false );
@@ -135,15 +135,15 @@ SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH& aSheet ) const
 }
 
 
-std::unordered_set<SCH_ITEM*>& SCH_ITEM::ConnectedItems()
+ITEM_SET& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet )
 {
-    return m_connected_items;
+    return m_connected_items[ aSheet ];
 }
 
 
-void SCH_ITEM::AddConnectionTo( SCH_ITEM* aItem )
+void SCH_ITEM::AddConnectionTo( const SCH_SHEET_PATH& aSheet, SCH_ITEM* aItem )
 {
-    m_connected_items.insert( aItem );
+    m_connected_items[ aSheet ].insert( aItem );
 }
 
 

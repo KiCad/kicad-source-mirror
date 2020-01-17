@@ -187,7 +187,8 @@ void SCH_BUS_ENTRY_BASE::Rotate( wxPoint aPosition )
 }
 
 
-bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
+bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
+                                              const SCH_SHEET_PATH* aPath )
 {
     bool previousStateStart = m_isDanglingStart;
     bool previousStateEnd = m_isDanglingEnd;
@@ -249,7 +250,8 @@ bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aI
 }
 
 
-bool SCH_BUS_BUS_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
+bool SCH_BUS_BUS_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
+                                             const SCH_SHEET_PATH* aPath )
 {
     bool previousStateStart = m_isDanglingStart;
     bool previousStateEnd = m_isDanglingEnd;

@@ -456,30 +456,25 @@ void SCH_COMPONENT::ResolveAll(
 }
 
 
-void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
+void SCH_COMPONENT::UpdatePins()
 {
     m_pins.clear();
     m_pinMap.clear();
 
     if( m_part )
     {
+        SCH_PIN_MAP map;
         unsigned i = 0;
 
         for( LIB_PIN* libPin = m_part->GetNextPin(); libPin; libPin = m_part->GetNextPin( libPin ) )
         {
             wxASSERT( libPin->Type() == LIB_PIN_T );
 
-            if( libPin->GetUnit() && m_unit && ( m_unit != libPin->GetUnit() ) )
-                continue;
-
             if( libPin->GetConvert() && m_convert && ( m_convert != libPin->GetConvert() ) )
                 continue;
 
-            m_pins.emplace_back( SCH_PIN( libPin, this ) );
+            m_pins.push_back( std::unique_ptr<SCH_PIN>( new SCH_PIN( libPin, this ) ) );
             m_pinMap[ libPin ] = i;
-
-            if( aSheet )
-                m_pins[ i ].InitializeConnection( *aSheet );
 
             ++i;
         }
@@ -490,7 +485,7 @@ void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
 SCH_CONNECTION* SCH_COMPONENT::GetConnectionForPin( LIB_PIN* aPin, const SCH_SHEET_PATH& aSheet )
 {
     if( m_pinMap.count( aPin ) )
-        return m_pins[ m_pinMap.at( aPin ) ].Connection( aSheet );
+        return m_pins[ m_pinMap[aPin] ]->Connection( aSheet );
 
     return nullptr;
 }
@@ -757,7 +752,7 @@ void SCH_COMPONENT::SetTimeStamp( timestamp_t aNewTimeStamp )
 }
 
 
-int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
+int SCH_COMPONENT::GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const
 {
     wxString          path = GetPath( aSheet );
     wxString          h_path, h_multi;
@@ -785,7 +780,7 @@ int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
 }
 
 
-void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection )
+void SCH_COMPONENT::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelection )
 {
     wxString          path = GetPath( aSheet );
 
@@ -975,6 +970,27 @@ void SCH_COMPONENT::GetPins( std::vector<LIB_PIN*>& aPinsList )
 {
     if( m_part )
         m_part->GetPins( aPinsList, m_unit, m_convert );
+}
+
+
+SCH_PIN_PTRS SCH_COMPONENT::GetSchPins( const SCH_SHEET_PATH* aSheet ) const
+{
+    if( aSheet == nullptr )
+        aSheet = g_CurrentSheet;
+
+    // TODO(JE) if this works, consider caching in m_sheet_pins
+    int unit = GetUnitSelection( aSheet );
+    SCH_PIN_PTRS ptrs;
+
+    for( const auto& p : m_pins )
+    {
+        if( unit && p->GetLibPin()->GetUnit() && ( p->GetLibPin()->GetUnit() != unit ) )
+            continue;
+
+        ptrs.push_back( p.get() );
+    }
+
+    return ptrs;
 }
 
 
@@ -1508,16 +1524,17 @@ void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
+bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
+                                         const SCH_SHEET_PATH* aPath )
 {
     bool changed = false;
 
-    for( SCH_PIN& pin : m_pins )
+    for( auto& pin : m_pins )
     {
-        bool previousState = pin.IsDangling();
-        pin.SetIsDangling( true );
+        bool previousState = pin->IsDangling();
+        pin->SetIsDangling( true );
 
-        wxPoint pos = m_transform.TransformCoordinate( pin.GetPosition() ) + m_Pos;
+        wxPoint pos = m_transform.TransformCoordinate( pin->GetPosition() ) + m_Pos;
 
         for( DANGLING_END_ITEM& each_item : aItemList )
         {
@@ -1539,7 +1556,7 @@ bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemLi
             case JUNCTION_END:
 
                 if( pos == each_item.GetPosition() )
-                    pin.SetIsDangling( false );
+                    pin->SetIsDangling( false );
 
                 break;
 
@@ -1547,11 +1564,11 @@ bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemLi
                 break;
             }
 
-            if( !pin.IsDangling() )
+            if( !pin->IsDangling() )
                 break;
         }
 
-        changed = ( changed || ( previousState != pin.IsDangling() ) );
+        changed = ( changed || ( previousState != pin->IsDangling() ) );
     }
 
     return changed;
@@ -1569,8 +1586,8 @@ wxPoint SCH_COMPONENT::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 
 void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
-    for( const SCH_PIN& pin : m_pins )
-        aPoints.push_back( m_transform.TransformCoordinate( pin.GetPosition() ) + m_Pos );
+    for( const auto& pin : m_pins )
+        aPoints.push_back( m_transform.TransformCoordinate( pin->GetPosition() ) + m_Pos );
 }
 
 
@@ -1648,9 +1665,9 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
 
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_PIN_T )
         {
-            for( SCH_PIN& pin : m_pins )
+            for( auto& pin : m_pins )
             {
-                if( SEARCH_RESULT::QUIT == aInspector( &pin, (void*) this ) )
+                if( SEARCH_RESULT::QUIT == aInspector( pin.get(), (void*) this ) )
                     return SEARCH_RESULT::QUIT;
             }
         }
@@ -1821,9 +1838,9 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
 {
     wxPoint new_pos = m_transform.InverseTransform().TransformCoordinate( aPosition - m_Pos );
 
-    for( const SCH_PIN& pin : m_pins )
+    for( const auto& pin : m_pins )
     {
-        if( pin.GetPosition() == new_pos )
+        if( pin->GetPosition() == new_pos )
             return true;
     }
 
@@ -1858,9 +1875,9 @@ void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
 
 bool SCH_COMPONENT::HasBrightenedPins()
 {
-    for( const SCH_PIN& pin : m_pins )
+    for( const auto& pin : m_pins )
     {
-        if( pin.IsBrightened() )
+        if( pin->IsBrightened() )
             return true;
     }
 
@@ -1870,30 +1887,30 @@ bool SCH_COMPONENT::HasBrightenedPins()
 
 void SCH_COMPONENT::ClearBrightenedPins()
 {
-    for( SCH_PIN& pin : m_pins )
-        pin.ClearBrightened();
+    for( auto& pin : m_pins )
+        pin->ClearBrightened();
 }
 
 
 void SCH_COMPONENT::BrightenPin( LIB_PIN* aPin )
 {
     if( m_pinMap.count( aPin ) )
-        m_pins[ m_pinMap.at( aPin ) ].SetBrightened();
+        m_pins[ m_pinMap.at( aPin ) ]->SetBrightened();
 }
 
 
 void SCH_COMPONENT::ClearHighlightedPins()
 {
-    for( SCH_PIN& pin : m_pins )
-        pin.ClearHighlighted();
+    for( auto& pin : m_pins )
+        pin->ClearHighlighted();
 }
 
 
 bool SCH_COMPONENT::HasHighlightedPins()
 {
-    for( const SCH_PIN& pin : m_pins )
+    for( const auto& pin : m_pins )
     {
-        if( pin.IsHighlighted() )
+        if( pin->IsHighlighted() )
             return true;
     }
 
@@ -1904,7 +1921,7 @@ bool SCH_COMPONENT::HasHighlightedPins()
 void SCH_COMPONENT::HighlightPin( LIB_PIN* aPin )
 {
     if( m_pinMap.count( aPin ) )
-        m_pins[ m_pinMap.at( aPin ) ].SetHighlighted();
+        m_pins[ m_pinMap.at( aPin ) ]->SetHighlighted();
 }
 
 

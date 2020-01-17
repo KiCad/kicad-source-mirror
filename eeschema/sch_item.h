@@ -126,6 +126,8 @@ public:
 };
 
 
+typedef std::unordered_set<SCH_ITEM*> ITEM_SET;
+
 /**
  * SCH_ITEM
  * is a base class for any item which can be embedded within the SCHEMATIC
@@ -143,8 +145,8 @@ protected:
     wxPoint        m_storedPos;     ///< a temporary variable used in some move commands
                                     ///> to store a initial pos (of the item or mouse cursor)
 
-    /// Stores pointers to other items that are connected to this one (schematic only)
-    std::unordered_set<SCH_ITEM*> m_connected_items;
+    /// Stores pointers to other items that are connected to this one, per sheet
+    std::unordered_map<SCH_SHEET_PATH, ITEM_SET> m_connected_items;
 
     /// Stores connectivity information, per sheet
     std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTION*> m_connection_map;
@@ -301,10 +303,18 @@ public:
      * always returns false.  Only override the method if the item can be tested for a
      * dangling state.
      *
+     * If aSheet is passed a non-null pointer to a SCH_SHEET_PATH, the overrided method can
+     * optionally use it to update sheet-local connectivity information
+     *
      * @param aItemList - List of items to test item against.
+     * @param aSheet - Sheet path to update connections for
      * @return True if the dangling state has changed from it's current setting.
      */
-    virtual bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) { return false; }
+    virtual bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
+                                      const SCH_SHEET_PATH* aPath = nullptr )
+    {
+        return false;
+    }
 
     virtual bool IsDangling() const { return false; }
 
@@ -351,14 +361,14 @@ public:
     SCH_CONNECTION* Connection( const SCH_SHEET_PATH& aPath ) const;
 
     /**
-     * Retrieves the set of items connected to this item (schematic only)
+     * Retrieves the set of items connected to this item on the given sheet
      */
-    std::unordered_set<SCH_ITEM*>& ConnectedItems();
+    ITEM_SET& ConnectedItems( const SCH_SHEET_PATH& aPath );
 
     /**
      * Adds a connection link between this item and another
      */
-    void AddConnectionTo( SCH_ITEM* aItem );
+    void AddConnectionTo( const SCH_SHEET_PATH& aPath, SCH_ITEM* aItem );
 
     /**
      * Creates a new connection object associated with this object

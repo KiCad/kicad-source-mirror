@@ -396,19 +396,13 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
         }
 
         updateItemConnectivity( sheet, items );
+
+        // UpdateDanglingState() also adds connected items for SCH_TEXT
+        sheet.LastScreen()->TestDanglingEnds( &sheet );
     }
 
     update_items.Stop();
     wxLogTrace( "CONN_PROFILE", "UpdateItemConnectivity() %0.4f ms", update_items.msecs() );
-
-    PROF_COUNTER tde;
-
-    // IsDanglingStateChanged() also adds connected items for things like SCH_TEXT
-    SCH_SCREENS schematic;
-    schematic.TestDanglingEnds();
-
-    tde.Stop();
-    wxLogTrace( "CONN_PROFILE", "TestDanglingEnds() %0.4f ms", tde.msecs() );
 
     PROF_COUNTER build_graph;
 
@@ -442,7 +436,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
     {
         std::vector< wxPoint > points;
         item->GetConnectionPoints( points );
-        item->ConnectedItems().clear();
+        item->ConnectedItems( aSheet ).clear();
 
         if( item->Type() == SCH_SHEET_T )
         {
@@ -453,7 +447,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                     pin->InitializeConnection( aSheet );
                 }
 
-                pin->ConnectedItems().clear();
+                pin->ConnectedItems( aSheet ).clear();
                 pin->Connection( aSheet )->Reset();
 
                 connection_map[ pin->GetTextPos() ].push_back( pin );
@@ -465,26 +459,31 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
             TRANSFORM t = component->GetTransform();
 
-            // Assumption: we don't need to call UpdatePins() here because anything
-            // that would change the pins of the component will have called it already
+            // TODO(JE) right now this relies on GetSchPins() returning good SCH_PIN pointers
+            // that contain good LIB_PIN pointers.  Since these get invalidated whenever the
+            // library component is refreshed, the current solution as of ed025972 is to just
+            // rebuild the SCH_PIN list when the component is refreshed, and then re-run the
+            // connectivity calculations.  This is slow and should be improved before release.
+            // See https://gitlab.com/kicad/code/kicad/issues/3784
 
-            for( SCH_PIN& pin : component->GetPins() )
+            for( SCH_PIN* pin : component->GetSchPins( &aSheet ) )
             {
-                pin.InitializeConnection( aSheet );
+                pin->InitializeConnection( aSheet );
 
-                wxPoint pos = t.TransformCoordinate( pin.GetPosition() ) + component->GetPosition();
+                wxPoint pos = t.TransformCoordinate( pin->GetPosition() ) +
+                              component->GetPosition();
 
                 // because calling the first time is not thread-safe
-                pin.GetDefaultNetName( aSheet );
-                pin.ConnectedItems().clear();
+                pin->GetDefaultNetName( aSheet );
+                pin->ConnectedItems( aSheet ).clear();
 
                 // Invisible power pins need to be post-processed later
 
-                if( pin.IsPowerConnection() && !pin.IsVisible() )
-                    m_invisible_power_pins.emplace_back( std::make_pair( aSheet, &pin ) );
+                if( pin->IsPowerConnection() && !pin->IsVisible() )
+                    m_invisible_power_pins.emplace_back( std::make_pair( aSheet, pin ) );
 
-                connection_map[ pos ].push_back( &pin );
-                m_items.insert( &pin );
+                connection_map[ pos ].push_back( pin );
+                m_items.insert( pin );
             }
         }
         else
@@ -580,8 +579,8 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                         else
                             bus_entry->m_connected_bus_items[1] = bus;
 
-                        bus_entry->ConnectedItems().insert( bus );
-                        bus->ConnectedItems().insert( bus_entry );
+                        bus_entry->ConnectedItems( aSheet ).insert( bus );
+                        bus->ConnectedItems( aSheet ).insert( bus_entry );
                     }
                 }
             }
@@ -594,8 +593,8 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                     connected_item->ConnectionPropagatesTo( test_item ) &&
                     test_item->ConnectionPropagatesTo( connected_item ) )
                 {
-                    connected_item->ConnectedItems().insert( test_item );
-                    test_item->ConnectedItems().insert( connected_item );
+                    connected_item->ConnectedItems( aSheet ).insert( test_item );
+                    test_item->ConnectedItems( aSheet ).insert( connected_item );
                 }
 
                 // Set up the link between the bus entry net and the bus
@@ -688,8 +687,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                       return ( conn->SubgraphCode() == 0 );
                     };
 
-                std::copy_if( item->ConnectedItems().begin(),
-                              item->ConnectedItems().end(),
+                std::copy_if( item->ConnectedItems( sheet ).begin(),
+                              item->ConnectedItems( sheet ).end(),
                               std::back_inserter( members ), get_items );
 
                 for( auto connected_item : members )
@@ -706,8 +705,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         connected_conn->SetSubgraphCode( subgraph->m_code );
                         subgraph->AddItem( connected_item );
 
-                        std::copy_if( connected_item->ConnectedItems().begin(),
-                                      connected_item->ConnectedItems().end(),
+                        std::copy_if( connected_item->ConnectedItems( sheet ).begin(),
+                                      connected_item->ConnectedItems( sheet ).end(),
                                       std::back_inserter( members ), get_items );
                     }
                 }
@@ -913,15 +912,15 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     for( const auto& it : m_invisible_power_pins )
     {
-        SCH_PIN* pin = it.second;
+        SCH_SHEET_PATH sheet = it.first;
+        SCH_PIN*       pin   = it.second;
 
-        if( !pin->ConnectedItems().empty() && !pin->GetLibPin()->GetParent()->IsPower() )
+        if( !pin->ConnectedItems( sheet ).empty() && !pin->GetLibPin()->GetParent()->IsPower() )
         {
             // ERC will warn about this: user has wired up an invisible pin
             continue;
         }
 
-        SCH_SHEET_PATH sheet = it.first;
         SCH_CONNECTION* connection = pin->Connection( sheet );
 
         if( !connection )

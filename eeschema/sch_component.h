@@ -68,7 +68,9 @@ class SYMBOL_LIB_TABLE;
 
 
 /// A container for several SCH_PIN items
-typedef std::vector<SCH_PIN>      SCH_PINS;
+typedef std::vector<std::unique_ptr<SCH_PIN>> SCH_PINS;
+
+typedef std::vector<SCH_PIN*> SCH_PIN_PTRS;
 
 /// A map from the library pin pointer to the SCH_PIN's index
 typedef std::unordered_map<LIB_PIN*, unsigned> SCH_PIN_MAP;
@@ -112,8 +114,8 @@ private:
     ///< A flattened copy of a LIB_PART found in the PROJECT's libraries to for this component.
     std::unique_ptr< LIB_PART > m_part;
 
-    SCH_PINS    m_pins;         ///< the component's pins
-    SCH_PIN_MAP m_pinMap;       ///< the component's pins mapped by LIB_PIN*.
+    SCH_PINS    m_pins;         ///< a SCH_PIN for every LIB_PIN (across all units)
+    SCH_PIN_MAP m_pinMap;       ///< the component's pins mapped by LIB_PIN*
 
     AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
 
@@ -225,9 +227,9 @@ public:
     int GetUnit() const { return m_unit; }
 
     /**
-     * Updates the local cache of SCH_PIN_CONNECTION objects for each pin
+     * Updates the cache of SCH_PIN objects for each pin
      */
-    void UpdatePins( SCH_SHEET_PATH* aSheet = nullptr );
+    void UpdatePins();
 
     /**
      * Retrieves the connection for a given pin of the component
@@ -475,7 +477,13 @@ public:
      */
     void GetPins( std::vector<LIB_PIN*>& aPinsList );
 
-    SCH_PINS& GetPins() { return m_pins; }
+    /**
+     * Retrieves a list of the SCH_PINs for the given sheet path.
+     * Since a component can have a different unit on a different instance of a sheet,
+     * this list returns the subset of pins that exist on a given sheet.
+     * @return a vector of pointers (non-owning) to SCH_PINs
+     */
+    SCH_PIN_PTRS GetSchPins( const SCH_SHEET_PATH* aSheet = nullptr ) const;
 
     /**
      * Print a component
@@ -537,10 +545,10 @@ public:
                                    int             aMulti );
 
     // returns the unit selection, for the given sheet path.
-    int GetUnitSelection( SCH_SHEET_PATH* aSheet );
+    int GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const;
 
     // Set the unit selection, for the given sheet path.
-    void SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection );
+    void SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelection );
 
     // Geometric transforms (used in block operations):
 
@@ -576,7 +584,8 @@ public:
      *
      * @return true if any pin's state has changed.
      */
-    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) override;
+    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
+                              const SCH_SHEET_PATH* aPath = nullptr ) override;
 
     wxPoint GetPinPhysicalPosition( const LIB_PIN* Pin ) const;
 

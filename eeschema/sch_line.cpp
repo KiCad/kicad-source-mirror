@@ -534,7 +534,8 @@ void SCH_LINE::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
+bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
+                                    const SCH_SHEET_PATH* aPath )
 {
     bool previousStartState = m_startIsDangling;
     bool previousEndState = m_endIsDangling;
@@ -559,7 +560,7 @@ bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
             if( m_end == item.GetPosition() )
                 m_endIsDangling = false;
 
-            if( (m_startIsDangling == false) && (m_endIsDangling == false) )
+            if( !m_startIsDangling && !m_endIsDangling )
                 break;
         }
     }

@@ -1199,14 +1199,14 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
     // represented in the LIB_PART and will inherit the settings of the parent component.)
     if( itemType == SCH_COMPONENT_T )
     {
-        SCH_PINS& pins = static_cast<SCH_COMPONENT*>( aItem )->GetPins();
+        SCH_PIN_PTRS pins = static_cast<SCH_COMPONENT*>( aItem )->GetSchPins( g_CurrentSheet );
 
-        for( SCH_PIN& pin : pins )
+        for( SCH_PIN* pin : pins )
         {
             if( aMode == SELECTED )
-                pin.SetSelected();
+                pin->SetSelected();
             else if( aMode == BRIGHTENED )
-                pin.SetBrightened();
+                pin->SetBrightened();
         }
 
         std::vector<SCH_FIELD*> fields;
@@ -1256,14 +1256,14 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
     // represented in the LIB_PART.)
     if( itemType == SCH_COMPONENT_T )
     {
-        SCH_PINS& pins = static_cast<SCH_COMPONENT*>( aItem )->GetPins();
+        SCH_PIN_PTRS pins = static_cast<SCH_COMPONENT*>( aItem )->GetSchPins( g_CurrentSheet );
 
-        for( SCH_PIN& pin : pins )
+        for( SCH_PIN* pin : pins )
         {
             if( aMode == SELECTED )
-                pin.ClearSelected();
+                pin->ClearSelected();
             else if( aMode == BRIGHTENED )
-                pin.ClearBrightened();
+                pin->ClearBrightened();
         }
 
         std::vector<SCH_FIELD*> fields;

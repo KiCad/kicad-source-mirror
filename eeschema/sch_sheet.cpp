@@ -757,7 +757,8 @@ void SCH_SHEET::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_SHEET::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
+bool SCH_SHEET::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
+                                     const SCH_SHEET_PATH* aPath )
 {
     bool changed = false;
 

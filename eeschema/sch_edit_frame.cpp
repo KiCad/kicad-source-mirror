@@ -1039,7 +1039,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
 
         TestDanglingEnds();
 
-        for( SCH_ITEM* item : aItem->ConnectedItems() )
+        for( SCH_ITEM* item : aItem->ConnectedItems( *g_CurrentSheet ) )
             RefreshItem( item );
     }
 
@@ -1172,14 +1172,15 @@ void SCH_EDIT_FRAME::FixupJunctions()
         GetCurrentSheet().UpdateAllScreenReferences();
 
         auto screen = GetCurrentSheet().LastScreen();
+
         for( auto aItem : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
             auto cmp   = static_cast<SCH_COMPONENT*>( aItem );
             auto xform = cmp->GetTransform();
 
-            for( const SCH_PIN& pin : cmp->GetPins() )
+            for( const SCH_PIN* pin : cmp->GetSchPins( &sheet ) )
             {
-                auto pos = cmp->GetPosition() + xform.TransformCoordinate( pin.GetPosition() );
+                auto pos = cmp->GetPosition() + xform.TransformCoordinate( pin->GetPosition() );
 
                 // Test if a _new_ junction is needed, and add it if missing
                 if( screen->IsJunctionNeeded( pos, true ) )

@@ -785,7 +785,7 @@ void SCH_SCREEN::GetHierarchicalItems( EDA_ITEMS& aItems )
 }
 
 
-bool SCH_SCREEN::TestDanglingEnds()
+bool SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath )
 {
     std::vector< DANGLING_END_ITEM > endPoints;
     bool hasStateChanged = false;
@@ -795,7 +795,7 @@ bool SCH_SCREEN::TestDanglingEnds()
 
     for( auto item : Items() )
     {
-        if( item->UpdateDanglingState( endPoints ) )
+        if( item->UpdateDanglingState( endPoints, aPath ) )
             hasStateChanged = true;
     }
 

@@ -328,7 +328,8 @@ void SCH_TEXT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
+bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
+                                    const SCH_SHEET_PATH* aPath )
 {
     // Normal text labels cannot be tested for dangling ends.
     if( Type() == SCH_TEXT_T )
@@ -355,8 +356,8 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
             {
                 m_isDangling = false;
 
-                if( item.GetType() != PIN_END )
-                    m_connected_items.insert( static_cast< SCH_ITEM* >( item.GetItem() ) );
+                if( aPath && item.GetType() != PIN_END )
+                    m_connected_items[ *aPath ].insert( static_cast<SCH_ITEM*>( item.GetItem() ) );
             }
 
             break;
@@ -385,9 +386,12 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 
                 // Add the line to the connected items, since it won't be picked
                 // up by a search of intersecting connection points
-                auto sch_item = static_cast< SCH_ITEM* >( item.GetItem() );
-                AddConnectionTo( sch_item );
-                sch_item->AddConnectionTo( this );
+                if( aPath )
+                {
+                    auto sch_item = static_cast<SCH_ITEM*>( item.GetItem() );
+                    AddConnectionTo( *aPath, sch_item );
+                    sch_item->AddConnectionTo( *aPath, this );
+                }
             }
         }
             break;
@@ -669,7 +673,9 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
     {
         if( *p == SCH_LABEL_LOCATE_WIRE_T )
         {
-            for( SCH_ITEM* connection : m_connected_items )
+            wxASSERT( m_connected_items.count( *g_CurrentSheet ) );
+
+            for( SCH_ITEM* connection : m_connected_items.at( *g_CurrentSheet ) )
             {
                 if( connection->IsType( wireTypes ) )
                     return true;
@@ -677,7 +683,9 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
         }
         else if ( *p == SCH_LABEL_LOCATE_BUS_T )
         {
-            for( SCH_ITEM* connection : m_connected_items )
+            wxASSERT( m_connected_items.count( *g_CurrentSheet ) );
+
+            for( SCH_ITEM* connection : m_connected_items.at( *g_CurrentSheet ) )
             {
                 if( connection->IsType( busTypes ) )
                     return true;

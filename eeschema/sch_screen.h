@@ -285,9 +285,10 @@ public:
 
     /**
      * Test all of the connectable objects in the schematic for unused connection points.
+     * @param aPath is a sheet path to pass to UpdateDanglingState if desired
      * @return True if any connection state changes were made.
      */
-    bool TestDanglingEnds();
+    bool TestDanglingEnds( const SCH_SHEET_PATH* aPath = nullptr );
 
     /**
      * Return all wires and junctions connected to \a aSegment which are not connected any

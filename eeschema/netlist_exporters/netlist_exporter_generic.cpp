@@ -551,7 +551,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
             }
 
             // Netlist ordering: Net name, then ref des, then pin name
-            std::sort( sorted_items.begin(), sorted_items.end(), []( auto a, auto b ) {
+            std::sort( sorted_items.begin(), sorted_items.end(), [] ( auto a, auto b ) {
                         auto ref_a = a.first->GetParentComponent()->GetRef( &a.second );
                         auto ref_b = b.first->GetParentComponent()->GetRef( &b.second );
 
@@ -560,6 +560,17 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
 
                         return ref_a < ref_b;
                     } );
+
+            // Some duplicates can exist, for example on multi-unit parts with duplicated
+            // pins across units.  If the user connects the pins on each unit, they will
+            // appear on separate subgraphs.  Remove those here:
+            sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
+                    [] ( auto a, auto b ) {
+                        auto ref_a = a.first->GetParentComponent()->GetRef( &a.second );
+                        auto ref_b = b.first->GetParentComponent()->GetRef( &b.second );
+
+                        return ref_a == ref_b && a.first->GetNumber() == b.first->GetNumber();
+                    } ), sorted_items.end() );
 
             for( const auto& pair : sorted_items )
             {
