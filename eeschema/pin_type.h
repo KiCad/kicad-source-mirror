@@ -34,23 +34,24 @@
 /**
  * The component library pin object electrical types used in ERC tests.
  */
-enum ELECTRICAL_PINTYPE {
-    PIN_INPUT,
-    PIN_OUTPUT,
-    PIN_BIDI,
-    PIN_TRISTATE,
-    PIN_PASSIVE,
-    PIN_UNSPECIFIED,
-    PIN_POWER_IN,
-    PIN_POWER_OUT,
-    PIN_OPENCOLLECTOR,
-    PIN_OPENEMITTER,
-    PIN_NC              /* No connect */
+enum class ELECTRICAL_PINTYPE
+{
+    PT_INPUT,         ///< usual pin input: must be connected
+    PT_OUTPUT,        ///< usual output
+    PT_BIDI,          ///< input or output (like port for a microprocessor)
+    PT_TRISTATE,      ///< tris state bus pin
+    PT_PASSIVE,       ///< pin for passive components: must be connected, and can be connected to any pin
+    PT_UNSPECIFIED,   ///< unknown electrical properties: creates always a warning when connected
+    PT_POWER_IN,      ///< power input (GND, VCC for ICs). Must be connected to a power output.
+    PT_POWER_OUT,     ///< output of a regulator: intended to be connected to power input pins
+    PT_OPENCOLLECTOR, ///< pin type open collector
+    PT_OPENEMITTER,   ///< pin type open emitter
+    PT_NC,            ///< not connected (must be left open)
+
+    PT_LAST_OPTION = PT_NC ///< sentinel value, set to last usable enum option
 };
 
-enum {
-    PINTYPE_COUNT = PIN_NC + 1
-};
+#define ELECTRICAL_PINTYPES_TOTAL ( static_cast<int>( ELECTRICAL_PINTYPE::PT_LAST_OPTION ) + 1 )
 
 // UI
 wxString GetText( ELECTRICAL_PINTYPE );

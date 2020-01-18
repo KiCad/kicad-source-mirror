@@ -116,7 +116,7 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
     if( IsBusVectorLabel( aLabel ) )
     {
         m_name = aLabel;
-        m_type = CONNECTION_BUS;
+        m_type = CONNECTION_TYPE::BUS;
 
         std::vector<wxString> members;
 
@@ -125,19 +125,19 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
 
         for( const auto& vector_member : members )
         {
-            auto member = std::make_shared< SCH_CONNECTION >( m_parent, m_sheet );
-            member->m_type = CONNECTION_NET;
-            member->m_prefix = m_prefix;
-            member->m_name = vector_member;
-            member->m_local_name = vector_member;
+            auto member            = std::make_shared<SCH_CONNECTION>( m_parent, m_sheet );
+            member->m_type         = CONNECTION_TYPE::NET;
+            member->m_prefix       = m_prefix;
+            member->m_name         = vector_member;
+            member->m_local_name   = vector_member;
             member->m_vector_index = i++;
             m_members.push_back( member );
         }
     }
     else if( IsBusGroupLabel( aLabel ) )
     {
-        m_type = CONNECTION_BUS_GROUP;
-        m_name = aLabel;
+        m_type       = CONNECTION_TYPE::BUS_GROUP;
+        m_name       = aLabel;
         m_local_name = aLabel;
 
         std::vector<wxString> members;
@@ -173,16 +173,16 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
     }
     else
     {
-        m_name = aLabel;
+        m_name       = aLabel;
         m_local_name = aLabel;
-        m_type = CONNECTION_NET;
+        m_type       = CONNECTION_TYPE::NET;
     }
 }
 
 
 void SCH_CONNECTION::Reset()
 {
-    m_type = CONNECTION_NONE;
+    m_type = CONNECTION_TYPE::NONE;
     m_name.Empty();
     m_local_name.Empty();
     m_prefix.Empty();
@@ -257,7 +257,7 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
     if( m_name.IsEmpty() )
         ret = "<NO NET>";
 
-    if( !Parent() || m_type == CONNECTION_NONE )
+    if( !Parent() || m_type == CONNECTION_TYPE::NONE )
         return ret;
 
     if( !aIgnoreSheet )

@@ -145,8 +145,8 @@ void SCH_NO_CONNECT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
 
     item->m_SheetPath = *aSheetPath;
     item->m_SheetPathInclude = *aSheetPath;
-    item->m_Comp = this;
-    item->m_Type = NET_NOCONNECT;
+    item->m_Comp             = this;
+    item->m_Type             = NETLIST_ITEM::NOCONNECT;
     item->m_Start = item->m_End = m_pos;
 
     aNetListItems.push_back( item );

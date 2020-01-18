@@ -77,9 +77,6 @@ static const BITMAP_DEF iconsPinsOrientations[] =
 
 const wxString LIB_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType )
 {
-    if( aType < 0 || aType >= (int) PINTYPE_COUNT )
-        return wxT( "???" );
-
     // These strings are the canonical name of the electrictal type
     // Not translated, no space in name, only ASCII chars.
     // to use when the string name must be known and well defined
@@ -99,7 +96,7 @@ const wxString LIB_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType
         wxT( "NotConnected" )
     };
 
-    return msgPinElectricType[ aType ];
+    return msgPinElectricType[static_cast<int>( aType )];
 }
 
 
@@ -146,17 +143,16 @@ static int ExternalPinDecoSize( const LIB_PIN &aPin )
     return aPin.GetNumberTextSize() / 2;
 }
 
-LIB_PIN::LIB_PIN( LIB_PART*      aParent ) :
-    LIB_ITEM( LIB_PIN_T, aParent ),
-    m_shape( PINSHAPE_LINE )
+LIB_PIN::LIB_PIN( LIB_PART* aParent )
+        : LIB_ITEM( LIB_PIN_T, aParent ), m_shape( GRAPHIC_PINSHAPE::LINE )
 {
-    m_length = LIB_EDIT_FRAME::GetDefaultPinLength();
-    m_orientation = PIN_RIGHT;                  // Pin orient: Up, Down, Left, Right
-    m_type = PIN_UNSPECIFIED;                   // electrical type of pin
-    m_attributes = 0;                           // bit 0 != 0: pin invisible
-    m_numTextSize = LIB_EDIT_FRAME::GetPinNumDefaultSize();
+    m_length       = LIB_EDIT_FRAME::GetDefaultPinLength();
+    m_orientation  = PIN_RIGHT;                       // Pin orient: Up, Down, Left, Right
+    m_type         = ELECTRICAL_PINTYPE::PT_UNSPECIFIED; // electrical type of pin
+    m_attributes   = 0;                               // bit 0 != 0: pin invisible
+    m_numTextSize  = LIB_EDIT_FRAME::GetPinNumDefaultSize();
     m_nameTextSize = LIB_EDIT_FRAME::GetPinNameDefaultSize();
-    m_width = 0;
+    m_width        = 0;
 }
 
 
@@ -299,8 +295,6 @@ void LIB_PIN::SetOrientation( int orientation, bool aTestOtherPins )
 
 void LIB_PIN::SetShape( GRAPHIC_PINSHAPE aShape )
 {
-    assert( aShape >= 0 && aShape < int( PINSHAPE_COUNT ) );
-
     if( m_shape != aShape )
     {
         m_shape = aShape;
@@ -328,14 +322,6 @@ void LIB_PIN::SetShape( GRAPHIC_PINSHAPE aShape )
 
 void LIB_PIN::SetType( ELECTRICAL_PINTYPE aType, bool aTestOtherPins )
 {
-    assert( aType >= 0 && aType < (int)PINTYPE_COUNT );
-
-    if( aType < PIN_INPUT )
-        aType = PIN_INPUT;
-
-    if( aType >= (int)PINTYPE_COUNT )
-        aType = PIN_NC;
-
     if( m_type != aType )
     {
         m_type = aType;
@@ -602,7 +588,7 @@ void LIB_PIN::PrintPinSymbol( wxDC* aDC, const wxPoint& aPos, int aOrient )
     case PIN_RIGHT:  x1 = posX + len;  MapX1 = -1;  break;
     }
 
-    if( m_shape == PINSHAPE_INVERTED || m_shape == PINSHAPE_INVERTED_CLOCK )
+    if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
     {
         const int radius = ExternalPinDecoSize( *this );
         GRCircle( nullptr, aDC, MapX1 * radius + x1, MapY1 * radius + y1, radius, width, color );
@@ -617,8 +603,9 @@ void LIB_PIN::PrintPinSymbol( wxDC* aDC, const wxPoint& aPos, int aOrient )
     }
 
     // Draw the clock shape (>)inside the symbol
-    if( m_shape == PINSHAPE_CLOCK || m_shape == PINSHAPE_INVERTED_CLOCK ||
-        m_shape == PINSHAPE_FALLING_EDGE_CLOCK || m_shape == PINSHAPE_CLOCK_LOW )
+    if( m_shape == GRAPHIC_PINSHAPE::CLOCK || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK
+            || m_shape == GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK
+            || m_shape == GRAPHIC_PINSHAPE::CLOCK_LOW )
     {
         const int clock_size = InternalPinDecoSize( *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
@@ -636,8 +623,8 @@ void LIB_PIN::PrintPinSymbol( wxDC* aDC, const wxPoint& aPos, int aOrient )
     }
 
     // Draw the active low (or H to L active transition)
-    if( m_shape == PINSHAPE_INPUT_LOW ||
-        m_shape == PINSHAPE_FALLING_EDGE_CLOCK || m_shape == PINSHAPE_CLOCK_LOW )
+    if( m_shape == GRAPHIC_PINSHAPE::INPUT_LOW || m_shape == GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK
+            || m_shape == GRAPHIC_PINSHAPE::CLOCK_LOW )
     {
         const int deco_size = ExternalPinDecoSize( *this );
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
@@ -654,7 +641,7 @@ void LIB_PIN::PrintPinSymbol( wxDC* aDC, const wxPoint& aPos, int aOrient )
         }
     }
 
-    if( m_shape == PINSHAPE_OUTPUT_LOW )    /* IEEE symbol "Active Low Output" */
+    if( m_shape == GRAPHIC_PINSHAPE::OUTPUT_LOW ) /* IEEE symbol "Active Low Output" */
     {
         const int deco_size = ExternalPinDecoSize( *this );
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
@@ -668,7 +655,7 @@ void LIB_PIN::PrintPinSymbol( wxDC* aDC, const wxPoint& aPos, int aOrient )
             GRLineTo( nullptr, aDC, x1, y1 + MapY1 * deco_size * 2, width, color );
         }
     }
-    else if( m_shape == PINSHAPE_NONLOGIC ) /* NonLogic pin symbol */
+    else if( m_shape == GRAPHIC_PINSHAPE::NONLOGIC ) /* NonLogic pin symbol */
     {
         const int deco_size = ExternalPinDecoSize( *this );
         GRMoveTo( x1 - (MapX1 + MapY1) * deco_size, y1 - (MapY1 - MapX1) * deco_size );
@@ -679,7 +666,7 @@ void LIB_PIN::PrintPinSymbol( wxDC* aDC, const wxPoint& aPos, int aOrient )
                   color );
     }
 
-    if( m_type == PIN_NC )   // Draw a N.C. symbol
+    if( m_type == ELECTRICAL_PINTYPE::PT_NC ) // Draw a N.C. symbol
     {
         const int deco_size = TARGET_PIN_RADIUS;
         GRLine( nullptr, aDC, posX - deco_size, posY - deco_size, posX + deco_size, posY + deco_size, width, color );
@@ -897,7 +884,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     case PIN_RIGHT:  x1 = aPosition.x + m_length;  MapX1 = -1;  break;
     }
 
-    if( m_shape == PINSHAPE_INVERTED || m_shape == PINSHAPE_INVERTED_CLOCK )
+    if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
     {
         const int radius = ExternalPinDecoSize( *this );
         aPlotter->Circle( wxPoint( MapX1 * radius + x1, MapY1 * radius + y1 ),
@@ -906,7 +893,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
         aPlotter->MoveTo( wxPoint( MapX1 * radius * 2 + x1, MapY1 * radius * 2 + y1 ) );
         aPlotter->FinishTo( aPosition );
     }
-    else if( m_shape == PINSHAPE_FALLING_EDGE_CLOCK )
+    else if( m_shape == GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK )
     {
         const int deco_size = InternalPinDecoSize( *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
@@ -931,8 +918,8 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
         aPlotter->FinishTo( aPosition );
     }
 
-    if( m_shape == PINSHAPE_CLOCK || m_shape == PINSHAPE_INVERTED_CLOCK ||
-        m_shape == PINSHAPE_CLOCK_LOW )
+    if( m_shape == GRAPHIC_PINSHAPE::CLOCK || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK
+            || m_shape == GRAPHIC_PINSHAPE::CLOCK_LOW )
     {
         const int deco_size = InternalPinDecoSize( *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
@@ -949,7 +936,8 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
         }
     }
 
-    if( m_shape == PINSHAPE_INPUT_LOW || m_shape == PINSHAPE_CLOCK_LOW )    /* IEEE symbol "Active Low Input" */
+    if( m_shape == GRAPHIC_PINSHAPE::INPUT_LOW
+            || m_shape == GRAPHIC_PINSHAPE::CLOCK_LOW ) /* IEEE symbol "Active Low Input" */
     {
         const int deco_size = ExternalPinDecoSize( *this );
 
@@ -968,7 +956,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     }
 
 
-    if( m_shape == PINSHAPE_OUTPUT_LOW )    /* IEEE symbol "Active Low Output" */
+    if( m_shape == GRAPHIC_PINSHAPE::OUTPUT_LOW ) /* IEEE symbol "Active Low Output" */
     {
         const int symbol_size = ExternalPinDecoSize( *this );
 
@@ -983,7 +971,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
             aPlotter->FinishTo( wxPoint( x1, y1 + MapY1 * symbol_size * 2 ) );
         }
     }
-    else if( m_shape == PINSHAPE_NONLOGIC ) /* NonLogic pin symbol */
+    else if( m_shape == GRAPHIC_PINSHAPE::NONLOGIC ) /* NonLogic pin symbol */
     {
         const int deco_size = ExternalPinDecoSize( *this );
         aPlotter->MoveTo( wxPoint( x1 - (MapX1 + MapY1) * deco_size, y1 - (MapY1 - MapX1) * deco_size ) );
@@ -991,7 +979,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
         aPlotter->MoveTo( wxPoint( x1 - (MapX1 - MapY1) * deco_size, y1 - (MapY1 + MapX1) * deco_size ) );
         aPlotter->FinishTo( wxPoint( x1 + (MapX1 - MapY1) * deco_size, y1 + (MapY1 + MapX1) * deco_size ) );
     }
-    if( m_type == PIN_NC )   // Draw a N.C. symbol
+    if( m_type == ELECTRICAL_PINTYPE::PT_NC ) // Draw a N.C. symbol
     {
         const int deco_size = TARGET_PIN_RADIUS;
         const int ex1 = aPosition.x;
@@ -1477,7 +1465,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles ) const
     // Actual text height is bigger than text size
     int numberTextHeight  = showNum ? KiROUND( m_numTextSize * 1.1 ) : 0;
 
-    if( m_shape == PINSHAPE_INVERTED || m_shape == PINSHAPE_INVERTED_CLOCK )
+    if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
         minsizeV = std::max( TARGET_PIN_RADIUS, ExternalPinDecoSize( *this ) );
 
     // calculate top left corner position

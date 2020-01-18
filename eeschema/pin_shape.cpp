@@ -30,75 +30,46 @@
 
 #include <macros.h>
 
-wxString GetText( GRAPHIC_PINSHAPE shape )
+
+struct pinShapeStruct
 {
-    switch( shape )
-    {
-    case PINSHAPE_LINE:
-        return _( "Line" );
+    wxString             name;
+    const BITMAP_OPAQUE* bitmap;
+};
 
-    case PINSHAPE_INVERTED:
-        return _( "Inverted" );
+/*
+* Conversion map between PLOT_DASH_TYPE values and style names displayed
+*/
+// clang-format off
+const std::map<GRAPHIC_PINSHAPE, struct pinShapeStruct> pinShapes = {
+    { GRAPHIC_PINSHAPE::LINE,               { _( "Line" ),               pinshape_normal_xpm } },
+    { GRAPHIC_PINSHAPE::INVERTED,           { _( "Inverted" ),           pinshape_invert_xpm } },
+    { GRAPHIC_PINSHAPE::CLOCK,              { _( "Clock" ),              pinshape_clock_normal_xpm } },
+    { GRAPHIC_PINSHAPE::INVERTED_CLOCK,     { _( "Inverted clock" ),     pinshape_clock_invert_xpm } },
+    { GRAPHIC_PINSHAPE::INPUT_LOW,          { _( "Input low" ),          pinshape_active_low_input_xpm } },
+    { GRAPHIC_PINSHAPE::CLOCK_LOW,          { _( "Clock low" ),          pinshape_clock_active_low_xpm } },
+    { GRAPHIC_PINSHAPE::OUTPUT_LOW,         { _( "Output low" ),         pinshape_active_low_output_xpm } },
+    { GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK, { _( "Falling edge clock" ), pinshape_clock_fall_xpm } },
+    { GRAPHIC_PINSHAPE::NONLOGIC,           { _( "NonLogic" ),           pinshape_nonlogic_xpm } },
+};
+// clang-format on
 
-    case PINSHAPE_CLOCK:
-        return _( "Clock" );
 
-    case PINSHAPE_INVERTED_CLOCK:
-        return _( "Inverted clock" );
+wxString GetText( GRAPHIC_PINSHAPE aShape )
+{
+    auto findIt = pinShapes.find( aShape );
 
-    case PINSHAPE_INPUT_LOW:
-        return _( "Input low" );
+    wxCHECK_MSG( findIt != pinShapes.end(), wxT( "?" ), "Could not find pinshape in lookup map" );
 
-    case PINSHAPE_CLOCK_LOW:
-        return _( "Clock low" );
-
-    case PINSHAPE_OUTPUT_LOW:
-        return _( "Output low" );
-
-    case PINSHAPE_FALLING_EDGE_CLOCK:
-        return _( "Falling edge clock" );
-
-    case PINSHAPE_NONLOGIC:
-        return _( "NonLogic" );
-    }
-
-    assert( !"Invalid pin shape" );
-    return wxT( "?" );
+    return findIt->second.name;
 }
 
 
-BITMAP_DEF GetBitmap( GRAPHIC_PINSHAPE shape )
+BITMAP_DEF GetBitmap( GRAPHIC_PINSHAPE aShape )
 {
-    switch( shape )
-    {
-    case PINSHAPE_LINE:
-        return pinshape_normal_xpm;
+    auto findIt = pinShapes.find( aShape );
 
-    case PINSHAPE_INVERTED:
-        return pinshape_invert_xpm;
+    wxCHECK_MSG( findIt != pinShapes.end(), nullptr, "Could not find pinshape in lookup map" );
 
-    case PINSHAPE_CLOCK:
-        return pinshape_clock_normal_xpm;
-
-    case PINSHAPE_INVERTED_CLOCK:
-        return pinshape_clock_invert_xpm;
-
-    case PINSHAPE_INPUT_LOW:
-        return pinshape_active_low_input_xpm;
-
-    case PINSHAPE_CLOCK_LOW:
-        return pinshape_clock_active_low_xpm;
-
-    case PINSHAPE_OUTPUT_LOW:
-        return pinshape_active_low_output_xpm;
-
-    case PINSHAPE_FALLING_EDGE_CLOCK:
-        return pinshape_clock_fall_xpm;
-
-    case PINSHAPE_NONLOGIC:
-        return pinshape_nonlogic_xpm;
-    }
-
-    assert( !"Invalid pin shape" );
-    return 0;
+    return findIt->second.bitmap;
 }

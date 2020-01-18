@@ -41,80 +41,80 @@ class SCH_COMPONENT;
 
 
 /* Type of Net objects (wires, labels, pins...) */
-enum NETLIST_ITEM_T
+enum class NETLIST_ITEM
 {
-    NET_ITEM_UNSPECIFIED,           // only for not yet initialized instances
-    NET_SEGMENT,                    // connection by wire
-    NET_BUS,                        // connection by bus
-    NET_JUNCTION,                   // connection by junction: can connect to
-                                    // or more crossing wires
-    NET_LABEL,                      // this is a local label
-    NET_GLOBLABEL,                  // this is a global label that connect all
-                                    // others global label in whole hierarchy
-    NET_HIERLABEL,                  // element to indicate connection to a
-                                    // higher-level sheet
-    NET_SHEETLABEL,                 // element to indicate connection to a
-                                    // lower-level sheet.
-    NET_BUSLABELMEMBER,             /* created when a bus label is found:
-                                     * the bus label (like DATA[0..7] is
-                                     * converted to n single labels like
-                                     * DATA0, DATA1 ...
-                                     * These objects are living only in the current
-                                     * NETLIST_OBJECT_LIST, not in shematic.
-                                     */
-    NET_GLOBBUSLABELMEMBER,         // see NET_BUSLABELMEMBER, used when a
-                                    // global bus label is found
-    NET_HIERBUSLABELMEMBER,         // see NET_BUSLABELMEMBER, used when a
-                                    // hierarchical bus label is found
-    NET_SHEETBUSLABELMEMBER,        // see NET_BUSLABELMEMBER, used when a
-                                    // pin sheet label using bus notation
-                                    // is found
-    NET_PINLABEL,                   /* created when a pin is POWER (IN or
-                                     * OUT) with invisible attribute is found:
-                                     * these pins are equivalent to a global
-                                     * label and are automatically connected
-                                     */
-    NET_PIN,                        // this is an usual pin
-    NET_NOCONNECT                   // this is a no connect symbol
+    ITEM_UNSPECIFIED,    // only for not yet initialized instances
+    SEGMENT,             // connection by wire
+    BUS,                 // connection by bus
+    JUNCTION,            // connection by junction: can connect to
+                         // or more crossing wires
+    LABEL,               // this is a local label
+    GLOBLABEL,           // this is a global label that connect all
+                         // others global label in whole hierarchy
+    HIERLABEL,           // element to indicate connection to a
+                         // higher-level sheet
+    SHEETLABEL,          // element to indicate connection to a
+                         // lower-level sheet.
+    BUSLABELMEMBER,      /* created when a bus label is found:
+                          * the bus label (like DATA[0..7] is
+                          * converted to n single labels like
+                          * DATA0, DATA1 ...
+                          * These objects are living only in the current
+                          * NETLIST_OBJECT_LIST, not in shematic.
+                          */
+    GLOBBUSLABELMEMBER,  // see NET_BUSLABELMEMBER, used when a
+                         // global bus label is found
+    HIERBUSLABELMEMBER,  // see NET_BUSLABELMEMBER, used when a
+                         // hierarchical bus label is found
+    SHEETBUSLABELMEMBER, // see NET_BUSLABELMEMBER, used when a
+                         // pin sheet label using bus notation
+                         // is found
+    PINLABEL,            /* created when a pin is POWER (IN or
+                         * OUT) with invisible attribute is found:
+                         * these pins are equivalent to a global
+                         * label and are automatically connected
+                         */
+    PIN,                 // this is an usual pin
+    NOCONNECT            // this is a no connect symbol
 };
 
 
 /* Values for .m_FlagOfConnection member */
-enum NET_CONNECTION_T
+enum class NET_CONNECTION
 {
-    UNCONNECTED = 0,            /* Pin or Label not connected (error) */
-    NOCONNECT_SYMBOL_PRESENT,   /* Pin not connected but have a  NoConnect
+    UNCONNECTED = 0,          /* Pin or Label not connected (error) */
+    NOCONNECT_SYMBOL_PRESENT, /* Pin not connected but have a  NoConnect
                                  * symbol on it (no error) */
-    PAD_CONNECT                 /* Normal connection (no error) */
+    PAD_CONNECT               /* Normal connection (no error) */
 };
 
 
 class NETLIST_OBJECT
 {
 public:
-    NETLIST_ITEM_T m_Type;              /* Type of item (see NETLIST_ITEM_T enum) */
-    EDA_ITEM* m_Comp;                   /* Pointer to the library item that
-                                         * created this net object (the parent)
-                                         */
-    SCH_ITEM* m_Link;                   /* For SCH_SHEET_PIN:
-                                         * Pointer to the hierarchy sheet that
-                                         * contains this SCH_SHEET_PIN
-                                         * For Pins: pointer to the schematic component
-                                         * that contains this pin
-                                         */
-    int m_Flag;                         /* flag used in calculations */
-    SCH_SHEET_PATH  m_SheetPath;        // the sheet path which contains this item
-    SCH_SHEET_PATH  m_SheetPathInclude; // sheet path which contains the hierarchical label
+    NETLIST_ITEM m_Type;                    /* Type of item (see NETLIST_ITEM_T enum) */
+    EDA_ITEM*    m_Comp;                    /* Pointer to the library item that
+                                             * created this net object (the parent)
+                                             */
+    SCH_ITEM* m_Link;                       /* For SCH_SHEET_PIN:
+                                             * Pointer to the hierarchy sheet that
+                                             * contains this SCH_SHEET_PIN
+                                             * For Pins: pointer to the schematic component
+                                             * that contains this pin
+                                             */
+    int                m_Flag;              /* flag used in calculations */
+    SCH_SHEET_PATH     m_SheetPath;         // the sheet path which contains this item
+    SCH_SHEET_PATH     m_SheetPathInclude;  // sheet path which contains the hierarchical label
     ELECTRICAL_PINTYPE m_ElectricalPinType; // Has meaning only for Pins: electrical type of the pin
-    int m_BusNetCode;                   /* Used for BUS connections */
-    int m_Member;                       /* for labels type NET_BUSLABELMEMBER ( bus member
-                                         * created from the BUS label ) member number.
-                                         */
-    NET_CONNECTION_T m_ConnectionType;  // Used to store the connection type
-    wxString    m_PinNum;               // pin number
-    wxString    m_Label;                // Label text (for labels) or Pin name (for pins)
-    wxPoint     m_Start;                // Position of object or for segments: starting point
-    wxPoint     m_End;                  // For segments (wire and buses): ending point
+    int                m_BusNetCode;        /* Used for BUS connections */
+    int                m_Member;            /* for labels type NET_BUSLABELMEMBER ( bus member
+                                             * created from the BUS label ) member number.
+                                             */
+    NET_CONNECTION m_ConnectionType;        // Used to store the connection type
+    wxString       m_PinNum;                // pin number
+    wxString       m_Label;                 // Label text (for labels) or Pin name (for pins)
+    wxPoint        m_Start;                 // Position of object or for segments: starting point
+    wxPoint        m_End;                   // For segments (wire and buses): ending point
 
 private:
     int m_netCode;                      /* net code for all items except BUS
@@ -132,7 +132,6 @@ public:
 
 #if defined(DEBUG)
     void Show( std::ostream& out, int ndx ) const;
-
 #endif
 
     NETLIST_OBJECT();
@@ -151,12 +150,12 @@ public:
      *                             symbol on it (no error)
      * PAD_CONNECT                 Normal connection (no error)
      */
-    void SetConnectionType( NET_CONNECTION_T aFlg = UNCONNECTED )
+    void SetConnectionType( NET_CONNECTION aFlg = NET_CONNECTION::UNCONNECTED )
     {
         m_ConnectionType = aFlg;
     }
 
-    NET_CONNECTION_T GetConnectionType() const
+    NET_CONNECTION GetConnectionType() const
     {
         return m_ConnectionType;
     }
@@ -342,7 +341,7 @@ public:
     /**
      * Acces to an item type
      */
-    NETLIST_ITEM_T GetItemType( unsigned aIdx ) const
+    NETLIST_ITEM GetItemType( unsigned aIdx ) const
     {
         return GetItem( aIdx )->m_Type;
     }
@@ -355,7 +354,7 @@ public:
         return GetItem( aIdx )->GetNet();
     }
 
-    NET_CONNECTION_T GetConnectionType( unsigned aIdx )
+    NET_CONNECTION GetConnectionType( unsigned aIdx )
     {
         return GetItem( aIdx )->GetConnectionType();
     }
@@ -367,7 +366,7 @@ public:
      *                             symbol on it (no error)
      * PAD_CONNECT                 Normal connection (no error)
      */
-    void SetConnectionType( unsigned aIdx, NET_CONNECTION_T aFlg = UNCONNECTED )
+    void SetConnectionType( unsigned aIdx, NET_CONNECTION aFlg = NET_CONNECTION::UNCONNECTED )
     {
         GetItem( aIdx )->SetConnectionType( aFlg );
     }
@@ -381,7 +380,7 @@ public:
     void ResetConnectionsType()
     {
         for( unsigned ii = 0; ii < size(); ii++ )
-            GetItem( ii )->SetConnectionType( UNCONNECTED );
+            GetItem( ii )->SetConnectionType( NET_CONNECTION::UNCONNECTED );
     }
 
     /*

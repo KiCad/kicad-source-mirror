@@ -49,34 +49,17 @@
 
 
 /*
- *  Electrical type of pins:
- *  PIN_INPUT = usual pin input: must be connected
- *  PIN_OUTPUT = usual output
- *  PIN_BIDI = input or output (like port for a microprocessor)
- *  PIN_TRISTATE = tris state bus pin
- *  PIN_PASSIVE = pin for passive components: must be connected, and can be
- * connected to any pin
- *  PIN_UNSPECIFIED = unknown electrical properties: creates always a warning
- * when connected
- *  PIN_POWER_IN = power input (GND, VCC for ICs). Must be connected to a power
- * output.
- *  PIN_POWER_OUT = output of a regulator: intended to be connected to power
- * input pins
- *  PIN_OPENCOLLECTOR = pin type open collector
- *  PIN_OPENEMITTER = pin type open emitter
- *  PIN_NC = not connected (must be left open)
- *
- *  Minimal requirements:
- *  All pins *must* be connected (except PIN_NC).
+ *  Minimal ERC requirements:
+ *  All pins *must* be connected (except ELECTRICAL_PINTYPE::PT_NC).
  *  When a pin is not connected in schematic, the user must place a "non
  * connected" symbol to this pin.
  *  This ensures a forgotten connection will be detected.
  */
 
 /* Messages for conflicts :
- *  PIN_INPUT, PIN_OUTPUT, PIN_BIDI, PIN_TRISTATE, PIN_PASSIVE,
- *  PIN_UNSPECIFIED, PIN_POWER_IN, PIN_POWER_OUT, PIN_OPENCOLLECTOR,
- *  PIN_OPENEMITTER, PIN_NC
+ *  ELECTRICAL_PINTYPE::PT_INPUT, ELECTRICAL_PINTYPE::PT_OUTPUT, ELECTRICAL_PINTYPE:PT_:BIDI, ELECTRICAL_PINTYPE::PT_TRISTATE, ELECTRICAL_PINTYPE::PT_PASSIVE,
+ *  ELECTRICAL_PINTYPE::PT_UNSPECIFIED, ELECTRICAL_PINTYPE::PT_POWER_IN, ELECTRICAL_PINTYPE::PT_POWER_OUT, ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR,
+ *  ELECTRICAL_PINTYPE::PT_OPENEMITTER, ELECTRICAL_PINTYPE::PT_NC
  *  These messages are used to show the ERC matrix in ERC dialog
  */
 
@@ -118,7 +101,7 @@ const wxString CommentERC_V[] =
  *  at start up: must be loaded by DefaultDiagErc
  *  Can be modified in dialog ERC
  */
-int  DiagErc[PINTYPE_COUNT][PINTYPE_COUNT];
+int DiagErc[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
 
 /**
  * Default Look up table which gives the ERC error level for a pair of connected pins
@@ -127,7 +110,7 @@ int  DiagErc[PINTYPE_COUNT][PINTYPE_COUNT];
  *  note also, to avoid inconsistancy:
  *    DefaultDiagErc[i][j] = DefaultDiagErc[j][i]
  */
-int DefaultDiagErc[PINTYPE_COUNT][PINTYPE_COUNT] =
+int DefaultDiagErc[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
 {
 /*         I,   O,    Bi,   3S,   Pas,  UnS,  PwrI, PwrO, OC,   OE,   NC */
 /* I */  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
@@ -154,7 +137,7 @@ int DefaultDiagErc[PINTYPE_COUNT][PINTYPE_COUNT] =
  * in net.  Nets are OK when their final state is NET_NC or DRV.   Nets with the state
  * NOD have no valid source signal.
  */
-static int MinimalReq[PINTYPE_COUNT][PINTYPE_COUNT] =
+static int MinimalReq[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
 {
 /*         In   Out, Bi,  3S,  Pas, UnS, PwrI,PwrO,OC,  OE,  NC */
 /* In*/  { NOD, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
@@ -362,14 +345,14 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMi
 
     wxString cmp_ref( "?" );
 
-    if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
+    if( aNetItemRef->m_Type == NETLIST_ITEM::PIN && aNetItemRef->m_Link )
         cmp_ref = aNetItemRef->GetComponentParent()->GetRef( &aNetItemRef->m_SheetPath );
 
     if( aNetItemTst == NULL )
     {
         if( aMinConn == NOD )    /* Nothing driving the net. */
         {
-            if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
+            if( aNetItemRef->m_Type == NETLIST_ITEM::PIN && aNetItemRef->m_Link )
                 cmp_ref = aNetItemRef->GetComponentParent()->GetRef(
                     &aNetItemRef->m_SheetPath );
 
@@ -396,7 +379,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMi
 
         wxString alt_cmp( "?" );
 
-        if( aNetItemTst->m_Type == NET_PIN && aNetItemTst->m_Link )
+        if( aNetItemTst->m_Type == NETLIST_ITEM::PIN && aNetItemTst->m_Link )
             alt_cmp = aNetItemTst->GetComponentParent()->GetRef( &aNetItemTst->m_SheetPath );
 
         msg.Printf( _( "Pin %s (%s) of component %s is connected to " ),
@@ -425,7 +408,7 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
     ELECTRICAL_PINTYPE ref_elect_type = aList->GetItem( aNetItemRef )->m_ElectricalPinType;
     int local_minconn = NOC;
 
-    if( ref_elect_type == PIN_NC )
+    if( ref_elect_type == ELECTRICAL_PINTYPE::PT_NC )
         local_minconn = NPI;
 
     /* Test pins connected to NetItemRef */
@@ -445,8 +428,7 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
                 /* Not connected or not driven pin. */
                 bool seterr = true;
 
-                if( local_minconn == NOC &&
-                    aList->GetItemType( aNetItemRef ) == NET_PIN )
+                if( local_minconn == NOC && aList->GetItemType( aNetItemRef ) == NETLIST_ITEM::PIN )
                 {
                     /* This pin is not connected: for multiple part per
                      * package, and duplicated pin,
@@ -458,7 +440,7 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
                      */
                     for( unsigned duplicate = 0; duplicate < aList->size(); duplicate++ )
                     {
-                        if( aList->GetItemType( duplicate ) != NET_PIN )
+                        if( aList->GetItemType( duplicate ) != NETLIST_ITEM::PIN )
                             continue;
 
                         if( duplicate == aNetItemRef )
@@ -500,44 +482,46 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
 
         switch( aList->GetItemType( netItemTst ) )
         {
-        case NET_ITEM_UNSPECIFIED:
-        case NET_SEGMENT:
-        case NET_BUS:
-        case NET_JUNCTION:
-        case NET_LABEL:
-        case NET_HIERLABEL:
-        case NET_BUSLABELMEMBER:
-        case NET_HIERBUSLABELMEMBER:
-        case NET_SHEETBUSLABELMEMBER:
-        case NET_SHEETLABEL:
-        case NET_GLOBLABEL:
-        case NET_GLOBBUSLABELMEMBER:
-        case NET_PINLABEL:
+        case NETLIST_ITEM::ITEM_UNSPECIFIED:
+        case NETLIST_ITEM::SEGMENT:
+        case NETLIST_ITEM::BUS:
+        case NETLIST_ITEM::JUNCTION:
+        case NETLIST_ITEM::LABEL:
+        case NETLIST_ITEM::HIERLABEL:
+        case NETLIST_ITEM::BUSLABELMEMBER:
+        case NETLIST_ITEM::HIERBUSLABELMEMBER:
+        case NETLIST_ITEM::SHEETBUSLABELMEMBER:
+        case NETLIST_ITEM::SHEETLABEL:
+        case NETLIST_ITEM::GLOBLABEL:
+        case NETLIST_ITEM::GLOBBUSLABELMEMBER:
+        case NETLIST_ITEM::PINLABEL:
             break;
 
-        case NET_NOCONNECT:
+        case NETLIST_ITEM::NOCONNECT:
             local_minconn = std::max( NET_NC, local_minconn );
             break;
 
-        case NET_PIN:
-            jj = aList->GetItem( netItemTst )->m_ElectricalPinType;
-            local_minconn = std::max( MinimalReq[ref_elect_type][jj], local_minconn );
+        case NETLIST_ITEM::PIN:
+            jj            = aList->GetItem( netItemTst )->m_ElectricalPinType;
+            local_minconn = std::max(
+                    MinimalReq[static_cast<int>( ref_elect_type )][static_cast<int>( jj )],
+                    local_minconn );
 
             if( netItemTst <= aNetItemRef )
                 break;
 
             if( erc == OK )
             {
-                erc = DiagErc[ref_elect_type][jj];
+                erc = DiagErc[static_cast<int>( ref_elect_type )][static_cast<int>( jj )];
 
                 if( erc != OK )
                 {
-                    if( aList->GetConnectionType( netItemTst ) == UNCONNECTED )
+                    if( aList->GetConnectionType( netItemTst ) == NET_CONNECTION::UNCONNECTED )
                     {
-                        Diagnose( aList->GetItem( aNetItemRef ),
-                                  aList->GetItem( netItemTst ),
-                                  0, erc );
-                        aList->SetConnectionType( netItemTst, NOCONNECT_SYMBOL_PRESENT );
+                        Diagnose( aList->GetItem( aNetItemRef ), aList->GetItem( netItemTst ), 0,
+                                erc );
+                        aList->SetConnectionType(
+                                netItemTst, NET_CONNECTION::NOCONNECT_SYMBOL_PRESENT );
                     }
                 }
             }
@@ -559,7 +543,7 @@ int NETLIST_OBJECT_LIST::CountPinsInNet( unsigned aNetStart )
         if( curr_net != GetItemNet( item ) )   // End of net
             break;
 
-        if( GetItemType( item ) == NET_PIN )
+        if( GetItemType( item ) == NETLIST_ITEM::PIN )
             count++;
     }
 
@@ -712,20 +696,20 @@ void NETLIST_OBJECT_LIST::TestforSimilarLabels()
     {
         switch( GetItemType( netItem ) )
         {
-        case NET_LABEL:
-        case NET_BUSLABELMEMBER:
-        case NET_PINLABEL:
-        case NET_GLOBBUSLABELMEMBER:
-        case NET_HIERLABEL:
-        case NET_HIERBUSLABELMEMBER:
-        case NET_GLOBLABEL:
+        case NETLIST_ITEM::LABEL:
+        case NETLIST_ITEM::BUSLABELMEMBER:
+        case NETLIST_ITEM::PINLABEL:
+        case NETLIST_ITEM::GLOBBUSLABELMEMBER:
+        case NETLIST_ITEM::HIERLABEL:
+        case NETLIST_ITEM::HIERBUSLABELMEMBER:
+        case NETLIST_ITEM::GLOBLABEL:
             // add this label in lists
             uniqueLabelList.insert( GetItem( netItem ) );
             fullLabelList.push_back( GetItem( netItem ) );
             break;
 
-        case NET_SHEETLABEL:
-        case NET_SHEETBUSLABELMEMBER:
+        case NETLIST_ITEM::SHEETLABEL:
+        case NETLIST_ITEM::SHEETBUSLABELMEMBER:
         default:
             break;
         }

@@ -152,7 +152,7 @@ private:
             int id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
             wxString name = member->LocalName();
 
-            if( member->Type() == CONNECTION_BUS )
+            if( member->Type() == CONNECTION_TYPE::BUS )
             {
                 ACTION_MENU* submenu = new ACTION_MENU( true );
                 AppendSubMenu( submenu, name );

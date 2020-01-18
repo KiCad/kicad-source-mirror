@@ -346,8 +346,10 @@ public:
      * Return whether this pin forms an implicit power connection: i.e., is hidden
      * and of type POWER_IN.
      */
-    bool IsPowerConnection() const {
-        return GetType() == PIN_POWER_IN && ( !IsVisible() || (LIB_PART*) GetParent()->IsPower() );
+    bool IsPowerConnection() const
+    {
+        return GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
+               && ( !IsVisible() || (LIB_PART*) GetParent()->IsPower() );
     }
 
     int GetPenSize() const override;

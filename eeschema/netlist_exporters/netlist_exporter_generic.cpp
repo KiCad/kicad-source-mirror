@@ -572,7 +572,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
                 lastNetCode  = netCode;
             }
 
-            if( nitem->m_Type != NET_PIN )
+            if( nitem->m_Type != NETLIST_ITEM::PIN )
                 continue;
 
             if( nitem->m_Flag != 0 )     // Redundant pin, skip it

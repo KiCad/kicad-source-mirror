@@ -220,7 +220,7 @@ std::vector<SCH_ITEM*> CONNECTION_SUBGRAPH::GetBusLabels() const
             auto label_conn = item->Connection( m_sheet );
 
             // Only consider bus vectors
-            if( label_conn->Type() == CONNECTION_BUS )
+            if( label_conn->Type() == CONNECTION_TYPE::BUS )
                 labels.push_back( item );
         }
         default: break;
@@ -496,22 +496,23 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             switch( item->Type() )
             {
             case SCH_LINE_T:
-                conn->SetType( item->GetLayer() == LAYER_BUS ? CONNECTION_BUS : CONNECTION_NET );
+                conn->SetType( item->GetLayer() == LAYER_BUS ? CONNECTION_TYPE::BUS :
+                                                               CONNECTION_TYPE::NET );
                 break;
 
             case SCH_BUS_BUS_ENTRY_T:
-                conn->SetType( CONNECTION_BUS );
+                conn->SetType( CONNECTION_TYPE::BUS );
                 // clean previous (old) links:
                 static_cast<SCH_BUS_BUS_ENTRY*>( item )->m_connected_bus_items[0] = nullptr;
                 static_cast<SCH_BUS_BUS_ENTRY*>( item )->m_connected_bus_items[1] = nullptr;
                 break;
 
             case SCH_PIN_T:
-                conn->SetType( CONNECTION_NET );
+                conn->SetType( CONNECTION_TYPE::NET );
                 break;
 
             case SCH_BUS_WIRE_ENTRY_T:
-                conn->SetType( CONNECTION_NET );
+                conn->SetType( CONNECTION_TYPE::NET );
                 // clean previous (old) link:
                 static_cast<SCH_BUS_WIRE_ENTRY*>( item )->m_connected_bus_item = nullptr;
                 break;
@@ -778,7 +779,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 {
                     auto pin = static_cast<SCH_PIN*>( item );
 
-                    if( pin->GetType() == PIN_NC )
+                    if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
                         subgraph->m_no_connect = item;
 
                     break;
@@ -1695,7 +1696,7 @@ SCH_CONNECTION* CONNECTION_GRAPH::matchBusMember(
 
     SCH_CONNECTION* match = nullptr;
 
-    if( aBusConnection->Type() == CONNECTION_BUS )
+    if( aBusConnection->Type() == CONNECTION_TYPE::BUS )
     {
         // Vector bus: compare against index, because we allow the name
         // to be different
@@ -1717,7 +1718,7 @@ SCH_CONNECTION* CONNECTION_GRAPH::matchBusMember(
             // Vector inside group: compare names, because for bus groups
             // we expect the naming to be consistent across all usages
             // TODO(JE) explain this in the docs
-            if( c->Type() == CONNECTION_BUS )
+            if( c->Type() == CONNECTION_TYPE::BUS )
             {
                 for( const auto& bus_member : c->Members() )
                 {
@@ -2057,7 +2058,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 
             for( const auto& member : bus_wire->Connection( sheet )->Members() )
             {
-                if( member->Type() == CONNECTION_BUS )
+                if( member->Type() == CONNECTION_TYPE::BUS )
                 {
                     for( const auto& sub_member : member->Members() )
                         if( sub_member->Name( true ) == test_name )
@@ -2231,7 +2232,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
             }
         }
 
-        if( pin && !has_other_connections && pin->GetType() != PIN_NC )
+        if( pin && !has_other_connections && pin->GetType() != ELECTRICAL_PINTYPE::PT_NC )
         {
             if( aCreateMarkers )
             {

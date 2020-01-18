@@ -40,8 +40,8 @@ class DIALOG_ERC : public DIALOG_ERC_BASE
     DECLARE_EVENT_TABLE()
 
 private:
-    SCH_EDIT_FRAME* m_parent;
-    wxBitmapButton* m_buttonList[PINTYPE_COUNT][PINTYPE_COUNT];
+    SCH_EDIT_FRAME*   m_parent;
+    wxBitmapButton*   m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
     bool            m_initialized;
     const SCH_MARKER* m_lastMarkerFound;
     static bool     m_diagErcTableInit; // go to true after DiagErc init

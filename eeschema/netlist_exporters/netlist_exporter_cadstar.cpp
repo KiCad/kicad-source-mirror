@@ -149,7 +149,7 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
         }
 
 
-        if( nitem->m_Type != NET_PIN )
+        if( nitem->m_Type != NETLIST_ITEM::PIN )
             continue;
 
         if( nitem->m_Flag != 0 )

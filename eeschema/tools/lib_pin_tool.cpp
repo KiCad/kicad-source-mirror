@@ -33,9 +33,9 @@
 #include "lib_pin_tool.h"
 
 
-static ELECTRICAL_PINTYPE g_LastPinType          = PIN_INPUT;
+static ELECTRICAL_PINTYPE g_LastPinType          = ELECTRICAL_PINTYPE::PT_INPUT;
 static int                g_LastPinOrient        = PIN_RIGHT;
-static GRAPHIC_PINSHAPE   g_LastPinShape         = PINSHAPE_LINE;
+static GRAPHIC_PINSHAPE   g_LastPinShape         = GRAPHIC_PINSHAPE::LINE;
 static bool               g_LastPinCommonConvert = false;
 static bool               g_LastPinCommonUnit    = false;
 static bool               g_LastPinVisible       = true;
