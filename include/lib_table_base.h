@@ -171,8 +171,6 @@ public:
      */
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const;
 
-    static void Parse( std::unique_ptr< LIB_TABLE_ROW >& aRow, LIB_TABLE_LEXER* in );
-
     LIB_TABLE_ROW* clone() const
     {
         return do_clone();
