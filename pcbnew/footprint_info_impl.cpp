@@ -342,12 +342,15 @@ void FOOTPRINT_LIST_IMPL::WriteCacheToFile( wxTextFile* aCacheFile )
 {
     if( aCacheFile->Exists() )
     {
-        aCacheFile->Open();
+        if( !aCacheFile->Open() )
+            return;
+
         aCacheFile->Clear();
     }
     else
     {
-        aCacheFile->Create();
+        if( !aCacheFile->Create() )
+            return;
     }
 
     aCacheFile->AddLine( wxString::Format( "%lld", m_list_timestamp ) );
@@ -375,10 +378,8 @@ void FOOTPRINT_LIST_IMPL::ReadCacheFromFile( wxTextFile* aCacheFile )
 
     try
     {
-        if( aCacheFile->Exists() )
+        if( aCacheFile->Exists() && aCacheFile->Open() )
         {
-            aCacheFile->Open();
-
             aCacheFile->GetFirstLine().ToLongLong( &m_list_timestamp );
 
             while( aCacheFile->GetCurrentLine() + 6 < aCacheFile->GetLineCount() )
