@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,8 @@ bool DIALOG_SET_GRID::TransferDataToWindow()
 
     for( size_t i = 0; i < gridSizes.size(); i++ )
     {
-        m_choiceGridSize->Append( wxString::Format( wxT( "%0.1f" ), gridSizes[i].m_Size.x ) );
+        m_choiceGridSize->Append( wxString::Format( "%0.1f",
+                static_cast<float>( Iu2Mils( gridSizes[i].m_Size.x ) ) ) );
 
         if( gridSizes[i].m_CmdId == m_frame->GetScreen()->GetGridCmdId() )
             m_choiceGridSize->SetSelection( (int) i );
