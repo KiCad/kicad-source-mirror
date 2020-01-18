@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013-2017 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -503,57 +503,75 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
     if( aUseGraph )
     {
         wxASSERT( m_graph );
+        int code = 0;
 
-        for( const auto& it : m_graph->m_net_code_to_subgraphs_map )
+        for( const auto& it : m_graph->GetNetMap() )
         {
-            bool added = false;
+            bool     added     = false;
+            wxString net_name  = it.first.first;
+            auto     subgraphs = it.second;
 
-            auto code = it.first;
-            auto subgraphs = it.second;
-            auto net_name = subgraphs[0]->GetNetName();
+            // Code starts at 1
+            code++;
 
             XNODE* xnode;
+            std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>> sorted_items;
 
             for( auto subgraph : subgraphs )
             {
                 auto sheet = subgraph->m_sheet;
 
                 for( auto item : subgraph->m_items )
-                {
                     if( item->Type() == SCH_PIN_T )
-                    {
-                        auto pin = static_cast<SCH_PIN*>( item );
+                        sorted_items.emplace_back(
+                                std::make_pair( static_cast<SCH_PIN*>( item ), sheet ) );
+            }
 
-                        auto refText = pin->GetParentComponent()->GetRef( &sheet );
-                        const auto& pinText = pin->GetNumber();
+            // Netlist ordering: Net name, then ref des, then pin name
+            std::sort( sorted_items.begin(), sorted_items.end(), []( auto a, auto b ) {
+                        auto ref_a = a.first->GetParentComponent()->GetRef( &a.second );
+                        auto ref_b = b.first->GetParentComponent()->GetRef( &b.second );
 
-                        // Skip power symbols and virtual components
-                        if( refText[0] == wxChar( '#' ) )
-                            continue;
+                        if( ref_a == ref_b )
+                            return a.first->GetNumber() < b.first->GetNumber();
 
-                        if( !added )
-                        {
-                            xnets->AddChild( xnet = node( "net" ) );
-                            netCodeTxt.Printf( "%d", code );
-                            xnet->AddAttribute( "code", netCodeTxt );
-                            xnet->AddAttribute( "name", net_name );
+                        return ref_a < ref_b;
+                    } );
 
-                            added = true;
-                        }
+            for( const auto& pair : sorted_items )
+            {
+                SCH_PIN* pin = pair.first;
+                SCH_SHEET_PATH sheet = pair.second;
 
-                        xnet->AddChild( xnode = node( "node" ) );
-                        xnode->AddAttribute( "ref", refText );
-                        xnode->AddAttribute( "pin", pinText );
+                auto refText = pin->GetParentComponent()->GetRef( &sheet );
+                const auto& pinText = pin->GetNumber();
 
-                        wxString pinName;
+                // Skip power symbols and virtual components
+                if( refText[0] == wxChar( '#' ) )
+                    continue;
 
-                        if( pin->GetName() != "~" ) //  ~ is a char used to code empty strings in libs.
-                            pinName = pin->GetName();
+                if( !added )
+                {
+                    xnets->AddChild( xnet = node( "net" ) );
+                    netCodeTxt.Printf( "%d", code );
+                    xnet->AddAttribute( "code", netCodeTxt );
+                    xnet->AddAttribute( "name", net_name );
 
-                        if( !pinName.IsEmpty() )
-                            xnode->AddAttribute( "pinfunction", pinName );
-                    }
+                    added = true;
                 }
+
+                xnet->AddChild( xnode = node( "node" ) );
+                xnode->AddAttribute( "ref", refText );
+                xnode->AddAttribute( "pin", pinText );
+
+                wxString pinName;
+
+                if( pin->GetName() != "~" ) //  ~ is a char used to code empty strings in libs.
+                    pinName = pin->GetName();
+
+                if( !pinName.IsEmpty() )
+                    xnode->AddAttribute( "pinfunction", pinName );
+
             }
         }
     }

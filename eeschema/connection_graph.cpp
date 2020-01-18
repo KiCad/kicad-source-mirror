@@ -954,7 +954,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             subgraph->AddItem( pin );
             subgraph->ResolveDrivers();
 
-            m_net_code_to_subgraphs_map[ code ].push_back( subgraph );
+            auto key = std::make_pair( subgraph->GetNetName(), code );
+            m_net_code_to_subgraphs_map[ key ].push_back( subgraph );
             m_subgraphs.push_back( subgraph );
             m_driver_subgraphs.push_back( subgraph );
 
@@ -1409,8 +1410,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         if( subgraph->m_driver_connection->IsBus() )
             continue;
 
-        int code = subgraph->m_driver_connection->NetCode();
-        m_net_code_to_subgraphs_map[ code ].push_back( subgraph );
+        auto key = std::make_pair( subgraph->GetNetName(),
+                                   subgraph->m_driver_connection->NetCode() );
+        m_net_code_to_subgraphs_map[ key ].push_back( subgraph );
     }
 
     // Clean up and deallocate stale subgraphs

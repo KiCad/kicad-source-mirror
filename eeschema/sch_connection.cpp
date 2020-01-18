@@ -319,11 +319,16 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 
     aList.push_back( MSG_PANEL_ITEM( _( "Connection Name" ), UnescapeString( Name() ), BROWN ) );
 
+    // NOTE(JE) Disabling this for now, because net codes are generated in the netlist exporter
+    // in order to avoid sort costs.  It may make sense to just tear out net codes from the
+    // CONNECTION_GRAPH entirely in the future, as they are mostly only useful for netlist exports.
+#if 0
     if( !IsBus() )
     {
         msg.Printf( "%d", m_net_code );
         aList.push_back( MSG_PANEL_ITEM( _( "Net Code" ), msg, BROWN ) );
     }
+#endif
 
     if( auto alias = g_ConnectionGraph->GetBusAlias( m_name ) )
     {

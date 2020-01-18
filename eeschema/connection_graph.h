@@ -198,6 +198,11 @@ public:
     CONNECTION_SUBGRAPH* m_hier_parent;
 };
 
+/// Associates a net code with the final name of a net
+typedef std::pair<wxString, int> NET_NAME_CODE;
+
+/// Associates a NET_CODE_NAME with all the subgraphs in that net
+typedef std::map<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> NET_MAP;
 
 /**
  * Calculates the connectivity of a schematic and generates netlists
@@ -255,11 +260,10 @@ public:
      */
     int RunERC( const ERC_SETTINGS& aSettings, bool aCreateMarkers = true );
 
+    const NET_MAP& GetNetMap() const { return m_net_code_to_subgraphs_map; }
+
     // TODO(JE) Remove this when pressure valve is removed
     static bool m_allowRealTime;
-
-    // TODO(JE) firm up API and move to private
-    std::map<int, std::vector<CONNECTION_SUBGRAPH*> > m_net_code_to_subgraphs_map;
 
 private:
 
@@ -290,6 +294,8 @@ private:
 
     std::unordered_map<wxString,
                        std::vector<CONNECTION_SUBGRAPH*>> m_net_name_to_subgraphs_map;
+
+    NET_MAP m_net_code_to_subgraphs_map;
 
     int m_last_net_code;
 
