@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2017-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,7 +154,7 @@ void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER
         const VECTOR2I line_vec( aEndPoint - last_pt );
         // get a restricted 45/H/V line from the last fixed point to the cursor
         auto new_end = last_pt + GetVectorSnapped45( line_vec );
-        OPT_VECTOR2I pt;
+        OPT_VECTOR2I pt = NULLOPT;
 
         if( m_lockedPoints.SegmentCount() > 1 )
         {
