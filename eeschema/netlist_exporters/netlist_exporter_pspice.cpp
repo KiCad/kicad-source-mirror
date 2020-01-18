@@ -384,6 +384,7 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 
     m_directives.clear();
     bool controlBlock = false;
+    bool circuitBlock = false;
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
@@ -436,20 +437,9 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
                     m_title = line.AfterFirst( ' ' );
                 }
 
-                // Handle .control .. .endc blocks
-                else if( lowercaseline.IsSameAs( ".control" ) && ( !controlBlock ) )
-                {
-                    controlBlock = true;
-                    m_directives.push_back( line );
-                }
-                else if( lowercaseline.IsSameAs( ".endc" ) && controlBlock )
-                {
-                    controlBlock = false;
-                    m_directives.push_back( line );
-                }
-
                 else if( line.StartsWith( '.' )                           // one-line directives
                         || controlBlock                                   // .control .. .endc block
+                        || circuitBlock                                   // .subckt  .. .ends block
                         || couplingK.Matches( line )                      // K## L## L## coupling constant
                         || ( directiveStarted && line.StartsWith( '+' ) ) ) // multiline directives
                 {
@@ -457,6 +447,21 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
                     // and the start of a longer directive
                     m_directives.emplace_back( line + " " );
                 }
+
+
+                // Handle .control .. .endc blocks
+                if( lowercaseline.IsSameAs( ".control" ) && ( !controlBlock ) )
+                    controlBlock = true;
+
+                if( lowercaseline.IsSameAs( ".endc" ) && controlBlock )
+                    controlBlock = false;
+
+                // Handle .subckt .. .ends blocks
+                if( lowercaseline.StartsWith( ".subckt" ) && ( !circuitBlock ) )
+                    circuitBlock = true;
+
+                if( lowercaseline.IsSameAs( ".ends" ) && circuitBlock )
+                    circuitBlock = false;
 
                 // Mark directive as started or continued in case it is a multi-line one
                 directiveStarted = line.StartsWith( '.' )
