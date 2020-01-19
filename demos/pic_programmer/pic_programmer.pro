@@ -1,4 +1,4 @@
-update=17/09/2019 13:28:31
+update=19/01/2020 20:27:59
 last_client=kicad
 [common]
 NetDir=
@@ -62,6 +62,8 @@ OthersTextSizeH=1
 OthersTextSizeThickness=0.15
 OthersTextItalic=0
 OthersTextUpright=1
+DimensionUnits=0
+DimensionPrecision=1
 SolderMaskClearance=0.09999999999999999
 SolderMaskMinWidth=0
 SolderPasteClearance=0
