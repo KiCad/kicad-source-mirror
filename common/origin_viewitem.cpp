@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,6 +24,7 @@
  */
 
 #include <eda_draw_frame.h>
+#include <geometry/geometry_utils.h>
 #include <origin_viewitem.h>
 #include <gal/graphics_abstraction_layer.h>
 
@@ -94,6 +96,40 @@ void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
             gal->DrawLine( m_position - VECTOR2D( 0, scaledSize.y ),
                             m_position + VECTOR2D( 0, scaledSize.y ) );
             break;
+
+        case DASH_LINE:
+        {
+            gal->DrawCircle( m_position, scaledSize.x / 4 );
+
+            VECTOR2D start( m_position );
+            VECTOR2D end( m_end );
+            EDA_RECT clip( wxPoint( start ), wxSize( end.x - start.x, end.y - start.y ) );
+            clip.Normalize();
+
+            double               theta = atan2( end.y - start.y, end.x - start.x );
+            std::array<double,2> strokes( { DASH_MARK_LEN( 1 ), DASH_GAP_LEN( 1 ) } );
+
+            for( size_t i = 0; i < 10000; ++i )
+            {
+                VECTOR2D next( start.x + strokes[ i % 2 ] * cos( theta ),
+                               start.y + strokes[ i % 2 ] * sin( theta ) );
+
+                // Drawing each segment can be done rounded to ints.
+                wxPoint segStart( KiROUND( start.x ), KiROUND( start.y ) );
+                wxPoint segEnd( KiROUND( next.x ), KiROUND( next.y ) );
+
+                if( ClipLine( &clip, segStart.x, segStart.y, segEnd.x, segEnd.y ) )
+                    break;
+                else if( i % 2 == 0 )
+                    gal->DrawLine( segStart, segEnd );
+
+                start = next;
+            }
+
+            gal->DrawLine( m_position, m_end );
+            gal->DrawCircle( m_end, scaledSize.x / 4 );
+            break;
+        }
 
         case X:
         case CIRCLE_X:

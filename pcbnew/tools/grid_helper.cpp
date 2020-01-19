@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -51,6 +51,7 @@ GRID_HELPER::GRID_HELPER( PCB_BASE_FRAME* aFrame ) :
 {
     m_enableSnap = true;
     m_enableGrid = true;
+    m_enableSnapLine = true;
     m_snapSize = 100;
     m_snapItem = nullptr;
     KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
@@ -67,6 +68,12 @@ GRID_HELPER::GRID_HELPER( PCB_BASE_FRAME* aFrame ) :
     m_viewSnapPoint.SetDrawAtZero( true );
     view->Add( &m_viewSnapPoint );
     view->SetVisible( &m_viewSnapPoint, false );
+
+    m_viewSnapLine.SetStyle( KIGFX::ORIGIN_VIEWITEM::DASH_LINE );
+    m_viewSnapLine.SetColor( COLOR4D( 0.33, 0.55, 0.95, 1.0 ) );
+    m_viewSnapLine.SetDrawAtZero( true );
+    view->Add( &m_viewSnapLine );
+    view->SetVisible( &m_viewSnapLine, false );
 }
 
 
@@ -284,6 +291,8 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
         if( !m_enableGrid || snapDist <= gridDist )
         {
             m_viewSnapPoint.SetPosition( nearest->pos );
+            m_viewSnapLine.SetPosition( nearest->pos );
+            m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapLine, false );
 
             if( m_frame->GetCanvas()->GetView()->IsVisible( &m_viewSnapPoint ) )
                 m_frame->GetCanvas()->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY);
@@ -295,8 +304,39 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
         }
     }
 
+    if( m_snapItem && m_enableSnapLine )
+    {
+        bool snapLine = false;
+
+        if( std::abs( m_viewSnapLine.GetPosition().x - aOrigin.x ) < GetGrid().x )
+        {
+            nearestGrid.x = m_viewSnapLine.GetPosition().x;
+            snapLine      = true;
+        }
+
+        if( std::abs( m_viewSnapLine.GetPosition().y - aOrigin.y ) < GetGrid().y )
+        {
+            nearestGrid.y = m_viewSnapLine.GetPosition().y;
+            snapLine      = true;
+        }
+
+        if( snapLine && m_skipPoint != VECTOR2I( m_viewSnapLine.GetPosition() ) )
+        {
+            m_viewSnapLine.SetEndPosition( nearestGrid );
+            m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapPoint, false );
+
+            if( m_frame->GetCanvas()->GetView()->IsVisible( &m_viewSnapLine ) )
+                m_frame->GetCanvas()->GetView()->Update( &m_viewSnapLine, KIGFX::GEOMETRY );
+            else
+                m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapLine, true );
+
+            return nearestGrid;
+        }
+    }
+
     m_snapItem = nullptr;
     m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapPoint, false );
+    m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapLine, false );
     return nearestGrid;
 }
 

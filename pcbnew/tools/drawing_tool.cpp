@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -1050,6 +1050,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
                 aGraphic->SetStart( (wxPoint) cursorPos );
                 aGraphic->SetEnd( (wxPoint) cursorPos );
                 aGraphic->SetLayer( getDrawingLayer() );
+                grid.SetSkipPoint( cursorPos );
 
                 if( !isLocalOriginSet )
                     m_frame->GetScreen()->m_LocalOrigin = cursorPos;
@@ -1463,6 +1464,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         auto cleanup = [&] () {
             polyGeomMgr.Reset();
             started = false;
+            grid.ClearSkipPoint();
             m_controls->SetAutoPan( false );
             m_controls->CaptureCursor( false );
         };

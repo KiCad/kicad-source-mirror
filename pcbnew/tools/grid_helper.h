@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -63,9 +64,27 @@ public:
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
                              const std::vector<BOARD_ITEM*>& aSkip = {} );
 
+    void SetSkipPoint( const VECTOR2I& aPoint )
+    {
+        m_skipPoint = aPoint;
+    }
+
+    /**
+     * We clear the skip point by setting it to an unreachable position, thereby preventing matching
+     */
+    void ClearSkipPoint()
+    {
+        m_skipPoint = VECTOR2I( std::numeric_limits<int>::min(), std::numeric_limits<int>::min() );
+    }
+
     void SetSnap( bool aSnap )
     {
         m_enableSnap = aSnap;
+    }
+
+    void SetSnapLine( bool aSnap )
+    {
+        m_enableSnapLine = aSnap;
     }
 
     void SetUseGrid( bool aGrid = true )
@@ -127,14 +146,17 @@ private:
     }
 
     PCB_BASE_FRAME* m_frame;
-    OPT<VECTOR2I> m_auxAxis;
+    OPT<VECTOR2I>   m_auxAxis;
 
-    bool m_enableSnap;              ///< If true, allow snapping to other items on the layers
-    bool m_enableGrid;              ///< If true, allow snapping to grid
-    int m_snapSize;                 ///< Sets the radius in screen units for snapping to items
-    ANCHOR* m_snapItem;             ///< Pointer to the currently snapped item in m_anchors (NULL if not snapped)
+    bool     m_enableSnap;          ///< If true, allow snapping to other items on the layers
+    bool     m_enableGrid;          ///< If true, allow snapping to grid
+    bool     m_enableSnapLine;      ///< If true, allow drawing lines from snap points
+    int      m_snapSize;            ///< Sets the radius in screen units for snapping to items
+    ANCHOR*  m_snapItem;            ///< Pointer to the currently snapped item in m_anchors (NULL if not snapped)
+    VECTOR2I m_skipPoint;           ///< When drawing a line, we avoid snapping to the source point
 
     KIGFX::ORIGIN_VIEWITEM m_viewSnapPoint;
+    KIGFX::ORIGIN_VIEWITEM m_viewSnapLine;
     KIGFX::ORIGIN_VIEWITEM m_viewAxis;
 };
 

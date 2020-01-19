@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -44,7 +45,10 @@ class ORIGIN_VIEWITEM : public BOARD_ITEM
 {
 public:
     ///> Marker symbol styles
-    enum MARKER_STYLE { NO_GRAPHIC, CROSS, X, DOT, CIRCLE_CROSS, CIRCLE_X, CIRCLE_DOT };
+    enum MARKER_STYLE
+    {
+        NO_GRAPHIC, CROSS, X, DOT, CIRCLE_CROSS, CIRCLE_X, CIRCLE_DOT, DASH_LINE
+    };
 
     ORIGIN_VIEWITEM( const COLOR4D& aColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 ),
                      MARKER_STYLE aStyle = CIRCLE_X, int aSize = 16,
@@ -109,6 +113,21 @@ public:
         return wxPoint( m_position.x, m_position.y );
     }
 
+    inline void SetEndPosition( const VECTOR2D& aPosition )
+    {
+        m_end = aPosition;
+    }
+
+    inline void SetEndPosition( const wxPoint& aPosition )
+    {
+        m_end = VECTOR2D( aPosition );
+    }
+
+    inline const wxPoint GetEndPosition() const
+    {
+        return wxPoint( m_end.x, m_end.y );
+    }
+
     inline void SetSize( int aSize )
     {
         m_size = aSize;
@@ -142,6 +161,9 @@ public:
 protected:
     ///> Marker coordinates.
     VECTOR2D        m_position;
+
+    ///> Marker end position for markers that stretch between points
+    VECTOR2D        m_end;
 
     ///> Marker size (in pixels).
     int             m_size;
