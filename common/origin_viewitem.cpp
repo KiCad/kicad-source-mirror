@@ -23,10 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <array>
 #include <eda_draw_frame.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <geometry/geometry_utils.h>
 #include <origin_viewitem.h>
-#include <gal/graphics_abstraction_layer.h>
 
 using namespace KIGFX;
 
