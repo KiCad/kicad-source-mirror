@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1165,7 +1165,8 @@ void SCH_EDIT_FRAME::FixupJunctions()
 
     for( const SCH_SHEET_PATH& sheet : sheetList )
     {
-        std::vector<wxPoint> junctions;
+        // We require a set here to avoid adding multiple junctions to the same spot
+        std::set<wxPoint> junctions;
 
         SetCurrentSheet( sheet );
         GetCurrentSheet().UpdateAllScreenReferences();
@@ -1182,7 +1183,7 @@ void SCH_EDIT_FRAME::FixupJunctions()
 
                 // Test if a _new_ junction is needed, and add it if missing
                 if( screen->IsJunctionNeeded( pos, true ) )
-                    junctions.push_back( pos );
+                    junctions.insert( pos );
             }
         }
 
