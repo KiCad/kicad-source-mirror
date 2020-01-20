@@ -108,7 +108,7 @@ void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
             clip.Normalize();
 
             double               theta = atan2( end.y - start.y, end.x - start.x );
-            std::array<double,2> strokes( { DASH_MARK_LEN( 1 ), DASH_GAP_LEN( 1 ) } );
+            std::array<double,2> strokes = { DASH_MARK_LEN( 1 ), DASH_GAP_LEN( 1 ) };
 
             for( size_t i = 0; i < 10000; ++i )
             {
