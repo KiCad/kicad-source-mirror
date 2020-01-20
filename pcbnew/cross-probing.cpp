@@ -167,8 +167,12 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( module )
     {
-        m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, (void*) module );
         bbox = module->GetBoundingBox();
+
+        if( pad )
+            m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, (void*) pad );
+        else
+            m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, (void*) module );
     }
     else if( netcode > 0 )
     {
