@@ -25,11 +25,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <config.h>
+
 #include "ngspice.h"
 #include "spice_reporter.h"
-#include <common.h>     // LOCALE_IO
+
+#include <common.h>
+
 #include <wx/stdpaths.h>
 #include <wx/dir.h>
+
 #include <stdexcept>
 
 using namespace std;
