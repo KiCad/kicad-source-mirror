@@ -91,10 +91,11 @@ enum {
 static const std::map<int, supportedFileType>& fileTypes()
 {
     /*
-    * This is wrapped inside a function to prevent a static initialization order fiasco with the file extension
-    * variables. Once C++20 is allowed in KiCad code, those file extensions can be made constexpr and this can
-    * be removed from a function call and placed in the file normally.
-    */
+     * TODO(C++20): Clean this up
+     * This is wrapped inside a function to prevent a static initialization order fiasco with the file extension
+     * variables. Once C++20 is allowed in KiCad code, those file extensions can be made constexpr and this can
+     * be removed from a function call and placed in the file normally.
+     */
     static const std::map<int, supportedFileType> fileTypes =
     {
         { ID_PANEL_FPLIB_ADD_KICADMOD,    { "KiCad (folder with .kicad_mod files)", "",                               KiCadFootprintFileExtension,      false, IO_MGR::KICAD_SEXP } },

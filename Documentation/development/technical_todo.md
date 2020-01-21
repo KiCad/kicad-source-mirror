@@ -29,6 +29,9 @@ the version switch exists and can be tidied.
 
 ## C++14 {#todo_cpp_14}
 
+This C++ standard version is already used by KiCad on the development branch, but much code
+that pre-dates this version can be tidied.
+
 Compiler support:
 
 * GCC: complete by GCC 5: [GCC C++14 support](https://gcc.gnu.org/projects/cxx-status.html#cxx14).
@@ -47,6 +50,12 @@ Provides:
 * [`std::filesystem`](https://en.cppreference.com/w/cpp/filesystem)
   can replace `boost::filesystem` and the Boost dependency can be dropped entirely
   from the CMake files.
+
+
+## C++20 {#todo_cpp_20}
+
+* `constexpr std::string` and `constexpr std::vector` can be used to initialize items:
+    * File extensions in `wildcards_and_files_ext.h`
 
 # Compilers {#compilers}
 
