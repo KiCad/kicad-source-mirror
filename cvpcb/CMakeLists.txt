@@ -8,10 +8,10 @@ add_definitions( -DCVPCB )
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
-    ../3d-viewer
-    ../pcbnew
-    ../pcbnew/dialogs
-    ../common
+    ${CMAKE_SOURCE_DIR}/3d-viewer
+    ${CMAKE_SOURCE_DIR}/pcbnew
+    ${CMAKE_SOURCE_DIR}/pcbnew/dialogs
+    ${CMAKE_SOURCE_DIR}/common
     ${GLM_INCLUDE_DIR}
     ${INC_AFTER}
     )
@@ -27,9 +27,9 @@ set( CVPCB_DIALOGS
     )
 
 set( CVPCB_SRCS
-    ../common/base_units.cpp
-    ../pcbnew/tools/grid_helper.cpp
-    ../pcbnew/board_stackup_manager/stackup_predefined_prms.cpp
+    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/tools/grid_helper.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/board_stackup_manager/stackup_predefined_prms.cpp
     auto_associate.cpp
     cfg.cpp
     components_listbox.cpp

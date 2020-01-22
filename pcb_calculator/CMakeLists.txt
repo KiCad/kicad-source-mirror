@@ -5,7 +5,7 @@ include_directories(
     dialogs
     transline
     attenuators
-    ../common
+    ${CMAKE_SOURCE_DIR}/common
     ${INC_AFTER}
     )
 
@@ -56,11 +56,11 @@ if( APPLE )
 endif()
 
 add_executable( pcb_calculator WIN32 MACOSX_BUNDLE
-    ../common/single_top.cpp
-    ../common/pgm_base.cpp
+    ${CMAKE_SOURCE_DIR}/common/single_top.cpp
+    ${CMAKE_SOURCE_DIR}/common/pgm_base.cpp
     ${PCB_CALCULATOR_RESOURCES}
     )
-set_source_files_properties( ../common/single_top.cpp PROPERTIES
+set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_CALC;BUILD_KIWAY_DLL"
     )
 target_link_libraries( pcb_calculator

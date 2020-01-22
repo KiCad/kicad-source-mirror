@@ -15,8 +15,8 @@ include_directories(
     ${GLEW_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${CURL_INCLUDE_DIRS}
-    ../3d-viewer
-    ../pcbnew
+    ${CMAKE_SOURCE_DIR}/3d-viewer
+    ${CMAKE_SOURCE_DIR}/pcbnew
     ${INC_AFTER}
     ${OCE_INCLUDE_DIRS}
     ${OCC_INCLUDE_DIR}
@@ -416,59 +416,59 @@ set( PCB_COMMON_SRCS
     lset.cpp
     origin_viewitem.cpp
     page_info.cpp
-    ../pcbnew/pcb_base_frame.cpp
-    ../pcbnew/board_commit.cpp
-    ../pcbnew/board_connected_item.cpp
-    ../pcbnew/board_design_settings.cpp
-    ../pcbnew/board_items_to_polygon_shape_transform.cpp
-    ../pcbnew/class_board.cpp
-    ../pcbnew/class_board_item.cpp
-    ../pcbnew/class_dimension.cpp
-    ../pcbnew/class_drawsegment.cpp
-    ../pcbnew/class_edge_mod.cpp
-    ../pcbnew/class_marker_pcb.cpp
-    ../pcbnew/class_module.cpp
-    ../pcbnew/netclass.cpp
-    ../pcbnew/netinfo_item.cpp
-    ../pcbnew/netinfo_list.cpp
-    ../pcbnew/class_pad.cpp
-    ../pcbnew/class_pcb_target.cpp
-    ../pcbnew/class_pcb_text.cpp
-    ../pcbnew/board_stackup_manager/class_board_stackup.cpp
-    ../pcbnew/class_text_mod.cpp
-    ../pcbnew/class_track.cpp
-    ../pcbnew/class_zone.cpp
-    ../pcbnew/collectors.cpp
-    ../pcbnew/connectivity/connectivity_algo.cpp
-    ../pcbnew/connectivity/connectivity_items.cpp
-    ../pcbnew/connectivity/connectivity_data.cpp
-    ../pcbnew/convert_drawsegment_list_to_polygon.cpp
-    ../pcbnew/drc_item.cpp
-    ../pcbnew/eagle_plugin.cpp
-    ../pcbnew/gpcb_plugin.cpp
-    ../pcbnew/io_mgr.cpp
-    ../pcbnew/kicad_clipboard.cpp
-    ../pcbnew/netlist_reader/kicad_netlist_reader.cpp
-    ../pcbnew/kicad_plugin.cpp
-    ../pcbnew/netlist_reader/legacy_netlist_reader.cpp
-    ../pcbnew/legacy_plugin.cpp
-    ../pcbnew//netlist_reader/netlist_reader.cpp
-    ../pcbnew/pad_custom_shape_functions.cpp
-    ../pcbnew/pad_print_functions.cpp
-    ../pcbnew/pcb_display_options.cpp
-    ../pcbnew/pcb_draw_panel_gal.cpp
-    ../pcbnew/pcb_general_settings.cpp
-    ../pcbnew/netlist_reader/pcb_netlist.cpp
-    ../pcbnew/pcb_painter.cpp
-    ../pcbnew/pcb_parser.cpp
-    ../pcbnew/pcb_plot_params.cpp
-    ../pcbnew/pcb_screen.cpp
-    ../pcbnew/pcb_view.cpp
-    ../pcbnew/plugin.cpp
-    ../pcbnew/ratsnest_data.cpp
-    ../pcbnew/ratsnest_viewitem.cpp
-    ../pcbnew/sel_layer.cpp
-    ../pcbnew/zone_settings.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_base_frame.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/board_commit.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/board_connected_item.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/board_design_settings.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/board_items_to_polygon_shape_transform.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_board.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_board_item.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_dimension.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_drawsegment.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_edge_mod.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_marker_pcb.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_module.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/netclass.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/netinfo_item.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/netinfo_list.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_pad.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_pcb_target.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_pcb_text.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/board_stackup_manager/class_board_stackup.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_text_mod.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_track.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/class_zone.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/collectors.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/connectivity/connectivity_algo.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/connectivity/connectivity_items.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/connectivity/connectivity_data.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/convert_drawsegment_list_to_polygon.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/drc_item.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/eagle_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/gpcb_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/io_mgr.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/kicad_clipboard.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/kicad_netlist_reader.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/kicad_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/legacy_netlist_reader.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/legacy_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew//netlist_reader/netlist_reader.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pad_custom_shape_functions.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pad_print_functions.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_display_options.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_draw_panel_gal.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_general_settings.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/pcb_netlist.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_painter.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_parser.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_plot_params.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_screen.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_view.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest_data.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest_viewitem.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/sel_layer.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/zone_settings.cpp
     widgets/net_selector.cpp
 )
 
@@ -567,13 +567,13 @@ if( false ) # future
 
     include_directories( BEFORE ${INC_BEFORE} )
     include_directories(
-        ../common
+        ${CMAKE_SOURCE_DIR}/common
         ${INC_AFTER}
         )
 
     set( SWIG_MODULE_kiway_EXTRA_DEPS
-        ../common/swig/ki_exception.i
-        ../common/swig/kicad.i
+        ${CMAKE_SOURCE_DIR}/common/swig/ki_exception.i
+        ${CMAKE_SOURCE_DIR}/common/swig/kicad.i
         )
 
     swig_add_module( kiway python

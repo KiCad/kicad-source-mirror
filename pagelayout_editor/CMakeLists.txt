@@ -8,7 +8,7 @@ add_definitions(-DPL_EDITOR)
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
     dialogs
-    ../common/dialogs
+    ${CMAKE_SOURCE_DIR}/common/dialogs
     ${INC_AFTER}
     )
 
@@ -39,12 +39,12 @@ set( PL_EDITOR_SRCS
     )
 
 set( PL_EDITOR_EXTRA_SRCS
-    ../common/base_screen.cpp
-    ../common/base_units.cpp
-    ../common/eda_text.cpp
-    ../common/dialogs/dialog_page_settings.cpp
-    ../common/dialogs/panel_display_options.cpp
-    ../common/page_info.cpp
+    ${CMAKE_SOURCE_DIR}/common/base_screen.cpp
+    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
+    ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
+    ${CMAKE_SOURCE_DIR}/common/dialogs/dialog_page_settings.cpp
+    ${CMAKE_SOURCE_DIR}/common/dialogs/panel_display_options.cpp
+    ${CMAKE_SOURCE_DIR}/common/page_info.cpp
 )
 
 
@@ -72,11 +72,11 @@ endif()
 
 # a very small program launcher for pl_editor_kiface
 add_executable( pl_editor WIN32 MACOSX_BUNDLE
-    ../common/single_top.cpp
-    ../common/pgm_base.cpp
+    ${CMAKE_SOURCE_DIR}/common/single_top.cpp
+    ${CMAKE_SOURCE_DIR}/common/pgm_base.cpp
     ${PL_EDITOR_RESOURCES}
     )
-set_source_files_properties( ../common/single_top.cpp PROPERTIES
+set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PL_EDITOR;PGM_DATA_FILE_EXT=\"kicad_wks\";BUILD_KIWAY_DLL"
     )
 target_link_libraries( pl_editor

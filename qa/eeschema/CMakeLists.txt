@@ -29,8 +29,8 @@ add_executable( qa_eeschema
     # ../../common/single_top.cpp
 
     # stuff from common which is needed...why?
-    ../../common/colors.cpp
-    ../../common/observable.cpp
+    ${CMAKE_SOURCE_DIR}/common/colors.cpp
+    ${CMAKE_SOURCE_DIR}/common/observable.cpp
 
     # need the mock Pgm for many functions
     mocks_eeschema.cpp

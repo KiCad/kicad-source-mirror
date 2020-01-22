@@ -27,8 +27,8 @@ add_executable( qa_common_tools
     # ../../common/eda_text.cpp
 
     # stuff from common which is needed...why?
-    ../../common/colors.cpp
-    ../../common/observable.cpp
+    ${CMAKE_SOURCE_DIR}/common/colors.cpp
+    ${CMAKE_SOURCE_DIR}/common/observable.cpp
 
     # The main entry point
     main.cpp

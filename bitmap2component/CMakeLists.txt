@@ -9,14 +9,15 @@ include_directories( BEFORE ${INC_BEFORE} )
 include_directories( ${INC_AFTER} )
 
 set( BITMAP2COMPONENT_SRCS
-    ../common/single_top.cpp
+    ${CMAKE_SOURCE_DIR}/common/single_top.cpp
+
     bitmap2cmp_main.cpp
     bitmap2component.cpp
     bitmap2cmp_gui_base.cpp
     bitmap2cmp_gui.cpp
     )
 
-set_source_files_properties( ../common/single_top.cpp PROPERTIES
+set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS     "TOP_FRAME=FRAME_BM2CMP"
     )
 set_source_files_properties( bitmap2cmp_gui.cpp PROPERTIES

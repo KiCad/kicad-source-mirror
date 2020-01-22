@@ -29,12 +29,12 @@ set( common_srcs
     test_module.cpp
 
     # stuff from common due to...units?
-    ../../common/eda_text.cpp
-    ../../common/base_units.cpp
+    ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
+    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
 
     # stuff from common which is needed...why?
-    ../../common/colors.cpp
-    ../../common/observable.cpp
+    ${CMAKE_SOURCE_DIR}/common/colors.cpp
+    ${CMAKE_SOURCE_DIR}/common/observable.cpp
 
     wximage_test_utils.cpp
 

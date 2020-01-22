@@ -26,9 +26,9 @@ include_directories(
     ./libedit
     ./libview
     ./tools
-    ../common
-    ../common/dialogs
-    ../libs/sexpr/include
+    ${CMAKE_SOURCE_DIR}/common
+    ${CMAKE_SOURCE_DIR}/common/dialogs
+    ${CMAKE_SOURCE_DIR}/libs/sexpr/include
     ${INC_AFTER}
     )
 
@@ -238,12 +238,12 @@ set( EESCHEMA_SRCS
 
 
 set( EESCHEMA_COMMON_SRCS
-    ../common/dialogs/dialog_page_settings.cpp
-    ../common/dialogs/panel_display_options.cpp
-    ../common/base_screen.cpp
-    ../common/base_units.cpp
-    ../common/eda_text.cpp
-    ../common/page_info.cpp
+    ${CMAKE_SOURCE_DIR}/common/dialogs/dialog_page_settings.cpp
+    ${CMAKE_SOURCE_DIR}/common/dialogs/panel_display_options.cpp
+    ${CMAKE_SOURCE_DIR}/common/base_screen.cpp
+    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
+    ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
+    ${CMAKE_SOURCE_DIR}/common/page_info.cpp
     )
 
 
@@ -310,11 +310,11 @@ endif()
 
 
 add_executable( eeschema WIN32 MACOSX_BUNDLE
-    ../common/single_top.cpp
-    ../common/pgm_base.cpp
+    ${CMAKE_SOURCE_DIR}/common/single_top.cpp
+    ${CMAKE_SOURCE_DIR}/common/pgm_base.cpp
     ${EESCHEMA_RESOURCES}
     )
-set_source_files_properties( ../common/single_top.cpp PROPERTIES
+set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_SCH;PGM_DATA_FILE_EXT=\"sch\";BUILD_KIWAY_DLL"
     )
 target_link_libraries( eeschema

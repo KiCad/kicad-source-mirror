@@ -7,8 +7,8 @@ add_definitions( -DKICAD )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
-    ../pcbnew
-    ../eeschema
+    ${CMAKE_SOURCE_DIR}/pcbnew
+    ${CMAKE_SOURCE_DIR}/eeschema
     ${INC_AFTER}
     )
 

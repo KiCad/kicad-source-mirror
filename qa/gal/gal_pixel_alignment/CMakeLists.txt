@@ -35,16 +35,18 @@ add_dependencies( pnsrouter pcbcommon pcad2kicadpcb ${GITHUB_PLUGIN_LIBRARIES} )
 
 add_executable(test_gal_pixel_alignment WIN32
   test_gal_pixel_alignment.cpp
-  ../../qa_utils/pcb_test_frame.cpp
-  ../../qa_utils/mocks.cpp
-  ../../../common/base_units.cpp
-  ../../../pcbnew/board_stackup_manager/stackup_predefined_prms.cpp
-  ../../../pcbnew/tools/pcb_tool_base.cpp
-  ../../../pcbnew/tools/pcb_actions.cpp
-  ../../../pcbnew/tools/pcbnew_selection.cpp
-  ../../../pcbnew/tools/selection_tool.cpp
-  ../../../pcbnew/tools/tool_event_utils.cpp
-  #../../pcbnew/tools/outline_editor.cpp
+
+  ${CMAKE_SOURCE_DIR}/qa/qa_utils/pcb_test_frame.cpp
+  ${CMAKE_SOURCE_DIR}/qa/qa_utils/mocks.cpp
+
+  ${CMAKE_SOURCE_DIR}/common/base_units.cpp
+
+  ${CMAKE_SOURCE_DIR}/pcbnew/board_stackup_manager/stackup_predefined_prms.cpp
+  ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_tool_base.cpp
+  ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_actions.cpp
+  ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcbnew_selection.cpp
+  ${CMAKE_SOURCE_DIR}/pcbnew/tools/selection_tool.cpp
+  ${CMAKE_SOURCE_DIR}/pcbnew/tools/tool_event_utils.cpp
 )
 
 include_directories( BEFORE ${INC_BEFORE} )

@@ -28,11 +28,11 @@ add_executable( qa_pcbnew
     # ../../common/single_top.cpp
 
     # stuff from common due to...units?
-    ../../common/eda_text.cpp
+    ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
 
     # stuff from common which is needed...why?
-    ../../common/colors.cpp
-    ../../common/observable.cpp
+    ${CMAKE_SOURCE_DIR}/common/colors.cpp
+    ${CMAKE_SOURCE_DIR}/common/observable.cpp
 
     # The main test entry points
     test_module.cpp

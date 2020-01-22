@@ -15,10 +15,10 @@ add_executable( test-nm-biu-to-ascii-mm-round-tripping
 add_executable( property_tree
     EXCLUDE_FROM_ALL
     property_tree.cpp
-    ../common/richio.cpp
-    ../common/exceptions.cpp
-    ../common/dsnlexer.cpp
-    ../common/ptree.cpp
+    ${CMAKE_SOURCE_DIR}/common/richio.cpp
+    ${CMAKE_SOURCE_DIR}/common/exceptions.cpp
+    ${CMAKE_SOURCE_DIR}/common/dsnlexer.cpp
+    ${CMAKE_SOURCE_DIR}/common/ptree.cpp
     )
 target_link_libraries( property_tree
     ${wxWidgets_LIBRARIES}

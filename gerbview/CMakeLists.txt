@@ -7,10 +7,10 @@ add_definitions(-DGERBVIEW)
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
-    ../pcbnew
+    ${CMAKE_SOURCE_DIR}/pcbnew
     dialogs
-    ../common
-    ../3d-viewer
+    ${CMAKE_SOURCE_DIR}/common
+    ${CMAKE_SOURCE_DIR}/3d-viewer
     ${INC_AFTER}
     )
 
@@ -67,14 +67,14 @@ set( GERBVIEW_SRCS
     )
 
 set( GERBVIEW_EXTRA_SRCS
-    ../common/base_screen.cpp
-    ../common/base_units.cpp
-    ../common/eda_text.cpp
-    ../common/widgets/layer_box_selector.cpp
-    ../common/lset.cpp
-    ../common/settings.cpp
-    ../pcbnew/layer_widget.cpp
-    ../common/page_info.cpp
+    ${CMAKE_SOURCE_DIR}/common/base_screen.cpp
+    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
+    ${CMAKE_SOURCE_DIR}/common/eda_text.cpp
+    ${CMAKE_SOURCE_DIR}/common/widgets/layer_box_selector.cpp
+    ${CMAKE_SOURCE_DIR}/common/lset.cpp
+    ${CMAKE_SOURCE_DIR}/common/settings.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/layer_widget.cpp
+    ${CMAKE_SOURCE_DIR}/common/page_info.cpp
 )
 
 if( MINGW )
@@ -99,11 +99,11 @@ if( APPLE )
 endif()
 
 add_executable( gerbview WIN32 MACOSX_BUNDLE
-    ../common/single_top.cpp
-    ../common/pgm_base.cpp
+    ${CMAKE_SOURCE_DIR}/common/single_top.cpp
+    ${CMAKE_SOURCE_DIR}/common/pgm_base.cpp
     ${GERBVIEW_RESOURCES}
     )
-set_source_files_properties( ../common/single_top.cpp PROPERTIES
+set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_GERBER;BUILD_KIWAY_DLL"
     )
 target_link_libraries( gerbview

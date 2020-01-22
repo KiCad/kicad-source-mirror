@@ -8,8 +8,8 @@ include_directories( BEFORE
 )
 
 include_directories(
-    ../../include
-    ../../common
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/common
     ${INC_AFTER}
 )
 

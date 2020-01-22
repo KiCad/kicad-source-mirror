@@ -22,7 +22,7 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 
     # Infrequently needed headers go at end of search paths, append to INC_AFTER
     set( INC_AFTER ${INC_AFTER} swig )
-    set( INC_AFTER ${INC_AFTER} ../common/swig )
+    set( INC_AFTER ${INC_AFTER} ${CMAKE_SOURCE_DIR}/common/swig )
 
     #message( STATUS "pcbnew INC_AFTER:${INC_AFTER}" )
 endif()
@@ -39,11 +39,11 @@ include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
     ./autorouter
-    ../3d-viewer
-    ../common
-    ../common/dialogs
+    ${CMAKE_SOURCE_DIR}/3d-viewer
+    ${CMAKE_SOURCE_DIR}/common
+    ${CMAKE_SOURCE_DIR}/common/dialogs
     ./exporters
-    ../utils/idftools
+    ${CMAKE_SOURCE_DIR}/utils/idftools
     ${GLM_INCLUDE_DIR}
     ./specctra_import_export
     ${INC_AFTER}
@@ -341,9 +341,9 @@ set( PCBNEW_SRCS
 
 # extra sources from common
 set( PCBNEW_COMMON_SRCS
-    ../common/dialogs/dialog_page_settings.cpp
-    ../common/base_units.cpp
-    ../common/hotkeys_basic.cpp
+    ${CMAKE_SOURCE_DIR}/common/dialogs/dialog_page_settings.cpp
+    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
+    ${CMAKE_SOURCE_DIR}/common/hotkeys_basic.cpp
     )
 
 set( PCBNEW_SCRIPTING_DIALOGS
@@ -352,7 +352,7 @@ set( PCBNEW_SCRIPTING_DIALOGS
     )
 
 set( PCBNEW_SCRIPTING_PYTHON_HELPERS
-    ../common/swig/wx_python_helpers.cpp
+    ${CMAKE_SOURCE_DIR}/common/swig/wx_python_helpers.cpp
     swig/pcbnew_action_plugins.cpp
     swig/pcbnew_footprint_wizards.cpp
     swig/pcbnew_scripting_helpers.cpp
@@ -396,10 +396,10 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 
     set( SWIG_FLAGS
         -I${CMAKE_CURRENT_SOURCE_DIR}
-        -I${CMAKE_CURRENT_SOURCE_DIR}/../include
-        -I${CMAKE_CURRENT_SOURCE_DIR}/../scripting
-        -I${CMAKE_CURRENT_SOURCE_DIR}/../common/swig
-        -I${CMAKE_CURRENT_SOURCE_DIR}/../libs/kimath/include
+        -I${CMAKE_SOURCE_DIR}/include
+        -I${CMAKE_SOURCE_DIR}/scripting
+        -I${CMAKE_SOURCE_DIR}/common/swig
+        -I${CMAKE_SOURCE_DIR}/libs/kimath/include
         -I${WXPYTHON_SWIG_DIR}
         )
 
@@ -460,10 +460,10 @@ if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
         DEPENDS swig/zone.i
         DEPENDS swig/zone_settings.i
 
-        DEPENDS ../common/swig/kicad.i
-        DEPENDS ../common/swig/wx.i
-        DEPENDS ../common/swig/ki_exception.i
-        DEPENDS ../scripting/kicadplugins.i
+        DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/kicad.i
+        DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/wx.i
+        DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/ki_exception.i
+        DEPENDS ${CMAKE_SOURCE_DIR}/scripting/kicadplugins.i
 
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docstrings
 
@@ -579,10 +579,10 @@ endif()
 
 # a very small program launcher for pcbnew_kiface
 add_executable( pcbnew WIN32 MACOSX_BUNDLE
-    ../common/single_top.cpp
+    ${CMAKE_SOURCE_DIR}/common/single_top.cpp
     ${PCBNEW_RESOURCES}
     )
-set_source_files_properties( ../common/single_top.cpp pcbnew.cpp PROPERTIES
+set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp pcbnew.cpp PROPERTIES
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PCB_EDITOR;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
     )
 target_link_libraries( pcbnew
