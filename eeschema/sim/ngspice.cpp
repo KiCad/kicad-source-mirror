@@ -25,7 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <config.h>
+#include <config.h>     // Needed for MSW compilation
 
 #include "ngspice.h"
 #include "spice_reporter.h"

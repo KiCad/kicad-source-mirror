@@ -50,9 +50,16 @@ Provides:
 * [`std::filesystem`](https://en.cppreference.com/w/cpp/filesystem)
   can replace `boost::filesystem` and the Boost dependency can be dropped entirely
   from the CMake files.
+* `[[fallthrough]]` attribute can be used to indicate switch statements intentionally fallthrough.
+  Then Clang -Wimplicit-fallthrough warnings can be enabled.
 
 
 ## C++20 {#todo_cpp_20}
+
+Compiler support:
+* TBD (Yet to be released)
+
+Provides:
 
 * `constexpr std::string` and `constexpr std::vector` can be used to initialize items:
     * File extensions in `wildcards_and_files_ext.h`
