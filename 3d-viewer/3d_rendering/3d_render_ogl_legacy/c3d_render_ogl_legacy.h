@@ -200,8 +200,10 @@ private:
     struct
     {
         SMATERIAL m_Paste;
-        SMATERIAL m_SilkS;
-        SMATERIAL m_SolderMask;
+        SMATERIAL m_SilkSBot;
+        SMATERIAL m_SilkSTop;
+        SMATERIAL m_SolderMaskBot;
+        SMATERIAL m_SolderMaskTop;
         SMATERIAL m_EpoxyBoard;
         SMATERIAL m_Copper;
         SMATERIAL m_Plastic;

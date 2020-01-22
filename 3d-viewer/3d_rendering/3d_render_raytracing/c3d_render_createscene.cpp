@@ -100,34 +100,54 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                 0.0f,                                   // transparency
                 0.0f );
 
-    m_materials.m_SilkS = CBLINN_PHONG_MATERIAL(
-                ConvertSRGBToLinear( SFVEC3F( 0.11f ) ),// ambient
-                SFVEC3F( 0.0f, 0.0f, 0.0f ),            // emissive
-                glm::clamp( ((SFVEC3F)(1.0f) -
-                            ConvertSRGBToLinear( (SFVEC3F)m_settings.m_SilkScreenColor) ),
-                            SFVEC3F( 0.0f ),
-                            SFVEC3F( 0.10f ) ),         // specular
-                0.078125f * 128.0f,                     // shiness
-                0.0f,                                   // transparency
-                0.0f );
+    m_materials.m_SilkS = CBLINN_PHONG_MATERIAL( ConvertSRGBToLinear( SFVEC3F( 0.11f ) ), // ambient
+            SFVEC3F( 0.0f, 0.0f, 0.0f ), // emissive
+            glm::clamp(
+                    ( ( SFVEC3F )( 1.0f )
+                            - ConvertSRGBToLinear( (SFVEC3F) m_settings.m_SilkScreenColorTop ) ),
+                    SFVEC3F( 0.0f ),
+                    SFVEC3F( 0.10f ) ), // specular
+            0.078125f * 128.0f,         // shiness
+            0.0f,                       // transparency
+            0.0f );
 
-    const float solderMask_gray = ( m_settings.m_SolderMaskColor.r +
-                                    m_settings.m_SolderMaskColor.g +
-                                    m_settings.m_SolderMaskColor.b ) / 3.0f;
+    const float solderMaskTop_gray =
+            ( m_settings.m_SolderMaskColorTop.r + m_settings.m_SolderMaskColorTop.g
+                    + m_settings.m_SolderMaskColorTop.b )
+            / 3.0f;
 
-    const float solderMask_transparency = solderMask_gray * 0.40f + 0.005f;
+    const float solderMaskTop_transparency = solderMaskTop_gray * 0.40f + 0.005f;
 
     m_materials.m_SolderMask = CBLINN_PHONG_MATERIAL(
-                ConvertSRGBToLinear( (SFVEC3F)m_settings.m_SolderMaskColor ) *
-                0.10f,                                  // ambient
-                SFVEC3F( 0.0f, 0.0f, 0.0f ),            // emissive
-                glm::clamp( ( (SFVEC3F)( 1.0f ) -
-                            ConvertSRGBToLinear( (SFVEC3F)m_settings.m_SolderMaskColor ) ),
-                            SFVEC3F( 0.0f ),
-                            SFVEC3F( solderMask_gray * 2.0f ) ),         // specular
-                0.85f * 128.0f,                         // shiness
-                solderMask_transparency,                // transparency
-                0.16f );                                // reflection
+            ConvertSRGBToLinear( (SFVEC3F) m_settings.m_SolderMaskColorTop ) * 0.10f, // ambient
+            SFVEC3F( 0.0f, 0.0f, 0.0f ),                                              // emissive
+            glm::clamp(
+                    ( ( SFVEC3F )( 1.0f )
+                            - ConvertSRGBToLinear( (SFVEC3F) m_settings.m_SolderMaskColorTop ) ),
+                    SFVEC3F( 0.0f ),
+                    SFVEC3F( solderMaskTop_gray * 2.0f ) ), // specular
+            0.85f * 128.0f,                                 // shiness
+            solderMaskTop_transparency,                     // transparency
+            0.16f );                                        // reflection
+
+    const float solderMaskBot_gray =
+            ( m_settings.m_SolderMaskColorBot.r + m_settings.m_SolderMaskColorBot.g
+                    + m_settings.m_SolderMaskColorBot.b )
+            / 3.0f;
+
+    const float solderMaskBot_transparency = solderMaskBot_gray * 0.40f + 0.005f;
+
+    m_materials.m_SolderMask = CBLINN_PHONG_MATERIAL(
+            ConvertSRGBToLinear( (SFVEC3F) m_settings.m_SolderMaskColorBot ) * 0.10f, // ambient
+            SFVEC3F( 0.0f, 0.0f, 0.0f ),                                              // emissive
+            glm::clamp(
+                    ( ( SFVEC3F )( 1.0f )
+                            - ConvertSRGBToLinear( (SFVEC3F) m_settings.m_SolderMaskColorBot ) ),
+                    SFVEC3F( 0.0f ),
+                    SFVEC3F( solderMaskBot_gray * 2.0f ) ), // specular
+            0.85f * 128.0f,                                 // shiness
+            solderMaskBot_transparency,                     // transparency
+            0.16f );
 
     m_materials.m_SolderMask.SetCastShadows( true );
     m_materials.m_SolderMask.SetNrRefractionsSamples( 1 );
@@ -463,11 +483,18 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
             break;
 
             case B_SilkS:
+                materialLayer = &m_materials.m_SilkS;
+
+                if( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) )
+                    layerColor = m_settings.m_SilkScreenColorBot;
+                else
+                    layerColor = m_settings.GetLayerColor( layer_id );
+                break;
             case F_SilkS:
                 materialLayer = &m_materials.m_SilkS;
 
                 if( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) )
-                    layerColor = m_settings.m_SilkScreenColor;
+                    layerColor = m_settings.m_SilkScreenColorTop;
                 else
                     layerColor = m_settings.GetLayerColor( layer_id );
             break;
@@ -650,7 +677,11 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
             SFVEC3F layerColor;
             if( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) )
-                layerColor = m_settings.m_SolderMaskColor;
+
+                if( layer_id == B_Mask )
+                    layerColor = m_settings.m_SolderMaskColorBot;
+                else
+                    layerColor = m_settings.m_SolderMaskColorTop;
             else
                 layerColor = m_settings.GetLayerColor( layer_id );
 

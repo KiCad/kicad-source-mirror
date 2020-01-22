@@ -29,6 +29,7 @@ set( CVPCB_DIALOGS
 set( CVPCB_SRCS
     ../common/base_units.cpp
     ../pcbnew/tools/grid_helper.cpp
+    ../pcbnew/board_stackup_manager/stackup_predefined_prms.cpp
     auto_associate.cpp
     cfg.cpp
     components_listbox.cpp
