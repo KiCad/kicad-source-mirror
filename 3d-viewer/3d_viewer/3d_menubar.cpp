@@ -308,8 +308,12 @@ void EDA_3D_VIEWER::CreateMenuBar()
     colorSubmenu->AddItem( ID_MENU3D_PCB_BODY_COLOR, _( "Board Body Color..." ), "",
                            setcolor_board_body_xpm,            SELECTION_CONDITIONS::ShowAlways );
 
-    colorSubmenu->AddItem( ID_MENU3D_STACKUP_COLORS, _( "Get colors from physical stackup" ), "",
-            nullptr, SELECTION_CONDITIONS::ShowAlways );
+    // Only allow the stackup to be used in the PCB editor, since it isn't editable in the other frames
+    if( Parent()->IsType( FRAME_PCB_EDITOR ) )
+    {
+        colorSubmenu->AddItem( ID_MENU3D_STACKUP_COLORS, _( "Get colors from physical stackup" ), "",
+                nullptr, SELECTION_CONDITIONS::ShowAlways );
+    }
 
     prefsMenu->AddMenu( colorSubmenu );
 

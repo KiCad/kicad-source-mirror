@@ -677,11 +677,12 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
             SFVEC3F layerColor;
             if( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) )
-
+            {
                 if( layer_id == B_Mask )
                     layerColor = m_settings.m_SolderMaskColorBot;
                 else
                     layerColor = m_settings.m_SolderMaskColorTop;
+            }
             else
                 layerColor = m_settings.GetLayerColor( layer_id );
 
