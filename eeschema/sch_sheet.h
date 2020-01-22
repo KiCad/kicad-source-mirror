@@ -39,8 +39,8 @@ class SCH_EDIT_FRAME;
 class NETLIST_OBJECT_LIST;
 
 
-#define MIN_SHEET_WIDTH  500
-#define MIN_SHEET_HEIGHT 150
+#define MIN_SHEET_WIDTH  500    // Units are mils.
+#define MIN_SHEET_HEIGHT 150    // Units are mils.
 
 
 /**

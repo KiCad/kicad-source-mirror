@@ -50,7 +50,7 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
 {
     m_Layer = LAYER_SHEET;
     m_pos = pos;
-    m_size = wxSize( MIN_SHEET_WIDTH, MIN_SHEET_HEIGHT );
+    m_size = wxSize( Mils2iu( MIN_SHEET_WIDTH ), Mils2iu( MIN_SHEET_HEIGHT ) );
     SetTimeStamp( GetNewTimeStamp() );
     m_sheetNameSize = GetDefaultTextSize();
     m_fileNameSize = GetDefaultTextSize();
@@ -264,7 +264,7 @@ bool SCH_SHEET::HasUndefinedPins()
 
 int SCH_SHEET::GetMinWidth() const
 {
-    int width = MIN_SHEET_WIDTH;
+    int width = Mils2iu( MIN_SHEET_WIDTH );
 
     for( size_t i = 0; i < m_pins.size();  i++ )
     {
@@ -304,7 +304,7 @@ int SCH_SHEET::GetMinWidth() const
 
 int SCH_SHEET::GetMinHeight() const
 {
-    int height = MIN_SHEET_HEIGHT;
+    int height = Mils2iu( MIN_SHEET_HEIGHT );
 
     for( size_t i = 0; i < m_pins.size();  i++ )
     {

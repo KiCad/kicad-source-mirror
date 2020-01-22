@@ -1,4 +1,4 @@
-update=01/01/2020 17:37:30
+update=Tue 21 Jan 2020 12:19:00 PM EST
 version=1
 last_client=kicad
 [cvpcb]
@@ -254,3 +254,19 @@ uViaDrill=0.2032
 dPairWidth=0.4
 dPairGap=0.35
 dPairViaGap=0.25
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=Pcbnew
+SpiceAjustPassiveValues=0
+LabSize=50
+ERC_WriteFile=0
+ERC_TestSimilarLabels=1
+ERC_CheckUniqueGlobalLabels=1
+ERC_CheckBusDriverConflicts=1
+ERC_CheckBusEntryConflicts=1
+ERC_CheckBusToBusConflicts=1
+ERC_CheckBusToNetConflicts=1
