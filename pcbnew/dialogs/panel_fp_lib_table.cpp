@@ -121,7 +121,7 @@ public:
     }
 
 
-    virtual wxDirTraverseResult OnFile( const wxString& aFileName )
+    virtual wxDirTraverseResult OnFile( const wxString& aFileName ) override
     {
         wxFileName file( aFileName );
         if( m_searchExtension.IsSameAs( file.GetExt(), false ) )
@@ -133,7 +133,7 @@ public:
     }
 
 
-    virtual wxDirTraverseResult OnOpenError( const wxString& aOpenErrorName )
+    virtual wxDirTraverseResult OnOpenError( const wxString& aOpenErrorName ) override
     {
         m_failedDirs.insert( { aOpenErrorName, 1 } );
         return wxDIR_IGNORE;
@@ -146,7 +146,7 @@ public:
     }
 
 
-    virtual wxDirTraverseResult OnDir( const wxString& aDirName )
+    virtual wxDirTraverseResult OnDir( const wxString& aDirName ) override
     {
         m_currentDir = aDirName;
         return wxDIR_CONTINUE;
