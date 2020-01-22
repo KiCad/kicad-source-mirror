@@ -158,7 +158,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
 
     for( auto item : aScreen->Items().OfType( SCH_LINE_T ) )
     {
-        if( item->GetLayer() == LAYER_WIRE )
+        if( item->GetLayer() == LAYER_WIRE || item->GetLayer() == LAYER_BUS )
             lines.push_back( static_cast<SCH_LINE*>( item ) );
     }
 
@@ -221,7 +221,8 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
             if( !secondLine->IsParallel( firstLine )
                     || secondLine->GetLineStyle() != firstLine->GetLineStyle()
                     || secondLine->GetLineColor() != firstLine->GetLineColor()
-                    || secondLine->GetLineSize() != firstLine->GetLineSize() )
+                    || secondLine->GetLineSize() != firstLine->GetLineSize()
+                    || secondLine->GetLayer() != firstLine->GetLayer() )
                 continue;
 
             // Remove identical lines
