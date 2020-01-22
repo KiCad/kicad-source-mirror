@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2017-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Russell Oliver <roliver8143@gmail.com>
@@ -582,7 +584,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
         while( sheetNode )
         {
-            wxPoint                    pos = wxPoint( x * 1000, y * 1000 );
+            wxPoint                    pos = wxPoint( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
             std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET( pos ) );
             SCH_SCREEN*                screen = new SCH_SCREEN( m_kiway );
 
