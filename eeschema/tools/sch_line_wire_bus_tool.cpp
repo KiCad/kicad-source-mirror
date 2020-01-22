@@ -123,9 +123,10 @@ private:
             selection = selTool->RequestSelection( busType );
             bus = (SCH_LINE*) selection.Front();
         }
+
         if( !bus )
         {
-            Append( ID_POPUP_SCH_UNFOLD_BUS, _( "no bus selected" ), wxEmptyString );
+            Append( ID_POPUP_SCH_UNFOLD_BUS, _( "No bus selected" ), wxEmptyString );
             Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
             return;
         }
@@ -134,7 +135,7 @@ private:
 
         if( !connection ||  !connection->IsBus() || connection->Members().empty() )
         {
-            Append( ID_POPUP_SCH_UNFOLD_BUS, _( "bus has no connections" ), wxEmptyString );
+            Append( ID_POPUP_SCH_UNFOLD_BUS, _( "Bus has no connections" ), wxEmptyString );
             Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
             return;
         }
@@ -150,17 +151,18 @@ private:
         for( const auto& member : connection->Members() )
         {
             int id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
-            wxString name = member->LocalName();
+            wxString name = UnescapeString( member->LocalName() );
 
             if( member->Type() == CONNECTION_TYPE::BUS )
             {
                 ACTION_MENU* submenu = new ACTION_MENU( true );
+                submenu->SetTool( m_tool );
                 AppendSubMenu( submenu, name );
 
                 for( const auto& sub_member : member->Members() )
                 {
                     id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
-                    submenu->Append( id, sub_member->LocalName(), wxEmptyString );
+                    submenu->Append( id, UnescapeString( sub_member->LocalName() ), wxEmptyString );
                 }
             }
             else
@@ -335,6 +337,14 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
                 break;
             }
+            else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
+            {
+                break;
+            }
+            else
+            {
+                evt->SetPassEvent();
+            }
         }
     }
 
@@ -365,7 +375,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
 
     m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->m_End(), aNet );
     m_busUnfold.label->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
-    m_busUnfold.label->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+    m_busUnfold.label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
     m_busUnfold.label->SetParent( m_frame->GetScreen() );
     m_busUnfold.label->SetFlags( IS_NEW | IS_MOVED );
 
@@ -640,6 +650,10 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
                 // Update the label "ghost" position
                 m_busUnfold.label->SetPosition( cursorPos );
                 m_view->AddToPreview( m_busUnfold.label->Clone() );
+
+                // Ensure segment is non-null at the start of bus unfold
+                if( !segment )
+                    segment = m_wires.back();
             }
 
             if( segment )

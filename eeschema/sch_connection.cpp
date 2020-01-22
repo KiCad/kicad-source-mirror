@@ -113,14 +113,18 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
 {
     m_members.clear();
 
-    if( IsBusVectorLabel( aLabel ) )
+    m_name       = aLabel;
+    m_local_name = aLabel;
+
+    wxString unescaped = UnescapeString( aLabel );
+
+    if( IsBusVectorLabel( unescaped ) )
     {
-        m_name = aLabel;
         m_type = CONNECTION_TYPE::BUS;
 
         std::vector<wxString> members;
 
-        ParseBusVector( aLabel, &m_vector_prefix, members );
+        ParseBusVector( unescaped, &m_vector_prefix, members );
         long i = 0;
 
         for( const auto& vector_member : members )
@@ -134,16 +138,14 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
             m_members.push_back( member );
         }
     }
-    else if( IsBusGroupLabel( aLabel ) )
+    else if( IsBusGroupLabel( unescaped ) )
     {
-        m_type       = CONNECTION_TYPE::BUS_GROUP;
-        m_name       = aLabel;
-        m_local_name = aLabel;
+        m_type = CONNECTION_TYPE::BUS_GROUP;
 
         std::vector<wxString> members;
         wxString group_name;
 
-        if( ParseBusGroup( aLabel, &group_name, members ) )
+        if( ParseBusGroup( unescaped, &group_name, members ) )
         {
             // Named bus groups generate a net prefix, unnamed ones don't
             wxString prefix = group_name != wxT( "" ) ? ( group_name + wxT( "." ) ) : wxT( "" );
@@ -173,9 +175,7 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
     }
     else
     {
-        m_name       = aLabel;
-        m_local_name = aLabel;
-        m_type       = CONNECTION_TYPE::NET;
+        m_type = CONNECTION_TYPE::NET;
     }
 }
 
@@ -317,7 +317,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
     wxString msg, group_name;
     std::vector<wxString> group_members;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Connection Name" ), Name(), BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Connection Name" ), UnescapeString( Name() ), BROWN ) );
 
     if( !IsBus() )
     {
