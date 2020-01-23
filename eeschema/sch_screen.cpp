@@ -4,7 +4,7 @@
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -498,6 +498,8 @@ void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
         for( auto aItem : Items().OfType( SCH_COMPONENT_T ) )
             cmps.push_back( static_cast<SCH_COMPONENT*>( aItem ) );
 
+        for( auto cmp : cmps )
+            Remove( cmp );
 
         // Must we resolve?
         if( (m_modification_sync != mod_hash) || aForce )
@@ -513,6 +515,11 @@ void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
             for( auto cmp : cmps )
                 cmp->UpdatePins();
         }
+
+        // Changing the symbol may adjust the bbox of the symbol.  This re-inserts the
+        // item with the new bbox
+        for( auto cmp : cmps )
+            Append( cmp );
     }
 }
 
