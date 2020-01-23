@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -22,19 +22,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <eda_draw_frame.h>
+
 #include <dialog_lib_new_component.h>
 #include <sch_validators.h>
 #include <template_fieldnames.h>
 
-DIALOG_LIB_NEW_COMPONENT::DIALOG_LIB_NEW_COMPONENT( wxWindow* parent,
+DIALOG_LIB_NEW_COMPONENT::DIALOG_LIB_NEW_COMPONENT( EDA_DRAW_FRAME* aParent,
                                                     const wxArrayString* aRootSymbolNames ) :
-    DIALOG_LIB_NEW_COMPONENT_BASE( parent )
+    DIALOG_LIB_NEW_COMPONENT_BASE( dynamic_cast<wxWindow*>( aParent ) ),
+    m_pinTextPosition( aParent, m_staticPinTextPositionLabel, m_textPinTextPosition,
+                       m_staticPinTextPositionUnits, true )
 {
     if( aRootSymbolNames && aRootSymbolNames->GetCount() )
         m_comboInheritanceSelect->Append( *aRootSymbolNames );
 
     m_textName->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE ) );
     m_textReference->SetValidator( SCH_FIELD_VALIDATOR( true, REFERENCE ) );
+
+    m_pinTextPosition.SetValue( Mils2iu( 40 ) );
 
     // initial focus should be on first editable field.
     m_textName->SetFocus();
@@ -62,8 +68,9 @@ void DIALOG_LIB_NEW_COMPONENT::syncControls( bool aIsDerivedPart )
     m_checkLockItems->Enable( !aIsDerivedPart );
     m_checkHasConversion->Enable( !aIsDerivedPart );
     m_checkIsPowerSymbol->Enable( !aIsDerivedPart );
-    m_staticText12->Enable( !aIsDerivedPart );
-    m_spinPinTextPosition->Enable( !aIsDerivedPart );
+    m_staticPinTextPositionLabel->Enable( !aIsDerivedPart );
+    m_textPinTextPosition->Enable( !aIsDerivedPart );
+    m_staticPinTextPositionUnits->Enable( !aIsDerivedPart );
     m_checkShowPinNumber->Enable( !aIsDerivedPart );
     m_checkShowPinName->Enable( !aIsDerivedPart );
     m_checkShowPinNameInside->Enable( !aIsDerivedPart );

@@ -184,7 +184,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
     m_ShowPinNumButt->SetValue( m_libEntry->ShowPinNumbers() );
     m_ShowPinNameButt->SetValue( m_libEntry->ShowPinNames() );
     m_PinsNameInsideButt->SetValue( m_libEntry->GetPinNameOffset() != 0 );
-    m_pinNameOffset.SetValue( Mils2iu( m_libEntry->GetPinNameOffset() ) );
+    m_pinNameOffset.SetValue( m_libEntry->GetPinNameOffset() );
 
     wxArrayString tmp = m_libEntry->GetFootprints();
     m_FootprintFilterListBox->Append( tmp );
@@ -344,7 +344,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
 
     if( m_PinsNameInsideButt->GetValue() )
     {
-        int offset = KiROUND( (double) m_pinNameOffset.GetValue() / IU_PER_MILS );
+        int offset = KiROUND( (double) m_pinNameOffset.GetValue() );
 
         // We interpret an offset of 0 as "outside", so make sure it's non-zero
         m_libEntry->SetPinNameOffset( offset == 0 ? 20 : offset );

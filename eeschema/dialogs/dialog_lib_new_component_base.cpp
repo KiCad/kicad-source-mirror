@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jan 23 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -86,17 +86,21 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizerBottom = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 2, 6, 6 );
+	fgSizer4 = new wxFlexGridSizer( 0, 3, 6, 6 );
 	fgSizer4->AddGrowableCol( 1 );
 	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText12 = new wxStaticText( this, wxID_ANY, _("Pin text position offset:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText12->Wrap( -1 );
-	fgSizer4->Add( m_staticText12, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_staticPinTextPositionLabel = new wxStaticText( this, wxID_ANY, _("Pin text position offset:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticPinTextPositionLabel->Wrap( -1 );
+	fgSizer4->Add( m_staticPinTextPositionLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_spinPinTextPosition = new wxSpinCtrl( this, wxID_ANY, wxT("40"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 40 );
-	fgSizer4->Add( m_spinPinTextPosition, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	m_textPinTextPosition = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer4->Add( m_textPinTextPosition, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_staticPinTextPositionUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticPinTextPositionUnits->Wrap( -1 );
+	fgSizer4->Add( m_staticPinTextPositionUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizerBottom->Add( fgSizer4, 0, wxALL|wxEXPAND, 5 );

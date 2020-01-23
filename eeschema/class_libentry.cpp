@@ -90,7 +90,7 @@ LIB_PART::LIB_PART( const wxString& aName, LIB_PART* aParent, PART_LIB* aLibrary
 {
     m_dateLastEdition     = 0;
     m_unitCount           = 1;
-    m_pinNameOffset       = 40;
+    m_pinNameOffset       = Mils2iu( 40 );
     m_options             = ENTRY_NORMAL;
     m_unitsLocked         = false;
     m_showPinNumbers      = true;

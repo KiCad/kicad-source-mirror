@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version 3.9.0 Jan 23 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,8 +51,9 @@ class DIALOG_LIB_NEW_COMPONENT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkLockItems;
 		wxCheckBox* m_checkHasConversion;
 		wxCheckBox* m_checkIsPowerSymbol;
-		wxStaticText* m_staticText12;
-		wxSpinCtrl* m_spinPinTextPosition;
+		wxStaticText* m_staticPinTextPositionLabel;
+		wxTextCtrl* m_textPinTextPosition;
+		wxStaticText* m_staticPinTextPositionUnits;
 		wxCheckBox* m_checkShowPinNumber;
 		wxCheckBox* m_checkShowPinName;
 		wxCheckBox* m_checkShowPinNameInside;

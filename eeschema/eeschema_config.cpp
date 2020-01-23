@@ -47,14 +47,14 @@
 #include <gr_text.h>
 #include "sch_junction.h"
 
-static int s_defaultBusThickness = DEFAULTBUSTHICKNESS;
-static int s_defaultWireThickness  = DEFAULTDRAWLINETHICKNESS;
-static int s_defaultTextSize = DEFAULT_SIZE_TEXT;
+static int s_defaultBusThickness = Mils2iu( DEFAULTBUSTHICKNESS );
+static int s_defaultWireThickness  = Mils2iu( DEFAULTDRAWLINETHICKNESS );
+static int s_defaultTextSize = Mils2iu( DEFAULT_SIZE_TEXT );
 static int s_drawDefaultLineThickness = -1;
 static bool s_selectTextAsBox = false;
 static bool s_selectDrawChildren = true;
 static bool s_selectFillShapes = false;
-static int  s_selectThickness = DEFAULTSELECTIONTHICKNESS;
+static int  s_selectThickness = Mils2iu( DEFAULTSELECTIONTHICKNESS );
 
 int GetDefaultBusThickness()
 {
@@ -402,7 +402,8 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     SetSelectionDrawChildItems( aCfg->ReadBool( drawSelectedChildren, true ) );
     SetSelectionFillShapes( aCfg->ReadBool( selectionFillShapes, false ) );
     SetSelectionThickness(
-            static_cast<int>( aCfg->Read( selectionThickness, DEFAULTSELECTIONTHICKNESS ) ) );
+        Mils2iu( static_cast<int>( aCfg->Read( selectionThickness,
+                                       DEFAULTSELECTIONTHICKNESS ) ) ) );
 
     SetTextMarkupFlags( (int) aCfg->Read( TextMarkupFlagsEntry, 0L ) );
 
@@ -467,7 +468,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( boxedSelectedText, GetSelectionTextAsBox() );
     aCfg->Write( drawSelectedChildren, GetSelectionDrawChildItems() );
     aCfg->Write( selectionFillShapes, GetSelectionFillShapes() );
-    aCfg->Write( selectionThickness, GetSelectionThickness() );
+    aCfg->Write( selectionThickness, Iu2Mils( GetSelectionThickness() ) );
     aCfg->Write( NavigatorStaysOpenEntry, m_navigatorStaysOpen );
 
     // Save template fieldnames
