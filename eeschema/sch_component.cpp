@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1315,17 +1315,11 @@ EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
     int x2 = m_transform.x1 * xm + m_transform.y1 * ym;
     int y2 = m_transform.x2 * xm + m_transform.y2 * ym;
 
-    // H and W must be > 0:
-    if( x2 < x1 )
-        std::swap( x2, x1 );
-
-    if( y2 < y1 )
-        std::swap( y2, y1 );
-
     bBox.SetX( x1 );
     bBox.SetY( y1 );
     bBox.SetWidth( x2 - x1 );
     bBox.SetHeight( y2 - y1 );
+    bBox.Normalize();
 
     bBox.Offset( m_Pos );
     return bBox;

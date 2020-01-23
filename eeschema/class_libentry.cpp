@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -786,8 +786,7 @@ void LIB_PART::ViewGetLayers( int aLayers[], int& aCount ) const
 
 const EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
 {
-    EDA_RECT bBox;
-    bool initialized = false;
+    EDA_RECT bbox;
 
     for( const LIB_ITEM& item : m_drawings )
     {
@@ -801,16 +800,10 @@ const EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
         if( item.Type() == LIB_FIELD_T )
             continue;
 
-        if( initialized )
-            bBox.Merge( item.GetBoundingBox() );
-        else
-        {
-            bBox = item.GetBoundingBox();
-            initialized = true;
-        }
+        bbox.Merge( item.GetBoundingBox() );
     }
 
-    return bBox;
+    return bbox;
 }
 
 

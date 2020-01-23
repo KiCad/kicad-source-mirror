@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1437,7 +1437,7 @@ void LIB_PIN::GetMsgPanelInfo(
 
 const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles ) const
 {
-    LIB_PART*      entry = (LIB_PART*     ) m_Parent;
+    LIB_PART*      entry = static_cast<LIB_PART*>( m_Parent );
     EDA_RECT       bbox;
     wxPoint        begin;
     wxPoint        end;
@@ -1493,15 +1493,15 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles ) const
 
     if( nameTextOffset )        // for values > 0, pin name is inside the body
     {
-        end.x = m_length + nameTextLength;
+        end.x = m_length + nameTextLength + TARGET_PIN_RADIUS;
         end.y = std::min( -minsizeV, -nameTextHeight / 2 );
     }
     else        // if value == 0:
                 // pin name is outside the body, and above the pin line
                 // pin num is below the pin line
     {
-        end.x = std::max(m_length, nameTextLength);
-        end.y = -begin.y;
+        end.x   = std::max( m_length + TARGET_PIN_RADIUS, nameTextLength );
+        end.y   = -begin.y;
         begin.y = std::max( minsizeV, nameTextHeight );
     }
 
