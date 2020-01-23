@@ -121,8 +121,10 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
         m_activeTextCtrl = m_valueMultiLine;
         m_activeTextEntry = nullptr;
 
-        m_labelSingleLine->Show( false );  m_valueSingleLine->Show( false );
-        m_labelCombo->Show( false );       m_valueCombo->Show( false );
+        m_labelSingleLine->Show( false );
+        m_valueSingleLine->Show( false );
+        m_labelCombo->Show( false );
+        m_valueCombo->Show( false );
 
         m_textEntrySizer->AddGrowableRow( 0 );
     }

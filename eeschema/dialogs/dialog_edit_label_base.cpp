@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,7 +31,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_valueSingleLine = new wxTextCtrl( this, wxID_VALUESINGLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER|wxTE_RICH );
 	m_valueSingleLine->SetMinSize( wxSize( 360,-1 ) );
 
-	m_textEntrySizer->Add( m_valueSingleLine, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 3 );
+	m_textEntrySizer->Add( m_valueSingleLine, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_labelMultiLine = new wxStaticText( this, wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelMultiLine->Wrap( -1 );
@@ -68,7 +68,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_valueMultiLine->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
 	m_valueMultiLine->SetMinSize( wxSize( 480,100 ) );
 
-	m_textEntrySizer->Add( m_valueMultiLine, 1, wxEXPAND | wxALL, 5 );
+	m_textEntrySizer->Add( m_valueMultiLine, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_labelCombo = new wxStaticText( this, wxID_ANY, _("Label:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCombo->Wrap( -1 );
@@ -87,7 +87,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	bSizeCtrlSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_textSizeCtrl = new wxTextCtrl( this, wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizeCtrlSizer->Add( m_textSizeCtrl, 0, wxEXPAND|wxLEFT|wxRIGHT, 3 );
+	bSizeCtrlSizer->Add( m_textSizeCtrl, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_textSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeUnits->Wrap( -1 );
