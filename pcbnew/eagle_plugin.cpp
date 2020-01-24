@@ -1909,36 +1909,11 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     if( !IsCopperLayer( layer ) )
         return;
 
-    bool shape_set = false;
-    int shape = EPAD::UNDEF;
     D_PAD* pad = new D_PAD( aModule );
     aModule->PadsList().PushBack( pad );
     transferPad( e, pad );
 
-    if( pad->GetName() == wxT( "1" ) && m_rules->psFirst != EPAD::UNDEF )
-        shape = m_rules->psFirst;
-    else if( layer == F_Cu &&  m_rules->psTop != EPAD::UNDEF )
-        shape = m_rules->psTop;
-    else if( layer == B_Cu && m_rules->psBottom != EPAD::UNDEF )
-        shape = m_rules->psBottom;
-
-    switch( shape )
-    {
-    case EPAD::ROUND:
-    case EPAD::OCTAGON:
-        shape_set = true;
-        pad->SetShape( PAD_SHAPE_CIRCLE );
-        break;
-
-    case EPAD::SQUARE:
-        shape_set = true;
-        pad->SetShape( PAD_SHAPE_RECT );
-        break;
-
-    default:
-        pad->SetShape( PAD_SHAPE_RECT );
-    }
-
+    pad->SetShape( PAD_SHAPE_RECT );
     pad->SetAttribute( PAD_ATTRIB_SMD );
 
     wxSize padSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() );
@@ -1959,7 +1934,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     int roundRadius = eagleClamp( m_rules->srMinRoundness * 2,
             (int)( minPadSize * m_rules->srRoundness ), m_rules->srMaxRoundness * 2 );
 
-    if( !shape_set && ( e.roundness || roundRadius > 0 ) )
+    if( e.roundness || roundRadius > 0 )
     {
         double roundRatio = (double) roundRadius / minPadSize / 2.0;
 
