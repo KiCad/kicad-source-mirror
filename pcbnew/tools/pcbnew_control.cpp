@@ -363,7 +363,8 @@ int PCBNEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 
     while( startLayer != --layer )
     {
-        if( brd->IsLayerVisible( static_cast<PCB_LAYER_ID>( layer ) ) && IsCopperLayer( layer ) )
+        if( IsCopperLayer( layer )       // also test for valid layer id (layer >= F_Cu)
+            && brd->IsLayerVisible( static_cast<PCB_LAYER_ID>( layer ) ) )
             break;
 
         if( layer <= F_Cu )
