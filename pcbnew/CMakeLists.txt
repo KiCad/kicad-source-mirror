@@ -697,6 +697,13 @@ endif()
 # if building pcbnew, then also build pcbnew_kiface if out of date.
 add_dependencies( pcbnew pcbnew_kiface )
 
+if( WIN32 )
+    # Copy dynamic lib dependency to build dir to allow running directly
+    add_custom_command( TARGET pcbnew POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:kicad_3dsg>" "$<TARGET_FILE_DIR:pcbnew>"
+        )
+endif()
+
 # these 2 binaries are a matched set, keep them together:
 if( APPLE )
     set_target_properties( pcbnew PROPERTIES
