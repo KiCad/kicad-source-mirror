@@ -260,8 +260,9 @@ public:
      *
      * @note The removed item is not deleted.  It is only unlinked from the item list.
      * @param aItem Item to be removed from schematic.
+     * @return True if we successfully removed the item
      */
-    void Remove( SCH_ITEM* aItem );
+    bool Remove( SCH_ITEM* aItem );
 
     /**
      * Updates \a aItem's bounding box in the tree

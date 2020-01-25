@@ -174,8 +174,11 @@ void SCH_SCREEN::DecRefCount()
 
 void SCH_SCREEN::Append( SCH_ITEM* aItem )
 {
-    m_rtree.insert( aItem );
-    --m_modification_sync;
+    if( aItem->Type() != SCH_SHEET_PIN_T && aItem->Type() != SCH_FIELD_T )
+    {
+        m_rtree.insert( aItem );
+        --m_modification_sync;
+    }
 }
 
 
@@ -186,9 +189,8 @@ void SCH_SCREEN::Append( SCH_SCREEN* aScreen )
     // No need to descend the hierarchy.  Once the top level screen is copied, all of it's
     // children are copied as well.
     for( auto aItem : aScreen->m_rtree )
-        m_rtree.insert( aItem );
+        Append( aItem );
 
-    --m_modification_sync;
     aScreen->Clear( false );
 }
 
@@ -227,14 +229,14 @@ void SCH_SCREEN::FreeDrawList()
 
 void SCH_SCREEN::Update( SCH_ITEM* aItem )
 {
-    Remove( aItem );
-    Append( aItem );
+    if( Remove( aItem ) )
+        Append( aItem );
 }
 
 
-void SCH_SCREEN::Remove( SCH_ITEM* aItem )
+bool SCH_SCREEN::Remove( SCH_ITEM* aItem )
 {
-    m_rtree.remove( aItem );
+    return m_rtree.remove( aItem );
 }
 
 
