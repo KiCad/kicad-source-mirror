@@ -442,7 +442,24 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         // Moving items changes the RTree box bounds.
         for( auto item : selection )
-            m_frame->GetScreen()->Update( static_cast<SCH_ITEM*>( item ) );
+        {
+            switch( item->Type() )
+            {
+            // Moving sheet pins does not change the BBox.
+            case SCH_SHEET_PIN_T:
+                break;
+
+            // Moving fields should update the associated component
+            case SCH_FIELD_T:
+                if( item->GetParent() )
+                    m_frame->GetScreen()->Update( static_cast<SCH_ITEM*>( item->GetParent() ) );
+
+                break;
+
+            default:
+                m_frame->GetScreen()->Update( static_cast<SCH_ITEM*>( item ) );
+            }
+        }
 
         // If we move items away from a junction, we _may_ want to add a junction there
         // to denote the state.
