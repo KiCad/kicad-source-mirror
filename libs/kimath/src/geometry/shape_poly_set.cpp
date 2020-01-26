@@ -538,9 +538,38 @@ void SHAPE_POLY_SET::Inflate( int aAmount, int aCircleSegmentsCount,
     // N.B. see the Clipper documentation for jtSquare/jtMiter/jtRound.  They are poorly named
     // and are not what you'd think they are.
     // http://www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Types/JoinType.htm
-    JoinType joinType = aCornerStrategy == ROUND_ALL_CORNERS ? jtRound : jtMiter;
-    double   miterLimit = aCornerStrategy == ALLOW_ACUTE_CORNERS ? 10 : 1.5;
-    JoinType miterFallback = aCornerStrategy == ROUND_ACUTE_CORNERS ? jtRound : jtSquare;
+    JoinType joinType;          // The way corners are offsetted
+    double   miterLimit = 2.0;  // Smaller value when using jtMiter for joinType
+    JoinType miterFallback;
+
+    switch( aCornerStrategy )
+    {
+    case ALLOW_ACUTE_CORNERS:
+        joinType = jtMiter;
+        miterLimit = 10;        // Allows large spikes
+        miterFallback = jtSquare;
+        break;
+
+    case CHAMFER_ACUTE_CORNERS: // Acute angles are chamfered
+        joinType = jtMiter;
+        miterFallback = jtRound;
+        break;
+
+    case ROUND_ACUTE_CORNERS:   // Acute angles are rounded
+        joinType = jtMiter;
+        miterFallback = jtSquare;
+        break;
+
+    case CHAMFER_ALL_CORNERS:   // All angles are chamfered.
+        joinType = jtSquare;
+        miterFallback = jtSquare;
+        break;
+
+    case ROUND_ALL_CORNERS:     // All angles are rounded.
+        joinType = jtRound;
+        miterFallback = jtSquare;
+        break;
+    }
 
     for( const POLYGON& poly : m_polys )
     {

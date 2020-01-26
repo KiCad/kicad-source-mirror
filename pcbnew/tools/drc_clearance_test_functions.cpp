@@ -675,7 +675,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             int clearance = std::max( ref_seg_clearance, zone->GetClearance() );
             SHAPE_POLY_SET* outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
 
-            if( outline->Distance( refSeg, ref_seg_width ) < clearance )
+            int error = clearance - outline->Distance( refSeg, ref_seg_width );
+
+            // to avoid false positive, due to rounding issues and approxiamtions
+            // in distance and clearance calculations, use a small threshold for distance
+            // (1 micron)
+            #define THRESHOLD_DIST Millimeter2iu( 0.001 )
+            if( error > THRESHOLD_DIST )
                 addMarkerToPcb( m_markerFactory.NewMarker( aRefSeg, zone, DRCE_TRACK_NEAR_ZONE ) );
         }
     }

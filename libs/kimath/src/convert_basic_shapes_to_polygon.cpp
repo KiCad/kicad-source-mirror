@@ -97,6 +97,12 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPo
     // of the segment.
     int     radius  = aWidth / 2;
     int     numSegs = std::max( GetArcToSegmentCount( radius, aError, 360.0 ), 6 );
+
+    // Because we want to create 2 arcs (one at each segment end) numSegs must be
+    // a even value (we will used numSegs/2 later)
+    if( numSegs % 2 != 0 )
+        numSegs++;
+
     int     delta = 3600 / numSegs;   // rotate angle in 0.1 degree
     double  correction = GetCircletoPolyCorrectionFactor( numSegs );
 

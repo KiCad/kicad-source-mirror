@@ -58,24 +58,25 @@ enum class ZONE_HATCH_STYLE
 class ZONE_SETTINGS
 {
 public:
+    // the actual zone outline shape can be slightly modified (smoothed):
     enum {
         SMOOTHING_UNDEFINED = -1,
-        SMOOTHING_NONE = 0,
-        SMOOTHING_CHAMFER,
-        SMOOTHING_FILLET,
-        SMOOTHING_LAST
+        SMOOTHING_NONE = 0,         // Zone outline is used without change
+        SMOOTHING_CHAMFER,          // Zone outline is used after chamfering corners
+        SMOOTHING_FILLET,           // Zone outline is used after rounding corners
+        SMOOTHING_LAST              // sentinel
     };
 
     ZONE_FILL_MODE  m_FillMode;
 
     int  m_ZonePriority;                ///< Priority (0 ... N) of the zone
 
-    int  m_ZoneClearance;               ///< Clearance value
+    int  m_ZoneClearance;               ///< Minimal clearance value
     int  m_ZoneMinThickness;            ///< Min thickness value in filled areas
-    int  m_HatchFillTypeThickness;       ///< Grid style shape: thickness of lines (if 0 -> solid shape)
-    int  m_HatchFillTypeGap;             ///< Grid style shape: clearance between lines (0 -> solid shape)
-    double m_HatchFillTypeOrientation;   ///< Grid style shape: orientation of grid lines in degrees
-    int  m_HatchFillTypeSmoothingLevel;  ///< Grid pattern smoothing type, similar to corner smoothing type
+    int  m_HatchFillTypeThickness;      ///< Grid style shape: thickness of lines (if 0 -> solid shape)
+    int  m_HatchFillTypeGap;            ///< Grid style shape: clearance between lines (0 -> solid shape)
+    double m_HatchFillTypeOrientation;  ///< Grid style shape: orientation of grid lines in degrees
+    int  m_HatchFillTypeSmoothingLevel; ///< Grid pattern smoothing type, similar to corner smoothing type
                                         ///< 0 = no smoothing, 1 = fillet, >= 2 = arc
     double m_HatchFillTypeSmoothingValue; ///< Grid pattern chamfer distance/fillet value
                                         ///< this is the ratio between the gap and the chamfer size

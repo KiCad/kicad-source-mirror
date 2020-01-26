@@ -865,12 +865,16 @@ class SHAPE_POLY_SET : public SHAPE
         void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                                   POLYGON_MODE aFastMode );
 
-        enum CORNER_STRATEGY
+        enum CORNER_STRATEGY    ///< define how inflate transform build inflated polygon
         {
-            ALLOW_ACUTE_CORNERS,
-            CHOP_ACUTE_CORNERS,
-            ROUND_ACUTE_CORNERS,
-            ROUND_ALL_CORNERS
+            ALLOW_ACUTE_CORNERS,    ///< just inflate the polygon. Acute angles create spikes
+            CHAMFER_ACUTE_CORNERS,  ///< Acute angles are chamfered
+            ROUND_ACUTE_CORNERS,    ///< Acute angles are rounded
+            CHAMFER_ALL_CORNERS,    ///< All angles are chamfered.
+                                    ///< The distance between new and old polygon edges is not
+                                    ///< constant, but do not change a lot
+            ROUND_ALL_CORNERS       ///< All angles are rounded.
+                                    ///< The distance between new and old polygon edges is constant
         };
 
         /**

@@ -514,6 +514,12 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, SHAPE_POL
  */
 void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aHoles )
 {
+    // a small extra clearance to be sure actual track clearance is not smaller
+    // than requested clearance due to many approximations in calculations,
+    // like arc to segment approx, rounding issues...
+    // 2 microns are a good value
+    int extra_margin = Millimeter2iu( 0.002 );
+
     int zone_clearance = aZone->GetClearance();
     int edgeClearance = m_board->GetDesignSettings().m_CopperEdgeClearance;
     int zone_to_edgecut_clearance = std::max( aZone->GetZoneClearance(), edgeClearance );
@@ -522,7 +528,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
     // the bounding box is the zone bounding box + the biggest clearance found in Netclass list
     EDA_RECT zone_boundingbox = aZone->GetBoundingBox();
     int biggest_clearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
-    biggest_clearance = std::max( biggest_clearance, zone_clearance );
+    biggest_clearance = std::max( biggest_clearance, zone_clearance ) + extra_margin;
     zone_boundingbox.Inflate( biggest_clearance );
 
     // Use a dummy pad to calculate hole clearance when a pad has a hole but is not on the
@@ -570,7 +576,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
         if( track->GetNetCode() == aZone->GetNetCode()  && ( aZone->GetNetCode() != 0) )
             continue;
 
-        int gap = std::max( zone_clearance, track->GetClearance() );
+        int gap = std::max( zone_clearance, track->GetClearance() ) + extra_margin;
         EDA_RECT item_boundingbox = track->GetBoundingBox();
 
         if( item_boundingbox.Intersects( zone_boundingbox ) )
@@ -686,10 +692,19 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
     int epsilon = Millimeter2iu( 0.001 );
     int numSegs = std::max( GetArcToSegmentCount( half_min_width, m_high_def, 360.0 ), 6 );
 
-    SHAPE_POLY_SET::CORNER_STRATEGY cornerStrategy = SHAPE_POLY_SET::CHOP_ACUTE_CORNERS;
-
-    if( aZone->GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_FILLET )
-        cornerStrategy = SHAPE_POLY_SET::ROUND_ACUTE_CORNERS;
+    // solid polygons are deflated and inflated during calculations.
+    // Polygons deflate usually do not create issues.
+    // Polygons inflate is a tricky transform, because it can create excessively long and narrow 'spikes'
+    // especially for acute angles.
+    // But in very case, the inflate transform caannot create bigger shapes than initial shapes.
+    // so the corner strategy is very important.
+    // The best is SHAPE_POLY_SET::ROUND_ALL_CORNERS.
+    // unfortunately, it creates a lot of small segments.
+    // SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS is not acceptable
+    // So for intermediate transforms, we use CHAMFER_ALL_CORNERS.
+    // For final transform, we use ROUND_ALL_CORNERS
+    SHAPE_POLY_SET::CORNER_STRATEGY intermediatecornerStrategy = SHAPE_POLY_SET::CHAMFER_ALL_CORNERS;
+    SHAPE_POLY_SET::CORNER_STRATEGY finalcornerStrategy = SHAPE_POLY_SET::ROUND_ALL_CORNERS;
 
     std::deque<SHAPE_LINE_CHAIN> thermalSpokes;
     SHAPE_POLY_SET clearanceHoles;
@@ -723,8 +738,8 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
     // Prune features that don't meet minimum-width criteria
     if( half_min_width - epsilon > epsilon )
     {
-        testAreas.Deflate( half_min_width - epsilon, numSegs, cornerStrategy );
-        testAreas.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
+        testAreas.Deflate( half_min_width - epsilon, numSegs, intermediatecornerStrategy );
+        testAreas.Inflate( half_min_width - epsilon, numSegs, intermediatecornerStrategy );
     }
 
     // Spoke-end-testing is hugely expensive so we generate cached bounding-boxes to speed
@@ -764,7 +779,7 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
     aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
     // Prune features that don't meet minimum-width criteria
     if( half_min_width - epsilon > epsilon )
-        aRawPolys.Deflate( half_min_width - epsilon, numSegs, cornerStrategy );
+        aRawPolys.Deflate( half_min_width - epsilon, numSegs, intermediatecornerStrategy );
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &aRawPolys, "solid-areas-before-hatching" );
@@ -785,7 +800,7 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
     else if( half_min_width - epsilon > epsilon )
     {
         aRawPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-        aRawPolys.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
+        aRawPolys.Inflate( half_min_width - epsilon, numSegs, finalcornerStrategy );
 
         // If we've deflated/inflated by something near our corner radius then we will have
         // ended up with too-sharp corners.  Apply outline smoothing again.
@@ -839,9 +854,9 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
         int numSegs = std::max( GetArcToSegmentCount( half_min_width, m_high_def, 360.0 ), 6 );
 
         if( m_brdOutlinesValid )
-            smoothedPoly.BooleanIntersection( m_boardOutline, SHAPE_POLY_SET::PM_FAST );
+            smoothedPoly.BooleanIntersection( m_boardOutline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-        smoothedPoly.Deflate( half_min_width - epsilon, numSegs );
+        smoothedPoly.Deflate( half_min_width/* - epsilon*/, numSegs );
 
         // Remove the non filled areas due to the hatch pattern
         if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
