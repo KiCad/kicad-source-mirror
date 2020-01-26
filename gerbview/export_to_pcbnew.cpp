@@ -185,17 +185,17 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
         return;
     }
 
-    wxString        fileName;
+    wxString        fileDialogName( wxT( "noname." ) + KiCadPcbFileExtension );
     wxString        path = m_mruPath;
 
     wxFileDialog    filedlg( this, _( "Board File Name" ),
-                             path, fileName, PcbFileWildcard(),
+                             path, fileDialogName, PcbFileWildcard(),
                              wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( filedlg.ShowModal() == wxID_CANCEL )
         return;
 
-    fileName = filedlg.GetPath();
+    wxFileName fileName = filedlg.GetPath();
 
     /* Install a dialog frame to choose the mapping
      * between gerber layers and Pcbnew layers
@@ -207,9 +207,13 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
     if( ok != wxID_OK )
         return;
 
-    m_mruPath = wxFileName( fileName ).GetPath();
+    // If no extension was entered, then force the extension to be a KiCad PCB file
+    if( !fileName.HasExt() )
+        fileName.SetExt( KiCadPcbFileExtension );
 
-    GBR_TO_PCB_EXPORTER gbr_exporter( this, fileName );
+    m_mruPath = fileName.GetPath();
+
+    GBR_TO_PCB_EXPORTER gbr_exporter( this, fileName.GetFullPath() );
 
     gbr_exporter.ExportPcb( layerdlg->GetLayersLookUpTable(), layerdlg->GetCopperLayersCount() );
 }
