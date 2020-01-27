@@ -455,6 +455,8 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 {
     wxCHECK_RET( aSheet != NULL, wxT( "Cannot build sheet list from undefined sheet." ) );
 
+    std::vector<SCH_SHEET*> badSheets;
+
     if( aSheet == g_RootSheet )
         m_isRootSheet = true;
 
@@ -477,10 +479,22 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
             if( item->Type() == SCH_SHEET_T )
             {
                 SCH_SHEET* sheet = (SCH_SHEET*) item;
-                BuildSheetList( sheet );
+
+                if( !m_currentSheetPath.TestForRecursion(
+                            sheet->GetFileName(), aSheet->GetFileName() ) )
+                    BuildSheetList( sheet );
+                else
+                    badSheets.push_back( sheet );
             }
 
             item = item->Next();
+        }
+
+
+        for( auto sheet : badSheets )
+        {
+            aSheet->GetScreen()->Remove( sheet );
+            aSheet->GetScreen()->SetModify();
         }
     }
 
