@@ -737,7 +737,8 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
             aHierarchy->LastScreen()->Remove( aSheet );
         }
 
-        if( !LoadSheetFromFile( aSheet, aHierarchy, newFilename ) )
+        if( !LoadSheetFromFile( aSheet, aHierarchy, newFilename )
+                || checkSheetForRecursion( aSheet, aHierarchy ) )
         {
             if( restoreSheet )
                 aHierarchy->LastScreen()->Append( aSheet );
