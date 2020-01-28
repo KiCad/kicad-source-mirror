@@ -263,6 +263,24 @@ void SCH_TEXT::SwapData( SCH_ITEM* aItem )
 }
 
 
+bool SCH_TEXT::operator<( const SCH_ITEM& aItem ) const
+{
+    if( Type() != aItem.Type() )
+        return Type() < aItem.Type();
+
+    auto other = static_cast<const SCH_TEXT*>( &aItem );
+
+
+    if( GetPosition().x != other->GetPosition().x )
+        return GetPosition().x < other->GetPosition().x;
+
+    if( GetPosition().y != other->GetPosition().y )
+        return GetPosition().y < other->GetPosition().y;
+
+    return GetText() < other->GetText();
+}
+
+
 int SCH_TEXT::GetPenSize() const
 {
     int pensize = GetThickness();

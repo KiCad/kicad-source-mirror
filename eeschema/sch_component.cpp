@@ -1714,7 +1714,7 @@ bool SCH_COMPONENT::operator <( const SCH_ITEM& aItem ) const
     if( Type() != aItem.Type() )
         return Type() < aItem.Type();
 
-    SCH_COMPONENT* component = (SCH_COMPONENT*) &aItem;
+    auto component = static_cast<const SCH_COMPONENT*>( &aItem );
 
     EDA_RECT rect = GetBodyBoundingBox();
 
@@ -1727,7 +1727,7 @@ bool SCH_COMPONENT::operator <( const SCH_ITEM& aItem ) const
     if( m_Pos.y != component->m_Pos.y )
         return m_Pos.y < component->m_Pos.y;
 
-    return false;
+    return GetTimeStamp() < aItem.GetTimeStamp();
 }
 
 

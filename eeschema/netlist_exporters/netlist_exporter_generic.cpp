@@ -212,7 +212,30 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
 
     for( unsigned i = 0;  i < sheetList.size();  i++ )
     {
+
+        auto cmp = []( const SCH_COMPONENT* a, const SCH_COMPONENT* b ) {
+            return a->GetField( REFERENCE )->GetText() < b->GetField( REFERENCE )->GetText();
+        };
+
+        std::set<SCH_COMPONENT*, decltype( cmp )> ordered_components( cmp );
+
         for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        {
+            auto comp = static_cast<SCH_COMPONENT*>( item );
+            auto test = ordered_components.insert( comp );
+
+            if( !test.second )
+            {
+                if( ( *( test.first ) )->GetUnit() > comp->GetUnit() )
+                {
+                    ordered_components.erase( test.first );
+                    ordered_components.insert( comp );
+                }
+            }
+        }
+
+
+        for( auto item : ordered_components )
         {
             SCH_COMPONENT* comp = findNextComponent( item, &sheetList[i] );
 

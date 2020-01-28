@@ -171,8 +171,18 @@ void SCH_ITEM::SwapData( SCH_ITEM* aItem )
 
 bool SCH_ITEM::operator < ( const SCH_ITEM& aItem ) const
 {
-    wxCHECK_MSG( false, this->Type() < aItem.Type(),
-                 wxT( "Less than operator not defined for " ) + GetClass() );
+    bool retval = ( Type() < aItem.Type() );
+
+    if( Type() != aItem.Type() )
+        return Type() < aItem.Type();
+
+    if( GetTimeStamp() != aItem.GetTimeStamp() )
+        return GetTimeStamp() < aItem.GetTimeStamp();
+
+    if( GetPosition().x != aItem.GetPosition().x )
+        return GetPosition().x < aItem.GetPosition().x;
+
+    return GetPosition().y < aItem.GetPosition().y;
 }
 
 

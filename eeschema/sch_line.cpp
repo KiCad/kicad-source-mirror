@@ -689,7 +689,7 @@ bool SCH_LINE::operator <( const SCH_ITEM& aItem ) const
     if( Type() != aItem.Type() )
         return Type() < aItem.Type();
 
-    SCH_LINE* line = (SCH_LINE*) &aItem;
+    auto line = static_cast<const SCH_LINE*>( &aItem );
 
     if( GetLength() != line->GetLength() )
         return GetLength() < line->GetLength();

@@ -23,10 +23,12 @@
 #include <algorithm>
 #include <boost/algorithm/string/join.hpp>
 #include <cctype>
+#include <set>
 
 #include <wx/mstream.h>
 #include <wx/filename.h>
 #include <wx/tokenzr.h>
+
 #include <pgm_base.h>
 #include <gr_text.h>
 #include <kiway.h>
@@ -1877,7 +1879,15 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
         saveBusAlias( alias );
     }
 
+    // Enforce item ordering
+    auto cmp = []( const SCH_ITEM* a, const SCH_ITEM* b ) { return *a < *b; };
+    std::multiset<SCH_ITEM*, decltype( cmp )> save_map( cmp );
+
     for( auto item : aScreen->Items() )
+        save_map.insert( item );
+
+
+    for( auto& item : save_map )
     {
         switch( item->Type() )
         {

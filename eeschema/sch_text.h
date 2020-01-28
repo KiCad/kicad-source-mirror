@@ -270,6 +270,8 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
+    bool operator<( const SCH_ITEM& aItem ) const override;
+
     int GetPenSize() const override;
 
     // Geometric transforms (used in block operations):
