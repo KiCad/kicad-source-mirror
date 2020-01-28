@@ -114,7 +114,14 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
-        break;
+        if( !item )
+            break;
+
+        // Clear current highlight and highlight the current item
+        GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
+        GetCanvas()->GetView()->HighlightItem( item, nullptr );
+        GetCanvas()->Refresh();
+    break;
 
     case ID_ZOOM_SELECTION:
         break;
