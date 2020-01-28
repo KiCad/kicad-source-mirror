@@ -270,6 +270,8 @@ bool SCH_TEXT::operator<( const SCH_ITEM& aItem ) const
 
     auto other = static_cast<const SCH_TEXT*>( &aItem );
 
+    if( GetLayer() != other->GetLayer() )
+            return GetLayer() < other->GetLayer();
 
     if( GetPosition().x != other->GetPosition().x )
         return GetPosition().x < other->GetPosition().x;

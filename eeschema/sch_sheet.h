@@ -534,6 +534,8 @@ public:
 
     SCH_SHEET& operator=( const SCH_ITEM& aSheet );
 
+    bool operator <( const SCH_ITEM& aItem ) const override;
+
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     wxPoint GetPosition() const override { return m_pos; }

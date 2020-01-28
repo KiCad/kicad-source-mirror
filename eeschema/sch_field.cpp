@@ -498,3 +498,26 @@ wxPoint SCH_FIELD::GetPosition() const
 
     return component->GetTransform().TransformCoordinate( pos ) + component->GetPosition();
 }
+
+
+bool SCH_FIELD::operator <( const SCH_ITEM& aItem ) const
+{
+    if( Type() != aItem.Type() )
+        return Type() < aItem.Type();
+
+    auto field = static_cast<const SCH_FIELD*>( &aItem );
+
+    if( GetId() != field->GetId() )
+        return GetId() < field->GetId();
+
+    if( GetText() != field->GetText() )
+        return GetText() < field->GetText();
+
+    if( GetLibPosition().x != field->GetLibPosition().x )
+        return GetLibPosition().x < field->GetLibPosition().x;
+
+    if( GetLibPosition().y != field->GetLibPosition().y )
+        return GetLibPosition().y < field->GetLibPosition().y;
+
+    return GetName() < field->GetName();
+}

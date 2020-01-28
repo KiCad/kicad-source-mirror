@@ -692,16 +692,19 @@ bool SCH_LINE::operator <( const SCH_ITEM& aItem ) const
 
     auto line = static_cast<const SCH_LINE*>( &aItem );
 
-    if( GetLength() != line->GetLength() )
-        return GetLength() < line->GetLength();
+    if( GetLayer() != line->GetLayer() )
+        return GetLayer() < line->GetLayer();
 
-    if( m_start.x != line->m_start.x )
-        return m_start.x < line->m_start.x;
+    if( GetStartPoint().x != line->GetStartPoint().x )
+        return GetStartPoint().x < line->GetStartPoint().x;
 
-    if( m_start.y != line->m_start.y )
-        return m_start.y < line->m_start.y;
+    if( GetStartPoint().y != line->GetStartPoint().y )
+        return GetStartPoint().y < line->GetStartPoint().y;
 
-    return false;
+    if( GetEndPoint().x != line->GetEndPoint().x )
+        return GetEndPoint().x < line->GetEndPoint().x;
+
+    return GetEndPoint().y < line->GetEndPoint().y;
 }
 
 

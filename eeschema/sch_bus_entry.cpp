@@ -406,6 +406,29 @@ void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aLi
 }
 
 
+bool SCH_BUS_ENTRY_BASE::operator <( const SCH_ITEM& aItem ) const
+{
+    if( Type() != aItem.Type() )
+        return Type() < aItem.Type();
+
+    auto component = static_cast<const SCH_BUS_ENTRY_BASE*>( &aItem );
+
+    if( GetLayer() != component->GetLayer() )
+        return GetLayer() < component->GetLayer();
+
+    if( GetPosition().x != component->GetPosition().x )
+        return GetPosition().x < component->GetPosition().x;
+
+    if( GetPosition().y != component->GetPosition().y )
+        return GetPosition().y < component->GetPosition().y;
+
+    if( m_End().x != component->m_End().x )
+        return m_End().x < component->m_End().x;
+
+    return m_End().y < component->m_End().y;
+}
+
+
 bool SCH_BUS_WIRE_ENTRY::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
 {
     // Don't generate connections between bus entries and buses, since there is

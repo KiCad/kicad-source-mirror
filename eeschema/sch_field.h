@@ -201,6 +201,8 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    bool operator <( const SCH_ITEM& aItem ) const override;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif

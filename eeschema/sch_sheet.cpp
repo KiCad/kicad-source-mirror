@@ -971,6 +971,23 @@ SCH_SHEET& SCH_SHEET::operator=( const SCH_ITEM& aItem )
 }
 
 
+bool SCH_SHEET::operator <( const SCH_ITEM& aItem ) const
+{
+    if( Type() != aItem.Type() )
+        return Type() < aItem.Type();
+
+    auto sheet = static_cast<const SCH_SHEET*>( &aItem );
+
+    if (m_name != sheet->m_name)
+        return m_name < sheet->m_name;
+
+    if (m_fileName != sheet->m_fileName)
+        return m_fileName < sheet->m_fileName;
+
+    return false;
+}
+
+
 #if defined(DEBUG)
 
 void SCH_SHEET::Show( int nestLevel, std::ostream& os ) const
