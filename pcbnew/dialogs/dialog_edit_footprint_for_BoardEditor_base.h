@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -71,6 +71,8 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_OrientValueCtrl;
 		wxStaticText* m_BoardSideLabel;
 		wxChoice* m_BoardSideCtrl;
+		wxStaticText* m_BoardUniqueIDlabel;
+		wxTextCtrl* m_tcUniqueID;
 		wxRadioBox* m_AutoPlaceCtrl;
 		wxStaticBoxSizer* m_sizerAP;
 		wxBoxSizer* m_sizerAllow90;

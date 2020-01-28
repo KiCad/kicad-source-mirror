@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -179,21 +179,31 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 
 	bSizerLeft->Add( sbOrientationSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bSizerBoardSize;
-	bSizerBoardSize = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizerFpInfo;
+	fgSizerFpInfo = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerFpInfo->AddGrowableCol( 1 );
+	fgSizerFpInfo->SetFlexibleDirection( wxBOTH );
+	fgSizerFpInfo->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_BoardSideLabel = new wxStaticText( m_PanelGeneral, wxID_ANY, _("Board side:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BoardSideLabel->Wrap( -1 );
-	bSizerBoardSize->Add( m_BoardSideLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizerFpInfo->Add( m_BoardSideLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxString m_BoardSideCtrlChoices[] = { _("Front"), _("Back") };
 	int m_BoardSideCtrlNChoices = sizeof( m_BoardSideCtrlChoices ) / sizeof( wxString );
 	m_BoardSideCtrl = new wxChoice( m_PanelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_BoardSideCtrlNChoices, m_BoardSideCtrlChoices, 0 );
 	m_BoardSideCtrl->SetSelection( 0 );
-	bSizerBoardSize->Add( m_BoardSideCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizerFpInfo->Add( m_BoardSideCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+	m_BoardUniqueIDlabel = new wxStaticText( m_PanelGeneral, wxID_ANY, _("Sheet path:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_BoardUniqueIDlabel->Wrap( -1 );
+	fgSizerFpInfo->Add( m_BoardUniqueIDlabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_tcUniqueID = new wxTextCtrl( m_PanelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	fgSizerFpInfo->Add( m_tcUniqueID, 0, wxALL|wxEXPAND, 5 );
 
 
-	bSizerLeft->Add( bSizerBoardSize, 0, wxEXPAND|wxALL, 5 );
+	bSizerLeft->Add( fgSizerFpInfo, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerProperties->Add( bSizerLeft, 1, wxEXPAND, 5 );

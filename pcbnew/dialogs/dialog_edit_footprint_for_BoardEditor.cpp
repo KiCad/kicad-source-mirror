@@ -282,6 +282,8 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
 
     m_BoardSideCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
 
+    m_tcUniqueID->SetValue( m_footprint->GetPath() );
+
     if( m_footprint->IsLocked() )
         m_AutoPlaceCtrl->SetSelection( 2 );
     else if( m_footprint->PadsLocked() )
