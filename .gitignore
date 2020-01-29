@@ -17,16 +17,10 @@ eeschema/cmp_library_lexer.h
 eeschema/cmp_library_keywords.*
 eeschema/dialogs/dialog_bom_cfg_keywords.cpp
 eeschema/dialogs/dialog_bom_cfg_lexer.h
-eeschema/dialogs/dialog_bom_help_md.h
 eeschema/template_fieldnames_keywords.*
 eeschema/template_fieldnames_lexer.h
 pcbnew/pcb_plot_params_keywords.cpp
 pcbnew/pcb_plot_params_lexer.h
-pcb_calculator/attenuators/bridget_tee_formula.h
-pcb_calculator/attenuators/pi_formula.h
-pcb_calculator/attenuators/splitter_formula.h
-pcb_calculator/attenuators/tee_formula.h
-pcb_calculator/tracks_width_versus_current_formula.h
 Makefile
 CMakeCache.txt
 auto_renamed_to_cpp
