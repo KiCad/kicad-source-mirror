@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_3D_VIEW_OPTION_BASE_H__
-#define __DIALOG_3D_VIEW_OPTION_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -37,7 +36,7 @@
 class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticText3DRenderOpts;
 		wxStaticBitmap* m_bitmapRealisticMode;
@@ -50,6 +49,8 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxBoundingBoxes;
 		wxStaticBitmap* m_bitmapAreas;
 		wxCheckBox* m_checkBoxAreas;
+		wxStaticBitmap* m_bitmapSubtractMaskFromSilk;
+		wxCheckBox* m_checkBoxSubtractMaskFromSilk;
 		wxStaticText* m_staticText3DmodelVisibility;
 		wxStaticBitmap* m_bitmap3DshapesTH;
 		wxCheckBox* m_checkBox3DshapesTH;
@@ -76,16 +77,15 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCheckRealisticMode( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 571,372 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 571,372 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_3D_VIEW_OPTIONS_BASE();
-	
+
 };
 
-#endif //__DIALOG_3D_VIEW_OPTION_BASE_H__

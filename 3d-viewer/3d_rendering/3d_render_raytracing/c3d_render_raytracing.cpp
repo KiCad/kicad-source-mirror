@@ -1727,7 +1727,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
     SFVEC3F hitPoint = aHitInfo.m_HitPoint;
 
     if( !m_isPreview )
-        hitPoint += aHitInfo.m_HitNormal * m_settings.GetNonCopperLayerThickness3DU() * 1.0f;
+        hitPoint += aHitInfo.m_HitNormal * m_settings.GetNonCopperLayerThickness3DU() * 1.2f;
 
     const CMATERIAL *objMaterial = aHitInfo.pHitObject->GetMaterial();
     wxASSERT( objMaterial != NULL );

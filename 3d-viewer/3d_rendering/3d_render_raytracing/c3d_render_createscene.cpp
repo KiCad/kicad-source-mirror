@@ -539,10 +539,12 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
             std::vector<const COBJECT2D *> *object2d_B = CSGITEM_EMPTY;
 
-            if( true )  // previously, was a option, now holes are always drawn in zones
-            {
-                object2d_B = new std::vector<const COBJECT2D *>();
+            object2d_B = new std::vector<const COBJECT2D*>();
 
+            // Subtract holes but not in SolderPaste
+            // (can be added as an option in future)
+            if( !( ( layer_id == B_Paste ) || ( layer_id == F_Paste ) ) )
+            {
                 // Check if there are any layerhole that intersects this object
                 // Eg: a segment is cutted by a via hole or THT hole.
                 // /////////////////////////////////////////////////////////////
@@ -554,7 +556,6 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
                     const CBVHCONTAINER2D *containerLayerHoles2d =
                             static_cast<const CBVHCONTAINER2D *>(ii_hole->second);
-
 
                     CONST_LIST_OBJECT2D intersectionList;
                     containerLayerHoles2d->GetListObjectsIntersects( object2d_A->GetBBox(),
@@ -600,12 +601,44 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
                         }
                     }
                 }
+            }
 
-                if( object2d_B->empty() )
+
+            const MAP_CONTAINER_2D& mapLayers = m_settings.GetMapLayers();
+
+            if( m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) &&
+                ( ( ( layer_id == B_SilkS ) &&
+                    ( mapLayers.find( B_Mask ) != mapLayers.end() ) ) ||
+                  ( ( layer_id == F_SilkS ) &&
+                    ( mapLayers.find( F_Mask ) != mapLayers.end() ) ) ) )
+            {
+                const PCB_LAYER_ID layerMask_id = ( layer_id == B_SilkS ) ? B_Mask : F_Mask;
+
+                const CBVHCONTAINER2D *containerMaskLayer2d =
+                        static_cast<const CBVHCONTAINER2D*>( mapLayers.at( layerMask_id ) );
+
+                CONST_LIST_OBJECT2D intersectionList;
+                containerMaskLayer2d->GetListObjectsIntersects( object2d_A->GetBBox(),
+                                                                intersectionList );
+
+                if( !intersectionList.empty() )
                 {
-                    delete object2d_B;
-                    object2d_B = CSGITEM_EMPTY;
+                    for( CONST_LIST_OBJECT2D::const_iterator objOnLayer =
+                         intersectionList.begin();
+                         objOnLayer != intersectionList.end();
+                         ++objOnLayer )
+                    {
+                        const COBJECT2D* obj2d = static_cast<const COBJECT2D*>( *objOnLayer );
+
+                        object2d_B->push_back( obj2d );
+                    }
                 }
+            }
+
+            if( object2d_B->empty() )
+            {
+                delete object2d_B;
+                object2d_B = CSGITEM_EMPTY;
             }
 
             if( (object2d_B == CSGITEM_EMPTY) &&

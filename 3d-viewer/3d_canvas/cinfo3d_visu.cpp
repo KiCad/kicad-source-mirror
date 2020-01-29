@@ -103,6 +103,7 @@ CINFO3D_VISU::CINFO3D_VISU() :
     SetFlag( FL_ZONE, true );
     SetFlag( FL_SILKSCREEN, true );
     SetFlag( FL_SOLDERMASK, true );
+    SetFlag( FL_SUBTRACT_MASK_FROM_SILK, false );
 
     m_BgColorBot         = SFVEC3D( 0.4, 0.4, 0.5 );
     m_BgColorTop         = SFVEC3D( 0.8, 0.8, 0.9 );

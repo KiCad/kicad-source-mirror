@@ -526,9 +526,6 @@ void CLAYERS_OGL_DISP_LISTS::DrawAllCameraCulledSubtractLayer(
         const CLAYERS_OGL_DISP_LISTS *aLayerToSubtractB,
         bool aDrawMiddle ) const
 {
-    if( aDrawMiddle )
-        DrawMiddle();
-
     glClearStencil( 0x00 );
     glClear( GL_STENCIL_BUFFER_BIT );
 
@@ -584,6 +581,8 @@ void CLAYERS_OGL_DISP_LISTS::DrawAllCameraCulledSubtractLayer(
     glStencilOp( GL_KEEP, GL_KEEP, GL_INCR );
     DrawTop();
 
+    if( aDrawMiddle )
+        DrawMiddle();
 
     glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
 
