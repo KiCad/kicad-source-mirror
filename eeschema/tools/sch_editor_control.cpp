@@ -52,7 +52,7 @@
 #include <dialogs/dialog_paste_special.h>
 #include <netlist_exporters/netlist_exporter_pspice.h>
 #include <math/util.h>      // for KiROUND
-
+#include <dialog_update_from_pcb.h>
 
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
 {
@@ -1220,6 +1220,14 @@ int SCH_EDITOR_CONTROL::UpdatePCB( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::UpdateFromPCB( const TOOL_EVENT& aEvent )
+{
+    DIALOG_UPDATE_FROM_PCB dlg( m_frame );
+    dlg.ShowModal();
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
 {
     int result = NET_PLUGIN_CHANGE;
@@ -1364,6 +1372,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::EditSymbolLibraryLinks,EE_ACTIONS::editSymbolLibraryLinks.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowPcbNew,            EE_ACTIONS::showPcbNew.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::UpdatePCB,             ACTIONS::updatePcbFromSchematic.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::UpdateFromPCB,         ACTIONS::updateSchematicFromPcb.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ExportNetlist,         EE_ACTIONS::exportNetlist.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::GenerateBOM,           EE_ACTIONS::generateBOM.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::DrawSheetOnClipboard,  EE_ACTIONS::drawSheetOnClipboard.MakeEvent() );

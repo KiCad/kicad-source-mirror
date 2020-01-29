@@ -162,6 +162,13 @@ int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit )
     return -1;
 }
 
+int SCH_REFERENCE_LIST::FindRefByPath( const wxString& aPath ) const
+{
+    for( size_t i = 0; i < componentFlatList.size(); ++i )
+        if( componentFlatList[i].GetPath() == aPath )
+            return i;
+    return -1;
+}
 
 void SCH_REFERENCE_LIST::RemoveSubComponentsFromList()
 {
@@ -531,6 +538,32 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
     }
 }
 
+int SCH_REFERENCE_LIST::checkForDuplicatedElements( REPORTER& aReporter )
+{
+    int      error = 0;
+    wxString msg;
+    for( size_t ii = 0; ii < componentFlatList.size() - 1; ii++ )
+    {
+        if( ( componentFlatList[ii].m_TimeStamp != componentFlatList[ii + 1].m_TimeStamp )
+                || ( componentFlatList[ii].GetSheetPath()
+                        != componentFlatList[ii + 1].GetSheetPath() ) )
+            continue;
+
+        // Same time stamp found.
+        wxString full_path;
+
+        full_path.Printf( wxT( "%s%8.8X" ), GetChars( componentFlatList[ii].GetSheetPath().Path() ),
+                componentFlatList[ii].m_TimeStamp );
+
+        msg.Printf( _( "Duplicate time stamp (%s) for %s%d and %s%d" ), full_path,
+                componentFlatList[ii].GetRef(), componentFlatList[ii].m_NumRef,
+                componentFlatList[ii + 1].GetRef(), componentFlatList[ii + 1].m_NumRef );
+
+        aReporter.Report( msg, REPORTER::RPT_WARNING );
+        error++;
+    }
+    return error;
+}
 
 int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
 {
@@ -694,30 +727,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
 
     // count the duplicated time stamps
     SortByTimeStamp();
-
-    for( int ii = 0; ii < imax; ii++ )
-    {
-        if(  ( componentFlatList[ii].m_TimeStamp != componentFlatList[ii + 1].m_TimeStamp )
-          || ( componentFlatList[ii].GetSheetPath() != componentFlatList[ii + 1].GetSheetPath() )  )
-            continue;
-
-        // Same time stamp found.
-        wxString full_path;
-
-        full_path.Printf( wxT( "%s%8.8X" ),
-                          GetChars( componentFlatList[ii].GetSheetPath().Path() ),
-                          componentFlatList[ii].m_TimeStamp );
-
-        msg.Printf( _( "Duplicate time stamp (%s) for %s%d and %s%d" ),
-                    full_path,
-                    componentFlatList[ii].GetRef(),
-                    componentFlatList[ii].m_NumRef,
-                    componentFlatList[ii + 1].GetRef(),
-                    componentFlatList[ii + 1].m_NumRef );
-
-        aReporter.Report( msg, REPORTER::RPT_WARNING );
-        error++;
-    }
+    error += checkForDuplicatedElements( aReporter );
 
     return error;
 }

@@ -92,6 +92,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_symbol_remap_base.cpp
     dialogs/dialog_update_fields.cpp
     dialogs/dialog_update_fields_base.cpp
+    dialogs/dialog_update_from_pcb.cpp
+    dialogs/dialog_update_from_pcb_base.cpp
     dialogs/panel_eeschema_template_fieldnames.cpp
     dialogs/panel_eeschema_template_fieldnames_base.cpp
     dialogs/panel_eeschema_display_options.cpp
@@ -218,6 +220,7 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_orcadpcb2.cpp
     netlist_exporters/netlist_exporter_pspice.cpp
 
+    tools/backannotate.cpp
     tools/backanno.cpp
     tools/ee_actions.cpp
     tools/ee_inspection_tool.cpp

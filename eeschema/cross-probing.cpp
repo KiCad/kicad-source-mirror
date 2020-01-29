@@ -453,6 +453,10 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             payload = "success";
         break;
 
+    case MAIL_SCH_UPDATE:
+        m_toolManager->RunAction( ACTIONS::updateSchematicFromPcb, true );
+        break;
+
     default:
         ;
     }

@@ -34,11 +34,14 @@
 #include <class_pcb_target.h>
 #include <class_zone.h>
 #include <collectors.h>
+#include <confirm.h>
 #include <cstdint>
 #include <dialogs/dialog_page_settings.h>
 #include <dialogs/dialog_update_pcb.h>
 #include <functional>
 #include <gestfich.h>
+#include <kiface_i.h>
+#include <kiway.h>
 #include <memory>
 #include <netlist_reader/pcb_netlist.h>
 #include <origin_viewitem.h>
@@ -395,6 +398,28 @@ int PCB_EDITOR_CONTROL::UpdatePCBFromSchematic( const TOOL_EVENT& aEvent )
         updateDialog.ShowModal();
     }
 
+    return 0;
+}
+
+int PCB_EDITOR_CONTROL::UpdateSchematicFromPCB( const TOOL_EVENT& aEvent )
+{
+    if( Kiface().IsSingle() )
+    {
+        DisplayErrorMessage(
+                m_frame, _( "Cannot update schematic because Pcbnew is opened in stand-alone "
+                            "mode. In order to create or update PCBs from schematics, you "
+                            "must launch the KiCad project manager and create a project." ) );
+        return 0;
+    }
+
+    m_frame->RunEeschema();
+    KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_SCH, false );
+
+    if( frame )
+    {
+        std::string payload;
+        m_frame->Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_UPDATE, payload, m_frame );
+    }
     return 0;
 }
 
@@ -1166,6 +1191,7 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::UnlockSelected,         PCB_ACTIONS::unlock.MakeEvent() );
 
     Go( &PCB_EDITOR_CONTROL::UpdatePCBFromSchematic, ACTIONS::updatePcbFromSchematic.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::UpdateSchematicFromPCB, ACTIONS::updateSchematicFromPcb.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ShowEeschema,           PCB_ACTIONS::showEeschema.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ToggleLayersManager,    PCB_ACTIONS::showLayersManager.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ToggleMicrowaveToolbar, PCB_ACTIONS::showMicrowaveToolbar.MakeEvent() );

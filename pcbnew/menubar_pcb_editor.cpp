@@ -471,6 +471,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     CONDITIONAL_MENU* toolsMenu = new CONDITIONAL_MENU( false, selTool );
 
     toolsMenu->AddItem( ACTIONS::updatePcbFromSchematic,     SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( ACTIONS::updateSchematicFromPcb,     SELECTION_CONDITIONS::ShowAlways );
     toolsMenu->AddItem( PCB_ACTIONS::updateFootprints,       SELECTION_CONDITIONS::ShowAlways );
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)

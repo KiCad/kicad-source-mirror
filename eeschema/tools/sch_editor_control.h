@@ -105,6 +105,7 @@ public:
     int EditSymbolLibraryLinks( const TOOL_EVENT& aEvent );
     int ShowPcbNew( const TOOL_EVENT& aEvent );
     int UpdatePCB( const TOOL_EVENT& aEvent );
+    int UpdateFromPCB( const TOOL_EVENT& aEvent );
     int ImportFPAssignments( const TOOL_EVENT& aEvent );
     int ExportNetlist( const TOOL_EVENT& aEvent );
     int GenerateBOM( const TOOL_EVENT& aEvent );
