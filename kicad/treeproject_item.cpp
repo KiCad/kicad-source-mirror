@@ -31,10 +31,13 @@
 
 #include <wx/regex.h>
 
+#include <confirm.h>
 #include <gestfich.h>
+#include <kiplatform/environment.h>
 #include <kiway.h>
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
+
 #include "treeprojectfiles.h"
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
@@ -126,16 +129,16 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
 
 void TREEPROJECT_ITEM::Delete()
 {
-    bool isDirectory = wxDirExists( GetFileName() );
-    bool success;
+    wxString errMsg;
 
-    if( !isDirectory )
-        success = wxRemoveFile( GetFileName() );
-    else
-        success = DeleteDirectory( GetFileName() );
+    if( !KIPLATFORM::ENV::MoveToTrash( GetFileName(), errMsg ) )
+    {
+        wxString dialogMsg = wxString::Format( _( "Failed to delete '%s'"), GetFileName() );
+        DisplayErrorMessage( m_parent, dialogMsg, errMsg );
+        return;
+    }
 
-    if( success )
-        m_parent->Delete( GetId() );
+    m_parent->Delete( GetId() );
 }
 
 
