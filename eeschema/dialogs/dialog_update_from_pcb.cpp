@@ -59,11 +59,11 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Update Schematic" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
-    m_sdbSizer1->Layout();
+    m_sdbSizerOK->SetLabel( _( "Update Schematic" ) );
+    m_sdbSizerCancel->SetLabel( _( "Close" ) );
+    m_sdbSizer->Layout();
 
-    m_sdbSizer1OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
     FinishDialogSettings();
 }
 
@@ -83,7 +83,7 @@ void DIALOG_UPDATE_FROM_PCB::updateData()
 
     if( backAnno.FetchNetlistFromPCB( netlist ) )
         successfulRun = backAnno.BackAnnotateSymbols( netlist );
-    m_sdbSizer1OK->Enable( successfulRun );
+    m_sdbSizerOK->Enable( successfulRun );
     m_messagePanel->Flush( false );
 }
 
