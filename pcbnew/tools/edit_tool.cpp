@@ -937,6 +937,9 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
             statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
             Wait();
         }
+
+        // Ensure statusPopup is hidden after use and before deleting it:
+        statusPopup.Hide();
     }
 
     m_lockedSelected = false;
@@ -1371,6 +1374,9 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aReferencePoint )
 
     while( !done )
         Wait();
+
+    // Ensure statusPopup is hidden after use and before deleting it:
+    statusPopup->Hide();
 
     if( pickedPoint.is_initialized() )
         aReferencePoint = pickedPoint.get();
