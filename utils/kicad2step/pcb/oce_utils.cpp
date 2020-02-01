@@ -735,12 +735,13 @@ bool PCBMODEL::CreatePCB()
         }
 
         std::list< KICADCURVE >::iterator sC = m_curves.begin();
-        std::list< KICADCURVE >::iterator eC = m_curves.end();
+        bool added = false;
 
-        while( sC != eC )
+        while( sC != m_curves.end() )
         {
             if( oln.AddSegment( *sC ) )
             {
+                added = true;
                 m_curves.erase( sC );
                 break;
             }
@@ -748,7 +749,7 @@ bool PCBMODEL::CreatePCB()
             ++sC;
         }
 
-        if( sC == eC && !oln.m_curves.empty() )
+        if( !added && !oln.m_curves.empty() )
         {
             std::ostringstream ostr;
 #ifdef DEBUG
