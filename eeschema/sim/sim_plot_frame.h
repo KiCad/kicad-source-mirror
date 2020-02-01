@@ -55,6 +55,18 @@ class SIM_PLOT_PANEL;
 class SIM_THREAD_REPORTER;
 class TUNER_SLIDER;
 
+
+// Identifiers (indexes) for color choice in color table
+enum SIM_COLOR_SET
+{
+    SIM_BG_COLOR,
+    SIM_FG_COLOR,
+    SIM_AXIS_COLOR,
+    SIM_CURSOR_COLOR,
+    SIM_TRACE_COLOR     // First index for trace colors list
+};
+
+
 ///> Trace descriptor class
 class TRACE_DESC
 {
@@ -161,6 +173,23 @@ public:
      */
     const NETLIST_EXPORTER_PSPICE_SIM* GetExporter() const;
 
+    /**
+     * @return the current background option for plotting.
+     * false for drak bg, true for clear bg
+     */
+    bool GetPlotBgOpt() const { return m_plotUseWhiteBg; }
+
+    /**
+     * @return the wxColor selected in color list.
+     * @param aColorId is the index in color list
+     */
+    wxColor GetPlotColor( int aColorId );
+
+    /**
+     * @return the count of colors in color list
+     */
+    int GetPlotColorCount() { return m_colorList.size(); }
+
 private:
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;
@@ -168,6 +197,12 @@ private:
     /** Give icons to menuitems of the main menubar
      */
     void setIconsForMenuItems();
+
+    /** Fills m_colorList by a default set of colors.
+     *  @param aWhiteBg = true to use a white (or clear) background
+     * false to use a dark background
+     */
+    void fillDefaultColorList( bool aWhiteBg );
 
     /**
      * @brief Adds a new plot to the current panel.
@@ -259,6 +294,11 @@ private:
     void menuShowLegendUpdate( wxUpdateUIEvent& event ) override;
     void menuShowDotted( wxCommandEvent& event ) override;
     void menuShowDottedUpdate( wxUpdateUIEvent& event ) override;
+	void menuWhiteBackground( wxCommandEvent& event ) override;
+	void menuShowWhiteBackgroundUpdate( wxUpdateUIEvent& event ) override
+    {
+        event.Check( m_plotUseWhiteBg );
+    }
 
     // Event handlers
     void onPlotChanged( wxAuiNotebookEvent& event ) override;
@@ -358,6 +398,10 @@ private:
     int m_splitterPlotAndConsoleSashPosition;
     int m_splitterSignalsSashPosition;
     int m_splitterTuneValuesSashPosition;
+    bool m_plotUseWhiteBg;
+
+    ///> The color list to draw traces, bg, fg, axis...
+    std::vector<wxColour> m_colorList;
 };
 
 // Commands

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class wxListView;
+
 #include "kiway_player.h"
 #include <wx/string.h>
 #include <wx/bitmap.h>
@@ -43,6 +45,7 @@
 #define ID_MENU_SHOW_GRID 1008
 #define ID_MENU_SHOW_LEGEND 1009
 #define ID_MENU_DOTTED 1010
+#define ID_MENU_WHITE_BG 1011
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class SIM_PLOT_FRAME_BASE
@@ -108,6 +111,8 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void menuShowLegendUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void menuShowDotted( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuShowDottedUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void menuWhiteBackground( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuShowWhiteBackgroundUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onPlotChanged( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onPlotClose( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onSignalDblClick( wxMouseEvent& event ) { event.Skip(); }

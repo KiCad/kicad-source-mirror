@@ -31,16 +31,18 @@
 #include <map>
 #include "sim_types.h"
 
+class SIM_PLOT_FRAME;
+class SIM_PLOT_PANEL;
 class TRACE;
 
 ///> Cursor attached to a trace to follow its values:
 class CURSOR : public mpInfoLayer
 {
 public:
-    CURSOR( const TRACE* aTrace )
+    CURSOR( const TRACE* aTrace, SIM_PLOT_PANEL* aPlotPanel )
         : mpInfoLayer( wxRect( 0, 0, DRAG_MARGIN, DRAG_MARGIN ), wxTRANSPARENT_BRUSH ),
         m_trace( aTrace ), m_updateRequired( true ), m_updateRef( false ),
-        m_coords( 0.0, 0.0 ), m_window( nullptr )
+        m_coords( 0.0, 0.0 ), m_window( nullptr ), m_plotPanel( aPlotPanel )
     {
         SetDrawOutsideMargins( false );
     }
@@ -79,6 +81,7 @@ private:
     bool m_updateRequired, m_updateRef;
     wxRealPoint m_coords;
     mpWindow* m_window;
+    SIM_PLOT_PANEL* m_plotPanel;
 
     static constexpr int DRAG_MARGIN = 10;
 };
@@ -163,10 +166,17 @@ protected:
 class SIM_PLOT_PANEL : public mpWindow
 {
 public:
-    SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
+    SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, SIM_PLOT_FRAME* aMainFrame,
+                    wxWindowID id, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = wxPanelNameStr );
 
     ~SIM_PLOT_PANEL();
+
+    ///> set the pointer to the sim plot frame
+    void SetMasterFrame( SIM_PLOT_FRAME* aFrame )
+    {
+        m_masterFrame = aFrame;
+    }
 
     SIM_TYPE GetType() const
     {
@@ -271,8 +281,18 @@ public:
     ///> Update trace line style
     void UpdateTraceStyle( TRACE* trace );
 
+    /**
+     * A proxy to SIM_PLOT_FRAME::GetPlotColor()
+     * @return the color stored in m_colorList.
+     * @param aIndex is the index in list
+     */
+    wxColour GetPlotColor( int aIndex );
+
+    ///> Update plot colors
+    void UpdatePlotColors();
+
 private:
-    ///> Returns a new color from the palette
+    ///> @return a new color from the palette
     wxColour generateColor();
 
     // Color index to get a new color from the palette
@@ -291,6 +311,8 @@ private:
     std::vector<mpLayer*> m_topLevel;
 
     const SIM_TYPE m_type;
+
+    SIM_PLOT_FRAME* m_masterFrame;
 };
 
 wxDECLARE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );

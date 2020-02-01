@@ -138,6 +138,9 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     // Get the previous size and position of windows:
     LoadSettings( config() );
 
+    // Prepare the color list to plot traces
+    fillDefaultColorList( GetPlotBgOpt() );
+
     // Give icons to menuitems
     setIconsForMenuItems();
 
@@ -228,10 +231,12 @@ SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
         m_settingsDlg->Destroy();
 }
 
+// Keys for config save/read
 #define PLOT_PANEL_WIDTH_ENTRY "SimPlotPanelWidth"
 #define PLOT_PANEL_HEIGHT_ENTRY "SimPlotPanelHeight"
 #define SIGNALS_PANEL_HEIGHT_ENTRY "SimSignalPanelHeight"
 #define CURSORS_PANEL_HEIGHT_ENTRY "SimCursorsPanelHeight"
+#define PLOT_WITE_BG "SimPlotWhiteBg"
 
 void SIM_PLOT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
@@ -243,6 +248,7 @@ void SIM_PLOT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( PLOT_PANEL_HEIGHT_ENTRY, m_splitterPlotAndConsole->GetSashPosition() );
     aCfg->Write( SIGNALS_PANEL_HEIGHT_ENTRY, m_splitterSignals->GetSashPosition() );
     aCfg->Write( CURSORS_PANEL_HEIGHT_ENTRY, m_splitterTuneValues->GetSashPosition() );
+    aCfg->Write( PLOT_WITE_BG, m_plotUseWhiteBg );
 }
 
 
@@ -257,6 +263,7 @@ void SIM_PLOT_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( PLOT_PANEL_HEIGHT_ENTRY, &m_splitterPlotAndConsoleSashPosition, -1 );
     aCfg->Read( SIGNALS_PANEL_HEIGHT_ENTRY, &m_splitterSignalsSashPosition, -1 );
     aCfg->Read( CURSORS_PANEL_HEIGHT_ENTRY, &m_splitterTuneValuesSashPosition, -1 );
+    aCfg->Read( PLOT_WITE_BG, &m_plotUseWhiteBg, false );
 }
 
 
@@ -295,6 +302,8 @@ void SIM_PLOT_FRAME::setIconsForMenuItems()
         { wxID_ZOOM_FIT, zoom_fit_in_page_xpm},
         { ID_MENU_SHOW_GRID, grid_xpm},
         { ID_MENU_SHOW_LEGEND, text_xpm},
+        { ID_MENU_DOTTED, add_dashed_line_xpm},
+        { ID_MENU_WHITE_BG, swap_layer_xpm},
 
         { 0, nullptr }  // Sentinel
     };
@@ -346,6 +355,56 @@ void SIM_PLOT_FRAME::setSubWindowsSashSize()
 }
 
 
+wxColor SIM_PLOT_FRAME::GetPlotColor( int aColorId )
+{
+    // return the wxColor selected in color list or BLACK is not in list
+    if( aColorId >= 0 && aColorId < (int)m_colorList.size() )
+        return m_colorList[aColorId];
+
+    return wxColor( 0, 0, 0 );
+}
+
+
+void SIM_PLOT_FRAME::fillDefaultColorList( bool aWhiteBg )
+{
+    m_colorList.clear();
+
+    if( aWhiteBg )
+    {
+        m_colorList.emplace_back( 255, 255, 255 );  // Bg color
+        m_colorList.emplace_back( 0, 0, 0 );        // Fg color (texts)
+        m_colorList.emplace_back( 130, 130, 130 );  // Axis color
+        m_colorList.emplace_back( 0, 0, 0 );        // cursors color
+    }
+    else
+    {
+        m_colorList.emplace_back( 0, 0, 0 );        // Bg color
+        m_colorList.emplace_back( 255, 255, 255 );  // Fg color (texts)
+        m_colorList.emplace_back( 130, 130, 130 );  // Axis color
+        m_colorList.emplace_back( 255, 255, 255 );  // cursors color
+    }
+
+    // Add a list of color for traces, starting at index SIM_TRACE_COLOR
+    m_colorList.emplace_back( 0xE4, 0x1A, 0x1C );
+    m_colorList.emplace_back( 0x37, 0x7E, 0xB8 );
+    m_colorList.emplace_back( 0x4D, 0xAF, 0x4A );
+    m_colorList.emplace_back( 0x98, 0x4E, 0xA3 );
+    m_colorList.emplace_back( 0xFF, 0x7F, 0x00 );
+    m_colorList.emplace_back( 0xFF, 0xFF, 0x33 );
+    m_colorList.emplace_back( 0xA6, 0x56, 0x28 );
+    m_colorList.emplace_back( 0xF7, 0x81, 0xBF );
+    m_colorList.emplace_back( 0x66, 0xC2, 0xA5 );
+    m_colorList.emplace_back( 0xFC, 0x8D, 0x62 );
+    m_colorList.emplace_back( 0x8D, 0xA0, 0xCB );
+    m_colorList.emplace_back( 0xE7, 0x8A, 0xC3 );
+    m_colorList.emplace_back( 0xA6, 0xD8, 0x54 );
+    m_colorList.emplace_back( 0xFF, 0xD9, 0x2F );
+    m_colorList.emplace_back( 0xE5, 0xC4, 0x94 );
+    m_colorList.emplace_back( 0xB3, 0xB3, 0xB3 );
+
+}
+
+
 void SIM_PLOT_FRAME::StartSimulation()
 {
     STRING_FORMATTER formatter;
@@ -393,7 +452,7 @@ bool SIM_PLOT_FRAME::IsSimulationRunning()
 
 SIM_PLOT_PANEL* SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
 {
-    SIM_PLOT_PANEL* plotPanel = new SIM_PLOT_PANEL( aSimType, m_plotNotebook, wxID_ANY );
+    SIM_PLOT_PANEL* plotPanel = new SIM_PLOT_PANEL( aSimType, m_plotNotebook, this, wxID_ANY );
 
     plotPanel->EnableMouseWheelPan(
             m_schematicFrame->GetCanvas()->GetViewControls()->IsMousewheelPanEnabled() );
@@ -1098,6 +1157,26 @@ void SIM_PLOT_FRAME::menuShowDottedUpdate( wxUpdateUIEvent& event )
     SIM_PLOT_PANEL* plot = CurrentPlot();
 
     event.Check( plot ? plot->GetDottedCurrentPhase() : false );
+}
+
+
+void SIM_PLOT_FRAME::menuWhiteBackground( wxCommandEvent& event )
+{
+    m_plotUseWhiteBg = not m_plotUseWhiteBg;
+
+    // Rebuild the color list to plot traces
+    fillDefaultColorList( GetPlotBgOpt() );
+
+    // Now send changes to all SIM_PLOT_PANEL
+    for( size_t page = 0; page < m_plotNotebook->GetPageCount(); page++ )
+    {
+        wxWindow* curPage = m_plotNotebook->GetPage( page );
+
+        if( curPage == m_welcomePanel )
+            continue;
+
+        static_cast<SIM_PLOT_PANEL*>( curPage )->UpdatePlotColors();
+    }
 }
 
 

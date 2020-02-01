@@ -24,6 +24,7 @@
  */
 
 #include "sim_plot_panel.h"
+#include "sim_plot_frame.h"
 
 #include <algorithm>
 #include <limits>
@@ -331,7 +332,8 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     wxCoord topPx    = m_drawOutsideMargins ? 0 : aWindow.GetMarginTop();
     wxCoord bottomPx = m_drawOutsideMargins ? aWindow.GetScrY() : aWindow.GetScrY() - aWindow.GetMarginBottom();
 
-    aDC.SetPen( wxPen( *wxWHITE, 1, m_continuous ? wxPENSTYLE_SOLID : wxPENSTYLE_LONG_DASH ) );
+    aDC.SetPen( wxPen( m_plotPanel->GetPlotColor( SIM_CURSOR_COLOR ), 1,
+                       m_continuous ? wxPENSTYLE_SOLID : wxPENSTYLE_LONG_DASH ) );
 
     if( topPx < cursorPos.y && cursorPos.y < bottomPx )
         aDC.DrawLine( leftPx, cursorPos.y, rightPx, cursorPos.y );
@@ -361,7 +363,8 @@ void CURSOR::UpdateReference()
 }
 
 
-SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id, const wxPoint& pos,
+SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, SIM_PLOT_FRAME* aMainFrame,
+                                wxWindowID id, const wxPoint& pos,
         const wxSize& size, long style, const wxString& name )
         : mpWindow( parent, id, pos, size, style ),
           m_colorIdx( 0 ),
@@ -369,16 +372,15 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
           m_axis_y1( nullptr ),
           m_axis_y2( nullptr ),
           m_dotted_cp( false ),
-          m_type( aType )
+          m_type( aType ),
+          m_masterFrame( aMainFrame )
 {
     LimitView( true );
     SetMargins( 50, 80, 50, 80 );
 
-    wxColour grey( 130, 130, 130 );
-    wxColour dark( 10, 10, 10 );
-    SetColourTheme( dark, *wxWHITE, grey );
-    EnableDoubleBuffer( true );
-    UpdateAll();
+    SetColourTheme( GetPlotColor( SIM_BG_COLOR ),
+                    GetPlotColor( SIM_FG_COLOR ),
+                    GetPlotColor( SIM_AXIS_COLOR ) );
 
     switch( m_type )
     {
@@ -434,11 +436,10 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
         AddLayer( m_axis_y2 );
     }
 
+    // a mpInfoLegend displays le name of traces on the left top panel corner:
     m_legend = new mpInfoLegend( wxRect( 0, 40, 200, 40 ), wxTRANSPARENT_BRUSH );
     m_legend->SetVisible( false );
     AddLayer( m_legend );
-    m_topLevel.push_back( m_legend );
-    SetColourTheme( dark, *wxWHITE, grey );
 
     EnableDoubleBuffer( true );
     UpdateAll();
@@ -448,6 +449,23 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
 SIM_PLOT_PANEL::~SIM_PLOT_PANEL()
 {
     // ~mpWindow destroys all the added layers, so there is no need to destroy m_traces contents
+}
+
+
+void SIM_PLOT_PANEL::UpdatePlotColors()
+{
+    // Update bg and fg colors:
+    SetColourTheme( GetPlotColor( SIM_BG_COLOR ),
+                    GetPlotColor( SIM_FG_COLOR ),
+                    GetPlotColor( SIM_AXIS_COLOR ) );
+
+    UpdateAll();
+}
+
+
+wxColour SIM_PLOT_PANEL::GetPlotColor( int aIndex )
+{
+    return m_masterFrame->GetPlotColor( aIndex );
 }
 
 
@@ -608,7 +626,7 @@ void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, bool aEnable )
 
     if( aEnable )
     {
-        CURSOR* c = new CURSOR( t );
+        CURSOR* c = new CURSOR( t, this );
         int plotCenter = GetMarginLeft() + ( GetXScreen() - GetMarginLeft() - GetMarginRight() ) / 2;
         c->SetX( plotCenter );
         t->SetCursor( c );
@@ -644,42 +662,31 @@ void SIM_PLOT_PANEL::ResetScales()
 
 wxColour SIM_PLOT_PANEL::generateColor()
 {
-    /// @todo have a look at:
-    /// http://stanford.edu/~mwaskom/software/seaborn/tutorial/color_palettes.html
-    /// https://github.com/Gnuplotting/gnuplot-palettes
-
-    // const unsigned long colors[] = { 0x0000ff, 0x00ff00, 0xff0000, 0x00ffff, 0xff00ff, 0xffff000, 0xffffff };
-
-    const unsigned long colors[] = { 0xE41A1C, 0x377EB8, 0x4DAF4A, 0x984EA3, 0xFF7F00, 0xFFFF33, 0xA65628, 0xF781BF,
-                                     0x66C2A5, 0xFC8D62, 0x8DA0CB, 0xE78AC3, 0xA6D854, 0xFFD92F, 0xE5C494, 0xB3B3B3 };
-
-    //const unsigned long colors[] = { 0xe3cea6, 0xb4781f, 0x8adfb2, 0x2ca033, 0x999afb, 0x1c1ae3, 0x6fbffd, 0x007fff, 0xd6b2ca, 0x9a3d6a };
-
-    // hls
-    //const unsigned long colors[] = { 0x0f1689, 0x0f7289, 0x35890f, 0x0f8945, 0x89260f, 0x890f53, 0x89820f, 0x630f89 };
-
-    // pastels, good for dark background
-    //const unsigned long colors[] = { 0x2fd8fe, 0x628dfa, 0x53d8a6, 0xa5c266, 0xb3b3b3, 0x94c3e4, 0xca9f8d, 0xac680e };
-
-    const unsigned int colorCount = sizeof(colors) / sizeof(unsigned long);
+    const unsigned int colorCount = m_masterFrame->GetPlotColorCount() - SIM_TRACE_COLOR;
 
     for( int i = 0; i < (int)colorCount - 1; i++ )
     {
-        const wxColour color = wxColour( colors[i] );
+        const wxColour color = GetPlotColor( i+SIM_TRACE_COLOR );
         bool hasColor = false;
+
         for( auto& t : m_traces )
         {
             TRACE* trace = t.second;
+
             if( trace->GetTraceColour() == color )
             {
                 hasColor = true;
                 break;
             }
         }
+
         if( !hasColor )
             return color;
     }
-    return wxColour( colors[m_traces.size() % colorCount] );
+
+    // If all colors are in use, choose a suitable color in list
+    int idx = m_traces.size() % colorCount;
+    return wxColour( GetPlotColor( idx + SIM_TRACE_COLOR ) );
 }
 
 wxDEFINE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );
