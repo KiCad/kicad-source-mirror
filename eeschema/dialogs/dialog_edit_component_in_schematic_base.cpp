@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2019)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -93,7 +93,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	bButtonSize->Add( m_bpMoveDown, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bButtonSize->Add( 0, 0, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 10 );
+	bButtonSize->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 	m_bpDelete = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpDelete->SetToolTip( _("Delete field") );
@@ -102,12 +102,12 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	bButtonSize->Add( m_bpDelete, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bButtonSize->Add( 0, 0, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_updateFieldValues = new wxButton( sbFields->GetStaticBox(), wxID_ANY, _("Update Fields from Library..."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateFieldValues->SetToolTip( _("Sets fields to the original library values") );
 
-	bButtonSize->Add( m_updateFieldValues, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bButtonSize->Add( m_updateFieldValues, 0, wxEXPAND, 5 );
 
 
 	sbFields->Add( bButtonSize, 0, wxALL|wxEXPAND, 5 );
@@ -195,8 +195,8 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
-	wxBoxSizer* bSizer101;
-	bSizer101 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerBottom;
+	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
@@ -212,16 +212,16 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	bSizer11->Add( m_textCtrlTimeStamp, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bSizer101->Add( bSizer11, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bSizerBottom->Add( bSizer11, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 
-	bSizer101->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Edit Spice Model..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer101->Add( m_spiceFieldsButton, 0, wxEXPAND|wxALL, 5 );
+	bSizerBottom->Add( m_spiceFieldsButton, 0, wxEXPAND|wxALL, 5 );
 
 
-	bSizer101->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
+	bSizerBottom->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
 
 	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	m_stdDialogButtonSizerOK = new wxButton( this, wxID_OK );
@@ -230,10 +230,10 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_stdDialogButtonSizer->AddButton( m_stdDialogButtonSizerCancel );
 	m_stdDialogButtonSizer->Realize();
 
-	bSizer101->Add( m_stdDialogButtonSizer, 0, wxEXPAND, 5 );
+	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxEXPAND, 5 );
 
 
-	mainSizer->Add( bSizer101, 0, wxEXPAND, 5 );
+	mainSizer->Add( bSizerBottom, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( mainSizer );

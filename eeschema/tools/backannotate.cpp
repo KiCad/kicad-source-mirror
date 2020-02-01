@@ -109,7 +109,8 @@ bool BACK_ANNOTATE::FetchNetlistFromPCB( std::string& aNetlist )
     {
         DisplayErrorMessage(
                 m_frame, _( "Cannot fetch PCB netlist because eeschema is opened in "
-                            "stand-alone mode, you must launch the KiCad project manager "
+                            "stand-alone mode.\n"
+                            "You must launch the KiCad project manager "
                             "and create a project." ) );
         return false;
     }
@@ -149,7 +150,7 @@ int BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
             if( path == "" )
             {
-                msg.Printf( _( "Footprint %s has no symbol associated." ), ref );
+                msg.Printf( _( "Footprint \"%s\" has no symbol associated." ), ref );
                 m_settings.reporter.ReportHead( msg, REPORTER::RPT_WARNING );
                 continue;
             }
@@ -167,7 +168,7 @@ int BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         if( nearestItem != m_pcbModules.end() && nearestItem->first == path )
         {
             // Module with this path already exists - generate error
-            msg.Printf( _( "Pcb footprints %s and %s linked to same symbol" ),
+            msg.Printf( _( "Pcb footprints \"%s\" and \"%s\" linked to same symbol" ),
                     nearestItem->second->ref, ref );
             m_settings.reporter.ReportHead( msg, REPORTER::RPT_ERROR );
             ++errors;
@@ -222,7 +223,7 @@ int BACK_ANNOTATE::getChangeList()
         {
             // Haven't found linked symbol in multiunits or common refs. Generate error
             wxString msg;
-            msg.Printf( _( "Cannot find symbol for %s footprint" ), pcbData->ref );
+            msg.Printf( _( "Cannot find symbol for \"%s\" footprint" ), pcbData->ref );
             ++errors;
             m_settings.reporter.ReportTail( msg, REPORTER::RPT_ERROR );
         }
@@ -248,7 +249,7 @@ int BACK_ANNOTATE::checkForUnusedSymbols()
         {
             ++errors;
             wxString msg;
-            msg.Printf( _( "Cannot find footprint for %s symbol" ), m_refs[i++].GetFullRef() );
+            msg.Printf( _( "Cannot find footprint for \"%s\" symbol" ), m_refs[i++].GetFullRef() );
             m_settings.reporter.ReportTail( msg, REPORTER::RPT_ERROR );
         }
 
@@ -307,7 +308,7 @@ int BACK_ANNOTATE::checkSharedSchematicErrors()
                 // Refs share same component but have different values or footprints
                 ++errors;
                 wxString msg;
-                msg.Printf( _( "%s and %s use the same schematic symbol. "
+                msg.Printf( _( "\"%s\" and \"%s\" use the same schematic symbol.\n"
                                "They cannot have different footprints or values." ),
                         ( it + 1 )->second->ref, it->second->ref );
                 m_settings.reporter.ReportTail( msg, REPORTER::RPT_ERROR );
@@ -325,8 +326,8 @@ int BACK_ANNOTATE::checkSharedSchematicErrors()
                 if( !checkReuseViolation( tmp, *it->second ) )
                 {
                     wxString msg;
-                    msg.Printf( _( "Unable to change %s footprint or value because associated"
-                                   "symbol is reused in the another project" ),
+                    msg.Printf( _( "Unable to change \"%s\" footprint or value because associated"
+                                   " symbol is reused in the another project" ),
                             it->second->ref );
                     m_settings.reporter.ReportTail( msg, REPORTER::RPT_ERROR );
                     ++errors;
@@ -356,7 +357,7 @@ void BACK_ANNOTATE::applyChangelist()
         if( m_settings.processReferences && ref.GetRef() != module.ref )
         {
             ++m_changesCount;
-            msg.Printf( _( "Change %s reference to %s." ), ref.GetFullRef(), module.ref );
+            msg.Printf( _( "Change \"%s\" reference to \"%s\"." ), ref.GetFullRef(), module.ref );
             if( !m_settings.dryRun )
                 ref.GetComp()->SetRef( &ref.GetSheetPath(), module.ref );
             m_settings.reporter.ReportHead( msg, REPORTER::RPT_ACTION );
@@ -376,7 +377,7 @@ void BACK_ANNOTATE::applyChangelist()
         if( m_settings.processValues && oldValue != module.value )
         {
             ++m_changesCount;
-            msg.Printf( _( "Change %s value from %s to %s." ), ref.GetFullRef(),
+            msg.Printf( _( "Change \"%s\" value from \"%s\" to \"\"%s\"." ), ref.GetFullRef(),
                     getTextFromField( ref, VALUE ), module.value );
             if( !m_settings.dryRun )
                 item.first.GetComp()->GetField( VALUE )->SetText( module.value );
