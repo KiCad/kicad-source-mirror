@@ -34,6 +34,7 @@
 #include <sch_draw_panel.h>
 #include <confirm.h>
 #include <sch_edit_frame.h>
+#include <sch_view.h>
 #include <kicad_device_context.h>
 
 #include <general.h>
@@ -237,6 +238,34 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     // if the old item is the current schematic item, replace it by the new text:
     if( screen->GetCurItem() == text )
         screen->SetCurItem( newtext );
+
+    // handle dangling end for the different label/text types
+    if( type == SCH_TEXT_T )
+    {
+        if( newtext->IsDangling() )
+        {
+            newtext->SetIsDangling( false );
+            GetCanvas()->GetView()->Update( newtext, KIGFX::REPAINT );
+        }
+    }
+    else
+    {
+        newtext->SetIsDangling( true );
+    }
+
+    TestDanglingEnds();
+
+    // fix rotation of the converted label, only needed for horizontal labels:
+    bool newTypeIsBig = newtext->Type() == SCH_GLOBAL_LABEL_T ||
+            newtext->Type() == SCH_HIERARCHICAL_LABEL_T;
+    bool oldTypeIsBig = text->Type() == SCH_GLOBAL_LABEL_T ||
+            text->Type() == SCH_HIERARCHICAL_LABEL_T;
+
+    if ( ( newTypeIsBig && !oldTypeIsBig ) ||
+            ( !newTypeIsBig && oldTypeIsBig ) )
+    {
+        newtext->MirrorY( newtext->GetPosition().x );
+    }
 
     if( text->IsNew() )
     {
