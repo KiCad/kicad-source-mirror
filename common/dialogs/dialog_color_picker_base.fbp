@@ -504,7 +504,7 @@
                                                                             <property name="min">0</property>
                                                                             <property name="min_size"></property>
                                                                             <property name="minimize_button">0</property>
-                                                                            <property name="minimum_size">80,-1</property>
+                                                                            <property name="minimum_size">-1,-1</property>
                                                                             <property name="moveable">1</property>
                                                                             <property name="name">m_spinCtrlRed</property>
                                                                             <property name="pane_border">1</property>
@@ -567,7 +567,7 @@
                                                                             <property name="min">0</property>
                                                                             <property name="min_size"></property>
                                                                             <property name="minimize_button">0</property>
-                                                                            <property name="minimum_size">80,-1</property>
+                                                                            <property name="minimum_size">-1,-1</property>
                                                                             <property name="moveable">1</property>
                                                                             <property name="name">m_spinCtrlGreen</property>
                                                                             <property name="pane_border">1</property>
@@ -630,7 +630,7 @@
                                                                             <property name="min">0</property>
                                                                             <property name="min_size"></property>
                                                                             <property name="minimize_button">0</property>
-                                                                            <property name="minimum_size">80,-1</property>
+                                                                            <property name="minimum_size">-1,-1</property>
                                                                             <property name="moveable">1</property>
                                                                             <property name="name">m_spinCtrlBlue</property>
                                                                             <property name="pane_border">1</property>
@@ -916,7 +916,7 @@
                                                                                     <property name="min">0</property>
                                                                                     <property name="min_size"></property>
                                                                                     <property name="minimize_button">0</property>
-                                                                                    <property name="minimum_size">80,-1</property>
+                                                                                    <property name="minimum_size">-1,-1</property>
                                                                                     <property name="moveable">1</property>
                                                                                     <property name="name">m_spinCtrlHue</property>
                                                                                     <property name="pane_border">1</property>
@@ -979,7 +979,7 @@
                                                                                     <property name="min">0</property>
                                                                                     <property name="min_size"></property>
                                                                                     <property name="minimize_button">0</property>
-                                                                                    <property name="minimum_size">80,-1</property>
+                                                                                    <property name="minimum_size">-1,-1</property>
                                                                                     <property name="moveable">1</property>
                                                                                     <property name="name">m_spinCtrlSaturation</property>
                                                                                     <property name="pane_border">1</property>
