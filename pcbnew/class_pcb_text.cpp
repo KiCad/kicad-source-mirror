@@ -217,3 +217,15 @@ void TEXTE_PCB::SwapData( BOARD_ITEM* aImage )
 }
 
 
+static struct TEXTE_PCB_DESC
+{
+    TEXTE_PCB_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( TEXTE_PCB );
+        propMgr.AddTypeCast( new TYPE_CAST<TEXTE_PCB, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<TEXTE_PCB, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( TEXTE_PCB ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( TEXTE_PCB ), TYPE_HASH( EDA_TEXT ) );
+    }
+} _TEXTE_PCB_DESC;

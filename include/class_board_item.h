@@ -100,6 +100,18 @@ public:
 
     virtual wxPoint GetPosition() const = 0;
 
+    int GetX() const
+    {
+        wxPoint p = GetPosition();
+        return p.x;
+    }
+
+    int GetY() const
+    {
+        wxPoint p = GetPosition();
+        return p.y;
+    }
+
     /**
      * Function GetCenter()
      *
@@ -111,6 +123,18 @@ public:
     virtual wxPoint GetCenter() const { return GetPosition(); }
 
     virtual void SetPosition( const wxPoint& aPos ) = 0;
+
+    void SetX( int aX )
+    {
+        wxPoint p( aX, GetY() );
+        SetPosition( p );
+    }
+
+    void SetY( int aY )
+    {
+        wxPoint p( GetX(), aY );
+        SetPosition( p );
+    }
 
     /**
      * Function IsConnected()
@@ -328,5 +352,9 @@ protected:
      */
     static wxString LayerMaskDescribe( const BOARD* aBoard, LSET aMask );
 };
+
+#ifndef SWIG
+DECLARE_ENUM_TO_WXANY( PCB_LAYER_ID );
+#endif
 
 #endif /* BOARD_ITEM_STRUCT_H */

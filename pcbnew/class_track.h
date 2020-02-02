@@ -117,6 +117,11 @@ public:
     void SetStart( const wxPoint& aStart )      { m_Start = aStart; }
     const wxPoint& GetStart() const             { return m_Start; }
 
+    void SetEndX( int aX ) { m_End.x = aX; }
+    void SetEndY( int aY ) { m_End.y = aY; }
+
+    int GetEndX() const { return m_End.x; }
+    int GetEndY() const { return m_End.x; }
 
     /// Return the selected endpoint (start or end)
     const wxPoint& GetEndPoint( ENDPOINT_T aEndPoint ) const

@@ -291,6 +291,7 @@ void EDGE_MODULE::Move( const wxPoint& aMoveVector )
     SetDrawCoord();
 }
 
+
 unsigned int EDGE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     const int HIDE = std::numeric_limits<unsigned int>::max();
@@ -308,3 +309,14 @@ unsigned int EDGE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     // Other layers are shown without any conditions
     return 0;
 }
+
+
+static struct EDGE_MODULE_DESC
+{
+    EDGE_MODULE_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( EDGE_MODULE );
+        propMgr.InheritsAfter( TYPE_HASH( EDGE_MODULE ), TYPE_HASH( DRAWSEGMENT ) );
+    }
+} _EDGE_MODULE_DESC;

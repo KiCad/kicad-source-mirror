@@ -483,9 +483,23 @@ EDA_ITEM* DIMENSION::Clone() const
     return new DIMENSION( *this );
 }
 
+
 void DIMENSION::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_DIMENSION_T );
 
     std::swap( *((DIMENSION*) this), *((DIMENSION*) aImage) );
 }
+
+
+static struct DIMENSION_DESC
+{
+    DIMENSION_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( DIMENSION );
+        propMgr.InheritsAfter( TYPE_HASH( DIMENSION ), TYPE_HASH( BOARD_ITEM ) );
+        //propMgr.AddProperty( new PROPERTY<DIMENSION, int>( "Height",
+                    //&DIMENSION::SetHeight, &DIMENSION::GetHeight, PROPERTY_DISPLAY::DISTANCE ) );
+    }
+} _DIMENSION_DESC;

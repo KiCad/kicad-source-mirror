@@ -142,3 +142,23 @@ void PCB_TARGET::SwapData( BOARD_ITEM* aImage )
     std::swap( *((PCB_TARGET*) this), *((PCB_TARGET*) aImage) );
 }
 
+
+static struct PCB_TARGET_DESC
+{
+    PCB_TARGET_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( PCB_TARGET );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_TARGET ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _( "Size" ),
+                    &PCB_TARGET::SetSize, &PCB_TARGET::GetSize, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _( "Width" ),
+                    &PCB_TARGET::SetWidth, &PCB_TARGET::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
+
+        auto shape = new PROPERTY<PCB_TARGET, int>( _( "Shape" ),
+                &PCB_TARGET::SetShape, &PCB_TARGET::GetShape );
+        // TODO change the integer to an enum?
+        //shape->SetValues( { { 0, _( "Cross" ) }, { 1, ( "Plus" ) } } );
+        propMgr.AddProperty( shape );
+    }
+} _PCB_TARGET_DESC;

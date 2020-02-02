@@ -735,3 +735,77 @@ const EDA_RECT EDA_RECT::GetBoundingBoxRotated( wxPoint aRotCenter, double aAngl
 
     return bbox;
 }
+
+
+static struct EDA_ITEM_DESC
+{
+    EDA_ITEM_DESC()
+    {
+        ENUM_MAP<KICAD_T>::Instance()
+            .Map( NOT_USED,             _( "<not used>" ) )
+            //.Map( EOT,                  _( "<EOT>" ) )
+            .Map( TYPE_NOT_INIT,        _( "<type not init>" ) )    // == EOT
+            .Map( SCREEN_T,             _( "Screen" ) )
+
+            .Map( PCB_MODULE_T,         _( "Footprint" ) )
+            .Map( PCB_PAD_T,            _( "Pad" ) )
+            .Map( PCB_LINE_T,           _( "Line" ) )
+            .Map( PCB_TEXT_T,           _( "Board Text" ) )
+            .Map( PCB_MODULE_TEXT_T,    _( "Footprint Text" ) )
+            .Map( PCB_MODULE_EDGE_T,    _( "Footprint Graphics" ) )
+            .Map( PCB_TRACE_T,          _( "Track" ) )
+            .Map( PCB_VIA_T,            _( "Via" ) )
+            .Map( PCB_MARKER_T,         _( "Board Marker" ) )
+            .Map( PCB_DIMENSION_T,      _( "Dimension" ) )
+            .Map( PCB_TARGET_T,         _( "Target" ) )
+            .Map( PCB_ZONE_AREA_T,      _( "Zone" ) )
+            .Map( PCB_ITEM_LIST_T,      _( "Item List" ) )
+            .Map( PCB_NETINFO_T,        _( "Net Info" ) )
+
+            .Map( SCH_MARKER_T,             _( "Schematic Marker" ) )
+            .Map( SCH_JUNCTION_T,           _( "Junction" ) )
+            .Map( SCH_NO_CONNECT_T,         _( "No-Connect Flag" ) )
+            .Map( SCH_BUS_WIRE_ENTRY_T,     _( "Wire Entry" ) )
+            .Map( SCH_BUS_BUS_ENTRY_T,      _( "Bus Entry" ) )
+            .Map( SCH_LINE_T,               _( "Graphic Line" ) )
+            .Map( SCH_BITMAP_T,             _( "Bitmap" ) )
+            .Map( SCH_TEXT_T,               _( "Schematic Text" ) )
+            .Map( SCH_LABEL_T,              _( "Net Label" ) )
+            .Map( SCH_GLOBAL_LABEL_T,       _( "Global Label" ) )
+            .Map( SCH_HIER_LABEL_T,         _( "Hierarchical Label" ) )
+            .Map( SCH_FIELD_T,              _( "Schematic Field" ) )
+            .Map( SCH_COMPONENT_T,          _( "Component" ) )
+            .Map( SCH_SHEET_PIN_T,          _( "Sheet Pin" ) )
+            .Map( SCH_SHEET_T,              _( "Sheet" ) )
+
+            .Map( SCH_FIELD_LOCATE_REFERENCE_T, _( "Field Locate Reference" ) )
+            .Map( SCH_FIELD_LOCATE_VALUE_T,     _( "Field Locate Value" ) )
+            .Map( SCH_FIELD_LOCATE_FOOTPRINT_T, _( "Field Locate Footprint" ) )
+
+            .Map( SCH_SCREEN_T,         _( "SCH Screen" ) )
+
+            .Map( LIB_PART_T,           _( "Symbol" ) )
+            .Map( LIB_ALIAS_T,          _( "Alias" ) )
+            .Map( LIB_ARC_T,            _( "Arc" ) )
+            .Map( LIB_CIRCLE_T,         _( "Circle" ) )
+            .Map( LIB_TEXT_T,           _( "Symbol Text" ) )
+            .Map( LIB_RECTANGLE_T,      _( "Rectangle" ) )
+            .Map( LIB_POLYLINE_T,       _( "Polyline" ) )
+            .Map( LIB_BEZIER_T,         _( "Bezier" ) )
+            .Map( LIB_PIN_T,            _( "Pin" ) )
+            .Map( LIB_FIELD_T,          _( "Symbol Field" ) )
+
+            .Map( GERBER_LAYOUT_T,      _( "Gerber Layout" ) )
+            .Map( GERBER_DRAW_ITEM_T,   _( "Draw Item" ) )
+            .Map( GERBER_IMAGE_T,       _( "Image" ) )
+
+            .Map( MAX_STRUCT_TYPE_ID,   _( "<max struct type>" ) );
+
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( EDA_ITEM );
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_ITEM, KICAD_T>( "Type",
+                    NO_SETTER( EDA_ITEM, KICAD_T ), &EDA_ITEM::Type ) );
+    }
+} _EDA_ITEM_DESC;
+
+ENUM_TO_WXANY( KICAD_T );

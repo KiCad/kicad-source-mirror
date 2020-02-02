@@ -1176,3 +1176,26 @@ void DRAWSEGMENT::SwapData( BOARD_ITEM* aImage )
     std::swap( m_BezierPoints, image->m_BezierPoints );
     std::swap( m_Poly, image->m_Poly );
 }
+
+
+static struct DRAWSEGMENT_DESC
+{
+    DRAWSEGMENT_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( DRAWSEGMENT );
+        propMgr.InheritsAfter( TYPE_HASH( DRAWSEGMENT ), TYPE_HASH( BOARD_ITEM ) );
+
+        propMgr.AddProperty( new PROPERTY<DRAWSEGMENT, int>( _( "Thickness" ),
+                    &DRAWSEGMENT::SetWidth, &DRAWSEGMENT::GetWidth, PROPERTY_DISPLAY::DISTANCE ) );
+        // TODO show certain properties depending on the shape
+        propMgr.AddProperty( new PROPERTY<DRAWSEGMENT, double>( _( "Angle" ),
+                    &DRAWSEGMENT::SetAngle, &DRAWSEGMENT::GetAngle, PROPERTY_DISPLAY::DECIDEGREE ) );
+        // TODO or may have different names (arcs)
+        // TODO type?
+        propMgr.AddProperty( new PROPERTY<DRAWSEGMENT, int>( _( "End X" ),
+                    &DRAWSEGMENT::SetEndX, &DRAWSEGMENT::GetEndX, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<DRAWSEGMENT, int>( _( "End Y" ),
+                    &DRAWSEGMENT::SetEndY, &DRAWSEGMENT::GetEndY, PROPERTY_DISPLAY::DISTANCE ) );
+    }
+} _DRAWSEGMENT_DESC;

@@ -451,3 +451,17 @@ wxString TEXTE_MODULE::GetShownText( int aDepth ) const
 
     return text;
 }
+
+
+static struct TEXTE_MODULE_DESC
+{
+    TEXTE_MODULE_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( TEXTE_MODULE );
+        propMgr.AddTypeCast( new TYPE_CAST<TEXTE_MODULE, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<TEXTE_MODULE, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( TEXTE_MODULE ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( TEXTE_MODULE ), TYPE_HASH( EDA_TEXT ) );
+    }
+} _TEXTE_MODULE_DESC;

@@ -129,6 +129,8 @@ public:
      * returns the starting point of the graphic
      */
     const wxPoint& GetStart() const         { return m_Start; }
+    int GetStartY()                         { return m_Start.y; }
+    int GetStartX()                         { return m_Start.x; }
     void SetStart( const wxPoint& aStart )  { m_Start = aStart; }
     void SetStartY( int y )                 { m_Start.y = y; }
     void SetStartX( int x )                 { m_Start.x = x; }
@@ -138,6 +140,8 @@ public:
      * returns the ending point of the graphic
      */
     const wxPoint& GetEnd() const           { return m_End; }
+    int GetEndY()                           { return m_End.y; }
+    int GetEndX()                           { return m_End.x; }
     void SetEnd( const wxPoint& aEnd )      { m_End = aEnd; }
     void SetEndY( int y )                   { m_End.y = y; }
     void SetEndX( int x )                   { m_End.x = x; }

@@ -134,11 +134,85 @@ void BOARD_ITEM::DeleteStructure()
 
 void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
 {
-
 }
+
 
 void BOARD_ITEM::TransformShapeWithClearanceToPolygon(
         SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue, int aError, bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( false, "Called TransformShapeWithClearanceToPolygon() on unsupported BOARD_ITEM." );
 };
+
+
+static struct BOARD_ITEM_DESC
+{
+    BOARD_ITEM_DESC()
+    {
+        ENUM_MAP<PCB_LAYER_ID>::Instance()
+                .Map( F_Cu, LSET::Name( F_Cu ) )
+                .Map( In1_Cu, LSET::Name( In1_Cu ) )
+                .Map( In2_Cu, LSET::Name( In2_Cu ) )
+                .Map( In3_Cu, LSET::Name( In3_Cu ) )
+                .Map( In4_Cu, LSET::Name( In4_Cu ) )
+                .Map( In5_Cu, LSET::Name( In5_Cu ) )
+                .Map( In6_Cu, LSET::Name( In6_Cu ) )
+                .Map( In7_Cu, LSET::Name( In7_Cu ) )
+                .Map( In8_Cu, LSET::Name( In8_Cu ) )
+                .Map( In9_Cu, LSET::Name( In9_Cu ) )
+                .Map( In10_Cu, LSET::Name( In10_Cu ) )
+                .Map( In11_Cu, LSET::Name( In11_Cu ) )
+                .Map( In12_Cu, LSET::Name( In12_Cu ) )
+                .Map( In13_Cu, LSET::Name( In13_Cu ) )
+                .Map( In14_Cu, LSET::Name( In14_Cu ) )
+                .Map( In15_Cu, LSET::Name( In15_Cu ) )
+                .Map( In16_Cu, LSET::Name( In16_Cu ) )
+                .Map( In17_Cu, LSET::Name( In17_Cu ) )
+                .Map( In18_Cu, LSET::Name( In18_Cu ) )
+                .Map( In19_Cu, LSET::Name( In19_Cu ) )
+                .Map( In20_Cu, LSET::Name( In20_Cu ) )
+                .Map( In21_Cu, LSET::Name( In21_Cu ) )
+                .Map( In22_Cu, LSET::Name( In22_Cu ) )
+                .Map( In23_Cu, LSET::Name( In23_Cu ) )
+                .Map( In24_Cu, LSET::Name( In24_Cu ) )
+                .Map( In25_Cu, LSET::Name( In25_Cu ) )
+                .Map( In26_Cu, LSET::Name( In26_Cu ) )
+                .Map( In27_Cu, LSET::Name( In27_Cu ) )
+                .Map( In28_Cu, LSET::Name( In28_Cu ) )
+                .Map( In29_Cu, LSET::Name( In29_Cu ) )
+                .Map( In30_Cu, LSET::Name( In30_Cu ) )
+                .Map( B_Cu, LSET::Name( B_Cu ) )
+                .Map( B_Adhes, LSET::Name( B_Adhes ) )
+                .Map( F_Adhes, LSET::Name( F_Adhes ) )
+                .Map( B_Paste, LSET::Name( B_Paste ) )
+                .Map( F_Paste, LSET::Name( F_Paste ) )
+                .Map( B_SilkS, LSET::Name( B_SilkS ) )
+                .Map( F_SilkS, LSET::Name( F_SilkS ) )
+                .Map( B_Mask, LSET::Name( B_Mask ) )
+                .Map( F_Mask, LSET::Name( F_Mask ) )
+                .Map( Dwgs_User, LSET::Name( Dwgs_User ) )
+                .Map( Cmts_User, LSET::Name( Cmts_User ) )
+                .Map( Eco1_User, LSET::Name( Eco1_User ) )
+                .Map( Eco2_User, LSET::Name( Eco2_User ) )
+                .Map( Edge_Cuts, LSET::Name( Edge_Cuts ) )
+                .Map( Margin, LSET::Name( Margin ) )
+                .Map( B_CrtYd, LSET::Name( B_CrtYd ) )
+                .Map( F_CrtYd, LSET::Name( F_CrtYd ) )
+                .Map( B_Fab, LSET::Name( B_Fab ) )
+                .Map( F_Fab, LSET::Name( F_Fab ) );
+
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( BOARD_ITEM );
+        propMgr.InheritsAfter( TYPE_HASH( BOARD_ITEM ), TYPE_HASH( EDA_ITEM ) );
+
+        propMgr.AddProperty( new PROPERTY<BOARD_ITEM, int>( _( "Position X" ),
+                    &BOARD_ITEM::SetX, &BOARD_ITEM::GetX, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<BOARD_ITEM, int>( _( "Position Y" ),
+                    &BOARD_ITEM::SetY, &BOARD_ITEM::GetY, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<BOARD_ITEM, PCB_LAYER_ID>( _( "Layer" ),
+                    &BOARD_ITEM::SetLayer, &BOARD_ITEM::GetLayer ) );
+        propMgr.AddProperty( new PROPERTY<BOARD_ITEM, bool>( _( "Locked" ),
+                    &BOARD_ITEM::SetLocked, &BOARD_ITEM::IsLocked ) );
+    }
+} _BOARD_ITEM_DESC;
+
+IMPLEMENT_ENUM_TO_WXANY( PCB_LAYER_ID )

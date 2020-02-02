@@ -610,3 +610,45 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
                 &aCornerBuffer );
     }
 }
+
+
+static struct EDA_TEXT_DESC
+{
+    EDA_TEXT_DESC()
+    {
+        ENUM_MAP<EDA_TEXT_HJUSTIFY_T>::Instance()
+                .Map( GR_TEXT_HJUSTIFY_LEFT, _( "Left" ) )
+                .Map( GR_TEXT_HJUSTIFY_CENTER, _( "Center" ) )
+                .Map( GR_TEXT_HJUSTIFY_RIGHT, _( "Right" ) );
+        ENUM_MAP<EDA_TEXT_VJUSTIFY_T>::Instance()
+                .Map( GR_TEXT_VJUSTIFY_TOP, _( "Top" ) )
+                .Map( GR_TEXT_VJUSTIFY_CENTER, _( "Center" ) )
+                .Map( GR_TEXT_VJUSTIFY_BOTTOM, _( "Bottom" ) );
+
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( EDA_TEXT );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _( "Text" ),
+                    &EDA_TEXT::SetText, &EDA_TEXT::GetText ) );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _( "Thickness" ),
+                    &EDA_TEXT::SetThickness, &EDA_TEXT::GetThickness, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _( "Italic" ),
+                    &EDA_TEXT::SetItalic, &EDA_TEXT::IsItalic ) );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _( "Bold" ),
+                    &EDA_TEXT::SetBold, &EDA_TEXT::IsBold ) );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _( "Mirrored" ),
+                    &EDA_TEXT::SetMirrored, &EDA_TEXT::IsMirrored ) );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _( "Visible" ),
+                    &EDA_TEXT::SetVisible, &EDA_TEXT::IsVisible ) );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _( "Width" ),
+                    &EDA_TEXT::SetTextWidth, &EDA_TEXT::GetTextWidth, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _( "Height" ),
+                    &EDA_TEXT::SetTextHeight, &EDA_TEXT::GetTextHeight, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, EDA_TEXT_HJUSTIFY_T>( _( "Horizontal Justification" ),
+                    &EDA_TEXT::SetHorizJustify, &EDA_TEXT::GetHorizJustify ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, EDA_TEXT_VJUSTIFY_T>( _( "Vertical Justification" ),
+                    &EDA_TEXT::SetVertJustify, &EDA_TEXT::GetVertJustify ) );
+    }
+} _EDA_TEXT_DESC;
+
+ENUM_TO_WXANY( EDA_TEXT_HJUSTIFY_T )
+ENUM_TO_WXANY( EDA_TEXT_VJUSTIFY_T )

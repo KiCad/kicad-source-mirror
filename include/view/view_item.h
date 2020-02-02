@@ -33,6 +33,8 @@
 #include <vector>
 #include <bitset>
 #include <math/box2.h>
+#include <inspectable.h>
+
 
 namespace KIGFX
 {
@@ -80,8 +82,7 @@ enum VIEW_VISIBILITY_FLAGS {
  * VIEW_ITEM objects are never owned by a VIEW. A single VIEW_ITEM can belong to any number of
  * static VIEWs, but only one dynamic VIEW due to storage of only one VIEW reference.
  */
-
-class VIEW_ITEM
+class VIEW_ITEM : public INSPECTABLE
 {
 public:
     VIEW_ITEM() : m_viewPrivData( nullptr )

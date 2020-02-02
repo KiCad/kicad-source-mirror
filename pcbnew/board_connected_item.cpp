@@ -197,3 +197,15 @@ wxString BOARD_CONNECTED_ITEM::GetNetClassName() const
 {
     return m_netinfo->GetClassName();
 }
+
+
+static struct BOARD_CONNECTED_ITEM_DESC
+{
+    BOARD_CONNECTED_ITEM_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( BOARD_CONNECTED_ITEM );
+        propMgr.InheritsAfter( TYPE_HASH( BOARD_CONNECTED_ITEM ), TYPE_HASH( BOARD_ITEM ) );
+        //propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, NETINFO_ITEM*>( "Net", &BOARD_CONNECTED_ITEM::SetNet, &BOARD_CONNECTED_ITEM::GetNet ) );
+    }
+} _BOARD_CONNECTED_ITEM_DESC;

@@ -1374,3 +1374,23 @@ unsigned int MODULE_ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView )
     // Other layers are shown without any conditions
     return 0;
 }
+
+
+static struct ZONE_CONTAINER_DESC
+{
+    ZONE_CONTAINER_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( ZONE_CONTAINER );
+        propMgr.InheritsAfter( TYPE_HASH( ZONE_CONTAINER ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Clearance" ),
+                    &ZONE_CONTAINER::SetZoneClearance, &ZONE_CONTAINER::GetZoneClearance, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, unsigned>( _( "Priority" ),
+                    &ZONE_CONTAINER::SetPriority, &ZONE_CONTAINER::GetPriority ) );
+        //propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, bool>( "Filled",
+                    //&ZONE_CONTAINER::SetIsFilled, &ZONE_CONTAINER::IsFilled ) );
+        propMgr.AddProperty( new PROPERTY<ZONE_CONTAINER, int>( _( "Min Thickness" ),
+                    &ZONE_CONTAINER::SetMinThickness, &ZONE_CONTAINER::GetMinThickness, PROPERTY_DISPLAY::DISTANCE ) );
+        // TODO pad connection, thermal relief gap, thermal relief copper bridge
+    }
+} _ZONE_CONTAINER_DESC;

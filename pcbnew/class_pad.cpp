@@ -1187,3 +1187,51 @@ void D_PAD::SwapData( BOARD_ITEM* aImage )
 
     std::swap( *((MODULE*) this), *((MODULE*) aImage) );
 }
+
+
+static struct PAD_DESC
+{
+    PAD_DESC()
+    {
+        ENUM_MAP<PAD_SHAPE_T>::Instance()
+                .Map( PAD_SHAPE_RECT, _( "Rectangle" ) )
+                .Map( PAD_SHAPE_OVAL, _( "Oval" ) )
+                .Map( PAD_SHAPE_TRAPEZOID, _( "Trapezoid" ) )
+                .Map( PAD_SHAPE_ROUNDRECT, _( "Rounded Rectangular" ) );
+
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( D_PAD );
+        propMgr.InheritsAfter( TYPE_HASH( D_PAD ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
+
+        auto shape = new PROPERTY_ENUM<D_PAD, PAD_SHAPE_T>( _( "Shape" ), &D_PAD::SetShape, &D_PAD::GetShape );
+        propMgr.AddProperty( shape );
+
+        propMgr.AddProperty( new PROPERTY<D_PAD, wxString>( _( "Name" ), &D_PAD::SetName, &D_PAD::GetName ) );
+        propMgr.AddProperty( new PROPERTY<D_PAD, double>( _( "Orientation" ),
+                    &D_PAD::SetOrientationDegrees, &D_PAD::GetOrientationDegrees, PROPERTY_DISPLAY::DEGREE ) );
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Pad To Die Length" ),
+                    &D_PAD::SetPadToDieLength, &D_PAD::GetPadToDieLength, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Local Soldermask Margin" ),
+                    &D_PAD::SetLocalSolderMaskMargin, &D_PAD::GetLocalSolderMaskMargin, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Local Solderpaste Margin" ),
+                    &D_PAD::SetLocalSolderPasteMargin, &D_PAD::GetLocalSolderPasteMargin, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<D_PAD, double>( _( "Local Solderpaste Margin Ratio" ),
+                    &D_PAD::SetLocalSolderPasteMarginRatio, &D_PAD::GetLocalSolderPasteMarginRatio ) );
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Thermal Width" ),
+                    &D_PAD::SetThermalWidth, &D_PAD::GetThermalWidth, PROPERTY_DISPLAY::DISTANCE ) );
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Thermal Gap" ),
+                    &D_PAD::SetThermalGap, &D_PAD::GetThermalGap, PROPERTY_DISPLAY::DISTANCE ) );
+
+        auto roundRadiusRatio = new PROPERTY<D_PAD, double>( _( "Round Radius Ratio" ),
+                &D_PAD::SetRoundRectRadiusRatio, &D_PAD::GetRoundRectRadiusRatio );
+        roundRadiusRatio->SetAvailableFunc( [=](INSPECTABLE* aItem)->bool
+                { return aItem->Get( shape ) == PAD_SHAPE_ROUNDRECT; } );
+        propMgr.AddProperty( roundRadiusRatio );
+
+        propMgr.AddProperty( new PROPERTY<D_PAD, int>( _( "Local Clearance" ),
+                    &D_PAD::SetLocalClearance, &D_PAD::GetLocalClearance, PROPERTY_DISPLAY::DISTANCE ) );
+        // TODO delta, size, drill size, dirill shape offset, layerset, zone connection
+    }
+} _PAD_DESC;
+
+ENUM_TO_WXANY( PAD_SHAPE_T );
