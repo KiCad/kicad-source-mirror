@@ -93,7 +93,7 @@ public:
         return BOARD_ITEM::Matches( GetShownText(), aSearchData );
     }
 
-    virtual const wxPoint GetPosition() const override
+    virtual wxPoint GetPosition() const override
     {
         return EDA_TEXT::GetTextPos();
     }

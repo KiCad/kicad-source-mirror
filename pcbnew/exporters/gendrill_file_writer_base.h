@@ -179,7 +179,7 @@ public:
      * Return the plot offset (usually the position
      * of the auxiliary axis
      */
-    const wxPoint GetOffset() { return m_offset; }
+    wxPoint GetOffset() { return m_offset; }
 
     /**
      * Sets the page info used to plot drill maps

@@ -103,7 +103,7 @@ public:
         m_position = VECTOR2D( aPosition );
     }
 
-    inline const wxPoint GetPosition() const override
+    inline wxPoint GetPosition() const override
     {
         return wxPoint( m_position.x, m_position.y );
     }

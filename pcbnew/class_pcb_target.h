@@ -63,7 +63,7 @@ public:
     }
 
     void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
-    const wxPoint GetPosition() const override { return m_Pos; }
+    wxPoint GetPosition() const override { return m_Pos; }
 
     void SetShape( int aShape )     { m_Shape = aShape; }
     int GetShape() const            { return m_Shape; }

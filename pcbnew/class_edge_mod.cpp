@@ -207,7 +207,7 @@ bool EDGE_MODULE::IsParentFlipped() const
     return false;
 }
 
-void EDGE_MODULE::Mirror( wxPoint aCentre, bool aMirrorAroundXAxis )
+void EDGE_MODULE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
 {
     // Mirror an edge of the footprint. the layer is not modified
     // This is a footprint shape modification.

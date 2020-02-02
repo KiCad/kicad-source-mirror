@@ -85,7 +85,7 @@ public:
     /**
      * @return a wxPoint, position of the first point of the outline
      */
-    const wxPoint GetPosition() const override;
+    wxPoint GetPosition() const override;
     void SetPosition( const wxPoint& aPos ) override {}
 
     /**

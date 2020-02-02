@@ -224,7 +224,7 @@ void BOARD::ClearProject()
 }
 
 
-const wxPoint BOARD::GetPosition() const
+wxPoint BOARD::GetPosition() const
 {
     return ZeroOffset;
 }

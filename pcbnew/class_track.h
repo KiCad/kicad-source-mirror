@@ -105,7 +105,7 @@ public:
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
     void SetPosition( const wxPoint& aPos ) override { m_Start = aPos; }
-    const wxPoint GetPosition() const override { return m_Start; }
+    wxPoint GetPosition() const override { return m_Start; }
     const wxPoint GetFocusPosition() const override { return ( m_Start + m_End ) / 2; }
 
     void SetWidth( int aWidth )                 { m_Width = aWidth; }

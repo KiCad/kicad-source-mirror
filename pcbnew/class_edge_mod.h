@@ -85,7 +85,7 @@ public:
      * This is a footprint shape modification.
      * (should be only called by a footprint editing function)
      */
-    void Mirror( const wxPoint aCentre, bool aMirrorAroundXAxis );
+    void Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis );
 
     /**
      * Rotate an edge of the footprint.

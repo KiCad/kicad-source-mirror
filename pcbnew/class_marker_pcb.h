@@ -68,7 +68,7 @@ public:
 
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
-    const wxPoint GetPosition() const override { return m_Pos; }
+    wxPoint GetPosition() const override { return m_Pos; }
     void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override
