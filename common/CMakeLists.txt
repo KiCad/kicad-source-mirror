@@ -327,6 +327,7 @@ set( COMMON_SRCS
     printout.cpp
     project.cpp
     properties.cpp
+    property_mgr.cpp
     ptree.cpp
     rc_item.cpp
     refdes_utils.cpp
