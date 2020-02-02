@@ -1295,22 +1295,23 @@ void MODULE::SetOrientation( double newangle )
     CalculateBoundingBox();
 }
 
-BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
-                               bool aIncrementPadNumbers,
+BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem, bool aIncrementPadNumbers,
                                bool aAddToModule )
 {
     BOARD_ITEM* new_item = NULL;
-    D_PAD* new_pad = NULL;
     MODULE_ZONE_CONTAINER* new_zone = NULL;
 
     switch( aItem->Type() )
     {
     case PCB_PAD_T:
     {
-        new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
+        D_PAD* new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
 
         if( aAddToModule )
             m_pads.push_back( new_pad );
+
+        if( aIncrementPadNumbers && !new_pad->IsAperturePad() )
+            new_pad->IncrementPadName( true, true );
 
         new_item = new_pad;
         break;
@@ -1329,26 +1330,30 @@ BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
 
     case PCB_MODULE_TEXT_T:
     {
-        const TEXTE_MODULE* old_text = static_cast<const TEXTE_MODULE*>( aItem );
+        TEXTE_MODULE* new_text = new TEXTE_MODULE( *static_cast<const TEXTE_MODULE*>( aItem ) );
 
-        // do not duplicate value or reference fields
-        // (there can only be one of each)
-        if( old_text->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
+        if( new_text->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
         {
-            TEXTE_MODULE* new_text = new TEXTE_MODULE( *old_text );
-
-            if( aAddToModule )
-                Add( new_text );
-
-            new_item = new_text;
+            new_text->SetText( wxT( "%R" ) );
+            new_text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
         }
+        else if( new_text->GetType() == TEXTE_MODULE::TEXT_is_VALUE )
+        {
+            new_text->SetText( wxT( "%V" ) );
+            new_text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+        }
+
+        if( aAddToModule )
+            Add( new_text );
+
+        new_item = new_text;
+
         break;
     }
 
     case PCB_MODULE_EDGE_T:
     {
-        EDGE_MODULE* new_edge = new EDGE_MODULE(
-                *static_cast<const EDGE_MODULE*>(aItem) );
+        EDGE_MODULE* new_edge = new EDGE_MODULE( *static_cast<const EDGE_MODULE*>(aItem) );
 
         if( aAddToModule )
             Add( new_edge );
@@ -1363,14 +1368,8 @@ BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
 
     default:
         // Un-handled item for duplication
-        wxASSERT_MSG( false, "Duplication not supported for items of class "
-                      + aItem->GetClass() );
+        wxFAIL_MSG( "Duplication not supported for items of class " + aItem->GetClass() );
         break;
-    }
-
-    if( aIncrementPadNumbers && new_pad && !new_pad->IsAperturePad() )
-    {
-        new_pad->IncrementPadName( true, true );
     }
 
     return new_item;
