@@ -1308,8 +1308,6 @@ static struct DIMENSION_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_DIMENSION_BASE ), TYPE_HASH( BOARD_ITEM ) );
         // TODO: add dimension properties:
         //propMgr.AddProperty( new PROPERTY<DIMENSION, int>( _HKI( "Height" ),
-                    //&DIMENSION::SetHeight, &DIMENSION::GetHeight, PROPERTY_DISPLAY::DISTANCE ) );
+                    //&DIMENSION::SetHeight, &DIMENSION::GetHeight, PROPERTY_DISPLAY::SIZE ) );
     }
 } _DIMENSION_DESC;
-
-

@@ -1620,6 +1620,10 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
 }
 
 
+ENUM_TO_WXANY( SHAPE_T )
+ENUM_TO_WXANY( PLOT_DASH_TYPE )
+
+
 static struct EDA_SHAPE_DESC
 {
     EDA_SHAPE_DESC()
@@ -1641,21 +1645,29 @@ static struct EDA_SHAPE_DESC
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( EDA_SHAPE );
-        propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, SHAPE_T>( _HKI( "Shape" ),
-                    &EDA_SHAPE::SetShape, &EDA_SHAPE::GetShape ) );
+        auto shape = new PROPERTY_ENUM<EDA_SHAPE, SHAPE_T>( _HKI( "Shape" ),
+                     NO_SETTER( EDA_SHAPE, SHAPE_T ), &EDA_SHAPE::GetShape );
+        propMgr.AddProperty( shape );
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start X" ),
-                    &EDA_SHAPE::SetStartX, &EDA_SHAPE::GetStartX ) );
+                    &EDA_SHAPE::SetStartX, &EDA_SHAPE::GetStartX, PROPERTY_DISPLAY::COORD ) );
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Y" ),
-                    &EDA_SHAPE::SetStartY, &EDA_SHAPE::GetStartY ) );
+                    &EDA_SHAPE::SetStartY, &EDA_SHAPE::GetStartY, PROPERTY_DISPLAY::COORD ) );
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End X" ),
-                    &EDA_SHAPE::SetEndX, &EDA_SHAPE::GetEndX ) );
+                    &EDA_SHAPE::SetEndX, &EDA_SHAPE::GetEndX, PROPERTY_DISPLAY::COORD ) );
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End Y" ),
-                    &EDA_SHAPE::SetEndY, &EDA_SHAPE::GetEndY ) );
+                    &EDA_SHAPE::SetEndY, &EDA_SHAPE::GetEndY, PROPERTY_DISPLAY::COORD ) );
         // TODO: m_arcCenter, m_bezierC1, m_bezierC2, m_poly
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
-                    &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth ) );
+                    &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::SIZE ) );
+
+        auto angle = new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Angle" ),
+                    NO_SETTER( EDA_SHAPE, EDA_ANGLE ), &EDA_SHAPE::GetArcAngle,
+                    PROPERTY_DISPLAY::DECIDEGREE );
+        angle->SetAvailableFunc(
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    return aItem->Get( shape ).As<SHAPE_T>() == SHAPE_T::ARC;
+                } );
+        propMgr.AddProperty( angle );
     }
 } _EDA_SHAPE_DESC;
-
-ENUM_TO_WXANY( SHAPE_T )
-ENUM_TO_WXANY( PLOT_DASH_TYPE )

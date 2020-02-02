@@ -1702,36 +1702,36 @@ static struct PAD_DESC
                     PROPERTY_DISPLAY::DEGREE ) );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size X" ),
                     &PAD::SetSizeX, &PAD::GetSizeX,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                    PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size Y" ),
                     &PAD::SetSizeY, &PAD::GetSizeY,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                    PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Hole Size X" ),
                     &PAD::SetDrillSizeX, &PAD::GetDrillSizeX,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                    PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Hole Size Y" ),
                     &PAD::SetDrillSizeY, &PAD::GetDrillSizeY,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                    PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Pad To Die Length" ),
                     &PAD::SetPadToDieLength, &PAD::GetPadToDieLength,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                    PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Soldermask Margin Override" ),
                     &PAD::SetLocalSolderMaskMargin, &PAD::GetLocalSolderMaskMargin,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                    PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Solderpaste Margin Override" ),
                     &PAD::SetLocalSolderPasteMargin, &PAD::GetLocalSolderPasteMargin,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                    PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Solderpaste Margin Ratio Override" ),
                     &PAD::SetLocalSolderPasteMarginRatio, &PAD::GetLocalSolderPasteMarginRatio ) );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Thermal Relief Spoke Width" ),
                     &PAD::SetThermalSpokeWidth, &PAD::GetThermalSpokeWidth,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                    PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Thermal Relief Spoke Angle" ),
                     &PAD::SetThermalSpokeAngleDegrees, &PAD::GetThermalSpokeAngleDegrees,
                     PROPERTY_DISPLAY::DEGREE ) );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Thermal Relief Gap" ),
                     &PAD::SetThermalGap, &PAD::GetThermalGap,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                    PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_PROP>( _HKI( "Fabrication Property" ),
                     &PAD::SetProperty, &PAD::GetProperty ) );
 
@@ -1746,7 +1746,7 @@ static struct PAD_DESC
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Clearance Override" ),
                     &PAD::SetLocalClearance, &PAD::GetLocalClearance,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                    PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Parent" ),
                     NO_SETTER( PAD, wxString ), &PAD::GetParentAsString ) );
 

@@ -2821,10 +2821,10 @@ static struct FOOTPRINT_DESC
                     PROPERTY_DISPLAY::DEGREE ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Clearance Override" ),
                     &FOOTPRINT::SetLocalClearance, &FOOTPRINT::GetLocalClearance,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                    PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Solderpaste Margin Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
-                    PROPERTY_DISPLAY::DISTANCE ) );
+                    PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Solderpaste Margin Ratio Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMarginRatio,
                     &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );

@@ -995,7 +995,7 @@ static struct EDA_TEXT_DESC
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Thickness" ),
                                                           &EDA_TEXT::SetTextThickness,
                                                           &EDA_TEXT::GetTextThickness,
-                                                          PROPERTY_DISPLAY::DISTANCE ) );
+                                                          PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Italic" ),
                                                          &EDA_TEXT::SetItalic,
                                                          &EDA_TEXT::IsItalic ) );
@@ -1010,11 +1010,11 @@ static struct EDA_TEXT_DESC
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Width" ),
                                                           &EDA_TEXT::SetTextWidth,
                                                           &EDA_TEXT::GetTextWidth,
-                                                          PROPERTY_DISPLAY::DISTANCE ) );
+                                                          PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Height" ),
                                                           &EDA_TEXT::SetTextHeight,
                                                           &EDA_TEXT::GetTextHeight,
-                                                          PROPERTY_DISPLAY::DISTANCE ) );
+                                                          PROPERTY_DISPLAY::SIZE ) );
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT,
                              GR_TEXT_H_ALIGN_T>( _HKI( "Horizontal Justification" ),
                                                  &EDA_TEXT::SetHorizJustify,

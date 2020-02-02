@@ -318,7 +318,7 @@ static struct PCB_SHAPE_DESC
         REGISTER_TYPE( PCB_SHAPE );
         propMgr.AddTypeCast( new TYPE_CAST<PCB_SHAPE, BOARD_ITEM> );
         propMgr.AddTypeCast( new TYPE_CAST<PCB_SHAPE, EDA_SHAPE> );
-        propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ) );
     }
 } _PCB_SHAPE_DESC;
+

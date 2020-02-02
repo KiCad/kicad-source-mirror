@@ -177,9 +177,9 @@ private:
 
 public:
     PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = DEFAULT ) :
-        m_id( nextId ),
+        m_id( 0 ),
         m_name( aName ),
-        m_type( aType ),
+        m_display( aDisplay ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } )
     {
     }
@@ -253,9 +253,9 @@ public:
 
     virtual bool IsReadOnly() const = 0;
 
-    PROPERTY_TYPE Type() const
+    PROPERTY_DISPLAY Display() const
     {
-        return m_type;
+        return m_display;
     }
 
 protected:
@@ -301,18 +301,18 @@ public:
     template<typename SetType, typename GetType>
     PROPERTY( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )(),
-            PROPERTY_TYPE aType = DEFAULT )
+            PROPERTY_DISPLAY aDisplay = DEFAULT )
         : PROPERTY( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                           METHOD<Owner, T, Base>::Wrap( aGetter ), aType )
+                           METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
     {
     }
 
     template<typename SetType, typename GetType>
     PROPERTY( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )() const,
-            PROPERTY_TYPE aType = DEFAULT )
+            PROPERTY_DISPLAY aDisplay = DEFAULT )
         : PROPERTY( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                           METHOD<Owner, T, Base>::Wrap( aGetter ), aType )
+                           METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
     {
     }
 
@@ -338,8 +338,8 @@ public:
 
 protected:
     PROPERTY( const wxString& aName, SETTER_BASE<Owner, T>* s, GETTER_BASE<Owner, T>* g,
-            PROPERTY_TYPE aType )
-        : PROPERTY_BASE( aName, aType ), m_setter( s ), m_getter( g ),
+              PROPERTY_DISPLAY aDisplay )
+        : PROPERTY_BASE( aName, aDisplay ), m_setter( s ), m_getter( g ),
                 m_ownerHash( TYPE_HASH( Owner ) ), m_baseHash( TYPE_HASH( Base ) ),
                 m_typeHash( TYPE_HASH( BASE_TYPE ) )
     {
@@ -390,9 +390,9 @@ public:
     template<typename SetType, typename GetType>
     PROPERTY_ENUM( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )(),
-            PROPERTY_TYPE aType = PROPERTY_TYPE::DEFAULT )
+            PROPERTY_DISPLAY aDisplay = DEFAULT )
         : PROPERTY<Owner, T, Base>( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aType )
+                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
     {
         if ( std::is_enum<T>::value )
         {
@@ -404,9 +404,9 @@ public:
     template<typename SetType, typename GetType>
     PROPERTY_ENUM( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )() const,
-            PROPERTY_TYPE aType = PROPERTY_TYPE::DEFAULT )
+            PROPERTY_DISPLAY aDisplay = DEFAULT )
         : PROPERTY<Owner, T, Base>( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aType )
+                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
     {
         if ( std::is_enum<T>::value )
         {
