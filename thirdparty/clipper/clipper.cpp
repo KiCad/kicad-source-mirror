@@ -201,7 +201,8 @@ int PolyTree::Total() const
 // PolyNode methods ...
 // ------------------------------------------------------------------------------
 
-PolyNode::PolyNode() : Parent( 0 ), Index( 0 ), m_IsOpen( false )
+PolyNode::PolyNode() : Parent( 0 ), Index( 0 ), m_IsOpen( false ),
+        m_jointype( jtSquare ), m_endtype( etClosedPolygon )
 {
 }
 
@@ -1131,6 +1132,11 @@ ClipperBase::ClipperBase()              // constructor
 {
     m_CurrentLM = m_MinimaList.begin(); // begin() == end() here
     m_UseFullRange = false;
+
+    // Avoid uninitialized vars:
+    m_PreserveCollinear = false;
+    m_HasOpenPaths = false;
+    m_ActiveEdges = nullptr;
 }
 
 
@@ -1950,6 +1956,13 @@ Clipper::Clipper( int initOptions ) : ClipperBase()    // constructor
     m_StrictSimple  = ( (initOptions & ioStrictlySimple) != 0 );
     m_PreserveCollinear = ( (initOptions & ioPreserveCollinear) != 0 );
     m_HasOpenPaths = false;
+
+    // Avoid uninitialized vars
+    m_ClipType = ctIntersection;
+    m_SortedEdges = nullptr;
+    m_ClipFillType = pftEvenOdd;
+    m_SubjFillType = pftEvenOdd;
+    m_UsingPolyTree = false;
 #ifdef use_xyz
     m_ZFill = 0;
 #endif
@@ -4902,6 +4915,15 @@ ClipperOffset::ClipperOffset( double miterLimit, double arcTolerance )
     this->MiterLimit = miterLimit;
     this->ArcTolerance = arcTolerance;
     m_lowest.X = -1;
+
+    //Avoid uninitialized vars:
+    MiterFallback = jtSquare;
+    m_delta = 1.0;
+    m_sinA = 0.0;
+    m_sin = 0.0;
+    m_cos = 0.0;
+    m_miterLim = 1.0;
+    m_StepsPerRad = 1.0;
 }
 
 

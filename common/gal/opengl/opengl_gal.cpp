@@ -1806,6 +1806,10 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
     {
         const FONT_GLYPH_TYPE* g = LookupGlyph( 'x' );
         wxASSERT( g );
+
+        if( !g )    // Should not happen.
+            return 0;
+
         Translate( VECTOR2D( g->advance, 0 ) );
         return g->advance;
     }
