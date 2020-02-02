@@ -437,7 +437,6 @@ public:
         KiCadFootprintLibPathExtension;
         GedaPcbFootprintLibFileExtension;
         EagleFootprintLibPathExtension;
-        KiCadLib3DShapesPathExtension;
         SpecctraDsnFileExtension;
         IpcD356FileExtension;
          */
@@ -448,16 +447,26 @@ public:
     virtual wxDirTraverseResult OnDir( const wxString& dirPath ) override
     {
         wxFileName destDir( dirPath );
-        wxString   destDirPath = destDir.GetPath(); // strips off last directory
+        wxString   destDirPath = destDir.GetPathWithSep();
+        wxUniChar  pathSep = wxFileName::GetPathSeparator();
 
-        if( destDirPath.StartsWith( m_projectDirPath ) )
+        if( destDirPath.StartsWith( m_projectDirPath + pathSep ) )
         {
             destDirPath.Replace( m_projectDirPath, m_newProjectDirPath, false );
             destDir.SetPath( destDirPath );
         }
 
         if( destDir.GetName() == m_projectName )
-            destDir.SetName( m_newProjectName );
+        {
+            if( destDir.GetExt() == "pretty" )
+                destDir.SetName( m_newProjectName );
+#if 0
+            // WAYNE STAMBAUGH TODO:
+            // If we end up with a symbol equivalent to ".pretty" we'll want to handle it here....
+            else if( destDir.GetExt() == "sym_lib_dir_extension" )
+                destDir.SetName( m_newProjectName );
+#endif
+        }
 
         if( !wxMkdir( destDir.GetFullPath() ) )
         {
@@ -466,7 +475,7 @@ public:
             if( !m_errors.empty() )
                 m_errors += "\n";
 
-            msg.Printf( _( "Cannot copy file \"%s\"." ), destDir.GetFullPath() );
+            msg.Printf( _( "Cannot copy folder \"%s\"." ), destDir.GetFullPath() );
             m_errors += msg;
         }
 

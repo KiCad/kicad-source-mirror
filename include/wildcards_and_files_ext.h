@@ -141,7 +141,6 @@ extern const std::string GedaPcbFootprintLibFileExtension;
 extern const std::string EagleFootprintLibPathExtension;
 extern const std::string ComponentFileExtension;
 extern const std::string PageLayoutDescrFileExtension;
-extern const std::string KiCadLib3DShapesPathExtension;
 extern const std::string SpecctraDsnFileExtension;
 extern const std::string IpcD356FileExtension;
 

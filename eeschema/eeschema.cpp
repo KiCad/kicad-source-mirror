@@ -314,14 +314,23 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
                         const wxString& aSrcFilePath, wxString& aErrors )
 {
     wxFileName destFile( aSrcFilePath );
-    wxString   destPath = destFile.GetPath();
+    wxString   destPath = destFile.GetPathWithSep();
+    wxUniChar  pathSep = wxFileName::GetPathSeparator();
     wxString   ext = destFile.GetExt();
 
-    if( destPath.StartsWith( aProjectBasePath ) )
-    {
+    if( destPath.StartsWith( aProjectBasePath + pathSep ) )
         destPath.Replace( aProjectBasePath, aNewProjectBasePath, false );
-        destFile.SetPath( destPath );
-    }
+
+#if 0
+    // WAYNE STAMBAUGH TODO:
+    // If we end up with a symbol equivalent to ".pretty" we'll want to handle it here....
+    wxString srcProjectSymbolLib = pathSep + aProjectName + ".sym_lib_dir_extension" + pathSep;
+    wxString newProjectSymbolLib = pathSep + aNewProjectName + ".sym_lib_dir_extension" + pathSep;
+
+    destPath.Replace( srcProjectSymbolLib, newProjectSymbolLib, true );
+#endif
+
+    destFile.SetPath( destPath );
 
     if( ext == "sch" || ext == "sch-bak" )
     {

@@ -138,14 +138,13 @@ const std::string DrillFileExtension( "drl" );
 const std::string SVGFileExtension( "svg" );
 const std::string ReportFileExtension( "rpt" );
 const std::string FootprintPlaceFileExtension( "pos" );
-const std::string KiCadLib3DShapesPathExtension( "3dshapes" );  ///< 3D shapes default libpath
 
-const std::string KiCadFootprintLibPathExtension( "pretty" );   ///< KICAD PLUGIN libpath
-const std::string LegacyFootprintLibPathExtension( "mod" );
-const std::string EagleFootprintLibPathExtension( "lbr" );
+const std::string KiCadFootprintLibPathExtension( "pretty" );   // this is a directory
+const std::string LegacyFootprintLibPathExtension( "mod" );     // this is a file
+const std::string EagleFootprintLibPathExtension( "lbr" );      // this is a file
+const std::string GedaPcbFootprintLibFileExtension( "fp" );     // this is a file
 
 const std::string KiCadFootprintFileExtension( "kicad_mod" );
-const std::string GedaPcbFootprintLibFileExtension( "fp" );
 const std::string SpecctraDsnFileExtension( "dsn" );
 const std::string IpcD356FileExtension( "d356" );
 
