@@ -23,6 +23,18 @@
 
 #define ALPHA_MAX 100   // the max value returned by the alpha (opacity) slider
 
+
+// Configure the spin controls contained inside the dialog
+void configureSpinCtrl( wxSpinCtrl* aCtrl )
+{
+    wxSize textLength = aCtrl->GetTextExtent( "999" );
+    wxSize ctrlSize   = aCtrl->GetSizeFromTextSize( textLength );
+
+    aCtrl->SetMinSize( ctrlSize );
+    aCtrl->SetSize( ctrlSize );
+}
+
+
 DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor,
                                           bool aAllowOpacityControl, CUSTOM_COLORS_LIST* aUserColors )
 	: DIALOG_COLOR_PICKER_BASE( aParent )
@@ -130,6 +142,13 @@ bool DIALOG_COLOR_PICKER::TransferDataToWindow()
     setIconColor( m_OldColorRect, m_previousColor4D );
     SetEditVals( ALL_CHANGED );
     drawAll();
+
+    // Configure the spin control sizes
+    configureSpinCtrl( m_spinCtrlGreen );
+    configureSpinCtrl( m_spinCtrlBlue );
+    configureSpinCtrl( m_spinCtrlRed );
+    configureSpinCtrl( m_spinCtrlHue );
+    configureSpinCtrl( m_spinCtrlSaturation );
 
     m_notebook->GetPage( 0 )->Layout();
     m_notebook->GetPage( 1 )->Layout();

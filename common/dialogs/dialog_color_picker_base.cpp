@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,18 +56,12 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	fgSizerRGB->Add( m_staticTextB, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_spinCtrlRed = new wxSpinCtrl( sbSizerViewRGB->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 255, 128 );
-	m_spinCtrlRed->SetMinSize( wxSize( 80,-1 ) );
-
 	fgSizerRGB->Add( m_spinCtrlRed, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_spinCtrlGreen = new wxSpinCtrl( sbSizerViewRGB->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 255, 128 );
-	m_spinCtrlGreen->SetMinSize( wxSize( 80,-1 ) );
-
 	fgSizerRGB->Add( m_spinCtrlGreen, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_spinCtrlBlue = new wxSpinCtrl( sbSizerViewRGB->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 255, 128 );
-	m_spinCtrlBlue->SetMinSize( wxSize( 80,-1 ) );
-
 	fgSizerRGB->Add( m_spinCtrlBlue, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
@@ -103,13 +97,9 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	fgSizerHSV->Add( m_staticTextSat, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_spinCtrlHue = new wxSpinCtrl( sbSizerViewHSV->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
-	m_spinCtrlHue->SetMinSize( wxSize( 80,-1 ) );
-
 	fgSizerHSV->Add( m_spinCtrlHue, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_spinCtrlSaturation = new wxSpinCtrl( sbSizerViewHSV->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 255, 128 );
-	m_spinCtrlSaturation->SetMinSize( wxSize( 80,-1 ) );
-
 	fgSizerHSV->Add( m_spinCtrlSaturation, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
