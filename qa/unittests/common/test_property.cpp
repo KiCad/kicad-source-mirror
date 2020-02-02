@@ -259,7 +259,7 @@ BOOST_AUTO_TEST_CASE( NotexistingProperties )
 {
     ptr = &d;
     BOOST_CHECK_EQUAL( ptr->Set<int>( "does not exist", 5 ), false );
-    //BOOST_CHECK_EQUAL( ptr->Get<int>( "neither" ).has_value(), false );
+    BOOST_CHECK_EQUAL( static_cast<bool>( ptr->Get<int>( "neither" ) ), false );
 }
 
 // Request data using incorrect type
@@ -298,12 +298,12 @@ BOOST_AUTO_TEST_CASE( EnumGlob )
     BOOST_CHECK_EQUAL( v.GetCount(), values.GetCount() );
     BOOST_CHECK_EQUAL( v.GetCount(), labels.GetCount() );
 
-    for (int i = 0; i < values.GetCount(); ++i )
+    for (unsigned int i = 0; i < values.GetCount(); ++i )
     {
         BOOST_CHECK_EQUAL( v.GetValue( i ), values[i] );
     }
 
-    for (int i = 0; i < labels.GetCount(); ++i )
+    for (unsigned int i = 0; i < labels.GetCount(); ++i )
     {
         BOOST_CHECK_EQUAL( v.GetLabel( i ), labels[i] );
     }
@@ -338,12 +338,12 @@ BOOST_AUTO_TEST_CASE( EnumClass )
     BOOST_CHECK_EQUAL( v.GetCount(), values.GetCount() );
     BOOST_CHECK_EQUAL( v.GetCount(), labels.GetCount() );
 
-    for (int i = 0; i < values.GetCount(); ++i )
+    for (unsigned int i = 0; i < values.GetCount(); ++i )
     {
         BOOST_CHECK_EQUAL( v.GetValue( i ), values[i] );
     }
 
-    for (int i = 0; i < labels.GetCount(); ++i )
+    for (unsigned int i = 0; i < labels.GetCount(); ++i )
     {
         BOOST_CHECK_EQUAL( v.GetLabel( i ), labels[i] );
     }
@@ -406,12 +406,12 @@ BOOST_AUTO_TEST_CASE( AlternativeEnum )
     BOOST_CHECK_EQUAL( v.GetCount(), values.GetCount() );
     BOOST_CHECK_EQUAL( v.GetCount(), labels.GetCount() );
 
-    for (int i = 0; i < values.GetCount(); ++i )
+    for (unsigned int i = 0; i < values.GetCount(); ++i )
     {
         BOOST_CHECK_EQUAL( v.GetValue( i ), values[i] );
     }
 
-    for (int i = 0; i < labels.GetCount(); ++i )
+    for (unsigned int i = 0; i < labels.GetCount(); ++i )
     {
         BOOST_CHECK_EQUAL( v.GetLabel( i ), labels[i] );
     }

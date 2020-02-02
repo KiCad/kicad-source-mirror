@@ -50,9 +50,10 @@ class ENUM_MAP;
 enum PROPERTY_DISPLAY
 {
     DEFAULT,    ///< Default property for a given type
-    DISTANCE,   ///< Display value expressed in distance units (mm/inch)
-    DEGREE,     ///< Display value expressed in degrees
-    DECIDEGREE  ///< Convert decidegrees to degrees for display
+    SIZE,       ///< Size expressed in distance units (mm/inch)
+    COORD,      ///< Coordinate expressed in distance units (mm/inch)
+    DEGREE,     ///< Angle expressed in degrees
+    DECIDEGREE  ///< Angle expressed in decidegrees
 };
 
 ///< Macro to generate unique identifier for a type
@@ -176,8 +177,9 @@ private:
 
 public:
     PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = DEFAULT ) :
+        m_id( nextId ),
         m_name( aName ),
-        m_display( aDisplay ),
+        m_type( aType ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } )
     {
     }
@@ -251,9 +253,9 @@ public:
 
     virtual bool IsReadOnly() const = 0;
 
-    PROPERTY_DISPLAY GetDisplay() const
+    PROPERTY_TYPE Type() const
     {
-        return m_display;
+        return m_type;
     }
 
 protected:
@@ -279,8 +281,9 @@ protected:
     virtual wxAny getter( void* aObject ) const = 0;
 
 private:
-    const wxString                    m_name;
-    const PROPERTY_DISPLAY            m_display;
+    const size_t           m_id;
+    const wxString         m_name;
+    const PROPERTY_DISPLAY m_display;
 
     std::function<bool(INSPECTABLE*)> m_availFunc;   ///< Eval to determine if prop is available
 
@@ -298,18 +301,18 @@ public:
     template<typename SetType, typename GetType>
     PROPERTY( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )(),
-            PROPERTY_DISPLAY aDisplay = DEFAULT )
+            PROPERTY_TYPE aType = DEFAULT )
         : PROPERTY( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                           METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
+                           METHOD<Owner, T, Base>::Wrap( aGetter ), aType )
     {
     }
 
     template<typename SetType, typename GetType>
     PROPERTY( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )() const,
-            PROPERTY_DISPLAY aDisplay = DEFAULT )
+            PROPERTY_TYPE aType = DEFAULT )
         : PROPERTY( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                           METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
+                           METHOD<Owner, T, Base>::Wrap( aGetter ), aType )
     {
     }
 
@@ -335,8 +338,8 @@ public:
 
 protected:
     PROPERTY( const wxString& aName, SETTER_BASE<Owner, T>* s, GETTER_BASE<Owner, T>* g,
-            PROPERTY_DISPLAY aDisplay )
-        : PROPERTY_BASE( aName, aDisplay ), m_setter( s ), m_getter( g ),
+            PROPERTY_TYPE aType )
+        : PROPERTY_BASE( aName, aType ), m_setter( s ), m_getter( g ),
                 m_ownerHash( TYPE_HASH( Owner ) ), m_baseHash( TYPE_HASH( Base ) ),
                 m_typeHash( TYPE_HASH( BASE_TYPE ) )
     {
@@ -387,9 +390,9 @@ public:
     template<typename SetType, typename GetType>
     PROPERTY_ENUM( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )(),
-            PROPERTY_DISPLAY aDisplay = PROPERTY_DISPLAY::DEFAULT )
+            PROPERTY_TYPE aType = PROPERTY_TYPE::DEFAULT )
         : PROPERTY<Owner, T, Base>( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
+                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aType )
     {
         if ( std::is_enum<T>::value )
         {
@@ -401,9 +404,9 @@ public:
     template<typename SetType, typename GetType>
     PROPERTY_ENUM( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )() const,
-            PROPERTY_DISPLAY aDisplay = PROPERTY_DISPLAY::DEFAULT )
+            PROPERTY_TYPE aType = PROPERTY_TYPE::DEFAULT )
         : PROPERTY<Owner, T, Base>( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
+                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aType )
     {
         if ( std::is_enum<T>::value )
         {
@@ -442,7 +445,7 @@ public:
 
     const wxPGChoices& Choices() const override
     {
-        return m_choices;
+        return m_choices.GetCount() > 0 ? m_choices : ENUM_MAP<T>::Instance().Choices();
     }
 
     void SetChoices( const wxPGChoices& aChoices ) override
@@ -452,7 +455,7 @@ public:
 
     bool HasChoices() const override
     {
-        return m_choices.GetCount() > 0;
+        return Choices().GetCount() > 0;
     }
 
 protected:
