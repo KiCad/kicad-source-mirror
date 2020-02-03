@@ -2057,10 +2057,8 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         }
     }
 
-    int numZones = aCollector.CountType( PCB_ZONE_AREA_T );
-
     // Zone edges are very specific; zone fills much less so.
-    if( numZones > 0 )
+    if( aCollector.CountType( PCB_ZONE_AREA_T ) > 0 )
     {
         for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
         {
@@ -2148,9 +2146,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         }
     }
 
-    int moduleCount = aCollector.CountType( PCB_MODULE_T );
-
-    if( moduleCount > 0 )
+    if( aCollector.CountType( PCB_MODULE_T ) > 0 )
     {
         double maxArea = calcMaxArea( aCollector, PCB_MODULE_T );
         BOX2D viewportD = getView()->GetViewport();
