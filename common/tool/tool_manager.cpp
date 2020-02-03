@@ -55,17 +55,18 @@ struct TOOL_MANAGER::TOOL_STATE
 
     TOOL_STATE( const TOOL_STATE& aState )
     {
-        theTool = aState.theTool;
-        idle = aState.idle;
-        pendingWait = aState.pendingWait;
+        theTool            = aState.theTool;
+        idle               = aState.idle;
+        shutdown           = aState.shutdown;
+        pendingWait        = aState.pendingWait;
         pendingContextMenu = aState.pendingContextMenu;
-        contextMenu = aState.contextMenu;
+        contextMenu        = aState.contextMenu;
         contextMenuTrigger = aState.contextMenuTrigger;
-        cofunc = aState.cofunc;
-        wakeupEvent = aState.wakeupEvent;
-        waitEvents = aState.waitEvents;
-        transitions = aState.transitions;
-        vcSettings = aState.vcSettings;
+        cofunc             = aState.cofunc;
+        wakeupEvent        = aState.wakeupEvent;
+        waitEvents         = aState.waitEvents;
+        transitions        = aState.transitions;
+        vcSettings         = aState.vcSettings;
         // do not copy stateStack
     }
 
@@ -80,6 +81,9 @@ struct TOOL_MANAGER::TOOL_STATE
 
     /// Is the tool active (pending execution) or disabled at the moment
     bool idle;
+
+    /// Should the tool shutdown during next execution
+    bool shutdown;
 
     /// Flag defining if the tool is waiting for any event (i.e. if it
     /// issued a Wait() call).
@@ -112,17 +116,18 @@ struct TOOL_MANAGER::TOOL_STATE
 
     TOOL_STATE& operator=( const TOOL_STATE& aState )
     {
-        theTool = aState.theTool;
-        idle = aState.idle;
-        pendingWait = aState.pendingWait;
+        theTool            = aState.theTool;
+        idle               = aState.idle;
+        shutdown           = aState.shutdown;
+        pendingWait        = aState.pendingWait;
         pendingContextMenu = aState.pendingContextMenu;
-        contextMenu = aState.contextMenu;
+        contextMenu        = aState.contextMenu;
         contextMenuTrigger = aState.contextMenuTrigger;
-        cofunc = aState.cofunc;
-        wakeupEvent = aState.wakeupEvent;
-        waitEvents = aState.waitEvents;
-        transitions = aState.transitions;
-        vcSettings = aState.vcSettings;
+        cofunc             = aState.cofunc;
+        wakeupEvent        = aState.wakeupEvent;
+        waitEvents         = aState.waitEvents;
+        transitions        = aState.transitions;
+        vcSettings         = aState.vcSettings;
         // do not copy stateStack
         return *this;
     }
@@ -179,11 +184,12 @@ private:
     ///> Restores the initial state.
     void clear()
     {
-        idle = true;
-        pendingWait = false;
+        idle               = true;
+        shutdown           = false;
+        pendingWait        = false;
         pendingContextMenu = false;
-        cofunc = NULL;
-        contextMenu = NULL;
+        cofunc             = NULL;
+        contextMenu        = NULL;
         contextMenuTrigger = CMENU_OFF;
         vcSettings.Reset();
         transitions.clear();
@@ -429,6 +435,74 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
 }
 
 
+void TOOL_MANAGER::ShutdownAllTools()
+{
+    // Create a temporary list of tools to iterate over since when the tools shutdown
+    // they remove themselves from the list automatically (invalidating the iterator)
+    ID_LIST tmpList = m_activeTools;
+
+    for( auto id : tmpList )
+    {
+        ShutdownTool( id );
+    }
+}
+
+
+void TOOL_MANAGER::ShutdownTool( TOOL_ID aToolId )
+{
+    TOOL_BASE* tool = FindTool( aToolId );
+
+    if( tool && tool->GetType() == INTERACTIVE )
+        ShutdownTool( tool );
+}
+
+
+void TOOL_MANAGER::ShutdownTool( const std::string& aToolName )
+{
+    TOOL_BASE* tool = FindTool( aToolName );
+
+    if( tool && tool->GetType() == INTERACTIVE )
+        ShutdownTool( tool );
+}
+
+
+void TOOL_MANAGER::ShutdownTool( TOOL_BASE* aTool )
+{
+    wxASSERT( aTool != NULL );
+
+    TOOL_ID id = aTool->GetId();
+
+    if( isActive( aTool ) )
+    {
+        auto it = std::find( m_activeTools.begin(), m_activeTools.end(), id );
+
+        TOOL_STATE* st = m_toolIdIndex[*it];
+
+        // the tool state handler is waiting for events (i.e. called Wait() method)
+        if( st && st->pendingWait )
+        {
+            // Wake up the tool and tell it to shutdown
+            st->shutdown = true;
+            st->pendingWait = false;
+            st->waitEvents.clear();
+
+            if( st->cofunc )
+            {
+                wxLogTrace( kicadTraceToolStack,
+                        "TOOL_MANAGER::ShutdownTool is shutting down tool %s",
+                        st->theTool->GetName() );
+
+                setActiveState( st );
+                bool end = !st->cofunc->Resume();
+
+                if( end )
+                    it = finishTool( st );
+            }
+        }
+    }
+}
+
+
 TOOL_BASE* TOOL_MANAGER::FindTool( int aId ) const
 {
     std::map<TOOL_ID, TOOL_STATE*>::const_iterator it = m_toolIdIndex.find( aId );
@@ -560,7 +634,11 @@ TOOL_EVENT* TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_LIST&
     // switch context back to event dispatcher loop
     st->cofunc->KiYield();
 
-    return &st->wakeupEvent;
+    // If the tool should shutdown, it gets a null event to break the loop
+    if( st->shutdown )
+        return nullptr;
+    else
+        return &st->wakeupEvent;
 }
 
 

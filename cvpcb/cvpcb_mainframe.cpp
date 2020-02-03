@@ -185,9 +185,9 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 {
-    // Be sure a active tool (if exists) is deactivated:
+    // Shutdown all running tools
     if( m_toolManager )
-        m_toolManager->DeactivateTool();
+        m_toolManager->ShutdownAllTools();
 
     // Clean up the tool infrastructure
     delete m_actions;

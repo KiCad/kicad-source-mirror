@@ -233,6 +233,10 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
 FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 {
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
     // save the footprint in the PROJECT
     retainLastFootprint();
 

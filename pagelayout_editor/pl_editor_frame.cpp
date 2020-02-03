@@ -200,6 +200,10 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 PL_EDITOR_FRAME::~PL_EDITOR_FRAME()
 {
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
     // Since the file menu contains file history menus, we must ensure that the menu
     // destructor is called before the file history objects are deleted since their destructor
     // unregisters the menu from the history.

@@ -152,15 +152,15 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
 DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 {
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
     GetBoard()->DeleteAllModules();
     GetCanvas()->StopDrawing();
     GetCanvas()->GetView()->Clear();
     // Be sure any event cannot be fired after frame deletion:
     GetCanvas()->SetEvtHandlerEnabled( false );
-
-    // Be sure a active tool (if exists) is deactivated:
-    if( m_toolManager )
-        m_toolManager->DeactivateTool();
 
     delete GetScreen();
     SetScreen( NULL );      // Be sure there is no double deletion

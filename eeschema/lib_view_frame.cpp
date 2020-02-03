@@ -211,6 +211,10 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
 LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 {
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
     if( m_previewItem )
         GetCanvas()->GetView()->Remove( m_previewItem );
 }

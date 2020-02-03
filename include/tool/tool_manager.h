@@ -95,6 +95,36 @@ public:
     bool InvokeTool( const std::string& aToolName );
 
     /**
+     * Shutdown all tools with a currently registered event loop in this tool manager
+     * by waking them up with a null event.
+     */
+    void ShutdownAllTools();
+
+    /**
+     * Shutdown the specified tool by waking it up with a null event to terminate
+     * the processing loop.
+     *
+     * @param aTool is the tool to shutdown
+     */
+    void ShutdownTool( TOOL_BASE* aTool );
+
+    /**
+     * Shutdown the specified tool by waking it up with a null event to terminate
+     * the processing loop.
+     *
+     * @param aToolId is the ID of the tool to shutdown
+     */
+    void ShutdownTool( TOOL_ID aToolId );
+
+    /**
+     * Shutdown the specified tool by waking it up with a null event to terminate
+     * the processing loop.
+     *
+     * @param aToolName is name of the tool to shutdown
+     */
+    void ShutdownTool( const std::string& aToolName );
+
+    /**
      * Function RunAction()
      * Runs the specified action. The common format for action names is "application.ToolName.Action".
      *

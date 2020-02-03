@@ -222,6 +222,10 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
 GERBVIEW_FRAME::~GERBVIEW_FRAME()
 {
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
     GetCanvas()->GetView()->Clear();
 
     GetGerberLayout()->GetImagesList()->DeleteAllImages();

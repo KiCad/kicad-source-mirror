@@ -271,6 +271,10 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
 FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
 {
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
     GetCanvas()->StopDrawing();
     GetCanvas()->GetView()->Clear();
     // Be sure any event cannot be fired after frame deletion:

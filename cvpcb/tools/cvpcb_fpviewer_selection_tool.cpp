@@ -92,9 +92,6 @@ int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
     }
 
-    // This tool is supposed to be active forever
-    wxASSERT( false );
-
     return 0;
 }
 

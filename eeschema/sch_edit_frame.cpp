@@ -311,6 +311,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
+    // Shutdown all running tools
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
     delete m_item_to_repeat;        // we own the cloned object, see this->SaveCopyForRepeatItem()
 
     SetScreen( NULL );

@@ -89,9 +89,6 @@ int CVPCB_CONTROL::Main( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
     }
 
-    // This tool is supposed to be active forever
-    wxASSERT( false );
-
     return 0;
 }
 

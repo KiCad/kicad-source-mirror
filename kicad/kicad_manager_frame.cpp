@@ -166,9 +166,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
 KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 {
-    // Ensure there are no active tools
+    // Shutdown all running tools
     if( m_toolManager )
-        m_toolManager->DeactivateTool();
+        m_toolManager->ShutdownAllTools();
 
     delete m_actions;
     delete m_toolManager;

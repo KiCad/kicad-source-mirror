@@ -403,9 +403,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
     }
 
-    // This tool is supposed to be active forever
-    assert( false );
-
     return 0;
 }
 
