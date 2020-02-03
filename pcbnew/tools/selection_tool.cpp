@@ -1973,10 +1973,8 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         }
     }
 
-    int numZones = aCollector.CountType( PCB_ZONE_AREA_T );
-
     // Zone edges are very specific; zone fills much less so.
-    if( numZones > 0 )
+    if( aCollector.CountType( PCB_ZONE_AREA_T ) > 0 )
     {
         for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
         {
@@ -2102,9 +2100,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         }
     }
 
-    int moduleCount = aCollector.CountType( PCB_MODULE_T );
-
-    if( moduleCount > 0 )
+    if( aCollector.CountType( PCB_MODULE_T ) > 0 )
     {
         double maxArea = calcMaxArea( aCollector, PCB_MODULE_T );
         BOX2D viewportD = getView()->GetViewport();
@@ -2131,10 +2127,6 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                 // footprint then it should be considered for selection
                 else if( calcRatio( calcArea( mod ), maxArea ) <= footprintToFootprintMinRatio )
                     continue;
-                // if there are multiple footprints for selection at this point, prefer
-                // one that is on the active layer
-                else if( moduleCount > 1 && mod->GetLayer() == activeLayer )
-                    preferred.insert( mod );
                 // reject ALL OTHER footprints if there's still something else left
                 // to select
                 else if( (int)( rejected.size() + 1 ) < aCollector.GetCount() )
