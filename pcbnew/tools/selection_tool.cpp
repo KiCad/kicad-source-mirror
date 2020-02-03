@@ -1935,7 +1935,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
     constexpr double padToFootprintMinRatio = 0.45;
     // footprints containing items with items-to-footprint area ratio higher than this will be
     // forced to stay on the list
-    constexpr double footprintMaxCoverRatio = 0.80;
+    constexpr double footprintMaxCoverRatio = 0.90;
     constexpr double viaToPadMinRatio = 0.50;
     constexpr double trackViaLengthRatio = 2.0;
     constexpr double trackTrackLengthRatio = 0.3;
