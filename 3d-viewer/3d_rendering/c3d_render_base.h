@@ -66,7 +66,8 @@ public:
      * @param aStatusTextReporter: a pointer to the status progress reporter
      * @return it will return true if the render would like to redraw again
      */
-    virtual bool Redraw( bool aIsMoving, REPORTER *aStatusTextReporter = NULL ) = 0;
+    virtual bool Redraw( bool aIsMoving, REPORTER* aStatusTextReporter = NULL,
+            REPORTER* aWarningTextReporter = NULL ) = 0;
 
     /**
      * @brief ReloadRequest - !TODO: this must be reviewed to add flags to

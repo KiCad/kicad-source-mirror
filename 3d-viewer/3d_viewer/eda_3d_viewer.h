@@ -50,6 +50,15 @@
 #define QUALIFIED_VIEWER3D_FRAMENAME( parent ) \
                     ( wxString( VIEWER3D_FRAMENAME ) + wxT( ":" ) + parent->GetName() )
 
+
+enum EDA_3D_VIEWER_STATUSBAR
+{
+    STATUS_TEXT = 0,
+    WARN_TEXT,
+    X_POS,
+    Y_POS
+};
+
 /**
  *  Create and handle a window for the 3d viewer connected to a Kiway and a pcbboard
  */

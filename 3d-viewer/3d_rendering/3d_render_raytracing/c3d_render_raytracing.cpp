@@ -147,7 +147,8 @@ static inline void SetPixel( GLubyte *p, const CCOLORRGB &v )
 }
 
 
-bool C3D_RENDER_RAYTRACING::Redraw( bool aIsMoving, REPORTER *aStatusTextReporter )
+bool C3D_RENDER_RAYTRACING::Redraw(
+        bool aIsMoving, REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
 {
     bool requestRedraw = false;
 
@@ -178,7 +179,7 @@ bool C3D_RENDER_RAYTRACING::Redraw( bool aIsMoving, REPORTER *aStatusTextReporte
 
         //aIsMoving = true;
         requestRedraw = true;
-        reload( aStatusTextReporter );
+        reload( aStatusTextReporter, aWarningTextReporter );
     }
 
 

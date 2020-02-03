@@ -271,7 +271,7 @@ double CINFO3D_VISU::GetCircleCorrectionFactor( int aNrSides ) const
 }
 
 
-void CINFO3D_VISU::InitSettings( REPORTER *aStatusTextReporter )
+void CINFO3D_VISU::InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
 {
     wxLogTrace( m_logTrace, wxT( "CINFO3D_VISU::InitSettings" ) );
 
@@ -427,7 +427,10 @@ void CINFO3D_VISU::InitSettings( REPORTER *aStatusTextReporter )
     if( aStatusTextReporter )
         aStatusTextReporter->Report( _( "Build board body" ) );
 
-    createBoardPolygon();
+    if( !createBoardPolygon() )
+        aWarningTextReporter->Report( _( "Warning: Board outline is not closed" ) );
+    else
+        aWarningTextReporter->Report( wxEmptyString );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_stopCreateBoardPolyTime = GetRunningMicroSecs();
@@ -452,18 +455,13 @@ void CINFO3D_VISU::InitSettings( REPORTER *aStatusTextReporter )
 }
 
 
-void CINFO3D_VISU::createBoardPolygon()
+bool CINFO3D_VISU::createBoardPolygon()
 {
     m_board_poly.RemoveAllContours();
 
     wxString errmsg;
 
-    if( !m_board->GetBoardPolygonOutlines( m_board_poly, /*allLayerHoles,*/ &errmsg ) )
-    {
-        errmsg.append( wxT( "\n\n" ) );
-        errmsg.append( _( "Cannot determine the board outline." ) );
-        wxLogMessage( errmsg );
-    }
+    return m_board->GetBoardPolygonOutlines( m_board_poly, /*allLayerHoles,*/ &errmsg );
 }
 
 

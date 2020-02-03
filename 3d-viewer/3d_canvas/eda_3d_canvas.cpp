@@ -311,10 +311,10 @@ void EDA_3D_CANVAS::DisplayStatus()
         wxString msg;
 
         msg.Printf( "dx %3.2f", m_settings.CameraGet().GetCameraPos().x );
-        m_parentStatusBar->SetStatusText( msg, 1 );
+        m_parentStatusBar->SetStatusText( msg, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::X_POS ) );
 
         msg.Printf( "dy %3.2f", m_settings.CameraGet().GetCameraPos().y );
-        m_parentStatusBar->SetStatusText( msg, 2 );
+        m_parentStatusBar->SetStatusText( msg, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::Y_POS ) );
     }
 }
 
@@ -346,7 +346,10 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
 
     // !TODO: implement error reporter
     //WX_STRING_REPORTER errorReporter( &err_messages );
-    STATUS_TEXT_REPORTER activityReporter( m_parentStatusBar, 0 );
+    STATUS_TEXT_REPORTER activityReporter(
+            m_parentStatusBar, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::STATUS_TEXT ) );
+    STATUS_TEXT_REPORTER warningReporter(
+            m_parentStatusBar, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::WARN_TEXT ) );
 
     unsigned strtime = GetRunningMicroSecs();
 
@@ -438,8 +441,8 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
     {
         m_3d_render->SetCurWindowSize( clientSize );
 
-        requested_redraw = m_3d_render->Redraw( m_mouse_was_moved || m_camera_is_moving,
-                                                &activityReporter );
+        requested_redraw = m_3d_render->Redraw(
+                m_mouse_was_moved || m_camera_is_moving, &activityReporter, &warningReporter );
     }
 
     if( m_render_pivot )

@@ -334,7 +334,7 @@ CLAYERS_OGL_DISP_LISTS *C3D_RENDER_OGL_LEGACY::generate_holes_display_list(
 }
 
 
-void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
+void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
 {
     m_reloadRequested = false;
 
@@ -348,7 +348,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
 
     unsigned stats_startReloadTime = GetRunningMicroSecs();
 
-    m_settings.InitSettings( aStatusTextReporter );
+    m_settings.InitSettings( aStatusTextReporter, aWarningTextReporter );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_endReloadTime = GetRunningMicroSecs();

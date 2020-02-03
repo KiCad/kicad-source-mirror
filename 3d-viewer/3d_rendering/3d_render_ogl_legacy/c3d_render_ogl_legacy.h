@@ -65,13 +65,14 @@ public:
 
     // Imported from C3D_RENDER_BASE
     void SetCurWindowSize( const wxSize &aSize ) override;
-    bool Redraw( bool aIsMoving, REPORTER *aStatusTextReporter ) override;
+    bool Redraw( bool aIsMoving, REPORTER* aStatusTextReporter,
+            REPORTER* aWarningTextReporter ) override;
 
     int GetWaitForEditingTimeOut() override;
 
 private:
     bool initializeOpenGL();
-    void reload( REPORTER *aStatusTextReporter );
+    void reload( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter );
 
     void ogl_set_arrow_material();
 

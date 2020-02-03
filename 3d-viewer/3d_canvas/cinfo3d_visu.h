@@ -131,8 +131,9 @@ class CINFO3D_VISU
      * @brief InitSettings - Function to be called by the render when it need to
      * reload the settings for the board.
      * @param aStatusTextReporter: the pointer for the status reporter
+     * @param aWarningTextReporter: pointer for the warning reporter
      */
-    void InitSettings( REPORTER *aStatusTextReporter );
+    void InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter );
 
     /**
      * @brief BiuTo3Dunits - Board integer units To 3D units
@@ -418,7 +419,12 @@ class CINFO3D_VISU
     const MAP_POLY &GetPolyMapHoles_Outer() const { return m_layers_outer_holes_poly; }
 
  private:
-    void createBoardPolygon();
+    /**
+     * Create the board outline polygon.
+     *
+     * @return false if the outline could not be created
+     */
+    bool createBoardPolygon();
     void createLayers( REPORTER *aStatusTextReporter );
     void destroyLayers();
 

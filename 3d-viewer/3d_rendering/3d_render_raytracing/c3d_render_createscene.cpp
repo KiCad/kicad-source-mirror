@@ -255,7 +255,7 @@ void C3D_RENDER_RAYTRACING::create_3d_object_from( CCONTAINER& aDstContainer,
 }
 
 
-void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
+void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
 {
     m_reloadRequested = false;
 
@@ -270,7 +270,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
     unsigned stats_startReloadTime = GetRunningMicroSecs();
 
-    m_settings.InitSettings( aStatusTextReporter );
+    m_settings.InitSettings( aStatusTextReporter, aWarningTextReporter );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_endReloadTime = GetRunningMicroSecs();

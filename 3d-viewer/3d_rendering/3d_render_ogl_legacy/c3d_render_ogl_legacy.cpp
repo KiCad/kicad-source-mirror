@@ -516,8 +516,8 @@ void init_lights(void)
 }
 
 
-bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving,
-                                    REPORTER *aStatusTextReporter )
+bool C3D_RENDER_OGL_LEGACY::Redraw(
+        bool aIsMoving, REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
 {
     // Initialize openGL
     if( !m_is_opengl_initialized )
@@ -533,7 +533,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving,
         if( aStatusTextReporter )
             aStatusTextReporter->Report( _( "Loading..." ) );
 
-        reload( aStatusTextReporter );
+        reload( aStatusTextReporter, aWarningTextReporter );
         setupMaterials();
 
         // generate a new 3D grid as the size of the board may had changed
