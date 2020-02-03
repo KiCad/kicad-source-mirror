@@ -1040,7 +1040,7 @@ void DXF_IMPORT_PLUGIN::insertSpline( int aWidth )
 
         if( startpoint != endpoint )
         {
-            m_internalImporter.AddLine( startpoint, endpoint );
+            m_internalImporter.AddLine( startpoint, endpoint, aWidth );
 
             updateImageLimits( startpoint );
             updateImageLimits( endpoint );
@@ -1067,12 +1067,20 @@ void DXF_IMPORT_PLUGIN::insertSpline( int aWidth )
 
     // Each Bezier curve uses 4 vertices (a start point, 2 control points and a end point).
     // So we can have more than one Bezier curve ( there are one curve each four vertices)
+    // However, one can have one Bezier curve with end point = ctrl point 2, having only 3
+    // defined points in list.
     for( unsigned ii = 0; ii < coords.size(); ii += 8 )
     {
         VECTOR2D start( mapX( coords[ii] ), mapY( coords[ii+1] ) );
         VECTOR2D bezierControl1( mapX( coords[ii+2] ), mapY( coords[ii+3] ) );
         VECTOR2D bezierControl2( mapX( coords[ii+4] ), mapY( coords[ii+5] ) );
-        VECTOR2D end( mapX( coords[ii+6] ), mapY( coords[ii+7] ) );
+        VECTOR2D end;
+
+        if( ii+7 < coords.size() )
+            end = VECTOR2D( mapX( coords[ii+6] ), mapY( coords[ii+7] ) );
+        else
+            end = bezierControl2;
+
         m_internalImporter.AddSpline( start, bezierControl1, bezierControl2, end , aWidth );
     }
 #endif
