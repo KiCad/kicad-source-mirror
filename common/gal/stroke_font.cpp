@@ -36,7 +36,7 @@
 using namespace KIGFX;
 
 const double STROKE_FONT::INTERLINE_PITCH_RATIO = 1.61;
-const double STROKE_FONT::OVERBAR_POSITION_FACTOR = 1.22;
+const double STROKE_FONT::OVERBAR_POSITION_FACTOR = 1.40;
 const double STROKE_FONT::BOLD_FACTOR = 1.3;
 const double STROKE_FONT::STROKE_FONT_SCALE = 1.0 / 21.0;
 const double STROKE_FONT::ITALIC_TILT = 1.0 / 8;
@@ -489,9 +489,11 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
 double STROKE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight, double aGlyphThickness ) const
 {
     // Static method.
-    // Compute the Y position of the overbar. This is the distance between
-    // the text base line and the overbar axis.
-    return aGlyphHeight * OVERBAR_POSITION_FACTOR + aGlyphThickness;
+    // Compute the Y position of the overbar. This is the distance between the text base line
+    // and the overbar axis.
+    // Don't use the glyph thickness anymore.  We don't know how much of it is "real" and how
+    // much it has been plumped for drop shadows, etc.
+    return aGlyphHeight * OVERBAR_POSITION_FACTOR;
 }
 
 
