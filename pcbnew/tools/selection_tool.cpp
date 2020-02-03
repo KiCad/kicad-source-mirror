@@ -31,6 +31,7 @@ using namespace std::placeholders;
 #include <class_board_item.h>
 #include <class_track.h>
 #include <class_module.h>
+#include <class_edge_mod.h>
 #include <class_drawsegment.h>
 #include <class_zone.h>
 #include <collectors.h>
@@ -2042,6 +2043,44 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                             break;
                     }
                 }
+            }
+        }
+    }
+
+    if( aCollector.CountType( PCB_MODULE_EDGE_T ) + aCollector.CountType( PCB_LINE_T ) > 1 )
+    {
+        // Prefer exact hits to sloppy ones
+        int accuracy = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
+        bool found = false;
+
+        for( int dist = 0; dist < accuracy; ++dist )
+        {
+            for( int i = 0; i < aCollector.GetCount(); ++i )
+            {
+                if( DRAWSEGMENT* drawSegment = dynamic_cast<DRAWSEGMENT*>( aCollector[i] ) )
+                {
+                    if( drawSegment->HitTest( where, dist ) )
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if( found )
+            {
+                // throw out everything that is more sloppy than what we found
+                for( int i = 0; i < aCollector.GetCount(); ++i )
+                {
+                    if( DRAWSEGMENT* drawSegment = dynamic_cast<DRAWSEGMENT*>( aCollector[i] ) )
+                    {
+                        if( !drawSegment->HitTest( where, dist ) )
+                            rejected.insert( drawSegment );
+                    }
+                }
+
+                // we're done now
+                break;
             }
         }
     }

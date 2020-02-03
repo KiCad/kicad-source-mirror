@@ -26,10 +26,12 @@
 #include <class_board_item.h>             // class BOARD_ITEM
 
 #include <class_module.h>
+#include <class_edge_mod.h>
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_marker_pcb.h>
 #include <class_zone.h>
+#include <class_drawsegment.h>
 #include <math/util.h>      // for KiROUND
 
 
@@ -152,13 +154,14 @@ const KICAD_T GENERAL_COLLECTOR::Zones[] = {
 
 SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
-    BOARD_ITEM*     item   = (BOARD_ITEM*) testItem;
-    MODULE*         module = NULL;
-    D_PAD*          pad    = NULL;
+    BOARD_ITEM*     item        = (BOARD_ITEM*) testItem;
+    MODULE*         module      = nullptr;
+    D_PAD*          pad         = nullptr;
     bool            pad_through = false;
-    VIA*            via    = NULL;
-    MARKER_PCB*     marker = NULL;
-    ZONE_CONTAINER* zone   = NULL;
+    VIA*            via         = nullptr;
+    MARKER_PCB*     marker      = nullptr;
+    ZONE_CONTAINER* zone        = nullptr;
+    DRAWSEGMENT*    drawSegment = nullptr;
 
 #if 0   // debugging
     static int  breakhere = 0;
@@ -275,6 +278,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_LINE_T:
+        drawSegment = static_cast<DRAWSEGMENT*>( item );
         break;
 
     case PCB_DIMENSION_T:
@@ -323,6 +327,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             // Extract the module since it could be hidden
             module = static_cast<MODULE*>( item->GetParent() );
         }
+        break;
+
+    case PCB_MODULE_EDGE_T:
+        drawSegment = static_cast<EDGE_MODULE*>( item );
         break;
 
     case PCB_MODULE_T:
@@ -403,10 +411,11 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             {
                 if( !item->IsLocked() || !m_Guide->IgnoreLockedItems() )
                 {
+                    int  accuracy = KiROUND( 5 * m_Guide->OnePixelInIU() );
+
                     if( zone )
                     {
                         bool testFill = !m_Guide->IgnoreZoneFills();
-                        int  accuracy = KiROUND( 5 * m_Guide->OnePixelInIU() );
 
                         if( zone->HitTestForCorner( m_RefPos, accuracy * 2 )
                             || zone->HitTestForEdge( m_RefPos, accuracy )
@@ -416,9 +425,26 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                             goto exit;
                         }
                     }
-                    else if( item->HitTest( m_RefPos ) )
+                    else if( item->Type() == PCB_MODULE_T )
                     {
-                        if( !module || module->HitTestAccurate( m_RefPos ) )
+                        if( module->HitTest( m_RefPos, accuracy )
+                                && module->HitTestAccurate( m_RefPos, accuracy ) )
+                        {
+                            Append( item );
+                            goto exit;
+                        }
+                    }
+                    else if( drawSegment )
+                    {
+                        if( drawSegment->HitTest( m_RefPos, accuracy ) )
+                        {
+                            Append( item );
+                            goto exit;
+                        }
+                    }
+                    else
+                    {
+                        if( item->HitTest( m_RefPos, 0 ) )
                         {
                             Append( item );
                             goto exit;
@@ -449,10 +475,11 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             {
                 if( !item->IsLocked() || !m_Guide->IgnoreLockedItems() )
                 {
+                    int  accuracy = KiROUND( 5 * m_Guide->OnePixelInIU() );
+
                     if( zone )
                     {
                         bool testFill = !m_Guide->IgnoreZoneFills();
-                        int  accuracy = KiROUND( 5 * m_Guide->OnePixelInIU() );
 
                         if( zone->HitTestForCorner( m_RefPos, accuracy * 2 )
                             || zone->HitTestForEdge( m_RefPos, accuracy )
@@ -462,10 +489,30 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                             goto exit;
                         }
                     }
-                    else if( item->HitTest( m_RefPos ) )
+                    else if( item->Type() == PCB_MODULE_T )
                     {
-                        Append2nd( item );
-                        goto exit;
+                        if( module->HitTest( m_RefPos, accuracy )
+                                && module->HitTestAccurate( m_RefPos, accuracy ) )
+                        {
+                            Append( item );
+                            goto exit;
+                        }
+                    }
+                    else if( drawSegment )
+                    {
+                        if( drawSegment->HitTest( m_RefPos, accuracy ) )
+                        {
+                            Append( item );
+                            goto exit;
+                        }
+                    }
+                    else
+                    {
+                        if( item->HitTest( m_RefPos, 0 ) )
+                        {
+                            Append( item );
+                            goto exit;
+                        }
                     }
                 }
             }
