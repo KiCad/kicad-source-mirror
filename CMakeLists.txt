@@ -170,6 +170,10 @@ if( KICAD_USE_VALGRIND )
     add_definitions( -DKICAD_USE_VALGRIND )
 endif()
 
+# Ensure DEBUG is defined for all platforms in Debug builds
+# change to add_compile_definitions() after minimum required CMake version is 3.12
+set_property( DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS $<$<CONFIG:Debug>:DEBUG> )
+
 # CMP0063: CMake < 3.3 does not handle hidden visibility for static libraries,
 # and 3.3 is backwards compatible when the minimum version is smaller than 3.3.
 if( POLICY CMP0063 )
@@ -336,11 +340,11 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     # but no information about local variables.
     # Level 3 includes full information, but binaries are much larger.
     if( BUILD_SMALL_DEBUG_FILES )
-        set( CMAKE_C_FLAGS_DEBUG   "-g1 -ggdb1 -DDEBUG" )
-        set( CMAKE_CXX_FLAGS_DEBUG "-g1 -ggdb1 -DDEBUG" )
+        set( CMAKE_C_FLAGS_DEBUG   "-g1 -ggdb1" )
+        set( CMAKE_CXX_FLAGS_DEBUG "-g1 -ggdb1" )
     else()
-        set( CMAKE_C_FLAGS_DEBUG   "-g3 -ggdb3 -DDEBUG" )
-        set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG" )
+        set( CMAKE_C_FLAGS_DEBUG   "-g3 -ggdb3" )
+        set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3" )
     endif()
 
     if( KICAD_SANITIZE )
