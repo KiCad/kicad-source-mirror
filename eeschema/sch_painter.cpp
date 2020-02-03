@@ -240,7 +240,12 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
 
     if( aItem->Type() == SCH_LINE_T )
-        color = static_cast<const SCH_LINE*>( aItem )->GetLineColor();
+    {
+        COLOR4D lineColor = static_cast<const SCH_LINE*>( aItem )->GetLineColor();
+
+        if( lineColor != COLOR4D::UNSPECIFIED )
+            color = lineColor;
+    }
 
     if( aItem->IsBrightened() && !aDrawingShadows ) // Selection disambiguation, etc.
     {

@@ -63,7 +63,16 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     m_gal->SetWorldUnitLength( SCH_WORLD_UNIT );
 
     m_painter.reset( new KIGFX::SCH_PAINTER( m_gal ) );
-    m_painter->GetSettings()->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
+
+    COLOR_SETTINGS* cs = nullptr;
+
+    if( auto frame = dynamic_cast<SCH_BASE_FRAME*>( aParentWindow ) )
+        cs = frame->GetColorSettings();
+    else
+        cs = Pgm().GetSettingsManager().GetColorSettings();
+
+    wxASSERT( cs );
+    m_painter->GetSettings()->LoadColors( cs );
 
     m_view->SetPainter( m_painter.get() );
     m_view->SetScaleLimits( 1000.0, 0.0001 );    // This fixes the zoom in and zoom out limits

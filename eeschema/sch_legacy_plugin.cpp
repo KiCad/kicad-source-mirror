@@ -2290,7 +2290,7 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
             m_out->Print( 0, " %s %s", T_STYLE,
                           SCH_LINE::GetLineStyleName( aLine->GetLineStyle() ) );
 
-        if( aLine->GetLineColor() != aLine->GetDefaultColor() )
+        if( aLine->GetLineColor() != COLOR4D::UNSPECIFIED )
             m_out->Print( 0, " %s",
                 TO_UTF8( aLine->GetLineColor().ToColour().GetAsString( wxC2S_CSS_SYNTAX ) ) );
     }

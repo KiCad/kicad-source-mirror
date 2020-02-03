@@ -29,8 +29,10 @@
 #include <sch_edit_frame.h>
 #include <base_units.h>
 #include <sch_sheet_path.h>
+#include <pgm_base.h>
 #include <project.h>
 #include <reporter.h>
+#include <settings/settings_manager.h>
 
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
@@ -140,6 +142,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
     plotter->SetColorMode( getModeColor() );
     // Currently, plot units are in decimil
     plotter->SetViewport( aPlot0ffset, IU_PER_MILS/10, aScale, false );
+    plotter->SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-PS" ) );

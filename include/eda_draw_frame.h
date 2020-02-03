@@ -37,6 +37,7 @@
 
 class wxSingleInstanceChecker;
 class ACTION_TOOLBAR;
+class COLOR_SETTINGS;
 class TOOL_MENU;
 class APP_SETTINGS_BASE;
 
@@ -111,6 +112,8 @@ protected:
 
     EDA_MSG_PANEL*     m_messagePanel;
     int                m_MsgFrameHeight;
+
+    COLOR_SETTINGS*    m_colorSettings;
 
     /// The current canvas type
     EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;
@@ -227,10 +230,8 @@ public:
      */
     virtual void SetDrawBgColor( COLOR4D aColor) { m_drawBgColor= aColor ; }
 
-    /**
-     * Helper to retrieve a layer color from the global color settings
-     */
-    COLOR4D GetLayerColor( SCH_LAYER_ID aLayer );
+    /// Returns a pointer to the active color theme settings
+    virtual COLOR_SETTINGS* GetColorSettings();
 
     bool ShowPageLimits() const { return m_showPageLimits; }
     void SetShowPageLimits( bool aShow ) { m_showPageLimits = aShow; }

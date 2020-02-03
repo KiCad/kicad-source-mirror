@@ -120,7 +120,6 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     CLR( "board.footprint_text_invisible", LAYER_MOD_TEXT_INVISIBLE, COLOR4D( LIGHTGRAY ) );
     CLR( "board.grid",                     LAYER_GRID,               COLOR4D( DARKGRAY ) );
     CLR( "board.grid_axes",                LAYER_GRID_AXES,          COLOR4D( LIGHTGRAY ) );
-    CLR( "board.microvia",                 LAYER_VIA_MICROVIA,       COLOR4D( LIGHTGRAY ) );
     CLR( "board.no_connect",               LAYER_NO_CONNECTS,        COLOR4D( BLUE ) );
     CLR( "board.pad_back",                 LAYER_PAD_BK,             COLOR4D( GREEN ) );
     CLR( "board.pad_front",                LAYER_PAD_FR,             COLOR4D( RED ) );

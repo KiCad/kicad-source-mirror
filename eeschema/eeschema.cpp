@@ -164,26 +164,6 @@ PGM_BASE& Pgm()
 }
 
 
-// TODO(JE) Get rid of this on a second pass through eeschema
-static COLOR4D s_layerColor[LAYER_ID_COUNT];
-
-COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
-{
-    unsigned layer = ( aLayer );
-    wxASSERT( layer < arrayDim( s_layerColor ) );
-    return s_layerColor[layer];
-}
-
-
-void OnColorsChanged()
-{
-    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
-
-    for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
-        s_layerColor[layer] = cs->GetColor( layer );
-}
-
-
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
     // This is process-level-initialization, not project-level-initialization of the DSO.
@@ -192,8 +172,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
 
     start_common( aCtlBits );
-
-    OnColorsChanged();
 
     wxFileName fn = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
 

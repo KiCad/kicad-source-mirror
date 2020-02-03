@@ -36,6 +36,7 @@
 #include <sch_sheet_path.h>
 #include <project.h>
 #include <reporter.h>
+#include <settings/settings_manager.h>
 
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
@@ -109,6 +110,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    aFrame,
     plotter->SetPageSettings( pageInfo );
     plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
     plotter->SetColorMode( aPlotBlackAndWhite ? false : true );
+    plotter->SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
     wxPoint plot_offset;
     double scale = 1.0;
     // Currently, plot units are in decimil

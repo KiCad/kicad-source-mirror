@@ -179,6 +179,8 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_print_generic.cpp
     dialogs/dialog_print_generic_base.cpp
     dialogs/dialog_text_entry.cpp
+    dialogs/panel_color_settings_base.cpp
+    dialogs/panel_color_settings.cpp
     dialogs/panel_common_settings.cpp
     dialogs/panel_common_settings_base.cpp
     dialogs/panel_hotkeys_editor.cpp
@@ -310,6 +312,7 @@ set( COMMON_SRCS
     kiway_player.cpp
     languages_menu.cpp
     launch_ext.cpp
+    layer_id.cpp
     lib_id.cpp
     lib_table_base.cpp
     lib_tree_model.cpp

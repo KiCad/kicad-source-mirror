@@ -222,18 +222,9 @@ double SCH_LINE::GetLength() const
 }
 
 
-COLOR4D SCH_LINE::GetDefaultColor() const
-{
-    return GetLayerColor( m_Layer );
-}
-
-
 void SCH_LINE::SetLineColor( const COLOR4D aColor )
 {
-    if( aColor == GetDefaultColor() )
-        m_color = COLOR4D::UNSPECIFIED;
-    else
-        m_color = aColor;
+    m_color = aColor;
 }
 
 
@@ -241,7 +232,7 @@ void SCH_LINE::SetLineColor( const double r, const double g, const double b, con
 {
     COLOR4D newColor(r, g, b, a);
 
-    if( newColor == GetDefaultColor() || newColor == COLOR4D::UNSPECIFIED )
+    if( newColor == COLOR4D::UNSPECIFIED )
         m_color = COLOR4D::UNSPECIFIED;
     else
     {
@@ -254,11 +245,9 @@ void SCH_LINE::SetLineColor( const double r, const double g, const double b, con
 
 COLOR4D SCH_LINE::GetLineColor() const
 {
-    if( m_color == COLOR4D::UNSPECIFIED )
-        return GetLayerColor( m_Layer );
-
     return m_color;
 }
+
 
 PLOT_DASH_TYPE SCH_LINE::GetDefaultStyle() const
 {

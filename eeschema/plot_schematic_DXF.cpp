@@ -30,6 +30,8 @@
 #include <sch_edit_frame.h>
 #include <sch_sheet_path.h>
 #include <project.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
@@ -113,6 +115,7 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&    aFileName,
     const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
     plotter->SetPageSettings( pageInfo );
     plotter->SetColorMode( getModeColor() );
+    plotter->SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
     // Currently, plot units are in decimil
     plotter->SetViewport( aPlotOffset, IU_PER_MILS/10, aScale, false );
 

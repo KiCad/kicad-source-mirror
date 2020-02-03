@@ -87,6 +87,16 @@ public:
         m_color_context = aContext;
     }
 
+    const wxString& GetName()
+    {
+        return m_displayName;
+    }
+
+    void SetName( const wxString& aName )
+    {
+        m_displayName = aName;
+    }
+
 private:
 
     wxString m_displayName;

@@ -118,9 +118,8 @@ public:
 
     void SetLineColor( const double r, const double g, const double b, const double a );
 
+    /// Returns COLOR4D::UNSPECIFIED if a custom color hasn't been set for this line
     COLOR4D GetLineColor() const;
-
-    COLOR4D GetDefaultColor() const;
 
     int GetDefaultWidth() const;
 

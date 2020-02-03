@@ -82,6 +82,8 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( std::string aFilename, int aSchemaVersion 
     m_params.emplace_back( new PARAM<int>( "system.units",  &m_System.units,
             static_cast<int>( EDA_UNITS::MILLIMETRES ) ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "appearance.color_theme", &m_ColorTheme, "user" ) );
+
     addParamsForWindow( &m_Window, "window" );
 }
 

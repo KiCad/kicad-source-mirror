@@ -39,6 +39,7 @@
 #include <class_libentry.h>
 #include <lib_pin.h>
 #include <lib_arc.h>
+#include <settings/color_settings.h>
 
 
 // the separator char between the subpart id and the reference
@@ -494,7 +495,7 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
 {
     wxASSERT( aPlotter != NULL );
 
-    aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
+    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE ) );
     bool fill = aPlotter->GetColorMode();
 
     // draw background for filled items using background option
@@ -540,7 +541,7 @@ void LIB_PART::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
 {
     wxASSERT( aPlotter != NULL );
 
-    aPlotter->SetColor( GetLayerColor( LAYER_FIELDS ) );
+    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_FIELDS ) );
     bool fill = aPlotter->GetColorMode();
 
     for( LIB_ITEM& item : m_drawings )

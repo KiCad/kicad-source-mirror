@@ -131,6 +131,9 @@ public:
 
     WINDOW_SETTINGS m_Window;
 
+    /// Active color theme name
+    wxString m_ColorTheme;
+
     ///! Local schema version for common app settings
     int m_appSettingsSchemaVersion;
 

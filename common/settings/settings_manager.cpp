@@ -58,9 +58,7 @@ SETTINGS_MANAGER::SETTINGS_MANAGER() :
     m_common_settings =
             static_cast<COMMON_SETTINGS*>( RegisterSettings( new COMMON_SETTINGS, false ) );
 
-    // create the default color settings
-    m_color_settings["default"] =
-            static_cast<COLOR_SETTINGS*>( RegisterSettings( new COLOR_SETTINGS ) );
+    loadAllColorSettings();
 }
 
 SETTINGS_MANAGER::~SETTINGS_MANAGER()
@@ -150,7 +148,7 @@ void SETTINGS_MANAGER::FlushAndRelease( JSON_SETTINGS* aSettings )
 }
 
 
-COLOR_SETTINGS* SETTINGS_MANAGER::GetColorSettings( std::string aName )
+COLOR_SETTINGS* SETTINGS_MANAGER::GetColorSettings( const wxString& aName )
 {
     COLOR_SETTINGS* ret = nullptr;
 
@@ -160,11 +158,109 @@ COLOR_SETTINGS* SETTINGS_MANAGER::GetColorSettings( std::string aName )
     }
     catch( std::out_of_range& )
     {
+        if( !aName.empty() )
+            ret = loadColorSettingsByName( aName );
+
         // This had better work
-        ret = m_color_settings.at( "default" );
+        if( !ret )
+            ret = m_color_settings.at( "user" );
     }
 
     return ret;
+}
+
+
+COLOR_SETTINGS* SETTINGS_MANAGER::loadColorSettingsByName( const wxString& aName )
+{
+    wxLogTrace( traceSettings, "Attempting to load color theme %s", aName );
+
+    wxFileName fn( GetColorSettingsPath(), aName, "json" );
+
+    if( !fn.IsOk() || !fn.Exists() )
+    {
+        wxLogTrace( traceSettings, "Theme file %s.json not found, falling back to user", aName );
+        return nullptr;
+    }
+
+    auto cs = static_cast<COLOR_SETTINGS*>(
+            RegisterSettings( new COLOR_SETTINGS( aName.ToStdString() ) ) );
+
+    if( cs->GetFilename() != aName.ToStdString() )
+    {
+        wxLogTrace( traceSettings, "Warning: stored filename is actually %s, ", cs->GetFilename() );
+    }
+
+    m_color_settings[aName] = cs;
+
+    return cs;
+}
+
+
+class COLOR_SETTINGS_LOADER : public wxDirTraverser
+{
+private:
+    std::function<void( const wxString& )> m_action;
+
+public:
+    explicit COLOR_SETTINGS_LOADER( std::function<void( const wxString& )> aAction )
+            : m_action( std::move( aAction ) )
+    {
+    }
+
+    wxDirTraverseResult OnFile( const wxString& aFilePath ) override
+    {
+        wxFileName file( aFilePath );
+
+        if( file.GetExt() != "json" )
+            return wxDIR_CONTINUE;
+
+        if( file.GetName() == "user" )
+            return wxDIR_CONTINUE;
+
+        m_action( file.GetName() );
+
+        return wxDIR_CONTINUE;
+    }
+
+    wxDirTraverseResult OnDir( const wxString& dirPath ) override
+    {
+        return wxDIR_IGNORE;
+    }
+};
+
+
+void SETTINGS_MANAGER::registerColorSettings( const wxString& aFilename )
+{
+    m_color_settings[aFilename] = static_cast<COLOR_SETTINGS*>(
+            RegisterSettings( new COLOR_SETTINGS( aFilename.ToStdString() ) ) );
+}
+
+
+COLOR_SETTINGS* SETTINGS_MANAGER::AddNewColorSettings( const wxString& aFilename )
+{
+    wxString filename = aFilename;
+
+    if( filename.EndsWith( wxT( ".json" ) ) )
+        filename = filename.BeforeLast( '.' );
+
+    registerColorSettings( filename );
+    return m_color_settings[filename];
+}
+
+
+void SETTINGS_MANAGER::loadAllColorSettings()
+{
+    // Create the default color settings
+    registerColorSettings( "user" );
+
+    // Search for and load any other settings
+    COLOR_SETTINGS_LOADER loader(
+            [&]( const wxString& aFilename ) { registerColorSettings( aFilename ); } );
+
+    wxDir colors_dir( GetColorSettingsPath() );
+
+    if( colors_dir.IsOpened() )
+        colors_dir.Traverse( loader );
 }
 
 
@@ -182,8 +278,8 @@ void SETTINGS_MANAGER::SaveColorSettings( COLOR_SETTINGS* aSettings, const std::
 
     wxASSERT( aSettings->contains( ptr ) );
 
-    wxLogTrace( traceSettings, "Saving color scheme %s, preserving &s",
-            aSettings->GetFilename(), aNamespace );
+    wxLogTrace( traceSettings, "Saving color scheme %s, preserving %s", aSettings->GetFilename(),
+            aNamespace );
 
     nlohmann::json backup = aSettings->at( ptr );
     std::string path = GetColorSettingsPath();

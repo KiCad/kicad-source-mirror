@@ -26,6 +26,8 @@
 #include <sch_line.h>
 #include <dialog_edit_line_style.h>
 #include <dialogs/dialog_color_picker.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <sch_edit_frame.h>
 
 const int BUTT_COLOR_MINSIZE_X = 32;
@@ -174,7 +176,7 @@ void DIALOG_EDIT_LINE_STYLE::updateColorButton( COLOR4D& aColor )
 void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
 {
     m_width.SetValue( m_lines.front()->GetDefaultWidth() );
-    setColor( m_lines.front()->GetDefaultColor() );
+    setColor( COLOR4D::UNSPECIFIED );
 
     auto typeIt = lineTypeNames.find( m_lines.front()->GetDefaultStyle() );
     wxCHECK_RET( typeIt != lineTypeNames.end(),
@@ -188,7 +190,15 @@ void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
 void DIALOG_EDIT_LINE_STYLE::setColor( const COLOR4D& aColor )
 {
     m_selectedColor = aColor;
-    updateColorButton( m_selectedColor );
+
+    if( aColor == COLOR4D::UNSPECIFIED )
+    {
+        COLOR4D defaultColor = Pgm().GetSettingsManager().GetColorSettings()->GetColor(
+                m_lines.front()->GetLayer() );
+        updateColorButton( defaultColor );
+    }
+    else
+        updateColorButton( m_selectedColor );
 }
 
 
@@ -215,10 +225,7 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
             line->SetLineStyle( it->first );
         }
 
-        if( m_selectedColor != COLOR4D::UNSPECIFIED )
-        {
-            line->SetLineColor( m_selectedColor );
-        }
+        line->SetLineColor( m_selectedColor );
 
         m_frame->RefreshItem( line );
     }

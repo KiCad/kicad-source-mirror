@@ -23,6 +23,7 @@
 
 #include <class_library.h>
 #include <confirm.h>
+#include <dialogs/panel_eeschema_color_settings.h>
 #include <dialogs/panel_eeschema_display_options.h>
 #include <dialogs/panel_eeschema_settings.h>
 #include <dialogs/panel_eeschema_template_fieldnames.h>
@@ -42,10 +43,11 @@
 #include <sch_painter.h>
 #include <sch_sheet.h>
 #include <settings/app_settings.h>
+#include <settings/settings_manager.h>
 #include <symbol_lib_table.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/symbol_tree_pane.h>
-#include <widgets/widget_eeschema_color_config.h>
+//#include <widgets/widget_eeschema_color_config.h>
 #include <wildcards_and_files_ext.h>
 #include <ws_data_model.h>
 
@@ -153,10 +155,11 @@ void SetSelectionThickness( int aThickness )
     s_selectThickness = aThickness;
 }
 
-// Color to draw selected items
-COLOR4D GetItemSelectedColor()
+
+/// Helper for all the old plotting/printing code while it still exists
+COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
 {
-    return COLOR4D( BROWN );
+    return Pgm().GetSettingsManager().GetColorSettings()->GetColor( aLayer );
 }
 
 
@@ -175,7 +178,7 @@ void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
     book->AddPage( new wxPanel( book ), _( "Eeschema" ) );
     book->AddSubPage( new PANEL_EESCHEMA_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_EESCHEMA_SETTINGS( this, book ), _( "Editing Options" ) );
-    book->AddSubPage( new PANEL_EESCHEMA_COLOR_CONFIG( this, book ), _( "Colors" ) );
+    book->AddSubPage( new PANEL_EESCHEMA_COLOR_SETTINGS( this, book ), _( "Colors" ) );
     book->AddSubPage( new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( this, book ),
                       _( "Field Name Templates" ) );
 

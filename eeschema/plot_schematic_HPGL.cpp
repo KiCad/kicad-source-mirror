@@ -31,6 +31,8 @@
 #include <base_units.h>
 #include <sch_sheet_path.h>
 #include <project.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
@@ -200,6 +202,7 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
     plotter->SetPenDiameter( m_HPGLPenSize );
     plotter->StartPlot();
 
+    plotter->SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
     plotter->SetColor( BLACK );
 
     if( getPlotFrameRef() )

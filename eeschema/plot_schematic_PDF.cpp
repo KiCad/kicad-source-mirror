@@ -30,8 +30,10 @@
 #include <sch_edit_frame.h>
 #include <base_units.h>
 #include <sch_sheet_path.h>
+#include <pgm_base.h>
 #include <project.h>
 #include <general.h>
+#include <settings/settings_manager.h>
 
 #include <reporter.h>
 
@@ -61,6 +63,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
     PDF_PLOTTER* plotter = new PDF_PLOTTER();
     plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
     plotter->SetColorMode( getModeColor() );
+    plotter->SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );
     plotter->SetTitle( m_parent->GetTitleBlock().GetTitle() );
 

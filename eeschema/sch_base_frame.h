@@ -339,6 +339,13 @@ public:
      */
     virtual void OnModify() {}
 
+    /**
+     * Helper to retrieve a layer color from the global color settings
+     */
+    COLOR4D GetLayerColor( SCH_LAYER_ID aLayer );
+
+    COLOR_SETTINGS* GetColorSettings() override;
+
 protected:
     /**
      * Saves Symbol Library Tables to disk.

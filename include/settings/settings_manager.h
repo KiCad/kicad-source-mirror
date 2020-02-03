@@ -21,8 +21,8 @@
 #ifndef _SETTINGS_MANAGER_H
 #define _SETTINGS_MANAGER_H
 
+#include <common.h> // for wxString hash
 #include <settings/color_settings.h>
-#include <wx/wx.h>
 
 class COLOR_SETTINGS;
 class COMMON_SETTINGS;
@@ -96,7 +96,21 @@ public:
      * @param aName is the name of the color scheme to load
      * @return a loaded COLOR_SETTINGS object
      */
-    COLOR_SETTINGS* GetColorSettings( std::string aName = "default" );
+    COLOR_SETTINGS* GetColorSettings( const wxString& aName = "user" );
+
+    std::vector<COLOR_SETTINGS*> GetColorSettingsList()
+    {
+        std::vector<COLOR_SETTINGS*> ret;
+
+        for( const auto& el : m_color_settings )
+            ret.push_back( el.second );
+
+        std::sort( ret.begin(), ret.end(), []( COLOR_SETTINGS* a, COLOR_SETTINGS* b ) {
+            return a->GetName() < b->GetName();
+        } );
+
+        return ret;
+    }
 
     /**
      * Safely saves a COLOR_SETTINGS to disk, preserving any changes outside the given namespace.
@@ -108,6 +122,13 @@ public:
      * @param aNamespace is the namespace of settings to save
      */
     void SaveColorSettings( COLOR_SETTINGS* aSettings, const std::string& aNamespace = "" );
+
+    /**
+     * Registers a new color settings object with the given filename
+     * @param aFilename is the location to store the new settings object
+     * @return a pointer to the new object
+     */
+    COLOR_SETTINGS* AddNewColorSettings( const wxString& aFilename );
 
     /**
      * Retrieves the common settings shared by all applications
@@ -221,9 +242,20 @@ private:
      */
     static bool extractVersion( const std::string& aVersionString, int* aMajor, int* aMinor );
 
+    /**
+     * Attempts to load a color theme by name (the color theme directory and .json ext are assumed)
+     * @param aName is the filename of the color theme (without the extension or path)
+     * @return the loaded settings, or nullptr if load failed
+     */
+    COLOR_SETTINGS* loadColorSettingsByName( const wxString& aName );
+
+    void registerColorSettings( const wxString& aFilename );
+
+    void loadAllColorSettings();
+
     std::vector<std::unique_ptr<JSON_SETTINGS>> m_settings;
 
-    std::unordered_map<std::string, COLOR_SETTINGS*> m_color_settings;
+    std::unordered_map<wxString, COLOR_SETTINGS*> m_color_settings;
 
     // Convenience shortcut
     COMMON_SETTINGS* m_common_settings;

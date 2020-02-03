@@ -88,6 +88,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_showPageLimits      = false;
     m_drawBgColor         = COLOR4D( BLACK );   // the background color of the draw canvas:
                                                 // BLACK for Pcbnew, BLACK or WHITE for eeschema
+    m_colorSettings       = nullptr;
     m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
     m_zoomLevelCoeff      = 1.0;
     m_userUnits           = EDA_UNITS::MILLIMETRES;
@@ -839,7 +840,10 @@ void EDA_DRAW_FRAME::RecreateToolbars()
 }
 
 
-COLOR4D EDA_DRAW_FRAME::GetLayerColor( SCH_LAYER_ID aLayer )
+COLOR_SETTINGS* EDA_DRAW_FRAME::GetColorSettings()
 {
-    return Pgm().GetSettingsManager().GetColorSettings()->GetColor( aLayer );
+    if( !m_colorSettings )
+        m_colorSettings = Pgm().GetSettingsManager().GetColorSettings();
+
+    return m_colorSettings;
 }

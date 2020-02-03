@@ -147,18 +147,10 @@ void SetSelectionFillShapes( bool aBool );
 int  GetSelectionThickness();
 void SetSelectionThickness( int aThickness );
 
-COLOR4D  GetLayerColor( SCH_LAYER_ID aLayer );
-
-/**
- * Update the static layer color cache used by GetLayerColor()
- * TODO(JE) Remove this once eeschema is refactored to not need s_layerColor[]
- */
-void OnColorsChanged();
-
-// Color to draw selected items
-COLOR4D GetItemSelectedColor();
-
 // Color to draw items flagged invisible, in libedit (they are invisible in Eeschema
 COLOR4D GetInvisibleItemColor();
+
+// TODO(JE) Remove this once wxDC printing is gone
+COLOR4D GetLayerColor( SCH_LAYER_ID aLayer );
 
 #endif    // _GENERAL_H_

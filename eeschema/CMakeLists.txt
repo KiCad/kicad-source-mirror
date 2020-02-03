@@ -94,6 +94,7 @@ set( EESCHEMA_DLGS
     dialogs/dialog_update_fields_base.cpp
     dialogs/dialog_update_from_pcb.cpp
     dialogs/dialog_update_from_pcb_base.cpp
+    dialogs/panel_eeschema_color_settings.cpp
     dialogs/panel_eeschema_template_fieldnames.cpp
     dialogs/panel_eeschema_template_fieldnames_base.cpp
     dialogs/panel_eeschema_display_options.cpp
@@ -111,7 +112,6 @@ set( EESCHEMA_WIDGETS
     widgets/pin_type_combobox.cpp
     widgets/symbol_preview_widget.cpp
     widgets/symbol_tree_pane.cpp
-    widgets/widget_eeschema_color_config.cpp
     )
 
 

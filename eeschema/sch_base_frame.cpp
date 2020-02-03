@@ -24,9 +24,12 @@
 
 #include <base_units.h>
 #include <kiway.h>
+#include <pgm_base.h>
+#include <eeschema_settings.h>
 #include <sch_draw_panel.h>
 #include <sch_view.h>
 #include <sch_painter.h>
+#include <settings/settings_manager.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <confirm.h>
 #include <preview_items/selection_area.h>
@@ -446,3 +449,19 @@ void SCH_BASE_FRAME::SyncView()
 }
 
 
+COLOR4D SCH_BASE_FRAME::GetLayerColor( SCH_LAYER_ID aLayer )
+{
+    return GetColorSettings()->GetColor( aLayer );
+}
+
+
+COLOR_SETTINGS* SCH_BASE_FRAME::GetColorSettings()
+{
+    if( !m_colorSettings )
+    {
+        auto cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+        m_colorSettings = Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
+    }
+
+    return m_colorSettings;
+}
