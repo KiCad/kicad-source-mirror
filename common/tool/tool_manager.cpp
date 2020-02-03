@@ -932,7 +932,11 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 
     if( m_view && m_view->IsDirty() )
     {
-        GetEditFrame()->RefreshCanvas();
+        auto frame = GetEditFrame();
+        if( frame )
+        {
+            frame->RefreshCanvas();
+        }
 
 #if defined( __WXMAC__ ) || defined( __WINDOWS__ )
         wxTheApp->ProcessPendingEvents(); // required for updating brightening behind a popup menu
