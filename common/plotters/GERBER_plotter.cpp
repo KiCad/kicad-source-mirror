@@ -217,6 +217,10 @@ bool GERBER_PLOTTER::StartPlot()
     // Be sure the usual dark polarity is selected:
     fputs( "%LPD*%\n", outputFile );
 
+    // Set initial interpolation mode: always G01 (linear):
+    fputs( "G01*\n", outputFile );
+
+    // Set aperture list starting point:
     fputs( "G04 APERTURE LIST*\n", outputFile );
 
     return true;
