@@ -73,7 +73,9 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
         if( !is_ok && aBoard.GetDesignSettings().m_ProhibitOverlappingCourtyards )
         {
             auto marker = std::unique_ptr<MARKER_PCB>( marker_factory.NewMarker(
-                    pos, footprint, DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT ) );
+                                                        pos,
+                                                        footprint,
+                                                        DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT ) );
             HandleMarker( std::move( marker ) );
             success = false;
         }
@@ -85,7 +87,9 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
                 && footprint->GetPolyCourtyardBack().OutlineCount() == 0 && is_ok )
         {
             auto marker = std::unique_ptr<MARKER_PCB>( marker_factory.NewMarker(
-                    pos, footprint, DRCE_MISSING_COURTYARD_IN_FOOTPRINT ) );
+                                                          pos,
+                                                          footprint,
+                                                          DRCE_MISSING_COURTYARD_IN_FOOTPRINT ) );
             HandleMarker( std::move( marker ) );
             success = false;
         }
@@ -101,14 +105,14 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
 
     for( auto it1 = aBoard.Modules().begin(); it1 != aBoard.Modules().end(); it1++ )
     {
-        auto footprint = *it1;
+        MODULE* footprint = *it1;
 
         if( footprint->GetPolyCourtyardFront().OutlineCount() == 0 )
             continue; // No courtyard defined
 
         for( auto it2 = it1 + 1; it2 != aBoard.Modules().end(); it2++ )
         {
-            auto candidate = *it2;
+            MODULE* candidate = *it2;
 
             if( candidate->GetPolyCourtyardFront().OutlineCount() == 0 )
                 continue; // No courtyard defined
@@ -117,8 +121,8 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
             courtyard.Append( footprint->GetPolyCourtyardFront() );
 
             // Build the common area between footprint and the candidate:
-            courtyard.BooleanIntersection(
-                    candidate->GetPolyCourtyardFront(), SHAPE_POLY_SET::PM_FAST );
+            courtyard.BooleanIntersection( candidate->GetPolyCourtyardFront(),
+                                           SHAPE_POLY_SET::PM_FAST );
 
             // If no overlap, courtyard is empty (no common area).
             // Therefore if a common polygon exists, this is a DRC error
@@ -126,9 +130,11 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
             {
                 //Overlap between footprint and candidate
                 auto& pos = courtyard.CVertex( 0, 0, -1 );
-                auto  marker = std::unique_ptr<MARKER_PCB>(
-                        marker_factory.NewMarker( wxPoint( pos.x, pos.y ), footprint, candidate,
-                                DRCE_OVERLAPPING_FOOTPRINTS ) );
+                auto  marker = std::unique_ptr<MARKER_PCB>( marker_factory.NewMarker(
+                                                                  (wxPoint) pos,
+                                                                  footprint,
+                                                                  candidate,
+                                                                  DRCE_OVERLAPPING_FOOTPRINTS ) );
                 HandleMarker( std::move( marker ) );
                 success = false;
             }
@@ -138,14 +144,14 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
     // Test for overlapping on bottom layer:
     for( auto it1 = aBoard.Modules().begin(); it1 != aBoard.Modules().end(); it1++ )
     {
-        auto footprint = *it1;
+        MODULE* footprint = *it1;
 
         if( footprint->GetPolyCourtyardBack().OutlineCount() == 0 )
             continue; // No courtyard defined
 
         for( auto it2 = it1 + 1; it2 != aBoard.Modules().end(); it2++ )
         {
-            auto candidate = *it2;
+            MODULE* candidate = *it2;
 
             if( candidate->GetPolyCourtyardBack().OutlineCount() == 0 )
                 continue; // No courtyard defined
@@ -154,8 +160,8 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
             courtyard.Append( footprint->GetPolyCourtyardBack() );
 
             // Build the common area between footprint and the candidate:
-            courtyard.BooleanIntersection(
-                    candidate->GetPolyCourtyardBack(), SHAPE_POLY_SET::PM_FAST );
+            courtyard.BooleanIntersection( candidate->GetPolyCourtyardBack(),
+                                           SHAPE_POLY_SET::PM_FAST );
 
             // If no overlap, courtyard is empty (no common area).
             // Therefore if a common polygon exists, this is a DRC error
@@ -163,9 +169,11 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
             {
                 //Overlap between footprint and candidate
                 auto& pos = courtyard.CVertex( 0, 0, -1 );
-                auto  marker = std::unique_ptr<MARKER_PCB>(
-                        marker_factory.NewMarker( wxPoint( pos.x, pos.y ), footprint, candidate,
-                                DRCE_OVERLAPPING_FOOTPRINTS ) );
+                auto  marker = std::unique_ptr<MARKER_PCB>( marker_factory.NewMarker(
+                                                                  (wxPoint) pos,
+                                                                  footprint,
+                                                                  candidate,
+                                                                  DRCE_OVERLAPPING_FOOTPRINTS ) );
                 HandleMarker( std::move( marker ) );
                 success = false;
             }

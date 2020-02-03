@@ -468,7 +468,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
             aMessages->Refresh();
         }
 
-        doFootprintOverlappingDrc();
+        doOverlappingCourtyardsDrc();
     }
 
     for( DRC_ITEM* footprintItem : m_footprints )
@@ -1342,7 +1342,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 }
 
 
-void DRC::doFootprintOverlappingDrc()
+void DRC::doOverlappingCourtyardsDrc()
 {
     DRC_COURTYARD_OVERLAP drc_overlap(
             m_markerFactory, [&]( MARKER_PCB* aMarker ) { addMarkerToPcb( aMarker ); } );
