@@ -1363,36 +1363,33 @@ int EDIT_TOOL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
 bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aReferencePoint )
 {
     std::string         tool = "pcbnew.InteractiveEdit.selectReferencePoint";
-    // Do not create statusPopup on the stack:
-    // it crashes pcbnew when closing the current main frame
-    // (perhaps due to stack switching in coroutines)
-    std::unique_ptr<STATUS_TEXT_POPUP> statusPopup( new STATUS_TEXT_POPUP( frame() ) );
+    STATUS_TEXT_POPUP   statusPopup( frame() );
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
     OPT<VECTOR2I>       pickedPoint;
     bool                done = false;
 
-    statusPopup->SetText( _( "Select reference point for the copy..." ) );
+    statusPopup.SetText( _( "Select reference point for the copy..." ) );
 
     picker->SetClickHandler(
         [&]( const VECTOR2D& aPoint ) -> bool
         {
             pickedPoint = aPoint;
-            statusPopup->SetText( _( "Selection copied." ) );
-            statusPopup->Expire( 800 );
+            statusPopup.SetText( _( "Selection copied." ) );
+            statusPopup.Expire( 800 );
             return false;  // we don't need any more points
         } );
 
     picker->SetMotionHandler(
         [&] ( const VECTOR2D& aPos )
         {
-            statusPopup->Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
         } );
 
     picker->SetCancelHandler(
         [&]()
         {
-            statusPopup->SetText( _( "Copy cancelled." ) );
-            statusPopup->Expire( 800 );
+            statusPopup.SetText( _( "Copy cancelled." ) );
+            statusPopup.Expire( 800 );
         } );
 
     picker->SetFinalizeHandler(
@@ -1401,8 +1398,8 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aReferencePoint )
             done = true;
         } );
 
-    statusPopup->Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
-    statusPopup->Popup();
+    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+    statusPopup.Popup();
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
@@ -1410,7 +1407,7 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aReferencePoint )
         Wait();
 
     // Ensure statusPopup is hidden after use and before deleting it:
-    statusPopup->Hide();
+    statusPopup.Hide();
 
     if( pickedPoint.is_initialized() )
         aReferencePoint = pickedPoint.get();
