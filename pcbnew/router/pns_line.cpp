@@ -179,6 +179,109 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
 
     line.Intersect( aObstacle, ips );
 
+
+  /*  for( auto p : ips )
+    {
+            printf("gif %d %d  our %d their %d\n", p.p.x, p.p.y, p.our.Index(), p.their.Index() );
+    }*/
+
+    for( int i = 0; i < line.SegmentCount(); i++ )
+    {
+        const SEG& a = line.CSegment(i);
+        bool over = false;
+
+        
+        for( int j = 0; j < aObstacle.SegmentCount(); j++ )
+        {
+            const SEG& so = aObstacle.CSegment(j);
+            if( so.Contains( a ) )
+            {
+             //   printf("discard seg %d\n", i );
+                over = true;
+                break;
+            }
+        }
+
+        if(over)
+            continue;
+
+
+        bool a_in = aObstacle.PointInside( a.A );// && !aObstacle.PointOnEdge( a.A );
+        bool b_in = aObstacle.PointInside( a.B );// && !aObstacle.PointOnEdge( a.B );
+
+//        printf("i %d a %d %d %d %d [%d %d] a_in %d b_in %d\n", i, a.A.x, a.A.y, a.B.x, a.B.y, a.A.x- a.B.x, a.A.y - a.B.y, !!a_in, !!b_in );
+
+
+        if( a_in ^ b_in ) // segment crosses hull boundary
+        {
+            for( int j = 0; j < aObstacle.SegmentCount(); j++ )
+            {
+                OPT_VECTOR2I p;
+                
+                bool cont_a = aObstacle.CSegment(j).Contains( a.A );
+                bool cont_b = aObstacle.CSegment(j).Contains( a.B );
+
+                if(cont_a)
+                    p = a.A;
+                else if (cont_b)
+                    p = a.B;
+                else
+                    p = aObstacle.CSegment(j).Intersect( a );
+
+                printf("- cont_a %d cont_b %d p %d\n", !!cont_a, !!cont_b, p ? 1 : 0 );
+
+
+                if ( p )
+                {
+                      SHAPE_LINE_CHAIN::INTERSECTION ip;
+                      ip.our = a;
+                      ip.their = aObstacle.CSegment(j);
+                      ip.p = *p;
+                      ips.push_back(ip);
+                      printf("chb %d %d\n", p->x, p->y);
+                }
+            }
+        }
+        else if ( !a_in && !b_in )
+        {
+            int min_idx = INT_MAX;
+            int max_idx = INT_MIN;
+
+            for( int j = 0; j < aObstacle.SegmentCount(); j++ )
+            {
+                const SEG& os = aObstacle.CSegment(j);
+
+                if (os.Intersect(a))
+                {
+                    min_idx = std::min(min_idx, j);
+                    max_idx = std::max(max_idx, j);
+                }
+
+            }
+
+            if (min_idx != max_idx && min_idx != INT_MAX )
+            {
+                // genuine interesection found
+                for( int j = 0; j < aObstacle.SegmentCount(); j++ )
+                {
+                    const SEG& os = aObstacle.CSegment(j);
+
+                    auto p = os.Intersect(a);
+                    if(p)
+                    {
+                        SHAPE_LINE_CHAIN::INTERSECTION ip;
+                        ip.our = a;
+                        ip.their = aObstacle.CSegment(j);
+                        ip.p = *p;
+                        ips.push_back(ip);
+                       // printf("gif %d %d\n", p->x, p->y);
+                    }
+
+                }
+            }
+        }
+    }
+
     auto eFirst = aObstacle.EdgeContainingPoint( pFirst );
     auto eLast = aObstacle.EdgeContainingPoint( pLast );
 
