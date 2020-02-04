@@ -144,39 +144,132 @@ void LIB_TEXT::Move( const wxPoint& newPosition )
 }
 
 
+void LIB_TEXT::NormalizeJustification( bool inverse )
+{
+    wxPoint  delta( 0, 0 );
+    EDA_RECT bbox = GetTextBox( -1 );
+
+    if( GetTextAngle() == 0.0 )
+    {
+        if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+            delta.x = bbox.GetWidth() / 2;
+        else if( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+            delta.x = - bbox.GetWidth() / 2;
+
+        if( GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
+            delta.y = - bbox.GetHeight() / 2;
+        else if( GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
+            delta.y = bbox.GetHeight() / 2;
+    }
+    else
+    {
+        if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+            delta.y = bbox.GetWidth() / 2;
+        else if( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+            delta.y = - bbox.GetWidth() / 2;
+
+        if( GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
+            delta.x = + bbox.GetHeight() / 2;
+        else if( GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
+            delta.x = - bbox.GetHeight() / 2;
+    }
+
+    if( inverse )
+        SetTextPos( GetTextPos() - delta );
+    else
+        SetTextPos( GetTextPos() + delta );
+}
+
+
 void LIB_TEXT::MirrorHorizontal( const wxPoint& center )
 {
+    NormalizeJustification( false );
     int x = GetTextPos().x;
 
     x -= center.x;
     x *= -1;
     x += center.x;
 
+    if( GetTextAngle() == 0.0 )
+    {
+        if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+            SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        else if( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+            SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+    }
+    else
+    {
+        if( GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
+            SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        else if( GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
+            SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+    }
+
     SetTextX( x );
+    NormalizeJustification( true );
 }
 
 
 void LIB_TEXT::MirrorVertical( const wxPoint& center )
 {
+    NormalizeJustification( false );
     int y = GetTextPos().y;
 
     y -= center.y;
     y *= -1;
     y += center.y;
 
+    if( GetTextAngle() == 0.0 )
+    {
+        if( GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
+            SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        else if( GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
+            SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+    }
+    else
+    {
+        if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+            SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        else if( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+            SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+    }
+
     SetTextY( y );
+    NormalizeJustification( true );
 }
 
 
 void LIB_TEXT::Rotate( const wxPoint& center, bool aRotateCCW )
 {
+    NormalizeJustification( false );
     int rot_angle = aRotateCCW ? -900 : 900;
 
     wxPoint pt = GetTextPos();
     RotatePoint( &pt, center, rot_angle );
     SetTextPos( pt );
 
-    SetTextAngle( GetTextAngle() != 0.0 ? 0 : 900 );
+    if( GetTextAngle() == 0.0 )
+    {
+        SetTextAngle( 900 );
+    }
+    else
+    {
+        // 180º of rotation is a mirror
+
+        if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+            SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        else if( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+            SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+
+        if( GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
+            SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        else if( GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
+            SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+
+        SetTextAngle( 0 );
+    }
+
+    NormalizeJustification( true );
 }
 
 

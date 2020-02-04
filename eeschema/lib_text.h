@@ -122,6 +122,8 @@ public:
 
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
+    void NormalizeJustification( bool inverse );
+
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                const TRANSFORM& aTransform ) override;
 
