@@ -254,5 +254,9 @@ int SCH_EDIT_FRAME::CheckAnnotate( REPORTER& aReporter, bool aOneSheetOnly )
     else
         g_CurrentSheet->GetComponents( componentsList );
 
+    // Empty schematic does not need annotation
+    if( componentsList.GetCount() == 0 )
+        return 0;
+
     return componentsList.CheckAnnotation( aReporter );
 }
