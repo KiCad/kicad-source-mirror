@@ -407,10 +407,12 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 RescueSymbolLibTableProject( false );
         }
 
+        g_ConnectionGraph->Reset();
+
+        // Update all symbol library links for all sheets.
+        // NOTE: calls RecalculateConnections( GLOBAL_CLEANUP )
         schematic.UpdateSymbolLinks( true );      // Update all symbol library links for all sheets.
 
-        g_ConnectionGraph->Reset();
-        RecalculateConnections( GLOBAL_CLEANUP );
         SetScreen( g_CurrentSheet->LastScreen() );
 
         // Migrate conflicting bus definitions
@@ -419,13 +421,11 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             DIALOG_MIGRATE_BUSES dlg( this );
             dlg.ShowQuasiModal();
-
+            RecalculateConnections( NO_CLEANUP );
             OnModify();
         }
 
         GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
-        RecalculateConnections( GLOBAL_CLEANUP );
-
         GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
 
         GetScreen()->m_Initialized = true;
@@ -720,7 +720,6 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             }
             // Only perform the dangling end test on root sheet.
             GetScreen()->TestDanglingEnds();
-            RecalculateConnections( GLOBAL_CLEANUP );
 
             GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
 

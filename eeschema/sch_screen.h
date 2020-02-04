@@ -97,7 +97,7 @@ private:
      * can have many scheet paths sharing this screen, if this sheet is inside
      * an other sheet having many instances (one sheet path by parent sheet instance).
      */
-    wxArrayString m_clientSheetPathList;
+    std::vector<SCH_SHEET_PATH> m_clientSheetPathList;
 
     /// The size of the paper to print or plot on
     PAGE_INFO   m_paper;        // keep with the MVC 'model' if this class gets split
@@ -170,16 +170,16 @@ public:
     int GetRefCount() const                                 { return m_refCount; }
 
     /**
-     * @return the sheet paths count sharing this screen
+     * @return the sheet paths sharing this screen
      * if 1 this screen is not in a complex hierarchy: the reference field can be
      * used to store the component reference
      * if > 1 this screen is in a complex hierarchy, and components must have
      * a full alternate reference management
      */
-    int GetClientSheetPathsCount() { return (int) m_clientSheetPathList.GetCount(); }
-
-    wxArrayString& GetClientSheetPaths() { return m_clientSheetPathList; }
-
+    std::vector<SCH_SHEET_PATH>& GetClientSheetPaths()
+    {
+        return m_clientSheetPathList;
+    }
 
     void Append( SCH_ITEM* aItem );
 

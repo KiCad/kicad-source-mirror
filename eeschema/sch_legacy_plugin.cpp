@@ -1985,7 +1985,6 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
 {
     std::string     name1;
     std::string     name2;
-    wxArrayString   reference_fields;
 
     static wxString delimiters( wxT( " " ) );
 

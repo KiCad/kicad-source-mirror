@@ -745,7 +745,7 @@ void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 
 void SCH_SCREEN::EnsureAlternateReferencesExist()
 {
-    if( GetClientSheetPathsCount() <= 1 )   // No need for alternate reference
+    if( GetClientSheetPaths().size() <= 1 ) // No need for alternate reference
         return;
 
     for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
@@ -753,8 +753,8 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
         auto component = static_cast<SCH_COMPONENT*>( item );
 
         // Add (when not existing) all sheet path entries
-        for( unsigned int ii = 0; ii < m_clientSheetPathList.GetCount(); ii++ )
-            component->AddSheetPathReferenceEntryIfMissing( m_clientSheetPathList[ii] );
+        for( const auto& sheet : GetClientSheetPaths() )
+            component->AddSheetPathReferenceEntryIfMissing( sheet.Path() );
     }
 }
 
@@ -1299,7 +1299,7 @@ void SCH_SCREENS::BuildClientSheetPathList()
     SCH_SHEET_LIST sheetList( g_RootSheet );
 
     for( SCH_SCREEN* curr_screen = GetFirst(); curr_screen; curr_screen = GetNext() )
-        curr_screen->GetClientSheetPaths().Clear();
+        curr_screen->GetClientSheetPaths().clear();
 
     for( SCH_SHEET_PATH& sheetpath: sheetList )
     {
@@ -1310,7 +1310,7 @@ void SCH_SCREENS::BuildClientSheetPathList()
         {
             if( used_screen == curr_screen )
             {
-                curr_screen->GetClientSheetPaths().Add( sheetpath.PathAsString() );
+                curr_screen->GetClientSheetPaths().push_back( sheetpath );
                 break;
             }
         }

@@ -329,7 +329,7 @@ public:
      * Do nothing if already exists.
      * In component lists shared by more than one sheet path, an entry for each
      * sheet path must exist to manage references
-     * @param aSheetPathName is the candidate sheet path name
+     * @param aSheetPath is the candidate sheet path
      * this sheet path is the sheet path of the sheet containing the component,
      * not the full component sheet path
      * @return false if the alternate reference was existing, true if added.

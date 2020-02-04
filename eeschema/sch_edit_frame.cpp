@@ -1169,6 +1169,8 @@ void SCH_EDIT_FRAME::FixupJunctions()
     // Save the current sheet, to retrieve it later
     auto currSheet = GetCurrentSheet();
 
+    bool modified = false;
+
     SCH_SHEET_LIST sheetList;
     sheetList.BuildSheetList( g_RootSheet );
 
@@ -1197,8 +1199,14 @@ void SCH_EDIT_FRAME::FixupJunctions()
         }
 
         for( auto& pos : junctions )
-            AddJunction( pos );
+            AddJunction( pos, false, false );
+
+        if( junctions.size() )
+            modified = true;
     }
+
+    if( modified )
+        OnModify();
 
     // Reselect the initial sheet:
     SetCurrentSheet( currSheet );
