@@ -461,7 +461,7 @@ bool CINFO3D_VISU::createBoardPolygon()
 
     wxString errmsg;
 
-    return m_board->GetBoardPolygonOutlines( m_board_poly, /*allLayerHoles,*/ &errmsg );
+    return m_board->GetBoardPolygonOutlines( m_board_poly, &errmsg );
 }
 
 

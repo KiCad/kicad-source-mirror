@@ -64,6 +64,8 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_
     UNIT_BINDER            m_textSize;
     UNIT_BINDER            m_lineWidth;
 
+    bool                   m_hasChange;
+
 public:
     DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_EDIT_FRAME* parent );
     ~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS() override;
@@ -93,6 +95,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
         m_lineWidth( parent, m_lineWidthLabel, m_LineWidthCtrl, m_lineWidthUnits, true )
 {
     m_parent = parent;
+    m_hasChange = false;
 
     // TODO(JE) remove once real-time connectivity is a given
     if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
@@ -202,22 +205,40 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
     if( eda_text )
     {
         if( !m_textSize.IsIndeterminate() )
+        {
             eda_text->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
+            m_hasChange = true;
+        }
 
         if( m_hAlign->GetStringSelection() != INDETERMINATE )
+        {
             eda_text->SetHorizJustify( EDA_TEXT::MapHorizJustify( m_hAlign->GetSelection() - 1 ) );
+            m_hasChange = true;
+        }
 
         if( m_hAlign->GetStringSelection() != INDETERMINATE )
+        {
             eda_text->SetVertJustify( EDA_TEXT::MapVertJustify( m_vAlign->GetSelection() - 1 ) );
+            m_hasChange = true;
+        }
 
         if( m_Visible->Get3StateValue() != wxCHK_UNDETERMINED )
+        {
             eda_text->SetVisible( m_Visible->GetValue() );
+            m_hasChange = true;
+        }
 
         if( m_Italic->Get3StateValue() != wxCHK_UNDETERMINED )
+        {
             eda_text->SetItalic( m_Visible->GetValue() );
+            m_hasChange = true;
+        }
 
         if( m_Bold->Get3StateValue() != wxCHK_UNDETERMINED )
+        {
             eda_text->SetBold( m_Visible->GetValue() );
+            m_hasChange = true;
+        }
     }
 
     // No else!  Labels are both.
@@ -226,25 +247,33 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
         if( m_orientation->GetStringSelection() != INDETERMINATE )
         {
             sch_text->SetLabelSpinStyle( m_orientation->GetSelection() );
+            m_hasChange = true;
         }
     }
 
     if( lineItem )
     {
         if( !m_lineWidth.IsIndeterminate() )
+        {
             lineItem->SetLineWidth( m_lineWidth.GetValue() );
+            m_hasChange = true;
+        }
 
         if( lineItem->GetLayer() == LAYER_NOTES )
         {
             if( m_lineStyle->GetStringSelection() != INDETERMINATE )
+            {
                 lineItem->SetLineStyle( m_lineStyle->GetSelection() );
+                m_hasChange = true;
+            }
 
             if( m_setColor->GetValue() )
+            {
                 lineItem->SetLineColor( m_color->GetColour() );
+                m_hasChange = true;
+            }
         }
     }
-
-    m_parent->OnModify();
 }
 
 void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aSheetPath,
@@ -346,12 +375,18 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 
         if( screen )
         {
+            m_hasChange = false;
+
             for( auto item : screen->Items() )
                 visitItem( sheetPath, item );
+
+            if( m_hasChange )
+            {
+                m_parent->OnModify();
+                m_parent->HardRedraw();
+            }
         }
     }
-
-    m_parent->HardRedraw();
 
     return true;
 }
