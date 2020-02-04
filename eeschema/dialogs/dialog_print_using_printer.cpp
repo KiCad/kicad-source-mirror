@@ -398,7 +398,23 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     bool printReference = m_parent->GetPrintSheetReference();
 
     pageSizeIU = aScreen->GetPageSettings().GetSizeIU();
+#ifdef __WXGTK__
+    if( pageSizeIU.x > pageSizeIU.y )
+    {
+        auto psd = m_parent->GetPageSetupData();
+        psd.SetMarginTopLeft( wxPoint( 0, 3 ) );
+        psd.SetMarginBottomRight( wxPoint( 0, 5 ) );
+        FitThisSizeToPageMargins( pageSizeIU, psd );
+    }
+    else
+    {
+        FitThisSizeToPaper( pageSizeIU );
+    }
+
+#else
     FitThisSizeToPaper( pageSizeIU );
+#endif
+
     fitRect = GetLogicalPaperRect();
 
     wxLogDebug( wxT( "Fit rectangle: x = %d, y = %d, w = %d, h = %d" ),
