@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -211,6 +211,18 @@ bool SCH_SHEET::HasPin( const wxString& aName )
     for( SCH_SHEET_PIN* pin : m_pins )
     {
         if( pin->GetText().CmpNoCase( aName ) == 0 )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_SHEET::doIsConnected( const wxPoint& aPosition ) const
+{
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+    {
+        if( sheetPin->GetPosition() == aPosition )
             return true;
     }
 

@@ -357,7 +357,8 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
                 lines[BUSSES].push_back( (SCH_LINE*) item );
         }
 
-        if( ( item->Type() == SCH_COMPONENT_T ) && ( item->IsConnected( aPosition ) ) )
+        if( ( ( item->Type() == SCH_COMPONENT_T ) || ( item->Type() == SCH_SHEET_T ) )
+                && ( item->IsConnected( aPosition ) ) )
             pin_count++;
     }
 
