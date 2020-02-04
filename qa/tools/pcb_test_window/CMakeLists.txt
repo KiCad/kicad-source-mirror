@@ -2,7 +2,7 @@
 #
 # This program source code file is part of KiCad, a free EDA CAD application.
 #
-# Copyright (C) 2017 CERN
+# Copyright (C) 2017-2020 CERN
 # @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
 #
 # This program is free software; you can redistribute it and/or
@@ -22,23 +22,23 @@
 # or you may write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
+find_package( Boost COMPONENTS unit_test_framework REQUIRED )
+find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml propgrid stc REQUIRED )
 
 add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW)
 
 add_dependencies( pnsrouter pcbcommon ${PCBNEW_IO_LIBRARIES} )
 
 add_executable(test_window WIN32
-  test.cpp
-  ${CMAKE_SOURCE_DIR}/qa/qa_utils/pcb_test_frame.cpp
-  ${CMAKE_SOURCE_DIR}/qa/qa_utils/mocks.cpp
+    test.cpp
+    ${CMAKE_SOURCE_DIR}/qa/qa_utils/pcb_test_frame.cpp
+    ${CMAKE_SOURCE_DIR}/qa/qa_utils/mocks.cpp
 
-  ${CMAKE_SOURCE_DIR}/common/base_units.cpp
-  ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_tool_base.cpp
-  ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcbnew_selection.cpp
-  ${CMAKE_SOURCE_DIR}/pcbnew/tools/selection_tool.cpp
-  ${CMAKE_SOURCE_DIR}/pcbnew/tools/tool_event_utils.cpp
+    ${CMAKE_SOURCE_DIR}/common/base_units.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_tool_base.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcbnew_selection.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/tools/selection_tool.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/tools/tool_event_utils.cpp
 )
 
 include_directories( BEFORE ${INC_BEFORE} )

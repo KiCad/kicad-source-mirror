@@ -37,8 +37,10 @@
 #include <project.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
+#include <tools/pcb_actions.h>
 #include <widgets/appearance_controls.h>
 #include <dialogs/eda_view_switcher.h>
+#include <pcb_properties_panel.h>
 #include <wildcards_and_files_ext.h>
 #include <collectors.h>
 
@@ -50,7 +52,9 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
         PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
         m_undoRedoBlocked( false ),
         m_selectionFilterPanel( nullptr ),
-        m_appearancePanel( nullptr )
+        m_appearancePanel( nullptr ),
+        m_propertiesPanel( nullptr ),
+        m_tabbedPanel( nullptr )
 {
     Bind( wxEVT_IDLE,
           [this]( wxIdleEvent& aEvent )
@@ -256,6 +260,7 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
     }
 
     ReCreateAuxiliaryToolbar();
+    UpdateProperties();
 }
 
 
@@ -302,4 +307,12 @@ void PCB_BASE_EDIT_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
         m_appearancePanel->RefreshCollapsiblePanes();
 }
 
+
+void PCB_BASE_EDIT_FRAME::UpdateProperties()
+{
+    if( !m_propertiesPanel || !m_propertiesPanel->IsShownOnScreen() )
+        return;
+
+    m_propertiesPanel->Update();
+}
 

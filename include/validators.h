@@ -149,6 +149,11 @@ public:
 
     bool Validate( wxWindow* aParent ) override;
 
+    const wxString& GetRegEx() const
+    {
+        return m_regExString;
+    }
+
 protected:
     ///< Compiles and stores a regular expression
     void compileRegEx( const wxString& aRegEx, int aFlags );

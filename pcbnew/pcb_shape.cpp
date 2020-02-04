@@ -321,4 +321,3 @@ static struct PCB_SHAPE_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ) );
     }
 } _PCB_SHAPE_DESC;
-

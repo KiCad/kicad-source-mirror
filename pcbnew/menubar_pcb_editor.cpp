@@ -228,6 +228,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
     viewMenu->Add( PCB_ACTIONS::showLayersManager,    ACTION_MENU::CHECK );
+    viewMenu->Add( PCB_ACTIONS::showProperties   ,    ACTION_MENU::CHECK );
     viewMenu->Add( ACTIONS::showFootprintBrowser );
     viewMenu->Add( ACTIONS::show3DViewer );
 

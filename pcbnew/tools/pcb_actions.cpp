@@ -819,6 +819,11 @@ TOOL_ACTION PCB_ACTIONS::showLayersManager( "pcbnew.Control.showLayersManager",
         _( "Show Appearance Manager" ), _( "Show/hide the appearance manager" ),
         BITMAPS::layers_manager );
 
+TOOL_ACTION PCB_ACTIONS::showProperties( "pcbnew.Control.showProperties",
+        AS_GLOBAL, 0, "",
+        _( "Show Properties" ), _( "Show/hide the properties panel" ),
+        BITMAPS::tools );
+
 TOOL_ACTION PCB_ACTIONS::flipBoard( "pcbnew.Control.flipBoard",
         AS_GLOBAL, 0, "",
         _( "Flip Board View" ), _( "View board from the opposite side" ),

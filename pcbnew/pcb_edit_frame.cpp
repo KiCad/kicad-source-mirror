@@ -38,6 +38,7 @@
 #include <dialog_find.h>
 #include <dialog_footprint_properties.h>
 #include <dialogs/dialog_exchange_footprints.h>
+#include <pcb_properties_panel.h>
 #include <dialog_board_setup.h>
 #include <invoke_pcb_dialog.h>
 #include <board.h>
@@ -81,6 +82,7 @@
 #include <tools/pad_tool.h>
 #include <microwave/microwave_tool.h>
 #include <tools/position_relative_tool.h>
+#include <tools/properties_tool.h>
 #include <tools/zone_filler_tool.h>
 #include <tools/pcb_actions.h>
 #include <router/router_tool.h>
@@ -188,6 +190,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_show_layer_manager_tools = true;
     m_supportsAutoSave = true;
     m_probingSchToPcb = false;
+    m_show_properties = true;
 
     // We don't know what state board was in when it was last saved, so we have to
     // assume dirty
@@ -207,7 +210,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                                           EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
 
     SetCanvas( canvas );
-
     SetBoard( new BOARD() );
 
     wxIcon icon;
@@ -221,6 +223,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );
+
+    m_tabbedPanel = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                       wxAUI_NB_BOTTOM | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
+                                       wxAUI_NB_SCROLL_BUTTONS );
+
+    m_propertiesPanel = new PCB_PROPERTIES_PANEL( m_tabbedPanel, this );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
@@ -280,6 +288,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Right().Layer( 4 ).Position( 2 )
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false )
                       .MinSize( 180, -1 ).BestSize( 180, -1 ) );
+
+    m_auimgr.AddPane( m_tabbedPanel,    // TODO check
+                      EDA_PANE().Palette().Name( "TabbedPanel" ).Right().Layer( 3 )
+                      .PaneBorder( false ).MinSize( 300, -1 )
+                      .TopDockable( false ).BottomDockable( false ) );
 
     // Center
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
@@ -566,6 +579,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new CONVERT_TOOL );
     m_toolManager->RegisterTool( new GROUP_TOOL );
     m_toolManager->RegisterTool( new SCRIPTING_TOOL );
+    m_toolManager->RegisterTool( new PROPERTIES_TOOL );
     m_toolManager->InitTools();
 
     for( TOOL_BASE* tool : m_toolManager->Tools() )
@@ -1006,7 +1020,10 @@ void PCB_EDIT_FRAME::doCloseWindow()
     // on some platforms (Windows) that generate useless redraw of items in
     // the Layer Manager
     if( m_show_layer_manager_tools )
+    {
         m_auimgr.GetPane( "LayersManager" ).Show( false );
+        m_auimgr.GetPane( "TabbedPanel" ).Show( false );
+    }
 
     // Unlink the old project if needed
     GetBoard()->ClearProject();
@@ -1100,6 +1117,7 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     if( cfg )
     {
         m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
+        m_show_properties          = cfg->m_AuiPanels.show_properties;
     }
 }
 
@@ -1116,6 +1134,7 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
         cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
+        cfg->m_AuiPanels.show_properties      = m_show_properties;
     }
 }
 

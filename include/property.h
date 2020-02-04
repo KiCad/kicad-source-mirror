@@ -177,7 +177,6 @@ private:
 
 public:
     PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = DEFAULT ) :
-        m_id( 0 ),
         m_name( aName ),
         m_display( aDisplay ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } )
@@ -281,7 +280,6 @@ protected:
     virtual wxAny getter( void* aObject ) const = 0;
 
 private:
-    const size_t           m_id;
     const wxString         m_name;
     const PROPERTY_DISPLAY m_display;
 

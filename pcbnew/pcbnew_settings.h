@@ -126,6 +126,7 @@ public:
         int  appearance_panel_tab;
         int  right_panel_width;
         bool show_layer_manager;
+        bool show_properties;
     };
 
     struct DIALOG_CLEANUP

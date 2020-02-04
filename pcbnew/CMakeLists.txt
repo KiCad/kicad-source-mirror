@@ -183,6 +183,7 @@ set( PCBNEW_DIALOGS
     dialogs/panel_setup_text_and_graphics_base.cpp
     dialogs/panel_setup_tracks_and_vias.cpp
     dialogs/panel_setup_tracks_and_vias_base.cpp
+    dialogs/pcb_properties_panel.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
     footprint_wizard_frame_functions.cpp
@@ -355,6 +356,7 @@ set( PCBNEW_CLASS_SRCS
     tools/placement_tool.cpp
     tools/pcb_point_editor.cpp
     tools/position_relative_tool.cpp
+    tools/properties_tool.cpp
     tools/tool_event_utils.cpp
     tools/zone_create_helper.cpp
     tools/zone_filler_tool.cpp

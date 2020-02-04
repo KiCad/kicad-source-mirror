@@ -148,7 +148,10 @@ public:
 
     // User interface update command event handlers.
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
+
     bool LayerManagerShown();
+    bool PropertiesShown();
+
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectAutoWidth( wxUpdateUIEvent& aEvent );
@@ -294,6 +297,7 @@ public:
     void PrepareLayerIndicator( bool aForceRebuild = false );
 
     void ToggleLayersManager();
+    void ToggleProperties();
 
     /**
      * Create an ASCII footprint position file.
@@ -805,6 +809,7 @@ public:
     wxChoice* m_SelViaSizeBox;           // a choice box to display and select current via diameter
 
     bool m_show_layer_manager_tools;
+    bool m_show_properties;
 
     bool m_ZoneFillsDirty;               // Board has been modified since last zone fill.
 

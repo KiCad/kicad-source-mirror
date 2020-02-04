@@ -189,6 +189,7 @@ set( COMMON_WIDGET_SRCS
     widgets/number_badge.cpp
     widgets/paged_dialog.cpp
     widgets/progress_reporter_base.cpp
+    widgets/properties_panel.cpp
     widgets/split_button.cpp
     widgets/stepped_slider.cpp
     widgets/text_ctrl_eval.cpp
@@ -498,6 +499,7 @@ set( PCB_COMMON_SRCS
     fp_lib_table.cpp
     hash_eda.cpp
     page_info.cpp
+    pg_properties.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_base_frame.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_expr_evaluator.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_commit.cpp

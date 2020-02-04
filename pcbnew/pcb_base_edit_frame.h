@@ -32,6 +32,7 @@
 class APPEARANCE_CONTROLS;
 class BOARD_ITEM_CONTAINER;
 class PANEL_SELECTION_FILTER;
+class PROPERTIES_PANEL;
 
 /**
  * Common, abstract interface for edit frames.
@@ -214,6 +215,10 @@ public:
 
     APPEARANCE_CONTROLS* GetAppearancePanel() { return m_appearancePanel; }
 
+    PROPERTIES_PANEL* GetPropertiesPanel() { return m_propertiesPanel; }
+
+    void UpdateProperties();
+
 protected:
     /**
      * Prompts a user to select global or project library tables
@@ -241,6 +246,10 @@ protected:
 
     PANEL_SELECTION_FILTER* m_selectionFilterPanel;
     APPEARANCE_CONTROLS*    m_appearancePanel;
+    PROPERTIES_PANEL*       m_propertiesPanel;
+
+    /// Panel with Layers and Object Inspector tabs
+    wxAuiNotebook* m_tabbedPanel;
 };
 
 #endif
