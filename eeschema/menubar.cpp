@@ -218,7 +218,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AddItem( EE_ACTIONS::drawWire,               EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::drawBus,                EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::placeBusWireEntry,      EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::placeBusBusEntry,       EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::placeNoConnect,         EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::placeJunction,          EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::placeLabel,             EE_CONDITIONS::ShowAlways );
@@ -228,7 +227,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AddItem( EE_ACTIONS::placeHierLabel, EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::drawSheet,              EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::importSheetPin,         EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::placeSheetPin,          EE_CONDITIONS::ShowAlways );
 
     placeMenu->AddSeparator();
     placeMenu->AddItem( EE_ACTIONS::drawLines,              EE_CONDITIONS::ShowAlways );

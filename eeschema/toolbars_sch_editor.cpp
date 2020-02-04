@@ -123,7 +123,6 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( EE_ACTIONS::drawWire,               ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawBus,                ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeBusWireEntry,      ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeBusBusEntry,       ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeNoConnect,         ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeJunction,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeLabel,             ACTION_TOOLBAR::TOGGLE );
@@ -131,7 +130,6 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( EE_ACTIONS::placeHierLabel, ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawSheet,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::importSheetPin,         ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeSheetPin,          ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->Add( EE_ACTIONS::drawLines,              ACTION_TOOLBAR::TOGGLE );
@@ -192,7 +190,6 @@ void SCH_EDIT_FRAME::SyncToolbars()
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawWire );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawBus );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeBusWireEntry );
-    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeBusBusEntry );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeNoConnect );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeJunction );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeLabel );
@@ -200,7 +197,6 @@ void SCH_EDIT_FRAME::SyncToolbars()
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeHierLabel );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSheet );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::importSheetPin );
-    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSheetPin );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawLines );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSchematicText );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeImage );
