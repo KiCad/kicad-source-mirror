@@ -792,7 +792,7 @@ int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
     if( initialCount == 0 )
         selectCursor( true, connectedItemFilter );
 
-    for( KICAD_T stopCondition : { SCH_JUNCTION_T, PCB_PAD_T, EOT } )
+    for( KICAD_T stopCondition : { PCB_VIA_T, PCB_PAD_T, EOT } )
     {
         // copy the selection, since we're going to iterate and modify
         std::deque<EDA_ITEM*> selectedItems = m_selection.GetItems();
