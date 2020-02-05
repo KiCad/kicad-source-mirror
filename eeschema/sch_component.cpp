@@ -852,6 +852,18 @@ void SCH_COMPONENT::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOn
 }
 
 
+std::vector<SCH_FIELD*> SCH_COMPONENT::GetFields()
+{
+    std::vector<SCH_FIELD*> retvec;
+    retvec.reserve( m_Fields.size() );
+
+    for( SCH_FIELD& field : m_Fields )
+        retvec.push_back( &field );
+
+    return retvec;
+}
+
+
 SCH_FIELD* SCH_COMPONENT::AddField( const SCH_FIELD& aField )
 {
     int newNdx = m_Fields.size();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -984,11 +984,26 @@ void EE_SELECTION_TOOL::RebuildSelection()
         for( auto item : m_frame->GetScreen()->Items() )
         {
             // If the field and component are selected, only use the component
-            if( item->IsSelected()
-                    && !( item->Type() == SCH_FIELD_T && item->GetParent()
-                               && item->GetParent()->IsSelected() ) )
+            if( item->IsSelected() )
             {
                 select( item );
+            }
+            else
+            {
+                if( item->Type() == SCH_COMPONENT_T )
+                {
+                    for( auto field : static_cast<SCH_COMPONENT*>( item )->GetFields() )
+                        if( field->IsSelected() )
+                            select( field );
+                }
+
+                if( item->Type() == SCH_SHEET_T )
+                {
+                    for( auto pin : static_cast<SCH_SHEET*>( item )->GetPins() )
+                        if( pin->IsSelected() )
+                            select( pin );
+                }
+
             }
         }
     }
