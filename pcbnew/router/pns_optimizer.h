@@ -30,6 +30,7 @@
 
 #include "range.h"
 
+
 namespace PNS {
 
 class NODE;

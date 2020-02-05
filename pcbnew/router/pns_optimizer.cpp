@@ -41,7 +41,7 @@
 namespace PNS {
 
 
-static DEBUG_DECORATOR *dbg;
+static DEBUG_DECORATOR *g_dbg;
 /**
  *  Cost Estimator Methods
  */
@@ -292,12 +292,18 @@ class JOINT_CACHE
 bool PRESERVE_VERTEX_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement )
 {
     const auto& l = aOriginLine->CLine();
-    bool cv;
+    bool cv = false;
+
+    printf("-------> avtx chk %d %d v %d %d\n", aVertex1, aVertex2, m_v.x, m_v.y );
 
     for( int i = aVertex1; i < aVertex2; i++ )
     {
-        if ( l.CSegment(i).Contains( m_v ) )
+        int dist = l.CSegment(i).Distance( m_v );
+        printf("i %d dist %d\n", i, dist );
+        if ( dist <= 1 )
         {
+            g_dbg->AddSegment( l.CSegment(i), 1 );
+
             cv = true;
             break;
         }
@@ -308,7 +314,7 @@ bool PRESERVE_VERTEX_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOrig
 
     for( int i = 0; i < aReplacement.SegmentCount(); i++ )
     {
-        if ( aReplacement.CSegment(i).Contains( m_v ) )
+        if ( aReplacement.CSegment(i).Distance( m_v ) < 1 )
         {
             return true;
         }
@@ -444,9 +450,9 @@ void OPTIMIZER::AddConstraint ( OPT_CONSTRAINT *aConstraint )
 }
 
 bool OPTIMIZER::checkConstraints(  int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement )
-        {
+{
     for( auto c: m_constraints)
-        if ( !c->Check( aVertex1, aVertex2, aOriginLine, aReplacement ))
+        if ( !c->Check( aVertex1, aVertex2, aOriginLine, aReplacement ) )
             return false;
 
     return true;
@@ -1008,14 +1014,10 @@ bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VEC
 {
     OPTIMIZER opt( aWorld );
 
+    g_dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+
     opt.SetEffortLevel( aEffortLevel );
     opt.SetCollisionMask( -1 );
-
-    if ( aEffortLevel & KEEP_TOPOLOGY )
-    {
-        auto c = new KEEP_TOPOLOGY_CONSTRAINT( aWorld );
-        opt.AddConstraint( c );
-    }
 
     if ( aEffortLevel & PRESERVE_VERTEX )
     {
@@ -1023,6 +1025,13 @@ bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VEC
         opt.AddConstraint( c );
         //printf("pres-v %d %d\n", aV.x, aV.y );
     }
+
+    if ( aEffortLevel & KEEP_TOPOLOGY )
+    {
+        auto c = new KEEP_TOPOLOGY_CONSTRAINT( aWorld );
+        opt.AddConstraint( c );
+    }
+
     return opt.Optimize( aLine );
 }
 

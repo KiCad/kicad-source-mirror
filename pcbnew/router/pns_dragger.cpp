@@ -25,6 +25,7 @@
 #include "pns_shove.h"
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
+#include "pns_walkaround.h"
 
 namespace PNS {
 
@@ -151,8 +152,12 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_currentMode = Settings().Mode();
     m_freeAngleMode = (m_mode & DM_FREE_ANGLE);
 
-    if( m_currentMode != RM_MarkObstacles  && !m_freeAngleMode )
+    if( m_currentMode == RM_Shove  && !m_freeAngleMode )
+    {
         m_shove = std::make_unique<SHOVE>( m_world, Router() );
+        m_shove->SetLogger( Logger() );
+        m_shove->SetDebugDecorator( Dbg() );
+    }
 
     aStartItem->Unmark( MK_LOCKED );
 
@@ -273,11 +278,107 @@ void DRAGGER::dumbDragVia( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2
     }
 }
 
+void DRAGGER::optimizeAndUpdateDraggedLine( LINE& dragged, const VECTOR2I& aP )
+{
+    VECTOR2D lockV;
+    dragged.ClearSegmentLinks();
+    dragged.Unmark();
+
+    Dbg()->AddLine( dragged.CLine(), 5, 100000 );
+
+    lockV = dragged.CLine().NearestPoint( aP );
+    Dbg()->AddPoint( lockV, 4 );
+
+    OPTIMIZER::Optimize( &dragged,
+            OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY | OPTIMIZER::PRESERVE_VERTEX,
+            m_lastNode, lockV );
+
+    m_lastNode->Add( dragged );
+    m_draggedItems.Clear();
+    m_draggedItems.Add( dragged );
+}
+
+
+bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
+{
+    bool ok = false;
+// fixme: rewrite using shared_ptr...
+    if( m_lastNode )
+    {
+        delete m_lastNode;
+        m_lastNode = nullptr;
+    }
+
+    m_lastNode = m_world->Branch();
+
+    switch( m_mode )
+    {
+    case DM_SEGMENT:
+    case DM_CORNER:
+    {
+        int thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 4 : 0;
+        LINE dragged( m_draggedLine );
+        LINE origLine( m_draggedLine );
+        
+        if( m_mode == DM_SEGMENT )
+            dragged.DragSegment( aP, m_draggedSegmentIndex, thresh );
+        else
+            dragged.DragCorner( aP, m_draggedSegmentIndex, thresh );
+
+        if ( m_world->CheckColliding( &dragged ) )
+        {
+            WALKAROUND walkaround( m_lastNode, Router() );
+
+            walkaround.SetSolidsOnly( false );
+            walkaround.SetDebugDecorator( Dbg() );
+            walkaround.SetLogger( Logger() );
+            walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );
+
+            WALKAROUND::RESULT wr = walkaround.Route( dragged );
+
+            //Dbg()->AddLine( wr.lineCw.CLine(), 3, 200000 );
+            //Dbg()->AddLine( wr.lineCcw.CLine(), 2, 200000 );
+
+            if( wr.statusCcw == WALKAROUND::DONE && wr.statusCw == WALKAROUND::DONE )
+            {
+                dragged = ( wr.lineCw.CLine().Length() < wr.lineCcw.CLine().Length() ? wr.lineCw : wr.lineCcw );
+                ok = true;
+            }
+            else if ( wr.statusCw == WALKAROUND::DONE )
+            {
+                dragged = wr.lineCw;
+                ok = true;
+            }
+            else if ( wr.statusCcw == WALKAROUND::DONE )
+            {
+                dragged = wr.lineCcw;
+                ok = true;
+             }
+
+        }
+        else
+        {
+            ok = true;
+        }
+
+        if(ok)
+        {
+            m_lastNode->Remove( origLine );
+            optimizeAndUpdateDraggedLine( dragged, aP );
+        }
+    break;
+    }
+    }
+
+    m_dragStatus = ok;
+
+    return true;
+}
 
 bool DRAGGER::dragShove( const VECTOR2I& aP )
 {
     bool ok = false;
-
+    
     if( m_lastNode )
     {
         delete m_lastNode;
@@ -317,7 +418,10 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
             dragged.ClearSegmentLinks();
             dragged.Unmark();
 
+            Dbg()->AddLine(dragged.CLine(), 5, 100000 );
+            
             lockV = dragged.CLine().NearestPoint( aP );
+            Dbg()->AddPoint(lockV, 4 );
 
             OPTIMIZER::Optimize( &dragged, OPTIMIZER::MERGE_SEGMENTS 
                                          | OPTIMIZER::KEEP_TOPOLOGY
@@ -385,9 +489,11 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
         return dragMarkObstacles( aP );
 
     case RM_Shove:
-    case RM_Walkaround:
     case RM_Smart:
         return dragShove( aP );
+
+    case RM_Walkaround:
+        return dragWalkaround( aP );
 
     default:
         return false;

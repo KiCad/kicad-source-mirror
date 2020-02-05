@@ -105,10 +105,12 @@ private:
     
     bool dragMarkObstacles( const VECTOR2I& aP );
     bool dragShove(const VECTOR2I& aP );
+    bool dragWalkaround(const VECTOR2I& aP );
     bool startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg );
     bool startDragArc( const VECTOR2D& aP, ARC* aArc );
     bool startDragVia( VIA* aVia );
     void dumbDragVia( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP );
+    void optimizeAndUpdateDraggedLine( LINE& dragged, const VECTOR2I& aP );
 
     VIA_HANDLE m_initialVia;
     VIA_HANDLE m_draggedVia;
