@@ -165,11 +165,16 @@ public:
 
 class PROPERTY_BASE
 {
+private:
+    ///> Used to generate unique IDs
+    size_t nextId = 0;
+
 public:
     PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = DEFAULT )
-        : m_name( aName ), m_display( aDisplay ),
+        : m_id( nextId ), m_name( aName ), m_display( aDisplay ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } )
     {
+        ++nextId;
     }
 
     virtual ~PROPERTY_BASE()
@@ -189,6 +194,14 @@ public:
     {
         static wxPGChoices empty;
         return empty;
+    }
+
+    /**
+     * Sets the possible values for for the property.
+     */
+    virtual void SetChoices( const wxPGChoices& aChoices )
+    {
+        wxFAIL; // only possible for PROPERTY_ENUM
     }
 
     /**
@@ -217,14 +230,27 @@ public:
     }
 
     /**
-     * Returns the type-id of the Owner class.
+     * Returns type-id of the Owner class.
      */
     virtual size_t OwnerHash() const = 0;
 
     /**
-     * Returns the type-id of the property type.
+     * Returns type-id of the Base class.
+     */
+    virtual size_t BaseHash() const = 0;
+
+    /**
+     * Returns type-id of the property type.
      */
     virtual size_t TypeHash() const = 0;
+
+    /**
+     * Returns unique ID of the property.
+     */
+    size_t Id() const
+    {
+        return m_id;
+    }
 
     virtual bool IsReadOnly() const = 0;
 
@@ -246,7 +272,7 @@ protected:
     {
         wxAny a = getter( aObject );
 
-        if ( !(std::is_enum<T>::value && a.CheckType<int>() ) && !a.CheckType<T>() )
+        if ( !( std::is_enum<T>::value && a.CheckType<int>() ) && !a.CheckType<T>() )
             throw std::invalid_argument("Invalid requested type");
 
         return wxANY_AS(a, T);
@@ -256,6 +282,7 @@ protected:
     virtual wxAny getter( void* aObject ) const = 0;
 
 private:
+    const size_t m_id;
     const wxString m_name;
     const PROPERTY_DISPLAY m_display;
 
@@ -296,6 +323,11 @@ public:
         return m_ownerHash;
     }
 
+    size_t BaseHash() const override
+    {
+        return m_baseHash;
+    }
+
     size_t TypeHash() const override
     {
         return m_typeHash;
@@ -310,7 +342,8 @@ protected:
     PROPERTY( const wxString& aName, SETTER_BASE<Owner, T>* s, GETTER_BASE<Owner, T>* g,
             PROPERTY_DISPLAY aDisplay )
         : PROPERTY_BASE( aName, aDisplay ), m_setter( s ), m_getter( g ),
-                m_ownerHash( TYPE_HASH( Owner ) ), m_typeHash( TYPE_HASH( BASE_TYPE ) )
+                m_ownerHash( TYPE_HASH( Owner ) ), m_baseHash( TYPE_HASH( Base ) ),
+                m_typeHash( TYPE_HASH( BASE_TYPE ) )
     {
     }
 
@@ -344,6 +377,9 @@ protected:
     ///> Owner class type-id
     const size_t m_ownerHash;
 
+    ///> Base class type-id
+    const size_t m_baseHash;
+
     ///> Property value type-id
     const size_t m_typeHash;
 };
@@ -357,22 +393,28 @@ public:
     PROPERTY_ENUM( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )(),
             PROPERTY_DISPLAY aDisplay = PROPERTY_DISPLAY::DEFAULT )
-        : PROPERTY<Owner, T>( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay ),
-        m_choices( ENUM_MAP<T>::Instance().Choices() )
+        : PROPERTY<Owner, T, Base>( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
+                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
     {
-        wxASSERT_MSG( m_choices.GetCount() > 0, "No enum choices defined" );
+        if ( std::is_enum<T>::value )
+        {
+            m_choices = ENUM_MAP<T>::Instance().Choices();
+            wxASSERT_MSG( m_choices.GetCount() > 0, "No enum choices defined" );
+        }
     }
 
     template<typename SetType, typename GetType>
     PROPERTY_ENUM( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )() const,
             PROPERTY_DISPLAY aDisplay = PROPERTY_DISPLAY::DEFAULT )
-        : PROPERTY<Owner, T>( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
-                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay ),
-        m_choices( ENUM_MAP<T>::Instance().Choices() )
+        : PROPERTY<Owner, T, Base>( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
+                                     METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
     {
-        wxASSERT_MSG( m_choices.GetCount() > 0, "No enum choices defined" );
+        if ( std::is_enum<T>::value )
+        {
+            m_choices = ENUM_MAP<T>::Instance().Choices();
+            wxASSERT_MSG( m_choices.GetCount() > 0, "No enum choices defined" );
+        }
     }
 
     virtual void setter( void* obj, wxAny& v ) override
@@ -406,6 +448,11 @@ public:
     const wxPGChoices& Choices() const override
     {
         return m_choices;
+    }
+
+    void SetChoices( const wxPGChoices& aChoices ) override
+    {
+        m_choices = aChoices;
     }
 
     bool HasChoices() const override
@@ -478,11 +525,6 @@ public:
         return *this;
     }
 
-    void Reset()
-    {
-        m_choices.Clear();
-    }
-
     const wxString& ToString( T value ) const
     {
         return m_choices.GetLabel( static_cast<int>( value ) );
@@ -491,11 +533,6 @@ public:
     const wxPGChoices& Choices() const
     {
         return m_choices;
-    }
-
-    void SetChoices( const wxPGChoices& aChoices )
-    {
-        m_choices = aChoices;
     }
 
 private:

@@ -46,6 +46,7 @@ PROPERTY_BASE* PROPERTY_MANAGER::GetProperty( TYPE_ID aType, const wxString& aPr
 {
     wxASSERT_MSG( !m_dirty, "Have not called PROPERTY_MANAGER::Rebuild(), "
             "property list not up-to-date" );
+
     auto it = m_classes.find( aType );
 
     if( it == m_classes.end() )
@@ -105,6 +106,15 @@ void PROPERTY_MANAGER::AddProperty( PROPERTY_BASE* aProperty )
     CLASS_DESC& classDesc = getClass( hash );
     classDesc.m_ownProperties.emplace( name, aProperty );
     m_dirty = true;
+}
+
+
+void PROPERTY_MANAGER::ReplaceProperty( size_t aBase, const wxString& aName, PROPERTY_BASE* aNew )
+{
+    wxASSERT( aBase == aNew->BaseHash() );
+    CLASS_DESC& classDesc = getClass( aNew->OwnerHash() );
+    classDesc.m_replaced.insert( std::make_pair( aBase, aName ) );
+    AddProperty( aNew );
 }
 
 
@@ -169,7 +179,7 @@ PROPERTY_MANAGER::CLASS_DESC& PROPERTY_MANAGER::getClass( TYPE_ID aTypeId )
     auto it = m_classes.find( aTypeId );
 
     if( it == m_classes.end() )
-        tie( it, std::ignore ) = m_classes.emplace( std::make_pair( aTypeId, CLASS_DESC( aTypeId ) ) );
+        tie( it, std::ignore ) = m_classes.emplace( aTypeId, CLASS_DESC( aTypeId ) );
 
     return it->second;
 }
@@ -177,18 +187,28 @@ PROPERTY_MANAGER::CLASS_DESC& PROPERTY_MANAGER::getClass( TYPE_ID aTypeId )
 
 void PROPERTY_MANAGER::CLASS_DESC::rebuild()
 {
+    PROPERTY_SET replaced( m_replaced );
     m_allProperties.clear();
-    collectPropsRecur( m_allProperties );
+    collectPropsRecur( m_allProperties, replaced );
     // We need to keep properties sorted to be able to use std::set_* functions
     sort( m_allProperties.begin(), m_allProperties.end() );
 }
 
 
-void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult ) const
+void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult, PROPERTY_SET& aReplaced ) const
 {
-    for( const auto& base : m_bases )
-        base.get().collectPropsRecur( aResult );
+    for( const auto& replacedEntry : m_replaced )
+        aReplaced.emplace( replacedEntry );
 
-    for( auto& property : m_ownProperties )
-        aResult.push_back( property.second.get() );
+    for( auto& propertyData : m_ownProperties )
+    {
+        PROPERTY_BASE* property = propertyData.second.get();
+
+        // Do not store replaced properties
+        if( aReplaced.count( std::make_pair( property->OwnerHash(), property->Name() ) ) == 0 )
+            aResult.push_back( property );
+    }
+
+    for( const auto& base : m_bases )
+        base.get().collectPropsRecur( aResult, aReplaced );
 }

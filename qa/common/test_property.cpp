@@ -100,6 +100,10 @@ public:
     int m_cond;
 };
 
+class E : public D
+{
+};
+
 static struct ENUM_GLOB_DESC
 {
     ENUM_GLOB_DESC()
@@ -162,6 +166,9 @@ static struct CLASS_D_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<D, D::enum_class>( "enumClass", &D::setClassEnum, &D::getClassEnum ) );
         propMgr.AddProperty( new PROPERTY<D, wxPoint, A>( "point_alias", &D::setPoint, &D::getPoint ) );
 
+        propMgr.ReplaceProperty( TYPE_HASH( C ), "bool",
+                new PROPERTY<D, bool, C>( "replaced_bool", &D::setBool, &D::getBool ) );
+
         // lines below are needed to indicate multiple inheritance
         propMgr.AddTypeCast( new TYPE_CAST<D, A> );
         propMgr.AddTypeCast( new TYPE_CAST<D, C> );
@@ -173,6 +180,26 @@ static struct CLASS_D_DESC
         propMgr.AddProperty( cond );
     }
 } _CLASS_D_DESC;
+
+static struct CLASS_E_DESC
+{
+    CLASS_E_DESC()
+    {
+        wxArrayInt values;
+        values.Add( enum_glob::TEST1 );
+        values.Add( enum_glob::TEST3 );
+        wxArrayString labels;
+        labels.Add( "T1" );
+        labels.Add( "T3" );
+        wxPGChoices newChoices( labels, values );
+
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        auto prop = new PROPERTY_ENUM<E, enum_glob, D>( "enumGlob",
+                &E::setGlobEnum, &E::getGlobEnum );
+        prop->SetChoices( newChoices );
+        propMgr.ReplaceProperty( TYPE_HASH( D ), "enumGlob", prop );
+    }
+} _CLASS_E_DESC;
 
 ENUM_TO_WXANY( D::enum_class );
 
@@ -229,6 +256,7 @@ BOOST_AUTO_TEST_CASE( VirtualMethods )
 // Non-existing properties
 BOOST_AUTO_TEST_CASE( NotexistingProperties )
 {
+    ptr = &d;
     BOOST_CHECK_EQUAL( ptr->Set<int>( "does not exist", 5 ), false );
     BOOST_CHECK_EQUAL( ptr->Get<int>( "neither" ).has_value(), false );
 }
@@ -236,7 +264,8 @@ BOOST_AUTO_TEST_CASE( NotexistingProperties )
 // Request data using incorrect type
 BOOST_AUTO_TEST_CASE( IncorrectType )
 {
-    BOOST_CHECK_THROW( ptr->Get<wxPoint>( "bool" ), std::invalid_argument );
+    ptr = &d;
+    BOOST_CHECK_THROW( ptr->Get<wxPoint>( "A" ), std::invalid_argument );
 }
 
 // Type-casting (for types with multiple inheritance)
@@ -256,9 +285,9 @@ BOOST_AUTO_TEST_CASE( EnumGlob )
     BOOST_CHECK( prop->HasChoices() );
 
     wxArrayInt values;
-    values.Add( static_cast<int>( enum_glob::TEST1 ) );
-    values.Add( static_cast<int>( enum_glob::TEST2 ) );
-    values.Add( static_cast<int>( enum_glob::TEST3 ) );
+    values.Add( enum_glob::TEST1 );
+    values.Add( enum_glob::TEST2 );
+    values.Add( enum_glob::TEST3 );
     wxArrayString labels;
     labels.Add( "TEST1" );
     labels.Add( "TEST2" );
@@ -285,9 +314,9 @@ BOOST_AUTO_TEST_CASE( EnumClass )
     BOOST_CHECK( prop->HasChoices() );
 
     wxArrayInt values;
-    values.Add( static_cast<int>( D::enum_class::TESTA ) );
-    values.Add( static_cast<int>( D::enum_class::TESTB ) );
-    values.Add( static_cast<int>( D::enum_class::TESTC ) );
+    values.Add( D::enum_class::TESTA );
+    values.Add( D::enum_class::TESTB );
+    values.Add( D::enum_class::TESTC );
     wxArrayString labels;
     labels.Add( "TESTA" );
     labels.Add( "TESTB" );
@@ -322,7 +351,7 @@ BOOST_AUTO_TEST_CASE( Availability )
     BOOST_CHECK( propCond->Available( ptr ) );
 }
 
-// Using a different name for a parent propety
+// Using a different name for a parent property
 BOOST_AUTO_TEST_CASE( Alias )
 {
     ptr = &d;
@@ -334,6 +363,46 @@ BOOST_AUTO_TEST_CASE( Alias )
     ptr->Set( "point_alias", wxPoint( 300, 300 ) );
     BOOST_CHECK_EQUAL( *ptr->Get<wxPoint>( "point" ), wxPoint( 300, 300 ) );
     BOOST_CHECK_EQUAL( *ptr->Get<wxPoint>( "point_alias" ), wxPoint( 300, 300 ) );
+}
+
+// Property renaming
+BOOST_AUTO_TEST_CASE( Rename )
+{
+    PROPERTY_BASE* prop;
+
+    prop = propMgr.GetProperty( TYPE_HASH( D ), "bool" );
+    BOOST_CHECK_EQUAL( prop, nullptr );
+
+    prop = propMgr.GetProperty( TYPE_HASH( D ), "replaced_bool" );
+    BOOST_CHECK( prop );
+}
+
+// Different subset of enum values for a property
+BOOST_AUTO_TEST_CASE( AlternativeEnum )
+{
+    PROPERTY_BASE* prop = propMgr.GetProperty( TYPE_HASH( E ), "enumGlob" );
+    BOOST_CHECK( prop->HasChoices() );
+
+    wxArrayInt values;
+    values.Add( enum_glob::TEST1 );
+    values.Add( enum_glob::TEST3 );
+    wxArrayString labels;
+    labels.Add( "T1" );
+    labels.Add( "T3" );
+
+    const wxPGChoices& v = prop->Choices();
+    BOOST_CHECK_EQUAL( v.GetCount(), values.GetCount() );
+    BOOST_CHECK_EQUAL( v.GetCount(), labels.GetCount() );
+
+    for (int i = 0; i < values.GetCount(); ++i )
+    {
+        BOOST_CHECK_EQUAL( v.GetValue( i ), values[i] );
+    }
+
+    for (int i = 0; i < labels.GetCount(); ++i )
+    {
+        BOOST_CHECK_EQUAL( v.GetLabel( i ), labels[i] );
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()

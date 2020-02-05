@@ -26,6 +26,7 @@
 
 #include <map>
 #include <unordered_map>
+#include <set>
 #include <vector>
 #include <memory>
 #include <common.h>
@@ -37,6 +38,8 @@ class TYPE_CAST_BASE;
 using TYPE_ID = size_t;
 
 using PROPERTY_LIST = std::vector<PROPERTY_BASE*>;
+
+using PROPERTY_SET = std::set<std::pair<size_t, wxString>>;
 
 /**
  * Provides class metadata. Each class handled by PROPERTY_MANAGER
@@ -122,6 +125,18 @@ public:
     void AddProperty( PROPERTY_BASE* aProperty );
 
     /**
+     * Replaces an existing property for a specific type.
+     *
+     * It is used to modify a property that has been inherited from a base class.
+     * This method is used instead of AddProperty().
+     *
+     * @param aBase is the base class type the delivers the original property.
+     * @param aName is the name of the replaced property.
+     * @param aNew is the property replacing the inherited one.
+     */
+    void ReplaceProperty( size_t aBase, const wxString& aName, PROPERTY_BASE* aNew );
+
+    /**
      * Registers a type converter. Required prior TypeCast() usage.
      *
      * @param aCast is the type converter to register.
@@ -186,12 +201,15 @@ private:
         ///> All properties (both unique to the type and inherited)
         std::vector<PROPERTY_BASE*> m_allProperties;
 
+        ///> Replaced properties (TYPE_ID / name)
+        PROPERTY_SET m_replaced;
+
         ///> Recreates the list of properties
         void rebuild();
 
         ///> Traverses the class inheritance hierarchy bottom-to-top, gathering
         ///> all properties available to a type
-        void collectPropsRecur( PROPERTY_LIST& aResult ) const;
+        void collectPropsRecur( PROPERTY_LIST& aResult, PROPERTY_SET& aReplaced ) const;
     };
 
     ///> Returns metadata for a specific type
