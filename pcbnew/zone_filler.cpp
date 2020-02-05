@@ -241,6 +241,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         }
 
         zone.m_zone->SetFilledPolysList( poly );
+        zone.m_zone->CalculateFilledArea();
 
         if( aCheck && zone.m_zone->GetHashValue() != poly.GetHash() )
             outOfDate = true;

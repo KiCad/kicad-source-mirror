@@ -44,7 +44,8 @@
 
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
-        : BOARD_CONNECTED_ITEM( aParent, aInModule ? PCB_MODULE_ZONE_AREA_T : PCB_ZONE_AREA_T )
+        : BOARD_CONNECTED_ITEM( aParent, aInModule ? PCB_MODULE_ZONE_AREA_T : PCB_ZONE_AREA_T ),
+          m_area( 0.0 )
 {
     m_CornerSelection = nullptr;                // no corner is selected
     m_IsFilled = false;                         // fill status : true when the zone is filled
@@ -753,6 +754,9 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( MSG_PANEL_ITEM( _( "Fill Mode" ), msg, BROWN ) );
 
+    msg = MessageTextFromValue( aUnits, m_area, false, EDA_DATA_TYPE::AREA );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Filled Area" ), msg, BLUE ) );
+
     // Useful for statistics :
     msg.Printf( wxT( "%d" ), (int) m_HatchLines.size() );
     aList.emplace_back( MSG_PANEL_ITEM( _( "Hatch Lines" ), msg, BLUE ) );
@@ -1258,6 +1262,27 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly,
 
     return true;
 };
+
+
+double ZONE_CONTAINER::CalculateFilledArea()
+{
+    m_area = 0.0;
+
+    // Iterate over each outline polygon in the zone and then iterate over
+    // each hole it has to compute the total area.
+    for( int i = 0; i < m_FilledPolysList.OutlineCount(); i++ )
+    {
+        m_area += m_FilledPolysList.Outline( i ).Area();
+
+        for( int j = 0; m_FilledPolysList.HoleCount( i ); j++ )
+        {
+            m_area -= m_FilledPolysList.Hole( i, j ).Area();
+        }
+    }
+
+    return m_area;
+}
+
 
 /* Function TransformOutlinesShapeWithClearanceToPolygon
  * Convert the zone filled areas polygons to polygons

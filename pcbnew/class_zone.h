@@ -167,6 +167,24 @@ public:
     }
     int GetThermalReliefCopperBridge( D_PAD* aPad = NULL ) const;
 
+    /**
+     * Compute the area currently occupied by the zone fill.
+     *
+     * @return the currently filled area
+     */
+    double CalculateFilledArea();
+
+    /**
+     * Get the area currently occupied by the zone fill.
+     * This area is cached from the most recent call to CalculateFilledArea().
+     *
+     * @return the filled area
+     */
+    double GetFilledArea()
+    {
+        return m_area;
+    }
+
     bool IsFilled() const { return m_IsFilled; }
     void SetIsFilled( bool isFilled ) { m_IsFilled = isFilled; }
 
@@ -814,6 +832,8 @@ protected:
     std::vector<int>      m_insulatedIslands;
 
     bool                  m_hv45;           // constrain edges to horizontal, vertical or 45º
+
+    double                m_area;           // The filled zone area
 };
 
 

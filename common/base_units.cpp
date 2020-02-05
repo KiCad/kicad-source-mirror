@@ -124,25 +124,40 @@ double To_User_Unit( EDA_UNITS aUnit, double aValue, bool aUseMils )
  */
 
 // A lower-precision (for readability) version of StringFromValue()
-wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, bool aUseMils )
+wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, bool aUseMils, EDA_DATA_TYPE aType )
 {
     return MessageTextFromValue( aUnits, double( aValue ), aUseMils );
 }
 
 
 // A lower-precision (for readability) version of StringFromValue()
-wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, bool aUseMils )
+wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue,
+                               bool aUseMils, EDA_DATA_TYPE aType )
 {
     return MessageTextFromValue( aUnits, double( aValue ), aUseMils );
 }
 
 
 // A lower-precision (for readability) version of StringFromValue()
-wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aUseMils )
+wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aUseMils, EDA_DATA_TYPE aType )
 {
     wxString      text;
     const wxChar* format;
-    double        value = To_User_Unit( aUnits, aValue, aUseMils );
+    double        value = aValue;
+
+    switch( aType )
+    {
+    case EDA_DATA_TYPE::VOLUME:
+        value = To_User_Unit( aUnits, value, aUseMils );
+        // Fall through to continue computation
+
+    case EDA_DATA_TYPE::AREA:
+        value = To_User_Unit( aUnits, value, aUseMils );
+        // Fall through to continue computation
+
+    case EDA_DATA_TYPE::DISTANCE:
+        value = To_User_Unit( aUnits, value, aUseMils );
+    }
 
     if( aUnits == EDA_UNITS::INCHES )
     {
@@ -175,7 +190,7 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aUseMils )
     text.Printf( format, value );
     text += " ";
 
-    text += GetAbbreviatedUnitsLabel( aUnits, aUseMils );
+    text += GetAbbreviatedUnitsLabel( aUnits, aUseMils, aType );
 
     return text;
 }
@@ -449,18 +464,46 @@ wxString AngleToStringDegrees( double aAngle )
 }
 
 
-wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils )
+wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils, EDA_DATA_TYPE aType )
 {
     switch( aUnit )
     {
     case EDA_UNITS::INCHES:
         if( aUseMils )
-            return _( "mils" );
+        {
+            switch( aType )
+            {
+            case EDA_DATA_TYPE::DISTANCE:
+                return _( "mils" );
+            case EDA_DATA_TYPE::AREA:
+                return _( "sq. mils" );
+            case EDA_DATA_TYPE::VOLUME:
+                return _( "cu. mils" );
+            }
+        }
         else
-            return _( "in" );
+        {
+            switch( aType )
+            {
+            case EDA_DATA_TYPE::DISTANCE:
+                return _( "in" );
+            case EDA_DATA_TYPE::AREA:
+                return _( "sq. in" );
+            case EDA_DATA_TYPE::VOLUME:
+                return _( "cu. in" );
+            }
+        }
 
     case EDA_UNITS::MILLIMETRES:
-        return _( "mm" );
+        switch( aType )
+        {
+        case EDA_DATA_TYPE::DISTANCE:
+            return _( "mm" );
+        case EDA_DATA_TYPE::AREA:
+            return _( "sq. mm" );
+        case EDA_DATA_TYPE::VOLUME:
+            return _( "cu. mm" );
+        }
 
     case EDA_UNITS::PERCENT:
         return _( "%" );

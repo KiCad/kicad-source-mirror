@@ -69,6 +69,16 @@ typedef uint32_t timestamp_t;
 #define TEXT_ANGLE_HORIZ    0
 #define TEXT_ANGLE_VERT     900
 
+/**
+ * The type of unit.
+ */
+enum class EDA_DATA_TYPE
+{
+    DISTANCE = 0,
+    AREA     = 1,
+    VOLUME   = 2
+};
+
 enum class EDA_UNITS
 {
     INCHES = 0,

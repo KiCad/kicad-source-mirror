@@ -3889,7 +3889,10 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
     }
 
     if( !pts.IsEmpty() )
+    {
         zone->SetFilledPolysList( pts );
+        zone->CalculateFilledArea();
+    }
 
     // Ensure keepout and non copper zones do not have a net
     // (which have no sense for these zones)

@@ -107,13 +107,17 @@ wxString AngleToStringDegrees( double aAngle );
  *               message text.
  * @param aValue The double value to convert.
  * @param aUseMils Convert inch values to mils if true.
+ * @param aType Type of the unit being used (e.g. distance, area, etc.)
  * @return The converted string for display in user interface elements.
  */
-wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aUseMils = false );
+wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aUseMils = false,
+                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, bool aUseMils = false );
+wxString MessageTextFromValue( EDA_UNITS aUnits, int aValue, bool aUseMils = false,
+                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, bool aUseMils = false );
+wxString MessageTextFromValue( EDA_UNITS aUnits, long long int aValue, bool aUseMils = false,
+                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
  * Function StringFromValue
@@ -177,9 +181,12 @@ void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits, bool& 
  * Get the units string for a given units type.
  *
  * @param aUnits - The units requested.
+ * @param aUseMils - Use mils for the unit
+ * @param aType - The data type of the unit (e.g. distance, area, etc.)
  * @return The human readable units string.
  */
-wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils = false );
+wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils = false,
+                                   EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
 /**
  * Function FormatInternalUnits
