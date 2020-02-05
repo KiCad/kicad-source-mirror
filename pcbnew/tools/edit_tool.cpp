@@ -516,7 +516,9 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 {
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS ); } );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
+            } );
 
     for( EDA_ITEM* item : selection )
     {
@@ -572,7 +574,9 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS ); } );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
+            } );
 
     // Tracks & vias are treated in a special way:
     if( ( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) )( selection ) )
@@ -610,7 +614,10 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); }, nullptr, ! m_dragging );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+            },
+            nullptr, ! m_dragging );
 
     if( selection.Empty() )
         return 0;
@@ -691,7 +698,10 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); }, nullptr, ! m_dragging );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+            },
+            nullptr, !m_dragging );
 
     if( selection.Empty() )
         return 0;
@@ -771,8 +781,10 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 {
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); },
-            nullptr, ! m_dragging );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+            },
+            nullptr, !m_dragging );
 
     if( selection.Empty() )
         return 0;
@@ -818,8 +830,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
-    ROUTER_TOOL* routerTool = static_cast<ROUTER_TOOL*>
-            ( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
+    ROUTER_TOOL* routerTool = m_toolMgr->GetTool<ROUTER_TOOL>();
 
     // Do not delete items while actively routing.
     if( routerTool && routerTool->Router() && routerTool->Router()->RoutingInProgress() )
@@ -842,7 +853,9 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     {
         selectionCopy = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+            } );
     }
 
     bool isHover = selectionCopy.IsHover();
@@ -866,7 +879,10 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         // Second RequestSelection removes locked items but keeps a copy of their pointers
         selectionCopy = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-                { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED ); }, &lockedItems );
+                {
+                    EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED );
+                },
+                &lockedItems );
     }
 
 
@@ -952,7 +968,10 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 {
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
+            {
+                EditToolSelectionFilter( aCollector,
+                                      EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -1032,7 +1051,9 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     // Be sure that there is at least one item that we can modify
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+            } );
 
     if( selection.Empty() )
         return 0;
@@ -1056,9 +1077,20 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         orig_item = static_cast<BOARD_ITEM*>( item );
 
         if( m_editModules )
+        {
             dupe_item = editFrame->GetBoard()->GetFirstModule()->Duplicate( orig_item, increment );
+        }
+        else if( orig_item->GetParent() && orig_item->GetParent()->Type() == PCB_MODULE_T )
+        {
+            MODULE* parent = static_cast<MODULE*>( orig_item->GetParent() );
+
+            m_commit->Modify( parent );
+            dupe_item = parent->Duplicate( orig_item, false, true /* add to parent */ );
+        }
         else
+        {
             dupe_item = editFrame->GetBoard()->Duplicate( orig_item );
+        }
 
         if( dupe_item )
         {
@@ -1103,7 +1135,9 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 {
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+            } );
 
     if( selection.Empty() )
         return 0;

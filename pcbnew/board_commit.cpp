@@ -138,15 +138,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         {
             case CHT_ADD:
             {
-                if( !m_editModules )
-                {
-                    if( aCreateUndoEntry )
-                        undoList.PushItem( ITEM_PICKER( boardItem, UR_NEW ) );
-
-                    if( !( changeFlags & CHT_DONE ) )
-                        board->Add( boardItem );        // handles connectivity
-                }
-                else
+                if( m_editModules )
                 {
                     // modules inside modules are not supported yet
                     wxASSERT( boardItem->Type() != PCB_MODULE_T );
@@ -155,6 +147,20 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                     if( !( changeFlags & CHT_DONE ) )
                         board->Modules().front()->Add( boardItem );
+                }
+                else if( boardItem->Type() == PCB_MODULE_TEXT_T ||
+                         boardItem->Type() == PCB_MODULE_EDGE_T )
+                {
+                    wxASSERT( boardItem->GetParent() &&
+                              boardItem->GetParent()->Type() == PCB_MODULE_T );
+                }
+                else
+                {
+                    if( aCreateUndoEntry )
+                        undoList.PushItem( ITEM_PICKER( boardItem, UR_NEW ) );
+
+                    if( !( changeFlags & CHT_DONE ) )
+                        board->Add( boardItem );        // handles connectivity
                 }
 
                 view->Add( boardItem );
