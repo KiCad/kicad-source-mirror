@@ -65,7 +65,7 @@ void KiAssertFilter( const wxString &file, int line,
                                   const wxString &msg)
 {
     if( !msg.Contains( "Decimal separator mismatch" ) )
-        wxTheApp->OnAssertFailure( file, line, func, cond, msg );
+        wxTheApp->OnAssertFailure( file.c_str(), line, func.c_str(), cond.c_str(), msg.c_str() );
 }
 #endif
 

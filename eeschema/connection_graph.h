@@ -387,6 +387,15 @@ private:
     static SCH_CONNECTION* matchBusMember( SCH_CONNECTION* aBusConnection,
                                            SCH_CONNECTION* aSearch );
 
+    /**
+     * Builds a new default connection for the given item based on its properties.
+     * Handles strong drivers (power pins and labels) only
+     *
+     * @param aItem is an item that can generate a connection name
+     * @return a connection generated from the item, or nullptr if item is not valid
+     */
+    std::shared_ptr<SCH_CONNECTION> getDefaultConnection( SCH_ITEM* aItem, SCH_SHEET_PATH aSheet );
+
     void recacheSubgraphName( CONNECTION_SUBGRAPH* aSubgraph, const wxString& aOldName );
 
     /**
