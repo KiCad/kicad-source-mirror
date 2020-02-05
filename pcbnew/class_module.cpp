@@ -1520,12 +1520,21 @@ static struct MODULE_DESC
 {
     MODULE_DESC()
     {
+        wxPGChoices fpLayers;       // footprints might be placed only on F.Cu & B.Cu
+        fpLayers.Add( LSET::Name( F_Cu ), F_Cu );
+        fpLayers.Add( LSET::Name( B_Cu ), B_Cu );
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( MODULE );
         propMgr.AddTypeCast( new TYPE_CAST<MODULE, BOARD_ITEM> );
         propMgr.AddTypeCast( new TYPE_CAST<MODULE, BOARD_ITEM_CONTAINER> );
         propMgr.InheritsAfter( TYPE_HASH( MODULE ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( MODULE ), TYPE_HASH( BOARD_ITEM_CONTAINER ) );
+
+        auto layer = new PROPERTY_ENUM<MODULE, PCB_LAYER_ID, BOARD_ITEM>( _( "Layer" ),
+                    &MODULE::SetLayer, &MODULE::GetLayer );
+        layer->SetChoices( fpLayers );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _( "Layer" ), layer );
 
         propMgr.AddProperty( new PROPERTY<MODULE, wxString>( _( "Reference" ),
                     &MODULE::SetReference, &MODULE::GetReference ) );

@@ -1194,10 +1194,13 @@ static struct PAD_DESC
     PAD_DESC()
     {
         ENUM_MAP<PAD_SHAPE_T>::Instance()
+                .Map( PAD_SHAPE_CIRCLE, _( "Circle" ) )
                 .Map( PAD_SHAPE_RECT, _( "Rectangle" ) )
                 .Map( PAD_SHAPE_OVAL, _( "Oval" ) )
                 .Map( PAD_SHAPE_TRAPEZOID, _( "Trapezoid" ) )
-                .Map( PAD_SHAPE_ROUNDRECT, _( "Rounded Rectangular" ) );
+                .Map( PAD_SHAPE_ROUNDRECT, _( "Rounded Rectangle" ) )
+                .Map( PAD_SHAPE_CHAMFERED_RECT, _( "Chamfered Rectangle" ) )
+                .Map( PAD_SHAPE_CUSTOM, _( "Chamfered Rectangle" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( D_PAD );
