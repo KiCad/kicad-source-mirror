@@ -31,6 +31,7 @@
 
 #include <connectivity/connectivity_data.h>
 
+using namespace std::placeholders;
 
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype ), m_netinfo( NETINFO_LIST::OrphanedItem() )
@@ -206,6 +207,10 @@ static struct BOARD_CONNECTED_ITEM_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( BOARD_CONNECTED_ITEM );
         propMgr.InheritsAfter( TYPE_HASH( BOARD_CONNECTED_ITEM ), TYPE_HASH( BOARD_ITEM ) );
-        //propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, NETINFO_ITEM*>( "Net", &BOARD_CONNECTED_ITEM::SetNet, &BOARD_CONNECTED_ITEM::GetNet ) );
+
+        propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, int>( _( "Net" ),
+                    &BOARD_CONNECTED_ITEM::SetNetCode, &BOARD_CONNECTED_ITEM::GetNetCode ) );
+        propMgr.AddProperty( new PROPERTY<BOARD_CONNECTED_ITEM, wxString>( _( "Net class" ),
+                    NO_SETTER( BOARD_CONNECTED_ITEM, wxString ), &BOARD_CONNECTED_ITEM::GetNetClassName ) );
     }
 } _BOARD_CONNECTED_ITEM_DESC;

@@ -736,6 +736,11 @@ public:
      */
     NETINFO_ITEM* FindNet( const wxString& aNetname ) const;
 
+    const NETINFO_LIST& GetNetInfo() const
+    {
+        return m_NetInfo;
+    }
+
     NETINFO_LIST& GetNetInfo()
     {
         return m_NetInfo;

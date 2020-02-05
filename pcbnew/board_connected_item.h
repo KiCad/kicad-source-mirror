@@ -111,7 +111,12 @@ public:
      * Note also items (in fact pads) not on copper layers will have
      * their net code always set to 0 (not connected)
      */
-    bool SetNetCode( int aNetCode, bool aNoAssert=false );
+    bool SetNetCode( int aNetCode, bool aNoAssert );
+
+    void SetNetCode( int aNetCode )
+    {
+        SetNetCode( aNetCode, false );
+    }
 
     /**
      * Function GetNetname
