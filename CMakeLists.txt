@@ -402,8 +402,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
 if( MSVC )
-    # Fix our usage of "#ifdef DEBUG"
-    add_compile_definitions( $<$<CONFIG:Debug>:DEBUG> )
     # Disallow implicit linking for Boost
     add_definitions( -DBOOST_ALL_NO_LIB )
     # Disable MSVC's deprecation warnings
