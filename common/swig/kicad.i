@@ -96,6 +96,7 @@ principle should be easily implemented by adapting the current STL containers.
     #include <eda_text.h>
     #include <convert_to_biu.h>
     #include <id.h>
+    #include <build_version.h>
 %}
 
 // all the wx wrappers for wxString, wxPoint, wxRect, wxChar ..
@@ -116,6 +117,7 @@ principle should be easily implemented by adapting the current STL containers.
 %include colors_design_settings.h
 %include marker_base.h
 %include eda_text.h
+%include build_version.h
 
 // Cast time_t to known type for Python
 typedef long time_t;
