@@ -51,6 +51,10 @@ class PCBNEW_SELECTION;
 
 struct INTERACTIVE_PLACER_BASE
 {
+    virtual ~INTERACTIVE_PLACER_BASE()
+    {
+    }
+
     virtual std::unique_ptr<BOARD_ITEM> CreateItem() = 0;
     virtual void SnapItem( BOARD_ITEM *aItem );
     virtual bool PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit );
@@ -70,7 +74,7 @@ public:
      * Creates a tool with given id & name. The name must be unique. */
     PCB_TOOL_BASE( TOOL_ID aId, const std::string& aName ) :
         TOOL_INTERACTIVE ( aId, aName ),
-        m_editModules( false ) 
+        m_editModules( false )
     {};
 
     /**
@@ -79,7 +83,7 @@ public:
      * Creates a tool with given name. The name must be unique. */
     PCB_TOOL_BASE( const std::string& aName ) :
         TOOL_INTERACTIVE ( aName ),
-        m_editModules( false ) 
+        m_editModules( false )
     {};
 
     virtual ~PCB_TOOL_BASE() {};
@@ -133,28 +137,28 @@ protected:
     virtual void setTransitions() override;
 
 
-    KIGFX::PCB_VIEW* view() const 
-    { 
-        return static_cast<KIGFX::PCB_VIEW*>( getView() ); 
+    KIGFX::PCB_VIEW* view() const
+    {
+        return static_cast<KIGFX::PCB_VIEW*>( getView() );
     }
-    
-    KIGFX::VIEW_CONTROLS* controls() const 
-    { 
-        return getViewControls(); 
+
+    KIGFX::VIEW_CONTROLS* controls() const
+    {
+        return getViewControls();
     }
-    
-    PCB_BASE_EDIT_FRAME* frame() const 
-    { 
+
+    PCB_BASE_EDIT_FRAME* frame() const
+    {
         return getEditFrame<PCB_BASE_EDIT_FRAME>();
     }
-    
+
     BOARD* board() const { return getModel<BOARD>(); }
-    
+
     MODULE* module() const
     {
         return board()->GetFirstModule();
     }
-    
+
     const PCB_DISPLAY_OPTIONS& displayOptions() const;
     PCB_DRAW_PANEL_GAL* canvas() const;
     const PCBNEW_SELECTION& selection() const;

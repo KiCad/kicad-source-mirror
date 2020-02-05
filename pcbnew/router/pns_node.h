@@ -104,6 +104,10 @@ public:
 
     OBSTACLE_VISITOR( const ITEM* aItem );
 
+    virtual ~OBSTACLE_VISITOR()
+    {
+    }
+
     void SetWorld( const NODE* aNode, const NODE* aOverride = NULL );
 
     virtual bool operator()( ITEM* aCandidate ) = 0;

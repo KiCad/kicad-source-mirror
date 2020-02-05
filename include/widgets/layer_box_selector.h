@@ -43,6 +43,10 @@ protected:
 public:
     LAYER_SELECTOR();
 
+    virtual ~LAYER_SELECTOR()
+    {
+    }
+
     // Returns a color index from the layer id
     // Virtual function because GerbView uses its own functions in a derived class
     virtual COLOR4D GetLayerColor( LAYER_NUM aLayer ) const = 0;

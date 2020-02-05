@@ -74,7 +74,7 @@ public:
     };
 
     PROJECT();
-    ~PROJECT();
+    VTBL_ENTRY ~PROJECT();
 
     //-----<Cross Module API>----------------------------------------------------
 

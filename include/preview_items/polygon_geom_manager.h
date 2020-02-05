@@ -58,6 +58,10 @@ public:
 
         ///> Called when the polygon is complete
         virtual void OnComplete( const POLYGON_GEOM_MANAGER& aMgr ) = 0;
+
+        virtual ~CLIENT()
+        {
+        }
     };
 
     /**

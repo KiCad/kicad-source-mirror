@@ -39,6 +39,10 @@
 class APIEXPORT LIB_TREE_ITEM
 {
 public:
+    virtual ~LIB_TREE_ITEM()
+    {
+    }
+
     virtual LIB_ID GetLibId() const = 0;
 
     virtual wxString GetName() const = 0;

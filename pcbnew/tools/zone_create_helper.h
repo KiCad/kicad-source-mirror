@@ -71,7 +71,7 @@ public:
      */
     ZONE_CREATE_HELPER( DRAWING_TOOL& aTool, PARAMS& aParams );
 
-    ~ZONE_CREATE_HELPER();
+    virtual ~ZONE_CREATE_HELPER();
 
     /*
      * Interface for receiving POLYGON_GEOM_MANAGER update

@@ -40,6 +40,10 @@ class CTRACK_BALL : public CCAMERA
 
     explicit CTRACK_BALL( float aRangeScale );
 
+    virtual ~CTRACK_BALL()
+    {
+    }
+
     void Drag( const wxPoint &aNewMousePosition ) override;
 
     void Pan( const wxPoint &aNewMousePosition ) override;

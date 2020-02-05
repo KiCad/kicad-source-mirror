@@ -44,6 +44,10 @@ class PROGRESS_REPORTER
         PROGRESS_REPORTER( int aNumPhases );
         PROGRESS_REPORTER( const PROGRESS_REPORTER& ) = delete;
 
+        virtual ~PROGRESS_REPORTER()
+        {
+        }
+
         /**
          * initialize the aPhase virtual zone of the dialog progress bar
          */

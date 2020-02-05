@@ -290,6 +290,10 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
     struct PAD_PLACER : public INTERACTIVE_PLACER_BASE
     {
+        virtual ~PAD_PLACER()
+        {
+        }
+
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {
             D_PAD* pad = new D_PAD( m_board->GetFirstModule() );

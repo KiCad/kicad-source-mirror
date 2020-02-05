@@ -210,6 +210,10 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         }
     }
 
+    virtual ~DEFAULT_OBSTACLE_VISITOR()
+    {
+    }
+
     void SetCountLimit( int aLimit )
     {
         m_limitCount = aLimit;
@@ -482,6 +486,10 @@ struct HIT_VISITOR : public OBSTACLE_VISITOR
         OBSTACLE_VISITOR( NULL ),
         m_items( aTab ), m_point( aPoint )
     {}
+
+    virtual ~HIT_VISITOR()
+    {
+    }
 
     bool operator()( ITEM* aItem ) override
     {

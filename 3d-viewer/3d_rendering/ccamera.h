@@ -89,6 +89,10 @@ class CCAMERA
      */
     explicit CCAMERA( float aRangeScale );
 
+    virtual ~CCAMERA()
+    {
+    }
+
 
     /**
      *  Function GetRotationMatrix

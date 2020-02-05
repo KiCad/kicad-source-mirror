@@ -64,6 +64,10 @@ public:
     {
     }
 
+    virtual ~DRC_RUNNER()
+    {
+    }
+
     void Execute( BOARD& aBoard )
     {
         if( m_exec_context.m_verbose )
@@ -151,6 +155,10 @@ public:
     {
     }
 
+    virtual ~DRC_COURTYARD_OVERLAP_RUNNER()
+    {
+    }
+
 private:
     std::string getRunnerIntro() const override
     {
@@ -181,6 +189,10 @@ class DRC_COURTYARD_MISSING_RUNNER : public DRC_RUNNER
 {
 public:
     DRC_COURTYARD_MISSING_RUNNER( const EXECUTION_CONTEXT& aCtx ) : DRC_RUNNER( aCtx )
+    {
+    }
+
+    virtual ~DRC_COURTYARD_MISSING_RUNNER()
     {
     }
 

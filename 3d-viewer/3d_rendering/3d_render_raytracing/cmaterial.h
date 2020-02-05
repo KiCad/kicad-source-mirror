@@ -40,6 +40,10 @@ class  CPROCEDURALGENERATOR
 public:
     CPROCEDURALGENERATOR();
 
+    virtual ~CPROCEDURALGENERATOR()
+    {
+    }
+
     /**
      * @brief Generate - Generates a 3D vector based on the ray and
      * hit information depending on the implementation
@@ -62,6 +66,10 @@ public:
     CBOARDNORMAL() : CPROCEDURALGENERATOR() { m_scale = 1.0f; }
     CBOARDNORMAL( float aScale );
 
+    virtual ~CBOARDNORMAL()
+    {
+    }
+
     // Imported from CPROCEDURALGENERATOR
     SFVEC3F Generate( const RAY &aRay,
                       const HITINFO &aHitInfo ) const override;
@@ -81,6 +89,10 @@ public:
 
     CCOPPERNORMAL( float aScale, const CPROCEDURALGENERATOR *aBoardNormalGenerator );
 
+    virtual ~CCOPPERNORMAL()
+    {
+    }
+
     // Imported from CPROCEDURALGENERATOR
     SFVEC3F Generate( const RAY &aRay,
                       const HITINFO &aHitInfo ) const override;
@@ -96,6 +108,10 @@ class  CSOLDERMASKNORMAL : public CPROCEDURALGENERATOR
 public:
     CSOLDERMASKNORMAL() : CPROCEDURALGENERATOR() { m_copper_normal_generator = NULL; }
     CSOLDERMASKNORMAL( const CPROCEDURALGENERATOR *aCopperNormalGenerator );
+
+    virtual ~CSOLDERMASKNORMAL()
+    {
+    }
 
     // Imported from CPROCEDURALGENERATOR
     SFVEC3F Generate( const RAY &aRay,
@@ -115,6 +131,10 @@ public:
     }
 
     CPLASTICNORMAL( float aScale );
+
+    virtual ~CPLASTICNORMAL()
+    {
+    }
 
     // Imported from CPROCEDURALGENERATOR
     SFVEC3F Generate( const RAY &aRay,
@@ -136,6 +156,10 @@ public:
 
     CPLASTICSHINENORMAL( float aScale );
 
+    virtual ~CPLASTICSHINENORMAL()
+    {
+    }
+
     // Imported from CPROCEDURALGENERATOR
     SFVEC3F Generate( const RAY &aRay,
                       const HITINFO &aHitInfo ) const override;
@@ -154,6 +178,10 @@ public:
     }
 
     CMETALBRUSHEDNORMAL( float aScale );
+
+    virtual ~CMETALBRUSHEDNORMAL()
+    {
+    }
 
     // Imported from CPROCEDURALGENERATOR
     SFVEC3F Generate( const RAY &aRay,

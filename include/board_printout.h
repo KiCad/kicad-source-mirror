@@ -49,6 +49,10 @@ struct BOARD_PRINTOUT_SETTINGS : public PRINTOUT_SETTINGS
 {
     BOARD_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo );
 
+    virtual ~BOARD_PRINTOUT_SETTINGS()
+    {
+    }
+
     LSET m_layerSet;                   ///< Layers to print
     bool m_mirror;                      ///< Print mirrored
 

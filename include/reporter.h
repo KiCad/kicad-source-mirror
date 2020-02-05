@@ -134,6 +134,10 @@ public:
      * Returns true if the reporter client is non-empty.
      */
     virtual bool HasMessage() const = 0;
+
+    virtual ~REPORTER()
+    {
+    }
 };
 
 
@@ -149,6 +153,10 @@ public:
     WX_TEXT_CTRL_REPORTER( wxTextCtrl* aTextCtrl ) :
         REPORTER(),
         m_textCtrl( aTextCtrl )
+    {
+    }
+
+    virtual ~WX_TEXT_CTRL_REPORTER()
     {
     }
 
@@ -173,6 +181,10 @@ public:
     {
     }
 
+    virtual ~WX_STRING_REPORTER()
+    {
+    }
+
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
 
     bool HasMessage() const override;
@@ -191,6 +203,10 @@ public:
     WX_HTML_PANEL_REPORTER( WX_HTML_REPORT_PANEL* aPanel ) :
         REPORTER(),
         m_panel( aPanel )
+    {
+    }
+
+    virtual ~WX_HTML_PANEL_REPORTER()
     {
     }
 
@@ -216,6 +232,10 @@ public:
     {
     }
 
+    virtual ~NULL_REPORTER()
+    {
+    }
+
     static REPORTER& GetInstance();
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
@@ -232,6 +252,10 @@ class STDOUT_REPORTER : public REPORTER
 {
 public:
     STDOUT_REPORTER()
+    {
+    }
+
+    virtual ~STDOUT_REPORTER()
     {
     }
 

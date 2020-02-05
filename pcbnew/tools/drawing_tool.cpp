@@ -1593,6 +1593,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         VIA_PLACER( PCB_BASE_EDIT_FRAME* aFrame ) : m_gridHelper( aFrame )
         {}
 
+        virtual ~VIA_PLACER()
+        {
+        }
+
         TRACK* findTrack( VIA* aVia )
         {
             const LSET lset = aVia->GetLayerSet();

@@ -65,6 +65,10 @@ int MICROWAVE_TOOL::addMicrowaveFootprint( const TOOL_EVENT& aEvent )
                 m_itemType( aType )
         { };
 
+        virtual ~MICROWAVE_PLACER()
+        {
+        }
+
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {
             switch( m_itemType )

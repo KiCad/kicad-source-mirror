@@ -38,6 +38,10 @@ struct PRINTOUT_SETTINGS
         m_pageCount  = 0;
     }
 
+    virtual ~PRINTOUT_SETTINGS()
+    {
+    }
+
     virtual void Save( wxConfigBase* aConfig );
     virtual void Load( wxConfigBase* aConfig );
 

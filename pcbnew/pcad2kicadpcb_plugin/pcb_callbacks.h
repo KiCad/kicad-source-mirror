@@ -53,7 +53,11 @@ namespace PCAD2KICAD
     class PCB_CALLBACKS
     {
     public:
-        virtual PCB_LAYER_ID      GetKiCadLayer( int aPCadLayer ) = 0;
+        virtual ~PCB_CALLBACKS()
+        {
+        }
+
+        virtual PCB_LAYER_ID  GetKiCadLayer( int aPCadLayer ) = 0;
         virtual LAYER_TYPE_T  GetLayerType( int aPCadLayer ) = 0;
         virtual wxString      GetLayerNetNameRef( int aPCadLayer ) = 0;
         virtual int           GetNewTimestamp() = 0;

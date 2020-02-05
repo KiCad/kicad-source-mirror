@@ -233,6 +233,10 @@ public:
     RESCUER( PROJECT& aProject, SCH_SHEET_PATH* aCurrentSheet,
              EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackeEndType );
 
+    virtual ~RESCUER()
+    {
+    }
+
     /**
      * Writes out the rescue library. Called after successful PerformAction()s. If this fails,
      * undo the actions.
@@ -316,6 +320,10 @@ public:
     {
     }
 
+    virtual ~LEGACY_RESCUER()
+    {
+    }
+
     virtual void FindCandidates() override;
 
     virtual void InvokeDialog( wxWindow* aParent, bool aAskShowAgain ) override;
@@ -338,6 +346,10 @@ private:
 public:
     SYMBOL_LIB_TABLE_RESCUER( PROJECT& aProject, SCH_SHEET_PATH* aCurrentSheet,
                               EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackeEndType );
+
+    virtual ~SYMBOL_LIB_TABLE_RESCUER()
+    {
+    }
 
     virtual void FindCandidates() override;
 
