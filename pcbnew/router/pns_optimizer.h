@@ -171,7 +171,7 @@ private:
     void cacheAdd( ITEM* aItem, bool aIsStatic );
     void removeCachedSegments( LINE* aLine, int aStartVertex = 0, int aEndVertex = -1 );
 
-    bool checkConstraints(  int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement );
+    bool checkConstraints(  int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement );
 
 
 
@@ -210,7 +210,7 @@ public:
 
     virtual ~OPT_CONSTRAINT() {};
 
-    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement ) = 0;
+    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) = 0;
 
     int GetPriority() const
     {
@@ -240,7 +240,7 @@ public:
 
     virtual ~ANGLE_CONSTRAINT_45() {};
 
-    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
 
 private:
     int m_entryDirectionMask;
@@ -254,7 +254,7 @@ public:
         OPT_CONSTRAINT( aWorld ),
         m_allowedArea ( aAllowedArea ) {};
 
-        virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement ) override;
+        virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
 
 private:
     BOX2I m_allowedArea;
@@ -268,7 +268,7 @@ public:
         OPT_CONSTRAINT( aWorld )
         {};
 
-    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
 };
 
 class PRESERVE_VERTEX_CONSTRAINT: public OPT_CONSTRAINT
@@ -279,7 +279,7 @@ public:
         m_v( aV )
         {};
 
-    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
 private:
 
     VECTOR2I m_v;
