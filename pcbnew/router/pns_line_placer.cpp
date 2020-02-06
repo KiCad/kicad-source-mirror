@@ -1017,6 +1017,8 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     VECTOR2I p = aP;
     int eiDepth = -1;
 
+    printf(" **** lp move  %d %d ei %p\n", aP.x, aP.y, aEndItem );
+
     if( aEndItem && aEndItem->Owner() )
         eiDepth = static_cast<NODE*>( aEndItem->Owner() )->Depth();
 
@@ -1247,12 +1249,14 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, SEGMENT* aLatest )
 
 void LINE_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 {
-    m_sizes = aSizes;
-
-    if( !m_idle )
+    // initPlacement will kill the tail, don't do that unless the track size has changed
+    if( !m_idle && aSizes.TrackWidth() != m_sizes.TrackWidth() )
     {
+    m_sizes = aSizes;
         initPlacement();
     }
+
+    m_sizes = aSizes;
 }
 
 
