@@ -67,7 +67,7 @@ class GETTER_BASE
 public:
     virtual ~GETTER_BASE() {}
 
-    virtual T operator()( Owner* aOwner ) const = 0;
+    virtual T operator()( const Owner* aOwner ) const = 0;
 };
 
 template<typename Owner, typename T, typename FuncType>
@@ -77,9 +77,10 @@ public:
     GETTER( FuncType aFunc )
         : m_func( aFunc )
     {
+        wxCHECK( m_func, /*void*/ );
     }
 
-    T operator()( Owner* aOwner ) const override
+    T operator()( const Owner* aOwner ) const override
     {
         return ( aOwner->*m_func )();
     }
@@ -104,11 +105,11 @@ public:
     SETTER( FuncType aFunc )
         : m_func( aFunc )
     {
+        wxCHECK( m_func, /*void*/ );
     }
 
     void operator()( Owner* aOwner, T aValue ) override
     {
-        wxCHECK( m_func, /*void*/ );
         ( aOwner->*m_func )( aValue );
     }
 
@@ -121,7 +122,7 @@ template<typename Owner, typename T, typename Base = Owner>
 class METHOD
 {
 public:
-    constexpr static GETTER_BASE<Owner, T>* Wrap( T (Base::*aFunc)() )
+    static GETTER_BASE<Owner, T>* Wrap( T (Base::*aFunc)() )
     {
         return new GETTER<Owner, T, T (Base::*)()>( aFunc );
     }
@@ -143,7 +144,7 @@ public:
 
     constexpr static GETTER_BASE<Owner, T>* Wrap( const T (Base::*aFunc)() const )
     {
-        return new GETTER<Owner, T, const T (Base::*)() const>( aFunc );
+        return new GETTER<Owner, T, T (Base::*)() const>( aFunc );
     }
 
     constexpr static GETTER_BASE<Owner, T>* Wrap( const T& (Base::*aFunc)() const )
@@ -266,7 +267,7 @@ protected:
     }
 
     template<typename T>
-    T get( void* aObject )
+    T get( const void* aObject ) const
     {
         wxAny a = getter( aObject );
 
@@ -276,8 +277,9 @@ protected:
         return wxANY_AS( a, T );
     }
 
+private:
     virtual void setter( void* aObject, wxAny& aValue ) = 0;
-    virtual wxAny getter( void* aObject ) const = 0;
+    virtual wxAny getter( const void* aObject ) const = 0;
 
 private:
     const wxString         m_name;
@@ -293,8 +295,7 @@ template<typename Owner, typename T, typename Base = Owner>
 class PROPERTY : public PROPERTY_BASE
 {
 public:
-    typedef typename std::decay<T>::type BASE_TYPE;
-    typedef void (Base::*SETTER)( T );
+    using BASE_TYPE = typename std::decay<T>::type;
 
     template<typename SetType, typename GetType>
     PROPERTY( const wxString& aName,
@@ -357,9 +358,9 @@ protected:
         (*m_setter)( o, value );
     }
 
-    virtual wxAny getter( void* obj ) const override
+    virtual wxAny getter( const void* obj ) const override
     {
-        Owner* o = reinterpret_cast<Owner*>( obj );
+        const Owner* o = reinterpret_cast<const Owner*>( obj );
         wxAny res = (*m_getter)( o );
         return res;
     }
@@ -413,7 +414,7 @@ public:
         }
     }
 
-    virtual void setter( void* obj, wxAny& v ) override
+    void setter( void* obj, wxAny& v ) override
     {
         wxCHECK( !( PROPERTY<Owner, T, Base>::IsReadOnly() ), /*void*/ );
         Owner* o = reinterpret_cast<Owner*>( obj );
@@ -434,9 +435,9 @@ public:
         }
     }
 
-    virtual wxAny getter( void* obj ) const override
+    wxAny getter( const void* obj ) const override
     {
-        Owner* o = reinterpret_cast<Owner*>( obj );
+        const Owner* o = reinterpret_cast<const Owner*>( obj );
         wxAny res = static_cast<T>( (*PROPERTY<Owner, T, Base>::m_getter)( o ) );
         return res;
     }

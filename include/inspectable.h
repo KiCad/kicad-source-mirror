@@ -42,8 +42,7 @@ public:
     bool Set( PROPERTY_BASE* aProperty, wxAny& aValue )
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        TYPE_ID thisType = TYPE_HASH( *this );
-        void* object = propMgr.TypeCast( this, thisType, aProperty->OwnerHash() );
+        void* object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
 
         if( object )
             aProperty->setter( object, aValue );
@@ -55,8 +54,7 @@ public:
     bool Set( PROPERTY_BASE* aProperty, T aValue )
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        TYPE_ID thisType = TYPE_HASH( *this );
-        void* object = propMgr.TypeCast( this, thisType, aProperty->OwnerHash() );
+        void* object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
 
         if( object )
             aProperty->set<T>( object, aValue );
@@ -83,16 +81,15 @@ public:
         return object != nullptr;
     }
 
-    wxAny Get( PROPERTY_BASE* aProperty )
+    wxAny Get( PROPERTY_BASE* aProperty ) const
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        TYPE_ID thisType = TYPE_HASH( *this );
-        void* object = propMgr.TypeCast( this, thisType, aProperty->OwnerHash() );
+        const void* object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
         return object ? aProperty->getter( object ) : wxAny();
     }
 
     template<typename T>
-    T Get( PROPERTY_BASE* aProperty )
+    T Get( PROPERTY_BASE* aProperty ) const
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         TYPE_ID thisType = TYPE_HASH( *this );
@@ -101,7 +98,7 @@ public:
     }
 
     template<typename T>
-    boost::optional<T> Get( const wxString& aProperty )
+    boost::optional<T> Get( const wxString& aProperty ) const
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         TYPE_ID thisType = TYPE_HASH( *this );
@@ -110,7 +107,7 @@ public:
 
         if( prop )
         {
-            void* object = propMgr.TypeCast( this, thisType, prop->OwnerHash() );
+            const void* object = propMgr.TypeCast( this, thisType, prop->OwnerHash() );
 
             if( object )
                 ret = prop->get<T>( object );

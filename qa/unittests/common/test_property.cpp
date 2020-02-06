@@ -127,7 +127,8 @@ static struct CLASS_A_DESC
         propMgr.AddProperty( new PROPERTY<A, wxPoint>( "point", &A::setPoint, &A::getPoint ) );
         propMgr.AddProperty( new PROPERTY<A, wxPoint>( "point2", &A::setPoint, &A::getPoint2 ) );
 
-        propMgr.AddProperty( new PROPERTY<A, wxPoint>( "point3", &A::setPoint3, &A::getPoint3 ) );
+        // TODO non-const getters are not supported
+        //propMgr.AddProperty( new PROPERTY<A, wxPoint>( "point3", &A::setPoint3, &A::getPoint3 ) );
         propMgr.AddProperty( new PROPERTY<A, wxPoint>( "point4", &A::setPoint4, &A::getPoint4 ) );
     }
 } _CLASS_A_DESC;
