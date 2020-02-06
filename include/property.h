@@ -273,11 +273,11 @@ protected:
         if ( !( std::is_enum<T>::value && a.CheckType<int>() ) && !a.CheckType<T>() )
             throw std::invalid_argument( "Invalid requested type" );
 
-        return wxANY_AS(a, T);
+        return wxANY_AS( a, T );
     }
 
     virtual void setter( void* aObject, wxAny& aValue ) = 0;
-    virtual wxAny getter( void* aObject ) const = 0;
+    virtual wxAny getter( const void* aObject ) const = 0;
 
 private:
     const wxString         m_name;

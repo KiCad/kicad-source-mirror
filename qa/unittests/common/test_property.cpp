@@ -1,5 +1,5 @@
 /*
-* This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
