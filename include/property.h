@@ -277,7 +277,7 @@ protected:
     }
 
     virtual void setter( void* aObject, wxAny& aValue ) = 0;
-    virtual wxAny getter( const void* aObject ) const = 0;
+    virtual wxAny getter( void* aObject ) const = 0;
 
 private:
     const wxString         m_name;

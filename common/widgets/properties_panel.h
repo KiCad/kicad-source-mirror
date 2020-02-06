@@ -66,6 +66,7 @@ protected:
     // Event handlers
     virtual void valueChanging( wxPropertyGridEvent& aEvent ) {}
     virtual void valueChanged( wxPropertyGridEvent& aEvent ) {}
+    void onShow( wxShowEvent& aEvent );
 
     std::vector<PROPERTY_BASE*> m_displayed;
     wxPropertyGrid* m_grid;

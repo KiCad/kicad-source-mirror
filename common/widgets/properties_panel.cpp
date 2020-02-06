@@ -43,6 +43,7 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame )
 
     Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanged ), NULL, this );
     Connect( wxEVT_PG_CHANGING, wxPropertyGridEventHandler( PROPERTIES_PANEL::valueChanging ), NULL, this );
+    Connect( wxEVT_SHOW, wxShowEventHandler( PROPERTIES_PANEL::onShow ), NULL, this );
 }
 
 
@@ -146,4 +147,11 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
     }
 
     m_grid->FitColumns();
+}
+
+
+void PROPERTIES_PANEL::onShow( wxShowEvent& aEvent )
+{
+    if( aEvent.IsShown() )
+        Update();
 }
