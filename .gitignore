@@ -95,3 +95,5 @@ __pycache__
 
 # Visual Studio
 .vs/
+.editorconfig
+CMakeSettings.json
