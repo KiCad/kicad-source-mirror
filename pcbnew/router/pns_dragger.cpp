@@ -224,7 +224,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
 
     case DM_VIA: // fixme...
     {
-        dumbDragVia( m_initialVia, m_lastNode, aP );
+        dragViaMarkObstacles( m_initialVia, m_lastNode, aP );
 
         break;
     }
@@ -239,7 +239,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
 }
 
 
-void DRAGGER::dumbDragVia( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP )
+void DRAGGER::dragViaMarkObstacles( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP )
 {
     m_draggedItems.Clear();
 
@@ -277,6 +277,47 @@ void DRAGGER::dumbDragVia( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2
         }
     }
 }
+
+
+void DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP )
+{
+    m_draggedItems.Clear();
+
+    ITEM_SET fanout = findViaFanoutByHandle( aNode, aHandle );
+
+    if( fanout.Empty() )
+    {
+        return;
+    }
+    
+    for( ITEM* item : fanout.Items() )
+    {
+        if( const LINE* l = dyn_cast<const LINE*>( item ) )
+        {
+            LINE origLine( *l );
+            LINE draggedLine( *l );
+
+            draggedLine.DragCorner( aP, origLine.CLine().Find( aHandle.pos ), 0, m_freeAngleMode );
+            draggedLine.ClearSegmentLinks();
+
+            m_draggedItems.Add( draggedLine );
+
+            m_lastNode->Remove( origLine );
+            m_lastNode->Add( draggedLine );
+        }
+        else if ( VIA *via = dyn_cast<VIA*>( item ) )
+        {
+            auto nvia = Clone( *via );
+
+            nvia->SetPos( aP );
+            m_draggedItems.Add( nvia.get() );
+
+            m_lastNode->Remove( via );
+            m_lastNode->Add( std::move( nvia ) );
+        }
+    }
+}
+
 
 void DRAGGER::optimizeAndUpdateDraggedLine( LINE& dragged, const VECTOR2I& aP )
 {
@@ -367,6 +408,12 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
             optimizeAndUpdateDraggedLine( dragged, aP );
         }
     break;
+    }
+    case DM_VIA: // fixme...
+    {
+        dragViaWalkaround( m_initialVia, m_lastNode, aP );
+
+        break;
     }
     }
 
