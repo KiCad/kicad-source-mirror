@@ -49,8 +49,16 @@ void COMMON_CONTROL::Reset( RESET_REASON aReason )
 
 int COMMON_CONTROL::ConfigurePaths( const TOOL_EVENT& aEvent )
 {
-    KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
-    kiface->CreateWindow( m_frame, DIALOG_CONFIGUREPATHS, &m_frame->Kiway() );
+    try     // _pcbnew.kiface must be available: it contains the configure path dialog.
+    {
+        KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
+        kiface->CreateWindow( m_frame, DIALOG_CONFIGUREPATHS, &m_frame->Kiway() );
+    }
+    catch( ... )
+    {
+        // Do nothing here.
+        // A error message is displayed after trying to load _pcbnew.kiface.
+    }
     return 0;
 }
 
@@ -59,13 +67,32 @@ int COMMON_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
 {
     if( aEvent.IsAction( &ACTIONS::showSymbolLibTable ) )
     {
-        KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
-        kiface->CreateWindow( m_frame, DIALOG_SCH_LIBRARY_TABLE, &m_frame->Kiway() );
+        try     // Sch frame was not available, try to start it
+        {
+            KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
+            kiface->CreateWindow( m_frame, DIALOG_SCH_LIBRARY_TABLE, &m_frame->Kiway() );
+        }
+        catch( ... )
+        {
+            // _eeschema.kiface is not available: it contains the library table dialog.
+            // Do nothing here.
+            // A error message is displayed after trying to load _eeschema.kiface.
+        }
     }
     else if( aEvent.IsAction( &ACTIONS::showFootprintLibTable ) )
     {
-        KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
-        kiface->CreateWindow( m_frame, DIALOG_PCB_LIBRARY_TABLE, &m_frame->Kiway() );
+
+        try     // Pcb frame was not available, try to start it
+        {
+            KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
+            kiface->CreateWindow( m_frame, DIALOG_PCB_LIBRARY_TABLE, &m_frame->Kiway() );
+        }
+        catch( ... )
+        {
+            // _pcbnew.kiface is not available: it contains the library table dialog.
+            // Do nothing here.
+            // A error message is displayed after trying to load _pcbnew.kiface.
+        }
     }
 
     return 0;
@@ -87,7 +114,7 @@ int COMMON_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     // any platform.
     if( wxWindow::FindFocus() != editor )
         editor->SetFocus();
-    
+
     return 0;
 }
 
@@ -124,7 +151,7 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 
         if( !helpFile )
         {
-            msg = wxString::Format( _( "Html or pdf help file \n%s\nor\n%s could not be found." ), 
+            msg = wxString::Format( _( "Html or pdf help file \n%s\nor\n%s could not be found." ),
                                     names[0], names[1] );
             wxMessageBox( msg );
             return -1;
@@ -133,9 +160,9 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
     else
     {
         wxString base_name = m_frame->help_name();
-        
+
         helpFile = SearchHelpFileFullPath( search, base_name );
-    
+
         if( !helpFile )
         {
             msg = wxString::Format( _( "Help file \"%s\" could not be found." ), base_name );
@@ -179,7 +206,7 @@ void COMMON_CONTROL::setTransitions()
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showSymbolEditor.MakeEvent() );
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showFootprintBrowser.MakeEvent() );
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showFootprintEditor.MakeEvent() );
-    
+
     Go( &COMMON_CONTROL::ShowHelp,           ACTIONS::gettingStarted.MakeEvent() );
     Go( &COMMON_CONTROL::ShowHelp,           ACTIONS::help.MakeEvent() );
     Go( &COMMON_CONTROL::ListHotKeys,        ACTIONS::listHotKeys.MakeEvent() );
