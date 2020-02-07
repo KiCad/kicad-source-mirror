@@ -27,6 +27,7 @@
 
 
 #define LIST_COLUMN_WIDTH_KEY wxT( "SelectorColumnWidth" )
+#define PINNED_ITEMS_KEY      wxT( "PinnedItems" )
 
 static const int kDataViewIndent = 20;
 
@@ -43,9 +44,9 @@ wxDataViewItem LIB_TREE_MODEL_ADAPTER::ToItem( LIB_TREE_NODE const* aNode )
 /**
  * Convert wxDataViewItem -> CMP_TREE_NODE
  */
-LIB_TREE_NODE const* LIB_TREE_MODEL_ADAPTER::ToNode( wxDataViewItem aItem )
+LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ToNode( wxDataViewItem aItem )
 {
-    return static_cast<LIB_TREE_NODE const*>( aItem.GetID() );
+    return static_cast<LIB_TREE_NODE*>( aItem.GetID() );
 }
 
 
@@ -57,9 +58,9 @@ unsigned int LIB_TREE_MODEL_ADAPTER::IntoArray( LIB_TREE_NODE const& aNode,
 {
     unsigned int n = 0;
 
-    for( auto const& child: aNode.Children )
+    for( auto const& child: aNode.m_Children )
     {
-        if( child->Score > 0 )
+        if( child->m_Score > 0 )
         {
             aChildren.Add( ToItem( &*child ) );
             ++n;
@@ -91,6 +92,10 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER()
 
     if( m_config->Read( m_configPrefix + LIST_COLUMN_WIDTH_KEY, &colWidth ) )
         m_colWidths[PART_COL] = colWidth;
+
+    // JEY TODO NEW SETTINGS ARCH: read pinned items array....
+    //for( UFT8 pinnedItem : pinnedItems )
+    //   m_pinnedLibIDs.insert( pinnedItem );
 }
 
 
@@ -108,6 +113,20 @@ void LIB_TREE_MODEL_ADAPTER::SaveColWidths()
     else
     {
         wxLogDebug( "Error saving column size, tree view doesn't exist" );
+    }
+}
+
+void LIB_TREE_MODEL_ADAPTER::SavePinnedItems()
+{
+    // JEY TODO NEW SETTINGS ARCH: clear pinned items array in settings....
+
+    for( auto& child: m_tree.m_Children )
+    {
+        if( child->m_Pinned )
+        {
+            UTF8 pinnedItem = child->m_LibId.Format();
+            // JEY TODO NEW SETTINGS ARCH: add pinned entry to settings array....
+        }
     }
 }
 
@@ -137,6 +156,8 @@ void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( wxString const& aNodeName, wxString c
 {
     LIB_TREE_NODE_LIB& lib_node = m_tree.AddLib( aNodeName, aDesc );
 
+    lib_node.m_Pinned = m_pinnedLibIDs.count( lib_node.m_LibId.Format() ) > 0;
+
     for( LIB_TREE_ITEM* item: aItemList )
         lib_node.AddItem( item );
 
@@ -147,6 +168,12 @@ void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( wxString const& aNodeName, wxString c
 void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
 {
     m_tree.ResetScore();
+
+    for( auto& child: m_tree.m_Children )
+    {
+        if( child->m_Pinned )
+            child->m_Score *= 2;
+    }
 
     wxStringTokenizer tokenizer( aSearch );
 
@@ -267,21 +294,27 @@ LIB_ID LIB_TREE_MODEL_ADAPTER::GetAliasFor( const wxDataViewItem& aSelection ) c
     if( !node )
         return emptyId;
 
-    return node->LibId;
+    return node->m_LibId;
 }
 
 
 int LIB_TREE_MODEL_ADAPTER::GetUnitFor( const wxDataViewItem& aSelection ) const
 {
     const LIB_TREE_NODE* node = ToNode( aSelection );
-    return node ? node->Unit : 0;
+    return node ? node->m_Unit : 0;
 }
 
 
 LIB_TREE_NODE::TYPE LIB_TREE_MODEL_ADAPTER::GetTypeFor( const wxDataViewItem& aSelection ) const
 {
     const LIB_TREE_NODE* node = ToNode( aSelection );
-    return node ? node->Type : LIB_TREE_NODE::INVALID;
+    return node ? node->m_Type : LIB_TREE_NODE::INVALID;
+}
+
+
+LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::GetTreeNodeFor( const wxDataViewItem& aSelection ) const
+{
+    return ToNode( aSelection );
 }
 
 
@@ -289,8 +322,8 @@ int LIB_TREE_MODEL_ADAPTER::GetItemCount() const
 {
     int n = 0;
 
-    for( const std::unique_ptr<LIB_TREE_NODE>& lib: m_tree.Children )
-        n += lib->Children.size();
+    for( const std::unique_ptr<LIB_TREE_NODE>& lib: m_tree.m_Children )
+        n += lib->m_Children.size();
 
     return n;
 }
@@ -298,18 +331,18 @@ int LIB_TREE_MODEL_ADAPTER::GetItemCount() const
 
 wxDataViewItem LIB_TREE_MODEL_ADAPTER::FindItem( const LIB_ID& aLibId )
 {
-    for( auto& lib: m_tree.Children )
+    for( auto& lib: m_tree.m_Children )
     {
-        if( lib->Name != aLibId.GetLibNickname() )
+        if( lib->m_Name != aLibId.GetLibNickname() )
             continue;
 
         // if part name is not specified, return the library node
         if( aLibId.GetLibItemName() == "" )
             return ToItem( lib.get() );
 
-        for( auto& alias: lib->Children )
+        for( auto& alias: lib->m_Children )
         {
-            if( alias->Name == aLibId.GetLibItemName() )
+            if( alias->m_Name == aLibId.GetLibItemName() )
                 return ToItem( alias.get() );
         }
 
@@ -325,8 +358,8 @@ unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( wxDataViewItem const&   aItem,
 {
     auto node = ( aItem.IsOk() ? ToNode( aItem ) : &m_tree );
 
-    if( node->Type != LIB_TREE_NODE::TYPE::LIBID
-            || ( m_show_units && node->Type == LIB_TREE_NODE::TYPE::LIBID ) )
+    if( node->m_Type != LIB_TREE_NODE::TYPE::LIBID
+            || ( m_show_units && node->m_Type == LIB_TREE_NODE::TYPE::LIBID ) )
         return IntoArray( *node, aChildren );
     else
         return 0;
@@ -342,18 +375,18 @@ bool LIB_TREE_MODEL_ADAPTER::HasContainerColumns( wxDataViewItem const& aItem ) 
 bool LIB_TREE_MODEL_ADAPTER::IsContainer( wxDataViewItem const& aItem ) const
 {
     auto node = ToNode( aItem );
-    return node ? node->Children.size() : true;
+    return node ? node->m_Children.size() : true;
 }
 
 
 wxDataViewItem LIB_TREE_MODEL_ADAPTER::GetParent( wxDataViewItem const& aItem ) const
 {
     auto node = ToNode( aItem );
-    auto parent = node ? node->Parent : nullptr;
+    auto parent = node ? node->m_Parent : nullptr;
 
     // wxDataViewModel has no root node, but rather top-level elements have
     // an invalid (null) parent.
-    if( !node || !parent || parent->Type == LIB_TREE_NODE::TYPE::ROOT )
+    if( !node || !parent || parent->m_Type == LIB_TREE_NODE::TYPE::ROOT )
         return ToItem( nullptr );
     else
         return ToItem( parent );
@@ -377,10 +410,10 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
     {
     default:    // column == -1 is used for default Compare function
     case 0:
-        aVariant = node->Name;
+        aVariant = node->m_Name;
         break;
     case 1:
-        aVariant = node->Desc;
+        aVariant = node->m_Desc;
         break;
     }
 }
@@ -396,13 +429,13 @@ bool LIB_TREE_MODEL_ADAPTER::GetAttr( wxDataViewItem const&   aItem,
     auto node = ToNode( aItem );
     wxASSERT( node );
 
-    if( node->Type != LIB_TREE_NODE::LIBID )
+    if( node->m_Type != LIB_TREE_NODE::LIBID )
     {
         // Currently only aliases are formatted at all
         return false;
     }
 
-    if( !node->IsRoot && aCol == 0 )
+    if( !node->m_IsRoot && aCol == 0 )
     {
         // Names of non-root aliases are italicized
         aAttr.SetItalic( true );
@@ -419,14 +452,14 @@ void LIB_TREE_MODEL_ADAPTER::FindAndExpand( LIB_TREE_NODE& aNode,
                                             std::function<bool( LIB_TREE_NODE const* )> aFunc,
                                             LIB_TREE_NODE** aHighScore )
 {
-    for( auto& node: aNode.Children )
+    for( auto& node: aNode.m_Children )
     {
         if( aFunc( &*node ) )
         {
             auto item = wxDataViewItem( &*node );
             m_widget->ExpandAncestors( item );
 
-            if( !(*aHighScore) || node->Score > (*aHighScore)->Score )
+            if( !(*aHighScore) || node->m_Score > (*aHighScore)->m_Score )
                 (*aHighScore) = &*node;
         }
 
@@ -443,7 +476,7 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
                    []( LIB_TREE_NODE const* n )
                    {
                        // return leaf nodes with some level of matching
-                       return n->Type == LIB_TREE_NODE::TYPE::LIBID && n->Score > 1;
+                       return n->m_Type == LIB_TREE_NODE::TYPE::LIBID && n->m_Score > 1;
                    },
                    &highScore );
 
@@ -461,10 +494,10 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowPreselect()
     FindAndExpand( m_tree,
             [&]( LIB_TREE_NODE const* n )
             {
-                if( n->Type == LIB_TREE_NODE::LIBID && ( n->Children.empty() || !m_preselect_unit ) )
-                    return m_preselect_lib_id == n->LibId;
-                else if( n->Type == LIB_TREE_NODE::UNIT && m_preselect_unit )
-                    return m_preselect_lib_id == n->Parent->LibId && m_preselect_unit == n->Unit;
+                if( n->m_Type == LIB_TREE_NODE::LIBID && ( n->m_Children.empty() || !m_preselect_unit ) )
+                    return m_preselect_lib_id == n->m_LibId;
+                else if( n->m_Type == LIB_TREE_NODE::UNIT && m_preselect_unit )
+                    return m_preselect_lib_id == n->m_Parent->m_LibId && m_preselect_unit == n->m_Unit;
                 else
                     return false;
             },
@@ -481,8 +514,8 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowSingleLibrary()
     FindAndExpand( m_tree,
                    []( LIB_TREE_NODE const* n )
                    {
-                       return n->Type == LIB_TREE_NODE::TYPE::LIBID &&
-                              n->Parent->Parent->Children.size() == 1;
+                       return n->m_Type == LIB_TREE_NODE::TYPE::LIBID &&
+                              n->m_Parent->m_Parent->m_Children.size() == 1;
                    },
                    &highScore );
 

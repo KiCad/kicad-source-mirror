@@ -61,7 +61,9 @@ public:
     int DeleteFootprint( const TOOL_EVENT& aEvent );
     int ImportFootprint( const TOOL_EVENT& aEvent );
     int ExportFootprint( const TOOL_EVENT& aEvent );
-    
+
+    int PinLibrary( const TOOL_EVENT& aEvent );
+    int UnpinLibrary( const TOOL_EVENT& aEvent );
     int ToggleFootprintTree( const TOOL_EVENT& aEvent );
     int Properties( const TOOL_EVENT& aEvent );
 

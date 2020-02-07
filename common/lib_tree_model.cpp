@@ -51,10 +51,10 @@ static int matchPosScore(int aPosition, int aMaximum)
 
 void LIB_TREE_NODE::ResetScore()
 {
-    for( auto& child: Children )
+    for( auto& child: m_Children )
         child->ResetScore();
 
-    Score = kLowestDefaultScore;
+    m_Score = kLowestDefaultScore;
 }
 
 
@@ -64,62 +64,65 @@ void LIB_TREE_NODE::AssignIntrinsicRanks( bool presorted )
 
     if( presorted )
     {
-        int max = Children.size() - 1;
+        int max = m_Children.size() - 1;
 
         for( int i = 0; i <= max; ++i )
-            Children[i]->IntrinsicRank = max - i;
+            m_Children[i]->m_IntrinsicRank = max - i;
     }
     else
     {
-        for( auto const& node: Children )
+        for( auto const& node: m_Children )
             sort_buf.push_back( &*node );
 
         std::sort( sort_buf.begin(), sort_buf.end(),
                 []( LIB_TREE_NODE* a, LIB_TREE_NODE* b ) -> bool
-                    { return StrNumCmp( a->Name, b->Name, true ) > 0; } );
+                {
+                    return StrNumCmp( a->m_Name, b->m_Name, true ) > 0;
+                } );
 
         for( int i = 0; i < (int) sort_buf.size(); ++i )
-            sort_buf[i]->IntrinsicRank = i;
+            sort_buf[i]->m_IntrinsicRank = i;
     }
 }
 
 
 void LIB_TREE_NODE::SortNodes()
 {
-    std::sort( Children.begin(), Children.end(),
+    std::sort( m_Children.begin(), m_Children.end(),
                []( std::unique_ptr<LIB_TREE_NODE>& a, std::unique_ptr<LIB_TREE_NODE>& b )
                {
                    return Compare( *a, *b ) > 0;
                } );
 
-    for( std::unique_ptr<LIB_TREE_NODE>& node: Children )
+    for( std::unique_ptr<LIB_TREE_NODE>& node: m_Children )
         node->SortNodes();
 }
 
 
 int LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& aNode2 )
 {
-    if( aNode1.Type != aNode2.Type )
+    if( aNode1.m_Type != aNode2.m_Type )
         return 0;
 
-    if( aNode1.Score != aNode2.Score )
-        return aNode1.Score - aNode2.Score;
+    if( aNode1.m_Score != aNode2.m_Score )
+        return aNode1.m_Score - aNode2.m_Score;
 
-    if( aNode1.Parent != aNode2.Parent )
+    if( aNode1.m_Parent != aNode2.m_Parent )
         return 0;
 
-    return aNode1.IntrinsicRank - aNode2.IntrinsicRank;
+    return aNode1.m_IntrinsicRank - aNode2.m_IntrinsicRank;
 }
 
 
 LIB_TREE_NODE::LIB_TREE_NODE()
-    : Parent( nullptr ),
-      Type( INVALID ),
-      IntrinsicRank( 0 ),
-      Score( kLowestDefaultScore ),
-      Normalized( false ),
-      Unit( 0 ),
-      IsRoot( false )
+    : m_Parent( nullptr ),
+      m_Type( INVALID ),
+      m_IntrinsicRank( 0 ),
+      m_Score( kLowestDefaultScore ),
+      m_Pinned( false ),
+      m_Normalized( false ),
+      m_Unit( 0 ),
+      m_IsRoot( false )
 {}
 
 
@@ -136,36 +139,36 @@ LIB_TREE_NODE_UNIT::LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
         locale = Pgm().GetLocale();
     }
 
-    Parent = aParent;
-    Type = UNIT;
+    m_Parent = aParent;
+    m_Type = UNIT;
 
-    Unit = aUnit;
-    LibId = aParent->LibId;
+    m_Unit = aUnit;
+    m_LibId = aParent->m_LibId;
 
-    Name = namePrefix + " " + aItem->GetUnitReference( aUnit );
-    Desc = wxEmptyString;
-    MatchName = wxEmptyString;
+    m_Name = namePrefix + " " + aItem->GetUnitReference( aUnit );
+    m_Desc = wxEmptyString;
+    m_MatchName = wxEmptyString;
 
-    IntrinsicRank = -aUnit;
+    m_IntrinsicRank = -aUnit;
 }
 
 
 LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem )
 {
-    Type = LIBID;
-    Parent = aParent;
+    m_Type = LIBID;
+    m_Parent = aParent;
 
-    LibId.SetLibNickname( aItem->GetLibNickname() );
-    LibId.SetLibItemName( aItem->GetName () );
+    m_LibId.SetLibNickname( aItem->GetLibNickname() );
+    m_LibId.SetLibItemName( aItem->GetName () );
 
-    Name = aItem->GetName();
-    Desc = aItem->GetDescription();
+    m_Name = aItem->GetName();
+    m_Desc = aItem->GetDescription();
 
-    MatchName = aItem->GetName();
-    SearchText = aItem->GetSearchText();
-    Normalized = false;
+    m_MatchName = aItem->GetName();
+    m_SearchText = aItem->GetSearchText();
+    m_Normalized = false;
 
-    IsRoot = aItem->IsRoot();
+    m_IsRoot = aItem->IsRoot();
 
     if( aItem->GetUnitCount() > 1 )
     {
@@ -178,7 +181,7 @@ LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITE
 LIB_TREE_NODE_UNIT& LIB_TREE_NODE_LIB_ID::AddUnit( LIB_TREE_ITEM* aItem, int aUnit )
 {
     LIB_TREE_NODE_UNIT* unit = new LIB_TREE_NODE_UNIT( this, aItem, aUnit );
-    Children.push_back( std::unique_ptr<LIB_TREE_NODE>( unit ) );
+    m_Children.push_back( std::unique_ptr<LIB_TREE_NODE>( unit ) );
     return *unit;
 }
 
@@ -187,15 +190,15 @@ void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
 {
     // Update is called when the names match, so just update the other fields.
 
-    LibId.SetLibNickname( aItem->GetLibId().GetLibNickname() );
+    m_LibId.SetLibNickname( aItem->GetLibId().GetLibNickname() );
 
-    Desc = aItem->GetDescription();
+    m_Desc = aItem->GetDescription();
 
-    SearchText = aItem->GetSearchText();
-    Normalized = false;
+    m_SearchText = aItem->GetSearchText();
+    m_Normalized = false;
 
-    IsRoot = aItem->IsRoot();
-    Children.clear();
+    m_IsRoot = aItem->IsRoot();
+    m_Children.clear();
 
     for( int u = 1; u <= aItem->GetUnitCount(); ++u )
         AddUnit( aItem, u );
@@ -204,14 +207,14 @@ void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
 
 void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 {
-    if( Score <= 0 )
+    if( m_Score <= 0 )
         return; // Leaf nodes without scores are out of the game.
 
-    if( !Normalized )
+    if( !m_Normalized )
     {
-        MatchName = MatchName.Lower();
-        SearchText = SearchText.Lower();
-        Normalized = true;
+        m_MatchName = m_MatchName.Lower();
+        m_SearchText = m_SearchText.Lower();
+        m_Normalized = true;
     }
 
     // Keywords and description we only count if the match string is at
@@ -220,20 +223,20 @@ void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
     int found_pos = EDA_PATTERN_NOT_FOUND;
     int matchers_fired = 0;
 
-    if( aMatcher.GetPattern() == MatchName )
+    if( aMatcher.GetPattern() == m_MatchName )
     {
-        Score += 1000;  // exact match. High score :)
+        m_Score += 1000;  // exact match. High score :)
     }
-    else if( aMatcher.Find( MatchName, matchers_fired, found_pos ) )
+    else if( aMatcher.Find( m_MatchName, matchers_fired, found_pos ) )
     {
         // Substring match. The earlier in the string the better.
-        Score += matchPosScore( found_pos, 20 ) + 20;
+        m_Score += matchPosScore( found_pos, 20 ) + 20;
     }
-    else if( aMatcher.Find( Parent->MatchName, matchers_fired, found_pos ) )
+    else if( aMatcher.Find( m_Parent->m_MatchName, matchers_fired, found_pos ) )
     {
-        Score += 19;   // parent name matches.         score += 19
+        m_Score += 19;   // parent name matches.         score += 19
     }
-    else if( aMatcher.Find( SearchText, matchers_fired, found_pos ) )
+    else if( aMatcher.Find( m_SearchText, matchers_fired, found_pos ) )
     {
         // If we have a very short search term (like one or two letters),
         // we don't want to accumulate scores if they just happen to be in
@@ -243,52 +246,52 @@ void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
         {
             // For longer terms, we add scores 1..18 for positional match
             // (higher in the front, where the keywords are).
-            Score += matchPosScore( found_pos, 17 ) + 1;
+            m_Score += matchPosScore( found_pos, 17 ) + 1;
         }
     }
     else
     {
         // No match. That's it for this item.
-        Score = 0;
+        m_Score = 0;
     }
 
     // More matchers = better match
-    Score += 2 * matchers_fired;
+    m_Score += 2 * matchers_fired;
 }
 
 
 LIB_TREE_NODE_LIB::LIB_TREE_NODE_LIB( LIB_TREE_NODE* aParent, wxString const& aName,
                                       wxString const& aDesc )
 {
-    Type = LIB;
-    Name = aName;
-    MatchName = aName.Lower();
-    Desc = aDesc;
-    Parent = aParent;
-    LibId.SetLibNickname( aName );
+    m_Type = LIB;
+    m_Name = aName;
+    m_MatchName = aName.Lower();
+    m_Desc = aDesc;
+    m_Parent = aParent;
+    m_LibId.SetLibNickname( aName );
 }
 
 
 LIB_TREE_NODE_LIB_ID& LIB_TREE_NODE_LIB::AddItem( LIB_TREE_ITEM* aItem )
 {
     LIB_TREE_NODE_LIB_ID* item = new LIB_TREE_NODE_LIB_ID( this, aItem );
-    Children.push_back( std::unique_ptr<LIB_TREE_NODE>( item ) );
+    m_Children.push_back( std::unique_ptr<LIB_TREE_NODE>( item ) );
     return *item;
 }
 
 
 void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 {
-    Score = 0;
+    m_Score = 0;
 
     // We need to score leaf nodes, which are usually (but not always) children.
 
-    if( Children.size() )
+    if( m_Children.size() )
     {
-        for( auto& child: Children )
+        for( auto& child: m_Children )
         {
             child->UpdateScore( aMatcher );
-            Score = std::max( Score, child->Score );
+            m_Score = std::max( m_Score, child->m_Score );
         }
     }
     else
@@ -297,39 +300,39 @@ void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
         int found_pos = EDA_PATTERN_NOT_FOUND;
         int matchers_fired = 0;
 
-        if( aMatcher.GetPattern() == MatchName )
+        if( aMatcher.GetPattern() == m_MatchName )
         {
-            Score += 1000;  // exact match. High score :)
+            m_Score += 1000;  // exact match. High score :)
         }
-        else if( aMatcher.Find( MatchName, matchers_fired, found_pos ) )
+        else if( aMatcher.Find( m_MatchName, matchers_fired, found_pos ) )
         {
             // Substring match. The earlier in the string the better.
-            Score += matchPosScore( found_pos, 20 ) + 20;
+            m_Score += matchPosScore( found_pos, 20 ) + 20;
         }
 
         // More matchers = better match
-        Score += 2 * matchers_fired;
+        m_Score += 2 * matchers_fired;
     }
 }
 
 
 LIB_TREE_NODE_ROOT::LIB_TREE_NODE_ROOT()
 {
-    Type = ROOT;
+    m_Type = ROOT;
 }
 
 
 LIB_TREE_NODE_LIB& LIB_TREE_NODE_ROOT::AddLib( wxString const& aName, wxString const& aDesc )
 {
     LIB_TREE_NODE_LIB* lib = new LIB_TREE_NODE_LIB( this, aName, aDesc );
-    Children.push_back( std::unique_ptr<LIB_TREE_NODE>( lib ) );
+    m_Children.push_back( std::unique_ptr<LIB_TREE_NODE>( lib ) );
     return *lib;
 }
 
 
 void LIB_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 {
-    for( auto& child: Children )
+    for( auto& child: m_Children )
         child->UpdateScore( aMatcher );
 }
 

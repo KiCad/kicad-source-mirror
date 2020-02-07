@@ -298,6 +298,12 @@ LIB_ID FOOTPRINT_EDIT_FRAME::GetTreeFPID() const
 }
 
 
+LIB_TREE_NODE* FOOTPRINT_EDIT_FRAME::GetCurrentTreeNode() const
+{
+    return m_treePane->GetLibTree()->GetCurrentTreeNode();
+}
+
+
 LIB_ID FOOTPRINT_EDIT_FRAME::GetTargetFPID() const
 {
     LIB_ID id = GetTreeFPID();
@@ -715,7 +721,7 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
     adapter->Sync();
 
     m_treePane->GetLibTree()->Unselect();
-    m_treePane->Regenerate();
+    m_treePane->GetLibTree()->Regenerate( true );
 
     if( target.IsValid() )
     {
@@ -733,6 +739,17 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
             m_treePane->GetLibTree()->CenterLibId( target );
         }
     }
+}
+
+
+void FOOTPRINT_EDIT_FRAME::RegenerateLibraryTree()
+{
+    LIB_ID target = GetTargetFPID();
+
+    m_treePane->GetLibTree()->Regenerate( true );
+
+    if( target.IsValid() )
+        m_treePane->GetLibTree()->CenterLibId( target );
 }
 
 

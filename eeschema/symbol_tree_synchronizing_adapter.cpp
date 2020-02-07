@@ -56,7 +56,7 @@ TOOL_INTERACTIVE* SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetContextMenuTool()
 bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 {
     const LIB_TREE_NODE* node = ToNode( aItem );
-    return node ? node->Type == LIB_TREE_NODE::LIB : true;
+    return node ? node->m_Type == LIB_TREE_NODE::LIB : true;
 }
 
 
@@ -76,9 +76,9 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce,
     int i = 0, max = GetLibrariesCount();
 
     // Process already stored libraries
-    for( auto it = m_tree.Children.begin(); it != m_tree.Children.end(); /* iteration inside */ )
+    for( auto it = m_tree.m_Children.begin(); it != m_tree.m_Children.end(); /* iteration inside */ )
     {
-        const wxString& name = it->get()->Name;
+        const wxString& name = it->get()->m_Name;
 
         if( wxGetUTCTimeMillis() > nextUpdate )
         {
@@ -142,25 +142,25 @@ int SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetLibrariesCount() const
 
 void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
 {
-    auto hashIt = m_libHashes.find( aLibNode.Name );
+    auto hashIt = m_libHashes.find( aLibNode.m_Name );
 
     if( hashIt == m_libHashes.end() )
     {
         // add a new library
-        for( auto alias : m_libMgr->GetAliases( aLibNode.Name ) )
+        for( auto alias : m_libMgr->GetAliases( aLibNode.m_Name ) )
             aLibNode.AddItem( alias );
     }
-    else if( hashIt->second != m_libMgr->GetLibraryHash( aLibNode.Name ) )
+    else if( hashIt->second != m_libMgr->GetLibraryHash( aLibNode.m_Name ) )
     {
         // update an existing library
-        std::list<LIB_PART*> aliases = m_libMgr->GetAliases( aLibNode.Name );
+        std::list<LIB_PART*> aliases = m_libMgr->GetAliases( aLibNode.m_Name );
 
         // remove the common part from the aliases list
-        for( auto nodeIt = aLibNode.Children.begin(); nodeIt != aLibNode.Children.end(); /**/ )
+        for( auto nodeIt = aLibNode.m_Children.begin(); nodeIt != aLibNode.m_Children.end(); /**/ )
         {
             auto aliasIt = std::find_if( aliases.begin(), aliases.end(),
                     [&] ( const LIB_PART* a ) {
-                        return a->GetName() == (*nodeIt)->Name;
+                        return a->GetName() == (*nodeIt)->m_Name;
                     } );
 
             if( aliasIt != aliases.end() )
@@ -174,7 +174,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
             else
             {
                 // node does not exist in the library manager, remove the corresponding node
-                nodeIt = aLibNode.Children.erase( nodeIt );
+                nodeIt = aLibNode.m_Children.erase( nodeIt );
             }
         }
 
@@ -184,7 +184,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
     }
 
     aLibNode.AssignIntrinsicRanks();
-    m_libHashes[aLibNode.Name] = m_libMgr->GetLibraryHash( aLibNode.Name );
+    m_libHashes[aLibNode.m_Name] = m_libMgr->GetLibraryHash( aLibNode.m_Name );
 }
 
 
@@ -192,8 +192,8 @@ LIB_TREE_NODE::PTR_VECTOR::iterator SYMBOL_TREE_SYNCHRONIZING_ADAPTER::deleteLib
             LIB_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt )
 {
     LIB_TREE_NODE* node = aLibNodeIt->get();
-    m_libHashes.erase( node->Name );
-    auto it = m_tree.Children.erase( aLibNodeIt );
+    m_libHashes.erase( node->m_Name );
+    auto it = m_tree.m_Children.erase( aLibNodeIt );
     return it;
 }
 
@@ -213,25 +213,28 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
     switch( aCol )
     {
     case 0:
-        aVariant = node->Name;
+        aVariant = node->m_Name;
+
+        if( node->m_Pinned )
+            aVariant = "☆ " + node->m_Name;
 
         // mark modified libs with an asterisk
-        if( node->Type == LIB_TREE_NODE::LIB && m_libMgr->IsLibraryModified( node->Name ) )
-            aVariant = node->Name + " *";
+        if( node->m_Type == LIB_TREE_NODE::LIB && m_libMgr->IsLibraryModified( node->m_Name ) )
+            aVariant = aVariant.GetString() + " *";
 
         // mark modified parts with an aster-ix
-        if( node->Type == LIB_TREE_NODE::LIBID
-                && m_libMgr->IsPartModified( node->Name, node->Parent->Name ) )
-            aVariant = node->Name + " *";
+        if( node->m_Type == LIB_TREE_NODE::LIBID
+                && m_libMgr->IsPartModified( node->m_Name, node->m_Parent->m_Name ) )
+            aVariant = aVariant.GetString() + " *";
 
         break;
 
     case 1:
-        aVariant = node->Desc;
+        aVariant = node->m_Desc;
         break;
 
     default:    // column == -1 is used for default Compare function
-        aVariant = node->Name;
+        aVariant = node->m_Name;
         break;
     }
 }
@@ -250,11 +253,11 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
     auto node = ToNode( aItem );
     wxCHECK( node, false );
 
-    switch( node->Type )
+    switch( node->m_Type )
     {
     case LIB_TREE_NODE::LIB:
         // mark modified libs with bold font
-        aAttr.SetBold( m_libMgr->IsLibraryModified( node->Name ) );
+        aAttr.SetBold( m_libMgr->IsLibraryModified( node->m_Name ) );
 
 #ifdef __WXGTK__
         // The native wxGTK+ impl ignores background colour, so set the text colour instead.
@@ -263,7 +266,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
             aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #else
         // mark the current library with background color
-        if( node->Name == m_libMgr->GetCurrentLib() )
+        if( node->m_Name == m_libMgr->GetCurrentLib() )
         {
             aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT  ) );
             aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT  ) );
@@ -273,10 +276,10 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
 
     case LIB_TREE_NODE::LIBID:
         // mark modified part with bold font
-        aAttr.SetBold( m_libMgr->IsPartModified( node->Name, node->Parent->Name ) );
+        aAttr.SetBold( m_libMgr->IsPartModified( node->m_Name, node->m_Parent->m_Name ) );
 
         // mark aliases with italic font
-        aAttr.SetItalic( !node->IsRoot );
+        aAttr.SetItalic( !node->m_IsRoot );
 
 #ifdef __WXGTK__
         // The native wxGTK+ impl ignores background colour, so set the text colour instead.
@@ -285,7 +288,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
             aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #else
         // mark the current part with background color
-        if( node->LibId == m_libMgr->GetCurrentLibId() )
+        if( node->m_LibId == m_libMgr->GetCurrentLibId() )
         {
             aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
             aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT  ) );

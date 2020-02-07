@@ -617,7 +617,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
         if( m_path.IsEmpty() )
             m_path = aKiway->Prj().GetProjectPath();
 
-        wxLogTrace( traceSchLegacyPlugin, "Normalized append path \"%s\".", m_path );
+        wxLogTrace( traceSchLegacyPlugin, "m_Normalized append path \"%s\".", m_path );
     }
     else
     {

@@ -82,10 +82,22 @@ bool MODULE_EDITOR_TOOLS::Init()
         LIB_ID sel = m_frame->GetTreeFPID();
         return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
     };
+    auto pinnedLibSelectedCondition = [ this ] ( const SELECTION& aSel ) {
+        LIB_TREE_NODE* current = m_frame->GetCurrentTreeNode();
+        return current && current->m_Type == LIB_TREE_NODE::LIB && current->m_Pinned;
+    };
+    auto unpinnedLibSelectedCondition = [ this ] (const SELECTION& aSel ) {
+        LIB_TREE_NODE* current = m_frame->GetCurrentTreeNode();
+        return current && current->m_Type == LIB_TREE_NODE::LIB && !current->m_Pinned;
+    };
     auto fpSelectedCondition = [ this ] ( const SELECTION& aSel ) {
         LIB_ID sel = m_frame->GetTreeFPID();
         return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
     };
+
+    ctxMenu.AddItem( ACTIONS::pinLibrary,            unpinnedLibSelectedCondition );
+    ctxMenu.AddItem( ACTIONS::unpinLibrary,          pinnedLibSelectedCondition );
+    ctxMenu.AddSeparator();
 
     ctxMenu.AddItem( ACTIONS::newLibrary,            SELECTION_CONDITIONS::ShowAlways );
     ctxMenu.AddItem( ACTIONS::addLibrary,            SELECTION_CONDITIONS::ShowAlways );
@@ -252,6 +264,34 @@ int MODULE_EDITOR_TOOLS::ExportFootprint( const TOOL_EVENT& aEvent )
 int MODULE_EDITOR_TOOLS::EditFootprint( const TOOL_EVENT& aEvent )
 {
     m_frame->LoadModuleFromLibrary( m_frame->GetTreeFPID() );
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::PinLibrary( const TOOL_EVENT& aEvent )
+{
+    LIB_TREE_NODE* currentNode = m_frame->GetCurrentTreeNode();
+
+    if( currentNode && !currentNode->m_Pinned )
+    {
+        currentNode->m_Pinned = true;
+        m_frame->RegenerateLibraryTree();
+    }
+
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::UnpinLibrary( const TOOL_EVENT& aEvent )
+{
+    LIB_TREE_NODE* currentNode = m_frame->GetCurrentTreeNode();
+
+    if( currentNode && currentNode->m_Pinned )
+    {
+        currentNode->m_Pinned = false;
+        m_frame->RegenerateLibraryTree();
+    }
+
     return 0;
 }
 
@@ -558,6 +598,8 @@ void MODULE_EDITOR_TOOLS::setTransitions()
     Go( &MODULE_EDITOR_TOOLS::ImportFootprint,      PCB_ACTIONS::importFootprint.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::ExportFootprint,      PCB_ACTIONS::exportFootprint.MakeEvent() );
 
+    Go( &MODULE_EDITOR_TOOLS::PinLibrary,           ACTIONS::pinLibrary.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::UnpinLibrary,         ACTIONS::unpinLibrary.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::ToggleFootprintTree,  PCB_ACTIONS::toggleFootprintTree.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::Properties,           PCB_ACTIONS::footprintProperties.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::DefaultPadProperties, PCB_ACTIONS::defaultPadProperties.MakeEvent() );

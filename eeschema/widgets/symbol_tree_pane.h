@@ -48,9 +48,6 @@ public:
         return m_tree;
     }
 
-    ///> Updates the component tree
-    void Regenerate();
-
 protected:
     void onComponentSelected( wxCommandEvent& aEvent );
 

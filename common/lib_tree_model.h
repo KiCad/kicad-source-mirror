@@ -62,17 +62,18 @@ class EDA_COMBINED_MATCHER;
  * - `Parent` - parent node, or nullptr if root
  * - `Children` - vector of unique_ptrs to children
  * - `Type` - ROOT, LIB, ALIAS, or UNIT
- * - `IntrinsicRank` - cached initial sort order
- * - `Score` - score taking into account search terms. Zero means irrelevant and
+ * - `m_IntrinsicRank` - cached initial sort order
+ * - `m_Score` - score taking into account search terms. Zero means irrelevant and
  *      should be hidden.
  * - `Name` - name of the library/alias/unit, to be displayed
  * - `Desc` - description of the alias, to be displayed
- * - `MatchName` - Name, normalized to lowercase for matching
- * - `SearchText` - normalized composite of keywords and description
+ * - `m_MatchName` - Name, normalized to lowercase for matching
+ * - `m_SearchText` - normalized composite of keywords and description
  * - `LibId` - the #LIB_ID this alias or unit is from, or not valid
  * - `Unit` - the unit number, or zero for non-units
  */
-class LIB_TREE_NODE {
+class LIB_TREE_NODE
+{
 public:
     enum TYPE {
         ROOT, LIB, LIBID, UNIT, INVALID
@@ -80,31 +81,30 @@ public:
 
     typedef std::vector<std::unique_ptr<LIB_TREE_NODE>> PTR_VECTOR;
 
-    LIB_TREE_NODE*  Parent;     ///< Parent node or null
-    PTR_VECTOR      Children;   ///< List of child nodes
-    enum TYPE       Type;       ///< Node type
+    LIB_TREE_NODE*  m_Parent;     // Parent node or null
+    PTR_VECTOR      m_Children;   // List of child nodes
+    enum TYPE       m_Type;       // Node type
 
     /**
      * The rank of the item before any search terms are applied. This is
      * a fairly expensive sort (involving string compares) so it helps to
      * store the result of that sort.
      */
-    int IntrinsicRank;
+    int         m_IntrinsicRank;
 
-    /// The score of an item resulting from the search algorithm.
-    int Score;
+    int         m_Score;       // The score of an item resulting from the search algorithm.
+    bool        m_Pinned;      // Item should appear at top when there is no search string
 
-    wxString    Name;        ///< Actual name of the part
-    wxString    Desc;        ///< Description to be displayed
-    wxString    MatchName;   ///< Normalized name for matching
-    wxString    SearchText;  ///< Descriptive text to search
-    bool        Normalized;  ///< Support for lazy normalization.
+    wxString    m_Name;        // Actual name of the part
+    wxString    m_Desc;        // Description to be displayed
+    wxString    m_MatchName;   // Normalized name for matching
+    wxString    m_SearchText;  // Descriptive text to search
+    bool        m_Normalized;  // Support for lazy normalization.
 
 
-    LIB_ID      LibId;       ///< LIB_ID determined by the parent library nickname and alias name.
-    int         Unit;        ///< Actual unit, or zero
-    bool        IsRoot;      ///< Indicates if the symbol is a root symbol instead of an alias.
-    int         VisLen;      ///< Length of the string as shown on screen
+    LIB_ID      m_LibId;       // LIB_ID determined by the parent library nickname and alias name.
+    int         m_Unit;        // Actual unit, or zero
+    bool        m_IsRoot;      // Indicates if the symbol is a root symbol instead of an alias.
 
     /**
      * Update the score for this part. This is accumulative - it will be
@@ -120,7 +120,7 @@ public:
     void ResetScore();
 
     /**
-     * Store intrinsic ranks on all children of this node. See IntrinsicRank
+     * Store intrinsic ranks on all children of this node. See m_IntrinsicRank
      * member doc for more information.
      */
     void AssignIntrinsicRanks( bool presorted = false );

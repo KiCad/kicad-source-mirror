@@ -57,13 +57,6 @@ SYMBOL_TREE_PANE::~SYMBOL_TREE_PANE()
 }
 
 
-void SYMBOL_TREE_PANE::Regenerate()
-{
-    if( m_tree )
-        m_tree->Regenerate( true );
-}
-
-
 void SYMBOL_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
 {
     m_libEditFrame->GetToolManager()->RunAction( EE_ACTIONS::editSymbol, true );

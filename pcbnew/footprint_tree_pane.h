@@ -47,9 +47,6 @@ public:
         return m_tree;
     }
 
-    ///> Updates the footprint tree
-    void Regenerate();
-
 protected:
     void onComponentSelected( wxCommandEvent& aEvent );
     void onUpdateUI( wxUpdateUIEvent& aEvent );

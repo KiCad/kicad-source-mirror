@@ -139,6 +139,8 @@ LIB_TREE::~LIB_TREE()
 {
     // Save the column widths to the config file
     m_adapter->SaveColWidths();
+
+    m_adapter->SavePinnedItems();
 }
 
 
@@ -157,6 +159,17 @@ LIB_ID LIB_TREE::GetSelectedLibId( int* aUnit ) const
         *aUnit = m_adapter->GetUnitFor( sel );
 
     return m_adapter->GetAliasFor( sel );
+}
+
+
+LIB_TREE_NODE* LIB_TREE::GetCurrentTreeNode() const
+{
+    auto sel = m_tree_ctrl->GetSelection();
+
+    if( !sel )
+        return nullptr;
+
+    return m_adapter->GetTreeNodeFor( sel );
 }
 
 

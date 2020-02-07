@@ -208,17 +208,14 @@ public:
     /// Return the LIB_ID of the part or library selected in the footprint tree.
     LIB_ID GetTreeFPID() const;
 
+    LIB_TREE_NODE* GetCurrentTreeNode() const;
+
     /// Return the LIB_ID of the part being edited.
     LIB_ID GetLoadedFPID() const;
 
     /// Return the LIB_ID of the part selected in the footprint tree, or the loaded part if
     /// there is no selection in the tree.
     LIB_ID GetTargetFPID() const;
-
-    /**
-     * Perform a geometric transform on the current footprint.
-     */
-    void Transform( MODULE* module, int transform );
 
     // importing / exporting Footprint
     /**
@@ -339,6 +336,13 @@ public:
      * @param aProgress
      */
     void SyncLibraryTree( bool aProgress );
+
+    /**
+     * Filter, sort, and redisplay the library tree.  Does NOT synchronize it with libraries
+     * in disk.
+     */
+    void RegenerateLibraryTree();
+
     void FocusOnLibID( const LIB_ID& aLibID );
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;

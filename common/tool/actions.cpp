@@ -356,17 +356,25 @@ TOOL_ACTION ACTIONS::cursorRightFast( "common.Control.cursorRightFast",
 TOOL_ACTION ACTIONS::cursorClick( "common.Control.cursorClick",
         AS_GLOBAL, 
         WXK_RETURN, LEGACY_HK_NAME( "Mouse Left Click" ),
-        _( "Click" ), "Performs left mouse button click",
+        _( "Click" ), _( "Performs left mouse button click" ),
         nullptr, AF_NONE, (void*) CURSOR_CLICK );
 
 TOOL_ACTION ACTIONS::cursorDblClick( "common.Control.cursorDblClick",
         AS_GLOBAL, 
         WXK_END, LEGACY_HK_NAME( "Mouse Left Double Click" ),
-        _( "Double-click" ), "Performs left mouse button double-click",
+        _( "Double-click" ), _( "Performs left mouse button double-click" ),
         nullptr, AF_NONE, (void*) CURSOR_DBL_CLICK );
 
 TOOL_ACTION ACTIONS::refreshPreview( "common.Control.refreshPreview",
          AS_GLOBAL );
+
+TOOL_ACTION ACTIONS::pinLibrary( "common.Control.pinLibrary",
+         AS_GLOBAL, 0, "",
+         _( "Pin Library" ), "Keep the library at the top of the list" );
+
+TOOL_ACTION ACTIONS::unpinLibrary( "common.Control.unpinLibrary",
+         AS_GLOBAL, 0, "",
+         _( "Unpin Library" ), "No longer keep the library at the top of the list" );
 
 TOOL_ACTION ACTIONS::panUp( "common.Control.panUp",
         AS_GLOBAL, 

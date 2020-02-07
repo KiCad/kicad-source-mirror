@@ -40,6 +40,7 @@ class LIB_PART;
 class LIB_FIELD;
 class DIALOG_LIB_EDIT_TEXT;
 class SYMBOL_TREE_PANE;
+class LIB_TREE_NODE;
 class LIB_ID;
 class LIB_MANAGER;
 
@@ -145,6 +146,8 @@ public:
 
     /** Sets the current library nickname and returns the old library nickname. */
     wxString SetCurLib( const wxString& aLibNickname );
+
+    LIB_TREE_NODE* GetCurrentTreeNode() const;
 
     /**
      * Return the LIB_ID of the library or symbol selected in the symbol tree.
@@ -416,6 +419,12 @@ public:
      * to the library manager.  Optionally displays a progress dialog.
      */
     void SyncLibraries( bool aShowProgress );
+
+    /**
+     * Filter, sort, and redisplay the library tree.  Does NOT synchronize it with libraries
+     * in disk.
+     */
+    void RegenerateLibraryTree();
 
     /**
      * Allows Libedit to install its preferences panel into the preferences dialog.

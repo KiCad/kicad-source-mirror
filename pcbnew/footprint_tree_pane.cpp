@@ -53,13 +53,6 @@ FOOTPRINT_TREE_PANE::~FOOTPRINT_TREE_PANE()
 }
 
 
-void FOOTPRINT_TREE_PANE::Regenerate()
-{
-    if( m_tree )
-        m_tree->Regenerate( true );
-}
-
-
 void FOOTPRINT_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
 {
     m_frame->LoadModuleFromLibrary( GetLibTree()->GetSelectedLibId() );

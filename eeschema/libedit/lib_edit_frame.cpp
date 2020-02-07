@@ -540,6 +540,12 @@ LIB_ID LIB_EDIT_FRAME::getTargetLibId() const
 }
 
 
+LIB_TREE_NODE* LIB_EDIT_FRAME::GetCurrentTreeNode() const
+{
+    return m_treePane->GetLibTree()->GetCurrentTreeNode();
+}
+
+
 wxString LIB_EDIT_FRAME::getTargetLib() const
 {
     return getTargetLibId().GetLibNickname();
@@ -583,7 +589,7 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aShowProgress )
                 m_treePane->GetLibTree()->Unselect();
         }
 
-        m_treePane->Regenerate();
+        m_treePane->GetLibTree()->Regenerate( true );
 
         // Try to select the parent library, in case the part is not found
         if( !found && selected.IsValid() )
@@ -602,6 +608,17 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aShowProgress )
             m_treePane->GetLibTree()->CenterLibId( current );
         }
     }
+}
+
+
+void LIB_EDIT_FRAME::RegenerateLibraryTree()
+{
+    LIB_ID target = getTargetLibId();
+
+    m_treePane->GetLibTree()->Regenerate( true );
+
+    if( target.IsValid() )
+        m_treePane->GetLibTree()->CenterLibId( target );
 }
 
 

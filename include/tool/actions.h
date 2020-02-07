@@ -101,6 +101,9 @@ public:
     static TOOL_ACTION refreshPreview;      // Similar to a synthetic mouseMoved event, but also
                                             // used after a rotate, mirror, etc.
 
+    static TOOL_ACTION pinLibrary;
+    static TOOL_ACTION unpinLibrary;
+
     /// Cursor control with keyboard
     static TOOL_ACTION cursorUp;
     static TOOL_ACTION cursorDown;

@@ -29,6 +29,7 @@
 #include <wx/headerctrl.h>
 #include <vector>
 #include <functional>
+#include <set>
 
 /**
  * Adapter class in the component selector Model-View-Adapter (mediated MVC)
@@ -129,6 +130,7 @@ public:
      * valid.
      */
     void SaveColWidths();
+    void SavePinnedItems();
 
     /**
      * Set the component filter type. Must be set before adding libraries
@@ -222,6 +224,8 @@ public:
      */
     LIB_TREE_NODE::TYPE GetTypeFor( const wxDataViewItem& aSelection ) const;
 
+    LIB_TREE_NODE* GetTreeNodeFor( const wxDataViewItem& aSelection ) const;
+
     virtual wxString GenerateInfo( LIB_ID const& aLibId, int aUnit ) { return wxEmptyString; };
 
     /**
@@ -234,7 +238,7 @@ public:
      */
     virtual int GetLibrariesCount() const
     {
-        return m_tree.Children.size();
+        return m_tree.m_Children.size();
     }
 
     /**
@@ -265,7 +269,7 @@ public:
 
 protected:
     static wxDataViewItem ToItem( LIB_TREE_NODE const* aNode );
-    static LIB_TREE_NODE const* ToNode( wxDataViewItem aItem );
+    static LIB_TREE_NODE* ToNode( wxDataViewItem aItem );
     static unsigned int IntoArray( LIB_TREE_NODE const& aNode, wxDataViewItemArray& aChildren );
 
     LIB_TREE_NODE_ROOT m_tree;
@@ -342,6 +346,8 @@ private:
 
     wxConfigBase*       m_config;
     wxString            m_configPrefix;
+
+    std::set<UTF8>      m_pinnedLibIDs;
 
     /**
      * Find any results worth highlighting and expand them, according to given

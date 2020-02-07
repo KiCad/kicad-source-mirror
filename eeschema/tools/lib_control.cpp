@@ -30,6 +30,7 @@
 #include <tools/lib_control.h>
 #include <lib_edit_frame.h>
 #include <lib_view_frame.h>
+#include <symbol_tree_model_adapter.h>
 #include <wildcards_and_files_ext.h>
 #include <gestfich.h>
 #include <project.h>
@@ -51,10 +52,22 @@ bool LIB_CONTROL::Init()
             LIB_ID sel = editFrame->GetTreeLIBID();
             return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
         };
+        auto pinnedLibSelectedCondition = [ editFrame ] ( const SELECTION& aSel ) {
+            LIB_TREE_NODE* current = editFrame->GetCurrentTreeNode();
+            return current && current->m_Type == LIB_TREE_NODE::LIB && current->m_Pinned;
+        };
+        auto unpinnedLibSelectedCondition = [ editFrame ] (const SELECTION& aSel ) {
+            LIB_TREE_NODE* current = editFrame->GetCurrentTreeNode();
+            return current && current->m_Type == LIB_TREE_NODE::LIB && !current->m_Pinned;
+        };
         auto symbolSelectedCondition = [ editFrame ] ( const SELECTION& aSel ) {
             LIB_ID sel = editFrame->GetTreeLIBID();
             return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
         };
+
+        ctxMenu.AddItem( ACTIONS::pinLibrary,            unpinnedLibSelectedCondition );
+        ctxMenu.AddItem( ACTIONS::unpinLibrary,          pinnedLibSelectedCondition );
+        ctxMenu.AddSeparator();
 
         ctxMenu.AddItem( ACTIONS::newLibrary,            SELECTION_CONDITIONS::ShowAlways );
         ctxMenu.AddItem( ACTIONS::addLibrary,            SELECTION_CONDITIONS::ShowAlways );
@@ -214,6 +227,42 @@ int LIB_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
     {
         LIB_VIEW_FRAME* libViewFrame = static_cast<LIB_VIEW_FRAME*>( m_frame );
         libViewFrame->SetUnitAndConvert( libViewFrame->GetUnit(), convert );
+    }
+
+    return 0;
+}
+
+
+int LIB_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    {
+        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+        LIB_TREE_NODE*  currentNode = editFrame->GetCurrentTreeNode();
+
+        if( currentNode && !currentNode->m_Pinned )
+        {
+            currentNode->m_Pinned = true;
+            editFrame->RegenerateLibraryTree();
+        }
+    }
+
+    return 0;
+}
+
+
+int LIB_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    {
+        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+        LIB_TREE_NODE*  currentNode = editFrame->GetCurrentTreeNode();
+
+        if( currentNode && currentNode->m_Pinned )
+        {
+            currentNode->m_Pinned = false;
+            editFrame->RegenerateLibraryTree();
+        }
     }
 
     return 0;
@@ -435,6 +484,8 @@ void LIB_CONTROL::setTransitions()
     Go( &LIB_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
 
     Go( &LIB_CONTROL::ShowElectricalTypes,   EE_ACTIONS::showElectricalTypes.MakeEvent() );
+    Go( &LIB_CONTROL::PinLibrary,            ACTIONS::pinLibrary.MakeEvent() );
+    Go( &LIB_CONTROL::UnpinLibrary,          ACTIONS::unpinLibrary.MakeEvent() );
     Go( &LIB_CONTROL::ShowComponentTree,     EE_ACTIONS::showComponentTree.MakeEvent() );
     Go( &LIB_CONTROL::ToggleSyncedPinsMode,  EE_ACTIONS::toggleSyncedPinsMode.MakeEvent() );
 }
