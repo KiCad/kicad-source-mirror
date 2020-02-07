@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2010-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -435,9 +435,9 @@ bool LIB_ID::isLegalLibNicknameChar( unsigned aUniChar, LIB_ID_TYPE aType )
 }
 
 
-#if 0 && defined(DEBUG)
+#if 0
 
-// build this with Debug CMAKE_BUILD_TYPE
+// @todo Move this test into the unit test framework.
 
 void LIB_ID::Test()
 {
@@ -461,14 +461,6 @@ void LIB_ID::Test()
                 lpid.GetLibItemName().c_str(),
                 lpid.GetRevision().c_str() );
     }
-}
-
-
-int main( int argc, char** argv )
-{
-    LIB_ID::Test();
-
-    return 0;
 }
 
 #endif

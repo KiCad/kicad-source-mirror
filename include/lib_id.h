@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2010-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -227,10 +227,6 @@ public:
      * @return Invalid character found in the name or 0 is the name is valid.
      */
     static unsigned FindIllegalLibNicknameChar( const UTF8& aNickname, LIB_ID_TYPE aType );
-
-#if defined(DEBUG)
-    static void Test();
-#endif
 
 protected:
     /**
