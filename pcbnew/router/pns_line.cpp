@@ -228,7 +228,7 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
                 else
                     p = aObstacle.CSegment(j).Intersect( a );
 
-                printf("- cont_a %d cont_b %d p %d\n", !!cont_a, !!cont_b, p ? 1 : 0 );
+                //printf("- cont_a %d cont_b %d p %d\n", !!cont_a, !!cont_b, p ? 1 : 0 );
 
 
                 if ( p )
@@ -238,7 +238,7 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
                       ip.their = aObstacle.CSegment(j);
                       ip.p = *p;
                       ips.push_back(ip);
-                      printf("chb %d %d\n", p->x, p->y);
+                      //printf("chb %d %d\n", p->x, p->y);
                 }
             }
         }

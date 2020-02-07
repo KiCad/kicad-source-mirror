@@ -189,6 +189,8 @@ public:
     /// Activation of the Push and Shove router (skew tuning mode)
     static TOOL_ACTION routerTuneDiffPairSkew;
 
+    static TOOL_ACTION routerUndoLastSegment;
+
     /// Activation of the Push and Shove settings dialogs
     static TOOL_ACTION routerSettingsDialog;
     static TOOL_ACTION routerDiffPairDialog;

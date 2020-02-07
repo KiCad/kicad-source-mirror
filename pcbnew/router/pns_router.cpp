@@ -360,6 +360,9 @@ void ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
 
 void ROUTER::CommitRouting( NODE* aNode )
 {
+    if( m_state == ROUTE_TRACK && !m_placer->HasPlacedAnything() )
+        return;
+
     NODE::ITEM_VECTOR removed, added;
 
     aNode->GetUpdatedItems( removed, added );
@@ -393,10 +396,23 @@ bool ROUTER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
         break;
     }
 
-    if( rv )
-       StopRouting();
-
     return rv;
+}
+
+
+void ROUTER::UndoLastSegment()
+{
+    if( !RoutingInProgress() )
+        return;
+
+    m_placer->UnfixRoute();
+}
+
+
+void ROUTER::CommitRouting()
+{
+    m_placer->CommitPlacement();
+    StopRouting();
 }
 
 

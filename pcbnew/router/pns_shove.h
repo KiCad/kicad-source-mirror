@@ -86,6 +86,10 @@ public:
 
     void SetInitialLine( LINE& aInitial );
 
+    bool AddLockedSpringbackNode( NODE* aNode );
+    void UnlockSpringbackNode( NODE* aNode );
+    bool RewindSpringbackTo( NODE* aNode );
+
 private:
     typedef std::vector<SHAPE_LINE_CHAIN> HULL_SET;
     typedef OPT<LINE> OPT_LINE;
@@ -99,6 +103,8 @@ private:
         VECTOR2I m_p;
         NODE* m_node;
         OPT_BOX2I m_affectedArea;
+        int m_seq;
+        bool m_locked;
     };
 
     SHOVE_STATUS processHullSet( LINE& aCurrent, LINE& aObstacle,
@@ -147,6 +153,7 @@ private:
 
     NODE*                       m_root;
     NODE*                       m_currentNode;
+    int                         m_restrictSpringbackTagId;
 
     OPT_LINE                    m_newHead;
 

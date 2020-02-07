@@ -224,20 +224,20 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
         //Dbg()->AddLine( path_cw.CLine(), 2, 10000 );
 
 
-        printf("iter %d s_cw %d s_ccw %d\n", m_iteration, s_cw, s_ccw );
+        //printf("iter %d s_cw %d s_ccw %d\n", m_iteration, s_cw, s_ccw );
         
         auto old = path_cw.CLine();
 
         if( clipToLoopStart( path_cw.Line() ))
         {
-            printf("ClipCW\n");
+            //printf("ClipCW\n");
             //Dbg()->AddLine( old, 1, 40000 );
             s_cw = ALMOST_DONE;
         }
 
         if( clipToLoopStart( path_ccw.Line() ))
         {
-            printf("ClipCCW\n");
+            //printf("ClipCCW\n");
             s_ccw = ALMOST_DONE;
         }
 

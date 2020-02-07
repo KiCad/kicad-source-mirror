@@ -826,7 +826,7 @@ std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( TRACK* aTrack )
 }
 
 
-std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE::syncArc( ARC* aArc )
+std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( ARC* aArc )
 {
     std::unique_ptr< PNS::ARC > arc(
         new PNS::ARC( SHAPE_ARC( aArc->GetCenter(), aArc->GetStart(),

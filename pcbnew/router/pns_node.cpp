@@ -1276,7 +1276,6 @@ void NODE::Commit( NODE* aNode )
 
 void NODE::KillChildren()
 {
-    assert( isRoot() );
     releaseChildren();
 }
 

@@ -423,6 +423,11 @@ public:
         return !m_children.empty();
     }
 
+    NODE* GetParent() const
+    {
+        return m_parent;
+    }
+
     ///> checks if this branch contains an updated version of the m_item
     ///> from the root branch.
     bool Overrides( ITEM* aItem ) const

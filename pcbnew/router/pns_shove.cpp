@@ -626,7 +626,7 @@ NODE* SHOVE::reduceSpringback( const ITEM_SET& aHeadSet, VIA_HANDLE& aDraggedVia
 
         auto obs = spTag.m_node->CheckColliding( aHeadSet );
 
-        if( !obs )
+        if( !obs && !spTag.m_locked )
         {
             aDraggedVia = spTag.m_draggedVia;
             aDraggedVia.valid = true;
@@ -670,6 +670,9 @@ bool SHOVE::pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea, VIA* aD
     } else
         st.m_affectedArea = prev_area;
 
+    st.m_seq = (m_nodeStack.empty() ? 1 : m_nodeStack.back().m_seq + 1);
+    st.m_locked = false;
+    
     m_nodeStack.push_back( st );
 
     return true;
@@ -1607,4 +1610,61 @@ void SHOVE::SetInitialLine( LINE& aInitial )
     m_root->Remove( aInitial );
 }
 
+
+bool SHOVE::AddLockedSpringbackNode( NODE* aNode )
+{
+    SPRINGBACK_TAG sp;
+    sp.m_node = aNode;
+    sp.m_locked = true;
+
+    m_nodeStack.push_back(sp);
+    return true;
 }
+
+
+bool SHOVE::RewindSpringbackTo( NODE* aNode )
+{
+    bool found = false;
+
+    auto iter = m_nodeStack.begin();
+
+    while( iter != m_nodeStack.end() )
+    {
+        if ( iter->m_node == aNode )
+        {
+            printf("FOUND\n");
+            found = true;
+            break;
+        }
+        iter++;
+    }
+
+    if( !found )
+        return false;
+
+    auto start = iter;
+
+    aNode->KillChildren();
+    m_nodeStack.erase( start, m_nodeStack.end() );
+
+    return true;
+}
+
+
+void SHOVE::UnlockSpringbackNode( NODE* aNode )
+{
+    auto iter = m_nodeStack.begin();
+
+    while( iter != m_nodeStack.end() )
+    {
+        if ( iter->m_node == aNode )
+        {
+            iter->m_locked = false;
+            break;
+        }
+        iter++;
+    }
+}
+
+}
+

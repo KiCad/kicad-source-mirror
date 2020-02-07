@@ -297,7 +297,7 @@ void DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
             LINE origLine( *l );
             LINE draggedLine( *l );
 
-            draggedLine.DragCorner( aP, origLine.CLine().Find( aHandle.pos ), 0, m_freeAngleMode );
+            draggedLine.DragCorner( aP, origLine.CLine().Find( aHandle.pos ), m_freeAngleMode );
             draggedLine.ClearSegmentLinks();
 
             m_draggedItems.Add( draggedLine );
@@ -425,7 +425,7 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
 bool DRAGGER::dragShove( const VECTOR2I& aP )
 {
     bool ok = false;
-    
+
     if( m_lastNode )
     {
         delete m_lastNode;

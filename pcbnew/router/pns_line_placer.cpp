@@ -427,8 +427,8 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
         //Dbg()->AddPoint( p_cw, 4 );
         //Dbg()->AddPoint( p_ccw, 5 );
 
-        //Dbg()->AddLine( wr.lineCw.CLine(), 4, 1000 );
-        //Dbg()->AddLine( wr.lineCcw.CLine(), 5, 1000 );
+        Dbg()->AddLine( wr.lineCw.CLine(), 4, 1000 );
+        Dbg()->AddLine( wr.lineCcw.CLine(), 5, 1000 );
 
     }
 
@@ -841,6 +841,7 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
             n_iter++;
             go_back = true;
         }
+
     }
 
     if( !fail )
@@ -943,7 +944,10 @@ bool LINE_PLACER::SetLayer( int aLayer )
     else if( !m_startItem || ( m_startItem->OfKind( ITEM::VIA_T ) && m_startItem->Layers().Overlaps( aLayer ) ) )
     {
         m_currentLayer = aLayer;
-        initPlacement();
+        m_head.Line().Clear();
+        m_tail.Line().Clear();
+        m_head.SetLayer( m_currentLayer );
+        m_tail.SetLayer( m_currentLayer );
         Move( m_currentEnd, NULL );
         return true;
     }
@@ -960,10 +964,21 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_startItem = aStartItem;
     m_placingVia = false;
     m_chainedPlacement = false;
+    m_fixedTail.Clear();
 
     setInitialDirection( Settings().InitialDirection() );
 
     initPlacement();
+
+    NODE *n;
+
+    if ( m_shove )
+        n = m_shove->CurrentNode();
+    else
+        n = m_currentNode;
+
+    m_fixedTail.AddStage( m_currentStart, m_currentLayer, m_placingVia, m_direction, n );
+
     return true;
 }
 
@@ -1016,8 +1031,6 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     LINE current;
     VECTOR2I p = aP;
     int eiDepth = -1;
-
-    printf(" **** lp move  %d %d ei %p\n", aP.x, aP.y, aEndItem );
 
     if( aEndItem && aEndItem->Owner() )
         eiDepth = static_cast<NODE*>( aEndItem->Owner() )->Depth();
@@ -1090,8 +1103,6 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         if( pl.EndsWithVia() )
         {
             m_lastNode->Add( Clone( pl.Via() ) );
-            Router()->CommitRouting( m_lastNode );
-
             m_lastNode = NULL;
             m_currentNode = NULL;
 
@@ -1150,24 +1161,37 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     }
 
     if( pl.EndsWithVia() )
+    {
         m_lastNode->Add( Clone( pl.Via() ) );
+    }
 
     if( realEnd && lastSeg )
         simplifyNewLine( m_lastNode, lastSeg );
 
-    Router()->CommitRouting( m_lastNode );
-
-    m_lastNode = NULL;
-    m_currentNode = NULL;
 
     if( !realEnd )
     {
         setInitialDirection( d_last );
         m_currentStart = m_placingVia ? p_last : p_pre_last;
+
+        m_fixedTail.AddStage( m_p_start, m_currentLayer, m_placingVia, m_direction, m_currentNode );
+
         m_startItem = NULL;
         m_placingVia = false;
         m_chainedPlacement = !pl.EndsWithVia();
-        initPlacement();
+        
+        m_p_start = m_currentStart;
+        m_direction = m_initial_direction;
+
+        m_head.Line().Clear();
+        m_tail.Line().Clear();
+        m_currentNode = m_lastNode;
+        m_lastNode = m_lastNode->Branch();
+
+        if ( m_shove )
+        {
+            m_shove->AddLockedSpringbackNode( m_currentNode );
+        }
     }
     else
     {
@@ -1175,6 +1199,56 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     }
 
     return realEnd;
+}
+
+
+bool LINE_PLACER::UnfixRoute()
+{
+    FIXED_TAIL::STAGE st;
+
+    if ( !m_fixedTail.PopStage( st ) )
+        return false;
+
+    m_head.Line().Clear();
+    m_tail.Line().Clear();
+    m_startItem = NULL;
+    m_p_start = st.pts[0].p;
+    m_direction = st.pts[0].direction;
+    m_placingVia = st.pts[0].placingVias;
+    m_currentNode = st.commit;
+    m_currentLayer = st.pts[0].layer;
+    m_head.SetLayer( m_currentLayer );
+    m_tail.SetLayer( m_currentLayer );
+    m_head.RemoveVia( );
+    m_tail.RemoveVia( );
+    
+    if (m_shove)
+    {
+        m_shove->RewindSpringbackTo( m_currentNode );
+        m_shove->UnlockSpringbackNode( m_currentNode );
+        m_currentNode = m_shove->CurrentNode();
+        m_currentNode->KillChildren();
+    }
+
+    m_lastNode = m_currentNode->Branch();
+
+    return true;
+}
+
+
+bool LINE_PLACER::HasPlacedAnything() const
+{
+     return m_fixedTail.StageCount() > 1;
+}
+
+
+bool LINE_PLACER::CommitPlacement()
+{
+    Router()->CommitRouting( m_lastNode );
+
+    m_lastNode = NULL;
+    m_currentNode = NULL;
+    return true;
 }
 
 
@@ -1252,7 +1326,7 @@ void LINE_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
     // initPlacement will kill the tail, don't do that unless the track size has changed
     if( !m_idle && aSizes.TrackWidth() != m_sizes.TrackWidth() )
     {
-    m_sizes = aSizes;
+        m_sizes = aSizes;
         initPlacement();
     }
 
@@ -1266,8 +1340,8 @@ void LINE_PLACER::updateLeadingRatLine()
     SHAPE_LINE_CHAIN ratLine;
     TOPOLOGY topo( m_lastNode );
 
-    //if( topo.LeadingRatLine( &current, ratLine ) )
-        //Dbg()->AddLine( ratLine, 5, 10000 );
+    if( topo.LeadingRatLine( &current, ratLine ) )
+        Dbg()->AddLine( ratLine, 5, 10000 );
 }
 
 
@@ -1313,6 +1387,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aInver
         }
     }
 
+    aHead.SetLayer( m_currentLayer );
     aHead.SetShape( l );
 
     if( !m_placingVia )
@@ -1350,5 +1425,62 @@ void LINE_PLACER::GetModifiedNets( std::vector<int>& aNets ) const
     aNets.push_back( m_currentNet );
 }
 
+
+bool LINE_PLACER::AbortPlacement()
+{
+    m_world->KillChildren();
+    return true;
+}
+
+FIXED_TAIL::FIXED_TAIL ( int aLineCount )
+{
+
+}
+
+FIXED_TAIL::~FIXED_TAIL() 
+{
+
+}
+
+void FIXED_TAIL::Clear()
+{
+    m_stages.clear();
+}
+
+void FIXED_TAIL::AddStage( VECTOR2I aStart, int aLayer, bool placingVias, DIRECTION_45 direction, NODE *aNode )
+{
+    STAGE st;
+    FIX_POINT pt;
+
+    pt.p = aStart;
+    pt.layer = aLayer;
+    pt.direction = direction;
+    pt.placingVias = placingVias;
+
+    st.pts.push_back(pt);
+    st.commit = aNode;
+    
+    m_stages.push_back( st );
+}
+
+bool FIXED_TAIL::PopStage( FIXED_TAIL::STAGE& aStage )
+{
+    if( !m_stages.size() )
+        return false;
+
+    
+    aStage = m_stages.back();
+
+    if( m_stages.size() > 1 )
+        m_stages.pop_back();
+
+    return true;
+}
+
+
+int FIXED_TAIL::StageCount() const
+{
+    return m_stages.size();
+}
 
 }

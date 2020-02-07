@@ -78,6 +78,14 @@ public:
      */
     virtual bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish = false ) = 0;
 
+    virtual bool UnfixRoute() { return false; };
+
+    virtual bool CommitPlacement() { return false; };
+
+    virtual bool AbortPlacement() { return false; };
+
+    virtual bool HasPlacedAnything() const { return false; }
+
     /**
      * Function ToggleVia()
      *
@@ -183,6 +191,8 @@ public:
     virtual void GetModifiedNets( std::vector<int> &aNets ) const
     {
     }
+
+    
 };
 
 }

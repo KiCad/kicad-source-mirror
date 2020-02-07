@@ -197,7 +197,7 @@ void OPTIMIZER::removeCachedSegments( LINE* aLine, int aStartVertex, int aEndVer
 
     for( int i = aStartVertex; i < aEndVertex - 1; i++ )
     {
-        SEGMENT* s = segs[i];
+        LINKED_ITEM* s = segs[i];
         m_cacheTags.erase( s );
         m_cache.Remove( s );
     }
@@ -344,7 +344,7 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
             if( (ipNext.x ==aP.x) || ( ip.y ==aP.y
                                         && ( (ipNext.x >aP.x) == (ip.x <aP.x) ) ) )
                 return -1;
-        }
+	}
 
         if( (ip.y <aP.y) != (ipNext.y <aP.y) )
         {

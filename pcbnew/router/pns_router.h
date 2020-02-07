@@ -141,6 +141,8 @@ public:
     bool FixRoute( const VECTOR2I& aP, ITEM* aItem, bool aForceFinish = false );
     void BreakSegment( ITEM *aItem, const VECTOR2I& aP );
 
+    void UndoLastSegment();
+    void CommitRouting();
     void StopRouting();
 
     int GetClearance( const ITEM* aA, const ITEM* aB ) const;

@@ -75,6 +75,12 @@ enum VIA_ACTION_FLAGS
 #undef _
 #define _(s) s
 
+static const TOOL_ACTION ACT_UndoLastSegment( "pcbnew.InteractiveRouter.UndoLastSegment",
+        AS_CONTEXT,
+        WXK_BACK, "",
+        _( "Undo last segment" ),  _( "Stops laying the current track." ),
+        checked_ok_xpm );
+
 static const TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack",
         AS_CONTEXT,
         WXK_END, "",
@@ -389,6 +395,7 @@ public:
         Add( PCB_ACTIONS::routeSingleTrack );
         Add( PCB_ACTIONS::routeDiffPair );
         Add( ACT_EndTrack );
+        Add( ACT_UndoLastSegment );
         Add( PCB_ACTIONS::breakTrack );
 
         Add( PCB_ACTIONS::drag45Degree );
@@ -757,6 +764,8 @@ bool ROUTER_TOOL::finishInteractive()
 
 void ROUTER_TOOL::performRouting()
 {
+    bool finished = false;
+
     if( !prepareInteractive() )
         return;
 
@@ -775,6 +784,12 @@ void ROUTER_TOOL::performRouting()
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
+        else if( evt->IsAction( &ACT_UndoLastSegment ) )
+        {
+            m_router->UndoLastSegment();
+            updateEndItem( *evt );
+            m_router->Move( m_endSnapPoint, m_endItem );
+        }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &PCB_ACTIONS::routeSingleTrack ) )
         {
             updateEndItem( *evt );
@@ -783,7 +798,10 @@ void ROUTER_TOOL::performRouting()
 
 
             if( m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish ) )
+            {
+                finished = true;
                 break;
+            }
 
             if( needLayerSwitch )
                 switchLayerOnViaPlacement();
@@ -839,6 +857,9 @@ void ROUTER_TOOL::performRouting()
             evt->SetPassEvent();
         }
     }
+
+    m_router->CommitRouting();
+    m_router->StopRouting();
 
     finishInteractive();
 }
