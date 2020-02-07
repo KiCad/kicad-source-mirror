@@ -516,6 +516,10 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         return;
     }
 
+    // Shutdown all running tools ( and commit any pending change )
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
+
     if( Kiface().IsSingle() )
     {
         LIB_EDIT_FRAME* libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
@@ -621,6 +625,11 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
 
 void SCH_EDIT_FRAME::OnModify()
 {
+    wxASSERT( GetScreen() );
+
+    if( !GetScreen() )
+        return;
+
     GetScreen()->SetModify();
     GetScreen()->SetSave();
 
