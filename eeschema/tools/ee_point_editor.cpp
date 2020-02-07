@@ -371,16 +371,38 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-
-void pinEditedCorner( int editedPointIndex, int minWidth, int minHeight, VECTOR2I& topLeft,
-                      VECTOR2I& topRight, VECTOR2I& botLeft, VECTOR2I& botRight )
+/**
+ * Update the coordinates of 4 corners of a rectangle, accordint to constraints
+ * and the moved corner
+ * @param aEditedPointIndex is the corner id
+ * @param minWidth is the minimal width constraint
+ * @param minHeight is the minimal height constraint
+ * @param topLeft is the RECT_TOPLEFT to constraint
+ * @param topRight is the RECT_TOPRIGHT to constraint
+ * @param botLeft is the RECT_BOTLEFT to constraint
+ * @param botRight is the RECT_BOTRIGHT to constraint
+ * @param aGridSize is the a constraint: if > 1 new coordinates are on this grid
+ */
+static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
+                             VECTOR2I& topLeft, VECTOR2I& topRight,
+                             VECTOR2I& botLeft, VECTOR2I& botRight,
+                             int aGridSize = 0 )
 {
-    switch( editedPointIndex )
+    // A macro to keep a coordinate on the grid:
+    #define MOVE_TO_GRID(z) { z.x = ( (z.x +1 ) / aGridSize ) * aGridSize;\
+                              z.y = ( (z.y +1 ) / aGridSize ) * aGridSize; }
+    switch( aEditedPointIndex )
     {
     case RECT_TOPLEFT:
         // pin edited point within opposite corner
         topLeft.x = std::min( topLeft.x, botRight.x - minWidth );
         topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
+
+        if( aGridSize > 1 )     // Keep point on specified grid size
+        {
+            topLeft.x = ( topLeft.x / aGridSize ) * aGridSize;
+            topLeft.y = ( topLeft.y / aGridSize ) * aGridSize;
+        }
 
         // push edited point edges to adjacent corners
         topRight.y = topLeft.y;
@@ -393,6 +415,12 @@ void pinEditedCorner( int editedPointIndex, int minWidth, int minHeight, VECTOR2
         topRight.x = std::max( topRight.x, botLeft.x + minWidth );
         topRight.y = std::min( topRight.y, botLeft.y - minHeight );
 
+        if( aGridSize > 1 )     // Keep point on specified grid size
+        {
+            topRight.x = ( ( topRight.x+1 ) / aGridSize ) * aGridSize;
+            topRight.y = ( topRight.y / aGridSize ) * aGridSize;
+        }
+
         // push edited point edges to adjacent corners
         topLeft.y = topRight.y;
         botRight.x = topRight.x;
@@ -404,6 +432,12 @@ void pinEditedCorner( int editedPointIndex, int minWidth, int minHeight, VECTOR2
         botLeft.x = std::min( botLeft.x, topRight.x - minWidth );
         botLeft.y = std::max( botLeft.y, topRight.y + minHeight );
 
+        if( aGridSize > 1 )     // Keep point on specified grid size
+        {
+            botLeft.x = ( botLeft.x / aGridSize ) * aGridSize;
+            botLeft.y = ( ( botLeft.y+1 ) / aGridSize ) * aGridSize;
+        }
+
         // push edited point edges to adjacent corners
         botRight.y = botLeft.y;
         topLeft.x = botLeft.x;
@@ -414,6 +448,12 @@ void pinEditedCorner( int editedPointIndex, int minWidth, int minHeight, VECTOR2
         // pin edited point within opposite corner
         botRight.x = std::max( botRight.x, topLeft.x + minWidth );
         botRight.y = std::max( botRight.y, topLeft.y + minHeight );
+
+        if( aGridSize > 1 )     // Keep point on specified grid size
+        {
+            botRight.x = ( ( botRight.x+1 ) / aGridSize ) * aGridSize;
+            botRight.y = ( ( botRight.y+1 ) / aGridSize ) * aGridSize;
+        }
 
         // push edited point edges to adjacent corners
         botLeft.y = botRight.y;
@@ -525,8 +565,12 @@ void EE_POINT_EDITOR::updateItem() const
         VECTOR2I   botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
         VECTOR2I   botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
+        // The grid size used to place connected items. because a sheet contains
+        // connected items (sheet pins), keep corners coordinates on this grid.
+        // Otherwise, some sheet pins can be moved off grid
+        int grid_size = Mils2iu( 50 );
         pinEditedCorner( getEditedPointIndex(), sheet->GetMinWidth(), sheet->GetMinHeight(),
-                         topLeft, topRight, botLeft, botRight );
+                         topLeft, topRight, botLeft, botRight, grid_size );
 
         sheet->SetPosition( (wxPoint) topLeft );
         sheet->SetSize( wxSize( botRight.x - topLeft.x, botRight.y - topLeft.y ) );
