@@ -1434,21 +1434,15 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 
 void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
-    if( m_part )
+    for( auto& pin : m_pins )
     {
-        for( LIB_PIN* pin = m_part->GetNextPin();  pin;  pin = m_part->GetNextPin( pin ) )
-        {
-            wxASSERT( pin->Type() == LIB_PIN_T );
+        LIB_PIN* lib_pin = pin->GetLibPin();
 
-            if( pin->GetUnit() && m_unit && ( m_unit != pin->GetUnit() ) )
-                continue;
+        if( lib_pin->GetUnit() && m_unit && ( m_unit != lib_pin->GetUnit() ) )
+            continue;
 
-            if( pin->GetConvert() && m_convert && ( m_convert != pin->GetConvert() ) )
-                continue;
-
-            DANGLING_END_ITEM item( PIN_END, pin, GetPinPhysicalPosition( pin ), this );
-            aItemList.push_back( item );
-        }
+        DANGLING_END_ITEM item( PIN_END, lib_pin, GetPinPhysicalPosition( lib_pin ), this );
+        aItemList.push_back( item );
     }
 }
 
