@@ -49,7 +49,7 @@ DIALOG_EDIT_SHEET_PIN::DIALOG_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_
         m_choiceConnectionType->Append( sheetPinType );
 
     m_choiceConnectionType->SetSelection( 0 );
-    m_textName->SetFocus();
+    SetInitialFocus( m_textName );
     m_sdbSizerOK->SetDefault();
 
     // Set invalid label characters list:
