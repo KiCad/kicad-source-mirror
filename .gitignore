@@ -97,3 +97,6 @@ __pycache__
 .vs/
 .editorconfig
 CMakeSettings.json
+
+# Sublime Text
+*.sublime-*
