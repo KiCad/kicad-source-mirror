@@ -194,6 +194,16 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataFromWindow()
                 wxGridCellBoolEditor::IsTrueValue( m_grid->GetCellValue( i, COL_TEXT_ITALIC ) );
     }
 
+    // Footprint defaults
+    m_brdSettings.m_RefDefaultText = m_textCtrlRefText->GetValue();
+    m_brdSettings.m_RefDefaultlayer = (m_choiceLayerReference->GetSelection() == 0) ? F_SilkS : F_Fab;
+    m_brdSettings.m_RefDefaultVisibility = m_choiceVisibleReference->GetSelection() == 0;
+
+
+    m_brdSettings.m_ValueDefaultText = m_textCtrlValueText->GetValue();
+    m_brdSettings.m_ValueDefaultlayer = (m_choiceLayerValue->GetSelection() == 0) ? F_SilkS : F_Fab;
+    m_brdSettings.m_ValueDefaultVisibility = m_choiceVisibleValue->GetSelection() == 0;
+
     m_frame->SetDesignSettings( m_brdSettings );
 
     return true;
