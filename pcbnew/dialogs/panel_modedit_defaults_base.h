@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PANEL_MODEDIT_DEFAULTS_BASE_H__
-#define __PANEL_MODEDIT_DEFAULTS_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -31,10 +30,10 @@ class WX_GRID;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_MODEDIT_DEFAULTS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_MODEDIT_DEFAULTS_BASE : public wxPanel 
+class PANEL_MODEDIT_DEFAULTS_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticText13;
 		wxStaticText* m_staticTextRef;
@@ -48,12 +47,11 @@ class PANEL_MODEDIT_DEFAULTS_BASE : public wxPanel
 		wxStaticText* m_staticTextInfo;
 		wxStaticText* m_staticText1;
 		WX_GRID* m_grid;
-	
+
 	public:
-		
-		PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
+
+		PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_MODEDIT_DEFAULTS_BASE();
-	
+
 };
 
-#endif //__PANEL_MODEDIT_DEFAULTS_BASE_H__
