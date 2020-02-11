@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014-2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,34 +55,42 @@ using KIGFX::COLOR4D;
  *       application class.
  */
 
+// When reading/writing files, we need to swtich to setlocale( LC_NUMERIC, "C" ).
+// Works fine to read/write files with floating point numbers.
+// We can call setlocale( LC_NUMERIC, "C" ) of wxLocale( "C", "C", "C", false )
+// wxWidgets discourage a direct call to setlocale
+// Previouly, we called setlocale( LC_NUMERIC, "C" )
+// The old code will be removed when calling wxLocale( "C", "C", "C", false ) is fully tested
+#define USE_WXLOCALE 1      /* 0 to call setlocale, 1 to call wxLocale */
 
+// On Windows, when using setlocale, a wx alert is generated
+// in some cases (reading a bitmap for instance)
+// So we disable alerts during the time a file is read or written
+#if !USE_WXLOCALE
 #if defined( _WIN32 ) && defined( DEBUG )
 // a wxAssertHandler_t function to filter wxWidgets alert messages when reading/writing a file
 // when switching the locale to LC_NUMERIC, "C"
 // It is used in class LOCALE_IO to hide a useless (in kicad) wxWidgets alert message
 void KiAssertFilter( const wxString &file, int line,
-                                  const wxString &func, const wxString &cond,
-                                  const wxString &msg)
+                     const wxString &func, const wxString &cond,
+                     const wxString &msg)
 {
     if( !msg.Contains( "Decimal separator mismatch" ) )
         wxTheApp->OnAssertFailure( file.c_str(), line, func.c_str(), cond.c_str(), msg.c_str() );
 }
 #endif
+#endif
 
 
 std::atomic<unsigned int> LOCALE_IO::m_c_count( 0 );
-
-
-// Note on Windows, setlocale( LC_NUMERIC, "C" ) works fine to read/write
-// files with floating point numbers, but generates a overzealous wx alert
-// in some cases (reading a bitmap for instance)
-// So we disable alerts during the time a file is read or written
-
-LOCALE_IO::LOCALE_IO()
+LOCALE_IO::LOCALE_IO() : m_wxLocale( nullptr )
 {
     // use thread safe, atomic operation
     if( m_c_count++ == 0 )
     {
+#if USE_WXLOCALE
+        m_wxLocale = new wxLocale( "C", "C", "C", false );
+#else
         // Store the user locale name, to restore this locale later, in dtor
         m_user_locale = setlocale( LC_NUMERIC, nullptr );
 #if defined( _WIN32 ) && defined( DEBUG )
@@ -91,6 +99,7 @@ LOCALE_IO::LOCALE_IO()
 #endif
         // Switch the locale to C locale, to read/write files with fp numbers
         setlocale( LC_NUMERIC, "C" );
+#endif
     }
 }
 
@@ -101,10 +110,15 @@ LOCALE_IO::~LOCALE_IO()
     if( --m_c_count == 0 )
     {
         // revert to the user locale
+#if USE_WXLOCALE
+        delete m_wxLocale;      // Deleting m_wxLocale restored previous locale
+        m_wxLocale = nullptr;
+#else
         setlocale( LC_NUMERIC, m_user_locale.c_str() );
 #if defined( _WIN32 ) && defined( DEBUG )
         // Enable wxWidgets alerts
         wxSetDefaultAssertHandler();
+#endif
 #endif
     }
 }
