@@ -1082,13 +1082,26 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
 
     if( !handled )
     {
+        TOOL_EVENT mod_event( aEvent );
+
+        // Only immediate actions get the position.  Otherwise clear for tool activation
+        if( GetEditFrame() && !GetEditFrame()->GetDoImmediateActions() )
+        {
+            // An tool-selection-event has no position
+            if( mod_event.GetCommandStr().is_initialized()
+                    && mod_event.GetCommandStr().get() != GetEditFrame()->CurrentToolName() )
+            {
+                mod_event.SetHasPosition( false );
+            }
+        }
+
         // If the event is not handled through a hotkey activation, pass it to the currently
         // running tool loops
-        handled |= dispatchInternal( aEvent );
-        handled |= dispatchActivation( aEvent );
+        handled |= dispatchInternal( mod_event );
+        handled |= dispatchActivation( mod_event );
 
         // Open the context menu if requested by a tool
-        DispatchContextMenu( aEvent );
+        DispatchContextMenu( mod_event );
 
         // Dispatch any remaining events in the event queue
         while( !m_eventQueue.empty() )

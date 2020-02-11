@@ -448,10 +448,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     // clients that don't supply a tool will have to check GetSelected() themselves
     if( evt && m_tool )
     {
-
         wxLogTrace( kicadTraceToolStack, "ACTION_MENU::OnMenuEvent %s", evt->Format() );
-
-        TOOL_MANAGER* toolMgr = m_tool->GetManager();
 
         // Pass the position the menu was opened from into the generated event if it is a select event
         if( type == wxEVT_COMMAND_MENU_SELECTED )
@@ -461,16 +458,6 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 
         if( g_last_menu_highlighted_id == aEvent.GetId() && !m_isContextMenu )
             evt->SetHasPosition( false );
-
-        if( toolMgr->GetEditFrame() && !toolMgr->GetEditFrame()->GetDoImmediateActions() )
-        {
-            // An tool-selection-event has no position
-            if( evt->GetCommandStr().is_initialized()
-                    && evt->GetCommandStr().get() != toolMgr->GetEditFrame()->CurrentToolName() )
-            {
-                evt->SetHasPosition( false );
-            }
-        }
 
         if( m_tool->GetManager() )
             m_tool->GetManager()->ProcessEvent( *evt );

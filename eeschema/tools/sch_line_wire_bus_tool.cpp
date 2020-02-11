@@ -481,6 +481,10 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
     if( m_busUnfold.label )
         m_selectionTool->AddItemToSel( m_busUnfold.label, true );
 
+    // Continue the existing wires if we've started (usually by immediate action preference)
+    if( !m_wires.empty() )
+        segment = m_wires.back();
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
