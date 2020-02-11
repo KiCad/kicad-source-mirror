@@ -55,7 +55,7 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
     m_checkAutoplaceJustify->SetValue( m_frame->GetAutoplaceJustify() );
     m_checkAutoplaceAlign->SetValue( m_frame->GetAutoplaceAlign() );
 
-    m_mouseDragIsDrag->SetValue( m_frame->GetDragActionIsMove() );
+    m_mouseDragIsDrag->SetValue( !m_frame->GetDragActionIsMove() );
 
     m_cbPinSelectionOpt->SetValue( m_frame->GetSelectPinSelectSymbol() );
 
