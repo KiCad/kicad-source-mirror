@@ -574,15 +574,31 @@ void KICAD_MANAGER_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 
 void KICAD_MANAGER_FRAME::OnEditSymLibTable( wxCommandEvent& aEvent )
 {
-    KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
-    kiface->CreateWindow( this, DIALOG_SCH_LIBRARY_TABLE, &Kiway() );
+    try     // _eeschema.kiface must be available: it contains the configure dialog.
+    {
+        KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
+        kiface->CreateWindow( this, DIALOG_SCH_LIBRARY_TABLE, &Kiway() );
+    }
+    catch( ... )
+    {
+        // Do nothing here.
+        // A error message is displayed after trying to load _pcbnew.kiface.
+    }
 }
 
 
 void KICAD_MANAGER_FRAME::OnEditFpLibTable( wxCommandEvent& aEvent )
 {
-    KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
-    kiface->CreateWindow( this, DIALOG_PCB_LIBRARY_TABLE, &Kiway() );
+    try     // _pcbnew.kiface must be available: it contains the configure dialog.
+    {
+        KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
+        kiface->CreateWindow( this, DIALOG_PCB_LIBRARY_TABLE, &Kiway() );
+    }
+    catch( ... )
+    {
+        // Do nothing here.
+        // A error message is displayed after trying to load _pcbnew.kiface.
+    }
 }
 
 
