@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
     m_checkSelTextBox->SetValue( GetSelectionTextAsBox() );
     m_checkSelDrawChildItems->SetValue( GetSelectionDrawChildItems() );
     m_checkSelFillShapes->SetValue( GetSelectionFillShapes() );
-    m_selWidthCtrl->SetValue( GetSelectionThickness() );
+    m_selWidthCtrl->SetValue( Iu2Mils( GetSelectionThickness() ) );
 
     m_galOptsPanel->TransferDataToWindow();
 
@@ -126,7 +126,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     SetSelectionTextAsBox( m_checkSelTextBox->GetValue() );
     SetSelectionDrawChildItems( m_checkSelDrawChildItems->GetValue() );
     SetSelectionFillShapes( m_checkSelFillShapes->GetValue() );
-    SetSelectionThickness( m_selWidthCtrl->GetValue() );
+    SetSelectionThickness( Mils2iu( m_selWidthCtrl->GetValue() ) );
 
     // Update canvas
     m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
