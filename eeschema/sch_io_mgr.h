@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -53,7 +53,7 @@ public:
     DEFINE_ENUM_VECTOR( SCH_FILE_T,
     {
         SCH_LEGACY,      ///< Legacy Eeschema file formats prior to s-expression.
-//      SCH_KICAD,       ///< The s-expression version of the schematic file formats.
+        SCH_KICAD,       ///< The s-expression version of the schematic file formats.
         SCH_EAGLE,       ///< Autodesk Eagle file format
         // Add your schematic type here.
 

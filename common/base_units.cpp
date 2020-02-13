@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 1992-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -181,7 +181,7 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aUseMils, E
     else
     {
 #if defined( EESCHEMA )
-        format = wxT( "%.2f" );
+        format = wxT( "%.4f" );
 #else
         format = wxT( "%.3f" );
 #endif
@@ -526,9 +526,7 @@ std::string FormatInternalUnits( int aValue )
     double  engUnits = aValue;
     int     len;
 
-#ifndef EESCHEMA
     engUnits /= IU_PER_MM;
-#endif
 
     if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
     {
@@ -537,11 +535,9 @@ std::string FormatInternalUnits( int aValue )
         while( --len > 0 && buf[len] == '0' )
             buf[len] = '\0';
 
-#ifndef EESCHEMA
         if( buf[len] == '.' )
             buf[len] = '\0';
         else
-#endif
             ++len;
     }
     else

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,8 @@
 class TEST_LIB_PART_FIXTURE
 {
 public:
-    TEST_LIB_PART_FIXTURE() : m_part_no_data( "part_name", nullptr )
+    TEST_LIB_PART_FIXTURE() :
+        m_part_no_data( "part_name", nullptr )
     {
     }
 
@@ -365,6 +366,68 @@ BOOST_AUTO_TEST_CASE( Compare )
     testPart.SetShowPinNumbers( true );
 
     // Time stamp comparison tests.
+}
+
+
+/**
+ * Check the fetch unit items code.
+ */
+BOOST_AUTO_TEST_CASE( GetUnitItems )
+{
+    // There are no unit draw items in the empty LIB_PART object.
+    BOOST_CHECK( m_part_no_data.GetUnitItems( 1, 1 ).size() == 0 );
+
+    // A single unique unit with 1 pin common to all units and all body styles.
+    LIB_PIN* pin1 = new LIB_PIN( &m_part_no_data );
+    m_part_no_data.AddDrawItem( pin1 );
+    BOOST_CHECK( m_part_no_data.GetUnitItems( 0, 0 ).size() == 1 );
+
+    // A single unique unit with 1 pin in unit 1 and common to all body styles.
+    pin1->SetUnit( 1 );
+    BOOST_CHECK( m_part_no_data.GetUnitItems( 1, 0 ).size() == 1 );
+
+    // A single unique unit with 1 pin in unit 1 and body style 1.
+    pin1->SetConvert( 1 );
+    BOOST_CHECK( m_part_no_data.GetUnitItems( 1, 1 ).size() == 1 );
+
+    // Two unique units with pin 1 assigned to unit 1 and body style 1 and pin 2 assinged to
+    // unit 2 and body style 1.
+    LIB_PIN* pin2 = new LIB_PIN( &m_part_no_data );
+    m_part_no_data.SetUnitCount( 2 );
+    pin2->SetUnit( 2 );
+    pin2->SetConvert( 2 );
+    pin2->SetNumber( "4" );
+    m_part_no_data.AddDrawItem( pin2 );
+    BOOST_CHECK( m_part_no_data.GetUnitItems( 2, 2 ).size() == 1 );
+
+    // Make pin 1 body style common to all units.
+    pin1->SetConvert( 0 );
+    BOOST_CHECK( m_part_no_data.GetUnitItems( 1, 1 ).size() == 0 );
+    BOOST_CHECK( m_part_no_data.GetUnitItems( 2, 1 ).size() == 1 );
+
+    m_part_no_data.RemoveDrawItem( pin2 );
+    m_part_no_data.RemoveDrawItem( pin1 );
+    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem() );
+}
+
+
+/**
+ * Check the fetch unit draw items code.
+ */
+BOOST_AUTO_TEST_CASE( GetUnitDrawItems )
+{
+    // There are no unit draw items in the empty LIB_PART object.
+    BOOST_CHECK( m_part_no_data.GetUnitDrawItems().size() == 0 );
+
+    // A single unique unit with 1 pin common to all units and all body styles.
+    LIB_PIN* pin1 = new LIB_PIN( &m_part_no_data );
+    pin1->SetNumber( "1" );
+    m_part_no_data.AddDrawItem( pin1 );
+    std::vector<struct PART_UNITS> units = m_part_no_data.GetUnitDrawItems();
+    BOOST_CHECK( units.size() == 1 );
+    BOOST_CHECK( units[0].m_unit == 0 );
+    BOOST_CHECK( units[0].m_convert == 0 );
+    BOOST_CHECK( units[0].m_items[0] == pin1 );
 }
 
 

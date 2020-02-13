@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,9 +52,14 @@ EDA_ITEM* LIB_POLYLINE::Clone() const
 }
 
 
-int LIB_POLYLINE::compare( const LIB_ITEM& aOther ) const
+int LIB_POLYLINE::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == LIB_POLYLINE_T );
+
+    int retv = LIB_ITEM::compare( aOther );
+
+    if( retv )
+        return retv;
 
     const LIB_POLYLINE* tmp = (LIB_POLYLINE*) &aOther;
 

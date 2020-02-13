@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,6 +105,15 @@ public:
 
     // Define the enums for basic
     enum LIB_CONVERT : int  { BASE = 1, DEMORGAN = 2 };
+
+    /**
+     * The list of flags used by the #compare function.
+     *
+     * - NORMAL This compares everthing between two #LIB_ITEM objects.
+     * - UNIT This compare flag ignores unit and convert and pin number information when
+     *        comparing #LIB_ITEM objects for unit comparison.
+     */
+    enum COMPARE_FLAGS : int { NORMAL = 0x00, UNIT = 0x01 };
 
     /**
      * Provide a user-consumable name of the object type.  Perform localization when
@@ -309,7 +318,7 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
-private:
+protected:
 
     /**
      * Provide the draw object specific comparison called by the == and < operators.
@@ -321,12 +330,18 @@ private:
      *      - KICAD_T enum value.
      *      - Result of derived classes comparison.
      *
+     * @note Make sure you call down to #LIB_ITEM::compare before doing any derived object
+     *       comparisons or you will break the sorting using the symbol library file format.
+     *
      * @param aOther A reference to the other #LIB_ITEM to compare the arc against.
+     * @param aCompareFlags The flags used to perform the comparison.
+     *
      * @return An integer value less than 0 if the object is less than \a aOther ojbect,
      *         zero if the object is equal to \a aOther object, or greater than 0 if the
      *         object is greater than \a aOther object.
      */
-    virtual int compare( const LIB_ITEM& aOther ) const = 0;
+    virtual int compare( const LIB_ITEM& aOther,
+            LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const;
 };
 
 

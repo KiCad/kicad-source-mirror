@@ -90,7 +90,7 @@ LIB_PART::LIB_PART( const wxString& aName, LIB_PART* aParent, PART_LIB* aLibrary
 {
     m_dateLastEdition     = 0;
     m_unitCount           = 1;
-    m_pinNameOffset       = Mils2iu( 40 );
+    m_pinNameOffset       = Mils2iu( DEFAULT_PIN_NAME_OFFSET );
     m_options             = ENTRY_NORMAL;
     m_unitsLocked         = false;
     m_showPinNumbers      = true;
@@ -1122,4 +1122,162 @@ void LIB_PART::SetSubpartIdNotation( int aSep, int aFirstId )
 
     if( aFirstId == '1' && aSep != 0 )
         m_subpartFirstId = aFirstId;
+}
+
+
+std::vector<LIB_ITEM*> LIB_PART::GetUnitItems( int aUnit, int aConvert )
+{
+    std::vector<LIB_ITEM*> unitItems;
+
+    for( LIB_ITEM& item : m_drawings )
+    {
+        if( item.Type() == LIB_FIELD_T )
+            continue;
+
+        if( ( aConvert == -1 && item.GetUnit() == aUnit )
+          || ( aUnit == -1 && item.GetConvert() == aConvert )
+          || ( aUnit == item.GetUnit() && aConvert == item.GetConvert() ) )
+            unitItems.push_back( &item );
+    }
+
+    return unitItems;
+}
+
+
+std::vector<struct PART_UNITS> LIB_PART::GetUnitDrawItems()
+{
+    std::vector<struct PART_UNITS> units;
+
+    for( LIB_ITEM& item : m_drawings )
+    {
+        if( item.Type() == LIB_FIELD_T )
+            continue;
+
+        int unit = item.GetUnit();
+        int convert = item.GetConvert();
+
+        auto it = std::find_if( units.begin(), units.end(),
+                [unit, convert] ( const auto& a ) {
+                    return a.m_unit == unit && a.m_convert == convert;
+                } );
+
+        if( it == units.end() )
+        {
+            struct PART_UNITS newUnit;
+            newUnit.m_unit = item.GetUnit();
+            newUnit.m_convert = item.GetConvert();
+            newUnit.m_items.push_back( &item );
+            units.emplace_back( newUnit );
+        }
+        else
+        {
+            it->m_items.push_back( &item );
+        }
+    }
+
+    return units;
+}
+
+
+std::vector<struct PART_UNITS> LIB_PART::GetUniqueUnits()
+{
+    int unitNum;
+    size_t i;
+    struct PART_UNITS unit;
+    std::vector<LIB_ITEM*> compareDrawItems;
+    std::vector<LIB_ITEM*> currentDrawItems;
+    std::vector<struct PART_UNITS> uniqueUnits;
+
+    // The first unit is guarenteed to be unique so always include it.
+    unit.m_unit = 1;
+    unit.m_convert = 1;
+    unit.m_items = GetUnitItems( 1, 1 );
+
+    // There are no unique units if there are no draw items other than fields.
+    if( unit.m_items.size() == 0 )
+        return uniqueUnits;
+
+    uniqueUnits.emplace_back( unit );
+
+    if( ( GetUnitCount() == 1 || UnitsLocked() ) && !HasConversion() )
+        return uniqueUnits;
+
+    currentDrawItems = unit.m_items;
+
+    for( unitNum = 2; unitNum <= GetUnitCount(); unitNum++ )
+    {
+        compareDrawItems = GetUnitItems( unitNum, 1 );
+
+        wxCHECK2_MSG( compareDrawItems.size() != 0, continue,
+                      "Multiple unit symbol defined with empty units." );
+
+        if( currentDrawItems.size() != compareDrawItems.size() )
+        {
+            unit.m_unit = unitNum;
+            unit.m_convert = 1;
+            unit.m_items = compareDrawItems;
+            uniqueUnits.emplace_back( unit );
+        }
+        else
+        {
+            for( i = 0; i < currentDrawItems.size(); i++ )
+            {
+                if( currentDrawItems[i]->compare( *compareDrawItems[i],
+                                                  LIB_ITEM::COMPARE_FLAGS::UNIT ) != 0 )
+                {
+                    unit.m_unit = unitNum;
+                    unit.m_convert = 1;
+                    unit.m_items = compareDrawItems;
+                    uniqueUnits.emplace_back( unit );
+                }
+            }
+        }
+    }
+
+    if( HasConversion() )
+    {
+        currentDrawItems = GetUnitItems( 1, 2 );
+
+        if( ( GetUnitCount() == 1 || UnitsLocked() ) )
+        {
+            unit.m_unit = 1;
+            unit.m_convert = 2;
+            unit.m_items = currentDrawItems;
+            uniqueUnits.emplace_back( unit );
+
+            return uniqueUnits;
+        }
+
+        for( unitNum = 2; unitNum <= GetUnitCount(); unitNum++ )
+        {
+            compareDrawItems = GetUnitItems( unitNum, 2 );
+
+            wxCHECK2_MSG( compareDrawItems.size() != 0, continue,
+                          "Multiple unit symbol defined with empty units." );
+
+            if( currentDrawItems.size() != compareDrawItems.size() )
+            {
+                unit.m_unit = unitNum;
+                unit.m_convert = 2;
+                unit.m_items = compareDrawItems;
+                uniqueUnits.emplace_back( unit );
+            }
+            else
+            {
+                for( i = 0; i < currentDrawItems.size(); i++ )
+                {
+                    if( currentDrawItems[i]->compare( *compareDrawItems[i],
+                                                      LIB_ITEM::COMPARE_FLAGS::UNIT ) != 0 )
+                    {
+                        unit.m_unit = unitNum;
+                        unit.m_convert = 2;
+                        unit.m_items = compareDrawItems;
+                        uniqueUnits.emplace_back( unit );
+                    }
+                }
+            }
+        }
+    }
+
+    return uniqueUnits;
 }

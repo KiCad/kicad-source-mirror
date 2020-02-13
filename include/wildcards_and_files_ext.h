@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,6 +125,7 @@ extern const std::string EquFileExtension;
 extern const std::string LegacyPcbFileExtension;
 extern const std::string KiCadPcbFileExtension;
 #define PcbFileExtension    KiCadPcbFileExtension       // symlink choice
+extern const std::string KiCadSymbolLibFileExtension;
 extern const std::string PageLayoutDescrFileExtension;
 
 extern const std::string LegacyFootprintLibPathExtension;
@@ -170,6 +171,7 @@ extern wxString AllFilesWildcard();
 extern wxString ComponentFileWildcard();
 extern wxString PageLayoutDescrFileWildcard();
 extern wxString SchematicSymbolFileWildcard();
+extern wxString KiCadSymbolLibFileWildcard();
 extern wxString SchematicLibraryFileWildcard();
 extern wxString ProjectFileWildcard();
 extern wxString SchematicFileWildcard();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,7 @@ LIB_FIELD::LIB_FIELD( int idfield ) :
 }
 
 
-LIB_FIELD::LIB_FIELD( int aID, wxString& aName ) :
+LIB_FIELD::LIB_FIELD( int aID, const wxString& aName ) :
     LIB_ITEM( LIB_FIELD_T, NULL )
 {
     Init( aID );
@@ -184,11 +184,16 @@ void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 }
 
 
-int LIB_FIELD::compare( const LIB_ITEM& other ) const
+int LIB_FIELD::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
 {
-    wxASSERT( other.Type() == LIB_FIELD_T );
+    wxASSERT( aOther.Type() == LIB_FIELD_T );
 
-    const LIB_FIELD* tmp = ( LIB_FIELD* ) &other;
+    int retv = LIB_ITEM::compare( aOther, aCompareFlags );
+
+    if( retv )
+        return retv;
+
+    const LIB_FIELD* tmp = ( LIB_FIELD* ) &aOther;
 
     if( m_id != tmp->m_id )
         return m_id - tmp->m_id;
@@ -448,4 +453,10 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 BITMAP_DEF LIB_FIELD::GetMenuImage() const
 {
     return move_xpm;
+}
+
+
+bool LIB_FIELD::IsMandatory() const
+{
+    return m_id < MANDATORY_FIELDS;
 }

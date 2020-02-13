@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -789,6 +789,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 {
     wxFileName fn;
     wxString   msg;
+    SCH_IO_MGR::SCH_FILE_T aFileType = SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY;
     PROJECT&   prj = Prj();
 
     m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
@@ -812,8 +813,11 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         fn.SetName( aLibrary );
         fn.SetExt( SchematicLibraryFileExtension );
 
+        wxString wildcards = SchematicLibraryFileWildcard();
+        wildcards += "|" + KiCadSymbolLibFileWildcard();
+
         wxFileDialog dlg( this, wxString::Format( _( "Save Library \"%s\" As..." ), aLibrary ),
-                          default_path, fn.GetFullName(), SchematicLibraryFileWildcard(),
+                          default_path, fn.GetFullName(), wildcards,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -821,10 +825,16 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
         fn = dlg.GetPath();
 
-        // The GTK file chooser doesn't return the file extension added to
-        // file name so add it here.
-        if( fn.GetExt().IsEmpty() )
+        // Update the file extension and plugin if a different library type was selected.
+        if( dlg.GetFilterIndex() == 0 )
+        {
             fn.SetExt( SchematicLibraryFileExtension );
+        }
+        else
+        {
+            fn.SetExt( KiCadSymbolLibFileExtension );
+            aFileType = SCH_IO_MGR::SCH_FILE_T::SCH_KICAD;
+        }
     }
     else
     {
@@ -848,7 +858,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     if( !backupFile( docFileName, "bck" ) )
         return false;
 
-    if( !m_libMgr->SaveLibrary( aLibrary, fn.GetFullPath() ) )
+    if( !m_libMgr->SaveLibrary( aLibrary, fn.GetFullPath(), aFileType ) )
     {
         msg.Printf( _( "Failed to save changes to symbol library file \"%s\"" ),
                     fn.GetFullPath() );

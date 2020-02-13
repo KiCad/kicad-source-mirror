@@ -196,8 +196,8 @@ void SCH_BASE_FRAME::UpdateStatusBar()
         break;
 
     case EDA_UNITS::MILLIMETRES:
-        absformatter = "X %.2f  Y %.2f";
-        locformatter = "dx %.2f  dy %.2f  dist %.2f";
+        absformatter = "X %.4f  Y %.4f";
+        locformatter = "dx %.4f  dy %.4f  dist %.4f";
         break;
 
     case EDA_UNITS::UNSCALED:

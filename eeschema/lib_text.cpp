@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,11 +89,16 @@ EDA_ITEM* LIB_TEXT::Clone() const
 }
 
 
-int LIB_TEXT::compare( const LIB_ITEM& other ) const
+int LIB_TEXT::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
 {
-    wxASSERT( other.Type() == LIB_TEXT_T );
+    wxASSERT( aOther.Type() == LIB_TEXT_T );
 
-    const LIB_TEXT* tmp = ( LIB_TEXT* ) &other;
+    int retv = LIB_ITEM::compare( aOther, aCompareFlags );
+
+    if( retv )
+        return retv;
+
+    const LIB_TEXT* tmp = ( LIB_TEXT* ) &aOther;
 
     int result = GetText().CmpNoCase( tmp->GetText() );
 

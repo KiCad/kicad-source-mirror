@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@ public:
 
     LIB_FIELD( int idfield = 2 );
 
-    LIB_FIELD( int aID, wxString& aName );
+    LIB_FIELD( int aID, const wxString& aName );
 
     LIB_FIELD( LIB_PART * aParent, int idfield = 2 );
 
@@ -198,6 +198,8 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    bool IsMandatory() const;
+
 private:
 
     /**
@@ -212,7 +214,8 @@ private:
      *      - Field width.
      *      - Field height.
      */
-    int compare( const LIB_ITEM& aOther ) const override;
+    int compare( const LIB_ITEM& aOther,
+            LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const override;
 };
 
 typedef std::vector< LIB_FIELD > LIB_FIELDS;

@@ -33,6 +33,7 @@
 #include <memory>
 #include <wx/arrstr.h>
 #include <symbol_tree_synchronizing_adapter.h>
+#include <sch_io_mgr.h>
 #include <sch_screen.h>
 
 class LIB_PART;
@@ -235,7 +236,8 @@ public:
      * @param aFileName is the target file name.
      * @return True on success, false otherwise.
      */
-    bool SaveLibrary( const wxString& aLibrary, const wxString& aFileName );
+    bool SaveLibrary( const wxString& aLibrary, const wxString& aFileName,
+                      SCH_IO_MGR::SCH_FILE_T aFileType = SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY );
 
     /**
      * Reverts unsaved changes for a particular part.

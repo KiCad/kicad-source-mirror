@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -26,6 +26,7 @@
 #include <sch_io_mgr.h>
 #include <sch_legacy_plugin.h>
 #include <sch_eagle_plugin.h>
+#include <sch_sexpr_plugin.h>
 
 #include <wildcards_and_files_ext.h>
 
@@ -55,6 +56,8 @@ SCH_PLUGIN* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
     {
     case SCH_LEGACY:
         return new SCH_LEGACY_PLUGIN();
+    case SCH_KICAD:
+        return new SCH_SEXPR_PLUGIN();
     case SCH_EAGLE:
         return new SCH_EAGLE_PLUGIN();
     }
@@ -87,6 +90,9 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
     case SCH_LEGACY:
         return wxString( wxT( "Legacy" ) );
 
+    case SCH_KICAD:
+        return wxString( "KiCad" );
+
     case SCH_EAGLE:
 	   return wxString( wxT( "EAGLE" ) );
     }
@@ -101,6 +107,8 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
 
     if( aType == wxT( "Legacy" ) )
         return SCH_LEGACY;
+    else if( aType == "KiCad" )
+        return SCH_KICAD;
     else if( aType == wxT( "EAGLE" ) )
         return SCH_EAGLE;
 
@@ -133,6 +141,10 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
     if( fn.GetExt() == SchematicFileExtension )
     {
         ret = SCH_LEGACY;
+    }
+    else if( fn.GetExt() == KiCadSymbolLibFileExtension )
+    {
+        ret = SCH_KICAD;
     }
 
     return ret;

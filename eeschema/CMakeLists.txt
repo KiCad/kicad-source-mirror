@@ -199,6 +199,7 @@ set( EESCHEMA_SRCS
     sch_plugin.cpp
     sch_preview_panel.cpp
     sch_screen.cpp
+    sch_sexpr_plugin.cpp
     sch_sheet.cpp
     sch_sheet_path.cpp
     sch_sheet_pin.cpp
@@ -474,6 +475,14 @@ make_lexer(
     dialogs/dialog_bom_cfg_lexer.h
     dialogs/dialog_bom_cfg_keywords.cpp
     T_BOMCFG_T
+    )
+
+make_lexer(
+    eeschema_kiface_objects
+    symbol_lib.keywords
+    symbol_lib_lexer.h
+    symbol_lib_keywords.cpp
+    TSYMBOL_LIB_T
     )
 
 add_subdirectory( plugins )

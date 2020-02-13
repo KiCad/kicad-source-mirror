@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -31,8 +31,9 @@
 #include <pgm_base.h>
 #include <kiway.h>
 #include <profile.h>
-#include <symbol_lib_table.h>
+#include <sch_io_mgr.h>
 #include <sch_legacy_plugin.h>
+#include <symbol_lib_table.h>
 #include <list>
 
 
@@ -129,12 +130,13 @@ SYMBOL_LIB_TABLE_ROW* LIB_MANAGER::GetLibrary( const wxString& aLibrary ) const
 }
 
 
-bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileName )
+bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileName,
+                               SCH_IO_MGR::SCH_FILE_T aFileType )
 {
     wxCHECK( LibraryExists( aLibrary ), false );
     wxFileName fn( aFileName );
     wxCHECK( !fn.FileExists() || fn.IsFileWritable(), false );
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( aFileType ) );
     bool res = true;    // assume all libraries are successfully saved
 
     auto it = m_libs.find( aLibrary );

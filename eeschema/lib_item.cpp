@@ -73,12 +73,25 @@ void LIB_ITEM::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 }
 
 
+int LIB_ITEM::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
+{
+    if( Type() != aOther.Type() )
+        return Type() - aOther.Type();
+
+    // When comparing unit LIB_ITEM objects, we ignore the unit number.
+    if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_Unit != aOther.m_Unit )
+        return m_Unit - aOther.m_Unit;
+
+    if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_Convert != aOther.m_Convert )
+       return m_Convert - m_Convert;
+
+    return 0;
+}
+
+
 bool LIB_ITEM::operator==( const LIB_ITEM& aOther ) const
 {
-    return ( ( Type() == aOther.Type() )
-             && ( m_Unit == aOther.m_Unit )
-             && ( m_Convert == aOther.m_Convert )
-             && compare( aOther ) == 0 );
+    return compare( aOther ) == 0;
 }
 
 

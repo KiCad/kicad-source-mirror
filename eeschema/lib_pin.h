@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,9 @@ class SCH_COMPONENT;
 #include "pin_shape.h"
 #include "pin_type.h"
 #include "class_libentry.h"
+
+/// The offset of the pin name string from the end of the pin in mils.
+#define DEFAULT_PIN_NAME_OFFSET 40
 
 // Circle diameter drawn at the active end of pins:
 #define TARGET_PIN_RADIUS   Mils2iu( 15 )
@@ -472,7 +475,8 @@ private:
      *      - Pin horizontal (X) position.
      *      - Pin vertical (Y) position.
      */
-    int compare( const LIB_ITEM& aOther ) const override;
+    int compare( const LIB_ITEM& aOther,
+            LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const override;
 };
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -74,7 +74,7 @@ bool LIB_ARC::HitTest( const wxPoint& aRefPoint, int aAccuracy ) const
     // We are on the circle, ensure we are only on the arc, i.e. between
     //  m_ArcStart and m_ArcEnd
 
-    wxPoint startEndVector = twoPointVector( m_ArcStart, m_ArcEnd);
+    wxPoint startEndVector = twoPointVector( m_ArcStart, m_ArcEnd );
     wxPoint startRelativePositionVector = twoPointVector( m_ArcStart, relativePosition );
 
     wxPoint centerStartVector = twoPointVector( m_Pos, m_ArcStart );
@@ -132,9 +132,14 @@ EDA_ITEM* LIB_ARC::Clone() const
 }
 
 
-int LIB_ARC::compare( const LIB_ITEM& aOther ) const
+int LIB_ARC::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == LIB_ARC_T );
+
+    int retv = LIB_ITEM::compare( aOther );
+
+    if( retv )
+        return retv;
 
     const LIB_ARC* tmp = ( LIB_ARC* ) &aOther;
 

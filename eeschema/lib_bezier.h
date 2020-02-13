@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,8 +29,7 @@
 
 
 /**
- * LIB_BEZIER
- * defines bezier curve graphic body item.
+ * Define a bezier curve graphic body item.
  */
 class LIB_BEZIER : public LIB_ITEM
 {
@@ -80,7 +79,7 @@ public:
 
     void MoveTo( const wxPoint& aPosition ) override;
 
-    wxPoint GetPosition() const override; 
+    wxPoint GetPosition() const override;
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
     void MirrorVertical( const wxPoint& aCenter ) override;
@@ -107,7 +106,8 @@ private:
      *      - Bezier horizontal (X) point position.
      *      - Bezier vertical (Y) point position.
      */
-    int compare( const LIB_ITEM& aOther ) const override;
+    int compare( const LIB_ITEM& aOther,
+            LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const override;
 };
 
 

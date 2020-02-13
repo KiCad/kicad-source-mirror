@@ -1237,18 +1237,25 @@ EDA_ITEM* LIB_PIN::Clone() const
 }
 
 
-int LIB_PIN::compare( const LIB_ITEM& other ) const
+int LIB_PIN::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
 {
-    wxASSERT( other.Type() == LIB_PIN_T );
+    wxASSERT( aOther.Type() == LIB_PIN_T );
 
-    const LIB_PIN* tmp = (LIB_PIN*) &other;
+    int retv = LIB_ITEM::compare( aOther, aCompareFlags );
 
-    if( m_number != tmp->m_number )
+    if( retv )
+        return retv;
+
+    const LIB_PIN* tmp = (LIB_PIN*) &aOther;
+
+    // When comparing units, we do not compare the part numbers.  If everything else is
+    // identical, then we can just renumber the parts for the inherited symbol.
+    if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_number != tmp->m_number )
         return m_number.Cmp( tmp->m_number );
 
     int result = m_name.CmpNoCase( tmp->m_name );
 
-    if( result != 0 )
+    if( result )
         return result;
 
     if( m_position.x != tmp->m_position.x )
@@ -1256,6 +1263,30 @@ int LIB_PIN::compare( const LIB_ITEM& other ) const
 
     if( m_position.y != tmp->m_position.y )
         return m_position.y - tmp->m_position.y;
+
+    if( m_length != tmp->m_length )
+        return m_length - tmp->m_length;
+
+    if( m_orientation != tmp->m_orientation )
+        return m_orientation - tmp->m_orientation;
+
+    if( m_shape != tmp->m_shape )
+        return static_cast<int>( m_shape ) - static_cast<int>( tmp->m_shape );
+
+    if( m_type != tmp->m_type )
+        return static_cast<int>( m_type ) - static_cast<int>( tmp->m_type );
+
+    if( m_attributes != tmp->m_attributes )
+        return m_attributes - tmp->m_attributes;
+
+    if( m_width != tmp->m_width )
+        return m_width - tmp->m_width;
+
+    if( m_numTextSize != tmp->m_numTextSize )
+        return m_numTextSize - tmp->m_numTextSize;
+
+    if( m_nameTextSize != tmp->m_nameTextSize )
+        return m_nameTextSize - tmp->m_nameTextSize;
 
     return 0;
 }

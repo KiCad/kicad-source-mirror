@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,6 +114,7 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts )
 }
 
 
+const std::string KiCadSymbolLibFileExtension( "kicad_sym" );
 const std::string SchematicSymbolFileExtension( "sym" );
 const std::string SchematicLibraryFileExtension( "lib" );
 
@@ -172,9 +173,15 @@ wxString SchematicSymbolFileWildcard()
 }
 
 
+wxString KiCadSymbolLibFileWildcard()
+{
+    return _( "KiCad symbol library files" ) + AddFileExtListToFilter( { "kicad_sym" } );
+}
+
+
 wxString SchematicLibraryFileWildcard()
 {
-    return _( "KiCad symbol library files" ) + AddFileExtListToFilter( { "lib" } );
+    return _( "KiCad legacy symbol library files" ) + AddFileExtListToFilter( { "lib" } );
 }
 
 
