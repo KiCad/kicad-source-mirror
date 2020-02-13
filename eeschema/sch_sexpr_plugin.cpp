@@ -1446,9 +1446,11 @@ void SCH_SEXPR_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier,
         if( newLine == 4 )
         {
             aFormatter.Print( 0, "\n" );
-            aFormatter.Print( aNestLevel + 2, "(xy %s %s)",
+            aFormatter.Print( aNestLevel + 3, " (xy %s %s)",
                               FormatInternalUnits( pt.x ).c_str(),
                               FormatInternalUnits( pt.y ).c_str() );
+            newLine = 0;
+            lineCount += 1;
         }
         else
         {
@@ -1457,15 +1459,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier,
                               FormatInternalUnits( pt.y ).c_str() );
         }
 
-        if( newLine < 4 )
-        {
-            newLine += 1;
-        }
-        else
-        {
-            newLine = 0;
-            lineCount += 1;
-        }
+        newLine += 1;
     }
 
     if( lineCount == 1 )
@@ -1635,9 +1629,11 @@ void SCH_SEXPR_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine,
         if( newLine == 4 )
         {
             aFormatter.Print( 0, "\n" );
-            aFormatter.Print( aNestLevel + 2, "(xy %s %s)",
+            aFormatter.Print( aNestLevel + 3, " (xy %s %s)",
                               FormatInternalUnits( pt.x ).c_str(),
                               FormatInternalUnits( pt.y ).c_str() );
+            newLine = 0;
+            lineCount += 1;
         }
         else
         {
@@ -1646,15 +1642,7 @@ void SCH_SEXPR_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine,
                               FormatInternalUnits( pt.y ).c_str() );
         }
 
-        if( newLine < 4 )
-        {
-            newLine += 1;
-        }
-        else
-        {
-            newLine = 0;
-            lineCount += 1;
-        }
+        newLine += 1;
     }
 
     if( lineCount == 1 )
