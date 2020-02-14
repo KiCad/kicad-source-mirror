@@ -64,11 +64,15 @@ static bool normalizeAbsolutePaths( const wxFileName& aPathA,
     return true;
 }
 
+
 wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars,
         const wxString& aProjectPath )
 {
     wxFileName envPath;
-    wxString tmp, varName, normalizedFullPath;
+    wxString   varName;
+    wxString   remainingPath;
+    wxString   normalizedFullPath;
+    int        pathDepth = 0;
 
     if( aEnvVars )
     {
@@ -81,10 +85,18 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
 
             envPath.SetPath( entry.second.GetValue() );
 
+            wxString tmp;
             if( normalizeAbsolutePaths( envPath, aFilePath, &tmp ) )
             {
-                varName = entry.first;
-                break;
+                int newDepth = envPath.GetDirs().GetCount();
+
+                // Only use the variable if it removes more directories than the previous ones
+                if( newDepth > pathDepth )
+                {
+                    pathDepth     = newDepth;
+                    varName       = entry.first;
+                    remainingPath = tmp;
+                }
             }
         }
     }
@@ -94,7 +106,7 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
     {
         envPath.SetPath( aProjectPath );
 
-        if( normalizeAbsolutePaths( envPath, aFilePath, &tmp ) )
+        if( normalizeAbsolutePaths( envPath, aFilePath, &remainingPath ) )
             varName = PROJECT_VAR_NAME;
     }
 
@@ -102,14 +114,15 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
     {
         normalizedFullPath = wxString::Format( "${%s}/", varName );
 
-        if( !tmp.IsEmpty() )
-            normalizedFullPath += tmp;
+        if( !remainingPath.IsEmpty() )
+            normalizedFullPath += remainingPath;
 
         normalizedFullPath += aFilePath.GetFullName();
     }
 
     return normalizedFullPath;
 }
+
 
 wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars,
         const PROJECT* aProject )
