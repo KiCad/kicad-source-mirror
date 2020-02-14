@@ -36,7 +36,7 @@ public:
      *
      * @param aLibs library set from which parts will be loaded
      */
-    static PTR Create( LIB_TABLE* aLibs );
+    static PTR Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs );
 
     void AddLibraries();
 
@@ -46,7 +46,7 @@ protected:
     /**
      * Constructor; takes a set of libraries to be included in the search.
      */
-    FP_TREE_MODEL_ADAPTER( LIB_TABLE* aLibs );
+    FP_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs );
 
     std::vector<LIB_TREE_ITEM*> getFootprints( const wxString& aLibName );
 

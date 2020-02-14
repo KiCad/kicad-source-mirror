@@ -26,14 +26,16 @@
 
 #include "fp_tree_model_adapter.h"
 
-FP_TREE_MODEL_ADAPTER::PTR FP_TREE_MODEL_ADAPTER::Create( LIB_TABLE* aLibs )
+FP_TREE_MODEL_ADAPTER::PTR FP_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent,
+                                                          LIB_TABLE* aLibs )
 {
-    return PTR( new FP_TREE_MODEL_ADAPTER( aLibs ) );
+    return PTR( new FP_TREE_MODEL_ADAPTER( aParent, aLibs ) );
 }
 
 
-FP_TREE_MODEL_ADAPTER::FP_TREE_MODEL_ADAPTER( LIB_TABLE* aLibs )
-    : m_libs( (FP_LIB_TABLE*) aLibs )
+FP_TREE_MODEL_ADAPTER::FP_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs ) :
+        LIB_TREE_MODEL_ADAPTER( aParent ),
+        m_libs( (FP_LIB_TABLE*) aLibs )
 {}
 
 

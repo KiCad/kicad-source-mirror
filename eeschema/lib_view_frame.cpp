@@ -747,7 +747,7 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 
     // Container doing search-as-you-type.
     SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
-    auto adapterPtr( SYMBOL_TREE_MODEL_ADAPTER::Create( libs ) );
+    auto adapterPtr( SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs ) );
     auto adapter = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapterPtr.get() );
 
     const auto libNicknames = libs->GetLogicalLibs();

@@ -216,7 +216,7 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
     if( GFootprintList.GetErrorCount() )
         GFootprintList.DisplayErrors( this );
 
-    auto adapterPtr( FP_TREE_MODEL_ADAPTER::Create( fpTable ) );
+    auto adapterPtr( FP_TREE_MODEL_ADAPTER::Create( this, fpTable ) );
     auto adapter = static_cast<FP_TREE_MODEL_ADAPTER*>( adapterPtr.get() );
 
     std::vector<LIB_TREE_ITEM*> historyInfos;

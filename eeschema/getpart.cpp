@@ -103,7 +103,7 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* 
     if( !dialogLock.try_lock() )
         return COMPONENT_SELECTION();
 
-    auto adapterPtr( SYMBOL_TREE_MODEL_ADAPTER::Create( libs ) );
+    auto adapterPtr( SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs ) );
     auto adapter = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapterPtr.get() );
     bool loaded = false;
 

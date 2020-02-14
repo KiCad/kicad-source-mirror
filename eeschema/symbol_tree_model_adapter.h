@@ -40,7 +40,7 @@ public:
      *
      * @param aLibs library set from which parts will be loaded
      */
-    static PTR Create( LIB_TABLE* aLibs );
+    static PTR Create( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs );
 
     /**
      * Add all the libraries in a SYMBOL_LIB_TABLE to the model.
@@ -59,7 +59,7 @@ protected:
     /**
      * Constructor; takes a set of libraries to be included in the search.
      */
-    SYMBOL_TREE_MODEL_ADAPTER( LIB_TABLE* aLibs );
+    SYMBOL_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs );
 
 private:
     /**

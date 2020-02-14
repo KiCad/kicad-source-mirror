@@ -42,7 +42,7 @@ LIB_TREE_MODEL_ADAPTER::PTR FP_TREE_SYNCHRONIZING_ADAPTER::Create( FOOTPRINT_EDI
 
 FP_TREE_SYNCHRONIZING_ADAPTER::FP_TREE_SYNCHRONIZING_ADAPTER( FOOTPRINT_EDIT_FRAME* aFrame,
                                                               FP_LIB_TABLE* aLibs ) :
-        FP_TREE_MODEL_ADAPTER( aLibs ),
+        FP_TREE_MODEL_ADAPTER( aFrame, aLibs ),
         m_frame( aFrame )
 {
 }

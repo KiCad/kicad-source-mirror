@@ -90,6 +90,7 @@
  */
 
 class TOOL_INTERACTIVE;
+class PARAM_CFG;
 
 class LIB_TREE_MODEL_ADAPTER: public wxDataViewModel
 {
@@ -131,6 +132,8 @@ public:
      */
     void SaveColWidths();
     void SavePinnedItems();
+
+    std::vector<PARAM_CFG*>& GetProjectFileParameters();
 
     /**
      * Set the component filter type. Must be set before adding libraries
@@ -274,7 +277,9 @@ protected:
 
     LIB_TREE_NODE_ROOT m_tree;
 
-    LIB_TREE_MODEL_ADAPTER();
+    LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent );
+
+    LIB_TREE_NODE_LIB& DoAddLibraryNode( wxString const& aNodeName, wxString const& aDesc );
 
     /**
      * Check whether a container has columns too
@@ -332,30 +337,30 @@ protected:
                   wxDataViewItemAttr&     aAttr ) const override;
 
 private:
-    CMP_FILTER_TYPE     m_filter;
-    bool                m_show_units;
-    LIB_ID              m_preselect_lib_id;
-    int                 m_preselect_unit;
-    int                 m_freeze;
+    EDA_BASE_FRAME*         m_parent;
 
-    wxDataViewColumn*   m_col_part;
-    wxDataViewColumn*   m_col_desc;
-    wxDataViewCtrl*     m_widget;
+    CMP_FILTER_TYPE         m_filter;
+    bool                    m_show_units;
+    LIB_ID                  m_preselect_lib_id;
+    int                     m_preselect_unit;
+    int                     m_freeze;
 
-    int                 m_colWidths[NUM_COLS];
+    wxDataViewColumn*       m_col_part;
+    wxDataViewColumn*       m_col_desc;
+    wxDataViewCtrl*         m_widget;
 
-    wxConfigBase*       m_config;
-    wxString            m_configPrefix;
+    wxConfigBase*           m_config;
+    wxString                m_configPrefix;
+    std::vector<PARAM_CFG*> m_projectFileParams;
 
-    std::set<UTF8>      m_pinnedLibIDs;
+    int                     m_colWidths[NUM_COLS];
+    wxArrayString           m_pinnedLibs;
 
     /**
-     * Find any results worth highlighting and expand them, according to given
-     * criteria (f(CMP_TREE_NODE const*) -> bool)
+     * Find any results worth highlighting and expand them, according to given criteria
      * The highest-scoring node is written to aHighScore
      */
-    void FindAndExpand( LIB_TREE_NODE& aNode,
-                        std::function<bool( LIB_TREE_NODE const* )> aFunc,
+    void FindAndExpand( LIB_TREE_NODE& aNode, std::function<bool( LIB_TREE_NODE const* )> aFunc,
                         LIB_TREE_NODE** aHighScore );
 
     /**

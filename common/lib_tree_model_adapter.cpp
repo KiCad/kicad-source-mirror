@@ -19,8 +19,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <eda_base_frame.h>
 #include <eda_pattern_match.h>
 #include <kiface_i.h>
+#include <config_params.h>
 #include <lib_tree_model_adapter.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
@@ -71,14 +73,15 @@ unsigned int LIB_TREE_MODEL_ADAPTER::IntoArray( LIB_TREE_NODE const& aNode,
 }
 
 
-LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER()
-    :m_filter( CMP_FILTER_NONE ),
-     m_show_units( true ),
-     m_preselect_unit( 0 ),
-     m_freeze( 0 ),
-     m_col_part( nullptr ),
-     m_col_desc( nullptr ),
-     m_widget( nullptr )
+LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent ) :
+        m_parent( aParent ),
+        m_filter( CMP_FILTER_NONE ),
+        m_show_units( true ),
+        m_preselect_unit( 0 ),
+        m_freeze( 0 ),
+        m_col_part( nullptr ),
+        m_col_desc( nullptr ),
+        m_widget( nullptr )
 {
     // Default column widths
     m_colWidths[PART_COL] = 360;
@@ -87,15 +90,15 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER()
     m_config = Kiface().KifaceSettings();
     m_configPrefix = typeid( this ).name();
 
-    // Read the column width from the config
+    // Read the column width from the global config
     int colWidth = 0;
 
     if( m_config->Read( m_configPrefix + LIST_COLUMN_WIDTH_KEY, &colWidth ) )
         m_colWidths[PART_COL] = colWidth;
 
-    // JEY TODO NEW SETTINGS ARCH: read pinned items array....
-    //for( UFT8 pinnedItem : pinnedItems )
-    //   m_pinnedLibIDs.insert( pinnedItem );
+    // Read the pinned entries from the project config
+    m_parent->Kiway().Prj().ConfigLoad( Kiface().KifaceSearch(), m_parent->GetName(),
+                                        GetProjectFileParameters() );
 }
 
 
@@ -116,18 +119,30 @@ void LIB_TREE_MODEL_ADAPTER::SaveColWidths()
     }
 }
 
+
+std::vector<PARAM_CFG*>& LIB_TREE_MODEL_ADAPTER::GetProjectFileParameters()
+{
+    if( !m_projectFileParams.empty() )
+        return m_projectFileParams;
+
+    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( PINNED_ITEMS_KEY, &m_pinnedLibs ) );
+
+    return m_projectFileParams;
+}
+
+
 void LIB_TREE_MODEL_ADAPTER::SavePinnedItems()
 {
-    // JEY TODO NEW SETTINGS ARCH: clear pinned items array in settings....
+    m_pinnedLibs.clear();
 
     for( auto& child: m_tree.m_Children )
     {
         if( child->m_Pinned )
-        {
-            UTF8 pinnedItem = child->m_LibId.Format();
-            // JEY TODO NEW SETTINGS ARCH: add pinned entry to settings array....
-        }
+            m_pinnedLibs.push_back( child->m_LibId.GetLibNickname() );
     }
+
+    m_parent->Kiway().Prj().ConfigSave( Kiface().KifaceSearch(), m_parent->GetName(),
+                                        GetProjectFileParameters() );
 }
 
 
@@ -150,13 +165,22 @@ void LIB_TREE_MODEL_ADAPTER::SetPreselectNode( LIB_ID const& aLibId, int aUnit )
 }
 
 
+LIB_TREE_NODE_LIB& LIB_TREE_MODEL_ADAPTER::DoAddLibraryNode( wxString const& aNodeName,
+                                                             wxString const& aDesc )
+{
+    LIB_TREE_NODE_LIB& lib_node = m_tree.AddLib( aNodeName, aDesc );
+
+    lib_node.m_Pinned = m_pinnedLibs.Index( lib_node.m_LibId.GetLibNickname() ) != wxNOT_FOUND;
+
+    return lib_node;
+}
+
+
 void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( wxString const& aNodeName, wxString const& aDesc,
                                            std::vector<LIB_TREE_ITEM*> const& aItemList,
                                            bool presorted )
 {
-    LIB_TREE_NODE_LIB& lib_node = m_tree.AddLib( aNodeName, aDesc );
-
-    lib_node.m_Pinned = m_pinnedLibIDs.count( lib_node.m_LibId.Format() ) > 0;
+    LIB_TREE_NODE_LIB& lib_node = DoAddLibraryNode( aNodeName, aDesc );
 
     for( LIB_TREE_ITEM* item: aItemList )
         lib_node.AddItem( item );

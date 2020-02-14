@@ -35,14 +35,16 @@ bool SYMBOL_TREE_MODEL_ADAPTER::m_show_progress = true;
 #define PROGRESS_INTERVAL_MILLIS 66
 
 
-SYMBOL_TREE_MODEL_ADAPTER::PTR SYMBOL_TREE_MODEL_ADAPTER::Create( LIB_TABLE* aLibs )
+SYMBOL_TREE_MODEL_ADAPTER::PTR SYMBOL_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent,
+                                                                  LIB_TABLE* aLibs )
 {
-    return PTR( new SYMBOL_TREE_MODEL_ADAPTER( aLibs ) );
+    return PTR( new SYMBOL_TREE_MODEL_ADAPTER( aParent, aLibs ) );
 }
 
 
-SYMBOL_TREE_MODEL_ADAPTER::SYMBOL_TREE_MODEL_ADAPTER( LIB_TABLE* aLibs )
-    : m_libs( (SYMBOL_LIB_TABLE*) aLibs )
+SYMBOL_TREE_MODEL_ADAPTER::SYMBOL_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs ) :
+        LIB_TREE_MODEL_ADAPTER( aParent ),
+        m_libs( (SYMBOL_LIB_TABLE*) aLibs )
 {}
 
 

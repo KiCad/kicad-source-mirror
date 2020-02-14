@@ -27,7 +27,6 @@
 #include <lib_manager.h>
 #include <symbol_lib_table.h>
 #include <class_libentry.h>
-#include <tool/tool_manager.h>
 #include <tools/lib_control.h>
 
 
@@ -40,6 +39,7 @@ LIB_TREE_MODEL_ADAPTER::PTR SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( LIB_EDIT_
 
 SYMBOL_TREE_SYNCHRONIZING_ADAPTER::SYMBOL_TREE_SYNCHRONIZING_ADAPTER( LIB_EDIT_FRAME* aParent,
                                                                       LIB_MANAGER* aLibMgr ) :
+        LIB_TREE_MODEL_ADAPTER( aParent ),
         m_frame( aParent ),
         m_libMgr( aLibMgr ),
         m_lastSyncHash( -1 )
@@ -117,7 +117,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce,
 
             SYMBOL_LIB_TABLE_ROW* library = m_libMgr->GetLibrary( libName );
 
-            auto& lib_node = m_tree.AddLib( libName, library->GetDescr() );
+            auto& lib_node = DoAddLibraryNode( libName, library->GetDescr() );
             updateLibrary( lib_node );
         }
     }
