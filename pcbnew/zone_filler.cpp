@@ -557,7 +557,20 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
             if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0
                     || aZone->GetPadConnection( pad ) == ZONE_CONNECTION::NONE )
             {
+                // for pads having a netcode different from the zone, use the net clearance:
                 int gap = std::max( zone_clearance, pad->GetClearance() );
+
+                // for pads having the same netcode as the zone, the net clearance has no
+                // meaning (clearance between object of the same net is 0) and the
+                // zone_clearance can be set to 0 (In this case the netclass clearance is used)
+                // therefore use the antipad clearance (thermal clearance) or the
+                // zone_clearance if bigger.
+                if( pad->GetNetCode() > 0 && pad->GetNetCode() == aZone->GetNetCode() )
+                {
+                    int thermalGap = aZone->GetThermalReliefGap( pad );
+                    gap = std::max( zone_clearance, thermalGap );;
+                }
+
                 EDA_RECT item_boundingbox = pad->GetBoundingBox();
                 item_boundingbox.Inflate( pad->GetClearance() );
 
