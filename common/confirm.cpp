@@ -212,12 +212,15 @@ bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
 
 
 int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
-                      const wxString& aOKLabel, const wxString& aCancelLabel, bool* aApplyToAll )
+                      const wxString& aDetailedMessage, const wxString& aOKLabel,
+                      const wxString& aCancelLabel, bool* aApplyToAll )
 {
-    wxRichMessageDialog dlg( aParent, aMessage, wxEmptyString,
+    wxRichMessageDialog dlg( aParent, aMessage, aWarning,
                              wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );
-    dlg.ShowDetailedText( _( "If you don't save, all your changes will be permanently lost." ) );
     dlg.SetOKCancelLabels( aOKLabel, aCancelLabel );
+
+    if( !aDetailedMessage.IsEmpty() )
+        dlg.ShowDetailedText( aDetailedMessage );
 
     if( aApplyToAll )
         dlg.ShowCheckBox( _( "Apply to all" ), true );

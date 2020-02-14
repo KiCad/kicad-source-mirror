@@ -116,7 +116,9 @@ static const std::map<int, supportedFileType>& fileTypes()
 class LIBRARY_TRAVERSER : public wxDirTraverser
 {
 public:
-    LIBRARY_TRAVERSER( wxString aSearchExtension ) : m_searchExtension( aSearchExtension )
+    LIBRARY_TRAVERSER( wxString aSearchExtension, wxString aInitialDir )
+        : m_searchExtension( aSearchExtension ),
+          m_currentDir( aInitialDir )
     {
     }
 
@@ -758,7 +760,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         {
             wxDir rootDir( dlg.GetPath() );
 
-            LIBRARY_TRAVERSER traverser( fileType.m_FolderSearchExtension );
+            LIBRARY_TRAVERSER traverser( fileType.m_FolderSearchExtension, rootDir.GetName() );
             rootDir.Traverse( traverser );
 
             traverser.GetPaths( files );
@@ -793,6 +795,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     bool               applyToAll    = false;
     wxString           warning       = _( "Warning: Duplicate Nickname" );
     wxString           msg           = _( "A library nicknamed \"%s\" already exists." );
+    wxString           detailedMsg   = _( "Please change the library nickname after adding this library." );
 
     for( const auto& filePath : files )
     {
@@ -804,9 +807,9 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         {
             if( !applyToAll )
             {
-                int ret       = OKOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
-                        _( "Skip" ), _( "Add Anyway" ), &applyToAll );
-                addDuplicates = ( ret == wxID_CANCEL );
+                // The cancel button adds the library to the table anyway
+                addDuplicates = ( OKOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
+                        detailedMsg, _( "Skip" ), _( "Add Anyway" ), &applyToAll ) == wxID_CANCEL );
             }
 
             doAdd = addDuplicates;

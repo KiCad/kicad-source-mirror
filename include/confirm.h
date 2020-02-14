@@ -151,13 +151,16 @@ bool IsOK( wxWindow* aParent, const wxString& aMessage );
  * @param aWarning is the warning to display in the top part of the dialog box using a bold font.
  * @param aMessage is the message to display in the lower part of the dialog box using the
  *                 default system UI font.
+ * @param aDetailedMessage is the message to display in the "Show detailed information" section.
+ *                         Passing wxEmptyString will hide this portion of the dialog.
  * @param aOKLabel is the text to display in the OK button.
  * @param aCancelLabel is the text to display in the cancel button.
  *
  * @return wxID_OK or wxID_CANCEL depending on the button the user selected.
  */
 int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
-                      const wxString& aOKLabel, const wxString& aCancelLabel, bool* aApplyToAll );
+                      const wxString& aDetailedMessage, const wxString& aOKLabel,
+                      const wxString& aCancelLabel, bool* aApplyToAll );
 
 
 
