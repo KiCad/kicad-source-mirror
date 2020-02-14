@@ -262,7 +262,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
 #ifdef __WXGTK__
         // The native wxGTK+ impl ignores background colour, so set the text colour instead.
         // This works reasonably well in dark themes, and quite poorly in light ones....
-        if( node->Name == m_libMgr->GetCurrentLib() )
+        if( node->m_Name == m_libMgr->GetCurrentLib() )
             aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #else
         // mark the current library with background color
@@ -284,7 +284,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
 #ifdef __WXGTK__
         // The native wxGTK+ impl ignores background colour, so set the text colour instead.
         // This works reasonably well in dark themes, and quite poorly in light ones....
-        if( node->LibId == m_libMgr->GetCurrentLibId() )
+        if( node->m_LibId == m_libMgr->GetCurrentLibId() )
             aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #else
         // mark the current part with background color

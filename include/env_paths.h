@@ -33,7 +33,7 @@
  * @param aFilePath is the full file path (path and file name) to be normalized.
  * @param aEnvVars is an optional map of environmental variables to try substition with.
  * @param aProject is an optional project, to normalize the file path to the project path.
- * @return m_Normalized full file path (path and file name) if succeeded or empty string if the
+ * @return Normalized full file path (path and file name) if succeeded or empty string if the
  *          path could not be normalized.
  */
 wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars,
@@ -45,7 +45,7 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
  * @param aFilePath is the full file path (path and file name) to be normalized.
  * @param aEnvVars is an optional map of environmental variables to try substition with.
  * @param aProjectPath is an optional string to normalize the file path to the project path.
- * @return m_Normalized full file path (path and file name) if succeeded or empty string if the
+ * @return Normalized full file path (path and file name) if succeeded or empty string if the
  *          path could not be normalized.
  */
 wxString NormalizePath(

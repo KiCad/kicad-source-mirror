@@ -649,7 +649,7 @@ int AR_AUTOPLACER::getOptimalModulePlacement(MODULE* aModule)
     fpBBox.SetOrigin( fpBBoxOrg + m_curPosition );
 
     min_cost = -1.0;
-//    m_frame->SetStatusText( wxT( "m_Score ??, pos ??" ) );
+//    m_frame->SetStatusText( wxT( "Score ??, pos ??" ) );
 
 
     for( ; m_curPosition.x < xylimit.x; m_curPosition.x += m_matrix.m_GridRouting )
@@ -675,7 +675,7 @@ int AR_AUTOPLACER::getOptimalModulePlacement(MODULE* aModule)
                     LastPosOK   = m_curPosition;
                     min_cost    = Score;
                     wxString msg;
-/*                    msg.Printf( wxT( "m_Score %g, pos %s, %s" ),
+/*                    msg.Printf( wxT( "Score %g, pos %s, %s" ),
                                 min_cost,
                                 GetChars( ::CoordinateToString( LastPosOK.x ) ),
                                 GetChars( ::CoordinateToString( LastPosOK.y ) ) );
