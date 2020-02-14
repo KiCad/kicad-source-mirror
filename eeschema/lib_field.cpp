@@ -365,8 +365,6 @@ COLOR4D LIB_FIELD::GetDefaultColor()
 
 wxString LIB_FIELD::GetName( bool aTranslate ) const
 {
-    wxString name;
-
     switch( m_id )
     {
     case REFERENCE: return aTranslate ? _( "Reference" ) : wxT( "Reference" );
@@ -376,14 +374,10 @@ wxString LIB_FIELD::GetName( bool aTranslate ) const
 
     default:
         if( m_name.IsEmpty() )
-        {
             return aTranslate ? wxString::Format( _( "Field%d" ), m_id )
                               : wxString::Format( wxT( "Field%d" ), m_id );
-        }
         else
-        {
             return m_name;
-        }
     }
 }
 

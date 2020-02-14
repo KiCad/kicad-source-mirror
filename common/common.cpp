@@ -59,8 +59,13 @@ using KIGFX::COLOR4D;
 // Works fine to read/write files with floating point numbers.
 // We can call setlocale( LC_NUMERIC, "C" ) of wxLocale( "C", "C", "C", false )
 // wxWidgets discourage a direct call to setlocale
+// However, for us, calling wxLocale( "C", "C", "C", false ) has a unwanted effect:
+// The I18N translations are no longer active, because the English dixtionary is selected.
+// To read files, this is not a major issues, but the resul can differ
+// from using setlocale(xx, "C").
 // Previouly, we called setlocale( LC_NUMERIC, "C" )
-// The old code will be removed when calling wxLocale( "C", "C", "C", false ) is fully tested
+// The old code will be removed when calling wxLocale( "C", "C", "C", false )
+// is fully tested, and all issues fixed
 #define USE_WXLOCALE 1      /* 0 to call setlocale, 1 to call wxLocale */
 
 // On Windows, when using setlocale, a wx alert is generated
@@ -80,7 +85,6 @@ void KiAssertFilter( const wxString &file, int line,
 }
 #endif
 #endif
-
 
 std::atomic<unsigned int> LOCALE_IO::m_c_count( 0 );
 LOCALE_IO::LOCALE_IO() : m_wxLocale( nullptr )

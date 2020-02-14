@@ -157,7 +157,10 @@ void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
     for( auto compField : oldFields )
     {
         // If requested, transfer only fields that occur also in the original library part
-        if( !m_removeExtraBox->IsChecked() || libPart->FindField( compField->GetName() ) )
+        // and obviously mandatory fields
+        if( compField->GetId() < MANDATORY_FIELDS
+            || !m_removeExtraBox->IsChecked()
+            || libPart->FindField( compField->GetName() ) )
             newFields.push_back( *compField );
     }
 
@@ -170,6 +173,7 @@ void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
             continue;
 
         SCH_FIELD* field = nullptr;
+
         auto it = std::find_if( newFields.begin(), newFields.end(), [&] ( const SCH_FIELD& f )
                 { return f.GetName() == partField; } );
 
