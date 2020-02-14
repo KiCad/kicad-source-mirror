@@ -85,7 +85,7 @@ protected:
     virtual void showPopupMenu( wxMenu& menu );
     virtual void doPopupSelection( wxCommandEvent& event );
 
-    bool toggleCell( int aRow, int aCol );
+    bool toggleCell( int aRow, int aCol, bool aPreserveSelection = false );
     bool showEditor( int aRow, int aCol );
 
     virtual void paste_clipboard();

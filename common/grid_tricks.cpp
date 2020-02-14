@@ -55,7 +55,7 @@ GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid ):
 }
 
 
-bool GRID_TRICKS::toggleCell( int aRow, int aCol )
+bool GRID_TRICKS::toggleCell( int aRow, int aCol, bool aPreserveSelection )
 {
     auto renderer = m_grid->GetCellRenderer( aRow, aCol );
     bool isCheckbox = ( dynamic_cast<wxGridCellBoolRenderer*>( renderer ) != nullptr );
@@ -63,19 +63,21 @@ bool GRID_TRICKS::toggleCell( int aRow, int aCol )
 
     if( isCheckbox )
     {
-        m_grid->ClearSelection();
+        if( !aPreserveSelection )
+            m_grid->ClearSelection();
+
         m_grid->SetGridCursor( aRow, aCol );
 
         wxGridTableBase* model = m_grid->GetTable();
 
         if( model->CanGetValueAs( aRow, aCol, wxGRID_VALUE_BOOL )
-                && model->CanSetValueAs( aRow, aCol, wxGRID_VALUE_BOOL ))
+                && model->CanSetValueAs( aRow, aCol, wxGRID_VALUE_BOOL ) )
         {
-            model->SetValueAsBool( aRow, aCol, !model->GetValueAsBool( aRow, aCol ));
+            model->SetValueAsBool( aRow, aCol, !model->GetValueAsBool( aRow, aCol ) );
         }
         else    // fall back to string processing
         {
-            if( model->GetValue( aRow, aCol )  == wxT( "1" ) )
+            if( model->GetValue( aRow, aCol ) == wxT( "1" ) )
                 model->SetValue( aRow, aCol, wxT( "0" ) );
             else
                 model->SetValue( aRow, aCol, wxT( "1" ) );
@@ -336,10 +338,84 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
     // space-bar toggling of checkboxes
     if( ev.GetKeyCode() == ' ' )
     {
-        int row = m_grid->GetGridCursorRow();
-        int col = m_grid->GetGridCursorCol();
+        bool retVal = false;
 
-        if( m_grid->IsVisible( row, col ) && toggleCell( row, col ) )
+        // If only rows can be selected, only toggle the first cell in a row
+        if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectRows )
+        {
+            wxArrayInt rowSel = m_grid->GetSelectedRows();
+
+            for( unsigned int rowInd = 0; rowInd < rowSel.GetCount(); rowInd++ )
+            {
+                retVal |= toggleCell( rowSel[rowInd], 0, true );
+            }
+        }
+
+        // If only columns can be selected, only toggle the first cell in a column
+        else if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectColumns )
+        {
+            wxArrayInt colSel = m_grid->GetSelectedCols();
+
+            for( unsigned int colInd = 0; colInd < colSel.GetCount(); colInd++ )
+            {
+                retVal |= toggleCell( 0, colSel[colInd], true );
+            }
+        }
+
+        // If the user can select the individual cells, toggle each cell selected
+        else if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectCells )
+        {
+            wxArrayInt            rowSel   = m_grid->GetSelectedRows();
+            wxArrayInt            colSel   = m_grid->GetSelectedCols();
+            wxGridCellCoordsArray cellSel  = m_grid->GetSelectedCells();
+            wxGridCellCoordsArray topLeft  = m_grid->GetSelectionBlockTopLeft();
+            wxGridCellCoordsArray botRight = m_grid->GetSelectionBlockBottomRight();
+
+            // Iterate over every individually selected cell and try to toggle it
+            for( unsigned int cellInd = 0; cellInd < cellSel.GetCount(); cellInd++ )
+            {
+                retVal |= toggleCell( cellSel[cellInd].GetRow(), cellSel[cellInd].GetCol(), true );
+            }
+
+            // Iterate over every column and try to toggle each cell in it
+            for( unsigned int colInd = 0; colInd < colSel.GetCount(); colInd++ )
+            {
+                for( int row = 0; row < m_grid->GetNumberRows(); row++ )
+                {
+                    retVal |= toggleCell( row, colSel[colInd], true );
+                }
+            }
+
+            // Iterate over every row and try to toggle each cell in it
+            for( unsigned int rowInd = 0; rowInd < rowSel.GetCount(); rowInd++ )
+            {
+                for( int col = 0; col < m_grid->GetNumberCols(); col++ )
+                {
+                    retVal |= toggleCell( rowSel[rowInd], col, true );
+                }
+            }
+
+            // Iterate over the selection blocks
+            for( unsigned int blockInd = 0; blockInd < topLeft.GetCount(); blockInd++ )
+            {
+                wxGridCellCoords start = topLeft[blockInd];
+                wxGridCellCoords end   = botRight[blockInd];
+
+                for( int row = start.GetRow(); row <= end.GetRow(); row++ )
+                {
+                    for( int col = start.GetCol(); col <= end.GetCol(); col++ )
+                    {
+                        retVal |= toggleCell( row, col, true );
+                    }
+                }
+            }
+        }
+        else
+        {
+        }
+
+        // Return if there were any cells toggled
+        if( retVal )
             return;
     }
 
