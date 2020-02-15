@@ -62,8 +62,6 @@ protected:
     wxPoint        m_RefPos;            // Reference position used to generate the collection.
     EDA_RECT       m_RefBox;            // Selection rectangle used to generate the collection.
 
-    timestamp_t    m_TimeAtCollection;  // The time at which the collection was made.
-
 public:
     int            m_Threshold;         // Hit-test threshold in internal units.
 
@@ -75,7 +73,6 @@ public:
         m_ScanTypes( 0 ),
         // Inspect() is virtual so calling it from a class common inspector preserves polymorphism.
         m_inspector( [=] ( EDA_ITEM* aItem, void* aTestData ) { return this->Inspect( aItem, aTestData ); } ),
-        m_TimeAtCollection( 0 ),
         m_Threshold( 0 ),
         m_MenuCancelled( false )
     {
@@ -95,19 +92,6 @@ public:
     ITER end() { return m_List.end(); }
     CITER begin() const { return m_List.cbegin(); }
     CITER end() const { return m_List.cend(); }
-
-    /**
-     * Function IsValidIndex
-     * tests if \a aIndex is with the limits of the list of collected items.
-     *
-     * @param aIndex The index to test.
-     * @return True if \a aIndex is with the limits of the list of collected items,
-     *         otherwise false.
-     */
-    bool IsValidIndex( int aIndex )
-    {
-        return ( (unsigned) aIndex < m_List.size() );
-    }
 
     /**
      * Function GetCount
@@ -219,45 +203,10 @@ public:
         m_ScanTypes = scanTypes;
     }
 
-    void SetTimeNow()
-    {
-        m_TimeAtCollection = GetNewTimeStamp();
-    }
-
-    timestamp_t GetTime()
-    {
-        return m_TimeAtCollection;
-    }
-
     void SetRefPos( const wxPoint& aRefPos )  {  m_RefPos = aRefPos; }
-    const wxPoint& GetRefPos() const  {  return m_RefPos; }
 
-    void SetBoundingBox( const EDA_RECT& aRefBox ) { m_RefBox = aRefBox;  }
     const EDA_RECT& GetBoundingBox() const {  return m_RefBox; }
 
-    /**
-     * Function IsSimilarPointAndTime
-     * returns true if the given reference point is "similar" (defined here)
-     * to the internal reference point and the current time is within a few
-     * seconds of the internal m_TimeAtCollection.
-     *
-     * @param aRefPos A wxPoint to compare to.
-     * @return bool - true if the point and time are similar, else false.
-     */
-    bool IsSimilarPointAndTime( const wxPoint& aRefPos )
-    {
-        const int distMax = 2;      // adjust these here
-        const timestamp_t timeMax = 3;   // seconds
-
-        int dx = abs( aRefPos.x - m_RefPos.x );
-        int dy = abs( aRefPos.y - m_RefPos.y );
-
-        if( dx <= distMax && dy <= distMax &&
-            GetNewTimeStamp() - m_TimeAtCollection <= timeMax )
-            return true;
-        else
-            return false;
-    }
     /**
      * Function CountType
      * counts the number of items matching aType

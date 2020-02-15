@@ -541,8 +541,6 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
 
     aItem->Visit( m_inspector, NULL, m_ScanTypes );
 
-    SetTimeNow();               // when snapshot was taken
-
     // record the length of the primary list before concatenating on to it.
     m_PrimaryLength = m_List.size();
 
