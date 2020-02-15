@@ -608,6 +608,14 @@ public:
     ClipperLib::Path convertToClipper( bool aRequiredOrientation ) const;
 
     /**
+     * Find the segment nearest the given point.
+     *
+     * @param aP point to compare with
+     * @return the index of the segment closest to the point
+     */
+    int NearestSegment( const VECTOR2I& aP ) const;
+
+    /**
      * Function NearestPoint()
      *
      * Finds a point on the line chain that is closest to point aP.

@@ -22,17 +22,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <gr_basic.h>
-#include <sch_draw_panel.h>
-#include <gr_text.h>
-#include <plotter.h>
-#include <trigo.h>
-#include <sch_edit_frame.h>
+#include <algorithm>
+
 #include <bitmaps.h>
+#include <fctsys.h>
 #include <general.h>
-#include <sch_sheet.h>
+#include <geometry/shape_line_chain.h>
+#include <gr_basic.h>
+#include <gr_text.h>
 #include <kicad_string.h>
+#include <plotter.h>
+#include <sch_draw_panel.h>
+#include <sch_edit_frame.h>
+#include <sch_sheet.h>
+#include <trigo.h>
 
 
 SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :
@@ -157,37 +160,65 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
     if( sheet == NULL )
         return;
 
-    wxPoint center = sheet->m_pos + ( sheet->m_size / 2 );
+    int leftSide  = sheet->m_pos.x;
+    int rightSide = sheet->m_pos.x + sheet->m_size.x;
+    int topSide   = sheet->m_pos.y;
+    int botSide   = sheet->m_pos.y + sheet->m_size.y;
 
-    if( m_edge == SHEET_LEFT_SIDE || m_edge == SHEET_RIGHT_SIDE )
+    SHAPE_LINE_CHAIN sheetEdge;
+
+    sheetEdge.Append( leftSide,  topSide );
+    sheetEdge.Append( rightSide, topSide );
+    sheetEdge.Append( rightSide, botSide );
+    sheetEdge.Append( leftSide,  botSide );
+    sheetEdge.Append( leftSide,  topSide );
+
+    switch( sheetEdge.NearestSegment( Pos ) )
     {
-        if( Pos.x > center.x )
-            SetEdge( SHEET_RIGHT_SIDE );
-        else
-            SetEdge( SHEET_LEFT_SIDE );
+    case 0:
+        SetEdge( SHEET_TOP_SIDE );
+        break;
+    case 1:
+        SetEdge( SHEET_RIGHT_SIDE );
+        break;
+    case 2:
+        SetEdge( SHEET_BOTTOM_SIDE );
+        break;
+    case 3:
+        SetEdge( SHEET_LEFT_SIDE );
+        break;
+    default:
+        wxASSERT( "Invalid segment number" );
+    }
 
+    switch( GetEdge() )
+    {
+    case SHEET_RIGHT_SIDE:
+    case SHEET_LEFT_SIDE:
         SetTextY( Pos.y );
 
-        if( GetTextPos().y < sheet->m_pos.y )
-            SetTextY( sheet->m_pos.y );
+        if( GetTextPos().y < topSide )
+            SetTextY( topSide );
 
-        if( GetTextPos().y > (sheet->m_pos.y + sheet->m_size.y) )
-            SetTextY( sheet->m_pos.y + sheet->m_size.y );
-    }
-    else
-    {
-        if( Pos.y > center.y )
-            SetEdge( SHEET_BOTTOM_SIDE );
-        else
-            SetEdge( SHEET_TOP_SIDE );
+        if( GetTextPos().y > botSide )
+            SetTextY( botSide );
 
+        break;
+
+    case SHEET_BOTTOM_SIDE:
+    case SHEET_TOP_SIDE:
         SetTextX( Pos.x );
 
-        if( GetTextPos().x < sheet->m_pos.x )
-            SetTextX( sheet->m_pos.x );
+        if( GetTextPos().x < leftSide )
+            SetTextX( leftSide );
 
-        if( GetTextPos().x > (sheet->m_pos.x + sheet->m_size.x) )
-            SetTextX( sheet->m_pos.x + sheet->m_size.x );
+        if( GetTextPos().x > rightSide )
+            SetTextX( rightSide );
+
+        break;
+
+    case SHEET_UNDEFINED_SIDE:
+        wxASSERT( "Undefined sheet side" );
     }
 }
 
