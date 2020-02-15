@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __KICAD2STEP_FRAME_BASE_H__
-#define __KICAD2STEP_FRAME_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -27,19 +26,18 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class KICAD2STEP_FRAME_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class KICAD2STEP_FRAME_BASE : public wxFrame 
+class KICAD2STEP_FRAME_BASE : public wxFrame
 {
 	private:
-	
+
 	protected:
-	
+
 	public:
 		PANEL_KICAD2STEP* m_panelKicad2Step;
-		
-		KICAD2STEP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Kicad2step Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-		
+
+		KICAD2STEP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Kicad2step Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 644,300 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
+
 		~KICAD2STEP_FRAME_BASE();
-	
+
 };
 
-#endif //__KICAD2STEP_FRAME_BASE_H__

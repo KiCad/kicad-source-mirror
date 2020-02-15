@@ -38,6 +38,7 @@
 #include <limits>
 #include <sstream>
 
+#include <Standard_Failure.hxx>
 
 KICADMODULE::KICADMODULE( KICADPCB* aParent )
 {
@@ -378,10 +379,17 @@ bool KICADMODULE::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
         std::string fname( resolver->ResolvePath(
             wxString::FromUTF8Unchecked( i->m_modelname.c_str() ) ).ToUTF8() );
 
-        if( aPCB->AddComponent( fname, m_refdes, LAYER_BOTTOM == m_side ? true : false,
-            newpos, m_rotation, i->m_offset, i->m_rotation, i->m_scale ) )
-            hasdata = true;
-
+        try
+        {
+            if( aPCB->AddComponent( fname, m_refdes, LAYER_BOTTOM == m_side ? true : false,
+                newpos, m_rotation, i->m_offset, i->m_rotation, i->m_scale ) )
+                hasdata = true;
+        }
+        catch( const Standard_Failure& e)
+        {
+            ReportMessage( wxString::Format( "could not add component %s\n>>Opencascade error: %s\n ",
+                                             m_refdes, e.GetMessageString() ) );
+        }
     }
 
     return hasdata;

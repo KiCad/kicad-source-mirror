@@ -164,13 +164,11 @@ FormatType fileType( const char* aFileName )
 
     if( !lfile.FileExists() )
     {
-        std::ostringstream ostr;
-#ifdef DEBUG
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-        ostr << "  * no such file: '" << aFileName << "'\n";
-        wxLogMessage( "%s", ostr.str().c_str() );
+        wxString msg;
+        msg.Printf( " * fileType(): no such file: %s\n",
+                    wxString::FromUTF8Unchecked( aFileName ) );
 
+        ReportMessage( msg );
         return FMT_NONE;
     }
 
@@ -257,12 +255,9 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
 
         if( distance < m_minDistance2 )
         {
-            std::ostringstream ostr;
-#ifdef DEBUG
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-            ostr << "  * rejected a zero-length " << aCurve->Describe() << "\n";
-            wxLogMessage( "%s", ostr.str().c_str() );
+            wxString msg;
+            msg.Printf( "  * AddOutlineSegment() rejected a zero-length %s\n", aCurve->Describe() );
+            ReportMessage( msg );
             return false;
         }
 
@@ -276,12 +271,9 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
 
         if( rad < m_minDistance2 )
         {
-            std::ostringstream ostr;
-#ifdef DEBUG
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-            ostr << "  * rejected a zero-radius " << aCurve->Describe() << "\n";
-            wxLogMessage( "%s", ostr.str().c_str() );
+            wxString msg;
+            msg.Printf( "  * AddOutlineSegment() rejected a zero-radius %s\n", aCurve->Describe() );
+            ReportMessage( msg );
             return false;
         }
 
@@ -316,13 +308,10 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
 
             if( rad < m_minDistance2 )
             {
-                std::ostringstream ostr;
-#ifdef DEBUG
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-                ostr << "  * rejected an arc with equivalent end points, "
-                    << aCurve->Describe() << "\n";
-                wxLogMessage( "%s", ostr.str().c_str() );
+                wxString msg;
+                msg.Printf( "  * AddOutlineSegment() rejected an arc with equivalent end points, %s\n",
+                            aCurve->Describe() );
+                ReportMessage( msg );
                 return false;
             }
         }
@@ -422,12 +411,10 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
             // unexpected curve type
             do
             {
-                std::ostringstream ostr;
-#ifdef DEBUG
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-                ostr << "  * unsupported curve type: '" << aCurve->m_form << "'\n";
-                wxLogMessage( "%s", ostr.str().c_str() );
+                wxString msg;
+                msg.Printf( "  * AddOutlineSegment() unsupported curve type: %s\n",
+                            aCurve->m_form );
+                ReportMessage( msg );
             } while( 0 );
 
             return false;
@@ -664,7 +651,8 @@ bool PCBMODEL::CreatePCB()
     oln.AddSegment( *m_mincurve );
     m_curves.erase( m_mincurve );
 
-    ReportMessage( wxString::Format( "Build board outline (%d items)\n", (int)m_curves.size() ) );
+    ReportMessage( wxString::Format( "Build board outline (%d items)\n",
+                   (int)m_curves.size() ) );
 
     while( !m_curves.empty() )
     {
@@ -764,12 +752,10 @@ bool PCBMODEL::CreatePCB()
     }
 
     // subtract cutouts (if any)
-    for( const auto& i : m_cutouts )
-        board = BRepAlgoAPI_Cut( board, i );
-
     if( m_cutouts.size() )
-        ReportMessage( wxString::Format( "Build board cutout (%d holes)\n", (int)m_cutouts.size() ) );
+        ReportMessage( wxString::Format( "Build board cutouts and holes (%d holes)\n", (int)m_cutouts.size() ) );
 
+#if 0 // First version for holes removing: very slow when having many (> 300) holes
     // Substract holes (cutouts) can be time consuming, so display activity
     // state to be sure there is no hang:
     int char_count = 0;
@@ -791,7 +777,23 @@ bool PCBMODEL::CreatePCB()
             ReportMessage( wxString::Format( ". %d/%d\n", cur_count, cntmax ) );
         }
     }
+#else   // Much faster than first version: group all holes and cut only once
+    {
+        BRepAlgoAPI_Cut Cut;
+        TopTools_ListOfShape mainbrd;
+        mainbrd.Append( board );
 
+        Cut.SetArguments( mainbrd );
+        TopTools_ListOfShape holelist;
+
+        for( auto hole : m_cutouts )
+             holelist.Append( hole );
+
+        Cut.SetTools( holelist );
+        Cut.Build();
+        board = Cut.Shape();
+    }
+#endif
     // push the board to the data structure
     ReportMessage( "\nGenerate board full shape\n" );
     m_pcb_label = m_assy->AddComponent( m_assy_label, board );
@@ -827,7 +829,8 @@ bool PCBMODEL::WriteIGES( const wxString& aFileName )
 {
     if( m_pcb_label.IsNull() )
     {
-        ReportMessage( wxString::Format( "No valid PCB assembly; cannot create output file %s\n", aFileName ) );
+        ReportMessage( wxString::Format(
+                "No valid PCB assembly; cannot create output file %s\n", aFileName ) );
         return false;
     }
 
@@ -837,7 +840,7 @@ bool PCBMODEL::WriteIGES( const wxString& aFileName )
     writer.SetColorMode( Standard_True );
     writer.SetNameMode( Standard_True );
     IGESData_GlobalSection header = writer.Model()->GlobalSection();
-    header.SetFileName( new TCollection_HAsciiString( fn.GetFullName().ToUTF8() ) );
+    header.SetFileName( new TCollection_HAsciiString( fn.GetFullName().ToAscii() ) );
     header.SetSendName( new TCollection_HAsciiString( "KiCad electronic assembly" ) );
     header.SetAuthorName( new TCollection_HAsciiString( Interface_Static::CVal( "write.iges.header.author" ) ) );
     header.SetCompanyName( new TCollection_HAsciiString( Interface_Static::CVal( "write.iges.header.company" ) ) );
@@ -869,10 +872,12 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
 
     APIHeaderSection_MakeHeader hdr( writer.ChangeWriter().Model() );
     wxFileName fn( aFileName );
-    hdr.SetName( new TCollection_HAsciiString( fn.GetFullName().ToUTF8() ) );
+    // Note: use only Ascii7 chars, non Ascii7 chars (therefore UFT8 chars)
+    // are creating issues in the step file
+    hdr.SetName( new TCollection_HAsciiString( fn.GetFullName().ToAscii() ) );
     // TODO: how to control and ensure consistency with IGES?
-    hdr.SetAuthorValue( 1, new TCollection_HAsciiString( "An Author" ) );
-    hdr.SetOrganizationValue( 1, new TCollection_HAsciiString( "A Company" ) );
+    hdr.SetAuthorValue( 1, new TCollection_HAsciiString( "Pcbnew" ) );
+    hdr.SetOrganizationValue( 1, new TCollection_HAsciiString( "Kicad" ) );
     hdr.SetOriginatingSystem( new TCollection_HAsciiString( "KiCad to STEP converter" ) );
     hdr.SetDescriptionValue( 1, new TCollection_HAsciiString( "KiCad electronic assembly" ) );
 
@@ -880,7 +885,11 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
     // Creates a temporary file with a ascii7 name, because writer does not know
     // unicode filenames
     wxString currCWD = wxGetCwd();
-    wxSetWorkingDirectory( fn.GetPath() );
+    wxString workCWD =fn.GetPath();
+
+    if( !workCWD.IsEmpty() )
+        wxSetWorkingDirectory( workCWD );
+
     char tmpfname[] = "$tempfile$.step";
 
     if( Standard_False == writer.Write( tmpfname ) )
@@ -899,7 +908,8 @@ bool PCBMODEL::WriteSTEP( const wxString& aFileName )
 
 bool PCBMODEL::getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_Label& aLabel )
 {
-    std::string model_key = aFileName + "_" + std::to_string( aScale.x ) + "_" + std::to_string( aScale.y ) + "_" + std::to_string( aScale.z );
+    std::string model_key = aFileName + "_" + std::to_string( aScale.x )
+                            + "_" + std::to_string( aScale.y ) + "_" + std::to_string( aScale.z );
 
     MODEL_MAP::const_iterator mm = m_models.find( model_key );
 
@@ -921,7 +931,8 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_L
         case FMT_IGES:
             if( !readIGES( doc, aFileName.c_str() ) )
             {
-                ReportMessage( wxString::Format( "readIGES() failed on filename %s\n", aFileName ) );
+                ReportMessage( wxString::Format( "readIGES() failed on filename %s\n",
+                               aFileName ) );
                 return false;
             }
             break;
@@ -929,7 +940,8 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_L
         case FMT_STEP:
             if( !readSTEP( doc, aFileName.c_str() ) )
             {
-                ReportMessage( wxString::Format( "readSTEP() failed on filename %s\n", aFileName ) );
+                ReportMessage( wxString::Format( "readSTEP() failed on filename %s\n",
+                               aFileName ) );
                 return false;
             }
             break;
@@ -1001,7 +1013,7 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_L
 
     if( aLabel.IsNull() )
     {
-        ReportMessage( wxString::Format( "could not transfer model data from file %s", aFileName  ) );
+        ReportMessage( wxString::Format( "could not transfer model data from file %s\n", aFileName  ) );
         return false;
     }
 
@@ -1192,15 +1204,14 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
             brep.Perform( shape, Standard_False );
             TopoDS_Shape scaled_shape;
 
-            if ( brep.IsDone() ) {
+            if ( brep.IsDone() )
+            {
                 scaled_shape = brep.Shape();
-            } else {
-                std::ostringstream ostr;
-#ifdef DEBUG
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-                ostr << "  * failed to scale model\n";
-                wxLogMessage( "%s", ostr.str().c_str() );
+            }
+            else
+            {
+                ReportMessage( "  * transfertModel(): failed to scale model\n" );
+
                 scaled_shape = shape;
             }
 

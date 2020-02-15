@@ -21,7 +21,6 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-
 #include "wx/wx.h"
 #include <wx/app.h>
 #include <wx/cmdline.h>
@@ -31,11 +30,11 @@
 #include <sstream>
 #include <iostream>
 #include <sstream>
-#include <Standard_Failure.hxx>     // In open cascade
 
 #include "pcb/kicadpcb.h"
 #include "kicad2step_frame_base.h"
 #include "panel_kicad2step.h"
+#include <Standard_Failure.hxx>     // In open cascade
 
 class KICAD2STEP_FRAME;
 
@@ -130,7 +129,7 @@ bool KICAD2MCAD_APP::OnInit()
     m_Panel = m_frame->m_panelKicad2Step;
     m_Panel->m_params = m_params;
 
-    // and show it (a wxRrame is not shown when created initially)
+    // and show it (a wxFrame is not shown when created initially)
     m_frame->Show( true );
     m_frame->Iconize( false );
 
@@ -142,6 +141,7 @@ int KICAD2MCAD_APP::OnRun()
 {
     int diag = m_Panel->RunConverter();
     wxApp::OnRun();     // Start the main loop event, to manage the main frame
+
     return diag;
 }
 
@@ -305,7 +305,7 @@ bool KICAD2MCAD_APP::OnCmdLineParsed( wxCmdLineParser& parser )
 class STREAMBUF_SWAPPER
 {
 public:
-    STREAMBUF_SWAPPER( ostream & orig, ostream & replacement )
+    STREAMBUF_SWAPPER( std::ostream & orig, std::ostream & replacement )
         : m_buf( orig.rdbuf() ), m_str( orig )
     {
         orig.rdbuf( replacement.rdbuf() );
@@ -368,8 +368,8 @@ int PANEL_KICAD2STEP::RunConverter()
     // msgs_from_opencascade and errors_from_opencascade
     std::ostringstream msgs_from_opencascade;
     std::ostringstream errors_from_opencascade;
-    STREAMBUF_SWAPPER swapper_cout(cout, msgs_from_opencascade);
-    STREAMBUF_SWAPPER swapper_cerr(cerr, errors_from_opencascade);
+    STREAMBUF_SWAPPER swapper_cout(std::cout, msgs_from_opencascade);
+    STREAMBUF_SWAPPER swapper_cerr(std::cerr, errors_from_opencascade);
 
     if( pcb.ReadFile( m_params.m_filename ) )
     {

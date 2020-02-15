@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="14" />
+    <FileVersion major="1" minor="15" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -14,6 +14,7 @@
         <property name="file">kicad2step_frame_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">kicad2step_frame</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Frame" expanded="1">
@@ -45,8 +47,8 @@
             <property name="minimum_size"></property>
             <property name="name">KICAD2STEP_FRAME_BASE</property>
             <property name="pos"></property>
-            <property name="size">500,300</property>
-            <property name="style">wxDEFAULT_FRAME_STYLE</property>
+            <property name="size">644,300</property>
+            <property name="style">wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">; forward_declare; forward_declare</property>
             <property name="title">Kicad2step Converter</property>
             <property name="tooltip"></property>
@@ -54,54 +56,6 @@
             <property name="window_name"></property>
             <property name="window_style">wxTAB_TRAVERSAL</property>
             <property name="xrc_skip_sizer">1</property>
-            <event name="OnActivate"></event>
-            <event name="OnActivateApp"></event>
-            <event name="OnAuiPaneActivated"></event>
-            <event name="OnAuiPaneButton"></event>
-            <event name="OnAuiPaneClose"></event>
-            <event name="OnAuiPaneMaximize"></event>
-            <event name="OnAuiPaneRestore"></event>
-            <event name="OnAuiRender"></event>
-            <event name="OnAux1DClick"></event>
-            <event name="OnAux1Down"></event>
-            <event name="OnAux1Up"></event>
-            <event name="OnAux2DClick"></event>
-            <event name="OnAux2Down"></event>
-            <event name="OnAux2Up"></event>
-            <event name="OnChar"></event>
-            <event name="OnCharHook"></event>
-            <event name="OnClose"></event>
-            <event name="OnEnterWindow"></event>
-            <event name="OnEraseBackground"></event>
-            <event name="OnHibernate"></event>
-            <event name="OnIconize"></event>
-            <event name="OnIdle"></event>
-            <event name="OnKeyDown"></event>
-            <event name="OnKeyUp"></event>
-            <event name="OnKillFocus"></event>
-            <event name="OnLeaveWindow"></event>
-            <event name="OnLeftDClick"></event>
-            <event name="OnLeftDown"></event>
-            <event name="OnLeftUp"></event>
-            <event name="OnMaximize"></event>
-            <event name="OnMiddleDClick"></event>
-            <event name="OnMiddleDown"></event>
-            <event name="OnMiddleUp"></event>
-            <event name="OnMotion"></event>
-            <event name="OnMouseEvents"></event>
-            <event name="OnMouseWheel"></event>
-            <event name="OnMove"></event>
-            <event name="OnMoveEnd"></event>
-            <event name="OnMoveStart"></event>
-            <event name="OnMoving"></event>
-            <event name="OnPaint"></event>
-            <event name="OnRightDClick"></event>
-            <event name="OnRightDown"></event>
-            <event name="OnRightUp"></event>
-            <event name="OnSetFocus"></event>
-            <event name="OnShow"></event>
-            <event name="OnSize"></event>
-            <event name="OnUpdateUI"></event>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bSizerMain</property>
@@ -162,36 +116,6 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style">wxTAB_TRAVERSAL</property>
-                        <event name="OnAux1DClick"></event>
-                        <event name="OnAux1Down"></event>
-                        <event name="OnAux1Up"></event>
-                        <event name="OnAux2DClick"></event>
-                        <event name="OnAux2Down"></event>
-                        <event name="OnAux2Up"></event>
-                        <event name="OnChar"></event>
-                        <event name="OnCharHook"></event>
-                        <event name="OnEnterWindow"></event>
-                        <event name="OnEraseBackground"></event>
-                        <event name="OnKeyDown"></event>
-                        <event name="OnKeyUp"></event>
-                        <event name="OnKillFocus"></event>
-                        <event name="OnLeaveWindow"></event>
-                        <event name="OnLeftDClick"></event>
-                        <event name="OnLeftDown"></event>
-                        <event name="OnLeftUp"></event>
-                        <event name="OnMiddleDClick"></event>
-                        <event name="OnMiddleDown"></event>
-                        <event name="OnMiddleUp"></event>
-                        <event name="OnMotion"></event>
-                        <event name="OnMouseEvents"></event>
-                        <event name="OnMouseWheel"></event>
-                        <event name="OnPaint"></event>
-                        <event name="OnRightDClick"></event>
-                        <event name="OnRightDown"></event>
-                        <event name="OnRightUp"></event>
-                        <event name="OnSetFocus"></event>
-                        <event name="OnSize"></event>
-                        <event name="OnUpdateUI"></event>
                     </object>
                 </object>
             </object>

@@ -36,7 +36,6 @@
 #include <widgets/text_ctrl_eval.h>
 #include <wx_html_report_panel.h>
 
-#define OPTKEY_STEP_OVERWRITE       "STEP_Overwrite"
 
 class DIALOG_EXPORT_STEP: public DIALOG_EXPORT_STEP_BASE
 {
@@ -55,7 +54,7 @@ private:
     // The last preference for STEP Origin:
     STEP_ORG_OPT m_STEP_org_opt;
     bool   m_noVirtual;     // remember last preference for No Virtual Component
-    bool   m_overwriteFile; // remember last preference for overwrite file
+    static bool m_overwriteFile; // remember last preference for overwrite file
     int    m_OrgUnits;      // remember last units for User Origin
     double m_XOrg;          // remember last User Origin X value
     double m_YOrg;          // remember last User Origin Y value
@@ -118,6 +117,8 @@ public:
     }
 };
 
+bool DIALOG_EXPORT_STEP::m_overwriteFile = false;
+
 
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath ) :
     DIALOG_EXPORT_STEP_BASE( aParent )
@@ -161,7 +162,6 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_noVirtual = cfg->m_ExportStep.no_virtual;
 
     m_cbRemoveVirtual->SetValue( m_noVirtual );
-    m_config->Read( OPTKEY_STEP_OVERWRITE, &m_overwriteFile, false );
     m_cbOverwriteFile->SetValue( m_overwriteFile );
 
     m_STEP_OrgUnitChoice->SetSelection( m_OrgUnits );
