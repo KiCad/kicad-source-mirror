@@ -336,6 +336,16 @@ protected:
                   unsigned int            aCol,
                   wxDataViewItemAttr&     aAttr ) const override;
 
+    /**
+     * @return a unicode string to mark a node name like
+     * a pinned library name
+     * This is not an ascii7 char, but a unicode char
+     */
+    const wxString GetPinningSymbol() const
+    {
+        return wxString::FromUTF8( "☆ " );
+    }
+
 private:
     EDA_BASE_FRAME*         m_parent;
 

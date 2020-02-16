@@ -184,7 +184,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
                 aVariant = currentFPName;
         }
         else if( node->m_Pinned )
-            aVariant = "☆ " + node->m_Name;
+            aVariant = GetPinningSymbol() + node->m_Name;
         else
             aVariant = node->m_Name;
         break;

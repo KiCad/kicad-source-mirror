@@ -216,7 +216,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
         aVariant = node->m_Name;
 
         if( node->m_Pinned )
-            aVariant = "☆ " + node->m_Name;
+            aVariant = GetPinningSymbol() + node->m_Name;
 
         // mark modified libs with an asterisk
         if( node->m_Type == LIB_TREE_NODE::LIB && m_libMgr->IsLibraryModified( node->m_Name ) )
