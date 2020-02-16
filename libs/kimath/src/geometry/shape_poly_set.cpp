@@ -538,9 +538,9 @@ void SHAPE_POLY_SET::Inflate( int aAmount, int aCircleSegmentsCount,
     // N.B. see the Clipper documentation for jtSquare/jtMiter/jtRound.  They are poorly named
     // and are not what you'd think they are.
     // http://www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Types/JoinType.htm
-    JoinType joinType;          // The way corners are offsetted
-    double   miterLimit = 2.0;  // Smaller value when using jtMiter for joinType
-    JoinType miterFallback;
+    JoinType joinType = jtRound;    // The way corners are offsetted
+    double   miterLimit = 2.0;      // Smaller value when using jtMiter for joinType
+    JoinType miterFallback = jtSquare;
 
     switch( aCornerStrategy )
     {
