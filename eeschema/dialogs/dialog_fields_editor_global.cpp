@@ -206,7 +206,6 @@ public:
         {
             SCH_COMPONENT* comp = m_componentRefs[ i ].GetComp();
             timestamp_t compID = comp->GetTimeStamp();
-
             m_dataStore[ compID ][ aFieldName ] = comp->GetFieldText( aFieldName, m_frame );
         }
     }
@@ -915,18 +914,23 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
     // Force References to always be shown
     m_config->Write( "SymbolFieldEditor/Show/Reference", true );
 
-    AddField( _( "Reference" ), true, true  );
-    AddField( _( "Value" ),     true, true  );
-    AddField( _( "Footprint" ), true, true  );
-    AddField( _( "Datasheet" ), true, false );
+    // *DO NOT* use translated mandatory field names:
+    // They are also used as keyword to find fields in component list.
+    // Changing that is not a basic change
+    AddField( "Reference", true, true  );
+    AddField( "Value",     true, true  );
+    AddField( "Footprint", true, true  );
+    AddField( "Datasheet", true, false );
 
     for( const wxString& fieldName : userFieldNames )
         AddField( fieldName, true, false );
 
     // Add any templateFieldNames which aren't already present in the userFieldNames
     for( const TEMPLATE_FIELDNAME& templateFieldName : m_parent->GetTemplateFieldNames() )
+    {
         if( userFieldNames.count( templateFieldName.m_Name ) == 0 )
             AddField( templateFieldName.m_Name, false, false );
+    }
 }
 
 

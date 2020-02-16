@@ -404,7 +404,8 @@ void LIB_FIELD::SetName( const wxString& aName )
 
 wxString LIB_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Field %s \"%s\"" ), GetName(), ShortenedShownText() );
+    return wxString::Format( _( "Field %s \"%s\"" ), GetName( TRANSLATE_FIELD_NAME ),
+                             ShortenedShownText() );
 }
 
 
@@ -437,7 +438,7 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, BLUE ) );
 
     // Display field name (ref, value ...)
-    aList.push_back( MSG_PANEL_ITEM( _( "Field" ), GetName(), BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Field" ), GetName( TRANSLATE_FIELD_NAME ), BROWN ) );
 
     // Display field text:
     aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetShownText(), BROWN ) );

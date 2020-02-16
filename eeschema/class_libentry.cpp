@@ -586,8 +586,7 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem )
         {
             wxLogWarning( _(
                 "An attempt was made to remove the %s field from component %s in library %s." ),
-                GetChars( field->GetName() ), GetChars( GetName() ),
-                GetChars( GetLibraryName() ) );
+                field->GetName( TRANSLATE_FIELD_NAME ), GetName(), GetLibraryName() );
             return;
         }
     }
@@ -877,7 +876,7 @@ LIB_FIELD* LIB_PART::FindField( const wxString& aFieldName )
     {
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
 
-        if( field->GetName() == aFieldName )
+        if( field->GetName( NATIVE_FIELD_NAME ) == aFieldName )
             return field;
     }
 

@@ -2496,7 +2496,7 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::removeSymbol( LIB_PART* aPart )
                 {
                     LIB_FIELD& field = static_cast<LIB_FIELD&>( drawItem );
 
-                    if( firstChild->FindField( field.GetName() ) )
+                    if( firstChild->FindField( field.GetName( NATIVE_FIELD_NAME ) ) )
                         continue;
                 }
 
