@@ -477,7 +477,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
             {
                 int gap = zone_clearance;
                 int thermalGap = aZone->GetThermalReliefGap( pad );
-                gap = std::max( gap, thermalGap ) + outline_half_thickness;
+                gap = std::max( gap, thermalGap );
                 item_boundingbox = pad->GetBoundingBox();
                 item_boundingbox.Inflate( gap );
 
