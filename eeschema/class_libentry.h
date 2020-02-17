@@ -403,7 +403,8 @@ public:
     void GetFields( LIB_FIELDS& aList );
 
     /**
-     * Findd a field within this part matching \a aFieldName and returns it or NULL if not found.
+     * Find a field within this part matching \a aFieldName and returns it
+     * or NULL if not found.
      */
     LIB_FIELD* FindField( const wxString& aFieldName );
 

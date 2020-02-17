@@ -55,7 +55,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
     if( aField->GetId() == VALUE )
         caption = _( "Edit Component Name" );
     else
-        caption.Printf( _( "Edit %s Field" ), GetChars( aField->GetName() ) );
+        caption.Printf( _( "Edit %s Field" ), aField->GetName( TRANSLATE_FIELD_NAME ) );
 
     DIALOG_LIB_EDIT_ONE_FIELD dlg( this, caption, aField );
 

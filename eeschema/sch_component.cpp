@@ -988,7 +988,7 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
         {
             // Can no longer insert an empty name, since names are now keys.  The
             // field index is not used beyond the first MANDATORY_FIELDS
-            if( field.GetName().IsEmpty() )
+            if( field.GetName( NATIVE_FIELD_NAME ).IsEmpty() )
                 continue;
 
             // See if field already exists (mandatory fields always exist).
@@ -1005,11 +1005,12 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
             if( (unsigned) idx < MANDATORY_FIELDS )
                 schField = GetField( idx );
             else
-                schField = FindField( field.GetName() );
+                schField = FindField( field.GetName( NATIVE_FIELD_NAME ) );
 
             if( !schField )
             {
-                SCH_FIELD newField( wxPoint( 0, 0 ), GetFieldCount(), this, field.GetName() );
+                SCH_FIELD newField( wxPoint( 0, 0 ), GetFieldCount(), this,
+                                    field.GetName( NATIVE_FIELD_NAME ) );
                 schField = AddField( newField );
             }
 

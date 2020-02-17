@@ -244,7 +244,8 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
                         [&]( const SCH_FIELD& f ) { return f.GetName() == spiceField; } ), m_schfields->end() );
             else
                 m_libfields->erase( std::remove_if( m_libfields->begin(), m_libfields->end(),
-                        [&]( const LIB_FIELD& f ) { return f.GetName() == spiceField; } ), m_libfields->end() );
+                        [&]( const LIB_FIELD& f ) { return f.GetName( NATIVE_FIELD_NAME ) == spiceField; } ),
+                                    m_libfields->end() );
         }
     }
 
@@ -281,7 +282,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
             // TODO: There must be a good way to template out these repetitive calls
             for( auto field : *m_libfields )
             {
-                if( field.GetName() == spiceField  && !field.GetText().IsEmpty() )
+                if( field.GetName( NATIVE_FIELD_NAME ) == spiceField && !field.GetText().IsEmpty() )
                 {
                     m_fieldsTmp[idx] = field.GetText();
                     break;
@@ -778,7 +779,7 @@ LIB_FIELD& DIALOG_SPICE_MODEL::getLibField( int aFieldType )
     const wxString& spiceField = NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( (SPICE_FIELD) aFieldType );
 
     auto fieldIt = std::find_if( m_libfields->begin(), m_libfields->end(), [&]( const LIB_FIELD& f ) {
-        return f.GetName() == spiceField;
+        return f.GetName( NATIVE_FIELD_NAME ) == spiceField;
     } );
 
     // Found one, so return it

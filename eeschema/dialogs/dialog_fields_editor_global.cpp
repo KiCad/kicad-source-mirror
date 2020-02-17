@@ -868,10 +868,13 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
     // Force References to always be shown
     m_config->Write( "SymbolFieldEditor/Show/Reference", true );
 
-    AddField( _( "Reference" ), true, true  );
-    AddField( _( "Value" ),     true, true  );
-    AddField( _( "Footprint" ), true, true  );
-    AddField( _( "Datasheet" ), true, false );
+    // *DO NOT* use translated mandatory field names:
+    // They are also used as keyword to find fields in component list.
+    // Changing that is not a basic change
+    AddField( "Reference", true, true  );
+    AddField( "Value",     true, true  );
+    AddField( "Footprint", true, true  );
+    AddField( "Datasheet", true, false );
 
     for( auto fieldName : userFieldNames )
         AddField( fieldName, true, false );
