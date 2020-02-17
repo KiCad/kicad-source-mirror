@@ -460,9 +460,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                     }
                     else
                         pad->TransformShapeWithClearanceToPolygon( aFeatures,
-                                clearance,
-                                segsPerCircle,
-                                correctionFactor );
+                                clearance, segsPerCircle, correctionFactor );
                 }
 
                 continue;
@@ -476,7 +474,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                 || ( pad->GetShape() == PAD_SHAPE_CUSTOM && aZone->GetPadConnection( pad ) != PAD_ZONE_CONN_FULL ) )
             {
                 int gap = zone_clearance;
-                int thermalGap = aZone->GetThermalReliefGap( pad );
+                int thermalGap = aZone->GetThermalReliefGap( pad ) + outline_half_thickness;
                 gap = std::max( gap, thermalGap );
                 item_boundingbox = pad->GetBoundingBox();
                 item_boundingbox.Inflate( gap );
