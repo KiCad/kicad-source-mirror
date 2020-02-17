@@ -42,7 +42,7 @@ struct print_log_value<LIB_FIELD>
 {
     inline void operator()( std::ostream& os, LIB_FIELD const& f )
     {
-        os << "LIB_FIELD[ " << f.GetName() << " ]";
+        os << "LIB_FIELD[ " << f.GetName( NATIVE_FIELD_NAME ) << " ]";
     }
 };
 
