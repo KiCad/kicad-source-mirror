@@ -962,7 +962,7 @@ LIB_PART* SCH_SEXPR_PLUGIN_CACHE::removeSymbol( LIB_PART* aPart )
                 {
                     LIB_FIELD& field = static_cast<LIB_FIELD&>( drawItem );
 
-                    if( firstChild->FindField( field.GetName() ) )
+                    if( firstChild->FindField( field.GetName( NATIVE_FIELD_NAME ) ) )
                         continue;
                 }
 
@@ -1538,7 +1538,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
 {
     wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
 
-    wxString fieldName = aField->GetName();
+    wxString fieldName = aField->GetName( NATIVE_FIELD_NAME );
 
     // When saving legacy fields, prefix the field name with "ki_" to prevent name clashes
     // with exisiting user defined fields.
