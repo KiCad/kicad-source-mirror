@@ -97,6 +97,8 @@ public:
               m_bbox( aShape.m_bbox )
     {}
 
+    SHAPE_LINE_CHAIN( const std::vector<int>& aV);
+
     SHAPE_LINE_CHAIN( const std::vector<wxPoint>& aV, bool aClosed = false )
             : SHAPE( SH_LINE_CHAIN ), m_closed( aClosed ), m_width( 0 )
     {
@@ -582,6 +584,9 @@ public:
      * @return true if the point is inside the shape (edge is not treated as being inside).
      */
      bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0, bool aUseBBoxCache = false ) const;
+
+
+     bool SegmentInside( const SEG& aSeg ) const;
 
     /**
      * Function PointOnEdge()
