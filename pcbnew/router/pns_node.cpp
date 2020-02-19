@@ -1390,6 +1390,46 @@ ARC* NODE::findRedundantArc( ARC* aArc )
 }
 
 
+int NODE::QueryJoints( const BOX2I& aBox,
+                     std::vector<JOINT*>& aJoints,
+                     int aLayerMask,
+                     int aKindMask
+                 )
+{
+    int n = 0;
+
+    aJoints.clear();
+
+    for( auto j = m_joints.begin(); j != m_joints.end(); ++j )
+    {
+        if ( aBox.Contains(j->second.Pos()) && j->second.LinkCount ( aKindMask ) )
+        {
+            aJoints.push_back( &j->second );
+            n++;
+
+        }
+    }
+
+    if ( isRoot() )
+        return n;
+
+    for( auto j = m_root->m_joints.begin(); j != m_root->m_joints.end(); ++j )
+    {
+        if( ! Overrides( &j->second) )
+        {   if ( aBox.Contains(j->second.Pos()) && j->second.LinkCount ( aKindMask ) )
+            {
+                aJoints.push_back( &j->second );
+                n++;
+            }
+        }
+    }
+
+    return n;
+
+
+}
+
+
 ITEM *NODE::FindItemByParent( const BOARD_CONNECTED_ITEM* aParent )
 {
     INDEX::NET_ITEMS_LIST* l_cur = m_index->GetItemsForNet( aParent->GetNetCode() );
