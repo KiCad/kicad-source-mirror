@@ -108,7 +108,6 @@ private:
     std::unordered_set<BOARD_CONNECTED_ITEM*> m_hiddenItems;
 
     PNS::ROUTER* m_router;
-    BOARD* m_board;
     PCB_TOOL_BASE* m_tool;
     std::unique_ptr<BOARD_COMMIT> m_commit;
     const PCB_DISPLAY_OPTIONS* m_dispOptions;
