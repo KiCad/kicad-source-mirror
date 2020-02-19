@@ -290,6 +290,20 @@ public:
         return false;
     }
 
+
+    bool Contains( const SEG& aSeg ) const
+    {
+        if( aSeg.A == aSeg.B ) // single point corner case
+            return Contains( aSeg.A );
+
+        if( !Collinear( aSeg ) )
+            return false;
+
+        if( Contains( aSeg.A ) && Contains( aSeg.B ) )
+
+        return false;
+    }
+
     /**
      * Function Length()
      *
