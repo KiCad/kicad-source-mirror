@@ -178,7 +178,7 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, int aLayer )
 }
 
 bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
-{
+{   
 
     if( ! isStartingPointRoutable( aP, aLayer ) )
     {

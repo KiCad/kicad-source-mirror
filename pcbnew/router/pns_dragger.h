@@ -97,9 +97,6 @@ public:
      */
     const ITEM_SET Traces();
 
-    /// @copydoc ALGO_BASE::Logger()
-    virtual LOGGER* Logger() override;
-
     void SetMode( int aDragMode );
 
 private:

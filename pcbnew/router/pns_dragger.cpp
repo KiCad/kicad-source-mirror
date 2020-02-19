@@ -397,13 +397,4 @@ const ITEM_SET DRAGGER::Traces()
     return m_draggedItems;
 }
 
-
-LOGGER* DRAGGER::Logger()
-{
-    if( m_shove )
-        return m_shove->Logger();
-
-    return NULL;
-}
-
 }
