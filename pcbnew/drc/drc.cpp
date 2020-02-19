@@ -47,7 +47,7 @@
 #include <tools/pcb_tool_base.h>
 #include <kiface_i.h>
 #include <pcbnew.h>
-#include <tools/drc.h>
+#include <drc/drc.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <math/util.h>      // for KiROUND
 
@@ -58,7 +58,7 @@
 #include <geometry/shape_arc.h>
 
 #include <drc/courtyard_overlap.h>
-#include "zone_filler_tool.h"
+#include <tools/zone_filler_tool.h>
 
 DRC::DRC() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),

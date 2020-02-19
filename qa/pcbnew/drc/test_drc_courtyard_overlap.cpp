@@ -27,7 +27,7 @@
 #include <pcbnew_utils/board_file_utils.h>
 
 #include <class_module.h>
-#include <drc.h>
+#include <drc/drc.h>
 
 #include <drc/courtyard_overlap.h>
 

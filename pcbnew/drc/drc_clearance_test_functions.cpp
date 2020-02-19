@@ -27,7 +27,7 @@
 #include <pcb_edit_frame.h>
 #include <trigo.h>
 #include <pcbnew.h>
-#include <tools/drc.h>
+#include <drc/drc.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>

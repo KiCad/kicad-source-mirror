@@ -226,6 +226,8 @@ set( PCBNEW_MICROWAVE_SRCS
 
 set( PCBNEW_DRC_SRCS
     drc/courtyard_overlap.cpp
+    drc/drc.cpp
+    drc/drc_clearance_test_functions.cpp
     drc/drc_marker_factory.cpp
     drc/drc_provider.cpp
     )
@@ -254,8 +256,6 @@ set( PCBNEW_CLASS_SRCS
     array_pad_name_provider.cpp
     build_BOM_from_board.cpp
     cross-probing.cpp
-    tools/drc.cpp
-    tools/drc_clearance_test_functions.cpp
     edit.cpp
     edit_track_width.cpp
     files.cpp

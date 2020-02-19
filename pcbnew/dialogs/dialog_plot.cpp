@@ -36,8 +36,8 @@
 #include <dialog_plot.h>
 #include <dialog_gendrill.h>
 #include <wx_html_report_panel.h>
+#include <drc/drc.h>
 #include <tool/tool_manager.h>
-#include <tools/drc.h>
 #include <tools/zone_filler_tool.h>
 #include <math/util.h>      // for KiROUND
 

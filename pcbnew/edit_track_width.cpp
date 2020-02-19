@@ -27,7 +27,7 @@
 #include <pcbnew_id.h>
 #include <class_track.h>
 #include <pcbnew.h>
-#include <tools/drc.h>
+#include <drc/drc.h>
 
 
 int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,

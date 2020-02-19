@@ -25,7 +25,7 @@
 
 #include <class_edge_mod.h>
 #include <class_module.h>
-#include <drc.h>
+#include <drc/drc.h>
 
 #include <geometry/seg.h>
 #include <math/vector2d.h>

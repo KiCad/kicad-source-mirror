@@ -31,7 +31,7 @@
 #include <trace_helpers.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <tools/drc.h>
+#include <drc/drc.h>
 #include <layer_widget.h>
 #include <pcb_layer_widget.h>
 #include <config_params.h>
