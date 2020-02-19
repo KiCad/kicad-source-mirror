@@ -33,9 +33,13 @@
 
 #include "pns_utils.h"
 #include "pns_router.h"
+#include "pns_debug_decorator.h"
+
 
 namespace PNS {
 
+
+static DEBUG_DECORATOR *dbg;
 /**
  *  Cost Estimator Methods
  */
@@ -230,194 +234,7 @@ void OPTIMIZER::ClearCache( bool aStaticOnly  )
     }
 }
 
-
-class LINE_RESTRICTIONS
-{
-    public:
-        LINE_RESTRICTIONS() {};
-        ~LINE_RESTRICTIONS() {};
-
-        void Build( NODE* aWorld, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aLine, const BOX2I& aRestrictedArea, bool aRestrictedAreaEnable );
-        bool Check ( int aVertex1, int aVertex2, const SHAPE_LINE_CHAIN& aReplacement );
-        void Dump();
-
-    private:
-        int allowedAngles( NODE* aWorld, const LINE* aLine, const VECTOR2I& aP, bool aFirst );
-
-        struct RVERTEX
-        {
-            RVERTEX ( bool aRestricted, int aAllowedAngles ) :
-                restricted( aRestricted ),
-                allowedAngles( aAllowedAngles )
-            {
-            }
-
-            bool restricted;
-            int allowedAngles;
-        };
-
-        std::vector<RVERTEX> m_rs;
-};
-
-
-// fixme: use later
-int LINE_RESTRICTIONS::allowedAngles( NODE* aWorld, const LINE* aLine, const VECTOR2I& aP, bool aFirst )
-{
-    JOINT* jt = aWorld->FindJoint( aP , aLine );
-
-    if( !jt )
-        return 0xff;
-
-    DIRECTION_45 dirs [8];
-
-    int n_dirs = 0;
-
-    for( const ITEM* item : jt->Links().CItems() )
-    {
-        if( item->OfKind( ITEM::VIA_T | ITEM::SOLID_T ) )
-            return 0xff;
-        else if( auto segment = dynamic_cast<const SEGMENT*>( item ) )
-        {
-            SEG s( segment->Seg() );
-            if( s.A != aP )
-                s.Reverse();
-
-            dirs[n_dirs] = aFirst ? DIRECTION_45( s ) : DIRECTION_45( s ).Opposite();
-        }
-
-        if( ++n_dirs >= 8 )
-            break;
-    }
-
-    const int angleMask = DIRECTION_45::ANG_OBTUSE | DIRECTION_45::ANG_HALF_FULL | DIRECTION_45::ANG_STRAIGHT;
-    int outputMask = 0xff;
-
-    for( int d = 0; d < 8; d++ )
-    {
-        DIRECTION_45 refDir( ( DIRECTION_45::Directions ) d );
-
-        for( int i = 0; i < n_dirs; i++ )
-        {
-            if( !( refDir.Angle( dirs[i] ) & angleMask ) )
-                outputMask &= ~refDir.Mask();
-        }
-    }
-
-    //DrawDebugDirs( aP, outputMask, 3 );
-    return 0xff;
-}
-
-
-void LINE_RESTRICTIONS::Build( NODE* aWorld, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aLine, const BOX2I& aRestrictedArea, bool aRestrictedAreaEnable )
-{
-    const SHAPE_LINE_CHAIN& l = aLine;
-    VECTOR2I v_prev;
-    int n = l.PointCount( );
-
-    m_rs.reserve( n );
-
-    for( int i = 0; i < n; i++ )
-    {
-        const VECTOR2I &v = l.CPoint( i );
-        RVERTEX r( false, 0xff );
-
-        if( aRestrictedAreaEnable )
-        {
-            bool exiting = ( i > 0 && aRestrictedArea.Contains( v_prev ) && !aRestrictedArea.Contains( v ) );
-            bool entering = false;
-
-            if( i != l.PointCount() - 1 )
-            {
-                const VECTOR2I& v_next = l.CPoint( i + 1 );
-                entering = ( !aRestrictedArea.Contains( v ) && aRestrictedArea.Contains( v_next ) );
-            }
-
-            if( entering )
-            {
-                const SEG& sp = l.CSegment( i );
-                r.allowedAngles = DIRECTION_45( sp ).Mask();
-            }
-            else if( exiting )
-            {
-                const SEG& sp = l.CSegment( i - 1 );
-                r.allowedAngles = DIRECTION_45( sp ).Mask();
-            }
-            else
-            {
-                r.allowedAngles = ( !aRestrictedArea.Contains( v ) ) ? 0 : 0xff;
-                r.restricted = r.allowedAngles ? false : true;
-            }
-        }
-
-        v_prev = v;
-        m_rs.push_back( r );
-    }
-}
-
-
-void LINE_RESTRICTIONS::Dump()
-{
-}
-
-
-bool LINE_RESTRICTIONS::Check( int aVertex1, int aVertex2, const SHAPE_LINE_CHAIN& aReplacement )
-{
-    if( m_rs.empty( ) )
-        return true;
-
-    for( int i = aVertex1; i <= aVertex2; i++ )
-        if ( m_rs[i].restricted )
-            return false;
-
-    const RVERTEX& v1 = m_rs[ aVertex1 ];
-    const RVERTEX& v2 = m_rs[ aVertex2 ];
-
-    int m1 = DIRECTION_45( aReplacement.CSegment( 0 ) ).Mask();
-    int m2;
-
-    if( aReplacement.SegmentCount() == 1 )
-        m2 = m1;
-    else
-        m2 = DIRECTION_45( aReplacement.CSegment( 1 ) ).Mask();
-
-    return ( ( v1.allowedAngles & m1 ) != 0 ) &&
-           ( ( v2.allowedAngles & m2 ) != 0 );
-}
-
-
-bool OPTIMIZER::checkColliding( ITEM* aItem, bool aUpdateCache )
-{
-    CACHE_VISITOR v( aItem, m_world, m_collisionKindMask );
-
-    return static_cast<bool>( m_world->CheckColliding( aItem ) );
-
-#if 0
-    // something is wrong with the cache, need to investigate.
-    m_cache.Query( aItem->Shape(), m_world->GetMaxClearance(), v, false );
-
-    if( !v.m_collidingItem )
-    {
-        NODE::OPT_OBSTACLE obs = m_world->CheckColliding( aItem );
-
-        if( obs )
-        {
-            if( aUpdateCache )
-                cacheAdd( obs->m_item );
-
-            return true;
-        }
-    }
-    else
-    {
-        m_cacheTags[v.m_collidingItem].m_hits++;
-        return true;
-    }
-
-    return false;
-#endif
-}
-
-
+Pejo
 bool OPTIMIZER::checkColliding( LINE* aLine, const SHAPE_LINE_CHAIN& aOptPath )
 {
     LINE tmp( *aLine, aOptPath );
@@ -458,10 +275,6 @@ bool OPTIMIZER::mergeObtuse( LINE* aLine )
 
         for( int n = 0; n < n_segs - step; n++ )
         {
-            // Don't try to optimize the arc segments
-            if( current_path.isArc( n ) || current_path.isArc( n + step ) )
-                continue;
-
             const SEG s1 = current_path.CSegment( n );
             const SEG s2 = current_path.CSegment( n + step );
             SEG s1opt, s2opt;
@@ -547,6 +360,9 @@ bool OPTIMIZER::mergeFull( LINE* aLine )
 
         if( !found_anything )
             step--;
+
+        if( !step )
+            break;
     }
 
     aLine->SetShape( current_path );
@@ -588,15 +404,12 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
 
     int cost_orig = COST_ESTIMATOR::CornerCost( aCurrentPath );
 
-    LINE_RESTRICTIONS restr;
-
-    if( aLine->SegmentCount() < 4 )
+    if( aLine->SegmentCount() < 2 )
         return false;
 
     DIRECTION_45 orig_start( aLine->CSegment( 0 ) );
     DIRECTION_45 orig_end( aLine->CSegment( -1 ) );
 
-    restr.Build( m_world, aLine, aCurrentPath, m_restrictArea, m_restrictAreaActive );
 
     for( int n = 0; n < n_segs - step; n++ )
     {
@@ -617,14 +430,14 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
             SHAPE_LINE_CHAIN bypass = DIRECTION_45().BuildInitialTrace( s1.A, s2.B, i );
             cost[i] = INT_MAX;
 
-            bool restrictionsOK = restr.Check ( n, n + step + 1, bypass );
 
-            if( n == 0 && orig_start != DIRECTION_45( bypass.CSegment( 0 ) ) )
-                postureMatch = false;
-            else if( n == n_segs - step && orig_end != DIRECTION_45( bypass.CSegment( -1 ) ) )
-                postureMatch = false;
+            bool ok = false;
+            if ( !checkColliding( aLine, bypass ) )
+            {
+                ok = checkConstraints ( n, n + step + 1, aLine, bypass );
+            }
 
-            if( restrictionsOK && (postureMatch || !m_keepPostures) && !checkColliding( aLine, bypass ) )
+            if( ok )
             {
                 path[i] = aCurrentPath;
                 path[i].Replace( s1.Index(), s2.Index(), bypass );
@@ -973,12 +786,25 @@ bool OPTIMIZER::runSmartPads( LINE* aLine )
 }
 
 
-bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld )
+bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VECTOR2I aV )
 {
     OPTIMIZER opt( aWorld );
 
     opt.SetEffortLevel( aEffortLevel );
     opt.SetCollisionMask( -1 );
+
+    if ( aEffortLevel & KEEP_TOPOLOGY )
+    {
+        auto c = new KEEP_TOPOLOGY_CONSTRAINT( aWorld );
+        opt.AddConstraint( c );
+    }
+
+    if ( aEffortLevel & PRESERVE_VERTEX )
+    {
+        auto c = new PRESERVE_VERTEX_CONSTRAINT( aWorld, aV );
+        opt.AddConstraint( c );
+        //printf("pres-v %d %d\n", aV.x, aV.y );
+    }
     return opt.Optimize( aLine );
 }
 
@@ -1240,6 +1066,191 @@ bool OPTIMIZER::mergeDpSegments( DIFF_PAIR* aPair )
 bool OPTIMIZER::Optimize( DIFF_PAIR* aPair )
 {
     return mergeDpSegments( aPair );
+}
+
+static int64_t shovedArea( const SHAPE_LINE_CHAIN& aOld, const SHAPE_LINE_CHAIN& aNew )
+{
+    int64_t area = 0;
+    const int oc = aOld.PointCount();
+    const int nc = aNew.PointCount();
+    const int total = oc + nc;
+
+    for(int i = 0; i < total; i++)
+    {
+        int i_next = (i + 1 == total ? 0 : i + 1);
+
+        const VECTOR2I &v0 = ( i < oc ? aOld.CPoint(i) : aNew.CPoint( nc - 1 - (i - oc) ) );
+        const VECTOR2I &v1 = ( i_next < oc ? aOld.CPoint ( i_next ) : aNew.CPoint( nc - 1 - (i_next - oc) ) );
+        area += -(int64_t) v0.y * v1.x + (int64_t) v0.x * v1.y;
+    }
+
+    return std::abs(area / 2);
+}
+
+bool tightenSegment( bool dir, NODE *aNode, LINE cur, SHAPE_LINE_CHAIN in, SHAPE_LINE_CHAIN& out )
+{
+    SEG a = in.CSegment(0);
+    SEG center = in.CSegment(1);
+    SEG b = in.CSegment(2);
+
+    DIRECTION_45 dirA ( a );
+    DIRECTION_45 dirCenter ( center );
+    DIRECTION_45 dirB ( b );
+
+    if (!dirA.IsObtuse( dirCenter) || !dirCenter.IsObtuse(dirB))
+        return false;
+
+    //printf("Tighten!");
+
+    VECTOR2I perp = (center.B - center.A).Perpendicular();
+
+    auto rA = SEG( center.A, center.A + perp).LineProject( a.A );
+    auto rB = SEG( center.B, center.B + perp).LineProject( b.B );
+
+    VECTOR2I guideA, guideB ;
+
+    //SEG ga (center.A, rA);
+    //SEG gb (center.B, rB);
+
+    SEG guide;
+    int initial;
+
+    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+    if ( dirA.Angle ( dirB ) != DIRECTION_45::ANG_RIGHT )
+        return false;
+
+    {
+        auto rC = *a.IntersectLines( b );
+        dbg->AddSegment ( SEG( center.A, rC ), 1 );
+        dbg->AddSegment ( SEG( center.B, rC ), 2 );
+        /*
+        auto perp = dirCenter.Left().Left();
+
+        SEG sperp ( center.A, center.A + perp.ToVector() );
+
+        auto vpc = sperp.LineProject( rC );
+        auto vpa = sperp.LineProject( a.A );
+        auto vpb = sperp.LineProject( b.B );
+
+        auto da = (vpc - vpa).EuclideanNorm();
+        auto db = (vpc - vpb).EuclideanNorm();
+
+        auto vp = (da < db) ? vpa : vpb;
+        dbg->AddSegment ( SEG( vpc, vp ), 5 );
+
+
+        guide = SEG ( vpc, vp );*/
+
+
+    }
+
+    int da = a.Length();
+    int db = b.Length();
+
+    if ( da < db )
+        guide = a;
+    else
+        guide = b;
+
+
+    initial = guide.Length();
+
+    int step = initial;
+    int current = step;
+    //printf("step %d\n", step);
+    SHAPE_LINE_CHAIN snew;
+
+    while (step > 1)
+    {
+        LINE l ( cur );
+
+
+        //printf("current %d l %d\n", current, guide.Length() );
+        snew.Clear();
+        snew.Append( a.A );
+        snew.Append( a.B + (a.A - a.B).Resize( current ) );
+        snew.Append( b.A + (b.B - b.A).Resize( current ) );
+        snew.Append( b.B );
+
+        step /= 2;
+
+        l.SetShape(snew);
+        if( aNode->CheckColliding(&l) )
+        {
+            current -= step;
+        } else if ( current + step >= initial ) {
+            current = initial;
+        } else {
+            current += step;
+        }
+
+
+        //dbg->AddSegment ( SEG( center.A ,  a.LineProject( center.A + gr ) ), 3 );
+        //dbg->AddSegment ( SEG( center.A ,  center.A + guideA  ), 3 );
+        //dbg->AddSegment ( SEG( center.B , center.B + guideB ), 4 );
+
+
+        if ( current == initial )
+            break;
+
+
+    }
+    out = snew;
+
+    //dbg->AddLine ( snew, 3, 100000 );
+
+
+    return true;
+
+
+}
+
+void Tighten( NODE *aNode, SHAPE_LINE_CHAIN& aOldLine, LINE& aNewLine, LINE& aOptimized )
+{
+    LINE tmp;
+
+    printf("shovedArea : %lld %d\n", shovedArea(aOldLine, aNewLine.CLine() ), aNewLine.SegmentCount() );
+
+
+    if ( aNewLine.SegmentCount() < 3 )
+        return;
+
+    SHAPE_LINE_CHAIN current ( aNewLine.CLine() );
+
+    for (int step = 0; step < 3; step++)
+    {
+        current.Simplify();
+
+        for ( int i = 0; i <= current.SegmentCount() - 3; i++)
+        {
+            SHAPE_LINE_CHAIN l_in, l_out;
+
+            l_in = current.Slice(i, i+3);
+            for (int dir = 0; dir < 1; dir++)
+            {
+                if(  tightenSegment( dir ? true : false, aNode, aNewLine, l_in, l_out ) )
+                {
+                    SHAPE_LINE_CHAIN opt = current;
+                    opt.Replace(i, i+3, l_out);
+                    auto optArea = std::abs(shovedArea( aOldLine, opt ));
+                    auto prevArea = std::abss(shovedArea( aOldLine, current ));
+
+                    if( optArea < prevArea )
+                    {
+                        current = opt;
+                    }
+                    break;
+                }
+
+            }
+        }
+
+    }
+
+    aOptimized = LINE(aNewLine, current);
+
+    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+    //dbg->AddLine ( current, 4, 100000 );
 }
 
 }
