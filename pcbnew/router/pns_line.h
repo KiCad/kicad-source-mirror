@@ -293,6 +293,9 @@ public:
     bool HasLoops() const;
     bool HasLockedSegments() const;
 
+    void Clear();
+    void Merge ( const LINE& aOther );
+
     OPT_BOX2I ChangedArea( const LINE* aOther ) const;
 
     void SetSnapThreshhold( int aThreshhold )

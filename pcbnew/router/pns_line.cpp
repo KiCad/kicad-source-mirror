@@ -941,4 +941,12 @@ bool LINE::HasLockedSegments() const
     return false;
 }
 
+void LINE::Clear()
+{
+    m_hasVia = false;
+    m_line.Clear();
 }
+
+
+}
+
