@@ -27,6 +27,7 @@
 #include "pns_optimizer.h"
 #include "pns_utils.h"
 #include "pns_router.h"
+#include "pns_debug_decorator.h"
 
 namespace PNS {
 
@@ -57,8 +58,6 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
     OPT<OBSTACLE>& current_obs =
         aWindingDirection ? m_currentObstacle[0] : m_currentObstacle[1];
 
-    bool& prev_recursive = aWindingDirection ? m_recursiveCollision[0] : m_recursiveCollision[1];
-
     if( !current_obs )
         return DONE;
 
@@ -79,22 +78,35 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
         }
     }
 
-    if( ! aPath.Walkaround( current_obs->m_hull, path_pre[0], path_walk[0],
-                      path_post[0], aWindingDirection ) )
-        return STUCK;
+      aPath.Walkaround( current_obs->m_hull, path_pre[0], path_walk[0],
+                      path_post[0], aWindingDirection );
+    aPath.Walkaround( current_obs->m_hull, path_pre[1], path_walk[1],
+                      path_post[1], !aWindingDirection );
 
     if( ! aPath.Walkaround( current_obs->m_hull, path_pre[1], path_walk[1],
                       path_post[1], !aWindingDirection ) )
         return STUCK;
-
+    auto l =aPath.CLine();
 #ifdef DEBUG
-    m_logger.NewGroup( aWindingDirection ? "walk-cw" : "walk-ccw", m_iteration );
-    m_logger.Log( &path_walk[0], 0, "path-walk" );
-    m_logger.Log( &path_pre[0], 1, "path-pre" );
-    m_logger.Log( &path_post[0], 4, "path-post" );
-    m_logger.Log( &current_obs->m_hull, 2, "hull" );
-    m_logger.Log( current_obs->m_item, 3, "item" );
+    if( m_logger )
+    {
+        m_logger->NewGroup( aWindingDirection ? "walk-cw" : "walk-ccw", m_iteration );
+        m_logger->Log( &path_walk[0], 0, "path_walk" );
+        m_logger->Log( &path_pre[0], 1, "path_pre" );
+        m_logger->Log( &path_post[0], 4, "path_post" );
+        m_logger->Log( &current_obs->m_hull, 2, "hull" );
+        m_logger->Log( current_obs->m_item, 3, "item" );
+    }
 #endif
+
+    if ( Dbg() )
+    {
+        char name[128];
+        snprintf(name, sizeof(name), "hull-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
+        Dbg()->AddLine( current_obs->m_hull, 0, 1, name);
+        snprintf(name, sizeof(name), "path-%s-%d", aWindingDirection ? "cw" : "ccw", m_iteration );
+        Dbg()->AddLine( aPath.CLine(), 1, 1, name );
+    }
 
     int len_pre = path_walk[0].Length();
     int len_alt = path_walk[1].Length();
@@ -105,7 +117,7 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
 
     SHAPE_LINE_CHAIN pnew;
 
-    if( !m_forceLongerPath && len_alt < len_pre && !alt_collides && !prev_recursive )
+    /*if( !m_forceLongerPath && len_alt < len_pre && !alt_collides && !prev_recursive )
     {
         pnew = path_pre[1];
         pnew.Append( path_walk[1] );
@@ -115,26 +127,22 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
             current_obs = nearestObstacle( LINE( aPath, path_pre[1] ) );
         else
             current_obs = nearestObstacle( LINE( aPath, path_post[1] ) );
-        prev_recursive = false;
     }
-    else
+    else*/
     {
         pnew = path_pre[0];
         pnew.Append( path_walk[0] );
         pnew.Append( path_post[0] );
 
-        if( !path_post[0].PointCount() || !path_walk[0].PointCount() )
+        if( path_post[0].PointCount() == 0 || path_walk[0].PointCount() == 0 )
             current_obs = nearestObstacle( LINE( aPath, path_pre[0] ) );
         else
             current_obs = nearestObstacle( LINE( aPath, path_walk[0] ) );
 
         if( !current_obs )
         {
-            prev_recursive = false;
             current_obs = nearestObstacle( LINE( aPath, path_post[0] ) );
         }
-        else
-            prev_recursive = true;
     }
 
     pnew.Simplify();
@@ -142,6 +150,154 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
 
     return IN_PROGRESS;
 }
+
+
+
+bool clipToLoopStart( SHAPE_LINE_CHAIN& l )
+{
+    auto ip = l.SelfIntersecting();
+
+    if(!ip)
+        return false;
+    else {
+        int pidx = l.Split( ip->p );
+        auto lead = l.Slice(0, pidx);
+        auto tail = l.Slice(pidx + 1, -1);
+
+        int pidx2 = tail.Split( ip->p );
+        
+        auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+        dbg->AddPoint( ip->p, 5 );
+        
+        l = lead;
+        l.Append( tail.Slice( 0, pidx2 ) );
+        //l = l.Slice(0, pidx);
+        return true;
+    }
+
+    
+}
+
+
+
+const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
+{
+    LINE path_cw( aInitialPath ), path_ccw( aInitialPath );
+    WALKAROUND_STATUS s_cw = IN_PROGRESS, s_ccw = IN_PROGRESS;
+    SHAPE_LINE_CHAIN best_path;
+    RESULT result;
+
+    // special case for via-in-the-middle-of-track placement
+    if( aInitialPath.PointCount() <= 1 )
+    {
+        if( aInitialPath.EndsWithVia() && m_world->CheckColliding( &aInitialPath.Via(), m_itemMask ) )
+            return RESULT( STUCK, STUCK );
+
+        return RESULT( DONE, DONE, aInitialPath, aInitialPath );
+    }
+
+    start( aInitialPath );
+
+    m_currentObstacle[0] = m_currentObstacle[1] = nearestObstacle( aInitialPath );
+    m_recursiveBlockageCount = 0;
+
+    result.lineCw = aInitialPath;
+    result.lineCcw = aInitialPath;
+
+    if( m_forceWinding )
+    {
+        s_cw = m_forceCw ? IN_PROGRESS : STUCK;
+        s_ccw = m_forceCw ? STUCK : IN_PROGRESS;
+        m_forceSingleDirection = true;
+    } else {
+        m_forceSingleDirection = false;
+    }
+
+    while( m_iteration < m_iterationLimit )
+    {
+        if( s_cw != STUCK )
+            s_cw = singleStep( path_cw, true );
+
+        if( s_ccw != STUCK )
+            s_ccw = singleStep( path_ccw, false );
+
+        //Dbg()->AddLine( path_cw.CLine(), 2, 10000 );
+
+
+        printf("iter %d s_cw %d s_ccw %d\n", m_iteration, s_cw, s_ccw );
+        
+        auto old = path_cw.CLine();
+
+        if( clipToLoopStart( path_cw.Line() ))
+        {
+            printf("ClipCW\n");
+            //Dbg()->AddLine( old, 1, 40000 );
+            s_cw = ALMOST_DONE;
+        }
+
+        if( clipToLoopStart( path_ccw.Line() ))
+        {
+            printf("ClipCCW\n");
+            s_ccw = ALMOST_DONE;
+        }
+
+        
+        if( s_cw != IN_PROGRESS )
+        {
+            result.lineCw = path_cw;
+            result.statusCw = s_cw;
+        }
+
+        if( s_ccw != IN_PROGRESS )
+        {
+            result.lineCcw = path_ccw;
+            result.statusCcw = s_ccw;
+        }
+
+        if( s_cw != IN_PROGRESS && s_ccw != IN_PROGRESS )
+            break;
+
+        m_iteration++;
+    }
+
+    if( s_cw == IN_PROGRESS )
+    {
+        result.lineCw = path_cw;
+        result.statusCw = ALMOST_DONE;
+    }
+
+    if( s_ccw == IN_PROGRESS )
+    {
+        result.lineCcw = path_ccw;
+        result.statusCcw = ALMOST_DONE;
+    }
+
+    result.lineCw.Line().Simplify();
+    result.lineCcw.Line().Simplify();
+
+    if( result.lineCw.SegmentCount() < 1 || result.lineCw.CPoint( 0 ) != aInitialPath.CPoint( 0 ) )
+    {
+        result.statusCw = STUCK;
+    }
+
+    if( result.lineCw.PointCount() > 0 && result.lineCw.CPoint( -1 ) != aInitialPath.CPoint( -1 ) )
+    {
+        result.statusCw = ALMOST_DONE;
+    }
+
+    if( result.lineCcw.SegmentCount() < 1 || result.lineCcw.CPoint( 0 ) != aInitialPath.CPoint( 0 ) )
+    {
+        result.statusCcw = STUCK;
+    }
+
+    if( result.lineCcw.PointCount() > 0 && result.lineCcw.CPoint( -1 ) != aInitialPath.CPoint( -1 ) )
+    {
+        result.statusCcw = ALMOST_DONE;
+    }
+
+    return result;
+}
+
 
 
 WALKAROUND::WALKAROUND_STATUS WALKAROUND::Route( const LINE& aInitialPath,
@@ -261,7 +417,7 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::Route( const LINE& aInitialPath,
     if( aWalkPath.SegmentCount() < 1 )
         return STUCK;
     if( aWalkPath.CPoint( -1 ) != aInitialPath.CPoint( -1 ) )
-        return STUCK;
+        return ALMOST_DONE;
     if( aWalkPath.CPoint( 0 ) != aInitialPath.CPoint( 0 ) )
         return STUCK;
 

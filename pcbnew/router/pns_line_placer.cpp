@@ -366,10 +366,32 @@ bool LINE_PLACER::mergeHead()
 }
 
 
+VECTOR2I closestProjectedPoint( const SHAPE_LINE_CHAIN& line, const VECTOR2I& p )
+{
+    int min_dist = INT_MAX;
+    VECTOR2I closest;
+
+    for(int i = 0; i < line.SegmentCount(); i++ )
+    {
+        const auto& s = line.CSegment(i);
+        auto a = s.NearestPoint( p );
+        auto d = (a - p).EuclideanNorm();
+
+        if( d < min_dist )
+        {
+            min_dist = d;
+            closest = a;
+        }
+    }
+
+    return closest;
+}
+
+
 bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
 {
     LINE initTrack( m_head );
-    LINE walkFull;
+    LINE walkFull( m_head );
     int effort = 0;
     bool rv = true, viaOk;
 
@@ -379,9 +401,40 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
 
     walkaround.SetSolidsOnly( false );
     walkaround.SetDebugDecorator( Dbg() );
+    walkaround.SetLogger( Logger() );
     walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );
 
-    WALKAROUND::WALKAROUND_STATUS wf = walkaround.Route( initTrack, walkFull, false );
+    WALKAROUND::RESULT wr = walkaround.Route( initTrack );
+    //WALKAROUND::WALKAROUND_STATUS wf = walkaround.Route( initTrack, walkFull, false );
+
+    auto l_cw = wr.lineCw.CLine();
+    auto l_ccw = wr.lineCcw.CLine();
+
+    if( wr.statusCcw == WALKAROUND::ALMOST_DONE || wr.statusCw == WALKAROUND::ALMOST_DONE )
+    {
+
+        auto p_cw = closestProjectedPoint( l_cw, aP );
+        auto p_ccw = closestProjectedPoint( l_ccw, aP );
+
+        int idx_cw = l_cw.Split( p_cw );
+        int idx_ccw = l_ccw.Split( p_ccw );
+
+        l_cw = l_cw.Slice( 0, idx_cw );
+        l_ccw = l_ccw.Slice( 0, idx_ccw );
+
+        //Dbg()->AddLine( wr.lineCw.CLine(), 3, 40000 );
+
+        //Dbg()->AddPoint( p_cw, 4 );
+        //Dbg()->AddPoint( p_ccw, 5 );
+
+        //Dbg()->AddLine( wr.lineCw.CLine(), 4, 1000 );
+        //Dbg()->AddLine( wr.lineCcw.CLine(), 5, 1000 );
+
+    }
+
+    walkFull.SetShape( l_ccw.Length() < l_cw.Length() ? l_ccw : l_cw );
+
+    Dbg()->AddLine( walkFull.CLine(), 2, 100000, "walk-full" );
 
     switch( Settings().OptimizerEffort() )
     {
@@ -398,7 +451,7 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
     if( Settings().SmartPads() )
         effort |= OPTIMIZER::SMART_PADS;
 
-    if( wf == WALKAROUND::STUCK )
+    if( wr.statusCw == WALKAROUND::STUCK || wr.statusCcw == WALKAROUND::STUCK )
     {
         walkFull = walkFull.ClipToNearestObstacle( m_currentNode );
         rv = true;
@@ -578,6 +631,10 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead )
     bool viaOk = buildInitialLine( aP, initTrack );
 
     m_currentNode = m_shove->CurrentNode();
+
+    m_shove->SetLogger( Logger() );
+    m_shove->SetDebugDecorator( Dbg() );
+    
     OPTIMIZER optimizer( m_currentNode );
 
     WALKAROUND walkaround( m_currentNode, Router() );
@@ -585,6 +642,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead )
     walkaround.SetSolidsOnly( true );
     walkaround.SetIterationLimit( 10 );
     walkaround.SetDebugDecorator( Dbg() );
+    walkaround.SetLogger( Logger() );
     WALKAROUND::WALKAROUND_STATUS stat_solids = walkaround.Route( initTrack, walkSolids );
 
     optimizer.SetEffortLevel( OPTIMIZER::MERGE_SEGMENTS );
@@ -1204,8 +1262,8 @@ void LINE_PLACER::updateLeadingRatLine()
     SHAPE_LINE_CHAIN ratLine;
     TOPOLOGY topo( m_lastNode );
 
-    if( topo.LeadingRatLine( &current, ratLine ) )
-        Dbg()->AddLine( ratLine, 5, 10000 );
+    //if( topo.LeadingRatLine( &current, ratLine ) )
+        //Dbg()->AddLine( ratLine, 5, 10000 );
 }
 
 
@@ -1288,12 +1346,5 @@ void LINE_PLACER::GetModifiedNets( std::vector<int>& aNets ) const
     aNets.push_back( m_currentNet );
 }
 
-LOGGER* LINE_PLACER::Logger()
-{
-    if( m_shove )
-        return m_shove->Logger();
-
-    return NULL;
-}
 
 }
