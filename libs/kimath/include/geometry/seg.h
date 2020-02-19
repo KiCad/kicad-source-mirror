@@ -300,6 +300,7 @@ public:
             return false;
 
         if( Contains( aSeg.A ) && Contains( aSeg.B ) )
+            return true;
 
         return false;
     }
