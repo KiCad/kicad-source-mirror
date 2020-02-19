@@ -33,8 +33,17 @@
 #include <math/box2.h>       // for BOX2I
 #include <math/util.h>  // for rescale
 #include <math/vector2d.h>   // for VECTOR2, VECTOR2I
+
 class SHAPE;
 
+SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV)
+    : SHAPE( SH_LINE_CHAIN ), m_closed( false ), m_width( 0 )
+{
+    for(int i = 0; i < aV.size(); i+= 2 )
+    {
+        Append( aV[i], aV[i+1] );
+    }
+}
 
 ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation ) const
 {
@@ -478,6 +487,24 @@ int SHAPE_LINE_CHAIN::Intersect( const SEG& aSeg, INTERSECTIONS& aIp ) const
     return aIp.size();
 }
 
+static inline void addIntersection( SHAPE_LINE_CHAIN::INTERSECTIONS& aIps, int aPc, const SHAPE_LINE_CHAIN::INTERSECTION& aP )
+{
+    if( aIps.size() == 0 )
+    {
+        aIps.push_back( aP );
+        return;
+    }
+
+    const auto& last = aIps.back();
+
+    if( ( (last.our.Index() + 1) % aPc) == aP.our.Index() && last.p == aP.p )
+        return;
+
+    if( last.our.Index() == aP.our.Index() && last.p == aP.p )
+        return;
+
+    aIps.push_back( aP );
+}
 
 int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp ) const
 {
@@ -501,10 +528,10 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
                 is.our = a;
                 is.their = b;
 
-                if( a.Contains( b.A ) ) { is.p = b.A; aIp.push_back( is ); }
-                if( a.Contains( b.B ) ) { is.p = b.B; aIp.push_back( is ); }
-                if( b.Contains( a.A ) ) { is.p = a.A; aIp.push_back( is ); }
-                if( b.Contains( a.B ) ) { is.p = a.B; aIp.push_back( is ); }
+                if( a.Contains( b.A ) ) { is.p = b.A; addIntersection(aIp, PointCount(), is); }
+                if( a.Contains( b.B ) ) { is.p = b.B; addIntersection(aIp, PointCount(), is); }
+                if( b.Contains( a.A ) ) { is.p = a.A; addIntersection(aIp, PointCount(), is); }
+                if( b.Contains( a.B ) ) { is.p = a.B; addIntersection(aIp, PointCount(), is); }
             }
             else
             {
@@ -515,7 +542,7 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
                     is.p = *p;
                     is.our = a;
                     is.their = b;
-                    aIp.push_back( is );
+                    addIntersection(aIp, PointCount(), is);
                 }
             }
         }
