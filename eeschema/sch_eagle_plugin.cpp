@@ -588,8 +588,6 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET( pos ) );
             SCH_SCREEN*                screen = new SCH_SCREEN( m_kiway );
 
-            sheet->SetTimeStamp(
-                    GetNewTimeStamp() - i ); // minus the sheet index to make it unique.
             sheet->SetParent( m_rootSheet->GetScreen() );
             sheet->SetScreen( screen );
             sheet->GetScreen()->SetFileName( sheet->GetFileName() );
@@ -646,11 +644,9 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             // Instantiate the missing component unit
             int                            unit      = unitEntry.first;
             const wxString                 reference = origCmp->GetField( REFERENCE )->GetText();
-            std::unique_ptr<SCH_COMPONENT> component( new SCH_COMPONENT( *origCmp ) );
+            std::unique_ptr<SCH_COMPONENT> component( (SCH_COMPONENT*) origCmp->Duplicate() );
             component->SetUnitSelection( &sheetpath, unit );
             component->SetUnit( unit );
-            component->SetTimeStamp(
-                    EagleModuleTstamp( reference, origCmp->GetField( VALUE )->GetText(), unit ) );
             component->SetOrientation( 0 );
             component->AddHierarchicalReference( sheetpath.Path(), reference, unit );
 
@@ -1102,17 +1098,15 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     auto p = elib->package.find( kisymbolname );
 
     if( p != elib->package.end() )
-    {
         package = p->second;
-    }
 
     LIB_PART* part =
             m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname, m_properties.get() );
 
     if( !part )
     {
-        wxLogMessage( wxString::Format(
-                _( "Could not find %s in the imported library" ), kisymbolname ) );
+        wxLogMessage( wxString::Format( _( "Could not find %s in the imported library" ),
+                                        kisymbolname ) );
         return;
     }
 
@@ -1122,17 +1116,13 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     component->SetUnit( unit );
     component->SetPosition( wxPoint( einstance.x.ToSchUnits(), -einstance.y.ToSchUnits() ) );
     component->GetField( FOOTPRINT )->SetText( package );
-    component->SetTimeStamp(
-            EagleModuleTstamp( einstance.part, epart->value ? *epart->value : "", unit ) );
 
     if( einstance.rot )
     {
         component->SetOrientation( kiCadComponentRotation( einstance.rot->degrees ) );
 
         if( einstance.rot->mirror )
-        {
             component->MirrorY( einstance.x.ToSchUnits() );
-        }
     }
 
     LIB_FIELDS partFields;
@@ -1158,10 +1148,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     SCH_SHEET_PATH sheetpath;
     m_rootSheet->LocatePathOfScreen( screen, &sheetpath );
     wxString current_sheetpath = sheetpath.Path();
-
-    wxString tstamp;
-    tstamp.Printf( "%8.8lX", (unsigned long) component->GetTimeStamp() );
-    current_sheetpath += tstamp;
+    current_sheetpath += component->m_Uuid.AsString();
 
     component->GetField( REFERENCE )->SetText( reference );
     component->AddHierarchicalReference( current_sheetpath, reference, unit );

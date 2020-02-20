@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -271,8 +271,8 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aComp )
 
     case SCH_SHEET_T:
         {
-        SCH_SHEET* sheet = (SCH_SHEET*)aItem;
-        return StrPrintf( "$SHEET: \"%8.8lX\"", (unsigned long) sheet->GetTimeStamp() );
+            SCH_SHEET* sheet = (SCH_SHEET*)aItem;
+            return StrPrintf( "$SHEET: \"%s\"", TO_UTF8( sheet->m_Uuid.AsString() ) );
         }
 
     case SCH_PIN_T:

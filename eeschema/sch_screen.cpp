@@ -1081,40 +1081,28 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
     int count = 0;
 
     auto timestamp_cmp = []( const EDA_ITEM* a, const EDA_ITEM* b ) -> bool
-        {
-            return a->GetTimeStamp() < b->GetTimeStamp();
-        };
+                         {
+                             return a->m_Uuid < b->m_Uuid;
+                         };
 
     std::set<EDA_ITEM*, decltype( timestamp_cmp )> unique_stamps( timestamp_cmp );
 
-    for( size_t i = 0;  i < m_screens.size();  i++ )
-        m_screens[i]->GetHierarchicalItems( items );
+    for( SCH_SCREEN* screen : m_screens )
+        screen->GetHierarchicalItems( items );
 
     if( items.size() < 2 )
         return 0;
 
-    for( auto item : items )
+    for( EDA_ITEM* item : items )
     {
-        int failed = 0;
-
-        while( !unique_stamps.insert( item ).second )
+        if( !unique_stamps.insert( item ).second )
         {
-            failed = 1;
-
-            // for a component, update its Time stamp and its paths
-            // (m_PathsAndReferences field)
-            if( item->Type() == SCH_COMPONENT_T )
-                static_cast<SCH_COMPONENT*>( item )->SetTimeStamp( GetNewTimeStamp() );
-
-            // for a sheet, update only its time stamp (annotation of its
-            // components will be lost)
-            // @todo: see how to change sheet paths for its cmp list (can
-            //        be possible in most cases)
-            else
-                item->SetTimeStamp( GetNewTimeStamp() );
+            // Reset to fully random UUID.  This may lose reference, but better to be
+            // deterministic about it rather than to have duplicate UUIDs with random
+            // side-effects.
+            const_cast<UUID&>( item->m_Uuid ) = UUID();
+            count++;
         }
-
-        count += failed;
     }
 
     return count;

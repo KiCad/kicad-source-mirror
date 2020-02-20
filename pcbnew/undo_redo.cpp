@@ -166,17 +166,16 @@ static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     wxASSERT( aItem->Type() == aImage->Type() );
 
     // Remark: to create images of edited items to undo, we are using Clone method
-    // which can duplication of items foe copy, but does not clone all members
-    // mainly pointers in chain and time stamp, which is set to new, unique value.
+    // which does not do a deep copy.
     // So we have to use the current values of these parameters.
 
-    timestamp_t timestamp = aItem->GetTimeStamp();
+    wxASSERT( aItem->m_Uuid == aItem->m_Uuid );
+
     EDA_ITEM* parent = aItem->GetParent();
 
     aItem->SwapData( aImage );
 
-    // Restore pointers and time stamp, to be sure they are not broken
-    aItem->SetTimeStamp( timestamp );
+    // Restore pointers to be sure they are not broken
     aItem->SetParent( parent );
 }
 

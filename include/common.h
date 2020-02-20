@@ -47,6 +47,7 @@
 #include <memory>
 #include <type_traits>
 #include <typeinfo>
+#include <boost/uuid/uuid.hpp>
 
 class SEARCH_STACK;
 class REPORTER;
@@ -60,6 +61,107 @@ class REPORTER;
  * to {Get,Set}Id()) ?
  */
 typedef uint32_t timestamp_t;
+
+class UUID
+{
+public:
+    UUID();
+    UUID( int null );
+    UUID( const wxString& aString );
+    UUID( timestamp_t aTimestamp );
+
+    void Clone( const UUID& aUUID );
+
+    size_t Hash() const;
+
+    bool IsLegacyTimestamp() const;
+    timestamp_t AsLegacyTimestamp() const;
+
+    wxString AsString() const;
+    wxString AsLegacyTimestampString() const;
+
+    bool operator==( UUID const& rhs) const
+    {
+        return m_uuid == rhs.m_uuid;
+    }
+
+    bool operator!=( UUID const& rhs) const
+    {
+        return m_uuid != rhs.m_uuid;
+    }
+
+    bool operator<( UUID const& rhs) const
+    {
+        return m_uuid < rhs.m_uuid;
+    }
+
+private:
+    boost::uuids::uuid m_uuid;
+
+    timestamp_t        m_cached_timestamp;
+};
+
+
+extern UUID niluuid;
+
+
+class UUID_PATH : public std::vector<UUID>
+{
+public:
+    UUID_PATH()
+    {}
+
+    UUID_PATH( const wxString& aString )
+    {
+        for( const wxString& pathStep : wxSplit( aString, '/' ) )
+        {
+            if( !pathStep.empty() )
+                emplace_back( UUID( pathStep ) );
+        }
+    }
+
+    wxString AsString() const
+    {
+        wxString path;
+
+        for( const UUID& pathStep : *this )
+            path += '/' + pathStep.AsString();
+
+        return path;
+    }
+
+    bool operator==( UUID_PATH const& rhs) const
+    {
+        if( size() != rhs.size() )
+            return false;
+
+        for( int i = 0; i < size(); ++i )
+        {
+            if( at( i ) != rhs.at( i ) )
+                return false;
+        }
+
+        return true;
+    }
+
+    bool operator<( UUID_PATH const& rhs) const
+    {
+        if( size() != rhs.size() )
+            return size() < rhs.size();
+
+        for( int i = 0; i < size(); ++i )
+        {
+            if( at( i ) < rhs.at( i ) )
+                return true;
+
+            if( at( i ) != rhs.at( i ) )
+                return false;
+        }
+
+        return false;
+    }
+};
+
 
 /// default name for nameless projects
 #define NAMELESS_PROJECT wxT( "noname" )
@@ -153,15 +255,6 @@ void SelectReferenceNumber( wxTextEntry* aTextEntry );
  */
 int ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC,
                     wxProcess *callback = NULL );
-
-/**
- * @return an unique time stamp that changes after each call
- */
-timestamp_t GetNewTimeStamp();
-
-int GetCommandOptions( const int argc, const char** argv,
-                       const char* stringtst, const char** optarg,
-                       int* optind );
 
 /**
  * Split \a aString to a string list separated at \a aSplitter.

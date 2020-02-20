@@ -123,7 +123,6 @@ void PCB_TEXT::AddToBoard()
                                  m_name.textPositionY ) );
 
     pcbtxt->SetMirrored( m_name.mirror );
-    pcbtxt->SetTimeStamp( 0 );
 
     pcbtxt->SetLayer( m_KiCadLayer );
 }

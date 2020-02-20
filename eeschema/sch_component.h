@@ -327,15 +327,6 @@ public:
     bool AddSheetPathReferenceEntryIfMissing( const wxString& aSheetPathName );
 
     /**
-     * Change the time stamp to \a aNewTimeStamp and updates the reference path.
-     *
-     * @see m_PathsAndReferences
-     *
-     * @param aNewTimeStamp = new time stamp
-     */
-    void SetTimeStamp( timestamp_t aNewTimeStamp );
-
-    /**
      * Clear the HIGHLIGHTED flag of all items of the component (fields, pins ...)
      */
     bool ClearAllHighlightFlags();

@@ -90,8 +90,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataToWindow()
     m_filenameTextSize.SetValue( m_sheet->GetFileNameSize() );
     m_sheetnameTextSize.SetValue( m_sheet->GetSheetNameSize() );
 
-    auto tstamp = wxString::Format( wxT( "%8.8lX" ), (unsigned long) m_sheet->GetTimeStamp() );
-    m_textCtrlTimeStamp->SetValue( tstamp );
+    m_textCtrlTimeStamp->SetValue( m_sheet->m_Uuid.AsString() );
 
     return true;
 }

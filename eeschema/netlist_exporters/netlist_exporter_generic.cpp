@@ -201,8 +201,6 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
 {
     XNODE*      xcomps = node( "components" );
 
-    wxString    timeStamp;
-
     m_ReferencesAlreadyFound.Clear();
 
     SCH_SHEET_LIST sheetList( g_RootSheet );
@@ -273,9 +271,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             xcomp->AddChild( xsheetpath = node( "sheetpath" ) );
             xsheetpath->AddAttribute( "names", sheetList[i].PathHumanReadable() );
             xsheetpath->AddAttribute( "tstamps", sheetList[i].Path() );
-
-            timeStamp.Printf( "%8.8lX", (unsigned long)comp->GetTimeStamp() );
-            xcomp->AddChild( node( "tstamp", timeStamp ) );
+            xcomp->AddChild( node( "tstamp", comp->m_Uuid.AsString() ) );
         }
     }
 

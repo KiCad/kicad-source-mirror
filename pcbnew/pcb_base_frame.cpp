@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -171,10 +171,7 @@ void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
         GetBoard()->Add( module, ADD_MODE::APPEND );
 
         module->SetFlags( IS_NEW );
-
         module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized yet
-
-        module->SetTimeStamp( GetNewTimeStamp() );
 
         // Put it on FRONT layer (note that it might be stored flipped if the lib is an archive
         // built from a board)

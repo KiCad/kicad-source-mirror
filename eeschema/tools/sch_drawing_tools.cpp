@@ -214,7 +214,6 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                         next_comp->SetFlags( IS_NEW | IS_MOVED );
                         next_comp->SetUnit( new_unit );
                         next_comp->SetUnitSelection( g_CurrentSheet, new_unit );
-                        next_comp->SetTimeStamp( GetNewTimeStamp() );
 
                         if( m_frame->GetAutoplaceFields() )
                             component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
@@ -834,7 +833,6 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             sheet = new SCH_SHEET( (wxPoint) cursorPos );
             sheet->SetFlags( IS_NEW | IS_RESIZED );
-            sheet->SetTimeStamp( GetNewTimeStamp() );
             sheet->SetParent( m_frame->GetScreen() );
             sheet->SetScreen( NULL );
             sizeSheet( sheet, cursorPos );

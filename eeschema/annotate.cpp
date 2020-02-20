@@ -1,12 +1,7 @@
-/**
- * @file annotate.cpp
- * @brief Component annotation.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +33,7 @@
 #include <class_library.h>
 
 
-void mapExistingAnnotation( std::map<timestamp_t, wxString>& aMap )
+void mapExistingAnnotation( std::map<UUID, wxString>& aMap )
 {
     SCH_SHEET_LIST     sheets( g_RootSheet );
     SCH_REFERENCE_LIST references;
@@ -51,7 +46,7 @@ void mapExistingAnnotation( std::map<timestamp_t, wxString>& aMap )
         wxString       ref = comp->GetField( REFERENCE )->GetFullyQualifiedText();
 
         if( !ref.Contains( wxT( "?" ) ) )
-            aMap[ comp->GetTimeStamp() ] = ref;
+            aMap[ comp->m_Uuid ] = ref;
     }
 }
 
@@ -99,7 +94,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     SCH_MULTI_UNIT_REFERENCE_MAP lockedComponents;
 
     // Map of previous annotation for building info messages
-    std::map<timestamp_t, wxString> previousAnnotation;
+    std::map<UUID, wxString> previousAnnotation;
 
     // Test for and replace duplicate time stamps in components and sheets.  Duplicate
     // time stamps can happen with old schematics, schematic conversions, or manual
@@ -120,13 +115,9 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     if( aLockUnits )
     {
         if( aAnnotateSchematic )
-        {
             sheets.GetMultiUnitComponents( lockedComponents );
-        }
         else
-        {
             g_CurrentSheet->GetMultiUnitComponents( lockedComponents );
-        }
     }
 
     // Store previous annotations for building info messages
@@ -141,13 +132,9 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
     // Build component list
     if( aAnnotateSchematic )
-    {
         sheets.GetComponents( references );
-    }
     else
-    {
         g_CurrentSheet->GetComponents( references );
-    }
 
     // Break full components reference in name (prefix) and number:
     // example: IC1 become IC, and 1
@@ -156,13 +143,8 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     switch( aSortOption )
     {
     default:
-    case SORT_BY_X_POSITION:
-        references.SortByXCoordinate();
-        break;
-
-    case SORT_BY_Y_POSITION:
-        references.SortByYCoordinate();
-        break;
+    case SORT_BY_X_POSITION: references.SortByXCoordinate(); break;
+    case SORT_BY_Y_POSITION: references.SortByYCoordinate(); break;
     }
 
     bool useSheetNum = false;
@@ -191,7 +173,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
         SCH_COMPONENT* comp = references[ i ].GetComp();
-        wxString       prevRef = previousAnnotation[ comp->GetTimeStamp() ];
+        wxString       prevRef = previousAnnotation[ comp->m_Uuid ];
         wxString       newRef  = comp->GetField( REFERENCE )->GetFullyQualifiedText();
         wxString       msg;
 
@@ -202,27 +184,27 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
             if( comp->GetUnitCount() > 1 )
                 msg.Printf( _( "Updated %s (unit %s) from %s to %s" ),
-                            GetChars( comp->GetField( VALUE )->GetShownText() ),
+                            comp->GetField( VALUE )->GetShownText(),
                             LIB_PART::SubReference( comp->GetUnit(), false ),
-                            GetChars( prevRef ),
-                            GetChars( newRef ) );
+                            prevRef,
+                            newRef );
             else
                 msg.Printf( _( "Updated %s from %s to %s" ),
-                            GetChars( comp->GetField( VALUE )->GetShownText() ),
-                            GetChars( prevRef ),
-                            GetChars( newRef ) );
+                            comp->GetField( VALUE )->GetShownText(),
+                            prevRef,
+                            newRef );
         }
         else
         {
             if( comp->GetUnitCount() > 1 )
                 msg.Printf( _( "Annotated %s (unit %s) as %s" ),
-                            GetChars( comp->GetField( VALUE )->GetShownText() ),
+                            comp->GetField( VALUE )->GetShownText(),
                             LIB_PART::SubReference( comp->GetUnit(), false ),
-                            GetChars( newRef ) );
+                            newRef );
             else
                 msg.Printf( _( "Annotated %s as %s" ),
-                            GetChars( comp->GetField( VALUE )->GetShownText() ),
-                            GetChars( newRef ) );
+                            comp->GetField( VALUE )->GetShownText(),
+                            newRef );
         }
 
         aReporter.Report( msg, REPORTER::RPT_ACTION );

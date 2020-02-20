@@ -72,7 +72,10 @@ Vary: Accept-Encoding
 
 #include <kicad_curl/kicad_curl_easy.h>     // Include before any wx file
 #include <sstream>
+
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"  // For boost...
 #include <boost/ptr_container/ptr_map.hpp>
+
 #include <set>
 
 #include <wx/zipstrm.h>

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
  * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see authors.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see authors.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-
-/**
- * @file eeschema/sch_reference_list.h
  */
 
 #ifndef _SCH_REFERENCE_LIST_H_
@@ -65,7 +60,7 @@ class SCH_REFERENCE
     SCH_SHEET_PATH m_SheetPath;         ///< The sheet path for this reference.
     bool           m_IsNew;             ///< True if not yet annotated.
     int            m_SheetNum;          ///< The sheet number for the reference.
-    timestamp_t    m_TimeStamp;         ///< The time stamp for the reference.
+    UUID           m_Uuid;              ///< UUID of the component.
     EDA_TEXT*      m_Value;             ///< The component value of the reference.  It is the
                                         ///< same for all instances.
     int            m_NumRef;            ///< The numeric part of the reference designator.
@@ -79,15 +74,14 @@ public:
     SCH_REFERENCE() :
         m_SheetPath()
     {
-        m_RootCmp      = NULL;
-        m_Entry        = NULL;
-        m_Unit         = 0;
-        m_TimeStamp    = 0;
-        m_IsNew        = false;
-        m_Value        = NULL;
-        m_NumRef       = 0;
-        m_Flag         = 0;
-        m_SheetNum     = 0;
+        m_RootCmp         = NULL;
+        m_Entry           = NULL;
+        m_Unit            = 0;
+        m_IsNew           = false;
+        m_Value           = NULL;
+        m_NumRef          = 0;
+        m_Flag            = 0;
+        m_SheetNum        = 0;
     }
 
     SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent,
@@ -215,7 +209,7 @@ public:
 class SCH_REFERENCE_LIST
 {
 private:
-    std::vector <SCH_REFERENCE> componentFlatList;
+    std::vector <SCH_REFERENCE> flatList;
 
 public:
     /** Constructor
@@ -226,7 +220,7 @@ public:
 
     SCH_REFERENCE& operator[]( int aIndex )
     {
-        return componentFlatList[ aIndex ];
+        return flatList[ aIndex ];
     }
 
     /**
@@ -235,7 +229,7 @@ public:
      */
     unsigned GetCount()
     {
-        return componentFlatList.size();
+        return flatList.size();
     }
 
     /**
@@ -244,7 +238,7 @@ public:
      */
     SCH_REFERENCE& GetItem( int aIdx )
     {
-        return componentFlatList[aIdx];
+        return flatList[aIdx];
     }
 
     /**
@@ -254,7 +248,7 @@ public:
      */
     void AddItem( SCH_REFERENCE& aItem )
     {
-        componentFlatList.push_back( aItem );
+        flatList.push_back( aItem );
     }
 
     /**
@@ -264,14 +258,6 @@ public:
      * @param aIndex is the index of the item to be removed.
      */
     void RemoveItem( unsigned int aIndex );
-
-    /**
-     * Function RemoveSubComponentsFromList
-     * Remove sub components from the list, when multiples parts per package are
-     * found in this list.
-     * Useful to create BOM, when a component must appear only once
-     */
-    void RemoveSubComponentsFromList();
 
     /* Sort functions:
      * Sort functions are used to sort components for annotation or BOM generation.
@@ -294,7 +280,7 @@ public:
     void SplitReferences()
     {
         for( unsigned ii = 0; ii < GetCount(); ii++ )
-            componentFlatList[ii].Split();
+            flatList[ii].Split();
     }
 
     /**
@@ -309,7 +295,7 @@ public:
         /* update the reference numbers */
         for( unsigned ii = 0; ii < GetCount(); ii++ )
         {
-            componentFlatList[ii].Annotate();
+            flatList[ii].Annotate();
         }
     }
 
@@ -351,14 +337,6 @@ public:
     int CheckAnnotation( REPORTER& aReporter );
 
     /**
-     * @brief Check components having same references designator. Must be called with references
-     * sorted by timestamp \ref SortByTimeStamp()
-     * @param aReporter A sink for error messages.  Use NULL_REPORTER if you don't need errors.
-     * @return The number of errors found.
-     */
-    int checkForDuplicatedElements( REPORTER& aReporter );
-
-    /**
      * Function sortByXCoordinate
      * sorts the list of references by X position.
      * <p>
@@ -374,7 +352,7 @@ public:
      */
     void SortByXCoordinate()
     {
-        sort( componentFlatList.begin(), componentFlatList.end(), sortByXPosition );
+        sort( flatList.begin(), flatList.end(), sortByXPosition );
     }
 
     /**
@@ -393,7 +371,7 @@ public:
      */
     void SortByYCoordinate()
     {
-        sort( componentFlatList.begin(), componentFlatList.end(), sortByYPosition );
+        sort( flatList.begin(), flatList.end(), sortByYPosition );
     }
 
     /**
@@ -403,7 +381,7 @@ public:
      */
     void SortByTimeStamp()
     {
-        sort( componentFlatList.begin(), componentFlatList.end(), sortByTimeStamp );
+        sort( flatList.begin(), flatList.end(), sortByTimeStamp );
     }
 
     /**
@@ -423,7 +401,7 @@ public:
      */
     void SortByRefAndValue()
     {
-        sort( componentFlatList.begin(), componentFlatList.end(), sortByRefAndValue );
+        sort( flatList.begin(), flatList.end(), sortByRefAndValue );
     }
 
     /**
@@ -439,7 +417,7 @@ public:
      */
     void SortByReferenceOnly()
     {
-        sort( componentFlatList.begin(), componentFlatList.end(), sortByReferenceOnly );
+        sort( flatList.begin(), flatList.end(), sortByReferenceOnly );
     }
 
     /**
@@ -485,9 +463,9 @@ public:
     {
         printf( "%s\n", aPrefix );
 
-        for( unsigned i=0; i<componentFlatList.size();  ++i )
+        for( unsigned i=0; i < flatList.size(); ++i )
         {
-            SCH_REFERENCE& schref = componentFlatList[i];
+            SCH_REFERENCE& schref = flatList[i];
 
             printf( " [%-2d] ref:%-8s num:%-3d lib_part:%s\n",
                 i,
@@ -510,7 +488,7 @@ public:
     friend class BACK_ANNOTATION;
 
 private:
-    /* sort functions used to sort componentFlatList
+    /* sort functions used to sort flatList
     */
 
     static bool sortByRefAndValue( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -521,7 +521,6 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     dseg->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
                 }
 
-                dseg->SetTimeStamp( EagleTimeStamp( gr ) );
                 dseg->SetLayer( layer );
                 dseg->SetWidth( width );
             }
@@ -541,7 +540,6 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 m_board->Add( pcbtxt, ADD_MODE::APPEND );
 
                 pcbtxt->SetLayer( layer );
-                pcbtxt->SetTimeStamp( EagleTimeStamp( gr ) );
                 pcbtxt->SetText( FROM_UTF8( t.text.c_str() ) );
                 pcbtxt->SetTextPos( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
 
@@ -549,7 +547,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                 double ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
 
-                pcbtxt->SetThickness( t.size.ToPcbUnits() * ratio / 100 );
+                pcbtxt->SetThickness( KiROUND( t.size.ToPcbUnits() * ratio / 100 ) );
 
                 int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;
 
@@ -659,7 +657,6 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 }
 
                 dseg->SetShape( S_CIRCLE );
-                dseg->SetTimeStamp( EagleTimeStamp( gr ) );
                 dseg->SetLayer( layer );
                 dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
                 dseg->SetEnd( wxPoint( kicad_x( c.x ) + radius, kicad_y( c.y ) ) );
@@ -682,7 +679,6 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
                 m_board->Add( zone, ADD_MODE::APPEND );
 
-                zone->SetTimeStamp( EagleTimeStamp( gr ) );
                 zone->SetLayer( layer );
                 zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
@@ -699,7 +695,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     zone->Rotate( zone->GetPosition(), r.rot->degrees * 10 );
                 }
                 // this is not my fault:
-                zone->SetHatch( outline_hatch, zone->GetDefaultHatchPitch(), true );
+                zone->SetHatch( outline_hatch, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
             }
 
             m_xpath->pop();
@@ -901,8 +897,8 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         EELEMENT    e( element );
 
         // use "NULL-ness" as an indication of presence of the attribute:
-        EATTR*      nameAttr  = 0;
-        EATTR*      valueAttr = 0;
+        EATTR*      nameAttr  = nullptr;
+        EATTR*      valueAttr = nullptr;
 
         m_xpath->Value( e.name.c_str() );
 
@@ -1127,7 +1123,6 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 
     // use a "netcode = 0" type ZONE:
     zone = new ZONE_CONTAINER( m_board );
-    zone->SetTimeStamp( EagleTimeStamp( aPolyNode ) );
     m_board->Add( zone, ADD_MODE::APPEND );
 
     if( p.layer == EAGLE_LAYER::TRESTRICT )         // front layer keepout
@@ -1634,9 +1629,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
     PCB_LAYER_ID layer = kicad_layer( t.layer );
 
     if( layer == UNDEFINED_LAYER )
-    {
         layer = Cmts_User;
-    }
 
     TEXTE_MODULE* txt;
 
@@ -1651,7 +1644,6 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
         aModule->Add( txt );
     }
 
-    txt->SetTimeStamp( EagleTimeStamp( aTree ) );
     txt->SetText( FROM_UTF8( t.text.c_str() ) );
 
     wxPoint pos( kicad_x( t.x ), kicad_y( t.y ) );
@@ -1664,7 +1656,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
 
     double ratio = t.ratio ? *t.ratio : 8;  // DTD says 8 is default
 
-    txt->SetThickness( t.size.ToPcbUnits() * ratio / 100 );
+    txt->SetThickness( KiROUND( t.size.ToPcbUnits() * ratio / 100 ) );
 
     int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
 
@@ -1745,8 +1737,6 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     dwg->SetLayer( layer );
     dwg->SetWidth( 0 );
 
-    dwg->SetTimeStamp( EagleTimeStamp( aTree ) );
-
     std::vector<wxPoint> pts;
 
     wxPoint start( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
@@ -1763,9 +1753,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     dwg->SetEnd0( end );
 
     if( r.rot )
-    {
         dwg->Rotate( dwg->GetCenter(), r.rot->degrees * 10 );
-    }
 }
 
 
@@ -1779,7 +1767,6 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
 
     dwg->SetWidth( 0 );     // it's filled, no need for boundary width
     dwg->SetLayer( layer );
-    dwg->SetTimeStamp( EagleTimeStamp( aTree ) );
 
     std::vector<wxPoint> pts;
 
@@ -1877,7 +1864,6 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
     }
 
     gr->SetLayer( layer );
-    gr->SetTimeStamp( EagleTimeStamp( aTree ) );
     gr->SetStart0( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
     gr->SetEnd0( wxPoint( kicad_x( e.x ) + radius, kicad_y( e.y ) ) );
     gr->SetDrawCoord();
@@ -1994,9 +1980,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     }
 
     if( e.rot )
-    {
         pad->SetOrientation( e.rot->degrees * 10 );
-    }
 
     pad->SetLocalSolderPasteMargin( -eagleClamp( m_rules->mlMinCreamFrame,
                 (int) ( m_rules->mvCreamFrame * minPadSize ),
@@ -2138,7 +2122,6 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                         TRACK*  t = new TRACK( m_board );
 
-                        t->SetTimeStamp( EagleTimeStamp( netItem ) + int( RAD2DEG( angle ) ) );
                         t->SetPosition( start );
                         t->SetEnd( end );
                         t->SetWidth( width );
@@ -2153,7 +2136,6 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     TRACK*  t = new TRACK( m_board );
 
-                    t->SetTimeStamp( EagleTimeStamp( netItem ) );
                     t->SetPosition( start );
                     t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
                     t->SetWidth( width );
@@ -2227,8 +2209,6 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     else
                         via->SetViaType( VIATYPE::BLIND_BURIED );
 
-                    via->SetTimeStamp( EagleTimeStamp( netItem ) );
-
                     wxPoint pos( kicad_x( v.x ), kicad_y( v.y ) );
 
                     via->SetPosition( pos  );
@@ -2281,8 +2261,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
         {
             // KiCad does not support an unconnected zone with its own non-zero netcode,
             // but only when assigned netcode = 0 w/o a name...
-            for( ZONES::iterator it = zones.begin();  it != zones.end();  ++it )
-                (*it)->SetNetCode( NETINFO_LIST::UNCONNECTED );
+            for( ZONE_CONTAINER* zone : zones )
+                zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
             // therefore omit this signal/net.
         }
@@ -2526,7 +2506,7 @@ void EAGLE_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
 
 
 MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-        const PROPERTIES* aProperties )
+                                     const PROPERTIES* aProperties )
 {
     init( aProperties );
     cacheLib( aLibraryPath );
@@ -2535,10 +2515,8 @@ MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxStrin
     if( mi == m_templates.end() )
         return NULL;
 
-    // copy constructor to clone the template
-    MODULE* ret = new MODULE( *mi->second );
-
-    return ret;
+    // Return a copy of the template
+    return (MODULE*) mi->second->Duplicate();
 }
 
 

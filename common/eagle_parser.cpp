@@ -260,23 +260,6 @@ NODE_MAP MapChildren( wxXmlNode* aCurrentNode )
 }
 
 
-timestamp_t EagleTimeStamp( wxXmlNode* aTree )
-{
-    // in this case from a unique tree memory location
-    return (timestamp_t) reinterpret_cast<uintptr_t>( aTree );
-}
-
-
-timestamp_t EagleModuleTstamp( const wxString& aName, const wxString& aValue, int aUnit )
-{
-    std::size_t h1 = std::hash<wxString>{}( aName );
-    std::size_t h2 = std::hash<wxString>{}( aValue );
-    std::size_t h3 = std::hash<int>{}( aUnit );
-
-    return (timestamp_t)( h1 ^ (h2 << 1) ^ (h3 << 2) );
-}
-
-
 wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAngle )
 {
     // Eagle give us start and end.

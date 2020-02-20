@@ -10,7 +10,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1076,24 +1076,16 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
 }
 
 
-MODULE* BOARD::FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeStamp ) const
+MODULE* BOARD::FindModuleByPath( const UUID_PATH& aPath ) const
 {
-    if( aSearchByTimeStamp )
+    for( MODULE* module : m_modules )
     {
-        for( auto module : m_modules )
-        {
-            if( aRefOrTimeStamp.CmpNoCase( module->GetPath() ) == 0 )
-                return module;
-        }
-    }
-    else
-    {
-        return FindModuleByReference( aRefOrTimeStamp );
+        if( module->GetPath() == aPath )
+            return module;
     }
 
-    return NULL;
+    return nullptr;
 }
-
 
 
 // The pad count for each netcode, stored in a buffer for a fast access.
@@ -1589,10 +1581,11 @@ ZONE_CONTAINER* BOARD::InsertArea( int aNetcode, int aAreaIdx, PCB_LAYER_ID aLay
         int aCornerY, ZONE_HATCH_STYLE aHatch )
 {
     ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
+    // JEY TODO: this should be a duplicate so we don't have to handle the UUID here....
+    const_cast<UUID&>( new_area->m_Uuid ) = UUID();
 
     new_area->SetNetCode( aNetcode );
     new_area->SetLayer( aLayer );
-    new_area->SetTimeStamp( GetNewTimeStamp() );
 
     if( aAreaIdx < (int) ( m_ZoneDescriptorList.size() - 1 ) )
         m_ZoneDescriptorList.insert( m_ZoneDescriptorList.begin() + aAreaIdx + 1, new_area );
@@ -1656,36 +1649,6 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
 }
 
 
-BOARD_ITEM* BOARD::Duplicate( const BOARD_ITEM* aItem, bool aAddToBoard )
-{
-    BOARD_ITEM* new_item = NULL;
-
-    switch( aItem->Type() )
-    {
-    case PCB_MODULE_T:
-    case PCB_TEXT_T:
-    case PCB_LINE_T:
-    case PCB_TRACE_T:
-    case PCB_VIA_T:
-    case PCB_ZONE_AREA_T:
-    case PCB_TARGET_T:
-    case PCB_DIMENSION_T:
-        new_item = static_cast<BOARD_ITEM*>( aItem->Clone() );
-        break;
-
-    default:
-        // Un-handled item for duplication
-        new_item = NULL;
-        break;
-    }
-
-    if( new_item && aAddToBoard )
-        Add( new_item );
-
-    return new_item;
-}
-
-
 /* Extracts the board outlines and build a closed polygon
  * from lines, arcs and circle items on edge cut layer
  * Any closed outline inside the main outline is a hole
@@ -1707,7 +1670,6 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aError
     aOutlines.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
     return success;
-
 }
 
 

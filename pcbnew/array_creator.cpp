@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Created on: 11 Mar 2016, author John Beard
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,17 +94,33 @@ void ARRAY_CREATOR::Invoke()
             else
             {
                 // Need to create a new item
-                BOARD_ITEM* new_item;
+                BOARD_ITEM* new_item = nullptr;
 
                 if( m_editModules )
                 {
                     // Don't bother incrementing pads: the module won't update
                     // until commit, so we can only do this once
-                    new_item = module->Duplicate( item, false );
+                    new_item = module->DuplicateItem( item, false );
                 }
                 else
                 {
-                    new_item = m_parent.GetBoard()->Duplicate( item );
+                    switch( item->Type() )
+                    {
+                    case PCB_MODULE_T:
+                    case PCB_TEXT_T:
+                    case PCB_LINE_T:
+                    case PCB_TRACE_T:
+                    case PCB_VIA_T:
+                    case PCB_ZONE_AREA_T:
+                    case PCB_TARGET_T:
+                    case PCB_DIMENSION_T:
+                        new_item = item->Duplicate();
+                        break;
+
+                    default:
+                        // Silently drop other items (such as footprint texts) from duplication
+                        break;
+                    }
 
                     // PCB items keep the same numbering
 

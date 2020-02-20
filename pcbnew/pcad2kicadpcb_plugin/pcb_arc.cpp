@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,7 +182,6 @@ void PCB_ARC::AddToBoard()
     m_board->Add( dseg, ADD_MODE::APPEND );
 
     dseg->SetShape( IsCircle() ? S_CIRCLE : S_ARC );
-    dseg->SetTimeStamp( m_timestamp );
     dseg->SetLayer( m_KiCadLayer );
     dseg->SetStart( wxPoint( m_positionX, m_positionY ) );
     dseg->SetEnd( wxPoint( m_startX, m_startY ) );

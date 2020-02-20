@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -806,8 +806,7 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
 
     formatLayer( aDimension );
 
-    if( aDimension->GetTimeStamp() )
-        m_out->Print( 0, " (tstamp %lX)", (unsigned long)aDimension->GetTimeStamp() );
+    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aDimension->m_Uuid.AsString() ) );
 
     m_out->Print( 0, "\n" );
 
@@ -927,8 +926,7 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
 
     m_out->Print( 0, " (width %s)", FormatInternalUnits( aSegment->GetWidth() ).c_str() );
 
-    if( aSegment->GetTimeStamp() )
-        m_out->Print( 0, " (tstamp %lX)", (unsigned long)aSegment->GetTimeStamp() );
+    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aSegment->m_Uuid.AsString() ) );
 
     if( aSegment->GetStatus() )
         m_out->Print( 0, " (status %X)", aSegment->GetStatus() );
@@ -1025,8 +1023,7 @@ void PCB_IO::format( PCB_TARGET* aTarget, int aNestLevel ) const
 
     formatLayer( aTarget );
 
-    if( aTarget->GetTimeStamp() )
-        m_out->Print( 0, " (tstamp %lX)", (unsigned long)aTarget->GetTimeStamp() );
+    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aTarget->m_Uuid.AsString() ) );
 
     m_out->Print( 0, ")\n" );
 }
@@ -1061,11 +1058,9 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     m_out->Print( 0, " (tedit %lX)", (unsigned long)aModule->GetLastEditTime() );
 
     if( !( m_ctl & CTL_OMIT_TSTAMPS ) )
-    {
-        m_out->Print( 0, " (tstamp %lX)\n", (unsigned long)aModule->GetTimeStamp() );
-    }
-    else
-        m_out->Print( 0, "\n" );
+        m_out->Print( 0, " (tstamp %s)", TO_UTF8( aModule->m_Uuid.AsString() ) );
+
+    m_out->Print( 0, "\n" );
 
     if( !( m_ctl & CTL_OMIT_AT ) )
     {
@@ -1085,9 +1080,9 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(tags %s)\n",
                       m_out->Quotew( aModule->GetKeywords() ).c_str() );
 
-    if( !( m_ctl & CTL_OMIT_PATH ) && !!aModule->GetPath() )
+    if( !( m_ctl & CTL_OMIT_PATH ) && !aModule->GetPath().empty() )
         m_out->Print( aNestLevel+1, "(path %s)\n",
-                      m_out->Quotew( aModule->GetPath() ).c_str() );
+                      m_out->Quotew( aModule->GetPath().AsString() ).c_str() );
 
     if( aModule->GetPlacementCost90() != 0 )
         m_out->Print( aNestLevel+1, "(autoplace_cost90 %d)\n", aModule->GetPlacementCost90() );
@@ -1598,8 +1593,7 @@ void PCB_IO::format( TEXTE_PCB* aText, int aNestLevel ) const
 
     formatLayer( aText );
 
-    if( aText->GetTimeStamp() )
-        m_out->Print( 0, " (tstamp %lX)", (unsigned long)aText->GetTimeStamp() );
+    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aText->m_Uuid.AsString() ) );
 
     m_out->Print( 0, "\n" );
 
@@ -1723,8 +1717,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
 
     m_out->Print( 0, " (net %d)", m_mapping->Translate( aTrack->GetNetCode() ) );
 
-    if( aTrack->GetTimeStamp() != 0 )
-        m_out->Print( 0, " (tstamp %lX)", (unsigned long)aTrack->GetTimeStamp() );
+    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aTrack->m_Uuid.AsString() ) );
 
     if( aTrack->GetStatus() != 0 )
         m_out->Print( 0, " (status %X)", aTrack->GetStatus() );
@@ -1752,7 +1745,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
         formatLayer( aZone );
     }
 
-    m_out->Print( 0, " (tstamp %lX)", (unsigned long) aZone->GetTimeStamp() );
+    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aZone->m_Uuid.AsString() ) );
 
     // Save the outline aux info
     std::string hatch;
@@ -2180,7 +2173,7 @@ MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFo
                                const PROPERTIES* aProperties )
 {
     const MODULE* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
-    return footprint ? new MODULE( *footprint ) : nullptr;
+    return footprint ? (MODULE*) footprint->Duplicate() : nullptr;
 }
 
 
@@ -2266,11 +2259,9 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     }
 
     // I need my own copy for the cache
-    MODULE* module = new MODULE( *aFootprint );
+    MODULE* module = static_cast<MODULE*>( aFootprint->Duplicate() );
 
-    // and it's time stamp must be 0, it should have no parent, orientation should
-    // be zero, and it should be on the front layer.
-    module->SetTimeStamp( 0 );
+    // It should have no parent, orientation should be zero, and it should be on the front layer.
     module->SetParent( nullptr );
     module->SetOrientation( 0 );
 
@@ -2278,7 +2269,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     {
         auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 
-        if( cfg != nullptr )
+        if( cfg )
             module->Flip( module->GetPosition(), cfg->m_FlipLeftRight );
         else
             module->Flip( module->GetPosition(), false );
@@ -2301,7 +2292,7 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 
     if( !m_cache->IsWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Library \"%s\" is read only" ),
+        THROW_IO_ERROR( wxString::Format( _( "Library \"%s\" is read only." ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -2320,7 +2311,7 @@ void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES*
 {
     if( wxDir::Exists( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "cannot overwrite library path \"%s\"" ),
+        THROW_IO_ERROR( wxString::Format( _( "Cannot overwrite library path \"%s\"." ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -2345,7 +2336,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
 
     if( !fn.IsDirWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "user does not have permission to delete directory \"%s\"" ),
+        THROW_IO_ERROR( wxString::Format( _( "User does not have permission to delete directory \"%s\"." ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -2353,7 +2344,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
 
     if( dir.HasSubDirs() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "library directory \"%s\" has unexpected sub-directories" ),
+        THROW_IO_ERROR( wxString::Format( _( "Library directory \"%s\" has unexpected sub-directories." ),
                                           aLibraryPath.GetData() ) );
     }
 
@@ -2372,25 +2363,23 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
 
             if( tmp.GetExt() != KiCadFootprintFileExtension )
             {
-                THROW_IO_ERROR( wxString::Format( _( "unexpected file \"%s\" was found in library path \"%s\"" ),
+                THROW_IO_ERROR( wxString::Format( _( "Unexpected file \"%s\" was found in library path \"%s\"." ),
                                                   files[i].GetData(), aLibraryPath.GetData() ) );
             }
         }
 
         for( i = 0;  i < files.GetCount();  i++ )
-        {
             wxRemoveFile( files[i] );
-        }
     }
 
-    wxLogTrace( traceKicadPcbPlugin, wxT( "Removing footprint library \"%s\"" ),
+    wxLogTrace( traceKicadPcbPlugin, wxT( "Removing footprint library \"%s\"." ),
                 aLibraryPath.GetData() );
 
     // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog
     // we don't want that.  we want bare metal portability with no UI here.
     if( !wxRmdir( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "footprint library \"%s\" cannot be deleted" ),
+        THROW_IO_ERROR( wxString::Format( _( "Footprint library \"%s\" cannot be deleted." ),
                                           aLibraryPath.GetData() ) );
     }
 

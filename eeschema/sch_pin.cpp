@@ -100,7 +100,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
     // Add timestamp for uninitialized components
     if( name.Last() == '?' )
     {
-        name << GetParentComponent()->GetTimeStamp();
+        name << GetParentComponent()->m_Uuid.AsString();
         annotated = false;
     }
 

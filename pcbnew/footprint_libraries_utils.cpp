@@ -361,7 +361,6 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
         /*  This module should *already* be "normalized" in a way such that
             orientation is zero, etc., since it came from module editor.
 
-            module->SetTimeStamp( 0 );
             module->SetParent( 0 );
             module->SetOrientation( 0 );
         */
@@ -372,9 +371,8 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
 
         if( fp == NULL )
         {
-            wxMessageBox( wxString::Format(
-                          _( "Unable to create or write file \"%s\"" ),
-                         GetChars( dlg.GetPath() ) ) );
+            wxMessageBox( wxString::Format( _( "Unable to create or write file \"%s\"" ),
+                                            dlg.GetPath() ) );
             return;
         }
 
@@ -694,7 +692,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
     wxString footprintName = aModule->GetFPID().GetLibItemName();
     bool nameChanged = m_footprintNameWhenLoaded != footprintName;
 
-    if( aModule->GetLink() )
+    if( aModule->GetLink() != niluuid )
     {
         if( SaveFootprintToBoard( false ) )
         {
@@ -786,13 +784,13 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 
     // Search the old module (source) if exists
     // Because this source could be deleted when editing the main board...
-    if( module_in_edit->GetLink() )        // this is not a new module ...
+    if( module_in_edit->GetLink() != niluuid )        // this is not a new module ...
     {
         source_module = nullptr;
 
         for( auto mod : mainpcb->Modules() )
         {
-            if( module_in_edit->GetLink() == mod->GetTimeStamp() )
+            if( module_in_edit->GetLink() == mod->m_Uuid )
             {
                 source_module = mod;
                 break;
@@ -819,7 +817,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     // Create the "new" module
     MODULE* newmodule = new MODULE( *module_in_edit );
     newmodule->SetParent( mainpcb );
-    newmodule->SetLink( 0 );
+    newmodule->SetLink( niluuid );
 
     if( source_module )         // this is an update command
     {
@@ -828,7 +826,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         // and connexions are kept)
         // and the source_module (old module) is deleted
         pcbframe->Exchange_Module( source_module, newmodule, commit );
-        newmodule->SetTimeStamp( module_in_edit->GetLink() );
+        const_cast<UUID&>( newmodule->m_Uuid ) = module_in_edit->GetLink();
         commit.Push( wxT( "Update module" ) );
     }
     else        // This is an insert command
@@ -841,7 +839,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         pcbframe->PlaceModule( newmodule );
         newmodule->SetPosition( wxPoint( 0, 0 ) );
         viewControls->SetCrossHairCursorPosition( cursorPos, false );
-        newmodule->SetTimeStamp( GetNewTimeStamp() );
+        const_cast<UUID&>( newmodule->m_Uuid ) = UUID();
         commit.Push( wxT( "Insert module" ) );
 
         pcbframe->Raise();
@@ -967,7 +965,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
         return false;
 
     // Once saved-as a board footprint is no longer a board footprint
-    aModule->SetLink( 0 );
+    aModule->SetLink( niluuid );
 
     wxString fmt = module_exists ? _( "Component \"%s\" replaced in \"%s\"" ) :
                                    _( "Component \"%s\" added in  \"%s\"" );

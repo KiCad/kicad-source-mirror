@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras.
  * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>.
- * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,12 +26,9 @@
 #ifndef PCB_NETLIST_H
 #define PCB_NETLIST_H
 
-/**
- * @file pcb_netlist.h
- */
-
-
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"  // For boost...
 #include <boost/ptr_container/ptr_vector.hpp>
+
 #include <wx/arrstr.h>
 
 #include <lib_id.h>
@@ -90,8 +87,8 @@ class COMPONENT
     wxString       m_reference;         ///< The component reference designator found in netlist.
     wxString       m_value;             ///< The component value found in netlist.
 
-    // ZZZ This timestamp is string, not time_t
-    wxString       m_timeStamp;         ///< The component full time stamp found in netlist.
+    /// A fully specified path to the component: [ sheetUUID, sheetUUID, .., componentUUID ]
+    UUID_PATH      m_path;
 
     /// The name of the component in #m_library used when it was placed on the schematic..
     wxString       m_name;
@@ -117,16 +114,16 @@ class COMPONENT
     static COMPONENT_NET    m_emptyNet;
 
 public:
-    COMPONENT( const LIB_ID&   aFPID,
-               const wxString& aReference,
-               const wxString& aValue,
-               const wxString& aTimeStamp )
+    COMPONENT( const LIB_ID&    aFPID,
+               const wxString&  aReference,
+               const wxString&  aValue,
+               const UUID_PATH& aPath )
     {
         m_fpid             = aFPID;
         m_reference        = aReference;
         m_value            = aValue;
         m_pinCount         = 0;
-        m_timeStamp        = aTimeStamp;
+        m_path             = aPath;
         m_footprintChanged = false;
     }
 
@@ -170,7 +167,7 @@ public:
 
     const LIB_ID& GetAltFPID() const { return m_altFpid; }
 
-    const wxString& GetTimeStamp() const { return m_timeStamp; }
+    const UUID_PATH& GetPath() const { return m_path; }
 
     void SetFootprintFilters( const wxArrayString& aFilterList )
     {
@@ -288,13 +285,13 @@ public:
     COMPONENT* GetComponentByReference( const wxString& aReference );
 
     /**
-     * Function GetComponentByTimeStamp
-     * returns a #COMPONENT by \a aTimeStamp.
+     * Function GetComponentByPath
+     * returns a #COMPONENT by \a aPath.
      *
-     * @param aTimeStamp is the time stamp the #COMPONENT.
-     * @return a pointer to the #COMPONENT that matches \a aTimeStamp if found.  Otherwise NULL.
+     * @param aPath is the UUID_PATH [ sheetUUID, .., compUUID ] of the #COMPONENT.
+     * @return a pointer to the #COMPONENT that matches \a aPath if found.  Otherwise NULL.
      */
-    COMPONENT* GetComponentByTimeStamp( const wxString& aTimeStamp );
+    COMPONENT* GetComponentByPath( const UUID_PATH& aPath );
 
     void SortByFPID();
 

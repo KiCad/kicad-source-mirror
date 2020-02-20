@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 Jean-Pierre Charras.
- * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -282,23 +282,24 @@ void KICAD_NETLIST_PARSER::parseComponent()
 {
    /* Parses a section like
      * (comp (ref P1)
-     * (value DB25FEMELLE)
+     * (value DB25FEMALE)
      * (footprint DB25FC)
      * (libsource (lib conn) (part DB25))
      * (sheetpath (names /) (tstamps /))
-     * (tstamp 3256759C))
+     * (tstamp 68183921-93a5-49ac-91b0-49d05a0e1647))
      *
      * other fields (unused) are skipped
      * A component need a reference, value, footprint name and a full time stamp
      * The full time stamp is the sheetpath time stamp + the component time stamp
      */
-    LIB_ID   fpid;
-    wxString footprint;
-    wxString ref;
-    wxString value;
-    wxString library;
-    wxString name;
-    wxString pathtimestamp, timestamp;
+    LIB_ID    fpid;
+    wxString  footprint;
+    wxString  ref;
+    wxString  value;
+    wxString  library;
+    wxString  name;
+    UUID_PATH path;
+    UUID      uuid;
 
     // The token comp was read, so the next data is (ref P1)
     while( (token = NextTok()) != T_RIGHT )
@@ -365,14 +366,14 @@ void KICAD_NETLIST_PARSER::parseComponent()
             }
 
             NeedSYMBOLorNUMBER();
-            pathtimestamp = FROM_UTF8( CurText() );
+            path = UUID_PATH( FROM_UTF8( CurText() ) );
             NeedRIGHT();
             NeedRIGHT();
             break;
 
         case T_tstamp:
             NeedSYMBOLorNUMBER();
-            timestamp = FROM_UTF8( CurText() );
+            uuid = UUID( FROM_UTF8( CurText() ) );
             NeedRIGHT();
             break;
 
@@ -392,8 +393,8 @@ void KICAD_NETLIST_PARSER::parseComponent()
         THROW_IO_ERROR( error );
     }
 
-    pathtimestamp += timestamp;
-    COMPONENT* component = new COMPONENT( fpid, ref, value, pathtimestamp );
+    path.push_back( uuid );
+    COMPONENT* component = new COMPONENT( fpid, ref, value, path );
     component->SetName( name );
     component->SetLibrary( library );
     m_netlist->AddComponent( component );

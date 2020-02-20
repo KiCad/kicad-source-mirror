@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -225,8 +225,8 @@ public:
     const wxString& GetKeywords() const { return m_KeyWord; }
     void SetKeywords( const wxString& aKeywords ) { m_KeyWord = aKeywords; }
 
-    const wxString& GetPath() const { return m_Path; }
-    void SetPath( const wxString& aPath ) { m_Path = aPath; }
+    const UUID_PATH& GetPath() const { return m_Path; }
+    void SetPath( const UUID_PATH& aPath ) { m_Path = aPath; }
 
     int GetLocalSolderMaskMargin() const { return m_LocalSolderMaskMargin; }
     void SetLocalSolderMaskMargin( int aMargin ) { m_LocalSolderMaskMargin = aMargin; }
@@ -546,8 +546,8 @@ public:
 
     double GetArea( int aPadding = 0 ) const;
 
-    timestamp_t GetLink() const { return m_Link; }
-    void SetLink( timestamp_t aLink )            { m_Link = aLink; }
+    UUID GetLink() const { return m_Link; }
+    void SetLink( const UUID& aLink ) { m_Link = aLink; }
 
     int GetPlacementCost180() const { return m_CntRot180; }
     void SetPlacementCost180( int aCost )   { m_CntRot180 = aCost; }
@@ -556,13 +556,12 @@ public:
     void SetPlacementCost90( int aCost )    { m_CntRot90 = aCost; }
 
     /**
-     * Function Duplicate
+     * Function DuplicateItem
      * Duplicate a given item within the module, without adding to the board
      * @return the new item, or NULL if the item could not be duplicated
      */
-    BOARD_ITEM* Duplicate( const BOARD_ITEM* aItem,
-            bool aIncrementPadNumbers,
-            bool aAddToModule = false );
+    BOARD_ITEM* DuplicateItem( const BOARD_ITEM* aItem, bool aIncrementPadNumbers,
+                               bool aAddToModule = false );
 
     /**
      * Function Add3DModel
@@ -706,10 +705,10 @@ private:
 
     wxString       m_Doc;               // File name and path for documentation file.
     wxString       m_KeyWord;           // Search keywords to find module in library.
-    wxString       m_Path;
+    UUID_PATH      m_Path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
     timestamp_t    m_LastEditTime;
     int            m_arflag;            // Use to trace ratsnest and auto routing.
-    timestamp_t    m_Link;              // Temporary logical link used during editing
+    UUID           m_Link;              // Temporary logical link used during editing
     int            m_CntRot90;          // Horizontal automatic placement cost ( 0..10 ).
     int            m_CntRot180;         // Vertical automatic placement cost ( 0..10 ).
 

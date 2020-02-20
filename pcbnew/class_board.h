@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -289,8 +289,6 @@ public:
     }
 
     BOARD_ITEM* GetItem( void* aWeakReference );
-
-    BOARD_ITEM* Duplicate( const BOARD_ITEM* aItem, bool aAddToBoard = false );
 
     /**
      * Function GetConnectivity()
@@ -816,25 +814,20 @@ public:
 
     /**
      * Function FindModuleByReference
-     * searches for a MODULE within this board with the given
-     * reference designator.  Finds only the first one, if there
-     * is more than one such MODULE.
+     * searches for a MODULE within this board with the given reference designator.
+     * Finds only the first one, if there is more than one such MODULE.
      * @param aReference The reference designator of the MODULE to find.
-     * @return MODULE* - If found, the MODULE having the given reference
-     *  designator, else NULL.
+     * @return MODULE* - If found, the MODULE having the given reference designator, else NULL.
      */
     MODULE* FindModuleByReference( const wxString& aReference ) const;
 
     /**
-     * Function FindModule
-     * searches for a module matching \a aRefOrTimeStamp depending on the state of
-     * \a aSearchByTimeStamp.
-     * @param aRefOrTimeStamp is the search string.
-     * @param aSearchByTimeStamp searches by the module time stamp value if true.  Otherwise
-     *                           search by reference designator.
-     * @return MODULE* - If found, the module meeting the search criteria, else NULL.
+     * Function FindModuleByPath
+     * searches for a MODULE within this board with the given path.
+     * @param aPath The path ([sheetUUID, .., symbolUUID]) to search for.
+     * @return MODULE* - If found, the MODULE having the given uuid, else NULL.
      */
-    MODULE* FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeStamp = false ) const;
+    MODULE* FindModuleByPath( const UUID_PATH& aPath ) const;
 
     /**
      * Function SortedNetnamesList

@@ -51,12 +51,11 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     m_Layer = LAYER_SHEET;
     m_pos = pos;
     m_size = wxSize( Mils2iu( MIN_SHEET_WIDTH ), Mils2iu( MIN_SHEET_HEIGHT ) );
-    SetTimeStamp( GetNewTimeStamp() );
     m_sheetNameSize = GetDefaultTextSize();
     m_fileNameSize = GetDefaultTextSize();
     m_screen = NULL;
-    m_name.Printf( wxT( "Sheet%8.8lX" ), (long) m_TimeStamp );
-    m_fileName.Printf( wxT( "file%8.8lX.sch" ), (long) m_TimeStamp );
+    m_name.Printf( wxT( "Sheet%s" ), m_Uuid.AsString() );
+    m_fileName.Printf( wxT( "file%s.sch" ), m_Uuid.AsString() );
 }
 
 
@@ -66,7 +65,7 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
     m_pos = aSheet.m_pos;
     m_size = aSheet.m_size;
     m_Layer = aSheet.m_Layer;
-    SetTimeStamp( aSheet.m_TimeStamp );
+    const_cast<UUID&>( m_Uuid ) = aSheet.m_Uuid;
     m_sheetNameSize = aSheet.m_sheetNameSize;
     m_fileNameSize = aSheet.m_fileNameSize;
     m_screen = aSheet.m_screen;

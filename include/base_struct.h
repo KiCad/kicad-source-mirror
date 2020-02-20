@@ -162,6 +162,9 @@ typedef unsigned STATUS_FLAGS;
  */
 class EDA_ITEM : public KIGFX::VIEW_ITEM
 {
+public:
+    const UUID    m_Uuid;
+
 private:
 
     /**
@@ -175,7 +178,6 @@ private:
 protected:
 
     EDA_ITEM*     m_Parent;       ///< Linked list: Link (parent struct)
-    timestamp_t   m_TimeStamp;    ///< Time stamp used for logical links
 
     /// Set to true to override the visibility setting of the item.
     bool          m_forceVisible;
@@ -208,9 +210,6 @@ public:
     {
         return m_StructType;
     }
-
-    void SetTimeStamp( timestamp_t aNewTimeStamp ) { m_TimeStamp = aNewTimeStamp; }
-    timestamp_t GetTimeStamp() const { return m_TimeStamp; }
 
     EDA_ITEM* GetParent() const { return m_Parent; }
     void SetParent( EDA_ITEM* aParent )   { m_Parent = aParent; }

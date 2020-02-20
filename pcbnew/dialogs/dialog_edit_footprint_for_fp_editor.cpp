@@ -686,7 +686,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
 
 static bool footprintIsFromBoard( MODULE* aFootprint )
 {
-    return aFootprint->GetLink() != 0;
+    return aFootprint->GetLink() != niluuid;
 }
 
 

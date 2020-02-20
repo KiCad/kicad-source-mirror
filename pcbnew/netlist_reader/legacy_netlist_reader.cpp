@@ -100,7 +100,6 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
 {
     char*    text;
     wxString msg;
-    wxString timeStamp;         // the full time stamp read from netlist
     wxString footprintName;     // the footprint name read from netlist
     wxString value;             // the component value read from netlist
     wxString reference;         // the component schematic reference designator read from netlist
@@ -112,7 +111,7 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
 
     value = wxT( "~" );
 
-    // Sample component line:   /40C08647 $noname R20 4.7K {Lib=R}
+    // Sample component line:   /68183921-93a5-49ac-91b0-49d05a0e1647 $noname R20 4.7K {Lib=R}
 
     // Read time stamp (first word)
     if( ( text = strtok( line, " ()\t\n" ) ) == NULL )
@@ -122,7 +121,7 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
                            m_lineReader->Length() );
     }
 
-    timeStamp = FROM_UTF8( text );
+    UUID_PATH path( FROM_UTF8( text ) );
 
     // Read footprint name (second word)
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
@@ -170,7 +169,7 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
     if( !footprintName.IsEmpty() )
         fpid.SetLibItemName( footprintName );
 
-    COMPONENT* component = new COMPONENT( fpid, reference, value, timeStamp );
+    COMPONENT* component = new COMPONENT( fpid, reference, value, path );
     component->SetName( name );
     m_netlist->AddComponent( component );
     return component;

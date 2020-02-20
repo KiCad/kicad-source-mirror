@@ -178,7 +178,6 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
     {
         footprint->SetParent( m_board );
         footprint->SetPosition( estimateComponentInsertionPosition( ) );
-        footprint->SetTimeStamp( GetNewTimeStamp() );
 
         m_addedComponents.push_back( footprint );
         m_commit.Add( footprint );
@@ -280,18 +279,18 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent,
     }
 
     // Test for time stamp change.
-    if( aPcbComponent->GetPath() != aNewComponent->GetTimeStamp() )
+    if( aPcbComponent->GetPath() != aNewComponent->GetPath() )
     {
-        msg.Printf( _( "Change symbol path \"%s:%s\" to \"%s\"." ),
+        msg.Printf( _( "Update %s symbol association from %s to %s." ),
                     aPcbComponent->GetReference(),
-                    aPcbComponent->GetPath(),
-                    aNewComponent->GetTimeStamp() );
+                    aPcbComponent->GetPath().AsString(),
+                    aNewComponent->GetPath().AsString() );
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
         if( !m_isDryRun )
         {
             changed = true;
-            aPcbComponent->SetPath( aNewComponent->GetTimeStamp() );
+            aPcbComponent->SetPath( aNewComponent->GetPath() );
         }
     }
 
@@ -590,7 +589,7 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
     {
 
         if( m_lookupByTimestamp )
-            component = aNetlist.GetComponentByTimeStamp( module->GetPath() );
+            component = aNetlist.GetComponentByPath( module->GetPath() );
         else
             component = aNetlist.GetComponentByReference( module->GetReference() );
 
@@ -763,9 +762,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         int        matchCount = 0;
         MODULE*    tmp;
 
-        msg.Printf( _( "Processing component \"%s:%s:%s\"." ),
+        msg.Printf( _( "Processing component \"%s:%s\"." ),
                     component->GetReference(),
-                    component->GetTimeStamp(),
                     component->GetFPID().Format().wx_str() );
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
@@ -776,7 +774,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             if( footprint )
             {
                 if( m_lookupByTimestamp )
-                    match = footprint->GetPath() == component->GetTimeStamp();
+                    match = footprint->GetPath() == component->GetPath();
                 else
                     match = footprint->GetReference().CmpNoCase( component->GetReference() ) == 0;
             }

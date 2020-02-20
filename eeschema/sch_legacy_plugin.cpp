@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -193,8 +193,7 @@ static int parseInt( LINE_READER& aReader, const char* aLine, const char** aOutp
  * @throw IO_ERROR on an unexpected end of line.
  * @throw PARSE_ERROR if the parsed token is not a valid integer.
  */
-static uint32_t parseHex( LINE_READER& aReader, const char* aLine,
-                               const char** aOutput = NULL )
+static uint32_t parseHex( LINE_READER& aReader, const char* aLine, const char** aOutput = NULL )
 {
     if( !*aLine )
         SCH_PARSE_ERROR( _( "unexpected end of line" ), aReader, aLine );
@@ -458,7 +457,7 @@ static void parseQuotedString( wxString& aString, LINE_READER& aReader,
     {
         const char* next = tmp;
 
-        while( *next && *next == ' ' )
+        while( *next == ' ' )
             next++;
 
         *aNextToken = next;
@@ -963,8 +962,6 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
 {
     std::unique_ptr< SCH_SHEET > sheet( new SCH_SHEET() );
 
-    sheet->SetTimeStamp( GetNewTimeStamp() );
-
     const char* line = aReader.ReadLine();
 
     while( line != NULL )
@@ -983,9 +980,11 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
             size.SetHeight( Mils2Iu( parseInt( aReader, line, &line ) ) );
             sheet->SetSize( size );
         }
-        else if( strCompare( "U", line, &line ) )   // Sheet time stamp.
+        else if( strCompare( "U", line, &line ) )   // Sheet UUID.
         {
-            sheet->SetTimeStamp( parseHex( aReader, line ) );
+            wxString text;
+            parseUnquotedString( text, aReader, line );
+            const_cast<UUID&>( sheet->m_Uuid ) = UUID( text );
         }
         else if( *line == 'F' )                     // Sheet field.
         {
@@ -1578,7 +1577,9 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
 
             component->SetConvert( convert );
 
-            component->SetTimeStamp( parseHex( aReader, line, &line ) );
+            wxString text;
+            parseUnquotedString( text, aReader, line, &line );
+            const_cast<UUID&>( component->m_Uuid ) = UUID( text );
         }
         else if( strCompare( "P", line, &line ) )
         {
@@ -2009,9 +2010,11 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
     m_out->Print( 0, "$Comp\n" );
     m_out->Print( 0, "L %s %s\n", name2.c_str(), name1.c_str() );
 
-    // Generate unit number, convert and time stamp
-    m_out->Print( 0, "U %d %d %8.8X\n", aComponent->GetUnit(), aComponent->GetConvert(),
-                  aComponent->GetTimeStamp() );
+    // Generate unit number, conversion and UUID (including legacy timestamp if present)
+    m_out->Print( 0, "U %d %d %s\n",
+                  aComponent->GetUnit(),
+                  aComponent->GetConvert(),
+                  TO_UTF8( aComponent->m_Uuid.AsString() ) );
 
     // Save the position
     m_out->Print( 0, "P %d %d\n",
@@ -2160,17 +2163,21 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
 
     m_out->Print( 0, "$Sheet\n" );
     m_out->Print( 0, "S %-4d %-4d %-4d %-4d\n",
-                  Iu2Mils( aSheet->GetPosition().x ), Iu2Mils( aSheet->GetPosition().y ),
-                  Iu2Mils( aSheet->GetSize().x ), Iu2Mils( aSheet->GetSize().y ) );
+                  Iu2Mils( aSheet->GetPosition().x ),
+                  Iu2Mils( aSheet->GetPosition().y ),
+                  Iu2Mils( aSheet->GetSize().x ),
+                  Iu2Mils( aSheet->GetSize().y ) );
 
-    m_out->Print( 0, "U %8.8X\n", aSheet->GetTimeStamp() );
+    m_out->Print( 0, "U %s\n", TO_UTF8( aSheet->m_Uuid.AsString() ) );
 
     if( !aSheet->GetName().IsEmpty() )
-        m_out->Print( 0, "F0 %s %d\n", EscapedUTF8( aSheet->GetName() ).c_str(),
+        m_out->Print( 0, "F0 %s %d\n",
+                      EscapedUTF8( aSheet->GetName() ).c_str(),
                       Iu2Mils( aSheet->GetSheetNameSize() ) );
 
     if( !aSheet->GetFileName().IsEmpty() )
-        m_out->Print( 0, "F1 %s %d\n", EscapedUTF8( aSheet->GetFileName() ).c_str(),
+        m_out->Print( 0, "F1 %s %d\n",
+                      EscapedUTF8( aSheet->GetFileName() ).c_str(),
                       Iu2Mils( aSheet->GetFileNameSize() ) );
 
     for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
@@ -2191,25 +2198,16 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
 
         switch( pin->GetShape() )
         {
-        case PINSHEETLABEL_SHAPE::PS_INPUT:
-            type = 'I';
-            break;
-        case PINSHEETLABEL_SHAPE::PS_OUTPUT:
-            type = 'O';
-            break;
-        case PINSHEETLABEL_SHAPE::PS_BIDI:
-            type = 'B';
-            break;
-        case PINSHEETLABEL_SHAPE::PS_TRISTATE:
-            type = 'T';
-            break;
         default:
-        case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED:
-            type = 'U';
-            break;
+        case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED: type = 'U'; break;
+        case PINSHEETLABEL_SHAPE::PS_INPUT:       type = 'I'; break;
+        case PINSHEETLABEL_SHAPE::PS_OUTPUT:      type = 'O'; break;
+        case PINSHEETLABEL_SHAPE::PS_BIDI:        type = 'B'; break;
+        case PINSHEETLABEL_SHAPE::PS_TRISTATE:    type = 'T'; break;
         }
 
-        m_out->Print( 0, "F%d %s %c %c %-3d %-3d %-3d\n", pin->GetNumber(),
+        m_out->Print( 0, "F%d %s %c %c %-3d %-3d %-3d\n",
+                      pin->GetNumber(),
                       EscapedUTF8( pin->GetText() ).c_str(),     // supplies wrapping quotes
                       type, side, Iu2Mils( pin->GetPosition().x ),
                       Iu2Mils( pin->GetPosition().y ),
@@ -2225,7 +2223,8 @@ void SCH_LEGACY_PLUGIN::saveJunction( SCH_JUNCTION* aJunction )
     wxCHECK_RET( aJunction != NULL, "SCH_JUNCTION* is NULL" );
 
     m_out->Print( 0, "Connection ~ %-4d %-4d\n",
-                  Iu2Mils( aJunction->GetPosition().x ), Iu2Mils( aJunction->GetPosition().y ) );
+                  Iu2Mils( aJunction->GetPosition().x ),
+                  Iu2Mils( aJunction->GetPosition().y ) );
 }
 
 
@@ -2233,7 +2232,8 @@ void SCH_LEGACY_PLUGIN::saveNoConnect( SCH_NO_CONNECT* aNoConnect )
 {
     wxCHECK_RET( aNoConnect != NULL, "SCH_NOCONNECT* is NULL" );
 
-    m_out->Print( 0, "NoConn ~ %-4d %-4d\n", Iu2Mils( aNoConnect->GetPosition().x ),
+    m_out->Print( 0, "NoConn ~ %-4d %-4d\n",
+                  Iu2Mils( aNoConnect->GetPosition().x ),
                   Iu2Mils( aNoConnect->GetPosition().y ) );
 }
 

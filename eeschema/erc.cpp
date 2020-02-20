@@ -185,7 +185,6 @@ int TestDuplicateSheetNames( bool aCreateMarker )
                     {
                         /* Create a new marker type ERC error*/
                         SCH_MARKER* marker = new SCH_MARKER();
-                        marker->SetTimeStamp( GetNewTimeStamp() );
                         marker->SetData( ERCE_DUPLICATE_SHEET_NAME,
                                          ( (SCH_SHEET*) test_item )->GetPosition(),
                                          _( "Duplicate sheet name" ),
@@ -306,7 +305,6 @@ int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
                 wxPoint pos = unit->GetPosition();
 
                 SCH_MARKER* marker = new SCH_MARKER();
-                marker->SetTimeStamp( GetNewTimeStamp() );
                 marker->SetData( ERCE_DIFFERENT_UNIT_FP, pos, msg, pos );
                 marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
                 marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
@@ -332,8 +330,6 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMi
 
     /* Create new marker for ERC error. */
     marker = new SCH_MARKER();
-    marker->SetTimeStamp( GetNewTimeStamp() );
-
     marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
     marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
     screen = aNetItemRef->m_SheetPath.LastScreen();
@@ -827,8 +823,6 @@ static void SimilarLabelsDiagnose( NETLIST_OBJECT* aItemA, NETLIST_OBJECT* aItem
 {
     // Create new marker for ERC.
     SCH_MARKER* marker = new SCH_MARKER();
-
-    marker->SetTimeStamp( GetNewTimeStamp() );
     marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
     marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
     SCH_SCREEN* screen = aItemA->m_SheetPath.LastScreen();

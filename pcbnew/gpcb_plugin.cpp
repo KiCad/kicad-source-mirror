@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -944,7 +944,7 @@ MODULE* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString
                                     const PROPERTIES* aProperties )
 {
     const MODULE* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
-    return footprint ? new MODULE( *footprint ) : nullptr;
+    return footprint ? (MODULE*) footprint->Duplicate() : nullptr;
 }
 
 

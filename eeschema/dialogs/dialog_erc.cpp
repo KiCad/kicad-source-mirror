@@ -577,11 +577,13 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
                 {
                     SCH_MARKER* marker = new SCH_MARKER();
 
-                    marker->SetTimeStamp( GetNewTimeStamp() );
                     marker->SetData( ERCE_DIFFERENT_UNIT_NET, item->m_Start,
-                        wxString::Format( _( "Pin %s on %s is connected to both %s and %s" ),
-                        item->m_PinNum, ref, pin_to_net_map[pin_name], item->GetNetName() ),
-                        item->m_Start );
+                                     wxString::Format( _( "Pin %s on %s is connected to both %s and %s" ),
+                                                       item->m_PinNum,
+                                                       ref,
+                                                       pin_to_net_map[pin_name],
+                                                       item->GetNetName() ),
+                                                       item->m_Start );
                     marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
                     marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
 

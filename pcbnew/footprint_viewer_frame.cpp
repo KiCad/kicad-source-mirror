@@ -670,7 +670,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         BOARD_COMMIT commit( pcbframe );
 
         // Create the "new" module
-        MODULE* newmodule = new MODULE( *GetBoard()->GetFirstModule() );
+        MODULE* newmodule = (MODULE*) GetBoard()->GetFirstModule()->Duplicate();
         newmodule->SetParent( pcbframe->GetBoard() );
         newmodule->SetLink( 0 );
 
@@ -682,7 +682,6 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         pcbframe->PlaceModule( newmodule );
         newmodule->SetPosition( wxPoint( 0, 0 ) );
         viewControls->SetCrossHairCursorPosition( cursorPos, false );
-        newmodule->SetTimeStamp( GetNewTimeStamp() );
         commit.Push( wxT( "Insert module" ) );
 
         pcbframe->Raise();

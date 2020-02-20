@@ -476,9 +476,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         wxCHECK2_MSG( renamedSheet, continue,
                       "Sheet " + duplicateName + " not found in imported schematic." );
 
-        timestamp_t newtimestamp = GetNewTimeStamp();
-        renamedSheet->SetTimeStamp( newtimestamp );
-        renamedSheet->SetName( wxString::Format( "Sheet%8.8lX", (unsigned long) newtimestamp ) );
+        const_cast<UUID&>( renamedSheet->m_Uuid ) = UUID();
+        renamedSheet->SetName( wxString::Format( "Sheet%s", renamedSheet->m_Uuid.AsString() ) );
     }
 
     // Set all sheets loaded into the correct sheet file paths.
@@ -747,8 +746,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
     aSheet->SetSheetNameSize( dlg.GetSheetNameTextSize() );
 
     if( aSheet->GetName().IsEmpty() )
-        aSheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ),
-                                           (long unsigned) aSheet->GetTimeStamp() ) );
+        aSheet->SetName( wxString::Format( wxT( "Sheet%s" ), aSheet->m_Uuid.AsString() ) );
 
     if( aClearAnnotationNewItems )
         *aClearAnnotationNewItems = clearAnnotation;

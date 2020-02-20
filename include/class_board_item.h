@@ -159,6 +159,18 @@ public:
     virtual void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset = ZeroOffset ) = 0;
 
     /**
+     * Function Duplicate
+     * creates a copy of a BOARD_ITEM.
+     */
+    BOARD_ITEM* Duplicate() const
+    {
+        EDA_ITEM* dupe = Clone();
+        const_cast<UUID&>( dupe->m_Uuid ) = UUID();
+
+        return static_cast<BOARD_ITEM*>( dupe );
+    }
+
+    /**
      * Swap data between aItem and aImage.
      * aItem and aImage should have the same type
      * Used in undo redo command to swap values between an item and its copy

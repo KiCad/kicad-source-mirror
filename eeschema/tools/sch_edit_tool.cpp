@@ -796,13 +796,8 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         case SCH_SHEET_T:
         {
             SCH_SHEET* sheet = (SCH_SHEET*) newItem;
-            // Duplicate sheet names and sheet time stamps are not valid.  Use a time stamp
-            // based sheet name and update the time stamp for each sheet in the block.
-            timestamp_t timeStamp = GetNewTimeStamp();
-
-            sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)timeStamp ) );
-            sheet->SetTimeStamp( timeStamp );
-
+            // Duplicate sheet names are not valid.  Generate a UUID-based sheet name.
+            sheet->SetName( wxString::Format( wxT( "Sheet%s" ), sheet->m_Uuid.AsString() ) );
             sheet->SetParent( m_frame->GetScreen() );
             m_frame->AddToScreen( sheet );
 
@@ -813,10 +808,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         case SCH_COMPONENT_T:
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) newItem;
-
-            component->SetTimeStamp( GetNewTimeStamp() );
             component->ClearAnnotation( NULL );
-
             component->SetParent( m_frame->GetScreen() );
             m_frame->AddToScreen( component );
             break;
@@ -853,14 +845,12 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    SCH_ITEM* newItem = (SCH_ITEM*) sourceItem->Clone();
+    SCH_ITEM* newItem = sourceItem->Duplicate();
     bool      performDrag = false;
 
     // If cloning a component then put into 'move' mode.
     if( newItem->Type() == SCH_COMPONENT_T )
     {
-        ( (SCH_COMPONENT*) newItem )->SetTimeStamp( GetNewTimeStamp() );
-
         wxPoint cursorPos = (wxPoint) getViewControls()->GetCursorPosition( true );
         newItem->Move( cursorPos - newItem->GetPosition() );
         performDrag = true;

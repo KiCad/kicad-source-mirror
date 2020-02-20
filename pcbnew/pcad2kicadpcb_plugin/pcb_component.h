@@ -48,19 +48,19 @@ namespace PCAD2KICAD {
 class PCB_COMPONENT : public wxObject
 {
 public:
-    int         m_tag;
-    char        m_objType;
-    int         m_PCadLayer;
-    PCB_LAYER_ID    m_KiCadLayer;
-    int         m_timestamp;
-    int         m_positionX;
-    int         m_positionY;
-    int         m_rotation;
-    TTEXTVALUE  m_name;             // name has also private positions, rotations and so on....
-    wxString    m_net;
-    int         m_netCode;
-    wxString    m_compRef;          // internal usage for XL parsing
-    wxString    m_patGraphRefName;  // internal usage for XL parsing
+    int          m_tag;
+    char         m_objType;
+    int          m_PCadLayer;
+    PCB_LAYER_ID m_KiCadLayer;
+    UUID         m_uuid;
+    int          m_positionX;
+    int          m_positionY;
+    int          m_rotation;
+    TTEXTVALUE   m_name;             // name has also private positions, rotations and so on....
+    wxString     m_net;
+    int          m_netCode;
+    wxString     m_compRef;          // internal usage for XL parsing
+    wxString     m_patGraphRefName;  // internal usage for XL parsing
 
     PCB_COMPONENT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_COMPONENT();
@@ -71,7 +71,6 @@ public:
     virtual void    AddToBoard() = 0;
 
     PCB_LAYER_ID        GetKiCadLayer() { return m_callbacks->GetKiCadLayer( m_PCadLayer ); }
-    int GetNewTimestamp() { return m_callbacks->GetNewTimestamp(); }
     int GetNetCode( wxString aNetName ) { return m_callbacks->GetNetCode( aNetName ); }
 
 protected:

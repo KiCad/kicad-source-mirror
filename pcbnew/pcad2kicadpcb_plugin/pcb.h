@@ -56,7 +56,6 @@ public:
     PCB_LAYER_ID    GetKiCadLayer( int aPCadLayer ) override;
     LAYER_TYPE_T    GetLayerType( int aPCadLayer ) override;
     wxString        GetLayerNetNameRef( int aPCadLayer ) override;
-    int             GetNewTimestamp() override;
     int             GetNetCode( wxString aNetName ) override;
 
     void            ParseBoard( wxStatusBar*    aStatusBar,
@@ -66,7 +65,6 @@ public:
     void            AddToBoard() override;
 
 private:
-    int             m_timestamp_cnt;
     wxArrayString   m_layersStackup;
 
     XNODE*          FindCompDefName( XNODE* aNode, const wxString& aName );

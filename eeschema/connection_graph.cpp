@@ -171,7 +171,6 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
                       second_item->GetPosition();
 
             auto marker = new SCH_MARKER();
-            marker->SetTimeStamp( GetNewTimeStamp() );
             marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
             marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
             marker->SetData( ERCE_DRIVER_CONFLICT, p0, msg, p1 );
@@ -1987,7 +1986,6 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
                         net_item->GetSelectMenuText( m_frame->GetUserUnits() ) );
 
             auto marker = new SCH_MARKER();
-            marker->SetTimeStamp( GetNewTimeStamp() );
             marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
             marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
             marker->SetData( ERCE_BUS_TO_NET_CONFLICT,
@@ -2068,7 +2066,6 @@ bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSu
                             port->GetSelectMenuText( m_frame->GetUserUnits() ) );
 
                 auto marker = new SCH_MARKER();
-                marker->SetTimeStamp( GetNewTimeStamp() );
                 marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
                 marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
                 marker->SetData( ERCE_BUS_TO_BUS_CONFLICT,
@@ -2162,7 +2159,6 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
                         bus_wire->Connection( sheet )->Name( true ) );
 
             auto marker = new SCH_MARKER();
-            marker->SetTimeStamp( GetNewTimeStamp() );
             marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
             marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
             marker->SetData( ERCE_BUS_ENTRY_CONFLICT,
@@ -2229,7 +2225,6 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
                             pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) );
 
                 auto marker = new SCH_MARKER();
-                marker->SetTimeStamp( GetNewTimeStamp() );
                 marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
                 marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
                 marker->SetData( ERCE_NOCONNECT_CONNECTED, pos, msg, pos );
@@ -2249,7 +2244,6 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
                 msg.Printf( _( "No-connect marker is not connected to anything" ) );
 
                 auto marker = new SCH_MARKER();
-                marker->SetTimeStamp( GetNewTimeStamp() );
                 marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
                 marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
                 marker->SetData( ERCE_NOCONNECT_NOT_CONNECTED, pos, msg, pos );
@@ -2315,7 +2309,6 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
                             pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) );
 
                 auto marker = new SCH_MARKER();
-                marker->SetTimeStamp( GetNewTimeStamp() );
                 marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
                 marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
                 marker->SetData( ERCE_PIN_NOT_CONNECTED, pos, msg, pos );
@@ -2423,7 +2416,6 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph,
             msg.Printf( _( "%s %s is not connected anywhere else in the schematic." ),
                         prefix, GetChars( text->ShortenedShownText() ) );
 
-            marker->SetTimeStamp( GetNewTimeStamp() );
             marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
             marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
             marker->SetData( type, pos, msg, pos );

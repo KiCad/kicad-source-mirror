@@ -90,7 +90,6 @@ PCB::PCB( BOARD* aBoard ) : PCB_MODULE( this, aBoard )
     m_layersMap[3].KiCadLayer  = Eco2_User;
     m_layersMap[6].KiCadLayer  = F_SilkS;
     m_layersMap[7].KiCadLayer  = B_SilkS;
-    m_timestamp_cnt = 0x10000000;
 }
 
 
@@ -109,11 +108,6 @@ PCB::~PCB()
     }
 }
 
-
-int PCB::GetNewTimestamp()
-{
-    return m_timestamp_cnt++;
-}
 
 int PCB::GetNetCode( wxString aNetName )
 {

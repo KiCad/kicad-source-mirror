@@ -25,7 +25,9 @@
 #ifndef SCH_SHEEET_H
 #define SCH_SHEEET_H
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"  // For boost...
 #include <boost/ptr_container/ptr_vector.hpp>
+
 #include <sch_text.h>
 
 

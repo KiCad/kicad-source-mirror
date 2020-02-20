@@ -1007,7 +1007,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             {
                 for( auto existingItem : m_frame->GetScreen()->Items() )
                 {
-                    if( item->GetTimeStamp() == existingItem->GetTimeStamp() )
+                    if( item->m_Uuid == existingItem->m_Uuid )
                     {
                         dropAnnotations = true;
                         break;
@@ -1055,7 +1055,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             if( dropAnnotations )
             {
-                component->SetTimeStamp( GetNewTimeStamp() );
+                const_cast<UUID&>( component->m_Uuid ) = UUID();
 
                 // clear the annotation, but preserve the selected unit
                 int unit = component->GetUnit();
@@ -1066,19 +1066,22 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             component->Resolve( *symLibTable, partLib );
             component->UpdatePins();
         }
-        else if( item->Type() == SCH_SHEET_T )
+        else
+        {
+            // Everything else gets a new UUID
+            const_cast<UUID&>( item->m_Uuid ) = UUID();
+        }
+
+        if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET*  sheet = (SCH_SHEET*) item;
             wxFileName  fn = sheet->GetFileName();
             SCH_SCREEN* existingScreen = nullptr;
             bool        dropSheetAnnotations = false;
 
-            // Duplicate sheet names and timestamps are not valid.  Generate new timestamps
-            // and timestamp-based sheet names.
-            timestamp_t uid = GetNewTimeStamp();
+            // Duplicate sheet names are not valid.  Generate new UUID-based sheet names.
+            sheet->SetName( wxString::Format( wxT( "Sheet%s" ), sheet->m_Uuid.AsString() ) );
 
-            sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)uid ) );
-            sheet->SetTimeStamp( uid );
             sheet->SetParent( g_CurrentSheet->Last() );
             sheet->SetScreen( nullptr );
             sheetsPasted = true;

@@ -33,7 +33,10 @@
 
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
+
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"  // For boost...
 #include <boost/ptr_container/ptr_vector.hpp>
+
 #include <gal/color4d.h>
 #include <limits>
 

@@ -140,7 +140,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
     wxString   msg;
     LIB_ID     lastFPID;
     COMPONENT* component;
-    MODULE*    module = 0;
+    MODULE*    module = nullptr;
     MODULE*    fpOnBoard;
 
     if( aNetlist.IsEmpty() || Prj().PcbFootprintLibs()->IsEmpty() )
@@ -153,8 +153,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         component = aNetlist.GetComponent( ii );
 
 #if ALLOW_PARTIAL_FPID
-        // The FPID is ok as long as there is a footprint portion coming
-        // from eeschema.
+        // The FPID is ok as long as there is a footprint portion coming from eeschema.
         if( !component->GetFPID().GetLibItemName().size() )
 #else
         if( component->GetFPID().empty() )
@@ -170,9 +169,9 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         // Check if component footprint is already on BOARD and only load the footprint from
         // the library if it's needed.  Nickname can be blank.
         if( aNetlist.IsFindByTimeStamp() )
-            fpOnBoard = m_Pcb->FindModule( aNetlist.GetComponent( ii )->GetTimeStamp(), true );
+            fpOnBoard = m_Pcb->FindModuleByPath( aNetlist.GetComponent( ii )->GetPath() );
         else
-            fpOnBoard = m_Pcb->FindModule( aNetlist.GetComponent( ii )->GetReference() );
+            fpOnBoard = m_Pcb->FindModuleByReference( aNetlist.GetComponent( ii )->GetReference() );
 
         bool footprintMisMatch = fpOnBoard && fpOnBoard->GetFPID() != component->GetFPID();
 

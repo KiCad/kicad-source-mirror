@@ -26,7 +26,9 @@
 #ifndef MULTIVECTOR_H
 #define MULTIVECTOR_H
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"  // For boost...
 #include <boost/ptr_container/ptr_vector.hpp>
+
 #include <stdexcept>
 
 /**

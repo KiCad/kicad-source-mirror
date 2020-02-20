@@ -181,7 +181,7 @@ public:
      * @param doClone (default = false) indicates unique values (such as timestamp and
      *     sheet name) should be duplicated.  Use only for undo/redo operations.
      */
-    SCH_ITEM* Duplicate( bool doClone = false );
+    SCH_ITEM* Duplicate( bool doClone = false ) const;
 
     /**
      * Virtual function IsMovableFromAnchorPoint

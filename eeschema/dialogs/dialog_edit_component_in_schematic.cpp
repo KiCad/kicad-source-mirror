@@ -206,8 +206,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
         m_rbMirror->SetSelection( 0 );
 
     // Set the component's unique ID time stamp.
-    m_textCtrlTimeStamp->SetValue( wxString::Format( wxT( "%8.8lX" ),
-                                   (unsigned long) m_cmp->GetTimeStamp() ) );
+    m_textCtrlTimeStamp->SetValue( m_cmp->m_Uuid.AsString() );
 
     // Set the component's library name.
     m_libraryNameTextCtrl->SetValue( m_cmp->GetLibId().Format() );

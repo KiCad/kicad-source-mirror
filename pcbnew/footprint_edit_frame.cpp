@@ -334,7 +334,7 @@ bool FOOTPRINT_EDIT_FRAME::IsCurrentFPFromBoard() const
 {
     MODULE* module = GetBoard()->GetFirstModule();
 
-    return ( module && module->GetLink() > 0 );
+    return ( module && module->GetLink() != niluuid );
 }
 
 
@@ -559,10 +559,10 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent 
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
     MODULE* module_in_edit = GetBoard()->GetFirstModule();
-    bool canInsert = frame && module_in_edit && !module_in_edit->GetLink();
+    bool canInsert = frame && module_in_edit && module_in_edit->GetLink() == niluuid;
 
     // If the source was deleted, the module can inserted but not updated in the board.
-    if( frame && module_in_edit && module_in_edit->GetLink() ) // this is not a new module
+    if( frame && module_in_edit && module_in_edit->GetLink() != niluuid ) // this is not a new module
     {
         BOARD*  mainpcb = frame->GetBoard();
         canInsert = true;
@@ -570,7 +570,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent 
         // search if the source module was not deleted:
         for( auto source_module : mainpcb->Modules() )
         {
-            if( module_in_edit->GetLink() == source_module->GetTimeStamp() )
+            if( module_in_edit->GetLink() == source_module->m_Uuid )
             {
                 canInsert = false;
                 break;

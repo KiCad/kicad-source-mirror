@@ -180,12 +180,6 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::~DIALOG_FOOTPRINT_BOARD_EDITOR()
 
 void DIALOG_FOOTPRINT_BOARD_EDITOR::EditFootprint( wxCommandEvent&  )
 {
-    if( m_footprint->GetTimeStamp() == 0 )    // Module Editor needs a non null timestamp
-    {
-        m_footprint->SetTimeStamp( GetNewTimeStamp() );
-        m_frame->OnModify();
-    }
-
     EndModal( PRM_EDITOR_EDIT_BOARD_FOOTPRINT );
 }
 
@@ -281,7 +275,12 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
 
     m_BoardSideCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
 
-    m_tcUniqueID->SetValue( m_footprint->GetPath() );
+    wxString path;
+
+    for( const UUID& pathStep : m_footprint->GetPath() )
+        path += '/' + pathStep.AsString();
+
+    m_tcUniqueID->SetValue( path );
 
     if( m_footprint->IsLocked() )
         m_AutoPlaceCtrl->SetSelection( 2 );

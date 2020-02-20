@@ -72,12 +72,12 @@ SCH_ITEM::~SCH_ITEM()
 }
 
 
-SCH_ITEM* SCH_ITEM::Duplicate( bool doClone )
+SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
 {
     SCH_ITEM* newItem = (SCH_ITEM*) Clone();
 
-    if( doClone )
-        newItem->SetTimeStamp( GetTimeStamp() );
+    if( !doClone )
+        const_cast<UUID&>( newItem->m_Uuid ) = UUID();
 
     newItem->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
 
@@ -174,8 +174,8 @@ bool SCH_ITEM::operator < ( const SCH_ITEM& aItem ) const
     if( Type() != aItem.Type() )
         return Type() < aItem.Type();
 
-    if( GetTimeStamp() != aItem.GetTimeStamp() )
-        return GetTimeStamp() < aItem.GetTimeStamp();
+    if( m_Uuid != aItem.m_Uuid )
+        return m_Uuid < aItem.m_Uuid;
 
     if( GetPosition().x != aItem.GetPosition().x )
         return GetPosition().x < aItem.GetPosition().x;

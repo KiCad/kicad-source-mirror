@@ -139,8 +139,6 @@ void PCB_LINE::AddToBoard()
         TRACK* track = new TRACK( m_board );
         m_board->Add( track );
 
-        track->SetTimeStamp( m_timestamp );
-
         track->SetPosition( wxPoint( m_positionX, m_positionY ) );
         track->SetEnd( wxPoint( m_toX, m_toY ) );
 
@@ -154,7 +152,6 @@ void PCB_LINE::AddToBoard()
         DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
         m_board->Add( dseg, ADD_MODE::APPEND );
 
-        dseg->SetTimeStamp( m_timestamp );
         dseg->SetLayer( m_KiCadLayer );
         dseg->SetStart( wxPoint( m_positionX, m_positionY ) );
         dseg->SetEnd( wxPoint( m_toX, m_toY ) );

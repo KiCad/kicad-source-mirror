@@ -138,8 +138,6 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
     m_part.reset( part.release() );
     m_fieldsAutoplaced = AUTOPLACED_NO;
 
-    SetTimeStamp( GetNewTimeStamp() );
-
     // Copy fields from the library component
     UpdateFields( true, true );
 
@@ -181,7 +179,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     if( aComponent.m_part )
         m_part.reset( new LIB_PART( *aComponent.m_part.get() ) );
 
-    SetTimeStamp( aComponent.m_TimeStamp );
+    const_cast<UUID&>( m_Uuid ) = aComponent.m_Uuid;
 
     m_transform = aComponent.m_transform;
     m_prefix = aComponent.m_prefix;
@@ -596,10 +594,7 @@ wxString SCH_COMPONENT::GetPath( const SCH_SHEET_PATH* sheet ) const
     wxCHECK_MSG( sheet != NULL, wxEmptyString,
                  wxT( "Cannot get component path with invalid sheet object." ) );
 
-    wxString str;
-
-    str.Printf( wxT( "%8.8lX" ), (long unsigned) m_TimeStamp );
-    return sheet->Path() + str;
+    return sheet->Path() + m_Uuid.AsString();
 }
 
 
@@ -736,19 +731,6 @@ bool SCH_COMPONENT::IsAnnotated( const SCH_SHEET_PATH* aSheet )
     }
 
     return false;
-}
-
-
-void SCH_COMPONENT::SetTimeStamp( timestamp_t aNewTimeStamp )
-{
-    wxString string_timestamp, string_oldtimestamp;
-
-    string_timestamp.Printf( wxT( "%08lX" ), (long unsigned) aNewTimeStamp );
-    string_oldtimestamp.Printf( wxT( "%08lX" ), (long unsigned) m_TimeStamp );
-    EDA_ITEM::SetTimeStamp( aNewTimeStamp );
-
-    for( wxString& entry : m_PathsAndReferences )
-        entry.Replace( string_oldtimestamp.GetData(), string_timestamp.GetData() );
 }
 
 
@@ -1101,8 +1083,7 @@ bool SCH_COMPONENT::AddSheetPathReferenceEntryIfMissing( const wxString& aSheetP
 
     // The full component reference path is aSheetPathName + the component time stamp itself
     // full_AR_path is the alternate reference path to search
-    wxString full_AR_path = aSheetPathName
-                                   + wxString::Format( "%8.8lX", (unsigned long) GetTimeStamp() );
+    wxString full_AR_path = aSheetPathName + m_Uuid.AsString();
 
     for( unsigned int ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
     {
@@ -1757,7 +1738,7 @@ bool SCH_COMPONENT::operator <( const SCH_ITEM& aItem ) const
     if( m_Pos.y != component->m_Pos.y )
         return m_Pos.y < component->m_Pos.y;
 
-    return GetTimeStamp() < aItem.GetTimeStamp();
+    return m_Uuid < aItem.m_Uuid;       // Ensure deterministic sort
 }
 
 

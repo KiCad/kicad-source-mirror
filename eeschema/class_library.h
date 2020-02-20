@@ -31,7 +31,9 @@
 #ifndef CLASS_LIBRARY_H
 #define CLASS_LIBRARY_H
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"  // For boost...
 #include <boost/ptr_container/ptr_vector.hpp>
+
 #include <wx/filename.h>
 
 #include <sch_io_mgr.h>

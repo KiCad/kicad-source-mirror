@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -732,10 +732,9 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 if( module == NULL )
                     continue;
 
-                module->SetLink( 0 );
+                module->SetLink( niluuid );
 
                 module->SetFlags( IS_NEW ); // whatever
-                module->SetTimeStamp( GetNewTimeStamp() );
 
                 // Set parent so that clearance can be loaded
                 module->SetParent( board );

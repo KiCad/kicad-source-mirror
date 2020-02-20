@@ -23,16 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file common.cpp
- */
-
 #include <fctsys.h>
 #include <eda_base_frame.h>
-#include <base_struct.h>
 #include <common.h>
 #include <macros.h>
-#include <base_units.h>
 #include <reporter.h>
 #include <mutex>
 #include <settings/settings_manager.h>
@@ -42,10 +36,135 @@
 #include <wx/utils.h>
 #include <wx/stdpaths.h>
 #include <wx/url.h>
-
-#include <pgm_base.h>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/functional/hash.hpp>
 
 using KIGFX::COLOR4D;
+
+
+// Create only once, as seeding is *very* expensive
+static boost::uuids::random_generator randomGenerator;
+
+// These don't have the same performance penalty, but might as well be consistent
+static boost::uuids::string_generator stringGenerator;
+static boost::uuids::nil_generator nilGenerator;
+
+// Global nil reference
+UUID niluuid( 0 );
+
+
+UUID::UUID() :
+        m_uuid( randomGenerator() ),
+        m_cached_timestamp( 0 )
+{
+}
+
+
+UUID::UUID( int null ) :
+        m_uuid( nilGenerator() ),
+        m_cached_timestamp( 0 )
+{
+    wxASSERT( null == 0 );
+}
+
+
+UUID::UUID( const wxString& aString ) :
+        m_uuid(),
+        m_cached_timestamp( 0 )
+{
+    if( aString.length() == 8 )
+    {
+        // A legacy-timestamp-based UUID has only the last 4 octets filled in.
+        // Convert them individually to avoid stepping in the little-endian/big-endian
+        // doo-doo.
+        for( int i = 0; i < 4; ++i )
+        {
+            wxString octet = aString.substr( i * 2, 2 );
+            m_uuid.data[ i + 12 ] = strtol( octet.data(), NULL, 16 );
+        }
+
+        m_cached_timestamp = strtol( aString.c_str(), NULL, 16 );
+    }
+    else
+    {
+        try
+        {
+            m_uuid = stringGenerator( aString.wc_str() );
+
+            if( IsLegacyTimestamp() )
+                m_cached_timestamp = strtol( aString.substr( 28 ).c_str(), NULL, 16 );
+        }
+        catch( ... )
+        {
+            // Failed to parse string representation; best we can do is assign a new
+            // random one.
+            m_uuid = randomGenerator();
+        }
+    }
+}
+
+
+UUID::UUID( timestamp_t aTimestamp )
+{
+    m_cached_timestamp = aTimestamp;
+
+    // A legacy-timestamp-based UUID has only the last 4 octets filled in.
+    // Convert them individually to avoid stepping in the little-endian/big-endian
+    // doo-doo.
+    wxString str = AsLegacyTimestampString();
+
+    for( int i = 0; i < 4; ++i )
+    {
+        wxString octet = str.substr( i * 2, 2 );
+        m_uuid.data[ i + 12 ] = strtol( octet.data(), NULL, 16 );
+    }
+}
+
+
+bool UUID::IsLegacyTimestamp() const
+{
+    return !m_uuid.data[8] && !m_uuid.data[9] && !m_uuid.data[10] && !m_uuid.data[11];
+}
+
+
+timestamp_t UUID::AsLegacyTimestamp() const
+{
+    return m_cached_timestamp;
+}
+
+
+size_t UUID::Hash() const
+{
+    size_t hash = 0;
+
+    // Note: this is NOT little-endian/big-endian safe, but as long as it's just used
+    // at runtime it won't matter.
+
+    for( int i = 0; i < 4; ++i )
+        boost::hash_combine( hash, reinterpret_cast<const uint32_t*>( m_uuid.data )[i] );
+
+    return hash;
+}
+
+
+void UUID::Clone( const UUID& aUUID )
+{
+    m_uuid = aUUID.m_uuid;
+    m_cached_timestamp = aUUID.m_cached_timestamp;
+}
+
+
+wxString UUID::AsString() const
+{
+    return boost::uuids::to_string( m_uuid );
+}
+
+
+wxString UUID::AsLegacyTimestampString() const
+{
+    return wxString::Format( "%8.8lX", (unsigned long) AsLegacyTimestamp() );
+}
 
 
 /**

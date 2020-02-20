@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Oliver Walters
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,7 +184,7 @@ protected:
 
     // Data store
     // A map of compID : fieldSet, where fieldSet is a map of fieldName : fieldValue
-    std::map< timestamp_t, std::map<wxString, wxString> > m_dataStore;
+    std::map< UUID, std::map<wxString, wxString> > m_dataStore;
 
 
 public:
@@ -206,8 +206,7 @@ public:
         for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
         {
             SCH_COMPONENT* comp = m_componentRefs[ i ].GetComp();
-            timestamp_t compID = comp->GetTimeStamp();
-            m_dataStore[ compID ][ aFieldName ] = comp->GetFieldText( aFieldName, m_frame );
+            m_dataStore[ comp->m_Uuid ][ aFieldName ] = comp->GetFieldText( aFieldName, m_frame );
         }
     }
 
@@ -270,7 +269,7 @@ public:
             }
             else // Other columns are either a single value or ROW_MULTI_ITEMS
             {
-                timestamp_t compID = ref.GetComp()->GetTimeStamp();
+                const UUID& compID = ref.GetComp()->m_Uuid;
 
                 if( !m_dataStore.count( compID ) ||
                         !m_dataStore[ compID ].count( m_fieldNames[ aCol ] ) )
@@ -331,7 +330,7 @@ public:
         wxString fieldName = m_fieldNames[ aCol ];
 
         for( const auto& ref : rowGroup.m_Refs )
-            m_dataStore[ ref.GetComp()->GetTimeStamp() ][ fieldName ] = aValue;
+            m_dataStore[ ref.GetComp()->m_Uuid ][ fieldName ] = aValue;
 
         m_edited = true;
     }
@@ -419,8 +418,8 @@ public:
             matchFound = true;
         }
 
-        timestamp_t lhRefID = lhRef.GetComp()->GetTimeStamp();
-        timestamp_t rhRefID = rhRef.GetComp()->GetTimeStamp();
+        const UUID& lhRefID = lhRef.GetComp()->m_Uuid;
+        const UUID& rhRefID = rhRef.GetComp()->m_Uuid;
 
         // Now check all the other columns.  This must be done out of the dataStore
         // for the refresh button to work after editing.
@@ -598,7 +597,7 @@ public:
             m_frame->SetCurrentSheet( m_componentRefs[i].GetSheetPath() );
             m_frame->SaveCopyInUndoList( &comp, UR_CHANGED, true );
 
-            const std::map<wxString, wxString>& fieldStore = m_dataStore[comp.GetTimeStamp()];
+            const std::map<wxString, wxString>& fieldStore = m_dataStore[comp.m_Uuid];
 
             for( const std::pair<wxString, wxString> srcData : fieldStore )
             {
@@ -648,7 +647,7 @@ public:
 
             for( unsigned compRef = 0; compRef < m_componentRefs.GetCount(); ++ compRef )
             {
-                timestamp_t compId = m_componentRefs[ compRef ].GetComp()->GetTimeStamp();
+                const UUID& compId = m_componentRefs[ compRef ].GetComp()->m_Uuid;
                 wxString text = m_dataStore[ compId ][ column_label ];
                 width = std::max( width, GetTextSize( text, GetView() ).x );
             }

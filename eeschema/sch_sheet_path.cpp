@@ -23,11 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_sheet_path.cpp
- * @brief SCH_SHEET_PATH class implementation.
- */
-
 #include <fctsys.h>
 
 #include <sch_screen.h>
@@ -39,9 +34,6 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <template_fieldnames.h>
-
-#include <dialogs/dialog_schematic_find.h>
-
 #include <boost/functional/hash.hpp>
 #include <wx/filename.h>
 
@@ -67,7 +59,7 @@ void SCH_SHEET_PATH::Rehash()
     m_current_hash = 0;
 
     for( auto sheet : m_sheets )
-        boost::hash_combine( m_current_hash, sheet->GetTimeStamp() );
+        boost::hash_combine( m_current_hash, sheet->m_Uuid.Hash() );
 }
 
 
@@ -82,11 +74,11 @@ int SCH_SHEET_PATH::Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const
     //otherwise, same number of sheets.
     for( unsigned i = 0; i < size(); i++ )
     {
-        if( at( i )->GetTimeStamp() > aSheetPathToTest.at( i )->GetTimeStamp() )
-            return 1;
-
-        if( at( i )->GetTimeStamp() < aSheetPathToTest.at( i )->GetTimeStamp() )
+        if( at( i )->m_Uuid < aSheetPathToTest.at( i )->m_Uuid )
             return -1;
+
+        if( at( i )->m_Uuid != aSheetPathToTest.at( i )->m_Uuid )
+            return 1;
     }
 
     return 0;
@@ -126,17 +118,14 @@ SCH_SCREEN* SCH_SHEET_PATH::LastScreen() const
 
 wxString SCH_SHEET_PATH::Path() const
 {
-    wxString s, t;
+    wxString s;
 
     s = wxT( "/" );     // This is the root path
 
     // Start at 1 to avoid the root sheet, which does not need to be added to the path.
     // It's timestamp changes anyway.
     for( unsigned i = 1; i < size(); i++ )
-    {
-        t.Printf( _( "%8.8lX/" ), (long unsigned) at( i )->GetTimeStamp() );
-        s = s + t;
-    }
+        s += at( i )->m_Uuid.AsString();
 
     return s;
 }

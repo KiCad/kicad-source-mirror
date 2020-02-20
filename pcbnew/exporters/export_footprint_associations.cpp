@@ -43,8 +43,8 @@ bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName )
     for( auto module : aBrd->Modules() )
     {
         fprintf( cmpFile, "\nBeginCmp\n" );
-        fprintf( cmpFile, "TimeStamp = %8.8lX\n", (unsigned long)module->GetTimeStamp() );
-        fprintf( cmpFile, "Path = %s\n", TO_UTF8( module->GetPath() ) );
+        fprintf( cmpFile, "TimeStamp = %s\n", TO_UTF8( module->m_Uuid.AsString() ) );
+        fprintf( cmpFile, "Path = %s\n", TO_UTF8( module->GetPath().AsString() ) );
         fprintf( cmpFile, "Reference = %s;\n",
                  !module->GetReference().IsEmpty() ? TO_UTF8( module->GetReference() ) : "[NoRef]" );
         fprintf( cmpFile, "ValeurCmp = %s;\n",

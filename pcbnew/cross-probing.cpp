@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,10 +145,10 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     else if( strcmp( idcmd, "$SHEET:" ) == 0 )
     {
         msg.Printf( _( "Selecting all from sheet \"%s\"" ), FROM_UTF8( text ) );
-        wxString sheetStamp( FROM_UTF8( text ) );
+        wxString sheetUIID( FROM_UTF8( text ) );
         SetStatusText( msg );
         GetToolManager()->RunAction( PCB_ACTIONS::selectOnSheetFromEeschema, true,
-                                     static_cast<void*>( &sheetStamp ) );
+                                     static_cast<void*>( &sheetUIID ) );
         return;
     }
     else if( strcmp( idcmd, "$CLEAR" ) == 0 )
@@ -341,7 +341,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         for( auto& module : this->GetBoard()->Modules() )
         {
             netlist.AddComponent( new COMPONENT( module->GetFPID(), module->GetReference(),
-                    module->GetValue(), module->GetPath() ) );
+                                                 module->GetValue(), module->GetPath() ) );
         }
         netlist.Format(
                 "pcb_netlist", &sf, 0, CTL_OMIT_FILTERS | CTL_OMIT_NETS | CTL_OMIT_FILTERS );

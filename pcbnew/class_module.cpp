@@ -4,7 +4,7 @@
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +87,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_CntRot180 = aModule.m_CntRot180;
     m_LastEditTime = aModule.m_LastEditTime;
     m_Link = aModule.m_Link;
-    m_Path = aModule.m_Path;              // is this correct behavior?
+    m_Path = aModule.m_Path;
 
     m_LocalClearance = aModule.m_LocalClearance;
     m_LocalSolderMaskMargin = aModule.m_LocalSolderMaskMargin;
@@ -149,7 +149,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     CalculateBoundingBox();
 
     m_initial_comments = aModule.m_initial_comments ?
-                            new wxArrayString( *aModule.m_initial_comments ) : 0;
+                            new wxArrayString( *aModule.m_initial_comments ) : nullptr;
 }
 
 
@@ -191,7 +191,7 @@ MODULE& MODULE::operator=( const MODULE& aOther )
     m_CntRot180     = aOther.m_CntRot180;
     m_LastEditTime  = aOther.m_LastEditTime;
     m_Link          = aOther.m_Link;
-    m_Path          = aOther.m_Path; //is this correct behavior?
+    m_Path          = aOther.m_Path;
 
     m_LocalClearance                = aOther.m_LocalClearance;
     m_LocalSolderMaskMargin         = aOther.m_LocalSolderMaskMargin;
@@ -573,13 +573,9 @@ void MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aLi
 
     aList.emplace_back( MSG_PANEL_ITEM( _( "Last Change" ), msg, BROWN ) );
 
-    // display schematic path
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Netlist Path" ), m_Path, BROWN ) );
-
     // display the board side placement
     aList.emplace_back( MSG_PANEL_ITEM( _( "Board Side" ),
                         IsFlipped()? _( "Back (Flipped)" ) : _( "Front" ), RED ) );
-
 
     msg.Printf( wxT( "%zu" ), m_pads.size() );
     aList.emplace_back( MSG_PANEL_ITEM( _( "Pads" ), msg, BLUE ) );
@@ -1295,8 +1291,8 @@ void MODULE::SetOrientation( double newangle )
     CalculateBoundingBox();
 }
 
-BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem, bool aIncrementPadNumbers,
-                               bool aAddToModule )
+BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aIncrementPadNumbers,
+                                   bool aAddToModule )
 {
     BOARD_ITEM* new_item = NULL;
     MODULE_ZONE_CONTAINER* new_zone = NULL;

@@ -342,8 +342,6 @@ void PCB_PAD::AddToBoard()
             VIA* via = new VIA( m_board );
             m_board->Add( via );
 
-            via->SetTimeStamp( 0 );
-
             via->SetPosition( wxPoint( m_positionX, m_positionY ) );
             via->SetEnd( wxPoint( m_positionX, m_positionY ) );
 

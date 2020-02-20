@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2035,7 +2035,8 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT( bool aAllowCirclesZeroWidth )
             break;
 
         case T_tstamp:
-            segment->SetTimeStamp( parseHex() );
+            NextTok();
+            const_cast<UUID&>( segment->m_Uuid ) = UUID( CurStr() );
             break;
 
         case T_status:
@@ -2112,7 +2113,8 @@ TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB()
             break;
 
         case T_tstamp:
-            text->SetTimeStamp( parseHex() );
+            NextTok();
+            const_cast<UUID&>( text->m_Uuid ) = UUID( CurStr() );
             NeedRIGHT();
             break;
 
@@ -2163,19 +2165,20 @@ DIMENSION* PCB_PARSER::parseDIMENSION()
             break;
 
         case T_tstamp:
-            dimension->SetTimeStamp( parseHex() );
+            NextTok();
+            const_cast<UUID&>( dimension->m_Uuid ) = UUID( CurStr() );
             NeedRIGHT();
             break;
 
         case T_gr_text:
         {
             TEXTE_PCB* text = parseTEXTE_PCB();
-
-            // This copy  (using the copy constructor) rebuild the text timestamp,
-            // that is not what we want.
             dimension->Text() = *text;
-            // reinitialises the text time stamp to the right value (the dimension time stamp)
-            dimension->Text().SetTimeStamp( dimension->GetTimeStamp() );
+
+            // The text is part of the dimension and shares its uuid
+            const_cast<UUID&>( dimension->Text().m_Uuid ) = dimension->m_Uuid;
+
+            // Fetch other dimension properties out of the text item
             dimension->SetPosition( text->GetTextPos() );
 
             EDA_UNITS units = EDA_UNITS::INCHES;
@@ -2381,7 +2384,8 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             break;
 
         case T_tstamp:
-            module->SetTimeStamp( parseHex() );
+            NextTok();
+            const_cast<UUID&>( module->m_Uuid ) = UUID( CurStr() );
             NeedRIGHT();
             break;
 
@@ -2417,7 +2421,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
         case T_path:
             NeedSYMBOLorNUMBER();   // Paths can be numerical so a number is also a symbol here
-            module->SetPath( FromUTF8() );
+            module->SetPath( UUID_PATH( FromUTF8() ) );
             NeedRIGHT();
             break;
 
@@ -2810,7 +2814,8 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
             break;
 
         case T_tstamp:
-            segment->SetTimeStamp( parseHex() );
+            NextTok();
+            const_cast<UUID&>( segment->m_Uuid ) = UUID( CurStr() );
             break;
 
         case T_status:
@@ -3392,7 +3397,8 @@ TRACK* PCB_PARSER::parseTRACK()
             break;
 
         case T_tstamp:
-            track->SetTimeStamp( parseHex() );
+            NextTok();
+            const_cast<UUID&>( track->m_Uuid ) = UUID( CurStr() );
             break;
 
         case T_status:
@@ -3475,7 +3481,8 @@ VIA* PCB_PARSER::parseVIA()
             break;
 
         case T_tstamp:
-            via->SetTimeStamp( parseHex() );
+            NextTok();
+            const_cast<UUID&>( via->m_Uuid ) = UUID( CurStr() );
             NeedRIGHT();
             break;
 
@@ -3562,7 +3569,8 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
             break;
 
         case T_tstamp:
-            zone->SetTimeStamp( parseHex() );
+            NextTok();
+            const_cast<UUID&>( zone->m_Uuid ) = UUID( CurStr() );
             NeedRIGHT();
             break;
 
@@ -3990,7 +3998,8 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET()
             break;
 
         case T_tstamp:
-            target->SetTimeStamp( parseHex() );
+            NextTok();
+            const_cast<UUID&>( target->m_Uuid ) = UUID( CurStr() );
             NeedRIGHT();
             break;
 

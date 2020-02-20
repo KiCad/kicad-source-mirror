@@ -86,7 +86,6 @@ void EDA_ITEM::initVars()
     m_StructType = TYPE_NOT_INIT;
     m_Parent    = NULL;     // Linked list: Link (parent struct)
     m_Flags     = 0;        // flags for editions and other
-    SetTimeStamp( 0 );      // Time stamp used for logical links
     m_Status    = 0;
     m_forceVisible = false; // true to override the visibility setting of the item.
 }
@@ -221,9 +220,6 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
     m_Status     = aItem.m_Status;
     m_Parent     = aItem.m_Parent;
     m_forceVisible = aItem.m_forceVisible;
-
-    // A copy of an item cannot have the same time stamp as the original item.
-    SetTimeStamp( GetNewTimeStamp() );
 
     return *this;
 }

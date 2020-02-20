@@ -4,7 +4,7 @@
  * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -963,15 +963,25 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
+void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetID )
 {
+    UUID               uuid( aSheetID );
     std::list<MODULE*> modList;
 
     // store all modules that are on that sheet
     for( MODULE* module : board()->Modules() )
     {
-        if( module != NULL && module->GetPath().Contains( aSheetpath ) )
-            modList.push_back( module );
+        if( module == nullptr )
+            continue;
+
+        for( const UUID& pathStep : module->GetPath() )
+        {
+            if( pathStep == uuid )
+            {
+                modList.push_back( module );
+                break;
+            }
+        }
     }
 
     //Generate a list of all pads, and of all nets they belong to.
@@ -1081,9 +1091,9 @@ void SELECTION_TOOL::zoomFitSelection()
 int SELECTION_TOOL::selectSheetContents( const TOOL_EVENT& aEvent )
 {
     ClearSelection( true /*quiet mode*/ );
-    wxString* sheetpath = aEvent.Parameter<wxString*>();
+    wxString* sheetID = aEvent.Parameter<wxString*>();
 
-    selectAllItemsOnSheet( *sheetpath );
+    selectAllItemsOnSheet( *sheetID );
 
     zoomFitSelection();
 
@@ -1111,14 +1121,15 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 
     auto mod = dynamic_cast<MODULE*>( item );
 
+    if( mod->GetPath().empty() )
+        return 0;
+
     ClearSelection( true /*quiet mode*/ );
 
     // get the lowest subsheet name for this.
-    wxString sheetPath = mod->GetPath();
-    sheetPath = sheetPath.BeforeLast( '/' );
-    sheetPath = sheetPath.AfterLast( '/' );
+    wxString sheetID = mod->GetPath().back().AsString();
 
-    selectAllItemsOnSheet( sheetPath );
+    selectAllItemsOnSheet( sheetID );
 
     // Inform other potentially interested tools
     if( m_selection.Size() > 0 )

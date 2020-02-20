@@ -38,7 +38,6 @@
 #include <fctsys.h>
 #include <convert_to_biu.h>
 #include <confirm.h>
-#include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_module.h>
@@ -219,8 +218,8 @@ void SpreadFootprints( std::vector<MODULE*>* aFootprints,
             bool islastItem = false;
 
             if( ii == footprintList.size() - 1 ||
-                ( footprintList[ii]->GetPath().BeforeLast( '/' ) !=
-                  footprintList[ii+1]->GetPath().BeforeLast( '/' ) ) )
+                ( footprintList[ii]->GetPath().AsString().BeforeLast( '/' ) !=
+                  footprintList[ii+1]->GetPath().AsString().BeforeLast( '/' ) ) )
                 islastItem = true;
 
             footprintListBySheet.push_back( footprint );
@@ -303,8 +302,5 @@ void SpreadFootprints( std::vector<MODULE*>* aFootprints,
 // without the time stamp of the footprint ).
 static bool sortFootprintsbySheetPath( MODULE* ref, MODULE* compare )
 {
-    if( ref->GetPath().Length() == compare->GetPath().Length() )
-        return ref->GetPath().BeforeLast( '/' ).Cmp( compare->GetPath().BeforeLast( '/' ) ) < 0;
-
-    return ref->GetPath().Length() < compare->GetPath().Length();
+    return ref->GetPath() < compare->GetPath();
 }

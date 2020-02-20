@@ -36,21 +36,22 @@
 namespace PCAD2KICAD {
 
 PCB_COMPONENT::PCB_COMPONENT( PCB_CALLBACKS*    aCallbacks,
-                              BOARD*            aBoard ) : m_callbacks( aCallbacks ),
-    m_board( aBoard )
+                              BOARD*            aBoard ) :
+        m_uuid(),
+        m_callbacks( aCallbacks ),
+        m_board( aBoard )
 {
-    m_tag       = 0;
-    m_objType   = wxT( '?' );
-    m_PCadLayer     = 0;
-    m_KiCadLayer    = F_Cu; // It *has* to be somewhere...
-    m_timestamp     = 0;
-    m_positionX     = 0;
-    m_positionY     = 0;
-    m_rotation      = 0;
+    m_tag             = 0;
+    m_objType         = wxT( '?' );
+    m_PCadLayer       = 0;
+    m_KiCadLayer      = F_Cu; // It *has* to be somewhere...
+    m_positionX       = 0;
+    m_positionY       = 0;
+    m_rotation        = 0;
     InitTTextValue( &m_name );
-    m_net       = wxEmptyString;
-    m_netCode   = 0;
-    m_compRef   = wxEmptyString;
+    m_net             = wxEmptyString;
+    m_netCode         = 0;
+    m_compRef         = wxEmptyString;
     m_patGraphRefName = wxEmptyString;
 }
 

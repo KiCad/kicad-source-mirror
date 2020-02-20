@@ -106,9 +106,9 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     if( !Clear_Pcb( true ) )
         return false;
 
-    newModule = new MODULE( *aModule );
+    newModule = (MODULE*) aModule->Duplicate();
     newModule->SetParent( GetBoard() );
-    newModule->SetLink( aModule->GetTimeStamp() );
+    newModule->SetLink( aModule->m_Uuid );
 
     newModule->ClearFlags();
     newModule->RunOnChildren( std::bind( &clearModuleItemFlags, _1 ) );

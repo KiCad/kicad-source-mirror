@@ -54,7 +54,7 @@ void COMPONENT::SetModule( MODULE* aModule )
     aModule->SetReference( m_reference );
     aModule->SetValue( m_value );
     aModule->SetFPID( m_fpid );
-    aModule->SetPath( m_timeStamp );
+    aModule->SetPath( m_path );
 }
 
 
@@ -85,7 +85,13 @@ void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
         aOut->Print( nl+1, "(value %s)\n",    aOut->Quotew( m_value ).c_str() );
         aOut->Print( nl+1, "(name %s)\n",     aOut->Quotew( m_name ).c_str() );
         aOut->Print( nl+1, "(library %s)\n",  aOut->Quotew( m_library ).c_str() );
-        aOut->Print( nl+1, "(timestamp %s)\n", aOut->Quotew( m_timeStamp ).c_str() );
+
+        wxString path;
+
+        for( const UUID& pathStep : m_path )
+            path += '/' + pathStep.AsString();
+
+        aOut->Print( nl+1, "(timestamp %s)\n", aOut->Quotew( path ).c_str() );
     }
 
     if( !( aCtl & CTL_OMIT_FILTERS ) && m_footprintFilters.GetCount() )
@@ -158,20 +164,15 @@ COMPONENT* NETLIST::GetComponentByReference( const wxString& aReference )
 }
 
 
-COMPONENT* NETLIST::GetComponentByTimeStamp( const wxString& aTimeStamp )
+COMPONENT* NETLIST::GetComponentByPath( const UUID_PATH& aUuidPath )
 {
-    COMPONENT* component = NULL;
-
-    for( unsigned i = 0;  i < m_components.size();  i++ )
+    for( COMPONENT& component : m_components )
     {
-        if( m_components[i].GetTimeStamp() == aTimeStamp )
-        {
-            component = &m_components[i];
-            break;
-        }
+        if( component.GetPath() == aUuidPath )
+            return &component;
     }
 
-    return component;
+    return nullptr;
 }
 
 

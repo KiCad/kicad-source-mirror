@@ -28,8 +28,10 @@
 
 #include <map>
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"  // For boost...
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+
 #include <memory>
 
 #include <project.h>

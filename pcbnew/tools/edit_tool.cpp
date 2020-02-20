@@ -4,7 +4,7 @@
  * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1079,18 +1079,35 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         if( m_editModules )
         {
-            dupe_item = editFrame->GetBoard()->GetFirstModule()->Duplicate( orig_item, increment );
+            MODULE* editModule = editFrame->GetBoard()->GetFirstModule();
+            dupe_item = editModule->DuplicateItem( orig_item, increment );
         }
         else if( orig_item->GetParent() && orig_item->GetParent()->Type() == PCB_MODULE_T )
         {
             MODULE* parent = static_cast<MODULE*>( orig_item->GetParent() );
 
             m_commit->Modify( parent );
-            dupe_item = parent->Duplicate( orig_item, false, true /* add to parent */ );
+            dupe_item = parent->DuplicateItem( orig_item, false, true /* add to parent */ );
         }
         else
         {
-            dupe_item = editFrame->GetBoard()->Duplicate( orig_item );
+            switch( orig_item->Type() )
+            {
+            case PCB_MODULE_T:
+            case PCB_TEXT_T:
+            case PCB_LINE_T:
+            case PCB_TRACE_T:
+            case PCB_VIA_T:
+            case PCB_ZONE_AREA_T:
+            case PCB_TARGET_T:
+            case PCB_DIMENSION_T:
+                dupe_item = orig_item->Duplicate();
+                break;
+
+            default:
+                // Silently drop other items (such as footprint texts) from duplication
+                break;
+            }
         }
 
         if( dupe_item )
@@ -1341,12 +1358,6 @@ int EDIT_TOOL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
 
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    if( mod->GetTimeStamp() == 0 )    // Module Editor needs a non null timestamp
-    {
-        mod->SetTimeStamp( GetNewTimeStamp() );
-        editFrame->OnModify();
-    }
-
     auto editor = (FOOTPRINT_EDIT_FRAME*) editFrame->Kiway().Player( FRAME_FOOTPRINT_EDITOR, true );
 
     editor->Load_Module_From_BOARD( mod );
@@ -1425,7 +1436,9 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS );
+            } );
 
     if( selection.Empty() )
         return 1;

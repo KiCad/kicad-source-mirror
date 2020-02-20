@@ -30,6 +30,7 @@
 #define FOOTPRINT_INFO_H_
 
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <import_export.h>

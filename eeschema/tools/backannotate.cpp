@@ -71,8 +71,6 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
     sheets.GetComponents( m_refs, false );
     sheets.GetMultiUnitComponents( m_multiUnitsRefs );
 
-    m_refs.SortByTimeStamp();
-    errors += m_refs.checkForDuplicatedElements( m_settings.reporter );
     errors += getChangeList();
     errors += checkForUnusedSymbols();
     errors += checkSharedSchematicErrors();
@@ -91,7 +89,7 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
         }
         else
             m_settings.reporter.ReportTail(
-                    _( "No errors  during dry run. Ready to go." ), REPORTER::RPT_ACTION );
+                    _( "No errors during dry run. Ready to go." ), REPORTER::RPT_ACTION );
     }
     else
     {

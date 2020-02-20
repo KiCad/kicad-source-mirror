@@ -325,11 +325,6 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
     if( !session )
         THROW_IO_ERROR( _("Session file is missing the \"session\" section") );
 
-    /* Dick 16-Jan-2012: session need not have a placement section.
-    if( !session->placement )
-        THROW_IO_ERROR( _("Session file is missing the \"placement\" section") );
-    */
-
     if( !session->route )
         THROW_IO_ERROR( _("Session file is missing the \"routes\" section") );
 
@@ -358,10 +353,11 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
                 wxString reference = FROM_UTF8( place->component_id.c_str() );
                 MODULE* module = aBoard->FindModuleByReference( reference );
+
                 if( !module )
                 {
-                    THROW_IO_ERROR( wxString::Format( _("Session file has 'reference' to non-existent symbol \"%s\""),
-                                                      GetChars( reference ) ) );
+                    THROW_IO_ERROR( wxString::Format( _( "Reference '%s' not found." ),
+                                                      reference ) );
                 }
 
                 if( !place->hasVertex )
