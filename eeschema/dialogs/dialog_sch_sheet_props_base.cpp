@@ -23,100 +23,87 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bupperSizer;
 	bupperSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 7, 0, 0 );
-	fgSizer1->AddGrowableCol( 1 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bSizer3;
+	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_filenameLabel = new wxStaticText( this, wxID_ANY, _("&File name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_filenameLabel->Wrap( -1 );
-	fgSizer1->Add( m_filenameLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer3->Add( m_filenameLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textFileName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textFileName->SetMinSize( wxSize( 240,-1 ) );
+	m_textFileName->SetMinSize( wxSize( 360,-1 ) );
 
-	fgSizer1->Add( m_textFileName, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bSizer3->Add( m_textFileName, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_browseButton = new wxBitmapButton( this, ID_BUTTON_BROWSE_SHEET, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_browseButton->SetMinSize( wxSize( 30,28 ) );
 
-	fgSizer1->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 2 );
+	bSizer3->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	fgSizer1->Add( 0, 0, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 10 );
+	bupperSizer->Add( bSizer3, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_filenameVisible = new wxCheckBox( this, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4->Add( m_filenameVisible, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 36 );
 
 	m_filenameSizeLabel = new wxStaticText( this, wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_filenameSizeLabel->Wrap( -1 );
-	fgSizer1->Add( m_filenameSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer4->Add( m_filenameSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_filenameSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_filenameSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	bSizer4->Add( m_filenameSizeCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_filenameSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_filenameSizeUnits->Wrap( -1 );
-	fgSizer1->Add( m_filenameSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer4->Add( m_filenameSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	bupperSizer->Add( bSizer4, 0, wxEXPAND, 5 );
+
+
+	bupperSizer->Add( 0, 15, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_sheetnameLabel = new wxStaticText( this, wxID_ANY, _("&Sheet name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sheetnameLabel->Wrap( -1 );
-	fgSizer1->Add( m_sheetnameLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer5->Add( m_sheetnameLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_textSheetName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textSheetName, 5, wxEXPAND|wxTOP|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer5->Add( m_textSheetName, 5, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	fgSizer1->Add( 0, 0, 0, wxALIGN_CENTER_VERTICAL|wxALL, 10 );
+	bupperSizer->Add( bSizer5, 0, wxEXPAND, 5 );
 
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
 
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_sheetnameVisible = new wxCheckBox( this, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer6->Add( m_sheetnameVisible, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 36 );
 
 	m_sheetnameSizeLabel = new wxStaticText( this, wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sheetnameSizeLabel->Wrap( -1 );
-	fgSizer1->Add( m_sheetnameSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer6->Add( m_sheetnameSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_sheetnameSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_sheetnameSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	bSizer6->Add( m_sheetnameSizeCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_sheetnameSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sheetnameSizeUnits->Wrap( -1 );
-	fgSizer1->Add( m_sheetnameSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer6->Add( m_sheetnameSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	fgSizer1->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bupperSizer->Add( bSizer6, 0, wxEXPAND, 5 );
 
 
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_staticTextTimeStamp = new wxStaticText( this, wxID_ANY, _("Unique timestamp:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextTimeStamp->Wrap( -1 );
-	fgSizer1->Add( m_staticTextTimeStamp, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_textCtrlTimeStamp = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer1->Add( m_textCtrlTimeStamp, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-
-
-	bupperSizer->Add( fgSizer1, 1, wxALL|wxEXPAND, 5 );
-
-
-	mainSizer->Add( bupperSizer, 0, wxEXPAND|wxTOP, 5 );
+	mainSizer->Add( bupperSizer, 0, wxEXPAND|wxALL, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

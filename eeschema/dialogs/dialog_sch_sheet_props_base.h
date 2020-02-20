@@ -24,6 +24,7 @@
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
@@ -50,16 +51,16 @@ class DIALOG_SCH_SHEET_PROPS_BASE : public DIALOG_SHIM
 		wxStaticText* m_filenameLabel;
 		wxTextCtrl* m_textFileName;
 		wxBitmapButton* m_browseButton;
+		wxCheckBox* m_filenameVisible;
 		wxStaticText* m_filenameSizeLabel;
 		wxTextCtrl* m_filenameSizeCtrl;
 		wxStaticText* m_filenameSizeUnits;
 		wxStaticText* m_sheetnameLabel;
 		wxTextCtrl* m_textSheetName;
+		wxCheckBox* m_sheetnameVisible;
 		wxStaticText* m_sheetnameSizeLabel;
 		wxTextCtrl* m_sheetnameSizeCtrl;
 		wxStaticText* m_sheetnameSizeUnits;
-		wxStaticText* m_staticTextTimeStamp;
-		wxTextCtrl* m_textCtrlTimeStamp;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;

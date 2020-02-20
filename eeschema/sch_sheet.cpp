@@ -22,22 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_sheet.cpp
- * @brief Implementation of SCH_SHEET class.
- */
-
 #include <fctsys.h>
 #include <sch_draw_panel.h>
 #include <gr_text.h>
 #include <trigo.h>
-#include <richio.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
 #include <kicad_string.h>
 #include <msgpanel.h>
 #include <math/util.h>      // for KiROUND
-
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
@@ -51,7 +44,9 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     m_Layer = LAYER_SHEET;
     m_pos = pos;
     m_size = wxSize( Mils2iu( MIN_SHEET_WIDTH ), Mils2iu( MIN_SHEET_HEIGHT ) );
+    m_showSheetName = true;
     m_sheetNameSize = GetDefaultTextSize();
+    m_showFileName = true;
     m_fileNameSize = GetDefaultTextSize();
     m_screen = NULL;
     m_name.Printf( wxT( "Sheet%s" ), m_Uuid.AsString() );
@@ -66,7 +61,9 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
     m_size = aSheet.m_size;
     m_Layer = aSheet.m_Layer;
     const_cast<UUID&>( m_Uuid ) = aSheet.m_Uuid;
+    m_showSheetName = aSheet.m_showSheetName;
     m_sheetNameSize = aSheet.m_sheetNameSize;
+    m_showFileName = aSheet.m_showFileName;
     m_fileNameSize = aSheet.m_fileNameSize;
     m_screen = aSheet.m_screen;
     m_name = aSheet.m_name;
@@ -162,7 +159,9 @@ void SCH_SHEET::SwapData( SCH_ITEM* aItem )
     std::swap( m_pos, sheet->m_pos );
     std::swap( m_size, sheet->m_size );
     std::swap( m_name, sheet->m_name );
+    std::swap( m_showSheetName, sheet->m_showSheetName );
     std::swap( m_sheetNameSize, sheet->m_sheetNameSize );
+    std::swap( m_showFileName, sheet->m_showFileName );
     std::swap( m_fileNameSize, sheet->m_fileNameSize );
     m_pins.swap( sheet->m_pins );
 
@@ -466,18 +465,24 @@ void SCH_SHEET::Print( wxDC* aDC, const wxPoint& aOffset )
         name_orientation = TEXT_ANGLE_HORIZ;
 
     /* Draw text : SheetName */
-    Text = wxT( "Sheet: " ) + m_name;
-    textSize = wxSize( m_sheetNameSize, m_sheetNameSize );
-    textWidth = Clamp_Text_PenSize( lineWidth, textSize, false );
-    GRText( aDC, pos_sheetname, GetLayerColor( LAYER_SHEETNAME ), Text, name_orientation,
-            textSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, textWidth, false, false );
+    if( m_showSheetName )
+    {
+        Text = wxT( "Sheet: " ) + m_name;
+        textSize = wxSize( m_sheetNameSize, m_sheetNameSize );
+        textWidth = Clamp_Text_PenSize( lineWidth, textSize, false );
+        GRText( aDC, pos_sheetname, GetLayerColor( LAYER_SHEETNAME ), Text, name_orientation,
+                textSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, textWidth, false, false );
+    }
 
     /* Draw text : FileName */
-    Text = wxT( "File: " ) + m_fileName;
-    textSize = wxSize( m_fileNameSize, m_fileNameSize );
-    textWidth = Clamp_Text_PenSize( lineWidth, textSize, false );
-    GRText( aDC, pos_filename, GetLayerColor( LAYER_SHEETFILENAME ), Text, name_orientation,
-            textSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, textWidth, false, false );
+    if( m_showFileName )
+    {
+        Text = wxT( "File: " ) + m_fileName;
+        textSize = wxSize( m_fileNameSize, m_fileNameSize );
+        textWidth = Clamp_Text_PenSize( lineWidth, textSize, false );
+        GRText( aDC, pos_filename, GetLayerColor( LAYER_SHEETFILENAME ), Text, name_orientation,
+                textSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, textWidth, false, false );
+    }
 
     /* Draw text : SheetLabel */
     for( SCH_SHEET_PIN* sheetPin : m_pins )
@@ -487,22 +492,30 @@ void SCH_SHEET::Print( wxDC* aDC, const wxPoint& aOffset )
 
 const EDA_RECT SCH_SHEET::GetBoundingBox() const
 {
-    wxPoint end;
+    wxPoint  end;
     EDA_RECT box( m_pos, m_size );
     int      lineWidth = GetPenSize();
+    int      textLength = 0;
 
     // Determine length of texts
-    wxString text    = wxT( "Sheet: " ) + m_name;
-    int      textlen  = GraphicTextWidth( text, wxSize( m_sheetNameSize, m_sheetNameSize ),
-                                          false, false );
+    if( m_showSheetName )
+    {
+        wxString text    = wxT( "Sheet: " ) + m_name;
+        int      textlen  = GraphicTextWidth( text, wxSize( m_sheetNameSize, m_sheetNameSize ),
+                                              false, false );
+        textLength = std::max( textLength, textlen );
+    }
 
-    text = wxT( "File: " ) + m_fileName;
-    int      textlen2 = GraphicTextWidth( text, wxSize( m_fileNameSize, m_fileNameSize ),
-                                          false, false );
+    if( m_showFileName )
+    {
+        wxString text = wxT( "File: " ) + m_fileName;
+        int      textlen = GraphicTextWidth( text, wxSize( m_fileNameSize, m_fileNameSize ),
+                                             false, false );
+        textLength = std::max( textLength, textlen );
+    }
 
     // Calculate bounding box X size:
-    textlen = std::max( textlen, textlen2 );
-    end.x = std::max( m_size.x, textlen );
+    end.x = std::max( m_size.x, textLength );
 
     // Calculate bounding box pos:
     end.y = m_size.y;
@@ -636,9 +649,7 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "File Name" ), m_fileName, BROWN ) );
 
 #if 0   // Set to 1 to display the sheet time stamp (mainly for test)
-    wxString msg;
-    msg.Printf( wxT( "%.8X" ), m_TimeStamp );
-    aList.push_back( MSG_PANEL_ITEM( _( "Time Stamp" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "UUID" ), m_Uuid.AsString(), BLUE ) );
 #endif
 }
 
@@ -904,32 +915,39 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
         name_orientation = TEXT_ANGLE_HORIZ;
     }
 
-    /* Draw texts: SheetName */
-    Text = m_name;
-    size = wxSize( m_sheetNameSize, m_sheetNameSize );
-
-    //pos  = m_pos; pos.y -= 4;
-    thickness = GetDefaultLineThickness();
-    thickness = Clamp_Text_PenSize( thickness, size, false );
-
-    aPlotter->SetColor( GetLayerColor( LAYER_SHEETNAME ) );
-
     bool italic = false;
-    aPlotter->Text( pos_sheetname, txtcolor, wxT( "Sheet: " ) + Text, name_orientation, size,
-                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
-                    thickness, italic, false );
+
+    /* Draw texts: SheetName */
+    if( m_showSheetName )
+    {
+        Text = m_name;
+        size = wxSize( m_sheetNameSize, m_sheetNameSize );
+
+        //pos  = m_pos; pos.y -= 4;
+        thickness = GetDefaultLineThickness();
+        thickness = Clamp_Text_PenSize( thickness, size, false );
+
+        aPlotter->SetColor( GetLayerColor( LAYER_SHEETNAME ) );
+
+        aPlotter->Text( pos_sheetname, txtcolor, wxT( "Sheet: " ) + Text, name_orientation, size,
+                        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
+                        thickness, false, false );
+    }
 
     /*Draw texts : FileName */
-    Text = GetFileName();
-    size = wxSize( m_fileNameSize, m_fileNameSize );
-    thickness = GetDefaultLineThickness();
-    thickness = Clamp_Text_PenSize( thickness, size, false );
+    if( m_showFileName )
+    {
+        Text = GetFileName();
+        size = wxSize( m_fileNameSize, m_fileNameSize );
+        thickness = GetDefaultLineThickness();
+        thickness = Clamp_Text_PenSize( thickness, size, false );
 
-    aPlotter->SetColor( GetLayerColor( LAYER_SHEETFILENAME ) );
+        aPlotter->SetColor( GetLayerColor( LAYER_SHEETFILENAME ) );
 
-    aPlotter->Text( pos_filename, txtcolor, wxT( "File: " ) + Text, name_orientation, size,
-                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
-                    thickness, italic, false );
+        aPlotter->Text( pos_filename, txtcolor, wxT( "File: " ) + Text, name_orientation, size,
+                        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
+                        thickness, italic, false );
+    }
 
     aPlotter->SetColor( GetLayerColor( GetLayer() ) );
 

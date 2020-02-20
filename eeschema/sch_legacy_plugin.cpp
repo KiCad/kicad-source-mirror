@@ -993,19 +993,27 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
             wxString text;
             int size;
             int fieldId = parseInt( aReader, line, &line );
+            bool visible = true;
 
             if( fieldId == 0 || fieldId == 1 )      // Sheet name and file name.
             {
                 parseQuotedString( text, aReader, line, &line );
                 size = Mils2Iu( parseInt( aReader, line, &line ) );
 
+                if( strCompare( "V", line, &line ) )
+                    visible = true;
+                else if( strCompare( "I", line, &line ) )
+                    visible = false;
+
                 if( fieldId == 0 )
                 {
+                    sheet->SetShowSheetName( visible );
                     sheet->SetName( text );
                     sheet->SetSheetNameSize( size );
                 }
                 else
                 {
+                    sheet->SetShowFileName( visible );
                     sheet->SetFileName( text );
                     sheet->SetFileNameSize( size );
                 }
@@ -1027,27 +1035,12 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
 
                 switch( parseChar( aReader, line, &line ) )
                 {
-                case 'I':
-                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );
-                    break;
-
-                case 'O':
-                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );
-                    break;
-
-                case 'B':
-                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );
-                    break;
-
-                case 'T':
-                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_TRISTATE );
-                    break;
-
-                case 'U':
-                    sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
-                    break;
-                default:
-                    SCH_PARSE_ERROR( "invalid sheet pin type", aReader, line );
+                case 'I': sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );       break;
+                case 'O': sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );      break;
+                case 'B': sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );        break;
+                case 'T': sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_TRISTATE );    break;
+                case 'U': sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED ); break;
+                default:  SCH_PARSE_ERROR( "invalid sheet pin type", aReader, line );
                 }
 
                 switch( parseChar( aReader, line, &line ) )
@@ -2171,14 +2164,16 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
     m_out->Print( 0, "U %s\n", TO_UTF8( aSheet->m_Uuid.AsString() ) );
 
     if( !aSheet->GetName().IsEmpty() )
-        m_out->Print( 0, "F0 %s %d\n",
+        m_out->Print( 0, "F0 %s %d %c\n",
                       EscapedUTF8( aSheet->GetName() ).c_str(),
-                      Iu2Mils( aSheet->GetSheetNameSize() ) );
+                      Iu2Mils( aSheet->GetSheetNameSize() ),
+                      aSheet->GetShowSheetName() ? 'V' : 'I' );
 
     if( !aSheet->GetFileName().IsEmpty() )
-        m_out->Print( 0, "F1 %s %d\n",
+        m_out->Print( 0, "F1 %s %d %c\n",
                       EscapedUTF8( aSheet->GetFileName() ).c_str(),
-                      Iu2Mils( aSheet->GetFileNameSize() ) );
+                      Iu2Mils( aSheet->GetFileNameSize() ),
+                      aSheet->GetShowFileName() ? 'V' : 'I' );
 
     for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
     {

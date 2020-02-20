@@ -727,12 +727,6 @@ private:
     void UpdateTitle();
 
     /**
-     * Perform all cleanup and normalization steps so that the whole schematic
-     * is in a good state.  This should only be called when loading a file.
-     */
-    void NormalizeSchematicOnFirstLoad( bool recalculateConnections );
-
-    /**
      * Verify that \a aSheet will not cause a recursion error in \a aHierarchy.
      *
      * @param aSheet is the #SCH_SHEET object to test.

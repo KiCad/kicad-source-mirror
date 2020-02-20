@@ -600,9 +600,12 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
         // and can be not always undoable.
         // So prepare messages for user notifications:
         replaceMsg.Printf( _( "Change \"%s\" link from \"%s\" to \"%s\"?" ),
-                dlg.GetSheetName(), aSheet->GetFileName(), fileName.GetFullName() );
+                           dlg.GetSheetName(),
+                           aSheet->GetFileName(),
+                           fileName.GetFullName() );
         newMsg.Printf( _( "Create new file \"%s\" with contents of \"%s\"?" ),
-                fileName.GetFullName(), aSheet->GetFileName() );
+                       fileName.GetFullName(),
+                       aSheet->GetFileName() );
         noUndoMsg = _( "This action cannot be undone." );
 
         // We are always using here a case insensitive comparison
@@ -741,9 +744,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
         tmpFn.Replace( "\\", "/" );
 
     aSheet->SetFileName( tmpFn );
-    aSheet->SetFileNameSize( dlg.GetFileNameTextSize() );
     aSheet->SetName( dlg.GetSheetName() );
-    aSheet->SetSheetNameSize( dlg.GetSheetNameTextSize() );
 
     if( aSheet->GetName().IsEmpty() )
         aSheet->SetName( wxString::Format( wxT( "Sheet%s" ), aSheet->m_Uuid.AsString() ) );

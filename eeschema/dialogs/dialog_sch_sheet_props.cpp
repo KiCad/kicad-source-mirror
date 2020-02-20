@@ -50,9 +50,13 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* parent, SCH_SHEE
     m_tabOrder = {
         m_textFileName,
         m_browseButton,
-        m_textSheetName,
+        m_filenameVisible,
         m_filenameSizeCtrl,
+
+        m_textSheetName,
         m_sheetnameSizeCtrl,
+        m_sheetnameVisible,
+
         m_sdbSizer1OK,
         m_sdbSizer1Cancel
     };
@@ -84,13 +88,13 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataToWindow()
     fname.Replace( wxT("/"), wxT("\\") );
 #endif
     m_textFileName->SetValue( fname );
+    m_filenameVisible->SetValue( m_sheet->GetShowFileName() );
 
     m_textSheetName->SetValue( m_sheet->GetName() );
+    m_sheetnameVisible->SetValue( m_sheet->GetShowSheetName() );
 
     m_filenameTextSize.SetValue( m_sheet->GetFileNameSize() );
     m_sheetnameTextSize.SetValue( m_sheet->GetSheetNameSize() );
-
-    m_textCtrlTimeStamp->SetValue( m_sheet->m_Uuid.AsString() );
 
     return true;
 }
@@ -117,6 +121,11 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
                                               GetSheetName() ) );
         return false;
     }
+
+    m_sheet->SetShowFileName( m_filenameVisible->GetValue() );
+    m_sheet->SetFileNameSize( m_filenameTextSize.GetValue() );
+    m_sheet->SetShowSheetName( m_sheetnameVisible->GetValue() );
+    m_sheet->SetSheetNameSize( m_sheetnameTextSize.GetValue() );
 
     return true;
 }

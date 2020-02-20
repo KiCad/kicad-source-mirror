@@ -52,8 +52,6 @@ public:
 
     const wxString GetFileName();
     wxString GetSheetName() { return m_textSheetName->GetValue(); }
-    int GetFileNameTextSize() { return m_filenameTextSize.GetValue(); }
-    int GetSheetNameTextSize() { return m_sheetnameTextSize.GetValue(); }
 };
 
 #endif // __dialog_sch_sheet_props__

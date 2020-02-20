@@ -1609,28 +1609,36 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
             }
         }
 
-        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETNAME, drawingShadows ) );
+        if( aSheet->GetShowSheetName() )
+        {
+            wxString text = wxT( "Sheet: " ) + aSheet->GetName();
 
-        auto text = wxT( "Sheet: " ) + aSheet->GetName();
+            m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETNAME, drawingShadows ) );
+            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
 
-        m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
-        m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            int txtSize = aSheet->GetSheetNameSize();
+            m_gal->SetGlyphSize( VECTOR2D( txtSize, txtSize ) );
+            m_gal->SetFontBold( false );
+            m_gal->SetFontItalic( false );
 
-        auto txtSize = aSheet->GetSheetNameSize();
+            strokeText( text, pos_sheetname, nameAngle );
+        }
 
-        m_gal->SetGlyphSize( VECTOR2D( txtSize, txtSize ) );
-        m_gal->SetFontBold( false );
-        m_gal->SetFontItalic( false );
+        if( aSheet->GetShowFileName() )
+        {
+            wxString text = wxT( "File: " ) + aSheet->GetFileName();
 
-        strokeText( text, pos_sheetname, nameAngle );
+            m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETFILENAME, drawingShadows ) );
+            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
 
-        txtSize = aSheet->GetFileNameSize();
-        m_gal->SetGlyphSize( VECTOR2D( txtSize, txtSize ) );
-        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETFILENAME, drawingShadows ) );
-        m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
+            int txtSize = aSheet->GetFileNameSize();
+            m_gal->SetGlyphSize( VECTOR2D( txtSize, txtSize ) );
+            m_gal->SetFontBold( false );
+            m_gal->SetFontItalic( false );
 
-        text = wxT( "File: " ) + aSheet->GetFileName();
-        strokeText( text, pos_filename, nameAngle );
+            strokeText( text, pos_filename, nameAngle );
+        }
     }
 }
 

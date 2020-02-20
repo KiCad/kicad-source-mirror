@@ -219,22 +219,17 @@ class SCH_SHEET : public SCH_ITEM
     /// The file name is also in the #SCH_SCREEN object associated with the sheet.  It is
     /// also needed here for loading after reading the sheet description from file.
     wxString m_fileName;
+    bool     m_showFileName;        // Indicates filename should be drawn on schematic.
+    int      m_fileNameSize;        // The height of the text used to draw the file name.
 
     /// This is equivalent to the reference designator for components and is stored in F0
     /// sheet pin in the schematic file.
     wxString m_name;
+    bool     m_showSheetName;        // Indicates sheet name should be drawn on schematic.
+    int      m_sheetNameSize;       // The height of the text used to draw the sheet name.
 
-    /// The height of the text used to draw the sheet name.
-    int m_sheetNameSize;
-
-    /// The height of the text used to draw the file name.
-    int m_fileNameSize;
-
-    /// The position of the sheet.
-    wxPoint m_pos;
-
-    /// The size of the sheet.
-    wxSize m_size;
+    wxPoint  m_pos;                 // The position of the sheet.
+    wxSize   m_size;                // The size of the sheet.
 
 public:
     SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -271,8 +266,14 @@ public:
     wxString GetName() const { return m_name; }
     void SetName( const wxString& aName ) { m_name = aName; }
 
+    bool GetShowSheetName() const { return m_showSheetName; }
+    void SetShowSheetName( bool show ) { m_showSheetName = show; }
+
     int GetSheetNameSize() const { return m_sheetNameSize; }
     void SetSheetNameSize( int aSize ) { m_sheetNameSize = aSize; }
+
+    bool GetShowFileName() const { return m_showFileName; }
+    void SetShowFileName( bool show ) { m_showFileName = show; }
 
     int GetFileNameSize() const { return m_fileNameSize; }
     void SetFileNameSize( int aSize ) { m_fileNameSize = aSize; }
