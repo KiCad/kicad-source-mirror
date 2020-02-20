@@ -22,7 +22,16 @@
 #define _PARAMETERS_H
 
 #include <string>
+
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <boost/ptr_container/ptr_vector.hpp>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
+
 #include <utility>
 #include <math/util.h>
 

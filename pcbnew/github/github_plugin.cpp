@@ -73,8 +73,14 @@ Vary: Accept-Encoding
 #include <kicad_curl/kicad_curl_easy.h>     // Include before any wx file
 #include <sstream>
 
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"  // For boost...
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <boost/ptr_container/ptr_map.hpp>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #include <set>
 

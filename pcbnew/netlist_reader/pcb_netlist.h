@@ -26,8 +26,14 @@
 #ifndef PCB_NETLIST_H
 #define PCB_NETLIST_H
 
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"  // For boost...
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <boost/ptr_container/ptr_vector.hpp>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #include <wx/arrstr.h>
 

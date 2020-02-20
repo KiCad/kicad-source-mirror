@@ -34,8 +34,14 @@
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
 
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"  // For boost...
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <boost/ptr_container/ptr_vector.hpp>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #include <gal/color4d.h>
 #include <limits>

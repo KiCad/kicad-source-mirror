@@ -30,8 +30,14 @@
 #define FOOTPRINT_INFO_H_
 
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <boost/ptr_container/ptr_vector.hpp>
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #include <import_export.h>
 #include <ki_exception.h>
