@@ -92,7 +92,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     CLR( "schematic.sheet_name",        LAYER_SHEETNAME,            COLOR4D( CYAN ) );
     CLR( "schematic.value",             LAYER_VALUEPART,            COLOR4D( CYAN ) );
     CLR( "schematic.wire",              LAYER_WIRE,                 COLOR4D( GREEN ) );
-    CLR( "schematic.worksheet",         LAYER_SCHEMATIC_WORKSHEET,  COLOR4D( BLACK ) );
+    CLR( "schematic.worksheet",         LAYER_SCHEMATIC_WORKSHEET,  COLOR4D( RED ) );
 
     CLR( "gerbview.axes",               LAYER_GERBVIEW_AXES,        COLOR4D( BLUE ) );
     CLR( "gerbview.background",         LAYER_GERBVIEW_BACKGROUND,  COLOR4D( BLACK ) );
