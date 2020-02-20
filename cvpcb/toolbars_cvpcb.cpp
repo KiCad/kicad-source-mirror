@@ -61,10 +61,17 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
 
     // Add tools for footprint names filtering:
     KiScaledSeparator( m_mainToolBar, this );
+    
+    // wxGTK with GTK3 has a serious issue with bold texts: strings are incorrectly sized
+    // and truncated after the first space.
+    // so use SetLabelMarkup is a trick to fix this issue.
     m_mainToolBar->AddSpacer( 15 );
-    wxStaticText* text = new wxStaticText( m_mainToolBar, wxID_ANY,
-                                           _( "Footprint Filters:" ) );
+    wxString msg_bold = _( "Footprint Filters:" );
+    wxStaticText* text = new wxStaticText( m_mainToolBar, wxID_ANY, msg_bold );
 	text->SetFont( m_mainToolBar->GetFont().Bold() );
+#ifdef __WXGTK3__
+    text->SetLabelMarkup( "<b>" + msg_bold + "</b>" );
+#endif
     m_mainToolBar->AddControl( text );
 
     m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyFPFilters, true );
