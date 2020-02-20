@@ -22,6 +22,8 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_simple.h>
+#include <geometry/shape_file_io.h>
+
 #include <cmath>
 
 #include "pns_arc.h"
@@ -195,7 +197,7 @@ void OPTIMIZER::removeCachedSegments( LINE* aLine, int aStartVertex, int aEndVer
 
     for( int i = aStartVertex; i < aEndVertex - 1; i++ )
     {
-        LINKED_ITEM* s = segs[i];
+        SEGMENT* s = segs[i];
         m_cacheTags.erase( s );
         m_cache.Remove( s );
     }
@@ -234,7 +236,223 @@ void OPTIMIZER::ClearCache( bool aStaticOnly  )
     }
 }
 
-Pejo
+
+bool ANGLE_CONSTRAINT_45::Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement )
+{
+    auto dir_orig0 = DIRECTION_45( aOriginLine->CSegment( aVertex1 ) );
+    auto dir_orig1 = DIRECTION_45( aOriginLine->CSegment( aVertex2 - 1) );
+
+    if( aVertex1 == 0 )
+    {
+        if( ( dir_orig0.Mask() & m_entryDirectionMask ) == 0 )
+            return false; // disallowed entry angle
+    }
+
+    if( aVertex2 == aOriginLine->SegmentCount() - 1 )
+        {
+        if( ( dir_orig1.Mask() & m_exitDirectionMask ) == 0 )
+            return false; // disallowed exit ngle
+            }
+
+   
+
+    /*auto ang_rep0 = DIRECTION_45( aReplacement.CSegment(0) ).Angle( dir_orig0 );
+    auto ang_rep1 = DIRECTION_45( aReplacement.CSegment(-1) ).Angle( dir_orig1 );*/
+
+    return true;
+}
+
+bool AREA_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement )
+{
+    auto p1 = aOriginLine->CPoint( aVertex1 );
+    auto p2 = aOriginLine->CPoint( aVertex2 );
+
+    auto p1_in = m_allowedArea.Contains( p1 );
+    auto p2_in = m_allowedArea.Contains( p2 );
+
+    return p1_in || p2_in;
+}
+
+class JOINT_CACHE
+    {
+    public:
+        JOINT_CACHE( NODE *aWorld, int aLayer, int aMaxJoints );
+
+        bool CheckInside( const VECTOR2I& aPos ) const;
+
+    private:
+
+        struct ENTRY {
+            JOINT* joint;
+            int score;
+        };
+};
+
+
+bool PRESERVE_VERTEX_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement )
+{
+    const auto& l = aOriginLine->CLine();
+    bool cv;
+
+    for( int i = aVertex1; i < aVertex2; i++ )
+    {
+        if ( l.CSegment(i).Contains( m_v ) )
+        {
+            cv = true;
+            break;
+        }
+    }
+
+    if(!cv)
+        return true;
+
+    for( int i = 0; i < aReplacement.SegmentCount(); i++ )
+    {
+        if ( aReplacement.CSegment(i).Contains( m_v ) )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+// fixme: integrate into SHAPE_LINE_CHAIN, check corner cases against current PointInside implementation
+static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
+{
+    if( !aL.IsClosed() || aL.SegmentCount() < 3 )
+        return false;
+
+    // returns 0 if false, +1 if true, -1 if pt ON polygon boundary
+    int result  = 0;
+    size_t cnt  = aL.PointCount();
+
+    auto ip = aL.CPoint( 0 );
+
+    for( size_t i = 1; i <= cnt; ++i )
+    {
+        auto ipNext = (i == cnt ? aL.CPoint( 0 ) : aL.CPoint( i ));
+
+        if( ipNext.y == aP.y )
+        {
+            if( (ipNext.x ==aP.x) || ( ip.y ==aP.y
+                                        && ( (ipNext.x >aP.x) == (ip.x <aP.x) ) ) )
+                return -1;
+        }
+
+        if( (ip.y <aP.y) != (ipNext.y <aP.y) )
+        {
+            if( ip.x >=aP.x )
+            {
+                if( ipNext.x >aP.x )
+                    result = 1 - result;
+                else
+                {
+                    double d = (double) (ip.x -aP.x) * (ipNext.y -aP.y) -
+                               (double) (ipNext.x -aP.x) * (ip.y -aP.y);
+
+                    if( !d )
+                        return -1;
+
+                    if( (d > 0) == (ipNext.y > ip.y) )
+                        result = 1 - result;
+                }
+            }
+            else
+            {
+                if( ipNext.x >aP.x )
+                {
+                    double d = (double) (ip.x -aP.x) * (ipNext.y -aP.y) -
+                               (double) (ipNext.x -aP.x) * (ip.y -aP.y);
+
+                    if( !d )
+                        return -1;
+
+                    if( (d > 0) == (ipNext.y > ip.y) )
+                        result = 1 - result;
+                }
+            }
+        }
+
+        ip = ipNext;
+    }
+
+    return result > 0;
+}
+
+
+bool KEEP_TOPOLOGY_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement )
+        {
+    SHAPE_LINE_CHAIN encPoly = aOriginLine->CLine().Slice( aVertex1, aVertex2 );
+
+    // fixme: this is a remarkably shitty implementation...
+    encPoly.Append( aReplacement.Reverse() );
+    encPoly.SetClosed( true );
+
+    auto bb = encPoly.BBox();
+    std::vector<JOINT*> joints;
+
+    int cnt = m_world->QueryJoints( bb, joints, aOriginLine->Layers().Start(), ITEM::SOLID_T );
+
+    if( !cnt )
+        return true;
+
+    for( auto j : joints )
+        {
+        if ( j->Net() == aOriginLine->Net() )
+            continue;
+
+        if ( pointInside2( encPoly, j->Pos() ) )
+            {
+            bool falsePositive = false;
+            for( int k = 0; k < encPoly.PointCount(); k++)
+                if(encPoly.CPoint(k) == j->Pos() )
+                {
+                    falsePositive = true;
+                    break;
+            }
+
+            if( !falsePositive )
+            {
+                //dbg->AddPoint(j->Pos(), 5);
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool OPTIMIZER::checkColliding( ITEM* aItem, bool aUpdateCache )
+{
+    CACHE_VISITOR v( aItem, m_world, m_collisionKindMask );
+
+    return static_cast<bool>( m_world->CheckColliding( aItem ) );
+}
+
+void OPTIMIZER::ClearConstraints()
+{
+    for (auto c : m_constraints)
+        delete c;
+    m_constraints.clear();
+}
+
+void OPTIMIZER::AddConstraint ( OPT_CONSTRAINT *aConstraint )
+    {
+    m_constraints.push_back(aConstraint);
+}
+
+bool OPTIMIZER::checkConstraints(  int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aReplacement )
+        {
+    for( auto c: m_constraints)
+        if ( !c->Check( aVertex1, aVertex2, aOriginLine, aReplacement ))
+            return false;
+
+    return true;
+}
+
+
 bool OPTIMIZER::checkColliding( LINE* aLine, const SHAPE_LINE_CHAIN& aOptPath )
 {
     LINE tmp( *aLine, aOptPath );
@@ -313,7 +531,7 @@ bool OPTIMIZER::mergeObtuse( LINE* aLine )
                     }
                 }
             }
-        }
+         }
 
         if( !found_anything )
         {
@@ -1233,7 +1451,7 @@ void Tighten( NODE *aNode, SHAPE_LINE_CHAIN& aOldLine, LINE& aNewLine, LINE& aOp
                     SHAPE_LINE_CHAIN opt = current;
                     opt.Replace(i, i+3, l_out);
                     auto optArea = std::abs(shovedArea( aOldLine, opt ));
-                    auto prevArea = std::abss(shovedArea( aOldLine, current ));
+                    auto prevArea = std::abs(shovedArea( aOldLine, current ));
 
                     if( optArea < prevArea )
                     {

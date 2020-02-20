@@ -24,6 +24,7 @@
 #include "pns_dragger.h"
 #include "pns_shove.h"
 #include "pns_router.h"
+#include "pns_debug_decorator.h"
 
 namespace PNS {
 
@@ -312,8 +313,16 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
 
         if( ok )
         {
+            VECTOR2D lockV;
             dragged.ClearSegmentLinks();
             dragged.Unmark();
+
+            lockV = dragged.CLine().NearestPoint( aP );
+
+            OPTIMIZER::Optimize( &dragged, OPTIMIZER::MERGE_SEGMENTS 
+                                         | OPTIMIZER::KEEP_TOPOLOGY
+                                         | OPTIMIZER::PRESERVE_VERTEX, m_lastNode, lockV );
+
             m_lastNode->Add( dragged );
             m_draggedItems.Clear();
             m_draggedItems.Add( dragged );
