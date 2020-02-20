@@ -423,18 +423,6 @@ void PCB_EDIT_FRAME::AddActionPluginTools()
 }
 
 
-void PCB_EDIT_FRAME::SetActionPluginSettings( const std::vector<wxString>& aPluginSettings )
-{
-    m_Settings->m_VisibleActionPlugins = aPluginSettings;
-}
-
-
-std::vector<wxString> PCB_EDIT_FRAME::GetActionPluginSettings()
-{
-    return m_Settings->m_VisibleActionPlugins;
-}
-
-
 std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
 {
     std::vector<ACTION_PLUGIN*> plugins;
@@ -444,12 +432,12 @@ std::vector<ACTION_PLUGIN*> PCB_EDIT_FRAME::GetOrderedActionPlugins()
         plugins.push_back( ACTION_PLUGINS::GetAction( i ) );
 
     // First add plugins that have entries in settings
-    for( auto visble_plugin : GetActionPluginSettings() )
+    for( const auto& pair : m_Settings->m_VisibleActionPlugins )
     {
         auto loc = std::find_if( plugins.begin(), plugins.end(),
-                [visble_plugin] ( ACTION_PLUGIN* plugin )
+                [pair] ( ACTION_PLUGIN* plugin )
                 {
-                    return plugin->GetPluginPath().ToStdString() == visble_plugin;
+                    return plugin->GetPluginPath() == pair.first;
                 } );
 
         if( loc != plugins.end() )
@@ -473,8 +461,8 @@ bool PCB_EDIT_FRAME::GetActionPluginButtonVisible( const wxString& aPluginPath, 
 
     for( const auto& entry : settings )
     {
-        if( entry == aPluginPath.ToStdString() )
-            return true;
+        if( entry.first == aPluginPath )
+            return entry.second;
     }
 
     // Plugin is not in settings, return default.

@@ -352,7 +352,33 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVe
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     m_params.emplace_back(
-            new PARAM_LIST<wxString>( "action_plugins.visible", &m_VisibleActionPlugins, {} ) );
+            new PARAM_LAMBDA<nlohmann::json>( "action_plugins", [&]() -> nlohmann::json {
+                nlohmann::json js = nlohmann::json::array();
+
+                for( const auto& pair : m_VisibleActionPlugins )
+                    js.push_back( nlohmann::json( { { pair.first.ToUTF8(), pair.second } } ) );
+
+                return js;
+            }, [&]( const nlohmann::json& aObj ) {
+                m_VisibleActionPlugins.clear();
+
+                if( !aObj.is_array() )
+                {
+                    return;
+                }
+
+                for( const auto& entry : aObj )
+                {
+                    if( entry.empty() || !entry.is_object() )
+                        continue;
+
+                    for( const auto& pair : entry.items() )
+                    {
+                        m_VisibleActionPlugins.emplace_back( std::make_pair(
+                                wxString( pair.key().c_str(), wxConvUTF8 ), pair.value() ) );
+                    }
+                }
+            }, nlohmann::json::array() ) );
 #endif
 
     addParamsForWindow( &m_FootprintViewer, "footprint_viewer" );
@@ -476,6 +502,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
             while( pluginSettingsTokenizer.HasMoreTokens() )
             {
+                nlohmann::json row;
                 wxString plugin = pluginSettingsTokenizer.GetNextToken();
                 wxStringTokenizer pluginTokenizer = wxStringTokenizer( plugin, "=" );
 
@@ -485,14 +512,14 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                     continue;
                 }
 
-                plugin = pluginTokenizer.GetNextToken();
+                std::string key( pluginTokenizer.GetNextToken().ToUTF8() );
 
-                if( pluginTokenizer.GetNextToken().Cmp( wxT( "Visible" ) ) == 0 )
-                    js.push_back( plugin.ToUTF8() );
+                js.push_back( nlohmann::json( {
+                        { key, pluginTokenizer.GetNextToken().Cmp( wxT( "Visible" ) ) == 0 } } ) );
             }
         }
 
-        ( *this )[PointerFromString( "action_plugins.visible" ) ] = js;
+        ( *this )[PointerFromString( "action_plugins" ) ] = js;
     }
 
     ret &= fromLegacy<int>(    aCfg, "VrmlExportUnit",       "export_vrml.units" );

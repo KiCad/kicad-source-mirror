@@ -144,17 +144,27 @@ public:
 
         try
         {
-            val = aSettings->Get<ValueType>( m_path );
+            if( std::is_same<ValueType, nlohmann::json>::value )
+                val = aSettings->GetJson( m_path );
+            else
+                val = aSettings->Get<ValueType>( m_path );
         }
         catch( ... )
-        {}
+        {
+        }
 
         m_setter( val );
     }
 
     void Store( JSON_SETTINGS* aSettings) const override
     {
-        aSettings->Set<ValueType>( m_path, m_getter() );
+        try
+        {
+            aSettings->Set<ValueType>( m_path, m_getter() );
+        }
+        catch( ... )
+        {
+        }
     }
 
     ValueType GetDefault() const

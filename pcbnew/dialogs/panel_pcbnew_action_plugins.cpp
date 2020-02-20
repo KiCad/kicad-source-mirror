@@ -18,7 +18,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <kiface_i.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <panel_pcbnew_action_plugins.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/grid_icon_text_helpers.h>
@@ -136,17 +138,15 @@ void PANEL_PCBNEW_ACTION_PLUGINS::OnReloadButtonClick( wxCommandEvent& event )
 
 bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataFromWindow()
 {
-    std::vector<wxString> pluginSettings;
+    auto settings = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+    wxASSERT( settings );
 
-    pluginSettings.reserve( m_grid->GetNumberRows() );
+    settings->m_VisibleActionPlugins.clear();
 
     for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
-    {
-        if( m_grid->GetCellValue( ii, COLUMN_VISIBLE ) == wxT( "1" ) )
-            pluginSettings.emplace_back( m_grid->GetCellValue( ii, COLUMN_PATH ) );
-    }
-
-    m_frame->SetActionPluginSettings( pluginSettings );
+        settings->m_VisibleActionPlugins.emplace_back( std::make_pair(
+                m_grid->GetCellValue( ii, COLUMN_PATH ),
+                m_grid->GetCellValue( ii, COLUMN_VISIBLE ) == wxT( "1" ) ) );
 
     return true;
 }

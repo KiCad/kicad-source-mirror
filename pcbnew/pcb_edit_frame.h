@@ -370,17 +370,6 @@ public:
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
 
     /**
-     * Set a set of plugins that have visible buttons on toolbar
-     * Plugins are identified by their module path
-     */
-    void SetActionPluginSettings( const std::vector<wxString>& aPluginsWithButtons );
-
-    /**
-     * Get a set of plugins that have visible buttons on toolbar
-     */
-    std::vector<wxString> GetActionPluginSettings();
-
-    /**
      * Function GetActionPluginButtonVisible
      * Returns true if button visibility action plugin setting was set to true
      * or it is unset and plugin defaults to true.
