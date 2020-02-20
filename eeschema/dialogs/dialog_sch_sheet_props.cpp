@@ -111,17 +111,6 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
         return false;
     }
 
-    // Duplicate sheet names are not valid.
-    SCH_SHEET_LIST   hierarchy( g_RootSheet );
-    const SCH_SHEET* sheet = hierarchy.FindSheetByName( GetSheetName() );
-
-    if( sheet && (sheet != m_sheet) )
-    {
-        DisplayError( this, wxString::Format( _( "A sheet named \"%s\" already exists." ),
-                                              GetSheetName() ) );
-        return false;
-    }
-
     m_sheet->SetShowFileName( m_filenameVisible->GetValue() );
     m_sheet->SetFileNameSize( m_filenameTextSize.GetValue() );
     m_sheet->SetShowSheetName( m_sheetnameVisible->GetValue() );

@@ -306,30 +306,6 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName,
 }
 
 
-int SCH_SHEET_PATH::FindSheet( const wxString& aFileName ) const
-{
-    for( unsigned i = 0; i < size(); i++ )
-    {
-        if( at( i )->GetFileName().CmpNoCase( aFileName ) == 0 )
-            return (int)i;
-    }
-
-    return SHEET_NOT_FOUND;
-}
-
-
-SCH_SHEET* SCH_SHEET_PATH::FindSheetByName( const wxString& aSheetName )
-{
-    for( unsigned i = 0; i < size(); i++ )
-    {
-        if( at( i )->GetName().CmpNoCase( aSheetName ) == 0 )
-            return at( i );
-    }
-
-    return NULL;
-}
-
-
 /********************************************************************/
 /* Class SCH_SHEET_LIST to handle the list of Sheets in a hierarchy */
 /********************************************************************/
@@ -339,22 +315,6 @@ SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
 
     if( aSheet != NULL )
         BuildSheetList( aSheet );
-}
-
-
-SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheetByPath( const wxString& aPath, bool aHumanReadable )
-{
-    wxString sheetPath;
-
-    for( unsigned i = 0; i < size(); i++ )
-    {
-        sheetPath = ( aHumanReadable ) ? at( i ).PathHumanReadable() : at( i ).Path();
-
-        if( sheetPath == aPath )
-            return &at( i );
-    }
-
-    return NULL;
 }
 
 
@@ -589,20 +549,6 @@ bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
 
     // The source sheet file can safely be added to the destination sheet file.
     return false;
-}
-
-
-SCH_SHEET* SCH_SHEET_LIST::FindSheetByName( const wxString& aSheetName )
-{
-    for( unsigned i = 0; i < size(); i++ )
-    {
-        SCH_SHEET* sheet = at( i ).FindSheetByName( aSheetName );
-
-        if( sheet )
-            return sheet;
-    }
-
-    return NULL;
 }
 
 

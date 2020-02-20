@@ -445,40 +445,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
         }
     }
 
-    // Check for duplicate sheet names in the current page.
-    wxArrayString duplicateSheetNames;
-
-    for( auto item : currentScreen->Items().OfType( SCH_SHEET_T ) )
-    {
-        auto sheet = static_cast<SCH_SHEET*>( item );
-
-        if( newSheet->GetScreen()->GetSheet( sheet->GetName() ) )
-            duplicateSheetNames.Add( sheet->GetName() );
-    }
-
-    if( !duplicateSheetNames.IsEmpty() )
-    {
-        msg.Printf( "Duplicate sheet names exist on the current page.  Do you want to "
-                    "automatically rename the duplicate sheet names?" );
-
-        if( !IsOK( this, msg ) )
-            return false;
-    }
-
-    // Rename all duplicate sheet names.
     SCH_SCREEN* newScreen = newSheet->GetScreen();
     wxCHECK_MSG( newScreen, false, "No screen defined for sheet." );
-
-    for( const auto& duplicateName : duplicateSheetNames )
-    {
-        SCH_SHEET* renamedSheet = newScreen->GetSheet( duplicateName );
-
-        wxCHECK2_MSG( renamedSheet, continue,
-                      "Sheet " + duplicateName + " not found in imported schematic." );
-
-        const_cast<UUID&>( renamedSheet->m_Uuid ) = UUID();
-        renamedSheet->SetName( wxString::Format( "Sheet%s", renamedSheet->m_Uuid.AsString() ) );
-    }
 
     // Set all sheets loaded into the correct sheet file paths.
 
@@ -747,7 +715,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
     aSheet->SetName( dlg.GetSheetName() );
 
     if( aSheet->GetName().IsEmpty() )
-        aSheet->SetName( wxString::Format( wxT( "Sheet%s" ), aSheet->m_Uuid.AsString() ) );
+        aSheet->SetName( wxT( "Untitled Sheet" ) );
 
     if( aClearAnnotationNewItems )
         *aClearAnnotationNewItems = clearAnnotation;

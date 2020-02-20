@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,9 +87,6 @@ class SCH_ITEM;
 class SCH_REFERENCE_LIST;
 
 
-#define SHEET_NOT_FOUND          -1
-
-
 /**
  * Type SCH_MULTI_UNIT_REFERENCE_MAP
  * is used to create a map of reference designators for multi-unit parts.
@@ -167,11 +164,6 @@ public:
             retv = at( aIndex );
 
         return const_cast< SCH_SHEET* >( retv );
-    }
-
-    SCH_SHEET* GetSheet( unsigned aIndex )
-    {
-        return const_cast< SCH_SHEET* >( static_cast< const SCH_SHEET_PATH& >( *this ).GetSheet( aIndex ) );
     }
 
     /**
@@ -286,28 +278,6 @@ public:
      */
     bool TestForRecursion( const wxString& aSrcFileName, const wxString& aDestFileName ) const;
 
-    int FindSheet( const wxString& aFileName ) const;
-
-    /**
-     * Function FindSheetByName
-     *
-     * searches the #SCH_SHEET_PATH for a sheet named \a aSheetName.
-     *
-     * @param aSheetName is the name of the sheet to find.
-     * @return a pointer to the sheet named \a aSheetName if found or NULL if not found.
-     */
-    SCH_SHEET* FindSheetByName( const wxString& aSheetName );
-
-    /**
-     * Function FindSheetByPageNumber
-     *
-     * searches the #SCH_SHEET_LIST for a sheet with \a aPageNumber.
-     *
-     * @param aPageNumber is the number of the sheet to find.
-     * @return a pointer to a #SCH_SHEET object page \a aPageNumber if found or NULL if not found.
-     */
-    SCH_SHEET* FindSheetByPageNumber( int aPageNumber );
-
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
     bool operator!=( const SCH_SHEET_PATH& d1 ) const { return !( *this == d1 ) ; }
@@ -328,9 +298,6 @@ namespace std
 
 typedef std::vector< SCH_SHEET_PATH >            SCH_SHEET_PATHS;
 typedef SCH_SHEET_PATHS::iterator                SCH_SHEET_PATHS_ITER;
-typedef SCH_SHEET_PATHS::const_iterator          SCH_SHEET_PATHS_CITER;
-typedef SCH_SHEET_PATHS::reverse_iterator        SCH_SHEET_PATHS_RITER;
-typedef SCH_SHEET_PATHS::const_reverse_iterator  SCH_SHEET_PATHS_CRITER;
 
 
 /**
@@ -360,18 +327,6 @@ public:
     SCH_SHEET_LIST( SCH_SHEET* aSheet = NULL );
 
     ~SCH_SHEET_LIST() {}
-
-    /**
-     * Function GetSheetByPath
-     * returns a sheet matching the path name in \a aPath.
-     *
-     * @param aPath A wxString object containing path of the sheet to get.
-     * @param aHumanReadable True uses the human readable path for comparison.
-     *                       False uses the timestamp generated path.
-     * @return The sheet that matches \a aPath or NULL if no sheet matching
-     *         \a aPath is found.
-     */
-    SCH_SHEET_PATH* GetSheetByPath( const wxString& aPath, bool aHumanReadable = true );
 
     /**
      * Function IsModified
@@ -452,16 +407,6 @@ public:
      */
     bool TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
                            const wxString& aDestFileName ) const;
-
-    /**
-     * Function FindSheetByName
-     *
-     * searches the entire #SCH_SHEET_LIST for a sheet named \a aSheetName.
-     *
-     * @param aSheetName is the name of the sheet to find.
-     * @return a pointer to the sheet named \a aSheetName if found or NULL if not found.
-     */
-    SCH_SHEET* FindSheetByName( const wxString& aSheetName );
 
     /**
      * Function FindSheetForScreen

@@ -73,8 +73,6 @@ BOOST_AUTO_TEST_CASE( Default )
 {
     BOOST_CHECK_EQUAL( m_csheet.GetPosition(), wxPoint( 0, 0 ) );
 
-    BOOST_CHECK_PREDICATE( KI_TEST::EndsInTimestamp, ( m_csheet.GetName().ToStdString() ) );
-
     // it is it's own root sheet
     BOOST_CHECK_EQUAL( m_sheet.GetRootSheet(), &m_sheet );
     BOOST_CHECK_EQUAL( m_sheet.CountSheets(), 1 );

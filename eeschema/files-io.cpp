@@ -535,6 +535,7 @@ bool SCH_EDIT_FRAME::SaveProject()
 
     CreateArchiveLibraryCacheFile();
 
+    // Save the sheet name map to the project file
     wxString      configFile = Prj().GetProjectFullName();
     wxConfigBase* config = new wxFileConfig( wxEmptyString, wxEmptyString, configFile );
     int           index = 1;

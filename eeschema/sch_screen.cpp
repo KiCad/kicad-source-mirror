@@ -696,20 +696,6 @@ LIB_PIN* SCH_SCREEN::GetPin(
 }
 
 
-SCH_SHEET* SCH_SCREEN::GetSheet( const wxString& aName )
-{
-    for( auto item : Items().OfType( SCH_SHEET_T ) )
-    {
-        auto sheet = static_cast<SCH_SHEET*>( item );
-
-        if( aName.CmpNoCase( sheet->GetName() ) == 0 )
-            return sheet;
-    }
-
-    return NULL;
-}
-
-
 SCH_SHEET_PIN* SCH_SCREEN::GetSheetLabel( const wxPoint& aPosition )
 {
     SCH_SHEET_PIN* sheetPin = nullptr;
