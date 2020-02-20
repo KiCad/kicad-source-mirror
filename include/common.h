@@ -135,7 +135,7 @@ public:
         if( size() != rhs.size() )
             return false;
 
-        for( int i = 0; i < size(); ++i )
+        for( size_t i = 0; i < size(); ++i )
         {
             if( at( i ) != rhs.at( i ) )
                 return false;
@@ -149,7 +149,7 @@ public:
         if( size() != rhs.size() )
             return size() < rhs.size();
 
-        for( int i = 0; i < size(); ++i )
+        for( size_t i = 0; i < size(); ++i )
         {
             if( at( i ) < rhs.at( i ) )
                 return true;
