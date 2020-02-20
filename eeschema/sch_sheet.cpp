@@ -79,6 +79,7 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
         m_screen->IncRefCount();
 }
 
+// JEY TODO: add read/write of m_showSheetName & m_showFilename to new eeschema file format....
 
 SCH_SHEET::~SCH_SHEET()
 {
