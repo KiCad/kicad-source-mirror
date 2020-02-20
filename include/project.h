@@ -31,6 +31,7 @@
 #include <wx/string.h>
 #include <wx/filename.h>
 #include <core/typeinfo.h>
+#include <common.h>
 
 /// A variable name whose value holds the current project directory.
 /// Currently an environment variable, eventually a project variable.
@@ -110,6 +111,11 @@ public:
      * extension or path.
      */
     VTBL_ENTRY const wxString GetProjectName() const;
+
+    /**
+     * Return the name of the sheet identified by the given UUID.
+     */
+    VTBL_ENTRY const wxString GetSheetName( const UUID& aSheetID );
 
     /**
      * Function FootprintLibTblName
@@ -330,6 +336,8 @@ private:
 
     wxFileName      m_project_name;         ///< \<fullpath\>/\<basename\>.pro
     wxString        m_pro_date_and_time;
+
+    std::map<UUID, wxString> m_sheetNames;
 
     /// @see this::SetRString(), GetRString(), and enum RSTRING_T.
     wxString        m_rstrings[RSTRING_COUNT];

@@ -275,10 +275,16 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
 
     m_BoardSideCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
 
-    wxString path;
+    wxString path = "/";
 
-    for( const UUID& pathStep : m_footprint->GetPath() )
-        path += '/' + pathStep.AsString();
+    // Exclude the last path step (it's the component)
+    for( int i = 0; i + 1 < m_footprint->GetPath().size(); ++i )
+    {
+        if( path.length() > 1 )
+            path += "/";
+
+        path += Prj().GetSheetName( m_footprint->GetPath()[i] );
+    }
 
     m_tcUniqueID->SetValue( path );
 

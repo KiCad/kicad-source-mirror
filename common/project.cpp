@@ -168,6 +168,33 @@ const wxString PROJECT::libTableName( const wxString& aLibTableName ) const
 }
 
 
+const wxString PROJECT::GetSheetName( const UUID& aSheetID )
+{
+    if( m_sheetNames.empty() )
+    {
+        std::unique_ptr<wxConfigBase> config( configCreate( SEARCH_STACK(), GROUP_SHEET_NAMES ) );
+
+        config->SetPath( GROUP_SHEET_NAMES );
+
+        int index = 1;
+        wxString entry;
+
+        while( config->Read( wxString::Format( "%d", index++ ), &entry ) )
+        {
+            wxArrayString tokens = wxSplit( entry, ':' );
+
+            if( tokens.size() == 2 )
+                m_sheetNames[ UUID( tokens[0] ) ] = tokens[1];
+        }
+    }
+
+    if( m_sheetNames.count( aSheetID ) )
+        return m_sheetNames.at( aSheetID );
+    else
+        return aSheetID.AsString();
+}
+
+
 void PROJECT::SetRString( RSTRING_T aIndex, const wxString& aString )
 {
     unsigned ndx = unsigned( aIndex );

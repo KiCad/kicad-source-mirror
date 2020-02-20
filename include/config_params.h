@@ -52,9 +52,10 @@ using KIGFX::COLOR4D;
                                                         /// (Now in fp lib tables)
 #define GROUP_SCH_LIBS      wxT( "/eeschema/libraries" )    /// library list section
 
-#define GROUP_CVP           wxT("/cvpcb")
-#define GROUP_CVP_EQU       wxT("/cvpcb/equfiles")
+#define GROUP_CVP           wxT( "/cvpcb" )
+#define GROUP_CVP_EQU       wxT( "/cvpcb/equfiles" )
 
+#define GROUP_SHEET_NAMES   wxT( "/sheetnames" )
 
 #define CONFIG_VERSION      1
 

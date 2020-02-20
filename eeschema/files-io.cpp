@@ -535,6 +535,25 @@ bool SCH_EDIT_FRAME::SaveProject()
 
     CreateArchiveLibraryCacheFile();
 
+    wxString      configFile = Prj().GetProjectFullName();
+    wxConfigBase* config = new wxFileConfig( wxEmptyString, wxEmptyString, configFile );
+    int           index = 1;
+
+    config->DeleteGroup( GROUP_SHEET_NAMES );
+    config->SetPath( GROUP_SHEET_NAMES );
+
+    SCH_SHEET_LIST  sheetList( g_RootSheet );
+
+    for( SCH_SHEET_PATH& sheetPath : sheetList )
+    {
+        SCH_SHEET* sheet = sheetPath.Last();
+        config->Write( wxString::Format( "%d", index++ ),
+                       wxString::Format( "%s:%s", sheet->m_Uuid.AsString(), sheet->GetName() ) );
+    }
+
+    config->Flush();
+    delete config;
+
     UpdateTitle();
 
     return success;
