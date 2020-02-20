@@ -993,27 +993,19 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
             wxString text;
             int size;
             int fieldId = parseInt( aReader, line, &line );
-            bool visible = true;
 
             if( fieldId == 0 || fieldId == 1 )      // Sheet name and file name.
             {
                 parseQuotedString( text, aReader, line, &line );
                 size = Mils2Iu( parseInt( aReader, line, &line ) );
 
-                if( strCompare( "V", line, &line ) )
-                    visible = true;
-                else if( strCompare( "I", line, &line ) )
-                    visible = false;
-
                 if( fieldId == 0 )
                 {
-                    sheet->SetShowSheetName( visible );
                     sheet->SetName( text );
                     sheet->SetSheetNameSize( size );
                 }
                 else
                 {
-                    sheet->SetShowFileName( visible );
                     sheet->SetFileName( text );
                     sheet->SetFileNameSize( size );
                 }
@@ -2003,11 +1995,11 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
     m_out->Print( 0, "$Comp\n" );
     m_out->Print( 0, "L %s %s\n", name2.c_str(), name1.c_str() );
 
-    // Generate unit number, conversion and UUID (including legacy timestamp if present)
-    m_out->Print( 0, "U %d %d %s\n",
+    // Generate unit number, conversion and timestamp
+    m_out->Print( 0, "U %d %d %8.8X\n",
                   aComponent->GetUnit(),
                   aComponent->GetConvert(),
-                  TO_UTF8( aComponent->m_Uuid.AsString() ) );
+                  aComponent->m_Uuid.AsLegacyTimestamp() );
 
     // Save the position
     m_out->Print( 0, "P %d %d\n",
@@ -2161,19 +2153,17 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
                   Iu2Mils( aSheet->GetSize().x ),
                   Iu2Mils( aSheet->GetSize().y ) );
 
-    m_out->Print( 0, "U %s\n", TO_UTF8( aSheet->m_Uuid.AsString() ) );
+    m_out->Print( 0, "U %8.8X\n", aSheet->m_Uuid.AsLegacyTimestamp() );
 
     if( !aSheet->GetName().IsEmpty() )
-        m_out->Print( 0, "F0 %s %d %c\n",
+        m_out->Print( 0, "F0 %s %d\n",
                       EscapedUTF8( aSheet->GetName() ).c_str(),
-                      Iu2Mils( aSheet->GetSheetNameSize() ),
-                      aSheet->GetShowSheetName() ? 'V' : 'I' );
+                      Iu2Mils( aSheet->GetSheetNameSize() ) );
 
     if( !aSheet->GetFileName().IsEmpty() )
-        m_out->Print( 0, "F1 %s %d %c\n",
+        m_out->Print( 0, "F1 %s %d\n",
                       EscapedUTF8( aSheet->GetFileName() ).c_str(),
-                      Iu2Mils( aSheet->GetFileNameSize() ),
-                      aSheet->GetShowFileName() ? 'V' : 'I' );
+                      Iu2Mils( aSheet->GetFileNameSize() ) );
 
     for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
     {

@@ -58,6 +58,18 @@ UUID::UUID() :
         m_uuid( randomGenerator() ),
         m_cached_timestamp( 0 )
 {
+#if defined(EESCHEMA)
+    // JEY TODO: use legacy timestamps until new EEschema file format is in
+    static timestamp_t oldTimeStamp;
+    timestamp_t        newTimeStamp = time( NULL );
+
+    if( newTimeStamp <= oldTimeStamp )
+        newTimeStamp = oldTimeStamp + 1;
+
+    oldTimeStamp = newTimeStamp;
+
+    *this = UUID( wxString::Format( "%8.8X", newTimeStamp ) );
+#endif
 }
 
 
