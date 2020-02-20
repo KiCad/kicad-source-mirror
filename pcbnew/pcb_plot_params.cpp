@@ -139,7 +139,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_skipNPTH_Pads              = false;
 
     // TODO(JE) Is it an issue for this to be tied to Pgm()?
-    m_colors = Pgm().GetSettingsManager().GetColorSettings();
+    m_colors = PgmOrNull() ? Pgm().GetSettingsManager().GetColorSettings() : nullptr;
 }
 
 void PCB_PLOT_PARAMS::SetGerberPrecision( int aPrecision )
