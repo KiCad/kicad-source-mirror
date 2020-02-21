@@ -309,6 +309,7 @@ set( COMMON_SRCS
     kiway_holder.cpp
     kiway_player.cpp
     languages_menu.cpp
+    launch_ext.cpp
     lib_id.cpp
     lib_table_base.cpp
     lib_tree_model.cpp

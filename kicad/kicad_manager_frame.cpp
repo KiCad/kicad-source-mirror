@@ -34,6 +34,7 @@
 #include <kiway.h>
 #include <kiway_express.h>
 #include <kiway_player.h>
+#include <launch_ext.h>
 #include <panel_hotkeys_editor.h>
 #include <settings/common_settings.h>
 #include <tool/action_toolbar.h>
@@ -434,21 +435,7 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
 void KICAD_MANAGER_FRAME::OnBrowseInFileExplorer( wxCommandEvent& event )
 {
     // open project directory in host OS's file explorer
-    wxString project_dir = Prj().GetProjectPath();
-
-#ifdef __WXMAC__
-    wxString msg;
-
-    // Quote in case there are spaces in the path.
-    msg.Printf( "open \"%s\"", project_dir );
-
-    system( msg.c_str() );
-#else
-    // Quote in case there are spaces in the path.
-    AddDelimiterString( project_dir );
-
-    wxLaunchDefaultApplication( project_dir );
-#endif
+    LaunchExternal( Prj().GetProjectPath() );
 }
 
 
