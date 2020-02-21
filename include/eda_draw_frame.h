@@ -320,6 +320,8 @@ public:
      */
     virtual void OnSize( wxSizeEvent& event );
 
+    void OnMove( wxMoveEvent& aEvent ) override;
+
     /**
      * Rebuild the GAL and redraws the screen.  Call when something went wrong.
      */

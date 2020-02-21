@@ -290,6 +290,11 @@ public:
      */
     void OnMenuOpen( wxMenuEvent& event );
 
+    virtual void OnMove( wxMoveEvent& aEvent )
+    {
+        aEvent.Skip();
+    }
+
     void SetAutoSaveInterval( int aInterval );
 
     int GetAutoSaveInterval() const { return m_autoSaveInterval; }

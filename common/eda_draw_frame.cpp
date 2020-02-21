@@ -317,6 +317,23 @@ double EDA_DRAW_FRAME::GetZoom()
 }
 
 
+void EDA_DRAW_FRAME::OnMove( wxMoveEvent& aEvent )
+{
+    // If the window is moved to a different display, the scaling factor may change
+    double oldFactor = m_galDisplayOptions.m_scaleFactor;
+    m_galDisplayOptions.UpdateScaleFactor();
+
+    if( oldFactor != m_galDisplayOptions.m_scaleFactor )
+    {
+        wxSize clientSize = GetClientSize();
+        GetCanvas()->GetGAL()->ResizeScreen( clientSize.x, clientSize.y );
+        GetCanvas()->GetView()->MarkDirty();
+    }
+
+    aEvent.Skip();
+}
+
+
 void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
 {
     COMMON_TOOLS*     commonTools = m_toolManager->GetTool<COMMON_TOOLS>();

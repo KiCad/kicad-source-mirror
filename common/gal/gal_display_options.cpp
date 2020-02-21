@@ -53,6 +53,7 @@ static const wxChar* traceGalDispOpts = wxT( "KICAD_GAL_DISPLAY_OPTIONS" );
 GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
     : gl_antialiasing_mode( OPENGL_ANTIALIASING_MODE::NONE ),
       cairo_antialiasing_mode( CAIRO_ANTIALIASING_MODE::NONE ),
+      m_dpi( nullptr, nullptr ),
       m_gridStyle( GRID_STYLE::DOTS ),
       m_gridLineWidth( 1.0 ),
       m_gridMinSpacing( 10.0 ),
@@ -89,12 +90,10 @@ void GAL_DISPLAY_OPTIONS::ReadCommonConfig( COMMON_SETTINGS& aSettings, wxWindow
     cairo_antialiasing_mode = static_cast<KIGFX::CAIRO_ANTIALIASING_MODE>(
             aSettings.m_Graphics.cairo_aa_mode );
 
-    {
-        const DPI_SCALING dpi{ &aSettings, aWindow };
-        m_scaleFactor = dpi.GetScaleFactor();
-    }
+    m_dpi = DPI_SCALING( &aSettings, aWindow );
 
-    NotifyChanged();
+    // Also calls NotifyChanged
+    UpdateScaleFactor();
 }
 
 
@@ -119,6 +118,13 @@ void GAL_DISPLAY_OPTIONS::WriteConfig( WINDOW_SETTINGS& aCfg )
     aCfg.grid.axes_enabled = m_axesEnabled;
     aCfg.cursor.fullscreen_cursor = m_fullscreenCursor;
     aCfg.cursor.always_show_cursor = m_forceDisplayCursor;
+}
+
+
+void GAL_DISPLAY_OPTIONS::UpdateScaleFactor()
+{
+    m_scaleFactor = m_dpi.GetScaleFactor();
+    NotifyChanged();
 }
 
 

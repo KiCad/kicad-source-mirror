@@ -24,6 +24,7 @@
 #ifndef GAL_DISPLAY_OPTIONS_H__
 #define GAL_DISPLAY_OPTIONS_H__
 
+#include <dpi_scaling.h>
 #include <observable.h>
 
 class COMMON_SETTINGS;
@@ -102,11 +103,15 @@ namespace KIGFX
 
         void WriteConfig( WINDOW_SETTINGS& aCfg );
 
+        void UpdateScaleFactor();
+
         void NotifyChanged();
 
         OPENGL_ANTIALIASING_MODE gl_antialiasing_mode;
 
         CAIRO_ANTIALIASING_MODE cairo_antialiasing_mode;
+
+        DPI_SCALING m_dpi;
 
         ///> The grid style to draw the grid in
         KIGFX::GRID_STYLE m_gridStyle;
