@@ -279,18 +279,34 @@ void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
         aCfg->Read( text, &m_autoSaveInterval, DEFAULT_AUTO_SAVE_INTERVAL );
     }
 
-    // Ensure the window is on a connected display, and is visible.
-    // (at least a corner of the frame must be visible on screen)
-    // Sometimes, if a window was moved on an auxiliary display, and when this
-    // display is no more available, it is not the case.
-    wxRect rect( m_FramePos, m_FrameSize );
+    // Ensure window isn't bigger than can be displayed
+    int displayIndex = wxDisplay::GetFromPoint( m_FramePos );
 
-    if( wxDisplay::GetFromPoint( rect.GetTopLeft() ) == wxNOT_FOUND &&
-        wxDisplay::GetFromPoint( rect.GetTopRight() ) == wxNOT_FOUND &&
-        wxDisplay::GetFromPoint( rect.GetBottomLeft() ) == wxNOT_FOUND &&
-        wxDisplay::GetFromPoint( rect.GetBottomRight() ) == wxNOT_FOUND )
-    {
+    if( displayIndex == wxNOT_FOUND )
+        displayIndex = 0;
+
+    wxDisplay display( displayIndex );
+    wxRect clientSize = display.GetClientArea();
+
+    // The window may have been saved on a display that is no longer present.
+    // First, check the window origin and move it if it's off the chosen display
+
+    if( m_FramePos.x >= clientSize.x + clientSize.width ||
+        m_FramePos.y >= clientSize.y + clientSize.height )
         m_FramePos = wxDefaultPosition;
+
+    // Now, fix up the size if needed
+
+    if( m_FrameSize.x + m_FramePos.x > clientSize.x + clientSize.width )
+    {
+        m_FrameSize.x = clientSize.width;
+        m_FramePos.x = 0;
+    }
+
+    if( m_FrameSize.y + m_FramePos.y > clientSize.y + clientSize.height )
+    {
+        m_FrameSize.y = clientSize.height;
+        m_FramePos.y = 0;
     }
 
     // Ensure Window title bar is visible
@@ -302,7 +318,12 @@ void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     int Ypos_min = 0;
 #endif
     if( m_FramePos.y < Ypos_min )
+    {
+        if( m_FrameSize.y + ( Ypos_min - m_FramePos.y ) > clientSize.height)
+            m_FrameSize.y = clientSize.height - Ypos_min;
+
         m_FramePos.y = Ypos_min;
+    }
 
     if( maximized )
         Maximize();
