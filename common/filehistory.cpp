@@ -65,8 +65,7 @@ void FILE_HISTORY::Save( APP_SETTINGS_BASE& aSettings )
     aSettings.m_System.file_history.clear();
 
     for( const auto& file : m_fileHistory )
-        aSettings.m_System.file_history.insert( aSettings.m_System.file_history.begin(),
-                                                file.ToStdString() );
+        aSettings.m_System.file_history.emplace_back( file.ToStdString() );
 }
 
 
