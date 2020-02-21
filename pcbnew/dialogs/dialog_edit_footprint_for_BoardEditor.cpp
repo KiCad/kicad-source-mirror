@@ -278,7 +278,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     wxString path = "/";
 
     // Exclude the last path step (it's the component)
-    for( int i = 0; i + 1 < m_footprint->GetPath().size(); ++i )
+    for( size_t i = 0; i + 1 < m_footprint->GetPath().size(); ++i )
     {
         if( path.length() > 1 )
             path += "/";
