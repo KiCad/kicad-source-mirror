@@ -2026,8 +2026,18 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
             reference_fields = wxStringTokenize( aComponent->GetPathsAndReferences()[ii],
                                                  delimiters );
 
+            // Convert Alternate Reference paths back to legacy timestamps:
+            wxArrayString pathParts = wxSplit( reference_fields[0], '/' );
+            wxString      path;
+
+            for( const wxString& pathPart : pathParts )
+            {
+                if( !pathPart.IsEmpty() )
+                    path += "/" + KIID( pathPart ).AsLegacyTimestampString();
+            }
+
             m_out->Print( 0, "AR Path=\"%s\" Ref=\"%s\"  Part=\"%s\" \n",
-                          TO_UTF8( reference_fields[0] ),
+                          TO_UTF8( path ),
                           TO_UTF8( reference_fields[1] ),
                           TO_UTF8( reference_fields[2] ) );
         }

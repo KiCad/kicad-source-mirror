@@ -125,7 +125,7 @@ wxString SCH_SHEET_PATH::Path() const
     // Start at 1 to avoid the root sheet, which does not need to be added to the path.
     // It's timestamp changes anyway.
     for( unsigned i = 1; i < size(); i++ )
-        s += at( i )->m_Uuid.AsString();
+        s += at( i )->m_Uuid.AsString() + "/";
 
     return s;
 }
