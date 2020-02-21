@@ -126,6 +126,9 @@ public:
         return m_buffer;
     }
 
+    /// Escapes a string for use as a URL
+    std::string Escape( const std::string& aUrl );
+
 private:
     /**
      * Function setOption

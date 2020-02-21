@@ -142,3 +142,14 @@ bool KICAD_CURL_EASY::SetFollowRedirects( bool aFollow )
     }
     return false;
 }
+
+
+std::string KICAD_CURL_EASY::Escape( const std::string& aUrl )
+{
+    char* escaped = curl_easy_escape( m_CURL, aUrl.c_str(), aUrl.length() );
+
+    std::string ret( escaped );
+    curl_free( escaped );
+
+    return ret;
+}
