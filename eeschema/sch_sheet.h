@@ -25,15 +25,7 @@
 #ifndef SCH_SHEEET_H
 #define SCH_SHEEET_H
 
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
 #include <boost/ptr_container/ptr_vector.hpp>
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
-
 #include <sch_text.h>
 
 

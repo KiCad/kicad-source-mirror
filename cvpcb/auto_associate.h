@@ -30,14 +30,7 @@
 // 'FT232BL'		'QFP:LQFP-32_7x7mm_Pitch0.8mm'
 //
 
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
 #include <boost/ptr_container/ptr_vector.hpp>
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
 
 class FOOTPRINT_EQUIVALENCE
 {

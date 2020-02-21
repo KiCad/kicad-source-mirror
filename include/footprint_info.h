@@ -30,21 +30,12 @@
 #define FOOTPRINT_INFO_H_
 
 
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
 #include <boost/ptr_container/ptr_vector.hpp>
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
-
 #include <import_export.h>
 #include <ki_exception.h>
 #include <kicad_string.h>
 #include <sync_queue.h>
 #include <lib_tree_item.h>
-
 #include <atomic>
 #include <functional>
 #include <memory>

@@ -70,19 +70,10 @@ X-GitHub-Request-Id: 411087C2:659E:50FD6E6:52E67F66
 Vary: Accept-Encoding
 */
 
-#include <kicad_curl/kicad_curl_easy.h>     // Include before any wx file
-#include <sstream>
-
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
 #include <boost/ptr_container/ptr_map.hpp>
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
-
 #include <set>
+
+#include <kicad_curl/kicad_curl_easy.h>     // Include before any wx file
 
 #include <wx/zipstrm.h>
 #include <wx/mstream.h>
@@ -98,7 +89,6 @@ Vary: Accept-Encoding
 #include <class_module.h>
 #include <macros.h>
 #include <fp_lib_table.h>       // ExpandSubstitutions()
-#include <github_getliblist.h>
 
 
 using namespace std;

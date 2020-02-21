@@ -31,22 +31,12 @@
 #ifndef CLASS_LIBRARY_H
 #define CLASS_LIBRARY_H
 
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
+#include <map>
 #include <boost/ptr_container/ptr_vector.hpp>
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
-
 #include <wx/filename.h>
 
 #include <sch_io_mgr.h>
-
 #include <project.h>
-
-#include <map>
 
 class LIB_PART;
 class LIB_ID;

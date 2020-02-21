@@ -26,20 +26,11 @@
 #define SPECCTRA_H_
 
 
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-
 //  see http://www.boost.org/libs/ptr_container/doc/ptr_sequence_adapter.html
 #include <boost/ptr_container/ptr_vector.hpp>
 
 //  see http://www.boost.org/libs/ptr_container/doc/ptr_set.html
 #include <boost/ptr_container/ptr_set.hpp>
-
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
 
 #include <fctsys.h>
 #include <specctra_import_export/specctra_lexer.h>
