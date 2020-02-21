@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,8 +21,8 @@
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
-#include <wx/aui/auibook.h>
 #include <wx/button.h>
+#include <wx/aui/auibook.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,19 +40,19 @@ class DIALOG_ABOUT_BASE : public wxDialog
 		wxStaticText* m_staticTextCopyright;
 		wxStaticText* m_staticTextBuildVersion;
 		wxStaticText* m_staticTextLibVersion;
-		wxAuiNotebook* m_auiNotebook;
-		wxButton* m_btShowVersionInfo;
 		wxButton* m_btCopyVersionInfo;
+		wxButton* m_btReportBug;
+		wxAuiNotebook* m_auiNotebook;
 		wxButton* m_btOk;
 
 		// Virtual event handlers, overide them in your derived class
-		virtual void onShowVersionInfo( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCopyVersionInfo( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onReportBug( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_ABOUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("About"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 750,471 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_ABOUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("About"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1000,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_ABOUT_BASE();
 
 };

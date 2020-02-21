@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Rafael Sokolowski <Rafael.Sokolowski@web.de>
- * Copyright (C) 2017-2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 
 
 #include <config.h>
+#include <kicad_curl/kicad_curl_easy.h>
 #include <string>
 
 // kicad_curl.h must be included before wx headers, to avoid
@@ -57,13 +58,39 @@ extern std::string GetCurlLibVersion();
 #include <bitmaps.h>
 #include <build_version.h>
 #include <html_messagebox.h>
+#include <wx/uri.h>
 
 #include "dialog_about.h"
 
 
-/*
- * DIALOG_ABOUT methods
- */
+/// URL to launch a new issue with pre-populated description
+wxString DIALOG_ABOUT::m_bugReportUrl =
+        "https://gitlab.com/kicad/code/kicad/issues/new?issue[description]=%s";
+
+/// Issue template to use for reporting bugs (this should not be translated)
+wxString DIALOG_ABOUT::m_bugReportTemplate =
+        "<!-- --------Before Creating a New Issue-----------\n"
+        "* Search the issue tracker to verify the issue has not already been reported.\n"
+        "* Keep report contents limited to the necessary information required to fix the issue.\n"
+        "\n"
+        "---------Add your issue details below----------- -->\n"
+        "\n"
+        "# Description\n"
+        "<!-- What is the current behavior and what is the expected behavior?  -->\n"
+        "<!-- If the issue is visual/graphical, please attach screenshots of the problem. -->\n"
+        "\n"
+        "# Steps to reproduce\n"
+        "<!-- If there are multiple steps to reproduce it or it is a visual issue, then providing a"
+        "screen recording as an attachment to this report is recommended. -->\n"
+        "<!-- If this issue is specific to a project, please attach it to this issue. -->\n"
+        "1.\n"
+        "1.\n"
+        "# KiCad Version\n"
+        "\n"
+        "```\n"
+        "%s\n"
+        "```";
+
 
 DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     : DIALOG_ABOUT_BASE( aParent ), m_info( aAppInfo )
@@ -71,6 +98,7 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     wxASSERT( aParent != nullptr );
 
     m_picInformation = KiBitmap( info_xpm );
+    m_picVersion     = KiBitmap( recent_xpm );
     m_picDevelopers  = KiBitmap( preference_xpm );
     m_picDocWriters  = KiBitmap( editor_xpm );
     m_picArtists     = KiBitmap( palette_xpm );
@@ -125,8 +153,13 @@ wxFlexGridSizer* DIALOG_ABOUT::createFlexGridSizer()
 
 void DIALOG_ABOUT::createNotebooks()
 {
-    createNotebookHtmlPage( m_auiNotebook, _( "Information" ), m_picInformation,
-                            m_info.GetDescription() );
+    createNotebookHtmlPage( m_auiNotebook, _( "About" ), m_picInformation,
+            m_info.GetDescription() );
+
+    wxString version;
+    buildVersionInfoData( version, true );
+
+    createNotebookHtmlPage( m_auiNotebook, _( "Version" ), m_picVersion, version );
 
     createNotebookPage( m_auiNotebook, _( "Developers" ) , m_picDevelopers,
                         m_info.GetDevelopers() );
@@ -614,7 +647,7 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
 #endif
 }
 
-
+#if 0
 void DIALOG_ABOUT::onShowVersionInfo( wxCommandEvent& event )
 {
     wxString msg_version;
@@ -626,6 +659,7 @@ void DIALOG_ABOUT::onShowVersionInfo( wxCommandEvent& event )
     dlg.AddHTML_Text( msg_version );
     dlg.ShowModal();
 }
+#endif
 
 
 void DIALOG_ABOUT::onCopyVersionInfo( wxCommandEvent& event )
@@ -643,4 +677,20 @@ void DIALOG_ABOUT::onCopyVersionInfo( wxCommandEvent& event )
     wxTheClipboard->SetData( new wxTextDataObject( msg_version ) );
     wxTheClipboard->Close();
     m_btCopyVersionInfo->SetLabel( _( "Copied..." ) );
+}
+
+
+void DIALOG_ABOUT::onReportBug( wxCommandEvent& event )
+{
+    wxString version;
+    buildVersionInfoData( version, false );
+
+    wxString message;
+    message.Printf( m_bugReportTemplate, version );
+
+    KICAD_CURL_EASY kcurl;
+    wxString url_string;
+    url_string.Printf( m_bugReportUrl, kcurl.Escape( message.ToStdString() ) );
+
+    wxLaunchDefaultApplication( url_string );
 }

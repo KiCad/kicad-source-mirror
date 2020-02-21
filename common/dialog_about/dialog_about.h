@@ -43,6 +43,7 @@ private:
 
     // Icons for the various tabs of wxAuiNotebook
     wxBitmap     m_picInformation;
+    wxBitmap     m_picVersion;
     wxBitmap     m_picDevelopers;
     wxBitmap     m_picDocWriters;
     wxBitmap     m_picArtists;
@@ -52,6 +53,9 @@ private:
     wxString     m_titleName;
 
     ABOUT_APP_INFO& m_info;
+
+    static wxString m_bugReportUrl;
+    static wxString m_bugReportTemplate;
 
 public:
     DIALOG_ABOUT( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aAppInfo );
@@ -65,12 +69,13 @@ private:
      * @param aFormatHtml = true to use a minimal HTML format
      * false to use a plain text
      */
-    void         buildVersionInfoData( wxString& aMsg, bool aFormatHtml );
+    void buildVersionInfoData( wxString& aMsg, bool aFormatHtml );
 
-    void         onHtmlLinkClicked( wxHtmlLinkEvent& event );
+    void onHtmlLinkClicked( wxHtmlLinkEvent& event );
 
-	virtual void onCopyVersionInfo( wxCommandEvent& event ) override;
-	virtual void onShowVersionInfo( wxCommandEvent& event ) override;
+	void onCopyVersionInfo( wxCommandEvent& event ) override;
+
+	void onReportBug( wxCommandEvent& event ) override;
 
     // Notebook pages
     wxFlexGridSizer* createFlexGridSizer();
