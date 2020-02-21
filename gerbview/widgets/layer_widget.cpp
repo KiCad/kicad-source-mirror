@@ -671,9 +671,6 @@ void LAYER_WIDGET::ClearRenderRows()
 
 void LAYER_WIDGET::SelectLayerRow( int aRow )
 {
-    // enable the layer tab at index 0
-    m_notebook->SetSelection( 0 );
-
     INDICATOR_ICON* oldIndicator = (INDICATOR_ICON*) getLayerComp( m_CurrentRow, 0 );
 
     if( oldIndicator )
@@ -684,13 +681,6 @@ void LAYER_WIDGET::SelectLayerRow( int aRow )
     if( newIndicator )
     {
         newIndicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::ON );
-
-        // Make sure the desired layer row is visible.
-        // It seems that as of 2.8.2, setting the focus does this.
-        // I don't expect the scrolling to be needed at all because
-        // the minimum window size may end up being established so that the
-        // scroll bars will not be visible.
-        getLayerComp( aRow, 1 )->SetFocus();
     }
 
     m_CurrentRow = aRow;
