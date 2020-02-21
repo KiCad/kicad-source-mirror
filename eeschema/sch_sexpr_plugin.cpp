@@ -512,8 +512,7 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::loadSheet( LINE_READER& aReader )
 {
     std::unique_ptr< SCH_SHEET > sheet( new SCH_SHEET() );
 
-    sheet->SetTimeStamp( GetNewTimeStamp() );
-
+    // Timesheet time stamps are now automatically generated.
 
     return sheet.release();
 }
