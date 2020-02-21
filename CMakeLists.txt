@@ -389,6 +389,9 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         # API with respect to the C99 standard, so make sure we force it to use its own compliant
         # snprintf
         add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
+        
+        # Allow linking for Boost for the UUID against bcrypt
+        set( EXTRA_LIBS "bcrypt" )
 
     elseif( NOT APPLE )
         # Thou shalt not link vaporware and tell us it's a valid DSO (apple ld doesn't support it)

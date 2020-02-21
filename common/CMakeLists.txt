@@ -417,6 +417,7 @@ target_link_libraries( common
     ${CURL_LIBRARIES}
     ${OPENSSL_LIBRARIES}        # empty on Apple
     ${wxWidgets_LIBRARIES}
+    ${EXTRA_LIBS}
     )
 
 target_include_directories( common PUBLIC
