@@ -58,7 +58,6 @@ extern std::string GetCurlLibVersion();
 #include <bitmaps.h>
 #include <build_version.h>
 #include <html_messagebox.h>
-#include <wx/uri.h>
 
 #include "dialog_about.h"
 

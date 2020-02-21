@@ -73,9 +73,9 @@ private:
 
     void onHtmlLinkClicked( wxHtmlLinkEvent& event );
 
-	void onCopyVersionInfo( wxCommandEvent& event ) override;
+    void onCopyVersionInfo( wxCommandEvent& event ) override;
 
-	void onReportBug( wxCommandEvent& event ) override;
+    void onReportBug( wxCommandEvent& event ) override;
 
     // Notebook pages
     wxFlexGridSizer* createFlexGridSizer();
