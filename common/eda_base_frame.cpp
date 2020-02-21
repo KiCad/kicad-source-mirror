@@ -68,6 +68,12 @@ static const wxString entrySizeX = "Size_x"; ///< Width of frame, in pixels (suf
 static const wxString entryMaximized = "Maximized";  ///< Nonzero iff frame is maximized (suffix)
 ///@}
 
+
+BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
+    EVT_MOVE( EDA_BASE_FRAME::OnMove )
+END_EVENT_TABLE()
+
+
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
         long aStyle, const wxString& aFrameName ) :

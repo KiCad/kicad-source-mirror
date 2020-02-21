@@ -647,6 +647,8 @@ public:
      */
     virtual void OnSize( wxSizeEvent& event );
 
+    void OnMove( wxMoveEvent& aEvent ) override;
+
     void OnEraseBackground( wxEraseEvent& SizeEvent );
 
     virtual void OnZoom( wxCommandEvent& event );

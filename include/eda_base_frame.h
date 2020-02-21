@@ -198,6 +198,8 @@ protected:
 
     virtual wxString help_name();
 
+    DECLARE_EVENT_TABLE()
+
 public:
     EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
@@ -212,6 +214,11 @@ public:
      *          down to this or the auto save feature will be disabled.
      */
     bool ProcessEvent( wxEvent& aEvent ) override;
+
+    virtual void OnMove( wxMoveEvent& aEvent )
+    {
+        aEvent.Skip();
+    }
 
     void SetAutoSaveInterval( int aInterval );
 

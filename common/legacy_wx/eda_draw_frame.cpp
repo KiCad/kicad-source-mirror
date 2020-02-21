@@ -687,6 +687,12 @@ void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
 }
 
 
+void EDA_DRAW_FRAME::OnMove( wxMoveEvent& aEvent )
+{
+    aEvent.Skip();
+}
+
+
 void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 {
     // Keep default cursor in toolbars

@@ -672,6 +672,23 @@ void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
 }
 
 
+void EDA_DRAW_FRAME::OnMove( wxMoveEvent& aEvent )
+{
+    // If the window is moved to a different display, the scaling factor may change
+    double oldFactor = m_galDisplayOptions.m_scaleFactor;
+    m_galDisplayOptions.UpdateScaleFactor();
+
+    if( oldFactor != m_galDisplayOptions.m_scaleFactor )
+    {
+        wxSize clientSize = GetClientSize();
+        GetGalCanvas()->GetGAL()->ResizeScreen( clientSize.x, clientSize.y );
+        GetGalCanvas()->GetView()->MarkDirty();
+    }
+
+    aEvent.Skip();
+}
+
+
 void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 {
     // Keep default cursor in toolbars
