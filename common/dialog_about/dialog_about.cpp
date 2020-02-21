@@ -647,20 +647,6 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
 #endif
 }
 
-#if 0
-void DIALOG_ABOUT::onShowVersionInfo( wxCommandEvent& event )
-{
-    wxString msg_version;
-    buildVersionInfoData( msg_version, true );
-
-    HTML_MESSAGE_BOX dlg( this, _( "Version Info" ));
-    dlg.SetDialogSizeInDU( 400, 350 );
-
-    dlg.AddHTML_Text( msg_version );
-    dlg.ShowModal();
-}
-#endif
-
 
 void DIALOG_ABOUT::onCopyVersionInfo( wxCommandEvent& event )
 {
