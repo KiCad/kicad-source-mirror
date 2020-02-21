@@ -165,7 +165,7 @@ public:
     BOARD_ITEM* Duplicate() const
     {
         EDA_ITEM* dupe = Clone();
-        const_cast<KUUID&>( dupe->m_Uuid ) = KUUID();
+        const_cast<KIID&>( dupe->m_Uuid ) = KIID();
 
         return static_cast<BOARD_ITEM*>( dupe );
     }

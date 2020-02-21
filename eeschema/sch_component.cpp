@@ -179,7 +179,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     if( aComponent.m_part )
         m_part.reset( new LIB_PART( *aComponent.m_part.get() ) );
 
-    const_cast<KUUID&>( m_Uuid ) = aComponent.m_Uuid;
+    const_cast<KIID&>( m_Uuid ) = aComponent.m_Uuid;
 
     m_transform = aComponent.m_transform;
     m_prefix = aComponent.m_prefix;

@@ -86,7 +86,7 @@ class COMPONENT
     wxString       m_value;             ///< The component value found in netlist.
 
     /// A fully specified path to the component: [ sheetUUID, sheetUUID, .., componentUUID ]
-    UUID_PATH      m_path;
+    KIID_PATH    m_path;
 
     /// The name of the component in #m_library used when it was placed on the schematic..
     wxString       m_name;
@@ -112,10 +112,10 @@ class COMPONENT
     static COMPONENT_NET    m_emptyNet;
 
 public:
-    COMPONENT( const LIB_ID&    aFPID,
-               const wxString&  aReference,
-               const wxString&  aValue,
-               const UUID_PATH& aPath )
+    COMPONENT( const LIB_ID&      aFPID,
+               const wxString&    aReference,
+               const wxString&    aValue,
+               const KIID_PATH& aPath )
     {
         m_fpid             = aFPID;
         m_reference        = aReference;
@@ -165,7 +165,7 @@ public:
 
     const LIB_ID& GetAltFPID() const { return m_altFpid; }
 
-    const UUID_PATH& GetPath() const { return m_path; }
+    const KIID_PATH& GetPath() const { return m_path; }
 
     void SetFootprintFilters( const wxArrayString& aFilterList )
     {
@@ -286,10 +286,10 @@ public:
      * Function GetComponentByPath
      * returns a #COMPONENT by \a aPath.
      *
-     * @param aPath is the UUID_PATH [ sheetUUID, .., compUUID ] of the #COMPONENT.
+     * @param aPath is the KIID_PATH [ sheetUUID, .., compUUID ] of the #COMPONENT.
      * @return a pointer to the #COMPONENT that matches \a aPath if found.  Otherwise NULL.
      */
-    COMPONENT* GetComponentByPath( const UUID_PATH& aPath );
+    COMPONENT* GetComponentByPath( const KIID_PATH& aPath );
 
     void SortByFPID();
 

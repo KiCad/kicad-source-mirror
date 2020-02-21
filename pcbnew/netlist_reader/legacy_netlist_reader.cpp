@@ -121,7 +121,7 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
                            m_lineReader->Length() );
     }
 
-    UUID_PATH path( FROM_UTF8( text ) );
+    KIID_PATH path( FROM_UTF8( text ) );
 
     // Read footprint name (second word)
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )

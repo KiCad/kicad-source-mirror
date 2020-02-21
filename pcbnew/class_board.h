@@ -827,7 +827,7 @@ public:
      * @param aPath The path ([sheetUUID, .., symbolUUID]) to search for.
      * @return MODULE* - If found, the MODULE having the given uuid, else NULL.
      */
-    MODULE* FindModuleByPath( const UUID_PATH& aPath ) const;
+    MODULE* FindModuleByPath( const KIID_PATH& aPath ) const;
 
     /**
      * Function SortedNetnamesList

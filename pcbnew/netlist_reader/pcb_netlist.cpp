@@ -88,7 +88,7 @@ void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 
         wxString path;
 
-        for( const KUUID& pathStep : m_path )
+        for( const KIID& pathStep : m_path )
             path += '/' + pathStep.AsString();
 
         aOut->Print( nl+1, "(timestamp %s)\n", aOut->Quotew( path ).c_str() );
@@ -164,7 +164,7 @@ COMPONENT* NETLIST::GetComponentByReference( const wxString& aReference )
 }
 
 
-COMPONENT* NETLIST::GetComponentByPath( const UUID_PATH& aUuidPath )
+COMPONENT* NETLIST::GetComponentByPath( const KIID_PATH& aUuidPath )
 {
     for( COMPONENT& component : m_components )
     {

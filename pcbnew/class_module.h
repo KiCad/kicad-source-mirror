@@ -225,8 +225,8 @@ public:
     const wxString& GetKeywords() const { return m_KeyWord; }
     void SetKeywords( const wxString& aKeywords ) { m_KeyWord = aKeywords; }
 
-    const UUID_PATH& GetPath() const { return m_Path; }
-    void SetPath( const UUID_PATH& aPath ) { m_Path = aPath; }
+    const KIID_PATH& GetPath() const { return m_Path; }
+    void SetPath( const KIID_PATH& aPath ) { m_Path = aPath; }
 
     int GetLocalSolderMaskMargin() const { return m_LocalSolderMaskMargin; }
     void SetLocalSolderMaskMargin( int aMargin ) { m_LocalSolderMaskMargin = aMargin; }
@@ -546,8 +546,8 @@ public:
 
     double GetArea( int aPadding = 0 ) const;
 
-    KUUID GetLink() const { return m_Link; }
-    void SetLink( const KUUID& aLink ) { m_Link = aLink; }
+    KIID GetLink() const { return m_Link; }
+    void SetLink( const KIID& aLink ) { m_Link = aLink; }
 
     int GetPlacementCost180() const { return m_CntRot180; }
     void SetPlacementCost180( int aCost )   { m_CntRot180 = aCost; }
@@ -705,10 +705,10 @@ private:
 
     wxString       m_Doc;               // File name and path for documentation file.
     wxString       m_KeyWord;           // Search keywords to find module in library.
-    UUID_PATH      m_Path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
+    KIID_PATH    m_Path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
     timestamp_t    m_LastEditTime;
     int            m_arflag;            // Use to trace ratsnest and auto routing.
-    KUUID           m_Link;              // Temporary logical link used during editing
+    KIID         m_Link;              // Temporary logical link used during editing
     int            m_CntRot90;          // Horizontal automatic placement cost ( 0..10 ).
     int            m_CntRot180;         // Vertical automatic placement cost ( 0..10 ).
 

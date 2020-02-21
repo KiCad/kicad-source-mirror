@@ -1055,7 +1055,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             if( dropAnnotations )
             {
-                const_cast<KUUID&>( component->m_Uuid ) = KUUID();
+                const_cast<KIID&>( component->m_Uuid ) = KIID();
 
                 // clear the annotation, but preserve the selected unit
                 int unit = component->GetUnit();
@@ -1069,7 +1069,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         else
         {
             // Everything else gets a new UUID
-            const_cast<KUUID&>( item->m_Uuid ) = KUUID();
+            const_cast<KIID&>( item->m_Uuid ) = KIID();
         }
 
         if( item->Type() == SCH_SHEET_T )

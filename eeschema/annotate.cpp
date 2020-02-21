@@ -33,7 +33,7 @@
 #include <class_library.h>
 
 
-void mapExistingAnnotation( std::map<KUUID, wxString>& aMap )
+void mapExistingAnnotation( std::map<KIID, wxString>& aMap )
 {
     SCH_SHEET_LIST     sheets( g_RootSheet );
     SCH_REFERENCE_LIST references;
@@ -94,7 +94,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     SCH_MULTI_UNIT_REFERENCE_MAP lockedComponents;
 
     // Map of previous annotation for building info messages
-    std::map<KUUID, wxString> previousAnnotation;
+    std::map<KIID, wxString> previousAnnotation;
 
     // Test for and replace duplicate time stamps in components and sheets.  Duplicate
     // time stamps can happen with old schematics, schematic conversions, or manual

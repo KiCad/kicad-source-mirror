@@ -62,15 +62,15 @@ class REPORTER;
  */
 typedef uint32_t timestamp_t;
 
-class KUUID
+class KIID
 {
 public:
-    KUUID();
-    KUUID( int null );
-    KUUID( const wxString& aString );
-    KUUID( timestamp_t aTimestamp );
+    KIID();
+    KIID( int null );
+    KIID( const wxString& aString );
+    KIID( timestamp_t aTimestamp );
 
-    void Clone( const KUUID& aUUID );
+    void Clone( const KIID& aUUID );
 
     size_t Hash() const;
 
@@ -80,17 +80,17 @@ public:
     wxString AsString() const;
     wxString AsLegacyTimestampString() const;
 
-    bool operator==( KUUID const& rhs) const
+    bool operator==( KIID const& rhs) const
     {
         return m_uuid == rhs.m_uuid;
     }
 
-    bool operator!=( KUUID const& rhs) const
+    bool operator!=( KIID const& rhs) const
     {
         return m_uuid != rhs.m_uuid;
     }
 
-    bool operator<( KUUID const& rhs) const
+    bool operator<( KIID const& rhs) const
     {
         return m_uuid < rhs.m_uuid;
     }
@@ -102,21 +102,21 @@ private:
 };
 
 
-extern KUUID niluuid;
+extern KIID niluuid;
 
 
-class UUID_PATH : public std::vector<KUUID>
+class KIID_PATH : public std::vector<KIID>
 {
 public:
-    UUID_PATH()
+    KIID_PATH()
     {}
 
-    UUID_PATH( const wxString& aString )
+    KIID_PATH( const wxString& aString )
     {
         for( const wxString& pathStep : wxSplit( aString, '/' ) )
         {
             if( !pathStep.empty() )
-                emplace_back( KUUID( pathStep ) );
+                emplace_back( KIID( pathStep ) );
         }
     }
 
@@ -124,13 +124,13 @@ public:
     {
         wxString path;
 
-        for( const KUUID& pathStep : *this )
+        for( const KIID& pathStep : *this )
             path += '/' + pathStep.AsString();
 
         return path;
     }
 
-    bool operator==( UUID_PATH const& rhs) const
+    bool operator==( KIID_PATH const& rhs) const
     {
         if( size() != rhs.size() )
             return false;
@@ -144,7 +144,7 @@ public:
         return true;
     }
 
-    bool operator<( UUID_PATH const& rhs) const
+    bool operator<( KIID_PATH const& rhs) const
     {
         if( size() != rhs.size() )
             return size() < rhs.size();

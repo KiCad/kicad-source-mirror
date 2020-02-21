@@ -1076,7 +1076,7 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
 }
 
 
-MODULE* BOARD::FindModuleByPath( const UUID_PATH& aPath ) const
+MODULE* BOARD::FindModuleByPath( const KIID_PATH& aPath ) const
 {
     for( MODULE* module : m_modules )
     {

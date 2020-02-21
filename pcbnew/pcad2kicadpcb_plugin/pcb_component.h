@@ -52,7 +52,7 @@ public:
     char         m_objType;
     int          m_PCadLayer;
     PCB_LAYER_ID m_KiCadLayer;
-    KUUID         m_uuid;
+    KIID       m_uuid;
     int          m_positionX;
     int          m_positionY;
     int          m_rotation;

@@ -965,7 +965,7 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetID )
 {
-    KUUID               uuid( aSheetID );
+    KIID             uuid( aSheetID );
     std::list<MODULE*> modList;
 
     // store all modules that are on that sheet
@@ -974,7 +974,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetID )
         if( module == nullptr )
             continue;
 
-        for( const KUUID& pathStep : module->GetPath() )
+        for( const KIID& pathStep : module->GetPath() )
         {
             if( pathStep == uuid )
             {

@@ -826,7 +826,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         // and connexions are kept)
         // and the source_module (old module) is deleted
         pcbframe->Exchange_Module( source_module, newmodule, commit );
-        const_cast<KUUID&>( newmodule->m_Uuid ) = module_in_edit->GetLink();
+        const_cast<KIID&>( newmodule->m_Uuid ) = module_in_edit->GetLink();
         commit.Push( wxT( "Update module" ) );
     }
     else        // This is an insert command
@@ -839,7 +839,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         pcbframe->PlaceModule( newmodule );
         newmodule->SetPosition( wxPoint( 0, 0 ) );
         viewControls->SetCrossHairCursorPosition( cursorPos, false );
-        const_cast<KUUID&>( newmodule->m_Uuid ) = KUUID();
+        const_cast<KIID&>( newmodule->m_Uuid ) = KIID();
         commit.Push( wxT( "Insert module" ) );
 
         pcbframe->Raise();

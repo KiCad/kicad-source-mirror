@@ -60,7 +60,7 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
     m_pos = aSheet.m_pos;
     m_size = aSheet.m_size;
     m_Layer = aSheet.m_Layer;
-    const_cast<KUUID&>( m_Uuid ) = aSheet.m_Uuid;
+    const_cast<KIID&>( m_Uuid ) = aSheet.m_Uuid;
     m_showSheetName = aSheet.m_showSheetName;
     m_sheetNameSize = aSheet.m_sheetNameSize;
     m_showFileName = aSheet.m_showFileName;

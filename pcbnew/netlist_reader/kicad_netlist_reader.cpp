@@ -292,14 +292,14 @@ void KICAD_NETLIST_PARSER::parseComponent()
      * A component need a reference, value, footprint name and a full time stamp
      * The full time stamp is the sheetpath time stamp + the component time stamp
      */
-    LIB_ID    fpid;
-    wxString  footprint;
-    wxString  ref;
-    wxString  value;
-    wxString  library;
-    wxString  name;
-    UUID_PATH path;
-    KUUID      uuid;
+    LIB_ID      fpid;
+    wxString    footprint;
+    wxString    ref;
+    wxString    value;
+    wxString    library;
+    wxString    name;
+    KIID_PATH path;
+    KIID      uuid;
 
     // The token comp was read, so the next data is (ref P1)
     while( (token = NextTok()) != T_RIGHT )
@@ -366,14 +366,14 @@ void KICAD_NETLIST_PARSER::parseComponent()
             }
 
             NeedSYMBOLorNUMBER();
-            path = UUID_PATH( FROM_UTF8( CurText() ) );
+            path = KIID_PATH( FROM_UTF8( CurText() ) );
             NeedRIGHT();
             NeedRIGHT();
             break;
 
         case T_tstamp:
             NeedSYMBOLorNUMBER();
-            uuid = KUUID( FROM_UTF8( CurText() ) );
+            uuid = KIID( FROM_UTF8( CurText() ) );
             NeedRIGHT();
             break;
 
