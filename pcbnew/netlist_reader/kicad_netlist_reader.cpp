@@ -299,7 +299,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     wxString  library;
     wxString  name;
     UUID_PATH path;
-    UUID      uuid;
+    KUUID      uuid;
 
     // The token comp was read, so the next data is (ref P1)
     while( (token = NextTok()) != T_RIGHT )
@@ -373,7 +373,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
 
         case T_tstamp:
             NeedSYMBOLorNUMBER();
-            uuid = UUID( FROM_UTF8( CurText() ) );
+            uuid = KUUID( FROM_UTF8( CurText() ) );
             NeedRIGHT();
             break;
 

@@ -1086,7 +1086,7 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
             // Reset to fully random UUID.  This may lose reference, but better to be
             // deterministic about it rather than to have duplicate UUIDs with random
             // side-effects.
-            const_cast<UUID&>( item->m_Uuid ) = UUID();
+            const_cast<KUUID&>( item->m_Uuid ) = KUUID();
             count++;
         }
     }

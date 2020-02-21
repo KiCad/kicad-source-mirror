@@ -77,7 +77,7 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
     SCH_ITEM* newItem = (SCH_ITEM*) Clone();
 
     if( !doClone )
-        const_cast<UUID&>( newItem->m_Uuid ) = UUID();
+        const_cast<KUUID&>( newItem->m_Uuid ) = KUUID();
 
     newItem->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
 

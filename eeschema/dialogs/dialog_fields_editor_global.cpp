@@ -184,7 +184,7 @@ protected:
 
     // Data store
     // A map of compID : fieldSet, where fieldSet is a map of fieldName : fieldValue
-    std::map< UUID, std::map<wxString, wxString> > m_dataStore;
+    std::map< KUUID, std::map<wxString, wxString> > m_dataStore;
 
 
 public:
@@ -269,7 +269,7 @@ public:
             }
             else // Other columns are either a single value or ROW_MULTI_ITEMS
             {
-                const UUID& compID = ref.GetComp()->m_Uuid;
+                const KUUID& compID = ref.GetComp()->m_Uuid;
 
                 if( !m_dataStore.count( compID ) ||
                         !m_dataStore[ compID ].count( m_fieldNames[ aCol ] ) )
@@ -418,8 +418,8 @@ public:
             matchFound = true;
         }
 
-        const UUID& lhRefID = lhRef.GetComp()->m_Uuid;
-        const UUID& rhRefID = rhRef.GetComp()->m_Uuid;
+        const KUUID& lhRefID = lhRef.GetComp()->m_Uuid;
+        const KUUID& rhRefID = rhRef.GetComp()->m_Uuid;
 
         // Now check all the other columns.  This must be done out of the dataStore
         // for the refresh button to work after editing.
@@ -647,7 +647,7 @@ public:
 
             for( unsigned compRef = 0; compRef < m_componentRefs.GetCount(); ++ compRef )
             {
-                const UUID& compId = m_componentRefs[ compRef ].GetComp()->m_Uuid;
+                const KUUID& compId = m_componentRefs[ compRef ].GetComp()->m_Uuid;
                 wxString text = m_dataStore[ compId ][ column_label ];
                 width = std::max( width, GetTextSize( text, GetView() ).x );
             }

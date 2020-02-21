@@ -62,15 +62,15 @@ class REPORTER;
  */
 typedef uint32_t timestamp_t;
 
-class UUID
+class KUUID
 {
 public:
-    UUID();
-    UUID( int null );
-    UUID( const wxString& aString );
-    UUID( timestamp_t aTimestamp );
+    KUUID();
+    KUUID( int null );
+    KUUID( const wxString& aString );
+    KUUID( timestamp_t aTimestamp );
 
-    void Clone( const UUID& aUUID );
+    void Clone( const KUUID& aUUID );
 
     size_t Hash() const;
 
@@ -80,17 +80,17 @@ public:
     wxString AsString() const;
     wxString AsLegacyTimestampString() const;
 
-    bool operator==( UUID const& rhs) const
+    bool operator==( KUUID const& rhs) const
     {
         return m_uuid == rhs.m_uuid;
     }
 
-    bool operator!=( UUID const& rhs) const
+    bool operator!=( KUUID const& rhs) const
     {
         return m_uuid != rhs.m_uuid;
     }
 
-    bool operator<( UUID const& rhs) const
+    bool operator<( KUUID const& rhs) const
     {
         return m_uuid < rhs.m_uuid;
     }
@@ -102,10 +102,10 @@ private:
 };
 
 
-extern UUID niluuid;
+extern KUUID niluuid;
 
 
-class UUID_PATH : public std::vector<UUID>
+class UUID_PATH : public std::vector<KUUID>
 {
 public:
     UUID_PATH()
@@ -116,7 +116,7 @@ public:
         for( const wxString& pathStep : wxSplit( aString, '/' ) )
         {
             if( !pathStep.empty() )
-                emplace_back( UUID( pathStep ) );
+                emplace_back( KUUID( pathStep ) );
         }
     }
 
@@ -124,7 +124,7 @@ public:
     {
         wxString path;
 
-        for( const UUID& pathStep : *this )
+        for( const KUUID& pathStep : *this )
             path += '/' + pathStep.AsString();
 
         return path;

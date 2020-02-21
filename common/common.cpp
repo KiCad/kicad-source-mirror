@@ -51,10 +51,10 @@ static boost::uuids::string_generator stringGenerator;
 static boost::uuids::nil_generator nilGenerator;
 
 // Global nil reference
-UUID niluuid( 0 );
+KUUID niluuid( 0 );
 
 
-UUID::UUID() :
+KUUID::KUUID() :
         m_uuid( randomGenerator() ),
         m_cached_timestamp( 0 )
 {
@@ -73,7 +73,7 @@ UUID::UUID() :
 }
 
 
-UUID::UUID( int null ) :
+KUUID::KUUID( int null ) :
         m_uuid( nilGenerator() ),
         m_cached_timestamp( 0 )
 {
@@ -81,7 +81,7 @@ UUID::UUID( int null ) :
 }
 
 
-UUID::UUID( const wxString& aString ) :
+KUUID::KUUID( const wxString& aString ) :
         m_uuid(),
         m_cached_timestamp( 0 )
 {
@@ -117,7 +117,7 @@ UUID::UUID( const wxString& aString ) :
 }
 
 
-UUID::UUID( timestamp_t aTimestamp )
+KUUID::KUUID( timestamp_t aTimestamp )
 {
     m_cached_timestamp = aTimestamp;
 
@@ -134,19 +134,19 @@ UUID::UUID( timestamp_t aTimestamp )
 }
 
 
-bool UUID::IsLegacyTimestamp() const
+bool KUUID::IsLegacyTimestamp() const
 {
     return !m_uuid.data[8] && !m_uuid.data[9] && !m_uuid.data[10] && !m_uuid.data[11];
 }
 
 
-timestamp_t UUID::AsLegacyTimestamp() const
+timestamp_t KUUID::AsLegacyTimestamp() const
 {
     return m_cached_timestamp;
 }
 
 
-size_t UUID::Hash() const
+size_t KUUID::Hash() const
 {
     size_t hash = 0;
 
@@ -160,20 +160,20 @@ size_t UUID::Hash() const
 }
 
 
-void UUID::Clone( const UUID& aUUID )
+void KUUID::Clone( const KUUID& aUUID )
 {
     m_uuid = aUUID.m_uuid;
     m_cached_timestamp = aUUID.m_cached_timestamp;
 }
 
 
-wxString UUID::AsString() const
+wxString KUUID::AsString() const
 {
     return boost::uuids::to_string( m_uuid );
 }
 
 
-wxString UUID::AsLegacyTimestampString() const
+wxString KUUID::AsLegacyTimestampString() const
 {
     return wxString::Format( "%8.8lX", (unsigned long) AsLegacyTimestamp() );
 }

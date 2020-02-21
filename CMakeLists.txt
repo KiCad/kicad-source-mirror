@@ -408,6 +408,8 @@ endif( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 if( MSVC )
     # Disallow implicit linking for Boost
     add_definitions( -DBOOST_ALL_NO_LIB )
+    # But allow it for the UUID so that it will link against bcrypt
+    add_definitions( -DBOOST_UUID_FORCE_AUTO_LINK )
     # Disable MSVC's deprecation warnings
     add_definitions( -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS )
     # Hide Windows's min() and max() macros

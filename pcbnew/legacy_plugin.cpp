@@ -1236,7 +1236,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
             aModule->SetPosition( wxPoint( pos_x, pos_y ) );
             aModule->SetLayer( layer_id );
             aModule->SetOrientation( orient );
-            const_cast<UUID&>( aModule->m_Uuid ) = UUID( uuid );
+            const_cast<KUUID&>( aModule->m_Uuid ) = KUUID( uuid );
             aModule->SetLastEditTime( edittime );
         }
 
@@ -1252,7 +1252,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
         else if( TESTLINE( "Sc" ) )         // timestamp
         {
             char* uuid = strtok_r( (char*) line + SZ( "Sc" ), delims, (char**) &data );
-            const_cast<UUID&>( aModule->m_Uuid ) = UUID( uuid );
+            const_cast<KUUID&>( aModule->m_Uuid ) = KUUID( uuid );
         }
 
         else if( TESTLINE( "Op" ) )         // (Op)tions for auto placement
@@ -1969,7 +1969,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     dseg->SetAngle( angle );    // m_Angle
                     break;
                 case 3:
-                    const_cast<UUID&>( dseg->m_Uuid ) = UUID( data );
+                    const_cast<KUUID&>( dseg->m_Uuid ) = KUUID( data );
                     break;
                 case 4:
                     STATUS_FLAGS state;
@@ -2152,7 +2152,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             char*   vJustify       = strtok_r( NULL, delims, (char**) &data );
 
             pcbtxt->SetMirrored( !notMirrored );
-            const_cast<UUID&>( pcbtxt->m_Uuid ) = UUID( uuid );
+            const_cast<KUUID&>( pcbtxt->m_Uuid ) = KUUID( uuid );
             pcbtxt->SetItalic( !strcmp( style, "Italic" ) );
 
             if( hJustify )
@@ -2274,7 +2274,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         case PCB_VIA_T:   newTrack = new VIA( m_board );   break;
         }
 
-        const_cast<UUID&>( newTrack->m_Uuid ) = UUID( uuid );
+        const_cast<KUUID&>( newTrack->m_Uuid ) = KUUID( uuid );
         newTrack->SetPosition( wxPoint( start_x, start_y ) );
         newTrack->SetEnd( wxPoint( end_x, end_y ) );
 
@@ -2471,7 +2471,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             if( ReadDelimitedText( buf, data, sizeof(buf) ) > (int) sizeof(buf) )
                 THROW_IO_ERROR( "ZInfo netname too long" );
 
-            const_cast<UUID&>( zc->m_Uuid ) = UUID( uuid );
+            const_cast<KUUID&>( zc->m_Uuid ) = KUUID( uuid );
             // Init the net code only, not the netname, to be sure
             // the zone net name is the name read in file.
             // (When mismatch, the user will be prompted in DRC, to fix the actual name)
@@ -2745,7 +2745,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
             char*     uuid       = strtok_r( (char*) data, delims, (char**) &data );
 
             dim->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
-            const_cast<UUID&>( dim->m_Uuid ) = UUID( uuid );
+            const_cast<KUUID&>( dim->m_Uuid ) = KUUID( uuid );
             dim->SetShape( shape );
         }
 
@@ -2914,7 +2914,7 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
                                             wxPoint( pos_x, pos_y ), size, width );
             m_board->Add( t, ADD_MODE::APPEND );
 
-            const_cast<UUID&>( t->m_Uuid ) = UUID( uuid );
+            const_cast<KUUID&>( t->m_Uuid ) = KUUID( uuid );
         }
     }
 

@@ -488,7 +488,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
         aDest->Models() = aSrc->Models();  // Linked list of 3D models.
 
     // Updating other parameters
-    const_cast<UUID&>( aDest->m_Uuid ) = aSrc->m_Uuid;
+    const_cast<KUUID&>( aDest->m_Uuid ) = aSrc->m_Uuid;
     aDest->SetPath( aSrc->GetPath() );
     aDest->CalculateBoundingBox();
 

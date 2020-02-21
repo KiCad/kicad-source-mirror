@@ -163,7 +163,7 @@ typedef unsigned STATUS_FLAGS;
 class EDA_ITEM : public KIGFX::VIEW_ITEM
 {
 public:
-    const UUID    m_Uuid;
+    const KUUID    m_Uuid;
 
 private:
 

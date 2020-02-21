@@ -546,8 +546,8 @@ public:
 
     double GetArea( int aPadding = 0 ) const;
 
-    UUID GetLink() const { return m_Link; }
-    void SetLink( const UUID& aLink ) { m_Link = aLink; }
+    KUUID GetLink() const { return m_Link; }
+    void SetLink( const KUUID& aLink ) { m_Link = aLink; }
 
     int GetPlacementCost180() const { return m_CntRot180; }
     void SetPlacementCost180( int aCost )   { m_CntRot180 = aCost; }
@@ -708,7 +708,7 @@ private:
     UUID_PATH      m_Path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
     timestamp_t    m_LastEditTime;
     int            m_arflag;            // Use to trace ratsnest and auto routing.
-    UUID           m_Link;              // Temporary logical link used during editing
+    KUUID           m_Link;              // Temporary logical link used during editing
     int            m_CntRot90;          // Horizontal automatic placement cost ( 0..10 ).
     int            m_CntRot180;         // Vertical automatic placement cost ( 0..10 ).
 

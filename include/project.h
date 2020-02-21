@@ -115,7 +115,7 @@ public:
     /**
      * Return the name of the sheet identified by the given UUID.
      */
-    VTBL_ENTRY const wxString GetSheetName( const UUID& aSheetID );
+    VTBL_ENTRY const wxString GetSheetName( const KUUID& aSheetID );
 
     /**
      * Function FootprintLibTblName
@@ -337,7 +337,7 @@ private:
     wxFileName      m_project_name;         ///< \<fullpath\>/\<basename\>.pro
     wxString        m_pro_date_and_time;
 
-    std::map<UUID, wxString> m_sheetNames;
+    std::map<KUUID, wxString> m_sheetNames;
 
     /// @see this::SetRString(), GetRString(), and enum RSTRING_T.
     wxString        m_rstrings[RSTRING_COUNT];

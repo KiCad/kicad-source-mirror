@@ -168,7 +168,7 @@ const wxString PROJECT::libTableName( const wxString& aLibTableName ) const
 }
 
 
-const wxString PROJECT::GetSheetName( const UUID& aSheetID )
+const wxString PROJECT::GetSheetName( const KUUID& aSheetID )
 {
     if( m_sheetNames.empty() )
     {
@@ -184,7 +184,7 @@ const wxString PROJECT::GetSheetName( const UUID& aSheetID )
             wxArrayString tokens = wxSplit( entry, ':' );
 
             if( tokens.size() == 2 )
-                m_sheetNames[ UUID( tokens[0] ) ] = tokens[1];
+                m_sheetNames[ KUUID( tokens[0] ) ] = tokens[1];
         }
     }
 
