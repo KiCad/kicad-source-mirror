@@ -815,10 +815,17 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     m_connPoints.clear();
 
     // Translate the items.
-    for( auto item : m_currentSheet->GetScreen()->Items() )
+    std::vector<SCH_ITEM*> allItems;
+
+    std::copy( m_currentSheet->GetScreen()->Items().begin(),
+            m_currentSheet->GetScreen()->Items().end(), std::back_inserter( allItems ) );
+
+    for( auto item : allItems )
     {
         item->SetPosition( item->GetPosition() + translation );
         item->ClearFlags();
+        m_currentSheet->GetScreen()->Update( item );
+
     }
 }
 
