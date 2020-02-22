@@ -159,7 +159,7 @@ void DIALOG_ABOUT::createNotebooks()
     wxString version;
     buildVersionInfoData( version, true );
 
-    createNotebookHtmlPage( m_auiNotebook, _( "Version" ), m_picVersion, version );
+    createNotebookHtmlPage( m_auiNotebook, _( "Version" ), m_picVersion, version, true );
 
     createNotebookPage( m_auiNotebook, _( "Developers" ) , m_picDevelopers,
                         m_info.GetDevelopers() );
@@ -396,7 +396,8 @@ void DIALOG_ABOUT::createNotebookPageByCategory(wxAuiNotebook* aParent, const wx
 
 
 void DIALOG_ABOUT::createNotebookHtmlPage( wxAuiNotebook* aParent, const wxString& aCaption,
-                                           const wxBitmap& aIcon, const wxString& html )
+                                           const wxBitmap& aIcon, const wxString& html,
+                                           bool aSelection )
 {
     wxPanel* panel = new wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                   wxTAB_TRAVERSAL );
@@ -417,9 +418,10 @@ void DIALOG_ABOUT::createNotebookHtmlPage( wxAuiNotebook* aParent, const wxStrin
     // end of HTML structure indicated by closing tags
     htmlPage.Append( wxT( "</body></html>" ) );
 
+    int flags = aSelection ? wxHW_SCROLLBAR_AUTO : ( wxHW_SCROLLBAR_AUTO | wxHW_NO_SELECTION );
+
     // the HTML page is going to be created with previously created HTML content
-    wxHtmlWindow* htmlWindow = new wxHtmlWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                                 wxHW_SCROLLBAR_AUTO|wxHW_NO_SELECTION );
+    auto htmlWindow = new wxHtmlWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, flags );
 
     // HTML font set to font properties as they are used for widgets to have an unique look
     // under different platforms with HTML

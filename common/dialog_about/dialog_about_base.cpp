@@ -58,12 +58,12 @@ DIALOG_ABOUT_BASE::DIALOG_ABOUT_BASE( wxWindow* parent, wxWindowID id, const wxS
 	m_btCopyVersionInfo = new wxButton( this, wxID_COPY, _("&Copy Version Info"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btCopyVersionInfo->SetToolTip( _("Copy KiCad version info to the clipboard") );
 
-	bSizer5->Add( m_btCopyVersionInfo, 0, wxALL, 5 );
+	bSizer5->Add( m_btCopyVersionInfo, 0, wxALL|wxEXPAND, 5 );
 
 	m_btReportBug = new wxButton( this, wxID_COPY, _("&Report Bug"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btReportBug->SetToolTip( _("Report a problem with KiCad") );
 
-	bSizer5->Add( m_btReportBug, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	bSizer5->Add( m_btReportBug, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
 
 
 	bSizer5->Add( 0, 0, 1, wxEXPAND, 5 );

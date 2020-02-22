@@ -91,7 +91,8 @@ private:
     void             createNotebookHtmlPage( wxAuiNotebook*  aParent,
                                              const wxString& aCaption,
                                              const wxBitmap& aIcon,
-                                             const wxString& aHtmlMessage );
+                                             const wxString& aHtmlMessage,
+                                             bool aSelection = false );
 
     wxStaticText* wxStaticTextMail( wxScrolledWindow* aParent, const wxString& email );
     wxStaticBitmap*  createStaticBitmap( wxScrolledWindow* aParent, wxBitmap* icon );
