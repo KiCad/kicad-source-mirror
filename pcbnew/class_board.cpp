@@ -85,7 +85,7 @@ public:
 #endif
 };
 
-DELETED_BOARD_ITEM g_DeletedItem;
+DELETED_BOARD_ITEM* g_DeletedItem = nullptr;
 
 
 /* This is an odd place for this, but CvPcb won't link if it is
@@ -735,7 +735,10 @@ BOARD_ITEM* BOARD::GetItem( void* aWeakReference )
             return drawing;
 
     // Not found; weak reference has been deleted.
-    return &g_DeletedItem;
+    if( !g_DeletedItem )
+        g_DeletedItem = new DELETED_BOARD_ITEM();
+
+    return g_DeletedItem;
 }
 
 
@@ -1042,7 +1045,7 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
     wxASSERT( m_NetInfo.GetNetCount() > 0 );
 
     if( aNetcode == NETINFO_LIST::UNCONNECTED && m_NetInfo.GetNetCount() == 0 )
-        return &NETINFO_LIST::ORPHANED_ITEM;
+        return NETINFO_LIST::OrphanedItem();
     else
         return m_NetInfo.GetNetItem( aNetcode );
 }

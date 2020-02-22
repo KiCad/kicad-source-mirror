@@ -468,7 +468,15 @@ public:
 
     ///> NETINFO_ITEM meaning that there was no net assigned for an item, as there was no
     ///> board storing net list available.
-    static NETINFO_ITEM ORPHANED_ITEM;
+    static NETINFO_ITEM* OrphanedItem()
+    {
+        static NETINFO_ITEM* g_orphanedItem;
+
+        if( !g_orphanedItem )
+            g_orphanedItem = new NETINFO_ITEM( nullptr, wxEmptyString, NETINFO_LIST::UNCONNECTED );
+
+        return g_orphanedItem;
+    }
 
 #if defined(DEBUG)
     void Show() const;

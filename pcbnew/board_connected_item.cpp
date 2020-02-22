@@ -41,7 +41,7 @@ const wxChar* const traceMask = wxT( "BOARD_CONNECTED_ITEM" );
 
 
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
-    BOARD_ITEM( aParent, idtype ), m_netinfo( &NETINFO_LIST::ORPHANED_ITEM )
+    BOARD_ITEM( aParent, idtype ), m_netinfo( NETINFO_LIST::OrphanedItem() )
 {
     m_localRatsnestVisible = true;
 }
@@ -66,7 +66,7 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
     if( ( aNetCode >= 0 ) && board )
         m_netinfo = board->FindNet( aNetCode );
     else
-        m_netinfo = &NETINFO_LIST::ORPHANED_ITEM;
+        m_netinfo = NETINFO_LIST::OrphanedItem();
 
     if( !aNoAssert )
         wxASSERT( m_netinfo );
