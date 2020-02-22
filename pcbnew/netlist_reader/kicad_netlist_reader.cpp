@@ -298,8 +298,8 @@ void KICAD_NETLIST_PARSER::parseComponent()
     wxString    value;
     wxString    library;
     wxString    name;
-    KIID_PATH path;
-    KIID      uuid;
+    KIID_PATH   path;
+    KIID        uuid;
 
     // The token comp was read, so the next data is (ref P1)
     while( (token = NextTok()) != T_RIGHT )

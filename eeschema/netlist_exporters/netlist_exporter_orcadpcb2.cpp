@@ -102,7 +102,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             field = comp->GetRef( &sheetList[i] );
 
             ret |= fprintf( f, " ( %s %s",
-                            TO_UTF8( comp->GetPath( &sheetList[i] ) ),
+                            TO_UTF8( sheetList[i].PathAsString() + comp->m_Uuid.AsString() ),
                             TO_UTF8( footprint ) );
 
             ret |= fprintf( f, "  %s", TO_UTF8( field ) );

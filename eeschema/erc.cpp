@@ -643,8 +643,8 @@ struct compare_labels
 {
     bool operator() ( const NETLIST_OBJECT* lab1, const NETLIST_OBJECT* lab2 ) const
     {
-        wxString str1 = lab1->m_SheetPath.Path() + lab1->m_Label;
-        wxString str2 = lab2->m_SheetPath.Path() + lab2->m_Label;
+        wxString str1 = lab1->m_SheetPath.PathAsString() + lab1->m_Label;
+        wxString str2 = lab2->m_SheetPath.PathAsString() + lab2->m_Label;
 
         return str1.Cmp( str2 ) < 0;
     }
@@ -662,7 +662,7 @@ struct compare_paths
 {
     bool operator() ( const NETLIST_OBJECT* lab1, const NETLIST_OBJECT* lab2 ) const
     {
-        return lab1->m_SheetPath.Path().Cmp( lab2->m_SheetPath.Path() ) < 0;
+        return lab1->m_SheetPath.Path() < lab2->m_SheetPath.Path();
     }
 };
 
@@ -756,7 +756,7 @@ void NETLIST_OBJECT_LIST::TestforSimilarLabels()
 
         for( ; it_uniq != uniqueLabelList.end(); ++it_uniq )
         {
-            if( ( *it )->m_SheetPath.Path() == ( *it_uniq )->m_SheetPath.Path() )
+            if(( *it )->m_SheetPath.Path() == ( *it_uniq )->m_SheetPath.Path() )
                 loc_labelList.insert( *it_uniq );
         }
 

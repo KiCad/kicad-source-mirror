@@ -1308,7 +1308,7 @@ void SCH_SCREENS::BuildClientSheetPathList()
         {
             if( used_screen == curr_screen )
             {
-                curr_screen->GetClientSheetPaths().Add( sheetpath.Path() );
+                curr_screen->GetClientSheetPaths().Add( sheetpath.PathAsString() );
                 break;
             }
         }

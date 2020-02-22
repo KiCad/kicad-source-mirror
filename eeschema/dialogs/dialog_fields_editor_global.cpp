@@ -648,7 +648,7 @@ public:
             for( unsigned compRef = 0; compRef < m_componentRefs.GetCount(); ++ compRef )
             {
                 const KIID& compId = m_componentRefs[ compRef ].GetComp()->m_Uuid;
-                wxString      text = m_dataStore[ compId ][ column_label ];
+                wxString    text = m_dataStore[ compId ][ column_label ];
 
                 width = std::max( width, GetTextSize( text, GetView() ).x );
             }

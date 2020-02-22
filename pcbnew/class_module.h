@@ -705,10 +705,10 @@ private:
 
     wxString       m_Doc;               // File name and path for documentation file.
     wxString       m_KeyWord;           // Search keywords to find module in library.
-    KIID_PATH    m_Path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
+    KIID_PATH      m_Path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
     timestamp_t    m_LastEditTime;
     int            m_arflag;            // Use to trace ratsnest and auto routing.
-    KIID         m_Link;              // Temporary logical link used during editing
+    KIID           m_Link;              // Temporary logical link used during editing
     int            m_CntRot90;          // Horizontal automatic placement cost ( 0..10 ).
     int            m_CntRot180;         // Vertical automatic placement cost ( 0..10 ).
 

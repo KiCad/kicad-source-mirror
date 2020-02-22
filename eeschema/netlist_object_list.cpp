@@ -312,14 +312,12 @@ static bool evalLabelsPriority( const NETLIST_OBJECT* aLabel1, const NETLIST_OBJ
     // Global labels have the highest prioriy.
     // For local labels: names are prefixed by their sheetpath
     // use name defined in the more top level hierarchical sheet
-    // (i.e. shorter timestamp path because paths are /<timestamp1>/<timestamp2>/...
-    // and timestamp = 8 letters.
     // Note: the final net name uses human sheetpath name, not timestamp sheetpath name
     // They are equivalent, but not for human readers.
     if( ! aLabel1->IsLabelGlobal() && ! aLabel2->IsLabelGlobal() )
     {
-        if( aLabel1->m_SheetPath.Path().Length() != aLabel2->m_SheetPath.Path().Length() )
-            return aLabel1->m_SheetPath.Path().Length() < aLabel2->m_SheetPath.Path().Length();
+        if( aLabel1->m_SheetPath.size() != aLabel2->m_SheetPath.size() )
+            return aLabel1->m_SheetPath.size() < aLabel2->m_SheetPath.size();
     }
 
     int priority1 = getPriority( aLabel1 );

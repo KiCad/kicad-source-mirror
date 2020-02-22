@@ -84,6 +84,14 @@ typedef std::weak_ptr<LIB_PART>   PART_REF;
 extern std::string toUTFTildaText( const wxString& txt );
 
 
+struct COMPONENT_INSTANCE_REFERENCE
+{
+    KIID_PATH m_Path;
+    wxString  m_Reference;
+    int       m_Unit;
+};
+
+
 /**
  * SCH_COMPONENT
  * describes a real schematic component
@@ -121,13 +129,9 @@ private:
 
     bool        m_isInNetlist;  ///< True if the component should appear in the netlist
 
-    /**
-     * Defines the hierarchical path and reference of the component.  This allows support
-     * for hierarchical sheets that reference the same schematic.  The format for the path
-     * is /&ltsheet time stamp&gt/&ltsheet time stamp&gt/.../&lscomponent time stamp&gt.
-     * A single / denotes the root sheet.
-     */
-    wxArrayString m_PathsAndReferences;
+    // Defines the hierarchical path and reference of the component.  This allows support
+    // for multiple references to a single sub-sheet.
+    std::vector<COMPONENT_INSTANCE_REFERENCE> m_instanceReferences;
 
     void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
 
@@ -176,7 +180,10 @@ public:
         return wxT( "SCH_COMPONENT" );
     }
 
-    const wxArrayString& GetPathsAndReferences() const { return m_PathsAndReferences; }
+    const std::vector<COMPONENT_INSTANCE_REFERENCE>& GetInstanceReferences()
+    {
+        return m_instanceReferences;
+    }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
@@ -314,8 +321,8 @@ public:
     void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
 
     /**
-     * Add aSheetPath in m_PathsAndReferences alternate references list,
-     * if this entry does not exist
+     * Add an instance to the alternate references list (m_instanceReferences), if this entry
+     * does not already exist.
      * Do nothing if already exists.
      * In component lists shared by more than one sheet path, an entry for each
      * sheet path must exist to manage references
@@ -324,7 +331,7 @@ public:
      * not the full component sheet path
      * @return false if the alternate reference was existing, true if added.
      */
-    bool AddSheetPathReferenceEntryIfMissing( const wxString& aSheetPathName );
+    bool AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPath );
 
     /**
      * Clear the HIGHLIGHTED flag of all items of the component (fields, pins ...)
@@ -492,9 +499,6 @@ public:
 
     void SwapData( SCH_ITEM* aItem ) override;
 
-    // returns a unique ID, in the form of a path.
-    wxString GetPath( const SCH_SHEET_PATH* sheet ) const;
-
     /**
      * Tests for an acceptable reference string.
      *
@@ -534,11 +538,11 @@ public:
      * @param aPath is the hierarchical path (/&ltsheet timestamp&gt/&ltcomponent
      *              timestamp&gt like /05678E50/A23EF560)
      * @param aRef is the local reference like C45, R56
-     * @param aMulti is the unit selection used for symbols with multiple units per package.
+     * @param aUnit is the unit selection used for symbols with multiple units per package.
      */
-    void AddHierarchicalReference( const wxString& aPath,
-                                   const wxString& aRef,
-                                   int             aMulti );
+    void AddHierarchicalReference( const KIID_PATH& aPath,
+                                   const wxString&  aRef,
+                                   int              aUnit );
 
     // returns the unit selection, for the given sheet path.
     int GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const;

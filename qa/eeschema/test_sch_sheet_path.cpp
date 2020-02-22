@@ -91,7 +91,7 @@ BOOST_AUTO_TEST_CASE( Empty )
     BOOST_CHECK_EQUAL( m_empty_path.Last(), nullptr );
     BOOST_CHECK_EQUAL( m_empty_path.LastScreen(), nullptr );
 
-    BOOST_CHECK_EQUAL( m_empty_path.Path(), "/" );
+    BOOST_CHECK_EQUAL( m_empty_path.PathAsString(), "/" );
     BOOST_CHECK_EQUAL( m_empty_path.PathHumanReadable(), "/" );
 }
 
@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE( NonEmpty )
 
     // don't know what the timestamps will be, but we know the format: /<8 chars>/<8 chars>/
     BOOST_CHECK_PREDICATE(
-            KI_TEST::IsTimestampStringWithLevels, ( m_linear.Path().ToStdString() )( 2 ) );
+            KI_TEST::IsTimestampStringWithLevels, ( m_linear.PathAsString().ToStdString() )( 2 ) );
 
     // Sheet0 is the root sheet and isn't in the path
     BOOST_CHECK_EQUAL( m_linear.PathHumanReadable(), "/Sheet1/Sheet2/" );

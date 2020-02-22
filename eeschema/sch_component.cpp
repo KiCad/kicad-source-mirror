@@ -183,7 +183,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
 
     m_transform = aComponent.m_transform;
     m_prefix = aComponent.m_prefix;
-    m_PathsAndReferences = aComponent.m_PathsAndReferences;
+    m_instanceReferences = aComponent.m_instanceReferences;
     m_Fields = aComponent.m_Fields;
 
     // Re-parent the fields, which before this had aComponent as parent
@@ -563,55 +563,35 @@ void SCH_COMPONENT::Print( wxDC* aDC, const wxPoint& aOffset )
 }
 
 
-void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath, const wxString& aRef,
-                                              int aMulti )
+void SCH_COMPONENT::AddHierarchicalReference( const KIID_PATH& aPath, const wxString& aRef,
+                                              int aUnit )
 {
-    wxString          h_path, h_ref;
-    wxStringTokenizer tokenizer;
-    wxString          separators( wxT( " " ) );
-
     // Search for an existing path and remove it if found (should not occur)
-    for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
+    for( unsigned ii = 0; ii < m_instanceReferences.size(); ii++ )
     {
-        tokenizer.SetString( m_PathsAndReferences[ii], separators );
-        h_path = tokenizer.GetNextToken();
-
-        if( h_path.Cmp( aPath ) == 0 )
+        if( m_instanceReferences[ii].m_Path == aPath )
         {
-            m_PathsAndReferences.RemoveAt( ii );
+            m_instanceReferences.erase( m_instanceReferences.begin() + ii );
             ii--;
         }
     }
 
-    h_ref = aPath + wxT( " " ) + aRef;
-    h_ref << wxT( " " ) << aMulti;
-    m_PathsAndReferences.Add( h_ref );
-}
-
-
-wxString SCH_COMPONENT::GetPath( const SCH_SHEET_PATH* sheet ) const
-{
-    wxCHECK_MSG( sheet != NULL, wxEmptyString,
-                 wxT( "Cannot get component path with invalid sheet object." ) );
-
-    return sheet->Path() + m_Uuid.AsString();
+    COMPONENT_INSTANCE_REFERENCE instance;
+    instance.m_Path = aPath;
+    instance.m_Reference = aRef;
+    instance.m_Unit = aUnit;
+    m_instanceReferences.push_back( instance );
 }
 
 
 const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
 {
-    wxString          path = GetPath( sheet );
-    wxString          h_path;
-    wxStringTokenizer tokenizer;
-    wxString          separators( wxT( " " ) );
+    KIID_PATH path = sheet->Path();
 
-    for( const wxString& entry : m_PathsAndReferences )
+    for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
-        tokenizer.SetString( entry, separators );
-        h_path = tokenizer.GetNextToken();
-
-        if( h_path.Cmp( path ) == 0 )
-            return tokenizer.GetNextToken();
+        if( instance.m_Path == path )
+            return instance.m_Reference;
     }
 
     // If it was not found in m_Paths array, then see if it is in m_Field[REFERENCE] -- if so,
@@ -646,30 +626,15 @@ bool SCH_COMPONENT::IsReferenceStringValid( const wxString& aReferenceString )
 
 void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 {
-    wxString          path = GetPath( sheet );
-
-    bool              notInArray = true;
-
-    wxString          h_path, h_ref;
-    wxStringTokenizer tokenizer;
-    wxString          separators( wxT( " " ) );
+    KIID_PATH path = sheet->Path();
+    bool      notInArray = true;
 
     // check to see if it is already there before inserting it
-    for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
+    for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
-        tokenizer.SetString( m_PathsAndReferences[ii], separators );
-        h_path = tokenizer.GetNextToken();
-
-        if( h_path.Cmp( path ) == 0 )
+        if( instance.m_Path == path )
         {
-            // just update the reference text, not the timestamp.
-            h_ref  = h_path + wxT( " " ) + ref;
-            h_ref += wxT( " " );
-            tokenizer.GetNextToken();               // Skip old reference
-            h_ref += tokenizer.GetNextToken();      // Add part selection
-
-            // Add the part selection
-            m_PathsAndReferences[ii] = h_ref;
+            instance.m_Reference = ref;
             notInArray = false;
         }
     }
@@ -713,21 +678,12 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 
 bool SCH_COMPONENT::IsAnnotated( const SCH_SHEET_PATH* aSheet )
 {
-    wxString          path = GetPath( aSheet );
-    wxString          h_path;
-    wxStringTokenizer tokenizer;
-    wxString          separators( wxT( " " ) );
+    KIID_PATH path = aSheet->Path();
 
-    for( const wxString& entry : m_PathsAndReferences )
+    for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
-        tokenizer.SetString( entry, separators );
-        h_path = tokenizer.GetNextToken();
-
-        if( h_path.Cmp( path ) == 0 )
-        {
-            wxString ref = tokenizer.GetNextToken();
-            return ref.Last() != '?';
-        }
+        if( instance.m_Path == path )
+            return instance.m_Reference.Last() != '?';
     }
 
     return false;
@@ -736,24 +692,12 @@ bool SCH_COMPONENT::IsAnnotated( const SCH_SHEET_PATH* aSheet )
 
 int SCH_COMPONENT::GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const
 {
-    wxString          path = GetPath( aSheet );
-    wxString          h_path, h_multi;
-    wxStringTokenizer tokenizer;
-    wxString          separators( wxT( " " ) );
+    KIID_PATH path = aSheet->Path();
 
-    for( const wxString& entry : m_PathsAndReferences )
+    for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
-        tokenizer.SetString( entry, separators );
-        h_path = tokenizer.GetNextToken();
-
-        if( h_path.Cmp( path ) == 0 )
-        {
-            tokenizer.GetNextToken();   // Skip reference
-            h_multi = tokenizer.GetNextToken();
-            long imulti = 1;
-            h_multi.ToLong( &imulti );
-            return imulti;
-        }
+        if( instance.m_Path == path )
+            return instance.m_Unit;
     }
 
     // If it was not found in m_Paths array, then use m_unit.  This will happen if we load a
@@ -764,30 +708,15 @@ int SCH_COMPONENT::GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const
 
 void SCH_COMPONENT::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelection )
 {
-    wxString          path = GetPath( aSheet );
+    KIID_PATH path = aSheet->Path();
+    bool      notInArray = true;
 
-    bool              notInArray = true;
-
-    wxString          h_path, h_ref;
-    wxStringTokenizer tokenizer;
-    wxString          separators( wxT( " " ) );
-
-    //check to see if it is already there before inserting it
-    for( wxString& entry : m_PathsAndReferences )
+    // check to see if it is already there before inserting it
+    for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
-        tokenizer.SetString( entry, separators );
-        h_path = tokenizer.GetNextToken();
-
-        if( h_path.Cmp( path ) == 0 )
+        if( instance.m_Path == path )
         {
-            //just update the unit selection.
-            h_ref  = h_path + wxT( " " );
-            h_ref += tokenizer.GetNextToken();      // Add reference
-            h_ref += wxT( " " );
-            h_ref << aUnitSelection;                // Add part selection
-
-            // Ann the part selection
-            entry = h_ref;
+            instance.m_Unit = aUnitSelection;
             notInArray = false;
         }
     }
@@ -1021,15 +950,12 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
     m_transform = component->m_transform;
     component->m_transform = tmp;
 
-    std::swap( m_PathsAndReferences, component->m_PathsAndReferences );
+    std::swap( m_instanceReferences, component->m_instanceReferences );
 }
 
 
 void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
-    wxArrayString  reference_fields;
-    static const wxChar separators[] = wxT( " " );
-
     // Build a reference with no annotation,
     // i.e. a reference ended by only one '?'
     wxString defRef = m_prefix;
@@ -1044,24 +970,20 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 
     defRef.Append( wxT( "?" ) );
 
-    wxString path;
-
     if( aSheetPath )
-        path = GetPath( aSheetPath );
-
-    for( wxString& entry : m_PathsAndReferences )
     {
-        // Break hierarchical reference in path, ref and multi selection:
-        reference_fields = wxStringTokenize( entry, separators );
+        KIID_PATH path = aSheetPath->Path();
 
-        // For all components: if aSheetPath is not NULL,
-        // remove annotation only for the given path
-        if( aSheetPath == NULL || reference_fields[0].Cmp( path ) == 0 )
+        for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
         {
-            wxString newHref = reference_fields[0];
-            newHref << wxT( " " ) << defRef << wxT( " " ) << reference_fields[2];
-            entry = newHref;
+            if( instance.m_Path == path )
+                instance.m_Reference = defRef;
         }
+    }
+    else
+    {
+        for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+            instance.m_Reference = defRef;
     }
 
     // These 2 changes do not work in complex hierarchy.
@@ -1074,29 +996,22 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 }
 
 
-bool SCH_COMPONENT::AddSheetPathReferenceEntryIfMissing( const wxString& aSheetPathName )
+bool SCH_COMPONENT::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPath )
 {
     // a empty sheet path is illegal:
-    wxCHECK( !aSheetPathName.IsEmpty(), false );
+    wxCHECK( aSheetPath.size() > 0, false );
 
     wxString reference_path;
 
-    // The full component reference path is aSheetPathName + the component time stamp itself
-    // full_AR_path is the alternate reference path to search
-    wxString full_AR_path = aSheetPathName + m_Uuid.AsString();
-
-    for( unsigned int ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
+    for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
-        // Break hierarchical reference in path, ref and multi selection:
-        reference_path = m_PathsAndReferences[ii].BeforeFirst( ' ' );
-
         // if aSheetPath is found, nothing to do:
-        if( reference_path.Cmp( full_AR_path ) == 0 )
+        if( instance.m_Path == aSheetPath )
             return false;
     }
 
-    // This entry does not exist: add it, with a (temporary?) reference (last ref used for display)
-    AddHierarchicalReference( full_AR_path, m_Fields[REFERENCE].GetText(), m_unit );
+    // This entry does not exist: add it, with its last-used reference
+    AddHierarchicalReference( aSheetPath, m_Fields[REFERENCE].GetText(), m_unit );
     return true;
 }
 
@@ -1785,7 +1700,7 @@ SCH_COMPONENT& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
         m_convert   = c->m_convert;
         m_transform = c->m_transform;
 
-        m_PathsAndReferences = c->m_PathsAndReferences;
+        m_instanceReferences = c->m_instanceReferences;
 
         m_Fields    = c->m_Fields;    // std::vector's assignment operator
 

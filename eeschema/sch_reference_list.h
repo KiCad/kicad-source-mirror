@@ -60,7 +60,7 @@ class SCH_REFERENCE
     SCH_SHEET_PATH m_SheetPath;         ///< The sheet path for this reference.
     bool           m_IsNew;             ///< True if not yet annotated.
     int            m_SheetNum;          ///< The sheet number for the reference.
-    KIID         m_Uuid;              ///< UUID of the component.
+    KIID           m_Uuid;              ///< UUID of the component.
     EDA_TEXT*      m_Value;             ///< The component value of the reference.  It is the
                                         ///< same for all instances.
     int            m_NumRef;            ///< The numeric part of the reference designator.
@@ -101,7 +101,7 @@ public:
 
     const wxString GetPath() const
     {
-        return m_RootCmp ? m_RootCmp->GetPath( &m_SheetPath ) : "";
+        return m_RootCmp ? m_SheetPath.PathAsString() + m_RootCmp->m_Uuid.AsString() : "";
     }
 
     /**
@@ -189,7 +189,9 @@ public:
      */
     bool IsSameInstance( const SCH_REFERENCE& other ) const
     {
-        return GetComp() == other.GetComp() && GetSheetPath().Path() == other.GetSheetPath().Path();
+        // JEY TODO: should this be checking unit as well?
+        return GetComp() == other.GetComp()
+                    && GetSheetPath().Path() == other.GetSheetPath().Path();
     }
 
     bool IsUnitsLocked()

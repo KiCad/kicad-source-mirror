@@ -1583,9 +1583,23 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                 SCH_PARSE_ERROR( "missing 'Path=' token", aReader, line );
 
             line += len;
-            wxString path, reference, unit;
+            wxString pathStr, reference, unit;
 
-            parseQuotedString( path, aReader, line, &line );
+            parseQuotedString( pathStr, aReader, line, &line );
+
+            // Note: AR path excludes root sheet, but includes component.  Normalize to
+            // internal format by shifting everything down one and adding the root sheet.
+            KIID_PATH path( pathStr );
+
+            if( path.size() > 0 )
+            {
+                for( size_t i = path.size() - 1; i > 0; --i )
+                    path[i] = path[i-1];
+
+                path[0] = m_rootSheet->m_Uuid;
+            }
+            else
+                path.push_back( m_rootSheet->m_Uuid );
 
             strCompare = "Ref=";
             len = strlen( strCompare );
@@ -1968,10 +1982,10 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
     static wxString delimiters( wxT( " " ) );
 
     // This is redundant with the AR entries below, but it makes the files backwards-compatible.
-    if( aComponent->GetPathsAndReferences().GetCount() > 0 )
+    if( aComponent->GetInstanceReferences().size() > 0 )
     {
-        reference_fields = wxStringTokenize( aComponent->GetPathsAndReferences()[0], delimiters );
-        name1 = toUTFTildaText( reference_fields[1] );
+        const COMPONENT_INSTANCE_REFERENCE& instance = aComponent->GetInstanceReferences()[0];
+        name1 = toUTFTildaText( instance.m_Reference );
     }
     else
     {
@@ -2011,9 +2025,9 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
      * the reference inf is already saved
      * this is useful for old Eeschema version compatibility
      */
-    if( aComponent->GetPathsAndReferences().GetCount() > 1 )
+    if( aComponent->GetInstanceReferences().size() > 1 )
     {
-        for( unsigned int ii = 0; ii <  aComponent->GetPathsAndReferences().GetCount(); ii++ )
+        for( const COMPONENT_INSTANCE_REFERENCE& instance : aComponent->GetInstanceReferences() )
         {
             /*format:
              * AR Path="/140/2" Ref="C99"   Part="1"
@@ -2023,23 +2037,16 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
              * Ref is the conventional component reference for this 'path'
              * Part is the conventional component part selection for this 'path'
              */
-            reference_fields = wxStringTokenize( aComponent->GetPathsAndReferences()[ii],
-                                                 delimiters );
+            wxString path = "/";
 
-            // Convert Alternate Reference paths back to legacy timestamps:
-            wxArrayString pathParts = wxSplit( reference_fields[0], '/' );
-            wxString      path;
+            // Skip root sheet
+            for( int i = 1; i < instance.m_Path.size(); ++i )
+                path += instance.m_Path[i].AsLegacyTimestampString() + "/";
 
-            for( const wxString& pathPart : pathParts )
-            {
-                if( !pathPart.IsEmpty() )
-                    path += "/" + KIID( pathPart ).AsLegacyTimestampString();
-            }
-
-            m_out->Print( 0, "AR Path=\"%s\" Ref=\"%s\"  Part=\"%s\" \n",
-                          TO_UTF8( path ),
-                          TO_UTF8( reference_fields[1] ),
-                          TO_UTF8( reference_fields[2] ) );
+            m_out->Print( 0, "AR Path=\"%s\" Ref=\"%s\"  Part=\"%d\" \n",
+                          TO_UTF8( path + aComponent->m_Uuid.AsLegacyTimestampString() ),
+                          TO_UTF8( instance.m_Reference ),
+                          instance.m_Unit );
         }
     }
 

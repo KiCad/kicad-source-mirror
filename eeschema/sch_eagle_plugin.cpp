@@ -1154,8 +1154,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     SCH_SHEET_PATH sheetpath;
     m_rootSheet->LocatePathOfScreen( screen, &sheetpath );
-    wxString current_sheetpath = sheetpath.Path();
-    current_sheetpath += component->m_Uuid.AsString();
+    wxString current_sheetpath = sheetpath.PathAsString() + component->m_Uuid.AsString();
 
     component->GetField( REFERENCE )->SetText( reference );
     component->AddHierarchicalReference( current_sheetpath, reference, unit );

@@ -116,7 +116,7 @@ SCH_SCREEN* SCH_SHEET_PATH::LastScreen() const
 }
 
 
-wxString SCH_SHEET_PATH::Path() const
+wxString SCH_SHEET_PATH::PathAsString() const
 {
     wxString s;
 
@@ -128,6 +128,17 @@ wxString SCH_SHEET_PATH::Path() const
         s += at( i )->m_Uuid.AsString() + "/";
 
     return s;
+}
+
+
+KIID_PATH SCH_SHEET_PATH::Path() const
+{
+    KIID_PATH path;
+
+    for( const SCH_SHEET* sheet : m_sheets )
+        path.push_back( sheet->m_Uuid );
+
+    return path;
 }
 
 

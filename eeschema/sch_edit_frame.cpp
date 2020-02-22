@@ -368,20 +368,17 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
     SCH_SCREEN* screen;
     SCH_SCREENS s_list;
 
-    /* Set the sheet count, and the sheet number (1 for root sheet)
-     */
-    int            sheet_count = g_RootSheet->CountSheets();
-    int            SheetNumber = 1;
-    wxString       current_sheetpath = g_CurrentSheet->Path();
-    SCH_SHEET_LIST sheetList( g_RootSheet );
+    // Set the sheet count, and the sheet number (1 for root sheet)
+    int              sheet_count = g_RootSheet->CountSheets();
+    int              SheetNumber = 1;
+    const KIID_PATH& current_sheetpath = g_CurrentSheet->Path();
+    SCH_SHEET_LIST   sheetList( g_RootSheet );
 
     // Examine all sheets path to find the current sheets path,
     // and count them from root to the current sheet path:
     for( const SCH_SHEET_PATH& sheet : sheetList )
     {
-        wxString sheetpath = sheet.Path();
-
-        if( sheetpath == current_sheetpath )   // Current sheet path found
+        if( sheet.Path() == current_sheetpath )   // Current sheet path found
             break;
 
         SheetNumber++;                         // Not found, increment before this current path

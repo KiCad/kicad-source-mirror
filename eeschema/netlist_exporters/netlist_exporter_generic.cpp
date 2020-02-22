@@ -270,7 +270,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
 
             xcomp->AddChild( xsheetpath = node( "sheetpath" ) );
             xsheetpath->AddAttribute( "names", sheetList[i].PathHumanReadable() );
-            xsheetpath->AddAttribute( "tstamps", sheetList[i].Path() );
+            xsheetpath->AddAttribute( "tstamps", sheetList[i].PathAsString() );
             xcomp->AddChild( node( "tstamp", comp->m_Uuid.AsString() ) );
         }
     }
@@ -314,7 +314,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
         sheetTxt.Printf( "%u", i + 1 );
         xsheet->AddAttribute( "number", sheetTxt );
         xsheet->AddAttribute( "name", sheetList[i].PathHumanReadable() );
-        xsheet->AddAttribute( "tstamps", sheetList[i].Path() );
+        xsheet->AddAttribute( "tstamps", sheetList[i].PathAsString() );
 
 
         TITLE_BLOCK tb = screen->GetTitleBlock();

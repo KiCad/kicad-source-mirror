@@ -86,7 +86,7 @@ class COMPONENT
     wxString       m_value;             ///< The component value found in netlist.
 
     /// A fully specified path to the component: [ sheetUUID, sheetUUID, .., componentUUID ]
-    KIID_PATH    m_path;
+    KIID_PATH      m_path;
 
     /// The name of the component in #m_library used when it was placed on the schematic..
     wxString       m_name;

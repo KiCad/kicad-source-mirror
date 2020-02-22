@@ -194,12 +194,18 @@ public:
     SCH_SCREEN* LastScreen() const;
 
     /**
-     * Function Path
+     * Function PathAsString
      * the path uses the time stamps which do not changes even when editing
      * sheet parameters
      * a path is something like / (root) or /34005677 or /34005677/00AE4523
      */
-    wxString Path() const;
+    wxString PathAsString() const;
+
+    /**
+     * Get the sheet path as an KIID_PATH.
+     * @return
+     */
+    KIID_PATH Path() const;
 
     /**
      * Function PathHumanReadable

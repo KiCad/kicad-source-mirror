@@ -290,9 +290,10 @@ int BACK_ANNOTATE::checkSharedSchematicErrors()
     // We will count how many times every component used in our changelist
     // Component in this case is SCH_COMPONENT which can be used by more than one symbol
     int usageCount = 1;
+
     for( auto it = m_changelist.begin(); it != m_changelist.end(); ++it )
     {
-        int compUsage = it->first.GetComp()->GetPathsAndReferences().Count();
+        int compUsage = it->first.GetComp()->GetInstanceReferences().size();
 
         if( compUsage == 1 )
             continue;
