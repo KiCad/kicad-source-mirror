@@ -40,6 +40,10 @@ public:
     PNS_TUNE_STATUS_POPUP( EDA_DRAW_FRAME* aParent ) :
         STATUS_TEXT_POPUP( aParent )
     { }
+    
+    // Ensure the widgets is hidden before deleting it
+    // Otherwise we have a crash
+    ~PNS_TUNE_STATUS_POPUP() override { Hide(); }
 
     void UpdateStatus( PNS::ROUTER* aRouter );
 };
