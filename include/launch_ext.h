@@ -29,4 +29,10 @@ class wxString;
  */
 void LaunchExternal( const wxString& aPath );
 
+/**
+ * Attempts to launch a given URL in the user's browser
+ * @param aUrl is a valid URL (already escaped)
+ */
+void LaunchURL( const wxString& aUrl );
+
 #endif

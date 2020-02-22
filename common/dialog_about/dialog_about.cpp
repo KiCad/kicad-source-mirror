@@ -25,6 +25,7 @@
 
 #include <config.h>
 #include <kicad_curl/kicad_curl_easy.h>
+#include <launch_ext.h>
 #include <string>
 
 // kicad_curl.h must be included before wx headers, to avoid
@@ -677,5 +678,5 @@ void DIALOG_ABOUT::onReportBug( wxCommandEvent& event )
     wxString url_string;
     url_string.Printf( m_bugReportUrl, kcurl.Escape( message.ToStdString() ) );
 
-    wxLaunchDefaultApplication( url_string );
+    LaunchURL( url_string );
 }
