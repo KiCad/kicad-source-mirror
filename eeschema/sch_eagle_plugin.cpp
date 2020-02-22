@@ -1643,6 +1643,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire(
         polyLine->AddPoint( begin );
         polyLine->AddPoint( end );
         polyLine->SetUnit( aGateNumber );
+        polyLine->SetWidth( ewire.width.ToSchUnits() );
 
         return (LIB_ITEM*) polyLine.release();
     }
