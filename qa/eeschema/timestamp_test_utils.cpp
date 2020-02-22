@@ -39,9 +39,10 @@ bool EndsInTimestamp( const std::string& aStr )
     return IsTimeStampish( aStr.end() - 8, aStr.end() );
 }
 
-bool IsTimestampStringWithLevels( const std::string& aStr, unsigned aLevels )
+bool IsUUIDPathWithLevels( const std::string& aStr, unsigned aLevels )
 {
-    const unsigned tsLen = 8;
+    // A UUID is formated as 8-4-4-4-12
+    const unsigned tsLen = 36;
     const unsigned levelLen = tsLen + 1; // add the /
 
     if( aStr.size() != aLevels * levelLen + 1 )

@@ -75,7 +75,7 @@ bool EndsInTimestamp( const std::string& aStr );
  * @param  levels expected levels
  * @return        true if format matches
  */
-bool IsTimestampStringWithLevels( const std::string& aStr, unsigned aLevels );
+bool IsUUIDPathWithLevels( const std::string& aStr, unsigned aLevels );
 
 } // namespace KI_TEST
 

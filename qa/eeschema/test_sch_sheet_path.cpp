@@ -112,9 +112,9 @@ BOOST_AUTO_TEST_CASE( NonEmpty )
     BOOST_CHECK_EQUAL( m_linear.Last(), &m_sheets[2] );
     BOOST_CHECK_EQUAL( m_linear.LastScreen(), nullptr );
 
-    // don't know what the timestamps will be, but we know the format: /<8 chars>/<8 chars>/
+    // don't know what the uuids will be, but we know the format: /<8-4-4-4-12>/<8-4-4-4-12>/
     BOOST_CHECK_PREDICATE(
-            KI_TEST::IsTimestampStringWithLevels, ( m_linear.PathAsString().ToStdString() )( 2 ) );
+            KI_TEST::IsUUIDPathWithLevels, ( m_linear.PathAsString().ToStdString() )( 2 ) );
 
     // Sheet0 is the root sheet and isn't in the path
     BOOST_CHECK_EQUAL( m_linear.PathHumanReadable(), "/Sheet1/Sheet2/" );
