@@ -30,13 +30,12 @@
 
 // kicad_curl.h must be included before wx headers, to avoid
 // conflicts for some defines, at least on Windows
-#ifdef BUILD_GITHUB_PLUGIN
 // kicad_curl.h can create conflicts for some defines, at least on Windows
 // so we are using here 2 proxy functions to know Curl version to avoid
 // including kicad_curl.h to know Curl version
 extern std::string GetKicadCurlVersion();
 extern std::string GetCurlLibVersion();
-#endif
+
 #if defined( KICAD_USE_OCC ) | defined( KICAD_USE_OCE )
 #include <Standard_Version.hxx>
 #endif
@@ -492,9 +491,8 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
     aMsg << "Libraries:" << eol;
     aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << eol;
 
-#ifdef BUILD_GITHUB_PLUGIN
     aMsg << indent4 << GetKicadCurlVersion() << eol;
-#endif
+
     aMsg << "Platform: " << wxGetOsDescription() << ", "
          << platform.GetArchName() << ", "
          << platform.GetEndiannessName() << ", "
@@ -528,9 +526,7 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
     aMsg << indent4 << "OpenCASCADE Community Edition: " << OCC_VERSION_COMPLETE << eol;
 #endif
 
-#ifdef BUILD_GITHUB_PLUGIN
     aMsg << indent4 << "Curl: " << GetCurlLibVersion() << eol;
-#endif
 
     aMsg << indent4 << "Compiler: ";
 #if defined(__clang__)

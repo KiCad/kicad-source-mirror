@@ -648,11 +648,9 @@ find_package( GLM 0.9.5.1 REQUIRED )
 add_definitions( -DGLM_FORCE_CTOR_INIT )
 
 #
-# Find CURL library, required for github plugin
+# Find CURL library, required
 #
-if( BUILD_GITHUB_PLUGIN )
-    find_package( CURL REQUIRED )
-endif()
+find_package( CURL REQUIRED )
 
 #
 # Find Cairo library, required
