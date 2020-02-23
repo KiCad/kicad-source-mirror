@@ -35,7 +35,6 @@ RECTWAVEGUIDE::RECTWAVEGUIDE() : TRANSLINE()
 
     // Initialize these here variables mainly to avoid warnings from a static analyzer
     mur = 0.0;                  // magnetic permeability of substrate
-    tanm = 0.0;                 // Magnetic Loss Tangent
     a = 0.0;                    // width of waveguide
     b = 0.0;                    // height of waveguide
     l = 0.0;                    // length of waveguide
@@ -192,7 +191,6 @@ void RECTWAVEGUIDE::get_rectwaveguide_sub()
     m_murC  = getProperty( MURC_PRM );
     m_sigma = 1.0 / getProperty( RHO_PRM );
     m_tand  = getProperty( TAND_PRM );
-    tanm  = getProperty( TANM_PRM );
 }
 
 

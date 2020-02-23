@@ -31,7 +31,6 @@ public: RECTWAVEGUIDE();
 
 private:
     double mur;                 // magnetic permeability of substrate
-    double tanm;                // Magnetic Loss Tangent
     double a;                   // width of waveguide
     double b;                   // height of waveguide
     double l;                   // length of waveguide

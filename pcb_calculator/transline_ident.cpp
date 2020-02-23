@@ -241,8 +241,6 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MUR_PRM,
                                    _( "mu Rel I:" ), _( "Relative Permeability (mu) of Insulator" ), 1, false ) );
-        AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, TANM_PRM,
-                                   _( "TanM:" ), _( "Magnetic Loss Tangent" ), 0, false ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM,
                                    _( "mu Rel C:" ), _( "Relative Permeability (mu) of Conductor" ), 1,
                                    false ) );
