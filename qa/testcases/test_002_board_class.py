@@ -23,7 +23,7 @@ class TestBoardClass(unittest.TestCase):
         self.FILENAME=tempfile.mktemp()+".kicad_pcb"
 
     def test_pcb_find_module(self):
-        module = self.pcb.FindModule('P1')
+        module = self.pcb.FindModuleByReference('P1')
         self.assertEqual(module.GetReference(),'P1')
 
     def test_pcb_get_track_count(self):
@@ -43,9 +43,6 @@ class TestBoardClass(unittest.TestCase):
         pcb = BOARD()
         track = TRACK(pcb)
         pcb.Add(track)
-
-        #track.SetStartEnd(wxPointMM(10.0, 10.0),
-        #                  wxPointMM(20.0, 30.0))
 
         track.SetStart(wxPointMM(10.0, 10.0))
         track.SetEnd(wxPointMM(20.0, 30.0))
