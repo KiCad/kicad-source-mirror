@@ -3406,6 +3406,7 @@ ARC* PCB_PARSER::parseARC()
             break;
 
         case T_tstamp:
+            NextTok();
             const_cast<KIID&>( arc->m_Uuid ) = KIID( CurStr() );
             break;
 
