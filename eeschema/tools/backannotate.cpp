@@ -175,8 +175,8 @@ int BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         {
             // Add module to the map
             PCB_MODULE_DATA data( ref, footprint, value );
-            m_pcbModules.insert( nearestItem, decltype( PCB_MODULES_MAP::value_type() )( path,
-                                                      std::make_shared<PCB_MODULE_DATA>( data ) ) );
+            m_pcbModules.insert( nearestItem,
+                    std::make_pair( path, std::make_shared<PCB_MODULE_DATA>( data ) ) );
         }
     }
     return errors;
