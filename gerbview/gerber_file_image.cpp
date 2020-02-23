@@ -385,9 +385,10 @@ void GERBER_FILE_IMAGE::RemoveAttribute( X2_ATTRIBUTE& aAttribute )
      * if a attribute name is specified (for instance %TD.CN*%) is specified,
      * only this attribute is cleared
      */
-    m_NetAttributeDict.ClearAttribute( &aAttribute.GetPrm( 1 ) );
+    wxString cmd = aAttribute.GetPrm( 0 );
+    m_NetAttributeDict.ClearAttribute( &cmd );
 
-    if( aAttribute.GetPrm( 1 ).IsEmpty() || aAttribute.GetPrm( 1 ) == ".AperFunction" )
+    if( cmd.IsEmpty() || cmd == ".AperFunction" )
         m_AperFunction.Clear();
 }
 
