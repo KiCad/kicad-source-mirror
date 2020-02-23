@@ -172,8 +172,10 @@ bool GERBER_FILE_IMAGE::ReadRS274XCommand( char *aBuff, unsigned int aBuffSize, 
             default:
                 code_command = ReadXCommandID( aText );
                 ok = ExecuteRS274XCommand( code_command, aBuff, aBuffSize, aText );
+
                 if( !ok )
                     goto exit;
+
                 break;
             }
         }
@@ -364,7 +366,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
 
     case FILE_ATTRIBUTE:    // Command %TF ...
         m_IsX2_file = true;
-    {
+        {
         X2_ATTRIBUTE dummy;
         dummy.ParseAttribCmd( m_Current_File, aBuff, aBuffSize, aText, m_LineNum );
 
@@ -381,7 +383,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         {
             m_PartString = dummy.GetPrm( 1 );
         }
-     }
+        }
         break;
 
     case APERTURE_ATTRIBUTE:    // Command %TA
