@@ -67,6 +67,7 @@ public:
     void SetNormalColor( const COLOR4D& aColor ) { m_normalColor = aColor; }
     void SetSelectedColor( const COLOR4D& aColor ) { m_selectedColor = aColor; }
     void SetBrightenedColor( const COLOR4D& aColor ) { m_brightenedColor = aColor; }
+    void SetPageBorderColor( const COLOR4D& aColor ) { m_pageBorderColor = aColor; }
 
     const COLOR4D& GetGridColor() override
     {
@@ -87,6 +88,7 @@ private:
 
     COLOR4D m_gridColor;
     COLOR4D m_cursorColor;
+    COLOR4D m_pageBorderColor;
 };
 
 

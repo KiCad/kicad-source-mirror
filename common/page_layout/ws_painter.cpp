@@ -48,6 +48,7 @@ WS_RENDER_SETTINGS::WS_RENDER_SETTINGS()
     m_normalColor =     RED;
     m_selectedColor =   m_normalColor.Brightened( 0.5 );
     m_brightenedColor = COLOR4D( 0.0, 1.0, 0.0, 0.9 );
+    m_pageBorderColor = COLOR4D( 0.4, 0.4, 0.4, 1.0 );
 
     update();
 }
@@ -62,6 +63,7 @@ void WS_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
         m_layerColors[ layer ] = aSettings->GetColor( layer );
 
     m_backgroundColor = aSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+    m_pageBorderColor = aSettings->GetColor( LAYER_SCHEMATIC_GRID );
 }
 
 
@@ -370,14 +372,14 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_PAGE* aItem, int aLayer ) const
     m_gal->SetIsStroke( true );
 
     // Use a gray color for the border color
-    m_gal->SetStrokeColor( COLOR4D( 0.4, 0.4, 0.4, 1.0 ) );
+    m_gal->SetStrokeColor( m_renderSettings.m_pageBorderColor );
     m_gal->SetIsFill( false );
     m_gal->DrawRectangle( origin, end );
 
     // Draw the corner marker
     double marker_size = aItem->GetMarkerSize();
 
-    m_gal->SetStrokeColor( COLOR4D( 0.4, 0.4, 1.0, 1.0 ) );
+    m_gal->SetStrokeColor( m_renderSettings.m_pageBorderColor );
     VECTOR2D pos = VECTOR2D( aItem->GetMarkerPos().x, aItem->GetMarkerPos().y );
 
     // Draw a cirle and a X
@@ -397,7 +399,7 @@ void KIGFX::WS_PAINTER::DrawBorder( const PAGE_INFO* aPageInfo, int aScaleFactor
 
     m_gal->SetIsStroke( true );
     // Use a gray color for the border color
-    m_gal->SetStrokeColor( COLOR4D( 0.4, 0.4, 0.4, 1.0 ) );
+    m_gal->SetStrokeColor( m_renderSettings.m_pageBorderColor );
     m_gal->SetIsFill( false );
     m_gal->DrawRectangle( origin, end );
 }

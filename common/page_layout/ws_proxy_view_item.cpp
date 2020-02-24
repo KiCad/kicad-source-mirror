@@ -108,12 +108,13 @@ void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
         gal->Scale( VECTOR2D( -1.0, 1.0 ) );
     }
 
-    WS_PAINTER   ws_painter( gal );
-    WS_RENDER_SETTINGS* ws_settings =static_cast<WS_RENDER_SETTINGS*>( ws_painter.GetSettings() );
+    WS_PAINTER ws_painter( gal );
+    auto       ws_settings = static_cast<WS_RENDER_SETTINGS*>( ws_painter.GetSettings() );
 
     ws_settings->SetNormalColor( settings->GetLayerColor( m_colorLayer ) );
     ws_settings->SetSelectedColor( settings->GetLayerColor( LAYER_SELECT_OVERLAY ) );
     ws_settings->SetBrightenedColor( settings->GetLayerColor( LAYER_BRIGHTENED ) );
+    ws_settings->SetPageBorderColor( settings->GetLayerColor( LAYER_SCHEMATIC_GRID ) );
 
     // Draw all the components that make the page layout
     for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
