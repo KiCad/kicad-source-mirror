@@ -338,9 +338,8 @@ public:
      * Move the graphic cursor (crosshair cursor) at a given coordinate and reframes
      * the drawing if the requested point is out of view or if center on location is requested.
      * @param aPos is the point to go to.
-     * @param aCenterView is true if the new cursor position should be centered on canvas.
      */
-    void FocusOnLocation( const wxPoint& aPos, bool aCenterView = false );
+    void FocusOnLocation( const wxPoint& aPos );
 
     /**
      * @return The current zoom level.

@@ -330,7 +330,7 @@ void DIALOG_FIND::search( bool aDirection )
     if( m_it != m_hitList.end() )
     {
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, *m_it );
-        m_frame->FocusOnLocation( ( *m_it )->GetPosition(), true );
+        m_frame->FocusOnLocation( ( *m_it )->GetPosition() );
 
         msg.Printf( _( "\"%s\" found" ), searchString );
         m_frame->SetStatusText( msg );

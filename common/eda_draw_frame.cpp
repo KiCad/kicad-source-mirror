@@ -686,12 +686,32 @@ wxWindow* findDialog( wxWindowList& aList )
 }
 
 
-void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos, bool aCenterView )
+void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos )
 {
-    if( aCenterView )
-    {
-        wxWindow* dialog = findDialog( GetChildren() );
+    bool  centerView = false;
+    BOX2D r = GetCanvas()->GetView()->GetViewport();
 
+    // Center if we're off the current view, or within 10% of its edge
+    r.Inflate( - (int) r.GetWidth() / 10 );
+
+    if( !r.Contains( aPos ) )
+        centerView = true;
+
+    // Center if we're behind an obscuring dialog, or within 10% of its edge
+    wxWindow* dialog = findDialog( GetChildren() );
+
+    if( dialog )
+    {
+        wxRect dialogRect( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
+                           dialog->GetSize() );
+        dialogRect.Inflate( dialogRect.GetWidth() / 10 );
+
+        if( dialogRect.Contains( (wxPoint) GetCanvas()->GetView()->ToScreen( aPos ) ) )
+            centerView = true;
+    }
+
+    if( centerView )
+    {
         // If a dialog partly obscures the window, then center on the uncovered area.
         if( dialog )
         {

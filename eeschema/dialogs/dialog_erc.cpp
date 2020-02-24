@@ -292,7 +292,7 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
     }
 
     m_lastMarkerFound = marker;
-    m_parent->FocusOnLocation( marker->m_Pos, true );
+    m_parent->FocusOnLocation( marker->m_Pos );
     RedrawDrawPanel();
 }
 
@@ -303,7 +303,7 @@ void DIALOG_ERC::OnLeftDblClickMarkersList( wxMouseEvent& event )
     // was initialized (NULL if not found).
     if( m_lastMarkerFound )
     {
-        m_parent->FocusOnLocation( m_lastMarkerFound->m_Pos, true );
+        m_parent->FocusOnLocation( m_lastMarkerFound->m_Pos );
         RedrawDrawPanel();
     }
 

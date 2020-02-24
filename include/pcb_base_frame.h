@@ -211,6 +211,8 @@ public:
         return m_Pcb;
     }
 
+    void FocusOnItem( BOARD_ITEM* aItem );
+
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
     virtual void ReCreateOptToolbar() override { }

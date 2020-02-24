@@ -147,7 +147,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnSelectItem( wxCommandEvent& event )
 
         if( item )
         {
-            m_parentFrame->FocusOnLocation( item->GetPointA(), true );
+            m_parentFrame->FocusOnLocation( item->GetPointA() );
             WINDOW_THAWER thawer( m_parentFrame );
             m_parentFrame->GetCanvas()->Refresh();
         }
@@ -170,7 +170,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnLeftDClickItem( wxMouseEvent& event )
         const DRC_ITEM* item = m_ItemsListBox->GetItem( selection );
         if( item )
         {
-            m_parentFrame->FocusOnLocation( item->GetPointA(), true );
+            m_parentFrame->FocusOnLocation( item->GetPointA() );
 
             if( !IsModal() )
                 Show( false );

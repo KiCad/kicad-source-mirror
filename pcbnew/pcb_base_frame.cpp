@@ -185,6 +185,49 @@ void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
 }
 
 
+void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
+{
+    static KIID lastBrightenedItemID( niluuid );
+
+    BOARD_ITEM* lastItem = GetBoard()->GetItem( lastBrightenedItemID );
+
+    if( lastItem && lastItem != aItem )
+    {
+        lastItem->ClearBrightened();
+
+        if( lastItem->Type() == PCB_MODULE_T )
+        {
+            static_cast<MODULE*>( lastItem )->RunOnChildren( [&] ( BOARD_ITEM* child )
+            {
+                child->ClearBrightened();
+            });
+        }
+
+        GetCanvas()->GetView()->Update( lastItem );
+        lastBrightenedItemID = niluuid;
+        GetCanvas()->Refresh();
+    }
+
+    if( aItem )
+    {
+        aItem->SetBrightened();
+
+        if( aItem->Type() == PCB_MODULE_T )
+        {
+            static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* child )
+            {
+                child->SetBrightened();
+            });
+        }
+
+        GetCanvas()->GetView()->Update( aItem );
+        lastBrightenedItemID = aItem->m_Uuid;
+        FocusOnLocation( aItem->GetPosition() );
+        GetCanvas()->Refresh();
+    }
+}
+
+
 void PCB_BASE_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     wxASSERT( m_Pcb );
