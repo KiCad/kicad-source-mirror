@@ -31,19 +31,20 @@
 
 
 class PCB_EDIT_FRAME;
+class DRC_TREE_MODEL;
 
 
 class DIALOG_CLEANUP_TRACKS_AND_VIAS: public DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE
 {
     PCB_EDIT_FRAME* m_parentFrame;
     DRC_LIST        m_items;
+    DRC_TREE_MODEL* m_changesTreeModel;
 
     void doCleanup( bool aDryRun );
 
     void OnCheckBox( wxCommandEvent& anEvent ) override;
-    void OnSelectItem( wxCommandEvent& event ) override;
+    void OnSelectItem( wxDataViewEvent& event ) override;
     void OnLeftDClickItem( wxMouseEvent& event ) override;
-    void OnRightUpItem( wxMouseEvent& event ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

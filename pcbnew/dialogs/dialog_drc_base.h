@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,8 +10,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DRCLISTBOX;
-
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -28,7 +26,7 @@ class DRCLISTBOX;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/gbsizer.h>
-#include <wx/listbox.h>
+#include <wx/dataview.h>
 #include <wx/panel.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
@@ -38,9 +36,6 @@ class DRCLISTBOX;
 #define ID_CHECKBOX_RPT_FILE 1000
 #define ID_BUTTON_BROWSE_RPT_FILE 1001
 #define ID_NOTEBOOK1 1002
-#define ID_CLEARANCE_LIST 1003
-#define ID_UNCONNECTED_LIST 1004
-#define ID_FOOTPRINTS_LIST 1005
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_DRC_CONTROL_BASE
@@ -51,12 +46,12 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxPanel* m_panelUnconnectedItems;
 
 	protected:
-		wxStaticText* m_TrackMinWidthTitle;
-		wxStaticText* m_TrackMinWidthUnit;
-		wxStaticText* m_ViaMinTitle;
-		wxStaticText* m_ViaMinUnit;
-		wxStaticText* m_MicroViaMinTitle;
-		wxStaticText* m_MicroViaMinUnit;
+		wxStaticText* m_MinWidthLabel;
+		wxStaticText* m_MinWidthUnits;
+		wxStaticText* m_ViaMinLabel;
+		wxStaticText* m_ViaMinUnits;
+		wxStaticText* m_uViaMinLabel;
+		wxStaticText* m_uViaMinUnits;
 		wxCheckBox* m_cbRefillZones;
 		wxCheckBox* m_cbReportAllTrackErrors;
 		wxCheckBox* m_cbReportTracksToZonesErrors;
@@ -67,7 +62,10 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_BrowseButton;
 		wxNotebook* m_Notebook;
 		wxPanel* m_panelViolations;
+		wxDataViewCtrl* m_markerDataView;
+		wxDataViewCtrl* m_unconnectedDataView;
 		wxPanel* m_panelFootprintWarnings;
+		wxDataViewCtrl* m_footprintsDataView;
 		wxBoxSizer* m_sizerButtons;
 		wxButton* m_DeleteCurrentMarkerButton;
 		wxButton* m_DeleteAllMarkersButton;
@@ -80,31 +78,21 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		virtual void OnReportCheckBoxClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReportFilenameEdited( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonBrowseRptFileClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnChangingMarkerList( wxNotebookEvent& event ) { event.Skip(); }
-		virtual void OnLeftDClickClearance( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnLeftUpClearance( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnMarkerSelectionEvent( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRightUpClearance( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnChangingNotebookPage( wxNotebookEvent& event ) { event.Skip(); }
+		virtual void OnDRCItemSelected( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnMarkerDClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnLeftDClickUnconnected( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnLeftUpUnconnected( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnUnconnectedSelectionEvent( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRightUpUnconnected( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnLeftDClickFootprints( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnFootprintsSelectionEvent( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRightUpFootprints( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnDeleteOneClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteAllClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnStartdrcClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRunDRCClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
-		wxTextCtrl* m_SetTrackMinWidthCtrl;
-		wxTextCtrl* m_SetViaMinSizeCtrl;
-		wxTextCtrl* m_SetMicroViakMinSizeCtrl;
-		DRCLISTBOX* m_ClearanceListBox;
-		DRCLISTBOX* m_UnconnectedListBox;
-		DRCLISTBOX* m_FootprintsListBox;
+		wxTextCtrl* m_MinWidthCtrl;
+		wxTextCtrl* m_ViaMinCtrl;
+		wxTextCtrl* m_uViaMinCtrl;
 
 		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DRC_CONTROL_BASE();

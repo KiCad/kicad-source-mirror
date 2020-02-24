@@ -1,11 +1,7 @@
-/**
- * @file dialog_cleaning_options.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +22,8 @@
  */
 #include <wx/wx.h>
 
-#include "dialog_drclistbox.h"
+#include <drc/drc_tree_model.h>
 #include <board_commit.h>
-#include <collectors.h>
 #include <dialog_cleanup_tracks_and_vias.h>
 #include <kiface_i.h>
 #include <pcb_edit_frame.h>
@@ -37,7 +32,6 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tracks_cleaner.h>
-#include <wx_html_report_panel.h>
 
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParentFrame ):
@@ -51,6 +45,10 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
     m_deleteUnconnectedOpt->SetValue( cfg->m_Cleanup.cleanup_unconnected );
     m_cleanShortCircuitOpt->SetValue( cfg->m_Cleanup.cleanup_short_circuits );
     m_deleteTracksInPadsOpt->SetValue( cfg->m_Cleanup.cleanup_tracks_in_pad );
+
+    m_changesDataView->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, 4000 );
+    m_changesTreeModel = new DRC_TREE_MODEL( m_changesDataView );
+    m_changesDataView->AssociateModel( m_changesTreeModel );
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
@@ -74,6 +72,8 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
 
     for( DRC_ITEM* item : m_items )
         delete item;
+
+    m_changesTreeModel->DecRef();
 }
 
 
@@ -125,7 +125,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 
     if( aDryRun )
     {
-        m_ItemsListBox->SetList( GetUserUnits(), new DRC_LIST_GENERIC( &m_items ) );
+        m_changesTreeModel->SetProvider( new VECTOR_DRC_ITEMS_PROVIDER( &m_items ) );
     }
     else if( modified )
     {
@@ -136,22 +136,13 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 }
 
 
-void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnSelectItem( wxCommandEvent& event )
+void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnSelectItem( wxDataViewEvent& event )
 {
-    int selection = event.GetSelection();
+    BOARD_ITEM*   item = DRC_TREE_MODEL::ToBoardItem( m_parentFrame->GetBoard(), event.GetItem() );
+    WINDOW_THAWER thawer( m_parentFrame );
 
-    if( selection != wxNOT_FOUND )
-    {
-        // Find the selected DRC_ITEM in the listbox, position cursor there.
-        const DRC_ITEM* item = m_ItemsListBox->GetItem( selection );
-
-        if( item )
-        {
-            m_parentFrame->FocusOnLocation( item->GetPointA() );
-            WINDOW_THAWER thawer( m_parentFrame );
-            m_parentFrame->GetCanvas()->Refresh();
-        }
-    }
+    m_parentFrame->FocusOnItem( item );
+    m_parentFrame->GetCanvas()->Refresh();
 
     event.Skip();
 }
@@ -161,44 +152,10 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnLeftDClickItem( wxMouseEvent& event )
 {
     event.Skip();
 
-    int selection = m_ItemsListBox->GetSelection();
-
-    if( selection != wxNOT_FOUND )
+    if( m_changesDataView->GetCurrentItem().IsOk() )
     {
-        // Find the selected DRC_ITEM in the listbox, position cursor there.
-        // Then hide the dialog.
-        const DRC_ITEM* item = m_ItemsListBox->GetItem( selection );
-        if( item )
-        {
-            m_parentFrame->FocusOnLocation( item->GetPointA() );
-
-            if( !IsModal() )
-                Show( false );
-        }
-    }
-}
-
-
-void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnRightUpItem( wxMouseEvent& event )
-{
-    // popup menu to go to either of the items listed in the DRC_ITEM.
-
-    int selection = m_ItemsListBox->GetSelection();
-
-    if( selection != wxNOT_FOUND )
-    {
-        // popup menu to go to either of the items listed in the DRC_ITEM.
-        const DRC_ITEM* item = m_ItemsListBox->GetItem( selection );
-        GENERAL_COLLECTOR items;
-
-        items.Append( item->GetMainItem( m_parentFrame->GetBoard() ) );
-
-        if( item->HasSecondItem() )
-            items.Append( item->GetAuxiliaryItem( m_parentFrame->GetBoard() ) );
-
-        WINDOW_THAWER thawer( m_parentFrame );
-        m_parentFrame->GetToolManager()->RunAction( PCB_ACTIONS::selectionMenu, true, &items );
-        m_parentFrame->GetCanvas()->Refresh();
+        if( !IsModal() )
+            Show( false );
     }
 }
 

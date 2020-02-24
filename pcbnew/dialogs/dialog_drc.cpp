@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009-2016 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,22 +35,16 @@
 #include <pgm_base.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <view/view.h>
 #include <wildcards_and_files_ext.h>
+#include <drc/drc_tree_model.h>
+#include <wx/wupdlock.h>
 
-/* class DIALOG_DRC_CONTROL: a dialog to set DRC parameters (clearance, min cooper size)
- * and run DRC tests
- */
-
-
-DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL(
-        DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent )
-        : DIALOG_DRC_CONTROL_BASE( aParent ),
-          m_trackMinWidth( aEditorFrame, m_TrackMinWidthTitle, m_SetTrackMinWidthCtrl,
-                  m_TrackMinWidthUnit, true ),
-          m_viaMinSize( aEditorFrame, m_ViaMinTitle, m_SetViaMinSizeCtrl, m_ViaMinUnit, true ),
-          m_uviaMinSize( aEditorFrame, m_MicroViaMinTitle, m_SetMicroViakMinSizeCtrl,
-                  m_MicroViaMinUnit, true )
+DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame,
+                                        wxWindow* aParent ) :
+        DIALOG_DRC_CONTROL_BASE( aParent ),
+        m_trackMinWidth( aEditorFrame, m_MinWidthLabel, m_MinWidthCtrl, m_MinWidthUnits, true ),
+        m_viaMinSize( aEditorFrame, m_ViaMinLabel, m_ViaMinCtrl, m_ViaMinUnits, true ),
+        m_uviaMinSize( aEditorFrame, m_uViaMinLabel, m_uViaMinCtrl, m_uViaMinUnits, true )
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
 
@@ -60,6 +54,18 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL(
     m_BrdSettings  = m_brdEditor->GetBoard()->GetDesignSettings();
 
     m_BrowseButton->SetBitmap( KiBitmap( folder_xpm ) );
+
+    m_markerDataView->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, 4000 );
+    m_markerTreeModel = new DRC_TREE_MODEL( m_markerDataView );
+    m_markerDataView->AssociateModel( m_markerTreeModel );
+
+    m_unconnectedDataView->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, 4000 );
+    m_unconnectedTreeModel = new DRC_TREE_MODEL( m_unconnectedDataView );
+    m_unconnectedDataView->AssociateModel( m_unconnectedTreeModel );
+
+    m_footprintsDataView->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, 4000 );
+    m_footprintsTreeModel = new DRC_TREE_MODEL( m_footprintsDataView );
+    m_footprintsDataView->AssociateModel( m_footprintsTreeModel );
 
     // We use a sdbSizer here to get the order right, which is platform-dependent
     m_sdbSizer1OK->SetLabel( _( "Run DRC" ) );
@@ -81,6 +87,8 @@ DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
     cfg->m_DrcDialog.refill_zones       = m_cbRefillZones->GetValue();
     cfg->m_DrcDialog.test_track_to_zone = m_cbReportAllTrackErrors->GetValue();
     cfg->m_DrcDialog.test_footprints    = m_cbTestFootprints->GetValue();
+
+    m_markerTreeModel->DecRef();
 }
 
 
@@ -119,8 +127,6 @@ void DIALOG_DRC_CONTROL::InitValues()
     m_unconnectedTitleTemplate = m_Notebook->GetPageText( 1 );
     m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
 
-    m_DeleteCurrentMarkerButton->Enable( false );
-
     DisplayDRCValues();
 
     auto cfg = m_brdEditor->GetSettings();
@@ -137,9 +143,9 @@ void DIALOG_DRC_CONTROL::InitValues()
 
 void DIALOG_DRC_CONTROL::SetDRCParameters()
 {
-    m_BrdSettings.m_TrackMinWidth    = m_trackMinWidth.GetValue();
-    m_BrdSettings.m_ViasMinSize      = m_viaMinSize.GetValue();
-    m_BrdSettings.m_MicroViasMinSize = m_uviaMinSize.GetValue();
+    m_BrdSettings.m_TrackMinWidth    = (int) m_trackMinWidth.GetValue();
+    m_BrdSettings.m_ViasMinSize      = (int) m_viaMinSize.GetValue();
+    m_BrdSettings.m_MicroViasMinSize = (int) m_uviaMinSize.GetValue();
 
     m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
 }
@@ -159,7 +165,7 @@ void DIALOG_DRC_CONTROL::GetRptSettings( bool* aEnable, wxString& aFileName )
 }
 
 
-void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
+void DIALOG_DRC_CONTROL::OnRunDRCClick( wxCommandEvent& event )
 {
     wxString reportName, msg;
 
@@ -220,6 +226,68 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
 }
 
 
+void DIALOG_DRC_CONTROL::SetMarkersProvider( DRC_ITEMS_PROVIDER* aProvider )
+{
+    m_markerTreeModel->SetProvider( aProvider );
+}
+
+
+void DIALOG_DRC_CONTROL::SetUnconnectedProvider(class DRC_ITEMS_PROVIDER * aProvider)
+{
+    m_unconnectedTreeModel->SetProvider( aProvider );
+}
+
+
+void DIALOG_DRC_CONTROL::SetFootprintsProvider( DRC_ITEMS_PROVIDER* aProvider )
+{
+    m_footprintsTreeModel->SetProvider( aProvider );
+}
+
+
+void DIALOG_DRC_CONTROL::OnDRCItemSelected( wxDataViewEvent& event )
+{
+    BOARD_ITEM*   item = DRC_TREE_MODEL::ToBoardItem( m_brdEditor->GetBoard(), event.GetItem() );
+    WINDOW_THAWER thawer( m_brdEditor );
+
+    m_brdEditor->FocusOnItem( item );
+    m_brdEditor->GetCanvas()->Refresh();
+
+    event.Skip();
+}
+
+
+void DIALOG_DRC_CONTROL::OnDClick( wxDataViewCtrl* ctrl, wxMouseEvent& event )
+{
+    event.Skip();
+
+    if( ctrl->GetCurrentItem().IsOk() )
+    {
+        // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
+        // no destruction so we can preserve listbox cursor
+        if( !IsModal() )
+            Show( false );
+    }
+}
+
+
+void DIALOG_DRC_CONTROL::OnMarkerDClick( wxMouseEvent& event )
+{
+    OnDClick( m_markerDataView, event );
+}
+
+
+void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
+{
+    OnDClick( m_unconnectedDataView, event );
+}
+
+
+void DIALOG_DRC_CONTROL::OnLeftDClickFootprints( wxMouseEvent& event )
+{
+    OnDClick( m_footprintsDataView, event );
+}
+
+
 void DIALOG_DRC_CONTROL::OnDeleteAllClick( wxCommandEvent& event )
 {
     DelDRCMarkers();
@@ -235,7 +303,7 @@ void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent& )
     wxString prj_path = Prj().GetProjectPath();
 
     wxFileDialog dlg( this, _( "Save DRC Report File" ), prj_path, fn.GetFullName(),
-            ReportFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      ReportFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -269,248 +337,15 @@ void DIALOG_DRC_CONTROL::OnReportFilenameEdited( wxCommandEvent& event )
 }
 
 
-void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
-{
-    event.Skip();
-
-    int selection = m_ClearanceListBox->GetSelection();
-
-    if( selection != wxNOT_FOUND )
-    {
-        if( focusOnItem( m_ClearanceListBox->GetItem( selection ) ) )
-        {
-            // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
-            // no destruction so we can preserve listbox cursor
-            if( !IsModal() )
-                Show( false );
-        }
-    }
-}
-
-
-void DIALOG_DRC_CONTROL::OnRightUpFootprints( wxMouseEvent& event )
-{
-    int selection = rightUpClicSelection( m_FootprintsListBox, event );
-
-    if( selection != wxNOT_FOUND )
-        doSelectionMenu( m_FootprintsListBox->GetItem( selection ) );
-}
-
-
-void DIALOG_DRC_CONTROL::OnLeftUpClearance( wxMouseEvent& event )
-{
-    int selection = m_ClearanceListBox->GetSelection();
-
-    if( selection != wxNOT_FOUND )
-        focusOnItem( m_ClearanceListBox->GetItem( selection ) );
-}
-
-
-bool DIALOG_DRC_CONTROL::focusOnItem( const DRC_ITEM* aItem )
-{
-    if( !aItem )
-        return false;
-
-    auto toolmgr = m_brdEditor->GetToolManager();
-    auto pos     = aItem->GetPointA();
-    auto marker  = static_cast<MARKER_PCB*>( aItem->GetParent() );
-
-    if( marker )
-    {
-        pos = marker->GetPos();
-
-        toolmgr->RunAction( PCB_ACTIONS::selectionClear, true );
-        toolmgr->RunAction( PCB_ACTIONS::selectItem, true, marker );
-    }
-
-    m_brdEditor->FocusOnLocation( pos );
-    m_brdEditor->GetCanvas()->Refresh();
-
-    return true;
-}
-
-
-int DIALOG_DRC_CONTROL::rightUpClicSelection( DRCLISTBOX* aListBox, wxMouseEvent& event )
-{
-#if wxCHECK_VERSION( 3, 1, 3 )
-    // wxWidgets 3.1.3 has a bug in HitTest(): one cannot have the item selection
-    // on a right click: the returned value is always 10 so do not try to select
-    // an item on the right click. Just use the current selection (if any)
-    int selection = aListBox->GetSelection();
-#else
-    // Check if user right-clicked on a different item, and select the right clicked item
-    int selection = aListBox->HitTest( event.GetPosition() );
-
-    if( selection >= (int) aListBox->GetItemCount() ) // Should not happen.
-        selection = wxNOT_FOUND;
-#endif
-    if( selection == wxNOT_FOUND )
-        selection = aListBox->GetSelection();
-    else if( aListBox->GetSelection() != selection )
-        aListBox->SetSelection( selection );
-
-    return selection;
-}
-
-
-void DIALOG_DRC_CONTROL::OnRightUpUnconnected( wxMouseEvent& event )
-{
-    // popup menu to go to either of the items listed in the DRC_ITEM.
-    int selection = rightUpClicSelection( m_UnconnectedListBox, event );
-
-    if( selection != wxNOT_FOUND )
-        doSelectionMenu( m_UnconnectedListBox->GetItem( selection ) );
-}
-
-
-void DIALOG_DRC_CONTROL::OnRightUpClearance( wxMouseEvent& event )
-{
-    // popup menu to go to either of the items listed in the DRC_ITEM.
-    int selection = rightUpClicSelection( m_ClearanceListBox, event );
-
-    if( selection != wxNOT_FOUND )
-        doSelectionMenu( m_ClearanceListBox->GetItem( selection ) );
-}
-
-
-void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
-{
-    // popup menu to go to either of the items listed in the DRC_ITEM.
-
-    BOARD_ITEM* first  = aItem->GetMainItem( m_brdEditor->GetBoard() );
-    BOARD_ITEM* second = nullptr;
-
-    GENERAL_COLLECTOR items;
-
-    items.Append( first );
-
-    if( aItem->HasSecondItem() )
-    {
-        second = aItem->GetAuxiliaryItem( m_brdEditor->GetBoard() );
-        items.Append( second );
-    }
-
-    WINDOW_THAWER thawer( m_brdEditor );
-    m_brdEditor->GetToolManager()->VetoContextMenuMouseWarp();
-    m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionMenu, true, &items );
-
-    // If we got an item, focus on it
-    BOARD_ITEM* selection = items.GetCount() ? items[0] : nullptr;
-
-    if( selection && ( selection == first || selection == second ) )
-        m_brdEditor->FocusOnLocation( selection->GetPosition() );
-
-    m_brdEditor->GetCanvas()->Refresh();
-}
-
-
-void DIALOG_DRC_CONTROL::OnLeftDClickFootprints( wxMouseEvent& event )
-{
-    event.Skip();
-
-    int selection = m_FootprintsListBox->GetSelection();
-
-    if( selection != wxNOT_FOUND )
-    {
-        // Find the selected DRC_ITEM in the listbox, position cursor there.
-        // Then hide the dialog.
-        if( focusOnItem( m_FootprintsListBox->GetItem( selection ) ) )
-        {
-            if( !IsModal() )
-                Show( false );
-        }
-    }
-}
-
-
-void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
-{
-    event.Skip();
-
-    int selection = m_UnconnectedListBox->GetSelection();
-
-    if( selection != wxNOT_FOUND )
-    {
-        if( focusOnItem( m_UnconnectedListBox->GetItem( selection ) ) )
-        {
-            // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
-            // no destruction so we can preserve listbox cursor
-            if( !IsModal() )
-                Show( false );
-        }
-    }
-}
-
-
-void DIALOG_DRC_CONTROL::OnLeftUpUnconnected( wxMouseEvent& event )
-{
-    int selection = m_UnconnectedListBox->GetSelection();
-
-    if( selection != wxNOT_FOUND )
-        focusOnItem( m_UnconnectedListBox->GetItem( selection ) );
-}
-
-
-void DIALOG_DRC_CONTROL::OnChangingMarkerList( wxNotebookEvent& event )
+void DIALOG_DRC_CONTROL::OnChangingNotebookPage( wxNotebookEvent& event )
 {
     // Shouldn't be necessary, but is on at least OSX
     if( event.GetSelection() >= 0 )
         m_Notebook->ChangeSelection( (unsigned) event.GetSelection() );
 
-    m_DeleteCurrentMarkerButton->Enable( false );
-    m_ClearanceListBox->SetSelection( -1 );
-    m_UnconnectedListBox->SetSelection( -1 );
-}
-
-
-void DIALOG_DRC_CONTROL::OnMarkerSelectionEvent( wxCommandEvent& event )
-{
-    int selection = event.GetSelection();
-
-    if( selection != wxNOT_FOUND )
-    {
-        // until a MARKER is selected, this button is not enabled.
-        m_DeleteCurrentMarkerButton->Enable( true );
-
-        // Find the selected DRC_ITEM in the listbox, position cursor there.
-        focusOnItem( m_ClearanceListBox->GetItem( selection ) );
-    }
-
-    event.Skip();
-}
-
-
-void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
-{
-    int selection = event.GetSelection();
-
-    if( selection != wxNOT_FOUND )
-    {
-        // until a MARKER is selected, this button is not enabled.
-        m_DeleteCurrentMarkerButton->Enable( true );
-
-        // Find the selected DRC_ITEM in the listbox, position cursor there.
-        focusOnItem( m_UnconnectedListBox->GetItem( selection ) );
-    }
-
-    event.Skip();
-}
-
-
-void DIALOG_DRC_CONTROL::OnFootprintsSelectionEvent( wxCommandEvent& event )
-{
-    int selection = event.GetSelection();
-
-    if( selection != wxNOT_FOUND )
-    {
-        // until a MARKER is selected, this button is not enabled.
-        m_DeleteCurrentMarkerButton->Enable( true );
-
-        // Find the selected DRC_ITEM in the listbox, position cursor there.
-        focusOnItem( m_FootprintsListBox->GetItem( selection ) );
-    }
-
-    event.Skip();
+    m_markerDataView->UnselectAll();
+    m_unconnectedDataView->UnselectAll();
+    m_footprintsDataView->UnselectAll();
 }
 
 
@@ -527,9 +362,8 @@ void DIALOG_DRC_CONTROL::DelDRCMarkers()
     // Clear current selection list to avoid selection of deleted items
     m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_ClearanceListBox->DeleteAllItems();
-    m_UnconnectedListBox->DeleteAllItems();
-    m_DeleteCurrentMarkerButton->Enable( false );
+    m_markerTreeModel->DeleteAllItems();
+    m_unconnectedTreeModel->DeleteAllItems();
 }
 
 
@@ -571,26 +405,26 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
 
     fprintf( fp, "** Created on %s **\n", TO_UTF8( now.Format( wxT( "%F %T" ) ) ) );
 
-    count = m_ClearanceListBox->GetItemCount();
+    count = m_markerTreeModel->GetDRCItemCount();
 
     fprintf( fp, "\n** Found %d DRC errors **\n", count );
 
     for( int i = 0; i < count; ++i )
-        fprintf( fp, "%s", TO_UTF8( m_ClearanceListBox->GetItem( i )->ShowReport( units ) ) );
+        fprintf( fp, "%s", TO_UTF8( m_markerTreeModel->GetDRCItem( i )->ShowReport( units ) ) );
 
-    count = m_UnconnectedListBox->GetItemCount();
+    count = m_unconnectedTreeModel->GetDRCItemCount();
 
     fprintf( fp, "\n** Found %d unconnected pads **\n", count );
 
     for( int i = 0; i < count; ++i )
-        fprintf( fp, "%s", TO_UTF8( m_UnconnectedListBox->GetItem( i )->ShowReport( units ) ) );
+        fprintf( fp, "%s", TO_UTF8( m_unconnectedTreeModel->GetDRCItem( i )->ShowReport( units ) ) );
 
-    count = m_FootprintsListBox->GetItemCount();
+    count = m_footprintsTreeModel->GetDRCItemCount();
 
     fprintf( fp, "\n** Found %d Footprint errors **\n", count );
 
     for( int i = 0; i < count; ++i )
-        fprintf( fp, "%s", TO_UTF8( m_FootprintsListBox->GetItem( i )->ShowReport( units ) ) );
+        fprintf( fp, "%s", TO_UTF8( m_footprintsTreeModel->GetDRCItem( i )->ShowReport( units ) ) );
 
 
     fprintf( fp, "\n** End of Report **\n" );
@@ -603,50 +437,19 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
 
 void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
 {
-    ssize_t selectedIndex;
-    int     curTab = m_Notebook->GetSelection();
-
-    if( curTab == 0 )
+    if( m_Notebook->GetSelection() == 0 )
     {
-        selectedIndex = m_ClearanceListBox->GetSelection();
+        // Clear the selection.  It may be the selected DRC marker.
+        m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-        if( selectedIndex != wxNOT_FOUND )
-        {
-            // Clear the selection.  It may be the selected DRC marker.
-            m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_markerTreeModel->DeleteCurrentItem();
 
-            ssize_t newIndex = wxNOT_FOUND;
-
-            if( m_ClearanceListBox->GetItemCount() > 1 )
-            {
-                newIndex = std::min( selectedIndex,
-                        static_cast<ssize_t>( m_ClearanceListBox->GetItemCount() - 2 ) );
-            }
-
-            m_ClearanceListBox->DeleteItem( selectedIndex );
-
-            if( newIndex != wxNOT_FOUND )
-            {
-                focusOnItem( m_ClearanceListBox->GetItem( newIndex ) );
-                m_ClearanceListBox->SetSelection( newIndex );
-            }
-
-            // redraw the pcb
-            RedrawDrawPanel();
-        }
+        // redraw the pcb
+        RedrawDrawPanel();
     }
-    else if( curTab == 1 )
+    else if( m_Notebook->GetSelection() == 1 )
     {
-        selectedIndex = m_UnconnectedListBox->GetSelection();
-
-        if( selectedIndex != wxNOT_FOUND )
-        {
-            m_UnconnectedListBox->DeleteItem( selectedIndex );
-
-            /* these unconnected DRC_ITEMs are not currently visible on the pcb
-             *  RedrawDrawPanel();
-             */
-        }
+        m_unconnectedTreeModel->DeleteCurrentItem();
     }
 
     UpdateDisplayedCounts();
@@ -659,14 +462,14 @@ void DIALOG_DRC_CONTROL::UpdateDisplayedCounts()
 
     if( m_tester->m_drcRun )
     {
-        msg.sprintf( m_markersTitleTemplate, (int) m_ClearanceListBox->GetItemCount() );
+        msg.sprintf( m_markersTitleTemplate, m_markerTreeModel->GetDRCItemCount() );
         m_Notebook->SetPageText( 0, msg );
 
-        msg.sprintf( m_unconnectedTitleTemplate, (int) m_UnconnectedListBox->GetItemCount() );
+        msg.sprintf( m_unconnectedTitleTemplate, (int) m_unconnectedTreeModel->GetDRCItemCount() );
         m_Notebook->SetPageText( 1, msg );
 
         if( m_tester->m_footprintsTested )
-            msg.sprintf( m_footprintsTitleTemplate, (int) m_FootprintsListBox->GetItemCount() );
+            msg.sprintf( m_footprintsTitleTemplate, (int) m_footprintsTreeModel->GetDRCItemCount() );
         else
         {
             msg = m_footprintsTitleTemplate;

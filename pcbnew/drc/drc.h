@@ -129,49 +129,6 @@ class wxString;
 class wxTextCtrl;
 
 
-/**
- * Provide an abstract interface of a DRC_ITEM* list manager.  The details
- * of the actual list architecture are hidden from the caller.  Any class
- * that implements this interface can then be used by a DRCLISTBOX class without
- * it knowing the actual architecture of the list.
- */
-class DRC_ITEM_LIST
-{
-public:
-
-    /**
-     * Function DeleteAllItems
-     * removes and deletes all the items in the list.
-     */
-    virtual void DeleteAllItems() = 0;
-
-    /**
-     * Function GetItem
-     * retrieves a DRC_ITEM by pointer.  The actual item remains owned by the
-     * list container.
-     * @param aIndex The 0 based index into the list of the desired item.
-     * @return const DRC_ITEM* - the desired item or NULL if aIndex is out of range.
-     */
-    virtual const DRC_ITEM* GetItem( int aIndex ) = 0;
-
-    /**
-     * Function DeleteAllItems
-     * removes and deletes desired item from the list.
-     * @param aIndex The 0 based index into the list of the desired item which
-     *         is to be deleted.
-     */
-    virtual void DeleteItem( int aIndex ) = 0;
-
-    /**
-     * Function GetCount
-     * returns the number of items in the list.
-     */
-    virtual int GetCount() = 0;
-
-    virtual ~DRC_ITEM_LIST() { }
-};
-
-
 typedef std::vector<DRC_ITEM*> DRC_LIST;
 
 

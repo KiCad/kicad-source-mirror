@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2017-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,12 +34,8 @@
 #include <class_pad.h>
 #include <class_zone.h>
 #include <class_pcb_text.h>
-#include <class_draw_panel_gal.h>
-#include <view/view.h>
 #include <geometry/seg.h>
 #include <math_for_graphics.h>
-#include <geometry/geometry_utils.h>
-#include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <bitmaps.h>
 #include <tool/tool_manager.h>
@@ -54,11 +50,11 @@
 #include <dialog_drc.h>
 #include <wx/progdlg.h>
 #include <board_commit.h>
-#include <geometry/shape_segment.h>
 #include <geometry/shape_arc.h>
 
 #include <drc/courtyard_overlap.h>
 #include <tools/zone_filler_tool.h>
+#include "drc_tree_model.h"
 
 DRC::DRC() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
@@ -525,12 +521,9 @@ void DRC::updatePointers()
 
     if( m_drcDialog )  // Use diag list boxes only in DRC dialog
     {
-        m_drcDialog->m_ClearanceListBox->SetList(
-                m_pcbEditorFrame->GetUserUnits(), new DRC_LIST_MARKERS( m_pcb ) );
-        m_drcDialog->m_UnconnectedListBox->SetList(
-                m_pcbEditorFrame->GetUserUnits(), new DRC_LIST_GENERIC( &m_unconnected ) );
-        m_drcDialog->m_FootprintsListBox->SetList(
-                m_pcbEditorFrame->GetUserUnits(), new DRC_LIST_GENERIC( &m_footprints ) );
+        m_drcDialog->SetMarkersProvider( new BOARD_DRC_ITEMS_PROVIDER( m_pcb ) );
+        m_drcDialog->SetUnconnectedProvider( new VECTOR_DRC_ITEMS_PROVIDER( &m_unconnected ) );
+        m_drcDialog->SetFootprintsProvider( new VECTOR_DRC_ITEMS_PROVIDER( &m_footprints ) );
 
         m_drcDialog->UpdateDisplayedCounts();
     }
