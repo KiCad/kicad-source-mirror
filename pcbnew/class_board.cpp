@@ -700,39 +700,46 @@ void BOARD::DeleteZONEOutlines()
 }
 
 
-BOARD_ITEM* BOARD::GetItem( void* aWeakReference )
+BOARD_ITEM* BOARD::GetItem( const KIID& aID )
 {
+    if( aID == niluuid )
+        return nullptr;
+
     for( TRACK* track : Tracks() )
-        if( track == aWeakReference )
+        if( track->m_Uuid == aID )
             return track;
 
     for( MODULE* module : Modules() )
     {
-        if( module == aWeakReference )
+        if( module->m_Uuid == aID )
             return module;
 
         for( D_PAD* pad : module->Pads() )
-            if( pad == aWeakReference )
+            if( pad->m_Uuid == aID )
                 return pad;
 
-        if( &module->Reference() == aWeakReference )
+        if( module->Reference().m_Uuid == aID )
             return &module->Reference();
 
-        if( &module->Value() == aWeakReference )
+        if( module->Value().m_Uuid == aID )
             return &module->Value();
 
         for( BOARD_ITEM* drawing : module->GraphicalItems() )
-            if( drawing == aWeakReference )
+            if( drawing->m_Uuid == aID )
                 return drawing;
     }
 
     for( ZONE_CONTAINER* zone : Zones() )
-        if( zone == aWeakReference )
+        if( zone->m_Uuid == aID )
             return zone;
 
     for( BOARD_ITEM* drawing : Drawings() )
-        if( drawing == aWeakReference )
+        if( drawing->m_Uuid == aID )
             return drawing;
+
+    for( MARKER_PCB* marker : m_markers )
+        if( marker->m_Uuid == aID )
+            return marker;
 
     // Not found; weak reference has been deleted.
     if( !g_DeletedItem )

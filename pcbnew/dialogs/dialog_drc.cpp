@@ -323,7 +323,7 @@ bool DIALOG_DRC_CONTROL::focusOnItem( const DRC_ITEM* aItem )
         toolmgr->RunAction( PCB_ACTIONS::selectItem, true, marker );
     }
 
-    m_brdEditor->FocusOnLocation( pos, true );
+    m_brdEditor->FocusOnLocation( pos );
     m_brdEditor->GetCanvas()->Refresh();
 
     return true;
@@ -398,7 +398,7 @@ void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
     BOARD_ITEM* selection = items.GetCount() ? items[0] : nullptr;
 
     if( selection && ( selection == first || selection == second ) )
-        m_brdEditor->FocusOnLocation( selection->GetPosition(), true );
+        m_brdEditor->FocusOnLocation( selection->GetPosition() );
 
     m_brdEditor->GetCanvas()->Refresh();
 }

@@ -291,7 +291,7 @@ public:
         m_modules.clear();
     }
 
-    BOARD_ITEM* GetItem( void* aWeakReference );
+    BOARD_ITEM* GetItem( const KIID& aID );
 
     /**
      * Function GetConnectivity()

@@ -25,8 +25,8 @@
 
 #include <fctsys.h>
 #include <common.h>
-
-#include <pcbnew.h>
+#include "wx/html/m_templ.h"
+#include "wx/html/styleparams.h"
 #include <drc/drc.h>
 #include <drc_item.h>
 #include <class_board.h>
@@ -209,17 +209,23 @@ wxString DRC_ITEM::ShowHtml( EDA_UNITS aUnits ) const
 
         // an html fragment for the entire message in the listbox.  feel free
         // to add color if you want:
-        return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s: %s<br>&nbsp;&nbsp; %s: %s" ),
+        return wxString::Format( wxT( "<b>%s</b><br>"
+                                      "<kidiv id='%s'>&nbsp;&nbsp; %s: %s</kidiv><br>"
+                                      "<kidiv id='%s'>&nbsp;&nbsp; %s: %s</kidiv>" ),
                                  errText,
+                                 m_mainItemUuid.AsString(),
                                  ShowCoord( aUnits, m_MainPosition ),
                                  mainText,
+                                 m_auxItemUuid.AsString(),
                                  ShowCoord( aUnits, m_AuxiliaryPosition ),
                                  auxText );
     }
     else
     {
-        return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s: %s" ),
+        return wxString::Format( wxT( "<b>%s</b><br>"
+                                      "<kidiv id='%s'>&nbsp;&nbsp; %s: %s</kidiv>" ),
                                  errText,
+                                 m_mainItemUuid.AsString(),
                                  ShowCoord( aUnits, m_MainPosition ),
                                  mainText );
     }
@@ -251,12 +257,13 @@ wxString DRC_ITEM::ShowReport( EDA_UNITS aUnits ) const
 
 BOARD_ITEM* DRC_ITEM::GetMainItem( BOARD* aBoard ) const
 {
-    return aBoard->GetItem( m_mainItemWeakRef );
+    return aBoard->GetItem( m_mainItemUuid );
 }
 
 
 BOARD_ITEM* DRC_ITEM::GetAuxiliaryItem( BOARD* aBoard ) const
 {
-    return aBoard->GetItem( m_auxItemWeakRef );
+    return aBoard->GetItem( m_auxItemUuid );
 }
+
 

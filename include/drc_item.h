@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,29 +36,22 @@ class BOARD_ITEM;
 /**
  * DRC_ITEM
  * is a holder for a DRC (in Pcbnew) or ERC (in Eeschema) error item.
- * It is generated when two objects are too close (DRC)
- * or two connected objects (pins) have incompatible electrical types (ERC).
- * There are holders for information on two items.  The
- * information held is the board coordinate and the MenuText for each item.
- * Also held is the type of error by number and the location of the MARKER.
- * A function is provided to translate that number into text.
- * Some errors involve only one item (item with an incorrect param) so
- * m_hasSecondItem is set to false in this case.
+ * There are holders for information on two EDA_ITEMs.  Some errors involve only one item
+ * (item with an incorrect param) so m_hasSecondItem is set to false in this case.
  */
 class DRC_ITEM
 {
 protected:
     int          m_ErrorCode;         // the error code's numeric value
-    wxString     m_MainText;          // text for the first BOARD_ITEM or SCH_ITEM
-    wxString     m_AuxiliaryText;     // text for the second BOARD_ITEM or SCH_ITEM
-    wxPoint      m_MainPosition;      // the location of the first (or main ) BOARD_ITEM or SCH_ITEM.
-    wxPoint      m_AuxiliaryPosition; // the location of the second BOARD_ITEM or SCH_ITEM
-    bool         m_hasSecondItem;     // true when 2 items create a DRC/ERC error, false if only one item
+    wxString     m_MainText;          // text for the first EDA_ITEM
+    wxString     m_AuxiliaryText;     // text for the second EDA_ITEM
+    wxPoint      m_MainPosition;      // the location of the first EDA_ITEM
+    wxPoint      m_AuxiliaryPosition; // the location of the second EDA_ITEM
+    bool         m_hasSecondItem;     // true when 2 items create a DRC/ERC error
     bool         m_noCoordinate;
-
     MARKER_BASE* m_parent;            // The marker this item belongs to, if any
-    void*        m_mainItemWeakRef;   // search the current BOARD_ITEMs or SCH_ITEMs for a match
-    void*        m_auxItemWeakRef;    // search the current BOARD_ITEMs or SCH_ITEMs for a match
+    KIID         m_mainItemUuid;
+    KIID         m_auxItemUuid;
 
 public:
 
@@ -68,8 +61,8 @@ public:
         m_hasSecondItem   = false;
         m_noCoordinate    = false;
         m_parent          = nullptr;
-        m_mainItemWeakRef = nullptr;
-        m_auxItemWeakRef  = nullptr;
+        m_mainItemUuid    = niluuid;
+        m_auxItemUuid     = niluuid;
     }
 
     DRC_ITEM( EDA_UNITS aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
@@ -83,13 +76,11 @@ public:
         SetData( aUnits, aErrorCode, aMainItem, aMainPos );
     }
 
-
     DRC_ITEM( int aErrorCode, const wxString& aMainText )
     {
         SetData( aErrorCode, aMainText, wxPoint() );
         SetShowNoCoordinate();
     }
-
 
     /**
      * Function SetData
@@ -111,13 +102,13 @@ public:
         m_hasSecondItem     = bAuxiliaryItem != nullptr;
         m_noCoordinate      = false;
         m_parent            = nullptr;
+        m_mainItemUuid      = aMainItem->m_Uuid;
 
         if( m_hasSecondItem )
+        {
             m_AuxiliaryText = bAuxiliaryItem->GetSelectMenuText( aUnits );
-
-        // Weak references (void*).  One must search the BOARD_ITEMS or SCH_ITEMS for a match.
-        m_mainItemWeakRef   = aMainItem;
-        m_auxItemWeakRef    = bAuxiliaryItem;
+            m_auxItemUuid   = bAuxiliaryItem->m_Uuid;
+        }
     }
 
     /**
@@ -130,7 +121,8 @@ public:
      * @param bAuxiliaryPos = position the second item
      */
     void SetData( int aErrorCode, const wxString& aMainText, const wxPoint& aMainPos,
-                  const wxString& bAuxiliaryText = wxEmptyString, const wxPoint& bAuxiliaryPos = wxPoint() )
+                  const wxString& bAuxiliaryText = wxEmptyString,
+                  const wxPoint& bAuxiliaryPos = wxPoint() )
     {
         m_ErrorCode         = aErrorCode;
         m_MainText          = aMainText;
@@ -140,9 +132,8 @@ public:
         m_hasSecondItem     = bAuxiliaryText.Length();
         m_noCoordinate      = false;
         m_parent            = nullptr;
-
-        m_mainItemWeakRef   = nullptr;
-        m_auxItemWeakRef    = nullptr;
+        m_mainItemUuid      = niluuid;
+        m_auxItemUuid       = niluuid;
     }
 
     /**
@@ -156,12 +147,10 @@ public:
         m_AuxiliaryText     = aAuxiliaryText;
         m_AuxiliaryPosition = aAuxiliaryPos;
         m_hasSecondItem     = true;
-
-        m_auxItemWeakRef  = nullptr;
+        m_auxItemUuid       = niluuid;
     }
 
     void SetParent( MARKER_BASE* aMarker ) { m_parent = aMarker; }
-
     MARKER_BASE* GetParent() const { return m_parent; }
 
     bool HasSecondItem() const { return m_hasSecondItem; }
@@ -182,24 +171,18 @@ public:
 
     /**
      * Function ShowHtml
-     * translates this object into a fragment of HTML suitable for the
-     * wxWidget's wxHtmlListBox class.
+     * translates this object into a fragment of HTML suitable for the wxHtmlListBox class.
      * @return wxString - the html text.
      */
     wxString ShowHtml( EDA_UNITS aUnits ) const;
 
     /**
      * Function ShowReport
-     * translates this object into a text string suitable for saving
-     * to disk in a report.
+     * translates this object into a text string suitable for saving to disk in a report.
      * @return wxString - the simple multi-line report text.
      */
     wxString ShowReport( EDA_UNITS aUnits ) const;
 
-    /**
-     * Function GetErrorCode
-     * returns the error code.
-     */
     int GetErrorCode() const
     {
         return m_ErrorCode;
@@ -211,35 +194,15 @@ public:
      */
     wxString GetErrorText() const;
 
-    const wxString& GetTextA() const
-    {
-        return m_MainText;
-    }
+    const wxString& GetTextA() const { return m_MainText; }
+    const wxString& GetTextB() const { return m_AuxiliaryText; }
 
-
-    const wxString& GetTextB() const
-    {
-        return m_AuxiliaryText;
-    }
-
-
-    const wxPoint& GetPointA() const
-    {
-        return m_MainPosition;
-    }
-
-
-    const wxPoint& GetPointB() const
-    {
-        return m_AuxiliaryPosition;
-    }
-
+    const wxPoint& GetPointA() const { return m_MainPosition; }
+    const wxPoint& GetPointB() const { return m_AuxiliaryPosition; }
 
     /**
      * Function ShowCoord
      * formats a coordinate or position to text.
-     * @param aPos The position to format
-     * @return wxString - The formated string
      */
     static wxString ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos );
 };
