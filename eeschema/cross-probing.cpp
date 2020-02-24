@@ -140,10 +140,9 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
     {
         // Clear any existing highlighting
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-        m_frame->GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
 
         if( foundItem )
-            m_frame->GetCanvas()->GetView()->HighlightItem( foundItem, pin );
+            m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, foundItem );
     }
     m_probingPcbToSch = false;
 

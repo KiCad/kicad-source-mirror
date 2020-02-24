@@ -151,6 +151,9 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 // WARNING: if you add flags, you'll probably need to adjust the masks in GetEditFlags() and
 // ClearTempFlags().
 
+// NOTE: The HIGHLIGHTED flag is basically deprecated, it was used for cross-probing before eeschema
+// supported real object selection.
+
 #define EDA_ITEM_ALL_FLAGS -1
 
 typedef unsigned STATUS_FLAGS;
