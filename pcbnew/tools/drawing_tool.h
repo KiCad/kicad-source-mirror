@@ -258,6 +258,10 @@ private:
     ///> Selects a non-copper layer for drawing
     PCB_LAYER_ID getDrawingLayer() const;
 
+    ///> Test for a enabled non-copper layer suitable for drawing
+    ///> @return true if at lesat one is enabled
+    bool hasDrawingLayerAvailable() const;
+
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;

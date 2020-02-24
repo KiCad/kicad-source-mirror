@@ -220,6 +220,12 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     if( m_editModules && !m_frame->GetModel() )
         return 0;
 
+    if( !hasDrawingLayerAvailable() )
+    {
+        wxMessageBox( _("No enabled graphic layer to create a graphic item") );
+        return 0;
+    }
+
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT* line = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
 
@@ -264,6 +270,12 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     if( m_editModules && !m_frame->GetModel() )
         return 0;
 
+    if( !hasDrawingLayerAvailable() )
+    {
+        wxMessageBox( _("No enabled graphic layer to create a graphic item") );
+        return 0;
+    }
+
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT*    circle = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
     BOARD_COMMIT    commit( m_frame );
@@ -300,6 +312,12 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 {
     if( m_editModules && !m_frame->GetModel() )
         return 0;
+
+    if( !hasDrawingLayerAvailable() )
+    {
+        wxMessageBox( _("No enabled graphic layer to create a graphic item") );
+        return 0;
+    }
 
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT*    arc = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
@@ -507,6 +525,12 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 {
     if( m_editModules && !m_frame->GetModel() )
         return 0;
+
+    if( !hasDrawingLayerAvailable() )
+    {
+        wxMessageBox( _("No enabled graphic layer to create a graphic item") );
+        return 0;
+    }
 
     DIMENSION* dimension = NULL;
     BOARD_COMMIT commit( m_frame );
@@ -1372,7 +1396,15 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
     params.m_sourceZone = sourceZone;
 
     if( aMode == ZONE_MODE::GRAPHIC_POLYGON )
+    {
+        if( !hasDrawingLayerAvailable() )
+        {
+            wxMessageBox( _("No enabled graphic layer to create a graphic item") );
+            return 0;
+        }
+
         params.m_layer = getDrawingLayer();
+    }
     else if( aMode == ZONE_MODE::SIMILAR )
         params.m_layer = sourceZone->GetLayer();
     else
@@ -1828,24 +1860,59 @@ int DRAWING_TOOL::getSegmentWidth( PCB_LAYER_ID aLayer ) const
     return m_board->GetDesignSettings().GetLineThickness( aLayer );
 }
 
+// A list of suitable layers for drawings, used in getDrawingLayer() to
+// automatically switch from a copper layer to a not specialized drawing layer
+// and hasDrawingLayerAvailable()
+static LSET suitableDrawLayers( 4, F_SilkS, B_SilkS, Dwgs_User, Cmts_User );
 
 PCB_LAYER_ID DRAWING_TOOL::getDrawingLayer() const
 {
+    // at least one of suitableDrawLayers is expected enabled
     PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+    LSET enabledLayer = m_frame->GetBoard()->GetEnabledLayers();
 
     if( IsCopperLayer( layer ) )
     {
+        wxASSERT( hasDrawingLayerAvailable() );
+
+        layer = Dwgs_User;
+
+        if( !enabledLayer[Dwgs_User] )
+            layer = Cmts_User;
+
         if( layer == F_Cu )
-            layer = F_SilkS;
+        {
+            if( enabledLayer[F_SilkS] )
+                layer = F_SilkS;
+            else if( enabledLayer[B_SilkS] )
+                layer = B_SilkS;
+        }
         else if( layer == B_Cu )
-            layer = B_SilkS;
-        else
-            layer = Dwgs_User;
+        {
+            if( enabledLayer[B_SilkS] )
+                layer = B_SilkS;
+            else if( enabledLayer[F_SilkS] )
+                layer = F_SilkS;
+        }
 
         m_frame->SetActiveLayer( layer );
     }
 
     return layer;
+}
+
+
+bool DRAWING_TOOL::hasDrawingLayerAvailable() const
+{
+    PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+
+    if( !IsCopperLayer( layer ) )   // Already on a non copper layer
+        return true;
+
+    // If the active layer is a copper layer, see if a graphic layer is available
+    LSET enabledLayer = m_frame->GetBoard()->GetEnabledLayers();
+
+    return ( enabledLayer & suitableDrawLayers ).any();
 }
 
 
