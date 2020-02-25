@@ -2040,7 +2040,7 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
             wxString path = "/";
 
             // Skip root sheet
-            for( int i = 1; i < instance.m_Path.size(); ++i )
+            for( int i = 1; i < (int) instance.m_Path.size(); ++i )
                 path += instance.m_Path[i].AsLegacyTimestampString() + "/";
 
             m_out->Print( 0, "AR Path=\"%s\" Ref=\"%s\"  Part=\"%d\" \n",

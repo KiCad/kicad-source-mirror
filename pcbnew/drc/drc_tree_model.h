@@ -353,6 +353,8 @@ public:
         case DRC_TREE_NODE::MAIN_ITEM:                          return false;
         case DRC_TREE_NODE::AUX_ITEM:                           return false;
         }
+
+        return false;
     }
 
     void DeleteCurrentItem()
