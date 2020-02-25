@@ -716,6 +716,8 @@ private:
     void OnAppendProject( wxCommandEvent& event );
     void OnImportProject( wxCommandEvent& event );
 
+    void OnClearFileHistory( wxCommandEvent& aEvent );
+
     /**
      * Set the main window title bar text.
      *

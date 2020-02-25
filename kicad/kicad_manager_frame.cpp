@@ -83,6 +83,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
                     KICAD_MANAGER_FRAME::language_change )
 
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, KICAD_MANAGER_FRAME::OnFileHistory )
+    EVT_MENU( ID_FILE_LIST_CLEAR, KICAD_MANAGER_FRAME::OnClearFileHistory )
 
     // Special functions
     EVT_MENU( ID_INIT_WATCHED_PATHS, KICAD_MANAGER_FRAME::OnChangeWatchedPaths )
@@ -175,12 +176,6 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
     delete m_toolManager;
 
     m_auimgr.UnInit();
-
-    // Since the file menu contains file history menus, we must ensure that the menu
-    // destructor is called before the file history objects are deleted since their destructor
-    // unregisters the menu from the history.
-    wxMenu* fileMenu = GetMenuBar()->Remove( 0 );
-    delete fileMenu;
 }
 
 

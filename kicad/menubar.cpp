@@ -46,18 +46,24 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     //-- File menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU*         fileMenu = new CONDITIONAL_MENU( false, controlTool );
-    FILE_HISTORY&             fileHistory = PgmTop().GetFileHistory();
-    static FILE_HISTORY_MENU* openRecentMenu;
+    CONDITIONAL_MENU* fileMenu    = new CONDITIONAL_MENU( false, controlTool );
+    FILE_HISTORY&     fileHistory = PgmTop().GetFileHistory();
+
+    fileHistory.SetClearText( _( "Clear Recent Projects" ) );
+
+    static ACTION_MENU* openRecentMenu;
 
     // Create the menu if it does not exist. Adding a file to/from the history
     // will automatically refresh the menu.
     if( !openRecentMenu )
     {
-        openRecentMenu = new FILE_HISTORY_MENU( fileHistory, _( "Clear Recent Projects" ) );
+        openRecentMenu = new ACTION_MENU( false );
         openRecentMenu->SetTool( controlTool );
         openRecentMenu->SetTitle( _( "Open Recent" ) );
         openRecentMenu->SetIcon( recent_xpm );
+
+        fileHistory.UseMenu( openRecentMenu );
+        fileHistory.AddFilesToMenu();
     }
 
     fileMenu->AddItem( KICAD_MANAGER_ACTIONS::newProject,      SELECTION_CONDITIONS::ShowAlways );

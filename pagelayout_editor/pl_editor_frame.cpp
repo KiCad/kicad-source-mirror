@@ -65,6 +65,7 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_FILE, PL_EDITOR_FRAME::Files_io )
 
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PL_EDITOR_FRAME::OnFileHistory )
+    EVT_MENU( ID_FILE_LIST_CLEAR, PL_EDITOR_FRAME::OnClearFileHistory )
 
     EVT_TOOL( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
     EVT_TOOL( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
@@ -204,12 +205,6 @@ PL_EDITOR_FRAME::~PL_EDITOR_FRAME()
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
-
-    // Since the file menu contains file history menus, we must ensure that the menu
-    // destructor is called before the file history objects are deleted since their destructor
-    // unregisters the menu from the history.
-    wxMenu* fileMenu = GetMenuBar()->Remove( 0 );
-    delete fileMenu;
 }
 
 void PL_EDITOR_FRAME::setupTools()

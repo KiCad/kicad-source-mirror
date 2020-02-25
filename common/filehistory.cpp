@@ -33,8 +33,10 @@
 using namespace std::placeholders;
 
 
-FILE_HISTORY::FILE_HISTORY( size_t aMaxFiles, int aBaseFileId ) :
-        wxFileHistory( std::min( aMaxFiles, (size_t) MAX_FILE_HISTORY_SIZE ) )
+FILE_HISTORY::FILE_HISTORY( size_t aMaxFiles, int aBaseFileId, int aClearId, wxString aClearText )
+        : wxFileHistory( std::min( aMaxFiles, (size_t) MAX_FILE_HISTORY_SIZE ) ),
+          m_clearId( aClearId ),
+          m_clearText( aClearText )
 {
     SetBaseId( aBaseFileId );
 }
@@ -91,21 +93,80 @@ void FILE_HISTORY::SetMaxFiles( size_t aMaxFiles )
 
 void FILE_HISTORY::AddFileToHistory( const wxString &aFile )
 {
-    wxFileHistory::AddFileToHistory( aFile );
-
-    // Iterate over each menu associated with this file history, and if it is one of our
-    // FILE_HISTORY_MENUs, we force it to be refreshed (so that the items are all in the
-    // correct locations).
+    // Iterate over each menu removing our custom items
     for( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
             node; node = node->GetNext() )
     {
         wxMenu* menu = static_cast<wxMenu*>( node->GetData() );
-
-        FILE_HISTORY_MENU* fileMenu = dynamic_cast<FILE_HISTORY_MENU*>( menu );
-
-        if( fileMenu )
-            fileMenu->RefreshMenu();
+        doRemoveClearitem( menu );
     }
+
+    // Let wx add the items in the file history
+    wxFileHistory::AddFileToHistory( aFile );
+
+    // Add our custom items back
+    for( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
+            node; node = node->GetNext() )
+    {
+        wxMenu* menu = static_cast<wxMenu*>( node->GetData() );
+        doAddClearItem( menu );
+    }
+}
+
+
+void FILE_HISTORY::AddFilesToMenu( wxMenu* aMenu )
+{
+    doRemoveClearitem( aMenu );
+    wxFileHistory::AddFilesToMenu( aMenu );
+    doAddClearItem( aMenu );
+}
+
+
+void FILE_HISTORY::doRemoveClearitem( wxMenu* aMenu )
+{
+    size_t      itemPos;
+    wxMenuItem* clearItem = aMenu->FindChildItem( m_clearId, &itemPos );
+
+    // Remove the separator if there is one
+    if( clearItem && itemPos > 1 )
+    {
+        wxMenuItem* sepItem = aMenu->FindItemByPosition( itemPos - 1 );
+
+        if( sepItem )
+            aMenu->Destroy( sepItem );
+    }
+
+    // Remove the clear and placeholder menu items
+    if( clearItem )
+        aMenu->Destroy( m_clearId );
+
+    if( aMenu->FindChildItem( ID_FILE_LIST_EMPTY ) )
+        aMenu->Destroy( ID_FILE_LIST_EMPTY );
+}
+
+
+void FILE_HISTORY::doAddClearItem( wxMenu* aMenu )
+{
+    if( GetCount() == 0 )
+    {
+        // If the history is empty, we create an item to say there are no files
+        wxMenuItem* item = new wxMenuItem( nullptr, ID_FILE_LIST_EMPTY, _( "No Files" ) );
+
+        aMenu->Append( item );
+        aMenu->Enable( item->GetId(), false );
+    }
+
+    wxMenuItem* clearItem = new wxMenuItem( nullptr, m_clearId, m_clearText );
+
+    aMenu->AppendSeparator();
+    aMenu->Append( clearItem );
+}
+
+
+void FILE_HISTORY::ClearFileHistory()
+{
+    while( GetCount() > 0 )
+        RemoveFileFromHistory( 0 );
 }
 
 
@@ -118,67 +179,4 @@ SELECTION_CONDITION FILE_HISTORY::FileHistoryNotEmpty( const FILE_HISTORY& aHist
 bool FILE_HISTORY::isHistoryNotEmpty( const SELECTION& aSelection, const FILE_HISTORY& aHistory )
 {
     return aHistory.GetCount() != 0;
-}
-
-
-FILE_HISTORY_MENU::FILE_HISTORY_MENU( FILE_HISTORY& aHistory, wxString aClearText ) :
-    ACTION_MENU( false ),
-    m_fileHistory( aHistory ),
-    m_clearText( aClearText )
-{
-    m_fileHistory.UseMenu( this );
-    buildMenu();
-}
-
-
-FILE_HISTORY_MENU::~FILE_HISTORY_MENU()
-{
-    m_fileHistory.RemoveMenu( this );
-}
-
-
-void FILE_HISTORY_MENU::RefreshMenu()
-{
-    // We have to manually delete all menu items before we rebuild the menu
-    for( int i = GetMenuItemCount() - 1; i >= 0; --i )
-        Destroy( FindItemByPosition( i ) );
-
-    buildMenu();
-}
-
-
-void FILE_HISTORY_MENU::buildMenu()
-{
-    if( m_fileHistory.GetCount() == 0 )
-    {
-        // If the history is empty, we create an item to say there are no files
-        wxMenuItem* item = new wxMenuItem( this, wxID_ANY, _( "No Files" ) );
-
-        Append( item );
-        Enable( item->GetId(), false );
-    }
-    else
-        m_fileHistory.AddFilesToMenu( this );
-
-    wxMenuItem* clearItem = new wxMenuItem( this, ID_FILE_LIST_CLEAR, m_clearText );
-
-    AppendSeparator();
-    Append( clearItem );
-    Connect( ID_FILE_LIST_CLEAR, wxEVT_COMMAND_MENU_SELECTED,
-            wxMenuEventHandler( FILE_HISTORY_MENU::onClearEntries ), NULL, this );
-}
-
-
-void FILE_HISTORY_MENU::onClearEntries( wxMenuEvent& aEvent )
-{
-    while( m_fileHistory.GetCount() > 0 )
-        m_fileHistory.RemoveFileFromHistory( 0 );
-
-    RefreshMenu();
-}
-
-
-ACTION_MENU* FILE_HISTORY_MENU::create() const
-{
-    return new FILE_HISTORY_MENU( m_fileHistory, m_clearText );
 }

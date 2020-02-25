@@ -191,6 +191,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_SIZE( SCH_EDIT_FRAME::OnSize )
 
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, SCH_EDIT_FRAME::OnLoadFile )
+    EVT_MENU( ID_FILE_LIST_CLEAR, SCH_EDIT_FRAME::OnClearFileHistory )
 
     EVT_MENU( ID_APPEND_PROJECT, SCH_EDIT_FRAME::OnAppendProject )
     EVT_MENU( ID_IMPORT_NON_KICAD_SCH, SCH_EDIT_FRAME::OnImportProject )
@@ -306,12 +307,6 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     g_CurrentSheet = nullptr;
     g_ConnectionGraph = nullptr;
     g_RootSheet = NULL;
-
-    // Since the file menu contains file history menus, we must ensure that the menu
-    // destructor is called before the file history objects are deleted since their destructor
-    // unregisters the menu from the history.
-    wxMenu* fileMenu = GetMenuBar()->Remove( 0 );
-    delete fileMenu;
 }
 
 
@@ -749,6 +744,12 @@ void SCH_EDIT_FRAME::OnLoadFile( wxCommandEvent& event )
 
     if( fn.size() )
         OpenProjectFiles( std::vector<wxString>( 1, fn ) );
+}
+
+
+void SCH_EDIT_FRAME::OnClearFileHistory( wxCommandEvent& aEvent )
+{
+    ClearFileHistory();
 }
 
 

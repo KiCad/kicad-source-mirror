@@ -187,6 +187,11 @@ private:
     void            updateZoomSelectBox();
     void            unitsChangeRefresh() override;      // See class EDA_DRAW_FRAME
 
+    void OnClearJobFileHistory( wxCommandEvent& aEvent );
+    void OnClearZipFileHistory( wxCommandEvent& aEvent );
+    void OnClearDrlFileHistory( wxCommandEvent& aEvent );
+    void OnClearGbrFileHistory( wxCommandEvent& aEvent );
+
     // The Tool Framework initalization
     void setupTools();
 

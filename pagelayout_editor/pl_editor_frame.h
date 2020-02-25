@@ -252,6 +252,7 @@ public:
     virtual void PrintPage( wxDC* aDC ) override;
 
     void OnFileHistory( wxCommandEvent& event );
+    void OnClearFileHistory( wxCommandEvent& aEvent );
 
     /**
      * @return the filename of the current layout descr file

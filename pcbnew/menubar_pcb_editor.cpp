@@ -59,7 +59,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //-- File menu -----------------------------------------------------------
     //
     CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
-    static FILE_HISTORY_MENU* openRecentMenu;
+    static ACTION_MENU* openRecentMenu;
     auto& disp_opt = GetDisplayOptions();
 
     if( Kiface().IsSingle() )   // not when under a project mgr
@@ -70,10 +70,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         // will automatically refresh the menu.
         if( !openRecentMenu )
         {
-            openRecentMenu = new FILE_HISTORY_MENU( fileHistory );
+            openRecentMenu = new ACTION_MENU( false );
             openRecentMenu->SetTool( selTool );
             openRecentMenu->SetTitle( _( "Open Recent" ) );
             openRecentMenu->SetIcon( recent_xpm );
+
+            fileHistory.UseMenu( openRecentMenu );
+            fileHistory.AddFilesToMenu();
         }
 
         fileMenu->AddItem( ACTIONS::doNew,           SELECTION_CONDITIONS::ShowAlways );

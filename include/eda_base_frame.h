@@ -416,6 +416,14 @@ public:
                                  FILE_HISTORY* aFileHistory = NULL );
 
     /**
+     * Removes all files from the file history.
+     *
+     * @param aFileHistory The FILE_HISTORY in use. If null, the main application file
+     *                     history is used
+     */
+    void ClearFileHistory( FILE_HISTORY* aFileHistory = NULL );
+
+    /**
      * Update the list of recently opened files.
      *
      * The menu is also updated, if FILE_HISTORY::UseMenu was called at init time.

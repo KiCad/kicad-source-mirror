@@ -53,21 +53,24 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     //-- File menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU*         fileMenu = new CONDITIONAL_MENU( false, selTool );
-    static FILE_HISTORY_MENU* openRecentMenu;
+    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
+    static ACTION_MENU* openRecentMenu;
 
-    if( Kiface().IsSingle() )   // not when under a project mgr
+    if( Kiface().IsSingle() )   // When not under a project mgr
     {
         FILE_HISTORY& fileHistory = Kiface().GetFileHistory();
 
-        // Create the menu if it does not exist. Adding a file to/from the history
-        // will automatically refresh the menu.
+        // Add this menu to the list of menus managed by the file history
+        // (the file history will be updated when adding/removing files in history)
         if( !openRecentMenu )
         {
-            openRecentMenu = new FILE_HISTORY_MENU( fileHistory );
+            openRecentMenu = new ACTION_MENU( false );
             openRecentMenu->SetTool( selTool );
             openRecentMenu->SetTitle( _( "Open Recent" ) );
             openRecentMenu->SetIcon( recent_xpm );
+
+            fileHistory.UseMenu( openRecentMenu );
+            fileHistory.AddFilesToMenu( openRecentMenu );
         }
 
         fileMenu->AddItem( ACTIONS::doNew,         EE_CONDITIONS::ShowAlways );

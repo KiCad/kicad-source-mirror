@@ -48,17 +48,20 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
         return IsContentModified();
     };
 
-    static FILE_HISTORY_MENU* openRecentMenu;  // Open Recent submenu, static to remember this menu
-    FILE_HISTORY&             recentFiles = Kiface().GetFileHistory();
+    static ACTION_MENU* openRecentMenu;  // Open Recent submenu, static to remember this menu
+    FILE_HISTORY&       recentFiles = Kiface().GetFileHistory();
 
     // Create the menu if it does not exist. Adding a file to/from the history
     // will automatically refresh the menu.
     if( !openRecentMenu )
     {
-        openRecentMenu = new FILE_HISTORY_MENU( recentFiles );
+        openRecentMenu = new ACTION_MENU( false );
         openRecentMenu->SetTool( selTool );
         openRecentMenu->SetTitle( _( "Open Recent" ) );
         openRecentMenu->SetIcon( recent_xpm );
+
+        recentFiles.UseMenu( openRecentMenu );
+        recentFiles.AddFilesToMenu();
     }
 
     //-- File menu -------------------------------------------------------

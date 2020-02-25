@@ -55,6 +55,12 @@ void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 }
 
 
+void KICAD_MANAGER_FRAME::OnClearFileHistory( wxCommandEvent& aEvent )
+{
+    ClearFileHistory( &PgmTop().GetFileHistory() );
+}
+
+
 void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 {
     wxFileName fn = GetProjectFileName();

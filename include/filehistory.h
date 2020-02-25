@@ -47,8 +47,11 @@ public:
      *
      * @param aMaxFiles is the number of files to store in the history
      * @param aBaseFileId is the ID to use for the first file menu item
+     * @param aClearId is the ID to use for the clear menu menu item
+     * @param aClearText is the text to use for the menu item that clears the history.
      */
-    FILE_HISTORY( size_t aMaxFiles, int aBaseFileId );
+    FILE_HISTORY( size_t aMaxFiles, int aBaseFileId, int aClearId,
+            wxString aClearText = _( "Clear Recent Files" ) );
 
     /**
      * Loads history from a JSON settings object
@@ -82,12 +85,28 @@ public:
      * Adds a file to the history.
      *
      * This function overrides the default wxWidgets method to iterate through all
-     * menus associated with the file history, and if they are of the FILE_HISTORY_MENU
-     * type, call their RefreshMenu() function to update the menu display.
+     * menus associated with the file history, remove the added menu items, lets wx
+     * add the new files, and then re-adds the clear menu item.
      *
      * @param aFile is the filename of the file to add to the history.
      */
     void AddFileToHistory( const wxString &aFile ) override;
+
+    /**
+     * Add the files to all registered menus.
+     */
+    void AddFilesToMenu() override
+    {
+        // This is needed to ensure that the proper base class function is called
+        wxFileHistory::AddFilesToMenu();
+    }
+
+    /**
+     * Add the files to the specified menu
+     *
+     * @aMenu is the menu to operate on.
+     */
+    void AddFilesToMenu( wxMenu* aMenu ) override;
 
     /**
      * Update the number of files that will be contained inside the file history.
@@ -95,6 +114,21 @@ public:
      * @param aMaxFiles is the new number of files for the history
      */
     void SetMaxFiles( size_t aMaxFiles );
+
+    /**
+     * Set the text displayed on the menu item that clears the entire menu.
+     *
+     * @param aClearText is the text to use for the menu item
+     */
+    void SetClearText( wxString aClearText )
+    {
+        m_clearText = aClearText;
+    }
+
+    /**
+     * Clear all entries from the file history.
+     */
+    void ClearFileHistory();
 
     /**
      * Create a SELECTION_CONDITION that can be used to enable a menu item when the
@@ -105,51 +139,33 @@ public:
      */
     static SELECTION_CONDITION FileHistoryNotEmpty( const FILE_HISTORY& aHistory );
 
+protected:
+    /**
+     * Remove the clear menu item and the preceding separator from the given menu.
+     *
+     * @param aMenu is the menu to operate on
+     */
+    void doRemoveClearitem( wxMenu* aMenu );
+
+    /**
+     * Add the clear menu item and the preceding separator to the given menu.
+     *
+     * @param aMenu is the menu to operate on
+     */
+    void doAddClearItem( wxMenu* aMenu );
+
 private:
+    /**
+     * Test if the file history is empty. This function is designed to be used with a SELECTION_CONDITION
+     * to enable/disable the file history menu.
+     *
+     * @param aSelection is unused
+     * @param aHistory is the file history to test for items
+     */
     static bool isHistoryNotEmpty( const SELECTION& aSelection, const FILE_HISTORY& aHistory );
-};
 
-/**
- * This class implements a menu container for a file history. It adds in the ability to clear
- * the file history through a menu item.
- */
-class FILE_HISTORY_MENU : public ACTION_MENU
-{
-public:
-    /**
-     * Create the file history menu.
-     *
-     * @param aHistory is the file history to use in the menu
-     * @param aClearText is the text to use for the menu item that clears the history.
-     */
-    FILE_HISTORY_MENU( FILE_HISTORY& aHistory, wxString aClearText = _( "Clear Recent Files" ) );
-
-    ~FILE_HISTORY_MENU();
-
-    /**
-     * Refresh the menu. This removes all entries from the menu and readds them, to ensure that the
-     * clear menu item is at the bottom of the menu.
-     */
-    void RefreshMenu();
-
-private:
-    //! @copydoc ACTION_MENU::create()
-    ACTION_MENU* create() const override;
-
-    /**
-     * Construct the menu by adding the file history and menu items.
-     */
-    void buildMenu();
-
-    /**
-     * Event handler for when the clear menu item is activated.
-     *
-     * @param aEvent the menu event
-     */
-    void onClearEntries( wxMenuEvent& aEvent );
-
-    FILE_HISTORY& m_fileHistory;
-    wxString      m_clearText;
+    int      m_clearId;
+    wxString m_clearText;
 };
 
 #endif

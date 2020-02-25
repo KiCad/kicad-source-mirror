@@ -46,56 +46,66 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     //-- File menu -------------------------------------------------------
     //
-    CONDITIONAL_MENU*         fileMenu = new CONDITIONAL_MENU( false, selTool );
-    static FILE_HISTORY_MENU* openRecentGbrMenu;
-    static FILE_HISTORY_MENU* openRecentDrlMenu;
-    static FILE_HISTORY_MENU* openRecentJobMenu;
-    static FILE_HISTORY_MENU* openRecentZipMenu;
-    FILE_HISTORY&             recentGbrFiles = Kiface().GetFileHistory();
+    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
+    static ACTION_MENU* openRecentGbrMenu;
+    static ACTION_MENU* openRecentDrlMenu;
+    static ACTION_MENU* openRecentJobMenu;
+    static ACTION_MENU* openRecentZipMenu;
+
+    FILE_HISTORY& recentGbrFiles = Kiface().GetFileHistory();
+    recentGbrFiles.SetClearText( _( "Clear Recent Gerber Files" ) );
 
 
     // Create the gerber file menu if it does not exist. Adding a file to/from the history
     // will automatically refresh the menu.
     if( !openRecentGbrMenu )
     {
-        openRecentGbrMenu =
-                new FILE_HISTORY_MENU( recentGbrFiles, _( "Clear Recent Gerber Files" ) );
+        openRecentGbrMenu = new ACTION_MENU( false );
         openRecentGbrMenu->SetTool( selTool );
         openRecentGbrMenu->SetTitle( _( "Open Recent Gerber File" ) );
         openRecentGbrMenu->SetIcon( recent_xpm );
+
+        recentGbrFiles.UseMenu( openRecentGbrMenu );
+        recentGbrFiles.AddFilesToMenu();
     }
 
     // Create the drill file menu if it does not exist. Adding a file to/from the history
     // will automatically refresh the menu.
     if( !openRecentDrlMenu )
     {
-        openRecentDrlMenu =
-                new FILE_HISTORY_MENU( m_drillFileHistory, _( "Clear Recent Drill Files" ) );
+        openRecentDrlMenu = new ACTION_MENU( false );
         openRecentDrlMenu->SetTool( selTool );
         openRecentDrlMenu->SetTitle( _( "Open Recent Drill File" ) );
         openRecentDrlMenu->SetIcon( recent_xpm );
+
+        m_drillFileHistory.UseMenu( openRecentDrlMenu );
+        m_drillFileHistory.AddFilesToMenu();
     }
 
     // Create the job file menu if it does not exist. Adding a file to/from the history
     // will automatically refresh the menu.
     if( !openRecentJobMenu )
     {
-        openRecentJobMenu =
-                new FILE_HISTORY_MENU( m_jobFileHistory, _( "Clear Recent Job Files" ) );
+        openRecentJobMenu = new ACTION_MENU( false );
         openRecentJobMenu->SetTool( selTool );
         openRecentJobMenu->SetTitle( _( "Open Recent Job File" ) );
         openRecentJobMenu->SetIcon( recent_xpm );
+
+        m_jobFileHistory.UseMenu( openRecentJobMenu );
+        m_jobFileHistory.AddFilesToMenu();
     }
 
     // Create the zip file menu if it does not exist. Adding a file to/from the history
     // will automatically refresh the menu.
     if( !openRecentZipMenu )
     {
-        openRecentZipMenu =
-                new FILE_HISTORY_MENU( m_zipFileHistory, _( "Clear Recent Zip Files" ) );
+        openRecentZipMenu = new ACTION_MENU( false );
         openRecentZipMenu->SetTool( selTool );
         openRecentZipMenu->SetTitle( _( "Open Recent Zip File" ) );
         openRecentZipMenu->SetIcon( recent_xpm );
+
+        m_zipFileHistory.UseMenu( openRecentZipMenu );
+        m_zipFileHistory.AddFilesToMenu();
     }
 
     fileMenu->AddItem( wxID_FILE, _( "Open &Gerber File(s)..." ),

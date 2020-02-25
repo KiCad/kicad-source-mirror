@@ -640,6 +640,15 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
 }
 
 
+void EDA_BASE_FRAME::ClearFileHistory( FILE_HISTORY* aFileHistory )
+{
+    if( !aFileHistory )
+        aFileHistory = &Kiface().GetFileHistory();
+
+    aFileHistory->ClearFileHistory();
+}
+
+
 void EDA_BASE_FRAME::OnKicadAbout( wxCommandEvent& event )
 {
     void ShowAboutDialog(EDA_BASE_FRAME * aParent); // See AboutDialog_main.cpp

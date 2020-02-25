@@ -45,7 +45,7 @@ void BIN_MOD::Init()
     // get file history size from common settings
     int fileHistorySize = Pgm().GetCommonSettings()->m_System.file_history_size;
 
-    m_history = new FILE_HISTORY( (unsigned) std::max( 0, fileHistorySize ), ID_FILE1 );
+    m_history = new FILE_HISTORY( (unsigned) std::max( 0, fileHistorySize ), ID_FILE1, ID_FILE_LIST_CLEAR );
     m_history->Load( *m_config );
 
     // Prepare On Line Help. Use only lower case for help file names, in order to

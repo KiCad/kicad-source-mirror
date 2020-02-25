@@ -89,6 +89,7 @@ public:
     void OnBrowseInFileExplorer( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );
+    void OnClearFileHistory( wxCommandEvent& aEvent );
     void OnExit( wxCommandEvent& event );
 
     void ReCreateMenuBar() override;
@@ -119,7 +120,7 @@ public:
 
     void RefreshProjectTree();
 
-    /** 
+    /**
      * Creates a new project by setting up and initial project, schematic, and board files.
      *
      * The project file is copied from the kicad.pro template file if possible.  Otherwise,

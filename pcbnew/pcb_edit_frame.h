@@ -578,6 +578,7 @@ public:
     void GenD356File( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );
+    void OnClearFileHistory( wxCommandEvent& aEvent );
 
     /**
      * Function Files_io

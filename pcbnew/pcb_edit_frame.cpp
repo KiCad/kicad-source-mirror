@@ -114,6 +114,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
     EVT_MENU( ID_IMPORT_NON_KICAD_BOARD, PCB_EDIT_FRAME::Files_io )
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PCB_EDIT_FRAME::OnFileHistory )
+    EVT_MENU( ID_FILE_LIST_CLEAR, PCB_EDIT_FRAME::OnClearFileHistory )
 
     EVT_MENU( ID_GEN_EXPORT_FILE_GENCADFORMAT, PCB_EDIT_FRAME::ExportToGenCAD )
     EVT_MENU( ID_GEN_EXPORT_FILE_VRML, PCB_EDIT_FRAME::OnExportVRML )
@@ -333,12 +334,6 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
-
-    // Since the file menu contains file history menus, we must ensure that the menu
-    // destructor is called before the file history objects are deleted since their destructor
-    // unregisters the menu from the history.
-    wxMenu* fileMenu = GetMenuBar()->Remove( 0 );
-    delete fileMenu;
 }
 
 

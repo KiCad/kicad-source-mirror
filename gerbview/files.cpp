@@ -57,6 +57,11 @@ void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
     }
 }
 
+void GERBVIEW_FRAME::OnClearGbrFileHistory( wxCommandEvent& aEvent )
+{
+    ClearFileHistory();
+}
+
 
 void GERBVIEW_FRAME::OnDrlFileHistory( wxCommandEvent& event )
 {
@@ -69,6 +74,12 @@ void GERBVIEW_FRAME::OnDrlFileHistory( wxCommandEvent& event )
         Erase_Current_DrawLayer( false );
         LoadExcellonFiles( fn );
     }
+}
+
+
+void GERBVIEW_FRAME::OnClearDrlFileHistory( wxCommandEvent& aEvent )
+{
+    ClearFileHistory( &m_drillFileHistory );
 }
 
 
@@ -85,6 +96,12 @@ void GERBVIEW_FRAME::OnZipFileHistory( wxCommandEvent& event )
 }
 
 
+void GERBVIEW_FRAME::OnClearZipFileHistory( wxCommandEvent& aEvent )
+{
+    ClearFileHistory( &m_zipFileHistory );
+}
+
+
 void GERBVIEW_FRAME::OnJobFileHistory( wxCommandEvent& event )
 {
     wxString filename = GetFileFromHistory( event.GetId(), _( "Job files" ), &m_jobFileHistory );
@@ -93,6 +110,11 @@ void GERBVIEW_FRAME::OnJobFileHistory( wxCommandEvent& event )
         LoadGerberJobFile( filename );
 }
 
+
+void GERBVIEW_FRAME::OnClearJobFileHistory( wxCommandEvent& aEvent )
+{
+    ClearFileHistory( &m_jobFileHistory );
+}
 
 /* File commands. */
 void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
