@@ -295,13 +295,13 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::doValidate( bool aRemoveRedundantCorners )
 
     if(  polyline.PointCount() < 3 )
     {
-        m_warningText->SetLabel( _("Polygon must have at least 3 corners after simplification" ) );
+        m_warningText->SetLabel( _( "Polygon must have at least 3 corners after simplification" ) );
         valid = false;
     }
 
     if( valid && polyline.SelfIntersecting() )
     {
-        m_warningText->SetLabel( _("Polygon may not be self-intersecting" ) );
+        m_warningText->SetLabel( _( "Polygon can not be self-intersecting" ) );
         valid = false;
     }
 
@@ -319,7 +319,7 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::doValidate( bool aRemoveRedundantCorners )
 
             m_warningIcon->Show( true );
             m_warningText->Show( true );
-            m_warningText->SetLabel( _("Note: redundant corners removed" ) );
+            m_warningText->SetLabel( _( "Note: redundant corners removed" ) );
         }
     }
 
@@ -406,43 +406,29 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
     // Calculate a suitable scale to fit the available draw area
-    wxSize minsize;
+    int minsize( Millimeter2iu( 0.5 ) );
 
     for( unsigned ii = 0; ii < m_currshape.m_Poly.size(); ++ii )
     {
-        minsize.x = std::max( minsize.x, std::abs( m_currshape.m_Poly[ii].x ) );
-        minsize.y = std::max( minsize.y, std::abs( m_currshape.m_Poly[ii].y ) );
+        minsize = std::max( minsize, std::abs( m_currshape.m_Poly[ii].x ) );
+        minsize = std::max( minsize, std::abs( m_currshape.m_Poly[ii].y ) );
     }
 
     // The draw origin is the center of the window.
     // Therefore the window size is twice the minsize just calculated
-    minsize.x *= 2;
-    minsize.y *= 2;
-    minsize.x += m_currshape.m_Thickness;
-    minsize.y += m_currshape.m_Thickness;
-
-    // Avoid null or too small size:
-    int mindim = Millimeter2iu( 0.5 );
-
-    if( minsize.x < mindim )
-        minsize.x = mindim;
-
-    if( minsize.y < mindim )
-        minsize.y = mindim;
-
-    double scale = std::min( (double) dc_size.x / minsize.x, (double) dc_size.y / minsize.y );
+    minsize *= 2;
+    minsize += m_currshape.m_Thickness;
 
     // Give a margin
-    scale *= 0.9;
-    dc.SetUserScale( scale, scale );
+    double scale = std::min( double( dc_size.x ) / minsize, double( dc_size.y ) / minsize ) * 0.9;
 
     GRResetPenAndBrush( &dc );
 
     // Draw X and Y axis. This is particularly useful to show the
     // reference position of basic shape
     // Axis are drawn before the polygon to avoid masking segments on axis
-    GRLine( NULL, &dc, -int( dc_size.x/scale ), 0, int( dc_size.x/scale ), 0, 0, LIGHTBLUE );   // X axis
-    GRLine( NULL, &dc, 0, -int( dc_size.y/scale ), 0, int( dc_size.y/scale ), 0, LIGHTBLUE );   // Y axis
+    GRLine( NULL, &dc, -dc_size.x, 0, dc_size.x, 0, 0, LIGHTBLUE );   // X axis
+    GRLine( NULL, &dc, 0, -dc_size.y, 0, dc_size.y, 0, LIGHTBLUE );   // Y axis
 
     // Draw polygon.
     // The selected edge(s) are shown in selectcolor, the others in normalcolor.
@@ -463,7 +449,7 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
         if( jj >= m_currshape.m_Poly.size() )
             jj = 0;
 
-        GRLine( NULL, &dc, m_currshape.m_Poly[ii], m_currshape.m_Poly[jj], m_currshape.m_Thickness, color );
+        GRLine( NULL, &dc, m_currshape.m_Poly[ii] * scale, m_currshape.m_Poly[jj] * scale, m_currshape.m_Thickness * scale, color );
     }
 
     event.Skip();
