@@ -240,7 +240,7 @@ public:
         // display data, but Windows will create multiple associations.
         // On MacOS, this crashes kicad. See https://gitlab.com/kicad/code/kicad/issues/3666
         // and https://gitlab.com/kicad/code/kicad/issues/3653
-        AttachTo( m_markerDataView );
+        AttachTo( m_view );
 #endif
     }
 
@@ -279,7 +279,10 @@ public:
 
     bool IsContainer( wxDataViewItem const& aItem ) const override
     {
-        return ToNode( aItem )->m_Type == DRC_TREE_NODE::MARKER;
+        if( ToNode( aItem ) == nullptr )    // must be tree root...
+            return true;
+        else
+            return ToNode( aItem )->m_Type == DRC_TREE_NODE::MARKER;
     }
 
     wxDataViewItem GetParent( wxDataViewItem const& aItem ) const override
