@@ -47,6 +47,11 @@
 #include <wx/string.h>
 
 
+// Minimum window size
+static const int s_minsize_x = 500;
+static const int s_minsize_y = 400;
+
+
 BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::OnKicadAbout )
     EVT_MENU( wxID_PREFERENCES, EDA_BASE_FRAME::OnPreferences )
@@ -78,10 +83,8 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     m_toolManager = nullptr;
     m_settingsManager = nullptr;
 
-    // Gives a reasonable minimal size to the frame:
-    const int minsize_x = 500;
-    const int  minsize_y = 400;
-    SetSizeHints( minsize_x, minsize_y, -1, -1, -1, -1 );
+    // Set a reasonable minimal size for the frame
+    SetSizeHints( s_minsize_x, s_minsize_y, -1, -1, -1, -1 );
 
     // Store dimensions of the user area of the main window.
     GetClientSize( &m_FrameSize.x, &m_FrameSize.y );
@@ -448,10 +451,10 @@ void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
     m_FrameSize.y = aCfg->size_y;
 
     // Ensure minimum size is set if the stored config was zero-initialized
-    if( m_FrameSize.x < GetMinWidth() || m_FrameSize.y < GetMinHeight() )
+    if( m_FrameSize.x < s_minsize_x || m_FrameSize.y < s_minsize_y )
     {
-        m_FrameSize.x = GetMinWidth();
-        m_FrameSize.y = GetMinHeight();
+        m_FrameSize.x = s_minsize_x;
+        m_FrameSize.y = s_minsize_y;
     }
 
     // Ensure window isn't bigger than can be displayed
