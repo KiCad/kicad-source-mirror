@@ -240,7 +240,7 @@ public:
         // display data, but Windows will create multiple associations.
         // On MacOS, this crashes kicad. See https://gitlab.com/kicad/code/kicad/issues/3666
         // and https://gitlab.com/kicad/code/kicad/issues/3653
-        AttachTo( m_view );
+        m_view->AssociateModel( this );
 #endif
     }
 
