@@ -223,29 +223,10 @@ public:
         delete m_drcItemsProvider;
     }
 
-    void RebuildView()
-    {
-        wxWindowUpdateLocker updateLock( m_view );
-
-        // Even with the updateLock, wxWidgets sometimes ties its knickers in
-        // a knot when trying to run a wxdataview_selection_changed_callback()
-        // on a row that has been deleted.
-        // https://bugs.launchpad.net/kicad/+bug/1756255
-        m_view->UnselectAll();
-
-        Cleared();
-#if defined( __LINUX__ )
-        // The fastest method to update wxDataViewCtrl is to rebuild from
-        // scratch by calling Cleared(). Linux requires to reassociate model to
-        // display data, but Windows will create multiple associations.
-        // On MacOS, this crashes kicad. See https://gitlab.com/kicad/code/kicad/issues/3666
-        // and https://gitlab.com/kicad/code/kicad/issues/3653
-        m_view->AssociateModel( this );
-#endif
-    }
-
     void SetProvider( DRC_ITEMS_PROVIDER* aProvider )
     {
+        BeforeReset();
+
         delete m_drcItemsProvider;
         m_drcItemsProvider = aProvider;
         m_tree.clear();
@@ -263,7 +244,7 @@ public:
                 node.m_Children.emplace_back( &node, drcItem, DRC_TREE_NODE::AUX_ITEM );
         }
 
-        RebuildView();
+        AfterReset();
         ExpandAll();
     }
 
@@ -359,10 +340,11 @@ public:
 
     void DeleteCurrentItem()
     {
-        DRC_TREE_NODE*  node = ToNode( m_view->GetCurrentItem() );
-        const DRC_ITEM* item = node ? node->m_DrcItem : nullptr;
+        wxDataViewItem  dataViewItem = m_view->GetCurrentItem();
+        DRC_TREE_NODE*  tree_node = ToNode( dataViewItem );
+        const DRC_ITEM* drc_item = tree_node ? tree_node->m_DrcItem : nullptr;
 
-        if( !item )
+        if( !drc_item )
         {
             wxBell();
             return;
@@ -370,11 +352,12 @@ public:
 
         for( int i = 0; i < m_drcItemsProvider->GetCount(); ++i )
         {
-            if( m_drcItemsProvider->GetItem( i ) == item )
+            if( m_drcItemsProvider->GetItem( i ) == drc_item )
             {
                 m_drcItemsProvider->DeleteItem( i );
                 m_tree.erase( m_tree.begin() + i );
-                RebuildView();
+
+                ItemDeleted( ToItem( nullptr ), dataViewItem );
                 break;
             }
         }
@@ -387,7 +370,7 @@ public:
             m_drcItemsProvider->DeleteAllItems();
 
             m_tree.clear();
-            RebuildView();
+            Cleared();
         }
     }
 
