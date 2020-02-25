@@ -105,11 +105,7 @@ private:
     void OnDeleteOneClick( wxCommandEvent& event ) override;
 
     void OnDRCItemSelected( wxDataViewEvent& event ) override;
-
-    void OnDClick( wxDataViewCtrl* ctrl, wxMouseEvent& event );
-    void OnMarkerDClick( wxMouseEvent& event ) override;
-    void OnLeftDClickUnconnected( wxMouseEvent& event ) override;
-    void OnLeftDClickFootprints( wxMouseEvent& event ) override;
+    void OnDRCItemDClick( wxDataViewEvent& event ) override;
 
     void OnCancelClick( wxCommandEvent& event ) override;
 
@@ -120,7 +116,7 @@ private:
     void OnChangingNotebookPage( wxNotebookEvent& event ) override;
 
     void DelDRCMarkers();
-    void RedrawDrawPanel();
+    void RefreshBoardEditor();
 
     BOARD*              m_currentBoard;     // the board currently on test
     DRC*                m_tester;

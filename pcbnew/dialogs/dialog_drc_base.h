@@ -79,10 +79,8 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		virtual void OnReportFilenameEdited( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonBrowseRptFileClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChangingNotebookPage( wxNotebookEvent& event ) { event.Skip(); }
+		virtual void OnDRCItemDClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnDRCItemSelected( wxDataViewEvent& event ) { event.Skip(); }
-		virtual void OnMarkerDClick( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnLeftDClickUnconnected( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnLeftDClickFootprints( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnDeleteOneClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteAllClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }

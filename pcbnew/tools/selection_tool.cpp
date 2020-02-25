@@ -213,6 +213,8 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
+            m_frame->FocusOnItem( nullptr );
+
             selectPoint( evt->Position() );
         }
 
@@ -236,6 +238,8 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // double click? Display the properties window
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
+            m_frame->FocusOnItem( nullptr );
+
             if( m_selection.Empty() )
                 selectPoint( evt->Position() );
 
@@ -245,6 +249,8 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
+            m_frame->FocusOnItem( nullptr );
+
             if( m_additive || m_subtractive || m_exclusive_or || dragAlwaysSelects )
             {
                 selectMultiple();
@@ -272,6 +278,8 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( evt->IsCancel() )
         {
+            m_frame->FocusOnItem( nullptr );
+
             ClearSelection();
 
             if( evt->FirstResponder() == this )

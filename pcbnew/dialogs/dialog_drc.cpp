@@ -67,6 +67,8 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
     m_footprintsTreeModel = new DRC_TREE_MODEL( m_footprintsDataView );
     m_footprintsDataView->AssociateModel( m_footprintsTreeModel );
 
+    m_Notebook->SetSelection( 0 );
+
     // We use a sdbSizer here to get the order right, which is platform-dependent
     m_sdbSizer1OK->SetLabel( _( "Run DRC" ) );
     m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
@@ -82,11 +84,12 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
 
 DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
 {
-    auto cfg = m_brdEditor->GetSettings();
+    m_brdEditor->FocusOnItem( nullptr );
 
-    cfg->m_DrcDialog.refill_zones       = m_cbRefillZones->GetValue();
-    cfg->m_DrcDialog.test_track_to_zone = m_cbReportAllTrackErrors->GetValue();
-    cfg->m_DrcDialog.test_footprints    = m_cbTestFootprints->GetValue();
+    PCBNEW_SETTINGS* settings = m_brdEditor->GetSettings();
+    settings->m_DrcDialog.refill_zones       = m_cbRefillZones->GetValue();
+    settings->m_DrcDialog.test_track_to_zone = m_cbReportAllTrackErrors->GetValue();
+    settings->m_DrcDialog.test_footprints    = m_cbTestFootprints->GetValue();
 
     m_markerTreeModel->DecRef();
 }
@@ -222,7 +225,8 @@ void DIALOG_DRC_CONTROL::OnRunDRCClick( wxCommandEvent& event )
 
     wxEndBusyCursor();
 
-    RedrawDrawPanel();
+    RefreshBoardEditor();
+    SetFocus();
 }
 
 
@@ -256,43 +260,17 @@ void DIALOG_DRC_CONTROL::OnDRCItemSelected( wxDataViewEvent& event )
 }
 
 
-void DIALOG_DRC_CONTROL::OnDClick( wxDataViewCtrl* ctrl, wxMouseEvent& event )
+void DIALOG_DRC_CONTROL::OnDRCItemDClick( wxDataViewEvent& event )
 {
-    event.Skip();
-
-    if( ctrl->GetCurrentItem().IsOk() )
+    if( event.GetItem().IsOk() )
     {
         // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
         // no destruction so we can preserve listbox cursor
         if( !IsModal() )
             Show( false );
     }
-}
 
-
-void DIALOG_DRC_CONTROL::OnMarkerDClick( wxMouseEvent& event )
-{
-    OnDClick( m_markerDataView, event );
-}
-
-
-void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
-{
-    OnDClick( m_unconnectedDataView, event );
-}
-
-
-void DIALOG_DRC_CONTROL::OnLeftDClickFootprints( wxMouseEvent& event )
-{
-    OnDClick( m_footprintsDataView, event );
-}
-
-
-void DIALOG_DRC_CONTROL::OnDeleteAllClick( wxCommandEvent& event )
-{
-    DelDRCMarkers();
-    RedrawDrawPanel();
-    UpdateDisplayedCounts();
+    event.Skip();
 }
 
 
@@ -315,6 +293,8 @@ void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent& )
 
 void DIALOG_DRC_CONTROL::OnCancelClick( wxCommandEvent& event )
 {
+    m_brdEditor->FocusOnItem( nullptr );
+
     SetReturnCode( wxID_CANCEL );
     SetDRCParameters();
 
@@ -349,7 +329,7 @@ void DIALOG_DRC_CONTROL::OnChangingNotebookPage( wxNotebookEvent& event )
 }
 
 
-void DIALOG_DRC_CONTROL::RedrawDrawPanel()
+void DIALOG_DRC_CONTROL::RefreshBoardEditor()
 {
     WINDOW_THAWER thawer( m_brdEditor );
 
@@ -445,13 +425,21 @@ void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
         m_markerTreeModel->DeleteCurrentItem();
 
         // redraw the pcb
-        RedrawDrawPanel();
+        RefreshBoardEditor();
     }
     else if( m_Notebook->GetSelection() == 1 )
     {
         m_unconnectedTreeModel->DeleteCurrentItem();
     }
 
+    UpdateDisplayedCounts();
+}
+
+
+void DIALOG_DRC_CONTROL::OnDeleteAllClick( wxCommandEvent& event )
+{
+    DelDRCMarkers();
+    RefreshBoardEditor();
     UpdateDisplayedCounts();
 }
 

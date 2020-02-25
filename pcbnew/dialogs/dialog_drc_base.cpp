@@ -160,7 +160,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerUnconnectedBox;
 	bSizerUnconnectedBox = new wxBoxSizer( wxVERTICAL );
 
-	m_unconnectedDataView = new wxDataViewCtrl( m_panelUnconnectedItems, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_unconnectedDataView = new wxDataViewCtrl( m_panelUnconnectedItems, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER );
 	bSizerUnconnectedBox->Add( m_unconnectedDataView, 1, wxALL|wxEXPAND, 5 );
 
 
@@ -172,7 +172,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerFootprintsBox;
 	bSizerFootprintsBox = new wxBoxSizer( wxVERTICAL );
 
-	m_footprintsDataView = new wxDataViewCtrl( m_panelFootprintWarnings, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_footprintsDataView = new wxDataViewCtrl( m_panelFootprintWarnings, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER );
 	bSizerFootprintsBox->Add( m_footprintsDataView, 1, wxALL|wxEXPAND, 5 );
 
 
@@ -214,12 +214,12 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_RptFilenameCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnReportFilenameEdited ), NULL, this );
 	m_BrowseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnButtonBrowseRptFileClick ), NULL, this );
 	m_Notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_DRC_CONTROL_BASE::OnChangingNotebookPage ), NULL, this );
+	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemDClick ), NULL, this );
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemSelected ), NULL, this );
-	m_markerDataView->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnMarkerDClick ), NULL, this );
+	m_unconnectedDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemDClick ), NULL, this );
 	m_unconnectedDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemSelected ), NULL, this );
-	m_unconnectedDataView->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnLeftDClickUnconnected ), NULL, this );
+	m_footprintsDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemDClick ), NULL, this );
 	m_footprintsDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemSelected ), NULL, this );
-	m_footprintsDataView->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnLeftDClickFootprints ), NULL, this );
 	m_DeleteCurrentMarkerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnDeleteOneClick ), NULL, this );
 	m_DeleteAllMarkersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnDeleteAllClick ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnCancelClick ), NULL, this );
@@ -234,12 +234,12 @@ DIALOG_DRC_CONTROL_BASE::~DIALOG_DRC_CONTROL_BASE()
 	m_RptFilenameCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnReportFilenameEdited ), NULL, this );
 	m_BrowseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnButtonBrowseRptFileClick ), NULL, this );
 	m_Notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_DRC_CONTROL_BASE::OnChangingNotebookPage ), NULL, this );
+	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemDClick ), NULL, this );
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemSelected ), NULL, this );
-	m_markerDataView->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnMarkerDClick ), NULL, this );
+	m_unconnectedDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemDClick ), NULL, this );
 	m_unconnectedDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemSelected ), NULL, this );
-	m_unconnectedDataView->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnLeftDClickUnconnected ), NULL, this );
+	m_footprintsDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemDClick ), NULL, this );
 	m_footprintsDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemSelected ), NULL, this );
-	m_footprintsDataView->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnLeftDClickFootprints ), NULL, this );
 	m_DeleteCurrentMarkerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnDeleteOneClick ), NULL, this );
 	m_DeleteAllMarkersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnDeleteAllClick ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnCancelClick ), NULL, this );
