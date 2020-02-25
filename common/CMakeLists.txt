@@ -303,8 +303,6 @@ set( COMMON_SRCS
     hotkey_store.cpp
     hotkeys_basic.cpp
     html_messagebox.cpp
-    kicad_curl/kicad_curl.cpp
-    kicad_curl/kicad_curl_easy.cpp
     kiface_i.cpp
     kiway.cpp
     kiway_express.cpp
@@ -352,6 +350,11 @@ endif()
 if( NOT HAVE_STRTOKR )
     list( APPEND COMMON_SRCS strtok_r.c )
 endif()
+
+list( APPEND COMMON_SRCS
+    kicad_curl/kicad_curl.cpp
+    kicad_curl/kicad_curl_easy.cpp
+)
 
 set( COMMON_SRCS
     ${COMMON_SRCS}
