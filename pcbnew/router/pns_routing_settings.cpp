@@ -91,6 +91,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_params.emplace_back( new PARAM<int>( "max_radius",        &m_maxRadius,         1000000 ) );
     m_params.emplace_back( new PARAM<bool>( "use_rounded",      &m_roundedCorners,    false ) );
 
+    LoadFromFile();
 }
 
 
