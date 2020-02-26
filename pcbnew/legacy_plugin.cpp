@@ -1533,8 +1533,9 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             // read Netname
             ReadDelimitedText( buf, data, sizeof(buf) );
 
-            wxASSERT( m_board->FindNet( getNetCode( netcode ) )->GetNetname()
-                            == FROM_UTF8( StrPurge( buf ) ) );
+            if( m_board )
+                wxASSERT( m_board->FindNet( getNetCode( netcode ) )->GetNetname()
+                          == FROM_UTF8( StrPurge( buf ) ) );
         }
 
         else if( TESTLINE( "Po" ) )         // (Po)sition
