@@ -831,8 +831,11 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         fn = prj.SchSymbolLibTable()->GetFullURI( aLibrary );
     }
 
+    wxFileName docFileName = fn;
+    docFileName.SetExt( DOC_EXT );
+
     // Verify the user has write privileges before attempting to save the library file.
-    if( !IsWritable( fn ) )
+    if( !IsWritable( fn ) || !IsWritable( docFileName ) )
         return false;
 
     ClearMsgPanel();
@@ -840,9 +843,6 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     // Copy .lib file to .bak.
     if( !backupFile( fn, "bak" ) )
         return false;
-
-    wxFileName docFileName = fn;
-    docFileName.SetExt( DOC_EXT );
 
     // Copy .dcm file to .bck.
     if( !backupFile( docFileName, "bck" ) )
