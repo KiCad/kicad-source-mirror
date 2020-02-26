@@ -225,7 +225,7 @@ public:
 
     void SetProvider( DRC_ITEMS_PROVIDER* aProvider )
     {
-        BeforeReset();
+        Cleared();
 
         delete m_drcItemsProvider;
         m_drcItemsProvider = aProvider;
@@ -242,9 +242,16 @@ public:
 
             if( drcItem->HasSecondItem() )
                 node.m_Children.emplace_back( &node, drcItem, DRC_TREE_NODE::AUX_ITEM );
+
+            wxDataViewItemArray childItems;
+
+            for( DRC_TREE_NODE& child : node.m_Children )
+                childItems.Add( ToItem( &child ) );
+
+            ItemAdded( ToItem( nullptr ), ToItem( &node ) );
+            ItemsAdded( ToItem( &node ), childItems );
         }
 
-        AfterReset();
         ExpandAll();
     }
 
