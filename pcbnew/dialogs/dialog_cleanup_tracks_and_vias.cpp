@@ -46,7 +46,6 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
     m_cleanShortCircuitOpt->SetValue( cfg->m_Cleanup.cleanup_short_circuits );
     m_deleteTracksInPadsOpt->SetValue( cfg->m_Cleanup.cleanup_tracks_in_pad );
 
-    m_changesDataView->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, 4000 );
     m_changesTreeModel = new DRC_TREE_MODEL( m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
 

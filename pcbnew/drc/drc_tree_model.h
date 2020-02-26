@@ -232,7 +232,7 @@ public:
         // on a row that has been deleted.
         m_view->UnselectAll();
 
-        BeforeReset();
+        Cleared();
 
         delete m_drcItemsProvider;
         m_drcItemsProvider = aProvider;
@@ -251,7 +251,16 @@ public:
                 node.m_Children.emplace_back( &node, drcItem, DRC_TREE_NODE::AUX_ITEM );
         }
 
-        AfterReset();
+#if defined( __LINUX__ )
+        // The fastest method to update wxDataViewCtrl is to rebuild from
+        // scratch by calling Cleared(). Linux requires to reassociate model to
+        // display data, but Windows will create multiple associations.
+        // On MacOS, this crashes kicad. See https://gitlab.com/kicad/code/kicad/issues/3666
+        // and https://gitlab.com/kicad/code/kicad/issues/3653
+        m_view->AssociateModel( this );
+#endif
+        m_view->ClearColumns();
+        m_view->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, 4000 );
 
         ExpandAll();
     }

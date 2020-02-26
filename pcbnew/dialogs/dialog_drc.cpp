@@ -55,15 +55,12 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
 
     m_BrowseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
-    m_markerDataView->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, 4000 );
     m_markerTreeModel = new DRC_TREE_MODEL( m_markerDataView );
     m_markerDataView->AssociateModel( m_markerTreeModel );
 
-    m_unconnectedDataView->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, 4000 );
     m_unconnectedTreeModel = new DRC_TREE_MODEL( m_unconnectedDataView );
     m_unconnectedDataView->AssociateModel( m_unconnectedTreeModel );
 
-    m_footprintsDataView->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, 4000 );
     m_footprintsTreeModel = new DRC_TREE_MODEL( m_footprintsDataView );
     m_footprintsDataView->AssociateModel( m_footprintsTreeModel );
 
