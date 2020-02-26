@@ -225,7 +225,14 @@ public:
 
     void SetProvider( DRC_ITEMS_PROVIDER* aProvider )
     {
-        Cleared();
+        wxWindowUpdateLocker updateLock( m_view );
+
+        // Even with the updateLock, wxWidgets sometimes ties its knickers in
+        // a knot when trying to run a wxdataview_selection_changed_callback()
+        // on a row that has been deleted.
+        m_view->UnselectAll();
+
+        BeforeReset();
 
         delete m_drcItemsProvider;
         m_drcItemsProvider = aProvider;
@@ -242,15 +249,9 @@ public:
 
             if( drcItem->HasSecondItem() )
                 node.m_Children.emplace_back( &node, drcItem, DRC_TREE_NODE::AUX_ITEM );
-
-            wxDataViewItemArray childItems;
-
-            for( DRC_TREE_NODE& child : node.m_Children )
-                childItems.Add( ToItem( &child ) );
-
-            ItemAdded( ToItem( nullptr ), ToItem( &node ) );
-            ItemsAdded( ToItem( &node ), childItems );
         }
+
+        AfterReset();
 
         ExpandAll();
     }
