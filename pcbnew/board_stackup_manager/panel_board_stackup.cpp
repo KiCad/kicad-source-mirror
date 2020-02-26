@@ -442,7 +442,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
         if( item->HasEpsilonRValue() )
         {
             wxString txt;
-            txt.Printf( "%.1f", item->GetEpsilonR( sub_item ) );
+            txt.Printf( "%.2f", item->GetEpsilonR( sub_item ) );
             wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ui_row_item.m_EpsilonCtrl );
 
             if( textCtrl )
@@ -697,7 +697,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
     if( item->HasEpsilonRValue() )
     {
         wxString txt;
-        txt.Printf( "%.1f", item->GetEpsilonR( aSublayerIdx ) );
+        txt.Printf( "%.2f", item->GetEpsilonR( aSublayerIdx ) );
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                wxDefaultPosition, m_numericFieldsSize );
         textCtrl->SetValue( txt );

@@ -282,7 +282,7 @@ wxString BOARD_STACKUP_ITEM::FormatEpsilonR( int aDielectricSubLayer ) const
 {
     // return a wxString to print/display Epsilon R
     wxString txt;
-    txt.Printf( "%.1f", GetEpsilonR( aDielectricSubLayer ) );
+    txt.Printf( "%.2f", GetEpsilonR( aDielectricSubLayer ) );
     return txt;
 }
 
