@@ -139,6 +139,8 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
     DIALOG_DISPLAY_HTML_TEXT_BASE error_display( m_frame, wxID_ANY, _( "Marker Information" ),
                                                  wxDefaultPosition, wxSize( 750, 600 ) );
 
+    std::vector<wxString> messages;
+
     int dup_error = 0;
 
     for( unsigned ii = 1; ii < pinList.size(); ii++ )
@@ -179,7 +181,7 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
 
         msg += wxT( ".<br>" );
 
-        error_display.m_htmlWindow->AppendToPage( msg );
+        messages.push_back( msg );
     }
 
     // Test for off grid pins:
@@ -211,14 +213,27 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
         }
 
         msg += wxT( ".<br>" );
-
-        error_display.m_htmlWindow->AppendToPage( msg );
+        messages.push_back( msg );
     }
 
     if( !dup_error && !offgrid_error )
         DisplayInfoMessage( m_frame, _( "No off grid or duplicate pins were found." ) );
     else
+    {
+        wxColour bgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+        wxColour fgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+        wxString outmsg = wxString::Format( "<html><body bgcolor='%s' text='%s'>",
+                bgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
+                fgcolor.GetAsString( wxC2S_HTML_SYNTAX ) );
+
+        for( auto& msg : messages )
+            outmsg += msg;
+
+        outmsg += "</body></html>";
+
+        error_display.m_htmlWindow->SetPage( outmsg );
         error_display.ShowModal();
+    }
 }
 
 
