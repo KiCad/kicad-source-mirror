@@ -401,6 +401,7 @@ public:
         Add( ACT_SelLayerAndPlaceThroughVia );
         Add( ACT_SelLayerAndPlaceBlindVia );
         Add( ACT_SwitchPosture );
+        Add( ACT_SwitchRounding );
 
         AppendSeparator();
 
