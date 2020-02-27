@@ -51,6 +51,10 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
     m_userUnits = aFrame->GetUserUnits();
 
     m_dummyBoard = new BOARD();
+
+    // This board will only be used to hold a footprint for viewing
+    m_dummyBoard->SetBoardUse( BOARD_USE::FPHOLDER );
+
     m_selected = -1;
 
     // Set the bitmap of 3D view buttons:

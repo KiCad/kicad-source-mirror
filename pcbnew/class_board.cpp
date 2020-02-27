@@ -58,6 +58,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
 BOARD::BOARD() :
         BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),
+        m_boardUse( BOARD_USE::NORMAL ),
         m_paper( PAGE_INFO::A4 ),
         m_project( nullptr ),
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),

@@ -135,6 +135,10 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     SetCanvas( drawPanel );
     SetBoard( new BOARD() );
 
+
+    // This board will only be used to hold a footprint for editing
+    GetBoard()->SetBoardUse( BOARD_USE::FPHOLDER );
+
     // In modedit, the default net clearance is not known (it depends on the actual board).
     // So we do not show the default clearance, by setting it to 0.
     // The footprint or pad specific clearance will be shown.

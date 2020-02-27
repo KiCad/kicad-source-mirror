@@ -75,6 +75,10 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     SetIcon( icon );
 
     SetBoard( new BOARD() );
+
+    // This board will only be used to hold a footprint for viewing
+    GetBoard()->SetBoardUse( BOARD_USE::FPHOLDER );
+
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
 
     // Create GAL canvas before loading settings

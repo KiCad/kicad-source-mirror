@@ -171,6 +171,16 @@ DECL_DEQ_FOR_SWIG( TRACKS, TRACK* )
 DECL_DEQ_FOR_SWIG( GROUPS, PCB_GROUP* )
 
 /**
+ * Flags to specify how the board is being used.
+ */
+enum class BOARD_USE
+{
+    NORMAL,     // A normal board
+    FPHOLDER    // A board that holds a single footprint
+};
+
+
+/**
  * Information pertinent to a Pcbnew printed circuit board.
  */
 class BOARD : public BOARD_ITEM_CONTAINER
@@ -178,6 +188,9 @@ class BOARD : public BOARD_ITEM_CONTAINER
     friend class PCB_EDIT_FRAME;
 
 private:
+    /// What is this board being used for
+    BOARD_USE               m_boardUse;
+
     wxString                m_fileName;
     MARKERS                 m_markers;
     DRAWINGS                m_drawings;
@@ -235,6 +248,30 @@ public:
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && PCB_T == aItem->Type();
+    }
+
+    /**
+     * Set what the board is going to be used for.
+     *
+     * @param aUse is the flag
+     */
+    void SetBoardUse( BOARD_USE aUse ) { m_boardUse = aUse; }
+
+    /**
+     * Get what the board use is.
+     *
+     * @return what the board is being used for
+     */
+    BOARD_USE GetBoardUse() { return m_boardUse; }
+
+    /**
+     * Find out if the board is being used to hold a single footprint for editing/viewing.
+     *
+     * @return if the board is just holding a footprint
+     */
+    bool IsFootprintHolder()
+    {
+        return m_boardUse == BOARD_USE::FPHOLDER;
     }
 
     void SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }

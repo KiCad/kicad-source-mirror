@@ -119,6 +119,9 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
     board->SynchronizeNetsAndNetClasses();
     SetBoard( board );
 
+    // This board will only be used to hold a footprint for editing
+    GetBoard()->SetBoardUse( BOARD_USE::FPHOLDER );
+
     // clear filename, to avoid overwriting an old file
     GetBoard()->SetFileName( wxEmptyString );
 
