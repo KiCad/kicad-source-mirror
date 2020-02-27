@@ -131,7 +131,7 @@ void PAD_CS_PRIMITIVE::Rotate( const wxPoint& aRotCentre, double aAngle )
  * the shape is a polygon (can be with thick outline), segment, circle or arc
  */
 
-void D_PAD::AddPrimitive( const SHAPE_POLY_SET& aPoly, int aThickness )
+void D_PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aMergePrimitives )
 {
     std::vector<wxPoint> points;
 
@@ -143,21 +143,24 @@ void D_PAD::AddPrimitive( const SHAPE_POLY_SET& aPoly, int aThickness )
     for( auto iter = poly_no_hole.CIterate(); iter; iter++ )
         points.emplace_back( iter->x, iter->y );
 
-    AddPrimitive( points, aThickness );
+    AddPrimitivePoly( points, aThickness, aMergePrimitives );
 }
 
-void D_PAD::AddPrimitive( const std::vector<wxPoint>& aPoly, int aThickness )
+void D_PAD::AddPrimitivePoly(
+        const std::vector<wxPoint>& aPoly, int aThickness, bool aMergePrimitives )
 {
     PAD_CS_PRIMITIVE shape( S_POLYGON );
     shape.m_Poly = aPoly;
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
 
-    MergePrimitivesAsPolygon();
+    if( aMergePrimitives )
+        MergePrimitivesAsPolygon();
 }
 
 
-void D_PAD::AddPrimitive( wxPoint aStart, wxPoint aEnd, int aThickness )
+void D_PAD::AddPrimitiveSegment(
+        wxPoint aStart, wxPoint aEnd, int aThickness, bool aMergePrimitives )
 {
     PAD_CS_PRIMITIVE shape( S_SEGMENT );
     shape.m_Start = aStart;
@@ -165,11 +168,13 @@ void D_PAD::AddPrimitive( wxPoint aStart, wxPoint aEnd, int aThickness )
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
 
-    MergePrimitivesAsPolygon();
+    if( aMergePrimitives )
+        MergePrimitivesAsPolygon();
 }
 
 
-void D_PAD::AddPrimitive( wxPoint aCenter, wxPoint aStart, int aArcAngle, int aThickness )
+void D_PAD::AddPrimitiveArc(
+        wxPoint aCenter, wxPoint aStart, int aArcAngle, int aThickness, bool aMergePrimitives )
 {
     PAD_CS_PRIMITIVE shape( S_ARC );
     shape.m_Start = aCenter;
@@ -178,11 +183,13 @@ void D_PAD::AddPrimitive( wxPoint aCenter, wxPoint aStart, int aArcAngle, int aT
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
 
-    MergePrimitivesAsPolygon();
+    if( aMergePrimitives )
+        MergePrimitivesAsPolygon();
 }
 
 
-void D_PAD::AddPrimitive( wxPoint aStart, wxPoint aEnd, wxPoint aCtrl1, wxPoint aCtrl2, int aThickness )
+void D_PAD::AddPrimitiveCurve( wxPoint aStart, wxPoint aEnd, wxPoint aCtrl1, wxPoint aCtrl2,
+        int aThickness, bool aMergePrimitives )
 {
     PAD_CS_PRIMITIVE shape( S_CURVE );
     shape.m_Start = aStart;
@@ -192,11 +199,13 @@ void D_PAD::AddPrimitive( wxPoint aStart, wxPoint aEnd, wxPoint aCtrl1, wxPoint 
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
 
-    MergePrimitivesAsPolygon();
+    if( aMergePrimitives )
+        MergePrimitivesAsPolygon();
 }
 
 
-void D_PAD::AddPrimitive( wxPoint aCenter, int aRadius, int aThickness )
+void D_PAD::AddPrimitiveCircle(
+        wxPoint aCenter, int aRadius, int aThickness, bool aMergePrimitives )
 {
     PAD_CS_PRIMITIVE shape( S_CIRCLE );
     shape.m_Start = aCenter;
@@ -204,7 +213,8 @@ void D_PAD::AddPrimitive( wxPoint aCenter, int aRadius, int aThickness )
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
 
-    MergePrimitivesAsPolygon();
+    if( aMergePrimitives )
+        MergePrimitivesAsPolygon();
 }
 
 

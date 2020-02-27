@@ -3230,33 +3230,34 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                 {
                 case T_gr_arc:
                     dummysegm = parseDRAWSEGMENT();
-                    pad->AddPrimitive( dummysegm->GetCenter(), dummysegm->GetArcStart(),
-                                        dummysegm->GetAngle(), dummysegm->GetWidth() );
+                    pad->AddPrimitiveArc( dummysegm->GetCenter(), dummysegm->GetArcStart(),
+                            dummysegm->GetAngle(), dummysegm->GetWidth(), false );
                     break;
 
                 case T_gr_line:
                     dummysegm = parseDRAWSEGMENT();
-                    pad->AddPrimitive( dummysegm->GetStart(), dummysegm->GetEnd(),
-                                        dummysegm->GetWidth() );
+                    pad->AddPrimitiveSegment( dummysegm->GetStart(), dummysegm->GetEnd(),
+                            dummysegm->GetWidth(), false );
                     break;
 
                 case T_gr_circle:
                     dummysegm = parseDRAWSEGMENT( true );   // Circles with 0 thickness are allowed
                                                             // ( filled circles )
-                    pad->AddPrimitive( dummysegm->GetCenter(), dummysegm->GetRadius(),
-                                        dummysegm->GetWidth() );
+                    pad->AddPrimitiveCircle( dummysegm->GetCenter(), dummysegm->GetRadius(),
+                            dummysegm->GetWidth(), false );
                     break;
 
                 case T_gr_poly:
                     dummysegm = parseDRAWSEGMENT();
-                    pad->AddPrimitive( dummysegm->BuildPolyPointsList(), dummysegm->GetWidth() );
+                    pad->AddPrimitivePoly(
+                            dummysegm->BuildPolyPointsList(), dummysegm->GetWidth(), false );
                     break;
 
                 case T_gr_curve:
                     dummysegm = parseDRAWSEGMENT();
-                    pad->AddPrimitive( dummysegm->GetStart(), dummysegm->GetEnd(),
-                                       dummysegm->GetBezControl1(), dummysegm->GetBezControl2(),
-                                       dummysegm->GetWidth() );
+                    pad->AddPrimitiveCurve( dummysegm->GetStart(), dummysegm->GetEnd(),
+                            dummysegm->GetBezControl1(), dummysegm->GetBezControl2(),
+                            dummysegm->GetWidth(), false );
                     break;
 
                 default:

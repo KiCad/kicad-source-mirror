@@ -318,14 +318,18 @@ public:
      *   a arc
      *   a curve
      */
-    void AddPrimitive( const SHAPE_POLY_SET& aPoly, int aThickness );  ///< add a polygonal basic shape
-    void AddPrimitive( const std::vector<wxPoint>& aPoly, int aThickness );  ///< add a polygonal basic shape
-    void AddPrimitive( wxPoint aStart, wxPoint aEnd, int aThickness ); ///< segment basic shape
-    void AddPrimitive( wxPoint aCenter, int aRadius, int aThickness ); ///< ring or circle basic shape
-    void AddPrimitive( wxPoint aCenter, wxPoint aStart,
-                        int aArcAngle, int aThickness );    ///< arc basic shape
-    void AddPrimitive( wxPoint aStart, wxPoint aEnd, wxPoint aCtrl1,
-                        wxPoint aCtrl2, int aThickness );              ///< curve basic shape
+    void AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness,
+            bool aMergePrimitives = true ); ///< add a polygonal basic shape
+    void AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness,
+            bool aMergePrimitives = true ); ///< add a polygonal basic shape
+    void AddPrimitiveSegment( wxPoint aStart, wxPoint aEnd, int aThickness,
+            bool aMergePrimitives = true ); ///< segment basic shape
+    void AddPrimitiveCircle( wxPoint aCenter, int aRadius, int aThickness,
+            bool aMergePrimitives = true ); ///< ring or circle basic shape
+    void AddPrimitiveArc( wxPoint aCenter, wxPoint aStart, int aArcAngle, int aThickness,
+            bool aMergePrimitives = true ); ///< arc basic shape
+    void AddPrimitiveCurve( wxPoint aStart, wxPoint aEnd, wxPoint aCtrl1, wxPoint aCtrl2,
+            int aThickness, bool aMergePrimitives = true ); ///< curve basic shape
 
 
     bool GetBestAnchorPosition( VECTOR2I& aPos );
