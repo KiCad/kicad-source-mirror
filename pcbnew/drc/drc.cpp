@@ -75,8 +75,7 @@ DRC::DRC() :
     m_drcRun = false;
     m_footprintsTested = false;
 
-    m_doCreateRptFile = false;
-    // m_rptFilename set to empty by its constructor
+    m_severities = DRC_SHOW_ERRORS | DRC_SHOW_WARNINGS | DRC_SHOW_INFOS;
 
     m_segmAngle  = 0;
     m_segmLength = 0;
@@ -136,7 +135,7 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
         m_drcDialog = new DIALOG_DRC_CONTROL( this, m_pcbEditorFrame, aParent );
         updatePointers();
 
-        m_drcDialog->SetRptSettings( m_doCreateRptFile, m_rptFilename );
+        m_drcDialog->SetSettings( m_severities );
 
         if( show_dlg_modal )
             m_drcDialog->ShowModal();
@@ -170,7 +169,7 @@ void DRC::DestroyDRCDialog( int aReason )
 {
     if( m_drcDialog )
     {
-        m_drcDialog->GetRptSettings( &m_doCreateRptFile, m_rptFilename);
+        m_drcDialog->GetSettings( &m_severities );
 
         m_drcDialog->Destroy();
         m_drcDialog = nullptr;

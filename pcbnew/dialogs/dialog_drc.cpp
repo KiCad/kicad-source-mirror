@@ -39,6 +39,7 @@
 #include <drc/drc_tree_model.h>
 #include <wx/wupdlock.h>
 
+
 DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame,
                                         wxWindow* aParent ) :
         DIALOG_DRC_CONTROL_BASE( aParent ),
@@ -52,8 +53,6 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
     m_brdEditor    = aEditorFrame;
     m_currentBoard = m_brdEditor->GetBoard();
     m_BrdSettings  = m_brdEditor->GetBoard()->GetDesignSettings();
-
-    m_BrowseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
     m_markerTreeModel = new DRC_TREE_MODEL( m_markerDataView );
     m_markerDataView->AssociateModel( m_markerTreeModel );
@@ -73,7 +72,7 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
 
     m_sdbSizer1OK->SetDefault();
 
-    InitValues();
+    initValues();
 
     FinishDialogSettings();
 }
@@ -89,6 +88,18 @@ DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
     settings->m_DrcDialog.test_footprints    = m_cbTestFootprints->GetValue();
 
     m_markerTreeModel->DecRef();
+}
+
+
+void DIALOG_DRC_CONTROL::SetSettings( int aSeverities )
+{
+    m_severities = aSeverities;
+}
+
+
+void DIALOG_DRC_CONTROL::GetSettings( int* aSeverities )
+{
+    *aSeverities  = m_severities;
 }
 
 
@@ -109,11 +120,11 @@ void DIALOG_DRC_CONTROL::OnActivateDlg( wxActivateEvent& event )
     // updating data which can be modified outside the dialog (DRC parameters, units ...)
     // because the dialog is not modal
     m_BrdSettings = m_brdEditor->GetBoard()->GetDesignSettings();
-    DisplayDRCValues();
+    displayDRCValues();
 }
 
 
-void DIALOG_DRC_CONTROL::DisplayDRCValues()
+void DIALOG_DRC_CONTROL::displayDRCValues()
 {
     m_trackMinWidth.SetValue( m_BrdSettings.m_TrackMinWidth );
     m_viaMinSize.SetValue( m_BrdSettings.m_ViasMinSize );
@@ -121,13 +132,13 @@ void DIALOG_DRC_CONTROL::DisplayDRCValues()
 }
 
 
-void DIALOG_DRC_CONTROL::InitValues()
+void DIALOG_DRC_CONTROL::initValues()
 {
     m_markersTitleTemplate     = m_Notebook->GetPageText( 0 );
     m_unconnectedTitleTemplate = m_Notebook->GetPageText( 1 );
     m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
 
-    DisplayDRCValues();
+    displayDRCValues();
 
     auto cfg = m_brdEditor->GetSettings();
 
@@ -141,7 +152,7 @@ void DIALOG_DRC_CONTROL::InitValues()
 }
 
 
-void DIALOG_DRC_CONTROL::SetDRCParameters()
+void DIALOG_DRC_CONTROL::setDRCParameters()
 {
     m_BrdSettings.m_TrackMinWidth    = (int) m_trackMinWidth.GetValue();
     m_BrdSettings.m_ViasMinSize      = (int) m_viaMinSize.GetValue();
@@ -151,44 +162,19 @@ void DIALOG_DRC_CONTROL::SetDRCParameters()
 }
 
 
-void DIALOG_DRC_CONTROL::SetRptSettings( bool aEnable, const wxString& aFileName )
+void DIALOG_DRC_CONTROL::syncCheckboxes()
 {
-    m_RptFilenameCtrl->SetValue( aFileName );
-    m_CreateRptCtrl->SetValue( aEnable );
-}
-
-
-void DIALOG_DRC_CONTROL::GetRptSettings( bool* aEnable, wxString& aFileName )
-{
-    *aEnable  = m_CreateRptCtrl->GetValue();
-    aFileName = m_RptFilenameCtrl->GetValue();
+    m_showAll->SetValue( m_severities == DRC_SHOW_ERRORS | DRC_SHOW_WARNINGS | DRC_SHOW_INFOS );
+    m_showErrors->SetValue( m_severities & DRC_SHOW_ERRORS );
+    m_showWarnings->SetValue( m_severities & DRC_SHOW_WARNINGS );
+    m_showInfos->SetValue( m_severities & DRC_SHOW_INFOS );
 }
 
 
 void DIALOG_DRC_CONTROL::OnRunDRCClick( wxCommandEvent& event )
 {
-    wxString reportName, msg;
-
-    bool make_report = m_CreateRptCtrl->IsChecked();
-
-    if( make_report ) // Create a rpt file
-    {
-        reportName = m_RptFilenameCtrl->GetValue();
-
-        if( reportName.IsEmpty() )
-        {
-            wxCommandEvent dummy;
-            OnButtonBrowseRptFileClick( dummy );
-        }
-
-        if( !reportName.IsEmpty() )
-            reportName = makeValidFileNameReport();
-    }
-
-    SetDRCParameters();
+    setDRCParameters();
     m_tester->m_doZonesTest          = m_cbReportTracksToZonesErrors->GetValue();
-    m_tester->m_rptFilename          = reportName;
-    m_tester->m_doCreateRptFile      = make_report;
     m_tester->m_refillZones          = m_cbRefillZones->GetValue();
     m_tester->m_reportAllTrackErrors = m_cbReportAllTrackErrors->GetValue();
     m_tester->m_testFootprints       = m_cbTestFootprints->GetValue();
@@ -203,22 +189,6 @@ void DIALOG_DRC_CONTROL::OnRunDRCClick( wxCommandEvent& event )
     wxSafeYield(); // Allows time slice to refresh the Messages
     m_tester->RunTests( m_Messages );
     m_Notebook->ChangeSelection( 0 ); // display the "Problems/Markers" tab
-
-    // Generate the report
-    if( !reportName.IsEmpty() )
-    {
-        if( writeReport( reportName ) )
-        {
-            msg.Printf( _( "Report file \"%s\" created" ), GetChars( reportName ) );
-            wxMessageDialog popupWindow( this, msg, _( "Disk File Report Completed" ) );
-            popupWindow.ShowModal();
-        }
-        else
-        {
-            msg.Printf( _( "Unable to create report file \"%s\"" ), GetChars( reportName ) );
-            DisplayError( this, msg );
-        }
-    }
 
     wxEndBusyCursor();
 
@@ -271,20 +241,69 @@ void DIALOG_DRC_CONTROL::OnDRCItemDClick( wxDataViewEvent& event )
 }
 
 
-void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent& )
+void DIALOG_DRC_CONTROL::OnSeverity( wxCommandEvent& event )
 {
-    wxFileName fn = m_brdEditor->GetBoard()->GetFileName();
-    fn.SetExt( ReportFileExtension );
-    wxString prj_path = Prj().GetProjectPath();
+    int flag = 0;
 
-    wxFileDialog dlg( this, _( "Save DRC Report File" ), prj_path, fn.GetFullName(),
+    if( event.GetEventObject() == m_showAll )
+        flag = DRC_SHOW_ERRORS | DRC_SHOW_WARNINGS | DRC_SHOW_INFOS;
+    else if( event.GetEventObject() == m_showErrors )
+        flag = DRC_SHOW_ERRORS;
+    else if( event.GetEventObject() == m_showWarnings )
+        flag = DRC_SHOW_WARNINGS;
+    else if( event.GetEventObject() == m_showInfos )
+        flag = DRC_SHOW_INFOS;
+
+    if( event.IsChecked() )
+        m_severities |= flag;
+    else
+        m_severities &= ~flag;
+
+    syncCheckboxes();
+
+    // JEY TODO:
+    /*
+     * pass the severity level to the providers...
+     * or create new providers with the level...
+     * and then
+    m_markerTreeModel->SetProvider( ... );
+    m_unconnectedTreeModel->SetProvider( ... );
+    m_footprintsTreeModel->SetProvider( ... );
+     */
+}
+
+
+void DIALOG_DRC_CONTROL::OnSaveReport( wxCommandEvent& event )
+{
+    wxFileName fn( "./DRC." + ReportFileExtension );
+
+    wxFileDialog dlg( this, _( "Save Report to File" ), fn.GetPath(), fn.GetFullName(),
                       ReportFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( dlg.ShowModal() != wxID_OK )
         return;
 
-    m_CreateRptCtrl->SetValue( true );
-    m_RptFilenameCtrl->SetValue( dlg.GetPath() );
+    fn = dlg.GetPath();
+
+    if( fn.GetExt().IsEmpty() )
+        fn.SetExt( ReportFileExtension );
+
+    if( !fn.IsAbsolute() )
+    {
+        wxString prj_path = Prj().GetProjectPath();
+        fn.MakeAbsolute( prj_path );
+    }
+
+    if( writeReport( fn.GetFullPath() ) )
+    {
+        m_Messages->AppendText( wxString::Format( _( "Report file '%s' created\n" ),
+                                                  fn.GetFullPath() ) );
+    }
+    else
+    {
+        DisplayError( this, wxString::Format( _( "Unable to create report file '%s'" ),
+                                              fn.GetFullPath() ) );
+    }
 }
 
 
@@ -293,24 +312,11 @@ void DIALOG_DRC_CONTROL::OnCancelClick( wxCommandEvent& event )
     m_brdEditor->FocusOnItem( nullptr );
 
     SetReturnCode( wxID_CANCEL );
-    SetDRCParameters();
+    setDRCParameters();
 
     // The dialog can be modal or not modal.
     // Leave the DRC caller destroy (or not) the dialog
     m_tester->DestroyDRCDialog( wxID_CANCEL );
-}
-
-
-void DIALOG_DRC_CONTROL::OnReportCheckBoxClicked( wxCommandEvent& event )
-{
-    if( m_CreateRptCtrl->IsChecked() )
-        m_RptFilenameCtrl->SetFocus();
-}
-
-
-void DIALOG_DRC_CONTROL::OnReportFilenameEdited( wxCommandEvent& event )
-{
-    m_CreateRptCtrl->SetValue( event.GetString().Length() );
 }
 
 
@@ -341,28 +347,6 @@ void DIALOG_DRC_CONTROL::DelDRCMarkers()
 
     m_markerTreeModel->DeleteAllItems();
     m_unconnectedTreeModel->DeleteAllItems();
-}
-
-
-const wxString DIALOG_DRC_CONTROL::makeValidFileNameReport()
-{
-    wxFileName fn = m_RptFilenameCtrl->GetValue();
-
-    if( !fn.HasExt() )
-    {
-        fn.SetExt( ReportFileExtension );
-        m_RptFilenameCtrl->SetValue( fn.GetFullPath() );
-    }
-
-    // Ensure it is an absolute filename. if it is given relative
-    // it will be made relative to the project
-    if( !fn.IsAbsolute() )
-    {
-        wxString prj_path = Prj().GetProjectPath();
-        fn.MakeAbsolute( prj_path );
-    }
-
-    return fn.GetFullPath();
 }
 
 

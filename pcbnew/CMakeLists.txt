@@ -230,6 +230,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_clearance_test_functions.cpp
     drc/drc_marker_factory.cpp
     drc/drc_provider.cpp
+    drc/drc_tree_model.cpp
     )
 
 set( PCBNEW_NETLIST_SRCS

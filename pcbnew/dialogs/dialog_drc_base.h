@@ -20,22 +20,20 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/bmpbuttn.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/gbsizer.h>
 #include <wx/dataview.h>
 #include <wx/panel.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/notebook.h>
+#include <wx/button.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_CHECKBOX_RPT_FILE 1000
-#define ID_BUTTON_BROWSE_RPT_FILE 1001
-#define ID_NOTEBOOK1 1002
+#define ID_NOTEBOOK1 1000
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_DRC_CONTROL_BASE
@@ -57,15 +55,19 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbReportTracksToZonesErrors;
 		wxCheckBox* m_cbTestFootprints;
 		wxTextCtrl* m_Messages;
-		wxCheckBox* m_CreateRptCtrl;
-		wxTextCtrl* m_RptFilenameCtrl;
-		wxBitmapButton* m_BrowseButton;
 		wxNotebook* m_Notebook;
 		wxPanel* m_panelViolations;
 		wxDataViewCtrl* m_markerDataView;
 		wxDataViewCtrl* m_unconnectedDataView;
 		wxPanel* m_panelFootprintWarnings;
 		wxDataViewCtrl* m_footprintsDataView;
+		wxStaticText* m_showLabel;
+		wxCheckBox* m_showAll;
+		wxCheckBox* m_showErrors;
+		wxCheckBox* m_showWarnings;
+		wxCheckBox* m_showInfos;
+		wxButton* m_saveReport;
+		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_sizerButtons;
 		wxButton* m_DeleteCurrentMarkerButton;
 		wxButton* m_DeleteAllMarkersButton;
@@ -75,12 +77,11 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnActivateDlg( wxActivateEvent& event ) { event.Skip(); }
-		virtual void OnReportCheckBoxClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnReportFilenameEdited( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonBrowseRptFileClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChangingNotebookPage( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnDRCItemDClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnDRCItemSelected( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnSeverity( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSaveReport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteOneClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteAllClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }

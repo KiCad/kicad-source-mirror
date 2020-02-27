@@ -29,6 +29,9 @@
 #include <wx/wupdlock.h>
 
 
+#define WX_DATAVIEW_WINDOW_PADDING 6
+
+
 /**
  * Provide an abstract interface of a DRC_ITEM* list manager.  The details
  * of the actual list architecture are hidden from the caller.  Any class
@@ -165,15 +168,16 @@ public:
             m_DrcItem( aDrcItem )
     {}
 
-    NODE_TYPE                  m_Type;
-    DRC_TREE_NODE*             m_Parent;
+    NODE_TYPE       m_Type;
+    DRC_TREE_NODE*  m_Parent;
 
-    const DRC_ITEM*            m_DrcItem;
-    std::vector<DRC_TREE_NODE> m_Children;
+    const DRC_ITEM* m_DrcItem;
+
+    std::vector<std::unique_ptr<DRC_TREE_NODE>> m_Children;
 };
 
 
-class DRC_TREE_MODEL : public wxDataViewModel
+class DRC_TREE_MODEL : public wxDataViewModel, wxEvtHandler
 {
 public:
     static wxDataViewItem ToItem( DRC_TREE_NODE const* aNode )
@@ -186,119 +190,27 @@ public:
         return static_cast<DRC_TREE_NODE*>( aItem.GetID() );
     }
 
-    static BOARD_ITEM* ToBoardItem( BOARD* aBoard, wxDataViewItem aItem )
-    {
-        BOARD_ITEM*          board_item = nullptr;
-        const DRC_TREE_NODE* node = DRC_TREE_MODEL::ToNode( aItem );
-
-        if( node )
-        {
-            const DRC_ITEM* drc_item = node->m_DrcItem;
-
-            switch( node->m_Type )
-            {
-            case DRC_TREE_NODE::MARKER:
-                board_item = static_cast<MARKER_PCB*>( drc_item->GetParent() );
-                break;
-            case DRC_TREE_NODE::MAIN_ITEM:
-                board_item = drc_item->GetMainItem( aBoard );
-                break;
-            case DRC_TREE_NODE::AUX_ITEM:
-                board_item = drc_item->GetAuxiliaryItem( aBoard );
-                break;
-            }
-        }
-
-        return board_item;
-    };
+    static BOARD_ITEM* ToBoardItem( BOARD* aBoard, wxDataViewItem aItem );
 
 public:
-    DRC_TREE_MODEL( wxDataViewCtrl* aView ) :
-        m_view( aView ),
-        m_drcItemsProvider( nullptr )
-    { }
+    DRC_TREE_MODEL( wxDataViewCtrl* aView );
 
-    ~DRC_TREE_MODEL()
-    {
-        delete m_drcItemsProvider;
-    }
+    ~DRC_TREE_MODEL();
 
-    void SetProvider( DRC_ITEMS_PROVIDER* aProvider )
-    {
-        wxWindowUpdateLocker updateLock( m_view );
-
-        // Even with the updateLock, wxWidgets sometimes ties its knickers in
-        // a knot when trying to run a wxdataview_selection_changed_callback()
-        // on a row that has been deleted.
-        m_view->UnselectAll();
-
-        Cleared();
-
-        delete m_drcItemsProvider;
-        m_drcItemsProvider = aProvider;
-        m_tree.clear();
-
-        for( int i = 0; m_drcItemsProvider && i < m_drcItemsProvider->GetCount(); ++i )
-        {
-            const DRC_ITEM* drcItem = m_drcItemsProvider->GetItem( i );
-
-            m_tree.emplace_back( nullptr, drcItem, DRC_TREE_NODE::MARKER );
-            DRC_TREE_NODE& node = m_tree.back();
-
-            node.m_Children.emplace_back( &node, drcItem, DRC_TREE_NODE::MAIN_ITEM );
-
-            if( drcItem->HasSecondItem() )
-                node.m_Children.emplace_back( &node, drcItem, DRC_TREE_NODE::AUX_ITEM );
-        }
-
-#if defined( __LINUX__ )
-        // The fastest method to update wxDataViewCtrl is to rebuild from
-        // scratch by calling Cleared(). Linux requires to reassociate model to
-        // display data, but Windows will create multiple associations.
-        // On MacOS, this crashes kicad. See https://gitlab.com/kicad/code/kicad/issues/3666
-        // and https://gitlab.com/kicad/code/kicad/issues/3653
-        m_view->AssociateModel( this );
-#endif
-        m_view->ClearColumns();
-        m_view->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, 4000 );
-
-        ExpandAll();
-    }
+    void SetProvider( DRC_ITEMS_PROVIDER* aProvider );
 
     int GetDRCItemCount() const { return m_tree.size(); }
 
-    const DRC_ITEM* GetDRCItem( int i ) const { return m_tree.at( i ).m_DrcItem; }
+    const DRC_ITEM* GetDRCItem( int i ) const { return m_tree.at( i )->m_DrcItem; }
 
-    void ExpandAll()
-    {
-        for( DRC_TREE_NODE& markerNode : m_tree )
-            m_view->Expand( ToItem( &markerNode ) );
-    }
+    void ExpandAll();
 
-    bool IsContainer( wxDataViewItem const& aItem ) const override
-    {
-        if( ToNode( aItem ) == nullptr )    // must be tree root...
-            return true;
-        else
-            return ToNode( aItem )->m_Type == DRC_TREE_NODE::MARKER;
-    }
+    bool IsContainer( wxDataViewItem const& aItem ) const override;
 
-    wxDataViewItem GetParent( wxDataViewItem const& aItem ) const override
-    {
-        return ToItem( ToNode( aItem)->m_Parent );
-    }
+    wxDataViewItem GetParent( wxDataViewItem const& aItem ) const override;
 
     unsigned int GetChildren( wxDataViewItem const& aItem,
-                              wxDataViewItemArray&  aChildren ) const override
-    {
-        const DRC_TREE_NODE*              parent = ToNode( aItem );
-        const std::vector<DRC_TREE_NODE>& children = parent ? parent->m_Children : m_tree;
-
-        for( const DRC_TREE_NODE& child: children )
-            aChildren.Add( ToItem( &child ) );
-
-        return children.size();
-    }
+                              wxDataViewItemArray&  aChildren ) const override;
 
     // Simple, single-text-column model
     unsigned int GetColumnCount() const override { return 1; }
@@ -310,18 +222,7 @@ public:
      */
     void GetValue( wxVariant&              aVariant,
                    wxDataViewItem const&   aItem,
-                   unsigned int            aCol ) const override
-    {
-        const DRC_TREE_NODE* node = ToNode( aItem );
-        wxASSERT( node );
-
-        switch( node->m_Type )
-        {
-        case DRC_TREE_NODE::MARKER:    aVariant = node->m_DrcItem->GetErrorText();     break;
-        case DRC_TREE_NODE::MAIN_ITEM: aVariant = node->m_DrcItem->GetMainText();      break;
-        case DRC_TREE_NODE::AUX_ITEM:  aVariant = node->m_DrcItem->GetAuxiliaryText(); break;
-        }
-    }
+                   unsigned int            aCol ) const override;
 
     /**
      * Called by the wxDataView to edit an item's content.
@@ -340,61 +241,18 @@ public:
      */
     bool GetAttr( wxDataViewItem const&   aItem,
                   unsigned int            aCol,
-                  wxDataViewItemAttr&     aAttr ) const override
-    {
-        const DRC_TREE_NODE* node = ToNode( aItem );
-        wxASSERT( node );
+                  wxDataViewItemAttr&     aAttr ) const override;
 
-        switch( node->m_Type )
-        {
-        case DRC_TREE_NODE::MARKER:     aAttr.SetBold( true );  return true;
-        case DRC_TREE_NODE::MAIN_ITEM:                          return false;
-        case DRC_TREE_NODE::AUX_ITEM:                           return false;
-        }
+    void DeleteCurrentItem();
+    void DeleteAllItems();
 
-        return false;
-    }
-
-    void DeleteCurrentItem()
-    {
-        wxDataViewItem  dataViewItem = m_view->GetCurrentItem();
-        DRC_TREE_NODE*  tree_node = ToNode( dataViewItem );
-        const DRC_ITEM* drc_item = tree_node ? tree_node->m_DrcItem : nullptr;
-
-        if( !drc_item )
-        {
-            wxBell();
-            return;
-        }
-
-        for( int i = 0; i < m_drcItemsProvider->GetCount(); ++i )
-        {
-            if( m_drcItemsProvider->GetItem( i ) == drc_item )
-            {
-                m_drcItemsProvider->DeleteItem( i );
-                m_tree.erase( m_tree.begin() + i );
-
-                ItemDeleted( ToItem( nullptr ), dataViewItem );
-                break;
-            }
-        }
-    }
-
-    void DeleteAllItems()
-    {
-        if( m_drcItemsProvider )
-        {
-            m_drcItemsProvider->DeleteAllItems();
-
-            m_tree.clear();
-            Cleared();
-        }
-    }
+    void onSizeView( wxSizeEvent& aEvent );
 
 private:
-    wxDataViewCtrl*             m_view;
-    DRC_ITEMS_PROVIDER*         m_drcItemsProvider; // I own this, but not its contents
-    std::vector<DRC_TREE_NODE>  m_tree;             // I own this
+    wxDataViewCtrl*      m_view;
+    DRC_ITEMS_PROVIDER*  m_drcItemsProvider;   // I own this, but not its contents
+
+    std::vector<std::unique_ptr<DRC_TREE_NODE>> m_tree;  // I own this
 };
 
 #endif //KICAD_DRC_TREE_MODEL_H

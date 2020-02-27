@@ -158,12 +158,10 @@ private:
     bool     m_doUnconnectedTest;       // enable unconnected tests
     bool     m_doZonesTest;             // enable zone to items clearance tests
     bool     m_doKeepoutTest;           // enable keepout areas to items clearance tests
-    bool     m_doCreateRptFile;         // enable creating a report file
     bool     m_refillZones;             // refill zones if requested (by user).
     bool     m_reportAllTrackErrors;    // Report all tracks errors (or only 4 first errors)
     bool     m_testFootprints;          // Test footprints against schematic
-
-    wxString m_rptFilename;
+    int      m_severities;              // Severities of DRC violations to display
 
     MARKER_PCB* m_currentMarker;
 

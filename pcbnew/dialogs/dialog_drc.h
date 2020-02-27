@@ -36,19 +36,20 @@
 #include <dialog_drc_base.h>
 #include <widgets/unit_binder.h>
 
-// forward declarations
+
 class DRC_ITEMS_PROVIDER;
 class BOARD_DESIGN_SETTINGS;
 class DRC_TREE_MODEL;
 
-//end forward declarations
 
-/*!
- * DrcDialog class declaration
- */
+#define DRC_SHOW_ERRORS   0x0001
+#define DRC_SHOW_WARNINGS 0x0002
+#define DRC_SHOW_INFOS    0x0004
+
 #define DIALOG_DRC_WINDOW_NAME "DialogDrcWindowName"
 
-class DIALOG_DRC_CONTROL: public DIALOG_DRC_CONTROL_BASE
+class
+DIALOG_DRC_CONTROL: public DIALOG_DRC_CONTROL_BASE
 {
 public:
     BOARD_DESIGN_SETTINGS  m_BrdSettings;
@@ -57,14 +58,8 @@ public:
     DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent );
     ~DIALOG_DRC_CONTROL();
 
-    /**
-     * Enable/disable the report file creation
-     * @param aEnable = true to ask for creation
-     * @param aFileName = the filename or the report file
-     */
-    void SetRptSettings( bool aEnable, const wxString& aFileName );
-
-    void GetRptSettings( bool* aEnable, wxString& aFileName );
+    void SetSettings( int aSeverities );
+    void GetSettings( int* aSeverities );
 
     void SetMarkersProvider( DRC_ITEMS_PROVIDER* aProvider );
     void SetUnconnectedProvider( DRC_ITEMS_PROVIDER* aProvider );
@@ -82,31 +77,20 @@ private:
      */
     bool writeReport( const wxString& aFullFileName );
 
-    /**
-     * filenames can be entered by name.
-     * @return a good report filename  (with .rpt extension) (a full filename)
-     * from m_CreateRptCtrl
-     */
-    const wxString makeValidFileNameReport();
-
-    void InitValues( );
-
-    void DisplayDRCValues( );
-
-    void SetDRCParameters( );
-
-    void OnReportCheckBoxClicked( wxCommandEvent& event ) override;
-    void OnReportFilenameEdited( wxCommandEvent &event ) override;
-    void OnButtonBrowseRptFileClick( wxCommandEvent& event ) override;
-
-    void OnRunDRCClick( wxCommandEvent& event ) override;
-
-    void OnDeleteAllClick( wxCommandEvent& event ) override;
-    void OnDeleteOneClick( wxCommandEvent& event ) override;
+    void initValues();
+    void displayDRCValues();
+    void setDRCParameters();
+    void syncCheckboxes();
 
     void OnDRCItemSelected( wxDataViewEvent& event ) override;
     void OnDRCItemDClick( wxDataViewEvent& event ) override;
 
+    void OnSeverity( wxCommandEvent& event ) override;
+  	void OnSaveReport( wxCommandEvent& event ) override;
+
+    void OnDeleteOneClick( wxCommandEvent& event ) override;
+    void OnDeleteAllClick( wxCommandEvent& event ) override;
+    void OnRunDRCClick( wxCommandEvent& event ) override;
     void OnCancelClick( wxCommandEvent& event ) override;
 
     /// handler for activate event, updating data which can be modified outside the dialog
@@ -133,6 +117,8 @@ private:
     DRC_TREE_MODEL*     m_markerTreeModel;
     DRC_TREE_MODEL*     m_unconnectedTreeModel;
     DRC_TREE_MODEL*     m_footprintsTreeModel;
+
+    int                 m_severities;
 };
 
 #endif  // _DIALOG_DRC_H_

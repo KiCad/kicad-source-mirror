@@ -216,7 +216,8 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
         m_widget->UnselectAll();
 
         Cleared();
-#if defined( __LINUX__ )
+
+#ifdef __WXGTK__
         // The fastest method to update wxDataViewCtrl is to rebuild from
         // scratch by calling Cleared(). Linux requires to reassociate model to
         // display data, but Windows will create multiple associations.

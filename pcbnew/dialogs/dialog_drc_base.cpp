@@ -108,31 +108,6 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 
 	gbSizer1->Add( m_Messages, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP|wxLEFT, 5 );
 
-	wxFlexGridSizer* fgSizerRpt;
-	fgSizerRpt = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizerRpt->AddGrowableCol( 1 );
-	fgSizerRpt->SetFlexibleDirection( wxBOTH );
-	fgSizerRpt->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_CreateRptCtrl = new wxCheckBox( this, ID_CHECKBOX_RPT_FILE, _("Create report file:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_CreateRptCtrl->SetToolTip( _("Enable writing report to this file") );
-
-	fgSizerRpt->Add( m_CreateRptCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
-
-	m_RptFilenameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_RptFilenameCtrl->SetToolTip( _("Enter the report filename") );
-	m_RptFilenameCtrl->SetMinSize( wxSize( 180,-1 ) );
-
-	fgSizerRpt->Add( m_RptFilenameCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 3 );
-
-	m_BrowseButton = new wxBitmapButton( this, ID_BUTTON_BROWSE_RPT_FILE, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_BrowseButton->SetMinSize( wxSize( 30,28 ) );
-
-	fgSizerRpt->Add( m_BrowseButton, 0, wxALIGN_CENTER_VERTICAL, 2 );
-
-
-	gbSizer1->Add( fgSizerRpt, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxEXPAND|wxTOP|wxRIGHT, 7 );
-
 
 	gbSizer1->AddGrowableCol( 0 );
 	gbSizer1->AddGrowableCol( 1 );
@@ -181,7 +156,38 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	bSizerFootprintsBox->Fit( m_panelFootprintWarnings );
 	m_Notebook->AddPage( m_panelFootprintWarnings, _("Footprint Warnings (%d)"), false );
 
-	m_MainSizer->Add( m_Notebook, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_MainSizer->Add( m_Notebook, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSeveritySizer;
+	bSeveritySizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_showLabel = new wxStaticText( this, wxID_ANY, _("Show:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_showLabel->Wrap( -1 );
+	bSeveritySizer->Add( m_showLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_showAll = new wxCheckBox( this, wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_showAll, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_showErrors = new wxCheckBox( this, wxID_ANY, _("Errors"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_showErrors, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_showWarnings = new wxCheckBox( this, wxID_ANY, _("Warnings"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_showWarnings, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_showInfos = new wxCheckBox( this, wxID_ANY, _("Infos"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_showInfos, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bSeveritySizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_saveReport = new wxButton( this, wxID_ANY, _("Save..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_saveReport, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	m_MainSizer->Add( bSeveritySizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_MainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	m_sizerButtons = new wxBoxSizer( wxHORIZONTAL );
 
@@ -210,9 +216,6 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 
 	// Connect Events
 	this->Connect( wxEVT_ACTIVATE, wxActivateEventHandler( DIALOG_DRC_CONTROL_BASE::OnActivateDlg ) );
-	m_CreateRptCtrl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnReportCheckBoxClicked ), NULL, this );
-	m_RptFilenameCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnReportFilenameEdited ), NULL, this );
-	m_BrowseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnButtonBrowseRptFileClick ), NULL, this );
 	m_Notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_DRC_CONTROL_BASE::OnChangingNotebookPage ), NULL, this );
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemDClick ), NULL, this );
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemSelected ), NULL, this );
@@ -220,6 +223,11 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_unconnectedDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemSelected ), NULL, this );
 	m_footprintsDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemDClick ), NULL, this );
 	m_footprintsDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemSelected ), NULL, this );
+	m_showAll->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnSeverity ), NULL, this );
+	m_showErrors->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnSeverity ), NULL, this );
+	m_showWarnings->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnSeverity ), NULL, this );
+	m_showInfos->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnSeverity ), NULL, this );
+	m_saveReport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnSaveReport ), NULL, this );
 	m_DeleteCurrentMarkerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnDeleteOneClick ), NULL, this );
 	m_DeleteAllMarkersButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnDeleteAllClick ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnCancelClick ), NULL, this );
@@ -230,9 +238,6 @@ DIALOG_DRC_CONTROL_BASE::~DIALOG_DRC_CONTROL_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_ACTIVATE, wxActivateEventHandler( DIALOG_DRC_CONTROL_BASE::OnActivateDlg ) );
-	m_CreateRptCtrl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnReportCheckBoxClicked ), NULL, this );
-	m_RptFilenameCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnReportFilenameEdited ), NULL, this );
-	m_BrowseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnButtonBrowseRptFileClick ), NULL, this );
 	m_Notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_DRC_CONTROL_BASE::OnChangingNotebookPage ), NULL, this );
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemDClick ), NULL, this );
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemSelected ), NULL, this );
@@ -240,6 +245,11 @@ DIALOG_DRC_CONTROL_BASE::~DIALOG_DRC_CONTROL_BASE()
 	m_unconnectedDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemSelected ), NULL, this );
 	m_footprintsDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemDClick ), NULL, this );
 	m_footprintsDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_DRC_CONTROL_BASE::OnDRCItemSelected ), NULL, this );
+	m_showAll->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnSeverity ), NULL, this );
+	m_showErrors->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnSeverity ), NULL, this );
+	m_showWarnings->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnSeverity ), NULL, this );
+	m_showInfos->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnSeverity ), NULL, this );
+	m_saveReport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnSaveReport ), NULL, this );
 	m_DeleteCurrentMarkerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnDeleteOneClick ), NULL, this );
 	m_DeleteAllMarkersButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnDeleteAllClick ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnCancelClick ), NULL, this );
