@@ -325,14 +325,14 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& dragged, const VECTOR2I& aP )
     dragged.ClearSegmentLinks();
     dragged.Unmark();
 
-    Dbg()->AddLine( dragged.CLine(), 5, 100000 );
-
     lockV = dragged.CLine().NearestPoint( aP );
-    Dbg()->AddPoint( lockV, 4 );
 
-    OPTIMIZER::Optimize( &dragged,
-            OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY | OPTIMIZER::PRESERVE_VERTEX,
-            m_lastNode, lockV );
+    if( Settings().GetOptimizeDraggedTrack() )
+    {
+        OPTIMIZER::Optimize( &dragged,
+                OPTIMIZER::MERGE_SEGMENTS | OPTIMIZER::KEEP_TOPOLOGY | OPTIMIZER::PRESERVE_VERTEX,
+                m_lastNode, lockV );
+    }
 
     m_lastNode->Add( dragged );
     m_draggedItems.Clear();
@@ -465,14 +465,14 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
             dragged.ClearSegmentLinks();
             dragged.Unmark();
 
-            Dbg()->AddLine(dragged.CLine(), 5, 100000 );
-            
             lockV = dragged.CLine().NearestPoint( aP );
-            Dbg()->AddPoint(lockV, 4 );
 
-            OPTIMIZER::Optimize( &dragged, OPTIMIZER::MERGE_SEGMENTS 
-                                         | OPTIMIZER::KEEP_TOPOLOGY
-                                         | OPTIMIZER::PRESERVE_VERTEX, m_lastNode, lockV );
+            if( Settings().GetOptimizeDraggedTrack() )
+            {
+                OPTIMIZER::Optimize( &dragged, OPTIMIZER::MERGE_SEGMENTS 
+                                            | OPTIMIZER::KEEP_TOPOLOGY
+                                            | OPTIMIZER::PRESERVE_VERTEX, m_lastNode, lockV );
+            }
 
             m_lastNode->Add( dragged );
             m_draggedItems.Clear();

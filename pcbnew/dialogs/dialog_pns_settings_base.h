@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Oct 17 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,6 +50,7 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_smoothDragged;
 		wxCheckBox* m_violateDrc;
 		wxCheckBox* m_suggestEnding;
+		wxCheckBox* m_optimizeDraggedTrack;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_effortLabel;
 		wxSlider* m_effort;

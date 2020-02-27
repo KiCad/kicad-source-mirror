@@ -50,6 +50,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_inlineDragEnabled = false;
     m_snapToTracks = false;
     m_snapToPads = false;
+    m_optimizeDraggedTrack = true;
     m_minRadius = 0;
     m_maxRadius = 1000000;
     m_roundedCorners = false;
@@ -86,6 +87,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_params.emplace_back( new PARAM<bool>( "inline_drag",      &m_inlineDragEnabled, false ) );
     m_params.emplace_back( new PARAM<bool>( "snap_to_tracks",   &m_snapToTracks,      false ) );
     m_params.emplace_back( new PARAM<bool>( "snap_to_pads",     &m_snapToPads,        false ) );
+    m_params.emplace_back( new PARAM<bool>( "optimize_dragged_track",     &m_optimizeDraggedTrack,        true ) );
 
     m_params.emplace_back( new PARAM<int>( "min_radius",        &m_minRadius,         0 ) );
     m_params.emplace_back( new PARAM<int>( "max_radius",        &m_maxRadius,         1000000 ) );

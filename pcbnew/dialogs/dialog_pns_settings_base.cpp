@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Oct 17 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -74,7 +74,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bOptions->Add( m_smoothDragged, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_violateDrc = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Allow DRC violations"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_violateDrc->SetToolTip( _("(Highlight collisions mode only) - allows to establish a track even if is violating the DRC rules.") );
+	m_violateDrc->SetToolTip( _("(Highlight collisions mode only) - allows one to establish a track even if is violating the DRC rules.") );
 	
 	bOptions->Add( m_violateDrc, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -82,6 +82,9 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_suggestEnding->Enable( false );
 	
 	bOptions->Add( m_suggestEnding, 0, wxALL, 5 );
+	
+	m_optimizeDraggedTrack = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Optimize track being dragged"), wxDefaultPosition, wxDefaultSize, 0 );
+	bOptions->Add( m_optimizeDraggedTrack, 0, wxALL, 5 );
 	
 	m_staticline1 = new wxStaticLine( bOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bOptions->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );

@@ -144,6 +144,9 @@ public:
     bool GetRounded() const { return m_roundedCorners; }
     void SetRounded( bool aRound ) { m_roundedCorners = aRound; }
 
+    bool GetOptimizeDraggedTrack() const { return m_optimizeDraggedTrack; }
+    void SetOptimizeDraggedTrack( bool aEnable ) { m_optimizeDraggedTrack = aEnable; }
+
     void SetMinRadius( int aRadius )
     {
         m_minRadius = aRadius;
@@ -178,6 +181,7 @@ private:
     bool m_snapToTracks;
     bool m_snapToPads;
     bool m_roundedCorners;
+    bool m_optimizeDraggedTrack;
 
     int m_minRadius;
     int m_maxRadius;

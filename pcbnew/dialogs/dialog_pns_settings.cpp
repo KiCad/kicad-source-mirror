@@ -47,6 +47,7 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTIN
     m_violateDrc->SetValue( m_settings.CanViolateDRC() );
     m_freeAngleMode->SetValue( m_settings.GetFreeAngleMode() );
     m_dragToolMode->SetSelection ( m_settings.InlineDragEnabled() ? 1 : 0 );
+    m_optimizeDraggedTrack->SetValue( m_settings.GetOptimizeDraggedTrack() );
     // Enable/disable some options
     wxCommandEvent event;
     onModeChange( event );
@@ -75,7 +76,7 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     m_settings.SetCanViolateDRC( m_violateDrc->GetValue() );
     m_settings.SetFreeAngleMode( m_freeAngleMode->GetValue() );
     m_settings.SetInlineDragEnabled( m_dragToolMode->GetSelection () ? true : false );
-
+    m_settings.SetOptimizeDraggedTrack( m_optimizeDraggedTrack->GetValue() );
     m_settings.SaveToFile();
 
     aEvent.Skip();      // ends returning wxID_OK (default behavior)
