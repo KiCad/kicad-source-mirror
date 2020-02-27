@@ -652,7 +652,7 @@ public:
 
     /**
      * Layers which are not allowed within footprint definitions.  Currently internal
-     * copper layers, Edge.Cuts and Margin.
+     * copper layers and Margin.
      */
 
     static LSET ForbiddenFootprintLayers();
