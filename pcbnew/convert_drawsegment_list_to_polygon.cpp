@@ -190,6 +190,9 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
     if( aSegList.size() == 0 )
         return true;
 
+    // Return value
+    bool polygonComplete = true;
+
     wxString msg;
 
     // Make a working copy of aSegList, because the list is modified during calculations
@@ -497,17 +500,21 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                     if( aErrorLocation )
                         *aErrorLocation = prevPt;
 
-                    return false;
+                    polygonComplete = false;
+                    break;
                 }
                 break;
             }
         }
     }
 
+    int holeNum = -1;
+
     while( segList.size() )
     {
         // emit a signal layers keepout for every interior polygon left...
         int hole = aPolygons.NewHole();
+        holeNum++;
 
         graphic = (DRAWSEGMENT*) segList[0];
         segList.erase( segList.begin() );
@@ -702,7 +709,8 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                         if( aErrorLocation )
                             *aErrorLocation = prevPt;
 
-                        return false;
+                        aPolygons.Hole( 0, holeNum ).SetClosed( false );
+                        polygonComplete = false;
                     }
                     break;
                 }
@@ -746,7 +754,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
         }
     }
 
-    return true;
+    return polygonComplete;
 }
 
 #include <class_board.h>
