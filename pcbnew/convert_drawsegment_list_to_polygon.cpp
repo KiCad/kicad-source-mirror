@@ -821,3 +821,215 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, wxStri
 
     return success;
 }
+
+
+/**
+ * Get the complete bounding box of the board (including all items)
+ */
+void buildBoardBoundingBoxPoly( const BOARD* aBoard, SHAPE_POLY_SET& aOutline )
+{
+    EDA_RECT bbbox = aBoard->GetBoundingBox();
+
+    // If null area, uses the global bounding box.
+    if( ( bbbox.GetWidth() ) == 0 || ( bbbox.GetHeight() == 0 ) )
+        bbbox = aBoard->ComputeBoundingBox();
+
+    // Ensure non null area. If happen, gives a minimal size.
+    if( ( bbbox.GetWidth() ) == 0 || ( bbbox.GetHeight() == 0 ) )
+        bbbox.Inflate( Millimeter2iu( 1.0 ) );
+
+    aOutline.RemoveAllContours();
+    aOutline.NewOutline();
+
+    wxPoint corner;
+    aOutline.Append( bbbox.GetOrigin() );
+
+    corner.x = bbbox.GetOrigin().x;
+    corner.y = bbbox.GetEnd().y;
+    aOutline.Append( corner );
+
+    aOutline.Append( bbbox.GetEnd() );
+
+    corner.x = bbbox.GetEnd().x;
+    corner.y = bbbox.GetOrigin().y;
+    aOutline.Append( corner );
+}
+
+
+bool isCopperOutside( const MODULE* aMod, SHAPE_POLY_SET& aShape )
+{
+    bool padOutside = false;
+
+    for( auto pad : aMod->Pads() )
+    {
+        SHAPE_POLY_SET padPoly;
+        pad->BuildPadShapePolygon( padPoly, wxSize( 0, 0 ) );
+
+        bool padOutsidePad = false;
+        for( auto it = padPoly.CIterateSegments( 0 ); it; it++ )
+        {
+            auto seg = it.Get();
+            padOutsidePad |= !aShape.Collide( seg );
+        }
+
+        wxPoint padPos = pad->GetPosition();
+        wxLogDebug( "Tested pad (%d, %d): %s", padPos.x, padPos.y, padOutsidePad ? "true" : "false" );
+
+        padOutside |= padOutsidePad;
+    }
+
+    return padOutside;
+}
+
+
+VECTOR2I projectPointOnSegment( const VECTOR2I& aEndPoint, const SHAPE_POLY_SET& aOutline,
+        int aOutlineNum = 0 )
+{
+    int      minDistance = -1;
+    VECTOR2I projPoint;
+
+    for( auto it = aOutline.CIterateSegments( aOutlineNum ); it; it++ )
+    {
+        auto seg = it.Get();
+        int dis = seg.Distance( aEndPoint );
+
+        if( minDistance < 0 || ( dis < minDistance ) )
+        {
+            minDistance = dis;
+            projPoint   = seg.NearestPoint( aEndPoint );
+        }
+    }
+
+    return projPoint;
+}
+
+
+/**
+ * This function is used to extract a board outline for a footprint view.
+ *
+ * Notes:
+ * * Incomplete outlines will be closed by joining the end of the outline
+ *   onto the bounding box (by simply projecting the end points) and then take the
+ *   area that contains the copper.
+ * * If all copper lies inside a closed outline, than that outline will be treated
+ *   as an external board outline.
+ * * If copper is located outside a closed outline, then that outline will be treated
+ *   as a hole, and the outer edge will be formed using the bounding box.
+ */
+bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
+        wxString* aErrorText, unsigned int aTolerance, wxPoint* aErrorLocation )
+{
+    PCB_TYPE_COLLECTOR  items;
+
+    SHAPE_POLY_SET outlines;
+
+    // Get all the DRAWSEGMENTS and module graphics into 'items',
+    // then keep only those on layer == Edge_Cuts.
+    static const KICAD_T  scan_graphics[] = { PCB_LINE_T, PCB_MODULE_EDGE_T, EOT };
+    items.Collect( aBoard, scan_graphics );
+
+    // Make a working copy of aSegList, because the list is modified during calculations
+    std::vector< DRAWSEGMENT* > segList;
+
+    for( int ii = 0; ii < items.GetCount(); ii++ )
+    {
+        if( items[ii]->GetLayer() == Edge_Cuts )
+            segList.push_back( static_cast< DRAWSEGMENT* >( items[ii] ) );
+    }
+
+    bool success = ConvertOutlineToPolygon( segList, outlines, aErrorText, aTolerance, aErrorLocation );
+
+    // A closed outline was found
+    if( success )
+    {
+        // If copper is outside a closed polygon, treat it as a hole
+        if( isCopperOutside( aBoard->GetFirstModule(), outlines ) )
+        {
+            buildBoardBoundingBoxPoly( aBoard, aOutlines );
+
+            // Copy all outlines from the conversion as holes into the new outline
+            for( int i = 0; i < outlines.OutlineCount(); i++ )
+            {
+                aOutlines.AddHole( outlines.Outline( i ), -1 );
+
+                for( int j = 0; j < outlines.HoleCount( i ); j++ )
+                {
+                    aOutlines.AddHole( outlines.Hole( i, j ), -1 );
+                }
+            }
+        }
+        // If all copper is inside, then the computed outline is the board outline
+        else
+        {
+            aOutlines = outlines;
+        }
+    }
+    // No board outlines were found, so use the bounding box
+    else if( !outlines.OutlineCount() )
+    {
+        buildBoardBoundingBoxPoly( aBoard, aOutlines );
+    }
+    // There is an outline present, but it is not closed
+    else
+    {
+        SHAPE_POLY_SET closedPolys;
+        SHAPE_POLY_SET openPolys;
+
+        // Extract all polygons to top-level entities
+        for( int i = 0; i < outlines.OutlineCount(); i++ )
+        {
+            SHAPE_LINE_CHAIN chain = outlines.Outline( i );
+
+            // Separate the open and closed polygons
+            if( chain.IsClosed() )
+            {
+                wxLogDebug( "Outline closed" );
+                closedPolys.AddOutline( chain );
+            }
+            else
+            {
+                wxLogDebug( "Outline open" );
+                chain.SetClosed( true );
+                openPolys.AddOutline( chain );
+            }
+
+            // The ConvertOutlineToPolygon function returns only one main
+            // outline and the rest as holes, so we promote the holes
+            for( int j = 0; j < outlines.HoleCount( i ); j++ )
+            {
+                SHAPE_LINE_CHAIN hole = outlines.Hole( i, j );
+
+                if( hole.IsClosed() )
+                {
+                    wxLogDebug( "Hole closed" );
+                    closedPolys.AddOutline( hole );
+                }
+                else
+                {
+                    wxLogDebug( "Hole open" );
+                    hole.SetClosed( true );
+                    openPolys.AddOutline( hole );
+                }
+            }
+        }
+
+        SHAPE_POLY_SET boardBoundingBox;
+        buildBoardBoundingBoxPoly( aBoard, boardBoundingBox );
+
+        for( int i = 0; i < openPolys.OutlineCount(); i++ )
+        {
+            SHAPE_LINE_CHAIN chain = openPolys.Outline( i );
+
+
+            VECTOR2I startProj = projectPointOnSegment( chain.CPoint( 0 ), openPolys, i );
+            VECTOR2I endProj   = projectPointOnSegment( chain.CLastPoint(), openPolys, i );
+
+            wxLogDebug( "Start project: (%d, %d)", startProj.x, startProj.y );
+            wxLogDebug( "end project: (%d, %d)", endProj.x, endProj.y );
+        }
+
+
+    }
+
+    return success;
+}
