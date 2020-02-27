@@ -586,8 +586,6 @@ public:
      bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0, bool aUseBBoxCache = false ) const;
 
 
-     bool SegmentInside( const SEG& aSeg ) const;
-
     /**
      * Function PointOnEdge()
      *
