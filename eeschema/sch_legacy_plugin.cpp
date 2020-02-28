@@ -754,6 +754,11 @@ void SCH_LEGACY_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen, 
 {
     m_version = version;
 
+    // We cannot safely load content without a set root level.  If we haven't been given one,
+    // pick the default
+    if( m_rootSheet == nullptr )
+        m_rootSheet = g_RootSheet;
+
     while( aReader.ReadLine() )
     {
         char* line = aReader.Line();
