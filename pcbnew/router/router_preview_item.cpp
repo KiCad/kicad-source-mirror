@@ -154,8 +154,20 @@ const BOX2I ROUTER_PREVIEW_ITEM::ViewBBox() const
 
 void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN& aL, KIGFX::GAL* gal ) const
 {
+    gal->SetIsFill( false );
+
     for( int s = 0; s < aL.SegmentCount(); s++ )
         gal->DrawLine( aL.CSegment( s ).A, aL.CSegment( s ).B );
+
+    for( size_t s = 0; s < aL.ArcCount(); s++ )
+    {
+        auto arc = aL.CArcs()[s];
+
+        auto start_angle = DEG2RAD( arc.GetStartAngle() );
+        auto angle = DEG2RAD( arc.GetCentralAngle() );
+
+        gal->DrawArc( arc.GetCenter(), arc.GetRadius(), start_angle, start_angle + angle);
+    }
 
     if( aL.IsClosed() )
         gal->DrawLine( aL.CSegment( -1 ).B, aL.CSegment( 0 ).A );
@@ -293,9 +305,32 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         break;
     }
 
+    case SH_ARC:
+    {
+        const auto arc = static_cast<const SHAPE_ARC*>( m_shape );
+
+        auto start_angle = DEG2RAD( arc->GetStartAngle() );
+        auto angle = DEG2RAD( arc->GetCentralAngle() );
+
+        gal->SetIsFill( false );
+        gal->SetIsStroke( true );
+
+        if( m_showTrackClearance && m_clearance > 0 )
+        {
+            gal->SetLineWidth( m_width + 2 * m_clearance );
+            gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, start_angle + angle );
+        }
+
+        gal->SetLayerDepth( m_depth );
+        gal->SetStrokeColor( m_color );
+        gal->SetFillColor( m_color );
+        gal->SetLineWidth( m_width );
+        gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, start_angle + angle );
+        break;
+    }
+
     case SH_POLY_SET:
     case SH_COMPOUND:
-    case SH_ARC:
         break;          // Not yet in use
         }
     }
