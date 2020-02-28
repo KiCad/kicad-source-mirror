@@ -39,7 +39,7 @@ class SHAPE;
 SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV)
     : SHAPE( SH_LINE_CHAIN ), m_closed( false ), m_width( 0 )
 {
-    for(int i = 0; i < aV.size(); i+= 2 )
+    for(size_t i = 0; i < aV.size(); i+= 2 )
     {
         Append( aV[i], aV[i+1] );
     }
