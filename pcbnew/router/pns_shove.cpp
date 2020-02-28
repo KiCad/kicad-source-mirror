@@ -1632,7 +1632,6 @@ bool SHOVE::RewindSpringbackTo( NODE* aNode )
     {
         if ( iter->m_node == aNode )
         {
-            printf("FOUND\n");
             found = true;
             break;
         }
