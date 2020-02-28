@@ -33,6 +33,8 @@ class BOARD;
 class BOARD_COMMIT;
 class PCB_DISPLAY_OPTIONS;
 class PCB_TOOL_BASE;
+class MODULE;
+class D_PAD;
 
 namespace KIGFX
 {
@@ -103,6 +105,11 @@ public:
     void UpdateNet( int aNetCode ) override;
 
 private:
+    struct OFFSET {
+        VECTOR2I p_old, p_new;  
+    };
+
+    std::map<D_PAD*, OFFSET> m_moduleOffsets;
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_GROUP* m_previewItems;
     std::unordered_set<BOARD_CONNECTED_ITEM*> m_hiddenItems;

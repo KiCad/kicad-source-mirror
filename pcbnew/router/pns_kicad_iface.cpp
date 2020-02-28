@@ -24,6 +24,7 @@
 #include <board_connected_item.h>
 #include <class_text_mod.h>
 #include <class_edge_mod.h>
+#include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_drawsegment.h>
@@ -1321,6 +1322,15 @@ void PNS_KICAD_IFACE::RemoveItem( PNS::ITEM* aItem )
 {
     BOARD_CONNECTED_ITEM* parent = aItem->Parent();
 
+    if ( aItem->OfKind(PNS::ITEM::SOLID_T) )
+    {
+        auto pad = static_cast<D_PAD*>( parent );
+        auto pos = static_cast<PNS::SOLID*>( aItem )->Pos();
+
+        m_moduleOffsets[ pad ].p_old = pos;
+        return;
+    }
+
     if( parent )
     {
         m_commit->Remove( parent );
@@ -1380,6 +1390,15 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
         break;
     }
 
+    case PNS::ITEM::SOLID_T:
+    {
+        auto pad = static_cast<D_PAD*>( aItem->Parent() );
+        auto pos = static_cast<PNS::SOLID*>( aItem )->Pos();
+
+        m_moduleOffsets[ pad ].p_new = pos;
+        return;
+    }
+
     default:
         break;
     }
@@ -1397,8 +1416,29 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 
 void PNS_KICAD_IFACE::Commit()
 {
+    std::set<MODULE*> processedMods;
+
     EraseView();
-    m_commit->Push( _( "Added a track" ) );
+
+    for( auto mo : m_moduleOffsets )
+    {
+        auto offset = mo.second.p_new - mo.second.p_old;
+        auto mod = mo.first->GetParent();
+
+        VECTOR2I p_orig = mod->GetPosition();
+        VECTOR2I p_new = p_orig + offset;
+
+        if( processedMods.find( mod ) != processedMods.end() )
+            continue;
+
+        processedMods.insert( mod );
+        m_commit->Modify( mod );
+        mod->SetPosition( wxPoint( p_new.x, p_new.y ));
+    }
+
+    m_moduleOffsets.clear();
+
+    m_commit->Push( _( "Interactive Router" ) );
     m_commit = std::make_unique<BOARD_COMMIT>( m_tool );
 }
 
