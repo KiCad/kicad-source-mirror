@@ -49,6 +49,7 @@
 #include "pns_router.h"
 #include "pns_shove.h"
 #include "pns_dragger.h"
+#include "pns_component_dragger.h"
 #include "pns_topology.h"
 #include "pns_diff_pair_placer.h"
 #include "pns_meander_placer.h"
@@ -127,27 +128,37 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP )
         return m_placer->CurrentNode()->HitTest( aP );
 }
 
-
-bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aStartItem, int aDragMode )
+bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aItem, int aDragMode )
 {
+    return StartDragging( aP, ITEM_SET( aItem ), aDragMode );
+}
 
-    if( aDragMode & DM_FREE_ANGLE )
-        m_forceMarkObstaclesMode = true;
-    else
-        m_forceMarkObstaclesMode = false;
 
-    if( !aStartItem || aStartItem->OfKind( ITEM::SOLID_T ) )
+bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragMode )
+{
+    if( aStartItems.Empty() )
         return false;
 
-    m_placer = std::make_unique<LINE_PLACER>( this );
-    m_placer->Start( aP, aStartItem );
+    if( aStartItems.Count( ITEM::SOLID_T ) == aStartItems.Size() )
+    {
+        m_dragger = std::make_unique<COMPONENT_DRAGGER>( this );
+        m_forceMarkObstaclesMode = true;
+    }
+    else
+    {
+        if( aDragMode & DM_FREE_ANGLE )
+            m_forceMarkObstaclesMode = true;
+        else
+            m_forceMarkObstaclesMode = false;
 
-    m_dragger = std::make_unique<DRAGGER>( this );
+        m_dragger = std::make_unique<DRAGGER>( this );
+    }
+
     m_dragger->SetMode( aDragMode );
     m_dragger->SetWorld( m_world.get() );
     m_dragger->SetDebugDecorator ( m_iface->GetDebugDecorator () );
 
-    if( m_dragger->Start ( aP, aStartItem ) )
+    if( m_dragger->Start ( aP, aStartItems ) )
         m_state = DRAG_SEGMENT;
     else
     {
@@ -310,7 +321,6 @@ void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging )
     for( auto item : added )
     {
         int clearance = GetRuleResolver()->Clearance( item->Net() );
-
         m_iface->DisplayItem( item, -1, clearance, aDragging );
     }
 
@@ -411,7 +421,9 @@ void ROUTER::UndoLastSegment()
 
 void ROUTER::CommitRouting()
 {
-    m_placer->CommitPlacement();
+    if( m_state == ROUTE_TRACK )
+        m_placer->CommitPlacement();
+
     StopRouting();
 }
 

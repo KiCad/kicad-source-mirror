@@ -62,6 +62,7 @@ class VIA;
 class RULE_RESOLVER;
 class SHOVE;
 class DRAGGER;
+class DRAG_ALGO;
 
 enum ROUTER_MODE {
     PNS_MODE_ROUTE_SINGLE = 1,
@@ -78,7 +79,8 @@ enum DRAG_MODE
     DM_VIA = 0x4,
     DM_FREE_ANGLE = 0x8,
     DM_ARC = 0x10,
-    DM_ANY = 0x17
+    DM_ANY = 0x17,
+    DM_COMPONENT = 0x20
 };
 /**
  * ROUTER
@@ -180,6 +182,7 @@ public:
     const VECTOR2I      SnapToItem( ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment );
 
     bool StartDragging( const VECTOR2I& aP, ITEM* aItem, int aDragMode = DM_ANY );
+    bool StartDragging( const VECTOR2I& aP, ITEM_SET aItems, int aDragMode = DM_COMPONENT );
 
     void SetIterLimit( int aX ) { m_iterLimit = aX; }
     int GetIterLimit() const { return m_iterLimit; };
@@ -263,7 +266,7 @@ private:
     NODE*                   m_lastNode;
 
     std::unique_ptr< PLACEMENT_ALGO > m_placer;
-    std::unique_ptr< DRAGGER >        m_dragger;
+    std::unique_ptr< DRAG_ALGO >        m_dragger;
     std::unique_ptr< SHOVE >          m_shove;
 
     ROUTER_IFACE* m_iface;
