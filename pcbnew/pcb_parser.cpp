@@ -2344,7 +2344,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
         THROW_IO_ERROR( error );
     }
 
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token == T_LEFT )
             token = NextTok();
@@ -2359,7 +2359,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             int this_version = parseInt( FromUTF8().mb_str( wxConvUTF8 ) );
             NeedRIGHT();
             m_requiredVersion = std::max( m_requiredVersion, this_version );
-            m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
+            m_tooRecent       = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
             break;
         }
 
@@ -2412,19 +2412,19 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             break;
 
         case T_descr:
-            NeedSYMBOLorNUMBER();   // some symbols can be 0508, so a number is also a symbol here
+            NeedSYMBOLorNUMBER(); // some symbols can be 0508, so a number is also a symbol here
             module->SetDescription( FromUTF8() );
             NeedRIGHT();
             break;
 
         case T_tags:
-            NeedSYMBOLorNUMBER();   // some symbols can be 0508, so a number is also a symbol here
+            NeedSYMBOLorNUMBER(); // some symbols can be 0508, so a number is also a symbol here
             module->SetKeywords( FromUTF8() );
             NeedRIGHT();
             break;
 
         case T_path:
-            NeedSYMBOLorNUMBER();   // Paths can be numerical so a number is also a symbol here
+            NeedSYMBOLorNUMBER(); // Paths can be numerical so a number is also a symbol here
             module->SetPath( KIID_PATH( FromUTF8() ) );
             NeedRIGHT();
             break;
@@ -2446,13 +2446,13 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
         case T_solder_paste_margin:
             module->SetLocalSolderPasteMargin(
-                parseBoardUnits( "local solder paste margin value" ) );
+                    parseBoardUnits( "local solder paste margin value" ) );
             NeedRIGHT();
             break;
 
         case T_solder_paste_ratio:
             module->SetLocalSolderPasteMarginRatio(
-                parseDouble( "local solder paste margin ratio value" ) );
+                    parseDouble( "local solder paste margin ratio value" ) );
             NeedRIGHT();
             break;
 
@@ -2477,7 +2477,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             break;
 
         case T_attr:
-            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
                 switch( token )
                 {
@@ -2496,55 +2496,71 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             break;
 
         case T_fp_text:
+        {
+            TEXTE_MODULE* text = parseTEXTE_MODULE();
+            text->SetParent( module.get() );
+            double orientation = text->GetTextAngle();
+            orientation -= module->GetOrientation();
+            text->SetTextAngle( orientation );
+            text->SetDrawCoord();
+
+            switch( text->GetType() )
             {
-                TEXTE_MODULE* text = parseTEXTE_MODULE();
-                text->SetParent( module.get() );
-                double orientation = text->GetTextAngle();
-                orientation -= module->GetOrientation();
-                text->SetTextAngle( orientation );
-                text->SetDrawCoord();
+            case TEXTE_MODULE::TEXT_is_REFERENCE:
+                module->Reference() = *text;
+                delete text;
+                break;
 
-                switch( text->GetType() )
-                {
-                case TEXTE_MODULE::TEXT_is_REFERENCE:
-                    module->Reference() = *text;
-                    delete text;
-                    break;
+            case TEXTE_MODULE::TEXT_is_VALUE:
+                module->Value() = *text;
+                delete text;
+                break;
 
-                case TEXTE_MODULE::TEXT_is_VALUE:
-                    module->Value() = *text;
-                    delete text;
-                    break;
-
-                default:
-                    module->Add( text );
-                }
+            default:
+                module->Add( text );
             }
-            break;
+        }
+        break;
 
         case T_fp_arc:
-        case T_fp_circle:
-        case T_fp_curve:
-        case T_fp_line:
-        case T_fp_poly:
+        {
+            EDGE_MODULE* em = parseEDGE_MODULE();
+
+            // Drop 0 and NaN angles as these can corrupt/crash the schematic
+            if( std::isnormal( em->GetAngle() ) )
             {
-                EDGE_MODULE* em = parseEDGE_MODULE();
                 em->SetParent( module.get() );
                 em->SetDrawCoord();
                 module->Add( em );
             }
-            break;
+        }
+
+        break;
+
+        case T_fp_circle:
+        case T_fp_curve:
+        case T_fp_line:
+        case T_fp_poly:
+        {
+            EDGE_MODULE* em = parseEDGE_MODULE();
+            em->SetParent( module.get() );
+            em->SetDrawCoord();
+            module->Add( em );
+        }
+
+        break;
 
         case T_pad:
-            {
-                D_PAD*  pad = parseD_PAD( module.get() );
-                pt = pad->GetPos0();
+        {
+            D_PAD* pad = parseD_PAD( module.get() );
+            pt         = pad->GetPos0();
 
-                RotatePoint( &pt, module->GetOrientation() );
-                pad->SetPosition( pt + module->GetPosition() );
-                module->Add( pad, ADD_MODE::APPEND );
-            }
-            break;
+            RotatePoint( &pt, module->GetOrientation() );
+            pad->SetPosition( pt + module->GetPosition() );
+            module->Add( pad, ADD_MODE::APPEND );
+        }
+
+        break;
 
         case T_model:
             module->Add3DModel( parse3DModel() );
