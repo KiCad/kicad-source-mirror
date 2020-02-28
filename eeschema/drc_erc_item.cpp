@@ -106,14 +106,14 @@ wxString DRC_ITEM::ShowHtml( EDA_UNITS aUnits ) const
 
     wxColour hrefColour = wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT );
 
-    if( m_noCoordinate )
+    if( !m_hasPositions )
     {
         // omit the coordinate, a NETCLASS has no location
         return wxString::Format( "<p><b>%s</b><br>&nbsp;&nbsp; %s", errText, mainText );
     }
     else if( m_hasSecondItem )
     {
-        wxString auxText = m_AuxiliaryText;
+        wxString auxText = m_AuxText;
         auxText.Replace( wxT("<"), wxT("&lt;") );
         auxText.Replace( wxT(">"), wxT("&gt;") );
 
@@ -124,7 +124,7 @@ wxString DRC_ITEM::ShowHtml( EDA_UNITS aUnits ) const
                                  hrefColour.GetAsString( wxC2S_HTML_SYNTAX ),
                                  ShowCoord( aUnits, m_MainPosition ),
                                  mainText,
-                                 ShowCoord( aUnits, m_AuxiliaryPosition ),
+                                 ShowCoord( aUnits, m_AuxPosition ),
                                  auxText  );
     }
     else
@@ -147,8 +147,8 @@ wxString DRC_ITEM::ShowReport( EDA_UNITS aUnits ) const
                                  GetErrorText(),
                                  ShowCoord( aUnits, m_MainPosition ),
                                  m_MainText,
-                                 ShowCoord( aUnits, m_AuxiliaryPosition ),
-                                 m_AuxiliaryText );
+                                 ShowCoord( aUnits, m_AuxPosition ),
+                                 m_AuxText );
     }
     else
     {

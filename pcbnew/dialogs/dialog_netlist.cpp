@@ -222,7 +222,7 @@ void DIALOG_NETLIST::onFilenameChanged()
             {
                 m_MessageWindow->Clear();
                 REPORTER& reporter = m_MessageWindow->Reporter();
-                reporter.Report( _( "The netlist file does not exist." ), REPORTER::RPT_ERROR );
+                reporter.Report( _( "The netlist file does not exist." ), SEVERITY_ERROR );
             }
         }
     }
@@ -272,14 +272,14 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
 
     wxString msg;
     msg.Printf( _( "Reading netlist file \"%s\".\n" ), GetChars( netlistFileName ) );
-    reporter.ReportHead( msg, REPORTER::RPT_INFO );
+    reporter.ReportHead( msg, SEVERITY_INFO );
 
     if( m_matchByTimestamp->GetSelection() == 1 )
         msg = _( "Using references to match components and footprints.\n" );
     else
         msg = _( "Using time stamp fields (UUID) to match components and footprints.\n" );
 
-    reporter.ReportHead( msg, REPORTER::RPT_INFO );
+    reporter.ReportHead( msg, SEVERITY_INFO );
     m_MessageWindow->SetLazyUpdate( true ); // Use lazy update to speed the creation of the report
                                             // (the window is not updated for each message)
     m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;

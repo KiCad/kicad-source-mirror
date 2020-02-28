@@ -42,10 +42,6 @@ class BOARD_DESIGN_SETTINGS;
 class DRC_TREE_MODEL;
 
 
-#define DRC_SHOW_ERRORS   0x0001
-#define DRC_SHOW_WARNINGS 0x0002
-#define DRC_SHOW_INFOS    0x0004
-
 #define DIALOG_DRC_WINDOW_NAME "DialogDrcWindowName"
 
 class
@@ -65,8 +61,6 @@ public:
     void SetUnconnectedProvider( DRC_ITEMS_PROVIDER* aProvider );
     void SetFootprintsProvider( DRC_ITEMS_PROVIDER* aProvider );
 
-    void UpdateDisplayedCounts();
-
 private:
     /**
      * Function writeReport
@@ -81,26 +75,28 @@ private:
     void displayDRCValues();
     void setDRCParameters();
     void syncCheckboxes();
+    void updateDisplayedCounts();
 
-    void OnDRCItemSelected( wxDataViewEvent& event ) override;
-    void OnDRCItemDClick( wxDataViewEvent& event ) override;
+    void OnDRCItemSelected( wxDataViewEvent& aEvent ) override;
+    void OnDRCItemDClick( wxDataViewEvent& aEvent ) override;
+    void OnDRCItemRClick( wxDataViewEvent& aEvent ) override;
 
-    void OnSeverity( wxCommandEvent& event ) override;
-  	void OnSaveReport( wxCommandEvent& event ) override;
+    void OnSeverity( wxCommandEvent& aEvent ) override;
+  	void OnSaveReport( wxCommandEvent& aEvent ) override;
 
-    void OnDeleteOneClick( wxCommandEvent& event ) override;
-    void OnDeleteAllClick( wxCommandEvent& event ) override;
-    void OnRunDRCClick( wxCommandEvent& event ) override;
-    void OnCancelClick( wxCommandEvent& event ) override;
+    void OnDeleteOneClick( wxCommandEvent& aEvent ) override;
+    void OnDeleteAllClick( wxCommandEvent& aEvent ) override;
+    void OnRunDRCClick( wxCommandEvent& aEvent ) override;
+    void OnCancelClick( wxCommandEvent& aEvent ) override;
 
     /// handler for activate event, updating data which can be modified outside the dialog
     /// (DRC parameters)
-    void OnActivateDlg( wxActivateEvent& event ) override;
+    void OnActivateDlg( wxActivateEvent& aEvent ) override;
 
-    void OnChangingNotebookPage( wxNotebookEvent& event ) override;
+    void OnChangingNotebookPage( wxNotebookEvent& aEvent ) override;
 
-    void DelDRCMarkers();
-    void RefreshBoardEditor();
+    void deleteAllMarkers();
+    void refreshBoardEditor();
 
     BOARD*              m_currentBoard;     // the board currently on test
     DRC*                m_tester;
@@ -114,9 +110,14 @@ private:
     UNIT_BINDER         m_viaMinSize;
     UNIT_BINDER         m_uviaMinSize;
 
+    DRC_ITEMS_PROVIDER* m_markersProvider;
     DRC_TREE_MODEL*     m_markerTreeModel;
+
+    DRC_ITEMS_PROVIDER* m_unconnectedItemsProvider;
     DRC_TREE_MODEL*     m_unconnectedTreeModel;
-    DRC_TREE_MODEL*     m_footprintsTreeModel;
+
+    DRC_ITEMS_PROVIDER* m_footprintWarningsProvider;
+    DRC_TREE_MODEL*     m_footprintWarningsTreeModel;
 
     int                 m_severities;
 };

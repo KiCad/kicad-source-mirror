@@ -27,12 +27,12 @@
 
 #include <class_board.h>
 #include <class_track.h>
+#include <class_marker_pcb.h>
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <memory>
 #include <vector>
 #include <tools/pcb_tool_base.h>
-#include <drc/drc_marker_factory.h>
 
 #define OK_DRC  0
 #define BAD_DRC 1
@@ -43,24 +43,16 @@
 // and using #define that shows each numerical value helps for debug.
 
 /// DRC error codes:
-#define DRCE_                                  1    // not used yet
+#define DRCE_FIRST                             2
 #define DRCE_UNCONNECTED_ITEMS                 2    ///< items are unconnected
 #define DRCE_TRACK_NEAR_THROUGH_HOLE           3    ///< thru hole is too close to track
 #define DRCE_TRACK_NEAR_PAD                    4    ///< pad too close to track
 #define DRCE_TRACK_NEAR_VIA                    5    ///< track too close to via
 #define DRCE_VIA_NEAR_VIA                      6    ///< via too close to via
 #define DRCE_VIA_NEAR_TRACK                    7    ///< via too close to track
-#define DRCE_TRACK_ENDS1                       8    ///< 2 parallel track segments too close: fine start point test
-#define DRCE_TRACK_ENDS2                       9    ///< 2 parallel track segments too close: fine start point test
-#define DRCE_TRACK_ENDS3                       10   ///< 2 parallel track segments too close: fine end point test
-#define DRCE_TRACK_ENDS4                       11   ///< 2 parallel track segments too close: fine end point test
+#define DRCE_TRACK_ENDS                        8    ///< track ends are too close
 #define DRCE_TRACK_SEGMENTS_TOO_CLOSE          12   ///< 2 parallel track segments too close: segm ends between segref ends
 #define DRCE_TRACKS_CROSSING                   13   ///< tracks are crossing
-#define DRCE_ENDS_PROBLEM1                     14   ///< track ends are too close
-#define DRCE_ENDS_PROBLEM2                     15   ///< track ends are too close
-#define DRCE_ENDS_PROBLEM3                     16   ///< track ends are too close
-#define DRCE_ENDS_PROBLEM4                     17   ///< track ends are too close
-#define DRCE_ENDS_PROBLEM5                     18   ///< track ends are too close
 #define DRCE_PAD_NEAR_PAD1                     19   ///< pad too close to pad
 #define DRCE_VIA_HOLE_BIGGER                   20   ///< via's hole is bigger than its diameter
 #define DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR    21   ///< micro via's layer pair incorrect (layers must be adjacent)
@@ -109,6 +101,8 @@
 #define DRCE_DANGLING_VIA                      63
 #define DRCE_ZERO_LENGTH_TRACK                 64
 #define DRCE_TRACK_IN_PAD                      65
+
+#define DRCE_LAST                              65
 
 
 class PCB_EDIT_FRAME;
@@ -163,8 +157,6 @@ private:
     bool     m_testFootprints;          // Test footprints against schematic
     int      m_severities;              // Severities of DRC violations to display
 
-    MARKER_PCB* m_currentMarker;
-
     /* In DRC functions, many calculations are using coordinates relative
      * to the position of the segment under test (segm to segm DRC, segm to pad DRC
      * Next variables store coordinates relative to the start point of this segment
@@ -192,7 +184,6 @@ private:
     BOARD*              m_pcb;
     SHAPE_POLY_SET      m_board_outlines;   ///< The board outline including cutouts
     DIALOG_DRC_CONTROL* m_drcDialog;
-    DRC_MARKER_FACTORY  m_markerFactory;    ///< Class that generates markers
 
     DRC_LIST            m_unconnected;      ///< list of unconnected pads, as DRC_ITEMs
     DRC_LIST            m_footprints;       ///< list of footprint warnings, as DRC_ITEMs
@@ -208,10 +199,18 @@ private:
      */
     void updatePointers();
 
+    EDA_UNITS userUnits() const { return m_pcbEditorFrame->GetUserUnits(); }
+
     /**
      * Adds a DRC marker to the PCB through the COMMIT mechanism.
      */
     void addMarkerToPcb( MARKER_PCB* aMarker );
+
+    /**
+     * Fetches a reasonable point for marking a violoation between two non-point objects.
+     */
+    wxPoint getLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone ) const;
+    wxPoint getLocation( TRACK* aTrack, BOARD_ITEM* aConflitItem, const SEG& aConflictSeg ) const;
 
     //-----<categorical group tests>-----------------------------------------
 
@@ -289,7 +288,7 @@ private:
      * @return bool - true if no problems, else false and m_currentMarker is
      *          filled in with the problem information.
      */
-    bool doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterator aEndIt,
+    void doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterator aEndIt,
                      bool aTestZones );
 
     /**
@@ -355,13 +354,9 @@ public:
     /**
      * Tests whether distance between zones complies with the DRC rules.
      *
-     * @param aZone: zone to compare with other zones, or if NULL then
-     *          all zones are compared to all others.
-     * @param aCreateMarkers: if true create DRC markers.
-     * False: do not create markers. only fing drc errors
      * @return Errors count
      */
-    int TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers );
+    int TestZoneToZoneOutlines();
 
     /**
      * Test the board footprints against a netlist.  Will report DRCE_MISSING_FOOTPRINT,

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,24 +21,36 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <drc/drc_provider.h>
+
+#ifndef KICAD_PANEL_SETUP_DRC_SEVERITIES_H
+#define KICAD_PANEL_SETUP_DRC_SEVERITIES_H
+
+#include <map>
+#include <wx/generic/panelg.h>
 
 
-DRC_PROVIDER::DRC_PROVIDER( const DRC_MARKER_FACTORY& aMarkerMaker, MARKER_HANDLER aMarkerHandler )
-        : m_marker_factory( aMarkerMaker ), m_marker_handler( aMarkerHandler )
+class BOARD;
+class BOARD_DESIGN_SETTINGS;
+class PAGED_DIALOG;
+class PCB_EDIT_FRAME;
+class wxRadioBox;
+
+
+class PANEL_SETUP_DRC_SEVERITIES : public wxPanel
 {
-}
+private:
+    BOARD_DESIGN_SETTINGS&           m_brdSettings;
+    std::map<int, wxRadioButton*[4]> m_buttonMap;   // map from DRC error code to button group
 
+public:
+    PANEL_SETUP_DRC_SEVERITIES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
+    ~PANEL_SETUP_DRC_SEVERITIES( ) { };
 
-const DRC_MARKER_FACTORY& DRC_PROVIDER::GetMarkerFactory() const
-{
-    return m_marker_factory;
-}
+    void ImportSettingsFrom( BOARD* aBoard );
 
+private:
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+};
 
-void DRC_PROVIDER::HandleMarker( std::unique_ptr<MARKER_PCB> aMarker ) const
-{
-    // The marker hander currently takes a raw pointer,
-    // but it also assumes ownership
-    m_marker_handler( aMarker.release() );
-}
+#endif //KICAD_PANEL_SETUP_DRC_SEVERITIES_H

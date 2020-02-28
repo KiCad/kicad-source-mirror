@@ -32,14 +32,11 @@ using namespace std::placeholders;
 
 #include <fctsys.h>
 #include <pgm_base.h>
-#include <class_draw_panel_gal.h>
 #include <confirm.h>
-#include <dialog_helpers.h>
 #include <pcb_edit_frame.h>
 #include "pcb_netlist.h"
 #include "netlist_reader.h"
 #include <reporter.h>
-#include <wildcards_and_files_ext.h>
 #include <lib_id.h>
 #include <fp_lib_table.h>
 #include <class_board.h>
@@ -161,7 +158,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         {
             msg.Printf( _( "No footprint defined for symbol \"%s\".\n" ),
                         component->GetReference() );
-            aReporter.Report( msg, REPORTER::RPT_ERROR );
+            aReporter.Report( msg, SEVERITY_ERROR );
 
             continue;
         }
@@ -181,7 +178,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
                         component->GetReference(),
                         GetChars( fpOnBoard->GetFPID().Format() ),
                         GetChars( component->GetFPID().Format() ) );
-            aReporter.Report( msg, REPORTER::RPT_WARNING );
+            aReporter.Report( msg, SEVERITY_WARNING );
 
             continue;
         }
@@ -207,7 +204,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
                 msg.Printf( _( "%s footprint ID \"%s\" is not valid." ),
                             component->GetReference(),
                             GetChars( component->GetFPID().Format() ) );
-                aReporter.Report( msg, REPORTER::RPT_ERROR );
+                aReporter.Report( msg, SEVERITY_ERROR );
 
                 continue;
             }
@@ -224,7 +221,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
                 msg.Printf( _( "%s footprint \"%s\" not found in any libraries in the footprint library table.\n" ),
                             component->GetReference(),
                             GetChars( component->GetFPID().GetLibItemName() ) );
-                aReporter.Report( msg, REPORTER::RPT_ERROR );
+                aReporter.Report( msg, SEVERITY_ERROR );
 
                 continue;
             }

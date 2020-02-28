@@ -56,7 +56,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     // TODO(JE) in actual usage, how long does the default palette need to be?
     m_params.emplace_back( new PARAM_LIST<COLOR4D>( "palette", &m_Palette, default_palette ) );
 
-#define CLR( x, y, z ) m_params.emplace_back( new COLOR_MAP_PARAM( x, y, z, &m_colors ) );
+#define CLR( x, y, z ) m_params.emplace_back( new COLOR_MAP_PARAM( x, y, z, &m_colors ) )
 
     CLR( "schematic.background",        LAYER_SCHEMATIC_BACKGROUND, COLOR4D( WHITE ) );
     CLR( "schematic.brightened",        LAYER_BRIGHTENED,           COLOR4D( PUREMAGENTA ) );
@@ -64,8 +64,8 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     CLR( "schematic.component_body",    LAYER_DEVICE_BACKGROUND,    COLOR4D( LIGHTYELLOW ) );
     CLR( "schematic.component_outline", LAYER_DEVICE,               COLOR4D( RED ) );
     CLR( "schematic.cursor",            LAYER_SCHEMATIC_CURSOR,     COLOR4D( BLACK ) );
-    CLR( "schematic.erc_error",         LAYER_ERC_ERR,        COLOR4D( RED ).WithAlpha( 0.8 ) );
-    CLR( "schematic.erc_warning",       LAYER_ERC_WARN,       COLOR4D( GREEN ).WithAlpha( 0.8 ) );
+    CLR( "schematic.erc_error",         LAYER_ERC_ERR,              COLOR4D( RED ).WithAlpha( 0.8 ) );
+    CLR( "schematic.erc_warning",       LAYER_ERC_WARN,             COLOR4D( GREEN ).WithAlpha( 0.8 ) );
     CLR( "schematic.fields",            LAYER_FIELDS,               COLOR4D( MAGENTA ) );
     CLR( "schematic.grid",              LAYER_SCHEMATIC_GRID,       COLOR4D( DARKGRAY ) );
     CLR( "schematic.hidden",            LAYER_HIDDEN,               COLOR4D( LIGHTGRAY ) );
@@ -113,7 +113,8 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     CLR( "board.aux_items",                LAYER_AUX_ITEMS,          COLOR4D( WHITE ) );
     CLR( "board.background",               LAYER_PCB_BACKGROUND,     COLOR4D( BLACK ) );
     CLR( "board.cursor",                   LAYER_CURSOR,             COLOR4D( WHITE ) );
-    CLR( "board.drc",                      LAYER_DRC,                COLOR4D( LIGHTGRAY ) );
+    CLR( "board.drc_error",                LAYER_DRC_ERROR,          COLOR4D( PURERED ) );
+    CLR( "board.drc_warning",              LAYER_DRC_WARNING,        COLOR4D( PUREYELLOW ) );
     CLR( "board.footprint_text_back",      LAYER_MOD_TEXT_BK,        COLOR4D( BLUE ) );
     CLR( "board.footprint_text_front",     LAYER_MOD_TEXT_FR,        COLOR4D( LIGHTGRAY ) );
     CLR( "board.footprint_text_invisible", LAYER_MOD_TEXT_INVISIBLE, COLOR4D( LIGHTGRAY ) );
@@ -203,7 +204,8 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     CLR( "fpedit.aux_items",                FL + LAYER_AUX_ITEMS,          COLOR4D( WHITE ) );
     CLR( "fpedit.background",               FL + LAYER_PCB_BACKGROUND,     COLOR4D( BLACK ) );
     CLR( "fpedit.cursor",                   FL + LAYER_CURSOR,             COLOR4D( WHITE ) );
-    CLR( "fpedit.drc",                      FL + LAYER_DRC,                COLOR4D( LIGHTGRAY ) );
+    CLR( "fpedit.drc_error",                FL + LAYER_DRC_ERROR,          COLOR4D( PURERED ) );
+    CLR( "fpedit.drc_warning",              FL + LAYER_DRC_WARNING,        COLOR4D( PUREYELLOW ) );
     CLR( "fpedit.footprint_text_back",      FL + LAYER_MOD_TEXT_BK,        COLOR4D( BLUE ) );
     CLR( "fpedit.footprint_text_front",     FL + LAYER_MOD_TEXT_FR,        COLOR4D( LIGHTGRAY ) );
     CLR( "fpedit.footprint_text_invisible", FL + LAYER_MOD_TEXT_INVISIBLE, COLOR4D( LIGHTGRAY ) );
@@ -281,11 +283,11 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     // Colors for 3D viewer, which are used as defaults unless overridden by the board
     CLR( "3d_viewer.background_bottom", LAYER_3D_BACKGROUND_BOTTOM, COLOR4D( 0.4, 0.4, 0.5, 1.0 ) );
     CLR( "3d_viewer.background_top",    LAYER_3D_BACKGROUND_TOP,    COLOR4D( 0.8, 0.8, 0.9, 1.0 ) );
-    CLR( "3d_viewer.board",             LAYER_3D_BOARD,            COLOR4D( 0.2, 0.17, 0.09, 1.0 ) );
+    CLR( "3d_viewer.board",             LAYER_3D_BOARD,             COLOR4D( 0.2, 0.17, 0.09, 1.0 ) );
     CLR( "3d_viewer.copper",            LAYER_3D_COPPER,            COLOR4D( 0.7, 0.61, 0.0, 1.0 ) );
     CLR( "3d_viewer.silkscreen_bottom", LAYER_3D_SILKSCREEN_BOTTOM, COLOR4D( 0.9, 0.9, 0.9, 1.0 ) );
     CLR( "3d_viewer.silkscreen_top",    LAYER_3D_SILKSCREEN_TOP,    COLOR4D( 0.9, 0.9, 0.9, 1.0 ) );
-    CLR( "3d_viewer.soldermask",        LAYER_3D_SOLDERMASK,       COLOR4D( 0.08, 0.2, 0.14, 1.0 ) );
+    CLR( "3d_viewer.soldermask",        LAYER_3D_SOLDERMASK,        COLOR4D( 0.08, 0.2, 0.14, 1.0 ) );
     CLR( "3d_viewer.solderpaste",       LAYER_3D_SOLDERPASTE,       COLOR4D( 0.5, 0.5, 0.5, 1.0 ) );
 }
 
@@ -302,7 +304,9 @@ COLOR4D COLOR_SETTINGS::GetColor( int aLayer ) const
     {
         if( m_color_context == COLOR_CONTEXT::FOOTPRINT && aLayer >= PCBNEW_LAYER_ID_START
                 && aLayer <= GAL_LAYER_ID_END )
+        {
             aLayer += FPEDIT_LAYER_ID_START;
+        }
 
         return m_colors.at( aLayer );
     }
@@ -319,7 +323,9 @@ COLOR4D COLOR_SETTINGS::GetDefaultColor( int aLayer )
     {
         if( m_color_context == COLOR_CONTEXT::FOOTPRINT && aLayer >= PCBNEW_LAYER_ID_START
                 && aLayer <= GAL_LAYER_ID_END )
+        {
             aLayer += FPEDIT_LAYER_ID_START;
+        }
 
         COLOR_MAP_PARAM* p = nullptr;
 

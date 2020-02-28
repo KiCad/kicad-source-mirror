@@ -145,7 +145,7 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
         msg.Printf( _( "Cannot add %s (no footprint assigned)." ),
                     aComponent->GetReference(),
                     aComponent->GetFPID().Format().wx_str() );
-        m_reporter->Report( msg, REPORTER::RPT_ERROR );
+        m_reporter->Report( msg, SEVERITY_ERROR );
         ++m_errorCount;
         return nullptr;
     }
@@ -157,7 +157,7 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
         msg.Printf( _( "Cannot add %s (footprint \"%s\" not found)." ),
                     aComponent->GetReference(),
                     aComponent->GetFPID().Format().wx_str() );
-        m_reporter->Report( msg, REPORTER::RPT_ERROR );
+        m_reporter->Report( msg, SEVERITY_ERROR );
         ++m_errorCount;
         return nullptr;
     }
@@ -165,7 +165,7 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
     msg.Printf( _( "Add %s (footprint \"%s\")." ),
                 aComponent->GetReference(),
                 aComponent->GetFPID().Format().wx_str() );
-    m_reporter->Report( msg, REPORTER::RPT_ACTION );
+    m_reporter->Report( msg, SEVERITY_ACTION );
 
     // Set the pads ratsnest settings to the global settings
     bool set_ratsnest = m_frame->GetDisplayOptions().m_ShowGlobalRatsnest;
@@ -201,7 +201,7 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
         msg.Printf( _( "Cannot update %s (no footprint assigned)." ),
                     aNewComponent->GetReference(),
                     aNewComponent->GetFPID().Format().wx_str() );
-        m_reporter->Report( msg, REPORTER::RPT_ERROR );
+        m_reporter->Report( msg, SEVERITY_ERROR );
         ++m_errorCount;
         return nullptr;
     }
@@ -213,7 +213,7 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
         msg.Printf( _( "Cannot update %s (footprint \"%s\" not found)." ),
                     aNewComponent->GetReference(),
                     aNewComponent->GetFPID().Format().wx_str() );
-        m_reporter->Report( msg, REPORTER::RPT_ERROR );
+        m_reporter->Report( msg, SEVERITY_ERROR );
         ++m_errorCount;
         return nullptr;
     }
@@ -222,7 +222,7 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
                 aPcbComponent->GetReference(),
                 aPcbComponent->GetFPID().Format().wx_str(),
                 aNewComponent->GetFPID().Format().wx_str() );
-    m_reporter->Report( msg, REPORTER::RPT_ACTION );
+    m_reporter->Report( msg, SEVERITY_ACTION );
 
     m_newFootprintsCount++;
 
@@ -253,7 +253,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent,
         msg.Printf( _( "Change %s reference to %s." ),
                     aPcbComponent->GetReference(),
                     aNewComponent->GetReference() );
-        m_reporter->Report( msg, REPORTER::RPT_ACTION );
+        m_reporter->Report( msg, SEVERITY_ACTION );
 
         if ( !m_isDryRun )
         {
@@ -269,7 +269,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent,
                     aPcbComponent->GetReference(),
                     aPcbComponent->GetValue(),
                     aNewComponent->GetValue() );
-        m_reporter->Report( msg, REPORTER::RPT_ACTION );
+        m_reporter->Report( msg, SEVERITY_ACTION );
 
         if( !m_isDryRun )
         {
@@ -285,7 +285,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent,
                     aPcbComponent->GetReference(),
                     aPcbComponent->GetPath().AsString(),
                     aNewComponent->GetPath().AsString() );
-        m_reporter->Report( msg, REPORTER::RPT_INFO );
+        m_reporter->Report( msg, SEVERITY_INFO );
 
         if( !m_isDryRun )
         {
@@ -341,7 +341,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                 msg.Printf( _( "Disconnect %s pin %s." ),
                             aPcbComponent->GetReference(),
                             pad->GetName() );
-                m_reporter->Report( msg, REPORTER::RPT_ACTION );
+                m_reporter->Report( msg, SEVERITY_ACTION );
             }
             else if( m_warnForNoNetPads && pad->IsOnCopperLayer() && !pad->GetName().IsEmpty() )
             {
@@ -349,7 +349,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                 msg.Printf( _( "No net for component %s pin %s." ),
                             aPcbComponent->GetReference(),
                             pad->GetName() );
-                m_reporter->Report( msg, REPORTER::RPT_WARNING);
+                m_reporter->Report( msg, SEVERITY_WARNING);
             }
 
             if( !m_isDryRun )
@@ -397,7 +397,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
 
                     m_addedNets[netName] = netinfo;
                     msg.Printf( _( "Add net %s." ), UnescapeString( netName ) );
-                    m_reporter->Report( msg, REPORTER::RPT_ACTION );
+                    m_reporter->Report( msg, SEVERITY_ACTION );
                 }
 
                 if( !pad->GetNetname().IsEmpty() )
@@ -417,7 +417,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                             pad->GetName(),
                             UnescapeString( netName ) );
                 }
-                m_reporter->Report( msg, REPORTER::RPT_ACTION );
+                m_reporter->Report( msg, SEVERITY_ACTION );
 
                 if( !m_isDryRun )
                 {
@@ -488,7 +488,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
             {
                 msg.Printf( _( "Reconnect via from %s to %s." ),
                         UnescapeString( via->GetNetname() ), UnescapeString( updatedNetname ) );
-                m_reporter->Report( msg, REPORTER::RPT_ACTION );
+                m_reporter->Report( msg, SEVERITY_ACTION );
 
                 if( !m_isDryRun )
                 {
@@ -508,7 +508,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
             {
                 msg.Printf( _( "Via connected to unknown net (%s)." ),
                         UnescapeString( via->GetNetname() ) );
-                m_reporter->Report( msg, REPORTER::RPT_WARNING );
+                m_reporter->Report( msg, SEVERITY_WARNING );
                 ++m_warningCount;
             }
         }
@@ -550,7 +550,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                 msg.Printf( _( "Reconnect copper zone from %s to %s." ),
                             UnescapeString( zone->GetNetname() ),
                             UnescapeString( updatedNetname ) );
-                m_reporter->Report( msg, REPORTER::RPT_ACTION );
+                m_reporter->Report( msg, SEVERITY_ACTION );
 
                 if( !m_isDryRun )
                 {
@@ -570,7 +570,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
             {
                 msg.Printf( _( "Copper zone (%s) has no pads connected." ),
                             UnescapeString( zone->GetNetname() ) );
-                m_reporter->Report( msg, REPORTER::RPT_WARNING );
+                m_reporter->Report( msg, SEVERITY_WARNING );
                 ++m_warningCount;
             }
         }
@@ -598,12 +598,12 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
             if( module->IsLocked() )
             {
                 msg.Printf( _( "Cannot remove unused footprint %s (locked)." ), module->GetReference() );
-                m_reporter->Report( msg, REPORTER::RPT_WARNING );
+                m_reporter->Report( msg, SEVERITY_WARNING );
                 continue;
             }
 
             msg.Printf( _( "Remove unused footprint %s." ), module->GetReference() );
-            m_reporter->Report( msg, REPORTER::RPT_ACTION );
+            m_reporter->Report( msg, SEVERITY_ACTION );
 
             if( !m_isDryRun )
                 m_commit.Remove( module );
@@ -662,7 +662,7 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
                 {
                     msg.Printf( _( "Remove single pad net %s." ),
                                 UnescapeString( getNetname( previouspad ) ) );
-                    m_reporter->Report( msg, REPORTER::RPT_ACTION );
+                    m_reporter->Report( msg, SEVERITY_ACTION );
 
                     if( !m_isDryRun )
                         previouspad->SetNetCode( NETINFO_LIST::UNCONNECTED );
@@ -727,7 +727,7 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
                         component->GetReference(),
                         padname,
                         footprint->GetFPID().Format().wx_str() );
-            m_reporter->Report( msg, REPORTER::RPT_ERROR );
+            m_reporter->Report( msg, SEVERITY_ERROR );
             ++m_errorCount;
         }
     }
@@ -765,7 +765,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         msg.Printf( _( "Processing component \"%s:%s\"." ),
                     component->GetReference(),
                     component->GetFPID().Format().wx_str() );
-        m_reporter->Report( msg, REPORTER::RPT_INFO );
+        m_reporter->Report( msg, SEVERITY_INFO );
 
         for( auto footprint : m_board->Modules() )
         {
@@ -816,7 +816,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         {
             msg.Printf( _( "Multiple footprints found for \"%s\"." ),
                         component->GetReference() );
-            m_reporter->Report( msg, REPORTER::RPT_ERROR );
+            m_reporter->Report( msg, SEVERITY_ERROR );
         }
     }
 
@@ -850,20 +850,20 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     }
 
     // Update the ratsnest
-    m_reporter->ReportTail( wxT( "" ), REPORTER::RPT_ACTION );
-    m_reporter->ReportTail( wxT( "" ), REPORTER::RPT_ACTION );
+    m_reporter->ReportTail( wxT( "" ), SEVERITY_ACTION );
+    m_reporter->ReportTail( wxT( "" ), SEVERITY_ACTION );
 
     msg.Printf( _( "Total warnings: %d, errors: %d." ), m_warningCount, m_errorCount );
-    m_reporter->ReportTail( msg, REPORTER::RPT_ACTION );
+    m_reporter->ReportTail( msg, SEVERITY_ACTION );
 
     if( m_errorCount )
     {
         m_reporter->ReportTail( _( "Errors occurred during the netlist update. Unless you fix them "
                                    "your board will not be consistent with the schematics." ),
-                                REPORTER::RPT_ERROR );
+                                SEVERITY_ERROR );
         return false;
     }
 
-    m_reporter->ReportTail( _( "Netlist update successful!" ), REPORTER::RPT_ACTION );
+    m_reporter->ReportTail( _( "Netlist update successful!" ), SEVERITY_ACTION );
     return true;
 }

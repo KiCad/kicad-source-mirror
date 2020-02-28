@@ -73,7 +73,7 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
     if( textSize != GetDefaultTextSize() )
     {
         SetDefaultTextSize( textSize );
-        m_frame->SaveProjectSettings( false );
+        m_frame->SaveProjectSettings();
     }
 
     m_frame->SetRepeatStep(

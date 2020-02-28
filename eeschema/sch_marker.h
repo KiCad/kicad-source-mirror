@@ -105,6 +105,9 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
+
+protected:
+    KIGFX::COLOR4D getColor() const override;
 };
 
 #endif // TYPE_SCH_MARKER_H_

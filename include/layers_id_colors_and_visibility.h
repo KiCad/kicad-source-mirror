@@ -193,7 +193,8 @@ enum GAL_LAYER_ID: int
     LAYER_PADS_TH,              ///< multilayer pads, usually with holes
     LAYER_PADS_PLATEDHOLES,     ///< to draw pad holes (plated)
     LAYER_VIAS_HOLES,           ///< to draw via holes (pad holes do not use this layer)
-    LAYER_DRC,                  ///< drc markers
+    LAYER_DRC_ERROR,            ///< layer for drc markers with SEVERITY_ERROR
+    LAYER_DRC_WARNING,          ///< layer for drc markers with SEVERITY_WARNING
     LAYER_WORKSHEET,            ///< worksheet frame
     LAYER_GP_OVERLAY,           ///< general purpose overlay
     LAYER_SELECT_OVERLAY,       ///< currently selected items overlay
@@ -350,7 +351,6 @@ enum LAYER_3D_ID : int
 // after loading a board for instance
 #define MIN_VISIBILITY_MASK int( ( 1 << GAL_LAYER_INDEX( LAYER_PADS_PLATEDHOLES ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_VIAS_HOLES ) ) +\
-                 ( 1 << GAL_LAYER_INDEX( LAYER_DRC ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_SELECT_OVERLAY ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_GP_OVERLAY ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_RATSNEST ) ) )

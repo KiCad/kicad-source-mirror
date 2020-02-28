@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,16 +26,13 @@
 #ifndef CONFIG_PARAMS_H_
 #define CONFIG_PARAMS_H_
 
-/**
- * The common library
- * @file config_params.h
- */
+#include <set>
+#include <limits>
 
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <gal/color4d.h>
-#include <limits>
 
 using KIGFX::COLOR4D;
 
@@ -77,14 +74,15 @@ enum paramcfg_id {
     PARAM_BOOL,
     PARAM_LIBNAME_LIST,
     PARAM_WXSTRING,
+    PARAM_WXSTRING_SET,
     PARAM_FILENAME,
     PARAM_COMMAND_ERASE,
-    PARAM_FIELDNAME_LIST,
     PARAM_LAYERS,
     PARAM_TRACKWIDTHS,
     PARAM_VIADIMENSIONS,
     PARAM_DIFFPAIRDIMENSIONS,
-    PARAM_NETCLASSES
+    PARAM_NETCLASSES,
+    PARAM_SEVERITIES
 };
 
 
@@ -273,6 +271,28 @@ public:
                         wxString*       ptparam,
                         const wxString& default_val = wxEmptyString,
                         const wxChar* group = NULL );
+
+    virtual void ReadParam( wxConfigBase* aConfig ) const override;
+    virtual void SaveParam( wxConfigBase* aConfig ) const override;
+};
+
+
+/**
+ * Configuration parameter - std::set<wxString>
+ *
+ */
+class PARAM_CFG_WXSTRING_SET : public PARAM_CFG
+{
+public:
+    std::set<wxString>* m_Pt_param;       ///<  Pointer to the parameter value
+
+public:
+    PARAM_CFG_WXSTRING_SET( const wxString& ident, std::set<wxString>* ptparam, const wxChar* group = NULL );
+
+    PARAM_CFG_WXSTRING_SET( bool                Insetup,
+                            const wxString&     ident,
+                            std::set<wxString>* ptparam,
+                            const wxChar* group = NULL );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;

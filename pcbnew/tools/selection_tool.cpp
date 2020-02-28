@@ -1475,9 +1475,6 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
     // Filter out items that do not belong to active layers
     std::set<unsigned int> activeLayers = getView()->GetPainter()->GetSettings()->GetActiveLayers();
 
-    // The markers layer is considered to be always active
-    activeLayers.insert( (unsigned int) LAYER_DRC );
-
     aItem->ViewGetLayers( layers, layers_count );
 
     if( highContrast )

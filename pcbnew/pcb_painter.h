@@ -33,9 +33,7 @@
 
 
 class EDA_ITEM;
-class COLORS_DESIGN_SETTINGS;
 class PCB_DISPLAY_OPTIONS;
-
 class BOARD_ITEM;
 class ARC;
 class BOARD;

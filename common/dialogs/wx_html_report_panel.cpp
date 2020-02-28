@@ -34,7 +34,7 @@ WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow*      parent,
                                             long           style ) :
     WX_HTML_REPORT_PANEL_BASE( parent, id, pos, size, style ),
     m_reporter( this ),
-    m_severities( REPORTER::RPT_ALL ),
+    m_severities( -1 ),
     m_lazyUpdate( false )
 {
     syncCheckboxes();
@@ -63,8 +63,8 @@ REPORTER& WX_HTML_REPORT_PANEL::Reporter()
 }
 
 
-void WX_HTML_REPORT_PANEL::Report( const wxString& aText, REPORTER::SEVERITY aSeverity,
-        REPORTER::LOCATION aLocation )
+void WX_HTML_REPORT_PANEL::Report( const wxString& aText, SEVERITY aSeverity,
+                                   REPORTER::LOCATION aLocation )
 {
     REPORT_LINE line;
     line.message = aText;
@@ -130,80 +130,13 @@ void WX_HTML_REPORT_PANEL::scrollToBottom()
 }
 
 
-#define BADGE_SIZE       20
-#define BADGE_FONT_SIZE  10
-
-static wxBitmap makeBadge( REPORTER::SEVERITY aStyle, int aCount, wxWindow* aWindow )
-{
-    wxSize      size( BADGE_SIZE, BADGE_SIZE );
-    wxBitmap    bitmap( size );
-    wxBrush     brush;
-    wxMemoryDC  badgeDC;
-    wxColour    badgeColour;
-    wxColour    textColour;
-    int         fontSize = BADGE_FONT_SIZE;
-
-    if( aCount > 99 )
-        fontSize--;
-
-    badgeDC.SelectObject( bitmap );
-
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-    // We're one level deep in staticBoxes; each level is darkened by 210
-    brush.SetColour( aWindow->GetParent()->GetBackgroundColour().MakeDisabled( 210 ) );
-    badgeDC.SetBackground( brush );
-    badgeDC.Clear();
-
-    if( aCount == 0 )
-        return bitmap;
-
-    switch( aStyle )
-    {
-    case REPORTER::RPT_ERROR:
-        badgeColour = *wxRED;
-        textColour = *wxWHITE;
-        break;
-    case REPORTER::RPT_WARNING:
-        badgeColour = wxColour( 235, 120, 80 );    // Orange
-        textColour = *wxWHITE;
-        break;
-    case REPORTER::RPT_ACTION:
-        badgeColour = *wxGREEN;
-        textColour = *wxWHITE;
-        break;
-    case REPORTER::RPT_INFO:
-    default:
-        badgeColour = *wxLIGHT_GREY;
-        textColour = *wxBLACK;
-        break;
-    }
-
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-    brush.SetColour( badgeColour );
-    badgeDC.SetBrush( brush );
-    badgeDC.SetPen( wxPen( badgeColour, 0 ) );
-    badgeDC.DrawCircle( size.x / 2 - 1, size.y / 2, ( std::max( size.x, size.y ) / 2 ) - 1 );
-
-    wxFont font( fontSize, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD );
-    badgeDC.SetFont( font );
-
-    wxString text = wxString::Format( wxT( "%d" ), aCount );
-    wxSize textExtent = badgeDC.GetTextExtent( text );
-
-    badgeDC.SetTextForeground( textColour );
-    badgeDC.DrawText( text, size.x / 2 - textExtent.x / 2 - 1, size.y / 2 - textExtent.y / 2 );
-
-    return bitmap;
-}
-
-
 void WX_HTML_REPORT_PANEL::updateBadges()
 {
-    int count = Count( REPORTER::RPT_ERROR );
-    m_errorsBadge->SetBitmap( makeBadge( REPORTER::RPT_ERROR, count, m_errorsBadge ) );
+    int count = Count( SEVERITY_ERROR );
+    m_errorsBadge->SetBitmap( MakeBadge( SEVERITY_ERROR, count, m_errorsBadge, 2 ) );
 
-    count = Count( REPORTER::RPT_WARNING );
-    m_warningsBadge->SetBitmap( makeBadge( REPORTER::RPT_WARNING, count, m_warningsBadge ) );
+    count = Count( SEVERITY_WARNING );
+    m_warningsBadge->SetBitmap( MakeBadge( SEVERITY_WARNING, count, m_warningsBadge, 2 ) );
 }
 
 
@@ -240,19 +173,19 @@ wxString WX_HTML_REPORT_PANEL::generateHtml( const REPORT_LINE& aLine )
 
     switch( aLine.severity )
     {
-    case REPORTER::RPT_ERROR:
+    case SEVERITY_ERROR:
         retv = "<font color=\"red\" size=2><b>" + _( "Error: " ) + "</b></font><font size=2>" +
                aLine.message + "</font><br>";
         break;
-    case REPORTER::RPT_WARNING:
+    case SEVERITY_WARNING:
         retv = "<font color=\"orange\" size=2><b>" + _( "Warning: " ) +
                "</b></font><font size=2>" + aLine.message + "</font><br>";
         break;
-    case REPORTER::RPT_INFO:
+    case SEVERITY_INFO:
         retv = "<font color=\"dark gray\" size=2><b>" + _( "Info: " ) + "</b>" + aLine.message +
                "</font><br>";
         break;
-    case REPORTER::RPT_ACTION:
+    case SEVERITY_ACTION:
         retv = "<font color=\"dark green\" size=2>" + aLine.message + "</font><br>";
         break;
     default:
@@ -267,11 +200,11 @@ wxString WX_HTML_REPORT_PANEL::generatePlainText( const REPORT_LINE& aLine )
 {
     switch( aLine.severity )
     {
-    case REPORTER::RPT_ERROR:
+    case SEVERITY_ERROR:
         return _( "Error: " ) + aLine.message + wxT( "\n" );
-    case REPORTER::RPT_WARNING:
+    case SEVERITY_WARNING:
         return _( "Warning: " ) + aLine.message + wxT( "\n" );
-    case REPORTER::RPT_INFO:
+    case SEVERITY_INFO:
         return _( "Info: " ) + aLine.message + wxT( "\n" );
     default:
         return aLine.message + wxT( "\n" );
@@ -303,12 +236,16 @@ void WX_HTML_REPORT_PANEL::onMenuEvent( wxMenuEvent& event )
 }
 
 
+// Don't globally define this; different facilities use different definitions of "ALL"
+static int SEVERITY_ALL = SEVERITY_WARNING | SEVERITY_ERROR | SEVERITY_INFO | SEVERITY_ACTION;
+
+
 void WX_HTML_REPORT_PANEL::onCheckBoxShowAll( wxCommandEvent& event )
 {
     if( event.IsChecked() )
-        m_severities = REPORTER::RPT_ALL;
+        m_severities = SEVERITY_ALL;
     else
-        m_severities = 0;
+        m_severities = SEVERITY_ERROR;
 
     syncCheckboxes();
     Flush( true );
@@ -317,20 +254,20 @@ void WX_HTML_REPORT_PANEL::onCheckBoxShowAll( wxCommandEvent& event )
 
 void WX_HTML_REPORT_PANEL::syncCheckboxes()
 {
-    m_checkBoxShowAll->SetValue( m_severities == REPORTER::RPT_ALL );
-    m_checkBoxShowWarnings->SetValue( m_severities & REPORTER::RPT_WARNING );
-    m_checkBoxShowErrors->SetValue( m_severities & REPORTER::RPT_ERROR );
-    m_checkBoxShowInfos->SetValue( m_severities & REPORTER::RPT_INFO );
-    m_checkBoxShowActions->SetValue( m_severities & REPORTER::RPT_ACTION );
+    m_checkBoxShowAll->SetValue( m_severities == SEVERITY_ALL );
+    m_checkBoxShowWarnings->SetValue( m_severities & SEVERITY_WARNING );
+    m_checkBoxShowErrors->SetValue( m_severities & SEVERITY_ERROR );
+    m_checkBoxShowInfos->SetValue( m_severities & SEVERITY_INFO );
+    m_checkBoxShowActions->SetValue( m_severities & SEVERITY_ACTION );
 }
 
 
 void WX_HTML_REPORT_PANEL::onCheckBoxShowWarnings( wxCommandEvent& event )
 {
     if( event.IsChecked() )
-        m_severities |= REPORTER::RPT_WARNING;
+        m_severities |= SEVERITY_WARNING;
     else
-        m_severities &= ~REPORTER::RPT_WARNING;
+        m_severities &= ~SEVERITY_WARNING;
 
     syncCheckboxes();
     Flush( true );
@@ -340,9 +277,9 @@ void WX_HTML_REPORT_PANEL::onCheckBoxShowWarnings( wxCommandEvent& event )
 void WX_HTML_REPORT_PANEL::onCheckBoxShowErrors( wxCommandEvent& event )
 {
     if( event.IsChecked() )
-        m_severities |= REPORTER::RPT_ERROR;
+        m_severities |= SEVERITY_ERROR;
     else
-        m_severities &= ~REPORTER::RPT_ERROR;
+        m_severities &= ~SEVERITY_ERROR;
 
     syncCheckboxes();
     Flush( true );
@@ -352,9 +289,9 @@ void WX_HTML_REPORT_PANEL::onCheckBoxShowErrors( wxCommandEvent& event )
 void WX_HTML_REPORT_PANEL::onCheckBoxShowInfos( wxCommandEvent& event )
 {
     if( event.IsChecked() )
-        m_severities |= REPORTER::RPT_INFO;
+        m_severities |= SEVERITY_INFO;
     else
-        m_severities &= ~REPORTER::RPT_INFO;
+        m_severities &= ~SEVERITY_INFO;
 
     syncCheckboxes();
     Flush( true );
@@ -364,9 +301,9 @@ void WX_HTML_REPORT_PANEL::onCheckBoxShowInfos( wxCommandEvent& event )
 void WX_HTML_REPORT_PANEL::onCheckBoxShowActions( wxCommandEvent& event )
 {
     if( event.IsChecked() )
-        m_severities |= REPORTER::RPT_ACTION;
+        m_severities |= SEVERITY_ACTION;
     else
-        m_severities &= ~REPORTER::RPT_ACTION;
+        m_severities &= ~SEVERITY_ACTION;
 
     syncCheckboxes();
     Flush( true );
@@ -426,7 +363,7 @@ void WX_HTML_REPORT_PANEL::SetLabel( const wxString& aLabel )
 void WX_HTML_REPORT_PANEL::SetVisibleSeverities( int aSeverities )
 {
     if( aSeverities < 0 )
-        m_severities = REPORTER::RPT_ALL;
+        m_severities = SEVERITY_ALL;
     else
         m_severities = aSeverities;
 

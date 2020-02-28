@@ -35,10 +35,9 @@
 class DRC_COURTYARD_OVERLAP : public DRC_PROVIDER
 {
 public:
-    DRC_COURTYARD_OVERLAP(
-            const DRC_MARKER_FACTORY& aMarkerFactory, MARKER_HANDLER aMarkerHandler );
+    DRC_COURTYARD_OVERLAP( MARKER_HANDLER aMarkerHandler );
 
-    bool RunDRC( BOARD& aBoard ) const override;
+    bool RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) const override;
 };
 
 #endif // DRC_COURTYARD_OVERLAP__H

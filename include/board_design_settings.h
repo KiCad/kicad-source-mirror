@@ -188,17 +188,17 @@ public:
     bool       m_BlindBuriedViaAllowed;     ///< true to allow blind/buried vias
     VIATYPE    m_CurrentViaType;            ///< (VIA_BLIND_BURIED, VIA_THROUGH, VIA_MICROVIA)
 
-    bool       m_RequireCourtyards;         ///< require courtyard definitions in footprints
-    bool       m_ProhibitOverlappingCourtyards;  ///< check for overlapping courtyards in DRC
-
-    // if true, when creating a new track starting on an existing track, use this track width
-    bool       m_UseConnectedTrackWidth;
-    int        m_TrackMinWidth;             ///< track min value for width ((min copper size value
-    int        m_ViasMinSize;               ///< vias (not micro vias) min diameter
-    int        m_ViasMinDrill;              ///< vias (not micro vias) min drill diameter
-    int        m_MicroViasMinSize;          ///< micro vias (not vias) min diameter
-    int        m_MicroViasMinDrill;         ///< micro vias (not vias) min drill diameter
+    bool       m_UseConnectedTrackWidth;    // use width of existing track when creating a new,
+                                            // connected track
+    int        m_TrackMinWidth;             // track min value for width ((min copper size value
+    int        m_ViasMinSize;               // vias (not micro vias) min diameter
+    int        m_ViasMinDrill;              // vias (not micro vias) min drill diameter
+    int        m_MicroViasMinSize;          // micro vias min diameter
+    int        m_MicroViasMinDrill;         // micro vias min drill diameter
     int        m_CopperEdgeClearance;
+    int        m_HoleToHoleMin;             // Min width of peninsula between two drilled holes
+
+    std::map< int, int > m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
 
     /** Option to handle filled polygons in zones:
      * the "legacy" option is using thick outlines around filled polygons: give the best shape
@@ -219,8 +219,6 @@ public:
     int        m_SolderPasteMargin;         ///< Solder paste margin absolute value
     double     m_SolderPasteMarginRatio;    ///< Solder pask margin ratio value of pad size
                                             ///< The final margin is the sum of these 2 values
-
-    int        m_HoleToHoleMin;             ///< Min width of peninsula between two drilled holes
 
     // Arrays of default values for the various layer classes.
     int        m_LineThickness[ LAYER_CLASS_COUNT ];
@@ -302,6 +300,13 @@ public:
     BOARD_DESIGN_SETTINGS();
 
     BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
+
+    int GetSeverity( int aDRCErrorCode );
+
+    /**
+     * returns true if the DRC error code's severity is SEVERITY_IGNORE
+     */
+    bool Ignore( int aDRCErrorCode );
 
     /**
      * Function GetDefault
@@ -677,18 +682,6 @@ public:
      * @param aValue The minimum distance between copper items and board edges.
      */
     void SetCopperEdgeClearance( int aDistance );
-
-    /**
-     * Function SetRequireCourtyardDefinitions
-     * @param aRequire Set to true to generate DRC violations from missing courtyards.
-     */
-    void SetRequireCourtyardDefinitions( bool aRequire );
-
-    /**
-     * Function SetProhibitOverlappingCourtyards
-     * @param aProhibit Set to true to generate DRC violations from overlapping courtyards.
-     */
-    void SetProhibitOverlappingCourtyards( bool aProhibit );
 
     /**
      * Function GetVisibleLayers

@@ -28,8 +28,6 @@
 #include <class_board.h>
 #include <class_marker_pcb.h>
 
-#include <drc/drc_marker_factory.h>
-
 #include <functional>
 
 
@@ -57,26 +55,26 @@ public:
      * Note: Board is non-const, as some DRC functions modify the board
      * (e.g. zone fill or polygon coalescing)
      */
-    virtual bool RunDRC( BOARD& aBoard ) const = 0;
+    virtual bool RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) const = 0;
 
 protected:
-    DRC_PROVIDER( const DRC_MARKER_FACTORY& aMarkerMaker, MARKER_HANDLER aMarkerHandler );
-
-    /**
-     * Access to the stored reference to a marker constructor
-     */
-    const DRC_MARKER_FACTORY& GetMarkerFactory() const;
+    DRC_PROVIDER( MARKER_HANDLER aMarkerHandler ) :
+            m_marker_handler( std::move( aMarkerHandler ) )
+    {
+    }
 
     /**
      * Pass a given marker to the marker handler
      */
-    void HandleMarker( std::unique_ptr<MARKER_PCB> aMarker ) const;
+    void HandleMarker( std::unique_ptr<MARKER_PCB> aMarker ) const
+    {
+        // The marker hander currently takes a raw pointer,
+        // but it also assumes ownership
+        m_marker_handler( aMarker.release() );
+    }
+
 
 private:
-
-    /// A marker generator to make markers in the right context
-    const DRC_MARKER_FACTORY& m_marker_factory;
-
     /// The handler for any generated markers
     MARKER_HANDLER m_marker_handler;
 };

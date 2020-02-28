@@ -26,7 +26,7 @@
 #define KICAD_DRC_TREE_MODEL_H
 
 #include <drc/drc.h>
-#include <wx/wupdlock.h>
+#include <widgets/ui_common.h>
 
 
 #define WX_DATAVIEW_WINDOW_PADDING 6
@@ -41,7 +41,9 @@
 class DRC_ITEMS_PROVIDER
 {
 public:
-    virtual int GetCount() = 0;
+    virtual void SetSeverities( int aSeverities ) = 0;
+
+    virtual int GetCount( int aSeverity = -1 ) = 0;
 
     /**
      * Function GetItem
@@ -50,15 +52,15 @@ public:
      * @param aIndex The 0 based index into the list of the desired item.
      * @return const DRC_ITEM* - the desired item or NULL if aIndex is out of range.
      */
-    virtual const DRC_ITEM* GetItem( int aIndex ) = 0;
+    virtual DRC_ITEM* GetItem( int aIndex ) = 0;
 
     /**
      * Function DeleteItems
      * removes and deletes desired item from the list.
-     * @param aIndex The 0 based index into the list of the desired item which
-     *         is to be deleted.
+     * @param aIndex The 0 based index into the list of the desired item which is to be deleted.
+     * @param aDeep If true, the source item should be deleted as well as the filtered item.
      */
-    virtual void DeleteItem( int aIndex ) = 0;
+    virtual void DeleteItem( int aIndex, bool aDeep ) = 0;
 
     /**
      * Function DeleteAllItems
@@ -76,31 +78,78 @@ public:
  */
 class BOARD_DRC_ITEMS_PROVIDER : public DRC_ITEMS_PROVIDER
 {
-    BOARD* m_board;
+private:
+    BOARD*                   m_board;
+
+    int                      m_severities;
+    std::vector<MARKER_PCB*> m_filteredMarkers;
 
 public:
     BOARD_DRC_ITEMS_PROVIDER( BOARD* aBoard ) :
-            m_board( aBoard )
+            m_board( aBoard ),
+            m_severities( 0 )
     {
     }
 
-    int  GetCount() override
+    void SetSeverities( int aSeverities ) override
     {
-        return m_board->GetMARKERCount();
+        m_severities = aSeverities;
+
+        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+        m_filteredMarkers.clear();
+
+        for( MARKER_PCB* marker : m_board->Markers() )
+        {
+            int markerSeverity;
+
+            if( marker->IsExcluded() )
+                markerSeverity = SEVERITY_EXCLUSION;
+            else
+                markerSeverity = bds.GetSeverity( marker->GetReporter().GetErrorCode() );
+
+            if( markerSeverity & m_severities )
+                m_filteredMarkers.push_back( marker );
+        }
     }
 
-    const DRC_ITEM* GetItem( int aIndex ) override
+    int GetCount( int aSeverity = -1 ) override
     {
-        const MARKER_PCB* marker = m_board->GetMARKER( aIndex );
+        if( aSeverity < 0 )
+            return m_filteredMarkers.size();
+
+        int count = 0;
+        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+        for( MARKER_PCB* marker : m_board->Markers() )
+        {
+            int markerSeverity;
+
+            if( marker->IsExcluded() )
+                markerSeverity = SEVERITY_EXCLUSION;
+            else
+                markerSeverity = bds.GetSeverity( marker->GetReporter().GetErrorCode() );
+
+            if( markerSeverity == aSeverity )
+                count++;
+        }
+
+        return count;
+    }
+
+    DRC_ITEM* GetItem( int aIndex ) override
+    {
+        MARKER_PCB* marker = m_filteredMarkers[ aIndex ];
 
         return marker ? &marker->GetReporter() : nullptr;
     }
 
-    void DeleteItem( int aIndex ) override
+    void DeleteItem( int aIndex, bool aDeep ) override
     {
-        MARKER_PCB* marker = m_board->GetMARKER( aIndex );
+        MARKER_PCB* marker = m_filteredMarkers[ aIndex ];
+        m_filteredMarkers.erase( m_filteredMarkers.begin() + aIndex );
 
-        if( marker )
+        if( aDeep )
             m_board->Delete( marker );
     }
 
@@ -119,41 +168,110 @@ public:
  */
 class VECTOR_DRC_ITEMS_PROVIDER : public DRC_ITEMS_PROVIDER
 {
-    std::vector<DRC_ITEM*>* m_vector;
+    PCB_BASE_FRAME*         m_frame;
+    std::vector<DRC_ITEM*>* m_sourceVector;     // owns its DRC_ITEMs
+
+    int                     m_severities;
+    std::vector<DRC_ITEM*>  m_filteredVector;   // does not own its DRC_ITEMs
 
 public:
 
-    VECTOR_DRC_ITEMS_PROVIDER( std::vector<DRC_ITEM*>* aList ) :
-            m_vector( aList )
+    VECTOR_DRC_ITEMS_PROVIDER( PCB_BASE_FRAME* aFrame, std::vector<DRC_ITEM*>* aList ) :
+            m_frame( aFrame ),
+            m_sourceVector( aList ),
+            m_severities( 0 )
     {
     }
 
-    int  GetCount() override
+    void SetSeverities( int aSeverities ) override
     {
-        return m_vector ? (int) m_vector->size() : 0;
+        m_severities = aSeverities;
+
+        BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
+
+        m_filteredVector.clear();
+
+        if( m_sourceVector )
+        {
+            for( DRC_ITEM* item : *m_sourceVector )
+            {
+                if( bds.GetSeverity( item->GetErrorCode() ) & aSeverities )
+                    m_filteredVector.push_back( item );
+            }
+        }
     }
 
-    const DRC_ITEM* GetItem( int aIndex ) override
+    int  GetCount( int aSeverity = -1 ) override
     {
-        return (*m_vector)[aIndex];
+        if( aSeverity < 0 )
+            return m_filteredVector.size();
+
+        int count = 0;
+        BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
+
+        if( m_sourceVector )
+        {
+            for( DRC_ITEM* item : *m_sourceVector )
+            {
+                if( bds.GetSeverity( item->GetErrorCode() ) == aSeverity )
+                    count++;
+            }
+        }
+
+        return count;
     }
 
-    void DeleteItem( int aIndex ) override
+    DRC_ITEM* GetItem( int aIndex ) override
     {
-        delete (*m_vector)[aIndex];
-        m_vector->erase( m_vector->begin() + aIndex );
+        return (m_filteredVector)[aIndex];
+    }
+
+    void DeleteItem( int aIndex, bool aDeep ) override
+    {
+        DRC_ITEM* item = m_filteredVector[aIndex];
+        m_filteredVector.erase( m_filteredVector.begin() + aIndex );
+
+        if( aDeep )
+        {
+            for( int i = 0; i < m_sourceVector->size(); ++i )
+            {
+                if( m_sourceVector->at( i ) == item )
+                {
+                    delete item;
+                    m_sourceVector->erase( m_sourceVector->begin() + i );
+                    break;
+                }
+            }
+        }
     }
 
     void DeleteAllItems() override
     {
-        if( m_vector )
+        if( m_sourceVector )
         {
-            for( DRC_ITEM* item : *m_vector )
+            for( DRC_ITEM* item : *m_sourceVector )
                 delete item;
 
-            m_vector->clear();
+            m_sourceVector->clear();
         }
+
+        m_filteredVector.clear();   // no ownership of DRC_ITEM pointers
     }
+};
+
+
+/**
+ * RATSNEST_DRC_ITEMS_PROVIDER
+ */
+class RATSNEST_DRC_ITEMS_PROVIDER : public VECTOR_DRC_ITEMS_PROVIDER
+{
+    // TODO: for now this is just a vector, but we need to map it to some board-level
+    // data-structure so that deleting/excluding things can do a deep delete/exclusion
+    // which will be reflected in the ratsnest....
+public:
+    RATSNEST_DRC_ITEMS_PROVIDER( PCB_BASE_FRAME* aFrame, std::vector<DRC_ITEM*>* aList ) :
+            VECTOR_DRC_ITEMS_PROVIDER( aFrame, aList )
+    { }
 };
 
 
@@ -162,16 +280,16 @@ class DRC_TREE_NODE
 public:
     enum NODE_TYPE { MARKER, MAIN_ITEM, AUX_ITEM };
 
-    DRC_TREE_NODE( DRC_TREE_NODE* aParent, const DRC_ITEM* aDrcItem, NODE_TYPE aType ) :
+    DRC_TREE_NODE( DRC_TREE_NODE* aParent, DRC_ITEM* aDrcItem, NODE_TYPE aType ) :
             m_Type( aType ),
             m_Parent( aParent ),
             m_DrcItem( aDrcItem )
     {}
 
-    NODE_TYPE       m_Type;
-    DRC_TREE_NODE*  m_Parent;
+    NODE_TYPE      m_Type;
+    DRC_TREE_NODE* m_Parent;
 
-    const DRC_ITEM* m_DrcItem;
+    DRC_ITEM*      m_DrcItem;
 
     std::vector<std::unique_ptr<DRC_TREE_NODE>> m_Children;
 };
@@ -193,15 +311,14 @@ public:
     static BOARD_ITEM* ToBoardItem( BOARD* aBoard, wxDataViewItem aItem );
 
 public:
-    DRC_TREE_MODEL( wxDataViewCtrl* aView );
+    DRC_TREE_MODEL( PCB_BASE_FRAME* aParentFrame, wxDataViewCtrl* aView );
 
     ~DRC_TREE_MODEL();
 
     void SetProvider( DRC_ITEMS_PROVIDER* aProvider );
+    void SetSeverities( int aSeverities );
 
     int GetDRCItemCount() const { return m_tree.size(); }
-
-    const DRC_ITEM* GetDRCItem( int i ) const { return m_tree.at( i )->m_DrcItem; }
 
     void ExpandAll();
 
@@ -243,16 +360,23 @@ public:
                   unsigned int            aCol,
                   wxDataViewItemAttr&     aAttr ) const override;
 
-    void DeleteCurrentItem();
+    void ValueChanged( DRC_TREE_NODE* aNode );
+
+    void DeleteCurrentItem( bool aDeep );
     void DeleteAllItems();
 
+private:
+    void rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeverities );
     void onSizeView( wxSizeEvent& aEvent );
 
 private:
+    PCB_BASE_FRAME*      m_parentFrame;
     wxDataViewCtrl*      m_view;
+    int                  m_severities;
     DRC_ITEMS_PROVIDER*  m_drcItemsProvider;   // I own this, but not its contents
 
     std::vector<std::unique_ptr<DRC_TREE_NODE>> m_tree;  // I own this
 };
+
 
 #endif //KICAD_DRC_TREE_MODEL_H

@@ -28,6 +28,7 @@
 #include "dialog_import_settings.h"
 
 #include "dialog_board_setup.h"
+#include "panel_setup_drc_severities.h"
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         PAGED_DIALOG( aFrame, _( "Board Setup" ), _( "Import Settings from Another Project..." ) ),
@@ -40,6 +41,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_tracksAndVias = new PANEL_SETUP_TRACKS_AND_VIAS( this, aFrame, m_constraints );
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
     m_physicalStackup = new PANEL_SETUP_BOARD_STACKUP( this, aFrame, m_layers );
+    m_drcSeverities = new PANEL_SETUP_DRC_SEVERITIES( this, aFrame );
 
     /*
      * WARNING: If you change page names you MUST update calls to DoShowBoardSetupDialog().
@@ -59,6 +61,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_treebook->AddPage( new wxPanel( this ),  _( "Design Rules" ) );
     m_treebook->AddSubPage( m_constraints,  _( "Constraints" ) );
     m_treebook->AddSubPage( m_netclasses,  _( "Net Classes" ) );
+    m_treebook->AddSubPage( m_drcSeverities, _( "Violation Severity" ) );
 
 	// Connect Events
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,

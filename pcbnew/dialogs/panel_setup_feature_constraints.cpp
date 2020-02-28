@@ -68,9 +68,6 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
 
     m_edgeClearance.SetValue( m_BrdSettings->m_CopperEdgeClearance );
 
-    m_OptRequireCourtyards->SetValue( m_BrdSettings->m_RequireCourtyards );
-    m_OptOverlappingCourtyards->SetValue( m_BrdSettings->m_ProhibitOverlappingCourtyards );
-
     m_maxError.SetValue( m_BrdSettings->m_MaxError );
 
     m_cbOutlinePolygonFastest->SetValue( m_BrdSettings->m_ZoneUseNoOutlineInFill );
@@ -99,9 +96,6 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
     m_BrdSettings->SetMinHoleSeparation( m_holeToHoleMin.GetValue() );
 
     m_BrdSettings->SetCopperEdgeClearance( m_edgeClearance.GetValue() );
-
-    m_BrdSettings->SetRequireCourtyardDefinitions( m_OptRequireCourtyards->GetValue() );
-    m_BrdSettings->SetProhibitOverlappingCourtyards( m_OptOverlappingCourtyards->GetValue() );
 
     m_BrdSettings->m_MaxError = Clamp<int>( IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
             m_maxError.GetValue(), IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );

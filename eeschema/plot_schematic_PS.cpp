@@ -103,22 +103,21 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
             if( plotOneSheetPS( plotFileName.GetFullPath(), screen, plotPage, plot_offset,
                                 scale, aPlotFrameRef ) )
             {
-                msg.Printf( _( "Plot: \"%s\" OK.\n" ), GetChars( plotFileName.GetFullPath() ) );
-                reporter.Report( msg, REPORTER::RPT_ACTION );
+                msg.Printf( _( "Plot: \"%s\" OK.\n" ), plotFileName.GetFullPath() );
+                reporter.Report( msg, SEVERITY_ACTION );
             }
             else
             {
                 // Error
-                msg.Printf( _( "Unable to create file \"%s\".\n" ),
-                            GetChars( plotFileName.GetFullPath() ) );
-                reporter.Report( msg, REPORTER::RPT_ERROR );
+                msg.Printf( _( "Unable to create file \"%s\".\n" ), plotFileName.GetFullPath() );
+                reporter.Report( msg, SEVERITY_ERROR );
             }
 
         }
         catch( IO_ERROR& e )
         {
-            msg.Printf( wxT( "PS Plotter exception: %s"), GetChars( e.What() ) );
-            reporter.Report( msg, REPORTER::RPT_ERROR );
+            msg.Printf( wxT( "PS Plotter exception: %s"), e.What() );
+            reporter.Report( msg, SEVERITY_ERROR );
         }
     }
 

@@ -257,10 +257,8 @@ public:
 
     /**
      * Save changes to the project settings to the project (.pro) file.
-     *
-     * @param aAskForSave = true to open a dialog before saving the settings
      */
-    void SaveProjectSettings( bool aAskForSave ) override;
+    void SaveProjectSettings() override;
 
     /**
      * Loads the KiCad project file (*.pro) settings specific to Eeschema.

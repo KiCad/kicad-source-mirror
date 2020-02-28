@@ -35,14 +35,16 @@
 #define SCALING_FACTOR  Millimeter2iu( 0.1 )
 
 
+// JEY TODO: retire this; there's no reason not to use the next one...
 SCH_MARKER::SCH_MARKER() : SCH_ITEM( NULL, SCH_MARKER_T ), MARKER_BASE( SCALING_FACTOR )
 {
 }
 
 
+// JEY TODO: pass in ERCE code so we can get severity from it...
 SCH_MARKER::SCH_MARKER( const wxPoint& pos, const wxString& text ) :
     SCH_ITEM( NULL, SCH_MARKER_T ),
-    MARKER_BASE( 0, pos, text, pos, SCALING_FACTOR )
+    MARKER_BASE( 0, pos, text, pos, wxEmptyString, wxPoint(), SCALING_FACTOR )
 {
 }
 
@@ -70,18 +72,20 @@ void SCH_MARKER::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
+KIGFX::COLOR4D SCH_MARKER::getColor() const
+{
+    if( IsExcluded() )
+        return GetLayerColor( LAYER_HIDDEN );
+    else if( GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR )
+        return GetLayerColor( LAYER_ERC_ERR );
+    else
+        return GetLayerColor( LAYER_ERC_WARN );
+}
+
+
 void SCH_MARKER::Print( wxDC* aDC, const wxPoint& aOffset )
 {
-    COLOR4D tmp = m_Color;
-
-    if( GetMarkerType() == MARKER_BASE::MARKER_ERC )
-    {
-        m_Color = ( GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR ) ?
-                    GetLayerColor( LAYER_ERC_ERR ) : GetLayerColor( LAYER_ERC_WARN );
-    }
-
     PrintMarker( aDC, aOffset );
-    m_Color = tmp;
 }
 
 

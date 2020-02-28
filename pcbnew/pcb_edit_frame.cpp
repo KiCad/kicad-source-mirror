@@ -463,6 +463,46 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 }
 
 
+void PCB_EDIT_FRAME::RecordDRCExclusions()
+{
+    m_drcExclusions.clear();
+
+    for( MARKER_PCB* marker : GetBoard()->Markers() )
+    {
+        if( marker->IsExcluded() )
+            m_drcExclusions.insert( marker->Serialize() );
+    }
+}
+
+
+void PCB_EDIT_FRAME::ResolveDRCExclusions()
+{
+    for( MARKER_PCB* marker : GetBoard()->Markers() )
+    {
+        auto i = m_drcExclusions.find( marker->Serialize() );
+
+        if( i != m_drcExclusions.end() )
+        {
+            marker->SetExcluded( true );
+            m_drcExclusions.erase( i );
+        }
+    }
+
+    BOARD_COMMIT commit( this );
+
+    for( const wxString& exclusionData : m_drcExclusions )
+    {
+        MARKER_PCB* marker = MARKER_PCB::Deserialize( exclusionData );
+        marker->SetExcluded( true );
+        commit.Add( marker );
+    }
+
+    m_drcExclusions.clear();
+
+    commit.Push( wxEmptyString, false, false );
+}
+
+
 void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
@@ -473,14 +513,17 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         return;
     }
 
-    // First close the DRC dialog.
-    // For some reason, if the board editor frame is destroyed when the DRC
-    // dialog currently open, Pcbnew crashes, At least on Windows.
+    // First close the DRC dialog.  For some reason, if the board editor frame is destroyed
+    // when the DRC dialog currently open, Pcbnew crashes, at least on Windows.
     DIALOG_DRC_CONTROL* open_dlg = static_cast<DIALOG_DRC_CONTROL*>(
                                         wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME ) );
 
     if( open_dlg )
         open_dlg->Close( true );
+
+    // Save various DRC parameters, such as violation severities (which may have been
+    // edited via the DRC dialog as well as the Board Setup dialog), DRC exclusions, etc.
+    SaveProjectSettings();
 
     if( IsContentModified() )
     {
@@ -564,7 +607,7 @@ void PCB_EDIT_FRAME::DoShowBoardSetupDialog( const wxString& aInitialPage,
 
     if( dlg.ShowModal() == wxID_OK )
     {
-        SaveProjectSettings( false );
+        SaveProjectSettings();
 
         UpdateUserInterface();
         ReCreateAuxiliaryToolbar();
@@ -789,7 +832,7 @@ void PCB_EDIT_FRAME::SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPat
     if( relativeFileName.GetFullPath() != m_lastPath[ aType ] )
     {
         m_lastPath[ aType ] = relativeFileName.GetFullPath();
-        SaveProjectSettings( false );
+        SaveProjectSettings();
     }
 }
 

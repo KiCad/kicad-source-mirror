@@ -38,8 +38,6 @@ namespace KIGFX {
     };
 };
 
-class COLORS_DESIGN_SETTINGS;
-
 
 class SCH_PREVIEW_PANEL : public EDA_DRAW_PANEL_GAL
 {

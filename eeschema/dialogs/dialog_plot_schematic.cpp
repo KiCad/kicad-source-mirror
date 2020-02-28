@@ -50,7 +50,7 @@ void SCH_EDIT_FRAME::PlotSchematic()
 
     // save project config if the prj config has changed:
     if( dlg.PrjConfigChanged() )
-        SaveProjectSettings( false );
+        SaveProjectSettings();
 }
 
 
@@ -331,7 +331,7 @@ wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( wxTextCtrl* aOutputDirecto
     {
         wxString msg = wxString::Format( _( "Could not write plot files to folder \"%s\"." ),
                                          outputDir.GetPath() );
-        aReporter->Report( msg, REPORTER::RPT_ERROR );
+        aReporter->Report( msg, SEVERITY_ERROR );
     }
 
     wxFileName fn( plotFileName );

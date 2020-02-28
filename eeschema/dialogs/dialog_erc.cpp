@@ -100,7 +100,7 @@ DIALOG_ERC::~DIALOG_ERC()
     if( m_settings != m_parent->GetErcSettings() )
     {
         m_parent->UpdateErcSettings( m_settings );
-        m_parent->SaveProjectSettings( false );
+        m_parent->SaveProjectSettings();
     }
 }
 
@@ -489,7 +489,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     if( m_parent->CheckAnnotate( aReporter, false ) )
     {
         if( aReporter.HasMessage() )
-            aReporter.ReportTail( _( "Annotation required!" ), REPORTER::RPT_ERROR );
+            aReporter.ReportTail( _( "Annotation required!" ), SEVERITY_ERROR );
 
         return;
     }
@@ -622,7 +622,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     m_parent->GetCanvas()->Refresh();
 
     // Display message
-    aReporter.ReportTail( _( "Finished" ), REPORTER::RPT_INFO );
+    aReporter.ReportTail( _( "Finished" ), SEVERITY_INFO );
 
     if( m_settings.write_erc_file )
     {

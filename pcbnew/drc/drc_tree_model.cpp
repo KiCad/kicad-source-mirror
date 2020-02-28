@@ -24,7 +24,7 @@
 
 #include <drc/drc_tree_model.h>
 #include <wx/wupdlock.h>
-
+#include <widgets/ui_common.h>
 
 #define WX_DATAVIEW_WINDOW_PADDING 6
 
@@ -56,7 +56,8 @@ BOARD_ITEM* DRC_TREE_MODEL::ToBoardItem( BOARD* aBoard, wxDataViewItem aItem )
 }
 
 
-DRC_TREE_MODEL::DRC_TREE_MODEL( wxDataViewCtrl* aView ) :
+DRC_TREE_MODEL::DRC_TREE_MODEL( PCB_BASE_FRAME* aParentFrame, wxDataViewCtrl* aView ) :
+    m_parentFrame( aParentFrame ),
     m_view( aView ),
     m_drcItemsProvider( nullptr )
 {
@@ -69,10 +70,12 @@ DRC_TREE_MODEL::DRC_TREE_MODEL( wxDataViewCtrl* aView ) :
 DRC_TREE_MODEL::~DRC_TREE_MODEL()
 {
     delete m_drcItemsProvider;
+
+    // m_tree is all std::unique_ptr based, so it will look after itself
 }
 
 
-void DRC_TREE_MODEL::SetProvider( DRC_ITEMS_PROVIDER* aProvider )
+void DRC_TREE_MODEL::rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeverities )
 {
     wxWindowUpdateLocker updateLock( m_view );
 
@@ -83,22 +86,33 @@ void DRC_TREE_MODEL::SetProvider( DRC_ITEMS_PROVIDER* aProvider )
 
     Cleared();
 
-    delete m_drcItemsProvider;
-    m_drcItemsProvider = aProvider;
+    if( aProvider != m_drcItemsProvider )
+    {
+        delete m_drcItemsProvider;
+        m_drcItemsProvider = aProvider;
+    }
+
+    wxASSERT( m_drcItemsProvider );
+
+    if( aSeverities != m_severities )
+        m_severities = aSeverities;
+
+    m_drcItemsProvider->SetSeverities( m_severities );
+
     m_tree.clear();
 
 #define PUSH_NODE( p, item, type ) push_back( std::make_unique<DRC_TREE_NODE>( p, item, type ) )
 
     for( int i = 0; m_drcItemsProvider && i < m_drcItemsProvider->GetCount(); ++i )
     {
-        const DRC_ITEM* drcItem = m_drcItemsProvider->GetItem( i );
+        DRC_ITEM* drcItem = m_drcItemsProvider->GetItem( i );
 
         m_tree.PUSH_NODE( nullptr, drcItem, DRC_TREE_NODE::MARKER );
         DRC_TREE_NODE* node = m_tree.back().get();
 
         node->m_Children.PUSH_NODE( node, drcItem, DRC_TREE_NODE::MAIN_ITEM );
 
-        if( drcItem->HasSecondItem() )
+        if( drcItem->GetAuxItemID() != niluuid )
             node->m_Children.PUSH_NODE( node, drcItem, DRC_TREE_NODE::AUX_ITEM );
     }
 
@@ -116,6 +130,18 @@ void DRC_TREE_MODEL::SetProvider( DRC_ITEMS_PROVIDER* aProvider )
     m_view->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, width );
 
     ExpandAll();
+}
+
+
+void DRC_TREE_MODEL::SetProvider( DRC_ITEMS_PROVIDER* aProvider )
+{
+    rebuildModel( aProvider, m_severities );
+}
+
+
+void DRC_TREE_MODEL::SetSeverities( int aSeverities )
+{
+    rebuildModel( m_drcItemsProvider, aSeverities );
 }
 
 
@@ -162,13 +188,30 @@ void DRC_TREE_MODEL::GetValue( wxVariant&              aVariant,
                                unsigned int            aCol ) const
 {
     const DRC_TREE_NODE* node = ToNode( aItem );
-    wxASSERT( node );
+    const DRC_ITEM*      drcItem = node->m_DrcItem;
 
     switch( node->m_Type )
     {
-    case DRC_TREE_NODE::MARKER:    aVariant = node->m_DrcItem->GetErrorText();     break;
-    case DRC_TREE_NODE::MAIN_ITEM: aVariant = node->m_DrcItem->GetMainText();      break;
-    case DRC_TREE_NODE::AUX_ITEM:  aVariant = node->m_DrcItem->GetAuxiliaryText(); break;
+    case DRC_TREE_NODE::MARKER:
+    {
+        auto&    bds = m_parentFrame->GetBoard()->GetDesignSettings();
+        bool     excluded = drcItem->GetParent() && drcItem->GetParent()->IsExcluded();
+        bool     error = bds.m_DRCSeverities[ drcItem->GetErrorCode() ] == SEVERITY_ERROR;
+        wxString prefix = wxString::Format( wxT( "%s%s" ),
+                                            excluded ? _( "Excluded " ) : wxEmptyString,
+                                            error  ? _( "Error: " ) : _( "Warning: " ) );
+
+        aVariant = prefix + drcItem->GetErrorText();
+    }
+        break;
+
+    case DRC_TREE_NODE::MAIN_ITEM:
+        aVariant = drcItem->GetMainText();
+        break;
+
+    case DRC_TREE_NODE::AUX_ITEM:
+        aVariant = drcItem->GetAuxiliaryText();
+        break;
     }
 }
 
@@ -184,18 +227,50 @@ bool DRC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
     const DRC_TREE_NODE* node = ToNode( aItem );
     wxASSERT( node );
 
-    switch( node->m_Type )
+    bool ret = false;
+    bool heading = node->m_Type == DRC_TREE_NODE::MARKER;
+
+    if( heading )
     {
-    case DRC_TREE_NODE::MARKER:     aAttr.SetBold( true );  return true;
-    case DRC_TREE_NODE::MAIN_ITEM:                          return false;
-    case DRC_TREE_NODE::AUX_ITEM:                           return false;
+        aAttr.SetBold( true );
+        ret = true;
     }
 
-    return false;
+    if( node->m_DrcItem->GetParent() && node->m_DrcItem->GetParent()->IsExcluded() )
+    {
+        wxColour textColour = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXTEXT );
+
+        if( KIGFX::COLOR4D( textColour ).GetBrightness() > 0.5 )
+            aAttr.SetColour( textColour.ChangeLightness( heading ? 30 : 35 ) );
+        else
+            aAttr.SetColour( textColour.ChangeLightness( heading ? 170 : 165 ) );
+
+        aAttr.SetItalic( true );   // Strikethrough would be better, if wxWidgets supported it
+        ret = true;
+    }
+
+    return ret;
 }
 
 
-void DRC_TREE_MODEL::DeleteCurrentItem()
+void DRC_TREE_MODEL::ValueChanged( DRC_TREE_NODE* aNode )
+{
+    if( aNode->m_Type == DRC_TREE_NODE::MAIN_ITEM || aNode->m_Type == DRC_TREE_NODE::AUX_ITEM )
+    {
+        ValueChanged( aNode->m_Parent );
+    }
+
+    if( aNode->m_Type == DRC_TREE_NODE::MARKER )
+    {
+        wxDataViewModel::ValueChanged( ToItem( aNode ), 0 );
+
+        for( auto & child : aNode->m_Children )
+            wxDataViewModel::ValueChanged( ToItem( child.get() ), 0 );
+    }
+}
+
+
+void DRC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
 {
     wxDataViewItem  dataViewItem = m_view->GetCurrentItem();
     DRC_TREE_NODE*  tree_node = ToNode( dataViewItem );
@@ -211,10 +286,10 @@ void DRC_TREE_MODEL::DeleteCurrentItem()
     {
         if( m_drcItemsProvider->GetItem( i ) == drc_item )
         {
-            m_drcItemsProvider->DeleteItem( i );
+            m_drcItemsProvider->DeleteItem( i, aDeep );
             m_tree.erase( m_tree.begin() + i );
 
-            ItemDeleted( ToItem( nullptr ), dataViewItem );
+            ItemDeleted( ToItem( tree_node->m_Parent ), dataViewItem );
             break;
         }
     }

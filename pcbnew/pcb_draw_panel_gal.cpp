@@ -51,7 +51,7 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
 {
     LAYER_GP_OVERLAY,
     LAYER_SELECT_OVERLAY,
-    LAYER_DRC,
+    LAYER_DRC_ERROR, LAYER_DRC_WARNING,
     LAYER_PADS_NETNAMES, LAYER_VIAS_NETNAMES,
     Dwgs_User, Cmts_User, Eco1_User, Eco2_User, Edge_Cuts,
 
@@ -178,10 +178,8 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
         m_view->Add( module );
 
     // DRC markers
-    for( int marker_idx = 0; marker_idx < aBoard->GetMARKERCount(); ++marker_idx )
-    {
-        m_view->Add( aBoard->GetMARKER( marker_idx ) );
-    }
+    for( auto marker : aBoard->Markers() )
+        m_view->Add( marker );
 
     // Finalize the triangulation threads
     while( count_done < parallelThreadCount )
@@ -278,7 +276,7 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
             LAYER_VIA_THROUGH, LAYER_VIAS_HOLES, LAYER_VIAS_NETNAMES,
             LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_PADS_NETNAMES,
             LAYER_NON_PLATEDHOLES, LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
-            LAYER_RATSNEST, LAYER_DRC
+            LAYER_RATSNEST, LAYER_DRC_ERROR, LAYER_DRC_WARNING
     };
 
     for( auto layer : layers )
@@ -496,7 +494,6 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerTarget( LAYER_WORKSHEET, KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_WORKSHEET ) ;
     m_view->SetLayerDisplayOnly( LAYER_GRID );
-    m_view->SetLayerDisplayOnly( LAYER_DRC );
 }
 
 

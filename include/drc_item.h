@@ -44,11 +44,11 @@ class DRC_ITEM
 protected:
     int          m_ErrorCode;         // the error code's numeric value
     wxString     m_MainText;          // text for the first EDA_ITEM
-    wxString     m_AuxiliaryText;     // text for the second EDA_ITEM
+    wxString     m_AuxText;           // text for the second EDA_ITEM
     wxPoint      m_MainPosition;      // the location of the first EDA_ITEM
-    wxPoint      m_AuxiliaryPosition; // the location of the second EDA_ITEM
+    wxPoint      m_AuxPosition;       // the location of the second EDA_ITEM
+    bool         m_hasPositions;
     bool         m_hasSecondItem;     // true when 2 items create a DRC/ERC error
-    bool         m_noCoordinate;
     MARKER_BASE* m_parent;            // The marker this item belongs to, if any
     KIID         m_mainItemUuid;
     KIID         m_auxItemUuid;
@@ -57,29 +57,32 @@ public:
 
     DRC_ITEM()
     {
-        m_ErrorCode       = 0;
-        m_hasSecondItem   = false;
-        m_noCoordinate    = false;
-        m_parent          = nullptr;
-        m_mainItemUuid    = niluuid;
-        m_auxItemUuid     = niluuid;
+        m_ErrorCode     = 0;
+        m_hasPositions  = false;
+        m_hasSecondItem = false;
+        m_parent        = nullptr;
+        m_mainItemUuid  = niluuid;
+        m_auxItemUuid   = niluuid;
     }
 
-    DRC_ITEM( EDA_UNITS aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
-            EDA_ITEM* bAuxiliaryItem, const wxPoint& bAuxiliaryPos )
+    DRC_ITEM( EDA_UNITS aUnits, int aErrorCode,
+              EDA_ITEM* aMainItem,
+              EDA_ITEM* bAuxItem = nullptr )
     {
-        SetData( aUnits, aErrorCode, aMainItem, aMainPos, bAuxiliaryItem, bAuxiliaryPos );
+        SetData( aUnits, aErrorCode, aMainItem, bAuxItem );
     }
 
-    DRC_ITEM( EDA_UNITS aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos )
+    DRC_ITEM( EDA_UNITS aUnits, int aErrorCode,
+              EDA_ITEM* aMainItem, const wxPoint& aMainPos,
+              EDA_ITEM* bAuxItem = nullptr, const wxPoint& bAuxPos = wxPoint() )
     {
-        SetData( aUnits, aErrorCode, aMainItem, aMainPos );
+        SetData( aUnits, aErrorCode, aMainItem, aMainPos, bAuxItem, bAuxPos );
     }
 
     DRC_ITEM( int aErrorCode, const wxString& aMainText )
     {
         SetData( aErrorCode, aMainText, wxPoint() );
-        SetShowNoCoordinate();
+        m_hasPositions = false;
     }
 
     /**
@@ -87,27 +90,24 @@ public:
      * initialize all data in item
      * @param aErrorCode = error code
      * @param aMainItem = the first (main) schematic or board item
-     * @param bAuxiliaryItem = the second schematic or board item
-     * @param aMainPos = position the first item and therefore of this issue
-     * @param bAuxiliaryPos = position the second item
+     * @param bAuxItem = the second schematic or board item
      */
-    void SetData( EDA_UNITS aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos,
-            EDA_ITEM* bAuxiliaryItem = nullptr, const wxPoint& bAuxiliaryPos = wxPoint() )
+    void SetData( EDA_UNITS aUnits, int aErrorCode,
+                  EDA_ITEM* aMainItem,
+                  EDA_ITEM* bAuxItem = nullptr )
     {
-        m_ErrorCode         = aErrorCode;
-        m_MainText          = aMainItem->GetSelectMenuText( aUnits );
-        m_AuxiliaryText     = wxEmptyString;
-        m_MainPosition      = aMainPos;
-        m_AuxiliaryPosition = bAuxiliaryPos;
-        m_hasSecondItem     = bAuxiliaryItem != nullptr;
-        m_noCoordinate      = false;
-        m_parent            = nullptr;
-        m_mainItemUuid      = aMainItem->m_Uuid;
+        m_ErrorCode       = aErrorCode;
+        m_MainText        = aMainItem->GetSelectMenuText( aUnits );
+        m_AuxText         = wxEmptyString;
+        m_hasPositions    = false;
+        m_hasSecondItem   = bAuxItem != nullptr;
+        m_parent          = nullptr;
+        m_mainItemUuid    = aMainItem->m_Uuid;
 
         if( m_hasSecondItem )
         {
-            m_AuxiliaryText = bAuxiliaryItem->GetSelectMenuText( aUnits );
-            m_auxItemUuid   = bAuxiliaryItem->m_Uuid;
+            m_AuxText     = bAuxItem->GetSelectMenuText( aUnits );
+            m_auxItemUuid = bAuxItem->m_Uuid;
         }
     }
 
@@ -116,24 +116,98 @@ public:
      * initialize all data in item
      * @param aErrorCode = error code
      * @param aMainItem = the first (main) schematic or board item
-     * @param bAuxiliaryItem = the second schematic or board item
+     * @param bAuxItem = the second schematic or board item
      * @param aMainPos = position the first item and therefore of this issue
-     * @param bAuxiliaryPos = position the second item
+     * @param bAuxPos = position the second item
      */
-    void SetData( int aErrorCode, const wxString& aMainText, const wxPoint& aMainPos,
-                  const wxString& bAuxiliaryText = wxEmptyString,
-                  const wxPoint& bAuxiliaryPos = wxPoint() )
+    void SetData( EDA_UNITS aUnits, int aErrorCode,
+                  EDA_ITEM* aMainItem, const wxPoint& aMainPos,
+                  EDA_ITEM* bAuxItem = nullptr, const wxPoint& bAuxPos = wxPoint() )
     {
-        m_ErrorCode         = aErrorCode;
-        m_MainText          = aMainText;
-        m_AuxiliaryText     = bAuxiliaryText;
-        m_MainPosition      = aMainPos;
-        m_AuxiliaryPosition = bAuxiliaryPos;
-        m_hasSecondItem     = bAuxiliaryText.Length();
-        m_noCoordinate      = false;
-        m_parent            = nullptr;
-        m_mainItemUuid      = niluuid;
-        m_auxItemUuid       = niluuid;
+        m_ErrorCode       = aErrorCode;
+        m_MainText        = aMainItem->GetSelectMenuText( aUnits );
+        m_AuxText         = wxEmptyString;
+        m_MainPosition    = aMainPos;
+        m_AuxPosition     = bAuxPos;
+        m_hasPositions    = true;
+        m_hasSecondItem   = bAuxItem != nullptr;
+        m_parent          = nullptr;
+        m_mainItemUuid    = aMainItem->m_Uuid;
+
+        if( m_hasSecondItem )
+        {
+            m_AuxText     = bAuxItem->GetSelectMenuText( aUnits );
+            m_auxItemUuid = bAuxItem->m_Uuid;
+        }
+    }
+
+    /**
+     * Function SetData
+     * initialize all data in item
+     * @param aErrorCode = error code
+     * @param aMainText = a description of the first (main) item
+     * @param bAuxText = a description of the second item
+     */
+    void SetData( int aErrorCode,
+                  const wxString& aMainText,
+                  const wxString& bAuxText = wxEmptyString )
+    {
+        m_ErrorCode     = aErrorCode;
+        m_MainText      = aMainText;
+        m_AuxText       = bAuxText;
+        m_hasPositions  = false;
+        m_hasSecondItem = !bAuxText.IsEmpty();
+        m_parent        = nullptr;
+        m_mainItemUuid  = niluuid;
+        m_auxItemUuid   = niluuid;
+    }
+
+    /**
+     * Function SetData
+     * initialize all data in item
+     * @param aErrorCode = error code
+     * @param aMainText = a description of the first (main) item
+     * @param aMainPos = position the first item and therefore of this issue
+     * @param bAuxText = a description of the second item
+     * @param bAuxPos = position the second item
+     */
+    void SetData( int aErrorCode,
+                  const wxString& aMainText, const wxPoint& aMainPos,
+                  const wxString& bAuxText = wxEmptyString, const wxPoint& bAuxPos = wxPoint() )
+    {
+        m_ErrorCode     = aErrorCode;
+        m_MainText      = aMainText;
+        m_AuxText       = bAuxText;
+        m_MainPosition  = aMainPos;
+        m_AuxPosition   = bAuxPos;
+        m_hasPositions  = true;
+        m_hasSecondItem = !bAuxText.IsEmpty();
+        m_parent        = nullptr;
+        m_mainItemUuid  = niluuid;
+        m_auxItemUuid   = niluuid;
+    }
+
+    /**
+     * Function SetData
+     * initialize all data in item
+     * @param aErrorCode = error code
+     * @param aMainText = a description of the first (main) item
+     * @param aMainID = UUID of the main item
+     * @param bAuxText = a description of the second item
+     * @param bAuxID = UUID of the second item
+     */
+    void SetData( int aErrorCode,
+                  const wxString& aMainText, const KIID& aMainID,
+                  const wxString& bAuxText, const KIID& bAuxID )
+    {
+        m_ErrorCode     = aErrorCode;
+        m_MainText      = aMainText;
+        m_AuxText       = bAuxText;
+        m_hasPositions  = false;
+        m_hasSecondItem = !bAuxText.IsEmpty() || bAuxID != niluuid;
+        m_parent        = nullptr;
+        m_mainItemUuid  = aMainID;
+        m_auxItemUuid   = bAuxID;
     }
 
     /**
@@ -144,10 +218,10 @@ public:
      */
     void SetAuxiliaryData( const wxString& aAuxiliaryText, const wxPoint& aAuxiliaryPos )
     {
-        m_AuxiliaryText     = aAuxiliaryText;
-        m_AuxiliaryPosition = aAuxiliaryPos;
-        m_hasSecondItem     = true;
-        m_auxItemUuid       = niluuid;
+        m_AuxText       = aAuxiliaryText;
+        m_AuxPosition   = aAuxiliaryPos;
+        m_hasSecondItem = true;
+        m_auxItemUuid   = niluuid;
     }
 
     void SetParent( MARKER_BASE* aMarker ) { m_parent = aMarker; }
@@ -155,19 +229,22 @@ public:
 
     bool HasSecondItem() const { return m_hasSecondItem; }
 
-    void SetShowNoCoordinate() { m_noCoordinate = true; }
+    bool HasPositions() { return m_hasPositions; }
 
     /**
      * Access to A and B texts
      */
     wxString GetMainText() const { return m_MainText; }
-    wxString GetAuxiliaryText() const { return m_AuxiliaryText; }
+    wxString GetAuxiliaryText() const { return m_AuxText; }
 
     /**
      * Access to A and B items for BOARDs
      */
     BOARD_ITEM* GetMainItem( BOARD* aBoard ) const;
     BOARD_ITEM* GetAuxiliaryItem( BOARD* aBoard ) const;
+
+    KIID GetMainItemID() const { return m_mainItemUuid; }
+    KIID GetAuxItemID() const { return m_auxItemUuid; }
 
     /**
      * Function ShowHtml
@@ -183,10 +260,7 @@ public:
      */
     wxString ShowReport( EDA_UNITS aUnits ) const;
 
-    int GetErrorCode() const
-    {
-        return m_ErrorCode;
-    }
+    int GetErrorCode() const { return m_ErrorCode; }
 
     /**
      * Function GetErrorText
@@ -195,10 +269,10 @@ public:
     wxString GetErrorText() const;
 
     const wxString& GetTextA() const { return m_MainText; }
-    const wxString& GetTextB() const { return m_AuxiliaryText; }
+    const wxString& GetTextB() const { return m_AuxText; }
 
     const wxPoint& GetPointA() const { return m_MainPosition; }
-    const wxPoint& GetPointB() const { return m_AuxiliaryPosition; }
+    const wxPoint& GetPointB() const { return m_AuxPosition; }
 
     /**
      * Function ShowCoord

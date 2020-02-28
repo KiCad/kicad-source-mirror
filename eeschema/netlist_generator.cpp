@@ -119,33 +119,33 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
 
             msg << _( "Run command:" ) << wxT( "\n" ) << commandLine << wxT( "\n\n" );
 
-            aReporter->ReportHead( msg, REPORTER::RPT_ACTION );
+            aReporter->ReportHead( msg, SEVERITY_ACTION );
 
             if( diag != 0 )
                 aReporter->ReportTail( wxString::Format(
-                                    _("Command error. Return code %d" ), diag ),
-                                    REPORTER::RPT_ERROR );
+                                       _("Command error. Return code %d" ), diag ),
+                                       SEVERITY_ERROR );
             else
-                aReporter->ReportTail( _( "Success" ), REPORTER::RPT_INFO );
+                aReporter->ReportTail( _( "Success" ), SEVERITY_INFO );
 
             if( output.GetCount() )
             {
                 msg.Empty();
                 msg << wxT( "\n" ) << _( "Info messages:" ) << wxT( "\n" );
-                aReporter->Report( msg, REPORTER::RPT_INFO );
+                aReporter->Report( msg, SEVERITY_INFO );
 
                 for( unsigned ii = 0; ii < output.GetCount(); ii++ )
-                    aReporter->Report( output[ii] + wxT( "\n" ), REPORTER::RPT_INFO );
+                    aReporter->Report( output[ii] + wxT( "\n" ), SEVERITY_INFO );
             }
 
             if( errors.GetCount() )
             {
                 msg.Empty();
                 msg << wxT("\n") << _( "Error messages:" ) << wxT( "\n" );
-                aReporter->Report( msg, REPORTER::RPT_INFO );
+                aReporter->Report( msg, SEVERITY_INFO );
 
                 for( unsigned ii = 0; ii < errors.GetCount(); ii++ )
-                    aReporter->Report( errors[ii] + wxT( "\n" ), REPORTER::RPT_ERROR );
+                    aReporter->Report( errors[ii] + wxT( "\n" ), SEVERITY_ERROR );
             }
         }
         else

@@ -38,13 +38,14 @@ class SHAPE_LINE_CHAIN;
 class MARKER_BASE
 {
 public:
-    enum TYPEMARKER {   // Marker type: can be used to identify the purpose of the marker
+    enum TYPEMARKER {
         MARKER_UNSPEC,
         MARKER_ERC,
         MARKER_PCB,
         MARKER_SIMUL
     };
-    enum MARKER_SEVERITY {  // Severity of the marker: this is the level of error
+
+    enum MARKER_SEVERITY {
         MARKER_SEVERITY_UNSPEC,
         MARKER_SEVERITY_INFO,
         MARKER_SEVERITY_WARNING,
@@ -54,13 +55,17 @@ public:
     wxPoint               m_Pos;                 ///< position of the marker
 
 protected:
-    int                   m_ScalingFactor;       ///< Scaling factor to convert corners coordinates
-                                                 ///< to internat units coordinates
-    TYPEMARKER            m_MarkerType;          ///< The type of marker (useful to filter markers)
-    MARKER_SEVERITY       m_ErrorLevel;          ///< Specify the severity of the error
-    COLOR4D               m_Color;               ///< color
-    EDA_RECT              m_ShapeBoundingBox;    ///< Bounding box of the graphic symbol, relative
-                                                 ///< to the position of the shape, in marker shape units
+    int                   m_ScalingFactor;       // Scaling factor to convert corners coordinates
+                                                 // to internat units coordinates
+    TYPEMARKER            m_MarkerType;          // The type of marker (useful to filter markers)
+
+    // JEY TODO: retire this; error levels come from DRC_ITEM
+    MARKER_SEVERITY       m_ErrorLevel;          // Specify the severity of the error (Eeschema only)
+    bool                  m_Excluded;            // User has excluded this specific error
+
+    EDA_RECT              m_ShapeBoundingBox;    // Bounding box of the graphic symbol, relative
+                                                 // to the position of the shape, in marker shape
+                                                 // units
     DRC_ITEM              m_drc;
 
     void init();
@@ -79,8 +84,21 @@ public:
      * @param bPos The position of the second of two objects
      * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
      */
-    MARKER_BASE( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos, EDA_ITEM* aItem,
-            const wxPoint& aPos, EDA_ITEM* bItem, const wxPoint& bPos, int aScalingFactor );
+    MARKER_BASE( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
+                 EDA_ITEM* aItem, const wxPoint& aPos,
+                 EDA_ITEM* bItem, const wxPoint& bPos, int aScalingFactor );
+
+    /**
+     * Constructor
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aItem The first of two objects
+     * @param bItem The second of the two conflicting objects
+     * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
+     */
+    MARKER_BASE( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
+                 EDA_ITEM* aItem,
+                 EDA_ITEM* bItem, int aScalingFactor );
 
     /**
      * Constructor
@@ -100,12 +118,24 @@ public:
      * Constructor
      * @param aErrorCode The categorizing identifier for an error
      * @param aMarkerPos The position of the MARKER on the BOARD
-     * @param aText Text describing the object
-     * @param aPos The position of the object
+     * @param aText Text describing the first of two objects
+     * @param bText Text describing the second of the two conflicting objects
      * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
      */
     MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
-                 const wxString& aText, const wxPoint& aPos, int aScalingFactor );
+                 const wxString& aText,
+                 const wxString& bText, int aScalingFactor );
+
+    /**
+     * Constructor
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aText Text describing the object
+     * @param bText Text describing the second of the two conflicting objects
+     * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
+     */
+    MARKER_BASE( int aErrorCode,
+                 const wxString& aText,
+                 const wxString& bText, int aScalingFactor );
 
     /**
      * Contructor
@@ -115,7 +145,7 @@ public:
      */
     MARKER_BASE( const MARKER_BASE& aMarker );
 
-    ~MARKER_BASE();
+    virtual ~MARKER_BASE();
 
     /** The scaling factor to convert polygonal shape coordinates to internal units
      */
@@ -155,38 +185,16 @@ public:
     }
 
     /**
-     * Function SetColor
-     * Set the color of this marker
-     */
-    void SetColor( COLOR4D aColor )
-    {
-        m_Color = aColor;
-    }
-
-    /**
      * accessors to set/get error levels (warning, error, fatal error..)
      */
-    void SetErrorLevel( MARKER_SEVERITY aErrorLevel )
-    {
-        m_ErrorLevel = aErrorLevel;
-    }
+    void SetErrorLevel( MARKER_SEVERITY aErrorLevel ) { m_ErrorLevel = aErrorLevel; }
+    MARKER_SEVERITY GetErrorLevel() const { return m_ErrorLevel; }
 
-    MARKER_SEVERITY GetErrorLevel() const
-    {
-        return m_ErrorLevel;
-    }
-
-    /** accessors to set/get marker type (DRC, ERC, or other)
+    /**
+     * accessors to set/get marker type (DRC, ERC, or other)
      */
-    void SetMarkerType( enum TYPEMARKER aMarkerType )
-    {
-        m_MarkerType = aMarkerType;
-    }
-
-    enum TYPEMARKER GetMarkerType() const
-    {
-        return m_MarkerType;
-    }
+    void SetMarkerType( enum TYPEMARKER aMarkerType ) { m_MarkerType = aMarkerType; }
+    enum TYPEMARKER GetMarkerType() const { return m_MarkerType; }
 
     /**
      * Function SetData
@@ -198,8 +206,9 @@ public:
      * @param bItem The second of the two conflicting objects
      * @param bPos The position of the second of two objects
      */
-    void SetData( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos, EDA_ITEM* aItem,
-            const wxPoint& aPos, EDA_ITEM* bItem = nullptr, const wxPoint& bPos = wxPoint() );
+    void SetData( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
+                  EDA_ITEM* aItem, const wxPoint& aPos,
+                  EDA_ITEM* bItem = nullptr, const wxPoint& bPos = wxPoint() );
 
     /**
      * Function SetData
@@ -216,6 +225,38 @@ public:
                   const wxString& bText = wxEmptyString, const wxPoint& bPos = wxPoint() );
 
     /**
+     * Function SetData
+     * fills in all the reportable data associated with a MARKER.
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aItem The first of two objects
+     * @param aPos The position of the first of two objects
+     * @param bItem The second of the two conflicting objects
+     * @param bPos The position of the second of two objects
+     */
+    void SetData( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
+                  EDA_ITEM* aItem,
+                  EDA_ITEM* bItem = nullptr );
+
+    /**
+     * Function SetData
+     * fills in all the reportable data associated with a MARKER.
+     * @param aErrorCode The categorizing identifier for an error
+     * @param aMarkerPos The position of the MARKER on the BOARD
+     * @param aText Text describing the first of two objects
+     * @param aPos The position of the first of two objects
+     * @param bText Text describing the second of the two conflicting objects
+     * @param bPos The position of the second of two objects
+     */
+    void SetData( int aErrorCode, const wxPoint& aMarkerPos,
+                  const wxString& aText,
+                  const wxString& bText = wxEmptyString );
+
+    void SetData( int aErrorCode, const wxPoint& aMarkerPos,
+                  const wxString& aText, const KIID& aID,
+                  const wxString& bText, const KIID& bID );
+
+    /**
      * Function SetAuxiliaryData
      * initialize data for the second (auxiliary) item
      * @param aAuxiliaryText = the second text (main text) concerning the second schematic or
@@ -227,10 +268,8 @@ public:
         m_drc.SetAuxiliaryData( aAuxiliaryText, aAuxiliaryPos );
     }
 
-    void SetShowNoCoordinate()
-    {
-        m_drc.SetShowNoCoordinate();
-    }
+    bool IsExcluded() const { return m_Excluded; }
+    void SetExcluded( bool aExcluded ) { m_Excluded = aExcluded; }
 
     /**
      * Function GetReporter
@@ -238,10 +277,8 @@ public:
      * interface may be used.
      * @return const& DRC_ITEM
      */
-    const DRC_ITEM& GetReporter() const
-    {
-        return m_drc;
-    }
+    DRC_ITEM& GetReporter() { return m_drc; }
+    const DRC_ITEM& GetReporter() const { return m_drc; }
 
     /**
      * Function DisplayMarkerInfo
@@ -264,6 +301,9 @@ public:
      * It is OK to overestimate the size by a few counts.
      */
     EDA_RECT GetBoundingBoxMarker() const;
+
+protected:
+    virtual KIGFX::COLOR4D getColor() const = 0;
 };
 
 

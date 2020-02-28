@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PANEL_SETUP_FEATURE_CONSTRAINTS_BASE_H__
-#define __PANEL_SETUP_FEATURE_CONSTRAINTS_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -29,15 +28,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel 
+class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		wxCheckBox* m_OptAllowBlindBuriedVias;
 		wxCheckBox* m_OptAllowMicroVias;
-		wxCheckBox* m_OptRequireCourtyards;
-		wxCheckBox* m_OptOverlappingCourtyards;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_stCircleToPolyOpt;
 		wxStaticText* m_maxErrorTitle;
@@ -69,16 +66,15 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_EdgeClearanceLabel;
 		wxTextCtrl* m_EdgeClearanceCtrl;
 		wxStaticText* m_EdgeClearanceUnits;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onChangeOutlineOpt( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
+
+		PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_SETUP_FEATURE_CONSTRAINTS_BASE();
-	
+
 };
 
-#endif //__PANEL_SETUP_FEATURE_CONSTRAINTS_BASE_H__

@@ -30,6 +30,7 @@
 #include <drc/drc.h>
 
 #include <drc/courtyard_overlap.h>
+#include <widgets/ui_common.h>
 
 #include "../board_test_utils.h"
 #include "drc_test_utils.h"
@@ -242,10 +243,10 @@ static BOARD_DESIGN_SETTINGS GetOverlapCheckDesignSettings()
 
     // do the overlap tests - that's a different test, but if not set,
     // the invalid courtyard checks don't run either
-    des_settings.m_ProhibitOverlappingCourtyards = true;
+    des_settings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = SEVERITY_ERROR;
 
     // we will also check for missing courtyards here
-    des_settings.m_RequireCourtyards = true;
+    des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = SEVERITY_ERROR;
 
     return des_settings;
 }
@@ -306,8 +307,6 @@ static void CheckInvalidsMatchExpected( BOARD&          aBoard,
 void DoCourtyardInvalidTest(
         const COURTYARD_INVALID_CASE& aCase, const KI_TEST::BOARD_DUMPER& aDumper )
 {
-    DRC_MARKER_FACTORY marker_factory;
-
     auto board = MakeBoard( aCase.m_mods );
 
     // Dump if env var set
@@ -318,11 +317,13 @@ void DoCourtyardInvalidTest(
     // list of markers to collect
     std::vector<std::unique_ptr<MARKER_PCB>> markers;
 
-    DRC_COURTYARD_OVERLAP drc_overlap( marker_factory, [&]( MARKER_PCB* aMarker ) {
-        markers.push_back( std::unique_ptr<MARKER_PCB>( aMarker ) );
-    } );
+    DRC_COURTYARD_OVERLAP drc_overlap(
+            [&]( MARKER_PCB* aMarker )
+            {
+                markers.push_back( std::unique_ptr<MARKER_PCB>( aMarker ) );
+            } );
 
-    drc_overlap.RunDRC( *board );
+    drc_overlap.RunDRC( EDA_UNITS::MILLIMETRES, *board );
 
     CheckInvalidsMatchExpected( *board, markers, aCase.m_exp_errors );
 }

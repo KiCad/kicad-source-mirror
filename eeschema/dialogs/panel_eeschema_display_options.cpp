@@ -115,7 +115,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
         firstRefId != LIB_PART::GetSubpartFirstId() )
     {
         LIB_PART::SetSubpartIdNotation( refSeparator, firstRefId );
-        m_frame->SaveProjectSettings( false );
+        m_frame->SaveProjectSettings();
     }
 
     SetDefaultBusThickness( m_busWidth.GetValue() );

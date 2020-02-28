@@ -3287,9 +3287,15 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
             }
             break;
 
+        case T_tstamp:
+            NextTok();
+            const_cast<KIID&>( pad->m_Uuid ) = KIID( CurStr() );
+            NeedRIGHT();
+            break;
+
         default:
             Expecting( "at, drill, layers, net, die_length, solder_mask_margin, roundrect_rratio,\n"
-                       "solder_paste_margin, solder_paste_margin_ratio, clearance,\n"
+                       "solder_paste_margin, solder_paste_margin_ratio, clearance, tstamp,\n"
                        "zone_connect, fp_poly, primitives, thermal_width, or thermal_gap" );
         }
     }

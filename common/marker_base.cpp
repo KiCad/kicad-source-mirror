@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,8 +65,8 @@ const unsigned CORNERS_COUNT = arrayDim( MarkerShapeCorners );
 void MARKER_BASE::init()
 {
     m_MarkerType = MARKER_UNSPEC;
+    m_Excluded = false;
     m_ErrorLevel = MARKER_SEVERITY_UNSPEC;
-    m_Color = RED;
     const VECTOR2I* point_shape = GetShapePolygon();
     wxPoint start( point_shape->x, point_shape->y );
     wxPoint end = start;
@@ -90,7 +90,6 @@ MARKER_BASE::MARKER_BASE( const MARKER_BASE& aMarker )
     m_Pos = aMarker.m_Pos;
     m_ErrorLevel = aMarker.m_ErrorLevel;
     m_MarkerType = aMarker.m_MarkerType;
-    m_Color = aMarker.m_Color;
     m_ShapeBoundingBox = aMarker.m_ShapeBoundingBox;
     m_ScalingFactor = aMarker.m_ScalingFactor;
 }
@@ -104,13 +103,24 @@ MARKER_BASE::MARKER_BASE( int aScalingFactor )
 
 
 MARKER_BASE::MARKER_BASE( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-        EDA_ITEM* aItem, const wxPoint& aPos, EDA_ITEM* bItem, const wxPoint& bPos,
-        int aScalingFactor )
+                          EDA_ITEM* aItem, const wxPoint& aPos,
+                          EDA_ITEM* bItem, const wxPoint& bPos, int aScalingFactor )
 {
     m_ScalingFactor = aScalingFactor;
     init();
 
     SetData( aUnits, aErrorCode, aMarkerPos, aItem, aPos, bItem, bPos );
+}
+
+
+MARKER_BASE::MARKER_BASE( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
+                          EDA_ITEM* aItem,
+                          EDA_ITEM* bItem, int aScalingFactor )
+{
+    m_ScalingFactor = aScalingFactor;
+    init();
+
+    SetData( aUnits, aErrorCode, aMarkerPos, aItem, bItem );
 }
 
 
@@ -126,12 +136,24 @@ MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
 
 
 MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
-                          const wxString& aText, const wxPoint& aPos, int aScalingFactor )
+                          const wxString& aText,
+                          const wxString& bText, int aScalingFactor )
 {
     m_ScalingFactor = aScalingFactor;
     init();
 
-    SetData( aErrorCode, aMarkerPos, aText, aPos );
+    SetData( aErrorCode, aMarkerPos, aText, bText );
+}
+
+
+MARKER_BASE::MARKER_BASE( int aErrorCode,
+                          const wxString& aText,
+                          const wxString& bText, int aScalingFactor )
+{
+    m_ScalingFactor = aScalingFactor;
+    init();
+
+    SetData( aErrorCode, wxPoint(), aText, bText );
 }
 
 
@@ -141,7 +163,8 @@ MARKER_BASE::~MARKER_BASE()
 
 
 void MARKER_BASE::SetData( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-        EDA_ITEM* aItem, const wxPoint& aPos, EDA_ITEM* bItem, const wxPoint& bPos )
+                           EDA_ITEM* aItem, const wxPoint& aPos,
+                           EDA_ITEM* bItem, const wxPoint& bPos )
 {
     m_Pos = aMarkerPos;
     m_drc.SetData( aUnits, aErrorCode, aItem, aPos, bItem, bPos );
@@ -155,6 +178,36 @@ void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
 {
     m_Pos = aMarkerPos;
     m_drc.SetData( aErrorCode, aText, aPos, bText, bPos );
+    m_drc.SetParent( this );
+}
+
+
+void MARKER_BASE::SetData( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
+                           EDA_ITEM* aItem,
+                           EDA_ITEM* bItem )
+{
+    m_Pos = aMarkerPos;
+    m_drc.SetData( aUnits, aErrorCode, aItem, bItem );
+    m_drc.SetParent( this );
+}
+
+
+void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
+                           const wxString& aText,
+                           const wxString& bText )
+{
+    m_Pos = aMarkerPos;
+    m_drc.SetData( aErrorCode, aText, bText );
+    m_drc.SetParent( this );
+}
+
+
+void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
+                           const wxString& aText, const KIID& aID,
+                           const wxString& bText, const KIID& bID )
+{
+    m_Pos = aMarkerPos;
+    m_drc.SetData( aErrorCode, aText, aID, bText, bID );
     m_drc.SetParent( this );
 }
 
@@ -246,11 +299,11 @@ void MARKER_BASE::PrintMarker( wxDC* aDC, const wxPoint& aOffset )
     for( int ii = 0; ii < ccount; ii++ )
     {
         shape.emplace_back( GetShapePolygonCorner( ii ).x * MarkerScale(),
-                                  GetShapePolygonCorner( ii ).y * MarkerScale() );
+                            GetShapePolygonCorner( ii ).y * MarkerScale() );
     }
 
     for( int ii = 0; ii < ccount; ii++ )
         shape[ii] += m_Pos + aOffset;
 
-    GRClosedPoly( nullptr, aDC, ccount, &shape[0], true, 0, m_Color, m_Color );
+    GRClosedPoly( nullptr, aDC, ccount, &shape[0], true, 0, getColor(), getColor() );
 }

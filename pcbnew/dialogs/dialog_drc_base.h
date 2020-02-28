@@ -27,6 +27,7 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/notebook.h>
+#include <wx/statbmp.h>
 #include <wx/button.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
@@ -64,8 +65,11 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxStaticText* m_showLabel;
 		wxCheckBox* m_showAll;
 		wxCheckBox* m_showErrors;
+		wxStaticBitmap* m_errorsBadge;
 		wxCheckBox* m_showWarnings;
-		wxCheckBox* m_showInfos;
+		wxStaticBitmap* m_warningsBadge;
+		wxCheckBox* m_showExclusions;
+		wxStaticBitmap* m_exclusionsBadge;
 		wxButton* m_saveReport;
 		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_sizerButtons;
@@ -79,6 +83,7 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		virtual void OnActivateDlg( wxActivateEvent& event ) { event.Skip(); }
 		virtual void OnChangingNotebookPage( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnDRCItemDClick( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnDRCItemRClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnDRCItemSelected( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnSeverity( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveReport( wxCommandEvent& event ) { event.Skip(); }

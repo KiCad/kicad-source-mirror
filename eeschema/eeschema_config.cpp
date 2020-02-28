@@ -264,7 +264,7 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
 }
 
 
-void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
+void SCH_EDIT_FRAME::SaveProjectSettings()
 {
     PROJECT&        prj = Prj();
     wxFileName      fn = g_RootSheet->GetScreen()->GetFileName();  //ConfigFileName
@@ -273,17 +273,6 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
 
     if( !IsWritable( fn ) )
         return;
-
-    if( aAskForSave )
-    {
-        wxFileDialog dlg( this, _( "Save Project File" ), fn.GetPath(), fn.GetFullName(),
-                          ProjectFileWildcard(), wxFD_SAVE );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return;
-
-        fn = dlg.GetPath();
-    }
 
     wxString path = fn.GetFullPath();
 

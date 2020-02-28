@@ -58,8 +58,8 @@ public:
      * @param aSeverity string classification level bitfield
      * @param aLocation REPORTER::LOCATION enum for placement of message
      */
-    void Report( const wxString& aText, REPORTER::SEVERITY aSeverity,
-            REPORTER::LOCATION aLocation = REPORTER::LOC_BODY );
+    void Report( const wxString& aText, SEVERITY aSeverity,
+                 REPORTER::LOCATION aLocation = REPORTER::LOC_BODY );
 
     ///> clears the report panel
     void Clear();
@@ -90,7 +90,7 @@ public:
 private:
     struct REPORT_LINE
     {
-        REPORTER::SEVERITY severity;
+        SEVERITY severity;
         wxString message;
     };
 

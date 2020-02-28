@@ -661,7 +661,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             g_RootSheet->SetFileName( newfilename.GetFullPath() );
             GetScreen()->SetFileName( newfilename.GetFullPath() );
             GetScreen()->SetModify();
-            SaveProjectSettings( false );
+            SaveProjectSettings();
 
             UpdateFileHistory( aFileName );
             SCH_SCREENS schematic;

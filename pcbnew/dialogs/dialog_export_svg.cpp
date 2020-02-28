@@ -262,13 +262,12 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
 
         if( CreateSVGFile( path ) )
         {
-            reporter.Report( wxString::Format( _( "Exported \"%s\"." ), path ),
-                             REPORTER::RPT_ACTION );
+            reporter.Report( wxString::Format( _( "Exported \"%s\"." ), path ), SEVERITY_ACTION );
         }
         else    // Error
         {
             reporter.Report( wxString::Format( _( "Unable to create file \"%s\"." ), path ),
-                             REPORTER::RPT_ERROR );
+                             SEVERITY_ERROR );
         }
 
         if( aOnlyOneFile )

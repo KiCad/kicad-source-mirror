@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __WX_HTML_REPORT_PANEL_BASE_H__
-#define __WX_HTML_REPORT_PANEL_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -34,10 +33,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class WX_HTML_REPORT_PANEL_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class WX_HTML_REPORT_PANEL_BASE : public wxPanel 
+class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		wxStaticBoxSizer* m_box;
 		wxFlexGridSizer* m_fgSizer;
@@ -51,7 +50,7 @@ class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 		wxCheckBox* m_checkBoxShowActions;
 		wxCheckBox* m_checkBoxShowInfos;
 		wxButton* m_btnSaveReportToFile;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onRightClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowAll( wxCommandEvent& event ) { event.Skip(); }
@@ -60,13 +59,12 @@ class WX_HTML_REPORT_PANEL_BASE : public wxPanel
 		virtual void onCheckBoxShowActions( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCheckBoxShowInfos( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBtnSaveToFile( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 567,228 ), long style = wxTAB_TRAVERSAL ); 
+
+		WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 567,228 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~WX_HTML_REPORT_PANEL_BASE();
-	
+
 };
 
-#endif //__WX_HTML_REPORT_PANEL_BASE_H__

@@ -711,7 +711,7 @@ int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller )
     aCaller->SetNetListFormatName( dlg.m_DefaultNetFmtName );   // can have temporary changed
 
     if( curr_default_netformat != dlg.m_DefaultNetFmtName )
-        aCaller->SaveProjectSettings( false );
+        aCaller->SaveProjectSettings();
 
     return ret;
 }

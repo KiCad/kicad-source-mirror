@@ -245,6 +245,11 @@ public:
         return m_ZoneDescriptorList;
     }
 
+    MARKERS& Markers()
+    {
+        return m_markers;
+    }
+
     const std::vector<BOARD_CONNECTED_ITEM*> AllConnectedItems();
 
     /// zone contour currently in progress
@@ -310,7 +315,6 @@ public:
      */
     void BuildConnectivity();
 
-
     /**
      * Function DeleteMARKERs
      * deletes ALL MARKERS from the board.
@@ -322,29 +326,6 @@ public:
      * deletes ALL zone outlines from the board.
      */
     void DeleteZONEOutlines();
-
-    /**
-     * Function GetMARKER
-     * returns the MARKER at a given index.
-     * @param index The array type index into a collection of MARKER_PCBS.
-     * @return MARKER_PCB* - a pointer to the MARKER_PCB or NULL if index out of range.
-     */
-    MARKER_PCB* GetMARKER( int index ) const
-    {
-        if( (unsigned) index < m_markers.size() )
-            return m_markers[index];
-
-        return NULL;
-    }
-
-    /**
-     * Function GetMARKERCount
-     * @return int - The number of MARKER_PCBS.
-     */
-    int GetMARKERCount() const
-    {
-        return (int) m_markers.size();
-    }
 
     /**
      * Function SetAuxOrigin

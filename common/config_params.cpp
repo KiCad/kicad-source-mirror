@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@
 #include <wx/config.h>           // for wxConfigBase
 #include <wx/debug.h>            // for wxASSERT
 #include <wx/wx.h>               // for wxString, operator!=, operator==
-
 
 void wxConfigLoadParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList,
                          const wxString& aGroup )
@@ -443,6 +442,63 @@ void PARAM_CFG_WXSTRING::SaveParam( wxConfigBase* aConfig ) const
         return;
 
     aConfig->Write( m_Ident, *m_Pt_param );
+}
+
+
+PARAM_CFG_WXSTRING_SET::PARAM_CFG_WXSTRING_SET( const wxString& ident, std::set<wxString>* ptparam,
+                                                const wxChar* group ) :
+        PARAM_CFG( ident, PARAM_WXSTRING_SET, group )
+{
+    m_Pt_param = ptparam;
+}
+
+
+PARAM_CFG_WXSTRING_SET::PARAM_CFG_WXSTRING_SET( bool Insetup, const wxString& ident,
+                                                std::set<wxString>* ptparam, const wxChar* group ) :
+        PARAM_CFG( ident, PARAM_WXSTRING, group )
+{
+    m_Pt_param = ptparam;
+    m_Setup    = Insetup;
+}
+
+
+void PARAM_CFG_WXSTRING_SET::ReadParam( wxConfigBase* aConfig ) const
+{
+    if( !m_Pt_param || !aConfig )
+        return;
+
+    for( int i = 1; true; ++i )
+    {
+        wxString key, data;
+
+        key = m_Ident;
+        key << i;
+        data = aConfig->Read( key, wxT( "" ) );
+
+        if( data.IsEmpty() )
+            break;
+
+        m_Pt_param->insert( data );
+    }
+}
+
+
+void PARAM_CFG_WXSTRING_SET::SaveParam( wxConfigBase* aConfig ) const
+{
+    if( !m_Pt_param || !aConfig )
+        return;
+
+    int i = 1;
+
+    for( const wxString& str : *m_Pt_param )
+    {
+        wxString key, data;
+
+        key = m_Ident;
+        key << i++;
+
+        aConfig->Write( key, str );
+    }
 }
 
 

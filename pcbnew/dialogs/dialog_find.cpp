@@ -264,10 +264,8 @@ void DIALOG_FIND::search( bool aDirection )
 
         if( FindIncludeMarkers )
         {
-            for( int i = 0; i < m_frame->GetBoard()->GetMARKERCount(); ++i )
+            for( MARKER_PCB* marker : m_frame->GetBoard()->Markers() )
             {
-                MARKER_PCB* marker = m_frame->GetBoard()->GetMARKER( i );
-
                 if( marker->Matches( m_frame->GetFindReplaceData(), nullptr ) )
                     m_hitList.push_back( marker );
             }

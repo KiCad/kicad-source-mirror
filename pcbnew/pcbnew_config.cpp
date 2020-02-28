@@ -92,23 +92,16 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 }
 
 
-void PCB_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
+void PCB_EDIT_FRAME::SaveProjectSettings()
 {
     wxFileName fn = Prj().GetProjectFullName();
 
-    if( aAskForSave )
-    {
-        wxFileDialog dlg( this, _( "Save Project File" ), fn.GetPath(), fn.GetFullName(),
-                          ProjectFileWildcard(), wxFD_SAVE | wxFD_CHANGE_DIR );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return;
-
-        fn = dlg.GetPath();
-    }
+    if( !IsWritable( fn ) )
+        return;
 
     wxString pro_name = fn.GetFullPath();
 
+    RecordDRCExclusions();
     Prj().ConfigSave( Kiface().KifaceSearch(), GROUP_PCB, GetProjectFileParameters(), pro_name );
 }
 
@@ -140,6 +133,9 @@ std::vector<PARAM_CFG*>& PCB_EDIT_FRAME::GetProjectFileParameters()
 
     m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastGenCADExportPath" ),
                                                            &m_lastPath[ LAST_PATH_GENCAD ] ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING_SET( wxT( "DRCExclusion" ),
+                                                               &m_drcExclusions ) );
 
     GetBoard()->GetDesignSettings().AppendConfigs( GetBoard(), &m_projectFileParams);
 

@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <cstdio>
 #include <string>
 
 #include <common.h>
@@ -32,12 +31,11 @@
 #include <pcbnew_utils/board_file_utils.h>
 
 // DRC
+#include <widgets/ui_common.h>
+#include <pcbnew/drc/drc.h>
 #include <drc/courtyard_overlap.h>
-#include <drc/drc_marker_factory.h>
 
-#include <qa_utils/stdstream_line_reader.h>
 #include <qa_utils/utility_registry.h>
-
 
 using DRC_DURATION = std::chrono::microseconds;
 
@@ -88,7 +86,7 @@ public:
         DRC_DURATION duration;
         {
             SCOPED_PROF_COUNTER<DRC_DURATION> timer( duration );
-            drc_prov->RunDRC( aBoard );
+            drc_prov->RunDRC( EDA_UNITS::MILLIMETRES, aBoard );
         }
 
         // report results
@@ -97,12 +95,6 @@ public:
 
         if( m_exec_context.m_print_markers )
             reportMarkers( markers );
-    }
-
-protected:
-    const DRC_MARKER_FACTORY& getMarkerFactory() const
-    {
-        return m_marker_factory;
     }
 
 private:
@@ -141,7 +133,6 @@ private:
     }
 
     const EXECUTION_CONTEXT m_exec_context;
-    DRC_MARKER_FACTORY      m_marker_factory;
 };
 
 
@@ -168,8 +159,8 @@ private:
     BOARD_DESIGN_SETTINGS getDesignSettings() const override
     {
         BOARD_DESIGN_SETTINGS des_settings;
-        des_settings.m_RequireCourtyards = false;
-        des_settings.m_ProhibitOverlappingCourtyards = true;
+        des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = SEVERITY_IGNORE;
+        des_settings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = SEVERITY_ERROR;
 
         return des_settings;
     }
@@ -177,7 +168,7 @@ private:
     std::unique_ptr<DRC_PROVIDER> createDrcProvider(
             BOARD& aBoard, DRC_PROVIDER::MARKER_HANDLER aHandler ) override
     {
-        return std::make_unique<DRC_COURTYARD_OVERLAP>( getMarkerFactory(), aHandler );
+        return std::make_unique<DRC_COURTYARD_OVERLAP>( aHandler );
     }
 };
 
@@ -205,8 +196,8 @@ private:
     BOARD_DESIGN_SETTINGS getDesignSettings() const override
     {
         BOARD_DESIGN_SETTINGS des_settings;
-        des_settings.m_RequireCourtyards = true;
-        des_settings.m_ProhibitOverlappingCourtyards = false;
+        des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = SEVERITY_ERROR;
+        des_settings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = SEVERITY_IGNORE;
 
         return des_settings;
     }
@@ -214,7 +205,7 @@ private:
     std::unique_ptr<DRC_PROVIDER> createDrcProvider(
             BOARD& aBoard, DRC_PROVIDER::MARKER_HANDLER aHandler ) override
     {
-        return std::make_unique<DRC_COURTYARD_OVERLAP>( getMarkerFactory(), aHandler );
+        return std::make_unique<DRC_COURTYARD_OVERLAP>( aHandler );
     }
 };
 

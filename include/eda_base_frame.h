@@ -386,7 +386,7 @@ public:
      * The base method do nothing
      * @param aAskForSave = true to open a dialog before saving the settings
      */
-    virtual void SaveProjectSettings( bool aAskForSave ) {};
+    virtual void SaveProjectSettings() {};
 
     // Read/Save and Import/export hotkeys config
 

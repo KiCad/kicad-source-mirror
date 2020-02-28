@@ -28,8 +28,6 @@ namespace KIGFX
     class WS_PROXY_VIEW_ITEM;
 }
 
-class COLORS_DESIGN_SETTINGS;
-
 
 class GERBVIEW_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
 {

@@ -645,24 +645,31 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
 
     case PCB_MODULE_T:
         m_modules.erase( std::remove_if( m_modules.begin(), m_modules.end(),
-                [aBoardItem]( BOARD_ITEM* aItem ) { return aItem == aBoardItem; } ) );
+                                         [aBoardItem]( BOARD_ITEM* aItem )
+                                         {
+                                             return aItem == aBoardItem;
+                                         } ) );
         break;
 
     case PCB_TRACE_T:
     case PCB_ARC_T:
     case PCB_VIA_T:
         m_tracks.erase( std::remove_if( m_tracks.begin(), m_tracks.end(),
-                [aBoardItem]( BOARD_ITEM* aItem ) { return aItem == aBoardItem; } ) );
+                                        [aBoardItem]( BOARD_ITEM* aItem )
+                                        {
+                                            return aItem == aBoardItem;
+                                        } ) );
         break;
 
     case PCB_DIMENSION_T:
     case PCB_LINE_T:
     case PCB_TEXT_T:
     case PCB_TARGET_T:
-        m_drawings.erase(
-                std::remove_if( m_drawings.begin(), m_drawings.end(),
-                        [aBoardItem](BOARD_ITEM* aItem)
-                        {   return aItem == aBoardItem;} ) );
+        m_drawings.erase( std::remove_if( m_drawings.begin(), m_drawings.end(),
+                                          [aBoardItem](BOARD_ITEM* aItem)
+                                          {
+                                              return aItem == aBoardItem;
+                                          } ) );
         break;
 
     // other types may use linked list

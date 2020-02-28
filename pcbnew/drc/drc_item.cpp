@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2015-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,15 +49,7 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Via too close to via" ) );
     case DRCE_VIA_NEAR_TRACK:
         return wxString( _( "Via too close to track" ) );
-    case DRCE_TRACK_ENDS1:
-    case DRCE_TRACK_ENDS2:
-    case DRCE_TRACK_ENDS3:
-    case DRCE_TRACK_ENDS4:
-    case DRCE_ENDS_PROBLEM1:
-    case DRCE_ENDS_PROBLEM2:
-    case DRCE_ENDS_PROBLEM3:
-    case DRCE_ENDS_PROBLEM4:
-    case DRCE_ENDS_PROBLEM5:
+    case DRCE_TRACK_ENDS:
         return wxString( _( "Two track ends too close" ) );
     case DRCE_TRACK_SEGMENTS_TOO_CLOSE:
         return wxString( _( "Two parallel track segments too close" ) );
@@ -108,17 +100,17 @@ wxString DRC_ITEM::GetErrorText() const
 
     // use &lt; since this is text ultimately embedded in HTML
     case DRCE_NETCLASS_TRACKWIDTH:
-        return wxString( _( "NetClass Track Width &lt; global limit" ) );
+        return wxString( _( "NetClass Track Width < global limit" ) );
     case DRCE_NETCLASS_CLEARANCE:
-        return wxString( _( "NetClass Clearance &lt; global limit" ) );
+        return wxString( _( "NetClass Clearance < global limit" ) );
     case DRCE_NETCLASS_VIASIZE:
-        return wxString( _( "NetClass Via Dia &lt; global limit" ) );
+        return wxString( _( "NetClass Via Dia < global limit" ) );
     case DRCE_NETCLASS_VIADRILLSIZE:
-        return wxString( _( "NetClass Via Drill &lt; global limit" ) );
+        return wxString( _( "NetClass Via Drill < global limit" ) );
     case DRCE_NETCLASS_uVIASIZE:
-        return wxString( _( "NetClass uVia Dia &lt; global limit" ) );
+        return wxString( _( "NetClass uVia Dia < global limit" ) );
     case DRCE_NETCLASS_uVIADRILLSIZE:
-        return wxString( _( "NetClass uVia Drill &lt; global limit" ) );
+        return wxString( _( "NetClass uVia Drill < global limit" ) );
 
     case DRCE_VIA_INSIDE_KEEPOUT:
         return wxString( _( "Via inside keepout area" ) );
@@ -168,7 +160,7 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Remove track inside pad" ) );
 
     default:
-        return wxString::Format( _( "Unknown DRC error code %d" ), m_ErrorCode );
+        return wxEmptyString;
     }
 }
 
@@ -194,39 +186,23 @@ wxString DRC_ITEM::ShowHtml( EDA_UNITS aUnits ) const
     errText.Replace( wxT(">"), wxT("&gt;") );
 
 
-    if( m_noCoordinate )
+    if( m_hasSecondItem )
     {
-        // omit the coordinate, a NETCLASS has no location
-        return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s" ),
-                                 errText,
-                                 mainText );
-    }
-    else if( m_hasSecondItem )
-    {
-        wxString auxText = m_AuxiliaryText;
+        wxString auxText = m_AuxText;
         auxText.Replace( wxT("<"), wxT("&lt;") );
         auxText.Replace( wxT(">"), wxT("&gt;") );
 
         // an html fragment for the entire message in the listbox.  feel free
         // to add color if you want:
-        return wxString::Format( wxT( "<b>%s</b><br>"
-                                      "<kidiv id='%s'>&nbsp;&nbsp; %s: %s</kidiv><br>"
-                                      "<kidiv id='%s'>&nbsp;&nbsp; %s: %s</kidiv>" ),
+        return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s<br>&nbsp;&nbsp; %s" ),
                                  errText,
-                                 m_mainItemUuid.AsString(),
-                                 ShowCoord( aUnits, m_MainPosition ),
                                  mainText,
-                                 m_auxItemUuid.AsString(),
-                                 ShowCoord( aUnits, m_AuxiliaryPosition ),
                                  auxText );
     }
     else
     {
-        return wxString::Format( wxT( "<b>%s</b><br>"
-                                      "<kidiv id='%s'>&nbsp;&nbsp; %s: %s</kidiv>" ),
+        return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s" ),
                                  errText,
-                                 m_mainItemUuid.AsString(),
-                                 ShowCoord( aUnits, m_MainPosition ),
                                  mainText );
     }
 }
@@ -241,8 +217,8 @@ wxString DRC_ITEM::ShowReport( EDA_UNITS aUnits ) const
                                  GetErrorText(),
                                  ShowCoord( aUnits, m_MainPosition ),
                                  m_MainText,
-                                 ShowCoord( aUnits, m_AuxiliaryPosition ),
-                                 m_AuxiliaryText );
+                                 ShowCoord( aUnits, m_AuxPosition ),
+                                 m_AuxText );
     }
     else
     {

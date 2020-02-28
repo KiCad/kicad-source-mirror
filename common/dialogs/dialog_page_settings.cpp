@@ -263,7 +263,7 @@ void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
         m_screen->SetModify();
 
         if( LocalPrjConfigChanged() )
-            m_parent->SaveProjectSettings( false );
+            m_parent->SaveProjectSettings();
 
         // Call the post processing (if any) after changes
         m_parent->OnPageSettingsChange();

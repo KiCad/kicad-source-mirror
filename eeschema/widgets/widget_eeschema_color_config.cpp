@@ -94,12 +94,12 @@ static COLORBUTTON miscColorButtons[] = {
     { _( "ERC warning" ),         LAYER_ERC_WARN },
     { _( "ERC error" ),           LAYER_ERC_ERR },
     { _( "Brightened" ),          LAYER_BRIGHTENED },
-    { _( "Hidden items" ),        LAYER_HIDDEN },
+    { _( "Hidden item" ),         LAYER_HIDDEN },
     { _( "Worksheet" ),           LAYER_SCHEMATIC_WORKSHEET },
     { _( "Cursor" ),              LAYER_SCHEMATIC_CURSOR },
     { _( "Grid" ),                LAYER_SCHEMATIC_GRID },
     { _( "Background" ),          LAYER_SCHEMATIC_BACKGROUND },
-    { _( "Selection Highlight" ), LAYER_SELECTION_SHADOWS },
+    { _( "Selection highlight" ), LAYER_SELECTION_SHADOWS },
     { wxT( "" ), -1 }                           // Sentinel marking end of list.
 };
 

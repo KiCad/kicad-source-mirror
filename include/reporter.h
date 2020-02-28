@@ -26,6 +26,7 @@
 #define _REPORTER_H_
 
 #include <wx/string.h>
+#include <widgets/ui_common.h>
 
 /**
  * @file reporter.h
@@ -62,26 +63,6 @@ class REPORTER {
 
 public:
     /**
-     *  Severity of the reported messages.
-     *  Undefined are default status messages
-     *  Info are processing messages for which no action is taken
-     *  Action messages are items that modify the file(s) as expected
-     *  Warning messages are items that might be problematic but don't prevent
-     *    the process from completing
-     *  Error messages are items that prevent the process from completing
-     */
-    //
-    enum SEVERITY {
-        RPT_UNDEFINED = 0x0,
-        RPT_INFO      = 0x1,
-        RPT_ACTION    = 0x2,
-        RPT_WARNING   = 0x4,
-        RPT_ERROR     = 0x8
-    };
-
-    static constexpr int RPT_ALL = RPT_INFO | RPT_ACTION | RPT_WARNING | RPT_ERROR;
-
-    /**
      * Location where the message is to be reported.
      * LOC_HEAD messages are printed before all others (typically intro messages)
      * LOC_BODY messages are printed in the middle
@@ -102,13 +83,13 @@ public:
      * RPT_ERROR, RPT_ACTION ) used to filter and format messages
      */
 
-    virtual REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) = 0;
+    virtual REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) = 0;
 
     /**
      * Function ReportTail
      * Places the report at the end of the list, for objects that support report ordering
      */
-    virtual REPORTER& ReportTail( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED )
+    virtual REPORTER& ReportTail( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED )
     {
         return Report( aText, aSeverity );
     }
@@ -117,12 +98,12 @@ public:
      * Function ReportHead
      * Places the report at the beginning of the list for objects that support ordering
      */
-    virtual REPORTER& ReportHead( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED )
+    virtual REPORTER& ReportHead( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED )
     {
         return Report( aText, aSeverity );
     }
 
-    REPORTER& Report( const char* aText, SEVERITY aSeverity = RPT_UNDEFINED );
+    REPORTER& Report( const char* aText, SEVERITY aSeverity = SEVERITY_UNDEFINED );
 
     REPORTER& operator <<( const wxString& aText ) { return Report( aText ); }
     REPORTER& operator <<( const wxChar* aText ) { return Report( wxString( aText ) ); }
@@ -160,7 +141,7 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
 };
@@ -185,7 +166,7 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
 };
@@ -210,11 +191,11 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
 
-    REPORTER& ReportTail( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+    REPORTER& ReportTail( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
 
-    REPORTER& ReportHead( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+    REPORTER& ReportHead( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
 };
@@ -238,7 +219,7 @@ public:
 
     static REPORTER& GetInstance();
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override { return false; }
 };
@@ -261,7 +242,7 @@ public:
 
     static REPORTER& GetInstance();
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override { return false; }
 };

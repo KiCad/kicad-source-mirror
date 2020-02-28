@@ -22,6 +22,7 @@
 #define KICAD_DIALOG_BOARD_SETUP_H
 
 #include <widgets/paged_dialog.h>
+#include "panel_setup_drc_severities.h"
 
 class PCB_EDIT_FRAME;
 class PANEL_SETUP_FEATURE_CONSTRAINTS;
@@ -51,6 +52,7 @@ protected:
     PANEL_SETUP_TRACKS_AND_VIAS*     m_tracksAndVias;
     PANEL_SETUP_MASK_AND_PASTE*      m_maskAndPaste;
     PANEL_SETUP_BOARD_STACKUP*       m_physicalStackup;
+    PANEL_SETUP_DRC_SEVERITIES*      m_drcSeverities;
 
     // event handlers
     void OnPageChange( wxBookCtrlEvent& event );

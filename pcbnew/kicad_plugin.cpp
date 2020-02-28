@@ -1577,6 +1577,8 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         m_out->Print( aNestLevel+1, ")" );   // end of (basic_shapes
     }
 
+    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aPad->m_Uuid.AsString() ) );
+
     m_out->Print( 0, ")\n" );
 }
 
@@ -1615,7 +1617,8 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
     case TEXTE_MODULE::TEXT_is_DIVERS:    type = "user";
     }
 
-    m_out->Print( aNestLevel, "(fp_text %s %s (at %s", type.c_str(),
+    m_out->Print( aNestLevel, "(fp_text %s %s (at %s",
+                  type.c_str(),
                   m_out->Quotew( aText->GetText() ).c_str(),
                   FormatInternalUnits( aText->GetPos0() ).c_str() );
 

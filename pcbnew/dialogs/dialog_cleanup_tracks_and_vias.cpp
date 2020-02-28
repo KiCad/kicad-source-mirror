@@ -46,7 +46,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
     m_cleanShortCircuitOpt->SetValue( cfg->m_Cleanup.cleanup_short_circuits );
     m_deleteTracksInPadsOpt->SetValue( cfg->m_Cleanup.cleanup_tracks_in_pad );
 
-    m_changesTreeModel = new DRC_TREE_MODEL( m_changesDataView );
+    m_changesTreeModel = new DRC_TREE_MODEL( m_parentFrame, m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
@@ -124,7 +124,8 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 
     if( aDryRun )
     {
-        m_changesTreeModel->SetProvider( new VECTOR_DRC_ITEMS_PROVIDER( &m_items ) );
+        DRC_ITEMS_PROVIDER* provider = new VECTOR_DRC_ITEMS_PROVIDER( m_parentFrame, &m_items );
+        m_changesTreeModel->SetProvider( provider );
     }
     else if( modified )
     {

@@ -73,22 +73,20 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
 
             if( !success )
             {
-                msg.Printf( _( "Cannot create file \"%s\".\n" ),
-                            GetChars( plotFileName.GetFullPath() ) );
-                reporter.Report( msg, REPORTER::RPT_ERROR );
+                msg.Printf( _( "Cannot create file \"%s\".\n" ), plotFileName.GetFullPath() );
+                reporter.Report( msg, SEVERITY_ERROR );
             }
             else
             {
-                msg.Printf( _( "Plot: \"%s\" OK.\n" ),
-                            GetChars( plotFileName.GetFullPath() ) );
-                reporter.Report( msg, REPORTER::RPT_ACTION );
+                msg.Printf( _( "Plot: \"%s\" OK.\n" ), plotFileName.GetFullPath() );
+                reporter.Report( msg, SEVERITY_ACTION );
             }
         }
         catch( const IO_ERROR& e )
         {
             // Cannot plot SVG file
-            msg.Printf( wxT( "SVG Plotter exception: %s" ), GetChars( e.What() ) );
-            reporter.Report( msg, REPORTER::RPT_ERROR );
+            msg.Printf( wxT( "SVG Plotter exception: %s" ), e.What() );
+            reporter.Report( msg, SEVERITY_ERROR );
             break;
         }
     }

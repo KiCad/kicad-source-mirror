@@ -106,6 +106,7 @@ protected:
 
     wxString                m_lastPath[ LAST_PATH_SIZE ];
 
+    std::set<wxString>      m_drcExclusions;
 
     /**
      * Store the previous layer toolbar icon state information
@@ -401,9 +402,8 @@ public:
     /**
      * Function SaveProjectSettings
      * saves changes to the project settings to the project (.pro) file.
-     * @param aAskForSave = true to open a dialog before saving the settings
      */
-    void SaveProjectSettings( bool aAskForSave ) override;
+    void SaveProjectSettings() override;
 
     /**
      * Load the current project's file configuration settings which are pertinent
@@ -435,6 +435,16 @@ public:
      * @param aLastPath - The last file with full path successfully read.
      */
     void SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPath );
+
+    /**
+     * Scan existing markers and record data from any that are Excluded.
+     */
+    void RecordDRCExclusions();
+
+    /**
+     * Update markers to match recorded exclusions.
+     */
+    void ResolveDRCExclusions();
 
     void OnCloseWindow( wxCloseEvent& Event ) override;
     void Process_Special_Functions( wxCommandEvent& event );

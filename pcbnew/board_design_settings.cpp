@@ -34,7 +34,8 @@
 #include <kiface_i.h>
 #include <pcbnew.h>
 #include <board_design_settings.h>
-
+#include <drc/drc.h>
+#include <widgets/ui_common.h>
 
 #define CopperLayerCountKey         wxT( "CopperLayerCount" )
 #define BoardThicknessKey           wxT( "BoardThickness" )
@@ -54,6 +55,74 @@
 #define dPairWidthKey               wxT( "dPairWidth" )
 #define dPairGapKey                 wxT( "dPairGap" )
 #define dPairViaGapKey              wxT( "dPairViaGap" )
+
+
+class PARAM_CFG_SEVERITIES : public PARAM_CFG
+{
+protected:
+    BOARD* m_Pt_param;   ///< Pointer to the parameter value
+
+public:
+    PARAM_CFG_SEVERITIES( BOARD* ptparam, const wxChar* group = nullptr ) :
+            PARAM_CFG( wxEmptyString, PARAM_SEVERITIES, group )
+    {
+        m_Pt_param = ptparam;
+    }
+
+    void ReadParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        BOARD*                 board = m_Pt_param;
+        BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+        wxString               oldPath = aConfig->GetPath();
+
+        // Read legacy settings first so that modern settings will overwrite them
+        bool flag;
+
+        if( aConfig->Read( wxT( "RequireCourtyardDefinitions" ), &flag, false ) )
+        {
+            if( flag )
+                bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = SEVERITY_ERROR;
+            else
+                bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = SEVERITY_IGNORE;
+        }
+
+        if( aConfig->Read( wxT( "ProhibitOverlappingCourtyards" ), &flag, false ) )
+        {
+            if( flag )
+                bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = SEVERITY_ERROR;
+            else
+                bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = SEVERITY_IGNORE;
+        }
+
+        // TO DO: figure out what we're going to use as keys here so we can read/write these....
+
+        aConfig->SetPath( oldPath );
+    }
+
+    void SaveParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        BOARD*                 board = m_Pt_param;
+        BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+        wxString               oldPath = aConfig->GetPath();
+
+        // TO DO: figure out what we're going to use as keys here so we can read/write these....
+
+        // TO DO: for now just write out the legacy ones so we don't lose them
+        // TO DO: remove this once the new scheme is in place
+        aConfig->Write( wxT( "RequireCourtyardDefinitions" ),
+                        bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] != SEVERITY_IGNORE );
+        aConfig->Write( wxT( "ProhibitOverlappingCourtyards" ),
+                        bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] != SEVERITY_IGNORE );
+
+        aConfig->SetPath( oldPath );
+    }
+};
 
 
 //
@@ -501,6 +570,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_CopperEdgeClearance = Millimeter2iu( DEFAULT_COPPEREDGECLEARANCE );
     m_HoleToHoleMin       = Millimeter2iu( DEFAULT_HOLETOHOLEMIN );
 
+    for( int errorCode = DRCE_FIRST; errorCode <= DRCE_LAST; ++errorCode )
+        m_DRCSeverities[ errorCode ] = SEVERITY_ERROR;
+
+    m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = SEVERITY_IGNORE;
+
     m_MaxError            = ARC_HIGH_DEF;
     m_ZoneUseNoOutlineInFill = false;   // Use compatibility mode by default
 
@@ -517,10 +591,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_viaSizeIndex = 0;
     m_trackWidthIndex = 0;
     m_diffPairIndex = 0;
-
-    // Courtyard defaults
-    m_RequireCourtyards             = false;
-    m_ProhibitOverlappingCourtyards = true;
 
     // Default ref text on fp creation. If empty, use footprint name as default
     m_RefDefaultText = "REF**";
@@ -543,12 +613,6 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( BOARD* aBoard, std::vector<PARAM_CFG*
 
     aResult->push_back( new PARAM_CFG_BOOL( wxT( "AllowBlindVias" ),
           &m_BlindBuriedViaAllowed, false ) );
-
-    aResult->push_back( new PARAM_CFG_BOOL( wxT( "RequireCourtyardDefinitions" ),
-          &m_RequireCourtyards, false ) );
-
-    aResult->push_back( new PARAM_CFG_BOOL( wxT( "ProhibitOverlappingCourtyards" ),
-          &m_ProhibitOverlappingCourtyards, true ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinTrackWidth" ),
           &m_TrackMinWidth,
@@ -579,6 +643,8 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( BOARD* aBoard, std::vector<PARAM_CFG*
           &m_HoleToHoleMin,
           Millimeter2iu( DEFAULT_HOLETOHOLEMIN ), Millimeter2iu( 0.0 ), Millimeter2iu( 10.0 ),
           nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_SEVERITIES( aBoard ) );
 
     // Note: a clearance of -0.01 is a flag indicating we should use the legacy (pre-6.0) method
     // based on the edge cut thicknesses.
@@ -704,6 +770,18 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( BOARD* aBoard, std::vector<PARAM_CFG*
     aResult->push_back( new PARAM_CFG_DOUBLE( wxT( "SolderPasteRatio" ),
           &m_SolderPasteMarginRatio,
           DEFAULT_SOLDERPASTE_RATIO, -0.5, 1.0 ) );
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetSeverity( int aDRCErrorCode )
+{
+    return m_DRCSeverities[ aDRCErrorCode ];
+}
+
+
+bool BOARD_DESIGN_SETTINGS::Ignore( int aDRCErrorCode )
+{
+    return m_DRCSeverities[ aDRCErrorCode ] == SEVERITY_IGNORE;
 }
 
 
@@ -878,18 +956,6 @@ void BOARD_DESIGN_SETTINGS::SetMinHoleSeparation( int aDistance )
 void BOARD_DESIGN_SETTINGS::SetCopperEdgeClearance( int aDistance )
 {
     m_CopperEdgeClearance = aDistance;
-}
-
-
-void BOARD_DESIGN_SETTINGS::SetRequireCourtyardDefinitions( bool aRequire )
-{
-    m_RequireCourtyards = aRequire;
-}
-
-
-void BOARD_DESIGN_SETTINGS::SetProhibitOverlappingCourtyards( bool aProhibit )
-{
-    m_ProhibitOverlappingCourtyards = aProhibit;
 }
 
 

@@ -32,8 +32,6 @@
 
 
 class EDA_ITEM;
-class COLORS_DESIGN_SETTINGS;
-
 class GERBER_DRAW_ITEM;
 class GERBER_FILE_IMAGE;
 
