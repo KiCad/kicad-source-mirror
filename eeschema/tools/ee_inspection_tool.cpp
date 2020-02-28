@@ -226,8 +226,8 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
                 bgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
                 fgcolor.GetAsString( wxC2S_HTML_SYNTAX ) );
 
-        for( auto& msg : messages )
-            outmsg += msg;
+        for( auto& msgPart : messages )
+            outmsg += msgPart;
 
         outmsg += "</body></html>";
 

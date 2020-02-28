@@ -164,7 +164,7 @@ void DIALOG_DRC_CONTROL::setDRCParameters()
 
 void DIALOG_DRC_CONTROL::syncCheckboxes()
 {
-    m_showAll->SetValue( m_severities == DRC_SHOW_ERRORS | DRC_SHOW_WARNINGS | DRC_SHOW_INFOS );
+    m_showAll->SetValue( m_severities == ( DRC_SHOW_ERRORS | DRC_SHOW_WARNINGS | DRC_SHOW_INFOS ) );
     m_showErrors->SetValue( m_severities & DRC_SHOW_ERRORS );
     m_showWarnings->SetValue( m_severities & DRC_SHOW_WARNINGS );
     m_showInfos->SetValue( m_severities & DRC_SHOW_INFOS );
