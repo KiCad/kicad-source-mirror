@@ -79,4 +79,15 @@ ITEM* SOLID::Clone() const
     return solid;
 }
 
+void SOLID::SetPos( const VECTOR2I& aCenter )
+{
+    auto delta = aCenter - m_pos;
+
+    if( m_shape )
+        m_shape->Move( delta );
+
+    m_pos = aCenter;
+}
+
+
 }

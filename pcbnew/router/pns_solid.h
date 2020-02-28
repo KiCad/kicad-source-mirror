@@ -78,11 +78,8 @@ public:
         return m_pos;
     }
 
-    void SetPos( const VECTOR2I& aCenter )
-    {
-        m_pos = aCenter;
-    }
-
+    void SetPos( const VECTOR2I& aCenter );
+    
     int GetPadToDie() const
     {
         return m_padToDie;
