@@ -30,6 +30,7 @@
 #ifndef pcb_H_
 #define pcb_H_
 
+#include <map>
 #include <wx/wx.h>
 #include <xnode.h>
 
@@ -38,15 +39,13 @@
 
 namespace PCAD2KICAD {
 
-#define MAX_PCAD_LAYER_QTY 32
-
 class PCB : public PCB_MODULE, public PCB_CALLBACKS
 {
 public:
     PCB_COMPONENTS_ARRAY    m_pcbComponents;    // PCB Modules,Lines,Routes,Texts, .... and so on
     PCB_NETS_ARRAY          m_pcbNetlist;       // net objects collection
     wxString                m_defaultMeasurementUnit;
-    TLAYER                  m_layersMap[MAX_PCAD_LAYER_QTY];    // flexible layers mapping
+    std::map<int, TLAYER>   m_layersMap;        // flexible layers mapping
     int m_sizeX;
     int m_sizeY;
 

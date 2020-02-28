@@ -49,33 +49,46 @@ namespace PCAD2KICAD {
 
 PCB_LAYER_ID PCB::GetKiCadLayer( int aPCadLayer )
 {
-    wxASSERT( aPCadLayer >= 0 && aPCadLayer < MAX_PCAD_LAYER_QTY );
-    return m_layersMap[aPCadLayer].KiCadLayer;
+    auto it = m_layersMap.find( aPCadLayer );
+
+    if( it == m_layersMap.end() )
+        THROW_IO_ERROR( wxString::Format( _( "Unknown PCad layer %u" ), unsigned( aPCadLayer ) ) );
+
+    return it->second.KiCadLayer;
 }
 
 LAYER_TYPE_T PCB::GetLayerType( int aPCadLayer )
 {
-    wxASSERT( aPCadLayer >= 0 && aPCadLayer < MAX_PCAD_LAYER_QTY );
-    return m_layersMap[aPCadLayer].layerType;
+    auto it = m_layersMap.find( aPCadLayer );
+
+    if( it == m_layersMap.end() )
+        THROW_IO_ERROR( wxString::Format( _( "Unknown PCad layer %u" ), unsigned( aPCadLayer ) ) );
+
+    return it->second.layerType;
 }
 
 wxString PCB::GetLayerNetNameRef( int aPCadLayer )
 {
-    wxASSERT( aPCadLayer >= 0 && aPCadLayer < MAX_PCAD_LAYER_QTY );
-    return m_layersMap[aPCadLayer].netNameRef;
+    auto it = m_layersMap.find( aPCadLayer );
+
+    if( it == m_layersMap.end() )
+        THROW_IO_ERROR( wxString::Format( _( "Unknown PCad layer %u" ), unsigned( aPCadLayer ) ) );
+
+    return it->second.netNameRef;
 }
 
 PCB::PCB( BOARD* aBoard ) : PCB_MODULE( this, aBoard )
 {
-    int i;
-
     m_defaultMeasurementUnit = wxT( "mil" );
 
-    for( i = 0; i < MAX_PCAD_LAYER_QTY; i++ )
+    for( size_t i = 0; i < 8; ++i )
     {
-        m_layersMap[i].KiCadLayer = F_Mask; // default
-        m_layersMap[i].layerType  = LAYER_TYPE_NONSIGNAL; // default
-        m_layersMap[i].netNameRef = wxT( "" ); // default
+        TLAYER layer;
+        layer.KiCadLayer = F_Mask; // default
+        layer.layerType  = LAYER_TYPE_NONSIGNAL; // default
+        layer.netNameRef = wxT( "" ); // default
+
+        m_layersMap.insert( std::make_pair( i, layer ) );
     }
 
     m_sizeX = 0;
@@ -521,22 +534,25 @@ void PCB::MapLayer( XNODE* aNode )
     if( FindNode( aNode, wxT( "layerNum" ) ) )
         FindNode( aNode, wxT( "layerNum" ) )->GetNodeContent().ToLong( &num );
 
-    if( num < 0 || num >= MAX_PCAD_LAYER_QTY )
+    if( num < 0 )
         THROW_IO_ERROR( wxString::Format( wxT( "layerNum = %ld is out of range" ), num ) );
 
-    m_layersMap[(int) num].KiCadLayer = KiCadLayer;
+    TLAYER newlayer;
+    newlayer.KiCadLayer = KiCadLayer;
 
     if( FindNode( aNode, wxT( "layerType" ) ) )
     {
         layerType = FindNode( aNode, wxT( "layerType" ) )->GetNodeContent().Trim( false );
 
         if( layerType == wxT( "NonSignal" ) )
-            m_layersMap[(int) num].layerType = LAYER_TYPE_NONSIGNAL;
+            newlayer.layerType = LAYER_TYPE_NONSIGNAL;
         if( layerType == wxT( "Signal" ) )
-            m_layersMap[(int) num].layerType = LAYER_TYPE_SIGNAL;
+            newlayer.layerType = LAYER_TYPE_SIGNAL;
         if( layerType == wxT( "Plane" ) )
-            m_layersMap[(int) num].layerType = LAYER_TYPE_PLANE;
+            newlayer.layerType = LAYER_TYPE_PLANE;
     }
+
+    m_layersMap.insert( std::make_pair( num, newlayer ) );
 
     if( FindNode( aNode, wxT( "netNameRef" ) ) )
     {
@@ -733,6 +749,9 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxS
                         aNode->GetAttribute( wxT( "Name" ), &layerName );
                         layerName = layerName.MakeUpper();
                         m_layersStackup.Add( layerName );
+
+                        if( m_layersStackup.size() > 32 )
+                            THROW_IO_ERROR( _( "KiCad only supports 32 signal layers" ) );
                     }
                 }
             }
