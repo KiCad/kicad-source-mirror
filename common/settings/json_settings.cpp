@@ -381,7 +381,24 @@ bool JSON_SETTINGS::fromLegacyColor( wxConfigBase* aConfig, const std::string& a
 
 void JSON_SETTINGS::AddNestedSettings( NESTED_SETTINGS* aSettings )
 {
+    wxLogTrace( traceSettings, "AddNestedSettings %s", aSettings->GetFilename() );
     m_nested_settings.push_back( aSettings );
+}
+
+
+void JSON_SETTINGS::ReleaseNestedSettings( NESTED_SETTINGS* aSettings )
+{
+    auto it = std::find_if( m_nested_settings.begin(), m_nested_settings.end(),
+                            [&aSettings]( const JSON_SETTINGS* aPtr ) {
+                              return aPtr == aSettings;
+                            } );
+
+    if( it != m_nested_settings.end() )
+    {
+        wxLogTrace( traceSettings, "Flush and release %s", ( *it )->GetFilename() );
+        ( *it )->SaveToFile();
+        m_nested_settings.erase( it );
+    }
 }
 
 

@@ -34,7 +34,7 @@ public:
     NESTED_SETTINGS( const std::string& aName, int aSchemaVersion, JSON_SETTINGS* aParent,
                      const std::string& aPath, nlohmann::json aDefault = nlohmann::json( {} ) );
 
-    virtual ~NESTED_SETTINGS() {}
+    virtual ~NESTED_SETTINGS();
 
     /**
      * Loads the JSON document from the parent and then calls Load()

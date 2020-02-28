@@ -148,6 +148,12 @@ public:
     void AddNestedSettings( NESTED_SETTINGS* aSettings );
 
     /**
+     * Saves and frees a nested settings object, if it exists within this one
+     * @param aSettings is a pointer to a NESTED_SETTINGS that has already been added to this one
+     */
+    void ReleaseNestedSettings( NESTED_SETTINGS* aSettings );
+
+    /**
     * Builds a JSON pointer based on a given string
     * @param aPath is the path in the form "key1.key2.key3"
     * @return a JSON pointer that can be used to index into a JSON object

@@ -387,6 +387,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVe
 }
 
 
+PCBNEW_SETTINGS::~PCBNEW_SETTINGS() = default;
+
+
 bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 {
     bool ret = APP_SETTINGS_BASE::MigrateFromLegacy( aCfg );

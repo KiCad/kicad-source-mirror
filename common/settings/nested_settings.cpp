@@ -38,6 +38,12 @@ NESTED_SETTINGS::NESTED_SETTINGS( const std::string& aName, int aVersion, JSON_S
 }
 
 
+NESTED_SETTINGS::~NESTED_SETTINGS()
+{
+    m_parent->ReleaseNestedSettings( this );
+}
+
+
 void NESTED_SETTINGS::LoadFromFile( const std::string& aDirectory )
 {
     clear();

@@ -89,7 +89,6 @@ TOOL_BASE::~TOOL_BASE()
 }
 
 
-
 void TOOL_BASE::Reset( RESET_REASON aReason )
 {
     delete m_gridHelper;
@@ -109,9 +108,12 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
 
     m_router->UpdateSizes( m_savedSizes );
 
-    auto settings = new PNS::ROUTING_SETTINGS( frame()->GetSettings(), "tools.pns" );
-    frame()->GetSettings()->m_PnsSettings = settings;
-    m_router->LoadSettings( frame()->GetSettings()->m_PnsSettings );
+    PCBNEW_SETTINGS* settings = frame()->GetSettings();
+
+    if( !settings->m_PnsSettings )
+        settings->m_PnsSettings = std::make_unique<ROUTING_SETTINGS>( settings, "tools.pns" );
+
+    m_router->LoadSettings( settings->m_PnsSettings.get() );
 
     m_gridHelper = new GRID_HELPER( frame() );
 }

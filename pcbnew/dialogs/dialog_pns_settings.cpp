@@ -77,7 +77,6 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     m_settings.SetFreeAngleMode( m_freeAngleMode->GetValue() );
     m_settings.SetInlineDragEnabled( m_dragToolMode->GetSelection () ? true : false );
     m_settings.SetOptimizeDraggedTrack( m_optimizeDraggedTrack->GetValue() );
-    m_settings.SaveToFile();
 
     aEvent.Skip();      // ends returning wxID_OK (default behavior)
 }

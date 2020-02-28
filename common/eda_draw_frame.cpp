@@ -642,8 +642,6 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
     if( cfg )
         cfg->m_Graphics.canvas_type = static_cast<int>( aCanvasType );
 
-    Pgm().GetSettingsManager().Save( cfg );
-
     return false;
 }
 

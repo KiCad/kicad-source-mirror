@@ -191,7 +191,7 @@ public:
 
     PCBNEW_SETTINGS();
 
-    virtual ~PCBNEW_SETTINGS() {}
+    virtual ~PCBNEW_SETTINGS();
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
@@ -258,7 +258,7 @@ public:
 
     bool             m_MagneticGraphics;
 
-    PNS::ROUTING_SETTINGS* m_PnsSettings;
+    std::unique_ptr<PNS::ROUTING_SETTINGS> m_PnsSettings;
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     ACTION_PLUGIN_SETTINGS_LIST m_VisibleActionPlugins;
