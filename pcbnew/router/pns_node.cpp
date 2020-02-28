@@ -701,38 +701,32 @@ void NODE::removeArcIndex( ARC* aArc )
 }
 
 
-void NODE::removeViaIndex( VIA* aVia )
+void NODE::rebuildJoint( JOINT* aJoint, ITEM* aItem )
 {
-    // We have to split a single joint (associated with a via, binding together multiple layers)
-    // into multiple independent joints. As I'm a lazy bastard, I simply delete the via and all
-    // its links and re-insert them.
+    // We have to split a single joint (associated with a via or a pad, binding together multiple layers)
+    // into multiple independent joints. As I'm a lazy bastard, I simply delete the via/solid and all its links and re-insert them.
 
+    JOINT::LINKED_ITEMS links( aJoint->LinkList() );
     JOINT::HASH_TAG tag;
-
-    VECTOR2I p( aVia->Pos() );
-    LAYER_RANGE vLayers( aVia->Layers() );
-    int net = aVia->Net();
-
-    JOINT* jt = FindJoint( p, vLayers.Start(), net );
-    JOINT::LINKED_ITEMS links( jt->LinkList() );
+    int net = aItem->Net();
 
     tag.net = net;
-    tag.pos = p;
+    tag.pos = aJoint->Pos();
 
     bool split;
     do
     {
         split = false;
-        std::pair<JOINT_MAP::iterator, JOINT_MAP::iterator> range = m_joints.equal_range( tag );
+        auto range = m_joints.equal_range( tag );
 
         if( range.first == m_joints.end() )
             break;
 
         // find and remove all joints containing the via to be removed
 
-        for( JOINT_MAP::iterator f = range.first; f != range.second; ++f )
+        for( auto f = range.first; f != range.second; ++f )
         {
-            if( aVia->LayersOverlap( &f->second ) )
+            if( aItem->LayersOverlap( &f->second ) )
             {
                 m_joints.erase( f );
                 split = true;
@@ -742,16 +736,28 @@ void NODE::removeViaIndex( VIA* aVia )
     } while( split );
 
     // and re-link them, using the former via's link list
-    for(ITEM* item : links)
+    for(ITEM* link : links)
     {
-        if( item != aVia )
-            linkJoint( p, item->Layers(), net, item );
+        if( link != aItem )
+            linkJoint( tag.pos, link->Layers(), net, link );
     }
 }
 
+
+void NODE::removeViaIndex( VIA* aVia )
+{
+    JOINT* jt = FindJoint( aVia->Pos(), aVia->Layers().Start(), aVia->Net() );
+    assert( jt );
+    rebuildJoint( jt, aVia );
+}
+
+
 void NODE::removeSolidIndex( SOLID* aSolid )
 {
-    // fixme: this fucks up the joints, but it's only used for marking colliding obstacles for the moment, so we don't care.
+    // fixme: redundant code
+    JOINT* jt = FindJoint( aSolid->Pos(), aSolid->Layers().Start(), aSolid->Net() );
+    assert( jt );
+    rebuildJoint( jt, aSolid );
 }
 
 
@@ -1213,11 +1219,14 @@ void NODE::Dump( bool aLong )
 
 void NODE::GetUpdatedItems( ITEM_VECTOR& aRemoved, ITEM_VECTOR& aAdded )
 {
-    aRemoved.reserve( m_override.size() );
-    aAdded.reserve( m_index->Size() );
-
     if( isRoot() )
         return;
+
+    if( m_override.size() )
+        aRemoved.reserve( m_override.size() );
+    
+    if( m_index->Size() )
+        aAdded.reserve( m_index->Size() );
 
     for( ITEM* item : m_override )
         aRemoved.push_back( item );
