@@ -291,7 +291,6 @@ class JOINT_CACHE
 
 bool PRESERVE_VERTEX_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
 {
-    const auto& l = aOriginLine->CLine();
     bool cv = false;
 
     for( int i = aVertex1; i < aVertex2; i++ )
@@ -653,7 +652,6 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
 
         for( int i = 0; i < 2; i++ )
         {
-            bool postureMatch = true;
             SHAPE_LINE_CHAIN bypass = DIRECTION_45().BuildInitialTrace( s1.A, s2.B, i );
             cost[i] = INT_MAX;
 
@@ -1330,29 +1328,20 @@ bool tightenSegment( bool dir, NODE *aNode, LINE cur, SHAPE_LINE_CHAIN in, SHAPE
     if (!dirA.IsObtuse( dirCenter) || !dirCenter.IsObtuse(dirB))
         return false;
 
-    //printf("Tighten!");
-
-    VECTOR2I perp = (center.B - center.A).Perpendicular();
-
-    auto rA = SEG( center.A, center.A + perp).LineProject( a.A );
-    auto rB = SEG( center.B, center.B + perp).LineProject( b.B );
-
+    //VECTOR2I perp = (center.B - center.A).Perpendicular();
     VECTOR2I guideA, guideB ;
-
-    //SEG ga (center.A, rA);
-    //SEG gb (center.B, rB);
 
     SEG guide;
     int initial;
 
-    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+    //auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
     if ( dirA.Angle ( dirB ) != DIRECTION_45::ANG_RIGHT )
         return false;
 
     {
-        auto rC = *a.IntersectLines( b );
-        dbg->AddSegment ( SEG( center.A, rC ), 1 );
-        dbg->AddSegment ( SEG( center.B, rC ), 2 );
+        //auto rC = *a.IntersectLines( b );
+      //  dbg->AddSegment ( SEG( center.A, rC ), 1 );
+      //  dbg->AddSegment ( SEG( center.B, rC ), 2 );
         /*
         auto perp = dirCenter.Left().Left();
 
@@ -1478,7 +1467,7 @@ void Tighten( NODE *aNode, SHAPE_LINE_CHAIN& aOldLine, LINE& aNewLine, LINE& aOp
 
     aOptimized = LINE(aNewLine, current);
 
-    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+    //auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
     //dbg->AddLine ( current, 4, 100000 );
 }
 
