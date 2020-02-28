@@ -24,6 +24,9 @@
 #include <functional>
 using namespace std::placeholders;
 #include "class_board.h"
+#include "class_module.h"
+#include "class_pad.h"
+
 #include <pcb_edit_frame.h>
 #include <id.h>
 #include <macros.h>
@@ -49,6 +52,7 @@ using namespace std::placeholders;
 #include "router_tool.h"
 #include "pns_segment.h"
 #include "pns_router.h"
+#include "pns_itemset.h"
 
 using namespace KIGFX;
 
@@ -764,8 +768,6 @@ bool ROUTER_TOOL::finishInteractive()
 
 void ROUTER_TOOL::performRouting()
 {
-    bool finished = false;
-
     if( !prepareInteractive() )
         return;
 
@@ -799,7 +801,6 @@ void ROUTER_TOOL::performRouting()
 
             if( m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish ) )
             {
-                finished = true;
                 break;
             }
 
@@ -1162,9 +1163,9 @@ bool ROUTER_TOOL::CanInlineDrag()
 
     if( selection.Size() == 1 )
     {
-        const BOARD_CONNECTED_ITEM* item = static_cast<const BOARD_CONNECTED_ITEM*>( selection.Front() );
+        const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( selection.Front() );
 
-        if( item->Type() == PCB_TRACE_T || item->Type() == PCB_VIA_T )
+        if( item->Type() == PCB_TRACE_T || item->Type() == PCB_VIA_T || item->Type() == PCB_MODULE_T )
             return true;
     }
 
@@ -1182,18 +1183,36 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     if( selection.Size() != 1 )
         return 0;
 
-    const BOARD_CONNECTED_ITEM* item = static_cast<const BOARD_CONNECTED_ITEM*>( selection.Front() );
+    const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( selection.Front() );
 
-    if( item->Type() != PCB_TRACE_T && item->Type() != PCB_VIA_T )
+    if( item->Type() != PCB_TRACE_T && item->Type() != PCB_VIA_T && item->Type() != PCB_MODULE_T )
         return 0;
 
     Activate();
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_router->SyncWorld();
-    m_startItem = m_router->GetWorld()->FindItemByParent( item );
+    m_startItem = nullptr;
 
-    if( m_startItem && m_startItem->IsLocked() )
+    PNS::ITEM* startItem = nullptr;
+    PNS::ITEM_SET itemsToDrag;
+
+    if( item->Type() == PCB_MODULE_T )
+    {
+        const auto mod = static_cast<const MODULE*>(item);
+        for ( const auto p : mod->Pads() )
+        {
+            auto solid = m_router->GetWorld()->FindItemByParent( p );
+            itemsToDrag.Add( solid );
+        }
+    }
+    else
+    {
+        startItem = m_router->GetWorld()->FindItemByParent( static_cast<const BOARD_CONNECTED_ITEM*>( item ) );
+        itemsToDrag.Add( startItem );
+    }
+
+    if( startItem && startItem->IsLocked() )
     {
         KIDIALOG dlg( frame(), _( "The selected item is locked." ), _( "Confirmation" ),
                       wxOK | wxCANCEL | wxICON_WARNING );
@@ -1205,10 +1224,14 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     }
 
     VECTOR2I p0 = controls()->GetCursorPosition( false );
-    auto p = snapToItem( true, m_startItem, p0 );
+    VECTOR2I p = p0;
+
+    if( startItem )
+        p = snapToItem( true, startItem, p0 );
+
     int dragMode = aEvent.Parameter<int64_t> ();
 
-    bool dragStarted = m_router->StartDragging( p, m_startItem, dragMode );
+    bool dragStarted = m_router->StartDragging( p, itemsToDrag, dragMode );
 
     if( !dragStarted )
         return 0;
