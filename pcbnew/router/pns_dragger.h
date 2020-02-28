@@ -28,7 +28,7 @@
 #include "pns_node.h"
 #include "pns_via.h"
 #include "pns_line.h"
-#include "pns_algo_base.h"
+#include "pns_drag_algo.h"
 #include "pns_itemset.h"
 #include "pns_layerset.h"
 
@@ -44,18 +44,11 @@ class OPTIMIZER;
  *
  * Via, segment and corner dragging algorithm.
  */
-class DRAGGER : public ALGO_BASE
+class DRAGGER : public DRAG_ALGO
 {
 public:
      DRAGGER( ROUTER* aRouter );
     ~DRAGGER();
-
-    /**
-     * Function SetWorld()
-     *
-     * Sets the board to work on.
-     */
-    void SetWorld( NODE* aWorld );
 
     /**
      * Function Start()
@@ -63,7 +56,7 @@ public:
      * Starts routing a single track at point aP, taking item aStartItem as anchor
      * (unless NULL). Returns true if a dragging operation has started.
      */
-    bool Start( const VECTOR2I& aP, ITEM* aStartItem );
+    virtual bool Start( const VECTOR2I& aP, ITEM_SET& aPrimitives ) override;
 
     /**
      * Function Drag()
@@ -71,7 +64,7 @@ public:
      * Drags the current segment/corner/via to the point aP.
      * @return true, if dragging finished with success.
      */
-    bool Drag( const VECTOR2I& aP );
+    bool Drag( const VECTOR2I& aP ) override;
 
     /**
      * Function FixRoute()
@@ -80,7 +73,7 @@ public:
      * and eventually commits it to the world.
      * @return true, if dragging finished with success.
      */
-    bool FixRoute();
+    bool FixRoute() override;
 
     /**
      * Function CurrentNode()
@@ -88,16 +81,16 @@ public:
      * Returns the most recent world state, including all
      * items changed due to dragging operation.
      */
-    NODE* CurrentNode() const;
+    NODE* CurrentNode() const override;
 
     /**
      * Function Traces()
      *
      * Returns the set of dragged items.
      */
-    const ITEM_SET Traces();
+    const ITEM_SET Traces() override;
 
-    void SetMode( int aDragMode );
+    void SetMode( int aDragMode ) override;
 
 private:
 
@@ -116,7 +109,6 @@ private:
     VIA_HANDLE m_initialVia;
     VIA_HANDLE m_draggedVia;
 
-    NODE*    m_world;
     NODE*    m_lastNode;
     int      m_mode;
     LINE     m_draggedLine;
