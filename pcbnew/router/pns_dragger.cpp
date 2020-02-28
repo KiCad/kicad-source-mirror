@@ -362,7 +362,7 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
         LINE origLine( m_draggedLine );
         
         if( m_mode == DM_SEGMENT )
-            dragged.DragSegment( aP, m_draggedSegmentIndex, thresh );
+            dragged.DragSegment( aP, m_draggedSegmentIndex, false );
         else
             dragged.DragCorner( aP, m_draggedSegmentIndex, thresh );
 
