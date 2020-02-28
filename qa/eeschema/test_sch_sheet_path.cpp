@@ -31,7 +31,7 @@
 // Code under test
 #include <sch_sheet_path.h>
 
-#include "timestamp_test_utils.h"
+#include "uuid_test_utils.h"
 
 #include <sch_sheet.h>
 

@@ -36,7 +36,7 @@ add_executable( qa_eeschema
     mocks_eeschema.cpp
 
     eeschema_test_utils.cpp
-    timestamp_test_utils.cpp
+    uuid_test_utils.cpp
 
     # The main test entry points
     test_module.cpp

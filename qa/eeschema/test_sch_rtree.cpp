@@ -34,7 +34,7 @@
 // Code under test
 #include <sch_rtree.h>
 
-#include "timestamp_test_utils.h"
+#include "uuid_test_utils.h"
 
 #include <unit_test_utils/wx_assert.h>
 
