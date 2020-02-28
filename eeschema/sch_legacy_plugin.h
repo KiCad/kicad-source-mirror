@@ -77,6 +77,11 @@ public:
         return wxT( "sch" );
     }
 
+    const wxString GetLibraryFileExtension() const override
+    {
+        return wxT( "lib" );
+    }
+
     /**
      * The property used internally by the plugin to enable cache buffering which prevents
      * the library file from being written every time the cache is changed.  This is useful

@@ -47,7 +47,6 @@ class LIB_PART;
 class PART_LIB;
 class BUS_ALIAS;
 
-
 /**
  * A #SCH_PLUGIN derivation for loading schematic files using the new s-expression
  * file format.
@@ -63,12 +62,17 @@ public:
 
     const wxString GetName() const override
     {
-        return wxT( "Eeschema-Legacy" );
+        return wxT( "Eeschema s-expression" );
     }
 
     const wxString GetFileExtension() const override
     {
-        return wxT( "sch" );
+        return wxT( "kicad_sch" );
+    }
+
+    const wxString GetLibraryFileExtension() const override
+    {
+        return wxT( "kicad_sym" );
     }
 
     /**

@@ -34,6 +34,7 @@
 #include <lib_table_grid.h>
 #include <wildcards_and_files_ext.h>
 #include <env_paths.h>
+#include <eeschema_id.h>
 #include <lib_edit_frame.h>
 #include <lib_view_frame.h>
 #include <sch_edit_frame.h>
@@ -42,6 +43,64 @@
 
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
+
+
+// clang-format off
+
+/**
+ * Container that describes file type info for the add a library options
+ */
+struct supportedFileType
+{
+    wxString m_Description;            ///< Description shown in the file picker dialog
+    wxString m_FileFilter;             ///< Filter used for file pickers if m_IsFile is true
+    wxString m_FolderSearchExtension;  ///< In case of folders it stands for extensions of files stored inside
+    bool     m_IsFile;                 ///< Whether the library is a folder or a file
+    SCH_IO_MGR::SCH_FILE_T m_Plugin;
+};
+
+
+/**
+ * Event IDs for the menu items in the split button menu for add a library
+ */
+enum {
+    ID_PANEL_SYM_LIB_KICAD = ID_END_EESCHEMA_ID_LIST,
+    ID_PANEL_SYM_LIB_LEGACY,
+};
+
+
+/**
+ * Map with event id as the key to supported file types that will be listed for the add
+ * a library option.
+ */
+static const std::map<int, supportedFileType>& fileTypes()
+{
+    static const std::map<int, supportedFileType> fileTypes =
+    {
+        { ID_PANEL_SYM_LIB_LEGACY,
+            {
+                "KiCad legacy symbol library file (*.lib)",
+                SchematicSymbolFileWildcard(),
+                "",
+                true,
+                SCH_IO_MGR::SCH_LEGACY
+            }
+        },
+        {
+            ID_PANEL_SYM_LIB_KICAD,
+            {
+                "KiCad s-expression symbol library file (*.kicad_sym)",
+                KiCadSymbolLibFileWildcard(),
+                "",
+                true,
+                SCH_IO_MGR::SCH_KICAD
+            }
+        }
+    };
+
+    return fileTypes;
+}
+
 
 /**
  * Build a wxGridTableBase by wrapping an #SYMBOL_LIB_TABLE object.
@@ -184,8 +243,8 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     wxArrayString pluginChoices;
 
-//    pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD ) );
     pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
+    pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD ) );
 
     populateEnvironReadOnlyTable();
 
@@ -351,8 +410,12 @@ void PANEL_SYM_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
 
 void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
+    wxString wildcards = SchematicLibraryFileWildcard();
+
+    wildcards += "|" + KiCadSymbolLibFileWildcard();
+
     wxFileDialog dlg( this, _( "Select Library" ), m_lastBrowseDir,
-                      wxEmptyString, SchematicLibraryFileWildcard(),
+                      wxEmptyString, wildcards,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
     auto result = dlg.ShowModal();
@@ -401,17 +464,15 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             // SCH_IO_MGR needs to provide file extension information for libraries too
 
             // auto detect the plugin type
-            /*for( auto pluginType : SCH_IO_MGR::SCH_FILE_T_vector )
+            for( auto pluginType : SCH_IO_MGR::SCH_FILE_T_vector )
             {
-                if( SCH_IO_MGR::GetFileExtension( pluginType ).Lower() == fn.GetExt().Lower() )
+                if( SCH_IO_MGR::GetLibraryFileExtension( pluginType ).Lower() == fn.GetExt().Lower() )
                 {
                     m_cur_grid->SetCellValue( last_row, COL_TYPE,
                             SCH_IO_MGR::ShowType( pluginType ) );
                     break;
                 }
-            }*/
-            m_cur_grid->SetCellValue( last_row, COL_TYPE,
-                    SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
+            }
 
             // try to use path normalized to an environmental variable or project path
             wxString path = NormalizePath( filePath, &envVars, m_projectBasePath );
@@ -441,13 +502,10 @@ void PANEL_SYM_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
     if( m_cur_grid->AppendRows( 1 ) )
     {
         int row = m_cur_grid->GetNumberRows() - 1;
-        // Gives a default type (currently, only one type exists):
-        m_cur_grid->SetCellValue( row, COL_TYPE, SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
 
         // wx documentation is wrong, SetGridCursor does not make visible.
         m_cur_grid->MakeCellVisible( row, 0 );
         m_cur_grid->SetGridCursor( row, 1 );
-
         m_cur_grid->EnableCellEditControl( true );
         m_cur_grid->ShowCellEditControl();
     }

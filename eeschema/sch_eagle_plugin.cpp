@@ -375,6 +375,12 @@ const wxString SCH_EAGLE_PLUGIN::GetFileExtension() const
 }
 
 
+const wxString SCH_EAGLE_PLUGIN::GetLibraryFileExtension() const
+{
+    return "lbr";
+}
+
+
 int SCH_EAGLE_PLUGIN::GetModifyHash() const
 {
     return 0;

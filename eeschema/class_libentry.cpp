@@ -1011,7 +1011,7 @@ SEARCH_RESULT LIB_PART::Visit( INSPECTOR aInspector, void* aTestData, const KICA
 }
 
 
-void LIB_PART::SetUnitCount( int aCount )
+void LIB_PART::SetUnitCount( int aCount, bool aDuplicateDrawItems )
 {
     if( m_unitCount == aCount )
         return;
@@ -1028,7 +1028,7 @@ void LIB_PART::SetUnitCount( int aCount )
                 ++i;
         }
     }
-    else
+    else if( aDuplicateDrawItems )
     {
         int prevCount = m_unitCount;
 
@@ -1067,7 +1067,7 @@ int LIB_PART::GetUnitCount() const
 }
 
 
-void LIB_PART::SetConversion( bool aSetConvert )
+void LIB_PART::SetConversion( bool aSetConvert, bool aDuplicatePins )
 {
     if( aSetConvert == HasConversion() )
         return;
@@ -1075,25 +1075,28 @@ void LIB_PART::SetConversion( bool aSetConvert )
     // Duplicate items to create the converted shape
     if( aSetConvert )
     {
-        std::vector< LIB_ITEM* > tmp;     // Temporarily store the duplicated pins here.
-
-        for( LIB_ITEM& item : m_drawings )
+        if( aDuplicatePins )
         {
-            // Only pins are duplicated.
-            if( item.Type() != LIB_PIN_T )
-                continue;
+            std::vector< LIB_ITEM* > tmp;     // Temporarily store the duplicated pins here.
 
-            if( item.m_Convert == 1 )
+            for( LIB_ITEM& item : m_drawings )
             {
-                LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
-                newItem->m_Convert = 2;
-                tmp.push_back( newItem );
-            }
-        }
+                // Only pins are duplicated.
+                if( item.Type() != LIB_PIN_T )
+                    continue;
 
-        // Transfer the new pins to the LIB_PART.
-        for( unsigned i = 0;  i < tmp.size();  i++ )
-            m_drawings.push_back( tmp[i] );
+                if( item.m_Convert == 1 )
+                {
+                    LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
+                    newItem->m_Convert = 2;
+                    tmp.push_back( newItem );
+                }
+            }
+
+            // Transfer the new pins to the LIB_PART.
+            for( unsigned i = 0;  i < tmp.size();  i++ )
+                m_drawings.push_back( tmp[i] );
+        }
     }
     else
     {

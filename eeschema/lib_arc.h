@@ -27,7 +27,7 @@
 #define LIB_ARC_H
 
 #include <lib_item.h>
-
+#include <math/vector2d.h>
 
 class TRANSFORM;
 
@@ -115,6 +115,8 @@ public:
 
     wxPoint GetEnd() const { return m_ArcEnd; }
     void SetEnd( const wxPoint& aPoint ) { m_ArcEnd = aPoint; }
+
+    VECTOR2I CalcMidPoint() const;
 
     /**
      * Calculate the radius and angle of an arc using the start, end, and center points.

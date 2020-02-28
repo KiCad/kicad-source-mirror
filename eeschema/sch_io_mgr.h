@@ -96,13 +96,22 @@ public:
     static SCH_FILE_T EnumFromStr( const wxString& aFileType );
 
     /**
-     * Return the file extension for \a aFileType.
+     * Return the schematic file extension for \a aFileType.
      *
      * @param aFileType is the #SCH_FILE_T type.
      *
      * @return the file extension for \a aFileType or an empty string if \a aFileType is invalid.
      */
     static const wxString GetFileExtension( SCH_FILE_T aFileType );
+
+    /**
+     * Return the symbol library file extension (if any) for \a aFileType.
+     *
+     * @param aFileType is the #SCH_FILE_T type.
+     *
+     * @return the file extension for \a aFileType or an empty string if \a aFileType is invalid.
+     */
+    static const wxString GetLibraryFileExtension( SCH_FILE_T aFileType );
 
     /**
      * Return a plugin type given a footprint library's libPath.
@@ -199,6 +208,11 @@ public:
      * Returns the file extension for the #SCH_PLUGIN.
      */
     virtual const wxString GetFileExtension() const = 0;
+
+    /**
+     * Return the library file extension for the #SCH_PLUGIN object.
+     */
+    virtual const wxString GetLibraryFileExtension() const = 0;
 
     /**
      * Return the modification hash from the library cache.

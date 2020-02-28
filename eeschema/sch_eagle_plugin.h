@@ -87,6 +87,8 @@ public:
 
     const wxString GetFileExtension() const override;
 
+    const wxString GetLibraryFileExtension() const override;
+
     int GetModifyHash() const override;
 
     SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway, SCH_SHEET* aAppendToMe = NULL,

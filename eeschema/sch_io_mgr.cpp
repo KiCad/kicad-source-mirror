@@ -91,7 +91,7 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
         return wxString( wxT( "Legacy" ) );
 
     case SCH_KICAD:
-        return wxString( "KiCad" );
+        return wxString( wxT( "KiCad" ) );
 
     case SCH_EAGLE:
 	   return wxString( wxT( "EAGLE" ) );
@@ -107,7 +107,7 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
 
     if( aType == wxT( "Legacy" ) )
         return SCH_LEGACY;
-    else if( aType == "KiCad" )
+    else if( aType == wxT( "KiCad" ) )
         return SCH_KICAD;
     else if( aType == wxT( "EAGLE" ) )
         return SCH_EAGLE;
@@ -133,12 +133,27 @@ const wxString SCH_IO_MGR::GetFileExtension( SCH_FILE_T aFileType )
 }
 
 
+const wxString SCH_IO_MGR::GetLibraryFileExtension( SCH_FILE_T aFileType )
+{
+    wxString ext = wxEmptyString;
+    SCH_PLUGIN* plugin = FindPlugin( aFileType );
+
+    if( plugin != NULL )
+    {
+        ext = plugin->GetLibraryFileExtension();
+        ReleasePlugin( plugin );
+    }
+
+    return ext;
+}
+
+
 SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath )
 {
     SCH_FILE_T  ret = SCH_LEGACY;        // default guess, unless detected otherwise.
     wxFileName  fn( aLibPath );
 
-    if( fn.GetExt() == SchematicFileExtension )
+    if( fn.GetExt() == SchematicLibraryFileExtension )
     {
         ret = SCH_LEGACY;
     }

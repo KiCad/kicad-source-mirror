@@ -199,6 +199,7 @@ set( EESCHEMA_SRCS
     sch_plugin.cpp
     sch_preview_panel.cpp
     sch_screen.cpp
+    sch_sexpr_parser.cpp
     sch_sexpr_plugin.cpp
     sch_sheet.cpp
     sch_sheet_path.cpp

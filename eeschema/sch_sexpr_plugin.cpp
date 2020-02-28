@@ -65,16 +65,14 @@
 #include <pin_shape.h>
 #include <pin_type.h>
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
+#include <sch_file_versions.h>
+#include <sch_sexpr_parser.h>
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
 #include <symbol_lib_lexer.h>
 #include <confirm.h>
-#include <symbol_lib_lexer.h>
 #include <tool/selection.h>
 
 using namespace TSYMBOL_LIB_T;
-
-
-#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200126  // Initial version.
 
 
 #define SCH_PARSE_ERROR( text, reader, pos )                         \
@@ -1022,12 +1020,9 @@ void SCH_SEXPR_PLUGIN_CACHE::Load()
 
     FILE_LINE_READER reader( m_libFileName.GetFullPath() );
 
-    if( !reader.ReadLine() )
-        THROW_IO_ERROR( _( "unexpected end of file" ) );
+    SCH_SEXPR_PARSER parser( &reader );
 
-    const char* line = reader.Line();
-
-
+    parser.ParseLib( m_symbols );
     ++m_modHash;
 
     // Remember the file modification time of library file when the
@@ -1232,7 +1227,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
         if( aSymbol->GetPinNameOffset() != Iu2Mils( DEFAULT_PIN_NAME_OFFSET )
           || !aSymbol->ShowPinNames() )
         {
-            aFormatter.Print( 0, " (pin_name" );
+            aFormatter.Print( 0, " (pin_names" );
 
             if( aSymbol->GetPinNameOffset() != Iu2Mils( DEFAULT_PIN_NAME_OFFSET ) )
                 aFormatter.Print( 0, " (offset %s)",
@@ -1256,6 +1251,18 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 
         for( auto field : fields )
             saveField( &field, aFormatter, aNestLevel + 1 );
+
+        int lastFieldId = fields.back().GetId() + 1;
+
+        // @todo At some point in the future the lock status (all units interchangeable) should
+        // be set deterministically.  For now a custom lock properter is used to preserve the
+        // locked flag state.
+        if( aSymbol->UnitsLocked() )
+        {
+            LIB_FIELD locked( lastFieldId, "ki_locked" );
+            saveField( &locked, aFormatter, aNestLevel + 1 );
+            lastFieldId += 1;
+        }
 
         saveDcmInfoAsFields( aSymbol, aFormatter, aNestLevel, fields.back().GetId() + 1 );
 
@@ -1397,35 +1404,59 @@ void SCH_SEXPR_PLUGIN_CACHE::saveArc( LIB_ARC* aArc,
 {
     wxCHECK_RET( aArc && aArc->Type() == LIB_ARC_T, "Invalid LIB_ARC object." );
 
+    int x1 = aArc->GetFirstRadiusAngle();
+
+    if( x1 > 1800 )
+        x1 -= 3600;
+
+    int x2 = aArc->GetSecondRadiusAngle();
+
+    if( x2 > 1800 )
+        x2 -= 3600;
+
     aFormatter.Print( aNestLevel,
-                      "(arc (start %s %s) (end %s %s) (radius (at %s %s) (length %s))",
+                      "(arc (start %s %s) (end %s %s) (radius (at %s %s) (length %s) "
+                      "(angles %g %g))",
                       FormatInternalUnits( aArc->GetStart().x ).c_str(),
                       FormatInternalUnits( aArc->GetStart().y ).c_str(),
                       FormatInternalUnits( aArc->GetEnd().x ).c_str(),
                       FormatInternalUnits( aArc->GetEnd().y ).c_str(),
                       FormatInternalUnits( aArc->GetPosition().x ).c_str(),
                       FormatInternalUnits( aArc->GetPosition().y ).c_str(),
-                      FormatInternalUnits( aArc->GetRadius() ).c_str() );
+                      FormatInternalUnits( aArc->GetRadius() ).c_str(),
+                      static_cast<double>( x1 ) / 10.0,
+                      static_cast<double>( x2 ) / 10.0 );
 
     bool needsSpace = false;
+    bool onNewLine = false;
 
     if( Iu2Mils( aArc->GetWidth() ) != DEFAULTDRAWLINETHICKNESS
       && aArc->GetWidth() != 0 )
     {
-        aFormatter.Print( 0, "(stroke (width %s))",
+        aFormatter.Print( 0, "\n" );
+        aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
                           FormatInternalUnits( aArc->GetWidth() ).c_str() );
         needsSpace = true;
+        onNewLine = true;
     }
 
     if( aArc->GetFillMode() != NO_FILL )
     {
-        if( needsSpace )
+        if( !onNewLine || needsSpace )
             aFormatter.Print( 0, " " );
 
         FormatFill( static_cast< LIB_ITEM* >( aArc ), aFormatter, 0 );
     }
 
-    aFormatter.Print( 0, ")\n" );
+    if( onNewLine )
+    {
+        aFormatter.Print( 0, "\n" );
+        aFormatter.Print( aNestLevel, ")\n" );
+    }
+    else
+    {
+        aFormatter.Print( 0, ")\n" );
+    }
 }
 
 
@@ -1550,26 +1581,15 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
                       FormatInternalUnits( aField->GetPosition().x ).c_str(),
                       FormatInternalUnits( aField->GetPosition().y ).c_str() );
 
-    if( aField->IsVisible() && aField->IsDefaultFormatting() )
+    if( aField->IsDefaultFormatting() )
     {
-        aFormatter.Print( 0, ")\n" );  // Close property token if visible and no font effects.
+        aFormatter.Print( 0, ")\n" );           // Close property token if no font effects.
     }
     else
     {
-        if( !aField->IsVisible() )
-        {
-            if( aField->IsDefaultFormatting() )
-                aFormatter.Print( 0, " hide)\n" );  // Close property token if no font effects.
-            else
-                aFormatter.Print( 0, " hide" );
-        }
-
-        if( !aField->IsDefaultFormatting() )
-        {
-            aFormatter.Print( 0, "\n" );
-            aField->Format( &aFormatter, aNestLevel + 1, CTL_OMIT_HIDE );
-            aFormatter.Print( aNestLevel, ")\n" );  // Close property token.
-        }
+        aFormatter.Print( 0, "\n" );
+        aField->Format( &aFormatter, aNestLevel, 0 );
+        aFormatter.Print( aNestLevel, ")\n" );  // Close property token.
     }
 }
 
@@ -1608,7 +1628,12 @@ void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
         aFormatter.Print( 0, " (effects (font (size %s %s)))",
                           FormatInternalUnits( aPin->GetNumberTextSize() ).c_str(),
                           FormatInternalUnits( aPin->GetNumberTextSize() ).c_str() );
-    aFormatter.Print( 0, "))\n" );
+    aFormatter.Print( 0, ")" );
+
+    if( !aPin->IsVisible() )
+        aFormatter.Print( 0, " hide" );
+
+    aFormatter.Print( 0, ")\n" );
 }
 
 
@@ -1732,7 +1757,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveText( LIB_TEXT* aText,
                       FormatInternalUnits( aText->GetPosition().x ).c_str(),
                       FormatInternalUnits( aText->GetPosition().y ).c_str(),
                       aText->GetTextAngle() );
-    aText->Format( &aFormatter, aNestLevel + 1, 0 );
+    aText->Format( &aFormatter, aNestLevel, 0 );
     aFormatter.Print( aNestLevel, ")\n" );
 }
 

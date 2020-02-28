@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@
  * @return true if the point P is on the segment S.
  * faster than TestSegmentHit() because P should be exactly on S
  * therefore works fine only for H, V and 45 deg segm.
- * suitable for busses and wires in eeschema, otherwise use TestSegmentHit()
+ * suitable for buses and wires in Eeschema, otherwise use TestSegmentHit()
  */
 bool IsPointOnSegment( const wxPoint& aSegStart, const wxPoint& aSegEnd,
                        const wxPoint& aTestPoint );
@@ -106,6 +106,8 @@ void RotatePoint( double *pX, double *pY, double cx, double cy, double angle );
  * @return The center of the circle
  */
 const VECTOR2I GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
+const VECTOR2D GetArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd );
+const wxPoint GetArcCenter( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd );
 
 /* Return the arc tangent of 0.1 degrees coord vector dx, dy
  * between -1800 and 1800
@@ -214,7 +216,7 @@ inline double RAD2DEG( double rad ) { return rad * 180.0 / M_PI; }
 inline double DECIDEG2RAD( double deg ) { return deg * M_PI / 1800.0; }
 inline double RAD2DECIDEG( double rad ) { return rad * 1800.0 / M_PI; }
 
-/* These are templated over T (and not simply double) because eeschema
+/* These are templated over T (and not simply double) because Eeschema
    is still using int for angles in some place */
 
 /// Normalize angle to be  >=-360.0 and <= 360.0
@@ -240,7 +242,7 @@ template <class T> inline T NormalizeAngle360Min( T Angle )
 }
 
 /// Normalize angle to be in the 0.0 .. 360.0 range:
-/// angle is in 1/10 degees
+/// angle is in 1/10 degrees
 template <class T> inline T NormalizeAnglePos( T Angle )
 {
     while( Angle < 0 )
@@ -249,6 +251,7 @@ template <class T> inline T NormalizeAnglePos( T Angle )
         Angle -= 3600;
     return Angle;
 }
+
 template <class T> inline void NORMALIZE_ANGLE_POS( T& Angle )
 {
     Angle = NormalizeAnglePos( Angle );
@@ -313,6 +316,7 @@ template <class T> inline T NegateAndNormalizeAnglePos( T Angle )
         Angle -= 3600;
     return Angle;
 }
+
 template <class T> inline void NEGATE_AND_NORMALIZE_ANGLE_POS( T& Angle )
 {
     Angle = NegateAndNormalizeAnglePos( Angle );
@@ -328,6 +332,7 @@ template <class T> inline T NormalizeAngle90( T Angle )
         Angle -= 1800;
     return Angle;
 }
+
 template <class T> inline void NORMALIZE_ANGLE_90( T& Angle )
 {
     Angle = NormalizeAngle90( Angle );
@@ -343,11 +348,51 @@ template <class T> inline T NormalizeAngle180( T Angle )
         Angle -= 3600;
     return Angle;
 }
+
 template <class T> inline void NORMALIZE_ANGLE_180( T& Angle )
 {
     Angle = NormalizeAngle180( Angle );
 }
 
+/**
+ * Test if an arc from \a aStartAngle to \a aEndAngle crosses the positive X axis (0 degrees).
+ *
+ * Testing is performed in the quadrant 1 to quadrant 4 direction (counter-clockwise).
+ *
+ * @warning Do not use this function, it has not been tested.
+ *
+ * @param aStartAngle The arc start angle in degrees.
+ * @param aEndAngle The arc end angle in degrees.
+ */
+inline bool InterceptsPositiveX( double aStartAngle, double aEndAngle )
+{
+    double end = aEndAngle;
+
+    if( aStartAngle < aEndAngle )
+        end += 360.0;
+
+    return aStartAngle < 360.0 && aEndAngle > 360.0;
+}
+
+/**
+ * Test if an arc from \a aStartAngle to \a aEndAngle crosses the negative X axis (180 degrees).
+ *
+ * Testing is performed in the quadrant 1 to quadrant 4 direction (counter-clockwise).
+ *
+ * @warning Do not use this function, it has not been tested.
+ *
+ * @param aStartAngle The arc start angle in degrees.
+ * @param aEndAngle The arc end angle in degrees.
+ */
+inline bool InterceptsNegativeX( double aStartAngle, double aEndAngle )
+{
+    double end = aEndAngle;
+
+    if( aStartAngle < aEndAngle )
+        end += 360.0;
+
+    return aStartAngle < 180.0 && aEndAngle > 180.0;
+}
 
 /**
  * Circle generation utility: computes r * sin(a)

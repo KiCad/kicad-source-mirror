@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,13 +57,13 @@ bool IsPointOnSegment( const wxPoint& aSegStart, const wxPoint& aSegEnd,
 }
 
 
-// Returns true if the segment 1 intersectd the segment 2.
+// Returns true if the segment 1 intersected the segment 2.
 bool SegmentIntersectsSegment( const wxPoint &a_p1_l1, const wxPoint &a_p2_l1,
                                const wxPoint &a_p1_l2, const wxPoint &a_p2_l2,
                                wxPoint* aIntersectionPoint )
 {
 
-    //We are forced to use 64bit ints because the internal units can oveflow 32bit ints when
+    //We are forced to use 64bit ints because the internal units can overflow 32bit ints when
     // multiplied with each other, the alternative would be to scale the units down (i.e. divide
     // by a fixed number).
     long long dX_a, dY_a, dX_b, dY_b, dX_ab, dY_ab;
@@ -338,9 +338,9 @@ void RotatePoint( double* pX, double* pY, double angle )
 }
 
 
-const VECTOR2I GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
+const VECTOR2D GetArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd )
 {
-    VECTOR2I center;
+    VECTOR2D center;
     double yDelta_21 = aMid.y - aStart.y;
     double xDelta_21 = aMid.x - aStart.x;
     double yDelta_32 = aEnd.y - aMid.y;
@@ -352,8 +352,8 @@ const VECTOR2I GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const
     if( ( ( xDelta_21 == 0.0 ) && ( yDelta_32 == 0.0 ) ) ||
         ( ( yDelta_21 == 0.0 ) && ( xDelta_32 == 0.0 ) ) )
     {
-        center.x = KiROUND( ( aStart.x + aEnd.x ) / 2.0 );
-        center.y = KiROUND( ( aStart.y + aEnd.y ) / 2.0 );
+        center.x = ( aStart.x + aEnd.x ) / 2.0;
+        center.y = ( aStart.y + aEnd.y ) / 2.0 ;
         return center;
     }
 
@@ -383,20 +383,54 @@ const VECTOR2I GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const
         bSlope = -std::numeric_limits<double>::epsilon();
 
 
-    double result = ( aSlope * bSlope * ( aStart.y - aEnd.y ) +
-                      bSlope * ( aStart.x + aMid.x ) -
-                      aSlope * ( aMid.x + aEnd.x ) ) / ( 2 * ( bSlope - aSlope ) );
+    center.x = ( aSlope * bSlope * ( aStart.y - aEnd.y ) +
+                 bSlope * ( aStart.x + aMid.x ) -
+                 aSlope * ( aMid.x + aEnd.x ) ) / ( 2 * ( bSlope - aSlope ) );
 
-    center.x = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
-                                       result,
-                                       double( std::numeric_limits<int>::max() / 2.0 ) ) );
-
-    result = ( ( ( aStart.x + aMid.x ) / 2.0 - center.x ) / aSlope +
+    center.y = ( ( ( aStart.x + aMid.x ) / 2.0 - center.x ) / aSlope +
                  ( aStart.y + aMid.y ) / 2.0 );
 
-    center.y = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
-                                       result,
-                                       double( std::numeric_limits<int>::max() / 2.0 ) ) );
-
     return center;
+}
+
+
+const VECTOR2I GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
+{
+    VECTOR2D dStart( static_cast<double>( aStart.x ), static_cast<double>( aStart.y ) );
+    VECTOR2D dMid( static_cast<double>( aMid.x ), static_cast<double>( aMid.y ) );
+    VECTOR2D dEnd( static_cast<double>( aEnd.x ), static_cast<double>( aEnd.y ) );
+    VECTOR2D dCenter =  GetArcCenter( dStart, dMid, dEnd );
+
+    VECTOR2I iCenter;
+
+    iCenter.x = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
+                                        dCenter.x,
+                                        double( std::numeric_limits<int>::max() / 2.0 ) ) );
+
+    iCenter.y = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
+                                        dCenter.y,
+                                        double( std::numeric_limits<int>::max() / 2.0 ) ) );
+
+    return iCenter;
+}
+
+
+const wxPoint GetArcCenter( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd )
+{
+    VECTOR2D dStart( static_cast<double>( aStart.x ), static_cast<double>( aStart.y ) );
+    VECTOR2D dMid( static_cast<double>( aMid.x ), static_cast<double>( aMid.y ) );
+    VECTOR2D dEnd( static_cast<double>( aEnd.x ), static_cast<double>( aEnd.y ) );
+    VECTOR2D dCenter =  GetArcCenter( dStart, dMid, dEnd );
+
+    wxPoint iCenter;
+
+    iCenter.x = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
+                                        dCenter.x,
+                                        double( std::numeric_limits<int>::max() / 2.0 ) ) );
+
+    iCenter.y = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
+                                        dCenter.y,
+                                        double( std::numeric_limits<int>::max() / 2.0 ) ) );
+
+    return iCenter;
 }

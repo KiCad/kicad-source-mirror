@@ -477,9 +477,10 @@ public:
      * count is less than the current count, all draw objects for units
      * greater that count are removed from the part.
      *
-     * @param count - Number of units per package.
+     * @param aCount - Number of units per package.
+     * @param aDuplicateDrawItems Create duplicate draw items of unit 1 for each additionl unit.
      */
-    void SetUnitCount( int count );
+    void SetUnitCount( int aCount, bool aDuplicateDrawItems = true );
     int GetUnitCount() const override;
 
     /**
@@ -538,8 +539,9 @@ public:
      * added to the part.
      *
      * @param aSetConvert - Set or clear the part alternate body style.
+     * @param aDuplicatePins - Duplicate all pins from original body style if true.
      */
-    void SetConversion( bool aSetConvert );
+    void SetConversion( bool aSetConvert, bool aDuplicatePins = true );
 
     /**
      * Set the offset in mils of the pin name text from the pin symbol.
