@@ -216,6 +216,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     wxConfigLoadSetups( &aCfg, configParams );
 
+    for( auto param : configParams )
+        delete param;
+
     dumpCfg( configParams );
 }
 
