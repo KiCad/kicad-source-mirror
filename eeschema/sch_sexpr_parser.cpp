@@ -560,20 +560,21 @@ void SCH_SEXPR_PARSER::parsePinNames( std::unique_ptr<LIB_PART>& aSymbol )
 
         aSymbol->SetPinNameOffset( parseInternalUnits( "pin name offset" ) );
         NeedRIGHT();
+        token = NextTok();  // Either ) or hide
     }
-    else if( token == T_hide )
+
+    if( token == T_hide )
     {
         aSymbol->SetShowPinNames( false );
+        NeedRIGHT();
     }
-    else
+    else if( token != T_RIGHT )
     {
         error.Printf(
             _( "Invalid symbol names definition in\nfile: \"%s\"\nline: %d\noffset: %d" ),
             CurSource().c_str(), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }
-
-    NeedRIGHT();
 }
 
 
@@ -693,6 +694,7 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
         {
         case T_at:
             field->SetPosition( parseXY() );
+            field->SetTextAngle( static_cast<int>( parseDouble( "text angle" ) * 10.0 ) );
             NeedRIGHT();
             break;
 
@@ -1120,19 +1122,24 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
             pin->SetName( FromUTF8() );
             token = NextTok();
 
-            if( token == T_effects )
+            if( token != T_RIGHT )
             {
-                // The EDA_TEXT font effects formatting is used so use and EDA_TEXT object
-                // so duplicate parsing is not required.
-                EDA_TEXT text;
+                token = NextTok();
 
-                parseEDA_TEXT( &text );
-                pin->SetNameTextSize( text.GetTextHeight() );
-                NeedRIGHT();
-            }
-            else if( token != T_RIGHT )
-            {
-                Expecting( ") or effects" );
+                if( token == T_effects )
+                {
+                    // The EDA_TEXT font effects formatting is used so use and EDA_TEXT object
+                    // so duplicate parsing is not required.
+                    EDA_TEXT text;
+
+                    parseEDA_TEXT( &text );
+                    pin->SetNameTextSize( text.GetTextHeight() );
+                    NeedRIGHT();
+                }
+                else
+                {
+                    Expecting( "effects" );
+                }
             }
 
             break;
@@ -1150,19 +1157,24 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
             pin->SetNumber( FromUTF8() );
             token = NextTok();
 
-            if( token == T_effects )
+            if( token != T_RIGHT )
             {
-                // The EDA_TEXT font effects formatting is used so use and EDA_TEXT object
-                // so duplicate parsing is not required.
-                EDA_TEXT text;
+                token = NextTok();
 
-                parseEDA_TEXT( &text );
-                pin->SetNumberTextSize( text.GetTextHeight(), false );
-                NeedRIGHT();
-            }
-            else if( token != T_RIGHT )
-            {
-                Expecting( ") or effects" );
+                if( token == T_effects )
+                {
+                    // The EDA_TEXT font effects formatting is used so use and EDA_TEXT object
+                    // so duplicate parsing is not required.
+                    EDA_TEXT text;
+
+                    parseEDA_TEXT( &text );
+                    pin->SetNumberTextSize( text.GetTextHeight(), false );
+                    NeedRIGHT();
+                }
+                else
+                {
+                    Expecting( "effects" );
+                }
             }
 
             break;

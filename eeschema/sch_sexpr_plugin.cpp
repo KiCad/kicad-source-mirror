@@ -728,10 +728,10 @@ void SCH_SEXPR_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
     static wxString delimiters( wxT( " " ) );
 
     // This is redundant with the AR entries below, but it makes the files backwards-compatible.
-    if( aComponent->GetPathsAndReferences().GetCount() > 0 )
+    if( aComponent->GetInstanceReferences().size() > 0 )
     {
-        reference_fields = wxStringTokenize( aComponent->GetPathsAndReferences()[0], delimiters );
-        name1 = toUTFTildaText( reference_fields[1] );
+        const COMPONENT_INSTANCE_REFERENCE& instance = aComponent->GetInstanceReferences()[0];
+        name1 = toUTFTildaText( instance.m_Reference );
     }
     else
     {
@@ -1224,12 +1224,12 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
         if( !aSymbol->ShowPinNumbers() )
             aFormatter.Print( 0, " (pin_numbers hide)" );
 
-        if( aSymbol->GetPinNameOffset() != Iu2Mils( DEFAULT_PIN_NAME_OFFSET )
+        if( aSymbol->GetPinNameOffset() != Mils2iu( DEFAULT_PIN_NAME_OFFSET )
           || !aSymbol->ShowPinNames() )
         {
             aFormatter.Print( 0, " (pin_names" );
 
-            if( aSymbol->GetPinNameOffset() != Iu2Mils( DEFAULT_PIN_NAME_OFFSET ) )
+            if( aSymbol->GetPinNameOffset() != Mils2iu( DEFAULT_PIN_NAME_OFFSET ) )
                 aFormatter.Print( 0, " (offset %s)",
                                   FormatInternalUnits( aSymbol->GetPinNameOffset() ).c_str() );
 
@@ -1575,11 +1575,12 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
     if( aField->IsMandatory() && !fieldName.StartsWith( "ki_" ) )
         fieldName = "ki_" + fieldName.Lower();
 
-    aFormatter.Print( aNestLevel, "(property %s %s (at %s %s)",
+    aFormatter.Print( aNestLevel, "(property %s %s (at %s %s %g)",
                       aFormatter.Quotew( fieldName ).c_str(),
                       aFormatter.Quotew( aField->GetText() ).c_str(),
                       FormatInternalUnits( aField->GetPosition().x ).c_str(),
-                      FormatInternalUnits( aField->GetPosition().y ).c_str() );
+                      FormatInternalUnits( aField->GetPosition().y ).c_str(),
+                      static_cast<double>( aField->GetTextAngle() ) / 10.0 );
 
     if( aField->IsDefaultFormatting() )
     {
