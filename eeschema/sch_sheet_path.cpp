@@ -254,9 +254,13 @@ bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 ) const
 }
 
 
-bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName,
-                                       const wxString& aDestFileName ) const
+bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName, const wxString& aDestFileName )
 {
+    auto pair = std::make_pair( aSrcFileName, aDestFileName );
+
+    if( m_recursion_test_cache.count( pair ) )
+        return m_recursion_test_cache.at( pair );
+
     wxFileName rootFn = g_RootSheet->GetFileName();
     wxFileName srcFn = aSrcFileName;
     wxFileName destFn = aDestFileName;
@@ -270,7 +274,10 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName,
 
     // The source and destination sheet file names cannot be the same.
     if( srcFn == destFn )
+    {
+        m_recursion_test_cache[pair] = true;
         return true;
+    }
 
     /// @todo Store sheet file names with full path, either relative to project path
     ///       or absolute path.  The current design always assumes subsheet files are
@@ -294,7 +301,10 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName,
     // The destination sheet file name was not found in the sheet path or the destination
     // sheet file name is the root sheet so no recursion is possible.
     if( i >= size() || i == 0 )
+    {
+        m_recursion_test_cache[pair] = false;
         return false;
+    }
 
     // Walk back up to the root sheet to see if the source file name is already a parent in
     // the sheet path.  If so, recursion will occur.
@@ -308,11 +318,15 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName,
             cmpFn.MakeAbsolute( rootFn.GetPath() );
 
         if( cmpFn == srcFn )
+        {
+            m_recursion_test_cache[pair] = true;
             return true;
+        }
 
     } while( i != 0 );
 
     // The source sheet file name is not a parent of the destination sheet file name.
+    m_recursion_test_cache[pair] = false;
     return false;
 }
 
@@ -642,7 +656,7 @@ bool SCH_SHEET_LIST::IsComplexHierarchy() const
 
 
 bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
-                                       const wxString& aDestFileName ) const
+                                       const wxString& aDestFileName )
 {
     wxFileName rootFn = g_RootSheet->GetFileName();
     wxFileName destFn = aDestFileName;

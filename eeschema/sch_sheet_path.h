@@ -116,6 +116,8 @@ protected:
 
     int m_pageNumber;              /// Page numbers are maintained by the sheet load order.
 
+    std::map<std::pair<wxString, wxString>, bool> m_recursion_test_cache;
+
 public:
     SCH_SHEET_PATH();
 
@@ -283,7 +285,7 @@ public:
      * @param aDestFileName is the file name of the destination sheet for \a aSrcFileName.
      * @return true if \a aFileName will cause recursion in the sheet path.  Otherwise false.
      */
-    bool TestForRecursion( const wxString& aSrcFileName, const wxString& aDestFileName ) const;
+    bool TestForRecursion( const wxString& aSrcFileName, const wxString& aDestFileName );
 
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
@@ -423,7 +425,7 @@ public:
      * @return true if \a aFileName will cause recursion in the sheet path.  Otherwise false.
      */
     bool TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
-                           const wxString& aDestFileName ) const;
+                           const wxString& aDestFileName );
 
     /**
      * Function FindSheetForScreen
