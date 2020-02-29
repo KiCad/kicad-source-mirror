@@ -145,9 +145,9 @@ public:
         m_dirty = false;
     }
 
-    wxString Name( bool aIgnoreSheet = false ) const;
+    const wxString& Name( bool aIgnoreSheet = false ) const;
 
-    wxString RawName() const
+    const wxString& RawName() const
     {
         return m_name;
     }
@@ -157,6 +157,7 @@ public:
     void SetName( const wxString& aName )
     {
         m_name = aName;
+        recacheName();
     }
 
     wxString Prefix() const
@@ -181,6 +182,7 @@ public:
     void SetType( CONNECTION_TYPE aType )
     {
         m_type = aType;
+        recacheName();
     }
 
     int NetCode() const
@@ -318,6 +320,7 @@ public:
     static bool IsBusGroupLabel( const wxString& aLabel );
 
 private:
+    void recacheName();
 
     bool m_dirty;
 
@@ -330,6 +333,10 @@ private:
     CONNECTION_TYPE m_type; ///< @see enum CONNECTION_TYPE
 
     wxString m_name;        ///< Name of the connection.
+
+    wxString m_cached_name; ///< Full name, including prefix and suffix
+
+    wxString m_cached_name_with_path; ///< Full name including sheet path (if not global)
 
     /**
      * For bus members, we want to keep track of the "local" name of a member, that is,

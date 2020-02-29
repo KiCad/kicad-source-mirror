@@ -89,6 +89,8 @@ void SCH_CONNECTION::SetDriver( SCH_ITEM* aItem )
 {
     m_driver = aItem;
 
+    recacheName();
+
     for( const auto& member : m_members )
         member->SetDriver( aItem );
 }
@@ -97,6 +99,8 @@ void SCH_CONNECTION::SetDriver( SCH_ITEM* aItem )
 void SCH_CONNECTION::SetSheet( SCH_SHEET_PATH aSheet )
 {
     m_sheet = aSheet;
+
+    recacheName();
 
     for( const auto& member : m_members )
         member->SetSheet( aSheet );
@@ -132,9 +136,9 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
             auto member            = std::make_shared<SCH_CONNECTION>( m_parent, m_sheet );
             member->m_type         = CONNECTION_TYPE::NET;
             member->m_prefix       = m_prefix;
-            member->m_name         = vector_member;
             member->m_local_name   = vector_member;
             member->m_vector_index = i++;
+            member->SetName( vector_member );
             m_members.push_back( member );
         }
     }
@@ -177,6 +181,8 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
     {
         m_type = CONNECTION_TYPE::NET;
     }
+
+    recacheName();
 }
 
 
@@ -185,6 +191,8 @@ void SCH_CONNECTION::Reset()
     m_type = CONNECTION_TYPE::NONE;
     m_name.Empty();
     m_local_name.Empty();
+    m_cached_name.Empty();
+    m_cached_name_with_path.Empty();
     m_prefix.Empty();
     m_suffix .Empty();
     m_driver = nullptr;
@@ -218,6 +226,8 @@ void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
     m_vector_prefix = aOther.VectorPrefix();
 
     // Note: subgraph code isn't cloned, it should remain with the original object
+
+    recacheName();
 }
 
 
@@ -250,50 +260,48 @@ bool SCH_CONNECTION::IsDriver() const
 }
 
 
-wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
+const wxString& SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 {
-    wxString ret = m_prefix + m_name + m_suffix;
+    wxASSERT( !m_cached_name.IsEmpty() );
+    return aIgnoreSheet ? m_cached_name : m_cached_name_with_path;
+}
 
-    if( m_name.IsEmpty() )
-        ret = "<NO NET>";
+
+void SCH_CONNECTION::recacheName()
+{
+    m_cached_name = m_name.IsEmpty() ? "<NO NET>" : m_prefix + m_name + m_suffix;
+
+    bool prepend_path = true;
 
     if( !Parent() || m_type == CONNECTION_TYPE::NONE )
-        return ret;
+        prepend_path = false;
 
-    if( !aIgnoreSheet )
+    if( m_driver )
     {
-        bool prepend_path = true;
-
-        if( m_driver )
+        switch( m_driver->Type() )
         {
-            switch( m_driver->Type() )
-            {
-            case SCH_PIN_T:
-                // Pins are either power connections or belong to a uniquely-annotated
-                // component, so they don't need a path if they are driving the subgraph
-                prepend_path = false;
-                break;
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_PIN_T:
+            // Pins are either power connections or belong to a uniquely-annotated
+            // component, so they don't need a path if they are driving the subgraph
+            prepend_path = false;
+            break;
 
-            case SCH_GLOBAL_LABEL_T:
-                prepend_path = false;
-                break;
-
-            default:
-                break;
-            }
+        default:
+            break;
         }
-
-        if( prepend_path )
-            ret = m_sheet.PathHumanReadable() + ret;
     }
 
-    return ret;
+    m_cached_name_with_path =
+            prepend_path ? m_sheet.PathHumanReadable() + m_cached_name : m_cached_name;
 }
 
 
 void SCH_CONNECTION::SetPrefix( const wxString& aPrefix )
 {
     m_prefix = aPrefix;
+
+    recacheName();
 
     for( const auto& m : Members() )
         m->SetPrefix( aPrefix );
@@ -303,6 +311,8 @@ void SCH_CONNECTION::SetPrefix( const wxString& aPrefix )
 void SCH_CONNECTION::SetSuffix( const wxString& aSuffix )
 {
     m_suffix = aSuffix;
+
+    recacheName();
 
     for( const auto& m : Members() )
         m->SetSuffix( aSuffix );
