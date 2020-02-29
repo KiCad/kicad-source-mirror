@@ -195,6 +195,12 @@ void UNIT_BINDER::SetValue( int aValue )
 }
 
 
+void UNIT_BINDER::SetDoubleValue( double aValue )
+{
+    SetValue( StringFromValue( m_units, aValue, false, m_useMils ) );
+}
+
+
 void UNIT_BINDER::SetValue( wxString aValue )
 {
     auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
@@ -254,6 +260,28 @@ long long int UNIT_BINDER::GetValue()
         return 0;
 
     return ValueFromString( m_units, value, m_useMils );
+}
+
+
+double UNIT_BINDER::GetDoubleValue()
+{
+    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
+    auto staticText = dynamic_cast<wxStaticText*>( m_value );
+    wxString value;
+
+    if( textEntry )
+    {
+        if( m_needsEval && m_eval.Process( textEntry->GetValue() ) )
+            value = m_eval.Result();
+        else
+            value = textEntry->GetValue();
+    }
+    else if( staticText )
+        value = staticText->GetLabel();
+    else
+        return 0.0;
+
+    return DoubleValueFromString( m_units, value, m_useMils );
 }
 
 

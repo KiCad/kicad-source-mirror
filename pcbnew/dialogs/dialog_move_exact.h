@@ -57,6 +57,12 @@ private:
 
     std::vector<ROTATION_ANCHOR> m_menuIDs;
 
+    double m_stateX;
+    double m_stateY;
+    double m_stateRadius;
+    double m_stateTheta;
+
+
 public:
     // Constructor and destructor
     DIALOG_MOVE_EXACT(PCB_BASE_FRAME *aParent, wxPoint& aTranslate,
@@ -92,7 +98,7 @@ private:
      * @param polar interpret as polar coords
      * @return false if error (though the text conversion functions don't report errors)
      */
-    bool GetTranslationInIU ( wxPoint& val, bool polar );
+    bool GetTranslationInIU( wxRealPoint& val, bool polar );
 
     void buildRotationAnchorMenu();
 

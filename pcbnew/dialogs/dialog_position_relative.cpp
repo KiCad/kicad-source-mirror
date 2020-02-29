@@ -38,7 +38,11 @@ DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, wxP
     m_translation( translation ),
     m_anchor_position( anchor ),
     m_xOffset( aParent, m_xLabel, m_xEntry, m_xUnit ),
-    m_yOffset( aParent, m_yLabel, m_yEntry, m_yUnit )
+    m_yOffset( aParent, m_yLabel, m_yEntry, m_yUnit ),
+    m_stateX( 0.0 ),
+    m_stateY( 0.0 ),
+    m_stateRadius( 0.0 ),
+    m_stateTheta( 0.0 )
 {
     // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
     // implementation on MSW
@@ -55,8 +59,8 @@ DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, wxP
     m_polarCoords->SetValue( m_options.polarCoords );
     updateDialogControls( m_polarCoords->IsChecked() );
 
-    m_xOffset.SetValue( m_options.entry1 );
-    m_yOffset.SetValue( m_options.entry2 );
+    m_xOffset.SetDoubleValue( m_options.entry1 );
+    m_yOffset.SetDoubleValue( m_options.entry2 );
 
     m_stdButtonsOK->SetDefault();
 
@@ -73,12 +77,12 @@ void DIALOG_POSITION_RELATIVE::ToPolarDeg( double x, double y, double& r, double
 }
 
 
-bool DIALOG_POSITION_RELATIVE::GetTranslationInIU ( wxPoint& val, bool polar )
+bool DIALOG_POSITION_RELATIVE::GetTranslationInIU( wxRealPoint& val, bool polar )
 {
     if( polar )
     {
-        const int r = m_xOffset.GetValue();
-        const double q = m_yOffset.GetValue();
+        const double r = m_xOffset.GetDoubleValue();
+        const double q = m_yOffset.GetDoubleValue();
 
         val.x = r * cos( DEG2RAD( q / 10.0 ) );
         val.y = r * sin( DEG2RAD( q / 10.0 ) );
@@ -86,8 +90,8 @@ bool DIALOG_POSITION_RELATIVE::GetTranslationInIU ( wxPoint& val, bool polar )
     else
     {
         // direct read
-        val.x = m_xOffset.GetValue();
-        val.y = m_yOffset.GetValue();
+        val.x = m_xOffset.GetDoubleValue();
+        val.y = m_yOffset.GetDoubleValue();
     }
 
     // no validation to do here, but in future, you could return false here
@@ -98,31 +102,49 @@ bool DIALOG_POSITION_RELATIVE::GetTranslationInIU ( wxPoint& val, bool polar )
 void DIALOG_POSITION_RELATIVE::OnPolarChanged( wxCommandEvent& event )
 {
     bool newPolar = m_polarCoords->IsChecked();
-    wxPoint val;
-
-    // get the value as previously stored
-    GetTranslationInIU( val, !newPolar );
-
-    // now switch the controls to the new representations
+    double xOffset = m_xOffset.GetDoubleValue();
+    double yOffset = m_yOffset.GetDoubleValue();
     updateDialogControls( newPolar );
 
     if( newPolar )
     {
-        // convert to polar coordinates
-        double r, q;
-        ToPolarDeg( val.x, val.y, r, q );
+        if( xOffset != m_stateX || yOffset != m_stateY )
+        {
+            m_stateX = xOffset;
+            m_stateY = yOffset;
+            ToPolarDeg( m_stateX, m_stateY, m_stateRadius, m_stateTheta );
+            m_stateTheta *= 10.0;
 
-        m_xOffset.SetValue( KiROUND( r / 10.0) * 10 );
-        m_yOffset.SetValue( q * 10 );
+            m_xOffset.SetDoubleValue( m_stateRadius );
+            m_stateRadius = m_xOffset.GetDoubleValue();
+            m_yOffset.SetDoubleValue( m_stateTheta );
+            m_stateTheta = m_yOffset.GetDoubleValue();
+        }
+        else
+        {
+            m_xOffset.SetDoubleValue( m_stateRadius );
+            m_yOffset.SetDoubleValue( m_stateTheta );
+        }
     }
     else
     {
-        // vector is already in Cartesian, so just render out
-        // note - round off the last decimal place (10nm) to prevent
-        // (some) rounding causing errors when round-tripping
-        // you can never eliminate entirely, however
-        m_xOffset.SetValue( KiROUND( val.x / 10.0 ) * 10 );
-        m_yOffset.SetValue( KiROUND( val.y / 10.0 ) * 10 );
+        if( xOffset != m_stateRadius || yOffset != m_stateTheta )
+        {
+            m_stateRadius = xOffset;
+            m_stateTheta = yOffset;
+            m_stateX = m_stateRadius * cos( DEG2RAD( m_stateTheta / 10.0 ) );
+            m_stateY = m_stateRadius * sin( DEG2RAD( m_stateTheta / 10.0 ) );
+
+            m_xOffset.SetDoubleValue( m_stateX );
+            m_stateX = m_xOffset.GetDoubleValue();
+            m_yOffset.SetDoubleValue( m_stateY );
+            m_stateY = m_yOffset.GetDoubleValue();
+        }
+        else
+        {
+            m_xOffset.SetDoubleValue( m_stateX );
+            m_yOffset.SetDoubleValue( m_stateY );
+        }
     }
 }
 
@@ -209,14 +231,17 @@ void DIALOG_POSITION_RELATIVE::UpdateAnchor( EDA_ITEM* aItem )
 void DIALOG_POSITION_RELATIVE::OnOkClick( wxCommandEvent& event )
 {
     // for the output, we only deliver a Cartesian vector
-    bool ok = GetTranslationInIU( m_translation, m_polarCoords->IsChecked() );
+    wxRealPoint translation;
+    bool ok = GetTranslationInIU( translation, m_polarCoords->IsChecked() );
+    m_translation.x = KiROUND( translation.x );
+    m_translation.y = KiROUND( translation.y );
 
     if( ok )
     {
         // save the settings
         m_options.polarCoords = m_polarCoords->GetValue();
-        m_options.entry1      = m_xOffset.GetValue();
-        m_options.entry2      = m_yOffset.GetValue();
+        m_options.entry1      = m_xOffset.GetDoubleValue();
+        m_options.entry2      = m_yOffset.GetDoubleValue();
         POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
         wxASSERT( posrelTool );
 

@@ -72,6 +72,13 @@ public:
     void SetValue( wxString aValue );
 
     /**
+     * Function SetDoubleValue
+     * Sets new value (in Internal Units) for the text field, taking care of units conversion.
+     * @param aValue is the new value.
+     */
+    virtual void SetDoubleValue( double aValue );
+
+    /**
      * Function ChangeValue
      * Changes the value (in Internal Units) for the text field, taking care of units conversion
      * but does not trigger the update routine
@@ -86,6 +93,12 @@ public:
      * Returns the current value in Internal Units.
      */
     virtual long long int GetValue();
+
+    /**
+     * Function GetValue
+     * Returns the current value in Internal Units.
+     */
+    virtual double GetDoubleValue();
 
     /**
      * Function IsIndeterminate
