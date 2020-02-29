@@ -2533,6 +2533,8 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
                 em->SetDrawCoord();
                 module->Add( em );
             }
+            else
+                delete em;
         }
 
         break;
