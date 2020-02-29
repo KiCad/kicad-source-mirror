@@ -940,6 +940,18 @@ int SCH_EDITOR_CONTROL::Copy( const TOOL_EVENT& aEvent )
 }
 
 
+bool sheetNameExists( const SCH_SHEET_LIST& hierarchy, const wxString& aName )
+{
+    for( const SCH_SHEET_PATH& sheet : hierarchy )
+    {
+        if( sheet.Last()->GetName() == aName )
+            return true;
+    }
+
+    return false;
+}
+
+
 int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( wxWindow::FindFocus() );
@@ -1078,9 +1090,13 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             wxFileName  fn = sheet->GetFileName();
             SCH_SCREEN* existingScreen = nullptr;
             bool        dropSheetAnnotations = false;
+            wxString    sheetName = sheet->GetName();
+            int         uniquifier = 1;
 
-            // Duplicate sheet names are not valid.  Generate new UUID-based sheet names.
-            sheet->SetName( wxString::Format( wxT( "Sheet%s" ), sheet->m_Uuid.AsString() ) );
+            while( sheetNameExists( hierarchy, sheetName ) )
+                sheetName = sheet->GetName() << uniquifier++;
+
+            sheet->SetName( sheetName );
 
             sheet->SetParent( g_CurrentSheet->Last() );
             sheet->SetScreen( nullptr );
@@ -1093,7 +1109,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
 
             if( g_RootSheet->SearchHierarchy( fn.GetFullPath( wxPATH_UNIX ), &existingScreen ) )
-                dropSheetAnnotations = true;
+                dropSheetAnnotations = !forceKeepAnnotations;
             else
                 searchSupplementaryClipboard( sheet->GetFileName(), &existingScreen );
 
