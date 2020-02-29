@@ -1104,8 +1104,10 @@ bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer )
 
 bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem )
 {
+    // by default, all items are visible (new ones created by the router have parent == NULL as they have not been
+    // committed yet to the BOARD)
     if( !m_view || !aItem->Parent() )
-        return false;
+        return true;
 
     auto item = aItem->Parent();
     bool isOnVisibleLayer = true;
