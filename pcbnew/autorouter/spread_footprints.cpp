@@ -108,6 +108,7 @@ void spreadRectangles( CRectPlacement& aPlacementArea,
 
     // Add all subrects
     CSubRectArray::iterator it;
+
     for( it = vecSubRects.begin(); it != vecSubRects.end(); )
     {
         CRectPlacement::TRect r( 0, 0, it->w, it->h );
@@ -116,11 +117,26 @@ void spreadRectangles( CRectPlacement& aPlacementArea,
 
         if( !bPlaced )   // No room to place the rectangle: enlarge area and retry
         {
-            areaSizeX = ceil(areaSizeX * 1.1);
-            areaSizeY = ceil(areaSizeY * 1.1);
-            aPlacementArea.Init( areaSizeX, areaSizeY );
-            it = vecSubRects.begin();
-            continue;
+            bool retry = false;
+
+            if( areaSizeX < INT_MAX/2 )
+            {
+                retry = true;
+                areaSizeX = areaSizeX * 1.2;
+            }
+
+            if( areaSizeX < INT_MAX/2 )
+            {
+                retry = true;
+                areaSizeY = areaSizeY * 1.2;
+            }
+
+            if( retry )
+            {
+                aPlacementArea.Init( areaSizeX, areaSizeY );
+                it = vecSubRects.begin();
+                continue;
+            }
         }
 
         // When correctly placed in a placement area, the coords are returned in r.x and r.y
@@ -212,6 +228,9 @@ void SpreadFootprints( std::vector<MODULE*>* aFootprints,
         footprintListBySheet.clear();
         subsurface = 0.0;
 
+        int fp_max_width = 0;
+        int fp_max_height = 0;
+
         for( unsigned ii = 0; ii < footprintList.size(); ii++ )
         {
             MODULE* footprint = footprintList[ii];
@@ -225,13 +244,21 @@ void SpreadFootprints( std::vector<MODULE*>* aFootprints,
             footprintListBySheet.push_back( footprint );
             subsurface += footprint->GetArea( PADDING );
 
+            // Calculate min size of placement area:
+            EDA_RECT bbox = footprint->GetFootprintRect();
+            fp_max_width = std::max( fp_max_width, bbox.GetWidth() );
+            fp_max_height = std::max( fp_max_height, bbox.GetHeight() );
+
             if( islastItem )
             {
                 // end of the footprint sublist relative to the same sheet path
                 // calculate placement of the current sublist
                 EDA_RECT freeArea;
                 int Xsize_allowed = (int) ( sqrt( subsurface ) * 4.0 / 3.0 );
+                Xsize_allowed = std::max( fp_max_width, Xsize_allowed );
+
                 int Ysize_allowed = (int) ( subsurface / Xsize_allowed );
+                Ysize_allowed = std::max( fp_max_height, Ysize_allowed );
 
                 freeArea.SetWidth( Xsize_allowed );
                 freeArea.SetHeight( Ysize_allowed );
@@ -276,10 +303,17 @@ void SpreadFootprints( std::vector<MODULE*>* aFootprints,
         if( pass == 0 )
         {
             int Xsize_allowed = (int) ( sqrt( placementsurface ) * 4.0 / 3.0 );
+
+            if( Xsize_allowed < 0 || Xsize_allowed > INT_MAX/2 )
+                Xsize_allowed = INT_MAX/2;
+
             int Ysize_allowed = (int) ( placementsurface / Xsize_allowed );
+
+            if( Ysize_allowed < 0 || Ysize_allowed > INT_MAX/2 )
+                Ysize_allowed = INT_MAX/2;
+
             CRectPlacement placementArea;
             CSubRectArray  vecSubRects;
-
             fillRectList( vecSubRects, placementSheetAreas );
             spreadRectangles( placementArea, vecSubRects, Xsize_allowed, Ysize_allowed );
 
@@ -288,6 +322,15 @@ void SpreadFootprints( std::vector<MODULE*>* aFootprints,
                 TSubRect& srect = vecSubRects[it];
                 wxPoint pos( srect.x*scale, srect.y*scale );
                 wxSize size( srect.w*scale, srect.h*scale );
+
+                // Avoid too large coordinates: Overlapping components
+                // are better than out of screen components
+                if( (uint64_t)pos.x + (uint64_t)size.x > INT_MAX/2 )
+                    pos.x = 0;
+
+                if( (uint64_t)pos.y + (uint64_t)size.y > INT_MAX/2 )
+                    pos.y = 0;
+
                 placementSheetAreas[srect.n].SetOrigin( pos );
                 placementSheetAreas[srect.n].SetSize( size );
             }
