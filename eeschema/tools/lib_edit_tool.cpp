@@ -659,7 +659,7 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
         reader.ReadLine();
         newPart = SCH_LEGACY_PLUGIN::ParsePart( reader );
     }
-    catch( IO_ERROR& e )
+    catch( IO_ERROR& )
     {
         // If it's not a part then paste as text
         newPart = new LIB_PART( "dummy_part" );

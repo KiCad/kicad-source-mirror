@@ -47,7 +47,7 @@ UTILITY_PROGRAM::FUNC* COMBINED_UTILITY::findSubUtility( const std::string& aNam
 
         return &prog.m_func;
     }
-    catch( const std::out_of_range& e )
+    catch( const std::out_of_range& )
     {
         // not found in map
     }

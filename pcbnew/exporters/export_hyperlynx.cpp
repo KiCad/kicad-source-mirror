@@ -585,7 +585,7 @@ bool HYPERLYNX_EXPORTER::Run()
         writePadStacks();
         writeNets();
     }
-    catch( IO_ERROR& err )
+    catch( IO_ERROR& )
     {
         return false;
     }

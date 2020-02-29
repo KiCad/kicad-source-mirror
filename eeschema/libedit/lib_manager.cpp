@@ -649,7 +649,7 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LI
         {
             aTable->CreateSymbolLib( libName );
         }
-        catch( const IO_ERROR& e )
+        catch( const IO_ERROR& )
         {
             aTable->RemoveRow( libRow );
             return false;
@@ -967,7 +967,7 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
         {
             cachedParent = aPlugin->LoadSymbol( m_libName, bufferedParent->GetName() );
         }
-        catch( const IO_ERROR& ioe )
+        catch( const IO_ERROR& )
         {
             return false;
         }
