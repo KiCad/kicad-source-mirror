@@ -432,6 +432,7 @@ private:
     bool m_idle;
     bool m_chainedPlacement;
     bool m_orthoMode;
+    bool m_placementCorrect;
 
     FIXED_TAIL m_fixedTail;
 };

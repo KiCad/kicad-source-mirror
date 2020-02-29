@@ -958,6 +958,7 @@ bool LINE_PLACER::SetLayer( int aLayer )
 
 bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 {
+    m_placementCorrect = false;
     m_currentStart = VECTOR2I( aP );
     m_currentEnd = VECTOR2I( aP );
     m_currentNet = std::max( 0, aStartItem ? aStartItem->Net() : 0 );
@@ -1107,6 +1108,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
             m_currentNode = NULL;
 
             m_idle = true;
+            m_placementCorrect = true;
         }
 
         return true;
@@ -1192,9 +1194,12 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         {
             m_shove->AddLockedSpringbackNode( m_currentNode );
         }
+    
+        m_placementCorrect = true;
     }
     else
     {
+        m_placementCorrect = true;
         m_idle = true;
     }
 
@@ -1238,7 +1243,7 @@ bool LINE_PLACER::UnfixRoute()
 
 bool LINE_PLACER::HasPlacedAnything() const
 {
-     return m_fixedTail.StageCount() > 1;
+     return m_placementCorrect || m_fixedTail.StageCount() > 1;
 }
 
 
