@@ -39,7 +39,7 @@
  */
 wxCursor constructCursor( const CURSOR_STORE::CURSOR_DEF& aDef )
 {
-#if defined( __WXMSW__ ) or defined( __WXMAC__ )
+#if defined( __WXMSW__ ) || defined( __WXMAC__ )
 
     wxBitmap img_bitmap(
             reinterpret_cast<const char*>( aDef.m_image_data ), aDef.m_size.x, aDef.m_size.y );
@@ -58,7 +58,7 @@ wxCursor constructCursor( const CURSOR_STORE::CURSOR_DEF& aDef )
 
     return wxCursor{ image };
 
-#elif defined( __WXGTK__ ) or defined( __WXMOTIF__ )
+#elif defined( __WXGTK__ ) || defined( __WXMOTIF__ )
 
     return wxCursor{
         reinterpret_cast<const char*>( aDef.m_image_data ),
