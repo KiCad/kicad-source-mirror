@@ -489,6 +489,8 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "Color4DWireEx",            LAYER_WIRE );
     migrateLegacyColor( "Color4DWorksheetEx",       LAYER_SCHEMATIC_WORKSHEET );
 
+    Pgm().GetSettingsManager().SaveColorSettings( cs, "schematic" );
+
     // LibEdit settings were stored with eeschema.  If eeschema is the first app to run,
     // we need to migrate the LibEdit settings here
 

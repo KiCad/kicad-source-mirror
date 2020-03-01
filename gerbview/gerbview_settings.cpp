@@ -26,6 +26,7 @@
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
+#include <settings/settings_manager.h>
 #include <wx/config.h>
 
 
@@ -112,6 +113,32 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
             ( *this )[ptr].emplace_back( value );
         }
     }
+
+    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
+
+    auto migrateLegacyColor = [&] ( const std::string& aKey, int aLayerId ) {
+      wxString str;
+
+      if( aCfg->Read( aKey, &str ) )
+          cs->SetColor( aLayerId, COLOR4D( str ) );
+    };
+
+    migrateLegacyColor( "BackgroundColorEx",       LAYER_GERBVIEW_BACKGROUND );
+    migrateLegacyColor( "DCodeColorEx",            LAYER_DCODES );
+    migrateLegacyColor( "GridColorEx",             LAYER_GERBVIEW_GRID );
+    migrateLegacyColor( "NegativeObjectsColorEx",  LAYER_NEGATIVE_OBJECTS );
+    migrateLegacyColor( "WorksheetColorEx",        LAYER_GERBVIEW_WORKSHEET );
+
+    wxString key;
+
+    for( int i = 0, id = GERBVIEW_LAYER_ID_START;
+         id < GERBER_DRAWLAYERS_COUNT + GERBVIEW_LAYER_ID_START; ++i, ++id )
+    {
+        key.Printf( "ColorLayer%dEx", i );
+        migrateLegacyColor( key, id );
+    }
+
+    Pgm().GetSettingsManager().SaveColorSettings( cs, "gerbview" );
 
     return ret;
 }

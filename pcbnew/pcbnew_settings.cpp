@@ -646,6 +646,8 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( "Color4DViaThruEx",          LAYER_VIA_THROUGH );
     migrateLegacyColor( "Color4DWorksheet",          LAYER_WORKSHEET );
 
+    Pgm().GetSettingsManager().SaveColorSettings( cs, "board" );
+
     // Footprint editor settings were stored in pcbnew config file.  Migrate them here.
     auto fpedit = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( false );
     fpedit->MigrateFromLegacy( aCfg );
