@@ -117,10 +117,10 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
 
     auto migrateLegacyColor = [&] ( const std::string& aKey, int aLayerId ) {
-      wxString str;
+        wxString str;
 
-      if( aCfg->Read( aKey, &str ) )
-          cs->SetColor( aLayerId, COLOR4D( str ) );
+        if( aCfg->Read( aKey, &str ) )
+            cs->SetColor( aLayerId, COLOR4D( str ) );
     };
 
     migrateLegacyColor( "BackgroundColorEx",       LAYER_GERBVIEW_BACKGROUND );
@@ -135,7 +135,7 @@ bool GERBVIEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
          id < GERBER_DRAWLAYERS_COUNT + GERBVIEW_LAYER_ID_START; ++i, ++id )
     {
         key.Printf( "ColorLayer%dEx", i );
-        migrateLegacyColor( key, id );
+        migrateLegacyColor( key.ToStdString(), id );
     }
 
     Pgm().GetSettingsManager().SaveColorSettings( cs, "gerbview" );
