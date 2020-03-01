@@ -233,10 +233,18 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         switch( viaType )
         {
-        case VIA_THROUGH:      m_ViaTypeChoice->SetSelection( 0 ); break;
-        case VIA_MICROVIA:     m_ViaTypeChoice->SetSelection( 1 ); break;
-        case VIA_BLIND_BURIED: m_ViaTypeChoice->SetSelection( 2 ); break;
-        case VIA_NOT_DEFINED:  m_ViaTypeChoice->SetSelection( 3 ); break;
+        case VIA_THROUGH:
+            m_ViaTypeChoice->SetSelection( 0 );
+            break;
+        case VIA_MICROVIA:
+            m_ViaTypeChoice->SetSelection( 1 );
+            break;
+        case VIA_BLIND_BURIED:
+            m_ViaTypeChoice->SetSelection( 2 );
+            break;
+        case VIA_NOT_DEFINED:
+            m_ViaTypeChoice->SetSelection( wxNOT_FOUND );
+            break;
         }
 
         m_ViaStartLayer->Enable( viaType != VIA_THROUGH );
@@ -458,15 +466,20 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( !m_viaY.IsIndeterminate() )
                     v->SetPosition( wxPoint( v->GetPosition().x, m_viaY.GetValue() ) );
 
-                if( m_ViaTypeChoice->GetSelection() != 3)
+                switch( m_ViaTypeChoice->GetSelection() )
                 {
-                    switch( m_ViaTypeChoice->GetSelection() )
-                    {
-                    default:
-                    case 0: v->SetViaType( VIA_THROUGH ); v->SanitizeLayers(); break;
-                    case 1: v->SetViaType( VIA_MICROVIA );                     break;
-                    case 2: v->SetViaType( VIA_BLIND_BURIED );                 break;
-                    }
+                case 0:
+                    v->SetViaType( VIA_THROUGH );
+                    v->SanitizeLayers();
+                    break;
+                case 1:
+                    v->SetViaType( VIA_MICROVIA );
+                    break;
+                case 2:
+                    v->SetViaType( VIA_BLIND_BURIED );
+                    break;
+                default:
+                    break;
                 }
 
                 auto startLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer->GetLayerSelection() );
