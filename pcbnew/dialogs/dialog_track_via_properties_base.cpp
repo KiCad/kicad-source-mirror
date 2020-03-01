@@ -241,7 +241,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_ViaTypeLabel->Wrap( -1 );
 	fgViaRightSizer->Add( m_ViaTypeLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
-	wxString m_ViaTypeChoiceChoices[] = { _("Through"), _("Micro"), _("Blind/buried"), wxEmptyString };
+	wxString m_ViaTypeChoiceChoices[] = { _("Through"), _("Micro"), _("Blind/buried") };
 	int m_ViaTypeChoiceNChoices = sizeof( m_ViaTypeChoiceChoices ) / sizeof( wxString );
 	m_ViaTypeChoice = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ViaTypeChoiceNChoices, m_ViaTypeChoiceChoices, 0 );
 	m_ViaTypeChoice->SetSelection( 0 );

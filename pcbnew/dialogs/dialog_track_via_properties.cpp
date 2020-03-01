@@ -237,7 +237,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
             m_ViaTypeChoice->SetSelection( 2 );
             break;
         case VIATYPE::NOT_DEFINED:
-            m_ViaTypeChoice->SetSelection( 3 );
+            m_ViaTypeChoice->SetSelection( wxNOT_FOUND );
             break;
         }
 
@@ -458,22 +458,20 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( !m_viaY.IsIndeterminate() )
                     v->SetPosition( wxPoint( v->GetPosition().x, m_viaY.GetValue() ) );
 
-                if( m_ViaTypeChoice->GetSelection() != 3)
+                switch( m_ViaTypeChoice->GetSelection() )
                 {
-                    switch( m_ViaTypeChoice->GetSelection() )
-                    {
-                    default:
-                    case 0:
-                        v->SetViaType( VIATYPE::THROUGH );
-                        v->SanitizeLayers();
-                        break;
-                    case 1:
-                        v->SetViaType( VIATYPE::MICROVIA );
-                        break;
-                    case 2:
-                        v->SetViaType( VIATYPE::BLIND_BURIED );
-                        break;
-                    }
+                case 0:
+                    v->SetViaType( VIATYPE::THROUGH );
+                    v->SanitizeLayers();
+                    break;
+                case 1:
+                    v->SetViaType( VIATYPE::MICROVIA );
+                    break;
+                case 2:
+                    v->SetViaType( VIATYPE::BLIND_BURIED );
+                    break;
+                default:
+                    break;
                 }
 
                 auto startLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer->GetLayerSelection() );
