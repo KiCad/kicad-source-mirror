@@ -1266,10 +1266,12 @@ void CAIRO_GAL::endDrawing()
     // Now translate the raw context data from the format stored
     // by cairo into a format understood by wxImage.
 
-    pixman_image_t* dstImg = pixman_image_create_bits( PIXMAN_r8g8b8,
+    pixman_image_t* dstImg = pixman_image_create_bits(
+            wxPlatformInfo::Get().GetEndianness() == wxENDIAN_LITTLE ? PIXMAN_b8g8r8 :
+                                                                       PIXMAN_r8g8b8,
             screenSize.x, screenSize.y, (uint32_t*) wxOutput, wxBufferWidth * 3 );
-    pixman_image_t* srcImg = pixman_image_create_bits( PIXMAN_a8b8g8r8,
-            screenSize.x, screenSize.y, (uint32_t*) bitmapBuffer, wxBufferWidth * 4 );
+    pixman_image_t* srcImg = pixman_image_create_bits( PIXMAN_a8r8g8b8, screenSize.x, screenSize.y,
+            (uint32_t*) bitmapBuffer, wxBufferWidth * 4 );
 
     pixman_image_composite( PIXMAN_OP_SRC, srcImg, NULL, dstImg,
             0, 0, 0, 0, 0, 0, screenSize.x, screenSize.y );
