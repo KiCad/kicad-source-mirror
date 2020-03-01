@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -76,7 +76,7 @@ class DIALOG_NETLIST_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 499,464 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_NETLIST_BASE();
 
 };

@@ -46,6 +46,7 @@ using namespace std::placeholders;
 
 
 bool DIALOG_UPDATE_PCB::m_warnForNoNetPads = false;
+bool DIALOG_UPDATE_PCB::m_matchByUUID = false;
 
 
 DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist ) :
@@ -60,6 +61,7 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
     m_cbDeleteExtraFootprints->SetValue( cfg->m_NetlistDialog.delete_extra_footprints );
     m_cbDeleteSinglePadNets->SetValue( cfg->m_NetlistDialog.delete_single_pad_nets );
     m_cbWarnNoNetPad->SetValue( m_warnForNoNetPads );
+    m_matchByTimestamp->SetSelection( m_matchByUUID ? 0 : 1 );
 
     m_messagePanel->SetLabel( _("Changes To Be Applied") );
     m_messagePanel->SetLazyUpdate( true );
@@ -86,6 +88,7 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
 DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
 {
     m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
+    m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;
 
     auto cfg = m_frame->GetSettings();
 
@@ -123,6 +126,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
     updater.SetDeleteSinglePadNets( m_cbDeleteSinglePadNets->GetValue() );
     m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
+    m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;
     updater.SetWarnPadNoNetInNetlist( m_warnForNoNetPads );
     updater.UpdateNetlist( *m_netlist );
 

@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,9 @@ private:
     bool            m_initialized;
     bool            m_runDragCommand;
     static bool     m_warnForNoNetPads;
+    static bool     m_matchByUUID;      // True to use UUID as link between symbol and footprint
+                                        // False to use reference designator as link
+                                        // between symbol and footprint
 
 public:
     DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename );

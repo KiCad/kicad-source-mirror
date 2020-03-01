@@ -34,7 +34,7 @@ WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow*      parent,
                                             long           style ) :
     WX_HTML_REPORT_PANEL_BASE( parent, id, pos, size, style ),
     m_reporter( this ),
-    m_severities( -1 ),
+    m_severities( REPORTER::RPT_ALL ),
     m_lazyUpdate( false )
 {
     syncCheckboxes();

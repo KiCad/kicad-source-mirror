@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,7 +40,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxString m_matchByTimestampChoices[] = { _("Associate footprints by reference"), _("Associate footprints using time stamp field") };
+	wxString m_matchByTimestampChoices[] = { _("Associate footprints using time stamp (UUID)"), _("Associate footprints using reference") };
 	int m_matchByTimestampNChoices = sizeof( m_matchByTimestampChoices ) / sizeof( wxString );
 	m_matchByTimestamp = new wxRadioBox( this, wxID_ANY, _("Match Method"), wxDefaultPosition, wxDefaultSize, m_matchByTimestampNChoices, m_matchByTimestampChoices, 1, wxRA_SPECIFY_COLS );
 	m_matchByTimestamp->SetSelection( 1 );
@@ -108,7 +108,6 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 
 	// Connect Events
 	m_NetlistFilenameCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_NETLIST_BASE::OnFilenameKillFocus ), NULL, this );

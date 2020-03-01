@@ -57,6 +57,7 @@ void PCB_EDIT_FRAME::InstallNetlistFrame()
 }
 
 bool DIALOG_NETLIST::m_warnForNoNetPads = false;
+bool DIALOG_NETLIST::m_matchByUUID = false;
 
 
 DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename )
@@ -77,6 +78,7 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullF
     m_cbDeleteSinglePadNets->SetValue( cfg->m_NetlistDialog.delete_single_pad_nets );
 
     m_cbWarnNoNetPad->SetValue( m_warnForNoNetPads );
+    m_matchByTimestamp->SetSelection( m_matchByUUID ? 0 : 1 );
 
     m_MessageWindow->SetLabel( _("Changes To Be Applied") );
     m_MessageWindow->SetVisibleSeverities( cfg->m_NetlistDialog.report_filter );
@@ -98,14 +100,15 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullF
 DIALOG_NETLIST::~DIALOG_NETLIST()
 {
     m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
+    m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;
 
     auto cfg = m_parent->GetSettings();
 
-    cfg->m_NetlistDialog.report_filter           = m_cbUpdateFootprints->GetValue();
-    cfg->m_NetlistDialog.update_footprints       = m_cbDeleteShortingTracks->GetValue();
-    cfg->m_NetlistDialog.delete_shorting_tracks  = m_cbDeleteExtraFootprints->GetValue();
-    cfg->m_NetlistDialog.delete_extra_footprints = m_cbDeleteSinglePadNets->GetValue();
-    cfg->m_NetlistDialog.delete_single_pad_nets  = m_MessageWindow->GetVisibleSeverities();
+    cfg->m_NetlistDialog.report_filter           = m_MessageWindow->GetVisibleSeverities();
+    cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();
+    cfg->m_NetlistDialog.delete_shorting_tracks  = m_cbDeleteShortingTracks->GetValue();
+    cfg->m_NetlistDialog.delete_extra_footprints = m_cbDeleteExtraFootprints->GetValue();
+    cfg->m_NetlistDialog.delete_single_pad_nets  = m_cbDeleteSinglePadNets->GetValue();
 
     if( m_runDragCommand )
     {
@@ -271,18 +274,20 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
     msg.Printf( _( "Reading netlist file \"%s\".\n" ), GetChars( netlistFileName ) );
     reporter.ReportHead( msg, REPORTER::RPT_INFO );
 
-    if( m_matchByTimestamp->GetSelection() == 0 )
+    if( m_matchByTimestamp->GetSelection() == 1 )
         msg = _( "Using references to match components and footprints.\n" );
     else
-        msg = _( "Using tstamp fields to match components and footprints.\n" );
+        msg = _( "Using time stamp fields (UUID) to match components and footprints.\n" );
 
     reporter.ReportHead( msg, REPORTER::RPT_INFO );
     m_MessageWindow->SetLazyUpdate( true ); // Use lazy update to speed the creation of the report
                                             // (the window is not updated for each message)
+    m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;
+
     NETLIST netlist;
 
     netlist.SetDeleteExtraFootprints( m_cbDeleteExtraFootprints->GetValue() );
-    netlist.SetFindByTimeStamp( m_matchByTimestamp->GetSelection() == 1 );
+    netlist.SetFindByTimeStamp( m_matchByUUID );
     netlist.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
 
     if( !m_parent->ReadNetlistFromFile( netlistFileName, netlist, reporter ) )
@@ -291,7 +296,7 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
     BOARD_NETLIST_UPDATER updater( m_parent, m_parent->GetBoard() );
     updater.SetReporter ( &reporter );
     updater.SetIsDryRun( aDryRun );
-    updater.SetLookupByTimestamp( m_matchByTimestamp->GetSelection() == 1 );
+    updater.SetLookupByTimestamp( m_matchByUUID );
     updater.SetDeleteUnusedComponents ( m_cbDeleteExtraFootprints->GetValue() );
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
     updater.SetDeleteSinglePadNets( m_cbDeleteSinglePadNets->GetValue() );
