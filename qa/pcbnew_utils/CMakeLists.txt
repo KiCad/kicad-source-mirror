@@ -53,6 +53,10 @@ target_include_directories( qa_pcbnew_utils PUBLIC
     ${INC_AFTER}
 )
 
+add_dependencies( qa_pcbnew_utils
+    pcbcommon
+)
+
 target_link_libraries( qa_pcbnew_utils PUBLIC
     qa_utils
 )
