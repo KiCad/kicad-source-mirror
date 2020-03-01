@@ -408,6 +408,9 @@ bool SCH_CONNECTION::IsBusLabel( const wxString& aLabel )
 
 bool SCH_CONNECTION::IsBusVectorLabel( const wxString& aLabel )
 {
+    if( !aLabel.Contains( wxT( "[" ) ) )
+        return false;
+
     try
     {
         return std::regex_match( std::string( aLabel.mb_str() ), bus_label_re );
@@ -421,6 +424,9 @@ bool SCH_CONNECTION::IsBusVectorLabel( const wxString& aLabel )
 
 bool SCH_CONNECTION::IsBusGroupLabel( const wxString& aLabel )
 {
+    if( !aLabel.Contains( wxT( "{" ) ) )
+        return false;
+
     try
     {
         return std::regex_match( std::string( aLabel.mb_str() ), bus_group_label_re );
