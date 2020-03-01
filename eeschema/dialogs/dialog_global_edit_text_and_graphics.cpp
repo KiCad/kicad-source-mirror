@@ -230,13 +230,13 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
 
         if( m_Italic->Get3StateValue() != wxCHK_UNDETERMINED )
         {
-            eda_text->SetItalic( m_Visible->GetValue() );
+            eda_text->SetItalic( m_Italic->GetValue() );
             m_hasChange = true;
         }
 
         if( m_Bold->Get3StateValue() != wxCHK_UNDETERMINED )
         {
-            eda_text->SetBold( m_Visible->GetValue() );
+            eda_text->SetBold( m_Bold->GetValue() );
             m_hasChange = true;
         }
     }
