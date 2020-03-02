@@ -198,30 +198,30 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bSizer11;
-	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerUUID;
+	bSizerUUID = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticText* timeStampLabel;
 	timeStampLabel = new wxStaticText( this, wxID_ANY, _("Unique ID:"), wxDefaultPosition, wxDefaultSize, 0 );
 	timeStampLabel->Wrap( -1 );
-	bSizer11->Add( timeStampLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	bSizerUUID->Add( timeStampLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlTimeStamp = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	m_textCtrlTimeStamp->SetToolTip( _("Unique ID that identifies the symbol") );
 
-	bSizer11->Add( m_textCtrlTimeStamp, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizerUUID->Add( m_textCtrlTimeStamp, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 
 
-	bSizerBottom->Add( bSizer11, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bSizerBottom->Add( bSizerUUID, 1, wxEXPAND, 10 );
 
 
-	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerBottom->Add( 10, 0, 0, wxEXPAND, 5 );
 
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Edit Spice Model..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerBottom->Add( m_spiceFieldsButton, 0, wxEXPAND|wxALL, 5 );
 
 
-	bSizerBottom->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
+	bSizerBottom->Add( 10, 0, 0, wxEXPAND, 5 );
 
 	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	m_stdDialogButtonSizerOK = new wxButton( this, wxID_OK );
@@ -238,7 +238,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 
 	this->SetSizer( mainSizer );
 	this->Layout();
-	mainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::OnInitDlg ) );

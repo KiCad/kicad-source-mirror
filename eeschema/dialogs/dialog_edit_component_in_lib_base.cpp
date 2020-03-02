@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -172,7 +172,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_AsConvertButt = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Has alternate symbol (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AsConvertButt->SetToolTip( _("Check this option if the symbol has an alternate body style (De Morgan)") );
 
-	sbSizerSymbol->Add( m_AsConvertButt, 0, wxRIGHT|wxLEFT, 5 );
+	sbSizerSymbol->Add( m_AsConvertButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_OptionPower = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Define as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptionPower->SetToolTip( _("Setting this option makes the symbol in question appear in the\n\"add power port\" dialog.  It will lock the value text to protect it\nfrom editing in Eeschema.  The symbol will not be included in\nthe BOM and cannot be assigned a footprint.") );
@@ -186,18 +186,18 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_staticTextNbUnits->Wrap( -1 );
 	m_staticTextNbUnits->SetToolTip( _("Enter the number of units for a symbol that contains more than one unit") );
 
-	bSizerUnitCount->Add( m_staticTextNbUnits, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerUnitCount->Add( m_staticTextNbUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_SelNumberOfUnits = new wxSpinCtrl( sbSizerSymbol->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 64, 1 );
-	bSizerUnitCount->Add( m_SelNumberOfUnits, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerUnitCount->Add( m_SelNumberOfUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizerSymbol->Add( bSizerUnitCount, 1, wxEXPAND, 5 );
+	sbSizerSymbol->Add( bSizerUnitCount, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_OptionPartsLocked = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("All units are not interchangeable"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptionPartsLocked->SetToolTip( _("Check this option when creating multiple unit symbols and all units are not interchangeable") );
 
-	sbSizerSymbol->Add( m_OptionPartsLocked, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizerSymbol->Add( m_OptionPartsLocked, 0, wxALL, 5 );
 
 
 	bSizerLeftCol->Add( sbSizerSymbol, 0, wxEXPAND|wxALL, 5 );
@@ -208,54 +208,54 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxBoxSizer* bSizerRightCol;
 	bSizerRightCol = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizerAnnotations;
-	sbSizerAnnotations = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("Annotations") ), wxVERTICAL );
+	wxStaticBoxSizer* sbSizerPinTextOpts;
+	sbSizerPinTextOpts = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("Pin Texts Options:") ), wxVERTICAL );
 
-	m_ShowPinNumButt = new wxCheckBox( sbSizerAnnotations->GetStaticBox(), wxID_ANY, _("Show pin number"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowPinNumButt = new wxCheckBox( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("Show pin number"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowPinNumButt->SetValue(true);
 	m_ShowPinNumButt->SetToolTip( _("Show or hide pin numbers") );
 
-	sbSizerAnnotations->Add( m_ShowPinNumButt, 0, wxRIGHT|wxLEFT, 5 );
+	sbSizerPinTextOpts->Add( m_ShowPinNumButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_ShowPinNameButt = new wxCheckBox( sbSizerAnnotations->GetStaticBox(), wxID_ANY, _("Show pin name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowPinNameButt = new wxCheckBox( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("Show pin name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowPinNameButt->SetValue(true);
 	m_ShowPinNameButt->SetToolTip( _("Show or hide pin names") );
 
-	sbSizerAnnotations->Add( m_ShowPinNameButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbSizerPinTextOpts->Add( m_ShowPinNameButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizerAnnotations->Add( 0, 0, 1, wxEXPAND, 5 );
+	sbSizerPinTextOpts->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_PinsNameInsideButt = new wxCheckBox( sbSizerAnnotations->GetStaticBox(), wxID_ANY, _("Place pin names inside"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PinsNameInsideButt = new wxCheckBox( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("Place pin names inside"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PinsNameInsideButt->SetValue(true);
 	m_PinsNameInsideButt->SetToolTip( _("Check this option to have pin names inside the body and pin number outside.\nIf not checked pins names and pins numbers are outside.") );
 
-	sbSizerAnnotations->Add( m_PinsNameInsideButt, 0, wxALL, 5 );
+	sbSizerPinTextOpts->Add( m_PinsNameInsideButt, 0, wxALL, 5 );
 
 	wxBoxSizer* bSizerNameOffset;
 	bSizerNameOffset = new wxBoxSizer( wxHORIZONTAL );
 
-	m_nameOffsetLabel = new wxStaticText( sbSizerAnnotations->GetStaticBox(), wxID_ANY, _("Position offset:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_nameOffsetLabel = new wxStaticText( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("Position offset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_nameOffsetLabel->Wrap( -1 );
 	m_nameOffsetLabel->SetToolTip( _("Margin (in 0.001 inches) between a pin name position and the component body.\nA value from 10 to 40 is usually good.") );
 
 	bSizerNameOffset->Add( m_nameOffsetLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
-	m_nameOffsetCtrl = new wxTextCtrl( sbSizerAnnotations->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_nameOffsetCtrl = new wxTextCtrl( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerNameOffset->Add( m_nameOffsetCtrl, 1, wxLEFT|wxRIGHT, 5 );
 
-	m_nameOffsetUnits = new wxStaticText( sbSizerAnnotations->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_nameOffsetUnits = new wxStaticText( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_nameOffsetUnits->Wrap( -1 );
 	bSizerNameOffset->Add( m_nameOffsetUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbSizerAnnotations->Add( bSizerNameOffset, 0, wxEXPAND, 5 );
+	sbSizerPinTextOpts->Add( bSizerNameOffset, 0, wxEXPAND, 5 );
 
 
-	sbSizerAnnotations->Add( 0, 0, 1, wxEXPAND, 5 );
+	sbSizerPinTextOpts->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	bSizerRightCol->Add( sbSizerAnnotations, 1, wxEXPAND|wxALL, 5 );
+	bSizerRightCol->Add( sbSizerPinTextOpts, 1, wxEXPAND|wxALL, 5 );
 
 
 	bSizerLowerBasicPanel->Add( bSizerRightCol, 1, wxEXPAND, 5 );
@@ -349,7 +349,6 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnUpdateUI ) );
