@@ -1205,13 +1205,17 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         for ( const auto p : mod->Pads() )
         {
             auto solid = m_router->GetWorld()->FindItemByParent( p );
-            itemsToDrag.Add( solid );
+
+            if( solid )
+                itemsToDrag.Add( solid );
         }
     }
     else
     {
         startItem = m_router->GetWorld()->FindItemByParent( static_cast<const BOARD_CONNECTED_ITEM*>( item ) );
-        itemsToDrag.Add( startItem );
+
+        if( startItem)
+            itemsToDrag.Add( startItem );
     }
 
     if( startItem && startItem->IsLocked() )
