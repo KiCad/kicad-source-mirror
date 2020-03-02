@@ -1020,10 +1020,13 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PICKER_TOOL );
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
 
-    m_toolManager->GetTool<PAD_TOOL>()->SetEditModules( true );
     m_toolManager->GetTool<SELECTION_TOOL>()->SetEditModules( true );
     m_toolManager->GetTool<EDIT_TOOL>()->SetEditModules( true );
+    m_toolManager->GetTool<PAD_TOOL>()->SetEditModules( true );
     m_toolManager->GetTool<DRAWING_TOOL>()->SetEditModules( true );
+    m_toolManager->GetTool<POINT_EDITOR>()->SetEditModules( true );
+    m_toolManager->GetTool<PCBNEW_CONTROL>()->SetEditModules( true );
+    m_toolManager->GetTool<POSITION_RELATIVE_TOOL>()->SetEditModules( true );
 
     m_toolManager->InitTools();
 
