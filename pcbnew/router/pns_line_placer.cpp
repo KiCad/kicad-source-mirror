@@ -1101,16 +1101,16 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
     if( !l.SegmentCount() )
     {
-        if( pl.EndsWithVia() )
-        {
-            m_lastNode->Add( Clone( pl.Via() ) );
-            m_lastNode = NULL;
-            m_currentNode = NULL;
+        // Nothing to commit if we have an empty line
+        if( !pl.EndsWithVia() )
+            return false;
 
-            m_idle = true;
-            m_placementCorrect = true;
-        }
+        m_lastNode->Add( Clone( pl.Via() ) );
+        m_lastNode = NULL;
+        m_currentNode = NULL;
 
+        m_idle = true;
+        m_placementCorrect = true;
         return true;
     }
 
