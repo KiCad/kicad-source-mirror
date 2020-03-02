@@ -68,6 +68,14 @@ public:
     int SelectPositionRelativeItem( const TOOL_EVENT& aEvent  );
 
     /**
+     * Function GetSelectionAnchorPosition()
+     *
+     * Returns the postion of the selected item(s)
+     *
+     */
+    wxPoint GetSelectionAnchorPosition() const;
+
+    /**
      * Function RelativeItemSelectionMove()
      *
      * Positions the m_position_relative_selection selection relative to anchorpostion using

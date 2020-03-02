@@ -92,21 +92,15 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+wxPoint POSITION_RELATIVE_TOOL::GetSelectionAnchorPosition() const
+{
+    return static_cast<BOARD_ITEM*>( m_selection.GetTopLeftItem() )->GetPosition();
+}
+
 
 int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( wxPoint aPosAnchor, wxPoint aTranslation )
 {
-    wxPoint aSelAnchor( INT_MAX, INT_MAX );
-
-    // Find top-left item anchor in selection
-    for( auto item : m_selection )
-    {
-        wxPoint itemAnchor = static_cast<BOARD_ITEM*>( item )->GetPosition();
-
-        if( EuclideanNorm( itemAnchor ) < EuclideanNorm( aSelAnchor ) )
-            aSelAnchor = itemAnchor;
-    }
-
-    wxPoint aggregateTranslation = aPosAnchor + aTranslation - aSelAnchor;
+    wxPoint aggregateTranslation = aPosAnchor + aTranslation - GetSelectionAnchorPosition();
 
     for( auto item : m_selection )
     {
@@ -146,10 +140,10 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
         {
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
             const PCBNEW_SELECTION& sel = m_selectionTool->RequestSelection(
-                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-                {
-                    EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
-                } );
+                    []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector ) {
+                        EditToolSelectionFilter(
+                                aCollector, EXCLUDE_TRANSIENTS | INCLUDE_PADS_AND_MODULES );
+                    } );
 
             if( sel.Empty() )
                 return true;    // still looking for an item

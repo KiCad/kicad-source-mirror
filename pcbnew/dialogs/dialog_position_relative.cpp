@@ -156,12 +156,16 @@ void DIALOG_POSITION_RELATIVE::updateDialogControls( bool aPolar )
         m_xOffset.SetLabel( _( "Distance:" ) );     // Polar radius
         m_yOffset.SetLabel( _( "Angle:" ) );        // Polar theta or angle
         m_yOffset.SetUnits( EDA_UNITS::DEGREES );
+        m_clearX->SetToolTip( _( "Reset to the current distance from the reference position." ) );
+        m_clearY->SetToolTip( _( "Reset to the current angle from the reference position." ) );
     }
     else
     {
         m_xOffset.SetLabel( _( "Offset X:" ) );
         m_yOffset.SetLabel( _( "Offset Y:" ) );
         m_yOffset.SetUnits( GetUserUnits() );
+        m_clearX->SetToolTip( _( "Reset to the current X offset from the reference position." ) );
+        m_clearY->SetToolTip( _( "Reset to the current Y offset from the reference position." ) );
     }
 }
 
@@ -169,14 +173,43 @@ void DIALOG_POSITION_RELATIVE::updateDialogControls( bool aPolar )
 void DIALOG_POSITION_RELATIVE::OnClear( wxCommandEvent& event )
 {
     wxObject* obj = event.GetEventObject();
+    POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
+    wxASSERT( posrelTool );
+
+    wxPoint offset = posrelTool->GetSelectionAnchorPosition() - m_anchor_position;
+    double  r, q;
+    ToPolarDeg( offset.x, offset.y, r, q );
+
 
     if( obj == m_clearX )
     {
-        m_xOffset.SetValue( 0 );
+        m_stateX = offset.x;
+        m_xOffset.SetDoubleValue( r );
+        m_stateRadius = m_xOffset.GetDoubleValue();
+
+        if( m_polarCoords->IsChecked() )
+        {
+            m_xOffset.SetDoubleValue( m_stateRadius );
+        }
+        else
+        {
+            m_xOffset.SetValue( m_stateX );
+        }
     }
     else if( obj == m_clearY )
     {
-        m_yOffset.SetValue( 0 );
+        m_stateY = offset.y;
+        m_yOffset.SetDoubleValue( q * 10 );
+        m_stateTheta = m_yOffset.GetDoubleValue();
+
+        if( m_polarCoords->IsChecked() )
+        {
+            m_yOffset.SetDoubleValue( m_stateTheta );
+        }
+        else
+        {
+            m_yOffset.SetValue( m_stateY );
+        }
     }
 }
 

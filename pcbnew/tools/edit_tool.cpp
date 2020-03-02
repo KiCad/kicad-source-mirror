@@ -87,7 +87,7 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags )
             }
 
             // case 2: selection contains both the module and its pads - remove the pads
-            if( mod && aCollector.HasItem( mod ) )
+            if( !( aFlags & INCLUDE_PADS_AND_MODULES ) && mod && aCollector.HasItem( mod ) )
                 aCollector.Remove( item );
         }
         else if( ( aFlags & EXCLUDE_TRANSIENTS ) && item->Type() == PCB_MARKER_T )
