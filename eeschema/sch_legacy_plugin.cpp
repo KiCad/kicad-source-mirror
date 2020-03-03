@@ -3178,13 +3178,20 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_PART>& aPart,
 FILL_T SCH_LEGACY_PLUGIN_CACHE::parseFillMode( LINE_READER& aReader, const char* aLine,
                                                const char** aOutput )
 {
-    switch( parseChar( aReader, aLine, aOutput ) )
+    switch ( parseChar( aReader, aLine, aOutput ) )
     {
-    case 'F': return FILLED_SHAPE;
-    case 'f': return FILLED_WITH_BG_BODYCOLOR;
-    case 'N': return NO_FILL;
-    default: SCH_PARSE_ERROR( "invalid fill type, expected f, F, or N", aReader, aLine );
+    case 'F':
+        return FILLED_SHAPE;
+    case 'f':
+        return FILLED_WITH_BG_BODYCOLOR;
+    case 'N':
+        return NO_FILL;
+    default:
+        SCH_PARSE_ERROR( "invalid fill type, expected f, F, or N", aReader, aLine );
     }
+
+    // This will never be reached but quiets the compiler warnings
+    return NO_FILL;
 }
 
 
