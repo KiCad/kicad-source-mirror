@@ -18,8 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/replace.hpp>
+#include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <utility>
@@ -272,7 +271,7 @@ bool JSON_SETTINGS::MigrateFromLegacy( wxConfigBase* aLegacyConfig )
 
 nlohmann::json::json_pointer JSON_SETTINGS::PointerFromString( std::string aPath )
 {
-    boost::replace_all( aPath, ".", "/" );
+    std::replace( aPath.begin(), aPath.end(), '.', '/' );
     aPath.insert( 0, "/" );
 
     nlohmann::json::json_pointer p;
