@@ -182,17 +182,48 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
 SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch(
         SCH_SCREEN* aScreen, SCH_ITEM* aAfter, wxFindReplaceData* aData )
 {
-    bool past_item = ( aAfter == nullptr );
+    bool past_item = true;
+
+    if( aAfter != nullptr )
+    {
+        past_item = false;
+
+        if( aAfter->Type() == SCH_PIN_T || aAfter->Type() == SCH_FIELD_T )
+            aAfter = static_cast<SCH_ITEM*>( aAfter->GetParent() );
+    }
+
 
     for( auto item : aScreen->Items() )
     {
         if( item == aAfter )
+        {
             past_item = true;
+        }
+        else if( past_item )
+        {
+            if( aData == &g_markersOnly && item->Type() == SCH_MARKER_T )
+                return item;
 
-        if( past_item
-                && ( ( aData == &g_markersOnly && item->Type() == SCH_MARKER_T )
-                           || item->Matches( *aData, nullptr ) ) )
-            return item;
+            if( item->Matches( *aData, nullptr ) )
+                return item;
+
+            if( item->Type() == SCH_COMPONENT_T )
+            {
+                auto cmp = static_cast<SCH_COMPONENT*>( item );
+
+                for( auto field : cmp->GetFields() )
+                {
+                    if( field->Matches( *aData, nullptr ) )
+                        return field;
+                }
+
+                for( auto pin : cmp->GetSchPins() )
+                {
+                    if( pin->Matches( *aData, nullptr ) )
+                        return pin;
+                }
+            }
+        }
     }
 
     return nullptr;
