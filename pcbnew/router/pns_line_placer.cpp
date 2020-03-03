@@ -55,6 +55,7 @@ LINE_PLACER::LINE_PLACER( ROUTER* aRouter ) :
     m_startItem = NULL;
     m_chainedPlacement = false;
     m_orthoMode = false;
+    m_placementCorrect = false;
 }
 
 
