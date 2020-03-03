@@ -1252,7 +1252,8 @@ bool LINE_PLACER::HasPlacedAnything() const
 
 bool LINE_PLACER::CommitPlacement()
 {
-    Router()->CommitRouting( m_lastNode );
+    if( m_lastNode )
+        Router()->CommitRouting( m_lastNode );
 
     m_lastNode = NULL;
     m_currentNode = NULL;
