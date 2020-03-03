@@ -538,7 +538,9 @@ const ITEM_SET NODE::HitTest( const VECTOR2I& aPoint ) const
 
 void NODE::addSolid( SOLID* aSolid )
 {
-    linkJoint( aSolid->Pos(), aSolid->Layers(), aSolid->Net(), aSolid );
+    if( aSolid->IsRoutable() )
+        linkJoint( aSolid->Pos(), aSolid->Layers(), aSolid->Net(), aSolid );
+
     m_index->Add( aSolid );
 }
 
