@@ -1188,6 +1188,8 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
         m_head.Line().Clear();
         m_tail.Line().Clear();
+        m_head.RemoveVia();
+        m_tail.RemoveVia();
         m_currentNode = m_lastNode;
         m_lastNode = m_lastNode->Branch();
 
