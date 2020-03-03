@@ -33,7 +33,7 @@
 #include <class_library.h>
 
 
-void mapExistingAnnotation( std::map<KIID, wxString>& aMap )
+void mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 {
     SCH_SHEET_LIST     sheets( g_RootSheet );
     SCH_REFERENCE_LIST references;
@@ -43,10 +43,17 @@ void mapExistingAnnotation( std::map<KIID, wxString>& aMap )
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
         SCH_COMPONENT* comp = references[ i ].GetComp();
-        wxString       ref = comp->GetField( REFERENCE )->GetFullyQualifiedText();
+        SCH_SHEET_PATH* curr_sheetpath = &references[ i ].GetSheetPath();
+        KIID_PATH curr_full_uuid = curr_sheetpath->Path();
+        curr_full_uuid.push_back( comp->m_Uuid );
 
-        if( !ref.Contains( wxT( "?" ) ) )
-            aMap[ comp->m_Uuid ] = ref;
+        wxString ref = comp->GetRef( curr_sheetpath );
+
+        if( comp->GetUnitCount() > 1 )
+            ref << LIB_PART::SubReference( comp->GetUnitSelection( curr_sheetpath ) );
+
+        if( comp->IsAnnotated( curr_sheetpath ) )
+            aMap[ curr_full_uuid.AsString() ] = ref;
     }
 }
 
@@ -94,7 +101,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     SCH_MULTI_UNIT_REFERENCE_MAP lockedComponents;
 
     // Map of previous annotation for building info messages
-    std::map<KIID, wxString> previousAnnotation;
+    std::map<wxString, wxString> previousAnnotation;
 
     // Test for and replace duplicate time stamps in components and sheets.  Duplicate
     // time stamps can happen with old schematics, schematic conversions, or manual
@@ -173,9 +180,18 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
         SCH_COMPONENT* comp = references[ i ].GetComp();
-        wxString       prevRef = previousAnnotation[ comp->m_Uuid ];
-        wxString       newRef  = comp->GetField( REFERENCE )->GetFullyQualifiedText();
-        wxString       msg;
+        SCH_SHEET_PATH* curr_sheetpath = &references[ i ].GetSheetPath();
+        KIID_PATH curr_full_uuid = curr_sheetpath->Path();
+        curr_full_uuid.push_back( comp->m_Uuid );
+
+        wxString prevRef = previousAnnotation[ curr_full_uuid.AsString() ];
+
+        wxString newRef  = comp->GetRef( curr_sheetpath );
+
+        if( comp->GetUnitCount() > 1 )
+            newRef << LIB_PART::SubReference( comp->GetUnitSelection( curr_sheetpath ) );
+
+        wxString msg;
 
         if( prevRef.Length() )
         {
@@ -186,13 +202,11 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
                 msg.Printf( _( "Updated %s (unit %s) from %s to %s" ),
                             comp->GetField( VALUE )->GetShownText(),
                             LIB_PART::SubReference( comp->GetUnit(), false ),
-                            prevRef,
-                            newRef );
+                            prevRef, newRef );
             else
                 msg.Printf( _( "Updated %s from %s to %s" ),
                             comp->GetField( VALUE )->GetShownText(),
-                            prevRef,
-                            newRef );
+                            prevRef, newRef );
         }
         else
         {
