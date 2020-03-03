@@ -1069,6 +1069,7 @@ void SCH_SEXPR_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_PART>& aPart,
 FILL_T SCH_SEXPR_PLUGIN_CACHE::parseFillMode( LINE_READER& aReader, const char* aLine,
                                               const char** aOutput )
 {
+    return NO_FILL;
 }
 
 
