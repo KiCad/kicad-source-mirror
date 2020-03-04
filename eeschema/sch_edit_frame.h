@@ -131,7 +131,6 @@ private:
     bool                    m_printSheetReference;
     SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
     int                     m_repeatLabelDelta;   ///< Repeat label number increment step.
-    SCH_ITEM*               m_undoItem;           ///< Copy of the current item being edited.
     wxString                m_netListerCommand;   ///< Command line to call a custom net list
                                                   ///< generator.
     int                     m_exec_flags;         ///< Flags of the wxExecute() function
@@ -955,18 +954,6 @@ public:
      * Such object is owned by this container, and must be cloned.
      */
     SCH_ITEM* GetRepeatItem() const             { return m_item_to_repeat; }
-
-    /**
-     * Swap the cloned item in member variable m_undoItem with \a aItem and saves it to
-     * the undo list then swap the data back.
-     *
-     * This swaps the internal structure of the item with the cloned item.  It does not
-     * swap the actual item pointers themselves.
-     *
-     * @param aItem The item to swap with the current undo item.
-     * @param aAppend True if the action should be appended to the current undo record.
-     */
-    void SaveUndoItemInUndoList( SCH_ITEM* aItem, bool aAppend = false );
 
     /**
      * Performs an undo of the last edit WITHOUT logging a corresponding redo.  Used to cancel

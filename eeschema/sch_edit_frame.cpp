@@ -220,7 +220,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_printMonochrome = true;
     m_printSheetReference = true;
     SetShowPageLimits( true );
-    m_undoItem = NULL;
     m_hasAutoSave = true;
     m_showIllegalSymbolLibDialog = true;
     m_showSheetFileNameCaseSensitivityDlg = true;
@@ -301,7 +300,6 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 
     delete g_CurrentSheet;          // a SCH_SHEET_PATH, on the heap.
     delete g_ConnectionGraph;
-    delete m_undoItem;
     delete g_RootSheet;
 
     g_CurrentSheet = nullptr;
@@ -460,18 +458,6 @@ void SCH_EDIT_FRAME::HardRedraw()
 {
     GetCanvas()->DisplaySheet( g_CurrentSheet->LastScreen() );
     GetCanvas()->ForceRefresh();
-}
-
-
-void SCH_EDIT_FRAME::SaveUndoItemInUndoList( SCH_ITEM* aItem, bool aAppend )
-{
-    wxCHECK_RET( aItem != NULL, wxT( "Cannot swap undo item structures." ) );
-    wxCHECK_RET( m_undoItem != NULL, wxT( "Cannot swap undo item structures." ) );
-    wxCHECK_RET( aItem->Type() == m_undoItem->Type(), wxT( "Cannot swap undo item structures." ) );
-
-    aItem->SwapData( m_undoItem );
-    SaveCopyInUndoList( aItem, UR_CHANGED, aAppend );
-    aItem->SwapData( m_undoItem );
 }
 
 
@@ -1002,10 +988,6 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
         // Update connectivity info for new item
         if( !aItem->IsMoving() )
             RecalculateConnections( LOCAL_CLEANUP );
-    }
-    else
-    {
-        SaveUndoItemInUndoList( undoItem, aUndoAppend );
     }
 
     aItem->ClearFlags( IS_NEW );

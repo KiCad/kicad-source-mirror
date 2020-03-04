@@ -261,18 +261,6 @@ bool SCH_FIELD::IsVoid() const
 }
 
 
-void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
-{
-    SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
-
-    // save old cmp in undo list
-    frame->SaveUndoItemInUndoList( component );
-
-    ClearEditFlags();
-    frame->OnModify();
-}
-
-
 bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     wxString text = GetFullyQualifiedText();

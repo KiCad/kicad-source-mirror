@@ -119,8 +119,6 @@ public:
      */
     const wxString GetFullyQualifiedText() const;
 
-    void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
-
     const EDA_RECT GetBoundingBox() const override;
 
     /**
