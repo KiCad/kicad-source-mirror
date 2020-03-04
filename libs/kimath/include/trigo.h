@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,20 +33,22 @@
 #include <wx/gdicmn.h> // For wxPoint
 
 /**
- * Function IsPointOnSegment
- * @param aSegStart The first point of the segment S.
- * @param aSegEnd The second point of the segment S.
- * @param aTestPoint The point P to test.
- * @return true if the point P is on the segment S.
- * faster than TestSegmentHit() because P should be exactly on S
- * therefore works fine only for H, V and 45 deg segm.
- * suitable for buses and wires in Eeschema, otherwise use TestSegmentHit()
+ * Test if \a aTestPoint is on line defined by \a aSegStart and \a aSegEnd.
+ *
+ * This function is faster than #TestSegmentHit() because \a aTestPoint  should be exactly on
+ * the line.  This works fine only for H, V and 45 degree line segments.
+ *
+ * @param aSegStart The first point of the line segment.
+ * @param aSegEnd The second point of the line segment.
+ * @param aTestPoint The point to test.
+ *
+ * @return true if the point is on the line segment.
  */
 bool IsPointOnSegment( const wxPoint& aSegStart, const wxPoint& aSegEnd,
                        const wxPoint& aTestPoint );
 
 /**
- * Function SegmentIntersectsSegment
+ * Test if two lines intersect.
  *
  * @param a_p1_l1 The first point of the first line.
  * @param a_p2_l1 The second point of the first line.
@@ -99,7 +101,8 @@ void RotatePoint( double *pX, double *pY, double angle );
 void RotatePoint( double *pX, double *pY, double cx, double cy, double angle );
 
 /**
- * Determine the center of an arc/circle, given three points on its circumference
+ * Determine the center of an arc or circle given three points on its circumference.
+ *
  * @param aStart The starting point of the circle (equivalent to aEnd)
  * @param aMid The point on the arc, half-way between aStart and aEnd
  * @param aEnd The ending point of the circle (equivalent to aStart)
@@ -183,9 +186,8 @@ inline double CrossProduct( const wxPoint &vectorA, const wxPoint &vectorB )
 }
 
 /**
- * Function TestSegmentHit
- * test for hit on line segment
- * i.e. a reference point is within a given distance from segment
+ * Test if \a aRefPoint is with \a aDistance on the line defined by \a aStart and \a aEnd..
+ *
  * @param aRefPoint = reference point to test
  * @param aStart is the first end-point of the line segment
  * @param aEnd is the second end-point of the line segment
@@ -195,10 +197,10 @@ bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart,
                      wxPoint aEnd, int aDist );
 
 /**
- * Function GetLineLength
- * returns the length of a line segment defined by \a aPointA and \a aPointB.
- * See also EuclideanNorm and Distance for the single vector or four
- * scalar versions
+ * Return the length of a line segment defined by \a aPointA and \a aPointB.
+ *
+ * See also EuclideanNorm and Distance for the single vector or four scalar versions.
+ *
  * @return Length of a line (as double)
  */
 inline double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB )
@@ -359,8 +361,6 @@ template <class T> inline void NORMALIZE_ANGLE_180( T& Angle )
  *
  * Testing is performed in the quadrant 1 to quadrant 4 direction (counter-clockwise).
  *
- * @warning Do not use this function, it has not been tested.
- *
  * @param aStartAngle The arc start angle in degrees.
  * @param aEndAngle The arc end angle in degrees.
  */
@@ -368,18 +368,16 @@ inline bool InterceptsPositiveX( double aStartAngle, double aEndAngle )
 {
     double end = aEndAngle;
 
-    if( aStartAngle < aEndAngle )
+    if( aStartAngle > aEndAngle )
         end += 360.0;
 
-    return aStartAngle < 360.0 && aEndAngle > 360.0;
+    return aStartAngle < 360.0 && end > 360.0;
 }
 
 /**
  * Test if an arc from \a aStartAngle to \a aEndAngle crosses the negative X axis (180 degrees).
  *
  * Testing is performed in the quadrant 1 to quadrant 4 direction (counter-clockwise).
- *
- * @warning Do not use this function, it has not been tested.
  *
  * @param aStartAngle The arc start angle in degrees.
  * @param aEndAngle The arc end angle in degrees.
@@ -388,10 +386,10 @@ inline bool InterceptsNegativeX( double aStartAngle, double aEndAngle )
 {
     double end = aEndAngle;
 
-    if( aStartAngle < aEndAngle )
+    if( aStartAngle > aEndAngle )
         end += 360.0;
 
-    return aStartAngle < 180.0 && aEndAngle > 180.0;
+    return aStartAngle < 180.0 && end > 180.0;
 }
 
 /**

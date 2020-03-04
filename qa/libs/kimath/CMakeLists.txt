@@ -1,6 +1,6 @@
 # This program source code file is part of KiCad, a free EDA CAD application.
 #
-# Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+# Copyright (C) 2020 KiCad Developers, see AUTHORS.TXT for contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,7 +19,25 @@
 # or you may write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
-# QA tests and tools for common libraries
+#
+# Unit tests for KiCad math routines.
 
-add_subdirectory( sexpr )
-add_subdirectory( kimath )
+set( KIMATH_SRCS
+    kimath_test_module.cpp
+
+    test_kimath.cpp
+)
+
+add_executable( qa_kimath ${KIMATH_SRCS} )
+
+target_link_libraries( qa_kimath
+    kimath
+    unit_test_utils
+    ${wxWidgets_LIBRARIES}
+)
+
+target_include_directories( qa_kimath PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+kicad_add_boost_test( qa_kimath kmath )
