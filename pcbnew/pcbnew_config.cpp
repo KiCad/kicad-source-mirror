@@ -96,6 +96,12 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
 {
     wxFileName fn = Prj().GetProjectFullName();
 
+    // Check for the filename before checking IsWritable as this
+    // will throw errors on bad names.  Here, we just want to not
+    // save the Settings if we don't have a name
+    if( !fn.IsOk() )
+        return;
+
     if( !IsWritable( fn ) )
         return;
 
