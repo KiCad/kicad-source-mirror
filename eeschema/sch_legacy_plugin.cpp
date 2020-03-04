@@ -989,7 +989,9 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
         {
             wxString text;
             parseUnquotedString( text, aReader, line );
-            const_cast<KIID&>( sheet->m_Uuid ) = KIID( text );
+
+            if( text != "00000000" )
+                const_cast<KIID&>( sheet->m_Uuid ) = KIID( text );
         }
         else if( *line == 'F' )                     // Sheet field.
         {
@@ -1569,7 +1571,9 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
 
             wxString text;
             parseUnquotedString( text, aReader, line, &line );
-            const_cast<KIID&>( component->m_Uuid ) = KIID( text );
+
+            if( text != "00000000" )
+                const_cast<KIID&>( component->m_Uuid ) = KIID( text );
         }
         else if( strCompare( "P", line, &line ) )
         {

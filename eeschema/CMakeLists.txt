@@ -247,6 +247,7 @@ set( EESCHEMA_SRCS
 set( EESCHEMA_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/common/dialogs/dialog_page_settings.cpp
     ${CMAKE_SOURCE_DIR}/common/dialogs/panel_display_options.cpp
+    ${CMAKE_SOURCE_DIR}/common/common.cpp
     ${CMAKE_SOURCE_DIR}/common/base_screen.cpp
     ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     ${CMAKE_SOURCE_DIR}/common/eda_text.cpp

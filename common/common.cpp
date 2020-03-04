@@ -68,7 +68,7 @@ KIID::KIID() :
 
     oldTimeStamp = newTimeStamp;
 
-    *this = UUID( wxString::Format( "%8.8X", newTimeStamp ) );
+    *this = KIID( wxString::Format( "%8.8X", newTimeStamp ) );
 #endif
 }
 
