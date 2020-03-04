@@ -22,7 +22,6 @@
 #define KICAD_DIALOG_BOARD_SETUP_H
 
 #include <widgets/paged_dialog.h>
-#include "panel_setup_drc_severities.h"
 
 class PCB_EDIT_FRAME;
 class PANEL_SETUP_FEATURE_CONSTRAINTS;
@@ -32,6 +31,7 @@ class PANEL_SETUP_NETCLASSES;
 class PANEL_SETUP_TRACKS_AND_VIAS;
 class PANEL_SETUP_MASK_AND_PASTE;
 class PANEL_SETUP_BOARD_STACKUP;
+class PANEL_SETUP_DRC_SEVERITIES;
 
 
 class DIALOG_BOARD_SETUP : public PAGED_DIALOG

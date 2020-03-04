@@ -61,7 +61,7 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
             && !m_settings.processReferences )
     {
         m_settings.reporter.ReportTail(
-                _( "Select at least one property to back annotate" ), SEVERITY_ERROR );
+                _( "Select at least one property to back annotate" ), RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -85,16 +85,16 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
         if( !m_settings.dryRun )
         {
             msg.Printf( _( "Schematic is back-annotated. %d changes applied." ), m_changesCount );
-            m_settings.reporter.ReportTail( msg, SEVERITY_ACTION );
+            m_settings.reporter.ReportTail( msg, RPT_SEVERITY_ACTION );
         }
         else
             m_settings.reporter.ReportTail(
-                    _( "No errors during dry run. Ready to go." ), SEVERITY_ACTION );
+                    _( "No errors during dry run. Ready to go." ), RPT_SEVERITY_ACTION );
     }
     else
     {
         msg.Printf( _( "Found %d errors. Fix them and run back annotation." ), errors );
-        m_settings.reporter.ReportTail( msg, SEVERITY_ERROR );
+        m_settings.reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
     }
 
     return !errors;
@@ -149,7 +149,7 @@ int BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
             if( path == "" )
             {
                 msg.Printf( _( "Footprint \"%s\" has no symbol associated." ), ref );
-                m_settings.reporter.ReportHead( msg, SEVERITY_WARNING );
+                m_settings.reporter.ReportHead( msg, RPT_SEVERITY_WARNING );
                 continue;
             }
             footprint = UTF8( item.second.get_child( "fpid" ).front().first );
@@ -168,7 +168,7 @@ int BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
             // Module with this path already exists - generate error
             msg.Printf( _( "Pcb footprints \"%s\" and \"%s\" linked to same symbol" ),
                     nearestItem->second->ref, ref );
-            m_settings.reporter.ReportHead( msg, SEVERITY_ERROR );
+            m_settings.reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
             ++errors;
         }
         else
@@ -223,7 +223,7 @@ int BACK_ANNOTATE::getChangeList()
             wxString msg;
             msg.Printf( _( "Cannot find symbol for \"%s\" footprint" ), pcbData->ref );
             ++errors;
-            m_settings.reporter.ReportTail( msg, SEVERITY_ERROR );
+            m_settings.reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
         }
     }
     return errors;
@@ -248,7 +248,7 @@ int BACK_ANNOTATE::checkForUnusedSymbols()
             ++errors;
             wxString msg;
             msg.Printf( _( "Cannot find footprint for \"%s\" symbol" ), m_refs[i++].GetFullRef() );
-            m_settings.reporter.ReportTail( msg, SEVERITY_ERROR );
+            m_settings.reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
         }
 
         ++i;
@@ -310,7 +310,7 @@ int BACK_ANNOTATE::checkSharedSchematicErrors()
                 msg.Printf( _( "\"%s\" and \"%s\" use the same schematic symbol.\n"
                                "They cannot have different footprints or values." ),
                            ( it + 1 )->second->ref, it->second->ref );
-                m_settings.reporter.ReportTail( msg, SEVERITY_ERROR );
+                m_settings.reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
             }
         }
         else
@@ -328,7 +328,7 @@ int BACK_ANNOTATE::checkSharedSchematicErrors()
                     msg.Printf( _( "Unable to change \"%s\" footprint or value because associated"
                                    " symbol is reused in the another project" ),
                                 it->second->ref );
-                    m_settings.reporter.ReportTail( msg, SEVERITY_ERROR );
+                    m_settings.reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
                     ++errors;
                 }
             }
@@ -359,7 +359,7 @@ void BACK_ANNOTATE::applyChangelist()
             msg.Printf( _( "Change \"%s\" reference to \"%s\"." ), ref.GetFullRef(), module.ref );
             if( !m_settings.dryRun )
                 ref.GetComp()->SetRef( &ref.GetSheetPath(), module.ref );
-            m_settings.reporter.ReportHead( msg, SEVERITY_ACTION );
+            m_settings.reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
 
         if( m_settings.processFootprints && oldFootprint != module.footprint )
@@ -370,7 +370,7 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_settings.dryRun )
                 ref.GetComp()->GetField( FOOTPRINT )->SetText( module.footprint );
-            m_settings.reporter.ReportHead( msg, SEVERITY_ACTION );
+            m_settings.reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
 
         if( m_settings.processValues && oldValue != module.value )
@@ -380,12 +380,12 @@ void BACK_ANNOTATE::applyChangelist()
                     getTextFromField( ref, VALUE ), module.value );
             if( !m_settings.dryRun )
                 item.first.GetComp()->GetField( VALUE )->SetText( module.value );
-            m_settings.reporter.ReportHead( msg, SEVERITY_ACTION );
+            m_settings.reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
 
         if( changesCountBefore == m_changesCount )
             ++leftUnchanged;
     }
     msg.Printf( _( "%d symbols left unchanged" ), leftUnchanged );
-    m_settings.reporter.ReportHead( msg, SEVERITY_INFO );
+    m_settings.reporter.ReportHead( msg, RPT_SEVERITY_INFO );
 }

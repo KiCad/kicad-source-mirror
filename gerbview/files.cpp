@@ -308,7 +308,7 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
             wxString warning;
             warning << "<b>" << _( "File not found:" ) << "</b><br>"
                     << filename.GetFullPath() << "<br>";
-            reporter.Report( warning, SEVERITY_WARNING );
+            reporter.Report( warning, RPT_SEVERITY_WARNING );
             success = false;
             continue;
         }
@@ -350,7 +350,7 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
                 if( layer == NO_AVAILABLE_LAYERS && ii < aFilenameList.GetCount()-1 )
                 {
                     success = false;
-                    reporter.Report( MSG_NO_MORE_LAYER, SEVERITY_ERROR );
+                    reporter.Report( MSG_NO_MORE_LAYER, RPT_SEVERITY_ERROR );
 
                     // Report the name of not loaded files:
                     ii += 1;
@@ -358,7 +358,7 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
                     {
                         filename = aFilenameList[ii++];
                         wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
-                        reporter.Report( txt, SEVERITY_ERROR );
+                        reporter.Report( txt, RPT_SEVERITY_ERROR );
                     }
                     break;
                 }
@@ -471,7 +471,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
             if( layer == NO_AVAILABLE_LAYERS && ii < filenamesList.GetCount()-1 )
             {
                 success = false;
-                reporter.Report( MSG_NO_MORE_LAYER, SEVERITY_ERROR );
+                reporter.Report( MSG_NO_MORE_LAYER, RPT_SEVERITY_ERROR );
 
                 // Report the name of not loaded files:
                 ii += 1;
@@ -479,7 +479,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
                 {
                     filename = filenamesList[ii++];
                     wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
-                    reporter.Report( txt, SEVERITY_ERROR );
+                    reporter.Report( txt, RPT_SEVERITY_ERROR );
                 }
                 break;
             }
@@ -522,7 +522,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         if( aReporter )
         {
             msg.Printf( _( "Zip file \"%s\" cannot be opened" ), aFullFileName );
-            aReporter->Report( msg, SEVERITY_ERROR );
+            aReporter->Report( msg, RPT_SEVERITY_ERROR );
         }
 
         return false;
@@ -564,7 +564,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             if( aReporter )
             {
                 msg.Printf( _( "Info: skip file \"%s\" (unknown type)\n" ), entry->GetName() );
-                aReporter->Report( msg, SEVERITY_WARNING );
+                aReporter->Report( msg, RPT_SEVERITY_WARNING );
             }
 
             continue;
@@ -579,13 +579,13 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             if( aReporter )
             {
                 if( !reported_no_more_layer )
-                    aReporter->Report( MSG_NO_MORE_LAYER, SEVERITY_ERROR );
+                    aReporter->Report( MSG_NO_MORE_LAYER,  RPT_SEVERITY_ERROR );
 
                 reported_no_more_layer = true;
 
                 // Report the name of not loaded files:
                 msg.Printf( MSG_NOT_LOADED, GetChars( entry->GetName() ) );
-                aReporter->Report( msg, SEVERITY_ERROR );
+                aReporter->Report( msg, RPT_SEVERITY_ERROR );
             }
 
             delete entry;
@@ -606,7 +606,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
                 {
                     msg.Printf( _( "<b>Unable to create temporary file \"%s\"</b>\n"),
                                 unzipped_tempfile );
-                    aReporter->Report( msg, SEVERITY_ERROR );
+                    aReporter->Report( msg, RPT_SEVERITY_ERROR );
                 }
             }
         }
@@ -635,7 +635,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             if( aReporter )
             {
                 msg.Printf( _("<b>unzipped file %s read error</b>\n"), unzipped_tempfile );
-                aReporter->Report( msg, SEVERITY_ERROR );
+                aReporter->Report( msg, RPT_SEVERITY_ERROR );
             }
         }
         else

@@ -52,7 +52,7 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
         m_unconnectedTreeModel( nullptr ),
         m_footprintWarningsProvider( nullptr ),
         m_footprintWarningsTreeModel( nullptr ),
-        m_severities( SEVERITY_ERROR | SEVERITY_WARNING )
+        m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
 
@@ -180,15 +180,15 @@ void DIALOG_DRC_CONTROL::setDRCParameters()
 
 
 // Don't globally define this; different facilities use different definitions of "ALL"
-static int SEVERITY_ALL = SEVERITY_WARNING | SEVERITY_ERROR | SEVERITY_EXCLUSION;
+static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SEVERITY_EXCLUSION;
 
 
 void DIALOG_DRC_CONTROL::syncCheckboxes()
 {
-    m_showAll->SetValue( m_severities == SEVERITY_ALL );
-    m_showErrors->SetValue( m_severities & SEVERITY_ERROR );
-    m_showWarnings->SetValue( m_severities & SEVERITY_WARNING );
-    m_showExclusions->SetValue( m_severities & SEVERITY_EXCLUSION );
+    m_showAll->SetValue( m_severities == RPT_SEVERITY_ALL );
+    m_showErrors->SetValue( m_severities & RPT_SEVERITY_ERROR );
+    m_showWarnings->SetValue( m_severities & RPT_SEVERITY_WARNING );
+    m_showExclusions->SetValue( m_severities & RPT_SEVERITY_EXCLUSION );
 }
 
 
@@ -284,8 +284,8 @@ void DIALOG_DRC_CONTROL::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     switch( m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] )
     {
-    case SEVERITY_ERROR:   listName = _( "errors" );      break;
-    case SEVERITY_WARNING: listName = _( "warnings" );    break;
+    case RPT_SEVERITY_ERROR:   listName = _( "errors" );      break;
+    case RPT_SEVERITY_WARNING: listName = _( "warnings" );    break;
     default:               listName = _( "appropriate" ); break;
     }
 
@@ -302,7 +302,7 @@ void DIALOG_DRC_CONTROL::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     menu.AppendSeparator();
 
-    if( m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] == SEVERITY_WARNING )
+    if( m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] == RPT_SEVERITY_WARNING )
     {
         menu.Append( 3, wxString::Format( _( "Change severity to Error for all '%s' violations" ),
                      drcItem->GetErrorText(),
@@ -333,7 +333,7 @@ void DIALOG_DRC_CONTROL::OnDRCItemRClick( wxDataViewEvent& aEvent )
         node->m_DrcItem->GetParent()->SetExcluded( true );
 
         // Update view
-        if( m_severities & SEVERITY_EXCLUSION )
+        if( m_severities & RPT_SEVERITY_EXCLUSION )
             static_cast<DRC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
         else
             static_cast<DRC_TREE_MODEL*>( aEvent.GetModel() )->DeleteCurrentItem( false );
@@ -342,7 +342,7 @@ void DIALOG_DRC_CONTROL::OnDRCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case 3:
-        m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] = SEVERITY_ERROR;
+        m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] = RPT_SEVERITY_ERROR;
         m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
 
         // Rebuild model and view
@@ -351,7 +351,7 @@ void DIALOG_DRC_CONTROL::OnDRCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case 4:
-        m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] = SEVERITY_WARNING;
+        m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] = RPT_SEVERITY_WARNING;
         m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
 
         // Rebuild model and view
@@ -360,7 +360,7 @@ void DIALOG_DRC_CONTROL::OnDRCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case 5:
-        m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] = SEVERITY_IGNORE;
+        m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
         m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
 
         for( MARKER_PCB* marker : m_brdEditor->GetBoard()->Markers() )
@@ -382,18 +382,18 @@ void DIALOG_DRC_CONTROL::OnSeverity( wxCommandEvent& aEvent )
     int flag = 0;
 
     if( aEvent.GetEventObject() == m_showAll )
-        flag = SEVERITY_ALL;
+        flag = RPT_SEVERITY_ALL;
     else if( aEvent.GetEventObject() == m_showErrors )
-        flag = SEVERITY_ERROR;
+        flag = RPT_SEVERITY_ERROR;
     else if( aEvent.GetEventObject() == m_showWarnings )
-        flag = SEVERITY_WARNING;
+        flag = RPT_SEVERITY_WARNING;
     else if( aEvent.GetEventObject() == m_showExclusions )
-        flag = SEVERITY_EXCLUSION;
+        flag = RPT_SEVERITY_EXCLUSION;
 
     if( aEvent.IsChecked() )
         m_severities |= flag;
     else if( aEvent.GetEventObject() == m_showAll )
-        m_severities = SEVERITY_ERROR;
+        m_severities = RPT_SEVERITY_ERROR;
     else
         m_severities &= ~flag;
 
@@ -618,26 +618,26 @@ void DIALOG_DRC_CONTROL::updateDisplayedCounts()
 
     if( m_markersProvider )
     {
-        numErrors += m_markersProvider->GetCount( SEVERITY_ERROR );
-        numWarnings += m_markersProvider->GetCount( SEVERITY_WARNING );
-        numExcluded += m_markersProvider->GetCount( SEVERITY_EXCLUSION );
+        numErrors += m_markersProvider->GetCount( RPT_SEVERITY_ERROR );
+        numWarnings += m_markersProvider->GetCount( RPT_SEVERITY_WARNING );
+        numExcluded += m_markersProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
     if( m_unconnectedItemsProvider )
     {
-        numErrors += m_unconnectedItemsProvider->GetCount( SEVERITY_ERROR );
-        numWarnings += m_unconnectedItemsProvider->GetCount( SEVERITY_WARNING );
-        numExcluded += m_unconnectedItemsProvider->GetCount( SEVERITY_EXCLUSION );
+        numErrors += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_ERROR );
+        numWarnings += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_WARNING );
+        numExcluded += m_unconnectedItemsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
     if( m_footprintWarningsProvider )
     {
-        numErrors += m_footprintWarningsProvider->GetCount( SEVERITY_ERROR );
-        numWarnings += m_footprintWarningsProvider->GetCount( SEVERITY_WARNING );
-        numExcluded += m_footprintWarningsProvider->GetCount( SEVERITY_EXCLUSION );
+        numErrors += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_ERROR );
+        numWarnings += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_WARNING );
+        numExcluded += m_footprintWarningsProvider->GetCount( RPT_SEVERITY_EXCLUSION );
     }
 
-    m_errorsBadge->SetBitmap( MakeBadge( SEVERITY_ERROR, numErrors, m_errorsBadge ) );
-    m_warningsBadge->SetBitmap( MakeBadge( SEVERITY_WARNING, numWarnings, m_warningsBadge ) );
-    m_exclusionsBadge->SetBitmap( MakeBadge( SEVERITY_EXCLUSION, numExcluded, m_exclusionsBadge ) );
+    m_errorsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_ERROR, numErrors, m_errorsBadge ) );
+    m_warningsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_WARNING, numWarnings, m_warningsBadge ) );
+    m_exclusionsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_EXCLUSION, numExcluded, m_exclusionsBadge ) );
 }

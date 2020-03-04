@@ -191,7 +191,7 @@ private:
                         _( "File contains pad shapes that are not supported by the Hyperlynx exporter\n"
                            "(Supported shapes are oval, rectangle, circle.)\n"
                            "They have been exported as oval pads." ),
-                        SEVERITY_WARNING );
+                        RPT_SEVERITY_WARNING );
             }
             break;
         }

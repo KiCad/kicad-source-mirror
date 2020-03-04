@@ -58,7 +58,7 @@ PANEL_SETUP_DRC_SEVERITIES::PANEL_SETUP_DRC_SEVERITIES( PAGED_DIALOG* aParent,
    	        wxPanel*    radioPanel = new wxPanel( scrollWin );
    	        wxBoxSizer* radioSizer = new wxBoxSizer( wxHORIZONTAL );
 
-            for( int i = 0; i < sizeof( severities ) / sizeof( wxString ); ++i )
+            for( size_t i = 0; i < sizeof( severities ) / sizeof( wxString ); ++i )
             {
                 m_buttonMap[errorCode][i] = new wxRadioButton( radioPanel,
                                                                baseID + errorCode * 10 + i,
@@ -95,9 +95,9 @@ void PANEL_SETUP_DRC_SEVERITIES::ImportSettingsFrom( BOARD* aBoard )
         {
             switch( entry.second )
             {
-            case SEVERITY_ERROR:   m_buttonMap[entry.first][0]->SetValue( true ); break;
-            case SEVERITY_WARNING: m_buttonMap[entry.first][1]->SetValue( true ); break;
-            case SEVERITY_IGNORE:  m_buttonMap[entry.first][2]->SetValue( true ); break;
+            case RPT_SEVERITY_ERROR:   m_buttonMap[entry.first][0]->SetValue( true ); break;
+            case RPT_SEVERITY_WARNING: m_buttonMap[entry.first][1]->SetValue( true ); break;
+            case RPT_SEVERITY_IGNORE:  m_buttonMap[entry.first][2]->SetValue( true ); break;
             }
         }
     }
@@ -112,9 +112,9 @@ bool PANEL_SETUP_DRC_SEVERITIES::TransferDataToWindow()
         {
             switch( entry.second )
             {
-            case SEVERITY_ERROR:   m_buttonMap[entry.first][0]->SetValue( true ); break;
-            case SEVERITY_WARNING: m_buttonMap[entry.first][1]->SetValue( true ); break;
-            case SEVERITY_IGNORE:  m_buttonMap[entry.first][2]->SetValue( true ); break;
+            case RPT_SEVERITY_ERROR:   m_buttonMap[entry.first][0]->SetValue( true ); break;
+            case RPT_SEVERITY_WARNING: m_buttonMap[entry.first][1]->SetValue( true ); break;
+            case RPT_SEVERITY_IGNORE:  m_buttonMap[entry.first][2]->SetValue( true ); break;
             }
         }
     }
@@ -127,14 +127,14 @@ bool PANEL_SETUP_DRC_SEVERITIES::TransferDataFromWindow()
 {
     for( auto const& entry : m_buttonMap )
     {
-        int severity = SEVERITY_UNDEFINED;
+        int severity = RPT_SEVERITY_UNDEFINED;
 
         if( entry.second[0]->GetValue() )
-            severity = SEVERITY_ERROR;
+            severity = RPT_SEVERITY_ERROR;
         else if( entry.second[1]->GetValue() )
-            severity = SEVERITY_WARNING;
+            severity = RPT_SEVERITY_WARNING;
         else if( entry.second[2]->GetValue() )
-            severity = SEVERITY_IGNORE;
+            severity = RPT_SEVERITY_IGNORE;
 
         m_brdSettings.m_DRCSeverities[ entry.first ] = severity;
     }

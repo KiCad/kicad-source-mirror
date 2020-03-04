@@ -64,20 +64,20 @@ wxBitmap MakeBadge( SEVERITY aStyle, int aCount, wxWindow* aWindow, int aDepth )
 
     switch( aStyle )
     {
-    case SEVERITY_ERROR:
+    case RPT_SEVERITY_ERROR:
         badgeColour = *wxRED;
         textColour = *wxWHITE;
         break;
-    case SEVERITY_WARNING:
+    case RPT_SEVERITY_WARNING:
         badgeColour = *wxYELLOW;
         textColour = *wxBLACK;
         break;
-    case SEVERITY_ACTION:
+    case RPT_SEVERITY_ACTION:
         badgeColour = *wxGREEN;
         textColour = *wxWHITE;
         break;
-    case SEVERITY_EXCLUSION:
-    case SEVERITY_INFO:
+    case RPT_SEVERITY_EXCLUSION:
+    case RPT_SEVERITY_INFO:
     default:
         badgeColour = *wxLIGHT_GREY;
         textColour = *wxBLACK;

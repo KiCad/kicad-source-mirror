@@ -114,7 +114,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
         {
             wxString msg;
             msg.Printf( _( "%d duplicate time stamps were found and replaced." ), count );
-            aReporter.ReportTail( msg, SEVERITY_WARNING );
+            aReporter.ReportTail( msg, RPT_SEVERITY_WARNING );
         }
     }
 
@@ -221,12 +221,12 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
                             newRef );
         }
 
-        aReporter.Report( msg, SEVERITY_ACTION );
+        aReporter.Report( msg, RPT_SEVERITY_ACTION );
     }
 
     // Final control (just in case ... ).
     if( !CheckAnnotate( aReporter, !aAnnotateSchematic ) )
-        aReporter.ReportTail( _( "Annotation complete." ), SEVERITY_ACTION );
+        aReporter.ReportTail( _( "Annotation complete." ), RPT_SEVERITY_ACTION );
 
     // Update on screen references, that can be modified by previous calculations:
     g_CurrentSheet->UpdateAllScreenReferences();

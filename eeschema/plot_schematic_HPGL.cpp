@@ -149,18 +149,18 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
                                   plot_scale, aPlotFrameRef ) )
             {
                 msg.Printf( _( "Plot: \"%s\" OK.\n" ), plotFileName.GetFullPath() );
-                reporter.Report( msg, SEVERITY_ACTION );
+                reporter.Report( msg, RPT_SEVERITY_ACTION );
             }
             else
             {
                 msg.Printf( _( "Unable to create file \"%s\".\n" ), plotFileName.GetFullPath() );
-                reporter.Report( msg, SEVERITY_ERROR );
+                reporter.Report( msg, RPT_SEVERITY_ERROR );
             }
         }
         catch( IO_ERROR& e )
         {
             msg.Printf( wxT( "HPGL Plotter exception: %s"), e.What() );
-            reporter.Report( msg, SEVERITY_ERROR );
+            reporter.Report( msg, RPT_SEVERITY_ERROR );
         }
 
     }

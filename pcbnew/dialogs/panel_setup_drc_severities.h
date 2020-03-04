@@ -26,7 +26,7 @@
 #define KICAD_PANEL_SETUP_DRC_SEVERITIES_H
 
 #include <map>
-#include <wx/generic/panelg.h>
+#include <wx/panel.h>
 
 
 class BOARD;

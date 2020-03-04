@@ -88,7 +88,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
                 if( !plotter->OpenFile( plotFileName.GetFullPath() ) )
                 {
                     msg.Printf( _( "Unable to create file \"%s\".\n" ), plotFileName.GetFullPath() );
-                    reporter.Report( msg, SEVERITY_ERROR );
+                    reporter.Report( msg, RPT_SEVERITY_ERROR );
                     delete plotter;
                     return;
                 }
@@ -101,7 +101,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
             {
                 // Cannot plot PDF file
                 msg.Printf( wxT( "PDF Plotter exception: %s" ), e.What() );
-                reporter.Report( msg, SEVERITY_ERROR );
+                reporter.Report( msg, RPT_SEVERITY_ERROR );
 
                 restoreEnvironment( plotter, oldsheetpath );
                 return;
@@ -122,7 +122,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 
     // Everything done, close the plot and restore the environment
     msg.Printf( _( "Plot: \"%s\" OK.\n" ), plotFileName.GetFullPath() );
-    reporter.Report( msg, SEVERITY_ACTION );
+    reporter.Report( msg, RPT_SEVERITY_ACTION );
 
     restoreEnvironment( plotter, oldsheetpath );
 }

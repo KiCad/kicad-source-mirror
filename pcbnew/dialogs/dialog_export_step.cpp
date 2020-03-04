@@ -337,7 +337,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     bool success = false;
     wxArrayString output, errors;
     REPORTER& reporter = m_messagesPanel->Reporter();
-    reporter.ReportHead( wxString::Format( _( "Executing '%s'" ), cmdK2S ), SEVERITY_ACTION );
+    reporter.ReportHead( wxString::Format( _( "Executing '%s'" ), cmdK2S ), RPT_SEVERITY_ACTION );
 
     {
         wxBusyCursor dummy;
@@ -356,23 +356,23 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     }
 
     for( auto& err : errors )
-        reporter.Report( err, SEVERITY_WARNING );
+        reporter.Report( err, RPT_SEVERITY_WARNING );
 
     if( result )    // Any troubles?
     {
         if( !success )
         {
             reporter.ReportTail( _( "Unable to create STEP file.  Check that the board has a "
-                                        "valid outline and models." ), SEVERITY_ERROR );
+                                        "valid outline and models." ), RPT_SEVERITY_ERROR );
         }
         else
         {
             reporter.ReportTail( _( "STEP file has been created, but there are warnings." ),
-                                 SEVERITY_INFO );
+                                 RPT_SEVERITY_INFO );
         }
     }
     else
     {
-        reporter.ReportTail( _( "STEP file has been created successfully." ), SEVERITY_INFO );
+        reporter.ReportTail( _( "STEP file has been created successfully." ), RPT_SEVERITY_INFO );
     }
 }

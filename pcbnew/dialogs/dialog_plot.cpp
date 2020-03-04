@@ -613,7 +613,7 @@ void DIALOG_PLOT::applyPlotSettings()
         {
             m_defaultPenSize.SetValue( tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
             msg.Printf( _( "HPGL pen size constrained." ) );
-            reporter.Report( msg, SEVERITY_INFO );
+            reporter.Report( msg, RPT_SEVERITY_INFO );
         }
     }
     else    // keep the last value (initial value if no HPGL plot made)
@@ -624,7 +624,7 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         m_defaultLineWidth.SetValue( tempOptions.GetLineWidth() );
         msg.Printf( _( "Default line width constrained." ) );
-        reporter.Report( msg, SEVERITY_INFO );
+        reporter.Report( msg, RPT_SEVERITY_INFO );
     }
 
     // X scale
@@ -637,7 +637,7 @@ void DIALOG_PLOT::applyPlotSettings()
         msg.Printf( wxT( "%f" ), m_XScaleAdjust );
         m_fineAdjustXCtrl->SetValue( msg );
         msg.Printf( _( "X scale constrained." ) );
-        reporter.Report( msg, SEVERITY_INFO );
+        reporter.Report( msg, RPT_SEVERITY_INFO );
     }
 
     // Y scale
@@ -649,7 +649,7 @@ void DIALOG_PLOT::applyPlotSettings()
         msg.Printf( wxT( "%f" ), m_YScaleAdjust );
         m_fineAdjustYCtrl->SetValue( msg );
         msg.Printf( _( "Y scale constrained." ) );
-        reporter.Report( msg, SEVERITY_INFO );
+        reporter.Report( msg, RPT_SEVERITY_INFO );
     }
 
     auto cfg = m_parent->GetSettings();
@@ -670,7 +670,7 @@ void DIALOG_PLOT::applyPlotSettings()
                     StringFromValue( GetUserUnits(), m_widthAdjustMinValue, false, true ),
                     StringFromValue( GetUserUnits(), m_widthAdjustMaxValue, false, true ),
                     GetAbbreviatedUnitsLabel( GetUserUnits(), true ) );
-        reporter.Report( msg, SEVERITY_WARNING );
+        reporter.Report( msg, RPT_SEVERITY_WARNING );
     }
 
     // Store m_PSWidthAdjust in mm in user config
@@ -856,12 +856,12 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             delete plotter;
 
             msg.Printf( _( "Plot file \"%s\" created." ), fn.GetFullPath() );
-            reporter.Report( msg, SEVERITY_ACTION );
+            reporter.Report( msg, RPT_SEVERITY_ACTION );
         }
         else
         {
             msg.Printf( _( "Unable to create file \"%s\"." ), fn.GetFullPath() );
-            reporter.Report( msg, SEVERITY_ERROR );
+            reporter.Report( msg, RPT_SEVERITY_ERROR );
         }
 
         wxSafeYield();      // displays report message.

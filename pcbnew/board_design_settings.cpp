@@ -84,17 +84,17 @@ public:
         if( aConfig->Read( wxT( "RequireCourtyardDefinitions" ), &flag, false ) )
         {
             if( flag )
-                bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = SEVERITY_ERROR;
+                bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = RPT_SEVERITY_ERROR;
             else
-                bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = SEVERITY_IGNORE;
+                bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = RPT_SEVERITY_IGNORE;
         }
 
         if( aConfig->Read( wxT( "ProhibitOverlappingCourtyards" ), &flag, false ) )
         {
             if( flag )
-                bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = SEVERITY_ERROR;
+                bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_ERROR;
             else
-                bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = SEVERITY_IGNORE;
+                bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_IGNORE;
         }
 
         // TO DO: figure out what we're going to use as keys here so we can read/write these....
@@ -116,9 +116,9 @@ public:
         // TO DO: for now just write out the legacy ones so we don't lose them
         // TO DO: remove this once the new scheme is in place
         aConfig->Write( wxT( "RequireCourtyardDefinitions" ),
-                        bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] != SEVERITY_IGNORE );
+                        bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] != RPT_SEVERITY_IGNORE );
         aConfig->Write( wxT( "ProhibitOverlappingCourtyards" ),
-                        bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] != SEVERITY_IGNORE );
+                        bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] != RPT_SEVERITY_IGNORE );
 
         aConfig->SetPath( oldPath );
     }
@@ -571,9 +571,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_HoleToHoleMin       = Millimeter2iu( DEFAULT_HOLETOHOLEMIN );
 
     for( int errorCode = DRCE_FIRST; errorCode <= DRCE_LAST; ++errorCode )
-        m_DRCSeverities[ errorCode ] = SEVERITY_ERROR;
+        m_DRCSeverities[ errorCode ] = RPT_SEVERITY_ERROR;
 
-    m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = SEVERITY_IGNORE;
+    m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = RPT_SEVERITY_IGNORE;
 
     m_MaxError            = ARC_HIGH_DEF;
     m_ZoneUseNoOutlineInFill = false;   // Use compatibility mode by default
@@ -781,7 +781,7 @@ int BOARD_DESIGN_SETTINGS::GetSeverity( int aDRCErrorCode )
 
 bool BOARD_DESIGN_SETTINGS::Ignore( int aDRCErrorCode )
 {
-    return m_DRCSeverities[ aDRCErrorCode ] == SEVERITY_IGNORE;
+    return m_DRCSeverities[ aDRCErrorCode ] == RPT_SEVERITY_IGNORE;
 }
 
 

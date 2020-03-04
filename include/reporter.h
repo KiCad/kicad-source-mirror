@@ -83,13 +83,13 @@ public:
      * RPT_ERROR, RPT_ACTION ) used to filter and format messages
      */
 
-    virtual REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) = 0;
+    virtual REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) = 0;
 
     /**
      * Function ReportTail
      * Places the report at the end of the list, for objects that support report ordering
      */
-    virtual REPORTER& ReportTail( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED )
+    virtual REPORTER& ReportTail( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED )
     {
         return Report( aText, aSeverity );
     }
@@ -98,12 +98,12 @@ public:
      * Function ReportHead
      * Places the report at the beginning of the list for objects that support ordering
      */
-    virtual REPORTER& ReportHead( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED )
+    virtual REPORTER& ReportHead( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED )
     {
         return Report( aText, aSeverity );
     }
 
-    REPORTER& Report( const char* aText, SEVERITY aSeverity = SEVERITY_UNDEFINED );
+    REPORTER& Report( const char* aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED );
 
     REPORTER& operator <<( const wxString& aText ) { return Report( aText ); }
     REPORTER& operator <<( const wxChar* aText ) { return Report( wxString( aText ) ); }
@@ -141,7 +141,7 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
 };
@@ -166,7 +166,7 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
 };
@@ -191,11 +191,11 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
-    REPORTER& ReportTail( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
+    REPORTER& ReportTail( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
-    REPORTER& ReportHead( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
+    REPORTER& ReportHead( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
 };
@@ -219,7 +219,7 @@ public:
 
     static REPORTER& GetInstance();
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override { return false; }
 };
@@ -242,7 +242,7 @@ public:
 
     static REPORTER& GetInstance();
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override { return false; }
 };

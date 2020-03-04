@@ -196,9 +196,9 @@ void DRC_TREE_MODEL::GetValue( wxVariant&              aVariant,
     {
         auto&    bds = m_parentFrame->GetBoard()->GetDesignSettings();
         bool     excluded = drcItem->GetParent() && drcItem->GetParent()->IsExcluded();
-        bool     error = bds.m_DRCSeverities[ drcItem->GetErrorCode() ] == SEVERITY_ERROR;
+        bool     error = bds.m_DRCSeverities[ drcItem->GetErrorCode() ] == RPT_SEVERITY_ERROR;
         wxString prefix = wxString::Format( wxT( "%s%s" ),
-                                            excluded ? _( "Excluded " ) : wxEmptyString,
+                                            excluded ? _( "Excluded " ) : wxString( "" ),
                                             error  ? _( "Error: " ) : _( "Warning: " ) );
 
         aVariant = prefix + drcItem->GetErrorText();

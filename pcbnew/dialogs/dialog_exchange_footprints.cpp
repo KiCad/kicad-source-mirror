@@ -366,7 +366,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processModule( MODULE* aModule, const LIB_ID& a
     if( !newModule )
     {
         msg << ": " << _( "*** footprint not found ***" );
-        m_MessageWindow->Report( msg, SEVERITY_ERROR );
+        m_MessageWindow->Report( msg, RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -380,7 +380,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processModule( MODULE* aModule, const LIB_ID& a
         m_currentModule = newModule;
 
     msg += ": OK";
-    m_MessageWindow->Report( msg, SEVERITY_ACTION );
+    m_MessageWindow->Report( msg, RPT_SEVERITY_ACTION );
 
     return true;
 }

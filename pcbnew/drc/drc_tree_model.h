@@ -104,7 +104,7 @@ public:
             int markerSeverity;
 
             if( marker->IsExcluded() )
-                markerSeverity = SEVERITY_EXCLUSION;
+                markerSeverity = RPT_SEVERITY_EXCLUSION;
             else
                 markerSeverity = bds.GetSeverity( marker->GetReporter().GetErrorCode() );
 
@@ -126,7 +126,7 @@ public:
             int markerSeverity;
 
             if( marker->IsExcluded() )
-                markerSeverity = SEVERITY_EXCLUSION;
+                markerSeverity = RPT_SEVERITY_EXCLUSION;
             else
                 markerSeverity = bds.GetSeverity( marker->GetReporter().GetErrorCode() );
 
@@ -233,7 +233,7 @@ public:
 
         if( aDeep )
         {
-            for( int i = 0; i < m_sourceVector->size(); ++i )
+            for( size_t i = 0; i < m_sourceVector->size(); ++i )
             {
                 if( m_sourceVector->at( i ) == item )
                 {

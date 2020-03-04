@@ -331,7 +331,7 @@ wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( wxTextCtrl* aOutputDirecto
     {
         wxString msg = wxString::Format( _( "Could not write plot files to folder \"%s\"." ),
                                          outputDir.GetPath() );
-        aReporter->Report( msg, SEVERITY_ERROR );
+        aReporter->Report( msg, RPT_SEVERITY_ERROR );
     }
 
     wxFileName fn( plotFileName );

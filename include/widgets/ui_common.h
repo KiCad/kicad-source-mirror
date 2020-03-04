@@ -40,15 +40,16 @@ int GetStdMargin();
 
 }
 
-
+// Note: On windows, SEVERITY_ERROR collides with a system declaration,
+// so we used RPT_SEVERITY _xxx instead of SEVERITY _xxx
 enum SEVERITY {
-    SEVERITY_UNDEFINED = 0x00,
-    SEVERITY_INFO      = 0x01,
-    SEVERITY_EXCLUSION = 0x02,
-    SEVERITY_ACTION    = 0x04,
-    SEVERITY_WARNING   = 0x08,
-    SEVERITY_ERROR     = 0x10,
-    SEVERITY_IGNORE    = 0x20
+    RPT_SEVERITY_UNDEFINED = 0x00,
+    RPT_SEVERITY_INFO      = 0x01,
+    RPT_SEVERITY_EXCLUSION = 0x02,
+    RPT_SEVERITY_ACTION    = 0x04,
+    RPT_SEVERITY_WARNING   = 0x08,
+    RPT_SEVERITY_ERROR     = 0x10,
+    RPT_SEVERITY_IGNORE    = 0x20
 };
 
 wxBitmap MakeBadge( SEVERITY aStyle, int aCount, wxWindow* aWindow, int aDepth = 1 );

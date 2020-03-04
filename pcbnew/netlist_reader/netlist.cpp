@@ -158,7 +158,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         {
             msg.Printf( _( "No footprint defined for symbol \"%s\".\n" ),
                         component->GetReference() );
-            aReporter.Report( msg, SEVERITY_ERROR );
+            aReporter.Report( msg, RPT_SEVERITY_ERROR );
 
             continue;
         }
@@ -178,7 +178,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
                         component->GetReference(),
                         GetChars( fpOnBoard->GetFPID().Format() ),
                         GetChars( component->GetFPID().Format() ) );
-            aReporter.Report( msg, SEVERITY_WARNING );
+            aReporter.Report( msg, RPT_SEVERITY_WARNING );
 
             continue;
         }
@@ -204,7 +204,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
                 msg.Printf( _( "%s footprint ID \"%s\" is not valid." ),
                             component->GetReference(),
                             GetChars( component->GetFPID().Format() ) );
-                aReporter.Report( msg, SEVERITY_ERROR );
+                aReporter.Report( msg, RPT_SEVERITY_ERROR );
 
                 continue;
             }
@@ -221,7 +221,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
                 msg.Printf( _( "%s footprint \"%s\" not found in any libraries in the footprint library table.\n" ),
                             component->GetReference(),
                             GetChars( component->GetFPID().GetLibItemName() ) );
-                aReporter.Report( msg, SEVERITY_ERROR );
+                aReporter.Report( msg, RPT_SEVERITY_ERROR );
 
                 continue;
             }

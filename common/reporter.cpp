@@ -93,7 +93,7 @@ REPORTER& WX_HTML_PANEL_REPORTER::ReportHead( const wxString& aText, SEVERITY aS
 
 bool WX_HTML_PANEL_REPORTER::HasMessage() const
 {
-    return m_panel->Count( SEVERITY_ERROR | SEVERITY_WARNING ) > 0;
+    return m_panel->Count( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ) > 0;
 }
 
 REPORTER& NULL_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
@@ -116,11 +116,13 @@ REPORTER& STDOUT_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
     switch( aSeverity )
     {
-        case SEVERITY_UNDEFINED: std::cout << "SEVERITY_UNDEFINED: "; break;
-        case SEVERITY_INFO:      std::cout << "SEVERITY_INFO: ";      break;
-        case SEVERITY_WARNING:   std::cout << "SEVERITY_WARNING: ";   break;
-        case SEVERITY_ERROR:     std::cout << "SEVERITY_ERROR: ";     break;
-        case SEVERITY_ACTION:    std::cout << "SEVERITY_ACTION: ";    break;
+        case RPT_SEVERITY_UNDEFINED: std::cout << "SEVERITY_UNDEFINED: "; break;
+        case RPT_SEVERITY_INFO:      std::cout << "SEVERITY_INFO: ";      break;
+        case RPT_SEVERITY_WARNING:   std::cout << "SEVERITY_WARNING: ";   break;
+        case RPT_SEVERITY_ERROR:     std::cout << "SEVERITY_ERROR: ";     break;
+        case RPT_SEVERITY_ACTION:    std::cout << "SEVERITY_ACTION: ";    break;
+        case RPT_SEVERITY_EXCLUSION:
+        case RPT_SEVERITY_IGNORE:    break;
     }
 
     std::cout << aText << std::endl;

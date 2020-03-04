@@ -243,10 +243,10 @@ static BOARD_DESIGN_SETTINGS GetOverlapCheckDesignSettings()
 
     // do the overlap tests - that's a different test, but if not set,
     // the invalid courtyard checks don't run either
-    des_settings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = SEVERITY_ERROR;
+    des_settings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_ERROR;
 
     // we will also check for missing courtyards here
-    des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = SEVERITY_ERROR;
+    des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = RPT_SEVERITY_ERROR;
 
     return des_settings;
 }

@@ -132,11 +132,11 @@ void WX_HTML_REPORT_PANEL::scrollToBottom()
 
 void WX_HTML_REPORT_PANEL::updateBadges()
 {
-    int count = Count( SEVERITY_ERROR );
-    m_errorsBadge->SetBitmap( MakeBadge( SEVERITY_ERROR, count, m_errorsBadge, 2 ) );
+    int count = Count(RPT_SEVERITY_ERROR );
+    m_errorsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_ERROR, count, m_errorsBadge, 2 ) );
 
-    count = Count( SEVERITY_WARNING );
-    m_warningsBadge->SetBitmap( MakeBadge( SEVERITY_WARNING, count, m_warningsBadge, 2 ) );
+    count = Count(RPT_SEVERITY_WARNING );
+    m_warningsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_WARNING, count, m_warningsBadge, 2 ) );
 }
 
 
@@ -173,19 +173,19 @@ wxString WX_HTML_REPORT_PANEL::generateHtml( const REPORT_LINE& aLine )
 
     switch( aLine.severity )
     {
-    case SEVERITY_ERROR:
+    case RPT_SEVERITY_ERROR:
         retv = "<font color=\"red\" size=2><b>" + _( "Error: " ) + "</b></font><font size=2>" +
                aLine.message + "</font><br>";
         break;
-    case SEVERITY_WARNING:
+    case RPT_SEVERITY_WARNING:
         retv = "<font color=\"orange\" size=2><b>" + _( "Warning: " ) +
                "</b></font><font size=2>" + aLine.message + "</font><br>";
         break;
-    case SEVERITY_INFO:
+    case RPT_SEVERITY_INFO:
         retv = "<font color=\"dark gray\" size=2><b>" + _( "Info: " ) + "</b>" + aLine.message +
                "</font><br>";
         break;
-    case SEVERITY_ACTION:
+    case RPT_SEVERITY_ACTION:
         retv = "<font color=\"dark green\" size=2>" + aLine.message + "</font><br>";
         break;
     default:
@@ -200,11 +200,11 @@ wxString WX_HTML_REPORT_PANEL::generatePlainText( const REPORT_LINE& aLine )
 {
     switch( aLine.severity )
     {
-    case SEVERITY_ERROR:
+    case RPT_SEVERITY_ERROR:
         return _( "Error: " ) + aLine.message + wxT( "\n" );
-    case SEVERITY_WARNING:
+    case RPT_SEVERITY_WARNING:
         return _( "Warning: " ) + aLine.message + wxT( "\n" );
-    case SEVERITY_INFO:
+    case RPT_SEVERITY_INFO:
         return _( "Info: " ) + aLine.message + wxT( "\n" );
     default:
         return aLine.message + wxT( "\n" );
@@ -237,15 +237,15 @@ void WX_HTML_REPORT_PANEL::onMenuEvent( wxMenuEvent& event )
 
 
 // Don't globally define this; different facilities use different definitions of "ALL"
-static int SEVERITY_ALL = SEVERITY_WARNING | SEVERITY_ERROR | SEVERITY_INFO | SEVERITY_ACTION;
+static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SEVERITY_INFO | RPT_SEVERITY_ACTION;
 
 
 void WX_HTML_REPORT_PANEL::onCheckBoxShowAll( wxCommandEvent& event )
 {
     if( event.IsChecked() )
-        m_severities = SEVERITY_ALL;
+        m_severities = RPT_SEVERITY_ALL;
     else
-        m_severities = SEVERITY_ERROR;
+        m_severities = RPT_SEVERITY_ERROR;
 
     syncCheckboxes();
     Flush( true );
@@ -254,20 +254,20 @@ void WX_HTML_REPORT_PANEL::onCheckBoxShowAll( wxCommandEvent& event )
 
 void WX_HTML_REPORT_PANEL::syncCheckboxes()
 {
-    m_checkBoxShowAll->SetValue( m_severities == SEVERITY_ALL );
-    m_checkBoxShowWarnings->SetValue( m_severities & SEVERITY_WARNING );
-    m_checkBoxShowErrors->SetValue( m_severities & SEVERITY_ERROR );
-    m_checkBoxShowInfos->SetValue( m_severities & SEVERITY_INFO );
-    m_checkBoxShowActions->SetValue( m_severities & SEVERITY_ACTION );
+    m_checkBoxShowAll->SetValue( m_severities == RPT_SEVERITY_ALL );
+    m_checkBoxShowWarnings->SetValue( m_severities & RPT_SEVERITY_WARNING );
+    m_checkBoxShowErrors->SetValue( m_severities & RPT_SEVERITY_ERROR );
+    m_checkBoxShowInfos->SetValue( m_severities & RPT_SEVERITY_INFO );
+    m_checkBoxShowActions->SetValue( m_severities & RPT_SEVERITY_ACTION );
 }
 
 
 void WX_HTML_REPORT_PANEL::onCheckBoxShowWarnings( wxCommandEvent& event )
 {
     if( event.IsChecked() )
-        m_severities |= SEVERITY_WARNING;
+        m_severities |= RPT_SEVERITY_WARNING;
     else
-        m_severities &= ~SEVERITY_WARNING;
+        m_severities &= ~RPT_SEVERITY_WARNING;
 
     syncCheckboxes();
     Flush( true );
@@ -277,9 +277,9 @@ void WX_HTML_REPORT_PANEL::onCheckBoxShowWarnings( wxCommandEvent& event )
 void WX_HTML_REPORT_PANEL::onCheckBoxShowErrors( wxCommandEvent& event )
 {
     if( event.IsChecked() )
-        m_severities |= SEVERITY_ERROR;
+        m_severities |= RPT_SEVERITY_ERROR;
     else
-        m_severities &= ~SEVERITY_ERROR;
+        m_severities &= ~RPT_SEVERITY_ERROR;
 
     syncCheckboxes();
     Flush( true );
@@ -289,9 +289,9 @@ void WX_HTML_REPORT_PANEL::onCheckBoxShowErrors( wxCommandEvent& event )
 void WX_HTML_REPORT_PANEL::onCheckBoxShowInfos( wxCommandEvent& event )
 {
     if( event.IsChecked() )
-        m_severities |= SEVERITY_INFO;
+        m_severities |= RPT_SEVERITY_INFO;
     else
-        m_severities &= ~SEVERITY_INFO;
+        m_severities &= ~RPT_SEVERITY_INFO;
 
     syncCheckboxes();
     Flush( true );
@@ -301,9 +301,9 @@ void WX_HTML_REPORT_PANEL::onCheckBoxShowInfos( wxCommandEvent& event )
 void WX_HTML_REPORT_PANEL::onCheckBoxShowActions( wxCommandEvent& event )
 {
     if( event.IsChecked() )
-        m_severities |= SEVERITY_ACTION;
+        m_severities |= RPT_SEVERITY_ACTION;
     else
-        m_severities &= ~SEVERITY_ACTION;
+        m_severities &= ~RPT_SEVERITY_ACTION;
 
     syncCheckboxes();
     Flush( true );
@@ -363,7 +363,7 @@ void WX_HTML_REPORT_PANEL::SetLabel( const wxString& aLabel )
 void WX_HTML_REPORT_PANEL::SetVisibleSeverities( int aSeverities )
 {
     if( aSeverities < 0 )
-        m_severities = SEVERITY_ALL;
+        m_severities = RPT_SEVERITY_ALL;
     else
         m_severities = aSeverities;
 

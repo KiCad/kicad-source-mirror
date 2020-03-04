@@ -74,7 +74,7 @@ DRC::DRC() :
     m_drcRun = false;
     m_footprintsTested = false;
 
-    m_severities = SEVERITY_ERROR | SEVERITY_WARNING;
+    m_severities = RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING;
 
     m_segmAngle  = 0;
     m_segmLength = 0;

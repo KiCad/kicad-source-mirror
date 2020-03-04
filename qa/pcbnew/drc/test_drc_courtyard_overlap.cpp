@@ -448,10 +448,10 @@ static void CheckCollisionsMatchExpected( BOARD&        aBoard,
 static BOARD_DESIGN_SETTINGS GetOverlapCheckDesignSettings()
 {
     BOARD_DESIGN_SETTINGS des_settings;
-    des_settings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = SEVERITY_ERROR;
+    des_settings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_ERROR;
 
     // we might not always have courtyards - that's a separate test
-    des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = SEVERITY_IGNORE;
+    des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = RPT_SEVERITY_IGNORE;
 
     return des_settings;
 }

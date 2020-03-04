@@ -61,7 +61,7 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = SEVERITY_UNDEFINED ) override
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override
     {
         wxCommandEvent* event = new wxCommandEvent( EVT_SIM_REPORT );
         event->SetString( aText );

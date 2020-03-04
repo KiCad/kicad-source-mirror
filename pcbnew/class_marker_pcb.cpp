@@ -186,8 +186,8 @@ void MARKER_PCB::ViewGetLayers( int aLayers[], int& aCount ) const
     switch( board->GetDesignSettings().GetSeverity( m_drc.GetErrorCode() ) )
     {
     default:
-    case SEVERITY::SEVERITY_ERROR:   aLayers[0] = LAYER_DRC_ERROR;   break;
-    case SEVERITY::SEVERITY_WARNING: aLayers[0] = LAYER_DRC_WARNING; break;
+    case SEVERITY::RPT_SEVERITY_ERROR:   aLayers[0] = LAYER_DRC_ERROR;   break;
+    case SEVERITY::RPT_SEVERITY_WARNING: aLayers[0] = LAYER_DRC_WARNING; break;
     }
 }
 
@@ -207,8 +207,8 @@ GAL_LAYER_ID MARKER_PCB::GetColorLayer() const
     switch( board->GetDesignSettings().GetSeverity( m_drc.GetErrorCode() ) )
     {
     default:
-    case SEVERITY::SEVERITY_ERROR:   return LAYER_DRC_ERROR;
-    case SEVERITY::SEVERITY_WARNING: return LAYER_DRC_WARNING;
+    case SEVERITY::RPT_SEVERITY_ERROR:   return LAYER_DRC_ERROR;
+    case SEVERITY::RPT_SEVERITY_WARNING: return LAYER_DRC_WARNING;
     }
 }
 

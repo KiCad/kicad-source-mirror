@@ -104,20 +104,20 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
                                 scale, aPlotFrameRef ) )
             {
                 msg.Printf( _( "Plot: \"%s\" OK.\n" ), plotFileName.GetFullPath() );
-                reporter.Report( msg, SEVERITY_ACTION );
+                reporter.Report( msg, RPT_SEVERITY_ACTION );
             }
             else
             {
                 // Error
                 msg.Printf( _( "Unable to create file \"%s\".\n" ), plotFileName.GetFullPath() );
-                reporter.Report( msg, SEVERITY_ERROR );
+                reporter.Report( msg, RPT_SEVERITY_ERROR );
             }
 
         }
         catch( IO_ERROR& e )
         {
             msg.Printf( wxT( "PS Plotter exception: %s"), e.What() );
-            reporter.Report( msg, SEVERITY_ERROR );
+            reporter.Report( msg, RPT_SEVERITY_ERROR );
         }
     }
 

@@ -525,7 +525,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
                             tmp );
             }
 
-            aReporter.Report( msg, SEVERITY_WARNING );
+            aReporter.Report( msg, RPT_SEVERITY_WARNING );
             error++;
             break;
         }
@@ -547,7 +547,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
                         flatList[ii].m_Unit,
                         flatList[ii].GetLibPart()->GetUnitCount() );
 
-            aReporter.Report( msg, SEVERITY_ERROR );
+            aReporter.Report( msg, RPT_SEVERITY_ERROR );
             error++;
             break;
         }
@@ -591,7 +591,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
                             tmp );
             }
 
-            aReporter.Report( msg, SEVERITY_ERROR );
+            aReporter.Report( msg, RPT_SEVERITY_ERROR );
             error++;
             continue;
         }
@@ -621,7 +621,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
                             tmp );
             }
 
-            aReporter.Report( msg, SEVERITY_ERROR );
+            aReporter.Report( msg, RPT_SEVERITY_ERROR );
             error++;
         }
 
@@ -640,7 +640,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
                         LIB_PART::SubReference( flatList[next].m_Unit ),
                         flatList[next].m_Value->GetText() );
 
-            aReporter.Report( msg, SEVERITY_ERROR );
+            aReporter.Report( msg, RPT_SEVERITY_ERROR );
             error++;
         }
     }

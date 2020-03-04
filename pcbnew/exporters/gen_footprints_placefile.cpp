@@ -270,15 +270,15 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     {
         msg.Printf( _( "Unable to create \"%s\"." ), fn.GetFullPath() );
         wxMessageBox( msg );
-        m_reporter->Report( msg, SEVERITY_ERROR );
+        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         return false;
     }
 
     msg.Printf( _( "Front side (top side) place file: \"%s\"." ), filename );
-    m_reporter->Report( msg, SEVERITY_INFO );
+    m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
-    m_reporter->Report( msg, SEVERITY_INFO );
+    m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
     // Create the Back or Bottom side placement file
     fullcount = fpcount;
@@ -290,24 +290,24 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     if( fpcount < 0 )
     {
         msg.Printf( _( "Unable to create file \"%s\"." ), filename );
-        m_reporter->Report( msg, SEVERITY_ERROR );
+        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         wxMessageBox( msg );
         return false;
     }
 
     // Display results
     msg.Printf( _( "Back side (bottom side) place file: \"%s\"." ), filename );
-    m_reporter->Report( msg, SEVERITY_INFO );
+    m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
 
-    m_reporter->Report( msg, SEVERITY_INFO );
+    m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
     fullcount += fpcount;
     msg.Printf( _( "Full component count: %d\n" ), fullcount );
-    m_reporter->Report( msg, SEVERITY_INFO );
+    m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
-    m_reporter->Report( _( "Component Placement File generation OK." ), SEVERITY_ACTION );
+    m_reporter->Report( _( "Component Placement File generation OK." ), RPT_SEVERITY_ACTION );
 
     return true;
 }
@@ -343,7 +343,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
             for( MODULE* item : fp_no_smd_list )
             {
                 msg.Printf( _( "footprint %s (not set as SMD) forced in list" ), item->GetReference() );
-                m_reporter->Report( msg, SEVERITY_INFO );
+                m_reporter->Report( msg, RPT_SEVERITY_INFO );
             }
         }
     }
@@ -395,7 +395,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     {
         msg.Printf( _( "Unable to create \"%s\"." ), fn.GetFullPath() );
         wxMessageBox( msg );
-        m_reporter->Report( msg, SEVERITY_ERROR );
+        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         return false;
     }
 
@@ -404,14 +404,14 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     else
         msg.Printf( _( "Front side (top side) place file: \"%s\"." ),
                     fn.GetFullPath() );
-    m_reporter->Report( msg, SEVERITY_INFO );
+    m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
     msg.Printf( _( "Component count: %d." ), fpcount );
-    m_reporter->Report( msg, SEVERITY_INFO );
+    m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
     if( singleFile  )
     {
-        m_reporter->Report( _( "Component Placement File generation OK." ), SEVERITY_ACTION );
+        m_reporter->Report( _( "Component Placement File generation OK." ), RPT_SEVERITY_ACTION );
         return true;
     }
 
@@ -437,7 +437,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     if( fpcount < 0 )
     {
         msg.Printf( _( "Unable to create file \"%s\"." ), fn.GetFullPath() );
-        m_reporter->Report( msg, SEVERITY_ERROR );
+        m_reporter->Report( msg, RPT_SEVERITY_ERROR );
         wxMessageBox( msg );
         return false;
     }
@@ -446,21 +446,21 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     if( !singleFile )
     {
         msg.Printf( _( "Back side (bottom side) place file: \"%s\"." ), fn.GetFullPath() );
-        m_reporter->Report( msg, SEVERITY_INFO );
+        m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
         msg.Printf( _( "Component count: %d." ), fpcount );
 
-        m_reporter->Report( msg, SEVERITY_INFO );
+        m_reporter->Report( msg, RPT_SEVERITY_INFO );
     }
 
     if( !singleFile )
     {
         fullcount += fpcount;
         msg.Printf( _( "Full component count: %d\n" ), fullcount );
-        m_reporter->Report( msg, SEVERITY_INFO );
+        m_reporter->Report( msg, RPT_SEVERITY_INFO );
     }
 
-    m_reporter->Report( _( "Component Placement File generation OK." ), SEVERITY_ACTION );
+    m_reporter->Report( _( "Component Placement File generation OK." ), RPT_SEVERITY_ACTION );
 
     return true;
 }
