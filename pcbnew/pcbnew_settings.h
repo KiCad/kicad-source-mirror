@@ -64,6 +64,7 @@ public:
         bool refill_zones;
         bool test_track_to_zone;
         bool test_footprints;
+        int  severities;
     };
 
     struct DIALOG_EXPORT_IDF

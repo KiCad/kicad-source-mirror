@@ -74,8 +74,6 @@ DRC::DRC() :
     m_drcRun = false;
     m_footprintsTested = false;
 
-    m_severities = RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING;
-
     m_segmAngle  = 0;
     m_segmLength = 0;
 
@@ -132,8 +130,6 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
         m_drcDialog = new DIALOG_DRC_CONTROL( this, m_pcbEditorFrame, aParent );
         updatePointers();
 
-        m_drcDialog->SetSettings( m_severities );
-
         if( show_dlg_modal )
             m_drcDialog->ShowModal();
         else
@@ -166,8 +162,6 @@ void DRC::DestroyDRCDialog( int aReason )
 {
     if( m_drcDialog )
     {
-        m_drcDialog->GetSettings( &m_severities );
-
         m_drcDialog->Destroy();
         m_drcDialog = nullptr;
     }

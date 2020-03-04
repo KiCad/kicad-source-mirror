@@ -34,6 +34,7 @@
 #include <wx/config.h>
 #include <wx/tokenzr.h>
 #include <zones.h>
+#include <widgets/ui_common.h>
 
 #include "../3d-viewer/3d_viewer/3d_viewer_settings.h"
 
@@ -176,6 +177,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVe
 
     m_params.emplace_back( new PARAM<bool>( "drc_dialog.test_footprints",
             &m_DrcDialog.test_footprints, false ) );
+
+    m_params.emplace_back( new PARAM<int>( "drc_dialog.severities",
+            &m_DrcDialog.severities, RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ) );
 
     m_params.emplace_back( new PARAM<bool>( "gen_drill.merge_pth_npth",
             &m_GenDrill.merge_pth_npth, false ) );

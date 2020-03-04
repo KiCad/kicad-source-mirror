@@ -54,9 +54,6 @@ public:
     DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent );
     ~DIALOG_DRC_CONTROL();
 
-    void SetSettings( int aSeverities );
-    void GetSettings( int* aSeverities );
-
     void SetMarkersProvider( DRC_ITEMS_PROVIDER* aProvider );
     void SetUnconnectedProvider( DRC_ITEMS_PROVIDER* aProvider );
     void SetFootprintsProvider( DRC_ITEMS_PROVIDER* aProvider );

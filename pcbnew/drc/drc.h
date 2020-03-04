@@ -155,7 +155,6 @@ private:
     bool     m_refillZones;             // refill zones if requested (by user).
     bool     m_reportAllTrackErrors;    // Report all tracks errors (or only 4 first errors)
     bool     m_testFootprints;          // Test footprints against schematic
-    int      m_severities;              // Severities of DRC violations to display
 
     /* In DRC functions, many calculations are using coordinates relative
      * to the position of the segment under test (segm to segm DRC, segm to pad DRC
