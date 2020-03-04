@@ -86,6 +86,12 @@ public:
      */
     bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish ) override;
 
+    bool CommitPlacement() override;
+
+    bool AbortPlacement() override;
+
+    bool HasPlacedAnything() const override;
+
     /**
      * Function ToggleVia()
      *
