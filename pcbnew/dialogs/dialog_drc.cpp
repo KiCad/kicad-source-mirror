@@ -147,7 +147,11 @@ void DIALOG_DRC_CONTROL::initValues()
     m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
     m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_track_to_zone );
     m_cbTestFootprints->SetValue( cfg->m_DrcDialog.test_footprints );
+
     m_severities = cfg->m_DrcDialog.severities;
+    m_markerTreeModel->SetSeverities( m_severities );
+    m_unconnectedTreeModel->SetSeverities( m_severities );
+    m_footprintWarningsTreeModel->SetSeverities( m_severities );
 
     Layout(); // adding the units above expanded Clearance text, now resize.
 

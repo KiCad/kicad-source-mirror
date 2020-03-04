@@ -82,7 +82,8 @@ void DRC_TREE_MODEL::rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeveritie
     // Even with the updateLock, wxWidgets sometimes ties its knickers in
     // a knot when trying to run a wxdataview_selection_changed_callback()
     // on a row that has been deleted.
-    m_view->UnselectAll();
+    if( m_view )
+        m_view->UnselectAll();
 
     Cleared();
 
@@ -92,12 +93,11 @@ void DRC_TREE_MODEL::rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeveritie
         m_drcItemsProvider = aProvider;
     }
 
-    wxASSERT( m_drcItemsProvider );
-
     if( aSeverities != m_severities )
         m_severities = aSeverities;
 
-    m_drcItemsProvider->SetSeverities( m_severities );
+    if( m_drcItemsProvider )
+        m_drcItemsProvider->SetSeverities( m_severities );
 
     m_tree.clear();
 
