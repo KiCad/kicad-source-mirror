@@ -49,6 +49,8 @@ public:
 
     void SetNetInfo( NETINFO_LIST* aNetInfoList );
 
+    void SetBoard( BOARD* aBoard );
+
     void SetSelectedNetcode( int aNetcode );
     void SetSelectedNet( const wxString& aNetname );
     void SetIndeterminate();

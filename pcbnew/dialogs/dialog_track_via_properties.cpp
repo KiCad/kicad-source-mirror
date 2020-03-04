@@ -55,6 +55,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     VIATYPE viaType = VIATYPE::NOT_DEFINED;
 
+    m_netSelector->SetBoard( aParent->GetBoard() );
     m_netSelector->SetNetInfo( &aParent->GetBoard()->GetNetInfo() );
 
     m_TrackLayerCtrl->SetLayersHotkeys( false );

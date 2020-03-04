@@ -46,6 +46,7 @@ wxDEFINE_EVENT( NET_SELECTED, wxCommandEvent );
 #endif
 
 #define NO_NET _( "<no net>" )
+#define CREATE_NET _( "<create net>" )
 
 
 class NET_SELECTOR_COMBOPOPUP : public wxPanel, public wxComboPopup
@@ -58,6 +59,7 @@ public:
             m_minPopupWidth( -1 ),
             m_maxPopupHeight( 1000 ),
             m_netinfoList( nullptr ),
+            m_board( nullptr ),
             m_selectedNetcode( 0 ),
             m_focusHandler( nullptr )
     { }
@@ -122,6 +124,11 @@ public:
         rebuildList();
     }
 
+    void SetBoard( BOARD* aBoard )
+    {
+        m_board = aBoard;
+    }
+
     void SetIndeterminate() { m_selectedNetcode = -1; }
     bool IsIndeterminate() { return m_selectedNetcode == -1; }
 
@@ -171,8 +178,10 @@ public:
 
     void Accept()
     {
-        wxString selectedNetName;
-        int selection = m_listBox->GetSelection();
+        wxString  selectedNetName;
+        wxString  remainingName;
+        int       selection     = m_listBox->GetSelection();
+        wxString  prefix        = CREATE_NET;
 
         if( selection >= 0 )
             selectedNetName = m_listBox->GetString( (unsigned) selection );
@@ -186,6 +195,28 @@ public:
         {
             m_selectedNetcode = 0;
             GetComboCtrl()->SetValue( NO_NET );
+        }
+        else if( selectedNetName.StartsWith( CREATE_NET, &remainingName ) &&
+                !remainingName.IsEmpty() )
+        {
+            // Remove the first character ':' and all whitespace
+            remainingName = remainingName.Mid( 1 ).Trim().Trim( false );
+            NETINFO_ITEM *newnet = new NETINFO_ITEM( m_board, remainingName, 0 );
+
+            m_netinfoList->AppendNet( newnet );
+            rebuildList();
+
+            if( newnet->GetNet() > 0 )
+            {
+                m_selectedNetcode = newnet->GetNet();
+                GetComboCtrl()->SetValue( remainingName );
+            }
+            else
+            {
+                // This indicates that the NETINFO_ITEM was not successfully appended
+                // to the list for unknown reasons
+                delete newnet;
+            }
         }
         else
         {
@@ -242,7 +273,8 @@ protected:
     void rebuildList()
     {
         wxArrayString netNames;
-        wxString      filter = m_filterCtrl->GetValue().MakeLower();
+        wxString      netstring = m_filterCtrl->GetValue().MakeLower();
+        wxString      filter = netstring;
 
         if( !filter.IsEmpty() )
             filter = wxT( "*" ) + filter + wxT( "*" );
@@ -262,6 +294,12 @@ protected:
         // Special handling for <no net>
         if( filter.IsEmpty() || wxString( NO_NET ).MakeLower().Matches( filter ) )
             netNames.insert( netNames.begin(), NO_NET );
+
+        if( !filter.IsEmpty() && netNames.IsEmpty() )
+        {
+            wxString newnet = wxString::Format( "%s: %s", CREATE_NET, netstring );
+            netNames.insert( netNames.begin(), newnet );
+        }
 
         m_listBox->Set( netNames );
     }
@@ -453,6 +491,7 @@ protected:
     int              m_maxPopupHeight;
 
     NETINFO_LIST*    m_netinfoList;
+    BOARD*           m_board;
 
     int              m_selectedNetcode;
 
@@ -519,6 +558,12 @@ void NET_SELECTOR::onKeyDown( wxKeyEvent& aEvt )
 void NET_SELECTOR::SetNetInfo( NETINFO_LIST* aNetInfoList )
 {
     m_netSelectorPopup->SetNetInfo( aNetInfoList );
+}
+
+
+void NET_SELECTOR::SetBoard( BOARD* aBoard )
+{
+    m_netSelectorPopup->SetBoard( aBoard );
 }
 
 

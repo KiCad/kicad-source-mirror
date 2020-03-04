@@ -134,6 +134,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
         m_choiceFabProperty->Show( false );
     }
 
+    m_PadNetSelector->SetBoard( m_board );
     m_PadNetSelector->SetNetInfo( &m_board->GetNetInfo() );
 
     m_OrientValidator.SetRange( -360.0, 360.0 );
