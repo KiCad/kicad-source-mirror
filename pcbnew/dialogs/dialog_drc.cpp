@@ -309,6 +309,10 @@ void DIALOG_DRC_CONTROL::OnDRCItemRClick( wxDataViewEvent& aEvent )
                  drcItem->GetErrorText() ),
                  _( "Violations will not be checked or reported" ) );
 
+    menu.AppendSeparator();
+
+    menu.Append( 6, _( "Edit violation severities..." ), _( "Open the Board Setup... dialog" ) );
+
     switch( GetPopupMenuSelectionFromUser( menu ) )
     {
     case 1:
@@ -362,6 +366,10 @@ void DIALOG_DRC_CONTROL::OnDRCItemRClick( wxDataViewEvent& aEvent )
         // Rebuild model and view
         static_cast<DRC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
         updateDisplayedCounts();
+        break;
+
+    case 6:
+        m_brdEditor->DoShowBoardSetupDialog( _( "Violation Severity" ) );
         break;
     }
 }
