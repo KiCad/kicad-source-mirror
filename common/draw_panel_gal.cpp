@@ -228,7 +228,9 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 {
     KIGFX::GAL_CONTEXT_LOCKER locker( m_gal );
     wxSize clientSize = GetClientSize();
-    m_gal->ResizeScreen( clientSize.x, clientSize.y );
+    clientSize.x = std::max( 10, clientSize.x );
+    clientSize.y = std::max( 10, clientSize.y );
+    m_gal->ResizeScreen( clientSize.GetX(), clientSize.GetY() );
 
     if( m_view )
     {
@@ -414,8 +416,10 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     delete m_gal;
     m_gal = new_gal;
 
-    wxSize size = GetClientSize();
-    m_gal->ResizeScreen( size.GetX(), size.GetY() );
+    wxSize clientSize = GetClientSize();
+    clientSize.x = std::max( 10, clientSize.x );
+    clientSize.y = std::max( 10, clientSize.y );
+    m_gal->ResizeScreen( clientSize.GetX(), clientSize.GetY() );
 
     if( m_painter )
         m_painter->SetGAL( m_gal );

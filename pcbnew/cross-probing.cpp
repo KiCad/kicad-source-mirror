@@ -210,6 +210,8 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     {
         auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
         auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
+        screenSize.x = std::max( 10.0, screenSize.x );
+        screenSize.y = std::max( 10.0, screenSize.y );
         double ratio = std::max( fabs( bbSize.x / screenSize.x ),
                                  fabs( bbSize.y / screenSize.y ) );
 

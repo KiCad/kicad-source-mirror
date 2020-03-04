@@ -1081,6 +1081,8 @@ void SELECTION_TOOL::zoomFitSelection()
     auto view = getView();
 
     VECTOR2D screenSize = view->ToWorld( m_frame->GetCanvas()->GetClientSize(), false );
+    screenSize.x = std::max( 10.0, screenSize.x );
+    screenSize.y = std::max( 10.0, screenSize.y );
 
     if( selectionBox.GetWidth() != 0  || selectionBox.GetHeight() != 0 )
     {
