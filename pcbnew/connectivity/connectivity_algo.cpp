@@ -137,7 +137,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         break;
 
     case PCB_PAD_T:
-        if( m_itemMap.find ( static_cast<D_PAD*>( aItem ) ) != m_itemMap.end() )
+        if( m_itemMap.find ( aItem ) != m_itemMap.end() )
             return false;
 
         add( m_itemList, static_cast<D_PAD*>( aItem ) );
@@ -146,7 +146,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 
     case PCB_TRACE_T:
     {
-        if( m_itemMap.find( static_cast<TRACK*>( aItem ) ) != m_itemMap.end() )
+        if( m_itemMap.find( aItem ) != m_itemMap.end() )
             return false;
 
         add( m_itemList, static_cast<TRACK*>( aItem ) );
@@ -156,7 +156,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 
     case PCB_ARC_T:
     {
-        if( m_itemMap.find( static_cast<ARC*>( aItem ) ) != m_itemMap.end() )
+        if( m_itemMap.find( aItem ) != m_itemMap.end() )
             return false;
 
         add( m_itemList, static_cast<ARC*>( aItem ) );
@@ -165,7 +165,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     }
 
     case PCB_VIA_T:
-        if( m_itemMap.find( static_cast<VIA*>( aItem ) ) != m_itemMap.end() )
+        if( m_itemMap.find( aItem ) != m_itemMap.end() )
             return false;
 
         add( m_itemList, static_cast<VIA*>( aItem ) );
@@ -176,7 +176,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     {
         auto zone = static_cast<ZONE_CONTAINER*>( aItem );
 
-        if( m_itemMap.find( static_cast<ZONE_CONTAINER*>( aItem ) ) != m_itemMap.end() )
+        if( m_itemMap.find( aItem ) != m_itemMap.end() )
             return false;
 
         m_itemMap[zone] = ITEM_MAP_ENTRY();

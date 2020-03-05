@@ -145,7 +145,7 @@ private:
 
     CN_LIST m_itemList;
 
-    std::unordered_map<const BOARD_CONNECTED_ITEM*, ITEM_MAP_ENTRY> m_itemMap;
+    std::unordered_map<const BOARD_ITEM*, ITEM_MAP_ENTRY> m_itemMap;
 
     CLUSTERS m_connClusters;
     CLUSTERS m_ratsnestClusters;
