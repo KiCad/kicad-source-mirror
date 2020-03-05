@@ -478,9 +478,16 @@ void PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int width,
 {
     if( tracemode == FILLED )
     {
-        SetCurrentLineWidth( width );
-        MoveTo( start );
-        FinishTo( end );
+        if( start == end )
+        {
+            Circle( start, width, FILLED_SHAPE, 0 );
+        }
+        else
+        {
+            SetCurrentLineWidth( width );
+            MoveTo( start );
+            FinishTo( end );
+        }
     }
     else
     {
