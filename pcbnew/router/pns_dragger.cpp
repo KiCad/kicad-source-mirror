@@ -206,6 +206,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
         LINE origLine( m_draggedLine );
         LINE dragged( m_draggedLine );
         dragged.SetSnapThreshhold( thresh );
+        dragged.ClearSegmentLinks();
 
         if( m_mode == DM_SEGMENT )
             dragged.DragSegment( aP, m_draggedSegmentIndex );
