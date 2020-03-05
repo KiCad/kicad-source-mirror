@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -61,6 +61,11 @@ class DIALOG_SCH_SHEET_PROPS_BASE : public DIALOG_SHIM
 		wxStaticText* m_sheetnameSizeLabel;
 		wxTextCtrl* m_sheetnameSizeCtrl;
 		wxStaticText* m_sheetnameSizeUnits;
+		wxStaticLine* m_staticline2;
+		wxStaticText* m_staticTextUuid;
+		wxTextCtrl* m_textCtrlUuid;
+		wxStaticText* m_staticTextHpath;
+		wxTextCtrl* m_textCtrlHpath;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;

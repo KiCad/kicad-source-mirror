@@ -96,6 +96,9 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataToWindow()
     m_filenameTextSize.SetValue( m_sheet->GetFileNameSize() );
     m_sheetnameTextSize.SetValue( m_sheet->GetSheetNameSize() );
 
+    m_textCtrlUuid->SetValue( m_sheet->m_Uuid.AsString() );
+    m_textCtrlHpath->SetValue( g_CurrentSheet->PathHumanReadable() );
+
     return true;
 }
 

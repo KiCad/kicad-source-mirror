@@ -649,8 +649,12 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Sheet Name" ), m_name, CYAN ) );
     aList.push_back( MSG_PANEL_ITEM( _( "File Name" ), m_fileName, BROWN ) );
 
-#if 0   // Set to 1 to display the sheet time stamp (mainly for test)
-    aList.push_back( MSG_PANEL_ITEM( _( "UUID" ), m_Uuid.AsString(), BLUE ) );
+#if 1   // Set to 1 to display the sheet UUID and hierarchical path
+    wxString msgU, msgL;
+    msgU << _( "UUID" ) << ": " << m_Uuid.AsString();
+    msgL << _( "Path" ) << ": " <<g_CurrentSheet->PathHumanReadable();
+
+    aList.push_back( MSG_PANEL_ITEM( msgU, msgL, BLUE ) );
 #endif
 }
 
