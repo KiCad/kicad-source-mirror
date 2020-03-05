@@ -112,7 +112,7 @@ bool SHOVE::checkBumpDirection( const LINE& aCurrent, const LINE& aShoved ) cons
 {
     const SEG& ss = aCurrent.CSegment( 0 );
 
-    int dist = getClearance( &aCurrent, &aShoved ) + PNS_HULL_MARGIN;
+    int dist = getClearance( &aCurrent, &aShoved );
 
     dist += aCurrent.Width() / 2;
     dist += aShoved.Width() / 2;
