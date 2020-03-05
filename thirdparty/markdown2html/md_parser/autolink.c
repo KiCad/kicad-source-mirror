@@ -216,10 +216,11 @@ size_t sd_autolink__www( size_t* rewind_p, struct buf* link, uint8_t* data,
 size_t sd_autolink__email( size_t* rewind_p, struct buf* link, uint8_t* data,
                            size_t max_rewind, size_t size, unsigned int flags )
 {
-    size_t link_end, rewind;
+    size_t link_end;
+    int rewind;
     int nb = 0, np = 0;
 
-    for( rewind = 0; rewind < max_rewind; ++rewind )
+    for( rewind = 0; rewind < (int)max_rewind; ++rewind )
     {
         uint8_t c = data[-rewind - 1];
 
@@ -269,12 +270,14 @@ size_t sd_autolink__email( size_t* rewind_p, struct buf* link, uint8_t* data,
 size_t sd_autolink__url( size_t* rewind_p, struct buf* link, uint8_t* data,
                          size_t max_rewind, size_t size, unsigned int flags )
 {
-    size_t link_end, rewind = 0, domain_len;
+    size_t link_end, domain_len;
 
     if( size < 4 || data[1] != '/' || data[2] != '/' )
         return 0;
 
-    while( rewind < max_rewind && isalpha( data[-rewind - 1] ) )
+    int rewind = 0;
+
+    while( rewind < (int)max_rewind && isalpha( data[-rewind - 1] ) )
         rewind++;
 
     if( !sd_autolink_issafe( data - rewind, size + rewind ) )
