@@ -1107,7 +1107,6 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
             return false;
 
         m_lastNode->Add( Clone( pl.Via() ) );
-        m_lastNode = NULL;
         m_currentNode = NULL;
 
         m_idle = true;
