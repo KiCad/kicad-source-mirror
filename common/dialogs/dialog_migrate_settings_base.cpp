@@ -22,14 +22,14 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 	m_lblWelcome->Wrap( -1 );
 	m_lblWelcome->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	bSizer6->Add( m_lblWelcome, 0, wxALL, 5 );
+	bSizer6->Add( m_lblWelcome, 0, wxALL|wxEXPAND, 5 );
 
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("How would you like to configure KiCad?"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	bSizer6->Add( m_staticText2, 0, wxALL, 5 );
+	bSizer6->Add( m_staticText2, 0, wxALL|wxEXPAND, 5 );
 
 	m_btnPrevVer = new wxRadioButton( this, wxID_ANY, wxT("Import settings from a previous version at:"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_btnPrevVer, 0, wxALL, 5 );
+	bSizer6->Add( m_btnPrevVer, 0, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
@@ -41,6 +41,7 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 
 	m_btnCustomPath = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_btnCustomPath->SetToolTip( wxT("Choose a different path") );
+	m_btnCustomPath->SetMinSize( wxSize( 30,30 ) );
 
 	bSizer5->Add( m_btnCustomPath, 0, wxALL, 5 );
 
@@ -55,7 +56,7 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 	bSizer6->Add( m_lblPathError, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 
 	m_btnUseDefaults = new wxRadioButton( this, wxID_ANY, wxT("Start with default settings"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_btnUseDefaults, 0, wxALL, 5 );
+	bSizer6->Add( m_btnUseDefaults, 0, wxALL|wxEXPAND, 5 );
 
 
 	m_sizer->Add( bSizer6, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
