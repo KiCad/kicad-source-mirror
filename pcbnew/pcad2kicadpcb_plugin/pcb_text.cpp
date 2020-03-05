@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,7 +117,6 @@ void PCB_TEXT::AddToBoard()
 
     pcbtxt->SetItalic( m_name.isItalic );
     pcbtxt->SetThickness( m_name.textstrokeWidth );
-    pcbtxt->SetTextAngle( m_name.textRotation );
 
     SetTextJustify( pcbtxt, m_name.justify );
     pcbtxt->SetTextPos( wxPoint( m_name.textPositionX,
@@ -125,6 +124,11 @@ void PCB_TEXT::AddToBoard()
 
     pcbtxt->SetMirrored( m_name.mirror );
     pcbtxt->SetTimeStamp( 0 );
+
+    if( pcbtxt->IsMirrored() )
+        pcbtxt->SetTextAngle( 3600.0 - m_name.textRotation );
+    else
+        pcbtxt->SetTextAngle( m_name.textRotation );
 
     pcbtxt->SetLayer( m_KiCadLayer );
 }
