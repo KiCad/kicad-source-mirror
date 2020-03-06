@@ -1280,9 +1280,15 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 if( secondary_name == subgraph->m_driver_connection->Name() )
                     continue;
 
+                bool secondary_is_global = CONNECTION_SUBGRAPH::GetDriverPriority( driver )
+                                           >= CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN;
+
                 for( CONNECTION_SUBGRAPH* candidate : global_subgraphs )
                 {
                     if( candidate == subgraph )
+                        continue;
+
+                    if( !secondary_is_global && candidate->m_sheet != subgraph->m_sheet )
                         continue;
 
                     SCH_CONNECTION* conn = candidate->m_driver_connection;
