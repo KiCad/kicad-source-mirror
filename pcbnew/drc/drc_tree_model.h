@@ -286,12 +286,18 @@ public:
             m_DrcItem( aDrcItem )
     {}
 
+    ~DRC_TREE_NODE()
+    {
+        for( DRC_TREE_NODE* child : m_Children )
+            delete child;
+    }
+
     NODE_TYPE      m_Type;
     DRC_TREE_NODE* m_Parent;
 
     DRC_ITEM*      m_DrcItem;
 
-    std::vector<std::unique_ptr<DRC_TREE_NODE>> m_Children;
+    std::vector<DRC_TREE_NODE*> m_Children;
 };
 
 
@@ -375,7 +381,7 @@ private:
     int                  m_severities;
     DRC_ITEMS_PROVIDER*  m_drcItemsProvider;   // I own this, but not its contents
 
-    std::vector<std::unique_ptr<DRC_TREE_NODE>> m_tree;  // I own this
+    std::vector<DRC_TREE_NODE*> m_tree;  // I own this
 };
 
 

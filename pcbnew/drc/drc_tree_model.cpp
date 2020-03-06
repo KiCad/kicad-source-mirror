@@ -71,7 +71,8 @@ DRC_TREE_MODEL::~DRC_TREE_MODEL()
 {
     delete m_drcItemsProvider;
 
-    // m_tree is all std::unique_ptr based, so it will look after itself
+    for( DRC_TREE_NODE* topLevelNode : m_tree )
+        delete topLevelNode;
 }
 
 
@@ -101,19 +102,17 @@ void DRC_TREE_MODEL::rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeveritie
 
     m_tree.clear();
 
-#define PUSH_NODE( p, item, type ) push_back( std::make_unique<DRC_TREE_NODE>( p, item, type ) )
-
     for( int i = 0; m_drcItemsProvider && i < m_drcItemsProvider->GetCount(); ++i )
     {
         DRC_ITEM* drcItem = m_drcItemsProvider->GetItem( i );
 
-        m_tree.PUSH_NODE( nullptr, drcItem, DRC_TREE_NODE::MARKER );
-        DRC_TREE_NODE* node = m_tree.back().get();
+        m_tree.push_back( new DRC_TREE_NODE( nullptr, drcItem, DRC_TREE_NODE::MARKER ) );
+        DRC_TREE_NODE* n = m_tree.back();
 
-        node->m_Children.PUSH_NODE( node, drcItem, DRC_TREE_NODE::MAIN_ITEM );
+        n->m_Children.push_back( new DRC_TREE_NODE( n, drcItem, DRC_TREE_NODE::MAIN_ITEM ) );
 
         if( drcItem->GetAuxItemID() != niluuid )
-            node->m_Children.PUSH_NODE( node, drcItem, DRC_TREE_NODE::AUX_ITEM );
+            n->m_Children.push_back( new DRC_TREE_NODE( n, drcItem, DRC_TREE_NODE::AUX_ITEM ) );
     }
 
 #ifdef __WXGTK__
@@ -147,8 +146,8 @@ void DRC_TREE_MODEL::SetSeverities( int aSeverities )
 
 void DRC_TREE_MODEL::ExpandAll()
 {
-    for( std::unique_ptr<DRC_TREE_NODE>& markerNode : m_tree )
-        m_view->Expand( ToItem( markerNode.get() ) );
+    for( DRC_TREE_NODE* topLevelNode : m_tree )
+        m_view->Expand( ToItem( topLevelNode ) );
 }
 
 
@@ -170,11 +169,11 @@ wxDataViewItem DRC_TREE_MODEL::GetParent( wxDataViewItem const& aItem ) const
 unsigned int DRC_TREE_MODEL::GetChildren( wxDataViewItem const& aItem,
                                           wxDataViewItemArray&  aChildren ) const
 {
-    const DRC_TREE_NODE* p = ToNode( aItem );
-    const std::vector<std::unique_ptr<DRC_TREE_NODE>>& children = p ? p->m_Children : m_tree;
+    const DRC_TREE_NODE* node = ToNode( aItem );
+    const std::vector<DRC_TREE_NODE*>& children = node ? node->m_Children : m_tree;
 
-    for( const std::unique_ptr<DRC_TREE_NODE>& child: children )
-        aChildren.Add( ToItem( child.get() ) );
+    for( const DRC_TREE_NODE* child: children )
+        aChildren.push_back( ToItem( child ) );
 
     return children.size();
 }
@@ -265,15 +264,14 @@ void DRC_TREE_MODEL::ValueChanged( DRC_TREE_NODE* aNode )
         wxDataViewModel::ValueChanged( ToItem( aNode ), 0 );
 
         for( auto & child : aNode->m_Children )
-            wxDataViewModel::ValueChanged( ToItem( child.get() ), 0 );
+            wxDataViewModel::ValueChanged( ToItem( child ), 0 );
     }
 }
 
 
 void DRC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
 {
-    wxDataViewItem  dataViewItem = m_view->GetCurrentItem();
-    DRC_TREE_NODE*  tree_node = ToNode( dataViewItem );
+    DRC_TREE_NODE*  tree_node = ToNode( m_view->GetCurrentItem() );
     const DRC_ITEM* drc_item = tree_node ? tree_node->m_DrcItem : nullptr;
 
     if( !drc_item )
@@ -286,10 +284,24 @@ void DRC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
     {
         if( m_drcItemsProvider->GetItem( i ) == drc_item )
         {
-            m_drcItemsProvider->DeleteItem( i, aDeep );
-            m_tree.erase( m_tree.begin() + i );
+            wxDataViewItem      markerItem = ToItem( m_tree[i] );
+            wxDataViewItemArray childItems;
+            wxDataViewItem      parentItem = ToItem( m_tree[i]->m_Parent );
 
-            ItemDeleted( ToItem( tree_node->m_Parent ), dataViewItem );
+            for( DRC_TREE_NODE* child : m_tree[i]->m_Children )
+            {
+                childItems.push_back( ToItem( child ) );
+                delete child;
+            }
+
+            m_tree[i]->m_Children.clear();
+            ItemsDeleted( markerItem, childItems );
+
+            delete m_tree[i];
+            m_tree.erase( m_tree.begin() + i );
+            ItemDeleted( parentItem, markerItem );
+
+            m_drcItemsProvider->DeleteItem( i, aDeep );
             break;
         }
     }
