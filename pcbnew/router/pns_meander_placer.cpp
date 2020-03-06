@@ -197,10 +197,34 @@ bool MEANDER_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFi
 
     m_currentTrace = LINE( m_originLine, m_finalShape );
     m_currentNode->Add( m_currentTrace );
+    CommitPlacement();
 
-    Router()->CommitRouting( m_currentNode );
     return true;
 }
+
+
+bool MEANDER_PLACER::AbortPlacement()
+{
+    m_world->KillChildren();
+    return true;
+}
+
+
+bool MEANDER_PLACER::HasPlacedAnything() const
+{
+     return m_currentTrace.SegmentCount() > 0;
+}
+
+
+bool MEANDER_PLACER::CommitPlacement()
+{
+    if( m_currentNode )
+        Router()->CommitRouting( m_currentNode );
+
+    m_currentNode = NULL;
+    return true;
+}
+
 
 
 bool MEANDER_PLACER::CheckFit( MEANDER_SHAPE* aShape )

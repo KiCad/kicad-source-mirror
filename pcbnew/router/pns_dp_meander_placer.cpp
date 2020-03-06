@@ -315,8 +315,32 @@ bool DP_MEANDER_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForc
     m_currentNode->Add( lP );
     m_currentNode->Add( lN );
 
-    Router()->CommitRouting( m_currentNode );
+    CommitPlacement();
 
+    return true;
+}
+
+
+bool DP_MEANDER_PLACER::AbortPlacement()
+{
+    m_world->KillChildren();
+    return true;
+}
+
+
+bool DP_MEANDER_PLACER::HasPlacedAnything() const
+{
+     return m_originPair.CP().SegmentCount() > 0 ||
+             m_originPair.CN().SegmentCount() > 0;
+}
+
+
+bool DP_MEANDER_PLACER::CommitPlacement()
+{
+    if( m_currentNode )
+        Router()->CommitRouting( m_currentNode );
+
+    m_currentNode = NULL;
     return true;
 }
 

@@ -86,10 +86,13 @@ public:
      */
     bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish ) override;
 
+    /// @copydoc PLACEMENT_ALGO::CommitPlacement()
     bool CommitPlacement() override;
 
+    /// @copydoc PLACEMENT_ALGO::AbortPlacement()
     bool AbortPlacement() override;
 
+    /// @copydoc PLACEMENT_ALGO::HasPlacedAnything()
     bool HasPlacedAnything() const override;
 
     /**
