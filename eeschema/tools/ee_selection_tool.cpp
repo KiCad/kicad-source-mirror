@@ -607,10 +607,18 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
 EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
 {
-    // Filter an existing selection
-    if( !m_selection.Empty() )
+    if( m_selection.Empty() )
     {
-        for( int i = m_selection.GetSize() - 1; i >= 0; --i )
+        VECTOR2D cursorPos = getViewControls()->GetCursorPosition( true );
+
+        ClearSelection();
+        SelectPoint( cursorPos, aFilterList );
+        m_selection.SetIsHover( true );
+        m_selection.ClearReferencePoint();
+    }
+    else        // Trim an existing selection by aFilterList
+    {
+        for( int i = (int) m_selection.GetSize() - 1; i >= 0; --i )
         {
             EDA_ITEM* item = (EDA_ITEM*) m_selection.GetItem( i );
 
@@ -620,18 +628,6 @@ EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
                 m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
             }
         }
-
-    }
-
-    // If nothing was selected, or we filtered everything out, do a hover selection
-    if( m_selection.Empty() )
-    {
-        VECTOR2D cursorPos = getViewControls()->GetCursorPosition( true );
-
-        ClearSelection();
-        SelectPoint( cursorPos, aFilterList );
-        m_selection.SetIsHover( true );
-        m_selection.ClearReferencePoint();
     }
 
     updateReferencePoint();

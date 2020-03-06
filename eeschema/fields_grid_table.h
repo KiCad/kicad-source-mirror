@@ -73,6 +73,7 @@ class FIELDS_GRID_TABLE : public wxGridTableBase, public std::vector<T>
 {
 public:
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, LIB_PART* aPart );
+    FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, SCH_SHEET* aSheet );
     ~FIELDS_GRID_TABLE();
 
     int GetNumberRows() override { return (int) this->size(); }
@@ -98,10 +99,16 @@ public:
     wxString StringFromBool( bool aValue );
     bool BoolFromString( wxString aValue );
 
+protected:
+    void initGrid( DIALOG_SHIM* aDialog );
+
 private:
     SCH_BASE_FRAME* m_frame;
     EDA_UNITS       m_userUnits;
+    KICAD_T         m_parentType;
+    int             m_mandatoryFieldCount;
     LIB_PART*       m_part;
+    wxString        m_curdir;
 
     SCH_FIELD_VALIDATOR   m_fieldNameValidator;
     SCH_FIELD_VALIDATOR   m_referenceValidator;
@@ -109,6 +116,7 @@ private:
     LIB_ID_VALIDATOR      m_libIdValidator;
     SCH_FIELD_VALIDATOR   m_urlValidator;
     SCH_FIELD_VALIDATOR   m_nonUrlValidator;
+    SCH_FIELD_VALIDATOR   m_filepathValidator;
 
     wxGridCellAttr*       m_readOnlyAttr;
     wxGridCellAttr*       m_fieldNameAttr;
@@ -117,6 +125,7 @@ private:
     wxGridCellAttr*       m_footprintAttr;
     wxGridCellAttr*       m_urlAttr;
     wxGridCellAttr*       m_nonUrlAttr;
+    wxGridCellAttr*       m_filepathAttr;
     wxGridCellAttr*       m_boolAttr;
     wxGridCellAttr*       m_vAlignAttr;
     wxGridCellAttr*       m_hAlignAttr;

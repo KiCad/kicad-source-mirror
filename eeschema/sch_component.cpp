@@ -928,11 +928,11 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 
     m_Fields.swap( component->m_Fields );    // std::vector's swap()
 
-    for( int ii = 0; ii < component->GetFieldCount();  ++ii )
-        component->GetField( ii )->SetParent( component );
+    for( SCH_FIELD& field : component->m_Fields )
+        field.SetParent( component );
 
-    for( int ii = 0; ii < GetFieldCount();  ++ii )
-        GetField( ii )->SetParent( this );
+    for( SCH_FIELD& field : m_Fields )
+        field.SetParent( this );
 
     TRANSFORM tmp = m_transform;
 
@@ -1345,12 +1345,12 @@ void SCH_COMPONENT::MirrorY( int aYaxis_position )
     MIRROR( m_Pos.x, aYaxis_position );
     dx -= m_Pos.x;     // dx,0 is the move vector for this transform
 
-    for( int ii = 0; ii < GetFieldCount(); ii++ )
+    for( SCH_FIELD& field : m_Fields )
     {
         // Move the fields to the new position because the component itself has moved.
-        wxPoint pos = GetField( ii )->GetTextPos();
+        wxPoint pos = field.GetTextPos();
         pos.x -= dx;
-        GetField( ii )->SetTextPos( pos );
+        field.SetTextPos( pos );
     }
 }
 
@@ -1363,12 +1363,12 @@ void SCH_COMPONENT::MirrorX( int aXaxis_position )
     MIRROR( m_Pos.y, aXaxis_position );
     dy -= m_Pos.y;     // dy,0 is the move vector for this transform
 
-    for( int ii = 0; ii < GetFieldCount(); ii++ )
+    for( SCH_FIELD& field : m_Fields )
     {
         // Move the fields to the new position because the component itself has moved.
-        wxPoint pos = GetField( ii )->GetTextPos();
+        wxPoint pos = field.GetTextPos();
         pos.y -= dy;
-        GetField( ii )->SetTextPos( pos );
+        field.SetTextPos( pos );
     }
 }
 
@@ -1530,9 +1530,9 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
         {
             // Test the bounding boxes of fields if they are visible and not empty.
-            for( int ii = 0; ii < GetFieldCount(); ii++ )
+            for( SCH_FIELD& field : m_Fields )
             {
-                if( SEARCH_RESULT::QUIT == aInspector( GetField( ii ), (void*) this ) )
+                if( SEARCH_RESULT::QUIT == aInspector( &field, (void*) this ) )
                     return SEARCH_RESULT::QUIT;
             }
         }

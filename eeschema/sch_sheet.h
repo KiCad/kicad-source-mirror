@@ -263,6 +263,16 @@ public:
 
     std::vector<SCH_FIELD>& GetFields() { return m_fields; }
 
+    /**
+     * Set multiple schematic fields.
+     *
+     * @param aFields are the fields to set in this symbol.
+     */
+    void SetFields( const std::vector<SCH_FIELD>& aFields )
+    {
+        m_fields = aFields;     // vector copying, length is changed possibly
+    }
+
     // JEY TODO: retite these once new dialog is implemented...
     wxString GetName() const { return m_fields[ SHEETNAME ].GetText(); }
     void SetName( const wxString& aName ) { m_fields[ SHEETNAME ].SetText( aName ); }
@@ -411,7 +421,12 @@ public:
 
     void Print( wxDC* aDC, const wxPoint& aOffset ) override;
 
-    EDA_RECT const GetBoundingBox() const override;
+    /**
+     * Return a bounding box for the sheet body but not the fields.
+     */
+    const EDA_RECT GetBodyBoundingBox() const;
+
+    const EDA_RECT GetBoundingBox() const override;
 
     /**
      * Rotating around the boundingBox's center can cause walking when the sheetname or
@@ -500,17 +515,7 @@ public:
      */
     void Resize( const wxSize& aSize );
 
-    /**
-     * Return whether the fields have been automatically placed.
-     */
-    FIELDS_AUTOPLACED GetFieldsAutoplaced() const { return m_fieldsAutoplaced; }
-
-    /**
-     * Set fields automatically placed flag false.
-     */
-    void ClearFieldsAutoplaced() { m_fieldsAutoplaced = FIELDS_AUTOPLACED_NO; }
-
-    void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual );
+    void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
 
     void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList ) override;
 
@@ -557,18 +562,9 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
+    static const wxString GetDefaultFieldName( int aFieldNdx );
+
 protected:
-
-    /**
-     * @return the position of the anchor of sheet name text
-     */
-    wxPoint getSheetNamePosition();
-
-    /**
-     * @return the position of the anchor of filename text
-     */
-    wxPoint getFileNamePosition();
-
     /**
      * Renumber the sheet pins in the sheet.
      *

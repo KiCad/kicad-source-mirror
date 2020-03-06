@@ -43,7 +43,16 @@ class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
 
 
-enum DANGLING_END_T {
+enum FIELDS_AUTOPLACED
+{
+    FIELDS_AUTOPLACED_NO = 0,
+    FIELDS_AUTOPLACED_AUTO,
+    FIELDS_AUTOPLACED_MANUAL
+};
+
+
+enum DANGLING_END_T
+{
     UNKNOWN = 0,
     WIRE_START_END,
     WIRE_END_END,
@@ -140,10 +149,11 @@ class SCH_ITEM : public EDA_ITEM
     friend class CONNECTION_GRAPH;
 
 protected:
-    SCH_LAYER_ID   m_Layer;
-    EDA_ITEMS      m_connections;   ///< List of items connected to this item.
-    wxPoint        m_storedPos;     ///< a temporary variable used in some move commands
-                                    ///> to store a initial pos (of the item or mouse cursor)
+    SCH_LAYER_ID      m_Layer;
+    EDA_ITEMS         m_connections;      // List of items connected to this item.
+    FIELDS_AUTOPLACED m_fieldsAutoplaced; // indicates status of field autoplacement
+    wxPoint           m_storedPos;        // a temporary variable used in some move commands
+                                          // to store a initial pos of the item or mouse cursor
 
     /// Stores pointers to other items that are connected to this one, per sheet
     std::unordered_map<SCH_SHEET_PATH, ITEM_SET> m_connected_items;
@@ -387,6 +397,32 @@ public:
     void SetConnectivityDirty( bool aDirty = true ) { m_connectivity_dirty = aDirty; }
 
     virtual bool CanIncrementLabel() const { return false; }
+
+    /**
+     * Return whether the fields have been automatically placed.
+     */
+    FIELDS_AUTOPLACED GetFieldsAutoplaced() const { return m_fieldsAutoplaced; }
+
+    /**
+     * Set fields automatically placed flag false.
+     */
+    void ClearFieldsAutoplaced() { m_fieldsAutoplaced = FIELDS_AUTOPLACED_NO; }
+
+    /**
+     * Autoplace fields only if correct to do so automatically.
+     *
+     * Fields that have been moved by hand are not automatically placed.
+     *
+     * @param aScreen is the SCH_SCREEN associated with the current instance of the
+     *                component.
+     */
+    void AutoAutoplaceFields( SCH_SCREEN* aScreen )
+    {
+        if( GetFieldsAutoplaced() )
+            AutoplaceFields( aScreen, GetFieldsAutoplaced() == FIELDS_AUTOPLACED_MANUAL );
+    }
+
+    virtual void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) { }
 
     /**
      * Function Plot

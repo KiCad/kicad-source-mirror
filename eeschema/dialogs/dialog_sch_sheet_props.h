@@ -26,32 +26,49 @@
 #define __dialog_sch_sheet_props__
 
 #include <dialog_sch_sheet_props_base.h>
-#include <widgets/unit_binder.h>
+#include <fields_grid_table.h>
 
 
 class SCH_SHEET;
 class SCH_EDIT_FRAME;
 
 
-/** Implementing DIALOG_SCH_SHEET_PROPS_BASE */
 class DIALOG_SCH_SHEET_PROPS : public DIALOG_SCH_SHEET_PROPS_BASE
 {
-    SCH_SHEET*   m_sheet;
-
-    UNIT_BINDER  m_filenameTextSize;
-    UNIT_BINDER  m_sheetnameTextSize;
-
 public:
-    /** Constructor */
-    DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* parent, SCH_SHEET* aSheet );
+    DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
+                            bool* aClearAnnotationNewItems );
+
+    ~DIALOG_SCH_SHEET_PROPS() override;
+
+private:
+    SCH_EDIT_FRAME* m_frame;
+    SCH_SHEET*      m_sheet;
+    bool*           m_clearAnnotationNewItems;
+
+    int             m_width;
+    int             m_delayedFocusRow;
+    int             m_delayedFocusColumn;
+    wxString        m_shownColumns;
+
+    FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void OnBrowseClicked( wxCommandEvent& event ) override;
+    bool Validate() override;
 
-    const wxString GetFileName();
-    wxString GetSheetName() { return m_textSheetName->GetValue(); }
+    // event handlers
+    void OnAddField( wxCommandEvent& event ) override;
+    void OnDeleteField( wxCommandEvent& event ) override;
+    void OnMoveUp( wxCommandEvent& event ) override;
+    void OnMoveDown( wxCommandEvent& event ) override;
+    void OnSizeGrid( wxSizeEvent& event ) override;
+    void OnGridCellChanging( wxGridEvent& event );
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void OnInitDlg( wxInitDialogEvent& event ) override;
+
+    void AdjustGridColumns( int aWidth );
 };
 
 #endif // __dialog_sch_sheet_props__

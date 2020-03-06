@@ -40,7 +40,7 @@
 #include <pgm_base.h>
 
 
-const wxString GetDefaultFieldName( int aFieldNdx )
+const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx )
 {
     static void* locale = nullptr;
     static wxString sheetnameDefault;
@@ -51,9 +51,9 @@ const wxString GetDefaultFieldName( int aFieldNdx )
     // so only do it when necessary.
     if( Pgm().GetLocale() != locale )
     {
-        sheetnameDefault     = _( "Sheet Name" );
-        sheetfilenameDefault = _( "Sheet Filename" );
-        fieldDefault         = _( "Field" );
+        sheetnameDefault     = _( "Sheet name" );
+        sheetfilenameDefault = _( "Sheet file" );
+        fieldDefault         = _( "Field%d" );
         locale = Pgm().GetLocale();
     }
 
@@ -426,43 +426,45 @@ int SCH_SHEET::GetPenSize() const
 }
 
 
-wxPoint SCH_SHEET::getSheetNamePosition()
-{
-    wxSize  textSize = m_fields[ SHEETNAME ].GetTextSize();
-    int     margin = KiROUND( GetPenSize() / 2.0 + 4 + std::max( textSize.x, textSize.y ) * 0.3 );
-
-    if( IsVerticalOrientation() )
-        return wxPoint( -margin, m_size.y );
-    else
-        return wxPoint( 0, -margin );
-}
-
-
-wxPoint SCH_SHEET::getFileNamePosition()
-{
-    wxSize  textSize = m_fields[ SHEETNAME ].GetTextSize();
-    int     margin = KiROUND( GetPenSize() / 2.0 + 4 + std::max( textSize.x, textSize.y ) * 0.4 );
-
-    if( IsVerticalOrientation() )
-        return wxPoint( m_size.x + margin, m_size.y );
-    else
-        return wxPoint( 0, m_size.y + margin );
-}
-
-
 void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 {
     wxASSERT_MSG( !aManual, "manual autoplacement not currently supported for sheets" );
 
-    m_fields[ SHEETNAME ].SetTextPos( getSheetNamePosition() );
-    m_fields[ SHEETNAME ].SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-    m_fields[ SHEETNAME ].SetVertJustify(GR_TEXT_VJUSTIFY_BOTTOM );
-    m_fields[ SHEETNAME ].SetTextAngle( IsVerticalOrientation() ? 900 : 0 );
+    wxSize  textSize = m_fields[ SHEETNAME ].GetTextSize();
+    int     margin = KiROUND( GetPenSize() / 2.0 + 4 + std::max( textSize.x, textSize.y ) * 0.5 );
 
-    m_fields[ SHEETFILENAME ].SetTextPos( getFileNamePosition() );
-    m_fields[ SHEETFILENAME ].SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-    m_fields[ SHEETFILENAME ].SetVertJustify(GR_TEXT_VJUSTIFY_TOP );
-    m_fields[ SHEETFILENAME ].SetTextAngle( IsVerticalOrientation() ? 900 : 0 );
+    if( IsVerticalOrientation() )
+    {
+        m_fields[ SHEETNAME ].SetTextPos( m_pos + wxPoint( -margin, m_size.y ) );
+        m_fields[ SHEETNAME ].SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        m_fields[ SHEETNAME ].SetVertJustify(GR_TEXT_VJUSTIFY_BOTTOM );
+        m_fields[ SHEETNAME ].SetTextAngle( TEXT_ANGLE_VERT );
+    }
+    else
+    {
+        m_fields[ SHEETNAME ].SetTextPos( m_pos + wxPoint( 0, -margin ) );
+        m_fields[ SHEETNAME ].SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        m_fields[ SHEETNAME ].SetVertJustify(GR_TEXT_VJUSTIFY_BOTTOM );
+        m_fields[ SHEETNAME ].SetTextAngle( TEXT_ANGLE_HORIZ );
+    }
+
+    textSize = m_fields[ SHEETFILENAME ].GetTextSize();
+    margin = KiROUND( GetPenSize() / 2.0 + 4 + std::max( textSize.x, textSize.y ) * 0.4 );
+
+    if( IsVerticalOrientation() )
+    {
+        m_fields[ SHEETFILENAME ].SetTextPos( m_pos + wxPoint( m_size.x + margin, m_size.y ) );
+        m_fields[ SHEETFILENAME ].SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        m_fields[ SHEETFILENAME ].SetVertJustify(GR_TEXT_VJUSTIFY_TOP );
+        m_fields[ SHEETFILENAME ].SetTextAngle( TEXT_ANGLE_VERT );
+    }
+    else
+    {
+        m_fields[ SHEETFILENAME ].SetTextPos( m_pos + wxPoint( 0, m_size.y + margin ) );
+        m_fields[ SHEETFILENAME ].SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        m_fields[ SHEETFILENAME ].SetVertJustify(GR_TEXT_VJUSTIFY_TOP );
+        m_fields[ SHEETFILENAME ].SetTextAngle( TEXT_ANGLE_HORIZ );
+    }
 
     m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
 }
@@ -496,7 +498,7 @@ void SCH_SHEET::Print( wxDC* aDC, const wxPoint& aOffset )
 }
 
 
-const EDA_RECT SCH_SHEET::GetBoundingBox() const
+const EDA_RECT SCH_SHEET::GetBodyBoundingBox() const
 {
     wxPoint  end;
     EDA_RECT box( m_pos, m_size );
@@ -513,8 +515,16 @@ const EDA_RECT SCH_SHEET::GetBoundingBox() const
     box.SetEnd( end );
     box.Inflate( lineWidth / 2 );
 
-    for( size_t i = 0; i < m_fields.size(); i++ )
-        box.Merge( m_fields[i].GetBoundingBox() );
+    return box;
+}
+
+
+const EDA_RECT SCH_SHEET::GetBoundingBox() const
+{
+    EDA_RECT box = GetBodyBoundingBox();
+
+    for( const SCH_FIELD& field : m_fields )
+        box.Merge( field.GetBoundingBox() );
 
     return box;
 }
@@ -659,17 +669,26 @@ void SCH_SHEET::Rotate(wxPoint aPosition)
         m_size.y = -m_size.y;
     }
 
-    for( SCH_FIELD& field : m_fields )
-    {
-        // Move the fields to the new position because the sheet itself has moved.
-        wxPoint pos = field.GetTextPos();
-        pos.x -= prev.x - m_pos.x;
-        pos.y -= prev.y - m_pos.y;
-        field.SetTextPos( pos );
-    }
-
+    // Pins must be rotated first as that's how we determine vertical vs horizontal
+    // orientation for auto-placement
     for( SCH_SHEET_PIN* sheetPin : m_pins )
         sheetPin->Rotate( aPosition );
+
+    if( m_fieldsAutoplaced == FIELDS_AUTOPLACED_AUTO )
+    {
+        AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+    }
+    else
+    {
+        // Move the fields to the new position because the component itself has moved.
+        for( SCH_FIELD& field : m_fields )
+        {
+            wxPoint pos = field.GetTextPos();
+            pos.x -= prev.x - m_pos.x;
+            pos.y -= prev.y - m_pos.y;
+            field.SetTextPos( pos );
+        }
+    }
 }
 
 
@@ -783,6 +802,16 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICA
                 return SEARCH_RESULT::QUIT;
         }
 
+        if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
+        {
+            // Test the sheet fields.
+            for( SCH_FIELD& field : m_fields )
+            {
+                if( SEARCH_RESULT::QUIT == aInspector( &field, this ) )
+                    return SEARCH_RESULT::QUIT;
+            }
+        }
+
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_SHEET_PIN_T )
         {
             // Test the sheet labels.
@@ -812,7 +841,7 @@ BITMAP_DEF SCH_SHEET::GetMenuImage() const
 
 bool SCH_SHEET::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = GetBoundingBox();
+    EDA_RECT rect = GetBodyBoundingBox();
 
     rect.Inflate( aAccuracy );
 
@@ -827,9 +856,9 @@ bool SCH_SHEET::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Contains( GetBoundingBox() );
+        return rect.Contains( GetBodyBoundingBox() );
 
-    return rect.Intersects( GetBoundingBox() );
+    return rect.Intersects( GetBodyBoundingBox() );
 }
 
 

@@ -124,8 +124,6 @@ private:
     SCH_PINS    m_pins;         ///< a SCH_PIN for every LIB_PIN (across all units)
     SCH_PIN_MAP m_pinMap;       ///< the component's pins mapped by LIB_PIN*
 
-    FIELDS_AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
-
     bool        m_isInNetlist;  ///< True if the component should appear in the netlist
 
     // Defines the hierarchical path and reference of the component.  This allows support
@@ -425,16 +423,6 @@ public:
     int GetFieldCount() const { return (int)m_Fields.size(); }
 
     /**
-     * Return whether the fields have been automatically placed.
-     */
-    FIELDS_AUTOPLACED GetFieldsAutoplaced() const { return m_fieldsAutoplaced; }
-
-    /**
-     * Set fields automatically placed flag false.
-     */
-    void ClearFieldsAutoplaced() { m_fieldsAutoplaced = FIELDS_AUTOPLACED_NO; }
-
-    /**
      * Automatically orient all the fields in the component.
      *
      * @param aScreen is the SCH_SCREEN associated with the current instance of the
@@ -443,21 +431,7 @@ public:
      *  or a menu item). Some more 'intelligent' routines will be used that would be
      *  annoying if done automatically during moves.
      */
-    void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual );
-
-    /**
-     * Autoplace fields only if correct to do so automatically.
-     *
-     * Fields that have been moved by hand are not automatically placed.
-     *
-     * @param aScreen is the SCH_SCREEN associated with the current instance of the
-     *                component.
-     */
-    void AutoAutoplaceFields( SCH_SCREEN* aScreen )
-    {
-        if( GetFieldsAutoplaced() )
-            AutoplaceFields( aScreen, GetFieldsAutoplaced() == FIELDS_AUTOPLACED_MANUAL );
-    }
+    void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
 
 
     //-----</Fields>----------------------------------------------------------
@@ -558,8 +532,8 @@ public:
 
         m_Pos += aMoveVector;
 
-        for( int ii = 0; ii < GetFieldCount(); ii++ )
-            GetField( ii )->Move( aMoveVector );
+        for( SCH_FIELD& field : m_Fields )
+            field.Move( aMoveVector );
 
         SetModified();
     }

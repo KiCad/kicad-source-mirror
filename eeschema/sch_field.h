@@ -37,14 +37,6 @@ class SCH_COMPONENT;
 class LIB_FIELD;
 
 
-enum FIELDS_AUTOPLACED
-{
-    FIELDS_AUTOPLACED_NO = 0,
-    FIELDS_AUTOPLACED_AUTO,
-    FIELDS_AUTOPLACED_MANUAL
-};
-
-
 /**
  * SCH_FIELD
  * instances are attached to a component and provide a place for the component's value,

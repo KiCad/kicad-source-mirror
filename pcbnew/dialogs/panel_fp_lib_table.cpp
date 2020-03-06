@@ -389,7 +389,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
         wxGridCellAttr* attr;
 
         attr = new wxGridCellAttr;
-        attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, &m_lastBrowseDir ) );
+        attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, &m_lastBrowseDir, wxEmptyString ) );
         g->SetColAttr( COL_URI, attr );
 
         attr = new wxGridCellAttr;

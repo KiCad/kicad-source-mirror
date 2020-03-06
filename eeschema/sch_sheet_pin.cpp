@@ -175,20 +175,11 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 
     switch( sheetEdge.NearestSegment( Pos ) )
     {
-    case 0:
-        SetEdge( SHEET_TOP_SIDE );
-        break;
-    case 1:
-        SetEdge( SHEET_RIGHT_SIDE );
-        break;
-    case 2:
-        SetEdge( SHEET_BOTTOM_SIDE );
-        break;
-    case 3:
-        SetEdge( SHEET_LEFT_SIDE );
-        break;
-    default:
-        wxASSERT( "Invalid segment number" );
+    case 0: SetEdge( SHEET_TOP_SIDE );    break;
+    case 1: SetEdge( SHEET_RIGHT_SIDE );  break;
+    case 2: SetEdge( SHEET_BOTTOM_SIDE ); break;
+    case 3: SetEdge( SHEET_LEFT_SIDE );   break;
+    default: wxASSERT( "Invalid segment number" );
     }
 
     switch( GetEdge() )
@@ -257,16 +248,6 @@ void SCH_SHEET_PIN::Rotate( wxPoint aPosition )
 {
     wxPoint pt = GetTextPos();
     RotatePoint( &pt, aPosition, 900 );
-
-    switch( m_edge )
-    {
-    case SHEET_LEFT_SIDE:   SetEdge( SHEET_BOTTOM_SIDE ); break;
-    case SHEET_RIGHT_SIDE:  SetEdge( SHEET_TOP_SIDE );    break;
-    case SHEET_TOP_SIDE:    SetEdge( SHEET_LEFT_SIDE );   break;
-    case SHEET_BOTTOM_SIDE: SetEdge( SHEET_RIGHT_SIDE );  break;
-    default: break;
-    }
-
     ConstrainOnEdge( pt );
 }
 
@@ -283,14 +264,9 @@ void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wx
 
     switch( m_shape )
     {
-    case PINSHEETLABEL_SHAPE::PS_INPUT:
-        m_shape = PINSHEETLABEL_SHAPE::PS_OUTPUT;
-        break;
-    case PINSHEETLABEL_SHAPE::PS_OUTPUT:
-        m_shape = PINSHEETLABEL_SHAPE::PS_INPUT;
-        break;
-    default:
-        break;
+    case PINSHEETLABEL_SHAPE::PS_INPUT:  m_shape = PINSHEETLABEL_SHAPE::PS_OUTPUT; break;
+    case PINSHEETLABEL_SHAPE::PS_OUTPUT: m_shape = PINSHEETLABEL_SHAPE::PS_INPUT;  break;
+    default:                                                                       break;
     }
 
     SCH_HIERLABEL::CreateGraphicShape( aPoints, aPos );

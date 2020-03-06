@@ -371,7 +371,10 @@ protected:
 void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                     wxEvtHandler* aEventHandler )
 {
-    m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir );
+    if( m_ext.IsEmpty() )
+        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir );
+    else
+        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir, &m_ext );
 
 #if wxUSE_VALIDATORS
     // validate text in textctrl, if validator is set

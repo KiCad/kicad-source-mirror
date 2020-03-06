@@ -215,24 +215,26 @@ DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD(
 }
 
 
-DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD(
-        SCH_BASE_FRAME* aParent, const wxString& aTitle, const SCH_FIELD* aField )
-        : DIALOG_EDIT_ONE_FIELD( aParent, aTitle, aField )
+DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
+                                                      const wxString& aTitle,
+                                                      const SCH_FIELD* aField ) :
+        DIALOG_EDIT_ONE_FIELD( aParent, aTitle, aField )
 {
     m_fieldId = aField->GetId();
-
-    const SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
-
-    wxASSERT_MSG( component && component->Type() == SCH_COMPONENT_T,
-                  wxT( "Invalid schematic field parent item." ) );
+    m_isPower = false;
 
     // The library symbol may have been removed so using SCH_COMPONENT::GetPartRef() here
     // could result in a segfault.  If the library symbol is no longer available, the
     // schematic fields can still edit so set the power symbol flag to false.  This may not
     // be entirely accurate if the power library is missing but it's better then a segfault.
-    const LIB_PART* part = GetParent()->GetLibPart( component->GetLibId(), true );
+    if( aField->GetParent() && aField->GetParent()->Type() == SCH_COMPONENT_T )
+    {
+        const SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
+        const LIB_PART*      part = GetParent()->GetLibPart( component->GetLibId(), true );
 
-    m_isPower = ( part ) ? part->IsPower() : false;
+        if( part && part->IsPower() )
+            m_isPower = true;
+    }
 
     init();
 }
@@ -240,16 +242,13 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD(
 
 void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath )
 {
-    if( aField->GetId() == REFERENCE )
+    EDA_ITEM* parent = aField->GetParent();
+
+    if( parent && parent->Type() == SCH_COMPONENT_T && aField->GetId() == REFERENCE )
     {
         wxASSERT( aSheetPath );
 
-        SCH_COMPONENT* component = dynamic_cast< SCH_COMPONENT* >( aField->GetParent() );
-
-        wxASSERT( component );
-
-        if( component )
-            component->SetRef( aSheetPath, m_text );
+        static_cast<SCH_COMPONENT*>( parent )->SetRef( aSheetPath, m_text );
     }
 
     bool positioningModified = false;
@@ -270,8 +269,5 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
     updateText( aField );
 
     if( positioningModified )
-    {
-        auto component = static_cast< SCH_COMPONENT* >( aField->GetParent() );
-        component->ClearFieldsAutoplaced();
-    }
+        static_cast<SCH_ITEM*>( parent )->ClearFieldsAutoplaced();
 }

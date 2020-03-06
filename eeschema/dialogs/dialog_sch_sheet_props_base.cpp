@@ -1,147 +1,193 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/wx_grid.h"
+
 #include "dialog_sch_sheet_props_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( DIALOG_SCH_SHEET_PROPS_BASE, DIALOG_SHIM )
-	EVT_BUTTON( ID_BUTTON_BROWSE_SHEET, DIALOG_SCH_SHEET_PROPS_BASE::_wxFB_OnBrowseClicked )
-END_EVENT_TABLE()
-
 DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 500,150 ), wxDefaultSize );
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bupperSizer;
-	bupperSizer = new wxBoxSizer( wxVERTICAL );
+	m_longForm = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+	wxStaticBoxSizer* sbFields;
+	sbFields = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fields") ), wxVERTICAL );
 
-	m_filenameLabel = new wxStaticText( this, wxID_ANY, _("&File name:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_filenameLabel->Wrap( -1 );
-	bSizer3->Add( m_filenameLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_grid = new WX_GRID( sbFields->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
-	m_textFileName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textFileName->SetMinSize( wxSize( 360,-1 ) );
+	// Grid
+	m_grid->CreateGrid( 4, 11 );
+	m_grid->EnableEditing( true );
+	m_grid->EnableGridLines( true );
+	m_grid->EnableDragGridSize( false );
+	m_grid->SetMargins( 0, 0 );
 
-	bSizer3->Add( m_textFileName, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	// Columns
+	m_grid->SetColSize( 0, 72 );
+	m_grid->SetColSize( 1, 120 );
+	m_grid->SetColSize( 2, 48 );
+	m_grid->SetColSize( 3, 72 );
+	m_grid->SetColSize( 4, 72 );
+	m_grid->SetColSize( 5, 48 );
+	m_grid->SetColSize( 6, 48 );
+	m_grid->SetColSize( 7, 84 );
+	m_grid->SetColSize( 8, 84 );
+	m_grid->SetColSize( 9, 84 );
+	m_grid->SetColSize( 10, 84 );
+	m_grid->EnableDragColMove( false );
+	m_grid->EnableDragColSize( true );
+	m_grid->SetColLabelSize( 22 );
+	m_grid->SetColLabelValue( 0, _("Name") );
+	m_grid->SetColLabelValue( 1, _("Value") );
+	m_grid->SetColLabelValue( 2, _("Show") );
+	m_grid->SetColLabelValue( 3, _("H Align") );
+	m_grid->SetColLabelValue( 4, _("V Align") );
+	m_grid->SetColLabelValue( 5, _("Italic") );
+	m_grid->SetColLabelValue( 6, _("Bold") );
+	m_grid->SetColLabelValue( 7, _("Text Size") );
+	m_grid->SetColLabelValue( 8, _("Orientation") );
+	m_grid->SetColLabelValue( 9, _("X Position") );
+	m_grid->SetColLabelValue( 10, _("Y Position") );
+	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
-	m_browseButton = new wxBitmapButton( this, ID_BUTTON_BROWSE_SHEET, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_browseButton->SetMinSize( wxSize( 30,28 ) );
+	// Rows
+	m_grid->EnableDragRowSize( true );
+	m_grid->SetRowLabelSize( 0 );
+	m_grid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
-	bSizer3->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	// Label Appearance
+
+	// Cell Defaults
+	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_grid->SetMinSize( wxSize( -1,180 ) );
+
+	sbFields->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
+
+	wxBoxSizer* bButtonSize;
+	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bpAdd = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpAdd->SetToolTip( _("Add field") );
+	m_bpAdd->SetMinSize( wxSize( 30,30 ) );
+
+	bButtonSize->Add( m_bpAdd, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_bpMoveUp = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpMoveUp->SetToolTip( _("Move up") );
+	m_bpMoveUp->SetMinSize( wxSize( 30,30 ) );
+
+	bButtonSize->Add( m_bpMoveUp, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_bpMoveDown = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpMoveDown->SetToolTip( _("Move down") );
+	m_bpMoveDown->SetMinSize( wxSize( 30,30 ) );
+
+	bButtonSize->Add( m_bpMoveDown, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bupperSizer->Add( bSizer3, 0, wxEXPAND, 5 );
+	bButtonSize->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
-	wxBoxSizer* bSizerFilenameSettings;
-	bSizerFilenameSettings = new wxBoxSizer( wxHORIZONTAL );
+	m_bpDelete = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpDelete->SetToolTip( _("Delete field") );
+	m_bpDelete->SetMinSize( wxSize( 30,30 ) );
 
-	m_filenameVisible = new wxCheckBox( this, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerFilenameSettings->Add( m_filenameVisible, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 36 );
-
-	m_filenameSizeLabel = new wxStaticText( this, wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_filenameSizeLabel->Wrap( -1 );
-	bSizerFilenameSettings->Add( m_filenameSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	m_filenameSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerFilenameSettings->Add( m_filenameSizeCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_filenameSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_filenameSizeUnits->Wrap( -1 );
-	bSizerFilenameSettings->Add( m_filenameSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bButtonSize->Add( m_bpDelete, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bupperSizer->Add( bSizerFilenameSettings, 0, wxEXPAND, 5 );
+	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	bupperSizer->Add( 0, 15, 0, wxEXPAND, 5 );
+	sbFields->Add( bButtonSize, 0, wxALL|wxEXPAND, 5 );
+
+
+	m_longForm->Add( sbFields, 1, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_sheetnameLabel = new wxStaticText( this, wxID_ANY, _("&Sheet name:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sheetnameLabel->Wrap( -1 );
-	bSizer5->Add( m_sheetnameLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Hierarchical Path:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2->Wrap( -1 );
+	bSizer5->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_textSheetName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer5->Add( m_textSheetName, 5, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
-
-	bupperSizer->Add( bSizer5, 0, wxEXPAND, 5 );
-
-	wxBoxSizer* bSizerSheetnameSettings;
-	bSizerSheetnameSettings = new wxBoxSizer( wxHORIZONTAL );
-
-	m_sheetnameVisible = new wxCheckBox( this, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerSheetnameSettings->Add( m_sheetnameVisible, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 36 );
-
-	m_sheetnameSizeLabel = new wxStaticText( this, wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sheetnameSizeLabel->Wrap( -1 );
-	bSizerSheetnameSettings->Add( m_sheetnameSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	m_sheetnameSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerSheetnameSettings->Add( m_sheetnameSizeCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_sheetnameSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sheetnameSizeUnits->Wrap( -1 );
-	bSizerSheetnameSettings->Add( m_sheetnameSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_heirarchyPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	bSizer5->Add( m_heirarchyPath, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bupperSizer->Add( bSizerSheetnameSettings, 0, wxEXPAND, 5 );
+	m_longForm->Add( bSizer5, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bupperSizer->Add( 0, 20, 0, 0, 5 );
-
-	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bupperSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
-
-	m_staticTextUuid = new wxStaticText( this, wxID_ANY, _("UUID:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextUuid->Wrap( -1 );
-	bupperSizer->Add( m_staticTextUuid, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_textCtrlUuid = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	bupperSizer->Add( m_textCtrlUuid, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_staticTextHpath = new wxStaticText( this, wxID_ANY, _("Hierarchical Path:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextHpath->Wrap( -1 );
-	bupperSizer->Add( m_staticTextHpath, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_textCtrlHpath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	bupperSizer->Add( m_textCtrlHpath, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-
-
-	mainSizer->Add( bupperSizer, 0, wxEXPAND|wxALL, 5 );
+	mainSizer->Add( m_longForm, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
+	wxBoxSizer* bSizerBottom;
+	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
-	mainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
+	wxBoxSizer* bSizerUUID;
+	bSizerUUID = new wxBoxSizer( wxHORIZONTAL );
+
+	wxStaticText* timeStampLabel;
+	timeStampLabel = new wxStaticText( this, wxID_ANY, _("Unique ID:"), wxDefaultPosition, wxDefaultSize, 0 );
+	timeStampLabel->Wrap( -1 );
+	bSizerUUID->Add( timeStampLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_textCtrlTimeStamp = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_textCtrlTimeStamp->SetToolTip( _("Unique ID that identifies the symbol") );
+
+	bSizerUUID->Add( m_textCtrlTimeStamp, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	bSizerBottom->Add( bSizerUUID, 3, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();
+	m_stdDialogButtonSizerOK = new wxButton( this, wxID_OK );
+	m_stdDialogButtonSizer->AddButton( m_stdDialogButtonSizerOK );
+	m_stdDialogButtonSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_stdDialogButtonSizer->AddButton( m_stdDialogButtonSizerCancel );
+	m_stdDialogButtonSizer->Realize();
+
+	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxEXPAND|wxALL, 5 );
+
+
+	mainSizer->Add( bSizerBottom, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( mainSizer );
 	this->Layout();
-	mainSizer->Fit( this );
 
-	this->Centre( wxBOTH );
+	// Connect Events
+	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnInitDlg ) );
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnUpdateUI ) );
+	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnSizeGrid ), NULL, this );
+	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnAddField ), NULL, this );
+	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnMoveUp ), NULL, this );
+	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnMoveDown ), NULL, this );
+	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnDeleteField ), NULL, this );
 }
 
 DIALOG_SCH_SHEET_PROPS_BASE::~DIALOG_SCH_SHEET_PROPS_BASE()
 {
+	// Disconnect Events
+	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnInitDlg ) );
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnUpdateUI ) );
+	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnSizeGrid ), NULL, this );
+	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnAddField ), NULL, this );
+	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnMoveUp ), NULL, this );
+	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnMoveDown ), NULL, this );
+	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnDeleteField ), NULL, this );
+
 }

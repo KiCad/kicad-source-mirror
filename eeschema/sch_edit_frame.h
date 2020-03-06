@@ -726,16 +726,6 @@ private:
     void UpdateTitle();
 
     /**
-     * Verify that \a aSheet will not cause a recursion error in \a aHierarchy.
-     *
-     * @param aSheet is the #SCH_SHEET object to test.
-     * @param aHierarchy is the #SCH_SHEET_PATH where \a aSheet is going to reside.
-     *
-     * @return true if \a aSheet will cause a resursion error in \a aHierarchy.
-     */
-    bool checkSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy );
-
-    /**
      * Verify that the symbol library links \a aSheet and all of it's child sheets have
      * been remapped to the symbol library table.
      *
@@ -753,6 +743,17 @@ private:
      */
     bool importFile( const wxString& aFileName, int aFileType );
 
+public:
+    /**
+     * Verify that \a aSheet will not cause a recursion error in \a aHierarchy.
+     *
+     * @param aSheet is the #SCH_SHEET object to test.
+     * @param aHierarchy is the #SCH_SHEET_PATH where \a aSheet is going to reside.
+     *
+     * @return true if \a aSheet will cause a resursion error in \a aHierarchy.
+     */
+    bool CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy );
+
     /**
      * Check \a aSchematicFileName for a potential file name case sensitivity clashes.
      *
@@ -764,9 +765,8 @@ private:
      * @param aSchematicFileName is the absolute path and file name of the file to test.
      * @return true if the user accepts the potential file name clase risk.
      */
-    bool allowCaseSensitiveFileNameClashes( const wxString& aSchematicFileName );
+    bool AllowCaseSensitiveFileNameClashes( const wxString& aSchematicFileName );
 
-public:
     /**
      * Change a text type to another one.
      *

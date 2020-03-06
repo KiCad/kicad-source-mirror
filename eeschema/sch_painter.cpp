@@ -1387,7 +1387,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     }
 
     /* Calculate the text justification, according to the component orientation/mirror.
-     * Tthis is a bit complicated due to cumulative calculations:
+     * This is a bit complicated due to cumulative calculations:
      * - numerous cases (mirrored or not, rotation)
      * - the DrawGraphicText function recalculate also H and H justifications according to the
      *   text orientation.
@@ -1410,8 +1410,8 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
         m_gal->SetLineWidth( m_gal->GetLineWidth() * 0.5 );
         boundaryBox.RevertYAxis();
 
-        m_gal->DrawRectangle(
-                mapCoords( boundaryBox.GetPosition() ), mapCoords( boundaryBox.GetEnd() ) );
+        m_gal->DrawRectangle( mapCoords( boundaryBox.GetPosition() ),
+                              mapCoords( boundaryBox.GetEnd() ) );
     }
     else
     {
@@ -1424,7 +1424,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
         m_gal->SetTextMirrored( aField->IsMirrored() );
 
         strokeText( aField->GetFullyQualifiedText(), textpos,
-                orient == TEXT_ANGLE_VERT ? M_PI / 2 : 0 );
+                    orient == TEXT_ANGLE_VERT ? M_PI / 2 : 0 );
     }
 
     // Draw the umbilical line
@@ -1511,7 +1511,7 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
-    if( aLayer == LAYER_HIERLABEL || drawingShadows )
+    if( aLayer == LAYER_HIERLABEL || aLayer == LAYER_SELECTION_SHADOWS )
     {
         for( SCH_SHEET_PIN* sheetPin : aSheet->GetPins() )
         {
@@ -1542,9 +1542,6 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
         }
     }
 
-    if( drawingShadows && !aSheet->IsSelected() )
-        return;
-
     VECTOR2D pos = aSheet->GetPosition();
     VECTOR2D size = aSheet->GetSize();
 
@@ -1571,7 +1568,7 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
         m_gal->DrawRectangle( pos, pos + size );
     }
 
-    if( aLayer == LAYER_SHEET || drawingShadows )
+    if( aLayer == LAYER_SHEET || aLayer == LAYER_SELECTION_SHADOWS )
     {
         m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEET, drawingShadows ) );
         m_gal->SetIsStroke( true );
@@ -1580,7 +1577,7 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
         m_gal->DrawRectangle( pos, pos + size );
 
-        if( drawingShadows && !GetSelectionDrawChildItems() )
+        if( drawingShadows && !GetSelectionDrawChildItems() && aSheet->IsSelected() )
             return;
 
         for( SCH_FIELD& field : aSheet->GetFields() )

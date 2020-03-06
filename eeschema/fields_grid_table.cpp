@@ -33,6 +33,7 @@
 #include <template_fieldnames.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <wildcards_and_files_ext.h>
 
 #include "eda_doc.h"
 
@@ -47,15 +48,45 @@ enum
 template <class T>
 FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
                                          LIB_PART* aPart ) :
-    m_frame( aFrame ),
-    m_userUnits( aDialog->GetUserUnits() ),
-    m_part( aPart ),
-    m_fieldNameValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_NAME ),
-    m_referenceValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), REFERENCE ),
-    m_valueValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), VALUE ),
-    m_libIdValidator( LIB_ID::ID_PCB ),
-    m_urlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE ),
-    m_nonUrlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE )
+        m_frame( aFrame ),
+        m_userUnits( aDialog->GetUserUnits() ),
+        m_parentType( SCH_COMPONENT_T ),
+        m_mandatoryFieldCount( MANDATORY_FIELDS ),
+        m_part( aPart ),
+        m_fieldNameValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_NAME ),
+        m_referenceValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), REFERENCE ),
+        m_valueValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), VALUE ),
+        m_libIdValidator( LIB_ID::ID_PCB ),
+        m_urlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE ),
+        m_nonUrlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE ),
+        m_filepathValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), SHEETFILENAME )
+{
+    initGrid( aDialog );
+}
+
+
+template <class T>
+FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
+                                         SCH_SHEET* aSheet ) :
+        m_frame( aFrame ),
+        m_userUnits( aDialog->GetUserUnits() ),
+        m_parentType( SCH_SHEET_T ),
+        m_mandatoryFieldCount( SHEET_MANDATORY_FIELDS ),
+        m_part( nullptr ),
+        m_fieldNameValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_NAME ),
+        m_referenceValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), REFERENCE ),
+        m_valueValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), VALUE ),
+        m_libIdValidator( LIB_ID::ID_PCB ),
+        m_urlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE ),
+        m_nonUrlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE ),
+        m_filepathValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), SHEETFILENAME )
+{
+    initGrid( aDialog );
+}
+
+
+template <class T>
+void FIELDS_GRID_TABLE<T>::initGrid( DIALOG_SHIM* aDialog )
 {
     // Build the various grid cell attributes.
     // NOTE: validators and cellAttrs are member variables to get the destruction order
@@ -93,6 +124,13 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
     GRID_CELL_TEXT_EDITOR* nonUrlEditor = new GRID_CELL_TEXT_EDITOR();
     nonUrlEditor->SetValidator( m_nonUrlValidator );
     m_nonUrlAttr->SetEditor( nonUrlEditor );
+
+    m_curdir = m_frame->Prj().GetProjectPath();
+    m_filepathAttr = new wxGridCellAttr;
+    GRID_CELL_PATH_EDITOR* filepathEditor = new GRID_CELL_PATH_EDITOR( aDialog, &m_curdir,
+                                                                       SchematicFileExtension );
+    filepathEditor->SetValidator( m_filepathValidator );
+    m_filepathAttr->SetEditor( filepathEditor );
 
     m_boolAttr = new wxGridCellAttr;
     m_boolAttr->SetRenderer( new wxGridCellBoolRenderer() );
@@ -135,6 +173,7 @@ FIELDS_GRID_TABLE<T>::~FIELDS_GRID_TABLE()
     m_footprintAttr->DecRef();
     m_urlAttr->DecRef();
     m_nonUrlAttr->DecRef();
+    m_filepathAttr->DecRef();
     m_vAlignAttr->DecRef();
     m_hAlignAttr->DecRef();
     m_orientationAttr->DecRef();
@@ -207,7 +246,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
     switch( aCol )
     {
     case FDC_NAME:
-        if( aRow < MANDATORY_FIELDS || rowIsReadOnly )
+        if( aRow < m_mandatoryFieldCount || rowIsReadOnly )
         {
             tmp = m_fieldNameAttr->Clone();
             tmp->SetReadOnly( true );
@@ -221,7 +260,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         }
 
     case FDC_VALUE:
-        if( aRow == REFERENCE )
+        if( m_parentType == SCH_COMPONENT_T && aRow == REFERENCE )
         {
             if( rowIsReadOnly )
             {
@@ -236,7 +275,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
                 return m_referenceAttr;
             }
         }
-        else if( aRow == VALUE )
+        else if( m_parentType == SCH_COMPONENT_T && aRow == VALUE )
         {
             // For power symbols, the value is not editable, because value and pin name must
             // be the same and can be edited only in library editor.
@@ -254,7 +293,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
                 return m_valueAttr;
             }
         }
-        else if( aRow == FOOTPRINT )
+        else if( m_parentType == SCH_COMPONENT_T && aRow == FOOTPRINT )
         {
             if( rowIsReadOnly )
             {
@@ -269,10 +308,15 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
                 return m_footprintAttr;
             }
         }
-        else if( aRow == DATASHEET )
+        else if( m_parentType == SCH_COMPONENT_T && aRow == DATASHEET )
         {
             m_urlAttr->IncRef();
             return m_urlAttr;
+        }
+        else if( m_parentType == SCH_SHEET_T && aRow == SHEETFILENAME )
+        {
+            m_filepathAttr->IncRef();
+            return m_filepathAttr;
         }
         else
         {
@@ -403,10 +447,15 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     case FDC_NAME:
         // Use default field name for mandatory fields, because they are translated
         // according to the current locale
-        if( aRow < MANDATORY_FIELDS )
-            return TEMPLATE_FIELDNAME::GetDefaultFieldName( aRow );
-        else
-            return field.GetName( false );
+        if( aRow < m_mandatoryFieldCount )
+        {
+            if( m_parentType == SCH_COMPONENT_T )
+                return TEMPLATE_FIELDNAME::GetDefaultFieldName( aRow );
+            else if( m_parentType == SCH_SHEET_T )
+                return SCH_SHEET::GetDefaultFieldName( aRow );
+        }
+
+        return field.GetName( false );
 
     case FDC_VALUE:
         return field.GetText();

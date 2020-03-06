@@ -131,14 +131,15 @@ protected:
 class GRID_CELL_PATH_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
-    GRID_CELL_PATH_EDITOR( DIALOG_SHIM* aParent, wxString* aCurrentDir ) :
+    GRID_CELL_PATH_EDITOR( DIALOG_SHIM* aParent, wxString* aCurrentDir, const wxString& aExt ) :
             m_dlg( aParent ),
-            m_currentDir( aCurrentDir )
+            m_currentDir( aCurrentDir ),
+            m_ext( aExt )
     { }
 
     wxGridCellEditor* Clone() const override
     {
-        return new GRID_CELL_PATH_EDITOR( m_dlg, m_currentDir );
+        return new GRID_CELL_PATH_EDITOR( m_dlg, m_currentDir, m_ext );
     }
 
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
@@ -146,6 +147,7 @@ public:
 protected:
     DIALOG_SHIM* m_dlg;
     wxString*    m_currentDir;
+    wxString     m_ext;
 };
 
 

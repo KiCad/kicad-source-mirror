@@ -41,7 +41,7 @@
 #include <tool/actions.h>
 
 
-bool SCH_EDIT_FRAME::checkSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
+bool SCH_EDIT_FRAME::CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
 {
     wxASSERT( aSheet && aHierarchy );
 
@@ -207,7 +207,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     SCH_SHEET_LIST hierarchy( g_RootSheet );          // This is the schematic sheet hierarchy.
     SCH_SHEET_LIST sheetHierarchy( newSheet.get() );  // This is the hierarchy of the loaded file.
 
-    if( checkSheetForRecursion( newSheet.get(), aHierarchy )
+    if( CheckSheetForRecursion( newSheet.get(), aHierarchy )
       || checkForNoFullyDefinedLibIds( newSheet.get() ) )
         return false;
 
@@ -483,246 +483,10 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
         return false;
 
     // Get the new texts
-    DIALOG_SCH_SHEET_PROPS dlg( this, aSheet );
+    DIALOG_SCH_SHEET_PROPS dlg( this, aSheet, aClearAnnotationNewItems );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
-
-    wxFileName fileName = dlg.GetFileName();
-    fileName.SetExt( SchematicFileExtension );
-
-    wxString msg;
-    bool renameFile = false;
-    bool loadFromFile = false;
-    bool clearAnnotation = false;
-    bool restoreSheet = false;
-    bool isExistingSheet = false;
-    SCH_SCREEN* useScreen = NULL;
-
-    // Relative file names are relative to the path of the current sheet.  This allows for
-    // nesting of schematic files in subfolders.
-    if( !fileName.IsAbsolute() )
-    {
-        const SCH_SCREEN* currentScreen = aHierarchy->LastScreen();
-
-        wxCHECK_MSG( currentScreen, false, "Invalid sheet path object." );
-
-        wxFileName currentSheetFileName = currentScreen->GetFileName();
-
-        wxCHECK_MSG( fileName.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() ), false,
-                     "Cannot normalize new sheet schematic file path." );
-    }
-
-    wxString newFilename = fileName.GetFullPath();
-
-    // Search for a schematic file having the same filename already in use in the hierarchy
-    // or on disk, in order to reuse it.
-    if( !g_RootSheet->SearchHierarchy( newFilename, &useScreen ) )
-    {
-        loadFromFile = wxFileExists( newFilename );
-        wxLogDebug( "Sheet requested file \"%s\", %s",
-                    newFilename,
-                    ( loadFromFile ) ? "found" : "not found" );
-    }
-
-    // Inside Eeschema, filenames are stored using unix notation
-    newFilename.Replace( wxT( "\\" ), wxT( "/" ) );
-
-    if( aSheet->GetScreen() == NULL )                 // New sheet.
-    {
-        if( !allowCaseSensitiveFileNameClashes( newFilename ) )
-            return false;
-
-        if( useScreen || loadFromFile )               // Load from existing file.
-        {
-            clearAnnotation = true;
-
-            wxString existsMsg;
-            wxString linkMsg;
-            existsMsg.Printf( _( "\"%s\" already exists." ), fileName.GetFullName() );
-            linkMsg.Printf( _( "Link \"%s\" to this file?" ), dlg.GetSheetName() );
-            msg.Printf( wxT( "%s\n\n%s" ), existsMsg, linkMsg );
-
-            if( !IsOK( this, msg ) )
-                return false;
-
-        }
-        else                                          // New file.
-        {
-            InitSheet( aSheet, newFilename );
-        }
-    }
-    else                                              // Existing sheet.
-    {
-        bool isUndoable = true;
-        wxString replaceMsg;
-        wxString newMsg;
-        wxString noUndoMsg;
-
-        isExistingSheet = true;
-
-        if( !allowCaseSensitiveFileNameClashes( newFilename ) )
-            return false;
-
-        // Changing the filename of a sheet can modify the full hierarchy structure
-        // and can be not always undoable.
-        // So prepare messages for user notifications:
-        replaceMsg.Printf( _( "Change \"%s\" link from \"%s\" to \"%s\"?" ),
-                           dlg.GetSheetName(),
-                           aSheet->GetFileName(),
-                           fileName.GetFullName() );
-        newMsg.Printf( _( "Create new file \"%s\" with contents of \"%s\"?" ),
-                       fileName.GetFullName(),
-                       aSheet->GetFileName() );
-        noUndoMsg = _( "This action cannot be undone." );
-
-        // We are always using here a case insensitive comparison
-        // to avoid issues under Windows, although under Unix
-        // filenames are case sensitive.
-        // But many users create schematic under both Unix and Windows
-        // **
-        // N.B. 1: aSheet->GetFileName() will return a relative path
-        //         aSheet->GetScreen()->GetFileName() returns a full path
-        //
-        // N.B. 2: newFilename uses the unix notation for separator.
-        //         so we must use it also to compare the old filename to the new filename
-        wxString oldFilename = aSheet->GetScreen()->GetFileName();
-        oldFilename.Replace( wxT( "\\" ), wxT( "/" ) );
-
-        if( newFilename.Cmp( oldFilename ) != 0 )
-        {
-            // Sheet file name changes cannot be undone.
-            isUndoable = false;
-
-            if( useScreen || loadFromFile )           // Load from existing file.
-            {
-                clearAnnotation = true;
-
-                msg.Printf( wxT( "%s\n\n%s" ), replaceMsg, noUndoMsg );
-
-                if( !IsOK( this, msg ) )
-                    return false;
-
-                if( loadFromFile )
-                    aSheet->SetScreen( NULL );
-            }
-            else                                      // Save to new file name.
-            {
-                if( aSheet->GetScreenCount() > 1 )
-                {
-                    msg.Printf( wxT( "%s\n\n%s" ), newMsg, noUndoMsg );
-
-                    if( !IsOK( this, msg ) )
-                        return false;
-                }
-
-                renameFile = true;
-            }
-        }
-
-        if( isUndoable )
-            SaveCopyInUndoList( aSheet, UR_CHANGED );
-
-        if( renameFile )
-        {
-            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
-
-            // If the the associated screen is shared by more than one sheet, do not
-            // change the filename of the corresponding screen here.
-            // (a new screen will be created later)
-            // if it is not shared, update the filename
-            if( aSheet->GetScreenCount() <= 1 )
-                aSheet->GetScreen()->SetFileName( newFilename );
-
-            try
-            {
-                pi->Save( newFilename, aSheet->GetScreen(), &Kiway() );
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                msg.Printf( _( "Error occurred saving schematic file \"%s\"." ), newFilename );
-                DisplayErrorMessage( this, msg, ioe.What() );
-
-                msg.Printf( _( "Failed to save schematic \"%s\"" ), newFilename );
-                AppendMsgPanel( wxEmptyString, msg, CYAN );
-
-                return false;
-            }
-
-            // If the the associated screen is shared by more than one sheet, remove the
-            // screen and reload the file to a new screen.  Failure to do this will trash
-            // the screen reference counting in complex hierarchies.
-            if( aSheet->GetScreenCount() > 1 )
-            {
-                aSheet->SetScreen( NULL );
-                loadFromFile = true;
-            }
-        }
-    }
-
-    wxFileName userFileName = dlg.GetFileName();
-    userFileName.SetExt( SchematicFileExtension );
-
-    if( useScreen )
-    {
-        // Create a temporary sheet for recursion testing to prevent a possible recursion error.
-        std::unique_ptr< SCH_SHEET> tmpSheet( new SCH_SHEET );
-        tmpSheet->SetName( dlg.GetSheetName() );
-        tmpSheet->SetFileName( userFileName.GetFullPath() );
-        tmpSheet->SetScreen( useScreen );
-
-        // No need to check for valid library IDs if we are using an existing screen.
-        if( checkSheetForRecursion( tmpSheet.get(), aHierarchy ) )
-        {
-            if( restoreSheet )
-                aHierarchy->LastScreen()->Append( aSheet );
-
-            return false;
-        }
-
-        // It's safe to set the sheet screen now.
-        aSheet->SetScreen( useScreen );
-    }
-    else if( loadFromFile )
-    {
-        if( isExistingSheet )
-        {
-            // Temporarily remove the sheet from the current schematic page so that recursion
-            // and symbol library link tests can be performed with the modified sheet settings.
-            restoreSheet = true;
-            aHierarchy->LastScreen()->Remove( aSheet );
-        }
-
-        if( !LoadSheetFromFile( aSheet, aHierarchy, newFilename )
-                || checkSheetForRecursion( aSheet, aHierarchy ) )
-        {
-            if( restoreSheet )
-                aHierarchy->LastScreen()->Append( aSheet );
-
-            return false;
-        }
-
-        if( restoreSheet )
-            aHierarchy->LastScreen()->Append( aSheet );
-    }
-
-    wxString tmpFn = userFileName.GetFullPath();
-
-    if( wxFileName::GetPathSeparator() == '\\' )
-        tmpFn.Replace( "\\", "/" );
-
-    aSheet->SetFileName( tmpFn );
-    aSheet->SetName( dlg.GetSheetName() );
-
-    if( aSheet->GetName().IsEmpty() )
-        aSheet->SetName( wxT( "Untitled Sheet" ) );
-
-    if( aClearAnnotationNewItems )
-        *aClearAnnotationNewItems = clearAnnotation;
-
-    GetCanvas()->GetView()->Update( aSheet );
-
-    OnModify();
 
     return true;
 }
@@ -870,7 +634,7 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 }
 
 
-bool SCH_EDIT_FRAME::allowCaseSensitiveFileNameClashes( const wxString& aSchematicFileName )
+bool SCH_EDIT_FRAME::AllowCaseSensitiveFileNameClashes( const wxString& aSchematicFileName )
 {
     wxString msg;
     SCH_SCREENS screens;

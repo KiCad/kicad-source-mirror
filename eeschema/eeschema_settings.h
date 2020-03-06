@@ -34,6 +34,7 @@ public:
     struct APPEARANCE
     {
         wxString edit_component_visible_columns;
+        wxString edit_sheet_visible_columns;
         bool footprint_preview;
         bool navigator_stays_open;
         bool print_sheet_reference;

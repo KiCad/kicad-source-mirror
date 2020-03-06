@@ -446,11 +446,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 field->SetTextAngle( TEXT_ANGLE_HORIZ );
 
             // Now that we're moving a field, they're no longer autoplaced.
-            if( item->GetParent()->Type() == SCH_COMPONENT_T )
-            {
-                SCH_COMPONENT* parent = static_cast<SCH_COMPONENT*>( item->GetParent() );
-                parent->ClearFieldsAutoplaced();
-            }
+            static_cast<SCH_ITEM*>( item->GetParent() )->ClearFieldsAutoplaced();
 
             break;
         }
@@ -469,7 +465,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
             // Rotate the sheet on itself. Sheets do not have an anchor point.
-            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
+            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
             {
                 rotPoint = m_frame->GetNearestGridPosition( sheet->GetRotationCenter() );
                 sheet->Rotate( rotPoint );
@@ -635,11 +631,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                 field->SetHorizJustify( (EDA_TEXT_HJUSTIFY_T)-field->GetHorizJustify() );
 
             // Now that we're re-justifying a field, they're no longer autoplaced.
-            if( item->GetParent()->Type() == SCH_COMPONENT_T )
-            {
-                SCH_COMPONENT *parent = static_cast<SCH_COMPONENT*>( item->GetParent() );
-                parent->ClearFieldsAutoplaced();
-            }
+            static_cast<SCH_ITEM*>( item->GetParent() )->ClearFieldsAutoplaced();
 
             break;
         }
@@ -1065,13 +1057,11 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_EDIT_TOOL::editComponentFieldText( SCH_FIELD* aField )
+void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 {
-    SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
-
     // Save old component in undo list if not already in edit, or moving.
     if( aField->GetEditFlags() == 0 )    // i.e. not edited, or moved
-        m_frame->SaveCopyInUndoList( component, UR_CHANGED );
+        m_frame->SaveCopyInUndoList( (SCH_ITEM*) aField->GetParent(), UR_CHANGED );
 
     wxString title = wxString::Format( _( "Edit %s Field" ), aField->GetName() );
 
@@ -1083,8 +1073,8 @@ void SCH_EDIT_TOOL::editComponentFieldText( SCH_FIELD* aField )
 
     dlg.UpdateField( aField, g_CurrentSheet );
 
-    if( m_frame->GetAutoplaceFields() )
-        component->AutoAutoplaceFields( m_frame->GetScreen() );
+    if( m_frame->GetAutoplaceFields() || aField->GetParent()->Type() == SCH_SHEET_T )
+        static_cast<SCH_ITEM*>( aField->GetParent() )->AutoAutoplaceFields( m_frame->GetScreen() );
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->RefreshItem( aField );
@@ -1120,15 +1110,15 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
         SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
         if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
-            editComponentFieldText( component->GetField( REFERENCE ) );
+            editFieldText( component->GetField( REFERENCE ) );
         else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
-            editComponentFieldText( component->GetField( VALUE ) );
+            editFieldText( component->GetField( VALUE ) );
         else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
-            editComponentFieldText( component->GetField( FOOTPRINT ) );
+            editFieldText( component->GetField( FOOTPRINT ) );
     }
     else if( item->Type() == SCH_FIELD_T )
     {
-        editComponentFieldText( (SCH_FIELD*) item );
+        editFieldText( (SCH_FIELD*) item );
     }
 
     return 0;
@@ -1288,7 +1278,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         break;
 
     case SCH_FIELD_T:
-        editComponentFieldText( (SCH_FIELD*) item );
+        editFieldText( (SCH_FIELD*) item );
         break;
 
     case SCH_BITMAP_T:

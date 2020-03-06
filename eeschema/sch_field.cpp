@@ -216,18 +216,26 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
     RotatePoint( &begin, pos, GetTextAngle() );
     RotatePoint( &end, pos, GetTextAngle() );
 
-    // Due to the Y axis direction, we must mirror the bounding box,
-    // relative to the text position:
-    MIRROR( begin.y, pos.y );
-    MIRROR( end.y,   pos.y );
-
     // Now, apply the component transform (mirror/rot)
+    TRANSFORM transform;
+
     if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
     {
+        // Due to the Y axis direction, we must mirror the bounding box,
+        // relative to the text position:
+        MIRROR( begin.y, pos.y );
+        MIRROR( end.y,   pos.y );
+
         SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
-        rect.SetOrigin( parentComponent->GetTransform().TransformCoordinate( begin ));
-        rect.SetEnd( parentComponent->GetTransform().TransformCoordinate( end ));
+        transform = parentComponent->GetTransform();
     }
+    else
+    {
+        transform = TRANSFORM( 1, 0, 0, 1 );  // identity transform
+    }
+
+    rect.SetOrigin( transform.TransformCoordinate( begin ) );
+    rect.SetEnd( transform.TransformCoordinate( end ) );
 
     rect.Move( origin );
     rect.Normalize();
@@ -296,14 +304,23 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 
 bool SCH_FIELD::IsReplaceable() const
 {
-    if( m_id != VALUE )
-        return true;
+    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    {
+        if( m_id == VALUE )
+        {
+            LIB_PART* part = static_cast<SCH_COMPONENT*>( GetParent() )->GetPartRef().get();
 
-    SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( GetParent() );
-    LIB_PART*      part = component ? component->GetPartRef().get() : nullptr;
-    bool           isPower = part ? part->IsPower() : false;
+            if( part && part->IsPower() )
+                return false;
+        }
+    }
+    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+    {
+        if( m_id == SHEETFILENAME )
+            return false;
+    }
 
-    return !isPower;
+    return true;
 }
 
 
@@ -311,10 +328,8 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     bool     isReplaced = false;
     wxString text = GetFullyQualifiedText();
-    bool     isReference = m_Parent && m_Parent->Type() == SCH_COMPONENT_T && m_id == REFERENCE;
-    bool     isFilename = m_Parent && m_Parent->Type() == SCH_SHEET_T && m_id == SHEETFILENAME;
 
-    if( isReference )
+    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T && m_id == REFERENCE )
     {
         wxCHECK_MSG( aAuxData != NULL, false,
                      wxT( "Cannot replace reference designator without valid sheet path." ) );
@@ -323,8 +338,6 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
                      wxT( "Invalid replace symbol reference field call." ) ) ;
 
         SCH_COMPONENT* component = (SCH_COMPONENT*) m_Parent;
-
-        wxCHECK_MSG( component != NULL, false, wxT( "No symbol associated with field" ) + text );
 
         text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
@@ -336,7 +349,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
         if( isReplaced )
             component->SetRef( (SCH_SHEET_PATH*) aAuxData, text );
     }
-    else if( isFilename )
+    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T && m_id == SHEETFILENAME )
     {
         // This is likely too dangerous to allow....
     }
@@ -368,7 +381,12 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
     if( !m_name.IsEmpty() )
         return m_name;
     else if( aUseDefaultName )
-        return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
+    {
+        if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+            return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
+        else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+            return SCH_SHEET::GetDefaultFieldName( m_id );
+    }
 
     return wxEmptyString;
 }
@@ -376,7 +394,7 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 
 BITMAP_DEF SCH_FIELD::GetMenuImage() const
 {
-    if( dynamic_cast<SCH_COMPONENT*>( m_Parent ) )
+    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
     {
         switch( m_id )
         {
@@ -475,16 +493,20 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
 
 void SCH_FIELD::SetPosition( const wxPoint& aPosition )
 {
-    SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
-
-    wxPoint pos = ( (SCH_COMPONENT*) GetParent() )->GetPosition();
+    wxPoint pos = GetParentPosition();
 
     // Actual positions are calculated by the rotation/mirror transform of the
     // parent component of the field.  The inverse transform is used to calculate
     // the position relative to the parent component.
-    wxPoint pt = aPosition - pos;
+    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    {
+        SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
+        wxPoint        pt = aPosition - pos;
 
-    SetTextPos( pos + component->GetTransform().InverseTransform().TransformCoordinate( pt ) );
+        pos += component->GetTransform().InverseTransform().TransformCoordinate( pt );
+    }
+
+    SetTextPos( pos );
 }
 
 

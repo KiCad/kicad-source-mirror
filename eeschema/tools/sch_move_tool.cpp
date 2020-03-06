@@ -621,15 +621,22 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
     case SCH_PIN_T:
     case SCH_FIELD_T:
     {
-        SCH_COMPONENT* component = (SCH_COMPONENT*) aItem->GetParent();
-        TRANSFORM      transform = component->GetTransform().InverseTransform();
-        wxPoint        transformedDelta = transform.TransformCoordinate( (wxPoint) aDelta );
+        SCH_ITEM* parent = (SCH_ITEM*) aItem->GetParent();
+        wxPoint   delta( aDelta );
 
-        static_cast<SCH_ITEM*>( aItem )->Move( transformedDelta );
+        if( parent && parent->Type() == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* component = (SCH_COMPONENT*) aItem->GetParent();
+            TRANSFORM      transform = component->GetTransform().InverseTransform();
+
+            delta = transform.TransformCoordinate( delta );
+        }
+
+        static_cast<SCH_ITEM*>( aItem )->Move( delta );
 
         // If we're moving a field with respect to its parent then it's no longer auto-placed
-        if( aItem->Type() == SCH_FIELD_T && !component->IsSelected() )
-            component->ClearFieldsAutoplaced();
+        if( aItem->Type() == SCH_FIELD_T && !parent->IsSelected() )
+            parent->ClearFieldsAutoplaced();
 
         break;
     }

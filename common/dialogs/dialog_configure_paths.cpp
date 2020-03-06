@@ -68,11 +68,11 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent, FILENAME_RESO
     m_EnvVars->UseNativeColHeader( true );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, &m_curdir ) );
+    attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, &m_curdir, wxEmptyString ) );
     m_EnvVars->SetColAttr( EV_PATH_COL, attr );
 
     attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, &m_curdir ) );
+    attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, &m_curdir, wxEmptyString ) );
     m_SearchPaths->SetColAttr( EV_PATH_COL, attr );
 
     // Give a bit more room for combobox editors

@@ -443,8 +443,11 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
     {
     case SCH_FIELD_T:
     case LIB_FIELD_T:
-        component = (SCH_COMPONENT*) item->GetParent();
-        m_frame->SendMessageToPCBNEW( item, component );
+        if( item->GetParent() && item->GetParent()->Type() == SCH_COMPONENT_T )
+        {
+            component = (SCH_COMPONENT*) item->GetParent();
+            m_frame->SendMessageToPCBNEW( item, component );
+        }
         break;
 
     case SCH_COMPONENT_T:
