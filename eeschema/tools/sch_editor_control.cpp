@@ -223,6 +223,23 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch(
                         return pin;
                 }
             }
+
+            if( item->Type() == SCH_SHEET_T )
+            {
+                auto sheet = static_cast<SCH_SHEET*>( item );
+
+                for( SCH_FIELD& field : sheet->GetFields() )
+                {
+                    if( field.Matches( *aData, nullptr ) )
+                        return &field;
+                }
+
+                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                {
+                    if( pin->Matches( *aData, nullptr ) )
+                        return pin;
+                }
+            }
         }
     }
 

@@ -27,7 +27,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <sch_text.h>
-
+#include <sch_field.h>
 
 class LINE_READER;
 class SCH_SCREEN;
@@ -59,6 +59,15 @@ enum SHEET_SIDE
     SHEET_TOP_SIDE,
     SHEET_BOTTOM_SIDE,
     SHEET_UNDEFINED_SIDE
+};
+
+
+enum  SHEET_FIELD_TYPE {
+    SHEETNAME = 0,
+    SHEETFILENAME,
+
+    /// The first 2 are mandatory, and must be instantiated in SCH_SHEET
+    SHEET_MANDATORY_FIELDS
 };
 
 
@@ -214,20 +223,11 @@ class SCH_SHEET : public SCH_ITEM
     /// The list of sheet connection points.
     std::vector<SCH_SHEET_PIN*> m_pins;
 
-    /// The file name is also in the #SCH_SCREEN object associated with the sheet.  It is
-    /// also needed here for loading after reading the sheet description from file.
-    wxString m_fileName;
-    bool     m_showFileName;        // Indicates filename should be drawn on schematic.
-    int      m_fileNameSize;        // The height of the text used to draw the file name.
+    std::vector<SCH_FIELD>      m_fields;
+    FIELDS_AUTOPLACED           m_fieldsAutoplaced;    // indicates status of field autoplacement
 
-    /// This is equivalent to the reference designator for components and is stored in F0
-    /// sheet pin in the schematic file.
-    wxString m_name;
-    bool     m_showSheetName;        // Indicates sheet name should be drawn on schematic.
-    int      m_sheetNameSize;       // The height of the text used to draw the sheet name.
-
-    wxPoint  m_pos;                 // The position of the sheet.
-    wxSize   m_size;                // The size of the sheet.
+    wxPoint                     m_pos;                 // The position of the sheet.
+    wxSize                      m_size;                // The size of the sheet.
 
 public:
     SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -261,20 +261,23 @@ public:
      */
     bool IsMovableFromAnchorPoint() override { return false; }
 
-    wxString GetName() const { return m_name; }
-    void SetName( const wxString& aName ) { m_name = aName; }
+    std::vector<SCH_FIELD>& GetFields() { return m_fields; }
 
-    bool GetShowSheetName() const { return m_showSheetName; }
-    void SetShowSheetName( bool show ) { m_showSheetName = show; }
+    // JEY TODO: retite these once new dialog is implemented...
+    wxString GetName() const { return m_fields[ SHEETNAME ].GetText(); }
+    void SetName( const wxString& aName ) { m_fields[ SHEETNAME ].SetText( aName ); }
 
-    int GetSheetNameSize() const { return m_sheetNameSize; }
-    void SetSheetNameSize( int aSize ) { m_sheetNameSize = aSize; }
+    bool GetShowSheetName() const { return m_fields[ SHEETNAME ].IsVisible(); }
+    void SetShowSheetName( bool show ) { m_fields[ SHEETNAME ].SetVisible( show ); }
 
-    bool GetShowFileName() const { return m_showFileName; }
-    void SetShowFileName( bool show ) { m_showFileName = show; }
+    int GetSheetNameSize() const { return m_fields[ SHEETNAME ].GetTextSize().x; }
+    void SetSheetNameSize( int aSize ) { m_fields[ SHEETNAME ].SetTextSize( wxSize( aSize, aSize ) ); }
 
-    int GetFileNameSize() const { return m_fileNameSize; }
-    void SetFileNameSize( int aSize ) { m_fileNameSize = aSize; }
+    bool GetShowFileName() const { return m_fields[ SHEETFILENAME ].IsVisible(); }
+    void SetShowFileName( bool show ) { m_fields[ SHEETFILENAME ].SetVisible( show ); }
+
+    int GetFileNameSize() const { return m_fields[ SHEETFILENAME ].GetTextSize().x; }
+    void SetFileNameSize( int aSize ) { m_fields[ SHEETFILENAME ].SetTextSize( wxSize( aSize, aSize ) ); }
 
     SCH_SCREEN* GetScreen() { return m_screen; }
 
@@ -459,17 +462,18 @@ public:
      *
      * @return a wxString containing the filename
      */
-    wxString GetFileName( void ) const;
-
-    // Set a new filename without changing anything else
-    void SetFileName( const wxString& aFilename )
+    wxString GetFileName() const
     {
-        m_fileName = aFilename;
-        // Filenames are stored using unix notation
-        m_fileName.Replace( wxT("\\"), wxT("/") );
+        return m_fields[ SHEETFILENAME ].GetText();
     }
 
-    bool ChangeFileName( SCH_EDIT_FRAME* aFrame, const wxString& aFileName );
+    // Set a new filename without changing anything else
+    void SetFileName( wxString aFilename )
+    {
+        // Filenames are stored using unix notation
+        aFilename.Replace( wxT("\\"), wxT("/") );
+        m_fields[ SHEETFILENAME ].SetText( aFilename );
+    }
 
     // Geometric transforms (used in block operations):
 
@@ -487,8 +491,6 @@ public:
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override;
 
-    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL ) override;
-
     bool IsReplaceable() const override { return true; }
 
     /**
@@ -499,14 +501,16 @@ public:
     void Resize( const wxSize& aSize );
 
     /**
-     * @return the position of the anchor of sheet name text
+     * Return whether the fields have been automatically placed.
      */
-    wxPoint GetSheetNamePosition();
+    FIELDS_AUTOPLACED GetFieldsAutoplaced() const { return m_fieldsAutoplaced; }
 
     /**
-     * @return the position of the anchor of filename text
+     * Set fields automatically placed flag false.
      */
-    wxPoint GetFileNamePosition();
+    void ClearFieldsAutoplaced() { m_fieldsAutoplaced = FIELDS_AUTOPLACED_NO; }
+
+    void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual );
 
     void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList ) override;
 
@@ -554,6 +558,16 @@ public:
 #endif
 
 protected:
+
+    /**
+     * @return the position of the anchor of sheet name text
+     */
+    wxPoint getSheetNamePosition();
+
+    /**
+     * @return the position of the anchor of filename text
+     */
+    wxPoint getFileNamePosition();
 
     /**
      * Renumber the sheet pins in the sheet.

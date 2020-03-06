@@ -88,16 +88,16 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
         for( SCH_PIN* pin : component->GetSchPins() )
             pin->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
 
-        std::vector<SCH_FIELD*> fields;
-        component->GetFields( fields, false );
-
-        for( SCH_FIELD* field : fields )
+        for( SCH_FIELD* field : component->GetFields() )
             field->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
     }
 
     if( newItem->Type() == SCH_SHEET_T )
     {
         SCH_SHEET* sheet = (SCH_SHEET*) newItem;
+
+        for( SCH_FIELD& field : sheet->GetFields() )
+            field.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
 
         for( SCH_SHEET_PIN* pin : sheet->GetPins() )
             pin->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );

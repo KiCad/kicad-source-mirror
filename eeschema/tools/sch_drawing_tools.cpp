@@ -850,6 +850,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             if( m_frame->EditSheet( (SCH_SHEET*)sheet, g_CurrentSheet, nullptr ) )
             {
+                sheet->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+
                 m_frame->AddItemToScreenAndUndoList( sheet );
                 m_frame->UpdateHierarchyNavigator();
                 m_selectionTool->AddItemToSel( sheet );

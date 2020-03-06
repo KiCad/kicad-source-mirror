@@ -1341,10 +1341,7 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     draw( &tempPart, aLayer, false, aComp->GetUnit(), aComp->GetConvert() );
 
     // The fields are SCH_COMPONENT-specific so don't need to be copied/oriented/translated
-    std::vector<SCH_FIELD*> fields;
-    aComp->GetFields( fields, false );
-
-    for( SCH_FIELD* field : fields )
+    for( SCH_FIELD* field : aComp->GetFields() )
         draw( field, aLayer );
 }
 
@@ -1356,12 +1353,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     if( drawingShadows && !aField->IsSelected() )
         return;
 
-    switch( aField->GetId() )
-    {
-    case REFERENCE: aLayer = LAYER_REFERENCEPART; break;
-    case VALUE:     aLayer = LAYER_VALUEPART;     break;
-    default:        aLayer = LAYER_FIELDS;        break;
-    }
+    aLayer = aField->GetLayer();
 
     COLOR4D color = getRenderColor( aField, aLayer, drawingShadows );
 
@@ -1376,20 +1368,22 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     if( aField->IsVoid() )
         return;
 
-    SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) aField->GetParent();
-
-    if( drawingShadows && parentComponent->IsSelected() && !GetSelectionDrawChildItems() )
+    if( drawingShadows && aField->GetParent()->IsSelected() && !GetSelectionDrawChildItems() )
         return;
 
-    // Calculate the text orientation according to the component orientation.
-    int            orient = (int) aField->GetTextAngle();
+    // Calculate the text orientation according to the parent orientation.
+    int orient = (int) aField->GetTextAngle();
 
-    if( parentComponent->GetTransform().y1 )  // Rotate component 90 degrees.
+    if( aField->GetParent() && aField->GetParent()->Type() == SCH_COMPONENT_T )
     {
+        if( static_cast<SCH_COMPONENT*>( aField->GetParent() )->GetTransform().y1 )
+        {
+        // Rotate component 90 degrees.
         if( orient == TEXT_ANGLE_HORIZ )
             orient = TEXT_ANGLE_VERT;
         else
             orient = TEXT_ANGLE_HORIZ;
+        }
     }
 
     /* Calculate the text justification, according to the component orientation/mirror.
@@ -1436,9 +1430,11 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     // Draw the umbilical line
     if( aField->IsMoving() )
     {
+        wxPoint parentPos = aField->GetParentPosition();
+
         m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
         m_gal->SetStrokeColor( COLOR4D( 0.0, 0.0, 1.0, 1.0 ) );
-        m_gal->DrawLine( textpos, parentComponent->GetPosition() );
+        m_gal->DrawLine( textpos, parentPos );
     }
 }
 
@@ -1584,60 +1580,11 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
         m_gal->DrawRectangle( pos, pos + size );
 
-        VECTOR2D pos_sheetname = aSheet->GetSheetNamePosition();
-        VECTOR2D pos_filename = aSheet->GetFileNamePosition();
-        double   nameAngle = 0.0;
+        if( drawingShadows && !GetSelectionDrawChildItems() )
+            return;
 
-        if( aSheet->IsVerticalOrientation() )
-            nameAngle = M_PI/2;
-
-        if( drawingShadows )
-        {
-            if( !GetSelectionDrawChildItems() )
-                return;
-
-            if( aSheet->IsVerticalOrientation() )
-            {
-                pos_sheetname.y += getShadowWidth() / 2;
-                pos_filename.y += getShadowWidth() / 2;
-            }
-            else
-            {
-                pos_sheetname.x -= getShadowWidth() / 2;
-                pos_filename.x -= getShadowWidth() / 2;
-            }
-        }
-
-        if( aSheet->GetShowSheetName() )
-        {
-            wxString text = wxT( "Sheet: " ) + aSheet->GetName();
-
-            m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETNAME, drawingShadows ) );
-            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
-            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-
-            int txtSize = aSheet->GetSheetNameSize();
-            m_gal->SetGlyphSize( VECTOR2D( txtSize, txtSize ) );
-            m_gal->SetFontBold( false );
-            m_gal->SetFontItalic( false );
-
-            strokeText( text, pos_sheetname, nameAngle );
-        }
-
-        if( aSheet->GetShowFileName() )
-        {
-            wxString text = wxT( "File: " ) + aSheet->GetFileName();
-
-            m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETFILENAME, drawingShadows ) );
-            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-
-            int txtSize = aSheet->GetFileNameSize();
-            m_gal->SetGlyphSize( VECTOR2D( txtSize, txtSize ) );
-            m_gal->SetFontBold( false );
-            m_gal->SetFontItalic( false );
-
-            strokeText( text, pos_filename, nameAngle );
-        }
+        for( SCH_FIELD& field : aSheet->GetFields() )
+            draw( &field, aLayer );
     }
 }
 

@@ -37,6 +37,34 @@
 #include <settings/color_settings.h>
 #include <netlist_object.h>
 #include <trace_helpers.h>
+#include <pgm_base.h>
+
+
+const wxString GetDefaultFieldName( int aFieldNdx )
+{
+    static void* locale = nullptr;
+    static wxString sheetnameDefault;
+    static wxString sheetfilenameDefault;
+    static wxString fieldDefault;
+
+    // Fetching translations can take a surprising amount of time when loading libraries,
+    // so only do it when necessary.
+    if( Pgm().GetLocale() != locale )
+    {
+        sheetnameDefault     = _( "Sheet Name" );
+        sheetfilenameDefault = _( "Sheet Filename" );
+        fieldDefault         = _( "Field" );
+        locale = Pgm().GetLocale();
+    }
+
+    // Fixed values for the mandatory fields
+    switch( aFieldNdx )
+    {
+    case  SHEETNAME:     return sheetnameDefault;
+    case  SHEETFILENAME: return sheetfilenameDefault;
+    default:             return wxString::Format( fieldDefault, aFieldNdx );
+    }
+}
 
 
 SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
@@ -45,13 +73,22 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     m_Layer = LAYER_SHEET;
     m_pos = pos;
     m_size = wxSize( Mils2iu( MIN_SHEET_WIDTH ), Mils2iu( MIN_SHEET_HEIGHT ) );
-    m_showSheetName = true;
-    m_sheetNameSize = GetDefaultTextSize();
-    m_showFileName = true;
-    m_fileNameSize = GetDefaultTextSize();
     m_screen = NULL;
-    m_name.Printf( wxT( "Sheet%s" ), m_Uuid.AsString() );
-    m_fileName.Printf( wxT( "file%s.sch" ), m_Uuid.AsString() );
+
+    for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
+    {
+        m_fields.emplace_back( pos, i, this, GetDefaultFieldName( i ) );
+        m_fields.back().SetVisible( true );
+
+        if( i == SHEETNAME )
+            m_fields.back().SetLayer( LAYER_SHEETNAME );
+        else if( i == SHEETFILENAME )
+            m_fields.back().SetLayer( LAYER_SHEETFILENAME );
+        else
+            m_fields.back().SetLayer( LAYER_SHEETFIELDS );
+    }
+
+    m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
 }
 
 
@@ -62,13 +99,9 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
     m_size = aSheet.m_size;
     m_Layer = aSheet.m_Layer;
     const_cast<KIID&>( m_Uuid ) = aSheet.m_Uuid;
-    m_showSheetName = aSheet.m_showSheetName;
-    m_sheetNameSize = aSheet.m_sheetNameSize;
-    m_showFileName = aSheet.m_showFileName;
-    m_fileNameSize = aSheet.m_fileNameSize;
+    m_fields = aSheet.m_fields;
+    m_fieldsAutoplaced = aSheet.m_fieldsAutoplaced;
     m_screen = aSheet.m_screen;
-    m_name = aSheet.m_name;
-    m_fileName = aSheet.m_fileName;
 
     for( SCH_SHEET_PIN* pin : aSheet.m_pins )
     {
@@ -80,7 +113,6 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
         m_screen->IncRefCount();
 }
 
-// JEY TODO: add read/write of m_showSheetName & m_showFilename to new eeschema file format....
 
 SCH_SHEET::~SCH_SHEET()
 {
@@ -160,11 +192,8 @@ void SCH_SHEET::SwapData( SCH_ITEM* aItem )
 
     std::swap( m_pos, sheet->m_pos );
     std::swap( m_size, sheet->m_size );
-    std::swap( m_name, sheet->m_name );
-    std::swap( m_showSheetName, sheet->m_showSheetName );
-    std::swap( m_sheetNameSize, sheet->m_sheetNameSize );
-    std::swap( m_showFileName, sheet->m_showFileName );
-    std::swap( m_fileNameSize, sheet->m_fileNameSize );
+    m_fields.swap( sheet->m_fields );
+    std::swap( m_fieldsAutoplaced, sheet->m_fieldsAutoplaced );
     m_pins.swap( sheet->m_pins );
 
     // Update parent pointers after swapping.
@@ -202,7 +231,7 @@ void SCH_SHEET::RemovePin( SCH_SHEET_PIN* aSheetPin )
     }
 
     wxLogDebug( wxT( "Fix me: attempt to remove label %s which is not in sheet %s." ),
-                GetChars( aSheetPin->GetShownText() ), GetChars( m_name ) );
+                aSheetPin->GetShownText(), m_fields[ SHEETNAME ].GetText() );
 }
 
 
@@ -397,41 +426,45 @@ int SCH_SHEET::GetPenSize() const
 }
 
 
-wxPoint SCH_SHEET::GetSheetNamePosition()
+wxPoint SCH_SHEET::getSheetNamePosition()
 {
-    wxPoint pos = m_pos;
-    int     margin = KiROUND( GetPenSize() / 2.0 + 4 + m_sheetNameSize * 0.3 );
+    wxSize  textSize = m_fields[ SHEETNAME ].GetTextSize();
+    int     margin = KiROUND( GetPenSize() / 2.0 + 4 + std::max( textSize.x, textSize.y ) * 0.3 );
 
     if( IsVerticalOrientation() )
-    {
-        pos.x -= margin;
-        pos.y += m_size.y;
-    }
+        return wxPoint( -margin, m_size.y );
     else
-    {
-        pos.y -= margin;
-    }
-
-    return pos;
+        return wxPoint( 0, -margin );
 }
 
 
-wxPoint SCH_SHEET::GetFileNamePosition()
+wxPoint SCH_SHEET::getFileNamePosition()
 {
-    wxPoint  pos = m_pos;
-    int      margin = KiROUND( GetPenSize() / 2.0 + 4 + m_fileNameSize * 0.4 );
+    wxSize  textSize = m_fields[ SHEETNAME ].GetTextSize();
+    int     margin = KiROUND( GetPenSize() / 2.0 + 4 + std::max( textSize.x, textSize.y ) * 0.4 );
 
     if( IsVerticalOrientation() )
-    {
-        pos.x += m_size.x + margin;
-        pos.y += m_size.y;
-    }
+        return wxPoint( m_size.x + margin, m_size.y );
     else
-    {
-        pos.y += m_size.y + margin;
-    }
+        return wxPoint( 0, m_size.y + margin );
+}
 
-    return pos;
+
+void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
+{
+    wxASSERT_MSG( !aManual, "manual autoplacement not currently supported for sheets" );
+
+    m_fields[ SHEETNAME ].SetTextPos( getSheetNamePosition() );
+    m_fields[ SHEETNAME ].SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+    m_fields[ SHEETNAME ].SetVertJustify(GR_TEXT_VJUSTIFY_BOTTOM );
+    m_fields[ SHEETNAME ].SetTextAngle( IsVerticalOrientation() ? 900 : 0 );
+
+    m_fields[ SHEETFILENAME ].SetTextPos( getFileNamePosition() );
+    m_fields[ SHEETFILENAME ].SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+    m_fields[ SHEETFILENAME ].SetVertJustify(GR_TEXT_VJUSTIFY_TOP );
+    m_fields[ SHEETFILENAME ].SetTextAngle( IsVerticalOrientation() ? 900 : 0 );
+
+    m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
 }
 
 
@@ -448,43 +481,14 @@ void SCH_SHEET::ViewGetLayers( int aLayers[], int& aCount ) const
 void SCH_SHEET::Print( wxDC* aDC, const wxPoint& aOffset )
 {
     wxString  Text;
-    int       name_orientation;
-    wxPoint   pos_sheetname,pos_filename;
     wxPoint   pos = m_pos + aOffset;
     int       lineWidth = GetPenSize();
-    int       textWidth;
-    wxSize    textSize;
     COLOR4D   color = GetLayerColor( m_Layer );
 
     GRRect( nullptr, aDC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, lineWidth, color );
 
-    pos_sheetname = GetSheetNamePosition() + aOffset;
-    pos_filename = GetFileNamePosition() + aOffset;
-
-    if( IsVerticalOrientation() )
-        name_orientation = TEXT_ANGLE_VERT;
-    else
-        name_orientation = TEXT_ANGLE_HORIZ;
-
-    /* Draw text : SheetName */
-    if( m_showSheetName )
-    {
-        Text = wxT( "Sheet: " ) + m_name;
-        textSize = wxSize( m_sheetNameSize, m_sheetNameSize );
-        textWidth = Clamp_Text_PenSize( lineWidth, textSize, false );
-        GRText( aDC, pos_sheetname, GetLayerColor( LAYER_SHEETNAME ), Text, name_orientation,
-                textSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, textWidth, false, false );
-    }
-
-    /* Draw text : FileName */
-    if( m_showFileName )
-    {
-        Text = wxT( "File: " ) + m_fileName;
-        textSize = wxSize( m_fileNameSize, m_fileNameSize );
-        textWidth = Clamp_Text_PenSize( lineWidth, textSize, false );
-        GRText( aDC, pos_filename, GetLayerColor( LAYER_SHEETFILENAME ), Text, name_orientation,
-                textSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, textWidth, false, false );
-    }
+    for( SCH_FIELD& field : m_fields )
+        field.Print( aDC, aOffset );
 
     /* Draw text : SheetLabel */
     for( SCH_SHEET_PIN* sheetPin : m_pins )
@@ -499,23 +503,6 @@ const EDA_RECT SCH_SHEET::GetBoundingBox() const
     int      lineWidth = GetPenSize();
     int      textLength = 0;
 
-    // Determine length of texts
-    if( m_showSheetName )
-    {
-        wxString text    = wxT( "Sheet: " ) + m_name;
-        int      textlen  = GraphicTextWidth( text, wxSize( m_sheetNameSize, m_sheetNameSize ),
-                                              false, false );
-        textLength = std::max( textLength, textlen );
-    }
-
-    if( m_showFileName )
-    {
-        wxString text = wxT( "File: " ) + m_fileName;
-        int      textlen = GraphicTextWidth( text, wxSize( m_fileNameSize, m_fileNameSize ),
-                                             false, false );
-        textLength = std::max( textLength, textlen );
-    }
-
     // Calculate bounding box X size:
     end.x = std::max( m_size.x, textLength );
 
@@ -523,12 +510,11 @@ const EDA_RECT SCH_SHEET::GetBoundingBox() const
     end.y = m_size.y;
     end += m_pos;
 
-    // Move upper and lower limits to include texts:
-    box.SetY( box.GetY() - ( KiROUND( m_sheetNameSize * 1.3 ) + 8 ) );
-    end.y += KiROUND( m_fileNameSize * 1.3 ) + 8;
-
     box.SetEnd( end );
     box.Inflate( lineWidth / 2 );
+
+    for( size_t i = 0; i < m_fields.size(); i++ )
+        box.Merge( m_fields[i].GetBoundingBox() );
 
     return box;
 }
@@ -639,16 +625,10 @@ int SCH_SHEET::CountSheets()
 }
 
 
-wxString SCH_SHEET::GetFileName( void ) const
-{
-    return m_fileName;
-}
-
-
 void SCH_SHEET::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
-    aList.push_back( MSG_PANEL_ITEM( _( "Sheet Name" ), m_name, CYAN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "File Name" ), m_fileName, BROWN ) );
+    aList.emplace_back( _( "Sheet Name" ), m_fields[ SHEETNAME ].GetText(), CYAN );
+    aList.emplace_back( _( "File Name" ), m_fields[ SHEETFILENAME ].GetText(), BROWN );
 
 #if 1   // Set to 1 to display the sheet UUID and hierarchical path
     wxString msgU, msgL;
@@ -662,6 +642,8 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 
 void SCH_SHEET::Rotate(wxPoint aPosition)
 {
+    wxPoint prev = m_pos;
+
     RotatePoint( &m_pos, aPosition, 900 );
     RotatePoint( &m_size.x, &m_size.y, 900 );
 
@@ -675,6 +657,15 @@ void SCH_SHEET::Rotate(wxPoint aPosition)
     {
         m_pos.y += m_size.y;
         m_size.y = -m_size.y;
+    }
+
+    for( SCH_FIELD& field : m_fields )
+    {
+        // Move the fields to the new position because the sheet itself has moved.
+        wxPoint pos = field.GetTextPos();
+        pos.x -= prev.x - m_pos.x;
+        pos.y -= prev.y - m_pos.y;
+        field.SetTextPos( pos );
     }
 
     for( SCH_SHEET_PIN* sheetPin : m_pins )
@@ -717,7 +708,11 @@ void SCH_SHEET::Resize( const wxSize& aSize )
 
     m_size = aSize;
 
-    /* Move the sheet labels according to the new sheet size. */
+    // Move the fields if we're in autoplace mode
+    if( m_fieldsAutoplaced == FIELDS_AUTOPLACED_AUTO )
+        AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+
+    // Move the sheet labels according to the new sheet size.
     for( SCH_SHEET_PIN* sheetPin : m_pins )
         sheetPin->ConstrainOnEdge( sheetPin->GetPosition() );
 }
@@ -727,25 +722,8 @@ bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 
-    // Ignore the sheet file name if searching to replace.
-    if( !(aSearchData.GetFlags() & FR_SEARCH_REPLACE)
-        && SCH_ITEM::Matches( m_fileName, aSearchData ) )
-    {
-        return true;
-    }
-
-    if( SCH_ITEM::Matches( m_name, aSearchData ) )
-    {
-        return true;
-    }
-
+    // Sheets are searchable via the child field and pin item text.
     return false;
-}
-
-
-bool SCH_SHEET::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
-{
-    return EDA_ITEM::Replace( aSearchData, m_name );
 }
 
 
@@ -822,7 +800,7 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICA
 
 wxString SCH_SHEET::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Hierarchical Sheet %s" ), m_name );
+    return wxString::Format( _( "Hierarchical Sheet %s" ), m_fields[ SHEETNAME ].GetText() );
 }
 
 
@@ -855,8 +833,7 @@ bool SCH_SHEET::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 }
 
 
-void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
-                                SCH_SHEET_PATH*      aSheetPath )
+void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath )
 {
     SCH_SHEET_PATH sheetPath = *aSheetPath;
     sheetPath.push_back( this );
@@ -882,11 +859,7 @@ void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
 
 void SCH_SHEET::Plot( PLOTTER* aPlotter )
 {
-    COLOR4D    txtcolor = COLOR4D::UNSPECIFIED;
-    wxSize      size;
     wxString    Text;
-    int         name_orientation;
-    wxPoint     pos_sheetname, pos_filename;
     wxPoint     pos;
 
     aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
@@ -908,52 +881,8 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     aPlotter->LineTo( pos );
     aPlotter->FinishTo( m_pos );
 
-    if( IsVerticalOrientation() )
-    {
-        pos_sheetname    = wxPoint( m_pos.x - 8, m_pos.y + m_size.y );
-        pos_filename     = wxPoint( m_pos.x + m_size.x + 4, m_pos.y + m_size.y );
-        name_orientation = TEXT_ANGLE_VERT;
-    }
-    else
-    {
-        pos_sheetname    = wxPoint( m_pos.x, m_pos.y - 4 );
-        pos_filename     = wxPoint( m_pos.x, m_pos.y + m_size.y + 4 );
-        name_orientation = TEXT_ANGLE_HORIZ;
-    }
-
-    bool italic = false;
-
-    /* Draw texts: SheetName */
-    if( m_showSheetName )
-    {
-        Text = m_name;
-        size = wxSize( m_sheetNameSize, m_sheetNameSize );
-
-        //pos  = m_pos; pos.y -= 4;
-        thickness = GetDefaultLineThickness();
-        thickness = Clamp_Text_PenSize( thickness, size, false );
-
-        txtcolor = aPlotter->ColorSettings()->GetColor( LAYER_SHEETNAME );
-
-        aPlotter->Text( pos_sheetname, txtcolor, wxT( "Sheet: " ) + Text, name_orientation, size,
-                        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
-                        thickness, false, false );
-    }
-
-    /*Draw texts : FileName */
-    if( m_showFileName )
-    {
-        Text = GetFileName();
-        size = wxSize( m_fileNameSize, m_fileNameSize );
-        thickness = GetDefaultLineThickness();
-        thickness = Clamp_Text_PenSize( thickness, size, false );
-
-        txtcolor = aPlotter->ColorSettings()->GetColor( LAYER_SHEETFILENAME );
-
-        aPlotter->Text( pos_filename, txtcolor, wxT( "File: " ) + Text, name_orientation, size,
-                        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
-                        thickness, italic, false );
-    }
+    for( SCH_FIELD field : m_fields )
+        field.Plot( aPlotter );
 
     aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
 
@@ -979,9 +908,7 @@ SCH_SHEET& SCH_SHEET::operator=( const SCH_ITEM& aItem )
 
         m_pos = sheet->m_pos;
         m_size = sheet->m_size;
-        m_name = sheet->m_name;
-        m_sheetNameSize = sheet->m_sheetNameSize;
-        m_fileNameSize = sheet->m_fileNameSize;
+        m_fields = sheet->m_fields;
 
         for( SCH_SHEET_PIN* pin : sheet->m_pins )
         {
@@ -1001,11 +928,11 @@ bool SCH_SHEET::operator <( const SCH_ITEM& aItem ) const
 
     auto sheet = static_cast<const SCH_SHEET*>( &aItem );
 
-    if (m_name != sheet->m_name)
-        return m_name < sheet->m_name;
+    if (m_fields[ SHEETNAME ].GetText() != sheet->m_fields[ SHEETNAME ].GetText())
+        return m_fields[ SHEETNAME ].GetText() < sheet->m_fields[ SHEETNAME ].GetText();
 
-    if (m_fileName != sheet->m_fileName)
-        return m_fileName < sheet->m_fileName;
+    if (m_fields[ SHEETFILENAME ].GetText() != sheet->m_fields[ SHEETFILENAME ].GetText())
+        return m_fields[ SHEETFILENAME ].GetText() < sheet->m_fields[ SHEETFILENAME ].GetText();
 
     return false;
 }
@@ -1019,7 +946,7 @@ void SCH_SHEET::Show( int nestLevel, std::ostream& os ) const
     wxString s = GetClass();
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">" << " sheet_name=\""
-                                 << TO_UTF8( m_name ) << '"' << ">\n";
+                                 << TO_UTF8( m_fields[ SHEETNAME ].GetText() ) << '"' << ">\n";
 
     // show all the pins, and check the linked list integrity
     for( SCH_SHEET_PIN* sheetPin : m_pins )

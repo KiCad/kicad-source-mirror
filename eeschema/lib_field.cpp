@@ -145,12 +145,14 @@ bool LIB_FIELD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     // Reference designator text has one or 2 additional character (displays U? or U?A)
     if( m_id == REFERENCE )
     {
+        const LIB_PART*  parent = dynamic_cast<const LIB_PART*>( m_Parent );
+
         wxString extended_text = tmp_text.GetText();
         extended_text.Append('?');
-        const LIB_PART*      parent = static_cast<const LIB_PART*>( m_Parent );
 
-        if ( parent && ( parent->GetUnitCount() > 1 ) )
+        if ( parent && parent->GetUnitCount() > 1 )
             extended_text.Append('A');
+
         tmp_text.SetText( extended_text );
     }
 

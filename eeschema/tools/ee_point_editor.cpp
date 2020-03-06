@@ -575,6 +575,10 @@ void EE_POINT_EDITOR::updateItem() const
         sheet->SetPosition( (wxPoint) topLeft );
         sheet->SetSize( wxSize( botRight.x - topLeft.x, botRight.y - topLeft.y ) );
 
+        // Update the fields if we're in autoplace mode
+        if( sheet->GetFieldsAutoplaced() == FIELDS_AUTOPLACED_AUTO )
+            sheet->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+
         // Keep sheet pins attached to edges:
         for( SCH_SHEET_PIN* pin : sheet->GetPins() )
         {

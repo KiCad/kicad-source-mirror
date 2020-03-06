@@ -970,7 +970,7 @@ void EE_SELECTION_TOOL::RebuildSelection()
     {
         LIB_PART* start = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
 
-        for( auto& item : start->GetDrawItems() )
+        for( LIB_ITEM& item : start->GetDrawItems() )
         {
             if( item.IsSelected() )
                 select( static_cast<EDA_ITEM*>( &item ) );
@@ -989,16 +989,26 @@ void EE_SELECTION_TOOL::RebuildSelection()
             {
                 if( item->Type() == SCH_COMPONENT_T )
                 {
-                    for( auto field : static_cast<SCH_COMPONENT*>( item )->GetFields() )
+                    for( SCH_FIELD* field : static_cast<SCH_COMPONENT*>( item )->GetFields() )
+                    {
                         if( field->IsSelected() )
                             select( field );
+                    }
                 }
 
                 if( item->Type() == SCH_SHEET_T )
                 {
-                    for( auto pin : static_cast<SCH_SHEET*>( item )->GetPins() )
+                    for( SCH_FIELD& field : static_cast<SCH_SHEET*>( item )->GetFields() )
+                    {
+                        if( field.IsSelected() )
+                            select( &field );
+                    }
+
+                    for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
+                    {
                         if( pin->IsSelected() )
                             select( pin );
+                    }
                 }
 
             }
@@ -1221,10 +1231,7 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
                 pin->SetBrightened();
         }
 
-        std::vector<SCH_FIELD*> fields;
-        static_cast<SCH_COMPONENT*>( aItem )->GetFields( fields, false );
-
-        for( SCH_FIELD* field : fields )
+        for( SCH_FIELD* field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )
         {
             if( aMode == SELECTED )
                 field->SetSelected();
@@ -1234,9 +1241,15 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
     }
     else if( itemType == SCH_SHEET_T )
     {
-        std::vector<SCH_SHEET_PIN*>& pins = static_cast<SCH_SHEET*>( aItem )->GetPins();
+        for( SCH_FIELD& field : static_cast<SCH_SHEET*>( aItem )->GetFields() )
+        {
+            if( aMode == SELECTED )
+                field.SetSelected();
+            else if( aMode == BRIGHTENED )
+                field.SetBrightened();
+        }
 
-        for( SCH_SHEET_PIN* pin : pins )
+        for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( aItem )->GetPins() )
         {
             if( aMode == SELECTED )
                 pin->SetSelected();
@@ -1278,10 +1291,7 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
                 pin->ClearBrightened();
         }
 
-        std::vector<SCH_FIELD*> fields;
-        static_cast<SCH_COMPONENT*>( aItem )->GetFields( fields, false );
-
-        for( SCH_FIELD* field : fields )
+        for( SCH_FIELD* field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )
         {
             if( aMode == SELECTED )
                 field->ClearSelected();
@@ -1291,9 +1301,15 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
     }
     else if( itemType == SCH_SHEET_T )
     {
-        std::vector<SCH_SHEET_PIN*>& pins = static_cast<SCH_SHEET*>( aItem )->GetPins();
+        for( SCH_FIELD& field : static_cast<SCH_SHEET*>( aItem )->GetFields() )
+        {
+            if( aMode == SELECTED )
+                field.ClearSelected();
+            else if( aMode == BRIGHTENED )
+                field.ClearBrightened();
+        }
 
-        for( SCH_SHEET_PIN* pin : pins )
+        for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( aItem )->GetPins() )
         {
             if( aMode == SELECTED )
                 pin->ClearSelected();

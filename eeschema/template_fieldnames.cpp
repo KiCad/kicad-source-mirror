@@ -48,34 +48,19 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
         valueDefault     = _( "Value" );
         footprintDefault = _( "Footprint" );
         datasheetDefault = _( "Datasheet" );
-        fieldDefault     = _( "Field" );
+        fieldDefault     = _( "Field%d" );
         locale = Pgm().GetLocale();
     }
 
-    // Fixed values for the first few default fields used by EESCHEMA
-    // (mandatory fields)
+    // Fixed values for the mandatory fields
     switch( aFieldNdx )
     {
-    case  REFERENCE:
-        return referenceDefault;   // The component reference, R1, C1, etc.
-
-    case  VALUE:
-        return valueDefault;       // The component value + name
-
-    case  FOOTPRINT:
-        return footprintDefault;   // The footprint for use with Pcbnew
-
-    case  DATASHEET:
-        return datasheetDefault;   // Link to a datasheet for component
-
-    default:
-        break;
+    case  REFERENCE: return referenceDefault;   // The component reference, R1, C1, etc.
+    case  VALUE:     return valueDefault;       // The component value + name
+    case  FOOTPRINT: return footprintDefault;   // The footprint for use with Pcbnew
+    case  DATASHEET: return datasheetDefault;   // Link to a datasheet for component
+    default:         return wxString::Format( fieldDefault, aFieldNdx );
     }
-
-    // Other fields are use fields, give a default name:
-    wxString fieldName = fieldDefault;
-    fieldName << aFieldNdx;
-    return fieldName;
 }
 
 void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const

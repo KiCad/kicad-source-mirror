@@ -1066,7 +1066,10 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
             }
         }
         else if( strCompare( "$EndSheet", line ) )
+        {
+            sheet->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
             return sheet.release();
+        }
 
         line = aReader.ReadLine();
     }

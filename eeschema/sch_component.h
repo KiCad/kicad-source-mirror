@@ -99,7 +99,6 @@ struct COMPONENT_INSTANCE_REFERENCE
 class SCH_COMPONENT : public SCH_ITEM
 {
 public:
-    enum AUTOPLACED { AUTOPLACED_NO = 0, AUTOPLACED_AUTO, AUTOPLACED_MANUAL };
 
 private:
 
@@ -125,7 +124,7 @@ private:
     SCH_PINS    m_pins;         ///< a SCH_PIN for every LIB_PIN (across all units)
     SCH_PIN_MAP m_pinMap;       ///< the component's pins mapped by LIB_PIN*
 
-    AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
+    FIELDS_AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
 
     bool        m_isInNetlist;  ///< True if the component should appear in the netlist
 
@@ -428,12 +427,12 @@ public:
     /**
      * Return whether the fields have been automatically placed.
      */
-    AUTOPLACED GetFieldsAutoplaced() const { return m_fieldsAutoplaced; }
+    FIELDS_AUTOPLACED GetFieldsAutoplaced() const { return m_fieldsAutoplaced; }
 
     /**
      * Set fields automatically placed flag false.
      */
-    void ClearFieldsAutoplaced() { m_fieldsAutoplaced = AUTOPLACED_NO; }
+    void ClearFieldsAutoplaced() { m_fieldsAutoplaced = FIELDS_AUTOPLACED_NO; }
 
     /**
      * Automatically orient all the fields in the component.
@@ -457,7 +456,7 @@ public:
     void AutoAutoplaceFields( SCH_SCREEN* aScreen )
     {
         if( GetFieldsAutoplaced() )
-            AutoplaceFields( aScreen, GetFieldsAutoplaced() == AUTOPLACED_MANUAL );
+            AutoplaceFields( aScreen, GetFieldsAutoplaced() == FIELDS_AUTOPLACED_MANUAL );
     }
 
 

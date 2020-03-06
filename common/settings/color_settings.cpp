@@ -88,6 +88,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
 #endif
     CLR( "schematic.sheet",             LAYER_SHEET,                COLOR4D( MAGENTA ) );
     CLR( "schematic.sheet_filename",    LAYER_SHEETFILENAME,        COLOR4D( BROWN ) );
+    CLR( "schematic.sheet_fields",      LAYER_SHEETFIELDS,          COLOR4D( MAGENTA ) );
     CLR( "schematic.sheet_label",       LAYER_SHEETLABEL,           COLOR4D( CYAN ) );
     CLR( "schematic.sheet_name",        LAYER_SHEETNAME,            COLOR4D( CYAN ) );
     CLR( "schematic.value",             LAYER_VALUEPART,            COLOR4D( CYAN ) );

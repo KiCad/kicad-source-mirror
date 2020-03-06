@@ -49,7 +49,7 @@
 #include <trace_helpers.h>
 
 
-SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent, const wxString& aName ) :
+SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_ITEM* aParent, const wxString& aName ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),
     EDA_TEXT()
 {
@@ -77,17 +77,22 @@ const wxString SCH_FIELD::GetFullyQualifiedText() const
 {
     wxString text = GetText();
 
-    /* For more than one part per package, we must add the part selection
-     * A, B, ... or 1, 2, .. to the reference. */
-    if( m_id == REFERENCE )
-    {
-        SCH_COMPONENT* component = (SCH_COMPONENT*) m_Parent;
+    // Note that the IDs of FIELDS and SHEETS overlap, so one must check *both* the
+    // id and the parent's type.
 
-        wxCHECK_MSG( component != NULL, text,
-                     wxT( "No component associated with field" ) + text );
+    if( m_id == REFERENCE && m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    {
+        // For more than one part per package, we must add the part selection
+        // A, B, ... or 1, 2, .. to the reference.
+        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_Parent );
 
         if( component->GetUnitCount() > 1 )
             text << LIB_PART::SubReference( component->GetUnit() );
+    }
+
+    if( m_id == SHEETFILENAME && m_Parent && m_Parent->Type() == SCH_SHEET_T )
+    {
+        text = _( "File: " ) + text;
     }
 
     return text;
@@ -117,7 +122,7 @@ void SCH_FIELD::Print( wxDC* aDC, const wxPoint& aOffset )
     int            orient;
     COLOR4D        color;
     wxPoint        textpos;
-    SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) m_Parent;
+    SCH_COMPONENT* parentComponent = dynamic_cast<SCH_COMPONENT*>( m_Parent );
     int            lineWidth = GetThickness();
 
     if( lineWidth == 0 )   // Use default values for pen size
@@ -137,7 +142,7 @@ void SCH_FIELD::Print( wxDC* aDC, const wxPoint& aOffset )
     // Calculate the text orientation according to the component orientation.
     orient = GetTextAngle();
 
-    if( parentComponent->GetTransform().y1 )  // Rotate component 90 degrees.
+    if( parentComponent && parentComponent->GetTransform().y1 )  // Rotate component 90 degrees.
     {
         if( orient == TEXT_ANGLE_HORIZ )
             orient = TEXT_ANGLE_VERT;
@@ -161,12 +166,8 @@ void SCH_FIELD::Print( wxDC* aDC, const wxPoint& aOffset )
 
     if( m_forceVisible )
         color = COLOR4D( DARKGRAY );
-    else if( m_id == REFERENCE )
-        color = GetLayerColor( LAYER_REFERENCEPART );
-    else if( m_id == VALUE )
-        color = GetLayerColor( LAYER_VALUEPART );
     else
-        color = GetLayerColor( LAYER_FIELDS );
+        color = GetLayerColor( m_Layer );
 
     GRText( aDC, textpos, color, GetFullyQualifiedText(), orient, GetTextSize(),
             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, lineWidth, IsItalic(), IsBold() );
@@ -194,7 +195,6 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 
 const EDA_RECT SCH_FIELD::GetBoundingBox() const
 {
-    SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) m_Parent;
     int linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
 
     // We must pass the effective text thickness to GetTextBox
@@ -202,20 +202,14 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
     linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
     // Calculate the text bounding box:
-    EDA_RECT rect;
+    EDA_RECT  rect;
+    SCH_FIELD text( *this );    // Make a local copy to change text
+                                // because GetBoundingBox() is const
+    text.SetText( GetFullyQualifiedText() );
+    rect = text.GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
 
-    if( m_id == REFERENCE )     // multi units have one letter or more added to reference
-    {
-        SCH_FIELD text( *this );    // Make a local copy to change text
-                                    // because GetBoundingBox() is const
-        text.SetText( GetFullyQualifiedText() );
-        rect = text.GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
-    }
-    else
-        rect = GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
-
-    // Calculate the bounding box position relative to the component:
-    wxPoint origin = parentComponent->GetPosition();
+    // Calculate the bounding box position relative to the parent:
+    wxPoint origin = GetParentPosition();
     wxPoint pos = GetTextPos() - origin;
     wxPoint begin = rect.GetOrigin() - origin;
     wxPoint end = rect.GetEnd() - origin;
@@ -228,12 +222,16 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
     MIRROR( end.y,   pos.y );
 
     // Now, apply the component transform (mirror/rot)
-    begin = parentComponent->GetTransform().TransformCoordinate( begin );
-    end = parentComponent->GetTransform().TransformCoordinate( end );
-    rect.SetOrigin( begin);
-    rect.SetEnd( end);
+    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    {
+        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
+        rect.SetOrigin( parentComponent->GetTransform().TransformCoordinate( begin ));
+        rect.SetEnd( parentComponent->GetTransform().TransformCoordinate( end ));
+    }
+
     rect.Move( origin );
     rect.Normalize();
+
     return rect;
 }
 
@@ -265,20 +263,22 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     wxString text = GetFullyQualifiedText();
     int      flags = aSearchData.GetFlags();
+    bool     isReference = m_Parent && m_Parent->Type() == SCH_COMPONENT_T && m_id == REFERENCE;
+    bool     isValue = m_Parent && m_Parent->Type() == SCH_COMPONENT_T && m_id == VALUE;
 
     // User defined fields have an ID of -1.
-    if( m_id != REFERENCE && m_id != VALUE && !( flags & FR_SEARCH_ALL_FIELDS ) )
+    if( !isReference && !isValue && !( flags & FR_SEARCH_ALL_FIELDS ) )
         return false;
 
-    if( ( flags & FR_SEARCH_REPLACE ) && m_id == REFERENCE && !( flags & FR_REPLACE_REFERENCES ) )
+    if( ( flags & FR_SEARCH_REPLACE ) && isReference && !( flags & FR_REPLACE_REFERENCES ) )
         return false;
 
-    wxLogTrace(
-            traceFindItem, wxT( "    child item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
+    wxLogTrace(  traceFindItem, wxT( "    child item " )
+                    + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 
     // Take sheet path into account which effects the reference field and the unit for
     // components with multiple parts.
-    if( m_id == REFERENCE && aAuxData != NULL )
+    if( isReference && aAuxData != NULL )
     {
         SCH_COMPONENT* component = (SCH_COMPONENT*) m_Parent;
 
@@ -309,10 +309,12 @@ bool SCH_FIELD::IsReplaceable() const
 
 bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 {
-    bool isReplaced;
+    bool     isReplaced = false;
     wxString text = GetFullyQualifiedText();
+    bool     isReference = m_Parent && m_Parent->Type() == SCH_COMPONENT_T && m_id == REFERENCE;
+    bool     isFilename = m_Parent && m_Parent->Type() == SCH_SHEET_T && m_id == SHEETFILENAME;
 
-    if( m_id == REFERENCE )
+    if( isReference )
     {
         wxCHECK_MSG( aAuxData != NULL, false,
                      wxT( "Cannot replace reference designator without valid sheet path." ) );
@@ -333,6 +335,10 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 
         if( isReplaced )
             component->SetRef( (SCH_SHEET_PATH*) aAuxData, text );
+    }
+    else if( isFilename )
+    {
+        // This is likely too dangerous to allow....
     }
     else
     {
@@ -370,14 +376,16 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 
 BITMAP_DEF SCH_FIELD::GetMenuImage() const
 {
-    if( m_id == REFERENCE )
-        return edit_comp_ref_xpm;
-
-    if( m_id == VALUE )
-        return edit_comp_value_xpm;
-
-    if( m_id == FOOTPRINT )
-        return edit_comp_footprint_xpm;
+    if( dynamic_cast<SCH_COMPONENT*>( m_Parent ) )
+    {
+        switch( m_id )
+        {
+        case REFERENCE: return edit_comp_ref_xpm;
+        case VALUE:     return edit_comp_value_xpm;
+        case FOOTPRINT: return edit_comp_footprint_xpm;
+        default:        return edit_text_xpm;
+        }
+    }
 
     return edit_text_xpm;
 }
@@ -486,6 +494,17 @@ wxPoint SCH_FIELD::GetPosition() const
     wxPoint        pos = GetTextPos() - component->GetPosition();
 
     return component->GetTransform().TransformCoordinate( pos ) + component->GetPosition();
+}
+
+
+wxPoint SCH_FIELD::GetParentPosition() const
+{
+    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+        return static_cast<SCH_COMPONENT*>( m_Parent )->GetPosition();
+    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+        return static_cast<SCH_SHEET*>( m_Parent )->GetPosition();
+    else
+        return wxPoint();
 }
 
 

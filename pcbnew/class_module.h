@@ -692,7 +692,7 @@ private:
     TEXTE_MODULE*  m_Value;             // Component value (74LS00, 22K..)
     LIB_ID         m_fpid;              // The #LIB_ID of the MODULE.
     int            m_Attributs;         // Flag bits ( see Mod_Attribut )
-    int            m_ModuleStatus;      // For autoplace: flags (LOCKED, AUTOPLACED)
+    int            m_ModuleStatus;      // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
     EDA_RECT       m_BoundaryBox;       // Bounding box : coordinates on board, real orientation.
 
     ZONE_CONNECTION m_ZoneConnection;

@@ -117,7 +117,7 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
     SCH_ITEM( aParent, SCH_COMPONENT_T )
 {
     Init( aPos );
-    m_fieldsAutoplaced = AUTOPLACED_NO;
+    m_fieldsAutoplaced = FIELDS_AUTOPLACED_NO;
 }
 
 
@@ -136,7 +136,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
     part = aPart.Flatten();
     part->SetParent();
     m_part.reset( part.release() );
-    m_fieldsAutoplaced = AUTOPLACED_NO;
+    m_fieldsAutoplaced = FIELDS_AUTOPLACED_NO;
 
     // Copy fields from the library component
     UpdateFields( true, true );
@@ -208,17 +208,14 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
     // construct only the mandatory fields, which are the first 4 only.
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        SCH_FIELD field( pos, i, this, TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
+        m_Fields.emplace_back( pos, i, this, TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
 
         if( i == REFERENCE )
-            field.SetLayer( LAYER_REFERENCEPART );
+            m_Fields.back().SetLayer( LAYER_REFERENCEPART );
         else if( i == VALUE )
-            field.SetLayer( LAYER_VALUEPART );
-
-        // else keep LAYER_FIELDS from SCH_FIELD constructor
-
-        // SCH_FIELD's implicitly created copy constructor is called in here
-        AddField( field );
+            m_Fields.back().SetLayer( LAYER_VALUEPART );
+        else
+            m_Fields.back().SetLayer( LAYER_FIELDS );
     }
 
     m_prefix = wxString( wxT( "U" ) );
@@ -550,16 +547,8 @@ void SCH_COMPONENT::Print( wxDC* aDC, const wxPoint& aOffset )
         dummy()->Print( aDC, m_Pos + aOffset, 0, 0, opts );
     }
 
-    SCH_FIELD* field = GetField( REFERENCE );
-
-    if( field->IsVisible() )
-        field->Print( aDC, aOffset );
-
-    for( int ii = VALUE; ii < GetFieldCount(); ii++ )
-    {
-        field = GetField( ii );
-        field->Print( aDC, aOffset );
-    }
+    for( SCH_FIELD& field : m_Fields )
+        field.Print( aDC, aOffset );
 }
 
 
@@ -1392,13 +1381,13 @@ void SCH_COMPONENT::Rotate( wxPoint aPosition )
 
     SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
 
-    for( int ii = 0; ii < GetFieldCount(); ii++ )
+    for( SCH_FIELD& field : m_Fields )
     {
         // Move the fields to the new position because the component itself has moved.
-        wxPoint pos = GetField( ii )->GetTextPos();
+        wxPoint pos = field.GetTextPos();
         pos.x -= prev.x - m_Pos.x;
         pos.y -= prev.y - m_Pos.y;
-        GetField( ii )->SetTextPos( pos );
+        field.SetTextPos( pos );
     }
 }
 
