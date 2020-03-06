@@ -27,6 +27,7 @@
 #include <ws_painter.h>
 #include <pgm_base.h>
 #include <pl_editor_frame.h>
+#include <pl_editor_settings.h>
 #include <settings/settings_manager.h>
 #include <gal/graphics_abstraction_layer.h>
 
@@ -48,7 +49,11 @@ PL_DRAW_PANEL_GAL::PL_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindo
     GetGAL()->SetWorldUnitLength( 1.0/IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
 
     m_painter = std::make_unique<KIGFX::WS_PAINTER>( m_gal );
-    m_painter->GetSettings()->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
+
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<PL_EDITOR_SETTINGS>();
+    m_painter->GetSettings()->LoadColors(
+            Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme ) );
+
     m_view->SetPainter( m_painter.get() );
     m_view->SetScaleLimits( 20.0, 0.05 );    // This fixes the zoom in and zoom out limits
 
