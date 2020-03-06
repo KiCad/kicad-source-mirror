@@ -51,6 +51,8 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 {
     SetName( DLG_WINDOW_NAME );
     m_plotOpts = aParent->GetPlotSettings();
+    m_DRCWarningTemplate = m_DRCExclusionsWarning->GetLabel();
+
     init_Dialog();
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
@@ -92,24 +94,12 @@ void DIALOG_PLOT::init_Dialog()
     switch( m_plotOpts.GetFormat() )
     {
     default:
-    case PLOT_FORMAT::GERBER:
-        m_plotFormatOpt->SetSelection( 0 );
-        break;
-    case PLOT_FORMAT::POST:
-        m_plotFormatOpt->SetSelection( 1 );
-        break;
-    case PLOT_FORMAT::SVG:
-        m_plotFormatOpt->SetSelection( 2 );
-        break;
-    case PLOT_FORMAT::DXF:
-        m_plotFormatOpt->SetSelection( 3 );
-        break;
-    case PLOT_FORMAT::HPGL:
-        m_plotFormatOpt->SetSelection( 4 );
-        break;
-    case PLOT_FORMAT::PDF:
-        m_plotFormatOpt->SetSelection( 5 );
-        break;
+    case PLOT_FORMAT::GERBER: m_plotFormatOpt->SetSelection( 0 ); break;
+    case PLOT_FORMAT::POST:   m_plotFormatOpt->SetSelection( 1 ); break;
+    case PLOT_FORMAT::SVG:    m_plotFormatOpt->SetSelection( 2 ); break;
+    case PLOT_FORMAT::DXF:    m_plotFormatOpt->SetSelection( 3 ); break;
+    case PLOT_FORMAT::HPGL:   m_plotFormatOpt->SetSelection( 4 ); break;
+    case PLOT_FORMAT::PDF:    m_plotFormatOpt->SetSelection( 5 ); break;
     }
 
     // Set units and value for HPGL pen size (this param is in mils).
@@ -222,14 +212,34 @@ void DIALOG_PLOT::init_Dialog()
 
 void DIALOG_PLOT::reInitDialog()
 {
-    // after calling drill dialog, some parameters can be modified.
-    // update them
+    // after calling the Drill or DRC dialogs some parameters can be modified....
 
     // Output directory
     m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
 
     // Origin of coordinates:
     m_useAuxOriginCheckBox->SetValue( m_plotOpts.GetUseAuxOrigin() );
+
+    int knownViolations = 0;
+    int exclusions = 0;
+
+    for( MARKER_PCB* marker : m_parent->GetBoard()->Markers() )
+    {
+        if( marker->IsExcluded() )
+            exclusions++;
+        else
+            knownViolations++;
+    }
+
+    if( knownViolations || exclusions )
+    {
+        m_DRCExclusionsWarning->SetLabel( wxString::Format( m_DRCWarningTemplate,
+                                                            knownViolations,
+                                                            exclusions ) );
+        m_DRCExclusionsWarning->Show();
+    }
+    else
+        m_DRCExclusionsWarning->Hide();
 }
 
 
@@ -759,28 +769,14 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         m_parent->GetToolManager()->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( this );
 
     m_plotOpts.SetAutoScale( false );
-    m_plotOpts.SetScale( 1 );
 
     switch( m_plotOpts.GetScaleSelection() )
     {
-    default:
-        break;
-
-    case 0:     // Autoscale option
-        m_plotOpts.SetAutoScale( true );
-        break;
-
-    case 2:     // 3:2 option
-        m_plotOpts.SetScale( 1.5 );
-        break;
-
-    case 3:     // 2:1 option
-        m_plotOpts.SetScale( 2 );
-        break;
-
-    case 4:     // 3:1 option
-        m_plotOpts.SetScale( 3 );
-        break;
+    default: m_plotOpts.SetScale( 1 );        break;
+    case 0:  m_plotOpts.SetAutoScale( true ); break;
+    case 2:  m_plotOpts.SetScale( 1.5 );      break;
+    case 3:  m_plotOpts.SetScale( 2 );        break;
+    case 4:  m_plotOpts.SetScale( 3 );        break;
     }
 
     /* If the scale factor edit controls are disabled or the scale value
@@ -892,6 +888,9 @@ void DIALOG_PLOT::onRunDRC( wxCommandEvent& event )
 
         // Open a new drc dialod, with the right parent frame, and in Modal Mode
         drcTool->ShowDRCDialog( this );
+
+        // Update DRC warnings on return to this dialog
+        reInitDialog();
     }
 }
 

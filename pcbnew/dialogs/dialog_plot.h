@@ -60,6 +60,8 @@ private:
     UNIT_BINDER         m_defaultPenSize;
     UNIT_BINDER         m_trackWidthCorrection;
 
+    wxString            m_DRCWarningTemplate;
+
     PCB_PLOT_PARAMS     m_plotOpts;
 
     // Event called functions

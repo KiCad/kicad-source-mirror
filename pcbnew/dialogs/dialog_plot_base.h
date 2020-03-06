@@ -115,6 +115,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxBoxSizer* m_sizerButtons;
 		wxButton* m_buttonDRC;
+		wxStaticText* m_DRCExclusionsWarning;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Apply;
