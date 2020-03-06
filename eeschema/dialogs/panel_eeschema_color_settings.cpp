@@ -213,7 +213,7 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme()
 
 void PANEL_EESCHEMA_COLOR_SETTINGS::createButtons()
 {
-    const int flags  = wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT;
+    const int flags  = wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT | wxRIGHT;
     wxSize    border = ConvertDialogToPixels( BUTTON_BORDER );
 
     std::vector<SCH_LAYER_ID> layers;
