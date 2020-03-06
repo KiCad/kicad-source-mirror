@@ -27,6 +27,7 @@
 #include <dialogs/panel_eeschema_display_options.h>
 #include <dialogs/panel_eeschema_settings.h>
 #include <dialogs/panel_eeschema_template_fieldnames.h>
+#include <dialogs/panel_libedit_color_settings.h>
 #include <dialogs/panel_libedit_settings.h>
 #include <eeschema_config.h>
 #include <eeschema_settings.h>
@@ -416,6 +417,7 @@ void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
     book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
     book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_LIBEDIT_SETTINGS( this, book ), _( "Defaults" ) );
+    book->AddSubPage( new PANEL_LIBEDIT_COLOR_SETTINGS( this, book ), _( "Color Options" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }

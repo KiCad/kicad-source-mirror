@@ -141,6 +141,9 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
+    auto settings = GetCanvas()->GetView()->GetPainter()->GetSettings();
+    settings->LoadColors( GetColorSettings() );
+
     setupTools();
 
     m_libMgr = new LIB_MANAGER( *this );
@@ -280,6 +283,17 @@ void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
     cfg->m_Repeat.y_step          = Iu2Mils( GetRepeatStep().y );
     cfg->m_ShowPinElectricalType  = GetShowElectricalType();
     cfg->m_LibWidth               = m_treePane->GetSize().x;
+}
+
+
+COLOR_SETTINGS* LIB_EDIT_FRAME::GetColorSettings()
+{
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+
+    if( cfg->m_UseEeschemaColorSettings )
+        return m_colorSettings;
+    else
+        return Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
 }
 
 

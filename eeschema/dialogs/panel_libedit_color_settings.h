@@ -21,55 +21,25 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#ifndef _LIBEDIT_SETTINGS_H
-#define _LIBEDIT_SETTINGS_H
+#ifndef PANEL_LIBEDIT_COLOR_SETTINGS_H
+#define PANEL_LIBEDIT_COLOR_SETTINGS_H
 
-#include <settings/app_settings.h>
+#include "panel_libedit_color_settings_base.h"
+
+class LIB_EDIT_FRAME;
 
 
-class LIBEDIT_SETTINGS : public APP_SETTINGS_BASE
+class PANEL_LIBEDIT_COLOR_SETTINGS : public PANEL_LIBEDIT_COLOR_SETTINGS_BASE
 {
+    LIB_EDIT_FRAME* m_frame;
+
 public:
+    PANEL_LIBEDIT_COLOR_SETTINGS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow );
 
-    struct DEFAULTS
-    {
-        int line_width;
-        int pin_length;
-        int pin_name_size;
-        int pin_num_size;
-    };
+private:
+    bool TransferDataToWindow() override;
 
-    struct REPEAT
-    {
-        int label_delta;
-        int pin_step;
-        int x_step;
-        int y_step;
-    };
-
-    LIBEDIT_SETTINGS();
-
-    virtual ~LIBEDIT_SETTINGS() {}
-
-    virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
-
-    DEFAULTS m_Defaults;
-
-    REPEAT m_Repeat;
-
-    bool m_ShowPinElectricalType;
-
-    int m_LibWidth;
-
-    wxString m_EditComponentVisibleColumns;
-
-    wxString m_PinTableVisibleColumns;
-
-    bool m_UseEeschemaColorSettings;
-
-protected:
-
-    virtual std::string getLegacyFrameName() const override { return "LibeditFrame"; }
+    bool TransferDataFromWindow() override;
 };
 
 #endif

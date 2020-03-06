@@ -62,6 +62,9 @@ LIBEDIT_SETTINGS::LIBEDIT_SETTINGS() : APP_SETTINGS_BASE( "libedit", libeditSche
 
     m_params.emplace_back( new PARAM<wxString>( "edit_component_visible_columns",
             &m_EditComponentVisibleColumns, "0 1 2 3 4 5 6 7" ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "use_eeschema_color_settings", &m_UseEeschemaColorSettings, true ) );
 }
 
 

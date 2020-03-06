@@ -265,6 +265,8 @@ public:
         return m_settings;
     }
 
+    COLOR_SETTINGS* GetColorSettings() override;
+
     /**
      * Trigger the wxCloseEvent, which is handled by the function given to EVT_CLOSE() macro:
      * <p>
