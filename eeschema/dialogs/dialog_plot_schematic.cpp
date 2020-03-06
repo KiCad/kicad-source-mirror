@@ -34,6 +34,7 @@
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <sch_sheet.h>
+#include <settings/settings_manager.h>
 #include <ws_painter.h>
 
 
@@ -85,6 +86,19 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
 {
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
+    for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
+    {
+        int idx = m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
+
+        if( settings->GetFilename() == cfg->m_PlotPanel.color_theme )
+            m_colorTheme->SetSelection( idx );
+    }
+
+    m_colorTheme->Enable( cfg->m_PlotPanel.color );
+
+    m_plotBackgroundColor->Enable( cfg->m_PlotPanel.color );
+    m_plotBackgroundColor->SetValue( cfg->m_PlotPanel.background_color );
+
     // Set color or B&W plot option
     setModeColor( cfg->m_PlotPanel.color );
 
@@ -114,9 +128,11 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         break;
     case PLOT_FORMAT::DXF:
         m_plotFormatOpt->SetSelection( 3 );
+        m_plotBackgroundColor->Disable();
         break;
     case PLOT_FORMAT::HPGL:
         m_plotFormatOpt->SetSelection( 4 );
+        m_plotBackgroundColor->Disable();
         break;
     }
 
@@ -247,6 +263,12 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
         m_plotOriginTitle->Enable( fmt == PLOT_FORMAT::HPGL );
         m_plotOriginOpt->Enable( fmt == PLOT_FORMAT::HPGL );
         m_penWidth.Enable( fmt == PLOT_FORMAT::HPGL );
+
+        m_plotBackgroundColor->Enable(
+                fmt == PLOT_FORMAT::POST || fmt == PLOT_FORMAT::PDF || fmt == PLOT_FORMAT::SVG );
+
+        m_colorTheme->Enable( fmt != PLOT_FORMAT::HPGL );
+        m_ModeColorOption->Enable( fmt != PLOT_FORMAT::HPGL );
     }
 }
 
@@ -257,7 +279,10 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
 
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
+    cfg->m_PlotPanel.background_color = m_plotBackgroundColor->GetValue();
     cfg->m_PlotPanel.color = getModeColor();
+    cfg->m_PlotPanel.color_theme = static_cast<COLOR_SETTINGS*>(
+            m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) )->GetFilename();
     cfg->m_PlotPanel.frame_reference = getPlotFrameRef();
     cfg->m_PlotPanel.format = static_cast<int>( GetPlotFileFormat() );
     cfg->m_PlotPanel.hpgl_origin = GetPlotOriginCenter();

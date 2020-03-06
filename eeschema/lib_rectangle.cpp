@@ -34,6 +34,7 @@
 
 #include <general.h>
 #include <lib_rectangle.h>
+#include <settings/color_settings.h>
 #include <transform.h>
 
 
@@ -140,7 +141,7 @@ void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->SetColor( GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->Rect( pos, end, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
@@ -150,7 +151,7 @@ void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     if( !already_filled || pen_size > 0 )
     {
         pen_size = std::max( 0, pen_size );
-        aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
+        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE ) );
         aPlotter->Rect( pos, end, already_filled ? NO_FILL : m_Fill, pen_size );
     }
 }

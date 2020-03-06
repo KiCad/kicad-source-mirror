@@ -177,7 +177,13 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM_MAP<bool>( "field_editor.fields_group_by",
             &m_FieldEditorPanel.fields_group_by, {} ) );
 
+    m_params.emplace_back(
+            new PARAM<bool>( "plot.background_color", &m_PlotPanel.background_color, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "plot.color", &m_PlotPanel.color, true ) );
+
+    m_params.emplace_back(
+            new PARAM<wxString>( "plot.color_theme", &m_PlotPanel.color_theme, wxT( "user" ) ) );
 
     m_params.emplace_back( new PARAM<int>( "plot.format", &m_PlotPanel.format, 0 ) );
 

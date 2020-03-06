@@ -37,6 +37,7 @@
 #include <general.h>
 #include <lib_arc.h>
 #include <transform.h>
+#include <settings/color_settings.h>
 #include <status_popup.h>
 
 // Helper function
@@ -272,7 +273,7 @@ void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->SetColor( GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->Arc( pos, -t2, -t1, m_Radius, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
@@ -282,7 +283,7 @@ void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     if( !already_filled || pen_size > 0 )
     {
         pen_size = std::max( 0, pen_size );
-        aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
+        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE ) );
         aPlotter->Arc( pos, -t2, -t1, m_Radius, already_filled ? NO_FILL : m_Fill, pen_size );
     }
 }

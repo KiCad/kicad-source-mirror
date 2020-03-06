@@ -593,9 +593,3 @@ void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
 
     PlotPoly( cornerList, aFill, aWidth, aData );
 }
-
-
-void PLOTTER::SetPageSettings( const PAGE_INFO& aPageSettings )
-{
-    pageInfo = aPageSettings;
-}

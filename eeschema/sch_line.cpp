@@ -37,6 +37,7 @@
 #include <general.h>
 #include <sch_line.h>
 #include <sch_edit_frame.h>
+#include <settings/color_settings.h>
 #include <netlist_object.h>
 #include <sch_view.h>
 
@@ -758,7 +759,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter )
     if( m_color != COLOR4D::UNSPECIFIED )
         aPlotter->SetColor( m_color );
     else
-        aPlotter->SetColor( GetLayerColor( GetLayer() ) );
+        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
 
     aPlotter->SetCurrentLineWidth( GetPenSize() );
 

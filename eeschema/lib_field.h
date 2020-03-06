@@ -172,6 +172,8 @@ public:
 
     COLOR4D GetDefaultColor() override;
 
+    SCH_LAYER_ID GetDefaultLayer();
+
     void BeginEdit( const wxPoint aStartPoint ) override;
 
     void Offset( const wxPoint& aOffset ) override;

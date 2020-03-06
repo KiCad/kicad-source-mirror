@@ -136,13 +136,16 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
                                             double              aScale,
                                             bool                aPlotFrameRef )
 {
+    auto colors = static_cast<COLOR_SETTINGS*>(
+            m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) );
+
     PS_PLOTTER* plotter = new PS_PLOTTER();
     plotter->SetPageSettings( aPageInfo );
     plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
     plotter->SetColorMode( getModeColor() );
+    plotter->SetColorSettings( colors );
     // Currently, plot units are in decimil
     plotter->SetViewport( aPlot0ffset, IU_PER_MILS/10, aScale, false );
-    plotter->SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-PS" ) );
@@ -157,15 +160,26 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
 
     plotter->StartPlot();
 
+    if( m_plotBackgroundColor )
+    {
+        plotter->SetColor( plotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND ) );
+        wxPoint end( plotter->PageSettings().GetWidthIU(),
+                     plotter->PageSettings().GetHeightIU() );
+        plotter->Rect( wxPoint( 0, 0 ), end, FILLED_SHAPE, 1.0 );
+    }
+
     if( aPlotFrameRef )
     {
-        plotter->SetColor( BLACK );
+        COLOR4D color = plotter->GetColorMode() ?
+                        plotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_WORKSHEET ) :
+                        COLOR4D::BLACK;
+
         PlotWorkSheet( plotter, m_parent->GetTitleBlock(),
                        m_parent->GetPageSettings(),
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        m_parent->GetScreenDesc(),
                        aScreen->GetFileName(),
-                       GetLayerColor( ( SCH_LAYER_ID )LAYER_WORKSHEET ) );
+                       color );
     }
 
     aScreen->Plot( plotter );

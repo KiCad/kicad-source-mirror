@@ -38,6 +38,7 @@
 #include <general.h>
 #include <sch_no_connect.h>
 #include <netlist_object.h>
+#include <settings/color_settings.h>
 
 
 SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :
@@ -193,7 +194,7 @@ void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter )
     pY = m_pos.y;
 
     aPlotter->SetCurrentLineWidth( GetPenSize() );
-    aPlotter->SetColor( GetLayerColor( GetLayer() ) );
+    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_NOCONNECT ) );
     aPlotter->MoveTo( wxPoint( pX - delta, pY - delta ) );
     aPlotter->FinishTo( wxPoint( pX + delta, pY + delta ) );
     aPlotter->MoveTo( wxPoint( pX + delta, pY - delta ) );

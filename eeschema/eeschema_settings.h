@@ -130,12 +130,14 @@ public:
 
     struct PANEL_PLOT
     {
-        bool   color;
-        int    format;
-        bool   frame_reference;
-        int    hpgl_paper_size;
-        double hpgl_pen_size;
-        bool   hpgl_origin;
+        bool     background_color;
+        bool     color;
+        wxString color_theme;
+        int      format;
+        bool     frame_reference;
+        int      hpgl_paper_size;
+        double   hpgl_pen_size;
+        bool     hpgl_origin;
     };
 
     struct PANEL_SYM_CHOOSER

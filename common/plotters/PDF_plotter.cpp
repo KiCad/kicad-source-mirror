@@ -62,10 +62,6 @@ bool PDF_PLOTTER::OpenFile( const wxString& aFullFilename )
     return true;
 }
 
-void PDF_PLOTTER::SetPageSettings( const PAGE_INFO& aPageSettings )
-{
-    pageInfo = aPageSettings;
-}
 
 void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror )

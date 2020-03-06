@@ -112,10 +112,13 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&    aFileName,
 {
     DXF_PLOTTER* plotter = new DXF_PLOTTER();
 
+    auto colors = static_cast<COLOR_SETTINGS*>(
+            m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) );
+
     const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
     plotter->SetPageSettings( pageInfo );
     plotter->SetColorMode( getModeColor() );
-    plotter->SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
+    plotter->SetColorSettings( colors );
     // Currently, plot units are in decimil
     plotter->SetViewport( aPlotOffset, IU_PER_MILS/10, aScale, false );
 
@@ -134,12 +137,16 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&    aFileName,
 
     if( aPlotFrameRef )
     {
+        COLOR4D color = plotter->GetColorMode() ?
+                        plotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_WORKSHEET ) :
+                        COLOR4D::BLACK;
+
         PlotWorkSheet( plotter, m_parent->GetTitleBlock(),
                        m_parent->GetPageSettings(),
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        m_parent->GetScreenDesc(),
                        aScreen->GetFileName(),
-                       GetLayerColor( ( SCH_LAYER_ID )LAYER_WORKSHEET ) );
+                       color );
     }
 
     aScreen->Plot( plotter );

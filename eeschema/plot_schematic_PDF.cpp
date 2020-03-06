@@ -59,11 +59,14 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
     else
         sheetList.push_back( m_parent->GetCurrentSheet() );
 
+    auto colors = static_cast<COLOR_SETTINGS*>(
+            m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) );
+
     // Allocate the plotter and set the job level parameter
     PDF_PLOTTER* plotter = new PDF_PLOTTER();
     plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
     plotter->SetColorMode( getModeColor() );
-    plotter->SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
+    plotter->SetColorSettings( colors );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );
     plotter->SetTitle( m_parent->GetTitleBlock().GetTitle() );
 
@@ -148,15 +151,26 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter,
                                              SCH_SCREEN* aScreen,
                                              bool aPlotFrameRef )
 {
+    if( m_plotBackgroundColor->GetValue() )
+    {
+        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND ) );
+        wxPoint end( aPlotter->PageSettings().GetWidthIU(),
+                     aPlotter->PageSettings().GetHeightIU() );
+        aPlotter->Rect( wxPoint( 0, 0 ), end, FILLED_SHAPE, 1.0 );
+    }
+
     if( aPlotFrameRef )
     {
-        aPlotter->SetColor( BLACK );
+        COLOR4D color = aPlotter->GetColorMode() ?
+                                aPlotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_WORKSHEET ) :
+                                COLOR4D::BLACK;
+
         PlotWorkSheet( aPlotter, m_parent->GetTitleBlock(),
                        m_parent->GetPageSettings(),
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        m_parent->GetScreenDesc(),
                        aScreen->GetFileName(),
-                       GetLayerColor( ( SCH_LAYER_ID )LAYER_WORKSHEET ) );
+                       color );
     }
 
     aScreen->Plot( aPlotter );

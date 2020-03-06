@@ -28,6 +28,8 @@
 
 #include <fctsys.h>
 #include <sch_draw_panel.h>
+#include <plotter.h>
+#include <settings/color_settings.h>
 #include <trigo.h>
 #include <macros.h>
 #include <bitmaps.h>
@@ -183,7 +185,8 @@ bool SCH_BITMAP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
 
 void SCH_BITMAP::Plot( PLOTTER* aPlotter )
 {
-    m_image->PlotImage( aPlotter, m_pos, GetLayerColor( GetLayer() ), GetPenSize() );
+    m_image->PlotImage(
+            aPlotter, m_pos, aPlotter->ColorSettings()->GetColor( GetLayer() ), GetPenSize() );
 }
 
 

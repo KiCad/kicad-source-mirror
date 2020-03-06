@@ -202,16 +202,13 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
     plotter->SetPenDiameter( m_HPGLPenSize );
     plotter->StartPlot();
 
-    plotter->SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
-    plotter->SetColor( BLACK );
-
     if( getPlotFrameRef() )
         PlotWorkSheet( plotter, m_parent->GetTitleBlock(),
                        m_parent->GetPageSettings(),
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        m_parent->GetScreenDesc(),
                        aScreen->GetFileName(),
-                       GetLayerColor( ( SCH_LAYER_ID )LAYER_WORKSHEET ) );
+                       COLOR4D::BLACK );
 
     aScreen->Plot( plotter );
 

@@ -34,6 +34,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
+#include <settings/color_settings.h>
 #include <netlist_object.h>
 #include <trace_helpers.h>
 
@@ -888,7 +889,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     wxPoint     pos_sheetname, pos_filename;
     wxPoint     pos;
 
-    aPlotter->SetColor( GetLayerColor( GetLayer() ) );
+    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
 
     int thickness = GetPenSize();
     aPlotter->SetCurrentLineWidth( thickness );
@@ -932,7 +933,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
         thickness = GetDefaultLineThickness();
         thickness = Clamp_Text_PenSize( thickness, size, false );
 
-        aPlotter->SetColor( GetLayerColor( LAYER_SHEETNAME ) );
+        txtcolor = aPlotter->ColorSettings()->GetColor( LAYER_SHEETNAME );
 
         aPlotter->Text( pos_sheetname, txtcolor, wxT( "Sheet: " ) + Text, name_orientation, size,
                         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
@@ -947,14 +948,14 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
         thickness = GetDefaultLineThickness();
         thickness = Clamp_Text_PenSize( thickness, size, false );
 
-        aPlotter->SetColor( GetLayerColor( LAYER_SHEETFILENAME ) );
+        txtcolor = aPlotter->ColorSettings()->GetColor( LAYER_SHEETFILENAME );
 
         aPlotter->Text( pos_filename, txtcolor, wxT( "File: " ) + Text, name_orientation, size,
                         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
                         thickness, italic, false );
     }
 
-    aPlotter->SetColor( GetLayerColor( GetLayer() ) );
+    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
 
     /* Draw texts : SheetLabel */
     for( SCH_SHEET_PIN* sheetPin : m_pins )

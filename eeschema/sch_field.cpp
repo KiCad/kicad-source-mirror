@@ -44,6 +44,7 @@
 #include <class_library.h>
 #include <sch_component.h>
 #include <sch_field.h>
+#include <settings/color_settings.h>
 #include <kicad_string.h>
 #include <trace_helpers.h>
 
@@ -432,7 +433,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     wxCHECK_RET( parent != NULL && parent->Type() == SCH_COMPONENT_T,
                  wxT( "Cannot plot field with invalid parent." ) );
 
-    COLOR4D color = GetLayerColor( GetLayer() );
+    COLOR4D color = aPlotter->ColorSettings()->GetColor( GetLayer() );
 
     if( !IsVisible() )
         return;

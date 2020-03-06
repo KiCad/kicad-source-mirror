@@ -39,6 +39,7 @@
 #include <sch_junction.h>
 #include <netlist_object.h>
 #include <sch_connection.h>
+#include <settings/color_settings.h>
 
 
 int SCH_JUNCTION::m_symbolSize = Mils2iu( 40 );    // Default diameter of the junction symbol
@@ -194,7 +195,7 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->SetColor( GetLayerColor( GetLayer() ) );
+    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
     aPlotter->Circle( m_pos, GetEffectiveSymbolSize(), FILLED_SHAPE );
 }
 

@@ -39,6 +39,7 @@
 #include <transform.h>
 #include <lib_field.h>
 #include <template_fieldnames.h>
+#include <settings/color_settings.h>
 
 
 LIB_FIELD::LIB_FIELD(LIB_PART * aParent, int idfield ) :
@@ -297,7 +298,14 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
     wxPoint textpos = aTransform.TransformCoordinate( BoundaryBox.Centre() ) + aOffset;
 
-    aPlotter->Text( textpos, GetDefaultColor(), GetShownText(), orient, GetTextSize(),
+    COLOR4D color;
+
+    if( aPlotter->GetColorMode() )
+        color = aPlotter->ColorSettings()->GetColor( GetDefaultLayer() );
+    else
+        color = COLOR4D::BLACK;
+
+    aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(),
                     hjustify, vjustify, GetPenSize(), IsItalic(), IsBold() );
 }
 
@@ -357,14 +365,20 @@ void LIB_FIELD::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-COLOR4D LIB_FIELD::GetDefaultColor()
+SCH_LAYER_ID LIB_FIELD::GetDefaultLayer()
 {
     switch( m_id )
     {
-    case REFERENCE: return GetLayerColor( LAYER_REFERENCEPART );
-    case VALUE:     return GetLayerColor( LAYER_VALUEPART );
-    default:        return GetLayerColor( LAYER_FIELDS );
+    case REFERENCE: return LAYER_REFERENCEPART;
+    case VALUE:     return LAYER_VALUEPART;
+    default:        return LAYER_FIELDS;
     }
+}
+
+
+COLOR4D LIB_FIELD::GetDefaultColor()
+{
+    return GetLayerColor( GetDefaultLayer() );
 }
 
 

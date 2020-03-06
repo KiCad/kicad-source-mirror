@@ -144,7 +144,15 @@ public:
 
     COLOR_SETTINGS* ColorSettings() { return m_colors; }
 
-    virtual void SetPageSettings( const PAGE_INFO& aPageSettings );
+    virtual void SetPageSettings( const PAGE_INFO& aPageSettings )
+    {
+        pageInfo = aPageSettings;
+    }
+
+    PAGE_INFO& PageSettings()
+    {
+        return pageInfo;
+    }
 
     /**
      * Set the line width for the next drawing.
@@ -889,7 +897,6 @@ public:
 
     /** PDF can have multiple pages, so SetPageSettings can be called
      * with the outputFile open (but not inside a page stream!) */
-    virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror ) override;
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,

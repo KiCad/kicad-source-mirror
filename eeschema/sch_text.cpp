@@ -43,6 +43,7 @@
 
 #include <sch_text.h>
 #include <netlist_object.h>
+#include <settings/color_settings.h>
 #include <trace_helpers.h>
 
 #include <wx/debug.h>
@@ -513,7 +514,7 @@ bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
 void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
     static std::vector<wxPoint> Poly;
-    COLOR4D  color = GetLayerColor( GetLayer() );
+    COLOR4D  color = aPlotter->ColorSettings()->GetColor( GetLayer() );
     int      tmp = GetThickness();
     int      thickness = GetPenSize();
 

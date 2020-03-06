@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_PLOT_SCHEMATIC_BASE_H__
-#define __DIALOG_PLOT_SCHEMATIC_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -21,10 +20,10 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
@@ -43,7 +42,7 @@ class WX_HTML_REPORT_PANEL;
 class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticTextOutputDirectory;
 		wxTextCtrl* m_outputDirectoryName;
@@ -54,6 +53,9 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxChoice* m_paperSizeOption;
 		wxCheckBox* m_PlotFrameRefOpt;
 		wxChoice* m_ModeColorOption;
+		wxCheckBox* m_plotBackgroundColor;
+		wxStaticText* m_staticText9;
+		wxChoice* m_colorTheme;
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_lineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;
@@ -68,7 +70,7 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
@@ -77,13 +79,12 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		virtual void OnPageSizeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlotCurrent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlotAll( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot Schematic Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot Schematic Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PLOT_SCHEMATIC_BASE();
-	
+
 };
 
-#endif //__DIALOG_PLOT_SCHEMATIC_BASE_H__

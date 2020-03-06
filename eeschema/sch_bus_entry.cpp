@@ -36,6 +36,7 @@
 #include <sch_bus_entry.h>
 #include <sch_line.h>
 #include <sch_text.h>
+#include <settings/color_settings.h>
 
 
 SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, char shape ) :
@@ -351,7 +352,7 @@ bool SCH_BUS_ENTRY_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aA
 void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter )
 {
     aPlotter->SetCurrentLineWidth( GetPenSize() );
-    aPlotter->SetColor( GetLayerColor( GetLayer() ) );
+    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
     aPlotter->MoveTo( m_pos );
     aPlotter->FinishTo( m_End() );
 }

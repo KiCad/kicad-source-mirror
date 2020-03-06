@@ -49,6 +49,7 @@
 #include <transform.h>
 #include <sch_component.h>
 #include <sch_sheet_path.h>
+#include <settings/color_settings.h>
 #include <trace_helpers.h>
 
 
@@ -868,7 +869,7 @@ void LIB_PIN::PrintPinElectricalTypeName( wxDC* aDC, wxPoint& aPosition, int aOr
 void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation )
 {
     int         MapX1, MapY1, x1, y1;
-    COLOR4D     color = GetLayerColor( LAYER_PIN );
+    COLOR4D     color = aPlotter->ColorSettings()->GetColor( LAYER_PIN );
 
     aPlotter->SetColor( color );
     aPlotter->SetCurrentLineWidth( GetPenSize() );

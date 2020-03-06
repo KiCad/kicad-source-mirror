@@ -39,6 +39,7 @@
 #include <lib_item.h>
 #include <general.h>
 #include <transform.h>
+#include <settings/color_settings.h>
 #include <lib_text.h>
 
 
@@ -287,7 +288,7 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     COLOR4D color;
 
     if( plotter->GetColorMode() )       // Used normal color or selected color
-        color = GetDefaultColor();
+        color = plotter->ColorSettings()->GetColor( LAYER_DEVICE );
     else
         color = COLOR4D::BLACK;
 

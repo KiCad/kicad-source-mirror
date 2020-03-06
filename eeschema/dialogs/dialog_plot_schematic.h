@@ -154,5 +154,7 @@ public:
     // outside a dialog. This is the reason we need aFrame as parameter
     static bool plotOneSheetSVG( EDA_DRAW_FRAME* aFrame, const wxString& aFileName,
                                  SCH_SCREEN* aScreen,
-                                 bool aPlotBlackAndWhite, bool aPlotFrameRef );
+                                 bool aPlotBlackAndWhite, bool aPlotFrameRef,
+                                 bool aPlotBackgroundColor = false,
+                                 COLOR_SETTINGS* aColors = nullptr );
 };
