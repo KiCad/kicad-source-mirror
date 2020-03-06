@@ -41,7 +41,7 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 
 	m_btnCustomPath = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_btnCustomPath->SetToolTip( wxT("Choose a different path") );
-	m_btnCustomPath->SetMinSize( wxSize( 30,30 ) );
+	m_btnCustomPath->SetMinSize( wxSize( 40,30 ) );
 
 	bSizer5->Add( m_btnCustomPath, 0, wxALL, 5 );
 
