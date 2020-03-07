@@ -605,7 +605,7 @@ void PCB_EDIT_FRAME::DoShowBoardSetupDialog( const wxString& aInitialPage,
     if( !aInitialPage.IsEmpty() )
         dlg.SetInitialPage( aInitialPage, aInitialParentPage );
 
-    if( dlg.ShowModal() == wxID_OK )
+    if( dlg.ShowQuasiModal() == wxID_OK )
     {
         SaveProjectSettings();
 
