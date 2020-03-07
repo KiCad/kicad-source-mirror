@@ -110,7 +110,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataToWindow()
         if( field_copy.GetId() == SHEETFILENAME )
         {
             wxString filename = field_copy.GetText();
-            filename.Replace( wxT("/"), wxT("\\") ) );
+            filename.Replace( wxT("/"), wxT("\\") );
             field_copy.SetText( filename );
         }
 #endif
@@ -186,7 +186,7 @@ static bool positioningChanged( const SCH_FIELD& a, const SCH_FIELD& b )
 
 static bool positioningChanged( FIELDS_GRID_TABLE<SCH_FIELD>* a, std::vector<SCH_FIELD>& b )
 {
-    for( int i = 0; i < a->size(); ++i )
+    for( size_t i = 0; i < a->size(); ++i )
     {
         if( positioningChanged( a->at( i ), b.at( i ) ) )
             return true;
