@@ -59,6 +59,7 @@ BOARD_ITEM* DRC_TREE_MODEL::ToBoardItem( BOARD* aBoard, wxDataViewItem aItem )
 DRC_TREE_MODEL::DRC_TREE_MODEL( PCB_BASE_FRAME* aParentFrame, wxDataViewCtrl* aView ) :
     m_parentFrame( aParentFrame ),
     m_view( aView ),
+    m_severities( 0 ),
     m_drcItemsProvider( nullptr )
 {
     m_view->GetMainWindow()->Connect( wxEVT_SIZE,
