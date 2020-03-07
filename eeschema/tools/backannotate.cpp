@@ -233,6 +233,8 @@ int BACK_ANNOTATE::checkForUnusedSymbols()
 {
     int errors = 0;
 
+    m_refs.SortByTimeStamp();
+
     std::sort(
             m_changelist.begin(), m_changelist.end(), []( CHANGELIST_ITEM a, CHANGELIST_ITEM b ) {
                 return SCH_REFERENCE_LIST::sortByTimeStamp( a.first, b.first );
