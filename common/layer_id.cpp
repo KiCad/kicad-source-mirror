@@ -76,6 +76,9 @@ wxString LayerName( SCH_LAYER_ID aLayer )
     case LAYER_SHEETNAME:
         return _( "Sheet name" );
 
+    case LAYER_SHEETFIELDS:
+        return _( "Sheet fields" );
+
     case LAYER_SHEETFILENAME:
         return _( "Sheet file name" );
 
