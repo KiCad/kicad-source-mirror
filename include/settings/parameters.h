@@ -141,9 +141,15 @@ public:
         ValueType val = m_default;
 
         if( std::is_same<ValueType, nlohmann::json>::value )
-            val = aSettings->GetJson( m_path );
+        {
+            if( OPT<nlohmann::json> optval = aSettings->GetJson( m_path ) )
+                val = *optval;
+        }
         else
-            val = aSettings->Get<ValueType>( m_path );
+        {
+            if( OPT<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
+                val = *optval;
+        }
 
         m_setter( val );
     }
@@ -206,12 +212,8 @@ public:
 
         double dval = m_default * m_scale;
 
-        try
-        {
-            dval = aSettings->Get<double>( m_path );
-        }
-        catch( ... )
-        {}
+        if( OPT<double> optval = aSettings->Get<double>( m_path ) )
+            dval = *optval;
 
         ValueType val = KiROUND<ValueType>( dval / m_scale );
 
