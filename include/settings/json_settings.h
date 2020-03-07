@@ -25,6 +25,8 @@
 #include <utility>
 #include <wx/string.h>
 
+#include <core/optional.h>
+
 class wxConfigBase;
 class NESTED_SETTINGS;
 class PARAM_BASE;
@@ -90,19 +92,22 @@ public:
      * @param aPath is a string containing one or more keys separated by '.'
      * @return a JSON object from within this one
      */
-    nlohmann::json GetJson( std::string aPath ) const;
+    OPT<nlohmann::json> GetJson( std::string aPath ) const;
 
     /**
      * Fetches a value from within the JSON document.
-     * Will throw an exception if the value is not found or a mismatching type.
+     * Will return an empty optional if the value is not found or a mismatching type.
      * @tparam ValueType is the type to cast to
      * @param aPath is the path within the document to retrieve
      * @return a value from within this document
      */
     template<typename ValueType>
-    ValueType Get( std::string aPath ) const
+    OPT<ValueType> Get( std::string aPath ) const
     {
-        return GetJson( std::move( aPath ) ).get<ValueType>();
+        if( OPT<nlohmann::json> ret = GetJson( std::move( aPath ) ) )
+            return ret->get<ValueType>();
+
+        return NULLOPT;
     }
 
     /**
@@ -220,7 +225,7 @@ protected:
 
 // Specializations to allow conversion between wxString and std::string via JSON_SETTINGS API
 
-template<> wxString JSON_SETTINGS::Get( std::string aPath ) const;
+template<> OPT<wxString> JSON_SETTINGS::Get( std::string aPath ) const;
 
 template<> void JSON_SETTINGS::Set<wxString>( std::string aPath, wxString aVal );
 

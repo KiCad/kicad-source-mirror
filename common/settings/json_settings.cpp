@@ -237,20 +237,22 @@ void JSON_SETTINGS::SaveToFile( const std::string& aDirectory )
 }
 
 
-nlohmann::json JSON_SETTINGS::GetJson( std::string aPath ) const
+OPT<nlohmann::json> JSON_SETTINGS::GetJson( std::string aPath ) const
 {
-    nlohmann::json ret( {} );
+    nlohmann::json::json_pointer ptr = PointerFromString( std::move( aPath ) );
 
-    // Will throw an exception if the path is not found
-    try
+    if( this->contains( ptr ) )
     {
-        ret = this->at( PointerFromString( std::move( aPath ) ) );
-    }
-    catch( ... )
-    {
+        try
+        {
+            return OPT<nlohmann::json>{ this->at( ptr ) };
+        }
+        catch( ... )
+        {
+        }
     }
 
-    return ret;
+    return OPT<nlohmann::json>{};
 }
 
 
@@ -403,9 +405,12 @@ void JSON_SETTINGS::ReleaseNestedSettings( NESTED_SETTINGS* aSettings )
 
 // Specializations to allow conversion between wxString and std::string via JSON_SETTINGS API
 
-template<> wxString JSON_SETTINGS::Get( std::string aPath ) const
+template<> OPT<wxString> JSON_SETTINGS::Get( std::string aPath ) const
 {
-    return wxString( GetJson( std::move( aPath ) ).get<std::string>().c_str(), wxConvUTF8 );
+    if( OPT<nlohmann::json> opt_json = GetJson( std::move( aPath ) ) )
+        return wxString( opt_json->get<std::string>().c_str(), wxConvUTF8 );
+
+    return NULLOPT;
 }
 
 

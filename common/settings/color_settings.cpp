@@ -300,20 +300,16 @@ bool COLOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
 COLOR4D COLOR_SETTINGS::GetColor( int aLayer ) const
 {
-    try
+    if( m_color_context == COLOR_CONTEXT::FOOTPRINT && aLayer >= PCBNEW_LAYER_ID_START
+            && aLayer <= GAL_LAYER_ID_END )
     {
-        if( m_color_context == COLOR_CONTEXT::FOOTPRINT && aLayer >= PCBNEW_LAYER_ID_START
-                && aLayer <= GAL_LAYER_ID_END )
-        {
-            aLayer += FPEDIT_LAYER_ID_START;
-        }
+        aLayer += FPEDIT_LAYER_ID_START;
+    }
 
+    if( m_colors.count( aLayer ) )
         return m_colors.at( aLayer );
-    }
-    catch( std::out_of_range& )
-    {
-        return COLOR4D::UNSPECIFIED;
-    }
+
+    return COLOR4D::UNSPECIFIED;
 }
 
 

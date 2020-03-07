@@ -129,12 +129,8 @@ public:
 
         COLOR4D val = m_default;
 
-        try
-        {
-            val = aSettings->Get<COLOR4D>( m_path );
-        }
-        catch( ... )
-        {}
+        if( OPT<COLOR4D> optval = aSettings->Get<COLOR4D>( m_path ) )
+            val = *optval;
 
         ( *m_map )[ m_key ] = val;
     }

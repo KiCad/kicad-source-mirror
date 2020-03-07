@@ -22,10 +22,11 @@
 #define _PARAMETERS_H
 
 #include <string>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <utility>
 #include <math/util.h>
-#include "json_settings.h"
+
+#include <core/optional.h>
+#include <settings/json_settings.h>
 
 
 class PARAM_BASE
@@ -81,9 +82,9 @@ public:
 
         ValueType val = m_default;
 
-        try
+        if( OPT<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
         {
-            val = aSettings->Get<ValueType>( m_path );
+            val = *optval;
 
             if( m_use_minmax )
             {
@@ -91,8 +92,6 @@ public:
                     val = m_default;
             }
         }
-        catch( ... )
-        {}
 
         *m_ptr = val;
     }
@@ -141,16 +140,10 @@ public:
 
         ValueType val = m_default;
 
-        try
-        {
-            if( std::is_same<ValueType, nlohmann::json>::value )
-                val = aSettings->GetJson( m_path );
-            else
-                val = aSettings->Get<ValueType>( m_path );
-        }
-        catch( ... )
-        {
-        }
+        if( std::is_same<ValueType, nlohmann::json>::value )
+            val = aSettings->GetJson( m_path );
+        else
+            val = aSettings->Get<ValueType>( m_path );
 
         m_setter( val );
     }
@@ -274,20 +267,15 @@ public:
 
         std::vector<Type> val = m_default;
 
-        try
+        if( OPT<nlohmann::json> js = aSettings->GetJson( m_path ) )
         {
-            nlohmann::json js = aSettings->GetJson( m_path );
-
-            if( js.is_array() )
+            if( js->is_array() )
             {
                 val.clear();
 
-                for( const auto& el : js.items() )
+                for( const auto& el : js->items() )
                     val.push_back( el.value().get<Type>() );
             }
-        }
-        catch( ... )
-        {
         }
 
         *m_ptr = val;
@@ -342,20 +330,15 @@ public:
 
         std::map<std::string, Value> val = m_default;
 
-        try
+        if( OPT<nlohmann::json> js = aSettings->GetJson( m_path ) )
         {
-            nlohmann::json js = aSettings->GetJson( m_path );
-
-            if( js.is_object() )
+            if( js->is_object() )
             {
                 val.clear();
 
-                for( const auto& el : js.items() )
+                for( const auto& el : js->items() )
                     val[ el.key() ] = el.value().get<Value>();
             }
-        }
-        catch( ... )
-        {
         }
 
         *m_ptr = val;
