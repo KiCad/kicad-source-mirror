@@ -69,7 +69,7 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
     for( int j = 0; j < aNewStrokeFontSize; j++ )
     {
-        GLYPH    glyph;
+        GLYPH*   glyph = new GLYPH;
         double   glyphStartX = 0.0;
         double   glyphEndX = 0.0;
         double   glyphWidth = 0.0;
@@ -88,7 +88,7 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
             i += 2;
         }
 
-        glyph.reserve( strokes + 1 );
+        glyph->reserve( strokes + 1 );
 
         i = 0;
 
@@ -134,8 +134,8 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
                 if( !pointList )
                 {
-                    glyph.emplace_back();
-                    pointList = &glyph.back();
+                    pointList = new std::vector<VECTOR2D>;
+                    glyph->push_back( pointList );
                 }
 
                 pointList->push_back( point );
@@ -167,14 +167,14 @@ double STROKE_FONT::GetInterline( double aGlyphHeight )
 }
 
 
-BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, double aGlyphWidth ) const
+BOX2D STROKE_FONT::computeBoundingBox( const GLYPH* aGLYPH, double aGlyphWidth ) const
 {
     VECTOR2D min( 0, 0 );
     VECTOR2D max( aGlyphWidth, 0 );
 
-    for( const std::vector<VECTOR2D>& pointList : aGLYPH )
+    for( const std::vector<VECTOR2D>* pointList : *aGLYPH )
     {
-        for( const VECTOR2D& point : pointList )
+        for( const VECTOR2D& point : *pointList )
         {
             min.y = std::min( min.y, point.y );
             max.y = std::max( max.y, point.y );
@@ -427,7 +427,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
             dd = substitute - ' ';
         }
 
-        const GLYPH& glyph = m_glyphs->at( dd );
+        const GLYPH* glyph = m_glyphs->at( dd );
         const BOX2D& bbox  = m_glyphBoundingBoxes->at( dd );
 
         if( in_overbar )
@@ -455,11 +455,11 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
             last_had_overbar = false;
         }
 
-        for( const std::vector<VECTOR2D>& ptList : glyph )
+        for( const std::vector<VECTOR2D>* ptList : *glyph )
         {
             std::deque<VECTOR2D> ptListScaled;
 
-            for( const VECTOR2D& pt : ptList )
+            for( const VECTOR2D& pt : *ptList )
             {
                 VECTOR2D scaledPt( pt.x * glyphSize.x + xOffset, pt.y * glyphSize.y + yOffset );
 

@@ -42,8 +42,8 @@ namespace KIGFX
 {
 class GAL;
 
-typedef std::vector<std::vector<VECTOR2D>> GLYPH;
-typedef std::vector<GLYPH>                 GLYPH_LIST;
+typedef std::vector<std::vector<VECTOR2D>*> GLYPH;
+typedef std::vector<GLYPH*>                 GLYPH_LIST;
 
 /**
  * @brief Class STROKE_FONT implements stroke font drawing.
@@ -148,7 +148,7 @@ private:
      * @param aGlyphWidth is the x-component of the bounding box size.
      * @return is the complete bounding box size.
      */
-    BOX2D computeBoundingBox( const GLYPH& aGlyph, double aGlyphWidth ) const;
+    BOX2D computeBoundingBox( const GLYPH* aGlyph, double aGlyphWidth ) const;
 
     /**
      * @brief Draws a single line of text. Multiline texts should be split before using the
