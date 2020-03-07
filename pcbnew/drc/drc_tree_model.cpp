@@ -86,8 +86,6 @@ void DRC_TREE_MODEL::rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeveritie
     if( m_view )
         m_view->UnselectAll();
 
-    Cleared();
-
     if( aProvider != m_drcItemsProvider )
     {
         delete m_drcItemsProvider;
@@ -127,6 +125,10 @@ void DRC_TREE_MODEL::rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeveritie
     m_view->ClearColumns();
     int width = m_view->GetMainWindow()->GetRect().GetWidth() - WX_DATAVIEW_WINDOW_PADDING;
     m_view->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, width );
+
+    // Must be called after a significant change to force the wxDataViewModel
+    // to reread all of them, repopulating itself entirely.
+    Cleared();
 
     ExpandAll();
 }
@@ -326,4 +328,7 @@ void DRC_TREE_MODEL::onSizeView( wxSizeEvent& aEvent )
 
     if( m_view->GetColumnCount() > 0 )
         m_view->GetColumn( 0 )->SetWidth( width );
+
+    // Pass size event to other widgets
+    aEvent.Skip();
 }
