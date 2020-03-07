@@ -186,7 +186,7 @@ static bool positioningChanged( const SCH_FIELD& a, const SCH_FIELD& b )
 
 static bool positioningChanged( FIELDS_GRID_TABLE<SCH_FIELD>* a, std::vector<SCH_FIELD>& b )
 {
-    for( size_t i = 0; i < a->size(); ++i )
+    for( size_t i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
     {
         if( positioningChanged( a->at( i ), b.at( i ) ) )
             return true;
