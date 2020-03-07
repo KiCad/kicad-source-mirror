@@ -567,36 +567,8 @@ std::string SETTINGS_MANAGER::calculateUserSettingsPath( bool aIncludeVer, bool 
 
 std::string SETTINGS_MANAGER::GetSettingsVersion()
 {
-    // A full build version looks like (x.y.z-nnn-g1234567) or x.y.z-xxx
-    // The string after the major.minor.patch can contain all sorts of other information
-    // We want to extract the x.y portion here
-    wxString version = GetBuildVersion();
-
-    if( version.StartsWith( '(' ) )
-        version = version.Mid( 1 );
-
-    // Trim everything starting from the second '.'
-    
-    size_t mid    = 0;
-    int    found  = 0;
-
-    while( found < 2 && mid < version.size() )
-    {
-        if( version[mid] == '.' )
-            found++;
-
-        if( found == 2 )
-        {
-            version = version.SubString( 0, mid - 1 );
-            break;
-        }
-
-        mid++;
-    }
-
-    wxASSERT( version.Find( '.' ) != wxNOT_FOUND );
-
-    return version.ToStdString();
+    // CMake computes the major.minor string for us.
+    return GetMajorMinorVersion().ToStdString();
 }
 
 
