@@ -495,7 +495,6 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     RebuildView();
-    SyncLibraries( false );
 }
 
 
