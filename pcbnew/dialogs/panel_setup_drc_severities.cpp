@@ -67,7 +67,7 @@ PANEL_SETUP_DRC_SEVERITIES::PANEL_SETUP_DRC_SEVERITIES( PAGED_DIALOG* aParent,
                                                                wxDefaultSize,
                                                                i == 0 ? wxRB_GROUP : 0 );
                 radioSizer->Add( m_buttonMap[errorCode][i], 1,
-                                 wxALIGN_CENTER_VERTICAL | wxRIGHT | wxEXPAND, 25 );
+                                 wxRIGHT | wxEXPAND, 25 );
             }
 
             radioPanel->SetSizer( radioSizer );
