@@ -24,16 +24,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcb_edit_frame.h>
 
-#include "help_common_strings.h"
-#include "pcbnew.h"
-#include "pcbnew_id.h"
+#include <advanced_config.h>
+#include <drc/drc.h>
 #include <filehistory.h>
+#include <help_common_strings.h>
 #include <kiface_i.h>
 #include <menus_helpers.h>
+#include <pcb_edit_frame.h>
+#include <pcbnew.h>
+#include <pcbnew_id.h>
 #include <pgm_base.h>
-#include <advanced_config.h>
 #include <tool/actions.h>
 #include <tool/conditional_menu.h>
 #include <tool/selection_conditions.h>
@@ -168,8 +169,14 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AddMenu( submenuFabOutputs,            SELECTION_CONDITIONS::ShowAlways );
 
+    auto enableBoardSetupCondition = [ this ] ( const SELECTION& sel ) {
+        if( DRC* tool = m_toolManager->GetTool<DRC>() )
+            return !tool->IsDRCDialogShown();
+
+        return true;
+    };
     fileMenu->AddSeparator();
-    fileMenu->AddItem( PCB_ACTIONS::boardSetup,      SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( PCB_ACTIONS::boardSetup,      enableBoardSetupCondition );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ACTIONS::pageSettings,        SELECTION_CONDITIONS::ShowAlways );

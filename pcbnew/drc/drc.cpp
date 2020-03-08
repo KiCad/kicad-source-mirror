@@ -150,6 +150,15 @@ int DRC::ShowDRCDialog( const TOOL_EVENT& aEvent )
 }
 
 
+bool DRC::IsDRCDialogShown()
+{
+    if( m_drcDialog )
+        return m_drcDialog->IsShown();
+
+    return false;
+}
+
+
 void DRC::addMarkerToPcb( MARKER_PCB* aMarker )
 {
     BOARD_COMMIT commit( m_pcbEditorFrame );

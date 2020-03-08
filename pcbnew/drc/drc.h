@@ -382,6 +382,13 @@ public:
     int ShowDRCDialog( const TOOL_EVENT& aEvent );
 
     /**
+     * Check to see if the DRC dialog is currently shown
+     *
+     * @return true if the dialog is shown
+     */
+    bool IsDRCDialogShown();
+
+    /**
      * Deletes this ui dialog box and zeros out its pointer to remember
      * the state of the dialog's existence.
      *
