@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2014-2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,13 +34,15 @@
 #include <sch_sheet.h>
 #include <bitmaps.h>
 #include <eeschema_settings.h>
+#include <settings/color_settings.h>
 
 
 DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
                                                 bool* aClearAnnotationNewItems ) :
     DIALOG_SCH_SHEET_PROPS_BASE( aParent ),
     m_frame( aParent ),
-    m_clearAnnotationNewItems( aClearAnnotationNewItems )
+    m_clearAnnotationNewItems( aClearAnnotationNewItems ),
+    m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits, true )
 {
     m_sheet = aSheet;
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_sheet );
@@ -126,9 +128,29 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataToWindow()
     m_grid->ProcessTableMessage( msg );
     AdjustGridColumns( m_grid->GetRect().GetWidth() );
 
-    m_heirarchyPath->SetValue( g_CurrentSheet->PathHumanReadable() );
+    // border width
+    m_borderWidth.SetValue( m_sheet->GetBorderWidth() );
 
-    // Set the component's unique ID time stamp.
+    // set up color swatches
+    COLOR_SETTINGS* colorSettings = m_frame->GetColorSettings();
+    KIGFX::COLOR4D  borderColor = m_sheet->GetBorderColor();
+    KIGFX::COLOR4D  backgroundColor = m_sheet->GetBackgroundColor();
+
+    if( borderColor == COLOR4D::UNSPECIFIED )
+        borderColor = colorSettings->GetColor( LAYER_SHEET );
+
+    if( backgroundColor == COLOR4D::UNSPECIFIED )
+        backgroundColor = colorSettings->GetColor( LAYER_SHEET_BACKGROUND );
+
+    m_borderColorSwatch->SetSwatchColor( borderColor, false );
+    m_backgroundColorSwatch->SetSwatchColor( backgroundColor, false );
+
+    KIGFX::COLOR4D canvas = m_frame->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+    m_borderColorSwatch->SetSwatchBackground( canvas );
+    m_backgroundColorSwatch->SetSwatchBackground( canvas );
+
+    // set up the read-only fields
+    m_heirarchyPath->SetValue( g_CurrentSheet->PathHumanReadable() );
     m_textCtrlTimeStamp->SetValue( m_sheet->m_Uuid.AsString() );
 
     Layout();
@@ -443,6 +465,10 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
 
     if( m_clearAnnotationNewItems )
         *m_clearAnnotationNewItems = clearAnnotation;
+
+    m_sheet->SetBorderWidth( m_borderWidth.GetValue() );
+    m_sheet->SetBorderColor( m_borderColorSwatch->GetSwatchColor() );
+    m_sheet->SetBackgroundColor( m_backgroundColorSwatch->GetSwatchColor() );
 
     m_frame->TestDanglingEnds();
     m_frame->RefreshItem( m_sheet );

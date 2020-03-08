@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -230,7 +230,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	m_stdDialogButtonSizer->AddButton( m_stdDialogButtonSizerCancel );
 	m_stdDialogButtonSizer->Realize();
 
-	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxEXPAND, 5 );
+	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxEXPAND|wxALL, 5 );
 
 
 	mainSizer->Add( bSizerBottom, 0, wxEXPAND, 5 );

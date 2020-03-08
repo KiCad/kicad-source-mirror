@@ -115,12 +115,47 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Hierarchical Path:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	bSizer5->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	wxStaticBoxSizer* sbSizer2;
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Style") ), wxHORIZONTAL );
 
-	m_heirarchyPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	bSizer5->Add( m_heirarchyPath, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_borderWidthLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Border width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderWidthLabel->Wrap( -1 );
+	sbSizer2->Add( m_borderWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+
+	m_borderWidthCtrl = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer2->Add( m_borderWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_borderWidthUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderWidthUnits->Wrap( -1 );
+	sbSizer2->Add( m_borderWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+
+
+	sbSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_borderColorLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Border color:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderColorLabel->Wrap( -1 );
+	sbSizer2->Add( m_borderColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_borderColorSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+	m_borderColorSwatch->SetMinSize( wxSize( 48,24 ) );
+
+	sbSizer2->Add( m_borderColorSwatch, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	sbSizer2->Add( 40, 0, 1, wxEXPAND, 5 );
+
+	m_backgroundColorLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Background fill:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backgroundColorLabel->Wrap( -1 );
+	sbSizer2->Add( m_backgroundColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_backgroundColorSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_backgroundColorSwatch->SetMinSize( wxSize( 48,24 ) );
+
+	sbSizer2->Add( m_backgroundColorSwatch, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizer5->Add( sbSizer2, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
 	m_longForm->Add( bSizer5, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -129,29 +164,39 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	mainSizer->Add( m_longForm, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bSizerUUID;
-	bSizerUUID = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1->AddGrowableCol( 1 );
+	fgSizer1->SetFlexibleDirection( wxHORIZONTAL );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Hierarchical Path:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2->Wrap( -1 );
+	fgSizer1->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_heirarchyPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	fgSizer1->Add( m_heirarchyPath, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* timeStampLabel;
 	timeStampLabel = new wxStaticText( this, wxID_ANY, _("Unique ID:"), wxDefaultPosition, wxDefaultSize, 0 );
 	timeStampLabel->Wrap( -1 );
-	bSizerUUID->Add( timeStampLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( timeStampLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_textCtrlTimeStamp = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	m_textCtrlTimeStamp->SetToolTip( _("Unique ID that identifies the symbol") );
 
-	bSizerUUID->Add( m_textCtrlTimeStamp, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer1->Add( m_textCtrlTimeStamp, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
-	bSizerBottom->Add( bSizerUUID, 3, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerBottom->Add( fgSizer1, 1, wxEXPAND|wxALL, 5 );
 
 
-	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizerBottom->Add( 100, 0, 0, wxEXPAND, 5 );
 
 	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	m_stdDialogButtonSizerOK = new wxButton( this, wxID_OK );

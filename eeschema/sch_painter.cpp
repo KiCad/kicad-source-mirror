@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -230,8 +230,7 @@ float SCH_PAINTER::getShadowWidth()
 
     // For best visuals the selection width must be a cross between the zoom level and the
     // default line width.
-    return static_cast<float>(
-            fabs( matrix.GetScale().x * 2.75 ) +  GetSelectionThickness() );
+    return static_cast<float>( fabs( matrix.GetScale().x * 2.75 ) +  GetSelectionThickness() );
 }
 
 
@@ -245,6 +244,19 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
 
         if( lineColor != COLOR4D::UNSPECIFIED )
             color = lineColor;
+    }
+    else if( aItem->Type() == SCH_SHEET_T )
+    {
+        SCH_SHEET* sheet = (SCH_SHEET*) aItem;
+        COLOR4D    sheetColor = COLOR4D::UNSPECIFIED;
+
+        if( aLayer == LAYER_SHEET )
+            sheetColor = sheet->GetBorderColor();
+        else if( aLayer == LAYER_SHEET_BACKGROUND )
+            sheetColor = sheet->GetBackgroundColor();
+
+        if( sheetColor != COLOR4D::UNSPECIFIED )
+            color = sheetColor;
     }
 
     if( aItem->IsBrightened() && !aDrawingShadows ) // Selection disambiguation, etc.
@@ -1547,23 +1559,9 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
     if( aLayer == LAYER_SHEET_BACKGROUND )
     {
-        m_gal->SetIsStroke( aSheet->IsSelected() );
-        m_gal->SetLineWidth( getShadowWidth() );
-        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEET_BACKGROUND, true ) );
-
-        if( aSheet->IsMoving() )    // Gives a filled background when moving for a better look
-        {
-            // Select a fill color working well with black and white background color,
-            // both in Opengl and Cairo
-            m_gal->SetFillColor( COLOR4D( 0.1, 0.5, 0.5, 0.3 ) );
-            m_gal->SetIsFill( true );
-        }
-        else
-        {
-            // Could be modified later, when sheets can have their own fill color
-            m_gal->SetFillColor( getRenderColor( aSheet, LAYER_SHEET_BACKGROUND, true ) );
-            m_gal->SetIsFill( aSheet->IsSelected() && GetSelectionFillShapes() );
-        }
+        m_gal->SetFillColor( getRenderColor( aSheet, LAYER_SHEET_BACKGROUND, true ) );
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
 
         m_gal->DrawRectangle( pos, pos + size );
     }

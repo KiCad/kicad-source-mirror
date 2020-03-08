@@ -12,6 +12,7 @@
 #include <wx/intl.h>
 class WX_GRID;
 
+#include "widgets/color_swatch.h"
 #include "dialog_shim.h"
 #include <wx/colour.h>
 #include <wx/settings.h>
@@ -48,9 +49,16 @@ class DIALOG_SCH_SHEET_PROPS_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_bpMoveUp;
 		wxBitmapButton* m_bpMoveDown;
 		wxBitmapButton* m_bpDelete;
+		wxStaticText* m_borderWidthLabel;
+		wxTextCtrl* m_borderWidthCtrl;
+		wxStaticText* m_borderWidthUnits;
+		wxStaticText* m_borderColorLabel;
+		COLOR_SWATCH* m_borderColorSwatch;
+		wxStaticText* m_backgroundColorLabel;
+		COLOR_SWATCH* m_backgroundColorSwatch;
+		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticText2;
 		wxTextCtrl* m_heirarchyPath;
-		wxStaticLine* m_staticline1;
 		wxTextCtrl* m_textCtrlTimeStamp;
 		wxStdDialogButtonSizer* m_stdDialogButtonSizer;
 		wxButton* m_stdDialogButtonSizerOK;
@@ -68,7 +76,7 @@ class DIALOG_SCH_SHEET_PROPS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 864,440 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Sheet Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 864,440 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~DIALOG_SCH_SHEET_PROPS_BASE();
 
 };

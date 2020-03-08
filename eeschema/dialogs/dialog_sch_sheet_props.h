@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,9 @@
 #ifndef __dialog_sch_sheet_props__
 #define __dialog_sch_sheet_props__
 
-#include <dialog_sch_sheet_props_base.h>
 #include <fields_grid_table.h>
+#include <widgets/unit_binder.h>
+#include <dialog_sch_sheet_props_base.h>
 
 
 class SCH_SHEET;
@@ -52,6 +53,7 @@ private:
     wxString        m_shownColumns;
 
     FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
+    UNIT_BINDER                   m_borderWidth;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

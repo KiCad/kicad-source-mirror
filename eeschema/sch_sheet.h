@@ -229,6 +229,10 @@ class SCH_SHEET : public SCH_ITEM
     wxPoint                     m_pos;                 // The position of the sheet.
     wxSize                      m_size;                // The size of the sheet.
 
+    int                         m_borderWidth;
+    KIGFX::COLOR4D              m_borderColor;
+    KIGFX::COLOR4D              m_backgroundColor;
+
 public:
     SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );
 
@@ -293,6 +297,15 @@ public:
 
     wxSize GetSize() { return m_size; }
     void SetSize( const wxSize& aSize ) { m_size = aSize; }
+
+    int GetBorderWidth() const { return m_borderWidth; }
+    void SetBorderWidth( int aWidth ) { m_borderWidth = aWidth; }
+
+    KIGFX::COLOR4D GetBorderColor() const { return m_borderColor; }
+    void SetBorderColor( KIGFX::COLOR4D aColor ) { m_borderColor = aColor; }
+
+    KIGFX::COLOR4D GetBackgroundColor() const { return m_backgroundColor; }
+    void SetBackgroundColor( KIGFX::COLOR4D aColor ) { m_backgroundColor = aColor; }
 
     /**
      * Return the root sheet of this SCH_SHEET object.
@@ -498,6 +511,9 @@ public:
 
         for( SCH_SHEET_PIN* pin : m_pins )
             pin->Move( aMoveVector );
+
+        for( SCH_FIELD& field : m_fields )
+            field.Move( aMoveVector );
     }
 
     void MirrorY( int aYaxis_position ) override;

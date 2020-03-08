@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
 
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,8 @@ wxDEFINE_EVENT(COLOR_SWATCH_CHANGED, wxCommandEvent);
 using KIGFX::COLOR4D;
 
 
-const static wxSize SWATCH_SIZE_DU( 8, 6 );
+const static wxSize PALETTE_SWATCH_SIZE_DU( 8, 6 );
+const static wxSize DIALOG_SWATCH_SIZE_DU( 24, 10 );
 
 // See selcolor.cpp:
 extern COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor );
@@ -63,49 +64,69 @@ wxBitmap COLOR_SWATCH::MakeBitmap( COLOR4D aColor, COLOR4D aBackground, wxSize a
 }
 
 
-/**
- * Function makeColorButton
- * creates a wxStaticBitmap and assigns it a solid color and a control ID
- */
-static std::unique_ptr<wxStaticBitmap> makeColorSwatch( wxWindow* aParent, COLOR4D aColor,
-                                                        COLOR4D aBackground, int aID )
-{
-    static wxSize size = aParent->ConvertDialogToPixels( SWATCH_SIZE_DU );
-
-    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( aColor, aBackground, size );
-    auto ret = std::make_unique<wxStaticBitmap>( aParent, aID, bitmap );
-
-    return ret;
-}
-
-
 COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D aBackground,
-        const COLOR4D aDefault ) :
+                            const COLOR4D aDefault ) :
         wxPanel( aParent, aID ),
         m_color( aColor ),
         m_background( aBackground ),
         m_default( aDefault )
 {
+    m_size = ConvertDialogToPixels( PALETTE_SWATCH_SIZE_DU );
+
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
 
-    auto swatch = makeColorSwatch( this, m_color, m_background, aID );
-    m_swatch = swatch.release(); // hold a handle
+    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( aColor, aBackground, m_size );
+    m_swatch = new wxStaticBitmap( this, aID, bitmap );
 
     sizer->Add( m_swatch, 0, 0 );
 
+    setupEvents();
+}
+
+
+COLOR_SWATCH::COLOR_SWATCH( wxWindow *aParent, wxWindowID aID, const wxPoint &aPos,
+                            const wxSize &aSize, long aStyle ) :
+        wxPanel( aParent, aID, aPos, aSize, aStyle )
+{
+    if( aSize == wxDefaultSize )
+        m_size = ConvertDialogToPixels( DIALOG_SWATCH_SIZE_DU );
+    else
+        m_size = aSize;
+
+    SetSize( m_size );
+
+    auto sizer = new wxBoxSizer( wxHORIZONTAL );
+    SetSizer( sizer );
+
+    wxBitmap bitmap = COLOR_SWATCH::MakeBitmap( KIGFX::COLOR4D::UNSPECIFIED,
+                                                KIGFX::COLOR4D::UNSPECIFIED, m_size );
+    m_swatch = new wxStaticBitmap( this, aID, bitmap );
+
+    sizer->Add( m_swatch, 0, 0 );
+
+    setupEvents();
+}
+
+
+void COLOR_SWATCH::setupEvents()
+{
     // forward click to any other listeners, since we don't want them
     m_swatch->Bind( wxEVT_LEFT_DOWN, &COLOR_SWATCH::rePostEvent, this );
     m_swatch->Bind( wxEVT_RIGHT_DOWN, &COLOR_SWATCH::rePostEvent, this );
 
     // bind the events that trigger the dialog
-    m_swatch->Bind( wxEVT_LEFT_DCLICK, [this] ( wxMouseEvent& aEvt ) {
-        GetNewSwatchColor();
-    } );
+    m_swatch->Bind( wxEVT_LEFT_DCLICK,
+                    [this] ( wxMouseEvent& aEvt )
+                    {
+                        GetNewSwatchColor();
+                    } );
 
-    m_swatch->Bind( wxEVT_MIDDLE_DOWN, [this] ( wxMouseEvent& aEvt ) {
-        GetNewSwatchColor();
-    } );
+    m_swatch->Bind( wxEVT_MIDDLE_DOWN,
+                    [this] ( wxMouseEvent& aEvt )
+                    {
+                        GetNewSwatchColor();
+                    } );
 }
 
 
@@ -131,20 +152,18 @@ void COLOR_SWATCH::SetSwatchColor( COLOR4D aColor, bool sendEvent )
 {
     m_color = aColor;
 
-    wxBitmap bm = MakeBitmap( m_color, m_background, ConvertDialogToPixels( SWATCH_SIZE_DU ) );
+    wxBitmap bm = MakeBitmap( m_color, m_background, m_size );
     m_swatch->SetBitmap( bm );
 
     if( sendEvent )
-    {
         sendSwatchChangeEvent( *this );
-    }
 }
 
 
 void COLOR_SWATCH::SetSwatchBackground( COLOR4D aBackground )
 {
     m_background = aBackground;
-    wxBitmap bm = MakeBitmap( m_color, m_background, ConvertDialogToPixels( SWATCH_SIZE_DU ) );
+    wxBitmap bm = MakeBitmap( m_color, m_background, m_size );
     m_swatch->SetBitmap( bm );
 }
 
@@ -168,7 +187,7 @@ void COLOR_SWATCH::GetNewSwatchColor()
     {
         m_color = newColor;
 
-        wxBitmap bm = MakeBitmap( newColor, m_background, ConvertDialogToPixels( SWATCH_SIZE_DU ) );
+        wxBitmap bm = MakeBitmap( newColor, m_background, m_size );
         m_swatch->SetBitmap( bm );
 
         sendSwatchChangeEvent( *this );

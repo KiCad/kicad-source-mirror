@@ -47,7 +47,13 @@ public:
      * @param aID id to use when sending swatch events
      */
     COLOR_SWATCH( wxWindow* aParent, KIGFX::COLOR4D aColor, int aID, KIGFX::COLOR4D aBackground,
-            const KIGFX::COLOR4D aDefault = KIGFX::COLOR4D::UNSPECIFIED );
+                  const KIGFX::COLOR4D aDefault = KIGFX::COLOR4D::UNSPECIFIED );
+
+    /**
+     * constructor for wxFormBuilder
+     */
+    COLOR_SWATCH( wxWindow *aParent, wxWindowID aId, const wxPoint &aPos = wxDefaultPosition,
+                  const wxSize &aSize = wxDefaultSize, long aStyle = 0 );
 
     /**
      * Set the current swatch color directly.
@@ -74,6 +80,7 @@ public:
     static wxBitmap MakeBitmap( KIGFX::COLOR4D aColor, KIGFX::COLOR4D aBackground, wxSize aSize );
 
 private:
+    void setupEvents();
 
     /**
      * Pass unwanted events on to listeners of this object
@@ -91,6 +98,8 @@ private:
 
     ///> Handle of the actual swatch shown
     wxStaticBitmap* m_swatch;
+
+    wxSize          m_size;
 };
 
 

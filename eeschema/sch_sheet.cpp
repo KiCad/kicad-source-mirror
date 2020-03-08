@@ -89,6 +89,10 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     }
 
     m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
+
+    m_borderWidth = GetDefaultLineThickness();
+    m_borderColor = KIGFX::COLOR4D::UNSPECIFIED;
+    m_backgroundColor = KIGFX::COLOR4D::UNSPECIFIED;
 }
 
 
@@ -108,6 +112,10 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
         m_pins.emplace_back( new SCH_SHEET_PIN( *pin ) );
         m_pins.back()->SetParent( this );
     }
+
+    m_borderWidth = aSheet.m_borderWidth;
+    m_borderColor = aSheet.m_borderColor;
+    m_backgroundColor = aSheet.m_backgroundColor;
 
     if( m_screen )
         m_screen->IncRefCount();
@@ -202,6 +210,10 @@ void SCH_SHEET::SwapData( SCH_ITEM* aItem )
 
     for( SCH_SHEET_PIN* sheetPin : sheet->m_pins )
         sheetPin->SetParent( sheet );
+
+    std::swap( m_borderWidth, sheet->m_borderWidth );
+    std::swap( m_borderColor, sheet->m_borderColor );
+    std::swap( m_backgroundColor, sheet->m_backgroundColor );
 }
 
 
@@ -422,7 +434,7 @@ SCH_SHEET_PIN* SCH_SHEET::GetPin( const wxPoint& aPosition )
 
 int SCH_SHEET::GetPenSize() const
 {
-    return GetDefaultLineThickness();
+    return GetBorderWidth();
 }
 
 
@@ -485,7 +497,7 @@ void SCH_SHEET::Print( wxDC* aDC, const wxPoint& aOffset )
     wxString  Text;
     wxPoint   pos = m_pos + aOffset;
     int       lineWidth = GetPenSize();
-    COLOR4D   color = GetLayerColor( m_Layer );
+    COLOR4D   color = GetBorderColor();
 
     GRRect( nullptr, aDC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, lineWidth, color );
 
@@ -711,13 +723,13 @@ void SCH_SHEET::MirrorY( int aYaxis_position )
         sheetPin->MirrorY( aYaxis_position );
 }
 
+
 void SCH_SHEET::SetPosition( const wxPoint& aPosition )
 {
     // Remember the sheet and all pin sheet positions must be
     // modified. So use Move function to do that.
     Move( aPosition - m_pos );
 }
-
 
 
 void SCH_SHEET::Resize( const wxSize& aSize )
