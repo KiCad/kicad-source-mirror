@@ -386,6 +386,21 @@ unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( wxDataViewItem const&   aItem,
 }
 
 
+void LIB_TREE_MODEL_ADAPTER::RefreshTree( LIB_TREE_NODE* aNode )
+{
+    if( !aNode )
+        aNode = &m_tree;
+
+    for( auto const& child: aNode->m_Children )
+    {
+        if( child->m_Score > 0 )
+            RefreshTree( child.get() );
+    }
+
+    ItemChanged( ToItem( aNode ) );
+}
+
+
 bool LIB_TREE_MODEL_ADAPTER::HasContainerColumns( wxDataViewItem const& aItem ) const
 {
     return IsContainer( aItem );
