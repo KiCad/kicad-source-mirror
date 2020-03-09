@@ -50,16 +50,19 @@ wxString LayerName( SCH_LAYER_ID aLayer )
         return _( "Pin name" );
 
     case LAYER_REFERENCEPART:
-        return _( "Reference" );
+        return _( "Symbol reference" );
 
     case LAYER_VALUEPART:
-        return _( "Value" );
+        return _( "Symbol value" );
 
     case LAYER_FIELDS:
-        return _( "Fields" );
+        return _( "Symbol fields" );
 
     case LAYER_DEVICE:
-        return _( "Body outline" );
+        return _( "Symbol body outline" );
+
+    case LAYER_DEVICE_BACKGROUND:
+        return _( "Symbol body fill" );
 
     case LAYER_NOTES:
         return _( "Notes" );
@@ -71,7 +74,10 @@ wxString LayerName( SCH_LAYER_ID aLayer )
         return _( "Pin" );
 
     case LAYER_SHEET:
-        return _( "Sheet" );
+        return _( "Sheet border" );
+
+    case LAYER_SHEET_BACKGROUND:
+        return _( "Sheet background" );
 
     case LAYER_SHEETNAME:
         return _( "Sheet name" );
@@ -93,12 +99,6 @@ wxString LayerName( SCH_LAYER_ID aLayer )
 
     case LAYER_ERC_ERR:
         return _( "ERC error" );
-
-    case LAYER_DEVICE_BACKGROUND:
-        return _( "Body background" );
-
-    case LAYER_SHEET_BACKGROUND:
-        return _( "Sheet background" );
 
     case LAYER_SCHEMATIC_GRID:
         return _( "Grid" );
