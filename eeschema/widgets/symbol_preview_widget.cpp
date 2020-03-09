@@ -43,6 +43,7 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
     auto app_settings = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
     m_galDisplayOptions.ReadConfig( *common_settings, app_settings->m_Window, this );
+    m_galDisplayOptions.m_forceDisplayCursor = false;
 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = aCanvasType;
 

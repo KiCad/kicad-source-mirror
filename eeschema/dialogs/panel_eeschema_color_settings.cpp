@@ -90,6 +90,7 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( EDA_DRAW_FRAME* aF
 
     KIGFX::GAL_DISPLAY_OPTIONS options;
     options.ReadConfig( *common_settings, app_settings->m_Window, this );
+    options.m_forceDisplayCursor = false;
 
     auto type = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( app_settings->m_Graphics.canvas_type );
 
