@@ -38,7 +38,7 @@
 #include <class_library.h>
 
 
-void mapExistingAnnotation( std::map<timestamp_t, wxString>& aMap )
+void mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 {
     SCH_SHEET_LIST     sheets( g_RootSheet );
     SCH_REFERENCE_LIST references;
@@ -48,10 +48,19 @@ void mapExistingAnnotation( std::map<timestamp_t, wxString>& aMap )
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
         SCH_COMPONENT* comp = references[ i ].GetComp();
-        wxString       ref = comp->GetField( REFERENCE )->GetFullyQualifiedText();
+
+        const SCH_SHEET_PATH* curr_sheetpath = &references[ i ].GetSheetPath();
+        wxString full_path = curr_sheetpath->Path();
+        full_path += wxString::Format( wxT( "/%8.8lX" ),
+                                       (unsigned long) comp->GetTimeStamp() );
+
+        wxString ref = comp->GetRef( (SCH_SHEET_PATH*)curr_sheetpath );
+
+        if( comp->GetUnitCount() > 1 )
+            ref << LIB_PART::SubReference( comp->GetUnitSelection( curr_sheetpath ) );
 
         if( !ref.Contains( wxT( "?" ) ) )
-            aMap[ comp->GetTimeStamp() ] = ref;
+            aMap[ full_path ] = ref;
     }
 }
 
@@ -99,7 +108,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     SCH_MULTI_UNIT_REFERENCE_MAP lockedComponents;
 
     // Map of previous annotation for building info messages
-    std::map<timestamp_t, wxString> previousAnnotation;
+    std::map<wxString, wxString> previousAnnotation;
 
     // Test for and replace duplicate time stamps in components and sheets.  Duplicate
     // time stamps can happen with old schematics, schematic conversions, or manual
@@ -191,9 +200,19 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
         SCH_COMPONENT* comp = references[ i ].GetComp();
-        wxString       prevRef = previousAnnotation[ comp->GetTimeStamp() ];
-        wxString       newRef  = comp->GetField( REFERENCE )->GetFullyQualifiedText();
-        wxString       msg;
+
+        const SCH_SHEET_PATH* curr_sheetpath = &references[ i ].GetSheetPath();
+        wxString curr_full_path = curr_sheetpath->Path();
+        curr_full_path += wxString::Format( wxT( "/%8.8lX" ),
+                                            (unsigned long) comp->GetTimeStamp() );
+
+        wxString prevRef = previousAnnotation[ curr_full_path ];
+        wxString newRef  = comp->GetRef( curr_sheetpath );
+
+        if( comp->GetUnitCount() > 1 )
+            newRef << LIB_PART::SubReference( comp->GetUnitSelection( curr_sheetpath ) );
+
+        wxString msg;
 
         if( prevRef.Length() )
         {
@@ -202,27 +221,25 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
             if( comp->GetUnitCount() > 1 )
                 msg.Printf( _( "Updated %s (unit %s) from %s to %s" ),
-                            GetChars( comp->GetField( VALUE )->GetShownText() ),
+                            comp->GetField( VALUE )->GetShownText(),
                             LIB_PART::SubReference( comp->GetUnit(), false ),
-                            GetChars( prevRef ),
-                            GetChars( newRef ) );
+                            prevRef, newRef );
             else
                 msg.Printf( _( "Updated %s from %s to %s" ),
-                            GetChars( comp->GetField( VALUE )->GetShownText() ),
-                            GetChars( prevRef ),
-                            GetChars( newRef ) );
+                            comp->GetField( VALUE )->GetShownText(),
+                            prevRef, newRef );
         }
         else
         {
             if( comp->GetUnitCount() > 1 )
                 msg.Printf( _( "Annotated %s (unit %s) as %s" ),
-                            GetChars( comp->GetField( VALUE )->GetShownText() ),
+                            comp->GetField( VALUE )->GetShownText(),
                             LIB_PART::SubReference( comp->GetUnit(), false ),
-                            GetChars( newRef ) );
+                            newRef );
             else
                 msg.Printf( _( "Annotated %s as %s" ),
-                            GetChars( comp->GetField( VALUE )->GetShownText() ),
-                            GetChars( newRef ) );
+                            comp->GetField( VALUE )->GetShownText(),
+                            newRef );
         }
 
         aReporter.Report( msg, REPORTER::RPT_ACTION );

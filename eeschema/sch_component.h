@@ -546,7 +546,7 @@ public:
                                    int             aMulti );
 
     // returns the unit selection, for the given sheet path.
-    int GetUnitSelection( SCH_SHEET_PATH* aSheet );
+    int GetUnitSelection( const SCH_SHEET_PATH* aSheet );
 
     // Set the unit selection, for the given sheet path.
     void SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection );

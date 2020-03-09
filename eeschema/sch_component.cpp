@@ -837,7 +837,7 @@ void SCH_COMPONENT::SetTimeStamp( timestamp_t aNewTimeStamp )
 }
 
 
-int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
+int SCH_COMPONENT::GetUnitSelection( const SCH_SHEET_PATH* aSheet )
 {
     wxString          path = GetPath( aSheet );
     wxString          h_path, h_multi;
