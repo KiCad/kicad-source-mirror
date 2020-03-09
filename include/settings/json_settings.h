@@ -105,7 +105,15 @@ public:
     OPT<ValueType> Get( std::string aPath ) const
     {
         if( OPT<nlohmann::json> ret = GetJson( std::move( aPath ) ) )
-            return ret->get<ValueType>();
+        {
+            try
+            {
+                return ret->get<ValueType>();
+            }
+            catch( ... )
+            {
+            }
+        }
 
         return NULLOPT;
     }
