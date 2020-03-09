@@ -71,15 +71,14 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( EDA_DRAW_FRAME* aF
 {
     m_buttonSizePx = ConvertDialogToPixels( BUTTON_SIZE );
 
-    auto common_settings = Pgm().GetCommonSettings();
-    auto app_settings = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
-
-    COLOR_SETTINGS* current =
-            Pgm().GetSettingsManager().GetColorSettings( app_settings->m_ColorTheme );
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    COMMON_SETTINGS*   common_settings = Pgm().GetCommonSettings();
+    EESCHEMA_SETTINGS* app_settings = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+    COLOR_SETTINGS*    current = mgr.GetColorSettings( app_settings->m_ColorTheme );
 
     m_cbTheme->Clear();
 
-    for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
+    for( COLOR_SETTINGS* settings : mgr.GetColorSettingsList() )
     {
         int pos = m_cbTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
 
@@ -95,17 +94,19 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( EDA_DRAW_FRAME* aF
     auto type = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( app_settings->m_Graphics.canvas_type );
 
     m_preview = new SCH_PREVIEW_PANEL( this, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
-        options, type );
+                                       options, type );
     m_preview->SetStealsFocus( false );
     m_preview->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
 
     createButtons();
 
     Connect( FIRST_BUTTON_ID, FIRST_BUTTON_ID + ( SCH_LAYER_ID_END - SCH_LAYER_ID_START ),
-            wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler( PANEL_EESCHEMA_COLOR_SETTINGS::SetColor ) );
+             wxEVT_COMMAND_BUTTON_CLICKED,
+             wxCommandEventHandler( PANEL_EESCHEMA_COLOR_SETTINGS::SetColor ) );
 
+    m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
     m_colorsMainSizer->Add( m_preview, 1, wxALL | wxEXPAND, 5 );
+    m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
 
     createPreviewItems();
     updatePreview();
@@ -118,7 +119,7 @@ PANEL_EESCHEMA_COLOR_SETTINGS::~PANEL_EESCHEMA_COLOR_SETTINGS()
     delete m_page;
     delete m_titleBlock;
 
-    for( auto item : m_previewItems )
+    for( EDA_ITEM* item : m_previewItems )
         delete item;
 }
 
@@ -138,16 +139,16 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::TransferDataToWindow()
 
 bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme()
 {
+    SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
     COLOR4D bgcolor = m_currentSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
     for( SCH_LAYER_ID clyr = SCH_LAYER_ID_START; clyr < SCH_LAYER_ID_END; ++clyr )
     {
         if( bgcolor == m_currentSettings->GetColor( clyr ) && clyr != LAYER_SCHEMATIC_BACKGROUND )
         {
-            wxString msg =
-                    _( "Some items have the same color as the background\n"
-                       "and they will not be seen on the screen.  Are you\n"
-                       "sure you want to use these colors?" );
+            wxString msg = _( "Some items have the same color as the background\n"
+                              "and they will not be seen on the screen.  Are you\n"
+                              "sure you want to use these colors?" );
 
             if( wxMessageBox( msg, _( "Warning" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
                 return false;
@@ -169,15 +170,14 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme()
         if( !validateFilename() )
             return false;
 
-        selected = Pgm().GetSettingsManager().AddNewColorSettings(
-                m_txtFilename->GetValue().ToStdString() );
+        selected = settingsMgr.AddNewColorSettings( m_txtFilename->GetValue().ToStdString() );
 
         selected->SetName( m_txtThemeName->GetValue() );
-        Pgm().GetSettingsManager().Save( selected );
+        settingsMgr.Save( selected );
         dirty = true;
 
-        m_cbTheme->SetSelection(
-                m_cbTheme->Append( m_txtThemeName->GetValue(), static_cast<void*>( selected ) ) );
+        m_cbTheme->SetSelection( m_cbTheme->Append( m_txtThemeName->GetValue(),
+                                                    static_cast<void*>( selected ) ) );
     }
 
     for( SCH_LAYER_ID clyr = SCH_LAYER_ID_START; clyr < SCH_LAYER_ID_END; ++clyr )
@@ -194,16 +194,16 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme()
         selected->SetColor( clyr, color );
     }
 
-    auto settings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
+    KIGFX::RENDER_SETTINGS* settings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
     settings->LoadColors( selected );
 
     if( dirty )
     {
-        Pgm().GetSettingsManager().SaveColorSettings( selected, "schematic" );
+        settingsMgr.SaveColorSettings( selected, "schematic" );
         m_dirty = false;
     }
 
-    auto app_settings = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS* app_settings = settingsMgr.GetAppSettings<EESCHEMA_SETTINGS>();
 
     app_settings->m_ColorTheme = selected->GetFilename();
 
@@ -221,9 +221,11 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createButtons()
     for( SCH_LAYER_ID i = SCH_LAYER_ID_START; i < SCH_LAYER_ID_END; ++i )
         layers.push_back( i );
 
-    std::sort( layers.begin(), layers.end(), []( SCH_LAYER_ID a, SCH_LAYER_ID b ) {
-        return LayerName( a ) < LayerName( b );
-    } );
+    std::sort( layers.begin(), layers.end(),
+               []( SCH_LAYER_ID a, SCH_LAYER_ID b )
+               {
+                   return LayerName( a ) < LayerName( b );
+               } );
 
     for( SCH_LAYER_ID layer : layers )
     {
@@ -231,12 +233,12 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createButtons()
         if( layer == LAYER_SHEET_BACKGROUND )
             continue;
 
-        wxString name  = LayerName( layer );
-        auto     label = new wxStaticText( m_colorsListWindow, wxID_ANY, name );
-        COLOR4D  color = m_currentSettings->GetColor( layer );
+        wxString      name  = LayerName( layer );
+        wxStaticText* label = new wxStaticText( m_colorsListWindow, wxID_ANY, name );
+        COLOR4D       color = m_currentSettings->GetColor( layer );
 
-        wxMemoryDC iconDC;
-        wxBitmap   bitmap( m_buttonSizePx );
+        wxMemoryDC    iconDC;
+        wxBitmap      bitmap( m_buttonSizePx );
 
         iconDC.SelectObject( bitmap );
         iconDC.SetPen( *wxBLACK_PEN );
@@ -253,14 +255,16 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createButtons()
                                           m_buttonSizePx + border + wxSize( 1, 1 ) );
         button->SetToolTip( _( "Edit color (right click for options)" ) );
 
-        m_colorsGridSizer->Add( label, 1, flags, 5 );
-        m_colorsGridSizer->Add( button, 1, flags, 5 );
+        m_colorsGridSizer->Add( label, 0, flags, 5 );
+        m_colorsGridSizer->Add( button, 0, flags, 5 );
 
         m_buttons[layer] = button;
 
-        button->Bind( wxEVT_RIGHT_DOWN, [&, layer]( wxMouseEvent& aEvent ) {
-            ShowColorContextMenu( aEvent, layer );
-        } );
+        button->Bind( wxEVT_RIGHT_DOWN,
+                      [&, layer]( wxMouseEvent& aEvent )
+                      {
+                          ShowColorContextMenu( aEvent, layer );
+                      } );
     }
 }
 
@@ -286,7 +290,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::drawButton( wxBitmapButton* aButton, const C
 
 void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 {
-    auto view = m_preview->GetView();
+    KIGFX::VIEW* view = m_preview->GetView();
 
     m_page       = new PAGE_INFO( PAGE_INFO::Custom );
     m_titleBlock = new TITLE_BLOCK;
@@ -301,10 +305,11 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     // NOTE: It would be nice to parse a schematic file here.
     // This is created from the color_settings.sch file in demos folder
 
-    auto addItem = [&]( EDA_ITEM* aItem ) {
-        view->Add( aItem );
-        m_previewItems.push_back( aItem );
-    };
+    auto addItem = [&]( EDA_ITEM* aItem )
+                   {
+                       view->Add( aItem );
+                       m_previewItems.push_back( aItem );
+                   };
 
     std::vector<std::pair<SCH_LAYER_ID, std::pair<wxPoint, wxPoint>>> lines = {
                 { LAYER_WIRE, { { 1950, 1500 }, { 2325, 1500 } } },
@@ -325,7 +330,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
     for( const auto& line : lines )
     {
-        auto wire = new SCH_LINE;
+        SCH_LINE* wire = new SCH_LINE;
         wire->SetLayer( line.first );
         wire->SetStartPoint(
                 wxPoint( Mils2iu( line.second.first.x ), Mils2iu( line.second.first.y ) ) );

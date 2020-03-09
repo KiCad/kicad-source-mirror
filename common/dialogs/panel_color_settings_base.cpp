@@ -26,7 +26,7 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_cbTheme->SetSelection( 0 );
 	m_cbTheme->SetMinSize( wxSize( 150,-1 ) );
 
-	bControlSizer->Add( m_cbTheme, 0, wxALL, 5 );
+	bControlSizer->Add( m_cbTheme, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_btnSave = new wxButton( this, wxID_ANY, _("&Save"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnSave->Enable( false );
@@ -48,18 +48,18 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	bControlSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_btnReset = new wxButton( this, wxID_ANY, _("&Reset colors to default"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnReset = new wxButton( this, wxID_ANY, _("&Reset to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnReset->SetToolTip( _("Reset all colors in this theme to the KiCad defaults") );
 
 	bControlSizer->Add( m_btnReset, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_btnOpenFolder = new wxButton( this, wxID_ANY, _("Open theme folder"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnOpenFolder = new wxButton( this, wxID_ANY, _("Open Theme Folder"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnOpenFolder->SetToolTip( _("Open the folder containing color themes") );
 
 	bControlSizer->Add( m_btnOpenFolder, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	m_mainSizer->Add( bControlSizer, 0, wxEXPAND, 5 );
+	m_mainSizer->Add( bControlSizer, 0, wxEXPAND|wxRIGHT, 10 );
 
 	m_panelThemeProperties = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panelThemeProperties->Hide();
@@ -115,7 +115,7 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_colorsListWindow->SetScrollRate( 5, 5 );
 	m_colorsListWindow->SetMinSize( wxSize( 240,-1 ) );
 
-	m_colorsGridSizer = new wxFlexGridSizer( 0, 2, 5, 5 );
+	m_colorsGridSizer = new wxFlexGridSizer( 0, 2, 0, 0 );
 	m_colorsGridSizer->AddGrowableCol( 0 );
 	m_colorsGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_colorsGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
