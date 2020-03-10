@@ -42,14 +42,12 @@ class DIALOG_ERC : public DIALOG_ERC_BASE
 private:
     SCH_EDIT_FRAME*   m_parent;
     wxBitmapButton*   m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
-    bool            m_initialized;
+    bool              m_initialized;
     const SCH_MARKER* m_lastMarkerFound;
-    static bool     m_diagErcTableInit; // go to true after DiagErc init
-    ERC_SETTINGS    m_settings;
+    static bool       m_diagErcTableInit; // go to true after DiagErc init
 
 public:
     DIALOG_ERC( SCH_EDIT_FRAME* parent );
-    ~DIALOG_ERC();
 
 private:
     void Init();
@@ -77,8 +75,6 @@ private:
     void ReBuildMatrixPanel();
     void setDRCMatrixButtonState( wxBitmapButton *aButton, int aState );
     void updateMarkerCounts( SCH_SCREENS *screens );
-    void transferSettingsToControls();
-    void transferControlsToSettings();
 };
 
 

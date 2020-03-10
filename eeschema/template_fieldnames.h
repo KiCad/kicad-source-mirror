@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,28 +70,28 @@ enum  NumFieldType {
  */
 struct TEMPLATE_FIELDNAME
 {
-    wxString    m_Name;         ///<  The field name
-    bool        m_Visible;      ///<  If first appearance of the field's editor has as visible.
-    bool        m_URL;          ///<  If field should have a browse button
+    wxString    m_Name;         // The field name
+    bool        m_Visible;      // Field defaults to being visible in schematic.
+    bool        m_URL;          // If field should have a browse button
 
     TEMPLATE_FIELDNAME() :
-        m_Visible( false ),
-        m_URL( false )
+            m_Visible( false ),
+            m_URL( false )
     {
     }
 
     TEMPLATE_FIELDNAME( const wxString& aName ) :
-        m_Name( aName ),
-        m_Visible( false ),
-        m_URL( false )
+            m_Name( aName ),
+            m_Visible( false ),
+            m_URL( false )
     {
     }
 
     TEMPLATE_FIELDNAME( const TEMPLATE_FIELDNAME& ref )
     {
-        m_Name = ref.m_Name;
-        m_Visible = ref.m_Visible;
-        m_URL = ref.m_URL;
+            m_Name = ref.m_Name;
+            m_Visible = ref.m_Visible;
+            m_URL = ref.m_URL;
     }
 
     /**
@@ -130,21 +130,25 @@ typedef std::vector< TEMPLATE_FIELDNAME > TEMPLATE_FIELDNAMES;
 class TEMPLATES
 {
 private:
-    TEMPLATE_FIELDNAMES     m_Fields;
+    TEMPLATE_FIELDNAMES     m_globals;
+    TEMPLATE_FIELDNAMES     m_project;
+
+    // Combined list.  Project templates override global ones.
+    TEMPLATE_FIELDNAMES     m_resolved;
+    bool                    m_resolvedDirty;
 
 public:
-
     /**
      * Function Format
      * serializes this object out as text into the given OUTPUTFORMATTER.
      */
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) const ;
+    void Format( OUTPUTFORMATTER* out, int nestLevel, bool aGlobal ) const ;
 
     /**
      * Function Parse
      * fills this object from information in the input stream handled by TEMPLATE_FIELDNAMES_LEXER
      */
-    void Parse( TEMPLATE_FIELDNAMES_LEXER* in );
+    void Parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal );
 
 
     /**
@@ -155,28 +159,27 @@ public:
      *
      * @param aFieldName is a full description of the wanted field, and it must not match
      *          any of the default fieldnames.
-     * @return int - the index within the config container at which aFieldName was
-     *          added, or -1 if the name is illegal because it matches a default fieldname.
+     * @param aGlobal indicates whether to add to the global or project table.
      */
-    int AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName );
+    void AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool aGlobal );
 
     /**
-     * Function DeleteAllTemplateFieldNames
+     * Function DeleteAllFieldNameTemplates
      * deletes the entire contents.
      */
-    void DeleteAllTemplateFieldNames()
-    {
-        m_Fields.clear();
-    }
+    void DeleteAllFieldNameTemplates( bool aGlobal );
 
     /**
      * Function GetTemplateFieldName
      * returns a template fieldnames list for read only access.
      */
-    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames() const
-    {
-        return m_Fields;
-    }
+    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames();
+
+    /**
+     * Function GetTemplateFieldName
+     * returns a specific list (global or project) for read only access.
+     */
+    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames( bool aGlobal );
 
     /**
      * Function GetFieldName
@@ -185,7 +188,11 @@ public:
      * @param aName A wxString object containing the field name to search for.
      * @return the template fieldname if found; NULL otherwise.
      */
-    const TEMPLATE_FIELDNAME* GetFieldName( const wxString& aName ) const;
+    const TEMPLATE_FIELDNAME* GetFieldName( const wxString& aName );
+
+protected:
+    void resolveTemplates();
+
 };
 
 #endif // _TEMPLATE_FIELDNAME_H_

@@ -30,9 +30,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_IMPORT_SETTINGS_BASE
+/// Class DIALOG_SCH_IMPORT_SETTINGS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
+class DIALOG_SCH_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -52,16 +52,10 @@ class DIALOG_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 
 
 	public:
-		wxCheckBox* m_LayersOpt;
-		wxCheckBox* m_TextAndGraphicsOpt;
-		wxCheckBox* m_ConstraintsOpt;
-		wxCheckBox* m_NetclassesOpt;
-		wxCheckBox* m_TracksAndViasOpt;
-		wxCheckBox* m_MaskAndPasteOpt;
 		wxCheckBox* m_SeveritiesOpt;
 
-		DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_IMPORT_SETTINGS_BASE();
+		DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_SCH_IMPORT_SETTINGS_BASE();
 
 };
 

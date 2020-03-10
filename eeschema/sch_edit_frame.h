@@ -266,9 +266,10 @@ public:
      */
     bool LoadProjectFile();
 
-    const ERC_SETTINGS& GetErcSettings() { return m_ercSettings; }
+    void DoShowSchematicSetupDialog( const wxString& aInitialPage = wxEmptyString,
+                                     const wxString& aInitialParentPage = wxEmptyString );
 
-    void UpdateErcSettings( const ERC_SETTINGS& aSettings ) { m_ercSettings = aSettings; }
+    ERC_SETTINGS& GetErcSettings() { return m_ercSettings; }
 
     /**
      * Insert or append a wanted symbol field name into the field names template.
@@ -278,20 +279,19 @@ public:
      *
      * @param aFieldName is a full description of the wanted field, and it must not match
      *          any of the default field names.
-     * @return int - the index within the config container at which aFieldName was
-     *          added, or -1 if the name is illegal because it matches a default field name.
+     * @param aGlobal indicates whether to add to the global or project table
      */
-    int AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName )
+    void AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool aGlobal )
     {
-        return m_templateFieldNames.AddTemplateFieldName( aFieldName );
+        m_templateFieldNames.AddTemplateFieldName( aFieldName, aGlobal );
     }
 
     /**
-     * Remove all template field names.
+     * Remove all global or project fieldname templates.
      */
-    void DeleteAllTemplateFieldNames()
+    void DeleteAllTemplateFieldNames( bool aGlobal )
     {
-        m_templateFieldNames.DeleteAllTemplateFieldNames();
+        m_templateFieldNames.DeleteAllFieldNameTemplates( aGlobal );
     }
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;

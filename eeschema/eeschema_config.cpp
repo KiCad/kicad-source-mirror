@@ -51,6 +51,10 @@
 //#include <widgets/widget_eeschema_color_config.h>
 #include <wildcards_and_files_ext.h>
 #include <ws_data_model.h>
+#include <widgets/ui_common.h>
+#include <dialogs/dialog_schematic_setup.h>
+#include "erc.h"
+
 
 static int s_defaultBusThickness = Mils2iu( DEFAULTBUSTHICKNESS );
 static int s_defaultWireThickness  = Mils2iu( DEFAULTDRAWLINETHICKNESS );
@@ -60,6 +64,171 @@ static bool s_selectTextAsBox = false;
 static bool s_selectDrawChildren = true;
 static bool s_selectFillShapes = false;
 static int  s_selectThickness = Mils2iu( DEFAULTSELECTIONTHICKNESS );
+
+#define FieldNameTemplatesKey         wxT( "FieldNameTemplates" )
+
+
+class PARAM_CFG_FIELDNAMES : public PARAM_CFG
+{
+protected:
+    TEMPLATES * m_Pt_param;   ///< Pointer to the parameter value
+
+public:
+    PARAM_CFG_FIELDNAMES( TEMPLATES * ptparam, const wxChar* group = nullptr ) :
+                          PARAM_CFG( wxEmptyString, PARAM_SEVERITIES, group )
+    {
+        m_Pt_param = ptparam;
+    }
+
+    void ReadParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        wxString templateFieldNames = aConfig->Read( FieldNameTemplatesKey, wxEmptyString );
+
+        if( !templateFieldNames.IsEmpty() )
+        {
+            TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
+
+            try
+            {
+                m_Pt_param->Parse( &lexer, false );
+            }
+            catch( const IO_ERROR& DBG( e ) )
+            {
+                // @todo show error msg
+                DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
+            }
+        }
+    }
+
+    void SaveParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        STRING_FORMATTER sf;
+        m_Pt_param->Format( &sf, 0, false );
+
+        wxString record = FROM_UTF8( sf.GetString().c_str() );
+        record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
+        record.Replace( wxT("  "), wxT(" "), true );  // double space to single
+
+        aConfig->Write( FieldNameTemplatesKey, record );
+    }
+};
+
+
+class PARAM_CFG_SEVERITIES : public PARAM_CFG
+{
+protected:
+    ERC_SETTINGS* m_Pt_param;   ///< Pointer to the parameter value
+
+public:
+    PARAM_CFG_SEVERITIES( ERC_SETTINGS* ptparam, const wxChar* group = nullptr ) :
+                          PARAM_CFG( wxEmptyString, PARAM_SEVERITIES, group )
+    {
+        m_Pt_param = ptparam;
+    }
+
+    void ReadParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        wxString oldPath = aConfig->GetPath();
+
+        // Read legacy settings first so that modern settings will overwrite them
+        bool flag;
+
+        if( aConfig->Read( wxT( "ERC_TestSimilarLabels" ), &flag, true ) )
+        {
+            if( flag )
+            {
+                m_Pt_param->m_Severities[ ERCE_SIMILAR_GLBL_LABELS ] = RPT_SEVERITY_WARNING;
+                m_Pt_param->m_Severities[ ERCE_SIMILAR_LABELS ] = RPT_SEVERITY_WARNING;
+            }
+            else
+            {
+                m_Pt_param->m_Severities[ ERCE_SIMILAR_GLBL_LABELS ] = RPT_SEVERITY_IGNORE;
+                m_Pt_param->m_Severities[ ERCE_SIMILAR_LABELS ] = RPT_SEVERITY_IGNORE;
+            }
+        }
+
+        if( aConfig->Read( wxT( "ERC_CheckUniqueGlobalLabels" ), &flag, true ) )
+        {
+            if( flag )
+                m_Pt_param->m_Severities[ ERCE_GLOBLABEL ] = RPT_SEVERITY_WARNING;
+            else
+                m_Pt_param->m_Severities[ ERCE_GLOBLABEL ] = RPT_SEVERITY_IGNORE;
+        }
+
+        if( aConfig->Read( wxT( "ERC_CheckBusDriverConflicts" ), &flag, true ) )
+        {
+            if( flag )
+                m_Pt_param->m_Severities[ ERCE_DRIVER_CONFLICT ] = RPT_SEVERITY_WARNING;
+            else
+                m_Pt_param->m_Severities[ ERCE_DRIVER_CONFLICT ] = RPT_SEVERITY_IGNORE;
+        }
+
+        if( aConfig->Read( wxT( "ERC_CheckBusEntryConflicts" ), &flag, true ) )
+        {
+            if( flag )
+                m_Pt_param->m_Severities[ ERCE_BUS_ENTRY_CONFLICT ] = RPT_SEVERITY_WARNING;
+            else
+                m_Pt_param->m_Severities[ ERCE_BUS_ENTRY_CONFLICT ] = RPT_SEVERITY_IGNORE;
+        }
+
+        if( aConfig->Read( wxT( "ERC_CheckBusToBusConflicts" ), &flag, true ) )
+        {
+            if( flag )
+                m_Pt_param->m_Severities[ ERCE_BUS_TO_BUS_CONFLICT ] = RPT_SEVERITY_ERROR;
+            else
+                m_Pt_param->m_Severities[ ERCE_BUS_TO_BUS_CONFLICT ] = RPT_SEVERITY_IGNORE;
+        }
+
+        if( aConfig->Read( wxT( "ERC_CheckBusToNetConflicts" ), &flag, true ) )
+        {
+            if( flag )
+                m_Pt_param->m_Severities[ ERCE_BUS_TO_NET_CONFLICT ] = RPT_SEVERITY_ERROR;
+            else
+                m_Pt_param->m_Severities[ ERCE_BUS_TO_NET_CONFLICT ] = RPT_SEVERITY_IGNORE;
+        }
+
+        // TO DO: figure out what we're going to use as keys here so we can read/write these....
+
+        aConfig->SetPath( oldPath );
+    }
+
+    void SaveParam( wxConfigBase* aConfig ) const override
+    {
+        if( !m_Pt_param || !aConfig )
+            return;
+
+        wxString oldPath = aConfig->GetPath();
+
+        // TO DO: figure out what we're going to use as keys here so we can read/write these....
+
+        // TO DO: for now just write out the legacy ones so we don't lose them
+        // TO DO: remove this once the new scheme is in place
+        aConfig->Write( wxT( "ERC_TestSimilarLabels" ),
+                        m_Pt_param->IsTestEnabled( ERCE_SIMILAR_GLBL_LABELS ) );
+        aConfig->Write( wxT( "ERC_CheckUniqueGlobalLabels" ),
+                        m_Pt_param->IsTestEnabled( ERCE_GLOBLABEL ) );
+        aConfig->Write( wxT( "ERC_CheckBusDriverConflicts" ),
+                        m_Pt_param->IsTestEnabled( ERCE_DRIVER_CONFLICT ) );
+        aConfig->Write( wxT( "ERC_CheckBusEntryConflicts" ),
+                        m_Pt_param->IsTestEnabled( ERCE_BUS_ENTRY_CONFLICT ) );
+        aConfig->Write( wxT( "ERC_CheckBusToBusConflicts" ),
+                        m_Pt_param->IsTestEnabled( ERCE_BUS_TO_BUS_CONFLICT ) );
+        aConfig->Write( wxT( "ERC_CheckBusToNetConflicts" ),
+                        m_Pt_param->IsTestEnabled( ERCE_BUS_TO_NET_CONFLICT ) );
+
+        aConfig->SetPath( oldPath );
+    }
+};
+
 
 int GetDefaultBusThickness()
 {
@@ -180,7 +349,7 @@ void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
     book->AddSubPage( new PANEL_EESCHEMA_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_EESCHEMA_SETTINGS( this, book ), _( "Editing Options" ) );
     book->AddSubPage( new PANEL_EESCHEMA_COLOR_SETTINGS( this, book ), _( "Colors" ) );
-    book->AddSubPage( new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( this, book ),
+    book->AddSubPage( new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( this, book, true ),
                       _( "Field Name Templates" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );
@@ -190,6 +359,9 @@ void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 std::vector<PARAM_CFG*>& SCH_EDIT_FRAME::GetProjectFileParameters()
 
 {
+    // JEY TODO: everything in here which has a GUI needs to move from Preferences to
+    //  Schematic Setup Dialog...
+
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;
 
@@ -214,26 +386,18 @@ std::vector<PARAM_CFG*>& SCH_EDIT_FRAME::GetProjectFileParameters()
     params.push_back( new PARAM_CFG_INT( wxT( "LabSize" ),
                                          &s_defaultTextSize, DEFAULT_SIZE_TEXT, 5, 1000 ) );
 
-    params.push_back( new PARAM_CFG_BOOL( wxT( "ERC_WriteFile" ),
-                                          &m_ercSettings.write_erc_file, false ) );
+    params.push_back( new PARAM_CFG_FIELDNAMES( &m_templateFieldNames ) );
+    params.push_back( new PARAM_CFG_SEVERITIES( &m_ercSettings ) );
 
-    params.push_back( new PARAM_CFG_BOOL( wxT( "ERC_TestSimilarLabels" ),
-                                          &m_ercSettings.check_similar_labels, true ) );
+    return params;
+}
 
-    params.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckUniqueGlobalLabels" ),
-                                          &m_ercSettings.check_unique_global_labels, true ) );
 
-    params.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckBusDriverConflicts" ),
-                                          &m_ercSettings.check_bus_driver_conflicts, true ) );
+std::vector<PARAM_CFG*>  ERC_SETTINGS::GetProjectFileParameters()
+{
+    std::vector<PARAM_CFG*> params;
 
-    params.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckBusEntryConflicts" ),
-                                          &m_ercSettings.check_bus_entry_conflicts, true ) );
-
-    params.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckBusToBusConflicts" ),
-                                          &m_ercSettings.check_bus_to_bus_conflicts, true ) );
-
-    params.push_back( new PARAM_CFG_BOOL( wxT( "ERC_CheckBusToNetConflicts" ),
-                                          &m_ercSettings.check_bus_to_net_conflicts, true ) );
+    params.push_back( new PARAM_CFG_SEVERITIES( this ) );
 
     return params;
 }
@@ -265,6 +429,24 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
     pglayout.SetPageLayout( filename );
 
     return ret;
+}
+
+
+void SCH_EDIT_FRAME::DoShowSchematicSetupDialog( const wxString& aInitialPage,
+                                                 const wxString& aInitialParentPage )
+{
+    DIALOG_SCHEMATIC_SETUP dlg( this );
+
+    if( !aInitialPage.IsEmpty() )
+        dlg.SetInitialPage( aInitialPage, aInitialParentPage );
+
+    if( dlg.ShowQuasiModal() == wxID_OK )
+    {
+        SaveProjectSettings();
+
+        GetCanvas()->Refresh();
+        OnModify();
+    }
 }
 
 
@@ -335,7 +517,7 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
         try
         {
-            m_templateFieldNames.Parse( &lexer );
+            m_templateFieldNames.Parse( &lexer, true );
         }
         catch( const IO_ERROR& DBG( e ) )
         {
@@ -399,7 +581,7 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     // Save template fieldnames
     STRING_FORMATTER sf;
-    m_templateFieldNames.Format( &sf, 0 );
+    m_templateFieldNames.Format( &sf, 0, true );
 
     wxString record = FROM_UTF8( sf.GetString().c_str() );
     record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines

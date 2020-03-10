@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@
  */
 
 #include <fctsys.h>
-#include <base_screen.h>
 #include <widgets/wx_grid.h>
 #include <template_fieldnames.h>
 #include <grid_tricks.h>
@@ -33,10 +32,17 @@
 #include <panel_eeschema_template_fieldnames.h>
 
 PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT_FRAME* aFrame,
-                                                                        wxWindow* aWindow ) :
+                                                                        wxWindow* aWindow,
+                                                                        bool aGlobal ) :
         PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE( aWindow ),
-        m_frame( aFrame )
+        m_frame( aFrame ),
+        m_global( aGlobal )
 {
+    wxString msg;
+
+    msg.Printf( m_title->GetLabel(), aGlobal ? _( "Global" ) : _( "Project" ) );
+    m_title->SetLabel( msg );
+
     m_addFieldButton->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_deleteFieldButton->SetBitmap( KiBitmap( trash_xpm ) );
 
@@ -55,7 +61,7 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::~PANEL_EESCHEMA_TEMPLATE_FIELDNAMES()
 
 bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataToWindow()
 {
-    m_fields = m_frame->GetTemplateFieldNames();
+    m_fields = m_frame->GetTemplateFieldNames( m_global );
     return TransferDataToGrid();
 }
 
@@ -68,7 +74,7 @@ void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnAddButtonClick( wxCommandEvent& event
     int row = m_grid->GetNumberRows();
     TransferDataFromGrid();
 
-    TEMPLATE_FIELDNAME newFieldname = TEMPLATE_FIELDNAME( "Fieldname" );
+    TEMPLATE_FIELDNAME newFieldname = TEMPLATE_FIELDNAME( _( "Untitled Field" ) );
     newFieldname.m_Visible = false;
     m_fields.insert( m_fields.end(), newFieldname );
     TransferDataToGrid();
@@ -152,10 +158,10 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
     if( !TransferDataFromGrid() )
         return false;
 
-    m_frame->DeleteAllTemplateFieldNames();
+    m_frame->DeleteAllTemplateFieldNames( m_global );
 
     for( const TEMPLATE_FIELDNAME& field : m_fields )
-        m_frame->AddTemplateFieldName( field );
+        m_frame->AddTemplateFieldName( field, m_global );
 
     return true;
 }

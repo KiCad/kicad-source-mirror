@@ -21,6 +21,13 @@
 #ifndef _ERC_SETTINGS_H
 #define _ERC_SETTINGS_H
 
+#include <erc.h>
+#include <widgets/ui_common.h>
+
+
+class PARAM_CFG;
+
+
 /**
  * Container for ERC settings
  *
@@ -32,24 +39,18 @@ class ERC_SETTINGS
 public:
     void LoadDefaults()
     {
-        write_erc_file = false;
-        check_similar_labels = true;
-        check_unique_global_labels = true;
-        check_bus_driver_conflicts = true;
-        check_bus_entry_conflicts = true;
-        check_bus_to_bus_conflicts = true;
-        check_bus_to_net_conflicts = true;
+        m_Severities[ ERCE_SIMILAR_GLBL_LABELS ] = RPT_SEVERITY_WARNING;
+        m_Severities[ ERCE_SIMILAR_LABELS ] = RPT_SEVERITY_WARNING;
+        m_Severities[ ERCE_GLOBLABEL ] = RPT_SEVERITY_WARNING;
+        m_Severities[ ERCE_DRIVER_CONFLICT ] = RPT_SEVERITY_WARNING;
+        m_Severities[ ERCE_BUS_ENTRY_CONFLICT ] = RPT_SEVERITY_WARNING;
+        m_Severities[ ERCE_BUS_TO_BUS_CONFLICT ] = RPT_SEVERITY_ERROR;
+        m_Severities[ ERCE_BUS_TO_NET_CONFLICT ] = RPT_SEVERITY_ERROR;
     }
 
     bool operator==( const ERC_SETTINGS& other ) const
     {
-        return ( other.write_erc_file == write_erc_file &&
-                 other.check_similar_labels == check_similar_labels &&
-                 other.check_unique_global_labels == check_unique_global_labels &&
-                 other.check_bus_driver_conflicts == check_bus_driver_conflicts &&
-                 other.check_bus_entry_conflicts == check_bus_entry_conflicts &&
-                 other.check_bus_to_bus_conflicts == check_bus_to_bus_conflicts &&
-                 other.check_bus_to_net_conflicts == check_bus_to_net_conflicts );
+        return ( other.m_Severities == m_Severities );
     }
 
     bool operator!=( const ERC_SETTINGS& other ) const
@@ -57,26 +58,14 @@ public:
         return !( other == *this );
     }
 
-    /// If true, write ERC results to a file
-    bool write_erc_file;
+    bool IsTestEnabled( int aErrorCode ) const
+    {
+        return m_Severities.at( aErrorCode ) != RPT_SEVERITY_IGNORE;
+    }
 
-    /// If true, check each sheet for labels that differ only by letter case
-    bool check_similar_labels;
+    std::vector<PARAM_CFG*> GetProjectFileParameters();
 
-    /// If true, check to ensure that each global label apperas more than once
-    bool check_unique_global_labels;
-
-    /// If true, check that buses don't have conflicting drivers
-    bool check_bus_driver_conflicts;
-
-    /// If true, check that wires connecting to buses actually exist in the bus
-    bool check_bus_entry_conflicts;
-
-    /// If true, check that bus-to-bus connections share at least one member
-    bool check_bus_to_bus_conflicts;
-
-    /// If true, check that bus wires don't graphically connect to net objects (or vice versa)
-    bool check_bus_to_net_conflicts;
+    std::map<int, int> m_Severities;
 };
 
 #endif

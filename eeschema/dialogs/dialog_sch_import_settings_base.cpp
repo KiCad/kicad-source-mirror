@@ -5,11 +5,11 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_import_settings_base.h"
+#include "dialog_sch_import_settings_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_IMPORT_SETTINGS_BASE::DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_SCH_IMPORT_SETTINGS_BASE::DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
@@ -45,24 +45,6 @@ DIALOG_IMPORT_SETTINGS_BASE::DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWi
 	importLabel->Wrap( -1 );
 	bmiddleSizer->Add( importLabel, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_LayersOpt = new wxCheckBox( this, wxID_ANY, _("Layers setup"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_LayersOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_TextAndGraphicsOpt = new wxCheckBox( this, wxID_ANY, _("Text && Graphics default properties"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_TextAndGraphicsOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_ConstraintsOpt = new wxCheckBox( this, wxID_ANY, _("Design Rules"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_ConstraintsOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_NetclassesOpt = new wxCheckBox( this, wxID_ANY, _("Net Classes"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_NetclassesOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_TracksAndViasOpt = new wxCheckBox( this, wxID_ANY, _("Predefined Track and Via dimensions"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_TracksAndViasOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_MaskAndPasteOpt = new wxCheckBox( this, wxID_ANY, _("Solder Mask/Paste defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	bmiddleSizer->Add( m_MaskAndPasteOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
 	m_SeveritiesOpt = new wxCheckBox( this, wxID_ANY, _("Violation severities"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_SeveritiesOpt, 0, wxRIGHT|wxLEFT, 5 );
 
@@ -94,14 +76,14 @@ DIALOG_IMPORT_SETTINGS_BASE::DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWi
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnBrowseClicked ), NULL, this );
-	m_selectAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnSelectAll ), NULL, this );
+	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_IMPORT_SETTINGS_BASE::OnBrowseClicked ), NULL, this );
+	m_selectAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_IMPORT_SETTINGS_BASE::OnSelectAll ), NULL, this );
 }
 
-DIALOG_IMPORT_SETTINGS_BASE::~DIALOG_IMPORT_SETTINGS_BASE()
+DIALOG_SCH_IMPORT_SETTINGS_BASE::~DIALOG_SCH_IMPORT_SETTINGS_BASE()
 {
 	// Disconnect Events
-	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnBrowseClicked ), NULL, this );
-	m_selectAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_SETTINGS_BASE::OnSelectAll ), NULL, this );
+	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_IMPORT_SETTINGS_BASE::OnBrowseClicked ), NULL, this );
+	m_selectAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_IMPORT_SETTINGS_BASE::OnSelectAll ), NULL, this );
 
 }

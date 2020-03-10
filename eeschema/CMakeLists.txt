@@ -82,10 +82,13 @@ set( EESCHEMA_DLGS
     dialogs/dialog_rescue_each.cpp
     dialogs/dialog_rescue_each_base.cpp
     dialogs/dialog_edit_sheet_pin.cpp
+    dialogs/dialog_sch_import_settings.cpp
+    dialogs/dialog_sch_import_settings_base.cpp
     dialogs/dialog_sch_sheet_props.cpp
     dialogs/dialog_sch_sheet_props_base.cpp
     dialogs/dialog_schematic_find.cpp
     dialogs/dialog_schematic_find_base.cpp
+    dialogs/dialog_schematic_setup.cpp
     dialogs/dialog_set_grid.cpp
     dialogs/dialog_set_grid_base.cpp
     dialogs/dialog_symbol_remap.cpp
@@ -105,6 +108,8 @@ set( EESCHEMA_DLGS
     dialogs/panel_libedit_settings_base.cpp
     dialogs/panel_libedit_color_settings.cpp
     dialogs/panel_libedit_color_settings_base.cpp
+    dialogs/panel_setup_formatting.cpp
+    dialogs/panel_setup_formatting_base.cpp
     dialogs/panel_sym_lib_table.cpp
     dialogs/panel_sym_lib_table_base.cpp
     )
@@ -249,6 +254,7 @@ set( EESCHEMA_SRCS
 set( EESCHEMA_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/common/dialogs/dialog_page_settings.cpp
     ${CMAKE_SOURCE_DIR}/common/dialogs/panel_display_options.cpp
+    ${CMAKE_SOURCE_DIR}/common/dialogs/panel_setup_severities.cpp
     ${CMAKE_SOURCE_DIR}/common/common.cpp
     ${CMAKE_SOURCE_DIR}/common/base_screen.cpp
     ${CMAKE_SOURCE_DIR}/common/base_units.cpp

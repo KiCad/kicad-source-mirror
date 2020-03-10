@@ -254,11 +254,9 @@ public:
      *
      * Precondition: graph is up-to-date
      *
-     * @param aSettings is used to control which tests to run
-     * @param aCreateMarkers controls whether error markers are created
      * @return the number of errors found
      */
-    int RunERC( const ERC_SETTINGS& aSettings, bool aCreateMarkers = true );
+    int RunERC();
 
     const NET_MAP& GetNetMap() const { return m_net_code_to_subgraphs_map; }
 
@@ -404,11 +402,9 @@ private:
      * For example, a net wire connected to a bus port/pin, or vice versa
      *
      * @param  aSubgraph      is the subgraph to examine
-     * @param  aCreateMarkers controls whether error markers are created
      * @return                true for no errors, false for errors
      */
-    bool ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSubgraph,
-                                    bool aCreateMarkers );
+    bool ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
      * Checks one subgraph for conflicting connections between two bus items
@@ -418,11 +414,9 @@ private:
      * sheet pin
      *
      * @param  aSubgraph      is the subgraph to examine
-     * @param  aCreateMarkers controls whether error markers are created
      * @return                true for no errors, false for errors
      */
-    bool ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSubgraph,
-                                    bool aCreateMarkers );
+    bool ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
      * Checks one subgraph for conflicting bus entry to bus connections
@@ -434,11 +428,9 @@ private:
      * "USB.DP" but someone might accidentally just enter "DP"
      *
      * @param  aSubgraph      is the subgraph to examine
-     * @param  aCreateMarkers controls whether error markers are created
      * @return                true for no errors, false for errors
      */
-    bool ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH* aSubgraph,
-                                         bool aCreateMarkers );
+    bool ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
      * Checks one subgraph for proper presence or absence of no-connect symbols
@@ -447,11 +439,9 @@ private:
      * A pin without a no-connect symbol should have at least one connection
      *
      * @param  aSubgraph      is the subgraph to examine
-     * @param  aCreateMarkers controls whether error markers are created
      * @return                true for no errors, false for errors
      */
-    bool ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
-                             bool aCreateMarkers );
+    bool ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
      * Checks one subgraph for proper connection of labels
@@ -459,12 +449,10 @@ private:
      * Labels should be connected to something
      *
      * @param  aSubgraph      is the subgraph to examine
-     * @param  aCreateMarkers controls whether error markers are created
      * @param  aCheckGlobalLabels is true if global labels should be checked for loneliness
      * @return                true for no errors, false for errors
      */
-    bool ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph, bool aCreateMarkers,
-                         bool aCheckGlobalLabels );
+    bool ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph );
 
 };
 

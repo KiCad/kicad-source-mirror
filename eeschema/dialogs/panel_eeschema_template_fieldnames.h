@@ -31,6 +31,7 @@ class PANEL_EESCHEMA_TEMPLATE_FIELDNAMES : public PANEL_EESCHEMA_TEMPLATE_FIELDN
 protected:
     SCH_EDIT_FRAME*     m_frame;
     TEMPLATE_FIELDNAMES m_fields;
+    bool                m_global;   // Editing global (vs. project) fieldname templates
 
     int                 m_checkboxColWidth;
 
@@ -57,7 +58,7 @@ protected:
     void OnDeleteButtonClick( wxCommandEvent& event ) override;
 
 public:
-    PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow );
+    PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow, bool aGlobal );
     ~PANEL_EESCHEMA_TEMPLATE_FIELDNAMES() override;
 
 private:

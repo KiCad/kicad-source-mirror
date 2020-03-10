@@ -680,6 +680,9 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     if( manager )
         static_cast<EDA_BASE_FRAME*>( manager )->InstallPreferences( &dlg, hotkeysPanel );
 
+    for( int i = 0; i < book->GetPageCount(); ++i )
+        book->GetPage( i )->Layout();
+
     if( dlg.ShowModal() == wxID_OK )
         dlg.Kiway().CommonSettingsChanged( false );
 }

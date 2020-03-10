@@ -67,8 +67,7 @@ END_EVENT_TABLE()
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     DIALOG_ERC_BASE( parent, ID_DIALOG_ERC ),  // parent looks for this ID explicitly
     m_buttonList(),
-    m_initialized( false ),
-    m_settings()
+    m_initialized( false )
 {
     m_parent = parent;
     m_lastMarkerFound = nullptr;
@@ -93,18 +92,6 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 }
 
 
-DIALOG_ERC::~DIALOG_ERC()
-{
-    transferControlsToSettings();
-
-    if( m_settings != m_parent->GetErcSettings() )
-    {
-        m_parent->UpdateErcSettings( m_settings );
-        m_parent->SaveProjectSettings();
-    }
-}
-
-
 void DIALOG_ERC::Init()
 {
     m_initialized = false;
@@ -114,9 +101,6 @@ void DIALOG_ERC::Init()
         for( auto& button : buttonRow )
             button = NULL;
     }
-
-    m_settings = m_parent->GetErcSettings();
-    transferSettingsToControls();
 
     SCH_SCREENS screens;
     updateMarkerCounts( &screens );
@@ -133,30 +117,6 @@ void DIALOG_ERC::OnUpdateUI( wxUpdateUIEvent& event )
     m_buttondelmarkers->Show( m_NoteBook->GetSelection() == 0 );
     m_ResetOptButton->Show( m_NoteBook->GetSelection() == 1 );
     m_buttonsSizer->Layout();
-}
-
-
-void DIALOG_ERC::transferSettingsToControls()
-{
-    m_WriteResultOpt->SetValue( m_settings.write_erc_file );
-    m_cbTestSimilarLabels->SetValue( m_settings.check_similar_labels );
-    m_cbTestUniqueGlbLabels->SetValue( m_settings.check_unique_global_labels );
-    m_cbCheckBusDriverConflicts->SetValue( m_settings.check_bus_driver_conflicts );
-    m_cbCheckBusEntries->SetValue( m_settings.check_bus_entry_conflicts );
-    m_cbCheckBusToBusConflicts->SetValue( m_settings.check_bus_to_bus_conflicts );
-    m_cbCheckBusToNetConflicts->SetValue( m_settings.check_bus_to_net_conflicts );
-}
-
-
-void DIALOG_ERC::transferControlsToSettings()
-{
-    m_settings.write_erc_file = m_WriteResultOpt->GetValue();
-    m_settings.check_similar_labels = m_cbTestSimilarLabels->GetValue();
-    m_settings.check_unique_global_labels = m_cbTestUniqueGlbLabels->GetValue();
-    m_settings.check_bus_driver_conflicts = m_cbCheckBusDriverConflicts->GetValue();
-    m_settings.check_bus_entry_conflicts = m_cbCheckBusEntries->GetValue();
-    m_settings.check_bus_to_bus_conflicts = m_cbCheckBusToBusConflicts->GetValue();
-    m_settings.check_bus_to_net_conflicts = m_cbCheckBusToNetConflicts->GetValue();
 }
 
 
@@ -455,8 +415,6 @@ void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
 {
     memcpy( DiagErc, DefaultDiagErc, sizeof( DiagErc ) );
     ReBuildMatrixPanel();
-    m_settings.LoadDefaults();
-    transferSettingsToControls();
 }
 
 
@@ -479,8 +437,6 @@ void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
 void DIALOG_ERC::TestErc( REPORTER& aReporter )
 {
     wxFileName fn;
-
-    transferControlsToSettings();
 
     // Build the whole sheet list in hierarchy (sheet, not screen)
     SCH_SHEET_LIST sheets( g_RootSheet );
@@ -507,7 +463,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
 
     // The connection graph has a whole set of ERC checks it can run
     m_parent->RecalculateConnections( NO_CLEANUP );
-    g_ConnectionGraph->RunERC( m_settings );
+    g_ConnectionGraph->RunERC();
 
     // Test is all units of each multiunit component have the same footprint assigned.
     TestMultiunitFootprints( sheets );
@@ -604,8 +560,11 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
 
     // Test similar labels (i;e. labels which are identical when
     // using case insensitive comparisons)
-    if( m_settings.check_similar_labels )
+    if( m_parent->GetErcSettings().IsTestEnabled( ERCE_SIMILAR_GLBL_LABELS )
+            || m_parent->GetErcSettings().IsTestEnabled( ERCE_SIMILAR_LABELS ) )
+    {
         objectsConnectedList->TestforSimilarLabels();
+    }
 
     // Displays global results:
     updateMarkerCounts( &screens );
@@ -623,21 +582,6 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
 
     // Display message
     aReporter.ReportTail( _( "Finished" ), RPT_SEVERITY_INFO );
-
-    if( m_settings.write_erc_file )
-    {
-        fn = g_RootSheet->GetScreen()->GetFileName();
-        fn.SetExt( wxT( "erc" ) );
-
-        wxFileDialog dlg( this, _( "ERC File" ), fn.GetPath(), fn.GetFullName(),
-                          ErcFileWildcard(), wxFD_SAVE );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return;
-
-        if( WriteDiagnosticERC( GetUserUnits(), dlg.GetPath() ) )
-            ExecuteFile( this, Pgm().GetEditorName(), QuoteFullPath( fn ) );
-    }
 }
 
 

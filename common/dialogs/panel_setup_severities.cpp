@@ -21,16 +21,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <drc/drc.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/ui_common.h>
-#include "panel_setup_drc_severities.h"
+#include <drc_item.h>
+#include "panel_setup_severities.h"
 
 
-PANEL_SETUP_DRC_SEVERITIES::PANEL_SETUP_DRC_SEVERITIES( PAGED_DIALOG* aParent,
-                                                        PCB_EDIT_FRAME* aFrame ) :
+PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
+                                                std::map<int, int>& aSeverities,
+                                                int aFirstErrorCode, int aLastErrorCode ) :
         wxPanel( aParent->GetTreebook() ),
-        m_brdSettings( aFrame->GetBoard()->GetDesignSettings() )
+        m_severities( aSeverities )
 {
     wxString          severities[] = { _( "Error" ), _( "Warning" ), _( "Ignore" ) };
     int               baseID = 1000;
@@ -43,7 +44,7 @@ PANEL_SETUP_DRC_SEVERITIES::PANEL_SETUP_DRC_SEVERITIES( PAGED_DIALOG* aParent,
     wxFlexGridSizer* gridSizer = new wxFlexGridSizer( 0, 2, 0, 5 );
     gridSizer->SetFlexibleDirection( wxBOTH );
 
-   	for( int errorCode = DRCE_FIRST; errorCode <= DRCE_LAST; ++errorCode )
+   	for( int errorCode = aFirstErrorCode; errorCode <= aLastErrorCode; ++errorCode )
     {
    	    DRC_ITEM drcItem( errorCode, wxEmptyString );
    	    wxString msg = drcItem.GetErrorText();
@@ -87,9 +88,9 @@ PANEL_SETUP_DRC_SEVERITIES::PANEL_SETUP_DRC_SEVERITIES( PAGED_DIALOG* aParent,
 }
 
 
-void PANEL_SETUP_DRC_SEVERITIES::ImportSettingsFrom( BOARD* aBoard )
+void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, int>& aSettings )
 {
-    for( auto const& entry : aBoard->GetDesignSettings().m_DRCSeverities )
+    for( auto const& entry : aSettings )
     {
         if( m_buttonMap.count( entry.first ) )
         {
@@ -104,9 +105,9 @@ void PANEL_SETUP_DRC_SEVERITIES::ImportSettingsFrom( BOARD* aBoard )
 }
 
 
-bool PANEL_SETUP_DRC_SEVERITIES::TransferDataToWindow()
+bool PANEL_SETUP_SEVERITIES::TransferDataToWindow()
 {
-    for( auto const& entry : m_brdSettings.m_DRCSeverities )
+    for( auto const& entry : m_severities )
     {
         if( m_buttonMap.count( entry.first ) )
         {
@@ -123,7 +124,7 @@ bool PANEL_SETUP_DRC_SEVERITIES::TransferDataToWindow()
 }
 
 
-bool PANEL_SETUP_DRC_SEVERITIES::TransferDataFromWindow()
+bool PANEL_SETUP_SEVERITIES::TransferDataFromWindow()
 {
     for( auto const& entry : m_buttonMap )
     {
@@ -136,7 +137,7 @@ bool PANEL_SETUP_DRC_SEVERITIES::TransferDataFromWindow()
         else if( entry.second[2]->GetValue() )
             severity = RPT_SEVERITY_IGNORE;
 
-        m_brdSettings.m_DRCSeverities[ entry.first ] = severity;
+        m_severities[ entry.first ] = severity;
     }
 
     return true;

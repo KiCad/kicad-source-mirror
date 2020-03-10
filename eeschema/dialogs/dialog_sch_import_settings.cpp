@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,19 +22,18 @@
  */
 
 #include <bitmaps.h>
-#include <pcb_edit_frame.h>
-#include <class_board.h>
+#include <sch_edit_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
 
-#include <dialog_import_settings.h>
+#include <dialog_sch_import_settings.h>
 
 
-wxString DIALOG_IMPORT_SETTINGS::m_filePath;     // remember for session
+wxString DIALOG_SCH_IMPORT_SETTINGS::m_filePath;     // remember for session
 
 
-DIALOG_IMPORT_SETTINGS::DIALOG_IMPORT_SETTINGS( wxWindow* aParent, PCB_EDIT_FRAME* aFrame ) :
-        DIALOG_IMPORT_SETTINGS_BASE( aParent ),
+DIALOG_SCH_IMPORT_SETTINGS::DIALOG_SCH_IMPORT_SETTINGS( wxWindow* aParent, SCH_EDIT_FRAME* aFrame ) :
+        DIALOG_SCH_IMPORT_SETTINGS_BASE( aParent ),
         m_frame( aFrame )
 {
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
@@ -46,16 +45,16 @@ DIALOG_IMPORT_SETTINGS::DIALOG_IMPORT_SETTINGS( wxWindow* aParent, PCB_EDIT_FRAM
 }
 
 
-bool DIALOG_IMPORT_SETTINGS::TransferDataToWindow()
+bool DIALOG_SCH_IMPORT_SETTINGS::TransferDataToWindow()
 {
     m_filePathCtrl->SetValue( m_filePath );
     return true;
 }
 
 
-void DIALOG_IMPORT_SETTINGS::OnBrowseClicked( wxCommandEvent& event )
+void DIALOG_SCH_IMPORT_SETTINGS::OnBrowseClicked( wxCommandEvent& event )
 {
-    wxFileName fn = m_frame->GetBoard()->GetFileName();
+    wxFileName fn = g_RootSheet->GetFileName();
     fn.SetExt( ProjectFileExtension );
 
     wxFileDialog dlg( this, _( "Import Settings From" ), fn.GetPath(), fn.GetFullName(),
@@ -66,7 +65,7 @@ void DIALOG_IMPORT_SETTINGS::OnBrowseClicked( wxCommandEvent& event )
 }
 
 
-bool DIALOG_IMPORT_SETTINGS::TransferDataFromWindow()
+bool DIALOG_SCH_IMPORT_SETTINGS::TransferDataFromWindow()
 {
     if( !wxFileExists( m_filePathCtrl->GetValue() ) )
     {
@@ -80,13 +79,7 @@ bool DIALOG_IMPORT_SETTINGS::TransferDataFromWindow()
 }
 
 
-void DIALOG_IMPORT_SETTINGS::OnSelectAll( wxCommandEvent& event )
+void DIALOG_SCH_IMPORT_SETTINGS::OnSelectAll( wxCommandEvent& event )
 {
-    m_LayersOpt->SetValue( true );
-    m_TextAndGraphicsOpt->SetValue( true );
-    m_ConstraintsOpt->SetValue( true );
-    m_NetclassesOpt->SetValue( true );
-    m_TracksAndViasOpt->SetValue( true );
-    m_MaskAndPasteOpt->SetValue( true );
     m_SeveritiesOpt->SetValue( true );
 }

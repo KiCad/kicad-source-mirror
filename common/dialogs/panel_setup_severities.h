@@ -22,35 +22,34 @@
  */
 
 
-#ifndef KICAD_PANEL_SETUP_DRC_SEVERITIES_H
-#define KICAD_PANEL_SETUP_DRC_SEVERITIES_H
+#ifndef KICAD_PANEL_SETUP_SEVERITIES_H
+#define KICAD_PANEL_SETUP_SEVERITIES_H
 
 #include <map>
 #include <wx/panel.h>
 
 
-class BOARD;
-class BOARD_DESIGN_SETTINGS;
 class PAGED_DIALOG;
-class PCB_EDIT_FRAME;
+class EDA_DRAW_FRAME;
 class wxRadioBox;
 
 
-class PANEL_SETUP_DRC_SEVERITIES : public wxPanel
+class PANEL_SETUP_SEVERITIES : public wxPanel
 {
 private:
-    BOARD_DESIGN_SETTINGS&           m_brdSettings;
+    std::map<int, int>&              m_severities;
     std::map<int, wxRadioButton*[4]> m_buttonMap;   // map from DRC error code to button group
 
 public:
-    PANEL_SETUP_DRC_SEVERITIES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
-    ~PANEL_SETUP_DRC_SEVERITIES( ) { };
+    PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, std::map<int, int>& aSeverities,
+                            int aFirstErrorCode, int aLastErrorCode );
+    ~PANEL_SETUP_SEVERITIES( ) { };
 
-    void ImportSettingsFrom( BOARD* aBoard );
+    void ImportSettingsFrom( std::map<int, int>& aSettings );
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 };
 
-#endif //KICAD_PANEL_SETUP_DRC_SEVERITIES_H
+#endif //KICAD_PANEL_SETUP_SEVERITIES_H

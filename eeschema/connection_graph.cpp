@@ -41,6 +41,7 @@
 #include <advanced_config.h>
 
 #include <connection_graph.h>
+#include <widgets/ui_common.h>
 
 bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 {
@@ -1888,9 +1889,11 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
 }
 
 
-int CONNECTION_GRAPH::RunERC( const ERC_SETTINGS& aSettings, bool aCreateMarkers )
+int CONNECTION_GRAPH::RunERC()
 {
-    int error_count = 0;
+    int           error_count = 0;
+    ERC_SETTINGS& settings = m_frame->GetErcSettings();
+
 
     for( auto&& subgraph : m_subgraphs )
     {
@@ -1908,29 +1911,29 @@ int CONNECTION_GRAPH::RunERC( const ERC_SETTINGS& aSettings, bool aCreateMarkers
          * format due to their TestDanglingEnds() implementation.
          */
 
-        if( aSettings.check_bus_driver_conflicts &&
-            !subgraph->ResolveDrivers( aCreateMarkers ) )
+        if( settings.IsTestEnabled( ERCE_DRIVER_CONFLICT ) && !subgraph->ResolveDrivers() )
             error_count++;
 
-        if( aSettings.check_bus_to_net_conflicts &&
-            !ercCheckBusToNetConflicts( subgraph, aCreateMarkers ) )
+        if( settings.IsTestEnabled( ERCE_BUS_TO_NET_CONFLICT )
+                && !ercCheckBusToNetConflicts( subgraph ) )
             error_count++;
 
-        if( aSettings.check_bus_entry_conflicts &&
-            !ercCheckBusToBusEntryConflicts( subgraph, aCreateMarkers ) )
+        if( settings.IsTestEnabled( ERCE_BUS_ENTRY_CONFLICT )
+                && !ercCheckBusToBusEntryConflicts( subgraph ) )
             error_count++;
 
-        if( aSettings.check_bus_to_bus_conflicts &&
-            !ercCheckBusToBusConflicts( subgraph, aCreateMarkers ) )
+        if( settings.IsTestEnabled( ERCE_BUS_TO_BUS_CONFLICT )
+                && !ercCheckBusToBusConflicts( subgraph ) )
             error_count++;
 
         // The following checks are always performed since they don't currently
         // have an option exposed to the user
 
-        if( !ercCheckNoConnects( subgraph, aCreateMarkers ) )
+        if( !ercCheckNoConnects( subgraph ) )
             error_count++;
 
-        if( !ercCheckLabels( subgraph, aCreateMarkers, aSettings.check_unique_global_labels ) )
+        if( ( settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED )
+                || settings.IsTestEnabled( ERCE_GLOBLABEL ) ) && !ercCheckLabels( subgraph ) )
             error_count++;
     }
 
@@ -1938,8 +1941,7 @@ int CONNECTION_GRAPH::RunERC( const ERC_SETTINGS& aSettings, bool aCreateMarkers
 }
 
 
-bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSubgraph,
-                                                  bool aCreateMarkers )
+bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSubgraph )
 {
     wxString msg;
     auto sheet = aSubgraph->m_sheet;
@@ -1983,23 +1985,19 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
 
     if( net_item && bus_item )
     {
-        if( aCreateMarkers )
-        {
-            msg.Printf( _( "%s and %s are graphically connected but cannot"
-                           " electrically connect because one is a bus and"
-                           " the other is a net." ),
-                        bus_item->GetSelectMenuText( m_frame->GetUserUnits() ),
-                        net_item->GetSelectMenuText( m_frame->GetUserUnits() ) );
+        msg.Printf( _( "%s and %s are graphically connected but cannot electrically connect "
+                       "because one is a bus and the other is a net." ),
+                    bus_item->GetSelectMenuText( m_frame->GetUserUnits() ),
+                    net_item->GetSelectMenuText( m_frame->GetUserUnits() ) );
 
-            auto marker = new SCH_MARKER();
-            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
-            marker->SetData( ERCE_BUS_TO_NET_CONFLICT,
-                             net_item->GetPosition(), msg,
-                             bus_item->GetPosition() );
+        auto marker = new SCH_MARKER();
+        marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+        marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
+        marker->SetData( ERCE_BUS_TO_NET_CONFLICT,
+                         net_item->GetPosition(), msg,
+                         bus_item->GetPosition() );
 
-            screen->Append( marker );
-        }
+        screen->Append( marker );
 
         return false;
     }
@@ -2008,8 +2006,7 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
 }
 
 
-bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSubgraph,
-                                                  bool aCreateMarkers )
+bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSubgraph )
 {
     wxString msg;
     auto sheet = aSubgraph->m_sheet;
@@ -2064,22 +2061,18 @@ bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSu
 
         if( !match )
         {
-            if( aCreateMarkers )
-            {
-                msg.Printf( _( "%s and %s are graphically connected but do "
-                               "not share any bus members" ),
-                            label->GetSelectMenuText( m_frame->GetUserUnits() ),
-                            port->GetSelectMenuText( m_frame->GetUserUnits() ) );
+            msg.Printf( _( "%s and %s are graphically connected but do not share any bus members" ),
+                        label->GetSelectMenuText( m_frame->GetUserUnits() ),
+                        port->GetSelectMenuText( m_frame->GetUserUnits() ) );
 
-                auto marker = new SCH_MARKER();
-                marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-                marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
-                marker->SetData( ERCE_BUS_TO_BUS_CONFLICT,
-                                 label->GetPosition(), msg,
-                                 port->GetPosition() );
+            auto marker = new SCH_MARKER();
+            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
+            marker->SetData( ERCE_BUS_TO_BUS_CONFLICT,
+                             label->GetPosition(), msg,
+                             port->GetPosition() );
 
-                screen->Append( marker );
-            }
+            screen->Append( marker );
 
             return false;
         }
@@ -2089,8 +2082,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSu
 }
 
 
-bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH* aSubgraph,
-                                                       bool aCreateMarkers )
+bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH* aSubgraph )
 {
     wxString msg;
     bool conflict = false;
@@ -2156,23 +2148,20 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 
     if( conflict )
     {
-        if( aCreateMarkers )
-        {
-            msg.Printf( _( "%s (%s) is connected to %s (%s) but is not a member of the bus" ),
-                        bus_entry->GetSelectMenuText( m_frame->GetUserUnits() ),
-                        bus_entry->Connection( sheet )->Name( true ),
-                        bus_wire->GetSelectMenuText( m_frame->GetUserUnits() ),
-                        bus_wire->Connection( sheet )->Name( true ) );
+        msg.Printf( _( "%s (%s) is connected to %s (%s) but is not a member of the bus" ),
+                    bus_entry->GetSelectMenuText( m_frame->GetUserUnits() ),
+                    bus_entry->Connection( sheet )->Name( true ),
+                    bus_wire->GetSelectMenuText( m_frame->GetUserUnits() ),
+                    bus_wire->Connection( sheet )->Name( true ) );
 
-            auto marker = new SCH_MARKER();
-            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-            marker->SetData( ERCE_BUS_ENTRY_CONFLICT,
-                             bus_entry->GetPosition(), msg,
-                             bus_entry->GetPosition() );
+        auto marker = new SCH_MARKER();
+        marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+        marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+        marker->SetData( ERCE_BUS_ENTRY_CONFLICT,
+                         bus_entry->GetPosition(), msg,
+                         bus_entry->GetPosition() );
 
-            screen->Append( marker );
-        }
+        screen->Append( marker );
 
         return false;
     }
@@ -2182,8 +2171,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 
 
 // TODO(JE) Check sheet pins here too?
-bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
-                                           bool aCreateMarkers )
+bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph )
 {
     wxString msg;
     auto sheet = aSubgraph->m_sheet;
@@ -2222,40 +2210,34 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
 
         if( pin && has_invalid_items )
         {
-            if( aCreateMarkers )
-            {
-                wxPoint pos = pin->GetTransformedPosition();
+            wxPoint pos = pin->GetTransformedPosition();
 
-                msg.Printf( _( "Pin %s of component %s has a no-connect marker but is connected" ),
-                            pin->GetName(),
-                            pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) );
+            msg.Printf( _( "Pin %s of component %s has a no-connect marker but is connected" ),
+                        pin->GetName(),
+                        pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) );
 
-                auto marker = new SCH_MARKER();
-                marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-                marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-                marker->SetData( ERCE_NOCONNECT_CONNECTED, pos, msg, pos );
+            auto marker = new SCH_MARKER();
+            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+            marker->SetData( ERCE_NOCONNECT_CONNECTED, pos, msg, pos );
 
-                screen->Append( marker );
-            }
+            screen->Append( marker );
 
             return false;
         }
 
         if( !has_other_items )
         {
-            if( aCreateMarkers )
-            {
-                wxPoint pos = aSubgraph->m_no_connect->GetPosition();
+            wxPoint pos = aSubgraph->m_no_connect->GetPosition();
 
-                msg.Printf( _( "No-connect marker is not connected to anything" ) );
+            msg.Printf( _( "No-connect marker is not connected to anything" ) );
 
-                auto marker = new SCH_MARKER();
-                marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-                marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-                marker->SetData( ERCE_NOCONNECT_NOT_CONNECTED, pos, msg, pos );
+            auto marker = new SCH_MARKER();
+            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+            marker->SetData( ERCE_NOCONNECT_NOT_CONNECTED, pos, msg, pos );
 
-                screen->Append( marker );
-            }
+            screen->Append( marker );
 
             return false;
         }
@@ -2306,21 +2288,18 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
 
         if( pin && !has_other_connections && pin->GetType() != ELECTRICAL_PINTYPE::PT_NC )
         {
-            if( aCreateMarkers )
-            {
-                wxPoint pos = pin->GetTransformedPosition();
+            wxPoint pos = pin->GetTransformedPosition();
 
-                msg.Printf( _( "Pin %s of component %s is unconnected." ),
-                            pin->GetName(),
-                            pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) );
+            msg.Printf( _( "Pin %s of component %s is unconnected." ),
+                        pin->GetName(),
+                        pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) );
 
-                auto marker = new SCH_MARKER();
-                marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-                marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-                marker->SetData( ERCE_PIN_NOT_CONNECTED, pos, msg, pos );
+            auto marker = new SCH_MARKER();
+            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+            marker->SetData( ERCE_PIN_NOT_CONNECTED, pos, msg, pos );
 
-                screen->Append( marker );
-            }
+            screen->Append( marker );
 
             return false;
         }
@@ -2330,8 +2309,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
 }
 
 
-bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph,
-                                       bool aCreateMarkers, bool aCheckGlobalLabels )
+bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 {
     // Label connection rules:
     // Local labels are flagged if they don't connect to any pins and don't have a no-connect
@@ -2371,7 +2349,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph,
     bool is_global = text->Type() == SCH_GLOBAL_LABEL_T;
 
     // Global label check can be disabled independently
-    if( !aCheckGlobalLabels && is_global )
+    if( !m_frame->GetErcSettings().IsTestEnabled( ERCE_GLOBLABEL ) && is_global )
         return true;
 
     wxString name = text->GetShownText();
@@ -2409,25 +2387,22 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph,
 
     if( !has_other_connections )
     {
-        if( aCreateMarkers )
-        {
-            SCH_SCREEN* screen = aSubgraph->m_sheet.LastScreen();
-            wxPoint pos = text->GetPosition();
-            auto marker = new SCH_MARKER();
+        SCH_SCREEN* screen = aSubgraph->m_sheet.LastScreen();
+        wxPoint pos = text->GetPosition();
+        auto marker = new SCH_MARKER();
 
-            wxString msg;
-            wxString prefix = is_global ? _( "Global label" ) : _( "Label" );
-            ERCE_T type = is_global ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED;
+        wxString msg;
+        wxString prefix = is_global ? _( "Global label" ) : _( "Label" );
+        ERCE_T type = is_global ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED;
 
-            msg.Printf( _( "%s %s is not connected anywhere else in the schematic." ),
-                        prefix, GetChars( text->ShortenedShownText() ) );
+        msg.Printf( _( "%s %s is not connected anywhere else in the schematic." ),
+                    prefix, GetChars( text->ShortenedShownText() ) );
 
-            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-            marker->SetData( type, pos, msg, pos );
+        marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+        marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+        marker->SetData( type, pos, msg, pos );
 
-            screen->Append( marker );
-        }
+        screen->Append( marker );
 
         return false;
     }

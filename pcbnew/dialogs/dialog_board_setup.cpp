@@ -25,10 +25,15 @@
 #include <panel_setup_mask_and_paste.h>
 #include <../board_stackup_manager/panel_board_stackup.h>
 #include <kiface_i.h>
-#include "dialog_import_settings.h"
+#include <drc/drc.h>
+#include <dialog_import_settings.h>
+#include <panel_setup_severities.h>
 
 #include "dialog_board_setup.h"
-#include "panel_setup_drc_severities.h"
+
+
+bool g_macHack;
+
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         PAGED_DIALOG( aFrame, _( "Board Setup" ), _( "Import Settings from Another Project..." ) ),
@@ -41,7 +46,8 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_tracksAndVias = new PANEL_SETUP_TRACKS_AND_VIAS( this, aFrame, m_constraints );
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
     m_physicalStackup = new PANEL_SETUP_BOARD_STACKUP( this, aFrame, m_layers );
-    m_drcSeverities = new PANEL_SETUP_DRC_SEVERITIES( this, aFrame );
+    m_severities = new PANEL_SETUP_SEVERITIES( this, aFrame->GetDesignSettings().m_DRCSeverities,
+                                               DRCE_FIRST, DRCE_LAST );
 
     /*
      * WARNING: If you change page names you MUST update calls to DoShowBoardSetupDialog().
@@ -61,11 +67,14 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_treebook->AddPage( new wxPanel( this ),  _( "Design Rules" ) );
     m_treebook->AddSubPage( m_constraints,  _( "Constraints" ) );
     m_treebook->AddSubPage( m_netclasses,  _( "Net Classes" ) );
-    m_treebook->AddSubPage( m_drcSeverities, _( "Violation Severity" ) );
+    m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
 
 	// Connect Events
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
                          wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ), NULL, this );
+
+	FinishDialogSettings();
+	g_macHack = true;
 }
 
 
@@ -80,6 +89,17 @@ void DIALOG_BOARD_SETUP::OnPageChange( wxBookCtrlEvent& event )
 {
     if( event.GetSelection() == m_physicalStackupPage )
         m_physicalStackup->OnLayersOptionsChanged( m_layers->GetUILayerMask() );
+
+#ifdef __WXMAC__
+    // Work around an OSX bug where the wxGrid children don't get placed correctly
+    if( g_macHack && m_treebook->GetPage( event.GetSelection() ) == m_tracksAndVias )
+    {
+        m_tracksAndVias->SetSize( wxSize( m_tracksAndVias->GetSize().x - 1,
+                                          m_tracksAndVias->GetSize().y + 2 ) );
+
+        g_macHack = false;
+    }
+#endif
 }
 
 
@@ -125,6 +145,9 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
     // a board, and info only living in the board is not imported.
     if( importDlg.m_LayersOpt->GetValue() )
         m_physicalStackup->ImportSettingsFrom( dummyBoard );
+
+    if( importDlg.m_SeveritiesOpt->GetValue() )
+        m_severities->ImportSettingsFrom( dummyBoard->GetDesignSettings().m_DRCSeverities );
 
     delete dummyBoard;
     delete cfg;

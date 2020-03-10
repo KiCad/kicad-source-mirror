@@ -252,9 +252,17 @@ public:
     /**
      * Return a template field names list for read only access.
      */
-    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames() const
+    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames()
     {
         return m_templateFieldNames.GetTemplateFieldNames();
+    }
+
+    /**
+     * Return a specific template field names list (global or project) for read only access.
+     */
+    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames( bool aGlobal )
+    {
+        return m_templateFieldNames.GetTemplateFieldNames( aGlobal );
     }
 
     /**
@@ -263,7 +271,7 @@ public:
      * @param aName A wxString object containing the field name to search for.
      * @return the template fieldname if found; NULL otherwise.
      */
-    const TEMPLATE_FIELDNAME* GetTemplateFieldName( const wxString& aName ) const
+    const TEMPLATE_FIELDNAME* GetTemplateFieldName( const wxString& aName )
     {
         return m_templateFieldNames.GetFieldName( aName );
     }

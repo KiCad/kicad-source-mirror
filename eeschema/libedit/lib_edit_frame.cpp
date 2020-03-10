@@ -245,7 +245,7 @@ void LIB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
         try
         {
-            m_templateFieldNames.Parse( &lexer );
+            m_templateFieldNames.Parse( &lexer, true );
         }
         catch( const IO_ERROR& DBG( e ) )
         {

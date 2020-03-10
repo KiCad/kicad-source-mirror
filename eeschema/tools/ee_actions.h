@@ -151,6 +151,7 @@ public:
     static TOOL_ACTION updateFieldsFromLibrary;
     static TOOL_ACTION assignFootprints;
     static TOOL_ACTION showBusManager;
+    static TOOL_ACTION schematicSetup;
 
     // Suite operations
     static TOOL_ACTION editWithLibEdit;

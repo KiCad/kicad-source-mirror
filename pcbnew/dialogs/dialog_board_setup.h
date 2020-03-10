@@ -31,7 +31,7 @@ class PANEL_SETUP_NETCLASSES;
 class PANEL_SETUP_TRACKS_AND_VIAS;
 class PANEL_SETUP_MASK_AND_PASTE;
 class PANEL_SETUP_BOARD_STACKUP;
-class PANEL_SETUP_DRC_SEVERITIES;
+class PANEL_SETUP_SEVERITIES;
 
 
 class DIALOG_BOARD_SETUP : public PAGED_DIALOG
@@ -52,7 +52,7 @@ protected:
     PANEL_SETUP_TRACKS_AND_VIAS*     m_tracksAndVias;
     PANEL_SETUP_MASK_AND_PASTE*      m_maskAndPaste;
     PANEL_SETUP_BOARD_STACKUP*       m_physicalStackup;
-    PANEL_SETUP_DRC_SEVERITIES*      m_drcSeverities;
+    PANEL_SETUP_SEVERITIES*          m_severities;
 
     // event handlers
     void OnPageChange( wxBookCtrlEvent& event );
