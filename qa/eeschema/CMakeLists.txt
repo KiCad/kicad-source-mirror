@@ -45,6 +45,7 @@ add_executable( qa_eeschema
     test_sch_biu.cpp
 
     test_eagle_plugin.cpp
+    test_lib_arc.cpp
     test_lib_part.cpp
     test_sch_pin.cpp
     test_sch_rtree.cpp
@@ -63,6 +64,7 @@ add_dependencies( qa_eeschema eeschema )
 
 target_link_libraries( qa_eeschema
     common
+    kimath
     qa_utils
     unit_test_utils
     markdown_lib

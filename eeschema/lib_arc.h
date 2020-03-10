@@ -116,6 +116,14 @@ public:
     wxPoint GetEnd() const { return m_ArcEnd; }
     void SetEnd( const wxPoint& aPoint ) { m_ArcEnd = aPoint; }
 
+    /**
+     * Calculate the arc mid point using the arc start and end angles and radius length.
+     *
+     * @note This is not a general purpose trigonometric arc midpoint calculation.  It is
+     *       limited to the less than 180.0 degree arcs used in symbols.
+     *
+     * @return A #VECTOR2I object containing the midpoint of the arc.
+     */
     VECTOR2I CalcMidPoint() const;
 
     /**

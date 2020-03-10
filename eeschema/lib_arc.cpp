@@ -584,53 +584,19 @@ void LIB_ARC::CalcRadiusAngles()
 
 VECTOR2I LIB_ARC::CalcMidPoint() const
 {
-    double radA;
-    double radB;
     VECTOR2D midPoint;
     double startAngle = static_cast<double>( m_t1 ) / 10.0;
     double endAngle = static_cast<double>( m_t2 ) / 10.0;
 
-    // Normalize the draw angle to always be quadrant 1 to 4 (counter-clockwise).
-    if( startAngle > endAngle )
-        std::swap( startAngle, endAngle );
+    if( endAngle < startAngle )
+        endAngle -= 360.0;
 
-    if( startAngle < 0 )
-        startAngle += 360.0;
+    double midPointAngle = ( ( endAngle - startAngle ) / 2.0 ) + startAngle;
+    double x = cos( DEG2RAD( midPointAngle ) ) * m_Radius;
+    double y = sin( DEG2RAD( midPointAngle ) ) * m_Radius;
 
-    if( endAngle < 0 )
-        endAngle += 360.0;
-
-    bool interceptsNegativeX = InterceptsNegativeX( startAngle, endAngle );
-    bool interceptsPositiveX = InterceptsPositiveX( startAngle, endAngle );
-
-    if( !interceptsPositiveX && !interceptsNegativeX )
-    {
-        radA = 1.0;
-        radB = -1.0;
-    }
-    else if( interceptsPositiveX && !interceptsNegativeX )
-    {
-        radA = 1.0;
-        radB = 1.0;
-    }
-    else if( !interceptsPositiveX && interceptsNegativeX )
-    {
-        radA = -1.0;
-        radB = -1.0;
-    }
-    else
-    {
-        radA = -1.0;
-        radB = 1.0;
-    }
-
-    double x = ( radA * std::sqrt( (m_Radius + m_ArcStart.x) * (m_Radius + m_ArcEnd.x) ) ) +
-               ( radB * std::sqrt( (m_Radius - m_ArcStart.x) * (m_Radius - m_ArcEnd.x) ) );
-    double y = ( radA * std::sqrt( (m_Radius + m_ArcStart.y) * (m_Radius + m_ArcEnd.y) ) ) +
-               ( radB * std::sqrt( (m_Radius - m_ArcStart.y) * (m_Radius - m_ArcEnd.y) ) );
-
-    midPoint.x = KiROUND( x );
-    midPoint.y = KiROUND( y );
+    midPoint.x = KiROUND( x ) + m_Pos.x;
+    midPoint.y = KiROUND( y ) + m_Pos.y;
 
     return midPoint;
 }
