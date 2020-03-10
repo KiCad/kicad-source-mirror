@@ -1771,14 +1771,14 @@ const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
 
 void BOARD::ClearAllNetCodes()
 {
-    for ( BOARD_CONNECTED_ITEM* item : AllConnectedItems() )
+    for( BOARD_CONNECTED_ITEM* item : AllConnectedItems() )
         item->SetNetCode( 0 );
 }
 
 
 void BOARD::MapNets( const BOARD* aDestBoard )
 {
-    for ( BOARD_CONNECTED_ITEM* item : AllConnectedItems() )
+    for( BOARD_CONNECTED_ITEM* item : AllConnectedItems() )
     {
         NETINFO_ITEM* netInfo = aDestBoard->FindNet( item->GetNetname() );
 

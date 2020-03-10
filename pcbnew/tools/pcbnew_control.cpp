@@ -628,10 +628,18 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( !clipItem )
         return 0;
 
-    if( clipItem->Type() == PCB_T )
-        static_cast<BOARD*>( clipItem )->MapNets( m_frame->GetBoard() );
-
     bool editModules = m_editModules || frame()->IsType( FRAME_FOOTPRINT_EDITOR );
+
+    if( clipItem->Type() == PCB_T )
+    {
+        if( editModules )
+        {
+            for( BOARD_CONNECTED_ITEM* item : static_cast<BOARD*>( clipItem )->AllConnectedItems() )
+                item->SetNet( NETINFO_LIST::OrphanedItem() );
+        }
+        else
+            static_cast<BOARD*>( clipItem )->MapNets( m_frame->GetBoard() );
+    }
 
     // The clipboard can contain two different things, an entire kicad_pcb
     // or a single module
@@ -667,6 +675,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                     for( auto item : clipModule->GraphicalItems() )
                     {
+                        item->Move( clipModule->GetPosition() );
                         item->SetParent( editModule );
                         pastedItems.push_back( item );
                     }

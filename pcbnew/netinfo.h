@@ -205,8 +205,7 @@ public:
      */
     int GetClearance()
     {
-        wxASSERT( m_NetClass );
-        return m_NetClass->GetClearance();
+        return m_NetClass ? m_NetClass->GetClearance() : 0;
     }
 
 #endif

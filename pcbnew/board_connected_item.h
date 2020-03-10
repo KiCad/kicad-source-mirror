@@ -89,7 +89,7 @@ public:
      */
     void SetNet( NETINFO_ITEM* aNetInfo )
     {
-        assert( aNetInfo->GetBoard() == GetBoard() );
+        wxASSERT( aNetInfo->GetBoard() == GetBoard() || aNetInfo == NETINFO_LIST::OrphanedItem() );
         m_netinfo = aNetInfo;
     }
 
