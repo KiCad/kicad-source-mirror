@@ -27,6 +27,7 @@ class SCH_EDIT_FRAME;
 class PANEL_SETUP_SEVERITIES;
 class PANEL_EESCHEMA_TEMPLATE_FIELDNAMES;
 class PANEL_SETUP_FORMATTING;
+class PANEL_SETUP_PINMAP;
 
 
 class DIALOG_SCHEMATIC_SETUP : public PAGED_DIALOG
@@ -42,6 +43,7 @@ protected:
 
     PANEL_SETUP_FORMATTING*             m_formatting;
     PANEL_EESCHEMA_TEMPLATE_FIELDNAMES* m_fieldNameTemplates;
+    PANEL_SETUP_PINMAP*                 m_pinMap;
     PANEL_SETUP_SEVERITIES*             m_severities;
 
     // event handlers

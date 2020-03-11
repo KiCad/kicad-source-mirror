@@ -22,7 +22,7 @@
 #include <dialog_sch_import_settings.h>
 #include <panel_setup_severities.h>
 #include <panel_setup_formatting.h>
-
+#include <panel_setup_pinmap.h>
 #include "dialog_schematic_setup.h"
 #include "panel_eeschema_template_fieldnames.h"
 
@@ -38,6 +38,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 {
     m_formatting = new PANEL_SETUP_FORMATTING( this, aFrame );
     m_fieldNameTemplates = new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( aFrame, this, false );
+    m_pinMap = new PANEL_SETUP_PINMAP( this, aFrame );
     m_severities = new PANEL_SETUP_SEVERITIES( this, aFrame->GetErcSettings().m_Severities,
                                                ERCE_FIRST, ERCE_LAST );
     /*
@@ -49,6 +50,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_treebook->AddSubPage( m_fieldNameTemplates, _( "Field Name Templates" ) );
 
     m_treebook->AddPage( new wxPanel( this ),  _( "Electrical Rules" ) );
+    m_treebook->AddSubPage( m_pinMap, _( "Pin Map" ) );
     m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
 
 	// Connect Events

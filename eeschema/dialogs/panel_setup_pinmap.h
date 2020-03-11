@@ -22,52 +22,42 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DIALOG_ERC_H_
-#define _DIALOG_ERC_H_
+#ifndef _PANEL_SETUP_PINMAP_H_
+#define _PANEL_SETUP_PINMAP_H_
 
-#include <wx/htmllbox.h>
 #include <vector>
 #include <lib_pin.h>        // For PINTYPE_COUNT definition
-
-#include <dialog_erc_base.h>
 #include <erc_settings.h>
-#include "dialog_erc_listbox.h"
+#include "panel_setup_pinmap_base.h"
 
-// DIALOG_ERC class declaration
 
-class DIALOG_ERC : public DIALOG_ERC_BASE
+class SCH_EDIT_FRAME;
+
+
+class PANEL_SETUP_PINMAP : public PANEL_SETUP_PINMAP_BASE
 {
+    DECLARE_EVENT_TABLE()
+
 private:
     SCH_EDIT_FRAME*   m_parent;
+    wxBitmapButton*   m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
     bool              m_initialized;
-    const SCH_MARKER* m_lastMarkerFound;
+    static bool       m_diagErcTableInit; // go to true after DiagErc init
 
 public:
-    DIALOG_ERC( SCH_EDIT_FRAME* parent );
+    PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* aParent );
+
+    bool Show( bool show ) override;
 
 private:
-    void Init();
+    void OnResetMatrixClick( wxCommandEvent& aEvent ) override;
 
-    // from DIALOG_ERC_BASE:
-    void OnCloseErcDialog( wxCloseEvent& event ) override;
-    void OnErcCmpClick( wxCommandEvent& event ) override;
-    void OnEraseDrcMarkersClick( wxCommandEvent& event ) override;
-    void OnButtonCloseClick( wxCommandEvent& event ) override;
-
-    void RedrawDrawPanel();
-
-    // Click on a marker info:
-    void OnLeftClickMarkersList( wxHtmlLinkEvent& event ) override;
-
-    // Double click on a marker info:
-    void OnLeftDblClickMarkersList( wxMouseEvent& event ) override;
-
-    void TestErc( REPORTER& aReporter );
-    void DisplayERC_MarkersList();
-    void updateMarkerCounts( SCH_SCREENS *screens );
+    void ChangeErrorLevel( wxCommandEvent& event );
+    void ReBuildMatrixPanel();
+    void setDRCMatrixButtonState( wxBitmapButton *aButton, int aState );
 };
 
 
 #endif
 
-// _DIALOG_ERC_H_
+// _PANEL_SETUP_PINMAP_H_

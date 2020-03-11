@@ -37,8 +37,6 @@
 #include <sch_view.h>
 #include <netlist_object.h>
 #include <sch_marker.h>
-#include <sch_sheet.h>
-#include <lib_pin.h>
 #include <sch_component.h>
 #include <connection_graph.h>
 #include <tools/ee_actions.h>
@@ -48,25 +46,8 @@
 #include <id.h>
 
 
-extern int DiagErc[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
-extern int DefaultDiagErc[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
-
-
-bool DIALOG_ERC::m_diagErcTableInit = false;        // saved only for the current session
-
-// Control identifiers for events
-#define ID_MATRIX_0 1800
-
-
-BEGIN_EVENT_TABLE( DIALOG_ERC, DIALOG_ERC_BASE )
-    EVT_COMMAND_RANGE( ID_MATRIX_0, ID_MATRIX_0 + ( ELECTRICAL_PINTYPES_TOTAL * ELECTRICAL_PINTYPES_TOTAL ) - 1,
-                       wxEVT_COMMAND_BUTTON_CLICKED, DIALOG_ERC::ChangeErrorLevel )
-END_EVENT_TABLE()
-
-
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     DIALOG_ERC_BASE( parent, ID_DIALOG_ERC ),  // parent looks for this ID explicitly
-    m_buttonList(),
     m_initialized( false )
 {
     m_parent = parent;
@@ -96,27 +77,10 @@ void DIALOG_ERC::Init()
 {
     m_initialized = false;
 
-    for( auto& buttonRow : m_buttonList )
-    {
-        for( auto& button : buttonRow )
-            button = NULL;
-    }
-
     SCH_SCREENS screens;
     updateMarkerCounts( &screens );
 
     DisplayERC_MarkersList();
-
-    // Init Panel Matrix
-    ReBuildMatrixPanel();
-}
-
-
-void DIALOG_ERC::OnUpdateUI( wxUpdateUIEvent& event )
-{
-    m_buttondelmarkers->Show( m_NoteBook->GetSelection() == 0 );
-    m_ResetOptButton->Show( m_NoteBook->GetSelection() == 1 );
-    m_buttonsSizer->Layout();
 }
 
 
@@ -165,12 +129,6 @@ void DIALOG_ERC::OnButtonCloseClick( wxCommandEvent& event )
 void DIALOG_ERC::OnCloseErcDialog( wxCloseEvent& event )
 {
     Destroy();
-}
-
-
-void DIALOG_ERC::OnResetMatrixClick( wxCommandEvent& event )
-{
-    ResetDefaultERCDiag( event );
 }
 
 
@@ -271,125 +229,6 @@ void DIALOG_ERC::OnLeftDblClickMarkersList( wxMouseEvent& event )
 }
 
 
-void DIALOG_ERC::ReBuildMatrixPanel()
-{
-    // Try to know the size of bitmap button used in drc matrix
-    wxBitmapButton * dummy = new wxBitmapButton( m_matrixPanel, wxID_ANY, KiBitmap( ercerr_xpm ) );
-    wxSize bitmap_size = dummy->GetSize();
-    delete dummy;
-
-    if( !m_diagErcTableInit )
-    {
-        memcpy( DiagErc, DefaultDiagErc, sizeof(DefaultDiagErc) );
-        m_diagErcTableInit = true;
-    }
-
-    wxPoint pos;
-    // Get the current text size:use a dummy text.
-    wxStaticText* text = new wxStaticText( m_matrixPanel, -1, wxT( "W" ), pos );
-    int text_height   = text->GetRect().GetHeight();
-    bitmap_size.y = std::max( bitmap_size.y, text_height );
-    delete text;
-
-    // compute the Y pos interval:
-    pos.y = text_height;
-
-    if( !m_initialized )
-    {
-        std::vector<wxStaticText*> labels;
-
-        // Print row labels
-        for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
-        {
-            int y = pos.y + (ii * bitmap_size.y);
-            text = new wxStaticText( m_matrixPanel, -1, CommentERC_H[ii],
-                                     wxPoint( 5, y + ( bitmap_size.y / 2) - (text_height / 2) ) );
-            labels.push_back( text );
-
-            int x = text->GetRect().GetRight();
-            pos.x = std::max( pos.x, x );
-        }
-
-        // Right-align
-        for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
-        {
-            wxPoint labelPos = labels[ ii ]->GetPosition();
-            labelPos.x = pos.x - labels[ ii ]->GetRect().GetWidth();
-            labels[ ii ]->SetPosition( labelPos );
-        }
-
-        pos.x += 5;
-    }
-    else
-        pos = m_buttonList[0][0]->GetPosition();
-
-    for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
-    {
-        int y = pos.y + (ii * bitmap_size.y);
-
-        for( int jj = 0; jj <= ii; jj++ )
-        {
-            // Add column labels (only once)
-            int diag = DiagErc[ii][jj];
-            int x    = pos.x + (jj * bitmap_size.x);
-
-            if( (ii == jj) && !m_initialized )
-            {
-                wxPoint txtpos;
-                txtpos.x = x + (bitmap_size.x / 2);
-                txtpos.y = y - text_height;
-                text     = new wxStaticText( m_matrixPanel, -1, CommentERC_V[ii], txtpos );
-            }
-
-            int event_id = ID_MATRIX_0 + ii + ( jj * ELECTRICAL_PINTYPES_TOTAL );
-            BITMAP_DEF bitmap_butt = erc_green_xpm;
-
-            delete m_buttonList[ii][jj];
-            m_buttonList[ii][jj] = new wxBitmapButton( m_matrixPanel,
-                                                       event_id,
-                                                       KiBitmap( bitmap_butt ),
-                                                       wxPoint( x, y ) );
-            setDRCMatrixButtonState( m_buttonList[ii][jj], diag );
-        }
-    }
-
-    m_initialized = true;
-}
-
-
-void DIALOG_ERC::setDRCMatrixButtonState( wxBitmapButton *aButton, int aState )
-{
-    BITMAP_DEF bitmap_butt = nullptr;
-    wxString tooltip;
-
-    switch( aState )
-    {
-    case OK:
-        bitmap_butt = erc_green_xpm;
-        tooltip = _( "No error or warning" );
-        break;
-
-    case WAR:
-        bitmap_butt = ercwarn_xpm;
-        tooltip = _( "Generate warning" );
-        break;
-
-    case ERR:
-        bitmap_butt = ercerr_xpm;
-        tooltip = _( "Generate error" );
-        break;
-
-    default:
-        break;
-    }
-
-    if( bitmap_butt )
-    {
-        aButton->SetBitmap( KiBitmap( bitmap_butt ) );
-        aButton->SetToolTip( tooltip );
-    }
-}
-
 
 void DIALOG_ERC::DisplayERC_MarkersList()
 {
@@ -408,29 +247,6 @@ void DIALOG_ERC::DisplayERC_MarkersList()
     }
 
     m_MarkersList->DisplayList( GetUserUnits() );
-}
-
-
-void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
-{
-    memcpy( DiagErc, DefaultDiagErc, sizeof( DiagErc ) );
-    ReBuildMatrixPanel();
-}
-
-
-void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
-{
-    int id = event.GetId();
-    int ii = id - ID_MATRIX_0;
-    int x = ii / ELECTRICAL_PINTYPES_TOTAL;
-    int y = ii % ELECTRICAL_PINTYPES_TOTAL;
-    wxBitmapButton* butt = (wxBitmapButton*) event.GetEventObject();
-
-    int level = ( DiagErc[y][x] + 1 ) % 3;
-
-    setDRCMatrixButtonState( butt, level );
-
-    DiagErc[y][x] = DiagErc[x][y] = level;
 }
 
 

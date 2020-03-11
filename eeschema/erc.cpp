@@ -101,7 +101,7 @@ const wxString CommentERC_V[] =
  *  at start up: must be loaded by DefaultDiagErc
  *  Can be modified in dialog ERC
  */
-int DiagErc[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
+int PinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
 
 /**
  * Default Look up table which gives the ERC error level for a pair of connected pins
@@ -110,7 +110,7 @@ int DiagErc[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
  *  note also, to avoid inconsistancy:
  *    DefaultDiagErc[i][j] = DefaultDiagErc[j][i]
  */
-int DefaultDiagErc[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
+int DefaultPinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
 {
 /*         I,   O,    Bi,   3S,   Pas,  UnS,  PwrI, PwrO, OC,   OE,   NC */
 /* I */  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
@@ -508,7 +508,7 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
 
             if( erc == OK )
             {
-                erc = DiagErc[static_cast<int>( ref_elect_type )][static_cast<int>( jj )];
+                erc = PinMap[static_cast<int>( ref_elect_type )][static_cast<int>( jj )];
 
                 if( erc != OK )
                 {

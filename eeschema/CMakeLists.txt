@@ -110,6 +110,8 @@ set( EESCHEMA_DLGS
     dialogs/panel_libedit_color_settings_base.cpp
     dialogs/panel_setup_formatting.cpp
     dialogs/panel_setup_formatting_base.cpp
+    dialogs/panel_setup_pinmap.cpp
+    dialogs/panel_setup_pinmap_base.cpp
     dialogs/panel_sym_lib_table.cpp
     dialogs/panel_sym_lib_table_base.cpp
     )
