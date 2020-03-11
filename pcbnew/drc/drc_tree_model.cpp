@@ -113,6 +113,10 @@ void DRC_TREE_MODEL::rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeveritie
             n->m_Children.push_back( new DRC_TREE_NODE( n, drcItem, DRC_TREE_NODE::AUX_ITEM ) );
     }
 
+    // Must be called after a significant change of items to force the
+    // wxDataViewModel to reread all of them, repopulating itself entirely.
+    Cleared();
+
 #ifdef __WXGTK__
     // The fastest method to update wxDataViewCtrl is to rebuild from
     // scratch by calling Cleared(). Linux requires to reassociate model to
@@ -125,10 +129,6 @@ void DRC_TREE_MODEL::rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeveritie
     m_view->ClearColumns();
     int width = m_view->GetMainWindow()->GetRect().GetWidth() - WX_DATAVIEW_WINDOW_PADDING;
     m_view->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, width );
-
-    // Must be called after a significant change to force the wxDataViewModel
-    // to reread all of them, repopulating itself entirely.
-    Cleared();
 
     ExpandAll();
 }
