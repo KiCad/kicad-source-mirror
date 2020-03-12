@@ -128,15 +128,18 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINE
     SHAPE_POLY_SET originalOutline( *aZone.Outline() );
     originalOutline.BooleanSubtract( *aCutout.Outline(), SHAPE_POLY_SET::PM_FAST );
 
-    for( int i = 0; i < originalOutline.OutlineCount(); i++ )
+    // After substracting the hole, originalOutline can have more than one
+    // main outline.
+    // But a zone can have only one main outline, so create as many zones as
+    // originalOutline contains main outlines:
+    for( int outline = 0; outline < originalOutline.OutlineCount(); outline++ )
     {
         auto newZoneOutline = new SHAPE_POLY_SET;
-        newZoneOutline->AddOutline( originalOutline.Outline( i ) );
+        newZoneOutline->AddOutline( originalOutline.Outline( outline ) );
 
-        for (int j = 0; j < originalOutline.HoleCount(i) ; j++ )
-        {
-            newZoneOutline->AddHole( originalOutline.CHole(i, j), i );
-        }
+        // Add holes (if any) to the new zone outline:
+        for (int hole = 0; hole < originalOutline.HoleCount( outline ); hole++ )
+            newZoneOutline->AddHole( originalOutline.CHole( outline, hole ) );
 
         auto newZone = new ZONE_CONTAINER( aZone );
         newZone->SetOutline( newZoneOutline );

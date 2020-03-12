@@ -458,6 +458,8 @@ int SHAPE_POLY_SET::AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline )
 
     POLYGON& poly = m_polys[aOutline];
 
+    assert( aOutline < (int)m_polys.size() );
+
     assert( poly.size() );
 
     poly.push_back( aHole );
