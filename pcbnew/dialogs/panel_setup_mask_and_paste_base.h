@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,6 +16,10 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/statbmp.h>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/panel.h>
@@ -32,6 +36,8 @@ class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 	protected:
 		wxStaticText* m_staticTextInfoValPos;
 		wxStaticText* m_staticTextInfoValNeg;
+		wxStaticBitmap* m_bitmapWarning;
+		wxStaticText* m_staticTextInfoMaskMinWidth;
 		wxStaticText* m_MaskMarginLabel;
 		wxTextCtrl* m_MaskMarginCtrl;
 		wxStaticText* m_MaskMarginUnits;
