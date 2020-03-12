@@ -347,9 +347,7 @@ void GERBER_PLOTTER::selectAperture( const wxSize&           aSize,
                   ( m_apertures[m_currentApertureIdx].m_Type != aType ) ||
                   ( m_apertures[m_currentApertureIdx].m_Size != aSize );
 
-    if( !m_useNetAttributes )
-        aApertureAttribute = 0;
-    else if( !change )
+    if( !change )
         change = m_apertures[m_currentApertureIdx].m_ApertureAttribute != aApertureAttribute;
 
     if( change )
