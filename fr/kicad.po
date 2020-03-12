@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-09 18:34+0100\n"
-"PO-Revision-Date: 2020-03-09 18:48+0100\n"
+"POT-Creation-Date: 2020-03-10 11:27+0100\n"
+"PO-Revision-Date: 2020-03-12 20:42+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -2380,10 +2380,8 @@ msgid "&New"
 msgstr "&Nouveau"
 
 #: common/dialogs/panel_color_settings_base.cpp:38
-#, fuzzy
-#| msgid "Create a new library file containing the current symbol"
 msgid "Create a new color theme based on the current one"
-msgstr "Créer un fichier librairie contenant uniquement le symbole actuel"
+msgstr "Créer un nouveau thème de couleur basé sur le thème actuel"
 
 #: common/dialogs/panel_color_settings_base.cpp:42
 #: eeschema/dialogs/dialog_bus_manager.cpp:73
@@ -2407,7 +2405,7 @@ msgstr "Ajuster tous les raccourcis clavier aux valeurs KiCad par défaut"
 
 #: common/dialogs/panel_color_settings_base.cpp:56
 msgid "Open theme folder"
-msgstr ""
+msgstr "Ouvrir le répertoire des thèmes"
 
 #: common/dialogs/panel_color_settings_base.cpp:57
 msgid "Open the folder containing color themes"
@@ -3433,20 +3431,16 @@ msgid "Cursor"
 msgstr "Curseur"
 
 #: common/layer_id.cpp:113
-#, fuzzy
-#| msgid "Highlighted net: %s"
 msgid "Highlighted items"
-msgstr "Net en Surbrillance: %s"
+msgstr "Eléments en surbrillance"
 
 #: common/layer_id.cpp:116
 msgid "Hidden item"
 msgstr "Item invisible"
 
 #: common/layer_id.cpp:119
-#, fuzzy
-#| msgid "Selection Highlight"
 msgid "Selection highlight"
-msgstr "Sélection Surbrillance"
+msgstr "Sélection surbrillance"
 
 #: common/layer_id.cpp:122 gerbview/gerbview_layer_widget.cpp:106
 #: pcbnew/pcb_layer_widget.cpp:82
@@ -7882,7 +7876,7 @@ msgstr "Remplissage avec couleur d'arrière plan"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:85
 msgid "Plot the background color if the output format supports it"
-msgstr ""
+msgstr "Tracer la couleur de fond si le format de sortie le prend en charge"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:89
 msgid "Color theme:"
@@ -8035,10 +8029,8 @@ msgid "Project Rescue Helper"
 msgstr "Assistant de récupération du projet"
 
 #: eeschema/dialogs/dialog_sch_sheet_props.cpp:235
-#, fuzzy
-#| msgid "Enter Sheet"
 msgid "Untitled Sheet"
-msgstr "Entrer dans Feuille"
+msgstr "Feuille sans Nom"
 
 #: eeschema/dialogs/dialog_sch_sheet_props.cpp:288
 #: kicad/tools/kicad_manager_control.cpp:523
@@ -11093,19 +11085,14 @@ msgstr ""
 "offset: %d"
 
 #: eeschema/sch_sexpr_parser.cpp:123
-#, fuzzy, c-format
-#| msgid ""
-#| "Invalid net ID in\n"
-#| "file: \"%s\"\n"
-#| "line: %d\n"
-#| "offset: %d"
+#, c-format
 msgid ""
 "Empty symbol name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Invalide net ID en\n"
+"Nom de symbole vide en\n"
 "fichier: \"%s\"\n"
 "ligne: %d\n"
 "offset: %d"
@@ -11299,73 +11286,53 @@ msgstr ""
 "offset: %d"
 
 #: eeschema/sch_sexpr_parser.cpp:604
-#, fuzzy, c-format
-#| msgid ""
-#| "Invalid net ID in\n"
-#| "file: \"%s\"\n"
-#| "line: %d\n"
-#| "offset: %d"
+#, c-format
 msgid ""
 "Empty property name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Invalide net ID en\n"
+"Nom de propriété vide en\n"
 "fichier: \"%s\"\n"
 "ligne: %d\n"
 "offset: %d"
 
 #: eeschema/sch_sexpr_parser.cpp:613
-#, fuzzy, c-format
-#| msgid ""
-#| "Invalid net ID in\n"
-#| "file: \"%s\"\n"
-#| "line: %d\n"
-#| "offset: %d"
+#, c-format
 msgid ""
 "Invalid property value in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Invalide net ID en\n"
+"Valeur de propriété invalide en\n"
 "fichier: \"%s\"\n"
 "ligne: %d\n"
 "offset: %d"
 
 #: eeschema/sch_sexpr_parser.cpp:1117
-#, fuzzy, c-format
-#| msgid ""
-#| "Invalid net ID in\n"
-#| "file: \"%s\"\n"
-#| "line: %d\n"
-#| "offset: %d"
+#, c-format
 msgid ""
 "Invalid pin name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Invalide net ID en\n"
+"Nom de pin invalide en\n"
 "fichier: \"%s\"\n"
 "ligne: %d\n"
 "offset: %d"
 
 #: eeschema/sch_sexpr_parser.cpp:1152
-#, fuzzy, c-format
-#| msgid ""
-#| "Invalid floating point number in\n"
-#| "file: \"%s\"\n"
-#| "line: %d\n"
-#| "offset: %d"
+#, c-format
 msgid ""
 "Invalid pin number in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Nombre flottant invalide dans le fichier:\n"
+"Numéro de pin invalide en\n"
 "fichier \"%s\"\n"
 "ligne: %d\n"
 "offset: %d"
@@ -18327,10 +18294,9 @@ msgid "Change severity to Warning for all '%s' violations"
 msgstr "Changer la gravité en Warning pour toutes les violations \"%s\""
 
 #: pcbnew/dialogs/dialog_drc.cpp:308
-#, fuzzy, c-format
-#| msgid "Allow DRC violations"
+#, c-format
 msgid "Ignore all '%s' violations"
-msgstr "Autoriser les violations de DRC"
+msgstr "Ignorer toutes les violations \"%s\""
 
 #: pcbnew/dialogs/dialog_drc.cpp:310
 msgid "Violations will not be checked or reported"
@@ -18682,7 +18648,7 @@ msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
 msgstr ""
-"Une marge négative signifie use surface plus petite que le pad (usuel pour "
+"Une marge négative signifie une surface plus petite que le pad (usuel pour "
 "le masque de soudure)"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:334
@@ -21503,7 +21469,7 @@ msgstr "Exécuter DRC..."
 #: pcbnew/dialogs/dialog_plot_base.cpp:361
 #, c-format
 msgid "(%d known DRC violations; %d exclusions)"
-msgstr ""
+msgstr "(DRC: %d violations connues; %d exclusions)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:385
 msgid "Select Fab Layers"
@@ -21804,10 +21770,12 @@ msgstr "Offset Y:"
 #: pcbnew/dialogs/dialog_position_relative.cpp:167
 msgid "Reset to the current X offset from the reference position."
 msgstr ""
+"Réinitialiser le décalage X actuel à partir de la position de référence."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:168
 msgid "Reset to the current Y offset from the reference position."
 msgstr ""
+"Réinitialiser le décalage Y actuel à partir de la position de référence."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:234
 msgid "Reference location: grid origin"
@@ -26347,10 +26315,8 @@ msgid "Switch Rounding"
 msgstr "Commuter unités"
 
 #: pcbnew/router/router_tool.cpp:153
-#, fuzzy
-#| msgid "Switches posture of the currently routed track."
 msgid "Switches the corner type of the currently routed track."
-msgstr "Commute le pliage de la piste en cours de tracé."
+msgstr "Commute le type de raccord de la piste en cours de tracé."
 
 #: pcbnew/router/router_tool.cpp:173
 msgid "Select Track/Via Width"
