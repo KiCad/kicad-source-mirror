@@ -41,12 +41,6 @@ PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( PAGED_DIALOG* aParent,
 {
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
-
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_staticTextInfoValPos->SetFont( infoFont );
-    m_staticTextInfoValNeg->SetFont( infoFont );
-    m_staticTextInfoCopper->SetFont( infoFont );
 }
 
 

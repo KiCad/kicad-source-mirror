@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PANEL_SETUP_MASK_AND_PASTE_BASE_H__
-#define __PANEL_SETUP_MASK_AND_PASTE_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -17,6 +16,10 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/statbmp.h>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/panel.h>
@@ -26,13 +29,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SETUP_MASK_AND_PASTE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel 
+class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticTextInfoValPos;
 		wxStaticText* m_staticTextInfoValNeg;
+		wxStaticBitmap* m_bitmapWarning;
+		wxStaticText* m_staticTextInfoMaskMinWidth;
 		wxStaticText* m_MaskMarginLabel;
 		wxTextCtrl* m_MaskMarginCtrl;
 		wxStaticText* m_MaskMarginUnits;
@@ -46,12 +51,12 @@ class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 		wxTextCtrl* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
 		wxStaticText* m_staticTextInfoCopper;
-	
+		wxStaticText* m_staticTextInfoPaste;
+
 	public:
-		
-		PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
+
+		PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_SETUP_MASK_AND_PASTE_BASE();
-	
+
 };
 
-#endif //__PANEL_SETUP_MASK_AND_PASTE_BASE_H__

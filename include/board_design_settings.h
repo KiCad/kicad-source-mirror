@@ -49,8 +49,15 @@
 
 #define DEFAULT_PCB_EDGE_THICKNESS    0.15
 
-#define DEFAULT_SOLDERMASK_CLEARANCE  0.051  // soldermask to pad clearance
-#define DEFAULT_SOLDERMASK_MIN_WIDTH  0.25   // soldermask minimum dam size
+#define DEFAULT_SOLDERMASK_CLEARANCE  0.05  // soldermask to pad clearance
+
+// DEFAULT_SOLDERMASK_MIN_WIDTH is only used in Gerber files: soldermask minimum size.
+// Set to 0, because using non 0 value creates an annoying issue in Gerber files:
+// pads are no longer identified as pads (Flashed items or regions)
+// Therefore solder mask min width must be used only in specific cases
+// for instance for home made boards
+#define DEFAULT_SOLDERMASK_MIN_WIDTH  0.0
+
 #define DEFAULT_SOLDERPASTE_CLEARANCE 0.0
 #define DEFAULT_SOLDERPASTE_RATIO     0.0
 
