@@ -476,8 +476,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 }
 
 
-bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
-                                bool* aClearAnnotationNewItems )
+bool SCH_EDIT_FRAME::EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
+                                          bool* aClearAnnotationNewItems )
 {
     if( aSheet == NULL || aHierarchy == NULL )
         return false;

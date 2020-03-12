@@ -807,7 +807,7 @@ public:
      * it can happens when the edited sheet used an existying file, or becomes a new instance
      * of a already existing sheet.
      */
-    bool EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy, bool* aClearAnnotationNewItems );
+    bool EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy, bool* aClearAnnotationNewItems );
 
     void InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename );
 

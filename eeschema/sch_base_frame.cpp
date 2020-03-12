@@ -370,6 +370,8 @@ void SCH_BASE_FRAME::RefreshItem( EDA_ITEM* aItem, bool isAddOrDelete )
         // Component children are drawn from their parents.  Mark them for re-paint.
         if( parent && parent->Type() == SCH_COMPONENT_T )
             GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
+        else if( parent && parent->Type() == SCH_SHEET_T )
+            GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
     }
 
     GetCanvas()->Refresh();

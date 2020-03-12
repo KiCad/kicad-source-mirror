@@ -1224,12 +1224,13 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_SHEET_T:
     {
-        bool doClearAnnotation;
-        bool doRefresh = false;
+        SCH_SHEET*     sheet = static_cast<SCH_SHEET*>( item );
+        bool           doClearAnnotation;
+        bool           doRefresh = false;
         // Keep track of existing sheet paths. EditSheet() can modify this list
         SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
 
-        doRefresh = m_frame->EditSheet( (SCH_SHEET*) item, g_CurrentSheet, &doClearAnnotation );
+        doRefresh = m_frame->EditSheetProperties( sheet, g_CurrentSheet, &doClearAnnotation );
 
         if( doClearAnnotation )     // happens when the current sheet load a existing file
         {                           // we must clear "new" components annotation
@@ -1239,7 +1240,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             // Clear annotation of g_CurrentSheet itself, because its sheetpath
             // is not a new path, but components managed by its sheet path must have
             // their annotation cleared, because they are new:
-            ((SCH_SHEET*) item)->GetScreen()->ClearAnnotation( g_CurrentSheet );
+            sheet->GetScreen()->ClearAnnotation( g_CurrentSheet );
         }
 
         if( doRefresh )

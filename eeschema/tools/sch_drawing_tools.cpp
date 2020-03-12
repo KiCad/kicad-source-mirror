@@ -848,7 +848,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             getViewControls()->SetAutoPan( false );
             getViewControls()->CaptureCursor( false );
 
-            if( m_frame->EditSheet( (SCH_SHEET*)sheet, g_CurrentSheet, nullptr ) )
+            if( m_frame->EditSheetProperties((SCH_SHEET*) sheet, g_CurrentSheet, nullptr ) )
             {
                 sheet->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
