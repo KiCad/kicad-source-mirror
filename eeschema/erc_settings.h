@@ -37,6 +37,14 @@ class PARAM_CFG;
 class ERC_SETTINGS
 {
 public:
+    ERC_SETTINGS()
+    {
+        for( int i = ERCE_FIRST; i <= ERCE_LAST; ++i )
+            m_Severities[ i ] = RPT_SEVERITY_ERROR;
+
+        m_Severities[ ERCE_UNSPECIFIED ] = RPT_SEVERITY_UNDEFINED;
+    }
+
     void LoadDefaults()
     {
         m_Severities[ ERCE_SIMILAR_GLBL_LABELS ] = RPT_SEVERITY_WARNING;
