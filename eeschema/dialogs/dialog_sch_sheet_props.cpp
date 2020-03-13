@@ -71,6 +71,16 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHE
     m_bpMoveUp->SetBitmap( KiBitmap( small_up_xpm ) );
     m_bpMoveDown->SetBitmap( KiBitmap( small_down_xpm ) );
 
+    // Set font sizes
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_hiearchicalPathLabel->SetFont( infoFont );
+    m_heirarchyPath->SetFont( infoFont );
+    m_heirarchyPath->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+    m_timestampLabel->SetFont( infoFont );
+    m_textCtrlTimeStamp->SetFont( infoFont );
+    m_textCtrlTimeStamp->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
                      wxGridEventHandler( DIALOG_SCH_SHEET_PROPS::OnGridCellChanging ),

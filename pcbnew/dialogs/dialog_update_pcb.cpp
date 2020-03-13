@@ -25,7 +25,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <common.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <dialog_update_pcb.h>
@@ -35,18 +34,14 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
-#include <class_draw_panel_gal.h>
 #include <class_board.h>
 #include <ratsnest_data.h>
-#include <view/view.h>
-#include <functional>
 #include <kiface_i.h>
 
 using namespace std::placeholders;
 
 
 bool DIALOG_UPDATE_PCB::m_warnForNoNetPads = false;
-bool DIALOG_UPDATE_PCB::m_matchByUUID = false;
 
 
 DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist ) :
@@ -61,7 +56,6 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
     m_cbDeleteExtraFootprints->SetValue( cfg->m_NetlistDialog.delete_extra_footprints );
     m_cbDeleteSinglePadNets->SetValue( cfg->m_NetlistDialog.delete_single_pad_nets );
     m_cbWarnNoNetPad->SetValue( m_warnForNoNetPads );
-    m_matchByTimestamp->SetSelection( m_matchByUUID ? 0 : 1 );
 
     m_messagePanel->SetLabel( _("Changes To Be Applied") );
     m_messagePanel->SetLazyUpdate( true );
@@ -88,7 +82,6 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
 DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
 {
     m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
-    m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;
 
     auto cfg = m_frame->GetSettings();
 
@@ -115,18 +108,16 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     m_runDragCommand = false;
 
     m_netlist->SetDeleteExtraFootprints( m_cbDeleteExtraFootprints->GetValue() );
-    m_netlist->SetFindByTimeStamp( m_matchByTimestamp->GetSelection() == 0 );
+    m_netlist->SetFindByTimeStamp( !m_cbRelinkFootprints->GetValue() );
     m_netlist->SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
 
     BOARD_NETLIST_UPDATER updater( m_frame, m_frame->GetBoard() );
     updater.SetReporter ( &reporter );
     updater.SetIsDryRun( aDryRun );
-    updater.SetLookupByTimestamp( m_matchByTimestamp->GetSelection() == 0 );
+    updater.SetLookupByTimestamp( !m_cbRelinkFootprints->GetValue() );
     updater.SetDeleteUnusedComponents ( m_cbDeleteExtraFootprints->GetValue() );
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
     updater.SetDeleteSinglePadNets( m_cbDeleteSinglePadNets->GetValue() );
-    m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
-    m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;
     updater.SetWarnPadNoNetInNetlist( m_warnForNoNetPads );
     updater.UpdateNetlist( *m_netlist );
 
@@ -136,13 +127,6 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
         return;
 
     m_frame->OnNetlistChanged( updater, &m_runDragCommand );
-}
-
-
-void DIALOG_UPDATE_PCB::OnMatchChanged( wxCommandEvent& event )
-{
-    if( m_initialized )
-        PerformUpdate( true );
 }
 
 

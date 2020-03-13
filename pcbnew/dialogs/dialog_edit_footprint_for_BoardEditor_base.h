@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,9 +29,9 @@ class WX_GRID;
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/choice.h>
 #include <wx/radiobut.h>
 #include <wx/gbsizer.h>
-#include <wx/choice.h>
 #include <wx/radiobox.h>
 #include <wx/slider.h>
 #include <wx/panel.h>
@@ -63,16 +63,14 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_YPosLabel;
 		wxTextCtrl* m_ModPositionY;
 		wxStaticText* m_YPosUnit;
+		wxStaticText* m_BoardSideLabel;
+		wxChoice* m_BoardSideCtrl;
 		wxRadioButton* m_Orient0;
 		wxRadioButton* m_Orient90;
 		wxRadioButton* m_Orient270;
 		wxRadioButton* m_Orient180;
 		wxRadioButton* m_OrientOther;
 		wxTextCtrl* m_OrientValueCtrl;
-		wxStaticText* m_BoardSideLabel;
-		wxChoice* m_BoardSideCtrl;
-		wxStaticText* m_BoardUniqueIDlabel;
-		wxTextCtrl* m_tcUniqueID;
 		wxRadioBox* m_AutoPlaceCtrl;
 		wxStaticBoxSizer* m_sizerAP;
 		wxBoxSizer* m_sizerAllow90;
@@ -116,6 +114,8 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxBoxSizer* bLowerSizer3D;
 		wxStaticText* m_libraryIDLabel;
 		wxTextCtrl* m_tcLibraryID;
+		wxStaticText* m_sheetPathLabel;
+		wxTextCtrl* m_tcSheetPath;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;

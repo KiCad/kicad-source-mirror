@@ -94,6 +94,13 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     m_bpMoveUp->SetBitmap( KiBitmap( small_up_xpm ) );
     m_bpMoveDown->SetBitmap( KiBitmap( small_down_xpm ) );
 
+    // Set font sizes
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_timeStampLabel->SetFont( infoFont );
+    m_textCtrlTimeStamp->SetFont( infoFont );
+    m_textCtrlTimeStamp->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
                      wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging ),

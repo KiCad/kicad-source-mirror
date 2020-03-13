@@ -201,10 +201,9 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	wxBoxSizer* bSizerUUID;
 	bSizerUUID = new wxBoxSizer( wxHORIZONTAL );
 
-	wxStaticText* timeStampLabel;
-	timeStampLabel = new wxStaticText( this, wxID_ANY, _("Unique ID:"), wxDefaultPosition, wxDefaultSize, 0 );
-	timeStampLabel->Wrap( -1 );
-	bSizerUUID->Add( timeStampLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_timeStampLabel = new wxStaticText( this, wxID_ANY, _("Unique ID:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_timeStampLabel->Wrap( -1 );
+	bSizerUUID->Add( m_timeStampLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlTimeStamp = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	m_textCtrlTimeStamp->SetToolTip( _("Unique ID that identifies the symbol") );

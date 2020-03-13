@@ -118,6 +118,11 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_staticTextInfoCopper->SetFont( infoFont );
     m_staticTextInfoPaste->SetFont( infoFont );
 
+    m_libraryIDLabel->SetFont( infoFont );
+    m_tcLibraryID->SetFont( infoFont );
+    m_sheetPathLabel->SetFont( infoFont );
+    m_tcSheetPath->SetFont( infoFont );
+
     infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_staticTextInfoValNeg->SetFont( infoFont );
     m_staticTextInfoValPos->SetFont( infoFont );
@@ -258,6 +263,8 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     m_posX.SetValue( m_footprint->GetPosition().x );
     m_posY.SetValue( m_footprint->GetPosition().y );
 
+    m_BoardSideCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
+
     m_OrientValue = m_footprint->GetOrientation() / 10.0;
 
     if( m_OrientValue == 0.0 )
@@ -272,21 +279,6 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
         m_OrientOther->SetValue( true );
 
     updateOrientationControl();
-
-    m_BoardSideCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
-
-    wxString path = "/";
-
-    // Exclude the last path step (it's the component)
-    for( size_t i = 0; i + 1 < m_footprint->GetPath().size(); ++i )
-    {
-        if( path.length() > 1 )
-            path += "/";
-
-        path += Prj().GetSheetName( m_footprint->GetPath()[i] );
-    }
-
-    m_tcUniqueID->SetValue( path );
 
     if( m_footprint->IsLocked() )
         m_AutoPlaceCtrl->SetSelection( 2 );
@@ -391,6 +383,21 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
 
     // Show the footprint's ID.
     m_tcLibraryID->SetValue( m_footprint->GetFPID().Format() );
+    m_tcSheetPath->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+
+    wxString path = "/";
+
+    // Exclude the last path step (it's the component)
+    for( size_t i = 0; i + 1 < m_footprint->GetPath().size(); ++i )
+    {
+        if( path.length() > 1 )
+            path += "/";
+
+        path += Prj().GetSheetName( m_footprint->GetPath()[i] );
+    }
+
+    m_tcSheetPath->SetValue( path );
+    m_tcSheetPath->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
     {

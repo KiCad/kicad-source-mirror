@@ -37,9 +37,6 @@ private:
     bool            m_initialized;
     bool            m_runDragCommand;
     static bool     m_warnForNoNetPads;
-    static bool     m_matchByUUID;      // True to use UUID as link between symbol and footprint
-                                        // False to use reference designator as link
-                                        // between symbol and footprint
 
 public:
     DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST *aNetlist );
@@ -49,7 +46,6 @@ public:
 
 private:
 
-    void OnMatchChanged( wxCommandEvent& event ) override;
     void OnOptionChanged( wxCommandEvent& event ) override;
     void OnUpdateClick( wxCommandEvent& event ) override;
 

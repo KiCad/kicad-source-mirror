@@ -60,6 +60,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxRadioBox* m_rbOrientation;
 		wxRadioBox* m_rbMirror;
 		wxStaticLine* m_staticline1;
+		wxStaticText* m_timeStampLabel;
 		wxTextCtrl* m_textCtrlTimeStamp;
 		wxButton* m_spiceFieldsButton;
 		wxStdDialogButtonSizer* m_stdDialogButtonSizer;
