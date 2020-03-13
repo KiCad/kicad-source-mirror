@@ -378,7 +378,7 @@ void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName
 
     cfg->SetPath( wxT( "/" ) );
 
-    // cfg is deleted here by std::unique_ptr, that saves the *.pro file to disk
+    cfg->Flush();
 }
 
 

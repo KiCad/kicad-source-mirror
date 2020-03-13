@@ -42,10 +42,30 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Text") ), wxVERTICAL );
 
+	wxFlexGridSizer* fgSizer2;
+	fgSizer2 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer2->AddGrowableCol( 1 );
+	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_textSizeLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Default text size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textSizeLabel->Wrap( -1 );
+	fgSizer2->Add( m_textSizeLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_textSizeCtrl = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_textSizeCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+	m_textSizeUnits = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textSizeUnits->Wrap( -1 );
+	fgSizer2->Add( m_textSizeUnits, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	sbSizer4->Add( fgSizer2, 1, wxEXPAND|wxBOTTOM, 5 );
+
 	m_checkSuperSub = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Enable superscript/subscript markup"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkSuperSub->SetToolTip( _("Use '^' for superscript and '#' for subscript") );
 
-	sbSizer4->Add( m_checkSuperSub, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizer4->Add( m_checkSuperSub, 0, wxEXPAND|wxALL, 5 );
 
 	m_superSubHint = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("(preceed superscript text with ^; subscript text with #)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_superSubHint->Wrap( -1 );

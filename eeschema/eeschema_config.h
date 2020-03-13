@@ -17,10 +17,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @file eeschema_config.h
- */
-
 #ifndef EESCHEMA_CONFIG_H
 #define EESCHEMA_CONFIG_H
 
@@ -32,5 +28,22 @@ extern const wxChar AutoplaceJustifyEntry[];
 extern const wxChar AutoplaceAlignEntry[];
 extern const wxChar LibIconScaleEntry[];
 extern const wxChar SchIconScaleEntry[];
+
+class TEMPLATES;
+
+
+class PARAM_CFG_FIELDNAMES : public PARAM_CFG
+{
+protected:
+    TEMPLATES* m_Pt_param;   ///< Pointer to the parameter value
+
+public:
+    PARAM_CFG_FIELDNAMES( TEMPLATES* ptparam, const wxChar* group = nullptr );
+
+    void ReadParam( wxConfigBase* aConfig ) const override;
+    void SaveParam( wxConfigBase* aConfig ) const override;
+};
+
+
 
 #endif      // EESCHEMA_CONFIG_H

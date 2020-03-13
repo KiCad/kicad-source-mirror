@@ -33,10 +33,6 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS : public PANEL_EESCHEMA_DISPLAY_OPTIONS_BAS
 
     GAL_OPTIONS_PANEL* m_galOptsPanel;
 
-    UNIT_BINDER        m_busWidth;
-    UNIT_BINDER        m_wireWidth;
-    UNIT_BINDER        m_junctionSize;
-
 public:
     PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow );
 

@@ -45,6 +45,15 @@ DIALOG_SCH_IMPORT_SETTINGS_BASE::DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* pare
 	importLabel->Wrap( -1 );
 	bmiddleSizer->Add( importLabel, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
+	m_formattingOpt = new wxCheckBox( this, wxID_ANY, _("Formatting preferences"), wxDefaultPosition, wxDefaultSize, 0 );
+	bmiddleSizer->Add( m_formattingOpt, 0, wxALL, 5 );
+
+	m_fieldNameTemplatesOpt = new wxCheckBox( this, wxID_ANY, _("Field name templates"), wxDefaultPosition, wxDefaultSize, 0 );
+	bmiddleSizer->Add( m_fieldNameTemplatesOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_pinMapOpt = new wxCheckBox( this, wxID_ANY, _("Pin Map"), wxDefaultPosition, wxDefaultSize, 0 );
+	bmiddleSizer->Add( m_pinMapOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 	m_SeveritiesOpt = new wxCheckBox( this, wxID_ANY, _("Violation severities"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_SeveritiesOpt, 0, wxRIGHT|wxLEFT, 5 );
 

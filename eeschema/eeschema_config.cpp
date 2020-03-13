@@ -68,56 +68,49 @@ static int  s_selectThickness = Mils2iu( DEFAULTSELECTIONTHICKNESS );
 #define FieldNameTemplatesKey         wxT( "FieldNameTemplates" )
 
 
-class PARAM_CFG_FIELDNAMES : public PARAM_CFG
+PARAM_CFG_FIELDNAMES::PARAM_CFG_FIELDNAMES( TEMPLATES * ptparam, const wxChar* group ) :
+        PARAM_CFG( wxEmptyString, PARAM_SEVERITIES, group )
 {
-protected:
-    TEMPLATES * m_Pt_param;   ///< Pointer to the parameter value
+    m_Pt_param = ptparam;
+}
 
-public:
-    PARAM_CFG_FIELDNAMES( TEMPLATES * ptparam, const wxChar* group = nullptr ) :
-                          PARAM_CFG( wxEmptyString, PARAM_SEVERITIES, group )
+void PARAM_CFG_FIELDNAMES::ReadParam( wxConfigBase* aConfig ) const
+{
+    if( !m_Pt_param || !aConfig )
+        return;
+
+    wxString templateFieldNames = aConfig->Read( FieldNameTemplatesKey, wxEmptyString );
+
+    if( !templateFieldNames.IsEmpty() )
     {
-        m_Pt_param = ptparam;
-    }
+        TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
 
-    void ReadParam( wxConfigBase* aConfig ) const override
-    {
-        if( !m_Pt_param || !aConfig )
-            return;
-
-        wxString templateFieldNames = aConfig->Read( FieldNameTemplatesKey, wxEmptyString );
-
-        if( !templateFieldNames.IsEmpty() )
+        try
         {
-            TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
-
-            try
-            {
-                m_Pt_param->Parse( &lexer, false );
-            }
-            catch( const IO_ERROR& DBG( e ) )
-            {
-                // @todo show error msg
-                DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
-            }
+            m_Pt_param->Parse( &lexer, false );
+        }
+        catch( const IO_ERROR& DBG( e ) )
+        {
+            // @todo show error msg
+            DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
         }
     }
+}
 
-    void SaveParam( wxConfigBase* aConfig ) const override
-    {
-        if( !m_Pt_param || !aConfig )
-            return;
+void PARAM_CFG_FIELDNAMES::SaveParam( wxConfigBase* aConfig ) const
+{
+    if( !m_Pt_param || !aConfig )
+        return;
 
-        STRING_FORMATTER sf;
-        m_Pt_param->Format( &sf, 0, false );
+    STRING_FORMATTER sf;
+    m_Pt_param->Format( &sf, 0, false );
 
-        wxString record = FROM_UTF8( sf.GetString().c_str() );
-        record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
-        record.Replace( wxT("  "), wxT(" "), true );  // double space to single
+    wxString record = FROM_UTF8( sf.GetString().c_str() );
+    record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
+    record.Replace( wxT("  "), wxT(" "), true );  // double space to single
 
-        aConfig->Write( FieldNameTemplatesKey, record );
-    }
-};
+    aConfig->Write( FieldNameTemplatesKey, record );
+}
 
 
 class PARAM_CFG_SEVERITIES : public PARAM_CFG
@@ -356,12 +349,41 @@ void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 }
 
 
-std::vector<PARAM_CFG*>& SCH_EDIT_FRAME::GetProjectFileParameters()
-
+void SCH_EDIT_FRAME::AddFormattingParameters( std::vector<PARAM_CFG*>& params )
 {
-    // JEY TODO: everything in here which has a GUI needs to move from Preferences to
-    //  Schematic Setup Dialog...
+    EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
+    params.push_back( new PARAM_CFG_INT( wxT( "SubpartIdSeparator" ),
+                                         LIB_PART::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
+    params.push_back( new PARAM_CFG_INT( wxT( "SubpartFirstId" ),
+                                         LIB_PART::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
+
+    params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "LabSize" ),
+                                         &s_defaultTextSize,
+                                         Mils2iu( DEFAULT_SIZE_TEXT ),
+                                         5, 1000, nullptr, 1 / IU_PER_MILS ) );
+    params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "LineThickness" ),
+                                         &s_drawDefaultLineThickness,
+                                         Mils2iu( appSettings->m_Drawing.default_line_thickness ),
+                                         5, 1000, nullptr, 1 / IU_PER_MILS ) );
+
+    params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "BusThickness" ),
+                                         &s_defaultBusThickness,
+                                         Mils2iu( appSettings->m_Drawing.default_bus_thickness ),
+                                         5, 1000, nullptr, 1 / IU_PER_MILS ) );
+    params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "WireThickness" ),
+                                         &s_defaultWireThickness,
+                                         Mils2iu( appSettings->m_Drawing.default_wire_thickness ),
+                                         5, 1000, nullptr, 1 / IU_PER_MILS ) );
+    params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "JunctionSize" ),
+                                         &SCH_JUNCTION::g_SymbolSize,
+                                         Mils2iu( appSettings->m_Drawing.default_junction_size ),
+                                         5, 1000, nullptr, 1 / IU_PER_MILS ) );
+}
+
+
+std::vector<PARAM_CFG*>& SCH_EDIT_FRAME::GetProjectFileParameters()
+{
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;
 
@@ -373,20 +395,15 @@ std::vector<PARAM_CFG*>& SCH_EDIT_FRAME::GetProjectFileParameters()
     params.push_back( new PARAM_CFG_FILENAME( wxT( "PlotDirectoryName" ),
                                               &m_plotDirectoryName ) );
 
-    params.push_back( new PARAM_CFG_INT( wxT( "SubpartIdSeparator" ),
-                                         LIB_PART::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
-    params.push_back( new PARAM_CFG_INT( wxT( "SubpartFirstId" ),
-                                         LIB_PART::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
-
     params.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
                                               &m_netListFormat) );
     params.push_back( new PARAM_CFG_BOOL( wxT( "SpiceAjustPassiveValues" ),
                                           &m_spiceAjustPassiveValues, false ) );
 
-    params.push_back( new PARAM_CFG_INT( wxT( "LabSize" ),
-                                         &s_defaultTextSize, DEFAULT_SIZE_TEXT, 5, 1000 ) );
+    AddFormattingParameters( params );
 
     params.push_back( new PARAM_CFG_FIELDNAMES( &m_templateFieldNames ) );
+
     params.push_back( new PARAM_CFG_SEVERITIES( &m_ercSettings ) );
 
     return params;
@@ -405,14 +422,8 @@ std::vector<PARAM_CFG*>  ERC_SETTINGS::GetProjectFileParameters()
 
 bool SCH_EDIT_FRAME::LoadProjectFile()
 {
-    // Read library list and library path list
-    bool ret = Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH, GetProjectFileParameters() );
-
-    // Read schematic editor setup
-    ret &= Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDIT, GetProjectFileParameters() );
-
-    // Convert default text size to internal units.
-    SetDefaultTextSize( Mils2iu( GetDefaultTextSize() ) );
+    bool ret = Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDIT,
+                                 GetProjectFileParameters() );
 
     // Verify some values, because the config file can be edited by hand,
     // and have bad values:
@@ -462,12 +473,7 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
 
     wxString path = fn.GetFullPath();
 
-    // Convert default text size from internal units temporarily.
-    SetDefaultTextSize( Iu2Mils( GetDefaultTextSize() ) );
-
     prj.ConfigSave( Kiface().KifaceSearch(), GROUP_SCH_EDIT, GetProjectFileParameters(), path );
-
-    SetDefaultTextSize( Mils2iu( GetDefaultTextSize() ) );
 }
 
 
@@ -480,23 +486,10 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     m_repeatStep.x = Mils2iu( cfg->m_Drawing.default_repeat_offset_x );
     m_repeatStep.y = Mils2iu( cfg->m_Drawing.default_repeat_offset_y );
 
-    // LibEdit owns this one, but we must read it in if LibEdit hasn't set it yet
-    if( GetDefaultLineThickness() < 0 )
-        SetDefaultLineThickness( Mils2iu( cfg->m_Drawing.default_line_thickness ) );
-
-    SetDefaultBusThickness( Mils2iu( cfg->m_Drawing.default_bus_thickness ) );
-
-    // Property introduced in 6.0; use DefaultLineWidth for earlier projects
-    SetDefaultWireThickness( Mils2iu( cfg->m_Drawing.default_wire_thickness) );
-
     SetSelectionTextAsBox( cfg->m_Selection.text_as_box );
     SetSelectionDrawChildItems( cfg->m_Selection.draw_selected_children );
     SetSelectionFillShapes( cfg->m_Selection.fill_shapes );
     SetSelectionThickness( Mils2iu( cfg->m_Selection.thickness ) );
-
-    SetTextMarkupFlags( cfg->m_Drawing.text_markup_flags );
-
-    SCH_JUNCTION::SetSymbolSize( Mils2iu( cfg->m_Drawing.default_junction_size ) );
 
     m_footprintPreview      = cfg->m_Appearance.footprint_preview;
     m_navigatorStaysOpen    = cfg->m_Appearance.navigator_stays_open;
@@ -557,12 +550,8 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     cfg->m_AutoplaceFields.allow_rejustify      = m_autoplaceJustify;
     cfg->m_AutoplaceFields.align_to_grid        = m_autoplaceAlign;
 
-    cfg->m_Drawing.default_bus_thickness        = Iu2Mils( GetDefaultBusThickness() );
-    cfg->m_Drawing.default_line_thickness       = Iu2Mils( GetDefaultLineThickness() );
-    cfg->m_Drawing.default_junction_size        = Iu2Mils( SCH_JUNCTION::GetSymbolSize() );
     cfg->m_Drawing.default_repeat_offset_x      = Iu2Mils( m_repeatStep.x );
     cfg->m_Drawing.default_repeat_offset_y      = Iu2Mils( m_repeatStep.y );
-    cfg->m_Drawing.default_wire_thickness       = Iu2Mils( GetDefaultWireThickness() );
     cfg->m_Drawing.hv_lines_only                = GetForceHVLines();
     cfg->m_Drawing.repeat_label_increment       = m_repeatDeltaLabel;
     cfg->m_Drawing.text_markup_flags            = GetTextMarkupFlags();

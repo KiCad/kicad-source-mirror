@@ -23,8 +23,6 @@
  */
 
 #include <fctsys.h>
-#include <base_screen.h>
-#include <sch_view.h>
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
 #include <class_libentry.h>
@@ -36,10 +34,7 @@
 PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* aFrame,
                                                                 wxWindow* aWindow ) :
         PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( aWindow ),
-        m_frame( aFrame ),
-        m_busWidth( aFrame, m_busWidthLabel, m_busWidthCtrl, m_busWidthUnits, true ),
-        m_wireWidth( aFrame, m_wireWidthLabel, m_wireWidthCtrl, m_wireWidthUnits, true ),
-        m_junctionSize( aFrame, m_jctSizeLabel, m_jctSizeCtrl, m_jctSizeUnits, true )
+        m_frame( aFrame )
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_frame->GetGalDisplayOptions();
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
@@ -54,27 +49,6 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* 
 
 bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 {
-    // Reference style one of: "A" ".A" "-A" "_A" ".1" "-1" "_1"
-    int refStyleSelection;
-
-    switch( LIB_PART::GetSubpartIdSeparator() )
-    {
-    default:
-    case 0:   refStyleSelection = 0; break;
-    case '.': refStyleSelection = LIB_PART::GetSubpartFirstId() == '1' ? 4 : 1; break;
-    case '-': refStyleSelection = LIB_PART::GetSubpartFirstId() == '1' ? 5 : 2; break;
-    case '_': refStyleSelection = LIB_PART::GetSubpartFirstId() == '1' ? 6 : 3; break;
-    }
-
-    m_choiceSeparatorRefId->SetSelection( refStyleSelection );
-
-    m_busWidth.SetUnits( EDA_UNITS::INCHES, true );
-    m_wireWidth.SetUnits( EDA_UNITS::INCHES, true );
-    m_junctionSize.SetUnits( EDA_UNITS::INCHES, true );
-
-    m_busWidth.SetValue( GetDefaultBusThickness() );
-    m_wireWidth.SetValue( GetDefaultWireThickness() );
-    m_junctionSize.SetValue( SCH_JUNCTION::GetSymbolSize() );
     m_checkShowHiddenPins->SetValue( m_frame->GetShowAllPins() );
 
     int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
@@ -96,31 +70,6 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 
 bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    // Reference style one of: "A" ".A" "-A" "_A" ".1" "-1" "_1"
-    int firstRefId, refSeparator;
-
-    switch( m_choiceSeparatorRefId->GetSelection() )
-    {
-    default:
-    case 0: firstRefId = 'A'; refSeparator = 0; break;
-    case 1: firstRefId = 'A'; refSeparator = '.'; break;
-    case 2: firstRefId = 'A'; refSeparator = '-'; break;
-    case 3: firstRefId = 'A'; refSeparator = '_'; break;
-    case 4: firstRefId = '1'; refSeparator = '.'; break;
-    case 5: firstRefId = '1'; refSeparator = '-'; break;
-    case 6: firstRefId = '1'; refSeparator = '_'; break;
-    }
-
-    if( refSeparator != LIB_PART::GetSubpartIdSeparator() ||
-        firstRefId != LIB_PART::GetSubpartFirstId() )
-    {
-        LIB_PART::SetSubpartIdNotation( refSeparator, firstRefId );
-        m_frame->SaveProjectSettings();
-    }
-
-    SetDefaultBusThickness( m_busWidth.GetValue() );
-    SetDefaultWireThickness( m_wireWidth.GetValue() );
-    SCH_JUNCTION::SetSymbolSize( m_junctionSize.GetValue() );
     m_frame->SetShowAllPins( m_checkShowHiddenPins->GetValue() );
     m_frame->SetShowPageLimits( m_checkPageLimits->GetValue() );
     SetSelectionTextAsBox( m_checkSelTextBox->GetValue() );

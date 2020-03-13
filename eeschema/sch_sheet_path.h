@@ -431,6 +431,8 @@ public:
      * @throw std::bad_alloc if the memory for the sheet path list could not be allocated.
      */
     void BuildSheetList( SCH_SHEET* aSheet );
+
+    bool NameExists( const wxString& aSheetName );
 };
 
 #endif // CLASS_DRAWSHEET_PATH_H

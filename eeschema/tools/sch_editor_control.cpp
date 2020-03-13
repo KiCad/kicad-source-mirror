@@ -998,18 +998,6 @@ int SCH_EDITOR_CONTROL::Copy( const TOOL_EVENT& aEvent )
 }
 
 
-bool sheetNameExists( const SCH_SHEET_LIST& hierarchy, const wxString& aName )
-{
-    for( const SCH_SHEET_PATH& sheet : hierarchy )
-    {
-        if( sheet.Last()->GetName() == aName )
-            return true;
-    }
-
-    return false;
-}
-
-
 int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( wxWindow::FindFocus() );
@@ -1145,16 +1133,18 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET*  sheet = (SCH_SHEET*) item;
+            SCH_FIELD&  nameField = sheet->GetFields()[SHEETNAME];
             wxFileName  fn = sheet->GetFileName();
             SCH_SCREEN* existingScreen = nullptr;
             bool        dropSheetAnnotations = false;
-            wxString    sheetName = sheet->GetName();
+            wxString    baseName = nameField.GetText();
+            wxString    candidateName = baseName;
             int         uniquifier = 1;
 
-            while( sheetNameExists( hierarchy, sheetName ) )
-                sheetName = sheet->GetName() << uniquifier++;
+            while( hierarchy.NameExists( candidateName ) )
+                candidateName = wxString::Format( wxT( "%s%d" ), baseName, uniquifier++ );
 
-            sheet->SetName( sheetName );
+            nameField.SetText( candidateName );
 
             sheet->SetParent( g_CurrentSheet->Last() );
             sheet->SetScreen( nullptr );

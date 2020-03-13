@@ -32,7 +32,6 @@
 #include <sch_draw_panel.h>
 #include <trigo.h>
 #include <common.h>
-#include <richio.h>
 #include <plotter.h>
 #include <bitmaps.h>
 
@@ -42,12 +41,12 @@
 #include <settings/color_settings.h>
 
 
-int SCH_JUNCTION::m_symbolSize = Mils2iu( 40 );    // Default diameter of the junction symbol
+int SCH_JUNCTION::g_SymbolSize = Mils2iu( 40 );    // Default diameter of the junction symbol
 
 
 int SCH_JUNCTION::GetEffectiveSymbolSize()
 {
-    return std::max( GetDefaultLineThickness(), m_symbolSize );
+    return std::max( GetDefaultLineThickness(), g_SymbolSize );
 }
 
 

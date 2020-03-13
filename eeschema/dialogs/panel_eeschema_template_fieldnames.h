@@ -61,6 +61,8 @@ public:
     PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow, bool aGlobal );
     ~PANEL_EESCHEMA_TEMPLATE_FIELDNAMES() override;
 
+    void ImportSettingsFrom( TEMPLATES* templateMgr );
+
 private:
     void AdjustGridColumns( int aWidth );
 

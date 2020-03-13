@@ -1006,16 +1006,9 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
                 parseQuotedString( text, aReader, line, &line );
                 size = Mils2Iu( parseInt( aReader, line, &line ) );
 
-                if( fieldId == 0 )
-                {
-                    sheet->SetName( text );
-                    sheet->SetSheetNameSize( size );
-                }
-                else
-                {
-                    sheet->SetFileName( text );
-                    sheet->SetFileNameSize( size );
-                }
+                SCH_FIELD& field = sheet->GetFields()[ fieldId ];
+                field.SetText( text );
+                field.SetTextSize( wxSize( size, size ) );
             }
             else                                   // Sheet pin.
             {
@@ -2184,15 +2177,18 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
 
     m_out->Print( 0, "U %8.8X\n", aSheet->m_Uuid.AsLegacyTimestamp() );
 
-    if( !aSheet->GetName().IsEmpty() )
-        m_out->Print( 0, "F0 %s %d\n",
-                      EscapedUTF8( aSheet->GetName() ).c_str(),
-                      Iu2Mils( aSheet->GetSheetNameSize() ) );
+    SCH_FIELD& sheetName = aSheet->GetFields()[SHEETNAME];
+    SCH_FIELD& fileName = aSheet->GetFields()[SHEETFILENAME];
 
-    if( !aSheet->GetFileName().IsEmpty() )
+    if( !sheetName.GetText().IsEmpty() )
+        m_out->Print( 0, "F0 %s %d\n",
+                      EscapedUTF8( sheetName.GetText() ).c_str(),
+                      Iu2Mils( sheetName.GetTextSize().x ) );
+
+    if( !fileName.GetText().IsEmpty() )
         m_out->Print( 0, "F1 %s %d\n",
-                      EscapedUTF8( aSheet->GetFileName() ).c_str(),
-                      Iu2Mils( aSheet->GetFileNameSize() ) );
+                      EscapedUTF8( fileName.GetText() ).c_str(),
+                      Iu2Mils( fileName.GetTextSize().x ) );
 
     for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
     {

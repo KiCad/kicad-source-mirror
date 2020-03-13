@@ -352,7 +352,11 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
     else if( m_sheetTitles->GetValue() && aItem->Type() == SCH_SHEET_T )
     {
         if( !m_textSize.IsIndeterminate() )
-            static_cast<SCH_SHEET*>( aItem )->SetSheetNameSize( m_textSize.GetValue() );
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
+            wxSize     size( (int) m_textSize.GetValue(), (int) m_textSize.GetValue() );
+            sheet->GetFields()[SHEETNAME].SetTextSize( size );
+        }
     }
     else if( m_sheetPins->GetValue() && aItem->Type() == SCH_SHEET_PIN_T )
         processItem( aSheetPath, aItem );

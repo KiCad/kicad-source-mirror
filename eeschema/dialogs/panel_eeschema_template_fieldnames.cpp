@@ -187,3 +187,12 @@ void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnSizeGrid( wxSizeEvent& event )
 
     event.Skip();
 }
+
+
+void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::ImportSettingsFrom( TEMPLATES* templateMgr )
+{
+    m_fields = templateMgr->GetTemplateFieldNames( m_global );
+    TransferDataToGrid();
+}
+
+

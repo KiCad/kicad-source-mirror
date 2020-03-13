@@ -23,6 +23,7 @@
 #include <panel_setup_severities.h>
 #include <panel_setup_formatting.h>
 #include <panel_setup_pinmap.h>
+#include <eeschema_config.h>
 #include "dialog_schematic_setup.h"
 #include "panel_eeschema_template_fieldnames.h"
 
@@ -101,11 +102,34 @@ void DIALOG_SCHEMATIC_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
     cfg->SetExpandEnvVars( false );
     cfg->SetPath( wxCONFIG_PATH_SEPARATOR );
 
+    if( importDlg.m_formattingOpt->GetValue() )
+    {
+        std::vector<PARAM_CFG*> params;
+        m_frame->AddFormattingParameters( params );
+
+        wxConfigLoadParams( cfg, params, GROUP_SCH_EDIT );
+        m_formatting->TransferDataToWindow();
+    }
+
+    if( importDlg.m_fieldNameTemplatesOpt->GetValue() )
+    {
+        TEMPLATES templateMgr;
+        PARAM_CFG_FIELDNAMES param( &templateMgr );
+        param.ReadParam( cfg );
+
+        m_fieldNameTemplates->ImportSettingsFrom( &templateMgr );
+    }
+
+    if( importDlg.m_pinMapOpt->GetValue() )
+    {
+        // JEY TODO
+    }
+
     if( importDlg.m_SeveritiesOpt->GetValue() )
     {
         ERC_SETTINGS settings;
         settings.LoadDefaults();
-        wxConfigLoadParams( cfg, settings.GetProjectFileParameters(), GROUP_SCH );
+        wxConfigLoadParams( cfg, settings.GetProjectFileParameters(), GROUP_SCH_EDIT );
 
         m_severities->ImportSettingsFrom( settings.m_Severities );
     }

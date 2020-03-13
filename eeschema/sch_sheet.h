@@ -277,21 +277,7 @@ public:
         m_fields = aFields;     // vector copying, length is changed possibly
     }
 
-    // JEY TODO: retite these once new dialog is implemented...
     wxString GetName() const { return m_fields[ SHEETNAME ].GetText(); }
-    void SetName( const wxString& aName ) { m_fields[ SHEETNAME ].SetText( aName ); }
-
-    bool GetShowSheetName() const { return m_fields[ SHEETNAME ].IsVisible(); }
-    void SetShowSheetName( bool show ) { m_fields[ SHEETNAME ].SetVisible( show ); }
-
-    int GetSheetNameSize() const { return m_fields[ SHEETNAME ].GetTextSize().x; }
-    void SetSheetNameSize( int aSize ) { m_fields[ SHEETNAME ].SetTextSize( wxSize( aSize, aSize ) ); }
-
-    bool GetShowFileName() const { return m_fields[ SHEETFILENAME ].IsVisible(); }
-    void SetShowFileName( bool show ) { m_fields[ SHEETFILENAME ].SetVisible( show ); }
-
-    int GetFileNameSize() const { return m_fields[ SHEETFILENAME ].GetTextSize().x; }
-    void SetFileNameSize( int aSize ) { m_fields[ SHEETFILENAME ].SetTextSize( wxSize( aSize, aSize ) ); }
 
     SCH_SCREEN* GetScreen() { return m_screen; }
 

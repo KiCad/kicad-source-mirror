@@ -372,11 +372,23 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 }
 
 
+bool SCH_SHEET_LIST::NameExists( const wxString& aSheetName )
+{
+    for( const SCH_SHEET_PATH& sheet : *this )
+    {
+        if( sheet.Last()->GetName() == aSheetName )
+            return true;
+    }
+
+    return false;
+}
+
+
 bool SCH_SHEET_LIST::IsModified()
 {
-    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
+    for( const SCH_SHEET_PATH& sheet : *this )
     {
-        if( (*it).LastScreen() && (*it).LastScreen()->IsModify() )
+        if( sheet.LastScreen() && sheet.LastScreen()->IsModify() )
             return true;
     }
 
@@ -386,10 +398,10 @@ bool SCH_SHEET_LIST::IsModified()
 
 void SCH_SHEET_LIST::ClearModifyStatus()
 {
-    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
+    for( const SCH_SHEET_PATH& sheet : *this )
     {
-        if( (*it).LastScreen() )
-            (*it).LastScreen()->ClrModify();
+        if( sheet.LastScreen() )
+            sheet.LastScreen()->ClrModify();
     }
 }
 
@@ -403,11 +415,9 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
     SCH_MULTI_UNIT_REFERENCE_MAP lockedComponents;
 
     // Build the list of power components:
-    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
+    for( SCH_SHEET_PATH& sheet : *this )
     {
-        SCH_SHEET_PATH& spath = *it;
-
-        for( auto item : spath.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        for( auto item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
             auto      component = static_cast<SCH_COMPONENT*>( item );
             LIB_PART* part = component->GetPartRef().get();
@@ -417,7 +427,7 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
 
             if( part )
             {
-                SCH_REFERENCE schReference( component, part, spath );
+                SCH_REFERENCE schReference( component, part, sheet );
                 references.AddItem( schReference );
             }
         }
@@ -472,8 +482,8 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
 void SCH_SHEET_LIST::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
                                     bool aForceIncludeOrphanComponents )
 {
-    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
-        (*it).GetComponents( aReferences, aIncludePowerSymbols, aForceIncludeOrphanComponents );
+    for( SCH_SHEET_PATH& sheet : *this )
+        sheet.GetComponents( aReferences, aIncludePowerSymbols, aForceIncludeOrphanComponents );
 }
 
 void SCH_SHEET_LIST::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
@@ -503,8 +513,8 @@ bool SCH_SHEET_LIST::SetComponentFootprint( const wxString& aReference,
 {
     bool found = false;
 
-    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
-        found = (*it).SetComponentFootprint( aReference, aFootPrint, aSetVisible );
+    for( SCH_SHEET_PATH& sheet : *this )
+        found = sheet.SetComponentFootprint( aReference, aFootPrint, aSetVisible );
 
     return found;
 }

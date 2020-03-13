@@ -787,9 +787,18 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         case SCH_SHEET_T:
         {
-            SCH_SHEET* sheet = (SCH_SHEET*) newItem;
-            // Duplicate sheet names are not valid.  Generate a UUID-based sheet name.
-            sheet->SetName( wxString::Format( wxT( "Sheet%s" ), sheet->m_Uuid.AsString() ) );
+            SCH_SHEET_LIST hierarchy( g_RootSheet );
+            SCH_SHEET*     sheet = (SCH_SHEET*) newItem;
+            SCH_FIELD&     nameField = sheet->GetFields()[SHEETNAME];
+            wxString       baseName = nameField.GetText();
+            wxString       candidateName = baseName;
+            int            uniquifier = 1;
+
+            while( hierarchy.NameExists( candidateName ) )
+                candidateName = wxString::Format( wxT( "%s%d" ), baseName, uniquifier++ );
+
+            nameField.SetText( candidateName );
+
             sheet->SetParent( m_frame->GetScreen() );
             m_frame->AddToScreen( sheet );
 

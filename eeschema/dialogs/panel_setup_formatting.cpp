@@ -31,6 +31,7 @@
 PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame  ) :
         PANEL_SETUP_FORMATTING_BASE( aWindow ),
         m_frame( aFrame ),
+        m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
         m_busWidth( aFrame, m_busWidthLabel, m_busWidthCtrl, m_busWidthUnits, true ),
         m_wireWidth( aFrame, m_wireWidthLabel, m_wireWidthCtrl, m_wireWidthUnits, true ),
         m_junctionSize( aFrame, m_jctSizeLabel, m_jctSizeCtrl, m_jctSizeUnits, true )
@@ -57,13 +58,15 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
 
     m_choiceSeparatorRefId->SetSelection( refStyleSelection );
 
+    m_textSize.SetUnits( EDA_UNITS::INCHES, true );
     m_busWidth.SetUnits( EDA_UNITS::INCHES, true );
     m_wireWidth.SetUnits( EDA_UNITS::INCHES, true );
     m_junctionSize.SetUnits( EDA_UNITS::INCHES, true );
 
+    m_textSize.SetValue( GetDefaultTextSize() );
     m_busWidth.SetValue( GetDefaultBusThickness() );
     m_wireWidth.SetValue( GetDefaultWireThickness() );
-    m_junctionSize.SetValue( SCH_JUNCTION::GetSymbolSize() );
+    m_junctionSize.SetValue( SCH_JUNCTION::g_SymbolSize );
 
     int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
     m_checkSuperSub->SetValue( GetTextMarkupFlags() & superSubFlags );
@@ -96,9 +99,10 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
         m_frame->SaveProjectSettings();
     }
 
+    SetDefaultTextSize( m_textSize.GetValue() );
     SetDefaultBusThickness( m_busWidth.GetValue() );
     SetDefaultWireThickness( m_wireWidth.GetValue() );
-    SCH_JUNCTION::SetSymbolSize( m_junctionSize.GetValue() );
+    SCH_JUNCTION::g_SymbolSize = m_junctionSize.GetValue();
 
     int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
 
