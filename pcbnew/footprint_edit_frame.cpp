@@ -436,7 +436,7 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     // aCfg will be the PCBNEW_SETTINGS
     auto cfg = GetSettings();
 
-    EDA_BASE_FRAME::LoadSettings( cfg );
+    EDA_DRAW_FRAME::LoadSettings( cfg );
 
     // TODO(JE) remove once color themes exist
     COLOR_SETTINGS* cs = ColorSettings();
@@ -466,7 +466,7 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     // aCfg will be the PCBNEW_SETTINGS
     auto cfg = GetSettings();
 
-    EDA_BASE_FRAME::SaveSettings( cfg );
+    EDA_DRAW_FRAME::SaveSettings( cfg );
 
     cfg->m_DesignSettings = GetDesignSettings();
     cfg->m_Display = m_DisplayOptions;
