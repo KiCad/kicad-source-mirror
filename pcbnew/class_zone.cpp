@@ -134,6 +134,11 @@ void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     // members are expected non initialize in this.
     // initDataFromSrcInCopyCtor() is expected to be called
     // only from a copy constructor.
+
+    // Copy only useful EDA_ITEM flags:
+    m_Flags = aZone.m_Flags;
+    m_forceVisible = aZone.m_forceVisible;
+
     m_isKeepout = aZone.m_isKeepout;
     SetLayerSet( aZone.GetLayerSet() );
 
