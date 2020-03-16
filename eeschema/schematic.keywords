@@ -20,7 +20,9 @@ end
 extends
 fill
 font
+global_label
 hide
+hierarchical_label
 hint_alt_swap
 hint_pin_swap
 input
@@ -29,7 +31,9 @@ inverted
 inverted_clock
 italic
 justify
+kicad_sch
 kicad_symbol_lib
+label
 left
 length
 line

@@ -28,5 +28,13 @@
  *       YYYYMMDD format.  Comment the changes to the file format for historical purposes.
  *
  */
+
+/**
+ * Symbol library file version.
+ */
 #define SEXPR_SYMBOL_LIB_FILE_VERSION  20200126  // Initial version.
 
+/**
+ * Symbol library file version.
+ */
+#define SEXPR_SCHEMATIC_FILE_VERSION   20200310  // Initial version.

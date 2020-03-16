@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -247,7 +247,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
     // Relative file names are relative to the path of the current sheet.  This allows for
     // nesting of schematic files in subfolders.
     wxFileName fileName( newRelativeNativeFilename );
-    fileName.SetExt( SchematicFileExtension );
+    fileName.SetExt( LegacySchematicFileExtension );
 
     if( !fileName.IsAbsolute() )
     {
@@ -416,7 +416,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
     }
 
     wxFileName nativeFileName( newRelativeNativeFilename );
-    nativeFileName.SetExt( SchematicFileExtension );
+    nativeFileName.SetExt( LegacySchematicFileExtension );
 
     if( useScreen )
     {

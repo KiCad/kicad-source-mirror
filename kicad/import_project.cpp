@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Russell Oliver <roliver8143@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -72,7 +73,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     wxFileName sch( schdlg.GetPath() );
 
-    sch.SetExt( SchematicFileExtension );
+    sch.SetExt( LegacySchematicFileExtension );
 
     wxFileName pro = sch;
 

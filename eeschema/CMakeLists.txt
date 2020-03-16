@@ -491,9 +491,9 @@ make_lexer(
 
 make_lexer(
     eeschema_kiface_objects
-    symbol_lib.keywords
-    symbol_lib_lexer.h
-    symbol_lib_keywords.cpp
+    schematic.keywords
+    schematic_lexer.h
+    schematic_keywords.cpp
     TSYMBOL_LIB_T
     )
 

@@ -121,7 +121,8 @@ const std::string SchematicLibraryFileExtension( "lib" );
 const std::string VrmlFileExtension( "wrl" );
 
 const std::string ProjectFileExtension( "pro" );
-const std::string SchematicFileExtension( "sch" );
+const std::string LegacySchematicFileExtension( "sch" );
+const std::string KiCadSchematicFileExtension( "kicad_sch" );
 const std::string NetlistFileExtension( "net" );
 const std::string ComponentFileExtension( "cmp" );
 const std::string GerberFileExtension( "gbr" );
@@ -191,9 +192,15 @@ wxString ProjectFileWildcard()
 }
 
 
-wxString SchematicFileWildcard()
+wxString LegacySchematicFileWildcard()
 {
-    return _( "KiCad schematic files" ) + AddFileExtListToFilter( { "sch" } );
+    return _( "KiCad legacy schematic files" ) + AddFileExtListToFilter( { "sch" } );
+}
+
+
+wxString KiCadSchematicFileWildcard()
+{
+    return _( "KiCad s-expression schematic files" ) + AddFileExtListToFilter( { "kicad_sch" } );
 }
 
 

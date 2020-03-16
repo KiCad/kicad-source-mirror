@@ -751,14 +751,14 @@ void SCH_EDIT_FRAME::NewProject()
 {
     wxString pro_dir = m_mruPath;
 
-    wxFileDialog dlg( this, _( "New Schematic" ), pro_dir, wxEmptyString, SchematicFileWildcard(),
-                      wxFD_SAVE );
+    wxFileDialog dlg( this, _( "New Schematic" ), pro_dir, wxEmptyString,
+                      LegacySchematicFileWildcard(), wxFD_SAVE );
 
     if( dlg.ShowModal() != wxID_CANCEL )
     {
         // Enforce the extension, wxFileDialog is inept.
         wxFileName create_me = dlg.GetPath();
-        create_me.SetExt( SchematicFileExtension );
+        create_me.SetExt( LegacySchematicFileExtension );
 
         if( create_me.FileExists() )
         {
@@ -781,8 +781,8 @@ void SCH_EDIT_FRAME::LoadProject()
 {
     wxString pro_dir = m_mruPath;
 
-    wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir, wxEmptyString, SchematicFileWildcard(),
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir, wxEmptyString,
+                      LegacySchematicFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() != wxID_CANCEL )
     {

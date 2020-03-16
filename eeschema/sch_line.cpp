@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -809,4 +809,15 @@ void SCH_LINE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 bool SCH_LINE::IsGraphicLine() const
 {
     return ( GetLayer() == LAYER_NOTES );
+}
+
+
+bool SCH_LINE::UsesDefaultStroke() const
+{
+    if( ( m_size == GetDefaultWidth() || m_size == 0 )
+      && ( m_style == GetDefaultStyle() || m_style == PLOT_DASH_TYPE::DEFAULT )
+      && ( m_color == COLOR4D::UNSPECIFIED ) )
+        return true;
+
+    return false;
 }

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -267,7 +267,7 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
     switch( type )
     {
     case TREE_PROJECT:           return ProjectFileExtension;
-    case TREE_SCHEMA:            return SchematicFileExtension;
+    case TREE_SCHEMA:            return LegacySchematicFileExtension;
     case TREE_LEGACY_PCB:        return LegacyPcbFileExtension;
     case TREE_SEXP_PCB:          return KiCadPcbFileExtension;
     case TREE_GERBER:            return GerberFileExtensionWildCard;

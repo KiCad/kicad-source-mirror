@@ -47,7 +47,7 @@ using namespace TSYMBOL_LIB_T;
 
 
 SCH_SEXPR_PARSER::SCH_SEXPR_PARSER( LINE_READER* aLineReader ) :
-    SYMBOL_LIB_LEXER( aLineReader ),
+    SCHEMATIC_LEXER( aLineReader ),
     m_requiredVersion( 0 ),
     m_unit( 1 ),
     m_convert( 1 )
@@ -715,9 +715,9 @@ LIB_ARC* SCH_SEXPR_PARSER::parseArc()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as an arc token." ) );
 
     T token;
-    wxPoint start;
-    wxPoint mid;
-    wxPoint end;
+    wxPoint startPoint;
+    wxPoint midPoint;
+    wxPoint endPoint;
     wxPoint pos;
     bool hasMidPoint = false;
     std::unique_ptr<LIB_ARC> arc( new LIB_ARC( nullptr ) );
@@ -735,18 +735,18 @@ LIB_ARC* SCH_SEXPR_PARSER::parseArc()
         switch( token )
         {
         case T_start:
-            start = parseXY();
+            startPoint = parseXY();
             NeedRIGHT();
             break;
 
         case T_mid:
-            mid = parseXY();
+            midPoint = parseXY();
             NeedRIGHT();
             hasMidPoint = true;
             break;
 
         case T_end:
-            end = parseXY();
+            endPoint = parseXY();
             NeedRIGHT();
             break;
 
@@ -812,12 +812,12 @@ LIB_ARC* SCH_SEXPR_PARSER::parseArc()
     }
 
     arc->SetPosition( pos );
-    arc->SetStart( start );
-    arc->SetEnd( end );
+    arc->SetStart( startPoint );
+    arc->SetEnd( endPoint );
 
     if( hasMidPoint )
     {
-        VECTOR2I center = GetArcCenter( arc->GetStart(), mid, arc->GetEnd() );
+        VECTOR2I center = GetArcCenter( arc->GetStart(), midPoint, arc->GetEnd() );
 
         arc->SetPosition( wxPoint( center.x, center.y ) );
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,8 +127,8 @@ void FIELDS_GRID_TABLE<T>::initGrid( DIALOG_SHIM* aDialog )
 
     m_curdir = m_frame->Prj().GetProjectPath();
     m_filepathAttr = new wxGridCellAttr;
-    GRID_CELL_PATH_EDITOR* filepathEditor = new GRID_CELL_PATH_EDITOR( aDialog, &m_curdir,
-                                                                       SchematicFileExtension );
+    GRID_CELL_PATH_EDITOR* filepathEditor =
+            new GRID_CELL_PATH_EDITOR( aDialog, &m_curdir, LegacySchematicFileExtension );
     filepathEditor->SetValidator( m_filepathValidator );
     m_filepathAttr->SetEditor( filepathEditor );
 

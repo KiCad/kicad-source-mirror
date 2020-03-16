@@ -190,6 +190,16 @@ SCH_SHEET* SCH_SHEET::GetRootSheet()
 }
 
 
+bool SCH_SHEET::UsesDefaultStroke() const
+{
+    if( ( m_borderWidth == GetDefaultLineThickness() || m_borderWidth == 0 )
+      && ( m_borderColor == COLOR4D::UNSPECIFIED ) )
+        return true;
+
+    return false;
+}
+
+
 void SCH_SHEET::SwapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem->Type() == SCH_SHEET_T,

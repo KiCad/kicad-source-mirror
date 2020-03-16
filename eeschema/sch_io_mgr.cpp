@@ -166,6 +166,24 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
 }
 
 
+SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromSchPath( const wxString& aSchematicPath )
+{
+    SCH_FILE_T  ret = SCH_LEGACY;        // default guess, unless detected otherwise.
+    wxFileName  fn( aSchematicPath );
+
+    if( fn.GetExt() == LegacySchematicFileExtension )
+    {
+        ret = SCH_LEGACY;
+    }
+    else if( fn.GetExt() == KiCadSchematicFileExtension )
+    {
+        ret = SCH_KICAD;
+    }
+
+    return ret;
+}
+
+
 SCH_SHEET* SCH_IO_MGR::Load( SCH_FILE_T aFileType, const wxString& aFileName, KIWAY* aKiway,
                              SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {

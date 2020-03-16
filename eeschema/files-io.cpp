@@ -4,7 +4,7 @@
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,8 +72,12 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
 
     if( aSaveUnderNewName )
     {
+        wxString wildcards = LegacySchematicFileWildcard();
+
+        wildcards += "|" + KiCadSchematicFileWildcard();
+
         wxFileDialog dlg( this, _( "Schematic Files" ), wxPathOnly( Prj().GetProjectFullName() ),
-                          schematicFileName.GetFullName(), SchematicFileWildcard(),
+                          schematicFileName.GetFullName(), wildcards,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -81,8 +85,12 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
 
         schematicFileName = dlg.GetPath();
 
-        if( schematicFileName.GetExt() != SchematicFileExtension )
-            schematicFileName.SetExt( SchematicFileExtension );
+        if( dlg.GetFilterIndex() == 0
+          && schematicFileName.GetExt() != LegacySchematicFileExtension )
+            schematicFileName.SetExt( LegacySchematicFileExtension );
+        else if( dlg.GetFilterIndex() == 1
+          && schematicFileName.GetExt() != KiCadSchematicFileExtension )
+            schematicFileName.SetExt( KiCadSchematicFileExtension );
     }
 
     if( !IsWritable( schematicFileName ) )
@@ -111,7 +119,9 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
     wxLogTrace( traceAutoSave,
                 wxT( "Saving file <" ) + schematicFileName.GetFullPath() + wxT( ">" ) );
 
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromSchPath(
+            schematicFileName.GetFullPath() );
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
 
     try
     {
@@ -446,7 +456,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
     wxFileDialog dlg( this, _( "Append Schematic" ), path, wxEmptyString,
-                      SchematicFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                      LegacySchematicFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
@@ -652,7 +662,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             projectpath = Kiway().Prj().GetProjectPath();
             newfilename.SetPath( Prj().GetProjectPath() );
             newfilename.SetName( Prj().GetProjectName() );
-            newfilename.SetExt( SchematicFileExtension );
+            newfilename.SetExt( LegacySchematicFileExtension );
 
             g_CurrentSheet->clear();
             g_CurrentSheet->push_back( g_RootSheet );

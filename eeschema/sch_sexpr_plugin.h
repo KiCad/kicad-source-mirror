@@ -140,16 +140,16 @@ private:
     SCH_COMPONENT* loadComponent( LINE_READER& aReader );
     std::shared_ptr<BUS_ALIAS> loadBusAlias( LINE_READER& aReader, SCH_SCREEN* aScreen );
 
-    void saveComponent( SCH_COMPONENT* aComponent );
-    void saveField( SCH_FIELD* aField );
-    void saveBitmap( SCH_BITMAP* aBitmap );
-    void saveSheet( SCH_SHEET* aSheet );
-    void saveJunction( SCH_JUNCTION* aJunction );
-    void saveNoConnect( SCH_NO_CONNECT* aNoConnect );
-    void saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry );
-    void saveLine( SCH_LINE* aLine );
-    void saveText( SCH_TEXT* aText );
-    void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias );
+    void saveSymbol( SCH_COMPONENT* aComponent, int aNestLevel );
+    void saveField( SCH_FIELD* aField, int aNestLevel );
+    void saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel );
+    void saveSheet( SCH_SHEET* aSheet, int aNestLevel );
+    void saveJunction( SCH_JUNCTION* aJunction, int aNestLevel );
+    void saveNoConnect( SCH_NO_CONNECT* aNoConnect, int aNestLevel );
+    void saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLevel );
+    void saveLine( SCH_LINE* aLine, int aNestLevel );
+    void saveText( SCH_TEXT* aText, int aNestLevel );
+    void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNestLevel );
 
     void cacheLib( const wxString& aLibraryFileName );
     bool isBuffering( const PROPERTIES* aProperties );

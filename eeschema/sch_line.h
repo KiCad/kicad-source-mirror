@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ class SCH_LINE : public SCH_ITEM
     wxPoint m_start;            ///< Line start point
     wxPoint m_end;              ///< Line end point
     int     m_size;             ///< Line pensize
-    PLOT_DASH_TYPE m_style;            ///< Line style
+    PLOT_DASH_TYPE m_style;     ///< Line style
     COLOR4D m_color;            ///< Line color
 
 public:
@@ -125,6 +125,15 @@ public:
 
     void SetLineWidth( const int aSize );
 
+    /**
+     * Test if the #SCH_LINE object uses the default stroke settings.
+     *
+     * The stroke settings include the line width, style, and color.
+     *
+     * @return True if the #SCH_LINE object uses the default stroke settings.
+     */
+    bool UsesDefaultStroke() const;
+
     int GetLineSize() const { return m_size; }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
@@ -132,7 +141,6 @@ public:
     const EDA_RECT GetBoundingBox() const override;
 
     /**
-     * Function GetLength
      * @return The length of the line segment.
      */
     double GetLength() const;

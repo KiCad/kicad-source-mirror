@@ -114,9 +114,14 @@ public:
     static const wxString GetLibraryFileExtension( SCH_FILE_T aFileType );
 
     /**
-     * Return a plugin type given a footprint library's libPath.
+     * Return a plugin type given a symbol library using the file extension of \a aLibPath.
      */
     static SCH_FILE_T GuessPluginTypeFromLibPath( const wxString& aLibPath );
+
+    /**
+     * Return a plugin type given a schematic using the file extension of \a aSchematicPath.
+     */
+    static SCH_FILE_T GuessPluginTypeFromSchPath( const wxString& aSchematicPath );
 
     /**
      * Load the requested #SCH_PLUGIN and if found, calls the SCH_PLUGIN->Load(..) function

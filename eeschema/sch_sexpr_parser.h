@@ -35,7 +35,7 @@
 #include <math/util.h>                           // KiROUND, Clamp
 
 #include <class_library.h>
-#include <symbol_lib_lexer.h>
+#include <schematic_lexer.h>
 
 
 class LIB_ARC;
@@ -47,7 +47,7 @@ class LIB_POLYLINE;
 class LIB_TEXT;
 
 
-class SCH_SEXPR_PARSER : public SYMBOL_LIB_LEXER
+class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
 {
     int m_requiredVersion;  ///< Set to the symbol library file version required.
     int m_fieldId;          ///< The current field ID.

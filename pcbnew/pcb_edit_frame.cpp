@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2013-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1012,7 +1012,7 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST
 
     if( !frame->IsShown() )
     {
-        wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), SchematicFileExtension );
+        wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), LegacySchematicFileExtension );
 
         frame->OpenProjectFiles( std::vector<wxString>( 1, schfn.GetFullPath() ) );
 
@@ -1064,7 +1064,8 @@ void PCB_EDIT_FRAME::DoUpdatePCBFromNetlist( NETLIST& aNetlist, bool aUseTimesta
 void PCB_EDIT_FRAME::RunEeschema()
 {
     wxString   msg;
-    wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), SchematicFileExtension );
+    wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(),
+                      LegacySchematicFileExtension );
 
     if( !schfn.FileExists() )
     {

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -217,7 +217,7 @@ const wxString KICAD_MANAGER_FRAME::SchFileName()
 {
    wxFileName   fn( GetProjectFileName() );
 
-   fn.SetExt( SchematicFileExtension );
+   fn.SetExt( LegacySchematicFileExtension );
    return fn.GetFullPath();
 }
 
@@ -374,7 +374,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName )
     // It will avoid messages from the schematic editor or the board editor to create a new file
     // And forces the user to create main files under the right name for the project manager
     wxFileName fn( aProjectFileName.GetFullPath() );
-    fn.SetExt( SchematicFileExtension );
+    fn.SetExt( LegacySchematicFileExtension );
 
     // If a <project>.sch file does not exist, create a "stub" file ( minimal schematic file )
     if( !fn.FileExists() )
