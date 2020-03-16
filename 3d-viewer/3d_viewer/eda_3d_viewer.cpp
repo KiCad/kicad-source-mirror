@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -215,6 +215,7 @@ void EDA_3D_VIEWER::OnCloseWindow( wxCloseEvent &event )
     event.Skip( true );
 }
 
+
 #define ROT_ANGLE 10.0
 
 void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
@@ -236,7 +237,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         break;
 
     case ID_ROTATE3D_X_POS:
-        m_settings.CameraGet().RotateX( glm::radians(ROT_ANGLE) );
+        m_settings.CameraGet().RotateX( glm::radians( ROT_ANGLE ) );
 
         if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
             m_canvas->Request_refresh();
@@ -246,7 +247,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         break;
 
     case ID_ROTATE3D_X_NEG:
-        m_settings.CameraGet().RotateX( -glm::radians(ROT_ANGLE) );
+        m_settings.CameraGet().RotateX( -glm::radians( ROT_ANGLE ) );
 
         if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
             m_canvas->Request_refresh();
@@ -858,6 +859,7 @@ void EDA_3D_VIEWER::SynchroniseColoursWithBoard( void )
     }
 }
 
+
 void EDA_3D_VIEWER::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::CommonSettingsChanged" );
@@ -917,6 +919,15 @@ void EDA_3D_VIEWER::takeScreenshot( wxCommandEvent& event )
             m_defaultSaveScreenshotFileName.SetExt( ext );
 
         fullFileName = m_defaultSaveScreenshotFileName.GetFullPath();
+
+        if( !wxFileName::IsFileWritable( fullFileName ) )
+        {
+            wxString msg;
+
+            msg.Printf( _( "Insufficient permissions required to save file\n%s" ), fullFileName );
+            wxMessageBox( msg, _( "Error" ), wxOK | wxICON_ERROR, this );
+            return;
+        }
 
         // Be sure the screen area destroyed by the file dialog is redrawn
         // before making a screen copy.
