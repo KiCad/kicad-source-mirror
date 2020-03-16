@@ -64,6 +64,7 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
     m_messagePanel->SetVisibleSeverities( cfg->m_NetlistDialog.report_filter );
 
     m_messagePanel->GetSizer()->SetSizeHints( this );
+    m_messagePanel->Layout();
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.

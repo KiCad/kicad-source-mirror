@@ -512,6 +512,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 
 	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	m_tcLibraryID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+	m_tcLibraryID->SetToolTip( _("The library ID and footprint ID currently assigned.  Use “Change Footprint…” to assign a different footprint.") );
 
 	fgSizerSymbolRef->Add( m_tcLibraryID, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -521,6 +522,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 
 	m_tcSheetPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	m_tcSheetPath->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+	m_tcSheetPath->SetToolTip( _("The link to the associated schematic symbol, comprising the Unique IDs of the parent sheet(s) and the symbol.") );
 
 	fgSizerSymbolRef->Add( m_tcSheetPath, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 

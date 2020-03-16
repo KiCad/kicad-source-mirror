@@ -4160,7 +4160,7 @@
                                         <property name="style">wxTE_READONLY</property>
                                         <property name="subclass">; ; forward_declare</property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip"></property>
+                                        <property name="tooltip">The library ID and footprint ID currently assigned.  Use “Change Footprint…” to assign a different footprint.</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -4285,7 +4285,7 @@
                                         <property name="style">wxTE_READONLY</property>
                                         <property name="subclass">; ; forward_declare</property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip"></property>
+                                        <property name="tooltip">The link to the associated schematic symbol, comprising the Unique IDs of the parent sheet(s) and the symbol.</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>

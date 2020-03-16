@@ -25,6 +25,8 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
 
 	m_cbRelinkFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Re-link footprints to schematic symbols based on their Reference fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRelinkFootprints->SetToolTip( _("Normally footprints are linked to their symbols via their Unique IDs.  Select this option only if you want to reset the footprint linkages based on their references.") );
+
 	sbSizer1->Add( m_cbRelinkFootprints, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbDeleteExtraFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete footprints with no symbols"), wxDefaultPosition, wxDefaultSize, 0 );

@@ -307,7 +307,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVe
             new PARAM<int>( "netlist.report_filter", &m_NetlistDialog.report_filter, -1 ) );
 
     m_params.emplace_back( new PARAM<bool>(
-            "netlist.update_footprints", &m_NetlistDialog.update_footprints, false ) );
+            "netlist.update_footprints", &m_NetlistDialog.update_footprints, true ) );
 
     m_params.emplace_back( new PARAM<bool>(
             "netlist.delete_shorting_tracks", &m_NetlistDialog.delete_shorting_tracks, false ) );
