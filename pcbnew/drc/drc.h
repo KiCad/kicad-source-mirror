@@ -106,7 +106,7 @@
 
 
 class PCB_EDIT_FRAME;
-class DIALOG_DRC_CONTROL;
+class DIALOG_DRC;
 class BOARD_ITEM;
 class BOARD;
 class D_PAD;
@@ -123,9 +123,6 @@ class wxString;
 class wxTextCtrl;
 
 
-typedef std::vector<DRC_ITEM*> DRC_LIST;
-
-
 /**
  * Design Rule Checker object that performs all the DRC tests.  The output of
  * the checking goes to the BOARD file in the form of two MARKER lists.  Those
@@ -136,7 +133,7 @@ typedef std::vector<DRC_ITEM*> DRC_LIST;
  */
 class DRC : public PCB_TOOL_BASE
 {
-    friend class DIALOG_DRC_CONTROL;
+    friend class DIALOG_DRC;
 
 public:
     DRC();
@@ -160,35 +157,34 @@ private:
      * to the position of the segment under test (segm to segm DRC, segm to pad DRC
      * Next variables store coordinates relative to the start point of this segment
      */
-    wxPoint m_padToTestPos; // Position of the pad to compare in drc test segm to pad or pad to pad
-    wxPoint m_segmEnd;      // End point of the reference segment (start point = (0,0) )
+    wxPoint  m_padToTestPos;            // Position of the pad for segm-to-pad and pad-to-pad
+    wxPoint  m_segmEnd;                 // End point of the reference segment (start = (0, 0) )
 
     /* Some functions are comparing the ref segm to pads or others segments using
      * coordinates relative to the ref segment considered as the X axis
      * so we store the ref segment length (the end point relative to these axis)
      * and the segment orientation (used to rotate other coordinates)
      */
-    double m_segmAngle;     // Ref segm orientation in 0,1 degre
-    int m_segmLength;       // length of the reference segment
+    double   m_segmAngle;               // Ref segm orientation in 0.1 degree
+    int      m_segmLength;              // length of the reference segment
 
     /* variables used in checkLine to test DRC segm to segm:
      * define the area relative to the ref segment that does not contains any other segment
      */
-    int                 m_xcliplo;
-    int                 m_ycliplo;
-    int                 m_xcliphi;
-    int                 m_ycliphi;
+    int      m_xcliplo;
+    int      m_ycliplo;
+    int      m_xcliphi;
+    int      m_ycliphi;
 
-    PCB_EDIT_FRAME*     m_pcbEditorFrame;   ///< The pcb frame editor which owns the board
-    BOARD*              m_pcb;
-    SHAPE_POLY_SET      m_board_outlines;   ///< The board outline including cutouts
-    DIALOG_DRC_CONTROL* m_drcDialog;
+    PCB_EDIT_FRAME*        m_pcbEditorFrame;   // The pcb frame editor which owns the board
+    BOARD*                 m_pcb;
+    SHAPE_POLY_SET         m_board_outlines;   // The board outline including cutouts
+    DIALOG_DRC*    m_drcDialog;
 
-    DRC_LIST            m_unconnected;      ///< list of unconnected pads, as DRC_ITEMs
-    DRC_LIST            m_footprints;       ///< list of footprint warnings, as DRC_ITEMs
-    bool                m_drcRun;
-    bool                m_footprintsTested;
-
+    std::vector<DRC_ITEM*> m_unconnected;      // list of unconnected pads
+    std::vector<DRC_ITEM*> m_footprints;       // list of footprint warnings
+    bool                   m_drcRun;
+    bool                   m_footprintsTested;
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
@@ -361,8 +357,8 @@ public:
      * Test the board footprints against a netlist.  Will report DRCE_MISSING_FOOTPRINT,
      * DRCE_DUPLICATE_FOOTPRINT and DRCE_EXTRA_FOOTPRINT errors in aDRCList.
      */
-    static void TestFootprints(
-            NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits, DRC_LIST& aDRCList );
+    static void TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits,
+                                std::vector<DRC_ITEM*>& aDRCList );
 
     /**
      * Open a dialog and prompts the user, then if a test run button is

@@ -354,6 +354,14 @@ BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
 }
 
 
+int PCB_EDIT_FRAME::GetSeverity( int aErrorCode ) const
+{
+    BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
+
+    return bds.m_DRCSeverities[ aErrorCode ];
+}
+
+
 void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     PCB_BASE_FRAME::SetPageSettings( aPageSettings );
@@ -515,7 +523,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 
     // First close the DRC dialog.  For some reason, if the board editor frame is destroyed
     // when the DRC dialog currently open, Pcbnew crashes, at least on Windows.
-    DIALOG_DRC_CONTROL* open_dlg = static_cast<DIALOG_DRC_CONTROL*>(
+    DIALOG_DRC* open_dlg = static_cast<DIALOG_DRC*>(
                                         wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME ) );
 
     if( open_dlg )

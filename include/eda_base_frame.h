@@ -46,6 +46,7 @@
 #include <frame_type.h>
 #include <hotkeys_basic.h>
 #include <kiway_holder.h>
+#include <widgets/ui_common.h>
 
 // Option for main frames
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
@@ -228,6 +229,8 @@ public:
     }
 
     SETTINGS_MANAGER* GetSettingsManager() const { return m_settingsManager; }
+
+    virtual int GetSeverity( int aErrorCode ) const { return RPT_SEVERITY_UNDEFINED; }
 
     /**
      * Return the MVC controller.

@@ -29,7 +29,7 @@
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 #include <wx/config.h>
-
+#include <widgets/ui_common.h>
 
 ///! Update the schema version whenever a migration is required
 const int eeschemaSchemaVersion = 0;
@@ -42,6 +42,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
 
     m_params.emplace_back( new PARAM<wxString>( "appearance.edit_sheet_visible_columns",
             &m_Appearance.edit_sheet_visible_columns, "0 1 2 3 4 5 6 7" ) );
+
+    m_params.emplace_back( new PARAM<int>( "appearance.erc_severities",
+            &m_Appearance.erc_severities, RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ) );
 
     m_params.emplace_back( new PARAM<bool>( "appearance.footprint_preview",
             &m_Appearance.footprint_preview, true ) );

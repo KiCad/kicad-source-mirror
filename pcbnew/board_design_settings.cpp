@@ -575,7 +575,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
 
     m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = RPT_SEVERITY_IGNORE;
 
-    m_MaxError            = ARC_HIGH_DEF;
+    m_DRCSeverities[ DRCE_MISSING_FOOTPRINT ] = RPT_SEVERITY_WARNING;
+    m_DRCSeverities[ DRCE_DUPLICATE_FOOTPRINT ] = RPT_SEVERITY_WARNING;
+    m_DRCSeverities[ DRCE_EXTRA_FOOTPRINT ] = RPT_SEVERITY_WARNING;
+
+    m_MaxError = ARC_HIGH_DEF;
     m_ZoneUseNoOutlineInFill = false;   // Use compatibility mode by default
 
     // Global mask margins:

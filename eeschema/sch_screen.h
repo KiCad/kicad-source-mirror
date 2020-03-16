@@ -534,16 +534,14 @@ public:
     void DeleteAllMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType );
 
     /**
-     * Return the number of ERC markers of \a aMarkerType from all of the screens in the list.
-     *
-     * @param aMarkerType Indicates the type of marker to count. if MARKER_UNSPEC
-     *                    all markers are counted.
-     * @param aSeverity   Indicates the error level of marker to count.
-     *                  useMARKER_SEVERITY_UNSPEC to count all markersof the specified type
-     * @return int count of the markers found.
+     * Delete all markers of a particular type and error code.
      */
-    int GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType,
-                        enum MARKER_BASE::MARKER_SEVERITY aSeverity );
+    void DeleteMarkers( enum MARKER_BASE::TYPEMARKER aMarkerTyp, int aErrorCode );
+
+    /**
+     * Delete a specific marker.
+     */
+    void DeleteMarker( SCH_MARKER* aMarker );
 
     /**
      * Initialize or reinitialize the weak reference to the #LIB_PART for each #SCH_COMPONENT

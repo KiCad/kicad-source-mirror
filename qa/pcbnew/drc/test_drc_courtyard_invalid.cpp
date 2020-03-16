@@ -28,7 +28,7 @@
 
 #include <class_module.h>
 #include <drc/drc.h>
-
+#include <drc/drc_item.h>
 #include <drc/courtyard_overlap.h>
 #include <widgets/ui_common.h>
 
@@ -51,20 +51,17 @@ BOOST_FIXTURE_TEST_SUITE( DrcCourtyardInvalid, COURTYARD_TEST_FIXTURE )
  */
 struct COURTYARD_INVALID_TEST_MODULE
 {
-    /// Module Ref-Des (for identifying DRC errors)
-    std::string m_refdes;
-    /// List of segments that will be placed on the courtyard
-    std::vector<SEG> m_segs;
-    /// Module position
-    VECTOR2I m_pos;
+
+    std::string      m_refdes;   /// Module Ref-Des (for identifying DRC errors)
+    std::vector<SEG> m_segs;     /// List of segments that will be placed on the courtyard
+    VECTOR2I         m_pos;      /// Module position
 };
 
 
 struct COURTYARD_INVALID_INFO
 {
     std::string m_refdes;
-
-    int m_drc_error_code;
+    int         m_drc_error_code;
 };
 
 
@@ -78,12 +75,11 @@ std::ostream& operator<<( std::ostream& os, const COURTYARD_INVALID_INFO& aInval
 
 struct COURTYARD_INVALID_CASE
 {
-    std::string m_case_name;
-
+    std::string                                m_case_name;
     std::vector<COURTYARD_INVALID_TEST_MODULE> m_mods;
-
-    std::vector<COURTYARD_INVALID_INFO> m_exp_errors;
+    std::vector<COURTYARD_INVALID_INFO>        m_exp_errors;
 };
+
 
 // clang-format off
 static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
@@ -195,8 +191,8 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
  * Construct a #MODULE to use in a courtyard test from a #COURTYARD_TEST_MODULE
  * definition.
  */
-std::unique_ptr<MODULE> MakeInvalidCourtyardTestModule(
-        BOARD& aBoard, const COURTYARD_INVALID_TEST_MODULE& aMod )
+std::unique_ptr<MODULE> MakeInvalidCourtyardTestModule( BOARD& aBoard,
+                                                        const COURTYARD_INVALID_TEST_MODULE& aMod )
 {
     auto module = std::make_unique<MODULE>( &aBoard );
 
@@ -253,32 +249,26 @@ static BOARD_DESIGN_SETTINGS GetOverlapCheckDesignSettings()
 
 
 /**
- * Check if a #MARKER_PCB is described by a particular #COURTYARD_INVALID_INFO
- * object.
+ * Check if a #MARKER_PCB is described by a particular #COURTYARD_INVALID_INFO object.
  */
-static bool InvalidMatchesExpected(
-        BOARD& aBoard, const MARKER_PCB& aMarker, const COURTYARD_INVALID_INFO& aInvalid )
+static bool InvalidMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
+                                    const COURTYARD_INVALID_INFO& aInvalid )
 {
-    const DRC_ITEM& reporter = aMarker.GetReporter();
-
-    const MODULE* item_a = dynamic_cast<MODULE*>( reporter.GetMainItem( &aBoard ) );
+    const DRC_ITEM* reporter = static_cast<const DRC_ITEM*>( aMarker.GetRCItem() );
+    const MODULE*   item_a = dynamic_cast<MODULE*>( aBoard.GetItem( reporter->GetMainItemID() ) );
 
     // This one is more than just a mis-match!
-    if( reporter.HasSecondItem() )
+    if( reporter->HasSecondItem() )
     {
         BOOST_WARN_MESSAGE( false, "Expected no auxiliary item for invalid courtyard DRC." );
         return false;
     }
 
     if( item_a->GetReference() != aInvalid.m_refdes )
-    {
         return false;
-    }
 
-    if( reporter.GetErrorCode() != aInvalid.m_drc_error_code )
-    {
+    if( reporter->GetErrorCode() != aInvalid.m_drc_error_code )
         return false;
-    }
 
     return true;
 }

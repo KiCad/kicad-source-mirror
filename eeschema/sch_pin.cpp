@@ -81,6 +81,24 @@ void SCH_PIN::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 }
 
 
+wxString SCH_PIN::GetDescription( const SCH_SHEET_PATH* aSheet )
+{
+    if( GetName().IsEmpty() || GetNumber().IsEmpty() )
+    {
+        return wxString::Format( _( "Pin %s of component %s." ),
+                                 GetName().IsEmpty() ? GetNumber() : GetName(),
+                                 GetParentComponent()->GetRef( aSheet ) );
+    }
+    else
+    {
+        return wxString::Format( _( "Pin %s (%s) of component %s." ),
+                                 GetName(),
+                                 GetNumber(),
+                                 GetParentComponent()->GetRef( aSheet ) );
+    }
+}
+
+
 wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
 {
     if( m_libPin->IsPowerConnection() )

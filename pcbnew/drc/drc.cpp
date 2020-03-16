@@ -51,10 +51,9 @@
 #include <wx/progdlg.h>
 #include <board_commit.h>
 #include <geometry/shape_arc.h>
-
+#include <drc/drc_item.h>
 #include <drc/courtyard_overlap.h>
 #include <tools/zone_filler_tool.h>
-#include "drc_tree_model.h"
 
 DRC::DRC() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
@@ -127,7 +126,7 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
 
     if( !m_drcDialog )
     {
-        m_drcDialog = new DIALOG_DRC_CONTROL( this, m_pcbEditorFrame, aParent );
+        m_drcDialog = new DIALOG_DRC( this, m_pcbEditorFrame, aParent );
         updatePointers();
 
         if( show_dlg_modal )
@@ -604,9 +603,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
 bool DRC::testNetClasses()
 {
     bool        ret = true;
-
     NETCLASSES& netclasses = m_pcb->GetDesignSettings().m_NetClasses;
-
     wxString    msg;   // construct this only once here, not in a loop, since somewhat expensive.
 
     if( !doNetClass( netclasses.GetDefault(), msg ) )
@@ -799,15 +796,11 @@ void DRC::testUnconnected()
 
     for( const auto& edge : edges )
     {
-        auto src = edge.GetSourcePos();
-        auto dst = edge.GetTargetPos();
-
-        m_unconnected.emplace_back( new DRC_ITEM( m_pcbEditorFrame->GetUserUnits(),
-                                                  DRCE_UNCONNECTED_ITEMS,
-                                                  edge.GetSourceNode()->Parent(),
-                                                  wxPoint( src.x, src.y ),
-                                                  edge.GetTargetNode()->Parent(),
-                                                  wxPoint( dst.x, dst.y ) ) );
+        DRC_ITEM* item = new DRC_ITEM();
+        item->SetData( m_pcbEditorFrame->GetUserUnits(), DRCE_UNCONNECTED_ITEMS,
+                       edge.GetSourceNode()->Parent(), (wxPoint) edge.GetSourcePos(),
+                       edge.GetTargetNode()->Parent(), (wxPoint) edge.GetTargetPos() );
+        m_unconnected.push_back( item );
     }
 }
 
@@ -1339,11 +1332,13 @@ void DRC::doOverlappingCourtyardsDrc()
 }
 
 
-void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits, DRC_LIST& aDRCList )
+void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits,
+                          std::vector<DRC_ITEM*>& aDRCList )
 {
 
     // Search for duplicate footprints on the board
-    auto comp = []( const MODULE* x, const MODULE* y ) {
+    auto comp = []( const MODULE* x, const MODULE* y )
+    {
         return x->GetReference().CmpNoCase( y->GetReference() ) < 0;
     };
     auto mods = std::set<MODULE*, decltype( comp )>( comp );
@@ -1351,10 +1346,13 @@ void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits, DRC_
     for( auto mod : aPCB->Modules() )
     {
         auto ins = mods.insert( mod );
+
         if( !ins.second )
         {
-            aDRCList.emplace_back( new DRC_ITEM( aUnits, DRCE_DUPLICATE_FOOTPRINT, mod,
-                    mod->GetPosition(), *ins.first, ( *ins.first )->GetPosition() ) );
+            DRC_ITEM* item = new DRC_ITEM();
+            item->SetData( aUnits, DRCE_DUPLICATE_FOOTPRINT, mod, mod->GetPosition(),
+                           *ins.first, ( *ins.first )->GetPosition() );
+            aDRCList.push_back( item );
         }
     }
 
@@ -1367,11 +1365,11 @@ void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits, DRC_
 
         if( module == NULL )
         {
-            wxString msg = wxString::Format( wxT( "%s (%s)" ),
-                                             component->GetReference(),
-                                             component->GetValue() );
-
-            aDRCList.emplace_back( new DRC_ITEM( DRCE_MISSING_FOOTPRINT, msg ) );
+            DRC_ITEM* item = new DRC_ITEM();
+            item->SetData( DRCE_MISSING_FOOTPRINT, wxString::Format( wxT( "%s (%s)" ),
+                                                                     component->GetReference(),
+                                                                     component->GetValue() ) );
+            aDRCList.push_back( item );
         }
     }
 
@@ -1382,9 +1380,9 @@ void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits, DRC_
 
         if( component == NULL )
         {
-            aDRCList.emplace_back( new DRC_ITEM( aUnits, DRCE_EXTRA_FOOTPRINT,
-                                                 module, module->GetPosition(),
-                                                 nullptr, wxPoint() ) );
+            DRC_ITEM* item = new DRC_ITEM();
+            item->SetData( aUnits, DRCE_EXTRA_FOOTPRINT, module, module->GetPosition() );
+            aDRCList.push_back( item );
         }
     }
 }

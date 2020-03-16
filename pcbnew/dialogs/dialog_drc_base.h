@@ -37,9 +37,9 @@
 #define ID_NOTEBOOK1 1000
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_DRC_CONTROL_BASE
+/// Class DIALOG_DRC_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
+class DIALOG_DRC_BASE : public DIALOG_SHIM
 {
 	private:
 		wxPanel* m_panelUnconnectedItems;
@@ -98,8 +98,8 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_ViaMinCtrl;
 		wxTextCtrl* m_uViaMinCtrl;
 
-		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DIALOG_DRC_CONTROL_BASE();
+		DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		~DIALOG_DRC_BASE();
 
 };
 

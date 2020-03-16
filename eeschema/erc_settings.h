@@ -47,7 +47,6 @@ public:
 
     void LoadDefaults()
     {
-        m_Severities[ ERCE_SIMILAR_GLBL_LABELS ] = RPT_SEVERITY_WARNING;
         m_Severities[ ERCE_SIMILAR_LABELS ] = RPT_SEVERITY_WARNING;
         m_Severities[ ERCE_GLOBLABEL ] = RPT_SEVERITY_WARNING;
         m_Severities[ ERCE_DRIVER_CONFLICT ] = RPT_SEVERITY_WARNING;

@@ -58,20 +58,18 @@ static const VECTOR2I MarkerShapeCorners[] =
 };
 const unsigned CORNERS_COUNT = arrayDim( MarkerShapeCorners );
 
-/*******************/
-/* Classe MARKER_BASE */
-/*******************/
 
-void MARKER_BASE::init()
+MARKER_BASE::MARKER_BASE( int aScalingFactor, RC_ITEM* aItem, TYPEMARKER aType ) :
+        m_markerType( aType ),
+        m_excluded( false ),
+        m_rcItem( aItem ),
+        m_scalingFactor( aScalingFactor )
 {
-    m_MarkerType = MARKER_UNSPEC;
-    m_Excluded = false;
-    m_ErrorLevel = MARKER_SEVERITY_UNSPEC;
-    const VECTOR2I* point_shape = GetShapePolygon();
+    const VECTOR2I* point_shape = MarkerShapeCorners;
     wxPoint start( point_shape->x, point_shape->y );
     wxPoint end = start;
 
-    for( int ii = 1; ii < GetShapePolygonCornerCount(); ii++ )
+    for( int ii = 1; ii < CORNERS_COUNT; ii++ )
     {
         ++point_shape;
         start.x = std::min( start.x, point_shape->x);
@@ -80,80 +78,8 @@ void MARKER_BASE::init()
         end.y = std::max( end.y, point_shape->y);
     }
 
-    m_ShapeBoundingBox.SetOrigin(start);
-    m_ShapeBoundingBox.SetEnd(end);
-}
-
-
-MARKER_BASE::MARKER_BASE( const MARKER_BASE& aMarker )
-{
-    m_Pos = aMarker.m_Pos;
-    m_ErrorLevel = aMarker.m_ErrorLevel;
-    m_MarkerType = aMarker.m_MarkerType;
-    m_ShapeBoundingBox = aMarker.m_ShapeBoundingBox;
-    m_ScalingFactor = aMarker.m_ScalingFactor;
-}
-
-
-MARKER_BASE::MARKER_BASE( int aScalingFactor )
-{
-    m_ScalingFactor = aScalingFactor;
-    init();
-}
-
-
-MARKER_BASE::MARKER_BASE( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                          EDA_ITEM* aItem, const wxPoint& aPos,
-                          EDA_ITEM* bItem, const wxPoint& bPos, int aScalingFactor )
-{
-    m_ScalingFactor = aScalingFactor;
-    init();
-
-    SetData( aUnits, aErrorCode, aMarkerPos, aItem, aPos, bItem, bPos );
-}
-
-
-MARKER_BASE::MARKER_BASE( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                          EDA_ITEM* aItem,
-                          EDA_ITEM* bItem, int aScalingFactor )
-{
-    m_ScalingFactor = aScalingFactor;
-    init();
-
-    SetData( aUnits, aErrorCode, aMarkerPos, aItem, bItem );
-}
-
-
-MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
-                          const wxString& aText, const wxPoint& aPos,
-                          const wxString& bText, const wxPoint& bPos, int aScalingFactor )
-{
-    m_ScalingFactor = aScalingFactor;
-    init();
-
-    SetData( aErrorCode, aMarkerPos, aText, aPos, bText, bPos );
-}
-
-
-MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
-                          const wxString& aText,
-                          const wxString& bText, int aScalingFactor )
-{
-    m_ScalingFactor = aScalingFactor;
-    init();
-
-    SetData( aErrorCode, aMarkerPos, aText, bText );
-}
-
-
-MARKER_BASE::MARKER_BASE( int aErrorCode,
-                          const wxString& aText,
-                          const wxString& bText, int aScalingFactor )
-{
-    m_ScalingFactor = aScalingFactor;
-    init();
-
-    SetData( aErrorCode, wxPoint(), aText, bText );
+    m_shapeBoundingBox.SetOrigin( start);
+    m_shapeBoundingBox.SetEnd( end);
 }
 
 
@@ -167,8 +93,8 @@ void MARKER_BASE::SetData( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMar
                            EDA_ITEM* bItem, const wxPoint& bPos )
 {
     m_Pos = aMarkerPos;
-    m_drc.SetData( aUnits, aErrorCode, aItem, aPos, bItem, bPos );
-    m_drc.SetParent( this );
+    m_rcItem->SetData( aUnits, aErrorCode, aItem, aPos, bItem, bPos );
+    m_rcItem->SetParent( this );
 }
 
 
@@ -177,8 +103,8 @@ void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
                            const wxString& bText, const wxPoint& bPos )
 {
     m_Pos = aMarkerPos;
-    m_drc.SetData( aErrorCode, aText, aPos, bText, bPos );
-    m_drc.SetParent( this );
+    m_rcItem->SetData( aErrorCode, aText, aPos, bText, bPos );
+    m_rcItem->SetParent( this );
 }
 
 
@@ -187,8 +113,8 @@ void MARKER_BASE::SetData( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMar
                            EDA_ITEM* bItem )
 {
     m_Pos = aMarkerPos;
-    m_drc.SetData( aUnits, aErrorCode, aItem, bItem );
-    m_drc.SetParent( this );
+    m_rcItem->SetData( aUnits, aErrorCode, aItem, bItem );
+    m_rcItem->SetParent( this );
 }
 
 
@@ -197,8 +123,8 @@ void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
                            const wxString& bText )
 {
     m_Pos = aMarkerPos;
-    m_drc.SetData( aErrorCode, aText, bText );
-    m_drc.SetParent( this );
+    m_rcItem->SetData( aErrorCode, aText, bText );
+    m_rcItem->SetParent( this );
 }
 
 
@@ -207,8 +133,8 @@ void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
                            const wxString& bText, const KIID& bID )
 {
     m_Pos = aMarkerPos;
-    m_drc.SetData( aErrorCode, aText, aID, bText, bID );
-    m_drc.SetParent( this );
+    m_rcItem->SetData( aErrorCode, aText, aID, bText, bID );
+    m_rcItem->SetParent( this );
 }
 
 
@@ -234,76 +160,36 @@ bool MARKER_BASE::HitTestMarker( const wxPoint& aHitPosition, int aAccuracy ) co
 
 void MARKER_BASE::ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon) const
 {
-    // Build the marker shape polygon in internal units:
-    const int ccount = GetShapePolygonCornerCount();
-
-    for( int ii = 0; ii < ccount; ii++ )
-        aPolygon.Append( GetShapePolygonCorner( ii ) * MarkerScale() );
+    for( const VECTOR2I& corner : MarkerShapeCorners )
+        aPolygon.Append( corner * MarkerScale() );
 
     // Be sure aPolygon is seen as a closed polyline:
     aPolygon.SetClosed( true );
 }
 
 
-const VECTOR2I* MARKER_BASE::GetShapePolygon() const
-{
-    return MarkerShapeCorners;
-}
-
-
-const VECTOR2I& MARKER_BASE::GetShapePolygonCorner( int aIdx ) const
-{
-    return MarkerShapeCorners[aIdx];
-}
-
-
-int MARKER_BASE::GetShapePolygonCornerCount() const
-{
-    return CORNERS_COUNT;
-}
-
-
 EDA_RECT MARKER_BASE::GetBoundingBoxMarker() const
 {
-    wxSize size_iu = m_ShapeBoundingBox.GetSize();
-    wxPoint position_iu = m_ShapeBoundingBox.GetPosition();
-    size_iu.x *= m_ScalingFactor;
-    size_iu.y *= m_ScalingFactor;
-    position_iu.x *= m_ScalingFactor;
-    position_iu.y *= m_ScalingFactor;
+    wxSize size_iu = m_shapeBoundingBox.GetSize();
+    wxPoint position_iu = m_shapeBoundingBox.GetPosition();
+    size_iu.x *= m_scalingFactor;
+    size_iu.y *= m_scalingFactor;
+    position_iu.x *= m_scalingFactor;
+    position_iu.y *= m_scalingFactor;
     position_iu += m_Pos;
 
     return EDA_RECT( position_iu, size_iu );
 }
 
 
-
-void MARKER_BASE::DisplayMarkerInfo( EDA_DRAW_FRAME* aFrame )
-{
-    wxString msg = m_drc.ShowHtml( aFrame->GetUserUnits() );
-    DIALOG_DISPLAY_HTML_TEXT_BASE infodisplay( (wxWindow*)aFrame, wxID_ANY, _( "Marker Info" ),
-                                               wxGetMousePosition(), wxSize( 550, 140 ) );
-
-    infodisplay.m_htmlWindow->SetPage( msg );
-    infodisplay.ShowModal();
-}
-
-
 void MARKER_BASE::PrintMarker( wxDC* aDC, const wxPoint& aOffset )
 {
     // Build the marker shape polygon in internal units:
-    const int ccount = GetShapePolygonCornerCount();
     std::vector<wxPoint> shape;
-    shape.reserve( ccount );
+    shape.reserve( CORNERS_COUNT );
 
-    for( int ii = 0; ii < ccount; ii++ )
-    {
-        shape.emplace_back( GetShapePolygonCorner( ii ).x * MarkerScale(),
-                            GetShapePolygonCorner( ii ).y * MarkerScale() );
-    }
+    for( const VECTOR2I& corner : MarkerShapeCorners )
+        shape.emplace_back( corner * MarkerScale() + m_Pos + aOffset );
 
-    for( int ii = 0; ii < ccount; ii++ )
-        shape[ii] += m_Pos + aOffset;
-
-    GRClosedPoly( nullptr, aDC, ccount, &shape[0], true, 0, getColor(), getColor() );
+    GRClosedPoly( nullptr, aDC, CORNERS_COUNT, &shape[0], true, 0, getColor(), getColor() );
 }

@@ -31,40 +31,46 @@
 
 #include <dialog_erc_base.h>
 #include <erc_settings.h>
-#include "dialog_erc_listbox.h"
 
 // DIALOG_ERC class declaration
 
 class DIALOG_ERC : public DIALOG_ERC_BASE
 {
 private:
-    SCH_EDIT_FRAME*   m_parent;
-    bool              m_initialized;
-    const SCH_MARKER* m_lastMarkerFound;
+    SCH_EDIT_FRAME*    m_parent;
+
+    RC_ITEMS_PROVIDER* m_markerProvider;
+    RC_TREE_MODEL*     m_markerTreeModel;
+
+    int                m_severities;
 
 public:
     DIALOG_ERC( SCH_EDIT_FRAME* parent );
+    ~DIALOG_ERC();
 
 private:
-    void Init();
-
     // from DIALOG_ERC_BASE:
     void OnCloseErcDialog( wxCloseEvent& event ) override;
-    void OnErcCmpClick( wxCommandEvent& event ) override;
+    void OnRunERCClick( wxCommandEvent& event ) override;
     void OnEraseDrcMarkersClick( wxCommandEvent& event ) override;
+    void OnERCItemSelected( wxDataViewEvent& aEvent ) override;
+    void OnERCItemDClick( wxDataViewEvent& aEvent ) override;
+    void OnERCItemRClick( wxDataViewEvent& aEvent ) override;
+
+    void OnSeverity( wxCommandEvent& aEvent ) override;
+    void OnSaveReport( wxCommandEvent& aEvent ) override;
     void OnButtonCloseClick( wxCommandEvent& event ) override;
 
     void RedrawDrawPanel();
 
-    // Click on a marker info:
-    void OnLeftClickMarkersList( wxHtmlLinkEvent& event ) override;
-
-    // Double click on a marker info:
-    void OnLeftDblClickMarkersList( wxMouseEvent& event ) override;
-
     void TestErc( REPORTER& aReporter );
-    void DisplayERC_MarkersList();
-    void updateMarkerCounts( SCH_SCREENS *screens );
+
+    bool writeReport( const wxString& aFullFileName );
+
+    void deleteAllMarkers();
+
+    void syncCheckboxes();
+    void updateDisplayedCounts();
 };
 
 

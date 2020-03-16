@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,15 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file general.h
- */
-
 #ifndef _GENERAL_H_
 #define _GENERAL_H_
 
 #include <gal/color4d.h>
 #include <layers_id_colors_and_visibility.h>
+#include <erc_settings.h>
 
 using KIGFX::COLOR4D;
 
@@ -38,6 +35,7 @@ class CONNECTION_GRAPH;
 class TRANSFORM;
 class SCH_SHEET;
 class SCH_SHEET_PATH;
+class ERC_SETTINGS;
 
 #define EESCHEMA_VERSION 5
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
@@ -47,7 +45,6 @@ class SCH_SHEET_PATH;
 
 #define DEFAULT_REPEAT_OFFSET_X 0       ///< the default X value (overwritten by the eeschema config)
 #define DEFAULT_REPEAT_OFFSET_Y 100     ///< the default Y value (overwritten by the eeschema config)
-#define REPEAT_OFFSET_MAX 1000          ///< the max value of repeat offset value
 #define DEFAULT_REPEAT_LABEL_INC 1      ///< the default value (overwritten by the eeschema config)
 #define DEFAULT_REPEAT_OFFSET_PIN 100   ///< the default value (overwritten by the eeschema config)
                                         ///< when repeating a pin
@@ -68,9 +65,6 @@ class SCH_SHEET_PATH;
 
 ///< The default pin name size when creating pins(can be changed in preference menu)
 #define DEFAULTPINNAMESIZE 50
-
-///< The default library pane width
-#define DEFAULTLIBWIDTH 250
 
 ///< The default selection highlight thickness
 #define DEFAULTSELECTIONTHICKNESS 3
@@ -97,6 +91,14 @@ extern SCH_SHEET_PATH* g_CurrentSheet;    ///< which sheet we are presently work
  * This also wants to live in the eventual SCHEMATIC object
  */
 extern CONNECTION_GRAPH* g_ConnectionGraph;
+
+/**
+ * This also wants to live in the eventual SCHEMATIC object
+ */
+extern ERC_SETTINGS* g_ErcSettings;
+
+int GetSeverity( int aErrorCode );
+void SetSeverity( int aErrorCode, int aSeverity );
 
 /**
  * Default line thickness used to draw/plot items having a

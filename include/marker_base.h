@@ -26,12 +26,15 @@
 #ifndef MARKER_BASE_H
 #define MARKER_BASE_H
 
-#include <drc_item.h>
+#include <rc_item.h>
 #include <gr_basic.h>
 #include <eda_rect.h>
+
+
 class SHAPE_LINE_CHAIN;
 
-/* Marker are mainly used to show a DRC or ERC error or warning
+/*
+ * Marker are mainly used to show a DRC or ERC error or warning
  */
 
 
@@ -45,129 +48,34 @@ public:
         MARKER_SIMUL
     };
 
-    enum MARKER_SEVERITY {
-        MARKER_SEVERITY_UNSPEC,
-        MARKER_SEVERITY_INFO,
-        MARKER_SEVERITY_WARNING,
-        MARKER_SEVERITY_ERROR
-    };
-
     wxPoint               m_Pos;                 ///< position of the marker
 
 protected:
-    int                   m_ScalingFactor;       // Scaling factor to convert corners coordinates
+    TYPEMARKER            m_markerType;          // The type of marker (useful to filter markers)
+    bool                  m_excluded;            // User has excluded this specific error
+    RC_ITEM*              m_rcItem;
+
+    int                   m_scalingFactor;       // Scaling factor to convert corners coordinates
                                                  // to internat units coordinates
-    TYPEMARKER            m_MarkerType;          // The type of marker (useful to filter markers)
-
-    // JEY TODO: retire this; error levels come from DRC_ITEM
-    MARKER_SEVERITY       m_ErrorLevel;          // Specify the severity of the error (Eeschema only)
-    bool                  m_Excluded;            // User has excluded this specific error
-
-    EDA_RECT              m_ShapeBoundingBox;    // Bounding box of the graphic symbol, relative
+    EDA_RECT              m_shapeBoundingBox;    // Bounding box of the graphic symbol, relative
                                                  // to the position of the shape, in marker shape
                                                  // units
-    DRC_ITEM              m_drc;
-
-    void init();
 
 public:
 
-    MARKER_BASE( int aScalingFactor );
-
-    /**
-     * Constructor
-     * @param aErrorCode The categorizing identifier for an error
-     * @param aMarkerPos The position of the MARKER on the BOARD
-     * @param aItem The first of two objects
-     * @param aPos The position of the first of two objects
-     * @param bItem The second of the two conflicting objects
-     * @param bPos The position of the second of two objects
-     * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
-     */
-    MARKER_BASE( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                 EDA_ITEM* aItem, const wxPoint& aPos,
-                 EDA_ITEM* bItem, const wxPoint& bPos, int aScalingFactor );
-
-    /**
-     * Constructor
-     * @param aErrorCode The categorizing identifier for an error
-     * @param aMarkerPos The position of the MARKER on the BOARD
-     * @param aItem The first of two objects
-     * @param bItem The second of the two conflicting objects
-     * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
-     */
-    MARKER_BASE( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                 EDA_ITEM* aItem,
-                 EDA_ITEM* bItem, int aScalingFactor );
-
-    /**
-     * Constructor
-     * @param aErrorCode The categorizing identifier for an error
-     * @param aMarkerPos The position of the MARKER on the BOARD
-     * @param aText Text describing the first of two objects
-     * @param aPos The position of the first of two objects
-     * @param bText Text describing the second of the two conflicting objects
-     * @param bPos The position of the second of two objects
-     * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
-     */
-    MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
-                 const wxString& aText, const wxPoint& aPos,
-                 const wxString& bText, const wxPoint& bPos, int aScalingFactor );
-
-    /**
-     * Constructor
-     * @param aErrorCode The categorizing identifier for an error
-     * @param aMarkerPos The position of the MARKER on the BOARD
-     * @param aText Text describing the first of two objects
-     * @param bText Text describing the second of the two conflicting objects
-     * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
-     */
-    MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
-                 const wxString& aText,
-                 const wxString& bText, int aScalingFactor );
-
-    /**
-     * Constructor
-     * @param aErrorCode The categorizing identifier for an error
-     * @param aText Text describing the object
-     * @param bText Text describing the second of the two conflicting objects
-     * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
-     */
-    MARKER_BASE( int aErrorCode,
-                 const wxString& aText,
-                 const wxString& bText, int aScalingFactor );
-
-    /**
-     * Contructor
-     * makes a copy of \a aMarker but does not copy the DRC_ITEM.
-     *
-     * @param aMarker The marker to copy.
-     */
-    MARKER_BASE( const MARKER_BASE& aMarker );
+    MARKER_BASE( int aScalingFactor, RC_ITEM* aItem, TYPEMARKER aType = MARKER_UNSPEC );
 
     virtual ~MARKER_BASE();
 
     /** The scaling factor to convert polygonal shape coordinates to internal units
      */
-    int MarkerScale() const { return m_ScalingFactor; }
+    int MarkerScale() const { return m_scalingFactor; }
 
     /** Returns the shape polygon in internal units in a SHAPE_LINE_CHAIN
      * the coordinates are relatives to the marker position (are not absolute)
      * @param aPolygon is the SHAPE_LINE_CHAIN to fill with the shape
      */
     void ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon) const;
-
-    /** @return the shape corner list
-     */
-    const VECTOR2I* GetShapePolygon() const;
-
-    /** @return the shape polygon corner aIdx
-     */
-    const VECTOR2I& GetShapePolygonCorner( int aIdx ) const;
-
-    /** @return the default shape polygon corner count
-     */
-    int GetShapePolygonCornerCount() const;
 
     /**
      * Function PrintMarker
@@ -179,22 +87,15 @@ public:
      * Function GetPos
      * @return the position of this MARKER in internal units.
      */
-    const wxPoint& GetPos() const
-    {
-        return m_Pos;
-    }
+    const wxPoint& GetPos() const { return m_Pos; }
 
-    /**
-     * accessors to set/get error levels (warning, error, fatal error..)
-     */
-    void SetErrorLevel( MARKER_SEVERITY aErrorLevel ) { m_ErrorLevel = aErrorLevel; }
-    MARKER_SEVERITY GetErrorLevel() const { return m_ErrorLevel; }
+    virtual const KIID GetUUID() const = 0;
 
     /**
      * accessors to set/get marker type (DRC, ERC, or other)
      */
-    void SetMarkerType( enum TYPEMARKER aMarkerType ) { m_MarkerType = aMarkerType; }
-    enum TYPEMARKER GetMarkerType() const { return m_MarkerType; }
+    void SetMarkerType( enum TYPEMARKER aMarkerType ) { m_markerType = aMarkerType; }
+    enum TYPEMARKER GetMarkerType() const { return m_markerType; }
 
     /**
      * Function SetData
@@ -254,7 +155,7 @@ public:
 
     void SetData( int aErrorCode, const wxPoint& aMarkerPos,
                   const wxString& aText, const KIID& aID,
-                  const wxString& bText, const KIID& bID );
+                  const wxString& bText = wxEmptyString, const KIID& bID = niluuid );
 
     /**
      * Function SetAuxiliaryData
@@ -265,11 +166,11 @@ public:
      */
     void SetAuxiliaryData( const wxString& aAuxiliaryText, const wxPoint& aAuxiliaryPos )
     {
-        m_drc.SetAuxiliaryData( aAuxiliaryText, aAuxiliaryPos );
+        m_rcItem->SetAuxiliaryData( aAuxiliaryText, aAuxiliaryPos );
     }
 
-    bool IsExcluded() const { return m_Excluded; }
-    void SetExcluded( bool aExcluded ) { m_Excluded = aExcluded; }
+    bool IsExcluded() const { return m_excluded; }
+    void SetExcluded( bool aExcluded ) { m_excluded = aExcluded; }
 
     /**
      * Function GetReporter
@@ -277,14 +178,8 @@ public:
      * interface may be used.
      * @return const& DRC_ITEM
      */
-    DRC_ITEM& GetReporter() { return m_drc; }
-    const DRC_ITEM& GetReporter() const { return m_drc; }
-
-    /**
-     * Function DisplayMarkerInfo
-     * displays the full info of this marker, in a HTML window.
-     */
-    void DisplayMarkerInfo( EDA_DRAW_FRAME* aFrame );
+    RC_ITEM* GetRCItem() { return m_rcItem; }
+    const RC_ITEM* GetRCItem() const { return m_rcItem; }
 
     /**
      * Tests if the given wxPoint is within the bounds of this object.

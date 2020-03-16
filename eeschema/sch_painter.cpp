@@ -1689,12 +1689,7 @@ void SCH_PAINTER::draw( SCH_MARKER *aMarker, int aLayer )
     if( drawingShadows && !aMarker->IsSelected() )
         return;
 
-    if( aMarker->GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR )
-        aLayer = LAYER_ERC_ERR;
-    else
-        aLayer = LAYER_ERC_WARN;
-
-    COLOR4D color = getRenderColor( aMarker, aLayer, drawingShadows );
+    COLOR4D color = getRenderColor( aMarker, aMarker->GetColorLayer(), drawingShadows );
 
     m_gal->Save();
     m_gal->Translate( aMarker->GetPosition() );

@@ -28,9 +28,8 @@
 #include "wx/html/m_templ.h"
 #include "wx/html/styleparams.h"
 #include <drc/drc.h>
-#include <drc_item.h>
+#include <drc/drc_item.h>
 #include <class_board.h>
-#include <base_units.h>
 
 
 wxString DRC_ITEM::GetErrorText() const
@@ -165,81 +164,31 @@ wxString DRC_ITEM::GetErrorText() const
 }
 
 
-wxString DRC_ITEM::ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos )
+wxString escapeHtml( wxString aString )
 {
-    return wxString::Format( wxT( "@(%s, %s)" ),
-                             MessageTextFromValue( aUnits, aPos.x ),
-                             MessageTextFromValue( aUnits, aPos.y ) );
+    aString.Replace( wxT("<"), wxT("&lt;") );
+    aString.Replace( wxT(">"), wxT("&gt;") );
+    return aString;
 }
 
 
 wxString DRC_ITEM::ShowHtml( EDA_UNITS aUnits ) const
 {
-    wxString mainText = m_MainText;
-    // a wxHtmlWindows does not like < and > in the text to display
-    // because these chars have a special meaning in html
-    mainText.Replace( wxT("<"), wxT("&lt;") );
-    mainText.Replace( wxT(">"), wxT("&gt;") );
-
-    wxString errText = GetErrorText();
-    errText.Replace( wxT("<"), wxT("&lt;") );
-    errText.Replace( wxT(">"), wxT("&gt;") );
-
-
     if( m_hasSecondItem )
     {
-        wxString auxText = m_AuxText;
-        auxText.Replace( wxT("<"), wxT("&lt;") );
-        auxText.Replace( wxT(">"), wxT("&gt;") );
-
         // an html fragment for the entire message in the listbox.  feel free
         // to add color if you want:
         return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s<br>&nbsp;&nbsp; %s" ),
-                                 errText,
-                                 mainText,
-                                 auxText );
+                                 escapeHtml( GetErrorText() ),
+                                 escapeHtml( m_MainText ),
+                                 escapeHtml( m_AuxText ) );
     }
     else
     {
         return wxString::Format( wxT( "<b>%s</b><br>&nbsp;&nbsp; %s" ),
-                                 errText,
-                                 mainText );
+                                 escapeHtml( GetErrorText() ),
+                                 escapeHtml( m_MainText ) );
     }
-}
-
-
-wxString DRC_ITEM::ShowReport( EDA_UNITS aUnits ) const
-{
-    if( m_hasSecondItem )
-    {
-        return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
-                                 m_ErrorCode,
-                                 GetErrorText(),
-                                 ShowCoord( aUnits, m_MainPosition ),
-                                 m_MainText,
-                                 ShowCoord( aUnits, m_AuxPosition ),
-                                 m_AuxText );
-    }
-    else
-    {
-        return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
-                                 m_ErrorCode,
-                                 GetErrorText(),
-                                 ShowCoord( aUnits, m_MainPosition ),
-                                 m_MainText );
-    }
-}
-
-
-BOARD_ITEM* DRC_ITEM::GetMainItem( BOARD* aBoard ) const
-{
-    return aBoard->GetItem( m_mainItemUuid );
-}
-
-
-BOARD_ITEM* DRC_ITEM::GetAuxiliaryItem( BOARD* aBoard ) const
-{
-    return aBoard->GetItem( m_auxItemUuid );
 }
 
 

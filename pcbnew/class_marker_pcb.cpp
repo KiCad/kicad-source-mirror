@@ -29,16 +29,15 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <base_units.h>
-#include <pcbnew.h>
 #include <class_board.h>
 #include <class_board_item.h>
 #include <class_marker_pcb.h>
-#include <board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <widgets/ui_common.h>
 #include <pgm_base.h>
+#include <drc/drc_item.h>
 
 
 /// Factor to convert the maker unit shape to internal units:
@@ -46,7 +45,8 @@
 
 MARKER_PCB::MARKER_PCB( BOARD_ITEM* aParent ) :
         BOARD_ITEM( aParent, PCB_MARKER_T ),
-        MARKER_BASE( SCALING_FACTOR ), m_item( nullptr )
+        MARKER_BASE( SCALING_FACTOR, new DRC_ITEM() ),
+        m_item( nullptr )
 {
 }
 
@@ -55,9 +55,10 @@ MARKER_PCB::MARKER_PCB( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarker
                         BOARD_ITEM* aItem,
                         BOARD_ITEM* bItem ) :
         BOARD_ITEM( nullptr, PCB_MARKER_T ), // parent set during BOARD::Add()
-        MARKER_BASE( aUnits, aErrorCode, aMarkerPos, aItem, bItem, SCALING_FACTOR ),
+        MARKER_BASE( SCALING_FACTOR, new DRC_ITEM() ),
         m_item( nullptr )
 {
+    SetData( aUnits, aErrorCode, aMarkerPos, aItem, bItem );
 }
 
 
@@ -65,9 +66,10 @@ MARKER_PCB::MARKER_PCB( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarker
                         BOARD_ITEM* aItem, const wxPoint& aPos,
                         BOARD_ITEM* bItem, const wxPoint& bPos ) :
         BOARD_ITEM( nullptr, PCB_MARKER_T ), // parent set during BOARD::Add()
-        MARKER_BASE( aUnits, aErrorCode, aMarkerPos, aItem, aPos, bItem, bPos, SCALING_FACTOR ),
+        MARKER_BASE( SCALING_FACTOR, new DRC_ITEM() ),
         m_item( nullptr )
 {
+    SetData( aUnits, aErrorCode, aMarkerPos, aItem, aPos, bItem, bPos );
 }
 
 
@@ -75,8 +77,10 @@ MARKER_PCB::MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
                         const wxString& aText, const wxPoint& aPos,
                         const wxString& bText, const wxPoint& bPos ) :
         BOARD_ITEM( nullptr, PCB_MARKER_T ),  // parent set during BOARD::Add()
-        MARKER_BASE( aErrorCode, aMarkerPos, aText, aPos, bText, bPos, SCALING_FACTOR ), m_item( nullptr )
+        MARKER_BASE( SCALING_FACTOR, new DRC_ITEM() ),
+        m_item( nullptr )
 {
+    SetData( aErrorCode, aMarkerPos, aText, aPos, bText, bPos );
 }
 
 
@@ -84,8 +88,10 @@ MARKER_PCB::MARKER_PCB( int aErrorCode,
                         const wxString& aText,
                         const wxString& bText) :
         BOARD_ITEM( nullptr, PCB_MARKER_T ),  // parent set during BOARD::Add()
-        MARKER_BASE( aErrorCode, aText, bText, SCALING_FACTOR ), m_item( nullptr )
+        MARKER_BASE( SCALING_FACTOR, new DRC_ITEM() ),
+        m_item( nullptr )
 {
+    SetData( aErrorCode, wxDefaultPosition, aText, bText );
 }
 
 
@@ -98,13 +104,13 @@ MARKER_PCB::~MARKER_PCB()
 wxString MARKER_PCB::Serialize() const
 {
     return wxString::Format( wxT( "%d|%d|%d|%s|%s|%s|%s" ),
-                             m_drc.GetErrorCode(),
+                             m_rcItem->GetErrorCode(),
                              m_Pos.x,
                              m_Pos.y,
-                             m_drc.GetMainText(),
-                             m_drc.GetMainItemID().AsString(),
-                             m_drc.GetAuxiliaryText(),
-                             m_drc.GetAuxItemID().AsString() );
+                             m_rcItem->GetMainText(),
+                             m_rcItem->GetMainItemID().AsString(),
+                             m_rcItem->GetAuxText(),
+                             m_rcItem->GetAuxItemID().AsString() );
 }
 
 
@@ -116,8 +122,8 @@ MARKER_PCB* MARKER_PCB::Deserialize( const wxString& data )
 
     marker->m_Pos.x = (int) strtol( props[1].c_str(), nullptr, 10 );
     marker->m_Pos.y = (int) strtol( props[2].c_str(), nullptr, 10 );
-    marker->m_drc.SetData( errorCode, props[3], KIID( props[4] ), props[5], KIID( props[6] ) );
-    marker->m_drc.SetParent( marker );
+    marker->m_rcItem->SetData( errorCode, props[3], KIID( props[4] ), props[5], KIID( props[6] ) );
+    marker->m_rcItem->SetParent( marker );
     return marker;
 }
 
@@ -137,11 +143,9 @@ bool MARKER_PCB::IsOnLayer( PCB_LAYER_ID aLayer ) const
 
 void MARKER_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Type" ), _( "Marker" ), DARKCYAN ) );
-
-    aList.emplace_back( MSG_PANEL_ITEM( _( "Violation" ), m_drc.GetErrorText(), RED ) );
-
-    aList.emplace_back( MSG_PANEL_ITEM( m_drc.GetTextA(), m_drc.GetTextB(), DARKBROWN ) );
+    aList.emplace_back( _( "Type" ), _( "Marker" ), DARKCYAN );
+    aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorText(), RED );
+    aList.emplace_back( m_rcItem->GetMainText(), m_rcItem->GetAuxText(), DARKBROWN );
 }
 
 
@@ -162,7 +166,7 @@ void MARKER_PCB::Flip(const wxPoint& aCentre, bool aFlipLeftRight )
 
 wxString MARKER_PCB::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Marker (%s)" ), GetReporter().GetErrorText() );
+    return wxString::Format( _( "Marker (%s)" ), m_rcItem->GetErrorText() );
 }
 
 
@@ -183,7 +187,7 @@ void MARKER_PCB::ViewGetLayers( int aLayers[], int& aCount ) const
 
     BOARD* board = static_cast<BOARD*>( ancestor );
 
-    switch( board->GetDesignSettings().GetSeverity( m_drc.GetErrorCode() ) )
+    switch( board->GetDesignSettings().GetSeverity( m_rcItem->GetErrorCode() ) )
     {
     default:
     case SEVERITY::RPT_SEVERITY_ERROR:   aLayers[0] = LAYER_DRC_ERROR;   break;
@@ -204,7 +208,7 @@ GAL_LAYER_ID MARKER_PCB::GetColorLayer() const
 
     BOARD* board = static_cast<BOARD*>( ancestor );
 
-    switch( board->GetDesignSettings().GetSeverity( m_drc.GetErrorCode() ) )
+    switch( board->GetDesignSettings().GetSeverity( m_rcItem->GetErrorCode() ) )
     {
     default:
     case SEVERITY::RPT_SEVERITY_ERROR:   return LAYER_DRC_ERROR;
@@ -222,7 +226,7 @@ KIGFX::COLOR4D MARKER_PCB::getColor() const
 
 const EDA_RECT MARKER_PCB::GetBoundingBox() const
 {
-    EDA_RECT bbox = m_ShapeBoundingBox;
+    EDA_RECT bbox = m_shapeBoundingBox;
 
     wxPoint pos = m_Pos;
     pos.x += int( bbox.GetOrigin().x * MarkerScale() );

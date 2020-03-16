@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2009-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +63,6 @@ enum ERCE_T
     ERCE_NOCONNECT_NOT_CONNECTED, // a no connect symbol is not connected to anything
     ERCE_LABEL_NOT_CONNECTED,   // label not connected to anything
     ERCE_SIMILAR_LABELS,        // 2 labels are equal fir case insensitive comparisons
-    ERCE_SIMILAR_GLBL_LABELS,   // 2 labels are equal fir case insensitive comparisons
     ERCE_DIFFERENT_UNIT_FP,     // different units of the same component have different footprints assigned
     ERCE_DIFFERENT_UNIT_NET,    // a shared pin in a multi-unit component is connected to more than one net
     ERCE_BUS_ALIAS_CONFLICT,    // conflicting bus alias definitions across sheets
@@ -85,20 +84,12 @@ enum ERCE_T
 
 
 /**
- * Function WriteDiagnosticERC
- * save the ERC errors to \a aFullFileName.
- *
- * @param aFullFileName A wxString object containing the file name and path.
- */
-bool WriteDiagnosticERC( EDA_UNITS aUnits, const wxString& aFullFileName );
-
-/**
  * Performs ERC testing and creates an ERC marker to show the ERC problem for aNetItemRef
  * or between aNetItemRef and aNetItemTst.
  *  if MinConn < 0: this is an error on labels
  */
-void Diagnose( NETLIST_OBJECT* NetItemRef, NETLIST_OBJECT* NetItemTst,
-                      int MinConnexion, int Diag );
+void Diagnose( NETLIST_OBJECT* NetItemRef, NETLIST_OBJECT* NetItemTst, int MinConnexion,
+               int Diag );
 
 /**
  * Perform ERC testing for electrical conflicts between \a NetItemRef and other items
@@ -109,9 +100,8 @@ void Diagnose( NETLIST_OBJECT* NetItemRef, NETLIST_OBJECT* NetItemTst,
  * @param aMinConnexion = a pointer to a variable to store the minimal connection
  * found( NOD, DRV, NPI, NET_NC)
  */
-void TestOthersItems( NETLIST_OBJECT_LIST* aList,
-                             unsigned aNetItemRef, unsigned aNetStart,
-                             int* aMinConnexion );
+void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned aNetStart,
+                      int* aMinConnexion );
 
 /**
  * Function TestDuplicateSheetNames( )
@@ -129,11 +119,9 @@ int TestDuplicateSheetNames( bool aCreateMarker );
  * (for example, two hierarchical sub-sheets contain different definitions for
  * the same bus alias)
  *
- * @param aCreateMarker: true = create error markers in schematic,
- *                       false = calculate error count only
  * @return the error count
  */
-int TestConflictingBusAliases( bool aCreateMarker = true );
+int TestConflictingBusAliases();
 
 /**
  * Test if all units of each multiunit component have the same footprint assigned.

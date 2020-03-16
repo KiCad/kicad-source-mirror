@@ -101,6 +101,8 @@ public:
         return aItem && PCB_MARKER_T == aItem->Type();
     }
 
+    const KIID GetUUID() const override { return m_Uuid; }
+
     wxString Serialize() const;
 
     static MARKER_PCB* Deserialize( const wxString& data );
@@ -135,7 +137,7 @@ public:
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
     {
-        return BOARD_ITEM::Matches( m_drc.GetErrorText(), aSearchData );
+        return BOARD_ITEM::Matches( m_rcItem->GetErrorText(), aSearchData );
     }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;

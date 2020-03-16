@@ -47,7 +47,6 @@ public:
     int RunSimulation( const TOOL_EVENT& aEvent );
 
     int ShowDatasheet( const TOOL_EVENT& aEvent );
-    int ShowMarkerInfo( const TOOL_EVENT& aEvent );
 
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 

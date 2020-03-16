@@ -22,7 +22,6 @@
  */
 #include <wx/wx.h>
 
-#include <drc/drc_tree_model.h>
 #include <board_commit.h>
 #include <dialog_cleanup_tracks_and_vias.h>
 #include <kiface_i.h>
@@ -32,7 +31,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tracks_cleaner.h>
-
+#include <drc/drc_item.h>
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParentFrame ):
         DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( aParentFrame ),
@@ -46,7 +45,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
     m_cleanShortCircuitOpt->SetValue( cfg->m_Cleanup.cleanup_short_circuits );
     m_deleteTracksInPadsOpt->SetValue( cfg->m_Cleanup.cleanup_tracks_in_pad );
 
-    m_changesTreeModel = new DRC_TREE_MODEL( m_parentFrame, m_changesDataView );
+    m_changesTreeModel = new RC_TREE_MODEL( m_parentFrame, m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
@@ -124,7 +123,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 
     if( aDryRun )
     {
-        DRC_ITEMS_PROVIDER* provider = new VECTOR_DRC_ITEMS_PROVIDER( m_parentFrame, &m_items );
+        RC_ITEMS_PROVIDER* provider = new VECTOR_DRC_ITEMS_PROVIDER( m_parentFrame, &m_items );
         m_changesTreeModel->SetProvider( provider );
     }
     else if( modified )
@@ -136,15 +135,16 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 }
 
 
-void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnSelectItem( wxDataViewEvent& event )
+void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnSelectItem( wxDataViewEvent& aEvent )
 {
-    BOARD_ITEM*   item = DRC_TREE_MODEL::ToBoardItem( m_parentFrame->GetBoard(), event.GetItem() );
+    const KIID&   itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
+    BOARD_ITEM*   item = m_parentFrame->GetBoard()->GetItem( itemID );
     WINDOW_THAWER thawer( m_parentFrame );
 
     m_parentFrame->FocusOnItem( item );
     m_parentFrame->GetCanvas()->Refresh();
 
-    event.Skip();
+    aEvent.Skip();
 }
 
 

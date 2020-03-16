@@ -327,6 +327,7 @@ set( COMMON_SRCS
     project.cpp
     properties.cpp
     ptree.cpp
+    rc_item.cpp
     refdes_utils.cpp
     reporter.cpp
     richio.cpp

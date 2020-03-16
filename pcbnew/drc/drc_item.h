@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,62 +22,42 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef DRC_ITEM_H
+#define DRC_ITEM_H
 
-#ifndef KICAD_DRC_TREE_MODEL_H
-#define KICAD_DRC_TREE_MODEL_H
+#include <macros.h>
+#include <base_struct.h>
+#include <rc_item.h>
+#include <marker_base.h>
+#include <class_board.h>
+#include <class_marker_pcb.h>
+#include <pcb_base_frame.h>
 
-#include <drc/drc.h>
-#include <widgets/ui_common.h>
 
-
-#define WX_DATAVIEW_WINDOW_PADDING 6
-
-
-/**
- * Provide an abstract interface of a DRC_ITEM* list manager.  The details
- * of the actual list architecture are hidden from the caller.  Any class
- * that implements this interface can then be used by a DRC_TREE_MODEL class without
- * it knowing the actual architecture of the list.
- */
-class DRC_ITEMS_PROVIDER
+class DRC_ITEM : public RC_ITEM
 {
 public:
-    virtual void SetSeverities( int aSeverities ) = 0;
-
-    virtual int GetCount( int aSeverity = -1 ) = 0;
+    /**
+     * Function GetErrorText
+     * returns the string form of a drc error code.
+     */
+    wxString GetErrorText() const override;
 
     /**
-     * Function GetItem
-     * retrieves a DRC_ITEM by pointer.  The actual item remains owned by the
-     * list container.
-     * @param aIndex The 0 based index into the list of the desired item.
-     * @return const DRC_ITEM* - the desired item or NULL if aIndex is out of range.
+     * Function ShowHtml
+     * translates this object into a fragment of HTML suitable for the wxHtmlListBox class.
+     * @return wxString - the html text.
      */
-    virtual DRC_ITEM* GetItem( int aIndex ) = 0;
-
-    /**
-     * Function DeleteItems
-     * removes and deletes desired item from the list.
-     * @param aIndex The 0 based index into the list of the desired item which is to be deleted.
-     * @param aDeep If true, the source item should be deleted as well as the filtered item.
-     */
-    virtual void DeleteItem( int aIndex, bool aDeep ) = 0;
-
-    /**
-     * Function DeleteAllItems
-     * removes and deletes all the items in the list.
-     */
-    virtual void DeleteAllItems() = 0;
-
-    virtual ~DRC_ITEMS_PROVIDER() { }
+    wxString ShowHtml( EDA_UNITS aUnits ) const;
 };
+
 
 /**
  * BOARD_DRC_ITEMS_PROVIDER
  * is an implementation of the interface named DRC_ITEM_LIST which uses a BOARD instance
  * to fulfill the interface.  No ownership is taken of the BOARD.
  */
-class BOARD_DRC_ITEMS_PROVIDER : public DRC_ITEMS_PROVIDER
+class BOARD_DRC_ITEMS_PROVIDER : public RC_ITEMS_PROVIDER
 {
 private:
     BOARD*                   m_board;
@@ -106,7 +87,7 @@ public:
             if( marker->IsExcluded() )
                 markerSeverity = RPT_SEVERITY_EXCLUSION;
             else
-                markerSeverity = bds.GetSeverity( marker->GetReporter().GetErrorCode() );
+                markerSeverity = bds.GetSeverity( marker->GetRCItem()->GetErrorCode() );
 
             if( markerSeverity & m_severities )
                 m_filteredMarkers.push_back( marker );
@@ -118,8 +99,9 @@ public:
         if( aSeverity < 0 )
             return m_filteredMarkers.size();
 
-        int count = 0;
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+        int count = 0;
 
         for( MARKER_PCB* marker : m_board->Markers() )
         {
@@ -128,7 +110,7 @@ public:
             if( marker->IsExcluded() )
                 markerSeverity = RPT_SEVERITY_EXCLUSION;
             else
-                markerSeverity = bds.GetSeverity( marker->GetReporter().GetErrorCode() );
+                markerSeverity = bds.GetSeverity( marker->GetRCItem()->GetErrorCode() );
 
             if( markerSeverity == aSeverity )
                 count++;
@@ -141,7 +123,7 @@ public:
     {
         MARKER_PCB* marker = m_filteredMarkers[ aIndex ];
 
-        return marker ? &marker->GetReporter() : nullptr;
+        return marker ? static_cast<DRC_ITEM*>( marker->GetRCItem() ) : nullptr;
     }
 
     void DeleteItem( int aIndex, bool aDeep ) override
@@ -156,6 +138,7 @@ public:
     void DeleteAllItems() override
     {
         m_board->DeleteMARKERs();
+        m_filteredMarkers.clear();
     }
 };
 
@@ -166,7 +149,7 @@ public:
  * of pointers to DRC_ITEMs to fulfill the interface.  No ownership is taken of the
  * vector.
  */
-class VECTOR_DRC_ITEMS_PROVIDER : public DRC_ITEMS_PROVIDER
+class VECTOR_DRC_ITEMS_PROVIDER : public RC_ITEMS_PROVIDER
 {
     PCB_BASE_FRAME*         m_frame;
     std::vector<DRC_ITEM*>* m_sourceVector;     // owns its DRC_ITEMs
@@ -275,114 +258,4 @@ public:
 };
 
 
-class DRC_TREE_NODE
-{
-public:
-    enum NODE_TYPE { MARKER, MAIN_ITEM, AUX_ITEM };
-
-    DRC_TREE_NODE( DRC_TREE_NODE* aParent, DRC_ITEM* aDrcItem, NODE_TYPE aType ) :
-            m_Type( aType ),
-            m_Parent( aParent ),
-            m_DrcItem( aDrcItem )
-    {}
-
-    ~DRC_TREE_NODE()
-    {
-        for( DRC_TREE_NODE* child : m_Children )
-            delete child;
-    }
-
-    NODE_TYPE      m_Type;
-    DRC_TREE_NODE* m_Parent;
-
-    DRC_ITEM*      m_DrcItem;
-
-    std::vector<DRC_TREE_NODE*> m_Children;
-};
-
-
-class DRC_TREE_MODEL : public wxDataViewModel, wxEvtHandler
-{
-public:
-    static wxDataViewItem ToItem( DRC_TREE_NODE const* aNode )
-    {
-        return wxDataViewItem( const_cast<void*>( static_cast<void const*>( aNode ) ) );
-    }
-
-    static DRC_TREE_NODE* ToNode( wxDataViewItem aItem )
-    {
-        return static_cast<DRC_TREE_NODE*>( aItem.GetID() );
-    }
-
-    static BOARD_ITEM* ToBoardItem( BOARD* aBoard, wxDataViewItem aItem );
-
-public:
-    DRC_TREE_MODEL( PCB_BASE_FRAME* aParentFrame, wxDataViewCtrl* aView );
-
-    ~DRC_TREE_MODEL();
-
-    void SetProvider( DRC_ITEMS_PROVIDER* aProvider );
-    void SetSeverities( int aSeverities );
-
-    int GetDRCItemCount() const { return m_tree.size(); }
-
-    void ExpandAll();
-
-    bool IsContainer( wxDataViewItem const& aItem ) const override;
-
-    wxDataViewItem GetParent( wxDataViewItem const& aItem ) const override;
-
-    unsigned int GetChildren( wxDataViewItem const& aItem,
-                              wxDataViewItemArray&  aChildren ) const override;
-
-    // Simple, single-text-column model
-    unsigned int GetColumnCount() const override { return 1; }
-    wxString GetColumnType( unsigned int aCol ) const override { return "string"; }
-    bool HasContainerColumns( wxDataViewItem const& aItem ) const override { return true; }
-
-    /**
-     * Called by the wxDataView to fetch an item's value.
-     */
-    void GetValue( wxVariant&              aVariant,
-                   wxDataViewItem const&   aItem,
-                   unsigned int            aCol ) const override;
-
-    /**
-     * Called by the wxDataView to edit an item's content.
-     */
-    bool SetValue( wxVariant const& aVariant,
-                   wxDataViewItem const&   aItem,
-                   unsigned int            aCol ) override
-    {
-        // Editing not supported
-        return false;
-    }
-
-    /**
-     * Called by the wxDataView to fetch an item's formatting.  Return true iff the
-     * item has non-default attributes.
-     */
-    bool GetAttr( wxDataViewItem const&   aItem,
-                  unsigned int            aCol,
-                  wxDataViewItemAttr&     aAttr ) const override;
-
-    void ValueChanged( DRC_TREE_NODE* aNode );
-
-    void DeleteCurrentItem( bool aDeep );
-    void DeleteAllItems();
-
-private:
-    void rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeverities );
-    void onSizeView( wxSizeEvent& aEvent );
-
-private:
-    PCB_BASE_FRAME*      m_parentFrame;
-    wxDataViewCtrl*      m_view;
-    int                  m_severities;
-    DRC_ITEMS_PROVIDER*  m_drcItemsProvider;   // I own this, but not its contents
-
-    std::vector<DRC_TREE_NODE*> m_tree;  // I own this
-};
-
-
-#endif //KICAD_DRC_TREE_MODEL_H
+#endif      // DRC_ITEM_H

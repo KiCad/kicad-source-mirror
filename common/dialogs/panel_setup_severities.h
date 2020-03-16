@@ -38,12 +38,14 @@ class PANEL_SETUP_SEVERITIES : public wxPanel
 {
 private:
     std::map<int, int>&              m_severities;
+    int                              m_firstErrorCode;
+    int                              m_lastErrorCode;
+
     std::map<int, wxRadioButton*[4]> m_buttonMap;   // map from DRC error code to button group
 
 public:
-    PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, std::map<int, int>& aSeverities,
-                            int aFirstErrorCode, int aLastErrorCode );
-    ~PANEL_SETUP_SEVERITIES( ) { };
+    PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& aDummyItem,
+                            std::map<int, int>& aSeverities, int aFirstError, int aLastError );
 
     void ImportSettingsFrom( std::map<int, int>& aSettings );
 

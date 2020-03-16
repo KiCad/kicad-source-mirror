@@ -125,7 +125,6 @@ private:
 
     std::vector<PARAM_CFG*> m_projectFileParams;
     std::vector<PARAM_CFG*> m_configSettings;
-    ERC_SETTINGS            m_ercSettings;
     wxPageSetupDialogData   m_pageSetupData;
     bool                    m_printMonochrome;    ///< Print monochrome instead of grey scale.
     bool                    m_printSheetReference;
@@ -270,8 +269,6 @@ public:
 
     void DoShowSchematicSetupDialog( const wxString& aInitialPage = wxEmptyString,
                                      const wxString& aInitialParentPage = wxEmptyString );
-
-    ERC_SETTINGS& GetErcSettings() { return m_ercSettings; }
 
     /**
      * Insert or append a wanted symbol field name into the field names template.

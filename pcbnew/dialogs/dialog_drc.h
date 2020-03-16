@@ -31,32 +31,31 @@
 #include <fctsys.h>
 #include <pcbnew.h>
 #include <drc/drc.h>
+#include <rc_item.h>
 #include <class_marker_pcb.h>
 #include <class_board.h>
 #include <dialog_drc_base.h>
 #include <widgets/unit_binder.h>
 
 
-class DRC_ITEMS_PROVIDER;
 class BOARD_DESIGN_SETTINGS;
-class DRC_TREE_MODEL;
 
 
 #define DIALOG_DRC_WINDOW_NAME "DialogDrcWindowName"
 
 class
-DIALOG_DRC_CONTROL: public DIALOG_DRC_CONTROL_BASE
+DIALOG_DRC: public DIALOG_DRC_BASE
 {
 public:
     BOARD_DESIGN_SETTINGS  m_BrdSettings;
 
     /// Constructors
-    DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent );
-    ~DIALOG_DRC_CONTROL();
+    DIALOG_DRC( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent );
+    ~DIALOG_DRC();
 
-    void SetMarkersProvider( DRC_ITEMS_PROVIDER* aProvider );
-    void SetUnconnectedProvider( DRC_ITEMS_PROVIDER* aProvider );
-    void SetFootprintsProvider( DRC_ITEMS_PROVIDER* aProvider );
+    void SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider );
+    void SetUnconnectedProvider( RC_ITEMS_PROVIDER* aProvider );
+    void SetFootprintsProvider( RC_ITEMS_PROVIDER* aProvider );
 
 private:
     /**
@@ -95,28 +94,28 @@ private:
     void deleteAllMarkers();
     void refreshBoardEditor();
 
-    BOARD*              m_currentBoard;     // the board currently on test
-    DRC*                m_tester;
-    PCB_EDIT_FRAME*     m_brdEditor;
+    BOARD*             m_currentBoard;     // the board currently on test
+    DRC*               m_tester;
+    PCB_EDIT_FRAME*    m_brdEditor;
 
-    wxString            m_markersTitleTemplate;
-    wxString            m_unconnectedTitleTemplate;
-    wxString            m_footprintsTitleTemplate;
+    wxString           m_markersTitleTemplate;
+    wxString           m_unconnectedTitleTemplate;
+    wxString           m_footprintsTitleTemplate;
 
-    UNIT_BINDER         m_trackMinWidth;
-    UNIT_BINDER         m_viaMinSize;
-    UNIT_BINDER         m_uviaMinSize;
+    UNIT_BINDER        m_trackMinWidth;
+    UNIT_BINDER        m_viaMinSize;
+    UNIT_BINDER        m_uviaMinSize;
 
-    DRC_ITEMS_PROVIDER* m_markersProvider;
-    DRC_TREE_MODEL*     m_markerTreeModel;
+    RC_ITEMS_PROVIDER* m_markersProvider;
+    RC_TREE_MODEL*     m_markerTreeModel;
 
-    DRC_ITEMS_PROVIDER* m_unconnectedItemsProvider;
-    DRC_TREE_MODEL*     m_unconnectedTreeModel;
+    RC_ITEMS_PROVIDER* m_unconnectedItemsProvider;
+    RC_TREE_MODEL*     m_unconnectedTreeModel;
 
-    DRC_ITEMS_PROVIDER* m_footprintWarningsProvider;
-    DRC_TREE_MODEL*     m_footprintWarningsTreeModel;
+    RC_ITEMS_PROVIDER* m_footprintWarningsProvider;
+    RC_TREE_MODEL*     m_footprintWarningsTreeModel;
 
-    int                 m_severities;
+    int                m_severities;
 };
 
 #endif  // _DIALOG_DRC_H_

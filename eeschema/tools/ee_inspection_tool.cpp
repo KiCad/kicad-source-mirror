@@ -22,22 +22,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <view/view_controls.h>
 #include <sch_component.h>
-#include <sch_marker.h>
 #include <id.h>
 #include <kiway.h>
 #include <confirm.h>
 #include <tool/conditional_menu.h>
 #include <tool/selection_conditions.h>
-#include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_inspection_tool.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/ee_selection.h>
 #include <search_stack.h>
 #include <sim/sim_plot_frame.h>
-#include <sch_view.h>
 #include <sch_edit_frame.h>
 #include <lib_edit_frame.h>
 #include <lib_view_frame.h>
@@ -66,7 +62,6 @@ bool EE_INSPECTION_TOOL::Init()
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
     selToolMenu.AddItem( EE_ACTIONS::showDatasheet, EE_CONDITIONS::SingleSymbol && EE_CONDITIONS::Idle, 220 );
-    selToolMenu.AddItem( EE_ACTIONS::showMarkerInfo, singleMarkerCondition && EE_CONDITIONS::Idle, 220 );
 
     return true;
 }
@@ -298,22 +293,6 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_INSPECTION_TOOL::ShowMarkerInfo( const TOOL_EVENT& aEvent )
-{
-    EE_SELECTION& selection = m_selectionTool->GetSelection();
-
-    if( selection.Empty() )
-        return 0;
-
-    SCH_MARKER* marker = dynamic_cast<SCH_MARKER*>( selection.Front() );
-
-    if( marker )
-        marker->DisplayMarkerInfo( m_frame );
-
-    return 0;
-}
-
-
 int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
@@ -342,7 +321,6 @@ void EE_INSPECTION_TOOL::setTransitions()
     Go( &EE_INSPECTION_TOOL::RunSimulation,       EE_ACTIONS::runSimulation.MakeEvent() );
 
     Go( &EE_INSPECTION_TOOL::ShowDatasheet,       EE_ACTIONS::showDatasheet.MakeEvent() );
-    Go( &EE_INSPECTION_TOOL::ShowMarkerInfo,      EE_ACTIONS::showMarkerInfo.MakeEvent() );
 
     Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::SelectedEvent );
     Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::UnselectedEvent );

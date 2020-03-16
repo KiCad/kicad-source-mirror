@@ -26,9 +26,9 @@
 
 std::ostream& operator<<( std::ostream& os, const MARKER_PCB& aMarker )
 {
-    const auto& reporter = aMarker.GetReporter();
+    const auto& reporter = aMarker.GetRCItem();
     os << "MARKER_PCB[\n";
-    os << "    type=" << reporter.GetErrorCode() << " (" << reporter.GetErrorText() << ")"
+    os << "    type=" << reporter->GetErrorCode() << " (" << reporter->GetErrorText() << ")"
        << "\n";
     os << "]";
     return os;
@@ -40,7 +40,7 @@ namespace KI_TEST
 
 bool IsDrcMarkerOfType( const MARKER_PCB& aMarker, int aErrorCode )
 {
-    return aMarker.GetReporter().GetErrorCode() == aErrorCode;
+    return aMarker.GetRCItem()->GetErrorCode() == aErrorCode;
 }
 
 } // namespace KI_TEST

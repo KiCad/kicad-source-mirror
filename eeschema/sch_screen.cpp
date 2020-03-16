@@ -216,7 +216,8 @@ void SCH_SCREEN::FreeDrawList()
     std::vector<SCH_ITEM*> delete_list;
 
     std::copy_if( m_rtree.begin(), m_rtree.end(), std::back_inserter( delete_list ),
-            []( SCH_ITEM* aItem ) {
+            []( SCH_ITEM* aItem )
+            {
                 return ( aItem->Type() != SCH_SHEET_PIN_T && aItem->Type() != SCH_FIELD_T );
             } );
 
@@ -645,13 +646,13 @@ void SCH_SCREEN::ClearDrawingState()
 }
 
 
-LIB_PIN* SCH_SCREEN::GetPin(
-        const wxPoint& aPosition, SCH_COMPONENT** aComponent, bool aEndPointOnly )
+LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent,
+                             bool aEndPointOnly )
 {
     SCH_COMPONENT*  component = NULL;
     LIB_PIN*        pin = NULL;
 
-    for( auto item : Items().Overlapping( SCH_COMPONENT_T, aPosition ) )
+    for( SCH_ITEM* item : Items().Overlapping( SCH_COMPONENT_T, aPosition ) )
     {
         component = static_cast<SCH_COMPONENT*>( item );
 
@@ -700,7 +701,7 @@ SCH_SHEET_PIN* SCH_SCREEN::GetSheetLabel( const wxPoint& aPosition )
 {
     SCH_SHEET_PIN* sheetPin = nullptr;
 
-    for( auto item : Items().OfType( SCH_SHEET_T ) )
+    for( SCH_ITEM* item : Items().OfType( SCH_SHEET_T ) )
     {
         auto sheet = static_cast<SCH_SHEET*>( item );
 
@@ -718,7 +719,7 @@ size_t SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions
 {
     size_t count = 0;
 
-    for( auto item : Items() )
+    for( SCH_ITEM* item : Items() )
     {
         if( ( item->Type() != SCH_JUNCTION_T || aTestJunctions ) && item->IsConnected( aPos ) )
             count++;
@@ -731,9 +732,9 @@ size_t SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions
 void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
 
-    for( auto item : Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
     {
-        auto component = static_cast<SCH_COMPONENT*>( item );
+        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
 
         component->ClearAnnotation( aSheetPath );
 
@@ -750,7 +751,7 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
     if( GetClientSheetPathsCount() <= 1 )   // No need for alternate reference
         return;
 
-    for( auto item : Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
     {
         auto component = static_cast<SCH_COMPONENT*>( item );
 
@@ -763,7 +764,7 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
 
 void SCH_SCREEN::GetHierarchicalItems( EDA_ITEMS& aItems )
 {
-    for( auto item : Items() )
+    for( SCH_ITEM* item : Items() )
     {
         if( ( item->Type() == SCH_SHEET_T ) || ( item->Type() == SCH_COMPONENT_T ) )
             aItems.push_back( item );
@@ -776,10 +777,10 @@ bool SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath )
     std::vector< DANGLING_END_ITEM > endPoints;
     bool hasStateChanged = false;
 
-    for( auto item : Items() )
+    for( SCH_ITEM* item : Items() )
         item->GetEndPoints( endPoints );
 
-    for( auto item : Items() )
+    for( SCH_ITEM* item : Items() )
     {
         if( item->UpdateDanglingState( endPoints, aPath ) )
             hasStateChanged = true;
@@ -792,7 +793,7 @@ bool SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath )
 SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLayer,
                                SCH_LINE_TEST_T aSearchType )
 {
-    for( auto item : Items() )
+    for( SCH_ITEM* item : Items() )
     {
         if( item->Type() != SCH_LINE_T )
             continue;
@@ -825,7 +826,7 @@ SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLay
 
 SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy )
 {
-    for( auto item : Items().Overlapping( aPosition, aAccuracy ) )
+    for( SCH_ITEM* item : Items().Overlapping( aPosition, aAccuracy ) )
     {
         switch( item->Type() )
         {
@@ -850,7 +851,7 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
     SCH_COMPONENT* component;
     bool           found = false;
 
-    for( auto item : Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
     {
         component = static_cast<SCH_COMPONENT*>( item );
 
@@ -934,10 +935,9 @@ void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
     // for now, make it look like XML, expand on this later.
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
-    for( const auto item : Items() )
-    {
+
+    for( const SCH_ITEM* item : Items() )
         item->Show( nestLevel + 1, os );
-    }
 
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
@@ -990,9 +990,9 @@ void SCH_SCREENS::addScreenToList( SCH_SCREEN* aScreen )
     if( aScreen == NULL )
         return;
 
-    for( unsigned int i = 0; i < m_screens.size(); i++ )
+    for( const SCH_SCREEN* screen : m_screens )
     {
-        if( m_screens[i] == aScreen )
+        if( screen == aScreen )
             return;
     }
 
@@ -1008,7 +1008,7 @@ void SCH_SCREENS::buildScreenList( SCH_SHEET* aSheet )
 
         addScreenToList( screen );
 
-        for( auto item : screen->Items().OfType( SCH_SHEET_T ) )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
             buildScreenList( static_cast<SCH_SHEET*>( item ) );
     }
 }
@@ -1016,8 +1016,8 @@ void SCH_SCREENS::buildScreenList( SCH_SHEET* aSheet )
 
 void SCH_SCREENS::ClearAnnotation()
 {
-    for( size_t i = 0;  i < m_screens.size();  i++ )
-        m_screens[i]->ClearAnnotation( NULL );
+    for( SCH_SCREEN* screen : m_screens )
+        screen->ClearAnnotation( NULL );
 }
 
 
@@ -1095,49 +1095,49 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
 }
 
 
-void SCH_SCREENS::DeleteAllMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType )
+void SCH_SCREENS::DeleteMarker( SCH_MARKER* aMarker )
 {
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
     {
-        std::vector<SCH_ITEM*> markers;
-
-        for( auto item : screen->Items().OfType( SCH_MARKER_T ) )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_MARKER_T ) )
         {
-            if( static_cast<SCH_MARKER*>( item )->GetMarkerType() == aMarkerType )
-                markers.push_back( item );
-        }
-
-        for( auto marker : markers )
-        {
-            screen->Remove( marker );
-            delete marker;
+            if( item == aMarker )
+            {
+                screen->DeleteItem( item );
+                return;
+            }
         }
     }
 }
 
 
-int SCH_SCREENS::GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType,
-                                 enum MARKER_BASE::MARKER_SEVERITY aSeverity )
+void SCH_SCREENS::DeleteMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType, int aErrorCode )
 {
-    int count = 0;
-
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( auto item : screen->Items().OfType( SCH_MARKER_T ) )
+        std::vector<SCH_ITEM*> markers;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_MARKER_T ) )
         {
-            auto marker = static_cast<SCH_MARKER*>( item );
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
+            RC_ITEM*    rcItem = marker->GetRCItem();
 
-            if( ( aMarkerType != MARKER_BASE::MARKER_UNSPEC ) &&
-                ( marker->GetMarkerType() != aMarkerType ) )
-                continue;
-
-            if( aSeverity == MARKER_BASE::MARKER_SEVERITY_UNSPEC ||
-                aSeverity == marker->GetErrorLevel() )
-                count++;
+            if( marker->GetMarkerType() == aMarkerType &&
+                    ( aErrorCode == ERCE_UNSPECIFIED || rcItem->GetErrorCode() == aErrorCode ) )
+            {
+                markers.push_back( item );
+            }
         }
-    }
 
-    return count;
+        for( SCH_ITEM* marker : markers )
+            screen->DeleteItem( marker );
+    }
+}
+
+
+void SCH_SCREENS::DeleteAllMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType )
+{
+    DeleteMarkers( aMarkerType, ERCE_UNSPECIFIED );
 }
 
 

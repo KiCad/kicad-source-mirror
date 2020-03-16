@@ -55,11 +55,6 @@ TOOL_ACTION EE_ACTIONS::showDatasheet( "eeschema.InspectionTool.showDatasheet",
         _( "Show Datasheet" ), _( "Opens the datasheet in a browser" ),
         datasheet_xpm );
 
-TOOL_ACTION EE_ACTIONS::showMarkerInfo( "eeschema.InspectionTool.showMarkerInfo",
-        AS_GLOBAL, 0, "",
-        _( "Show Marker Info" ), _( "Display the marker's info in a dialog" ),
-        info_xpm );
-
 
 // EE_POINT_EDITOR
 //

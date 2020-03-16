@@ -393,24 +393,6 @@ public:
     void SortListbySheet();
 
     /**
-     * Counts number of pins connected on the same net.
-     * Used to count all pins connected to a no connect symbol
-     * @return the pin count of the net starting at aNetStart
-     * @param aNetStart = index in list of net objects of the first item
-     */
-    int CountPinsInNet( unsigned aNetStart );
-
-    /**
-     * Function TestforNonOrphanLabel
-     * Sheet labels are expected to be connected to a hierarchical label.
-     * Hierarchical labels are expected to be connected to a sheet label.
-     * Global labels are expected to be not orphan (connected to at least one
-     * other global label.
-     * This function tests the connection to another suitable label.
-     */
-    void TestforNonOrphanLabel( unsigned aNetItemRef, unsigned aStartNet );
-
-    /**
      * Function TestforSimilarLabels
      * detects labels which are different when using case sensitive comparisons
      * but are equal when using case insensitive comparisons

@@ -164,33 +164,27 @@ int TestDuplicateSheetNames( bool aCreateMarker )
     {
         std::vector<SCH_SHEET*> list;
 
-        for( auto item : screen->Items().OfType( SCH_SHEET_T ) )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
             list.push_back( static_cast<SCH_SHEET*>( item ) );
 
         for( size_t i = 0; i < list.size(); i++ )
         {
-            auto item = list[i];
+            SCH_SHEET* item = list[i];
 
             for( size_t j = i + 1; j < list.size(); j++ )
             {
-                auto test_item = list[j];
+                SCH_SHEET* test_item = list[j];
 
                 // We have found a second sheet: compare names
                 // we are using case insensitive comparison to avoid mistakes between
                 // similar names like Mysheet and mysheet
-                if( ( (SCH_SHEET*) item )->GetName().CmpNoCase(
-                        ( ( SCH_SHEET* ) test_item )->GetName() ) == 0 )
+                if( item->GetName().CmpNoCase( test_item->GetName() ) == 0 )
                 {
                     if( aCreateMarker )
                     {
-                        /* Create a new marker type ERC error*/
-                        SCH_MARKER* marker = new SCH_MARKER();
-                        marker->SetData( ERCE_DUPLICATE_SHEET_NAME,
-                                         ( (SCH_SHEET*) test_item )->GetPosition(),
-                                         _( "Duplicate sheet name" ),
-                                         ( (SCH_SHEET*) test_item )->GetPosition() );
-                        marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-                        marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
+                        SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
+                        marker->SetData( EDA_UNITS::UNSCALED, ERCE_DUPLICATE_SHEET_NAME,
+                                         item->GetPosition(), item, test_item );
                         screen->Append( marker );
                     }
 
@@ -204,10 +198,9 @@ int TestDuplicateSheetNames( bool aCreateMarker )
 }
 
 
-int TestConflictingBusAliases( bool aCreateMarker )
+int TestConflictingBusAliases()
 {
     wxString    msg;
-    wxPoint     dummyPos( 0, 0 );
     int         err_count = 0;
     SCH_SCREENS screens;
     std::vector< std::shared_ptr<BUS_ALIAS> > aliases;
@@ -222,21 +215,14 @@ int TestConflictingBusAliases( bool aCreateMarker )
             {
                 if( alias->GetName() == test->GetName() && alias->Members() != test->Members() )
                 {
-                    if( aCreateMarker )
-                    {
-                        msg = wxString::Format( _( "Bus alias %s has conflicting definitions on"
-                                                   " multiple sheets: %s and %s" ),
-                                                alias->GetName(),
-                                                alias->GetParent()->GetFileName(),
-                                                test->GetParent()->GetFileName() );
+                    msg.Printf( _( "Bus alias %s has conflicting definitions on %s and %s" ),
+                                alias->GetName(),
+                                alias->GetParent()->GetFileName(),
+                                test->GetParent()->GetFileName() );
 
-                        SCH_MARKER* marker = new SCH_MARKER();
-                        marker->SetData( ERCE_BUS_ALIAS_CONFLICT, dummyPos, msg, dummyPos );
-                        marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-                        marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
-
-                        test->GetParent()->Append( marker );
-                    }
+                    SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
+                    marker->SetData( ERCE_BUS_ALIAS_CONFLICT, wxPoint(), msg );
+                    test->GetParent()->Append( marker );
 
                     ++err_count;
                 }
@@ -270,45 +256,41 @@ int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
         // Reference footprint
         wxString fp;
         wxString unitName;
+        KIID     unitID;
 
         for( unsigned i = 0; i < component.second.GetCount(); ++i )
         {
-            SCH_COMPONENT* cmp = refList.GetItem( i ).GetComp();
+            SCH_COMPONENT* unit = refList.GetItem( i ).GetComp();
             SCH_SHEET_PATH sheetPath = refList.GetItem( i ).GetSheetPath();
-            fp = cmp->GetField( FOOTPRINT )->GetText();
+            fp = unit->GetField( FOOTPRINT )->GetText();
 
             if( !fp.IsEmpty() )
             {
-                unitName = cmp->GetRef( &sheetPath )
-                    + LIB_PART::SubReference( cmp->GetUnit(), false );
+                unitName = unit->GetRef( &sheetPath, true );
+                unitID = unit->m_Uuid;
                 break;
             }
         }
 
         for( unsigned i = 0; i < component.second.GetCount(); ++i )
         {
-            SCH_REFERENCE& ref = refList.GetItem( i );
-            SCH_COMPONENT* unit = ref.GetComp();
-            SCH_SHEET_PATH sheetPath = refList.GetItem( i ).GetSheetPath();
-            const wxString curFp = unit->GetField( FOOTPRINT )->GetText();
+            SCH_REFERENCE& secondRef = refList.GetItem( i );
+            SCH_COMPONENT* secondUnit = secondRef.GetComp();
+            SCH_SHEET_PATH sheetPath = secondRef.GetSheetPath();
 
-            if( !curFp.IsEmpty() && fp != curFp )
+            const wxString secondFp = secondUnit->GetField( FOOTPRINT )->GetText();
+            wxString       secondName = secondUnit->GetRef( &sheetPath, true );
+            KIID           secondID = secondUnit->m_Uuid;
+
+            if( !secondFp.IsEmpty() && fp != secondFp )
             {
-                wxString curUnitName = unit->GetRef( &sheetPath )
-                    + LIB_PART::SubReference( unit->GetUnit(), false );
-                wxString msg = wxString::Format( _( "Unit %s has '%s' assigned, "
-                                                    "whereas unit %s has '%s' assigned" ),
-                                                 unitName,
-                                                 fp,
-                                                 curUnitName,
-                                                 curFp );
-                wxPoint pos = unit->GetPosition();
+                wxString description = _( "%s has '%s' assigned" );
 
-                SCH_MARKER* marker = new SCH_MARKER();
-                marker->SetData( ERCE_DIFFERENT_UNIT_FP, pos, msg, pos );
-                marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-                marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-                ref.GetSheetPath().LastScreen()->Append( marker );
+                SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
+                marker->SetData( ERCE_DIFFERENT_UNIT_FP, secondUnit->GetPosition(),
+                                 wxString::Format( description, unitName, fp ), unitID,
+                                 wxString::Format( description, secondName, secondFp ), secondID );
+                secondRef.GetSheetPath().LastScreen()->Append( marker );
 
                 ++errors;
             }
@@ -321,74 +303,33 @@ int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
 
 void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMinConn, int aDiag )
 {
-    SCH_MARKER*     marker = NULL;
-    SCH_SCREEN*     screen;
-    ELECTRICAL_PINTYPE ii, jj;
-
-    if( aDiag == OK || aMinConn < 1 )
+    if( aDiag == OK || aMinConn < 1 || aNetItemRef->m_Type != NETLIST_ITEM::PIN )
         return;
 
+    SCH_PIN* pin = static_cast<SCH_PIN*>( aNetItemRef->m_Comp );
+
     /* Create new marker for ERC error. */
-    marker = new SCH_MARKER();
-    marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-    marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-    screen = aNetItemRef->m_SheetPath.LastScreen();
-    screen->Append( marker );
+    SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
+    aNetItemRef->m_SheetPath.LastScreen()->Append( marker );
 
-    wxString msg;
-
-    ii = aNetItemRef->m_ElectricalPinType;
-
-    wxString cmp_ref( "?" );
-
-    if( aNetItemRef->m_Type == NETLIST_ITEM::PIN && aNetItemRef->m_Link )
-        cmp_ref = aNetItemRef->GetComponentParent()->GetRef( &aNetItemRef->m_SheetPath );
-
-    if( aNetItemTst == NULL )
+    if( aNetItemTst == NULL)
     {
         if( aMinConn == NOD )    /* Nothing driving the net. */
         {
-            if( aNetItemRef->m_Type == NETLIST_ITEM::PIN && aNetItemRef->m_Link )
-                cmp_ref = aNetItemRef->GetComponentParent()->GetRef(
-                    &aNetItemRef->m_SheetPath );
-
-            msg.Printf( _( "Pin %s (%s) of component %s is not driven (Net %d)." ),
-                        aNetItemRef->m_PinNum,
-                        GetChars( GetText( ii ) ),
-                        GetChars( cmp_ref ),
-                        aNetItemRef->GetNet() );
-            marker->SetData( ERCE_PIN_NOT_DRIVEN, aNetItemRef->m_Start, msg, aNetItemRef->m_Start );
+            marker->SetData( ERCE_PIN_NOT_DRIVEN, aNetItemRef->m_Start,
+                             pin->GetDescription( &aNetItemRef->m_SheetPath ), pin->m_Uuid );
             return;
         }
     }
 
-    if( aNetItemTst )         /* Error between 2 pins */
+    if( aNetItemTst && aNetItemTst->m_Type == NETLIST_ITEM::PIN )  /* Error between 2 pins */
     {
-        jj = aNetItemTst->m_ElectricalPinType;
-        int errortype = ERCE_PIN_TO_PIN_WARNING;
+        SCH_PIN* pinB = static_cast<SCH_PIN*>( aNetItemTst->m_Comp );
 
-        if( aDiag == ERR )
-        {
-            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
-            errortype = ERCE_PIN_TO_PIN_ERROR;
-        }
-
-        wxString alt_cmp( "?" );
-
-        if( aNetItemTst->m_Type == NETLIST_ITEM::PIN && aNetItemTst->m_Link )
-            alt_cmp = aNetItemTst->GetComponentParent()->GetRef( &aNetItemTst->m_SheetPath );
-
-        msg.Printf( _( "Pin %s (%s) of component %s is connected to " ),
-                    aNetItemRef->m_PinNum,
-                    GetChars( GetText( ii ) ),
-                    GetChars( cmp_ref ) );
-        marker->SetData( errortype, aNetItemRef->m_Start, msg, aNetItemRef->m_Start );
-        msg.Printf( _( "pin %s (%s) of component %s (net %d)." ),
-                    aNetItemTst->m_PinNum,
-                    GetChars( GetText( jj ) ),
-                    GetChars( alt_cmp ),
-                    aNetItemRef->GetNet() );
-        marker->SetAuxiliaryData( msg, aNetItemTst->m_Start );
+        marker->SetData( aDiag == ERR ? ERCE_PIN_TO_PIN_ERROR : ERCE_PIN_TO_PIN_WARNING,
+                         aNetItemRef->m_Start,
+                         pin->GetDescription( &aNetItemRef->m_SheetPath ), pin->m_Uuid,
+                         pinB->GetDescription( &aNetItemTst->m_SheetPath ), pinB->m_Uuid );
     }
 }
 
@@ -514,10 +455,10 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
                 {
                     if( aList->GetConnectionType( netItemTst ) == NET_CONNECTION::UNCONNECTED )
                     {
-                        Diagnose( aList->GetItem( aNetItemRef ), aList->GetItem( netItemTst ), 0,
-                                erc );
-                        aList->SetConnectionType(
-                                netItemTst, NET_CONNECTION::NOCONNECT_SYMBOL_PRESENT );
+                        Diagnose( aList->GetItem( aNetItemRef ), aList->GetItem( netItemTst ),
+                                  0, erc );
+                        aList->SetConnectionType( netItemTst,
+                                                  NET_CONNECTION::NOCONNECT_SYMBOL_PRESENT );
                     }
                 }
             }
@@ -526,111 +467,6 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
         }
     }
 }
-
-int NETLIST_OBJECT_LIST::CountPinsInNet( unsigned aNetStart )
-{
-    int count = 0;
-    int curr_net = GetItemNet( aNetStart );
-
-    /* Test pins connected to NetItemRef */
-    for( unsigned item = aNetStart; item < size(); item++ )
-    {
-        // We examine only a given net. We stop the search if the net changes
-        if( curr_net != GetItemNet( item ) )   // End of net
-            break;
-
-        if( GetItemType( item ) == NETLIST_ITEM::PIN )
-            count++;
-    }
-
-    return count;
-}
-
-bool WriteDiagnosticERC( EDA_UNITS aUnits, const wxString& aFullFileName )
-{
-    wxFFile file( aFullFileName, wxT( "wt" ) );
-
-    if( !file.IsOpened() )
-        return false;
-
-    wxString msg = wxString::Format( _( "ERC report (%s, Encoding UTF8)\n" ), DateAndTime() );
-    int err_count = 0;
-    int warn_count = 0;
-    int total_count = 0;
-    SCH_SHEET_LIST sheetList( g_RootSheet );
-
-    for( unsigned i = 0;  i < sheetList.size(); i++ )
-    {
-        msg << wxString::Format( _( "\n***** Sheet %s\n" ),
-                                 GetChars( sheetList[i].PathHumanReadable() ) );
-
-        for( auto aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
-        {
-            auto marker = static_cast<const SCH_MARKER*>( aItem );
-
-            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
-                continue;
-
-            total_count++;
-
-            if( marker->GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR )
-                err_count++;
-
-            if( marker->GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_WARNING )
-                warn_count++;
-
-            msg << marker->GetReporter().ShowReport( aUnits );
-        }
-    }
-
-    msg << wxString::Format( _( "\n ** ERC messages: %d  Errors %d  Warnings %d\n" ),
-                             total_count, err_count, warn_count );
-
-    // Currently: write report using UTF8 (as usual in Kicad).
-    // TODO: see if we can use the current encoding page (mainly for Windows users),
-    // Or other format (HTML?)
-    file.Write( msg );
-
-    // wxFFile dtor will close the file.
-
-    return true;
-}
-
-
-void NETLIST_OBJECT_LIST::TestforNonOrphanLabel( unsigned aNetItemRef, unsigned aStartNet )
-{
-    unsigned netItemTst = aStartNet;
-    int      erc = 1;
-
-    // Review the list of labels connected to NetItemRef:
-    for( ; ; netItemTst++ )
-    {
-        if( netItemTst == aNetItemRef )
-            continue;
-
-        /* Is always in the same net? */
-        if( ( netItemTst == size() )
-          || ( GetItemNet( aNetItemRef ) != GetItemNet( netItemTst ) ) )
-        {
-            /* End Netcode found. */
-            if( erc )
-            {
-                /* Glabel or SheetLabel orphaned. */
-                Diagnose( GetItem( aNetItemRef ), NULL, -1, WAR );
-            }
-
-            return;
-        }
-
-        if( GetItem( aNetItemRef )->IsLabelConnected( GetItem( netItemTst ) ) )
-            erc = 0;
-
-        //same thing, different order.
-        if( GetItem( netItemTst )->IsLabelConnected( GetItem( aNetItemRef ) ) )
-            erc = 0;
-    }
-}
-
 
 // this code try to detect similar labels, i.e. labels which are identical
 // when they are compared using case insensitive coparisons.
@@ -744,20 +580,18 @@ void NETLIST_OBJECT_LIST::TestforSimilarLabels()
     // Build paths list
     std::set<NETLIST_OBJECT*, compare_paths> pathsList;
 
-    for( auto it = uniqueLabelList.begin(); it != uniqueLabelList.end(); ++it )
-        pathsList.insert( *it );
+    for( NETLIST_OBJECT* label : uniqueLabelList )
+        pathsList.insert( label );
 
     // Examine each label inside a sheet path:
-    for( auto it = pathsList.begin(); it != pathsList.end(); ++it )
+    for( NETLIST_OBJECT* candidate : pathsList )
     {
         loc_labelList.clear();
 
-        auto it_uniq = uniqueLabelList.begin();
-
-        for( ; it_uniq != uniqueLabelList.end(); ++it_uniq )
+        for( NETLIST_OBJECT* uniqueLabel : uniqueLabelList)
         {
-            if(( *it )->m_SheetPath.Path() == ( *it_uniq )->m_SheetPath.Path() )
-                loc_labelList.insert( *it_uniq );
+            if( candidate->m_SheetPath.Path() == uniqueLabel->m_SheetPath.Path() )
+                loc_labelList.insert( uniqueLabel );
         }
 
         // at this point, loc_labelList contains labels of the current sheet path.
@@ -791,6 +625,7 @@ void NETLIST_OBJECT_LIST::TestforSimilarLabels()
     }
 }
 
+
 // Helper function: count the number of labels identical to aLabel
 //  for global label: global labels in the full project
 //  for local label: all labels in the current sheet
@@ -818,27 +653,13 @@ static int countIndenticalLabels( std::vector<NETLIST_OBJECT*>& aList, NETLIST_O
     return count;
 }
 
+
 // Helper function: creates a marker for similar labels ERC warning
 static void SimilarLabelsDiagnose( NETLIST_OBJECT* aItemA, NETLIST_OBJECT* aItemB )
 {
     // Create new marker for ERC.
-    SCH_MARKER* marker = new SCH_MARKER();
-    marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-    marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-    SCH_SCREEN* screen = aItemA->m_SheetPath.LastScreen();
-    screen->Append( marker );
-
-    wxString fmt = aItemA->IsLabelGlobal() ? _( "Global label '%s' (sheet '%s') looks like:" ) :
-                                             _( "Local label '%s' (sheet '%s') looks like:" );
-    wxString msg;
-
-    msg.Printf( fmt, aItemA->m_Label, aItemA->m_SheetPath.PathHumanReadable() );
-    marker->SetData( aItemA->IsLabelGlobal() && aItemB->IsLabelGlobal() ?
-                            ERCE_SIMILAR_GLBL_LABELS : ERCE_SIMILAR_LABELS,
-                     aItemA->m_Start, msg, aItemA->m_Start );
-
-    fmt = aItemB->IsLabelGlobal() ? _( "Global label \"%s\" (sheet \"%s\")" ) :
-                                    _( "Local label \"%s\" (sheet \"%s\")" );
-    msg.Printf( fmt, aItemB->m_Label, aItemB->m_SheetPath.PathHumanReadable() );
-    marker->SetAuxiliaryData( msg, aItemB->m_Start );
+    SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
+    marker->SetData( EDA_UNITS::UNSCALED, ERCE_SIMILAR_LABELS, aItemA->m_Start,
+                     aItemA->m_Comp, aItemB->m_Comp );
+    aItemA->m_SheetPath.LastScreen()->Append( marker );
 }

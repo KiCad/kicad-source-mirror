@@ -36,9 +36,9 @@ class DRC_TREE_MODEL;
 
 class DIALOG_CLEANUP_TRACKS_AND_VIAS: public DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE
 {
-    PCB_EDIT_FRAME* m_parentFrame;
-    DRC_LIST        m_items;
-    DRC_TREE_MODEL* m_changesTreeModel;
+    PCB_EDIT_FRAME*        m_parentFrame;
+    std::vector<DRC_ITEM*> m_items;
+    RC_TREE_MODEL*         m_changesTreeModel;
 
     void doCleanup( bool aDryRun );
 

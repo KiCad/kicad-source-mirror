@@ -23,15 +23,17 @@
 
 #include <widgets/paged_dialog.h>
 #include <widgets/ui_common.h>
-#include <drc_item.h>
+#include <rc_item.h>
 #include "panel_setup_severities.h"
 
 
-PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
+PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& aDummyItem,
                                                 std::map<int, int>& aSeverities,
                                                 int aFirstErrorCode, int aLastErrorCode ) :
         wxPanel( aParent->GetTreebook() ),
-        m_severities( aSeverities )
+        m_severities( aSeverities ),
+        m_firstErrorCode( aFirstErrorCode ),
+        m_lastErrorCode( aLastErrorCode )
 {
     wxString          severities[] = { _( "Error" ), _( "Warning" ), _( "Ignore" ) };
     int               baseID = 1000;
@@ -44,10 +46,10 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
     wxFlexGridSizer* gridSizer = new wxFlexGridSizer( 0, 2, 0, 5 );
     gridSizer->SetFlexibleDirection( wxBOTH );
 
-   	for( int errorCode = aFirstErrorCode; errorCode <= aLastErrorCode; ++errorCode )
+   	for( int errorCode = m_firstErrorCode; errorCode <= m_lastErrorCode; ++errorCode )
     {
-   	    DRC_ITEM drcItem( errorCode, wxEmptyString );
-   	    wxString msg = drcItem.GetErrorText();
+   	    aDummyItem.SetData( errorCode, wxEmptyString );
+   	    wxString msg = aDummyItem.GetErrorText();
 
    	    if( !msg.IsEmpty() )
         {
@@ -61,14 +63,13 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
 
             for( size_t i = 0; i < sizeof( severities ) / sizeof( wxString ); ++i )
             {
-                m_buttonMap[errorCode][i] = new wxRadioButton( radioPanel,
-                                                               baseID + errorCode * 10 + i,
-                                                               severities[i],
-                                                               wxDefaultPosition,
-                                                               wxDefaultSize,
-                                                               i == 0 ? wxRB_GROUP : 0 );
-                radioSizer->Add( m_buttonMap[errorCode][i], 1,
-                                 wxRIGHT | wxEXPAND, 25 );
+                m_buttonMap[ errorCode ][i] = new wxRadioButton( radioPanel,
+                                                                 baseID + errorCode * 10 + i,
+                                                                 severities[i],
+                                                                 wxDefaultPosition,
+                                                                 wxDefaultSize,
+                                                                 i == 0 ? wxRB_GROUP : 0 );
+                radioSizer->Add( m_buttonMap[ errorCode ][i], 1, wxRIGHT | wxEXPAND, 25 );
             }
 
             radioPanel->SetSizer( radioSizer );
@@ -90,16 +91,14 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
 
 void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, int>& aSettings )
 {
-    for( auto const& entry : aSettings )
+    for( int errorCode = m_firstErrorCode; errorCode <= m_lastErrorCode; ++errorCode )
     {
-        if( m_buttonMap.count( entry.first ) )
+        switch( aSettings[ errorCode ] )
         {
-            switch( entry.second )
-            {
-            case RPT_SEVERITY_ERROR:   m_buttonMap[entry.first][0]->SetValue( true ); break;
-            case RPT_SEVERITY_WARNING: m_buttonMap[entry.first][1]->SetValue( true ); break;
-            case RPT_SEVERITY_IGNORE:  m_buttonMap[entry.first][2]->SetValue( true ); break;
-            }
+        case RPT_SEVERITY_ERROR:   m_buttonMap[ errorCode ][0]->SetValue( true ); break;
+        case RPT_SEVERITY_WARNING: m_buttonMap[ errorCode ][1]->SetValue( true ); break;
+        case RPT_SEVERITY_IGNORE:  m_buttonMap[ errorCode ][2]->SetValue( true ); break;
+        default:                                                                  break;
         }
     }
 }
@@ -107,16 +106,14 @@ void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, int>& aSettings )
 
 bool PANEL_SETUP_SEVERITIES::TransferDataToWindow()
 {
-    for( auto const& entry : m_severities )
+    for( int errorCode = m_firstErrorCode; errorCode <= m_lastErrorCode; ++errorCode )
     {
-        if( m_buttonMap.count( entry.first ) )
+        switch( m_severities[ errorCode ] )
         {
-            switch( entry.second )
-            {
-            case RPT_SEVERITY_ERROR:   m_buttonMap[entry.first][0]->SetValue( true ); break;
-            case RPT_SEVERITY_WARNING: m_buttonMap[entry.first][1]->SetValue( true ); break;
-            case RPT_SEVERITY_IGNORE:  m_buttonMap[entry.first][2]->SetValue( true ); break;
-            }
+        case RPT_SEVERITY_ERROR:   m_buttonMap[ errorCode ][0]->SetValue( true ); break;
+        case RPT_SEVERITY_WARNING: m_buttonMap[ errorCode ][1]->SetValue( true ); break;
+        case RPT_SEVERITY_IGNORE:  m_buttonMap[ errorCode ][2]->SetValue( true ); break;
+        default:                                                                  break;
         }
     }
 

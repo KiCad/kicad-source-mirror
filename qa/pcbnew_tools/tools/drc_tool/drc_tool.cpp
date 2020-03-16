@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,8 +29,6 @@
 #include <wx/cmdline.h>
 
 #include <pcbnew_utils/board_file_utils.h>
-
-// DRC
 #include <widgets/ui_common.h>
 #include <pcbnew/drc/drc.h>
 #include <drc/courtyard_overlap.h>
@@ -69,17 +67,16 @@ public:
     void Execute( BOARD& aBoard )
     {
         if( m_exec_context.m_verbose )
-        {
             std::cout << "Running DRC check: " << getRunnerIntro() << std::endl;
-        }
 
         aBoard.SetDesignSettings( getDesignSettings() );
 
         std::vector<std::unique_ptr<MARKER_PCB>> markers;
 
-        auto marker_handler = [&]( MARKER_PCB* aMarker ) {
-            markers.push_back( std::unique_ptr<MARKER_PCB>( aMarker ) );
-        };
+        auto marker_handler = [&]( MARKER_PCB* aMarker )
+                              {
+                                  markers.push_back( std::unique_ptr<MARKER_PCB>( aMarker ) );
+                              };
 
         std::unique_ptr<DRC_PROVIDER> drc_prov = createDrcProvider( aBoard, marker_handler );
 
@@ -121,15 +118,12 @@ private:
         std::cout << "DRC markers: " << aMarkers.size() << std::endl;
 
         int index = 0;
+
         for( const auto& m : aMarkers )
-        {
-            std::cout << index++ << ": " << m->GetReporter().ShowReport( EDA_UNITS::MILLIMETRES );
-        }
+            std::cout << index++ << ": " << m->GetRCItem()->ShowReport( EDA_UNITS::MILLIMETRES );
 
         if( index )
-        {
             std::cout << std::endl;
-        }
     }
 
     const EXECUTION_CONTEXT m_exec_context;
@@ -300,9 +294,7 @@ int drc_main_func( int argc, char** argv )
     std::string filename;
 
     if( cl_parser.GetParamCount() )
-    {
         filename = cl_parser.GetParam( 0 ).ToStdString();
-    }
 
     std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( filename );
 

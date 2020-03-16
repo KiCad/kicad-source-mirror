@@ -26,6 +26,7 @@
 #include <../board_stackup_manager/panel_board_stackup.h>
 #include <kiface_i.h>
 #include <drc/drc.h>
+#include <drc/drc_item.h>
 #include <dialog_import_settings.h>
 #include <panel_setup_severities.h>
 
@@ -46,7 +47,10 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_tracksAndVias = new PANEL_SETUP_TRACKS_AND_VIAS( this, aFrame, m_constraints );
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
     m_physicalStackup = new PANEL_SETUP_BOARD_STACKUP( this, aFrame, m_layers );
-    m_severities = new PANEL_SETUP_SEVERITIES( this, aFrame->GetDesignSettings().m_DRCSeverities,
+
+    DRC_ITEM               dummyItem;
+    BOARD_DESIGN_SETTINGS& bds = aFrame->GetDesignSettings();
+    m_severities = new PANEL_SETUP_SEVERITIES( this, dummyItem, bds.m_DRCSeverities,
                                                DRCE_FIRST, DRCE_LAST );
 
     /*

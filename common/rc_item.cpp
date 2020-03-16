@@ -22,62 +22,90 @@
  */
 
 
-#include <drc/drc_tree_model.h>
 #include <wx/wupdlock.h>
+#include <wx/dataview.h>
 #include <widgets/ui_common.h>
+#include <marker_base.h>
+#include <eda_base_frame.h>
+#include <rc_item.h>
+#include <base_units.h>
 
 #define WX_DATAVIEW_WINDOW_PADDING 6
 
 
-BOARD_ITEM* DRC_TREE_MODEL::ToBoardItem( BOARD* aBoard, wxDataViewItem aItem )
+wxString RC_ITEM::ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos )
 {
-    BOARD_ITEM*          board_item = nullptr;
-    const DRC_TREE_NODE* node = DRC_TREE_MODEL::ToNode( aItem );
-
-    if( node )
-    {
-        const DRC_ITEM* drc_item = node->m_DrcItem;
-
-        switch( node->m_Type )
-        {
-        case DRC_TREE_NODE::MARKER:
-            board_item = static_cast<MARKER_PCB*>( drc_item->GetParent() );
-            break;
-        case DRC_TREE_NODE::MAIN_ITEM:
-            board_item = drc_item->GetMainItem( aBoard );
-            break;
-        case DRC_TREE_NODE::AUX_ITEM:
-            board_item = drc_item->GetAuxiliaryItem( aBoard );
-            break;
-        }
-    }
-
-    return board_item;
+    return wxString::Format( "@(%s, %s)",
+                             MessageTextFromValue( aUnits, aPos.x ),
+                             MessageTextFromValue( aUnits, aPos.y ) );
 }
 
 
-DRC_TREE_MODEL::DRC_TREE_MODEL( PCB_BASE_FRAME* aParentFrame, wxDataViewCtrl* aView ) :
-    m_parentFrame( aParentFrame ),
-    m_view( aView ),
-    m_severities( 0 ),
-    m_drcItemsProvider( nullptr )
+wxString RC_ITEM::ShowReport( EDA_UNITS aUnits ) const
+{
+    if( m_hasSecondItem )
+    {
+        return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
+                                 m_ErrorCode,
+                                 GetErrorText(),
+                                 ShowCoord( aUnits, m_MainPosition ),
+                                 m_MainText,
+                                 ShowCoord( aUnits, m_AuxPosition ),
+                                 m_AuxText );
+    }
+    else
+    {
+        return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
+                                 m_ErrorCode,
+                                 GetErrorText(),
+                                 ShowCoord( aUnits, m_MainPosition ),
+                                 m_MainText );
+    }
+}
+
+
+KIID RC_TREE_MODEL::ToUUID( wxDataViewItem aItem )
+{
+    const RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aItem );
+
+    if( node )
+    {
+        const RC_ITEM* rc_item = node->m_RcItem;
+
+        switch( node->m_Type )
+        {
+        case RC_TREE_NODE::MARKER:    return rc_item->GetParent()->GetUUID();
+        case RC_TREE_NODE::MAIN_ITEM: return rc_item->GetMainItemID();
+        case RC_TREE_NODE::AUX_ITEM:  return rc_item->GetAuxItemID();
+        }
+    }
+
+    return niluuid;
+}
+
+
+RC_TREE_MODEL::RC_TREE_MODEL( EDA_BASE_FRAME* aParentFrame, wxDataViewCtrl* aView ) :
+        m_editFrame( aParentFrame ),
+        m_view( aView ),
+        m_severities( 0 ),
+        m_rcItemsProvider( nullptr )
 {
     m_view->GetMainWindow()->Connect( wxEVT_SIZE,
-                                      wxSizeEventHandler( DRC_TREE_MODEL::onSizeView ),
+                                      wxSizeEventHandler( RC_TREE_MODEL::onSizeView ),
                                       NULL, this );
 }
 
 
-DRC_TREE_MODEL::~DRC_TREE_MODEL()
+RC_TREE_MODEL::~RC_TREE_MODEL()
 {
-    delete m_drcItemsProvider;
+    delete m_rcItemsProvider;
 
-    for( DRC_TREE_NODE* topLevelNode : m_tree )
+    for( RC_TREE_NODE* topLevelNode : m_tree )
         delete topLevelNode;
 }
 
 
-void DRC_TREE_MODEL::rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeverities )
+void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities )
 {
     wxWindowUpdateLocker updateLock( m_view );
 
@@ -87,31 +115,31 @@ void DRC_TREE_MODEL::rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeveritie
     if( m_view )
         m_view->UnselectAll();
 
-    if( aProvider != m_drcItemsProvider )
+    if( aProvider != m_rcItemsProvider )
     {
-        delete m_drcItemsProvider;
-        m_drcItemsProvider = aProvider;
+        delete m_rcItemsProvider;
+        m_rcItemsProvider = aProvider;
     }
 
     if( aSeverities != m_severities )
         m_severities = aSeverities;
 
-    if( m_drcItemsProvider )
-        m_drcItemsProvider->SetSeverities( m_severities );
+    if( m_rcItemsProvider )
+        m_rcItemsProvider->SetSeverities( m_severities );
 
     m_tree.clear();
 
-    for( int i = 0; m_drcItemsProvider && i < m_drcItemsProvider->GetCount(); ++i )
+    for( int i = 0; m_rcItemsProvider && i < m_rcItemsProvider->GetCount(); ++i )
     {
-        DRC_ITEM* drcItem = m_drcItemsProvider->GetItem( i );
+        RC_ITEM* drcItem = m_rcItemsProvider->GetItem( i );
 
-        m_tree.push_back( new DRC_TREE_NODE( nullptr, drcItem, DRC_TREE_NODE::MARKER ) );
-        DRC_TREE_NODE* n = m_tree.back();
+        m_tree.push_back( new RC_TREE_NODE( nullptr, drcItem, RC_TREE_NODE::MARKER ) );
+        RC_TREE_NODE* n = m_tree.back();
 
-        n->m_Children.push_back( new DRC_TREE_NODE( n, drcItem, DRC_TREE_NODE::MAIN_ITEM ) );
+        n->m_Children.push_back( new RC_TREE_NODE( n, drcItem, RC_TREE_NODE::MAIN_ITEM ) );
 
         if( drcItem->GetAuxItemID() != niluuid )
-            n->m_Children.push_back( new DRC_TREE_NODE( n, drcItem, DRC_TREE_NODE::AUX_ITEM ) );
+            n->m_Children.push_back( new RC_TREE_NODE( n, drcItem, RC_TREE_NODE::AUX_ITEM ) );
     }
 
     // Must be called after a significant change of items to force the
@@ -135,47 +163,47 @@ void DRC_TREE_MODEL::rebuildModel( DRC_ITEMS_PROVIDER* aProvider, int aSeveritie
 }
 
 
-void DRC_TREE_MODEL::SetProvider( DRC_ITEMS_PROVIDER* aProvider )
+void RC_TREE_MODEL::SetProvider( RC_ITEMS_PROVIDER* aProvider )
 {
     rebuildModel( aProvider, m_severities );
 }
 
 
-void DRC_TREE_MODEL::SetSeverities( int aSeverities )
+void RC_TREE_MODEL::SetSeverities( int aSeverities )
 {
-    rebuildModel( m_drcItemsProvider, aSeverities );
+    rebuildModel( m_rcItemsProvider, aSeverities );
 }
 
 
-void DRC_TREE_MODEL::ExpandAll()
+void RC_TREE_MODEL::ExpandAll()
 {
-    for( DRC_TREE_NODE* topLevelNode : m_tree )
+    for( RC_TREE_NODE* topLevelNode : m_tree )
         m_view->Expand( ToItem( topLevelNode ) );
 }
 
 
-bool DRC_TREE_MODEL::IsContainer( wxDataViewItem const& aItem ) const
+bool RC_TREE_MODEL::IsContainer( wxDataViewItem const& aItem ) const
 {
     if( ToNode( aItem ) == nullptr )    // must be tree root...
         return true;
     else
-        return ToNode( aItem )->m_Type == DRC_TREE_NODE::MARKER;
+        return ToNode( aItem )->m_Type == RC_TREE_NODE::MARKER;
 }
 
 
-wxDataViewItem DRC_TREE_MODEL::GetParent( wxDataViewItem const& aItem ) const
+wxDataViewItem RC_TREE_MODEL::GetParent( wxDataViewItem const& aItem ) const
 {
     return ToItem( ToNode( aItem)->m_Parent );
 }
 
 
-unsigned int DRC_TREE_MODEL::GetChildren( wxDataViewItem const& aItem,
+unsigned int RC_TREE_MODEL::GetChildren( wxDataViewItem const& aItem,
                                           wxDataViewItemArray&  aChildren ) const
 {
-    const DRC_TREE_NODE* node = ToNode( aItem );
-    const std::vector<DRC_TREE_NODE*>& children = node ? node->m_Children : m_tree;
+    const RC_TREE_NODE* node = ToNode( aItem );
+    const std::vector<RC_TREE_NODE*>& children = node ? node->m_Children : m_tree;
 
-    for( const DRC_TREE_NODE* child: children )
+    for( const RC_TREE_NODE* child: children )
         aChildren.push_back( ToItem( child ) );
 
     return children.size();
@@ -185,34 +213,33 @@ unsigned int DRC_TREE_MODEL::GetChildren( wxDataViewItem const& aItem,
 /**
  * Called by the wxDataView to fetch an item's value.
  */
-void DRC_TREE_MODEL::GetValue( wxVariant&              aVariant,
+void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
                                wxDataViewItem const&   aItem,
                                unsigned int            aCol ) const
 {
-    const DRC_TREE_NODE* node = ToNode( aItem );
-    const DRC_ITEM*      drcItem = node->m_DrcItem;
+    const RC_TREE_NODE* node = ToNode( aItem );
+    const RC_ITEM*      rcItem = node->m_RcItem;
 
     switch( node->m_Type )
     {
-    case DRC_TREE_NODE::MARKER:
+    case RC_TREE_NODE::MARKER:
     {
-        auto&    bds = m_parentFrame->GetBoard()->GetDesignSettings();
-        bool     excluded = drcItem->GetParent() && drcItem->GetParent()->IsExcluded();
-        bool     error = bds.m_DRCSeverities[ drcItem->GetErrorCode() ] == RPT_SEVERITY_ERROR;
+        bool     excluded = rcItem->GetParent() && rcItem->GetParent()->IsExcluded();
+        bool     error = m_editFrame->GetSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_ERROR;
         wxString prefix = wxString::Format( wxT( "%s%s" ),
                                             excluded ? _( "Excluded " ) : wxString( "" ),
                                             error  ? _( "Error: " ) : _( "Warning: " ) );
 
-        aVariant = prefix + drcItem->GetErrorText();
+        aVariant = prefix + rcItem->GetErrorText();
     }
         break;
 
-    case DRC_TREE_NODE::MAIN_ITEM:
-        aVariant = drcItem->GetMainText();
+    case RC_TREE_NODE::MAIN_ITEM:
+        aVariant = rcItem->GetMainText();
         break;
 
-    case DRC_TREE_NODE::AUX_ITEM:
-        aVariant = drcItem->GetAuxiliaryText();
+    case RC_TREE_NODE::AUX_ITEM:
+        aVariant = rcItem->GetAuxText();
         break;
     }
 }
@@ -222,15 +249,15 @@ void DRC_TREE_MODEL::GetValue( wxVariant&              aVariant,
  * Called by the wxDataView to fetch an item's formatting.  Return true iff the
  * item has non-default attributes.
  */
-bool DRC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
-                              unsigned int            aCol,
-                              wxDataViewItemAttr&     aAttr ) const
+bool RC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
+                             unsigned int            aCol,
+                             wxDataViewItemAttr&     aAttr ) const
 {
-    const DRC_TREE_NODE* node = ToNode( aItem );
+    const RC_TREE_NODE* node = ToNode( aItem );
     wxASSERT( node );
 
     bool ret = false;
-    bool heading = node->m_Type == DRC_TREE_NODE::MARKER;
+    bool heading = node->m_Type == RC_TREE_NODE::MARKER;
 
     if( heading )
     {
@@ -238,7 +265,7 @@ bool DRC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
         ret = true;
     }
 
-    if( node->m_DrcItem->GetParent() && node->m_DrcItem->GetParent()->IsExcluded() )
+    if( node->m_RcItem->GetParent() && node->m_RcItem->GetParent()->IsExcluded() )
     {
         wxColour textColour = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXTEXT );
 
@@ -255,14 +282,14 @@ bool DRC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
 }
 
 
-void DRC_TREE_MODEL::ValueChanged( DRC_TREE_NODE* aNode )
+void RC_TREE_MODEL::ValueChanged( RC_TREE_NODE* aNode )
 {
-    if( aNode->m_Type == DRC_TREE_NODE::MAIN_ITEM || aNode->m_Type == DRC_TREE_NODE::AUX_ITEM )
+    if( aNode->m_Type == RC_TREE_NODE::MAIN_ITEM || aNode->m_Type == RC_TREE_NODE::AUX_ITEM )
     {
         ValueChanged( aNode->m_Parent );
     }
 
-    if( aNode->m_Type == DRC_TREE_NODE::MARKER )
+    if( aNode->m_Type == RC_TREE_NODE::MARKER )
     {
         wxDataViewModel::ValueChanged( ToItem( aNode ), 0 );
 
@@ -272,10 +299,10 @@ void DRC_TREE_MODEL::ValueChanged( DRC_TREE_NODE* aNode )
 }
 
 
-void DRC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
+void RC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
 {
-    DRC_TREE_NODE*  tree_node = ToNode( m_view->GetCurrentItem() );
-    const DRC_ITEM* drc_item = tree_node ? tree_node->m_DrcItem : nullptr;
+    RC_TREE_NODE*  tree_node = ToNode( m_view->GetCurrentItem() );
+    const RC_ITEM* drc_item = tree_node ? tree_node->m_RcItem : nullptr;
 
     if( !drc_item )
     {
@@ -283,15 +310,15 @@ void DRC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
         return;
     }
 
-    for( int i = 0; i < m_drcItemsProvider->GetCount(); ++i )
+    for( int i = 0; i < m_rcItemsProvider->GetCount(); ++i )
     {
-        if( m_drcItemsProvider->GetItem( i ) == drc_item )
+        if( m_rcItemsProvider->GetItem( i ) == drc_item )
         {
             wxDataViewItem      markerItem = ToItem( m_tree[i] );
             wxDataViewItemArray childItems;
             wxDataViewItem      parentItem = ToItem( m_tree[i]->m_Parent );
 
-            for( DRC_TREE_NODE* child : m_tree[i]->m_Children )
+            for( RC_TREE_NODE* child : m_tree[i]->m_Children )
             {
                 childItems.push_back( ToItem( child ) );
                 delete child;
@@ -304,18 +331,18 @@ void DRC_TREE_MODEL::DeleteCurrentItem( bool aDeep )
             m_tree.erase( m_tree.begin() + i );
             ItemDeleted( parentItem, markerItem );
 
-            m_drcItemsProvider->DeleteItem( i, aDeep );
+            m_rcItemsProvider->DeleteItem( i, aDeep );
             break;
         }
     }
 }
 
 
-void DRC_TREE_MODEL::DeleteAllItems()
+void RC_TREE_MODEL::DeleteAllItems()
 {
-    if( m_drcItemsProvider )
+    if( m_rcItemsProvider )
     {
-        m_drcItemsProvider->DeleteAllItems();
+        m_rcItemsProvider->DeleteAllItems();
 
         m_tree.clear();
         Cleared();
@@ -323,7 +350,7 @@ void DRC_TREE_MODEL::DeleteAllItems()
 }
 
 
-void DRC_TREE_MODEL::onSizeView( wxSizeEvent& aEvent )
+void RC_TREE_MODEL::onSizeView( wxSizeEvent& aEvent )
 {
     int width = m_view->GetMainWindow()->GetRect().GetWidth() - WX_DATAVIEW_WINDOW_PADDING;
 

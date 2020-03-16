@@ -44,21 +44,32 @@
 #include <dialog_erc.h>
 #include <erc.h>
 #include <id.h>
-
+#include <confirm.h>
+#include <wx/ffile.h>
+#include <erc_item.h>
+#include <eeschema_settings.h>
 
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
-    DIALOG_ERC_BASE( parent, ID_DIALOG_ERC ),  // parent looks for this ID explicitly
-    m_initialized( false )
+        DIALOG_ERC_BASE( parent, ID_DIALOG_ERC ),  // parent looks for this ID explicitly
+        m_parent( parent ),
+        m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
-    m_parent = parent;
-    m_lastMarkerFound = nullptr;
+    EESCHEMA_SETTINGS* settings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    m_severities = settings->m_Appearance.erc_severities;
+
+    m_markerProvider = new SHEETLIST_ERC_ITEMS_PROVIDER();
+    m_markerTreeModel = new RC_TREE_MODEL( parent, m_markerDataView );
+    m_markerDataView->AssociateModel( m_markerTreeModel );
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_textMarkers->SetFont( infoFont );
     m_titleMessages->SetFont( infoFont );
 
-    Init();
+    m_markerTreeModel->SetSeverities( m_severities );
+    m_markerTreeModel->SetProvider( m_markerProvider );
+    syncCheckboxes();
+    updateDisplayedCounts();
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
@@ -73,35 +84,31 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 }
 
 
-void DIALOG_ERC::Init()
+DIALOG_ERC::~DIALOG_ERC()
 {
-    m_initialized = false;
+    EESCHEMA_SETTINGS* settings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    settings->m_Appearance.erc_severities = m_severities;
 
-    SCH_SCREENS screens;
-    updateMarkerCounts( &screens );
-
-    DisplayERC_MarkersList();
+    m_markerTreeModel->DecRef();
 }
 
 
-void DIALOG_ERC::updateMarkerCounts( SCH_SCREENS *screens )
+void DIALOG_ERC::updateDisplayedCounts()
 {
-    int markers = screens->GetMarkerCount( MARKER_BASE::MARKER_ERC,
-                                           MARKER_BASE::MARKER_SEVERITY_UNSPEC );
-    int warnings = screens->GetMarkerCount( MARKER_BASE::MARKER_ERC,
-                                            MARKER_BASE::MARKER_SEVERITY_WARNING );
-    int errors = screens->GetMarkerCount( MARKER_BASE::MARKER_ERC,
-                                          MARKER_BASE::MARKER_SEVERITY_ERROR );
+    int numErrors = 0;
+    int numWarnings = 0;
+    int numExcluded = 0;
 
-    wxString num;
-    num.Printf( wxT( "%d" ), markers );
-    m_TotalErrCount->SetValue( num );
+    if( m_markerProvider )
+    {
+        numErrors += m_markerProvider->GetCount( RPT_SEVERITY_ERROR );
+        numWarnings += m_markerProvider->GetCount( RPT_SEVERITY_WARNING );
+        numExcluded += m_markerProvider->GetCount( RPT_SEVERITY_EXCLUSION );
+    }
 
-    num.Printf( wxT( "%d" ), errors );
-    m_LastErrCount->SetValue( num );
-
-    num.Printf( wxT( "%d" ), warnings );
-    m_LastWarningCount->SetValue( num );
+    m_errorsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_ERROR, numErrors, m_errorsBadge ) );
+    m_warningsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_WARNING, numWarnings, m_warningsBadge ) );
+    m_exclusionsBadge->SetBitmap( MakeBadge( RPT_SEVERITY_EXCLUSION, numExcluded, m_exclusionsBadge ) );
 }
 
 
@@ -109,12 +116,9 @@ void DIALOG_ERC::updateMarkerCounts( SCH_SCREENS *screens )
  */
 void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 {
-    SCH_SCREENS ScreenList;
+    deleteAllMarkers();
 
-    ScreenList.DeleteAllMarkers( MARKER_BASE::MARKER_ERC );
-    updateMarkerCounts( &ScreenList );
-
-    m_MarkersList->ClearList();
+    updateDisplayedCounts();
     m_parent->GetCanvas()->Refresh();
 }
 
@@ -122,20 +126,36 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 // This is a modeless dialog so we have to handle these ourselves.
 void DIALOG_ERC::OnButtonCloseClick( wxCommandEvent& event )
 {
+    m_parent->FocusOnItem( nullptr );
+
     Close();
 }
 
 
 void DIALOG_ERC::OnCloseErcDialog( wxCloseEvent& event )
 {
+    m_parent->FocusOnItem( nullptr );
+
     Destroy();
 }
 
 
-void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
+static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SEVERITY_EXCLUSION;
+
+
+void DIALOG_ERC::syncCheckboxes()
+{
+    m_showAll->SetValue( m_severities == RPT_SEVERITY_ALL );
+    m_showErrors->SetValue( m_severities & RPT_SEVERITY_ERROR );
+    m_showWarnings->SetValue( m_severities & RPT_SEVERITY_WARNING );
+    m_showExclusions->SetValue( m_severities & RPT_SEVERITY_EXCLUSION );
+}
+
+
+void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
 {
     wxBusyCursor busy;
-    m_MarkersList->ClearList();
+    deleteAllMarkers();
 
     m_MessagesList->Clear();
     wxSafeYield();      // m_MarkersList must be redraw
@@ -150,103 +170,6 @@ void DIALOG_ERC::RedrawDrawPanel()
     WINDOW_THAWER thawer( m_parent );
 
     m_parent->GetCanvas()->Refresh();
-}
-
-
-void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
-{
-    wxString link = event.GetLinkInfo().GetHref();
-
-    m_lastMarkerFound = nullptr;
-
-    long index;
-
-    if( !link.ToLong( &index ) )
-        return;
-
-    const SCH_MARKER* marker = m_MarkersList->GetItem( index );
-
-    if( !marker )
-        return;
-
-    // Search for the selected marker
-    unsigned i;
-    SCH_SHEET_LIST  sheetList( g_RootSheet );
-    bool found = false;
-
-    for( i = 0; i < sheetList.size(); i++ )
-    {
-        for( auto aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
-        {
-            if( static_cast<const SCH_MARKER*>( aItem ) == marker )
-            {
-                found = true;
-                break;
-            }
-        }
-
-        if( found )
-            break;
-    }
-
-    if( !found ) // Error
-    {
-        wxMessageBox( _( "Marker not found" ) );
-
-        // The marker was deleted, so rebuild marker list
-        DisplayERC_MarkersList();
-        return;
-    }
-
-    if( sheetList[i] != m_parent->GetCurrentSheet() )
-    {
-        m_parent->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
-        m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
-
-        m_parent->SetCurrentSheet( sheetList[i] );
-        m_parent->DisplayCurrentSheet();
-        sheetList[i].LastScreen()->SetZoom( m_parent->GetScreen()->GetZoom() );
-        m_parent->RedrawScreen( (wxPoint) m_parent->GetScreen()->m_ScrollCenter, false );
-    }
-
-    m_lastMarkerFound = marker;
-    m_parent->FocusOnLocation( marker->m_Pos );
-    RedrawDrawPanel();
-}
-
-
-void DIALOG_ERC::OnLeftDblClickMarkersList( wxMouseEvent& event )
-{
-    // Remember: OnLeftClickMarkersList was called just before and therefore m_lastMarkerFound
-    // was initialized (NULL if not found).
-    if( m_lastMarkerFound )
-    {
-        m_parent->FocusOnLocation( m_lastMarkerFound->m_Pos );
-        RedrawDrawPanel();
-    }
-
-    Close();
-}
-
-
-
-void DIALOG_ERC::DisplayERC_MarkersList()
-{
-    SCH_SHEET_LIST sheetList( g_RootSheet);
-    m_MarkersList->ClearList();
-
-    for( unsigned i = 0; i < sheetList.size(); i++ )
-    {
-        for( auto aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
-        {
-            SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
-
-            if( marker->GetMarkerType() == MARKER_BASE::MARKER_ERC )
-                m_MarkersList->AppendToList( marker );
-        }
-    }
-
-    m_MarkersList->DisplayList( GetUserUnits() );
 }
 
 
@@ -268,21 +191,31 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
 
     SCH_SCREENS screens;
 
-    // Erase all previous DRC markers.
-    screens.DeleteAllMarkers( MARKER_BASE::MARKER_ERC );
-
     // Test duplicate sheet names inside a given sheet.  While one can have multiple references
     // to the same file, each must have a unique name.
-    TestDuplicateSheetNames( true );
+    if( g_ErcSettings->IsTestEnabled( ERCE_DUPLICATE_SHEET_NAME ) )
+    {
+        aReporter.ReportTail( _( "Checking sheet names...\n" ), RPT_SEVERITY_INFO );
+        TestDuplicateSheetNames( true );
+    }
 
-    TestConflictingBusAliases();
+    if( g_ErcSettings->IsTestEnabled( ERCE_BUS_ALIAS_CONFLICT ) )
+    {
+        aReporter.ReportTail( _( "Checking bus conflicts...\n" ), RPT_SEVERITY_INFO );
+        TestConflictingBusAliases();
+    }
 
     // The connection graph has a whole set of ERC checks it can run
+    aReporter.ReportTail( _( "Checking conflicts...\n" ) );
     m_parent->RecalculateConnections( NO_CLEANUP );
     g_ConnectionGraph->RunERC();
 
     // Test is all units of each multiunit component have the same footprint assigned.
-    TestMultiunitFootprints( sheets );
+    if( g_ErcSettings->IsTestEnabled( ERCE_DIFFERENT_UNIT_FP ) )
+    {
+        aReporter.ReportTail( _( "Checking footprints...\n" ), RPT_SEVERITY_INFO );
+        TestMultiunitFootprints( sheets );
+    }
 
     std::unique_ptr<NETLIST_OBJECT_LIST> objectsConnectedList( m_parent->BuildNetListBase() );
 
@@ -291,7 +224,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
 
     unsigned lastItemIdx = 0;
     unsigned nextItemIdx = 0;
-    int MinConn    = NOC;
+    int      MinConn = NOC;
 
     // Check that a pin appears in only one net.  This check is necessary because multi-unit
     // components that have shared pins could be wired to different nets.
@@ -302,6 +235,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     // nextItem to the current item (exclusive) needs to be checked against the current item.
     // The lastItem variable is used as a helper to pass the last item's number from one loop
     // iteration to the next, which simplifies the initial pass.
+    aReporter.ReportTail( _( "Checking connections...\n" ), RPT_SEVERITY_INFO );
     for( unsigned itemIdx = 0; itemIdx < objectsConnectedList->size(); itemIdx++ )
     {
         auto item = objectsConnectedList->GetItem( itemIdx );
@@ -336,10 +270,11 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
         case NETLIST_ITEM::PIN:
         {
             // Check if this pin has appeared before on a different net
-            if( item->m_Link )
+            if( item->m_Link && g_ErcSettings->IsTestEnabled( ERCE_DIFFERENT_UNIT_NET ) )
             {
-                auto ref = item->GetComponentParent()->GetRef( &item->m_SheetPath );
+                wxString ref = item->GetComponentParent()->GetRef( &item->m_SheetPath );
                 wxString pin_name = ref + "_" + item->m_PinNum;
+                wxString msg;
 
                 if( pin_to_net_map.count( pin_name ) == 0 )
                 {
@@ -347,18 +282,14 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
                 }
                 else if( pin_to_net_map[pin_name] != item->GetNetName() )
                 {
-                    SCH_MARKER* marker = new SCH_MARKER();
+                    msg.Printf( _( "Pin %s on %s is connected to both %s and %s" ),
+                                item->m_PinNum,
+                                ref,
+                                pin_to_net_map[pin_name],
+                                item->GetNetName() );
 
-                    marker->SetData( ERCE_DIFFERENT_UNIT_NET, item->m_Start,
-                                     wxString::Format( _( "Pin %s on %s is connected to both %s and %s" ),
-                                                       item->m_PinNum,
-                                                       ref,
-                                                       pin_to_net_map[pin_name],
-                                                       item->GetNetName() ),
-                                                       item->m_Start );
-                    marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-                    marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
-
+                    SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
+                    marker->SetData( ERCE_DIFFERENT_UNIT_NET, item->m_Start, msg, item->m_Start );
                     item->m_SheetPath.LastScreen()->Append( marker );
                 }
             }
@@ -376,17 +307,17 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
 
     // Test similar labels (i;e. labels which are identical when
     // using case insensitive comparisons)
-    if( m_parent->GetErcSettings().IsTestEnabled( ERCE_SIMILAR_GLBL_LABELS )
-            || m_parent->GetErcSettings().IsTestEnabled( ERCE_SIMILAR_LABELS ) )
+    if( g_ErcSettings->IsTestEnabled( ERCE_SIMILAR_LABELS ) )
     {
+        aReporter.ReportTail( _( "Checking labels...\n" ), RPT_SEVERITY_INFO );
         objectsConnectedList->TestforSimilarLabels();
     }
 
-    // Displays global results:
-    updateMarkerCounts( &screens );
-
     // Display diags:
-    DisplayERC_MarkersList();
+    m_markerTreeModel->SetProvider( m_markerProvider );
+
+    // Displays global results:
+    updateDisplayedCounts();
 
     // Display new markers from the current screen:
     KIGFX::VIEW* view = m_parent->GetCanvas()->GetView();
@@ -398,6 +329,289 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
 
     // Display message
     aReporter.ReportTail( _( "Finished" ), RPT_SEVERITY_INFO );
+}
+
+
+void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
+{
+    const KIID&     itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
+    SCH_SHEET_LIST  sheetList( g_RootSheet );
+    SCH_SHEET_PATH  sheet;
+    SCH_ITEM*       item = sheetList.GetItem( itemID, &sheet );
+
+    if( item )
+    {
+        WINDOW_THAWER thawer( m_parent );
+
+        if( sheet != m_parent->GetCurrentSheet() )
+        {
+            m_parent->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
+            m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+
+            m_parent->SetCurrentSheet( sheet );
+            m_parent->DisplayCurrentSheet();
+            sheet.LastScreen()->SetZoom( m_parent->GetScreen()->GetZoom() );
+            m_parent->RedrawScreen( (wxPoint) m_parent->GetScreen()->m_ScrollCenter, false );
+        }
+
+        m_parent->FocusOnItem( item );
+        RedrawDrawPanel();
+    }
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_ERC::OnERCItemDClick( wxDataViewEvent& aEvent )
+{
+    if( aEvent.GetItem().IsOk() )
+    {
+        // turn control over to m_parent, hide this DIALOG_ERC window,
+        // no destruction so we can preserve listbox cursor
+        if( !IsModal() )
+            Show( false );
+    }
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
+{
+    RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
+
+    if( !node )
+        return;
+
+    RC_ITEM*  rcItem = node->m_RcItem;
+    wxString  listName;
+    wxMenu    menu;
+
+    switch( GetSeverity( rcItem->GetErrorCode() ) )
+    {
+    case RPT_SEVERITY_ERROR:   listName = _( "errors" );      break;
+    case RPT_SEVERITY_WARNING: listName = _( "warnings" );    break;
+    default:                   listName = _( "appropriate" ); break;
+    }
+
+    if( rcItem->GetParent()->IsExcluded() )
+    {
+        menu.Append( 1, _( "Remove exclusion for this violation" ),
+                     wxString::Format( _( "It will be placed back in the %s list" ), listName ) );
+    }
+    else
+    {
+        menu.Append( 2, _( "Exclude this violation" ),
+                     wxString::Format( _( "It will be excluded from the %s list" ), listName ) );
+    }
+
+    menu.AppendSeparator();
+
+    if( GetSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_WARNING )
+    {
+        menu.Append( 3, wxString::Format( _( "Change severity to Error for all '%s' violations" ),
+                     rcItem->GetErrorText(),
+                     _( "Violation severities can also be edited in the Board Setup... dialog" ) ) );
+    }
+    else
+    {
+        menu.Append( 4, wxString::Format( _( "Change severity to Warning for all '%s' violations" ),
+                     rcItem->GetErrorText(),
+                     _( "Violation severities can also be edited in the Board Setup... dialog" ) ) );
+    }
+
+    menu.Append( 5, wxString::Format( _( "Ignore all '%s' violations" ),
+                 rcItem->GetErrorText() ),
+                 _( "Violations will not be checked or reported" ) );
+
+    menu.AppendSeparator();
+
+    menu.Append( 6, _( "Edit violation severities..." ), _( "Open the Schematic Setup... dialog" ) );
+
+    switch( GetPopupMenuSelectionFromUser( menu ) )
+    {
+    case 1:
+        node->m_RcItem->GetParent()->SetExcluded( false );
+
+        // Update view
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
+        updateDisplayedCounts();
+        break;
+
+    case 2:
+        node->m_RcItem->GetParent()->SetExcluded( true );
+
+        // Update view
+        if( m_severities & RPT_SEVERITY_EXCLUSION )
+            static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
+        else
+            static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->DeleteCurrentItem( false );
+
+        updateDisplayedCounts();
+        break;
+
+    case 3:
+        SetSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_ERROR );
+
+        // Rebuild model and view
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markerProvider );
+        updateDisplayedCounts();
+        break;
+
+    case 4:
+        SetSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_WARNING );
+
+        // Rebuild model and view
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markerProvider );
+        updateDisplayedCounts();
+        break;
+
+    case 5:
+    {
+        SetSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_IGNORE );
+
+        SCH_SCREENS ScreenList;
+        ScreenList.DeleteMarkers( MARKER_BASE::MARKER_ERC, rcItem->GetErrorCode() );
+
+        // Rebuild model and view
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markerProvider );
+        updateDisplayedCounts();
+    }
+        break;
+
+    case 6:
+        m_parent->DoShowSchematicSetupDialog( _( "Violation Severity" ) );
+        break;
+    }
+}
+
+
+void DIALOG_ERC::OnSeverity( wxCommandEvent& aEvent )
+{
+    int flag = 0;
+
+    if( aEvent.GetEventObject() == m_showAll )
+        flag = RPT_SEVERITY_ALL;
+    else if( aEvent.GetEventObject() == m_showErrors )
+        flag = RPT_SEVERITY_ERROR;
+    else if( aEvent.GetEventObject() == m_showWarnings )
+        flag = RPT_SEVERITY_WARNING;
+    else if( aEvent.GetEventObject() == m_showExclusions )
+        flag = RPT_SEVERITY_EXCLUSION;
+
+    if( aEvent.IsChecked() )
+        m_severities |= flag;
+    else if( aEvent.GetEventObject() == m_showAll )
+        m_severities = RPT_SEVERITY_ERROR;
+    else
+        m_severities &= ~flag;
+
+    syncCheckboxes();
+
+    // Set the provider's severity levels through the TreeModel so that the old tree
+    // can be torn down before the severity changes.
+    //
+    // It's not clear this is required, but we've had a lot of issues with wxDataView
+    // being cranky on various platforms.
+
+    m_markerTreeModel->SetSeverities( m_severities );
+
+    updateDisplayedCounts();
+}
+
+
+void DIALOG_ERC::deleteAllMarkers()
+{
+    // Clear current selection list to avoid selection of deleted items
+    m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+
+    m_markerTreeModel->DeleteAllItems();
+}
+
+
+void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
+{
+    wxFileName fn( "./ERC." + ReportFileExtension );
+
+    wxFileDialog dlg( this, _( "Save Report to File" ), fn.GetPath(), fn.GetFullName(),
+                      ReportFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    fn = dlg.GetPath();
+
+    if( fn.GetExt().IsEmpty() )
+        fn.SetExt( ReportFileExtension );
+
+    if( !fn.IsAbsolute() )
+    {
+        wxString prj_path = Prj().GetProjectPath();
+        fn.MakeAbsolute( prj_path );
+    }
+
+    if( writeReport( fn.GetFullPath() ) )
+    {
+        m_MessagesList->AppendText( wxString::Format( _( "Report file '%s' created\n" ),
+                                                      fn.GetFullPath() ) );
+    }
+    else
+    {
+        DisplayError( this, wxString::Format( _( "Unable to create report file '%s'" ),
+                                              fn.GetFullPath() ) );
+    }
+}
+
+
+bool DIALOG_ERC::writeReport( const wxString& aFullFileName )
+{
+    wxFFile file( aFullFileName, wxT( "wt" ) );
+
+    if( !file.IsOpened() )
+        return false;
+
+    wxString msg = wxString::Format( _( "ERC report (%s, Encoding UTF8)\n" ), DateAndTime() );
+
+    int            err_count = 0;
+    int            warn_count = 0;
+    int            total_count = 0;
+    SCH_SHEET_LIST sheetList( g_RootSheet );
+
+    for( unsigned i = 0;  i < sheetList.size(); i++ )
+    {
+        msg << wxString::Format( _( "\n***** Sheet %s\n" ), sheetList[i].PathHumanReadable() );
+
+        for( auto aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
+        {
+            auto marker = static_cast<const SCH_MARKER*>( aItem );
+
+            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
+                continue;
+
+            total_count++;
+
+            switch( g_ErcSettings->m_Severities[ marker->GetRCItem()->GetErrorCode() ] )
+            {
+            case RPT_SEVERITY_ERROR:   err_count++;  break;
+            case RPT_SEVERITY_WARNING: warn_count++; break;
+            default:                                 break;
+            }
+
+            msg << marker->GetRCItem()->ShowReport( GetUserUnits() );
+        }
+    }
+
+    msg << wxString::Format( _( "\n ** ERC messages: %d  Errors %d  Warnings %d\n" ),
+                             total_count, err_count, warn_count );
+
+    // Currently: write report using UTF8 (as usual in Kicad).
+    // TODO: see if we can use the current encoding page (mainly for Windows users),
+    // Or other format (HTML?)
+    file.Write( msg );
+
+    // wxFFile dtor will close the file.
+
+    return true;
 }
 
 

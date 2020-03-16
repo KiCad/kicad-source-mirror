@@ -28,23 +28,20 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <base_units.h>
-
 #include <sch_marker.h>
+#include <widgets/ui_common.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <settings/color_settings.h>
+#include <erc_item.h>
 
 /// Factor to convert the maker unit shape to internal units:
 #define SCALING_FACTOR  Millimeter2iu( 0.1 )
 
 
-// JEY TODO: retire this; there's no reason not to use the next one...
-SCH_MARKER::SCH_MARKER() : SCH_ITEM( NULL, SCH_MARKER_T ), MARKER_BASE( SCALING_FACTOR )
-{
-}
-
-
-// JEY TODO: pass in ERCE code so we can get severity from it...
-SCH_MARKER::SCH_MARKER( const wxPoint& pos, const wxString& text ) :
-    SCH_ITEM( NULL, SCH_MARKER_T ),
-    MARKER_BASE( 0, pos, text, pos, wxEmptyString, wxPoint(), SCALING_FACTOR )
+SCH_MARKER::SCH_MARKER( TYPEMARKER aType ) :
+        SCH_ITEM( nullptr, SCH_MARKER_T ),
+        MARKER_BASE( SCALING_FACTOR, new ERC_ITEM(), aType )
 {
 }
 
@@ -72,14 +69,39 @@ void SCH_MARKER::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-KIGFX::COLOR4D SCH_MARKER::getColor() const
+void SCH_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount     = 2;
+
+    switch( g_ErcSettings->m_Severities[ m_rcItem->GetErrorCode() ] )
+    {
+    default:
+    case SEVERITY::RPT_SEVERITY_ERROR:   aLayers[0] = LAYER_ERC_ERR;  break;
+    case SEVERITY::RPT_SEVERITY_WARNING: aLayers[0] = LAYER_ERC_WARN; break;
+    }
+
+    aLayers[1] = LAYER_SELECTION_SHADOWS;
+}
+
+
+SCH_LAYER_ID SCH_MARKER::GetColorLayer() const
 {
     if( IsExcluded() )
-        return GetLayerColor( LAYER_HIDDEN );
-    else if( GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR )
-        return GetLayerColor( LAYER_ERC_ERR );
-    else
-        return GetLayerColor( LAYER_ERC_WARN );
+        return LAYER_HIDDEN;
+
+    switch( g_ErcSettings->m_Severities[ m_rcItem->GetErrorCode() ] )
+    {
+    default:
+    case SEVERITY::RPT_SEVERITY_ERROR:   return LAYER_ERC_ERR;
+    case SEVERITY::RPT_SEVERITY_WARNING: return LAYER_ERC_WARN;
+    }
+}
+
+
+KIGFX::COLOR4D SCH_MARKER::getColor() const
+{
+    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
+    return colors->GetColor( GetColorLayer() );
 }
 
 
@@ -91,17 +113,9 @@ void SCH_MARKER::Print( wxDC* aDC, const wxPoint& aOffset )
 
 bool SCH_MARKER::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
-    return SCH_ITEM::Matches( m_drc.GetErrorText(), aSearchData )
-                || SCH_ITEM::Matches( m_drc.GetMainText(), aSearchData )
-                || SCH_ITEM::Matches( m_drc.GetAuxiliaryText(), aSearchData );
-}
-
-
-void SCH_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
-{
-    aCount     = 2;
-    aLayers[0] = this->m_ErrorLevel == MARKER_SEVERITY_ERROR ? LAYER_ERC_ERR : LAYER_ERC_WARN;
-    aLayers[1] = LAYER_SELECTION_SHADOWS;
+    return SCH_ITEM::Matches( m_rcItem->GetErrorText(), aSearchData )
+                || SCH_ITEM::Matches( m_rcItem->GetMainText(), aSearchData )
+                || SCH_ITEM::Matches( m_rcItem->GetAuxText(), aSearchData );
 }
 
 
@@ -114,7 +128,7 @@ const EDA_RECT SCH_MARKER::GetBoundingBox() const
 void SCH_MARKER::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     aList.push_back( MSG_PANEL_ITEM( _( "Electronics Rule Check Error" ),
-                                     GetReporter().GetErrorText(), DARKRED ) );
+                                     m_rcItem->GetErrorText(), DARKRED ) );
 }
 
 

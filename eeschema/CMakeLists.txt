@@ -154,11 +154,11 @@ set( EESCHEMA_SRCS
     component_references_lister.cpp
     connection_graph.cpp
     cross-probing.cpp
-    drc_erc_item.cpp
     edit_label.cpp
     eeschema_config.cpp
     eeschema_settings.cpp
     erc.cpp
+    erc_item.cpp
     fields_grid_table.cpp
     files-io.cpp
     generate_alias_info.cpp

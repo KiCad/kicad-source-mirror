@@ -488,7 +488,7 @@ public:
      *
      * @return the reference for the sheet.
      */
-    const wxString GetRef( const SCH_SHEET_PATH* aSheet );
+    const wxString GetRef( const SCH_SHEET_PATH* aSheet, bool aIncludeUnit = false );
 
     /**
      * Set the reference for the given sheet path for this symbol.

@@ -5,8 +5,6 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_erc_listbox.h"
-
 #include "dialog_erc_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -24,41 +22,6 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bupperSizer;
 	bupperSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxStaticBoxSizer* sdiagSizer;
-	sdiagSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("ERC Report:") ), wxVERTICAL );
-
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 5, 5 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_ErcTotalErrorsText = new wxStaticText( sdiagSizer->GetStaticBox(), wxID_ANY, _("Total:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ErcTotalErrorsText->Wrap( -1 );
-	fgSizer1->Add( m_ErcTotalErrorsText, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_TotalErrCount = new wxTextCtrl( sdiagSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer1->Add( m_TotalErrCount, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_WarnErcErrorsText = new wxStaticText( sdiagSizer->GetStaticBox(), wxID_ANY, _("Warnings:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_WarnErcErrorsText->Wrap( -1 );
-	fgSizer1->Add( m_WarnErcErrorsText, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_LastWarningCount = new wxTextCtrl( sdiagSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer1->Add( m_LastWarningCount, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_LastErrCountText = new wxStaticText( sdiagSizer->GetStaticBox(), wxID_ANY, _("Errors:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_LastErrCountText->Wrap( -1 );
-	fgSizer1->Add( m_LastErrCountText, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_LastErrCount = new wxTextCtrl( sdiagSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer1->Add( m_LastErrCount, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	sdiagSizer->Add( fgSizer1, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
-
-
-	bupperSizer->Add( sdiagSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
 	wxBoxSizer* bSizerMessages;
 	bSizerMessages = new wxBoxSizer( wxVERTICAL );
 
@@ -66,37 +29,85 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_titleMessages->Wrap( -1 );
 	m_titleMessages->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizerMessages->Add( m_titleMessages, 0, wxRIGHT|wxLEFT, 12 );
+	bSizerMessages->Add( m_titleMessages, 0, wxRIGHT|wxLEFT, 10 );
 
 	m_MessagesList = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
-	m_MessagesList->SetMinSize( wxSize( 180,-1 ) );
+	m_MessagesList->SetMinSize( wxSize( 180,110 ) );
 
-	bSizerMessages->Add( m_MessagesList, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
-
-
-	bupperSizer->Add( bSizerMessages, 1, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 3 );
+	bSizerMessages->Add( m_MessagesList, 1, wxEXPAND|wxLEFT, 5 );
 
 
-	bercSizer->Add( bupperSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
+	bupperSizer->Add( bSizerMessages, 1, wxEXPAND|wxBOTTOM, 5 );
 
-	m_textMarkers = new wxStaticText( this, wxID_ANY, _("Error List:"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	bercSizer->Add( bupperSizer, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
+
+	m_textMarkers = new wxStaticText( this, wxID_ANY, _("Violations:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textMarkers->Wrap( -1 );
 	m_textMarkers->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bercSizer->Add( m_textMarkers, 0, wxLEFT|wxRIGHT, 20 );
+	bercSizer->Add( m_textMarkers, 0, wxTOP|wxRIGHT|wxLEFT, 10 );
 
-	m_MarkersList = new ERC_HTML_LISTFRAME( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO|wxBORDER_SIMPLE );
-	m_MarkersList->SetMinSize( wxSize( 460,200 ) );
+	m_markerDataView = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER );
+	m_markerDataView->SetToolTip( _("Click on items to highlight them on the board.") );
+	m_markerDataView->SetMinSize( wxSize( -1,200 ) );
 
-	bercSizer->Add( m_MarkersList, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bercSizer->Add( m_markerDataView, 2, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSeveritySizer;
+	bSeveritySizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_showLabel = new wxStaticText( this, wxID_ANY, _("Show:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_showLabel->Wrap( -1 );
+	bSeveritySizer->Add( m_showLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_showAll = new wxCheckBox( this, wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_showAll, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer1->Add( bercSizer, 1, wxEXPAND, 5 );
+	bSeveritySizer->Add( 35, 0, 0, wxEXPAND, 5 );
+
+	m_showErrors = new wxCheckBox( this, wxID_ANY, _("Errors"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_showErrors, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_errorsBadge = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_errorsBadge->SetMinSize( wxSize( 20,20 ) );
+
+	bSeveritySizer->Add( m_errorsBadge, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 25 );
+
+	m_showWarnings = new wxCheckBox( this, wxID_ANY, _("Warnings"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_showWarnings, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_warningsBadge = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_warningsBadge->SetMinSize( wxSize( 20,20 ) );
+
+	bSeveritySizer->Add( m_warningsBadge, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 25 );
+
+	m_showExclusions = new wxCheckBox( this, wxID_ANY, _("Exclusions"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_showExclusions, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_exclusionsBadge = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_exclusionsBadge, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 25 );
+
+
+	bSeveritySizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_saveReport = new wxButton( this, wxID_ANY, _("Save..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSeveritySizer->Add( m_saveReport, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	bercSizer->Add( bSeveritySizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+
+	bSizer1->Add( bercSizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 8 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer1->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttondelmarkers = new wxButton( this, ID_ERASE_DRC_MARKERS, _("Delete Markers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonsSizer->Add( m_buttondelmarkers, 0, wxALL|wxEXPAND, 5 );
+	m_buttonsSizer->Add( m_buttondelmarkers, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 8 );
 
 
 	m_buttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -108,10 +119,10 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	m_buttonsSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
+	m_buttonsSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
-	bSizer1->Add( m_buttonsSizer, 0, wxEXPAND|wxLEFT, 10 );
+	bSizer1->Add( m_buttonsSizer, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( bSizer1 );
@@ -120,21 +131,33 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_ERC_BASE::OnCloseErcDialog ) );
-	m_MarkersList->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_ERC_BASE::OnLeftClickMarkersList ), NULL, this );
-	m_MarkersList->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_ERC_BASE::OnLeftDblClickMarkersList ), NULL, this );
+	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemDClick ), NULL, this );
+	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemRClick ), NULL, this );
+	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemSelected ), NULL, this );
+	m_showAll->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
+	m_showErrors->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
+	m_showWarnings->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
+	m_showExclusions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
+	m_saveReport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSaveReport ), NULL, this );
 	m_buttondelmarkers->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnEraseDrcMarkersClick ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnButtonCloseClick ), NULL, this );
-	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnErcCmpClick ), NULL, this );
+	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnRunERCClick ), NULL, this );
 }
 
 DIALOG_ERC_BASE::~DIALOG_ERC_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_ERC_BASE::OnCloseErcDialog ) );
-	m_MarkersList->Disconnect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( DIALOG_ERC_BASE::OnLeftClickMarkersList ), NULL, this );
-	m_MarkersList->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_ERC_BASE::OnLeftDblClickMarkersList ), NULL, this );
+	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemDClick ), NULL, this );
+	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemRClick ), NULL, this );
+	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemSelected ), NULL, this );
+	m_showAll->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
+	m_showErrors->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
+	m_showWarnings->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
+	m_showExclusions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
+	m_saveReport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSaveReport ), NULL, this );
 	m_buttondelmarkers->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnEraseDrcMarkersClick ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnButtonCloseClick ), NULL, this );
-	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnErcCmpClick ), NULL, this );
+	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnRunERCClick ), NULL, this );
 
 }

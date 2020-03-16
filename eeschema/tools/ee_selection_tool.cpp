@@ -76,9 +76,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = [] (const SELECTION& aSel )
         SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
 
         if( comp )
-        {
             return !comp->GetPartRef() || !comp->GetPartRef()->IsPower();
-        }
     }
 
     return false;
@@ -92,9 +90,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleDeMorganSymbol = [] ( const SELECTION& 
         SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
 
         if( comp )
-        {
             return comp->GetPartRef() && comp->GetPartRef()->HasConversion();
-        }
     }
 
     return false;
@@ -108,9 +104,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleMultiUnitSymbol = [] ( const SELECTION&
         SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
 
         if( comp )
-        {
             return comp->GetPartRef() && comp->GetPartRef()->GetUnitCount() >= 2;
-        }
     }
 
     return false;
@@ -305,6 +299,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
+            m_frame->FocusOnItem( nullptr );
+
             SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr, false,
                          m_additive, m_subtractive, m_exclusive_or );
         }
@@ -329,6 +325,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // double click? Display the properties window
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
+            m_frame->FocusOnItem( nullptr );
+
             if( m_selection.Empty() )
                 SelectPoint( evt->Position());
 
@@ -343,6 +341,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
+            m_frame->FocusOnItem( nullptr );
+
             if( m_additive || m_subtractive || m_exclusive_or || m_frame->GetDragSelects() )
             {
                 selectMultiple();
@@ -391,11 +391,15 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( evt->IsCancelInteractive() )
         {
+            m_frame->FocusOnItem( nullptr );
+
             ClearSelection();
         }
 
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
+            m_frame->FocusOnItem( nullptr );
+
             ClearSelection();
         }
 

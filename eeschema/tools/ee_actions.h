@@ -142,7 +142,6 @@ public:
     /// Inspection and Editing
     static TOOL_ACTION showDatasheet;
     static TOOL_ACTION runERC;
-    static TOOL_ACTION showMarkerInfo;
     static TOOL_ACTION annotate;
     static TOOL_ACTION editSymbolFields;
     static TOOL_ACTION editSymbolLibraryLinks;

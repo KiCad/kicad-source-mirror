@@ -28,7 +28,7 @@
 
 #include <class_module.h>
 #include <drc/drc.h>
-
+#include <drc/drc_item.h>
 #include <drc/courtyard_overlap.h>
 #include <widgets/ui_common.h>
 
@@ -394,13 +394,13 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
  * Check if a #MARKER_PCB is described by a particular #COURTYARD_COLLISION
  * object.
  */
-static bool CollisionMatchesExpected(
-        BOARD& aBoard, const MARKER_PCB& aMarker, const COURTYARD_COLLISION& aCollision )
+static bool CollisionMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
+                                      const COURTYARD_COLLISION& aCollision )
 {
-    const DRC_ITEM& reporter = aMarker.GetReporter();
+    const DRC_ITEM* reporter = static_cast<const DRC_ITEM*>( aMarker.GetRCItem() );
 
-    const MODULE* item_a = dynamic_cast<MODULE*>( reporter.GetMainItem( &aBoard ) );
-    const MODULE* item_b = dynamic_cast<MODULE*>( reporter.GetAuxiliaryItem( &aBoard ) );
+    const MODULE* item_a = dynamic_cast<MODULE*>( aBoard.GetItem( reporter->GetMainItemID() ) );
+    const MODULE* item_b = dynamic_cast<MODULE*>( aBoard.GetItem( reporter->GetAuxItemID() ) );
 
     // cant' find the items!
     if( !item_a || !item_b )

@@ -36,13 +36,12 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <wildcards_and_files_ext.h>
-#include <drc/drc_tree_model.h>
+#include <rc_item.h>
 #include <wx/wupdlock.h>
 #include <widgets/ui_common.h>
 
-DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame,
-                                        wxWindow* aParent ) :
-        DIALOG_DRC_CONTROL_BASE( aParent ),
+DIALOG_DRC::DIALOG_DRC( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
+        DIALOG_DRC_BASE( aParent ),
         m_trackMinWidth( aEditorFrame, m_MinWidthLabel, m_MinWidthCtrl, m_MinWidthUnits, true ),
         m_viaMinSize( aEditorFrame, m_ViaMinLabel, m_ViaMinCtrl, m_ViaMinUnits, true ),
         m_uviaMinSize( aEditorFrame, m_uViaMinLabel, m_uViaMinCtrl, m_uViaMinUnits, true ),
@@ -61,13 +60,13 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
     m_currentBoard = m_brdEditor->GetBoard();
     m_BrdSettings  = m_brdEditor->GetBoard()->GetDesignSettings();
 
-    m_markerTreeModel = new DRC_TREE_MODEL( m_brdEditor, m_markerDataView );
+    m_markerTreeModel = new RC_TREE_MODEL( m_brdEditor, m_markerDataView );
     m_markerDataView->AssociateModel( m_markerTreeModel );
 
-    m_unconnectedTreeModel = new DRC_TREE_MODEL( m_brdEditor, m_unconnectedDataView );
+    m_unconnectedTreeModel = new RC_TREE_MODEL( m_brdEditor, m_unconnectedDataView );
     m_unconnectedDataView->AssociateModel( m_unconnectedTreeModel );
 
-    m_footprintWarningsTreeModel = new DRC_TREE_MODEL( m_brdEditor, m_footprintsDataView );
+    m_footprintWarningsTreeModel = new RC_TREE_MODEL( m_brdEditor, m_footprintsDataView );
     m_footprintsDataView->AssociateModel( m_footprintWarningsTreeModel );
 
     m_Notebook->SetSelection( 0 );
@@ -86,7 +85,7 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
 }
 
 
-DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
+DIALOG_DRC::~DIALOG_DRC()
 {
     m_brdEditor->FocusOnItem( nullptr );
 
@@ -100,7 +99,7 @@ DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
 }
 
 
-void DIALOG_DRC_CONTROL::OnActivateDlg( wxActivateEvent& aEvent )
+void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 {
     if( m_currentBoard != m_brdEditor->GetBoard() )
     {
@@ -126,7 +125,7 @@ void DIALOG_DRC_CONTROL::OnActivateDlg( wxActivateEvent& aEvent )
 }
 
 
-void DIALOG_DRC_CONTROL::displayDRCValues()
+void DIALOG_DRC::displayDRCValues()
 {
     m_trackMinWidth.SetValue( m_BrdSettings.m_TrackMinWidth );
     m_viaMinSize.SetValue( m_BrdSettings.m_ViasMinSize );
@@ -134,7 +133,7 @@ void DIALOG_DRC_CONTROL::displayDRCValues()
 }
 
 
-void DIALOG_DRC_CONTROL::initValues()
+void DIALOG_DRC::initValues()
 {
     m_markersTitleTemplate     = m_Notebook->GetPageText( 0 );
     m_unconnectedTitleTemplate = m_Notebook->GetPageText( 1 );
@@ -159,7 +158,7 @@ void DIALOG_DRC_CONTROL::initValues()
 }
 
 
-void DIALOG_DRC_CONTROL::setDRCParameters()
+void DIALOG_DRC::setDRCParameters()
 {
     m_BrdSettings.m_TrackMinWidth    = (int) m_trackMinWidth.GetValue();
     m_BrdSettings.m_ViasMinSize      = (int) m_viaMinSize.GetValue();
@@ -173,7 +172,7 @@ void DIALOG_DRC_CONTROL::setDRCParameters()
 static int RPT_SEVERITY_ALL = RPT_SEVERITY_WARNING | RPT_SEVERITY_ERROR | RPT_SEVERITY_EXCLUSION;
 
 
-void DIALOG_DRC_CONTROL::syncCheckboxes()
+void DIALOG_DRC::syncCheckboxes()
 {
     m_showAll->SetValue( m_severities == RPT_SEVERITY_ALL );
     m_showErrors->SetValue( m_severities & RPT_SEVERITY_ERROR );
@@ -182,7 +181,7 @@ void DIALOG_DRC_CONTROL::syncCheckboxes()
 }
 
 
-void DIALOG_DRC_CONTROL::OnRunDRCClick( wxCommandEvent& aEvent )
+void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 {
     setDRCParameters();
     m_tester->m_doZonesTest          = m_cbReportTracksToZonesErrors->GetValue();
@@ -211,7 +210,7 @@ void DIALOG_DRC_CONTROL::OnRunDRCClick( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_DRC_CONTROL::SetMarkersProvider( DRC_ITEMS_PROVIDER* aProvider )
+void DIALOG_DRC::SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider )
 {
     m_markersProvider = aProvider;
     m_markerTreeModel->SetProvider( m_markersProvider );
@@ -219,7 +218,7 @@ void DIALOG_DRC_CONTROL::SetMarkersProvider( DRC_ITEMS_PROVIDER* aProvider )
 }
 
 
-void DIALOG_DRC_CONTROL::SetUnconnectedProvider(class DRC_ITEMS_PROVIDER * aProvider )
+void DIALOG_DRC::SetUnconnectedProvider( class RC_ITEMS_PROVIDER * aProvider )
 {
     m_unconnectedItemsProvider = aProvider;
     m_unconnectedTreeModel->SetProvider( m_unconnectedItemsProvider );
@@ -227,7 +226,7 @@ void DIALOG_DRC_CONTROL::SetUnconnectedProvider(class DRC_ITEMS_PROVIDER * aProv
 }
 
 
-void DIALOG_DRC_CONTROL::SetFootprintsProvider( DRC_ITEMS_PROVIDER* aProvider )
+void DIALOG_DRC::SetFootprintsProvider( RC_ITEMS_PROVIDER* aProvider )
 {
     m_footprintWarningsProvider = aProvider;
     m_footprintWarningsTreeModel->SetProvider( m_footprintWarningsProvider );
@@ -235,9 +234,10 @@ void DIALOG_DRC_CONTROL::SetFootprintsProvider( DRC_ITEMS_PROVIDER* aProvider )
 }
 
 
-void DIALOG_DRC_CONTROL::OnDRCItemSelected( wxDataViewEvent& aEvent )
+void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 {
-    BOARD_ITEM*   item = DRC_TREE_MODEL::ToBoardItem( m_brdEditor->GetBoard(), aEvent.GetItem() );
+    const KIID&   itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
+    BOARD_ITEM*   item = m_brdEditor->GetBoard()->GetItem( itemID );
     WINDOW_THAWER thawer( m_brdEditor );
 
     m_brdEditor->FocusOnItem( item );
@@ -247,11 +247,11 @@ void DIALOG_DRC_CONTROL::OnDRCItemSelected( wxDataViewEvent& aEvent )
 }
 
 
-void DIALOG_DRC_CONTROL::OnDRCItemDClick( wxDataViewEvent& aEvent )
+void DIALOG_DRC::OnDRCItemDClick( wxDataViewEvent& aEvent )
 {
     if( aEvent.GetItem().IsOk() )
     {
-        // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
+        // turn control over to m_brdEditor, hide this DIALOG_DRC window,
         // no destruction so we can preserve listbox cursor
         if( !IsModal() )
             Show( false );
@@ -261,25 +261,25 @@ void DIALOG_DRC_CONTROL::OnDRCItemDClick( wxDataViewEvent& aEvent )
 }
 
 
-void DIALOG_DRC_CONTROL::OnDRCItemRClick( wxDataViewEvent& aEvent )
+void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 {
-    DRC_TREE_NODE* node = DRC_TREE_MODEL::ToNode( aEvent.GetItem() );
+    RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
 
     if( !node )
         return;
 
-    DRC_ITEM* drcItem = node->m_DrcItem;
+    RC_ITEM*  rcItem = node->m_RcItem;
     wxString  listName;
     wxMenu    menu;
 
-    switch( m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] )
+    switch( m_BrdSettings.m_DRCSeverities[ rcItem->GetErrorCode() ] )
     {
     case RPT_SEVERITY_ERROR:   listName = _( "errors" );      break;
     case RPT_SEVERITY_WARNING: listName = _( "warnings" );    break;
-    default:               listName = _( "appropriate" ); break;
+    default:                   listName = _( "appropriate" ); break;
     }
 
-    if( drcItem->GetParent()->IsExcluded() )
+    if( rcItem->GetParent()->IsExcluded() )
     {
         menu.Append( 1, _( "Remove exclusion for this violation" ),
                      wxString::Format( _( "It will be placed back in the %s list" ), listName ) );
@@ -292,21 +292,21 @@ void DIALOG_DRC_CONTROL::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     menu.AppendSeparator();
 
-    if( m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] == RPT_SEVERITY_WARNING )
+    if( m_BrdSettings.m_DRCSeverities[ rcItem->GetErrorCode() ] == RPT_SEVERITY_WARNING )
     {
         menu.Append( 3, wxString::Format( _( "Change severity to Error for all '%s' violations" ),
-                     drcItem->GetErrorText(),
+                     rcItem->GetErrorText(),
                      _( "Violation severities can also be edited in the Board Setup... dialog" ) ) );
     }
     else
     {
         menu.Append( 4, wxString::Format( _( "Change severity to Warning for all '%s' violations" ),
-                     drcItem->GetErrorText(),
+                     rcItem->GetErrorText(),
                      _( "Violation severities can also be edited in the Board Setup... dialog" ) ) );
     }
 
     menu.Append( 5, wxString::Format( _( "Ignore all '%s' violations" ),
-                 drcItem->GetErrorText() ),
+                 rcItem->GetErrorText() ),
                  _( "Violations will not be checked or reported" ) );
 
     menu.AppendSeparator();
@@ -316,55 +316,55 @@ void DIALOG_DRC_CONTROL::OnDRCItemRClick( wxDataViewEvent& aEvent )
     switch( GetPopupMenuSelectionFromUser( menu ) )
     {
     case 1:
-        node->m_DrcItem->GetParent()->SetExcluded( false );
+        node->m_RcItem->GetParent()->SetExcluded( false );
 
         // Update view
-        static_cast<DRC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
         updateDisplayedCounts();
         break;
 
     case 2:
-        node->m_DrcItem->GetParent()->SetExcluded( true );
+        node->m_RcItem->GetParent()->SetExcluded( true );
 
         // Update view
         if( m_severities & RPT_SEVERITY_EXCLUSION )
-            static_cast<DRC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
+            static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
         else
-            static_cast<DRC_TREE_MODEL*>( aEvent.GetModel() )->DeleteCurrentItem( false );
+            static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->DeleteCurrentItem( false );
 
         updateDisplayedCounts();
         break;
 
     case 3:
-        m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] = RPT_SEVERITY_ERROR;
+        m_BrdSettings.m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_ERROR;
         m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
 
         // Rebuild model and view
-        static_cast<DRC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
         updateDisplayedCounts();
         break;
 
     case 4:
-        m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] = RPT_SEVERITY_WARNING;
+        m_BrdSettings.m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_WARNING;
         m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
 
         // Rebuild model and view
-        static_cast<DRC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
         updateDisplayedCounts();
         break;
 
     case 5:
-        m_BrdSettings.m_DRCSeverities[ drcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
+        m_BrdSettings.m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
         m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
 
         for( MARKER_PCB* marker : m_brdEditor->GetBoard()->Markers() )
         {
-            if( marker->GetReporter().GetErrorCode() == drcItem->GetErrorCode() )
+            if( marker->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
                 m_brdEditor->GetBoard()->Delete( marker );
         }
 
         // Rebuild model and view
-        static_cast<DRC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
         updateDisplayedCounts();
         break;
 
@@ -375,7 +375,7 @@ void DIALOG_DRC_CONTROL::OnDRCItemRClick( wxDataViewEvent& aEvent )
 }
 
 
-void DIALOG_DRC_CONTROL::OnSeverity( wxCommandEvent& aEvent )
+void DIALOG_DRC::OnSeverity( wxCommandEvent& aEvent )
 {
     int flag = 0;
 
@@ -411,7 +411,7 @@ void DIALOG_DRC_CONTROL::OnSeverity( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_DRC_CONTROL::OnSaveReport( wxCommandEvent& aEvent )
+void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
 {
     wxFileName fn( "./DRC." + ReportFileExtension );
 
@@ -445,7 +445,7 @@ void DIALOG_DRC_CONTROL::OnSaveReport( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_DRC_CONTROL::OnCancelClick( wxCommandEvent& aEvent )
+void DIALOG_DRC::OnCancelClick( wxCommandEvent& aEvent )
 {
     m_brdEditor->FocusOnItem( nullptr );
 
@@ -458,7 +458,7 @@ void DIALOG_DRC_CONTROL::OnCancelClick( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_DRC_CONTROL::OnChangingNotebookPage( wxNotebookEvent& aEvent )
+void DIALOG_DRC::OnChangingNotebookPage( wxNotebookEvent& aEvent )
 {
     // Shouldn't be necessary, but is on at least OSX
     if( aEvent.GetSelection() >= 0 )
@@ -470,7 +470,7 @@ void DIALOG_DRC_CONTROL::OnChangingNotebookPage( wxNotebookEvent& aEvent )
 }
 
 
-void DIALOG_DRC_CONTROL::refreshBoardEditor()
+void DIALOG_DRC::refreshBoardEditor()
 {
     WINDOW_THAWER thawer( m_brdEditor );
 
@@ -478,7 +478,7 @@ void DIALOG_DRC_CONTROL::refreshBoardEditor()
 }
 
 
-void DIALOG_DRC_CONTROL::deleteAllMarkers()
+void DIALOG_DRC::deleteAllMarkers()
 {
     // Clear current selection list to avoid selection of deleted items
     m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -488,7 +488,7 @@ void DIALOG_DRC_CONTROL::deleteAllMarkers()
 }
 
 
-bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
+bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
 {
     FILE* fp = wxFopen( aFullFileName, wxT( "w" ) );
 
@@ -534,7 +534,7 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
 }
 
 
-void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& aEvent )
+void DIALOG_DRC::OnDeleteOneClick( wxCommandEvent& aEvent )
 {
     if( m_Notebook->GetSelection() == 0 )
     {
@@ -559,7 +559,7 @@ void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_DRC_CONTROL::OnDeleteAllClick( wxCommandEvent& aEvent )
+void DIALOG_DRC::OnDeleteAllClick( wxCommandEvent& aEvent )
 {
     deleteAllMarkers();
 
@@ -568,7 +568,7 @@ void DIALOG_DRC_CONTROL::OnDeleteAllClick( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_DRC_CONTROL::updateDisplayedCounts()
+void DIALOG_DRC::updateDisplayedCounts()
 {
     wxString msg;
 

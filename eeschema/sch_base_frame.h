@@ -312,6 +312,8 @@ public:
 
     virtual void CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
 
+    void FocusOnItem( SCH_ITEM* aItem );
+
     void HardRedraw() override;
 
     /**

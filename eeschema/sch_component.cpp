@@ -573,27 +573,37 @@ void SCH_COMPONENT::AddHierarchicalReference( const KIID_PATH& aPath, const wxSt
 }
 
 
-const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
+const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUnit )
 {
     KIID_PATH path = sheet->Path();
+    wxString  ref;
 
     for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
-            return instance.m_Reference;
+        {
+            ref = instance.m_Reference;
+            break;
+        }
     }
 
     // If it was not found in m_Paths array, then see if it is in m_Field[REFERENCE] -- if so,
     // use this as a default for this path.  This will happen if we load a version 1 schematic
     // file.  It will also mean that multiple instances of the same sheet by default all have
     // the same component references, but perhaps this is best.
-    if( !GetField( REFERENCE )->GetText().IsEmpty() )
+    if( ref.IsEmpty() && !GetField( REFERENCE )->GetText().IsEmpty() )
     {
         SetRef( sheet, GetField( REFERENCE )->GetText() );
-        return GetField( REFERENCE )->GetText();
+        ref = GetField( REFERENCE )->GetText();
     }
 
-    return m_prefix;
+    if( ref.IsEmpty() )
+        ref = m_prefix;
+
+    if( aIncludeUnit )
+        ref += LIB_PART::SubReference( GetUnit() );
+
+    return ref;
 }
 
 
@@ -1594,9 +1604,9 @@ void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
 
             NETLIST_OBJECT* item = new NETLIST_OBJECT();
             item->m_SheetPathInclude = *aSheetPath;
-            item->m_Comp = (SCH_ITEM*) pin;
-            item->m_SheetPath         = *aSheetPath;
-            item->m_Type              = NETLIST_ITEM::PIN;
+            item->m_Comp = m_pins[ m_pinMap.at( pin ) ].get();
+            item->m_SheetPath = *aSheetPath;
+            item->m_Type = NETLIST_ITEM::PIN;
             item->m_Link = (SCH_ITEM*) this;
             item->m_ElectricalPinType = pin->GetType();
             item->m_PinNum = pin->GetNumber();
@@ -1611,8 +1621,8 @@ void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                 item = new NETLIST_OBJECT();
                 item->m_SheetPathInclude = *aSheetPath;
                 item->m_Comp = NULL;
-                item->m_SheetPath        = *aSheetPath;
-                item->m_Type             = NETLIST_ITEM::PINLABEL;
+                item->m_SheetPath = *aSheetPath;
+                item->m_Type = NETLIST_ITEM::PINLABEL;
                 item->m_Label = pin->GetName();
                 item->m_Start = pos;
                 item->m_End = item->m_Start;

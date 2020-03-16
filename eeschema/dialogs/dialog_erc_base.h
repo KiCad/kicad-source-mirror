@@ -10,8 +10,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class ERC_HTML_LISTFRAME;
-
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -21,12 +19,14 @@ class ERC_HTML_LISTFRAME;
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/html/htmlwin.h>
+#include <wx/dataview.h>
+#include <wx/checkbox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/statbmp.h>
 #include <wx/button.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,16 +41,20 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_ErcTotalErrorsText;
-		wxTextCtrl* m_TotalErrCount;
-		wxStaticText* m_WarnErcErrorsText;
-		wxTextCtrl* m_LastWarningCount;
-		wxStaticText* m_LastErrCountText;
-		wxTextCtrl* m_LastErrCount;
 		wxStaticText* m_titleMessages;
 		wxTextCtrl* m_MessagesList;
 		wxStaticText* m_textMarkers;
-		ERC_HTML_LISTFRAME* m_MarkersList;
+		wxDataViewCtrl* m_markerDataView;
+		wxStaticText* m_showLabel;
+		wxCheckBox* m_showAll;
+		wxCheckBox* m_showErrors;
+		wxStaticBitmap* m_errorsBadge;
+		wxCheckBox* m_showWarnings;
+		wxStaticBitmap* m_warningsBadge;
+		wxCheckBox* m_showExclusions;
+		wxStaticBitmap* m_exclusionsBadge;
+		wxButton* m_saveReport;
+		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_buttonsSizer;
 		wxButton* m_buttondelmarkers;
 		wxStdDialogButtonSizer* m_sdbSizer1;
@@ -59,11 +63,14 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseErcDialog( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnLeftClickMarkersList( wxHtmlLinkEvent& event ) { event.Skip(); }
-		virtual void OnLeftDblClickMarkersList( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnERCItemDClick( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnERCItemRClick( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnERCItemSelected( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnSeverity( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSaveReport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEraseDrcMarkersClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCloseClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnErcCmpClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRunERCClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

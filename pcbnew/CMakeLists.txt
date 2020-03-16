@@ -229,7 +229,6 @@ set( PCBNEW_DRC_SRCS
     drc/courtyard_overlap.cpp
     drc/drc.cpp
     drc/drc_clearance_test_functions.cpp
-    drc/drc_tree_model.cpp
     )
 
 set( PCBNEW_NETLIST_SRCS

@@ -315,6 +315,42 @@ void SCH_BASE_FRAME::CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 }
 
 
+void SCH_BASE_FRAME::FocusOnItem( SCH_ITEM* aItem )
+{
+    static KIID lastBrightenedItemID( niluuid );
+
+    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCH_SHEET_PATH dummy;
+    SCH_ITEM*      lastItem = sheetList.GetItem( lastBrightenedItemID, &dummy );
+
+    if( lastItem && lastItem != aItem )
+    {
+        lastItem->ClearBrightened();
+
+        RefreshItem( lastItem );
+        lastBrightenedItemID = niluuid;
+    }
+
+    if( aItem )
+    {
+        aItem->SetBrightened();
+
+        RefreshItem( aItem );
+        lastBrightenedItemID = aItem->m_Uuid;
+
+        wxPoint position = aItem->GetPosition();
+
+        if( aItem->GetParent() && aItem->GetParent()->Type() == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( aItem->GetParent() );
+            position += comp->GetPosition();
+        }
+
+        FocusOnLocation( position );
+    }
+}
+
+
 void SCH_BASE_FRAME::HardRedraw()
 {
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );

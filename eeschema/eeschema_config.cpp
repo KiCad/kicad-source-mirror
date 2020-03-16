@@ -42,13 +42,11 @@
 #include <sch_edit_frame.h>
 #include <sch_junction.h>
 #include <sch_painter.h>
-#include <sch_sheet.h>
 #include <settings/app_settings.h>
 #include <settings/settings_manager.h>
 #include <symbol_lib_table.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/symbol_tree_pane.h>
-//#include <widgets/widget_eeschema_color_config.h>
 #include <wildcards_and_files_ext.h>
 #include <ws_data_model.h>
 #include <widgets/ui_common.h>
@@ -138,15 +136,9 @@ public:
         if( aConfig->Read( wxT( "ERC_TestSimilarLabels" ), &flag, true ) )
         {
             if( flag )
-            {
-                m_Pt_param->m_Severities[ ERCE_SIMILAR_GLBL_LABELS ] = RPT_SEVERITY_WARNING;
                 m_Pt_param->m_Severities[ ERCE_SIMILAR_LABELS ] = RPT_SEVERITY_WARNING;
-            }
             else
-            {
-                m_Pt_param->m_Severities[ ERCE_SIMILAR_GLBL_LABELS ] = RPT_SEVERITY_IGNORE;
                 m_Pt_param->m_Severities[ ERCE_SIMILAR_LABELS ] = RPT_SEVERITY_IGNORE;
-            }
         }
 
         if( aConfig->Read( wxT( "ERC_CheckUniqueGlobalLabels" ), &flag, true ) )
@@ -206,7 +198,7 @@ public:
         // TO DO: for now just write out the legacy ones so we don't lose them
         // TO DO: remove this once the new scheme is in place
         aConfig->Write( wxT( "ERC_TestSimilarLabels" ),
-                        m_Pt_param->IsTestEnabled( ERCE_SIMILAR_GLBL_LABELS ) );
+                        m_Pt_param->IsTestEnabled( ERCE_SIMILAR_LABELS ) );
         aConfig->Write( wxT( "ERC_CheckUniqueGlobalLabels" ),
                         m_Pt_param->IsTestEnabled( ERCE_GLOBLABEL ) );
         aConfig->Write( wxT( "ERC_CheckBusDriverConflicts" ),
@@ -221,6 +213,17 @@ public:
         aConfig->SetPath( oldPath );
     }
 };
+
+
+int GetSeverity( int aErrorCode )
+{
+    return g_ErcSettings->m_Severities[ aErrorCode ];
+}
+
+void SetSeverity( int aErrorCode, int aSeverity )
+{
+    g_ErcSettings->m_Severities[ aErrorCode ] = aSeverity;
+}
 
 
 int GetDefaultBusThickness()
@@ -391,12 +394,8 @@ std::vector<PARAM_CFG*>& SCH_EDIT_FRAME::GetProjectFileParameters()
 
     params.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
                                               &BASE_SCREEN::m_PageLayoutDescrFileName ) );
-
-    params.push_back( new PARAM_CFG_FILENAME( wxT( "PlotDirectoryName" ),
-                                              &m_plotDirectoryName ) );
-
-    params.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
-                                              &m_netListFormat) );
+    params.push_back( new PARAM_CFG_FILENAME( wxT( "PlotDirectoryName" ), &m_plotDirectoryName ) );
+    params.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ), &m_netListFormat) );
     params.push_back( new PARAM_CFG_BOOL( wxT( "SpiceAjustPassiveValues" ),
                                           &m_spiceAjustPassiveValues, false ) );
 
@@ -404,7 +403,7 @@ std::vector<PARAM_CFG*>& SCH_EDIT_FRAME::GetProjectFileParameters()
 
     params.push_back( new PARAM_CFG_FIELDNAMES( &m_templateFieldNames ) );
 
-    params.push_back( new PARAM_CFG_SEVERITIES( &m_ercSettings ) );
+    params.push_back( new PARAM_CFG_SEVERITIES( g_ErcSettings ) );
 
     return params;
 }

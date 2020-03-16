@@ -32,6 +32,7 @@
 #include <reporter.h>
 #include <bitmaps.h>
 #include <drc/drc.h>
+#include <drc/drc_item.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <class_board.h>
@@ -187,7 +188,7 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
         return;
 
     HTML_MESSAGE_BOX dlg( this, _( "Check footprints" ) );
-    DRC_LIST drcItems;
+    std::vector<DRC_ITEM*> drcItems;
 
     DRC::TestFootprints( netlist, m_parent->GetBoard(), GetUserUnits(), drcItems );
 

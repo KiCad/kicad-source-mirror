@@ -46,7 +46,7 @@ public:
      * @param aDeleteTracksinPad = true to remove tracks fully inside pads
      * (short circuits)
      */
-    bool CleanupBoard( bool aDryRun, DRC_LIST* aItemsList, bool aCleanVias,
+    bool CleanupBoard( bool aDryRun, std::vector<DRC_ITEM*>* aItemsList, bool aCleanVias,
             bool aRemoveMisConnected, bool aMergeSegments, bool aDeleteUnconnected,
             bool aDeleteTracksinPad );
 
@@ -115,11 +115,11 @@ private:
      */
     bool testTrackEndpointIsNode( TRACK* aTrack, bool aTstStart );
 
-    EDA_UNITS     m_units;
-    BOARD*        m_brd;
-    BOARD_COMMIT& m_commit;
-    bool          m_dryRun;
-    DRC_LIST*     m_itemsList;
+    EDA_UNITS               m_units;
+    BOARD*                  m_brd;
+    BOARD_COMMIT&           m_commit;
+    bool                    m_dryRun;
+    std::vector<DRC_ITEM*>* m_itemsList;
 
     bool removeItems( std::set<BOARD_ITEM*>& aItems );
 };
