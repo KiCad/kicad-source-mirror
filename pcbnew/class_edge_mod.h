@@ -80,11 +80,10 @@ public:
 
     /**
      * Flip entity relative to aCentre.
-     * The item is mirrored, and layer changed to the paired corresponding layer
-     * if it is on a paired layer
-     * This function should be called only from MODULE::Flip because there is
-     * not usual to flip an item alone, without flipping the parent footprint.
-     * (consider Mirror for a mirror transform).
+     * The item is mirrored, and layer changed to the paired corresponding layer if it is on
+     * a paired layer.
+     * This function should be called only from MODULE::Flip because it is not usual to flip
+     * an item alone, without flipping the parent footprint (consider Mirror() instead).
      */
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
@@ -104,16 +103,14 @@ public:
 
     /**
      * Set relative coordinates from draw coordinates.
-     * Call in only when the geometry ov the footprint is modified
-     * and therefore the relative coordinates have to be updated from
-     * the draw coordinates
+     * Call in only when the geometry or the footprint is modified and therefore the relative
+     * coordinates have to be updated from the draw coordinates.
      */
     void SetLocalCoord();
 
     /**
      * Set draw coordinates (absolute values ) from relative coordinates.
-     * Must be called when a relative coordinate has changed, in order
-     * to see the changes on screen
+     * Must be called when a relative coordinate has changed in order to see the changes on screen
      */
     void SetDrawCoord();
 

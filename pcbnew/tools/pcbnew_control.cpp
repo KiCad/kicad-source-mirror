@@ -620,6 +620,82 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 }
 
 
+void pasteModuleItemsToModEdit( MODULE* aClipModule, BOARD* aBoard,
+                                std::vector<BOARD_ITEM*>& aPastedItems )
+{
+    MODULE* editModule = aBoard->GetFirstModule();
+
+    aClipModule->SetParent( aBoard );
+
+    for( D_PAD* pad : aClipModule->Pads() )
+    {
+        pad->SetParent( editModule );
+        aPastedItems.push_back( pad );
+    }
+
+    aClipModule->Pads().clear();
+
+    for( BOARD_ITEM* item : aClipModule->GraphicalItems() )
+    {
+        if( item->Type() == PCB_MODULE_EDGE_T )
+        {
+            EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( item );
+
+            edge->SetParent( nullptr );
+            edge->SetLocalCoord();
+        }
+        else if( item->Type() == PCB_MODULE_TEXT_T )
+        {
+            TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
+
+            if( text->GetType() != TEXTE_MODULE::TEXT_is_DIVERS )
+                text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+
+            if( text->GetText() == "%V" )
+                text->SetText( aClipModule->GetValue() );
+            else if( text->GetText() == "%R" )
+                text->SetText( aClipModule->GetReference() );
+
+            text->SetTextAngle( aClipModule->GetOrientation() );
+
+            text->SetParent( nullptr );
+            text->SetLocalCoord();
+        }
+
+        item->SetParent( editModule );
+        aPastedItems.push_back( item );
+    }
+
+    aClipModule->GraphicalItems().clear();
+
+    if( !aClipModule->GetReference().IsEmpty() )
+    {
+        TEXTE_MODULE* text = new TEXTE_MODULE( aClipModule->Reference() );
+        text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+        text->SetTextAngle( aClipModule->GetOrientation() );
+
+        text->SetParent( nullptr );
+        text->SetLocalCoord();
+
+        text->SetParent( editModule );
+        aPastedItems.push_back( text );
+    }
+
+    if( !aClipModule->GetValue().IsEmpty() )
+    {
+        TEXTE_MODULE* text = new TEXTE_MODULE( aClipModule->Value() );
+        text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+        text->SetTextAngle( aClipModule->GetOrientation() );
+
+        text->SetParent( nullptr );
+        text->SetLocalCoord();
+
+        text->SetParent( editModule );
+        aPastedItems.push_back( text );
+    }
+}
+
+
 int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO pi;
@@ -662,26 +738,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 std::vector<BOARD_ITEM*> pastedItems;
 
                 for( MODULE* clipModule : clipBoard->Modules() )
-                {
-                    clipModule->SetParent( board() );
-
-                    for( auto pad : clipModule->Pads() )
-                    {
-                        pad->SetParent( editModule );
-                        pastedItems.push_back( pad );
-                    }
-
-                    clipModule->Pads().clear();
-
-                    for( auto item : clipModule->GraphicalItems() )
-                    {
-                        item->Move( clipModule->GetPosition() );
-                        item->SetParent( editModule );
-                        pastedItems.push_back( item );
-                    }
-
-                    clipModule->GraphicalItems().clear();
-                }
+                    pasteModuleItemsToModEdit( clipModule, board(), pastedItems );
 
                 for( BOARD_ITEM* clipDrawItem : clipBoard->Drawings() )
                 {
@@ -731,24 +788,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             if( editModules )
             {
-                MODULE* editModule = board()->GetFirstModule();
-
-                for( auto pad : clipModule->Pads() )
-                {
-                    pad->SetParent( editModule );
-                    pastedItems.push_back( pad );
-                }
-
-                clipModule->Pads().clear();
-
-                for( auto item : clipModule->GraphicalItems() )
-                {
-                    item->SetParent( editModule );
-                    pastedItems.push_back( item );
-                }
-
-                clipModule->GraphicalItems().clear();
-
+                pasteModuleItemsToModEdit( clipModule, board(), pastedItems );
                 delete clipModule;
             }
             else
