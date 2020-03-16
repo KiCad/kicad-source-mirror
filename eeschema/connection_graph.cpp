@@ -38,6 +38,7 @@
 #include <sch_sheet_path.h>
 #include <sch_text.h>
 
+#include <advanced_config.h>
 #include <connection_graph.h>
 #include <widgets/ui_common.h>
 
