@@ -208,8 +208,6 @@ static float getPinAngle( int aOrientation )
 
 static const char* getSheetPinShapeToken( PINSHEETLABEL_SHAPE aShape )
 {
-    wxString retv;
-
     switch( aShape )
     {
     case PINSHEETLABEL_SHAPE::PS_INPUT:       return SCHEMATIC_LEXER::TokenName( T_input );
@@ -219,8 +217,6 @@ static const char* getSheetPinShapeToken( PINSHEETLABEL_SHAPE aShape )
     case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED: return SCHEMATIC_LEXER::TokenName( T_passive );
     default:         wxFAIL;                  return SCHEMATIC_LEXER::TokenName( T_passive );
     }
-
-    return retv;
 }
 
 
