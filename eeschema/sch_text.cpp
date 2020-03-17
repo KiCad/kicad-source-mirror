@@ -51,12 +51,6 @@
 
 extern void IncrementLabelMember( wxString& name, int aIncrement );
 
-// Only for tests: set DRAW_BBOX to 1 to draw the bounding box of labels
-#define DRAW_BBOX 0
-
-// Margin in internal units (mils) between labels and wires
-#define TXT_MARGIN 4
-
 /* Coding polygons for global symbol graphic shapes.
  *  the first parml is the number of corners
  *  others are the corners coordinates in reduced units
@@ -140,7 +134,8 @@ wxPoint SCH_TEXT::GetSchematicTextOffset() const
     wxPoint text_offset;
 
     // add an offset to x (or y) position to aid readability of text on a wire or line
-    int thick_offset = Mils2iu( TXT_MARGIN ) + ( GetPenSize() + GetDefaultLineThickness() ) / 2;
+    int thick_offset = KiROUND( GetTextOffsetRatio() * GetTextSize().y );
+    thick_offset += ( GetPenSize() + GetDefaultLineThickness() ) / 2;
 
     switch( GetLabelSpinStyle() )
     {
@@ -771,7 +766,8 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
 
     case PINSHEETLABEL_SHAPE::PS_OUTPUT:
     case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED:
-        offset += TXT_MARGIN;
+        offset += KiROUND( GetTextOffsetRatio() * GetTextSize().y );
+        ;
         break;
 
     default:
@@ -1184,23 +1180,24 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
-    int     width = std::max( GetThickness(), GetDefaultLineThickness() );
-    int     ii = GetTextWidth() + TXT_MARGIN + width;
+    int     thickness = std::max( GetThickness(), GetDefaultLineThickness() );
+    int     offset = KiROUND( GetTextOffsetRatio() * GetTextSize().y );
+    int     total_offset = GetTextWidth() + offset + thickness;
 
     switch( GetLabelSpinStyle() )
     {
     default:
     case LABEL_SPIN_STYLE::LEFT:
-        text_offset.x = -ii;
+        text_offset.x = -total_offset;
         break; // Orientation horiz normale
     case LABEL_SPIN_STYLE::UP:
-        text_offset.y = -ii;
+        text_offset.y = -total_offset;
         break; // Orientation vert UP
     case LABEL_SPIN_STYLE::RIGHT:
-        text_offset.x = ii;
+        text_offset.x = total_offset;
         break; // Orientation horiz inverse
     case LABEL_SPIN_STYLE::BOTTOM:
-        text_offset.y = ii;
+        text_offset.y = total_offset;
         break; // Orientation vert BOTTOM
     }
 

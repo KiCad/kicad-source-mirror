@@ -59,6 +59,19 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	m_textSizeUnits->Wrap( -1 );
 	fgSizer2->Add( m_textSizeUnits, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_textOffsetRatioLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Text offset ratio:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOffsetRatioLabel->Wrap( -1 );
+	m_textOffsetRatioLabel->SetToolTip( _("Percentage of the text size to offset text above or below wire or bus") );
+
+	fgSizer2->Add( m_textOffsetRatioLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_textOffsetRatioCtrl = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_textOffsetRatioCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+
+	m_offsetRatioUnits = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_offsetRatioUnits->Wrap( -1 );
+	fgSizer2->Add( m_offsetRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+
 
 	sbSizer4->Add( fgSizer2, 1, wxEXPAND|wxBOTTOM, 5 );
 
@@ -78,7 +91,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Connections") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer32;
-	fgSizer32 = new wxFlexGridSizer( 0, 3, 3, 0 );
+	fgSizer32 = new wxFlexGridSizer( 0, 3, 5, 0 );
 	fgSizer32->AddGrowableCol( 1 );
 	fgSizer32->SetFlexibleDirection( wxBOTH );
 	fgSizer32->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );

@@ -68,6 +68,8 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_wireWidth.SetValue( GetDefaultWireThickness() );
     m_junctionSize.SetValue( SCH_JUNCTION::g_SymbolSize );
 
+    m_textOffsetRatioCtrl->SetValue( wxString::Format( "%f", GetTextOffsetRatio() * 100.0 ) );
+
     int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
     m_checkSuperSub->SetValue( GetTextMarkupFlags() & superSubFlags );
 
@@ -103,6 +105,11 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     SetDefaultBusThickness( m_busWidth.GetValue() );
     SetDefaultWireThickness( m_wireWidth.GetValue() );
     SCH_JUNCTION::g_SymbolSize = m_junctionSize.GetValue();
+
+    double dtmp = 0.0;
+    wxString msg = m_textOffsetRatioCtrl->GetValue();
+    msg.ToDouble( &dtmp );
+    SetTextOffsetRatio( dtmp / 100.0 );
 
     int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
 

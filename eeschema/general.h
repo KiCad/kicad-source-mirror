@@ -48,6 +48,7 @@ class ERC_SETTINGS;
 #define DEFAULT_REPEAT_LABEL_INC 1      ///< the default value (overwritten by the eeschema config)
 #define DEFAULT_REPEAT_OFFSET_PIN 100   ///< the default value (overwritten by the eeschema config)
                                         ///< when repeating a pin
+#define TXT_MARGIN 4
 
 ///< The thickness to draw busses that do not have a specific width
 ///< (can be changed in preference menu)
@@ -112,6 +113,12 @@ void SetDefaultLineThickness( int aThickness );
  */
 int GetDefaultTextSize();
 void SetDefaultTextSize( int aSize );
+
+/**
+ * Amount to offset text above/below wires & busses.  Expressed as a ratio of the text size.
+ */
+double GetTextOffsetRatio();
+void SetTextOffsetRatio( double aOffsetRatio );
 
 /**
  * Default line thickness used to draw/plot busses.

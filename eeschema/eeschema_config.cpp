@@ -58,6 +58,7 @@ static int s_defaultBusThickness = Mils2iu( DEFAULTBUSTHICKNESS );
 static int s_defaultWireThickness  = Mils2iu( DEFAULTDRAWLINETHICKNESS );
 static int s_defaultTextSize = Mils2iu( DEFAULT_SIZE_TEXT );
 static int s_drawDefaultLineThickness = -1;
+static double s_textOffsetRatio = 0.08;
 static bool s_selectTextAsBox = false;
 static bool s_selectDrawChildren = true;
 static bool s_selectFillShapes = false;
@@ -274,6 +275,18 @@ void SetDefaultLineThickness( int aThickness )
 }
 
 
+double GetTextOffsetRatio()
+{
+    return s_textOffsetRatio;
+}
+
+
+void SetTextOffsetRatio( double aOffsetRatio )
+{
+    s_textOffsetRatio = aOffsetRatio;
+}
+
+
 bool GetSelectionTextAsBox()
 {
     return s_selectTextAsBox;
@@ -365,6 +378,10 @@ void SCH_EDIT_FRAME::AddFormattingParameters( std::vector<PARAM_CFG*>& params )
                                          &s_defaultTextSize,
                                          Mils2iu( DEFAULT_SIZE_TEXT ),
                                          5, 1000, nullptr, 1 / IU_PER_MILS ) );
+    params.push_back( new PARAM_CFG_DOUBLE( wxT( "TextOffsetRatio" ),
+                                         &s_textOffsetRatio,
+                                         (double) TXT_MARGIN / DEFAULT_SIZE_TEXT,
+                                         -200.0, 200.0 ) );
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "LineThickness" ),
                                          &s_drawDefaultLineThickness,
                                          Mils2iu( appSettings->m_Drawing.default_line_thickness ),
