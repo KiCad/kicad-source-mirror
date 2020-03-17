@@ -19,6 +19,7 @@ eeschema/dialogs/dialog_bom_cfg_keywords.cpp
 eeschema/dialogs/dialog_bom_cfg_lexer.h
 eeschema/template_fieldnames_keywords.*
 eeschema/template_fieldnames_lexer.h
+eeschema/schematic_keywords.*
 pcbnew/pcb_plot_params_keywords.cpp
 pcbnew/pcb_plot_params_lexer.h
 Makefile
