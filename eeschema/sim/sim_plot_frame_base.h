@@ -84,15 +84,15 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxBoxSizer* m_sideSizer;
 		wxSplitterWindow* m_splitterSignals;
 		wxPanel* m_panelSignals;
-		wxStaticText* m_staticText2;
+		wxStaticText* m_staticTextSignals;
 		wxListView* m_signals;
 		wxPanel* m_panelCursorsAndTune;
 		wxSplitterWindow* m_splitterTuneValues;
 		wxPanel* m_panelCursors;
-		wxStaticText* m_staticText3;
+		wxStaticText* m_staticTextCursors;
 		wxListCtrl* m_cursors;
 		wxPanel* m_tunePanel;
-		wxStaticText* m_staticText4;
+		wxStaticText* m_staticTextTune;
 		wxBoxSizer* m_tuneSizer;
 
 		// Virtual event handlers, overide them in your derived class
@@ -121,7 +121,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 
 	public:
 
-		SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Simulator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL, const wxString& name = wxT("SIM_PLOT_FRAME") );
+		SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Simulator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 564,531 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL, const wxString& name = wxT("SIM_PLOT_FRAME") );
 
 		~SIM_PLOT_FRAME_BASE();
 

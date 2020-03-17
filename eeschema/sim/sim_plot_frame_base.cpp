@@ -213,12 +213,14 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_splitterSignals->SetMinimumPaneSize( 20 );
 
 	m_panelSignals = new wxPanel( m_splitterSignals, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panelSignals->SetMinSize( wxSize( -1,100 ) );
+
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText2 = new wxStaticText( m_panelSignals, wxID_ANY, _("Signals"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	bSizer10->Add( m_staticText2, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_staticTextSignals = new wxStaticText( m_panelSignals, wxID_ANY, _("Signals"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSignals->Wrap( -1 );
+	bSizer10->Add( m_staticTextSignals, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_signals = new wxListView( m_panelSignals, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL );
 	bSizer10->Add( m_signals, 1, wxEXPAND, 5 );
@@ -239,12 +241,14 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_splitterTuneValues->SetMinimumPaneSize( 20 );
 
 	m_panelCursors = new wxPanel( m_splitterTuneValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panelCursors->SetMinSize( wxSize( -1,100 ) );
+
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText3 = new wxStaticText( m_panelCursors, wxID_ANY, _("Cursors"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText3->Wrap( -1 );
-	bSizer12->Add( m_staticText3, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_staticTextCursors = new wxStaticText( m_panelCursors, wxID_ANY, _("Cursors"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCursors->Wrap( -1 );
+	bSizer12->Add( m_staticTextCursors, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_cursors = new wxListCtrl( m_panelCursors, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL );
 	bSizer12->Add( m_cursors, 1, wxEXPAND, 5 );
@@ -254,12 +258,14 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_panelCursors->Layout();
 	bSizer12->Fit( m_panelCursors );
 	m_tunePanel = new wxPanel( m_splitterTuneValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_tunePanel->SetMinSize( wxSize( -1,100 ) );
+
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText4 = new wxStaticText( m_tunePanel, wxID_ANY, _("Tune"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	bSizer13->Add( m_staticText4, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_staticTextTune = new wxStaticText( m_tunePanel, wxID_ANY, _("Tune"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTune->Wrap( -1 );
+	bSizer13->Add( m_staticTextTune, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_tuneSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -290,7 +296,6 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 
 	this->SetSizer( m_sizerMain );
 	this->Layout();
-	m_sizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 
