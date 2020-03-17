@@ -250,7 +250,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent,
     // Test for reference designator field change.
     if( aPcbComponent->GetReference() != aNewComponent->GetReference() )
     {
-        msg.Printf( _( "Change %s reference to %s." ),
+        msg.Printf( _( "Change %s reference designator to %s." ),
                     aPcbComponent->GetReference(),
                     aNewComponent->GetReference() );
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );

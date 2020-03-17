@@ -14,7 +14,6 @@
         <property name="file">dialog_update_from_pcb_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_update_from_pcb_base</property>
@@ -26,7 +25,6 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
-        <property name="use_array_enum">0</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -85,24 +83,22 @@
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND</property>
                                     <property name="proportion">1</property>
-                                    <object class="wxGridBagSizer" expanded="1">
-                                        <property name="empty_cell_size"></property>
-                                        <property name="flexible_direction">wxBOTH</property>
+                                    <object class="wxFlexGridSizer" expanded="1">
+                                        <property name="cols">2</property>
+                                        <property name="flexible_direction">wxVERTICAL</property>
                                         <property name="growablecols"></property>
                                         <property name="growablerows"></property>
                                         <property name="hgap">0</property>
                                         <property name="minimum_size"></property>
-                                        <property name="name">gbSizerOpts</property>
-                                        <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_ALL</property>
+                                        <property name="name">fgSizer1</property>
+                                        <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                         <property name="permission">none</property>
+                                        <property name="rows">0</property>
                                         <property name="vgap">0</property>
-                                        <object class="gbsizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="colspan">1</property>
-                                            <property name="column">0</property>
-                                            <property name="flag">wxALL</property>
-                                            <property name="row">0</property>
-                                            <property name="rowspan">1</property>
+                                            <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                            <property name="proportion">0</property>
                                             <object class="wxCheckBox" expanded="0">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
@@ -132,7 +128,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Update references</property>
+                                                <property name="label">Update reference designators</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -164,14 +160,11 @@
                                                 <event name="OnCheckBox">OnOptionChanged</event>
                                             </object>
                                         </object>
-                                        <object class="gbsizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="colspan">1</property>
-                                            <property name="column">0</property>
-                                            <property name="flag">wxALL</property>
-                                            <property name="row">1</property>
-                                            <property name="rowspan">1</property>
-                                            <object class="wxCheckBox" expanded="0">
+                                            <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                            <property name="proportion">0</property>
+                                            <object class="wxCheckBox" expanded="1">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
@@ -200,7 +193,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Update footprints</property>
+                                                <property name="label">Ignore errors in shared schematic sheets</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -208,7 +201,7 @@
                                                 <property name="minimize_button">0</property>
                                                 <property name="minimum_size"></property>
                                                 <property name="moveable">1</property>
-                                                <property name="name">m_cbUpdateFootprints</property>
+                                                <property name="name">m_cbIgnoreOtherProjects</property>
                                                 <property name="pane_border">1</property>
                                                 <property name="pane_position"></property>
                                                 <property name="pane_size"></property>
@@ -219,9 +212,9 @@
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
-                                                <property name="subclass">; forward_declare</property>
+                                                <property name="subclass">; ; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Update footprint associations of symbols whose footprints have been replaced with different footprints in PCB.</property>
+                                                <property name="tooltip">Shared schematic sheets used in complex hierarchies have constraints. They are not always compatible with back annotation when updating footprints and values . &#x0A;If this option is selected, errors generated by sharing will be disabled.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -232,13 +225,10 @@
                                                 <event name="OnCheckBox">OnOptionChanged</event>
                                             </object>
                                         </object>
-                                        <object class="gbsizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="colspan">1</property>
-                                            <property name="column">0</property>
-                                            <property name="flag">wxALL</property>
-                                            <property name="row">2</property>
-                                            <property name="rowspan">1</property>
+                                            <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                            <property name="proportion">0</property>
                                             <object class="wxCheckBox" expanded="0">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
@@ -300,14 +290,21 @@
                                                 <event name="OnCheckBox">OnOptionChanged</event>
                                             </object>
                                         </object>
-                                        <object class="gbsizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="colspan">1</property>
-                                            <property name="column">1</property>
-                                            <property name="flag">wxALL</property>
-                                            <property name="row">0</property>
-                                            <property name="rowspan">1</property>
-                                            <object class="wxCheckBox" expanded="1">
+                                            <property name="flag">wxEXPAND</property>
+                                            <property name="proportion">1</property>
+                                            <object class="spacer" expanded="1">
+                                                <property name="height">0</property>
+                                                <property name="permission">protected</property>
+                                                <property name="width">0</property>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem" expanded="1">
+                                            <property name="border">5</property>
+                                            <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                            <property name="proportion">0</property>
+                                            <object class="wxCheckBox" expanded="0">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
@@ -336,7 +333,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Ignore errors in shared schematic sheets</property>
+                                                <property name="label">Update footprint assingments</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -344,7 +341,7 @@
                                                 <property name="minimize_button">0</property>
                                                 <property name="minimum_size"></property>
                                                 <property name="moveable">1</property>
-                                                <property name="name">m_cbIgnoreOtherProjects</property>
+                                                <property name="name">m_cbUpdateFootprints</property>
                                                 <property name="pane_border">1</property>
                                                 <property name="pane_position"></property>
                                                 <property name="pane_size"></property>
@@ -355,9 +352,9 @@
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
-                                                <property name="subclass">; ; forward_declare</property>
+                                                <property name="subclass">; forward_declare</property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Shared schematic sheets used in complex hierarchies have constraints. They are not always compatible with back annotation when updating footprints and values . &#x0A;If this option is selected, errors generated by sharing will be disabled.</property>
+                                                <property name="tooltip">Update footprint associations of symbols whose footprints have been replaced with different footprints in PCB.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>

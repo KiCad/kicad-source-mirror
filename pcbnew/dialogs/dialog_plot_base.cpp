@@ -83,12 +83,12 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotModuleValueOpt->SetValue(true);
 	gbSizer1->Add( m_plotModuleValueOpt, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_plotModuleRefOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_PRINT_REF, _("Plot footprint references"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotModuleRefOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_PRINT_REF, _("Plot reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotModuleRefOpt->SetValue(true);
 	gbSizer1->Add( m_plotModuleRefOpt, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_plotInvisibleText = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Force plotting of invisible values / refs"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotInvisibleText->SetToolTip( _("Force plot invisible values and/or references") );
+	m_plotInvisibleText->SetToolTip( _("Force plot invisible footprint values and reference designators") );
 
 	gbSizer1->Add( m_plotInvisibleText, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 

@@ -46,6 +46,10 @@ public:
         m_sdbSizerOK->SetDefault();
         m_choiceFpList->Append( aFpList );
 
+        wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+        infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+        m_multipleHint->SetFont( infoFont );
+
         // Dialog should not shrink beyond it's minimal size.
         GetSizer()->SetSizeHints( this );
     }

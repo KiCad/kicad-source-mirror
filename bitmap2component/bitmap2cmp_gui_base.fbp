@@ -2039,13 +2039,13 @@
                                     <property name="pin_button">1</property>
                                     <property name="pos"></property>
                                     <property name="resize">Resizable</property>
-                                    <property name="selection">0</property>
+                                    <property name="selection">1</property>
                                     <property name="show">1</property>
                                     <property name="size"></property>
                                     <property name="style">wxRA_SPECIFY_COLS</property>
                                     <property name="subclass"></property>
                                     <property name="toolbar_pane">0</property>
-                                    <property name="tooltip">Choose the board layer to place the outline.&#x0A;The 2 invisible fields reference and value are always placed on the silk screen layer.</property>
+                                    <property name="tooltip">Choose the board layer to place the outline.&#x0A;The reference designator and value are always placed on the silk screen layer (but will be marked invisible).</property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
                                     <property name="validator_type">wxDefaultValidator</property>

@@ -24,8 +24,8 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
 
-	m_cbRelinkFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Re-link footprints to schematic symbols based on their Reference fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbRelinkFootprints->SetToolTip( _("Normally footprints are linked to their symbols via their Unique IDs.  Select this option only if you want to reset the footprint linkages based on their references.") );
+	m_cbRelinkFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Re-link footprints to schematic symbols based on their reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRelinkFootprints->SetToolTip( _("Normally footprints are linked to their symbols via their Unique IDs.  Select this option only if you want to reset the footprint linkages based on their reference designators.") );
 
 	sbSizer1->Add( m_cbRelinkFootprints, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -35,6 +35,7 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 	sbSizer1->Add( m_cbDeleteExtraFootprints, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbUpdateFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Replace footprints with those specified in the schematic"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUpdateFootprints->SetValue(true);
 	m_cbUpdateFootprints->SetToolTip( _("Normally footprints on the board should be changed to match footprint assignment changes made in the schematic. Uncheck this only if you don't want to change existing footprints on the board.") );
 
 	sbSizer1->Add( m_cbUpdateFootprints, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );

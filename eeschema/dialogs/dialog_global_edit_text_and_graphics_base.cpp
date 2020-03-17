@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,10 +22,10 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	wxStaticBoxSizer* sbScope;
 	sbScope = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scope") ), wxVERTICAL );
 
-	m_references = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Symbol references"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_references = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbScope->Add( m_references, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
-	m_values = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Symbol values"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_values = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Values"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbScope->Add( m_values, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 	m_otherFields = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Other symbol fields"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -85,7 +85,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer2->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 
-	m_referenceFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by parent symbol reference:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_referenceFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by parent reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_referenceFilterOpt, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_referenceFilter = new wxTextCtrl( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );

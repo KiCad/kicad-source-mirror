@@ -262,8 +262,8 @@
                                                     <property name="pos"></property>
                                                     <property name="resize">Resizable</property>
                                                     <property name="row_label_horiz_alignment">wxALIGN_LEFT</property>
-                                                    <property name="row_label_size">100</property>
-                                                    <property name="row_label_values">&quot;Reference&quot; &quot;Value&quot;</property>
+                                                    <property name="row_label_size">160</property>
+                                                    <property name="row_label_values">&quot;Reference designator&quot; &quot;Value&quot;</property>
                                                     <property name="row_label_vert_alignment">wxALIGN_CENTER</property>
                                                     <property name="row_sizes"></property>
                                                     <property name="rows">2</property>

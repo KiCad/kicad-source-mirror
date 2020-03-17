@@ -164,7 +164,7 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
         // Test if the reference string is valid:
         if( !SCH_COMPONENT::IsReferenceStringValid( m_text ) )
         {
-            DisplayError( this, _( "Illegal reference field value!" ) );
+            DisplayError( this, _( "Illegal reference designator value!" ) );
             return false;
         }
     }

@@ -86,7 +86,7 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
     switch( m_fieldId )
     {
     case REFERENCE:
-        fieldCharError = _( "The reference field cannot contain %s character(s)." );
+        fieldCharError = _( "The reference designator cannot contain %s character(s)." );
         break;
 
     case VALUE:

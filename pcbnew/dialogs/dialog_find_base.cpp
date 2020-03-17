@@ -59,13 +59,13 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* sizerInclude;
 	sizerInclude = new wxBoxSizer( wxVERTICAL );
 
+	m_includeReferences = new wxCheckBox( this, wxID_ANY, wxT("Search footprint reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeReferences->SetValue(true);
+	sizerInclude->Add( m_includeReferences, 0, wxALL, 5 );
+
 	m_includeValues = new wxCheckBox( this, wxID_ANY, wxT("Search footprint values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeValues->SetValue(true);
 	sizerInclude->Add( m_includeValues, 0, wxALL, 5 );
-
-	m_includeReferences = new wxCheckBox( this, wxID_ANY, wxT("Search footprint references"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_includeReferences->SetValue(true);
-	sizerInclude->Add( m_includeReferences, 0, wxALL, 5 );
 
 	m_includeTexts = new wxCheckBox( this, wxID_ANY, wxT("Search other text items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeTexts->SetValue(true);

@@ -40,7 +40,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxString m_matchByTimestampChoices[] = { _("Link footprints using symbol UUIDs"), _("Link footprints using symbol references") };
+	wxString m_matchByTimestampChoices[] = { _("Link footprints using component tstamps (unique ids)"), _("Link footprints using reference designators") };
 	int m_matchByTimestampNChoices = sizeof( m_matchByTimestampChoices ) / sizeof( wxString );
 	m_matchByTimestamp = new wxRadioBox( this, wxID_ANY, _("Link Method"), wxDefaultPosition, wxDefaultSize, m_matchByTimestampNChoices, m_matchByTimestampChoices, 1, wxRA_SPECIFY_COLS );
 	m_matchByTimestamp->SetSelection( 0 );
@@ -54,7 +54,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	m_cbUpdateFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Replace footprints with those specified in netlist"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_cbUpdateFootprints, 0, wxBOTTOM, 5 );
 
-	m_cbDeleteExtraFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete footprints with no symbols in netlist"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbDeleteExtraFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete footprints with no components in netlist"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_cbDeleteExtraFootprints, 0, wxBOTTOM, 5 );
 
 	m_cbDeleteShortingTracks = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete tracks shorting multiple nets"), wxDefaultPosition, wxDefaultSize, 0 );

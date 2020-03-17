@@ -260,8 +260,8 @@ void KICAD_NETLIST_PARSER::parseNet()
             if( component == NULL )
             {
                 wxString msg;
-                msg.Printf( _( "Cannot find component with reference \"%s\" in netlist." ),
-                               GetChars( reference ) );
+                msg.Printf( _( "Cannot find component with reference designator \"%s\" in netlist." ),
+                               reference );
                 THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), m_lineReader->Line(),
                                    m_lineReader->LineNumber(), m_lineReader->Length() );
             }

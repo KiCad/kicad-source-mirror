@@ -43,8 +43,8 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		wxCheckBox* m_matchWords;
 		wxCheckBox* m_wildcards;
 		wxCheckBox* m_wrap;
-		wxCheckBox* m_includeValues;
 		wxCheckBox* m_includeReferences;
+		wxCheckBox* m_includeValues;
 		wxCheckBox* m_includeTexts;
 		wxCheckBox* m_includeMarkers;
 		wxCheckBox* m_includeVias;

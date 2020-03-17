@@ -376,7 +376,7 @@ TOOL_ACTION EE_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
 TOOL_ACTION EE_ACTIONS::editReference( "eeschema.InteractiveEdit.editReference",
         AS_GLOBAL,
         'U', LEGACY_HK_NAME( "Edit Symbol Reference" ),
-        _( "Edit Reference..." ), _( "Displays reference field dialog" ),
+        _( "Edit Reference Designator..." ), _( "Displays reference designator dialog" ),
         edit_comp_ref_xpm );
 
 TOOL_ACTION EE_ACTIONS::editValue( "eeschema.InteractiveEdit.editValue",

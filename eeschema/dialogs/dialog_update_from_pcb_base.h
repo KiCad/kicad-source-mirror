@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,7 +19,6 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/gbsizer.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/panel.h>
@@ -37,9 +36,9 @@ class DIALOG_UPDATE_FROM_PCB_BASE : public DIALOG_SHIM
 
 	protected:
 		wxCheckBox* m_cbUpdateReferences;
-		wxCheckBox* m_cbUpdateFootprints;
-		wxCheckBox* m_cbUpdateValues;
 		wxCheckBox* m_cbIgnoreOtherProjects;
+		wxCheckBox* m_cbUpdateValues;
+		wxCheckBox* m_cbUpdateFootprints;
 		WX_HTML_REPORT_PANEL* m_messagePanel;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

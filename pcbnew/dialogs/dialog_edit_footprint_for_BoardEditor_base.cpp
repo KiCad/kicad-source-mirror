@@ -65,8 +65,8 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 
 	// Rows
 	m_itemsGrid->EnableDragRowSize( false );
-	m_itemsGrid->SetRowLabelSize( 100 );
-	m_itemsGrid->SetRowLabelValue( 0, _("Reference") );
+	m_itemsGrid->SetRowLabelSize( 160 );
+	m_itemsGrid->SetRowLabelValue( 0, _("Reference designator") );
 	m_itemsGrid->SetRowLabelValue( 1, _("Value") );
 	m_itemsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 

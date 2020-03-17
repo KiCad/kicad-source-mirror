@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,7 +29,7 @@ PANEL_MODEDIT_DEFAULTS_BASE::PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	defaultValuesSizer->SetFlexibleDirection( wxBOTH );
 	defaultValuesSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextRef = new wxStaticText( this, wxID_ANY, _("&Reference:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRef = new wxStaticText( this, wxID_ANY, _("&Reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRef->Wrap( -1 );
 	defaultValuesSizer->Add( m_staticTextRef, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
@@ -78,7 +78,7 @@ PANEL_MODEDIT_DEFAULTS_BASE::PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWi
 
 	bSizerMargins->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
-	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Leave reference and/or value blank to use footprint name."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("A blank reference designator or value will use the footprint name."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
 	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 

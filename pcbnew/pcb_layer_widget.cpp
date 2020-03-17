@@ -25,22 +25,15 @@
 
 
 #include <class_board.h>
-#include <class_text_mod.h>
-#include <collectors.h>
-#include <confirm.h>
 #include <fctsys.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <layer_widget.h>
 #include <macros.h>
 #include <menus_helpers.h>
-#include <painter.h>
 #include <pcb_display_options.h>
-#include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_widget.h>
 #include <pcb_painter.h>
-#include <pcb_view.h>
-#include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
@@ -60,7 +53,7 @@ const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
     RR( _( "Footprints Front" ),     LAYER_MOD_FR,             NOCOLOR,  _( "Show footprints that are on board's front") ),
     RR( _( "Footprints Back" ),      LAYER_MOD_BK,             NOCOLOR,  _( "Show footprints that are on board's back") ),
     RR( _( "Values" ),               LAYER_MOD_VALUES,         NOCOLOR,  _( "Show footprint values") ),
-    RR( _( "References" ),           LAYER_MOD_REFERENCES,     NOCOLOR,  _( "Show footprint references") ),
+    RR( _( "Reference Designators" ),LAYER_MOD_REFERENCES,     NOCOLOR,  _( "Show footprint reference designators") ),
     RR( _( "Footprint Text Front" ), LAYER_MOD_TEXT_FR,        NOCOLOR,  _( "Show footprint text on board's front" ) ),
     RR( _( "Footprint Text Back" ),  LAYER_MOD_TEXT_BK,        NOCOLOR,  _( "Show footprint text on board's back" ) ),
     RR( _( "Hidden Text" ),          LAYER_MOD_TEXT_INVISIBLE, WHITE,    _( "Show footprint text marked as invisible" ) ),

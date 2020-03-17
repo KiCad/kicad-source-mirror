@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -182,8 +182,8 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	wxString m_rbPCBLayerChoices[] = { _("Front silk screen"), _("Front solder mask"), _("User layer Eco1"), _("User layer Eco2") };
 	int m_rbPCBLayerNChoices = sizeof( m_rbPCBLayerChoices ) / sizeof( wxString );
 	m_rbPCBLayer = new wxRadioBox( m_panelRight, wxID_ANY, _("Board Layer for Outline:"), wxDefaultPosition, wxDefaultSize, m_rbPCBLayerNChoices, m_rbPCBLayerChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbPCBLayer->SetSelection( 0 );
-	m_rbPCBLayer->SetToolTip( _("Choose the board layer to place the outline.\nThe 2 invisible fields reference and value are always placed on the silk screen layer.") );
+	m_rbPCBLayer->SetSelection( 1 );
+	m_rbPCBLayer->SetToolTip( _("Choose the board layer to place the outline.\nThe reference designator and value are always placed on the silk screen layer (but will be marked invisible).") );
 
 	brightSizer->Add( m_rbPCBLayer, 0, wxALL|wxEXPAND, 5 );
 

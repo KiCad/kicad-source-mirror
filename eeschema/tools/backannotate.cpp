@@ -356,7 +356,7 @@ void BACK_ANNOTATE::applyChangelist()
         if( m_settings.processReferences && ref.GetRef() != module.ref )
         {
             ++m_changesCount;
-            msg.Printf( _( "Change \"%s\" reference to \"%s\"." ), ref.GetFullRef(), module.ref );
+            msg.Printf( _( "Change \"%s\" reference designator to \"%s\"." ), ref.GetFullRef(), module.ref );
             if( !m_settings.dryRun )
                 ref.GetComp()->SetRef( &ref.GetSheetPath(), module.ref );
             m_settings.reporter.ReportHead( msg, RPT_SEVERITY_ACTION );

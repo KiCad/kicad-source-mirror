@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -64,12 +64,12 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_SingleLineSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_TextLabel = new wxStaticText( this, wxID_ANY, _("Reference:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextLabel = new wxStaticText( this, wxID_ANY, _("Reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextLabel->Wrap( -1 );
 	m_SingleLineSizer->Add( m_TextLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_SingleLineText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	m_SingleLineSizer->Add( m_SingleLineText, 1, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_SingleLineSizer->Add( m_SingleLineText, 1, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bMainSizer->Add( m_SingleLineSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );

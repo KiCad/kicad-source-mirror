@@ -238,7 +238,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Reference:</property>
+                                <property name="label">Reference designator:</property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -269,7 +269,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxTOP|wxBOTTOM|wxRIGHT</property>
+                            <property name="flag">wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">1</property>
                             <object class="wxTextCtrl" expanded="1">
                                 <property name="BottomDockable">1</property>

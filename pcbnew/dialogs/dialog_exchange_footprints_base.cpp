@@ -27,7 +27,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_matchSelected = new wxRadioButton( this, wxID_ANY, _("%s selected footprint"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSelected, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
-	m_matchSpecifiedRef = new wxRadioButton( this, wxID_ANY, _("%s footprints matching reference:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchSpecifiedRef = new wxRadioButton( this, wxID_ANY, _("%s footprints matching reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSpecifiedRef, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 
 	m_specifiedRef = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
@@ -41,7 +41,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_specifiedValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_upperSizer->Add( m_specifiedValue, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_matchSpecifiedID = new wxRadioButton( this, wxID_ANY, _("%s footprints with identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchSpecifiedID = new wxRadioButton( this, wxID_ANY, _("%s footprints with library id:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_upperSizer->Add( m_matchSpecifiedID, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
 
 
@@ -72,7 +72,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_changeSizer->Add( staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	wxStaticText* newIdLabel;
-	newIdLabel = new wxStaticText( this, wxID_ANY, _("New footprint identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
+	newIdLabel = new wxStaticText( this, wxID_ANY, _("New footprint library id:"), wxDefaultPosition, wxDefaultSize, 0 );
 	newIdLabel->Wrap( -1 );
 	m_changeSizer->Add( newIdLabel, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
 
