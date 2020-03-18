@@ -51,6 +51,9 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& 
    	    aDummyItem.SetData( errorCode, wxEmptyString );
    	    wxString msg = aDummyItem.GetErrorText();
 
+        // When msg is empty, for some reason, the current errorCode is not supported
+        // by the RC_ITEM aDummyItem.
+        // Skip this errorCode.
    	    if( !msg.IsEmpty() )
         {
             wxStaticText* errorLabel = new wxStaticText( scrollWin, wxID_ANY, msg + wxT( ":" ) );
@@ -93,6 +96,9 @@ void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, int>& aSettings )
 {
     for( int errorCode = m_firstErrorCode; errorCode <= m_lastErrorCode; ++errorCode )
     {
+        if(! m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
+            continue;
+
         switch( aSettings[ errorCode ] )
         {
         case RPT_SEVERITY_ERROR:   m_buttonMap[ errorCode ][0]->SetValue( true ); break;
@@ -108,6 +114,9 @@ bool PANEL_SETUP_SEVERITIES::TransferDataToWindow()
 {
     for( int errorCode = m_firstErrorCode; errorCode <= m_lastErrorCode; ++errorCode )
     {
+        if(! m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
+            continue;
+
         switch( m_severities[ errorCode ] )
         {
         case RPT_SEVERITY_ERROR:   m_buttonMap[ errorCode ][0]->SetValue( true ); break;
@@ -125,6 +134,9 @@ bool PANEL_SETUP_SEVERITIES::TransferDataFromWindow()
 {
     for( auto const& entry : m_buttonMap )
     {
+        if( !entry.second[0] )  // this entry does not actually exist
+            continue;
+
         int severity = RPT_SEVERITY_UNDEFINED;
 
         if( entry.second[0]->GetValue() )
