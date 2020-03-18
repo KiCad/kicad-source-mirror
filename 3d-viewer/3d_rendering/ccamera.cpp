@@ -434,16 +434,6 @@ void CCAMERA::SetCurMousePosition( const wxPoint &aNewMousePosition )
 }
 
 
-void CCAMERA::SetProjection( PROJECTION_TYPE aProjectionType )
-{
-    if( m_projectionType != aProjectionType )
-    {
-        m_projectionType = aProjectionType;
-        rebuildProjection();
-    }
-}
-
-
 void CCAMERA::ToggleProjection()
 {
     if( m_projectionType == PROJECTION_TYPE::ORTHO )

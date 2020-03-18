@@ -822,7 +822,8 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
 
         // Store the cursor position, so the tools could execute actions
         // using the point where the user has invoked a context menu
-        m_menuCursor = m_viewControls->GetCursorPosition();
+        if( m_viewControls )
+            m_menuCursor = m_viewControls->GetCursorPosition();
 
         // Save all tools cursor settings, as they will be overridden
         for( auto idState : m_toolIdIndex )
@@ -836,7 +837,8 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
                 m_cursorSettings[idState.first] = NULLOPT;
         }
 
-        m_viewControls->ForceCursorPosition( true, m_menuCursor );
+        if( m_viewControls )
+            m_viewControls->ForceCursorPosition( true, m_menuCursor );
 
         // Display a copy of menu
         std::unique_ptr<ACTION_MENU> menu( m->Clone() );
@@ -848,8 +850,11 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
             frame->PopupMenu( menu.get() );
 
         // Warp the cursor if a menu item was selected
-        if( menu->GetSelected() >= 0 && m_warpMouseAfterContextMenu )
-            m_viewControls->WarpCursor( m_menuCursor, true, false );
+        if( menu->GetSelected() >= 0 )
+        {
+            if( m_viewControls && m_warpMouseAfterContextMenu )
+                m_viewControls->WarpCursor( m_menuCursor, true, false );
+        }
         // Otherwise notify the tool of a cancelled menu
         else
         {

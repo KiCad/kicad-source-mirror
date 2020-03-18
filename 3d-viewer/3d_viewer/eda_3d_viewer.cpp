@@ -22,19 +22,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/colordlg.h>
+#include <wx/colour.h>
+#include <wx/string.h>
+#include <wx/wupdlock.h>
+#include <wx/clipbrd.h>
 #include "eda_3d_viewer.h"
-#include "3d_viewer_settings.h"
-
-#include "../3d_viewer_id.h"
+#include <3d_viewer_settings.h>
+#include <3d_viewer_id.h>
 #include "../common_ogl/cogl_att_list.h"
-#include <3d_actions.h>
+#include <3d_viewer/tools/3d_actions.h>
+#include <3d_viewer/tools/3d_viewer_control.h>
 #include <bitmaps.h>
 #include <board_stackup_manager/class_board_stackup.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
 #include <class_board.h>
 #include <dpi_scaling.h>
 #include <gestfich.h>
-#include <hotkeys_basic.h>
 #include <layers_id_colors_and_visibility.h>
 #include <pgm_base.h>
 #include <project.h>
@@ -42,12 +46,9 @@
 #include <settings/settings_manager.h>
 #include <tool/common_control.h>
 #include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/action_toolbar.h>
 #include <wildcards_and_files_ext.h>
-#include <wx/colordlg.h>
-#include <wx/colour.h>
-#include <wx/string.h>
-#include <wx/toolbar.h>
-
 
 /**
  * Flag to enable 3D viewer main frame window debug tracing.
@@ -64,8 +65,6 @@ BEGIN_EVENT_TABLE( EDA_3D_VIEWER, EDA_BASE_FRAME )
     EVT_ACTIVATE( EDA_3D_VIEWER::OnActivate )
     EVT_SET_FOCUS( EDA_3D_VIEWER::OnSetFocus )
 
-    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_REDRAW, EDA_3D_VIEWER::ProcessZoom )
-
     EVT_TOOL_RANGE( ID_START_COMMAND_3D, ID_MENU_COMMAND_END,
                     EDA_3D_VIEWER::Process_Special_Functions )
 
@@ -74,8 +73,6 @@ BEGIN_EVENT_TABLE( EDA_3D_VIEWER, EDA_BASE_FRAME )
     EVT_MENU( wxID_CLOSE, EDA_3D_VIEWER::Exit3DFrame )
     EVT_MENU( ID_RENDER_CURRENT_VIEW, EDA_3D_VIEWER::OnRenderEngineSelection )
     EVT_MENU( ID_DISABLE_RAY_TRACING, EDA_3D_VIEWER::OnDisableRayTracing )
-
-    EVT_MENU_RANGE( ID_MENU3D_GRID, ID_MENU3D_GRID_END, EDA_3D_VIEWER::On3DGridSelection )
 
     EVT_UPDATE_UI( ID_RENDER_CURRENT_VIEW, EDA_3D_VIEWER::OnUpdateUIEngine )
     EVT_UPDATE_UI_RANGE( ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL,
@@ -86,18 +83,17 @@ BEGIN_EVENT_TABLE( EDA_3D_VIEWER, EDA_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
-                              const wxString &aTitle, long style ) :
-                KIWAY_PLAYER( aKiway, aParent,
-                              FRAME_PCB_DISPLAY3D, aTitle,
-                              wxDefaultPosition, wxDefaultSize,
-                              style, QUALIFIED_VIEWER3D_FRAMENAME( aParent ) )
+EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxString &aTitle,
+                              long style ) :
+        KIWAY_PLAYER( aKiway, aParent, FRAME_PCB_DISPLAY3D, aTitle, wxDefaultPosition,
+                      wxDefaultSize, style, QUALIFIED_VIEWER3D_FRAMENAME( aParent ) ),
+        m_mainToolBar( nullptr ),
+        m_canvas( nullptr ),
+        m_toolDispatcher( nullptr )
 {
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::EDA_3D_VIEWER %s", aTitle );
 
-    m_canvas = NULL;
     m_disable_ray_tracing = false;
-    m_mainToolBar = nullptr;
     m_AboutTitle = "3D Viewer";
 
     // Give it an icon
@@ -115,11 +111,8 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
     wxStatusBar *status_bar = CreateStatusBar( arrayDim( status_dims ) );
     SetStatusWidths( arrayDim( status_dims ), status_dims );
 
-    m_canvas = new EDA_3D_CANVAS( this,
-                                  COGL_ATT_LIST::GetAttributesList( true ),
-                                  aParent->GetBoard(),
-                                  m_settings,
-                                  Prj().Get3DCacheManager() );
+    m_canvas = new EDA_3D_CANVAS( this, COGL_ATT_LIST::GetAttributesList( true ),
+                                  aParent->GetBoard(), m_settings, Prj().Get3DCacheManager() );
 
     if( m_canvas )
         m_canvas->SetStatusBar( status_bar );
@@ -129,12 +122,19 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
 
     // Create the manager
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, this );
+    m_toolManager->SetEnvironment( GetBoard(), nullptr, nullptr, this );
+
+    m_actions = new EDA_3D_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+    m_canvas->SetEventDispatcher( m_toolDispatcher );
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_CONTROL );
-    m_actions = new EDA_3D_ACTIONS();
+    m_toolManager->RegisterTool( new EDA_3D_VIEWER_CONTROL );
     m_toolManager->InitTools();
+
+    // Run the viewer control tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "3DViewer.Control" );
 
     CreateMenuBar();
     ReCreateMainToolbar();
@@ -146,9 +146,6 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
 
     m_auimgr.Update();
 
-    m_mainToolBar->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( EDA_3D_VIEWER::OnKeyEvent ),
-                            NULL, this );
-
     // Fixes bug in Windows (XP and possibly others) where the canvas requires the focus
     // in order to receive mouse events.  Otherwise, the user has to click somewhere on
     // the canvas before it will respond to mouse wheel events.
@@ -159,8 +156,7 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
 
 EDA_3D_VIEWER::~EDA_3D_VIEWER()
 {
-    m_mainToolBar->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( EDA_3D_VIEWER::OnKeyEvent ),
-                               NULL, this );
+    m_canvas->SetEventDispatcher( nullptr );
 
     m_auimgr.UnInit();
 
@@ -216,8 +212,6 @@ void EDA_3D_VIEWER::OnCloseWindow( wxCloseEvent &event )
 }
 
 
-#define ROT_ANGLE 10.0
-
 void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 {
     int     id = event.GetId();
@@ -235,91 +229,6 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_RELOAD3D_BOARD:
         NewDisplay( true );
         break;
-
-    case ID_ROTATE3D_X_POS:
-        m_settings.CameraGet().RotateX( glm::radians( ROT_ANGLE ) );
-
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-            m_canvas->Request_refresh();
-        else
-            m_canvas->RenderRaytracingRequest();
-
-        break;
-
-    case ID_ROTATE3D_X_NEG:
-        m_settings.CameraGet().RotateX( -glm::radians( ROT_ANGLE ) );
-
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-            m_canvas->Request_refresh();
-        else
-            m_canvas->RenderRaytracingRequest();
-
-        break;
-
-    case ID_ROTATE3D_Y_POS:
-        m_settings.CameraGet().RotateY( glm::radians(ROT_ANGLE) );
-
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-            m_canvas->Request_refresh();
-        else
-            m_canvas->RenderRaytracingRequest();
-
-        break;
-
-    case ID_ROTATE3D_Y_NEG:
-        m_settings.CameraGet().RotateY( -glm::radians(ROT_ANGLE) );
-
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-            m_canvas->Request_refresh();
-        else
-            m_canvas->RenderRaytracingRequest();
-
-        break;
-
-    case ID_ROTATE3D_Z_POS:
-        m_settings.CameraGet().RotateZ( glm::radians(ROT_ANGLE) );
-
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-            m_canvas->Request_refresh();
-        else
-            m_canvas->RenderRaytracingRequest();
-
-        break;
-
-    case ID_ROTATE3D_Z_NEG:
-        m_settings.CameraGet().RotateZ( -glm::radians(ROT_ANGLE) );
-
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-            m_canvas->Request_refresh();
-        else
-            m_canvas->RenderRaytracingRequest();
-
-        break;
-
-    case ID_MOVE3D_LEFT:
-        m_canvas->SetView3D( WXK_LEFT );
-        return;
-
-    case ID_MOVE3D_RIGHT:
-        m_canvas->SetView3D( WXK_RIGHT );
-        return;
-
-    case ID_MOVE3D_UP:
-        m_canvas->SetView3D( WXK_UP );
-        return;
-
-    case ID_MOVE3D_DOWN:
-        m_canvas->SetView3D( WXK_DOWN );
-        return;
-
-    case ID_ORTHO:
-        m_settings.CameraGet().ToggleProjection();
-
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-            m_canvas->Request_refresh();
-        else
-            m_canvas->RenderRaytracingRequest();
-        return;
 
     case ID_TOOL_SCREENCOPY_TOCLIBBOARD:
     case ID_MENU_SCREENCOPY_PNG:
@@ -373,11 +282,6 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         NewDisplay( true );
         break;
 
-    case ID_MENU3D_REALISTIC_MODE:
-        m_settings.SetFlag( FL_USE_REALISTIC_MODE, isChecked );
-        NewDisplay( true );
-        return;
-
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL:
         m_settings.MaterialModeSet( MATERIAL_MODE::NORMAL );
         NewDisplay( true );
@@ -390,111 +294,6 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE:
         m_settings.MaterialModeSet( MATERIAL_MODE::CAD_MODE );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_FL_OPENGL_RENDER_COPPER_THICKNESS:
-        m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_FL_OPENGL_RENDER_SHOW_MODEL_BBOX:
-        m_settings.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, isChecked );
-        m_canvas->Request_refresh();
-        return;
-
-    case ID_MENU3D_FL_RAYTRACING_RENDER_SHADOWS:
-        m_settings.SetFlag( FL_RENDER_RAYTRACING_SHADOWS, isChecked );
-        m_canvas->Request_refresh();
-        return;
-
-    case ID_MENU3D_FL_RAYTRACING_PROCEDURAL_TEXTURES:
-        m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_FL_RAYTRACING_BACKFLOOR:
-        m_settings.SetFlag( FL_RENDER_RAYTRACING_BACKFLOOR, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_FL_RAYTRACING_REFRACTIONS:
-        m_settings.SetFlag( FL_RENDER_RAYTRACING_REFRACTIONS, isChecked );
-        m_canvas->Request_refresh();
-        return;
-
-    case ID_MENU3D_FL_RAYTRACING_REFLECTIONS:
-        m_settings.SetFlag( FL_RENDER_RAYTRACING_REFLECTIONS, isChecked );
-        m_canvas->Request_refresh();
-        return;
-
-    case ID_MENU3D_FL_RAYTRACING_POST_PROCESSING:
-        m_settings.SetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_FL_RAYTRACING_ANTI_ALIASING:
-        m_settings.SetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING, isChecked );
-        m_canvas->Request_refresh();
-        return;
-
-    case ID_MENU3D_SHOW_BOARD_BODY:
-        m_settings.SetFlag( FL_SHOW_BOARD_BODY, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_AXIS_ONOFF:
-        m_settings.SetFlag( FL_AXIS, isChecked );
-        m_canvas->Request_refresh();
-        return;
-
-    case ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL:
-        m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL_INSERT:
-        m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_VIRTUAL:
-        m_settings.SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_ZONE_ONOFF:
-        m_settings.SetFlag( FL_ZONE, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_ADHESIVE_ONOFF:
-        m_settings.SetFlag( FL_ADHESIVE, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_SILKSCREEN_ONOFF:
-        m_settings.SetFlag( FL_SILKSCREEN, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_SOLDER_MASK_ONOFF:
-        m_settings.SetFlag( FL_SOLDERMASK, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_SOLDER_PASTE_ONOFF:
-        m_settings.SetFlag( FL_SOLDERPASTE, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_COMMENTS_ONOFF:
-        m_settings.SetFlag( FL_COMMENTS, isChecked );
-        NewDisplay( true );
-        return;
-
-    case ID_MENU3D_ECO_ONOFF:
-        m_settings.SetFlag( FL_ECO, isChecked );
         NewDisplay( true );
         return;
 
@@ -518,57 +317,6 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 }
 
 
-void EDA_3D_VIEWER::On3DGridSelection( wxCommandEvent &event )
-{
-    int id = event.GetId();
-
-    wxASSERT( id < ID_MENU3D_GRID_END );
-    wxASSERT( id > ID_MENU3D_GRID );
-
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER::On3DGridSelection id %d", id );
-
-    switch( id )
-    {
-    case ID_MENU3D_GRID_NOGRID:
-        m_settings.GridSet( GRID3D_TYPE::NONE );
-        break;
-    case ID_MENU3D_GRID_10_MM:
-        m_settings.GridSet( GRID3D_TYPE::GRID_10MM );
-        break;
-    case ID_MENU3D_GRID_5_MM:
-        m_settings.GridSet( GRID3D_TYPE::GRID_5MM );
-        break;
-    case ID_MENU3D_GRID_2P5_MM:
-        m_settings.GridSet( GRID3D_TYPE::GRID_2P5MM );
-        break;
-    case ID_MENU3D_GRID_1_MM:
-        m_settings.GridSet( GRID3D_TYPE::GRID_1MM );
-        break;
-
-    default:
-        wxFAIL_MSG( "Invalid event in EDA_3D_VIEWER::On3DGridSelection()" );
-    }
-
-    int menu_ids[]
-    {
-        ID_MENU3D_GRID_NOGRID, ID_MENU3D_GRID_10_MM, ID_MENU3D_GRID_5_MM,
-        ID_MENU3D_GRID_2P5_MM, ID_MENU3D_GRID_1_MM
-    };
-
-    // Refresh checkmarks
-    wxMenuBar* menuBar = GetMenuBar();
-
-    for( int ii = 0; ii < 5; ii++ )
-    {
-        wxMenuItem* item = menuBar->FindItem( menu_ids[ii] );
-        item->Check( menu_ids[ii] == id );
-    }
-
-    if( m_canvas )
-        m_canvas->Request_refresh();
-}
-
-
 void EDA_3D_VIEWER::OnRenderEngineSelection( wxCommandEvent &event )
 {
     const RENDER_ENGINE old_engine = m_settings.RenderEngineGet();
@@ -586,28 +334,6 @@ void EDA_3D_VIEWER::OnRenderEngineSelection( wxCommandEvent &event )
     {
         RenderEngineChanged();
     }
-}
-
-
-void EDA_3D_VIEWER::ProcessZoom( wxCommandEvent &event )
-{
-    int id = event.GetId();
-
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER::ProcessZoom id:%d", id );
-
-    if( m_canvas == NULL )
-        return;
-
-    switch( id )
-    {
-    case ID_ZOOM_PAGE:   m_canvas->SetView3D( WXK_HOME ); break;
-    case ID_ZOOM_IN:     m_canvas->SetView3D( WXK_F1 );   break;
-    case ID_ZOOM_OUT:    m_canvas->SetView3D( WXK_F2 );   break;
-    case ID_ZOOM_REDRAW: m_canvas->Request_refresh();     break;
-    default: wxFAIL_MSG( "Invalid event in EDA_3D_VIEWER::ProcessZoom()" );
-    }
-
-    m_canvas->DisplayStatus();
 }
 
 
@@ -873,15 +599,6 @@ void EDA_3D_VIEWER::CommonSettingsChanged( bool aEnvVarsChanged )
     loadCommonSettings();
 
     NewDisplay( true );
-}
-
-
-void EDA_3D_VIEWER::OnKeyEvent( wxKeyEvent& event )
-{
-    if( m_canvas )
-        return m_canvas->OnKeyEvent( event );
-
-    event.Skip();
 }
 
 

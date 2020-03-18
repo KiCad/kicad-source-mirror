@@ -29,7 +29,6 @@
 #include <confirm.h>
 #include <dialog_helpers.h>
 #include <fctsys.h>
-#include <help_common_strings.h>
 #include <kiface_i.h>
 #include <memory>
 #include <pcb_edit_frame.h>

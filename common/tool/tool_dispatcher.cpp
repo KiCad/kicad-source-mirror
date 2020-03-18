@@ -326,10 +326,12 @@ int translateSpecialCode( int aKeyCode )
 
 void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
-    bool motion = false, buttonEvents = false;
+    bool            motion = false;
+    bool            buttonEvents = false;
+    VECTOR2D        pos;
     OPT<TOOL_EVENT> evt;
-    int key = 0;    // key = 0 if the event is not a key event
-    bool keyIsSpecial = false;  // True if the key is a special key code
+    int             key = 0;    // key = 0 if the event is not a key event
+    bool            keyIsSpecial = false;  // True if the key is a special key code
 
     int type = aEvent.GetEventType();
 
@@ -357,28 +359,39 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         wxMouseEvent* me = static_cast<wxMouseEvent*>( &aEvent );
         int mods = decodeModifiers( me );
 
-        VECTOR2D pos = m_toolMgr->GetViewControls()->GetMousePosition();
-
-        if( pos != m_lastMousePos )
+        if( m_toolMgr->GetViewControls() )
         {
-            motion = true;
-            m_lastMousePos = pos;
+            pos = m_toolMgr->GetViewControls()->GetMousePosition();
+
+            if( pos != m_lastMousePos )
+            {
+                motion = true;
+                m_lastMousePos = pos;
+            }
         }
 
         for( unsigned int i = 0; i < m_buttons.size(); i++ )
             buttonEvents |= handleMouseButton( aEvent, i, motion );
 
-        if( !buttonEvents && motion )
+        if( m_toolMgr->GetViewControls() )
         {
-            evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_MOTION, mods );
-            evt->SetMousePosition( pos );
+            if( !buttonEvents && motion )
+            {
+                evt = TOOL_EVENT( TC_MOUSE, TA_MOUSE_MOTION, mods );
+                evt->SetMousePosition( pos );
+            }
         }
 
 #ifdef __APPLE__
         // TODO That's a big ugly workaround, somehow DRAWPANEL_GAL loses focus
         // after second LMB click and currently I have no means to do better debugging
         if( type == wxEVT_LEFT_UP )
-            static_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() )->GetCanvas()->SetFocus();
+        {
+            EDA_DRAW_FRAME* drawFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() );
+
+            if( drawFrame )
+                drawFrame->GetCanvas()->SetFocus();
+        }
 #endif /* __APPLE__ */
     }
     else if( type == wxEVT_CHAR_HOOK || type == wxEVT_CHAR )

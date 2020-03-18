@@ -26,7 +26,6 @@
 
 #include "footprint_edit_frame.h"
 
-#include "help_common_strings.h"
 #include "pcbnew.h"
 #include "pcbnew_id.h"
 #include <menus_helpers.h>

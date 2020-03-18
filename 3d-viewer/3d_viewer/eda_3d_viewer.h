@@ -77,6 +77,8 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
 
     BOARD* GetBoard() { return Parent()->GetBoard(); }
 
+    EDA_3D_CANVAS* GetCanvas() { return m_canvas; }
+
     /**
      * Request reloading the 3D view. However the request will be executed
      * only when the 3D canvas is refreshed.
@@ -108,55 +110,47 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
      * Get a SFVEC3D from a wx colour dialog
      * @param aColor is the SFVEC3D to change
      * @param aTitle is the title displayed in the colordialog selector
-     * @param aPredefinedColors is a reference to a CUSTOM_COLOR_ITEM list
-     * which contains a few predefined colors
-     * if empty, no predefined colors are used.
-     * no change if aborted by user
+     * @param aPredefinedColors is a reference to a CUSTOM_COLOR_ITEM list which contains
+     * a few predefined colors
      */
     bool Set3DColorFromUser( SFVEC3D &aColor, const wxString& aTitle,
                              CUSTOM_COLORS_LIST* aPredefinedColors );
 
     /**
      * Set the solder mask color from a set of colors
-     * @return true if a new color is chosen, false if
-     * no change or aborted by user
+     * @return true if a new color is chosen, false if no change or aborted by user
      */
     bool Set3DSolderMaskColorFromUser();
 
     /**
      * Set the solder mask color from a set of colors
-     * @return true if a new color is chosen, false if
-     * no change or aborted by user
+     * @return true if a new color is chosen, false if no change or aborted by user
      */
     bool Set3DSolderPasteColorFromUser();
 
     /**
      * Set the copper color from a set of colors
-     * @return true if a new color is chosen, false if
-     * no change or aborted by user
+     * @return true if a new color is chosen, false if no change or aborted by user
      */
     bool Set3DCopperColorFromUser();
 
     /**
      * Set the copper color from a set of colors
-     * @return true if a new color is chosen, false if
-     * no change or aborted by user
+     * @return true if a new color is chosen, false if no change or aborted by user
      */
     bool Set3DBoardBodyColorFromUser();
 
     /**
      * Set the silkscreen color from a set of colors
-     * @return true if a new color is chosen, false if
-     * no change or aborted by user
+     * @return true if a new color is chosen, false if no change or aborted by user
      */
     bool Set3DSilkScreenColorFromUser();
 
     /**
      * Notification that common settings are updated.
      *
-     * This would be private (and only called by the Kiway), but we
-     * need to do this manually from the PCB frame because the 3D viewer isn't
-     * updated via the #KIWAY.
+     * This would be private (and only called by the Kiway), but we need to do this manually
+     * from the PCB frame because the 3D viewer isn't updated via the #KIWAY.
      */
     void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
@@ -171,12 +165,8 @@ private:
 
     void Process_Special_Functions( wxCommandEvent &event );
 
-    void On3DGridSelection( wxCommandEvent &event );
-
     void OnRenderEngineSelection( wxCommandEvent &event );
     void OnDisableRayTracing( wxCommandEvent& aEvent );
-
-    void ProcessZoom( wxCommandEvent &event );
 
     void OnActivate( wxActivateEvent &event );
 
@@ -188,17 +178,12 @@ private:
     void OnUpdateUIMaterial( wxUpdateUIEvent& aEvent );
 
     void CreateMenuBar();
-
-    /**
-     * Equivalent of EDA_DRAW_FRAME::ReCreateHToolbar
-     */
     void ReCreateMainToolbar();
+    void SyncToolbars() override;
 
     void SaveSettings( APP_SETTINGS_BASE *aCfg ) override;
 
     void LoadSettings( APP_SETTINGS_BASE *aCfg ) override;
-
-    void OnKeyEvent( wxKeyEvent& event );
 
     /**
      *  Create a Screenshot of the current 3D view.
@@ -220,13 +205,15 @@ private:
      */
     void loadCommonSettings();
 
-    wxFileName     m_defaultSaveScreenshotFileName;
+    wxFileName       m_defaultSaveScreenshotFileName;
 
-    wxAuiToolBar*  m_mainToolBar;
-    EDA_3D_CANVAS* m_canvas;
-    CINFO3D_VISU   m_settings;
+    ACTION_TOOLBAR*  m_mainToolBar;
+    EDA_3D_CANVAS*   m_canvas;
+    CINFO3D_VISU     m_settings;
 
-    bool           m_disable_ray_tracing;
+    TOOL_DISPATCHER* m_toolDispatcher;
+
+    bool             m_disable_ray_tracing;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

@@ -29,10 +29,9 @@
 #include <eda_3d_viewer.h>
 #include <menus_helpers.h>
 #include <3d_viewer_id.h>
-#include <3d_actions.h>
+#include <3d_viewer/tools/3d_actions.h>
 #include <tool/tool_manager.h>
 #include <tool/common_control.h>
-#include "help_common_strings.h"
 
 
 void EDA_3D_VIEWER::CreateMenuBar()
@@ -72,51 +71,28 @@ void EDA_3D_VIEWER::CreateMenuBar()
     //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, tool );
 
-    viewMenu->AddItem( ID_ZOOM_IN, _( "Zoom In\tF1" ), HELP_ZOOM_IN,
-                       zoom_in_xpm,                    SELECTION_CONDITIONS::ShowAlways );
-
-    viewMenu->AddItem( ID_ZOOM_OUT, _( "Zoom Out\tF2" ), HELP_ZOOM_OUT,
-                       zoom_out_xpm,                   SELECTION_CONDITIONS::ShowAlways );
-
-    viewMenu->AddItem( ID_ZOOM_PAGE, _( "Zoom to Fit" ), HELP_ZOOM_FIT,
-                       zoom_fit_in_page_xpm,           SELECTION_CONDITIONS::ShowAlways );
-
-    viewMenu->AddItem( ID_ZOOM_REDRAW, _( "Redraw\tR" ), HELP_ZOOM_REDRAW,
-                       zoom_redraw_xpm,                SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomIn,                SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOut,               SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,         SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,            SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ID_ROTATE3D_X_NEG, _( "Rotate X Clockwise" ) + "\tCtrl+Shift+X", "",
-                       rotate_neg_x_xpm,               SELECTION_CONDITIONS::ShowAlways );
-
-    viewMenu->AddItem( ID_ROTATE3D_X_POS, _( "Rotate X Counterclockwise" ) + "\tCtrl+X", "",
-                       rotate_pos_x_xpm,               SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( EDA_3D_ACTIONS::rotateXCW,      SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( EDA_3D_ACTIONS::rotateXCCW,     SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ID_ROTATE3D_Y_NEG, _( "Rotate Y Clockwise" ) + "\tCtrl+Shift+Y", "",
-                       rotate_neg_y_xpm,               SELECTION_CONDITIONS::ShowAlways );
-
-    viewMenu->AddItem( ID_ROTATE3D_Y_POS, _( "Rotate Y Counterclockwise" ) + "\tCtrl+Y", "",
-                       rotate_pos_y_xpm,               SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( EDA_3D_ACTIONS::rotateYCW,      SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( EDA_3D_ACTIONS::rotateYCCW,     SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ID_ROTATE3D_Z_NEG, _( "Rotate Z Clockwise" ) + "\tCtrl+Shift+Z", "",
-                       rotate_neg_z_xpm,               SELECTION_CONDITIONS::ShowAlways );;
-
-    viewMenu->AddItem( ID_ROTATE3D_Z_POS, _( "Rotate Z Counterclockwise" ) + "\tCtrl+Z", "",
-                       rotate_pos_z_xpm,               SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( EDA_3D_ACTIONS::rotateZCW,      SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( EDA_3D_ACTIONS::rotateZCCW,     SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ID_MOVE3D_LEFT, _( "Move Left\tLeft" ), "",
-                       left_xpm,                       SELECTION_CONDITIONS::ShowAlways );
-
-    viewMenu->AddItem( ID_MOVE3D_RIGHT, _( "Move Right\tRight" ), "",
-                       right_xpm,                      SELECTION_CONDITIONS::ShowAlways );
-
-    viewMenu->AddItem( ID_MOVE3D_UP, _( "Move Up\tUp" ), "",
-                       up_xpm,                         SELECTION_CONDITIONS::ShowAlways );
-
-    viewMenu->AddItem( ID_MOVE3D_DOWN, _( "Move Down\tDown" ), "",
-                       down_xpm,                       SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( EDA_3D_ACTIONS::moveLeft,       SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( EDA_3D_ACTIONS::moveRight,      SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( EDA_3D_ACTIONS::moveUp,         SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( EDA_3D_ACTIONS::moveDown,       SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->Resolve();
 
@@ -229,53 +205,22 @@ void EDA_3D_VIEWER::CreateMenuBar()
 
     optsSubmenu->AddMenu( propsSubmenu,                        SELECTION_CONDITIONS::ShowAlways );
 
-    optsSubmenu->AddCheckItem( ID_MENU3D_FL_OPENGL_RENDER_COPPER_THICKNESS,
-                               _( "Show Copper Thickness" ),
-                               _( "Shows the copper thickness on copper layers (slower loading)" ),
-                               use_3D_copper_thickness_xpm,    copperThicknessCondition );
-
-    optsSubmenu->AddCheckItem( ID_MENU3D_FL_OPENGL_RENDER_SHOW_MODEL_BBOX,
-                               _( "Show Model Bounding Boxes" ), "",
-                               ortho_xpm,                      boundingBoxesCondition );
+    optsSubmenu->AddCheckItem( EDA_3D_ACTIONS::showCopperThickness, copperThicknessCondition );
+    optsSubmenu->AddCheckItem( EDA_3D_ACTIONS::showBoundingBoxes,   boundingBoxesCondition );
 
     // Raytracing  submenu
     CONDITIONAL_MENU* raySubmenu = new CONDITIONAL_MENU( false, tool );
     raySubmenu->SetTitle( _( "Raytracing Options" ) );
     raySubmenu->SetIcon( tools_xpm );
 
-    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_RENDER_SHADOWS,
-                 _( "Render Shadows" ), "",
-                  green_xpm,                                   renderShadowsCondition );
+    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::renderShadows,        renderShadowsCondition );
+    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::proceduralTextures,   proceduralTexturesCondition );
+    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::addFloor,             showFloorCondition );
+    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::showRefractions,      useRefractionsCondition );
+    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::showReflections,      useReflectionsCondition );
+    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::antiAliasing,         antiAliasingCondition );
 
-    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_PROCEDURAL_TEXTURES,
-                 _( "Procedural Textures" ),
-                 _( "Apply procedural textures to materials (slow)"),
-                   green_xpm,                                  proceduralTexturesCondition );
-
-    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_BACKFLOOR,
-                 _( "Add Floor" ),
-                 _( "Adds a floor plane below the board (slow)"),
-                   green_xpm,                                  showFloorCondition );
-
-    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_REFRACTIONS,
-                 _( "Refractions" ),
-                 _( "Render materials with refractions properties on final render (slow)"),
-                   green_xpm,                                  useRefractionsCondition );
-
-    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_REFLECTIONS,
-                _( "Reflections" ),
-                _( "Render materials with reflections properties on final render (slow)"),
-                  green_xpm,                                   useReflectionsCondition );
-
-    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_ANTI_ALIASING,
-                 _( "Anti-aliasing" ),
-                 _( "Render with improved quality on final render (slow)"),
-                   green_xpm,                                  antiAliasingCondition );
-
-    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_POST_PROCESSING,
-                 _( "Post-processing" ),
-                 _( "Apply Screen Space Ambient Occlusion and Global Illumination reflections on final render (slow)"),
-                   green_xpm,                                  postProcessCondition );
+    raySubmenu->AddCheckItem( EDA_3D_ACTIONS::postProcessing,       postProcessCondition );
 
     optsSubmenu->AddMenu( raySubmenu,                          SELECTION_CONDITIONS::ShowAlways );
     prefsMenu->AddMenu( optsSubmenu,                           SELECTION_CONDITIONS::ShowAlways );
@@ -312,13 +257,12 @@ void EDA_3D_VIEWER::CreateMenuBar()
     if( Parent()->IsType( FRAME_PCB_EDITOR ) )
     {
         colorSubmenu->AddItem( ID_MENU3D_STACKUP_COLORS, _( "Get colors from physical stackup" ), "",
-                nullptr, SELECTION_CONDITIONS::ShowAlways );
+                               nullptr, SELECTION_CONDITIONS::ShowAlways );
     }
 
     prefsMenu->AddMenu( colorSubmenu );
 
-    prefsMenu->AddCheckItem( ID_MENU3D_AXIS_ONOFF, _( "Show 3D &Axis" ), "",
-                             axis3d_front_xpm,                 showAxesCondition );
+    prefsMenu->AddCheckItem( EDA_3D_ACTIONS::showAxis,         showAxesCondition );
 
     // Grid  submenu
     CONDITIONAL_MENU* gridSubmenu = new CONDITIONAL_MENU( false, tool );
@@ -352,16 +296,11 @@ void EDA_3D_VIEWER::CreateMenuBar()
     };
     //clang-format on
 
-    gridSubmenu->AddCheckItem( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), "",
-                               nullptr, noGridCondition );
-    gridSubmenu->AddCheckItem( ID_MENU3D_GRID_10_MM, _( "3D Grid 10mm" ), "",
-                               nullptr, grid10mmCondition );
-    gridSubmenu->AddCheckItem( ID_MENU3D_GRID_5_MM, _( "3D Grid 5mm" ), "",
-                               nullptr, grid5mmCondition );
-    gridSubmenu->AddCheckItem( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5mm" ), "",
-                               nullptr, grid2p5mmCondition );
-    gridSubmenu->AddCheckItem( ID_MENU3D_GRID_1_MM, _( "3D Grid 1mm" ), "",
-                               nullptr, grid_1mmCondition );
+    gridSubmenu->AddCheckItem( EDA_3D_ACTIONS::noGrid,         noGridCondition );
+    gridSubmenu->AddCheckItem( EDA_3D_ACTIONS::show10mmGrid,   grid10mmCondition );
+    gridSubmenu->AddCheckItem( EDA_3D_ACTIONS::show5mmGrid,    grid5mmCondition );
+    gridSubmenu->AddCheckItem( EDA_3D_ACTIONS::show2_5mmGrid,  grid2p5mmCondition );
+    gridSubmenu->AddCheckItem( EDA_3D_ACTIONS::show1mmGrid,    grid_1mmCondition );
 
     prefsMenu->AddMenu( gridSubmenu,                           SELECTION_CONDITIONS::ShowAlways );
 

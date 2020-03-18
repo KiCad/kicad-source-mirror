@@ -160,9 +160,8 @@ class CCAMERA
      */
     void SetCurMousePosition( const wxPoint &aPosition );
 
-    void SetProjection( PROJECTION_TYPE aProjectionType );
-
     void ToggleProjection();
+    PROJECTION_TYPE GetProjection() { return m_projectionType; }
 
     /**
      * @brief SetCurWindowSize - update the windows size of the camera

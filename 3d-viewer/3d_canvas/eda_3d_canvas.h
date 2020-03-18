@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,36 +22,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  eda_3d_canvas.h
- * @brief
- */
-
 #ifndef EDA_3D_CANVAS_H
 #define EDA_3D_CANVAS_H
 
 
 #include "cinfo3d_visu.h"
 #include "3d_rendering/c3d_render_base.h"
-#include "3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.h"
-#include "3d_rendering/3d_render_raytracing/c3d_render_raytracing.h"
 #include "3d_cache/3d_cache.h"
 #include <gal/hidpi_gl_canvas.h>
-#include <wx/clipbrd.h>
-#include <wx/dataobj.h>
 #include <wx/image.h>
-#include <wx/wupdlock.h>
 #include <wx/timer.h>
-#include <wx/statusbr.h>
-#include <pcb_base_frame.h>
 
-// Flag for special keys
-// TODO Remove these when Action-ifying 3d viewer
-#define GR_KB_RIGHTSHIFT    ( 0x01000000U )
-#define GR_KB_LEFTSHIFT     ( 0x02000000U )
-#define GR_KB_CTRL          ( 0x04000000U )
-#define GR_KB_ALT           ( 0x08000000U )
-#define GR_KB_SHIFT         ( GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT )
+
+class wxStatusBar;
+class BOARD;
+class C3D_RENDER_RAYTRACING;
+class C3D_RENDER_OGL_LEGACY;
 
 
 /**
@@ -59,10 +45,7 @@
  */
 class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
 {
-
  public:
-
-
     /**
      *  @brief EDA_3D_CANVAS - Creates a new 3D Canvas with a attribute list
      *  @param aParent: the parent creator of this canvas
@@ -77,6 +60,15 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
                    S3D_CACHE *a3DCachePointer = NULL );
 
     ~EDA_3D_CANVAS();
+
+    /**
+     * Function SetEventDispatcher()
+     * Sets a dispatcher that processes events and forwards them to tools.
+     * @param aEventDispatcher is the object that will be used for dispatching events.
+     * DRAW_PANEL_GAL does not take over the ownership. Passing NULL disconnects all event
+     * handlers from the DRAW_PANEL_GAL and parent frame.
+     */
+    void SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher );
 
     void SetStatusBar( wxStatusBar *aStatusBar ) { m_parentStatusBar = aStatusBar; }
 
@@ -130,11 +122,10 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
      */
     void Request_refresh( bool aRedrawImmediately = true );
 
-    void OnKeyEvent( wxKeyEvent& event );
-
-    bool SupportsRayTracing() const { return m_opengl_supports_raytracing; }
-
-    bool IsOpenGLInitialized() const { return m_is_opengl_initialized; }
+    /**
+     * Used to forward events to the canvas from popups, etc.
+     */
+    void OnEvent( wxEvent& aEvent );
 
 private:
 
@@ -149,64 +140,40 @@ private:
 #endif
 
     void OnMouseMove( wxMouseEvent &event );
-
     void OnLeftDown( wxMouseEvent &event );
-
     void OnLeftUp( wxMouseEvent &event );
-
     void OnMiddleUp( wxMouseEvent &event );
-
     void OnMiddleDown( wxMouseEvent &event );
-
-    void OnRightClick( wxMouseEvent &event );
-
-    void OnPopUpMenu( wxCommandEvent &event );
-
-    void OnCharHook( wxKeyEvent& event );
-
     void OnTimerTimeout_Editing( wxTimerEvent& event );
-
-    /**
-     * @brief OnCloseWindow - called when the frame is closed
-     * @param event
-     */
     void OnCloseWindow( wxCloseEvent &event );
-
     void OnResize( wxSizeEvent &event );
-
     void OnTimerTimeout_Redraw( wxTimerEvent& event );
 
     DECLARE_EVENT_TABLE()
 
  private:
-
     /**
      * @brief stop_editingTimeOut_Timer - stop the editing time, so it will not timeout
      */
     void stop_editingTimeOut_Timer();
-
 
     /**
      * @brief restart_editingTimeOut_Timer - reset the editing timer
      */
     void restart_editingTimeOut_Timer();
 
-
     /**
      * @brief request_start_moving_camera - start a camera movement
      * @param aMovingSpeed: the time speed
      * @param aRenderPivot: if it should display pivot cursor while move
      */
-    void request_start_moving_camera( float aMovingSpeed = 2.0f,
-                                      bool aRenderPivot = true );
-
+    void request_start_moving_camera( float aMovingSpeed = 2.0f, bool aRenderPivot = true );
 
     /**
      * @brief move_pivot_based_on_cur_mouse_position -
      * This function hits a ray to the board and start a moviment
      */
     void move_pivot_based_on_cur_mouse_position();
-
 
     /**
      * @brief render_pivot - render the pivot cursor
@@ -228,60 +195,34 @@ private:
 
  private:
 
-    /// current OpenGL context
-    wxGLContext *m_glRC;
+    TOOL_DISPATCHER*       m_eventDispatcher;
+    wxStatusBar*           m_parentStatusBar;         // Parent statusbar to report progress
 
-    /// Parent statusbar to report progress
-    wxStatusBar *m_parentStatusBar;
+    wxGLContext*           m_glRC;                    // Current OpenGL context
+    bool                   m_is_opengl_initialized;
 
-    /// Time timeout will expires after some time sinalizing that the mouse /
-    /// keyboard movements are over.
-    wxTimer m_editing_timeout_timer;
+    wxTimer                m_editing_timeout_timer;   // Expires after some time signalling that
+                                                      // the mouse / keyboard movements are over
+    wxTimer                m_redraw_trigger_timer;    // Used to schedule a redraw event
 
-    /// This timer will be used to schedule a redraw event
-    wxTimer m_redraw_trigger_timer;
+    bool                   m_mouse_is_moving;         // Mouse activity is in progress
+    bool                   m_mouse_was_moved;
+    bool                   m_camera_is_moving;        // Camera animation is ongoing
+    bool                   m_render_pivot;            // Render the pivot while camera moving
+    float                  m_camera_moving_speed;     // 1.0f will be 1:1
+    unsigned               m_strtime_camera_movement; // Ticktime of camera movement start
 
-    /// true if mouse activity is on progress
-    bool m_mouse_is_moving;
+    CINFO3D_VISU&          m_settings;                // Pre-computed 3D information and visual
+                                                      // settings to render the board
+    C3D_RENDER_BASE*       m_3d_render;
+    C3D_RENDER_RAYTRACING* m_3d_render_raytracing;
+    C3D_RENDER_OGL_LEGACY* m_3d_render_ogl_legacy;
 
-    /// true if there was some type of activity, it will be used to render in
-    /// preview mode
-    bool m_mouse_was_moved;
+    static const float     m_delta_move_step_factor;  // Step factor to used with cursor on
+                                                      // relation to the current zoom
 
-    /// true if camera animation is ongoing
-    bool m_camera_is_moving;
-
-    /// activated the render of pivot while camera moving
-    bool m_render_pivot;
-
-    /// 1.0f will be 1:1
-    float m_camera_moving_speed;
-
-    /// Stores the ticktime when the camera star its movement
-    unsigned m_strtime_camera_movement;
-
-    /// Stores all pre-computed 3D information and visualization settings to render the board
-    CINFO3D_VISU &m_settings;
-
-    /// The current render in used for this canvas
-    C3D_RENDER_BASE       *m_3d_render;
-
-    /// Raytracing render class
-    C3D_RENDER_RAYTRACING *m_3d_render_raytracing;
-
-    /// OpenGL legacy render class
-    C3D_RENDER_OGL_LEGACY *m_3d_render_ogl_legacy;
-
-    /// Flag to store if opengl was initialized already
-    bool m_is_opengl_initialized;
-
-    /// Step factor to used with cursor on relation to the current zoom
-    static const float m_delta_move_step_factor;
-
-    /// Flags that the user requested the current view to be render with raytracing
-    bool m_render_raytracing_was_requested;
-
-    bool m_opengl_supports_raytracing;
+    bool                   m_opengl_supports_raytracing;
+    bool                   m_render_raytracing_was_requested;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

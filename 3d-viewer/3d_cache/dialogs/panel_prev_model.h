@@ -41,6 +41,7 @@
 #include <vector>
 
 #include <3d_canvas/eda_3d_canvas.h>
+#include <3d_viewer_id.h>
 
 // Define min and max parameter values
 #define MAX_SCALE          10000.0
@@ -148,17 +149,17 @@ private:
 
 	void View3DLeft( wxCommandEvent& event ) override
     {
-        m_previewPane->SetView3D( GR_KB_SHIFT + 'X' );
+        m_previewPane->SetView3D( ID_VIEW3D_LEFT );
     }
 
 	void View3DFront( wxCommandEvent& event ) override
     {
-        m_previewPane->SetView3D( 'Y' );
+        m_previewPane->SetView3D( ID_VIEW3D_FRONT );
     }
 
 	void View3DTop( wxCommandEvent& event ) override
     {
-        m_previewPane->SetView3D( 'Z' );
+        m_previewPane->SetView3D( ID_VIEW3D_TOP );
     }
 
 	void View3DUpdate( wxCommandEvent& event ) override
@@ -169,17 +170,17 @@ private:
 
 	void View3DRight( wxCommandEvent& event ) override
     {
-        m_previewPane->SetView3D( 'X' );
+        m_previewPane->SetView3D( ID_VIEW3D_RIGHT );
     }
 
 	void View3DBack( wxCommandEvent& event ) override
     {
-        m_previewPane->SetView3D( GR_KB_SHIFT + 'Y' );
+        m_previewPane->SetView3D( ID_VIEW3D_BACK );
     }
 
 	void View3DBottom( wxCommandEvent& event ) override
     {
-        m_previewPane->SetView3D( GR_KB_SHIFT + 'Z' );
+        m_previewPane->SetView3D( ID_VIEW3D_BOTTOM );
     }
 
 public:

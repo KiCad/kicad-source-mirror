@@ -41,13 +41,22 @@ class TOOL_MANAGER;
 class EDA_3D_ACTIONS : public ACTIONS
 {
 public:
+    static TOOL_ACTION controlActivate;
+
     static TOOL_ACTION pivotCenter;
+    static TOOL_ACTION rotateXCW;
+    static TOOL_ACTION rotateXCCW;
+    static TOOL_ACTION rotateYCW;
+    static TOOL_ACTION rotateYCCW;
+    static TOOL_ACTION rotateZCW;
+    static TOOL_ACTION rotateZCCW;
     static TOOL_ACTION moveLeft;
     static TOOL_ACTION moveRight;
     static TOOL_ACTION moveUp;
     static TOOL_ACTION moveDown;
     static TOOL_ACTION homeView;
     static TOOL_ACTION resetView;
+    static TOOL_ACTION toggleOrtho;
 
     static TOOL_ACTION viewFront;
     static TOOL_ACTION viewBack;
@@ -56,12 +65,35 @@ public:
     static TOOL_ACTION viewTop;
     static TOOL_ACTION viewBottom;
 
+    static TOOL_ACTION noGrid;
+    static TOOL_ACTION show10mmGrid;
+    static TOOL_ACTION show5mmGrid;
+    static TOOL_ACTION show2_5mmGrid;
+    static TOOL_ACTION show1mmGrid;
+
     static TOOL_ACTION rotate45axisZ;
-    static TOOL_ACTION zoomIn;
-    static TOOL_ACTION zoomOut;
     static TOOL_ACTION attributesTHT;
     static TOOL_ACTION attributesSMD;
     static TOOL_ACTION attributesVirtual;
+    static TOOL_ACTION showCopperThickness;
+    static TOOL_ACTION showBoundingBoxes;
+    static TOOL_ACTION renderShadows;
+    static TOOL_ACTION proceduralTextures;
+    static TOOL_ACTION addFloor;
+    static TOOL_ACTION showRefractions;
+    static TOOL_ACTION showReflections;
+    static TOOL_ACTION antiAliasing;
+    static TOOL_ACTION postProcessing;
+    static TOOL_ACTION toggleRealisticMode;
+    static TOOL_ACTION toggleBoardBody;
+    static TOOL_ACTION showAxis;
+    static TOOL_ACTION toggleZones;
+    static TOOL_ACTION toggleAdhesive;
+    static TOOL_ACTION toggleSilk;
+    static TOOL_ACTION toggleSolderMask;
+    static TOOL_ACTION toggleSolderPaste;
+    static TOOL_ACTION toggleComments;
+    static TOOL_ACTION toggleECO;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }

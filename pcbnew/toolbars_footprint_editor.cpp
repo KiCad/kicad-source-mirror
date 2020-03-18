@@ -67,7 +67,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::undo );
     m_mainToolBar->Add( ACTIONS::redo );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );

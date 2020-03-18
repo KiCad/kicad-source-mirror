@@ -28,7 +28,6 @@
 #include <advanced_config.h>
 #include <drc/drc.h>
 #include <filehistory.h>
-#include <help_common_strings.h>
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pcb_edit_frame.h>

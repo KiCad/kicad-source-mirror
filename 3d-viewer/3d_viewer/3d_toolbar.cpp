@@ -29,12 +29,12 @@
  */
 
 #include <fctsys.h>
-
+#include <wx/wupdlock.h>
 #include <eda_3d_viewer.h>
-#include <3d_canvas/cinfo3d_visu.h>
 #include <menus_helpers.h>
+#include <tool/action_toolbar.h>
+#include <tools/3d_actions.h>
 #include <3d_viewer_id.h>
-
 
 void EDA_3D_VIEWER::ReCreateMainToolbar()
 {
@@ -43,14 +43,10 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
     wxWindowUpdateLocker dummy( this );
 
     if( m_mainToolBar )
-    {
         m_mainToolBar->Clear();
-    }
     else
-    {
-        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
-    }
+        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
     m_mainToolBar->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,
@@ -74,77 +70,40 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
                             _( "Render current view using Raytracing" ), wxITEM_CHECK );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
-                            KiScaledBitmap( zoom_in_xpm, this ),
-                            _( "Zoom in" ) );
-
-    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
-                            KiScaledBitmap( zoom_out_xpm, this ),
-                            _( "Zoom out" ) );
-
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
-                            KiScaledBitmap( zoom_redraw_xpm, this ),
-                            _( "Redraw view" ) );
-
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                            KiScaledBitmap( zoom_fit_in_page_xpm, this ),
-                            _( "Zoom to fit 3D model" ) );
+    m_mainToolBar->Add( ACTIONS::zoomRedraw );
+    m_mainToolBar->Add( ACTIONS::zoomInCenter );
+    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
+    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_ROTATE3D_X_NEG, wxEmptyString,
-                            KiScaledBitmap( rotate_neg_x_xpm, this ),
-                            _( "Rotate X Clockwise" ) );
-
-    m_mainToolBar->AddTool( ID_ROTATE3D_X_POS, wxEmptyString,
-                            KiScaledBitmap( rotate_pos_x_xpm, this ),
-                            _( "Rotate X Counterclockwise" ) );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::rotateXCW );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::rotateXCCW );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_ROTATE3D_Y_NEG, wxEmptyString,
-                            KiScaledBitmap( rotate_neg_y_xpm, this ),
-                            _( "Rotate Y Clockwise" ) );
-
-    m_mainToolBar->AddTool( ID_ROTATE3D_Y_POS, wxEmptyString,
-                            KiScaledBitmap( rotate_pos_y_xpm, this ),
-                            _( "Rotate Y Counterclockwise" ) );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::rotateYCW );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::rotateYCCW );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_ROTATE3D_Z_NEG, wxEmptyString,
-                            KiScaledBitmap( rotate_neg_z_xpm, this ),
-                            _( "Rotate Z Clockwise" ) );
-
-    m_mainToolBar->AddTool( ID_ROTATE3D_Z_POS, wxEmptyString,
-                            KiScaledBitmap( rotate_pos_z_xpm, this ),
-                            _( "Rotate Z Counterclockwise" ) );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::rotateZCW );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::rotateZCCW );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_MOVE3D_LEFT, wxEmptyString,
-                            KiScaledBitmap( left_xpm, this ),
-                            _( "Move left" ) );
-
-    m_mainToolBar->AddTool( ID_MOVE3D_RIGHT, wxEmptyString,
-                            KiScaledBitmap( right_xpm, this ),
-                            _( "Move right" ) );
-
-    m_mainToolBar->AddTool( ID_MOVE3D_UP, wxEmptyString,
-                            KiScaledBitmap( up_xpm, this ),
-                            _( "Move up" ) );
-
-    m_mainToolBar->AddTool( ID_MOVE3D_DOWN, wxEmptyString,
-                            KiScaledBitmap( down_xpm, this ),
-                            _( "Move down" ) );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::moveLeft );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::moveRight );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::moveUp );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::moveDown );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_ORTHO, wxEmptyString,
-                            KiScaledBitmap( ortho_xpm, this ),
-                            _( "Enable/Disable orthographic projection" ),
-                            wxITEM_CHECK );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::toggleOrtho, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->Realize();
+}
+
+
+void EDA_3D_VIEWER::SyncToolbars()
+{
+    bool isOrtho = m_settings.CameraGet().GetProjection() == PROJECTION_TYPE::ORTHO;
+
+    m_mainToolBar->Toggle( EDA_3D_ACTIONS::toggleOrtho, isOrtho );
+    m_mainToolBar->Refresh();
 }
