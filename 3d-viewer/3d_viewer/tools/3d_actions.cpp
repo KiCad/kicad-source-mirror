@@ -38,77 +38,71 @@ TOOL_ACTION EDA_3D_ACTIONS::controlActivate( "3DViewer.Control", AS_GLOBAL,
         NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION EDA_3D_ACTIONS::pivotCenter( "3DViewer.Control.pivotCenter",
-        AS_GLOBAL,
+        AS_ACTIVE,
         ' ', "",
         "Center pivot rotation (Middle mouse click)" );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateXCW( "3DViewer.Control.rotateXclockwise",
-        AS_GLOBAL,
-        0, "",
+        AS_GLOBAL, 0, "",
         _( "Rotate X Clockwise" ), _( "Rotate X Clockwise" ),
         rotate_neg_x_xpm, AF_NONE, (void*) ID_ROTATE3D_X_NEG );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateXCCW( "3DViewer.Control.rotateXcounterclockwise",
-        AS_GLOBAL,
-        0, "",
+        AS_GLOBAL, 0, "",
         _( "Rotate X Counterclockwise" ), _( "Rotate X Counterclockwise" ),
         rotate_pos_x_xpm, AF_NONE, (void*) ID_ROTATE3D_X_POS );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateYCW( "3DViewer.Control.rotateYclockwise",
-        AS_GLOBAL,
-        0, "",
+        AS_GLOBAL, 0, "",
         _( "Rotate Y Clockwise" ), _( "Rotate Y Clockwise" ),
         rotate_neg_y_xpm, AF_NONE, (void*) ID_ROTATE3D_Y_NEG );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateYCCW( "3DViewer.Control.rotateYcounterclockwise",
-        AS_GLOBAL,
-        0, "",
+        AS_GLOBAL, 0, "",
         _( "Rotate Y Counterclockwise" ), _( "Rotate Y Counterclockwise" ),
         rotate_pos_y_xpm, AF_NONE, (void*) ID_ROTATE3D_Y_POS );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateZCW( "3DViewer.Control.rotateZclockwise",
-        AS_GLOBAL,
-        0, "",
+        AS_GLOBAL, 0, "",
         _( "Rotate Z Clockwise" ), _( "Rotate Z Clockwise" ),
         rotate_neg_z_xpm, AF_NONE, (void*) ID_ROTATE3D_Z_NEG );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateZCCW( "3DViewer.Control.rotateZcounterclockwise",
-        AS_GLOBAL,
-        0, "",
+        AS_GLOBAL, 0, "",
         _( "Rotate Z Counterclockwise" ), _( "Rotate Z Counterclockwise" ),
         rotate_pos_z_xpm, AF_NONE, (void*) ID_ROTATE3D_Z_POS );
 
 TOOL_ACTION EDA_3D_ACTIONS::moveLeft( "3DViewer.Control.moveLeft",
-        AS_GLOBAL,
+        AS_ACTIVE,
         WXK_LEFT, "",
         _( "Move board Left" ), _( "Move board Left" ),
         left_xpm, AF_NONE, (void*) CURSOR_LEFT );
 
 TOOL_ACTION EDA_3D_ACTIONS::moveRight( "3DViewer.Control.moveRight",
-        AS_GLOBAL,
+        AS_ACTIVE,
         WXK_RIGHT, "",
         _( "Move board Right" ), _( "Move board Right" ),
         right_xpm, AF_NONE, (void*) CURSOR_RIGHT );
 
 TOOL_ACTION EDA_3D_ACTIONS::moveUp( "3DViewer.Control.moveUp",
-        AS_GLOBAL,
+        AS_ACTIVE,
         WXK_UP, "",
         _( "Move board Up" ), _( "Move board Up" ),
         up_xpm, AF_NONE, (void*) CURSOR_UP );
 
 TOOL_ACTION EDA_3D_ACTIONS::moveDown( "3DViewer.Control.moveDown",
-        AS_GLOBAL,
+        AS_ACTIVE,
         WXK_DOWN, "",
         _( "Move board Down" ), _( "Move board Down" ),
         down_xpm, AF_NONE, (void*) CURSOR_DOWN );
 
 TOOL_ACTION EDA_3D_ACTIONS::homeView( "3DViewer.Control.homeView",
-        AS_GLOBAL,
+        AS_ACTIVE,
         WXK_HOME, "",
         "Home view" );
 
 TOOL_ACTION EDA_3D_ACTIONS::resetView( "3DViewer.Control.resetView",
-        AS_GLOBAL,
+        AS_ACTIVE,
         'R', "",
         "Reset view" );
 
@@ -118,37 +112,37 @@ TOOL_ACTION EDA_3D_ACTIONS::toggleOrtho( "3DViewer.Control.toggleOrtho",
         ortho_xpm );
 
 TOOL_ACTION EDA_3D_ACTIONS::viewFront( "3DViewer.Control.viewFront",
-        AS_GLOBAL,
+        AS_ACTIVE,
         'Y', "",
         _( "View Front" ), _( "View Front" ),
         axis3d_front_xpm, AF_NONE, (void*) ID_VIEW3D_FRONT );
 
 TOOL_ACTION EDA_3D_ACTIONS::viewBack( "3DViewer.Control.viewBack",
-        AS_GLOBAL,
+        AS_ACTIVE,
         MD_SHIFT + 'Y', "",
         _( "View Back" ), _( "View Back" ),
         axis3d_back_xpm, AF_NONE, (void*) ID_VIEW3D_BACK );
 
 TOOL_ACTION EDA_3D_ACTIONS::viewLeft( "3DViewer.Control.viewLeft",
-        AS_GLOBAL,
+        AS_ACTIVE,
         MD_SHIFT + 'X', "",
         _( "View Left" ), _( "View Left" ),
         axis3d_left_xpm, AF_NONE, (void*) ID_VIEW3D_LEFT );
 
 TOOL_ACTION EDA_3D_ACTIONS::viewRight( "3DViewer.Control.viewRight",
-        AS_GLOBAL,
+        AS_ACTIVE,
         'X', "",
         _( "View Right" ), _( "View Right" ),
         axis3d_right_xpm, AF_NONE, (void*) ID_VIEW3D_RIGHT );
 
 TOOL_ACTION EDA_3D_ACTIONS::viewTop( "3DViewer.Control.viewTop",
-        AS_GLOBAL,
+        AS_ACTIVE,
         'Z', "",
         _( "View Top" ), _( "View Top" ),
         axis3d_top_xpm, AF_NONE, (void*) ID_VIEW3D_TOP );
 
 TOOL_ACTION EDA_3D_ACTIONS::viewBottom( "3DViewer.Control.viewBottom",
-        AS_GLOBAL,
+        AS_ACTIVE,
         MD_SHIFT + 'Z', "",
         _( "View Bottom" ), _( "View Bottom" ),
         axis3d_bottom_xpm, AF_NONE, (void*) ID_VIEW3D_BOTTOM );
@@ -179,24 +173,24 @@ TOOL_ACTION EDA_3D_ACTIONS::show1mmGrid( "3DViewer.Control.show1mmGrid",
         nullptr, AF_NONE, (void*) GRID3D_TYPE::GRID_1MM );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotate45axisZ( "3DViewer.Control.rotate45axisZ",
-        AS_GLOBAL,
+        AS_ACTIVE,
         WXK_TAB, "",
         "Rotate 45 degrees over Z axis" );
 
 TOOL_ACTION EDA_3D_ACTIONS::attributesTHT( "3DViewer.Control.attributesTHT",
-        AS_GLOBAL,
+        AS_ACTIVE,
         'T', "",
         _( "Toggle Through Hole 3D models" ),  _( "Toggle 3D models with 'Through hole' attribute" ),
         nullptr, AF_NONE, (void*) FL_MODULE_ATTRIBUTES_NORMAL );
 
 TOOL_ACTION EDA_3D_ACTIONS::attributesSMD( "3DViewer.Control.attributesSMD",
-        AS_GLOBAL,
+        AS_ACTIVE,
         'S', "",
         _( "Toggle SMD 3D models" ), _( "Toggle 3D models with 'Surface mount' attribute" ),
         nullptr, AF_NONE, (void*) FL_MODULE_ATTRIBUTES_NORMAL_INSERT );
 
 TOOL_ACTION EDA_3D_ACTIONS::attributesVirtual( "3DViewer.Control.attributesVirtual",
-        AS_GLOBAL,
+        AS_ACTIVE,
         'V', "",
         _( "Toggle Virtual 3D models" ), _( "Toggle 3D models with 'Virtual' attribute" ),
         nullptr, AF_NONE, (void*) FL_MODULE_ATTRIBUTES_VIRTUAL );
