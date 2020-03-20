@@ -1624,8 +1624,10 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 
     visit( aSubgraph );
 
-    for( CONNECTION_SUBGRAPH* child : search_list )
+    for( unsigned i = 0; i < search_list.size(); i++ )
     {
+        auto child = search_list[i];
+
         visited.insert( child );
 
         visit( child );
