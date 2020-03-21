@@ -24,6 +24,7 @@
 
 #include <wx/colordlg.h>
 #include <wx/colour.h>
+#include <wx/filename.h>
 #include <wx/string.h>
 #include <wx/wupdlock.h>
 #include <wx/clipbrd.h>
@@ -637,7 +638,9 @@ void EDA_3D_VIEWER::takeScreenshot( wxCommandEvent& event )
 
         fullFileName = m_defaultSaveScreenshotFileName.GetFullPath();
 
-        if( !wxFileName::IsFileWritable( fullFileName ) )
+        wxFileName fn = fullFileName;
+
+        if( !fn.IsDirWritable() )
         {
             wxString msg;
 
