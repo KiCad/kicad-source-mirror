@@ -1181,6 +1181,30 @@ public:
 
 
 protected:
+    /** Plot a round rect (a round rect shape in fact) as a Gerber region
+     * using lines and arcs for corners
+     * @param aRectCenter is the center of the rectangle
+     * @param aSize is the size of the rectangle
+     * @param aCornerRadius is the radius of the corners
+     * @param aOrient is the rotation of the rectangle
+     * Note: only the G36 ... G37 region is created.
+     */
+    void plotRoundRectAsRegion( const wxPoint& aRectCenter, const wxSize& aSize,
+                                int aCornerRadius, double aOrient );
+    /**
+     * Plot a Gerber arc.
+     * if aPlotInRegion = true, the current pen position will not be
+     * initialized to the arc start position, and therefore the arc can be used
+     * to define a region outline item
+     * a line will be created from current ^position to arc start point
+     * if aPlotInRegion = false, the current pen position will be initialized
+     * to the arc start position, to plot an usual arc item
+     * The line thickness is not initialized in plotArc, and must be initialized
+     * before calling it if needed.
+     */
+    void plotArc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
+                      int aRadius, bool aPlotInRegion );
+
     /**
      * Pick an existing aperture or create a new one, matching the
      * size, type and attributes.

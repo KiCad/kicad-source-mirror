@@ -762,6 +762,12 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_EDGECUT );
     }
 
+    if( IsCopperLayer( aSeg->GetLayer() ) )
+        // Graphic items (DRAWSEGMENT, TEXT) having no net have the NonConductor attribute
+        // Graphic items having a net have the Conductor attribute, but are not (yet?)
+        // supported in Pcbnew
+        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
+
     switch( aSeg->GetShape() )
     {
     case S_CIRCLE:
