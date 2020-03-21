@@ -644,14 +644,17 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     cs->SetColorContext( COLOR_CONTEXT::PCB );
     cs->Load();
 
-    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
-    m_rotationAngle            = cfg->m_RotationAngle;
-    g_DrawDefaultLineThickness = Millimeter2iu( cfg->m_PlotLineWidth );
-    m_show_microwave_tools     = cfg->m_AuiPanels.show_microwave_tools;
-    m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
-    m_showPageLimits           = cfg->m_ShowPageLimits;
+    if( cfg )
+    {
+        m_rotationAngle            = cfg->m_RotationAngle;
+        g_DrawDefaultLineThickness = Millimeter2iu( cfg->m_PlotLineWidth );
+        m_show_microwave_tools     = cfg->m_AuiPanels.show_microwave_tools;
+        m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
+        m_showPageLimits           = cfg->m_ShowPageLimits;
+    }
 }
 
 
@@ -670,11 +673,14 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
-    cfg->m_RotationAngle                  = m_rotationAngle;
-    cfg->m_PlotLineWidth                  = Iu2Millimeter( g_DrawDefaultLineThickness );
-    cfg->m_AuiPanels.show_microwave_tools = m_show_microwave_tools;
-    cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
-    cfg->m_ShowPageLimits                 = m_showPageLimits;
+    if( cfg )
+    {
+        cfg->m_RotationAngle                  = m_rotationAngle;
+        cfg->m_PlotLineWidth                  = Iu2Millimeter( g_DrawDefaultLineThickness );
+        cfg->m_AuiPanels.show_microwave_tools = m_show_microwave_tools;
+        cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
+        cfg->m_ShowPageLimits                 = m_showPageLimits;
+    }
 }
 
 

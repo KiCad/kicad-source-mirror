@@ -123,14 +123,19 @@ public:
     };
 
 
-    AUTOPLACER( SCH_COMPONENT* aComponent, SCH_SCREEN* aScreen )
-        :m_screen( aScreen ), m_component( aComponent )
+    AUTOPLACER( SCH_COMPONENT* aComponent, SCH_SCREEN* aScreen ) :
+            m_screen( aScreen ), m_component( aComponent )
     {
         m_component->GetFields( m_fields, /* aVisibleOnly */ true );
 
         auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-        m_allow_rejustify = cfg->m_AutoplaceFields.allow_rejustify;
-        m_align_to_grid = cfg->m_AutoplaceFields.align_to_grid;
+        wxASSERT( cfg );
+
+        if( cfg )
+        {
+            m_allow_rejustify = cfg->m_AutoplaceFields.allow_rejustify;
+            m_align_to_grid = cfg->m_AutoplaceFields.align_to_grid;
+        }
 
         m_comp_bbox = m_component->GetBodyBoundingBox();
         m_fbox_size = ComputeFBoxSize( /* aDynamic */ true );

@@ -117,7 +117,6 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
     SCH_ITEM( aParent, SCH_COMPONENT_T )
 {
     Init( aPos );
-    m_fieldsAutoplaced = FIELDS_AUTOPLACED_NO;
 }
 
 
@@ -136,7 +135,6 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
     part = aPart.Flatten();
     part->SetParent();
     m_part.reset( part.release() );
-    m_fieldsAutoplaced = FIELDS_AUTOPLACED_NO;
 
     // Copy fields from the library component
     UpdateFields( true, true );

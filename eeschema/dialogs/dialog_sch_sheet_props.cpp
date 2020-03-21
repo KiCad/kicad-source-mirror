@@ -59,8 +59,13 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHE
 
     // Show/hide columns according to user's preference
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    m_shownColumns = cfg->m_Appearance.edit_sheet_visible_columns;
-    m_grid->ShowHideColumns( m_shownColumns );
+    wxASSERT( cfg );
+
+    if( cfg )
+    {
+        m_shownColumns = cfg->m_Appearance.edit_sheet_visible_columns;
+        m_grid->ShowHideColumns( m_shownColumns );
+    }
 
     wxToolTip::Enable( true );
     m_stdDialogButtonSizerOK->SetDefault();
@@ -93,7 +98,10 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHE
 DIALOG_SCH_SHEET_PROPS::~DIALOG_SCH_SHEET_PROPS()
 {
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    cfg->m_Appearance.edit_sheet_visible_columns = m_grid->GetShownColumns();
+    wxASSERT( cfg );
+
+    if( cfg )
+        cfg->m_Appearance.edit_sheet_visible_columns = m_grid->GetShownColumns();
 
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );

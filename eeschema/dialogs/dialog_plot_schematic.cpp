@@ -85,55 +85,52 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent )
 void DIALOG_PLOT_SCHEMATIC::initDlg()
 {
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    wxASSERT( cfg );
 
-    for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
+    if( cfg )
     {
-        int idx = m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
+        for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
+        {
+            int idx = m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
 
-        if( settings->GetFilename() == cfg->m_PlotPanel.color_theme )
-            m_colorTheme->SetSelection( idx );
-    }
+            if( settings->GetFilename() == cfg->m_PlotPanel.color_theme )
+                m_colorTheme->SetSelection( idx );
+        }
 
-    m_colorTheme->Enable( cfg->m_PlotPanel.color );
+        m_colorTheme->Enable( cfg->m_PlotPanel.color );
 
-    m_plotBackgroundColor->Enable( cfg->m_PlotPanel.color );
-    m_plotBackgroundColor->SetValue( cfg->m_PlotPanel.background_color );
+        m_plotBackgroundColor->Enable( cfg->m_PlotPanel.color );
+        m_plotBackgroundColor->SetValue( cfg->m_PlotPanel.background_color );
 
-    // Set color or B&W plot option
-    setModeColor( cfg->m_PlotPanel.color );
+        // Set color or B&W plot option
+        setModeColor( cfg->m_PlotPanel.color );
 
-    // Set plot or not frame reference option
-    setPlotFrameRef( cfg->m_PlotPanel.frame_reference );
+        // Set plot or not frame reference option
+        setPlotFrameRef( cfg->m_PlotPanel.frame_reference );
 
-    // Set HPGL plot origin to center of paper of left bottom corner
-    SetPlotOriginCenter( cfg->m_PlotPanel.hpgl_origin );
+        // Set HPGL plot origin to center of paper of left bottom corner
+        SetPlotOriginCenter( cfg->m_PlotPanel.hpgl_origin );
 
-    m_HPGLPaperSizeSelect = cfg->m_PlotPanel.hpgl_paper_size;
+        m_HPGLPaperSizeSelect = cfg->m_PlotPanel.hpgl_paper_size;
 
-    // HPGL Pen Size is stored in mm in config
-    m_HPGLPenSize = cfg->m_PlotPanel.hpgl_pen_size * IU_PER_MM;
+        // HPGL Pen Size is stored in mm in config
+        m_HPGLPenSize = cfg->m_PlotPanel.hpgl_pen_size * IU_PER_MM;
 
-    // Switch to the last save plot format
-    switch( static_cast<PLOT_FORMAT>( cfg->m_PlotPanel.format ) )
-    {
-    default:
-    case PLOT_FORMAT::POST:
-        m_plotFormatOpt->SetSelection( 0 );
-        break;
-    case PLOT_FORMAT::PDF:
-        m_plotFormatOpt->SetSelection( 1 );
-        break;
-    case PLOT_FORMAT::SVG:
-        m_plotFormatOpt->SetSelection( 2 );
-        break;
-    case PLOT_FORMAT::DXF:
-        m_plotFormatOpt->SetSelection( 3 );
-        m_plotBackgroundColor->Disable();
-        break;
-    case PLOT_FORMAT::HPGL:
-        m_plotFormatOpt->SetSelection( 4 );
-        m_plotBackgroundColor->Disable();
-        break;
+        // Switch to the last save plot format
+        PLOT_FORMAT fmt = static_cast<PLOT_FORMAT>( cfg->m_PlotPanel.format );
+
+        switch( fmt  )
+        {
+        default:
+        case PLOT_FORMAT::POST: m_plotFormatOpt->SetSelection( 0 ); break;
+        case PLOT_FORMAT::PDF:  m_plotFormatOpt->SetSelection( 1 ); break;
+        case PLOT_FORMAT::SVG:  m_plotFormatOpt->SetSelection( 2 ); break;
+        case PLOT_FORMAT::DXF:  m_plotFormatOpt->SetSelection( 3 ); break;
+        case PLOT_FORMAT::HPGL: m_plotFormatOpt->SetSelection( 4 ); break;
+        }
+
+        if( fmt == PLOT_FORMAT::DXF || fmt == PLOT_FORMAT::HPGL )
+            m_plotBackgroundColor->Disable();
     }
 
     // Set the default line width (pen width which should be used for
@@ -278,18 +275,22 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
     m_HPGLPenSize = m_penWidth.GetValue();
 
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    wxASSERT( cfg );
 
-    cfg->m_PlotPanel.background_color = m_plotBackgroundColor->GetValue();
-    cfg->m_PlotPanel.color = getModeColor();
-    cfg->m_PlotPanel.color_theme = static_cast<COLOR_SETTINGS*>(
-            m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) )->GetFilename();
-    cfg->m_PlotPanel.frame_reference = getPlotFrameRef();
-    cfg->m_PlotPanel.format = static_cast<int>( GetPlotFileFormat() );
-    cfg->m_PlotPanel.hpgl_origin = GetPlotOriginCenter();
-    cfg->m_PlotPanel.hpgl_paper_size = m_HPGLPaperSizeSelect;
+    if( cfg )
+    {
+        cfg->m_PlotPanel.background_color = m_plotBackgroundColor->GetValue();
+        cfg->m_PlotPanel.color = getModeColor();
+        cfg->m_PlotPanel.color_theme = static_cast<COLOR_SETTINGS*>(
+                m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) )->GetFilename();
+        cfg->m_PlotPanel.frame_reference = getPlotFrameRef();
+        cfg->m_PlotPanel.format = static_cast<int>( GetPlotFileFormat() );
+        cfg->m_PlotPanel.hpgl_origin = GetPlotOriginCenter();
+        cfg->m_PlotPanel.hpgl_paper_size = m_HPGLPaperSizeSelect;
 
-    // HPGL Pen Size is stored in mm in config
-    cfg->m_PlotPanel.hpgl_pen_size = m_HPGLPenSize / IU_PER_MM;
+        // HPGL Pen Size is stored in mm in config
+        cfg->m_PlotPanel.hpgl_pen_size = m_HPGLPenSize / IU_PER_MM;
+    }
 
     SetDefaultLineThickness( m_defaultLineWidth.GetValue() );
 

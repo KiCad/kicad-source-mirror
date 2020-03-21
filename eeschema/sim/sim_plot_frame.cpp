@@ -238,13 +238,16 @@ void SIM_PLOT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
-    EDA_BASE_FRAME::SaveSettings( cfg );
+    if( cfg )
+    {
+        EDA_BASE_FRAME::SaveSettings( cfg );
 
-    cfg->m_Simulator.plot_panel_width     = m_splitterLeftRight->GetSashPosition();
-    cfg->m_Simulator.plot_panel_height    = m_splitterPlotAndConsole->GetSashPosition();
-    cfg->m_Simulator.signal_panel_height  = m_splitterSignals->GetSashPosition();
-    cfg->m_Simulator.cursors_panel_height = m_splitterTuneValues->GetSashPosition();
-    cfg->m_Simulator.white_background     = m_plotUseWhiteBg;
+        cfg->m_Simulator.plot_panel_width     = m_splitterLeftRight->GetSashPosition();
+        cfg->m_Simulator.plot_panel_height    = m_splitterPlotAndConsole->GetSashPosition();
+        cfg->m_Simulator.signal_panel_height  = m_splitterSignals->GetSashPosition();
+        cfg->m_Simulator.cursors_panel_height = m_splitterTuneValues->GetSashPosition();
+        cfg->m_Simulator.white_background     = m_plotUseWhiteBg;
+    }
 }
 
 
@@ -253,16 +256,19 @@ void SIM_PLOT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
-    EDA_BASE_FRAME::LoadSettings( cfg );
+    if( cfg )
+    {
+        EDA_BASE_FRAME::LoadSettings( cfg );
 
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+        SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    // Read subwindows sizes (should be > 0 )
-    m_splitterLeftRightSashPosition      = cfg->m_Simulator.plot_panel_width;
-    m_splitterPlotAndConsoleSashPosition = cfg->m_Simulator.plot_panel_height;
-    m_splitterSignalsSashPosition        = cfg->m_Simulator.signal_panel_height;
-    m_splitterTuneValuesSashPosition     = cfg->m_Simulator.cursors_panel_height;
-    m_plotUseWhiteBg                     = cfg->m_Simulator.white_background;
+        // Read subwindows sizes (should be > 0 )
+        m_splitterLeftRightSashPosition      = cfg->m_Simulator.plot_panel_width;
+        m_splitterPlotAndConsoleSashPosition = cfg->m_Simulator.plot_panel_height;
+        m_splitterSignalsSashPosition        = cfg->m_Simulator.signal_panel_height;
+        m_splitterTuneValuesSashPosition     = cfg->m_Simulator.cursors_panel_height;
+        m_plotUseWhiteBg                     = cfg->m_Simulator.white_background;
+    }
 }
 
 
@@ -270,7 +276,8 @@ WINDOW_SETTINGS* SIM_PLOT_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
     wxASSERT( cfg );
-    return &cfg->m_Simulator.window;
+
+    return cfg ? &cfg->m_Simulator.window : nullptr;
 }
 
 

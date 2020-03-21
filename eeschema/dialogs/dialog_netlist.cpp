@@ -321,22 +321,27 @@ void NETLIST_DIALOG::InstallCustomPages()
     NETLIST_PAGE_DIALOG* currPage;
 
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    wxASSERT( cfg );
 
-    for( size_t i = 0;
-         i < CUSTOMPANEL_COUNTMAX && i < cfg->m_NetlistPanel.custom_command_titles.size(); i++ )
+    if( cfg )
     {
-        // pairs of (title, command) are stored
-        wxString title = cfg->m_NetlistPanel.custom_command_titles[i];
+        for( size_t i = 0;
+             i < CUSTOMPANEL_COUNTMAX && i < cfg->m_NetlistPanel.custom_command_titles.size();
+             i++ )
+        {
+            // pairs of (title, command) are stored
+            wxString title = cfg->m_NetlistPanel.custom_command_titles[i];
 
-        if( i >= cfg->m_NetlistPanel.custom_command_paths.size() )
-            break; // No more panel to install
+            if( i >= cfg->m_NetlistPanel.custom_command_paths.size() )
+                break; // No more panel to install
 
-        wxString command = cfg->m_NetlistPanel.custom_command_paths[i];
+            wxString command = cfg->m_NetlistPanel.custom_command_paths[i];
 
-        currPage = AddOneCustomPage( title, command,
-                static_cast<NETLIST_TYPE_ID>( NET_TYPE_CUSTOM1 + i ) );
+            currPage = AddOneCustomPage( title, command,
+                    static_cast<NETLIST_TYPE_ID>( NET_TYPE_CUSTOM1 + i ) );
 
-        m_PanelNetType[PANELCUSTOMBASE + i] = currPage;
+            m_PanelNetType[PANELCUSTOMBASE + i] = currPage;
+        }
     }
 }
 

@@ -87,7 +87,10 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 DIALOG_ERC::~DIALOG_ERC()
 {
     EESCHEMA_SETTINGS* settings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    settings->m_Appearance.erc_severities = m_severities;
+    wxASSERT( settings );
+
+    if( settings )
+        settings->m_Appearance.erc_severities = m_severities;
 
     m_markerTreeModel->DecRef();
 }
