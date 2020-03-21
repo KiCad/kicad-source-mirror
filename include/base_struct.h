@@ -169,37 +169,25 @@ public:
     const KIID  m_Uuid;
 
 private:
-
     /**
      * Run time identification, _keep private_ so it can never be changed after
      * a constructor sets it.  See comment near SetType() regarding virtual
      * functions.
      */
     KICAD_T       m_StructType;
-    STATUS_FLAGS  m_Status;
 
 protected:
-
+    STATUS_FLAGS  m_Status;
     EDA_ITEM*     m_Parent;       ///< Linked list: Link (parent struct)
-
-    /// Set to true to override the visibility setting of the item.
     bool          m_forceVisible;
-
-    /// Flag bits for editing and other uses.
     STATUS_FLAGS  m_Flags;
 
-private:
-
-    void initVars();
-
 protected:
-
     EDA_ITEM( EDA_ITEM* parent, KICAD_T idType );
     EDA_ITEM( KICAD_T idType );
     EDA_ITEM( const EDA_ITEM& base );
 
 public:
-
     virtual ~EDA_ITEM() { };
 
     /**
@@ -209,10 +197,7 @@ public:
      * after a constructor sets it, so there is no public "setter" method.
      * @return KICAD_T - the type of object.
      */
-    inline KICAD_T Type() const
-    {
-        return m_StructType;
-    }
+    inline KICAD_T Type() const { return m_StructType; }
 
     EDA_ITEM* GetParent() const { return m_Parent; }
     void SetParent( EDA_ITEM* aParent )   { m_Parent = aParent; }

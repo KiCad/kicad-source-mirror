@@ -54,41 +54,32 @@ static const unsigned char dummy_png[] = {
 static const BITMAP_OPAQUE dummy_xpm[1] = {{ dummy_png, sizeof( dummy_png ), "dummy_xpm" }};
 
 
-enum textbox {
-    ID_TEXTBOX_LIST = 8010
-};
+EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType ) :
+        m_StructType( idType ),
+        m_Status( 0 ),
+        m_Parent( parent ),
+        m_forceVisible( false ),
+        m_Flags( 0 )
+{ }
 
 
-EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType )
-{
-    initVars();
-    m_StructType = idType;
-    m_Parent     = parent;
-}
+EDA_ITEM::EDA_ITEM( KICAD_T idType ) :
+        m_StructType( idType ),
+        m_Status( 0 ),
+        m_Parent( nullptr ),
+        m_forceVisible( false ),
+        m_Flags( 0 )
+{ }
 
 
-EDA_ITEM::EDA_ITEM( KICAD_T idType )
-{
-    initVars();
-    m_StructType = idType;
-}
-
-
-EDA_ITEM::EDA_ITEM( const EDA_ITEM& base )
-{
-    initVars();
-    *this = base;
-}
-
-
-void EDA_ITEM::initVars()
-{
-    m_StructType = TYPE_NOT_INIT;
-    m_Parent    = NULL;     // Linked list: Link (parent struct)
-    m_Flags     = 0;        // flags for editions and other
-    m_Status    = 0;
-    m_forceVisible = false; // true to override the visibility setting of the item.
-}
+EDA_ITEM::EDA_ITEM( const EDA_ITEM& base ) :
+        m_Uuid( base.m_Uuid ),
+        m_StructType( base.m_StructType ),
+        m_Status( base.m_Status ),
+        m_Parent( base.m_Parent ),
+        m_forceVisible( base.m_forceVisible ),
+        m_Flags( base.m_Flags )
+{ }
 
 
 void EDA_ITEM::SetModified()

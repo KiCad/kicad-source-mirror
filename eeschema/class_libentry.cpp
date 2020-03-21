@@ -135,6 +135,8 @@ LIB_PART::LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary ) :
     m_keyWords            = aPart.m_keyWords;
     m_docFileName         = aPart.m_docFileName;
 
+    ClearSelected();
+
     for( const LIB_ITEM& oldItem : aPart.m_drawings )
     {
         if( ( oldItem.GetFlags() & ( IS_NEW | STRUCT_DELETED ) ) != 0 )
@@ -143,6 +145,7 @@ LIB_PART::LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary ) :
         try
         {
             newItem = (LIB_ITEM*) oldItem.Clone();
+            newItem->ClearSelected();
             newItem->SetParent( this );
             m_drawings.push_back( newItem );
         }
