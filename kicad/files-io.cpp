@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,8 @@ void KICAD_MANAGER_FRAME::OnClearFileHistory( wxCommandEvent& aEvent )
 }
 
 
-bool CopyStreamData( wxInputStream& inputStream, wxOutputStream& outputStream, wxFileOffset size )
+// Unarchive Files code comes from wxWidgets sample/archive/archive.cpp
+static bool CopyStreamData( wxInputStream& inputStream, wxOutputStream& outputStream, wxFileOffset size )
 {
     wxChar buf[128 * 1024];
     int readSize = 128 * 1024;
