@@ -472,9 +472,7 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 {
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
-    if( m_my_part )
-        delete m_my_part;
-
+    delete m_my_part;
     m_my_part = aPart;
 
     // select the current component in the tree widget
@@ -837,6 +835,21 @@ void LIB_EDIT_FRAME::RebuildView()
 void LIB_EDIT_FRAME::HardRedraw()
 {
     SyncLibraries( true );
+
+    if( m_my_part )
+    {
+        EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+        EE_SELECTION&      selection = selectionTool->GetSelection();
+
+        for( LIB_ITEM& item : m_my_part->GetDrawItems() )
+        {
+            if( std::find( selection.begin(), selection.end(), &item ) == selection.end() )
+                item.ClearSelected();
+            else
+                item.SetSelected();
+        }
+    }
+
     RebuildView();
 }
 

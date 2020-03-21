@@ -649,7 +649,6 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     if( !part )
         return 0;
 
-    EE_SELECTION&       selection = m_selectionTool->GetSelection();
     std::string         text = m_toolMgr->GetClipboard();
     STRING_LINE_READER  reader( text, "Clipboard" );
     LIB_PART*           newPart;
@@ -674,6 +673,9 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     m_frame->SaveCopyInUndoList( part );
     m_selectionTool->ClearSelection();
 
+    for( LIB_ITEM& item : part->GetDrawItems() )
+        item.ClearFlags( IS_NEW | IS_PASTED | SELECTED );
+
     for( LIB_ITEM& item : newPart->GetDrawItems() )
     {
         if( item.Type() == LIB_FIELD_T )
@@ -693,6 +695,8 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     delete newPart;
 
     m_selectionTool->RebuildSelection();
+
+    EE_SELECTION& selection = m_selectionTool->GetSelection();
 
     if( !selection.Empty() )
     {
@@ -726,7 +730,7 @@ int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     {
         LIB_ITEM* oldItem = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
         LIB_ITEM* newItem = (LIB_ITEM*) oldItem->Clone();
-        oldItem->ClearFlags( SELECTED );
+        oldItem->ClearFlags( IS_NEW | IS_PASTED | SELECTED );
         newItem->SetFlags( IS_NEW | IS_PASTED | SELECTED );
         newItem->SetParent( part );
         newItems.push_back( newItem );
