@@ -264,6 +264,9 @@ void EDA_3D_VIEWER_CONTROL::setTransitions()
     Go( &EDA_3D_VIEWER_CONTROL::ViewControl,        EDA_3D_ACTIONS::viewRight.MakeEvent() );
     Go( &EDA_3D_VIEWER_CONTROL::ViewControl,        EDA_3D_ACTIONS::viewFront.MakeEvent() );
     Go( &EDA_3D_VIEWER_CONTROL::ViewControl,        EDA_3D_ACTIONS::viewBack.MakeEvent() );
+    Go( &EDA_3D_VIEWER_CONTROL::ViewControl,        EDA_3D_ACTIONS::pivotCenter.MakeEvent() );
+    Go( &EDA_3D_VIEWER_CONTROL::ViewControl,        EDA_3D_ACTIONS::homeView.MakeEvent() );
+    Go( &EDA_3D_VIEWER_CONTROL::ViewControl,        EDA_3D_ACTIONS::resetView.MakeEvent() );
     Go( &EDA_3D_VIEWER_CONTROL::RotateView,         EDA_3D_ACTIONS::rotateXCW.MakeEvent() );
     Go( &EDA_3D_VIEWER_CONTROL::RotateView,         EDA_3D_ACTIONS::rotateXCCW.MakeEvent() );
     Go( &EDA_3D_VIEWER_CONTROL::RotateView,         EDA_3D_ACTIONS::rotateYCW.MakeEvent() );

@@ -40,7 +40,8 @@ TOOL_ACTION EDA_3D_ACTIONS::controlActivate( "3DViewer.Control", AS_GLOBAL,
 TOOL_ACTION EDA_3D_ACTIONS::pivotCenter( "3DViewer.Control.pivotCenter",
         AS_ACTIVE,
         ' ', "",
-        "Center pivot rotation (Middle mouse click)" );
+        _( "Center pivot rotation" ), _( "Center pivot rotation (middle mouse click)" ),
+        nullptr, AF_NONE, (void*) WXK_SPACE );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateXCW( "3DViewer.Control.rotateXclockwise",
         AS_GLOBAL, 0, "",
@@ -99,12 +100,14 @@ TOOL_ACTION EDA_3D_ACTIONS::moveDown( "3DViewer.Control.moveDown",
 TOOL_ACTION EDA_3D_ACTIONS::homeView( "3DViewer.Control.homeView",
         AS_ACTIVE,
         WXK_HOME, "",
-        "Home view" );
+        _( "Home view" ), _( "Home view" ),
+        nullptr, AF_NONE, (void*) WXK_HOME );
 
 TOOL_ACTION EDA_3D_ACTIONS::resetView( "3DViewer.Control.resetView",
         AS_ACTIVE,
         'R', "",
-        "Reset view" );
+        _( "Reset view" ), _( "Reset view" ),
+        nullptr, AF_NONE, (void*) ID_VIEW3D_RESET );
 
 TOOL_ACTION EDA_3D_ACTIONS::toggleOrtho( "3DViewer.Control.toggleOrtho",
         AS_GLOBAL, 0, "",

@@ -872,36 +872,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
 
         return true;
 
-    case '+':
-    case '-':
-        break;
-
-    case 't':
-    case 'T':
-        m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL,
-                            !m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
-        ReloadRequest();
-        handled = true;
-        break;
-
-    case 's':
-    case 'S':
-        m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT,
-                            !m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
-        ReloadRequest();
-        handled = true;
-        break;
-
-    case 'v':
-    case 'V':
-        m_settings.SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL,
-                            !m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) );
-        ReloadRequest();
-        handled = true;
-        break;
-
-    case 'r':
-    case 'R':
+    case ID_VIEW3D_RESET:
         m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
