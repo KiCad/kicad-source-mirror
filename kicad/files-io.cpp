@@ -55,6 +55,44 @@ void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 }
 
 
+bool CopyStreamData( wxInputStream& inputStream, wxOutputStream& outputStream, wxFileOffset size )
+{
+    wxChar buf[128 * 1024];
+    int readSize = 128 * 1024;
+    wxFileOffset copiedData = 0;
+
+    for (;;)
+    {
+        if (size != -1 && copiedData + readSize > size)
+            readSize = size - copiedData;
+
+        inputStream.Read( buf, readSize );
+
+        size_t actuallyRead = inputStream.LastRead();
+        outputStream.Write( buf, actuallyRead );
+
+        if( outputStream.LastWrite() != actuallyRead )
+        {
+            wxLogError( "Failed to output data" );
+            //return false;
+        }
+
+        if (size == -1)
+        {
+            if (inputStream.Eof())
+                break;
+        }
+        else
+        {
+            copiedData += actuallyRead;
+            if( copiedData >= size )
+                break;
+        }
+    }
+
+    return true;
+}
+
 void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 {
     wxFileName fn = GetProjectFileName();
@@ -68,7 +106,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     if( zipfiledlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxString msg = wxString::Format( _( "\nOpen \"%s\"\n" ), GetChars( zipfiledlg.GetPath() ) );
+    wxString msg = wxString::Format( _( "\nOpen \"%s\"\n" ), zipfiledlg.GetPath() );
     PrintMsg( msg );
 
     wxDirDialog dirDlg( this, _( "Target Directory" ), fn.GetPath(),
@@ -78,49 +116,65 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
         return;
 
     wxString unzipDir = dirDlg.GetPath() + wxT( "/" );
-    msg.Printf( _( "Unzipping project in \"%s\"\n" ), GetChars( unzipDir ) );
+    msg.Printf( _( "Unzipping project in \"%s\"\n" ), unzipDir );
     PrintMsg( msg );
 
-    wxFileSystem zipfilesys;
+    wxString archiveFileName = zipfiledlg.GetPath();
+    wxFileInputStream fileInputStream( archiveFileName );
 
-    zipfilesys.AddHandler( new wxZipFSHandler );
-    auto path = wxURI( zipfiledlg.GetPath() + wxT( "#zip:" ) ).BuildURI();
-    zipfilesys.ChangePathTo( path, true );
+    if (!fileInputStream.IsOk())
+        return;
 
-    wxFSFile* zipfile = NULL;
-    wxString  localfilename = zipfilesys.FindFirst( wxFileSelectorDefaultWildcardStr, wxFILE );
+    const wxArchiveClassFactory* archiveClassFactory =
+        wxArchiveClassFactory::Find( archiveFileName, wxSTREAM_FILEEXT );
 
-    while( !localfilename.IsEmpty() )
+    if( archiveClassFactory )
     {
-        zipfile = zipfilesys.OpenFile( localfilename );
-        if( !zipfile )
+        wxScopedPtr<wxArchiveInputStream> archiveStream( archiveClassFactory->NewStream(fileInputStream) );
+
+        for (wxArchiveEntry* entry = archiveStream->GetNextEntry(); entry;
+             entry = archiveStream->GetNextEntry())
         {
-            DisplayError( this, wxT( "Zip file read error" ) );
-            break;
+            PrintMsg( wxString::Format( _( "Extract file \"%s\"" ), entry->GetName() ) );
+
+            wxString fullname = unzipDir + entry->GetName();
+
+            // Ensure the target directory exists and created it if not
+            wxString t_path = wxPathOnly( fullname );
+
+            if( !wxDirExists( t_path ) )
+            {
+                // To create t_path, we need to create all subdirs from unzipDir
+                // to t_path.
+                wxFileName pathToCreate;
+                pathToCreate.AssignDir( t_path );
+                pathToCreate.MakeRelativeTo( unzipDir );
+
+                // Create the list of subdirs candidates
+                wxArrayString subDirs;
+                subDirs = pathToCreate.GetDirs();
+                pathToCreate.AssignDir( unzipDir );
+
+                for( size_t ii = 0; ii < subDirs.Count(); ii++ )
+                {
+                    pathToCreate.AppendDir( subDirs[ii] );
+                    wxString currPath = pathToCreate.GetPath();
+
+                    if( !wxDirExists( currPath ) )
+                        wxMkdir( currPath );
+                }
+            }
+
+            wxTempFileOutputStream outputFileStream( fullname );
+
+            if( CopyStreamData( *archiveStream, outputFileStream, entry->GetSize() ) )
+            {
+                outputFileStream.Commit();
+                PrintMsg( _( " OK\n" ) );
+            }
+            else
+                PrintMsg( _( " *ERROR*\n" ) );
         }
-
-        wxFileName uzfn = localfilename.AfterLast( ':' );
-        uzfn.MakeAbsolute( unzipDir );
-        wxString unzipfilename = uzfn.GetFullPath();
-
-        msg.Printf( _( "Extract file \"%s\"" ), GetChars( unzipfilename ) );
-        PrintMsg( msg );
-
-        wxInputStream* stream = zipfile->GetStream();
-        wxFFileOutputStream* ofile = new wxFFileOutputStream( unzipfilename );
-
-        if( ofile->Ok() )
-        {
-            ofile->Write( *stream );
-            PrintMsg( _( " OK\n" ) );
-        }
-        else
-            PrintMsg( _( " *ERROR*\n" ) );
-
-        delete ofile;
-        delete zipfile;
-
-        localfilename = zipfilesys.FindNext();
     }
 
     PrintMsg( wxT( "** end **\n" ) );
@@ -214,7 +268,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
         curr_fn.MakeRelativeTo( currdirname );
         currFilename = curr_fn.GetFullPath();
 
-        msg.Printf( _( "Archive file \"%s\"" ), GetChars( currFilename ) );
+        msg.Printf( _( "Archive file \"%s\"" ), currFilename );
         PrintMsg( msg );
 
         // Read input file and add it to the zip file:
@@ -242,14 +296,14 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     if( zipstream.Close() )
     {
         msg.Printf( _( "\nZip archive \"%s\" created (%d bytes)" ),
-                    GetChars( zipfilename ), zipBytesCnt );
+                    zipfilename, zipBytesCnt );
         PrintMsg( msg );
         PrintMsg( wxT( "\n** end **\n" ) );
     }
     else
     {
         msg.Printf( wxT( "Unable to create archive \"%s\", abort\n" ),
-                    GetChars( zipfilename ) );
+                    zipfilename );
         PrintMsg( msg );
     }
 
