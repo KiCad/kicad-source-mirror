@@ -22,11 +22,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  eda_3d_viewer.cpp
- * @brief Implements a 3d viewer windows GUI
- */
-
+#include <wx/colordlg.h>
+#include <wx/colour.h>
+#include <wx/filename.h>
+#include <wx/string.h>
+#include <wx/wupdlock.h>
+#include <wx/clipbrd.h>
 #include "eda_3d_viewer.h"
 
 #include "../3d_viewer_id.h"
@@ -990,7 +991,9 @@ void EDA_3D_VIEWER::takeScreenshot( wxCommandEvent& event )
 
         fullFileName = m_defaultSaveScreenshotFileName.GetFullPath();
 
-        if( !wxFileName::IsFileWritable( fullFileName ) )
+        wxFileName fn = fullFileName;
+
+        if( !fn.IsDirWritable() )
         {
             wxString msg;
 
