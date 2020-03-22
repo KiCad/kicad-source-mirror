@@ -68,6 +68,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     CLR( "schematic.erc_warning",       LAYER_ERC_WARN,             COLOR4D( GREEN ).WithAlpha( 0.8 ) );
     CLR( "schematic.fields",            LAYER_FIELDS,               COLOR4D( MAGENTA ) );
     CLR( "schematic.grid",              LAYER_SCHEMATIC_GRID,       COLOR4D( DARKGRAY ) );
+    CLR( "schematic.grid_axes",         LAYER_SCHEMATIC_GRID_AXES,  COLOR4D( BLUE ) );
     CLR( "schematic.hidden",            LAYER_HIDDEN,               COLOR4D( LIGHTGRAY ) );
     CLR( "schematic.junction",          LAYER_JUNCTION,             COLOR4D( GREEN ) );
     CLR( "schematic.label_global",      LAYER_GLOBLABEL,            COLOR4D( RED ) );

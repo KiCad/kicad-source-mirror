@@ -790,6 +790,8 @@ void LIB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
 
+    GetCanvas()->GetGAL()->SetAxesColor( m_colorSettings->GetColor( LAYER_SCHEMATIC_GRID_AXES ) );
+
     RecreateToolbars();
 
     if( aEnvVarsChanged )
@@ -931,6 +933,7 @@ void LIB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 
     // Set options specific to symbol editor (axies are always enabled):
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
+    GetCanvas()->GetGAL()->SetAxesColor( m_colorSettings->GetColor( LAYER_SCHEMATIC_GRID_AXES ) );
 }
 
 

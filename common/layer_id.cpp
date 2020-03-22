@@ -103,6 +103,9 @@ wxString LayerName( SCH_LAYER_ID aLayer )
     case LAYER_SCHEMATIC_GRID:
         return _( "Grid" );
 
+    case LAYER_SCHEMATIC_GRID_AXES:
+        return _( "Axes" );
+
     case LAYER_SCHEMATIC_BACKGROUND:
         return _( "Background" );
 
