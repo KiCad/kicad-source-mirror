@@ -745,7 +745,7 @@ void PCB_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
     auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    wxCHECK( cfg, /*void*/ );
 
     cfg->m_UserGrid.size_x = To_User_Unit( m_userUnits, m_UserGridSize.x );
     cfg->m_UserGrid.size_y = To_User_Unit( m_userUnits, m_UserGridSize.y );

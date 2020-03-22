@@ -884,7 +884,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aName,
 
     wxVector<wxVariant> fieldsCtrlRow;
 
-    auto cfg     = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    auto cfg     = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     bool show    = defaultShow;
     bool sort_by = defaultSortBy;
 
@@ -932,6 +932,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
 
     // Force References to always be shown
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    wxASSERT( cfg );
     cfg->m_FieldEditorPanel.fields_show["Reference"] = true;
 
     // *DO NOT* use translated mandatory field names:
@@ -986,7 +987,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
 
     std::string key( fieldName.ToUTF8() );
 
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    auto cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     cfg->m_FieldEditorPanel.fields_show[key] = true;
 
     AddField( fieldName, true, false );
@@ -1006,7 +1007,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
 
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
 {
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    auto cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxDataViewItem item = event.GetItem();
 
     int row = m_fieldsCtrl->ItemToRow( item );

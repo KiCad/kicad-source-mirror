@@ -131,6 +131,9 @@ public:
         auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
         wxASSERT( cfg );
 
+        m_allow_rejustify = false;
+        m_align_to_grid = true;
+
         if( cfg )
         {
             m_allow_rejustify = cfg->m_AutoplaceFields.allow_rejustify;

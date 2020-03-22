@@ -69,7 +69,7 @@ MARKER_BASE::MARKER_BASE( int aScalingFactor, RC_ITEM* aItem, TYPEMARKER aType )
     wxPoint start( point_shape->x, point_shape->y );
     wxPoint end = start;
 
-    for( int ii = 1; ii < CORNERS_COUNT; ii++ )
+    for( unsigned ii = 1; ii < CORNERS_COUNT; ii++ )
     {
         ++point_shape;
         start.x = std::min( start.x, point_shape->x);

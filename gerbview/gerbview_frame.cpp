@@ -309,6 +309,7 @@ void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
     GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg );
+    wxCHECK( cfg, /*void*/ );
 
     SetElementVisibility( LAYER_WORKSHEET, cfg->m_Appearance.show_border_and_titleblock );
 
@@ -330,6 +331,7 @@ void GERBVIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
     GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg );
+    wxCHECK( cfg, /*void*/ );
 
     cfg->m_Appearance.page_type = GetPageSettings().GetType();
     cfg->m_Appearance.show_border_and_titleblock = m_showBorderAndTitleBlock;

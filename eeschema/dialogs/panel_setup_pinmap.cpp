@@ -148,8 +148,8 @@ void PANEL_SETUP_PINMAP::ReBuildMatrixPanel()
                 wxPoint txtpos;
                 txtpos.x = x + (bitmap_size.x / 2);
                 txtpos.y = y - text_height;
-                WX_ANGLE_TEXT* txt = new WX_ANGLE_TEXT( m_matrixPanel, wxID_ANY, CommentERC_V[ii],
-                                                        txtpos, 450 );
+                new WX_ANGLE_TEXT( m_matrixPanel, wxID_ANY, CommentERC_V[ii],
+                                   txtpos, 450 );
             }
 
             int event_id = ID_MATRIX_0 + ii + ( jj * ELECTRICAL_PINTYPES_TOTAL );
