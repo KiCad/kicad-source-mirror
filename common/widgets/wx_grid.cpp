@@ -269,28 +269,24 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
 
 void WX_GRID::EnsureColLabelsVisible()
 {
-    int row_height = GetColLabelSize();
-    // The 1.1 scale factor is due to the fact row labels use a bold font, bigger than the normal font
+    // The 1.1 scale factor is due to the fact row labels use a bold font, bigger than
+    // the normal font
     // TODO: use a better way to evaluate the text size, for bold font
+    int line_height = int( GetTextExtent( "Mj" ).y * 1.1 ) + 3;
+    int row_height = GetColLabelSize();
+
     // Headers can be multiline. Fix the Column Label Height to show the full header
     // However GetTextExtent does not work on multiline strings,
     // and do not return the full text height (only the height of one line)
     for( int col = 0; col < GetNumberCols(); col++ )
     {
-        int nl_count = 0;
-
-        for( unsigned ii = 0; ii < GetColLabelValue( col ).size(); ii++ )
-            if( GetColLabelValue( col )[ii] == '\n' )
-                nl_count++;
+        int nl_count = GetColLabelValue( col ).Freq( '\n' );
 
         if( nl_count )
         {
-            // calculate a reasonable text height and its margin
-            int heigth = int( GetTextExtent( "Mj" ).y * 1.1 ) + 3;
-
             // Col Label height must be able to show nl_count+1 lines
-            if( row_height < heigth * (nl_count+1) )
-                row_height += heigth*nl_count;
+            if( row_height < line_height * ( nl_count+1 ) )
+                row_height += line_height * nl_count;
         }
     }
 
