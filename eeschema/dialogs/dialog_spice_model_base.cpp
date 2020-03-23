@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -653,10 +653,177 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_pwrFm = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_pwrFm->Hide();
 
+	wxFlexGridSizer* fgSizer11;
+	fgSizer11 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer11->AddGrowableCol( 1 );
+	fgSizer11->SetFlexibleDirection( wxBOTH );
+	fgSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText138 = new wxStaticText( m_pwrFm, wxID_ANY, _("Offset:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText138->Wrap( -1 );
+	fgSizer11->Add( m_staticText138, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_fmOffset = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fmOffset->SetMinSize( wxSize( 100,-1 ) );
+
+	fgSizer11->Add( m_fmOffset, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText1311 = new wxStaticText( m_pwrFm, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1311->Wrap( -1 );
+	fgSizer11->Add( m_staticText1311, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText141 = new wxStaticText( m_pwrFm, wxID_ANY, _("Amplitude:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText141->Wrap( -1 );
+	fgSizer11->Add( m_staticText141, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_fmAmplitude = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer11->Add( m_fmAmplitude, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText1321 = new wxStaticText( m_pwrFm, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1321->Wrap( -1 );
+	fgSizer11->Add( m_staticText1321, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText151 = new wxStaticText( m_pwrFm, wxID_ANY, _("Carrier frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText151->Wrap( -1 );
+	fgSizer11->Add( m_staticText151, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_fmFcarrier = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer11->Add( m_fmFcarrier, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText1331 = new wxStaticText( m_pwrFm, wxID_ANY, _("Hertz"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1331->Wrap( -1 );
+	fgSizer11->Add( m_staticText1331, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText161 = new wxStaticText( m_pwrFm, wxID_ANY, _("Modulation index:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText161->Wrap( -1 );
+	fgSizer11->Add( m_staticText161, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_fmModIndex = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer11->Add( m_fmModIndex, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText1341 = new wxStaticText( m_pwrFm, wxID_ANY, _("-"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1341->Wrap( -1 );
+	fgSizer11->Add( m_staticText1341, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText171 = new wxStaticText( m_pwrFm, wxID_ANY, _("Signal frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText171->Wrap( -1 );
+	fgSizer11->Add( m_staticText171, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_fmFsignal = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer11->Add( m_fmFsignal, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText1351 = new wxStaticText( m_pwrFm, wxID_ANY, _("Hertz"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1351->Wrap( -1 );
+	fgSizer11->Add( m_staticText1351, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText181 = new wxStaticText( m_pwrFm, wxID_ANY, _("Carrier phase:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText181->Wrap( -1 );
+	fgSizer11->Add( m_staticText181, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_fmPhaseC = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer11->Add( m_fmPhaseC, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText1361 = new wxStaticText( m_pwrFm, wxID_ANY, _("degrees"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1361->Wrap( -1 );
+	fgSizer11->Add( m_staticText1361, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText201 = new wxStaticText( m_pwrFm, wxID_ANY, _("Signal phase:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText201->Wrap( -1 );
+	fgSizer11->Add( m_staticText201, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_fmPhaseS = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer11->Add( m_fmPhaseS, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText1371 = new wxStaticText( m_pwrFm, wxID_ANY, _("degrees"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1371->Wrap( -1 );
+	fgSizer11->Add( m_staticText1371, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+
+	m_pwrFm->SetSizer( fgSizer11 );
+	m_pwrFm->Layout();
+	fgSizer11->Fit( m_pwrFm );
 	m_powerNotebook->AddPage( m_pwrFm, _("FM"), false );
 	m_pwrAm = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_pwrAm->Hide();
 
+	wxFlexGridSizer* fgSizer12;
+	fgSizer12 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer12->AddGrowableCol( 1 );
+	fgSizer12->SetFlexibleDirection( wxBOTH );
+	fgSizer12->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText1381 = new wxStaticText( m_pwrAm, wxID_ANY, _("Amplitude:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1381->Wrap( -1 );
+	fgSizer12->Add( m_staticText1381, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_amAmplitude = new wxTextCtrl( m_pwrAm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_amAmplitude->SetMinSize( wxSize( 100,-1 ) );
+
+	fgSizer12->Add( m_amAmplitude, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText13111 = new wxStaticText( m_pwrAm, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13111->Wrap( -1 );
+	fgSizer12->Add( m_staticText13111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText1411 = new wxStaticText( m_pwrAm, wxID_ANY, _("Offset:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1411->Wrap( -1 );
+	fgSizer12->Add( m_staticText1411, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_amOffset = new wxTextCtrl( m_pwrAm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer12->Add( m_amOffset, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText13211 = new wxStaticText( m_pwrAm, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13211->Wrap( -1 );
+	fgSizer12->Add( m_staticText13211, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText1511 = new wxStaticText( m_pwrAm, wxID_ANY, _("Modulating frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1511->Wrap( -1 );
+	fgSizer12->Add( m_staticText1511, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_amModulatingFreq = new wxTextCtrl( m_pwrAm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer12->Add( m_amModulatingFreq, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText13311 = new wxStaticText( m_pwrAm, wxID_ANY, _("Hertz"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13311->Wrap( -1 );
+	fgSizer12->Add( m_staticText13311, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText1611 = new wxStaticText( m_pwrAm, wxID_ANY, _("Carrier frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1611->Wrap( -1 );
+	fgSizer12->Add( m_staticText1611, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_amCarrierFreq = new wxTextCtrl( m_pwrAm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer12->Add( m_amCarrierFreq, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText13411 = new wxStaticText( m_pwrAm, wxID_ANY, _("Hertz"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13411->Wrap( -1 );
+	fgSizer12->Add( m_staticText13411, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText1711 = new wxStaticText( m_pwrAm, wxID_ANY, _("Signal delay:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1711->Wrap( -1 );
+	fgSizer12->Add( m_staticText1711, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_amSignalDelay = new wxTextCtrl( m_pwrAm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer12->Add( m_amSignalDelay, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText13511 = new wxStaticText( m_pwrAm, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13511->Wrap( -1 );
+	fgSizer12->Add( m_staticText13511, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText1811 = new wxStaticText( m_pwrAm, wxID_ANY, _("Carrier phase:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1811->Wrap( -1 );
+	fgSizer12->Add( m_staticText1811, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_amPhase = new wxTextCtrl( m_pwrAm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer12->Add( m_amPhase, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText13611 = new wxStaticText( m_pwrAm, wxID_ANY, _("degrees"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13611->Wrap( -1 );
+	fgSizer12->Add( m_staticText13611, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+
+	m_pwrAm->SetSizer( fgSizer12 );
+	m_pwrAm->Layout();
+	fgSizer12->Fit( m_pwrAm );
 	m_powerNotebook->AddPage( m_pwrAm, _("AM"), false );
 	m_pwrTransNoise = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_pwrTransNoise->Hide();
@@ -665,6 +832,71 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_pwrRandom = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_pwrRandom->Hide();
 
+	wxFlexGridSizer* fgSizer13;
+	fgSizer13 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer13->AddGrowableCol( 1 );
+	fgSizer13->SetFlexibleDirection( wxBOTH );
+	fgSizer13->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText27111 = new wxStaticText( m_pwrRandom, wxID_ANY, _("Type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText27111->Wrap( -1 );
+	fgSizer13->Add( m_staticText27111, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxString m_rnTypeChoices[] = { _("Uniform"), _("Gaussian"), _("Exponential"), _("Poisson") };
+	int m_rnTypeNChoices = sizeof( m_rnTypeChoices ) / sizeof( wxString );
+	m_rnType = new wxChoice( m_pwrRandom, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_rnTypeNChoices, m_rnTypeChoices, 0 );
+	m_rnType->SetSelection( 0 );
+	fgSizer13->Add( m_rnType, 0, wxALL|wxEXPAND, 5 );
+
+
+	fgSizer13->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_staticText26711 = new wxStaticText( m_pwrRandom, wxID_ANY, _("Individual value duration:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText26711->Wrap( -1 );
+	fgSizer13->Add( m_staticText26711, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_rnTS = new wxTextCtrl( m_pwrRandom, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer13->Add( m_rnTS, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText262111 = new wxStaticText( m_pwrRandom, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText262111->Wrap( -1 );
+	fgSizer13->Add( m_staticText262111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText28111 = new wxStaticText( m_pwrRandom, wxID_ANY, _("Time delay:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText28111->Wrap( -1 );
+	fgSizer13->Add( m_staticText28111, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_rnTD = new wxTextCtrl( m_pwrRandom, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer13->Add( m_rnTD, 0, wxALL|wxEXPAND, 5 );
+
+	m_staticText263111 = new wxStaticText( m_pwrRandom, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText263111->Wrap( -1 );
+	fgSizer13->Add( m_staticText263111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_rnParam1Text = new wxStaticText( m_pwrRandom, wxID_ANY, _("Range:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rnParam1Text->Wrap( -1 );
+	fgSizer13->Add( m_rnParam1Text, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_rnParam1 = new wxTextCtrl( m_pwrRandom, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer13->Add( m_rnParam1, 0, wxALL|wxEXPAND, 5 );
+
+
+	fgSizer13->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_rnParam2Text = new wxStaticText( m_pwrRandom, wxID_ANY, _("Offset:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rnParam2Text->Wrap( -1 );
+	fgSizer13->Add( m_rnParam2Text, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_rnParam2 = new wxTextCtrl( m_pwrRandom, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer13->Add( m_rnParam2, 0, wxALL|wxEXPAND, 5 );
+
+
+	fgSizer13->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	m_pwrRandom->SetSizer( fgSizer13 );
+	m_pwrRandom->Layout();
+	fgSizer13->Fit( m_pwrRandom );
 	m_powerNotebook->AddPage( m_pwrRandom, _("Random"), false );
 	m_pwrExtData = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_pwrExtData->Hide();
@@ -735,6 +967,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_modelName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onModelSelected ), NULL, this );
 	m_pwlAddButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlAdd ), NULL, this );
 	m_pwlRemoveBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlRemove ), NULL, this );
+	m_rnType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onRandomSourceType ), NULL, this );
 }
 
 DIALOG_SPICE_MODEL_BASE::~DIALOG_SPICE_MODEL_BASE()
@@ -746,5 +979,6 @@ DIALOG_SPICE_MODEL_BASE::~DIALOG_SPICE_MODEL_BASE()
 	m_modelName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onModelSelected ), NULL, this );
 	m_pwlAddButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlAdd ), NULL, this );
 	m_pwlRemoveBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlRemove ), NULL, this );
+	m_rnType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onRandomSourceType ), NULL, this );
 
 }

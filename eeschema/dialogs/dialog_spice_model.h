@@ -112,6 +112,7 @@ private:
     void onModelSelected( wxCommandEvent& event ) override;
     void onPwlAdd( wxCommandEvent& event ) override;
     void onPwlRemove( wxCommandEvent& event ) override;
+    void onRandomSourceType( wxCommandEvent& event ) override;
 
     ///> Edited component
     SCH_COMPONENT& m_component;

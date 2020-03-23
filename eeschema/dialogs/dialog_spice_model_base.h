@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,6 +29,7 @@
 #include <wx/stc/stc.h>
 #include <wx/statbox.h>
 #include <wx/listctrl.h>
+#include <wx/choice.h>
 #include <wx/notebook.h>
 #include <wx/radiobox.h>
 #include <wx/checkbox.h>
@@ -171,9 +172,60 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		wxListCtrl* m_pwlValList;
 		wxButton* m_pwlRemoveBtn;
 		wxPanel* m_pwrFm;
+		wxStaticText* m_staticText138;
+		wxTextCtrl* m_fmOffset;
+		wxStaticText* m_staticText1311;
+		wxStaticText* m_staticText141;
+		wxTextCtrl* m_fmAmplitude;
+		wxStaticText* m_staticText1321;
+		wxStaticText* m_staticText151;
+		wxTextCtrl* m_fmFcarrier;
+		wxStaticText* m_staticText1331;
+		wxStaticText* m_staticText161;
+		wxTextCtrl* m_fmModIndex;
+		wxStaticText* m_staticText1341;
+		wxStaticText* m_staticText171;
+		wxTextCtrl* m_fmFsignal;
+		wxStaticText* m_staticText1351;
+		wxStaticText* m_staticText181;
+		wxTextCtrl* m_fmPhaseC;
+		wxStaticText* m_staticText1361;
+		wxStaticText* m_staticText201;
+		wxTextCtrl* m_fmPhaseS;
+		wxStaticText* m_staticText1371;
 		wxPanel* m_pwrAm;
+		wxStaticText* m_staticText1381;
+		wxTextCtrl* m_amAmplitude;
+		wxStaticText* m_staticText13111;
+		wxStaticText* m_staticText1411;
+		wxTextCtrl* m_amOffset;
+		wxStaticText* m_staticText13211;
+		wxStaticText* m_staticText1511;
+		wxTextCtrl* m_amModulatingFreq;
+		wxStaticText* m_staticText13311;
+		wxStaticText* m_staticText1611;
+		wxTextCtrl* m_amCarrierFreq;
+		wxStaticText* m_staticText13411;
+		wxStaticText* m_staticText1711;
+		wxTextCtrl* m_amSignalDelay;
+		wxStaticText* m_staticText13511;
+		wxStaticText* m_staticText1811;
+		wxTextCtrl* m_amPhase;
+		wxStaticText* m_staticText13611;
 		wxPanel* m_pwrTransNoise;
 		wxPanel* m_pwrRandom;
+		wxStaticText* m_staticText27111;
+		wxChoice* m_rnType;
+		wxStaticText* m_staticText26711;
+		wxTextCtrl* m_rnTS;
+		wxStaticText* m_staticText262111;
+		wxStaticText* m_staticText28111;
+		wxTextCtrl* m_rnTD;
+		wxStaticText* m_staticText263111;
+		wxStaticText* m_rnParam1Text;
+		wxTextCtrl* m_rnParam1;
+		wxStaticText* m_rnParam2Text;
+		wxTextCtrl* m_rnParam2;
 		wxPanel* m_pwrExtData;
 		wxRadioBox* m_pwrType;
 		wxStaticLine* m_staticline2;
@@ -191,6 +243,7 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		virtual void onModelSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPwlAdd( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPwlRemove( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onRandomSourceType( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
