@@ -451,7 +451,7 @@ msgstr "抗锯齿"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:272
 msgid "Render with improved quality on final render (slow)"
-msgstr "以最高质量渲染 (慢)"
+msgstr "在最终渲染中以最高质量渲染 (慢)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:276
 msgid "Post-processing"
@@ -461,7 +461,7 @@ msgstr "后期处理"
 msgid ""
 "Apply Screen Space Ambient Occlusion and Global Illumination reflections on "
 "final render (slow)"
-msgstr "在最终渲染上，应用屏幕空间环境光遮蔽和全局光照反射 (慢)"
+msgstr "在最终渲染中，应用屏幕空间环境光遮蔽和全局光照反射 (慢)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:287
 msgid "Choose Colors"
@@ -2789,9 +2789,9 @@ msgid ""
 "made?"
 msgstr ""
 "这可能存在问题！\n"
-"这似乎是你最后一次编辑的文件\n"
+"似乎你在上次编辑文件\n"
 "\"%s\"\n"
-"它没有正确保存, 你是否希望恢复上次保存的修改内容？"
+"后没有正确保存它, 你是否希望恢复上次保存的修改内容？"
 
 #: common/eda_base_frame.cpp:775
 #, c-format
@@ -4017,11 +4017,11 @@ msgstr "设置网格尺寸"
 
 #: common/tool/actions.cpp:449
 msgid "Imperial"
-msgstr "特级"
+msgstr "英制"
 
 #: common/tool/actions.cpp:449
 msgid "Use inches and mils"
-msgstr "使用英寸和密耳"
+msgstr "使用英寸和密耳 （mil）"
 
 #: common/tool/actions.cpp:454
 msgid "Metric"
@@ -4045,7 +4045,7 @@ msgstr "极坐标"
 
 #: common/tool/actions.cpp:465
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr "在极性坐标系和笛卡尔坐标系之间切换"
+msgstr "在极坐标系和笛卡尔坐标系之间切换"
 
 #: common/tool/actions.cpp:471
 msgid "Reset Local Coordinates"
@@ -4057,7 +4057,7 @@ msgstr "始终显示光标"
 
 #: common/tool/actions.cpp:477
 msgid "Display crosshairs even in selection tool"
-msgstr "即使在选择工具中也能显示十字线"
+msgstr "即使在选择工具中也显示十字线"
 
 #: common/tool/actions.cpp:482
 msgid "Full-Window Crosshairs"
@@ -4065,7 +4065,7 @@ msgstr "全屏十字光标"
 
 #: common/tool/actions.cpp:482
 msgid "Switch display of full-window crosshairs"
-msgstr "全屏十字光标的开关显示"
+msgstr "开关全屏十字光标"
 
 #: common/tool/actions.cpp:488
 msgid "High Contrast Mode"
@@ -4132,7 +4132,7 @@ msgstr "从原理图更新 PCB..."
 
 #: common/tool/actions.cpp:535
 msgid "Push changes from schematic to PCB"
-msgstr "从原理图到 PCB 的推送更改"
+msgstr "将更改从原理图推送到 PCB"
 
 #: common/tool/actions.cpp:539
 msgid "Update Schematic from PCB..."
@@ -4707,7 +4707,7 @@ msgstr ""
 
 #: cvpcb/cvpcb.cpp:169
 msgid "An error occurred attempting to load the global footprint library table"
-msgstr "尝试加载全局封装库表发生错误"
+msgstr "尝试加载全局封装库表时发生错误"
 
 #: cvpcb/cvpcb_mainframe.cpp:59 cvpcb/menubar.cpp:55
 msgid "Assign Footprints"
@@ -6603,7 +6603,7 @@ msgstr "非法引用指示符值！"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:175
 msgid "Value may not be empty."
-msgstr "值可能不是空的。"
+msgstr "值不能是空的。"
 
 #: eeschema/dialogs/dialog_edit_sheet_pin_base.cpp:28
 #: eeschema/dialogs/dialog_netlist_base.cpp:85 eeschema/libedit/libedit.cpp:436
@@ -6690,7 +6690,7 @@ msgstr "适当"
 
 #: eeschema/dialogs/dialog_erc.cpp:399 pcbnew/dialogs/dialog_drc.cpp:284
 msgid "Remove exclusion for this violation"
-msgstr "删除此违规的排除"
+msgstr "不再排除此违规"
 
 #: eeschema/dialogs/dialog_erc.cpp:400 pcbnew/dialogs/dialog_drc.cpp:285
 #, c-format
@@ -6714,12 +6714,12 @@ msgstr "将所有 \"%s\" 违规的严重性更改为错误"
 #: eeschema/dialogs/dialog_erc.cpp:414 eeschema/dialogs/dialog_erc.cpp:420
 #: pcbnew/dialogs/dialog_drc.cpp:299 pcbnew/dialogs/dialog_drc.cpp:305
 msgid "Violation severities can also be edited in the Board Setup... dialog"
-msgstr "违规程度也可以在“电路板设置...”对话框中进行编辑"
+msgstr "违规严重程度也可以在“电路板设置...”对话框中进行编辑"
 
 #: eeschema/dialogs/dialog_erc.cpp:418 pcbnew/dialogs/dialog_drc.cpp:303
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "将所有 \"%s\" 违规的严重性更改为警告"
+msgstr "将所有 \"%s\" 违规的严重程度更改为警告"
 
 #: eeschema/dialogs/dialog_erc.cpp:423 pcbnew/dialogs/dialog_drc.cpp:308
 #, c-format
@@ -7376,7 +7376,7 @@ msgstr "状态"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:212
 msgid "Updated"
-msgstr "更新"
+msgstr "已更新"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:19
 msgid ""
@@ -7391,8 +7391,8 @@ msgid ""
 "Please select a new name for each of the buses below.\n"
 "A name has been suggested for you based on the labels attached to the bus."
 msgstr ""
-"请为下面的每辆公交车选择一个新名称。\n"
-"根据连接到总线的标签, 为您推荐了一个名称。"
+"请为下面的每个总线选择一个新名称。\n"
+"已根据连接到总线的标签，推荐了一个名称。"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:34
 msgid "Proposed new name:"
@@ -7482,7 +7482,7 @@ msgstr "粘贴选项"
 
 #: eeschema/dialogs/dialog_paste_special_base.cpp:26
 msgid "Keep existing annotations, even if they are duplicated"
-msgstr "保留现有标注，即使它们是重复的"
+msgstr "即使现有标注是重复的也保留它们"
 
 #: eeschema/dialogs/dialog_paste_special_base.cpp:29
 msgid "Clear annotations on pasted items"
@@ -7760,7 +7760,7 @@ msgstr "符号名称"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:126
 msgid "Action Taken"
-msgstr "采取措施"
+msgstr "动作已完成"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:130 eeschema/lib_field.cpp:391
 #: eeschema/sch_component.cpp:1274 eeschema/sch_component.cpp:1322
@@ -8865,7 +8865,7 @@ msgid ""
 "and they will not be seen on the screen.  Are you\n"
 "sure you want to use these colors?"
 msgstr ""
-"有些项目的颜色与背景相同\n"
+"有些项目的颜色与背景相同，\n"
 "在屏幕上它们将不可见。\n"
 "你确定要使用这些颜色吗？"
 
@@ -9549,8 +9549,7 @@ msgid ""
 "load \n"
 "hierarchical sheet schematics."
 msgstr ""
-"整个原理图不能被加载。 尝试加载时发生错误\n"
-"层次原理图。"
+"整个原理图不能被加载。 尝试加载层次原理图时发生错误。"
 
 #: eeschema/files-io.cpp:328
 #, c-format
@@ -9951,7 +9950,7 @@ msgid ""
 "Check write permission."
 msgstr ""
 "无法创建库文件 \"%s\"。\n"
-"检查写入权限。"
+"请检查写入权限。"
 
 #: eeschema/libedit/lib_edit_frame.cpp:589 eeschema/libedit/lib_export.cpp:191
 msgid "Could not open the library file."
@@ -10775,7 +10774,7 @@ msgstr "%s 线在未知层从 (%s,%s) 到 (%s,%s)"
 
 #: eeschema/sch_line.cpp:788
 msgid "Net Wire"
-msgstr "网连线"
+msgstr "网络连线"
 
 #: eeschema/sch_line.cpp:789
 msgid "Bus Wire"
@@ -10827,11 +10826,11 @@ msgstr "启用事务日志记录。这个选项只是为了打开记录，不需
 
 #: eeschema/sch_plugin.cpp:150 pcbnew/plugin.cpp:158
 msgid "User name for <b>login</b> to some special library server."
-msgstr "用户名以 <b>登录</b> 到专业的库服务器。"
+msgstr "<b>登录</b> 到专业的库服务器使用的用户名。"
 
 #: eeschema/sch_plugin.cpp:154 pcbnew/plugin.cpp:162
 msgid "Password for <b>login</b> to some special library server."
-msgstr "密码以 <b>登录</b> 到专业的库服务器。"
+msgstr "<b>登录</b> 到专业的库服务器使用的密码。"
 
 #: eeschema/sch_plugin.cpp:162
 msgid ""
@@ -12444,7 +12443,7 @@ msgstr "导出网表..."
 
 #: eeschema/tools/ee_actions.cpp:567
 msgid "Export file containing netlist in one of several formats"
-msgstr "导出文件,其中包含几种格式之一的网列表"
+msgstr "导出包含某种格式的网表的文件"
 
 #: eeschema/tools/ee_actions.cpp:572
 msgid "Generate BOM..."
@@ -12488,7 +12487,7 @@ msgstr "显示隐藏引脚"
 
 #: eeschema/tools/ee_actions.cpp:603
 msgid "Force H/V Wires and Busses"
-msgstr "强制 H/V 线和总线"
+msgstr "强制水平或垂直绘制连线和总线"
 
 #: eeschema/tools/ee_actions.cpp:611
 msgid "Add Junctions to Selection where needed"
@@ -12496,11 +12495,11 @@ msgstr "根据需要将连接点添加到选择"
 
 #: eeschema/tools/ee_actions.cpp:616
 msgid "Add Wire"
-msgstr "添加电线"
+msgstr "添加连线"
 
 #: eeschema/tools/ee_actions.cpp:616
 msgid "Add a wire"
-msgstr "添加电线"
+msgstr "添加连线"
 
 #: eeschema/tools/ee_actions.cpp:622
 msgid "Add Bus"
@@ -12514,35 +12513,35 @@ msgstr "添加总线"
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:91
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:147
 msgid "Unfold from Bus"
-msgstr "展开总线"
+msgstr "从总线上展开"
 
 #: eeschema/tools/ee_actions.cpp:628
 msgid "Break a wire out of a bus"
-msgstr "断开总线的电线"
+msgstr "断开总线上的连线"
 
 #: eeschema/tools/ee_actions.cpp:640
 msgid "Finish Wire or Bus"
-msgstr "完成电线或总线"
+msgstr "结束电线或总线"
 
 #: eeschema/tools/ee_actions.cpp:640
 msgid "Complete drawing at current segment"
-msgstr "在当前线段上完成绘图"
+msgstr "在当前线段处结束绘制"
 
 #: eeschema/tools/ee_actions.cpp:645
 msgid "Finish Wire"
-msgstr "完成电线"
+msgstr "结束连线"
 
 #: eeschema/tools/ee_actions.cpp:645
 msgid "Complete wire with current segment"
-msgstr "完整电线与当前段"
+msgstr "结束连线并保留当前连线线段"
 
 #: eeschema/tools/ee_actions.cpp:650
 msgid "Finish Bus"
-msgstr "完成总线"
+msgstr "结束总线"
 
 #: eeschema/tools/ee_actions.cpp:650
 msgid "Complete bus with current segment"
-msgstr "完整的总线与当前段"
+msgstr "结束总线并保留当前总线线段"
 
 #: eeschema/tools/ee_actions.cpp:655
 msgid "Finish Lines"
@@ -12588,8 +12587,8 @@ msgid ""
 "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts "
 "with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr ""
-"<b>重复引脚 %s</b> \"%s\" 在位置 <b>(%.3f, %.3f)</b>与冲突引脚 %s \"%s\" 在位"
-"置 <b>(%.3f, %.3f)</b>"
+"<b>发现重复引脚， %s</b> \"%s\" 位于 <b>(%.3f, %.3f)</b> 与 %s \"%s\" 位于"
+"<b>(%.3f, %.3f)</b> 发生冲突"
 
 #: eeschema/tools/ee_inspection_tool.cpp:164
 #, c-format
@@ -12985,7 +12984,7 @@ msgstr "没有空间加载文件"
 
 #: gerbview/excellon_read_drill_file.cpp:281
 msgid "Error reading EXCELLON drill file"
-msgstr "错误读取 EXCELLON 钻孔文件"
+msgstr "读取 EXCELLON 钻孔文件时发生错误"
 
 #: gerbview/excellon_read_drill_file.cpp:421
 #, c-format
@@ -13269,7 +13268,7 @@ msgid ""
 "Preferences menu."
 msgstr ""
 "KiCad 可以使用您的显卡, 为您提供更流畅、更快速的体验。默认情况下, 此选项处于"
-"关闭状态, 因为它不与所有计算机兼容。\n"
+"关闭状态, 因为不是所有计算机都与它兼容。\n"
 "\n"
 "是否要尝试启用显卡加速？\n"
 "\n"
@@ -15796,7 +15795,7 @@ msgstr "写入数据文件时发生错误"
 #: pcb_calculator/regulators_funct.cpp:100
 #: pcb_calculator/regulators_funct.cpp:287
 msgid "Bad or missing parameters!"
-msgstr "损坏或丢失参数！"
+msgstr "参数缺失或不正确！"
 
 #: pcb_calculator/regulators_funct.cpp:240
 #, c-format
@@ -16309,7 +16308,7 @@ msgstr "铜层"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:884
 msgid "Stackup not up to date. Verify it"
-msgstr "堆叠不是最新的。验证它"
+msgstr "堆叠不是最新的。请验证它"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:927
 msgid ""
@@ -16428,7 +16427,7 @@ msgstr "电路板完成"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:145
 msgid "Has castellated pads"
-msgstr "有邮戳焊盘"
+msgstr "有邮票孔"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:148
 msgid "Plated board edge"
@@ -16440,7 +16439,7 @@ msgstr "铜表面处理（镀铜）："
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:160
 msgid "Edge card connectors:"
-msgstr "卡片边沿联接器："
+msgstr "边缘连接器："
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:164
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:56
@@ -16774,7 +16773,7 @@ msgstr "散热片"
 
 #: pcbnew/class_pad.cpp:797
 msgid "Castellated"
-msgstr "蜂窝状"
+msgstr "邮票孔"
 
 #: pcbnew/class_pad.cpp:812 pcbnew/class_track.cpp:940
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:106
@@ -16871,9 +16870,10 @@ msgstr "PCB 文本"
 msgid "Pcb Text \"%s\" on %s"
 msgstr "电路板上的文字 \"%s\" (%s)"
 
+# 此处需要查证。
 #: pcbnew/class_text_mod.cpp:352
 msgid "Ref."
-msgstr "参考。"
+msgstr "参考."
 
 #: pcbnew/class_text_mod.cpp:369
 msgid "Display"
@@ -17149,12 +17149,12 @@ msgstr "区域："
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
 msgid "THT:"
-msgstr "通孔装插技术 (THT)："
+msgstr "直插 (THT)："
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
 #: pcbnew/dialogs/dialog_board_statistics.cpp:141
 msgid "SMD:"
-msgstr "表贴器件 (SMD)："
+msgstr "贴片 (SMD)："
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:137
 msgid "Virtual:"
@@ -17533,7 +17533,7 @@ msgstr "轮廓显示："
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:63
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 msgid "Fully hatched"
-msgstr "完全阴影线"
+msgstr "完全填充"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:132
 msgid "Corner smoothing:"
@@ -17575,7 +17575,7 @@ msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local  pad settings"
 msgstr ""
-"默认焊盘与覆铜区连接类型.\n"
+"默认焊盘与覆铜区连接类型。\n"
 "该设置可以通过本地焊盘设置覆盖"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
@@ -17646,11 +17646,11 @@ msgid ""
 "2 = round corners\n"
 "3 = round corners (finer shape)"
 msgstr ""
-"平滑努力的值\n"
+"平滑工作量的值\n"
 "0 = 没有平滑\n"
 "1 = 倒角\n"
 "2 = 圆角\n"
-"3 = 圆角 (更精细的形状)"
+"3 = 圆角 (更精细)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:306
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:145
@@ -17670,7 +17670,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:331
 msgid "Export Settings to Other Zones"
-msgstr "导出设置到其他空间"
+msgstr "导出设置到其他区域"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:332
 msgid ""
@@ -17692,7 +17692,7 @@ msgstr "十六进制 (0,1,...,F,10,...)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:131
 msgid "Alphabet, minus IOSQXZ"
-msgstr "英文字母，IOSQXY 以外的文字"
+msgstr "除 IOSQXY 以外的英文字母"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:135
 msgid "Alphabet, full 26 characters"
@@ -17701,7 +17701,7 @@ msgstr "全部英文字母"
 #: pcbnew/dialogs/dialog_create_array.cpp:251
 #, c-format
 msgid "Bad numeric value for %s: %s"
-msgstr "%s 的不良数值：%s"
+msgstr "%s 的值不是有效的数字：%s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:289
 #, c-format
@@ -17887,11 +17887,11 @@ msgstr "角度："
 msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
-msgstr "正角表示一个逆时针旋转。 0° 角将产生一个完整的圆平分到“计数”的部分。"
+msgstr "正角表示一个逆时针旋转。 0° 角将产生一个平分到“个数”个部分的整个圆。"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:254
 msgid "Count:"
-msgstr "计数："
+msgstr "个数："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:258
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:36
@@ -17903,7 +17903,7 @@ msgstr "4"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:259
 msgid "How many items in the array."
-msgstr "有多少项在阵列。"
+msgstr "阵列中有多少个项目。"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:263
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:52
@@ -19179,7 +19179,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:59
 msgid "Minimal header"
-msgstr "最少标题"
+msgstr "最少钻头种类"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:60
 msgid ""
@@ -19187,7 +19187,7 @@ msgid ""
 "Only use it for board houses which do not accept fully featured headers."
 msgstr ""
 "不推荐。\n"
-"仅用于不接受全功能接头的板房。"
+"仅用于没有全品类钻头的板厂。"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:64
 msgid "PTH and NPTH in single file"
@@ -19200,7 +19200,7 @@ msgid ""
 "file."
 msgstr ""
 "不推荐。\n"
-"仅用于要求将合并的金属化 (PTH) 和非金属化 (NPTH) 合并为单个文件的板房。"
+"仅用于要求将金属化孔 (PTH) 和非金属化孔 (NPTH) 合并为单个文件的板厂。"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:69
 msgid "Use route command (recommended)"
@@ -19221,7 +19221,7 @@ msgid ""
 " \"Use alternate mode\" uses another drill/ route command (G85)\n"
 "(Use it only if the recommended command does not work)"
 msgstr ""
-"椭圆形孔经常给板房造成问题。\n"
+"椭圆形孔经常给板厂造成问题。\n"
 "“使用路径命令”使用通常的 G00 路径命令（推荐）\n"
 "  “使用备用模式”使用另一个钻孔/路径命令（G85）\n"
 "（仅在推荐的命令不起作用时使用它）"
@@ -19341,7 +19341,7 @@ msgstr "确定要删除整板吗？"
 
 #: pcbnew/dialogs/dialog_global_deletion.cpp:111
 msgid "Are you sure you want to delete the selected items?"
-msgstr "您确定要删除已选择项吗？"
+msgstr "确定要删除已选择项吗？"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
 msgid "Items to Delete:"
@@ -19979,7 +19979,7 @@ msgstr "多边形不能自相交"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:375
 msgid "Note: redundant corners removed"
-msgstr "注意：删除冗余的角落"
+msgstr "注意：已移除多余的角"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:401
 msgid "Select a corner to add the new corner after."
@@ -20117,15 +20117,15 @@ msgstr "错误：允许贴片或连接焊盘只有一个外部铜层"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1301
 msgid "Property cannot be set for NPTH"
-msgstr "无法为 NPTH 设置属性"
+msgstr "无法为非金属化孔设置属性"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1305
 msgid "Castellated property can be set only for PTH"
-msgstr "只能为 PTH 设置蜂窝状属性"
+msgstr "只能为金属化孔设置邮票孔属性"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1309
 msgid "BGA property can be set only for SMD pads"
-msgstr "BGA 属性只能为 SMD 焊盘设置"
+msgstr "BGA 属性只能为贴片焊盘设置"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1318
 msgid "Incorrect corner size value"
@@ -20455,7 +20455,7 @@ msgstr "散热片焊盘"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:403
 msgid "Castellated pad (through hole only)"
-msgstr "蜂窝状焊盘（仅限通孔）"
+msgstr "邮票孔（仅限通孔）"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:428
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -21034,7 +21034,7 @@ msgstr "来自设计规则"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:58
 msgid "Manual"
-msgstr "手册"
+msgstr "手动"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:69
 msgid "Target length:"
@@ -21571,7 +21571,7 @@ msgid ""
 "This will change the net assigned to %lu connected pads to %s.\n"
 "Do you wish to continue?"
 msgstr ""
-"这将将分配给 %lu 连接垫的网络更改为 %s。\n"
+"将分配给 %lu 个焊盘的网络更改为 %s。\n"
 "是否要继续？"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:328
@@ -22883,7 +22883,7 @@ msgstr "0.0001mm / 0.01 mil"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:265
 msgid "No via drill defined."
-msgstr "没有钻孔定义。"
+msgstr "没有定义过孔孔径。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:297
 #, c-format
@@ -23278,15 +23278,15 @@ msgstr "错误的封装"
 
 #: pcbnew/drc/drc_item.cpp:142
 msgid "Extra footprint"
-msgstr "扩展的封装"
+msgstr "多余的封装"
 
 #: pcbnew/drc/drc_item.cpp:145
 msgid "Remove track shorting two nets"
-msgstr "删除布线短路两个网"
+msgstr "删除短路两个网络的布线"
 
 #: pcbnew/drc/drc_item.cpp:147
 msgid "Remove redundant via"
-msgstr "删除通孔冗余"
+msgstr "删除多余的通孔"
 
 #: pcbnew/drc/drc_item.cpp:149
 msgid "Remove duplicate track"
@@ -23962,11 +23962,10 @@ msgid ""
 "directory <b>must</b> have a <b>.pretty</b> file extension because the "
 "format of the save is pretty.</p>"
 msgstr ""
-"此属性设置为一个目录，保存到这个库时的脚印将被记为 pretty 封装。\n"
-"任何保存优先级高于封装在 GitHub 的软件库相同的名称。这些保存的封装可以被发送"
-"到库的维护者的更新。\n"
-"由于保存的格式为 .pretty，<P>目录<b>必须</B>有一个<B>.pretty</b>的文件扩展"
-"名。</P>"
+"将此属性设置为一个目录，在这个目录中保存到库的封装将被叫做为 pretty 封装。\n"
+"任何保存的内容优先级都高于封装在 GitHub 库中同名的项目。这些保存的封装可以"
+"作为更新发送给库的维护者。\n"
+"由于封装的格式为 pretty，<p>目录<b>必须</b>有一个<b>.pretty</b>的扩展名。</p>"
 
 #: pcbnew/github/github_plugin.cpp:408
 #, c-format
@@ -23982,7 +23981,7 @@ msgid ""
 "Unable to parse URL:\n"
 "\"%s\""
 msgstr ""
-"无法解析网址 URL：\n"
+"无法解析网址：\n"
 "\"%s\""
 
 #: pcbnew/github/github_plugin.cpp:588
@@ -23994,7 +23993,7 @@ msgid ""
 "Reason: \"%s\""
 msgstr ""
 "%s\n"
-"无法获取或下载 Zip 归档：\"%s\"\n"
+"无法获取或下载 Zip 压缩包：\"%s\"\n"
 "从库路径：\"%s\"。\n"
 "原因：\"%s\""
 
@@ -24020,7 +24019,7 @@ msgstr "封装库路径 \"%s\" 不存在"
 #: pcbnew/gpcb_plugin.cpp:287 pcbnew/kicad_plugin.cpp:321
 #, c-format
 msgid "library \"%s\" has no footprint \"%s\" to delete"
-msgstr "库 \"%s\"中没有封装 \"%s\"可删除"
+msgstr "库 \"%s\" 中没有封装 \"%s\" 可删除"
 
 #: pcbnew/gpcb_plugin.cpp:351
 #, c-format
@@ -24104,7 +24103,7 @@ msgstr "没有处理此文件类型的插件。"
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:31
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:37
 msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
-msgstr "只导入向量。位图和字体将被忽略。"
+msgstr "只导入矢量图。位图和字体将被忽略。"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:45
 msgid "Placement:"
@@ -24197,7 +24196,7 @@ msgstr "未知过孔类型 %d"
 #: pcbnew/kicad_plugin.cpp:1860
 #, c-format
 msgid "unknown zone corner smoothing type %d"
-msgstr "未知区域全角平滑类型  %d"
+msgstr "未知铜区角平滑类型  %d"
 
 #: pcbnew/kicad_plugin.cpp:2072
 msgid "this file does not contain a PCB"
@@ -24598,7 +24597,7 @@ msgstr "创建微波模块"
 
 #: pcbnew/microwave.cpp:149
 msgid "Angle in degrees:"
-msgstr "钻头角度："
+msgstr "扇形角度（°）："
 
 #: pcbnew/microwave.cpp:159
 msgid "Incorrect number, abort"
@@ -24654,7 +24653,7 @@ msgstr "请求的长度值太小"
 
 #: pcbnew/microwave/microwave_inductor.cpp:368
 msgid "Requested length can't be represented"
-msgstr "氢气的长度无法表示"
+msgstr "请求的长度无法表示"
 
 #: pcbnew/microwave/microwave_inductor.cpp:376
 msgid "Component Value:"
@@ -24831,7 +24830,7 @@ msgstr ""
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:119
 msgid "Cannot parse time stamp in symbol section of netlist."
-msgstr "无法解析网表的元件部分的时间标记。"
+msgstr "无法解析网表的元件部分的时间戳。"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:129
 msgid "Cannot parse footprint name in symbol section of netlist."
@@ -25401,6 +25400,7 @@ msgstr "设置当前布线项长度调整参数。"
 msgid "Increase Spacing"
 msgstr "增大间距"
 
+# 此处需要考证step的真正位置以便匹配其翻译
 #: pcbnew/router/length_tuner_tool.cpp:74
 msgid "Increase meander spacing by one step."
 msgstr "一个步长增加弯曲间距。"
@@ -25480,7 +25480,7 @@ msgstr ""
 #: pcbnew/router/pns_dp_meander_placer.cpp:399
 #: pcbnew/router/pns_meander_placer.cpp:269
 msgid "Too long: "
-msgstr "台长： "
+msgstr "太长： "
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:402
 #: pcbnew/router/pns_meander_placer.cpp:272
@@ -25501,8 +25501,9 @@ msgstr "？"
 #: pcbnew/router/pns_kicad_iface.cpp:889
 #, c-format
 msgid "Malformed keep-out zone at (%d, %d)"
-msgstr "畸形的禁布区在(%d, %d)"
+msgstr "(%d, %d)处的禁止布线区形状异常"
 
+# 此zone经核查源码确认为禁止布线区
 #: pcbnew/router/pns_kicad_iface.cpp:892
 #, c-format
 msgid ""
@@ -25511,8 +25512,8 @@ msgid ""
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
 "%s\n"
-"无法通过“跟踪布局”工具来处理此区域。\n"
-"请验证它不是自相交多边形。"
+"布线工具无法处理此禁止布线区。\n"
+"请确保它不是自相交的多边形。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1443 pcbnew/router/router_tool.cpp:393
 msgid "Interactive Router"
@@ -25581,7 +25582,7 @@ msgstr "放置盲孔或埋孔"
 
 #: pcbnew/router/router_tool.cpp:110
 msgid "Adds a blind or buried via at the end of currently routed track."
-msgstr "添加埋或盲孔并结束当前布线."
+msgstr "添加埋孔或盲孔并结束当前布线."
 
 #: pcbnew/router/router_tool.cpp:116
 msgid "Place Microvia"
@@ -25842,7 +25843,7 @@ msgid "Exception on python footprint wizard code"
 msgstr "Python 封装向导代码异常"
 
 #: pcbnew/toolbars_footprint_editor.cpp:84
-msgid "Load footprint from current board"
+msgid "Load footprint from current board" 
 msgstr "从当前电路板打开封装"
 
 #: pcbnew/toolbars_footprint_editor.cpp:88
@@ -25991,7 +25992,7 @@ msgstr "为副本选择参考点..."
 
 #: pcbnew/tools/edit_tool.cpp:1389
 msgid "Selection copied."
-msgstr "选择复制。"
+msgstr "选择项已复制。"
 
 #: pcbnew/tools/edit_tool.cpp:1403
 msgid "Copy cancelled."
@@ -26270,7 +26271,7 @@ msgstr "更新选定的布线和过孔尺寸"
 
 #: pcbnew/tools/pcb_actions.cpp:248
 msgid "Delete Full Track"
-msgstr "删除完整布线"
+msgstr "删除整条布线"
 
 #: pcbnew/tools/pcb_actions.cpp:248
 msgid "Deletes selected item(s) and copper connections"
@@ -27392,7 +27393,7 @@ msgstr "构造填充区域..."
 
 #: pcbnew/zone_filler.cpp:197
 msgid "Removing insulated copper islands..."
-msgstr "移除孤铜..."
+msgstr "移除死铜..."
 
 #: pcbnew/zone_filler.cpp:255
 msgid "Zone fills are out-of-date. Refill?"
@@ -28838,19 +28839,19 @@ msgstr ""
 #~ msgstr "在电线或总线上添加标签"
 
 #~ msgid "Add a global label to a wire or bus"
-#~ msgstr "向电线或总线添加全局标签"
+#~ msgstr "向连线或总线添加全局标签"
 
 #~ msgid "Add a hierarchical label to a wire or bus"
-#~ msgstr "向电线或总线添加分层标签"
+#~ msgstr "向连线或总线添加分层标签"
 
 #~ msgid "Add a sheet pin to the selected sheet"
-#~ msgstr "将工作表引脚添加到所选工作表"
+#~ msgstr "将图框引脚添加到所选工作表"
 
 #~ msgid "Add Imported Sheet Pin"
-#~ msgstr "添加导入的图钉"
+#~ msgstr "添加导入的图框引脚"
 
 #~ msgid "Add an imported sheet pin"
-#~ msgstr "添加一个导入的图钉"
+#~ msgstr "添加一个导入的图框引脚"
 
 #~ msgid "Add no connect"
 #~ msgstr "添加无连接"
@@ -28889,13 +28890,13 @@ msgstr ""
 #~ msgstr "拖动项目"
 
 #~ msgid "Start Wire"
-#~ msgstr "启动线"
+#~ msgstr "开始绘制连线"
 
 #~ msgid "Start drawing a wire"
-#~ msgstr "开始绘制电线"
+#~ msgstr "开始绘制连线"
 
 #~ msgid "Start Bus"
-#~ msgstr "启动总线"
+#~ msgstr "开始绘制总线"
 
 #~ msgid "Start drawing a bus"
 #~ msgstr "开始绘制总线"
@@ -29289,7 +29290,7 @@ msgstr ""
 #~ msgstr "切换搜索树"
 
 #~ msgid "Board setup"
-#~ msgstr "板 设置"
+#~ msgstr "电路板设置"
 
 #~ msgid "Open footprint editor"
 #~ msgstr "打开封装编辑"
