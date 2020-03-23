@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -287,7 +287,7 @@ DIALOG_BOM::~DIALOG_BOM()
 
     wxString list( FROM_UTF8( writer.GetString().c_str() ) );
 
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    auto cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
     cfg->m_BomPanel.plugins = list.ToStdString();
     cfg->m_BomPanel.selected_plugin = m_lbGenerators->GetStringSelection().ToStdString();
@@ -297,7 +297,7 @@ DIALOG_BOM::~DIALOG_BOM()
 // Read the initialized plugins in config and fill the list of names
 void DIALOG_BOM::installGeneratorsList()
 {
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    auto cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
     wxString list               = cfg->m_BomPanel.plugins;
     wxString active_plugin_name = cfg->m_BomPanel.selected_plugin;

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2007-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,7 +263,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 void DISPLAY_FOOTPRINTS_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     auto cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    wxCHECK( cfg, /* void */ );
 
     EDA_DRAW_FRAME::LoadSettings( cfg );
 
@@ -277,7 +277,7 @@ void DISPLAY_FOOTPRINTS_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     auto cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    wxCHECK( cfg, /* void */ );
 
     EDA_DRAW_FRAME::SaveSettings( cfg );
 
@@ -291,7 +291,7 @@ void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 WINDOW_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
     auto cfg = dynamic_cast<CVPCB_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    wxCHECK( cfg, nullptr );
     return &cfg->m_FootprintViewer;
 }
 

@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 jean-pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,7 +122,7 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
 
 DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
 {
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    auto cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
     cfg->m_AnnotatePanel.sort_order = GetSortOrder();
     cfg->m_AnnotatePanel.method = GetAnnotateAlgo();
@@ -132,7 +132,7 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
 
 void DIALOG_ANNOTATE::InitValues()
 {
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    auto cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     int option;
 
     // These are always reset to attempt to keep the user out of trouble...

@@ -721,7 +721,7 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
     auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    wxCHECK( cfg, /*void*/ );
 
     // Ensure grid id is an existent grid id:
     if( (m_LastGridSizeId <= 0) ||

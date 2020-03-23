@@ -364,11 +364,13 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
         case F_Paste:
             m_materials.m_Paste.m_Diffuse = get_layer_color( aLayerID );
             OGL_SetMaterial( m_materials.m_Paste );
-        break;
+            break;
 
         case B_SilkS:
             m_materials.m_SilkSBot.m_Diffuse = get_layer_color( aLayerID );
             OGL_SetMaterial( m_materials.m_SilkSBot );
+            break;
+
         case F_SilkS:
             m_materials.m_SilkSTop.m_Diffuse = get_layer_color( aLayerID );
             OGL_SetMaterial( m_materials.m_SilkSTop );

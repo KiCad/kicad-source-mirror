@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -276,7 +276,7 @@ void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
  */
 void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
 {
-    auto config = dynamic_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
+    auto config = static_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
     config->m_BoardLayersCount = m_exportBoardCopperLayersCount;
 
     config->m_GerberToPcbLayerMapping.clear();
@@ -289,7 +289,7 @@ void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
 
 void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
 {
-    auto config = dynamic_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
+    auto config = static_cast<GERBVIEW_SETTINGS*>( Kiface().KifaceSettings() );
 
     m_exportBoardCopperLayersCount = config->m_BoardLayersCount;
     normalizeBrdLayersCount();

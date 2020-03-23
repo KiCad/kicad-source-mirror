@@ -59,6 +59,9 @@ GERBVIEW_SETTINGS::GERBVIEW_SETTINGS() : APP_SETTINGS_BASE( "gerbview", gerbview
 
     m_params.emplace_back( new PARAM_LIST<int>( "gerber_to_pcb_layers",
             &m_GerberToPcbLayerMapping, {} ) );
+
+    m_params.emplace_back( new PARAM<int>( "gerber_to_pcb_copperlayers_count",
+            &m_BoardLayersCount, 2 ) );
 }
 
 

@@ -268,6 +268,6 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
     aField->SetText( m_text );
     updateText( aField );
 
-    if( positioningModified )
+    if( positioningModified && parent )
         static_cast<SCH_ITEM*>( parent )->ClearFieldsAutoplaced();
 }
