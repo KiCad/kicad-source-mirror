@@ -1418,7 +1418,7 @@ bool OUTLINE::MakeShape( TopoDS_Shape& aShape, double aThickness )
         return false;   // there is already data in the shape object
 
     if( m_curves.empty() )
-        return true;    // suceeded in doing nothing
+        return true;    // succeeded in doing nothing
 
     if( !m_closed )
         return false;   // the loop is not closed

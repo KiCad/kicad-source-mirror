@@ -63,7 +63,7 @@ private:
     std::string m_refdes;
     DOUBLET     m_position;
     double      m_rotation; // rotation (radians)
-    bool        m_virtual;  // true for a vitual (usually mechanical) component
+    bool        m_virtual;  // true for a virtual (usually mechanical) component
 
     std::vector< KICADPAD* >    m_pads;
     std::vector< KICADCURVE* >  m_curves;

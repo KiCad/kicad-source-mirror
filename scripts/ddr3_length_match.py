@@ -239,7 +239,7 @@ def report_teed_lengths(groupname, netname, target_length, tolerance):
     """
 
     # Each net goes from CPU to four memory chips, these are the 4 lengths from
-    # CPU to each of the for memory chip balls/pads, some of these journies are
+    # CPU to each of the for memory chip balls/pads, some of these journeys are
     # common with one another but branch off at each T.
     lens[0] += len_t1 + len_t2_1
     lens[1] += len_t1 + len_t2_1
@@ -295,7 +295,7 @@ if __name__ == "__main__":
                 pass # kicad save process seems to momentarily delete file, so there's a race here with "No such file.."
             time.sleep(0.5)
 
-        # The "Debug" build of pcbnew writes to disk slowy, new file takes time to get to disk.
+        # The "Debug" build of pcbnew writes to disk slowly, new file takes time to get to disk.
         time.sleep(1)
 
         first = False

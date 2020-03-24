@@ -1355,7 +1355,7 @@ bool VRML_LAYER::Write3DIndices( std::ostream& aOutFile, bool aIncludePlatedHole
 }
 
 
-// add a triangular facet (triplet) to the ouptut index list
+// add a triangular facet (triplet) to the output index list
 bool VRML_LAYER::addTriplet( VERTEX_3D* p0, VERTEX_3D* p1, VERTEX_3D* p2 )
 {
     double  dx0 = p1->x - p0->x;

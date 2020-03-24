@@ -230,7 +230,7 @@ bool S3D_RESOLVER::createPathList( void )
         fndummy.Assign( mS->second, "" );
         wxString pathVal;
 
-        // ensure system ENV VARs supercede internally defined vars
+        // ensure system ENV VARs supersede internally defined vars
         if( wxGetEnv( mS->first, &pathVal ) && wxDirExists( pathVal ) )
             fndummy.Assign( pathVal, "" );
         else

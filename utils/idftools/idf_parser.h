@@ -373,7 +373,7 @@ public:
      *
      * @param aComponentOutline is a pointer to the outline data to be added
      *
-     * @return true if the operation succeedes, otherwise false
+     * @return true if the operation succeeds, otherwise false
      */
     bool AddOutlineData( IDF3_COMP_OUTLINE_DATA* aComponentOutline );
 

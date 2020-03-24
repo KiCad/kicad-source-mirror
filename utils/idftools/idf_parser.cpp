@@ -2325,7 +2325,7 @@ void IDF3_BOARD::readBoardFile( const std::string& aFileName, bool aNoSubstitute
         //       section must be the Outline section, and the last section must be the
         //       Placement section. All other sections may be in any order."
 
-        // further notes: Except for the HEADER section, sections may be preceeded by
+        // further notes: Except for the HEADER section, sections may be preceded by
         // comment lines which will be copied back out on write(). No comments may
         // be associated with the board file itself since the only logical location
         // for unambiguous association is at the end of the file, which is inconvenient

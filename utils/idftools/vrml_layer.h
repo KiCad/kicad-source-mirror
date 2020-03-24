@@ -42,7 +42,7 @@
 #endif
 
 #include <wx/glcanvas.h>    // CALLBACK definition, needed on Windows
-                            // alse needed on OSX to define __DARWIN__
+                            // also needed on OSX to define __DARWIN__
 
 #ifdef __WXMAC__
 #  ifdef __DARWIN__
@@ -158,7 +158,7 @@ public:
 
     /**
      * Function GetArcParams
-     * retieves the parameters used in calculating the number of vertices in an arc
+     * retrieves the parameters used in calculating the number of vertices in an arc
      *
      * @param aMaxSeg is the maximum number of segments for an arc with cords of length aMinLength
      * @param aMinLength is the minimum length of cords in an arc
@@ -230,7 +230,7 @@ public:
      * @param aContour is an index to a contour as returned by NewContour()
      * @param aHoleFlag determines if the contour must be a hole
      *
-     * @return bool: true if the operation suceeded
+     * @return bool: true if the operation succeeded
      */
     bool EnsureWinding( int aContourID, bool aHoleFlag );
 
