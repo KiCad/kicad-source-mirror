@@ -87,7 +87,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     PICKED_ITEMS_LIST   undoList;
     KIGFX::VIEW*        view = m_toolMgr->GetView();
     BOARD*              board = (BOARD*) m_toolMgr->GetModel();
-    PCB_BASE_FRAME*     frame = (PCB_BASE_FRAME*) m_toolMgr->GetEditFrame();
+    PCB_BASE_FRAME*     frame = (PCB_BASE_FRAME*) m_toolMgr->GetToolHolder();
     auto                connectivity = board->GetConnectivity();
     std::set<EDA_ITEM*> savedModules;
     SELECTION_TOOL*     selTool = m_toolMgr->GetTool<SELECTION_TOOL>();

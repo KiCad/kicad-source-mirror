@@ -958,11 +958,17 @@ std::vector<unsigned int> CVPCB_MAINFRAME::GetComponentIndices(
 }
 
 
-DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFootprintViewerFrame()
+DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFootprintViewerFrame() const
 {
     // returns the Footprint Viewer frame, if exists, or NULL
     return dynamic_cast<DISPLAY_FOOTPRINTS_FRAME*>
             ( wxWindow::FindWindowByName( FOOTPRINTVIEWER_FRAME_NAME ) );
+}
+
+
+wxWindow* CVPCB_MAINFRAME::GetToolCanvas() const
+{
+    return GetFootprintViewerFrame();
 }
 
 

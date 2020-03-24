@@ -24,7 +24,7 @@
 
 #include "dialog_3D_view_option_base.h"
 #include <3d_viewer/eda_3d_viewer.h>
-#include <3d_canvas/cinfo3d_visu.h>
+#include <3d_canvas/3d_settings.h>
 #include <bitmaps.h>
 
 class DIALOG_3D_VIEW_OPTIONS : public DIALOG_3D_VIEW_OPTIONS_BASE
@@ -33,8 +33,8 @@ public:
     explicit DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* parent );
 
 private:
-    EDA_3D_VIEWER* m_parent;
-    CINFO3D_VISU&  m_3Dprms;
+    EDA_3D_VIEWER*   m_parent;
+    EDA_3D_SETTINGS& m_settings;
 
     void initDialog();
 
@@ -58,7 +58,7 @@ void EDA_3D_VIEWER::Install3DViewOptionDialog( wxCommandEvent& event )
 
 
 DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* parent )
-     :DIALOG_3D_VIEW_OPTIONS_BASE( parent ), m_3Dprms( parent->GetSettings() )
+     : DIALOG_3D_VIEW_OPTIONS_BASE( parent ), m_settings( *parent->GetSettings() )
 {
     m_parent = parent;
 
@@ -94,23 +94,23 @@ void DIALOG_3D_VIEW_OPTIONS::initDialog()
 bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
 {
     // Check/uncheck checkboxes
-    m_checkBoxRealisticMode->SetValue( m_3Dprms.GetFlag( FL_USE_REALISTIC_MODE ) );
-    m_checkBoxBoardBody->SetValue(  m_3Dprms.GetFlag( FL_SHOW_BOARD_BODY ) );
-    m_checkBoxCuThickness->SetValue(  m_3Dprms.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
-    m_checkBoxAreas->SetValue( m_3Dprms.GetFlag( FL_ZONE ) );
-    m_checkBoxBoundingBoxes->SetValue( m_3Dprms.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
+    m_checkBoxRealisticMode->SetValue( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
+    m_checkBoxBoardBody->SetValue( m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
+    m_checkBoxCuThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
+    m_checkBoxAreas->SetValue( m_settings.GetFlag( FL_ZONE ) );
+    m_checkBoxBoundingBoxes->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
 
-    m_checkBox3DshapesTH->SetValue( m_3Dprms.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
-    m_checkBox3DshapesSMD->SetValue( m_3Dprms.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
-    m_checkBox3DshapesVirtual->SetValue( m_3Dprms.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) );
+    m_checkBox3DshapesTH->SetValue( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
+    m_checkBox3DshapesSMD->SetValue( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
+    m_checkBox3DshapesVirtual->SetValue( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) );
 
-    m_checkBoxSilkscreen->SetValue( m_3Dprms.GetFlag( FL_SILKSCREEN ) );
-    m_checkBoxSolderMask->SetValue( m_3Dprms.GetFlag( FL_SOLDERMASK ) );
-    m_checkBoxSolderpaste->SetValue( m_3Dprms.GetFlag( FL_SOLDERPASTE ) );
-    m_checkBoxAdhesive->SetValue( m_3Dprms.GetFlag( FL_ADHESIVE ) );
-    m_checkBoxComments->SetValue( m_3Dprms.GetFlag( FL_COMMENTS ) );
-    m_checkBoxECO->SetValue( m_3Dprms.GetFlag( FL_ECO ) );
-    m_checkBoxSubtractMaskFromSilk->SetValue( m_3Dprms.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
+    m_checkBoxSilkscreen->SetValue( m_settings.GetFlag( FL_SILKSCREEN ) );
+    m_checkBoxSolderMask->SetValue( m_settings.GetFlag( FL_SOLDERMASK ) );
+    m_checkBoxSolderpaste->SetValue( m_settings.GetFlag( FL_SOLDERPASTE ) );
+    m_checkBoxAdhesive->SetValue( m_settings.GetFlag( FL_ADHESIVE ) );
+    m_checkBoxComments->SetValue( m_settings.GetFlag( FL_COMMENTS ) );
+    m_checkBoxECO->SetValue( m_settings.GetFlag( FL_ECO ) );
+    m_checkBoxSubtractMaskFromSilk->SetValue( m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
 
     return true;
 }
@@ -119,27 +119,27 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
 bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
 {
     // Set render mode
-    m_3Dprms.SetFlag( FL_USE_REALISTIC_MODE, m_checkBoxRealisticMode->GetValue() );
+    m_settings.SetFlag( FL_USE_REALISTIC_MODE, m_checkBoxRealisticMode->GetValue() );
 
     // Set visibility of items
-    m_3Dprms.SetFlag( FL_SHOW_BOARD_BODY, m_checkBoxBoardBody->GetValue() );
-    m_3Dprms.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
-    m_3Dprms.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
-    m_3Dprms.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, m_checkBoxBoundingBoxes->GetValue() );
-    m_3Dprms.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, m_checkBoxSubtractMaskFromSilk->GetValue() );
+    m_settings.SetFlag( FL_SHOW_BOARD_BODY, m_checkBoxBoardBody->GetValue() );
+    m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
+    m_settings.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
+    m_settings.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, m_checkBoxBoundingBoxes->GetValue() );
+    m_settings.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, m_checkBoxSubtractMaskFromSilk->GetValue() );
 
     // Set 3D shapes visibility
-    m_3Dprms.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, m_checkBox3DshapesTH->GetValue() );
-    m_3Dprms.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, m_checkBox3DshapesSMD->GetValue() );
-    m_3Dprms.SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL, m_checkBox3DshapesVirtual->GetValue() );
+    m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, m_checkBox3DshapesTH->GetValue() );
+    m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, m_checkBox3DshapesSMD->GetValue() );
+    m_settings.SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL, m_checkBox3DshapesVirtual->GetValue() );
 
     // Set Layer visibility
-    m_3Dprms.SetFlag( FL_SILKSCREEN, m_checkBoxSilkscreen->GetValue() );
-    m_3Dprms.SetFlag( FL_SOLDERMASK, m_checkBoxSolderMask->GetValue() );
-    m_3Dprms.SetFlag( FL_SOLDERPASTE, m_checkBoxSolderpaste->GetValue() );
-    m_3Dprms.SetFlag( FL_ADHESIVE, m_checkBoxAdhesive->GetValue() );
-    m_3Dprms.SetFlag( FL_COMMENTS, m_checkBoxComments->GetValue() );
-    m_3Dprms.SetFlag( FL_ECO, m_checkBoxECO->GetValue( ) );
+    m_settings.SetFlag( FL_SILKSCREEN, m_checkBoxSilkscreen->GetValue() );
+    m_settings.SetFlag( FL_SOLDERMASK, m_checkBoxSolderMask->GetValue() );
+    m_settings.SetFlag( FL_SOLDERPASTE, m_checkBoxSolderpaste->GetValue() );
+    m_settings.SetFlag( FL_ADHESIVE, m_checkBoxAdhesive->GetValue() );
+    m_settings.SetFlag( FL_COMMENTS, m_checkBoxComments->GetValue() );
+    m_settings.SetFlag( FL_ECO, m_checkBoxECO->GetValue( ) );
 
     return true;
 }

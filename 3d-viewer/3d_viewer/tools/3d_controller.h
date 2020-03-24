@@ -27,22 +27,25 @@
 #include <tool/tool_interactive.h>
 
 class EDA_3D_VIEWER;
+class EDA_3D_SETTINGS;
+
 
 /**
- * 3D_VIEWER_CONTROL
+ * EDA_3D_CONTROLLER
  *
- * Handles actions that are shared between different applications
+ * Handles view actions for various 3D canvases.
  */
 
-class EDA_3D_VIEWER_CONTROL : public TOOL_INTERACTIVE
+class EDA_3D_CONTROLLER : public TOOL_INTERACTIVE
 {
 public:
-    EDA_3D_VIEWER_CONTROL() :
+    EDA_3D_CONTROLLER() :
         TOOL_INTERACTIVE( "3DViewer.Control" ),
-        m_frame( nullptr )
+        m_canvas( nullptr ),
+        m_settings( nullptr )
     { }
 
-    ~EDA_3D_VIEWER_CONTROL() override { }
+    ~EDA_3D_CONTROLLER() override { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -73,10 +76,11 @@ private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
-    ///> Pointer to the currently used edit frame.
-    EDA_3D_VIEWER* m_frame;
-
     int doZoomInOut( bool aDirection, bool aCenterOnCursor );
+
+private:
+    EDA_3D_CANVAS*   m_canvas;
+    EDA_3D_SETTINGS* m_settings;
 };
 
 #endif

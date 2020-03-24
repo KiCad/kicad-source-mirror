@@ -46,6 +46,7 @@
 #include <frame_type.h>
 #include <hotkeys_basic.h>
 #include <kiway_holder.h>
+#include <tools_holder.h>
 #include <widgets/ui_common.h>
 
 // Option for main frames
@@ -100,7 +101,7 @@ enum id_librarytype {
  * and that class is not a player.
  * </p>
  */
-class EDA_BASE_FRAME : public wxFrame, public KIWAY_HOLDER
+class EDA_BASE_FRAME : public wxFrame, public TOOLS_HOLDER, public KIWAY_HOLDER
 {
     /**
      * (with its unexpected name so it does not collide with the real OnWindowClose()
@@ -124,35 +125,21 @@ protected:
     wxString        m_AboutTitle;           // Name of program displayed in About.
 
     wxAuiManager    m_auimgr;
+    wxString        m_perspective;          // wxAuiManager perspective.
 
     wxString        m_configName;           // Prefix used to identify some params (frame size...)
                                             // and to name some config files (legacy hotkey files)
 
     SETTINGS_MANAGER* m_settingsManager;
 
-    TOOL_MANAGER*   m_toolManager;
-    ACTIONS*        m_actions;
-
-    std::vector<std::string> m_toolStack;   // Stack of user-level "tools".  Not to be confused
-                                            // with TOOL_BASE-derived instances, many of which
-                                            // implement multiple user-level "tools".  The user-
-                                            // level "tools" are TOOL_ACTIONSs internally.
-
-    bool            m_immediateActions;     // Preference for immediate actions.  If false, the
-                                            // first invocation of a hotkey will just select the
-                                            // relevant tool.
-    bool            m_dragSelects;          // Prefer selection to dragging.
-    bool            m_moveWarpsCursor;      // cursor is warped to move/drag origin
     bool            m_hasAutoSave;
     bool            m_autoSaveState;
     int             m_autoSaveInterval;     // The auto save interval time in seconds.
     wxTimer*        m_autoSaveTimer;
 
-    wxString        m_perspective;          // wxAuiManager perspective.
-
     wxString        m_mruPath;              // Most recently used path.
 
-    EDA_UNITS m_userUnits;
+    EDA_UNITS       m_userUnits;
 
     ///> Default style flags used for wxAUI toolbars
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
@@ -233,44 +220,6 @@ public:
     virtual int GetSeverity( int aErrorCode ) const { return RPT_SEVERITY_UNDEFINED; }
 
     /**
-     * Return the MVC controller.
-     */
-    TOOL_MANAGER* GetToolManager() const { return m_toolManager; }
-
-    /**
-     * NB: the definition of "tool" is different at the user level.  The implementation uses
-     * a single TOOL_BASE derived class to implement several user "tools", such as rectangle
-     * and circle, or wire and bus.  So each user-level tool is actually a TOOL_ACTION.
-     */
-    virtual void PushTool( const std::string& actionName );
-    virtual void PopTool( const std::string& actionName );
-
-    bool ToolStackIsEmpty() { return m_toolStack.empty(); }
-
-    std::string CurrentToolName() const;
-    bool IsCurrentTool( const TOOL_ACTION& aAction ) const;
-
-    virtual void DisplayToolMsg( const wxString& msg ) {};
-
-    /**
-     * Indicates that hotkeys should perform an immediate action even if another tool is
-     * currently active.  If false, the first hotkey should select the relevant tool.
-     */
-    bool GetDoImmediateActions() const { return m_immediateActions; }
-
-    /**
-     * Indicates that a drag should draw a selection rectangle, even when started over an
-     * item.
-     */
-    bool GetDragSelects() const { return m_dragSelects; }
-
-    /**
-     * Indicates that a move operation should warp the mouse pointer to the origin of the
-     * move object.  This improves snapping, but some users are alergic to mouse warping.
-     */
-    bool GetMoveWarpsCursor() const { return m_moveWarpsCursor; }
-
-    /**
      * Override the default process event handler to implement the auto save feature.
      *
      * @warning If you override this function in a derived class, make sure you call down to
@@ -288,10 +237,10 @@ public:
     virtual void OnCharHook( wxKeyEvent& event );
 
     /**
-     * Workaround some issues in wxWidgets where the menu events aren't captured by the
-     * menus themselves.
+     * The TOOL_DISPATCHER needs these to work around some issues in wxWidgets where the menu
+     * events aren't captured by the menus themselves.
      */
-    void OnMenuOpen( wxMenuEvent& event );
+    void OnMenuEvent( wxMenuEvent& event );
 
     virtual void OnMove( wxMoveEvent& aEvent )
     {
@@ -376,7 +325,7 @@ public:
      * modes in which case the m_configName must be set to the base name so that a single
      * config can be used.
      */
-    wxString ConfigBaseName()
+    wxString ConfigBaseName() override
     {
         wxString baseCfgName = m_configName.IsEmpty() ? GetName() : m_configName;
         return baseCfgName;
@@ -507,12 +456,7 @@ public:
      * Notification event that some of the common (suite-wide) settings have changed.
      * Update menus, toolbars, local variables, etc.
      */
-    virtual void CommonSettingsChanged( bool aEnvVarsChanged );
-
-    /**
-     * Notification to refresh the drawing canvas (if any).
-     */
-    virtual void RefreshCanvas() { };
+    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
     const wxString& GetAboutTitle() const { return m_AboutTitle; }
 

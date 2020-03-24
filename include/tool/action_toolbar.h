@@ -29,7 +29,7 @@
 #include <wx/aui/auibar.h>
 #include <tool/tool_event.h>
 
-class EDA_DRAW_FRAME;
+class EDA_BASE_FRAME;
 class TOOL_MANAGER;
 class TOOL_ACTION;
 

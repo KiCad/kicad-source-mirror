@@ -33,13 +33,12 @@
 #include <3d_viewer_id.h>
 #include "../common_ogl/cogl_att_list.h"
 #include <3d_viewer/tools/3d_actions.h>
-#include <3d_viewer/tools/3d_viewer_control.h>
+#include <3d_viewer/tools/3d_controller.h>
 #include <bitmaps.h>
 #include <board_stackup_manager/class_board_stackup.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
 #include <class_board.h>
 #include <dpi_scaling.h>
-#include <gestfich.h>
 #include <layers_id_colors_and_visibility.h>
 #include <pgm_base.h>
 #include <project.h>
@@ -131,7 +130,7 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_CONTROL );
-    m_toolManager->RegisterTool( new EDA_3D_VIEWER_CONTROL );
+    m_toolManager->RegisterTool( new EDA_3D_CONTROLLER );
     m_toolManager->InitTools();
 
     // Run the viewer control tool, it is supposed to be always active
@@ -218,8 +217,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     int     id = event.GetId();
     bool    isChecked = event.IsChecked();
 
-    wxLogTrace( m_logTrace,
-                "EDA_3D_VIEWER::Process_Special_Functions id %d isChecked %d",
+    wxLogTrace( m_logTrace, "EDA_3D_VIEWER::Process_Special_Functions id %d isChecked %d",
                 id, isChecked );
 
     if( m_canvas == NULL )
@@ -332,9 +330,7 @@ void EDA_3D_VIEWER::OnRenderEngineSelection( wxCommandEvent &event )
                                                                             "OpenGL Legacy" );
 
     if( old_engine != m_settings.RenderEngineGet() )
-    {
         RenderEngineChanged();
-    }
 }
 
 
@@ -433,25 +429,16 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
     m_settings.SetFlag( FL_AXIS, cfg->m_Render.show_axis );
 
     m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, cfg->m_Render.show_footprints_normal );
-
     m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, cfg->m_Render.show_footprints_insert );
-
     m_settings.SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL, cfg->m_Render.show_footprints_virtual );
 
     m_settings.SetFlag( FL_ZONE, cfg->m_Render.show_zones );
-
     m_settings.SetFlag( FL_ADHESIVE, cfg->m_Render.show_adhesive );
-
     m_settings.SetFlag( FL_SILKSCREEN, cfg->m_Render.show_silkscreen );
-
     m_settings.SetFlag( FL_SOLDERMASK, cfg->m_Render.show_soldermask );
-
     m_settings.SetFlag( FL_SOLDERPASTE, cfg->m_Render.show_solderpaste );
-
     m_settings.SetFlag( FL_COMMENTS, cfg->m_Render.show_comments );
-
     m_settings.SetFlag( FL_ECO, cfg->m_Render.show_eco );
-
     m_settings.SetFlag( FL_SHOW_BOARD_BODY, cfg->m_Render.show_board_body );
 
     m_settings.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );

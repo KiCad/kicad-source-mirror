@@ -45,9 +45,9 @@ KIGFX::VIEW_CONTROLS* TOOL_BASE::getViewControls() const
 }
 
 
-EDA_BASE_FRAME* TOOL_BASE::getEditFrameInt() const
+TOOLS_HOLDER* TOOL_BASE::getToolHolderInt() const
 {
-    return m_toolMgr->GetEditFrame();
+    return m_toolMgr->GetToolHolder();
 }
 
 

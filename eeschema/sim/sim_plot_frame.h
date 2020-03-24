@@ -196,6 +196,9 @@ public:
 
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
 
+    // Simulator doesn't host a tool framework
+    wxWindow* GetToolCanvas() const override { return nullptr; }
+
 private:
 
     /** Give icons to menuitems of the main menubar

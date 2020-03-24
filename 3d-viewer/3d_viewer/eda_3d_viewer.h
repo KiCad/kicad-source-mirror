@@ -4,7 +4,7 @@
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 #ifndef EDA_3D_VIEWER_H
 #define EDA_3D_VIEWER_H
 
-#include "../3d_canvas/cinfo3d_visu.h"
+#include "3d_canvas/3d_settings.h"
 #include "../3d_canvas/eda_3d_canvas.h"
 #include <kiway_player.h>
 #include <wx/colourdata.h>
@@ -62,7 +62,7 @@ enum EDA_3D_VIEWER_STATUSBAR
 /**
  *  Create and handle a window for the 3d viewer connected to a Kiway and a pcbboard
  */
-class EDA_3D_VIEWER : public KIWAY_PLAYER
+class EDA_3D_VIEWER : public EDA_3D_SETTINGS_HOLDER, public KIWAY_PLAYER
 {
 
  public:
@@ -77,7 +77,7 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
 
     BOARD* GetBoard() { return Parent()->GetBoard(); }
 
-    EDA_3D_CANVAS* GetCanvas() { return m_canvas; }
+    wxWindow* GetToolCanvas() const override { return m_canvas; }
 
     /**
      * Request reloading the 3D view. However the request will be executed
@@ -104,7 +104,7 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
     /**
      *  @return current settings
      */
-    CINFO3D_VISU &GetSettings() { return m_settings; }
+    EDA_3D_SETTINGS* GetSettings() override { return &m_settings; }
 
     /**
      * Get a SFVEC3D from a wx colour dialog
@@ -209,7 +209,7 @@ private:
 
     ACTION_TOOLBAR*  m_mainToolBar;
     EDA_3D_CANVAS*   m_canvas;
-    CINFO3D_VISU     m_settings;
+    EDA_3D_SETTINGS  m_settings;
 
     TOOL_DISPATCHER* m_toolDispatcher;
 

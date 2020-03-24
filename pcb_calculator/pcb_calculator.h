@@ -379,6 +379,8 @@ public:
     void OnBoardClassesUnitsSelection( wxCommandEvent& event ) override;
     void BoardClassesUpdateData( double aUnitScale );
 
+    // Calculator doesn't host a tool framework
+    wxWindow* GetToolCanvas() const override { return nullptr; }
 };
 
 

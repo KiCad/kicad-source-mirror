@@ -470,6 +470,8 @@ public:
     virtual EDA_DRAW_PANEL_GAL* GetCanvas() const { return m_canvas; }
     void SetCanvas( EDA_DRAW_PANEL_GAL* aPanel ) { m_canvas = aPanel; }
 
+    wxWindow* GetToolCanvas() const override { return GetCanvas(); }
+
     /**
      * Return a reference to the gal rendering options used by GAL for rendering.
      */

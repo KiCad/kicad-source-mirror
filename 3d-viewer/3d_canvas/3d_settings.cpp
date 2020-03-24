@@ -28,7 +28,7 @@
  */
 
 #include "../3d_rendering/ccamera.h"
-#include "cinfo3d_visu.h"
+#include "3d_settings.h"
 #include <3d_rendering/3d_render_raytracing/shapes2D/cpolygon2d.h>
 #include <class_board.h>
 #include <3d_math.h>
@@ -44,17 +44,17 @@
  *  "KI_TRACE_EDA_CINFO3D_VISU".  See the wxWidgets documentation on wxLogTrace for
  *  more information.
  */
-const wxChar *CINFO3D_VISU::m_logTrace = wxT( "KI_TRACE_EDA_CINFO3D_VISU" );
+const wxChar *EDA_3D_SETTINGS::m_logTrace = wxT( "KI_TRACE_EDA_CINFO3D_VISU" );
 
 
-CINFO3D_VISU G_null_CINFO3D_VISU;
+EDA_3D_SETTINGS G_null_EDA_3D_SETTINGS;
 
 
-CINFO3D_VISU::CINFO3D_VISU() :
+EDA_3D_SETTINGS::EDA_3D_SETTINGS() :
     m_currentCamera( m_trackBallCamera ),
     m_trackBallCamera( RANGE_SCALE_3D )
 {
-    wxLogTrace( m_logTrace, wxT( "CINFO3D_VISU::CINFO3D_VISU" ) );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_SETTINGS::EDA_3D_SETTINGS" ) );
 
     m_board            = NULL;
     m_3d_model_manager = NULL;
@@ -73,8 +73,6 @@ CINFO3D_VISU::CINFO3D_VISU() :
 
     m_boardBoundingBox.Reset();
 
-    m_layers_container2D.clear();
-    m_layers_holes2D.clear();
     m_through_holes_inner.Clear();
     m_through_holes_outer.Clear();
 
@@ -93,7 +91,6 @@ CINFO3D_VISU::CINFO3D_VISU() :
 
     m_calc_seg_min_factor3DU = 0.0f;
     m_calc_seg_max_factor3DU = 0.0f;
-
 
     memset( m_layerZcoordTop, 0, sizeof( m_layerZcoordTop ) );
     memset( m_layerZcoordBottom, 0, sizeof( m_layerZcoordBottom ) );
@@ -122,13 +119,13 @@ CINFO3D_VISU::CINFO3D_VISU() :
 }
 
 
-CINFO3D_VISU::~CINFO3D_VISU()
+EDA_3D_SETTINGS::~EDA_3D_SETTINGS()
 {
     destroyLayers();
 }
 
 
-bool CINFO3D_VISU::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
+bool EDA_3D_SETTINGS::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
 {
     wxASSERT( aLayer < PCB_LAYER_ID_COUNT );
 
@@ -211,7 +208,7 @@ bool CINFO3D_VISU::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
 }
 
 
-bool CINFO3D_VISU::GetFlag( DISPLAY3D_FLG aFlag ) const
+bool EDA_3D_SETTINGS::GetFlag( DISPLAY3D_FLG aFlag ) const
 {
     wxASSERT( aFlag < FL_LAST );
 
@@ -219,14 +216,14 @@ bool CINFO3D_VISU::GetFlag( DISPLAY3D_FLG aFlag ) const
 }
 
 
-void CINFO3D_VISU::SetFlag( DISPLAY3D_FLG aFlag, bool aState )
+void EDA_3D_SETTINGS::SetFlag( DISPLAY3D_FLG aFlag, bool aState )
 {
     wxASSERT( aFlag < FL_LAST );
 
     m_drawFlags[aFlag] = aState;
 }
 
-bool CINFO3D_VISU::ShouldModuleBeDisplayed( MODULE_ATTR_T aModuleAttributs ) const
+bool EDA_3D_SETTINGS::ShouldModuleBeDisplayed( MODULE_ATTR_T aModuleAttributs ) const
 {
     if( ( ( aModuleAttributs == MOD_DEFAULT ) &&
           GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) ) ||
@@ -246,12 +243,12 @@ bool CINFO3D_VISU::ShouldModuleBeDisplayed( MODULE_ATTR_T aModuleAttributs ) con
 #define COPPER_THICKNESS KiROUND( 0.035 * IU_PER_MM )   // for 35 um
 #define TECH_LAYER_THICKNESS KiROUND( 0.04 * IU_PER_MM )
 
-int CINFO3D_VISU::GetCopperThicknessBIU() const
+int EDA_3D_SETTINGS::GetCopperThicknessBIU() const
 {
     return COPPER_THICKNESS;
 }
 
-unsigned int CINFO3D_VISU::GetNrSegmentsCircle( float aDiameter3DU ) const
+unsigned int EDA_3D_SETTINGS::GetNrSegmentsCircle( float aDiameter3DU ) const
 {
     wxASSERT( aDiameter3DU > 0.0f );
 
@@ -259,7 +256,7 @@ unsigned int CINFO3D_VISU::GetNrSegmentsCircle( float aDiameter3DU ) const
 }
 
 
-unsigned int CINFO3D_VISU::GetNrSegmentsCircle( int aDiameterBIU ) const
+unsigned int EDA_3D_SETTINGS::GetNrSegmentsCircle( int aDiameterBIU ) const
 {
     wxASSERT( aDiameterBIU > 0 );
 
@@ -268,7 +265,7 @@ unsigned int CINFO3D_VISU::GetNrSegmentsCircle( int aDiameterBIU ) const
 }
 
 
-double CINFO3D_VISU::GetCircleCorrectionFactor( int aNrSides ) const
+double EDA_3D_SETTINGS::GetCircleCorrectionFactor( int aNrSides ) const
 {
     wxASSERT( aNrSides >= 3 );
 
@@ -276,9 +273,9 @@ double CINFO3D_VISU::GetCircleCorrectionFactor( int aNrSides ) const
 }
 
 
-void CINFO3D_VISU::InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
+void EDA_3D_SETTINGS::InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
 {
-    wxLogTrace( m_logTrace, wxT( "CINFO3D_VISU::InitSettings" ) );
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_SETTINGS::InitSettings" ) );
 
     // Calculates the board bounding box
     // First, use only the board outlines
@@ -309,8 +306,7 @@ void CINFO3D_VISU::InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWarni
     // Calculate the convertion to apply to all positions.
     m_biuTo3Dunits = RANGE_SCALE_3D / std::max( m_boardSize.x, m_boardSize.y );
 
-    m_epoxyThickness3DU = m_board->GetDesignSettings().GetBoardThickness() *
-                          m_biuTo3Dunits;
+    m_epoxyThickness3DU = m_board->GetDesignSettings().GetBoardThickness() * m_biuTo3Dunits;
 
     // !TODO: use value defined by user (currently use default values by ctor
     m_copperThickness3DU         = COPPER_THICKNESS     * m_biuTo3Dunits;
@@ -450,7 +446,7 @@ void CINFO3D_VISU::InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWarni
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_stopCreateLayersTime = GetRunningMicroSecs();
 
-    printf( "CINFO3D_VISU::InitSettings times\n" );
+    printf( "EDA_3D_SETTINGS::InitSettings times\n" );
     printf( "  CreateBoardPoly:          %.3f ms\n",
             (float)( stats_stopCreateBoardPolyTime  - stats_startCreateBoardPolyTime  ) / 1e3 );
     printf( "  CreateLayers and holes:   %.3f ms\n",
@@ -460,7 +456,7 @@ void CINFO3D_VISU::InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWarni
 }
 
 
-bool CINFO3D_VISU::createBoardPolygon()
+bool EDA_3D_SETTINGS::createBoardPolygon()
 {
     m_board_poly.RemoveAllContours();
 
@@ -470,7 +466,7 @@ bool CINFO3D_VISU::createBoardPolygon()
 }
 
 
-float CINFO3D_VISU::GetModulesZcoord3DIU( bool aIsFlipped ) const
+float EDA_3D_SETTINGS::GetModulesZcoord3DIU( bool aIsFlipped ) const
 {
     if( aIsFlipped )
     {
@@ -489,23 +485,7 @@ float CINFO3D_VISU::GetModulesZcoord3DIU( bool aIsFlipped ) const
 }
 
 
-void CINFO3D_VISU::CameraSetType( CAMERA_TYPE aCameraType )
-{
-    switch( aCameraType )
-    {
-    case CAMERA_TYPE::TRACKBALL:
-        m_currentCamera = m_trackBallCamera;
-        break;
-
-    default:
-        wxLogMessage( wxT( "CINFO3D_VISU::CameraSetType() error: unknown camera type %d" ),
-                      (int)aCameraType );
-        break;
-    }
-}
-
-
-SFVEC3F CINFO3D_VISU::GetLayerColor( PCB_LAYER_ID aLayerId ) const
+SFVEC3F EDA_3D_SETTINGS::GetLayerColor( PCB_LAYER_ID aLayerId ) const
 {
     wxASSERT( aLayerId < PCB_LAYER_ID_COUNT );
 
@@ -515,13 +495,13 @@ SFVEC3F CINFO3D_VISU::GetLayerColor( PCB_LAYER_ID aLayerId ) const
 }
 
 
-SFVEC3F CINFO3D_VISU::GetItemColor( int aItemId ) const
+SFVEC3F EDA_3D_SETTINGS::GetItemColor( int aItemId ) const
 {
     return GetColor( m_colors->GetColor( aItemId ) );
 }
 
 
-SFVEC3F CINFO3D_VISU::GetColor( COLOR4D aColor ) const
+SFVEC3F EDA_3D_SETTINGS::GetColor( COLOR4D aColor ) const
 {
     return SFVEC3F( aColor.r, aColor.g, aColor.b );
 }

@@ -179,6 +179,12 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 }
 
 
+wxWindow* KICAD_MANAGER_FRAME::GetToolCanvas() const
+{
+    return m_leftWin;
+}
+
+
 APP_SETTINGS_BASE* KICAD_MANAGER_FRAME::config()
 {
     APP_SETTINGS_BASE* ret = PgmTop().PgmSettings();

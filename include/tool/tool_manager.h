@@ -34,10 +34,10 @@
 #include <tool/tool_base.h>
 #include <view/view_controls.h>
 
+class TOOLS_HOLDER;
 class TOOL_BASE;
 class ACTION_MANAGER;
 class ACTION_MENU;
-class EDA_BASE_FRAME;
 
 
 /**
@@ -274,7 +274,7 @@ public:
      * These are made available to the tool. Called by the parent frame when it is set up.
      */
     void SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
-                         KIGFX::VIEW_CONTROLS* aViewControls, EDA_BASE_FRAME* aFrame );
+                         KIGFX::VIEW_CONTROLS* aViewControls, TOOLS_HOLDER* aFrame );
 
     /* Accessors for the environment objects (view, model, etc.) */
     KIGFX::VIEW* GetView() const
@@ -295,10 +295,7 @@ public:
         return m_model;
     }
 
-    inline EDA_BASE_FRAME* GetEditFrame() const
-    {
-        return m_frame;
-    }
+    inline TOOLS_HOLDER* GetToolHolder() const { return m_frame; }
 
     /**
      * Returns id of the tool that is on the top of the active tools stack
@@ -561,10 +558,10 @@ private:
     /// Original cursor position, if overridden by the context menu handler
     std::map<TOOL_ID, OPT<VECTOR2D>> m_cursorSettings;
 
-    EDA_ITEM* m_model;
-    KIGFX::VIEW* m_view;
+    EDA_ITEM*             m_model;
+    KIGFX::VIEW*          m_view;
     KIGFX::VIEW_CONTROLS* m_viewControls;
-    EDA_BASE_FRAME* m_frame;
+    TOOLS_HOLDER*         m_frame;
 
     /// Queue that stores events to be processed at the end of the event processing cycle.
     std::list<TOOL_EVENT> m_eventQueue;

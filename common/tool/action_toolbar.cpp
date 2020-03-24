@@ -42,10 +42,10 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
 
 void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry )
 {
-    EDA_BASE_FRAME* editFrame = m_toolManager->GetEditFrame();
-    int toolId = aAction.GetId() + ACTION_ID;
+    wxWindow* parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
+    int       toolId = aAction.GetId() + ACTION_ID;
 
-    AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), editFrame ),
+    AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), parent ),
              aAction.GetDescription(), aIsToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL );
 
     m_toolKinds[ toolId ] = aIsToggleEntry;
@@ -55,10 +55,10 @@ void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry )
 
 void ACTION_TOOLBAR::AddButton( const TOOL_ACTION& aAction )
 {
-    EDA_BASE_FRAME* editFrame = m_toolManager->GetEditFrame();
-    int toolId = aAction.GetId() + ACTION_ID;
+    wxWindow* parent = dynamic_cast<wxWindow*>( m_toolManager->GetToolHolder() );
+    int       toolId = aAction.GetId() + ACTION_ID;
 
-    AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), editFrame ),
+    AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), parent ),
              aAction.GetName(), wxITEM_NORMAL );
 
     m_toolKinds[ toolId ] = false;

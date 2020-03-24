@@ -59,7 +59,7 @@ typedef enum
 class C3D_RENDER_RAYTRACING : public C3D_RENDER_BASE
 {
 public:
-    explicit C3D_RENDER_RAYTRACING( CINFO3D_VISU &aSettings );
+    explicit C3D_RENDER_RAYTRACING( EDA_3D_SETTINGS &aSettings );
 
     ~C3D_RENDER_RAYTRACING();
 

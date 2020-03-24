@@ -106,7 +106,7 @@ protected:
 private:
     void update() override
     {
-        SCH_EDIT_FRAME*    frame = (SCH_EDIT_FRAME*) getToolManager()->GetEditFrame();
+        SCH_EDIT_FRAME*    frame = (SCH_EDIT_FRAME*) getToolManager()->GetToolHolder();
         EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
         KICAD_T            busType[] = { SCH_LINE_LOCATE_BUS_T, EOT };
         EE_SELECTION&      selection = selTool->RequestSelection( busType );

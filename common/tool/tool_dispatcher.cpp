@@ -29,6 +29,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/actions.h>
+#include <tool/action_menu.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 
@@ -340,7 +341,12 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     // In this case, give the focus to the parent frame (GAL canvas itself does not accept the
     // focus when iconized for some obscure reason)
     if( wxWindow::FindFocus() == nullptr )
-        m_toolMgr->GetEditFrame()->SetFocus();
+    {
+        wxWindow* window = dynamic_cast<wxWindow*>( m_toolMgr->GetToolHolder() );
+
+        if( window )
+            window->SetFocus();
+    }
 
     // Mouse handling
     // Note: wxEVT_LEFT_DOWN event must always be skipped.
@@ -387,10 +393,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         // after second LMB click and currently I have no means to do better debugging
         if( type == wxEVT_LEFT_UP )
         {
-            EDA_DRAW_FRAME* drawFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() );
-
-            if( drawFrame )
-                drawFrame->GetCanvas()->SetFocus();
+            if( m_toolMgr->GetToolHolder() && m_toolMgr->GetToolHolder()->GetToolCanvas() )
+                m_toolMgr->GetToolHolder()->GetToolCanvas()->SetFocus();
         }
 #endif /* __APPLE__ */
     }
@@ -469,6 +473,48 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
             evt = TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL );
         else
             evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_PRESSED, key | mods );
+    }
+    else if( type == wxEVT_MENU_OPEN || type == wxEVT_MENU_CLOSE || type == wxEVT_MENU_HIGHLIGHT )
+    {
+        //
+        // wxWidgets has several issues that we have to work around:
+        //
+        // 1) wxWidgets 3.0.x Windows has a bug where wxEVT_MENU_OPEN and wxEVT_MENU_HIGHLIGHT
+        //    events are not captured by the ACTON_MENU menus.  So we forward them here.
+        //    (FWIW, this one is fixed in wxWidgets 3.1.x.)
+        //
+        // 2) wxWidgets doesn't pass the menu pointer for wxEVT_MENU_HIGHLIGHT events.  So we
+        //    store the menu pointer from the wxEVT_MENU_OPEN call.
+        //
+        // 3) wxWidgets has no way to tell whether a command is from a menu selection or a
+        //    hotkey.  So we keep track of menu highlighting so we can differentiate.
+        //
+
+        static ACTION_MENU* currentMenu;
+
+        wxMenuEvent& menuEvent = *dynamic_cast<wxMenuEvent*>( &aEvent );
+
+        if( type == wxEVT_MENU_OPEN )
+        {
+            currentMenu = dynamic_cast<ACTION_MENU*>( menuEvent.GetMenu() );
+
+            if( currentMenu )
+                currentMenu->OnMenuEvent( menuEvent );
+        }
+        else if( type == wxEVT_MENU_HIGHLIGHT )
+        {
+            if( currentMenu )
+                currentMenu->OnMenuEvent( menuEvent );
+        }
+        else if( type == wxEVT_MENU_CLOSE )
+        {
+            if( currentMenu )
+                currentMenu->OnMenuEvent( menuEvent );
+
+            currentMenu = nullptr;
+        }
+
+        aEvent.Skip();
     }
 
     bool handled = false;

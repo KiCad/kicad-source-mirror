@@ -39,7 +39,7 @@
 #include "panel_prev_3d_base.h"
 
 #include <vector>
-
+#include <tools_holder.h>
 #include <3d_canvas/eda_3d_canvas.h>
 #include <3d_viewer_id.h>
 
@@ -66,20 +66,20 @@
 class S3D_CACHE;
 class FILENAME_RESOLVER;
 class BOARD;
-class CINFO3D_VISU;
+class EDA_3D_SETTINGS;
 class MODULE;
 
-class PANEL_PREV_3D: public PANEL_PREV_3D_BASE
+class PANEL_PREV_3D: public EDA_3D_SETTINGS_HOLDER, public TOOLS_HOLDER, public PANEL_PREV_3D_BASE
 {
 public:
     PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aModule,
-                   std::vector<MODULE_3D_SETTINGS> *aParentModelList );
+                   std::vector<MODULE_3D_SETTINGS>* aParentModelList );
 
     ~PANEL_PREV_3D();
 
 private:
     EDA_3D_CANVAS*                   m_previewPane;
-    CINFO3D_VISU*                    m_settings3Dviewer;
+    EDA_3D_SETTINGS*                 m_settings3Dviewer;
 
     BOARD*                           m_dummyBoard;
     MODULE*                          m_dummyModule;
@@ -91,8 +91,6 @@ private:
 
     // Methods of the class
 private:
-    void initPanel();
-
     /**
      * Load 3D relevant settings from the user configuration
      */
@@ -184,6 +182,15 @@ private:
     }
 
 public:
+    /**
+     * The TOOL_DISPATCHER needs these to work around some issues in wxWidgets where the menu
+     * events aren't captured by the menus themselves.
+     */
+    void OnMenuEvent( wxMenuEvent& aEvent );
+
+    wxWindow* GetToolCanvas() const override { return m_previewPane; }
+    EDA_3D_SETTINGS* GetSettings() override { return m_settings3Dviewer; }
+
     /**
      * @brief SetModelDataIdx - Sets the currently selected index in the model list so that
      * the scale/rotation/offset controls can be updated.

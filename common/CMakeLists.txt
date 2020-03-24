@@ -335,6 +335,7 @@ set( COMMON_SRCS
     searchhelpfilefullpath.cpp
     status_popup.cpp
     systemdirsappend.cpp
+    tools_holder.cpp
     trace_helpers.cpp
     undo_redo_container.cpp
     utf8.cpp

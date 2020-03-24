@@ -73,7 +73,7 @@ void ACTION_MENU::SetIcon( const BITMAP_OPAQUE* aIcon )
 
 void ACTION_MENU::setupEvents()
 {
-// See wxWidgets hack in EDA_BASE_FRAME::OnMenuOpen().
+// See wxWidgets hack in TOOL_DISPATCHER::DispatchWxEvent().
 //    Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
 //    Connect( wxEVT_MENU_HIGHLIGHT, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
 //    Connect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );

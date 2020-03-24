@@ -46,7 +46,7 @@
 // convertLinearToSRGB
 //#include <glm/gtc/color_space.hpp>
 
-C3D_RENDER_RAYTRACING::C3D_RENDER_RAYTRACING( CINFO3D_VISU &aSettings ) :
+C3D_RENDER_RAYTRACING::C3D_RENDER_RAYTRACING( EDA_3D_SETTINGS &aSettings ) :
                        C3D_RENDER_BASE( aSettings ),
                        m_postshader_ssao( aSettings.CameraGet() )
 {

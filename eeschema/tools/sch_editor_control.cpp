@@ -696,7 +696,7 @@ static VECTOR2D CLEAR;
 // TODO(JE) Probably use netcode rather than connection name here eventually
 static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
-    SCH_EDIT_FRAME*     editFrame = static_cast<SCH_EDIT_FRAME*>( aToolMgr->GetEditFrame() );
+    SCH_EDIT_FRAME*     editFrame = static_cast<SCH_EDIT_FRAME*>( aToolMgr->GetToolHolder() );
     EE_SELECTION_TOOL*  selTool = aToolMgr->GetTool<EE_SELECTION_TOOL>();
     SCH_EDITOR_CONTROL* editorControl = aToolMgr->GetTool<SCH_EDITOR_CONTROL>();
     wxString            netName;

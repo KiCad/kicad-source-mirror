@@ -161,6 +161,8 @@ public:
 
     void ReCreateTreePrj();
 
+    wxWindow* GetToolCanvas() const override;
+
     DECLARE_EVENT_TABLE()
 
 private:

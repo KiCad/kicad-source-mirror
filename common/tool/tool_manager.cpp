@@ -846,7 +846,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         m_menuOwner = toolId;
         m_menuActive = true;
 
-        if( auto frame = dynamic_cast<wxFrame*>( m_frame ) )
+        if( wxWindow* frame = dynamic_cast<wxWindow*>( m_frame ) )
             frame->PopupMenu( menu.get() );
 
         // Warp the cursor if a menu item was selected
@@ -937,11 +937,8 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 
     if( m_view && m_view->IsDirty() )
     {
-        auto frame = GetEditFrame();
-        if( frame )
-        {
-            frame->RefreshCanvas();
-        }
+        if( GetToolHolder() )
+            GetToolHolder()->RefreshCanvas();
 
 #if defined( __WXMAC__ ) || defined( __WINDOWS__ )
         wxTheApp->ProcessPendingEvents(); // required for updating brightening behind a popup menu
@@ -1017,7 +1014,7 @@ TOOL_ID TOOL_MANAGER::MakeToolId( const std::string& aToolName )
 
 
 void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
-                                   KIGFX::VIEW_CONTROLS* aViewControls, EDA_BASE_FRAME* aFrame )
+                                   KIGFX::VIEW_CONTROLS* aViewControls, TOOLS_HOLDER* aFrame )
 {
     m_model = aModel;
     m_view = aView;
@@ -1094,11 +1091,11 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
         TOOL_EVENT mod_event( aEvent );
 
         // Only immediate actions get the position.  Otherwise clear for tool activation
-        if( GetEditFrame() && !GetEditFrame()->GetDoImmediateActions() )
+        if( GetToolHolder() && !GetToolHolder()->GetDoImmediateActions() )
         {
             // An tool-selection-event has no position
             if( mod_event.GetCommandStr().is_initialized()
-                    && mod_event.GetCommandStr().get() != GetEditFrame()->CurrentToolName() )
+                    && mod_event.GetCommandStr().get() != GetToolHolder()->CurrentToolName() )
             {
                 mod_event.SetHasPosition( false );
             }
@@ -1149,7 +1146,7 @@ bool TOOL_MANAGER::IsToolActive( TOOL_ID aId ) const
 
 void TOOL_MANAGER::UpdateUI( const TOOL_EVENT& aEvent )
 {
-    EDA_BASE_FRAME* frame = GetEditFrame();
+    EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( GetToolHolder() );
 
     if( frame )
     {

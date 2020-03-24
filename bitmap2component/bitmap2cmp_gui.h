@@ -75,16 +75,15 @@ public:
     int GetOutputDPI();
 
 private:
-    EDA_UNITS m_unit;               // The units for m_outputSize (mm, inch, dpi)
-    double    m_outputSize;         // The size in m_unit of the output image, depending on
-                                    // the user settings. Set to the initial image size
-    int     m_originalDPI;          // The image DPI if specified in file, or 0 if unknown
-    int     m_originalSizePixels;   // The original image size read from file, in pixels
+    EDA_UNITS m_unit;                 // The units for m_outputSize (mm, inch, dpi)
+    double    m_outputSize;           // The size in m_unit of the output image, depending on
+                                      // the user settings. Set to the initial image size
+    int       m_originalDPI;          // The image DPI if specified in file, or 0 if unknown
+    int       m_originalSizePixels;   // The original image size read from file, in pixels
 };
 
 class BM2CMP_FRAME : public BM2CMP_FRAME_BASE
 {
-
 public:
     BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~BM2CMP_FRAME();
@@ -155,20 +154,22 @@ private:
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
+    wxWindow* GetToolCanvas() const override;
+
 private:
-    wxImage  m_Pict_Image;
-    wxBitmap m_Pict_Bitmap;
-    wxImage  m_Greyscale_Image;
-    wxBitmap m_Greyscale_Bitmap;
-    wxImage  m_NB_Image;
-    wxBitmap m_BN_Bitmap;
-    IMAGE_SIZE                    m_outputSizeX;
-    IMAGE_SIZE                    m_outputSizeY;
-    bool                          m_Negative;
-    wxString                      m_BitmapFileName;
-    wxString                      m_ConvertedFileName;
-    bool                          m_exportToClipboard;
-    bool                          m_AspectRatioLocked;
-    double                        m_AspectRatio;
+    wxImage    m_Pict_Image;
+    wxBitmap   m_Pict_Bitmap;
+    wxImage    m_Greyscale_Image;
+    wxBitmap   m_Greyscale_Bitmap;
+    wxImage    m_NB_Image;
+    wxBitmap   m_BN_Bitmap;
+    IMAGE_SIZE m_outputSizeX;
+    IMAGE_SIZE m_outputSizeY;
+    bool       m_Negative;
+    wxString   m_BitmapFileName;
+    wxString   m_ConvertedFileName;
+    bool       m_exportToClipboard;
+    bool       m_AspectRatioLocked;
+    double     m_AspectRatio;
 };
 #endif// BITMOP2CMP_GUI_H_

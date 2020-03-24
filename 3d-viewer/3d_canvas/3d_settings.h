@@ -22,13 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  cinfo3d_visu.h
- * @brief Handles data related with the board to be visualized
- */
-
-#ifndef CINFO3D_VISU_H
-#define CINFO3D_VISU_H
+#ifndef EDA_3D_SETTINGS_H
+#define EDA_3D_SETTINGS_H
 
 #include <vector>
 #include "../3d_rendering/3d_render_raytracing/accelerators/ccontainer2d.h"
@@ -67,16 +62,16 @@ typedef std::map< PCB_LAYER_ID, SHAPE_POLY_SET *> MAP_POLY;
 
 
 /**
- *  Class CINFO3D_VISU
+ *  Class EDA_3D_SETTINGS
  *  Helper class to handle information needed to display 3D board
  */
-class CINFO3D_VISU
+class EDA_3D_SETTINGS
 {
  public:
 
-    CINFO3D_VISU();
+    EDA_3D_SETTINGS();
 
-    ~CINFO3D_VISU();
+    ~EDA_3D_SETTINGS();
 
     /**
      * @brief Set3DCacheManager - Update the Cache manager pointer
@@ -204,12 +199,6 @@ class CINFO3D_VISU
     float GetModulesZcoord3DIU( bool aIsFlipped ) const ;
 
     /**
-     * @brief CameraSetType - Set the camera type to use
-     * @param aCameraType: camera type to use in this canvas
-     */
-    void CameraSetType( CAMERA_TYPE aCameraType );
-
-    /**
      * @brief CameraGet - get current camera in use
      * @return a camera
      */
@@ -283,14 +272,20 @@ class CINFO3D_VISU
      * @param aLayerId: layer id
      * @return position in 3D unities
      */
-    float GetLayerTopZpos3DU( PCB_LAYER_ID aLayerId ) const { return m_layerZcoordTop[aLayerId]; }
+    float GetLayerTopZpos3DU( PCB_LAYER_ID aLayerId ) const
+    {
+        return m_layerZcoordTop[aLayerId];
+    }
 
     /**
      * @brief GetLayerBottomZpos3DU - Get the bottom z position
      * @param aLayerId: layer id
      * @return position in 3D unities
      */
-    float GetLayerBottomZpos3DU( PCB_LAYER_ID aLayerId ) const { return m_layerZcoordBottom[aLayerId]; }
+    float GetLayerBottomZpos3DU( PCB_LAYER_ID aLayerId ) const
+    {
+        return m_layerZcoordBottom[aLayerId];
+    }
 
     /**
      * @brief GetMapLayers - Get the map of container that have the objects per layer
@@ -320,8 +315,10 @@ class CINFO3D_VISU
      * @brief GetThroughHole_Outer_poly_NPTH -
      * @return
      */
-    const SHAPE_POLY_SET &GetThroughHole_Outer_poly_NPTH() const {
-        return m_through_outer_holes_poly_NPTH; }
+    const SHAPE_POLY_SET &GetThroughHole_Outer_poly_NPTH() const
+    {
+        return m_through_outer_holes_poly_NPTH;
+    }
 
     /**
      * @brief GetThroughHole_Vias_Outer -
@@ -337,17 +334,19 @@ class CINFO3D_VISU
 
     /**
      * @brief GetThroughHole_Vias_Outer_poly -
-     * @return
      */
-    const SHAPE_POLY_SET &GetThroughHole_Vias_Outer_poly() const {
-        return m_through_outer_holes_vias_poly; }
+    const SHAPE_POLY_SET &GetThroughHole_Vias_Outer_poly() const
+    {
+        return m_through_outer_holes_vias_poly;
+    }
 
     /**
      * @brief GetThroughHole_Vias_Inner_poly -
-     * @return
      */
-    const SHAPE_POLY_SET &GetThroughHole_Vias_Inner_poly() const {
-        return m_through_inner_holes_vias_poly; }
+    const SHAPE_POLY_SET &GetThroughHole_Vias_Inner_poly() const
+    {
+        return m_through_inner_holes_vias_poly;
+    }
 
     /**
      * @brief GetThroughHole_Inner - Get the ThroughHole container
@@ -680,7 +679,15 @@ private:
 
 };
 
-/// This is a dummy visualization configuration
-extern CINFO3D_VISU G_null_CINFO3D_VISU;
 
-#endif // CINFO3D_VISU_H
+/// This is a dummy visualization configuration
+extern EDA_3D_SETTINGS G_null_EDA_3D_SETTINGS;
+
+
+class EDA_3D_SETTINGS_HOLDER
+{
+public:
+    virtual EDA_3D_SETTINGS* GetSettings() = 0;
+};
+
+#endif // EDA_3D_SETTINGS_H

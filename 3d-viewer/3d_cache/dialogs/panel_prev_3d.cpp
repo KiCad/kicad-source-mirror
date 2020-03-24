@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,8 +24,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "panel_prev_model.h"
+#include "panel_prev_3d.h"
 #include <3d_canvas/eda_3d_canvas.h>
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include <tools/3d_actions.h>
+#include <tools/3d_controller.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <class_board.h>
@@ -37,42 +41,11 @@
 
 
 PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aModule,
-                              std::vector<MODULE_3D_SETTINGS> *aParentModelList ) :
-    PANEL_PREV_3D_BASE( aParent, wxID_ANY )
+                              std::vector<MODULE_3D_SETTINGS>* aParentModelList ) :
+        PANEL_PREV_3D_BASE( aParent, wxID_ANY )
 {
     m_userUnits = aFrame->GetUserUnits();
 
-    initPanel();
-
-    m_parentModelList = aParentModelList;
-
-    m_dummyModule = new MODULE( *aModule );
-    m_dummyBoard->Add( m_dummyModule );
-
-    // Set 3d viewer configuration for preview
-    m_settings3Dviewer = new CINFO3D_VISU();
-
-    // Create the 3D canvas
-    m_previewPane = new EDA_3D_CANVAS( this, COGL_ATT_LIST::GetAttributesList( true ),
-                                       m_dummyBoard, *m_settings3Dviewer,
-                                       aFrame->Prj().Get3DCacheManager() );
-
-    loadCommonSettings();
-
-    m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND, 5 );
-}
-
-
-PANEL_PREV_3D::~PANEL_PREV_3D()
-{
-    delete m_settings3Dviewer;
-    delete m_dummyBoard;
-    delete m_previewPane;
-}
-
-
-void PANEL_PREV_3D::initPanel()
-{
     m_dummyBoard = new BOARD();
     m_selected = -1;
 
@@ -100,6 +73,58 @@ void PANEL_PREV_3D::initPanel()
 
     for( wxSpinButton* button : spinButtonList )
         button->SetRange(INT_MIN, INT_MAX );
+
+    m_parentModelList = aParentModelList;
+
+    m_dummyModule = new MODULE( *aModule );
+    m_dummyBoard->Add( m_dummyModule );
+
+    // Set 3d viewer configuration for preview
+    m_settings3Dviewer = new EDA_3D_SETTINGS();
+
+    // Create the 3D canvas
+    m_previewPane = new EDA_3D_CANVAS( this, COGL_ATT_LIST::GetAttributesList( true ),
+                                       m_dummyBoard, *m_settings3Dviewer,
+                                       aFrame->Prj().Get3DCacheManager() );
+
+    loadCommonSettings();
+
+    // Create the manager
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( m_dummyBoard, nullptr, nullptr, this );
+
+    m_actions = new EDA_3D_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+    m_previewPane->SetEventDispatcher( m_toolDispatcher );
+
+    // Register tools
+    m_toolManager->RegisterTool( new EDA_3D_CONTROLLER );
+    m_toolManager->InitTools();
+
+    // Run the viewer control tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "3DViewer.Control" );
+
+    m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND, 5 );
+
+    for( wxEventType eventType : { wxEVT_MENU_OPEN, wxEVT_MENU_CLOSE, wxEVT_MENU_HIGHLIGHT } )
+        Connect( eventType, wxMenuEventHandler( PANEL_PREV_3D::OnMenuEvent ), NULL, this );
+}
+
+
+PANEL_PREV_3D::~PANEL_PREV_3D()
+{
+    delete m_settings3Dviewer;
+    delete m_dummyBoard;
+    delete m_previewPane;
+}
+
+
+void PANEL_PREV_3D::OnMenuEvent( wxMenuEvent& aEvent )
+{
+    if( !m_toolDispatcher )
+        aEvent.Skip();
+    else
+        m_toolDispatcher->DispatchWxEvent( aEvent );
 }
 
 
@@ -127,12 +152,12 @@ static double rotationFromString( const wxString& aValue )
 
     if( rotation > MAX_ROTATION )
     {
-        int n = rotation / MAX_ROTATION;
+        int n = KiROUND( rotation / MAX_ROTATION );
         rotation -= MAX_ROTATION * n;
     }
     else if( rotation < -MAX_ROTATION )
     {
-        int n = -rotation / MAX_ROTATION;
+        int n = KiROUND( -rotation / MAX_ROTATION );
         rotation += MAX_ROTATION * n;
     }
 
@@ -351,6 +376,7 @@ void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
     if( m_userUnits == EDA_UNITS::INCHES )
     {
         step = OFFSET_INCREMENT_MIL/1000.0;
+
         if( event.ShiftDown( ) )
             step = OFFSET_INCREMENT_MIL_FINE/1000.0;
     }
@@ -372,13 +398,10 @@ void PANEL_PREV_3D::UpdateDummyModule( bool aReloadRequired )
 {
     m_dummyModule->Models().clear();
 
-    for( size_t i = 0; i < m_parentModelList->size(); ++i )
+    for( MODULE_3D_SETTINGS& model : *m_parentModelList)
     {
-        if( m_parentModelList->at( i ).m_Preview )
-        {
-            m_dummyModule->Models().insert( m_dummyModule->Models().end(),
-                                            m_parentModelList->at( i ) );
-        }
+        if( model.m_Preview )
+            m_dummyModule->Models().push_back( model );
     }
 
     if( aReloadRequired )

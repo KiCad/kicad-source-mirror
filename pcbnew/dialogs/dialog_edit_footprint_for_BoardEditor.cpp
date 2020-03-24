@@ -44,7 +44,7 @@
 #include <widgets/wx_grid.h>
 
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
-#include "3d_cache/dialogs/panel_prev_model.h"
+#include "3d_cache/dialogs/panel_prev_3d.h"
 
 #include <dialog_edit_footprint_for_BoardEditor.h>
 

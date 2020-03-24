@@ -34,8 +34,8 @@ set(3D-VIEWER_SRCS
     ${DIR_DLG}/3d_cache_dialogs.cpp
     ${DIR_DLG}/dlg_select_3dmodel.cpp
     ${DIR_DLG}/panel_prev_3d_base.cpp
-    ${DIR_DLG}/panel_prev_model.cpp
-    3d_canvas/cinfo3d_visu.cpp
+    ${DIR_DLG}/panel_prev_3d.cpp
+    3d_canvas/3d_settings.cpp
     3d_canvas/create_layer_items.cpp
     3d_canvas/create_3Dgraphic_brd_items.cpp
     3d_canvas/create_layer_poly.cpp
@@ -86,14 +86,14 @@ set(3D-VIEWER_SRCS
     3d_rendering/cpostshader.cpp
     3d_rendering/cpostshader_ssao.cpp
     3d_rendering/ctrack_ball.cpp
-    3d_viewer/3d_menubar.cpp
     3d_rendering/test_cases.cpp
     3d_rendering/trackball.cpp
+    3d_viewer/3d_menubar.cpp
     3d_viewer/3d_toolbar.cpp
     3d_viewer/dialogs/dialog_3D_view_option.cpp
     3d_viewer/dialogs/dialog_3D_view_option_base.cpp
     3d_viewer/tools/3d_actions.cpp
-    3d_viewer/tools/3d_viewer_control.cpp
+    3d_viewer/tools/3d_controller.cpp
     3d_viewer/eda_3d_viewer.cpp
     3d_viewer/3d_viewer_settings.cpp
     common_ogl/cogl_att_list.cpp

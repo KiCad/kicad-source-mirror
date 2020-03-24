@@ -237,7 +237,7 @@ void DIALOG_POSITION_RELATIVE::OnUseGridOriginClick( wxCommandEvent& event )
 
 void DIALOG_POSITION_RELATIVE::OnUseUserOriginClick( wxCommandEvent& event )
 {
-    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) m_toolMgr->GetEditFrame();
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) m_toolMgr->GetToolHolder();
 
     m_anchor_position = (wxPoint) frame->GetScreen()->m_LocalOrigin;
     m_referenceInfo->SetLabel( _( "Reference location: local coordinates origin" ) );

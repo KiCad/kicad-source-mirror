@@ -150,7 +150,9 @@ public:
     /**
      * @return a pointer on the Footprint Viewer frame, if exists, or NULL
      */
-    DISPLAY_FOOTPRINTS_FRAME* GetFootprintViewerFrame();
+    DISPLAY_FOOTPRINTS_FRAME* GetFootprintViewerFrame() const;
+
+    wxWindow* GetToolCanvas() const override;
 
     /**
      * Find out which control currently has focus.

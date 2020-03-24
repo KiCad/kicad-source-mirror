@@ -151,13 +151,8 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 {
     SetKiway( this, aKiway );
 
-    wxString unitList[] =
-    {
-        _("mm"), _("Inch"), _("DPI")
-    };
-
-    for( int ii = 0; ii < 3; ii++ )
-        m_PixelUnit->Append( unitList[ii] );
+    for( wxString unit : { _( "mm" ), _( "Inch" ), _( "DPI" ) } )
+        m_PixelUnit->Append( unit );
 
     LoadSettings( config() );
 
@@ -199,6 +194,12 @@ BM2CMP_FRAME::~BM2CMP_FRAME()
      * destructor and before the native window is destroyed
      */
     this->Freeze( );
+}
+
+
+wxWindow* BM2CMP_FRAME::GetToolCanvas() const
+{
+    return m_Notebook->GetCurrentPage();
 }
 
 

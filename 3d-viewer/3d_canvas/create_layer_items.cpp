@@ -30,7 +30,7 @@
  *  board_items_to_polygon_shape_transform.cpp
  */
 
-#include "cinfo3d_visu.h"
+#include "3d_settings.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/cring2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/cfilledcircle2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/croundsegment2d.h"
@@ -58,69 +58,44 @@
 
 #include <profile.h>
 
-void CINFO3D_VISU::destroyLayers()
+void EDA_3D_SETTINGS::destroyLayers()
 {
     if( !m_layers_poly.empty() )
     {
-        for( MAP_POLY::iterator ii = m_layers_poly.begin();
-             ii != m_layers_poly.end();
-             ++ii )
-        {
-            delete ii->second;
-            ii->second = NULL;
-        }
+        for( auto& poly : m_layers_poly )
+            delete poly.second;
 
         m_layers_poly.clear();
     }
 
     if( !m_layers_inner_holes_poly.empty() )
     {
-        for( MAP_POLY::iterator ii = m_layers_inner_holes_poly.begin();
-             ii != m_layers_inner_holes_poly.end();
-             ++ii )
-        {
-            delete ii->second;
-            ii->second = NULL;
-        }
+        for( auto& poly : m_layers_inner_holes_poly )
+            delete poly.second;
 
         m_layers_inner_holes_poly.clear();
     }
 
     if( !m_layers_outer_holes_poly.empty() )
     {
-        for( MAP_POLY::iterator ii = m_layers_outer_holes_poly.begin();
-             ii != m_layers_outer_holes_poly.end();
-             ++ii )
-        {
-            delete ii->second;
-            ii->second = NULL;
-        }
+        for( auto& poly : m_layers_outer_holes_poly )
+            delete poly.second;
 
         m_layers_outer_holes_poly.clear();
     }
 
     if( !m_layers_container2D.empty() )
     {
-        for( MAP_CONTAINER_2D::iterator ii = m_layers_container2D.begin();
-             ii != m_layers_container2D.end();
-             ++ii )
-        {
-            delete ii->second;
-            ii->second = NULL;
-        }
+        for( auto& poly : m_layers_container2D )
+            delete poly.second;
 
         m_layers_container2D.clear();
     }
 
     if( !m_layers_holes2D.empty() )
     {
-        for( MAP_CONTAINER_2D::iterator ii = m_layers_holes2D.begin();
-             ii != m_layers_holes2D.end();
-             ++ii )
-        {
-            delete ii->second;
-            ii->second = NULL;
-        }
+        for( auto& poly : m_layers_holes2D )
+            delete poly.second;
 
         m_layers_holes2D.clear();
     }
@@ -138,7 +113,7 @@ void CINFO3D_VISU::destroyLayers()
 }
 
 
-void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
+void EDA_3D_SETTINGS::createLayers( REPORTER *aStatusTextReporter )
 {
     destroyLayers();
 
@@ -146,14 +121,14 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // Based on: https://github.com/KiCad/kicad-source-mirror/blob/master/3d-viewer/3d_draw.cpp#L692
     // /////////////////////////////////////////////////////////////////////////
 
-    #ifdef PRINT_STATISTICS_3D_VIEWER
+#ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_startCopperLayersTime = GetRunningMicroSecs();
 
     unsigned start_Time = stats_startCopperLayersTime;
 #endif
 
     PCB_LAYER_ID cu_seq[MAX_CU_LAYERS];
-    LSET     cu_set = LSET::AllCuMask( m_copperLayersCount );
+    LSET         cu_set = LSET::AllCuMask( m_copperLayersCount );
 
     m_stats_nr_tracks               = 0;
     m_stats_track_med_width         = 0;
@@ -168,7 +143,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     trackList.clear();
     trackList.reserve( m_board->Tracks().size() );
 
-    for( auto track : m_board->Tracks() )
+    for( TRACK* track : m_board->Tracks() )
     {
         if( !Is3DLayerEnabled( track->GetLayer() ) ) // Skip non enabled layers
             continue;
@@ -241,10 +216,8 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     // Create tracks as objects and add it to container
     // /////////////////////////////////////////////////////////////////////////
-    for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
+    for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
-        const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
-
         wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
 
         CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
@@ -272,10 +245,8 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     // Create VIAS and THTs objects and add it to holes containers
     // /////////////////////////////////////////////////////////////////////////
-    for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
+    for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
-        const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
-
         // ADD TRACKS
         unsigned int nTracks = trackList.size();
 
@@ -324,7 +295,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                                                                   hole_inner_radius + thickness,
                                                                   *track ) );
                 }
-                else if( lIdx == 0 ) // it only adds once the THT holes
+                else if( curr_layer_id == layer_id[0] ) // it only adds once the THT holes
                 {
                     // Add through hole object
                     // /////////////////////////////////////////////////////////
@@ -356,10 +327,8 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     // Create VIAS and THTs objects and add it to holes containers
     // /////////////////////////////////////////////////////////////////////////
-    for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
+    for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
-        const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
-
         // ADD TRACKS
         const unsigned int nTracks = trackList.size();
 
@@ -420,7 +389,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                     TransformCircleToPolygon( *layerInnerHolesPoly, via->GetStart(),
                             holediameter / 2, ARC_HIGH_DEF );
                 }
-                else if( lIdx == 0 ) // it only adds once the THT holes
+                else if( curr_layer_id == layer_id[0] ) // it only adds once the THT holes
                 {
                     const int holediameter = via->GetDrillValue();
                     const int hole_outer_radius = (holediameter / 2)+ GetCopperThicknessBIU();
@@ -457,10 +426,8 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
-        for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
+        for( PCB_LAYER_ID curr_layer_id : layer_id )
         {
-            const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
-
             wxASSERT( m_layers_poly.find( curr_layer_id ) != m_layers_poly.end() );
 
             SHAPE_POLY_SET *layerPoly = m_layers_poly[curr_layer_id];
@@ -488,9 +455,9 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     // Add holes of modules
     // /////////////////////////////////////////////////////////////////////////
-    for( auto module : m_board->Modules() )
+    for( MODULE* module : m_board->Modules() )
     {
-        for( auto pad : module->Pads() )
+        for( D_PAD* pad : module->Pads() )
         {
             const wxSize padHole = pad->GetDrillSize();
 
@@ -520,9 +487,9 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     // Add contours of the pad holes (pads can be Circle or Segment holes)
     // /////////////////////////////////////////////////////////////////////////
-    for( auto module : m_board->Modules() )
+    for( MODULE* module : m_board->Modules() )
     {
-        for( auto pad : module->Pads() )
+        for( D_PAD* pad : module->Pads() )
         {
             const wxSize padHole = pad->GetDrillSize();
 
@@ -535,7 +502,6 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             if( pad->GetAttribute () != PAD_ATTRIB_HOLE_NOT_PLATED )
             {
                 pad->BuildPadDrillShapePolygon( m_through_outer_holes_poly, inflate );
-
                 pad->BuildPadDrillShapePolygon( m_through_inner_holes_poly, 0 );
             }
             else
@@ -553,16 +519,14 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     // Add modules PADs objects to containers
     // /////////////////////////////////////////////////////////////////////////
-    for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
+    for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
-        const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
-
         wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
 
         CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
 
         // ADD PADS
-        for( auto module : m_board->Modules() )
+        for( MODULE* module : m_board->Modules() )
         {
             // Note: NPTH pads are not drawn on copper layers when the pad
             // has same shape as its hole
@@ -590,10 +554,8 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
-        for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
+        for( PCB_LAYER_ID curr_layer_id : layer_id )
         {
-            const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
-
             wxASSERT( m_layers_poly.find( curr_layer_id ) != m_layers_poly.end() );
 
             SHAPE_POLY_SET *layerPoly = m_layers_poly[curr_layer_id];
@@ -613,8 +575,9 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                                                            true );
 
                 // Micro-wave modules may have items on copper layers
-                module->TransformGraphicTextWithClearanceToPolygonSet(
-                        curr_layer_id, *layerPoly, 0 );
+                module->TransformGraphicTextWithClearanceToPolygonSet( curr_layer_id,
+                                                                       *layerPoly,
+                                                                       0 );
 
                 transformGraphicModuleEdgeToPolygonSet( module, curr_layer_id, *layerPoly );
             }
@@ -628,10 +591,8 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     // Add graphic item on copper layers to object containers
     // /////////////////////////////////////////////////////////////////////////
-    for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
+    for( PCB_LAYER_ID curr_layer_id : layer_id )
     {
-        const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
-
         wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
 
         CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
@@ -686,18 +647,16 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
-        for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
+        for( PCB_LAYER_ID cur_layer_id : layer_id )
         {
-            const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
+            wxASSERT( m_layers_poly.find( cur_layer_id ) != m_layers_poly.end() );
 
-            wxASSERT( m_layers_poly.find( curr_layer_id ) != m_layers_poly.end() );
-
-            SHAPE_POLY_SET *layerPoly = m_layers_poly[curr_layer_id];
+            SHAPE_POLY_SET *layerPoly = m_layers_poly[cur_layer_id];
 
             // ADD GRAPHIC ITEMS ON COPPER LAYERS (texts)
-            for( auto item : m_board->Drawings() )
+            for( BOARD_ITEM* item : m_board->Drawings() )
             {
-                if( !item->IsOnLayer( curr_layer_id ) )
+                if( !item->IsOnLayer( cur_layer_id ) )
                     continue;
 
                 switch( item->Type() )
@@ -712,7 +671,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
                 default:
                     wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ),
-                            item->Type() );
+                                item->Type() );
                     break;
                 }
             }
@@ -775,10 +734,8 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             && ( m_render_engine == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
         // ADD COPPER ZONES
-        for( int ii = 0; ii < m_board->GetAreaCount(); ++ii )
+        for( ZONE_CONTAINER* zone : m_board->Zones() )
         {
-            const ZONE_CONTAINER* zone = m_board->GetArea( ii );
-
             if( zone == nullptr )
                 break;
 
@@ -844,21 +801,17 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     if( aStatusTextReporter )
         aStatusTextReporter->Report( _( "Simplify holes contours" ) );
 
-    for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
+    for( PCB_LAYER_ID layer : layer_id )
     {
-        const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
-
-        if( m_layers_outer_holes_poly.find( curr_layer_id ) !=
-            m_layers_outer_holes_poly.end() )
+        if( m_layers_outer_holes_poly.find( layer ) != m_layers_outer_holes_poly.end() )
         {
             // found
-            SHAPE_POLY_SET *polyLayer = m_layers_outer_holes_poly[curr_layer_id];
+            SHAPE_POLY_SET *polyLayer = m_layers_outer_holes_poly[layer];
             polyLayer->Simplify( SHAPE_POLY_SET::PM_FAST );
 
-            wxASSERT( m_layers_inner_holes_poly.find( curr_layer_id ) !=
-                      m_layers_inner_holes_poly.end() );
+            wxASSERT( m_layers_inner_holes_poly.find( layer ) != m_layers_inner_holes_poly.end() );
 
-            polyLayer = m_layers_inner_holes_poly[curr_layer_id];
+            polyLayer = m_layers_inner_holes_poly[layer];
             polyLayer->Simplify( SHAPE_POLY_SET::PM_FAST );
         }
     }
@@ -919,7 +872,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         const PCB_LAYER_ID curr_layer_id = *seq;
 
         if( !Is3DLayerEnabled( curr_layer_id ) )
-                    continue;
+            continue;
 
         CBVHCONTAINER2D *layerContainer = new CBVHCONTAINER2D;
         m_layers_container2D[curr_layer_id] = layerContainer;
@@ -929,7 +882,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
         // Add drawing objects
         // /////////////////////////////////////////////////////////////////////
-        for( auto item : m_board->Drawings() )
+        for( BOARD_ITEM* item : m_board->Drawings() )
         {
             if( !item->IsOnLayer( curr_layer_id ) )
                 continue;
@@ -965,7 +918,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
         // Add drawing contours
         // /////////////////////////////////////////////////////////////////////
-        for( auto item : m_board->Drawings() )
+        for( BOARD_ITEM* item : m_board->Drawings() )
         {
             if( !item->IsOnLayer( curr_layer_id ) )
                 continue;
@@ -988,13 +941,13 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
         // Add modules tech layers - objects
         // /////////////////////////////////////////////////////////////////////
-        for( auto module : m_board->Modules() )
+        for( MODULE* module : m_board->Modules() )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
             {
                 int     linewidth = g_DrawDefaultLineThickness;
 
-                for( auto pad : module->Pads() )
+                for( D_PAD* pad : module->Pads() )
                 {
                     if( !pad->IsOnLayer( curr_layer_id ) )
                         continue;
@@ -1014,13 +967,13 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
         // Add modules tech layers - contours
         // /////////////////////////////////////////////////////////////////////
-        for( auto module : m_board->Modules() )
+        for( MODULE* module : m_board->Modules() )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
             {
                 const int linewidth = g_DrawDefaultLineThickness;
 
-                for( auto pad : module->Pads() )
+                for( D_PAD* pad : module->Pads() )
                 {
                     if( !pad->IsOnLayer( curr_layer_id ) )
                         continue;
@@ -1053,9 +1006,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                 if( !zone->IsOnLayer( curr_layer_id ) )
                     continue;
 
-                AddSolidAreasShapesToContainer( zone,
-                                                layerContainer,
-                                                curr_layer_id );
+                AddSolidAreasShapesToContainer( zone, layerContainer, curr_layer_id );
             }
 
             for( int ii = 0; ii < m_board->GetAreaCount(); ++ii )
@@ -1093,26 +1044,22 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     if( !m_layers_holes2D.empty() )
     {
-        for( MAP_CONTAINER_2D::iterator ii = m_layers_holes2D.begin();
-             ii != m_layers_holes2D.end();
-             ++ii )
-        {
-            ((CBVHCONTAINER2D *)(ii->second))->BuildBVH();
-        }
+        for( auto& hole : m_layers_holes2D)
+            hole.second->BuildBVH();
     }
 
     // We only need the Solder mask to initialize the BVH
     // because..?
-    if( (CBVHCONTAINER2D *)m_layers_container2D[B_Mask] )
-        ((CBVHCONTAINER2D *)m_layers_container2D[B_Mask])->BuildBVH();
+    if( m_layers_container2D[B_Mask] )
+        m_layers_container2D[B_Mask]->BuildBVH();
 
-    if( (CBVHCONTAINER2D *)m_layers_container2D[F_Mask] )
-        ((CBVHCONTAINER2D *)m_layers_container2D[F_Mask])->BuildBVH();
+    if( m_layers_container2D[F_Mask] )
+        m_layers_container2D[F_Mask]->BuildBVH();
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_endHolesBVHTime = GetRunningMicroSecs();
 
-    printf( "CINFO3D_VISU::createLayers times\n" );
+    printf( "EDA_3D_SETTINGS::createLayers times\n" );
     printf( "  Copper Layers:          %.3f ms\n",
             (float)( stats_endCopperLayersTime  - stats_startCopperLayersTime  ) / 1e3 );
     printf( "  Holes BVH creation:     %.3f ms\n",

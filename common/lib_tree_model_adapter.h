@@ -92,6 +92,8 @@
 class APP_SETTINGS_BASE;
 class TOOL_INTERACTIVE;
 class PARAM_CFG;
+class EDA_BASE_FRAME;
+
 
 class LIB_TREE_MODEL_ADAPTER: public wxDataViewModel
 {

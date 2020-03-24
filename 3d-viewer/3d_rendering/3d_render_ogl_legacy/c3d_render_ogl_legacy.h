@@ -59,7 +59,7 @@ typedef std::map< wxString, C_OGL_3DMODEL * > MAP_3DMODEL;
 class C3D_RENDER_OGL_LEGACY : public C3D_RENDER_BASE
 {
 public:
-    explicit C3D_RENDER_OGL_LEGACY( CINFO3D_VISU &aSettings );
+    explicit C3D_RENDER_OGL_LEGACY( EDA_3D_SETTINGS &aSettings );
 
     ~C3D_RENDER_OGL_LEGACY();
 

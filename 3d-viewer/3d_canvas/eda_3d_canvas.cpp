@@ -85,7 +85,7 @@ END_EVENT_TABLE()
 
 
 EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow *aParent, const int *aAttribList, BOARD *aBoard,
-                              CINFO3D_VISU &aSettings , S3D_CACHE *a3DCachePointer ) :
+                              EDA_3D_SETTINGS &aSettings , S3D_CACHE *a3DCachePointer ) :
         HIDPI_GL_CANVAS( aParent, wxID_ANY, aAttribList, wxDefaultPosition, wxDefaultSize,
                          wxFULL_REPAINT_ON_RESIZE ),
         m_eventDispatcher( nullptr ),
@@ -153,10 +153,11 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow *aParent, const int *aAttribList, BOARD *
         wxEVT_LEFT_UP, wxEVT_LEFT_DOWN, wxEVT_LEFT_DCLICK,
         wxEVT_RIGHT_UP, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_DCLICK,
         wxEVT_MIDDLE_UP, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_DCLICK,
-        wxEVT_MOTION, wxEVT_MOUSEWHEEL, wxEVT_CHAR, wxEVT_CHAR_HOOK
+        wxEVT_MOTION, wxEVT_MOUSEWHEEL, wxEVT_CHAR, wxEVT_CHAR_HOOK,
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
-        , wxEVT_MAGNIFY
+        wxEVT_MAGNIFY,
 #endif
+        wxEVT_MENU_OPEN, wxEVT_MENU_CLOSE, wxEVT_MENU_HIGHLIGHT
     };
 
     for( wxEventType eventType : events )

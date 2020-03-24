@@ -102,7 +102,7 @@ int KiIconScale( wxWindow* aWindow )
 }
 
 
-static int get_scale_factor( EDA_BASE_FRAME* aWindow )
+static int get_scale_factor( wxWindow* aWindow )
 {
     int requested_scale = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
 
@@ -113,7 +113,7 @@ static int get_scale_factor( EDA_BASE_FRAME* aWindow )
 }
 
 
-wxBitmap KiScaledBitmap( BITMAP_DEF aBitmap, EDA_BASE_FRAME* aWindow )
+wxBitmap KiScaledBitmap( BITMAP_DEF aBitmap, wxWindow* aWindow )
 {
     // Bitmap conversions are cached because they can be slow.
     static std::unordered_map<SCALED_BITMAP_ID, wxBitmap> bitmap_cache;
@@ -145,7 +145,7 @@ wxBitmap KiScaledBitmap( BITMAP_DEF aBitmap, EDA_BASE_FRAME* aWindow )
 }
 
 
-wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, EDA_BASE_FRAME* aWindow )
+wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, wxWindow* aWindow )
 {
     const int scale = get_scale_factor( aWindow );
 
@@ -164,7 +164,7 @@ wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, EDA_BASE_FRAME* aWindow )
 }
 
 
-void KiScaledSeparator( wxAuiToolBar* aToolbar, EDA_BASE_FRAME* aWindow )
+void KiScaledSeparator( wxAuiToolBar* aToolbar, wxWindow* aWindow )
 {
     const int scale = get_scale_factor( aWindow );
 

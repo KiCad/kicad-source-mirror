@@ -30,7 +30,6 @@
 // test if it works under stable release
 // #include <wx/bitmap.h>   // only to define wxBitmap
 class wxBitmap;     // only to define wxBitmap
-class EDA_BASE_FRAME;
 class EDA_DRAW_FRAME;
 class wxWindow;
 class wxAuiToolBar;
@@ -55,7 +54,7 @@ wxBitmap KiBitmap( BITMAP_DEF aBitmap );
  * @param aBitmap bitmap definition
  * @param aWindow target window for scaling context
  */
-wxBitmap KiScaledBitmap( BITMAP_DEF aBitmap, EDA_BASE_FRAME* aWindow );
+wxBitmap KiScaledBitmap( BITMAP_DEF aBitmap, wxWindow* aWindow );
 
 /**
  * Overload of the above function that takes another wxBitmap as a parameter.
@@ -63,12 +62,12 @@ wxBitmap KiScaledBitmap( BITMAP_DEF aBitmap, EDA_BASE_FRAME* aWindow );
  * @param aBitmap bitmap definition
  * @param aWindow target window for scaling context
  */
-wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, EDA_BASE_FRAME* aWindow );
+wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, wxWindow* aWindow );
 
 /**
  * Add a separator to the given toolbar scaled the same way as KiScaledBitmap.
  */
-void KiScaledSeparator( wxAuiToolBar* aToolbar, EDA_BASE_FRAME* aWindow );
+void KiScaledSeparator( wxAuiToolBar* aToolbar, wxWindow* aWindow );
 
 /**
  * Return the automatic scale factor that would be used for a given window by
