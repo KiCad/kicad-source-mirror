@@ -209,6 +209,22 @@ void KICAD_MANAGER_FRAME::OnSize( wxSizeEvent& event )
 
 void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
+#ifdef _WINDOWS_
+    // For some obscure reason, on Windows, when killing Kicad from the Windows task manager
+    // if a editor frame (schematic, library, board editor or fp editor) is open and has
+    // some edition to save, OnCloseWindow is run twice *at the same time*, creating race
+    // conditions between OnCloseWindow() code.
+    // Therefore I added (JPC) a ugly hack to discard the second call (unwanted) during
+    // execution of the first call (only one call is right).
+    // Note also if there is no change made in editors, this behavior does not happen.
+    static std::atomic<unsigned int> lock_close_event( 0 );
+
+    if( ++lock_close_event > 1 )    // Skip extra calls
+    {
+        return;
+    }
+#endif
+
     if( Kiway().PlayersClose( false ) )
     {
         int px, py;
@@ -233,6 +249,10 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
         Destroy();
     }
+
+#ifdef _WINDOWS_
+    lock_close_event = 0;   // Reenable event management
+#endif
 }
 
 
