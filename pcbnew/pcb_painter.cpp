@@ -845,27 +845,33 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     else
     {
         SHAPE_POLY_SET polySet;
-        wxSize margin;
-        int clearance = 0;
 
         switch( aLayer )
         {
         case F_Mask:
         case B_Mask:
-            clearance += aPad->GetSolderMaskMargin();
+            {
+            int clearance = aPad->GetSolderMaskMargin();
+            aPad->TransformShapeWithClearanceToPolygon( polySet, clearance );
+            }
             break;
 
         case F_Paste:
         case B_Paste:
-            margin = aPad->GetSolderPasteMargin();
-            clearance += ( margin.x + margin.y ) / 2;
+            {
+            wxSize pad_size = aPad->GetSize();
+            wxSize margin = aPad->GetSolderPasteMargin();
+            const_cast<D_PAD*>(aPad)->SetSize( pad_size + margin );
+            aPad->TransformShapeWithClearanceToPolygon( polySet, 0 );
+            const_cast<D_PAD*>(aPad)->SetSize( pad_size );
+            }
             break;
 
         default:
+            aPad->TransformShapeWithClearanceToPolygon( polySet, 0 );
             break;
         }
 
-        aPad->TransformShapeWithClearanceToPolygon( polySet, clearance );
         m_gal->DrawPolygon( polySet );
     }
 
