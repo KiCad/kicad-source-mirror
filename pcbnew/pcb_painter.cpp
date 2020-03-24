@@ -861,7 +861,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             {
             wxSize pad_size = aPad->GetSize();
             wxSize margin = aPad->GetSolderPasteMargin();
-            const_cast<D_PAD*>(aPad)->SetSize( pad_size + margin );
+            const_cast<D_PAD*>(aPad)->SetSize( pad_size + margin + margin );
             aPad->TransformShapeWithClearanceToPolygon( polySet, 0 );
             const_cast<D_PAD*>(aPad)->SetSize( pad_size );
             }
