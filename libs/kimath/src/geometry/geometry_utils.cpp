@@ -60,6 +60,23 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
     return std::max( segCount, 1 );
 }
 
+// When creating polygons to create a clearance polygonal area, the polygon must
+// be same or bigger than the original shape.
+// Polygons are bigger if the original shape has arcs (round rectangles, ovals, circles...)
+// In some cases (in fact only one: when building layer solder mask) modifying
+// shapes when converting them to polygons is not acceptable (the modification
+// can break calculations)
+// so one can disable the shape expansion by calling KeepPolyInsideShape( true )
+// Important: calling KeepPolyInsideShape( false ) after calculations is
+// mandatory to break oher calculations
+static bool s_disable_arc_correction = false;
+
+// Enable (aInside = false) or disable (aInside = true) polygonal shape expansion
+// when converting pads shapes and other items shapes to polygons:
+void DisableArcRadiusCorrection( bool aDisable )
+{
+    s_disable_arc_correction = aDisable;
+}
 
 double GetCircletoPolyCorrectionFactor( int aSegCountforCircle )
 {
@@ -71,8 +88,7 @@ double GetCircletoPolyCorrectionFactor( int aSegCountforCircle )
      * the correctionFactor is 1 /cos( PI/aSegCountforCircle  )
      */
     aSegCountforCircle = std::max( MIN_SEGCOUNT_FOR_CIRCLE, aSegCountforCircle );
-
-    return 1.0 / cos( M_PI / aSegCountforCircle );
+    return s_disable_arc_correction ? 1.0 : 1.0 / cos( M_PI / aSegCountforCircle );
 }
 
 

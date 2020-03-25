@@ -8,7 +8,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -362,7 +362,11 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             wxSize extraSize = margin * 2;
             extraSize.x += width_adj;
             extraSize.y += width_adj;
+
+            // Store these parameters that can be modified to plot inflated/deflated pads shape
             wxSize deltaSize = pad->GetDelta(); // has meaning only for trapezoidal pads
+            PAD_SHAPE_T padShape = pad->GetShape();
+            double padCornerRadius = pad->GetRoundRectCornerRadius();
 
             if( pad->GetShape() == PAD_SHAPE_TRAPEZOID )
             {   // The easy way is to use BuildPadPolygon to calculate
@@ -430,8 +434,15 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 itemplotter.PlotPad( pad, color, plotMode );
                 break;
 
-            case PAD_SHAPE_TRAPEZOID:
             case PAD_SHAPE_RECT:
+                if( margin.x > 0 )
+                {
+                    pad->SetShape( PAD_SHAPE_ROUNDRECT );
+                    pad->SetSize( padPlotsSize );
+                    pad->SetRoundRectCornerRadius( margin.x );
+                }
+                // Fall through
+            case PAD_SHAPE_TRAPEZOID:
             case PAD_SHAPE_ROUNDRECT:
             case PAD_SHAPE_CHAMFERED_RECT:
                 pad->SetSize( padPlotsSize );
@@ -465,8 +476,11 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 break;
             }
 
-            pad->SetSize( tmppadsize );     // Restore the pad size
+            // Restore the pad parameters modified by the plot code
+            pad->SetSize( tmppadsize );
             pad->SetDelta( deltaSize );
+            pad->SetShape( padShape );
+            pad->SetRoundRectCornerRadius( padCornerRadius );
         }
 
         aPlotter->EndBlock( NULL );
@@ -788,16 +802,33 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
  *      mask clearance only (because deflate sometimes creates shape artifacts)
  * 5 - draw result as polygons
  *
- * TODO:
- * make this calculation only for shapes with clearance near than (min width solder mask)
- * (using DRC algo)
- * plot all other shapes by flashing the basing shape
- * (shapes will be better, and calculations faster)
+ * We have 2 algos:
+ * the initial algo, that create polygons for every shape, inflate and deflate polygons
+ * with Min Thickness/2, and merges the result.
+ * Drawback: pads attributes are lost (annoying in Gerber)
+ * the new algo:
+ * create initial polygons for every shape (pad or polygon),
+ * inflate and deflate polygons
+ * with Min Thickness/2, and merges the result (like initial algo)
+ * remove all initial polygons.
+ * The remaining polygons are areas with thickness < min thickness
+ * plot all initial shapes by flashing (or using regions) for pad and polygons
+ * (shapes will be better) and remaining polygons to
+ * remove areas with thickness < min thickness from final mask
+ *
+ * TODO: remove old code after more testing.
  */
+#define NEW_ALGO 1
+extern void KeepPolyInside( bool aInside );
+
 void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                           const PCB_PLOT_PARAMS& aPlotOpt, int aMinThickness )
 {
     PCB_LAYER_ID    layer = aLayerMask[B_Mask] ? B_Mask : F_Mask;
+
+    // Set the current arc to segment max approx error
+    int currMaxError = aBoard->GetDesignSettings().m_MaxError;
+    aBoard->GetDesignSettings().m_MaxError = Millimeter2iu( 0.005 );
 
     // We remove 1nm as we expand both sides of the shapes, so allowing for
     // a strictly greater than or equal comparison in the shape separation (boolean add)
@@ -808,8 +839,12 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     itemplotter.SetLayerSet( aLayerMask );
 
     // Plot edge layer and graphic items.
-    // They do not have a solder Mask margin, because they  graphic items
+    // They do not have a solder Mask margin, because they are graphic items
     // on this layer (like logos), not actually areas around pads.
+
+    // Normal mode to generate polygons from shapes with arcs, if any:
+    DisableArcRadiusCorrection( false );
+
     itemplotter.PlotBoardGraphicItems();
 
     for( auto module : aBoard->Modules() )
@@ -827,15 +862,26 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     // of pad + clearance around the pad, where clearance = solder mask clearance + extra margin.
     // Extra margin is half the min width for solder mask, which is used to merge too-close shapes
     // (distance < aMinThickness), and will be removed when creating the actual shapes.
-    SHAPE_POLY_SET areas;           // Contains shapes to plot
-    SHAPE_POLY_SET initialPolys;    // Contains exact shapes to plot
+
+    // Will contain shapes inflated by inflate value that will be merged and deflated by
+    // inflate value to build final polygons
+    // After calculations the remaining polygons are polygons to plot
+    SHAPE_POLY_SET areas;
+    // Will contain exact shapes of all items on solder mask
+    SHAPE_POLY_SET initialPolys;
+
+#if NEW_ALGO
+    // Generate polygons with arcs inside the shape or exact shape
+    // to minimize shape changes created by arc to segment size correction.
+    DisableArcRadiusCorrection( true );
+#endif
 
     // Plot pads
     for( auto module : aBoard->Modules() )
     {
-        // add shapes with exact size
+        // add shapes with their exact mask layer size in initialPolys
         module->TransformPadsShapesWithClearanceToPolygon( layer, initialPolys, 0 );
-        // add shapes inflated by aMinThickness/2
+        // add shapes inflated by aMinThickness/2 in areas
         module->TransformPadsShapesWithClearanceToPolygon( layer, areas, inflate );
     }
 
@@ -865,8 +911,10 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             if( !( via_set & aLayerMask ).any() )
                 continue;
 
-            via->TransformShapeWithClearanceToPolygon( areas, via_margin );
+            // add shapes with their exact mask layer size in initialPolys
             via->TransformShapeWithClearanceToPolygon( initialPolys, via_clearance );
+            // add shapes inflated by aMinThickness/2 in areas
+            via->TransformShapeWithClearanceToPolygon( areas, via_margin );
         }
     }
 
@@ -882,18 +930,35 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( zone->GetLayer() != layer )
             continue;
 
-        // Some intersecting zones, despite being on the same layer with the same net, cannot be
-        // merged due to other parameters such as fillet radius.  The copper pour will end up
+        // Some intersecting zones, despite being on the same layer, cannot be
+        // merged due to other parameters such as fillet radius. The filled areas will end up
         // effectively merged though, so we want to keep the corners of such intersections sharp.
         std::set<VECTOR2I> colinearCorners;
         zone->GetColinearCorners( aBoard, colinearCorners );
 
+        // add shapes inflated by aMinThickness/2 in areas
         zone->TransformOutlinesShapeWithClearanceToPolygon( areas, inflate + zone_margin, false,
                                                             &colinearCorners );
+        // add shapes with their exact mask layer size in initialPolys
         zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys, zone_margin, false,
                                                             &colinearCorners );
     }
 
+    int maxError = aBoard->GetDesignSettings().m_MaxError;
+    int numSegs = std::max( GetArcToSegmentCount( inflate, maxError, 360.0 ), 12 );
+
+    // Merge all polygons: After deflating, not merged (not overlapping) polygons
+    // will have the initial shape (with perhaps small changes due to deflating transform)
+    areas.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    areas.Deflate( inflate, numSegs );
+
+    // Restore initial settings:
+    aBoard->GetDesignSettings().m_MaxError = currMaxError;
+
+    // Restore normal option to build polygons from item shapes:
+    DisableArcRadiusCorrection( false );
+
+#if !NEW_ALGO
     // To avoid a lot of code, use a ZONE_CONTAINER to handle and plot polygons, because our
     // polygons look exactly like filled areas in zones.
     // Note, also this code is not optimized: it creates a lot of copy/duplicate data.
@@ -902,18 +967,61 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     ZONE_CONTAINER zone( aBoard );
     zone.SetMinThickness( 0 );      // trace polygons only
     zone.SetLayer( layer );
-    int maxError = aBoard->GetDesignSettings().m_MaxError;
-    int numSegs = std::max( GetArcToSegmentCount( inflate, maxError, 360.0 ), 6 );
-
-    areas.BooleanAdd( initialPolys, SHAPE_POLY_SET::PM_FAST );
-    areas.Deflate( inflate, numSegs );
-
     // Combine the current areas to initial areas. This is mandatory because inflate/deflate
     // transform is not perfect, and we want the initial areas perfectly kept
     areas.BooleanAdd( initialPolys, SHAPE_POLY_SET::PM_FAST );
     areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
     itemplotter.PlotFilledAreas( &zone, areas );
+#else
+
+    // Remove initial shapes: each shape will be added later, as flashed item or region
+    // with a suitable attribute.
+    // Do not merge pads is mandatory in Gerber files: They must be indentified as pads
+
+    // we deflate areas in polygons, to avoid after subtracting initial shapes
+    // having small artifacts due to approximations during polygon transforms
+    areas.BooleanSubtract( initialPolys, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+    // Slightly inflate polygons to avoid any gap between them and other shapes,
+    // These gaps are created by arc to segments approximations
+    areas.Inflate( Millimeter2iu( 0.002 ),6 );
+
+    // Now, only polygons with a too small thickness are stored in areas.
+    areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+    // Plot each initial shape (pads and polygons on mask layer), with suitable attributes:
+    PlotStandardLayer( aBoard, aPlotter, aLayerMask, aPlotOpt );
+
+    // Add shapes corresponding to areas having too small thickness.
+    std::vector<wxPoint> cornerList;
+
+    for( int ii = 0; ii < areas.OutlineCount(); ii++ )
+    {
+        cornerList.clear();
+        const SHAPE_LINE_CHAIN& path = areas.COutline( ii );
+
+        // polygon area in mm^2 :
+        double curr_area = path.Area() / ( IU_PER_MM * IU_PER_MM );
+
+        // Skip very small polygons: they are certainly artifacts created by
+        // arc approximations and polygon transforms
+        // (inflate/deflate transforms)
+        constexpr double poly_min_area_mm2 = 0.01;     // 0.01 mm^2 gives a good filtering
+
+        if( curr_area < poly_min_area_mm2 )
+            continue;
+
+        for( int jj = 0; jj < path.PointCount(); jj++ )
+            cornerList.emplace_back( (wxPoint) path.CPoint( jj ) );
+
+        // Ensure the polygon is closed
+        if( cornerList[0] != cornerList[cornerList.size() - 1] )
+            cornerList.push_back( cornerList[0] );
+
+        aPlotter->PlotPoly( cornerList, FILLED_SHAPE );
+    }
+#endif
 }
 
 

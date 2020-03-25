@@ -37,7 +37,6 @@
 
 class EDA_RECT;
 
-
 /**
  * @return the number of segments to approximate a arc by segments
  * with a given max error (this number is >= 1)
@@ -48,8 +47,24 @@ class EDA_RECT;
  */
 int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree );
 
+/** When creating polygons to create a clearance polygonal area, the polygon must
+ * be same or bigger than the original shape.
+ * Polygons are bigger if the original shape has arcs (round rectangles, ovals, circles...)
+ * In some cases (in fact only one: when building layer solder mask) modifying
+ * shapes when converting them to polygons is not acceptable (the modification
+ * can break calculations)
+ * so one can disable the shape expansion by calling KeepPolyInsideShape( true )
+ * Important: calling KeepPolyInsideShape( false ) after calculations is
+ * mandatory to break oher calculations
+ * @param aDisable = false to create polygons same or outside the original shape
+ *  = true to create polygons same or inside the original shape and minimize
+ * shape geometric changes
+ */
+void DisableArcRadiusCorrection( bool aDisable );
+
 /**
- * @return the correction factor to approximate a circle by segments
+ * @return the correction factor to approximate a circle by segments or 1.0
+ * depending on the last call to DisableArcRadiusCorrection()
  * @param aSegCountforCircle is the number of segments to approximate the circle
  *
  * When creating a polygon from a circle, the polygon is inside the circle.
@@ -58,6 +73,8 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree );
  * the equivalent polygon outside the circle
  * The correction factor is a scaling factor to apply to the radius to build a
  * polygon outside the circle (only the middle of each segment is on the circle
+ *
+ *
  */
 double GetCircletoPolyCorrectionFactor( int aSegCountforCircle );
 
