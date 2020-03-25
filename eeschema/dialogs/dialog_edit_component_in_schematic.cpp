@@ -26,7 +26,6 @@
 #include <wx/tooltip.h>
 
 #include <confirm.h>
-#include <grid_tricks.h>
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
@@ -40,12 +39,10 @@
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
-#include <sch_validators.h>
 #include <symbol_lib_table.h>
 
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
-#include <netlist_exporter_pspice.h>
 #endif /* KICAD_SPICE */
 
 
@@ -288,7 +285,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditSpiceModel( wxCommandEvent& event
     if( dialog.ShowModal() != wxID_OK )
         return;
 
-    diff = m_fields->size() - diff;
+    diff = (int) m_fields->size() - diff;
 
     if( diff > 0 )
     {
@@ -548,8 +545,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnAddField( wxCommandEvent& event )
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
     m_grid->ProcessTableMessage( msg );
 
-    m_grid->MakeCellVisible( m_fields->size() - 1, 0 );
-    m_grid->SetGridCursor( m_fields->size() - 1, 0 );
+    m_grid->MakeCellVisible( (int) m_fields->size() - 1, 0 );
+    m_grid->SetGridCursor( (int) m_fields->size() - 1, 0 );
 
     m_grid->EnableCellEditControl();
     m_grid->ShowCellEditControl();

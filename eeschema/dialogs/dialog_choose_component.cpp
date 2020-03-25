@@ -44,14 +44,6 @@
 #include <wx/timer.h>
 #include <wx/utils.h>
 
-#define SYM_CHOOSER_HSASH           wxT( "SymbolChooserHSashPosition" )
-#define SYM_CHOOSER_VSASH           wxT( "SymbolChooserVSashPosition" )
-#define SYM_CHOOSER_WIDTH_KEY       wxT( "SymbolChooserWidth" )
-#define SYM_CHOOSER_HEIGHT_KEY      wxT( "SymbolChooserHeight" )
-#define SYM_CHOOSER_KEEP_SYM_KEY    wxT( "SymbolChooserKeepSymbol" )
-#define SYM_CHOOSER_USE_UNITS_KEY   wxT( "SymbolChooserUseUnits" )
-
-
 std::mutex DIALOG_CHOOSE_COMPONENT::g_Mutex;
 
 
@@ -61,11 +53,14 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
                                                   bool aShowFootprints, bool aAllowBrowser )
         : DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
                        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+          m_symbol_preview( nullptr ),
           m_browser_button( nullptr ),
           m_hsplitter( nullptr ),
           m_vsplitter( nullptr ),
           m_fp_sel_ctrl( nullptr ),
           m_fp_preview( nullptr ),
+          m_keepSymbol( nullptr ),
+          m_useUnits( nullptr ),
           m_tree( nullptr ),
           m_details( nullptr ),
           m_parent( aParent ),
@@ -232,11 +227,11 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
 
 wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
 {
-    auto panel = new wxPanel( aParent );
-    auto sizer = new wxBoxSizer( wxVERTICAL );
+    wxPanel*                     panel = new wxPanel( aParent );
+    wxBoxSizer*                  sizer = new wxBoxSizer( wxVERTICAL );
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = m_parent->GetCanvas()->GetBackend();
 
-    m_symbol_preview = new SYMBOL_PREVIEW_WIDGET( panel, Kiway(),
-                                                  m_parent->GetCanvas()->GetBackend() );
+    m_symbol_preview = new SYMBOL_PREVIEW_WIDGET( panel, Kiway(), backend );
     m_symbol_preview->SetLayoutDirection( wxLayout_LeftToRight );
 
     if( m_show_footprints )
@@ -267,12 +262,12 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
     m_keepSymbol = new wxCheckBox( panel, 1000, _("Multi-Symbol Placement"), wxDefaultPosition,
-            wxDefaultSize, wxALIGN_RIGHT );
+                                   wxDefaultSize, wxALIGN_RIGHT );
     m_keepSymbol->SetValue( cfg->m_SymChooserPanel.keep_symbol );
     m_keepSymbol->SetToolTip( _( "Place multiple copies of the symbol." ) );
 
     m_useUnits = new wxCheckBox( panel, 1000, _("Place all units"), wxDefaultPosition,
-            wxDefaultSize, wxALIGN_RIGHT );
+                                 wxDefaultSize, wxALIGN_RIGHT );
     m_useUnits->SetValue( cfg->m_SymChooserPanel.place_all_units );
     m_useUnits->SetToolTip( _( "Sequentially place all units of the symbol." ) );
 
@@ -469,13 +464,12 @@ void DIALOG_CHOOSE_COMPONENT::OnFootprintSelected( wxCommandEvent& aEvent )
 {
     m_fp_override = aEvent.GetString();
 
-    m_field_edits.erase(
-            std::remove_if( m_field_edits.begin(), m_field_edits.end(),
-                            []( std::pair<int, wxString> const& i )
-                            {
-                                return i.first == FOOTPRINT;
-                            } ),
-            m_field_edits.end() );
+    m_field_edits.erase( std::remove_if( m_field_edits.begin(), m_field_edits.end(),
+                                         []( std::pair<int, wxString> const& i )
+                                         {
+                                             return i.first == FOOTPRINT;
+                                         } ),
+                         m_field_edits.end() );
 
     m_field_edits.emplace_back( std::make_pair( FOOTPRINT, m_fp_override ) );
 

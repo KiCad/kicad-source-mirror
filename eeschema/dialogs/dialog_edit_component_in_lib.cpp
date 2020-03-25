@@ -23,28 +23,20 @@
 
 #include <bitmaps.h>
 #include <class_libentry.h>
-#include <common.h>
 #include <confirm.h>
-#include <dialog_helpers.h>
 #include <dialog_text_entry.h>
-#include <eeschema_settings.h>
 #include <fctsys.h>
-#include <general.h>
-#include <kiface_i.h>
 #include <kiway.h>
 #include <lib_edit_frame.h>
 #include <lib_manager.h>
 #include <math/util.h> // for KiROUND
 #include <pgm_base.h>
 #include <sch_component.h>
-#include <sch_item.h>
-#include <symbol_lib_table.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
 
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
-#include <netlist_exporter_pspice.h>
 #endif /* KICAD_SPICE */
 
 #include <dialog_edit_component_in_lib.h>
@@ -417,8 +409,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAddField( wxCommandEvent& event )
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
     m_grid->ProcessTableMessage( msg );
 
-    m_grid->MakeCellVisible( m_fields->size() - 1, 0 );
-    m_grid->SetGridCursor( m_fields->size() - 1, 0 );
+    m_grid->MakeCellVisible( (int) m_fields->size() - 1, 0 );
+    m_grid->SetGridCursor( (int) m_fields->size() - 1, 0 );
 
     m_grid->EnableCellEditControl();
     m_grid->ShowCellEditControl();
@@ -509,7 +501,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnEditSpiceModel( wxCommandEvent& event )
     if( dialog.ShowModal() != wxID_OK )
         return;
 
-    diff = m_fields->size() - diff;
+    diff = (int) m_fields->size() - diff;
 
     if( diff > 0 )
     {
@@ -561,7 +553,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAddFootprintFilter( wxCommandEvent& eve
     // duplicate filters do no harm, so don't be a nanny.
 
     m_FootprintFilterListBox->Append( filterLine );
-    m_FootprintFilterListBox->SetSelection( m_FootprintFilterListBox->GetCount() - 1 );
+    m_FootprintFilterListBox->SetSelection( (int) m_FootprintFilterListBox->GetCount() - 1 );
 }
 
 
