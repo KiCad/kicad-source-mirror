@@ -378,7 +378,7 @@ void EDA_3D_SETTINGS::createNewPadWithClearance( const D_PAD* aPad,
         // see pcbnew/board_items_to_polygon_shape_transform.cpp
 
         wxPoint corners[4];
-        aPad->BuildPadPolygon( corners, wxSize( 0, 0), aPad->GetOrientation() );
+        aPad->BuildPadPolygon( corners, aClearanceValue, aPad->GetOrientation() );
 
         SFVEC2F corners3DU[4];
 
