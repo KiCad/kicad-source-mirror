@@ -228,6 +228,7 @@ void SCH_SHEET::AddPin( SCH_SHEET_PIN* aSheetPin )
     wxASSERT( aSheetPin != NULL );
     wxASSERT( aSheetPin->Type() == SCH_SHEET_PIN_T );
 
+    aSheetPin->SetParent( this );
     m_pins.push_back( aSheetPin );
     renumberPins();
 }

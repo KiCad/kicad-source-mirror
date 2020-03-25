@@ -485,7 +485,7 @@ make_lexer(
     schematic.keywords
     schematic_lexer.h
     schematic_keywords.cpp
-    TSYMBOL_LIB_T
+    TSCHEMATIC_T
     )
 
 add_subdirectory( plugins )

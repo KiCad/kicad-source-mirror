@@ -197,10 +197,12 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 {
     // implement the pseudo code from KIWAY_PLAYER.h:
 
+    wxString msg;
+
     // This is for python:
     if( aFileSet.size() != 1 )
     {
-        UTF8 msg = StrPrintf( "Eeschema:%s() takes only a single filename.", __func__ );
+        msg.Printf( "Eeschema:%s() takes only a single filename.", __WXFUNCTION__ );
         DisplayError( this, msg );
         return false;
     }
@@ -212,8 +214,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( !LockFile( fullFileName ) )
     {
-        wxString msg = wxString::Format( _( "Schematic file \"%s\" is already open." ),
-                                         fullFileName );
+        msg.Printf( _( "Schematic file \"%s\" is already open." ), fullFileName );
         DisplayError( this, msg );
         return false;
     }
@@ -230,9 +231,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( is_new && !( aCtl & KICTL_CREATE ) )
     {
         // notify user that fullFileName does not exist, ask if user wants to create it.
-        wxString ask = wxString::Format( _( "Schematic \"%s\" does not exist.  Do you wish to create it?" ),
-                                         fullFileName );
-        if( !IsOK( this, ask ) )
+        msg.Printf( _( "Schematic \"%s\" does not exist.  Do you wish to create it?" ),
+                    fullFileName );
+
+        if( !IsOK( this, msg ) )
             return false;
     }
 
@@ -240,8 +242,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         SetScreen( nullptr );
         delete g_RootSheet;
+
         if( g_CurrentSheet )
             g_CurrentSheet->clear();
+
         g_RootSheet = nullptr;
 
         CreateScreens();
@@ -295,7 +299,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         delete g_RootSheet;   // Delete the current project.
         g_RootSheet = NULL;   // Force CreateScreens() to build new empty project on load failure.
 
-        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+        SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( fullFileName );
+        SCH_PLUGIN* plugin = SCH_IO_MGR::FindPlugin( schFileType );
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( plugin );
 
         // This will rename the file if there is an autosave and the user want to recover
 		CheckForAutoSaveFile( fullFileName );
@@ -324,7 +330,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             CreateScreens();
             m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 
-            wxString msg;
             msg.Printf( _( "Error loading schematic file \"%s\".\n%s" ),
                         GetChars( fullFileName ), GetChars( ioe.What() ) );
             DisplayError( this, msg );

@@ -75,7 +75,7 @@
 #include <confirm.h>
 #include <tool/selection.h>
 
-using namespace TSYMBOL_LIB_T;
+using namespace TSCHEMATIC_T;
 
 
 #define SCH_PARSE_ERROR( text, reader, pos )                         \
@@ -560,105 +560,9 @@ void SCH_SEXPR_PLUGIN::loadFile( const wxString& aFileName, SCH_SCREEN* aScreen 
 {
     FILE_LINE_READER reader( aFileName );
 
-    loadHeader( reader, aScreen );
+    SCH_SEXPR_PARSER parser( &reader );
 
-    LoadContent( reader, aScreen, m_version );
-}
-
-
-void SCH_SEXPR_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen, int version )
-{
-    m_version = version;
-}
-
-
-void SCH_SEXPR_PLUGIN::loadHeader( LINE_READER& aReader, SCH_SCREEN* aScreen )
-{
-}
-
-
-void SCH_SEXPR_PLUGIN::loadPageSettings( LINE_READER& aReader, SCH_SCREEN* aScreen )
-{
-    wxASSERT( aScreen != NULL );
-
-    wxString    buf;
-    PAGE_INFO   pageInfo;
-    TITLE_BLOCK tb;
-}
-
-
-SCH_SHEET* SCH_SEXPR_PLUGIN::loadSheet( LINE_READER& aReader )
-{
-    std::unique_ptr< SCH_SHEET > sheet( new SCH_SHEET() );
-
-    // Timesheet time stamps are now automatically generated.
-
-    return sheet.release();
-}
-
-
-SCH_BITMAP* SCH_SEXPR_PLUGIN::loadBitmap( LINE_READER& aReader )
-{
-    std::unique_ptr< SCH_BITMAP > bitmap( new SCH_BITMAP );
-
-    return bitmap.release();
-}
-
-
-SCH_JUNCTION* SCH_SEXPR_PLUGIN::loadJunction( LINE_READER& aReader )
-{
-    std::unique_ptr< SCH_JUNCTION > junction( new SCH_JUNCTION );
-
-    return junction.release();
-}
-
-
-SCH_NO_CONNECT* SCH_SEXPR_PLUGIN::loadNoConnect( LINE_READER& aReader )
-{
-    std::unique_ptr< SCH_NO_CONNECT > no_connect( new SCH_NO_CONNECT );
-
-    return no_connect.release();
-}
-
-
-SCH_LINE* SCH_SEXPR_PLUGIN::loadWire( LINE_READER& aReader )
-{
-    std::unique_ptr< SCH_LINE > wire( new SCH_LINE );
-
-    return wire.release();
-}
-
-
-SCH_BUS_ENTRY_BASE* SCH_SEXPR_PLUGIN::loadBusEntry( LINE_READER& aReader )
-{
-    std::unique_ptr< SCH_BUS_ENTRY_BASE > busEntry;
-
-    return busEntry.release();
-}
-
-
-SCH_TEXT* SCH_SEXPR_PLUGIN::loadText( LINE_READER& aReader )
-{
-    std::unique_ptr< SCH_TEXT> text;
-
-    return text.release();
-}
-
-
-SCH_COMPONENT* SCH_SEXPR_PLUGIN::loadComponent( LINE_READER& aReader )
-{
-    std::unique_ptr< SCH_COMPONENT > component( new SCH_COMPONENT() );
-
-    return component.release();
-}
-
-
-std::shared_ptr<BUS_ALIAS> SCH_SEXPR_PLUGIN::loadBusAlias( LINE_READER& aReader,
-                                                           SCH_SCREEN* aScreen )
-{
-    auto busAlias = std::make_shared< BUS_ALIAS >( aScreen );
-
-    return busAlias;
+    parser.ParseSchematic( aScreen );
 }
 
 
@@ -716,8 +620,9 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SCREEN* aScreen )
         save_map.insert( item );
 
     KICAD_T itemType = TYPE_NOT_INIT;
+    SCH_LAYER_ID layer = SCH_LAYER_ID_START;
 
-    for( auto& item : save_map )
+    for( SCH_ITEM* item : save_map )
     {
         if( itemType != item->Type() )
         {
@@ -735,32 +640,53 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SCREEN* aScreen )
             m_out->Print( 0, "\n" );
             saveSymbol( static_cast<SCH_COMPONENT*>( item ), 1 );
             break;
+
         case SCH_BITMAP_T:
             saveBitmap( static_cast<SCH_BITMAP*>( item ), 1 );
             break;
+
         case SCH_SHEET_T:
             m_out->Print( 0, "\n" );
             saveSheet( static_cast<SCH_SHEET*>( item ), 1 );
             break;
+
         case SCH_JUNCTION_T:
             saveJunction( static_cast<SCH_JUNCTION*>( item ), 1 );
             break;
+
         case SCH_NO_CONNECT_T:
             saveNoConnect( static_cast<SCH_NO_CONNECT*>( item ), 1 );
             break;
+
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_BUS_BUS_ENTRY_T:
             saveBusEntry( static_cast<SCH_BUS_ENTRY_BASE*>( item ), 1 );
             break;
+
         case SCH_LINE_T:
+            if( layer != item->GetLayer() )
+            {
+                if( layer == SCH_LAYER_ID_START )
+                {
+                    layer = item->GetLayer();
+                }
+                else
+                {
+                    layer = item->GetLayer();
+                    m_out->Print( 0, "\n" );
+                }
+            }
+
             saveLine( static_cast<SCH_LINE*>( item ), 1 );
             break;
+
         case SCH_TEXT_T:
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
             saveText( static_cast<SCH_TEXT*>( item ), 1 );
             break;
+
         default:
             wxASSERT( "Unexpected schematic object type in SCH_SEXPR_PLUGIN::Format()" );
         }
@@ -783,31 +709,39 @@ void SCH_SEXPR_PLUGIN::Format( SELECTION* aSelection, OUTPUTFORMATTER* aFormatte
         case SCH_COMPONENT_T:
             saveSymbol( static_cast< SCH_COMPONENT* >( item ), 0 );
             break;
+
         case SCH_BITMAP_T:
             saveBitmap( static_cast< SCH_BITMAP* >( item ), 0 );
             break;
+
         case SCH_SHEET_T:
             saveSheet( static_cast< SCH_SHEET* >( item ), 0 );
             break;
+
         case SCH_JUNCTION_T:
             saveJunction( static_cast< SCH_JUNCTION* >( item ), 0 );
             break;
+
         case SCH_NO_CONNECT_T:
             saveNoConnect( static_cast< SCH_NO_CONNECT* >( item ), 0 );
             break;
+
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_BUS_BUS_ENTRY_T:
             saveBusEntry( static_cast< SCH_BUS_ENTRY_BASE* >( item ), 0 );
             break;
+
         case SCH_LINE_T:
             saveLine( static_cast< SCH_LINE* >( item ), 0 );
             break;
+
         case SCH_TEXT_T:
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
             saveText( static_cast< SCH_TEXT* >( item ), 0 );
             break;
+
         default:
             wxASSERT( "Unexpected schematic object type in SCH_SEXPR_PLUGIN::Format()" );
         }
@@ -819,35 +753,20 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, int aNestLevel )
 {
     wxCHECK_RET( aSymbol != nullptr && m_out != nullptr, "" );
 
-    std::string     name1;
-    std::string     name2;
+    std::string     libName;
     wxArrayString   reference_fields;
 
     static wxString delimiters( wxT( " " ) );
-
-    // This is redundant with the AR entries below, but it makes the files backwards-compatible.
-    if( aSymbol->GetInstanceReferences().size() > 0 )
-    {
-        const COMPONENT_INSTANCE_REFERENCE& instance = aSymbol->GetInstanceReferences()[0];
-        name1 = toUTFTildaText( instance.m_Reference );
-    }
-    else
-    {
-        if( aSymbol->GetField( REFERENCE )->GetText().IsEmpty() )
-            name1 = toUTFTildaText( aSymbol->GetPrefix() );
-        else
-            name1 = toUTFTildaText( aSymbol->GetField( REFERENCE )->GetText() );
-    }
 
     wxString part_name = aSymbol->GetLibId().Format();
 
     if( part_name.size() )
     {
-        name2 = toUTFTildaText( part_name );
+        libName = toUTFTildaText( part_name );
     }
     else
     {
-        name2 = "_NONAME_";
+        libName = "_NONAME_";
     }
 
     double angle;
@@ -858,20 +777,22 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, int aNestLevel )
     else if( orientation == CMP_ORIENT_180 )
         angle = 180.0;
     else if( orientation == CMP_ORIENT_270 )
-        angle = 270;
+        angle = 270.0;
     else
         angle = 0.0;
 
-    m_out->Print( aNestLevel, "(symbol %s is %s (at %d %d %g)",
-                  m_out->Quotew( name1 ).c_str(), m_out->Quotew( name2 ).c_str(),
-                  aSymbol->GetPosition().x, aSymbol->GetPosition().y, angle );
+    m_out->Print( aNestLevel, "(symbol (lib_id %s) (at %s %s %s)",
+                  m_out->Quotew( libName ).c_str(),
+                  FormatInternalUnits( aSymbol->GetPosition().x ).c_str(),
+                  FormatInternalUnits( aSymbol->GetPosition().y ).c_str(),
+                  FormatAngle( angle * 10.0 ).c_str() );
 
     bool mirrorX = aSymbol->GetOrientation() & CMP_MIRROR_X;
     bool mirrorY = aSymbol->GetOrientation() & CMP_MIRROR_Y;
 
     if( mirrorX || mirrorY )
     {
-        m_out->Print( 0, "(mirror" );
+        m_out->Print( 0, " (mirror" );
 
         if( mirrorX )
             m_out->Print( 0, " x" );
@@ -879,12 +800,13 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, int aNestLevel )
         if( mirrorY )
             m_out->Print( 0, " y" );
 
-        m_out->Print( 0, ")\n" );
+        m_out->Print( 0, ")" );
     }
+
+    if( !( aSymbol->GetInstanceReferences().size() > 1 ) )
+        m_out->Print( 0, " (unit %d)\n", aSymbol->GetUnit() );
     else
-    {
         m_out->Print( 0, "\n" );
-    }
 
     // @todo Convert to full UUID if current UUID is a legacy time stamp.
     m_out->Print( aNestLevel + 1, "(uuid %s)\n",
@@ -945,18 +867,21 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
 
     wxString fieldName;
 
+    // For some reason (bug in legacy parser?) the field ID for non-mandatory fields is -1 so
+    // check for this in order to correctly use the field name.
     if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
         fieldName = "ki_" + TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId() ).Lower();
     else
         fieldName = aField->GetName();
 
-    m_out->Print( aNestLevel, "(property %s %s (at %d %d %g)",
+    m_out->Print( aNestLevel, "(property %s %s (at %s %s %s)",
                   m_out->Quotew( fieldName ).c_str(),
                   m_out->Quotew( aField->GetText() ).c_str(),
-                  aField->GetPosition().x, aField->GetPosition().y,
-                  aField->GetTextAngleDegrees() );
+                  FormatInternalUnits( aField->GetPosition().x ).c_str(),
+                  FormatInternalUnits( aField->GetPosition().y ).c_str(),
+                  FormatAngle( aField->GetTextAngleDegrees() * 10.0 ).c_str() );
 
-    if( !aField->IsDefaultFormatting() )
+    if( !aField->IsDefaultFormatting() || ( aField->GetTextHeight() != GetDefaultTextSize() ) )
     {
         m_out->Print( 0, "\n" );
         aField->Format( m_out, aNestLevel, 0 );
@@ -977,8 +902,9 @@ void SCH_SEXPR_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
 
     wxCHECK_RET( image != NULL, "wxImage* is NULL" );
 
-    m_out->Print( aNestLevel, "(image (at %d %d)",
-                  aBitmap->GetPosition().x, aBitmap->GetPosition().y );
+    m_out->Print( aNestLevel, "(image (at %s %s)",
+                  FormatInternalUnits( aBitmap->GetPosition().x ).c_str(),
+                  FormatInternalUnits( aBitmap->GetPosition().y ).c_str() );
 
     if( aBitmap->GetImage()->GetScale() != 1.0 )
         m_out->Print( 0, " (scale %g)", aBitmap->GetImage()->GetScale() );
@@ -996,19 +922,20 @@ void SCH_SEXPR_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
 
     for( int ii = 0; begin < buffer->GetBufferEnd(); begin++, ii++ )
     {
-        if( ii % 32 )
+        if( ii % 16 )
         {
 
-            m_out->Print( 0, " %2.2X ", *begin & 0xFF );
+            m_out->Print( 0, " 0x%2.2X", *begin & 0xFF );
         }
         else
         {
             ii = 0;
             m_out->Print( 0, "\n" );
-            m_out->Print( aNestLevel + 2, "%2.2X ", *begin & 0xFF );
+            m_out->Print( aNestLevel + 2, "0x%2.2X", *begin & 0xFF );
         }
     }
 
+    m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel + 1, ")\n" );  // Closes data token.
     m_out->Print( aNestLevel, ")\n" );      // Closes image token.
 }
@@ -1018,13 +945,13 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
 {
     wxCHECK_RET( aSheet != nullptr && m_out != nullptr, "" );
 
-    m_out->Print( aNestLevel, "(sheet (start %s %s) (end %s %s)",
+    m_out->Print( aNestLevel, "(sheet (at %s %s) (size %s %s)",
                   FormatInternalUnits( aSheet->GetPosition().x ).c_str(),
                   FormatInternalUnits( aSheet->GetPosition().y ).c_str(),
                   FormatInternalUnits( aSheet->GetSize().GetWidth() ).c_str(),
                   FormatInternalUnits( aSheet->GetSize().GetHeight() ).c_str() );
 
-    if( aSheet->UsesDefaultStroke() )
+    if( !aSheet->UsesDefaultStroke() )
     {
         m_out->Print( 0, " " );
         formatStroke( m_out, 0, aSheet->GetBorderWidth(), PLOT_DASH_TYPE::SOLID,
@@ -1037,19 +964,26 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
 
     for( auto field : aSheet->GetFields() )
     {
-        saveField( &field, aNestLevel + 1 );
+        SCH_FIELD tmp = field;
+
+        if( field.GetId() == SHEETNAME )
+            tmp.SetName( "ki_sheet_name" );
+        else if( field.GetId() == SHEETFILENAME )
+            tmp.SetName( "ki_sheet_file" );
+
+        saveField( &tmp, aNestLevel + 1 );
     }
 
     for( const auto pin : aSheet->GetPins() )
     {
-        m_out->Print( aNestLevel + 1, "(pin %s %s at( %s %s %g)",
+        m_out->Print( aNestLevel + 1, "(pin %s %s (at %s %s %s)",
                       EscapedUTF8( pin->GetText() ).c_str(),
                       getSheetPinShapeToken( pin->GetShape() ),
                       FormatInternalUnits( pin->GetPosition().x ).c_str(),
                       FormatInternalUnits( pin->GetPosition().y ).c_str(),
-                      getSheetPinAngle( pin->GetEdge() ) );
+                      FormatAngle( getSheetPinAngle( pin->GetEdge() ) * 10.0 ).c_str() );
 
-        if( !pin->IsDefaultFormatting() )
+        if( !pin->IsDefaultFormatting() || ( pin->GetTextHeight() != GetDefaultTextSize() ) )
         {
             m_out->Print( 0, "\n" );
             pin->Format( m_out, aNestLevel + 1, 0 );
@@ -1099,11 +1033,11 @@ void SCH_SEXPR_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLev
     }
     else
     {
-        m_out->Print( aNestLevel, "(bus_entry (start %s %s) (end %s %s))\n",
+        m_out->Print( aNestLevel, "(bus_entry (at %s %s) (size %s %s))\n",
                       FormatInternalUnits( aBusEntry->GetPosition().x ).c_str(),
                       FormatInternalUnits( aBusEntry->GetPosition().y ).c_str(),
-                      FormatInternalUnits( aBusEntry->m_End().x ).c_str(),
-                      FormatInternalUnits( aBusEntry->m_End().y ).c_str() );
+                      FormatInternalUnits( aBusEntry->GetSize().GetWidth() ).c_str(),
+                      FormatInternalUnits( aBusEntry->GetSize().GetHeight() ).c_str() );
     }
 }
 
@@ -1144,19 +1078,30 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
 {
     wxCHECK_RET( aText != nullptr && m_out != nullptr, "" );
 
+    double angle;
+
+    switch( aText->GetLabelSpinStyle() )
+    {
+    case LABEL_SPIN_STYLE::RIGHT:    angle = 0.0;    break;
+    case LABEL_SPIN_STYLE::UP:       angle = 90.0;   break;
+    case LABEL_SPIN_STYLE::LEFT:     angle = 180.0;  break;
+    case LABEL_SPIN_STYLE::BOTTOM:   angle = 270.0;  break;
+    default:      wxFAIL;            angle = 0.0;    break;
+    }
+
     m_out->Print( aNestLevel, "(%s %s",
                   getTextTypeToken( aText->Type() ),
                   m_out->Quotew( aText->GetText() ).c_str() );
 
     if( ( aText->Type() == SCH_GLOBAL_LABEL_T ) || ( aText->Type() == SCH_HIER_LABEL_T ) )
-        m_out->Print( 0, " %s", getSheetPinShapeToken( aText->GetShape() ) );
+        m_out->Print( 0, " (shape %s)", getSheetPinShapeToken( aText->GetShape() ) );
 
     if( aText->GetText().Length() < 50 )
     {
         m_out->Print( 0, " (at %s %s %s)",
                       FormatInternalUnits( aText->GetPosition().x ).c_str(),
                       FormatInternalUnits( aText->GetPosition().y ).c_str(),
-                      FormatAngle( aText->GetTextAngle() ).c_str() );
+                      FormatAngle( angle * 10.0 ).c_str() );
     }
     else
     {
@@ -1167,7 +1112,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
                       FormatAngle( aText->GetTextAngle() ).c_str() );
     }
 
-    if( !aText->IsDefaultFormatting() )
+    if( !aText->IsDefaultFormatting() || ( aText->GetTextHeight() != GetDefaultTextSize() ) )
     {
         m_out->Print( 0, "\n" );
         aText->Format( m_out, aNestLevel + 1, 0 );

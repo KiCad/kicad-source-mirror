@@ -127,18 +127,7 @@ public:
 
 private:
     void loadHierarchy( SCH_SHEET* aSheet );
-    void loadHeader( LINE_READER& aReader, SCH_SCREEN* aScreen );
-    void loadPageSettings( LINE_READER& aReader, SCH_SCREEN* aScreen );
     void loadFile( const wxString& aFileName, SCH_SCREEN* aScreen );
-    SCH_SHEET* loadSheet( LINE_READER& aReader );
-    SCH_BITMAP* loadBitmap( LINE_READER& aReader );
-    SCH_JUNCTION* loadJunction( LINE_READER& aReader );
-    SCH_NO_CONNECT* loadNoConnect( LINE_READER& aReader );
-    SCH_LINE* loadWire( LINE_READER& aReader );
-    SCH_BUS_ENTRY_BASE* loadBusEntry( LINE_READER& aReader );
-    SCH_TEXT* loadText( LINE_READER& aReader );
-    SCH_COMPONENT* loadComponent( LINE_READER& aReader );
-    std::shared_ptr<BUS_ALIAS> loadBusAlias( LINE_READER& aReader, SCH_SCREEN* aScreen );
 
     void saveSymbol( SCH_COMPONENT* aComponent, int aNestLevel );
     void saveField( SCH_FIELD* aField, int aNestLevel );

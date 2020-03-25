@@ -28,7 +28,12 @@
  * @brief Schematic and symbol library s-expression file format parser implementations.
  */
 
+#include <wx/mstream.h>
 #include <wx/tokenzr.h>
+
+#include <common.h>
+#include <lib_id.h>
+#include <plotter.h>
 
 #include <class_libentry.h>
 #include <lib_arc.h>
@@ -38,12 +43,21 @@
 #include <lib_polyline.h>
 #include <lib_rectangle.h>
 #include <lib_text.h>
+#include <sch_bitmap.h>
+#include <sch_bus_entry.h>
+#include <sch_component.h>
+#include <sch_edit_frame.h>          // CMP_ORIENT_XXX
+#include <sch_field.h>
 #include <sch_file_versions.h>
+#include <sch_line.h>
+#include <sch_junction.h>
+#include <sch_no_connect.h>
+#include <sch_screen.h>
 #include <sch_sexpr_parser.h>
 #include <template_fieldnames.h>
 
 
-using namespace TSYMBOL_LIB_T;
+using namespace TSCHEMATIC_T;
 
 
 SCH_SEXPR_PARSER::SCH_SEXPR_PARSER( LINE_READER* aLineReader ) :
@@ -67,7 +81,7 @@ void SCH_SEXPR_PARSER::ParseLib( LIB_PART_MAP& aSymbolLibMap )
 
     NeedLEFT();
     NextTok();
-    parseHeader();
+    parseHeader( T_kicad_symbol_lib, SEXPR_SYMBOL_LIB_FILE_VERSION );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -374,6 +388,66 @@ double SCH_SEXPR_PARSER::parseDouble()
 }
 
 
+void SCH_SEXPR_PARSER::parseStroke( STROKE_PARAMS& aStroke )
+{
+    wxCHECK_RET( CurTok() == T_stroke,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a stroke." ) );
+
+    aStroke.m_Width = GetDefaultLineThickness();
+    aStroke.m_Type = PLOT_DASH_TYPE::DEFAULT;
+    aStroke.m_Color = COLOR4D::UNSPECIFIED;
+
+    T token;
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_width:
+            aStroke.m_Width = parseInternalUnits( "stroke width" );
+            NeedRIGHT();
+            break;
+
+        case T_type:
+        {
+            token = NextTok();
+
+            switch( token )
+            {
+            case T_dash:      aStroke.m_Type = PLOT_DASH_TYPE::DASH;      break;
+            case T_dot:       aStroke.m_Type = PLOT_DASH_TYPE::DOT;       break;
+            case T_dash_dot:  aStroke.m_Type = PLOT_DASH_TYPE::DASHDOT;   break;
+            case T_solid:     aStroke.m_Type = PLOT_DASH_TYPE::SOLID;     break;
+            default:
+                Expecting( "solid, dash, dash_dot, or dot" );
+            }
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_color:
+            aStroke.m_Color =
+                    COLOR4D( wxColour( static_cast<unsigned char>( parseInt( "red" ) ),
+                                       static_cast<unsigned char>( parseInt( "green" ) ),
+                                       static_cast<unsigned char>( parseInt( "blue" ) ),
+                                       static_cast<unsigned char>( parseInt( "alpha" ) ) ) );
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "width, type, or color" );
+        }
+
+    }
+}
+
+
 FILL_T SCH_SEXPR_PARSER::parseFillMode()
 {
     wxCHECK_MSG( CurTok() == T_fill, NO_FILL,
@@ -509,9 +583,9 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 }
 
 
-void SCH_SEXPR_PARSER::parseHeader()
+void SCH_SEXPR_PARSER::parseHeader( TSCHEMATIC_T::T aHeaderType, int aFileVersion )
 {
-    wxCHECK_RET( CurTok() == T_kicad_symbol_lib,
+    wxCHECK_RET( CurTok() == aHeaderType,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a header." ) );
 
     NeedLEFT();
@@ -532,7 +606,7 @@ void SCH_SEXPR_PARSER::parseHeader()
     }
     else
     {
-        m_requiredVersion = SEXPR_SYMBOL_LIB_FILE_VERSION;
+        m_requiredVersion = aFileVersion;
 
         // Skip the host name and host build version information.
         NeedSYMBOL();
@@ -581,7 +655,8 @@ void SCH_SEXPR_PARSER::parsePinNames( std::unique_ptr<LIB_PART>& aSymbol )
 void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
 {
     wxCHECK_RET( CurTok() == T_property,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a property token." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
+                 wxT( " as a property token." ) );
 
     wxString error;
     wxString name;
@@ -1350,6 +1425,1020 @@ LIB_TEXT* SCH_SEXPR_PARSER::parseText()
 
         default:
             Expecting( "at or effects" );
+        }
+    }
+
+    return text.release();
+}
+
+
+void SCH_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
+{
+    wxCHECK_RET( CurTok() == T_page,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a PAGE_INFO." ) );
+
+    T token;
+
+    NeedSYMBOL();
+
+    wxString pageType = FromUTF8();
+
+    if( !aPageInfo.SetType( pageType ) )
+    {
+        wxString err;
+        err.Printf( _( "Page type \"%s\" is not valid " ), GetChars( FromUTF8() ) );
+        THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+    }
+
+    if( pageType == PAGE_INFO::Custom )
+    {
+        double width = parseDouble( "width" );      // width in mm
+
+        // Perform some controls to avoid crashes if the size is edited by hands
+        if( width < 100.0 )
+            width = 100.0;
+        else if( width > 1200.0 )
+            width = 1200.0;
+
+        double height = parseDouble( "height" );    // height in mm
+
+        if( height < 100.0 )
+            height = 100.0;
+        else if( height > 1200.0 )
+            height = 1200.0;
+
+        aPageInfo.SetWidthMils( Mm2mils( width ) );
+        aPageInfo.SetHeightMils( Mm2mils( height ) );
+    }
+
+    token = NextTok();
+
+    if( token == T_portrait )
+    {
+        aPageInfo.SetPortrait( true );
+        NeedRIGHT();
+    }
+    else if( token != T_RIGHT )
+    {
+        Expecting( "portrait" );
+    }
+}
+
+
+void SCH_SEXPR_PARSER::parseTITLE_BLOCK( TITLE_BLOCK& aTitleBlock )
+{
+    wxCHECK_RET( CurTok() == T_title_block,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
+                 wxT( " as TITLE_BLOCK." ) );
+
+    T token;
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_title:
+            NextTok();
+            aTitleBlock.SetTitle( FromUTF8() );
+            break;
+
+        case T_date:
+            NextTok();
+            aTitleBlock.SetDate( FromUTF8() );
+            break;
+
+        case T_rev:
+            NextTok();
+            aTitleBlock.SetRevision( FromUTF8() );
+            break;
+
+        case T_company:
+            NextTok();
+            aTitleBlock.SetCompany( FromUTF8() );
+            break;
+
+        case T_comment:
+        {
+            int commentNumber = parseInt( "comment" );
+
+            switch( commentNumber )
+            {
+            case 1:
+                NextTok();
+                aTitleBlock.SetComment( 0, FromUTF8() );
+                break;
+
+            case 2:
+                NextTok();
+                aTitleBlock.SetComment( 1, FromUTF8() );
+                break;
+
+            case 3:
+                NextTok();
+                aTitleBlock.SetComment( 2, FromUTF8() );
+                break;
+
+            case 4:
+                NextTok();
+                aTitleBlock.SetComment( 3, FromUTF8() );
+                break;
+
+            case 5:
+                NextTok();
+                aTitleBlock.SetComment( 4, FromUTF8() );
+                break;
+
+            case 6:
+                NextTok();
+                aTitleBlock.SetComment( 5, FromUTF8() );
+                break;
+
+            case 7:
+                NextTok();
+                aTitleBlock.SetComment( 6, FromUTF8() );
+                break;
+
+            case 8:
+                NextTok();
+                aTitleBlock.SetComment( 7, FromUTF8() );
+                break;
+
+            case 9:
+                NextTok();
+                aTitleBlock.SetComment( 8, FromUTF8() );
+                break;
+
+            default:
+                wxString err;
+                err.Printf( wxT( "%d is not a valid title block comment number" ), commentNumber );
+                THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+            }
+
+            break;
+        }
+
+        default:
+            Expecting( "title, date, rev, company, or comment" );
+        }
+
+        NeedRIGHT();
+    }
+}
+
+
+SCH_FIELD* SCH_SEXPR_PARSER::parseSchField()
+{
+    wxCHECK_MSG( CurTok() == T_property, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
+                 wxT( " as a property token." ) );
+
+    wxString error;
+    wxString name;
+    wxString value;
+
+    T token = NextTok();
+
+    if( !IsSymbol( token ) )
+    {
+        error.Printf( _( "Invalid property name in\nfile: \"%s\"\nline: %d\noffset: %d" ),
+                      CurSource().c_str(), CurLineNumber(), CurOffset() );
+        THROW_IO_ERROR( error );
+    }
+
+    name = FromUTF8();
+
+    if( name.IsEmpty() )
+    {
+        error.Printf( _( "Empty property name in\nfile: \"%s\"\nline: %d\noffset: %d" ),
+                      CurSource().c_str(), CurLineNumber(), CurOffset() );
+        THROW_IO_ERROR( error );
+    }
+
+    token = NextTok();
+
+    if( !IsSymbol( token ) )
+    {
+        error.Printf( _( "Invalid property value in\nfile: \"%s\"\nline: %d\noffset: %d" ),
+                      CurSource().c_str(), CurLineNumber(), CurOffset() );
+        THROW_IO_ERROR( error );
+    }
+
+    // Empty property values are valid.
+    value = FromUTF8();
+
+    std::unique_ptr<SCH_FIELD> field( new SCH_FIELD( wxDefaultPosition, MANDATORY_FIELDS,
+                                                     nullptr, name ) );
+
+    field->SetText( value );
+    field->SetVisible( true );
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_at:
+            field->SetPosition( parseXY() );
+            field->SetTextAngle( static_cast<int>( parseDouble( "text angle" ) * 10.0 ) );
+            NeedRIGHT();
+            break;
+
+        case T_effects:
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( field.get() ) );
+            break;
+
+        default:
+            Expecting( "at or effects" );
+        }
+    }
+
+    return field.release();
+}
+
+
+SCH_SHEET_PIN* SCH_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
+{
+    wxCHECK_MSG( aSheet != nullptr, nullptr, "" );
+    wxCHECK_MSG( CurTok() == T_pin, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
+                 wxT( " as a sheet pin token." ) );
+
+    wxString error;
+    wxString name;
+    wxString shape;
+
+    T token = NextTok();
+
+    if( !IsSymbol( token ) )
+    {
+        error.Printf( _( "Invalid sheet pin name in\nfile: \"%s\"\nline: %d\noffset: %d" ),
+                      CurSource().c_str(), CurLineNumber(), CurOffset() );
+        THROW_IO_ERROR( error );
+    }
+
+    name = FromUTF8();
+
+    if( name.IsEmpty() )
+    {
+        error.Printf( _( "Empty sheet pin name in\nfile: \"%s\"\nline: %d\noffset: %d" ),
+                      CurSource().c_str(), CurLineNumber(), CurOffset() );
+        THROW_IO_ERROR( error );
+    }
+
+    std::unique_ptr<SCH_SHEET_PIN> sheetPin( new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), name ) );
+
+    token = NextTok();
+
+    switch( token )
+    {
+    case T_input:          sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );        break;
+    case T_output:         sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );       break;
+    case T_bidirectional:  sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );         break;
+    case T_tri_state:      sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_TRISTATE );     break;
+    case T_passive:        sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );  break;
+    default:
+        Expecting( "input, output, bidirectional, tri_state, or passive" );
+    }
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_at:
+        {
+            sheetPin->SetPosition( parseXY() );
+
+            double angle = parseDouble( "sheet pin angle (side)" );
+
+            if( angle == 0.0 )
+                sheetPin->SetEdge( SHEET_RIGHT_SIDE );
+            else if( angle == 90.0 )
+                sheetPin->SetEdge( SHEET_TOP_SIDE );
+            else if( angle == 180.0 )
+                sheetPin->SetEdge( SHEET_LEFT_SIDE );
+            else if( angle == 270.0 )
+                sheetPin->SetEdge( SHEET_BOTTOM_SIDE );
+            else
+                Expecting( "0, 90, 180, or 270" );
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_effects:
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( sheetPin.get() ) );
+            break;
+
+        default:
+            Expecting( "at or effects" );
+        }
+    }
+
+    return sheetPin.release();
+}
+
+
+void SCH_SEXPR_PARSER::parseSchSymbolInstances( std::unique_ptr<SCH_COMPONENT>& aSymbol )
+{
+    wxCHECK_RET( CurTok() == T_instances,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
+                 wxT( " as a instances token." ) );
+
+    T token;
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_path:
+        {
+            NeedSYMBOL();
+
+            int unit;
+            wxString reference;
+            KIID_PATH path( FromUTF8() );
+
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_reference:
+                    NeedSYMBOL();
+                    reference = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                case T_unit:
+                    unit = parseInt( "symbol unit" );
+                    NeedRIGHT();
+                    break;
+
+                default:
+                    Expecting( "path or unit" );
+                }
+            }
+
+            aSymbol->AddHierarchicalReference( path, reference, unit );
+            aSymbol->GetField( REFERENCE )->SetText( reference );
+            break;
+        }
+
+        default:
+            Expecting( "path" );
+        }
+    }
+}
+
+
+void SCH_SEXPR_PARSER::ParseSchematic( SCH_SCREEN* aScreen )
+{
+    wxCHECK_RET( aScreen != nullptr, "" );
+
+    T token;
+
+    NeedLEFT();
+    NextTok();
+
+    if( CurTok() != T_kicad_sch )
+        Expecting( "kicad_sch" );
+
+    parseHeader( T_kicad_sch, SEXPR_SCHEMATIC_FILE_VERSION );
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_page:
+        {
+            PAGE_INFO pageInfo;
+            parsePAGE_INFO( pageInfo );
+            aScreen->SetPageSettings( pageInfo );
+            break;
+        }
+
+        case T_title_block:
+        {
+            TITLE_BLOCK tb;
+            parseTITLE_BLOCK( tb );
+            aScreen->SetTitleBlock( tb );
+            break;
+        }
+
+        case T_symbol:
+            aScreen->Append( static_cast<SCH_ITEM*>( parseSchematicSymbol() ) );
+            break;
+
+        case T_image:
+            aScreen->Append( static_cast<SCH_ITEM*>( parseImage() ) );
+            break;
+
+        case T_sheet:
+            aScreen->Append( static_cast<SCH_ITEM*>( parseSheet() ) );
+            break;
+
+        case T_junction:
+            aScreen->Append( static_cast<SCH_ITEM*>( parseJunction() ) );
+            break;
+
+        case T_no_connect:
+            aScreen->Append( static_cast<SCH_ITEM*>( parseNoConnect() ) );
+            break;
+
+        case T_bus_entry:
+            aScreen->Append( static_cast<SCH_ITEM*>( parseBusEntry() ) );
+            break;
+
+        case T_polyline:
+        case T_bus:
+        case T_wire:
+            aScreen->Append( static_cast<SCH_ITEM*>( parseLine() ) );
+            break;
+
+        case T_text:
+        case T_label:
+        case T_global_label:
+        case T_hierarchical_label:
+            aScreen->Append( static_cast<SCH_ITEM*>( parseSchText() ) );
+            break;
+
+        default:
+            Expecting( "symbol, bitmap, sheet, junction, no_connect, bus_entry, line"
+                       "bus, text, label, global_label, or hierarchical_label" );
+        }
+    }
+}
+
+
+SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
+{
+    wxCHECK_MSG( CurTok() == T_symbol, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a symbol." ) );
+
+    T token;
+    int orientation;
+    wxString tmp;
+    SCH_FIELD* field;
+    std::unique_ptr<SCH_COMPONENT> symbol( new SCH_COMPONENT() );
+
+    m_fieldId = MANDATORY_FIELDS;
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_lib_id:
+        {
+            token = NextTok();
+
+            if( !IsSymbol( token ) && token != T_NUMBER )
+                Expecting( "symbol|number" );
+
+            LIB_ID id;
+            wxString text = FromUTF8();
+
+            if( !text.IsEmpty() && id.Parse( text, LIB_ID::ID_SCH, true ) >= 0 )
+            {
+                tmp.Printf( _( "Invalid symbol lbirary ID in\nfile: \"%s\"\nline: %d\n"
+                               "offset: %d" ),
+                            GetChars( CurSource() ), CurLineNumber(), CurOffset() );
+                THROW_IO_ERROR( tmp );
+            }
+
+            symbol->SetLibId( id );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_at:
+            symbol->SetPosition( parseXY() );
+
+            switch( static_cast<int>( parseDouble( "symbol orientation" ) ) )
+            {
+            case 0:    orientation = CMP_ORIENT_0;    break;
+            case 90:   orientation = CMP_ORIENT_90;   break;
+            case 180:  orientation = CMP_ORIENT_180;  break;
+            case 270:  orientation = CMP_ORIENT_270;  break;
+            default:   Expecting( "0, 90, 180, or 270" );
+            }
+
+            NeedRIGHT();
+            break;
+
+        case T_mirror:
+            token = NextTok();
+
+            if( token == T_x )
+                orientation |= CMP_MIRROR_X;
+            else if( token == T_y )
+                orientation |= CMP_MIRROR_Y;
+            else
+                Expecting( "x or y" );
+
+            NeedRIGHT();
+            break;
+
+        case T_unit:
+            symbol->SetUnit( parseInt( "symbol unit" ) );
+            NeedRIGHT();
+            break;
+
+        case T_uuid:
+            NeedSYMBOL();
+            const_cast<KIID&>( symbol->m_Uuid ) = KIID( FromUTF8() );
+            NeedRIGHT();
+            break;
+
+        case T_property:
+        {
+            int fieldIndex;
+
+            field = parseSchField();
+            field->SetParent( symbol.get() );
+
+            if( field->GetName() == "ki_reference" )
+            {
+                fieldIndex = REFERENCE;
+                field->SetId( REFERENCE );
+                field->SetLayer( LAYER_REFERENCEPART );
+                field->SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE ) );
+            }
+            else if( field->GetName() == "ki_value" )
+            {
+                fieldIndex = VALUE;
+                field->SetId( VALUE );
+                field->SetLayer( LAYER_VALUEPART );
+                field->SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE ) );
+            }
+            else if( field->GetName() == "ki_footprint" )
+            {
+                fieldIndex = FOOTPRINT;
+                field->SetId( FOOTPRINT );
+                field->SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( FOOTPRINT ) );
+            }
+            else if( field->GetName() == "ki_datasheet" )
+            {
+                fieldIndex = DATASHEET;
+                field->SetId( DATASHEET );
+                field->SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET ) );
+            }
+            else
+            {
+                fieldIndex = m_fieldId;
+                field->SetId( m_fieldId );
+                symbol->AddField( *field );
+                m_fieldId += 1;
+            }
+
+            *symbol->GetField( fieldIndex ) = *field;
+            delete field;
+            break;
+        }
+
+        case T_instances:
+            parseSchSymbolInstances( symbol );
+            break;
+
+        default:
+            Expecting( "lib_id, at, mirror, uuid, property, or instances" );
+        }
+    }
+
+    symbol->SetOrientation( orientation );
+
+    return symbol.release();
+}
+
+
+SCH_BITMAP* SCH_SEXPR_PARSER::parseImage()
+{
+    wxCHECK_MSG( CurTok() == T_image, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as an image." ) );
+
+    T token;
+    std::unique_ptr<SCH_BITMAP> bitmap( new SCH_BITMAP() );
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_at:
+            bitmap->SetPosition( parseXY() );
+            NeedRIGHT();
+            break;
+
+        case T_scale:
+            bitmap->GetImage()->SetScale( parseDouble( "image scale factor" ) );
+
+            if( !std::isnormal( bitmap->GetImage()->GetScale() ) )
+                bitmap->GetImage()->SetScale( 1.0 );
+
+            NeedRIGHT();
+            break;
+
+        case T_data:
+        {
+            wxMemoryOutputStream stream;
+
+            token = NextTok();
+
+            while( token != T_RIGHT )
+            {
+                if( !IsSymbol( token ) || CurStr().find_first_of( "0x" ) != 0 )
+                    Expecting( "hex image data" );
+
+                stream.PutC( static_cast<char>( strtol( CurText() + 2, NULL, 16 ) & 0xFF ) );
+                token = NextTok();
+            }
+
+            wxImage* image = new wxImage();
+            wxMemoryInputStream istream( stream );
+            image->LoadFile( istream, wxBITMAP_TYPE_PNG );
+            bitmap->GetImage()->SetImage( image );
+            bitmap->GetImage()->SetBitmap( new wxBitmap( *image ) );
+            break;
+        }
+
+        default:
+            Expecting( "at, scale, or data" );
+        }
+    }
+
+    return bitmap.release();
+}
+
+
+SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
+{
+    wxCHECK_MSG( CurTok() == T_sheet, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a sheet." ) );
+
+    T token;
+    STROKE_PARAMS stroke;
+    SCH_FIELD* field;
+    std::vector<SCH_FIELD> fields;
+    std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET() );
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_at:
+            sheet->SetPosition( parseXY() );
+            NeedRIGHT();
+            break;
+
+        case T_size:
+        {
+            wxSize size;
+            size.SetWidth( parseInternalUnits( "sheet width" ) );
+            size.SetHeight( parseInternalUnits( "sheet height" ) );
+            sheet->SetSize( size );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_stroke:
+            parseStroke( stroke );
+            sheet->SetBorderWidth( stroke.m_Width );
+            sheet->SetBorderColor( stroke.m_Color );
+            NeedRIGHT();
+            break;
+
+        case T_uuid:
+            NeedSYMBOL();
+            const_cast<KIID&>( sheet->m_Uuid ) = KIID( FromUTF8() );
+            NeedRIGHT();
+            break;
+
+        case T_property:
+            field = parseSchField();
+
+            if( field->GetName() == "ki_sheet_name" )
+            {
+                field->SetId( SHEETNAME );
+                field->SetName( SCH_SHEET::GetDefaultFieldName( SHEETNAME ) );
+            }
+            else if( field->GetName() == "ki_sheet_file" )
+            {
+                field->SetId( SHEETFILENAME );
+                field->SetName( SCH_SHEET::GetDefaultFieldName( SHEETFILENAME ) );
+            }
+            else
+            {
+                field->SetId( m_fieldId );
+                m_fieldId += 1;
+            }
+
+            field->SetParent( sheet.get() );
+            fields.emplace_back( *field );
+            delete field;
+            break;
+
+        case T_pin:
+            sheet->AddPin( parseSchSheetPin( sheet.get() ) );
+            break;
+
+        default:
+            Expecting( "at, size, stroke, uuid, property, or pin" );
+        }
+    }
+
+    sheet->SetFields( fields );
+
+    return sheet.release();
+}
+
+
+SCH_JUNCTION* SCH_SEXPR_PARSER::parseJunction()
+{
+    wxCHECK_MSG( CurTok() == T_junction, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a junction." ) );
+
+    T token;
+    std::unique_ptr<SCH_JUNCTION> junction( new SCH_JUNCTION() );
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_at:
+            junction->SetPosition( parseXY() );
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "at" );
+        }
+    }
+
+    return junction.release();
+}
+
+
+SCH_NO_CONNECT* SCH_SEXPR_PARSER::parseNoConnect()
+{
+    wxCHECK_MSG( CurTok() == T_no_connect, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a no connect." ) );
+
+    T token;
+    std::unique_ptr<SCH_NO_CONNECT> no_connect( new SCH_NO_CONNECT() );
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_at:
+            no_connect->SetPosition( parseXY() );
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "at" );
+        }
+    }
+
+    return no_connect.release();
+}
+
+
+SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
+{
+    wxCHECK_MSG( CurTok() == T_bus_entry, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a bus entry." ) );
+
+    T token;
+    std::unique_ptr<SCH_BUS_WIRE_ENTRY> busEntry( new SCH_BUS_WIRE_ENTRY() );
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_at:
+            busEntry->SetPosition( parseXY() );
+            NeedRIGHT();
+            break;
+
+        case T_size:
+        {
+            wxSize size;
+
+            size.SetWidth( parseInternalUnits( "bus entry height" ) );
+            size.SetHeight( parseInternalUnits( "bus entry width" ) );
+            busEntry->SetSize( size );
+
+            if( size.y < 0 )
+                busEntry->SetBusEntryShape( '/' );
+
+            NeedRIGHT();
+            break;
+        }
+
+        default:
+            Expecting( "at or size" );
+        }
+    }
+
+    return busEntry.release();
+}
+
+
+SCH_LINE* SCH_SEXPR_PARSER::parseLine()
+{
+    T token;
+    STROKE_PARAMS stroke;
+    std::unique_ptr<SCH_LINE> line( new SCH_LINE() );
+
+    switch( CurTok() )
+    {
+    case T_polyline:   line->SetLayer( LAYER_NOTES );   break;
+    case T_wire:       line->SetLayer( LAYER_WIRE );    break;
+    case T_bus:        line->SetLayer( LAYER_BUS );     break;
+    default:
+        wxCHECK_MSG( false, nullptr,
+                     wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a line." ) );
+    }
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_pts:
+            NeedLEFT();
+            token = NextTok();
+
+            if( token != T_xy )
+                Expecting( "xy" );
+
+            line->SetStartPoint( parseXY() );
+            NeedRIGHT();
+            NeedLEFT();
+            token = NextTok();
+
+            if( token != T_xy )
+                Expecting( "xy" );
+
+            line->SetEndPoint( parseXY() );
+            NeedRIGHT();
+            NeedRIGHT();
+            break;
+
+        case T_stroke:
+            parseStroke( stroke );
+            line->SetLineWidth( stroke.m_Width );
+            line->SetLineStyle( stroke.m_Type );
+            line->SetLineColor( stroke.m_Color );
+            break;
+
+        default:
+            Expecting( "at or stroke" );
+        }
+    }
+
+    return line.release();
+}
+
+
+SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
+{
+    T token;
+    std::unique_ptr<SCH_TEXT> text;
+
+    switch( CurTok() )
+    {
+    case T_text:                text.reset( new SCH_TEXT );          break;
+    case T_label:               text.reset( new SCH_LABEL );         break;
+    case T_global_label:        text.reset( new SCH_GLOBALLABEL );   break;
+    case T_hierarchical_label:  text.reset( new SCH_HIERLABEL );     break;
+    default:
+        wxCHECK_MSG( false, nullptr,
+                     wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as text." ) );
+    }
+
+    NeedSYMBOL();
+
+    text->SetText( FromUTF8() );
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_at:
+        {
+            text->SetPosition( parseXY() );
+
+            switch( static_cast<int>( parseDouble( "text angle" ) ) )
+            {
+            case 0:    text->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );    break;
+            case 90:   text->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );       break;
+            case 180:  text->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );     break;
+            case 270:  text->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );   break;
+            default:
+                wxFAIL;
+                text->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+                break;
+            }
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_shape:
+        {
+            if( text->Type() == SCH_TEXT_T || text->Type() == SCH_LABEL_T )
+                Unexpected( T_shape );
+
+            token = NextTok();
+
+            switch( token )
+            {
+            case T_input:          text->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );        break;
+            case T_output:         text->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );       break;
+            case T_bidirectional:  text->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );         break;
+            case T_tri_state:      text->SetShape( PINSHEETLABEL_SHAPE::PS_TRISTATE );     break;
+            case T_passive:        text->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );  break;
+            default:
+                Expecting( "input, output, bidirectional, tri_state, or passive" );
+            }
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_effects:
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ) );
+            break;
+
+        default:
+            Expecting( "at, shape, or effects" );
         }
     }
 

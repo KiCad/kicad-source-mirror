@@ -35,6 +35,7 @@
 #include <math/util.h>                           // KiROUND, Clamp
 
 #include <class_library.h>
+#include <general.h>
 #include <schematic_lexer.h>
 
 
@@ -45,8 +46,45 @@ class LIB_ITEM;
 class LIB_PIN;
 class LIB_POLYLINE;
 class LIB_TEXT;
+class PAGE_INFO;
+class SCH_BITMAP;
+class SCH_BUS_WIRE_ENTRY;
+class SCH_COMPONENT;
+class SCH_FIELD;
+class SCH_JUNCTION;
+class SCH_LINE;
+class SCH_NO_CONNECT;
+class SCH_SCREEN;
+class SCH_SHEET;
+class SCH_SHEET_PIN;
+class SCH_TEXT;
+class TITLE_BLOCK;
 
 
+/**
+ * Simple container to manage line stroke parameters.
+ */
+class STROKE_PARAMS
+{
+public:
+    int m_Width;
+    PLOT_DASH_TYPE m_Type;
+    COLOR4D m_Color;
+
+    STROKE_PARAMS( int aWidth = GetDefaultLineThickness(),
+                   PLOT_DASH_TYPE aType = PLOT_DASH_TYPE::DEFAULT,
+                   const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) :
+    m_Width( aWidth ),
+    m_Type( aType ),
+    m_Color( aColor )
+    {
+    }
+};
+
+
+/**
+ * Object to parser s-expression symbol library and schematic file formats.
+ */
 class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
 {
     int m_requiredVersion;  ///< Set to the symbol library file version required.
@@ -55,7 +93,13 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     int m_convert;          ///< The current body style being parsed.
     wxString m_symbolName;  ///< The current symbol name.
 
-    void parseHeader();
+    void parseHeader( TSCHEMATIC_T::T aHeaderType, int aFileVersion );
+
+    inline long parseHex()
+    {
+        NextTok();
+        return strtol( CurText(), NULL, 16 );
+    }
 
     inline int parseInt()
     {
@@ -83,7 +127,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
         return parseDouble();
     }
 
-    inline double parseDouble( TSYMBOL_LIB_T::T aToken )
+    inline double parseDouble( TSCHEMATIC_T::T aToken )
     {
         return parseDouble( GetTokenText( aToken ) );
     }
@@ -109,7 +153,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
         return KiROUND( Clamp<double>( -int_limit, retval, int_limit ) );
     }
 
-    inline int parseInternalUnits( TSYMBOL_LIB_T::T aToken )
+    inline int parseInternalUnits( TSCHEMATIC_T::T aToken )
     {
         return parseInternalUnits( GetTokenText( aToken ) );
     }
@@ -123,6 +167,13 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
 
         return xy;
     }
+
+    /**
+     * Parse stroke definition \a aStroke.
+     *
+     * @param aStrokeDef A reference to the #STROKE_PARAMS structure to write to.
+     */
+    void parseStroke( STROKE_PARAMS& aStroke );
 
     FILL_T parseFillMode();
 
@@ -139,6 +190,21 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     LIB_RECTANGLE* parseRectangle();
     LIB_TEXT* parseText();
 
+    void parsePAGE_INFO( PAGE_INFO& aPageInfo );
+    void parseTITLE_BLOCK( TITLE_BLOCK& aTitleBlock );
+    void parseSchSymbolInstances( std::unique_ptr<SCH_COMPONENT>& aSymbol );
+
+    SCH_SHEET_PIN* parseSchSheetPin( SCH_SHEET* aSheet );
+    SCH_FIELD* parseSchField();
+    SCH_COMPONENT* parseSchematicSymbol();
+    SCH_BITMAP* parseImage();
+    SCH_SHEET* parseSheet();
+    SCH_JUNCTION* parseJunction();
+    SCH_NO_CONNECT* parseNoConnect();
+    SCH_BUS_WIRE_ENTRY* parseBusEntry();
+    SCH_LINE* parseLine();
+    SCH_TEXT* parseSchText();
+
 public:
     SCH_SEXPR_PARSER( LINE_READER* aLineReader = nullptr );
 
@@ -147,6 +213,15 @@ public:
     LIB_PART* ParseSymbol( LIB_PART_MAP& aSymbolLibMap );
 
     LIB_ITEM* ParseDrawItem();
+
+    /**
+     * Parse a single schematic file into \a aScreen.
+     *
+     * @note This does not load any sub-sheets or decent complex sheet hierarchies.
+     *
+     * @param aScreen The #SCH_SCREEN object to store the parsed schematic file.
+     */
+    void ParseSchematic( SCH_SCREEN* aScreen );
 
     /**
      * Return whether a version number, if any was parsed, was too recent
