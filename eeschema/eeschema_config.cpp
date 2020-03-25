@@ -497,41 +497,45 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
 
-    m_repeatStep.x = Mils2iu( cfg->m_Drawing.default_repeat_offset_x );
-    m_repeatStep.y = Mils2iu( cfg->m_Drawing.default_repeat_offset_y );
-
-    SetSelectionTextAsBox( cfg->m_Selection.text_as_box );
-    SetSelectionDrawChildItems( cfg->m_Selection.draw_selected_children );
-    SetSelectionFillShapes( cfg->m_Selection.fill_shapes );
-    SetSelectionThickness( Mils2iu( cfg->m_Selection.thickness ) );
-
-    m_footprintPreview      = cfg->m_Appearance.footprint_preview;
-    m_navigatorStaysOpen    = cfg->m_Appearance.navigator_stays_open;
-    m_showAllPins           = cfg->m_Appearance.show_hidden_pins;
-    m_autoplaceFields       = cfg->m_AutoplaceFields.enable;
-    m_autoplaceAlign        = cfg->m_AutoplaceFields.align_to_grid;
-    m_autoplaceJustify      = cfg->m_AutoplaceFields.allow_rejustify;
-    m_forceHVLines          = cfg->m_Drawing.hv_lines_only;
-    m_dragActionIsMove      = cfg->m_Input.drag_is_move;
-    m_selectPinSelectSymbol = cfg->m_Selection.select_pin_selects_symbol;
-    m_repeatDeltaLabel      = cfg->m_Drawing.repeat_label_increment;
-
-    wxString templateFieldNames = cfg->m_Drawing.field_names;
-
-    if( !templateFieldNames.IsEmpty() )
+    if( cfg )
     {
-        TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
+        m_repeatStep.x = Mils2iu( cfg->m_Drawing.default_repeat_offset_x );
+        m_repeatStep.y = Mils2iu( cfg->m_Drawing.default_repeat_offset_y );
 
-        try
+        SetSelectionTextAsBox( cfg->m_Selection.text_as_box );
+        SetSelectionDrawChildItems( cfg->m_Selection.draw_selected_children );
+        SetSelectionFillShapes( cfg->m_Selection.fill_shapes );
+        SetSelectionThickness( Mils2iu( cfg->m_Selection.thickness ) );
+
+        m_footprintPreview      = cfg->m_Appearance.footprint_preview;
+        m_navigatorStaysOpen    = cfg->m_Appearance.navigator_stays_open;
+        m_showAllPins           = cfg->m_Appearance.show_hidden_pins;
+        m_autoplaceFields       = cfg->m_AutoplaceFields.enable;
+        m_autoplaceAlign        = cfg->m_AutoplaceFields.align_to_grid;
+        m_autoplaceJustify      = cfg->m_AutoplaceFields.allow_rejustify;
+        m_forceHVLines          = cfg->m_Drawing.hv_lines_only;
+        m_dragActionIsMove      = cfg->m_Input.drag_is_move;
+        m_selectPinSelectSymbol = cfg->m_Selection.select_pin_selects_symbol;
+        m_repeatDeltaLabel      = cfg->m_Drawing.repeat_label_increment;
+
+        wxString templateFieldNames = cfg->m_Drawing.field_names;
+
+        if( !templateFieldNames.IsEmpty() )
         {
-            m_templateFieldNames.Parse( &lexer, true );
-        }
-        catch( const IO_ERROR& DBG( e ) )
-        {
-            // @todo show error msg
-            DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
+            TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
+
+            try
+            {
+                m_templateFieldNames.Parse( &lexer, true );
+            }
+            catch( const IO_ERROR& DBG( e ) )
+            {
+                // @todo show error msg
+                DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
+            }
         }
     }
 
@@ -548,51 +552,54 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
+    wxASSERT( cfg );
 
     // TODO(JE) do most of these need to live as class members here, or can the sites that need
     // the setting just grab a pointer to the EESCHEMA_SETTINGS and look them up directly?
+    if( cfg )
+    {
+        cfg->m_Appearance.footprint_preview         = m_footprintPreview;
+        cfg->m_Appearance.navigator_stays_open      = m_navigatorStaysOpen;
+        cfg->m_Appearance.print_sheet_reference     = m_printSheetReference;
+        cfg->m_Appearance.show_hidden_pins          = m_showAllPins;
+        cfg->m_Appearance.show_illegal_symbol_lib_dialog = m_showIllegalSymbolLibDialog;
+        cfg->m_Appearance.show_page_limits          = m_showPageLimits;
+        cfg->m_Appearance.show_sheet_filename_case_sensitivity_dialog =
+                m_showSheetFileNameCaseSensitivityDlg;
 
-    cfg->m_Appearance.footprint_preview         = m_footprintPreview;
-    cfg->m_Appearance.navigator_stays_open      = m_navigatorStaysOpen;
-    cfg->m_Appearance.print_sheet_reference     = m_printSheetReference;
-    cfg->m_Appearance.show_hidden_pins          = m_showAllPins;
-    cfg->m_Appearance.show_illegal_symbol_lib_dialog = m_showIllegalSymbolLibDialog;
-    cfg->m_Appearance.show_page_limits          = m_showPageLimits;
-    cfg->m_Appearance.show_sheet_filename_case_sensitivity_dialog =
-            m_showSheetFileNameCaseSensitivityDlg;
+        cfg->m_AutoplaceFields.enable               = m_autoplaceFields;
+        cfg->m_AutoplaceFields.allow_rejustify      = m_autoplaceJustify;
+        cfg->m_AutoplaceFields.align_to_grid        = m_autoplaceAlign;
 
-    cfg->m_AutoplaceFields.enable               = m_autoplaceFields;
-    cfg->m_AutoplaceFields.allow_rejustify      = m_autoplaceJustify;
-    cfg->m_AutoplaceFields.align_to_grid        = m_autoplaceAlign;
+        cfg->m_Drawing.default_repeat_offset_x      = Iu2Mils( m_repeatStep.x );
+        cfg->m_Drawing.default_repeat_offset_y      = Iu2Mils( m_repeatStep.y );
+        cfg->m_Drawing.hv_lines_only                = GetForceHVLines();
+        cfg->m_Drawing.repeat_label_increment       = m_repeatDeltaLabel;
+        cfg->m_Drawing.text_markup_flags            = GetTextMarkupFlags();
 
-    cfg->m_Drawing.default_repeat_offset_x      = Iu2Mils( m_repeatStep.x );
-    cfg->m_Drawing.default_repeat_offset_y      = Iu2Mils( m_repeatStep.y );
-    cfg->m_Drawing.hv_lines_only                = GetForceHVLines();
-    cfg->m_Drawing.repeat_label_increment       = m_repeatDeltaLabel;
-    cfg->m_Drawing.text_markup_flags            = GetTextMarkupFlags();
+        cfg->m_Input.drag_is_move                   = m_dragActionIsMove;
 
-    cfg->m_Input.drag_is_move                   = m_dragActionIsMove;
+        cfg->m_Printing.monochrome                  = m_printMonochrome;
 
-    cfg->m_Printing.monochrome                  = m_printMonochrome;
+        cfg->m_Selection.thickness                  = Iu2Mils( GetSelectionThickness() );
+        cfg->m_Selection.draw_selected_children     = GetSelectionDrawChildItems();
+        cfg->m_Selection.fill_shapes                = GetSelectionFillShapes();
+        cfg->m_Selection.select_pin_selects_symbol  = GetSelectPinSelectSymbol();
+        cfg->m_Selection.text_as_box                = GetSelectionTextAsBox();
 
-    cfg->m_Selection.thickness                  = Iu2Mils( GetSelectionThickness() );
-    cfg->m_Selection.draw_selected_children     = GetSelectionDrawChildItems();
-    cfg->m_Selection.fill_shapes                = GetSelectionFillShapes();
-    cfg->m_Selection.select_pin_selects_symbol  = GetSelectPinSelectSymbol();
-    cfg->m_Selection.text_as_box                = GetSelectionTextAsBox();
+        cfg->m_System.units                         = static_cast<int>( m_userUnits );
 
-    cfg->m_System.units                         = static_cast<int>( m_userUnits );
+        // Save template fieldnames
+        STRING_FORMATTER sf;
+        m_templateFieldNames.Format( &sf, 0, true );
 
-    // Save template fieldnames
-    STRING_FORMATTER sf;
-    m_templateFieldNames.Format( &sf, 0, true );
+        wxString record = FROM_UTF8( sf.GetString().c_str() );
+        record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
+        record.Replace( wxT("  "), wxT(" "), true );  // double space to single
 
-    wxString record = FROM_UTF8( sf.GetString().c_str() );
-    record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
-    record.Replace( wxT("  "), wxT(" "), true );  // double space to single
-
-    cfg->m_Drawing.field_names = record.ToStdString();
+        cfg->m_Drawing.field_names = record.ToStdString();
+    }
 }
 
 

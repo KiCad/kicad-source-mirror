@@ -25,6 +25,7 @@
 #ifndef EDA_3D_SETTINGS_H
 #define EDA_3D_SETTINGS_H
 
+#include <array>
 #include <vector>
 #include "../3d_rendering/3d_render_raytracing/accelerators/ccontainer2d.h"
 #include "../3d_rendering/3d_render_raytracing/accelerators/ccontainer.h"
@@ -45,7 +46,6 @@
 #include <class_zone.h>
 #include <class_module.h>
 #include <reporter.h>
-
 
 class COLOR_SETTINGS;
 
@@ -621,10 +621,10 @@ private:
     double m_biuTo3Dunits;
 
     /// Top (End) Z position of each layer (normalized)
-    float  m_layerZcoordTop[PCB_LAYER_ID_COUNT];
+    std::array<float, PCB_LAYER_ID_COUNT>  m_layerZcoordTop;
 
     /// Bottom (Start) Z position of each layer (normalized)
-    float  m_layerZcoordBottom[PCB_LAYER_ID_COUNT];
+    std::array<float, PCB_LAYER_ID_COUNT>  m_layerZcoordBottom;
 
     /// Copper thickness (normalized)
     float  m_copperThickness3DU;

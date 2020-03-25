@@ -555,27 +555,31 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup()
 
     NetlistUpdateOpt();
 
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    wxASSERT( cfg );
 
-    cfg->m_NetlistPanel.custom_command_titles.clear();
-    cfg->m_NetlistPanel.custom_command_paths.clear();
-
-    // Update existing custom pages
-    for( int ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
+    if( cfg )
     {
-        NETLIST_PAGE_DIALOG* currPage = m_PanelNetType[ii + PANELCUSTOMBASE];
+        cfg->m_NetlistPanel.custom_command_titles.clear();
+        cfg->m_NetlistPanel.custom_command_paths.clear();
 
-        if( currPage == NULL )
-            break;
+        // Update existing custom pages
+        for( int ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
+        {
+            NETLIST_PAGE_DIALOG* currPage = m_PanelNetType[ii + PANELCUSTOMBASE];
 
-        wxString title = currPage->m_TitleStringCtrl->GetValue();
+            if( currPage == NULL )
+                break;
 
-        if( title.IsEmpty() )
-            continue;
+            wxString title = currPage->m_TitleStringCtrl->GetValue();
 
-        cfg->m_NetlistPanel.custom_command_titles.push_back( title.ToStdString() );
-        cfg->m_NetlistPanel.custom_command_paths.push_back(
-                currPage->m_CommandStringCtrl->GetValue().ToStdString() );
+            if( title.IsEmpty() )
+                continue;
+
+            cfg->m_NetlistPanel.custom_command_titles.emplace_back( title.ToStdString() );
+            cfg->m_NetlistPanel.custom_command_paths.emplace_back(
+                    currPage->m_CommandStringCtrl->GetValue().ToStdString() );
+        }
     }
 }
 

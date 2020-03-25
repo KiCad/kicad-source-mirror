@@ -512,9 +512,12 @@ void FOOTPRINT_WIZARD_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
-    EDA_DRAW_FRAME::LoadSettings( cfg );
+    if( cfg )
+    {
+        EDA_DRAW_FRAME::LoadSettings( cfg );
 
-    m_auiPerspective = cfg->m_FootprintViewer.perspective;
+        m_auiPerspective = cfg->m_FootprintViewer.perspective;
+    }
 }
 
 
@@ -523,9 +526,12 @@ void FOOTPRINT_WIZARD_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
-    EDA_DRAW_FRAME::SaveSettings( cfg );
+    if( cfg )
+        {
+        EDA_DRAW_FRAME::SaveSettings( cfg );
 
-    cfg->m_FootprintViewer.perspective = m_auimgr.SavePerspective().ToStdString();
+        cfg->m_FootprintViewer.perspective = m_auimgr.SavePerspective().ToStdString();
+    }
 }
 
 
@@ -533,7 +539,8 @@ WINDOW_SETTINGS* FOOTPRINT_WIZARD_FRAME::GetWindowSettings( APP_SETTINGS_BASE* a
 {
     auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxASSERT( cfg );
-    return &cfg->m_FootprintWizard;
+
+    return cfg ? &cfg->m_FootprintWizard : nullptr;
 }
 
 

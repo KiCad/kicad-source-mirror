@@ -65,8 +65,16 @@ void EDA_3D_CONTROLLER::Reset( RESET_REASON aReason )
 {
     TOOLS_HOLDER* holder = m_toolMgr->GetToolHolder();
 
-    m_canvas = dynamic_cast<EDA_3D_CANVAS*>( holder->GetToolCanvas() );
-    m_settings = dynamic_cast<EDA_3D_SETTINGS_HOLDER*>( holder )->GetSettings();
+    if( holder )
+    {
+        m_canvas = dynamic_cast<EDA_3D_CANVAS*>( holder->GetToolCanvas() );
+        m_settings = dynamic_cast<EDA_3D_SETTINGS_HOLDER*>( holder )->GetSettings();
+    }
+    else
+    {
+        m_canvas = nullptr;
+        m_settings = nullptr;
+    }
 }
 
 

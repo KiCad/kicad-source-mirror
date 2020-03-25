@@ -40,9 +40,10 @@
 #include <utf8.h>
 
 
-BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, SETTINGS aSettings )
-        : m_settings( aSettings ),
-          m_frame( aFrame )
+BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, SETTINGS aSettings ) :
+        m_settings( aSettings ),
+        m_frame( aFrame ),
+        m_changesCount( 0 )
 {
 }
 
@@ -235,10 +236,11 @@ int BACK_ANNOTATE::checkForUnusedSymbols()
 
     m_refs.SortByTimeStamp();
 
-    std::sort(
-            m_changelist.begin(), m_changelist.end(), []( CHANGELIST_ITEM a, CHANGELIST_ITEM b ) {
-                return SCH_REFERENCE_LIST::sortByTimeStamp( a.first, b.first );
-            } );
+    std::sort( m_changelist.begin(), m_changelist.end(),
+               []( const CHANGELIST_ITEM& a, const CHANGELIST_ITEM& b )
+               {
+                   return SCH_REFERENCE_LIST::sortByTimeStamp( a.first, b.first );
+               } );
 
     size_t i = 0;
     for( auto& item : m_changelist )

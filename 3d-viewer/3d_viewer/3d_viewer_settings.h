@@ -72,47 +72,4 @@ protected:
 };
 
 
-// Individual color param: not necessary once 3D viewer is migrated to color theme system
-// TODO(JE) remove once irrelevant
-class PARAM_COLOR : public PARAM_BASE
-{
-public:
-    PARAM_COLOR( const std::string& aJsonPath, COLOR4D* aPtr, COLOR4D aDefault,
-           bool aReadOnly = false ) :
-            PARAM_BASE( aJsonPath, aReadOnly ), m_ptr( aPtr ), m_default( aDefault )
-    {}
-
-    void Load( JSON_SETTINGS* aSettings ) const override
-    {
-        if( m_readOnly )
-            return;
-
-        COLOR4D val = m_default;
-
-        if( OPT<COLOR4D> optval = aSettings->Get<COLOR4D>( m_path ) )
-            val = *optval;
-
-        *m_ptr = val;
-    }
-
-    void Store( JSON_SETTINGS* aSettings) const override
-    {
-        aSettings->Set<COLOR4D>( m_path, *m_ptr );
-    }
-
-    COLOR4D GetDefault() const
-    {
-        return m_default;
-    }
-
-    virtual void SetDefault() override
-    {
-        *m_ptr = m_default;
-    }
-
-private:
-    COLOR4D* m_ptr;
-    COLOR4D m_default;
-};
-
 #endif

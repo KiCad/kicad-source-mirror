@@ -147,22 +147,26 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
     Layout();
 
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    wxASSERT( cfg );
 
-    // We specify the width of the right window (m_symbol_view_panel), because specify
-    // the width of the left window does not work as expected when SetSashGravity() is called
-    m_hsplitter->SetSashPosition( cfg->m_SymChooserPanel.sash_pos_h > 0 ?
-                                  cfg->m_SymChooserPanel.sash_pos_h : HorizPixelsFromDU( 220 ) );
+    if( cfg )
+    {
+        EESCHEMA_SETTINGS::PANEL_SYM_CHOOSER& panelCfg = cfg->m_SymChooserPanel;
 
-    if( m_vsplitter )
-        m_vsplitter->SetSashPosition( cfg->m_SymChooserPanel.sash_pos_v > 0 ?
-                                      cfg->m_SymChooserPanel.sash_pos_v : VertPixelsFromDU( 230 ) );
+        // We specify the width of the right window (m_symbol_view_panel), because specify
+        // the width of the left window does not work as expected when SetSashGravity() is called
+        m_hsplitter->SetSashPosition( panelCfg.sash_pos_h > 0 ? panelCfg.sash_pos_h :
+                                                                HorizPixelsFromDU( 220 ) );
 
-    wxSize dlgSize( cfg->m_SymChooserPanel.width > 0 ?
-                    cfg->m_SymChooserPanel.width : HorizPixelsFromDU( 390 ),
-                    cfg->m_SymChooserPanel.height > 0 ?
-                    cfg->m_SymChooserPanel.height : VertPixelsFromDU( 300 ) );
-    SetSize( dlgSize );
+        if( m_vsplitter )
+            m_vsplitter->SetSashPosition( panelCfg.sash_pos_v > 0 ? panelCfg.sash_pos_v :
+                                                                    VertPixelsFromDU( 230 ) );
+
+        wxSize dlgSize( panelCfg.width > 0 ? panelCfg.width : HorizPixelsFromDU( 390 ),
+                        panelCfg.height > 0 ? panelCfg.height : VertPixelsFromDU( 300 ) );
+        SetSize( dlgSize );
+    }
 
     SetInitialFocus( m_tree );
     okButton->SetDefault();
@@ -183,7 +187,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     if( m_details )
         m_details->Connect( wxEVT_CHAR_HOOK,
                             wxKeyEventHandler( DIALOG_CHOOSE_COMPONENT::OnCharHook ),
-                                               NULL, this );
+                            NULL, this );
 }
 
 
@@ -205,7 +209,7 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
     if( m_details )
         m_details->Disconnect( wxEVT_CHAR_HOOK,
                                wxKeyEventHandler( DIALOG_CHOOSE_COMPONENT::OnCharHook ),
-                                                  NULL, this );
+                               NULL, this );
 
     // I am not sure the following two lines are necessary, but they will not hurt anyone
     m_dbl_click_timer->Stop();

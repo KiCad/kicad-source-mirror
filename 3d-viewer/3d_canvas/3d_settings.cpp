@@ -51,13 +51,16 @@ EDA_3D_SETTINGS G_null_EDA_3D_SETTINGS;
 
 
 EDA_3D_SETTINGS::EDA_3D_SETTINGS() :
-    m_currentCamera( m_trackBallCamera ),
-    m_trackBallCamera( RANGE_SCALE_3D )
+        m_board( nullptr ),
+        m_3d_model_manager( nullptr ),
+        m_colors( nullptr ),
+        m_layerZcoordTop(),
+        m_layerZcoordBottom(),
+        m_currentCamera( m_trackBallCamera ),
+        m_trackBallCamera( RANGE_SCALE_3D )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_SETTINGS::EDA_3D_SETTINGS" ) );
 
-    m_board            = NULL;
-    m_3d_model_manager = NULL;
     m_3D_grid_type     = GRID3D_TYPE::NONE;
     m_drawFlags.resize( FL_LAST, false );
 
@@ -91,9 +94,6 @@ EDA_3D_SETTINGS::EDA_3D_SETTINGS() :
 
     m_calc_seg_min_factor3DU = 0.0f;
     m_calc_seg_max_factor3DU = 0.0f;
-
-    memset( m_layerZcoordTop, 0, sizeof( m_layerZcoordTop ) );
-    memset( m_layerZcoordBottom, 0, sizeof( m_layerZcoordBottom ) );
 
     SetFlag( FL_USE_REALISTIC_MODE, true );
     SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, true );

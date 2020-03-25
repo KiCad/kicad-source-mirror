@@ -30,9 +30,10 @@
 #include <widgets/wx_grid.h>
 
 
-PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( PCB_EDIT_FRAME* aFrame, PAGED_DIALOG* aWindow ) :
-    PANEL_PCBNEW_ACTION_PLUGINS_BASE( aWindow->GetTreebook() ),
-    m_frame( aFrame )
+PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( PCB_EDIT_FRAME* aFrame,
+                                                          PAGED_DIALOG* aWindow ) :
+        PANEL_PCBNEW_ACTION_PLUGINS_BASE( aWindow->GetTreebook() ),
+        m_frame( aFrame )
 {
     m_genericIcon = KiBitmap( hammer_xpm );
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
@@ -138,15 +139,20 @@ void PANEL_PCBNEW_ACTION_PLUGINS::OnReloadButtonClick( wxCommandEvent& event )
 
 bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataFromWindow()
 {
-    auto settings = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+    PCBNEW_SETTINGS* settings = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( settings );
 
-    settings->m_VisibleActionPlugins.clear();
+    if( settings )
+    {
+        settings->m_VisibleActionPlugins.clear();
 
-    for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
-        settings->m_VisibleActionPlugins.emplace_back( std::make_pair(
-                m_grid->GetCellValue( ii, COLUMN_PATH ),
-                m_grid->GetCellValue( ii, COLUMN_VISIBLE ) == wxT( "1" ) ) );
+        for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
+        {
+            settings->m_VisibleActionPlugins.emplace_back( std::make_pair(
+                    m_grid->GetCellValue( ii, COLUMN_PATH ),
+                    m_grid->GetCellValue( ii, COLUMN_VISIBLE ) == wxT( "1" ) ) );
+        }
+    }
 
     return true;
 }
@@ -155,6 +161,7 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataFromWindow()
 bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 {
     m_grid->Freeze();
+
     if( m_grid->GetNumberRows() != 0 )
         m_grid->DeleteRows( 0, m_grid->GetNumberRows() );
 
@@ -173,21 +180,14 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
         m_grid->SetCellRenderer( row, COLUMN_VISIBLE, new wxGridCellBoolRenderer() );
         m_grid->SetCellAlignment( row, COLUMN_VISIBLE, wxALIGN_CENTER, wxALIGN_CENTER );
 
-        bool showButton = m_frame->GetActionPluginButtonVisible(
-                ap->GetPluginPath(), ap->GetShowToolbarButton() );
+        bool showButton = m_frame->GetActionPluginButtonVisible( ap->GetPluginPath(),
+                                                                 ap->GetShowToolbarButton() );
 
         m_grid->SetCellValue( row, COLUMN_VISIBLE, showButton ? wxT( "1" ) : wxEmptyString );
 
-        // Name
         m_grid->SetCellValue( row, COLUMN_NAME, ap->GetName() );
-
-        // Category
         m_grid->SetCellValue( row, COLUMN_CATEGORY, ap->GetCategoryName() );
-
-        // Description
         m_grid->SetCellValue( row, COLUMN_DESCRIPTION, ap->GetDescription() );
-
-        // Path
         m_grid->SetCellValue( row, COLUMN_PATH, ap->GetPluginPath() );
     }
 

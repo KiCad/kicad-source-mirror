@@ -19,12 +19,12 @@
  */
 
 #include <3d_enums.h>
-#include <settings/common_settings.h>
 #include <settings/parameters.h>
-#include <settings/settings_manager.h>
 #include <wx/config.h>
 
 #include "3d_viewer_settings.h"
+
+using KIGFX::COLOR4D;
 
 ///! Update the schema version whenever a migration is required
 const int viewer3dSchemaVersion = 0;

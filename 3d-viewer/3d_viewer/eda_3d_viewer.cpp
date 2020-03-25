@@ -376,7 +376,7 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    auto cfg = dynamic_cast<EDA_3D_VIEWER_SETTINGS*>( aCfg );
+    EDA_3D_VIEWER_SETTINGS* cfg = dynamic_cast<EDA_3D_VIEWER_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::LoadSettings" );
@@ -400,55 +400,51 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
     set_color( colors->GetColor( LAYER_3D_SOLDERMASK ),        m_settings.m_SolderMaskColorTop );
     set_color( colors->GetColor( LAYER_3D_SOLDERPASTE ),       m_settings.m_SolderPasteColor );
 
-    m_settings.SetFlag( FL_USE_REALISTIC_MODE, cfg->m_Render.realistic );
+    if( cfg )
+    {
+#define TRANSER_SETTING( flag, field ) m_settings.SetFlag( flag, cfg->m_Render.field )
 
-    m_settings.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, cfg->m_Render.subtract_mask_from_silk );
+        TRANSER_SETTING( FL_USE_REALISTIC_MODE,      realistic );
+        TRANSER_SETTING( FL_SUBTRACT_MASK_FROM_SILK, subtract_mask_from_silk );
 
-    // OpenGL options
-    m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS,  cfg->m_Render.opengl_copper_thickness );
+        // OpenGL options
+        TRANSER_SETTING( FL_RENDER_OPENGL_COPPER_THICKNESS, opengl_copper_thickness );
+        TRANSER_SETTING( FL_RENDER_OPENGL_SHOW_MODEL_BBOX,  opengl_show_model_bbox );
 
-    m_settings.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX,   cfg->m_Render.opengl_show_model_bbox );
+        // Raytracing options
+        TRANSER_SETTING( FL_RENDER_RAYTRACING_SHADOWS,             raytrace_shadows );
+        TRANSER_SETTING( FL_RENDER_RAYTRACING_BACKFLOOR,           raytrace_backfloor );
+        TRANSER_SETTING( FL_RENDER_RAYTRACING_REFRACTIONS,         raytrace_refractions );
+        TRANSER_SETTING( FL_RENDER_RAYTRACING_REFLECTIONS,         raytrace_reflections );
+        TRANSER_SETTING( FL_RENDER_RAYTRACING_POST_PROCESSING,     raytrace_post_processing );
+        TRANSER_SETTING( FL_RENDER_RAYTRACING_ANTI_ALIASING,       raytrace_anti_aliasing );
+        TRANSER_SETTING( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, raytrace_procedural_textures );
 
-    // Raytracing options
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_SHADOWS,       cfg->m_Render.raytrace_shadows );
+        TRANSER_SETTING( FL_AXIS,                            show_axis );
+        TRANSER_SETTING( FL_MODULE_ATTRIBUTES_NORMAL,        show_footprints_normal );
+        TRANSER_SETTING( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, show_footprints_insert );
+        TRANSER_SETTING( FL_MODULE_ATTRIBUTES_VIRTUAL,       show_footprints_virtual );
+        TRANSER_SETTING( FL_ZONE,                            show_zones );
+        TRANSER_SETTING( FL_ADHESIVE,                        show_adhesive );
+        TRANSER_SETTING( FL_SILKSCREEN,                      show_silkscreen );
+        TRANSER_SETTING( FL_SOLDERMASK,                      show_soldermask );
+        TRANSER_SETTING( FL_SOLDERPASTE,                     show_solderpaste );
+        TRANSER_SETTING( FL_COMMENTS,                        show_comments );
+        TRANSER_SETTING( FL_ECO,                             show_eco );
+        TRANSER_SETTING( FL_SHOW_BOARD_BODY,                 show_board_body );
 
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_BACKFLOOR,     cfg->m_Render.raytrace_backfloor );
+        m_settings.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
 
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFRACTIONS,   cfg->m_Render.raytrace_refractions );
+        RENDER_ENGINE engine = static_cast<RENDER_ENGINE>( cfg->m_Render.engine );
+        wxLogTrace( m_logTrace, engine == RENDER_ENGINE::RAYTRACING ?
+                                "EDA_3D_VIEWER::LoadSettings render setting Ray Trace" :
+                                "EDA_3D_VIEWER::LoadSettings render setting OpenGL" );
+        m_settings.RenderEngineSet( engine );
 
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFLECTIONS,   cfg->m_Render.raytrace_reflections );
+        m_settings.MaterialModeSet( static_cast<MATERIAL_MODE>( cfg->m_Render.material_mode ) );
 
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING,
-            cfg->m_Render.raytrace_post_processing );
-
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING, cfg->m_Render.raytrace_anti_aliasing );
-
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES,
-            cfg->m_Render.raytrace_procedural_textures );
-
-    m_settings.SetFlag( FL_AXIS, cfg->m_Render.show_axis );
-
-    m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, cfg->m_Render.show_footprints_normal );
-    m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, cfg->m_Render.show_footprints_insert );
-    m_settings.SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL, cfg->m_Render.show_footprints_virtual );
-
-    m_settings.SetFlag( FL_ZONE, cfg->m_Render.show_zones );
-    m_settings.SetFlag( FL_ADHESIVE, cfg->m_Render.show_adhesive );
-    m_settings.SetFlag( FL_SILKSCREEN, cfg->m_Render.show_silkscreen );
-    m_settings.SetFlag( FL_SOLDERMASK, cfg->m_Render.show_soldermask );
-    m_settings.SetFlag( FL_SOLDERPASTE, cfg->m_Render.show_solderpaste );
-    m_settings.SetFlag( FL_COMMENTS, cfg->m_Render.show_comments );
-    m_settings.SetFlag( FL_ECO, cfg->m_Render.show_eco );
-    m_settings.SetFlag( FL_SHOW_BOARD_BODY, cfg->m_Render.show_board_body );
-
-    m_settings.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
-
-    RENDER_ENGINE engine = static_cast<RENDER_ENGINE>( cfg->m_Render.engine );
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER::LoadSettings render setting %s",
-            ( engine == RENDER_ENGINE::RAYTRACING ) ? "Ray Trace" : "OpenGL" );
-    m_settings.RenderEngineSet( engine );
-
-    m_settings.MaterialModeSet( static_cast<MATERIAL_MODE>( cfg->m_Render.material_mode ) );
+#undef TRANSFER_SETTING
+    }
 }
 
 
@@ -476,43 +472,49 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
     save_color( m_settings.m_SolderMaskColorTop, LAYER_3D_SOLDERMASK );
     save_color( m_settings.m_SolderPasteColor,   LAYER_3D_SOLDERPASTE );
 
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER::SaveSettings render setting %s",
-            ( m_settings.RenderEngineGet() == RENDER_ENGINE::RAYTRACING ) ? "Ray Trace" :
-                                                                            "OpenGL" );
+    wxLogTrace( m_logTrace, m_settings.RenderEngineGet() == RENDER_ENGINE::RAYTRACING ?
+                            "EDA_3D_VIEWER::SaveSettings render setting Ray Trace" :
+                            "EDA_3D_VIEWER::SaveSettings render setting OpenGL" );
 
-    cfg->m_Render.engine        = static_cast<int>( m_settings.RenderEngineGet() );
-    cfg->m_Render.grid_type     = static_cast<int>( m_settings.GridGet() );
-    cfg->m_Render.material_mode = static_cast<int>( m_settings.MaterialModeGet() );
+    if( cfg )
+    {
+#define TRANSFER_SETTING( field, flag ) cfg->m_Render.field = m_settings.GetFlag( flag )
 
-    cfg->m_Render.opengl_copper_thickness = m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS );
-    cfg->m_Render.opengl_show_model_bbox = m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
-    cfg->m_Render.raytrace_anti_aliasing = m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING );
-    cfg->m_Render.raytrace_backfloor     = m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR );
-    cfg->m_Render.raytrace_post_processing =
-            m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING );
-    cfg->m_Render.raytrace_procedural_textures =
-            m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES );
-    cfg->m_Render.raytrace_reflections    = m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS );
-    cfg->m_Render.raytrace_refractions    = m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS );
-    cfg->m_Render.raytrace_shadows        = m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS );
-    cfg->m_Render.realistic               = m_settings.GetFlag( FL_USE_REALISTIC_MODE );
-    cfg->m_Render.show_adhesive           = m_settings.GetFlag( FL_ADHESIVE );
-    cfg->m_Render.show_axis               = m_settings.GetFlag( FL_AXIS );
-    cfg->m_Render.show_board_body         = m_settings.GetFlag( FL_SHOW_BOARD_BODY );
-    cfg->m_Render.show_comments           = m_settings.GetFlag( FL_COMMENTS );
-    cfg->m_Render.show_eco                = m_settings.GetFlag( FL_ECO );
-    cfg->m_Render.show_footprints_insert = m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT );
-    cfg->m_Render.show_footprints_normal  = m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL );
-    cfg->m_Render.show_footprints_virtual = m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL );
-    cfg->m_Render.show_silkscreen         = m_settings.GetFlag( FL_SILKSCREEN );
-    cfg->m_Render.show_soldermask         = m_settings.GetFlag( FL_SOLDERMASK );
-    cfg->m_Render.show_solderpaste        = m_settings.GetFlag( FL_SOLDERPASTE );
-    cfg->m_Render.show_zones              = m_settings.GetFlag( FL_ZONE );
-    cfg->m_Render.subtract_mask_from_silk = m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK );
+        cfg->m_Render.engine        = static_cast<int>( m_settings.RenderEngineGet() );
+        cfg->m_Render.grid_type     = static_cast<int>( m_settings.GridGet() );
+        cfg->m_Render.material_mode = static_cast<int>( m_settings.MaterialModeGet() );
+
+        TRANSFER_SETTING( opengl_copper_thickness,      FL_RENDER_OPENGL_COPPER_THICKNESS );
+        TRANSFER_SETTING( opengl_show_model_bbox,       FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
+        TRANSFER_SETTING( raytrace_anti_aliasing,       FL_RENDER_RAYTRACING_ANTI_ALIASING );
+        TRANSFER_SETTING( raytrace_backfloor,           FL_RENDER_RAYTRACING_BACKFLOOR );
+        TRANSFER_SETTING( raytrace_post_processing,     FL_RENDER_RAYTRACING_POST_PROCESSING );
+        TRANSFER_SETTING( raytrace_procedural_textures, FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES );
+        TRANSFER_SETTING( raytrace_reflections,         FL_RENDER_RAYTRACING_REFLECTIONS );
+        TRANSFER_SETTING( raytrace_refractions,         FL_RENDER_RAYTRACING_REFRACTIONS );
+        TRANSFER_SETTING( raytrace_shadows,             FL_RENDER_RAYTRACING_SHADOWS );
+
+        TRANSFER_SETTING( realistic,               FL_USE_REALISTIC_MODE );
+        TRANSFER_SETTING( show_adhesive,           FL_ADHESIVE );
+        TRANSFER_SETTING( show_axis,               FL_AXIS );
+        TRANSFER_SETTING( show_board_body,         FL_SHOW_BOARD_BODY );
+        TRANSFER_SETTING( show_comments,           FL_COMMENTS );
+        TRANSFER_SETTING( show_eco,                FL_ECO );
+        TRANSFER_SETTING( show_footprints_insert,  FL_MODULE_ATTRIBUTES_NORMAL_INSERT );
+        TRANSFER_SETTING( show_footprints_normal,  FL_MODULE_ATTRIBUTES_NORMAL );
+        TRANSFER_SETTING( show_footprints_virtual, FL_MODULE_ATTRIBUTES_VIRTUAL );
+        TRANSFER_SETTING( show_silkscreen,         FL_SILKSCREEN );
+        TRANSFER_SETTING( show_soldermask,         FL_SOLDERMASK );
+        TRANSFER_SETTING( show_solderpaste,        FL_SOLDERPASTE );
+        TRANSFER_SETTING( show_zones,              FL_ZONE );
+        TRANSFER_SETTING( subtract_mask_from_silk, FL_SUBTRACT_MASK_FROM_SILK );
+
+#undef TRANSER_SETTING
+    }
 }
 
 
-void EDA_3D_VIEWER::SynchroniseColoursWithBoard( void )
+void EDA_3D_VIEWER::SynchroniseColoursWithBoard()
 {
     BOARD*                 brd       = GetBoard();
     const FAB_LAYER_COLOR* stdColors = GetColorStandardList();
