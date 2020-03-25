@@ -70,15 +70,25 @@ class BRDITEMS_PLOTTER : public PCB_PLOT_PARAMS
     /// Pointer to color settings that should be used for plotting
     COLOR_SETTINGS* m_colors;
 
+    /// Dummy colors object that can be created if there is no Pgm context
+    std::unique_ptr<COLOR_SETTINGS> m_default_colors;
+
 public:
-    BRDITEMS_PLOTTER( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS& aPlotOpts ) :
-        PCB_PLOT_PARAMS( aPlotOpts )
+    BRDITEMS_PLOTTER( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS& aPlotOpts )
+            : PCB_PLOT_PARAMS( aPlotOpts ), m_default_colors()
     {
         m_plotter = aPlotter;
         m_board = aBoard;
 
-        // TODO(JE) do we ever need to plot outside the context of Pgm()?
-        m_colors = Pgm().GetSettingsManager().GetColorSettings();
+        if( PgmOrNull() )
+        {
+            m_colors = Pgm().GetSettingsManager().GetColorSettings();
+        }
+        else
+        {
+            m_default_colors = std::make_unique<COLOR_SETTINGS>();
+            m_colors         = m_default_colors.get();
+        }
     }
 
     /**
