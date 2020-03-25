@@ -373,6 +373,14 @@ void LIB_EDIT_FRAME::OnSave( wxCommandEvent& aEvent )
     }
     else
     {
+        wxFileName fn = Prj().SchSymbolLibTable()->GetFullURI( libName );
+        wxFileName docFileName = fn;
+        docFileName.SetExt( DOC_EXT );
+
+        // Verify the user has write privileges before attempting to save the library file.
+        if( !IsWritable( fn ) || !IsWritable( docFileName ) )
+            return;
+
         // Save Part
         if( m_libMgr->FlushPart( partName, libName ) )
             m_libMgr->ClearPartModified( partName, libName );
