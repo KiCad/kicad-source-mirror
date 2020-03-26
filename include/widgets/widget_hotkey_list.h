@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file widget_hotkey_list.h
- */
-
 #ifndef __widget_hotkey_list__
 #define __widget_hotkey_list__
 
@@ -33,7 +29,7 @@
 #include <vector>
 
 #include <wx/treelist.h>
-#include <widgets/two_column_tree_list.h>
+#include <wx/dataview.h>
 
 #include <hotkeys_basic.h>
 #include <hotkey_store.h>
@@ -41,24 +37,27 @@
 
 class WIDGET_HOTKEY_CLIENT_DATA;
 
-class WIDGET_HOTKEY_LIST : public TWO_COLUMN_TREE_LIST
+class WIDGET_HOTKEY_LIST : public wxTreeListCtrl
 {
     HOTKEY_STORE&               m_hk_store;
     bool                        m_readOnly;
 
     wxTreeListItem              m_context_menu_item;
 
+    int                         m_rubber_band_column;
+    int                         m_clamped_min_width;
+
+    static std::map<wxString, int> m_width_cache;
+
     /**
      * Method GetHKClientData
-     * Return the WIDGET_HOTKEY_CLIENT_DATA for the given item, or NULL if the
-     * item is invalid.
+     * Return the WIDGET_HOTKEY_CLIENT_DATA for the given item, or NULL if the item is invalid.
      */
     WIDGET_HOTKEY_CLIENT_DATA* GetHKClientData( wxTreeListItem aItem );
 
     /**
-     * Get the WIDGET_HOTKEY_CLIENT_DATA form an item and assert if it isn't
-     * found. This is for use when the data not being present indicates an
-     * error.
+     * Get the WIDGET_HOTKEY_CLIENT_DATA form an item and assert if it isn't found. This is for
+     * use when the data not being present indicates an error.
      */
     WIDGET_HOTKEY_CLIENT_DATA* getExpectedHkClientData( wxTreeListItem aItem );
 
@@ -80,8 +79,8 @@ class WIDGET_HOTKEY_LIST : public TWO_COLUMN_TREE_LIST
     /**
      * Attempt to change the given hotkey to the given key code.
      *
-     * If the hotkey conflicts, the user is prompted to change anyway (and
-     * in doing so, unset the conflicting key), or cancel the attempt.
+     * If the hotkey conflicts, the user is prompted to change anyway (and in doing so, unset
+     * the conflicting key), or cancel the attempt.
      *
      * @param aHotkey the change-able hotkey to try to change
      * @param aKey the key code to change it to
@@ -89,7 +88,6 @@ class WIDGET_HOTKEY_LIST : public TWO_COLUMN_TREE_LIST
     void changeHotkey( HOTKEY& aHotkey, long aKey );
 
 protected:
-
     /**
      * Method EditItem
      * Prompt the user for a new hotkey given a list item.
@@ -127,14 +125,20 @@ protected:
     void OnSize( wxSizeEvent& aEvent );
 
     /**
+     * Memoized version of wxWidthFor(), which returns the width in pixels required to display
+     * a string. The wx version is REALLY SLOW on macOS.
+     */
+    int MemoWidthFor( const wxString& aStr );
+
+    /**
      * Method ResolveKeyConflicts
-     * Check if we can set a hotkey, and prompt the user if there is a conflict between
-     * keys. The key code should already have been checked that it's not for the same
-     * entry as it's current in, or else this method will prompt for the self-change.
+     * Check if we can set a hotkey, and prompt the user if there is a conflict between keys.
+     * The key code should already have been checked that it's not for the same entry as it's
+     * current in, or else this method will prompt for the self-change.
      *
      * The method will do conflict resolution depending on aSectionTag.
-     * g_CommonSectionTag means the key code must only be checkd with the aSectionTag
-     * section and g_CommonSectionTag section.
+     * g_CommonSectionTag means the key code must only be checkd with the aSectionTag section
+     * and g_CommonSectionTag section.
      *
      * @param aKey - key to check
      * @param aActionName - name of the action into which the key is proposed to be installed
@@ -165,8 +169,8 @@ public:
 
     /**
      * Set hotkeys in the control to default or original values.
-     * @param aResetToDefault if true,.reset to the defaults inherent to the
-     * hotkeym, else reset to the value they had when the dialog was invoked.
+     * @param aResetToDefault if true, reset to the defaults inherent to the hotkeys, else
+     *                        reset to the value they had when the dialog was invoked.
      */
     void ResetAllHotkeys( bool aResetToDefault );
 
