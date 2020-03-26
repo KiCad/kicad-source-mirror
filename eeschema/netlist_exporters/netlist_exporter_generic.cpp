@@ -448,7 +448,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
             {
                 XNODE*     xfield;
                 xfields->AddChild( xfield = node( "field", fieldList[i].GetText() ) );
-                xfield->AddAttribute( "name", fieldList[i].GetName(false) );
+                xfield->AddAttribute( "name", fieldList[i].GetCanonicalName() );
             }
         }
 

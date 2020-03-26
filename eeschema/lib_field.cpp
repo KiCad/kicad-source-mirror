@@ -384,22 +384,26 @@ COLOR4D LIB_FIELD::GetDefaultColor()
 }
 
 
-wxString LIB_FIELD::GetName( bool aTranslate ) const
+wxString LIB_FIELD::GetName( bool aUseDefaultName ) const
+{
+    if( !m_name.IsEmpty() )
+        return m_name;
+    else if( aUseDefaultName )
+        return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
+}
+
+
+wxString LIB_FIELD::GetCanonicalName() const
 {
     switch( m_id )
     {
-    case REFERENCE: return aTranslate ? _( "Reference" ) : wxT( "Reference" );
-    case VALUE:     return aTranslate ? _( "Value" ) : wxT( "Value" );
-    case FOOTPRINT: return aTranslate ? _( "Footprint" ) : wxT( "Footprint" );
-    case DATASHEET: return aTranslate ? _( "Datasheet" ) : wxT( "Datasheet" );
-
-    default:
-        if( m_name.IsEmpty() )
-            return aTranslate ? wxString::Format( _( "Field%d" ), m_id )
-                              : wxString::Format( wxT( "Field%d" ), m_id );
-        else
-            return m_name;
+    case  REFERENCE: return wxT( "Reference" );
+    case  VALUE:     return wxT( "Value" );
+    case  FOOTPRINT: return wxT( "Footprint" );
+    case  DATASHEET: return wxT( "Datasheet" );
     }
+
+    return m_name;
 }
 
 
@@ -425,7 +429,8 @@ void LIB_FIELD::SetName( const wxString& aName )
 
 wxString LIB_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Field %s \"%s\"" ), GetName( TRANSLATE_FIELD_NAME ),
+    return wxString::Format( _( "Field %s \"%s\"" ),
+                             GetName(),
                              ShortenedShownText() );
 }
 
@@ -459,7 +464,7 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, BLUE ) );
 
     // Display field name (ref, value ...)
-    aList.push_back( MSG_PANEL_ITEM( _( "Field" ), GetName( TRANSLATE_FIELD_NAME ), BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Field" ), GetName(), BROWN ) );
 
     // Display field text:
     aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetShownText(), BROWN ) );

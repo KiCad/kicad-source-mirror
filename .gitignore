@@ -17,8 +17,8 @@ eeschema/cmp_library_lexer.h
 eeschema/cmp_library_keywords.*
 eeschema/dialogs/dialog_bom_cfg_keywords.cpp
 eeschema/dialogs/dialog_bom_cfg_lexer.h
-eeschema/template_fieldnames_keywords.*
-eeschema/template_fieldnames_lexer.h
+common/template_fieldnames_keywords.cpp
+common/template_fieldnames_lexer.h
 eeschema/schematic_keywords.*
 pcbnew/pcb_plot_params_keywords.cpp
 pcbnew/pcb_plot_params_lexer.h

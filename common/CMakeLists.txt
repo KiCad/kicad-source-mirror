@@ -184,6 +184,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_common_settings.cpp
     dialogs/panel_common_settings_base.cpp
     dialogs/panel_hotkeys_editor.cpp
+    dialogs/panel_text_variables.cpp
+    dialogs/panel_text_variables_base.cpp
     dialogs/wx_html_report_panel.cpp
     dialogs/wx_html_report_panel_base.cpp
     )
@@ -334,6 +336,7 @@ set( COMMON_SRCS
     searchhelpfilefullpath.cpp
     status_popup.cpp
     systemdirsappend.cpp
+    template_fieldnames.cpp
     tools_holder.cpp
     trace_helpers.cpp
     undo_redo_container.cpp
@@ -543,6 +546,15 @@ make_lexer(
     lib_table_lexer.h
     lib_table_keywords.cpp
     LIB_TABLE_T
+    )
+
+# auto-generate s-expression template fieldnames lexer and keywords.
+make_lexer(
+    common
+    template_fieldnames.keywords
+    template_fieldnames_lexer.h
+    template_fieldnames_keywords.cpp
+    TFIELD_T
     )
 
 # auto-generate page layout reader s-expression page_layout_reader_lexer.h

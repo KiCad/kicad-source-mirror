@@ -148,16 +148,10 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    aFrame,
 
     if( aPlotFrameRef )
     {
-        COLOR4D color = plotter->GetColorMode() ?
-                        plotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_WORKSHEET ) :
-                        COLOR4D::BLACK;
-
-        PlotWorkSheet( plotter, aFrame->GetTitleBlock(),
-                       aFrame->GetPageSettings(),
+        PlotWorkSheet( plotter, &aScreen->Prj(), aFrame->GetTitleBlock(), pageInfo,
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
-                       aFrame->GetScreenDesc(),
-                       aScreen->GetFileName(),
-                       color );
+                       aFrame->GetScreenDesc(), aScreen->GetFileName(),
+                       plotter->GetColorMode() ? COLOR4D::UNSPECIFIED : COLOR4D::BLACK );
     }
 
     aScreen->Plot( plotter );

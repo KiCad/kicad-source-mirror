@@ -299,7 +299,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     m_page->SetHeightMils( 5000 );
     m_page->SetWidthMils( 5500 );
 
-    m_ws = new KIGFX::WS_PROXY_VIEW_ITEM( static_cast<int>( IU_PER_MILS ), m_page, m_titleBlock );
+    m_ws = new KIGFX::WS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr, m_titleBlock );
     m_ws->SetColorLayer( LAYER_SCHEMATIC_WORKSHEET );
     view->Add( m_ws );
 

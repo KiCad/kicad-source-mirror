@@ -890,9 +890,9 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, int aNestLevel )
     m_out->Print( aNestLevel + 1, "(uuid %s)\n",
                   m_out->Quotew( aSymbol->m_Uuid.AsString() ).c_str() );
 
-    for( auto field : aSymbol->GetFields() )
+    for( SCH_FIELD& field : aSymbol->GetFields() )
     {
-        saveField( field, aNestLevel + 1 );
+        saveField( &field, aNestLevel + 1 );
     }
 
     // @todo Save sheet UUID at top level of schematic file.  This will require saving from
@@ -1304,7 +1304,7 @@ LIB_PART* SCH_SEXPR_PLUGIN_CACHE::removeSymbol( LIB_PART* aPart )
                 {
                     LIB_FIELD& field = static_cast<LIB_FIELD&>( drawItem );
 
-                    if( firstChild->FindField( field.GetName( NATIVE_FIELD_NAME ) ) )
+                    if( firstChild->FindField( field.GetCanonicalName() ) )
                         continue;
                 }
 
@@ -1797,7 +1797,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
 {
     wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
 
-    wxString fieldName = aField->GetName( NATIVE_FIELD_NAME );
+    wxString fieldName = aField->GetCanonicalName();
 
     // When saving legacy fields, prefix the field name with "ki_" to prevent name clashes
     // with exisiting user defined fields.

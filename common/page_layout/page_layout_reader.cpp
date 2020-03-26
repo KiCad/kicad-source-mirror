@@ -113,6 +113,80 @@ PAGE_LAYOUT_READER_PARSER::PAGE_LAYOUT_READER_PARSER( const char* aLine, const w
 }
 
 
+wxString convertLegacyVariableRefs( const wxString& aTextbase )
+{
+    wxString msg;
+
+    /*
+     * Legacy formats
+     * %% = replaced by %
+     * %K = Kicad version
+     * %Z = paper format name (A4, USLetter)
+     * %Y = company name
+     * %D = date
+     * %R = revision
+     * %S = sheet number
+     * %N = number of sheets
+     * %L = layer name
+     * %Cx = comment (x = 0 to 9 to identify the comment)
+     * %F = filename
+     * %P = sheet path (sheet full name)
+     * %T = title
+     */
+
+    for( unsigned ii = 0; ii < aTextbase.Len(); ii++ )
+    {
+        if( aTextbase[ii] != '%' )
+        {
+            msg << aTextbase[ii];
+            continue;
+        }
+
+        if( ++ii >= aTextbase.Len() )
+            break;
+
+        wxChar format = aTextbase[ii];
+
+        switch( format )
+        {
+            case '%': msg += '%';                       break;
+            case 'D': msg += wxT( "${ISSUE_DATE}" );    break;
+            case 'R': msg += wxT( "${REVISION}" );      break;
+            case 'K': msg += wxT( "${KICAD_VERSION}" ); break;
+            case 'Z': msg += wxT( "${PAPER}" );         break;
+            case 'S': msg += wxT( "${#}" );             break;
+            case 'N': msg += wxT( "${##}" );            break;
+            case 'F': msg += wxT( "${FILENAME}" );      break;
+            case 'L': msg += wxT( "${LAYER}" );         break;
+            case 'P': msg += wxT( "${SHEETNAME}" );     break;
+            case 'Y': msg += wxT( "${COMPANY}" );       break;
+            case 'T': msg += wxT( "${TITLE}" );         break;
+            case 'C':
+                format = aTextbase[++ii];
+
+                switch( format )
+                {
+                case '0': msg += wxT( "${COMMENT0}" );  break;
+                case '1': msg += wxT( "${COMMENT1}" );  break;
+                case '2': msg += wxT( "${COMMENT2}" );  break;
+                case '3': msg += wxT( "${COMMENT3}" );  break;
+                case '4': msg += wxT( "${COMMENT4}" );  break;
+                case '5': msg += wxT( "${COMMENT5}" );  break;
+                case '6': msg += wxT( "${COMMENT6}" );  break;
+                case '7': msg += wxT( "${COMMENT7}" );  break;
+                case '8': msg += wxT( "${COMMENT8}" );  break;
+                case '9': msg += wxT( "${COMMENT9}" );  break;
+                }
+
+            default:
+                break;
+        }
+    }
+
+    return msg;
+}
+
+
 void PAGE_LAYOUT_READER_PARSER::Parse( WS_DATA_MODEL* aLayout )
 {
     WS_DATA_ITEM* item;
@@ -158,7 +232,7 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WS_DATA_MODEL* aLayout )
 
         case T_tbtext:
             NeedSYMBOLorNUMBER();
-            item = new WS_DATA_ITEM_TEXT( FromUTF8() );
+            item = new WS_DATA_ITEM_TEXT( convertLegacyVariableRefs( FromUTF8() ) );
             parseText( (WS_DATA_ITEM_TEXT*) item );
             aLayout->Append( item );
             break;
@@ -169,6 +243,7 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WS_DATA_MODEL* aLayout )
         }
     }
 }
+
 
 void PAGE_LAYOUT_READER_PARSER::parseSetup( WS_DATA_MODEL* aLayout )
 {

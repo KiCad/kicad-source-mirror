@@ -886,7 +886,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
     if( ( GetTextMarkupFlags() & ENABLE_SUPERSCRIPT_MARKUP ) && aText.Contains( wxT( "^" ) ) )
         processSuperSub = true;
 
-    if( textAsLines || containsNonAsciiChars( aText ) || aMultilineAllowed || processSuperSub )
+    if( m_textAsLines || containsNonAsciiChars( aText ) || aMultilineAllowed || processSuperSub )
     {
         // output text as graphics.
         // Perhaps multiline texts could be handled as DXF text entity

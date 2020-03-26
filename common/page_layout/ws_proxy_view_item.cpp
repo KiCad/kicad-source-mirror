@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2013-2019 CERN
+ * Copyright (C) 2013-2020 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,8 +25,6 @@
 #include <ws_proxy_view_item.h>
 #include <ws_draw_item.h>
 #include <ws_data_item.h>
-#include <gal/graphics_abstraction_layer.h>
-#include <painter.h>
 #include <layers_id_colors_and_visibility.h>
 #include <page_info.h>
 #include <view/view.h>
@@ -35,27 +33,16 @@
 using namespace KIGFX;
 
 WS_PROXY_VIEW_ITEM::WS_PROXY_VIEW_ITEM( int aMils2IUscalefactor, const PAGE_INFO* aPageInfo,
-                                        const TITLE_BLOCK* aTitleBlock ) :
+                                        const PROJECT* aProject, const TITLE_BLOCK* aTitleBlock ) :
         EDA_ITEM( NOT_USED ), // this item is never added to a BOARD so it needs no type
         m_mils2IUscalefactor( aMils2IUscalefactor ),
         m_titleBlock( aTitleBlock ),
         m_pageInfo( aPageInfo ),
         m_sheetNumber( 1 ),
         m_sheetCount( 1 ),
+        m_project( aProject ),
         m_colorLayer( LAYER_WORKSHEET )
 {
-}
-
-
-void WS_PROXY_VIEW_ITEM::SetPageInfo( const PAGE_INFO* aPageInfo )
-{
-    m_pageInfo = aPageInfo;
-}
-
-
-void WS_PROXY_VIEW_ITEM::SetTitleBlock( const TITLE_BLOCK* aTitleBlock )
-{
-    m_titleBlock = aTitleBlock;
 }
 
 
@@ -95,6 +82,7 @@ void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
     drawList.SetSheetCount( m_sheetCount );
     drawList.SetFileName( fileName );
     drawList.SetSheetName( sheetName );
+    drawList.SetProject( m_project );
 
     drawList.BuildWorkSheetGraphicList( *m_pageInfo, *m_titleBlock );
 

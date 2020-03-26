@@ -341,6 +341,7 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 {
     PCB_BASE_EDIT_FRAME::SetBoard( aBoard );
 
+    aBoard->SetProject( &Prj() );
     aBoard->GetConnectivity()->Build( aBoard );
 
     // reload the worksheet
@@ -369,7 +370,7 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     // Prepare worksheet template
     KIGFX::WS_PROXY_VIEW_ITEM* worksheet;
     worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS ,&m_Pcb->GetPageSettings(),
-                                               &m_Pcb->GetTitleBlock() );
+                                               m_Pcb->GetProject(), &m_Pcb->GetTitleBlock() );
     worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
 
     BASE_SCREEN* screen = GetScreen();

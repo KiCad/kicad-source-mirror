@@ -57,9 +57,9 @@ wxString GetDefaultPlotExtension( PLOT_FORMAT aFormat )
 }
 
 
-void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
+void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK& aTitleBlock,
                     const PAGE_INFO& aPageInfo, int aSheetNumber, int aNumberOfSheets,
-                    const wxString &aSheetDesc, const wxString &aFilename, const COLOR4D aColor )
+                    const wxString &aSheetDesc, const wxString &aFilename, COLOR4D aColor )
 {
     /* Note: Page sizes values are given in mils
      */
@@ -83,7 +83,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     drawList.SetSheetCount( aNumberOfSheets );
     drawList.SetFileName( fn.GetFullName() );   // Print only the short filename
     drawList.SetSheetName( aSheetDesc );
-
+    drawList.SetProject( aProject );
 
     drawList.BuildWorkSheetGraphicList( aPageInfo, aTitleBlock );
 

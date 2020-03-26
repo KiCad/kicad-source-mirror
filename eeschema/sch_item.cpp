@@ -92,8 +92,8 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
         for( SCH_PIN* pin : component->GetSchPins() )
             pin->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
 
-        for( SCH_FIELD* field : component->GetFields() )
-            field->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+        for( SCH_FIELD& field : component->GetFields() )
+            field.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
     }
 
     if( newItem->Type() == SCH_SHEET_T )

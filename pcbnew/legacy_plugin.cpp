@@ -88,6 +88,7 @@
 #include <build_version.h>
 #include <confirm.h>
 #include <math/util.h>      // for KiROUND
+#include <template_fieldnames.h>
 
 typedef LEGACY_PLUGIN::BIU      BIU;
 
@@ -1781,7 +1782,8 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     // convert the "quoted, escaped, UTF8, text" to a wxString, find it by skipping
     // as far forward as needed until the first double quote.
     txt_end = data + ReadDelimitedText( &m_field, data );
-
+    m_field.Replace( "%V", "${VALUE}" );
+    m_field.Replace( "%R", "${REFERENCE}" );
     aText->SetText( m_field );
 
     // after switching to strtok, there's no easy coming back because of the

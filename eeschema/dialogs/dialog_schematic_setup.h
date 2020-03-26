@@ -28,6 +28,7 @@ class PANEL_SETUP_SEVERITIES;
 class PANEL_EESCHEMA_TEMPLATE_FIELDNAMES;
 class PANEL_SETUP_FORMATTING;
 class PANEL_SETUP_PINMAP;
+class PANEL_TEXT_VARIABLES;
 
 
 class DIALOG_SCHEMATIC_SETUP : public PAGED_DIALOG
@@ -45,6 +46,9 @@ protected:
     PANEL_EESCHEMA_TEMPLATE_FIELDNAMES* m_fieldNameTemplates;
     PANEL_SETUP_PINMAP*                 m_pinMap;
     PANEL_SETUP_SEVERITIES*             m_severities;
+    PANEL_TEXT_VARIABLES*               m_textVars;
+
+    std::vector<bool>                   m_macHack;
 
     // event handlers
     void OnPageChange( wxBookCtrlEvent& event );

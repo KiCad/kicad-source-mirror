@@ -50,6 +50,7 @@ using KIGFX::COLOR4D;
 #define GROUP_CVP_EQU       wxT( "/cvpcb/equfiles" )
 
 #define GROUP_SHEET_NAMES   wxT( "/sheetnames" )
+#define GROUP_TEXT_VARS     wxT( "/text_variables" )
 
 #define CONFIG_VERSION      1
 

@@ -53,7 +53,6 @@
 
 int DIALOG_FOOTPRINT_BOARD_EDITOR::m_page = 0;     // remember the last open page during session
 
-
 DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aParent,
                                                               MODULE* aModule ) :
     DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( aParent ),
@@ -156,6 +155,9 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_buttonRemove->SetBitmap( KiBitmap( trash_xpm ) );
 
     FinishDialogSettings();
+
+    for( int i = 0; i < m_NoteBook->GetPageCount(); ++i )
+   	    m_macHack.push_back( true );
 }
 
 
@@ -918,6 +920,29 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnGridSize( wxSizeEvent& aEvent )
     adjustGridColumns( aEvent.GetSize().GetX());
 
     aEvent.Skip();
+}
+
+
+void DIALOG_FOOTPRINT_BOARD_EDITOR::OnPageChange( wxNotebookEvent& aEvent )
+{
+    int page = aEvent.GetSelection();
+
+    // Shouldn't be necessary, but is on at least OSX
+    if( page >= 0 )
+        m_NoteBook->ChangeSelection( (unsigned) page );
+
+#ifdef __WXMAC__
+    // Work around an OSX bug where the wxGrid children don't get placed correctly until
+    // the first resize event
+    if( m_macHack[ page ] )
+    {
+        wxSize pageSize = m_NoteBook->GetPage( page )->GetSize();
+        pageSize.x -= 1;
+
+        m_NoteBook->GetPage( page )->SetSize( pageSize );
+        m_macHack[ page ] = false;
+    }
+#endif
 }
 
 

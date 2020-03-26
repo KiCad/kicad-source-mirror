@@ -100,8 +100,10 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 static PCBNEW_SETTINGS dummyGeneralSettings;
 
 BOARD::BOARD() :
-    BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),
-        m_paper( PAGE_INFO::A4 ), m_NetInfo( this )
+        BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),
+        m_paper( PAGE_INFO::A4 ),
+        m_NetInfo( this ),
+        m_project( nullptr )
 {
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;

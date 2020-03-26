@@ -170,16 +170,10 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
 
     if( aPlotFrameRef )
     {
-        COLOR4D color = plotter->GetColorMode() ?
-                        plotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_WORKSHEET ) :
-                        COLOR4D::BLACK;
-
-        PlotWorkSheet( plotter, m_parent->GetTitleBlock(),
-                       m_parent->GetPageSettings(),
+        PlotWorkSheet( plotter, &aScreen->Prj(), m_parent->GetTitleBlock(), aPageInfo,
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
-                       m_parent->GetScreenDesc(),
-                       aScreen->GetFileName(),
-                       color );
+                       m_parent->GetScreenDesc(), aScreen->GetFileName(),
+                       plotter->GetColorMode() ? COLOR4D::UNSPECIFIED : COLOR4D::BLACK );
     }
 
     aScreen->Plot( plotter );

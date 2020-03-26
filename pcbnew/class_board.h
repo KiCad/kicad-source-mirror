@@ -57,6 +57,7 @@ class REPORTER;
 class SHAPE_POLY_SET;
 class CONNECTIVITY_DATA;
 class COMPONENT;
+class PROJECT;
 
 // Forward declare endpoint from class_track.h
 enum ENDPOINT_T : int;
@@ -185,20 +186,21 @@ private:
 
     LAYER                   m_Layer[PCB_LAYER_ID_COUNT];
 
-                                                    // if true m_highLight_NetCode is used
+                                                        // if true m_highLight_NetCode is used
     HIGH_LIGHT_INFO         m_highLight;                // current high light data
     HIGH_LIGHT_INFO         m_highLightPrevious;        // a previously stored high light data
 
-    int                     m_fileFormatVersionAtLoad;  ///< the version loaded from the file
+    int                     m_fileFormatVersionAtLoad;  // the version loaded from the file
 
     std::shared_ptr<CONNECTIVITY_DATA>      m_connectivity;
 
     BOARD_DESIGN_SETTINGS   m_designSettings;
-    PCBNEW_SETTINGS*        m_generalSettings;      ///< reference only; I have no ownership
+    PCBNEW_SETTINGS*        m_generalSettings;      // reference only; I have no ownership
     PAGE_INFO               m_paper;
-    TITLE_BLOCK             m_titles;               ///< text in lower right of screen and plots
+    TITLE_BLOCK             m_titles;               // text in lower right of screen and plots
     PCB_PLOT_PARAMS         m_plotOptions;
-    NETINFO_LIST            m_NetInfo;              ///< net info list (name, design constraints ..
+    NETINFO_LIST            m_NetInfo;              // net info list (name, design constraints ..
+    PROJECT*                m_project;              // project this board is a part of (if any)
 
 
     // The default copy constructor & operator= are inadequate,
@@ -303,10 +305,7 @@ public:
      * returns list of missing connections between components/tracks.
      * @return an object that contains informations about missing connections.
      */
-    std::shared_ptr<CONNECTIVITY_DATA> GetConnectivity() const
-    {
-        return m_connectivity;
-    }
+    std::shared_ptr<CONNECTIVITY_DATA> GetConnectivity() const { return m_connectivity; }
 
     /**
      * Builds or rebuilds the board connectivity database for the board,
@@ -326,6 +325,9 @@ public:
      * deletes ALL zone outlines from the board.
      */
     void DeleteZONEOutlines();
+
+    PROJECT* GetProject() const            { return m_project; }
+    void SetProject( PROJECT* aProject )   { m_project = aProject; }
 
     /**
      * Function SetAuxOrigin
@@ -355,16 +357,8 @@ public:
      * Function GetHighLightNetCode
      * @return netcode of net to highlight (-1 when no net selected)
      */
-    int GetHighLightNetCode() const { return m_highLight.m_netCode; }
-
-    /**
-     * Function SetHighLightNet
-     * @param aNetCode = netcode of net to highlight
-     */
-    void SetHighLightNet( int aNetCode)
-    {
-        m_highLight.m_netCode = aNetCode;
-    }
+    int GetHighLightNetCode() const       { return m_highLight.m_netCode; }
+    void SetHighLightNet( int aNetCode)   { m_highLight.m_netCode = aNetCode; }
 
     /**
      * Function IsHighLightNetON
@@ -373,24 +367,18 @@ public:
     bool IsHighLightNetON() const { return m_highLight.m_highLightOn; }
 
     /**
-     * Function HighLightOFF
-     * Disable highlight.
-     */
-    void HighLightOFF() { m_highLight.m_highLightOn = false; }
-
-    /**
      * Function HighLightON
      * Enable highlight.
      * if m_highLight_NetCode >= 0, this net will be highlighted
      */
     void HighLightON() { m_highLight.m_highLightOn = true; }
+    void HighLightOFF() { m_highLight.m_highLightOn = false; }
 
     /**
      * Function GetCopperLayerCount
      * @return int - The number of copper layers in the BOARD.
      */
     int  GetCopperLayerCount() const;
-
     void SetCopperLayerCount( int aCount );
 
     /**
@@ -575,25 +563,13 @@ public:
 
     /**
      * Function GetLayerID
-     * returns the ID of a layer given by aLayerName.  Copper layers may
-     * have custom names.
-     *
-     * @param aLayerName = A layer name, like wxT("B.Cu"), etc.
-     *
-     * @return PCB_LAYER_ID -   the layer id, which for copper layers may
-     *                      be custom, else standard.
+     * returns the ID of a layer.  Copper layers may have custom names.
      */
     const PCB_LAYER_ID GetLayerID( const wxString& aLayerName ) const;
 
     /**
      * Function GetLayerName
-     * returns the name of a layer given by aLayer.  Copper layers may
-     * have custom names.
-     *
-     * @param aLayer = A layer, like B_Cu, etc.
-     *
-     * @return wxString -   the layer name, which for copper layers may
-     *                      be custom, else standard.
+     * returns the name of a layer.  Copper layers may have custom names.
      */
     const wxString GetLayerName( PCB_LAYER_ID aLayer ) const;
 

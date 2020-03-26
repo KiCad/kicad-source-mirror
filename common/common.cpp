@@ -25,12 +25,10 @@
 
 #include <fctsys.h>
 #include <eda_base_frame.h>
+#include <project.h>
 #include <common.h>
-#include <macros.h>
 #include <reporter.h>
 #include <mutex>
-#include <settings/settings_manager.h>
-
 #include <wx/process.h>
 #include <wx/config.h>
 #include <wx/utils.h>
@@ -358,23 +356,7 @@ void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSpli
 
 int ProcessExecute( const wxString& aCommandLine, int aFlags, wxProcess *callback )
 {
-    return wxExecute( aCommandLine, aFlags, callback );
-}
-
-
-timestamp_t GetNewTimeStamp()
-{
-    static timestamp_t oldTimeStamp;
-    timestamp_t newTimeStamp;
-
-    newTimeStamp = time( NULL );
-
-    if( newTimeStamp <= oldTimeStamp )
-        newTimeStamp = oldTimeStamp + 1;
-
-    oldTimeStamp = newTimeStamp;
-
-    return newTimeStamp;
+    return (int) wxExecute( aCommandLine, aFlags, callback );
 }
 
 
@@ -388,6 +370,50 @@ enum Bracket
 #endif
     Bracket_Max
 };
+
+
+wxString ExpandTextVars( const wxString& aSource,
+                         const std::function<bool( wxString* )>& aLocalResolver,
+                         const PROJECT* aProject )
+{
+    wxString newbuf;
+    size_t   sourceLen = aSource.length();
+
+    for( size_t i = 0; i < sourceLen; ++i )
+    {
+        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
+        {
+            wxString token;
+
+            for( i = i + 2; i < sourceLen; ++i )
+            {
+                if( aSource[i] == '}' )
+                    break;
+                else
+                    token.append( aSource[i] );
+            }
+
+            if( token.IsEmpty() )
+                continue;
+
+            if( aLocalResolver( &token ) || ( aProject && aProject->TextVarResolver( &token ) ) )
+            {
+                newbuf.append( token );
+            }
+            else
+            {
+                // Token not resolved: leave the reference unchanged
+                newbuf.append( "${" + token + "}" );
+            }
+        }
+        else
+        {
+            newbuf.append( aSource[i] );
+        }
+    }
+
+    return newbuf;
+}
 
 
 //

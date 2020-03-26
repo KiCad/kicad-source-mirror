@@ -220,8 +220,8 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch(
 
                 for( auto field : cmp->GetFields() )
                 {
-                    if( field->Matches( *aData, nullptr ) )
-                        return field;
+                    if( field.Matches( *aData, nullptr ) )
+                        return &field;
                 }
 
                 for( auto pin : cmp->GetSchPins() )

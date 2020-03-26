@@ -25,11 +25,9 @@
 #include <panel_setup_pinmap.h>
 #include <eeschema_config.h>
 #include <erc_item.h>
+#include <panel_text_variables.h>
 #include "dialog_schematic_setup.h"
 #include "panel_eeschema_template_fieldnames.h"
-
-
-bool g_macHack;
 
 
 DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
@@ -45,6 +43,9 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     ERC_ITEM dummyItem;
     m_severities = new PANEL_SETUP_SEVERITIES( this, dummyItem, g_ErcSettings->m_Severities,
                                                ERCE_FIRST, ERCE_LAST );
+
+    m_textVars = new PANEL_TEXT_VARIABLES( this, &Prj() );
+
     /*
      * WARNING: If you change page names you MUST update calls to DoShowSchematicSetupDialog().
      */
@@ -57,12 +58,17 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_treebook->AddSubPage( m_pinMap, _( "Pin Map" ) );
     m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
 
+    m_treebook->AddPage( new wxPanel( this ), _( "Project" ) );
+    m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );
+
 	// Connect Events
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
                          wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), NULL, this );
 
     FinishDialogSettings();
-    g_macHack = true;
+
+    for( int i = 0; i < m_treebook->GetPageCount(); ++i )
+   	    m_macHack.push_back( true );
 }
 
 
@@ -76,16 +82,17 @@ DIALOG_SCHEMATIC_SETUP::~DIALOG_SCHEMATIC_SETUP()
 void DIALOG_SCHEMATIC_SETUP::OnPageChange( wxBookCtrlEvent& event )
 {
 #ifdef __WXMAC__
-    // Work around an OSX bug where the wxGrid children don't get placed correctly
-    if( g_macHack && m_treebook->GetPage( event.GetSelection() ) == m_fieldNameTemplates )
+    // Work around an OSX bug where the wxGrid children don't get placed correctly until
+    // the first resize event
+    int page = event.GetSelection();
+
+    if( m_macHack[ page ] )
     {
-        m_fieldNameTemplates->SetSize( wxSize( m_fieldNameTemplates->GetSize().x - 1,
-                                               m_fieldNameTemplates->GetSize().y ) );
+        wxSize pageSize = m_treebook->GetPage( page )->GetSize();
+        pageSize.x -= 1;
 
-        wxPoint pos = m_fieldNameTemplates->GetPosition();
-        m_fieldNameTemplates->Move( pos.x + 6, pos.y + 6 );
-
-        g_macHack = false;
+        m_treebook->GetPage( page )->SetSize( pageSize );
+        m_macHack[ page ] = false;
     }
 #endif
 }

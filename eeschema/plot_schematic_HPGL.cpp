@@ -202,13 +202,12 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
     plotter->SetPenDiameter( m_HPGLPenSize );
     plotter->StartPlot();
 
-    if( getPlotFrameRef() )
-        PlotWorkSheet( plotter, m_parent->GetTitleBlock(),
-                       m_parent->GetPageSettings(),
+    if( aPlotFrameRef )
+    {
+        PlotWorkSheet( plotter, &m_parent->Prj(), m_parent->GetTitleBlock(), aPageInfo,
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
-                       m_parent->GetScreenDesc(),
-                       aScreen->GetFileName(),
-                       COLOR4D::BLACK );
+                       m_parent->GetScreenDesc(), aScreen->GetFileName(), COLOR4D::BLACK );
+    }
 
     aScreen->Plot( plotter );
 

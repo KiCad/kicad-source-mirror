@@ -161,16 +161,11 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter,
 
     if( aPlotFrameRef )
     {
-        COLOR4D color = aPlotter->GetColorMode() ?
-                                aPlotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_WORKSHEET ) :
-                                COLOR4D::BLACK;
-
-        PlotWorkSheet( aPlotter, m_parent->GetTitleBlock(),
-                       m_parent->GetPageSettings(),
-                       aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
-                       m_parent->GetScreenDesc(),
+        PlotWorkSheet( aPlotter, &aScreen->Prj(), m_parent->GetTitleBlock(),
+                       m_parent->GetPageSettings(), aScreen->m_ScreenNumber,
+                       aScreen->m_NumberOfScreens, m_parent->GetScreenDesc(),
                        aScreen->GetFileName(),
-                       color );
+                       aPlotter->GetColorMode() ? COLOR4D::UNSPECIFIED : COLOR4D::BLACK );
     }
 
     aScreen->Plot( aPlotter );

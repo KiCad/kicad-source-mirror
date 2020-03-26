@@ -1232,8 +1232,8 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
         // Plot the frame reference if requested
         if( aPlotOpts->GetPlotFrameRef() )
         {
-            PlotWorkSheet( plotter, aBoard->GetTitleBlock(), aBoard->GetPageSettings(),
-                           1, 1, aSheetDesc, aBoard->GetFileName() );
+            PlotWorkSheet( plotter, aBoard->GetProject(), aBoard->GetTitleBlock(),
+                           aBoard->GetPageSettings(), 1, 1, aSheetDesc, aBoard->GetFileName() );
 
             if( aPlotOpts->GetMirror() )
                 initializePlotter( plotter, aBoard, aPlotOpts );

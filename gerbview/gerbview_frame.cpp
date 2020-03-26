@@ -874,8 +874,8 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     auto drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetCanvas() );
 
     // Prepare worksheet template
-    auto worksheet =
-            new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS, &GetPageSettings(), &GetTitleBlock() );
+    auto worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS, &GetPageSettings(),
+                                                    &Prj(), &GetTitleBlock() );
 
     if( screen != NULL )
     {

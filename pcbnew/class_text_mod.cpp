@@ -28,6 +28,7 @@
 #include <trigo.h>
 #include <gr_text.h>
 #include <kicad_string.h>
+#include <common.h>
 #include <richio.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
@@ -41,7 +42,7 @@
 #include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
-
+#include <kiway.h>
 
 TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     BOARD_ITEM( parent, PCB_MODULE_TEXT_T ),
@@ -274,10 +275,10 @@ void TEXTE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOff
       || ( IsBackLayer( text_layer ) && !brd->IsElementVisible( LAYER_MOD_TEXT_BK ) ) )
         return;
 
-    if( !brd->IsElementVisible( LAYER_MOD_REFERENCES ) && GetText() == wxT( "%R" ) )
+    if( !brd->IsElementVisible( LAYER_MOD_REFERENCES ) && GetText() == wxT( "${REFERENCE}" ) )
         return;
 
-    if( !brd->IsElementVisible( LAYER_MOD_VALUES ) && GetText() == wxT( "%V" ) )
+    if( !brd->IsElementVisible( LAYER_MOD_VALUES ) && GetText() == wxT( "${VALUE}" ) )
         return;
 
     // Invisible texts are still drawn (not plotted) in LAYER_MOD_TEXT_INVISIBLE
@@ -462,11 +463,11 @@ unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return HIDE;
 
     // Handle Render tab switches
-    if( ( m_Type == TEXT_is_VALUE || GetText() == wxT( "%V" ) )
+    if( ( m_Type == TEXT_is_VALUE || GetText() == wxT( "${VALUE}" ) )
             && !aView->IsLayerVisible( LAYER_MOD_VALUES ) )
         return HIDE;
 
-    if( ( m_Type == TEXT_is_REFERENCE || GetText() == wxT( "%R" ) )
+    if( ( m_Type == TEXT_is_REFERENCE || GetText() == wxT( "${REFERENCE}" ) )
             && !aView->IsLayerVisible( LAYER_MOD_REFERENCES ) )
         return HIDE;
 
@@ -489,57 +490,35 @@ unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 wxString TEXTE_MODULE::GetShownText() const
 {
-    /* First order optimization: no % means that no processing is
-     * needed; just hope that RVO and copy constructor implementation
-     * avoid to copy the whole block; anyway it should be better than
-     * rebuild the string one character at a time...
-     * Also it seems wise to only expand macros in user text (but there
-     * is no technical reason, probably) */
+    const MODULE* module = static_cast<MODULE*>( GetParent() );
+     wxASSERT( module );
 
-    if( (m_Type != TEXT_is_DIVERS) || (wxString::npos == GetText().find('%')) )
-        return GetText();
+    const BOARD* board = static_cast<BOARD*>( module->GetParent() );
+    wxASSERT( board );
 
-    wxString newbuf;
-    const MODULE *module = static_cast<MODULE*>( GetParent() );
+    auto moduleResolver = [ this, module ]( wxString* token ) -> bool
+                          {
+                              if( module )
+                              {
+                                  if( token->IsSameAs( wxT( "REFERENCE" ) ) )
+                                  {
+                                      *token = module->GetReference();
+                                      return true;
+                                  }
+                                  else if( token->IsSameAs( wxT( "VALUE" ) ) )
+                                  {
+                                      *token = module->GetValue();
+                                      return true;
+                                  }
+                                  else if( token->IsSameAs( wxT( "LAYER" ) ) )
+                                  {
+                                      *token = GetLayerName();
+                                      return true;
+                                  }
+                              }
 
-    for( wxString::const_iterator it = GetText().begin(); it != GetText().end(); ++it )
-    {
-        // Process '%' and copy everything else
-        if( *it != '%' )
-            newbuf.append(*it);
-        else
-        {
-            /* Look at the next character (if is it there) and append
-             * its expansion */
-            ++it;
+                              return false;
+                          };
 
-            if( it != GetText().end() )
-            {
-                switch( char(*it) )
-                {
-                case '%':
-                    newbuf.append( '%' );
-                    break;
-
-                case 'R':
-                    if( module )
-                        newbuf.append( module->GetReference() );
-                    break;
-
-                case 'V':
-                    if( module )
-                        newbuf.append( module->GetValue() );
-                    break;
-
-                default:
-                    newbuf.append( '?' );
-                    break;
-                }
-            }
-            else
-                break; // The string is over and we can't ++ anymore
-        }
-    }
-
-    return newbuf;
+    return ExpandTextVars( GetText(), moduleResolver, board->GetProject() );
 }

@@ -373,9 +373,9 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 // use the dynamic_cast to move through the type tree anyway.
                 const wxString text = dynamic_cast<EDA_TEXT*>( boardItem )->GetText();
 
-                if( m_references->GetValue() && text == wxT( "%R" ) )
+                if( m_references->GetValue() && text == wxT( "${REFERENCE}" ) )
                     visitItem( commit, boardItem );
-                else if( m_values->GetValue() && text == wxT( "%V" ) )
+                else if( m_values->GetValue() && text == wxT( "${VALUE}" ) )
                     visitItem( commit, boardItem );
                 else if( m_otherFields->GetValue() )
                     visitItem( commit, boardItem );

@@ -61,6 +61,18 @@ PROJECT::~PROJECT()
 }
 
 
+bool PROJECT::TextVarResolver( wxString* aToken ) const
+{
+    if( m_textVars.count( *aToken ) > 0 )
+    {
+        *aToken = m_textVars.at( *aToken );
+        return true;
+    }
+
+    return false;
+}
+
+
 void PROJECT::SetProjectFullName( const wxString& aFullPathAndName )
 {
     // Compare paths, rather than inodes, to be less surprising to the user.
@@ -376,6 +388,16 @@ void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName
 
     wxConfigSaveParams( cfg.get(), aParams, aGroupName );
 
+    cfg->DeleteGroup( GROUP_TEXT_VARS );
+    cfg->SetPath( GROUP_TEXT_VARS );
+    int index = 1;
+
+    for( const auto& textvar : m_textVars )
+    {
+        cfg->Write( wxString::Format( "%d", index++ ),
+                    wxString::Format( "%s:%s", textvar.first, textvar.second ) );
+    }
+
     cfg->SetPath( wxT( "/" ) );
 
     cfg->Flush();
@@ -396,7 +418,7 @@ bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString&  aGroupNam
     }
 
     // We do not want expansion of env var values when reading our project config file
-    cfg.get()->SetExpandEnvVars( false );
+    cfg->SetExpandEnvVars( false );
 
     cfg->SetPath( wxCONFIG_PATH_SEPARATOR );
 
@@ -406,6 +428,18 @@ bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString&  aGroupNam
 
     wxConfigLoadParams( cfg.get(), aParams, aGroupName );
 
+    cfg->SetPath( GROUP_TEXT_VARS );
+
+    int index = 1;
+    wxString entry;
+
+    while( cfg->Read( wxString::Format( "%d", index++ ), &entry ) )
+    {
+        wxArrayString tokens = wxSplit( entry, ':' );
+
+        if( tokens.size() == 2 )
+            m_textVars[ tokens[0] ] = tokens[1];
+    }
     return true;
 }
 

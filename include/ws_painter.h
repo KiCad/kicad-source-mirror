@@ -155,6 +155,6 @@ private:
 void PrintPageLayout( wxDC* aDC, const PAGE_INFO& aPageInfo, const wxString& aFullSheetName,
                       const wxString& aFileName, const TITLE_BLOCK& aTitleBlock, int aSheetCount,
                       int aSheetNumber, int aPenWidth, double aScalar, COLOR4D aColor,
-                      const wxString& aSheetLayer = wxEmptyString );
+                      const PROJECT* aProject, const wxString& aSheetLayer = wxEmptyString );
 
 #endif // WS_PAINTER_H

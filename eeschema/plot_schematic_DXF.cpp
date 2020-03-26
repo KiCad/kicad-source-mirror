@@ -104,11 +104,11 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
 }
 
 
-bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&    aFileName,
-                                             SCH_SCREEN*        aScreen,
-                                             wxPoint            aPlotOffset,
-                                             double             aScale,
-                                             bool aPlotFrameRef )
+bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString& aFileName,
+                                             SCH_SCREEN*     aScreen,
+                                             wxPoint         aPlotOffset,
+                                             double          aScale,
+                                             bool            aPlotFrameRef )
 {
     DXF_PLOTTER* plotter = new DXF_PLOTTER();
 
@@ -137,16 +137,10 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&    aFileName,
 
     if( aPlotFrameRef )
     {
-        COLOR4D color = plotter->GetColorMode() ?
-                        plotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_WORKSHEET ) :
-                        COLOR4D::BLACK;
-
-        PlotWorkSheet( plotter, m_parent->GetTitleBlock(),
-                       m_parent->GetPageSettings(),
+        PlotWorkSheet( plotter, &m_parent->Prj(), m_parent->GetTitleBlock(), pageInfo,
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
-                       m_parent->GetScreenDesc(),
-                       aScreen->GetFileName(),
-                       color );
+                       m_parent->GetScreenDesc(), aScreen->GetFileName(),
+                       plotter->GetColorMode() ? COLOR4D::UNSPECIFIED : COLOR4D::BLACK );
     }
 
     aScreen->Plot( plotter );

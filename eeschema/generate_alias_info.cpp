@@ -159,7 +159,7 @@ protected:
 
     wxString GetHtmlFieldRow( LIB_FIELD const & aField )
     {
-        wxString name = aField.GetName( NATIVE_FIELD_NAME );
+        wxString name = aField.GetCanonicalName();
         wxString text = aField.GetFullText( m_unit > 0 ? m_unit : 1 );
         wxString fieldhtml = FieldFormat;
 
@@ -225,7 +225,7 @@ protected:
 
                 for( auto const& parentField : parentFields )
                 {
-                    if( m_symbol->FindField( parentField.GetName( NATIVE_FIELD_NAME ) ) )
+                    if( m_symbol->FindField( parentField.GetCanonicalName() ) )
                         continue;
 
                     fieldtable += GetHtmlFieldRow( parentField );

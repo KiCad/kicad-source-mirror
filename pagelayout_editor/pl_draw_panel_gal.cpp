@@ -26,6 +26,7 @@
 #include <ws_data_model.h>
 #include <ws_painter.h>
 #include <pgm_base.h>
+#include <kiway.h>
 #include <pl_editor_frame.h>
 #include <pl_editor_settings.h>
 #include <settings/settings_manager.h>
@@ -98,6 +99,7 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
     WS_DRAW_ITEM_LIST dummy;
     dummy.SetPaperFormat( &m_edaFrame->GetPageSettings().GetType() );
     dummy.SetTitleBlock( &m_edaFrame->GetTitleBlock() );
+    dummy.SetProject( &m_edaFrame->Prj() );
 
     for( WS_DATA_ITEM* dataItem : model.GetItems() )
         dataItem->SyncDrawItems( &dummy, m_view );

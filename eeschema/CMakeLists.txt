@@ -221,7 +221,6 @@ set( EESCHEMA_SRCS
     symbol_lib_table.cpp
     symbol_tree_model_adapter.cpp
     symbol_tree_synchronizing_adapter.cpp
-    template_fieldnames.cpp
     toolbars_lib_view.cpp
     toolbars_sch_editor.cpp
     transform.cpp
@@ -471,14 +470,6 @@ make_lexer(
     cmp_library_lexer.h
     cmp_library_keywords.cpp
     TLIB_T
-    )
-
-make_lexer(
-    eeschema_kiface_objects
-    template_fieldnames.keywords
-    template_fieldnames_lexer.h
-    template_fieldnames_keywords.cpp
-    TFIELD_T
     )
 
 make_lexer(

@@ -372,7 +372,7 @@ public:
     /**
      * Returns a vector of fields from the component
      */
-    std::vector<SCH_FIELD*> GetFields();
+    std::vector<SCH_FIELD>& GetFields() { return m_Fields; }
 
     /**
      * Add a field to the symbol.

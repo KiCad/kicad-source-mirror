@@ -111,7 +111,7 @@ bool DIALOG_UPDATE_FIELDS::TransferDataToWindow()
                 const LIB_FIELD* field = static_cast<const LIB_FIELD*>( &( *it ) );
 
                 if( field->GetId() >= MANDATORY_FIELDS )
-                    m_fields.insert( field->GetName( false ) );
+                    m_fields.insert( field->GetName() );
             }
         }
     }
@@ -121,7 +121,7 @@ bool DIALOG_UPDATE_FIELDS::TransferDataToWindow()
 
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        m_fieldsBox->Append( m_components.front()->GetField( i )->GetName( false ) );
+        m_fieldsBox->Append( m_components.front()->GetField( i )->GetName() );
 
         if( i != REFERENCE && i != VALUE )
             m_fieldsBox->Check( i, true );

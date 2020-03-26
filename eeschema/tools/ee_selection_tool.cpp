@@ -989,10 +989,10 @@ void EE_SELECTION_TOOL::RebuildSelection()
             {
                 if( item->Type() == SCH_COMPONENT_T )
                 {
-                    for( SCH_FIELD* field : static_cast<SCH_COMPONENT*>( item )->GetFields() )
+                    for( SCH_FIELD& field : static_cast<SCH_COMPONENT*>( item )->GetFields() )
                     {
-                        if( field->IsSelected() )
-                            select( field );
+                        if( field.IsSelected() )
+                            select( &field );
                     }
                 }
 
@@ -1231,12 +1231,12 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
                 pin->SetBrightened();
         }
 
-        for( SCH_FIELD* field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )
+        for( SCH_FIELD& field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )
         {
             if( aMode == SELECTED )
-                field->SetSelected();
+                field.SetSelected();
             else if( aMode == BRIGHTENED )
-                field->SetBrightened();
+                field.SetBrightened();
         }
     }
     else if( itemType == SCH_SHEET_T )
@@ -1291,12 +1291,12 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
                 pin->ClearBrightened();
         }
 
-        for( SCH_FIELD* field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )
+        for( SCH_FIELD& field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )
         {
             if( aMode == SELECTED )
-                field->ClearSelected();
+                field.ClearSelected();
             else if( aMode == BRIGHTENED )
-                field->ClearBrightened();
+                field.ClearBrightened();
         }
     }
     else if( itemType == SCH_SHEET_T )

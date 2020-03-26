@@ -66,6 +66,7 @@ private:
     bool                             m_initialFocus;
 
     bool                             m_inSelect;
+    std::vector<bool>                m_macHack;
 
 public:
     // The dialog can be closed for several reasons.
@@ -106,6 +107,7 @@ private:
     void OnAddField( wxCommandEvent&  ) override;
     void OnDeleteField( wxCommandEvent&  ) override;
     void OnUpdateUI( wxUpdateUIEvent&  ) override;
+    void OnPageChange( wxNotebookEvent& event ) override;
 
     void select3DModel( int aModelIdx );
 

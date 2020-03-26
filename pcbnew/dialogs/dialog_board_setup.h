@@ -32,6 +32,7 @@ class PANEL_SETUP_TRACKS_AND_VIAS;
 class PANEL_SETUP_MASK_AND_PASTE;
 class PANEL_SETUP_BOARD_STACKUP;
 class PANEL_SETUP_SEVERITIES;
+class PANEL_TEXT_VARIABLES;
 
 
 class DIALOG_BOARD_SETUP : public PAGED_DIALOG
@@ -53,6 +54,9 @@ protected:
     PANEL_SETUP_MASK_AND_PASTE*      m_maskAndPaste;
     PANEL_SETUP_BOARD_STACKUP*       m_physicalStackup;
     PANEL_SETUP_SEVERITIES*          m_severities;
+    PANEL_TEXT_VARIABLES*            m_textVars;
+
+    std::vector<bool>                m_macHack;
 
     // event handlers
     void OnPageChange( wxBookCtrlEvent& event );

@@ -651,9 +651,9 @@ void pasteModuleItemsToModEdit( MODULE* aClipModule, BOARD* aBoard,
             if( text->GetType() != TEXTE_MODULE::TEXT_is_DIVERS )
                 text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
 
-            if( text->GetText() == "%V" )
+            if( text->GetText() == "${VALUE}" )
                 text->SetText( aClipModule->GetValue() );
-            else if( text->GetText() == "%R" )
+            else if( text->GetText() == "${REFERENCE}" )
                 text->SetText( aClipModule->GetReference() );
 
             text->SetTextAngle( aClipModule->GetOrientation() );

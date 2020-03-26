@@ -32,7 +32,6 @@ class PAGE_INFO;
 class TITLE_BLOCK;
 class WS_DRAW_ITEM_LINE;
 class WS_DRAW_ITEM_RECT;
-class WS_DRAW_ITEM_POLYGON;
 class WS_DRAW_ITEM_TEXT;
 class WS_DRAW_ITEM_BITMAP;
 
@@ -44,67 +43,32 @@ class GAL;
 class WS_PROXY_VIEW_ITEM : public EDA_ITEM
 {
 public:
-    WS_PROXY_VIEW_ITEM( int aScaleFactor, const PAGE_INFO* aPageInfo,  const TITLE_BLOCK* aTitleBlock );
+    WS_PROXY_VIEW_ITEM( int aScaleFactor, const PAGE_INFO* aPageInfo, const PROJECT* aProject,
+                        const TITLE_BLOCK* aTitleBlock );
 
     /**
      * Function SetFileName()
      * Sets the file name displayed in the title block.
-     *
-     * @param aFileName is the new file name.
      */
-    void SetFileName( const std::string& aFileName )
-    {
-        m_fileName = aFileName;
-    }
+    void SetFileName( const std::string& aFileName ) { m_fileName = aFileName; }
 
     /**
      * Function SetSheetName()
      * Sets the sheet name displayed in the title block.
-     *
-     * @param aSheetName is the new sheet name.
      */
-    void SetSheetName( const std::string& aSheetName )
-    {
-        m_sheetName = aSheetName;
-    }
-
-    /**
-     * Function SetPageInfo()
-     * Changes the PAGE_INFO object used to draw the worksheet.
-     *
-     * @param aPageInfo is the new PAGE_INFO object.
-     */
-    void SetPageInfo( const PAGE_INFO* aPageInfo );
-
-    /**
-     * Function SetTitleBlock()
-     * Changes the TITLE_BLOCK object used to draw the worksheet.
-     *
-     * @param aTitleBlock is the new TITLE_BLOCK object.
-     */
-    void SetTitleBlock( const TITLE_BLOCK* aTitleBlock );
+    void SetSheetName( const std::string& aSheetName ) { m_sheetName = aSheetName; }
 
     /**
      * Function SetSheetNumber()
      * Changes the sheet number displayed in the title block.
-     *
-     * @param aSheetNumber is the new sheet number.
      */
-    void SetSheetNumber( int aSheetNumber )
-    {
-        m_sheetNumber = aSheetNumber;
-    }
+    void SetSheetNumber( int aSheetNumber ) { m_sheetNumber = aSheetNumber; }
 
     /**
      * Function SetSheetCount()
      * Changes the sheets count number displayed in the title block.
-     *
-     * @param aSheetCount is the new sheets count number.
      */
-    void SetSheetCount( int aSheetCount )
-    {
-        m_sheetCount = aSheetCount;
-    }
+    void SetSheetCount( int aSheetCount ) { m_sheetCount = aSheetCount; }
 
     /**
      * Can be used to override which layer ID is used for worksheet item colors
@@ -140,28 +104,18 @@ public:
 protected:
     /// the factor between mils (units used in worksheet and internal units)
     /// it is the value IU_PER_MILS used in the caller
-    int m_mils2IUscalefactor;
+    int                m_mils2IUscalefactor;
 
-    /// File name displayed in the title block
-    std::string m_fileName;
-
-    /// Sheet name displayed in the title block
-    std::string m_sheetName;
-
-    /// Title block that contains properties of the title block displayed in the worksheet.
+    std::string        m_fileName;
+    std::string        m_sheetName;
     const TITLE_BLOCK* m_titleBlock;
-
-    /// Worksheet page information.
-    const PAGE_INFO* m_pageInfo;
-
-    /// Sheet number displayed in the title block.
-    int m_sheetNumber;
-
-    /// Sheets count number displayed in the title block.
-    int m_sheetCount;
+    const PAGE_INFO*   m_pageInfo;
+    int                m_sheetNumber;
+    int                m_sheetCount;
+    const PROJECT*     m_project;
 
     /// Layer that is used for worksheet color (LAYER_WORKSHEET is always used for visibility)
-    int m_colorLayer;
+    int                m_colorLayer;
 };
 }
 

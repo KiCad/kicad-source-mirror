@@ -29,11 +29,9 @@
 #include <drc/drc_item.h>
 #include <dialog_import_settings.h>
 #include <panel_setup_severities.h>
+#include <panel_text_variables.h>
 
 #include "dialog_board_setup.h"
-
-
-bool g_macHack;
 
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
@@ -52,6 +50,8 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     BOARD_DESIGN_SETTINGS& bds = aFrame->GetDesignSettings();
     m_severities = new PANEL_SETUP_SEVERITIES( this, dummyItem, bds.m_DRCSeverities,
                                                DRCE_FIRST, DRCE_LAST );
+
+    m_textVars = new PANEL_TEXT_VARIABLES( this, &Prj() );
 
     /*
      * WARNING: If you change page names you MUST update calls to DoShowBoardSetupDialog().
@@ -73,12 +73,17 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_treebook->AddSubPage( m_netclasses,  _( "Net Classes" ) );
     m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
 
+    m_treebook->AddPage( new wxPanel( this ), _( "Project" ) );
+    m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );
+
 	// Connect Events
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
                          wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ), NULL, this );
 
 	FinishDialogSettings();
-	g_macHack = true;
+
+	for( int i = 0; i < m_treebook->GetPageCount(); ++i )
+	    m_macHack.push_back( true );
 }
 
 
@@ -95,13 +100,18 @@ void DIALOG_BOARD_SETUP::OnPageChange( wxBookCtrlEvent& event )
         m_physicalStackup->OnLayersOptionsChanged( m_layers->GetUILayerMask() );
 
 #ifdef __WXMAC__
-    // Work around an OSX bug where the wxGrid children don't get placed correctly
-    if( g_macHack && m_treebook->GetPage( event.GetSelection() ) == m_tracksAndVias )
-    {
-        m_tracksAndVias->SetSize( wxSize( m_tracksAndVias->GetSize().x - 1,
-                                          m_tracksAndVias->GetSize().y + 2 ) );
+    // Work around an OSX bug where the wxGrid children don't get placed correctly until
+    // the first resize event
+    int page = event.GetSelection();
 
-        g_macHack = false;
+    if( m_macHack[ page ] )
+    {
+        wxSize pageSize = m_treebook->GetPage( page )->GetSize();
+        pageSize.x -= 1;
+        pageSize.y += 2;
+
+        m_treebook->GetPage( page )->SetSize( pageSize );
+        m_macHack[ page ] = false;
     }
 #endif
 }

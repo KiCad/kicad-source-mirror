@@ -111,19 +111,18 @@ public:
      * Returns the field name.
      *
      * The first four field IDs are reserved and therefore always return their respective
-     * names.  The user definable fields will return FieldN where N is the ID of the field
-     * when the m_name member is empty.
+     * names.
      *
-     * @param aTranslate true to return translated field name.
-     * note: has meaning mainly for mandatory fields or to return a default field name.
-     * Should be used only in messages (never when trying to find a field by name)
-     * false to return the english name.
-     * Normal option when the name is used as keyword in netlists.
-     * @return Name of the field.
+     * The user definable fields will return FieldN where N is the ID of the field when the
+     * m_name member is empyt unless false is passed to \a aUseDefaultName.
      */
-    #define TRANSLATE_FIELD_NAME true
-    #define NATIVE_FIELD_NAME false
-    wxString GetName( bool aTranslate ) const;
+    wxString GetName( bool aUseDefaultName = true ) const;
+
+    /**
+     * Get a non-language-specific name for a field which can be used for storage, variable
+     * look-up, etc.
+     */
+    wxString GetCanonicalName() const;
 
     /**
      * Set a user definable field name to \a aName.

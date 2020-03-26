@@ -34,11 +34,11 @@
 #include <widgets/wx_grid.h>
 #include <widgets/grid_text_button_helpers.h>
 
-enum ENV_VAR_GRID_COLUMNS
+enum TEXT_VAR_GRID_COLUMNS
 {
-    EV_NAME_COL = 0,
-    EV_PATH_COL,
-    EV_FLAG_COL
+    TV_NAME_COL = 0,
+    TV_VALUE_COL,
+    TV_FLAG_COL
 };
 
 enum SEARCH_PATH_GRID_COLUMNS
@@ -64,16 +64,16 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent, FILENAME_RESO
 
     m_EnvVars->DeleteRows( 0, m_EnvVars->GetNumberRows() );
     m_EnvVars->AppendCols( 1 );     // for the isExternal flags
-    m_EnvVars->HideCol( EV_FLAG_COL );
+    m_EnvVars->HideCol( TV_FLAG_COL );
     m_EnvVars->UseNativeColHeader( true );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, &m_curdir, wxEmptyString ) );
-    m_EnvVars->SetColAttr( EV_PATH_COL, attr );
+    m_EnvVars->SetColAttr( TV_VALUE_COL, attr );
 
     attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, &m_curdir, wxEmptyString ) );
-    m_SearchPaths->SetColAttr( EV_PATH_COL, attr );
+    m_SearchPaths->SetColAttr( TV_VALUE_COL, attr );
 
     // Give a bit more room for combobox editors
     m_EnvVars->SetDefaultRowSize( m_EnvVars->GetDefaultRowSize() + 4 );
@@ -167,23 +167,23 @@ void DIALOG_CONFIGURE_PATHS::AppendEnvVar( const wxString& aName, const wxString
 
     m_EnvVars->AppendRows( 1 );
 
-    m_EnvVars->SetCellValue( i, EV_NAME_COL, aName );
+    m_EnvVars->SetCellValue( i, TV_NAME_COL, aName );
 
-    wxGridCellAttr* nameCellAttr = m_EnvVars->GetOrCreateCellAttr( i, EV_NAME_COL );
+    wxGridCellAttr* nameCellAttr = m_EnvVars->GetOrCreateCellAttr( i, TV_NAME_COL );
     wxGridCellTextEditor* nameTextEditor = new GRID_CELL_TEXT_EDITOR();
     nameTextEditor->SetValidator( ENV_VAR_NAME_VALIDATOR() );
     nameCellAttr->SetEditor( nameTextEditor );
     nameCellAttr->SetReadOnly( IsEnvVarImmutable( aName ) );
     nameCellAttr->DecRef();
 
-    m_EnvVars->SetCellValue( i, EV_PATH_COL, aPath );
+    m_EnvVars->SetCellValue( i, TV_VALUE_COL, aPath );
 
-    wxGridCellAttr* pathCellAttr = m_EnvVars->GetOrCreateCellAttr( i, EV_PATH_COL );
+    wxGridCellAttr* pathCellAttr = m_EnvVars->GetOrCreateCellAttr( i, TV_VALUE_COL );
     wxSystemColour c = isExternal ? wxSYS_COLOUR_MENU : wxSYS_COLOUR_LISTBOX;
     pathCellAttr->SetBackgroundColour( wxSystemSettings::GetColour( c ) );
     pathCellAttr->DecRef();
 
-    m_EnvVars->SetCellValue( i, EV_FLAG_COL, isExternal ? wxT( "external" ) : wxEmptyString );
+    m_EnvVars->SetCellValue( i, TV_FLAG_COL, isExternal ? wxT( "external" ) : wxEmptyString );
 }
 
 
@@ -221,9 +221,9 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
 
     for( int row = 0; row < m_EnvVars->GetNumberRows(); ++row )
     {
-        wxString name = m_EnvVars->GetCellValue( row, EV_NAME_COL );
-        wxString path = m_EnvVars->GetCellValue( row, EV_PATH_COL );
-        wxString external = m_EnvVars->GetCellValue( row, EV_FLAG_COL );
+        wxString name = m_EnvVars->GetCellValue( row, TV_NAME_COL );
+        wxString path = m_EnvVars->GetCellValue( row, TV_VALUE_COL );
+        wxString external = m_EnvVars->GetCellValue( row, TV_FLAG_COL );
 
         if( external.Length() )
             continue;
@@ -232,7 +232,7 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
         {
             m_errorGrid = m_EnvVars;
             m_errorRow = row;
-            m_errorCol = EV_NAME_COL;
+            m_errorCol = TV_NAME_COL;
             m_errorMsg = _( "Environment variable name cannot be empty." );
             return false;
         }
@@ -240,7 +240,7 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
         {
             m_errorGrid = m_EnvVars;
             m_errorRow = row;
-            m_errorCol = EV_PATH_COL;
+            m_errorCol = TV_VALUE_COL;
             m_errorMsg = _( "Environment variable path cannot be empty." );
             return false;
         }
@@ -302,7 +302,7 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellChanging( wxGridEvent& event )
     {
         if( grid == m_EnvVars )
         {
-            if( col == EV_NAME_COL )
+            if( col == TV_NAME_COL )
                 m_errorMsg = _( "Environment variable name cannot be empty." );
             else
                 m_errorMsg = _( "Environment variable path cannot be empty." );
@@ -323,7 +323,7 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellChanging( wxGridEvent& event )
 
     if( grid == m_EnvVars )
     {
-        if( col == EV_PATH_COL && m_EnvVars->GetCellValue( row, EV_FLAG_COL ).Length() )
+        if( col == TV_VALUE_COL && m_EnvVars->GetCellValue( row, TV_FLAG_COL ).Length() )
         {
             wxString msg1 = _( "This path was defined  externally to the running process and\n"
                                "will only be temporarily overwritten." );
@@ -337,7 +337,7 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellChanging( wxGridEvent& event )
             dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
             dlg.ShowModal();
         }
-        else if( col == EV_NAME_COL && m_EnvVars->GetCellValue( row, EV_NAME_COL ) != text )
+        else if( col == TV_NAME_COL && m_EnvVars->GetCellValue( row, TV_NAME_COL ) != text )
         {
             if( text == PROJECT_VAR_NAME )    // This env var name is reserved and cannot be added here:
             {
@@ -347,7 +347,7 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellChanging( wxGridEvent& event )
                 event.Veto();
             }
             else    // Changing name; clear external flag
-                m_EnvVars->SetCellValue( row, EV_FLAG_COL, wxEmptyString );
+                m_EnvVars->SetCellValue( row, TV_FLAG_COL, wxEmptyString );
         }
     }
 }
@@ -360,8 +360,8 @@ void DIALOG_CONFIGURE_PATHS::OnAddEnvVar( wxCommandEvent& event )
 
     AppendEnvVar( wxEmptyString, wxEmptyString, false );
 
-    m_EnvVars->MakeCellVisible( m_EnvVars->GetNumberRows() - 1, EV_NAME_COL );
-    m_EnvVars->SetGridCursor( m_EnvVars->GetNumberRows() - 1, EV_NAME_COL );
+    m_EnvVars->MakeCellVisible( m_EnvVars->GetNumberRows() - 1, TV_NAME_COL );
+    m_EnvVars->SetGridCursor( m_EnvVars->GetNumberRows() - 1, TV_NAME_COL );
 
     m_EnvVars->EnableCellEditControl( true );
     m_EnvVars->ShowCellEditControl();
@@ -389,7 +389,7 @@ void DIALOG_CONFIGURE_PATHS::OnRemoveEnvVar( wxCommandEvent& event )
 
     if( curRow < 0 || m_EnvVars->GetNumberRows() <= curRow )
         return;
-    else if( IsEnvVarImmutable( m_EnvVars->GetCellValue( curRow, EV_NAME_COL ) ) )
+    else if( IsEnvVarImmutable( m_EnvVars->GetCellValue( curRow, TV_NAME_COL ) ) )
     {
         wxBell();
         return;
@@ -468,9 +468,9 @@ void DIALOG_CONFIGURE_PATHS::OnSearchPathMoveDown( wxCommandEvent& event )
 
 void DIALOG_CONFIGURE_PATHS::OnGridCellRightClick( wxGridEvent& aEvent )
 {
-    wxASSERT( (int) EV_PATH_COL == (int) SP_PATH_COL );
+    wxASSERT((int) TV_VALUE_COL == (int) SP_PATH_COL );
 
-    if( aEvent.GetCol() == EV_PATH_COL )
+    if( aEvent.GetCol() == TV_VALUE_COL )
     {
         wxMenu menu;
 
@@ -483,7 +483,7 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellRightClick( wxGridEvent& aEvent )
             if( dlg.ShowModal() == wxID_OK )
             {
                 wxGrid* grid = dynamic_cast<wxGrid*>( aEvent.GetEventObject() );
-                grid->SetCellValue( aEvent.GetRow(), EV_PATH_COL, dlg.GetPath() );
+                grid->SetCellValue( aEvent.GetRow(), TV_VALUE_COL, dlg.GetPath() );
                 m_curdir = dlg.GetPath();
             }
         }
@@ -506,10 +506,10 @@ void DIALOG_CONFIGURE_PATHS::OnUpdateUI( wxUpdateUIEvent& event )
     {
         int width = m_EnvVars->GetClientRect().GetWidth();
 
-        m_EnvVars->AutoSizeColumn( EV_NAME_COL );
-        m_EnvVars->SetColSize( EV_NAME_COL, std::max( m_EnvVars->GetColSize( EV_NAME_COL ), 120 ) );
+        m_EnvVars->AutoSizeColumn( TV_NAME_COL );
+        m_EnvVars->SetColSize( TV_NAME_COL, std::max( m_EnvVars->GetColSize( TV_NAME_COL ), 120 ) );
 
-        m_EnvVars->SetColSize( EV_PATH_COL, width - m_EnvVars->GetColSize( EV_NAME_COL ) );
+        m_EnvVars->SetColSize( TV_VALUE_COL, width - m_EnvVars->GetColSize( TV_NAME_COL ) );
 
         width = m_SearchPaths->GetClientRect().GetWidth();
 

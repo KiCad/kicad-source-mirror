@@ -731,7 +731,7 @@ static const wxString productName = wxT( "KiCad E.D.A.  " );
 void PrintPageLayout( wxDC* aDC, const PAGE_INFO& aPageInfo, const wxString& aFullSheetName,
                       const wxString& aFileName, const TITLE_BLOCK& aTitleBlock, int aSheetCount,
                       int aSheetNumber, int aPenWidth, double aScalar, COLOR4D aColor,
-                      const wxString& aSheetLayer )
+                      const PROJECT* aProject, const wxString& aSheetLayer )
 {
     WS_DRAW_ITEM_LIST drawList;
 
@@ -742,6 +742,7 @@ void PrintPageLayout( wxDC* aDC, const PAGE_INFO& aPageInfo, const wxString& aFu
     drawList.SetFileName( aFileName );
     drawList.SetSheetName( aFullSheetName );
     drawList.SetSheetLayer( aSheetLayer );
+    drawList.SetProject( aProject );
 
     drawList.BuildWorkSheetGraphicList( aPageInfo, aTitleBlock );
 
@@ -769,7 +770,7 @@ void EDA_DRAW_FRAME::PrintWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineW
 
     PrintPageLayout( aDC, GetPageSettings(), GetScreenDesc(), aFilename, GetTitleBlock(),
                      aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber, aLineWidth, aScalar,
-                     color, aSheetLayer );
+                     color, &Prj(), aSheetLayer );
 
     if( origin.y > 0 )
     {

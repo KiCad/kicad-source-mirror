@@ -97,6 +97,7 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
 
     m_worksheet.reset( new KIGFX::WS_PROXY_VIEW_ITEM( static_cast< int >( IU_PER_MILS ),
                                                       &aScreen->GetPageSettings(),
+                                                      &aScreen->Prj(),
                                                       &aScreen->GetTitleBlock() ) );
     m_worksheet->SetSheetNumber( aScreen->m_ScreenNumber );
     m_worksheet->SetSheetCount( aScreen->m_NumberOfScreens );

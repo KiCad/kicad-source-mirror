@@ -1353,8 +1353,8 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     draw( &tempPart, aLayer, false, aComp->GetUnit(), aComp->GetConvert() );
 
     // The fields are SCH_COMPONENT-specific so don't need to be copied/oriented/translated
-    for( SCH_FIELD* field : aComp->GetFields() )
-        draw( field, aLayer );
+    for( SCH_FIELD& field : aComp->GetFields() )
+        draw( &field, aLayer );
 }
 
 
@@ -1435,8 +1435,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
         m_gal->SetFontItalic( aField->IsItalic() );
         m_gal->SetTextMirrored( aField->IsMirrored() );
 
-        strokeText( aField->GetFullyQualifiedText(), textpos,
-                    orient == TEXT_ANGLE_VERT ? M_PI / 2 : 0 );
+        strokeText( aField->GetShownText(), textpos, orient == TEXT_ANGLE_VERT ? M_PI / 2 : 0 );
     }
 
     // Draw the umbilical line

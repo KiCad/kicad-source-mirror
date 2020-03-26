@@ -1429,9 +1429,9 @@ protected:
 class DXF_PLOTTER : public PLOTTER
 {
 public:
-    DXF_PLOTTER() : textAsLines( false )
+    DXF_PLOTTER() : m_textAsLines( false )
     {
-        textAsLines = true;
+        m_textAsLines = true;
         m_currentColor = COLOR4D::BLACK;
         m_currentLineType = PLOT_DASH_TYPE::SOLID;
         SetUnits( DXF_UNITS::INCHES );
@@ -1453,7 +1453,7 @@ public:
     virtual void SetTextMode( PLOT_TEXT_MODE mode ) override
     {
         if( mode != PLOT_TEXT_MODE::DEFAULT )
-            textAsLines = ( mode != PLOT_TEXT_MODE::NATIVE );
+            m_textAsLines = ( mode != PLOT_TEXT_MODE::NATIVE );
     }
 
     virtual bool StartPlot() override;
@@ -1566,22 +1566,21 @@ public:
     }
 
 protected:
-    bool textAsLines;
-    COLOR4D m_currentColor;
+    bool           m_textAsLines;
+    COLOR4D        m_currentColor;
     PLOT_DASH_TYPE m_currentLineType;
 
-    DXF_UNITS    m_plotUnits;
-    double       m_unitScalingFactor;
-    unsigned int m_measurementDirective;
+    DXF_UNITS      m_plotUnits;
+    double         m_unitScalingFactor;
+    unsigned int   m_measurementDirective;
 };
 
 class TITLE_BLOCK;
-void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
-                    const PAGE_INFO& aPageInfo,
-                    int aSheetNumber, int aNumberOfSheets,
-                    const wxString &aSheetDesc,
-                    const wxString &aFilename,
-                    const COLOR4D aColor = COLOR4D::UNSPECIFIED );
+
+void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK& aTitleBlock,
+                    const PAGE_INFO& aPageInfo, int aSheetNumber, int aNumberOfSheets,
+                    const wxString &aSheetDesc, const wxString &aFilename,
+                    COLOR4D aColor = COLOR4D::UNSPECIFIED );
 
 /** Returns the default plot extension for a format
   */

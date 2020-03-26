@@ -760,18 +760,6 @@ void SCH_COMPONENT::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOn
 }
 
 
-std::vector<SCH_FIELD*> SCH_COMPONENT::GetFields()
-{
-    std::vector<SCH_FIELD*> retvec;
-    retvec.reserve( m_Fields.size() );
-
-    for( SCH_FIELD& field : m_Fields )
-        retvec.push_back( &field );
-
-    return retvec;
-}
-
-
 SCH_FIELD* SCH_COMPONENT::AddField( const SCH_FIELD& aField )
 {
     int newNdx = m_Fields.size();
@@ -816,19 +804,9 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
         LIB_FIELDS fields;
         m_part->GetFields( fields );
 
-        for( const LIB_FIELD& field : fields )
+        for( const LIB_FIELD& libField : fields )
         {
-            // Can no longer insert an empty name, since names are now keys.  The
-            // field index is not used beyond the first MANDATORY_FIELDS
-            if( field.GetName( NATIVE_FIELD_NAME ).IsEmpty() )
-                continue;
-
-            // See if field already exists (mandatory fields always exist).
-            // for mandatory fields, the name and field id are fixed, so we use the
-            // known and fixed id to get them (more reliable than names, which can be translated)
-            // for other fields (custom fields), locate the field by same name
-            // (field id has no known meaning for custom fields)
-            int idx = field.GetId();
+            int idx = libField.GetId();
             SCH_FIELD* schField;
 
             if( idx == REFERENCE && !aResetRef )
@@ -837,19 +815,21 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
             if( (unsigned) idx < MANDATORY_FIELDS )
                 schField = GetField( idx );
             else
-                schField = FindField( field.GetName( NATIVE_FIELD_NAME ) );
-
-            if( !schField )
             {
-                SCH_FIELD newField( wxPoint( 0, 0 ), GetFieldCount(), this,
-                                    field.GetName( NATIVE_FIELD_NAME ) );
-                schField = AddField( newField );
+                schField = FindField( libField.GetCanonicalName() );
+
+                if( !schField )
+                {
+                    wxString  fieldName = libField.GetCanonicalName();
+                    SCH_FIELD newField( wxPoint( 0, 0), GetFieldCount(), this, fieldName );
+                    schField = AddField( newField );
+                }
             }
 
             if( aResetStyle )
             {
-                schField->ImportValues( field );
-                schField->SetTextPos( m_Pos + field.GetTextPos() );
+                schField->ImportValues( libField );
+                schField->SetTextPos( m_Pos + libField.GetTextPos() );
             }
 
             if( idx == VALUE )
@@ -869,7 +849,7 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
             }
             else
             {
-                schField->SetText( field.GetText() );
+                schField->SetText( libField.GetText() );
             }
         }
     }

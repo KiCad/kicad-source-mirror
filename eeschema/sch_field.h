@@ -103,21 +103,19 @@ public:
      */
     wxString GetName( bool aUseDefaultName = true ) const;
 
+    /**
+     * Get a non-language-specific name for a field which can be used for storage, variable
+     * look-up, etc.
+     */
+    wxString GetCanonicalName() const;
+
     void SetName( const wxString& aName ) { m_name = aName; }
 
     int GetId() const { return m_id; }
 
     void SetId( int aId ) { m_id = aId; }
 
-    /**
-     * Function GetFullyQualifiedText
-     * returns the fully qualified field text by allowing for the part suffix to be added
-     * to the reference designator field if the component has multiple parts.  For all other
-     * fields this is the equivalent of EDA_TEXT::GetText().
-     *
-     * @return a const wxString object containing the field's string.
-     */
-    const wxString GetFullyQualifiedText() const;
+    wxString GetShownText() const override;
 
     const EDA_RECT GetBoundingBox() const override;
 

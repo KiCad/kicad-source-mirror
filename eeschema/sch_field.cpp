@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,6 @@
  */
 
 #include <fctsys.h>
-#include <sch_draw_panel.h>
 #include <base_struct.h>
 #include <gr_basic.h>
 #include <gr_text.h>
@@ -39,7 +38,7 @@
 #include <sch_edit_frame.h>
 #include <plotter.h>
 #include <bitmaps.h>
-
+#include <kiway.h>
 #include <general.h>
 #include <class_library.h>
 #include <sch_component.h>
@@ -73,11 +72,117 @@ EDA_ITEM* SCH_FIELD::Clone() const
 }
 
 
-const wxString SCH_FIELD::GetFullyQualifiedText() const
+wxString SCH_FIELD::GetShownText() const
 {
-    wxString text = GetText();
+    auto symbolResolver = [ this ]( wxString* token ) -> bool
+                          {
+                              SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_Parent );
+                              std::vector<SCH_FIELD>& fields = component->GetFields();
 
-    // Note that the IDs of FIELDS and SHEETS overlap, so one must check *both* the
+                              for( int i = 0; i < MANDATORY_FIELDS; ++i )
+                              {
+                                  if( token->IsSameAs( fields[i].GetCanonicalName().Upper() ) )
+                                  {
+                                      // silently drop recursive references
+                                      if( &fields[i] == this )
+                                          *token = wxEmptyString;
+                                      else
+                                          *token = fields[i].GetShownText();
+
+                                      return true;
+                                  }
+                              }
+
+                              for( int i = MANDATORY_FIELDS; i < fields.size(); ++i )
+                              {
+                                  if( token->IsSameAs( fields[i].GetName() )
+                                        || token->IsSameAs( fields[i].GetName().Upper() ) )
+                                  {
+                                      // silently drop recursive references
+                                      if( &fields[i] == this )
+                                          *token = wxEmptyString;
+                                      else
+                                          *token = fields[i].GetShownText();
+
+                                      return true;
+                                  }
+                              }
+
+                              if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) )  )
+                              {
+                                  SCH_FIELD& f = component->GetFields()[ FOOTPRINT ];
+                                  wxArrayString parts = wxSplit( f.GetText(), ':' );
+
+                                  *token = parts[0];
+                                  return true;
+                              }
+                              else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
+                              {
+                                  SCH_FIELD& f = component->GetFields()[ FOOTPRINT ];
+                                  wxArrayString parts = wxSplit( f.GetText(), ':' );
+
+                                  *token = parts[ std::min( 1, (int) parts.size() - 1 ) ];
+                                  return true;
+                              }
+                              else if( token->IsSameAs( wxT( "UNIT" ) ) )
+                              {
+                                  *token = LIB_PART::SubReference( component->GetUnit() );
+                                  return true;
+                              }
+
+                              return false;
+                          };
+
+    auto sheetResolver = [ & ]( wxString* token ) -> bool
+                         {
+                             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_Parent );
+                             std::vector<SCH_FIELD>& fields = sheet->GetFields();
+
+                             for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
+                             {
+                                 if( token->IsSameAs( fields[i].GetCanonicalName().Upper() ) )
+                                 {
+                                     // silently drop recursive references
+                                     if( &fields[i] == this )
+                                         *token = wxEmptyString;
+                                     else
+                                         *token = fields[i].GetShownText();
+
+                                     return true;
+                                 }
+                             }
+
+                             for( int i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
+                             {
+                                 if( token->IsSameAs( fields[i].GetName() ) )
+                                 {
+                                     // silently drop recursive references
+                                     if( &fields[i] == this )
+                                         *token = wxEmptyString;
+                                     else
+                                         *token = fields[i].GetShownText();
+
+                                     return true;
+                                 }
+                             }
+
+                             return false;
+                         };
+
+    PROJECT*  project = nullptr;
+    wxString  text;
+
+    if( g_RootSheet && g_RootSheet->GetScreen() )
+        project = &g_RootSheet->GetScreen()->Kiway().Prj();
+
+    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+        text = ExpandTextVars( GetText(), symbolResolver, project );
+    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+        text = ExpandTextVars( GetText(), sheetResolver, project );
+    else
+        text = GetText();
+
+    // WARNING: the IDs of FIELDS and SHEETS overlap, so one must check *both* the
     // id and the parent's type.
 
     if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
@@ -177,7 +282,7 @@ void SCH_FIELD::Print( wxDC* aDC, const wxPoint& aOffset )
     else
         color = GetLayerColor( m_Layer );
 
-    GRText( aDC, textpos, color, GetFullyQualifiedText(), orient, GetTextSize(),
+    GRText( aDC, textpos, color, GetShownText(), orient, GetTextSize(),
             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, lineWidth, IsItalic(), IsBold() );
 }
 
@@ -213,7 +318,7 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
     EDA_RECT  rect;
     SCH_FIELD text( *this );    // Make a local copy to change text
                                 // because GetBoundingBox() is const
-    text.SetText( GetFullyQualifiedText() );
+    text.SetText( GetShownText() );
     rect = text.GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
 
     // Calculate the bounding box position relative to the parent:
@@ -278,7 +383,7 @@ bool SCH_FIELD::IsVoid() const
 
 bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
-    wxString text = GetFullyQualifiedText();
+    wxString text = GetShownText();
     int      flags = aSearchData.GetFlags();
     bool     searchUserDefinedFields = flags & FR_SEARCH_ALL_FIELDS;
     bool     searchAndReplace = flags & FR_SEARCH_REPLACE;
@@ -416,6 +521,31 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 }
 
 
+wxString SCH_FIELD::GetCanonicalName() const
+{
+    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    {
+        switch( m_id )
+        {
+        case  REFERENCE: return wxT( "Reference" );
+        case  VALUE:     return wxT( "Value" );
+        case  FOOTPRINT: return wxT( "Footprint" );
+        case  DATASHEET: return wxT( "Datasheet" );
+        }
+    }
+    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+    {
+        switch( m_id )
+        {
+        case  SHEETNAME:     return wxT( "Sheetname" );
+        case  SHEETFILENAME: return wxT( "Sheetfile" );
+        }
+    }
+
+    return m_name;
+}
+
+
 BITMAP_DEF SCH_FIELD::GetMenuImage() const
 {
     if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
@@ -474,8 +604,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     if( IsVoid() )
         return;
 
-    /* Calculate the text orientation, according to the component
-     * orientation/mirror */
+    // Calculate the text orientation, according to the component orientation/mirror
     int orient = GetTextAngle();
 
     if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
@@ -491,16 +620,16 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
         }
     }
 
-    /* Calculate the text justification, according to the component
-     * orientation/mirror
+    /*
+     * Calculate the text justification, according to the component orientation/mirror
      * this is a bit complicated due to cumulative calculations:
      * - numerous cases (mirrored or not, rotation)
-     * - the DrawGraphicText function recalculate also H and H justifications
-     *      according to the text orientation.
-     * - When a component is mirrored, the text is not mirrored and
-     *   justifications are complicated to calculate
-     * so the more easily way is to use no justifications ( Centered text )
-     * and use GetBoundaryBox to know the text coordinate considered as centered
+     * - the DrawGraphicText function also recalculates H and H justifications according to the
+     *   text orientation.
+     * - When a component is mirrored, the text is not mirrored and justifications are
+     *   complicated to calculate
+     * so the easier way is to use no justifications (centered text) and use GetBoundaryBox to
+     * know the text coordinate considered as centered
      */
     EDA_RECT BoundaryBox = GetBoundingBox();
     EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;
@@ -509,9 +638,8 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
 
     int      thickness = GetPenSize();
 
-    aPlotter->Text( textpos, color, GetFullyQualifiedText(), orient, GetTextSize(),
-            hjustify, vjustify,
-            thickness, IsItalic(), IsBold() );
+    aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(),  hjustify, vjustify,
+                    thickness, IsItalic(), IsBold() );
 }
 
 

@@ -353,20 +353,20 @@ class WS_DRAW_ITEM_LIST
 {
 protected:
     std::vector <WS_DRAW_ITEM_BASE*> m_graphicList;     // Items to draw/plot
-    unsigned m_idx;             // for GetFirst, GetNext functions
-    double   m_milsToIu;        // the scalar to convert pages units ( mils)
-                                // to draw/plot units.
-    int      m_penSize;         // The default line width for drawings.
-                                // used when an item has a pen size = 0
-    int      m_sheetNumber;     // the value of the sheet number, for basic inscriptions
-    int      m_sheetCount;      // the value of the number of sheets, in schematic
-                                // for basic inscriptions, in schematic
-    const TITLE_BLOCK* m_titleBlock;    // for basic inscriptions
-    const wxString* m_paperFormat;      // for basic inscriptions
-    wxString        m_fileName;         // for basic inscriptions
-    wxString        m_sheetFullName;    // for basic inscriptions
-    const wxString* m_sheetLayer;       // for basic inscriptions
-
+    unsigned           m_idx;             // for GetFirst, GetNext functions
+    double             m_milsToIu;        // the scalar to convert pages units ( mils)
+                                          // to draw/plot units.
+    int                m_penSize;         // The default line width for drawings.
+                                          // used when an item has a pen size = 0
+    int                m_sheetNumber;     // the value of the sheet number, for basic inscriptions
+    int                m_sheetCount;      // the value of the number of sheets, in schematic
+                                          // for basic inscriptions, in schematic
+    const TITLE_BLOCK* m_titleBlock;      // for basic inscriptions
+    const wxString*    m_paperFormat;     // for basic inscriptions
+    wxString           m_fileName;        // for basic inscriptions
+    wxString           m_sheetFullName;   // for basic inscriptions
+    const wxString*    m_sheetLayer;      // for basic inscriptions
+    const PROJECT*     m_project;         // for project-based variable substitutions
 
 public:
     WS_DRAW_ITEM_LIST()
@@ -379,6 +379,7 @@ public:
         m_sheetLayer = nullptr;
         m_titleBlock = nullptr;
         m_paperFormat = nullptr;
+        m_project = nullptr;
     }
 
     ~WS_DRAW_ITEM_LIST()
@@ -387,6 +388,8 @@ public:
         // for( WS_DRAW_ITEM_BASE* item : m_graphicList )
         //     delete item;
     }
+
+    void SetProject( const PROJECT* aProject ) { m_project = aProject; }
 
     /**
      * Set the title block (mainly for page layout editor)

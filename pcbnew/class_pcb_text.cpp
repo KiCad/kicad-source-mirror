@@ -61,6 +61,26 @@ TEXTE_PCB::~TEXTE_PCB()
 }
 
 
+wxString TEXTE_PCB::GetShownText() const
+{
+    const BOARD* board = static_cast<BOARD*>( GetParent() );
+    wxASSERT( board );
+
+    auto moduleResolver = [ this ]( wxString* token ) -> bool
+                          {
+                              if( token->IsSameAs( wxT( "LAYER" ) ) )
+                              {
+                                  *token = GetLayerName();
+                                  return true;
+                              }
+
+                              return false;
+                          };
+
+    return ExpandTextVars( GetText(), moduleResolver, board->GetProject() );
+}
+
+
 void TEXTE_PCB::SetTextAngle( double aAngle )
 {
     EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
@@ -178,9 +198,12 @@ EDA_ITEM* TEXTE_PCB::Clone() const
     return new TEXTE_PCB( *this );
 }
 
+
 void TEXTE_PCB::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_TEXT_T );
 
     std::swap( *((TEXTE_PCB*) this), *((TEXTE_PCB*) aImage) );
 }
+
+

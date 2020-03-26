@@ -423,12 +423,12 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
             {
                 SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( aItem );
 
-                for( SCH_FIELD* field : comp->GetFields() )
+                for( SCH_FIELD& field : comp->GetFields() )
                 {
-                    if( field->m_Uuid == aID )
+                    if( field.m_Uuid == aID )
                     {
                         *aPathOut = sheet;
-                        return field;
+                        return &field;
                     }
                 }
 
@@ -444,6 +444,15 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
             else if( aItem->Type() == SCH_SHEET_T )
             {
                 SCH_SHEET* sch_sheet = static_cast<SCH_SHEET*>( aItem );
+
+                for( SCH_FIELD& field : sch_sheet->GetFields() )
+                {
+                    if( field.m_Uuid == aID )
+                    {
+                        *aPathOut = sheet;
+                        return &field;
+                    }
+                }
 
                 for( SCH_SHEET_PIN* pin : sch_sheet->GetPins() )
                 {

@@ -49,6 +49,7 @@
 #include <typeinfo>
 #include <boost/uuid/uuid.hpp>
 
+class PROJECT;
 class SEARCH_STACK;
 class REPORTER;
 
@@ -309,6 +310,14 @@ const wxString PrePendPath( const wxString& aEnvVar, const wxString& aPriorityPa
  * @return a string where env var are replaced by their value
  */
 const wxString ExpandEnvVarSubstitutions( const wxString& aString );
+
+/**
+ * Expand '${var-name}' templates in text.  The LocalResolver is given first crack at it,
+ * after which the PROJECT's resolver is called.
+ */
+wxString ExpandTextVars( const wxString& aSource,
+                         const std::function<bool( wxString* )>& aLocalResolver,
+                         const PROJECT* aProject );
 
 /**
  * Replace any environment variables in file-path uris (leaving network-path URIs alone).

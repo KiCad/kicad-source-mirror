@@ -584,15 +584,8 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem )
     // omitted when saving to disk.
     if( aItem->Type() == LIB_FIELD_T )
     {
-        LIB_FIELD* field = (LIB_FIELD*) aItem;
-
-        if( field->GetId() < MANDATORY_FIELDS )
-        {
-            wxLogWarning( _(
-                "An attempt was made to remove the %s field from component %s in library %s." ),
-                field->GetName( TRANSLATE_FIELD_NAME ), GetName(), GetLibraryName() );
+        if( static_cast<LIB_FIELD*>( aItem )->GetId() < MANDATORY_FIELDS )
             return;
-        }
     }
 
     LIB_ITEMS& items = m_drawings[ aItem->Type() ];
@@ -880,7 +873,7 @@ LIB_FIELD* LIB_PART::FindField( const wxString& aFieldName )
     {
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
 
-        if( field->GetName( NATIVE_FIELD_NAME ) == aFieldName )
+        if( field->GetCanonicalName() == aFieldName )
             return field;
     }
 

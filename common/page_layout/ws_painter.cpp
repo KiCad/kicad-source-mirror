@@ -89,124 +89,93 @@ const COLOR4D& WS_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer 
 // after replacing format symbols by the corresponding value
 wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 {
-    wxString msg;
+    auto wsResolver = [ this ]( wxString* token ) -> bool
+                      {
+                          if( token->IsSameAs( wxT( "KICAD_VERSION" ) ) )
+                          {
+                              *token = wxString::Format( wxT( "%s%s %s" ),
+                                                         productName,
+                                                         Pgm().App().GetAppName(),
+                                                         GetBuildVersion() );
+                              return true;
+                          }
+                          else if( token->IsSameAs( wxT( "#" ) ) )
+                          {
+                              *token = wxString::Format( wxT( "%d" ), m_sheetNumber );
+                              return true;
+                          }
+                          else if( token->IsSameAs( wxT( "##" ) ) )
+                          {
+                              *token = wxString::Format( wxT( "%d" ), m_sheetCount );
+                              return true;
+                          }
+                          else if( token->IsSameAs( wxT( "SHEETNAME" ) ) )
+                          {
+                              *token = m_sheetFullName;
+                              return true;
+                          }
+                          else if( token->IsSameAs( wxT( "FILENAME" ) ) )
+                          {
+                              wxFileName fn( m_fileName );
+                              *token = fn.GetFullName();
+                              return true;
+                          }
+                          else if( token->IsSameAs( wxT( "PAPER" ) ) )
+                          {
+                              *token = m_paperFormat ? *m_paperFormat : wxEmptyString;
+                              return true;
+                          }
+                          else if( token->IsSameAs( wxT( "LAYER" ) ) )
+                          {
+                              *token = m_sheetLayer ? *m_sheetLayer : wxEmptyString;
+                              return true;
+                          }
+                          else if( token->IsSameAs( wxT( "ISSUE_DATE" ) ) )
+                          {
+                              *token = m_titleBlock ? m_titleBlock->GetDate() : wxEmptyString;
+                              return true;
+                          }
+                          else if( token->IsSameAs( wxT( "REVISION" ) ) )
+                          {
+                              *token = m_titleBlock ? m_titleBlock->GetRevision() : wxEmptyString;
+                              return true;
+                          }
+                          else if( token->IsSameAs( wxT( "TITLE" ) ) )
+                          {
+                              *token = m_titleBlock ? m_titleBlock->GetTitle() : wxEmptyString;
+                              return true;
+                          }
+                          else if( token->IsSameAs( wxT( "COMPANY" ) ) )
+                          {
+                              *token = m_titleBlock ? m_titleBlock->GetCompany() : wxEmptyString;
+                              return true;
+                          }
+                          else if( token->Left( token->Len()-1 ).IsSameAs( wxT( "COMMENT" ) ) )
+                          {
+                              wxChar c = token->Last();
 
-    /* Known formats
-     * %% = replaced by %
-     * %K = Kicad version
-     * %Z = paper format name (A4, USLetter)
-     * %Y = company name
-     * %D = date
-     * %R = revision
-     * %S = sheet number
-     * %N = number of sheets
-     * %L = layer name
-     * %Cx = comment (x = 0 to 9 to identify the comment)
-     * %F = filename
-     * %P = sheet path (sheet full name)
-     * %T = title
-     */
+                              switch( c )
+                              {
+                              case '0':
+                              case '1':
+                              case '2':
+                              case '3':
+                              case '4':
+                              case '5':
+                              case '6':
+                              case '7':
+                              case '8':
+                              case '9':
+                                  *token = m_titleBlock ? m_titleBlock->GetComment( c - '0' )
+                                                        : wxEmptyString;
+                                  return true;
+                              }
+                          }
 
-    for( unsigned ii = 0; ii < aTextbase.Len(); ii++ )
-    {
-        if( aTextbase[ii] != '%' )
-        {
-            msg << aTextbase[ii];
-            continue;
-        }
+                          return false;
+                      };
 
-        if( ++ii >= aTextbase.Len() )
-            break;
-
-        wxChar format = aTextbase[ii];
-        switch( format )
-        {
-            case '%':
-                msg += '%';
-                break;
-
-            case 'D':
-                if( m_titleBlock )
-                    msg += m_titleBlock->GetDate();
-                break;
-
-            case 'R':
-                if( m_titleBlock )
-                    msg += m_titleBlock->GetRevision();
-                break;
-
-            case 'K':
-                msg += productName + Pgm().App().GetAppName();
-                msg += wxT( " " ) + GetBuildVersion();
-                break;
-
-            case 'Z':
-                if( m_paperFormat )
-                    msg += *m_paperFormat;
-                break;
-
-            case 'S':
-                msg << m_sheetNumber;
-                break;
-
-            case 'N':
-                msg << m_sheetCount;
-                break;
-
-            case 'F':
-                {
-                    wxFileName fn( m_fileName );
-                    msg += fn.GetFullName();
-                }
-                break;
-
-            case 'L':
-                if( m_sheetLayer )
-                    msg += *m_sheetLayer;
-                break;
-
-            case 'P':
-                msg += m_sheetFullName;
-                break;
-
-            case 'Y':
-                if( m_titleBlock )
-                    msg += m_titleBlock->GetCompany();
-                break;
-
-            case 'T':
-                if( m_titleBlock )
-                    msg += m_titleBlock->GetTitle();
-                break;
-
-            case 'C':
-                format = aTextbase[++ii];
-                switch( format )
-                {
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    if( m_titleBlock )
-                        msg += m_titleBlock->GetComment( format - '0');
-                    break;
-
-                default:
-                    break;
-                }
-
-            default:
-                break;
-        }
-    }
-
-    return msg;
+    return ExpandTextVars( aTextbase, wsResolver, m_project );
 }
 
 

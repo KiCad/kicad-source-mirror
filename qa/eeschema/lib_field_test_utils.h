@@ -42,7 +42,7 @@ struct print_log_value<LIB_FIELD>
 {
     inline void operator()( std::ostream& os, LIB_FIELD const& f )
     {
-        os << "LIB_FIELD[ " << f.GetName( NATIVE_FIELD_NAME ) << " ]";
+        os << "LIB_FIELD[ " << f.GetCanonicalName() << " ]";
     }
 };
 
@@ -68,16 +68,15 @@ namespace KI_TEST
  * @param  aExpectedId the expected field id
  * @return           true if match
  */
-bool FieldNameIdMatches(
-        const LIB_FIELD& aField, const std::string& aExpectedName, int aExpectedId )
+bool FieldNameIdMatches( const LIB_FIELD& aField, const std::string& aExpectedName,
+                         int aExpectedId )
 {
     bool       ok = true;
-    const auto gotName = aField.GetName( false );
+    const auto gotName = aField.GetCanonicalName();
 
     if( gotName != aExpectedName )
     {
-        BOOST_TEST_INFO(
-                "Field name mismatch: got '" << gotName << "', expected '" << aExpectedName );
+        BOOST_TEST_INFO( "Field name: got '" << gotName << "', expected '" << aExpectedName );
         ok = false;
     }
 
@@ -85,7 +84,7 @@ bool FieldNameIdMatches(
 
     if( gotId != aExpectedId )
     {
-        BOOST_TEST_INFO( "Field ID mismatch: got '" << gotId << "', expected '" << aExpectedId );
+        BOOST_TEST_INFO( "Field ID: got '" << gotId << "', expected '" << aExpectedId );
         ok = false;
     }
 

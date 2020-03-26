@@ -53,6 +53,8 @@ public:
         return aItem && PCB_TEXT_T == aItem->Type();
     }
 
+    wxString GetShownText() const override;
+
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
     {
         return BOARD_ITEM::Matches( GetShownText(), aSearchData );

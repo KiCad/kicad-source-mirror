@@ -50,6 +50,7 @@
 #include <zones.h>
 #include <pcb_parser.h>
 #include <convert_basic_shapes_to_polygon.h>    // for RECT_CHAMFER_POSITIONS definition
+#include <template_fieldnames.h>
 
 using namespace PCB_KEYS_T;
 
@@ -2624,7 +2625,10 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE()
 
     NeedSYMBOLorNUMBER();
 
-    text->SetText( FromUTF8() );
+    wxString value = FromUTF8();
+    value.Replace( "%V", "${VALUE}" );
+    value.Replace( "%R", "${REFERENCE}" );
+    text->SetText( value );
     NeedLEFT();
     token = NextTok();
 

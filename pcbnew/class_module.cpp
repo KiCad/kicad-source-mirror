@@ -1330,12 +1330,12 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aIncrementPadNu
 
         if( new_text->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
         {
-            new_text->SetText( wxT( "%R" ) );
+            new_text->SetText( wxT( "${REFERENCE}" ) );
             new_text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
         }
         else if( new_text->GetType() == TEXTE_MODULE::TEXT_is_VALUE )
         {
-            new_text->SetText( wxT( "%V" ) );
+            new_text->SetText( wxT( "${VALUE}" ) );
             new_text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
         }
 
