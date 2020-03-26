@@ -42,7 +42,6 @@ void EDA_3D_SETTINGS::buildPadShapePolygon( const D_PAD* aPad,
                                             SHAPE_POLY_SET& aCornerBuffer,
                                             wxSize aInflateValue ) const
 {
-    wxPoint corners[4];
     wxPoint PadShapePos = aPad->ShapePos(); /* Note: for pad having a shape offset,
                                              * the pad position is NOT the shape position */
     switch( aPad->GetShape() )
@@ -68,6 +67,7 @@ void EDA_3D_SETTINGS::buildPadShapePolygon( const D_PAD* aPad,
     case PAD_SHAPE_TRAPEZOID:
     case PAD_SHAPE_RECT:
     {
+        wxPoint corners[4];
         SHAPE_LINE_CHAIN aLineChain;
 
         aPad->BuildPadPolygon( corners, aInflateValue, aPad->GetOrientation() );

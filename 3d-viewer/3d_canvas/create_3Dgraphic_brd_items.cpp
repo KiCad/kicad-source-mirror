@@ -376,9 +376,22 @@ void EDA_3D_SETTINGS::createNewPadWithClearance( const D_PAD* aPad,
     case PAD_SHAPE_RECT:
     {
         // see pcbnew/board_items_to_polygon_shape_transform.cpp
-
         wxPoint corners[4];
-        aPad->BuildPadPolygon( corners, aClearanceValue, aPad->GetOrientation() );
+        bool drawOutline;
+
+        // For aClearanceValue.x == aClearanceValue.y and > 0 we use the pad shape
+        // and draw outlines with thicknes = aClearanceValue.
+        // Otherwise we draw only the inflated/deflated shape
+        if( aClearanceValue.x > 0 && aClearanceValue.x == aClearanceValue.y )
+        {
+            drawOutline = true;
+            aPad->BuildPadPolygon( corners, wxSize( 0, 0 ), aPad->GetOrientation() );
+        }
+        else
+        {
+            drawOutline = false;
+            aPad->BuildPadPolygon( corners, aClearanceValue, aPad->GetOrientation() );
+        }
 
         SFVEC2F corners3DU[4];
 
@@ -406,20 +419,23 @@ void EDA_3D_SETTINGS::createNewPadWithClearance( const D_PAD* aPad,
         // Add the PAD contours
         // Round segments cannot have 0-length elements, so we approximate them
         // as a small circle
-        for( int i = 1; i <= 4; i++ )
+        if( drawOutline )
         {
-            if( Is_segment_a_circle( corners3DU[i - 1], corners3DU[i & 3] ) )
+            for( int i = 1; i <= 4; i++ )
             {
-                aDstContainer->Add( new CFILLEDCIRCLE2D( corners3DU[i - 1],
-                                        aClearanceValue.x * m_biuTo3Dunits,
-                                        *aPad ) );
-            }
-            else
-            {
-                aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[i - 1],
-                                                         corners3DU[i & 3],
-                                                         aClearanceValue.x * 2.0f * m_biuTo3Dunits,
-                                                         *aPad ) );
+                if( Is_segment_a_circle( corners3DU[i - 1], corners3DU[i & 3] ) )
+                {
+                    aDstContainer->Add( new CFILLEDCIRCLE2D( corners3DU[i - 1],
+                                            aClearanceValue.x * m_biuTo3Dunits,
+                                            *aPad ) );
+                }
+                else
+                {
+                    aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[i - 1],
+                                                             corners3DU[i & 3],
+                                                             aClearanceValue.x * 2.0f * m_biuTo3Dunits,
+                                                             *aPad ) );
+                }
             }
         }
     }
