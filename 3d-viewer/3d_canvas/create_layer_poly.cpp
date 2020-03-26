@@ -30,7 +30,7 @@
  *  board_items_to_polygon_shape_transform.cpp
  */
 
-#include "3d_settings.h"
+#include "board_adapter.h"
 #include <convert_basic_shapes_to_polygon.h>
 #include <class_edge_mod.h>
 #include <class_module.h>
@@ -38,9 +38,9 @@
 
 // This is the same function as in board_items_to_polygon_shape_transform.cpp
 // but it adds the rect/trapezoid shapes with a different winding
-void EDA_3D_SETTINGS::buildPadShapePolygon( const D_PAD* aPad,
-                                            SHAPE_POLY_SET& aCornerBuffer,
-                                            wxSize aInflateValue ) const
+void BOARD_ADAPTER::buildPadShapePolygon( const D_PAD* aPad,
+                                          SHAPE_POLY_SET& aCornerBuffer,
+                                          wxSize aInflateValue ) const
 {
     wxPoint PadShapePos = aPad->ShapePos(); /* Note: for pad having a shape offset,
                                              * the pad position is NOT the shape position */
@@ -105,9 +105,9 @@ void EDA_3D_SETTINGS::buildPadShapePolygon( const D_PAD* aPad,
 }
 
 
-void EDA_3D_SETTINGS::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
-                                                          SHAPE_POLY_SET& aCornerBuffer,
-                                                          int             aWidth ) const
+void BOARD_ADAPTER::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
+                                                        SHAPE_POLY_SET& aCornerBuffer,
+                                                        int             aWidth ) const
 {
     if( aPad->GetShape() == PAD_SHAPE_CIRCLE )    // Draw a ring
     {
@@ -139,10 +139,10 @@ void EDA_3D_SETTINGS::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
 
 // Based on the same function name in board_items_to_polyshape_transform.cpp
 // It was implemented here to allow dynamic segments count per pad shape
-void EDA_3D_SETTINGS::transformPadsShapesWithClearanceToPolygon( const PADS& aPads, PCB_LAYER_ID aLayer,
-                                                                 SHAPE_POLY_SET& aCornerBuffer,
-                                                                 int aInflateValue,
-                                                                 bool aSkipNPTHPadsWihNoCopper ) const
+void BOARD_ADAPTER::transformPadsShapesWithClearanceToPolygon( const PADS& aPads, PCB_LAYER_ID aLayer,
+                                                               SHAPE_POLY_SET& aCornerBuffer,
+                                                               int aInflateValue,
+                                                               bool aSkipNPTHPadsWihNoCopper ) const
 {
     wxSize margin;
     for( auto pad : aPads )
@@ -198,9 +198,9 @@ void EDA_3D_SETTINGS::transformPadsShapesWithClearanceToPolygon( const PADS& aPa
     }
 }
 
-void EDA_3D_SETTINGS::transformGraphicModuleEdgeToPolygonSet( const MODULE *aModule,
-                                                              PCB_LAYER_ID aLayer,
-                                                              SHAPE_POLY_SET& aCornerBuffer ) const
+void BOARD_ADAPTER::transformGraphicModuleEdgeToPolygonSet( const MODULE *aModule,
+                                                            PCB_LAYER_ID aLayer,
+                                                            SHAPE_POLY_SET& aCornerBuffer ) const
 {
     for( auto item : aModule->GraphicalItems() )
     {

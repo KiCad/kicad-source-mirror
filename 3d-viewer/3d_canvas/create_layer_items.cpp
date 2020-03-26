@@ -30,7 +30,7 @@
  *  board_items_to_polygon_shape_transform.cpp
  */
 
-#include "3d_settings.h"
+#include "board_adapter.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/cring2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/cfilledcircle2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/croundsegment2d.h"
@@ -58,7 +58,7 @@
 
 #include <profile.h>
 
-void EDA_3D_SETTINGS::destroyLayers()
+void BOARD_ADAPTER::destroyLayers()
 {
     if( !m_layers_poly.empty() )
     {
@@ -113,7 +113,7 @@ void EDA_3D_SETTINGS::destroyLayers()
 }
 
 
-void EDA_3D_SETTINGS::createLayers( REPORTER *aStatusTextReporter )
+void BOARD_ADAPTER::createLayers( REPORTER *aStatusTextReporter )
 {
     destroyLayers();
 
@@ -1059,7 +1059,7 @@ void EDA_3D_SETTINGS::createLayers( REPORTER *aStatusTextReporter )
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_endHolesBVHTime = GetRunningMicroSecs();
 
-    printf( "EDA_3D_SETTINGS::createLayers times\n" );
+    printf( "BOARD_ADAPTER::createLayers times\n" );
     printf( "  Copper Layers:          %.3f ms\n",
             (float)( stats_endCopperLayersTime  - stats_startCopperLayersTime  ) / 1e3 );
     printf( "  Holes BVH creation:     %.3f ms\n",

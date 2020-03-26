@@ -35,7 +35,7 @@ set(3D-VIEWER_SRCS
     ${DIR_DLG}/dlg_select_3dmodel.cpp
     ${DIR_DLG}/panel_prev_3d_base.cpp
     ${DIR_DLG}/panel_prev_3d.cpp
-    3d_canvas/3d_settings.cpp
+    3d_canvas/board_adapter.cpp
     3d_canvas/create_layer_items.cpp
     3d_canvas/create_3Dgraphic_brd_items.cpp
     3d_canvas/create_layer_poly.cpp

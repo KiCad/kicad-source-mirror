@@ -89,6 +89,8 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
                       wxDefaultSize, style, QUALIFIED_VIEWER3D_FRAMENAME( aParent ) ),
         m_mainToolBar( nullptr ),
         m_canvas( nullptr ),
+        m_currentCamera( m_trackBallCamera ),
+        m_trackBallCamera( RANGE_SCALE_3D ),
         m_toolDispatcher( nullptr )
 {
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::EDA_3D_VIEWER %s", aTitle );
@@ -112,7 +114,8 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     SetStatusWidths( arrayDim( status_dims ), status_dims );
 
     m_canvas = new EDA_3D_CANVAS( this, COGL_ATT_LIST::GetAttributesList( true ),
-                                  aParent->GetBoard(), m_settings, Prj().Get3DCacheManager() );
+                                  aParent->GetBoard(), m_boardAdapter, m_currentCamera,
+                                  Prj().Get3DCacheManager() );
 
     if( m_canvas )
         m_canvas->SetStatusBar( status_bar );
@@ -236,10 +239,10 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         return;
 
     case ID_MENU3D_BGCOLOR_BOTTOM:
-        if( Set3DColorFromUser( m_settings.m_BgColorBot, _( "Background Color, Bottom" ),
+        if( Set3DColorFromUser( m_boardAdapter.m_BgColorBot, _( "Background Color, Bottom" ),
                                 nullptr ) )
         {
-            if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+            if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
                 m_canvas->Request_refresh();
             else
                 NewDisplay( true );
@@ -247,9 +250,9 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         return;
 
     case ID_MENU3D_BGCOLOR_TOP:
-        if( Set3DColorFromUser( m_settings.m_BgColorTop, _( "Background Color, Top" ), nullptr ) )
+        if( Set3DColorFromUser( m_boardAdapter.m_BgColorTop, _( "Background Color, Top" ), nullptr ) )
         {
-            if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+            if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
                 m_canvas->Request_refresh();
             else
                 NewDisplay( true );
@@ -282,17 +285,17 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         break;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL:
-        m_settings.MaterialModeSet( MATERIAL_MODE::NORMAL );
+        m_boardAdapter.MaterialModeSet( MATERIAL_MODE::NORMAL );
         NewDisplay( true );
         return;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY:
-        m_settings.MaterialModeSet( MATERIAL_MODE::DIFFUSE_ONLY );
+        m_boardAdapter.MaterialModeSet( MATERIAL_MODE::DIFFUSE_ONLY );
         NewDisplay( true );
         return;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE:
-        m_settings.MaterialModeSet( MATERIAL_MODE::CAD_MODE );
+        m_boardAdapter.MaterialModeSet( MATERIAL_MODE::CAD_MODE );
         NewDisplay( true );
         return;
 
@@ -318,18 +321,18 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
 void EDA_3D_VIEWER::OnRenderEngineSelection( wxCommandEvent &event )
 {
-    const RENDER_ENGINE old_engine = m_settings.RenderEngineGet();
+    const RENDER_ENGINE old_engine = m_boardAdapter.RenderEngineGet();
 
     if( old_engine == RENDER_ENGINE::OPENGL_LEGACY )
-        m_settings.RenderEngineSet( RENDER_ENGINE::RAYTRACING );
+        m_boardAdapter.RenderEngineSet( RENDER_ENGINE::RAYTRACING );
     else
-        m_settings.RenderEngineSet( RENDER_ENGINE::OPENGL_LEGACY );
+        m_boardAdapter.RenderEngineSet( RENDER_ENGINE::OPENGL_LEGACY );
 
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::OnRenderEngineSelection type %s ",
-            ( m_settings.RenderEngineGet() == RENDER_ENGINE::RAYTRACING ) ? "Ray Trace" :
-                                                                            "OpenGL Legacy" );
+            ( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::RAYTRACING ) ? "Ray Trace" :
+                                                                                "OpenGL Legacy" );
 
-    if( old_engine != m_settings.RenderEngineGet() )
+    if( old_engine != m_boardAdapter.RenderEngineGet() )
         RenderEngineChanged();
 }
 
@@ -339,7 +342,7 @@ void EDA_3D_VIEWER::OnDisableRayTracing( wxCommandEvent& aEvent )
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::%s disabling ray tracing.", __WXFUNCTION__ );
 
     m_disable_ray_tracing = true;
-    m_settings.RenderEngineSet( RENDER_ENGINE::OPENGL_LEGACY );
+    m_boardAdapter.RenderEngineSet( RENDER_ENGINE::OPENGL_LEGACY );
 }
 
 
@@ -390,19 +393,19 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
         aTarget.b = aColor.b;
     };
 
-    set_color( colors->GetColor( LAYER_3D_BACKGROUND_BOTTOM ), m_settings.m_BgColorBot );
-    set_color( colors->GetColor( LAYER_3D_BACKGROUND_TOP ),    m_settings.m_BgColorTop );
-    set_color( colors->GetColor( LAYER_3D_BOARD ),             m_settings.m_BoardBodyColor );
-    set_color( colors->GetColor( LAYER_3D_COPPER ),            m_settings.m_CopperColor );
-    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ), m_settings.m_SilkScreenColorBot );
-    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_TOP ),    m_settings.m_SilkScreenColorTop );
-    set_color( colors->GetColor( LAYER_3D_SOLDERMASK ),        m_settings.m_SolderMaskColorBot );
-    set_color( colors->GetColor( LAYER_3D_SOLDERMASK ),        m_settings.m_SolderMaskColorTop );
-    set_color( colors->GetColor( LAYER_3D_SOLDERPASTE ),       m_settings.m_SolderPasteColor );
+    set_color( colors->GetColor( LAYER_3D_BACKGROUND_BOTTOM ), m_boardAdapter.m_BgColorBot );
+    set_color( colors->GetColor( LAYER_3D_BACKGROUND_TOP ),    m_boardAdapter.m_BgColorTop );
+    set_color( colors->GetColor( LAYER_3D_BOARD ),             m_boardAdapter.m_BoardBodyColor );
+    set_color( colors->GetColor( LAYER_3D_COPPER ),            m_boardAdapter.m_CopperColor );
+    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ), m_boardAdapter.m_SilkScreenColorBot );
+    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_TOP ),    m_boardAdapter.m_SilkScreenColorTop );
+    set_color( colors->GetColor( LAYER_3D_SOLDERMASK ),        m_boardAdapter.m_SolderMaskColorBot );
+    set_color( colors->GetColor( LAYER_3D_SOLDERMASK ),        m_boardAdapter.m_SolderMaskColorTop );
+    set_color( colors->GetColor( LAYER_3D_SOLDERPASTE ),       m_boardAdapter.m_SolderPasteColor );
 
     if( cfg )
     {
-#define TRANSER_SETTING( flag, field ) m_settings.SetFlag( flag, cfg->m_Render.field )
+#define TRANSER_SETTING( flag, field ) m_boardAdapter.SetFlag( flag, cfg->m_Render.field )
 
         TRANSER_SETTING( FL_USE_REALISTIC_MODE,      realistic );
         TRANSER_SETTING( FL_SUBTRACT_MASK_FROM_SILK, subtract_mask_from_silk );
@@ -433,15 +436,15 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
         TRANSER_SETTING( FL_ECO,                             show_eco );
         TRANSER_SETTING( FL_SHOW_BOARD_BODY,                 show_board_body );
 
-        m_settings.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
+        m_boardAdapter.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
 
         RENDER_ENGINE engine = static_cast<RENDER_ENGINE>( cfg->m_Render.engine );
         wxLogTrace( m_logTrace, engine == RENDER_ENGINE::RAYTRACING ?
                                 "EDA_3D_VIEWER::LoadSettings render setting Ray Trace" :
                                 "EDA_3D_VIEWER::LoadSettings render setting OpenGL" );
-        m_settings.RenderEngineSet( engine );
+        m_boardAdapter.RenderEngineSet( engine );
 
-        m_settings.MaterialModeSet( static_cast<MATERIAL_MODE>( cfg->m_Render.material_mode ) );
+        m_boardAdapter.MaterialModeSet( static_cast<MATERIAL_MODE>( cfg->m_Render.material_mode ) );
 
 #undef TRANSFER_SETTING
     }
@@ -463,26 +466,26 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
         colors->SetColor( aTarget, COLOR4D( aSource.r, aSource.g, aSource.b, 1.0 ) );
     };
 
-    save_color( m_settings.m_BgColorBot,         LAYER_3D_BACKGROUND_BOTTOM );
-    save_color( m_settings.m_BgColorTop,         LAYER_3D_BACKGROUND_TOP );
-    save_color( m_settings.m_BoardBodyColor,     LAYER_3D_BOARD );
-    save_color( m_settings.m_CopperColor,        LAYER_3D_COPPER );
-    save_color( m_settings.m_SilkScreenColorBot, LAYER_3D_SILKSCREEN_BOTTOM );
-    save_color( m_settings.m_SilkScreenColorTop, LAYER_3D_SILKSCREEN_TOP );
-    save_color( m_settings.m_SolderMaskColorTop, LAYER_3D_SOLDERMASK );
-    save_color( m_settings.m_SolderPasteColor,   LAYER_3D_SOLDERPASTE );
+    save_color( m_boardAdapter.m_BgColorBot,         LAYER_3D_BACKGROUND_BOTTOM );
+    save_color( m_boardAdapter.m_BgColorTop,         LAYER_3D_BACKGROUND_TOP );
+    save_color( m_boardAdapter.m_BoardBodyColor,     LAYER_3D_BOARD );
+    save_color( m_boardAdapter.m_CopperColor,        LAYER_3D_COPPER );
+    save_color( m_boardAdapter.m_SilkScreenColorBot, LAYER_3D_SILKSCREEN_BOTTOM );
+    save_color( m_boardAdapter.m_SilkScreenColorTop, LAYER_3D_SILKSCREEN_TOP );
+    save_color( m_boardAdapter.m_SolderMaskColorTop, LAYER_3D_SOLDERMASK );
+    save_color( m_boardAdapter.m_SolderPasteColor,   LAYER_3D_SOLDERPASTE );
 
-    wxLogTrace( m_logTrace, m_settings.RenderEngineGet() == RENDER_ENGINE::RAYTRACING ?
+    wxLogTrace( m_logTrace, m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::RAYTRACING ?
                             "EDA_3D_VIEWER::SaveSettings render setting Ray Trace" :
                             "EDA_3D_VIEWER::SaveSettings render setting OpenGL" );
 
     if( cfg )
     {
-#define TRANSFER_SETTING( field, flag ) cfg->m_Render.field = m_settings.GetFlag( flag )
+#define TRANSFER_SETTING( field, flag ) cfg->m_Render.field = m_boardAdapter.GetFlag( flag )
 
-        cfg->m_Render.engine        = static_cast<int>( m_settings.RenderEngineGet() );
-        cfg->m_Render.grid_type     = static_cast<int>( m_settings.GridGet() );
-        cfg->m_Render.material_mode = static_cast<int>( m_settings.MaterialModeGet() );
+        cfg->m_Render.engine        = static_cast<int>( m_boardAdapter.RenderEngineGet() );
+        cfg->m_Render.grid_type     = static_cast<int>( m_boardAdapter.GridGet() );
+        cfg->m_Render.material_mode = static_cast<int>( m_boardAdapter.MaterialModeGet() );
 
         TRANSFER_SETTING( opengl_copper_thickness,      FL_RENDER_OPENGL_COPPER_THICKNESS );
         TRANSFER_SETTING( opengl_show_model_bbox,       FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
@@ -548,24 +551,24 @@ void EDA_3D_VIEWER::SynchroniseColoursWithBoard()
                 switch( stckpItem->GetBrdLayerId() )
                 {
                 case F_SilkS:
-                    m_settings.m_SilkScreenColorTop.r = color.Red() / 255.0;
-                    m_settings.m_SilkScreenColorTop.g = color.Green() / 255.0;
-                    m_settings.m_SilkScreenColorTop.b = color.Blue() / 255.0;
+                    m_boardAdapter.m_SilkScreenColorTop.r = color.Red() / 255.0;
+                    m_boardAdapter.m_SilkScreenColorTop.g = color.Green() / 255.0;
+                    m_boardAdapter.m_SilkScreenColorTop.b = color.Blue() / 255.0;
                     break;
                 case B_SilkS:
-                    m_settings.m_SilkScreenColorBot.r = color.Red() / 255.0;
-                    m_settings.m_SilkScreenColorBot.g = color.Green() / 255.0;
-                    m_settings.m_SilkScreenColorBot.b = color.Blue() / 255.0;
+                    m_boardAdapter.m_SilkScreenColorBot.r = color.Red() / 255.0;
+                    m_boardAdapter.m_SilkScreenColorBot.g = color.Green() / 255.0;
+                    m_boardAdapter.m_SilkScreenColorBot.b = color.Blue() / 255.0;
                     break;
                 case F_Mask:
-                    m_settings.m_SolderMaskColorTop.r = color.Red() / 255.0;
-                    m_settings.m_SolderMaskColorTop.g = color.Green() / 255.0;
-                    m_settings.m_SolderMaskColorTop.b = color.Blue() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorTop.r = color.Red() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorTop.g = color.Green() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorTop.b = color.Blue() / 255.0;
                     break;
                 case B_Mask:
-                    m_settings.m_SolderMaskColorBot.r = color.Red() / 255.0;
-                    m_settings.m_SolderMaskColorBot.g = color.Green() / 255.0;
-                    m_settings.m_SolderMaskColorBot.b = color.Blue() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorBot.r = color.Red() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorBot.g = color.Green() / 255.0;
+                    m_boardAdapter.m_SolderMaskColorBot.b = color.Blue() / 255.0;
                     break;
                 default:
                     break;
@@ -724,9 +727,9 @@ bool EDA_3D_VIEWER::Set3DSilkScreenColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM( 241.0/255.0, 241.0/255.0, 241.0/255.0, "White" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 4.0/255.0, 18.0/255.0, 21.0/255.0, "Dark" ) );
 
-    if( Set3DColorFromUser( m_settings.m_SilkScreenColorTop, _( "Silkscreen Color" ), &colors ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_SilkScreenColorTop, _( "Silkscreen Color" ), &colors ) )
     {
-        m_settings.m_SilkScreenColorBot = m_settings.m_SilkScreenColorTop;
+        m_boardAdapter.m_SilkScreenColorBot = m_boardAdapter.m_SilkScreenColorTop;
         NewDisplay( true );
         return true;
     }
@@ -754,9 +757,9 @@ bool EDA_3D_VIEWER::Set3DSolderMaskColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM( 119/255.0,  31/255.0,  91/255.0, "Purple" ) );
     colors.push_back( CUSTOM_COLOR_ITEM(  32/255.0,   2/255.0,  53/255.0, "Purple Dark" ) );
 
-    if( Set3DColorFromUser( m_settings.m_SolderMaskColorTop, _( "Solder Mask Color" ), &colors ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_SolderMaskColorTop, _( "Solder Mask Color" ), &colors ) )
     {
-        m_settings.m_SolderMaskColorBot = m_settings.m_SolderMaskColorTop;
+        m_boardAdapter.m_SolderMaskColorBot = m_boardAdapter.m_SolderMaskColorTop;
         NewDisplay( true );
         return true;
     }
@@ -774,7 +777,7 @@ bool EDA_3D_VIEWER::Set3DCopperColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM( 213/255.0, 213/255.0, 213/255.0, "Silver" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 160/255.0, 160/255.0, 160/255.0, "Tin" ) );
 
-    if( Set3DColorFromUser( m_settings.m_CopperColor, _( "Copper Color" ), &colors ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_CopperColor, _( "Copper Color" ), &colors ) )
     {
         NewDisplay( true );
         return true;
@@ -797,7 +800,7 @@ bool EDA_3D_VIEWER::Set3DBoardBodyColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM(  63/255.0, 126/255.0, 71/255.0, "green 1" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 117/255.0, 122/255.0, 90/255.0, "green 2" ) );
 
-    if( Set3DColorFromUser( m_settings.m_BoardBodyColor, _( "Board Body Color" ), &colors ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_BoardBodyColor, _( "Board Body Color" ), &colors ) )
     {
         NewDisplay( true );
         return true;
@@ -815,7 +818,7 @@ bool EDA_3D_VIEWER::Set3DSolderPasteColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM( 213/255.0, 213/255.0, 213/255.0, "Silver" ) );
     colors.push_back( CUSTOM_COLOR_ITEM(  90/255.0,  90/255.0,  90/255.0, "grey 2" ) );
 
-    if( Set3DColorFromUser( m_settings.m_SolderPasteColor, _( "Solder Paste Color" ), &colors ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_SolderPasteColor, _( "Solder Paste Color" ), &colors ) )
     {
         NewDisplay( true );
         return true;
@@ -827,7 +830,7 @@ bool EDA_3D_VIEWER::Set3DSolderPasteColorFromUser()
 
 void EDA_3D_VIEWER::OnUpdateUIEngine( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( m_settings.RenderEngineGet() != RENDER_ENGINE::OPENGL_LEGACY );
+    aEvent.Check( m_boardAdapter.RenderEngineGet() != RENDER_ENGINE::OPENGL_LEGACY );
 }
 
 
@@ -837,15 +840,15 @@ void EDA_3D_VIEWER::OnUpdateUIMaterial( wxUpdateUIEvent& aEvent )
     switch( aEvent.GetId() )
     {
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL:
-        aEvent.Check( m_settings.MaterialModeGet() == MATERIAL_MODE::NORMAL );
+        aEvent.Check( m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::NORMAL );
         break;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY:
-        aEvent.Check( m_settings.MaterialModeGet() == MATERIAL_MODE::DIFFUSE_ONLY );
+        aEvent.Check( m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::DIFFUSE_ONLY );
         break;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE:
-        aEvent.Check( m_settings.MaterialModeGet() == MATERIAL_MODE::CAD_MODE );
+        aEvent.Check( m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::CAD_MODE );
         break;
 
     default:
@@ -862,5 +865,5 @@ void EDA_3D_VIEWER::loadCommonSettings()
 
     const DPI_SCALING dpi{ settings, this };
     m_canvas->SetScaleFactor( dpi.GetScaleFactor() );
-    m_settings.SetFlag( FL_MOUSEWHEEL_PANNING, settings->m_Input.mousewheel_pan );
+    m_boardAdapter.SetFlag( FL_MOUSEWHEEL_PANNING, settings->m_Input.mousewheel_pan );
 }

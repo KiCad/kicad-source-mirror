@@ -42,7 +42,11 @@
 
 PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aModule,
                               std::vector<MODULE_3D_SETTINGS>* aParentModelList ) :
-        PANEL_PREV_3D_BASE( aParent, wxID_ANY )
+        PANEL_PREV_3D_BASE( aParent, wxID_ANY ),
+        m_previewPane( nullptr ),
+        m_boardAdapter(),
+        m_currentCamera( m_trackBallCamera ),
+        m_trackBallCamera( RANGE_SCALE_3D )
 {
     m_userUnits = aFrame->GetUserUnits();
 
@@ -79,12 +83,9 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
     m_dummyModule = new MODULE( *aModule );
     m_dummyBoard->Add( m_dummyModule );
 
-    // Set 3d viewer configuration for preview
-    m_settings3Dviewer = new EDA_3D_SETTINGS();
-
     // Create the 3D canvas
     m_previewPane = new EDA_3D_CANVAS( this, COGL_ATT_LIST::GetAttributesList( true ),
-                                       m_dummyBoard, *m_settings3Dviewer,
+                                       m_dummyBoard, m_boardAdapter, m_currentCamera,
                                        aFrame->Prj().Get3DCacheManager() );
 
     loadCommonSettings();
@@ -113,7 +114,6 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
 
 PANEL_PREV_3D::~PANEL_PREV_3D()
 {
-    delete m_settings3Dviewer;
     delete m_dummyBoard;
     delete m_previewPane;
 }
@@ -137,7 +137,7 @@ void PANEL_PREV_3D::loadCommonSettings()
     const DPI_SCALING dpi{ settings, this };
     m_previewPane->SetScaleFactor( dpi.GetScaleFactor() );
 
-    m_settings3Dviewer->SetFlag( FL_MOUSEWHEEL_PANNING, settings->m_Input.mousewheel_pan );
+    m_boardAdapter.SetFlag( FL_MOUSEWHEEL_PANNING, settings->m_Input.mousewheel_pan );
 }
 
 

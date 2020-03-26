@@ -128,7 +128,7 @@ public:
         m_schSettings = *static_cast<const SCH_RENDER_SETTINGS*>( aSettings );
     }
 
-    /// @copydoc PAINTER::GetSettings()
+    /// @copydoc PAINTER::GetAdapter()
     virtual SCH_RENDER_SETTINGS* GetSettings() override
     {
         return &m_schSettings;

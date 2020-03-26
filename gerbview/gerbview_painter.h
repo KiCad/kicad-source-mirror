@@ -175,7 +175,7 @@ public:
         m_gerbviewSettings = *static_cast<const GERBVIEW_RENDER_SETTINGS*>( aSettings );
     }
 
-    /// @copydoc PAINTER::GetSettings()
+    /// @copydoc PAINTER::GetAdapter()
     virtual GERBVIEW_RENDER_SETTINGS* GetSettings() override
     {
         return &m_gerbviewSettings;

@@ -81,7 +81,7 @@ void EDA_3D_CANVAS::render_pivot( float t , float aScale )
     if( t > 1.0f )
         t = 1.0f;
 
-    const SFVEC3F &lookAtPos = m_settings.CameraGet().GetLookAtPos_T1();
+    const SFVEC3F &lookAtPos = m_camera.GetLookAtPos_T1();
 
     glDisable( GL_LIGHTING );
     glDisable( GL_DEPTH_TEST );
@@ -90,11 +90,11 @@ void EDA_3D_CANVAS::render_pivot( float t , float aScale )
     // Set projection and modelview matrixes
     // /////////////////////////////////////////////////////////////////////////
     glMatrixMode( GL_PROJECTION );
-    glLoadMatrixf( glm::value_ptr( m_settings.CameraGet().GetProjectionMatrix() ) );
+    glLoadMatrixf( glm::value_ptr( m_camera.GetProjectionMatrix() ) );
 
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
-    glLoadMatrixf( glm::value_ptr( m_settings.CameraGet().GetViewMatrix() ) );
+    glLoadMatrixf( glm::value_ptr( m_camera.GetViewMatrix() ) );
 
     glEnable( GL_COLOR_MATERIAL );
     glColor4f( 0.0f, 1.0f, 0.0f, 0.75f - t * 0.75f );

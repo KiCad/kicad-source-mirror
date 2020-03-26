@@ -40,8 +40,9 @@
 const wxChar * C3D_RENDER_BASE::m_logTrace = wxT( "KI_TRACE_3D_RENDER" );
 
 
-C3D_RENDER_BASE::C3D_RENDER_BASE( EDA_3D_SETTINGS &aSettings) :
-                                  m_settings( aSettings )
+C3D_RENDER_BASE::C3D_RENDER_BASE( BOARD_ADAPTER& aBoardAdapter, CCAMERA& aCamera ) :
+        m_boardAdapter( aBoardAdapter ),
+        m_camera( aCamera )
 {
     wxLogTrace( m_logTrace, wxT( "C3D_RENDER_BASE::C3D_RENDER_BASE" ) );
     m_is_opengl_initialized = false;

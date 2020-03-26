@@ -145,7 +145,7 @@ public:
         return m_toolMgr;
     }
 
-    //TOOL_SETTINGS& GetSettings();
+    //TOOL_SETTINGS& GetAdapter();
 
     bool IsToolActive() const;
     

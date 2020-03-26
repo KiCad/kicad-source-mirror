@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef EDA_3D_SETTINGS_H
-#define EDA_3D_SETTINGS_H
+#ifndef BOARD_ADAPTER_H
+#define BOARD_ADAPTER_H
 
 #include <array>
 #include <vector>
@@ -31,7 +31,6 @@
 #include "../3d_rendering/3d_render_raytracing/accelerators/ccontainer.h"
 #include "../3d_rendering/3d_render_raytracing/shapes3D/cbbox.h"
 #include "../3d_rendering/ccamera.h"
-#include "../3d_rendering/ctrack_ball.h"
 #include "../3d_enums.h"
 #include "../3d_cache/3d_cache.h"
 
@@ -62,16 +61,16 @@ typedef std::map< PCB_LAYER_ID, SHAPE_POLY_SET *> MAP_POLY;
 
 
 /**
- *  Class EDA_3D_SETTINGS
+ *  Class BOARD_ADAPTER
  *  Helper class to handle information needed to display 3D board
  */
-class EDA_3D_SETTINGS
+class BOARD_ADAPTER
 {
  public:
 
-    EDA_3D_SETTINGS();
+    BOARD_ADAPTER();
 
-    ~EDA_3D_SETTINGS();
+    ~BOARD_ADAPTER();
 
     /**
      * @brief Set3DCacheManager - Update the Cache manager pointer
@@ -197,12 +196,6 @@ class EDA_3D_SETTINGS
      * @return the Z position of 3D shapes, in 3D integer units
      */
     float GetModulesZcoord3DIU( bool aIsFlipped ) const ;
-
-    /**
-     * @brief CameraGet - get current camera in use
-     * @return a camera
-     */
-    CCAMERA &CameraGet() const { return m_currentCamera; }
 
     /**
      * @brief GridGet - get the current grid
@@ -517,27 +510,15 @@ public:
 
 private:
 
-    /// Current board
-    BOARD *m_board;
-
-    /// pointer to the 3d model manager
-    S3D_CACHE *m_3d_model_manager;
-
-    /// pointer to current color settings
-    COLOR_SETTINGS* m_colors;
+    BOARD*              m_board;
+    S3D_CACHE*          m_3d_model_manager;
+    COLOR_SETTINGS*     m_colors;
 
     // Render options
 
-    /// options flags to render the board
     std::vector< bool > m_drawFlags;
-
-    /// Stores the current grid type
     GRID3D_TYPE         m_3D_grid_type;
-
-    /// render engine currently on use
     RENDER_ENGINE       m_render_engine;
-
-    /// mode to render the 3d shape models material
     MATERIAL_MODE       m_material_mode;
 
 
@@ -556,7 +537,7 @@ private:
     // Pcb board bounding boxes
 
     /// 3d bounding box of the pcb board in 3d units
-    CBBOX   m_boardBoundingBox;
+    CBBOX             m_boardBoundingBox;
 
     /// It contains polygon contours for each layer
     MAP_POLY          m_layers_poly;
@@ -635,13 +616,6 @@ private:
     /// Non copper layers thickness
     float  m_nonCopperLayerThickness3DU;
 
-
-    // Cameras
-
-    /// Holds a pointer to current camera in use.
-    CCAMERA &m_currentCamera;
-    CTRACK_BALL m_trackBallCamera;
-
     /// min factor used for cicle segment approximation calculation
     float m_calc_seg_min_factor3DU;
 
@@ -680,14 +654,11 @@ private:
 };
 
 
-/// This is a dummy visualization configuration
-extern EDA_3D_SETTINGS G_null_EDA_3D_SETTINGS;
-
-
-class EDA_3D_SETTINGS_HOLDER
+class EDA_3D_BOARD_HOLDER
 {
 public:
-    virtual EDA_3D_SETTINGS* GetSettings() = 0;
+    virtual BOARD_ADAPTER& GetAdapter() = 0;
+    virtual CCAMERA&       GetCurrentCamera() = 0;
 };
 
-#endif // EDA_3D_SETTINGS_H
+#endif // BOARD_ADAPTER_H

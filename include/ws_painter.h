@@ -114,7 +114,7 @@ public:
         m_renderSettings = *static_cast<const WS_RENDER_SETTINGS*>( aSettings );
     }
 
-    /// @copydoc PAINTER::GetSettings()
+    /// @copydoc PAINTER::GetAdapter()
     virtual RENDER_SETTINGS* GetSettings() override { return &m_renderSettings; }
 
 private:

@@ -68,12 +68,14 @@ void EDA_3D_CONTROLLER::Reset( RESET_REASON aReason )
     if( holder )
     {
         m_canvas = dynamic_cast<EDA_3D_CANVAS*>( holder->GetToolCanvas() );
-        m_settings = dynamic_cast<EDA_3D_SETTINGS_HOLDER*>( holder )->GetSettings();
+        m_boardAdapter = &dynamic_cast<EDA_3D_BOARD_HOLDER*>( holder )->GetAdapter();
+        m_camera = &dynamic_cast<EDA_3D_BOARD_HOLDER*>( holder )->GetCurrentCamera();
     }
     else
     {
         m_canvas = nullptr;
-        m_settings = nullptr;
+        m_boardAdapter = nullptr;
+        m_camera = nullptr;
     }
 }
 
@@ -138,16 +140,16 @@ int EDA_3D_CONTROLLER::RotateView( const TOOL_EVENT& aEvent )
 {
     switch( aEvent.Parameter<intptr_t>() )
     {
-    case ID_ROTATE3D_X_NEG: m_settings->CameraGet().RotateX( -glm::radians( ROT_ANGLE ) ); break;
-    case ID_ROTATE3D_X_POS: m_settings->CameraGet().RotateX(  glm::radians( ROT_ANGLE ) ); break;
-    case ID_ROTATE3D_Y_NEG: m_settings->CameraGet().RotateY( -glm::radians( ROT_ANGLE ) ); break;
-    case ID_ROTATE3D_Y_POS: m_settings->CameraGet().RotateY(  glm::radians( ROT_ANGLE ) ); break;
-    case ID_ROTATE3D_Z_NEG: m_settings->CameraGet().RotateZ( -glm::radians( ROT_ANGLE ) ); break;
-    case ID_ROTATE3D_Z_POS: m_settings->CameraGet().RotateZ(  glm::radians( ROT_ANGLE ) ); break;
-    default:                wxFAIL;                                                        break;
+    case ID_ROTATE3D_X_NEG: m_camera->RotateX( -glm::radians( ROT_ANGLE ) ); break;
+    case ID_ROTATE3D_X_POS: m_camera->RotateX( glm::radians( ROT_ANGLE ) );  break;
+    case ID_ROTATE3D_Y_NEG: m_camera->RotateY( -glm::radians( ROT_ANGLE ) ); break;
+    case ID_ROTATE3D_Y_POS: m_camera->RotateY( glm::radians( ROT_ANGLE ) );  break;
+    case ID_ROTATE3D_Z_NEG: m_camera->RotateZ( -glm::radians( ROT_ANGLE ) ); break;
+    case ID_ROTATE3D_Z_POS: m_camera->RotateZ( glm::radians( ROT_ANGLE ) );  break;
+    default:                wxFAIL;                                          break;
     }
 
-    if( m_settings->RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+    if( m_boardAdapter->RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
         m_canvas->Request_refresh();
     else
         m_canvas->RenderRaytracingRequest();
@@ -158,9 +160,9 @@ int EDA_3D_CONTROLLER::RotateView( const TOOL_EVENT& aEvent )
 
 int EDA_3D_CONTROLLER::ToggleOrtho( const TOOL_EVENT& aEvent )
 {
-    m_settings->CameraGet().ToggleProjection();
+    m_camera->ToggleProjection();
 
-    if( m_settings->RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+    if( m_boardAdapter->RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
         m_canvas->Request_refresh();
     else
         m_canvas->RenderRaytracingRequest();
@@ -173,7 +175,7 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
 {
     DISPLAY3D_FLG flag = aEvent.Parameter<DISPLAY3D_FLG>();
 
-    m_settings->SetFlag( flag, !m_settings->GetFlag( flag ) );
+    m_boardAdapter->SetFlag( flag, !m_boardAdapter->GetFlag( flag ) );
 
     switch( flag )
     {
@@ -205,7 +207,7 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
 int EDA_3D_CONTROLLER::On3DGridSelection( const TOOL_EVENT& aEvent )
 {
     GRID3D_TYPE grid = aEvent.Parameter<GRID3D_TYPE>();
-    m_settings->GridSet( grid );
+    m_boardAdapter->GridSet( grid );
 
     if( m_canvas )
         m_canvas->Request_refresh();

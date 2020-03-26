@@ -59,14 +59,14 @@ typedef std::map< wxString, C_OGL_3DMODEL * > MAP_3DMODEL;
 class C3D_RENDER_OGL_LEGACY : public C3D_RENDER_BASE
 {
 public:
-    explicit C3D_RENDER_OGL_LEGACY( EDA_3D_SETTINGS &aSettings );
+    explicit C3D_RENDER_OGL_LEGACY( BOARD_ADAPTER& aAdapter, CCAMERA& aCamera );
 
     ~C3D_RENDER_OGL_LEGACY();
 
     // Imported from C3D_RENDER_BASE
     void SetCurWindowSize( const wxSize &aSize ) override;
     bool Redraw( bool aIsMoving, REPORTER* aStatusTextReporter,
-            REPORTER* aWarningTextReporter ) override;
+                 REPORTER* aWarningTextReporter ) override;
 
     int GetWaitForEditingTimeOut() override;
 
@@ -108,9 +108,6 @@ private:
     MAP_3DMODEL m_3dmodel_map;
 
 private:
-    void generate_through_outer_holes();
-    void generate_through_inner_holes();
-
     CLAYERS_OGL_DISP_LISTS *generate_holes_display_list( const LIST_OBJECT2D &aListHolesObject2d,
                                                          const SHAPE_POLY_SET &aPoly,
                                                          float aZtop,
@@ -213,11 +210,6 @@ private:
 
     void set_layer_material( PCB_LAYER_ID aLayerID );
     SFVEC3F get_layer_color( PCB_LAYER_ID aLayerID );
-
-public:
-    const MAP_OGL_DISP_LISTS &GetLayerDispListMap() const { return m_ogl_disp_lists_layers; }
-    const CLAYERS_OGL_DISP_LISTS *GetLayerDispList( PCB_LAYER_ID aLayerId ) const { return m_ogl_disp_lists_layers.at( aLayerId ); }
-    const CLAYERS_OGL_DISP_LISTS *GetBoardDispList() const { return m_ogl_disp_list_board; }
 };
 
 #endif // C3D_RENDER_OGL_LEGACY_H_

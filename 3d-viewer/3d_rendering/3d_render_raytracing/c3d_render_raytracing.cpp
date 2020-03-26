@@ -46,9 +46,9 @@
 // convertLinearToSRGB
 //#include <glm/gtc/color_space.hpp>
 
-C3D_RENDER_RAYTRACING::C3D_RENDER_RAYTRACING( EDA_3D_SETTINGS &aSettings ) :
-                       C3D_RENDER_BASE( aSettings ),
-                       m_postshader_ssao( aSettings.CameraGet() )
+C3D_RENDER_RAYTRACING::C3D_RENDER_RAYTRACING( BOARD_ADAPTER& aAdapter, CCAMERA& aCamera ) :
+                       C3D_RENDER_BASE( aAdapter, aCamera ),
+                       m_postshader_ssao( aCamera )
 {
     wxLogTrace( m_logTrace, wxT( "C3D_RENDER_RAYTRACING::C3D_RENDER_RAYTRACING" ) );
 
@@ -213,7 +213,7 @@ bool C3D_RENDER_RAYTRACING::Redraw(
     glDisable( GL_BLEND );
 
 
-    const bool was_camera_changed = m_settings.CameraGet().ParametersChanged();
+    const bool was_camera_changed = m_camera.ParametersChanged();
 
     if( requestRedraw || aIsMoving || was_camera_changed )
         m_rt_render_state = RT_RENDER_STATE_MAX; // Set to an invalid state,
@@ -225,10 +225,10 @@ bool C3D_RENDER_RAYTRACING::Redraw(
     {
         // Set head light (camera view light) with the oposite direction of the camera
         if( m_camera_light )
-            m_camera_light->SetDirection( -m_settings.CameraGet().GetDir() );
+            m_camera_light->SetDirection( -m_camera.GetDir() );
 
-        OGL_DrawBackground( SFVEC3F(m_settings.m_BgColorTop),
-                            SFVEC3F(m_settings.m_BgColorBot) );
+        OGL_DrawBackground( SFVEC3F( m_boardAdapter.m_BgColorTop),
+                            SFVEC3F( m_boardAdapter.m_BgColorBot) );
 
         // Bind PBO
         glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboId );
@@ -274,8 +274,8 @@ bool C3D_RENDER_RAYTRACING::Redraw(
         {
             glClear( GL_COLOR_BUFFER_BIT );
             // Options if we want draw background instead
-            //OGL_DrawBackground( SFVEC3F(m_settings.m_BgColorTop),
-            //                    SFVEC3F(m_settings.m_BgColorBot) );
+            //OGL_DrawBackground( SFVEC3F(m_boardAdapter.m_BgColorTop),
+            //                    SFVEC3F(m_boardAdapter.m_BgColorBot) );
         }
 
         glWindowPos2i( m_xoffset, m_yoffset );
@@ -307,9 +307,9 @@ void C3D_RENDER_RAYTRACING::render( GLubyte *ptrPBO , REPORTER *aStatusTextRepor
         restart_render_state();
 
         if( m_camera_light )
-            m_camera_light->SetDirection( -m_settings.CameraGet().GetDir() );
+            m_camera_light->SetDirection( -m_camera.GetDir() );
 
-        if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+        if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
         {
             // Set all pixels of PBO transparent (Alpha to 0)
             // This way it will draw the full buffer but only shows the updated (
@@ -325,8 +325,8 @@ void C3D_RENDER_RAYTRACING::render( GLubyte *ptrPBO , REPORTER *aStatusTextRepor
             }
         }
 
-        m_BgColorTop_LinearRGB = ConvertSRGBToLinear( (SFVEC3F)m_settings.m_BgColorTop );
-        m_BgColorBot_LinearRGB = ConvertSRGBToLinear( (SFVEC3F)m_settings.m_BgColorBot );
+        m_BgColorTop_LinearRGB = ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BgColorTop );
+        m_BgColorBot_LinearRGB = ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BgColorBot );
     }
 
     switch( m_rt_render_state )
@@ -418,12 +418,10 @@ void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte *ptrPBO ,
     // or mark it as finished
     if( m_nrBlocksRenderProgress >= m_blockPositions.size() )
     {
-        if( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
+        if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
             m_rt_render_state = RT_RENDER_STATE_POST_PROCESS_SHADE;
         else
-        {
             m_rt_render_state = RT_RENDER_STATE_FINISH;
-        }
     }
 }
 
@@ -462,8 +460,7 @@ SFVEC3F ConvertSRGBToLinear( const SFVEC3F &aSRGBcolor )
 
 #endif
 
-void C3D_RENDER_RAYTRACING::rt_final_color( GLubyte *ptrPBO,
-                                            const SFVEC3F &rgbColor,
+void C3D_RENDER_RAYTRACING::rt_final_color( GLubyte *ptrPBO, const SFVEC3F &rgbColor,
                                             bool applyColorSpaceConversion )
 {
 
@@ -535,7 +532,7 @@ void C3D_RENDER_RAYTRACING::rt_trace_AA_packet( const SFVEC3F *aBgColorY,
                                                 const RAY *aRayPck,
                                                 SFVEC3F *aOutHitColor )
 {
-    const bool is_testShadow =  m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS );
+    const bool is_testShadow =  m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS );
 
     for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
     {
@@ -665,10 +662,9 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
     const SFVEC2I blockPosI = SFVEC2I( blockPos.x + m_xoffset,
                                        blockPos.y + m_yoffset );
 
-    RAYPACKET blockPacket( m_settings.CameraGet(),
-                           (SFVEC2F)blockPosI + SFVEC2F(DISP_FACTOR, DISP_FACTOR),
-                           SFVEC2F(DISP_FACTOR, DISP_FACTOR) // Displacement random factor
-                           );
+    RAYPACKET blockPacket( m_camera, (SFVEC2F)blockPosI + SFVEC2F(DISP_FACTOR, DISP_FACTOR),
+                           SFVEC2F(DISP_FACTOR, DISP_FACTOR) /* Displacement random factor */ );
+
 
     HITINFO_PACKET hitPacket_X0Y0[RAYPACKET_RAYS_PER_PACKET];
 
@@ -692,7 +688,7 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
     {
 
         // If block is empty then set shades and continue
-        if( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
+        if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
         {
             for( unsigned int y = 0; y < RAYPACKET_DIM; ++y )
             {
@@ -718,14 +714,13 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
         // (as the final color will be computed on post processing)
         // but it is used for report progress
 
-        const bool isFinalColor = !m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING );
+        const bool isFinalColor = !m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING );
 
         for( unsigned int y = 0; y < RAYPACKET_DIM; ++y )
         {
             const SFVEC3F &outColor = bgColor[y];
 
-            const unsigned int yConst = blockPos.x +
-                                        ( (y + blockPos.y) * m_realBufferSize.x);
+            const unsigned int yConst = blockPos.x + ( (y + blockPos.y) * m_realBufferSize.x);
 
             for( unsigned int x = 0; x < RAYPACKET_DIM; ++x )
             {
@@ -748,10 +743,10 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
     rt_shades_packet( bgColor,
                       blockPacket.m_ray,
                       hitPacket_X0Y0,
-                      m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ),
+                      m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ),
                       hitColor_X0Y0 );
 
-    if( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) )
+    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) )
     {
         SFVEC3F hitColor_AA_X1Y1[RAYPACKET_RAYS_PER_PACKET];
 
@@ -761,10 +756,8 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
         HITINFO_PACKET hitPacket_AA_X1Y1[RAYPACKET_RAYS_PER_PACKET];
         HITINFO_PACKET_init( hitPacket_AA_X1Y1 );
 
-        RAYPACKET blockPacket_AA_X1Y1( m_settings.CameraGet(),
-                                       (SFVEC2F)blockPosI + SFVEC2F(0.5f, 0.5f),
-                                       SFVEC2F(DISP_FACTOR, DISP_FACTOR) // Displacement random factor
-                                       );
+        RAYPACKET blockPacket_AA_X1Y1( m_camera, (SFVEC2F)blockPosI + SFVEC2F(0.5f, 0.5f),
+                                       SFVEC2F(DISP_FACTOR, DISP_FACTOR) );
 
         if( !m_accelerator->Intersect( blockPacket_AA_X1Y1, hitPacket_AA_X1Y1 ) )
         {
@@ -784,7 +777,7 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
             rt_shades_packet( bgColor,
                               blockPacket_AA_X1Y1.m_ray,
                               hitPacket_AA_X1Y1,
-                              m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ),
+                              m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ),
                               hitColor_AA_X1Y1
                               );
         }
@@ -807,17 +800,17 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
         RAY blockRayPck_AA_X0Y1[RAYPACKET_RAYS_PER_PACKET];
         RAY blockRayPck_AA_X1Y1_half[RAYPACKET_RAYS_PER_PACKET];
 
-        RAYPACKET_InitRays_with2DDisplacement( m_settings.CameraGet(),
+        RAYPACKET_InitRays_with2DDisplacement( m_camera,
                                                (SFVEC2F)blockPosI + SFVEC2F(0.5f - DISP_FACTOR, DISP_FACTOR),
                                                SFVEC2F(DISP_FACTOR, DISP_FACTOR), // Displacement random factor
                                                blockRayPck_AA_X1Y0 );
 
-        RAYPACKET_InitRays_with2DDisplacement( m_settings.CameraGet(),
+        RAYPACKET_InitRays_with2DDisplacement( m_camera,
                                                (SFVEC2F)blockPosI + SFVEC2F(DISP_FACTOR, 0.5f - DISP_FACTOR),
                                                SFVEC2F(DISP_FACTOR, DISP_FACTOR), // Displacement random factor
                                                blockRayPck_AA_X0Y1 );
 
-        RAYPACKET_InitRays_with2DDisplacement( m_settings.CameraGet(),
+        RAYPACKET_InitRays_with2DDisplacement( m_camera,
                                                (SFVEC2F)blockPosI + SFVEC2F(0.25f - DISP_FACTOR, 0.25f - DISP_FACTOR),
                                                SFVEC2F(DISP_FACTOR, DISP_FACTOR), // Displacement random factor
                                                blockRayPck_AA_X1Y1_half );
@@ -858,7 +851,7 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
 
     const uint32_t ptrInc = (m_realBufferSize.x - RAYPACKET_DIM) * 4;
 
-    if( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
+    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
     {
         SFVEC2I bPos;
         bPos.y = blockPos.y;
@@ -918,7 +911,7 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_shade( GLubyte *ptrPBO,
 {
     (void)ptrPBO; // unused
 
-    if( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
+    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
     {
         if( aStatusTextReporter )
             aStatusTextReporter->Report( _("Rendering: Post processing shader") );
@@ -969,7 +962,7 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
 {
     (void)aStatusTextReporter; //unused
 
-    if( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
+    if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
     {
         // Now blurs the shader result and compute the final color
         std::atomic<size_t> nextBlock( 0 );
@@ -1105,16 +1098,16 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                 const SFVEC2I windowsPos = SFVEC2I( windowPosUI.x + m_xoffset,
                                                     windowPosUI.y + m_yoffset );
 
-                RAYPACKET blockPacket( m_settings.CameraGet(), windowsPos, 4 );
+                RAYPACKET blockPacket( m_camera, windowsPos, 4 );
 
                 HITINFO_PACKET hitPacket[RAYPACKET_RAYS_PER_PACKET];
 
                 // Initialize hitPacket with a "not hit" information
-                for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
+                for( HITINFO_PACKET& packet : hitPacket )
                 {
-                    hitPacket[i].m_HitInfo.m_tHit = std::numeric_limits<float>::infinity();
-                    hitPacket[i].m_HitInfo.m_acc_node_info = 0;
-                    hitPacket[i].m_hitresult = false;
+                    packet.m_HitInfo.m_tHit = std::numeric_limits<float>::infinity();
+                    packet.m_HitInfo.m_acc_node_info = 0;
+                    packet.m_hitresult = false;
                 }
 
                 //  Intersect packet block
@@ -1129,8 +1122,8 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                 {
                     const float posYfactor = (float)(windowsPos.y + y * 4.0f) / (float)m_windowSize.y;
 
-                    bgColor[y] = (SFVEC3F)m_settings.m_BgColorTop * SFVEC3F(posYfactor) +
-                                 (SFVEC3F)m_settings.m_BgColorBot * ( SFVEC3F(1.0f) - SFVEC3F(posYfactor) );
+                    bgColor[y] = (SFVEC3F)m_boardAdapter.m_BgColorTop * SFVEC3F( posYfactor) +
+                                 (SFVEC3F)m_boardAdapter.m_BgColorBot * ( SFVEC3F( 1.0f) - SFVEC3F( posYfactor) );
                 }
 
                 CCOLORRGB hitColorShading[RAYPACKET_RAYS_PER_PACKET];
@@ -1728,7 +1721,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
     SFVEC3F hitPoint = aHitInfo.m_HitPoint;
 
     if( !m_isPreview )
-        hitPoint += aHitInfo.m_HitNormal * m_settings.GetNonCopperLayerThickness3DU() * 1.2f;
+        hitPoint += aHitInfo.m_HitNormal * m_boardAdapter.GetNonCopperLayerThickness3DU() * 1.2f;
 
     const CMATERIAL *objMaterial = aHitInfo.pHitObject->GetMaterial();
     wxASSERT( objMaterial != NULL );
@@ -1740,7 +1733,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
     const LIST_LIGHT &lightList = m_lights.GetList();
 
 #if USE_EXPERIMENTAL_SOFT_SHADOWS
-    const bool is_aa_enabled = m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) &&
+    const bool is_aa_enabled = m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) &&
                                (!m_isPreview);
 #endif
 
@@ -1766,7 +1759,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
         /*
         if( (!m_isPreview) &&
             // Little hack to make randomness to the shading and shadows
-            m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
+            m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
             vectorToLight = glm::normalize( vectorToLight +
                                             UniformRandomHemisphereDirection() * 0.1f );
          */
@@ -1789,7 +1782,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                     (aRecursiveLevel > 0) ||
 
                     // Only use soft shadows if using post processing
-                    (!m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
+                    (!m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
                   )
                 {
 #endif
@@ -1835,7 +1828,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                 shadow_att_factor_sum += shadow_att_factor_light;
             }
 
-            if( !m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
+            if( !m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
             {
                 outColor += objMaterial->Shade( aRay,
                                                 aHitInfo,
@@ -1894,7 +1887,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
 
         if( !aIsInsideObject &&
             (objMaterial->GetReflection() > 0.0f) &&
-            m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) )
+            m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) )
         {
             const unsigned int reflection_number_of_samples = objMaterial->GetNrReflectionsSamples();
 
@@ -1941,8 +1934,8 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
         // Refractions
         // /////////////////////////////////////////////////////////////////////
 
-        if( (objMaterial->GetTransparency() > 0.0f) &&
-            m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) )
+        if((objMaterial->GetTransparency() > 0.0f) &&
+           m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) )
         {
             const float airIndex = 1.000293f;
             const float glassIndex = 1.49f;

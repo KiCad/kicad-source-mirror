@@ -102,7 +102,7 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
 
 void EDA_3D_VIEWER::SyncToolbars()
 {
-    bool isOrtho = m_settings.CameraGet().GetProjection() == PROJECTION_TYPE::ORTHO;
+    bool isOrtho = m_currentCamera.GetProjection() == PROJECTION_TYPE::ORTHO;
 
     m_mainToolBar->Toggle( EDA_3D_ACTIONS::toggleOrtho, isOrtho );
     m_mainToolBar->Refresh();

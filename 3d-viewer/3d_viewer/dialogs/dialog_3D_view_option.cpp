@@ -24,7 +24,7 @@
 
 #include "dialog_3D_view_option_base.h"
 #include <3d_viewer/eda_3d_viewer.h>
-#include <3d_canvas/3d_settings.h>
+#include <3d_canvas/board_adapter.h>
 #include <bitmaps.h>
 
 class DIALOG_3D_VIEW_OPTIONS : public DIALOG_3D_VIEW_OPTIONS_BASE
@@ -33,8 +33,8 @@ public:
     explicit DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* parent );
 
 private:
-    EDA_3D_VIEWER*   m_parent;
-    EDA_3D_SETTINGS& m_settings;
+    EDA_3D_VIEWER* m_parent;
+    BOARD_ADAPTER& m_settings;
 
     void initDialog();
 
@@ -57,11 +57,11 @@ void EDA_3D_VIEWER::Install3DViewOptionDialog( wxCommandEvent& event )
 }
 
 
-DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* parent )
-     : DIALOG_3D_VIEW_OPTIONS_BASE( parent ), m_settings( *parent->GetSettings() )
+DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* parent ) :
+        DIALOG_3D_VIEW_OPTIONS_BASE( parent ),
+        m_parent( parent ),
+        m_settings( parent->GetAdapter() )
 {
-    m_parent = parent;
-
     initDialog();
 
     m_sdbSizerOK->SetDefault();

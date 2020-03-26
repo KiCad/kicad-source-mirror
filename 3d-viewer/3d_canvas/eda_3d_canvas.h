@@ -26,7 +26,7 @@
 #define EDA_3D_CANVAS_H
 
 
-#include "3d_settings.h"
+#include "board_adapter.h"
 #include "3d_rendering/c3d_render_base.h"
 #include "3d_cache/3d_cache.h"
 #include <gal/hidpi_gl_canvas.h>
@@ -53,11 +53,8 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
      *  @param aBoard: The board
      *  @param aSettings: the settings options to be used by this canvas
      */
-    EDA_3D_CANVAS( wxWindow *aParent,
-                   const int *aAttribList  = 0,
-                   BOARD *aBoard = NULL,
-                   EDA_3D_SETTINGS &aSettings = G_null_EDA_3D_SETTINGS,
-                   S3D_CACHE *a3DCachePointer = NULL );
+    EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* aBoard,
+                   BOARD_ADAPTER& aSettings, CCAMERA& aCamera, S3D_CACHE* a3DCachePointer );
 
     ~EDA_3D_CANVAS();
 
@@ -212,8 +209,8 @@ private:
     float                  m_camera_moving_speed;     // 1.0f will be 1:1
     unsigned               m_strtime_camera_movement; // Ticktime of camera movement start
 
-    EDA_3D_SETTINGS&          m_settings;                // Pre-computed 3D information and visual
-                                                      // settings to render the board
+    BOARD_ADAPTER&         m_boardAdapter;            // Pre-computed 3D info and settings
+    CCAMERA&               m_camera;
     C3D_RENDER_BASE*       m_3d_render;
     C3D_RENDER_RAYTRACING* m_3d_render_raytracing;
     C3D_RENDER_OGL_LEGACY* m_3d_render_ogl_legacy;

@@ -32,8 +32,9 @@
 #ifndef EDA_3D_VIEWER_H
 #define EDA_3D_VIEWER_H
 
-#include "3d_canvas/3d_settings.h"
-#include "../3d_canvas/eda_3d_canvas.h"
+#include "3d_canvas/board_adapter.h"
+#include "3d_canvas/eda_3d_canvas.h"
+#include "3d_rendering/ctrack_ball.h"
 #include <kiway_player.h>
 #include <wx/colourdata.h>
 #include <../common/dialogs/dialog_color_picker.h>  // for CUSTOM_COLORS_LIST definition
@@ -62,7 +63,7 @@ enum EDA_3D_VIEWER_STATUSBAR
 /**
  *  Create and handle a window for the 3d viewer connected to a Kiway and a pcbboard
  */
-class EDA_3D_VIEWER : public EDA_3D_SETTINGS_HOLDER, public KIWAY_PLAYER
+class EDA_3D_VIEWER : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
 {
 
  public:
@@ -101,10 +102,8 @@ class EDA_3D_VIEWER : public EDA_3D_SETTINGS_HOLDER, public KIWAY_PLAYER
      */
     void NewDisplay( bool aForceImmediateRedraw = false );
 
-    /**
-     *  @return current settings
-     */
-    EDA_3D_SETTINGS* GetSettings() override { return &m_settings; }
+    BOARD_ADAPTER& GetAdapter() override { return m_boardAdapter; }
+    CCAMERA& GetCurrentCamera() override { return m_currentCamera; }
 
     /**
      * Get a SFVEC3D from a wx colour dialog
@@ -155,7 +154,7 @@ class EDA_3D_VIEWER : public EDA_3D_SETTINGS_HOLDER, public KIWAY_PLAYER
     void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
 
-    void SynchroniseColoursWithBoard( void );
+    void SynchroniseColoursWithBoard();
 
 private:
     /// Called when user press the File->Exit
@@ -209,7 +208,9 @@ private:
 
     ACTION_TOOLBAR*  m_mainToolBar;
     EDA_3D_CANVAS*   m_canvas;
-    EDA_3D_SETTINGS  m_settings;
+    BOARD_ADAPTER    m_boardAdapter;
+    CCAMERA&         m_currentCamera;
+    CTRACK_BALL      m_trackBallCamera;
 
     TOOL_DISPATCHER* m_toolDispatcher;
 

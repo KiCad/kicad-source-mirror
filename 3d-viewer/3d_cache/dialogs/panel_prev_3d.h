@@ -42,6 +42,7 @@
 #include <tools_holder.h>
 #include <3d_canvas/eda_3d_canvas.h>
 #include <3d_viewer_id.h>
+#include <3d_rendering/ctrack_ball.h>
 
 // Define min and max parameter values
 #define MAX_SCALE          10000.0
@@ -66,10 +67,10 @@
 class S3D_CACHE;
 class FILENAME_RESOLVER;
 class BOARD;
-class EDA_3D_SETTINGS;
+class BOARD_ADAPTER;
 class MODULE;
 
-class PANEL_PREV_3D: public EDA_3D_SETTINGS_HOLDER, public TOOLS_HOLDER, public PANEL_PREV_3D_BASE
+class PANEL_PREV_3D: public EDA_3D_BOARD_HOLDER, public TOOLS_HOLDER, public PANEL_PREV_3D_BASE
 {
 public:
     PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aModule,
@@ -79,7 +80,9 @@ public:
 
 private:
     EDA_3D_CANVAS*                   m_previewPane;
-    EDA_3D_SETTINGS*                 m_settings3Dviewer;
+    BOARD_ADAPTER                    m_boardAdapter;
+    CCAMERA&                         m_currentCamera;
+    CTRACK_BALL                      m_trackBallCamera;
 
     BOARD*                           m_dummyBoard;
     MODULE*                          m_dummyModule;
@@ -141,7 +144,7 @@ private:
 
 	void View3DISO( wxCommandEvent& event ) override
     {
-        m_settings3Dviewer->CameraGet().ToggleProjection();
+	    m_currentCamera.ToggleProjection();
         m_previewPane->Refresh();
     }
 
@@ -189,7 +192,9 @@ public:
     void OnMenuEvent( wxMenuEvent& aEvent );
 
     wxWindow* GetToolCanvas() const override { return m_previewPane; }
-    EDA_3D_SETTINGS* GetSettings() override { return m_settings3Dviewer; }
+
+    BOARD_ADAPTER& GetAdapter() override { return m_boardAdapter; }
+    CCAMERA& GetCurrentCamera() override { return m_currentCamera; }
 
     /**
      * @brief SetModelDataIdx - Sets the currently selected index in the model list so that

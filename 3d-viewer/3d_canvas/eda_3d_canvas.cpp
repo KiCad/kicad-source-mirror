@@ -84,14 +84,16 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, wxGLCanvas )
 END_EVENT_TABLE()
 
 
-EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow *aParent, const int *aAttribList, BOARD *aBoard,
-                              EDA_3D_SETTINGS &aSettings , S3D_CACHE *a3DCachePointer ) :
+EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* aBoard,
+                              BOARD_ADAPTER& aBoardAdapter, CCAMERA& aCamera,
+                              S3D_CACHE* a3DCachePointer ) :
         HIDPI_GL_CANVAS( aParent, wxID_ANY, aAttribList, wxDefaultPosition, wxDefaultSize,
                          wxFULL_REPAINT_ON_RESIZE ),
         m_eventDispatcher( nullptr ),
         m_parentStatusBar( nullptr ),
         m_glRC( nullptr ),
-        m_settings( aSettings ),
+        m_boardAdapter( aBoardAdapter ),
+        m_camera( aCamera ),
         m_3d_render( nullptr )
 {
     wxLogTrace( m_logTrace, "EDA_3D_CANVAS::EDA_3D_CANVAS" );
@@ -123,8 +125,8 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow *aParent, const int *aAttribList, BOARD *
     m_render_raytracing_was_requested = false;
     m_opengl_supports_raytracing = false;
 
-    m_3d_render_raytracing = new C3D_RENDER_RAYTRACING( aSettings );
-    m_3d_render_ogl_legacy = new C3D_RENDER_OGL_LEGACY( aSettings );
+    m_3d_render_raytracing = new C3D_RENDER_RAYTRACING( m_boardAdapter, m_camera );
+    m_3d_render_ogl_legacy = new C3D_RENDER_OGL_LEGACY( m_boardAdapter, m_camera );
 
     wxASSERT( m_3d_render_raytracing != NULL );
     wxASSERT( m_3d_render_ogl_legacy != NULL );
@@ -137,12 +139,12 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow *aParent, const int *aAttribList, BOARD *
     RenderEngineChanged();
 
     wxASSERT( aBoard != NULL );
-    m_settings.SetBoard( aBoard );
+    m_boardAdapter.SetBoard( aBoard );
 
-    m_settings.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
+    m_boardAdapter.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
 
     wxASSERT( a3DCachePointer != NULL );
-    m_settings.Set3DCacheManager( a3DCachePointer );
+    m_boardAdapter.Set3DCacheManager( a3DCachePointer );
 
     const wxEventType events[] =
     {
@@ -287,12 +289,12 @@ void EDA_3D_CANVAS::GetScreenshot( wxImage &aDstImage )
 void EDA_3D_CANVAS::ReloadRequest( BOARD *aBoard , S3D_CACHE *aCachePointer )
 {
     if( aCachePointer != NULL )
-        m_settings.Set3DCacheManager( aCachePointer );
+        m_boardAdapter.Set3DCacheManager( aCachePointer );
 
     if( aBoard != NULL )
-        m_settings.SetBoard( aBoard );
+        m_boardAdapter.SetBoard( aBoard );
 
-    m_settings.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
+    m_boardAdapter.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
 
     if( m_3d_render )
         m_3d_render->ReloadRequest();
@@ -319,10 +321,10 @@ void EDA_3D_CANVAS::DisplayStatus()
     {
         wxString msg;
 
-        msg.Printf( "dx %3.2f", m_settings.CameraGet().GetCameraPos().x );
+        msg.Printf( "dx %3.2f", m_camera.GetCameraPos().x );
         m_parentStatusBar->SetStatusText( msg, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::X_POS ) );
 
-        msg.Printf( "dy %3.2f", m_settings.CameraGet().GetCameraPos().y );
+        msg.Printf( "dy %3.2f", m_camera.GetCameraPos().y );
         m_parentStatusBar->SetStatusText( msg, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::Y_POS ) );
     }
 }
@@ -380,7 +382,7 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
     // is wrong when next another canvas is repainted.
     wxSize clientSize = GetNativePixelSize();
 
-    const bool windows_size_changed = m_settings.CameraGet().SetCurWindowSize( clientSize );
+    const bool windows_size_changed = m_camera.SetCurWindowSize( clientSize );
 
     // Initialize openGL if need
     // /////////////////////////////////////////////////////////////////////////
@@ -399,13 +401,13 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
     {
         m_3d_render = m_3d_render_ogl_legacy;
         m_render_raytracing_was_requested = false;
-        m_settings.RenderEngineSet( RENDER_ENGINE::OPENGL_LEGACY );
+        m_boardAdapter.RenderEngineSet( RENDER_ENGINE::OPENGL_LEGACY );
     }
 
     // Check if a raytacing was requested and need to switch to raytracing mode
-    if( m_settings.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
+    if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
     {
-        const bool was_camera_changed = m_settings.CameraGet().ParametersChanged();
+        const bool was_camera_changed = m_camera.ParametersChanged();
 
         // It reverts back to OpenGL mode if it was requested a raytracing
         // render of the current scene. AND the mouse / camera is moving
@@ -426,7 +428,7 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
     {
         const unsigned curtime_delta = GetRunningMicroSecs() - m_strtime_camera_movement;
         curtime_delta_s = (curtime_delta / 1e6) * m_camera_moving_speed;
-        m_settings.CameraGet().Interpolate( curtime_delta_s );
+        m_camera.Interpolate( curtime_delta_s );
 
         if( curtime_delta_s > 1.0f )
         {
@@ -456,7 +458,7 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
 
     if( m_render_pivot )
     {
-        const float scale = glm::min( m_settings.CameraGet().ZoomGet(), 1.0f );
+        const float scale = glm::min( m_camera.ZoomGet(), 1.0f );
         render_pivot( curtime_delta_s, scale * scale );
     }
 
@@ -480,7 +482,7 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
     }
 
     // This will reset the flag of camera parameters changed
-    m_settings.CameraGet().ParametersChanged();
+    m_camera.ParametersChanged();
 
     if( !err_messages.IsEmpty() )
         wxLogMessage( err_messages );
@@ -540,9 +542,9 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent &event )
     if( m_camera_is_moving )
         return;
 
-    float delta_move = m_delta_move_step_factor * m_settings.CameraGet().ZoomGet();
+    float delta_move = m_delta_move_step_factor * m_camera.ZoomGet();
 
-    if( m_settings.GetFlag( FL_MOUSEWHEEL_PANNING ) )
+    if( m_boardAdapter.GetFlag( FL_MOUSEWHEEL_PANNING ) )
         delta_move *= (0.01f * event.GetWheelRotation());
     else
         if( event.GetWheelRotation() < 0 )
@@ -557,28 +559,28 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent &event )
     //      wheel + ctrl    -> horizontal scrolling;
     //      wheel           -> zooming.
 
-    if( m_settings.GetFlag( FL_MOUSEWHEEL_PANNING ) && !event.ControlDown() )
+    if( m_boardAdapter.GetFlag( FL_MOUSEWHEEL_PANNING ) && !event.ControlDown() )
     {
         if( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL || event.ShiftDown() )
-            m_settings.CameraGet().Pan( SFVEC3F( -delta_move, 0.0f, 0.0f ) );
+            m_camera.Pan( SFVEC3F( -delta_move, 0.0f, 0.0f ) );
         else
-            m_settings.CameraGet().Pan( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
+            m_camera.Pan( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
 
         mouseActivity = true;
     }
-    else if( event.ShiftDown() && !m_settings.GetFlag( FL_MOUSEWHEEL_PANNING ) )
+    else if( event.ShiftDown() && !m_boardAdapter.GetFlag( FL_MOUSEWHEEL_PANNING ) )
     {
-        m_settings.CameraGet().Pan( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
+        m_camera.Pan( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
         mouseActivity = true;
     }
-    else if( event.ControlDown() && !m_settings.GetFlag( FL_MOUSEWHEEL_PANNING ) )
+    else if( event.ControlDown() && !m_boardAdapter.GetFlag( FL_MOUSEWHEEL_PANNING ) )
     {
-        m_settings.CameraGet().Pan( SFVEC3F( delta_move, 0.0f, 0.0f ) );
+        m_camera.Pan( SFVEC3F( delta_move, 0.0f, 0.0f ) );
         mouseActivity = true;
     }
     else
     {
-        mouseActivity = m_settings.CameraGet().Zoom( event.GetWheelRotation() > 0 ? 1.1f : 1/1.1f );
+        mouseActivity = m_camera.Zoom( event.GetWheelRotation() > 0 ? 1.1f : 1/1.1f );
     }
 
     // If it results on a camera movement
@@ -594,7 +596,7 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent &event )
     }
 
     // Update the cursor current mouse position on the camera
-    m_settings.CameraGet().SetCurMousePosition( event.GetPosition() );
+    m_camera.SetCurMousePosition( event.GetPosition() );
 }
 
 
@@ -611,7 +613,7 @@ void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
 
     float magnification = ( event.GetMagnification() + 1.0f );
 
-    m_settings.CameraGet().Zoom( magnification );
+    m_camera.Zoom( magnification );
 
     DisplayStatus();
     Request_refresh();
@@ -626,14 +628,14 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
     if( m_camera_is_moving )
         return;
 
-    m_settings.CameraGet().SetCurWindowSize( GetNativePixelSize() );
+    m_camera.SetCurWindowSize( GetNativePixelSize() );
 
     if( event.Dragging() )
     {
         if( event.LeftIsDown() )            // Drag
-            m_settings.CameraGet().Drag( event.GetPosition() );
+            m_camera.Drag( event.GetPosition() );
         else if( event.MiddleIsDown() )     // Pan
-            m_settings.CameraGet().Pan( event.GetPosition() );
+            m_camera.Pan( event.GetPosition() );
 
         m_mouse_is_moving = true;
         m_mouse_was_moved = true;
@@ -644,7 +646,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
     }
 
     const wxPoint eventPosition = event.GetPosition();
-    m_settings.CameraGet().SetCurMousePosition( eventPosition );
+    m_camera.SetCurMousePosition( eventPosition );
 }
 
 
@@ -774,7 +776,7 @@ void EDA_3D_CANVAS::move_pivot_based_on_cur_mouse_position()
     SFVEC3F rayDir;
 
     // Generate a ray origin and direction based on current mouser position and camera
-    m_settings.CameraGet().MakeRayAtCurrrentMousePosition( rayOrigin, rayDir );
+    m_camera.MakeRayAtCurrrentMousePosition( rayOrigin, rayDir );
 
     RAY mouseRay;
     mouseRay.Init( rayOrigin, rayDir );
@@ -782,12 +784,12 @@ void EDA_3D_CANVAS::move_pivot_based_on_cur_mouse_position()
     float hit_t;
 
     // Test it with the board bounding box
-    if( m_settings.GetBBox3DU().Intersect( mouseRay, &hit_t ) )
+    if( m_boardAdapter.GetBBox3DU().Intersect( mouseRay, &hit_t ) )
     {
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().SetLookAtPos_T1( mouseRay.at( hit_t ) );
-        m_settings.CameraGet().ResetXYpos_T1();
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.SetLookAtPos_T1( mouseRay.at( hit_t ) );
+        m_camera.ResetXYpos_T1();
 
         request_start_moving_camera();
     }
@@ -799,7 +801,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
     if( m_camera_is_moving )
         return false;
 
-    const float delta_move = m_delta_move_step_factor * m_settings.CameraGet().ZoomGet();
+    const float delta_move = m_delta_move_step_factor * m_camera.ZoomGet();
     const float arrow_moving_time_speed = 8.0f;
     bool handled = false;
 
@@ -810,126 +812,124 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         return true;
 
     case WXK_LEFT:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().Pan_T1( SFVEC3F( -delta_move, 0.0f, 0.0f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.Pan_T1( SFVEC3F( -delta_move, 0.0f, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
         return true;
 
     case WXK_RIGHT:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().Pan_T1( SFVEC3F( +delta_move, 0.0f, 0.0f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.Pan_T1( SFVEC3F( +delta_move, 0.0f, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
         return true;
 
     case WXK_UP:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().Pan_T1( SFVEC3F( 0.0f, +delta_move, 0.0f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.Pan_T1( SFVEC3F( 0.0f, +delta_move, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
         return true;
 
     case WXK_DOWN:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().Pan_T1( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::LINEAR );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.Pan_T1( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
         request_start_moving_camera( arrow_moving_time_speed, false );
         return true;
 
     case WXK_HOME:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().Reset_T1();
-        request_start_moving_camera( glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 1/1.26f ), 1.26f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.Reset_T1();
+        request_start_moving_camera( glm::min( glm::max( m_camera.ZoomGet(), 1/1.26f ), 1.26f ) );
         return true;
 
     case WXK_END:
         break;
 
     case WXK_TAB:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::EASING_IN_OUT );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().RotateZ_T1( glm::radians( 45.0f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::EASING_IN_OUT );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.RotateZ_T1( glm::radians( 45.0f ) );
         request_start_moving_camera();
         handled = true;
         break;
 
     case WXK_F1:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
+        m_camera.SetT0_and_T1_current_T();
 
-        if( m_settings.CameraGet().Zoom_T1( 1.26f ) )   // 3 steps per doubling
+        if( m_camera.Zoom_T1( 1.26f ) )   // 3 steps per doubling
             request_start_moving_camera( 3.0f );
 
         return true;
 
     case WXK_F2:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
+        m_camera.SetT0_and_T1_current_T();
 
-        if( m_settings.CameraGet().Zoom_T1( 1/1.26f ) ) // 3 steps per halving
+        if( m_camera.Zoom_T1( 1/1.26f ) ) // 3 steps per halving
             request_start_moving_camera( 3.0f );
 
         return true;
 
     case ID_VIEW3D_RESET:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().Reset_T1();
-        request_start_moving_camera( glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.Reset_T1();
+        request_start_moving_camera( glm::min( glm::max( m_camera.ZoomGet(), 0.5f ), 1.125f ) );
         return true;
 
     case ID_VIEW3D_RIGHT:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().Reset_T1();
-        m_settings.CameraGet().RotateZ_T1( glm::radians( -90.0f ) );
-        m_settings.CameraGet().RotateX_T1( glm::radians( -90.0f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.Reset_T1();
+        m_camera.RotateZ_T1( glm::radians( -90.0f ) );
+        m_camera.RotateX_T1( glm::radians( -90.0f ) );
         request_start_moving_camera();
         return true;
 
     case ID_VIEW3D_LEFT:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().Reset_T1();
-        m_settings.CameraGet().RotateZ_T1( glm::radians(  90.0f ) );
-        m_settings.CameraGet().RotateX_T1( glm::radians( -90.0f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.Reset_T1();
+        m_camera.RotateZ_T1( glm::radians(  90.0f ) );
+        m_camera.RotateX_T1( glm::radians( -90.0f ) );
         request_start_moving_camera();
         return true;
 
     case ID_VIEW3D_FRONT:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().Reset_T1();
-        m_settings.CameraGet().RotateX_T1( glm::radians( -90.0f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.Reset_T1();
+        m_camera.RotateX_T1( glm::radians( -90.0f ) );
         request_start_moving_camera();
         return true;
 
     case ID_VIEW3D_BACK:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().Reset_T1();
-        m_settings.CameraGet().RotateX_T1( glm::radians(  -90.0f ) );
-        m_settings.CameraGet().RotateZ_T1( glm::radians( -180.0f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.Reset_T1();
+        m_camera.RotateX_T1( glm::radians(  -90.0f ) );
+        m_camera.RotateZ_T1( glm::radians( -180.0f ) );
         request_start_moving_camera();
         return true;
 
     case ID_VIEW3D_TOP:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().Reset_T1();
-        request_start_moving_camera(
-                    glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.Reset_T1();
+        request_start_moving_camera( glm::min( glm::max( m_camera.ZoomGet(), 0.5f ), 1.125f ) );
         return true;
 
     case ID_VIEW3D_BOTTOM:
-        m_settings.CameraGet().SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().Reset_T1();
-        m_settings.CameraGet().RotateY_T1( glm::radians( 180.0f ) );
-        request_start_moving_camera(
-                    glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
+        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
+        m_camera.SetT0_and_T1_current_T();
+        m_camera.Reset_T1();
+        m_camera.RotateY_T1( glm::radians( 180.0f ) );
+        request_start_moving_camera( glm::min( glm::max( m_camera.ZoomGet(), 0.5f ), 1.125f ) );
         return true;
 
     default:
@@ -949,7 +949,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
 
 void EDA_3D_CANVAS::RenderEngineChanged()
 {
-    switch( m_settings.RenderEngineGet() )
+    switch( m_boardAdapter.RenderEngineGet() )
     {
     case RENDER_ENGINE::OPENGL_LEGACY: m_3d_render = m_3d_render_ogl_legacy; break;
     case RENDER_ENGINE::RAYTRACING:    m_3d_render = m_3d_render_raytracing; break;

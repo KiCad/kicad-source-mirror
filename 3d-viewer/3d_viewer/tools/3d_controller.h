@@ -27,7 +27,7 @@
 #include <tool/tool_interactive.h>
 
 class EDA_3D_VIEWER;
-class EDA_3D_SETTINGS;
+class BOARD_ADAPTER;
 
 
 /**
@@ -40,9 +40,10 @@ class EDA_3D_CONTROLLER : public TOOL_INTERACTIVE
 {
 public:
     EDA_3D_CONTROLLER() :
-        TOOL_INTERACTIVE( "3DViewer.Control" ),
-        m_canvas( nullptr ),
-        m_settings( nullptr )
+            TOOL_INTERACTIVE( "3DViewer.Control" ),
+            m_canvas( nullptr ),
+            m_boardAdapter( nullptr ),
+            m_camera( nullptr )
     { }
 
     ~EDA_3D_CONTROLLER() override { }
@@ -79,8 +80,9 @@ private:
     int doZoomInOut( bool aDirection, bool aCenterOnCursor );
 
 private:
-    EDA_3D_CANVAS*   m_canvas;
-    EDA_3D_SETTINGS* m_settings;
+    EDA_3D_CANVAS* m_canvas;
+    BOARD_ADAPTER* m_boardAdapter;
+    CCAMERA*       m_camera;
 };
 
 #endif

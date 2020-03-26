@@ -30,17 +30,12 @@
  *  board_items_to_polygon_shape_transform.cpp
  */
 
-#include "3d_settings.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/cring2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/cfilledcircle2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/croundsegment2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/cpolygon4pts2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/cpolygon2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes2D/ctriangle2d.h"
-#include "../3d_rendering/3d_render_raytracing/accelerators/ccontainer2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes3D/ccylinder.h"
-#include "../3d_rendering/3d_render_raytracing/shapes3D/clayeritem.h"
-
+#include <board_adapter.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_pad.h>
@@ -87,10 +82,10 @@ void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 // Based on
 // void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet
 // board_items_to_polygon_shape_transform.cpp
-void EDA_3D_SETTINGS::AddShapeWithClearanceToContainer( const TEXTE_PCB* aText,
-                                                        CGENERICCONTAINER2D *aDstContainer,
-                                                        PCB_LAYER_ID aLayerId,
-                                                        int aClearanceValue )
+void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const TEXTE_PCB* aText,
+                                                      CGENERICCONTAINER2D *aDstContainer,
+                                                      PCB_LAYER_ID aLayerId,
+                                                      int aClearanceValue )
 {
     wxSize size = aText->GetTextSize();
 
@@ -131,10 +126,10 @@ void EDA_3D_SETTINGS::AddShapeWithClearanceToContainer( const TEXTE_PCB* aText,
 }
 
 
-void EDA_3D_SETTINGS::AddShapeWithClearanceToContainer( const DIMENSION* aDimension,
-                                                        CGENERICCONTAINER2D *aDstContainer,
-                                                        PCB_LAYER_ID aLayerId,
-                                                        int aClearanceValue )
+void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DIMENSION* aDimension,
+                                                      CGENERICCONTAINER2D *aDstContainer,
+                                                      PCB_LAYER_ID aLayerId,
+                                                      int aClearanceValue )
 {
     AddShapeWithClearanceToContainer(&aDimension->Text(), aDstContainer, aLayerId, aClearanceValue);
 
@@ -168,10 +163,10 @@ void EDA_3D_SETTINGS::AddShapeWithClearanceToContainer( const DIMENSION* aDimens
 // Based on
 // void MODULE::TransformGraphicShapesWithClearanceToPolygonSet
 // board_items_to_polygon_shape_transform.cpp#L204
-void EDA_3D_SETTINGS::AddGraphicsShapesWithClearanceToContainer( const MODULE* aModule,
-                                                                 CGENERICCONTAINER2D *aDstContainer,
-                                                                 PCB_LAYER_ID aLayerId,
-                                                                 int aInflateValue )
+void BOARD_ADAPTER::AddGraphicsShapesWithClearanceToContainer( const MODULE* aModule,
+                                                               CGENERICCONTAINER2D *aDstContainer,
+                                                               PCB_LAYER_ID aLayerId,
+                                                               int aInflateValue )
 {
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
     EDGE_MODULE* outline;
@@ -234,8 +229,8 @@ void EDA_3D_SETTINGS::AddGraphicsShapesWithClearanceToContainer( const MODULE* a
 }
 
 
-COBJECT2D *EDA_3D_SETTINGS::createNewTrack( const TRACK* aTrack,
-                                            int aClearanceValue ) const
+COBJECT2D *BOARD_ADAPTER::createNewTrack( const TRACK* aTrack,
+                                          int aClearanceValue ) const
 {
     SFVEC2F start3DU(  aTrack->GetStart().x * m_biuTo3Dunits,
                       -aTrack->GetStart().y * m_biuTo3Dunits ); // y coord is inverted
@@ -281,9 +276,9 @@ COBJECT2D *EDA_3D_SETTINGS::createNewTrack( const TRACK* aTrack,
 // Based on:
 // void D_PAD:: TransformShapeWithClearanceToPolygon(
 // board_items_to_polygon_shape_transform.cpp
-void EDA_3D_SETTINGS::createNewPadWithClearance( const D_PAD* aPad,
-                                                 CGENERICCONTAINER2D *aDstContainer,
-                                                 wxSize aClearanceValue ) const
+void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
+                                               CGENERICCONTAINER2D *aDstContainer,
+                                               wxSize aClearanceValue ) const
 {
     // note: for most of shapes, aClearanceValue.x = aClearanceValue.y
     // only rectangular and oval shapes can have different values
@@ -295,7 +290,7 @@ void EDA_3D_SETTINGS::createNewPadWithClearance( const D_PAD* aPad,
     if( !dx || !dy )
     {
         wxLogTrace( m_logTrace,
-                    wxT( "EDA_3D_SETTINGS::createNewPadWithClearance - found an invalid pad" ) );
+                    wxT( "BOARD_ADAPTER::createNewPadWithClearance - found an invalid pad" ) );
 
         return;
     }
@@ -533,13 +528,13 @@ void EDA_3D_SETTINGS::createNewPadWithClearance( const D_PAD* aPad,
 // Based on:
 // BuildPadDrillShapePolygon
 // board_items_to_polygon_shape_transform.cpp
-COBJECT2D *EDA_3D_SETTINGS::createNewPadDrill( const D_PAD* aPad, int aInflateValue )
+COBJECT2D *BOARD_ADAPTER::createNewPadDrill( const D_PAD* aPad, int aInflateValue )
 {
     wxSize drillSize = aPad->GetDrillSize();
 
     if( !drillSize.x || !drillSize.y )
     {
-        wxLogTrace( m_logTrace, wxT( "EDA_3D_SETTINGS::createNewPadDrill - found an invalid pad" ) );
+        wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::createNewPadDrill - found an invalid pad" ) );
         return NULL;
     }
 
@@ -584,11 +579,11 @@ COBJECT2D *EDA_3D_SETTINGS::createNewPadDrill( const D_PAD* aPad, int aInflateVa
 }
 
 
-void EDA_3D_SETTINGS::AddPadsShapesWithClearanceToContainer( const MODULE* aModule,
-                                                             CGENERICCONTAINER2D *aDstContainer,
-                                                             PCB_LAYER_ID aLayerId,
-                                                             int aInflateValue,
-                                                             bool aSkipNPTHPadsWihNoCopper )
+void BOARD_ADAPTER::AddPadsShapesWithClearanceToContainer( const MODULE* aModule,
+                                                           CGENERICCONTAINER2D *aDstContainer,
+                                                           PCB_LAYER_ID aLayerId,
+                                                           int aInflateValue,
+                                                           bool aSkipNPTHPadsWihNoCopper )
 {
     wxSize margin;
 
@@ -647,13 +642,13 @@ void EDA_3D_SETTINGS::AddPadsShapesWithClearanceToContainer( const MODULE* aModu
 
 // based on TransformArcToPolygon function from
 // common/convert_basic_shapes_to_polygon.cpp
-void EDA_3D_SETTINGS::TransformArcToSegments( const wxPoint &aCentre,
-                                              const wxPoint &aStart,
-                                              double aArcAngle,
-                                              int aCircleToSegmentsCount,
-                                              int aWidth,
-                                              CGENERICCONTAINER2D *aDstContainer,
-                                              const BOARD_ITEM &aBoardItem )
+void BOARD_ADAPTER::TransformArcToSegments( const wxPoint &aCentre,
+                                            const wxPoint &aStart,
+                                            double aArcAngle,
+                                            int aCircleToSegmentsCount,
+                                            int aWidth,
+                                            CGENERICCONTAINER2D *aDstContainer,
+                                            const BOARD_ITEM &aBoardItem )
 {
     wxPoint arc_start, arc_end;
     int     delta = 3600 / aCircleToSegmentsCount;   // rotate angle in 0.1 degree
@@ -724,10 +719,10 @@ void EDA_3D_SETTINGS::TransformArcToSegments( const wxPoint &aCentre,
 // Based on
 // TransformShapeWithClearanceToPolygon
 // board_items_to_polygon_shape_transform.cpp#L431
-void EDA_3D_SETTINGS::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSegment,
-                                                        CGENERICCONTAINER2D *aDstContainer,
-                                                        PCB_LAYER_ID aLayerId,
-                                                        int aClearanceValue )
+void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSegment,
+                                                      CGENERICCONTAINER2D *aDstContainer,
+                                                      PCB_LAYER_ID aLayerId,
+                                                      int aClearanceValue )
 {
     // The full width of the lines to create
     // The extra 1 protects the inner/outer radius values from degeneracy
@@ -815,9 +810,9 @@ void EDA_3D_SETTINGS::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDraw
 // Based on
 // TransformSolidAreasShapesToPolygonSet
 // board_items_to_polygon_shape_transform.cpp
-void EDA_3D_SETTINGS::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneContainer,
-                                                      CGENERICCONTAINER2D *aDstContainer,
-                                                      PCB_LAYER_ID aLayerId )
+void BOARD_ADAPTER::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneContainer,
+                                                    CGENERICCONTAINER2D *aDstContainer,
+                                                    PCB_LAYER_ID aLayerId )
 {
     // Copy the polys list because we have to simplify it
     SHAPE_POLY_SET polyList = SHAPE_POLY_SET( aZoneContainer->GetFilledPolysList(), true );
@@ -896,9 +891,9 @@ void EDA_3D_SETTINGS::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZon
 
 
 
-void EDA_3D_SETTINGS::buildPadShapeThickOutlineAsSegments( const D_PAD*  aPad,
-                                                           CGENERICCONTAINER2D *aDstContainer,
-                                                           int aWidth )
+void BOARD_ADAPTER::buildPadShapeThickOutlineAsSegments( const D_PAD*  aPad,
+                                                         CGENERICCONTAINER2D *aDstContainer,
+                                                         int aWidth )
 {
     if( aPad->GetShape() == PAD_SHAPE_CIRCLE )    // Draw a ring
     {

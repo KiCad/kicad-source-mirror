@@ -141,7 +141,7 @@ void C3D_RENDER_OGL_LEGACY::add_object_to_triangle_layer( const CRING2D * aRing,
     generate_ring_contour( center,
                            inner,
                            outer,
-                           m_settings.GetNrSegmentsCircle( outer * 2.0f ),
+                           m_boardAdapter.GetNrSegmentsCircle( outer * 2.0f ),
                            innerContour,
                            outerContour,
                            false );
@@ -318,7 +318,7 @@ CLAYERS_OGL_DISP_LISTS *C3D_RENDER_OGL_LEGACY::generate_holes_display_list(
             layerTriangles->AddToMiddleContourns( aPoly,
                                                   aZbot,
                                                   aZtop,
-                                                  m_settings.BiuTo3Dunits(),
+                                                  m_boardAdapter.BiuTo3Dunits(),
                                                   aInvertFaces );
         }
 
@@ -348,14 +348,14 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
 
     unsigned stats_startReloadTime = GetRunningMicroSecs();
 
-    m_settings.InitSettings( aStatusTextReporter, aWarningTextReporter );
+    m_boardAdapter.InitSettings( aStatusTextReporter, aWarningTextReporter );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_endReloadTime = GetRunningMicroSecs();
 #endif
 
-    SFVEC3F camera_pos = m_settings.GetBoardCenter3DU();
-    m_settings.CameraGet().SetBoardLookAtPos( camera_pos );
+    SFVEC3F camera_pos = m_boardAdapter.GetBoardCenter3DU();
+    m_camera.SetBoardLookAtPos( camera_pos );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_start_OpenGL_Load_Time = GetRunningMicroSecs();
@@ -368,11 +368,11 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
     // /////////////////////////////////////////////////////////////////////////
 
     CCONTAINER2D boardContainer;
-    SHAPE_POLY_SET tmpBoard = m_settings.GetBoardPoly();
+    SHAPE_POLY_SET tmpBoard = m_boardAdapter.GetBoardPoly();
     Convert_shape_line_polygon_to_triangles( tmpBoard,
                                              boardContainer,
-                                             m_settings.BiuTo3Dunits(),
-                                             (const BOARD_ITEM &)*m_settings.GetBoard() );
+                                             m_boardAdapter.BiuTo3Dunits(),
+                                             (const BOARD_ITEM &)*m_boardAdapter.GetBoard() );
 
     const LIST_OBJECT2D &listBoardObject2d = boardContainer.GetList();
 
@@ -409,7 +409,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
                                   layer_z_bot );
         }
 
-        const SHAPE_POLY_SET &boardPoly = m_settings.GetBoardPoly();
+        const SHAPE_POLY_SET &boardPoly = m_boardAdapter.GetBoardPoly();
 
         wxASSERT( boardPoly.OutlineCount() > 0 );
 
@@ -418,7 +418,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
             layerTriangles->AddToMiddleContourns( boardPoly,
                                                   layer_z_bot,
                                                   layer_z_top,
-                                                  m_settings.BiuTo3Dunits(),
+                                                  m_boardAdapter.BiuTo3Dunits(),
                                                   false );
 
             m_ogl_disp_list_board = new CLAYERS_OGL_DISP_LISTS( *layerTriangles,
@@ -437,52 +437,52 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
         aStatusTextReporter->Report( _( "Load OpenGL: holes and vias" ) );
 
     m_ogl_disp_list_through_holes_outer = generate_holes_display_list(
-                m_settings.GetThroughHole_Outer().GetList(),
-                m_settings.GetThroughHole_Outer_poly(),
-                1.0f,
-                0.0f,
-                false );
+            m_boardAdapter.GetThroughHole_Outer().GetList(),
+            m_boardAdapter.GetThroughHole_Outer_poly(),
+            1.0f,
+            0.0f,
+            false );
 
-    SHAPE_POLY_SET bodyHoles = m_settings.GetThroughHole_Outer_poly();
+    SHAPE_POLY_SET bodyHoles = m_boardAdapter.GetThroughHole_Outer_poly();
 
-    bodyHoles.BooleanAdd( m_settings.GetThroughHole_Outer_poly_NPTH(),
+    bodyHoles.BooleanAdd( m_boardAdapter.GetThroughHole_Outer_poly_NPTH(),
                           SHAPE_POLY_SET::PM_FAST );
 
     m_ogl_disp_list_through_holes_outer_with_npth = generate_holes_display_list(
-                m_settings.GetThroughHole_Outer().GetList(),
-                bodyHoles,
-                1.0f,
-                0.0f,
-                false );
+            m_boardAdapter.GetThroughHole_Outer().GetList(),
+            bodyHoles,
+            1.0f,
+            0.0f,
+            false );
 
     m_ogl_disp_list_through_holes_inner = generate_holes_display_list(
-                m_settings.GetThroughHole_Inner().GetList(),
-                m_settings.GetThroughHole_Inner_poly(),
-                1.0f,
-                0.0f,
-                true );
+            m_boardAdapter.GetThroughHole_Inner().GetList(),
+            m_boardAdapter.GetThroughHole_Inner_poly(),
+            1.0f,
+            0.0f,
+            true );
 
 
     m_ogl_disp_list_through_holes_vias_outer = generate_holes_display_list(
-                m_settings.GetThroughHole_Vias_Outer().GetList(),
-                m_settings.GetThroughHole_Vias_Outer_poly(),
-                1.0f,
-                0.0f,
-                false );
+            m_boardAdapter.GetThroughHole_Vias_Outer().GetList(),
+            m_boardAdapter.GetThroughHole_Vias_Outer_poly(),
+            1.0f,
+            0.0f,
+            false );
 
     // Not in use
     //m_ogl_disp_list_through_holes_vias_inner = generate_holes_display_list(
-    //      m_settings.GetThroughHole_Vias_Inner().GetList(),
-    //      m_settings.GetThroughHole_Vias_Inner_poly(),
+    //      m_boardAdapter.GetThroughHole_Vias_Inner().GetList(),
+    //      m_boardAdapter.GetThroughHole_Vias_Inner_poly(),
     //      1.0f, 0.0f,
     //      false );
 
-    const MAP_POLY & innerMapHoles = m_settings.GetPolyMapHoles_Inner();
-    const MAP_POLY & outerMapHoles = m_settings.GetPolyMapHoles_Outer();
+    const MAP_POLY & innerMapHoles = m_boardAdapter.GetPolyMapHoles_Inner();
+    const MAP_POLY & outerMapHoles = m_boardAdapter.GetPolyMapHoles_Outer();
 
     wxASSERT( innerMapHoles.size() == outerMapHoles.size() );
 
-    const MAP_CONTAINER_2D &map_holes = m_settings.GetMapLayersHoles();
+    const MAP_CONTAINER_2D &map_holes = m_boardAdapter.GetMapLayersHoles();
 
     if( outerMapHoles.size() > 0 )
     {
@@ -526,13 +526,13 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
     if( aStatusTextReporter )
         aStatusTextReporter->Report( _( "Load OpenGL: layers" ) );
 
-    for( MAP_CONTAINER_2D::const_iterator ii = m_settings.GetMapLayers().begin();
-         ii != m_settings.GetMapLayers().end();
+    for( MAP_CONTAINER_2D::const_iterator ii = m_boardAdapter.GetMapLayers().begin();
+         ii != m_boardAdapter.GetMapLayers().end();
          ++ii )
     {
         PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
 
-        if( !m_settings.Is3DLayerEnabled( layer_id ) )
+        if( !m_boardAdapter.Is3DLayerEnabled( layer_id ) )
             continue;
 
         const CBVHCONTAINER2D *container2d = static_cast<const CBVHCONTAINER2D *>(ii->second);
@@ -593,7 +593,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
             }
         }
 
-        const MAP_POLY &map_poly = m_settings.GetPolyMap();
+        const MAP_POLY &map_poly = m_boardAdapter.GetPolyMap();
 
         // Load the vertical (Z axis)  component of shapes
         if( map_poly.find( layer_id ) != map_poly.end() )
@@ -602,7 +602,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
 
             if( polyList->OutlineCount() > 0 )
                 layerTriangles->AddToMiddleContourns( *polyList, layer_z_bot, layer_z_top,
-                                                      m_settings.BiuTo3Dunits(), false );
+                                                      m_boardAdapter.BiuTo3Dunits(), false );
         }
 
         // Create display list
@@ -675,8 +675,8 @@ void C3D_RENDER_OGL_LEGACY::get_layer_z_pos ( PCB_LAYER_ID aLayerID,
                                               float &aOutZtop,
                                               float &aOutZbot ) const
 {
-    aOutZbot = m_settings.GetLayerBottomZpos3DU( aLayerID );
-    aOutZtop = m_settings.GetLayerTopZpos3DU( aLayerID );
+    aOutZbot = m_boardAdapter.GetLayerBottomZpos3DU( aLayerID );
+    aOutZtop = m_boardAdapter.GetLayerTopZpos3DU( aLayerID );
 
     if( aOutZtop < aOutZbot )
     {
@@ -731,12 +731,12 @@ void C3D_RENDER_OGL_LEGACY::generate_cylinder( const SFVEC2F &aCenter,
 
 void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
 {
-    if( m_settings.GetStats_Nr_Vias() )
+    if( m_boardAdapter.GetStats_Nr_Vias() )
     {
         const unsigned int reserve_nr_triangles_estimation =
-                m_settings.GetNrSegmentsCircle( m_settings.GetStats_Med_Via_Hole_Diameter3DU() ) *
+                m_boardAdapter.GetNrSegmentsCircle( m_boardAdapter.GetStats_Med_Via_Hole_Diameter3DU() ) *
                 8 *
-                m_settings.GetStats_Nr_Vias();
+                m_boardAdapter.GetStats_Nr_Vias();
 
         CLAYER_TRIANGLES *layerTriangleVIA = new CLAYER_TRIANGLES( reserve_nr_triangles_estimation );
 
@@ -744,20 +744,20 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
         // /////////////////////////////////////////////////////////////////////////
 
         // Insert vias holes (vertical cylinders)
-        for( auto track : m_settings.GetBoard()->Tracks() )
+        for( auto track : m_boardAdapter.GetBoard()->Tracks() )
         {
             if( track->Type() == PCB_VIA_T )
             {
                 const VIA *via = static_cast<const VIA*>(track);
 
-                const float  holediameter = via->GetDrillValue() * m_settings.BiuTo3Dunits();
-                const float  thickness = m_settings.GetCopperThickness3DU();
-                const int    nrSegments = m_settings.GetNrSegmentsCircle( via->GetDrillValue() );
-                const double correctionFactor = m_settings.GetCircleCorrectionFactor( nrSegments );
+                const float  holediameter = via->GetDrillValue() * m_boardAdapter.BiuTo3Dunits();
+                const float  thickness = m_boardAdapter.GetCopperThickness3DU();
+                const int    nrSegments = m_boardAdapter.GetNrSegmentsCircle( via->GetDrillValue() );
+                const double correctionFactor = m_boardAdapter.GetCircleCorrectionFactor( nrSegments );
                 const float  hole_inner_radius = ( holediameter / 2.0f ) * correctionFactor;
 
-                const SFVEC2F via_center(  via->GetStart().x * m_settings.BiuTo3Dunits(),
-                                          -via->GetStart().y * m_settings.BiuTo3Dunits() );
+                const SFVEC2F via_center( via->GetStart().x * m_boardAdapter.BiuTo3Dunits(),
+                                          -via->GetStart().y * m_boardAdapter.BiuTo3Dunits() );
 
                 PCB_LAYER_ID top_layer, bottom_layer;
                 via->LayerPair( &top_layer, &bottom_layer );
@@ -788,7 +788,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
     }
 
 
-    if( m_settings.GetStats_Nr_Holes() > 0 )
+    if( m_boardAdapter.GetStats_Nr_Holes() > 0 )
     {
         SHAPE_POLY_SET tht_outer_holes_poly; // Stores the outer poly of the copper holes (the pad)
         SHAPE_POLY_SET tht_inner_holes_poly; // Stores the inner poly of the copper holes (the hole)
@@ -797,7 +797,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
         tht_inner_holes_poly.RemoveAllContours();
 
         // Insert pads holes (vertical cylinders)
-        for( const auto module : m_settings.GetBoard()->Modules() )
+        for( const auto module : m_boardAdapter.GetBoard()->Modules() )
         {
             for( auto pad : module->Pads() )
             {
@@ -812,10 +812,10 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
                     // we use the hole diameter to calculate the seg count.
                     // for round holes, drillsize.x == drillsize.y
                     // for slots, the diameter is the smaller of (drillsize.x, drillsize.y)
-                    int    copperThickness = m_settings.GetCopperThicknessBIU();
+                    int    copperThickness = m_boardAdapter.GetCopperThicknessBIU();
                     int    radius = std::min( drillsize.x, drillsize.y ) / 2 + copperThickness;
-                    int    nrSegments = m_settings.GetNrSegmentsCircle( radius * 2 );
-                    double correctionFactor = m_settings.GetCircleCorrectionFactor( nrSegments );
+                    int    nrSegments = m_boardAdapter.GetNrSegmentsCircle( radius * 2 );
+                    double correctionFactor = m_boardAdapter.GetCircleCorrectionFactor( nrSegments );
                     int    correction = radius * ( correctionFactor - 1 );
 
                     pad->BuildPadDrillShapePolygon(
@@ -834,8 +834,8 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
 
         Convert_shape_line_polygon_to_triangles( tht_outer_holes_poly,
                                                  holesContainer,
-                                                 m_settings.BiuTo3Dunits(),
-                                                 (const BOARD_ITEM &)*m_settings.GetBoard() );
+                                                 m_boardAdapter.BiuTo3Dunits(),
+                                                 (const BOARD_ITEM &)*m_boardAdapter.GetBoard() );
 
         const LIST_OBJECT2D &listHolesObject2d = holesContainer.GetList();
 
@@ -873,7 +873,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
             {
                 layerTriangles->AddToMiddleContourns( tht_outer_holes_poly,
                                                       layer_z_bot, layer_z_top,
-                                                      m_settings.BiuTo3Dunits(),
+                                                      m_boardAdapter.BiuTo3Dunits(),
                                                       false );
 
                 m_ogl_disp_list_pads_holes = new CLAYERS_OGL_DISP_LISTS(
@@ -896,13 +896,13 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
  */
 void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER *aStatusTextReporter )
 {
-    if( (!m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL )) &&
-        (!m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT )) &&
-        (!m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL )) )
+    if((!m_boardAdapter.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL )) &&
+       (!m_boardAdapter.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT )) &&
+       (!m_boardAdapter.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL )) )
         return;
 
     // Go for all modules
-    for( auto module : m_settings.GetBoard()->Modules() )
+    for( auto module : m_boardAdapter.GetBoard()->Modules() )
     {
         if( !module->Models().empty() )
         {
@@ -930,14 +930,14 @@ void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER *aStatusTextReporter )
                     {
                         // It is not present, try get it from cache
                         const S3DMODEL *modelPtr =
-                                m_settings.Get3DCacheManager()->GetModel( sM->m_Filename );
+                                m_boardAdapter.Get3DCacheManager()->GetModel( sM->m_Filename );
 
                         // only add it if the return is not NULL
                         if( modelPtr )
                         {
                             C_OGL_3DMODEL* ogl_model =
                                     new C_OGL_3DMODEL( *modelPtr,
-                                                       m_settings.MaterialModeGet() );
+                                                       m_boardAdapter.MaterialModeGet() );
 
                             if( ogl_model )
                                 m_3dmodel_map[ sM->m_Filename ] = ogl_model;

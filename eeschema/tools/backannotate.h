@@ -127,7 +127,7 @@ private:
     wxString getTextFromField( const SCH_REFERENCE& aRef, const NumFieldType aField );
 
     /**
-     * @brief Check if modules has different data. Check only if corresponding \ref m_settings
+     * @brief Check if modules has different data. Check only if corresponding \ref m_boardAdapter
      * flag is rised
      * @param aFirst first module to compare
      * @param aSecond second module to compare

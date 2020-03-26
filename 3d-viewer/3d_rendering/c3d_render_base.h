@@ -32,7 +32,7 @@
 
 
 #include <pcb_base_frame.h>
-#include "3d_canvas/3d_settings.h"
+#include "3d_canvas/board_adapter.h"
 #include <reporter.h>
 
 #include <widgets/busy_indicator.h>
@@ -47,7 +47,7 @@ class C3D_RENDER_BASE
     // Operations
 public:
 
-    explicit C3D_RENDER_BASE( EDA_3D_SETTINGS &aSettings );
+    explicit C3D_RENDER_BASE( BOARD_ADAPTER& aBoardAdapter, CCAMERA& aCamera );
 
     virtual ~C3D_RENDER_BASE() = 0;
 
@@ -107,7 +107,9 @@ protected:
     std::unique_ptr<BUSY_INDICATOR> CreateBusyIndicator() const;
 
     /// settings refrence in use for this render
-    EDA_3D_SETTINGS &m_settings;
+    BOARD_ADAPTER& m_boardAdapter;
+
+    CCAMERA&       m_camera;
 
     /// flag if the opengl specific for this render was already initialized
     bool m_is_opengl_initialized;

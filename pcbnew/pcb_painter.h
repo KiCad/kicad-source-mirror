@@ -232,7 +232,7 @@ public:
         m_pcbSettings = *static_cast<const PCB_RENDER_SETTINGS*>( aSettings );
     }
 
-    /// @copydoc PAINTER::GetSettings()
+    /// @copydoc PAINTER::GetAdapter()
     virtual PCB_RENDER_SETTINGS* GetSettings() override
     {
         return &m_pcbSettings;

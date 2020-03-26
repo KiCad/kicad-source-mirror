@@ -28,7 +28,7 @@
  */
 
 #include "../3d_rendering/ccamera.h"
-#include "3d_settings.h"
+#include "board_adapter.h"
 #include <3d_rendering/3d_render_raytracing/shapes2D/cpolygon2d.h>
 #include <class_board.h>
 #include <3d_math.h>
@@ -44,22 +44,17 @@
  *  "KI_TRACE_EDA_CINFO3D_VISU".  See the wxWidgets documentation on wxLogTrace for
  *  more information.
  */
-const wxChar *EDA_3D_SETTINGS::m_logTrace = wxT( "KI_TRACE_EDA_CINFO3D_VISU" );
+const wxChar *BOARD_ADAPTER::m_logTrace = wxT( "KI_TRACE_EDA_CINFO3D_VISU" );
 
 
-EDA_3D_SETTINGS G_null_EDA_3D_SETTINGS;
-
-
-EDA_3D_SETTINGS::EDA_3D_SETTINGS() :
+BOARD_ADAPTER::BOARD_ADAPTER() :
         m_board( nullptr ),
         m_3d_model_manager( nullptr ),
         m_colors( nullptr ),
         m_layerZcoordTop(),
-        m_layerZcoordBottom(),
-        m_currentCamera( m_trackBallCamera ),
-        m_trackBallCamera( RANGE_SCALE_3D )
+        m_layerZcoordBottom()
 {
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_SETTINGS::EDA_3D_SETTINGS" ) );
+    wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::BOARD_ADAPTER" ) );
 
     m_3D_grid_type     = GRID3D_TYPE::NONE;
     m_drawFlags.resize( FL_LAST, false );
@@ -119,13 +114,13 @@ EDA_3D_SETTINGS::EDA_3D_SETTINGS() :
 }
 
 
-EDA_3D_SETTINGS::~EDA_3D_SETTINGS()
+BOARD_ADAPTER::~BOARD_ADAPTER()
 {
     destroyLayers();
 }
 
 
-bool EDA_3D_SETTINGS::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
+bool BOARD_ADAPTER::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
 {
     wxASSERT( aLayer < PCB_LAYER_ID_COUNT );
 
@@ -208,7 +203,7 @@ bool EDA_3D_SETTINGS::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
 }
 
 
-bool EDA_3D_SETTINGS::GetFlag( DISPLAY3D_FLG aFlag ) const
+bool BOARD_ADAPTER::GetFlag( DISPLAY3D_FLG aFlag ) const
 {
     wxASSERT( aFlag < FL_LAST );
 
@@ -216,14 +211,14 @@ bool EDA_3D_SETTINGS::GetFlag( DISPLAY3D_FLG aFlag ) const
 }
 
 
-void EDA_3D_SETTINGS::SetFlag( DISPLAY3D_FLG aFlag, bool aState )
+void BOARD_ADAPTER::SetFlag( DISPLAY3D_FLG aFlag, bool aState )
 {
     wxASSERT( aFlag < FL_LAST );
 
     m_drawFlags[aFlag] = aState;
 }
 
-bool EDA_3D_SETTINGS::ShouldModuleBeDisplayed( MODULE_ATTR_T aModuleAttributs ) const
+bool BOARD_ADAPTER::ShouldModuleBeDisplayed( MODULE_ATTR_T aModuleAttributs ) const
 {
     if( ( ( aModuleAttributs == MOD_DEFAULT ) &&
           GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) ) ||
@@ -243,12 +238,12 @@ bool EDA_3D_SETTINGS::ShouldModuleBeDisplayed( MODULE_ATTR_T aModuleAttributs ) 
 #define COPPER_THICKNESS KiROUND( 0.035 * IU_PER_MM )   // for 35 um
 #define TECH_LAYER_THICKNESS KiROUND( 0.04 * IU_PER_MM )
 
-int EDA_3D_SETTINGS::GetCopperThicknessBIU() const
+int BOARD_ADAPTER::GetCopperThicknessBIU() const
 {
     return COPPER_THICKNESS;
 }
 
-unsigned int EDA_3D_SETTINGS::GetNrSegmentsCircle( float aDiameter3DU ) const
+unsigned int BOARD_ADAPTER::GetNrSegmentsCircle( float aDiameter3DU ) const
 {
     wxASSERT( aDiameter3DU > 0.0f );
 
@@ -256,7 +251,7 @@ unsigned int EDA_3D_SETTINGS::GetNrSegmentsCircle( float aDiameter3DU ) const
 }
 
 
-unsigned int EDA_3D_SETTINGS::GetNrSegmentsCircle( int aDiameterBIU ) const
+unsigned int BOARD_ADAPTER::GetNrSegmentsCircle( int aDiameterBIU ) const
 {
     wxASSERT( aDiameterBIU > 0 );
 
@@ -265,7 +260,7 @@ unsigned int EDA_3D_SETTINGS::GetNrSegmentsCircle( int aDiameterBIU ) const
 }
 
 
-double EDA_3D_SETTINGS::GetCircleCorrectionFactor( int aNrSides ) const
+double BOARD_ADAPTER::GetCircleCorrectionFactor( int aNrSides ) const
 {
     wxASSERT( aNrSides >= 3 );
 
@@ -273,9 +268,9 @@ double EDA_3D_SETTINGS::GetCircleCorrectionFactor( int aNrSides ) const
 }
 
 
-void EDA_3D_SETTINGS::InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
+void BOARD_ADAPTER::InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWarningTextReporter )
 {
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_SETTINGS::InitSettings" ) );
+    wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::InitSettings" ) );
 
     // Calculates the board bounding box
     // First, use only the board outlines
@@ -446,7 +441,7 @@ void EDA_3D_SETTINGS::InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWa
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_stopCreateLayersTime = GetRunningMicroSecs();
 
-    printf( "EDA_3D_SETTINGS::InitSettings times\n" );
+    printf( "BOARD_ADAPTER::InitSettings times\n" );
     printf( "  CreateBoardPoly:          %.3f ms\n",
             (float)( stats_stopCreateBoardPolyTime  - stats_startCreateBoardPolyTime  ) / 1e3 );
     printf( "  CreateLayers and holes:   %.3f ms\n",
@@ -456,7 +451,7 @@ void EDA_3D_SETTINGS::InitSettings( REPORTER* aStatusTextReporter, REPORTER* aWa
 }
 
 
-bool EDA_3D_SETTINGS::createBoardPolygon()
+bool BOARD_ADAPTER::createBoardPolygon()
 {
     m_board_poly.RemoveAllContours();
 
@@ -466,7 +461,7 @@ bool EDA_3D_SETTINGS::createBoardPolygon()
 }
 
 
-float EDA_3D_SETTINGS::GetModulesZcoord3DIU( bool aIsFlipped ) const
+float BOARD_ADAPTER::GetModulesZcoord3DIU( bool aIsFlipped ) const
 {
     if( aIsFlipped )
     {
@@ -485,7 +480,7 @@ float EDA_3D_SETTINGS::GetModulesZcoord3DIU( bool aIsFlipped ) const
 }
 
 
-SFVEC3F EDA_3D_SETTINGS::GetLayerColor( PCB_LAYER_ID aLayerId ) const
+SFVEC3F BOARD_ADAPTER::GetLayerColor( PCB_LAYER_ID aLayerId ) const
 {
     wxASSERT( aLayerId < PCB_LAYER_ID_COUNT );
 
@@ -495,13 +490,13 @@ SFVEC3F EDA_3D_SETTINGS::GetLayerColor( PCB_LAYER_ID aLayerId ) const
 }
 
 
-SFVEC3F EDA_3D_SETTINGS::GetItemColor( int aItemId ) const
+SFVEC3F BOARD_ADAPTER::GetItemColor( int aItemId ) const
 {
     return GetColor( m_colors->GetColor( aItemId ) );
 }
 
 
-SFVEC3F EDA_3D_SETTINGS::GetColor( COLOR4D aColor ) const
+SFVEC3F BOARD_ADAPTER::GetColor( COLOR4D aColor ) const
 {
     return SFVEC3F( aColor.r, aColor.g, aColor.b );
 }
