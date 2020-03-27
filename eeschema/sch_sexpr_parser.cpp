@@ -5,22 +5,18 @@
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -28,6 +24,10 @@
  * @brief Schematic and symbol library s-expression file format parser implementations.
  */
 
+// For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
+// base64 code.
+#define wxUSE_BASE64 1
+#include <wx/base64.h>
 #include <wx/mstream.h>
 #include <wx/tokenzr.h>
 
@@ -2076,19 +2076,20 @@ SCH_BITMAP* SCH_SEXPR_PARSER::parseImage()
 
         case T_data:
         {
-            wxMemoryOutputStream stream;
-
             token = NextTok();
+
+            wxString data;
 
             while( token != T_RIGHT )
             {
-                if( !IsSymbol( token ) || CurStr().find_first_of( "0x" ) != 0 )
-                    Expecting( "hex image data" );
+                if( !IsSymbol( token ) )
+                    Expecting( "base64 image data" );
 
-                stream.PutC( static_cast<char>( strtol( CurText() + 2, NULL, 16 ) & 0xFF ) );
-                token = NextTok();
+                data += FromUTF8();
             }
 
+            wxMemoryBuffer buffer = wxBase64Decode( data );
+            wxMemoryOutputStream stream( buffer.GetData(), buffer.GetBufSize() );
             wxImage* image = new wxImage();
             wxMemoryInputStream istream( stream );
             image->LoadFile( istream, wxBITMAP_TYPE_PNG );

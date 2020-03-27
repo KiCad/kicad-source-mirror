@@ -23,6 +23,10 @@
 #include <boost/algorithm/string/join.hpp>
 #include <cctype>
 
+// For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
+// base64 code.
+#define wxUSE_BASE64 1
+#include <wx/base64.h>
 #include <wx/mstream.h>
 #include <wx/filename.h>
 #include <wx/tokenzr.h>
@@ -918,21 +922,19 @@ void SCH_SEXPR_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
 
     // Write binary data in hexadecimal form (ASCII)
     wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
-    char*           begin  = (char*) buffer->GetBufferStart();
+    wxString out = wxBase64Encode( buffer->GetBufferStart(), buffer->GetBufferSize() );
 
-    for( int ii = 0; begin < buffer->GetBufferEnd(); begin++, ii++ )
+    // Apparently the MIME standard character width for base64 encoding is 76 (unconfirmed)
+    // so use it in a vein attempt to be standard like.
+#define MIME_BASE64_LENGTH 76
+
+    size_t first = 0;
+
+    while( first < out.Length() )
     {
-        if( ii % 16 )
-        {
-
-            m_out->Print( 0, " 0x%2.2X", *begin & 0xFF );
-        }
-        else
-        {
-            ii = 0;
-            m_out->Print( 0, "\n" );
-            m_out->Print( aNestLevel + 2, "0x%2.2X", *begin & 0xFF );
-        }
+        m_out->Print( 0, "\n" );
+        m_out->Print( aNestLevel + 2, "%s", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
+        first += MIME_BASE64_LENGTH;
     }
 
     m_out->Print( 0, "\n" );
