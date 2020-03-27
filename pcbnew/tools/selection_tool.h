@@ -219,12 +219,26 @@ private:
      */
     int selectNet( const TOOL_EVENT& aEvent );
 
+    enum STOP_CONDITION
+    {
+        /** Stop at any place where more than two traces meet
+         *
+         * Because vias are also traces, this makes selection stop at a
+         * via if there is a trace on another layer as well, but a via
+         * with only one connection will be selected. */
+        STOP_AT_JUNCTION,
+        /** Stop when reaching a pad */
+        STOP_AT_PAD,
+        /** Select the entire net */
+        STOP_NEVER
+    };
+
     /**
      * Selects connecteed tracks and vias.
      *
-     * @param aStopCondition must be one of JUNCTION_T, PAD_T, or EOT.
+     * @param aStopCondition where to stop selecting more items
      */
-    void selectConnectedTracks( BOARD_CONNECTED_ITEM& aSourceItem, KICAD_T aStopCondition );
+    void selectConnectedTracks( BOARD_CONNECTED_ITEM& aSourceItem, STOP_CONDITION aStopCondition );
 
     /**
      * Selects all items with the given net code

@@ -797,7 +797,7 @@ int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
     if( initialCount == 0 )
         selectCursor( true, connectedItemFilter );
 
-    for( KICAD_T stopCondition : { PCB_VIA_T, PCB_PAD_T, EOT } )
+    for( STOP_CONDITION stopCondition : { STOP_AT_JUNCTION, STOP_AT_PAD, STOP_NEVER } )
     {
         // copy the selection, since we're going to iterate and modify
         std::deque<EDA_ITEM*> selectedItems = m_selection.GetItems();
@@ -828,7 +828,7 @@ int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 
 
 void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
-                                            KICAD_T aStopCondition )
+                                            STOP_CONDITION aStopCondition )
 {
     constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, EOT };
 
@@ -900,13 +900,13 @@ void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
         {
             wxPoint pt = activePts[i];
 
-            if( trackMap[ pt ].size() > 2 && aStopCondition == SCH_JUNCTION_T )
+            if( trackMap[ pt ].size() > 2 && aStopCondition == STOP_AT_JUNCTION )
             {
                 activePts.erase( activePts.begin() + i );
                 continue;
             }
 
-            if( padMap.count( pt ) && aStopCondition != EOT )
+            if( padMap.count( pt ) && aStopCondition != STOP_NEVER )
             {
                 activePts.erase( activePts.begin() + i );
                 continue;
@@ -1012,7 +1012,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
     std::list<TRACK*> launchTracks;
 
     for( D_PAD* pad : padList )
-        selectConnectedTracks( *pad, EOT );
+        selectConnectedTracks( *pad, STOP_NEVER );
 
     // now we need to find all modules that are connected to each of these nets
     // then we need to determine if these modules are in the list of modules
