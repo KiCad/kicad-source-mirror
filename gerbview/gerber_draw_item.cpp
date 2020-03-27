@@ -339,7 +339,7 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
     case GBR_SPOT_OVAL:
     {
         if( code )
-            bbox.Inflate( code->m_Size.x, code->m_Size.y );
+            bbox.Inflate( code->m_Size.x /2, code->m_Size.y / 2 );
         break;
     }
 
@@ -827,6 +827,37 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
 
     case GBR_SPOT_RECT:
         return GetBoundingBox().Contains( aRefPos );
+
+    case GBR_SPOT_OVAL:
+        {
+        EDA_RECT bbox = GetBoundingBox();
+
+            if( ! bbox.Contains( aRefPos ) )
+                return false;
+
+        // This is similar to a segment with thickness = min( m_Size.x, m_Size.y )
+        int radius = std::min( m_Size.x, m_Size.y )/2;
+        wxPoint start, end;
+        if( m_Size.x > m_Size.y )   // Horizontal oval
+        {
+            int len = m_Size.y - m_Size.x;
+            start.x = -len/2;
+            end.x = len/2;
+        }
+        else   // Vertical oval
+        {
+            int len = m_Size.x - m_Size.y;
+            start.y = -len/2;
+            end.y = len/2;
+        }
+        start += bbox.Centre();
+        end += bbox.Centre();
+
+        if( radius < MIN_HIT_TEST_RADIUS )
+            radius = MIN_HIT_TEST_RADIUS;
+
+        return TestSegmentHit( aRefPos, start, end, radius );
+        }
 
     case GBR_ARC:
         {
