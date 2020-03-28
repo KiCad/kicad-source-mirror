@@ -150,7 +150,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     if( context )
     {
         wxLogTrace( kicadTraceToolStack,
-                "ACTION_MANAGER::RunHotKey Running action %s for hotkey %s", context->GetName(),
+                "ACTION_MANAGER::RunHotKey Running context action %s for hotkey %s", context->GetName(),
                 KeyNameFromKeyCode( aHotKey ) );
 
         return m_toolMgr->RunAction( *context, true );
@@ -160,7 +160,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
         for( auto act : global )
         {
             wxLogTrace( kicadTraceToolStack,
-                    "ACTION_MANAGER::RunHotKey Running action: %s for hotkey %s", act->GetName(),
+                    "ACTION_MANAGER::RunHotKey Running global action: %s for hotkey %s", act->GetName(),
                     KeyNameFromKeyCode( aHotKey ) );
 
             if( m_toolMgr->RunAction( *act, true ) )
