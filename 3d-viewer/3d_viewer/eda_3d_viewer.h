@@ -212,8 +212,6 @@ private:
     CCAMERA&         m_currentCamera;
     CTRACK_BALL      m_trackBallCamera;
 
-    TOOL_DISPATCHER* m_toolDispatcher;
-
     bool             m_disable_ray_tracing;
 
     /**

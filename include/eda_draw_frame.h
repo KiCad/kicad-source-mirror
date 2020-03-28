@@ -93,8 +93,6 @@ protected:
                                             // to screens
     bool               m_PolarCoords;       // For those frames that support polar coordinates
 
-    TOOL_DISPATCHER*   m_toolDispatcher;
-
     bool               m_showBorderAndTitleBlock;  // Show the worksheet (border and title block).
     long               m_firstRunDialogSetting;    // Show first run dialog on startup
 
