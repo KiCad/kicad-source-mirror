@@ -362,6 +362,7 @@ const KICAD_T rotatableItems[] = {
     SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
     SCH_JUNCTION_T,
+    SCH_NO_CONNECT_T,
     EOT
 };
 
@@ -666,7 +667,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     }
     else if( selection.GetSize() > 1 )
     {
-        mirrorPoint = (wxPoint)selection.GetReferencePoint();
+        mirrorPoint = m_frame->GetNearestGridPosition( (wxPoint)selection.GetCenter() );
 
         for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
         {
