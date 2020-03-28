@@ -211,7 +211,7 @@ bool C3D_RENDER_RAYTRACING::Redraw(
     glDisable( GL_DEPTH_TEST );
     glDisable( GL_TEXTURE_2D );
     glDisable( GL_BLEND );
-
+    glDisable( GL_MULTISAMPLE );
 
     const bool was_camera_changed = m_camera.ParametersChanged();
 

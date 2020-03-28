@@ -565,6 +565,14 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
 
     glViewport( 0, 0, m_windowSize.x, m_windowSize.y );
 
+    if( aIsMoving == false )
+    {
+        glEnable( GL_MULTISAMPLE );
+    }
+    else
+    {
+        glDisable( GL_MULTISAMPLE );
+    }
 
     // clear color and depth buffers
     // /////////////////////////////////////////////////////////////////////////
