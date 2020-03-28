@@ -74,7 +74,14 @@ KIID RC_TREE_MODEL::ToUUID( wxDataViewItem aItem )
 
         switch( node->m_Type )
         {
-        case RC_TREE_NODE::MARKER:    return rc_item->GetParent()->GetUUID();
+        case RC_TREE_NODE::MARKER:
+            // rc_item->GetParent() can be null, if the parent is not existing
+            // when a RC item has no corresponding ERC/DRC marker
+            if( rc_item->GetParent() )
+                return rc_item->GetParent()->GetUUID();
+
+            break;
+
         case RC_TREE_NODE::MAIN_ITEM: return rc_item->GetMainItemID();
         case RC_TREE_NODE::AUX_ITEM:  return rc_item->GetAuxItemID();
         }
