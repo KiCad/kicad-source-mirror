@@ -182,6 +182,8 @@ void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     // (has meaning only for copper zones)
     m_netinfo = aZone.m_netinfo;
 
+    m_area = aZone.m_area;
+
     SetNeedRefill( aZone.NeedRefill() );
 }
 

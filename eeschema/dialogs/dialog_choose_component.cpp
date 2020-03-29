@@ -143,7 +143,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     Layout();
 
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    wxASSERT( cfg );
 
     if( cfg )
     {
@@ -212,6 +211,8 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
 
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
+    wxCHECK( cfg, /*void*/ );
+
     cfg->m_SymChooserPanel.width = GetSize().x;
     cfg->m_SymChooserPanel.height = GetSize().y;
 
@@ -263,12 +264,12 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
 
     m_keepSymbol = new wxCheckBox( panel, 1000, _("Multi-Symbol Placement"), wxDefaultPosition,
                                    wxDefaultSize, wxALIGN_RIGHT );
-    m_keepSymbol->SetValue( cfg->m_SymChooserPanel.keep_symbol );
+    m_keepSymbol->SetValue( cfg ? cfg->m_SymChooserPanel.keep_symbol : true );
     m_keepSymbol->SetToolTip( _( "Place multiple copies of the symbol." ) );
 
     m_useUnits = new wxCheckBox( panel, 1000, _("Place all units"), wxDefaultPosition,
                                  wxDefaultSize, wxALIGN_RIGHT );
-    m_useUnits->SetValue( cfg->m_SymChooserPanel.place_all_units );
+    m_useUnits->SetValue( cfg ? cfg->m_SymChooserPanel.place_all_units : true );
     m_useUnits->SetToolTip( _( "Sequentially place all units of the symbol." ) );
 
     auto fgSizer = new wxFlexGridSizer( 0, 2, 0, 1 );

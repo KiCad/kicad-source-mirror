@@ -63,6 +63,7 @@ PLOTTER::PLOTTER( )
     m_mirrorIsHorizontal = true;
     m_yaxisReversed = false;
     outputFile = 0;
+    m_colors = nullptr;
     colorMode = false;          // Starts as a BW plot
     negativeMode = false;
     // Temporary init to avoid not initialized vars, will be set later

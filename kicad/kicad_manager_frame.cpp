@@ -504,6 +504,9 @@ void KICAD_MANAGER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
     auto settings = dynamic_cast<KICAD_SETTINGS*>( aCfg );
+
+    wxCHECK( settings, /*void*/);
+
     m_leftWinWidth = settings->m_LeftWinWidth;
 }
 
@@ -513,6 +516,9 @@ void KICAD_MANAGER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
     auto settings = dynamic_cast<KICAD_SETTINGS*>( aCfg );
+
+    wxCHECK( settings, /*void*/);
+
     settings->m_LeftWinWidth = m_leftWin->GetSize().x;
 }
 

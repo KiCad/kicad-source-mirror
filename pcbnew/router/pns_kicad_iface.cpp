@@ -532,6 +532,7 @@ PNS_KICAD_IFACE_BASE::PNS_KICAD_IFACE_BASE()
     m_board = nullptr;
     m_router = nullptr;
     m_debugDecorator = nullptr;
+    m_router = nullptr;
 }
 
 
@@ -1458,7 +1459,7 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
     m_view = aView;
     m_previewItems = new KIGFX::VIEW_GROUP( m_view );
     m_previewItems->SetLayer( LAYER_SELECT_OVERLAY ) ;
-    
+
     if(m_view)
         m_view->Add( m_previewItems );
 

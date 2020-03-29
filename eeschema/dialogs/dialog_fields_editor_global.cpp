@@ -932,7 +932,8 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
 
     // Force References to always be shown
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    wxASSERT( cfg );
+    wxCHECK( cfg, /*void*/ );
+
     cfg->m_FieldEditorPanel.fields_show["Reference"] = true;
 
     // *DO NOT* use translated mandatory field names:

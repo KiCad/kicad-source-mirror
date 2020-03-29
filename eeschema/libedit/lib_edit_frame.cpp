@@ -224,15 +224,18 @@ void LIB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     auto cfg = dynamic_cast<LIBEDIT_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
-    SetDefaultLineThickness( Mils2iu( cfg->m_Defaults.line_width ) );
-    SetDefaultPinLength( Mils2iu( cfg->m_Defaults.pin_length ) );
-    m_textPinNameDefaultSize = Mils2iu( cfg->m_Defaults.pin_name_size );
-    m_textPinNumDefaultSize = Mils2iu( cfg->m_Defaults.pin_num_size );
-    SetRepeatDeltaLabel( cfg->m_Repeat.label_delta );
-    SetRepeatPinStep( Mils2iu( cfg->m_Repeat.pin_step ) );
-    SetRepeatStep( wxPoint( cfg->m_Repeat.x_step, cfg->m_Repeat.y_step ) );
-    m_showPinElectricalTypeName = cfg->m_ShowPinElectricalType;
-    m_defaultLibWidth = cfg->m_LibWidth;
+    if( cfg )
+    {
+        SetDefaultLineThickness( Mils2iu( cfg->m_Defaults.line_width ) );
+        SetDefaultPinLength( Mils2iu( cfg->m_Defaults.pin_length ) );
+        m_textPinNameDefaultSize = Mils2iu( cfg->m_Defaults.pin_name_size );
+        m_textPinNumDefaultSize = Mils2iu( cfg->m_Defaults.pin_num_size );
+        SetRepeatDeltaLabel( cfg->m_Repeat.label_delta );
+        SetRepeatPinStep( Mils2iu( cfg->m_Repeat.pin_step ) );
+        SetRepeatStep( wxPoint( cfg->m_Repeat.x_step, cfg->m_Repeat.y_step ) );
+        m_showPinElectricalTypeName = cfg->m_ShowPinElectricalType;
+        m_defaultLibWidth = cfg->m_LibWidth;
+    }
 
     // TODO(JE) does libedit need its own TemplateFieldNames?
     auto ee_settings = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();

@@ -78,7 +78,10 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
 
     // Show/hide columns according to user's preference
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    m_shownColumns = cfg->m_Appearance.edit_component_visible_columns;
+
+    if( cfg )
+        m_shownColumns = cfg->m_Appearance.edit_component_visible_columns;
+
     m_grid->ShowHideColumns( m_shownColumns );
 
     wxToolTip::Enable( true );
@@ -110,7 +113,9 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC()
 {
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    cfg->m_Appearance.edit_component_visible_columns = m_grid->GetShownColumns();
+
+    if( cfg )
+        cfg->m_Appearance.edit_component_visible_columns = m_grid->GetShownColumns();
 
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );

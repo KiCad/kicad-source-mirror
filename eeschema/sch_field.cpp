@@ -525,7 +525,8 @@ void SCH_FIELD::SetPosition( const wxPoint& aPosition )
         SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
         wxPoint        relativePos = aPosition - parentComponent->GetPosition();
 
-        parentComponent->GetTransform().InverseTransform().TransformCoordinate( relativePos );
+        relativePos = parentComponent->GetTransform().
+                            InverseTransform().TransformCoordinate( relativePos );
 
         SetTextPos( relativePos + parentComponent->GetPosition() );
     }
@@ -541,7 +542,7 @@ wxPoint SCH_FIELD::GetPosition() const
         SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
         wxPoint        relativePos = GetTextPos() - parentComponent->GetPosition();
 
-        parentComponent->GetTransform().TransformCoordinate( relativePos );
+        relativePos = parentComponent->GetTransform().TransformCoordinate( relativePos );
 
         return relativePos + parentComponent->GetPosition();
     }

@@ -293,7 +293,10 @@ void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
     if( resp == wxID_YES )
     {
         auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-        cfg->m_RescueNeverShow = true;
+
+        if( cfg )
+            cfg->m_RescueNeverShow = true;
+
         m_Rescuer->m_chosen_candidates.clear();
         Close();
     }
