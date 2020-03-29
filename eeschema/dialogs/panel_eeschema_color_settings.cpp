@@ -353,27 +353,27 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     addItem( e2 );
 
     auto t1 = new SCH_TEXT( wxPoint( Mils2iu( 2850 ), Mils2iu( 2250 ) ), wxT( "PLAIN TEXT" ) );
-    t1->SetLabelSpinStyle( 0 );
+    t1->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::LEFT );
     addItem( t1 );
 
     auto t2 = new SCH_LABEL( wxPoint( Mils2iu( 1975 ), Mils2iu( 1500 ) ), wxT( "GLOBAL0" ) );
-    t2->SetLabelSpinStyle( 2 );
+    t2->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
     t2->SetIsDangling( false );
     addItem( t2 );
 
     auto t3 = new SCH_LABEL( wxPoint( Mils2iu( 1975 ), Mils2iu( 2600 ) ), wxT( "GLOBAL1" ) );
-    t3->SetLabelSpinStyle( 2 );
+    t3->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
     t3->SetIsDangling( false );
     addItem( t3 );
 
     auto t4 = new SCH_GLOBALLABEL(
             wxPoint( Mils2iu( 1750 ), Mils2iu( 1400 ) ), wxT( "GLOBAL[3..0]" ) );
-    t4->SetLabelSpinStyle( 0 );
+    t4->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::LEFT );
     t4->SetIsDangling( false );
     addItem( t4 );
 
     auto t5 = new SCH_HIERLABEL( wxPoint( Mils2iu( 3250 ), Mils2iu( 1600 ) ), wxT( "HIER_LABEL" ) );
-    t5->SetLabelSpinStyle( 2 );
+    t5->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
     t5->SetIsDangling( false );
     addItem( t5 );
 

@@ -72,7 +72,8 @@ enum ERCE_T
     ERCE_BUS_TO_BUS_CONFLICT,   // a connection between bus objects doesn't share at least one net
     ERCE_BUS_TO_NET_CONFLICT,   // a bus wire is graphically connected to a net port/pin (or vice versa)
     ERCE_GLOBLABEL,             // a global label is unique
-    ERCE_LAST = ERCE_GLOBLABEL
+    ERCE_UNRESOLVED_VARIABLE,
+    ERCE_LAST = ERCE_UNRESOLVED_VARIABLE
 };
 
 /* Minimal connection table */
@@ -112,6 +113,12 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
  *                       false = calculate error count only
  */
 int TestDuplicateSheetNames( bool aCreateMarker );
+
+/**
+ * Function TestTextVars()
+ * Checks for any unresolved text variable references.
+ */
+void TestTextVars();
 
 /**
  * Checks that there are not conflicting bus alias definitions in the schematic

@@ -549,6 +549,9 @@ public:
      */
     int ModalAnnotate( const wxString& aMessage );
 
+    ///> @copydoc EDA_BASE_FRAME::GetSeverity()
+    int GetSeverity( int aErrorCode ) const override;
+
     // Functions used for hierarchy handling
     SCH_SHEET_PATH& GetCurrentSheet();
 

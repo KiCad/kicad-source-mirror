@@ -1059,6 +1059,12 @@ void SCH_EDIT_FRAME::UpdateTitle()
 }
 
 
+int SCH_EDIT_FRAME::GetSeverity( int aErrorCode ) const
+{
+    return ::GetSeverity( aErrorCode );
+}
+
+
 void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 {
     SCH_SHEET_LIST list( g_RootSheet );

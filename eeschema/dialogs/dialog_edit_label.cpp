@@ -322,12 +322,12 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
         return false;
     }
 
-    m_CurrentText->SetLabelSpinStyle( m_TextOrient->GetSelection() );
+    m_CurrentText->SetLabelSpinStyle( (LABEL_SPIN_STYLE::SPIN) m_TextOrient->GetSelection() );
 
     m_CurrentText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
     if( m_TextShape )
-        m_CurrentText->SetShape( static_cast<PINSHEETLABEL_SHAPE>( m_TextShape->GetSelection() ) );
+        m_CurrentText->SetShape( (PINSHEETLABEL_SHAPE) m_TextShape->GetSelection() );
 
     int style = m_TextStyle->GetSelection();
 

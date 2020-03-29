@@ -484,6 +484,9 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         aMessages->Refresh();
     }
 
+    if( !m_pcb->GetDesignSettings().Ignore( DRCE_UNRESOLVED_VARIABLE ) )
+        testTextVars();
+
     m_drcRun = true;
 
     // update the m_drcDialog listboxes
@@ -1160,31 +1163,73 @@ void DRC::testDisabledLayers()
     // Perform the test only for copper layers
     disabledLayers &= LSET::AllCuMask();
 
-    auto createMarker = [&]( BOARD_ITEM* aItem ) {
-        addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_DISABLED_LAYER_ITEM,
-                                        aItem->GetPosition(), aItem ) );
-    };
-
-    for( auto track : board->Tracks() )
+    for( TRACK* track : board->Tracks() )
     {
         if( disabledLayers.test( track->GetLayer() ) )
-            createMarker( track );
+        {
+            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_DISABLED_LAYER_ITEM,
+                                            track->GetPosition(), track ) );
+        }
     }
 
-    for( auto module : board->Modules() )
+    for( MODULE* module : board->Modules() )
     {
         module->RunOnChildren(
-            [&]( BOARD_ITEM* aItem )
+                    [&]( BOARD_ITEM* child )
+                    {
+                        if( disabledLayers.test( child->GetLayer() ) )
+                        {
+                            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_DISABLED_LAYER_ITEM,
+                                                            child->GetPosition(), child ) );
+                        }
+                    } );
+    }
+
+    for( ZONE_CONTAINER* zone : board->Zones() )
+    {
+        if( disabledLayers.test( zone->GetLayer() ) )
+        {
+            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_DISABLED_LAYER_ITEM,
+                                            zone->GetPosition(), zone ) );
+        }
+    }
+}
+
+
+void DRC::testTextVars()
+{
+    BOARD* board = m_pcbEditorFrame->GetBoard();
+
+    for( MODULE* module : board->Modules() )
+    {
+        module->RunOnChildren(
+            [&]( BOARD_ITEM* child )
             {
-                if( disabledLayers.test( aItem->GetLayer() ) )
-                    createMarker( aItem );
+                if( child->Type() == PCB_MODULE_TEXT_T )
+                {
+                    TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( child );
+
+                    if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                    {
+                        addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_UNRESOLVED_VARIABLE,
+                                                        text->GetPosition(), text ) );
+                    }
+                }
             } );
     }
 
-    for( auto zone : board->Zones() )
+    for( BOARD_ITEM* drawing : board->Drawings() )
     {
-        if( disabledLayers.test( zone->GetLayer() ) )
-            createMarker( zone );
+        if( drawing->Type() == PCB_TEXT_T )
+        {
+            TEXTE_PCB* text = static_cast<TEXTE_PCB*>( drawing );
+
+            if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
+            {
+                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_UNRESOLVED_VARIABLE,
+                                                text->GetPosition(), text ) );
+            }
+        }
     }
 }
 

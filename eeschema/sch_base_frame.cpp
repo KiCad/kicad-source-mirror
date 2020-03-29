@@ -343,7 +343,11 @@ void SCH_BASE_FRAME::FocusOnItem( SCH_ITEM* aItem )
         if( aItem->GetParent() && aItem->GetParent()->Type() == SCH_COMPONENT_T )
         {
             SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( aItem->GetParent() );
-            position += comp->GetPosition();
+
+            wxPoint delta;
+            position -= comp->GetPosition();
+            delta = comp->GetTransform().TransformCoordinate( position );
+            position = delta + comp->GetPosition();
         }
 
         FocusOnLocation( position );

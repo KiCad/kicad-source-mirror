@@ -1406,7 +1406,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
             spinStyle = 0;
     }
 
-    text->SetLabelSpinStyle( spinStyle );
+    text->SetLabelSpinStyle( (LABEL_SPIN_STYLE::SPIN) spinStyle );
 
     int size = Mils2Iu( parseInt( aReader, line, &line ) );
 

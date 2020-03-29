@@ -55,30 +55,20 @@ public:
     {
     }
 
-
-    LABEL_SPIN_STYLE( int aSpin )
-    {
-        m_spin = static_cast<SPIN>( aSpin );
-    }
-
-
     constexpr bool operator==( SPIN a ) const
     {
         return m_spin == a;
     }
-
 
     constexpr bool operator!=( SPIN a ) const
     {
         return m_spin != a;
     }
 
-
     operator int() const
     {
         return static_cast<int>( m_spin );
     }
-
 
     LABEL_SPIN_STYLE RotateCW()
     {
@@ -96,7 +86,6 @@ public:
         return LABEL_SPIN_STYLE( newSpin );
     }
 
-
     LABEL_SPIN_STYLE RotateCCW()
     {
         SPIN newSpin = m_spin;
@@ -112,7 +101,6 @@ public:
 
         return LABEL_SPIN_STYLE( newSpin );
     }
-
 
     /*
      * Mirrors the label spin style across the X axis or simply swaps up and bottom
@@ -132,7 +120,6 @@ public:
 
         return LABEL_SPIN_STYLE( newSpin );
     }
-
 
     /*
      * Mirrors the label spin style across the Y axis or simply swaps left and right
@@ -219,6 +206,8 @@ public:
     {
         return wxT( "SCH_TEXT" );
     }
+
+    wxString GetShownText() const override;
 
     /**
      * Increment the label text, if it ends with a number.

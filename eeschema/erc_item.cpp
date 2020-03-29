@@ -74,6 +74,8 @@ wxString ERC_ITEM::GetErrorText() const
         return wxString( _( "Invalid connection between bus and net items" ) );
     case ERCE_GLOBLABEL:
         return wxString( _( "Global label not connected anywhere else in the schematic" ) );
+    case ERCE_UNRESOLVED_VARIABLE:
+        return wxString( _( "Unresolved text variable" ) );
     default:
         wxFAIL_MSG( "Missing ERC error description" );
         return wxString( wxT("Unknown.") );

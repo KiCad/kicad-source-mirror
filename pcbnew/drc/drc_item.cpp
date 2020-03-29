@@ -158,6 +158,9 @@ wxString DRC_ITEM::GetErrorText() const
     case DRCE_TRACK_IN_PAD:
         return wxString( _( "Remove track inside pad" ) );
 
+    case DRCE_UNRESOLVED_VARIABLE:
+        return wxString( _( "Unresolved text variable" ) );
+
     default:
         return wxEmptyString;
     }

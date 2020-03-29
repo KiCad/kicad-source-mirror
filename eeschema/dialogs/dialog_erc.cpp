@@ -316,6 +316,9 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
         objectsConnectedList->TestforSimilarLabels();
     }
 
+    if( g_ErcSettings->IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
+        TestTextVars();
+
     // Display diags:
     m_markerTreeModel->SetProvider( m_markerProvider );
 

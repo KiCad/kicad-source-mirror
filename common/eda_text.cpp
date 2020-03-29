@@ -168,8 +168,8 @@ wxString EDA_TEXT::ShortenedShownText() const
     tmp.Replace( wxT( "\r" ), wxT( " " ) );
     tmp.Replace( wxT( "\t" ), wxT( " " ) );
 
-    if( tmp.Length() > 15 )
-        tmp = tmp.Left( 12 ) + wxT( "..." );
+    if( tmp.Length() > 36 )
+        tmp = tmp.Left( 34 ) + wxT( "..." );
 
     return tmp;
 }

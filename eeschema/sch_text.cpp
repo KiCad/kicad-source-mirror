@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@
 #include <gal/stroke_font.h>
 #include <bitmaps.h>
 #include <math/util.h>      // for KiROUND
-
+#include <kiway.h>
 #include <sch_text.h>
 #include <netlist_object.h>
 #include <settings/color_settings.h>
@@ -446,6 +446,69 @@ const EDA_RECT SCH_TEXT::GetBoundingBox() const
 }
 
 
+wxString getElectricalTypeLabel( PINSHEETLABEL_SHAPE aType )
+{
+    switch( aType )
+    {
+    case PINSHEETLABEL_SHAPE::PS_INPUT:       return _( "Input" );
+    case PINSHEETLABEL_SHAPE::PS_OUTPUT:      return _( "Output" );
+    case PINSHEETLABEL_SHAPE::PS_BIDI:        return _( "Bidirectional" );
+    case PINSHEETLABEL_SHAPE::PS_TRISTATE:    return _( "Tri-State" );
+    case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED: return _( "Passive" );
+    default:                                  return wxT( "???" );
+    }
+}
+
+
+wxString SCH_TEXT::GetShownText() const
+{
+    auto textResolver = [this]( wxString* token ) -> bool
+                        {
+                            if( ( Type() == SCH_GLOBAL_LABEL_T
+                                    || Type() == SCH_HIER_LABEL_T
+                                    || Type() == SCH_SHEET_PIN_T )
+                                 && token->IsSameAs( wxT( "CONNECTION_TYPE" ) ) )
+                            {
+                                *token = getElectricalTypeLabel( GetShape() );
+                                return true;
+                            }
+
+                            if( Type() == SCH_SHEET_PIN_T && m_Parent )
+                            {
+                                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_Parent );
+                                std::vector<SCH_FIELD>& fields = sheet->GetFields();
+
+                                for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
+                                {
+                                    if( token->IsSameAs( fields[i].GetCanonicalName().Upper() ) )
+                                    {
+                                        *token = fields[i].GetShownText();
+                                        return true;
+                                    }
+                                }
+
+                                for( int i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
+                                {
+                                    if( token->IsSameAs( fields[i].GetName() ) )
+                                    {
+                                        *token = fields[i].GetShownText();
+                                        return true;
+                                    }
+                                }
+                            }
+
+                            return false;
+                        };
+
+    PROJECT*  project = nullptr;
+
+    if( g_RootSheet && g_RootSheet->GetScreen() )
+        project = &g_RootSheet->GetScreen()->Kiway().Prj();
+
+    return ExpandTextVars( GetText(), textResolver, project );
+}
+
+
 wxString SCH_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Graphic Text \"%s\"" ), GetChars( ShortenedShownText() ) );
@@ -465,7 +528,7 @@ void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
         return;
 
     NETLIST_OBJECT* item = new NETLIST_OBJECT();
-    item->m_SheetPath = *aSheetPath;
+    item->m_SheetPath        = *aSheetPath;
     item->m_SheetPathInclude = *aSheetPath;
     item->m_Comp             = (SCH_ITEM*) this;
     item->m_Type             = NETLIST_ITEM::LABEL;
@@ -597,16 +660,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
     // Display electrical type if it is relevant
     if( Type() == SCH_GLOBAL_LABEL_T || Type() == SCH_HIER_LABEL_T || Type() == SCH_SHEET_PIN_T )
     {
-        switch( GetShape() )
-        {
-        case PINSHEETLABEL_SHAPE::PS_INPUT:       msg = _( "Input" );         break;
-        case PINSHEETLABEL_SHAPE::PS_OUTPUT:      msg = _( "Output" );        break;
-        case PINSHEETLABEL_SHAPE::PS_BIDI:        msg = _( "Bidirectional" ); break;
-        case PINSHEETLABEL_SHAPE::PS_TRISTATE:    msg = _( "Tri-State" );     break;
-        case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED: msg = _( "Passive" );       break;
-        default:                                  msg = wxT( "???" );         break;
-        }
-
+        msg = getElectricalTypeLabel( GetShape() );
         aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, BLUE ) );
     }
 

@@ -235,9 +235,6 @@ wxString SCH_NETNAME_VALIDATOR::IsValid( const wxString& str ) const
     if( SCH_CONNECTION::IsBusGroupLabel( str ) )
         return wxString();
 
-    if( str.Contains( '{' ) || str.Contains( '}' ) )
-        return _( "Signal name contains '{' or '}' but is not a valid group bus name" );
-
     if( ( str.Contains( '[' ) || str.Contains( ']' ) ) &&
         !SCH_CONNECTION::IsBusVectorLabel( str ) )
         return _( "Signal name contains '[' or ']' but is not a valid vector bus name" );

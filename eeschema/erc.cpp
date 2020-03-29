@@ -198,6 +198,73 @@ int TestDuplicateSheetNames( bool aCreateMarker )
 }
 
 
+void TestTextVars()
+{
+    SCH_SCREENS screens;
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_LOCATE_ANY_T ) )
+        {
+            if( item->Type() == SCH_COMPONENT_T )
+            {
+                SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+
+                for( SCH_FIELD& field : component->GetFields() )
+                {
+                    if( field.GetShownText().Matches( wxT( "*${*}*" ) ) )
+                    {
+                        wxPoint delta = field.GetPosition() - component->GetPosition();
+                        delta = component->GetTransform().TransformCoordinate( delta );
+
+                        SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
+                        marker->SetData( EDA_UNITS::UNSCALED, ERCE_UNRESOLVED_VARIABLE,
+                                         component->GetPosition() + delta, &field );
+                        screen->Append( marker );
+                    }
+                }
+            }
+            else if( item->Type() == SCH_SHEET_T )
+            {
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+                for( SCH_FIELD& field : sheet->GetFields() )
+                {
+                    if( field.GetShownText().Matches( wxT( "*${*}*" ) ) )
+                    {
+                        SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
+                        marker->SetData( EDA_UNITS::UNSCALED, ERCE_UNRESOLVED_VARIABLE,
+                                         field.GetPosition(), &field );
+                        screen->Append( marker );
+                    }
+                }
+
+                for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
+                {
+                    if( pin->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                    {
+                        SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
+                        marker->SetData( EDA_UNITS::UNSCALED, ERCE_UNRESOLVED_VARIABLE,
+                                         pin->GetPosition(), pin );
+                        screen->Append( marker );
+                    }
+                }
+            }
+            else if( SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( item ) )
+            {
+                if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
+                {
+                    SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
+                    marker->SetData( EDA_UNITS::UNSCALED, ERCE_UNRESOLVED_VARIABLE,
+                                     text->GetPosition(), text );
+                    screen->Append( marker );
+                }
+            }
+        }
+    }
+}
+
+
 int TestConflictingBusAliases()
 {
     wxString    msg;
@@ -205,7 +272,7 @@ int TestConflictingBusAliases()
     SCH_SCREENS screens;
     std::vector< std::shared_ptr<BUS_ALIAS> > aliases;
 
-    for( auto screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
     {
         std::unordered_set< std::shared_ptr<BUS_ALIAS> > screen_aliases = screen->GetBusAliases();
 

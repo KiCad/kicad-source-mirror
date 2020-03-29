@@ -100,7 +100,9 @@ enum PCB_DRC_CODE {
     DRCE_ZERO_LENGTH_TRACK,
     DRCE_TRACK_IN_PAD,
 
-    DRCE_LAST = DRCE_TRACK_IN_PAD
+    DRCE_UNRESOLVED_VARIABLE,
+
+    DRCE_LAST = DRCE_UNRESOLVED_VARIABLE
 };
 
 
@@ -246,8 +248,11 @@ private:
 
     void testCopperTextAndGraphics();
 
-    ///> Tests for items placed on disabled layers (causing false connections).
+    // Tests for items placed on disabled layers (causing false connections).
     void testDisabledLayers();
+
+    // Test for any unresolved text variable references
+    void testTextVars();
 
     /**
      * Test that the board outline is contiguous and composed of valid elements
