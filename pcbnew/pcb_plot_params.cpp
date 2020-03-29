@@ -93,9 +93,9 @@ static bool setDouble( double* aTarget, double aValue, double aMin, double aMax 
 PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 {
     m_useGerberProtelExtensions  = false;
-    m_useGerberX2format          = false;
-    m_includeGerberNetlistInfo   = false;
-    m_createGerberJobFile        = false;
+    m_useGerberX2format          = true;
+    m_includeGerberNetlistInfo   = true;
+    m_createGerberJobFile        = true;
     m_gerberPrecision            = gbrDefaultPrecision;
     m_excludeEdgeLayer           = true;
     m_lineWidth                  = g_DrawDefaultLineThickness;
