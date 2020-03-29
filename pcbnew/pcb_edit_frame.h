@@ -559,14 +559,14 @@ public:
      * @param aForceSmdItems = true to force all footprints with smd pads in list
      *                       = false to put only footprints with option "INSERT" in list
      * @param aTopSide true to list footprints on front (top) side,
-     * @param BottomSide true to list footprints on back (bottom) side,
+     * @param aBottomSide true to list footprints on back (bottom) side,
      * if aTopSide and aTopSide are true, list footprints on both sides
      * @param aFormatCSV = true to use a comma separated file (CSV) format; defautl = false
      * @return the number of footprints found on aSide side,
      *    or -1 if the file could not be created
      */
     int DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
-                                      bool aForceSmdItems, bool aTopSide, bool BottomSide, bool aFormatCSV = false );
+                                     bool aForceSmdItems, bool aTopSide, bool aBottomSide, bool aFormatCSV = false );
 
     /**
      * Function GenFootprintsReport

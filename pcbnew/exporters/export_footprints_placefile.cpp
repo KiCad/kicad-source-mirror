@@ -186,6 +186,9 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             LAYER_NUM layer = list[ii].m_Module->GetLayer();
             wxASSERT( layer == F_Cu || layer == B_Cu );
 
+            if( layer == B_Cu )
+                footprint_pos.x = - footprint_pos.x;
+
             wxString tmp = "\"" + list[ii].m_Reference;
             tmp << "\"" << csv_sep;
             tmp << "\"" << list[ii].m_Value;

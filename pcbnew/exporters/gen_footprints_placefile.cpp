@@ -477,7 +477,7 @@ int PCB_EDITOR_CONTROL::GeneratePosFile( const TOOL_EVENT& aEvent )
 
 
 int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
-                                                 bool aForceSmdItems, bool aTopSide, bool BottomSide, bool aFormatCSV )
+                                                 bool aForceSmdItems, bool aTopSide, bool aBottomSide, bool aFormatCSV )
 {
     FILE * file = NULL;
 
@@ -491,7 +491,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, 
 
     std::string data;
     PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, aForceSmdItems,
-                                  aTopSide, BottomSide, aFormatCSV );
+                                  aTopSide, aBottomSide, aFormatCSV );
     data = exporter.GenPositionData();
 
     // if aFullFileName is empty, the file is not created, only the
