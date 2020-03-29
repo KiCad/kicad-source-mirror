@@ -215,6 +215,23 @@ bool GERBER_JOBFILE_WRITER::WriteJSONJobFile( const wxString& aFullFilename )
 }
 
 
+double GERBER_JOBFILE_WRITER::mapValue( double aUiValue )
+{
+    // A helper function to convert aUiValue in Json units (mm) and to have
+    // 4 digits in Json  in mantissa when using %g to print it
+    // i.e. displays values truncated in 0.1 microns.
+    // This is enough for a Json file
+    char buffer[128];
+    sprintf( buffer, "%.4f", aUiValue * m_conversionUnits );
+
+    long double output;
+    sscanf( buffer, "%Lg", &output );
+
+    return output;
+
+}
+
+
 void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
 {
     m_json["GeneralSpecs"] = json( {} );
@@ -252,8 +269,8 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     // output the bord size in mm:
     EDA_RECT brect = m_pcb->GetBoardEdgesBoundingBox();
 
-    m_json["GeneralSpecs"]["Size"]["X"] = brect.GetWidth() * m_conversionUnits;
-    m_json["GeneralSpecs"]["Size"]["Y"] = brect.GetHeight() * m_conversionUnits;
+    m_json["GeneralSpecs"]["Size"]["X"] = mapValue( brect.GetWidth() );
+    m_json["GeneralSpecs"]["Size"]["Y"] = mapValue( brect.GetHeight() );
 
 
     // Add some data to the JSON header, GeneralSpecs:
@@ -262,7 +279,7 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
 
     // Board thickness
     m_json["GeneralSpecs"]["BoardThickness"] =
-            m_pcb->GetDesignSettings().GetBoardThickness() * m_conversionUnits;
+            mapValue( m_pcb->GetDesignSettings().GetBoardThickness() );
 
     // Copper finish
     BOARD_STACKUP brd_stackup = m_pcb->GetDesignSettings().GetStackupDescriptor();
@@ -466,9 +483,9 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
 
     m_json["DesignRules"] = { {
         { "Layers", "Outer" },
-        { "PadToPad", minPadClearanceOuter * m_conversionUnits },
-        { "PadToTrack", minPadClearanceOuter * m_conversionUnits },
-        { "TrackToTrack", minclearance_track2track * m_conversionUnits }
+        { "PadToPad", mapValue( minPadClearanceOuter ) },
+        { "PadToTrack", mapValue( minPadClearanceOuter ) },
+        { "TrackToTrack", mapValue( minclearance_track2track ) }
     } };
 
     // Until this is changed in Kicad, use the same value for internal tracks
@@ -490,7 +507,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     }
 
     if( mintrackWidthOuter != INT_MAX )
-        m_json["DesignRules"][0]["MinLineWidth"] = mintrackWidthOuter * m_conversionUnits;
+        m_json["DesignRules"][0]["MinLineWidth"] = mapValue( mintrackWidthOuter );
 
     // Output the minimal zone to xx clearance
     // Note: zones can have a zone clearance set to 0
@@ -514,28 +531,28 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     }
 
     if( minclearanceOuter != INT_MAX )
-        m_json["DesignRules"][0]["TrackToRegion"] = minclearanceOuter * m_conversionUnits;
+        m_json["DesignRules"][0]["TrackToRegion"] = mapValue( minclearanceOuter );
 
     if( minclearanceOuter != INT_MAX )
-        m_json["DesignRules"][0]["RegionToRegion"] = minclearanceOuter * m_conversionUnits;
+        m_json["DesignRules"][0]["RegionToRegion"] = mapValue( minclearanceOuter );
 
     if( hasInnerLayers )
     {
         m_json["DesignRules"] += json( {
             { "Layers", "Inner" },
-            { "PadToPad", minPadClearanceInner * m_conversionUnits },
-            { "PadToTrack", minPadClearanceInner * m_conversionUnits },
-            { "TrackToTrack", minclearance_track2track * m_conversionUnits }
+            { "PadToPad", mapValue( minPadClearanceInner ) },
+            { "PadToTrack", mapValue( minPadClearanceInner ) },
+            { "TrackToTrack", mapValue( minclearance_track2track  ) }
         } );
 
         if( mintrackWidthInner != INT_MAX )
-            m_json["DesignRules"][1]["MinLineWidth"] = mintrackWidthInner * m_conversionUnits;
+            m_json["DesignRules"][1]["MinLineWidth"] = mapValue( mintrackWidthInner );
 
         if( minclearanceInner != INT_MAX )
-            m_json["DesignRules"][1]["TrackToRegion"] = minclearanceInner * m_conversionUnits;
+            m_json["DesignRules"][1]["TrackToRegion"] = mapValue( minclearanceInner  );
 
         if( minclearanceInner != INT_MAX )
-            m_json["DesignRules"][1]["RegionToRegion"] = minclearanceInner * m_conversionUnits;
+            m_json["DesignRules"][1]["RegionToRegion"] = mapValue( minclearanceInner );
     }
 }
 
@@ -570,7 +587,7 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
         for( int sub_idx = 0; sub_idx < sub_layer_count; sub_idx++ )
         {
             // layer thickness is always in mm
-            double      thickness = item->GetThickness( sub_idx ) * m_conversionUnits;
+            double      thickness = mapValue( item->GetThickness( sub_idx ) );
             wxString    layer_type;
             std::string layer_name; // for comment
             json        layer_json;

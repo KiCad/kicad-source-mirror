@@ -157,6 +157,12 @@ private:
      */
     std::string formatStringFromUTF32( const wxString& aText );
 
+    /** A helper function to convert a double in Pcbnew internal units to
+     * a JSON double value (in mm), with only 4 digits in mantissa for a better readability
+     * when printed using %g or equivalent format.
+     */
+    double mapValue( double aUiValue );
+
 private:
     BOARD* m_pcb;               // The board
     REPORTER* m_reporter;       // a reporter for messages (can be null)
