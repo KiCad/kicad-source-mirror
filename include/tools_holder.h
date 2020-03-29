@@ -35,6 +35,13 @@ class TOOL_DISPATCHER;
 class ACTIONS;
 
 
+/*
+ * Class TOOLS_HOLDER
+ * A mix-in class which allows its owner to hold a set of tools from the tool framework.
+ *
+ * This is just the framework; the owner is responsible for registering individual tools,
+ * creating the dispatcher, etc.
+ */
 class TOOLS_HOLDER
 {
 protected:
@@ -42,14 +49,17 @@ protected:
     ACTIONS*          m_actions;
     TOOL_DISPATCHER*  m_toolDispatcher;
 
-    std::vector<std::string> m_toolStack;   // Stack of user-level "tools".  Not to be confused
-                                            // with a stack of TOOL_BASE instances, because many
-                                            // of them implement multiple user-level "tools".  The
-                                            // user-level "tools" equate to ACTIONs.
+    std::vector<std::string> m_toolStack;   // Stack of user-level "tools".  This is NOT a
+                                            // stack of TOOL instances, because somewhat
+                                            // confusingly most TOOLs implement more than one
+                                            // user-level tool.  A user-level tool actually
+                                            // equates to an ACTION handler, so this stack
+                                            // stores ACTION names.
 
-    bool              m_immediateActions;   // Preference for immediate actions.  If false, the
-                                            // first invocation of a hotkey will just select the
-                                            // relevant tool.
+    bool              m_immediateActions;   // Preference for immediate actions.  If false,
+                                            // the first invocation of a hotkey will just
+                                            // select the relevant tool rather than executing
+                                            // the tool's action.
     bool              m_dragSelects;        // Prefer selection to dragging.
     bool              m_moveWarpsCursor;    // cursor is warped to move/drag origin
 

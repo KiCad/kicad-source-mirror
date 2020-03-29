@@ -48,18 +48,14 @@ public:
 
     /**
      * Function GetItem
-     * retrieves a RC_ITEM by pointer.  The actual item remains owned by the
-     * list container.
-     * @param aIndex The 0 based index into the list of the desired item.
-     * @return const RC_ITEM* - the desired item or NULL if aIndex is out of range.
+     * retrieves a RC_ITEM by index.
      */
     virtual RC_ITEM* GetItem( int aIndex ) = 0;
 
     /**
-     * Function DeleteItems
-     * removes and deletes desired item from the list.
-     * @param aIndex The 0 based index into the list of the desired item which is to be deleted.
-     * @param aDeep If true, the source item should be deleted as well as the filtered item.
+     * Function DeleteItem
+     * removes (and optionally deletes) the indexed item from the list.
+     * @param aDeep If true, the source item should be deleted as well as its entry in the list.
      */
     virtual void DeleteItem( int aIndex, bool aDeep ) = 0;
 
@@ -241,7 +237,8 @@ public:
     /**
      * Function SetAuxiliaryData
      * initialize data for the second (auxiliary) item
-     * @param aAuxiliaryText = the second text (main text) concerning the second schematic or board item
+     * @param aAuxiliaryText = the second text (main text) concerning the second schematic
+     *                         or board item
      * @param aAuxiliaryPos = position the second item
      */
     void SetAuxiliaryData( const wxString& aAuxiliaryText, const wxPoint& aAuxiliaryPos )
