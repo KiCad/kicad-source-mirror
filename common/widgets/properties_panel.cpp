@@ -89,48 +89,44 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
         if( !property->Available( aSelection.Front() ) )
             continue;
 
-        // Either determine the common value for a property or "<...>" to mark multiple values
-        bool first = true;
+        // Either determine the common value for a property or "<...>" to indicate multiple values
         bool available = true;
         wxVariant commonVal, itemVal;
 
         for( EDA_ITEM* item : aSelection )
         {
-            wxVariant& value = first ? commonVal : itemVal;
+            if( !property->Available( item ) )
+                break; // there is an item that does not have this property, so do not display it
 
-            if( !first && !property->Available( item ) )
+            wxVariant& value = commonVal.IsNull() ? commonVal : itemVal;
+            const wxAny& any = item->Get( property );
+            bool converted = false;
+
+            if( property->HasChoices() )
             {
-                // there is an item that does not have this property
+                // handle enums as ints, since there are no default conversion functions for wxAny
+                int tmp;
+                converted = any.GetAs<int>( &tmp );
+
+                if( converted )
+                    value = wxVariant( tmp );
+            }
+
+            if( !converted )                // all other types
+                converted = any.GetAs( &value );
+
+            if( !converted )
+            {
+                wxFAIL_MSG( "Could not convert wxAny to wxVariant" );
                 available = false;
                 break;
             }
 
-            const wxAny& any = static_cast<EDA_ITEM*>( item )->Get( property );
-
-            if( !any.GetAs( &value ) )
-            {
-                int tmp;
-
-                if( any.GetAs<int>( &tmp ) )    // needed to handle enums
-                {
-                    value = wxVariant( tmp );
-                }
-                else
-                {
-                    wxFAIL_MSG( "Could not convert wxAny to wxVariant" );
-                    // if it is an enum, be sure that there is a corresponding ENUM_TO_WXANY
-                    available = false;
-                    break;
-                }
-            }
-
-            if( !first && value != commonVal )
+            if( !commonVal.IsNull() && value != commonVal )
             {
                 commonVal.MakeNull();       // items have different values for this property
                 break;
             }
-
-            first = false;
         }
 
         if( available )

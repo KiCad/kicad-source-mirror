@@ -177,7 +177,9 @@ static struct CLASS_D_DESC
         propMgr.InheritsAfter( TYPE_HASH( D ), TYPE_HASH( C ) );
 
         auto cond = new PROPERTY<D, int>( "cond", &D::setCond, &D::getCond );
-        cond->SetAvailableFunc( [=](INSPECTABLE* aItem)->bool { return *aItem->Get<int>( "A" ) > 50; } );
+        cond->SetAvailableFunc( [=](INSPECTABLE* aItem)->bool {
+                return *aItem->Get<enum_glob>( "enumGlob" ) == enum_glob::TEST1;
+        } );
         propMgr.AddProperty( cond );
     }
 } _CLASS_D_DESC;
@@ -356,11 +358,11 @@ BOOST_AUTO_TEST_CASE( Availability )
     PROPERTY_BASE* propCond = propMgr.GetProperty( TYPE_HASH( D ), "cond" );
     ptr = &d;
 
-    // "cond" property is available only when "a" field is greater than 50
-    d.setA( 0 );
+    // "cond" property is available only when "a" field is greater than 50  //TODO fix desc
+    d.setGlobEnum( enum_glob::TEST3 );
     BOOST_CHECK( !propCond->Available( ptr ) );
 
-    d.setA( 100 );
+    d.setGlobEnum( enum_glob::TEST1 );
     BOOST_CHECK( propCond->Available( ptr ) );
 }
 

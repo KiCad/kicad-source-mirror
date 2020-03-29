@@ -239,9 +239,9 @@ public:
     void SetSize( const VECTOR2I& aSize )       { m_size = aSize; SetDirty(); }
     const VECTOR2I& GetSize() const             { return m_size; }
     void SetSizeX( const int aX )               { m_size.x = aX; SetDirty(); }
-    const int GetSizeX() const                  { return m_size.x; }
+    int GetSizeX() const                        { return m_size.x; }
     void SetSizeY( const int aY )               { m_size.y = aY; SetDirty(); }
-    const int GetSizeY() const                  { return m_size.y; }
+    int GetSizeY() const                        { return m_size.y; }
 
     void SetDelta( const VECTOR2I& aSize )      { m_deltaSize = aSize; SetDirty(); }
     const VECTOR2I& GetDelta() const            { return m_deltaSize; }
@@ -249,9 +249,9 @@ public:
     void SetDrillSize( const VECTOR2I& aSize )  { m_drill = aSize; SetDirty(); }
     const VECTOR2I& GetDrillSize() const        { return m_drill; }
     void SetDrillSizeX( const int aX )          { m_drill.x = aX; SetDirty(); }
-    const int GetDrillSizeX() const             { return m_drill.x; }
+    int GetDrillSizeX() const                   { return m_drill.x; }
     void SetDrillSizeY( const int aY )          { m_drill.y = aY; SetDirty(); }
-    const int GetDrillSizeY() const             { return m_drill.y; }
+    int GetDrillSizeY() const                   { return m_drill.y; }
 
     void SetOffset( const VECTOR2I& aOffset )    { m_offset = aOffset; SetDirty(); }
     const VECTOR2I& GetOffset() const            { return m_offset; }
