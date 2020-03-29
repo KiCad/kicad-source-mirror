@@ -617,10 +617,10 @@ void NETLIST_OBJECT_LIST::TestforSimilarLabels()
     // build global labels and compare
     std::set<NETLIST_OBJECT*, compare_label_names> loc_labelList;
 
-    for( auto it = uniqueLabelList.begin(); it != uniqueLabelList.end(); ++it )
+    for( NETLIST_OBJECT* label : uniqueLabelList )
     {
-        if( (*it)->IsLabelGlobal() )
-            loc_labelList.insert( *it );
+        if( label->IsLabelGlobal() )
+            loc_labelList.insert( label );
     }
 
     // compare global labels (same label names appears only once in list)
@@ -702,7 +702,7 @@ static int countIndenticalLabels( std::vector<NETLIST_OBJECT*>& aList, NETLIST_O
 
     if( aRef->IsLabelGlobal() )
     {
-        for( auto i : aList)
+        for( NETLIST_OBJECT* i : aList )
         {
             if( i->IsLabelGlobal() && i->m_Label == aRef->m_Label )
                 count++;
@@ -710,7 +710,7 @@ static int countIndenticalLabels( std::vector<NETLIST_OBJECT*>& aList, NETLIST_O
     }
     else
     {
-        for( auto i : aList)
+        for( NETLIST_OBJECT* i : aList )
         {
             if( i->m_Label == aRef->m_Label && i->m_SheetPath.Path() == aRef->m_SheetPath.Path() )
                 count++;

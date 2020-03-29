@@ -186,8 +186,8 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
 }
 
 
-SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch(
-        SCH_SCREEN* aScreen, SCH_ITEM* aAfter, wxFindReplaceData* aData )
+SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch( SCH_SCREEN* aScreen, SCH_ITEM* aAfter,
+                                         wxFindReplaceData* aData )
 {
     bool past_item = true;
 
@@ -200,7 +200,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch(
     }
 
 
-    for( auto item : aScreen->Items() )
+    for( SCH_ITEM* item : aScreen->Items() )
     {
         if( item == aAfter )
         {
@@ -216,15 +216,15 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch(
 
             if( item->Type() == SCH_COMPONENT_T )
             {
-                auto cmp = static_cast<SCH_COMPONENT*>( item );
+                SCH_COMPONENT* cmp = static_cast<SCH_COMPONENT*>( item );
 
-                for( auto field : cmp->GetFields() )
+                for( SCH_FIELD& field : cmp->GetFields() )
                 {
                     if( field.Matches( *aData, nullptr ) )
                         return &field;
                 }
 
-                for( auto pin : cmp->GetSchPins() )
+                for( SCH_PIN* pin : cmp->GetSchPins() )
                 {
                     if( pin->Matches( *aData, nullptr ) )
                         return pin;
@@ -233,7 +233,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch(
 
             if( item->Type() == SCH_SHEET_T )
             {
-                auto sheet = static_cast<SCH_SHEET*>( item );
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
                 for( SCH_FIELD& field : sheet->GetFields() )
                 {
@@ -766,7 +766,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     if( !screen )
         return 0;
 
-    for( auto item : screen->Items() )
+    for( SCH_ITEM* item : screen->Items() )
     {
         SCH_CONNECTION* conn   = item->Connection( *g_CurrentSheet );
         bool            redraw = item->IsBrightened();
@@ -790,7 +790,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
             for( LIB_PIN* pin : pins )
             {
-                auto pin_conn = comp->GetConnectionForPin( pin, *g_CurrentSheet );
+                SCH_CONNECTION* pin_conn = comp->GetConnectionForPin( pin, *g_CurrentSheet );
 
                 if( pin_conn && pin_conn->Name( false ) == selectedNetName )
                 {
@@ -803,8 +803,8 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         {
             for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
             {
-                auto pin_conn = pin->Connection( *g_CurrentSheet );
-                bool redrawPin = pin->IsBrightened();
+                SCH_CONNECTION* pin_conn = pin->Connection( *g_CurrentSheet );
+                bool            redrawPin = pin->IsBrightened();
 
                 if( pin_conn && pin_conn->Name() == selectedNetName )
                     pin->SetBrightened();
@@ -825,7 +825,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     // Be sure highlight change will be redrawn
     KIGFX::VIEW* view = getView();
 
-    for( auto redrawItem : itemsToRedraw )
+    for( EDA_ITEM* redrawItem : itemsToRedraw )
         view->Update( (KIGFX::VIEW_ITEM*)redrawItem, KIGFX::VIEW_UPDATE_FLAGS::REPAINT );
 
     m_frame->GetCanvas()->Refresh();
@@ -1055,7 +1055,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( m_frame->Prj().GetProjectPath() );
 
-    for( auto item : paste_screen.Items() )
+    for( SCH_ITEM* item : paste_screen.Items() )
     {
         loadedItems.push_back( item );
 
@@ -1063,7 +1063,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         {
             if( !dropAnnotations && !forceKeepAnnotations )
             {
-                for( auto existingItem : m_frame->GetScreen()->Items() )
+                for( SCH_ITEM* existingItem : m_frame->GetScreen()->Items() )
                 {
                     if( item->m_Uuid == existingItem->m_Uuid )
                     {
@@ -1374,7 +1374,7 @@ int SCH_EDITOR_CONTROL::ToggleHiddenPins( const TOOL_EVENT& aEvent )
 {
     m_frame->SetShowAllPins( !m_frame->GetShowAllPins() );
 
-    auto painter = static_cast<KIGFX::SCH_PAINTER*>( getView()->GetPainter() );
+    KIGFX::SCH_PAINTER* painter = static_cast<KIGFX::SCH_PAINTER*>( getView()->GetPainter() );
     painter->GetSettings()->m_ShowHiddenPins = m_frame->GetShowAllPins();
 
     getView()->UpdateAllItems( KIGFX::REPAINT );
