@@ -92,9 +92,12 @@ public:
     T Get( PROPERTY_BASE* aProperty ) const
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        TYPE_ID thisType = TYPE_HASH( *this );
-        void* object = propMgr.TypeCast( this, thisType, aProperty->OwnerHash() );
-        return object ? aProperty->get<T>( object ) : T();
+        const void* object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
+
+        if( !object )
+            throw std::runtime_error( "Could not cast INSPECTABLE to the requested type" );
+
+        return aProperty->get<T>( object );
     }
 
     template<typename T>
