@@ -118,7 +118,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     m_toolManager->InitTools();
 
     // Run the control tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "cvpcb.InteractiveSelection" );
+    m_toolManager->InvokeTool( "cvpcb.FootprintViewerInteractiveSelection" );
 
     ReCreateHToolbar();
     ReCreateVToolbar();

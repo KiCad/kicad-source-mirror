@@ -43,9 +43,9 @@ protected:
     TOOL_DISPATCHER*  m_toolDispatcher;
 
     std::vector<std::string> m_toolStack;   // Stack of user-level "tools".  Not to be confused
-                                            // with TOOL_BASE-derived instances, many of which
-                                            // implement multiple user-level "tools".  The user-
-                                            // level "tools" are TOOL_ACTIONSs internally.
+                                            // with a stack of TOOL_BASE instances, because many
+                                            // of them implement multiple user-level "tools".  The
+                                            // user-level "tools" equate to ACTIONs.
 
     bool              m_immediateActions;   // Preference for immediate actions.  If false, the
                                             // first invocation of a hotkey will just select the

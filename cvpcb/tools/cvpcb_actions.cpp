@@ -33,50 +33,53 @@
 
 
 // Selection tool action for the footprint viewer window
-TOOL_ACTION CVPCB_ACTIONS::selectionActivate( "cvpcb.InteractiveSelection", AS_GLOBAL,
-        0, "",
+TOOL_ACTION CVPCB_ACTIONS::selectionActivate( "cvpcb.FootprintViewerInteractiveSelection",
+        AS_GLOBAL, 0, "",
         "",
         "",
         NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
 
-TOOL_ACTION CVPCB_ACTIONS::controlActivate( "cvpcb.Control", AS_GLOBAL,
-        0, "",
+TOOL_ACTION CVPCB_ACTIONS::controlActivate( "cvpcb.Control",
+        AS_GLOBAL, 0, "",
         "",
         "",
         NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
 
 
 // Action to show the footprint viewer window
-TOOL_ACTION CVPCB_ACTIONS::showFootprintViewer( "cvpcb.Control.ShowFootprintViewer", AS_GLOBAL,
-        0, "",
+TOOL_ACTION CVPCB_ACTIONS::showFootprintViewer( "cvpcb.Control.ShowFootprintViewer",
+        AS_GLOBAL, 0, "",
         _( "View selected footprint" ),
         _( "View the selected footprint in the footprint viewer" ),
         show_footprint_xpm );
 
 
 // Actions to handle management tasks
-TOOL_ACTION CVPCB_ACTIONS::showEquFileTable( "cvpcb.Control.ShowEquFileTable", AS_GLOBAL,
-        0, "",
+TOOL_ACTION CVPCB_ACTIONS::showEquFileTable( "cvpcb.Control.ShowEquFileTable",
+        AS_GLOBAL, 0, "",
         _( "Manage Footprint Association Files" ),
         _( "Configure footprint association file (.equ) list.  These files are "
            "used to automatically assign footprint names from symbol values." ),
         library_table_xpm );
 
-TOOL_ACTION CVPCB_ACTIONS::saveAssociations( "cvpcb.Control.SaveAssocations", AS_GLOBAL,
+TOOL_ACTION CVPCB_ACTIONS::saveAssociations( "cvpcb.Control.SaveAssocations",
+        AS_GLOBAL,
         MD_CTRL + 'S', LEGACY_HK_NAME( "Save" ),
         _( "Save to Schematic" ),
         _( "Save footprint associations in schematic symbol footprint fields" ),
         save_xpm );
 
 // Actions to navigate the display
-TOOL_ACTION CVPCB_ACTIONS::changeFocusRight( "cvpcb.Control.changeFocusRight", AS_GLOBAL,
+TOOL_ACTION CVPCB_ACTIONS::changeFocusRight( "cvpcb.Control.changeFocusRight",
+        AS_GLOBAL,
         WXK_TAB, "",
         "",
         "",
         nullptr, AF_NONE,
         (void*) CVPCB_MAINFRAME::CHANGE_FOCUS_RIGHT );
 
-TOOL_ACTION CVPCB_ACTIONS::changeFocusLeft( "cvpcb.Control.changeFocusLeft", AS_GLOBAL,
+TOOL_ACTION CVPCB_ACTIONS::changeFocusLeft( "cvpcb.Control.changeFocusLeft",
+        AS_GLOBAL,
         MD_SHIFT + WXK_TAB, "",
         "",
         "",
@@ -84,15 +87,15 @@ TOOL_ACTION CVPCB_ACTIONS::changeFocusLeft( "cvpcb.Control.changeFocusLeft", AS_
         (void*) CVPCB_MAINFRAME::CHANGE_FOCUS_LEFT );
 
 // Actions to navigate the component list
-TOOL_ACTION CVPCB_ACTIONS::gotoNextNA( "cvpcb.Control.GotoNextNA", AS_GLOBAL,
-        0, "",
+TOOL_ACTION CVPCB_ACTIONS::gotoNextNA( "cvpcb.Control.GotoNextNA",
+        AS_GLOBAL, 0, "",
         _( "Select next unassociated symbol" ),
         _( "Select next unassociated symbol" ),
         right_xpm, AF_NONE,
         (void*) CVPCB_MAINFRAME::ITEM_NEXT );
 
-TOOL_ACTION CVPCB_ACTIONS::gotoPreviousNA( "cvpcb.Control.GotoPreviousNA", AS_GLOBAL,
-        0, "",
+TOOL_ACTION CVPCB_ACTIONS::gotoPreviousNA( "cvpcb.Control.GotoPreviousNA",
+        AS_GLOBAL, 0, "",
         _( "Select previous unassociated symbol" ),
         _( "Select previous unassociated symbol" ),
         left_xpm, AF_NONE,
@@ -100,26 +103,28 @@ TOOL_ACTION CVPCB_ACTIONS::gotoPreviousNA( "cvpcb.Control.GotoPreviousNA", AS_GL
 
 
 // Actions to modify component associations
-TOOL_ACTION CVPCB_ACTIONS::associate( "cvpcb.Association.Associate", AS_GLOBAL,
+TOOL_ACTION CVPCB_ACTIONS::associate( "cvpcb.Association.Associate",
+        AS_GLOBAL,
         WXK_RETURN, "",
         _( "Associate footprint" ),
         _( "Associate selected footprint with selected components" ),
         auto_associe_xpm );
 
-TOOL_ACTION CVPCB_ACTIONS::autoAssociate( "cvpcb.Association.AutoAssociate", AS_GLOBAL,
-        0, "",
+TOOL_ACTION CVPCB_ACTIONS::autoAssociate( "cvpcb.Association.AutoAssociate",
+        AS_GLOBAL, 0, "",
         _( "Automatically associate footprints" ),
         _( "Perform automatic footprint association" ),
         auto_associe_xpm );
 
-TOOL_ACTION CVPCB_ACTIONS::deleteAssoc( "cvpcb.Association.Delete", AS_GLOBAL,
+TOOL_ACTION CVPCB_ACTIONS::deleteAssoc( "cvpcb.Association.Delete",
+        AS_GLOBAL,
         WXK_DELETE, "",
         _( "Delete association" ),
         _( "Delete selected footprint associations" ),
         delete_association_xpm );
 
-TOOL_ACTION CVPCB_ACTIONS::deleteAll( "cvpcb.Association.DeleteAll", AS_GLOBAL,
-        0, "",
+TOOL_ACTION CVPCB_ACTIONS::deleteAll( "cvpcb.Association.DeleteAll",
+        AS_GLOBAL, 0, "",
         _( "Delete all footprint associations" ),
         _( "Delete all footprint associations" ),
         delete_association_xpm );
