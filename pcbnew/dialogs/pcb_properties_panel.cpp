@@ -37,7 +37,7 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_EDIT_FRAME* a
 }
 
 
-void PCB_PROPERTIES_PANEL::Update()
+void PCB_PROPERTIES_PANEL::UpdateData()
 {
     PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     const SELECTION& selection = selectionTool->GetSelection();

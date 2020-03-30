@@ -313,6 +313,6 @@ void PCB_BASE_EDIT_FRAME::UpdateProperties()
     if( !m_propertiesPanel || !m_propertiesPanel->IsShownOnScreen() )
         return;
 
-    m_propertiesPanel->Update();
+    m_propertiesPanel->UpdateData();
 }
 

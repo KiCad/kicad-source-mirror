@@ -42,7 +42,7 @@ public:
     {
     }
 
-    virtual void Update() override = 0;
+    virtual void UpdateData() = 0;
 
     wxPropertyGrid* GetPropertyGrid()
     {

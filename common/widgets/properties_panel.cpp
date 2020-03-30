@@ -149,5 +149,5 @@ void PROPERTIES_PANEL::update( const SELECTION& aSelection )
 void PROPERTIES_PANEL::onShow( wxShowEvent& aEvent )
 {
     if( aEvent.IsShown() )
-        Update();
+        UpdateData();
 }

@@ -37,7 +37,7 @@ public:
     {
     }
 
-    void Update() override;
+    void UpdateData() override;
 
 protected:
     wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const override;
