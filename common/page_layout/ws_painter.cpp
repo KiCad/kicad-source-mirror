@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -122,32 +122,32 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                           }
                           else if( token->IsSameAs( wxT( "PAPER" ) ) )
                           {
-                              *token = m_paperFormat ? *m_paperFormat : wxEmptyString;
+                              *token = m_paperFormat ? *m_paperFormat : wxString("");
                               return true;
                           }
                           else if( token->IsSameAs( wxT( "LAYER" ) ) )
                           {
-                              *token = m_sheetLayer ? *m_sheetLayer : wxEmptyString;
+                              *token = m_sheetLayer ? *m_sheetLayer : wxString("");
                               return true;
                           }
                           else if( token->IsSameAs( wxT( "ISSUE_DATE" ) ) )
                           {
-                              *token = m_titleBlock ? m_titleBlock->GetDate() : wxEmptyString;
+                              *token = m_titleBlock ? m_titleBlock->GetDate() : wxString("");
                               return true;
                           }
                           else if( token->IsSameAs( wxT( "REVISION" ) ) )
                           {
-                              *token = m_titleBlock ? m_titleBlock->GetRevision() : wxEmptyString;
+                              *token = m_titleBlock ? m_titleBlock->GetRevision() : wxString("");
                               return true;
                           }
                           else if( token->IsSameAs( wxT( "TITLE" ) ) )
                           {
-                              *token = m_titleBlock ? m_titleBlock->GetTitle() : wxEmptyString;
+                              *token = m_titleBlock ? m_titleBlock->GetTitle() : wxString("");
                               return true;
                           }
                           else if( token->IsSameAs( wxT( "COMPANY" ) ) )
                           {
-                              *token = m_titleBlock ? m_titleBlock->GetCompany() : wxEmptyString;
+                              *token = m_titleBlock ? m_titleBlock->GetCompany() : wxString("");
                               return true;
                           }
                           else if( token->Left( token->Len()-1 ).IsSameAs( wxT( "COMMENT" ) ) )
@@ -167,7 +167,7 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                               case '8':
                               case '9':
                                   *token = m_titleBlock ? m_titleBlock->GetComment( c - '0' )
-                                                        : wxEmptyString;
+                                                        : wxString("");
                                   return true;
                               }
                           }
