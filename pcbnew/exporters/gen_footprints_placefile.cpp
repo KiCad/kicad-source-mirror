@@ -533,6 +533,9 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
             LAYER_NUM layer = list[ii].m_Module->GetLayer();
             wxASSERT( layer == F_Cu || layer == B_Cu );
 
+            if( layer == B_Cu )
+                footprint_pos.x = - footprint_pos.x;
+
             wxString line = "\"" + list[ii].m_Reference;
             line << "\"" << csv_sep;
             line << "\"" << list[ii].m_Value;
