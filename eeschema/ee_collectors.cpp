@@ -25,7 +25,6 @@
 
 #include <macros.h>
 #include <trace_helpers.h>
-
 #include <ee_collectors.h>
 #include <lib_item.h>
 #include <sch_bus_entry.h>
@@ -33,6 +32,7 @@
 #include <sch_line.h>
 #include <sch_sheet_path.h>
 #include <transform.h>
+#include "sch_reference_list.h"
 
 
 const KICAD_T EE_COLLECTOR::AllItems[] = {
@@ -166,3 +166,28 @@ bool EE_COLLECTOR::IsDraggableJunction() const
 
     return false;
 }
+
+
+void CollectOtherUnits( SCH_SHEET_PATH& aSheet, SCH_COMPONENT* aUnit,
+                        std::vector<SCH_COMPONENT*>* otherUnits )
+{
+    if( aUnit->GetUnitCount() > 1 )
+    {
+        const LIB_ID   thisLibId = aUnit->GetLibId();
+        const wxString thisRef   = aUnit->GetRef( &aSheet );
+        int            thisUnit  = aUnit->GetUnit();
+
+        SCH_REFERENCE_LIST components;
+        aSheet.GetComponents( components );
+
+        for( unsigned i = 0; i < components.GetCount(); i++ )
+        {
+            SCH_REFERENCE component = components[i];
+
+            if( component.GetRef() == thisRef && component.GetUnit() != thisUnit )
+                otherUnits->push_back( component.GetComp() );
+        }
+    }
+}
+
+

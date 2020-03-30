@@ -30,7 +30,10 @@
 #include <collector.h>
 #include <dialogs/dialog_schematic_find.h>
 #include <sch_item.h>
-#include <sch_sheet_path.h>
+
+
+class SCH_SHEET_PATH;
+class SCH_COMPONENT;
 
 
 /**
@@ -122,5 +125,8 @@ public:
     int      m_Convert;         // Fixed DeMorgan filter (for symbol editor)
 };
 
+
+void CollectOtherUnits( SCH_SHEET_PATH& aSheet, SCH_COMPONENT* aUnit,
+                        std::vector<SCH_COMPONENT*>* otherUnits );
 
 #endif // EE_COLLECTORS_H

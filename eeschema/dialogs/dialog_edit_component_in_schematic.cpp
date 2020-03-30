@@ -32,6 +32,7 @@
 
 #include <widgets/wx_grid.h>
 
+#include <ee_collectors.h>
 #include <class_library.h>
 #include <eeschema_settings.h>
 #include <fields_grid_table.h>
@@ -483,27 +484,17 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     // parts.
     if( m_cmp->GetUnitCount() > 1 )
     {
-        const LIB_ID   thisLibId = m_cmp->GetLibId();
-        const wxString thisRef   = m_cmp->GetRef( &( GetParent()->GetCurrentSheet() ) );
-        int            thisUnit  = m_cmp->GetUnit();
+        std::vector<SCH_COMPONENT*> otherUnits;
 
-        SCH_REFERENCE_LIST components;
-        GetParent()->GetCurrentSheet().GetComponents( components );
+        CollectOtherUnits( GetParent()->GetCurrentSheet(), m_cmp, &otherUnits );
 
-        for( unsigned i = 0; i < components.GetCount(); i++ )
+        for( SCH_COMPONENT* otherUnit : otherUnits )
         {
-            SCH_REFERENCE component = components[i];
-
-            if( component.GetLibPart()->GetLibId() == thisLibId
-                    && component.GetRef() == thisRef
-                    && component.GetUnit() != thisUnit )
-            {
-                SCH_COMPONENT* otherUnit = component.GetComp();
-                GetParent()->SaveCopyInUndoList( otherUnit, UR_CHANGED, true /* append */);
-                otherUnit->GetField( VALUE )->SetText( m_fields->at( VALUE ).GetText() );
-                otherUnit->GetField( FOOTPRINT )->SetText( m_fields->at( FOOTPRINT ).GetText() );
-                otherUnit->GetField( DATASHEET )->SetText( m_fields->at( DATASHEET ).GetText() );
-            }
+            GetParent()->SaveCopyInUndoList( otherUnit, UR_CHANGED, true /* append */);
+            otherUnit->GetField( VALUE )->SetText( m_fields->at( VALUE ).GetText() );
+            otherUnit->GetField( FOOTPRINT )->SetText( m_fields->at( FOOTPRINT ).GetText() );
+            otherUnit->GetField( DATASHEET )->SetText( m_fields->at( DATASHEET ).GetText() );
+            GetParent()->RefreshItem( otherUnit );
         }
     }
 

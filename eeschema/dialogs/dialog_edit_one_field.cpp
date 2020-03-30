@@ -29,6 +29,8 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <sch_base_frame.h>
+#include <sch_edit_frame.h>
+#include <ee_collectors.h>
 #include <sch_component.h>
 #include <class_libentry.h>
 #include <lib_field.h>
@@ -242,12 +244,13 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 
 void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath )
 {
-    EDA_ITEM* parent = aField->GetParent();
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+    SCH_ITEM*       parent = dynamic_cast<SCH_ITEM*>( aField->GetParent() );
+    int             fieldType = aField->GetId();
 
-    if( parent && parent->Type() == SCH_COMPONENT_T && aField->GetId() == REFERENCE )
+    if( parent && parent->Type() == SCH_COMPONENT_T && fieldType == REFERENCE )
     {
         wxASSERT( aSheetPath );
-
         static_cast<SCH_COMPONENT*>( parent )->SetRef( aSheetPath, m_text );
     }
 
@@ -268,6 +271,24 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
     aField->SetText( m_text );
     updateText( aField );
 
+    // The value, footprint and datasheet fields should be kept in sync in multi-unit
+    // parts.
+    if( editFrame && parent && parent->Type() == SCH_COMPONENT_T
+            && ( fieldType == VALUE || fieldType == FOOTPRINT || fieldType == DATASHEET ) )
+    {
+        SCH_COMPONENT*              thisUnit = static_cast<SCH_COMPONENT*>( parent );
+        std::vector<SCH_COMPONENT*> otherUnits;
+
+        CollectOtherUnits( editFrame->GetCurrentSheet(), thisUnit, &otherUnits );
+
+        for( SCH_COMPONENT* otherUnit : otherUnits )
+        {
+            editFrame->SaveCopyInUndoList( otherUnit, UR_CHANGED, true /* append */);
+            otherUnit->GetField( fieldType )->SetText( m_text );
+            editFrame->RefreshItem( otherUnit );
+        }
+    }
+
     if( positioningModified && parent )
-        static_cast<SCH_ITEM*>( parent )->ClearFieldsAutoplaced();
+        parent->ClearFieldsAutoplaced();
 }
