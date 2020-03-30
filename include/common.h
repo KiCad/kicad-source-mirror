@@ -33,6 +33,7 @@
 #define INCLUDE__COMMON_H_
 
 #include <vector>
+#include <functional>
 
 #include <wx/wx.h>
 #include <wx/confbase.h>
