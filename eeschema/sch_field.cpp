@@ -529,6 +529,7 @@ void SCH_FIELD::SetPosition( const wxPoint& aPosition )
                             InverseTransform().TransformCoordinate( relativePos );
 
         SetTextPos( relativePos + parentComponent->GetPosition() );
+        return;
     }
 
     SetTextPos( aPosition );
