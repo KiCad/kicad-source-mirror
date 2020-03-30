@@ -78,6 +78,9 @@ CAIRO_GAL_BASE::~CAIRO_GAL_BASE()
 
     if( context )
         cairo_destroy( context );
+
+    for( auto imageSurface : imageSurfaces )
+        cairo_surface_destroy( imageSurface );
 }
 
 
@@ -502,7 +505,9 @@ void CAIRO_GAL_BASE::DrawBitmap( const BITMAP_BASE& aBitmap )
     cairo_surface_mark_dirty( image );
     cairo_set_source_surface( currentContext, image, 0, 0 );
     cairo_paint( currentContext );
-    cairo_surface_destroy( image );
+
+    // store the image handle so it can be destroyed later
+    imageSurfaces.push_back( image );
 
     isElementAdded = true;
 
@@ -923,6 +928,11 @@ void CAIRO_GAL_BASE::EnableDepthTest( bool aEnabled )
 
 void CAIRO_GAL_BASE::resetContext()
 {
+    for( auto imageSurface : imageSurfaces )
+        cairo_surface_destroy( imageSurface );
+
+    imageSurfaces.clear();
+
     ClearScreen();
 
     // Compute the world <-> screen transformations

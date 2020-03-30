@@ -304,6 +304,9 @@ protected:
     cairo_t*            context;                ///< Cairo image
     cairo_surface_t*    surface;                ///< Cairo surface
 
+    /// List of surfaces that were created by painting images, to be cleaned up later
+    std::vector<cairo_surface_t*> imageSurfaces;
+
     std::vector<cairo_matrix_t> xformStack;
 
     void flushPath();
