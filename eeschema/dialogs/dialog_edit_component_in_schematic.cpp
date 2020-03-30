@@ -484,7 +484,6 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     // parts.
     if( m_cmp->GetUnitCount() > 1 )
     {
-        const LIB_ID   thisLibId = m_cmp->GetLibId();
         const wxString thisRef   = m_cmp->GetRef( &( GetParent()->GetCurrentSheet() ) );
         int            thisUnit  = m_cmp->GetUnit();
 
@@ -495,9 +494,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
         {
             SCH_REFERENCE component = components[i];
 
-            if( component.GetLibPart()->GetLibId() == thisLibId
-                    && component.GetRef() == thisRef
-                    && component.GetUnit() != thisUnit )
+            if( component.GetRef() == thisRef && component.GetUnit() != thisUnit )
             {
                 SCH_COMPONENT* otherUnit = component.GetComp();
                 GetParent()->SaveCopyInUndoList( otherUnit, UR_CHANGED, true /* append */);

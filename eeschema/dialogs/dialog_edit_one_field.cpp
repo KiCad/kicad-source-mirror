@@ -34,6 +34,7 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <sch_base_frame.h>
+#include <sch_edit_frame.h>
 #include <sch_component.h>
 #include <class_libentry.h>
 #include <lib_field.h>
@@ -43,7 +44,7 @@
 #include <sch_validators.h>
 
 #include <dialog_edit_one_field.h>
-
+#include <sch_reference_list.h>
 
 // These should probably moved into some other file as helpers.
 EDA_TEXT_HJUSTIFY_T IntToEdaTextHorizJustify( int aHorizJustify )
@@ -275,12 +276,13 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 
 void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath )
 {
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+    SCH_COMPONENT*  component = dynamic_cast<SCH_COMPONENT*>( aField->GetParent() );
+    int             fieldType = aField->GetId();
+
     if( aField->GetId() == REFERENCE )
     {
         wxASSERT( aSheetPath  );
-
-        SCH_COMPONENT* component = dynamic_cast< SCH_COMPONENT* >( aField->GetParent() );
-
         wxASSERT( component  );
 
         if( component )
@@ -304,9 +306,31 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
     aField->SetText( m_text );
     updateText( aField );
 
-    if( positioningModified )
+    // The value, footprint and datasheet fields should be kept in sync in multi-unit
+    // parts.
+    if( editFrame && component && component->GetUnitCount() > 1
+            && ( fieldType == VALUE || fieldType == FOOTPRINT || fieldType == DATASHEET ) )
     {
-        auto component = static_cast< SCH_COMPONENT* >( aField->GetParent() );
-        component->ClearFieldsAutoplaced();
+        const wxString thisRef   = component->GetRef( &( editFrame->GetCurrentSheet() ) );
+        int            thisUnit  = component->GetUnit();
+
+        SCH_REFERENCE_LIST components;
+        editFrame->GetCurrentSheet().GetComponents( components );
+
+        for( unsigned i = 0; i < components.GetCount(); i++ )
+        {
+            SCH_REFERENCE componentRef = components[i];
+
+            if( componentRef.GetRef() == thisRef && componentRef.GetUnit() != thisUnit )
+            {
+                SCH_COMPONENT* otherUnit = componentRef.GetComp();
+                editFrame->SaveCopyInUndoList( otherUnit, UR_CHANGED, true /* append */);
+                otherUnit->GetField( fieldType )->SetText( m_text );
+                editFrame->RefreshItem( otherUnit );
+            }
+        }
     }
+
+    if( component && positioningModified )
+        component->ClearFieldsAutoplaced();
 }
