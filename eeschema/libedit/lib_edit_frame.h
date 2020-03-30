@@ -506,7 +506,7 @@ private:
     bool isCurrentPart( const LIB_ID& aLibId ) const;
 
     ///> Renames LIB_PART aliases to avoid conflicts before adding a component to a library
-    void fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibrary );
+    void ensureUniqueName( LIB_PART* aPart, const wxString& aLibrary );
 
     DECLARE_EVENT_TABLE()
 };

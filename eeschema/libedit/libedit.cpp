@@ -667,7 +667,7 @@ void LIB_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
     if( !newPart )
         return;
 
-    fixDuplicateAliases( newPart, lib );
+    ensureUniqueName( newPart, lib );
     m_libMgr->UpdatePart( newPart, lib );
     SyncLibraries( false );
     m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, newPart->GetName() ) );
@@ -676,19 +676,16 @@ void LIB_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
 }
 
 
-void LIB_EDIT_FRAME::fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibrary )
+void LIB_EDIT_FRAME::ensureUniqueName( LIB_PART* aPart, const wxString& aLibrary )
 {
     wxCHECK( aPart, /* void */ );
 
     int      i = 1;
-    wxString newName;
+    wxString newName = aPart->GetName();
 
     // Append a number to the name until the name is unique in the library.
-    do
-    {
-        newName.Printf( "%s_%d", aPart->GetName(), i );
-        i++;
-    } while( m_libMgr->PartExists( newName, aLibrary ) );
+    while( m_libMgr->PartExists( newName, aLibrary ) )
+        newName.Printf( "%s_%d", aPart->GetName(), i++ );
 
     aPart->SetName( newName );
 }
