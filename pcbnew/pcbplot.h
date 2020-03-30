@@ -67,28 +67,12 @@ class BRDITEMS_PLOTTER : public PCB_PLOT_PARAMS
     BOARD*      m_board;
     LSET        m_layerMask;
 
-    /// Pointer to color settings that should be used for plotting
-    COLOR_SETTINGS* m_colors;
-
-    /// Dummy colors object that can be created if there is no Pgm context
-    std::unique_ptr<COLOR_SETTINGS> m_default_colors;
-
 public:
     BRDITEMS_PLOTTER( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS& aPlotOpts )
-            : PCB_PLOT_PARAMS( aPlotOpts ), m_default_colors()
+            : PCB_PLOT_PARAMS( aPlotOpts )
     {
         m_plotter = aPlotter;
         m_board = aBoard;
-
-        if( PgmOrNull() )
-        {
-            m_colors = Pgm().GetSettingsManager().GetColorSettings();
-        }
-        else
-        {
-            m_default_colors = std::make_unique<COLOR_SETTINGS>();
-            m_colors         = m_default_colors.get();
-        }
     }
 
     /**

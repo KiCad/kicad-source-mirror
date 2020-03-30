@@ -73,7 +73,7 @@
 
 COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 {
-    COLOR4D color = m_colors->GetColor( aLayer );
+    COLOR4D color = ColorSettings()->GetColor( aLayer );
 
     // A hack to avoid plotting a white item in white color, expecting the paper
     // is also white: use a non white color:
@@ -393,7 +393,7 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
     draw.SetWidth( aDim->GetWidth() );
     draw.SetLayer( aDim->GetLayer() );
 
-    COLOR4D color = m_colors->GetColor( aDim->GetLayer() );
+    COLOR4D color = ColorSettings()->GetColor( aDim->GetLayer() );
 
     // Set plot color (change WHITE to LIGHTGRAY because
     // the white items are not seen on a white paper or screen

@@ -175,6 +175,9 @@ private:
     /// Pointer to active color settings to be used for plotting
     COLOR_SETTINGS* m_colors;
 
+    /// Dummy colors object that can be created if there is no Pgm context
+    std::shared_ptr<COLOR_SETTINGS> m_default_colors;
+
 public:
     PCB_PLOT_PARAMS();
 

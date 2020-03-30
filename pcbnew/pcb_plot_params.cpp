@@ -138,8 +138,16 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     // it is a "local" parameter
     m_skipNPTH_Pads              = false;
 
-    // TODO(JE) Is it an issue for this to be tied to Pgm()?
-    m_colors = PgmOrNull() ? Pgm().GetSettingsManager().GetColorSettings() : nullptr;
+    if( PgmOrNull() )
+    {
+        m_default_colors = nullptr;
+        m_colors         = Pgm().GetSettingsManager().GetColorSettings();
+    }
+    else
+    {
+        m_default_colors = std::make_shared<COLOR_SETTINGS>();
+        m_colors         = m_default_colors.get();
+    }
 }
 
 void PCB_PLOT_PARAMS::SetGerberPrecision( int aPrecision )
