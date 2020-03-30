@@ -216,14 +216,7 @@ void LIB_TREE::Regenerate( bool aKeepState )
 
 void LIB_TREE::RefreshLibTree()
 {
-    // m_adapter->RefreshTree() does not work fine on Windows.
-    // It creates a lot of wxWidgets alerts.
-    // calling Refresh of the wxPanel is enough
-#ifdef _WINDOWS_
-    Refresh();
-#else
     m_adapter->RefreshTree();
-#endif
 }
 
 

@@ -394,10 +394,11 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree( LIB_TREE_NODE* aNode )
     for( auto const& child: aNode->m_Children )
     {
         if( child->m_Score > 0 )
+        {
             RefreshTree( child.get() );
+            ItemChanged( ToItem( aNode ) );
+        }
     }
-
-    ItemChanged( ToItem( aNode ) );
 }
 
 
