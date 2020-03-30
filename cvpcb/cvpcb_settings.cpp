@@ -32,6 +32,10 @@ const int cvpcbSchemaVersion = 0;
 CVPCB_SETTINGS::CVPCB_SETTINGS() :
         APP_SETTINGS_BASE( "cvpcb", cvpcbSchemaVersion )
 {
+    // Make Coverity happy:
+    m_FilterFootprint = 0;
+
+    // Init settings:
     m_params.emplace_back( new PARAM<int>( "filter_footprint", &m_FilterFootprint, 0 ) );
 
     addParamsForWindow( &m_FootprintViewer, "footprint_viewer" );

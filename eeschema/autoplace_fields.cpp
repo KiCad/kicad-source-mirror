@@ -134,9 +134,6 @@ public:
         m_allow_rejustify = false;
         m_align_to_grid = true;
 
-        m_allow_rejustify = false;
-        m_align_to_grid = true;
-
         if( cfg )
         {
             m_allow_rejustify = cfg->m_AutoplaceFields.allow_rejustify;

@@ -53,6 +53,7 @@ public:
         m_recursiveCollision[0] = m_recursiveCollision[1] = false;
         m_iteration = 0;
         m_forceCw = false;
+        m_forceUniqueWindingDirection = false;
     }
 
     ~WALKAROUND() {};

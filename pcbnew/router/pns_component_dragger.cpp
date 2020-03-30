@@ -33,6 +33,9 @@ namespace PNS
 
 COMPONENT_DRAGGER::COMPONENT_DRAGGER( ROUTER* aRouter ) : DRAG_ALGO( aRouter )
 {
+    // ensure all variables are initialized
+    m_dragStatus = false;
+    m_currentNode = nullptr;
 }
 
 

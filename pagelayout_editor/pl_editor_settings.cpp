@@ -33,6 +33,15 @@ const int plEditorSchemaVersion = 0;
 PL_EDITOR_SETTINGS::PL_EDITOR_SETTINGS() :
         APP_SETTINGS_BASE( "pl_editor", plEditorSchemaVersion )
 {
+    // Make Coverity happy:
+    m_CornerOrigin = 0;
+    m_PropertiesFrameWidth = 150;
+    m_LastCustomWidth = 17000;
+    m_LastCustomHeight = 11000;
+    m_LastWasPortrait = false;
+    m_BlackBackground = false;
+
+    // Build settings:
     m_params.emplace_back(
             new PARAM<int>( "properties_frame_width", &m_PropertiesFrameWidth, 150 ) );
 

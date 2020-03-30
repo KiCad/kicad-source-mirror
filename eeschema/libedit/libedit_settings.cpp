@@ -35,6 +35,10 @@ LIBEDIT_SETTINGS::LIBEDIT_SETTINGS() : APP_SETTINGS_BASE( "libedit", libeditSche
         m_Defaults(), m_Repeat(), m_ShowPinElectricalType( true ), m_LibWidth(),
         m_EditComponentVisibleColumns()
 {
+    // Make Coverity happy
+    m_UseEeschemaColorSettings = true;;
+
+    // Init settings:
     SetLegacyFilename( "eeschema" );
 
     m_params.emplace_back( new PARAM<int>( "defaults.line_width", &m_Defaults.line_width, 6 ) );

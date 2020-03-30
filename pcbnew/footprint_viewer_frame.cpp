@@ -714,7 +714,7 @@ void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    wxCHECK( cfg, /*void*/ );
 
     // We don't want to store anything other than the window settings
     EDA_BASE_FRAME::SaveSettings( cfg );
@@ -727,7 +727,7 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 WINDOW_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
     auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    wxCHECK_MSG( cfg, nullptr, "config not existing" );
 
     return &cfg->m_FootprintViewer;
 }

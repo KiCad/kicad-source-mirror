@@ -91,6 +91,7 @@ SHOVE::SHOVE( NODE* aWorld, ROUTER* aRouter ) :
     m_draggedVia = NULL;
     m_iter = 0;
     m_multiLineMode = false;
+    m_restrictSpringbackTagId = 0;
 }
 
 
@@ -672,7 +673,7 @@ bool SHOVE::pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea, VIA* aD
 
     st.m_seq = (m_nodeStack.empty() ? 1 : m_nodeStack.back().m_seq + 1);
     st.m_locked = false;
-    
+
     m_nodeStack.push_back( st );
 
     return true;

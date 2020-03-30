@@ -43,7 +43,7 @@ class DRAG_ALGO : public ALGO_BASE
 {
 public:
     DRAG_ALGO( ROUTER* aRouter ) :
-        ALGO_BASE( aRouter )
+        ALGO_BASE( aRouter ), m_world( nullptr )
     {
     }
 
