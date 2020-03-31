@@ -386,19 +386,16 @@ unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( wxDataViewItem const&   aItem,
 }
 
 
-void LIB_TREE_MODEL_ADAPTER::RefreshTree( LIB_TREE_NODE* aNode )
+void LIB_TREE_MODEL_ADAPTER::RefreshTree()
 {
-    if( !aNode )
-        aNode = &m_tree;
+    // Yes, this is an enormous hack.  But it works on all platforms, it doesn't suffer
+    // the On^2 sorting issues that ItemChanged() does on OSX, and it doesn't lose the
+    // user's scroll position (which re-attaching or deleting/re-inserting columns does).
+    static int walk = 1;
 
-    for( auto const& child: aNode->m_Children )
-    {
-        if( child->m_Score > 0 )
-        {
-            RefreshTree( child.get() );
-            ItemChanged( ToItem( aNode ) );
-        }
-    }
+    m_col_part->SetWidth( m_col_part->GetWidth() + walk );
+    m_col_desc->SetWidth( m_col_desc->GetWidth() - walk );
+    walk = -walk;
 }
 
 

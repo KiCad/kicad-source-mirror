@@ -105,7 +105,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce,
     }
 
     // Look for new libraries
-    for( const auto& libName : m_libMgr->GetLibraryNames() )
+    for( const wxString& libName : m_libMgr->GetLibraryNames() )
     {
         if( m_libHashes.count( libName ) == 0 )
         {
@@ -116,8 +116,8 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce,
             }
 
             SYMBOL_LIB_TABLE_ROW* library = m_libMgr->GetLibrary( libName );
+            LIB_TREE_NODE_LIB&    lib_node = DoAddLibraryNode( libName, library->GetDescr() );
 
-            auto& lib_node = DoAddLibraryNode( libName, library->GetDescr() );
             updateLibrary( lib_node );
         }
     }
@@ -130,7 +130,7 @@ int SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetLibrariesCount() const
 {
     int count = LIB_TREE_MODEL_ADAPTER::GetLibrariesCount();
 
-    for( const auto& libName : m_libMgr->GetLibraryNames() )
+    for( const wxString& libName : m_libMgr->GetLibraryNames() )
     {
         if( m_libHashes.count( libName ) == 0 )
             ++count;
@@ -147,7 +147,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
     if( hashIt == m_libHashes.end() )
     {
         // add a new library
-        for( auto alias : m_libMgr->GetAliases( aLibNode.m_Name ) )
+        for( LIB_PART* alias : m_libMgr->GetAliases( aLibNode.m_Name ) )
             aLibNode.AddItem( alias );
     }
     else if( hashIt->second != m_libMgr->GetLibraryHash( aLibNode.m_Name ) )
@@ -179,7 +179,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
         }
 
         // now the aliases list contains only new aliases that need to be added to the tree
-        for( auto alias : aliases )
+        for( LIB_PART* alias : aliases )
             aLibNode.AddItem( alias );
     }
 
@@ -207,29 +207,38 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
         return;
     }
 
-    auto node = ToNode( aItem );
+    LIB_TREE_NODE* node = ToNode( aItem );
     wxASSERT( node );
 
     switch( aCol )
     {
     case 0:
-        aVariant = node->m_Name;
+        if( m_frame->GetCurPart() && m_frame->GetCurPart()->GetLibId() == node->m_LibId )
+            node->m_Name = m_frame->GetCurPart()->GetLibId().GetLibItemName();
 
         if( node->m_Pinned )
             aVariant = GetPinningSymbol() + node->m_Name;
+        else
+            aVariant = node->m_Name;
 
-        // mark modified libs with an asterisk
-        if( node->m_Type == LIB_TREE_NODE::LIB && m_libMgr->IsLibraryModified( node->m_Name ) )
-            aVariant = aVariant.GetString() + " *";
-
-        // mark modified parts with an aster-ix
-        if( node->m_Type == LIB_TREE_NODE::LIBID
-                && m_libMgr->IsPartModified( node->m_Name, node->m_Parent->m_Name ) )
-            aVariant = aVariant.GetString() + " *";
+        // mark modified items with an asterisk
+        if( node->m_Type == LIB_TREE_NODE::LIB )
+        {
+            if( m_libMgr->IsLibraryModified( node->m_Name ) )
+                aVariant = aVariant.GetString() + " *";
+        }
+        else if( node->m_Type == LIB_TREE_NODE::LIBID )
+        {
+            if( m_libMgr->IsPartModified( node->m_Name, node->m_Parent->m_Name ) )
+                aVariant = aVariant.GetString() + " *";
+        }
 
         break;
 
     case 1:
+        if( m_frame->GetCurPart() && m_frame->GetCurPart()->GetLibId() == node->m_LibId )
+            node->m_Desc = m_frame->GetCurPart()->GetDescription();
+
         aVariant = node->m_Desc;
         break;
 
@@ -250,7 +259,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
     if( aCol != 0 )
         return false;
 
-    auto node = ToNode( aItem );
+    LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, false );
 
     switch( node->m_Type )

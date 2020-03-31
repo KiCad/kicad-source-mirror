@@ -270,7 +270,7 @@ public:
     void Thaw() { m_freeze--; }
     bool IsFrozen() const { return m_freeze; }
 
-    void RefreshTree( LIB_TREE_NODE* aNode = nullptr );
+    void RefreshTree();
 
     // Allows subclasses to nominate a context menu handler.
     virtual TOOL_INTERACTIVE* GetContextMenuTool() { return nullptr; }

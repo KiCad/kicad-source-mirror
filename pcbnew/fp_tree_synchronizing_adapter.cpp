@@ -171,17 +171,13 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
     case 0:
         if( node->m_LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
         {
-            auto mod = m_frame->GetBoard()->GetFirstModule();
-
-            wxASSERT( mod );
-
-            wxString currentFPName = mod->GetFPID().GetLibItemName();
+            node->m_Name = m_frame->GetLoadedFPID().GetLibItemName();
 
             // mark modified part with an asterisk
             if( m_frame->GetScreen()->IsModify() )
-                aVariant = currentFPName + " *";
+                aVariant = node->m_Name + " *";
             else
-                aVariant = currentFPName;
+                aVariant = node->m_Name;
         }
         else if( node->m_Pinned )
             aVariant = GetPinningSymbol() + node->m_Name;
@@ -190,6 +186,9 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
         break;
 
     case 1:
+        if( node->m_LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
+            node->m_Desc = m_frame->GetBoard()->GetFirstModule()->GetDescription();
+
         aVariant = node->m_Desc;
         break;
 
