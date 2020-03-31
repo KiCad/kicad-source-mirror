@@ -912,8 +912,11 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
-        m_camera.RotateX_T1( glm::radians(  -90.0f ) );
-        m_camera.RotateZ_T1( glm::radians( -180.0f ) );
+        m_camera.RotateX_T1( glm::radians( -90.0f ) );
+        // The rotation angle should be 180.
+        // We use 179.999 (180 - epsilon) to avoid a full 360 deg rotation when
+        // using 180 deg if the previous rotated position was already 180 deg
+        m_camera.RotateZ_T1( glm::radians( 179.999f ) );
         request_start_moving_camera();
         return true;
 
@@ -928,7 +931,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
-        m_camera.RotateY_T1( glm::radians( 180.0f ) );
+        m_camera.RotateY_T1( glm::radians( 179.999f ) );    // Rotation = 180 - epsilon
         request_start_moving_camera( glm::min( glm::max( m_camera.ZoomGet(), 0.5f ), 1.125f ) );
         return true;
 
