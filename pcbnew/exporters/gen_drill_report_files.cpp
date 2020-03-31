@@ -56,6 +56,13 @@ inline double diameter_in_mm( double ius )
 }
 
 
+// return a pen size to plot markers and having a readable shape
+inline int getMarkerBestPenSize( int aMarkerDiameter )
+{
+    return aMarkerDiameter / 10;
+}
+
+
 bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_FORMAT aFormat )
 {
     // Remark:
@@ -66,6 +73,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     wxPoint   offset;
     PLOTTER*  plotter = NULL;
     PAGE_INFO dummy( PAGE_INFO::A4, false );
+    int  bottom_limit = 0;        // Y coord limit of page. 0 mean do not use
 
     PCB_PLOT_PARAMS plot_opts; // starts plotting with default options
 
@@ -104,12 +112,13 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         // fall through
     case PLOT_FORMAT::PDF:
     case PLOT_FORMAT::POST:
+    case PLOT_FORMAT::SVG:
     {
         PAGE_INFO pageA4( wxT( "A4" ) );
         wxSize    pageSizeIU = pageA4.GetSizeIU();
 
-        // Reserve a margin around the page.
-        int margin = KiROUND( 20 * IU_PER_MM );
+        // Reserve a 10 mm margin around the page.
+        int margin = Millimeter2iu( 10 );
 
         // Calculate a scaling factor to print the board on the sheet
         double Xscale = double( pageSizeIU.x - ( 2 * margin ) ) / bbbox.GetWidth();
@@ -129,7 +138,11 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         offset.x = KiROUND( double( bbbox.Centre().x ) - ( pageSizeIU.x / 2.0 ) / scale );
         offset.y = KiROUND( double( bbbox.Centre().y ) - ( ypagesize_for_board / 2.0 ) / scale );
 
-        if( aFormat == PLOT_FORMAT::PDF )
+        bottom_limit = ( pageSizeIU.y - margin ) / scale;
+
+        if( aFormat == PLOT_FORMAT::SVG )
+            plotter = new SVG_PLOTTER;
+        else if( aFormat == PLOT_FORMAT::PDF )
             plotter = new PDF_PLOTTER;
         else
             plotter = new PS_PLOTTER;
@@ -153,19 +166,10 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         plotter->SetViewport( offset, IU_PER_MILS / 10, scale, false );
     }
     break;
-
-    case PLOT_FORMAT::SVG:
-    {
-        SVG_PLOTTER* svg_plotter = new SVG_PLOTTER;
-        plotter = svg_plotter;
-        plotter->SetPageSettings( page_info );
-        plotter->SetViewport( offset, IU_PER_MILS / 10, scale, false );
-    }
-    break;
     }
 
     plotter->SetCreator( wxT( "PCBNEW" ) );
-    plotter->SetDefaultLineWidth( 5 * IU_PER_MILS );
+    plotter->SetDefaultLineWidth( Millimeter2iu( 0.2 ) );
     plotter->SetColorMode( false );
 
     if( !plotter->OpenFile( aFullFileName ) )
@@ -200,24 +204,28 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         }
     }
 
-    int      x, y;
     int      plotX, plotY, TextWidth;
     int      intervalle = 0;
     char     line[1024];
     wxString msg;
-    int      textmarginaftersymbol = KiROUND( 2 * IU_PER_MM );
+    int      textmarginaftersymbol = Millimeter2iu( 2 );
 
     // Set Drill Symbols width
-    plotter->SetDefaultLineWidth( 0.2 * IU_PER_MM / scale );
+    plotter->SetDefaultLineWidth( Millimeter2iu( 0.2 ) );
     plotter->SetCurrentLineWidth( -1 );
 
     // Plot board outlines and drill map
     plotDrillMarks( plotter );
 
     // Print a list of symbols used.
-    int    charSize  = 3 * IU_PER_MM; // text size in IUs
-    double charScale = 1.0 / scale;   // real scale will be 1/scale,
-                                      // because the global plot scale is scale
+    int    charSize = Millimeter2iu( 2 );  // text size in IUs
+    // real char scale will be 1/scale, because the global plot scale is scale
+    // for scale < 1.0 ( plot bigger actual size)
+    // Therefore charScale = 1.0 / scale keep the initial charSize
+    // (for scale < 1 we use the global scaling factor: the board must be plotted
+    // smaller than the actual size)
+    double charScale = std::min( 1.0, 1.0 / scale );
+
     TextWidth  = KiROUND( ( charSize * charScale ) / 10.0 ); // Set text width (thickness)
     intervalle = KiROUND( charSize * charScale ) + TextWidth;
 
@@ -231,6 +239,11 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
             wxSize( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) ),
             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, TextWidth, false, false );
 
+    // For some formats (PS, PDF SVG) we plot the drill size list on more than one column
+    // because the list must be contained inside the printed page
+    // (others formats do not have a defined page size)
+    int max_line_len = 0;   // The max line len in iu of the currently plotte column
+
     for( unsigned ii = 0; ii < m_toolListBuffer.size(); ii++ )
     {
         DRILL_TOOL& tool = m_toolListBuffer[ii];
@@ -240,13 +253,26 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
         plotY += intervalle;
 
+        // Ensure there are room to plot the line
+        if( bottom_limit && plotY+intervalle > bottom_limit )
+        {
+            plotY = bbbox.GetBottom() + intervalle;
+            plotX += max_line_len + Millimeter2iu( 10 );//column_width;
+            max_line_len = 0;
+        }
+
         int plot_diam = KiROUND( tool.m_Diameter );
-        x = KiROUND( plotX - textmarginaftersymbol * charScale - plot_diam / 2.0 );
-        y = KiROUND( plotY + charSize * charScale );
+        // For markers plotted with the comment, keep marker size <= text height
+        plot_diam = std::min( plot_diam, KiROUND( charSize * charScale ) );
+        int x = KiROUND( plotX - textmarginaftersymbol * charScale - plot_diam / 2.0 );
+        int y = KiROUND( plotY + charSize * charScale );
+
+        plotter->SetCurrentLineWidth( getMarkerBestPenSize( plot_diam ) );
         plotter->Marker( wxPoint( x, y ), plot_diam, ii );
+        plotter->SetCurrentLineWidth( -1 );
 
         // List the diameter of each drill in mm and inches.
-        sprintf( line, "%2.2fmm / %2.3f\" ", diameter_in_mm( tool.m_Diameter ),
+        sprintf( line, "%3.3fmm / %2.4f\" ", diameter_in_mm( tool.m_Diameter ),
                 diameter_in_inches( tool.m_Diameter ) );
 
         msg = FROM_UTF8( line );
@@ -277,6 +303,11 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
         if( intervalle < ( plot_diam + ( 1 * IU_PER_MM / scale ) + TextWidth ) )
             intervalle = plot_diam + ( 1 * IU_PER_MM / scale ) + TextWidth;
+
+        // Evaluate the text horizontal size, to know the maximal column size
+        // This is a rough value, but ok to create a new column to plot next texts
+        int text_len = msg.Len() * ( ( charSize * charScale ) + TextWidth );
+        max_line_len = std::max( max_line_len, text_len + plot_diam );
     }
 
     plotter->EndPlot();
@@ -400,6 +431,9 @@ bool GENDRILL_WRITER_BASE::plotDrillMarks( PLOTTER* aPlotter )
         const HOLE_INFO& hole = m_holeListBuffer[ii];
         pos = hole.m_Hole_Pos;
 
+        // Gives a good line thickness to have a good marker shape:
+        aPlotter->SetCurrentLineWidth( getMarkerBestPenSize( hole.m_Hole_Diameter ) );
+
         // Always plot the drill symbol (for slots identifies the needed cutter!
         aPlotter->Marker( pos, hole.m_Hole_Diameter, hole.m_Tool_Reference - 1 );
 
@@ -409,6 +443,8 @@ bool GENDRILL_WRITER_BASE::plotDrillMarks( PLOTTER* aPlotter )
             aPlotter->FlashPadOval( pos, oblong_size, hole.m_Hole_Orient, SKETCH, NULL );
         }
     }
+
+    aPlotter->SetCurrentLineWidth( -1 );
 
     return true;
 }
