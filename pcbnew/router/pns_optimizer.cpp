@@ -254,7 +254,7 @@ bool ANGLE_CONSTRAINT_45::Check ( int aVertex1, int aVertex2, LINE* aOriginLine,
             return false; // disallowed exit ngle
             }
 
-   
+
 
     /*auto ang_rep0 = DIRECTION_45( aReplacement.CSegment(0) ).Angle( dir_orig0 );
     auto ang_rep1 = DIRECTION_45( aReplacement.CSegment(-1) ).Angle( dir_orig1 );*/
@@ -311,7 +311,7 @@ bool PRESERVE_VERTEX_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOrig
     for( int i = 0; i < aReplacement.SegmentCount(); i++ )
     {
         int dist = aReplacement.CSegment(i).Distance( m_v );
-        
+
         if ( dist <= 1 )
         {
             return true;
@@ -1315,7 +1315,7 @@ static int64_t shovedArea( const SHAPE_LINE_CHAIN& aOld, const SHAPE_LINE_CHAIN&
     return std::abs(area / 2);
 }
 
-bool tightenSegment( bool dir, NODE *aNode, LINE cur, SHAPE_LINE_CHAIN in, SHAPE_LINE_CHAIN& out )
+bool tightenSegment( bool dir, NODE *aNode, LINE cur, const SHAPE_LINE_CHAIN& in, SHAPE_LINE_CHAIN& out )
 {
     SEG a = in.CSegment(0);
     SEG center = in.CSegment(1);

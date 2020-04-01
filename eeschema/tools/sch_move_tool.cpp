@@ -635,7 +635,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
         static_cast<SCH_ITEM*>( aItem )->Move( delta );
 
         // If we're moving a field with respect to its parent then it's no longer auto-placed
-        if( aItem->Type() == SCH_FIELD_T && !parent->IsSelected() )
+        if( aItem->Type() == SCH_FIELD_T && parent && !parent->IsSelected() )
             parent->ClearFieldsAutoplaced();
 
         break;

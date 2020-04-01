@@ -281,8 +281,8 @@ wxString BACK_ANNOTATE::getTextFromField( const SCH_REFERENCE& aRef, const NumFi
 int BACK_ANNOTATE::checkSharedSchematicErrors()
 {
 
-    std::sort(
-            m_changelist.begin(), m_changelist.end(), []( CHANGELIST_ITEM a, CHANGELIST_ITEM b ) {
+    std::sort( m_changelist.begin(), m_changelist.end(),
+                    []( CHANGELIST_ITEM& a, CHANGELIST_ITEM& b ) {
                 return a.first.GetComp() > b.first.GetComp();
             } );
 
