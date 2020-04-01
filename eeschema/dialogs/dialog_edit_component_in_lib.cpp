@@ -142,7 +142,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    // Push a copy of each field into m_fields
+    // Push a copy of each field into m_updateFields
     m_libEntry->GetFields( *m_fields );
 
     // Copy the data sheet field from the old alias document file name if it's not empty.

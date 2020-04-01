@@ -584,7 +584,7 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem )
     // omitted when saving to disk.
     if( aItem->Type() == LIB_FIELD_T )
     {
-        if( static_cast<LIB_FIELD*>( aItem )->GetId() < MANDATORY_FIELDS )
+        if( static_cast<LIB_FIELD*>( aItem )->IsMandatory() )
             return;
     }
 
@@ -845,7 +845,7 @@ void LIB_PART::GetFields( LIB_FIELDS& aList )
     {
         field = ( LIB_FIELD* ) &item;
 
-        if( (unsigned) field->GetId() < MANDATORY_FIELDS )
+        if( field->IsMandatory() )
             continue;  // was added above
 
         aList.push_back( *field );

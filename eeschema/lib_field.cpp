@@ -386,10 +386,10 @@ COLOR4D LIB_FIELD::GetDefaultColor()
 
 wxString LIB_FIELD::GetName( bool aUseDefaultName ) const
 {
-    if( !m_name.IsEmpty() )
-        return m_name;
-    else if( aUseDefaultName )
+    if( m_name.IsEmpty() && aUseDefaultName )
         return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
+
+    return m_name;
 }
 
 
@@ -410,12 +410,9 @@ wxString LIB_FIELD::GetCanonicalName() const
 void LIB_FIELD::SetName( const wxString& aName )
 {
     // Mandatory field names are fixed.
-
-    // So what?  Why should the low level code be in charge of such a policy issue?
-    // Besides, m_id is a relic that is untrustworthy now.
-    if( m_id >=0 && m_id < MANDATORY_FIELDS )
+    if( IsMandatory() )
     {
-        DBG(printf( "trying to set a MANDATORY_FIELD's name\n" );)
+        wxFAIL_MSG( "trying to set a MANDATORY_FIELD's name\n" );
         return;
     }
 
@@ -479,5 +476,5 @@ BITMAP_DEF LIB_FIELD::GetMenuImage() const
 
 bool LIB_FIELD::IsMandatory() const
 {
-    return m_id < MANDATORY_FIELDS;
+    return m_id >= 0 && m_id < MANDATORY_FIELDS;
 }

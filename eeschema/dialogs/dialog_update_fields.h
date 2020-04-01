@@ -70,7 +70,7 @@ private:
     SCH_EDIT_FRAME* m_frame;
 
     ///> Set of field names that should have values updated
-    set<wxString> m_fields;
+    set<wxString> m_updateFields;
 
     ///> Components to update
     list<SCH_COMPONENT*> m_components;

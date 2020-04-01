@@ -945,7 +945,7 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
 
     wxString fieldName;
 
-    if( aField->GetId() < MANDATORY_FIELDS )
+    if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
         fieldName = "ki_" + TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId() ).Lower();
     else
         fieldName = aField->GetName();

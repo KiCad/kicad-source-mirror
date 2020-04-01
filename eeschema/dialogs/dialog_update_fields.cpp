@@ -57,12 +57,12 @@ bool DIALOG_UPDATE_FIELDS::TransferDataFromWindow()
 
 
     // Create the set of fields to be updated
-    m_fields.clear();
+    m_updateFields.clear();
 
     for( unsigned i = 0; i < m_fieldsBox->GetCount(); ++i )
     {
         if( m_fieldsBox->IsChecked( i ) )
-            m_fields.insert( m_fieldsBox->GetString( i ) );
+            m_updateFields.insert( m_fieldsBox->GetString( i ) );
     }
 
 
@@ -111,7 +111,7 @@ bool DIALOG_UPDATE_FIELDS::TransferDataToWindow()
                 const LIB_FIELD* field = static_cast<const LIB_FIELD*>( &( *it ) );
 
                 if( field->GetId() >= MANDATORY_FIELDS )
-                    m_fields.insert( field->GetName() );
+                    m_updateFields.insert( field->GetName() );
             }
         }
     }
@@ -127,9 +127,9 @@ bool DIALOG_UPDATE_FIELDS::TransferDataToWindow()
             m_fieldsBox->Check( i, true );
     }
 
-    for( const auto& field : m_fields )
+    for( const wxString& fieldName : m_updateFields )
     {
-        int idx = m_fieldsBox->Append( field );
+        int idx = m_fieldsBox->Append( fieldName );
         m_fieldsBox->Check( idx, true );
     }
 
@@ -142,7 +142,6 @@ bool DIALOG_UPDATE_FIELDS::TransferDataToWindow()
 
 void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
 {
-    std::vector<SCH_FIELD*> oldFields;
     SCH_FIELDS newFields;
 
     std::unique_ptr< LIB_PART >& libPart = aComponent->GetPartRef();
@@ -152,79 +151,100 @@ void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
 
     LIB_PART* alias = m_frame->GetLibPart( aComponent->GetLibId() );
 
-    aComponent->GetFields( oldFields, false );
-
-    for( auto compField : oldFields )
+    for( const SCH_FIELD& existingField : aComponent->GetFields() )
     {
+        if( existingField.GetId() >= 0 && existingField.GetId() < MANDATORY_FIELDS )
+        {
+            newFields.push_back( existingField );
+            continue;
+        }
+
         // If requested, transfer only fields that occur also in the original library part
-        // and obviously mandatory fields
-        if( compField->GetId() < MANDATORY_FIELDS
-            || !m_removeExtraBox->IsChecked()
-            || libPart->FindField( compField->GetName() ) )
-            newFields.push_back( *compField );
+        if( m_removeExtraBox->IsChecked() && !libPart->FindField( existingField.GetName() ) )
+            continue;
+
+        newFields.push_back( existingField );
     }
 
-    // Update the requested field values
-    for( const auto& partField : m_fields )
+    // Update the requested fields
+    for( const wxString& fieldName : m_updateFields )
     {
-        LIB_FIELD* libField = libPart->FindField( partField );
+        LIB_FIELD* libField = libPart->FindField( fieldName );
 
         if( !libField )
             continue;
 
-        SCH_FIELD* field = nullptr;
-
-        auto it = std::find_if( newFields.begin(), newFields.end(), [&] ( const SCH_FIELD& f )
-                { return f.GetName() == partField; } );
+        auto it = std::find_if( newFields.begin(), newFields.end(),
+                                [&] ( const SCH_FIELD& f )
+                                {
+                                    return f.GetName() == fieldName;
+                                } );
 
         if( it != newFields.end() )
         {
-            field = &*it;
+            SCH_FIELD* newField = &*it;
+            wxString   fieldValue = libField->GetText();
+
+            if( alias )
+            {
+                if( fieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE ) )
+                    fieldValue = alias->GetName();
+                else if( fieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET ) )
+                    fieldValue = alias->GetDocFileName();
+            }
+
+            if( fieldValue.IsEmpty() )
+            {
+                // If the library field is empty an update would clear an existing entry.
+                // Check if this is the desired behavior.
+                if( m_resetEmpty->IsChecked() )
+                    newField->SetText( wxEmptyString );
+            }
+            else
+            {
+                newField->SetText( fieldValue );
+            }
+
+            if( m_resetVisibility->IsChecked() )
+            {
+                newField->SetVisible( libField->IsVisible() );
+            }
+
+            if( m_resetPosition->IsChecked() )
+            {
+                newField->SetTextAngle( libField->GetTextAngle() );
+
+                // Schematic fields are schematic-relative; symbol editor fields are component-relative
+                if( m_createUndo )
+                    newField->SetTextPos( libField->GetTextPos() + aComponent->GetPosition() );
+                else
+                    newField->SetTextPos( libField->GetTextPos() );
+            }
+
+            if( m_resetSizeAndStyle->IsChecked() )
+            {
+                newField->SetHorizJustify( libField->GetHorizJustify() );
+                newField->SetVertJustify( libField->GetVertJustify() );
+                newField->SetTextSize( libField->GetTextSize() );
+                newField->SetItalic( libField->IsItalic() );
+                newField->SetBold( libField->IsBold() );
+            }
         }
         else
         {
             // Missing field, it has to be added to the component
-            SCH_FIELD f( wxPoint( 0, 0 ), newFields.size(), aComponent, partField );
-            newFields.push_back( f );
-            field = &newFields.back();
-        }
+            SCH_FIELD newField( wxPoint( 0, 0 ), newFields.size(), aComponent, fieldName );
 
-        wxString fieldValue = libField->GetText();
+            newField.ImportValues( *libField );
+            newField.SetText( libField->GetText() );
 
-        if( alias )
-        {
-            if( partField == TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE ) )
-                fieldValue = alias->GetName();
-            else if( partField == TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET ) )
-                fieldValue = alias->GetDocFileName();
-        }
-
-        // If the library field is empty an update would clear an existing entry.
-        // Check if this is the desired behavior.
-        if( !fieldValue.empty() || m_resetEmpty->IsChecked() )
-           field->SetText( fieldValue );
-
-        if( m_resetVisibility->IsChecked() )
-            field->SetVisible( libField->IsVisible() );
-
-        if( m_resetPosition->IsChecked() )
-        {
-            field->SetTextAngle( libField->GetTextAngle() );
-
-            // Board fields are board-relative; symbol editor fields are component-relative
+            // Schematic fields are schematic-relative; symbol editor fields are component-relative
             if( m_createUndo )
-                field->SetTextPos( libField->GetTextPos() + aComponent->GetPosition() );
+                newField.SetTextPos( libField->GetTextPos() + aComponent->GetPosition() );
             else
-                field->SetTextPos( libField->GetTextPos() );
-        }
+                newField.SetTextPos( libField->GetTextPos() );
 
-        if( m_resetSizeAndStyle->IsChecked() )
-        {
-            field->SetHorizJustify( libField->GetHorizJustify() );
-            field->SetVertJustify( libField->GetVertJustify() );
-            field->SetTextSize( libField->GetTextSize() );
-            field->SetItalic( libField->IsItalic() );
-            field->SetBold( libField->IsBold() );
+            newFields.push_back( newField );
         }
     }
 

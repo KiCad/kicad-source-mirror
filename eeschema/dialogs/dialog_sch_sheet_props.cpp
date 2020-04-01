@@ -120,7 +120,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    // Push a copy of each field into m_fields
+    // Push a copy of each field into m_updateFields
     for( SCH_FIELD& field : m_sheet->GetFields() )
     {
         SCH_FIELD field_copy( field );

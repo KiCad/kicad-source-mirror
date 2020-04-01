@@ -812,7 +812,7 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
             if( idx == REFERENCE && !aResetRef )
                 continue;
 
-            if( (unsigned) idx < MANDATORY_FIELDS )
+            if( idx >= 0 && idx < MANDATORY_FIELDS )
                 schField = GetField( idx );
             else
             {

@@ -143,7 +143,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
 
     std::set<wxString> defined;
 
-    // Push a copy of each field into m_fields
+    // Push a copy of each field into m_updateFields
     for( int i = 0; i < m_cmp->GetFieldCount(); ++i )
     {
         SCH_FIELD field( *m_cmp->GetField( i ) );
