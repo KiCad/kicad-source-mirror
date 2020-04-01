@@ -1812,13 +1812,6 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
 void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
 {
     EPOLYGON      p( aTree );
-    PCB_LAYER_ID  layer = kicad_layer( p.layer );
-    EDGE_MODULE*  dwg = new EDGE_MODULE( aModule, S_POLYGON );
-
-    aModule->Add( dwg );
-
-    dwg->SetWidth( 0 );     // it's filled, no need for boundary width
-    dwg->SetLayer( layer );
 
     std::vector<wxPoint> pts;
 
@@ -1880,12 +1873,51 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
         }
     }
 
-    dwg->SetPolyPoints( pts );
-    dwg->SetStart0( *pts.begin() );
-    dwg->SetEnd0( pts.back() );
-    dwg->SetDrawCoord();
-    dwg->GetPolyShape().Inflate( p.width.ToPcbUnits() / 2, 32,
-                                 SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
+    if( p.layer == EAGLE_LAYER::TRESTRICT || p.layer == EAGLE_LAYER::BRESTRICT
+            || p.layer == EAGLE_LAYER::VRESTRICT )
+    {
+        MODULE_ZONE_CONTAINER* zone = new MODULE_ZONE_CONTAINER( aModule );
+        aModule->Add( zone, ADD_MODE::APPEND );
+
+        if( p.layer == EAGLE_LAYER::TRESTRICT ) // front layer keepout
+            zone->SetLayer( F_Cu );
+        else if( p.layer == EAGLE_LAYER::BRESTRICT ) // bottom layer keepout
+            zone->SetLayer( B_Cu );
+        else if( p.layer == EAGLE_LAYER::VRESTRICT ) // all layers
+            zone->SetLayerSet( LSET::AllCuMask() );
+
+        zone->SetIsKeepout( true );
+        zone->SetDoNotAllowVias( true );
+        if( p.layer == EAGLE_LAYER::TRESTRICT || p.layer == EAGLE_LAYER::BRESTRICT )
+        {
+            zone->SetDoNotAllowTracks( true );
+            zone->SetDoNotAllowCopperPour( true );
+        }
+
+        SHAPE_LINE_CHAIN outline( pts );
+        outline.SetClosed( true );
+        zone->Outline()->AddOutline( outline );
+
+        zone->SetHatch(
+                ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+    }
+    else
+    {
+        PCB_LAYER_ID layer = kicad_layer( p.layer );
+        EDGE_MODULE* dwg   = new EDGE_MODULE( aModule, S_POLYGON );
+
+        aModule->Add( dwg );
+
+        dwg->SetWidth( 0 ); // it's filled, no need for boundary width
+        dwg->SetLayer( layer );
+
+        dwg->SetPolyPoints( pts );
+        dwg->SetStart0( *pts.begin() );
+        dwg->SetEnd0( pts.back() );
+        dwg->SetDrawCoord();
+        dwg->GetPolyShape().Inflate(
+                p.width.ToPcbUnits() / 2, 32, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
+    }
 }
 
 void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
