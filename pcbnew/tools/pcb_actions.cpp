@@ -27,6 +27,7 @@
 #include <pcbnew_id.h>
 #include <bitmaps.h>
 #include <layers_id_colors_and_visibility.h>
+#include <microwave/microwave_tool.h>
 #include <tool/tool_manager.h>
 #include <router/pns_router.h>
 
@@ -407,22 +408,22 @@ TOOL_ACTION PCB_ACTIONS::cleanupTracksAndVias( "pcbnew.GlobalEdit.cleanupTracksA
 TOOL_ACTION PCB_ACTIONS::microwaveCreateGap( "pcbnew.MicrowaveTool.createGap",
         AS_GLOBAL, 0, "",
         _( "Add Microwave Gap" ), _( "Create gap of specified length for microwave applications" ),
-        mw_add_gap_xpm, AF_ACTIVATE, (void*) MWAVE_TOOL_SIMPLE_ID::GAP );
+        mw_add_gap_xpm, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::GAP );
 
 TOOL_ACTION PCB_ACTIONS::microwaveCreateStub( "pcbnew.MicrowaveTool.createStub",
         AS_GLOBAL, 0, "",
         _( "Add Microwave Stub" ), _( "Create stub of specified length for microwave applications" ),
-        mw_add_stub_xpm, AF_ACTIVATE, (void*) MWAVE_TOOL_SIMPLE_ID::STUB );
+        mw_add_stub_xpm, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::STUB );
 
 TOOL_ACTION PCB_ACTIONS::microwaveCreateStubArc( "pcbnew.MicrowaveTool.createStubArc",
         AS_GLOBAL, 0, "",
         _( "Add Microwave Arc Stub" ), _( "Create stub (arc) of specified size for microwave applications" ),
-        mw_add_stub_arc_xpm, AF_ACTIVATE, (void*) MWAVE_TOOL_SIMPLE_ID::STUB_ARC );
+        mw_add_stub_arc_xpm, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::STUB_ARC );
 
 TOOL_ACTION PCB_ACTIONS::microwaveCreateFunctionShape( "pcbnew.MicrowaveTool.createFunctionShape",
         AS_GLOBAL, 0, "",
         _( "Add Microwave Polygonal Shape" ), _( "Create a microwave polygonal shape from a list of vertices" ),
-        mw_add_gap_xpm, AF_ACTIVATE, (void*) MWAVE_TOOL_SIMPLE_ID::FUNCTION_SHAPE );
+        mw_add_gap_xpm, AF_ACTIVATE, (void*) MICROWAVE_FOOTPRINT_SHAPE::FUNCTION_SHAPE );
 
 TOOL_ACTION PCB_ACTIONS::microwaveCreateLine( "pcbnew.MicrowaveTool.createLine",
         AS_GLOBAL, 0, "",

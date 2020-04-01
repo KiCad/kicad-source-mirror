@@ -28,6 +28,30 @@
 
 #include <tool/tool_menu.h>
 
+// This class is inside MICROWAVE_TOOL::addMicrowaveFootprint
+class MICROWAVE_PLACER;
+
+// Microwave shapes that are created as board modules when the user requests them.
+enum class MICROWAVE_FOOTPRINT_SHAPE
+{
+    GAP,
+    STUB,
+    STUB_ARC,
+    FUNCTION_SHAPE,
+};
+
+/**
+ * Parameters for construction of a microwave inductor
+ */
+struct MICROWAVE_INDUCTOR_PATTERN
+{
+public:
+    wxPoint m_Start;
+    wxPoint m_End;
+    int     m_length;       // full length trace.
+    int     m_Width;        // Trace width.
+};
+
 
 /**
  * MICROWAVE_TOOL
@@ -47,6 +71,8 @@ public:
     void setTransitions() override;
 
 private:
+    // Make the placer class a friend so it can use the create functions
+    friend MICROWAVE_PLACER;
 
     ///> Main interactive tool
     int addMicrowaveFootprint( const TOOL_EVENT& aEvent );
@@ -56,6 +82,37 @@ private:
 
     ///> Draw a microwave inductor interactively
     int drawMicrowaveInductor( const TOOL_EVENT& aEvent );
+
+    /**
+     * Creates a module "GAP" or "STUB" used in micro wave designs.
+     *  This module has 2 pads:
+     *  PAD_ATTRIB_SMD, rectangular, H size = V size = current track width.
+     *  the "gap" is isolation created between this 2 pads
+     *
+     * @param aComponentShape is the component to create
+     * @return the new module
+     */
+    MODULE* createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintShape );
+
+    MODULE* createPolygonShape();
+
+    /**
+     * Creates an S-shaped coil footprint for microwave applications.
+     */
+    MODULE* createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aPattern, wxString& aErrorMessage );
+
+    /**
+     * Create a basic footprint for micro wave applications.
+     *
+     * The default pad settings are:
+     *  PAD_ATTRIB_SMD, rectangular, H size = V size = current track width.
+     *
+     * @param aValue is the text value
+     * @param aTextSize is the size of ref and value texts ( <= 0 to use board default values )
+     * @param aPadCount is number of pads
+     * @return the new module
+     */
+    MODULE* createBaseFootprint( const wxString& aValue, int aTextSize, int aPadCount );
 };
 
 

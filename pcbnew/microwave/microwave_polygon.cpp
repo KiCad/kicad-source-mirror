@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
-#include <microwave/microwave_inductor.h>
+#include <microwave/microwave_tool.h>
 #include <pcbnew.h>
 #include <math/util.h>      // for KiROUND
 
@@ -48,193 +48,6 @@ static double  ShapeScaleX, ShapeScaleY;
 static wxSize  ShapeSize;
 static int     PolyShapeType;
 
-
-MODULE* PCB_EDIT_FRAME::CreateMuWaveBaseFootprint( const wxString& aValue,
-                                                   int aTextSize, int aPadCount )
-{
-    MODULE* module = CreateNewModule( aValue );
-
-    if( aTextSize > 0 )
-    {
-        module->Reference().SetTextSize( wxSize( aTextSize, aTextSize ) );
-        module->Reference().SetThickness( aTextSize/5 );
-        module->Value().SetTextSize( wxSize( aTextSize, aTextSize ) );
-        module->Value().SetThickness( aTextSize/5 );
-    }
-
-    // Create 2 pads used in gaps and stubs.  The gap is between these 2 pads
-    // the stub is the pad 2
-    wxString Line;
-    int pad_num = 1;
-
-    while( aPadCount-- )
-    {
-        D_PAD* pad = new D_PAD( module );
-
-        module->Add( pad, ADD_MODE::INSERT );
-
-        int tw = GetDesignSettings().GetCurrentTrackWidth();
-        pad->SetSize( wxSize( tw, tw ) );
-
-        pad->SetPosition( module->GetPosition() );
-        pad->SetShape( PAD_SHAPE_RECT );
-        pad->SetAttribute( PAD_ATTRIB_SMD );
-        pad->SetLayerSet( F_Cu );
-
-        Line.Printf( wxT( "%d" ), pad_num );
-        pad->SetName( Line );
-        pad_num++;
-    }
-
-    return module;
-}
-
-
-MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
-{
-    int      oX;
-    D_PAD*   pad;
-    MODULE*  module;
-    wxString msg, cmp_name;
-    int      pad_count = 2;
-    int      angle     = 0;
-    // Ref and value text size (O = use board default value.
-    // will be set to a value depending on the footprint size, if possible
-    int      text_size = 0;
-
-    // Enter the size of the gap or stub
-    int      gap_size = GetDesignSettings().GetCurrentTrackWidth();
-
-    switch( shape_type )
-    {
-    case 0:
-        msg = _( "Gap Size:" );
-        cmp_name = "muwave_gap";
-        text_size = gap_size;
-        break;
-
-    case 1:
-        msg = _( "Stub Size:" );
-        cmp_name  = "muwave_stub";
-        text_size = gap_size;
-        pad_count = 2;
-        break;
-
-    case 2:
-        msg = _( "Arc Stub Radius Value:" );
-        cmp_name  = "muwave_arcstub";
-        pad_count = 1;
-        break;
-
-    default:
-        msg = wxT( "???" );
-        break;
-    }
-
-    wxString value = StringFromValue( GetUserUnits(), gap_size );
-    WX_TEXT_ENTRY_DIALOG dlg( this, msg, _( "Create microwave module" ), value );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return NULL; // cancelled by user
-
-    value    = dlg.GetValue();
-    gap_size = ValueFromString( GetUserUnits(), value );
-
-    bool abort = false;
-
-    if( shape_type == 2 )
-    {
-        double            fcoeff = 10.0, fval;
-        msg.Printf( wxT( "%3.1f" ), angle / fcoeff );
-        WX_TEXT_ENTRY_DIALOG angledlg( this, _( "Angle in degrees:" ),
-                                       _( "Create microwave module" ), msg );
-
-        if( angledlg.ShowModal() != wxID_OK )
-            return NULL; // cancelled by user
-
-        msg = angledlg.GetValue();
-
-        if( !msg.ToDouble( &fval ) )
-        {
-            DisplayError( this, _( "Incorrect number, abort" ) );
-            abort = true;
-        }
-
-        angle = std::abs( KiROUND( fval * fcoeff ) );
-
-        if( angle > 1800 )
-            angle = 1800;
-    }
-
-    if( abort )
-        return NULL;
-
-    module = CreateMuWaveBaseFootprint( cmp_name, text_size, pad_count );
-    auto it = module->Pads().begin();
-    pad = *it;
-
-    switch( shape_type )
-    {
-    case 0:     //Gap :
-        oX = -( gap_size + pad->GetSize().x ) / 2;
-        pad->SetX0( oX );
-
-        pad->SetX( pad->GetPos0().x + pad->GetPosition().x );
-
-        pad = *( it + 1 );
-
-        pad->SetX0( oX + gap_size + pad->GetSize().x );
-        pad->SetX( pad->GetPos0().x + pad->GetPosition().x );
-        break;
-
-    case 1:     //Stub :
-        pad->SetName( wxT( "1" ) );
-        pad = *( it + 1 );
-        pad->SetY0( -( gap_size + pad->GetSize().y ) / 2 );
-        pad->SetSize( wxSize( pad->GetSize().x, gap_size ) );
-        pad->SetY( pad->GetPos0().y + pad->GetPosition().y );
-        break;
-
-    case 2:     // Arc Stub created by a polygonal approach:
-    {
-        pad->SetShape( PAD_SHAPE_CUSTOM );
-        pad->SetAnchorPadShape( PAD_SHAPE_RECT );
-
-        int numPoints = (angle / 50) + 3;     // Note: angles are in 0.1 degrees
-        std::vector<wxPoint> polyPoints;
-        polyPoints.reserve( numPoints );
-
-        polyPoints.emplace_back( wxPoint( 0, 0 ) );
-
-        int theta = -angle / 2;
-
-        for( int ii = 1; ii<numPoints - 1; ii++ )
-        {
-            wxPoint pt( 0, -gap_size );
-            RotatePoint( &pt.x, &pt.y, theta );
-            polyPoints.push_back( pt );
-
-            theta += 50;
-
-            if( theta > angle / 2 )
-                theta = angle / 2;
-        }
-
-        // Close the polygon:
-        polyPoints.push_back( polyPoints[0] );
-
-        pad->AddPrimitivePoly( polyPoints, 0 ); // add a polygonal basic shape
-    }
-        break;
-
-    default:
-        break;
-    }
-
-    module->CalculateBoundingBox();
-    OnModify();
-    return module;
-}
 
 
 /**************** Polygon Shapes ***********************/
@@ -425,7 +238,7 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
 }
 
 
-MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
+MODULE* MICROWAVE_TOOL::createPolygonShape()
 {
     D_PAD*       pad1, * pad2;
     MODULE*      module;
@@ -433,7 +246,9 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     int          pad_count = 2;
     EDGE_MODULE* edge;
 
-    MWAVE_POLYGONAL_SHAPE_DLG dlg( this, wxDefaultPosition );
+    PCB_EDIT_FRAME& editFrame  = *getEditFrame<PCB_EDIT_FRAME>();
+
+    MWAVE_POLYGONAL_SHAPE_DLG dlg( &editFrame, wxDefaultPosition );
 
     int ret = dlg.ShowModal();
 
@@ -451,20 +266,20 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
 
     if( ( ShapeSize.x ) == 0 || ( ShapeSize.y == 0 ) )
     {
-        DisplayError( this, _( "Shape has a null size!" ) );
+        DisplayError( &editFrame, _( "Shape has a null size!" ) );
         return NULL;
     }
 
     if( PolyEdges.size() == 0 )
     {
-        DisplayError( this, _( "Shape has no points!" ) );
+        DisplayError( &editFrame, _( "Shape has no points!" ) );
         return NULL;
     }
 
     cmp_name = wxT( "muwave_polygon" );
 
     // Create a footprint with 2 pads, orientation = 0, pos 0
-    module = CreateMuWaveBaseFootprint( cmp_name, 0, pad_count );
+    module = createBaseFootprint( cmp_name, 0, pad_count );
 
     // We try to place the footprint anchor to the middle of the shape len
     wxPoint offset;
@@ -529,7 +344,8 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     // without extra thickness
     edge->SetWidth( 0 );
     PolyEdges.clear();
+
     module->CalculateBoundingBox();
-    OnModify();
+    editFrame.OnModify();
     return module;
 }

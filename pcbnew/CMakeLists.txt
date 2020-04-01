@@ -222,7 +222,10 @@ set( PCBNEW_EXPORTERS
     )
 
 set( PCBNEW_MICROWAVE_SRCS
+    microwave/microwave_footprint.cpp
     microwave/microwave_inductor.cpp
+    microwave/microwave_polygon.cpp
+    microwave/microwave_tool.cpp
     )
 
 set( PCBNEW_DRC_SRCS
@@ -275,7 +278,6 @@ set( PCBNEW_CLASS_SRCS
     load_select_footprint.cpp
     menubar_footprint_editor.cpp
     menubar_pcb_editor.cpp
-    microwave.cpp
     pad_naming.cpp
     pcb_base_edit_frame.cpp
     pcb_layer_box_selector.cpp
@@ -309,7 +311,6 @@ set( PCBNEW_CLASS_SRCS
     tools/edit_tool.cpp
     tools/global_edit_tool.cpp
     tools/grid_helper.cpp
-    tools/microwave_tool.cpp
     tools/footprint_editor_tools.cpp
     tools/pad_tool.cpp
     tools/pcb_actions.cpp

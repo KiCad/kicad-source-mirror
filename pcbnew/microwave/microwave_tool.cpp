@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2019 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2020 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,22 +21,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "microwave_tool.h"
-#include <gal/graphics_abstraction_layer.h>
-#include <class_draw_panel_gal.h>
-#include <view/view_controls.h>
-#include <view/view.h>
-#include <tool/tool_manager.h>
+#include <bitmaps.h>
 #include <board_commit.h>
+#include <class_board_item.h>
+#include <class_draw_panel_gal.h>
+#include <class_module.h>
 #include <confirm.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <microwave/microwave_tool.h>
 #include <preview_items/two_point_geom_manager.h>
 #include <preview_items/centreline_rect_item.h>
-#include <bitmaps.h>
-#include <class_board_item.h>
-#include <class_module.h>
-#include <microwave/microwave_inductor.h>
-#include "pcb_actions.h"
-#include "selection_tool.h"
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+#include <tools/selection_tool.h>
+#include <view/view_controls.h>
+#include <view/view.h>
 
 
 MICROWAVE_TOOL::MICROWAVE_TOOL() :
@@ -56,12 +55,10 @@ void MICROWAVE_TOOL::Reset( RESET_REASON aReason )
 
 int MICROWAVE_TOOL::addMicrowaveFootprint( const TOOL_EVENT& aEvent )
 {
-    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
-
     struct MICROWAVE_PLACER : public INTERACTIVE_PLACER_BASE
     {
-        MICROWAVE_PLACER( PCB_EDIT_FRAME* aFrame, int aType ) :
-                m_frame( aFrame ),
+        MICROWAVE_PLACER( MICROWAVE_TOOL* aTool, MICROWAVE_FOOTPRINT_SHAPE aType ) :
+                m_tool( aTool ),
                 m_itemType( aType )
         { };
 
@@ -73,65 +70,31 @@ int MICROWAVE_TOOL::addMicrowaveFootprint( const TOOL_EVENT& aEvent )
         {
             switch( m_itemType )
             {
-            case MWAVE_TOOL_SIMPLE_ID::GAP:
-                return std::unique_ptr<MODULE>( m_frame->Create_MuWaveComponent( 0 ) );
-            case MWAVE_TOOL_SIMPLE_ID::STUB:
-                return std::unique_ptr<MODULE>( m_frame->Create_MuWaveComponent( 1 ) );
-            case MWAVE_TOOL_SIMPLE_ID::STUB_ARC:
-                return std::unique_ptr<MODULE>( m_frame->Create_MuWaveComponent( 2 ) );
-            case MWAVE_TOOL_SIMPLE_ID::FUNCTION_SHAPE:
-                return std::unique_ptr<MODULE>( m_frame->Create_MuWavePolygonShape() );
+            case MICROWAVE_FOOTPRINT_SHAPE::GAP:
+            case MICROWAVE_FOOTPRINT_SHAPE::STUB:
+            case MICROWAVE_FOOTPRINT_SHAPE::STUB_ARC:
+                return std::unique_ptr<MODULE>( m_tool->createFootprint( m_itemType ) );
+
+            case MICROWAVE_FOOTPRINT_SHAPE::FUNCTION_SHAPE:
+                return std::unique_ptr<MODULE>( m_tool->createPolygonShape() );
+
             default:
                 return std::unique_ptr<MODULE>();
             };
         }
 
     private:
-        PCB_EDIT_FRAME* m_frame;
-        int             m_itemType;
+        MICROWAVE_TOOL*           m_tool;
+        MICROWAVE_FOOTPRINT_SHAPE m_itemType;
     };
 
-    MICROWAVE_PLACER placer( frame, aEvent.Parameter<intptr_t>() );
+    MICROWAVE_PLACER placer( this, aEvent.Parameter<MICROWAVE_FOOTPRINT_SHAPE>() );
 
     doInteractiveItemPlacement( aEvent.GetCommandStr().get(), &placer,
                                 _( "Place microwave feature" ),
                                 IPO_REPEAT | IPO_ROTATE | IPO_FLIP );
 
     return 0;
-}
-
-
-void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR2I& aEnd )
-{
-    auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
-
-    MWAVE::INDUCTOR_PATTERN pattern;
-
-    pattern.m_Width = board()->GetDesignSettings().GetCurrentTrackWidth();
-
-    pattern.m_Start = { aStart.x, aStart.y };
-    pattern.m_End = { aEnd.x, aEnd.y };
-
-    wxString errorMessage;
-
-    auto inductorModule = std::unique_ptr<MODULE>( CreateMicrowaveInductor( pattern, &frame,
-                                                                            errorMessage ) );
-
-    // on any error, report if we can
-    if ( !inductorModule || !errorMessage.IsEmpty() )
-    {
-        if ( !errorMessage.IsEmpty() )
-            DisplayError( &frame, errorMessage );
-    }
-    else
-    {
-        // at this point, we can save the module
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, inductorModule.get() );
-
-        BOARD_COMMIT commit( this );
-        commit.Add( inductorModule.release() );
-        commit.Push( _("Add microwave inductor" ) );
-    }
 }
 
 
@@ -150,7 +113,7 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
 
     KIGFX::VIEW& view = *getView();
     KIGFX::VIEW_CONTROLS& controls = *getViewControls();
-    auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
+    PCB_EDIT_FRAME& frame = *getEditFrame<PCB_EDIT_FRAME>();
 
     std::string tool = aEvent.GetCommandStr().get();
     frame.PushTool( tool );
@@ -267,6 +230,7 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
     view.Remove( &previewRect );
     return 0;
 }
+
 
 
 void MICROWAVE_TOOL::setTransitions()

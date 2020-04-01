@@ -33,17 +33,6 @@
 class TOOL_EVENT;
 class TOOL_MANAGER;
 
-// Type of microwave items that are "simple" - just get placed on the board directly,
-// without a graphical interactive setup stage
-enum MWAVE_TOOL_SIMPLE_ID
-{
-    GAP,
-    STUB,
-    STUB_ARC,
-    FUNCTION_SHAPE,
-};
-
-
 enum class ZONE_MODE
 {
     ADD,             ///< Add a new zone/keepout with fresh settings

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,23 +21,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "microwave_inductor.h"
-
 #include <wx/wx.h>
 
 #include <base_units.h>
-#include <dialog_text_entry.h>
-#include <geometry/geometry_utils.h>
-#include <pcb_edit_frame.h>
-#include <validators.h>
-
+#include <board_commit.h>
 #include <class_pad.h>
 #include <class_edge_mod.h>
 #include <class_module.h>
+#include <confirm.h>
+#include <dialog_text_entry.h>
+#include <geometry/geometry_utils.h>
 #include <math/util.h>      // for KiROUND
-
-
-using namespace MWAVE;
+#include <microwave/microwave_tool.h>
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+#include <pcb_edit_frame.h>
+#include <validators.h>
 
 /**
  * Function  gen_arc
@@ -52,7 +51,7 @@ using namespace MWAVE;
 static void gen_arc( std::vector <wxPoint>& aBuffer,
                      const wxPoint&         aStartPoint,
                      const wxPoint&         aCenter,
-                     int                     a_ArcAngle )
+                     int                    a_ArcAngle )
 {
     auto first_point = aStartPoint - aCenter;
     auto radius = KiROUND( EuclideanNorm( first_point ) );
@@ -109,7 +108,7 @@ static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<wxPoint>& a
  * The equations are (assuming the area size of the entire shape is Size:
  * Size.x = 2 * radius + segm_len
  * Size.y = (segm_count + 2 ) * 2 * radius + 2 * stubs_len
- * inductorPattern.m_length = 2 * delta // connections to the coil
+ * aInductorPattern.m_length = 2 * delta // connections to the coil
  *             + (segm_count-2) * segm_len      // length of the strands except 1st and last
  *             + (segm_count) * (PI * radius)   // length of rounded
  * segm_len + / 2 - radius * 2)                 // length of 1st and last bit
@@ -291,8 +290,42 @@ static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<wxPoint>& a
 }
 
 
-MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
-                    PCB_EDIT_FRAME* aPcbFrame, wxString& aErrorMessage )
+void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR2I& aEnd )
+{
+    PCB_EDIT_FRAME& editFrame = *getEditFrame<PCB_EDIT_FRAME>();
+
+    MICROWAVE_INDUCTOR_PATTERN pattern;
+
+    pattern.m_Width = board()->GetDesignSettings().GetCurrentTrackWidth();
+
+    pattern.m_Start = { aStart.x, aStart.y };
+    pattern.m_End = { aEnd.x, aEnd.y };
+
+    wxString errorMessage;
+
+    auto inductorModule = std::unique_ptr<MODULE>( createMicrowaveInductor( pattern,
+                                                                            errorMessage ) );
+
+    // on any error, report if we can
+    if ( !inductorModule || !errorMessage.IsEmpty() )
+    {
+        if ( !errorMessage.IsEmpty() )
+            DisplayError( &editFrame, errorMessage );
+    }
+    else
+    {
+        // at this point, we can save the module
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, inductorModule.get() );
+
+        BOARD_COMMIT commit( this );
+        commit.Add( inductorModule.release() );
+        commit.Push( _("Add microwave inductor" ) );
+    }
+}
+
+
+MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aInductorPattern,
+                                                 wxString& aErrorMessage )
 {
     /* Build a microwave inductor footprint.
      * - Length Mself.lng
@@ -330,22 +363,24 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
     D_PAD*   pad;
     wxString msg;
 
-    auto pt = inductorPattern.m_End - inductorPattern.m_Start;
-    int     min_len = KiROUND( EuclideanNorm( pt ) );
-    inductorPattern.m_length = min_len;
+    PCB_EDIT_FRAME& editFrame = *getEditFrame<PCB_EDIT_FRAME>();
+
+    auto pt      = aInductorPattern.m_End - aInductorPattern.m_Start;
+    int  min_len = KiROUND( EuclideanNorm( pt ) );
+    aInductorPattern.m_length = min_len;
 
     // Enter the desired length.
-    msg = StringFromValue( aPcbFrame->GetUserUnits(), inductorPattern.m_length, true );
-    WX_TEXT_ENTRY_DIALOG dlg( aPcbFrame, _( "Length of Trace:" ), wxEmptyString, msg );
+    msg = StringFromValue( editFrame.GetUserUnits(), aInductorPattern.m_length, true );
+    WX_TEXT_ENTRY_DIALOG dlg( &editFrame, _( "Length of Trace:" ), wxEmptyString, msg );
 
     if( dlg.ShowModal() != wxID_OK )
         return nullptr; // canceled by user
 
     msg = dlg.GetValue();
-    inductorPattern.m_length = ValueFromString( aPcbFrame->GetUserUnits(), msg );
+    aInductorPattern.m_length = ValueFromString( editFrame.GetUserUnits(), msg );
 
     // Control values (ii = minimum length)
-    if( inductorPattern.m_length < min_len )
+    if( aInductorPattern.m_length < min_len )
     {
         aErrorMessage = _( "Requested length < minimum length" );
         return nullptr;
@@ -353,8 +388,8 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
 
     // Calculate the elements.
     std::vector <wxPoint> buffer;
-    const INDUCTOR_S_SHAPE_RESULT res = BuildCornersList_S_Shape( buffer, inductorPattern.m_Start,
-            inductorPattern.m_End, inductorPattern.m_length, inductorPattern.m_Width );
+    const INDUCTOR_S_SHAPE_RESULT res = BuildCornersList_S_Shape( buffer, aInductorPattern.m_Start,
+            aInductorPattern.m_End, aInductorPattern.m_length, aInductorPattern.m_Width );
 
     switch( res )
     {
@@ -373,19 +408,18 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
 
     // Generate footprint. the value is also used as footprint name.
     msg = "L";
-    WX_TEXT_ENTRY_DIALOG cmpdlg( aPcbFrame, _( "Component Value:" ), wxEmptyString, msg );
+    WX_TEXT_ENTRY_DIALOG cmpdlg( &editFrame, _( "Component Value:" ), wxEmptyString, msg );
     cmpdlg.SetTextValidator( MODULE_NAME_CHAR_VALIDATOR( &msg ) );
 
     if( ( cmpdlg.ShowModal() != wxID_OK ) || msg.IsEmpty() )
         return nullptr;    //  Aborted by user
 
-    MODULE* module = aPcbFrame->CreateNewModule( msg );
-    aPcbFrame->AddModuleToBoard( module );
+    MODULE* module = editFrame.CreateNewModule( msg );
 
     module->SetFPID( LIB_ID( wxEmptyString, wxT( "mw_inductor" ) ) );
     module->SetAttributes( MOD_VIRTUAL | MOD_CMS );
     module->ClearFlags();
-    module->SetPosition( inductorPattern.m_End );
+    module->SetPosition( aInductorPattern.m_End );
 
     // Generate segments
     for( unsigned jj = 1; jj < buffer.size(); jj++ )
@@ -394,7 +428,7 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
         PtSegm = new EDGE_MODULE( module );
         PtSegm->SetStart( buffer[jj - 1] );
         PtSegm->SetEnd( buffer[jj] );
-        PtSegm->SetWidth( inductorPattern.m_Width );
+        PtSegm->SetWidth( aInductorPattern.m_Width );
         PtSegm->SetLayer( module->GetLayer() );
         PtSegm->SetShape( S_SEGMENT );
         PtSegm->SetStart0( PtSegm->GetStart() - module->GetPosition() );
@@ -408,10 +442,10 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
     module->Add( pad );
 
     pad->SetName( "1" );
-    pad->SetPosition( inductorPattern.m_End );
+    pad->SetPosition( aInductorPattern.m_End );
     pad->SetPos0( pad->GetPosition() - module->GetPosition() );
 
-    pad->SetSize( wxSize( inductorPattern.m_Width, inductorPattern.m_Width ) );
+    pad->SetSize( wxSize( aInductorPattern.m_Width, aInductorPattern.m_Width ) );
 
     pad->SetLayerSet( LSET( module->GetLayer() ) );
     pad->SetAttribute( PAD_ATTRIB_SMD );
@@ -423,12 +457,12 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
 
     pad = newpad;
     pad->SetName( "2" );
-    pad->SetPosition( inductorPattern.m_Start );
+    pad->SetPosition( aInductorPattern.m_Start );
     pad->SetPos0( pad->GetPosition() - module->GetPosition() );
 
     // Modify text positions.
-    wxPoint refPos( ( inductorPattern.m_Start.x + inductorPattern.m_End.x ) / 2,
-                    ( inductorPattern.m_Start.y + inductorPattern.m_End.y ) / 2 );
+    wxPoint refPos( ( aInductorPattern.m_Start.x + aInductorPattern.m_End.x ) / 2,
+                    ( aInductorPattern.m_Start.y + aInductorPattern.m_End.y ) / 2 );
 
     wxPoint valPos = refPos;
 

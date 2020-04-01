@@ -73,7 +73,7 @@
 #include <tools/pcb_inspection_tool.h>
 #include <tools/placement_tool.h>
 #include <tools/pad_tool.h>
-#include <tools/microwave_tool.h>
+#include <microwave/microwave_tool.h>
 #include <tools/position_relative_tool.h>
 #include <tools/zone_filler_tool.h>
 #include <tools/pcb_actions.h>
