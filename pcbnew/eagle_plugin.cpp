@@ -1738,32 +1738,74 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
 
 void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
 {
-    ERECT        r( aTree );
-    PCB_LAYER_ID layer = kicad_layer( r.layer );
-    EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
+    ERECT r( aTree );
 
-    aModule->Add( dwg );
+    if( r.layer == EAGLE_LAYER::TRESTRICT || r.layer == EAGLE_LAYER::BRESTRICT
+            || r.layer == EAGLE_LAYER::VRESTRICT )
+    {
+        MODULE_ZONE_CONTAINER* zone = new MODULE_ZONE_CONTAINER( aModule );
+        aModule->Add( zone, ADD_MODE::APPEND );
 
-    dwg->SetLayer( layer );
-    dwg->SetWidth( 0 );
+        if( r.layer == EAGLE_LAYER::TRESTRICT ) // front layer keepout
+            zone->SetLayer( F_Cu );
+        else if( r.layer == EAGLE_LAYER::BRESTRICT ) // bottom layer keepout
+            zone->SetLayer( B_Cu );
+        else if( r.layer == EAGLE_LAYER::VRESTRICT ) // all layers
+            zone->SetLayerSet( LSET::AllCuMask() );
 
-    std::vector<wxPoint> pts;
+        zone->SetIsKeepout( true );
+        zone->SetDoNotAllowVias( true );
+        if( r.layer == EAGLE_LAYER::TRESTRICT || r.layer == EAGLE_LAYER::BRESTRICT )
+        {
+            zone->SetDoNotAllowTracks( true );
+            zone->SetDoNotAllowCopperPour( true );
+        }
 
-    wxPoint start( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
-    wxPoint end(   wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
+        const int outlineIdx = -1; // this is the id of the copper zone main outline
+        zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
+        zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ), outlineIdx );
+        zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
+        zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
-    pts.push_back( start );
-    pts.emplace_back( kicad_x( r.x2 ), kicad_y( r.y1 ) );
-    pts.emplace_back( kicad_x( r.x2 ), kicad_y( r.y2 ) );
-    pts.push_back( end );
+        if( r.rot )
+        {
+            wxPoint center( ( kicad_x( r.x1 ) + kicad_x( r.x2 ) ) / 2,
+                    ( kicad_y( r.y1 ) + kicad_y( r.y2 ) ) / 2 );
+            zone->Rotate( center, r.rot->degrees * 10 );
+        }
 
-    dwg->SetPolyPoints( pts );
+        zone->SetHatch(
+                ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+    }
+    else
+    {
+        PCB_LAYER_ID layer = kicad_layer( r.layer );
 
-    dwg->SetStart0( start );
-    dwg->SetEnd0( end );
+        EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
 
-    if( r.rot )
-        dwg->Rotate( dwg->GetCenter(), r.rot->degrees * 10 );
+        aModule->Add( dwg );
+
+        dwg->SetLayer( layer );
+        dwg->SetWidth( 0 );
+
+        std::vector<wxPoint> pts;
+
+        wxPoint start( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
+        wxPoint end( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
+
+        pts.push_back( start );
+        pts.emplace_back( kicad_x( r.x2 ), kicad_y( r.y1 ) );
+        pts.emplace_back( kicad_x( r.x2 ), kicad_y( r.y2 ) );
+        pts.push_back( end );
+
+        dwg->SetPolyPoints( pts );
+
+        dwg->SetStart0( start );
+        dwg->SetEnd0( end );
+
+        if( r.rot )
+            dwg->Rotate( dwg->GetCenter(), r.rot->degrees * 10 );
+    }
 }
 
 
