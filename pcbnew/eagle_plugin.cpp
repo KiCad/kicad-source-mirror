@@ -644,28 +644,78 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             m_xpath->push( "circle" );
 
             ECIRCLE      c( gr );
-            PCB_LAYER_ID layer = kicad_layer( c.layer );
 
-            if( layer != UNDEFINED_LAYER )       // unsupported layer
+            int width  = c.width.ToPcbUnits();
+            int radius = c.radius.ToPcbUnits();
+
+            if( c.layer == EAGLE_LAYER::TRESTRICT || c.layer == EAGLE_LAYER::BRESTRICT
+                    || c.layer == EAGLE_LAYER::VRESTRICT )
             {
-                DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
-                m_board->Add( dseg, ADD_MODE::APPEND );
+                ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+                m_board->Add( zone, ADD_MODE::APPEND );
 
-                int width = c.width.ToPcbUnits();
-                int radius = c.radius.ToPcbUnits();
+                if( c.layer == EAGLE_LAYER::TRESTRICT ) // front layer keepout
+                    zone->SetLayer( F_Cu );
+                else if( c.layer == EAGLE_LAYER::BRESTRICT ) // bottom layer keepout
+                    zone->SetLayer( B_Cu );
+                else if( c.layer == EAGLE_LAYER::VRESTRICT ) // all layers
+                    zone->SetLayerSet( LSET::AllCuMask() );
 
-                // with == 0 means filled circle
-                if( width <= 0 )
+                zone->SetIsKeepout( true );
+                zone->SetDoNotAllowVias( true );
+                if( c.layer == EAGLE_LAYER::TRESTRICT || c.layer == EAGLE_LAYER::BRESTRICT )
                 {
-                    width = radius;
-                    radius = radius / 2;
+                    zone->SetDoNotAllowTracks( true );
+                    zone->SetDoNotAllowCopperPour( true );
                 }
 
-                dseg->SetShape( S_CIRCLE );
-                dseg->SetLayer( layer );
-                dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
-                dseg->SetEnd( wxPoint( kicad_x( c.x ) + radius, kicad_y( c.y ) ) );
-                dseg->SetWidth( width );
+                // approximate circle as polygon with a edge every 10 degree
+                wxPoint center( kicad_x( c.x ), kicad_y( c.y ) );
+                int     outlineRadius = radius + ( width / 2 );
+                for( int angle = 0; angle < 360; angle += 10 )
+                {
+                    wxPoint rotatedPoint( outlineRadius, 0 );
+                    RotatePoint( &rotatedPoint, angle * 10. );
+                    zone->AppendCorner( center + rotatedPoint, -1 );
+                }
+
+                if( width > 0 )
+                {
+                    zone->NewHole();
+                    int innerRadius = radius - ( width / 2 );
+                    for( int angle = 0; angle < 360; angle += 10 )
+                    {
+                        wxPoint rotatedPoint( innerRadius, 0 );
+                        RotatePoint( &rotatedPoint, angle * 10. );
+                        zone->AppendCorner( center + rotatedPoint, 0 );
+                    }
+                }
+
+                zone->SetHatch( ZONE_HATCH_STYLE::DIAGONAL_EDGE,
+                        ZONE_CONTAINER::GetDefaultHatchPitch(), true );
+            }
+            else
+            {
+                PCB_LAYER_ID layer = kicad_layer( c.layer );
+
+                if( layer != UNDEFINED_LAYER ) // unsupported layer
+                {
+                    DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
+                    m_board->Add( dseg, ADD_MODE::APPEND );
+
+                    // with == 0 means filled circle
+                    if( width <= 0 )
+                    {
+                        width  = radius;
+                        radius = radius / 2;
+                    }
+
+                    dseg->SetShape( S_CIRCLE );
+                    dseg->SetLayer( layer );
+                    dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
+                    dseg->SetEnd( wxPoint( kicad_x( c.x ) + radius, kicad_y( c.y ) ) );
+                    dseg->SetWidth( width );
+                }
             }
             m_xpath->pop();
         }
@@ -1923,34 +1973,85 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
 void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
 {
     ECIRCLE         e( aTree );
-    PCB_LAYER_ID    layer = kicad_layer( e.layer );
-    EDGE_MODULE*    gr = new EDGE_MODULE( aModule, S_CIRCLE );
-    int             width = e.width.ToPcbUnits();
-    int             radius = e.radius.ToPcbUnits();
 
-    // with == 0 means filled circle
-    if( width <= 0 )
+    int width  = e.width.ToPcbUnits();
+    int radius = e.radius.ToPcbUnits();
+
+    if( e.layer == EAGLE_LAYER::TRESTRICT || e.layer == EAGLE_LAYER::BRESTRICT
+            || e.layer == EAGLE_LAYER::VRESTRICT )
     {
-        width = radius;
-        radius = radius / 2;
+        MODULE_ZONE_CONTAINER* zone = new MODULE_ZONE_CONTAINER( aModule );
+        aModule->Add( zone, ADD_MODE::APPEND );
+
+        if( e.layer == EAGLE_LAYER::TRESTRICT ) // front layer keepout
+            zone->SetLayer( F_Cu );
+        else if( e.layer == EAGLE_LAYER::BRESTRICT ) // bottom layer keepout
+            zone->SetLayer( B_Cu );
+        else if( e.layer == EAGLE_LAYER::VRESTRICT ) // all layers
+            zone->SetLayerSet( LSET::AllCuMask() );
+
+        zone->SetIsKeepout( true );
+        zone->SetDoNotAllowVias( true );
+        if( e.layer == EAGLE_LAYER::TRESTRICT || e.layer == EAGLE_LAYER::BRESTRICT )
+        {
+            zone->SetDoNotAllowTracks( true );
+            zone->SetDoNotAllowCopperPour( true );
+        }
+
+        // approximate circle as polygon with a edge every 10 degree
+        wxPoint center( kicad_x( e.x ), kicad_y( e.y ) );
+        int     outlineRadius = radius + ( width / 2 );
+        for( int angle = 0; angle < 360; angle += 10 )
+        {
+            wxPoint rotatedPoint( outlineRadius, 0 );
+            RotatePoint( &rotatedPoint, angle * 10. );
+            zone->AppendCorner( center + rotatedPoint, -1 );
+        }
+
+        if( width > 0 )
+        {
+            zone->NewHole();
+            int innerRadius = radius - ( width / 2 );
+            for( int angle = 0; angle < 360; angle += 10 )
+            {
+                wxPoint rotatedPoint( innerRadius, 0 );
+                RotatePoint( &rotatedPoint, angle * 10. );
+                zone->AppendCorner( center + rotatedPoint, 0 );
+            }
+        }
+
+        zone->SetHatch(
+                ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
     }
-
-    aModule->Add( gr );
-    gr->SetWidth( width );
-
-    switch ( (int) layer )
+    else
     {
-    case UNDEFINED_LAYER:
-        layer = Cmts_User;
-        break;
-    default:
-        break;
-    }
+        PCB_LAYER_ID layer = kicad_layer( e.layer );
+        EDGE_MODULE* gr    = new EDGE_MODULE( aModule, S_CIRCLE );
 
-    gr->SetLayer( layer );
-    gr->SetStart0( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
-    gr->SetEnd0( wxPoint( kicad_x( e.x ) + radius, kicad_y( e.y ) ) );
-    gr->SetDrawCoord();
+        // with == 0 means filled circle
+        if( width <= 0 )
+        {
+            width  = radius;
+            radius = radius / 2;
+        }
+
+        aModule->Add( gr );
+        gr->SetWidth( width );
+
+        switch( (int) layer )
+        {
+        case UNDEFINED_LAYER:
+            layer = Cmts_User;
+            break;
+        default:
+            break;
+        }
+
+        gr->SetLayer( layer );
+        gr->SetStart0( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
+        gr->SetEnd0( wxPoint( kicad_x( e.x ) + radius, kicad_y( e.y ) ) );
+        gr->SetDrawCoord();
+    }
 }
 
 
