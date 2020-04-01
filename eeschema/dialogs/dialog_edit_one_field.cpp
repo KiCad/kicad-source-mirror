@@ -273,10 +273,11 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
 
     // The value, footprint and datasheet fields should be kept in sync in multi-unit
     // parts.
+    // Of course the component must be annotated to collect other units.
     if( editFrame && parent && parent->Type() == SCH_COMPONENT_T
             && ( fieldType == VALUE || fieldType == FOOTPRINT || fieldType == DATASHEET ) )
     {
-        SCH_COMPONENT*              thisUnit = static_cast<SCH_COMPONENT*>( parent );
+        SCH_COMPONENT* thisUnit = static_cast<SCH_COMPONENT*>( parent );
         std::vector<SCH_COMPONENT*> otherUnits;
 
         CollectOtherUnits( editFrame->GetCurrentSheet(), thisUnit, &otherUnits );

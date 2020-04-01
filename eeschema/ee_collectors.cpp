@@ -171,7 +171,8 @@ bool EE_COLLECTOR::IsDraggableJunction() const
 void CollectOtherUnits( SCH_SHEET_PATH& aSheet, SCH_COMPONENT* aUnit,
                         std::vector<SCH_COMPONENT*>* otherUnits )
 {
-    if( aUnit->GetUnitCount() > 1 )
+    // Obviously, one can collect other units only if aUnit is annotated.
+    if( aUnit->GetUnitCount() > 1 && aUnit->IsAnnotated( &aSheet ) )
     {
         const LIB_ID   thisLibId = aUnit->GetLibId();
         const wxString thisRef   = aUnit->GetRef( &aSheet );
