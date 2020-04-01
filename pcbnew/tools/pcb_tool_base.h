@@ -110,11 +110,22 @@ public:
 
 protected:
 
+    /**
+     * Options for placing items interactively.
+     */
     enum INTERACTIVE_PLACEMENT_OPTIONS {
-        IPO_ROTATE = 1,
-        IPO_FLIP = 2,
-        IPO_SINGLE_CLICK = 4,
-        IPO_REPEAT = 8
+        /// Handle the rotate action in the loop by calling the item's rotate method
+        IPO_ROTATE       = 0x01,
+
+        /// Handle flip action in the loop by calling the item's flip method
+        IPO_FLIP         = 0x02,
+
+        /// Create an item immediately on placement starting, otherwise show the pencil cursor
+        /// until the item is created
+        IPO_SINGLE_CLICK = 0x04,
+
+        /// Allow repeat placement of the item
+        IPO_REPEAT       = 0x08
     };
 
 
