@@ -242,7 +242,18 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
         return false;
 
     wxString newRelativeNativeFilename = m_fields->at( SHEETFILENAME ).GetText();
-    wxString newRelativeFilename = newRelativeNativeFilename;
+
+    if( newRelativeNativeFilename.IsEmpty() )
+    {
+        wxMessageBox( _( "A sheet cannot have an empty filename" ) );
+        return false;
+    }
+
+    // Ensure the filename extension is OK
+    wxFileName fn( newRelativeNativeFilename );
+    fn.SetExt( LegacySchematicFileExtension );
+
+    wxString newRelativeFilename = fn.GetFullPath();
 
     // Inside Eeschema, filenames are stored using unix notation
     newRelativeFilename.Replace( wxT( "\\" ), wxT( "/" ) );
