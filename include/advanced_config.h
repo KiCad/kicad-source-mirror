@@ -69,11 +69,6 @@ public:
     static const ADVANCED_CFG& GetCfg();
 
     /**
-     * Enable pad pin function handling in pcbnew.
-     */
-    bool m_EnableUsePinFunction;
-
-    /**
      * Enable pad property handling in pcbnew.
      */
     bool m_EnableUsePadProperty;
