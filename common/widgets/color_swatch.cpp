@@ -111,16 +111,32 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow *aParent, wxWindowID aID, const wxPoint &aP
 
 void COLOR_SWATCH::setupEvents()
 {
-    // forward click to any other listeners, since we don't want them
-    m_swatch->Bind( wxEVT_LEFT_DOWN, &COLOR_SWATCH::rePostEvent, this );
-    m_swatch->Bind( wxEVT_RIGHT_DOWN, &COLOR_SWATCH::rePostEvent, this );
+    wxWindow* topLevelParent = GetParent();
 
-    // bind the events that trigger the dialog
-    m_swatch->Bind( wxEVT_LEFT_DCLICK,
-                    [this] ( wxMouseEvent& aEvt )
-                    {
-                        GetNewSwatchColor();
-                    } );
+    while( topLevelParent && !topLevelParent->IsTopLevel() )
+        topLevelParent = topLevelParent->GetParent();
+
+    if( topLevelParent && dynamic_cast<DIALOG_SHIM*>( topLevelParent ) )
+    {
+        m_swatch->Bind( wxEVT_LEFT_DOWN,
+                        [this] ( wxMouseEvent& aEvt )
+                        {
+                            GetNewSwatchColor();
+                        } );
+    }
+    else
+    {
+        // forward click to any other listeners, since we don't want them
+        m_swatch->Bind( wxEVT_LEFT_DOWN, &COLOR_SWATCH::rePostEvent, this );
+        m_swatch->Bind( wxEVT_RIGHT_DOWN, &COLOR_SWATCH::rePostEvent, this );
+
+        // bind the events that trigger the dialog
+        m_swatch->Bind( wxEVT_LEFT_DCLICK,
+                        [this] ( wxMouseEvent& aEvt )
+                        {
+                            GetNewSwatchColor();
+                        } );
+    }
 
     m_swatch->Bind( wxEVT_MIDDLE_DOWN,
                     [this] ( wxMouseEvent& aEvt )
