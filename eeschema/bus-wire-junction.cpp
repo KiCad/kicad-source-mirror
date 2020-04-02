@@ -303,7 +303,7 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
 
 bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, SCH_SCREEN* aScreen )
 {
-    static const KICAD_T wiresAndBusses[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+    static const KICAD_T wiresAndBuses[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
 
     if( aScreen == nullptr )
         aScreen = GetScreen();
@@ -314,7 +314,7 @@ bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, SCH_SCREEN* aScreen )
 
     for( auto item : aScreen->Items().Overlapping( SCH_LINE_T, aPoint ) )
     {
-        if( item->IsType( wiresAndBusses ) )
+        if( item->IsType( wiresAndBuses ) )
             wires.push_back( static_cast<SCH_LINE*>( item ) );
     }
 
@@ -356,7 +356,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
     SCH_SCREEN*        screen = GetScreen();
     PICKED_ITEMS_LIST  undoList;
     EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-    KICAD_T            wiresAndBusses[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+    KICAD_T            wiresAndBuses[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
 
     auto remove_item = [ & ]( SCH_ITEM* aItem ) -> void
     {
@@ -375,7 +375,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
     {
         auto line = static_cast<SCH_LINE*>( item );
 
-        if( line->IsType( wiresAndBusses ) && line->IsEndPoint( aJunction->GetPosition() )
+        if( line->IsType( wiresAndBuses ) && line->IsEndPoint( aJunction->GetPosition() )
                 && !( line->GetEditFlags() & STRUCT_DELETED ) )
             lines.push_back( line );
     }

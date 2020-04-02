@@ -40,7 +40,7 @@ class EE_SELECTION_TOOL;
 /**
  * SCH_DRAWING_TOOLS
  *
- * Tool responsible for drawing/placing items (symbols, wires, busses, labels, etc.)
+ * Tool responsible for drawing/placing items (symbols, wires, buses, labels, etc.)
  */
 
 class SCH_DRAWING_TOOLS : public EE_TOOL_BASE<SCH_EDIT_FRAME>

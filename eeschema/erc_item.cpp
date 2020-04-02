@@ -69,7 +69,7 @@ wxString ERC_ITEM::GetErrorText() const
     case ERCE_BUS_LABEL_ERROR:
         return wxString( _( "Label attached to bus item does not describe a bus" ) );
     case ERCE_BUS_TO_BUS_CONFLICT:
-        return wxString( _( "Busses are graphically connected but share no bus members" ) );
+        return wxString( _( "Buses are graphically connected but share no bus members" ) );
     case ERCE_BUS_TO_NET_CONFLICT:
         return wxString( _( "Invalid connection between bus and net items" ) );
     case ERCE_GLOBLABEL:

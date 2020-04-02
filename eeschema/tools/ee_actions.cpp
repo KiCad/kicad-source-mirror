@@ -600,7 +600,7 @@ TOOL_ACTION EE_ACTIONS::toggleHiddenPins( "eeschema.EditorControl.showHiddenPins
 
 TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
         AS_GLOBAL, 0, "",
-        _( "Force H/V Wires and Busses" ), "",
+        _( "Force H/V Wires and Buses" ), "",
         lines90_xpm );
 
 
@@ -616,7 +616,7 @@ TOOL_ACTION EE_ACTIONS::drawWire( "eeschema.InteractiveDrawingLineWireBus.drawWi
         _( "Add Wire" ), _( "Add a wire" ),
         add_line_xpm, AF_ACTIVATE, (void*) LAYER_WIRE );
 
-TOOL_ACTION EE_ACTIONS::drawBus( "eeschema.InteractiveDrawingLineWireBus.drawBusses",
+TOOL_ACTION EE_ACTIONS::drawBus( "eeschema.InteractiveDrawingLineWireBus.drawBuses",
         AS_GLOBAL,
         'B', LEGACY_HK_NAME( "Begin Bus" ),
         _( "Add Bus" ), _( "Add a bus" ),

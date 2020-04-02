@@ -50,7 +50,7 @@ class ERC_SETTINGS;
                                         ///< when repeating a pin
 #define TXT_MARGIN 4
 
-///< The thickness to draw busses that do not have a specific width
+///< The thickness to draw buses that do not have a specific width
 ///< (can be changed in preference menu)
 #define DEFAULTBUSTHICKNESS 12
 
@@ -123,13 +123,13 @@ int GetDefaultTextSize();
 void SetDefaultTextSize( int aSize );
 
 /**
- * Amount to offset text above/below wires & busses.  Expressed as a ratio of the text size.
+ * Amount to offset text above/below wires & buses.  Expressed as a ratio of the text size.
  */
 double GetTextOffsetRatio();
 void SetTextOffsetRatio( double aOffsetRatio );
 
 /**
- * Default line thickness used to draw/plot busses.
+ * Default line thickness used to draw/plot buses.
  */
 int GetDefaultBusThickness();
 void SetDefaultBusThickness( int aThickness );

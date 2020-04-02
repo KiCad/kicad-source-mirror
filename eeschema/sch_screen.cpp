@@ -309,7 +309,7 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 
         for( auto item : Items().Overlapping( SCH_LINE_T, test_item->GetBoundingBox() ) )
         {
-            // Skip connecting lines on different layers (e.g. busses)
+            // Skip connecting lines on different layers (e.g. buses)
             if( test_item->GetLayer() != item->GetLayer() )
                 continue;
 
@@ -334,7 +334,7 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 
 bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
 {
-    enum { WIRES, BUSSES } layers;
+    enum { WIRES, BUSES } layers;
 
     bool    has_nonparallel[ sizeof( layers ) ] = { false };
     int     end_count[ sizeof( layers ) ] = { 0 };
@@ -355,7 +355,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
             if( item->GetLayer() == LAYER_WIRE )
                 lines[WIRES].push_back( (SCH_LINE*) item );
             else if( item->GetLayer() == LAYER_BUS )
-                lines[BUSSES].push_back( (SCH_LINE*) item );
+                lines[BUSES].push_back( (SCH_LINE*) item );
         }
 
         if( ( ( item->Type() == SCH_COMPONENT_T ) || ( item->Type() == SCH_SHEET_T ) )
@@ -363,7 +363,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
             pin_count++;
     }
 
-    for( int i : { WIRES, BUSSES } )
+    for( int i : { WIRES, BUSES } )
     {
         bool removed_overlapping = false;
         bool mid_point = false;
@@ -409,7 +409,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
         return true;
 
     // Check for bus - bus junction requirements
-    if( has_nonparallel[BUSSES] && end_count[BUSSES] > 2 )
+    if( has_nonparallel[BUSES] && end_count[BUSES] > 2 )
         return true;
 
     return false;

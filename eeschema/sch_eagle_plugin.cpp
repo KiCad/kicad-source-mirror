@@ -710,7 +710,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     wxFileName fileName( fn );
     m_currentSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
 
-    // Loop through all busses
+    // Loop through all buses
     // From the DTD: "Buses receive names which determine which signals they include.
     // A bus is a drawing object. It does not create any electrical connections.
     // These are always created by means of the nets and their names."

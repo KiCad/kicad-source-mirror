@@ -132,12 +132,12 @@ enum KICAD_T
     SCH_FIELD_LOCATE_FOOTPRINT_T,
     SCH_FIELD_LOCATE_DATASHEET_T,
 
-    // Same for picking wires and busses from SCH_LINE_T items
+    // Same for picking wires and buses from SCH_LINE_T items
     SCH_LINE_LOCATE_WIRE_T,
     SCH_LINE_LOCATE_BUS_T,
     SCH_LINE_LOCATE_GRAPHIC_LINE_T,
 
-    // Same for picking labels attached to wires and/or busses
+    // Same for picking labels attached to wires and/or buses
     SCH_LABEL_LOCATE_WIRE_T,
     SCH_LABEL_LOCATE_BUS_T,
 
