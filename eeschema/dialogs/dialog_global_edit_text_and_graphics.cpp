@@ -40,7 +40,7 @@ static bool       g_modifyReferences;
 static bool       g_modifyValues;
 static bool       g_modifyOtherFields;
 static bool       g_modifyWires;
-static bool       g_modifyBusses;
+static bool       g_modifyBuses;
 static bool       g_modifyGlobalLabels;
 static bool       g_modifyHierLabels;
 static bool       g_modifySheetTitles;
@@ -115,7 +115,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
     g_modifyValues = m_values->GetValue();
     g_modifyOtherFields = m_otherFields->GetValue();
     g_modifyWires = m_wires->GetValue();
-    g_modifyBusses = m_buses->GetValue();
+    g_modifyBuses = m_buses->GetValue();
     g_modifyGlobalLabels = m_globalLabels->GetValue();
     g_modifyHierLabels = m_hierLabels->GetValue();
     g_modifySheetTitles = m_sheetTitles->GetValue();
@@ -144,7 +144,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_values->SetValue( g_modifyValues );
     m_otherFields->SetValue( g_modifyOtherFields );
     m_wires->SetValue( g_modifyWires );
-    m_buses->SetValue( g_modifyBusses );
+    m_buses->SetValue( g_modifyBuses );
     m_globalLabels->SetValue( g_modifyGlobalLabels );
     m_hierLabels->SetValue( g_modifyHierLabels );
     m_sheetTitles->SetValue( g_modifySheetTitles );
