@@ -101,12 +101,12 @@ public:
     void Commit() override;
     void AddItem( PNS::ITEM* aItem ) override;
     void RemoveItem( PNS::ITEM* aItem ) override;
-    
+
     void UpdateNet( int aNetCode ) override;
 
 private:
     struct OFFSET {
-        VECTOR2I p_old, p_new;  
+        VECTOR2I p_old, p_new;
     };
 
     std::map<D_PAD*, OFFSET> m_moduleOffsets;
@@ -114,7 +114,6 @@ private:
     KIGFX::VIEW_GROUP* m_previewItems;
     std::unordered_set<BOARD_CONNECTED_ITEM*> m_hiddenItems;
 
-    PNS::ROUTER* m_router;
     PCB_TOOL_BASE* m_tool;
     std::unique_ptr<BOARD_COMMIT> m_commit;
     const PCB_DISPLAY_OPTIONS* m_dispOptions;

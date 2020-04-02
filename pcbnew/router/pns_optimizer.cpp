@@ -1315,7 +1315,8 @@ static int64_t shovedArea( const SHAPE_LINE_CHAIN& aOld, const SHAPE_LINE_CHAIN&
     return std::abs(area / 2);
 }
 
-bool tightenSegment( bool dir, NODE *aNode, LINE cur, const SHAPE_LINE_CHAIN& in, SHAPE_LINE_CHAIN& out )
+bool tightenSegment( bool dir, NODE *aNode, const LINE& cur,
+                     const SHAPE_LINE_CHAIN& in, SHAPE_LINE_CHAIN& out )
 {
     SEG a = in.CSegment(0);
     SEG center = in.CSegment(1);
@@ -1418,10 +1419,7 @@ bool tightenSegment( bool dir, NODE *aNode, LINE cur, const SHAPE_LINE_CHAIN& in
 
     //dbg->AddLine ( snew, 3, 100000 );
 
-
     return true;
-
-
 }
 
 void Tighten( NODE *aNode, SHAPE_LINE_CHAIN& aOldLine, LINE& aNewLine, LINE& aOptimized )
