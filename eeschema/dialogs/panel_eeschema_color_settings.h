@@ -26,7 +26,7 @@
 #include <panel_color_settings.h>
 
 class COLOR_SETTINGS;
-class EDA_DRAW_FRAME;
+class SCH_BASE_FRAME;
 class PAGE_INFO;
 class SCH_ITEM;
 class SCH_PREVIEW_PANEL;
@@ -40,7 +40,7 @@ namespace KIGFX
 class PANEL_EESCHEMA_COLOR_SETTINGS : public PANEL_COLOR_SETTINGS
 {
 public:
-    PANEL_EESCHEMA_COLOR_SETTINGS( EDA_DRAW_FRAME* aFrame, wxWindow* aParent );
+    PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aFrame, wxWindow* aParent );
 
     ~PANEL_EESCHEMA_COLOR_SETTINGS() override;
 
@@ -79,7 +79,7 @@ protected:
     };
 
 private:
-    EDA_DRAW_FRAME* m_frame;
+    SCH_BASE_FRAME* m_frame;
 
     SCH_PREVIEW_PANEL* m_preview;
 

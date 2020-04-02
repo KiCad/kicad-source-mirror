@@ -26,7 +26,6 @@
 #include <gal/gal_display_options.h>
 #include <layers_id_colors_and_visibility.h>
 #include <class_libentry.h>
-#include <lib_pin.h>
 #include <lib_polyline.h>
 #include <menus_helpers.h>
 #include <page_info.h>
@@ -45,6 +44,7 @@
 #include <title_block.h>
 #include <view/view.h>
 #include <ws_proxy_view_item.h>
+#include <sch_base_frame.h>
 
 // Width and height of every (color-displaying / bitmap) button in dialog units
 const wxSize BUTTON_SIZE( 24, 12 );
@@ -54,7 +54,7 @@ const wxSize BUTTON_BORDER( 4, 4 );
 constexpr int FIRST_BUTTON_ID = 1800;
 
 
-PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( EDA_DRAW_FRAME* aFrame,
+PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aFrame,
                                                               wxWindow* aParent ) :
           PANEL_COLOR_SETTINGS( aParent ),
           m_frame( aFrame ),
@@ -143,9 +143,10 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme()
     SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
     COLOR4D bgcolor = m_currentSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
-    for( SCH_LAYER_ID clyr = SCH_LAYER_ID_START; clyr < SCH_LAYER_ID_END; ++clyr )
+    for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
     {
-        if( bgcolor == m_currentSettings->GetColor( clyr ) && clyr != LAYER_SCHEMATIC_BACKGROUND )
+        if( bgcolor == m_currentSettings->GetColor( layer )
+            && layer != LAYER_SCHEMATIC_BACKGROUND && layer != LAYER_SHEET_BACKGROUND )
         {
             wxString msg = _( "Some items have the same color as the background\n"
                               "and they will not be seen on the screen.  Are you\n"
@@ -181,18 +182,29 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme()
                                                     static_cast<void*>( selected ) ) );
     }
 
-    for( SCH_LAYER_ID clyr = SCH_LAYER_ID_START; clyr < SCH_LAYER_ID_END; ++clyr )
+    for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
     {
-        COLOR4D color = m_currentSettings->GetColor( clyr );
+        COLOR4D color;
+
+        if( layer == LAYER_SHEET )
+            color = GetDefaultSheetBorderColor();
+        else if( layer == LAYER_SHEET_BACKGROUND )
+            color = GetDefaultSheetBackgroundColor();
+        else
+            color = m_currentSettings->GetColor( layer );
+
         // Do not allow non-background layers to be completely white.
         // This ensures the BW printing recognizes that the colors should be printed black.
-        if( color == COLOR4D::WHITE && clyr != LAYER_SCHEMATIC_BACKGROUND )
+        if( color == COLOR4D::WHITE
+                && layer != LAYER_SCHEMATIC_BACKGROUND && layer != LAYER_SHEET_BACKGROUND )
+        {
             color.Darken( 0.01 );
+        }
 
-        if( !dirty && selected->GetColor( clyr ) != color )
+        if( !dirty && selected->GetColor( layer ) != color )
             dirty = true;
 
-        selected->SetColor( clyr, color );
+        selected->SetColor( layer, color );
     }
 
     KIGFX::RENDER_SETTINGS* settings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
@@ -230,8 +242,8 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createButtons()
 
     for( SCH_LAYER_ID layer : layers )
     {
-        // LAYER_SHEET_BACKGROUND doesn't currently allow changing settings
-        if( layer == LAYER_SHEET_BACKGROUND )
+        // Sheet borders and backgrounds are now sheet-specific
+        if( layer == LAYER_SHEET || layer == LAYER_SHEET_BACKGROUND )
             continue;
 
         wxString      name  = LayerName( layer );

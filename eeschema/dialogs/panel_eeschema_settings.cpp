@@ -25,7 +25,10 @@
 #include <fctsys.h>
 #include <base_screen.h>
 #include <sch_edit_frame.h>
-
+#include <settings/settings_manager.h>
+#include <settings/color_settings.h>
+#include <painter.h>
+#include <pgm_base.h>
 #include "panel_eeschema_settings.h"
 
 
@@ -45,7 +48,16 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
             StringFromValue( EDA_UNITS::INCHES, m_frame->GetRepeatStep().x, false, true ) );
     m_vPitchCtrl->SetValue(
             StringFromValue( EDA_UNITS::INCHES, m_frame->GetRepeatStep().y, false, true ) );
-    m_spinRepeatLabel->SetValue( m_frame->GetRepeatDeltaLabel() );
+    m_spinLabelRepeatStep->SetValue( m_frame->GetRepeatDeltaLabel() );
+
+    COLOR_SETTINGS* settings = m_frame->GetColorSettings();
+    COLOR4D         schematicBackground = settings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+
+    m_borderColorSwatch->SetSwatchBackground( schematicBackground );
+    m_borderColorSwatch->SetSwatchColor( GetDefaultSheetBorderColor(), false );
+
+    m_backgroundColorSwatch->SetSwatchBackground( schematicBackground );
+    m_backgroundColorSwatch->SetSwatchColor( GetDefaultSheetBackgroundColor(), false );
 
     m_checkHVOrientation->SetValue( m_frame->GetForceHVLines() );
     m_footprintPreview->SetValue( m_frame->GetShowFootprintPreviews() );
@@ -76,10 +88,13 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
         m_frame->SaveProjectSettings();
     }
 
+    SetDefaultSheetBorderColor( m_borderColorSwatch->GetSwatchColor() );
+    SetDefaultSheetBackgroundColor( m_backgroundColorSwatch->GetSwatchColor() );
+
     m_frame->SetRepeatStep(
             wxPoint( (int) ValueFromString( EDA_UNITS::INCHES, m_hPitchCtrl->GetValue(), true ),
                      (int) ValueFromString( EDA_UNITS::INCHES, m_vPitchCtrl->GetValue(), true ) ) );
-    m_frame->SetRepeatDeltaLabel( m_spinRepeatLabel->GetValue() );
+    m_frame->SetRepeatDeltaLabel( m_spinLabelRepeatStep->GetValue() );
 
     m_frame->SetForceHVLines( m_checkHVOrientation->GetValue() );
     m_frame->SetShowFootprintPreviews( m_footprintPreview->GetValue() );

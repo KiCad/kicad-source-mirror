@@ -44,7 +44,9 @@ static bool       g_modifyBusses;
 static bool       g_modifyGlobalLabels;
 static bool       g_modifyHierLabels;
 static bool       g_modifySheetTitles;
+static bool       g_modifyOtherSheetFields;
 static bool       g_modifySheetPins;
+static bool       g_modifySheetBorders;
 static bool       g_modifySchTextAndGraphics;
 
 static bool       g_filterByFieldname;
@@ -117,7 +119,9 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
     g_modifyGlobalLabels = m_globalLabels->GetValue();
     g_modifyHierLabels = m_hierLabels->GetValue();
     g_modifySheetTitles = m_sheetTitles->GetValue();
+    g_modifyOtherSheetFields = m_sheetFields->GetValue();
     g_modifySheetPins = m_sheetPins->GetValue();
+    g_modifySheetBorders = m_sheetBorders->GetValue();
     g_modifySchTextAndGraphics = m_schTextAndGraphics->GetValue();
 
     g_filterByFieldname = m_fieldnameFilterOpt->GetValue();
@@ -144,7 +148,9 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_globalLabels->SetValue( g_modifyGlobalLabels );
     m_hierLabels->SetValue( g_modifyHierLabels );
     m_sheetTitles->SetValue( g_modifySheetTitles );
+    m_sheetFields->SetValue( g_modifyOtherSheetFields );
     m_sheetPins->SetValue( g_modifySheetPins );
+    m_sheetBorders->SetValue( g_modifySheetBorders );
     m_schTextAndGraphics->SetValue( g_modifySchTextAndGraphics );
 
     // SetValue() generates events, ChangeValue() does not
@@ -185,6 +191,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_lineWidth.SetValue( INDETERMINATE );
     m_lineStyle->SetStringSelection( INDETERMINATE );
     m_setColor->SetValue( false );
+    m_setBgColor->SetValue( false );
 
     return true;
 }
@@ -269,7 +276,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
 
             if( m_setColor->GetValue() )
             {
-                lineItem->SetLineColor( m_color->GetColour() );
+                lineItem->SetLineColor( m_colorSwatch->GetSwatchColor() );
                 m_hasChange = true;
             }
         }
@@ -341,6 +348,51 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
             }
         }
     }
+    else if( aItem->Type() == SCH_SHEET_T )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
+
+        if( m_sheetTitles->GetValue() )
+            processItem( aSheetPath, &sheet->GetFields()[ SHEETNAME ] );
+
+        if( m_sheetFields->GetValue() )
+        {
+            for( SCH_FIELD& field : sheet->GetFields() )
+            {
+                if( field.GetId() == SHEETNAME )
+                    continue;
+
+                const wxString& fieldName = field.GetName();
+
+                if( !m_fieldnameFilterOpt->GetValue() || m_fieldnameFilter->GetValue().IsEmpty()
+                        || WildCompareString( m_fieldnameFilter->GetValue(), fieldName, false ) )
+                {
+                    processItem( aSheetPath, &field );
+                }
+            }
+        }
+
+        if( m_sheetBorders->GetValue() )
+        {
+            if( !m_lineWidth.IsIndeterminate() )
+            {
+                sheet->SetBorderWidth( m_lineWidth.GetValue() );
+                m_hasChange = true;
+            }
+
+            if( m_setColor->GetValue() )
+            {
+                sheet->SetBorderColor( m_colorSwatch->GetSwatchColor() );
+                m_hasChange = true;
+            }
+
+            if( m_setBgColor->GetValue() )
+            {
+                sheet->SetBackgroundColor( m_bgColorSwatch->GetSwatchColor() );
+                m_hasChange = true;
+            }
+        }
+    }
     else if( m_wires->GetValue() && aItem->IsType( wireTypes ) )
         processItem( aSheetPath, aItem );
     else if( m_busses->GetValue() && aItem->IsType( busTypes ) )
@@ -349,15 +401,6 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         processItem( aSheetPath, aItem );
     else if( m_hierLabels->GetValue() && aItem->Type() == SCH_HIER_LABEL_T )
         processItem( aSheetPath, aItem );
-    else if( m_sheetTitles->GetValue() && aItem->Type() == SCH_SHEET_T )
-    {
-        if( !m_textSize.IsIndeterminate() )
-        {
-            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
-            wxSize     size( (int) m_textSize.GetValue(), (int) m_textSize.GetValue() );
-            sheet->GetFields()[SHEETNAME].SetTextSize( size );
-        }
-    }
     else if( m_sheetPins->GetValue() && aItem->Type() == SCH_SHEET_PIN_T )
         processItem( aSheetPath, aItem );
     else if( m_schTextAndGraphics->GetValue() && aItem->IsType( schTextAndGraphics ) )

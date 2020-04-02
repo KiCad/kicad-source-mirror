@@ -109,6 +109,14 @@ int GetDefaultLineThickness();
 void SetDefaultLineThickness( int aThickness );
 
 /**
+ * Defaults for new sheets.
+ */
+COLOR4D GetDefaultSheetBorderColor();
+void SetDefaultSheetBorderColor( COLOR4D aColor );
+COLOR4D GetDefaultSheetBackgroundColor();
+void SetDefaultSheetBackgroundColor( COLOR4D aColor );
+
+/**
  * Default size for text in general
  */
 int GetDefaultTextSize();

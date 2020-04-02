@@ -58,6 +58,8 @@ static int s_defaultBusThickness = Mils2iu( DEFAULTBUSTHICKNESS );
 static int s_defaultWireThickness  = Mils2iu( DEFAULTDRAWLINETHICKNESS );
 static int s_defaultTextSize = Mils2iu( DEFAULT_SIZE_TEXT );
 static int s_drawDefaultLineThickness = -1;
+static COLOR4D s_defaultSheetBorderColor = MAGENTA;
+static COLOR4D s_defaultSheetBackgroundColor = WHITE;
 static double s_textOffsetRatio = 0.08;
 static bool s_selectTextAsBox = false;
 static bool s_selectDrawChildren = true;
@@ -266,6 +268,30 @@ void SetDefaultTextSize( int aTextSize )
 int GetDefaultLineThickness()
 {
     return s_drawDefaultLineThickness;
+}
+
+
+COLOR4D GetDefaultSheetBorderColor()
+{
+    return s_defaultSheetBorderColor;
+}
+
+
+void SetDefaultSheetBorderColor( COLOR4D aColor )
+{
+    s_defaultSheetBorderColor = aColor;
+}
+
+
+COLOR4D GetDefaultSheetBackgroundColor()
+{
+    return s_defaultSheetBackgroundColor;
+}
+
+
+void SetDefaultSheetBackgroundColor( COLOR4D aColor )
+{
+    s_defaultSheetBackgroundColor = aColor;
 }
 
 
@@ -545,6 +571,10 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     settings->m_ShowHiddenPins = m_showAllPins;
     settings->SetShowPageLimits( m_showPageLimits );
     settings->m_ShowUmbilicals = true;
+
+    COLOR_SETTINGS* colorSettings = GetColorSettings();
+    SetDefaultSheetBorderColor( colorSettings->GetColor( LAYER_SHEET ) );
+    SetDefaultSheetBackgroundColor( colorSettings->GetColor( LAYER_SHEET_BACKGROUND ) );
 }
 
 

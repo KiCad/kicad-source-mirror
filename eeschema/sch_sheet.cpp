@@ -91,8 +91,8 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
 
     m_borderWidth = GetDefaultLineThickness();
-    m_borderColor = KIGFX::COLOR4D::UNSPECIFIED;
-    m_backgroundColor = KIGFX::COLOR4D::UNSPECIFIED;
+    m_borderColor = GetDefaultSheetBorderColor();
+    m_backgroundColor = GetDefaultSheetBackgroundColor();
 }
 
 
