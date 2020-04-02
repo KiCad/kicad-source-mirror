@@ -47,11 +47,11 @@ LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PA
 {
     wxCHECK_MSG( aLibTable, nullptr, "Invalid symbol library table." );
 
-    LIB_PART* symbol = nullptr;
+    LIB_ALIAS* symbol = nullptr;
 
     try
     {
-        alias = aLibTable->LoadSymbol( aLibId );
+        symbol = aLibTable->LoadSymbol( aLibId );
 
         if( !symbol && aCacheLib )
         {
@@ -59,7 +59,7 @@ LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PA
 
             wxString cacheName = aLibId.GetLibNickname().wx_str();
             cacheName += "_" + aLibId.GetLibItemName();
-            symbol = aCacheLib->FindPart( cacheName );
+            symbol = aCacheLib->FindAlias( cacheName );
         }
     }
     catch( const IO_ERROR& ioe )
@@ -74,7 +74,7 @@ LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PA
         }
     }
 
-    return alias;
+    return symbol;
 }
 
 
