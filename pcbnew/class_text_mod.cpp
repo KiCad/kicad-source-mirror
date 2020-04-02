@@ -520,5 +520,5 @@ wxString TEXTE_MODULE::GetShownText() const
                               return false;
                           };
 
-    return ExpandTextVars( GetText(), moduleResolver, board->GetProject() );
+    return ExpandTextVars( EDA_TEXT::GetShownText(), moduleResolver, board->GetProject() );
 }

@@ -505,7 +505,7 @@ wxString SCH_TEXT::GetShownText() const
     if( g_RootSheet && g_RootSheet->GetScreen() )
         project = &g_RootSheet->GetScreen()->Kiway().Prj();
 
-    return ExpandTextVars( GetText(), textResolver, project );
+    return ExpandTextVars( EDA_TEXT::GetShownText(), textResolver, project );
 }
 
 

@@ -170,17 +170,15 @@ wxString SCH_FIELD::GetShownText() const
                          };
 
     PROJECT*  project = nullptr;
-    wxString  text;
+    wxString  text = EDA_TEXT::GetShownText();
 
     if( g_RootSheet && g_RootSheet->GetScreen() )
         project = &g_RootSheet->GetScreen()->Kiway().Prj();
 
     if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
-        text = ExpandTextVars( GetText(), symbolResolver, project );
+        text = ExpandTextVars( text, symbolResolver, project );
     else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
-        text = ExpandTextVars( GetText(), sheetResolver, project );
-    else
-        text = GetText();
+        text = ExpandTextVars( text, sheetResolver, project );
 
     // WARNING: the IDs of FIELDS and SHEETS overlap, so one must check *both* the
     // id and the parent's type.

@@ -77,7 +77,7 @@ wxString TEXTE_PCB::GetShownText() const
                               return false;
                           };
 
-    return ExpandTextVars( GetText(), moduleResolver, board->GetProject() );
+    return ExpandTextVars( EDA_TEXT::GetShownText(), moduleResolver, board->GetProject() );
 }
 
 
