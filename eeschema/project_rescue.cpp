@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,11 +125,15 @@ static wxFileName GetRescueLibraryFileName()
 
 RESCUE_CASE_CANDIDATE::RESCUE_CASE_CANDIDATE( const wxString& aRequestedName,
                                               const wxString& aNewName,
-                                              LIB_PART* aLibCandidate )
+                                              LIB_PART* aLibCandidate,
+                                              int aUnit,
+                                              int aConvert )
 {
     m_requested_name = aRequestedName;
     m_new_name = aNewName;
     m_lib_candidate = aLibCandidate;
+    m_unit = aUnit;
+    m_convert = aConvert;
 }
 
 
@@ -170,7 +174,9 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             continue;
 
         RESCUE_CASE_CANDIDATE candidate( part_name, case_insensitive_matches[0]->GetName(),
-                                         case_insensitive_matches[0]->GetPart() );
+                                         case_insensitive_matches[0]->GetPart(),
+                                         each_component->GetUnit(),
+                                         each_component->GetConvert() );
 
         candidate_map[part_name] = candidate;
     }
@@ -213,12 +219,16 @@ bool RESCUE_CASE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 RESCUE_CACHE_CANDIDATE::RESCUE_CACHE_CANDIDATE( const wxString& aRequestedName,
                                                 const wxString& aNewName,
                                                 LIB_PART* aCacheCandidate,
-                                                LIB_PART* aLibCandidate )
+                                                LIB_PART* aLibCandidate,
+                                                int aUnit,
+                                                int aConvert )
 {
     m_requested_name = aRequestedName;
     m_new_name = aNewName;
     m_cache_candidate = aCacheCandidate;
     m_lib_candidate = aLibCandidate;
+    m_unit = aUnit;
+    m_convert = aConvert;
 }
 
 
@@ -271,7 +281,9 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             // Check if the symbol has already been rescued.
             wxString new_name = LIB_ID::FixIllegalChars( part_name, LIB_ID::ID_SCH );
 
-            RESCUE_CACHE_CANDIDATE candidate( part_name, new_name, cache_match, lib_match );
+            RESCUE_CACHE_CANDIDATE candidate( part_name, new_name, cache_match, lib_match,
+                                              each_component->GetUnit(),
+                                              each_component->GetConvert() );
 
             candidate_map[part_name] = candidate;
         }
@@ -335,13 +347,17 @@ RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::RESCUE_SYMBOL_LIB_TABLE_CANDIDATE(
     const LIB_ID& aRequestedId,
     const LIB_ID& aNewId,
     LIB_PART* aCacheCandidate,
-    LIB_PART* aLibCandidate ) : RESCUE_CANDIDATE()
+    LIB_PART* aLibCandidate,
+    int aUnit,
+    int aConvert ) : RESCUE_CANDIDATE()
 {
     m_requested_id = aRequestedId;
     m_requested_name = aRequestedId.Format();
     m_new_id = aNewId;
     m_lib_candidate = aLibCandidate;
     m_cache_candidate = aCacheCandidate;
+    m_unit = aUnit;
+    m_convert = aConvert;
 }
 
 
@@ -406,7 +422,9 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             libNickname.Replace( " ", "-" );
             LIB_ID new_id( libNickname, new_name + "-" + part_id.GetLibNickname().wx_str() );
 
-            RESCUE_SYMBOL_LIB_TABLE_CANDIDATE candidate( part_id, new_id, cache_match, lib_match );
+            RESCUE_SYMBOL_LIB_TABLE_CANDIDATE candidate( part_id, new_id, cache_match, lib_match,
+                                                         each_component->GetUnit(),
+                                                         each_component->GetConvert() );
 
             candidate_map[part_id] = candidate;
         }

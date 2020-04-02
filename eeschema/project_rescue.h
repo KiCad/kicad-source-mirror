@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,6 +69,8 @@ protected:
     wxString  m_requested_name;
     wxString  m_new_name;
     LIB_PART* m_lib_candidate;
+    int       m_unit;
+    int       m_convert;
 
 public:
     virtual ~RESCUE_CANDIDATE() {}
@@ -94,6 +96,10 @@ public:
      * NULL.
      */
     virtual LIB_PART* GetLibCandidate() const { return m_lib_candidate; }
+
+    int GetUnit() const { return m_unit; }
+
+    int GetConvert() const { return m_convert; }
 
     /**
      * Get a description of the action proposed, for displaying in the UI.
@@ -125,9 +131,11 @@ public:
      * @param aRequestedName - the name the schematic asks for
      * @param aNewName - the name we want to change it to
      * @param aLibCandidate - the part that will give us
+     * @param aUnit The unit of the rescued symbol.
+     * @param aConvert The body style of the rescued symbol.
      */
     RESCUE_CASE_CANDIDATE( const wxString& aRequestedName, const wxString& aNewName,
-                           LIB_PART* aLibCandidate );
+                           LIB_PART* aLibCandidate, int aUnit = 0, int aConvert = 0 );
 
     RESCUE_CASE_CANDIDATE() { m_lib_candidate = NULL; }
 
@@ -156,9 +164,12 @@ public:
      * @param aNewName - the name we want to change it to
      * @param aCacheCandidate - the part from the cache
      * @param aLibCandidate - the part that would be loaded from the library
+     * @param aUnit The unit of the rescued symbol.
+     * @param aConvert The body style of the rescued symbol.
      */
     RESCUE_CACHE_CANDIDATE( const wxString& aRequestedName, const wxString& aNewName,
-                            LIB_PART* aCacheCandidate, LIB_PART* aLibCandidate );
+                            LIB_PART* aCacheCandidate, LIB_PART* aLibCandidate,
+                            int aUnit = 0, int aConvert = 0 );
 
     RESCUE_CACHE_CANDIDATE();
 
@@ -191,9 +202,12 @@ public:
      * @param aNewName - the name we want to change it to
      * @param aCacheCandidate - the part from the cache
      * @param aLibCandidate - the part that would be loaded from the library
+     * @param aUnit The unit of the rescued symbol.
+     * @param aConvert The body style of the rescued symbol.
      */
     RESCUE_SYMBOL_LIB_TABLE_CANDIDATE( const LIB_ID& aRequestedId, const LIB_ID& aNewId,
-                                       LIB_PART* aCacheCandidate, LIB_PART* aLibCandidate);
+                                       LIB_PART* aCacheCandidate, LIB_PART* aLibCandidate,
+                                       int aUnit = 0, int aConvert = 0 );
 
     RESCUE_SYMBOL_LIB_TABLE_CANDIDATE();
 

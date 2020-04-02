@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -245,8 +245,13 @@ void DIALOG_RESCUE_EACH::displayItemsInConflict()
     else
     {
         RESCUE_CANDIDATE& selected_part = m_Rescuer->m_all_candidates[row];
-        m_previewOldWidget->DisplayPart( selected_part.GetCacheCandidate(), 0 );
-        m_previewNewWidget->DisplayPart( selected_part.GetLibCandidate(), 0 );
+
+        m_previewOldWidget->DisplayPart( selected_part.GetCacheCandidate(),
+                                         selected_part.GetUnit(),
+                                         selected_part.GetConvert() );
+        m_previewNewWidget->DisplayPart( selected_part.GetLibCandidate(),
+                                         selected_part.GetUnit(),
+                                         selected_part.GetConvert() );
     }
 }
 

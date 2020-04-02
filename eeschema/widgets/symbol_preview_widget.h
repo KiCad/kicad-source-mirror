@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -58,9 +58,9 @@ public:
     /**
      * Set the currently displayed symbol.
      */
-    void DisplaySymbol( const LIB_ID& aSymbolID, int aUnit );
+    void DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, int aConvert = 0 );
 
-    void DisplayPart( LIB_PART* aPart, int aUnit );
+    void DisplayPart( LIB_PART* aPart, int aUnit, int aConvert = 0 );
 
 private:
     void onSize( wxSizeEvent& aEvent );

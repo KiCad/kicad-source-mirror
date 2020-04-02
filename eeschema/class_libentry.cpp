@@ -715,6 +715,15 @@ bool LIB_PART::PinsConflictWith( LIB_PART& aOtherPart, bool aTestNums, bool aTes
         for( LIB_PIN* eachOtherPin : otherPinList )
         {
             wxASSERT( eachOtherPin );
+
+            // Same unit?
+            if( eachThisPin->GetUnit() != eachOtherPin->GetUnit() )
+                continue;
+
+            // Same body stype?
+            if( eachThisPin->GetConvert() != eachOtherPin->GetConvert() )
+                continue;
+
             // Same position?
             if( eachThisPin->GetPosition() != eachOtherPin->GetPosition() )
                 continue;
@@ -740,6 +749,7 @@ bool LIB_PART::PinsConflictWith( LIB_PART& aOtherPart, bool aTestNums, bool aTes
                 continue;
 
             foundMatch = true;
+            break;                    // Match found so seach is complete.
         }
 
         if( !foundMatch )

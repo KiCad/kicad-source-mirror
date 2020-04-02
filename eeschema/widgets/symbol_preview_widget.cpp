@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -57,7 +57,8 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
 
     // Do not display the grid: the look is not good for a small canvas area.
     // But mainly, due to some strange bug I (JPC) was unable to fix, the grid creates
-    // strange artifacts on Windows when eeschema is run from Kicad manager (but not in stand alone...).
+    // strange artifacts on Windows when eeschema is run from Kicad manager (but not in
+    // stand alone...).
     m_preview->GetGAL()->SetGridVisibility( false );
 
     // Early initialization of the canvas background color,
@@ -141,7 +142,7 @@ void SYMBOL_PREVIEW_WIDGET::fitOnDrawArea()
 }
 
 
-void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
+void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, int aConvert )
 {
     KIGFX::VIEW* view = m_preview->GetView();
     auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
@@ -172,19 +173,16 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
 
         // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
         // draw all of them.)
-        if( part->IsMulti() && aUnit == 0 )
-            aUnit = 1;
-
-        settings->m_ShowUnit = aUnit;
+        settings->m_ShowUnit = ( part->IsMulti() && aUnit == 0 ) ? 1 : aUnit;
 
         // For symbols having a De Morgan body style, use the first style
-        settings->m_ShowConvert = part->HasConversion() ? 1 : 0;
+        settings->m_ShowConvert =
+                ( part->HasConversion() && aConvert == 0 ) ? 1 : aConvert;
 
         m_previewItem = new LIB_ALIAS( *alias, part );
         view->Add( m_previewItem );
 
-        // Get the symbole size, in internal units
-        m_itemBBox = part->GetUnitBoundingBox( aUnit, 0 );
+        m_itemBBox = part->GetUnitBoundingBox( settings->m_ShowUnit, settings->m_ShowConvert );
 
         if( !m_preview->IsShown() )
         {
@@ -201,7 +199,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
 }
 
 
-void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit )
+void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit, int aConvert )
 {
     KIGFX::VIEW* view = m_preview->GetView();
 
@@ -214,19 +212,21 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit )
 
     if( aPart )
     {
-        // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
-        // draw all of them.)
-        if( aPart->IsMulti() && aUnit == 0 )
-            aUnit = 1;
+        m_previewItem = new LIB_PART( *aPart );
 
         // For symbols having a De Morgan body style, use the first style
         auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
-        settings->m_ShowConvert = aPart->HasConversion() ? 1 : 0;
-        m_previewItem = new LIB_PART( *aPart );
+        // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
+        // draw all of them.)
+        settings->m_ShowUnit = ( aPart->IsMulti() && aUnit == 0 ) ? 1 : aUnit;
+
+        settings->m_ShowConvert =
+                ( aPart->HasConversion() && aConvert == 0 ) ? 1 : aConvert;
+
         view->Add( m_previewItem );
 
         // Get the symbole size, in internal units
-        m_itemBBox = aPart->GetUnitBoundingBox( aUnit, 0 );
+        m_itemBBox = aPart->GetUnitBoundingBox( settings->m_ShowUnit, settings->m_ShowConvert );
 
         // Calculate the draw scale to fit the drawing area
         fitOnDrawArea();
