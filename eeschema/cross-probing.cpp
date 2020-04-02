@@ -270,8 +270,24 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aComp )
 
     case SCH_SHEET_T:
         {
+            // For cross probing, we need the full path of the sheet, because
+            // in complex hierarchies the sheet uuid of not unique
             SCH_SHEET* sheet = (SCH_SHEET*)aItem;
-            return StrPrintf( "$SHEET: \"%s\"", TO_UTF8( sheet->m_Uuid.AsString() ) );
+            wxString full_path;
+
+            SCH_SHEET* parent = sheet;
+            while( (parent = dynamic_cast<SCH_SHEET*>( parent->GetParent() ) ) )
+            {
+                if( parent->GetParent() )   // The root sheet has no parent and path is just "/"
+                {
+                    full_path.Prepend( parent->m_Uuid.AsString() );
+                    full_path.Prepend( "/" );
+                }
+            }
+
+            full_path += "/" + sheet->m_Uuid.AsString();
+
+            return StrPrintf( "$SHEET: \"%s\"", TO_UTF8( full_path ) );
         }
 
     case SCH_PIN_T:

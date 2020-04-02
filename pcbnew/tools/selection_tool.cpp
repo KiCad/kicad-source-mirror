@@ -971,25 +971,23 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetID )
+void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 {
-    KIID             uuid( aSheetID );
     std::list<MODULE*> modList;
 
-    // store all modules that are on that sheet
+    // store all modules that are on that sheet path
     for( MODULE* module : board()->Modules() )
     {
         if( module == nullptr )
             continue;
 
-        for( const KIID& pathStep : module->GetPath() )
-        {
-            if( pathStep == uuid )
-            {
-                modList.push_back( module );
-                break;
-            }
-        }
+        wxString footprint_path = module->GetPath().AsString().BeforeLast('/');
+
+        if( aSheetPath.IsEmpty() )
+            aSheetPath += '/';
+
+        if( footprint_path == aSheetPath )
+            modList.push_back( module );
     }
 
     //Generate a list of all pads, and of all nets they belong to.
@@ -1101,9 +1099,9 @@ void SELECTION_TOOL::zoomFitSelection()
 int SELECTION_TOOL::selectSheetContents( const TOOL_EVENT& aEvent )
 {
     ClearSelection( true /*quiet mode*/ );
-    wxString* sheetID = aEvent.Parameter<wxString*>();
+    wxString sheetPath = *aEvent.Parameter<wxString*>();
 
-    selectAllItemsOnSheet( *sheetID );
+    selectAllItemsOnSheet( sheetPath );
 
     zoomFitSelection();
 
@@ -1136,10 +1134,13 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 
     ClearSelection( true /*quiet mode*/ );
 
-    // get the lowest subsheet name for this.
-    wxString sheetID = mod->GetPath().back().AsString();
+    // get the sheet path only.
+    wxString sheetPath = mod->GetPath().AsString().BeforeLast( '/' );
 
-    selectAllItemsOnSheet( sheetID );
+    if( sheetPath.IsEmpty() )
+        sheetPath += '/';
+
+    selectAllItemsOnSheet( sheetPath );
 
     // Inform other potentially interested tools
     if( m_selection.Size() > 0 )

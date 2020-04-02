@@ -232,17 +232,18 @@ private:
     void selectAllItemsOnNet( int aNetCode );
 
     /**
-     * Selects all items with the given sheet timestamp name
+     * Selects all items with the given sheet timestamp/UUID name
      * (the sheet path)
+     * The path of the root sheet is "/"
      */
-    void selectAllItemsOnSheet( wxString& aSheetID );
+    void selectAllItemsOnSheet( wxString& aSheetPath );
 
     ///> Selects all modules belonging to same sheet, from Eeschema,
     ///> using crossprobing
     int selectSheetContents( const TOOL_EVENT& aEvent );
 
     ///> Selects all modules belonging to same hierarchical sheet
-    ///> as the selected footprint.
+    ///> as the selected footprint (same sheet path).
     int selectSameSheet( const TOOL_EVENT& aEvent );
 
     ///> Find dialog callback.
