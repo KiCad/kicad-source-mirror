@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -750,33 +750,28 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
     else    // Plot pad as region.
             // Only regions and flashed items accept a object attribute TO.P for the pin name
     {
-        if( size.x > size.y )
-        {
-            std::swap( size.x, size.y );
-
-            if( orient < 2700 )
-                orient += 900;
-            else
-                orient -= 2700;
-        }
-
         if( trace_mode == FILLED )
         {
-            // TODO: use an aperture macro to declare the rotated pad
-            // to be able to flash the shape
-            // For now, the pad is drawn as segment
-
-            // The pad is reduced to an segment with dy > dx
-            int delta = size.y - size.x;
-            wxPoint p0( 0, -delta / 2 );
-            wxPoint p1( 0, delta / 2 );
-            RotatePoint( &p0.x, &p0.y, orient );
-            RotatePoint( &p1.x, &p1.y, orient );
-
-            ThickSegment( pos + p0, pos + p1, size.x, trace_mode, gbr_metadata );
+            // Draw the oval as round rect pad with a radius = 50% min size)
+            // In gerber file, it will be drawn as a region with arcs, and can be
+            // detected as pads (similar to a flashed pad)
+            FlashPadRoundRect( pos, aSize, std::min( aSize.x, aSize.y ) /2,
+                               orient, FILLED, aData );
         }
-        else
+        else    // Non filled shape: plot outlines:
+        {
+            if( size.x > size.y )
+            {
+                std::swap( size.x, size.y );
+
+                if( orient < 2700 )
+                    orient += 900;
+                else
+                    orient -= 2700;
+            }
+
             sketchOval( pos, size, orient, -1 );
+        }
     }
 }
 
