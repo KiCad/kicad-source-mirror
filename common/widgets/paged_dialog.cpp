@@ -78,6 +78,8 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle,
 
     if( m_auxiliaryButton )
         m_auxiliaryButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PAGED_DIALOG::OnAuxiliaryAction ), nullptr, this );
+
+    m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED, wxBookCtrlEventHandler( PAGED_DIALOG::OnPageChange ), NULL, this );
     Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PAGED_DIALOG::OnUpdateUI ), nullptr, this );
 }
 
@@ -98,7 +100,10 @@ void PAGED_DIALOG::finishInitialization()
     m_treebook->Fit();
     m_treebook->Layout();
 
-    FinishDialogSettings();
+    for( int i = 0; i < m_treebook->GetPageCount(); ++i )
+   	    m_macHack.push_back( true );
+
+   	FinishDialogSettings();
 }
 
 
@@ -133,6 +138,9 @@ PAGED_DIALOG::~PAGED_DIALOG()
 
     if( m_auxiliaryButton )
         m_auxiliaryButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PAGED_DIALOG::OnAuxiliaryAction ), nullptr, this );
+
+    m_treebook->Disconnect( wxEVT_TREEBOOK_PAGE_CHANGED, wxBookCtrlEventHandler( PAGED_DIALOG::OnPageChange ), NULL, this );
+
     Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PAGED_DIALOG::OnUpdateUI ), nullptr, this );
 }
 
@@ -266,3 +274,25 @@ void PAGED_DIALOG::OnUpdateUI( wxUpdateUIEvent& event )
         }
     }
 }
+
+
+void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
+{
+#ifdef __WXMAC__
+    // Work around an OSX bug where the wxGrid children don't get placed correctly until
+    // the first resize event
+    int page = event.GetSelection();
+
+    if( page + 1 <= m_macHack.size() && m_macHack[ page ] )
+    {
+        wxSize pageSize = m_treebook->GetPage( page )->GetSize();
+        pageSize.x -= 3;
+        pageSize.y += 2;
+
+        m_treebook->GetPage( page )->SetSize( pageSize );
+        m_macHack[ page ] = false;
+    }
+#endif
+}
+
+

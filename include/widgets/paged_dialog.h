@@ -35,6 +35,8 @@ private:
     int         m_errorRow;     // the row if m_errorCtrl is a grid
     int         m_errorCol;     // the column if m_errorCtrl is a grid
 
+    std::vector<bool> m_macHack;
+
 public:
     PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle,
                   const wxString& aAuxiliaryAction = wxEmptyString );
@@ -55,6 +57,7 @@ protected:
 
     virtual void OnAuxiliaryAction( wxCommandEvent& event ) { event.Skip(); }
     void OnUpdateUI( wxUpdateUIEvent& event );
+    void OnPageChange( wxBookCtrlEvent& event );
 
     wxTreebook* m_treebook;
     wxButton*   m_auxiliaryButton;
