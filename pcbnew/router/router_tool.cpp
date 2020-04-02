@@ -798,7 +798,6 @@ void ROUTER_TOOL::performRouting()
             bool needLayerSwitch = m_router->IsPlacingVia();
             bool forceFinish = evt->Modifier( MD_SHIFT );
 
-
             if( m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish ) )
             {
                 break;
@@ -831,13 +830,10 @@ void ROUTER_TOOL::performRouting()
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
-        else if( evt->IsAction( &ACT_EndTrack ) )
+        else if( evt->IsAction( &ACT_EndTrack ) || evt->IsDblClick( BUT_LEFT )  )
         {
-            bool still_routing = true;
-
-            while( still_routing )
-                still_routing = m_router->FixRoute( m_endSnapPoint, m_endItem );
-
+            // Stop current routing:
+            m_router->FixRoute( m_endSnapPoint, m_endItem, true );
             break;
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate()
