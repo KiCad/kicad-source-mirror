@@ -37,8 +37,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_wires = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Wires && wire labels"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbScope->Add( m_wires, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
-	m_busses = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Busses && bus labels"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbScope->Add( m_busses, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+	m_buses = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Buses && bus labels"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbScope->Add( m_buses, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 	m_globalLabels = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Global labels"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbScope->Add( m_globalLabels, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );

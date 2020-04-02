@@ -115,7 +115,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
     g_modifyValues = m_values->GetValue();
     g_modifyOtherFields = m_otherFields->GetValue();
     g_modifyWires = m_wires->GetValue();
-    g_modifyBusses = m_busses->GetValue();
+    g_modifyBusses = m_buses->GetValue();
     g_modifyGlobalLabels = m_globalLabels->GetValue();
     g_modifyHierLabels = m_hierLabels->GetValue();
     g_modifySheetTitles = m_sheetTitles->GetValue();
@@ -144,7 +144,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_values->SetValue( g_modifyValues );
     m_otherFields->SetValue( g_modifyOtherFields );
     m_wires->SetValue( g_modifyWires );
-    m_busses->SetValue( g_modifyBusses );
+    m_buses->SetValue( g_modifyBusses );
     m_globalLabels->SetValue( g_modifyGlobalLabels );
     m_hierLabels->SetValue( g_modifyHierLabels );
     m_sheetTitles->SetValue( g_modifySheetTitles );
@@ -395,7 +395,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
     }
     else if( m_wires->GetValue() && aItem->IsType( wireTypes ) )
         processItem( aSheetPath, aItem );
-    else if( m_busses->GetValue() && aItem->IsType( busTypes ) )
+    else if( m_buses->GetValue() && aItem->IsType( busTypes ) )
         processItem( aSheetPath, aItem );
     else if( m_globalLabels->GetValue() && aItem->Type() == SCH_GLOBAL_LABEL_T )
         processItem( aSheetPath, aItem );

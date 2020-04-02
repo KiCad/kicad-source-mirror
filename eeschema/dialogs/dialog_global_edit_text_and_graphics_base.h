@@ -43,7 +43,7 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_values;
 		wxCheckBox* m_otherFields;
 		wxCheckBox* m_wires;
-		wxCheckBox* m_busses;
+		wxCheckBox* m_buses;
 		wxCheckBox* m_globalLabels;
 		wxCheckBox* m_hierLabels;
 		wxCheckBox* m_sheetTitles;
