@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,17 +48,22 @@
 LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
                          wxWindow* aParent, bool aShowErrorMsg )
 {
-    // wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
-    wxCHECK_MSG( aLibTable, NULL, "Invalid symbol library table." );
+    wxCHECK_MSG( aLibTable, nullptr, "Invalid symbol library table." );
 
-    LIB_PART* symbol = NULL;
+    LIB_PART* symbol = nullptr;
 
     try
     {
         symbol = aLibTable->LoadSymbol( aLibId );
 
         if( !symbol && aCacheLib )
-            symbol = aCacheLib->FindPart( aLibId );
+        {
+            wxCHECK_MSG( aCacheLib->IsCache(), nullptr, "Invalid cache library." );
+
+            wxString cacheName = aLibId.GetLibNickname().wx_str();
+            cacheName += "_" + aLibId.GetLibItemName();
+            symbol = aCacheLib->FindPart( cacheName );
+        }
     }
     catch( const IO_ERROR& ioe )
     {
