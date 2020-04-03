@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 John Beard, john.j.beard@gmail.com
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,8 +70,8 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, wxPoint& aTransla
 
     // and set up the entries according to the saved options
     m_polarCoords->SetValue( m_options.polarCoords );
-    m_moveX.SetDoubleValue( m_options.entry1 );
-    m_moveY.SetDoubleValue( m_options.entry2 );
+    m_moveX.SetValue( m_options.entry1 );
+    m_moveY.SetValue( m_options.entry2 );
 
     m_rotate.SetUnits( EDA_UNITS::DEGREES );
     m_rotate.SetValue( m_options.entryRotation );
@@ -246,9 +246,9 @@ bool DIALOG_MOVE_EXACT::TransferDataFromWindow()
     {
         // save the settings
         m_options.polarCoords = m_polarCoords->GetValue();
-        m_options.entry1 = m_moveX.GetDoubleValue();
-        m_options.entry2 = m_moveY.GetDoubleValue();
-        m_options.entryRotation = m_rotate.GetValue();
+        m_options.entry1 = m_moveX.GetOriginalText();
+        m_options.entry2 = m_moveY.GetOriginalText();
+        m_options.entryRotation = m_rotate.GetOriginalText();
         m_options.entryAnchorSelection = (size_t) std::max( m_anchorOptions->GetSelection(), 0 );
         return true;
     }

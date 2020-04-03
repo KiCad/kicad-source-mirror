@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -293,6 +294,19 @@ bool UNIT_BINDER::IsIndeterminate() const
         return textEntry->GetValue() == INDETERMINATE;
 
     return false;
+}
+
+
+wxString UNIT_BINDER::GetOriginalText() const
+{
+    if( m_allowEval )
+        return m_eval.OriginalText();
+    else if( dynamic_cast<wxTextEntry*>( m_value ) )
+        return dynamic_cast<wxTextEntry*>( m_value )->GetValue();
+    else if( dynamic_cast<wxStaticText*>( m_value ) )
+        return dynamic_cast<wxStaticText*>( m_value )->GetLabel();
+    else
+        return wxEmptyString;
 }
 
 

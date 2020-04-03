@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -106,6 +107,13 @@ public:
      * represents a multiple selection of differing values).
      */
     bool IsIndeterminate() const;
+
+    /**
+     * Function GetOriginalText
+     * Returns the pre-evaluated text (or the current text if evaluation is not supported).
+     * Used primarily to remember values between dialog invocations.
+     */
+    wxString GetOriginalText() const;
 
     /**
      * Function Validate

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 John Beard, john.j.beard@gmail.com
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,17 +110,17 @@ private:
      */
     struct MOVE_EXACT_OPTIONS
     {
-        bool   polarCoords;
-        double entry1;
-        double entry2;
-        double entryRotation;
-        size_t entryAnchorSelection;
+        bool     polarCoords;
+        wxString entry1;
+        wxString entry2;
+        wxString entryRotation;
+        size_t   entryAnchorSelection;
 
         MOVE_EXACT_OPTIONS():
             polarCoords( false ),
-            entry1( 0 ),
-            entry2( 0 ),
-            entryRotation( 0 ),
+            entry1( wxT( "0" ) ),
+            entry2( wxT( "0" ) ),
+            entryRotation( wxT( "0" ) ),
             entryAnchorSelection( 0 )
         {
         }
