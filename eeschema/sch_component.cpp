@@ -1473,7 +1473,20 @@ wxPoint SCH_COMPONENT::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     for( const auto& pin : m_pins )
+    {
+        // Collect only pins attached to the current unit and convert.
+        // others are not associated to this component instance
+        int pin_unit = pin.get()->GetLibPin()->GetUnit();
+        int pin_convert = pin.get()->GetLibPin()->GetConvert();
+
+        if( pin_unit > 0 && pin_unit != GetUnit() )
+            continue;
+
+        if( pin_convert > 0 && pin_convert != GetConvert() )
+            continue;
+
         aPoints.push_back( m_transform.TransformCoordinate( pin->GetPosition() ) + m_Pos );
+    }
 }
 
 
@@ -1737,6 +1750,17 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
 
     for( const auto& pin : m_pins )
     {
+        // Collect only pins attached to the current unit and convert.
+        // others are not associated to this component instance
+        int pin_unit = pin.get()->GetLibPin()->GetUnit();
+        int pin_convert = pin.get()->GetLibPin()->GetConvert();
+
+        if( pin_unit > 0 && pin_unit != GetUnit() )
+            continue;
+
+        if( pin_convert > 0 && pin_convert != GetConvert() )
+            continue;
+
         if( pin->GetPosition() == new_pos )
             return true;
     }
