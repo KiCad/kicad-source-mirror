@@ -1553,6 +1553,17 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
         {
             for( auto& pin : m_pins )
             {
+                // Collect only pins attached to the current unit and convert.
+                // others are not associated to this component instance
+                int pin_unit = pin.get()->GetLibPin()->GetUnit();
+                int pin_convert = pin.get()->GetLibPin()->GetConvert();
+
+                if( pin_unit > 0 && pin_unit != GetUnit() )
+                    continue;
+
+                if( pin_convert > 0 && pin_convert != GetConvert() )
+                    continue;
+
                 if( SEARCH_RESULT::QUIT == aInspector( pin.get(), (void*) this ) )
                     return SEARCH_RESULT::QUIT;
             }
