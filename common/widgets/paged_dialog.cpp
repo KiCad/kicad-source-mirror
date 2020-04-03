@@ -100,7 +100,7 @@ void PAGED_DIALOG::finishInitialization()
     m_treebook->Fit();
     m_treebook->Layout();
 
-    for( int i = 0; i < m_treebook->GetPageCount(); ++i )
+    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
    	    m_macHack.push_back( true );
 
    	FinishDialogSettings();

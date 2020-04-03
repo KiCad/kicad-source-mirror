@@ -23,7 +23,9 @@
 
 #cmakedefine HAVE_CMATH_ISINF
 
+#if !defined( HAVE_CLOCK_GETTIME )
 #cmakedefine HAVE_CLOCK_GETTIME
+#endif
 
 #cmakedefine HAVE_GETTIMEOFDAY_FUNC
 

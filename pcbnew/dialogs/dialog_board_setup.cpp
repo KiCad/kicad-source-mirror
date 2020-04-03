@@ -82,7 +82,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 
 	FinishDialogSettings();
 
-	for( int i = 0; i < m_treebook->GetPageCount(); ++i )
+	for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
 	    m_macHack.push_back( true );
 }
 

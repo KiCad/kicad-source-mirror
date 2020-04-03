@@ -156,7 +156,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
 
     FinishDialogSettings();
 
-    for( int i = 0; i < m_NoteBook->GetPageCount(); ++i )
+    for( size_t i = 0; i < m_NoteBook->GetPageCount(); ++i )
    	    m_macHack.push_back( true );
 }
 
