@@ -93,7 +93,7 @@ wxString SCH_FIELD::GetShownText() const
                                   }
                               }
 
-                              for( int i = MANDATORY_FIELDS; i < fields.size(); ++i )
+                              for( size_t i = MANDATORY_FIELDS; i < fields.size(); ++i )
                               {
                                   if( token->IsSameAs( fields[i].GetName() )
                                         || token->IsSameAs( fields[i].GetName().Upper() ) )
@@ -152,7 +152,7 @@ wxString SCH_FIELD::GetShownText() const
                                  }
                              }
 
-                             for( int i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
+                             for( size_t i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
                              {
                                  if( token->IsSameAs( fields[i].GetName() ) )
                                  {

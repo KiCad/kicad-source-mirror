@@ -487,7 +487,7 @@ wxString SCH_TEXT::GetShownText() const
                                     }
                                 }
 
-                                for( int i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
+                                for( size_t i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
                                 {
                                     if( token->IsSameAs( fields[i].GetName() ) )
                                     {

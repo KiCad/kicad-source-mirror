@@ -395,7 +395,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // Only do this if RescueNeverShow was not set.
             auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
-            if( !cfg->m_RescueNeverShow )
+            if( !cfg || !cfg->m_RescueNeverShow )
                 RescueSymbolLibTableProject( false );
         }
 

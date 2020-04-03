@@ -65,17 +65,22 @@ void EDA_3D_CONTROLLER::Reset( RESET_REASON aReason )
 {
     TOOLS_HOLDER* holder = m_toolMgr->GetToolHolder();
 
+    m_canvas = nullptr;
+    m_boardAdapter = nullptr;
+    m_camera = nullptr;
+
     if( holder )
     {
         m_canvas = dynamic_cast<EDA_3D_CANVAS*>( holder->GetToolCanvas() );
-        m_boardAdapter = &dynamic_cast<EDA_3D_BOARD_HOLDER*>( holder )->GetAdapter();
-        m_camera = &dynamic_cast<EDA_3D_BOARD_HOLDER*>( holder )->GetCurrentCamera();
-    }
-    else
-    {
-        m_canvas = nullptr;
-        m_boardAdapter = nullptr;
-        m_camera = nullptr;
+
+        EDA_3D_BOARD_HOLDER* holder3d =
+                dynamic_cast<EDA_3D_BOARD_HOLDER*>( holder->GetToolCanvas() );
+
+        if( holder3d )
+        {
+            m_boardAdapter = &holder3d->GetAdapter();
+            m_camera = &holder3d->GetCurrentCamera();
+        }
     }
 }
 

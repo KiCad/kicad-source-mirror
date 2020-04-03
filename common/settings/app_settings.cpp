@@ -35,6 +35,12 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( std::string aFilename, int aSchemaVersion 
         JSON_SETTINGS( std::move( aFilename ), SETTINGS_LOC::USER, appSettingsSchemaVersion ),
         m_Printing(), m_System(), m_Window(), m_appSettingsSchemaVersion( aSchemaVersion )
 {
+    // Make Coverity happy:
+    m_LibTree.column_width = 360;
+    m_Graphics.canvas_type = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+
+
+    // Build parameters list:
     m_params.emplace_back( new PARAM<int>( "find_replace.flags", &m_FindReplace.flags, 1 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "find_replace.find_string",
