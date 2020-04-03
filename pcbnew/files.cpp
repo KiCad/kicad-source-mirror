@@ -76,17 +76,23 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
     // load a BOARD. User may occasionally use the wrong plugin to load a
     // *.brd file (since both legacy and eagle use *.brd extension),
     // but eventually *.kicad_pcb will be more common than legacy *.brd files.
+
+    // clang-format off
     static const struct
     {
         const wxString&     filter;
         IO_MGR::PCB_FILE_T  pluginType;
     } loaders[] =
     {
-        { PcbFileWildcard(),          IO_MGR::KICAD_SEXP },   // Current Kicad board files
-        { LegacyPcbFileWildcard(),    IO_MGR::LEGACY },       // Old Kicad board files
-        { EaglePcbFileWildcard(),     IO_MGR::EAGLE },        // Import board files
-        { PCadPcbFileWildcard(),      IO_MGR::PCAD },         // Import board files
+        { PcbFileWildcard(),                    IO_MGR::KICAD_SEXP },            // Current Kicad board files
+        { LegacyPcbFileWildcard(),              IO_MGR::LEGACY },                // Old Kicad board files
+        { EaglePcbFileWildcard(),               IO_MGR::EAGLE },                 // Import Eagle board files
+        { PCadPcbFileWildcard(),                IO_MGR::PCAD },                  // Import PCAD board files
+        { AltiumDesignerPcbFileWildcard(),      IO_MGR::ALTIUM_DESIGNER },       // Import Altium Designer board files
+        { AltiumCircuitStudioPcbFileWildcard(), IO_MGR::ALTIUM_CIRCUIT_STUDIO }, // Import Altium Circuit Studio board files
+        { AltiumCircuitMakerPcbFileWildcard(),  IO_MGR::ALTIUM_CIRCUIT_MAKER },  // Import Altium Circuit Maker board files
     };
+    // clang-format on
 
     wxFileName  fileName( *aFileName );
     wxString    fileFilters;
@@ -357,7 +363,7 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
 
     wxFileName fn = aFileName;
 
-    // Note: file extensions are expected to be in ower case.
+    // Note: file extensions are expected to be in lower case.
     // This is not always true, especially when importing files, so the string
     // comparisons are case insensitive to try to find the suitable plugin.
 
@@ -366,9 +372,21 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
         // both legacy and eagle share a common file extension.
         pluginType = ( aCtl & KICTL_EAGLE_BRD ) ? IO_MGR::EAGLE : IO_MGR::LEGACY;
     }
-    else if( fn.GetExt().CmpNoCase(  IO_MGR::GetFileExtension( IO_MGR::PCAD ) ) == 0 )
+    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::PCAD ) ) == 0 )
     {
         pluginType = IO_MGR::PCAD;
+    }
+    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::ALTIUM_DESIGNER ) ) == 0 )
+    {
+        pluginType = IO_MGR::ALTIUM_DESIGNER;
+    }
+    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::ALTIUM_CIRCUIT_STUDIO ) ) == 0 )
+    {
+        pluginType = IO_MGR::ALTIUM_CIRCUIT_STUDIO;
+    }
+    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::ALTIUM_CIRCUIT_MAKER ) ) == 0 )
+    {
+        pluginType = IO_MGR::ALTIUM_CIRCUIT_MAKER;
     }
     else
     {

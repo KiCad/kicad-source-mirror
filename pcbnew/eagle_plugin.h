@@ -34,6 +34,7 @@
 
 class D_PAD;
 class TEXTE_MODULE;
+class ZONE_CONTAINER;
 
 typedef std::map<wxString, MODULE*>  MODULE_MAP;
 typedef std::vector<ZONE_CONTAINER*> ZONES;

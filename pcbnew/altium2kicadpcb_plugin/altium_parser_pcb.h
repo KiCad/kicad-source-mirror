@@ -1,0 +1,616 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#ifndef ALTIUM_PARSER_PCB_H
+#define ALTIUM_PARSER_PCB_H
+
+#include <cstdint>
+#include <cstring>
+#include <memory>
+#include <vector>
+
+#include <wx/gdicmn.h>
+
+// tthis constant specifies an unconnected net
+const uint16_t ALTIUM_NET_UNCONNECTED = std::numeric_limits<uint16_t>::max();
+
+// this constant specifies a item which is not inside an component
+const uint16_t ALTIUM_COMPONENT_NONE = std::numeric_limits<uint16_t>::max();
+
+// this constant specifies a item which does not define a polygon
+const uint16_t ALTIUM_POLYGON_NONE = std::numeric_limits<uint16_t>::max();
+
+
+enum class ALTIUM_UNIT
+{
+    UNKNOWN = 0,
+
+    INCHES      = 1,
+    MILS        = 2,
+    MILLIMETERS = 3,
+    CENTIMETER  = 4
+};
+
+enum class ALTIUM_CLASS_KIND
+{
+    UNKNOWN = -1,
+
+    NET_CLASS              = 0,
+    SOURCE_SCHEMATIC_CLASS = 1,
+    FROM_TO                = 2,
+    PAD_CLASS              = 3,
+    LAYER_CLASS            = 4,
+    UNKNOWN_CLASS          = 5,
+    DIFF_PAIR_CLASS        = 6,
+    POLYGON_CLASS          = 7
+};
+
+enum class ALTIUM_DIMENSION_KIND
+{
+    UNKNOWN = 0,
+
+    LINEAR          = 1,
+    ANGULAR         = 2,
+    RADIAL          = 3,
+    LEADER          = 4,
+    DATUM           = 5,
+    BASELINE        = 6,
+    CENTER          = 7,
+    LINEAR_DIAMETER = 8,
+    RADIAL_DIAMETER = 9
+};
+
+enum class ALTIUM_REGION_KIND
+{
+    UNKNOWN = -1,
+
+    COPPER            = 0, // KIND=0
+    POLYGON_CUTOUT    = 1, // KIND=1
+    BOARD_CUTOUT      = 2, // KIND=0 AND ISBOARDCUTOUT=TRUE
+    CAVITY_DEFINITION = 3, // KIND=4
+};
+
+enum class ALTIUM_RULE_KIND
+{
+    UNKNOWN = 0,
+
+    CLEARANCE              = 1,
+    DIFF_PAIR_ROUTINGS     = 2,
+    HEIGHT                 = 3,
+    HOLE_SIZE              = 4,
+    HOLE_TO_HOLE_CLEARANCE = 5,
+    WIDTH                  = 6,
+    PASTE_MASK_EXPANSION   = 7,
+    PLANE_CLEARANCE        = 8,
+    POLYGON_CONNECT        = 9,
+};
+
+enum class ALTIUM_RECORD
+{
+    ARC    = 1,
+    PAD    = 2,
+    VIA    = 3,
+    TRACK  = 4,
+    TEXT   = 5,
+    FILL   = 6,
+    REGION = 11,
+    MODEL  = 12
+};
+
+enum class ALTIUM_PAD_SHAPE
+{
+    UNKNOWN   = 0,
+    CIRCLE    = 1,
+    RECT      = 2,
+    OCTAGONAL = 3
+};
+
+enum class ALTIUM_PAD_SHAPE_ALT
+{
+    UNKNOWN   = 0,
+    CIRCLE    = 1,
+    RECT      = 2, // TODO: valid?
+    OCTAGONAL = 3, // TODO: valid?
+    ROUNDRECT = 9
+};
+
+enum class ALTIUM_PAD_HOLE_SHAPE
+{
+    UNKNOWN = -1,
+    ROUND   = 0,
+    SQUARE  = 1,
+    SLOT    = 2
+};
+
+enum class ALTIUM_PAD_MODE
+{
+    SIMPLE            = 0,
+    TOP_MIDDLE_BOTTOM = 1,
+    FULL_STACK        = 2
+};
+
+enum class ALTIUM_PAD_RULE
+{
+    UNKNOWN = 0,
+    RULE    = 1,
+    MANUAL  = 2
+};
+
+enum class ALTIUM_POLYGON_HATCHSTYLE
+{
+    UNKNOWN = 0,
+
+    SOLID      = 1,
+    DEGREE_45  = 2,
+    DEGREE_90  = 3,
+    HORIZONTAL = 4,
+    VERTICAL   = 5,
+    NONE       = 6
+};
+
+enum class ALTIUM_TEXT_POSITION
+{
+    LEFT_TOP      = 1,
+    LEFT_CENTER   = 2,
+    LEFT_BOTTOM   = 3,
+    CENTER_TOP    = 4,
+    CENTER_CENTER = 5,
+    CENTER_BOTTOM = 6,
+    RIGHT_TOP     = 7,
+    RIGHT_CENTER  = 8,
+    RIGHT_BOTTOM  = 9
+};
+
+struct ALTIUM_VERTICE
+{
+    const bool    isRound;
+    const int32_t radius;
+    const double  startangle;
+    const double  endangle;
+    const wxPoint position;
+    const wxPoint center;
+
+    explicit ALTIUM_VERTICE( const wxPoint aPosition )
+            : isRound( false ),
+              radius( 0 ),
+              startangle( 0. ),
+              endangle( 0. ),
+              position( aPosition ),
+              center( wxPoint( 0, 0 ) )
+    {
+    }
+
+    explicit ALTIUM_VERTICE( bool aIsRound, int32_t aRadius, double aStartAngle, double aEndAngle,
+            const wxPoint aPosition, const wxPoint aCenter )
+            : isRound( aIsRound ),
+              radius( aRadius ),
+              startangle( aStartAngle ),
+              endangle( aEndAngle ),
+              position( aPosition ),
+              center( aCenter )
+    {
+    }
+};
+
+enum class ALTIUM_LAYER
+{
+    UNKNOWN = 0,
+
+    TOP_LAYER    = 1,
+    MID_LAYER_1  = 2,
+    MID_LAYER_2  = 3,
+    MID_LAYER_3  = 4,
+    MID_LAYER_4  = 5,
+    MID_LAYER_5  = 6,
+    MID_LAYER_6  = 7,
+    MID_LAYER_7  = 8,
+    MID_LAYER_8  = 9,
+    MID_LAYER_9  = 10,
+    MID_LAYER_10 = 11,
+    MID_LAYER_11 = 12,
+    MID_LAYER_12 = 13,
+    MID_LAYER_13 = 14,
+    MID_LAYER_14 = 15,
+    MID_LAYER_15 = 16,
+    MID_LAYER_16 = 17,
+    MID_LAYER_17 = 18,
+    MID_LAYER_18 = 19,
+    MID_LAYER_19 = 20,
+    MID_LAYER_20 = 21,
+    MID_LAYER_21 = 22,
+    MID_LAYER_22 = 23,
+    MID_LAYER_23 = 24,
+    MID_LAYER_24 = 25,
+    MID_LAYER_25 = 26,
+    MID_LAYER_26 = 27,
+    MID_LAYER_27 = 28,
+    MID_LAYER_28 = 29,
+    MID_LAYER_29 = 30,
+    MID_LAYER_30 = 31,
+    BOTTOM_LAYER = 32,
+
+    TOP_OVERLAY    = 33,
+    BOTTOM_OVERLAY = 34,
+    TOP_PASTE      = 35,
+    BOTTOM_PASTE   = 36,
+    TOP_SOLDER     = 37,
+    BOTTOM_SOLDER  = 38,
+
+    INTERNAL_PLANE_1  = 39,
+    INTERNAL_PLANE_2  = 40,
+    INTERNAL_PLANE_3  = 41,
+    INTERNAL_PLANE_4  = 42,
+    INTERNAL_PLANE_5  = 43,
+    INTERNAL_PLANE_6  = 44,
+    INTERNAL_PLANE_7  = 45,
+    INTERNAL_PLANE_8  = 46,
+    INTERNAL_PLANE_9  = 47,
+    INTERNAL_PLANE_10 = 48,
+    INTERNAL_PLANE_11 = 49,
+    INTERNAL_PLANE_12 = 50,
+    INTERNAL_PLANE_13 = 51,
+    INTERNAL_PLANE_14 = 52,
+    INTERNAL_PLANE_15 = 53,
+    INTERNAL_PLANE_16 = 54,
+
+    DRILL_GUIDE    = 55,
+    KEEP_OUT_LAYER = 56,
+
+    MECHANICAL_1  = 57,
+    MECHANICAL_2  = 58,
+    MECHANICAL_3  = 59,
+    MECHANICAL_4  = 60,
+    MECHANICAL_5  = 61,
+    MECHANICAL_6  = 62,
+    MECHANICAL_7  = 63,
+    MECHANICAL_8  = 64,
+    MECHANICAL_9  = 65,
+    MECHANICAL_10 = 66,
+    MECHANICAL_11 = 67,
+    MECHANICAL_12 = 68,
+    MECHANICAL_13 = 69,
+    MECHANICAL_14 = 70,
+    MECHANICAL_15 = 71,
+    MECHANICAL_16 = 72,
+
+    DRILL_DRAWING     = 73,
+    MULTI_LAYER       = 74,
+    CONNECTIONS       = 75,
+    BACKGROUND        = 76,
+    DRC_ERROR_MARKERS = 77,
+    SELECTIONS        = 78,
+    VISIBLE_GRID_1    = 79,
+    VISIBLE_GRID_2    = 80,
+    PAD_HOLES         = 81,
+    VIA_HOLES         = 82,
+};
+
+class ALTIUM_PARSER;
+
+struct ABOARD6_LAYER_STACKUP
+{
+    wxString name;
+
+    size_t nextId;
+    size_t prevId;
+
+    int32_t copperthick;
+
+    double   dielectricconst;
+    int32_t  dielectricthick;
+    wxString dielectricmaterial;
+};
+
+struct ABOARD6
+{
+    wxPoint sheetpos;
+    wxSize  sheetsize;
+
+    int                                layercount;
+    std::vector<ABOARD6_LAYER_STACKUP> stackup;
+
+    std::vector<ALTIUM_VERTICE> board_vertices;
+
+    explicit ABOARD6( ALTIUM_PARSER& aReader );
+};
+
+struct ACLASS6
+{
+    wxString name;
+    wxString uniqueid;
+
+    ALTIUM_CLASS_KIND kind;
+
+    std::vector<wxString> names;
+
+    explicit ACLASS6( ALTIUM_PARSER& aReader );
+};
+
+struct ACOMPONENT6
+{
+    ALTIUM_LAYER layer;
+    wxPoint      position;
+    double       rotation;
+    bool         locked;
+    bool         nameon;
+    bool         commenton;
+    wxString     sourcedesignator;
+    wxString     sourcefootprintlibrary;
+    wxString     sourcecomponentlibrary;
+    wxString     sourcelibreference;
+    explicit ACOMPONENT6( ALTIUM_PARSER& aReader );
+};
+
+struct ADIMENSION6
+{
+    ALTIUM_LAYER          layer;
+    ALTIUM_DIMENSION_KIND kind;
+
+    wxString textformat;
+
+    int32_t height;
+    double  angle;
+
+    uint32_t linewidth;
+    uint32_t textheight;
+    uint32_t textlinewidth;
+    int32_t  textprecission;
+    bool     textbold;
+    bool     textitalic;
+
+    int32_t arrowsize;
+
+    ALTIUM_UNIT textunit;
+
+    wxPoint xy1;
+
+    std::vector<wxPoint> referencePoint;
+    std::vector<wxPoint> textPoint;
+
+    explicit ADIMENSION6( ALTIUM_PARSER& aReader );
+};
+
+struct ANET6
+{
+    wxString name;
+
+    explicit ANET6( ALTIUM_PARSER& aReader );
+};
+
+struct APOLYGON6
+{
+    ALTIUM_LAYER layer;
+    uint16_t     net;
+    bool         locked;
+
+    ALTIUM_POLYGON_HATCHSTYLE hatchstyle;
+
+    int32_t gridsize;
+    int32_t trackwidth;
+    int32_t minprimlength;
+    bool    useoctagons;
+
+    std::vector<ALTIUM_VERTICE> vertices;
+
+    explicit APOLYGON6( ALTIUM_PARSER& aReader );
+};
+
+
+struct ARULE6
+{
+    wxString name;
+    int      priority;
+
+    ALTIUM_RULE_KIND kind;
+
+    wxString scope1expr;
+    wxString scope2expr;
+
+    // ALTIUM_RULE_KIND::CLEARANCE
+    int clearanceGap;
+
+    // ALTIUM_RULE_KIND::PLANE_CLEARANCE
+    int planeclearanceClearance;
+
+    // ALTIUM_RULE_KIND::POLYGON_CONNECT
+    int32_t polygonconnectAirgapwidth;
+    int32_t polygonconnectReliefconductorwidth;
+    int     polygonconnectReliefentries;
+
+    // TODO: implement different types of rules we need to parse
+
+    explicit ARULE6( ALTIUM_PARSER& aReader );
+};
+
+struct AREGION6
+{
+    bool is_locked;
+    bool is_keepout;
+
+    bool is_shapebased;
+
+    ALTIUM_LAYER layer;
+    uint16_t     net;
+    uint16_t     component;
+    uint16_t     subpolyindex;
+
+    ALTIUM_REGION_KIND kind; // I asume this means if normal or keepout?
+
+    std::vector<ALTIUM_VERTICE> vertices;
+
+    explicit AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices );
+};
+
+struct AARC6
+{
+    bool is_locked;
+    bool is_keepout;
+    bool is_polygonoutline;
+
+    ALTIUM_LAYER layer;
+    uint16_t     net;
+    uint16_t     component;
+    uint16_t     subpolyindex;
+
+    wxPoint  center;
+    uint32_t radius;
+    double   startangle;
+    double   endangle;
+    uint32_t width;
+
+    explicit AARC6( ALTIUM_PARSER& aReader );
+};
+
+struct APAD6_SIZE_AND_SHAPE
+{
+    ALTIUM_PAD_HOLE_SHAPE holeshape;
+    uint32_t slotsize;
+    double   slotrotation;
+
+    wxSize               inner_size[29];
+    ALTIUM_PAD_SHAPE     inner_shape[29];
+    wxPoint              holeoffset[32];
+    ALTIUM_PAD_SHAPE_ALT alt_shape[32];
+    uint8_t              cornerradius[32];
+};
+
+struct APAD6
+{
+    bool is_locked;
+    bool is_tent_top;
+    bool is_tent_bottom;
+    bool is_test_fab_top;
+    bool is_test_fab_bottom;
+
+    wxString name;
+
+    ALTIUM_LAYER layer;
+    uint16_t     net;
+    uint16_t     component;
+
+    wxPoint  position;
+    wxSize   topsize;
+    wxSize   midsize;
+    wxSize   botsize;
+    uint32_t holesize;
+
+    ALTIUM_PAD_SHAPE topshape;
+    ALTIUM_PAD_SHAPE midshape;
+    ALTIUM_PAD_SHAPE botshape;
+
+    ALTIUM_PAD_MODE padmode;
+
+    double          direction;
+    bool            plated;
+    ALTIUM_PAD_RULE pastemaskexpansionmode;
+    int32_t         pastemaskexpansionmanual;
+    ALTIUM_PAD_RULE soldermaskexpansionmode;
+    int32_t         soldermaskexpansionmanual;
+    double          holerotation;
+
+    ALTIUM_LAYER tolayer;
+    ALTIUM_LAYER fromlayer;
+
+    std::unique_ptr<APAD6_SIZE_AND_SHAPE> sizeAndShape;
+
+    explicit APAD6( ALTIUM_PARSER& aReader );
+};
+
+struct AVIA6
+{
+    bool is_locked;
+    bool is_tent_top;
+    bool is_tent_bottom;
+    bool is_test_fab_top;
+    bool is_test_fab_bottom;
+
+    uint16_t net;
+
+    wxPoint  position;
+    uint32_t diameter;
+    uint32_t holesize;
+
+    ALTIUM_LAYER    layer_start;
+    ALTIUM_LAYER    layer_end;
+    ALTIUM_PAD_MODE viamode;
+
+    explicit AVIA6( ALTIUM_PARSER& aReader );
+};
+
+struct ATRACK6
+{
+    bool is_locked;
+    bool is_keepout;
+    bool is_polygonoutline;
+
+    ALTIUM_LAYER layer;
+    uint16_t     net;
+    uint16_t     component;
+    uint16_t     subpolyindex;
+
+    wxPoint  start;
+    wxPoint  end;
+    uint32_t width;
+
+    explicit ATRACK6( ALTIUM_PARSER& aReader );
+};
+
+struct ATEXT6
+{
+    ALTIUM_LAYER layer;
+    uint16_t     component;
+
+    wxPoint              position;
+    uint32_t             height;
+    double               rotation;
+    uint32_t             strokewidth;
+    ALTIUM_TEXT_POSITION textposition;
+    bool                 mirrored;
+
+    bool isComment;
+    bool isDesignator;
+    bool isTruetype;
+
+    wxString text;
+
+    explicit ATEXT6( ALTIUM_PARSER& aReader );
+};
+
+struct AFILL6
+{
+    bool is_locked;
+    bool is_keepout;
+
+    ALTIUM_LAYER layer;
+    uint16_t     component;
+    uint16_t     net;
+
+    wxPoint pos1;
+    wxPoint pos2;
+    double  rotation;
+
+    explicit AFILL6( ALTIUM_PARSER& aReader );
+};
+
+
+#endif //ALTIUM_PARSER_PCB_H

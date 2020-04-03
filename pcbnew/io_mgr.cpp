@@ -25,13 +25,16 @@
 #include <wx/filename.h>
 #include <wx/uri.h>
 
-#include <io_mgr.h>
-#include <legacy_plugin.h>
-#include <kicad_plugin.h>
-#include <eagle_plugin.h>
-#include <pcad2kicadpcb_plugin/pcad_plugin.h>
-#include <gpcb_plugin.h>
+#include <altium2kicadpcb_plugin/altium_circuit_maker_plugin.h>
+#include <altium2kicadpcb_plugin/altium_circuit_studio_plugin.h>
+#include <altium2kicadpcb_plugin/altium_designer_plugin.h>
 #include <config.h>
+#include <eagle_plugin.h>
+#include <gpcb_plugin.h>
+#include <io_mgr.h>
+#include <kicad_plugin.h>
+#include <legacy_plugin.h>
+#include <pcad2kicadpcb_plugin/pcad_plugin.h>
 
 #if defined(BUILD_GITHUB_PLUGIN)
  #include <github/github_plugin.h>
@@ -204,6 +207,14 @@ void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoar
 static IO_MGR::REGISTER_PLUGIN registerEaglePlugin( IO_MGR::EAGLE, wxT("Eagle"), []() -> PLUGIN* { return new EAGLE_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerKicadPlugin( IO_MGR::KICAD_SEXP, wxT("KiCad"), []() -> PLUGIN* { return new PCB_IO; } );
 static IO_MGR::REGISTER_PLUGIN registerPcadPlugin( IO_MGR::PCAD, wxT("P-Cad"), []() -> PLUGIN* { return new PCAD_PLUGIN; } );
+static IO_MGR::REGISTER_PLUGIN registerAltiumDesignerPlugin( IO_MGR::ALTIUM_DESIGNER,
+        wxT( "Altium Designer" ), []() -> PLUGIN* { return new ALTIUM_DESIGNER_PLUGIN; } );
+static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitStudioPlugin( IO_MGR::ALTIUM_CIRCUIT_STUDIO,
+        wxT( "Altium Circuit Studio" ),
+        []() -> PLUGIN* { return new ALTIUM_CIRCUIT_STUDIO_PLUGIN; } );
+static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitMakerPlugin( IO_MGR::ALTIUM_CIRCUIT_MAKER,
+        wxT( "Altium Circuit Maker" ),
+        []() -> PLUGIN* { return new ALTIUM_CIRCUIT_MAKER_PLUGIN; } );
 #ifdef BUILD_GITHUB_PLUGIN
 static IO_MGR::REGISTER_PLUGIN registerGithubPlugin( IO_MGR::GITHUB, wxT("Github"), []() -> PLUGIN* { return new GITHUB_PLUGIN; } );
 #endif /* BUILD_GITHUB_PLUGIN */

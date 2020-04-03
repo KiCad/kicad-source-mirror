@@ -67,6 +67,7 @@ target_link_libraries( qa_pcbnew
     pcbcommon
     pnsrouter
     pcad2kicadpcb
+    altium2kicadpcb
     gal
     common
     gal

@@ -22,6 +22,7 @@
 #
 
 add_subdirectory( clipper )
+add_subdirectory( compoundfilereader )
 add_subdirectory( dxflib_qcad )
 add_subdirectory( libcontext )
 add_subdirectory( markdown2html )
