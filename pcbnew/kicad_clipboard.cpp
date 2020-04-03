@@ -199,15 +199,20 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
 
     clipboard->Flush();
 
+    #ifndef __WXOSX__
     // This section exists to return the clipboard data, ensuring it has fully
     // been processed by the system clipboard.  This appears to be needed for
     // extremely large clipboard copies on asynchronous linux clipboard managers
-    // such as KDE's Klipper
+    // such as KDE's Klipper. However, a read back of the data on OSX before the
+    // clipboard is closed seems to cause an ASAN error (heap-buffer-overflow)
+    // since it uses the cached version of the clipboard data and not the system
+    // clipboard data.
     {
         wxTextDataObject data;
         clipboard->GetData( data );
         ( void )data.GetText(); // Keep unused variable
     }
+    #endif
 }
 
 
