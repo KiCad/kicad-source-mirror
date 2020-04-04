@@ -55,6 +55,8 @@ private:
     FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
     UNIT_BINDER                   m_borderWidth;
 
+    bool onSheetFilenameChanged( const wxString& aNewFilename );
+
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,8 +46,6 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHE
 {
     m_sheet = aSheet;
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_sheet );
-
-    m_width = 0;
     m_delayedFocusRow = SHEETNAME;
     m_delayedFocusColumn = FDC_VALUE;
 
@@ -257,25 +255,60 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
 
     // Inside Eeschema, filenames are stored using unix notation
     newRelativeFilename.Replace( wxT( "\\" ), wxT( "/" ) );
+    wxString oldFilename = m_sheet->GetFields()[ SHEETFILENAME ].GetText();
+    oldFilename.Replace( wxT( "\\" ), wxT( "/" ) );
+
+    bool filename_changed = oldFilename != newRelativeFilename;
+
+    if( filename_changed )
+    {
+        bool ok = onSheetFilenameChanged( newRelativeFilename );
+
+        if( !ok )
+            return false;
+    }
 
     wxString newSheetname = m_fields->at( SHEETNAME ).GetText();
 
     if( newSheetname.IsEmpty() )
         newSheetname = _( "Untitled Sheet" );
 
+    m_fields->at( SHEETNAME ).SetText( newSheetname );
+
+    // change all field positions from relative to absolute
+    for( unsigned i = 0;  i < m_fields->size();  ++i )
+        m_fields->at( i ).Offset( m_sheet->GetPosition() );
+
+    if( positioningChanged( m_fields, m_sheet->GetFields() ) )
+        m_sheet->ClearFieldsAutoplaced();
+
+    m_sheet->SetFields( *m_fields );
+
+    m_sheet->SetBorderWidth( m_borderWidth.GetValue() );
+    m_sheet->SetBorderColor( m_borderColorSwatch->GetSwatchColor() );
+    m_sheet->SetBackgroundColor( m_backgroundColorSwatch->GetSwatchColor() );
+
+    m_frame->TestDanglingEnds();
+    m_frame->RefreshItem( m_sheet );
+    m_frame->OnModify();
+
+    return true;
+}
+
+
+bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilename )
+{
     // Relative file names are relative to the path of the current sheet.  This allows for
     // nesting of schematic files in subfolders.
-    wxFileName fileName( newRelativeNativeFilename );
+    wxFileName fileName( aNewFilename );
     fileName.SetExt( LegacySchematicFileExtension );
 
     if( !fileName.IsAbsolute() )
     {
         const SCH_SCREEN* currentScreen = g_CurrentSheet->LastScreen();
-
         wxCHECK_MSG( currentScreen, false, "Invalid sheet path object." );
 
         wxFileName currentSheetFileName = currentScreen->GetFileName();
-
         wxCHECK_MSG( fileName.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() ), false,
                      "Cannot normalize new sheet schematic file path." );
     }
@@ -303,37 +336,35 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
                     ( loadFromFile ) ? "found" : "not found" );
     }
 
-    if( m_sheet->GetScreen() == NULL )                 // New sheet.
+    if( m_sheet->GetScreen() == NULL )      // New just created sheet.
     {
         if( !m_frame->AllowCaseSensitiveFileNameClashes( newAbsoluteFilename ) )
             return false;
 
-        if( useScreen || loadFromFile )               // Load from existing file.
+        if( useScreen || loadFromFile )     // Load from existing file.
         {
             clearAnnotation = true;
-
             wxString existsMsg;
             wxString linkMsg;
             existsMsg.Printf( _( "\"%s\" already exists." ), fileName.GetFullName() );
-            linkMsg.Printf( _( "Link \"%s\" to this file?" ), newSheetname );
+            linkMsg.Printf( _( "Link \"%s\" to this file?" ), newAbsoluteFilename );
             msg.Printf( wxT( "%s\n\n%s" ), existsMsg, linkMsg );
 
             if( !IsOK( this, msg ) )
                 return false;
 
         }
-        else                                          // New file.
+        else                                // New file.
         {
             m_frame->InitSheet( m_sheet, newAbsoluteFilename );
         }
     }
-    else                                              // Existing sheet.
+    else                                    // Existing sheet.
     {
         bool isUndoable = true;
         wxString replaceMsg;
         wxString newMsg;
         wxString noUndoMsg;
-
         isExistingSheet = true;
 
         if( !m_frame->AllowCaseSensitiveFileNameClashes( newAbsoluteFilename ) )
@@ -343,7 +374,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
         // and can be not always undoable.
         // So prepare messages for user notifications:
         replaceMsg.Printf( _( "Change \"%s\" link from \"%s\" to \"%s\"?" ),
-                           newSheetname,
+                           newAbsoluteFilename,
                            m_sheet->GetFileName(),
                            fileName.GetFullName() );
         newMsg.Printf( _( "Create new file \"%s\" with contents of \"%s\"?" ),
@@ -434,8 +465,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
         }
     }
 
-    wxFileName nativeFileName( newRelativeNativeFilename );
-    nativeFileName.SetExt( LegacySchematicFileExtension );
+    wxFileName nativeFileName( aNewFilename );
 
     if( useScreen )
     {
@@ -480,28 +510,8 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
             g_CurrentSheet->LastScreen()->Append( m_sheet );
     }
 
-    m_fields->at( SHEETFILENAME ).SetText( newRelativeFilename );
-    m_fields->at( SHEETNAME ).SetText( newSheetname );
-
-    // change all field positions from relative to absolute
-    for( unsigned i = 0;  i < m_fields->size();  ++i )
-        m_fields->at( i ).Offset( m_sheet->GetPosition() );
-
-    if( positioningChanged( m_fields, m_sheet->GetFields() ) )
-        m_sheet->ClearFieldsAutoplaced();
-
-    m_sheet->SetFields( *m_fields );
-
     if( m_clearAnnotationNewItems )
         *m_clearAnnotationNewItems = clearAnnotation;
-
-    m_sheet->SetBorderWidth( m_borderWidth.GetValue() );
-    m_sheet->SetBorderColor( m_borderColorSwatch->GetSwatchColor() );
-    m_sheet->SetBackgroundColor( m_backgroundColorSwatch->GetSwatchColor() );
-
-    m_frame->TestDanglingEnds();
-    m_frame->RefreshItem( m_sheet );
-    m_frame->OnModify();
 
     return true;
 }
