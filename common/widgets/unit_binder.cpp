@@ -204,12 +204,9 @@ void UNIT_BINDER::SetDoubleValue( double aValue )
 
 void UNIT_BINDER::SetValue( wxString aValue )
 {
-    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
-    auto staticText = dynamic_cast<wxStaticText*>( m_value );
-
-    if( textEntry )
+    if( auto textEntry = dynamic_cast<wxTextEntry*>( m_value ) )
         textEntry->SetValue( aValue );
-    else if( staticText )
+    else if( auto staticText = dynamic_cast<wxStaticText*>( m_value ) )
         staticText->SetLabel( aValue );
 
     if( m_allowEval )
@@ -227,12 +224,9 @@ void UNIT_BINDER::ChangeValue( int aValue )
 
 void UNIT_BINDER::ChangeValue( wxString aValue )
 {
-    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
-    auto staticText = dynamic_cast<wxStaticText*>( m_value );
-
-    if( textEntry )
+    if( auto textEntry = dynamic_cast<wxTextEntry*>( m_value ) )
         textEntry->ChangeValue( aValue );
-    else if( staticText )
+    else if( auto staticText = dynamic_cast<wxStaticText*>( m_value ) )
         staticText->SetLabel( aValue );
 
     if( m_allowEval )
@@ -244,18 +238,16 @@ void UNIT_BINDER::ChangeValue( wxString aValue )
 
 long long int UNIT_BINDER::GetValue()
 {
-    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
-    auto staticText = dynamic_cast<wxStaticText*>( m_value );
     wxString value;
 
-    if( textEntry )
+    if( auto textEntry = dynamic_cast<wxTextEntry*>( m_value ) )
     {
         if( m_needsEval && m_eval.Process( textEntry->GetValue() ) )
             value = m_eval.Result();
         else
             value = textEntry->GetValue();
     }
-    else if( staticText )
+    else if( auto staticText = dynamic_cast<wxStaticText*>( m_value ) )
         value = staticText->GetLabel();
     else
         return 0;
@@ -266,18 +258,16 @@ long long int UNIT_BINDER::GetValue()
 
 double UNIT_BINDER::GetDoubleValue()
 {
-    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
-    auto staticText = dynamic_cast<wxStaticText*>( m_value );
     wxString value;
 
-    if( textEntry )
+    if( auto textEntry = dynamic_cast<wxTextEntry*>( m_value ) )
     {
         if( m_needsEval && m_eval.Process( textEntry->GetValue() ) )
             value = m_eval.Result();
         else
             value = textEntry->GetValue();
     }
-    else if( staticText )
+    else if( auto staticText = dynamic_cast<wxStaticText*>( m_value ) )
         value = staticText->GetLabel();
     else
         return 0.0;
@@ -288,9 +278,7 @@ double UNIT_BINDER::GetDoubleValue()
 
 bool UNIT_BINDER::IsIndeterminate() const
 {
-    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
-
-    if( textEntry )
+    if( auto textEntry = dynamic_cast<wxTextEntry*>( m_value ) )
         return textEntry->GetValue() == INDETERMINATE;
 
     return false;
@@ -301,10 +289,10 @@ wxString UNIT_BINDER::GetOriginalText() const
 {
     if( m_allowEval )
         return m_eval.OriginalText();
-    else if( dynamic_cast<wxTextEntry*>( m_value ) )
-        return dynamic_cast<wxTextEntry*>( m_value )->GetValue();
-    else if( dynamic_cast<wxStaticText*>( m_value ) )
-        return dynamic_cast<wxStaticText*>( m_value )->GetLabel();
+    else if( auto textEntry = dynamic_cast<wxTextEntry*>( m_value ) )
+        return textEntry->GetValue();
+    else if( auto staticText = dynamic_cast<wxStaticText*>( m_value ) )
+        return staticText->GetLabel();
     else
         return wxEmptyString;
 }
