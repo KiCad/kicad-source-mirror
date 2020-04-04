@@ -86,9 +86,6 @@ void LIB_FIELD::Init( int id )
 {
     m_id = id;
 
-    SetTextWidth( GetDefaultTextSize() );
-    SetTextHeight( GetDefaultTextSize() );
-
     SetTextAngle( TEXT_ANGLE_HORIZ );    // constructor already did this.
 
     // Fields in RAM must always have names, because we are trying to get less dependent on
@@ -106,16 +103,12 @@ int LIB_FIELD::GetPenSize() const
 {
     int pensize = GetThickness();
 
-    if( pensize == 0 )   // Use default values for pen size
-    {
-        if( IsBold() )
-            pensize = GetPenSizeForBold( GetTextWidth() );
-        else
-            pensize = GetDefaultLineThickness();
-    }
+    if( pensize == 0 && IsBold() )
+        pensize = GetPenSizeForBold( GetTextWidth() );
 
     // Clip pen size for small texts:
     pensize = Clamp_Text_PenSize( pensize, GetTextSize(), IsBold() );
+
     return pensize;
 }
 

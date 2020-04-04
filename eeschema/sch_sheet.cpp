@@ -90,9 +90,9 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
 
     m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
 
-    m_borderWidth = GetDefaultLineThickness();
-    m_borderColor = GetDefaultSheetBorderColor();
-    m_backgroundColor = GetDefaultSheetBackgroundColor();
+    m_borderWidth = 0;
+    m_borderColor = COLOR4D::UNSPECIFIED;
+    m_backgroundColor = COLOR4D::UNSPECIFIED;
 }
 
 
@@ -192,11 +192,7 @@ SCH_SHEET* SCH_SHEET::GetRootSheet()
 
 bool SCH_SHEET::UsesDefaultStroke() const
 {
-    if( ( m_borderWidth == GetDefaultLineThickness() || m_borderWidth == 0 )
-      && ( m_borderColor == COLOR4D::UNSPECIFIED ) )
-        return true;
-
-    return false;
+    return m_borderWidth == 0 && m_borderColor == COLOR4D::UNSPECIFIED;
 }
 
 
@@ -913,7 +909,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     wxString    Text;
     wxPoint     pos;
 
-    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
+    aPlotter->SetColor( GetBorderColor() );
 
     int thickness = GetPenSize();
     aPlotter->SetCurrentLineWidth( thickness );
@@ -934,8 +930,6 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
 
     for( SCH_FIELD field : m_fields )
         field.Plot( aPlotter );
-
-    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
 
     /* Draw texts : SheetLabel */
     for( SCH_SHEET_PIN* sheetPin : m_pins )

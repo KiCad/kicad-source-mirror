@@ -39,7 +39,7 @@ void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 
     SVG_PLOTTER* plotter = new SVG_PLOTTER();
     plotter->SetPageSettings( pageInfo );
-    plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
+    plotter->SetDefaultLineWidth( GetDefaultLineWidth() );
     plotter->SetColorMode( plotColor );
 
     wxPoint plot_offset;

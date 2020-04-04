@@ -43,6 +43,8 @@ LIBEDIT_SETTINGS::LIBEDIT_SETTINGS() : APP_SETTINGS_BASE( "libedit", libeditSche
 
     m_params.emplace_back( new PARAM<int>( "defaults.line_width", &m_Defaults.line_width, 6 ) );
 
+    m_params.emplace_back( new PARAM<int>( "defaults.text_size", &m_Defaults.text_size, 50 ) );
+
     m_params.emplace_back( new PARAM<int>( "defaults.pin_length", &m_Defaults.pin_length, 100 ) );
 
     m_params.emplace_back(

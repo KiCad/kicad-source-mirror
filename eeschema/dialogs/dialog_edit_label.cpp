@@ -348,9 +348,5 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
     m_Parent->GetCanvas()->Refresh();
     m_Parent->OnModify();
 
-    // Make the text size the new default size ( if it is a new text ):
-    if( m_CurrentText->IsNew() )
-        SetDefaultTextSize( m_CurrentText->GetTextWidth() );
-
     return true;
 }

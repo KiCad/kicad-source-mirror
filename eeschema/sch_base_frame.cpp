@@ -34,8 +34,6 @@
 #include <confirm.h>
 #include <preview_items/selection_area.h>
 #include <class_library.h>
-#include <lib_edit_frame.h>
-#include <lib_view_frame.h>
 #include <sch_base_frame.h>
 #include <symbol_lib_table.h>
 #include <tool/action_toolbar.h>
@@ -80,25 +78,25 @@ LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART
 }
 
 
-// Static members:
-
 SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindowType,
                                 const wxString& aTitle, const wxPoint& aPosition,
                                 const wxSize& aSize, long aStyle, const wxString& aFrameName ) :
-    EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle, aFrameName )
+    EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle, aFrameName ),
+    m_defaultLineWidth( 0 ),
+    m_defaultWireThickness( 0 ),
+    m_defaultBusThickness( 0 ),
+    m_defaultTextSize( 0 ),
+    m_repeatDeltaLabel( 0 ),
+    m_showPinElectricalTypeName( false ),
+    m_dragActionIsMove( false ),
+    m_repeatComponent( false ),
+    m_useAllUnits( false )
 {
     createCanvas();
 
-    m_zoomLevelCoeff = 11.0 * IU_PER_MILS;    // Adjusted to roughly displays zoom level = 1
-                                              // when the screen shows a 1:1 image
-                                              // obviously depends on the monitor,
-                                              // but this is an acceptable value
-    m_repeatStep = wxPoint( Mils2iu( DEFAULT_REPEAT_OFFSET_X ),
-                            Mils2iu( DEFAULT_REPEAT_OFFSET_Y ) );
-    m_repeatDeltaLabel = DEFAULT_REPEAT_LABEL_INC;
-    m_showPinElectricalTypeName = false;
-    m_repeatComponent = false;
-    m_useAllUnits = false;
+    // Adjusted to display zoom level ~ 1 when the screen shows a 1:1 image
+    // Obviously depends on the monitor, but this is an acceptable value
+    m_zoomLevelCoeff = 11.0 * IU_PER_MILS;
 }
 
 
@@ -128,6 +126,27 @@ void SCH_BASE_FRAME::SetScreen(  BASE_SCREEN* aScreen )
 const wxString SCH_BASE_FRAME::GetZoomLevelIndicator() const
 {
     return EDA_DRAW_FRAME::GetZoomLevelIndicator();
+}
+
+
+void SCH_BASE_FRAME::SetDefaultLineWidth( int aWidth )
+{
+    m_defaultLineWidth = aWidth;
+    GetRenderSettings()->m_DefaultLineWidth = aWidth;
+}
+
+
+void SCH_BASE_FRAME::SetDefaultWireThickness( int aThickness )
+{
+    m_defaultWireThickness = aThickness;
+    GetRenderSettings()->m_DefaultWireThickness = aThickness;
+}
+
+
+void SCH_BASE_FRAME::SetDefaultBusThickness( int aThickness )
+{
+    m_defaultBusThickness = aThickness;
+    GetRenderSettings()->m_DefaultBusThickness = aThickness;
 }
 
 

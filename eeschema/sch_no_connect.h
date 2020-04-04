@@ -60,7 +60,7 @@ public:
 
     int GetSize() const
     {
-        return std::max( m_size, KiROUND( GetDefaultLineThickness() * 3 ) );
+        return m_size;
     }
 
     int GetPenSize() const override;

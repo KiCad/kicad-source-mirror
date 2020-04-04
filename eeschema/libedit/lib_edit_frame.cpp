@@ -64,9 +64,7 @@
 
 
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
-int LIB_EDIT_FRAME::           g_LastTextSize    = -1;
 double LIB_EDIT_FRAME::        g_LastTextAngle   = TEXT_ANGLE_HORIZ;
-int LIB_EDIT_FRAME::           g_LastLineWidth   = 0;
 
 // these values are overridden when reading the config
 int LIB_EDIT_FRAME::           m_textPinNumDefaultSize = Mils2iu( DEFAULTPINNUMSIZE );
@@ -104,7 +102,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_DrawSpecificConvert = true;
     m_DrawSpecificUnit    = false;
     m_SyncPinEdit         = false;
-    m_repeatPinStep = Mils2iu( DEFAULT_REPEAT_OFFSET_PIN );
+    m_repeatPinStep       = 0;
     SetShowElectricalType( true );
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
@@ -114,10 +112,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_unit = 1;
     m_convert = 1;
     m_AboutTitle = "LibEdit";
-
-    // Delayed initialization
-    if( g_LastTextSize == -1 )
-        g_LastTextSize = GetDefaultTextSize();
 
     // Initialize grid id to the default value 50 mils:
     m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
@@ -226,8 +220,9 @@ void LIB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     if( cfg )
     {
-        SetDefaultLineThickness( Mils2iu( cfg->m_Defaults.line_width ) );
+        SetDefaultLineWidth( Mils2iu( cfg->m_Defaults.line_width ) );
         SetDefaultPinLength( Mils2iu( cfg->m_Defaults.pin_length ) );
+        SetDefaultTextSize( Mils2iu( cfg->m_Defaults.text_size ) );
         m_textPinNameDefaultSize = Mils2iu( cfg->m_Defaults.pin_name_size );
         m_textPinNumDefaultSize = Mils2iu( cfg->m_Defaults.pin_num_size );
         SetRepeatDeltaLabel( cfg->m_Repeat.label_delta );
@@ -276,7 +271,8 @@ void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
     auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
     EDA_DRAW_FRAME::SaveSettings( cfg );
 
-    cfg->m_Defaults.line_width    = Iu2Mils( GetDefaultLineThickness() );
+    cfg->m_Defaults.line_width    = Iu2Mils( GetDefaultLineWidth() );
+    cfg->m_Defaults.text_size     = Iu2Mils( GetDefaultTextSize() );
     cfg->m_Defaults.pin_length    = Iu2Mils( GetDefaultPinLength() );
     cfg->m_Defaults.pin_name_size = Iu2Mils( GetPinNameDefaultSize() );
     cfg->m_Defaults.pin_num_size  = Iu2Mils( GetPinNumDefaultSize() );

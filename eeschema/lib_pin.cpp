@@ -536,13 +536,7 @@ bool LIB_PIN::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 int LIB_PIN::GetPenSize() const
 {
-    if( m_width > 0 )
-        return m_width;
-
-    if( m_width == 0 )
-       return GetDefaultLineThickness();
-
-    return 0;
+    return m_width;
 }
 
 
@@ -688,10 +682,8 @@ void LIB_PIN::PrintPinTexts( wxDC* DC, wxPoint& pin_pos, int orient, int TextIns
     wxSize PinNumSize( m_numTextSize, m_numTextSize );
     int    nameLineWidth = Clamp_Text_PenSize( GetPenSize(), m_nameTextSize, false );
     int    numLineWidth = Clamp_Text_PenSize( GetPenSize(), m_numTextSize, false );
-    int    name_offset = Mils2iu( PIN_TEXT_MARGIN ) +
-                         ( nameLineWidth + GetDefaultLineThickness() ) / 2;
-    int    num_offset = Mils2iu( PIN_TEXT_MARGIN ) +
-                        ( numLineWidth + GetDefaultLineThickness() ) / 2;
+    int    name_offset = Mils2iu( PIN_TEXT_MARGIN ) + nameLineWidth;
+    int    num_offset = Mils2iu( PIN_TEXT_MARGIN ) + numLineWidth;
 
     /* Get the num and name colors */
     COLOR4D NameColor = IsVisible() ? GetLayerColor( LAYER_PINNAM ) : GetInvisibleItemColor();
@@ -1015,10 +1007,8 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
     int     numLineWidth = GetPenSize();
     numLineWidth = Clamp_Text_PenSize( numLineWidth, m_numTextSize, false );
 
-    int     name_offset = Mils2iu( PIN_TEXT_MARGIN ) +
-                          ( nameLineWidth + GetDefaultLineThickness() ) / 2;
-    int     num_offset = Mils2iu( PIN_TEXT_MARGIN ) +
-                         ( numLineWidth + GetDefaultLineThickness() ) / 2;
+    int     name_offset = Mils2iu( PIN_TEXT_MARGIN ) + nameLineWidth;
+    int     num_offset = Mils2iu( PIN_TEXT_MARGIN ) + numLineWidth;
 
     /* Get the num and name colors */
     COLOR4D NameColor = GetLayerColor( LAYER_PINNAM );

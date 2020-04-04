@@ -23,6 +23,7 @@
 
 #include <fctsys.h>
 #include <sch_edit_frame.h>
+#include <sch_painter.h>
 #include <class_libentry.h>
 #include <panel_setup_formatting.h>
 #include <sch_junction.h>
@@ -32,6 +33,7 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAM
         PANEL_SETUP_FORMATTING_BASE( aWindow ),
         m_frame( aFrame ),
         m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
+        m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
         m_busWidth( aFrame, m_busWidthLabel, m_busWidthCtrl, m_busWidthUnits, true ),
         m_wireWidth( aFrame, m_wireWidthLabel, m_wireWidthCtrl, m_wireWidthUnits, true ),
         m_junctionSize( aFrame, m_jctSizeLabel, m_jctSizeCtrl, m_jctSizeUnits, true )
@@ -59,13 +61,15 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_choiceSeparatorRefId->SetSelection( refStyleSelection );
 
     m_textSize.SetUnits( EDA_UNITS::INCHES, true );
+    m_lineWidth.SetUnits( EDA_UNITS::INCHES, true );
     m_busWidth.SetUnits( EDA_UNITS::INCHES, true );
     m_wireWidth.SetUnits( EDA_UNITS::INCHES, true );
     m_junctionSize.SetUnits( EDA_UNITS::INCHES, true );
 
-    m_textSize.SetValue( GetDefaultTextSize() );
-    m_busWidth.SetValue( GetDefaultBusThickness() );
-    m_wireWidth.SetValue( GetDefaultWireThickness() );
+    m_textSize.SetValue( m_frame->GetDefaultTextSize() );
+    m_lineWidth.SetValue( m_frame->GetDefaultLineWidth() );
+    m_busWidth.SetValue( m_frame->GetDefaultBusThickness() );
+    m_wireWidth.SetValue( m_frame->GetDefaultWireThickness() );
     m_junctionSize.SetValue( SCH_JUNCTION::g_SymbolSize );
 
     m_textOffsetRatioCtrl->SetValue( wxString::Format( "%f", GetTextOffsetRatio() * 100.0 ) );
@@ -101,10 +105,12 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
         m_frame->SaveProjectSettings();
     }
 
-    SetDefaultTextSize( m_textSize.GetValue() );
-    SetDefaultBusThickness( m_busWidth.GetValue() );
-    SetDefaultWireThickness( m_wireWidth.GetValue() );
-    SCH_JUNCTION::g_SymbolSize = m_junctionSize.GetValue();
+    m_frame->SetDefaultTextSize( (int) m_textSize.GetValue() );
+    m_frame->SetDefaultLineWidth( (int) m_lineWidth.GetValue() );
+    m_frame->SetDefaultWireThickness( (int) m_wireWidth.GetValue() );
+    m_frame->SetDefaultBusThickness( (int) m_busWidth.GetValue() );
+    SCH_JUNCTION::g_SymbolSize = (int) m_junctionSize.GetValue();
+
 
     double dtmp = 0.0;
     wxString msg = m_textOffsetRatioCtrl->GetValue();

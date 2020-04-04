@@ -111,10 +111,8 @@ public:
      */
     bool          m_DrawSpecificUnit;
 
-    static int    g_LastTextSize;
     static double g_LastTextAngle;
     static FILL_T g_LastFillStyle;
-    static int    g_LastLineWidth;
 
 public:
     LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );

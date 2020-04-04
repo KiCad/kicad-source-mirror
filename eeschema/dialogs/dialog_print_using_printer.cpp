@@ -426,7 +426,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
 
     if( printReference )
     {
-        m_parent->PrintWorkSheet( dc, aScreen, GetDefaultLineThickness(), IU_PER_MILS,
+        m_parent->PrintWorkSheet( dc, aScreen, m_parent->GetDefaultLineWidth(), IU_PER_MILS,
                                   aScreen->GetFileName(), wxEmptyString,
                                   m_parent->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) );
     }

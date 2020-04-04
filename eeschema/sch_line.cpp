@@ -283,32 +283,15 @@ PLOT_DASH_TYPE SCH_LINE::GetLineStyle() const
 }
 
 
-int SCH_LINE::GetDefaultWidth() const
-{
-    if( m_Layer == LAYER_BUS )
-        return GetDefaultBusThickness();
-    else if( m_Layer == LAYER_WIRE )
-        return GetDefaultWireThickness();
-
-    return GetDefaultLineThickness();
-}
-
-
 void SCH_LINE::SetLineWidth( const int aSize )
 {
-    if( aSize == GetDefaultWidth() )
-        m_size = 0;
-    else
-        m_size = aSize;
+    m_size = aSize;
 }
 
 
 int SCH_LINE::GetPenSize() const
 {
-    if( m_size > 0 )
-        return m_size;
-
-    return GetDefaultWidth();
+    return m_size;
 }
 
 
@@ -814,10 +797,6 @@ bool SCH_LINE::IsGraphicLine() const
 
 bool SCH_LINE::UsesDefaultStroke() const
 {
-    if( ( m_size == GetDefaultWidth() || m_size == 0 )
-      && ( m_style == GetDefaultStyle() || m_style == PLOT_DASH_TYPE::DEFAULT )
-      && ( m_color == COLOR4D::UNSPECIFIED ) )
-        return true;
-
-    return false;
+    return m_size == 0 && m_color == COLOR4D::UNSPECIFIED
+                && ( m_style == GetDefaultStyle() || m_style == PLOT_DASH_TYPE::DEFAULT );
 }

@@ -107,6 +107,10 @@ public:
     bool m_ShowPinsElectricalType;
     bool m_ShowDisabled;
     bool m_ShowUmbilicals;
+
+    int  m_DefaultLineWidth;
+    int  m_DefaultWireThickness;
+    int  m_DefaultBusThickness;
 };
 
 

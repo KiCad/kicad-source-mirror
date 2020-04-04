@@ -43,20 +43,7 @@ class ERC_SETTINGS;
 #define DANGLING_SYMBOL_SIZE 12
 
 
-#define DEFAULT_REPEAT_OFFSET_X 0       ///< the default X value (overwritten by the eeschema config)
-#define DEFAULT_REPEAT_OFFSET_Y 100     ///< the default Y value (overwritten by the eeschema config)
-#define DEFAULT_REPEAT_LABEL_INC 1      ///< the default value (overwritten by the eeschema config)
-#define DEFAULT_REPEAT_OFFSET_PIN 100   ///< the default value (overwritten by the eeschema config)
-                                        ///< when repeating a pin
 #define TXT_MARGIN 4
-
-///< The thickness to draw buses that do not have a specific width
-///< (can be changed in preference menu)
-#define DEFAULTBUSTHICKNESS 12
-
-///< The thickness to draw lines that thickness is set to 0 (default thickness)
-///< (can be changed in preference menu)
-#define DEFAULTDRAWLINETHICKNESS 6
 
 ///< The default pin len value when creating pins(can be changed in preference menu)
 #define DEFAULTPINLENGTH 100
@@ -102,43 +89,10 @@ int GetSeverity( int aErrorCode );
 void SetSeverity( int aErrorCode, int aSeverity );
 
 /**
- * Default line thickness used to draw/plot items having a
- * default thickness line value (i.e. = 0 ).
- */
-int GetDefaultLineThickness();
-void SetDefaultLineThickness( int aThickness );
-
-/**
- * Defaults for new sheets.
- */
-COLOR4D GetDefaultSheetBorderColor();
-void SetDefaultSheetBorderColor( COLOR4D aColor );
-COLOR4D GetDefaultSheetBackgroundColor();
-void SetDefaultSheetBackgroundColor( COLOR4D aColor );
-
-/**
- * Default size for text in general
- */
-int GetDefaultTextSize();
-void SetDefaultTextSize( int aSize );
-
-/**
  * Amount to offset text above/below wires & buses.  Expressed as a ratio of the text size.
  */
 double GetTextOffsetRatio();
 void SetTextOffsetRatio( double aOffsetRatio );
-
-/**
- * Default line thickness used to draw/plot buses.
- */
-int GetDefaultBusThickness();
-void SetDefaultBusThickness( int aThickness );
-
-/**
- * Default line thickness used to draw/plot wires.
- */
-int GetDefaultWireThickness();
-void SetDefaultWireThickness( int aThickness );
 
 /**
  * Draw selected text items as box

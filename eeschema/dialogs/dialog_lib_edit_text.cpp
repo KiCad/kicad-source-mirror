@@ -89,7 +89,7 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
     }
     else
     {
-        m_textSize.SetValue( m_parent->g_LastTextSize );
+        m_textSize.SetValue( m_parent->GetDefaultTextSize() );
 
         m_CommonUnit->SetValue( !m_parent->m_DrawSpecificUnit );
         m_CommonConvert->SetValue( !m_parent->m_DrawSpecificConvert );
@@ -103,8 +103,7 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
 bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
 {
     m_parent->g_LastTextAngle = m_orientChoice->GetSelection() ? TEXT_ANGLE_VERT
-                                                                    : TEXT_ANGLE_HORIZ;
-    m_parent->g_LastTextSize = m_textSize.GetValue();
+                                                               : TEXT_ANGLE_HORIZ;
     m_parent->m_DrawSpecificConvert = !m_CommonConvert->GetValue();
     m_parent->m_DrawSpecificUnit = !m_CommonUnit->GetValue();
 
@@ -116,7 +115,7 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
             m_graphicText->SetText( m_TextValue->GetValue() );
 
         m_graphicText->SetPosition( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
-        m_graphicText->SetTextSize( wxSize( m_parent->g_LastTextSize, m_parent->g_LastTextSize ) );
+        m_graphicText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
         m_graphicText->SetTextAngle( m_parent->g_LastTextAngle );
 
         if( m_parent->m_DrawSpecificUnit )

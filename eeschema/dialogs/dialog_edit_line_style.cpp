@@ -175,7 +175,7 @@ void DIALOG_EDIT_LINE_STYLE::updateColorButton( COLOR4D& aColor )
 
 void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
 {
-    m_width.SetValue( m_lines.front()->GetDefaultWidth() );
+    m_width.SetValue( 0 );
     setColor( COLOR4D::UNSPECIFIED );
 
     auto typeIt = lineTypeNames.find( m_lines.front()->GetDefaultStyle() );

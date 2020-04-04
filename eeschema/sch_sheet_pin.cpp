@@ -97,7 +97,7 @@ bool SCH_SHEET_PIN::operator==( const SCH_SHEET_PIN* aPin ) const
 
 int SCH_SHEET_PIN::GetPenSize() const
 {
-    return GetDefaultLineThickness();
+    return 0;   // use default pen size
 }
 
 

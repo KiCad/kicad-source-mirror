@@ -97,14 +97,14 @@ void SCH_NO_CONNECT::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
 
 int SCH_NO_CONNECT::GetPenSize() const
 {
-    return GetDefaultLineThickness();
+    return 0;   // use default pen size
 }
 
 
 void SCH_NO_CONNECT::Print( wxDC* aDC, const wxPoint& aOffset )
 {
     int half = GetSize() / 2;
-    int width = GetDefaultLineThickness();
+    int width = GetPenSize();
     int pX = m_pos.x + aOffset.x;
     int pY = m_pos.y + aOffset.y;
 
@@ -161,7 +161,7 @@ bool SCH_NO_CONNECT::doIsConnected( const wxPoint& aPosition ) const
 
 bool SCH_NO_CONNECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int delta = ( ( GetSize() + GetDefaultLineThickness() ) / 2 ) + aAccuracy;
+    int delta = ( GetPenSize() + GetSize() ) / 2 + aAccuracy;
 
     wxPoint dist = aPosition - m_pos;
 

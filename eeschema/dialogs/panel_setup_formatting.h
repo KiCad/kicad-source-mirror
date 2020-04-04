@@ -32,6 +32,7 @@ class PANEL_SETUP_FORMATTING : public PANEL_SETUP_FORMATTING_BASE
     SCH_EDIT_FRAME*    m_frame;
 
     UNIT_BINDER        m_textSize;
+    UNIT_BINDER        m_lineWidth;
 
     UNIT_BINDER        m_busWidth;
     UNIT_BINDER        m_wireWidth;

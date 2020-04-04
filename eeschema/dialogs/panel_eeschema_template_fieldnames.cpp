@@ -43,6 +43,14 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT
     msg.Printf( m_title->GetLabel(), aGlobal ? _( "Global" ) : _( "Project" ) );
     m_title->SetLabel( msg );
 
+    // Yep, it's a hack.  I haven't a clue why the global and project versions don't lay
+    // out the same.
+    if( !aGlobal )
+    {
+        m_leftMargin->PrependSpacer( 10 );
+        m_topMargin->PrependSpacer( 10 );
+    }
+
     m_addFieldButton->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_deleteFieldButton->SetBitmap( KiBitmap( trash_xpm ) );
 

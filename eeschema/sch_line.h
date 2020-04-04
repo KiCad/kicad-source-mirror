@@ -121,8 +121,6 @@ public:
     /// Returns COLOR4D::UNSPECIFIED if a custom color hasn't been set for this line
     COLOR4D GetLineColor() const;
 
-    int GetDefaultWidth() const;
-
     void SetLineWidth( const int aSize );
 
     /**

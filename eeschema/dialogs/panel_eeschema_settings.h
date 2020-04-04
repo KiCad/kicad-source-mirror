@@ -20,6 +20,7 @@
 #ifndef KICAD_PANEL_EESCHEMA_SETTINGS_H
 #define KICAD_PANEL_EESCHEMA_SETTINGS_H
 
+#include <widgets/unit_binder.h>
 #include "panel_eeschema_settings_base.h"
 
 class SCH_EDIT_FRAME;
@@ -27,7 +28,11 @@ class SCH_EDIT_FRAME;
 
 class PANEL_EESCHEMA_SETTINGS : public PANEL_EESCHEMA_SETTINGS_BASE
 {
-    SCH_EDIT_FRAME*   m_frame;
+    SCH_EDIT_FRAME* m_frame;
+
+    UNIT_BINDER     m_defaultTextSize;
+    UNIT_BINDER     m_hPitch;
+    UNIT_BINDER     m_vPitch;
 
 public:
     PANEL_EESCHEMA_SETTINGS( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow );

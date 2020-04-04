@@ -23,9 +23,7 @@
  */
 
 #include <fctsys.h>
-#include <base_screen.h>
 #include <lib_edit_frame.h>
-#include <sch_view.h>
 #include <sch_painter.h>
 
 #include "panel_libedit_settings.h"
@@ -33,24 +31,26 @@
 
 PANEL_LIBEDIT_SETTINGS::PANEL_LIBEDIT_SETTINGS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow ) :
         PANEL_LIBEDIT_SETTINGS_BASE( aWindow ),
-        m_frame( aFrame )
+        m_frame( aFrame ),
+        m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
+        m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
+        m_pinLength( aFrame, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits, true ),
+        m_pinNameSize( aFrame, m_pinNameSizeLabel, m_pinNameSizeCtrl, m_pinNameSizeUnits, true ),
+        m_pinNumberSize( aFrame, m_pinNumSizeLabel, m_pinNumSizeCtrl, m_pinNumSizeUnits, true ),
+        m_hPitch( aFrame, m_hPitchLabel, m_hPitchCtrl, m_hPitchUnits, true ),
+        m_vPitch( aFrame, m_vPitchLabel, m_vPitchCtrl, m_vPitchUnits, true )
 {}
 
 
 bool PANEL_LIBEDIT_SETTINGS::TransferDataToWindow()
 {
-    m_lineWidthCtrl->SetValue(
-            StringFromValue( EDA_UNITS::INCHES, GetDefaultLineThickness(), false, true ) );
-    m_pinLengthCtrl->SetValue(
-            StringFromValue( EDA_UNITS::INCHES, m_frame->GetDefaultPinLength(), false, true ) );
-    m_pinNumSizeCtrl->SetValue(
-            StringFromValue( EDA_UNITS::INCHES, m_frame->GetPinNumDefaultSize(), false, true ) );
-    m_pinNameSizeCtrl->SetValue(
-            StringFromValue( EDA_UNITS::INCHES, m_frame->GetPinNameDefaultSize(), false, true ) );
-    m_hPitchCtrl->SetValue(
-            StringFromValue( EDA_UNITS::INCHES, m_frame->GetRepeatStep().x, false, true ) );
-    m_vPitchCtrl->SetValue(
-            StringFromValue( EDA_UNITS::INCHES, m_frame->GetRepeatStep().y, false, true ) );
+    m_lineWidth.SetValue( m_frame->GetDefaultLineWidth() );
+    m_textSize.SetValue( m_frame->GetDefaultTextSize() );
+    m_pinLength.SetValue( m_frame->GetDefaultPinLength() );
+    m_pinNumberSize.SetValue( m_frame->GetPinNumDefaultSize() );
+    m_pinNameSize.SetValue( m_frame->GetPinNameDefaultSize() );
+    m_hPitch.SetValue( m_frame->GetRepeatStep().x );
+    m_vPitch.SetValue( m_frame->GetRepeatStep().y );
     m_choicePinDisplacement->SetSelection( m_frame->GetRepeatPinStep() == Iu2Mils( 50 ) ? 1 : 0 );
     m_spinRepeatLabel->SetValue( m_frame->GetRepeatDeltaLabel() );
 
@@ -62,19 +62,14 @@ bool PANEL_LIBEDIT_SETTINGS::TransferDataToWindow()
 
 bool PANEL_LIBEDIT_SETTINGS::TransferDataFromWindow()
 {
-    SetDefaultLineThickness(
-            ValueFromString( EDA_UNITS::INCHES, m_lineWidthCtrl->GetValue(), true ) );
-    m_frame->SetDefaultPinLength(
-            ValueFromString( EDA_UNITS::INCHES, m_pinLengthCtrl->GetValue(), true ) );
-    m_frame->SetPinNumDefaultSize(
-            ValueFromString( EDA_UNITS::INCHES, m_pinNumSizeCtrl->GetValue(), true ) );
-    m_frame->SetPinNameDefaultSize(
-            ValueFromString( EDA_UNITS::INCHES, m_pinNameSizeCtrl->GetValue(), true ) );
-    m_frame->SetRepeatStep(
-            wxPoint( ValueFromString( EDA_UNITS::INCHES, m_hPitchCtrl->GetValue(), true ),
-                    ValueFromString( EDA_UNITS::INCHES, m_vPitchCtrl->GetValue(), true ) ) );
-    m_frame->SetRepeatPinStep( m_choicePinDisplacement->GetSelection() == 1 ?
-            Mils2iu( 50 ) : Mils2iu( 100 ) );
+    m_frame->SetDefaultLineWidth( (int) m_lineWidth.GetValue() );
+    m_frame->SetDefaultTextSize( (int) m_textSize.GetValue() );
+    m_frame->SetDefaultPinLength( (int) m_pinLength.GetValue() );
+    m_frame->SetPinNumDefaultSize( (int) m_pinNumberSize.GetValue() );
+    m_frame->SetPinNameDefaultSize( (int) m_pinNameSize.GetValue() );
+    m_frame->SetRepeatStep( wxPoint( (int) m_hPitch.GetValue(), (int) m_vPitch.GetValue() ) );
+    m_frame->SetRepeatPinStep( m_choicePinDisplacement->GetSelection() == 1 ? Mils2iu( 50 )
+                                                                            : Mils2iu( 100 ) );
     m_frame->SetRepeatDeltaLabel( m_spinRepeatLabel->GetValue() );
 
     m_frame->SetShowElectricalType( m_checkShowPinElectricalType->GetValue() );

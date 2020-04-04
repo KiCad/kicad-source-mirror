@@ -453,13 +453,13 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
         break;
 
     case LAYER_WIRE:
-        if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_BUS_WIRE_ENTRY_T) )
+        if( GetItem( aPosition, Mils2iu( 6 ), SCH_BUS_WIRE_ENTRY_T) )
             return true;
 
-        if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_BUS_BUS_ENTRY_T) )
+        if( GetItem( aPosition, Mils2iu( 6 ), SCH_BUS_BUS_ENTRY_T) )
             return true;
 
-        if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_JUNCTION_T ) )
+        if( GetItem( aPosition, SCH_JUNCTION::GetSymbolSize(), SCH_JUNCTION_T ) )
             return true;
 
         if( GetPin( aPosition, NULL, true ) )

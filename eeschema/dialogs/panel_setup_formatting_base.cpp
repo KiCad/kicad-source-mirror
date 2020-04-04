@@ -87,6 +87,32 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 
 	bLeftColumn->Add( sbSizer4, 1, wxEXPAND|wxALL, 5 );
 
+	wxStaticBoxSizer* sbSizer41;
+	sbSizer41 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbols") ), wxVERTICAL );
+
+	wxFlexGridSizer* fgSizer321;
+	fgSizer321 = new wxFlexGridSizer( 0, 3, 5, 0 );
+	fgSizer321->AddGrowableCol( 1 );
+	fgSizer321->SetFlexibleDirection( wxBOTH );
+	fgSizer321->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_lineWidthLabel = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("Default line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthLabel->Wrap( -1 );
+	fgSizer321->Add( m_lineWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_lineWidthCtrl = new wxTextCtrl( sbSizer41->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP );
+	fgSizer321->Add( m_lineWidthCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_lineWidthUnits = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthUnits->Wrap( -1 );
+	fgSizer321->Add( m_lineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	sbSizer41->Add( fgSizer321, 1, wxEXPAND|wxBOTTOM, 5 );
+
+
+	bLeftColumn->Add( sbSizer41, 0, wxEXPAND|wxALL, 5 );
+
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Connections") ), wxVERTICAL );
 
@@ -130,7 +156,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	fgSizer32->Add( m_jctSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizer2->Add( fgSizer32, 0, wxBOTTOM|wxRIGHT|wxEXPAND, 5 );
+	sbSizer2->Add( fgSizer32, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
 	bLeftColumn->Add( sbSizer2, 0, wxEXPAND|wxALL, 5 );

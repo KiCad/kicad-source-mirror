@@ -40,7 +40,8 @@
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
 
-void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
+void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef,
+                                           int aDefaultLineWidth )
 {
     SCH_SCREEN*     screen = m_parent->GetScreen();
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();     // sheetpath is saved here
@@ -64,7 +65,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 
     // Allocate the plotter and set the job level parameter
     PDF_PLOTTER* plotter = new PDF_PLOTTER();
-    plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
+    plotter->SetDefaultLineWidth( aDefaultLineWidth );
     plotter->SetColorMode( getModeColor() );
     plotter->SetColorSettings( colors );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );

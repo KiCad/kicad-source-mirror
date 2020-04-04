@@ -44,9 +44,9 @@
 int SCH_JUNCTION::g_SymbolSize = Mils2iu( 40 );    // Default diameter of the junction symbol
 
 
-int SCH_JUNCTION::GetEffectiveSymbolSize()
+int SCH_JUNCTION::GetSymbolSize()
 {
-    return std::max( GetDefaultLineThickness(), g_SymbolSize );
+    return g_SymbolSize;
 }
 
 
@@ -87,7 +87,7 @@ const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
     EDA_RECT rect;
 
     rect.SetOrigin( m_pos );
-    rect.Inflate( ( GetPenSize() + GetEffectiveSymbolSize() ) / 2 );
+    rect.Inflate( ( GetPenSize() + GetSymbolSize() ) / 2 );
 
     return rect;
 }
@@ -98,8 +98,8 @@ void SCH_JUNCTION::Print( wxDC* aDC, const wxPoint& aOffset )
     auto    conn = Connection( *g_CurrentSheet );
     COLOR4D color = GetLayerColor( ( conn && conn->IsBus() ) ? LAYER_BUS : m_Layer );
 
-    GRFilledCircle( nullptr, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
-                    ( GetEffectiveSymbolSize() / 2 ), 0, color, color );
+    GRFilledCircle( nullptr, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, GetSymbolSize() / 2,
+                    0, color, color );
 }
 
 
@@ -195,7 +195,7 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
     aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
-    aPlotter->Circle( m_pos, GetEffectiveSymbolSize(), FILLED_SHAPE );
+    aPlotter->Circle( m_pos, GetSymbolSize(), FILLED_SHAPE );
 }
 
 

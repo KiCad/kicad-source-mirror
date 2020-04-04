@@ -403,6 +403,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAddField( wxCommandEvent& event )
     int       fieldID = m_fields->size();
     LIB_FIELD newField( m_libEntry, fieldID );
 
+    newField.SetTextSize( wxSize( m_Parent->GetDefaultTextSize(),
+                                  m_Parent->GetDefaultTextSize() ) );
+
     m_fields->push_back( newField );
 
     // notify the grid

@@ -20,6 +20,7 @@
 #ifndef PANEL_LIBEDIT_SETTINGS_H
 #define PANEL_LIBEDIT_SETTINGS_H
 
+#include <widgets/unit_binder.h>
 #include "panel_libedit_settings_base.h"
 
 class LIB_EDIT_FRAME;
@@ -27,7 +28,17 @@ class LIB_EDIT_FRAME;
 
 class PANEL_LIBEDIT_SETTINGS : public PANEL_LIBEDIT_SETTINGS_BASE
 {
-    LIB_EDIT_FRAME*   m_frame;
+    LIB_EDIT_FRAME* m_frame;
+
+    UNIT_BINDER     m_lineWidth;
+    UNIT_BINDER     m_textSize;
+
+    UNIT_BINDER     m_pinLength;
+    UNIT_BINDER     m_pinNameSize;
+    UNIT_BINDER     m_pinNumberSize;
+
+    UNIT_BINDER     m_hPitch;
+    UNIT_BINDER     m_vPitch;
 
 public:
     PANEL_LIBEDIT_SETTINGS( LIB_EDIT_FRAME* aFrame, wxWindow* aWindow );

@@ -72,7 +72,7 @@ private:
     void    initDlg();
 
     // common
-    void getPlotOptions();
+    void getPlotOptions( int* aDefaultLineWidth );
 
     bool getModeColor()
     { return m_ModeColorOption->GetSelection() == 0; }
@@ -93,7 +93,7 @@ private:
     void PlotSchematic( bool aPlotAll );
 
     // PDF
-    void    createPDFFile( bool aPlotAll, bool aPlotFrameRef );
+    void    createPDFFile( bool aPlotAll, bool aPlotFrameRef, int aDefaultLineWidth );
     void    plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen, bool aPlotFrameRef);
     void    setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen );
 
@@ -127,13 +127,13 @@ private:
                               wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // PS
-    void    createPSFile( bool aPlotAll, bool aPlotFrameRef );
-    bool    plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen,
-                            const PAGE_INFO& aPageInfo,
-                            wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
+    void    createPSFile( bool aPlotAll, bool aPlotFrameRef, int aDefaultLineWidth );
+    bool    plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen, int aDefaultLineWidth,
+                            const PAGE_INFO& aPageInfo, wxPoint aPlot0ffset, double aScale,
+                            bool aPlotFrameRef );
 
     // SVG
-    void    createSVGFile( bool aPlotAll, bool aPlotFrameRef );
+    void    createSVGFile( bool aPlotAll, bool aPlotFrameRef, int aDefaultLineWidth );
 
     /**
      * Create a file name with an absolute path name
@@ -153,8 +153,7 @@ public:
     // This function is static because it is called by libedit
     // outside a dialog. This is the reason we need aFrame as parameter
     static bool plotOneSheetSVG( EDA_DRAW_FRAME* aFrame, const wxString& aFileName,
-                                 SCH_SCREEN* aScreen,
+                                 SCH_SCREEN* aScreen, int aDefaultLineWidth,
                                  bool aPlotBlackAndWhite, bool aPlotFrameRef,
-                                 bool aPlotBackgroundColor = false,
-                                 COLOR_SETTINGS* aColors = nullptr );
+                                 bool aPlotBackgroundColor, COLOR_SETTINGS* aColors );
 };

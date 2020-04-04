@@ -34,6 +34,7 @@ public:
     struct DEFAULTS
     {
         int line_width;
+        int text_size;
         int pin_length;
         int pin_name_size;
         int pin_num_size;

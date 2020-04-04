@@ -54,12 +54,6 @@
 #include "erc.h"
 
 
-static int s_defaultBusThickness = Mils2iu( DEFAULTBUSTHICKNESS );
-static int s_defaultWireThickness  = Mils2iu( DEFAULTDRAWLINETHICKNESS );
-static int s_defaultTextSize = Mils2iu( DEFAULT_SIZE_TEXT );
-static int s_drawDefaultLineThickness = -1;
-static COLOR4D s_defaultSheetBorderColor = MAGENTA;
-static COLOR4D s_defaultSheetBackgroundColor = WHITE;
 static double s_textOffsetRatio = 0.08;
 static bool s_selectTextAsBox = false;
 static bool s_selectDrawChildren = true;
@@ -229,78 +223,6 @@ void SetSeverity( int aErrorCode, int aSeverity )
 }
 
 
-int GetDefaultBusThickness()
-{
-    return s_defaultBusThickness;
-}
-
-
-void SetDefaultBusThickness( int aThickness )
-{
-    s_defaultBusThickness = std::max( 1, aThickness );
-}
-
-
-int GetDefaultWireThickness()
-{
-    return s_defaultWireThickness;
-}
-
-
-void SetDefaultWireThickness( int aThickness )
-{
-    s_defaultWireThickness = std::max( 1, aThickness );
-}
-
-
-int GetDefaultTextSize()
-{
-    return s_defaultTextSize;
-}
-
-
-void SetDefaultTextSize( int aTextSize )
-{
-    s_defaultTextSize = aTextSize;
-}
-
-
-int GetDefaultLineThickness()
-{
-    return s_drawDefaultLineThickness;
-}
-
-
-COLOR4D GetDefaultSheetBorderColor()
-{
-    return s_defaultSheetBorderColor;
-}
-
-
-void SetDefaultSheetBorderColor( COLOR4D aColor )
-{
-    s_defaultSheetBorderColor = aColor;
-}
-
-
-COLOR4D GetDefaultSheetBackgroundColor()
-{
-    return s_defaultSheetBackgroundColor;
-}
-
-
-void SetDefaultSheetBackgroundColor( COLOR4D aColor )
-{
-    s_defaultSheetBackgroundColor = aColor;
-}
-
-
-void SetDefaultLineThickness( int aThickness )
-{
-    s_drawDefaultLineThickness = std::max( 1, aThickness );
-}
-
-
 double GetTextOffsetRatio()
 {
     return s_textOffsetRatio;
@@ -403,7 +325,7 @@ void SCH_EDIT_FRAME::AddFormattingParameters( std::vector<PARAM_CFG*>& params )
                                          LIB_PART::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
 
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "LabSize" ),
-                                         &s_defaultTextSize,
+                                         &m_defaultTextSize,
                                          Mils2iu( DEFAULT_SIZE_TEXT ),
                                          5, 1000, nullptr, 1 / IU_PER_MILS ) );
     params.push_back( new PARAM_CFG_DOUBLE( wxT( "TextOffsetRatio" ),
@@ -411,16 +333,16 @@ void SCH_EDIT_FRAME::AddFormattingParameters( std::vector<PARAM_CFG*>& params )
                                          (double) TXT_MARGIN / DEFAULT_SIZE_TEXT,
                                          -200.0, 200.0 ) );
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "LineThickness" ),
-                                         &s_drawDefaultLineThickness,
+                                         &m_defaultLineWidth,
                                          Mils2iu( appSettings->m_Drawing.default_line_thickness ),
                                          5, 1000, nullptr, 1 / IU_PER_MILS ) );
 
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "BusThickness" ),
-                                         &s_defaultBusThickness,
+                                         &m_defaultBusThickness,
                                          Mils2iu( appSettings->m_Drawing.default_bus_thickness ),
                                          5, 1000, nullptr, 1 / IU_PER_MILS ) );
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "WireThickness" ),
-                                         &s_defaultWireThickness,
+                                         &m_defaultWireThickness,
                                          Mils2iu( appSettings->m_Drawing.default_wire_thickness ),
                                          5, 1000, nullptr, 1 / IU_PER_MILS ) );
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "JunctionSize" ),
@@ -468,6 +390,10 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
 {
     bool ret = Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDIT,
                                  GetProjectFileParameters() );
+
+    GetRenderSettings()->m_DefaultLineWidth = m_defaultLineWidth;
+    GetRenderSettings()->m_DefaultWireThickness = m_defaultWireThickness;
+    GetRenderSettings()->m_DefaultBusThickness = m_defaultBusThickness;
 
     // Verify some values, because the config file can be edited by hand,
     // and have bad values:
@@ -642,7 +568,7 @@ void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
     book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
     book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
-    book->AddSubPage( new PANEL_LIBEDIT_SETTINGS( this, book ), _( "Defaults" ) );
+    book->AddSubPage( new PANEL_LIBEDIT_SETTINGS( this, book ), _( "Editing Options" ) );
     book->AddSubPage( new PANEL_LIBEDIT_COLOR_SETTINGS( this, book ), _( "Color Options" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );

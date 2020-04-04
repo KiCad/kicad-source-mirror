@@ -53,9 +53,7 @@ public:
         return wxT( "SCH_JUNCTION" );
     }
 
-    // Return the size the symbol should be drawn at.  This is GetSymbolSize() clamped to be
-    // no less than the current wire width.
-    static int GetEffectiveSymbolSize();
+    static int GetSymbolSize();
 
     void SwapData( SCH_ITEM* aItem ) override;
 

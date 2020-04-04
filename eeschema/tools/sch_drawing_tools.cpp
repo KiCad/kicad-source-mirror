@@ -835,6 +835,9 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet->SetFlags( IS_NEW | IS_RESIZED );
             sheet->SetParent( m_frame->GetScreen() );
             sheet->SetScreen( NULL );
+            sheet->SetBorderWidth( m_frame->GetDefaultLineWidth() );
+            sheet->SetBorderColor( m_frame->GetDefaultSheetBorderColor() );
+            sheet->SetBackgroundColor( m_frame->GetDefaultSheetBackgroundColor() );
             sizeSheet( sheet, cursorPos );
 
             m_view->ClearPreview();

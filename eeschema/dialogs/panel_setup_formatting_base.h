@@ -43,6 +43,9 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_offsetRatioUnits;
 		wxCheckBox* m_checkSuperSub;
 		wxStaticText* m_superSubHint;
+		wxStaticText* m_lineWidthLabel;
+		wxTextCtrl* m_lineWidthCtrl;
+		wxStaticText* m_lineWidthUnits;
 		wxStaticText* m_busWidthLabel;
 		wxTextCtrl* m_busWidthCtrl;
 		wxStaticText* m_busWidthUnits;

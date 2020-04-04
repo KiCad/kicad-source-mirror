@@ -915,7 +915,7 @@ void SCH_EDIT_FRAME::PrintPage( wxDC* aDC )
 
     aDC->SetLogicalFunction( wxCOPY );
     GetScreen()->Print( aDC );
-    PrintWorkSheet( aDC, GetScreen(), GetDefaultLineThickness(), IU_PER_MILS, fileName );
+    PrintWorkSheet( aDC, GetScreen(), GetDefaultLineWidth(), IU_PER_MILS, fileName );
 }
 
 

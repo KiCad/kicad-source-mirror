@@ -135,7 +135,7 @@ wxPoint SCH_TEXT::GetSchematicTextOffset() const
 
     // add an offset to x (or y) position to aid readability of text on a wire or line
     int thick_offset = KiROUND( GetTextOffsetRatio() * GetTextSize().y );
-    thick_offset += ( GetPenSize() + GetDefaultLineThickness() ) / 2;
+    thick_offset += GetPenSize() / 2;
 
     switch( GetLabelSpinStyle() )
     {
@@ -283,30 +283,23 @@ int SCH_TEXT::GetPenSize() const
 {
     int pensize = GetThickness();
 
-    if( pensize == 0 )   // Use default values for pen size
-    {
-        if( IsBold()  )
-            pensize = GetPenSizeForBold( GetTextWidth() );
-        else
-            pensize = GetDefaultLineThickness();
-    }
+    if( pensize == 0 && IsBold()  )
+        pensize = GetPenSizeForBold( GetTextWidth() );
 
     // Clip pen size for small texts:
     pensize = Clamp_Text_PenSize( pensize, GetTextSize(), IsBold() );
+
     return pensize;
 }
 
 
 void SCH_TEXT::Print( wxDC* DC, const wxPoint& aOffset )
 {
-    COLOR4D     color = GetLayerColor( m_Layer );
-    int         linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
-
-    linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
-
+    COLOR4D color = GetLayerColor( m_Layer );
+    int     linewidth = GetPenSize();
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
+    int     savedWidth = GetThickness();
 
-    int savedWidth = GetThickness();
     SetThickness( linewidth );              // Set the minimum width
 
     EDA_TEXT::Print( DC, text_offset, color );
@@ -421,11 +414,8 @@ void SCH_TEXT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 
 const EDA_RECT SCH_TEXT::GetBoundingBox() const
 {
-    // We must pass the effective text thickness to GetTextBox
-    // when calculating the bounding box
-    int linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
-
-    linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
+    // Use the maximum clamped pen width to give us a bit of wiggle room
+    int linewidth = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
 
     EDA_RECT rect = GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
 
@@ -751,8 +741,10 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
 
 const EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
-    int         linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
-    EDA_RECT    rect = GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
+    // Use the maximum clamped pen width to give us a bit of wiggle room
+    int linewidth = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
+
+    EDA_RECT rect = GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
 
     if( GetTextAngle() != 0.0 )
     {
@@ -804,9 +796,7 @@ EDA_ITEM* SCH_GLOBALLABEL::Clone() const
 wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
-    int     width = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
-
-    width = Clamp_Text_PenSize( width, GetTextSize(), IsBold() );
+    int     width = GetPenSize();
     int     halfSize = GetTextWidth() / 2;
     int     offset   = width;
 
@@ -891,14 +881,12 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 void SCH_GLOBALLABEL::Print( wxDC* DC, const wxPoint& aOffset )
 {
     static std::vector <wxPoint> Poly;
+
     COLOR4D color = GetLayerColor( m_Layer );
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
+    int     linewidth = GetPenSize();
+    int     save_width = GetThickness();
 
-    int linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
-
-    linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
-
-    int save_width = GetThickness();
     SetThickness( linewidth );
 
     EDA_TEXT::Print( DC, text_offset, color );
@@ -913,9 +901,9 @@ void SCH_GLOBALLABEL::Print( wxDC* DC, const wxPoint& aOffset )
 void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
 {
     int halfSize  = GetTextHeight() / 2;
-    int linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
 
-    linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
+    // Use the maximum clamped pen width to give us a bit of wiggle room
+    int linewidth = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
 
     aPoints.clear();
 
@@ -1018,7 +1006,8 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     y  = GetTextPos().y;
     dx = dy = 0;
 
-    int width = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
+    // Use the maximum clamped pen width to give us a bit of wiggle room
+    int width = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
 
     height = ( (GetTextHeight() * 15) / 10 ) + width + 2 * TXT_MARGIN;
 
@@ -1139,11 +1128,9 @@ void SCH_HIERLABEL::Print( wxDC* DC, const wxPoint& offset )
 
     auto    conn = Connection( *g_CurrentSheet );
     COLOR4D color = GetLayerColor( ( conn && conn->IsBus() ) ? LAYER_BUS : m_Layer );
-    int     linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
+    int     linewidth = GetPenSize();
+    int     save_width = GetThickness();
 
-    linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
-
-    int save_width = GetThickness();
     SetThickness( linewidth );
 
     wxPoint text_offset = offset + GetSchematicTextOffset();
@@ -1186,7 +1173,8 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
     y  = GetTextPos().y;
     dx = dy = 0;
 
-    int width = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
+    // Use the maximum clamped pen width to give us a bit of wiggle room
+    int width = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
 
     height = GetTextHeight() + width + 2 * TXT_MARGIN;
     length = LenSize( GetShownText(), width, GetTextMarkupFlags() )
@@ -1234,7 +1222,7 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
-    int     thickness = std::max( GetThickness(), GetDefaultLineThickness() );
+    int     thickness = GetPenSize();
     int     offset = KiROUND( GetTextOffsetRatio() * GetTextSize().y );
     int     total_offset = GetTextWidth() + offset + thickness;
 

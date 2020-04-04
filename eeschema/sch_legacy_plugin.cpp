@@ -2282,7 +2282,7 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
     // Write line style (width, type, color) only for non default values
     if( aLine->IsGraphicLine() )
     {
-        if( aLine->GetPenSize() != aLine->GetDefaultWidth() )
+        if( aLine->GetPenSize() != 0 )
             m_out->Print( 0, " %s %d", T_WIDTH, Iu2Mils( aLine->GetLineSize() ) );
 
         if( aLine->GetLineStyle() != aLine->GetDefaultStyle() )

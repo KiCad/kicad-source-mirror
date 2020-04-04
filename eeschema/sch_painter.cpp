@@ -38,7 +38,6 @@
 #include <lib_arc.h>
 #include <lib_bezier.h>
 #include <lib_circle.h>
-#include <lib_edit_frame.h>
 #include <lib_field.h>
 #include <lib_item.h>
 #include <lib_pin.h>
@@ -59,7 +58,6 @@
 #include <sch_sheet.h>
 #include <sch_text.h>
 #include <settings/color_settings.h>
-#include <template_fieldnames.h>
 #include <view/view.h>
 
 #include "sch_painter.h"
@@ -283,6 +281,9 @@ float SCH_PAINTER::getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows )
 {
     float width = (float) aItem->GetPenSize();
 
+    if( width == 0 )
+        width = (float) m_schSettings.m_DefaultLineWidth;
+
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();
 
@@ -292,12 +293,22 @@ float SCH_PAINTER::getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows )
 
 float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows )
 {
-   float width = (float) aItem->GetPenSize();
+    float width = (float) aItem->GetPenSize();
 
-   if( aItem->IsSelected() && aDrawingShadows )
-       width += getShadowWidth();
+    if( width == 0 )
+    {
+        if( aItem->GetLayer() ==  LAYER_WIRE )
+            width = (float)  m_schSettings.m_DefaultWireThickness;
+        else if( aItem->GetLayer() == LAYER_BUS )
+            width = (float)  m_schSettings.m_DefaultBusThickness;
+        else
+            width = (float) m_schSettings.m_DefaultLineWidth;
+    }
 
-   return width;
+    if( aItem->IsSelected() && aDrawingShadows )
+        width += getShadowWidth();
+
+    return width;
 }
 
 
@@ -306,7 +317,7 @@ float SCH_PAINTER::getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows
     float width = (float) aItem->GetThickness();
 
     if( width == 0 )
-        width = (float) GetDefaultLineThickness();
+        width = (float) m_schSettings.m_DefaultLineWidth;
 
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();
@@ -404,7 +415,7 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
     case LAYER_DEVICE:
         m_gal->SetIsFill( aItem->GetFillMode() == FILLED_SHAPE );
         m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
-        m_gal->SetIsStroke( aItem->GetPenSize() > 0 );
+        m_gal->SetIsStroke( true );
         m_gal->SetLineWidth( getLineWidth( aItem, false ) );
         m_gal->SetStrokeColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
 
@@ -905,7 +916,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 
     int   insideOffset = textOffset;
     int   outsideOffset = 10;
-    float lineThickness = (float) GetDefaultLineThickness();
+    float lineThickness = (float) m_schSettings.m_DefaultLineWidth;
     float aboveOffset = Mils2iu( PIN_TEXT_MARGIN ) + ( thickness[ABOVE] + lineThickness ) / 2.0;
     float belowOffset = Mils2iu( PIN_TEXT_MARGIN ) + ( thickness[BELOW] + lineThickness ) / 2.0;
 
@@ -1110,7 +1121,7 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetIsFill( !drawingShadows );
     m_gal->SetFillColor( color );
-    m_gal->DrawCircle( aJct->GetPosition(), SCH_JUNCTION::GetEffectiveSymbolSize() / 2.0 );
+    m_gal->DrawCircle( aJct->GetPosition(), SCH_JUNCTION::GetSymbolSize() / 2.0 );
 }
 
 
@@ -1596,7 +1607,7 @@ void SCH_PAINTER::draw( SCH_NO_CONNECT *aNC, int aLayer )
     m_gal->SetIsFill( false );
 
     VECTOR2D p = aNC->GetPosition();
-    int      delta = aNC->GetSize() / 2;
+    int      delta = std::max( aNC->GetSize(), m_schSettings.m_DefaultLineWidth * 3 ) / 2;
 
     m_gal->DrawLine( p + VECTOR2D( -delta, -delta ), p + VECTOR2D( delta, delta ) );
     m_gal->DrawLine( p + VECTOR2D( -delta, delta ), p + VECTOR2D( delta, -delta ) );

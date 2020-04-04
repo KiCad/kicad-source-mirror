@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,10 +24,7 @@
 
 #include <ee_actions.h>
 #include <lib_edit_frame.h>
-#include <sch_view.h>
-#include <confirm.h>
 #include <view/view_controls.h>
-#include <view/view.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/lib_drawing_tools.h>
@@ -148,7 +145,8 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                     LIB_TEXT* text = new LIB_TEXT( part );
                     text->SetPosition( wxPoint( cursorPos.x, -cursorPos.y ) );
-                    text->SetTextSize( wxSize( m_frame->g_LastTextSize, m_frame->g_LastTextSize ) );
+                    text->SetTextSize( wxSize( m_frame->GetDefaultTextSize(),
+                                               m_frame->GetDefaultTextSize() ) );
                     text->SetTextAngle( m_frame->g_LastTextAngle );
 
                     DIALOG_LIB_EDIT_TEXT dlg( m_frame, text );
@@ -319,7 +317,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             wxASSERT( item );
 
-            item->SetWidth( LIB_EDIT_FRAME::g_LastLineWidth );
+            item->SetWidth( m_frame->GetDefaultLineWidth() );
             item->SetFillMode( LIB_EDIT_FRAME::g_LastFillStyle );
             item->SetFlags( IS_NEW );
             item->BeginEdit( wxPoint( cursorPos.x, -cursorPos.y ) );

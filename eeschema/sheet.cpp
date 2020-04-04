@@ -493,19 +493,6 @@ bool SCH_EDIT_FRAME::EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHi
 
 
 PINSHEETLABEL_SHAPE SCH_EDIT_FRAME::m_lastSheetPinType = PINSHEETLABEL_SHAPE::PS_INPUT;
-wxSize SCH_EDIT_FRAME::m_lastSheetPinTextSize( -1, -1 );
-wxPoint SCH_EDIT_FRAME::m_lastSheetPinPosition;
-
-const wxSize &SCH_EDIT_FRAME::GetLastSheetPinTextSize()
-{
-    // Delayed initialization (need the preferences to be loaded)
-    if( m_lastSheetPinTextSize.x == -1 )
-    {
-        m_lastSheetPinTextSize.x = GetDefaultTextSize();
-        m_lastSheetPinTextSize.y = GetDefaultTextSize();
-    }
-    return m_lastSheetPinTextSize;
-}
 
 
 SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel )
@@ -521,7 +508,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL*
 
     sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), text );
     sheetPin->SetFlags( IS_NEW );
-    sheetPin->SetTextSize( GetLastSheetPinTextSize() );
+    sheetPin->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
     sheetPin->SetShape( m_lastSheetPinType );
 
     if( !aLabel )
@@ -536,7 +523,6 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL*
     }
 
     m_lastSheetPinType = sheetPin->GetShape();
-    m_lastSheetPinTextSize = sheetPin->GetTextSize();
 
     sheetPin->SetPosition( (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition() );
 

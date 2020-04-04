@@ -287,7 +287,7 @@ static void formatStroke( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aWidt
 
     aFormatter->Print( aNestLevel, "(stroke" );
 
-    if( !( aWidth == GetDefaultLineThickness() || aWidth == 0 ) )
+    if( !( aWidth == 0 ) )
         aFormatter->Print( 0, " (width %s)", FormatInternalUnits( aWidth ).c_str() );
 
     if( !( aStyle == PLOT_DASH_TYPE::DEFAULT || aStyle == PLOT_DASH_TYPE::SOLID ) )
@@ -1659,8 +1659,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveArc( LIB_ARC* aArc,
     bool needsSpace = false;
     bool onNewLine = false;
 
-    if( Iu2Mils( aArc->GetWidth() ) != DEFAULTDRAWLINETHICKNESS
-      && aArc->GetWidth() != 0 )
+    if( aArc->GetWidth() != 0 )
     {
         aFormatter.Print( 0, "\n" );
         aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
@@ -1733,8 +1732,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier,
 
     bool needsSpace = false;
 
-    if( Iu2Mils( aBezier->GetWidth() ) != DEFAULTDRAWLINETHICKNESS
-      && aBezier->GetWidth() != 0 )
+    if( aBezier->GetWidth() != 0 )
     {
         aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
                           FormatInternalUnits( aBezier->GetWidth() ).c_str() );
@@ -1774,8 +1772,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveCircle( LIB_CIRCLE* aCircle,
                       FormatInternalUnits( aCircle->GetPosition().y ).c_str(),
                       FormatInternalUnits( aCircle->GetRadius() ).c_str() );
 
-    if( Iu2Mils( aCircle->GetWidth() ) != DEFAULTDRAWLINETHICKNESS
-      && aCircle->GetWidth() != 0 )
+    if( aCircle->GetWidth() != 0 )
     {
         aFormatter.Print( 0, " (stroke (width %s))",
                           FormatInternalUnits( aCircle->GetWidth() ).c_str() );
@@ -1911,8 +1908,7 @@ void SCH_SEXPR_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine,
 
     bool needsSpace = false;
 
-    if( Iu2Mils( aPolyLine->GetWidth() ) != DEFAULTDRAWLINETHICKNESS
-      && aPolyLine->GetWidth() != 0 )
+    if( aPolyLine->GetWidth() != 0 )
     {
         aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
                           FormatInternalUnits( aPolyLine->GetWidth() ).c_str() );
@@ -1956,8 +1952,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveRectangle( LIB_RECTANGLE* aRectangle,
 
     bool needsSpace = false;
 
-    if( Iu2Mils( aRectangle->GetWidth() ) != DEFAULTDRAWLINETHICKNESS
-      && aRectangle->GetWidth() != 0 )
+    if( aRectangle->GetWidth() != 0 )
     {
         aFormatter.Print( 0, " (stroke (width %s))",
                           FormatInternalUnits( aRectangle->GetWidth() ).c_str() );

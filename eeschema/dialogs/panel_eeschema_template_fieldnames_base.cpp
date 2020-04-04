@@ -16,12 +16,13 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
 	wxBoxSizer* bPanelSizer;
 	bPanelSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxVERTICAL );
+	m_leftMargin = new wxBoxSizer( wxHORIZONTAL );
+
+	m_topMargin = new wxBoxSizer( wxVERTICAL );
 
 	m_title = new wxStaticText( this, wxID_ANY, _("%s field name templates:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
-	bSizer4->Add( m_title, 0, wxTOP|wxBOTTOM, 5 );
+	m_topMargin->Add( m_title, 0, wxTOP|wxBOTTOM, 5 );
 
 	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -55,7 +56,7 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_grid->SetMinSize( wxSize( -1,180 ) );
 
-	bSizer4->Add( m_grid, 1, wxEXPAND, 10 );
+	m_topMargin->Add( m_grid, 1, wxEXPAND, 10 );
 
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
@@ -74,10 +75,13 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
 	bSizer10->Add( m_deleteFieldButton, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer4->Add( bSizer10, 0, wxEXPAND, 10 );
+	m_topMargin->Add( bSizer10, 0, wxEXPAND, 10 );
 
 
-	bPanelSizer->Add( bSizer4, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	m_leftMargin->Add( m_topMargin, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+
+
+	bPanelSizer->Add( m_leftMargin, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bPanelSizer );

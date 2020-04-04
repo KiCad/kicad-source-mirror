@@ -163,15 +163,8 @@ private:
     */
 
     static PINSHEETLABEL_SHAPE m_lastSheetPinType;    ///< Last sheet pin type.
-    static wxSize           m_lastSheetPinTextSize;   ///< Last sheet pin text size.
-    static wxPoint          m_lastSheetPinPosition;   ///< Last sheet pin position.
 
 protected:
-    /**
-     * Initializing accessor for the pin text size
-     */
-    const wxSize &GetLastSheetPinTextSize();
-
     /**
      * Save the schematic files that have been modified and not yet saved.
      *

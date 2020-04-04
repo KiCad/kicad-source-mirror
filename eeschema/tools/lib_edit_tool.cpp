@@ -442,7 +442,6 @@ void LIB_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify( );
 
-    m_frame->g_LastLineWidth       = dialog.GetWidth();
     m_frame->m_DrawSpecificConvert = !dialog.GetApplyToAllConversions();
     m_frame->m_DrawSpecificUnit    = !dialog.GetApplyToAllUnits();
 

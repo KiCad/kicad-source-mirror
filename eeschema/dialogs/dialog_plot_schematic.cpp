@@ -135,7 +135,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
 
     // Set the default line width (pen width which should be used for
     // items that do not have a pen size defined (like frame ref)
-    m_defaultLineWidth.SetValue( GetDefaultLineThickness() );
+    m_defaultLineWidth.SetValue( m_parent->GetDefaultLineWidth() );
 
     // Initialize HPGL specific widgets
     m_penWidth.SetValue( m_HPGLPenSize );
@@ -270,7 +270,7 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
+void DIALOG_PLOT_SCHEMATIC::getPlotOptions( int* aDefaultLineWidth )
 {
     m_HPGLPenSize = m_penWidth.GetValue();
 
@@ -292,7 +292,7 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
         cfg->m_PlotPanel.hpgl_pen_size = m_HPGLPenSize / IU_PER_MM;
     }
 
-    SetDefaultLineThickness( m_defaultLineWidth.GetValue() );
+    *aDefaultLineWidth = (int) m_defaultLineWidth.GetValue();
 
     // Plot directory
     wxString path = m_outputDirectoryName->GetValue();
@@ -319,22 +319,24 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
 
 void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
 {
-    getPlotOptions();
+    int defaultLineWidth;
+
+    getPlotOptions( &defaultLineWidth );
 
     switch( GetPlotFileFormat() )
     {
     default:
     case PLOT_FORMAT::POST:
-        createPSFile( aPlotAll, getPlotFrameRef() );
+        createPSFile( aPlotAll, getPlotFrameRef(), defaultLineWidth );
         break;
     case PLOT_FORMAT::DXF:
         CreateDXFFile( aPlotAll, getPlotFrameRef() );
         break;
     case PLOT_FORMAT::PDF:
-        createPDFFile( aPlotAll, getPlotFrameRef() );
+        createPDFFile( aPlotAll, getPlotFrameRef(), defaultLineWidth );
         break;
     case PLOT_FORMAT::SVG:
-        createSVGFile( aPlotAll, getPlotFrameRef() );
+        createSVGFile( aPlotAll, getPlotFrameRef(), defaultLineWidth );
         break;
     case PLOT_FORMAT::HPGL:
         createHPGLFile( aPlotAll, getPlotFrameRef() );

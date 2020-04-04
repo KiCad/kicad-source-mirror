@@ -187,9 +187,9 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme()
         COLOR4D color;
 
         if( layer == LAYER_SHEET )
-            color = GetDefaultSheetBorderColor();
+            color = m_frame->GetDefaultSheetBorderColor();
         else if( layer == LAYER_SHEET_BACKGROUND )
-            color = GetDefaultSheetBackgroundColor();
+            color = m_frame->GetDefaultSheetBackgroundColor();
         else
             color = m_currentSettings->GetColor( layer );
 

@@ -535,6 +535,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnAddField( wxCommandEvent& event )
     newField.SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID ) );
     newField.SetTextAngle( m_fields->at( REFERENCE ).GetTextAngle() );
 
+    newField.SetTextSize( wxSize( GetParent()->GetDefaultTextSize(),
+                                  GetParent()->GetDefaultTextSize() ) );
+
     m_fields->push_back( newField );
 
     // notify the grid

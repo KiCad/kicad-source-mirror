@@ -198,13 +198,7 @@ void LIB_POLYLINE::RemoveCorner( int aIdx )
 
 int LIB_POLYLINE::GetPenSize() const
 {
-    if( m_Width > 0 )
-        return m_Width;
-
-    if( m_Width == 0 )
-       return GetDefaultLineThickness();
-
-    return -1;   // the minimal pen value
+    return m_Width;
 }
 
 

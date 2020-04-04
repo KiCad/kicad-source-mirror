@@ -37,7 +37,8 @@
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
 
-void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
+void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
+                                          int aDefaultLineWidth )
 {
     SCH_SCREEN*     screen = m_parent->GetScreen();
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();  // sheetpath is saved here
@@ -102,8 +103,8 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
             wxFileName plotFileName = createPlotFileName( m_outputDirectoryName,
                                                           fname, ext, &reporter );
 
-            if( plotOneSheetPS( plotFileName.GetFullPath(), screen, plotPage, plot_offset,
-                                scale, aPlotFrameRef ) )
+            if( plotOneSheetPS( plotFileName.GetFullPath(), screen, aDefaultLineWidth, plotPage,
+                                plot_offset, scale, aPlotFrameRef ) )
             {
                 msg.Printf( _( "Plot: \"%s\" OK.\n" ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ACTION );
@@ -131,6 +132,7 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
 
 bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
                                             SCH_SCREEN*         aScreen,
+                                            int                 aDefaultLineWidth,
                                             const PAGE_INFO&    aPageInfo,
                                             wxPoint             aPlot0ffset,
                                             double              aScale,
@@ -141,7 +143,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
 
     PS_PLOTTER* plotter = new PS_PLOTTER();
     plotter->SetPageSettings( aPageInfo );
-    plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
+    plotter->SetDefaultLineWidth( aDefaultLineWidth );
     plotter->SetColorMode( getModeColor() );
     plotter->SetColorSettings( colors );
     // Currently, plot units are in decimil

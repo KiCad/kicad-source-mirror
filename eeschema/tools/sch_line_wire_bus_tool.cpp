@@ -374,7 +374,8 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
     m_frame->AddToScreen( m_busUnfold.entry );
 
     m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->m_End(), aNet );
-    m_busUnfold.label->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+    m_busUnfold.label->SetTextSize( wxSize( m_frame->GetDefaultTextSize(),
+                                            m_frame->GetDefaultTextSize() ) );
     m_busUnfold.label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
     m_busUnfold.label->SetParent( m_frame->GetScreen() );
     m_busUnfold.label->SetFlags( IS_NEW | IS_MOVED );

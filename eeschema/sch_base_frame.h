@@ -87,6 +87,13 @@ LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
 class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
 protected:
+    int       m_defaultLineWidth;
+    int       m_defaultWireThickness;
+    int       m_defaultBusThickness;
+    int       m_defaultTextSize;
+    COLOR4D   m_defaultSheetBorderColor;
+    COLOR4D   m_defaultSheetBackgroundColor;
+
     TEMPLATES m_templateFieldNames;
     wxPoint   m_repeatStep;                // the increment value of the position of an item
                                            // when it is repeated
@@ -131,6 +138,24 @@ public:
      */
     bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
     void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
+
+    int GetDefaultLineWidth() const { return m_defaultLineWidth; }
+    void SetDefaultLineWidth( int aWidth );
+
+    int GetDefaultWireThickness() const { return m_defaultWireThickness; }
+    void SetDefaultWireThickness( int aThickness );
+
+    int GetDefaultBusThickness() const { return m_defaultBusThickness; }
+    void SetDefaultBusThickness( int aThickness );
+
+    int GetDefaultTextSize() const { return m_defaultTextSize; }
+    void SetDefaultTextSize( int aSize ) { m_defaultTextSize = aSize; }
+
+    COLOR4D GetDefaultSheetBorderColor() { return m_defaultSheetBorderColor; }
+    void SetDefaultSheetBorderColor( COLOR4D aColor ) { m_defaultSheetBorderColor = aColor; }
+
+    COLOR4D GetDefaultSheetBackgroundColor() { return m_defaultSheetBackgroundColor; }
+    void SetDefaultSheetBackgroundColor( COLOR4D aColor ) { m_defaultSheetBackgroundColor = aColor; }
 
     /**
      * @return the increment value of the position of an item

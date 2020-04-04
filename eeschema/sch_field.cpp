@@ -210,37 +210,22 @@ int SCH_FIELD::GetPenSize() const
 {
     int pensize = GetThickness();
 
-    if( pensize == 0 )   // Use default values for pen size
-    {
-        if( IsBold()  )
-            pensize = GetPenSizeForBold( GetTextWidth() );
-        else
-            pensize = GetDefaultLineThickness();
-    }
+    if( pensize == 0 && IsBold()  )
+        pensize = GetPenSizeForBold( GetTextWidth() );
 
     // Clip pen size for small texts:
     pensize = Clamp_Text_PenSize( pensize, GetTextSize(), IsBold() );
+
     return pensize;
 }
 
 
 void SCH_FIELD::Print( wxDC* aDC, const wxPoint& aOffset )
 {
-    int            orient;
-    COLOR4D        color;
-    wxPoint        textpos;
-    int            lineWidth = GetThickness();
-
-    if( lineWidth == 0 )   // Use default values for pen size
-    {
-        if( IsBold() )
-            lineWidth = GetPenSizeForBold( GetTextWidth() );
-        else
-            lineWidth = GetDefaultLineThickness();
-    }
-
-    // Clip pen size for small texts:
-    lineWidth = Clamp_Text_PenSize( lineWidth, GetTextSize(), IsBold() );
+    int      orient;
+    COLOR4D  color;
+    wxPoint  textpos;
+    int      lineWidth = GetPenSize();
 
     if( ( !IsVisible() && !m_forceVisible) || IsVoid() )
         return;
@@ -306,11 +291,8 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 
 const EDA_RECT SCH_FIELD::GetBoundingBox() const
 {
-    int linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
-
-    // We must pass the effective text thickness to GetTextBox
-    // when calculating the bounding box
-    linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
+    // Use the maximum clamped pen width to give us a bit of wiggle room
+    int linewidth = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
 
     // Calculate the text bounding box:
     EDA_RECT  rect;

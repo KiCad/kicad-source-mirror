@@ -23,7 +23,6 @@
  */
 
 #include <fctsys.h>
-#include <base_screen.h>
 #include <sch_edit_frame.h>
 #include <settings/settings_manager.h>
 #include <settings/color_settings.h>
@@ -34,7 +33,10 @@
 
 PANEL_EESCHEMA_SETTINGS::PANEL_EESCHEMA_SETTINGS( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow ) :
         PANEL_EESCHEMA_SETTINGS_BASE( aWindow ),
-        m_frame( aFrame )
+        m_frame( aFrame ),
+        m_defaultTextSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
+        m_hPitch( aFrame, m_hPitchLabel, m_hPitchCtrl, m_hPitchUnits, true ),
+        m_vPitch( aFrame, m_vPitchLabel, m_vPitchCtrl, m_vPitchUnits, true )
 {}
 
 
@@ -42,22 +44,19 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
 {
     m_choiceUnits->SetSelection( m_frame->GetUserUnits() == EDA_UNITS::INCHES ? 0 : 1 );
 
-    m_textSizeCtrl->SetValue(
-            StringFromValue( EDA_UNITS::INCHES, GetDefaultTextSize(), false, true ) );
-    m_hPitchCtrl->SetValue(
-            StringFromValue( EDA_UNITS::INCHES, m_frame->GetRepeatStep().x, false, true ) );
-    m_vPitchCtrl->SetValue(
-            StringFromValue( EDA_UNITS::INCHES, m_frame->GetRepeatStep().y, false, true ) );
+    m_defaultTextSize.SetValue( m_frame->GetDefaultTextSize() );
+    m_hPitch.SetValue( m_frame->GetRepeatStep().x );
+    m_vPitch.SetValue( m_frame->GetRepeatStep().y );
     m_spinLabelRepeatStep->SetValue( m_frame->GetRepeatDeltaLabel() );
 
     COLOR_SETTINGS* settings = m_frame->GetColorSettings();
     COLOR4D         schematicBackground = settings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
     m_borderColorSwatch->SetSwatchBackground( schematicBackground );
-    m_borderColorSwatch->SetSwatchColor( GetDefaultSheetBorderColor(), false );
+    m_borderColorSwatch->SetSwatchColor( m_frame->GetDefaultSheetBorderColor(), false );
 
     m_backgroundColorSwatch->SetSwatchBackground( schematicBackground );
-    m_backgroundColorSwatch->SetSwatchColor( GetDefaultSheetBackgroundColor(), false );
+    m_backgroundColorSwatch->SetSwatchColor( m_frame->GetDefaultSheetBackgroundColor(), false );
 
     m_checkHVOrientation->SetValue( m_frame->GetForceHVLines() );
     m_footprintPreview->SetValue( m_frame->GetShowFootprintPreviews() );
@@ -77,23 +76,15 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
 
 bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
 {
-    m_frame->SetUserUnits(
-            m_choiceUnits->GetSelection() == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES );
+    m_frame->SetUserUnits( m_choiceUnits->GetSelection() == 0 ? EDA_UNITS::INCHES
+                                                              : EDA_UNITS::MILLIMETRES );
 
-    int textSize = (int) ValueFromString( EDA_UNITS::INCHES, m_textSizeCtrl->GetValue(), true );
+    m_frame->SetDefaultTextSize( (int) m_defaultTextSize.GetValue() );
 
-    if( textSize != GetDefaultTextSize() )
-    {
-        SetDefaultTextSize( textSize );
-        m_frame->SaveProjectSettings();
-    }
+    m_frame->SetDefaultSheetBorderColor( m_borderColorSwatch->GetSwatchColor() );
+    m_frame->SetDefaultSheetBackgroundColor( m_backgroundColorSwatch->GetSwatchColor() );
 
-    SetDefaultSheetBorderColor( m_borderColorSwatch->GetSwatchColor() );
-    SetDefaultSheetBackgroundColor( m_backgroundColorSwatch->GetSwatchColor() );
-
-    m_frame->SetRepeatStep(
-            wxPoint( (int) ValueFromString( EDA_UNITS::INCHES, m_hPitchCtrl->GetValue(), true ),
-                     (int) ValueFromString( EDA_UNITS::INCHES, m_vPitchCtrl->GetValue(), true ) ) );
+    m_frame->SetRepeatStep( wxPoint( (int) m_hPitch.GetValue(),  (int) m_vPitch.GetValue() ) );
     m_frame->SetRepeatDeltaLabel( m_spinLabelRepeatStep->GetValue() );
 
     m_frame->SetForceHVLines( m_checkHVOrientation->GetValue() );
@@ -107,6 +98,8 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
     m_frame->SetDragActionIsMove( !m_mouseDragIsDrag->GetValue() );
 
     m_frame->SetSelectPinSelectSymbol( m_cbPinSelectionOpt->GetValue() );
+
+    m_frame->SaveProjectSettings();
 
     return true;
 }

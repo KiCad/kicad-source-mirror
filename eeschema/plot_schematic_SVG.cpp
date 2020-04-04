@@ -41,7 +41,8 @@
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
 
-void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
+void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
+                                           int aDefaultLineWidth )
 {
     wxString        msg;
     REPORTER&       reporter = m_MessagesBox->Reporter();
@@ -72,7 +73,7 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
                                                           fname, ext, &reporter );
 
             bool success = plotOneSheetSVG( m_parent, plotFileName.GetFullPath(), screen,
-                                            getModeColor() ? false : true,
+                                            aDefaultLineWidth, getModeColor() ? false : true,
                                             aPrintFrameRef, m_plotBackgroundColor->GetValue(),
                                             colors );
 
@@ -105,6 +106,7 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
 bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    aFrame,
                                              const wxString&    aFileName,
                                              SCH_SCREEN*        aScreen,
+                                             int                aDefaultLineWidth,
                                              bool               aPlotBlackAndWhite,
                                              bool               aPlotFrameRef,
                                              bool               aPlotBackgroundColor,
@@ -117,7 +119,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    aFrame,
 
     const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
     plotter->SetPageSettings( pageInfo );
-    plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
+    plotter->SetDefaultLineWidth( aDefaultLineWidth );
     plotter->SetColorMode( aPlotBlackAndWhite ? false : true );
     plotter->SetColorSettings( aColors );
     wxPoint plot_offset;
