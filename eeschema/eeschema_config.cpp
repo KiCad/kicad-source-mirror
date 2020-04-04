@@ -395,6 +395,8 @@ void SCH_EDIT_FRAME::AddFormattingParameters( std::vector<PARAM_CFG*>& params )
 {
     EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
+    wxCHECK( appSettings, /*void*/ );
+
     params.push_back( new PARAM_CFG_INT( wxT( "SubpartIdSeparator" ),
                                          LIB_PART::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
     params.push_back( new PARAM_CFG_INT( wxT( "SubpartFirstId" ),

@@ -1405,7 +1405,10 @@ void ALTIUM_PCB::ParseArcs6Data(
 
             if( elem.component != ALTIUM_COMPONENT_NONE )
             {
-                dynamic_cast<EDGE_MODULE*>( ds )->SetLocalCoord();
+                auto em = dynamic_cast<EDGE_MODULE*>( ds );
+
+                if( em )
+                    em->SetLocalCoord();
             }
         }
     }
@@ -1842,16 +1845,21 @@ void ALTIUM_PCB::ParseTexts6Data(
 
         itm->SetPosition( elem.position );
         tx->SetTextAngle( elem.rotation * 10. );
+
         if( elem.component != ALTIUM_COMPONENT_NONE )
         {
             TEXTE_MODULE* txm = dynamic_cast<TEXTE_MODULE*>( tx );
-            if( elem.isDesignator || elem.isComment )
+
+            if( txm )
             {
-                double orientation =
-                        static_cast<const MODULE*>( txm->GetParent() )->GetOrientation();
-                txm->SetTextAngle( orientation + txm->GetTextAngle() );
+                if( elem.isDesignator || elem.isComment )
+                {
+                    double orientation =
+                            static_cast<const MODULE*>( txm->GetParent() )->GetOrientation();
+                    txm->SetTextAngle( orientation + txm->GetTextAngle() );
+                }
+                txm->SetLocalCoord();
             }
-            txm->SetLocalCoord();
         }
 
         PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );

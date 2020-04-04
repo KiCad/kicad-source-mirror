@@ -695,7 +695,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
 void FOOTPRINT_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    wxCHECK( cfg, /*void*/ );
 
     PCB_BASE_FRAME::LoadSettings( aCfg );
 
