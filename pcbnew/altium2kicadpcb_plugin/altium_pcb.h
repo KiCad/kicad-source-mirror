@@ -27,7 +27,6 @@
 #include <functional>
 #include <layers_id_colors_and_visibility.h>
 #include <vector>
-#include <zconf.h>
 
 #include <altium_parser_pcb.h>
 
