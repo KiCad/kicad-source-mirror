@@ -57,6 +57,9 @@ class ERC_SETTINGS;
 ///< The default selection highlight thickness
 #define DEFAULTSELECTIONTHICKNESS 3
 
+///< The default line width in mils.
+#define DEFAULT_LINE_WIDTH 6
+
 /* Rotation, mirror of graphic items in components bodies are handled by a
  * transform matrix.  The default matrix is useful to draw lib entries with
  * using this default matrix ( no rotation, no mirror but Y axis is bottom to top, and

@@ -885,7 +885,8 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
                   FormatInternalUnits( aField->GetPosition().y ).c_str(),
                   FormatAngle( aField->GetTextAngleDegrees() * 10.0 ).c_str() );
 
-    if( !aField->IsDefaultFormatting() || ( aField->GetTextHeight() != GetDefaultTextSize() ) )
+    if( !aField->IsDefaultFormatting()
+      || ( aField->GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) ) )
     {
         m_out->Print( 0, "\n" );
         aField->Format( m_out, aNestLevel, 0 );
@@ -985,7 +986,8 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
                       FormatInternalUnits( pin->GetPosition().y ).c_str(),
                       FormatAngle( getSheetPinAngle( pin->GetEdge() ) * 10.0 ).c_str() );
 
-        if( !pin->IsDefaultFormatting() || ( pin->GetTextHeight() != GetDefaultTextSize() ) )
+        if( !pin->IsDefaultFormatting()
+          || ( pin->GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) ) )
         {
             m_out->Print( 0, "\n" );
             pin->Format( m_out, aNestLevel + 1, 0 );
@@ -1114,7 +1116,8 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
                       FormatAngle( aText->GetTextAngle() ).c_str() );
     }
 
-    if( !aText->IsDefaultFormatting() || ( aText->GetTextHeight() != GetDefaultTextSize() ) )
+    if( !aText->IsDefaultFormatting()
+      || ( aText->GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) ) )
     {
         m_out->Print( 0, "\n" );
         aText->Format( m_out, aNestLevel + 1, 0 );
@@ -1606,7 +1609,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveArc( LIB_ARC* aArc,
     bool needsSpace = false;
     bool onNewLine = false;
 
-    if( aArc->GetWidth() != 0 )
+    if( aArc->GetWidth() != 0 && aArc->GetWidth() != Mils2iu( DEFAULT_LINE_WIDTH ) )
     {
         aFormatter.Print( 0, "\n" );
         aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
@@ -1679,7 +1682,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier,
 
     bool needsSpace = false;
 
-    if( aBezier->GetWidth() != 0 )
+    if( aBezier->GetWidth() != 0 && aBezier->GetWidth() != Mils2iu( DEFAULT_LINE_WIDTH ) )
     {
         aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
                           FormatInternalUnits( aBezier->GetWidth() ).c_str() );
@@ -1719,7 +1722,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveCircle( LIB_CIRCLE* aCircle,
                       FormatInternalUnits( aCircle->GetPosition().y ).c_str(),
                       FormatInternalUnits( aCircle->GetRadius() ).c_str() );
 
-    if( aCircle->GetWidth() != 0 )
+    if( aCircle->GetWidth() != 0 && aCircle->GetWidth() != Mils2iu( DEFAULT_LINE_WIDTH ) )
     {
         aFormatter.Print( 0, " (stroke (width %s))",
                           FormatInternalUnits( aCircle->GetWidth() ).c_str() );
@@ -1749,7 +1752,8 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
                       FormatInternalUnits( aField->GetPosition().y ).c_str(),
                       static_cast<double>( aField->GetTextAngle() ) / 10.0 );
 
-    if( aField->IsDefaultFormatting() && ( aField->GetTextHeight() == GetDefaultTextSize() ) )
+    if( aField->IsDefaultFormatting()
+      && ( aField->GetTextHeight() == Mils2iu( DEFAULT_SIZE_TEXT ) ) )
     {
         aFormatter.Print( 0, ")\n" );           // Close property token if no font effects.
     }
@@ -1866,7 +1870,7 @@ void SCH_SEXPR_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine,
 
     bool needsSpace = false;
 
-    if( aPolyLine->GetWidth() != 0 )
+    if( aPolyLine->GetWidth() != 0 && aPolyLine->GetWidth() != Mils2iu( DEFAULT_LINE_WIDTH ) )
     {
         aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
                           FormatInternalUnits( aPolyLine->GetWidth() ).c_str() );
@@ -1910,7 +1914,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveRectangle( LIB_RECTANGLE* aRectangle,
 
     bool needsSpace = false;
 
-    if( aRectangle->GetWidth() != 0 )
+    if( aRectangle->GetWidth() != 0 && aRectangle->GetWidth() != Mils2iu( DEFAULT_LINE_WIDTH ) )
     {
         aFormatter.Print( 0, " (stroke (width %s))",
                           FormatInternalUnits( aRectangle->GetWidth() ).c_str() );
