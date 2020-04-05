@@ -30,10 +30,9 @@
 class DIALOG_3D_VIEW_OPTIONS : public DIALOG_3D_VIEW_OPTIONS_BASE
 {
 public:
-    explicit DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* parent );
+    explicit DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* aParent );
 
 private:
-    EDA_3D_VIEWER* m_parent;
     BOARD_ADAPTER& m_settings;
 
     void initDialog();
@@ -57,10 +56,9 @@ void EDA_3D_VIEWER::Install3DViewOptionDialog( wxCommandEvent& event )
 }
 
 
-DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* parent ) :
-        DIALOG_3D_VIEW_OPTIONS_BASE( parent ),
-        m_parent( parent ),
-        m_settings( parent->GetAdapter() )
+DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* aParent ) :
+        DIALOG_3D_VIEW_OPTIONS_BASE( aParent ),
+        m_settings( aParent->GetAdapter() )
 {
     initDialog();
 

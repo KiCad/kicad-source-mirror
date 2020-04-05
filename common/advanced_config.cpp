@@ -68,13 +68,6 @@ namespace AC_KEYS
 static const wxChar UsePadProperty[] = wxT( "UsePadProperty" );
 
 /**
- * In Pcbnew, pads can handle a pin function info (this is the schematic pin name)
- * Because this feature adds a new keyword in *.kicad_pcb files, this is an advanced feature
- * until it is fully finalized
- */
-static const wxChar UsePinFunction[] = wxT( "UsePinFunction" );
-
-/**
  * Testing mode for new connectivity algorithm.  Setting this to on will cause all modifications
  * to the netlist to be recalculated on the fly.  This may be slower than the standard process
  * at the moment

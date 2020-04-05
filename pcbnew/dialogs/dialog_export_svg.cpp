@@ -228,9 +228,9 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
 
     // Create output directory if it does not exist (also transform it in
     // absolute form). Bail if it fails
-    wxString    path = ExpandEnvVarSubstitutions( m_outputDirectory, &Prj() );
+    wxString   path = ExpandEnvVarSubstitutions( m_outputDirectory, &Prj() );
     wxFileName outputDir = wxFileName::DirName( path );
-    wxString boardFilename = m_board->GetFileName();
+    wxString   boardFilename = m_board->GetFileName();
 
     REPORTER& reporter = m_messagesPanel->Reporter();
 
@@ -255,20 +255,20 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
         wxString     suffix = aOnlyOneFile ? wxT( "brd" ) : m_board->GetStandardLayerName( layer );
 
         BuildPlotFileName( &fn, outputDir.GetPath(), suffix, SVGFileExtension );
-        wxString     path = fn.GetFullPath();
+        wxString svgPath = fn.GetFullPath();
 
         m_printMaskLayer = aOnlyOneFile ? all_selected : LSET( layer );
 
         if( m_PrintBoardEdgesCtrl->IsChecked() )
             m_printMaskLayer.set( Edge_Cuts );
 
-        if( CreateSVGFile( path ) )
+        if( CreateSVGFile( svgPath ) )
         {
-            reporter.Report( wxString::Format( _( "Exported \"%s\"." ), path ), RPT_SEVERITY_ACTION );
+            reporter.Report( wxString::Format( _( "Exported \"%s\"." ), svgPath ), RPT_SEVERITY_ACTION );
         }
         else    // Error
         {
-            reporter.Report( wxString::Format( _( "Unable to create file \"%s\"." ), path ),
+            reporter.Report( wxString::Format( _( "Unable to create file \"%s\"." ), svgPath ),
                              RPT_SEVERITY_ERROR );
         }
 
