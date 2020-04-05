@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,13 +34,11 @@
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <bitmaps.h>
-#include <build_version.h>
 #include <macros.h>
 #include <reporter.h>
 #include <tools/pcb_editor_control.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <pcbnew.h>
 #include <wildcards_and_files_ext.h>
 #include <kiface_i.h>
 #include <wx_html_report_panel.h>
@@ -119,11 +117,6 @@ private:
     bool CreateGerberFiles();
 
     // accessors to options:
-    wxString GetOutputDirectory()
-    {
-        return m_outputDirectoryName->GetValue();
-    }
-
     bool UnitsMM()
     {
         return m_radioBoxUnits->GetSelection() == 1;
@@ -177,9 +170,9 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 
 void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
-    // Build the absolute path of current output plot directory
-    // to preselect it when opening the dialog.
-    wxString    path = Prj().AbsolutePath( m_outputDirectoryName->GetValue() );
+    // Build the absolute path of current output directory to preselect it in the file browser.
+    wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
+    path = Prj().AbsolutePath( path );
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 
@@ -240,10 +233,10 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     wxString    msg;
     int fullcount = 0;
 
-    // Create output directory if it does not exist.
-    // Also transform it in absolute path.
+    // Create output directory if it does not exist. Also transform it in absolute path.
     // Bail if it fails
-    wxFileName  outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
+    wxString    path = ExpandEnvVarSubstitutions( m_plotOpts.GetOutputDirectory(), &Prj() );
+    wxFileName  outputDir = wxFileName::DirName( path );
     wxString    boardFilename = m_parent->GetBoard()->GetFileName();
 
     m_reporter = &m_messagesPanel->Reporter();
@@ -327,7 +320,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     // Test for any footprint candidate in list, and display the list of forced footprints
     // if ForceAllSmd() is true
     {
-        PLACE_FILE_EXPORTER exporter( brd, UnitsMM(), ForceAllSmd(), top_side, bottom_side, useCSVfmt );
+        PLACE_FILE_EXPORTER exporter( brd, UnitsMM(), ForceAllSmd(), top_side, bottom_side,
+                                      useCSVfmt );
         exporter.GenPositionData();
 
         if( exporter.GetFootprintCount() == 0)
@@ -342,7 +336,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
             for( MODULE* item : fp_no_smd_list )
             {
-                msg.Printf( _( "footprint %s (not set as SMD) forced in list" ), item->GetReference() );
+                msg.Printf( _( "footprint %s (not set as SMD) forced in list" ),
+                            item->GetReference() );
                 m_reporter->Report( msg, RPT_SEVERITY_INFO );
             }
         }
@@ -477,7 +472,8 @@ int PCB_EDITOR_CONTROL::GeneratePosFile( const TOOL_EVENT& aEvent )
 
 
 int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
-                                                 bool aForceSmdItems, bool aTopSide, bool aBottomSide, bool aFormatCSV )
+                                                 bool aForceSmdItems, bool aTopSide,
+                                                 bool aBottomSide, bool aFormatCSV )
 {
     FILE * file = NULL;
 
@@ -490,8 +486,8 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, 
     }
 
     std::string data;
-    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, aForceSmdItems,
-                                  aTopSide, aBottomSide, aFormatCSV );
+    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, aForceSmdItems, aTopSide, aBottomSide,
+                                  aFormatCSV );
     data = exporter.GenPositionData();
 
     // if aFullFileName is empty, the file is not created, only the
@@ -514,7 +510,7 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
 {
     wxFileName fn;
 
-    wxString boardFilePath = ( (wxFileName) GetBoard()->GetFileName()).GetPath();
+    wxString boardFilePath = ( (wxFileName) GetBoard()->GetFileName() ).GetPath();
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), boardFilePath );
 
     if( dirDialog.ShowModal() == wxID_CANCEL )
@@ -545,11 +541,7 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
  */
 bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM )
 {
-    wxString msg;
-    FILE*    rptfile;
-    wxPoint  module_pos;
-
-    rptfile = wxFopen( aFullFilename, wxT( "wt" ) );
+    FILE* rptfile = wxFopen( aFullFilename, wxT( "wt" ) );
 
     if( rptfile == NULL )
         return false;

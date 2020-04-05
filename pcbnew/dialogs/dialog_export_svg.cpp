@@ -36,7 +36,6 @@
 #include <pcbplot.h>
 #include <class_board.h>
 #include <dialog_export_svg_base.h>
-#include <invoke_pcb_dialog.h>
 #include <wx_html_report_panel.h>
 #include <bitmaps.h>
 #include <widgets/unit_binder.h>
@@ -77,11 +76,14 @@ private:
  * DIALOG_EXPORT_SVG functions
  */
 DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
-    DIALOG_EXPORT_SVG_BASE( aParent ), m_parent( aParent ),
-    m_lineWidth( aParent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
+        DIALOG_EXPORT_SVG_BASE( aParent ),
+        m_board( aBoard ),
+        m_parent( aParent ),
+        m_printBW( false ),
+        m_printMirror( false ),
+        m_oneFileOnly( false ),
+        m_lineWidth( aParent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
 {
-    m_board  = aBoard;
-
     memset( m_boxSelectLayer, 0, sizeof( m_boxSelectLayer ) );
 
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
@@ -190,17 +192,16 @@ LSET DIALOG_EXPORT_SVG::getCheckBoxSelectedLayers() const
 
 void DIALOG_EXPORT_SVG::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
-    // Build the absolute path of current output plot directory
-    // to preselect it when opening the dialog.
-    wxFileName  fn( m_outputDirectoryName->GetValue() );
-    wxString    path = Prj().AbsolutePath( m_outputDirectoryName->GetValue() );
+    // Build the absolute path of current output directory to preselect it in the file browser.
+    wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
+    path = Prj().AbsolutePath( path );
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 
     if( dirDialog.ShowModal() == wxID_CANCEL )
         return;
 
-    wxFileName      dirName = wxFileName::DirName( dirDialog.GetPath() );
+    wxFileName dirName = wxFileName::DirName( dirDialog.GetPath() );
 
     wxMessageDialog dialog( this, _( "Use a relative path?" ), _( "Plot Output Directory" ),
                             wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
@@ -227,7 +228,8 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
 
     // Create output directory if it does not exist (also transform it in
     // absolute form). Bail if it fails
-    wxFileName outputDir = wxFileName::DirName( m_outputDirectory );
+    wxString    path = ExpandEnvVarSubstitutions( m_outputDirectory, &Prj() );
+    wxFileName outputDir = wxFileName::DirName( path );
     wxString boardFilename = m_board->GetFileName();
 
     REPORTER& reporter = m_messagesPanel->Reporter();
