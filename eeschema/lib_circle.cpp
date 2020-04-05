@@ -194,7 +194,7 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
 int LIB_CIRCLE::GetPenSize() const
 {
-    m_Width;
+    return m_Width;
 }
 
 
