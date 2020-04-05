@@ -7,8 +7,7 @@
  * Copyright (C) 1992-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,15 +140,12 @@ private:
 
     /**
      * Create a file name with an absolute path name
-     * @param aOutputDirectoryName the directory name to plot, this can be a relative name of the
-     *                             current project directory or an absolute directory name.
      * @param aPlotFileName the name for the file to plot without a path
      * @param aExtension the extension for the file to plot
      * @param aReporter a point to a REPORTER object use to show messages (can be NULL)
      * @return the created file name
      * @throw IO_ERROR on file I/O errors
      */
-    wxFileName createPlotFileName( wxTextCtrl* aOutputDirectoryName,
-                                   wxString& aPlotFileName,
-                                   wxString& aExtension, REPORTER* aReporter = NULL );
+    wxFileName createPlotFileName( wxString& aPlotFileName, wxString& aExtension,
+                                   REPORTER* aReporter = NULL );
 };

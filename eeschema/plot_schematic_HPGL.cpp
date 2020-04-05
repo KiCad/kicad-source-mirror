@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,8 +142,7 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
         {
             wxString fname = m_parent->GetUniqueFilenameForCurrentSheet();
             wxString ext = HPGL_PLOTTER::GetDefaultFileExtension();
-            wxFileName plotFileName = createPlotFileName( m_outputDirectoryName, fname,
-                                                          ext, &reporter );
+            wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 
             LOCALE_IO toggle;
 

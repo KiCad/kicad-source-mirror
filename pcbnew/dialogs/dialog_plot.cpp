@@ -346,10 +346,9 @@ void DIALOG_PLOT::OnSetScaleOpt( wxCommandEvent& event )
 
 void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
-    // Build the absolute path of current output plot directory
-    // to preselect it when opening the dialog.
-    wxFileName  fn( m_outputDirectoryName->GetValue() );
-    wxString    path = Prj().AbsolutePath( m_outputDirectoryName->GetValue() );
+    // Build the absolute path of current output directory to preselect it in the file browser.
+    wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
+    path = Prj().AbsolutePath( path );
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 
@@ -358,7 +357,7 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 
     wxFileName      dirName = wxFileName::DirName( dirDialog.GetPath() );
 
-    fn = Prj().AbsolutePath( m_parent->GetBoard()->GetFileName() );
+    wxFileName fn( Prj().AbsolutePath( m_parent->GetBoard()->GetFileName() ) );
     wxString defaultPath = fn.GetPathWithSep();
     wxString msg;
     msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ),
@@ -752,7 +751,8 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
     // Create output directory if it does not exist (also transform it in
     // absolute form). Bail if it fails
-    wxFileName  outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
+    wxString    path = ExpandEnvVarSubstitutions( m_plotOpts.GetOutputDirectory(), &Prj() );
+    wxFileName  outputDir = wxFileName::DirName( path );
     wxString    boardFilename = m_parent->GetBoard()->GetFileName();
     REPORTER&   reporter = m_messagesPanel->Reporter();
 

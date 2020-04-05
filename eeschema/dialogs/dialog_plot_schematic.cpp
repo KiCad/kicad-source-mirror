@@ -7,8 +7,7 @@
  * Copyright (C) 1992-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,10 +154,9 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
  */
 void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
-    // Build the absolute path of current output plot directory
-    // to preselect it when opening the dialog.
-    wxFileName  fn( m_outputDirectoryName->GetValue() );
-    wxString    path = Prj().AbsolutePath( m_outputDirectoryName->GetValue() );
+    // Build the absolute path of current output directory to preselect it in the file browser.
+    wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
+    path = Prj().AbsolutePath( path );
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 
@@ -167,7 +165,7 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
 
     wxFileName      dirName = wxFileName::DirName( dirDialog.GetPath() );
 
-    fn = Prj().AbsolutePath( g_RootSheet->GetFileName() );
+    wxFileName fn( Prj().AbsolutePath( g_RootSheet->GetFileName() ) );
     wxString defaultPath = fn.GetPathWithSep();
     wxString msg;
     msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ), GetChars( defaultPath ) );
@@ -352,13 +350,12 @@ void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
 }
 
 
-wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( wxTextCtrl* aOutputDirectoryName,
-                                                      wxString& aPlotFileName,
+wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( wxString& aPlotFileName,
                                                       wxString& aExtension,
                                                       REPORTER* aReporter )
 {
-    wxString outputDirName = aOutputDirectoryName->GetValue();
-    wxFileName outputDir = wxFileName::DirName( outputDirName );
+    wxString   path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
+    wxFileName outputDir = wxFileName::DirName( path );
 
     wxString plotFileName = Prj().AbsolutePath( aPlotFileName + wxT( "." ) + aExtension);
 

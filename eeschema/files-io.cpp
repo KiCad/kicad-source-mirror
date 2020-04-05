@@ -649,8 +649,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             pglayout.SetEmptyLayout();
 
             BASE_SCREEN::m_PageLayoutDescrFileName = "empty.kicad_wks";
-            wxFileName layoutfn( Kiway().Prj().GetProjectPath(),
-                                 BASE_SCREEN::m_PageLayoutDescrFileName );
+            wxFileName layoutfn( Prj().GetProjectPath(), BASE_SCREEN::m_PageLayoutDescrFileName );
             wxFile layoutfile;
 
             if( layoutfile.Create( layoutfn.GetFullPath() ) )
@@ -659,9 +658,9 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                 layoutfile.Close();
             }
 
-            projectpath = Kiway().Prj().GetProjectPath();
-            newfilename.SetPath( Prj().GetProjectPath() );
-            newfilename.SetName( Prj().GetProjectName() );
+            projectpath = Prj().GetProjectPath();
+            newfilename.SetPath( projectpath );
+            newfilename.SetName( projectpath );
             newfilename.SetExt( LegacySchematicFileExtension );
 
             g_CurrentSheet->clear();

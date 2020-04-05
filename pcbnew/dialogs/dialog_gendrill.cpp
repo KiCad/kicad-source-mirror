@@ -292,21 +292,19 @@ void DIALOG_GENDRILL::UpdatePrecisionOptions()
 
 void DIALOG_GENDRILL::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
-    // Build the absolute path of current output plot directory
-    // to preselect it when opening the dialog.
-    wxFileName  fn( m_outputDirectoryName->GetValue() );
-    wxString    path = Prj().AbsolutePath( m_outputDirectoryName->GetValue() );
+    // Build the absolute path of current output directory to preselect it in the file browser.
+    wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
+    path = Prj().AbsolutePath( path );
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 
     if( dirDialog.ShowModal() == wxID_CANCEL )
         return;
 
-    wxFileName      dirName = wxFileName::DirName( dirDialog.GetPath() );
-
-    fn = Prj().AbsolutePath( m_board->GetFileName() );
-    wxString defaultPath = fn.GetPathWithSep();
-    wxString msg;
+    wxFileName dirName = wxFileName::DirName( dirDialog.GetPath() );
+    wxFileName fn( Prj().AbsolutePath( m_board->GetFileName() ) );
+    wxString   defaultPath = fn.GetPathWithSep();
+    wxString   msg;
     msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ), GetChars( defaultPath ) );
 
     wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
@@ -378,7 +376,8 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
 
     // Create output directory if it does not exist (also transform it in
     // absolute form). Bail if it fails
-    wxFileName  outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
+    wxString    path = ExpandEnvVarSubstitutions( m_plotOpts.GetOutputDirectory(), &Prj() );
+    wxFileName  outputDir = wxFileName::DirName( path );
     wxString    boardFilename = m_board->GetFileName();
 
     if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
@@ -399,8 +398,8 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
         excellonWriter.SetRouteModeForOvalHoles( m_UseRouteModeForOvalHoles );
         excellonWriter.SetMapFileFormat( filefmt[choice] );
 
-        excellonWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(),
-                                                  aGenDrill, aGenMap, &reporter );
+        excellonWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(), aGenDrill, aGenMap,
+                                                  &reporter );
     }
     else
     {
@@ -427,7 +426,8 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
     fn.SetName( fn.GetName() + wxT( "-drl" ) );
     fn.SetExt( ReportFileExtension );
 
-    wxString defaultPath = Prj().AbsolutePath( m_plotOpts.GetOutputDirectory() );
+    wxString defaultPath = ExpandEnvVarSubstitutions( m_plotOpts.GetOutputDirectory(), &Prj() );
+    defaultPath = Prj().AbsolutePath( defaultPath );
 
     if( defaultPath.IsEmpty() )
         defaultPath = wxStandardPaths::Get().GetDocumentsDir();

@@ -171,7 +171,7 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
         }
     }
 
-    GetAssociatedDocument( m_frame, helpFile, &m_frame->Kiway().Prj() );
+    GetAssociatedDocument( m_frame, helpFile, &m_frame->Prj() );
     return 0;
 }
 

@@ -4,7 +4,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,8 +91,6 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
 
         wxPoint plot_offset;
 
-        wxString outputDirName = m_outputDirectoryName->GetValue();
-
         wxString msg;
         REPORTER& reporter = m_MessagesBox->Reporter();
 
@@ -100,8 +98,7 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
         {
             wxString fname = m_parent->GetUniqueFilenameForCurrentSheet();
             wxString ext = PS_PLOTTER::GetDefaultFileExtension();
-            wxFileName plotFileName = createPlotFileName( m_outputDirectoryName,
-                                                          fname, ext, &reporter );
+            wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 
             if( plotOneSheetPS( plotFileName.GetFullPath(), screen, aDefaultLineWidth, plotPage,
                                 plot_offset, scale, aPlotFrameRef ) )

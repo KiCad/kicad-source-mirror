@@ -97,7 +97,7 @@ protected:
         else if (event.GetId() == MYID_SHOW_DATASHEET )
         {
             wxString datasheet_uri = m_grid->GetCellValue( m_grid->GetGridCursorRow(), DATASHEET );
-            GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Kiway().Prj() );
+            GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj() );
         }
         else
         {
