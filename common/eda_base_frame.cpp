@@ -483,6 +483,13 @@ void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName, FILE_HISTO
         fileHistory = &Kiface().GetFileHistory();
 
     fileHistory->AddFileToHistory( FullFileName );
+
+    // Update the menubar to update the file history menu
+    if( GetMenuBar() )
+    {
+        ReCreateMenuBar();
+        GetMenuBar()->Refresh();
+    }
 }
 
 
