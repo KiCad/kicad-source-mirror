@@ -870,13 +870,13 @@ void PCB_BASE_FRAME::SetFastGrid2()
 
 bool PCB_BASE_FRAME::IsGridVisible() const
 {
-    return m_DisplayOptions.m_ShowGrid;
+    return m_drawGrid;
 }
 
 
 void PCB_BASE_FRAME::SetGridVisibility( bool aVisible )
 {
-    m_DisplayOptions.m_ShowGrid = aVisible;
+    m_drawGrid = aVisible;
 
     // Update the display with the new grid
     if( GetCanvas() )
