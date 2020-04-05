@@ -101,7 +101,7 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            wxString errmsg = _( "incompatible plugin (missing function 'GetNExtensions')" );
+            wxString errmsg = "incompatible plugin (missing function 'GetNExtensions')";
             ostr << errmsg.ToUTF8() << "\n";
             ostr << "'" << aFullFileName.ToUTF8() << "'";
             wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
@@ -114,7 +114,7 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                wxString errmsg = _( "incompatible plugin (missing function 'GetModelExtension')" );
+                wxString errmsg = "incompatible plugin (missing function 'GetModelExtension')";
                 ostr << errmsg.ToUTF8() << "\n";
                 ostr << "'" << aFullFileName.ToUTF8() << "'";
                 wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
@@ -123,7 +123,7 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             else
             {
                 std::ostringstream ostr;
-                wxString errmsg = _( "missing function 'GetModelExtension'" );
+                wxString errmsg = "missing function 'GetModelExtension'";
                 ostr << errmsg.ToUTF8();
                 wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
             }
@@ -135,7 +135,7 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                wxString errmsg = _( "incompatible plugin (missing function 'GetNFilters')" );
+                wxString errmsg = "incompatible plugin (missing function 'GetNFilters')";
                 ostr << errmsg.ToUTF8() << "\n";
                 ostr << "'" << aFullFileName.ToUTF8() << "'";
                 wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
@@ -144,7 +144,7 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             else
             {
                 std::ostringstream ostr;
-                wxString errmsg = _( "missing function 'GetNFilters'" );
+                wxString errmsg = "missing function 'GetNFilters'";
                 ostr << errmsg.ToUTF8();
                 wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
             }
@@ -156,7 +156,7 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                wxString errmsg = _( "incompatible plugin (missing function 'GetFileFilter')" );
+                wxString errmsg = "incompatible plugin (missing function 'GetFileFilter')";
                 ostr << errmsg.ToUTF8() << "\n";
                 ostr << "'" << aFullFileName.ToUTF8() << "'";
                 wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
@@ -165,7 +165,7 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             else
             {
                 std::ostringstream ostr;
-                wxString errmsg = _( "missing function 'GetFileFilter'" );
+                wxString errmsg = "missing function 'GetFileFilter'";
                 ostr << errmsg.ToUTF8();
                 wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
             }
@@ -177,7 +177,7 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                wxString errmsg = _( "incompatible plugin (missing function 'CanRender')" );
+                wxString errmsg = "incompatible plugin (missing function 'CanRender')";
                 ostr << errmsg.ToUTF8() << "\n";
                 ostr << "'" << aFullFileName.ToUTF8() << "'";
                 wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
@@ -186,7 +186,7 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             else
             {
                 std::ostringstream ostr;
-                wxString errmsg = _( "missing function 'CanRender'" );
+                wxString errmsg = "missing function 'CanRender'";
                 ostr << errmsg.ToUTF8();
                 wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
             }
@@ -198,7 +198,7 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             {
                 std::ostringstream ostr;
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                wxString errmsg = _( "incompatible plugin (missing function 'Load')" );
+                wxString errmsg = "incompatible plugin (missing function 'Load')";
                 ostr << errmsg.ToUTF8() << "\n";
                 ostr << "'" << aFullFileName.ToUTF8() << "'";
                 wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
@@ -206,7 +206,7 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
             else
             {
                 std::ostringstream ostr;
-                wxString errmsg = _( "missing function 'Load'" );
+                wxString errmsg = "missing function 'Load'";
                 ostr << errmsg.ToUTF8();
                 wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
             }

@@ -412,7 +412,7 @@ int ALTIUM_PCB::GetNetCode( uint16_t aId ) const
     else if( m_num_nets < aId )
     {
         THROW_IO_ERROR(
-                wxString::Format( _( "Netcode with id %d does not exist. Only %d nets are known" ),
+                wxString::Format( "Netcode with id %d does not exist. Only %d nets are known",
                         aId, m_num_nets ) );
     }
     else
