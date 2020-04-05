@@ -127,8 +127,15 @@ void FIELDS_GRID_TABLE<T>::initGrid( DIALOG_SHIM* aDialog )
 
     m_curdir = m_frame->Prj().GetProjectPath();
     m_filepathAttr = new wxGridCellAttr;
+
+    // Create a wild card using wxFileDialog syntax.
+    wxString wildCard( _("sch files") );
+    std::vector<std::string> exts;
+    exts.push_back( LegacySchematicFileExtension );
+    wildCard += AddFileExtListToFilter( exts );
+
     GRID_CELL_PATH_EDITOR* filepathEditor =
-            new GRID_CELL_PATH_EDITOR( aDialog, &m_curdir, LegacySchematicFileExtension );
+            new GRID_CELL_PATH_EDITOR( aDialog, &m_curdir, wildCard );
     filepathEditor->SetValidator( m_filepathValidator );
     m_filepathAttr->SetEditor( filepathEditor );
 
