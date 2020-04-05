@@ -68,11 +68,6 @@ ALTIUM_PARSER::ALTIUM_PARSER(
         const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     m_subrecord_end = nullptr;
-    if( aEntry->size > std::numeric_limits<size_t>::max() )
-    {
-        THROW_IO_ERROR( "stream too large" );
-    }
-
     m_size  = static_cast<size_t>( aEntry->size );
     m_error = false;
     m_content.reset( new char[m_size] );

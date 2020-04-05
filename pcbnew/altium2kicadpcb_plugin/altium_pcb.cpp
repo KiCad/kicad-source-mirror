@@ -54,13 +54,19 @@ void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName,
     }
 
     fseek( fp, 0, SEEK_END );
-    size_t                           len = ftell( fp );
+    long len = ftell( fp );
+    if( len < 0 )
+    {
+        fclose( fp );
+        THROW_IO_ERROR( "Reading error, cannot determine length of file" );
+    }
+
     std::unique_ptr<unsigned char[]> buffer( new unsigned char[len] );
     fseek( fp, 0, SEEK_SET );
 
     size_t bytesRead = fread( buffer.get(), sizeof( unsigned char ), len, fp );
     fclose( fp );
-    if( len != bytesRead )
+    if( static_cast<size_t>( len ) != bytesRead )
     {
         THROW_IO_ERROR( "Reading error" );
     }
@@ -995,18 +1001,10 @@ void ALTIUM_PCB::ParsePolygons6Data(
         zone->SetPosition( elem.vertices.at( 0 ).position );
         zone->SetLocked( elem.locked );
 
-        SHAPE_LINE_CHAIN linechain;
         for( auto& vertice : elem.vertices )
         {
-            // TODO: arcs
-            linechain.Append( vertice.position );
+            zone->AppendCorner( vertice.position, -1 ); // TODO: arcs
         }
-        linechain.Append( elem.vertices.at( 0 ).position );
-        linechain.SetClosed( true );
-
-        SHAPE_POLY_SET* outline = new SHAPE_POLY_SET();
-        outline->AddOutline( linechain );
-        zone->SetOutline( outline );
 
         // TODO: more flexible rule parsing
         const ARULE6* clearanceRule = GetRuleDefault( ALTIUM_RULE_KIND::PLANE_CLEARANCE );
@@ -1056,7 +1054,8 @@ void ALTIUM_PCB::ParsePolygons6Data(
                     elem.hatchstyle == ALTIUM_POLYGON_HATCHSTYLE::DEGREE_45 ? 45 : 0 );
         }
 
-        zone->SetHatch( ZONE_HATCH_STYLE::DIAGONAL_EDGE, zone->GetDefaultHatchPitch(), true );
+        zone->SetHatch(
+                ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
     }
 
     if( reader.GetRemainingBytes() != 0 )
@@ -1157,19 +1156,14 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
             }
 
             zone->SetPosition( elem.vertices.at( 0 ).position );
-            SHAPE_LINE_CHAIN linechain;
+
             for( auto& vertice : elem.vertices )
             {
-                linechain.Append( vertice.position );
+                zone->AppendCorner( vertice.position, -1 );
             }
-            linechain.Append( elem.vertices.at( 0 ).position );
-            linechain.SetClosed( true );
 
-            SHAPE_POLY_SET* outline = new SHAPE_POLY_SET();
-            outline->AddOutline( linechain );
-            zone->SetOutline( outline );
-
-            zone->SetHatch( ZONE_HATCH_STYLE::DIAGONAL_EDGE, zone->GetDefaultHatchPitch(), true );
+            zone->SetHatch(
+                    ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
         }
         else if( elem.kind == ALTIUM_REGION_KIND::COPPER )
         {
@@ -1190,17 +1184,12 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
                 ds->SetLayer( klayer );
                 ds->SetWidth( 0 );
 
-                SHAPE_LINE_CHAIN linechain;
+                std::vector<wxPoint> pts;
                 for( auto& vertice : elem.vertices )
                 {
-                    linechain.Append( vertice.position );
+                    pts.push_back( vertice.position );
                 }
-                linechain.Append( elem.vertices.at( 0 ).position );
-                linechain.SetClosed( true );
-
-                SHAPE_POLY_SET polyset;
-                polyset.AddOutline( linechain );
-                ds->SetPolyShape( polyset );
+                ds->SetPolyPoints( pts );
             }
         }
         else
@@ -1334,11 +1323,9 @@ void ALTIUM_PCB::ParseArcs6Data(
             zone->SetDoNotAllowVias( false );
             zone->SetDoNotAllowCopperPour( true );
 
-            SHAPE_POLY_SET* outline = new SHAPE_POLY_SET();
-            ds.TransformShapeWithClearanceToPolygon( *outline, 0, ARC_HIGH_DEF, false );
-            outline->Simplify(
+            ds.TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF, false );
+            zone->Outline()->Simplify(
                     SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); // the outline is not a single polygon!
-            zone->SetOutline( outline );
 
             zone->SetHatch(
                     ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
@@ -1720,9 +1707,7 @@ void ALTIUM_PCB::ParseTracks6Data(
             zone->SetDoNotAllowVias( false );
             zone->SetDoNotAllowCopperPour( true );
 
-            SHAPE_POLY_SET* outline = new SHAPE_POLY_SET();
-            ds.TransformShapeWithClearanceToPolygon( *outline, 0, ARC_HIGH_DEF, false );
-            zone->SetOutline( outline );
+            ds.TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF, false );
 
             zone->SetHatch(
                     ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
@@ -1942,29 +1927,12 @@ void ALTIUM_PCB::ParseFills6Data(
     {
         AFILL6 elem( reader );
 
-        SHAPE_LINE_CHAIN linechain;
-
         wxPoint p11( elem.pos1.x, elem.pos1.y );
         wxPoint p12( elem.pos1.x, elem.pos2.y );
         wxPoint p22( elem.pos2.x, elem.pos2.y );
         wxPoint p21( elem.pos2.x, elem.pos1.y );
 
-        // rotate of the linechain behaves different than this?
         wxPoint center( ( elem.pos1.x + elem.pos2.x ) / 2, ( elem.pos1.y + elem.pos2.y ) / 2 );
-        RotatePoint( &p11, center, elem.rotation * 10. );
-        RotatePoint( &p12, center, elem.rotation * 10. );
-        RotatePoint( &p22, center, elem.rotation * 10. );
-        RotatePoint( &p21, center, elem.rotation * 10. );
-
-        linechain.Append( p11 );
-        linechain.Append( p12 );
-        linechain.Append( p22 );
-        linechain.Append( p21 );
-        linechain.Append( p11 );
-        linechain.SetClosed( true );
-
-        SHAPE_POLY_SET* outline = new SHAPE_POLY_SET();
-        outline->AddOutline( linechain );
 
         PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
         if( klayer == UNDEFINED_LAYER )
@@ -1983,8 +1951,13 @@ void ALTIUM_PCB::ParseFills6Data(
             zone->SetNetCode( GetNetCode( elem.net ) );
             zone->SetLayer( klayer );
             zone->SetPosition( elem.pos1 );
-            zone->SetOutline( outline );
             zone->SetPriority( 1000 );
+
+            const int outlineIdx = -1; // this is the id of the copper zone main outline
+            zone->AppendCorner( p11, outlineIdx );
+            zone->AppendCorner( p12, outlineIdx );
+            zone->AppendCorner( p22, outlineIdx );
+            zone->AppendCorner( p21, outlineIdx );
 
             // should be correct?
             zone->SetZoneClearance( 0 );
@@ -1998,7 +1971,13 @@ void ALTIUM_PCB::ParseFills6Data(
                 zone->SetDoNotAllowCopperPour( true );
             }
 
-            zone->SetHatch( ZONE_HATCH_STYLE::DIAGONAL_EDGE, zone->GetDefaultHatchPitch(), true );
+            if( elem.rotation != 0. )
+            {
+                zone->Rotate( center, elem.rotation * 10 );
+            }
+
+            zone->SetHatch(
+                    ZONE_HATCH_STYLE::DIAGONAL_EDGE, ZONE_CONTAINER::GetDefaultHatchPitch(), true );
         }
         else
         {
@@ -2006,8 +1985,14 @@ void ALTIUM_PCB::ParseFills6Data(
             m_board->Add( ds, ADD_MODE::APPEND );
 
             ds->SetShape( STROKE_T::S_POLYGON );
-            ds->SetPolyShape( *outline );
             ds->SetLayer( klayer );
+
+            ds->SetPolyPoints( { p11, p12, p22, p21 } );
+
+            if( elem.rotation != 0. )
+            {
+                ds->Rotate( center, elem.rotation * 10 );
+            }
         }
     }
 
