@@ -470,7 +470,7 @@ void ALTIUM_PCB::ParseFileHeader(
     // TODO: does not seem to work all the time at the moment
     //if( reader.GetRemainingBytes() != 0 )
     //{
-    //    THROW_IO_ERROR( _( "FileHeader stream is not fully parsed" ) );
+    //    THROW_IO_ERROR( "FileHeader stream is not fully parsed" );
     //}
 }
 
@@ -483,7 +483,7 @@ void ALTIUM_PCB::ParseBoard6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Board6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Board6 stream is not fully parsed" );
     }
 
     m_board->SetAuxOrigin( elem.sheetpos );
@@ -518,7 +518,7 @@ void ALTIUM_PCB::ParseBoard6Data(
 
         if( ( *it )->GetType() != BS_ITEM_TYPE_COPPER )
         {
-            THROW_IO_ERROR( _( "Board6 stream, unexpected item while parsing stackup" ) );
+            THROW_IO_ERROR( "Board6 stream, unexpected item while parsing stackup" );
         }
         ( *it )->SetThickness( layer.copperthick );
 
@@ -527,7 +527,7 @@ void ALTIUM_PCB::ParseBoard6Data(
             if( layer.nextId != 0 )
             {
                 THROW_IO_ERROR(
-                        _( "Board6 stream, unexpected id while parsing last stackup layer" ) );
+                        "Board6 stream, unexpected id while parsing last stackup layer" );
             }
             // overwrite entry from internal -> bottom
             m_layermap[static_cast<ALTIUM_LAYER>( i )] = B_Cu;
@@ -537,7 +537,7 @@ void ALTIUM_PCB::ParseBoard6Data(
         ++it;
         if( ( *it )->GetType() != BS_ITEM_TYPE_DIELECTRIC )
         {
-            THROW_IO_ERROR( _( "Board6 stream, unexpected item while parsing stackup" ) );
+            THROW_IO_ERROR( "Board6 stream, unexpected item while parsing stackup" );
         }
         ( *it )->SetThickness( layer.dielectricthick, 0 );
         ( *it )->SetMaterial( layer.dielectricmaterial.empty() ?
@@ -642,7 +642,7 @@ void ALTIUM_PCB::ParseClasses6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Classes6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Classes6 stream is not fully parsed" );
     }
 }
 
@@ -691,7 +691,7 @@ void ALTIUM_PCB::ParseComponents6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Components6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Components6 stream is not fully parsed" );
     }
 }
 
@@ -700,7 +700,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 {
     if( aElem.referencePoint.size() != 2 )
     {
-        THROW_IO_ERROR( _( "Incorrect number of reference points for linear dimension object" ) );
+        THROW_IO_ERROR( "Incorrect number of reference points for linear dimension object" );
     }
 
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
@@ -931,21 +931,21 @@ void ALTIUM_PCB::ParseDimensions6Data(
             HelperParseDimensions6Leader( elem );
             break;
         case ALTIUM_DIMENSION_KIND::DATUM:
-            wxLogInfo( wxString::Format( _( "Ignore dimension object of kind %d" ), elem.kind ) );
+            wxLogInfo( wxString::Format( "Ignore dimension object of kind %d", elem.kind ) );
             // HelperParseDimensions6Datum( elem );
             break;
         case ALTIUM_DIMENSION_KIND::CENTER:
             HelperParseDimensions6Center( elem );
             break;
         default:
-            wxLogInfo( wxString::Format( _( "Ignore dimension object of kind %d" ), elem.kind ) );
+            wxLogInfo( wxString::Format( "Ignore dimension object of kind %d", elem.kind ) );
             break;
         }
     }
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Dimensions6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Dimensions6 stream is not fully parsed" );
     }
 }
 
@@ -964,7 +964,7 @@ void ALTIUM_PCB::ParseNets6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Nets6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Nets6 stream is not fully parsed" );
     }
 }
 
@@ -1062,7 +1062,7 @@ void ALTIUM_PCB::ParsePolygons6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Polygons6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Polygons6 stream is not fully parsed" );
     }
 }
 
@@ -1087,7 +1087,7 @@ void ALTIUM_PCB::ParseRules6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Rules6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Rules6 stream is not fully parsed" );
     }
 }
 
@@ -1105,7 +1105,7 @@ void ALTIUM_PCB::ParseBoardRegionsData(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "BoardRegions stream is not fully parsed" ) );
+        THROW_IO_ERROR( "BoardRegions stream is not fully parsed" );
     }
 }
 
@@ -1214,7 +1214,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "ShapeBasedRegions6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "ShapeBasedRegions6 stream is not fully parsed" );
     }
 }
 
@@ -1241,7 +1241,7 @@ void ALTIUM_PCB::ParseRegions6Data(
             if( m_polygons.size() <= elem.subpolyindex )
             {
                 THROW_IO_ERROR(  wxString::Format(
-                        _( "Region stream tries to access polygon id %d of %d existing polygons" ),
+                        "Region stream tries to access polygon id %d of %d existing polygons",
                         elem.subpolyindex, m_polygons.size() ) );
             }
 
@@ -1272,7 +1272,7 @@ void ALTIUM_PCB::ParseRegions6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Regions6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Regions6 stream is not fully parsed" );
     }
 }
 
@@ -1375,7 +1375,7 @@ void ALTIUM_PCB::ParseArcs6Data(
                 if( m_components.size() <= elem.component )
                 {
                     THROW_IO_ERROR( wxString::Format(
-                            _( "Arcs6 stream tries to access component id %d of %d existing components" ),
+                            "Arcs6 stream tries to access component id %d of %d existing components",
                             elem.component, m_components.size() ) );
                 }
                 MODULE* module = m_components.at( elem.component );
@@ -1415,7 +1415,7 @@ void ALTIUM_PCB::ParseArcs6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Arcs6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Arcs6 stream is not fully parsed" );
     }
 }
 
@@ -1441,7 +1441,7 @@ void ALTIUM_PCB::ParsePads6Data(
             if( m_components.size() <= elem.component )
             {
                 THROW_IO_ERROR( wxString::Format(
-                        _( "Pads6 stream tries to access component id %d of %d existing components" ),
+                        "Pads6 stream tries to access component id %d of %d existing components",
                         elem.component, m_components.size() ) );
             }
             module = m_components.at( elem.component );
@@ -1491,7 +1491,7 @@ void ALTIUM_PCB::ParsePads6Data(
                 switch( elem.sizeAndShape->holeshape )
                 {
                 case ALTIUM_PAD_HOLE_SHAPE::ROUND:
-                    wxFAIL_MSG( _( "Round holes are handled before the switch" ) );
+                    wxFAIL_MSG( "Round holes are handled before the switch" );
                     break;
 
                 case ALTIUM_PAD_HOLE_SHAPE::SQUARE:
@@ -1617,7 +1617,7 @@ void ALTIUM_PCB::ParsePads6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Pads6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Pads6 stream is not fully parsed" );
     }
 }
 
@@ -1661,7 +1661,7 @@ void ALTIUM_PCB::ParseVias6Data(
         if( !IsCopperLayer( start_klayer ) || !IsCopperLayer( end_klayer ) )
         {
             wxLogError( wxString::Format(
-                    _( "Via from layer %d <-> %d uses non-coppy layer. This should not happen." ),
+                    _( "Via from layer %d <-> %d uses non-copper layer. This should not happen." ),
                     elem.layer_start, elem.layer_end ) );
             continue; // just assume through-hole instead.
         }
@@ -1672,7 +1672,7 @@ void ALTIUM_PCB::ParseVias6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Vias6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Vias6 stream is not fully parsed" );
     }
 }
 
@@ -1759,7 +1759,7 @@ void ALTIUM_PCB::ParseTracks6Data(
                 if( m_components.size() <= elem.component )
                 {
                     THROW_IO_ERROR( wxString::Format(
-                            _( "Tracks6 stream tries to access component id %d of %d existing components" ),
+                            "Tracks6 stream tries to access component id %d of %d existing components",
                             elem.component, m_components.size() ) );
                 }
                 MODULE*      module = m_components.at( elem.component );
@@ -1783,7 +1783,7 @@ void ALTIUM_PCB::ParseTracks6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Tracks6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Tracks6 stream is not fully parsed" );
     }
 }
 
@@ -1811,7 +1811,7 @@ void ALTIUM_PCB::ParseTexts6Data(
             if( m_components.size() <= elem.component )
             {
                 THROW_IO_ERROR( wxString::Format(
-                        _( "Texts6 stream tries to access component id %d of %d existing components" ),
+                        "Texts6 stream tries to access component id %d of %d existing components",
                         elem.component, m_components.size() ) );
             }
             MODULE*       module = m_components.at( elem.component );
@@ -1900,7 +1900,7 @@ void ALTIUM_PCB::ParseTexts6Data(
                 tx->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_RIGHT );
                 break;
             default:
-                wxLogError( _( "Unexpected horizontal Text Position. This should never happen." ) );
+                wxLogError( "Unexpected horizontal Text Position. This should never happen." );
                 break;
             }
 
@@ -1922,7 +1922,7 @@ void ALTIUM_PCB::ParseTexts6Data(
                 tx->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
                 break;
             default:
-                wxLogError( _( "Unexpected vertical text position. This should never happen." ) );
+                wxLogError( "Unexpected vertical text position. This should never happen." );
                 break;
             }
         }
@@ -1930,7 +1930,7 @@ void ALTIUM_PCB::ParseTexts6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Texts6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Texts6 stream is not fully parsed" );
     }
 }
 
@@ -2014,6 +2014,6 @@ void ALTIUM_PCB::ParseFills6Data(
 
     if( reader.GetRemainingBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Fills6 stream is not fully parsed" ) );
+        THROW_IO_ERROR( "Fills6 stream is not fully parsed" );
     }
 }

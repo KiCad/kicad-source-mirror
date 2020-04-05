@@ -153,7 +153,7 @@ ABOARD6::ABOARD6( ALTIUM_PARSER& aReader )
     std::map<wxString, wxString> properties = aReader.ReadProperties();
     if( properties.empty() )
     {
-        THROW_IO_ERROR( _( "Board6 stream has no properties!" ) );
+        THROW_IO_ERROR( "Board6 stream has no properties!" );
     }
 
     /*for (auto & property : properties) {
@@ -201,7 +201,7 @@ ABOARD6::ABOARD6( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Board6 stream was not parsed correctly!" ) );
+        THROW_IO_ERROR( "Board6 stream was not parsed correctly!" );
     }
 }
 
@@ -210,7 +210,7 @@ ACLASS6::ACLASS6( ALTIUM_PARSER& aReader )
     std::map<wxString, wxString> properties = aReader.ReadProperties();
     if( properties.empty() )
     {
-        THROW_IO_ERROR( _( "Classes6 stream has no properties!" ) );
+        THROW_IO_ERROR( "Classes6 stream has no properties!" );
     }
 
     name     = ALTIUM_PARSER::PropertiesReadString( properties, "NAME", "" );
@@ -230,7 +230,7 @@ ACLASS6::ACLASS6( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Classes6 stream was not parsed correctly!" ) );
+        THROW_IO_ERROR( "Classes6 stream was not parsed correctly" );
     }
 }
 
@@ -239,7 +239,7 @@ ACOMPONENT6::ACOMPONENT6( ALTIUM_PARSER& aReader )
     std::map<wxString, wxString> properties = aReader.ReadProperties();
     if( properties.empty() )
     {
-        THROW_IO_ERROR( _( "Components6 stream has no properties!" ) );
+        THROW_IO_ERROR( "Components6 stream has no properties" );
     }
 
     layer = altium_layer_from_name(
@@ -260,7 +260,7 @@ ACOMPONENT6::ACOMPONENT6( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Components6 stream was not parsed correctly" ) );
+        THROW_IO_ERROR( "Components6 stream was not parsed correctly" );
     }
 }
 
@@ -271,7 +271,7 @@ ADIMENSION6::ADIMENSION6( ALTIUM_PARSER& aReader )
     std::map<wxString, wxString> properties = aReader.ReadProperties();
     if( properties.empty() )
     {
-        THROW_IO_ERROR( _( "Dimensions6 stream has no properties" ) );
+        THROW_IO_ERROR( "Dimensions6 stream has no properties" );
     }
 
     layer = altium_layer_from_name(
@@ -347,7 +347,7 @@ ADIMENSION6::ADIMENSION6( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Dimensions6 stream was not parsed correctly" ) );
+        THROW_IO_ERROR( "Dimensions6 stream was not parsed correctly" );
     }
 }
 
@@ -356,14 +356,14 @@ ANET6::ANET6( ALTIUM_PARSER& aReader )
     std::map<wxString, wxString> properties = aReader.ReadProperties();
     if( properties.empty() )
     {
-        THROW_IO_ERROR( _( "Nets6 stream has no properties" ) );
+        THROW_IO_ERROR( "Nets6 stream has no properties" );
     }
 
     name = ALTIUM_PARSER::PropertiesReadString( properties, "NAME", "" );
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Nets6 stream was not parsed correctly" ) );
+        THROW_IO_ERROR( "Nets6 stream was not parsed correctly" );
     }
 }
 
@@ -372,7 +372,7 @@ APOLYGON6::APOLYGON6( ALTIUM_PARSER& aReader )
     std::map<wxString, wxString> properties = aReader.ReadProperties();
     if( properties.empty() )
     {
-        THROW_IO_ERROR( _( "Polygons6 stream has no properties" ) );
+        THROW_IO_ERROR( "Polygons6 stream has no properties" );
     }
 
     layer = altium_layer_from_name(
@@ -421,7 +421,7 @@ APOLYGON6::APOLYGON6( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Polygons6 stream was not parsed correctly" ) );
+        THROW_IO_ERROR( "Polygons6 stream was not parsed correctly" );
     }
 }
 
@@ -432,7 +432,7 @@ ARULE6::ARULE6( ALTIUM_PARSER& aReader )
     std::map<wxString, wxString> properties = aReader.ReadProperties();
     if( properties.empty() )
     {
-        THROW_IO_ERROR( _( "Rules6 stream has no properties" ) );
+        THROW_IO_ERROR( "Rules6 stream has no properties" );
     }
 
     name     = ALTIUM_PARSER::PropertiesReadString( properties, "NAME", "" );
@@ -494,7 +494,7 @@ ARULE6::ARULE6( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Rules6 stream was not parsed correctly" ) );
+        THROW_IO_ERROR( "Rules6 stream was not parsed correctly" );
     }
 }
 
@@ -503,7 +503,7 @@ AARC6::AARC6( ALTIUM_PARSER& aReader )
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
     if( recordtype != ALTIUM_RECORD::ARC )
     {
-        THROW_IO_ERROR( _( "Arcs6 stream has invalid recordtype" ) );
+        THROW_IO_ERROR( "Arcs6 stream has invalid recordtype" );
     }
 
     // Subrecord 1
@@ -532,7 +532,7 @@ AARC6::AARC6( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Arcs6 stream was not parsed correctly" ) );
+        THROW_IO_ERROR( "Arcs6 stream was not parsed correctly" );
     }
 }
 
@@ -541,19 +541,19 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
     if( recordtype != ALTIUM_RECORD::PAD )
     {
-        THROW_IO_ERROR( _( "Pads6 stream has invalid recordtype" ) );
+        THROW_IO_ERROR( "Pads6 stream has invalid recordtype" );
     }
 
     // Subrecord 1
     size_t subrecord1 = aReader.ReadAndSetSubrecordLength();
     if( subrecord1 == 0 )
     {
-        THROW_IO_ERROR( _( "Pads6 stream has no subrecord1 data" ) );
+        THROW_IO_ERROR( "Pads6 stream has no subrecord1 data" );
     }
     name = aReader.ReadWxString();
     if( aReader.GetRemainingSubrecordBytes() != 0 )
     {
-        THROW_IO_ERROR( _( "Pads6 stream has invalid subrecord1 length" ) );
+        THROW_IO_ERROR( "Pads6 stream has invalid subrecord1 length" );
     }
     aReader.SkipSubrecord();
 
@@ -573,8 +573,9 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     size_t subrecord5 = aReader.ReadAndSetSubrecordLength();
     if( subrecord5 < 120 )
     {
-        THROW_IO_ERROR( _(
-                "Pads6 stream subrecord has length < 120, which is unexpected" ) ); // TODO: exact minimum length we know?
+        // TODO: exact minimum length we know?
+        THROW_IO_ERROR(
+            "Pads6 stream subrecord has length < 120, which is unexpected" );
     }
 
     layer = static_cast<ALTIUM_LAYER>( aReader.Read<uint8_t>() );
@@ -681,7 +682,7 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Pads6 stream was not parsed correctly" ) );
+        THROW_IO_ERROR( "Pads6 stream was not parsed correctly" );
     }
 }
 
@@ -690,7 +691,7 @@ AVIA6::AVIA6( ALTIUM_PARSER& aReader )
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
     if( recordtype != ALTIUM_RECORD::VIA )
     {
-        THROW_IO_ERROR( _( "Vias6 stream has invalid recordtype" ) );
+        THROW_IO_ERROR( "Vias6 stream has invalid recordtype" );
     }
 
     // Subrecord 1
@@ -722,7 +723,7 @@ AVIA6::AVIA6( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Vias6 stream was not parsed correctly" ) );
+        THROW_IO_ERROR( "Vias6 stream was not parsed correctly" );
     }
 }
 
@@ -731,7 +732,7 @@ ATRACK6::ATRACK6( ALTIUM_PARSER& aReader )
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
     if( recordtype != ALTIUM_RECORD::TRACK )
     {
-        THROW_IO_ERROR( _( "Tracks6 stream has invalid recordtype" ) );
+        THROW_IO_ERROR( "Tracks6 stream has invalid recordtype" );
     }
 
     // Subrecord 1
@@ -758,7 +759,7 @@ ATRACK6::ATRACK6( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Tracks6 stream was not parsed correctly" ) );
+        THROW_IO_ERROR( "Tracks6 stream was not parsed correctly" );
     }
 }
 
@@ -767,7 +768,7 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader )
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
     if( recordtype != ALTIUM_RECORD::TEXT )
     {
-        THROW_IO_ERROR( _( "Texts6 stream has invalid recordtype" ) );
+        THROW_IO_ERROR( "Texts6 stream has invalid recordtype" );
     }
 
     // Subrecord 1 - Properties
@@ -809,7 +810,7 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Texts6 stream was not parsed correctly" ) );
+        THROW_IO_ERROR( "Texts6 stream was not parsed correctly" );
     }
 }
 
@@ -818,7 +819,7 @@ AFILL6::AFILL6( ALTIUM_PARSER& aReader )
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
     if( recordtype != ALTIUM_RECORD::FILL )
     {
-        THROW_IO_ERROR( _( "Fills6 stream has invalid recordtype" ) );
+        THROW_IO_ERROR( "Fills6 stream has invalid recordtype" );
     }
 
     // Subrecord 1
@@ -844,7 +845,7 @@ AFILL6::AFILL6( ALTIUM_PARSER& aReader )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Fills6 stream was not parsed correctly" ) );
+        THROW_IO_ERROR( "Fills6 stream was not parsed correctly" );
     }
 }
 
@@ -853,7 +854,7 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
     if( recordtype != ALTIUM_RECORD::REGION )
     {
-        THROW_IO_ERROR( _( "Regions6 stream has invalid recordtype" ) );
+        THROW_IO_ERROR( "Regions6 stream has invalid recordtype" );
     }
 
     // Subrecord 1
@@ -875,7 +876,7 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
     std::map<wxString, wxString> properties = aReader.ReadProperties();
     if( properties.empty() )
     {
-        THROW_IO_ERROR( _( "Regions6 stream has empty properties" ) );
+        THROW_IO_ERROR( "Regions6 stream has empty properties" );
     }
 
     int  pkind     = ALTIUM_PARSER::PropertiesReadInt( properties, "KIND", 0 );
@@ -936,6 +937,6 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
 
     if( aReader.HasParsingError() )
     {
-        THROW_IO_ERROR( _( "Regions6 stream was not parsed correctly" ) );
+        THROW_IO_ERROR( "Regions6 stream was not parsed correctly" );
     }
 }
