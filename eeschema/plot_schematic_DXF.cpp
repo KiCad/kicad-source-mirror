@@ -112,13 +112,10 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString& aFileName,
 {
     DXF_PLOTTER* plotter = new DXF_PLOTTER();
 
-    auto colors = static_cast<COLOR_SETTINGS*>(
-            m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) );
-
     const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
     plotter->SetPageSettings( pageInfo );
     plotter->SetColorMode( getModeColor() );
-    plotter->SetColorSettings( colors );
+    plotter->SetColorSettings( getColorSettings() );
     // Currently, plot units are in decimil
     plotter->SetViewport( aPlotOffset, IU_PER_MILS/10, aScale, false );
 

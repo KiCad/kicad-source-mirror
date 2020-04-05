@@ -248,13 +248,17 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
         SCH_SHEET* sheet = (SCH_SHEET*) aItem;
         COLOR4D    sheetColor = COLOR4D::UNSPECIFIED;
 
-        if( aLayer == LAYER_SHEET )
-            sheetColor = sheet->GetBorderColor();
-        else if( aLayer == LAYER_SHEET_BACKGROUND )
-            sheetColor = sheet->GetBackgroundColor();
+        // Lazy fixup of legacy sheets with no color specifications
+        if( sheet->GetBorderColor() == COLOR4D::UNSPECIFIED )
+            sheet->SetBorderColor( m_schSettings.GetLayerColor( LAYER_SHEET ) );
 
-        if( sheetColor != COLOR4D::UNSPECIFIED )
-            color = sheetColor;
+        if( sheet->GetBackgroundColor() == COLOR4D::UNSPECIFIED )
+            sheet->SetBackgroundColor( m_schSettings.GetLayerColor( LAYER_SHEET_BACKGROUND ) );
+
+        if( aLayer == LAYER_SHEET )
+            color = sheet->GetBorderColor();
+        else if( aLayer == LAYER_SHEET_BACKGROUND )
+            color = sheet->GetBackgroundColor();
     }
 
     if( aItem->IsBrightened() && !aDrawingShadows ) // Selection disambiguation, etc.

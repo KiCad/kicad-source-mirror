@@ -138,14 +138,11 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
                                             double              aScale,
                                             bool                aPlotFrameRef )
 {
-    auto colors = static_cast<COLOR_SETTINGS*>(
-            m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) );
-
     PS_PLOTTER* plotter = new PS_PLOTTER();
     plotter->SetPageSettings( aPageInfo );
     plotter->SetDefaultLineWidth( aDefaultLineWidth );
     plotter->SetColorMode( getModeColor() );
-    plotter->SetColorSettings( colors );
+    plotter->SetColorSettings( getColorSettings() );
     // Currently, plot units are in decimil
     plotter->SetViewport( aPlot0ffset, IU_PER_MILS/10, aScale, false );
 
@@ -162,7 +159,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
 
     plotter->StartPlot();
 
-    if( m_plotBackgroundColor )
+    if( m_plotBackgroundColor->GetValue() )
     {
         plotter->SetColor( plotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND ) );
         wxPoint end( plotter->PageSettings().GetWidthIU(),

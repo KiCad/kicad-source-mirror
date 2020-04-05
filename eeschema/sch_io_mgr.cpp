@@ -184,35 +184,4 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromSchPath( const wxString& a
 }
 
 
-SCH_SHEET* SCH_IO_MGR::Load( SCH_FILE_T aFileType, const wxString& aFileName, KIWAY* aKiway,
-                             SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
-{
-    // release the SCH_PLUGIN even if an exception is thrown.
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( FindPlugin( aFileType ) );
-
-    if( (SCH_PLUGIN*) pi )  // test pi->plugin
-    {
-        return pi->Load( aFileName, aKiway, aAppendToMe, aProperties );  // virtual
-    }
-
-    THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
-}
-
-
-void SCH_IO_MGR::Save( SCH_FILE_T aFileType, const wxString& aFileName,
-                       SCH_SCREEN* aSchematic, KIWAY* aKiway, const PROPERTIES* aProperties )
-{
-    // release the SCH_PLUGIN even if an exception is thrown.
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( FindPlugin( aFileType ) );
-
-    if( (SCH_PLUGIN*) pi )  // test pi->plugin
-    {
-        pi->Save( aFileName, aSchematic, aKiway, aProperties );  // virtual
-        return;
-    }
-
-    THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
-}
-
-
 DECLARE_ENUM_VECTOR( SCH_IO_MGR, SCH_FILE_T )

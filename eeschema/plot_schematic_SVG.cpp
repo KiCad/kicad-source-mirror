@@ -49,9 +49,6 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();
     SCH_SHEET_LIST  sheetList;
 
-    auto colors = static_cast<COLOR_SETTINGS*>(
-            m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) );
-
     if( aPrintAll )
         sheetList.BuildSheetList( g_RootSheet );
     else
@@ -72,10 +69,8 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
             wxFileName plotFileName = createPlotFileName( m_outputDirectoryName,
                                                           fname, ext, &reporter );
 
-            bool success = plotOneSheetSVG( m_parent, plotFileName.GetFullPath(), screen,
-                                            aDefaultLineWidth, getModeColor() ? false : true,
-                                            aPrintFrameRef, m_plotBackgroundColor->GetValue(),
-                                            colors );
+            bool success = plotOneSheetSVG( plotFileName.GetFullPath(), screen, aDefaultLineWidth,
+                                            getModeColor() ? false : true, aPrintFrameRef );
 
             if( !success )
             {
@@ -103,25 +98,18 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
 }
 
 
-bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    aFrame,
-                                             const wxString&    aFileName,
-                                             SCH_SCREEN*        aScreen,
-                                             int                aDefaultLineWidth,
-                                             bool               aPlotBlackAndWhite,
-                                             bool               aPlotFrameRef,
-                                             bool               aPlotBackgroundColor,
-                                             COLOR_SETTINGS*    aColors )
+bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString& aFileName,
+                                             SCH_SCREEN*     aScreen,
+                                             int             aDefaultLineWidth,
+                                             bool            aPlotBlackAndWhite,
+                                             bool            aPlotFrameRef )
 {
     SVG_PLOTTER* plotter = new SVG_PLOTTER();
-
-    if( !aColors )
-        aColors = aFrame->GetColorSettings();
-
     const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
     plotter->SetPageSettings( pageInfo );
     plotter->SetDefaultLineWidth( aDefaultLineWidth );
     plotter->SetColorMode( aPlotBlackAndWhite ? false : true );
-    plotter->SetColorSettings( aColors );
+    plotter->SetColorSettings( getColorSettings() );
     wxPoint plot_offset;
     double scale = 1.0;
     // Currently, plot units are in decimil
@@ -140,7 +128,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    aFrame,
 
     plotter->StartPlot();
 
-    if( aPlotBackgroundColor )
+    if( m_plotBackgroundColor->GetValue() )
     {
         plotter->SetColor( plotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND ) );
         wxPoint end( plotter->PageSettings().GetWidthIU(),
@@ -150,9 +138,9 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    aFrame,
 
     if( aPlotFrameRef )
     {
-        PlotWorkSheet( plotter, &aScreen->Prj(), aFrame->GetTitleBlock(), pageInfo,
+        PlotWorkSheet( plotter, &aScreen->Prj(), m_parent->GetTitleBlock(), pageInfo,
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
-                       aFrame->GetScreenDesc(), aScreen->GetFileName(),
+                       m_parent->GetScreenDesc(), aScreen->GetFileName(),
                        plotter->GetColorMode() ? COLOR4D::UNSPECIFIED : COLOR4D::BLACK );
     }
 

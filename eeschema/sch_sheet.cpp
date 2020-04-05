@@ -909,6 +909,11 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     wxString    Text;
     wxPoint     pos;
 
+    COLOR4D borderColor = GetBorderColor();
+
+    if( borderColor == COLOR4D::UNSPECIFIED )
+        borderColor = aPlotter->ColorSettings()->GetColor( LAYER_SHEET );
+
     aPlotter->SetColor( GetBorderColor() );
 
     int thickness = GetPenSize();

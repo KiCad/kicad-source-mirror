@@ -80,6 +80,8 @@ private:
     void setModeColor( bool aColor )
     { m_ModeColorOption->SetSelection( aColor ? 0 : 1 ); }
 
+    COLOR_SETTINGS* getColorSettings();
+
     /**
      * Set the m_outputDirectoryName variable to the selected directory from directory dialog.
      */
@@ -134,6 +136,8 @@ private:
 
     // SVG
     void    createSVGFile( bool aPlotAll, bool aPlotFrameRef, int aDefaultLineWidth );
+    bool    plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScreen, int aDefaultLineWidth,
+                             bool aPlotBlackAndWhite, bool aPlotFrameRef );
 
     /**
      * Create a file name with an absolute path name
@@ -148,12 +152,4 @@ private:
     wxFileName createPlotFileName( wxTextCtrl* aOutputDirectoryName,
                                    wxString& aPlotFileName,
                                    wxString& aExtension, REPORTER* aReporter = NULL );
-
-public:
-    // This function is static because it is called by libedit
-    // outside a dialog. This is the reason we need aFrame as parameter
-    static bool plotOneSheetSVG( EDA_DRAW_FRAME* aFrame, const wxString& aFileName,
-                                 SCH_SCREEN* aScreen, int aDefaultLineWidth,
-                                 bool aPlotBlackAndWhite, bool aPlotFrameRef,
-                                 bool aPlotBackgroundColor, COLOR_SETTINGS* aColors );
 };

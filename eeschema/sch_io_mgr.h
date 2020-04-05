@@ -122,58 +122,6 @@ public:
      * Return a plugin type given a schematic using the file extension of \a aSchematicPath.
      */
     static SCH_FILE_T GuessPluginTypeFromSchPath( const wxString& aSchematicPath );
-
-    /**
-     * Load the requested #SCH_PLUGIN and if found, calls the SCH_PLUGIN->Load(..) function
-     * on it using the arguments passed to this function.  After the SCH_PLUGIN->Load()
-     * function returns, the #SCH_PLUGIN is Released() as part of this call.
-     *
-     * @param aFileType is the #SCH_FILE_T of file to load.
-     *
-     * @param aFileName is the name of the file to load.
-     *
-     * @param aKiway is the #KIWAY object used to access the component libraries loaded
-     *               by the project.
-     *
-     * @param aAppendToMe is an existing #SCH_SHEET to append to, use NULL if a new
-     *                    #SCH_SHEET load is wanted.
-     *
-     * @param aProperties is an associative array that allows the caller to pass additional
-     *                    tuning parameters to the #SCH_PLUGIN.
-     *
-     * @return the loaded schematic which the caller owns.  This is never NULL because
-     *          exception thrown if an error occurs.
-     *
-     * @throw IO_ERROR if the #SCH_PLUGIN cannot be found, file cannot be found
-     *                 or file cannot be loaded.
-     */
-    static SCH_SHEET* Load( SCH_FILE_T aFileType, const wxString& aFileName, KIWAY* aKiway,
-                            SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL );
-
-    /**
-     * Write either a full aSchematic to a storage file in a format that this
-     * implementation knows about, or it can be used to write a portion of
-     * aSchematic to a special kind of export file.
-     *
-     * @param aFileType is the #SCH_FILE_T of file to save.
-     *
-     * @param aFileName is the name of a file to save to on disk.
-     *
-     * @param aSchematic is the #SCH_SCREEN document (data tree) to save or export to disk.
-     *
-     * @param aKiway is the #KIWAY object used to access the component libraries loaded
-     *               by the project.
-     *
-     * @param aProperties is an associative array that can be used to tell the
-     *                    saver how to save the file, because it can take any number of
-     *                    additional named tuning arguments that the plugin is known to support.
-     *                    The caller continues to own this object (plugin may not delete it), and
-     *                    plugins should expect it to be optionally NULL.
-     *
-     * @throw IO_ERROR if there is a problem saving or exporting.
-     */
-    static void Save( SCH_FILE_T aFileType, const wxString& aFileName,
-                      SCH_SCREEN* aSchematic, KIWAY* aKiway, const PROPERTIES* aProperties = NULL );
 };
 
 

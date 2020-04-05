@@ -305,6 +305,13 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( int* aDefaultLineWidth )
 }
 
 
+COLOR_SETTINGS* DIALOG_PLOT_SCHEMATIC::getColorSettings()
+{
+    int selection = m_colorTheme->GetSelection();
+    return static_cast<COLOR_SETTINGS*>( m_colorTheme->GetClientData( selection ) );
+}
+
+
 void DIALOG_PLOT_SCHEMATIC::OnPlotCurrent( wxCommandEvent& event )
 {
     PlotSchematic( false );

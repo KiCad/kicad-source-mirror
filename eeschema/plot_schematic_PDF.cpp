@@ -60,14 +60,11 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef,
     else
         sheetList.push_back( m_parent->GetCurrentSheet() );
 
-    auto colors = static_cast<COLOR_SETTINGS*>(
-            m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) );
-
     // Allocate the plotter and set the job level parameter
     PDF_PLOTTER* plotter = new PDF_PLOTTER();
     plotter->SetDefaultLineWidth( aDefaultLineWidth );
     plotter->SetColorMode( getModeColor() );
-    plotter->SetColorSettings( colors );
+    plotter->SetColorSettings( getColorSettings() );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );
     plotter->SetTitle( m_parent->GetTitleBlock().GetTitle() );
 
