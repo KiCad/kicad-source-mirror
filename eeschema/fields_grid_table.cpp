@@ -129,7 +129,7 @@ void FIELDS_GRID_TABLE<T>::initGrid( DIALOG_SHIM* aDialog )
     m_filepathAttr = new wxGridCellAttr;
 
     // Create a wild card using wxFileDialog syntax.
-    wxString wildCard( _("sch files") );
+    wxString wildCard( _( "Schematic Files" ) );
     std::vector<std::string> exts;
     exts.push_back( LegacySchematicFileExtension );
     wildCard += AddFileExtListToFilter( exts );
