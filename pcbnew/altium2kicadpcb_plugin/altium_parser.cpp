@@ -70,7 +70,7 @@ ALTIUM_PARSER::ALTIUM_PARSER(
     m_subrecord_end = nullptr;
     if( aEntry->size > std::numeric_limits<size_t>::max() )
     {
-        THROW_IO_ERROR( _( "stream too large" ) );
+        THROW_IO_ERROR( "stream too large" );
     }
 
     m_size  = static_cast<size_t>( aEntry->size );
@@ -216,7 +216,7 @@ int32_t ALTIUM_PARSER::PropertiesReadKicadUnit( const std::map<wxString, wxStrin
         return ConvertToKicadUnit( mils );
     }
 
-    wxLogError( wxString::Format( _( "Unit '%s' does not end with mils" ) ), value );
+    wxLogError( wxString::Format( "Unit '%s' does not end with mils" ), value );
     return 0;
 }
 

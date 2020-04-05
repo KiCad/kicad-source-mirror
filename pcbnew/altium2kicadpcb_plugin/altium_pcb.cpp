@@ -373,7 +373,7 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
         {
             wxASSERT_MSG( !isRequired,
                     wxString::Format(
-                            _( "Altium Directory of kind %d was expected, but no mapping is present in the code" ),
+                            "Altium Directory of kind %d was expected, but no mapping is present in the code",
                             directory ) );
             continue;
         }
@@ -839,8 +839,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
 
     if( aElem.textPoint.empty() )
     {
-        wxLogError(
-                wxString::Format( _( "No text position present for leader dimension object" ) ) );
+        wxLogError( "No text position present for leader dimension object" );
         return;
     }
 
@@ -1207,7 +1206,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
         else
         {
             wxLogError( wxString::Format(
-                    _( "Ignore polygon shape of kind %d on layer %s, because not implemented yet" ),
+                    "Ignore polygon shape of kind %d on layer %s, because not implemented yet",
                     elem.kind, LSET::Name( GetKicadLayer( elem.layer ) ) ) );
         }
     }
@@ -1476,7 +1475,7 @@ void ALTIUM_PCB::ParsePads6Data(
             {
                 // TODO: I assume other values are possible as well?
                 wxLogError( wxString::Format(
-                        _( "Pad '%s' of Footprint %s is not marked as multilayer, but it is an THT pad" ),
+                        "Pad '%s' of Footprint %s is not marked as multilayer, but it is an THT pad",
                         elem.name, module->GetReference() ) );
             }
             pad->SetAttribute( elem.plated ? PAD_ATTR_T::PAD_ATTRIB_STANDARD :
@@ -1529,7 +1528,7 @@ void ALTIUM_PCB::ParsePads6Data(
                 default:
                 case ALTIUM_PAD_HOLE_SHAPE::UNKNOWN:
                     wxLogError( wxString::Format(
-                            _( "Pad '%s' of Footprint %s uses a hole of unknown kind %d" ),
+                           "Pad '%s' of Footprint %s uses a hole of unknown kind %d",
                             elem.name, module->GetReference(), elem.sizeAndShape->holeshape ) );
                     pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
                     pad->SetDrillSize( wxSize( elem.holesize, elem.holesize ) ); // Workaround
@@ -1574,7 +1573,7 @@ void ALTIUM_PCB::ParsePads6Data(
             break;
         case ALTIUM_PAD_SHAPE::UNKNOWN:
         default:
-            wxLogError( wxString::Format( _( "Pad '%s' of Footprint %s uses a unknown pad-shape" ),
+            wxLogError( wxString::Format( "Pad '%s' of Footprint %s uses a unknown pad-shape",
                     elem.name, module->GetReference() ) );
             break;
         }
@@ -1661,7 +1660,7 @@ void ALTIUM_PCB::ParseVias6Data(
         if( !IsCopperLayer( start_klayer ) || !IsCopperLayer( end_klayer ) )
         {
             wxLogError( wxString::Format(
-                    _( "Via from layer %d <-> %d uses non-copper layer. This should not happen." ),
+                    "Via from layer %d <-> %d uses non-copper layer. This should not happen.",
                     elem.layer_start, elem.layer_end ) );
             continue; // just assume through-hole instead.
         }
