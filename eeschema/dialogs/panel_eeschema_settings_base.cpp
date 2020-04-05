@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,13 +26,13 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 
 	m_staticText2 = new wxStaticText( sbSizer7->GetStaticBox(), wxID_ANY, _("&Measurement units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	sbSizer7->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizer7->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxString m_choiceUnitsChoices[] = { _("inches"), _("millimeters") };
 	int m_choiceUnitsNChoices = sizeof( m_choiceUnitsChoices ) / sizeof( wxString );
 	m_choiceUnits = new wxChoice( sbSizer7->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnitsNChoices, m_choiceUnitsChoices, 0 );
 	m_choiceUnits->SetSelection( 0 );
-	sbSizer7->Add( m_choiceUnits, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	sbSizer7->Add( m_choiceUnits, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	bLeftColumn->Add( sbSizer7, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -60,10 +60,10 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 
 	m_textSizeLabel = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Schematic text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
-	bSizer5->Add( m_textSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer5->Add( m_textSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_textSizeCtrl = new wxTextCtrl( sbSizer5->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP );
-	bSizer5->Add( m_textSizeCtrl, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer5->Add( m_textSizeCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_textSizeUnits = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeUnits->Wrap( -1 );
@@ -168,10 +168,10 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 
 	m_labelIncrementLabel = new wxStaticText( repeatSizer->GetStaticBox(), wxID_ANY, _("Label increment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelIncrementLabel->Wrap( -1 );
-	fgSizerRepeatOpt1->Add( m_labelIncrementLabel, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	fgSizerRepeatOpt1->Add( m_labelIncrementLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	m_spinLabelRepeatStep = new wxSpinCtrl( repeatSizer->GetStaticBox(), wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -10, 10, 1 );
-	fgSizerRepeatOpt1->Add( m_spinLabelRepeatStep, 1, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRepeatOpt1->Add( m_spinLabelRepeatStep, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 
 	fgSizerRepeatOpt1->Add( 0, 0, 1, wxEXPAND, 3 );

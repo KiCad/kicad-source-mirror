@@ -46,6 +46,7 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHE
 {
     m_sheet = aSheet;
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_sheet );
+    m_width = 100;  // Will be later set to a better value
     m_delayedFocusRow = SHEETNAME;
     m_delayedFocusColumn = FDC_VALUE;
 
