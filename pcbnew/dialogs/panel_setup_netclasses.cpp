@@ -613,6 +613,8 @@ void PANEL_SETUP_NETCLASSES::ImportSettingsFrom( BOARD* aBoard )
     m_BrdSettings = &aBoard->GetDesignSettings();
     TransferDataToWindow();
 
+    rebuildNetclassDropdowns();
+
     m_netclassGrid->ForceRefresh();
     m_membershipGrid->ForceRefresh();
 
