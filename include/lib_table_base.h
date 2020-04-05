@@ -477,15 +477,6 @@ public:
      */
     static UTF8 FormatOptions( const PROPERTIES* aProperties );
 
-    /**
-     * Replaces any environment variable references with their values and is here to fully
-     * embellish the TABLE_ROW::uri in a platform independent way.
-     *
-     * This enables library tables to have platform dependent environment variables in them,
-     * allowing for a uniform table across platforms.
-     */
-    static const wxString ExpandSubstitutions( const wxString& aString );
-
 protected:
 
     /**

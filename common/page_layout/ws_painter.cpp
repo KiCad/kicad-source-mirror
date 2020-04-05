@@ -89,93 +89,94 @@ const COLOR4D& WS_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer 
 // after replacing format symbols by the corresponding value
 wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 {
-    auto wsResolver = [ this ]( wxString* token ) -> bool
-                      {
-                          if( token->IsSameAs( wxT( "KICAD_VERSION" ) ) )
-                          {
-                              *token = wxString::Format( wxT( "%s%s %s" ),
-                                                         productName,
-                                                         Pgm().App().GetAppName(),
-                                                         GetBuildVersion() );
-                              return true;
-                          }
-                          else if( token->IsSameAs( wxT( "#" ) ) )
-                          {
-                              *token = wxString::Format( wxT( "%d" ), m_sheetNumber );
-                              return true;
-                          }
-                          else if( token->IsSameAs( wxT( "##" ) ) )
-                          {
-                              *token = wxString::Format( wxT( "%d" ), m_sheetCount );
-                              return true;
-                          }
-                          else if( token->IsSameAs( wxT( "SHEETNAME" ) ) )
-                          {
-                              *token = m_sheetFullName;
-                              return true;
-                          }
-                          else if( token->IsSameAs( wxT( "FILENAME" ) ) )
-                          {
-                              wxFileName fn( m_fileName );
-                              *token = fn.GetFullName();
-                              return true;
-                          }
-                          else if( token->IsSameAs( wxT( "PAPER" ) ) )
-                          {
-                              *token = m_paperFormat ? *m_paperFormat : wxString("");
-                              return true;
-                          }
-                          else if( token->IsSameAs( wxT( "LAYER" ) ) )
-                          {
-                              *token = m_sheetLayer ? *m_sheetLayer : wxString("");
-                              return true;
-                          }
-                          else if( token->IsSameAs( wxT( "ISSUE_DATE" ) ) )
-                          {
-                              *token = m_titleBlock ? m_titleBlock->GetDate() : wxString("");
-                              return true;
-                          }
-                          else if( token->IsSameAs( wxT( "REVISION" ) ) )
-                          {
-                              *token = m_titleBlock ? m_titleBlock->GetRevision() : wxString("");
-                              return true;
-                          }
-                          else if( token->IsSameAs( wxT( "TITLE" ) ) )
-                          {
-                              *token = m_titleBlock ? m_titleBlock->GetTitle() : wxString("");
-                              return true;
-                          }
-                          else if( token->IsSameAs( wxT( "COMPANY" ) ) )
-                          {
-                              *token = m_titleBlock ? m_titleBlock->GetCompany() : wxString("");
-                              return true;
-                          }
-                          else if( token->Left( token->Len()-1 ).IsSameAs( wxT( "COMMENT" ) ) )
-                          {
-                              wxChar c = token->Last();
+    std::function<bool( wxString* )> wsResolver =
+            [ this ]( wxString* token ) -> bool
+            {
+                if( token->IsSameAs( wxT( "KICAD_VERSION" ) ))
+                {
+                    *token = wxString::Format( wxT( "%s%s %s" ),
+                                               productName,
+                                               Pgm().App().GetAppName(),
+                                               GetBuildVersion());
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "#" ) ))
+                {
+                    *token = wxString::Format( wxT( "%d" ), m_sheetNumber );
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "##" ) ))
+                {
+                    *token = wxString::Format( wxT( "%d" ), m_sheetCount );
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "SHEETNAME" ) ))
+                {
+                    *token = m_sheetFullName;
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "FILENAME" ) ))
+                {
+                    wxFileName fn( m_fileName );
+                    *token = fn.GetFullName();
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "PAPER" ) ))
+                {
+                    *token = m_paperFormat ? *m_paperFormat : wxString( "" );
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "LAYER" ) ))
+                {
+                    *token = m_sheetLayer ? *m_sheetLayer : wxString( "" );
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "ISSUE_DATE" ) ))
+                {
+                    *token = m_titleBlock ? m_titleBlock->GetDate() : wxString( "" );
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "REVISION" ) ))
+                {
+                    *token = m_titleBlock ? m_titleBlock->GetRevision() : wxString( "" );
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "TITLE" ) ))
+                {
+                    *token = m_titleBlock ? m_titleBlock->GetTitle() : wxString( "" );
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "COMPANY" ) ))
+                {
+                    *token = m_titleBlock ? m_titleBlock->GetCompany() : wxString( "" );
+                    return true;
+                }
+                else if( token->Left( token->Len() - 1 ).IsSameAs( wxT( "COMMENT" ) ))
+                {
+                    wxChar c = token->Last();
 
-                              switch( c )
-                              {
-                              case '0':
-                              case '1':
-                              case '2':
-                              case '3':
-                              case '4':
-                              case '5':
-                              case '6':
-                              case '7':
-                              case '8':
-                              case '9':
-                                  *token = m_titleBlock ? m_titleBlock->GetComment( c - '0' )
-                                                        : wxString("");
-                                  return true;
-                              }
-                          }
+                    switch( c )
+                    {
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                        *token = m_titleBlock ? m_titleBlock->GetComment( c - '0' )
+                                              : wxString( "" );
+                        return true;
+                    }
+                }
 
-                          return false;
-                      };
+                return false;
+            };
 
-    return ExpandTextVars( aTextbase, wsResolver, m_project );
+    return ExpandTextVars( aTextbase, &wsResolver, m_project );
 }
 
 

@@ -60,23 +60,13 @@ private:
     /// mapping of file names to cache names and data
     std::map< wxString, S3D_CACHE_ENTRY*, rsort_wxString > m_CacheMap;
 
-    /// object to resolve file names
-    FILENAME_RESOLVER* m_FNResolver;
+    FILENAME_RESOLVER*  m_FNResolver;
 
-    /// plugin manager
     S3D_PLUGIN_MANAGER* m_Plugins;
 
-    /// set true if the cache needs to be updated
-    bool m_DirtyCache;
-
-    /// 3D cache directory
-    wxString m_CacheDir;
-
-    /// base configuration path for 3D items
-    wxString m_ConfigDir;
-
-    /// current KiCad project dir
-    wxString m_ProjDir;
+    PROJECT*            m_project;
+    wxString            m_CacheDir;
+    wxString            m_ConfigDir;       /// base configuration path for 3D items
 
     /** Find or create cache entry for file name
      *
@@ -134,21 +124,11 @@ public:
     bool Set3DConfigDir( const wxString& aConfigDir );
 
     /**
-     * Function Get3DConfigDir
-     * returns the current 3D configuration directory on
-     * success, otherwise it returns wxEmptyString. If the
-     * directory was not previously set via Set3DConfigDir()
-     * then a default is used which is based on kicad's
-     * configuration directory code as of September 2015.
-     */
-    wxString Get3DConfigDir( bool createDefault = false );
-
-    /**
      * Function SetProjectDir
      * sets the current project's working directory; this
      * affects the model search path
      */
-    bool SetProjectDir( const wxString& aProjDir );
+    bool SetProject( PROJECT* aProject );
 
     /**
      * Function SetProgramBase
@@ -157,12 +137,6 @@ public:
      * local env vars.
      */
     void SetProgramBase( PGM_BASE* aBase );
-
-    /**
-     * Function GetProjectDir
-     * returns the current project's working directory
-     */
-    wxString GetProjectDir( void );
 
     /**
      * Function Load
@@ -177,7 +151,7 @@ public:
      */
     SCENEGRAPH* Load( const wxString& aModelFile );
 
-    FILENAME_RESOLVER* GetResolver( void );
+    FILENAME_RESOLVER* GetResolver();
 
     /**
      * Function GetFileFilters
@@ -186,7 +160,7 @@ public:
      *
      * @return a pointer to the filter list
      */
-    std::list< wxString > const* GetFileFilters( void ) const;
+    std::list< wxString > const* GetFileFilters() const;
 
     /**
      * Function FlushCache
@@ -198,7 +172,7 @@ public:
      * Function ClosePlugins
      * unloads plugins to free memory
      */
-    void ClosePlugins( void );
+    void ClosePlugins();
 
     /**
      * Function GetModel
@@ -209,8 +183,6 @@ public:
      * @return is a pointer to the render data or NULL if not available
      */
     S3DMODEL* GetModel( const wxString& aModelFileName );
-
-    wxString GetModelHash( const wxString& aModelFileName );
 };
 
 #endif  // CACHE_3D_H

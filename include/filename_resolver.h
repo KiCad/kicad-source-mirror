@@ -51,11 +51,12 @@ struct SEARCH_PATH
 class FILENAME_RESOLVER
 {
 private:
-    wxString m_ConfigDir;           // 3D configuration directory
-    std::list< SEARCH_PATH > m_Paths; // list of base paths to search from
-    int m_errflags;
-    PGM_BASE* m_pgm;
-    wxString m_curProjDir;
+    wxString               m_ConfigDir;     // 3D configuration directory
+    std::list<SEARCH_PATH> m_Paths;         // list of base paths to search from
+    int                    m_errflags;
+    PGM_BASE*              m_pgm;
+    PROJECT*               m_project;
+    wxString               m_curProjDir;
 
     /**
      * Function createPathList
@@ -126,7 +127,8 @@ public:
      * @retval      true        success
      * @retval      false       failure
      */
-    bool SetProjectDir( const wxString& aProjDir, bool* flgChanged = NULL );
+    bool SetProject( PROJECT* aProject, bool* flgChanged = NULL );
+
     wxString GetProjectDir( void );
 
     /**

@@ -373,7 +373,7 @@ enum Bracket
 
 
 wxString ExpandTextVars( const wxString& aSource,
-                         const std::function<bool( wxString* )>& aLocalResolver,
+                         const std::function<bool( wxString* )>* aLocalResolver,
                          const PROJECT* aProject )
 {
     wxString newbuf;
@@ -396,7 +396,11 @@ wxString ExpandTextVars( const wxString& aSource,
             if( token.IsEmpty() )
                 continue;
 
-            if( aLocalResolver( &token ) || ( aProject && aProject->TextVarResolver( &token ) ) )
+            if( aLocalResolver && (*aLocalResolver)( &token ) )
+            {
+                newbuf.append( token );
+            }
+            else if( aProject && aProject->TextVarResolver( &token ) )
             {
                 newbuf.append( token );
             }
@@ -419,7 +423,7 @@ wxString ExpandTextVars( const wxString& aSource,
 //
 // Stolen from wxExpandEnvVars and then heavily optimized
 //
-wxString KIwxExpandEnvVars(const wxString& str)
+wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject )
 {
     size_t strlen = str.length();
 
@@ -477,9 +481,14 @@ wxString KIwxExpandEnvVars(const wxString& str)
             // NB: use wxGetEnv instead of wxGetenv as otherwise variables
             //     set through wxSetEnv may not be read correctly!
             bool expanded = false;
-            wxString tmp;
+            wxString tmp = strVarName;
 
-            if( wxGetEnv( strVarName, &tmp ) )
+            if( aProject && aProject->TextVarResolver( &tmp ) )
+            {
+                strResult += tmp;
+                expanded = true;
+            }
+            else if( wxGetEnv( strVarName, &tmp ) )
             {
                 strResult += tmp;
                 expanded = true;
@@ -548,7 +557,7 @@ wxString KIwxExpandEnvVars(const wxString& str)
 }
 
 
-const wxString ExpandEnvVarSubstitutions( const wxString& aString )
+const wxString ExpandEnvVarSubstitutions( const wxString& aString, PROJECT* aProject )
 {
     // wxGetenv( wchar_t* ) is not re-entrant on linux.
     // Put a lock on multithreaded use of wxGetenv( wchar_t* ), called from wxEpandEnvVars(),
@@ -557,21 +566,22 @@ const wxString ExpandEnvVarSubstitutions( const wxString& aString )
     std::lock_guard<std::mutex> lock( getenv_mutex );
 
     // We reserve the right to do this another way, by providing our own member function.
-    return KIwxExpandEnvVars( aString );
+    return KIwxExpandEnvVars( aString, aProject );
 }
 
 
-const wxString ResolveUriByEnvVars( const wxString& aUri )
+const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject )
 {
+    wxString uri = ExpandTextVars( aUri, nullptr, aProject );
+
     // URL-like URI: return as is.
-    wxURL url( aUri );
+    wxURL url( uri );
 
     if( url.GetError() == wxURL_NOERR )
-        return aUri;
+        return uri;
 
-    // Otherwise, the path points to a local file. Resolve environment
-    // variables if any.
-    return ExpandEnvVarSubstitutions( aUri );
+    // Otherwise, the path points to a local file. Resolve environment variables if any.
+    return ExpandEnvVarSubstitutions( aUri, aProject );
 }
 
 

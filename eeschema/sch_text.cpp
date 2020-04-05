@@ -452,50 +452,51 @@ wxString getElectricalTypeLabel( PINSHEETLABEL_SHAPE aType )
 
 wxString SCH_TEXT::GetShownText() const
 {
-    auto textResolver = [this]( wxString* token ) -> bool
+    std::function<bool( wxString* )> textResolver =
+            [this]( wxString* token ) -> bool
+            {
+                if( ( Type() == SCH_GLOBAL_LABEL_T
+                        || Type() == SCH_HIER_LABEL_T
+                        || Type() == SCH_SHEET_PIN_T )
+                     && token->IsSameAs( wxT( "CONNECTION_TYPE" ) ) )
+                {
+                    *token = getElectricalTypeLabel( GetShape() );
+                    return true;
+                }
+
+                if( Type() == SCH_SHEET_PIN_T && m_Parent )
+                {
+                    SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_Parent );
+                    std::vector<SCH_FIELD>& fields = sheet->GetFields();
+
+                    for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
+                    {
+                        if( token->IsSameAs( fields[i].GetCanonicalName().Upper() ) )
                         {
-                            if( ( Type() == SCH_GLOBAL_LABEL_T
-                                    || Type() == SCH_HIER_LABEL_T
-                                    || Type() == SCH_SHEET_PIN_T )
-                                 && token->IsSameAs( wxT( "CONNECTION_TYPE" ) ) )
-                            {
-                                *token = getElectricalTypeLabel( GetShape() );
-                                return true;
-                            }
+                            *token = fields[i].GetShownText();
+                            return true;
+                        }
+                    }
 
-                            if( Type() == SCH_SHEET_PIN_T && m_Parent )
-                            {
-                                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_Parent );
-                                std::vector<SCH_FIELD>& fields = sheet->GetFields();
+                    for( size_t i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
+                    {
+                        if( token->IsSameAs( fields[i].GetName() ) )
+                        {
+                            *token = fields[i].GetShownText();
+                            return true;
+                        }
+                    }
+                }
 
-                                for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
-                                {
-                                    if( token->IsSameAs( fields[i].GetCanonicalName().Upper() ) )
-                                    {
-                                        *token = fields[i].GetShownText();
-                                        return true;
-                                    }
-                                }
-
-                                for( size_t i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
-                                {
-                                    if( token->IsSameAs( fields[i].GetName() ) )
-                                    {
-                                        *token = fields[i].GetShownText();
-                                        return true;
-                                    }
-                                }
-                            }
-
-                            return false;
-                        };
+                return false;
+            };
 
     PROJECT*  project = nullptr;
 
     if( g_RootSheet && g_RootSheet->GetScreen() )
         project = &g_RootSheet->GetScreen()->Kiway().Prj();
 
-    return ExpandTextVars( EDA_TEXT::GetShownText(), textResolver, project );
+    return ExpandTextVars( EDA_TEXT::GetShownText(), &textResolver, project );
 }
 
 

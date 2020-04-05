@@ -305,25 +305,26 @@ bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
 const wxString PrePendPath( const wxString& aEnvVar, const wxString& aPriorityPath );
 
 /**
- * Replace any environment variable references with their values.
+ * Replace any environment variable & text variable references with their values.
  *
  * @param aString = a string containing (perhaps) references to env var
  * @return a string where env var are replaced by their value
  */
-const wxString ExpandEnvVarSubstitutions( const wxString& aString );
+const wxString ExpandEnvVarSubstitutions( const wxString& aString, PROJECT* aProject );
 
 /**
  * Expand '${var-name}' templates in text.  The LocalResolver is given first crack at it,
  * after which the PROJECT's resolver is called.
  */
 wxString ExpandTextVars( const wxString& aSource,
-                         const std::function<bool( wxString* )>& aLocalResolver,
+                         const std::function<bool( wxString* )>* aLocalResolver,
                          const PROJECT* aProject );
 
 /**
- * Replace any environment variables in file-path uris (leaving network-path URIs alone).
+ * Replace any environment and/or text variables in file-path uris (leaving network-path URIs
+ * alone).
  */
-const wxString ResolveUriByEnvVars( const wxString& aUri );
+const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject );
 
 
 #ifdef __WXMAC__

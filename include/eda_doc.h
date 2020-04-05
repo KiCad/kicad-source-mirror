@@ -47,12 +47,10 @@ bool KeywordMatch( const wxString& aKeys, const wxString& aDatabase );
  * @param aParent = main frame
  * @param aDocName = filename of file to open (Full filename or short filename)
  * if \a aDocName begins with http: or ftp: or www. the default internet browser is launched
- * @param aPaths = a wxPathList to explore.
- *              if NULL or aDocName is a full filename, aPath is not used.
 */
 bool GetAssociatedDocument( wxWindow* aParent,
                             const wxString& aDocName,
-                            const wxPathList* aPaths = NULL );
+                            PROJECT* aProject );
 
 
 #endif /* __INCLUDE__EDA_DOC_H__ */

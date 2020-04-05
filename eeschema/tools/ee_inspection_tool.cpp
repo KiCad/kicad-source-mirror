@@ -283,11 +283,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
     }
 
     if( !datasheet.IsEmpty() && datasheet != wxT( "~" ) )
-    {
-        SEARCH_STACK* lib_search = m_frame->Prj().SchSearchS();
-
-        GetAssociatedDocument( m_frame, datasheet, lib_search );
-    }
+        GetAssociatedDocument( m_frame, datasheet, &m_frame->Prj() );
 
     return 0;
 }

@@ -74,100 +74,102 @@ EDA_ITEM* SCH_FIELD::Clone() const
 
 wxString SCH_FIELD::GetShownText() const
 {
-    auto symbolResolver = [ this ]( wxString* token ) -> bool
-                          {
-                              SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_Parent );
-                              std::vector<SCH_FIELD>& fields = component->GetFields();
+    std::function<bool( wxString* )> symbolResolver =
+            [this]( wxString* token ) -> bool
+            {
+                SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_Parent );
+                std::vector<SCH_FIELD>& fields = component->GetFields();
 
-                              for( int i = 0; i < MANDATORY_FIELDS; ++i )
-                              {
-                                  if( token->IsSameAs( fields[i].GetCanonicalName().Upper() ) )
-                                  {
-                                      // silently drop recursive references
-                                      if( &fields[i] == this )
-                                          *token = wxEmptyString;
-                                      else
-                                          *token = fields[i].GetShownText();
+                for( int i = 0; i < MANDATORY_FIELDS; ++i )
+                {
+                    if( token->IsSameAs( fields[ i ].GetCanonicalName().Upper()))
+                    {
+                        // silently drop recursive references
+                        if( &fields[ i ] == this )
+                            *token = wxEmptyString;
+                        else
+                            *token = fields[ i ].GetShownText();
 
-                                      return true;
-                                  }
-                              }
+                        return true;
+                    }
+                }
 
-                              for( size_t i = MANDATORY_FIELDS; i < fields.size(); ++i )
-                              {
-                                  if( token->IsSameAs( fields[i].GetName() )
-                                        || token->IsSameAs( fields[i].GetName().Upper() ) )
-                                  {
-                                      // silently drop recursive references
-                                      if( &fields[i] == this )
-                                          *token = wxEmptyString;
-                                      else
-                                          *token = fields[i].GetShownText();
+                for( size_t i = MANDATORY_FIELDS; i < fields.size(); ++i )
+                {
+                    if( token->IsSameAs( fields[ i ].GetName())
+                        || token->IsSameAs( fields[ i ].GetName().Upper()))
+                    {
+                        // silently drop recursive references
+                        if( &fields[ i ] == this )
+                            *token = wxEmptyString;
+                        else
+                            *token = fields[ i ].GetShownText();
 
-                                      return true;
-                                  }
-                              }
+                        return true;
+                    }
+                }
 
-                              if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) )  )
-                              {
-                                  SCH_FIELD& f = component->GetFields()[ FOOTPRINT ];
-                                  wxArrayString parts = wxSplit( f.GetText(), ':' );
+                if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ))
+                {
+                    SCH_FIELD& f = component->GetFields()[ FOOTPRINT ];
+                    wxArrayString parts = wxSplit( f.GetText(), ':' );
 
-                                  *token = parts[0];
-                                  return true;
-                              }
-                              else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
-                              {
-                                  SCH_FIELD& f = component->GetFields()[ FOOTPRINT ];
-                                  wxArrayString parts = wxSplit( f.GetText(), ':' );
+                    *token = parts[ 0 ];
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ))
+                {
+                    SCH_FIELD& f = component->GetFields()[ FOOTPRINT ];
+                    wxArrayString parts = wxSplit( f.GetText(), ':' );
 
-                                  *token = parts[ std::min( 1, (int) parts.size() - 1 ) ];
-                                  return true;
-                              }
-                              else if( token->IsSameAs( wxT( "UNIT" ) ) )
-                              {
-                                  *token = LIB_PART::SubReference( component->GetUnit() );
-                                  return true;
-                              }
+                    *token = parts[ std::min( 1, (int) parts.size() - 1 ) ];
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "UNIT" ) ))
+                {
+                    *token = LIB_PART::SubReference( component->GetUnit());
+                    return true;
+                }
 
-                              return false;
-                          };
+                return false;
+            };
 
-    auto sheetResolver = [ & ]( wxString* token ) -> bool
-                         {
-                             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_Parent );
-                             std::vector<SCH_FIELD>& fields = sheet->GetFields();
+    std::function<bool( wxString* )> sheetResolver =
+            [&]( wxString* token ) -> bool
+            {
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_Parent );
+                std::vector<SCH_FIELD>& fields = sheet->GetFields();
 
-                             for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
-                             {
-                                 if( token->IsSameAs( fields[i].GetCanonicalName().Upper() ) )
-                                 {
-                                     // silently drop recursive references
-                                     if( &fields[i] == this )
-                                         *token = wxEmptyString;
-                                     else
-                                         *token = fields[i].GetShownText();
+                for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
+                {
+                    if( token->IsSameAs( fields[ i ].GetCanonicalName().Upper()))
+                    {
+                        // silently drop recursive references
+                        if( &fields[ i ] == this )
+                            *token = wxEmptyString;
+                        else
+                            *token = fields[ i ].GetShownText();
 
-                                     return true;
-                                 }
-                             }
+                        return true;
+                    }
+                }
 
-                             for( size_t i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
-                             {
-                                 if( token->IsSameAs( fields[i].GetName() ) )
-                                 {
-                                     // silently drop recursive references
-                                     if( &fields[i] == this )
-                                         *token = wxEmptyString;
-                                     else
-                                         *token = fields[i].GetShownText();
+                for( size_t i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
+                {
+                    if( token->IsSameAs( fields[ i ].GetName()))
+                    {
+                        // silently drop recursive references
+                        if( &fields[ i ] == this )
+                            *token = wxEmptyString;
+                        else
+                            *token = fields[ i ].GetShownText();
 
-                                     return true;
-                                 }
-                             }
+                        return true;
+                    }
+                }
 
-                             return false;
-                         };
+                return false;
+            };
 
     PROJECT*  project = nullptr;
     wxString  text = EDA_TEXT::GetShownText();
@@ -176,9 +178,9 @@ wxString SCH_FIELD::GetShownText() const
         project = &g_RootSheet->GetScreen()->Kiway().Prj();
 
     if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
-        text = ExpandTextVars( text, symbolResolver, project );
+        text = ExpandTextVars( text, &symbolResolver, project );
     else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
-        text = ExpandTextVars( text, sheetResolver, project );
+        text = ExpandTextVars( text, &sheetResolver, project );
 
     // WARNING: the IDs of FIELDS and SHEETS overlap, so one must check *both* the
     // id and the parent's type.

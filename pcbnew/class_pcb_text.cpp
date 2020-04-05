@@ -66,18 +66,19 @@ wxString TEXTE_PCB::GetShownText() const
     const BOARD* board = static_cast<BOARD*>( GetParent() );
     wxASSERT( board );
 
-    auto moduleResolver = [ this ]( wxString* token ) -> bool
-                          {
-                              if( token->IsSameAs( wxT( "LAYER" ) ) )
-                              {
-                                  *token = GetLayerName();
-                                  return true;
-                              }
+    std::function<bool( wxString* )> moduleResolver =
+            [ this ]( wxString* token ) -> bool
+            {
+                if( token->IsSameAs( wxT( "LAYER" ) ) )
+                {
+                    *token = GetLayerName();
+                    return true;
+                }
 
-                              return false;
-                          };
+                return false;
+            };
 
-    return ExpandTextVars( EDA_TEXT::GetShownText(), moduleResolver, board->GetProject() );
+    return ExpandTextVars( EDA_TEXT::GetShownText(), &moduleResolver, board->GetProject() );
 }
 
 

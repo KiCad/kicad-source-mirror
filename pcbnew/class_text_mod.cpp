@@ -496,29 +496,30 @@ wxString TEXTE_MODULE::GetShownText() const
     const BOARD* board = static_cast<BOARD*>( module->GetParent() );
     wxASSERT( board );
 
-    auto moduleResolver = [ this, module ]( wxString* token ) -> bool
-                          {
-                              if( module )
-                              {
-                                  if( token->IsSameAs( wxT( "REFERENCE" ) ) )
-                                  {
-                                      *token = module->GetReference();
-                                      return true;
-                                  }
-                                  else if( token->IsSameAs( wxT( "VALUE" ) ) )
-                                  {
-                                      *token = module->GetValue();
-                                      return true;
-                                  }
-                                  else if( token->IsSameAs( wxT( "LAYER" ) ) )
-                                  {
-                                      *token = GetLayerName();
-                                      return true;
-                                  }
-                              }
+    std::function<bool( wxString* )> moduleResolver =
+            [ this, module ]( wxString* token ) -> bool
+            {
+                if( module )
+                {
+                    if( token->IsSameAs( wxT( "REFERENCE" ) ))
+                    {
+                        *token = module->GetReference();
+                        return true;
+                    }
+                    else if( token->IsSameAs( wxT( "VALUE" ) ))
+                    {
+                        *token = module->GetValue();
+                        return true;
+                    }
+                    else if( token->IsSameAs( wxT( "LAYER" ) ))
+                    {
+                        *token = GetLayerName();
+                        return true;
+                    }
+                }
 
-                              return false;
-                          };
+                return false;
+            };
 
-    return ExpandTextVars( EDA_TEXT::GetShownText(), moduleResolver, board->GetProject() );
+    return ExpandTextVars( EDA_TEXT::GetShownText(), &moduleResolver, board->GetProject() );
 }

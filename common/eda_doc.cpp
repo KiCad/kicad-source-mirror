@@ -77,15 +77,18 @@ static const wxFileTypeInfo EDAfallbacks[] =
 };
 
 
-bool GetAssociatedDocument( wxWindow* aParent,
-                            const wxString& aDocName,
-                            const wxPathList* aPaths)
-
+bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject )
 {
-    wxString docname, fullfilename;
-    wxString msg;
-    wxString command;
-    bool     success = false;
+    SEARCH_STACK* aPaths = nullptr;
+    wxString      docname;
+    wxString      fullfilename;
+    wxString      msg;
+    wxString      command;
+    bool          success = false;
+
+#if defined(EESCHEMA)
+    SEARCH_STACK* aPaths = aProject ? aProject->SchSearchS() : nullptr;
+#endif
 
     // Is an internet url
     static const wxChar* url_header[] = {
@@ -97,11 +100,11 @@ bool GetAssociatedDocument( wxWindow* aParent,
     };
 
     // Replace before resolving as we might have a URL in a variable
-    docname = ResolveUriByEnvVars( aDocName );
+    docname = ResolveUriByEnvVars( aDocName, aProject );
 
-    for( unsigned ii = 0; ii < arrayDim(url_header); ii++ )
+    for( const wxString& proc : url_header)
     {
-        if( docname.First( url_header[ii] ) == 0 )   // looks like an internet url
+        if( docname.First( proc ) == 0 )   // looks like an internet url
         {
             wxURI uri( docname );
             wxLaunchDefaultBrowser( uri.BuildURI() );
@@ -117,7 +120,7 @@ bool GetAssociatedDocument( wxWindow* aParent,
 
 
     /* Compute the full file name */
-    if( wxIsAbsolutePath( docname ) || aPaths == NULL)
+    if( wxIsAbsolutePath( docname ) || aPaths == NULL )
         fullfilename = docname;
     /* If the file exists, this is a trivial case: return the filename
      * "as this".  the name can be an absolute path, or a relative path
@@ -126,9 +129,7 @@ bool GetAssociatedDocument( wxWindow* aParent,
     else if( wxFileName::FileExists( docname ) )
         fullfilename = docname;
     else
-    {
         fullfilename = aPaths->FindValidPath( docname );
-    }
 
     wxString mask( wxT( "*" ) ), extension;
 

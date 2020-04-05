@@ -194,7 +194,7 @@ const wxString WS_DATA_MODEL::MakeShortFileName( const wxString& aFullFileName,
 const wxString WS_DATA_MODEL::MakeFullFileName( const wxString& aShortFileName,
                                                 const wxString& aProjectPath )
 {
-    wxString    fullFileName = ExpandEnvVarSubstitutions( aShortFileName );
+    wxString fullFileName = ExpandEnvVarSubstitutions( aShortFileName, nullptr );
 
     if( fullFileName.IsEmpty() )
         return fullFileName;

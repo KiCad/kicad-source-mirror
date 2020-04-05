@@ -74,7 +74,7 @@ const wxString LIB_TABLE_ROW::GetFullURI( bool aSubstituted ) const
         return uri_expanded;
 
 #else   // late expansion
-        return LIB_TABLE::ExpandSubstitutions( uri_user );
+        return ExpandEnvVarSubstitutions( uri_user, nullptr );
 #endif
     }
 
@@ -448,10 +448,4 @@ UTF8 LIB_TABLE::FormatOptions( const PROPERTIES* aProperties )
     }
 
     return ret;
-}
-
-
-const wxString LIB_TABLE::ExpandSubstitutions( const wxString& aString )
-{
-    return ExpandEnvVarSubstitutions( aString );
 }

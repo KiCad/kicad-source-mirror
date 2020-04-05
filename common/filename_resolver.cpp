@@ -50,10 +50,11 @@ static std::mutex mutex_resolver;
 static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& aResult );
 
 
-FILENAME_RESOLVER::FILENAME_RESOLVER()
+FILENAME_RESOLVER::FILENAME_RESOLVER() :
+        m_pgm( nullptr ),
+        m_project( nullptr )
 {
     m_errflags = 0;
-    m_pgm = NULL;
 }
 
 
@@ -62,12 +63,7 @@ bool FILENAME_RESOLVER::Set3DConfigDir( const wxString& aConfigDir )
     if( aConfigDir.empty() )
         return false;
 
-    wxFileName cfgdir;
-
-    if( aConfigDir.StartsWith( "${" ) || aConfigDir.StartsWith( "$(" ) )
-        cfgdir.Assign( ExpandEnvVarSubstitutions( aConfigDir ), "" );
-    else
-        cfgdir.Assign( aConfigDir, "" );
+    wxFileName cfgdir( ExpandEnvVarSubstitutions( aConfigDir, m_project ), "" );
 
     cfgdir.Normalize();
 
@@ -81,17 +77,14 @@ bool FILENAME_RESOLVER::Set3DConfigDir( const wxString& aConfigDir )
 }
 
 
-bool FILENAME_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgChanged )
+bool FILENAME_RESOLVER::SetProject( PROJECT* aProject, bool* flgChanged )
 {
-    if( aProjDir.empty() )
+    m_project = aProject;
+
+    if( !aProject )
         return false;
 
-    wxFileName projdir;
-
-    if( aProjDir.StartsWith( "${" ) || aProjDir.StartsWith( "$(" ) )
-        projdir.Assign( ExpandEnvVarSubstitutions( aProjDir ), "" );
-    else
-        projdir.Assign( aProjDir, "" );
+    wxFileName projdir( ExpandEnvVarSubstitutions( aProject->GetProjectPath(), aProject ), "" );
 
     projdir.Normalize();
 
@@ -113,7 +106,6 @@ bool FILENAME_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgChange
 
         if( flgChanged )
             *flgChanged = true;
-
     }
     else
     {
@@ -123,7 +115,6 @@ bool FILENAME_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgChange
 
             if( flgChanged )
                 *flgChanged = true;
-
         }
         else
         {
@@ -132,13 +123,13 @@ bool FILENAME_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgChange
     }
 
 #ifdef DEBUG
-    do {
+    {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [INFO] changed project dir to ";
         ostr << m_Paths.front().m_pathexp.ToUTF8();
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-    } while( 0 );
+    }
 #endif
 
     return true;
@@ -188,7 +179,7 @@ bool FILENAME_RESOLVER::createPathList()
     {
         for( const wxString& curr_path : epaths )
         {
-            wxString pathVal = ExpandEnvVarSubstitutions( curr_path );
+            wxString pathVal = ExpandEnvVarSubstitutions( curr_path, m_project );
 
             if( pathVal.empty() )
             {
@@ -272,8 +263,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     // wxFileName::Normalize() routine to perform expansion then
     // we will have a race condition since wxWidgets does not assure
     // a threadsafe wrapper for getenv().
-    if( tname.StartsWith( "${" ) || tname.StartsWith( "$(" ) )
-        tname = ExpandEnvVarSubstitutions( tname );
+    tname = ExpandEnvVarSubstitutions( tname, m_project );
 
     wxFileName tmpFN( tname );
 
@@ -341,8 +331,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         tmpFN.Assign( sPL->m_pathexp, "" );
         wxString fullPath = tmpFN.GetPathWithSep() + tname;
 
-        if( fullPath.StartsWith( "${" ) || fullPath.StartsWith( "$(" ) )
-            fullPath = ExpandEnvVarSubstitutions( fullPath );
+        fullPath = ExpandEnvVarSubstitutions( fullPath, m_project );
 
         if( wxFileName::FileExists( fullPath ) )
         {
@@ -361,7 +350,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         wxString fullPath( "${KISYS3DMOD}" );
         fullPath.Append( fpath.GetPathSeparator() );
         fullPath.Append( tname );
-        fullPath = ExpandEnvVarSubstitutions( fullPath );
+        fullPath = ExpandEnvVarSubstitutions( fullPath, m_project );
         fpath.Assign( fullPath );
 
         if( fpath.Normalize() && fpath.FileExists() )
@@ -404,8 +393,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
             wxFileName fpath( wxFileName::DirName( sPL->m_pathexp ) );
             wxString fullPath = fpath.GetPathWithSep() + relpath;
 
-            if( fullPath.StartsWith( "${") || fullPath.StartsWith( "$(" ) )
-                fullPath = ExpandEnvVarSubstitutions( fullPath );
+            fullPath = ExpandEnvVarSubstitutions( fullPath, m_project );
 
             if( wxFileName::FileExists( fullPath ) )
             {
@@ -452,12 +440,7 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
         tpath.m_pathvar.erase( tpath.m_pathvar.length() - 1 );
     #endif
 
-    wxFileName path;
-
-    if( tpath.m_pathvar.StartsWith( "${" ) || tpath.m_pathvar.StartsWith( "$(" ) )
-        path.Assign( ExpandEnvVarSubstitutions( tpath.m_pathvar ), "" );
-    else
-        path.Assign( tpath.m_pathvar, "" );
+    wxFileName path( ExpandEnvVarSubstitutions( tpath.m_pathvar, m_project ), "" );
 
     path.Normalize();
 
@@ -728,12 +711,7 @@ void FILENAME_RESOLVER::checkEnvVarPath( const wxString& aPath )
     SEARCH_PATH lpath;
     lpath.m_alias = envar;
     lpath.m_pathvar = lpath.m_alias;
-    wxFileName tmpFN;
-
-    if( lpath.m_alias.StartsWith( "${" ) || lpath.m_alias.StartsWith( "$(" ) )
-        tmpFN.Assign( ExpandEnvVarSubstitutions( lpath.m_alias ), "" );
-    else
-        tmpFN.Assign( lpath.m_alias, "" );
+    wxFileName tmpFN( ExpandEnvVarSubstitutions( lpath.m_alias, m_project ), "" );
 
     wxUniChar psep = tmpFN.GetPathSeparator();
     tmpFN.Normalize();
@@ -780,7 +758,7 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
         // in the case of aliases, ensure that we use the most recent definition
         if( sL->m_alias.StartsWith( "${" ) || sL->m_alias.StartsWith( "$(" ) )
         {
-            wxString tpath = ExpandEnvVarSubstitutions( sL->m_alias );
+            wxString tpath = ExpandEnvVarSubstitutions( sL->m_alias, m_project );
 
             if( tpath.empty() )
             {

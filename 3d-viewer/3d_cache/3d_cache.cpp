@@ -135,7 +135,7 @@ public:
     ~S3D_CACHE_ENTRY();
 
     void SetSHA1( const unsigned char* aSHA1Sum );
-    const wxString GetCacheBaseName( void );
+    const wxString GetCacheBaseName();
 
     wxDateTime    modTime;      // file modification time
     unsigned char sha1sum[20];
@@ -155,8 +155,7 @@ S3D_CACHE_ENTRY::S3D_CACHE_ENTRY()
 
 S3D_CACHE_ENTRY::~S3D_CACHE_ENTRY()
 {
-    if( NULL != sceneData )
-        delete sceneData;
+    delete sceneData;
 
     if( NULL != renderData )
         S3D::Destroy3DModel( &renderData );
@@ -174,11 +173,10 @@ void S3D_CACHE_ENTRY::SetSHA1( const unsigned char* aSHA1Sum )
     }
 
     memcpy( sha1sum, aSHA1Sum, 20 );
-    return;
 }
 
 
-const wxString S3D_CACHE_ENTRY::GetCacheBaseName( void )
+const wxString S3D_CACHE_ENTRY::GetCacheBaseName()
 {
     if( m_CacheBaseName.empty() )
         m_CacheBaseName = sha1ToWXString( sha1sum );
@@ -189,11 +187,9 @@ const wxString S3D_CACHE_ENTRY::GetCacheBaseName( void )
 
 S3D_CACHE::S3D_CACHE()
 {
-    m_DirtyCache = false;
     m_FNResolver = new FILENAME_RESOLVER;
+    m_project = nullptr;
     m_Plugins = new S3D_PLUGIN_MANAGER;
-
-    return;
 }
 
 
@@ -201,13 +197,8 @@ S3D_CACHE::~S3D_CACHE()
 {
     FlushCache();
 
-    if( m_FNResolver )
-        delete m_FNResolver;
-
-    if( m_Plugins )
-        delete m_Plugins;
-
-    return;
+    delete m_FNResolver;
+    delete m_Plugins;
 }
 
 
@@ -514,12 +505,7 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
     if( !m_ConfigDir.empty() )
         return false;
 
-    wxFileName cfgdir;
-
-    if( aConfigDir.StartsWith( "${" ) || aConfigDir.StartsWith( "$(" ) )
-        cfgdir.Assign( ExpandEnvVarSubstitutions( aConfigDir ), "" );
-    else
-        cfgdir.Assign( aConfigDir, "" );
+    wxFileName cfgdir( ExpandEnvVarSubstitutions( aConfigDir, m_project ), "" );
 
     cfgdir.Normalize();
 
@@ -564,7 +550,7 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
 #elif defined(__APPLE)
     cacheDir = "${HOME}/Library/Caches/kicad/3d";
 #else   // assume Linux
-    cacheDir = ExpandEnvVarSubstitutions( "${XDG_CACHE_HOME}" );
+    cacheDir = ExpandEnvVarSubstitutions( "${XDG_CACHE_HOME}", nullptr );
 
     if( cacheDir.empty() || cacheDir == "${XDG_CACHE_HOME}" )
         cacheDir = "${HOME}/.cache";
@@ -572,7 +558,7 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
     cacheDir.append( "/kicad/3d" );
 #endif
 
-    cacheDir = ExpandEnvVarSubstitutions( cacheDir );
+    cacheDir = ExpandEnvVarSubstitutions( cacheDir, m_project );
     cfgdir.Assign( cacheDir, "" );
 
     if( !cfgdir.DirExists() )
@@ -593,66 +579,13 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
 }
 
 
-wxString S3D_CACHE::Get3DConfigDir( bool createDefault )
+bool S3D_CACHE::SetProject( PROJECT* aProject )
 {
-    if( !m_ConfigDir.empty() || !createDefault )
-        return m_ConfigDir;
+    m_project = aProject;
 
-    // note: duplicated from common/common.cpp GetKicadConfigPath() to avoid
-    // code coupling; ideally the instantiating code should call
-    // Set3DConfigDir() to set the directory rather than relying on this
-    // directory remaining the same in future KiCad releases.
-    wxFileName cfgpath;
-
-    // From the wxWidgets wxStandardPaths::GetUserConfigDir() help:
-    //      Unix: ~ (the home directory)
-    //      Windows: "C:\Documents and Settings\username\Application Data"
-    //      Mac: ~/Library/Preferences
-    cfgpath.AssignDir( wxStandardPaths::Get().GetUserConfigDir() );
-
-#if !defined( __WINDOWS__ ) && !defined( __WXMAC__ )
-    wxString envstr = ExpandEnvVarSubstitutions( "${XDG_CONFIG_HOME}" );
-
-    if( envstr.IsEmpty() || envstr == "${XDG_CONFIG_HOME}" )
-    {
-        // XDG_CONFIG_HOME is not set, so use the fallback
-        cfgpath.AppendDir( wxT( ".config" ) );
-    }
-    else
-    {
-        // Override the assignment above with XDG_CONFIG_HOME
-        cfgpath.AssignDir( envstr );
-    }
-#endif
-
-    cfgpath.AppendDir( wxT( "kicad" ) );
-    cfgpath.AppendDir( wxT( "3d" ) );
-
-    if( !cfgpath.DirExists() )
-    {
-        cfgpath.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-    }
-
-    if( !cfgpath.DirExists() )
-    {
-        wxLogTrace( MASK_3D_CACHE, "%s:%s:%d\n * failed to create 3D configuration directory '%s'",
-                    __FILE__, __FUNCTION__, __LINE__, cfgpath.GetPath() );
-
-        return wxT( "" );
-    }
-
-    if( Set3DConfigDir( cfgpath.GetPath() ) )
-        return m_ConfigDir;
-
-    return wxEmptyString;
-}
-
-
-bool S3D_CACHE::SetProjectDir( const wxString& aProjDir )
-{
     bool hasChanged = false;
 
-    if( m_FNResolver->SetProjectDir( aProjDir, &hasChanged ) && hasChanged )
+    if( m_FNResolver->SetProject( aProject, &hasChanged ) && hasChanged )
     {
         m_CacheMap.clear();
 
@@ -677,23 +610,16 @@ bool S3D_CACHE::SetProjectDir( const wxString& aProjDir )
 void S3D_CACHE::SetProgramBase( PGM_BASE* aBase )
 {
     m_FNResolver->SetProgramBase( aBase );
-    return;
 }
 
 
-wxString S3D_CACHE::GetProjectDir( void )
-{
-    return m_FNResolver->GetProjectDir();
-}
-
-
-FILENAME_RESOLVER* S3D_CACHE::GetResolver( void )
+FILENAME_RESOLVER* S3D_CACHE::GetResolver()
 {
     return m_FNResolver;
 }
 
 
-std::list< wxString > const* S3D_CACHE::GetFileFilters( void ) const
+std::list< wxString > const* S3D_CACHE::GetFileFilters() const
 {
     return m_Plugins->GetFileFilters();
 }
@@ -715,17 +641,13 @@ void S3D_CACHE::FlushCache( bool closePlugins )
 
     if( closePlugins )
         ClosePlugins();
-
-    return;
 }
 
 
-void S3D_CACHE::ClosePlugins( void )
+void S3D_CACHE::ClosePlugins()
 {
-    if( NULL != m_Plugins )
+    if( m_Plugins )
         m_Plugins->ClosePlugins();
-
-    return;
 }
 
 
@@ -756,31 +678,6 @@ S3DMODEL* S3D_CACHE::GetModel( const wxString& aModelFileName )
 }
 
 
-wxString S3D_CACHE::GetModelHash( const wxString& aModelFileName )
-{
-    wxString full3Dpath = m_FNResolver->ResolvePath( aModelFileName );
-
-    if( full3Dpath.empty() || !wxFileName::FileExists( full3Dpath ) )
-        return wxEmptyString;
-
-    // check cache if file is already loaded
-    std::map< wxString, S3D_CACHE_ENTRY*, rsort_wxString >::iterator mi;
-    mi = m_CacheMap.find( full3Dpath );
-
-    if( mi != m_CacheMap.end() )
-        return mi->second->GetCacheBaseName();
-
-    // a cache item does not exist; search the Filename->Cachename map
-    S3D_CACHE_ENTRY* cp = NULL;
-    checkCache( full3Dpath, &cp );
-
-    if( NULL != cp )
-        return cp->GetCacheBaseName();
-
-    return wxEmptyString;
-}
-
-
 S3D_CACHE* PROJECT::Get3DCacheManager( bool aUpdateProjDir )
 {
     std::lock_guard<std::mutex> lock( mutex3D_cacheManager );
@@ -805,7 +702,7 @@ S3D_CACHE* PROJECT::Get3DCacheManager( bool aUpdateProjDir )
     }
 
     if( aUpdateProjDir )
-        cache->SetProjectDir( GetProjectPath() );
+        cache->SetProject( this );
 
     return cache;
 }

@@ -246,7 +246,6 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
     else if( aItem->Type() == SCH_SHEET_T )
     {
         SCH_SHEET* sheet = (SCH_SHEET*) aItem;
-        COLOR4D    sheetColor = COLOR4D::UNSPECIFIED;
 
         // Lazy fixup of legacy sheets with no color specifications
         if( sheet->GetBorderColor() == COLOR4D::UNSPECIFIED )

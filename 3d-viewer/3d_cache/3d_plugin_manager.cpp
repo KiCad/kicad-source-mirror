@@ -340,12 +340,7 @@ void S3D_PLUGIN_MANAGER::checkPluginName( const wxString& aPath,
     if( aPath.empty() || !wxFileName::FileExists( aPath ) )
         return;
 
-    wxFileName path;
-
-    if( aPath.StartsWith( "${" ) || aPath.StartsWith( "$(" ) )
-        path.Assign( ExpandEnvVarSubstitutions( aPath ) );
-    else
-        path.Assign( aPath );
+    wxFileName path( ExpandEnvVarSubstitutions( aPath, nullptr ) );
 
     path.Normalize();
 
@@ -374,7 +369,7 @@ void S3D_PLUGIN_MANAGER::checkPluginName( const wxString& aPath,
 
 
 void S3D_PLUGIN_MANAGER::checkPluginPath( const wxString& aPath,
-    std::list< wxString >& aSearchList )
+                                          std::list< wxString >& aSearchList )
 {
     // check the existence of a path and add it to the path search list
     if( aPath.empty() )
@@ -388,7 +383,7 @@ void S3D_PLUGIN_MANAGER::checkPluginPath( const wxString& aPath,
     wxFileName path;
 
     if( aPath.StartsWith( "${" ) || aPath.StartsWith( "$(" ) )
-        path.Assign( ExpandEnvVarSubstitutions( aPath ), "" );
+        path.Assign( ExpandEnvVarSubstitutions( aPath, nullptr ), "" );
     else
         path.Assign( aPath, "" );
 

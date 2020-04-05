@@ -286,7 +286,7 @@ protected:
         wxString filename = GetValue();
 
         if( !filename.IsEmpty() && filename != wxT( "~" ) )
-            GetAssociatedDocument( m_dlg, GetValue() );
+            GetAssociatedDocument( m_dlg, GetValue(), &m_dlg->Kiway().Prj() );
     }
 
     DIALOG_SHIM* m_dlg;
@@ -336,7 +336,7 @@ protected:
         if( path.IsEmpty() )
             path = *m_currentDir;
         else
-            path = ExpandEnvVarSubstitutions( path );
+            path = ExpandEnvVarSubstitutions( path, &m_dlg->Kiway().Prj() );
 
         if( m_ext )
         {
