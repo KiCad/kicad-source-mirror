@@ -1440,7 +1440,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
             lastFieldId += 1;
         }
 
-        saveDcmInfoAsFields( aSymbol, aFormatter, aNestLevel, fields.back().GetId() + 1 );
+        saveDcmInfoAsFields( aSymbol, aFormatter, aNestLevel, lastFieldId );
 
         // Save the draw items grouped by units.
         std::vector<PART_UNITS> units = aSymbol->GetUnitDrawItems();
@@ -1741,21 +1741,15 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
 {
     wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
 
-    wxString fieldName = aField->GetCanonicalName();
-
-    // When saving legacy fields, prefix the field name with "ki_" to prevent name clashes
-    // with exisiting user defined fields.
-    if( aField->IsMandatory() && !fieldName.StartsWith( "ki_" ) )
-        fieldName = "ki_" + fieldName.Lower();
-
-    aFormatter.Print( aNestLevel, "(property %s %s (at %s %s %g)",
-                      aFormatter.Quotew( fieldName ).c_str(),
+    aFormatter.Print( aNestLevel, "(property %s %s (id %d) (at %s %s %g)",
+                      aFormatter.Quotew( aField->GetName() ).c_str(),
                       aFormatter.Quotew( aField->GetText() ).c_str(),
+                      aField->GetId(),
                       FormatInternalUnits( aField->GetPosition().x ).c_str(),
                       FormatInternalUnits( aField->GetPosition().y ).c_str(),
                       static_cast<double>( aField->GetTextAngle() ) / 10.0 );
 
-    if( aField->IsDefaultFormatting() )
+    if( aField->IsDefaultFormatting() && ( aField->GetTextHeight() == GetDefaultTextSize() ) )
     {
         aFormatter.Print( 0, ")\n" );           // Close property token if no font effects.
     }
@@ -1784,30 +1778,47 @@ void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
                       FormatAngle( getPinAngle( aPin->GetOrientation() ) * 10.0 ).c_str(),
                       FormatInternalUnits( aPin->GetLength() ).c_str() );
 
-    aFormatter.Print( 0, " (name %s",
-                      aFormatter.Quotew( aPin->GetName() ).c_str() );
+    int nestLevel = 0;
 
-    // This follows the EDA_TEXT effects formatting for future expansion.
-    if( aPin->GetNameTextSize() != Mils2iu( DEFAULTPINNAMESIZE ) )
-        aFormatter.Print( 0, " (effects (font (size %s %s)))",
-                          FormatInternalUnits( aPin->GetNameTextSize() ).c_str(),
-                          FormatInternalUnits( aPin->GetNameTextSize() ).c_str() );
+    if( aPin->GetNameTextSize() != Mils2iu( DEFAULTPINNAMESIZE )
+      || aPin->GetNumberTextSize() != Mils2iu( DEFAULTPINNUMSIZE ) )
+    {
+        aFormatter.Print( 0, "\n" );
+        aFormatter.Print( aNestLevel + 1, "(name %s",
+                          aFormatter.Quotew( aPin->GetName() ).c_str() );
 
-    aFormatter.Print( 0, ")" );
-    aFormatter.Print( 0, " (number %s",
-                      aFormatter.Quotew( aPin->GetNumber() ).c_str() );
+        // This follows the EDA_TEXT effects formatting for future expansion.
+        if( aPin->GetNameTextSize() != Mils2iu( DEFAULTPINNAMESIZE ) )
+            aFormatter.Print( 0, " (effects (font (size %s %s)))",
+                              FormatInternalUnits( aPin->GetNameTextSize() ).c_str(),
+                              FormatInternalUnits( aPin->GetNameTextSize() ).c_str() );
 
-    // This follows the EDA_TEXT effects formatting for future expansion.
-    if( aPin->GetNumberTextSize() != Mils2iu( DEFAULTPINNUMSIZE ) )
-        aFormatter.Print( 0, " (effects (font (size %s %s)))",
-                          FormatInternalUnits( aPin->GetNumberTextSize() ).c_str(),
-                          FormatInternalUnits( aPin->GetNumberTextSize() ).c_str() );
-    aFormatter.Print( 0, ")" );
+        aFormatter.Print( 0, ")\n" );
+        aFormatter.Print( aNestLevel + 1, "(number %s",
+                          aFormatter.Quotew( aPin->GetNumber() ).c_str() );
+
+        // This follows the EDA_TEXT effects formatting for future expansion.
+        if( aPin->GetNumberTextSize() != Mils2iu( DEFAULTPINNUMSIZE ) )
+            aFormatter.Print( 0, " (effects (font (size %s %s)))",
+                              FormatInternalUnits( aPin->GetNumberTextSize() ).c_str(),
+                              FormatInternalUnits( aPin->GetNumberTextSize() ).c_str() );
+        aFormatter.Print( 0, ")\n" );
+        nestLevel = aNestLevel + 1;
+    }
+    else
+    {
+        aFormatter.Print( 0, " (name %s) (number %s)",
+                          aFormatter.Quotew( aPin->GetName() ).c_str(),
+                          aFormatter.Quotew( aPin->GetNumber() ).c_str() );
+    }
 
     if( !aPin->IsVisible() )
-        aFormatter.Print( 0, " hide" );
+        aFormatter.Print( nestLevel, " hide" );
 
-    aFormatter.Print( 0, ")\n" );
+    if( nestLevel )
+        nestLevel -= 1;
+
+    aFormatter.Print( nestLevel, ")\n" );
 }
 
 

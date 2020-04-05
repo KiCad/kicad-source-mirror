@@ -35,6 +35,7 @@ hide
 hierarchical_label
 hint_alt_swap
 hint_pin_swap
+id
 image
 input
 input_low

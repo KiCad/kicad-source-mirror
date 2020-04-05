@@ -619,7 +619,8 @@ void SCH_SEXPR_PARSER::parseHeader( TSCHEMATIC_T::T aHeaderType, int aFileVersio
 void SCH_SEXPR_PARSER::parsePinNames( std::unique_ptr<LIB_PART>& aSymbol )
 {
     wxCHECK_RET( CurTok() == T_pin_names,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a pin_name token." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
+                 wxT( " as a pin_name token." ) );
 
     wxString error;
 
@@ -661,7 +662,7 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
     wxString error;
     wxString name;
     wxString value;
-    std::unique_ptr<LIB_FIELD> tmp( new LIB_FIELD( MANDATORY_FIELDS ) );
+    std::unique_ptr<LIB_FIELD> field( new LIB_FIELD( MANDATORY_FIELDS ) );
 
     T token = NextTok();
 
@@ -681,6 +682,7 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
         THROW_IO_ERROR( error );
     }
 
+    field->SetName( name );
     token = NextTok();
 
     if( !IsSymbol( token ) )
@@ -693,39 +695,61 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
     // Empty property values are valid.
     value = FromUTF8();
 
-    LIB_FIELD* field;
+    field->SetText( value );
 
-    if( name == "ki_reference" )
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
-        field = &aSymbol->GetReferenceField();
-        field->SetText( value );
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_id:
+            field->SetId( parseInt( "field ID" ) );
+            NeedRIGHT();
+            break;
+
+        case T_at:
+            field->SetPosition( parseXY() );
+            field->SetTextAngle( static_cast<int>( parseDouble( "text angle" ) * 10.0 ) );
+            NeedRIGHT();
+            break;
+
+        case T_effects:
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( field.get() ) );
+            break;
+
+        default:
+            Expecting( "id, at or effects" );
+        }
     }
-    else if( name == "ki_value" )
+
+    LIB_FIELD* existingField;
+
+    if( field->GetId() < MANDATORY_FIELDS )
     {
-        field = &aSymbol->GetValueField();
-        field->SetText( value );
-    }
-    else if( name == "ki_footprint" )
-    {
-        field = &aSymbol->GetFootprintField();
-        field->SetText( value );
-    }
-    else if( name == "ki_datasheet" )
-    {
-        field = aSymbol->GetField( DATASHEET );
-        aSymbol->SetDocFileName( value );
+        existingField = aSymbol->GetField( field->GetId() );
+
+        /// @todo Remove this once the legacy file format is deprecated.
+        if( field->GetId() == DATASHEET )
+        {
+            aSymbol->SetDocFileName( value );
+            field->SetText( wxEmptyString );
+        }
+
+        *existingField = *field;
     }
     else if( name == "ki_keywords" )
     {
         // Not a LIB_FIELD object yet.
         aSymbol->SetKeyWords( value );
-        field = tmp.get();
     }
     else if( name == "ki_description" )
     {
         // Not a LIB_FIELD object yet.
         aSymbol->SetDescription( value );
-        field = tmp.get();
     }
     else if( name == "ki_fp_filters" )
     {
@@ -737,48 +761,24 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
             filters.Add( tokenizer.GetNextToken() );
 
         aSymbol->SetFootprintFilters( filters );
-        field = tmp.get();
     }
     else if( name == "ki_locked" )
     {
+        // This is a temporary LIB_FIELD object until interchangeable units are determined on
+        // the fly.
         aSymbol->LockUnits( true );
-        field = tmp.get();
     }
     else
     {
-        field = aSymbol->FindField( name );
+        existingField = aSymbol->GetField( field->GetId() );
 
-        if( !field )
+        if( !existingField )
         {
-            field = new LIB_FIELD( m_fieldId, name );
-            aSymbol->AddDrawItem( field );
-            m_fieldId += 1;
+            aSymbol->AddDrawItem( field.release() );
         }
-
-        field->SetText( value );
-    }
-
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
-    {
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
-
-        switch( token )
+        else
         {
-        case T_at:
-            field->SetPosition( parseXY() );
-            field->SetTextAngle( static_cast<int>( parseDouble( "text angle" ) * 10.0 ) );
-            NeedRIGHT();
-            break;
-
-        case T_effects:
-            parseEDA_TEXT( static_cast<EDA_TEXT*>( field ) );
-            break;
-
-        default:
-            Expecting( "at or effects" );
+            *existingField = *field;
         }
     }
 }
@@ -1646,6 +1646,11 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField()
 
         switch( token )
         {
+        case T_id:
+            field->SetId( parseInt( "field ID" ) );
+            NeedRIGHT();
+            break;
+
         case T_at:
             field->SetPosition( parseXY() );
             field->SetTextAngle( static_cast<int>( parseDouble( "text angle" ) * 10.0 ) );
@@ -1984,46 +1989,23 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
         case T_property:
         {
-            int fieldIndex;
-
             field = parseSchField();
             field->SetParent( symbol.get() );
 
-            if( field->GetName() == "ki_reference" )
+            if( field->GetId() == REFERENCE )
             {
-                fieldIndex = REFERENCE;
-                field->SetId( REFERENCE );
                 field->SetLayer( LAYER_REFERENCEPART );
-                field->SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE ) );
             }
-            else if( field->GetName() == "ki_value" )
+            else if( field->GetId() == VALUE )
             {
-                fieldIndex = VALUE;
-                field->SetId( VALUE );
                 field->SetLayer( LAYER_VALUEPART );
-                field->SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE ) );
             }
-            else if( field->GetName() == "ki_footprint" )
+            else if( field->GetId() >= MANDATORY_FIELDS )
             {
-                fieldIndex = FOOTPRINT;
-                field->SetId( FOOTPRINT );
-                field->SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( FOOTPRINT ) );
-            }
-            else if( field->GetName() == "ki_datasheet" )
-            {
-                fieldIndex = DATASHEET;
-                field->SetId( DATASHEET );
-                field->SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET ) );
-            }
-            else
-            {
-                fieldIndex = m_fieldId;
-                field->SetId( m_fieldId );
                 symbol->AddField( *field );
-                m_fieldId += 1;
             }
 
-            *symbol->GetField( fieldIndex ) = *field;
+            *symbol->GetField( field->GetId() ) = *field;
             delete field;
             break;
         }
