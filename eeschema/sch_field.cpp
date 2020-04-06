@@ -82,7 +82,7 @@ wxString SCH_FIELD::GetShownText() const
 
                 for( int i = 0; i < MANDATORY_FIELDS; ++i )
                 {
-                    if( token->IsSameAs( fields[ i ].GetCanonicalName().Upper()))
+                    if( token->IsSameAs( fields[ i ].GetCanonicalName().Upper() ) )
                     {
                         // silently drop recursive references
                         if( &fields[ i ] == this )
@@ -96,8 +96,8 @@ wxString SCH_FIELD::GetShownText() const
 
                 for( size_t i = MANDATORY_FIELDS; i < fields.size(); ++i )
                 {
-                    if( token->IsSameAs( fields[ i ].GetName())
-                        || token->IsSameAs( fields[ i ].GetName().Upper()))
+                    if( token->IsSameAs( fields[ i ].GetName() )
+                        || token->IsSameAs( fields[ i ].GetName().Upper() ) )
                     {
                         // silently drop recursive references
                         if( &fields[ i ] == this )
@@ -109,7 +109,7 @@ wxString SCH_FIELD::GetShownText() const
                     }
                 }
 
-                if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ))
+                if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ) )
                 {
                     SCH_FIELD& f = component->GetFields()[ FOOTPRINT ];
                     wxArrayString parts = wxSplit( f.GetText(), ':' );
@@ -117,7 +117,7 @@ wxString SCH_FIELD::GetShownText() const
                     *token = parts[ 0 ];
                     return true;
                 }
-                else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ))
+                else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
                 {
                     SCH_FIELD& f = component->GetFields()[ FOOTPRINT ];
                     wxArrayString parts = wxSplit( f.GetText(), ':' );
@@ -125,9 +125,9 @@ wxString SCH_FIELD::GetShownText() const
                     *token = parts[ std::min( 1, (int) parts.size() - 1 ) ];
                     return true;
                 }
-                else if( token->IsSameAs( wxT( "UNIT" ) ))
+                else if( token->IsSameAs( wxT( "UNIT" ) ) )
                 {
-                    *token = LIB_PART::SubReference( component->GetUnit());
+                    *token = LIB_PART::SubReference( component->GetUnit() );
                     return true;
                 }
 
@@ -142,7 +142,7 @@ wxString SCH_FIELD::GetShownText() const
 
                 for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
                 {
-                    if( token->IsSameAs( fields[ i ].GetCanonicalName().Upper()))
+                    if( token->IsSameAs( fields[ i ].GetCanonicalName().Upper() ) )
                     {
                         // silently drop recursive references
                         if( &fields[ i ] == this )
@@ -156,7 +156,7 @@ wxString SCH_FIELD::GetShownText() const
 
                 for( size_t i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
                 {
-                    if( token->IsSameAs( fields[ i ].GetName()))
+                    if( token->IsSameAs( fields[ i ].GetName() ) )
                     {
                         // silently drop recursive references
                         if( &fields[ i ] == this )

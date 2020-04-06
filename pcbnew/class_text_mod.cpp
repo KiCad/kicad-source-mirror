@@ -501,17 +501,17 @@ wxString TEXTE_MODULE::GetShownText() const
             {
                 if( module )
                 {
-                    if( token->IsSameAs( wxT( "REFERENCE" ) ))
+                    if( token->IsSameAs( wxT( "REFERENCE" ) ) )
                     {
                         *token = module->GetReference();
                         return true;
                     }
-                    else if( token->IsSameAs( wxT( "VALUE" ) ))
+                    else if( token->IsSameAs( wxT( "VALUE" ) ) )
                     {
                         *token = module->GetValue();
                         return true;
                     }
-                    else if( token->IsSameAs( wxT( "LAYER" ) ))
+                    else if( token->IsSameAs( wxT( "LAYER" ) ) )
                     {
                         *token = GetLayerName();
                         return true;
