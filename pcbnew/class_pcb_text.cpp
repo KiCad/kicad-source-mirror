@@ -61,13 +61,13 @@ TEXTE_PCB::~TEXTE_PCB()
 }
 
 
-wxString TEXTE_PCB::GetShownText() const
+wxString TEXTE_PCB::GetShownText( int aDepth ) const
 {
-    const BOARD* board = static_cast<BOARD*>( GetParent() );
+    BOARD* board = static_cast<BOARD*>( GetParent() );
     wxASSERT( board );
 
-    std::function<bool( wxString* )> moduleResolver =
-            [ this ]( wxString* token ) -> bool
+    std::function<bool( wxString* )> pcbTextResolver =
+            [&]( wxString* token ) -> bool
             {
                 if( token->IsSameAs( wxT( "LAYER" ) ) )
                 {
@@ -75,10 +75,31 @@ wxString TEXTE_PCB::GetShownText() const
                     return true;
                 }
 
+                if( token->Contains( ':' ) )
+                {
+                    wxArrayString parts = wxSplit( *token, ':' );
+                    BOARD_ITEM*   refItem = board->GetItem( KIID( parts[0] ) );
+
+                    if( refItem && refItem->Type() == PCB_MODULE_T )
+                    {
+                        MODULE* refModule = static_cast<MODULE*>( refItem );
+
+                        if( refModule->ResolveTextVar( &parts[1], aDepth + 1 ) )
+                        {
+                            *token = parts[1];
+                            return true;
+                        }
+                    }
+                }
                 return false;
             };
 
-    return ExpandTextVars( EDA_TEXT::GetShownText(), &moduleResolver, board->GetProject() );
+    wxString text = EDA_TEXT::GetShownText( aDepth );
+
+    if( aDepth < 10 )
+        text = ExpandTextVars( text, &pcbTextResolver, board->GetProject() );
+
+    return text;
 }
 
 

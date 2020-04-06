@@ -207,7 +207,7 @@ public:
         return wxT( "SCH_TEXT" );
     }
 
-    wxString GetShownText() const override;
+    wxString GetShownText( int aDepth = 0 ) const override;
 
     /**
      * Increment the label text, if it ends with a number.

@@ -32,6 +32,8 @@
 #include <gr_text.h>
 #include <confirm.h>
 #include <sch_text.h>
+#include <sch_component.h>
+#include <sch_reference_list.h>
 #include <widgets/unit_binder.h>
 #include <dialog_edit_label_base.h>
 #include <kicad_string.h>
@@ -180,15 +182,126 @@ DIALOG_LABEL_EDITOR::~DIALOG_LABEL_EDITOR()
 }
 
 
+wxString convertKIIDsToReferences( const wxString& aSource )
+{
+    wxString newbuf;
+    size_t   sourceLen = aSource.length();
+
+    for( size_t i = 0; i < sourceLen; ++i )
+    {
+        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
+        {
+            wxString token;
+            bool     isCrossRef = false;
+
+            for( i = i + 2; i < sourceLen; ++i )
+            {
+                if( aSource[i] == '}' )
+                    break;
+
+                if( aSource[i] == ':' )
+                    isCrossRef = true;
+
+                token.append( aSource[i] );
+            }
+
+            if( isCrossRef )
+            {
+                SCH_SHEET_LIST sheetList( g_RootSheet );
+                wxArrayString  parts = wxSplit( token, ':' );
+                SCH_SHEET_PATH refSheetPath;
+                SCH_ITEM*      refItem = sheetList.GetItem( KIID( parts[0] ), &refSheetPath );
+
+                if( refItem && refItem->Type() == SCH_COMPONENT_T )
+                {
+                    SCH_COMPONENT* refComponent = static_cast<SCH_COMPONENT*>( refItem );
+                    token = refComponent->GetRef( &refSheetPath, true ) + ":" + parts[1];
+                }
+            }
+
+            newbuf.append( "${" + token + "}" );
+        }
+        else
+        {
+            newbuf.append( aSource[i] );
+        }
+    }
+
+    return newbuf;
+}
+
+
+wxString convertReferencesToKIIDs( const wxString& aSource )
+{
+    wxString newbuf;
+    size_t   sourceLen = aSource.length();
+
+    for( size_t i = 0; i < sourceLen; ++i )
+    {
+        if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
+        {
+            wxString token;
+            bool     isCrossRef = false;
+
+            for( i = i + 2; i < sourceLen; ++i )
+            {
+                if( aSource[i] == '}' )
+                    break;
+
+                if( aSource[i] == ':' )
+                    isCrossRef = true;
+
+                token.append( aSource[i] );
+            }
+
+            if( isCrossRef )
+            {
+                SCH_SHEET_LIST     sheets( g_RootSheet );
+                wxArrayString      parts = wxSplit( token, ':' );
+                SCH_REFERENCE_LIST references;
+
+                sheets.GetComponents( references );
+
+                for( size_t jj = 0; jj < references.GetCount(); jj++ )
+                {
+                    SCH_COMPONENT* refComponent = references[ jj ].GetComp();
+                    wxString       ref = refComponent->GetRef( &references[ jj ].GetSheetPath() );
+
+                    if( ref == parts[0] )
+                    {
+                        token = refComponent->m_Uuid.AsString() + ":" + parts[1];
+                        break;
+                    }
+                }
+            }
+
+            newbuf.append( "${" + token + "}" );
+        }
+        else
+        {
+            newbuf.append( aSource[i] );
+        }
+    }
+
+    return newbuf;
+}
+
+
 bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    if( m_activeTextEntry )
-        m_activeTextEntry->SetValue( UnescapeString( m_CurrentText->GetText() ) );
+    if( m_CurrentText->Type() == SCH_TEXT_T )
+    {
+        // show text variable cross-references in a human-readable format
+        m_valueMultiLine->SetValue( convertKIIDsToReferences( m_CurrentText->GetText() ) );
+    }
     else
-        m_valueMultiLine->SetValue( UnescapeString( m_CurrentText->GetText() ) );
+    {
+        // show control characters in a human-readable format
+        m_activeTextEntry->SetValue( UnescapeString( m_CurrentText->GetText() ) );
+    }
 
     if( m_valueCombo->IsShown() )
     {
@@ -308,11 +421,16 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
 
     m_Parent->GetCanvas()->Refresh();
 
-    // Escape string only if is is a label. For a simple graphic text do not change anything
     if( m_CurrentText->Type() == SCH_TEXT_T )
-        text = m_valueMultiLine->GetValue();
+    {
+        // convert any text variable cross-references to their UUIDs
+        text = convertReferencesToKIIDs( m_valueMultiLine->GetValue() );
+    }
     else
+    {
+        // labels need escaping
         text = EscapeString( m_activeTextEntry->GetValue(), CTX_NETNAME );
+    }
 
     if( !text.IsEmpty() )
         m_CurrentText->SetText( text );

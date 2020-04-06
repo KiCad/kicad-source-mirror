@@ -411,6 +411,12 @@ public:
     void TransformGraphicTextWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
             SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError = ARC_HIGH_DEF ) const;
 
+    /**
+     * Resolve any references to system tokens supported by the component.
+     * @param aDepth a counter to limit recursion and circular references.
+     */
+    bool ResolveTextVar( wxString* token, int aDepth = 0 ) const;
+
     ///> @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

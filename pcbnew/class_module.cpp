@@ -260,6 +260,28 @@ MODULE& MODULE::operator=( const MODULE& aOther )
 }
 
 
+bool MODULE::ResolveTextVar( wxString* token, int aDepth ) const
+{
+    if( token->IsSameAs( wxT( "REFERENCE" ) ) )
+    {
+        *token = m_Reference->GetShownText( aDepth + 1 );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "VALUE" ) ) )
+    {
+        *token = m_Value->GetShownText( aDepth + 1 );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "LAYER" ) ) )
+    {
+        *token = GetLayerName();
+        return true;
+    }
+
+    return false;
+}
+
+
 void MODULE::ClearAllNets()
 {
     // Force the ORPHANED dummy net info for all pads.

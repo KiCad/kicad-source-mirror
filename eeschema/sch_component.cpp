@@ -931,6 +931,53 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 }
 
 
+bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
+{
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
+    {
+        if( token->IsSameAs( m_Fields[ i ].GetCanonicalName().Upper() ) )
+        {
+            *token = m_Fields[ i ].GetShownText( aDepth + 1 );
+            return true;
+        }
+    }
+
+    for( size_t i = MANDATORY_FIELDS; i < m_Fields.size(); ++i )
+    {
+        if( token->IsSameAs( m_Fields[ i ].GetName() )
+            || token->IsSameAs( m_Fields[ i ].GetName().Upper() ) )
+        {
+            *token = m_Fields[ i ].GetShownText( aDepth + 1 );
+            return true;
+        }
+    }
+
+    if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ) )
+    {
+        const SCH_FIELD& field = m_Fields[ FOOTPRINT ];
+        wxArrayString parts = wxSplit( field.GetText(), ':' );
+
+        *token = parts[ 0 ];
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
+    {
+        const SCH_FIELD& field = m_Fields[ FOOTPRINT ];
+        wxArrayString parts = wxSplit( field.GetText(), ':' );
+
+        *token = parts[ std::min( 1, (int) parts.size() - 1 ) ];
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "UNIT" ) ) )
+    {
+        *token = LIB_PART::SubReference( GetUnit() );
+        return true;
+    }
+
+    return false;
+}
+
+
 void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
     // Build a reference with no annotation,

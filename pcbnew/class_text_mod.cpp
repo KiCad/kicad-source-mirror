@@ -488,38 +488,25 @@ unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-wxString TEXTE_MODULE::GetShownText() const
+wxString TEXTE_MODULE::GetShownText( int aDepth ) const
 {
     const MODULE* module = static_cast<MODULE*>( GetParent() );
-     wxASSERT( module );
-
-    const BOARD* board = static_cast<BOARD*>( module->GetParent() );
-    wxASSERT( board );
+    wxASSERT( module );
 
     std::function<bool( wxString* )> moduleResolver =
-            [ this, module ]( wxString* token ) -> bool
+            [&]( wxString* token ) -> bool
             {
-                if( module )
-                {
-                    if( token->IsSameAs( wxT( "REFERENCE" ) ) )
-                    {
-                        *token = module->GetReference();
-                        return true;
-                    }
-                    else if( token->IsSameAs( wxT( "VALUE" ) ) )
-                    {
-                        *token = module->GetValue();
-                        return true;
-                    }
-                    else if( token->IsSameAs( wxT( "LAYER" ) ) )
-                    {
-                        *token = GetLayerName();
-                        return true;
-                    }
-                }
-
-                return false;
+                return module && module->ResolveTextVar( token, aDepth );
             };
 
-    return ExpandTextVars( EDA_TEXT::GetShownText(), &moduleResolver, board->GetProject() );
+    PROJECT* project = nullptr;
+    wxString text = EDA_TEXT::GetShownText( aDepth );
+
+    if( module && module->GetParent() )
+        project = static_cast<BOARD*>( module->GetParent() )->GetProject();
+
+    if( aDepth < 10 )
+        text = ExpandTextVars( text, &moduleResolver, project );
+
+    return text;
 }

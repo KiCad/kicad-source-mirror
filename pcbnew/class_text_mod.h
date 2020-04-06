@@ -216,7 +216,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    virtual wxString GetShownText() const override;
+    virtual wxString GetShownText( int aDepth = 0 ) const override;
 
     virtual const BOX2I ViewBBox() const override;
 

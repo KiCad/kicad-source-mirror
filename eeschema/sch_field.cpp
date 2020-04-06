@@ -72,103 +72,20 @@ EDA_ITEM* SCH_FIELD::Clone() const
 }
 
 
-wxString SCH_FIELD::GetShownText() const
+wxString SCH_FIELD::GetShownText( int aDepth ) const
 {
     std::function<bool( wxString* )> symbolResolver =
-            [this]( wxString* token ) -> bool
+            [&]( wxString* token ) -> bool
             {
                 SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_Parent );
-                std::vector<SCH_FIELD>& fields = component->GetFields();
-
-                for( int i = 0; i < MANDATORY_FIELDS; ++i )
-                {
-                    if( token->IsSameAs( fields[ i ].GetCanonicalName().Upper() ) )
-                    {
-                        // silently drop recursive references
-                        if( &fields[ i ] == this )
-                            *token = wxEmptyString;
-                        else
-                            *token = fields[ i ].GetShownText();
-
-                        return true;
-                    }
-                }
-
-                for( size_t i = MANDATORY_FIELDS; i < fields.size(); ++i )
-                {
-                    if( token->IsSameAs( fields[ i ].GetName() )
-                        || token->IsSameAs( fields[ i ].GetName().Upper() ) )
-                    {
-                        // silently drop recursive references
-                        if( &fields[ i ] == this )
-                            *token = wxEmptyString;
-                        else
-                            *token = fields[ i ].GetShownText();
-
-                        return true;
-                    }
-                }
-
-                if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ) )
-                {
-                    SCH_FIELD& f = component->GetFields()[ FOOTPRINT ];
-                    wxArrayString parts = wxSplit( f.GetText(), ':' );
-
-                    *token = parts[ 0 ];
-                    return true;
-                }
-                else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
-                {
-                    SCH_FIELD& f = component->GetFields()[ FOOTPRINT ];
-                    wxArrayString parts = wxSplit( f.GetText(), ':' );
-
-                    *token = parts[ std::min( 1, (int) parts.size() - 1 ) ];
-                    return true;
-                }
-                else if( token->IsSameAs( wxT( "UNIT" ) ) )
-                {
-                    *token = LIB_PART::SubReference( component->GetUnit() );
-                    return true;
-                }
-
-                return false;
+                return component->ResolveTextVar( token, aDepth + 1 );
             };
 
     std::function<bool( wxString* )> sheetResolver =
             [&]( wxString* token ) -> bool
             {
                 SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_Parent );
-                std::vector<SCH_FIELD>& fields = sheet->GetFields();
-
-                for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
-                {
-                    if( token->IsSameAs( fields[ i ].GetCanonicalName().Upper() ) )
-                    {
-                        // silently drop recursive references
-                        if( &fields[ i ] == this )
-                            *token = wxEmptyString;
-                        else
-                            *token = fields[ i ].GetShownText();
-
-                        return true;
-                    }
-                }
-
-                for( size_t i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
-                {
-                    if( token->IsSameAs( fields[ i ].GetName() ) )
-                    {
-                        // silently drop recursive references
-                        if( &fields[ i ] == this )
-                            *token = wxEmptyString;
-                        else
-                            *token = fields[ i ].GetShownText();
-
-                        return true;
-                    }
-                }
-
-                return false;
+                return sheet->ResolveTextVar( token, aDepth + 1 );
             };
 
     PROJECT*  project = nullptr;
@@ -177,10 +94,15 @@ wxString SCH_FIELD::GetShownText() const
     if( g_RootSheet && g_RootSheet->GetScreen() )
         project = &g_RootSheet->GetScreen()->Kiway().Prj();
 
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
-        text = ExpandTextVars( text, &symbolResolver, project );
-    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
-        text = ExpandTextVars( text, &sheetResolver, project );
+    if( aDepth < 10 )
+    {
+        if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+            text = ExpandTextVars( text, &symbolResolver, project );
+        else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+            text = ExpandTextVars( text, &sheetResolver, project );
+        else
+            text = ExpandTextVars( text, nullptr, project );
+    }
 
     // WARNING: the IDs of FIELDS and SHEETS overlap, so one must check *both* the
     // id and the parent's type.
@@ -197,8 +119,7 @@ wxString SCH_FIELD::GetShownText() const
                 text << LIB_PART::SubReference( component->GetUnit() );
         }
     }
-
-    if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
     {
         if( m_id == SHEETFILENAME )
             text = _( "File: " ) + text;

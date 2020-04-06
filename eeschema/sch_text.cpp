@@ -33,6 +33,7 @@
 #include <macros.h>
 #include <trigo.h>
 #include <sch_draw_panel.h>
+#include <sch_component.h>
 #include <gr_text.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
@@ -450,10 +451,10 @@ wxString getElectricalTypeLabel( PINSHEETLABEL_SHAPE aType )
 }
 
 
-wxString SCH_TEXT::GetShownText() const
+wxString SCH_TEXT::GetShownText( int aDepth ) const
 {
     std::function<bool( wxString* )> textResolver =
-            [this]( wxString* token ) -> bool
+            [&]( wxString* token ) -> bool
             {
                 if( ( Type() == SCH_GLOBAL_LABEL_T
                         || Type() == SCH_HIER_LABEL_T
@@ -467,23 +468,39 @@ wxString SCH_TEXT::GetShownText() const
                 if( Type() == SCH_SHEET_PIN_T && m_Parent )
                 {
                     SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_Parent );
-                    std::vector<SCH_FIELD>& fields = sheet->GetFields();
 
-                    for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
+                    if( sheet->ResolveTextVar( token, aDepth ) )
+                        return true;
+                }
+
+                if( Type() == SCH_TEXT_T )
+                {
+                    if( token->Contains( ':' ) )
                     {
-                        if( token->IsSameAs( fields[i].GetCanonicalName().Upper() ) )
+                        SCH_SHEET_LIST sheetList( g_RootSheet );
+                        wxArrayString  parts = wxSplit( *token, ':' );
+                        SCH_SHEET_PATH dummy;
+                        SCH_ITEM*      refItem = sheetList.GetItem( KIID( parts[0] ), &dummy );
+
+                        if( refItem && refItem->Type() == SCH_COMPONENT_T )
                         {
-                            *token = fields[i].GetShownText();
-                            return true;
+                            SCH_COMPONENT* refComponent = static_cast<SCH_COMPONENT*>( refItem );
+
+                            if( refComponent->ResolveTextVar( &parts[1], aDepth + 1 ) )
+                            {
+                                *token = parts[1];
+                                return true;
+                            }
                         }
-                    }
-
-                    for( size_t i = SHEET_MANDATORY_FIELDS; i < fields.size(); ++i )
-                    {
-                        if( token->IsSameAs( fields[i].GetName() ) )
+                        else if( refItem && refItem->Type() == SCH_SHEET_T )
                         {
-                            *token = fields[i].GetShownText();
-                            return true;
+                            SCH_SHEET* refSheet = static_cast<SCH_SHEET*>( refItem );
+
+                            if( refSheet->ResolveTextVar( &parts[1], aDepth + 1 ) )
+                            {
+                                *token = parts[1];
+                                return true;
+                            }
                         }
                     }
                 }
@@ -496,7 +513,12 @@ wxString SCH_TEXT::GetShownText() const
     if( g_RootSheet && g_RootSheet->GetScreen() )
         project = &g_RootSheet->GetScreen()->Kiway().Prj();
 
-    return ExpandTextVars( EDA_TEXT::GetShownText(), &textResolver, project );
+    wxString text = EDA_TEXT::GetShownText( aDepth );
+
+    if( aDepth < 10 )
+        text = ExpandTextVars( text, &textResolver, project );
+
+    return text;
 }
 
 

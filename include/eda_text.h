@@ -123,10 +123,11 @@ public:
     virtual const wxString& GetText() const { return m_text; }
 
     /**
-     * Return the string actually shown after processing of the base
-     * text. Default is no processing
+     * Return the string actually shown after processing of the base text.
+     * @aParam aDepth is used to prevent infinite recusions and loops when expanding
+     * text variables.
      */
-    virtual wxString GetShownText() const { return m_shown_text; }
+    virtual wxString GetShownText( int aDepth = 0 ) const { return m_shown_text; }
 
     /**
      * Returns a shortened version (max 15 characters) of the shown text
