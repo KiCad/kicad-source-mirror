@@ -118,52 +118,33 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
 int ALTIUM_PARSER::PropertiesReadInt(
         const std::map<wxString, wxString>& aProperties, const wxString& aKey, int aDefault )
 {
-    try
-    {
-        const wxString& value = aProperties.at( aKey );
-
-        return wxAtoi( value );
-    }
-    catch( const std::out_of_range& oor )
-    {
-        return aDefault;
-    }
+    const std::map<wxString, wxString>::const_iterator& value = aProperties.find( aKey );
+    return value == aProperties.end() ? aDefault : wxAtoi( value->second );
 }
 
 double ALTIUM_PARSER::PropertiesReadDouble(
         const std::map<wxString, wxString>& aProperties, const wxString& aKey, double aDefault )
 {
-    try
-    {
-        const wxString& value = aProperties.at( aKey );
-
-        // Locale independent str -> double conversation
-        std::istringstream istr( (const char*) value.mb_str() );
-        istr.imbue( std::locale( "C" ) );
-
-        double doubleValue;
-        istr >> doubleValue;
-        return doubleValue;
-    }
-    catch( const std::out_of_range& oor )
+    const std::map<wxString, wxString>::const_iterator& value = aProperties.find( aKey );
+    if( value == aProperties.end() )
     {
         return aDefault;
     }
+
+    // Locale independent str -> double conversation
+    std::istringstream istr( (const char*) value->second.mb_str() );
+    istr.imbue( std::locale( "C" ) );
+
+    double doubleValue;
+    istr >> doubleValue;
+    return doubleValue;
 }
 
 bool ALTIUM_PARSER::PropertiesReadBool(
         const std::map<wxString, wxString>& aProperties, const wxString& aKey, bool aDefault )
 {
-    try
-    {
-        const wxString& value = aProperties.at( aKey );
-
-        return value == "TRUE";
-    }
-    catch( const std::out_of_range& oor )
-    {
-        return aDefault;
-    }
+    const std::map<wxString, wxString>::const_iterator& value = aProperties.find( aKey );
+    return value == aProperties.end() ? aDefault : value->second == "TRUE";
 }
 
 int32_t ALTIUM_PARSER::PropertiesReadKicadUnit( const std::map<wxString, wxString>& aProperties,
@@ -218,12 +199,6 @@ int32_t ALTIUM_PARSER::PropertiesReadKicadUnit( const std::map<wxString, wxStrin
 wxString ALTIUM_PARSER::PropertiesReadString( const std::map<wxString, wxString>& aProperties,
         const wxString& aKey, const wxString& aDefault )
 {
-    try
-    {
-        return aProperties.at( aKey );
-    }
-    catch( const std::out_of_range& oor )
-    {
-        return aDefault;
-    }
+    const std::map<wxString, wxString>::const_iterator& value = aProperties.find( aKey );
+    return value == aProperties.end() ? aDefault : value->second;
 }
