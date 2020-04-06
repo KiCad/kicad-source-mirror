@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # author: Maciej Suminski <maciej.suminski@cern.ch>
-# contributors: madworm, imcinerney
+# contributors: madworm, imcinerney, dimtass
 
 # Set to 1 to pull the tag given by NGSPICE_GIT_TAG
 # Set to 0 to pull the commit with the has given by NGSPICE_GIT_HASH
@@ -14,6 +14,8 @@ NGSPICE_GIT="git://git.code.sf.net/p/ngspice/ngspice"
 
 BUILD_DIR="/tmp/libngspice_so"
 SRC_DIR="${BUILD_DIR}/ngspice"
+
+NPROC=1
 
 if [ -n "${MINGW_PREFIX}" ]; then
     OSTYPE="mingw"
@@ -42,6 +44,22 @@ case "${OSTYPE}" in
         exit 1
         ;;
 esac
+
+while getopts "c:ah" option; do
+    case "${option}"
+    in
+        c) NPROC=${OPTARG};;    # number of cores
+        a) NPROC=$(nproc);;     # all threads
+        h) cat <<EOF
+    Usage: ${0} [-c Cores] [-a All Cores]
+
+    -c Cores        Number of cores/threads to use for make (default: 1)
+    -a All Cores    Use all available cores/threads
+    -h Help         This help
+EOF
+    exit 0
+    esac
+done
 
 
 if [ "$1" = "install" ]; then
@@ -79,7 +97,7 @@ cd "${BUILD_DIR}" || exit
 echo "libngspice (for KiCad) builder v1.2"
 echo "(c) CERN 2016"
 echo "author: Maciej Suminski <maciej.suminski@cern.ch>"
-echo "contributors: madworm, imcinerney"
+echo "contributors: madworm, imcinerney, dimtass"
 echo
 echo "PREREQUISITES: autoconf automake bison flex gcc git libtool make"
 echo
@@ -99,7 +117,7 @@ else
     exit 1
 fi
 
-echo "*** Building libngspice shared library.. ***"
+echo "*** Building libngspice shared library using ${NPROC} core(s).. ***"
 if [ $USE_GIT_TAG == 1 ]; then
     echo "*** Checking out tag ${NGSPICE_GIT_TAG} ***"
     git checkout tags/${NGSPICE_GIT_TAG}
@@ -110,7 +128,7 @@ fi
 
 ./autogen.sh
 ./configure --with-ngshared --enable-xspice --enable-cider ${CFG_OPTIONS}
-make
+make -j${NPROC}
 
 if [ $? != 0 ]; then
     echo "*** Build failed ***"
