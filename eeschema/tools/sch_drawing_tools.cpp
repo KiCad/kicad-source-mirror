@@ -210,6 +210,11 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                     // We are either stepping to the next unit or next component
                     if( m_frame->GetRepeatComponent() || new_unit > 1 )
                     {
+                        // Deselect the last placed symbol: obviously we do not want to
+                        // apply some changes (like rotation, mirror...) to previously placed
+                        // symbols.
+                        m_selectionTool->ClearSelection();
+
                         next_comp = static_cast<SCH_COMPONENT*>( component->Duplicate() );
                         next_comp->SetFlags( IS_NEW | IS_MOVED );
                         next_comp->SetUnit( new_unit );
