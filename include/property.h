@@ -49,11 +49,11 @@ class ENUM_MAP;
 ///< Common property types
 enum PROPERTY_DISPLAY
 {
-    DEFAULT,    ///< Default property for a given type
-    SIZE,       ///< Size expressed in distance units (mm/inch)
-    COORD,      ///< Coordinate expressed in distance units (mm/inch)
-    DEGREE,     ///< Angle expressed in degrees
-    DECIDEGREE  ///< Angle expressed in decidegrees
+    PT_DEFAULT,    ///< Default property for a given type
+    PT_SIZE,       ///< Size expressed in distance units (mm/inch)
+    PT_COORD,      ///< Coordinate expressed in distance units (mm/inch)
+    PT_DEGREE,     ///< Angle expressed in degrees
+    PT_DECIDEGREE  ///< Angle expressed in decidegrees
 };
 
 ///< Macro to generate unique identifier for a type
@@ -177,7 +177,7 @@ private:
     ///< Used to generate unique IDs.  Must come up front so it's initialized before ctor.
 
 public:
-    PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = DEFAULT ) :
+PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT ) :
         m_name( aName ),
         m_display( aDisplay ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } )
@@ -300,7 +300,7 @@ public:
     template<typename SetType, typename GetType>
     PROPERTY( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )(),
-            PROPERTY_DISPLAY aDisplay = DEFAULT )
+            PROPERTY_DISPLAY aDisplay = PT_DEFAULT )
         : PROPERTY( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
                            METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
     {
@@ -309,7 +309,7 @@ public:
     template<typename SetType, typename GetType>
     PROPERTY( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )() const,
-            PROPERTY_DISPLAY aDisplay = DEFAULT )
+            PROPERTY_DISPLAY aDisplay = PT_DEFAULT )
         : PROPERTY( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
                            METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
     {
@@ -389,7 +389,7 @@ public:
     template<typename SetType, typename GetType>
     PROPERTY_ENUM( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )(),
-            PROPERTY_DISPLAY aDisplay = DEFAULT )
+            PROPERTY_DISPLAY aDisplay = PT_DEFAULT )
         : PROPERTY<Owner, T, Base>( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
                                      METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
     {
@@ -403,7 +403,7 @@ public:
     template<typename SetType, typename GetType>
     PROPERTY_ENUM( const wxString& aName,
             void ( Base::*aSetter )( SetType ), GetType( Base::*aGetter )() const,
-            PROPERTY_DISPLAY aDisplay = DEFAULT )
+            PROPERTY_DISPLAY aDisplay = PT_DEFAULT )
         : PROPERTY<Owner, T, Base>( aName, METHOD<Owner, T, Base>::Wrap( aSetter ),
                                      METHOD<Owner, T, Base>::Wrap( aGetter ), aDisplay )
     {

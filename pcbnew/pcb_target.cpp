@@ -200,9 +200,9 @@ static struct PCB_TARGET_DESC
         REGISTER_TYPE( PCB_TARGET );
         propMgr.InheritsAfter( TYPE_HASH( PCB_TARGET ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _HKI( "Size" ),
-                    &PCB_TARGET::SetSize, &PCB_TARGET::GetSize, PROPERTY_DISPLAY::SIZE ) );
+                    &PCB_TARGET::SetSize, &PCB_TARGET::GetSize, PROPERTY_DISPLAY::PT_SIZE ) );
         propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _HKI( "Width" ),
-                    &PCB_TARGET::SetWidth, &PCB_TARGET::GetWidth, PROPERTY_DISPLAY::SIZE ) );
+                    &PCB_TARGET::SetWidth, &PCB_TARGET::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
 
         auto shape = new PROPERTY<PCB_TARGET, int>( _HKI( "Shape" ),
                 &PCB_TARGET::SetShape, &PCB_TARGET::GetShape );

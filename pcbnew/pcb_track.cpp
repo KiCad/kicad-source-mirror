@@ -1242,34 +1242,34 @@ static struct TRACK_VIA_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_TRACK ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "Width" ),
-            &PCB_TRACK::SetWidth, &PCB_TRACK::GetWidth, PROPERTY_DISPLAY::SIZE ) );
+            &PCB_TRACK::SetWidth, &PCB_TRACK::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ),
             new PROPERTY<PCB_TRACK, int, BOARD_ITEM>( _HKI( "Origin X" ),
-            &PCB_TRACK::SetX, &PCB_TRACK::GetX, PROPERTY_DISPLAY::SIZE ) );
+            &PCB_TRACK::SetX, &PCB_TRACK::GetX, PROPERTY_DISPLAY::PT_COORD ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ),
             new PROPERTY<PCB_TRACK, int, BOARD_ITEM>( _HKI( "Origin Y" ),
-            &PCB_TRACK::SetY, &PCB_TRACK::GetY, PROPERTY_DISPLAY::SIZE ) );
+            &PCB_TRACK::SetY, &PCB_TRACK::GetY, PROPERTY_DISPLAY::PT_COORD ) );
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "End X" ),
-            &PCB_TRACK::SetEndX, &PCB_TRACK::GetEndX, PROPERTY_DISPLAY::SIZE ) );
+            &PCB_TRACK::SetEndX, &PCB_TRACK::GetEndX, PROPERTY_DISPLAY::PT_COORD ) );
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "End Y" ),
-            &PCB_TRACK::SetEndY, &PCB_TRACK::GetEndY, PROPERTY_DISPLAY::SIZE ) );
+            &PCB_TRACK::SetEndY, &PCB_TRACK::GetEndY, PROPERTY_DISPLAY::PT_COORD ) );
 
         // Arc
         REGISTER_TYPE( PCB_ARC );
         propMgr.InheritsAfter( TYPE_HASH( PCB_ARC ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "Width" ),
-            &PCB_ARC::SetWidth, &PCB_ARC::GetWidth, PROPERTY_DISPLAY::SIZE ) );
+            &PCB_ARC::SetWidth, &PCB_ARC::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ),
             new PROPERTY<PCB_ARC, int, BOARD_ITEM>( _HKI( "Origin X" ),
-            &PCB_TRACK::SetX, &PCB_ARC::GetX, PROPERTY_DISPLAY::SIZE ) );
+            &PCB_TRACK::SetX, &PCB_ARC::GetX, PROPERTY_DISPLAY::PT_COORD ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ),
             new PROPERTY<PCB_ARC, int, BOARD_ITEM>( _HKI( "Origin Y" ),
-            &PCB_TRACK::SetY, &PCB_ARC::GetY, PROPERTY_DISPLAY::SIZE ) );
+            &PCB_TRACK::SetY, &PCB_ARC::GetY, PROPERTY_DISPLAY::PT_COORD ) );
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "End X" ),
-            &PCB_TRACK::SetEndX, &PCB_ARC::GetEndX, PROPERTY_DISPLAY::SIZE ) );
+            &PCB_TRACK::SetEndX, &PCB_ARC::GetEndX, PROPERTY_DISPLAY::PT_COORD ) );
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "End Y" ),
-            &PCB_TRACK::SetEndY, &PCB_ARC::GetEndY, PROPERTY_DISPLAY::SIZE ) );
+            &PCB_TRACK::SetEndY, &PCB_ARC::GetEndY, PROPERTY_DISPLAY::PT_COORD ) );
 
         // Via
         REGISTER_TYPE( PCB_VIA );
@@ -1279,9 +1279,9 @@ static struct TRACK_VIA_DESC
         // TODO test drill, use getdrillvalue?
         propMgr.ReplaceProperty( TYPE_HASH( PCB_TRACK ), _HKI( "Width" ),
             new PROPERTY<PCB_VIA, int, PCB_TRACK>( _HKI( "Diameter" ),
-            &PCB_VIA::SetWidth, &PCB_VIA::GetWidth, PROPERTY_DISPLAY::SIZE ) );
+            &PCB_VIA::SetWidth, &PCB_VIA::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Hole" ),
-            &PCB_VIA::SetDrill, &PCB_VIA::GetDrillValue, PROPERTY_DISPLAY::SIZE ) );
+            &PCB_VIA::SetDrill, &PCB_VIA::GetDrillValue, PROPERTY_DISPLAY::PT_SIZE ) );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ),
             new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Layer Top" ),
             &PCB_VIA::SetLayer, &PCB_VIA::GetLayer ) );

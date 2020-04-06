@@ -1649,20 +1649,20 @@ static struct EDA_SHAPE_DESC
                      NO_SETTER( EDA_SHAPE, SHAPE_T ), &EDA_SHAPE::GetShape );
         propMgr.AddProperty( shape );
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start X" ),
-                    &EDA_SHAPE::SetStartX, &EDA_SHAPE::GetStartX, PROPERTY_DISPLAY::COORD ) );
+                    &EDA_SHAPE::SetStartX, &EDA_SHAPE::GetStartX, PROPERTY_DISPLAY::PT_COORD ) );
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Y" ),
-                    &EDA_SHAPE::SetStartY, &EDA_SHAPE::GetStartY, PROPERTY_DISPLAY::COORD ) );
+                    &EDA_SHAPE::SetStartY, &EDA_SHAPE::GetStartY, PROPERTY_DISPLAY::PT_COORD ) );
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End X" ),
-                    &EDA_SHAPE::SetEndX, &EDA_SHAPE::GetEndX, PROPERTY_DISPLAY::COORD ) );
+                    &EDA_SHAPE::SetEndX, &EDA_SHAPE::GetEndX, PROPERTY_DISPLAY::PT_COORD ) );
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End Y" ),
-                    &EDA_SHAPE::SetEndY, &EDA_SHAPE::GetEndY, PROPERTY_DISPLAY::COORD ) );
+                    &EDA_SHAPE::SetEndY, &EDA_SHAPE::GetEndY, PROPERTY_DISPLAY::PT_COORD ) );
         // TODO: m_arcCenter, m_bezierC1, m_bezierC2, m_poly
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
-                    &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::SIZE ) );
+                    &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
 
         auto angle = new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Angle" ),
                     NO_SETTER( EDA_SHAPE, EDA_ANGLE ), &EDA_SHAPE::GetArcAngle,
-                    PROPERTY_DISPLAY::DECIDEGREE );
+                    PROPERTY_DISPLAY::PT_DECIDEGREE );
         angle->SetAvailableFunc(
                 [=]( INSPECTABLE* aItem ) -> bool
                 {

@@ -39,20 +39,20 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
 
     switch( display )
     {
-    case PROPERTY_DISPLAY::SIZE:
+    case PROPERTY_DISPLAY::PT_SIZE:
         ret = new PGPROPERTY_SIZE();
         break;
 
-    case PROPERTY_DISPLAY::COORD:
+    case PROPERTY_DISPLAY::PT_COORD:
         ret = new PGPROPERTY_COORD();
         break;
 
-    case PROPERTY_DISPLAY::DECIDEGREE: /* fall-through */
-    case PROPERTY_DISPLAY::DEGREE:
+    case PROPERTY_DISPLAY::PT_DECIDEGREE:
+    case PROPERTY_DISPLAY::PT_DEGREE:
     {
         auto prop = new PGPROPERTY_ANGLE();
 
-        if( display == PROPERTY_DISPLAY::DECIDEGREE )
+        if( display == PROPERTY_DISPLAY::PT_DECIDEGREE )
             prop->SetScale( 10.0 );
 
         ret = prop;
@@ -62,7 +62,7 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
     default:
         wxFAIL;
         /* fall through */
-    case PROPERTY_DISPLAY::DEFAULT:
+    case PROPERTY_DISPLAY::PT_DEFAULT:
     {
         // Create a corresponding wxPGProperty
         size_t typeId = aProperty->TypeHash();
@@ -74,32 +74,26 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty )
             ret = new wxEnumProperty( wxPG_LABEL, wxPG_LABEL,
                     const_cast<wxPGChoices&>( aProperty->Choices() ) );
         }
-
         else if( typeId == TYPE_HASH( int ) || typeId == TYPE_HASH( long ) )
         {
             ret = new wxIntProperty();
         }
-
         else if( typeId == TYPE_HASH( unsigned int ) || typeId == TYPE_HASH( unsigned long ) )
         {
             ret = new wxUIntProperty();
         }
-
         else if( typeId == TYPE_HASH( float ) || typeId == TYPE_HASH( double ) )
         {
             ret = new wxFloatProperty();
         }
-
         else if( typeId == TYPE_HASH( bool ) )
         {
             ret = new wxBoolProperty();
         }
-
         else if( typeId == TYPE_HASH( wxString ) )
         {
             ret = new wxStringProperty();
         }
-
         else
         {
             wxFAIL_MSG( wxString::Format( "Property '" + aProperty->Name() +

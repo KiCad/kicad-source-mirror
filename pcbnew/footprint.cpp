@@ -2818,13 +2818,13 @@ static struct FOOTPRINT_DESC
                     &FOOTPRINT::SetValue, &FOOTPRINT::GetValue ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Orientation" ),
                     &FOOTPRINT::SetOrientationDegrees, &FOOTPRINT::GetOrientationDegrees,
-                    PROPERTY_DISPLAY::DEGREE ) );
+                    PROPERTY_DISPLAY::PT_DEGREE ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Clearance Override" ),
                     &FOOTPRINT::SetLocalClearance, &FOOTPRINT::GetLocalClearance,
-                    PROPERTY_DISPLAY::SIZE ) );
+                    PROPERTY_DISPLAY::PT_SIZE ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Solderpaste Margin Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
-                    PROPERTY_DISPLAY::SIZE ) );
+                    PROPERTY_DISPLAY::PT_SIZE ) );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Solderpaste Margin Ratio Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMarginRatio,
                     &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
