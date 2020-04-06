@@ -562,22 +562,21 @@ AARC6::AARC6( ALTIUM_PARSER& aReader )
 APAD6::APAD6( ALTIUM_PARSER& aReader )
 {
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
+
     if( recordtype != ALTIUM_RECORD::PAD )
-    {
         THROW_IO_ERROR( "Pads6 stream has invalid recordtype" );
-    }
 
     // Subrecord 1
     size_t subrecord1 = aReader.ReadAndSetSubrecordLength();
+
     if( subrecord1 == 0 )
-    {
         THROW_IO_ERROR( "Pads6 stream has no subrecord1 data" );
-    }
+
     name = aReader.ReadWxString();
+
     if( aReader.GetRemainingSubrecordBytes() != 0 )
-    {
         THROW_IO_ERROR( "Pads6 stream has invalid subrecord1 length" );
-    }
+
     aReader.SkipSubrecord();
 
     // Subrecord 2
@@ -594,14 +593,14 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
 
     // Subrecord 5
     size_t subrecord5 = aReader.ReadAndSetSubrecordLength();
+
+    // TODO: exact minimum length we know?
     if( subrecord5 < 120 )
-    {
-        // TODO: exact minimum length we know?
-        THROW_IO_ERROR(
-            "Pads6 stream subrecord has length < 120, which is unexpected" );
-    }
+        THROW_IO_ERROR( "Pads6 stream subrecord has length < 120, which is unexpected" );
 
     layer = static_cast<ALTIUM_LAYER>( aReader.Read<uint8_t>() );
+    tolayer = ALTIUM_LAYER::UNKNOWN;
+    fromlayer = ALTIUM_LAYER::UNKNOWN;
 
     uint8_t flags1  = aReader.Read<uint8_t>();
     is_test_fab_top = ( flags1 & 0x80 ) != 0;
@@ -639,6 +638,7 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     soldermaskexpansionmode = static_cast<ALTIUM_PAD_RULE>( aReader.Read<uint8_t>() );
     aReader.Skip( 3 );
     holerotation = aReader.Read<double>();
+
     if( subrecord5 == 120 )
     {
         tolayer = static_cast<ALTIUM_LAYER>( aReader.Read<uint8_t>() );
@@ -649,6 +649,7 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     else if( subrecord5 == 171 )
     {
     }
+
     aReader.SkipSubrecord();
 
     // Subrecord 6
@@ -658,19 +659,14 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     {                              // TODO: detect type from something else than the size?
         sizeAndShape = std::make_unique<APAD6_SIZE_AND_SHAPE>();
 
-        for( int i = 0; i < 29; i++ )
-        {
-            sizeAndShape->inner_size[i].x = aReader.ReadKicadUnitX();
-        }
-        for( int i = 0; i < 29; i++ )
-        {
-            sizeAndShape->inner_size[i].y = aReader.ReadKicadUnitY();
-        }
+        for( wxSize& size : sizeAndShape->inner_size )
+            size.x = aReader.ReadKicadUnitX();
 
-        for( int i = 0; i < 29; i++ )
-        {
-            sizeAndShape->inner_shape[i] = static_cast<ALTIUM_PAD_SHAPE>( aReader.Read<uint8_t>() );
-        }
+        for( wxSize& size : sizeAndShape->inner_size )
+            size.y = aReader.ReadKicadUnitY();
+
+        for( ALTIUM_PAD_SHAPE& shape : sizeAndShape->inner_shape )
+            shape = static_cast<ALTIUM_PAD_SHAPE>( aReader.Read<uint8_t>() );
 
         aReader.Skip( 1 );
 
@@ -678,35 +674,25 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
         sizeAndShape->slotsize     = aReader.ReadKicadUnit();
         sizeAndShape->slotrotation = aReader.Read<double>();
 
-        for( int i = 0; i < 32; i++ )
-        {
-            sizeAndShape->holeoffset[i].x = aReader.ReadKicadUnitX();
-        }
-        for( int i = 0; i < 32; i++ )
-        {
-            sizeAndShape->holeoffset[i].y = aReader.ReadKicadUnitY();
-        }
+        for( wxPoint& pt : sizeAndShape->holeoffset )
+            pt.x = aReader.ReadKicadUnitX();
+
+        for( wxPoint& pt : sizeAndShape->holeoffset )
+            pt.y = aReader.ReadKicadUnitY();
 
         aReader.Skip( 1 );
 
-        for( int i = 0; i < 32; i++ )
-        {
-            sizeAndShape->alt_shape[i] =
-                    static_cast<ALTIUM_PAD_SHAPE_ALT>( aReader.Read<uint8_t>() );
-        }
+        for( ALTIUM_PAD_SHAPE_ALT& shape : sizeAndShape->alt_shape )
+            shape = static_cast<ALTIUM_PAD_SHAPE_ALT>( aReader.Read<uint8_t>() );
 
-        for( int i = 0; i < 32; i++ )
-        {
-            sizeAndShape->cornerradius[i] = aReader.Read<uint8_t>();
-        }
+        for( uint8_t& radius : sizeAndShape->cornerradius )
+            radius = aReader.Read<uint8_t>();
     }
 
     aReader.SkipSubrecord();
 
     if( aReader.HasParsingError() )
-    {
         THROW_IO_ERROR( "Pads6 stream was not parsed correctly" );
-    }
 }
 
 AVIA6::AVIA6( ALTIUM_PARSER& aReader )

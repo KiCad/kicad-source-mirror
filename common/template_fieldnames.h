@@ -138,6 +138,10 @@ private:
     bool                    m_resolvedDirty;
 
 public:
+    TEMPLATES() :
+            m_resolvedDirty( true )
+    { }
+
     /**
      * Function Format
      * serializes this object out as text into the given OUTPUTFORMATTER.

@@ -66,15 +66,17 @@ namespace KIGFX
 {
 
 SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
-    m_ShowUnit( 0 ),
-    m_ShowConvert( 0 )
-{
-    m_ShowHiddenText = true;
-    m_ShowHiddenPins = true;
-    m_ShowPinsElectricalType = true;
-    m_ShowUmbilicals = true;
-    m_ShowDisabled = false;
-}
+        m_ShowUnit( 0 ),
+        m_ShowConvert( 0 ),
+        m_ShowHiddenText( true ),
+        m_ShowHiddenPins( true ),
+        m_ShowPinsElectricalType( true ),
+        m_ShowDisabled( false ),
+        m_ShowUmbilicals( true ),
+        m_DefaultLineWidth( 0 ),
+        m_DefaultWireThickness( 0 ),
+        m_DefaultBusThickness( 0 )
+{ }
 
 
 void SCH_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )

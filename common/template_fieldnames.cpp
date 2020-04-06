@@ -176,6 +176,10 @@ void TEMPLATES::Parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal )
 }
 
 
+/*
+ * Flatten project and global templates into a single list.  (Project templates take
+ * precedence.)
+ */
 void TEMPLATES::resolveTemplates()
 {
     m_resolved = m_project;
@@ -201,7 +205,7 @@ void TEMPLATES::resolveTemplates()
 void TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool aGlobal )
 {
     // Ensure that the template fieldname does not match a fixed fieldname.
-    for( int i=0;  i<MANDATORY_FIELDS;  ++i )
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
         if( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) == aFieldName.m_Name )
             return;
@@ -214,16 +218,11 @@ void TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool
     {
         if( temp.m_Name == aFieldName.m_Name )
         {
-            // DBG( printf( "inserting template fieldname:'%s' at %d\n",
-            //            TO_UTF8( aFieldName.m_Name ), i ); )
-
             temp = aFieldName;
             m_resolvedDirty = true;
             return;
         }
     }
-
-    // DBG(printf("appending template fieldname:'%s'\n", aFieldName.m_Name.utf8_str() );)
 
     // the name is legal and not previously added to the config container, append
     // it and return its index within the container.

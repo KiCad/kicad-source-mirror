@@ -640,7 +640,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     else
     {
         m_rootSheet = aAppendToMe->GetRootSheet();
-        wxASSERT( m_rootSheet != NULL );
+        wxASSERT( m_rootSheet );
         sheet = aAppendToMe;
         loadHierarchy( sheet );
     }
@@ -1545,7 +1545,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                 unit = 1;
 
                 // Set the file as modified so the user can be warned.
-                if( m_rootSheet && m_rootSheet->GetScreen() )
+                if( m_rootSheet->GetScreen() )
                     m_rootSheet->GetScreen()->SetModify();
             }
 
@@ -1559,7 +1559,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                 convert = 1;
 
                 // Set the file as modified so the user can be warned.
-                if( m_rootSheet && m_rootSheet->GetScreen() )
+                if( m_rootSheet->GetScreen() )
                     m_rootSheet->GetScreen()->SetModify();
             }
 
