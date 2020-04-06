@@ -1013,7 +1013,7 @@ void ALTIUM_PCB::ParsePolygons6Data(
             zone->SetZoneClearance( clearanceRule->planeclearanceClearance );
         }
         const ARULE6* polygonConnectRule = GetRuleDefault( ALTIUM_RULE_KIND::POLYGON_CONNECT );
-        if( clearanceRule != nullptr )
+        if( polygonConnectRule != nullptr )
         {
             // TODO: correct variables?
             zone->SetThermalReliefCopperBridge(
