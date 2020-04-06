@@ -1818,9 +1818,17 @@ void ALTIUM_PCB::ParseTexts6Data(
             itm = txm;
         }
 
-        if( !elem.isDesignator && elem.text == ".Designator" )
+        if( elem.text == ".Designator" && !elem.isDesignator )
         {
-            tx->SetText( "%R" );
+            tx->SetText( "${REFERENCE}" );
+        }
+        else if( elem.text == ".Comment" && !elem.isComment )
+        {
+            tx->SetText( "${VALUE}" );
+        }
+        else if( elem.text == ".Layer_Name" )
+        {
+            tx->SetText( "${LAYER}" );
         }
         else
         {
