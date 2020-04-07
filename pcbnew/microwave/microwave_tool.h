@@ -28,9 +28,6 @@
 
 #include <tool/tool_menu.h>
 
-// This class is inside MICROWAVE_TOOL::addMicrowaveFootprint
-class MICROWAVE_PLACER;
-
 // Microwave shapes that are created as board modules when the user requests them.
 enum class MICROWAVE_FOOTPRINT_SHAPE
 {
@@ -71,9 +68,6 @@ public:
     void setTransitions() override;
 
 private:
-    // Make the placer class a friend so it can use the create functions
-    friend MICROWAVE_PLACER;
-
     ///> Main interactive tool
     int addMicrowaveFootprint( const TOOL_EVENT& aEvent );
 
