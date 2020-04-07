@@ -61,18 +61,20 @@
  */
 
 // list of files extensions listed in the tree project window
-// *.sch files are always allowed, do not add here
 // Add extensions in a compatible regex format to see others files types
 static const wxChar* s_allowedExtensionsToList[] = {
     wxT( "^.*\\.pro$" ),
     wxT( "^.*\\.pdf$" ),
+    wxT( "^.*\\.sch$" ),           // Legacy Eeschema files
+    wxT( "^.*\\.kicad_sch$" ),     // S-expr Eeschema files
     wxT( "^[^$].*\\.brd$" ),       // Legacy Pcbnew files
     wxT( "^[^$].*\\.kicad_pcb$" ), // S format Pcbnew board files
     wxT( "^[^$].*\\.kicad_wks$" ), // S format kicad page layout help_textr files
     wxT( "^[^$].*\\.kicad_mod$" ), // S format kicad footprint files, currently not listed
     wxT( "^.*\\.net$" ),           // pcbnew netlist file
     wxT( "^.*\\.cir$" ),           // Spice netlist file
-    wxT( "^.*\\.lib$" ),           // Schematic library file
+    wxT( "^.*\\.lib$" ),           // Legacy schematic library file
+    wxT( "^.*\\.kicad_sym$" ),     // S-expr symbol libraries
     wxT( "^.*\\.txt$" ),
     wxT( "^.*\\.pho$" ),           // Gerber file (Old Kicad extension)
     wxT( "^.*\\.gbr$" ),           // Gerber file
@@ -145,10 +147,6 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
      * Filtering is now inverted: the filters are actually used to _enable_ support
      * for a given file type.
      */
-
-    // NOTE: sch filter must be first because of a test in AddFile() below
-    m_filters.emplace_back( wxT( "^.*\\.sch$" ) );
-
     for( int ii = 0; s_allowedExtensionsToList[ii] != NULL; ii++ )
         m_filters.emplace_back( s_allowedExtensionsToList[ii] );
 
@@ -322,10 +320,7 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
             if( reg.Matches( aName ) )
             {
                 addFile = true;
-
-                if( i == 0 )
-                    isSchematic = true;
-
+                isSchematic = ( fn.GetExt() == "sch" || fn.GetExt() == "kicad_sch" );
                 break;
             }
         }
