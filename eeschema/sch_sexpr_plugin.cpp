@@ -299,9 +299,9 @@ static void formatStroke( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aWidt
 
     if( !( aColor == COLOR4D::UNSPECIFIED ) )
         aFormatter->Print( 0, " (color %d %d %d %0.4f)",
-                           static_cast<int>( aColor.r * 255.0 + 0.5 ),
-                           static_cast<int>( aColor.g * 255.0 + 0.5 ),
-                           static_cast<int>( aColor.b * 255.0 + 0.5 ),
+                           KiROUND( aColor.r * 255.0 ),
+                           KiROUND( aColor.g * 255.0 ),
+                           KiROUND( aColor.b * 255.0 ),
                            aColor.a );
 
     aFormatter->Print( 0, ")" );
@@ -961,11 +961,20 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
                       aSheet->GetBorderColor() );
     }
 
+    if( !( aSheet->GetBackgroundColor() == COLOR4D::UNSPECIFIED ) )
+    {
+        m_out->Print( 0, " (fill (color %d %d %d %0.4f))",
+                      KiROUND( aSheet->GetBackgroundColor().r * 255.0 ),
+                      KiROUND( aSheet->GetBackgroundColor().g * 255.0 ),
+                      KiROUND( aSheet->GetBackgroundColor().b * 255.0 ),
+                      aSheet->GetBackgroundColor().a );
+    }
+
     m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel + 1, "(uuid %s)", TO_UTF8( aSheet->m_Uuid.AsString() ) );
     m_out->Print( 0, "\n" );
 
-    for( auto field : aSheet->GetFields() )
+    for( const SCH_FIELD& field : aSheet->GetFields() )
     {
         SCH_FIELD tmp = field;
 
@@ -977,7 +986,7 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
         saveField( &tmp, aNestLevel + 1 );
     }
 
-    for( const auto pin : aSheet->GetPins() )
+    for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
     {
         m_out->Print( aNestLevel + 1, "(pin %s %s (at %s %s %s)",
                       EscapedUTF8( pin->GetText() ).c_str(),

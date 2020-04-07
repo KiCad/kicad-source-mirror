@@ -74,11 +74,22 @@ public:
     STROKE_PARAMS( int aWidth = Mils2iu( DEFAULT_LINE_WIDTH ),
                    PLOT_DASH_TYPE aType = PLOT_DASH_TYPE::DEFAULT,
                    const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) :
-    m_Width( aWidth ),
-    m_Type( aType ),
-    m_Color( aColor )
+            m_Width( aWidth ),
+            m_Type( aType ),
+            m_Color( aColor )
     {
     }
+};
+
+
+/**
+ * Simple container to manage fill parameters.
+ */
+class FILL_PARAMS
+{
+public:
+    FILL_T m_FillType;
+    COLOR4D m_Color;
 };
 
 
@@ -175,7 +186,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
      */
     void parseStroke( STROKE_PARAMS& aStroke );
 
-    FILL_T parseFillMode();
+    void parseFill( FILL_PARAMS& aFill );
 
     void parseEDA_TEXT( EDA_TEXT* aText );
     void parsePinNames( std::unique_ptr<LIB_PART>& aSymbol );

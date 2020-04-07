@@ -433,10 +433,10 @@ void SCH_SEXPR_PARSER::parseStroke( STROKE_PARAMS& aStroke )
 
         case T_color:
             aStroke.m_Color =
-                    COLOR4D( wxColour( static_cast<unsigned char>( parseInt( "red" ) ),
-                                       static_cast<unsigned char>( parseInt( "green" ) ),
-                                       static_cast<unsigned char>( parseInt( "blue" ) ),
-                                       static_cast<unsigned char>( parseInt( "alpha" ) ) ) );
+                    COLOR4D( parseInt( "red" ) / 255.0,
+                             parseInt( "green" ) / 255.0,
+                             parseInt( "blue" ) / 255.0,
+                             parseDouble( "alpha" ) );
             NeedRIGHT();
             break;
 
@@ -448,43 +448,56 @@ void SCH_SEXPR_PARSER::parseStroke( STROKE_PARAMS& aStroke )
 }
 
 
-FILL_T SCH_SEXPR_PARSER::parseFillMode()
+void SCH_SEXPR_PARSER::parseFill( FILL_PARAMS& aFill )
 {
-    wxCHECK_MSG( CurTok() == T_fill, NO_FILL,
+    wxCHECK_RET( CurTok() == T_fill,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as fill." ) );
 
-    NeedLEFT();
-    T token = NextTok();
+    aFill.m_FillType = NO_FILL;
+    aFill.m_Color = COLOR4D::UNSPECIFIED;
 
-    if( token != T_type )
-        Expecting( "type" );
+    T token;
 
-    token = NextTok();
-
-    FILL_T fillType = NO_FILL;
-
-    switch( token )
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
-    case T_none:
-        fillType = NO_FILL;
-        break;
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
 
-    case T_outline:
-        fillType = FILLED_SHAPE;
-        break;
+        token = NextTok();
 
-    case T_background:
-        fillType = FILLED_WITH_BG_BODYCOLOR;
-        break;
+        switch( token )
+        {
+        case T_type:
+        {
+            token = NextTok();
 
-    default:
-        Expecting( "none, outline, or background" );
+            switch( token )
+            {
+            case T_none:       aFill.m_FillType = NO_FILL;                  break;
+            case T_outline:    aFill.m_FillType = FILLED_SHAPE;             break;
+            case T_background: aFill.m_FillType = FILLED_WITH_BG_BODYCOLOR; break;
+            default:
+                Expecting( "none, outline, or background" );
+            }
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_color:
+            aFill.m_Color =
+                    COLOR4D( parseInt( "red" ) / 255.0,
+                             parseInt( "green" ) / 255.0,
+                             parseInt( "blue" ) / 255.0,
+                             parseDouble( "alpha" ) );
+
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "type or color" );
+        }
     }
-
-    NeedRIGHT();  // Closes type token.
-    NeedRIGHT();  // Closes fill token.
-
-    return fillType;
 }
 
 
@@ -794,6 +807,7 @@ LIB_ARC* SCH_SEXPR_PARSER::parseArc()
     wxPoint midPoint;
     wxPoint endPoint;
     wxPoint pos;
+    FILL_PARAMS fill;
     bool hasMidPoint = false;
     std::unique_ptr<LIB_ARC> arc( new LIB_ARC( nullptr ) );
 
@@ -878,7 +892,8 @@ LIB_ARC* SCH_SEXPR_PARSER::parseArc()
             break;
 
         case T_fill:
-            arc->SetFillMode( parseFillMode() );
+            parseFill( fill );
+            arc->SetFillMode( fill.m_FillType );
             break;
 
         default:
@@ -911,6 +926,7 @@ LIB_BEZIER* SCH_SEXPR_PARSER::parseBezier()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a bezier." ) );
 
     T token;
+    FILL_PARAMS fill;
     std::unique_ptr<LIB_BEZIER> bezier( new LIB_BEZIER( nullptr ) );
 
     bezier->SetUnit( m_unit );
@@ -956,7 +972,8 @@ LIB_BEZIER* SCH_SEXPR_PARSER::parseBezier()
             break;
 
         case T_fill:
-            bezier->SetFillMode( parseFillMode() );
+            parseFill( fill );
+            bezier->SetFillMode( fill.m_FillType );
             break;
 
         default:
@@ -974,6 +991,7 @@ LIB_CIRCLE* SCH_SEXPR_PARSER::parseCircle()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a circle token." ) );
 
     T token;
+    FILL_PARAMS fill;
     std::unique_ptr<LIB_CIRCLE> circle( new LIB_CIRCLE( nullptr ) );
 
     circle->SetUnit( m_unit );
@@ -1011,7 +1029,8 @@ LIB_CIRCLE* SCH_SEXPR_PARSER::parseCircle()
             break;
 
         case T_fill:
-            circle->SetFillMode( parseFillMode() );
+            parseFill( fill );
+            circle->SetFillMode( fill.m_FillType );
             break;
 
         default:
@@ -1269,6 +1288,7 @@ LIB_POLYLINE* SCH_SEXPR_PARSER::parsePolyLine()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a polyline." ) );
 
     T token;
+    FILL_PARAMS fill;
     std::unique_ptr<LIB_POLYLINE> polyLine( new LIB_POLYLINE( nullptr ) );
 
     polyLine->SetUnit( m_unit );
@@ -1314,7 +1334,8 @@ LIB_POLYLINE* SCH_SEXPR_PARSER::parsePolyLine()
             break;
 
         case T_fill:
-            polyLine->SetFillMode( parseFillMode() );
+            parseFill( fill );
+            polyLine->SetFillMode( fill.m_FillType );
             break;
 
         default:
@@ -1332,6 +1353,7 @@ LIB_RECTANGLE* SCH_SEXPR_PARSER::parseRectangle()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a rectangle token." ) );
 
     T token;
+    FILL_PARAMS fill;
     std::unique_ptr<LIB_RECTANGLE> rectangle( new LIB_RECTANGLE( nullptr ) );
 
     rectangle->SetUnit( m_unit );
@@ -1369,7 +1391,8 @@ LIB_RECTANGLE* SCH_SEXPR_PARSER::parseRectangle()
             break;
 
         case T_fill:
-            rectangle->SetFillMode( parseFillMode() );
+            parseFill( fill );
+            rectangle->SetFillMode( fill.m_FillType );
             break;
 
         default:
@@ -2096,6 +2119,7 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
 
     T token;
     STROKE_PARAMS stroke;
+    FILL_PARAMS fill;
     SCH_FIELD* field;
     std::vector<SCH_FIELD> fields;
     std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET() );
@@ -2128,7 +2152,11 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
             parseStroke( stroke );
             sheet->SetBorderWidth( stroke.m_Width );
             sheet->SetBorderColor( stroke.m_Color );
-            NeedRIGHT();
+            break;
+
+        case T_fill:
+            parseFill( fill );
+            sheet->SetBackgroundColor( fill.m_Color );
             break;
 
         case T_uuid:
@@ -2166,7 +2194,7 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
             break;
 
         default:
-            Expecting( "at, size, stroke, uuid, property, or pin" );
+            Expecting( "at, size, stroke, background, uuid, property, or pin" );
         }
     }
 

@@ -40,14 +40,11 @@
  * is the set of fill types used in plotting or drawing enclosed areas.
  */
 enum FILL_T {
-    NO_FILL,                     // Poly, Square, Circle, Arc = option No Fill
-    FILLED_SHAPE,                /* Poly, Square, Circle, Arc = option Fill
-                                  * with current color ("Solid shape") */
-    FILLED_WITH_BG_BODYCOLOR     /* Poly, Square, Circle, Arc = option Fill
-                                  * with background body color, translucent
-                                  * (texts inside this shape can be seen)
-                                  * not filled in B&W mode when plotting or
-                                  * printing */
+    NO_FILL,
+    FILLED_SHAPE,                // Fill with object color ("Solid shape")
+    FILLED_WITH_BG_BODYCOLOR,    // Fill with background body color
+                                 //   (not filled in B&W mode when plotting or printing)
+    FILLED_WITH_COLOR            // Fill with a user-defined color (currently sheets only)
 };
 
 
