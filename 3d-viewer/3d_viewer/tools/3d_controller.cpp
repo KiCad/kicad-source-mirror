@@ -65,6 +65,8 @@ void EDA_3D_CONTROLLER::Reset( RESET_REASON aReason )
 {
     TOOLS_HOLDER* holder = m_toolMgr->GetToolHolder();
 
+    wxASSERT( holder );
+
     m_canvas = nullptr;
     m_boardAdapter = nullptr;
     m_camera = nullptr;
@@ -74,7 +76,9 @@ void EDA_3D_CONTROLLER::Reset( RESET_REASON aReason )
         m_canvas = dynamic_cast<EDA_3D_CANVAS*>( holder->GetToolCanvas() );
 
         EDA_3D_BOARD_HOLDER* holder3d =
-                dynamic_cast<EDA_3D_BOARD_HOLDER*>( holder->GetToolCanvas() );
+                dynamic_cast<EDA_3D_BOARD_HOLDER*>( holder );
+
+        wxASSERT( holder3d );
 
         if( holder3d )
         {
