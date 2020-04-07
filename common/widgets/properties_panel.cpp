@@ -28,10 +28,17 @@
 
 using namespace std;
 
+extern wxPGGlobalVarsClass* wxPGGlobalVars;
+
 PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame )
     : wxPanel( aParent ), m_frame( aFrame )
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+
+    // on some platforms wxPGGlobalVars is initialized automatically,
+    // but others need an explicit init
+    if( !wxPGGlobalVars )
+        wxPGInitResourceModule();
 
     m_grid = new wxPropertyGrid( this, wxID_ANY, wxDefaultPosition, wxSize( 300, 400 ),
             wxPG_AUTO_SORT | wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE );
