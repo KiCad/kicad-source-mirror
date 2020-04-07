@@ -39,6 +39,8 @@
 #include <rc_item.h>
 #include <wx/wupdlock.h>
 #include <widgets/ui_common.h>
+#include <pcb_layer_widget.h>
+
 
 DIALOG_DRC::DIALOG_DRC( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         DIALOG_DRC_BASE( aParent ),
@@ -205,7 +207,9 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     wxEndBusyCursor();
 
     refreshBoardEditor();
-    SetFocus();
+
+    wxSafeYield();
+    Raise();
     m_Notebook->GetPage( m_Notebook->GetSelection() )->SetFocus();
 }
 
@@ -238,7 +242,17 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 {
     const KIID&   itemID = RC_TREE_MODEL::ToUUID( aEvent.GetItem() );
     BOARD_ITEM*   item = m_brdEditor->GetBoard()->GetItem( itemID );
+    LSET          visibleLayers = m_brdEditor->GetBoard()->GetVisibleLayers();
     WINDOW_THAWER thawer( m_brdEditor );
+
+    if( item && ( item->GetLayerSet() & visibleLayers ) == 0 )
+    {
+        if( IsOK( this, wxString::Format( _( "Item not currently visible.\nShow the '%s' layer?" ),
+                                          item->GetLayerName() ) ) )
+        {
+            m_brdEditor->GetLayerManager()->SetLayerVisible( item->GetLayer(), true );
+        }
+    }
 
     m_brdEditor->FocusOnItem( item );
     m_brdEditor->GetCanvas()->Refresh();
