@@ -584,7 +584,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
                 segment = startSegments( aType, VECTOR2D( cursorPos ) );
             }
             // Create a new segment if we're out of previously-created ones
-            else if( !segment->IsNull() || ( forceHV && !m_wires.end()[-2]->IsNull() ) )
+            else if( !segment->IsNull() || ( forceHV && !m_wires[ m_wires.size() - 2 ]->IsNull() ) )
             {
                 // Terminate the command if the end point is on a pin, junction, or another
                 // wire or bus.
@@ -611,7 +611,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
             if( evt->IsDblClick( BUT_LEFT ) && segment )
             {
                 if( forceHV && m_wires.size() >= 2 )
-                    computeBreakPoint( { m_wires.end()[-2], segment }, cursorPos );
+                    computeBreakPoint( { m_wires[ m_wires.size() - 2 ], segment }, cursorPos );
 
                 finishSegments();
                 segment = nullptr;
@@ -665,7 +665,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
             {
                 // Coerce the line to vertical or horizontal if necessary
                 if( forceHV && m_wires.size() >= 2 )
-                    computeBreakPoint( { m_wires.end()[-2], segment }, cursorPos );
+                    computeBreakPoint( { m_wires[ m_wires.size() - 2 ], segment }, cursorPos );
                 else
                     segment->SetEndPoint( cursorPos );
             }

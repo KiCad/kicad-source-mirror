@@ -1580,23 +1580,7 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
                     m_pen.SetStyle( wxPENSTYLE_DOT );
                     dc.SetPen( m_pen );
 
-                    if( (m_flags == mpALIGN_LEFT) && !m_drawOutsideMargins )
-                    {
-                        dc.DrawLine( orgx - 4, p, endPx, p );
-                    }
-                    else
-                    {
-                        if( (m_flags == mpALIGN_RIGHT) && !m_drawOutsideMargins )
-                        {
-                            // dc.DrawLine( orgX-4, p, orgx+4, p);
-                            dc.DrawLine( orgx - 4, p, endPx, p );
-                        }
-                        else
-                        {
-                            dc.DrawLine( orgx - 4, p, endPx, p );
-                            // dc.DrawLine( orgx-4/*-w.GetScrX()*/, p, w.GetScrX(), p);
-                        }
-                    }
+                    dc.DrawLine( orgx - 4, p, endPx, p );
 
                     m_pen.SetStyle( wxPENSTYLE_SOLID );
                     dc.SetPen( m_pen );

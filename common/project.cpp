@@ -463,29 +463,25 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
     // This is a lazy loading function, it loads the project specific table when
     // that table is asked for, not before.
 
-    FP_LIB_TABLE*   tbl = (FP_LIB_TABLE*) GetElem( ELEM_FPTBL );
+    FP_LIB_TABLE* tbl = (FP_LIB_TABLE*) GetElem( ELEM_FPTBL );
 
-    // its gotta be NULL or a FP_LIB_TABLE, or a bug.
-    wxASSERT( !tbl || tbl->Type() == FP_LIB_TABLE_T );
-
-    if( !tbl )
+    if( tbl )
     {
-        // Build a new project specific FP_LIB_TABLE with the global table as a fallback.
-        // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
-        // stack this way, all using the same global fallback table.
-        KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
-
-        if( kiface )
-            tbl = (FP_LIB_TABLE*) kiface->IfaceOrAddress( KIFACE_NEW_FOOTPRINT_TABLE );
-
-        wxASSERT( tbl );
-        SetElem( ELEM_FPTBL, tbl );
-
-        wxString projectFpLibTableFileName = FootprintLibTblName();
-
+        wxASSERT( tbl->Type() == FP_LIB_TABLE_T );
+    }
+    else
+    {
         try
         {
-            tbl->Load( projectFpLibTableFileName );
+            // Build a new project specific FP_LIB_TABLE with the global table as a fallback.
+            // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
+            // stack this way, all using the same global fallback table.
+            KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
+
+            tbl = (FP_LIB_TABLE*) kiface->IfaceOrAddress( KIFACE_NEW_FOOTPRINT_TABLE );
+            tbl->Load( FootprintLibTblName() );
+
+            SetElem( ELEM_FPTBL, tbl );
         }
         catch( const IO_ERROR& ioe )
         {
