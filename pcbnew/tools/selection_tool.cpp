@@ -2146,6 +2146,17 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         }
     }
 
+    bool hasNonModules = false;
+
+    for( int i = 0; i < aCollector.GetCount(); ++i )
+    {
+        if( aCollector[i]->Type() != PCB_MODULE_T )
+        {
+            hasNonModules = true;
+            break;
+        }
+    }
+
     if( aCollector.CountType( PCB_MODULE_T ) > 0 )
     {
         double maxArea = calcMaxArea( aCollector, PCB_MODULE_T );
@@ -2175,7 +2186,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                     continue;
                 // reject ALL OTHER footprints if there's still something else left
                 // to select
-                else if( (int)( rejected.size() + 1 ) < aCollector.GetCount() )
+                else if( hasNonModules )
                     rejected.insert( mod );
             }
         }
