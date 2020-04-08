@@ -968,13 +968,39 @@ static void export_vrml_tracks( MODEL_VRML& aModel, BOARD* pcb )
             export_vrml_via( aModel, pcb, (const VIA*) track );
         }
         else if( ( track->GetLayer() == B_Cu || track->GetLayer() == F_Cu )
-                   && !aModel.m_plainPCB )
-            export_vrml_line( aModel, track->GetLayer(),
-                              track->GetStart().x * BOARD_SCALE,
-                              track->GetStart().y * BOARD_SCALE,
-                              track->GetEnd().x * BOARD_SCALE,
-                              track->GetEnd().y * BOARD_SCALE,
-                              track->GetWidth() * BOARD_SCALE );
+                 && !aModel.m_plainPCB )
+        {
+            if( track->Type() == PCB_ARC_T )
+            {
+                ARC* arc = static_cast<ARC*>( track );
+                VECTOR2D center( arc->GetCenter() );
+                double arc_angle_degree = arc->GetAngle()/10;
+
+                // Vrml exporter does not export arcs with angle < 1.0 degree
+                // ( to avoid issues with vrml viewers).
+                // The best way is to convert them to a small straight line
+                if( arc_angle_degree < -1.0 || arc_angle_degree > 1.0 )
+                    export_vrml_arc( aModel, track->GetLayer(),
+                                     center.x * BOARD_SCALE, center.y * BOARD_SCALE,
+                                     arc->GetStart().x * BOARD_SCALE,
+                                     arc->GetStart().y * BOARD_SCALE,
+                                     arc->GetWidth() * BOARD_SCALE, arc_angle_degree );
+                else
+                    export_vrml_line( aModel, arc->GetLayer(),
+                                      arc->GetStart().x * BOARD_SCALE,
+                                      arc->GetStart().y * BOARD_SCALE,
+                                      arc->GetEnd().x * BOARD_SCALE,
+                                      arc->GetEnd().y * BOARD_SCALE,
+                                      arc->GetWidth() * BOARD_SCALE );
+            }
+            else
+                export_vrml_line( aModel, track->GetLayer(),
+                                  track->GetStart().x * BOARD_SCALE,
+                                  track->GetStart().y * BOARD_SCALE,
+                                  track->GetEnd().x * BOARD_SCALE,
+                                  track->GetEnd().y * BOARD_SCALE,
+                                  track->GetWidth() * BOARD_SCALE );
+        }
     }
 }
 

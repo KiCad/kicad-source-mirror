@@ -575,7 +575,20 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         gbr_metadata.SetNetName( track->GetNetname() );
         int width = track->GetWidth() + itemplotter.getFineWidthAdj();
         aPlotter->SetColor( itemplotter.getColor( track->GetLayer() ) );
-        aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode, &gbr_metadata );
+
+        if( track->Type() == PCB_ARC_T )
+        {
+            ARC* arc = static_cast<ARC*>( track );
+            VECTOR2D center( arc->GetCenter() );
+            auto radius = arc->GetRadius();
+            auto start_angle = arc->GetArcAngleStart();
+            auto end_angle = start_angle + arc->GetAngle();
+
+            aPlotter->ThickArc( wxPoint( center.x, center.y ), -end_angle, -start_angle,
+                                radius, width, plotMode, &gbr_metadata );
+        }
+        else
+            aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode, &gbr_metadata );
     }
 
     aPlotter->EndBlock( NULL );
