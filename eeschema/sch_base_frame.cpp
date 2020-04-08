@@ -368,8 +368,9 @@ void SCH_BASE_FRAME::FocusOnItem( SCH_ITEM* aItem )
         {
             SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( aItem->GetParent() );
 
+            // for a pin, GetPosition() is relative to the symbol, not rotated, not mirrored
+            // calculate the physical position:
             wxPoint delta;
-            position -= comp->GetPosition();
             delta = comp->GetTransform().TransformCoordinate( position );
             position = delta + comp->GetPosition();
         }
