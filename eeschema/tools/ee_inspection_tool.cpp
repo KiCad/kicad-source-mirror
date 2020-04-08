@@ -78,8 +78,12 @@ int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
         wxWindow* erc = wxWindow::FindWindowById( ID_DIALOG_ERC, m_frame );
 
         if( erc )
+        {
+            // Needed at least on Windows. Raise() is not enough
+            erc->Show( true );
             // Bring it to the top if already open.  Dual monitor users need this.
             erc->Raise();
+        }
         else
             InvokeDialogERC( static_cast<SCH_EDIT_FRAME*>( m_frame ) );
     }

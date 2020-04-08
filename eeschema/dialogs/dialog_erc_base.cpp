@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -107,7 +107,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttondelmarkers = new wxButton( this, ID_ERASE_DRC_MARKERS, _("Delete Markers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonsSizer->Add( m_buttondelmarkers, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 8 );
+	m_buttonsSizer->Add( m_buttondelmarkers, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 8 );
 
 
 	m_buttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -119,7 +119,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	m_buttonsSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	m_buttonsSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
 
 
 	bSizer1->Add( m_buttonsSizer, 0, wxEXPAND|wxLEFT, 5 );
