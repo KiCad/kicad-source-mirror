@@ -22,9 +22,9 @@
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/textctrl.h>
-#include <wx/panel.h>
+#include <wx/statline.h>
 #include <wx/scrolwin.h>
+#include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -39,18 +39,9 @@ class PANEL_COLOR_SETTINGS_BASE : public wxPanel
 		wxBoxSizer* m_mainSizer;
 		wxStaticText* m_staticText9;
 		wxChoice* m_cbTheme;
-		wxButton* m_btnSave;
-		wxButton* m_btnNew;
-		wxButton* m_btnRename;
 		wxButton* m_btnReset;
 		wxButton* m_btnOpenFolder;
-		wxPanel* m_panelThemeProperties;
-		wxBoxSizer* m_sizerThemeProperties;
-		wxStaticText* m_staticText6;
-		wxTextCtrl* m_txtThemeName;
-		wxStaticText* m_staticText7;
-		wxTextCtrl* m_txtFilename;
-		wxStaticText* m_lblThemePropertiesError;
+		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_colorsMainSizer;
 		wxScrolledWindow* m_colorsListWindow;
 		wxFlexGridSizer* m_colorsGridSizer;
@@ -58,14 +49,8 @@ class PANEL_COLOR_SETTINGS_BASE : public wxPanel
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnThemeChanged( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnBtnSaveClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnBtnNewClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnBtnRenameClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBtnResetClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBtnOpenThemeFolderClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnThemeNameChanged( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnFilenameChar( wxKeyEvent& event ) { event.Skip(); }
-		virtual void OnFilenameChanged( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

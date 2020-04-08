@@ -18,22 +18,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <confirm.h>
 #include <launch_ext.h>
 #include <panel_color_settings.h>
-#include <pgm_base.h>
 #include <settings/settings_manager.h>
 
 
 PANEL_COLOR_SETTINGS::PANEL_COLOR_SETTINGS( wxWindow* aParent ) :
         PANEL_COLOR_SETTINGS_BASE( aParent )
 {
+#ifdef __APPLE__
+    m_btnOpenFolder->SetLabel( _( "Reveal Themes in Finder" ) );
+#endif
 }
 
 
 void PANEL_COLOR_SETTINGS::OnBtnOpenThemeFolderClicked( wxCommandEvent& event )
 {
-    wxString cmd;
-    wxString dir( Pgm().GetSettingsManager().GetColorSettingsPath() );
+    wxString dir( SETTINGS_MANAGER::GetColorSettingsPath() );
     LaunchExternal( dir );
 }

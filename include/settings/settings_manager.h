@@ -175,6 +175,11 @@ public:
     bool GetPreviousVersionPaths( std::vector<wxString>* aName = nullptr );
 
     /**
+     * Re-scans the color themes directory, reloading any changes it finds.
+     */
+    void ReloadColorSettings();
+
+    /**
      * Checks if a given path is probably a valid KiCad configuration directory.
      * Actually it just checks if a file called "kicad_common" exists, because that's probably
      * good enough for now.

@@ -45,6 +45,7 @@
 #include <view/view.h>
 #include <ws_proxy_view_item.h>
 #include <sch_base_frame.h>
+#include <validators.h>
 
 // Width and height of every (color-displaying / bitmap) button in dialog units
 const wxSize BUTTON_SIZE( 24, 12 );
@@ -62,16 +63,17 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
           m_currentSettings( nullptr ),
           m_page( nullptr ),
           m_titleBlock( nullptr ),
+          m_ws( nullptr ),
           m_previewItems(),
           m_buttons(),
-          m_filenameEdited( false ),
-          m_isNewTheme( false ),
-          m_dirty( false ),
           m_copied( COLOR4D::UNSPECIFIED )
 {
     m_buttonSizePx = ConvertDialogToPixels( BUTTON_SIZE );
 
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+
+    mgr.ReloadColorSettings();
+
     COMMON_SETTINGS*   common_settings = Pgm().GetCommonSettings();
     EESCHEMA_SETTINGS* app_settings = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
     COLOR_SETTINGS*    current = mgr.GetColorSettings( app_settings->m_ColorTheme );
@@ -85,6 +87,9 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
         if( settings == current )
             m_cbTheme->SetSelection( pos );
     }
+
+    m_cbTheme->Append( wxT( "---" ) );
+    m_cbTheme->Append( _( "New Theme..." ) );
 
     m_currentSettings = new COLOR_SETTINGS( *current );
 
@@ -127,7 +132,16 @@ PANEL_EESCHEMA_COLOR_SETTINGS::~PANEL_EESCHEMA_COLOR_SETTINGS()
 
 bool PANEL_EESCHEMA_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    return saveCurrentTheme();
+    if( !saveCurrentTheme( true ) )
+        return false;
+
+    m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( m_currentSettings );
+
+    SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* app_settings = settingsMgr.GetAppSettings<EESCHEMA_SETTINGS>();
+    app_settings->m_ColorTheme = m_currentSettings->GetFilename();
+
+    return true;
 }
 
 
@@ -138,49 +152,31 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::TransferDataToWindow()
 }
 
 
-bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme()
+bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme( bool aValidate )
 {
-    SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
-    COLOR4D bgcolor = m_currentSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
-
-    for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
+    if( aValidate )
     {
-        if( bgcolor == m_currentSettings->GetColor( layer )
-            && layer != LAYER_SCHEMATIC_BACKGROUND && layer != LAYER_SHEET_BACKGROUND )
+        COLOR4D bgcolor = m_currentSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+
+        for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
         {
-            wxString msg = _( "Some items have the same color as the background\n"
-                              "and they will not be seen on the screen.  Are you\n"
-                              "sure you want to use these colors?" );
+            if( bgcolor == m_currentSettings->GetColor( layer )
+                && layer != LAYER_SCHEMATIC_BACKGROUND && layer != LAYER_SHEET_BACKGROUND )
+            {
+                wxString msg = _( "Some items have the same color as the background\n"
+                                  "and they will not be seen on the screen.  Are you\n"
+                                  "sure you want to use these colors?" );
 
-            if( wxMessageBox( msg, _( "Warning" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
-                return false;
+                if( wxMessageBox( msg, _( "Warning" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
+                    return false;
 
-            break;
+                break;
+            }
         }
     }
 
-    bool dirty = m_dirty;
-    COLOR_SETTINGS* selected;
-
-    if( !m_isNewTheme )
-    {
-        int  idx = m_cbTheme->GetSelection();
-        selected = static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( idx ) );
-    }
-    else
-    {
-        if( !validateFilename() )
-            return false;
-
-        selected = settingsMgr.AddNewColorSettings( m_txtFilename->GetValue().ToStdString() );
-
-        selected->SetName( m_txtThemeName->GetValue() );
-        settingsMgr.Save( selected );
-        dirty = true;
-
-        m_cbTheme->SetSelection( m_cbTheme->Append( m_txtThemeName->GetValue(),
-                                                    static_cast<void*>( selected ) ) );
-    }
+    SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
+    COLOR_SETTINGS* selected = settingsMgr.GetColorSettings( m_currentSettings->GetFilename() );
 
     for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
     {
@@ -201,24 +197,10 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme()
             color.Darken( 0.01 );
         }
 
-        if( !dirty && selected->GetColor( layer ) != color )
-            dirty = true;
-
         selected->SetColor( layer, color );
     }
 
-    KIGFX::RENDER_SETTINGS* settings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
-    settings->LoadColors( selected );
-
-    if( dirty )
-    {
-        settingsMgr.SaveColorSettings( selected, "schematic" );
-        m_dirty = false;
-    }
-
-    EESCHEMA_SETTINGS* app_settings = settingsMgr.GetAppSettings<EESCHEMA_SETTINGS>();
-
-    app_settings->m_ColorTheme = selected->GetFilename();
+    settingsMgr.SaveColorSettings( selected, "schematic" );
 
     return true;
 }
@@ -445,8 +427,6 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::SetColor( wxCommandEvent& event )
 void PANEL_EESCHEMA_COLOR_SETTINGS::updateColor( SCH_LAYER_ID aLayer, const KIGFX::COLOR4D& aColor )
 {
     m_currentSettings->SetColor( aLayer, aColor );
-    m_dirty = true;
-    m_btnSave->Enable();
 
     drawButton( m_buttons[aLayer], aColor );
 
@@ -466,9 +446,6 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnBtnResetClicked( wxCommandEvent& event )
         m_currentSettings->SetColor( layer, defaultColor );
         drawButton( button, defaultColor );
     }
-
-    m_dirty = true;
-    m_btnSave->Enable();
 
     updatePreview();
 }
@@ -512,140 +489,70 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnSize( wxSizeEvent& aEvent )
 }
 
 
-void PANEL_EESCHEMA_COLOR_SETTINGS::showThemeNamePanel( bool aShow )
-{
-    m_panelThemeProperties->Show( aShow );
-    Layout();
-}
-
-
-void PANEL_EESCHEMA_COLOR_SETTINGS::OnBtnNewClicked( wxCommandEvent& event )
-{
-    m_txtFilename->Enable();
-
-    m_txtThemeName->SetValue( "" );
-    m_txtFilename->SetValue( "" );
-
-    showThemeNamePanel();
-
-    m_btnSave->Enable();
-    m_txtThemeName->SetFocus();
-    m_filenameEdited = false;
-    m_isNewTheme     = true;
-}
-
-
-void PANEL_EESCHEMA_COLOR_SETTINGS::OnBtnRenameClicked( wxCommandEvent& event )
-{
-    // "User" theme can't be renamed, it is the default if no other themes exist
-    if( m_currentSettings->GetFilename() == "user" )
-        return;
-
-    m_isNewTheme = false;
-    m_txtFilename->Disable();
-    showThemeNamePanel();
-}
-
-
-void PANEL_EESCHEMA_COLOR_SETTINGS::OnBtnSaveClicked( wxCommandEvent& event )
-{
-    if( ( !m_isNewTheme || validateFilename() ) && saveCurrentTheme() )
-    {
-        m_isNewTheme = false;
-        showThemeNamePanel( false );
-        m_btnSave->Disable();
-    }
-}
-
-
 void PANEL_EESCHEMA_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
 {
-    // TODO(JE) If dirty here, we should prompt to save the previous theme first
-    int  idx      = m_cbTheme->GetSelection();
-    auto selected = static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( idx ) );
+    int idx = m_cbTheme->GetSelection();
 
-    if( selected->GetFilename() != m_currentSettings->GetFilename() )
+    if( idx == m_cbTheme->GetCount() - 2 )
     {
-        *m_currentSettings = *selected;
-        updatePreview();
-
-        for( auto pair : m_buttons )
-            drawButton( pair.second, m_currentSettings->GetColor( pair.first ) );
+        // separator; re-select active theme
+        m_cbTheme->SetStringSelection( m_currentSettings->GetName() );
+        return;
     }
 
-    m_isNewTheme     = false;
-    m_filenameEdited = false;
-    showThemeNamePanel( false );
-}
-
-
-void PANEL_EESCHEMA_COLOR_SETTINGS::OnThemeNameChanged( wxCommandEvent& event )
-{
-    if( !m_filenameEdited )
-        m_txtFilename->SetValue( suggestFilename( m_txtThemeName->GetValue() ) );
-}
-
-
-void PANEL_EESCHEMA_COLOR_SETTINGS::OnFilenameChanged( wxCommandEvent& event )
-{
-}
-
-
-void PANEL_EESCHEMA_COLOR_SETTINGS::OnFilenameChar( wxKeyEvent& event )
-{
-    // Once the user has typed something in the filename box, stop suggesting things
-    m_filenameEdited = true;
-
-    if( !m_lblThemePropertiesError->GetLabel().empty() )
-        validateFilename();
-
-    event.Skip();
-}
-
-
-bool PANEL_EESCHEMA_COLOR_SETTINGS::validateFilename()
-{
-    wxFileName fn( m_txtFilename->GetValue() );
-
-    fn.SetPath( Pgm().GetSettingsManager().GetColorSettingsPath() );
-
-    if( !fn.IsOk() )
+    if( idx == m_cbTheme->GetCount() - 1 )
     {
-        m_lblThemePropertiesError->SetLabel( _( "Invalid filename" ) );
-        return false;
-    }
+        // New Theme...
 
-    if( fn.Exists() && m_isNewTheme )
+        if( !saveCurrentTheme( false ) )
+            return;
+
+        MODULE_NAME_CHAR_VALIDATOR themeNameValidator;
+        wxTextEntryDialog dlg( this, _( "New theme name:" ), _( "Add Color Theme" ) );
+        dlg.SetTextValidator( themeNameValidator );
+
+        if( dlg.ShowModal() != wxID_OK )
+            return;
+
+        wxString themeName = dlg.GetValue();
+        wxFileName fn( themeName + wxT( ".json" ) );
+        fn.SetPath( SETTINGS_MANAGER::GetColorSettingsPath() );
+
+        if( fn.Exists() )
+        {
+            wxMessageBox( _( "Theme already exists!" ) );
+            return;
+        }
+
+        SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
+        COLOR_SETTINGS* newSettings = settingsMgr.AddNewColorSettings( themeName );
+        newSettings->SetName( themeName );
+
+        for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
+            newSettings->SetColor( layer, m_currentSettings->GetColor( layer ) );
+
+        newSettings->SaveToFile( settingsMgr.GetPathForSettingsFile( newSettings ) );
+
+        idx = m_cbTheme->Insert( themeName, idx - 1, static_cast<void*>( newSettings ) );
+        m_cbTheme->SetSelection( idx );
+        *m_currentSettings = *newSettings;
+    }
+    else
     {
-        m_lblThemePropertiesError->SetLabel( _( "File already exists!" ) );
-        return false;
+        COLOR_SETTINGS* selected = static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( idx ) );
+
+        if( selected->GetFilename() != m_currentSettings->GetFilename() )
+        {
+            if( !saveCurrentTheme( false ) )
+                return;
+
+            *m_currentSettings = *selected;
+            updatePreview();
+
+            for( auto pair : m_buttons )
+                drawButton( pair.second, m_currentSettings->GetColor( pair.first ) );
+        }
     }
-
-    if( fn.GetExt() != "json" )
-    {
-        m_lblThemePropertiesError->SetLabel( _( "File must end in .json" ) );
-        return false;
-    }
-
-    return true;
-}
-
-
-wxString PANEL_EESCHEMA_COLOR_SETTINGS::suggestFilename( const wxString& aThemeName )
-{
-    static const std::regex invalidChars( "[^-\\w_ ]+" );
-    static const std::regex whitespace( "\\s+" );
-
-    std::string themeName( aThemeName.ToUTF8() );
-
-    themeName = std::regex_replace( themeName, invalidChars, "" );
-    themeName = std::regex_replace( themeName, whitespace, "_" );
-
-    wxString filename( themeName.c_str(), wxConvUTF8 );
-    filename.MakeLower();
-    filename.Append( ".json" );
-
-    return filename;
 }
 
 

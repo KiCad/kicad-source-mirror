@@ -43,7 +43,8 @@ const char* traceSettings = "SETTINGS";
 
 
 SETTINGS_MANAGER::SETTINGS_MANAGER() :
-        m_common_settings( nullptr ), m_migration_source()
+        m_common_settings( nullptr ),
+        m_migration_source()
 {
     // Check if the settings directory already exists, and if not, perform a migration if possible
     if( !MigrateIfNeeded() )
@@ -95,8 +96,9 @@ void SETTINGS_MANAGER::Load()
 void SETTINGS_MANAGER::Load( JSON_SETTINGS* aSettings )
 {
     auto it = std::find_if( m_settings.begin(), m_settings.end(),
-                            [&aSettings]( const std::unique_ptr<JSON_SETTINGS>& aPtr ) {
-                              return aPtr.get() == aSettings;
+                            [&aSettings]( const std::unique_ptr<JSON_SETTINGS>& aPtr )
+                            {
+                                return aPtr.get() == aSettings;
                             } );
 
     if( it != m_settings.end() )
@@ -120,8 +122,9 @@ void SETTINGS_MANAGER::Save()
 void SETTINGS_MANAGER::Save( JSON_SETTINGS* aSettings )
 {
     auto it = std::find_if( m_settings.begin(), m_settings.end(),
-                            [&aSettings]( const std::unique_ptr<JSON_SETTINGS>& aPtr ) {
-                              return aPtr.get() == aSettings;
+                            [&aSettings]( const std::unique_ptr<JSON_SETTINGS>& aPtr )
+                            {
+                                return aPtr.get() == aSettings;
                             } );
 
     if( it != m_settings.end() )
@@ -135,9 +138,10 @@ void SETTINGS_MANAGER::Save( JSON_SETTINGS* aSettings )
 void SETTINGS_MANAGER::FlushAndRelease( JSON_SETTINGS* aSettings )
 {
     auto it = std::find_if( m_settings.begin(), m_settings.end(),
-            [&aSettings]( const std::unique_ptr<JSON_SETTINGS>& aPtr ) {
-                return aPtr.get() == aSettings;
-            } );
+                            [&aSettings]( const std::unique_ptr<JSON_SETTINGS>& aPtr )
+                            {
+                                return aPtr.get() == aSettings;
+                            } );
 
     if( it != m_settings.end() )
     {
@@ -150,21 +154,17 @@ void SETTINGS_MANAGER::FlushAndRelease( JSON_SETTINGS* aSettings )
 
 COLOR_SETTINGS* SETTINGS_MANAGER::GetColorSettings( const wxString& aName )
 {
+    if( m_color_settings.count( aName ) )
+        return m_color_settings.at( aName );
+
     COLOR_SETTINGS* ret = nullptr;
 
-    try
-    {
-        ret = m_color_settings.at( aName );
-    }
-    catch( std::out_of_range& )
-    {
-        if( !aName.empty() )
-            ret = loadColorSettingsByName( aName );
+    if( !aName.empty() )
+        ret = loadColorSettingsByName( aName );
 
-        // This had better work
-        if( !ret )
-            ret = m_color_settings.at( "user" );
-    }
+    // This had better work
+    if( !ret )
+        ret = m_color_settings.at( "user" );
 
     return ret;
 }
@@ -254,8 +254,10 @@ void SETTINGS_MANAGER::loadAllColorSettings()
     registerColorSettings( "user" );
 
     // Search for and load any other settings
-    COLOR_SETTINGS_LOADER loader(
-            [&]( const wxString& aFilename ) { registerColorSettings( aFilename ); } );
+    COLOR_SETTINGS_LOADER loader( [&]( const wxString& aFilename )
+                                  {
+                                      registerColorSettings( aFilename );
+                                  } );
 
     wxDir colors_dir( GetColorSettingsPath() );
 
@@ -264,13 +266,22 @@ void SETTINGS_MANAGER::loadAllColorSettings()
 }
 
 
+void SETTINGS_MANAGER::ReloadColorSettings()
+{
+    m_color_settings.clear();
+    loadAllColorSettings();
+}
+
+
 void SETTINGS_MANAGER::SaveColorSettings( COLOR_SETTINGS* aSettings, const std::string& aNamespace )
 {
     // The passed settings should already be managed
     wxASSERT( std::find_if( m_color_settings.begin(), m_color_settings.end(),
-                            [aSettings] ( const auto& el ) {
-                                return el.second == aSettings;
-                            } ) != m_color_settings.end() );
+                            [aSettings] ( const std::pair<wxString, COLOR_SETTINGS*>& el )
+                            {
+                                return el.second->GetFilename() == aSettings->GetFilename();
+                            }
+                            ) != m_color_settings.end() );
 
     nlohmann::json::json_pointer ptr = JSON_SETTINGS::PointerFromString( aNamespace );
 

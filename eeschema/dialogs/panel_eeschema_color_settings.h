@@ -53,19 +53,7 @@ protected:
 
     void OnBtnResetClicked( wxCommandEvent& aEvent ) override;
 
-    void OnBtnRenameClicked( wxCommandEvent& aEvent ) override;
-
     void OnThemeChanged( wxCommandEvent& aEvent ) override;
-
-    void OnBtnSaveClicked( wxCommandEvent& aEvent ) override;
-
-    void OnBtnNewClicked( wxCommandEvent& aEvent ) override;
-
-    void OnThemeNameChanged( wxCommandEvent& aEvent ) override;
-
-    void OnFilenameChanged( wxCommandEvent& aEvent ) override;
-
-    void OnFilenameChar( wxKeyEvent& aEvent ) override;
 
     void OnSize( wxSizeEvent& aEvent ) override;
 
@@ -97,15 +85,9 @@ private:
 
     std::map<SCH_LAYER_ID, wxBitmapButton*> m_buttons;
 
-    bool m_filenameEdited;
-
-    bool m_isNewTheme;
-
-    bool m_dirty;
-
     KIGFX::COLOR4D m_copied;
 
-    bool saveCurrentTheme();
+    bool saveCurrentTheme( bool aValidate );
 
     void createPreviewItems();
 
@@ -118,12 +100,6 @@ private:
     void updatePreview();
 
     void zoomFitPreview();
-
-    bool validateFilename();
-
-    void showThemeNamePanel( bool aShow = true );
-
-    static wxString suggestFilename( const wxString& aThemeName );
 };
 
 

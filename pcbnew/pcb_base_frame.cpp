@@ -815,7 +815,7 @@ void PCB_BASE_FRAME::UpdateGridSelectBox()
     }
 
     m_gridSelectBox->Append( wxT( "---" ) );
-    m_gridSelectBox->Append( _( "Edit user grid..." ) );
+    m_gridSelectBox->Append( _( "Edit User Grid..." ) );
 
     m_gridSelectBox->SetSelection( icurr );
 }

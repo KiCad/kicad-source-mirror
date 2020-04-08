@@ -199,7 +199,7 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
     m_mainToolBar->AddTool( ID_BROWSE_IN_FILE_EXPLORER, wxEmptyString,
                             KiScaledBitmap( directory_browser_xpm, this ),
 #ifdef __APPLE__
-                            _( "Reveal project directory in Finder" ) );
+                            _( "Reveal project folder in Finder" ) );
 #else
                             _( "Open project directory in file explorer" ) );
 #endif
