@@ -705,7 +705,8 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
                 _( "Print the contents of the file" ), KiBitmap( print_button_xpm ) );
     }
 
-    PopupMenu( &popup_menu );
+    if( popup_menu.GetMenuItemCount() > 0 )
+        PopupMenu( &popup_menu );
 }
 
 
@@ -738,9 +739,29 @@ void TREE_PROJECT_FRAME::OnOpenSelectedFileWithTextEditor( wxCommandEvent& event
 void TREE_PROJECT_FRAME::OnDeleteFile( wxCommandEvent& )
 {
     std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
+    wxString                       msg, caption;
 
-    for( TREEPROJECT_ITEM* item_data : tree_data )
-        item_data->Delete();
+    if( tree_data.size() == 1 )
+    {
+        bool is_directory = wxDirExists( tree_data[0]->GetFileName() );
+        msg               = wxString::Format(
+                _( "Are you sure you want to delete '%s'?" ), tree_data[0]->GetFileName() );
+        caption = is_directory ? _( "Delete Directory" ) : _( "Delete File" );
+    }
+    else
+    {
+        msg = wxString::Format(
+                _( "Are you sure you want to delete %lu items?" ), tree_data.size() );
+        caption = _( "Delete Multiple Items" );
+    }
+
+    wxMessageDialog dialog( m_parent, msg, caption, wxYES_NO | wxICON_QUESTION );
+
+    if( dialog.ShowModal() == wxID_YES )
+    {
+        for( TREEPROJECT_ITEM* item_data : tree_data )
+            item_data->Delete();
+    }
 }
 
 
