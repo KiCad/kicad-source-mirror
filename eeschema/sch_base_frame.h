@@ -374,6 +374,8 @@ public:
      */
     virtual void OnModify() {}
 
+    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
+
     /**
      * Helper to retrieve a layer color from the global color settings
      */

@@ -108,6 +108,8 @@ public:
     bool m_ShowDisabled;
     bool m_ShowUmbilicals;
 
+    bool m_OverrideItemColors;
+
     int  m_DefaultLineWidth;
     int  m_DefaultWireThickness;
     int  m_DefaultBusThickness;

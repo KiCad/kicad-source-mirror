@@ -17,6 +17,7 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/choice.h>
+#include <wx/checkbox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -49,11 +50,13 @@ class PANEL_COLOR_SETTINGS_BASE : public wxPanel
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnThemeChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOverrideItemColorsClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBtnResetClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBtnOpenThemeFolderClicked( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
+		wxCheckBox* m_optOverrideColors;
 
 		PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 826,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_COLOR_SETTINGS_BASE();

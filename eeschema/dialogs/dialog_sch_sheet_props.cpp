@@ -35,7 +35,7 @@
 #include <bitmaps.h>
 #include <eeschema_settings.h>
 #include <settings/color_settings.h>
-
+#include "panel_eeschema_color_settings.h"
 
 DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
                                                 bool* aClearAnnotationNewItems ) :
@@ -159,12 +159,12 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataToWindow()
     if( backgroundColor == COLOR4D::UNSPECIFIED )
         backgroundColor = colorSettings->GetColor( LAYER_SHEET_BACKGROUND );
 
-    m_borderColorSwatch->SetSwatchColor( borderColor, false );
-    m_backgroundColorSwatch->SetSwatchColor( backgroundColor, false );
+    m_borderSwatch->SetSwatchColor( borderColor, false );
+    m_backgroundSwatch->SetSwatchColor( backgroundColor, false );
 
     KIGFX::COLOR4D canvas = m_frame->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
-    m_borderColorSwatch->SetSwatchBackground( canvas );
-    m_backgroundColorSwatch->SetSwatchBackground( canvas );
+    m_borderSwatch->SetSwatchBackground( canvas );
+    m_backgroundSwatch->SetSwatchBackground( canvas );
 
     // set up the read-only fields
     m_heirarchyPath->SetValue( g_CurrentSheet->PathHumanReadable() );
@@ -286,8 +286,29 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
     m_sheet->SetFields( *m_fields );
 
     m_sheet->SetBorderWidth( m_borderWidth.GetValue() );
-    m_sheet->SetBorderColor( m_borderColorSwatch->GetSwatchColor() );
-    m_sheet->SetBackgroundColor( m_backgroundColorSwatch->GetSwatchColor() );
+
+    COLOR_SETTINGS* colorSettings = m_frame->GetColorSettings();
+
+    if( colorSettings->GetOverrideSchItemColors()
+            && ( m_sheet->GetBorderColor()     != m_borderSwatch->GetSwatchColor() ||
+                 m_sheet->GetBackgroundColor() != m_backgroundSwatch->GetSwatchColor() ) )
+    {
+        wxPanel temp( this );
+        temp.Hide();
+        PANEL_EESCHEMA_COLOR_SETTINGS prefs( m_frame, &temp );
+        wxString checkboxLabel = prefs.m_optOverrideColors->GetLabel();
+
+        KIDIALOG dlg( this, _( "Note: item colors are overridden in the current color theme." ),
+                      KIDIALOG::KD_WARNING );
+        dlg.ShowDetailedText( wxString::Format( _( "To see individual item colors uncheck '%s'\n"
+                                                   "in Preferences > Eeschema > Colors." ),
+                                                checkboxLabel ) );
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+        dlg.ShowModal();
+    }
+
+    m_sheet->SetBorderColor( m_borderSwatch->GetSwatchColor() );
+    m_sheet->SetBackgroundColor( m_backgroundSwatch->GetSwatchColor() );
 
     m_frame->TestDanglingEnds();
     m_frame->RefreshItem( m_sheet );

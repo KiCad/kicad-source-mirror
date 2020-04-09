@@ -117,7 +117,7 @@ private:
 
     std::vector<wxBitmapButton*> m_buttonsColor;    ///< list of defined colors buttons
 
-    void SetEditVals( CHANGED_COLOR aChanged );
+    void SetEditVals( CHANGED_COLOR aChanged, bool aCheckTransparency );
 	void drawAll();
 
 	void createHSVBitmap();             ///< generate the bitmap that shows the HSV color circle

@@ -91,6 +91,8 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
     m_cbTheme->Append( wxT( "---" ) );
     m_cbTheme->Append( _( "New Theme..." ) );
 
+    m_optOverrideColors->SetValue( current->GetOverrideSchItemColors() );
+
     m_currentSettings = new COLOR_SETTINGS( *current );
 
     KIGFX::GAL_DISPLAY_OPTIONS options;
@@ -132,6 +134,8 @@ PANEL_EESCHEMA_COLOR_SETTINGS::~PANEL_EESCHEMA_COLOR_SETTINGS()
 
 bool PANEL_EESCHEMA_COLOR_SETTINGS::TransferDataFromWindow()
 {
+    m_currentSettings->SetOverrideSchItemColors( m_optOverrideColors->GetValue() );
+
     if( !saveCurrentTheme( true ) )
         return false;
 
@@ -177,6 +181,8 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme( bool aValidate )
 
     SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
     COLOR_SETTINGS* selected = settingsMgr.GetColorSettings( m_currentSettings->GetFilename() );
+
+    selected->SetOverrideSchItemColors( m_optOverrideColors->GetValue() );
 
     for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
     {
@@ -535,6 +541,9 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
 
         idx = m_cbTheme->Insert( themeName, idx - 1, static_cast<void*>( newSettings ) );
         m_cbTheme->SetSelection( idx );
+
+        m_optOverrideColors->SetValue( newSettings->GetOverrideSchItemColors() );
+
         *m_currentSettings = *newSettings;
     }
     else
@@ -546,6 +555,8 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
             if( !saveCurrentTheme( false ) )
                 return;
 
+            m_optOverrideColors->SetValue( selected->GetOverrideSchItemColors() );
+
             *m_currentSettings = *selected;
             updatePreview();
 
@@ -553,6 +564,12 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
                 drawButton( pair.second, m_currentSettings->GetColor( pair.first ) );
         }
     }
+}
+
+
+void PANEL_EESCHEMA_COLOR_SETTINGS::OnOverrideItemColorsClicked( wxCommandEvent& aEvent )
+{
+    // JEY TODO: hide/show extra color buttons
 }
 
 

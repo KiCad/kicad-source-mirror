@@ -136,11 +136,11 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	m_borderColorLabel->Wrap( -1 );
 	sbSizer2->Add( m_borderColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_borderColorSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_borderColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-	m_borderColorSwatch->SetMinSize( wxSize( 48,24 ) );
+    m_borderSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+	m_borderSwatch->SetMinSize( wxSize( 48, 24 ) );
 
-	sbSizer2->Add( m_borderColorSwatch, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	sbSizer2->Add( m_borderSwatch, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizer2->Add( 40, 0, 1, wxEXPAND, 5 );
@@ -149,10 +149,10 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	m_backgroundColorLabel->Wrap( -1 );
 	sbSizer2->Add( m_backgroundColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_backgroundColorSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_backgroundColorSwatch->SetMinSize( wxSize( 48,24 ) );
+    m_backgroundSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_backgroundSwatch->SetMinSize( wxSize( 48, 24 ) );
 
-	sbSizer2->Add( m_backgroundColorSwatch, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	sbSizer2->Add( m_backgroundSwatch, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizer5->Add( sbSizer2, 1, wxEXPAND|wxBOTTOM, 5 );

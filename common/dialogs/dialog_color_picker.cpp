@@ -145,7 +145,7 @@ bool DIALOG_COLOR_PICKER::TransferDataToWindow()
 {
     // Draw all bitmaps, with colors according to the color 4D
     setIconColor( m_OldColorRect, m_previousColor4D );
-    SetEditVals( ALL_CHANGED );
+    SetEditVals( ALL_CHANGED, false );
     drawAll();
 
     // Configure the spin control sizes
@@ -525,8 +525,16 @@ void DIALOG_COLOR_PICKER::drawHSVPalette()
 }
 
 
-void DIALOG_COLOR_PICKER::SetEditVals( CHANGED_COLOR aChanged )
+void DIALOG_COLOR_PICKER::SetEditVals( CHANGED_COLOR aChanged, bool aCheckTransparency )
 {
+    if( aCheckTransparency )
+    {
+        // If they've changed the color, they probably don't want it to remain 100% transparent,
+        // and it looks like a bug when it changing the color has no effect.
+        if( m_newColor4D.a == 0.0 )
+            m_newColor4D.a = 1.0;
+    }
+
     m_sliderTransparency->SetValue( normalizeToInt( m_newColor4D.a, ALPHA_MAX ) );
 
     if( aChanged == RED_CHANGED || aChanged == GREEN_CHANGED || aChanged == BLUE_CHANGED )
@@ -578,9 +586,10 @@ void DIALOG_COLOR_PICKER::buttColorClick( wxCommandEvent& event )
     m_newColor4D.r = color.r;
     m_newColor4D.g = color.g;
     m_newColor4D.b = color.b;
+    m_newColor4D.a = color.a;
 
     m_newColor4D.ToHSV( m_hue, m_sat, m_val, true );
-    SetEditVals( ALL_CHANGED );
+    SetEditVals( ALL_CHANGED, false );
 
     drawAll();
 
@@ -680,7 +689,7 @@ void DIALOG_COLOR_PICKER::onRGBMouseDrag( wxMouseEvent& event )
     }
 
     m_newColor4D.ToHSV( m_hue, m_sat, m_val, true );
-    SetEditVals( ALL_CHANGED );
+    SetEditVals( ALL_CHANGED, true );
 
     drawAll();
 }
@@ -737,7 +746,7 @@ bool DIALOG_COLOR_PICKER::setHSvaluesFromCursor( wxPoint aMouseCursor )
         m_hue += 360.0;
 
     m_newColor4D.FromHSV( m_hue, m_sat, m_val );
-    SetEditVals( ALL_CHANGED );
+    SetEditVals( ALL_CHANGED, true );
 
     return true;
 }
@@ -758,7 +767,7 @@ void DIALOG_COLOR_PICKER::OnChangeEditRed( wxSpinEvent& event )
 {
     double val = (double)event.GetPosition() / 255.0;
     m_newColor4D.r = val;
-    SetEditVals( RED_CHANGED );
+    SetEditVals( RED_CHANGED, true );
 
     drawAll();
 }
@@ -768,7 +777,7 @@ void DIALOG_COLOR_PICKER::OnChangeEditGreen( wxSpinEvent& event )
 {
     double val = (double)event.GetPosition() / 255.0;
     m_newColor4D.g = val;
-    SetEditVals( GREEN_CHANGED );
+    SetEditVals( GREEN_CHANGED, true );
 
     drawAll();
 }
@@ -778,7 +787,7 @@ void DIALOG_COLOR_PICKER::OnChangeEditBlue( wxSpinEvent& event )
 {
     double val = (double)event.GetPosition() / 255.0;
     m_newColor4D.b = val;
-    SetEditVals( BLUE_CHANGED );
+    SetEditVals( BLUE_CHANGED, true );
 
     drawAll();
 }
@@ -790,7 +799,7 @@ void DIALOG_COLOR_PICKER::OnChangeEditHue( wxSpinEvent& event )
 
     m_newColor4D.FromHSV( m_hue, m_sat, m_val );
 
-    SetEditVals( HUE_CHANGED );
+    SetEditVals( HUE_CHANGED, true );
 
     drawAll();
 }
@@ -802,7 +811,7 @@ void DIALOG_COLOR_PICKER::OnChangeEditSat( wxSpinEvent& event )
 
     m_newColor4D.FromHSV( m_hue, m_sat, m_val );
 
-    SetEditVals( SAT_CHANGED );
+    SetEditVals( SAT_CHANGED, true );
 
     drawAll();
 }
@@ -814,7 +823,7 @@ void DIALOG_COLOR_PICKER::OnChangeBrightness( wxScrollEvent& event )
 
     m_newColor4D.FromHSV( m_hue, m_sat, m_val );
 
-    SetEditVals( VAL_CHANGED );
+    SetEditVals( VAL_CHANGED, true );
 
     drawAll();
 }
@@ -825,9 +834,10 @@ void DIALOG_COLOR_PICKER::OnResetButton( wxCommandEvent& aEvent )
     m_newColor4D.r = m_defaultColor.r;
     m_newColor4D.g = m_defaultColor.g;
     m_newColor4D.b = m_defaultColor.b;
+    m_newColor4D.a = m_defaultColor.a;
 
     m_newColor4D.ToHSV( m_hue, m_sat, m_val, true );
-    SetEditVals( ALL_CHANGED );
+    SetEditVals( ALL_CHANGED, false );
 
     drawAll();
 }

@@ -164,7 +164,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	m_opacityLabel->Wrap( -1 );
 	m_SizerTransparency->Add( m_opacityLabel, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxLEFT, 5 );
 
-	m_sliderTransparency = new wxSlider( this, wxID_ANY, 80, 20, 100, wxDefaultPosition, wxDefaultSize, wxSL_INVERSE|wxSL_LABELS|wxSL_LEFT|wxSL_VERTICAL );
+	m_sliderTransparency = new wxSlider( this, wxID_ANY, 80, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_INVERSE|wxSL_LABELS|wxSL_LEFT|wxSL_VERTICAL );
 	m_SizerTransparency->Add( m_sliderTransparency, 1, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_HORIZONTAL, 10 );
 
 

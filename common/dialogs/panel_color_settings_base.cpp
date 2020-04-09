@@ -31,6 +31,14 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	bControlSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
+	m_optOverrideColors = new wxCheckBox( this, wxID_ANY, _("Override individual item colors"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_optOverrideColors->SetToolTip( _("Show all items in their default color even if they have specific colors set in their properties.") );
+
+	bControlSizer->Add( m_optOverrideColors, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bControlSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
 	m_btnReset = new wxButton( this, wxID_ANY, _("&Reset to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnReset->SetToolTip( _("Reset all colors in this theme to the KiCad defaults") );
 
@@ -74,6 +82,7 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	// Connect Events
 	this->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_COLOR_SETTINGS_BASE::OnSize ) );
 	m_cbTheme->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnThemeChanged ), NULL, this );
+	m_optOverrideColors->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnOverrideItemColorsClicked ), NULL, this );
 	m_btnReset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnBtnResetClicked ), NULL, this );
 	m_btnOpenFolder->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnBtnOpenThemeFolderClicked ), NULL, this );
 }
@@ -83,6 +92,7 @@ PANEL_COLOR_SETTINGS_BASE::~PANEL_COLOR_SETTINGS_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_COLOR_SETTINGS_BASE::OnSize ) );
 	m_cbTheme->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnThemeChanged ), NULL, this );
+	m_optOverrideColors->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnOverrideItemColorsClicked ), NULL, this );
 	m_btnReset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnBtnResetClicked ), NULL, this );
 	m_btnOpenFolder->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COLOR_SETTINGS_BASE::OnBtnOpenThemeFolderClicked ), NULL, this );
 

@@ -522,11 +522,20 @@ COLOR4D SCH_BASE_FRAME::GetLayerColor( SCH_LAYER_ID aLayer )
 }
 
 
+void SCH_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+{
+    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+
+    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    m_colorSettings = Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
+}
+
+
 COLOR_SETTINGS* SCH_BASE_FRAME::GetColorSettings()
 {
     if( !m_colorSettings )
     {
-        auto cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+        EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
         m_colorSettings = Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
     }
 

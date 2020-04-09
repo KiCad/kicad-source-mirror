@@ -53,9 +53,9 @@ class DIALOG_SCH_SHEET_PROPS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_borderWidthCtrl;
 		wxStaticText* m_borderWidthUnits;
 		wxStaticText* m_borderColorLabel;
-		COLOR_SWATCH* m_borderColorSwatch;
+		COLOR_SWATCH* m_borderSwatch;
 		wxStaticText* m_backgroundColorLabel;
-		COLOR_SWATCH* m_backgroundColorSwatch;
+		COLOR_SWATCH* m_backgroundSwatch;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_hiearchicalPathLabel;
 		wxTextCtrl* m_heirarchyPath;

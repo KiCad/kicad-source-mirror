@@ -73,6 +73,7 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_ShowPinsElectricalType( true ),
         m_ShowDisabled( false ),
         m_ShowUmbilicals( true ),
+        m_OverrideItemColors( false ),
         m_DefaultLineWidth( 0 ),
         m_DefaultWireThickness( 0 ),
         m_DefaultBusThickness( 0 )
@@ -88,6 +89,8 @@ void SCH_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
         m_layerColors[ layer ] = aSettings->GetColor( layer );
 
     m_backgroundColor = aSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+
+    m_OverrideItemColors = aSettings->GetOverrideSchItemColors();
 }
 
 
@@ -256,7 +259,9 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
         if( sheet->GetBackgroundColor() == COLOR4D::UNSPECIFIED )
             sheet->SetBackgroundColor( m_schSettings.GetLayerColor( LAYER_SHEET_BACKGROUND ) );
 
-        if( aLayer == LAYER_SHEET )
+        if( m_schSettings.m_OverrideItemColors )
+            color = m_schSettings.GetLayerColor( aLayer );
+        else if( aLayer == LAYER_SHEET )
             color = sheet->GetBorderColor();
         else if( aLayer == LAYER_SHEET_BACKGROUND )
             color = sheet->GetBackgroundColor();

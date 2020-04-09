@@ -51,10 +51,9 @@ protected:
 
     void SetColor( wxCommandEvent& aEvent );
 
-    void OnBtnResetClicked( wxCommandEvent& aEvent ) override;
-
     void OnThemeChanged( wxCommandEvent& aEvent ) override;
-
+    void OnOverrideItemColorsClicked( wxCommandEvent& aEvent ) override;
+    void OnBtnResetClicked( wxCommandEvent& aEvent ) override;
     void OnSize( wxSizeEvent& aEvent ) override;
 
     void ShowColorContextMenu( wxMouseEvent& aEvent, SCH_LAYER_ID aLayer );

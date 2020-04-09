@@ -29,7 +29,8 @@ const int colorsSchemaVersion = 0;
 
 COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
         JSON_SETTINGS( std::move( aFilename ), SETTINGS_LOC::COLORS, colorsSchemaVersion ),
-        m_Palette(), m_colors(), m_color_context( COLOR_CONTEXT::PCB )
+        m_overrideSchItemColors( false ),
+        m_color_context( COLOR_CONTEXT::PCB )
 {
 
     m_params.emplace_back( new PARAM<wxString>( "meta.name", &m_displayName, "KiCad Default" ) );
@@ -55,6 +56,9 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
 
     // TODO(JE) in actual usage, how long does the default palette need to be?
     m_params.emplace_back( new PARAM_LIST<COLOR4D>( "palette", &m_Palette, default_palette ) );
+
+    m_params.emplace_back( new PARAM<bool>( "schematic.override_item_colors",
+                                            &m_overrideSchItemColors, false ) );
 
 #define CLR( x, y, z ) m_params.emplace_back( new COLOR_MAP_PARAM( x, y, z, &m_colors ) )
 
