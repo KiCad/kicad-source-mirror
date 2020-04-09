@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -220,7 +220,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	m_gridDrills->EnableEditing( false );
 	m_gridDrills->EnableGridLines( true );
 	m_gridDrills->EnableDragGridSize( true );
-	m_gridDrills->SetMargins( 10, 0 );
+	m_gridDrills->SetMargins( 0, 0 );
 
 	// Columns
 	m_gridDrills->AutoSizeColumns();

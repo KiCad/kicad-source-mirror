@@ -981,11 +981,11 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="notebookpage" expanded="1">
+                        <object class="notebookpage" expanded="0">
                             <property name="bitmap"></property>
                             <property name="label">Drill Holes</property>
                             <property name="select">0</property>
-                            <object class="wxPanel" expanded="1">
+                            <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -1036,7 +1036,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                                <object class="wxBoxSizer" expanded="1">
+                                <object class="wxBoxSizer" expanded="0">
                                     <property name="minimum_size"></property>
                                     <property name="name">bDrillsSizer</property>
                                     <property name="orient">wxVERTICAL</property>
@@ -1097,7 +1097,7 @@
                                             <property name="label_font">,90,90,-1,70,0</property>
                                             <property name="label_text"></property>
                                             <property name="margin_height">0</property>
-                                            <property name="margin_width">10</property>
+                                            <property name="margin_width">0</property>
                                             <property name="max_size"></property>
                                             <property name="maximize_button">0</property>
                                             <property name="maximum_size">-1,300</property>
