@@ -475,6 +475,9 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         m_selectPinSelectSymbol = cfg->m_Selection.select_pin_selects_symbol;
         m_repeatDeltaLabel      = cfg->m_Drawing.repeat_label_increment;
 
+        SetDefaultSheetBorderColor( cfg->m_Drawing.default_sheet_border_color );
+        SetDefaultSheetBackgroundColor( cfg->m_Drawing.default_sheet_background_color );
+
         wxString templateFieldNames = cfg->m_Drawing.field_names;
 
         if( !templateFieldNames.IsEmpty() )
@@ -535,6 +538,8 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_Drawing.hv_lines_only                = GetForceHVLines();
         cfg->m_Drawing.repeat_label_increment       = m_repeatDeltaLabel;
         cfg->m_Drawing.text_markup_flags            = GetTextMarkupFlags();
+        cfg->m_Drawing.default_sheet_border_color   = GetDefaultSheetBorderColor();
+        cfg->m_Drawing.default_sheet_background_color = GetDefaultSheetBackgroundColor();
 
         cfg->m_Input.drag_is_move                   = m_dragActionIsMove;
 

@@ -27,6 +27,9 @@
 #include <settings/app_settings.h>
 
 
+using KIGFX::COLOR4D;
+
+
 class EESCHEMA_SETTINGS : public APP_SETTINGS_BASE
 {
 public:
@@ -60,6 +63,8 @@ public:
         int default_repeat_offset_x;
         int default_repeat_offset_y;
         int default_wire_thickness;
+        COLOR4D default_sheet_border_color;
+        COLOR4D default_sheet_background_color;
         wxString field_names;
         bool hv_lines_only;
         int repeat_label_increment;

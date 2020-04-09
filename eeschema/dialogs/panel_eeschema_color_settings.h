@@ -82,6 +82,7 @@ private:
 
     std::vector<EDA_ITEM*> m_previewItems;
 
+    std::map<SCH_LAYER_ID, wxStaticText*> m_labels;
     std::map<SCH_LAYER_ID, wxBitmapButton*> m_buttons;
 
     KIGFX::COLOR4D m_copied;

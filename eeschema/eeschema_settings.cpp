@@ -104,6 +104,12 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM<int>( "drawing.repeat_label_increment",
             &m_Drawing.repeat_label_increment, 1, -10, 10 ) );
 
+    m_params.emplace_back( new PARAM<COLOR4D>( "drawing.default_sheet_border_color",
+            &m_Drawing.default_sheet_border_color, COLOR4D( MAGENTA ) ) );
+
+    m_params.emplace_back( new PARAM<COLOR4D>( "drawing.default_sheet_background_color",
+            &m_Drawing.default_sheet_background_color, COLOR4D( WHITE ).WithAlpha( 0.0 ) ) );
+
     m_params.emplace_back(
             new PARAM<int>( "drawing.text_markup_flags", &m_Drawing.text_markup_flags, 0 ) );
 

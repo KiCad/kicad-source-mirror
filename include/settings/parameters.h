@@ -88,7 +88,7 @@ public:
 
             if( m_use_minmax )
             {
-                if( val > m_max || val < m_min )
+                if( m_max < val || val < m_min )
                     val = m_default;
             }
         }

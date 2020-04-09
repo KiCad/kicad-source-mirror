@@ -186,14 +186,7 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme( bool aValidate )
 
     for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
     {
-        COLOR4D color;
-
-        if( layer == LAYER_SHEET )
-            color = m_frame->GetDefaultSheetBorderColor();
-        else if( layer == LAYER_SHEET_BACKGROUND )
-            color = m_frame->GetDefaultSheetBackgroundColor();
-        else
-            color = m_currentSettings->GetColor( layer );
+        COLOR4D color = m_currentSettings->GetColor( layer );
 
         // Do not allow non-background layers to be completely white.
         // This ensures the BW printing recognizes that the colors should be printed black.
@@ -230,10 +223,6 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createButtons()
 
     for( SCH_LAYER_ID layer : layers )
     {
-        // Sheet borders and backgrounds are now sheet-specific
-        if( layer == LAYER_SHEET || layer == LAYER_SHEET_BACKGROUND )
-            continue;
-
         wxString      name  = LayerName( layer );
         wxStaticText* label = new wxStaticText( m_colorsListWindow, wxID_ANY, name );
         COLOR4D       color = m_currentSettings->GetColor( layer );
@@ -256,9 +245,18 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createButtons()
                                           m_buttonSizePx + border + wxSize( 1, 1 ) );
         button->SetToolTip( _( "Edit color (right click for options)" ) );
 
+        // If the theme is not overriding individual item colors then don't show them so that
+        // the user doesn't get seduced into thinking they'll have some effect.
+        if( layer == LAYER_SHEET || layer == LAYER_SHEET_BACKGROUND )
+        {
+            label->Show( m_currentSettings->GetOverrideSchItemColors() );
+            button->Show( m_currentSettings->GetOverrideSchItemColors() );
+        }
+
         m_colorsGridSizer->Add( label, 0, flags, 5 );
         m_colorsGridSizer->Add( button, 0, flags, 5 );
 
+        m_labels[layer] = label;
         m_buttons[layer] = button;
 
         button->Bind( wxEVT_RIGHT_DOWN,
@@ -561,7 +559,12 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
             updatePreview();
 
             for( auto pair : m_buttons )
+            {
                 drawButton( pair.second, m_currentSettings->GetColor( pair.first ) );
+
+                if( pair.first == LAYER_SHEET || pair.first == LAYER_SHEET_BACKGROUND )
+                    pair.second->Show( selected->GetOverrideSchItemColors() );
+            }
         }
     }
 }
@@ -569,7 +572,18 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
 
 void PANEL_EESCHEMA_COLOR_SETTINGS::OnOverrideItemColorsClicked( wxCommandEvent& aEvent )
 {
-    // JEY TODO: hide/show extra color buttons
+    m_currentSettings->SetOverrideSchItemColors( m_optOverrideColors->GetValue() );
+
+    // If the theme is not overriding individual item colors then don't show them so that
+    // the user doesn't get seduced into thinking they'll have some effect.
+    m_labels[ LAYER_SHEET ]->Show( m_currentSettings->GetOverrideSchItemColors() );
+    m_buttons[ LAYER_SHEET ]->Show( m_currentSettings->GetOverrideSchItemColors() );
+
+    m_labels[ LAYER_SHEET_BACKGROUND ]->Show( m_currentSettings->GetOverrideSchItemColors() );
+    m_buttons[ LAYER_SHEET_BACKGROUND ]->Show( m_currentSettings->GetOverrideSchItemColors() );
+
+    m_colorsGridSizer->Layout();
+    m_colorsListWindow->Layout();
 }
 
 

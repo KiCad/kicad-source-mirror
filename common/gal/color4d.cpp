@@ -141,6 +141,20 @@ const bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs )
     return !( lhs == rhs );
 }
 
+const bool operator<( const COLOR4D& lhs, const COLOR4D& rhs )
+{
+    if( lhs.r < rhs.r )
+        return true;
+    else if( lhs.g < rhs.g )
+        return true;
+    else if( lhs.b < rhs.b )
+        return true;
+    else if( lhs.a < rhs.a )
+        return true;
+
+    return false;
+}
+
 std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor )
 {
     return aStream << aColor.ToWxString( wxC2S_CSS_SYNTAX );
