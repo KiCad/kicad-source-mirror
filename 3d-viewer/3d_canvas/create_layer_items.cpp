@@ -234,7 +234,7 @@ void BOARD_ADAPTER::createLayers( REPORTER *aStatusTextReporter )
                 continue;
 
             // Add object item to layer container
-            layerContainer->Add( createNewTrack( track, 0.0f ) );
+            createNewTrack( track, layerContainer, 0.0f );
         }
     }
 

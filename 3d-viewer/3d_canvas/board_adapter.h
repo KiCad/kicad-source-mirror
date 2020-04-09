@@ -426,7 +426,8 @@ class BOARD_ADAPTER
     void destroyLayers();
 
     // Helper functions to create the board
-    COBJECT2D *createNewTrack( const TRACK* aTrack , int aClearanceValue ) const;
+     void createNewTrack( const TRACK* aTrack, CGENERICCONTAINER2D *aDstContainer,
+                          int aClearanceValue );
 
     void createNewPadWithClearance( const D_PAD *aPad,
                                     CGENERICCONTAINER2D *aDstContainer,

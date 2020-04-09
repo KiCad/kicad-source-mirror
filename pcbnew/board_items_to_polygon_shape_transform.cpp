@@ -520,20 +520,29 @@ void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 {
     wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for tracks." );
 
+    int width = m_Width + ( 2 * aClearanceValue );
+
     switch( Type() )
     {
     case PCB_VIA_T:
-    {
+        {
         int radius = ( m_Width / 2 ) + aClearanceValue;
         TransformCircleToPolygon( aCornerBuffer, m_Start, radius, aError );
-    }
+        }
+        break;
+
+    case PCB_ARC_T:
+        {
+        const ARC* arc = static_cast<const ARC*>( this );
+        VECTOR2D center( arc->GetCenter() );
+        double arc_angle = arc->GetAngle();
+        TransformArcToPolygon( aCornerBuffer, wxPoint( center.x, center.y ),
+                               GetStart(), arc_angle, aError, width );
+        }
         break;
 
     default:
-    {
-        int width = m_Width + ( 2 * aClearanceValue );
         TransformOvalToPolygon( aCornerBuffer, m_Start, m_End, width, aError );
-    }
         break;
     }
 }

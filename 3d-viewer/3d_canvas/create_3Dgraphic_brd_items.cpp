@@ -45,6 +45,7 @@
 #include <class_text_mod.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
+#include <geometry/geometry_utils.h>
 #include <gr_text.h>
 #include <utility>
 #include <vector>
@@ -62,8 +63,6 @@ static const BOARD_ITEM *s_boardItem = NULL;
 // This is a call back function, used by GRText to draw the 3D text shape:
 void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 {
-    wxASSERT( s_dstcontainer != NULL );
-
     const SFVEC2F start3DU( x0 * s_biuTo3Dunits, -y0 * s_biuTo3Dunits );
     const SFVEC2F end3DU  ( xf * s_biuTo3Dunits, -yf * s_biuTo3Dunits );
 
@@ -229,8 +228,8 @@ void BOARD_ADAPTER::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMo
 }
 
 
-COBJECT2D *BOARD_ADAPTER::createNewTrack( const TRACK* aTrack,
-                                          int aClearanceValue ) const
+void BOARD_ADAPTER::createNewTrack( const TRACK* aTrack, CGENERICCONTAINER2D *aDstContainer,
+                                          int aClearanceValue )
 {
     SFVEC2F start3DU(  aTrack->GetStart().x * m_biuTo3Dunits,
                       -aTrack->GetStart().y * m_biuTo3Dunits ); // y coord is inverted
@@ -238,38 +237,72 @@ COBJECT2D *BOARD_ADAPTER::createNewTrack( const TRACK* aTrack,
     switch( aTrack->Type() )
     {
     case PCB_VIA_T:
-    {
+        {
         const float radius = ( ( aTrack->GetWidth() / 2 ) + aClearanceValue ) * m_biuTo3Dunits;
+        aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU, radius, *aTrack ) );
+        }
+        break;
 
-        return new CFILLEDCIRCLE2D( start3DU, radius, *aTrack );
-    }
+    case PCB_ARC_T:
+        {
+            const ARC* arc = static_cast<const ARC*>( aTrack );
+            VECTOR2D center( arc->GetCenter() );
+            double arc_angle = arc->GetAngle();
+            double radius = arc->GetRadius();
+            int arcsegcount = GetArcToSegmentCount( radius, Millimeter2iu( 0.005), arc_angle/10 );
+            int circlesegcount;
+
+            // We need a circle to segment count. However, the arc angle can be small, and the
+            // radius very big. so we calculate a reasonable value for circlesegcount.
+            if( arcsegcount <= 1 )  // The arc will be approximated by a segment
+                circlesegcount = 1;
+            else
+            {
+                double cnt = arcsegcount * 3600/std::abs( arc_angle );
+
+                #define SEG_CNT_MAX 128
+                if( cnt < SEG_CNT_MAX )
+                {
+                    circlesegcount = (int)cnt;
+
+                    if( circlesegcount == 0 )
+                        circlesegcount = 1;
+                }
+                else
+                    circlesegcount = SEG_CNT_MAX;
+            }
+
+            TransformArcToSegments( wxPoint( center.x, center.y ), arc->GetStart(),
+                                    arc_angle, circlesegcount,
+                                    arc->GetWidth() + 2 * aClearanceValue, aDstContainer,
+                                    *arc );
+        }
+        break;
+
+    case PCB_TRACE_T:    // Track is a usual straight segment
+        {
+            SFVEC2F end3DU (  aTrack->GetEnd().x * m_biuTo3Dunits,
+                             -aTrack->GetEnd().y * m_biuTo3Dunits );
+
+            // Cannot add segments that have the same start and end point
+            if( Is_segment_a_circle( start3DU, end3DU ) )
+            {
+                const float radius = ((aTrack->GetWidth() / 2) + aClearanceValue) * m_biuTo3Dunits;
+
+                aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU, radius, *aTrack ) );
+            }
+            else
+            {
+                const float width = (aTrack->GetWidth() + 2 * aClearanceValue ) * m_biuTo3Dunits;
+
+                aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU, width, *aTrack ) );
+            }
+        }
         break;
 
     default:
-    {
-        wxASSERT( aTrack->Type() == PCB_TRACE_T );
-
-        SFVEC2F end3DU (  aTrack->GetEnd().x * m_biuTo3Dunits,
-                         -aTrack->GetEnd().y * m_biuTo3Dunits );
-
-        // Cannot add segments that have the same start and end point
-        if( Is_segment_a_circle( start3DU, end3DU ) )
-        {
-            const float radius = ((aTrack->GetWidth() / 2) + aClearanceValue) * m_biuTo3Dunits;
-
-            return new CFILLEDCIRCLE2D( start3DU, radius, *aTrack );
-        }
-        else
-        {
-            const float width = (aTrack->GetWidth() + 2 * aClearanceValue ) * m_biuTo3Dunits;
-
-            return new CROUNDSEGMENT2D( start3DU, end3DU, width, *aTrack );
-        }
-    }
         break;
     }
-
-    return NULL;
 }
 
 
@@ -686,8 +719,7 @@ void BOARD_ADAPTER::TransformArcToSegments( const wxPoint &aCentre,
         }
         else
         {
-            aDstContainer->Add( new CROUNDSEGMENT2D( start3DU,
-                                                     end3DU,
+            aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU,
                                                      aWidth * m_biuTo3Dunits,
                                                      aBoardItem ) );
         }
