@@ -29,7 +29,7 @@ target_link_libraries( kicad-ogltest
 
 if( APPLE )
     if( KICAD_USE_OCC )
-        set( KICAD_BUNDLE_LIBS ${OCC_LIBRARIES} )
+        set( KICAD_BUNDLE_LIBS ${OCC_LIBRARY_DIR} )
     endif()
     # puts binary into the main kicad.app bundle while linking
     set_target_properties( kicad-ogltest PROPERTIES
