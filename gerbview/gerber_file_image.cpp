@@ -206,6 +206,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Linear, 90 arc, Circ.
     m_360Arc_enbl  = false;                         // 360 deg circular
                                                     // interpolation disable
+    m_AsArcG74G75Cmd = false;                       // false untile a G74 or G75 comand is found
     m_Current_Tool = 0;                             // Current Dcode selected
     m_CommandState = 0;                             // State of the current command
     m_CurrentPos.x = m_CurrentPos.y = 0;            // current specified coord
