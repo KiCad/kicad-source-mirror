@@ -76,14 +76,14 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_treebook->AddPage( new wxPanel( this ), _( "Project" ) );
     m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );
 
+    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
+   	    m_macHack.push_back( true );
+
 	// Connect Events
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
                          wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ), NULL, this );
 
 	FinishDialogSettings();
-
-	for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
-	    m_macHack.push_back( true );
 }
 
 

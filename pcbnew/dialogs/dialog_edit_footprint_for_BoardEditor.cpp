@@ -68,6 +68,9 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_frame     = aParent;
     m_footprint = aModule;
 
+    for( size_t i = 0; i < m_NoteBook->GetPageCount(); ++i )
+   	    m_macHack.push_back( true );
+
     m_texts = new TEXT_MOD_GRID_TABLE( m_units, m_frame );
 
     m_delayedErrorMessage = wxEmptyString;
@@ -155,9 +158,6 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_buttonRemove->SetBitmap( KiBitmap( trash_xpm ) );
 
     FinishDialogSettings();
-
-    for( size_t i = 0; i < m_NoteBook->GetPageCount(); ++i )
-   	    m_macHack.push_back( true );
 }
 
 

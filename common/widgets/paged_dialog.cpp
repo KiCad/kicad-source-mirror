@@ -87,6 +87,9 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle,
 // Finish initialization after the bookctrl pages have been added.
 void PAGED_DIALOG::finishInitialization()
 {
+    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
+   	    m_macHack.push_back( true );
+
     // For some reason adding page labels to the treeCtrl doesn't invalidate its bestSize
     // cache so we have to do it by hand
     m_treebook->GetTreeCtrl()->InvalidateBestSize();
@@ -99,9 +102,6 @@ void PAGED_DIALOG::finishInitialization()
 
     m_treebook->Fit();
     m_treebook->Layout();
-
-    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
-   	    m_macHack.push_back( true );
 
    	FinishDialogSettings();
 }
