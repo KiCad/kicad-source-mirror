@@ -1303,46 +1303,49 @@ void C3D_RENDER_RAYTRACING::load_3D_models()
 
 
             // Get the list of model files for this model
+            S3D_CACHE* cacheMgr = m_boardAdapter.Get3DCacheManager();
             auto sM = module->Models().begin();
             auto eM = module->Models().end();
 
             while( sM != eM )
             {
-                // get it from cache
-                const S3DMODEL *modelPtr =
-                        m_boardAdapter.Get3DCacheManager()->GetModel( sM->m_Filename );
-
-                // only add it if the return is not NULL
-                if( modelPtr )
+                if( sM->m_Show && !sM->m_Filename.empty() )
                 {
-                    glm::mat4 modelMatrix = moduleMatrix;
+                    // get it from cache
+                    const S3DMODEL *modelPtr = cacheMgr->GetModel( sM->m_Filename );
 
-                    modelMatrix = glm::translate( modelMatrix,
-                                                  SFVEC3F( sM->m_Offset.x,
-                                                           sM->m_Offset.y,
-                                                           sM->m_Offset.z ) );
+                    // only add it if the return is not NULL
+                    if( modelPtr  )
+                    {
+                        glm::mat4 modelMatrix = moduleMatrix;
 
-                    modelMatrix = glm::rotate( modelMatrix,
-                                               (float)-( sM->m_Rotation.z / 180.0f ) *
-                                               glm::pi<float>(),
-                                               SFVEC3F( 0.0f, 0.0f, 1.0f ) );
+                        modelMatrix = glm::translate( modelMatrix,
+                                                      SFVEC3F( sM->m_Offset.x,
+                                                               sM->m_Offset.y,
+                                                               sM->m_Offset.z ) );
 
-                    modelMatrix = glm::rotate( modelMatrix,
-                                               (float)-( sM->m_Rotation.y / 180.0f ) *
-                                               glm::pi<float>(),
-                                               SFVEC3F( 0.0f, 1.0f, 0.0f ) );
+                        modelMatrix = glm::rotate( modelMatrix,
+                                                   (float)-( sM->m_Rotation.z / 180.0f ) *
+                                                   glm::pi<float>(),
+                                                   SFVEC3F( 0.0f, 0.0f, 1.0f ) );
 
-                    modelMatrix = glm::rotate( modelMatrix,
-                                               (float)-( sM->m_Rotation.x / 180.0f ) *
-                                               glm::pi<float>(),
-                                               SFVEC3F( 1.0f, 0.0f, 0.0f ) );
+                        modelMatrix = glm::rotate( modelMatrix,
+                                                   (float)-( sM->m_Rotation.y / 180.0f ) *
+                                                   glm::pi<float>(),
+                                                   SFVEC3F( 0.0f, 1.0f, 0.0f ) );
 
-                    modelMatrix = glm::scale( modelMatrix,
-                                              SFVEC3F( sM->m_Scale.x,
-                                                       sM->m_Scale.y,
-                                                       sM->m_Scale.z ) );
+                        modelMatrix = glm::rotate( modelMatrix,
+                                                   (float)-( sM->m_Rotation.x / 180.0f ) *
+                                                   glm::pi<float>(),
+                                                   SFVEC3F( 1.0f, 0.0f, 0.0f ) );
 
-                    add_3D_models( modelPtr, modelMatrix );
+                        modelMatrix = glm::scale( modelMatrix,
+                                                  SFVEC3F( sM->m_Scale.x,
+                                                           sM->m_Scale.y,
+                                                           sM->m_Scale.z ) );
+
+                        add_3D_models( modelPtr, modelMatrix );
+                    }
                 }
 
                 ++sM;

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,33 +22,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/filename.h>
-
 #include "3d_info.h"
 #include "3d_cache.h"
-#include "plugins/3dapi/ifsg_api.h"
 #include "3d_cache_dialogs.h"
 #include "dialog_configure_paths.h"
 #include "dlg_select_3dmodel.h"
 
 
-bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache,
-    wxString& prevModelSelectDir, int& prevModelWildcard, MODULE_3D_SETTINGS* aModel )
+bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache, wxString& prevModelSelectDir,
+                         int& prevModelWildcard, MODULE_3D_SETTINGS* aModel )
 {
     if( NULL == aModel )
         return false;
 
-    DLG_SELECT_3DMODEL* dm = new DLG_SELECT_3DMODEL( aParent, aCache, aModel,
-        prevModelSelectDir, prevModelWildcard );
+    DLG_SELECT_3DMODEL dm( aParent, aCache, aModel, prevModelSelectDir, prevModelWildcard );
 
-    if( wxID_OK == dm->ShowModal() )
-    {
-        delete dm;
-        return true;
-    }
-
-    delete dm;
-    return false;
+    return dm.ShowModal() == wxID_OK;
 }
 
 

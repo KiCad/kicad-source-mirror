@@ -400,7 +400,7 @@ void PANEL_PREV_3D::UpdateDummyModule( bool aReloadRequired )
 
     for( MODULE_3D_SETTINGS& model : *m_parentModelList)
     {
-        if( model.m_Preview )
+        if( model.m_Show )
             m_dummyModule->Models().push_back( model );
     }
 

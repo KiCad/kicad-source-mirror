@@ -85,7 +85,7 @@ class MODULE_3D_SETTINGS
             m_Scale { 1, 1, 1 },
             m_Rotation { 0, 0, 0 },
             m_Offset { 0, 0, 0 },
-            m_Preview( true )
+            m_Show( true )
         {
         }
 
@@ -98,7 +98,7 @@ class MODULE_3D_SETTINGS
         VECTOR3D m_Rotation;    ///< 3D model rotation (degrees)
         VECTOR3D m_Offset;      ///< 3D model offset (mm)
         wxString m_Filename;    ///< The 3D shape filename in 3D library
-        bool     m_Preview;     ///< Include module in 3D preview
+        bool     m_Show;        ///< Include module in rendering
 };
 
 DECL_DEQ_FOR_SWIG( PADS, D_PAD* )

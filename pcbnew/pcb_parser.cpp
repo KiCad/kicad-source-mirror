@@ -386,10 +386,8 @@ MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
+        if( token == T_LEFT )
+            token = NextTok();
 
         switch( token )
         {
@@ -409,7 +407,13 @@ MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
             n3D->m_Offset.x = parseDouble( "x value" ) * 25.4f;
             n3D->m_Offset.y = parseDouble( "y value" ) * 25.4f;
             n3D->m_Offset.z = parseDouble( "z value" ) * 25.4f;
-            NeedRIGHT();
+
+            NeedRIGHT();    // xyz
+            NeedRIGHT();    // at
+            break;
+
+        case T_hide:
+            n3D->m_Show = false;
             break;
 
         case T_offset:
@@ -425,7 +429,9 @@ MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
             n3D->m_Offset.x = parseDouble( "x value" );
             n3D->m_Offset.y = parseDouble( "y value" );
             n3D->m_Offset.z = parseDouble( "z value" );
-            NeedRIGHT();
+
+            NeedRIGHT();    // xyz
+            NeedRIGHT();    // offset
             break;
 
         case T_scale:
@@ -438,7 +444,9 @@ MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
             n3D->m_Scale.x = parseDouble( "x value" );
             n3D->m_Scale.y = parseDouble( "y value" );
             n3D->m_Scale.z = parseDouble( "z value" );
-            NeedRIGHT();
+
+            NeedRIGHT();    // xyz
+            NeedRIGHT();    // scale
             break;
 
         case T_rotate:
@@ -451,14 +459,15 @@ MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
             n3D->m_Rotation.x = parseDouble( "x value" );
             n3D->m_Rotation.y = parseDouble( "y value" );
             n3D->m_Rotation.z = parseDouble( "z value" );
-            NeedRIGHT();
+
+            NeedRIGHT();    // xyz
+            NeedRIGHT();    // rotate
             break;
 
         default:
-            Expecting( "at, offset, scale, or rotate" );
+            Expecting( "at, hide, offset, scale, or rotate" );
         }
 
-        NeedRIGHT();
     }
 
     return n3D;

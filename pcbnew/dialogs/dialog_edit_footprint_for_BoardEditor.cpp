@@ -377,7 +377,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
         m_modelsGrid->AppendRows( 1 );
         int row = m_modelsGrid->GetNumberRows() - 1;
         m_modelsGrid->SetCellValue( row, 0, origPath );
-        m_modelsGrid->SetCellValue( row, 1, model.m_Preview ? wxT( "1" ) : wxT( "0" ) );
+        m_modelsGrid->SetCellValue( row, 1, model.m_Show ? wxT( "1" ) : wxT( "0" ) );
     }
 
     select3DModel( 0 );   // will clamp idx within bounds
@@ -487,9 +487,9 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
     }
     else if( aEvent.GetCol() == 1 )
     {
-        wxString previewValue = m_modelsGrid->GetCellValue( aEvent.GetRow(), 1 );
+        wxString showValue = m_modelsGrid->GetCellValue( aEvent.GetRow(), 1 );
 
-        m_shapes3D_list[ aEvent.GetRow() ].m_Preview = previewValue == wxT( "1" );
+        m_shapes3D_list[ aEvent.GetRow() ].m_Show = ( showValue == wxT( "1" ) );
     }
 
     m_PreviewPane->UpdateDummyModule();
@@ -564,7 +564,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     model.m_Filename.Replace( "\\", "/" );
 #endif
 
-    model.m_Preview = true;
+    model.m_Show = true;
     m_shapes3D_list.push_back( model );
 
     int idx = m_modelsGrid->GetNumberRows();
@@ -583,7 +583,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DRow( wxCommandEvent&  )
 
     MODULE_3D_SETTINGS model;
 
-    model.m_Preview = true;
+    model.m_Show = true;
     m_shapes3D_list.push_back( model );
 
     int row = m_modelsGrid->GetNumberRows();

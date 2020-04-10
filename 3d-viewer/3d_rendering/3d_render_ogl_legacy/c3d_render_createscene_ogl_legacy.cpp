@@ -912,7 +912,7 @@ void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER *aStatusTextReporter )
 
             while( sM != eM )
             {
-                if( !sM->m_Filename.empty() )
+                if( sM->m_Show && !sM->m_Filename.empty() )
                 {
                     if( aStatusTextReporter )
                     {
