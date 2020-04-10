@@ -788,6 +788,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
 static KICAD_T nodeTypes[] =
 {
+    SCH_PIN_T,
     SCH_LINE_LOCATE_WIRE_T,
     SCH_LINE_LOCATE_BUS_T,
     SCH_BUS_WIRE_ENTRY_T,

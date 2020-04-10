@@ -711,9 +711,12 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         }
         else
         {
-            SCH_ITEM* item = (SCH_ITEM*) selTool->GetNode( aPosition );
+            SCH_ITEM* item = static_cast<SCH_ITEM*>( selTool->GetNode( aPosition ) );
+            SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( item );
 
-            if( item && item->Connection( *g_CurrentSheet ) )
+            if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
+                netName = comp->GetPartRef()->GetName();
+            else if( item && item->Connection( *g_CurrentSheet ) )
                 netName = item->Connection( *g_CurrentSheet )->Name();
         }
     }
@@ -768,10 +771,26 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
     for( SCH_ITEM* item : screen->Items() )
     {
-        SCH_CONNECTION* conn   = item->Connection( *g_CurrentSheet );
+        wxString        itemConnectionName;
+        SCH_COMPONENT*  comp = nullptr;
         bool            redraw = item->IsBrightened();
 
-        if( conn && conn->Name() == selectedNetName )
+        if( item->Type() == SCH_COMPONENT_T )
+            comp = static_cast<SCH_COMPONENT*>( item );
+
+        if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
+        {
+            itemConnectionName = comp->GetPartRef()->GetName();
+        }
+        else
+        {
+            SCH_CONNECTION* connection = item->Connection( *g_CurrentSheet );
+
+            if( connection )
+                itemConnectionName = connection->Name();
+        }
+
+        if( itemConnectionName == selectedNetName )
             item->SetBrightened();
         else
             item->ClearBrightened();
@@ -780,8 +799,6 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
         if( item->Type() == SCH_COMPONENT_T )
         {
-            SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
-
             redraw |= comp->HasBrightenedPins();
 
             comp->ClearBrightenedPins();
@@ -796,6 +813,19 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                 {
                     comp->BrightenPin( pin );
                     redraw = true;
+                }
+            }
+
+            if( comp->GetPartRef() && comp->GetPartRef()->IsPower() )
+            {
+                std::vector<SCH_FIELD>& fields = comp->GetFields();
+
+                for( int id : { REFERENCE, VALUE } )
+                {
+                    if( item->IsBrightened() && fields[id].IsVisible() )
+                        fields[id].SetBrightened();
+                    else
+                        fields[id].ClearBrightened();
                 }
             }
         }

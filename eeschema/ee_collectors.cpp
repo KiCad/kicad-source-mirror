@@ -95,7 +95,7 @@ SEARCH_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 
 
 void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], const wxPoint& aPos,
-        int aUnit, int aConvert )
+                            int aUnit, int aConvert )
 {
     Empty(); // empty the collection just in case
 
@@ -108,9 +108,33 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
 
     if( aScreen )
     {
+        // Components and sheets own their own children so have to be visited even if
+        // they're not in the filter list
+        bool componentsVisited = false;
+        bool sheetsVisited = false;
+
         for( const KICAD_T* filter = aFilterList; *filter != EOT; ++filter )
         {
-            for( auto item : aScreen->Items().OfType( *filter ) )
+            for( SCH_ITEM* item : aScreen->Items().OfType( *filter ) )
+            {
+                if( *filter == SCH_COMPONENT_T )
+                    componentsVisited = true;
+                else if( *filter == SCH_SHEET_T )
+                    sheetsVisited = true;
+
+                item->Visit( m_inspector, nullptr, m_ScanTypes );
+            }
+        }
+
+        if( !componentsVisited )
+        {
+            for( SCH_ITEM* item : aScreen->Items().OfType( SCH_COMPONENT_T ) )
+                item->Visit( m_inspector, nullptr, m_ScanTypes );
+        }
+
+        if( !sheetsVisited )
+        {
+            for( SCH_ITEM* item : aScreen->Items().OfType( SCH_SHEET_T ) )
                 item->Visit( m_inspector, nullptr, m_ScanTypes );
         }
     }
@@ -118,7 +142,7 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
 
 
 void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterList[],
-        const wxPoint& aPos, int aUnit, int aConvert )
+                            const wxPoint& aPos, int aUnit, int aConvert )
 {
     Empty();        // empty the collection just in case
 
@@ -153,16 +177,6 @@ bool EE_COLLECTOR::IsCorner() const
 
     if( is_busentry0 && (m_List[1]->Type() == SCH_LINE_T) )
         return true;
-
-    return false;
-}
-
-
-bool EE_COLLECTOR::IsDraggableJunction() const
-{
-    for( size_t i = 0;  i < m_List.size();  i++ )
-        if( ( (SCH_ITEM*) m_List[ i ] )->Type() == SCH_JUNCTION_T )
-            return true;
 
     return false;
 }

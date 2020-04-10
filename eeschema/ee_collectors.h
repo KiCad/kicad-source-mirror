@@ -105,21 +105,6 @@ public:
      */
     bool IsCorner() const;
 
-    /**
-     * Function IsDraggableJunction
-     * tests to see if the collected items form a draggable junction.
-     * <p>
-     * Daggable junctions are defined as:
-     * <ul>
-     * <li> The intersection of three or more wire end points. </li>
-     * <li> The intersection of one or more wire end point and one wire mid point. </li>
-     * <li> The crossing of two or more wire mid points and a junction. </li>
-     * </ul>
-     * </p>
-     * @return True if the collection is a draggable junction.
-     */
-    bool IsDraggableJunction() const;
-
 public:
     int      m_Unit;            // Fixed symbol unit filter (for symbol editor)
     int      m_Convert;         // Fixed DeMorgan filter (for symbol editor)
