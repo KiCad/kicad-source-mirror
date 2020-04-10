@@ -63,6 +63,7 @@ using namespace TSCHEMATIC_T;
 SCH_SEXPR_PARSER::SCH_SEXPR_PARSER( LINE_READER* aLineReader ) :
     SCHEMATIC_LEXER( aLineReader ),
     m_requiredVersion( 0 ),
+    m_fieldId( 0 ),
     m_unit( 1 ),
     m_convert( 1 )
 {
@@ -1801,7 +1802,7 @@ void SCH_SEXPR_PARSER::parseSchSymbolInstances( std::unique_ptr<SCH_COMPONENT>& 
         {
             NeedSYMBOL();
 
-            int unit;
+            int unit = 1;
             wxString reference;
             KIID_PATH path( FromUTF8() );
 
@@ -1932,7 +1933,7 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a symbol." ) );
 
     T token;
-    int orientation;
+    int orientation = CMP_ORIENT_0;
     wxString tmp;
     SCH_FIELD* field;
     std::unique_ptr<SCH_COMPONENT> symbol( new SCH_COMPONENT() );

@@ -130,7 +130,7 @@ ALTIUM_LAYER altium_layer_from_name( const wxString& aName )
     if( it == hash_map.end() )
     {
         wxLogError( wxString::Format(
-                _( "Unknown mapping of the Altium layer '%s'. Please report as issue." ), aName ) );
+                    "Unknown mapping of the Altium layer '%s'. Please report as issue.", aName ) );
         return ALTIUM_LAYER::UNKNOWN;
     }
     else
@@ -450,6 +450,12 @@ APOLYGON6::APOLYGON6( ALTIUM_PARSER& aReader )
 
 ARULE6::ARULE6( ALTIUM_PARSER& aReader )
 {
+    // Initalize all variables and make Coverity happy
+    planeclearanceClearance = 0;
+    polygonconnectAirgapwidth = 0;
+    polygonconnectReliefconductorwidth = 0;
+    polygonconnectReliefentries = 0;
+
     aReader.Skip( 2 );
 
     std::map<wxString, wxString> properties = aReader.ReadProperties();
