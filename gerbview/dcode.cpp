@@ -226,14 +226,14 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
             int delta = (m_Size.x - m_Size.y) / 2;
             start.x -= delta;
             end.x   += delta;
-            radius   = m_Size.y;
+            radius   = m_Size.y;    // Width in fact
         }
-        else   // horizontal oval
+        else   // vertical oval
         {
             int delta = (m_Size.y - m_Size.x) / 2;
             start.y -= delta;
             end.y   += delta;
-            radius   = m_Size.x;
+            radius   = m_Size.x;    // Width in fact
         }
 
         start = aParent->GetABPosition( start );
@@ -374,13 +374,10 @@ void D_CODE::ConvertShapeToPolygon()
             m_Polygon.Append( VECTOR2I( currpos ) );
         }
 
-        m_Polygon.Append( VECTOR2I( initialpos ) );      // close outline
+        m_Polygon.Append( VECTOR2I( initialpos ) ); // close outline
 
         if( m_Size.y > m_Size.x )                   // vertical oval, rotate polygon.
-        {
-            for( auto it = m_Polygon.Iterate( 0 ); it; ++it )
-                it->Rotate( -M_PI / 2 );
-        }
+            m_Polygon.Rotate( -M_PI / 2, VECTOR2I( 0, 0 ) );
 
         addHoleToPolygon( &m_Polygon, m_DrillShape, m_Drill, initialpos );
     }

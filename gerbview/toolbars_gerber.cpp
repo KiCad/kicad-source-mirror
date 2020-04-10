@@ -383,7 +383,7 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
 
         msg.Printf( "tool %d [%.3fx%.3f %s] %s",
                     dcode->m_Num_Dcode,
-                    dcode->m_Size.y / scale, dcode->m_Size.x / scale,
+                    dcode->m_Size.x / scale, dcode->m_Size.y / scale,
                     units,
                     D_CODE::ShowApertureType( dcode->m_Shape )
                     );

@@ -680,6 +680,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
 
             aText += 2;              // skip "C," for example
 
+            // First parameter is the size X:
             dcode->m_Size.x = KiROUND( ReadDouble( aText ) * conv_scale );
             dcode->m_Size.y = dcode->m_Size.x;
 
@@ -719,7 +720,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
                 while( *aText == ' ' )
                     aText++;
 
-                if( *aText == 'X' )
+                if( *aText == 'X' ) // Second parameter: size Y
                 {
                     aText++;
                     dcode->m_Size.y =
@@ -729,7 +730,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
                 while( *aText == ' ' )
                     aText++;
 
-                if( *aText == 'X' )
+                if( *aText == 'X' ) // third parameter: drill size (or drill size X)
                 {
                     aText++;
                     dcode->m_Drill.x = KiROUND( ReadDouble( aText ) * conv_scale );
@@ -740,13 +741,14 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
                 while( *aText == ' ' )
                     aText++;
 
-                if( *aText == 'X' )
+                if( *aText == 'X' ) // fourth parameter: drill size Y
                 {
                     aText++;
                     dcode->m_Drill.y =
                         KiROUND( ReadDouble( aText ) * conv_scale );
                     dcode->m_DrillShape = APT_DEF_RECT_HOLE;
                 }
+
                 dcode->m_Defined = true;
                 break;
 
