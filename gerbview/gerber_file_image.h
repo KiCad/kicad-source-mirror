@@ -163,6 +163,8 @@ public:
     bool               m_Has_DCode;                             // true = DCodes in file
                                                                 // (false = no DCode -> separate DCode file
     bool               m_360Arc_enbl;                           // Enbl 360 deg circular interpolation
+    bool               m_AsArcG74G75Cmd;                        // Set to true when a circular interpolation command
+                                                                // type is found. Mandatory before drawing an arc.
     bool               m_PolygonFillMode;                       // Enable polygon mode (read coord as a polygon descr)
     int                m_PolygonFillModeState;                  // In polygon mode: 0 = first segm, 1 = next segm
 

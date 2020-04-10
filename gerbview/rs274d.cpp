@@ -527,10 +527,12 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
     case GC_TURN_OFF_360_INTERPOL:      // disable Multi cadran arc and Arc interpol
         m_360Arc_enbl  = false;
         m_Iterpolation = GERB_INTERPOL_LINEAR_1X;   // not sure it should be done
+        m_AsArcG74G75Cmd = true;
         break;
 
     case GC_TURN_ON_360_INTERPOL:
         m_360Arc_enbl = true;
+        m_AsArcG74G75Cmd = true;
         break;
 
     case GC_SPECIFY_ABSOLUES_COORD:
@@ -633,6 +635,15 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             {
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
+                // Before any arc command, a G74 or G75 command must be set.
+                // Otherwise the Gerber file is invalid
+                if( !m_AsArcG74G75Cmd )
+                {
+                    AddMessageToList( _( "Invalid Gerber file: missing G74 or G75 arc command" ) );
+                    // Disable further warning messages:
+                    m_AsArcG74G75Cmd = true;
+                }
+
                 gbritem = m_Drawings.GetLast();
 
                 fillArcPOLY( gbritem, m_PreviousPos,
