@@ -645,7 +645,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 // Otherwise the Gerber file is invalid
                 if( !m_AsArcG74G75Cmd )
                 {
-                    AddMessageToList( _( "Invalide Gerber file: missing G74 or G75 arc command" ) );
+                    AddMessageToList( _( "Invalid Gerber file: missing G74 or G75 arc command" ) );
                     // Disable further warning messages:
                     m_AsArcG74G75Cmd = true;
                 }
