@@ -226,8 +226,6 @@ void C3D_MODEL_VIEWER::ogl_set_arrow_material()
 
 void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
 {
-    wxPaintDC( this );
-
     event.Skip( false );
 
     // SwapBuffer requires the window to be shown before calling
