@@ -336,7 +336,7 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	m_modelsGrid->EnableDragColSize( false );
 	m_modelsGrid->SetColLabelSize( 22 );
 	m_modelsGrid->SetColLabelValue( 0, _("3D Model(s)") );
-	m_modelsGrid->SetColLabelValue( 1, _("Preview") );
+	m_modelsGrid->SetColLabelValue( 1, _("Show") );
 	m_modelsGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Rows

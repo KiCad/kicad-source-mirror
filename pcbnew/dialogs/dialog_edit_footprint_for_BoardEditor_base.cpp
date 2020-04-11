@@ -433,7 +433,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_modelsGrid->EnableDragColSize( false );
 	m_modelsGrid->SetColLabelSize( 24 );
 	m_modelsGrid->SetColLabelValue( 0, _("3D Model(s)") );
-	m_modelsGrid->SetColLabelValue( 1, _("Preview") );
+	m_modelsGrid->SetColLabelValue( 1, _("Show") );
 	m_modelsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
