@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,7 +51,7 @@ DIALOG_SCH_IMPORT_SETTINGS_BASE::DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* pare
 	m_fieldNameTemplatesOpt = new wxCheckBox( this, wxID_ANY, _("Field name templates"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_fieldNameTemplatesOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_pinMapOpt = new wxCheckBox( this, wxID_ANY, _("Pin confict map"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pinMapOpt = new wxCheckBox( this, wxID_ANY, _("Pin conflict map"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_pinMapOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_SeveritiesOpt = new wxCheckBox( this, wxID_ANY, _("Violation severities"), wxDefaultPosition, wxDefaultSize, 0 );

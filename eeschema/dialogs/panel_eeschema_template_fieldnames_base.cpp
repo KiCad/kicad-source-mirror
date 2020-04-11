@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,7 +20,7 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES_BASE
 
 	m_topMargin = new wxBoxSizer( wxVERTICAL );
 
-	m_title = new wxStaticText( this, wxID_ANY, _("field name templates:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_title = new wxStaticText( this, wxID_ANY, _("Field name templates:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
 	m_topMargin->Add( m_title, 0, wxTOP|wxBOTTOM, 5 );
 
