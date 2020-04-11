@@ -790,7 +790,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                 itemConnectionName = connection->Name();
         }
 
-        if( itemConnectionName == selectedNetName )
+        if( !selectedNetName.IsEmpty() && itemConnectionName == selectedNetName )
             item->SetBrightened();
         else
             item->ClearBrightened();

@@ -1241,13 +1241,9 @@ EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
     EDA_RECT    bBox;
 
     if( m_part )
-    {
         bBox = m_part->GetBodyBoundingBox( m_unit, m_convert );
-    }
     else
-    {
         bBox = dummy()->GetBodyBoundingBox( m_unit, m_convert );
-    }
 
     int x0 = bBox.GetX();
     int xm = bBox.GetRight();
@@ -1279,8 +1275,8 @@ const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 {
     EDA_RECT bbox = GetBodyBoundingBox();
 
-    for( size_t i = 0; i < m_Fields.size(); i++ )
-        bbox.Merge( m_Fields[i].GetBoundingBox() );
+    for( const SCH_FIELD& field : m_Fields )
+        bbox.Merge( field.GetBoundingBox() );
 
     return bbox;
 }
@@ -1462,7 +1458,7 @@ bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemLi
 {
     bool changed = false;
 
-    for( auto& pin : m_pins )
+    for( std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
         bool previousState = pin->IsDangling();
         pin->SetIsDangling( true );
@@ -1519,12 +1515,12 @@ wxPoint SCH_COMPONENT::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 
 void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
-    for( const auto& pin : m_pins )
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
         // Collect only pins attached to the current unit and convert.
         // others are not associated to this component instance
-        int pin_unit = pin.get()->GetLibPin()->GetUnit();
-        int pin_convert = pin.get()->GetLibPin()->GetConvert();
+        int pin_unit = pin->GetLibPin()->GetUnit();
+        int pin_convert = pin->GetLibPin()->GetConvert();
 
         if( pin_unit > 0 && pin_unit != GetUnit() )
             continue;
@@ -1568,8 +1564,9 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
 
     for( const KICAD_T* p = aFilterTypes; (stype = *p) != EOT; ++p )
     {
-        // If caller wants to inspect component type or and component children types.
-        if( stype == SCH_LOCATE_ANY_T || stype == Type() )
+        if( stype == SCH_LOCATE_ANY_T
+                || ( stype == SCH_COMPONENT_T )
+                || ( stype == SCH_COMPONENT_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
         {
             if( SEARCH_RESULT::QUIT == aInspector( this, aTestData ) )
                 return SEARCH_RESULT::QUIT;
@@ -1577,7 +1574,6 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
 
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
         {
-            // Test the bounding boxes of fields if they are visible and not empty.
             for( SCH_FIELD& field : m_Fields )
             {
                 if( SEARCH_RESULT::QUIT == aInspector( &field, (void*) this ) )
@@ -1611,12 +1607,12 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
 
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_PIN_T )
         {
-            for( auto& pin : m_pins )
+            for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
             {
                 // Collect only pins attached to the current unit and convert.
                 // others are not associated to this component instance
-                int pin_unit = pin.get()->GetLibPin()->GetUnit();
-                int pin_convert = pin.get()->GetLibPin()->GetConvert();
+                int pin_unit = pin->GetLibPin()->GetUnit();
+                int pin_convert = pin->GetLibPin()->GetConvert();
 
                 if( pin_unit > 0 && pin_unit != GetUnit() )
                     continue;

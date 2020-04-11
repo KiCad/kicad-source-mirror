@@ -124,8 +124,7 @@ enum KICAD_T
     SCH_PIN_T,
 
     // Be prudent with these types:
-    // they should be used only to locate a specific field type
-    // among SCH_FIELD_T items types
+    // they should be used only to locate a specific field type among SCH_FIELD_Ts
     // N.B. If you add a type here, be sure to add it below to the BaseType()
     SCH_FIELD_LOCATE_REFERENCE_T,
     SCH_FIELD_LOCATE_VALUE_T,
@@ -140,6 +139,9 @@ enum KICAD_T
     // Same for picking labels attached to wires and/or buses
     SCH_LABEL_LOCATE_WIRE_T,
     SCH_LABEL_LOCATE_BUS_T,
+
+    // Same for picking components which are power symbols
+    SCH_COMPONENT_LOCATE_POWER_T,
 
     // matches any type
     SCH_LOCATE_ANY_T,
@@ -229,6 +231,9 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
     case SCH_LABEL_LOCATE_WIRE_T:
     case SCH_LABEL_LOCATE_BUS_T:
         return SCH_LABEL_T;
+
+    case SCH_COMPONENT_LOCATE_POWER_T:
+        return SCH_COMPONENT_T;
 
     default:
         return aType;
