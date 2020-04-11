@@ -117,9 +117,10 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
         {
             for( SCH_ITEM* item : aScreen->Items().OfType( *filter ) )
             {
-                if( *filter == SCH_COMPONENT_T )
+                if( *filter == SCH_COMPONENT_T || *filter == SCH_LOCATE_ANY_T )
                     componentsVisited = true;
-                else if( *filter == SCH_SHEET_T )
+
+                if( *filter == SCH_SHEET_T || *filter == SCH_LOCATE_ANY_T )
                     sheetsVisited = true;
 
                 item->Visit( m_inspector, nullptr, m_ScanTypes );
