@@ -77,16 +77,17 @@ wxString TEXTE_PCB::GetShownText( int aDepth ) const
 
                 if( token->Contains( ':' ) )
                 {
-                    wxArrayString parts = wxSplit( *token, ':' );
-                    BOARD_ITEM*   refItem = board->GetItem( KIID( parts[0] ) );
+                    wxString      remainder;
+                    wxString      ref = token->BeforeFirst( ':', &remainder );
+                    BOARD_ITEM*   refItem = board->GetItem( KIID( ref ) );
 
                     if( refItem && refItem->Type() == PCB_MODULE_T )
                     {
                         MODULE* refModule = static_cast<MODULE*>( refItem );
 
-                        if( refModule->ResolveTextVar( &parts[1], aDepth + 1 ) )
+                        if( refModule->ResolveTextVar( &remainder, aDepth + 1 ) )
                         {
-                            *token = parts[1];
+                            *token = remainder;
                             return true;
                         }
                     }

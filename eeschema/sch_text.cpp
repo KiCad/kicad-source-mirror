@@ -478,17 +478,18 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
                     if( token->Contains( ':' ) )
                     {
                         SCH_SHEET_LIST sheetList( g_RootSheet );
-                        wxArrayString  parts = wxSplit( *token, ':' );
+                        wxString       remainder;
+                        wxString       ref = token->BeforeFirst( ':', &remainder );
                         SCH_SHEET_PATH dummy;
-                        SCH_ITEM*      refItem = sheetList.GetItem( KIID( parts[0] ), &dummy );
+                        SCH_ITEM*      refItem = sheetList.GetItem( KIID( ref ), &dummy );
 
                         if( refItem && refItem->Type() == SCH_COMPONENT_T )
                         {
                             SCH_COMPONENT* refComponent = static_cast<SCH_COMPONENT*>( refItem );
 
-                            if( refComponent->ResolveTextVar( &parts[1], aDepth + 1 ) )
+                            if( refComponent->ResolveTextVar( &remainder, aDepth + 1 ) )
                             {
-                                *token = parts[1];
+                                *token = remainder;
                                 return true;
                             }
                         }
@@ -496,9 +497,9 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
                         {
                             SCH_SHEET* refSheet = static_cast<SCH_SHEET*>( refItem );
 
-                            if( refSheet->ResolveTextVar( &parts[1], aDepth + 1 ) )
+                            if( refSheet->ResolveTextVar( &remainder, aDepth + 1 ) )
                             {
-                                *token = parts[1];
+                                *token = remainder;
                                 return true;
                             }
                         }

@@ -316,11 +316,12 @@ wxString DIALOG_TEXT_PROPERTIES::convertKIIDsToReferences( const wxString& aSour
 
             if( isCrossRef )
             {
-                wxArrayString parts = wxSplit( token, ':' );
-                BOARD_ITEM*   refItem = m_Parent->GetBoard()->GetItem( KIID( parts[0] ) );
+                wxString      remainder;
+                wxString      ref = token.BeforeFirst( ':', &remainder );
+                BOARD_ITEM*   refItem = m_Parent->GetBoard()->GetItem( KIID( ref ) );
 
                 if( refItem && refItem->Type() == PCB_MODULE_T )
-                    token = static_cast<MODULE*>( refItem )->GetReference() + ":" + parts[1];
+                    token = static_cast<MODULE*>( refItem )->GetReference() + ":" + remainder;
             }
 
             newbuf.append( "${" + token + "}" );
@@ -360,13 +361,14 @@ wxString DIALOG_TEXT_PROPERTIES::convertReferencesToKIIDs( const wxString& aSour
 
             if( isCrossRef )
             {
-                wxArrayString parts = wxSplit( token, ':' );
+                wxString remainder;
+                wxString ref = token.BeforeFirst( ':', &remainder );
 
                 for( MODULE* mod : m_Parent->GetBoard()->Modules() )
                 {
-                    if( mod->GetReference().CmpNoCase( parts[0] ) == 0 )
+                    if( mod->GetReference().CmpNoCase( ref ) == 0 )
                     {
-                        token = mod->m_Uuid.AsString() + ":" + parts[1];
+                        token = mod->m_Uuid.AsString() + ":" + remainder;
                         break;
                     }
                 }

@@ -208,14 +208,16 @@ wxString convertKIIDsToReferences( const wxString& aSource )
             if( isCrossRef )
             {
                 SCH_SHEET_LIST sheetList( g_RootSheet );
-                wxArrayString  parts = wxSplit( token, ':' );
+                wxString       remainder;
+                wxString       ref = token.BeforeFirst( ':', &remainder );
+
                 SCH_SHEET_PATH refSheetPath;
-                SCH_ITEM*      refItem = sheetList.GetItem( KIID( parts[0] ), &refSheetPath );
+                SCH_ITEM*      refItem = sheetList.GetItem( KIID( ref ), &refSheetPath );
 
                 if( refItem && refItem->Type() == SCH_COMPONENT_T )
                 {
                     SCH_COMPONENT* refComponent = static_cast<SCH_COMPONENT*>( refItem );
-                    token = refComponent->GetRef( &refSheetPath, true ) + ":" + parts[1];
+                    token = refComponent->GetRef( &refSheetPath, true ) + ":" + remainder;
                 }
             }
 
@@ -257,7 +259,8 @@ wxString convertReferencesToKIIDs( const wxString& aSource )
             if( isCrossRef )
             {
                 SCH_SHEET_LIST     sheets( g_RootSheet );
-                wxArrayString      parts = wxSplit( token, ':' );
+                wxString           remainder;
+                wxString           ref = token.BeforeFirst( ':', &remainder );
                 SCH_REFERENCE_LIST references;
 
                 sheets.GetComponents( references );
@@ -265,11 +268,10 @@ wxString convertReferencesToKIIDs( const wxString& aSource )
                 for( size_t jj = 0; jj < references.GetCount(); jj++ )
                 {
                     SCH_COMPONENT* refComponent = references[ jj ].GetComp();
-                    wxString       ref = refComponent->GetRef( &references[ jj ].GetSheetPath() );
 
-                    if( ref == parts[0] )
+                    if( ref == refComponent->GetRef( &references[ jj ].GetSheetPath() ) )
                     {
-                        token = refComponent->m_Uuid.AsString() + ":" + parts[1];
+                        token = refComponent->m_Uuid.AsString() + ":" + remainder;
                         break;
                     }
                 }
