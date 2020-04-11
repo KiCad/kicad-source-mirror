@@ -368,7 +368,11 @@ wxString DIALOG_TEXT_PROPERTIES::convertReferencesToKIIDs( const wxString& aSour
                 {
                     if( mod->GetReference().CmpNoCase( ref ) == 0 )
                     {
-                        token = mod->m_Uuid.AsString() + ":" + remainder;
+                        wxString test( remainder );
+
+                        if( mod->ResolveTextVar( &test ) )
+                            token = mod->m_Uuid.AsString() + ":" + remainder;
+
                         break;
                     }
                 }

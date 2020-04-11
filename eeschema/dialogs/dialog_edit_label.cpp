@@ -271,7 +271,11 @@ wxString convertReferencesToKIIDs( const wxString& aSource )
 
                     if( ref == refComponent->GetRef( &references[ jj ].GetSheetPath(), true ) )
                     {
-                        token = refComponent->m_Uuid.AsString() + ":" + remainder;
+                        wxString test( remainder );
+
+                        if( refComponent->ResolveTextVar( &test ) )
+                            token = refComponent->m_Uuid.AsString() + ":" + remainder;
+
                         break;
                     }
                 }
