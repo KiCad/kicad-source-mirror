@@ -1587,7 +1587,8 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
                 return SEARCH_RESULT::QUIT;
         }
 
-        if( stype == SCH_FIELD_LOCATE_VALUE_T )
+        if( stype == SCH_FIELD_LOCATE_VALUE_T
+                || ( stype == SCH_COMPONENT_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
         {
             if( SEARCH_RESULT::QUIT == aInspector( GetField( VALUE ), (void*) this ) )
                 return SEARCH_RESULT::QUIT;
