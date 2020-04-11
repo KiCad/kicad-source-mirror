@@ -38,10 +38,8 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT
         m_frame( aFrame ),
         m_global( aGlobal )
 {
-    wxString msg;
-
-    msg.Printf( m_title->GetLabel(), aGlobal ? _( "Global" ) : _( "Project" ) );
-    m_title->SetLabel( msg );
+    m_title->SetLabel( aGlobal ? _( "Global field name templates:" )
+                               : _( "Project field name templates:" ) );
 
     // Yep, it's a hack.  I haven't a clue why the global and project versions don't lay
     // out the same.

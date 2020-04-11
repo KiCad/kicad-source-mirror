@@ -55,7 +55,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_treebook->AddSubPage( m_fieldNameTemplates, _( "Field Name Templates" ) );
 
     m_treebook->AddPage( new wxPanel( this ),  _( "Electrical Rules" ) );
-    m_treebook->AddSubPage( m_pinMap, _( "Pin Map" ) );
+    m_treebook->AddSubPage( m_pinMap, _( "Pin Conflicts Map" ) );
     m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
 
     m_treebook->AddPage( new wxPanel( this ), _( "Project" ) );

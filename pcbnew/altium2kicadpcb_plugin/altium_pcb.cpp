@@ -1451,8 +1451,8 @@ void ALTIUM_PCB::ParsePads6Data(
             if( elem.layer == ALTIUM_LAYER::MULTI_LAYER )
             {
                 wxLogError( wxString::Format(
-                        _( "Pad '%s' of Footprint %s marked as multilayer, but it is an SMT pad" ),
-                        elem.name, module->GetReference() ) );
+                            "Pad '%s' of Footprint %s marked as multilayer, but it is an SMT pad",
+                            elem.name, module->GetReference() ) );
             }
             pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
         }

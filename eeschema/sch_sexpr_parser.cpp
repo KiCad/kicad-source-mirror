@@ -1961,7 +1961,7 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
             if( !text.IsEmpty() && id.Parse( text, LIB_ID::ID_SCH, true ) >= 0 )
             {
-                tmp.Printf( _( "Invalid symbol lbirary ID in\nfile: \"%s\"\nline: %d\n"
+                tmp.Printf( _( "Invalid symbol library ID in\nfile: \"%s\"\nline: %d\n"
                                "offset: %d" ),
                             GetChars( CurSource() ), CurLineNumber(), CurOffset() );
                 THROW_IO_ERROR( tmp );
