@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-10 16:34+0200\n"
-"PO-Revision-Date: 2020-04-10 16:40+0200\n"
+"POT-Creation-Date: 2020-04-11 08:51+0200\n"
+"PO-Revision-Date: 2020-04-11 08:52+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -53,7 +53,7 @@ msgstr "OK"
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:144 common/confirm.cpp:195
 #: common/tool/actions.cpp:120
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:185
-#: pcbnew/microwave/microwave_polygon.cpp:125 pcbnew/pcb_parser.cpp:627
+#: pcbnew/microwave/microwave_polygon.cpp:125 pcbnew/pcb_parser.cpp:636
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -1371,7 +1371,7 @@ msgstr "Question"
 #: eeschema/libedit/libedit.cpp:568 eeschema/libedit/symbedit.cpp:96
 #: eeschema/sheet.cpp:641 eeschema/sheet_old.cpp:891
 #: pcbnew/dialogs/dialog_export_vrml.cpp:182
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:299 pcbnew/pcb_parser.cpp:624
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:299 pcbnew/pcb_parser.cpp:633
 msgid "Warning"
 msgstr "Avertissement"
 
@@ -2396,8 +2396,6 @@ msgid "MyLabel"
 msgstr "MyLabel"
 
 #: common/dialogs/panel_color_settings.cpp:30
-#, fuzzy
-#| msgid "Reveal in Finder"
 msgid "Reveal Themes in Finder"
 msgstr "Révéler dans Finder"
 
@@ -2412,7 +2410,7 @@ msgstr "Utilisateur"
 
 #: common/dialogs/panel_color_settings_base.cpp:34
 msgid "Override individual item colors"
-msgstr ""
+msgstr "Ignorer les couleurs individuees des éléments"
 
 #: common/dialogs/panel_color_settings_base.cpp:35
 msgid ""
@@ -3940,7 +3938,7 @@ msgid "Duplicates the selected item(s)"
 msgstr "Duplique le (les) élément(s) sélectionné(s)"
 
 #: common/tool/actions.cpp:181 kicad/tree_project_frame.cpp:693
-#: pcbnew/pcb_parser.cpp:627 pcbnew/tools/edit_tool.cpp:937
+#: pcbnew/pcb_parser.cpp:636 pcbnew/tools/edit_tool.cpp:937
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -8160,11 +8158,8 @@ msgid "Field name templates"
 msgstr "Modèles de nom de champs"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
-#: eeschema/dialogs/dialog_schematic_setup.cpp:58
-#, fuzzy
-#| msgid "Pin name"
-msgid "Pin Map"
-msgstr "Nom pin"
+msgid "Pin confict map"
+msgstr "Carte des conflits de pins"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:66
@@ -8188,6 +8183,8 @@ msgstr "Feuille sans Nom"
 #: eeschema/dialogs/dialog_sch_sheet_props.cpp:301
 msgid "Note: item colors are overridden in the current color theme."
 msgstr ""
+"Remarque : les couleurs des éléments sont forcées dans le thème de couleur "
+"actuel."
 
 #: eeschema/dialogs/dialog_sch_sheet_props.cpp:303
 #, c-format
@@ -8347,8 +8344,11 @@ msgstr "Modèles de Nom de Champs"
 msgid "Electrical Rules"
 msgstr "Règles Electriques"
 
+#: eeschema/dialogs/dialog_schematic_setup.cpp:58
+msgid "Pin Conflicts Map"
+msgstr "Carte des Conflits de Pins"
+
 #: eeschema/dialogs/dialog_schematic_setup.cpp:61
-#: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:43
 #: eeschema/libedit/lib_edit_frame.cpp:715
 #: pcbnew/dialogs/dialog_board_setup.cpp:76
 #: pcbnew/footprint_libraries_utils.cpp:510
@@ -9017,10 +9017,8 @@ msgid "Modulating frequency:"
 msgstr "Fréquence de modulation:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:801
-#, fuzzy
-#| msgid "Signal"
 msgid "Signal delay:"
-msgstr "Signal"
+msgstr "Retard du signal:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:827
 msgid "AM"
@@ -9355,10 +9353,8 @@ msgid "Edit color (right click for options)"
 msgstr "Modifier la couleur (clic droit pour les options)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:515
-#, fuzzy
-#| msgid "Theme name:"
 msgid "New theme name:"
-msgstr "Nom du thème:"
+msgstr "Nouveau nom du thème:"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:515
 msgid "Add Color Theme"
@@ -9528,21 +9524,21 @@ msgstr "Prévisualisation de l'empreinte dans le Sélecteur de Symbole"
 msgid "Keep hierarchy navigator open"
 msgstr "Garder le navigateur hiérarchique ouvert"
 
-#: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:43
-#: eeschema/libedit/lib_edit_frame.cpp:714
-#: pcbnew/footprint_libraries_utils.cpp:509
-msgid "Global"
-msgstr "Global"
+#: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:41
+msgid "Global field name templates:"
+msgstr "Modèles globaux de nom de champs:"
 
-#: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:85
+#: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:42
+msgid "Project field name templates:"
+msgstr "Modèles de nom de champs du projet:"
+
+#: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:83
 msgid "Untitled Field"
 msgstr "Champ sans Nom"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:23
-#, fuzzy, c-format
-#| msgid "Field Name Templates"
-msgid "%s field name templates:"
-msgstr "Modèles de Nom de Champs"
+msgid "field name templates:"
+msgstr "Modèles de nom de champs:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:45
 msgid "URL"
@@ -10477,6 +10473,11 @@ msgstr "Le fichier librairie n'a pas pu être ouvert."
 msgid "Loading library \"%s\""
 msgstr "Chargement librairie  \"%s\""
 
+#: eeschema/libedit/lib_edit_frame.cpp:714
+#: pcbnew/footprint_libraries_utils.cpp:509
+msgid "Global"
+msgstr "Global"
+
 #: eeschema/libedit/lib_edit_frame.cpp:717
 #: pcbnew/footprint_libraries_utils.cpp:513
 msgid "Choose the Library Table to add the library to:"
@@ -10709,7 +10710,7 @@ msgstr "Conserver le Symbole"
 #: eeschema/libedit/libedit.cpp:702 pcbnew/footprint_libraries_utils.cpp:986
 #, c-format
 msgid "Revert \"%s\" to last version saved?"
-msgstr "Revenir \"%s\" à la dernière version enregistrée?"
+msgstr "Restaurer \"%s\" à la dernière version enregistrée?"
 
 #: eeschema/libedit/libedit.cpp:771
 #, c-format
@@ -11386,7 +11387,7 @@ msgstr ""
 "Entrez le symbole python qui implémente les fonctions de SCH_PLUGIN::"
 "Symbol*()."
 
-#: eeschema/sch_sexpr_parser.cpp:128
+#: eeschema/sch_sexpr_parser.cpp:129
 #, c-format
 msgid ""
 "Invalid symbol name in\n"
@@ -11399,7 +11400,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:137
+#: eeschema/sch_sexpr_parser.cpp:138
 #, c-format
 msgid ""
 "Empty symbol name in\n"
@@ -11412,7 +11413,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:179
+#: eeschema/sch_sexpr_parser.cpp:180
 #, c-format
 msgid ""
 "Invalid symbol extends name in\n"
@@ -11425,7 +11426,7 @@ msgstr ""
 "ligne: %d\n"
 "décalage: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:190
+#: eeschema/sch_sexpr_parser.cpp:191
 #, c-format
 msgid ""
 "No parent for extended symbol %s in\n"
@@ -11438,7 +11439,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:207
+#: eeschema/sch_sexpr_parser.cpp:208
 #, c-format
 msgid ""
 "Invalid symbol unit name in\n"
@@ -11451,7 +11452,7 @@ msgstr ""
 "ligne: %d\n"
 "décalage: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:217
+#: eeschema/sch_sexpr_parser.cpp:218
 #, c-format
 msgid ""
 "Invalid symbol unit name prefix %s in\n"
@@ -11464,7 +11465,7 @@ msgstr ""
 "ligne: %d\n"
 "décalage: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:229
+#: eeschema/sch_sexpr_parser.cpp:230
 #, c-format
 msgid ""
 "Invalid symbol unit name suffix %s in\n"
@@ -11477,7 +11478,7 @@ msgstr ""
 "ligne: %d\n"
 "décalage: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:237
+#: eeschema/sch_sexpr_parser.cpp:238
 #, c-format
 msgid ""
 "Invalid symbol unit number %s in\n"
@@ -11490,7 +11491,7 @@ msgstr ""
 "ligne: %d\n"
 "décalage: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:247
+#: eeschema/sch_sexpr_parser.cpp:248
 #, c-format
 msgid ""
 "Invalid symbol convert number %s in\n"
@@ -11503,7 +11504,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:372 pcbnew/pcb_parser.cpp:161
+#: eeschema/sch_sexpr_parser.cpp:373 pcbnew/pcb_parser.cpp:161
 #, c-format
 msgid ""
 "Invalid floating point number in\n"
@@ -11516,7 +11517,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:381 pcbnew/pcb_parser.cpp:170
+#: eeschema/sch_sexpr_parser.cpp:382 pcbnew/pcb_parser.cpp:170
 #, c-format
 msgid ""
 "Missing floating point number in\n"
@@ -11529,7 +11530,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:662
+#: eeschema/sch_sexpr_parser.cpp:663
 #, c-format
 msgid ""
 "Invalid symbol names definition in\n"
@@ -11542,7 +11543,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:684 eeschema/sch_sexpr_parser.cpp:1631
+#: eeschema/sch_sexpr_parser.cpp:685 eeschema/sch_sexpr_parser.cpp:1632
 #, c-format
 msgid ""
 "Invalid property name in\n"
@@ -11555,7 +11556,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:693 eeschema/sch_sexpr_parser.cpp:1640
+#: eeschema/sch_sexpr_parser.cpp:694 eeschema/sch_sexpr_parser.cpp:1641
 #, c-format
 msgid ""
 "Empty property name in\n"
@@ -11568,7 +11569,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:703 eeschema/sch_sexpr_parser.cpp:1649
+#: eeschema/sch_sexpr_parser.cpp:704 eeschema/sch_sexpr_parser.cpp:1650
 #, c-format
 msgid ""
 "Invalid property value in\n"
@@ -11581,7 +11582,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:1211
+#: eeschema/sch_sexpr_parser.cpp:1212
 #, c-format
 msgid ""
 "Invalid pin name in\n"
@@ -11594,7 +11595,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:1246
+#: eeschema/sch_sexpr_parser.cpp:1247
 #, c-format
 msgid ""
 "Invalid pin number in\n"
@@ -11607,7 +11608,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:1423
+#: eeschema/sch_sexpr_parser.cpp:1424
 #, c-format
 msgid ""
 "Invalid text string in\n"
@@ -11620,61 +11621,46 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:1472 pcbnew/pcb_parser.cpp:793
+#: eeschema/sch_sexpr_parser.cpp:1473 pcbnew/pcb_parser.cpp:802
 #, c-format
 msgid "Page type \"%s\" is not valid "
 msgstr "Page type \"%s\" non valide "
 
-#: eeschema/sch_sexpr_parser.cpp:1711
-#, fuzzy, c-format
-#| msgid ""
-#| "Invalid pin name in\n"
-#| "file: \"%s\"\n"
-#| "line: %d\n"
-#| "offset: %d"
+#: eeschema/sch_sexpr_parser.cpp:1712
+#, c-format
 msgid ""
 "Invalid sheet pin name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Nom de pin invalide en\n"
+"Nom de pin d feuille invalide en\n"
 "fichier: \"%s\"\n"
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:1720
-#, fuzzy, c-format
-#| msgid ""
-#| "Empty property name in\n"
-#| "file: \"%s\"\n"
-#| "line: %d\n"
-#| "offset: %d"
+#: eeschema/sch_sexpr_parser.cpp:1721
+#, c-format
 msgid ""
 "Empty sheet pin name in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Nom de propriété vide en\n"
+"Nom de pin de feuille vide en\n"
 "fichier: \"%s\"\n"
 "ligne: %d\n"
 "offset: %d"
 
-#: eeschema/sch_sexpr_parser.cpp:1963
-#, fuzzy, c-format
-#| msgid ""
-#| "Invalid symbol name in\n"
-#| "file: \"%s\"\n"
-#| "line: %d\n"
-#| "offset: %d"
+#: eeschema/sch_sexpr_parser.cpp:1964
+#, c-format
 msgid ""
-"Invalid symbol lbirary ID in\n"
+"Invalid symbol library ID in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Nom de symbole invalide dans\n"
+"ID de librairie de symbole invalide dans\n"
 "fichier: \"%s\"\n"
 "ligne: %d\n"
 "offset: %d"
@@ -13370,12 +13356,12 @@ msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr ""
 "Erreur :  noms de sous-feuilles dupliqués trouvés dans la feuille courante."
 
-#: eeschema/tools/sch_editor_control.cpp:729
+#: eeschema/tools/sch_editor_control.cpp:732
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Net en Surbrillance: %s"
 
-#: eeschema/tools/sch_editor_control.cpp:1088
+#: eeschema/tools/sch_editor_control.cpp:1118
 #, c-format
 msgid ""
 "The pasted sheet \"%s\"\n"
@@ -14566,10 +14552,8 @@ msgid "Archive all project files"
 msgstr "Archiver les fichiers du projet"
 
 #: kicad/menubar.cpp:202
-#, fuzzy
-#| msgid "Reveal project directory in Finder"
 msgid "Reveal project folder in Finder"
-msgstr "Ouvrir le répertoire de projet dans l'explorateur de fichiers"
+msgstr "Révéler le répertoire de projet dans le \"Finder\""
 
 #: kicad/menubar.cpp:204
 msgid "Open project directory in file explorer"
@@ -16802,11 +16786,6 @@ msgstr "Longueur Câble"
 msgid "Electrical Resistivity in Ohm*m"
 msgstr "Résistivité électrique en Ohm*m"
 
-#: pcbnew/altium2kicadpcb_plugin/altium_parser_pcb.cpp:133
-#, c-format
-msgid "Unknown mapping of the Altium layer '%s'. Please report as issue."
-msgstr ""
-
 #: pcbnew/altium2kicadpcb_plugin/altium_pcb.cpp:52
 #, c-format
 msgid "Cannot open file '%s'"
@@ -16858,11 +16837,6 @@ msgid ""
 msgstr ""
 "Arc sur couche Altium %d n'a pas d'équivalent dans Kicad. Placé sur couche "
 "Eco1_User à la place"
-
-#: pcbnew/altium2kicadpcb_plugin/altium_pcb.cpp:1454
-#, c-format
-msgid "Pad '%s' of Footprint %s marked as multilayer, but it is an SMT pad"
-msgstr ""
 
 #: pcbnew/altium2kicadpcb_plugin/altium_pcb.cpp:1485
 #, c-format
@@ -19865,10 +19839,8 @@ msgid "Format"
 msgstr "Format"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:62
-#, fuzzy
-#| msgid "Separate files for front and back"
 msgid "Separate files for front, back"
-msgstr "Générer des fichiers séparés pour dessus et dessous"
+msgstr "Fichiers séparés pour dessus et dessous"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:62
 msgid "Single file for board"
@@ -24730,7 +24702,7 @@ msgid "Select Library Table"
 msgstr "Sélection Table des Librairies"
 
 #: pcbnew/footprint_libraries_utils.cpp:588 pcbnew/gpcb_plugin.cpp:962
-#: pcbnew/kicad_plugin.cpp:2222
+#: pcbnew/kicad_plugin.cpp:2223
 #, c-format
 msgid "Library \"%s\" is read only"
 msgstr "Librairie \"%s\" est en lecture seule"
@@ -25136,26 +25108,26 @@ msgstr ""
 "Le chemin de librairie d'empreintes \"%s\" n'existe pas (ou n'est pas un "
 "répertoire)"
 
-#: pcbnew/kicad_plugin.cpp:1311 pcbnew/legacy_plugin.cpp:98
+#: pcbnew/kicad_plugin.cpp:1312 pcbnew/legacy_plugin.cpp:98
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "type pad inconnu: %d"
 
-#: pcbnew/kicad_plugin.cpp:1696
+#: pcbnew/kicad_plugin.cpp:1697
 #, c-format
 msgid "unknown via type %d"
 msgstr "type via inconnu %d"
 
-#: pcbnew/kicad_plugin.cpp:1857
+#: pcbnew/kicad_plugin.cpp:1858
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "unknown zone corner smoothing type %d"
 
-#: pcbnew/kicad_plugin.cpp:2069
+#: pcbnew/kicad_plugin.cpp:2070
 msgid "this file does not contain a PCB"
 msgstr "ce fichier ne contient pas de PCB"
 
-#: pcbnew/kicad_plugin.cpp:2210
+#: pcbnew/kicad_plugin.cpp:2211
 #, c-format
 msgid ""
 "Library \"%s\" does not exist.\n"
@@ -25164,50 +25136,50 @@ msgstr ""
 "La librairie\"%s\" n'existe pas.\n"
 "Voulez vous la créer?"
 
-#: pcbnew/kicad_plugin.cpp:2214
+#: pcbnew/kicad_plugin.cpp:2215
 msgid "Library Not Found"
 msgstr "Librairie non trouvée"
 
-#: pcbnew/kicad_plugin.cpp:2253
+#: pcbnew/kicad_plugin.cpp:2254
 #, c-format
 msgid "Footprint file name \"%s\" is not valid."
 msgstr "Nom de fichier d'empreinte \"%s\" non valide."
 
-#: pcbnew/kicad_plugin.cpp:2259
+#: pcbnew/kicad_plugin.cpp:2260
 #, c-format
 msgid "No write permissions to delete file \"%s\""
 msgstr "Pas de permission d'écriture pour supprimer  le fichier \"%s\""
 
-#: pcbnew/kicad_plugin.cpp:2308
+#: pcbnew/kicad_plugin.cpp:2309
 #, c-format
 msgid "Library \"%s\" is read only."
 msgstr "La librairie \"%s\" est en lecture seule."
 
-#: pcbnew/kicad_plugin.cpp:2327
+#: pcbnew/kicad_plugin.cpp:2328
 #, c-format
 msgid "Cannot overwrite library path \"%s\"."
 msgstr "Impossible de remplacer le chemin librairie  \"%s\"."
 
-#: pcbnew/kicad_plugin.cpp:2352
+#: pcbnew/kicad_plugin.cpp:2353
 #, c-format
 msgid "User does not have permission to delete directory \"%s\"."
 msgstr ""
 "Vous n'avez pas la permission d'écriture pour supprimer le répertoire \"%s\"."
 
-#: pcbnew/kicad_plugin.cpp:2360
+#: pcbnew/kicad_plugin.cpp:2361
 #, c-format
 msgid "Library directory \"%s\" has unexpected sub-directories."
 msgstr "le répertoire librairie \"%s\" a des sous-répertoires inattendus."
 
-#: pcbnew/kicad_plugin.cpp:2379
+#: pcbnew/kicad_plugin.cpp:2380
 #, c-format
 msgid "Unexpected file \"%s\" was found in library path \"%s\"."
-msgstr "fichier inattendu \"%s\" trouvé dans le chemin de librairie \"%s\"."
+msgstr "Fichier inattendu \"%s\" trouvé dans le chemin de librairie \"%s\"."
 
-#: pcbnew/kicad_plugin.cpp:2395
+#: pcbnew/kicad_plugin.cpp:2396
 #, c-format
 msgid "Footprint library \"%s\" cannot be deleted."
-msgstr "la librairie d'empreintes  \"%s\" ne peut pas être supprimée."
+msgstr "La librairie d'empreintes  \"%s\" ne peut pas être supprimée."
 
 #: pcbnew/layer_widget.cpp:130
 msgid "Change Layer Color for "
@@ -25288,7 +25260,7 @@ msgstr "ZAux mauvais pour CZONE_CONTAINER \"%s\""
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Mauvais ZSmoothing pour CZONE_CONTAINER \"%s\""
 
-#: pcbnew/legacy_plugin.cpp:2580 pcbnew/pcb_parser.cpp:3776
+#: pcbnew/legacy_plugin.cpp:2580 pcbnew/pcb_parser.cpp:3785
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to polygon fills?"
@@ -25296,7 +25268,7 @@ msgstr ""
 "Le mode de remplissage par segment  n'est plus supporté.\n"
 "Convertir la zone en polygone de remplissage?"
 
-#: pcbnew/legacy_plugin.cpp:2582 pcbnew/pcb_parser.cpp:3778
+#: pcbnew/legacy_plugin.cpp:2582 pcbnew/pcb_parser.cpp:3787
 msgid "Legacy Zone Warning"
 msgstr "Avertissement d'Obsolescence"
 
@@ -25415,7 +25387,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:113
 msgid "Revert to Last Backup"
-msgstr "Reprendre Ancienne Sauvegarde"
+msgstr "Restaurer Ancienne Sauvegarde"
 
 #: pcbnew/menubar_pcb_editor.cpp:114
 msgid "Clear board and get previous backup version of board"
@@ -25793,7 +25765,7 @@ msgstr ""
 "netliste."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:390
-#: pcbnew/pcb_parser.cpp:2343
+#: pcbnew/pcb_parser.cpp:2352
 #, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -26237,12 +26209,12 @@ msgstr "Couche fabrication sur le dessous du circuit imprimé"
 msgid "Cannot interpret date code %d"
 msgstr "Ne peut pas interpréter le code de date %d"
 
-#: pcbnew/pcb_parser.cpp:499 pcbnew/pcb_parser.cpp:608
+#: pcbnew/pcb_parser.cpp:508 pcbnew/pcb_parser.cpp:617
 #, c-format
 msgid "Unknown token \"%s\""
 msgstr "Mot clé \"%s\" inconnu"
 
-#: pcbnew/pcb_parser.cpp:617
+#: pcbnew/pcb_parser.cpp:626
 msgid ""
 "Items found on undefined layers.  Do you wish to\n"
 "rescue them to the Cmts.User layer?"
@@ -26250,38 +26222,38 @@ msgstr ""
 "Éléments trouvés sur des couches non définies.\n"
 "Souhaitez-vous les sauver sur la couche Cmts.User?"
 
-#: pcbnew/pcb_parser.cpp:619
+#: pcbnew/pcb_parser.cpp:628
 msgid "Undefined layers:"
 msgstr "Couches non définies:"
 
-#: pcbnew/pcb_parser.cpp:627
+#: pcbnew/pcb_parser.cpp:636
 msgid "Rescue"
 msgstr "Secours"
 
-#: pcbnew/pcb_parser.cpp:1305
+#: pcbnew/pcb_parser.cpp:1314
 #, c-format
 msgid "Layer \"%s\" in file \"%s\" at line %d, is not in fixed layer hash"
 msgstr ""
 "La couche \"%s\" dans le fichier \"%s\" ligne %d, n'est pas dans la liste "
 "des couches prédéfinies"
 
-#: pcbnew/pcb_parser.cpp:1342
+#: pcbnew/pcb_parser.cpp:1351
 #, c-format
 msgid "%d is not a valid layer count"
 msgstr "%d n'est pas un nombre de couches valide"
 
-#: pcbnew/pcb_parser.cpp:1889
+#: pcbnew/pcb_parser.cpp:1898
 #, c-format
 msgid "Duplicate NETCLASS name \"%s\" in file \"%s\" at line %d, offset %d"
 msgstr ""
 "Nom NETCLASS \"%s\" dupliqué dans le fichier \"%s\" ligne %d, offset %d"
 
-#: pcbnew/pcb_parser.cpp:2622
+#: pcbnew/pcb_parser.cpp:2631
 #, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Ne peut gérer le texte d'empreinte type %s"
 
-#: pcbnew/pcb_parser.cpp:3059
+#: pcbnew/pcb_parser.cpp:3068
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -26294,7 +26266,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: pcbnew/pcb_parser.cpp:3075
+#: pcbnew/pcb_parser.cpp:3084
 #, c-format
 msgid ""
 "Net name doesn't match net ID in\n"
@@ -26307,8 +26279,8 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: pcbnew/pcb_parser.cpp:3433 pcbnew/pcb_parser.cpp:3499
-#: pcbnew/pcb_parser.cpp:3582 pcbnew/pcb_parser.cpp:3653
+#: pcbnew/pcb_parser.cpp:3442 pcbnew/pcb_parser.cpp:3508
+#: pcbnew/pcb_parser.cpp:3591 pcbnew/pcb_parser.cpp:3662
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -26321,7 +26293,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: pcbnew/pcb_parser.cpp:4043
+#: pcbnew/pcb_parser.cpp:4052
 #, c-format
 msgid ""
 "There is a zone that belongs to a not existing net\n"
@@ -28490,6 +28462,11 @@ msgstr "Modifier les propriétés de la zone"
 #, c-format
 msgid "Refill %d Zones"
 msgstr "Remplissage %d Zones"
+
+#, fuzzy
+#~| msgid "Pin name"
+#~ msgid "Pin Map"
+#~ msgstr "Nom pin"
 
 #~ msgid "&Save"
 #~ msgstr "&Sauver"
