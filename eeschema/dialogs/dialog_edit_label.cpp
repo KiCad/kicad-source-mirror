@@ -269,7 +269,7 @@ wxString convertReferencesToKIIDs( const wxString& aSource )
                 {
                     SCH_COMPONENT* refComponent = references[ jj ].GetComp();
 
-                    if( ref == refComponent->GetRef( &references[ jj ].GetSheetPath() ) )
+                    if( ref == refComponent->GetRef( &references[ jj ].GetSheetPath(), true ) )
                     {
                         token = refComponent->m_Uuid.AsString() + ":" + remainder;
                         break;
