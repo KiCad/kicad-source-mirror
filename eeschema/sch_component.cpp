@@ -598,7 +598,7 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aInclude
     if( ref.IsEmpty() )
         ref = m_prefix;
 
-    if( aIncludeUnit )
+    if( aIncludeUnit && GetUnitCount() > 1 )
         ref += LIB_PART::SubReference( GetUnit() );
 
     return ref;
