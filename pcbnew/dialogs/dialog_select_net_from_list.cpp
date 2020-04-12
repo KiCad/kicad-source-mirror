@@ -28,68 +28,14 @@
 #include <tools/pcb_inspection_tool.h>
 #include <class_board.h>
 #include <class_track.h>
-#include <dialog_select_net_from_list_base.h>
+#include <dialog_select_net_from_list.h>
 #include <eda_pattern_match.h>
 #include <wildcards_and_files_ext.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
 #include <connectivity/connectivity_data.h>
-
-class DIALOG_SELECT_NET_FROM_LIST: public DIALOG_SELECT_NET_FROM_LIST_BASE
-{
-private:
-public:
-    DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParent );
-    ~DIALOG_SELECT_NET_FROM_LIST();
-
-    // returns true if a net was selected, and its name in aName
-    bool GetNetName( wxString& aName );
-
-    /**
-     * Visually highlights a net.
-     * @param aNetName is the name of net to be highlighted.  An empty string will unhighlight
-     * any currently highlighted net.
-     */
-    void HighlightNet( const wxString& aNetName );
-
-private:
-    void onSelChanged( wxDataViewEvent& event ) override;
-    void onFilterChange( wxCommandEvent& event ) override;
-    void onListSize( wxSizeEvent& event ) override;
-    void onReport( wxCommandEvent& event ) override;
-
-    void buildNetsList();
-    wxString getListColumnHeaderNet() { return _( "Net" ); };
-    wxString getListColumnHeaderName() { return _( "Name" ); };
-    wxString getListColumnHeaderCount() { return _( "Pad Count" ); };
-    wxString getListColumnHeaderVias() { return _( "Via Count" ); };
-    wxString getListColumnHeaderBoard() { return _( "Board Length" ); };
-    wxString getListColumnHeaderDie() { return _( "Die Length" ); };
-    wxString getListColumnHeaderLength() { return _( "Length" ); };
-    void adjustListColumns();
-
-    wxArrayString   m_netsInitialNames;   // The list of escaped netnames (original names)
-    wxString        m_selection;
-    bool            m_wasSelected;
-    BOARD*          m_brd;
-    PCB_EDIT_FRAME* m_frame;
-};
-
-
-int PCB_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
-{
-    DIALOG_SELECT_NET_FROM_LIST dlg( m_frame );
-    wxString netname;
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-    {
-        // Clear highlight
-        dlg.HighlightNet( "" );
-    }
-
-    return 0;
-}
+#include <connectivity/connectivity_algo.h>
 
 
 DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParent )

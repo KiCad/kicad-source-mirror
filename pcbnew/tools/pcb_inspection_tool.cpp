@@ -28,6 +28,7 @@
 #include <tools/edit_tool.h>
 #include <painter.h>
 #include <connectivity/connectivity_data.h>
+#include <dialogs/dialog_select_net_from_list.h>
 #include <profile.h>
 #include "pcb_inspection_tool.h"
 
@@ -443,6 +444,18 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest()
     connectivity->ComputeDynamicRatsnest( items );
 }
 
+int PCB_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
+{
+    DIALOG_SELECT_NET_FROM_LIST dlg( m_frame );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+    {
+        // Clear highlight
+        dlg.HighlightNet( "" );
+    }
+
+    return 0;
+}
 
 void PCB_INSPECTION_TOOL::setTransitions()
 {
