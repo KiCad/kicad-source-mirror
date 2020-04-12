@@ -475,6 +475,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
             view->Add( eda_item );
             connectivity->Add( item );
+            item->GetBoard()->OnItemChanged( item );
         }
         break;
 
@@ -496,6 +497,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             item->Move( aRedoCommand ? aList->m_TransformPoint : -aList->m_TransformPoint );
             view->Update( item, KIGFX::GEOMETRY );
             connectivity->Update( item );
+            item->GetBoard()->OnItemChanged( item );
         }
             break;
 
@@ -506,6 +508,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
                           aRedoCommand ? m_rotationAngle : -m_rotationAngle );
             view->Update( item, KIGFX::GEOMETRY );
             connectivity->Update( item );
+            item->GetBoard()->OnItemChanged( item );
         }
             break;
 
@@ -516,6 +519,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
                           aRedoCommand ? -m_rotationAngle : m_rotationAngle );
             view->Update( item, KIGFX::GEOMETRY );
             connectivity->Update( item );
+            item->GetBoard()->OnItemChanged( item );
         }
             break;
 
@@ -525,6 +529,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             item->Flip( aList->m_TransformPoint, m_Settings->m_FlipLeftRight );
             view->Update( item, KIGFX::LAYERS );
             connectivity->Update( item );
+            item->GetBoard()->OnItemChanged( item );
         }
             break;
 

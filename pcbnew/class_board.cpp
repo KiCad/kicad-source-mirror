@@ -601,6 +601,8 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     aBoardItem->SetParent( this );
     aBoardItem->ClearEditFlags();
     m_connectivity->Add( aBoardItem );
+
+    InvokeListeners( &BOARD_LISTENER::OnBoardItemAdded, *this, aBoardItem );
 }
 
 
@@ -679,6 +681,8 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
     }
 
     m_connectivity->Remove( aBoardItem );
+
+    InvokeListeners( &BOARD_LISTENER::OnBoardItemRemoved, *this, aBoardItem );
 }
 
 
@@ -1429,6 +1433,9 @@ void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNe
 void BOARD::PadDelete( D_PAD* aPad )
 {
     GetConnectivity()->Remove( aPad );
+
+    InvokeListeners( &BOARD_LISTENER::OnBoardItemRemoved, *this, aPad );
+
     aPad->DeleteStructure();
 }
 
@@ -1797,5 +1804,56 @@ void BOARD::SanitizeNetcodes()
     {
         if( FindNet( item->GetNetCode() ) == nullptr )
             item->SetNetCode( NETINFO_LIST::ORPHANED );
+    }
+}
+
+void BOARD::AddListener( BOARD_LISTENER* aListener )
+{
+    if( std::find( m_listeners.begin(), m_listeners.end(), aListener ) == m_listeners.end() )
+        m_listeners.push_back( aListener );
+}
+
+void BOARD::RemoveListener( BOARD_LISTENER* aListener )
+{
+    auto i = std::find( m_listeners.begin(), m_listeners.end(), aListener );
+
+    if( i != m_listeners.end() )
+    {
+        std::iter_swap( i, m_listeners.end() - 1 );
+        m_listeners.pop_back();
+    }
+}
+
+void BOARD::OnItemChanged( BOARD_ITEM* aItem )
+{
+    InvokeListeners( &BOARD_LISTENER::OnBoardItemChanged, *this, aItem );
+}
+
+
+void BOARD::ResetNetHighLight()
+{
+    m_highLight.Clear();
+    m_highLightPrevious.Clear();
+
+    InvokeListeners( &BOARD_LISTENER::OnBoardHighlightNetChanged, *this );
+}
+
+
+void BOARD::SetHighLightNet( int aNetCode )
+{
+    if( m_highLight.m_netCode != aNetCode )
+    {
+        m_highLight.m_netCode = aNetCode;
+        InvokeListeners( &BOARD_LISTENER::OnBoardHighlightNetChanged, *this );
+    }
+}
+
+
+void BOARD::HighLightON( bool aValue )
+{
+    if( m_highLight.m_highLightOn != aValue )
+    {
+        m_highLight.m_highLightOn = aValue;
+        InvokeListeners( &BOARD_LISTENER::OnBoardHighlightNetChanged, *this );
     }
 }

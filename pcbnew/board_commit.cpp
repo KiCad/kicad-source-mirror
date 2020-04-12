@@ -262,6 +262,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                 connectivity->Update( boardItem );
                 view->Update( boardItem );
+                board->OnItemChanged( boardItem );
 
                 // if no undo entry is needed, the copy would create a memory leak
                 if( !aCreateUndoEntry )
@@ -395,6 +396,7 @@ void BOARD_COMMIT::Revert()
 
             view->Add( item );
             connectivity->Add( item );
+            board->OnItemChanged( item );
             delete copy;
             break;
         }

@@ -299,6 +299,8 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
         if( m_parent->SetTrackSegmentWidth( aItem, aUndoList, true ) == TRACK_ACTION_DRC_ERROR )
             m_failedDRC = true;
     }
+
+    m_brd->OnItemChanged( aItem );
 }
 
 

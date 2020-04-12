@@ -151,6 +151,25 @@ protected:
     }
 };
 
+/**
+ * BOARD_LISTENER
+ * provides an interface to hook into board modifications and get callbacks
+ * on certain modifications that are made to the board.  This allows updating
+ * auxiliary views other than the primary board editor view.
+ */
+class BOARD;
+
+class BOARD_LISTENER
+{
+public:
+    virtual ~BOARD_LISTENER() { }
+    virtual void OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem ) { }
+    virtual void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem ) { }
+    virtual void OnBoardNetSettingsChanged( BOARD& aBoard ) { }
+    virtual void OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem ) { }
+    virtual void OnBoardHighlightNetChanged( BOARD& aBoard ) { }
+};
+
 
 DECL_VEC_FOR_SWIG( MARKERS, MARKER_PCB* )
 DECL_VEC_FOR_SWIG( ZONE_CONTAINERS, ZONE_CONTAINER* )
@@ -202,12 +221,20 @@ private:
     NETINFO_LIST            m_NetInfo;              // net info list (name, design constraints ..
     PROJECT*                m_project;              // project this board is a part of (if any)
 
+    std::vector<BOARD_LISTENER*> m_listeners;
 
     // The default copy constructor & operator= are inadequate,
     // either write one or do not use it at all
     BOARD( const BOARD& aOther ) = delete;
 
     BOARD& operator=( const BOARD& aOther ) = delete;
+
+    template <typename Func, typename... Args>
+    void InvokeListeners( Func&& aFunc, Args&&... args )
+    {
+        for( auto&& l : m_listeners )
+            ( l->*aFunc )( std::forward<Args>( args )... );
+    }
 
 public:
     static inline bool ClassOf( const EDA_ITEM* aItem )
@@ -347,18 +374,19 @@ public:
      * Function ResetNetHighLight
      * Reset all high light data to the init state
      */
-    void ResetNetHighLight()
-    {
-        m_highLight.Clear();
-        m_highLightPrevious.Clear();
-    }
+    void ResetNetHighLight();
 
     /**
      * Function GetHighLightNetCode
      * @return netcode of net to highlight (-1 when no net selected)
      */
     int GetHighLightNetCode() const       { return m_highLight.m_netCode; }
-    void SetHighLightNet( int aNetCode)   { m_highLight.m_netCode = aNetCode; }
+
+    /**
+      * Function SetHighLightNet
+      * Select the netcode to be highlighted.
+      */
+    void SetHighLightNet( int aNetCode );
 
     /**
      * Function IsHighLightNetON
@@ -368,11 +396,19 @@ public:
 
     /**
      * Function HighLightON
-     * Enable highlight.
+     * Enable net highlight.
      * if m_highLight_NetCode >= 0, this net will be highlighted
      */
-    void HighLightON() { m_highLight.m_highLightOn = true; }
-    void HighLightOFF() { m_highLight.m_highLightOn = false; }
+    void HighLightON( bool aValue = true );
+
+    /**
+     * Function HighLightOFF
+     * Disable net highlight.
+     */
+    void HighLightOFF()
+    {
+        HighLightON( false );
+    }
 
     /**
      * Function GetCopperLayerCount
@@ -1119,6 +1155,28 @@ public:
     void MapNets( const BOARD* aDestBoard );
 
     void SanitizeNetcodes();
+
+    /**
+     * Add a listener to the board to receive calls whenever something on the
+     * board has been modified.  The board does not take ownership of the
+     * listener object.  Make sure to call RemoveListener before deleing the
+     * listener object.  The order of listener invocations is not guaranteed.
+     * If the specified listener object has been added before, it will not be
+     * added again.
+     */
+    void AddListener( BOARD_LISTENER* aListener );
+
+    /**
+     * Remove the specified listener.  If it has not been added before, it
+     * will do nothing.
+     */
+    void RemoveListener( BOARD_LISTENER* aListener );
+
+    /**
+      * Notify the board and its listeners that an item on the board has
+      * been modified in some way.
+      */
+    void OnItemChanged( BOARD_ITEM* aItem );
 };
 
 #endif      // CLASS_BOARD_H_

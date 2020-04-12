@@ -225,6 +225,8 @@ void BOARD::SynchronizeNetsAndNetClasses()
     m_designSettings.SetCustomDiffPairWidth( defaultNetClass->GetDiffPairWidth() );
     m_designSettings.SetCustomDiffPairGap( defaultNetClass->GetDiffPairGap() );
     m_designSettings.SetCustomDiffPairViaGap( defaultNetClass->GetDiffPairViaGap() );
+
+    InvokeListeners( &BOARD_LISTENER::OnBoardNetSettingsChanged, *this );
 }
 
 

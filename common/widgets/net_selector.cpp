@@ -201,9 +201,17 @@ public:
         {
             // Remove the first character ':' and all whitespace
             remainingName = remainingName.Mid( 1 ).Trim().Trim( false );
+
+            BOARD*        board  = m_netinfoList->GetParent();
             NETINFO_ITEM *newnet = new NETINFO_ITEM( m_board, remainingName, 0 );
 
-            m_netinfoList->AppendNet( newnet );
+            // add the new netinfo through the board's function so that
+            // board listeners get notified and things stay in sync.
+            if( board != nullptr )
+                board->Add( newnet );
+            else
+                m_netinfoList->AppendNet( newnet );
+
             rebuildList();
 
             if( newnet->GetNet() > 0 )
@@ -215,6 +223,11 @@ public:
             {
                 // This indicates that the NETINFO_ITEM was not successfully appended
                 // to the list for unknown reasons
+                if( board != nullptr )
+                    board->Remove( newnet );
+                else
+                    m_netinfoList->RemoveNet( newnet );
+
                 delete newnet;
             }
         }
