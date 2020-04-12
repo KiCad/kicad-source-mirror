@@ -394,7 +394,7 @@ void SCH_SEXPR_PARSER::parseStroke( STROKE_PARAMS& aStroke )
     wxCHECK_RET( CurTok() == T_stroke,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a stroke." ) );
 
-    aStroke.m_Width = Mils2iu( DEFAULT_LINE_WIDTH );
+    aStroke.m_Width = Mils2iu( DEFAULT_LINE_THICKNESS );
     aStroke.m_Type = PLOT_DASH_TYPE::DEFAULT;
     aStroke.m_Color = COLOR4D::UNSPECIFIED;
 

@@ -1618,7 +1618,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveArc( LIB_ARC* aArc,
     bool needsSpace = false;
     bool onNewLine = false;
 
-    if( aArc->GetWidth() != 0 && aArc->GetWidth() != Mils2iu( DEFAULT_LINE_WIDTH ) )
+    if( aArc->GetWidth() != 0 && aArc->GetWidth() != Mils2iu( DEFAULT_LINE_THICKNESS ) )
     {
         aFormatter.Print( 0, "\n" );
         aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
@@ -1691,7 +1691,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveBezier( LIB_BEZIER* aBezier,
 
     bool needsSpace = false;
 
-    if( aBezier->GetWidth() != 0 && aBezier->GetWidth() != Mils2iu( DEFAULT_LINE_WIDTH ) )
+    if( aBezier->GetWidth() != 0 && aBezier->GetWidth() != Mils2iu( DEFAULT_LINE_THICKNESS ) )
     {
         aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
                           FormatInternalUnits( aBezier->GetWidth() ).c_str() );
@@ -1731,7 +1731,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveCircle( LIB_CIRCLE* aCircle,
                       FormatInternalUnits( aCircle->GetPosition().y ).c_str(),
                       FormatInternalUnits( aCircle->GetRadius() ).c_str() );
 
-    if( aCircle->GetWidth() != 0 && aCircle->GetWidth() != Mils2iu( DEFAULT_LINE_WIDTH ) )
+    if( aCircle->GetWidth() != 0 && aCircle->GetWidth() != Mils2iu( DEFAULT_LINE_THICKNESS ) )
     {
         aFormatter.Print( 0, " (stroke (width %s))",
                           FormatInternalUnits( aCircle->GetWidth() ).c_str() );
@@ -1879,7 +1879,7 @@ void SCH_SEXPR_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine,
 
     bool needsSpace = false;
 
-    if( aPolyLine->GetWidth() != 0 && aPolyLine->GetWidth() != Mils2iu( DEFAULT_LINE_WIDTH ) )
+    if( aPolyLine->GetWidth() != 0 && aPolyLine->GetWidth() != Mils2iu( DEFAULT_LINE_THICKNESS ) )
     {
         aFormatter.Print( aNestLevel + 1, "(stroke (width %s))",
                           FormatInternalUnits( aPolyLine->GetWidth() ).c_str() );
@@ -1923,7 +1923,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveRectangle( LIB_RECTANGLE* aRectangle,
 
     bool needsSpace = false;
 
-    if( aRectangle->GetWidth() != 0 && aRectangle->GetWidth() != Mils2iu( DEFAULT_LINE_WIDTH ) )
+    if( aRectangle->GetWidth() != 0 && aRectangle->GetWidth() != Mils2iu( DEFAULT_LINE_THICKNESS ) )
     {
         aFormatter.Print( 0, " (stroke (width %s))",
                           FormatInternalUnits( aRectangle->GetWidth() ).c_str() );

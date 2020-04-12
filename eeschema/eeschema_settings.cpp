@@ -30,6 +30,7 @@
 #include <settings/settings_manager.h>
 #include <wx/config.h>
 #include <widgets/ui_common.h>
+#include <general.h>    // For some default values
 
 ///! Update the schema version whenever a migration is required
 const int eeschemaSchemaVersion = 0;
@@ -78,13 +79,13 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
             &m_AutoplaceFields.align_to_grid, true ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.default_bus_thickness",
-            &m_Drawing.default_bus_thickness, 12 ) );
+            &m_Drawing.default_bus_thickness, DEFAULT_BUS_THICKNESS ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.default_junction_size",
-            &m_Drawing.default_junction_size, 40 ) );
+            &m_Drawing.default_junction_size, DEFAULT_JUNCTION_DIAM ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.default_line_thickness",
-            &m_Drawing.default_line_thickness, 6 ) );
+            &m_Drawing.default_line_thickness, DEFAULT_LINE_THICKNESS ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.default_repeat_offset_x",
             &m_Drawing.default_repeat_offset_x, 0 ) );
@@ -93,7 +94,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
             &m_Drawing.default_repeat_offset_y, 100 ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.default_wire_thickness",
-            &m_Drawing.default_wire_thickness, 6 ) );
+            &m_Drawing.default_wire_thickness, DEFAULT_WIRE_THICKNESS ) );
 
     m_params.emplace_back(
             new PARAM<wxString>( "drawing.field_names", &m_Drawing.field_names, "" ) );

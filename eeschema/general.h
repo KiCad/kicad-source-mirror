@@ -54,11 +54,20 @@ class ERC_SETTINGS;
 ///< The default pin name size when creating pins(can be changed in preference menu)
 #define DEFAULTPINNAMESIZE 50
 
-///< The default selection highlight thickness
+///< The default selection highlight thickness (can be changed in preference menu)
 #define DEFAULTSELECTIONTHICKNESS 3
 
-///< The default line width in mils.
-#define DEFAULT_LINE_WIDTH 6
+///< The default line width in mils. (can be changed in preference menu)
+#define DEFAULT_LINE_THICKNESS 6
+
+///< The default wire width in mils. (can be changed in preference menu)
+#define DEFAULT_WIRE_THICKNESS 6
+
+///< The default bus width in mils. (can be changed in preference menu)
+#define DEFAULT_BUS_THICKNESS 12
+
+///< The default function diameter in mils. (can be changed in preference menu)
+#define DEFAULT_JUNCTION_DIAM 40
 
 /* Rotation, mirror of graphic items in components bodies are handled by a
  * transform matrix.  The default matrix is useful to draw lib entries with

@@ -71,7 +71,7 @@ public:
     PLOT_DASH_TYPE m_Type;
     COLOR4D m_Color;
 
-    STROKE_PARAMS( int aWidth = Mils2iu( DEFAULT_LINE_WIDTH ),
+    STROKE_PARAMS( int aWidth = Mils2iu( DEFAULT_LINE_THICKNESS ),
                    PLOT_DASH_TYPE aType = PLOT_DASH_TYPE::DEFAULT,
                    const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) :
             m_Width( aWidth ),

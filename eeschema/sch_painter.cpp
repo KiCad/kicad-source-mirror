@@ -74,9 +74,9 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_ShowDisabled( false ),
         m_ShowUmbilicals( true ),
         m_OverrideItemColors( false ),
-        m_DefaultLineWidth( 0 ),
-        m_DefaultWireThickness( 0 ),
-        m_DefaultBusThickness( 0 )
+        m_DefaultLineWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS ),
+        m_DefaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
+        m_DefaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS )
 { }
 
 
