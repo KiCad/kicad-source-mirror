@@ -27,9 +27,10 @@
 #include <lib_edit_frame.h>
 #include <confirm.h>
 #include <ee_actions.h>
-#include <sch_view.h>
-#include <dialogs/dialog_display_info_HTML_base.h>
 #include <dialogs/dialog_lib_edit_pin.h>
+#include <settings/settings_manager.h>
+#include <libedit/libedit_settings.h>
+#include <pgm_base.h>
 #include "lib_pin_tool.h"
 
 
@@ -48,7 +49,10 @@ static int                g_LastPinNumSize       = -1;
 static int GetLastPinLength()
 {
     if( g_LastPinLength == -1 )
-        g_LastPinLength = LIB_EDIT_FRAME::GetDefaultPinLength();
+    {
+        LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+        g_LastPinLength = Mils2iu( settings->m_Defaults.pin_length );
+    }
 
     return g_LastPinLength;
 }
@@ -56,7 +60,10 @@ static int GetLastPinLength()
 static int GetLastPinNameSize()
 {
     if( g_LastPinNameSize == -1 )
-        g_LastPinNameSize = LIB_EDIT_FRAME::GetPinNameDefaultSize();
+    {
+        LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+        g_LastPinNameSize = Mils2iu( settings->m_Defaults.pin_name_size );
+    }
 
     return g_LastPinNameSize;
 }
@@ -64,7 +71,10 @@ static int GetLastPinNameSize()
 static int GetLastPinNumSize()
 {
     if( g_LastPinNumSize == -1 )
-        g_LastPinNumSize = LIB_EDIT_FRAME::GetPinNumDefaultSize();
+    {
+        LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+        g_LastPinNumSize = Mils2iu( settings->m_Defaults.pin_num_size );
+    }
 
     return g_LastPinNumSize;
 }
@@ -318,22 +328,24 @@ LIB_PIN* LIB_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
     pin->ClearFlags();
     pin->SetFlags( IS_NEW );
 
+    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+
     switch( pin->GetOrientation() )
     {
-    case PIN_UP:    step.x = m_frame->GetRepeatPinStep();   break;
-    case PIN_DOWN:  step.x = m_frame->GetRepeatPinStep();   break;
-    case PIN_LEFT:  step.y = -m_frame->GetRepeatPinStep();  break;
-    case PIN_RIGHT: step.y = -m_frame->GetRepeatPinStep();  break;
+    case PIN_UP:    step.x = settings->m_Repeat.pin_step;   break;
+    case PIN_DOWN:  step.x = settings->m_Repeat.pin_step;   break;
+    case PIN_LEFT:  step.y = -settings->m_Repeat.pin_step;  break;
+    case PIN_RIGHT: step.y = -settings->m_Repeat.pin_step;  break;
     }
 
     pin->Offset( step );
 
     wxString nextName = pin->GetName();
-    IncrementLabelMember( nextName, m_frame->GetRepeatDeltaLabel() );
+    IncrementLabelMember( nextName, settings->m_Repeat.label_delta );
     pin->SetName( nextName );
 
     wxString nextNumber = pin->GetNumber();
-    IncrementLabelMember( nextNumber, m_frame->GetRepeatDeltaLabel() );
+    IncrementLabelMember( nextNumber, settings->m_Repeat.label_delta );
     pin->SetNumber( nextNumber );
 
     if( m_frame->SynchronizePins() )

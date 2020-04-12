@@ -66,11 +66,6 @@
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
 double LIB_EDIT_FRAME::        g_LastTextAngle   = TEXT_ANGLE_HORIZ;
 
-// these values are overridden when reading the config
-int LIB_EDIT_FRAME::           m_textPinNumDefaultSize = Mils2iu( DEFAULTPINNUMSIZE );
-int LIB_EDIT_FRAME::           m_textPinNameDefaultSize = Mils2iu( DEFAULTPINNAMESIZE );
-int LIB_EDIT_FRAME::           m_defaultPinLength = Mils2iu( DEFAULTPINLENGTH );
-
 FILL_T LIB_EDIT_FRAME::        g_LastFillStyle   = NO_FILL;
 
 
@@ -95,14 +90,15 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 END_EVENT_TABLE()
 
 LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_LIB_EDITOR, _( "Library Editor" ),
-        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, LIB_EDIT_FRAME_NAME )
+        SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_LIB_EDITOR, _( "Library Editor" ),
+                        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE,
+                        LIB_EDIT_FRAME_NAME ),
+        m_unitSelectBox( nullptr )
 {
     SetShowDeMorgan( false );
     m_DrawSpecificConvert = true;
     m_DrawSpecificUnit    = false;
     m_SyncPinEdit         = false;
-    m_repeatPinStep       = 0;
     SetShowElectricalType( true );
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
@@ -135,8 +131,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    auto settings = GetCanvas()->GetView()->GetPainter()->GetSettings();
-    settings->LoadColors( GetColorSettings() );
+    GetRenderSettings()->LoadColors( GetColorSettings() );
 
     setupTools();
 
@@ -162,7 +157,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "ComponentTree" ).Left().Layer(1)
                       .Caption( _( "Libraries" ) ).MinSize( 250, -1 )
-                      .BestSize( m_defaultLibWidth, -1 ).Resizable() );
+                      .BestSize( m_settings->m_LibWidth, -1 ).Resizable() );
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
 
     m_auimgr.AddPane( GetCanvas(), wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
@@ -213,75 +208,32 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 
 void LIB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    EDA_DRAW_FRAME::LoadSettings( aCfg );
+    SCH_BASE_FRAME::LoadSettings( eeconfig() );
 
-    auto cfg = dynamic_cast<LIBEDIT_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
-
-    if( cfg )
+    if( m_settings )
     {
-        SetDefaultLineWidth( Mils2iu( cfg->m_Defaults.line_width ) );
-        SetDefaultPinLength( Mils2iu( cfg->m_Defaults.pin_length ) );
-        SetDefaultTextSize( Mils2iu( cfg->m_Defaults.text_size ) );
-        m_textPinNameDefaultSize = Mils2iu( cfg->m_Defaults.pin_name_size );
-        m_textPinNumDefaultSize = Mils2iu( cfg->m_Defaults.pin_num_size );
-        SetRepeatDeltaLabel( cfg->m_Repeat.label_delta );
-        SetRepeatPinStep( Mils2iu( cfg->m_Repeat.pin_step ) );
-        SetRepeatStep( wxPoint( cfg->m_Repeat.x_step, cfg->m_Repeat.y_step ) );
-        m_showPinElectricalTypeName = cfg->m_ShowPinElectricalType;
-        m_defaultLibWidth = cfg->m_LibWidth;
+        SetDefaultLineWidth( Mils2iu( m_settings->m_Defaults.line_width ) );
+        SetDefaultTextSize( Mils2iu( m_settings->m_Defaults.text_size ) );
+        m_showPinElectricalTypeName = m_settings->m_ShowPinElectricalType;
     }
 
-    // TODO(JE) does libedit need its own TemplateFieldNames?
-    auto ee_settings = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
-    wxASSERT( ee_settings );
-    wxString templateFieldNames = ee_settings->m_Drawing.field_names;
-
-    if( !templateFieldNames.IsEmpty() )
-    {
-        TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
-
-        try
-        {
-            m_templateFieldNames.Parse( &lexer, true );
-        }
-        catch( const IO_ERROR& DBG( e ) )
-        {
-            // @todo show error msg
-            DBG( printf( "templatefieldnames parsing error: '%s'\n", TO_UTF8( e.What() ) ); )
-        }
-    }
-
-    auto painter = static_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
-    KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
-    settings->m_ShowPinsElectricalType = m_showPinElectricalTypeName;
+    GetRenderSettings()->m_ShowPinsElectricalType = GetShowElectricalType();
 
     // Hidden elements must be editable
-    settings->m_ShowHiddenText = true;
-    settings->m_ShowHiddenPins = true;
-    settings->m_ShowUmbilicals = false;
+    GetRenderSettings()->m_ShowHiddenText = true;
+    GetRenderSettings()->m_ShowHiddenPins = true;
+    GetRenderSettings()->m_ShowUmbilicals = false;
 }
 
 
 void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
 {
-    // aCfg will be EESCHEMA_SETTINGS because that's the parent FACE
-    // so we throw it away here and get our own settings
+    SCH_BASE_FRAME::SaveSettings( eeconfig() );
 
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
-    EDA_DRAW_FRAME::SaveSettings( cfg );
-
-    cfg->m_Defaults.line_width    = Iu2Mils( GetDefaultLineWidth() );
-    cfg->m_Defaults.text_size     = Iu2Mils( GetDefaultTextSize() );
-    cfg->m_Defaults.pin_length    = Iu2Mils( GetDefaultPinLength() );
-    cfg->m_Defaults.pin_name_size = Iu2Mils( GetPinNameDefaultSize() );
-    cfg->m_Defaults.pin_num_size  = Iu2Mils( GetPinNumDefaultSize() );
-    cfg->m_Repeat.label_delta     = GetRepeatDeltaLabel();
-    cfg->m_Repeat.pin_step        = Iu2Mils( GetRepeatPinStep() );
-    cfg->m_Repeat.x_step          = Iu2Mils( GetRepeatStep().x );
-    cfg->m_Repeat.y_step          = Iu2Mils( GetRepeatStep().y );
-    cfg->m_ShowPinElectricalType  = GetShowElectricalType();
-    cfg->m_LibWidth               = m_treePane->GetSize().x;
+    m_settings->m_Defaults.line_width    = Iu2Mils( GetDefaultLineWidth() );
+    m_settings->m_Defaults.text_size     = Iu2Mils( GetDefaultTextSize() );
+    m_settings->m_ShowPinElectricalType  = GetShowElectricalType();
+    m_settings->m_LibWidth               = m_treePane->GetSize().x;
 }
 
 

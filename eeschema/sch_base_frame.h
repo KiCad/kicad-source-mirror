@@ -31,6 +31,7 @@
 #include <page_info.h>
 #include <sch_draw_panel.h>
 #include <sch_screen.h>
+#include <eeschema_settings.h>
 
 #include <stddef.h>
 #include <utility>
@@ -91,19 +92,10 @@ protected:
     int       m_defaultWireThickness;
     int       m_defaultBusThickness;
     int       m_defaultTextSize;
-    COLOR4D   m_defaultSheetBorderColor;
-    COLOR4D   m_defaultSheetBackgroundColor;
 
     TEMPLATES m_templateFieldNames;
-    wxPoint   m_repeatStep;                // the increment value of the position of an item
-                                           // when it is repeated
-    int       m_repeatDeltaLabel;          // the increment value of labels like bus members
-                                           // when they are repeated
-    bool      m_showPinElectricalTypeName;
-    bool      m_dragActionIsMove;          // drag action defaults to move, otherwise it's drag
 
-    bool      m_repeatComponent;           // After placing one component, reload a sequential
-    bool      m_useAllUnits;               // After placing unit A, place unit B of the same
+    bool      m_showPinElectricalTypeName;
 
 public:
     SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -120,18 +112,17 @@ public:
     SCH_SCREEN* GetScreen() const override;
     void SetScreen( BASE_SCREEN* aScreen ) override;
 
+    EESCHEMA_SETTINGS* eeconfig() const { return static_cast<EESCHEMA_SETTINGS*>( config() ); }
+
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+
     KIGFX::SCH_RENDER_SETTINGS* GetRenderSettings();
 
     /**
      * Allow some frames to show/hide hidden pins.  The default impl shows all pins.
      */
     virtual bool GetShowAllPins() const { return true; }
-
-    /**
-     * Allow some frames to select the parent symbol when trying to select a pin.
-     * The default impl select the pin.
-     */
-    virtual bool GetSelectPinSelectSymbol() const { return false; }
 
     /**
      * Allow some frames to show/hide pin electrical type names.
@@ -151,61 +142,6 @@ public:
     int GetDefaultTextSize() const { return m_defaultTextSize; }
     void SetDefaultTextSize( int aSize ) { m_defaultTextSize = aSize; }
 
-    COLOR4D GetDefaultSheetBorderColor() { return m_defaultSheetBorderColor; }
-    void SetDefaultSheetBorderColor( COLOR4D aColor ) { m_defaultSheetBorderColor = aColor; }
-
-    COLOR4D GetDefaultSheetBackgroundColor() { return m_defaultSheetBackgroundColor; }
-    void SetDefaultSheetBackgroundColor( COLOR4D aColor ) { m_defaultSheetBackgroundColor = aColor; }
-
-    /**
-     * @return the increment value of the position of an item
-     * for the repeat command
-     */
-    const wxPoint GetRepeatStep() const { return m_repeatStep; }
-
-    /**
-     * Sets the repeat step value for repeat command
-     * @param aStep the increment value of the position of an item
-     * for the repeat command
-     */
-    void SetRepeatStep( const wxPoint& aStep) { m_repeatStep = aStep; }
-
-    /**
-     * @return the increment value of labels like bus members
-     * for the repeat command
-     */
-    int GetRepeatDeltaLabel() const { return m_repeatDeltaLabel; }
-
-    /**
-     * Sets the repeat delta label value for repeat command
-     * @param aDelta the increment value of labels like bus members
-     * for the repeat command
-     */
-    void SetRepeatDeltaLabel( int aDelta ) { m_repeatDeltaLabel = aDelta; }
-
-    /**
-     * @return the current setting of placing copies of the same symbol for each click
-     */
-    const bool GetRepeatComponent() { return m_repeatComponent; }
-
-    /**
-     * If true, keep placing new copies of the same symbol on each click
-     * @param aRepeat True to repeat the same symbol, False to only set one
-     */
-    void SetRepeatComponent( bool aRepeat ) { m_repeatComponent = aRepeat; }
-
-    /**
-     * @return the current setting to use all units when placing a component
-     */
-    const bool GetUseAllUnits() { return m_useAllUnits; }
-
-    /**
-     * Sets whether to utilize all units of a component when placing
-     * @param aUseAll True to iterate through Units A, B, ...
-     */
-    void SetUseAllUnits( bool aUseAll ) { m_useAllUnits = aUseAll; }
-
-
     /**
      * Function GetZoomLevelIndicator
      * returns a human readable value which can be displayed as zoom
@@ -213,9 +149,6 @@ public:
      * Virtual from the base class
      */
     const wxString GetZoomLevelIndicator() const override;
-
-    void SetDragActionIsMove( bool aValue ) { m_dragActionIsMove = aValue; }
-    bool GetDragActionIsMove() const { return m_dragActionIsMove; }
 
     void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
     const PAGE_INFO& GetPageSettings () const override;

@@ -86,11 +86,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
     m_defaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
     m_defaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS ),
     m_defaultTextSize( 50.0 * IU_PER_MILS ),
-    m_repeatDeltaLabel( 1 ),
-    m_showPinElectricalTypeName( false ),
-    m_dragActionIsMove( false ),
-    m_repeatComponent( false ),
-    m_useAllUnits( false )
+    m_showPinElectricalTypeName( false )
 {
     createCanvas();
 

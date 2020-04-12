@@ -448,12 +448,10 @@ WINDOW_SETTINGS* EDA_BASE_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-APP_SETTINGS_BASE* EDA_BASE_FRAME::config()
+APP_SETTINGS_BASE* EDA_BASE_FRAME::config() const
 {
     // KICAD_MANAGER_FRAME overrides this
-    APP_SETTINGS_BASE* ret = Kiface().KifaceSettings();
-    //wxASSERT( ret );
-    return ret;
+    return Kiface().KifaceSettings();
 }
 
 

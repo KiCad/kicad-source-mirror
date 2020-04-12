@@ -166,7 +166,7 @@ public:
     DECLARE_EVENT_TABLE()
 
 private:
-    APP_SETTINGS_BASE* config() override;
+    APP_SETTINGS_BASE* config() const override;
 
     const SEARCH_STACK& sys_search() override;
 

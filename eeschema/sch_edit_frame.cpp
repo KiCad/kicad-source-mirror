@@ -217,21 +217,15 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     g_ErcSettings = new ERC_SETTINGS();
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
-    m_showAllPins = false;
-    m_selectPinSelectSymbol = true;
     m_printMonochrome = true;
     m_printSheetReference = true;
-    SetShowPageLimits( true );
     m_hasAutoSave = true;
-    m_showIllegalSymbolLibDialog = true;
-    m_showSheetFileNameCaseSensitivityDlg = true;
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
     m_AboutTitle = "Eeschema";
 
     m_findReplaceDialog = nullptr;
     m_findReplaceStatusPopup = nullptr;
 
-    SetForceHVLines( true );
     SetSpiceAdjustPassiveValues( false );
 
     // Give an icon

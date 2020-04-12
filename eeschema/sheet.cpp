@@ -628,7 +628,7 @@ bool SCH_EDIT_FRAME::AllowCaseSensitiveFileNameClashes( const wxString& aSchemat
 
     wxCHECK( fn.IsAbsolute(), false );
 
-    if( m_showSheetFileNameCaseSensitivityDlg
+    if( eeconfig()->m_Appearance.show_sheet_filename_case_sensitivity_dialog
       && screens.CanCauseCaseSensitivityIssue( aSchematicFileName ) )
     {
         msg.Printf( _( "The file name \"%s\" can cause issues with an existing file name\n"
@@ -647,7 +647,8 @@ bool SCH_EDIT_FRAME::AllowCaseSensitiveFileNameClashes( const wxString& aSchemat
         if( dlg.ShowModal() == wxID_NO )
             return false;
 
-        m_showSheetFileNameCaseSensitivityDlg = !dlg.IsCheckBoxChecked();
+        eeconfig()->m_Appearance.show_sheet_filename_case_sensitivity_dialog =
+                                                            !dlg.IsCheckBoxChecked();
     }
 
     return true;

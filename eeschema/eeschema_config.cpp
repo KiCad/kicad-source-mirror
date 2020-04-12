@@ -55,10 +55,6 @@
 
 
 static double s_textOffsetRatio = 0.08;
-static bool s_selectTextAsBox = false;
-static bool s_selectDrawChildren = true;
-static bool s_selectFillShapes = false;
-static int  s_selectThickness = Mils2iu( DEFAULTSELECTIONTHICKNESS );
 
 #define FieldNameTemplatesKey         wxT( "FieldNameTemplates" )
 
@@ -235,54 +231,6 @@ void SetTextOffsetRatio( double aOffsetRatio )
 }
 
 
-bool GetSelectionTextAsBox()
-{
-    return s_selectTextAsBox;
-}
-
-
-void SetSelectionTextAsBox( bool aBool )
-{
-    s_selectTextAsBox = aBool;
-}
-
-
-bool GetSelectionDrawChildItems()
-{
-    return s_selectDrawChildren;
-}
-
-
-void SetSelectionDrawChildItems( bool aBool )
-{
-    s_selectDrawChildren = aBool;
-}
-
-
-bool GetSelectionFillShapes()
-{
-    return s_selectFillShapes;
-}
-
-
-void SetSelectionFillShapes( bool aBool )
-{
-    s_selectFillShapes = aBool;
-}
-
-
-int GetSelectionThickness()
-{
-    return s_selectThickness;
-}
-
-
-void SetSelectionThickness( int aThickness )
-{
-    s_selectThickness = aThickness;
-}
-
-
 /// Helper for all the old plotting/printing code while it still exists
 COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
 {
@@ -391,9 +339,9 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
     bool ret = Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDIT,
                                  GetProjectFileParameters() );
 
-    GetRenderSettings()->m_DefaultLineWidth = m_defaultLineWidth;
-    GetRenderSettings()->m_DefaultWireThickness = m_defaultWireThickness;
-    GetRenderSettings()->m_DefaultBusThickness = m_defaultBusThickness;
+    GetRenderSettings()->m_DefaultLineWidth = GetDefaultLineWidth();
+    GetRenderSettings()->m_DefaultWireThickness = GetDefaultWireThickness();
+    GetRenderSettings()->m_DefaultBusThickness = GetDefaultBusThickness();
 
     // Verify some values, because the config file can be edited by hand,
     // and have bad values:
@@ -449,36 +397,45 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
 
 void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    EDA_DRAW_FRAME::LoadSettings( aCfg );
+    SCH_BASE_FRAME::LoadSettings( eeconfig() );
 
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
-
-    if( cfg )
+    if( eeconfig() )
     {
-        m_repeatStep.x = Mils2iu( cfg->m_Drawing.default_repeat_offset_x );
-        m_repeatStep.y = Mils2iu( cfg->m_Drawing.default_repeat_offset_y );
+        GetRenderSettings()->m_ShowPinsElectricalType = false;
+        GetRenderSettings()->m_ShowHiddenText = false;
+        GetRenderSettings()->m_ShowHiddenPins = eeconfig()->m_Appearance.show_hidden_pins;
+        GetRenderSettings()->SetShowPageLimits( eeconfig()->m_Appearance.show_page_limits );
+        GetRenderSettings()->m_ShowUmbilicals = true;
+    }
+}
 
-        SetSelectionTextAsBox( cfg->m_Selection.text_as_box );
-        SetSelectionDrawChildItems( cfg->m_Selection.draw_selected_children );
-        SetSelectionFillShapes( cfg->m_Selection.fill_shapes );
-        SetSelectionThickness( Mils2iu( cfg->m_Selection.thickness ) );
 
-        m_footprintPreview      = cfg->m_Appearance.footprint_preview;
-        m_navigatorStaysOpen    = cfg->m_Appearance.navigator_stays_open;
-        m_showAllPins           = cfg->m_Appearance.show_hidden_pins;
-        m_autoplaceFields       = cfg->m_AutoplaceFields.enable;
-        m_autoplaceAlign        = cfg->m_AutoplaceFields.align_to_grid;
-        m_autoplaceJustify      = cfg->m_AutoplaceFields.allow_rejustify;
-        m_forceHVLines          = cfg->m_Drawing.hv_lines_only;
-        m_dragActionIsMove      = cfg->m_Input.drag_is_move;
-        m_selectPinSelectSymbol = cfg->m_Selection.select_pin_selects_symbol;
-        m_repeatDeltaLabel      = cfg->m_Drawing.repeat_label_increment;
+void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
+{
+    SCH_BASE_FRAME::SaveSettings( eeconfig() );
 
-        SetDefaultSheetBorderColor( cfg->m_Drawing.default_sheet_border_color );
-        SetDefaultSheetBackgroundColor( cfg->m_Drawing.default_sheet_background_color );
+    // TODO(JE) do most of these need to live as class members here, or can the sites that need
+    // the setting just grab a pointer to the EESCHEMA_SETTINGS and look them up directly?
+    if( eeconfig() )
+    {
+        eeconfig()->m_Appearance.print_sheet_reference     = m_printSheetReference;
 
-        wxString templateFieldNames = cfg->m_Drawing.field_names;
+        eeconfig()->m_Drawing.text_markup_flags            = GetTextMarkupFlags();
+
+        eeconfig()->m_Printing.monochrome                  = m_printMonochrome;
+
+        eeconfig()->m_System.units                         = static_cast<int>( m_userUnits );
+    }
+}
+
+
+void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
+{
+    EDA_DRAW_FRAME::LoadSettings( config() );
+
+    if( eeconfig() )
+    {
+        wxString templateFieldNames = eeconfig()->m_Drawing.field_names;
 
         if( !templateFieldNames.IsEmpty() )
         {
@@ -495,64 +452,15 @@ void SCH_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
             }
         }
     }
-
-    KIGFX::SCH_RENDER_SETTINGS* settings = GetRenderSettings();
-    settings->m_ShowPinsElectricalType = false;
-    settings->m_ShowHiddenText = false;
-    settings->m_ShowHiddenPins = m_showAllPins;
-    settings->SetShowPageLimits( m_showPageLimits );
-    settings->m_ShowUmbilicals = true;
-
-    COLOR_SETTINGS* colorSettings = GetColorSettings();
-    SetDefaultSheetBorderColor( colorSettings->GetColor( LAYER_SHEET ) );
-    SetDefaultSheetBackgroundColor( colorSettings->GetColor( LAYER_SHEET_BACKGROUND ) );
 }
 
 
-void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
+void SCH_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    EDA_DRAW_FRAME::SaveSettings( aCfg );
+    EDA_DRAW_FRAME::SaveSettings( config() );
 
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
-
-    // TODO(JE) do most of these need to live as class members here, or can the sites that need
-    // the setting just grab a pointer to the EESCHEMA_SETTINGS and look them up directly?
-    if( cfg )
+    if( eeconfig() )
     {
-        cfg->m_Appearance.footprint_preview         = m_footprintPreview;
-        cfg->m_Appearance.navigator_stays_open      = m_navigatorStaysOpen;
-        cfg->m_Appearance.print_sheet_reference     = m_printSheetReference;
-        cfg->m_Appearance.show_hidden_pins          = m_showAllPins;
-        cfg->m_Appearance.show_illegal_symbol_lib_dialog = m_showIllegalSymbolLibDialog;
-        cfg->m_Appearance.show_page_limits          = m_showPageLimits;
-        cfg->m_Appearance.show_sheet_filename_case_sensitivity_dialog =
-                m_showSheetFileNameCaseSensitivityDlg;
-
-        cfg->m_AutoplaceFields.enable               = m_autoplaceFields;
-        cfg->m_AutoplaceFields.allow_rejustify      = m_autoplaceJustify;
-        cfg->m_AutoplaceFields.align_to_grid        = m_autoplaceAlign;
-
-        cfg->m_Drawing.default_repeat_offset_x      = Iu2Mils( m_repeatStep.x );
-        cfg->m_Drawing.default_repeat_offset_y      = Iu2Mils( m_repeatStep.y );
-        cfg->m_Drawing.hv_lines_only                = GetForceHVLines();
-        cfg->m_Drawing.repeat_label_increment       = m_repeatDeltaLabel;
-        cfg->m_Drawing.text_markup_flags            = GetTextMarkupFlags();
-        cfg->m_Drawing.default_sheet_border_color   = GetDefaultSheetBorderColor();
-        cfg->m_Drawing.default_sheet_background_color = GetDefaultSheetBackgroundColor();
-
-        cfg->m_Input.drag_is_move                   = m_dragActionIsMove;
-
-        cfg->m_Printing.monochrome                  = m_printMonochrome;
-
-        cfg->m_Selection.thickness                  = Iu2Mils( GetSelectionThickness() );
-        cfg->m_Selection.draw_selected_children     = GetSelectionDrawChildItems();
-        cfg->m_Selection.fill_shapes                = GetSelectionFillShapes();
-        cfg->m_Selection.select_pin_selects_symbol  = GetSelectPinSelectSymbol();
-        cfg->m_Selection.text_as_box                = GetSelectionTextAsBox();
-
-        cfg->m_System.units                         = static_cast<int>( m_userUnits );
-
         // Save template fieldnames
         STRING_FORMATTER sf;
         m_templateFieldNames.Format( &sf, 0, true );
@@ -561,7 +469,7 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
         record.Replace( wxT("  "), wxT(" "), true );  // double space to single
 
-        cfg->m_Drawing.field_names = record.ToStdString();
+        eeconfig()->m_Drawing.field_names = record.ToStdString();
     }
 }
 

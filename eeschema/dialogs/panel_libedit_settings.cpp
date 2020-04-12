@@ -25,6 +25,9 @@
 #include <fctsys.h>
 #include <lib_edit_frame.h>
 #include <sch_painter.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <libedit/libedit_settings.h>
 
 #include "panel_libedit_settings.h"
 
@@ -44,15 +47,17 @@ PANEL_LIBEDIT_SETTINGS::PANEL_LIBEDIT_SETTINGS( LIB_EDIT_FRAME* aFrame, wxWindow
 
 bool PANEL_LIBEDIT_SETTINGS::TransferDataToWindow()
 {
+    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+
     m_lineWidth.SetValue( m_frame->GetDefaultLineWidth() );
     m_textSize.SetValue( m_frame->GetDefaultTextSize() );
-    m_pinLength.SetValue( m_frame->GetDefaultPinLength() );
-    m_pinNumberSize.SetValue( m_frame->GetPinNumDefaultSize() );
-    m_pinNameSize.SetValue( m_frame->GetPinNameDefaultSize() );
-    m_hPitch.SetValue( m_frame->GetRepeatStep().x );
-    m_vPitch.SetValue( m_frame->GetRepeatStep().y );
-    m_choicePinDisplacement->SetSelection( m_frame->GetRepeatPinStep() == Iu2Mils( 50 ) ? 1 : 0 );
-    m_spinRepeatLabel->SetValue( m_frame->GetRepeatDeltaLabel() );
+    m_pinLength.SetValue( Mils2iu( settings->m_Defaults.pin_length ) );
+    m_pinNumberSize.SetValue( Mils2iu( settings->m_Defaults.pin_num_size ) );
+    m_pinNameSize.SetValue( Mils2iu( settings->m_Defaults.pin_name_size ) );
+    m_hPitch.SetValue( Mils2iu( settings->m_Repeat.x_step ) );
+    m_vPitch.SetValue( Mils2iu( settings->m_Repeat.y_step ) );
+    m_choicePinDisplacement->SetSelection( settings->m_Repeat.pin_step == 50 ? 1 : 0 );
+    m_spinRepeatLabel->SetValue( settings->m_Repeat.label_delta );
 
     m_checkShowPinElectricalType->SetValue( m_frame->GetShowElectricalType() );
 
@@ -62,15 +67,17 @@ bool PANEL_LIBEDIT_SETTINGS::TransferDataToWindow()
 
 bool PANEL_LIBEDIT_SETTINGS::TransferDataFromWindow()
 {
+    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+
     m_frame->SetDefaultLineWidth( (int) m_lineWidth.GetValue() );
     m_frame->SetDefaultTextSize( (int) m_textSize.GetValue() );
-    m_frame->SetDefaultPinLength( (int) m_pinLength.GetValue() );
-    m_frame->SetPinNumDefaultSize( (int) m_pinNumberSize.GetValue() );
-    m_frame->SetPinNameDefaultSize( (int) m_pinNameSize.GetValue() );
-    m_frame->SetRepeatStep( wxPoint( (int) m_hPitch.GetValue(), (int) m_vPitch.GetValue() ) );
-    m_frame->SetRepeatPinStep( m_choicePinDisplacement->GetSelection() == 1 ? Mils2iu( 50 )
-                                                                            : Mils2iu( 100 ) );
-    m_frame->SetRepeatDeltaLabel( m_spinRepeatLabel->GetValue() );
+    settings->m_Defaults.pin_length = Iu2Mils( (int) m_pinLength.GetValue() );
+    settings->m_Defaults.pin_num_size = Iu2Mils( (int) m_pinNumberSize.GetValue() );
+    settings->m_Defaults.pin_name_size = Iu2Mils( (int) m_pinNameSize.GetValue() );
+    settings->m_Repeat.x_step = Iu2Mils( (int) m_hPitch.GetValue() );
+    settings->m_Repeat.y_step = Iu2Mils( (int) m_vPitch.GetValue() );
+    settings->m_Repeat.label_delta = m_spinRepeatLabel->GetValue();
+    settings->m_Repeat.pin_step = m_choicePinDisplacement->GetSelection() == 1 ? 50 : 100;
 
     m_frame->SetShowElectricalType( m_checkShowPinElectricalType->GetValue() );
 

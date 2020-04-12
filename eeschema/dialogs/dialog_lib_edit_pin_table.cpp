@@ -36,7 +36,8 @@
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/wx_grid.h>
 #include <wx/bmpcbox.h>
-
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 
 static std::vector<BITMAP_DEF> g_typeIcons;
 static wxArrayString           g_typeNames;
@@ -569,10 +570,12 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
 
         wxPoint pos = last->GetPosition();
 
+        LIBEDIT_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+
         if( last->GetOrientation() == PIN_LEFT || last->GetOrientation() == PIN_RIGHT )
-            pos.y -= m_editFrame->GetRepeatPinStep();
+            pos.y -= cfg->m_Repeat.pin_step;
         else
-            pos.x += m_editFrame->GetRepeatPinStep();
+            pos.x += cfg->m_Repeat.pin_step;
 
         newPin->SetPosition( pos );
     }

@@ -106,30 +106,6 @@ void SetSeverity( int aErrorCode, int aSeverity );
 double GetTextOffsetRatio();
 void SetTextOffsetRatio( double aOffsetRatio );
 
-/**
- * Draw selected text items as box
- */
-bool GetSelectionTextAsBox();
-void SetSelectionTextAsBox( bool aBool );
-
-/**
- * Draw selected child items or not
- */
-bool GetSelectionDrawChildItems();
-void SetSelectionDrawChildItems( bool aBool );
-
-/**
- * Draw selected shapes as filled or not
- */
-bool GetSelectionFillShapes();
-void SetSelectionFillShapes( bool aBool );
-
-/**
- * Selection highlight thickness
- */
-int  GetSelectionThickness();
-void SetSelectionThickness( int aThickness );
-
 // Color to draw items flagged invisible, in libedit (they are invisible in Eeschema
 COLOR4D GetInvisibleItemColor();
 

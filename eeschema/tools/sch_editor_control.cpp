@@ -1410,7 +1410,8 @@ int SCH_EDITOR_CONTROL::LeaveSheet( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::ToggleHiddenPins( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetShowAllPins( !m_frame->GetShowAllPins() );
+    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+    cfg->m_Appearance.show_hidden_pins = !cfg->m_Appearance.show_hidden_pins;
 
     KIGFX::SCH_PAINTER* painter = static_cast<KIGFX::SCH_PAINTER*>( getView()->GetPainter() );
     painter->GetSettings()->m_ShowHiddenPins = m_frame->GetShowAllPins();
@@ -1424,7 +1425,7 @@ int SCH_EDITOR_CONTROL::ToggleHiddenPins( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::ToggleForceHV( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetForceHVLines( !m_frame->GetForceHVLines() );
+    m_frame->eeconfig()->m_Drawing.hv_lines_only = !m_frame->eeconfig()->m_Drawing.hv_lines_only;
 
     return 0;
 }

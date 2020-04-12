@@ -49,18 +49,20 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* 
 
 bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 {
-    m_checkShowHiddenPins->SetValue( m_frame->GetShowAllPins() );
+    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+
+    m_checkShowHiddenPins->SetValue( cfg->m_Appearance.show_hidden_pins );
 
     int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
 
     m_checkSuperSub->SetValue( GetTextMarkupFlags() & superSubFlags );
 
-    m_checkPageLimits->SetValue( m_frame->ShowPageLimits() );
+    m_checkPageLimits->SetValue( cfg->m_Appearance.show_page_limits );
 
-    m_checkSelTextBox->SetValue( GetSelectionTextAsBox() );
-    m_checkSelDrawChildItems->SetValue( GetSelectionDrawChildItems() );
-    m_checkSelFillShapes->SetValue( GetSelectionFillShapes() );
-    m_selWidthCtrl->SetValue( Iu2Mils( GetSelectionThickness() ) );
+    m_checkSelTextBox->SetValue( cfg->m_Selection.text_as_box );
+    m_checkSelDrawChildItems->SetValue( cfg->m_Selection.draw_selected_children );
+    m_checkSelFillShapes->SetValue( cfg->m_Selection.fill_shapes );
+    m_selWidthCtrl->SetValue( cfg->m_Selection.thickness );
 
     m_galOptsPanel->TransferDataToWindow();
 
@@ -70,15 +72,14 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 
 bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    m_frame->SetShowAllPins( m_checkShowHiddenPins->GetValue() );
-    m_frame->SetShowPageLimits( m_checkPageLimits->GetValue() );
-    SetSelectionTextAsBox( m_checkSelTextBox->GetValue() );
-    SetSelectionDrawChildItems( m_checkSelDrawChildItems->GetValue() );
-    SetSelectionFillShapes( m_checkSelFillShapes->GetValue() );
-    SetSelectionThickness( Mils2iu( m_selWidthCtrl->GetValue() ) );
+    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
 
-    // Update canvas
-    m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
+    cfg->m_Appearance.show_hidden_pins = m_checkShowHiddenPins->GetValue();
+    cfg->m_Appearance.show_page_limits = m_checkPageLimits->GetValue();
+    cfg->m_Selection.text_as_box = m_checkSelTextBox->GetValue();
+    cfg->m_Selection.draw_selected_children = m_checkSelDrawChildItems->GetValue();
+    cfg->m_Selection.fill_shapes = m_checkSelFillShapes->GetValue();
+    cfg->m_Selection.thickness = KiROUND( m_selWidthCtrl->GetValue() );
 
     int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
 
@@ -87,7 +88,9 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     else
         SetTextMarkupFlags( GetTextMarkupFlags() & ~superSubFlags );
 
-    m_frame->GetRenderSettings()->SetShowPageLimits( m_checkPageLimits->GetValue() );
+    // Update canvas
+    m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
+    m_frame->GetRenderSettings()->SetShowPageLimits( cfg->m_Appearance.show_page_limits );
     m_frame->GetCanvas()->GetView()->MarkDirty();
     m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
     m_frame->GetCanvas()->Refresh();

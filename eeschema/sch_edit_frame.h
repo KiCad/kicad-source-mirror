@@ -59,7 +59,6 @@ class SCH_COMPONENT;
 class SCH_FIELD;
 class SCH_JUNCTION;
 class DIALOG_SCH_FIND;
-class wxFindDialogEvent;
 class wxFindReplaceData;
 class RESCUER;
 class HIERARCHY_NAVIG_DLG;
@@ -129,27 +128,13 @@ private:
     bool                    m_printMonochrome;    ///< Print monochrome instead of grey scale.
     bool                    m_printSheetReference;
     SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
-    int                     m_repeatLabelDelta;   ///< Repeat label number increment step.
     wxString                m_netListerCommand;   ///< Command line to call a custom net list
                                                   ///< generator.
     int                     m_exec_flags;         ///< Flags of the wxExecute() function
                                                   ///< to call a custom net list generator.
 
-    bool                    m_forceHVLines;       ///< force H or V directions for wires, bus, line
-
-    bool                    m_autoplaceFields;    ///< automatically place component fields
-    bool                    m_autoplaceJustify;   ///< allow autoplace to change justification
-    bool                    m_autoplaceAlign;     ///< align autoplaced fields to the grid
-    bool                    m_footprintPreview;   ///< whether to show footprint previews
-    bool                    m_navigatorStaysOpen; ///< whether to keep Navigator open
-    bool                    m_showIllegalSymbolLibDialog;
-    bool                    m_showSheetFileNameCaseSensitivityDlg;
-
     DIALOG_SCH_FIND*        m_findReplaceDialog;
     STATUS_TEXT_POPUP*      m_findReplaceStatusPopup;
-
-    bool                    m_showAllPins;            // show hidden pins
-    bool                    m_selectPinSelectSymbol;  // select parent when clicking on pin
 
     wxString                m_plotDirectoryName;
     wxString                m_netListFormat;
@@ -197,36 +182,6 @@ public:
     SCH_SCREEN* GetScreen() const override;
 
     void OnCloseWindow( wxCloseEvent& Event );
-
-    bool GetForceHVLines() const { return m_forceHVLines; }
-    void SetForceHVLines( bool aForceHVdirection ) { m_forceHVLines = aForceHVdirection; }
-
-    bool GetShowAllPins() const override { return m_showAllPins; }
-    void SetShowAllPins( bool aEnable ) { m_showAllPins = aEnable; }
-
-    bool GetSelectPinSelectSymbol() const override { return m_selectPinSelectSymbol; }
-    void SetSelectPinSelectSymbol( bool aEnable ) { m_selectPinSelectSymbol = aEnable; }
-
-    bool GetShowFootprintPreviews() const { return m_footprintPreview; }
-    void SetShowFootprintPreviews( bool aEnable ) { m_footprintPreview = aEnable; }
-
-    bool GetNavigatorStaysOpen() const
-    {
-        return m_navigatorStaysOpen;
-    }
-    void SetNavigatorStaysOpen( bool aEnable )
-    {
-        m_navigatorStaysOpen = aEnable;
-    }
-
-    bool GetAutoplaceFields() const { return m_autoplaceFields; }
-    void SetAutoplaceFields( bool aEnable ) { m_autoplaceFields = aEnable; }
-
-    bool GetAutoplaceAlign() const { return m_autoplaceAlign; }
-    void SetAutoplaceAlign( bool aEnable ) { m_autoplaceAlign = aEnable; }
-
-    bool GetAutoplaceJustify() const { return m_autoplaceJustify; }
-    void SetAutoplaceJustify( bool aEnable ) { m_autoplaceJustify = aEnable; }
 
     const wxString& GetNetListFormatName() const { return m_netListFormat; }
     void SetNetListFormatName( const wxString& aFormat ) { m_netListFormat = aFormat; }
@@ -875,8 +830,6 @@ public:
      * @param aAppend True if we are updating an ongoing commit
      */
     void DeleteJunction( SCH_ITEM* aItem, bool aAppend = false );
-
-    int GetLabelIncrement() const { return m_repeatLabelDelta; }
 
     void ConvertPart( SCH_COMPONENT* aComponent );
 

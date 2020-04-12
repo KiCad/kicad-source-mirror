@@ -192,8 +192,6 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
     KICAD_T oldType = aText->Type();
     bool    selected = aText->IsSelected();
 
-    wxCHECK_RET( aText->CanIncrementLabel(), "Cannot convert text type." );
-
     if( oldType == aNewType )
         return;
 

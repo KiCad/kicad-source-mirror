@@ -28,6 +28,7 @@
 #include <settings/color_settings.h>
 #include <painter.h>
 #include <pgm_base.h>
+#include <eeschema_settings.h>
 #include "panel_eeschema_settings.h"
 
 
@@ -42,33 +43,34 @@ PANEL_EESCHEMA_SETTINGS::PANEL_EESCHEMA_SETTINGS( SCH_EDIT_FRAME* aFrame, wxWind
 
 bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
 {
+    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+
     m_choiceUnits->SetSelection( m_frame->GetUserUnits() == EDA_UNITS::INCHES ? 0 : 1 );
 
     m_defaultTextSize.SetValue( m_frame->GetDefaultTextSize() );
-    m_hPitch.SetValue( m_frame->GetRepeatStep().x );
-    m_vPitch.SetValue( m_frame->GetRepeatStep().y );
-    m_spinLabelRepeatStep->SetValue( m_frame->GetRepeatDeltaLabel() );
+    m_hPitch.SetValue( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ) );
+    m_vPitch.SetValue( Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) );
+    m_spinLabelRepeatStep->SetValue( cfg->m_Drawing.repeat_label_increment );
 
     COLOR_SETTINGS* settings = m_frame->GetColorSettings();
     COLOR4D         schematicBackground = settings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
     m_borderColorSwatch->SetSwatchBackground( schematicBackground );
-    m_borderColorSwatch->SetSwatchColor( m_frame->GetDefaultSheetBorderColor(), false );
+    m_borderColorSwatch->SetSwatchColor( cfg->m_Drawing.default_sheet_border_color, false );
 
     m_backgroundColorSwatch->SetSwatchBackground( schematicBackground );
-    m_backgroundColorSwatch->SetSwatchColor( m_frame->GetDefaultSheetBackgroundColor(), false );
+    m_backgroundColorSwatch->SetSwatchColor( cfg->m_Drawing.default_sheet_background_color, false );
 
-    m_checkHVOrientation->SetValue( m_frame->GetForceHVLines() );
-    m_footprintPreview->SetValue( m_frame->GetShowFootprintPreviews() );
-    m_navigatorStaysOpen->SetValue( m_frame->GetNavigatorStaysOpen() );
+    m_checkHVOrientation->SetValue( cfg->m_Drawing.hv_lines_only );
+    m_footprintPreview->SetValue( cfg->m_Appearance.footprint_preview );
+    m_navigatorStaysOpen->SetValue( cfg->m_Appearance.navigator_stays_open );
 
-    m_checkAutoplaceFields->SetValue( m_frame->GetAutoplaceFields() );
-    m_checkAutoplaceJustify->SetValue( m_frame->GetAutoplaceJustify() );
-    m_checkAutoplaceAlign->SetValue( m_frame->GetAutoplaceAlign() );
+    m_checkAutoplaceFields->SetValue( cfg->m_AutoplaceFields.enable );
+    m_checkAutoplaceJustify->SetValue( cfg->m_AutoplaceFields.allow_rejustify );
+    m_checkAutoplaceAlign->SetValue( cfg->m_AutoplaceFields.align_to_grid );
 
-    m_mouseDragIsDrag->SetValue( !m_frame->GetDragActionIsMove() );
-
-    m_cbPinSelectionOpt->SetValue( m_frame->GetSelectPinSelectSymbol() );
+    m_mouseDragIsDrag->SetValue( !cfg->m_Input.drag_is_move );
+    m_cbPinSelectionOpt->SetValue( cfg->m_Selection.select_pin_selects_symbol );
 
     return true;
 }
@@ -76,28 +78,30 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
 
 bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
 {
+    EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+
     m_frame->SetUserUnits( m_choiceUnits->GetSelection() == 0 ? EDA_UNITS::INCHES
                                                               : EDA_UNITS::MILLIMETRES );
 
     m_frame->SetDefaultTextSize( (int) m_defaultTextSize.GetValue() );
 
-    m_frame->SetDefaultSheetBorderColor( m_borderColorSwatch->GetSwatchColor() );
-    m_frame->SetDefaultSheetBackgroundColor( m_backgroundColorSwatch->GetSwatchColor() );
+    cfg->m_Drawing.default_sheet_border_color = m_borderColorSwatch->GetSwatchColor();
+    cfg->m_Drawing.default_sheet_background_color = m_backgroundColorSwatch->GetSwatchColor();
 
-    m_frame->SetRepeatStep( wxPoint( (int) m_hPitch.GetValue(),  (int) m_vPitch.GetValue() ) );
-    m_frame->SetRepeatDeltaLabel( m_spinLabelRepeatStep->GetValue() );
+    cfg->m_Drawing.default_repeat_offset_x = Iu2Mils( (int) m_hPitch.GetValue() );
+    cfg->m_Drawing.default_repeat_offset_y = Iu2Mils( (int) m_vPitch.GetValue() );
+    cfg->m_Drawing.repeat_label_increment = m_spinLabelRepeatStep->GetValue();
 
-    m_frame->SetForceHVLines( m_checkHVOrientation->GetValue() );
-    m_frame->SetShowFootprintPreviews( m_footprintPreview->GetValue() );
-    m_frame->SetNavigatorStaysOpen( m_navigatorStaysOpen->GetValue() );
+    cfg->m_Drawing.hv_lines_only = m_checkHVOrientation->GetValue();
+    cfg->m_Appearance.footprint_preview = m_footprintPreview->GetValue();
+    cfg->m_Appearance.navigator_stays_open = m_navigatorStaysOpen->GetValue();
 
-    m_frame->SetAutoplaceFields( m_checkAutoplaceFields->GetValue() );
-    m_frame->SetAutoplaceJustify( m_checkAutoplaceJustify->GetValue() );
-    m_frame->SetAutoplaceAlign( m_checkAutoplaceAlign->GetValue() );
+    cfg->m_AutoplaceFields.enable = m_checkAutoplaceFields->GetValue();
+    cfg->m_AutoplaceFields.allow_rejustify = m_checkAutoplaceJustify->GetValue();
+    cfg->m_AutoplaceFields.align_to_grid = m_checkAutoplaceAlign->GetValue();
 
-    m_frame->SetDragActionIsMove( !m_mouseDragIsDrag->GetValue() );
-
-    m_frame->SetSelectPinSelectSymbol( m_cbPinSelectionOpt->GetValue() );
+    cfg->m_Input.drag_is_move = !m_mouseDragIsDrag->GetValue();
+    cfg->m_Selection.select_pin_selects_symbol = m_cbPinSelectionOpt->GetValue();
 
     m_frame->SaveProjectSettings();
 

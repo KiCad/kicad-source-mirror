@@ -566,7 +566,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
         if( item->Type() == SCH_COMPONENT_T && other->Type() == SCH_PIN_T )
         {
-            if( m_frame->GetSelectPinSelectSymbol() )
+            if( !m_isLibEdit && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol )
                 collector.Remove( other );
             else
                 collector.Remove( item );

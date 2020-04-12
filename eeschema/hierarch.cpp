@@ -43,6 +43,8 @@
 
 #include <hierarch.h>
 #include <view/view.h>
+#include <kiface_i.h>
+#include "eeschema_settings.h"
 
 class HIERARCHY_NAVIG_DLG;
 
@@ -200,11 +202,15 @@ void HIERARCHY_NAVIG_DLG::onSelectSheetPath( wxTreeEvent& event )
     m_SchFrameEditor->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
     m_SchFrameEditor->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
 
-    wxTreeItemId ItemSel = m_Tree->GetSelection();
-    m_SchFrameEditor->SetCurrentSheet(( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetPath );
+    wxTreeItemId  itemSel = m_Tree->GetSelection();
+    TreeItemData* itemData = static_cast<TreeItemData*>( m_Tree->GetItemData( itemSel ) );
+
+    m_SchFrameEditor->SetCurrentSheet( itemData->m_SheetPath );
     m_SchFrameEditor->DisplayCurrentSheet();
 
-    if( m_SchFrameEditor->GetNavigatorStaysOpen() == false )
+    EESCHEMA_SETTINGS* appSettings = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+    if( !appSettings->m_Appearance.navigator_stays_open )
         Close( true );
 }
 

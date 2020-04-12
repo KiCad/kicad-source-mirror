@@ -271,7 +271,7 @@ public:
      * Returns the settings object used in SaveSettings(), and is overloaded in
      * KICAD_MANAGER_FRAME
      */
-    virtual APP_SETTINGS_BASE* config();
+    virtual APP_SETTINGS_BASE* config() const;
 
     /**
      * Function InstallPreferences

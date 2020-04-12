@@ -29,15 +29,11 @@
 #include <eeschema_id.h>
 #include <fctsys.h>
 #include <general.h>
-#include <gr_basic.h>
 #include <kiway.h>
 #include <lib_edit_frame.h>
 #include <lib_view_frame.h>
-#include <msgpanel.h>
 #include <pgm_base.h>
-#include <project.h>
 #include <sch_component.h>
-#include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
 #include <tool/tool_manager.h>
@@ -45,7 +41,6 @@
 
 #include <dialog_choose_component.h>
 #include <symbol_tree_model_adapter.h>
-
 
 COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowser( wxTopLevelWindow* aParent,
         const SCHLIB_FILTER* aFilter, const LIB_ID& aPreselectedLibId, int aUnit, int aConvert )
@@ -176,9 +171,6 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* 
                             // but no symbol selected
         return COMPONENT_SELECTION();
 
-    SetUseAllUnits( dlg.GetUseAllUnits() );
-    SetRepeatComponent( dlg.GetKeepSymbol() );
-
     if( sel.Unit == 0 )
         sel.Unit = 1;
 
@@ -187,12 +179,12 @@ COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree( const SCHLIB_FILTER* 
 
     if( sel.LibId.IsValid() )
     {
-        aHistoryList.erase(
-            std::remove_if(
-                aHistoryList.begin(),
-                aHistoryList.end(),
-                [ &sel ]( COMPONENT_SELECTION const& i ){ return i.LibId == sel.LibId; } ),
-            aHistoryList.end() );
+        aHistoryList.erase( std::remove_if( aHistoryList.begin(), aHistoryList.end(),
+                                            [ &sel ]( COMPONENT_SELECTION const& i )
+                                            {
+                                                return i.LibId == sel.LibId;
+                                            } ),
+                            aHistoryList.end() );
 
         aHistoryList.insert( aHistoryList.begin(), sel );
     }
@@ -229,7 +221,7 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_COMPONENT* aComponent, int aUnit )
 
     if( !aComponent->GetEditFlags() )   // No command in progress: update schematic
     {
-        if( m_autoplaceFields )
+        if( eeconfig()->m_AutoplaceFields.enable )
             aComponent->AutoAutoplaceFields( GetScreen() );
 
         TestDanglingEnds();

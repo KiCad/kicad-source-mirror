@@ -44,7 +44,7 @@
 #include <sch_sheet.h>
 #include <sch_bitmap.h>
 #include <class_library.h>
-
+#include <eeschema_settings.h>
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
     EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" )
@@ -158,8 +158,10 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
                 // Pick the module to be placed
-                auto sel = m_frame->SelectCompFromLibTree( &filter, *historyList, true, 1, 1,
-                                                           m_frame->GetShowFootprintPreviews());
+                bool footprintPreviews = m_frame->eeconfig()->m_Appearance.footprint_preview;
+                COMPONENT_SELECTION sel = m_frame->SelectCompFromLibTree( &filter, *historyList,
+                                                                          true, 1, 1,
+                                                                          footprintPreviews );
 
                 // Restore cursor after dialog
                 getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
@@ -175,7 +177,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 // Be sure the link to the corresponding LIB_PART is OK:
                 component->Resolve( *m_frame->Prj().SchSymbolLibTable() );
 
-                if( m_frame->GetAutoplaceFields() )
+                if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                     component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
                 m_frame->SaveCopyForRepeatItem( component );
@@ -197,18 +199,19 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &new_sel );
                 m_frame->OnModify();
 
-                if( m_frame->GetUseAllUnits() || m_frame->GetRepeatComponent() )
+                if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units
+                        || m_frame->eeconfig()->m_SymChooserPanel.keep_symbol )
                 {
                     int new_unit = component->GetUnit();
 
-                    if( m_frame->GetUseAllUnits()
+                    if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units
                             && component->GetUnit() < component->GetUnitCount() )
                         new_unit++;
                     else
                         new_unit = 1;
 
                     // We are either stepping to the next unit or next component
-                    if( m_frame->GetRepeatComponent() || new_unit > 1 )
+                    if( m_frame->eeconfig()->m_SymChooserPanel.keep_symbol || new_unit > 1 )
                     {
                         // Deselect the last placed symbol: obviously we do not want to
                         // apply some changes (like rotation, mirror...) to previously placed
@@ -220,7 +223,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                         next_comp->SetUnit( new_unit );
                         next_comp->SetUnitSelection( g_CurrentSheet, new_unit );
 
-                        if( m_frame->GetAutoplaceFields() )
+                        if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                             component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
                         m_frame->SaveCopyForRepeatItem( next_comp );
@@ -834,6 +837,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_LEFT ) && !sheet )
         {
+            EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
+
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
             sheet = new SCH_SHEET( (wxPoint) cursorPos );
@@ -841,8 +846,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet->SetParent( m_frame->GetScreen() );
             sheet->SetScreen( NULL );
             sheet->SetBorderWidth( m_frame->GetDefaultLineWidth() );
-            sheet->SetBorderColor( m_frame->GetDefaultSheetBorderColor() );
-            sheet->SetBackgroundColor( m_frame->GetDefaultSheetBackgroundColor() );
+            sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );
+            sheet->SetBackgroundColor( cfg->m_Drawing.default_sheet_background_color );
             sizeSheet( sheet, cursorPos );
 
             m_view->ClearPreview();

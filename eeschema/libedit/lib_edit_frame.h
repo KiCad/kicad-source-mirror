@@ -70,15 +70,6 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     // But under some circumstances (New component created) these tools must left enabled
     static bool m_showDeMorgan;
 
-    static int m_textPinNumDefaultSize;     // The default pin num text size setting.
-    static int m_textPinNameDefaultSize;    // The default  pin name text size setting.
-    static int m_defaultPinLength;          //  Default pin length
-
-    /// Default repeat offset for pins in repeat place pin
-    int m_repeatPinStep;
-
-    int m_defaultLibWidth;
-
 public:
     /**
      * Set to true to synchronize pins at the same position when editing symbols with multiple
@@ -167,21 +158,6 @@ public:
     void SetCurPart( LIB_PART* aPart );
 
     LIB_MANAGER& GetLibManager();
-
-    static int GetPinNumDefaultSize() { return m_textPinNumDefaultSize; }
-    static void SetPinNumDefaultSize( int aSize ) { m_textPinNumDefaultSize = aSize; }
-
-    static int GetPinNameDefaultSize() { return m_textPinNameDefaultSize; }
-    static void SetPinNameDefaultSize( int aSize ) { m_textPinNameDefaultSize = aSize; }
-
-    static int GetDefaultPinLength() { return m_defaultPinLength; }
-    static void SetDefaultPinLength( int aLength ) { m_defaultPinLength = aLength; }
-
-    /**
-     * @return the increment value of the position of a pin for the pin repeat command
-     */
-    int GetRepeatPinStep() const { return m_repeatPinStep; }
-    void SetRepeatPinStep( int aStep) { m_repeatPinStep = aStep; }
 
     void ReCreateMenuBar() override;
 

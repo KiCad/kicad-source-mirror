@@ -396,8 +396,6 @@ public:
 
     void SetConnectivityDirty( bool aDirty = true ) { m_connectivity_dirty = aDirty; }
 
-    virtual bool CanIncrementLabel() const { return false; }
-
     /**
      * Return whether the fields have been automatically placed.
      */

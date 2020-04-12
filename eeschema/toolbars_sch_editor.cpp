@@ -169,18 +169,19 @@ void SCH_EDIT_FRAME::SyncToolbars()
 
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
 
+
     m_mainToolBar->Toggle( ACTIONS::save, IsContentModified() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );
     m_mainToolBar->Refresh();
 
-    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == EDA_UNITS::INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,      galOpts.m_fullscreenCursor );
-    m_optionsToolBar->Toggle( EE_ACTIONS::toggleHiddenPins,    GetShowAllPins() );
-    m_optionsToolBar->Toggle( EE_ACTIONS::toggleForceHV,       GetForceHVLines() );
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,          IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,         GetUserUnits() != EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,       GetUserUnits() == EDA_UNITS::INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,   galOpts.m_fullscreenCursor );
+    m_optionsToolBar->Toggle( EE_ACTIONS::toggleHiddenPins, GetShowAllPins() );
+    m_optionsToolBar->Toggle( EE_ACTIONS::toggleForceHV,    eeconfig()->m_Drawing.hv_lines_only );
     m_optionsToolBar->Refresh();
 
     TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );

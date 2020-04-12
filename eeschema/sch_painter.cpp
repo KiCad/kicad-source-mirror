@@ -59,6 +59,7 @@
 #include <sch_text.h>
 #include <settings/color_settings.h>
 #include <view/view.h>
+#include <kiface_i.h>
 
 #include "sch_painter.h"
 
@@ -97,6 +98,12 @@ void SCH_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 const COLOR4D& SCH_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
     return m_layerColors[ aLayer ];
+}
+
+
+EESCHEMA_SETTINGS* eeconfig()
+{
+    return dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 }
 
 
@@ -233,7 +240,7 @@ float SCH_PAINTER::getShadowWidth()
 
     // For best visuals the selection width must be a cross between the zoom level and the
     // default line width.
-    return static_cast<float>( fabs( matrix.GetScale().x * 2.75 ) +  GetSelectionThickness() );
+    return (float) fabs( matrix.GetScale().x * 2.75 ) + Mils2iu( eeconfig()->m_Selection.thickness );
 }
 
 
@@ -439,7 +446,7 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
 
 void SCH_PAINTER::fillIfSelection( int aLayer )
 {
-    if( aLayer == LAYER_SELECTION_SHADOWS && GetSelectionFillShapes() )
+    if( aLayer == LAYER_SELECTION_SHADOWS && eeconfig()->m_Selection.fill_shapes )
         m_gal->SetIsFill( true );
 }
 
@@ -575,7 +582,7 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 
     auto pos = mapCoords( aField->GetPosition() );
 
-    if( drawingShadows && GetSelectionTextAsBox() )
+    if( drawingShadows && eeconfig()->m_Selection.text_as_box )
     {
         EDA_RECT boundaryBox = aField->GetBoundingBox();
 
@@ -584,8 +591,8 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
         m_gal->SetLineWidth( m_gal->GetLineWidth() * 0.5 );
         boundaryBox.RevertYAxis();
 
-        m_gal->DrawRectangle(
-                mapCoords( boundaryBox.GetPosition() ), mapCoords( boundaryBox.GetEnd() ) );
+        m_gal->DrawRectangle( mapCoords( boundaryBox.GetPosition() ),
+                              mapCoords( boundaryBox.GetEnd() ) );
     }
     else
     {
@@ -864,7 +871,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 
     // Draw the labels
     if( drawingShadows && ( libEntry->Type() == LIB_PART_T || libEntry->IsSelected() )
-            && !GetSelectionDrawChildItems() )
+            && !eeconfig()->m_Selection.draw_selected_children )
         return;
 
     int textOffset = libEntry->GetPinNameOffset();
@@ -1248,7 +1255,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
     if( drawingShadows )
     {
-        if( GetSelectionTextAsBox() )
+        if( eeconfig()->m_Selection.text_as_box )
         {
             EDA_RECT bBox = aText->GetBoundingBox();
 
@@ -1401,8 +1408,11 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     if( aField->IsVoid() )
         return;
 
-    if( drawingShadows && aField->GetParent()->IsSelected() && !GetSelectionDrawChildItems() )
+    if( drawingShadows && aField->GetParent()->IsSelected()
+            && !eeconfig()->m_Selection.draw_selected_children )
+    {
         return;
+    }
 
     // Calculate the text orientation according to the parent orientation.
     int orient = (int) aField->GetTextAngle();
@@ -1436,7 +1446,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( getLineWidth( aField, drawingShadows ) );
 
-    if( drawingShadows && GetSelectionTextAsBox() )
+    if( drawingShadows && eeconfig()->m_Selection.text_as_box )
     {
         m_gal->SetIsFill( true );
         m_gal->SetFillColor( color );
@@ -1550,8 +1560,11 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
             if( drawingShadows && !aSheet->IsSelected() && !sheetPin->IsSelected() )
                 continue;
 
-            if( drawingShadows && !GetSelectionDrawChildItems() && aSheet->IsSelected() )
+            if( drawingShadows && aSheet->IsSelected()
+                    && !eeconfig()->m_Selection.draw_selected_children )
+            {
                 break;
+            }
 
             int     width = aSheet->GetPenSize();
             wxPoint initial_pos = sheetPin->GetTextPos();
@@ -1595,7 +1608,7 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
         m_gal->DrawRectangle( pos, pos + size );
 
-        if( drawingShadows && !GetSelectionDrawChildItems() && aSheet->IsSelected() )
+        if( drawingShadows && !eeconfig()->m_Selection.draw_selected_children && aSheet->IsSelected() )
             return;
 
         for( SCH_FIELD& field : aSheet->GetFields() )

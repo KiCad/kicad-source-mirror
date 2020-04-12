@@ -375,7 +375,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             if( !libNames.IsEmpty() )
             {
-                if( m_showIllegalSymbolLibDialog )
+                if( eeconfig()->m_Appearance.show_illegal_symbol_lib_dialog )
                 {
                     wxRichMessageDialog invalidLibDlg(
                             this,
@@ -388,7 +388,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                                "broken symbol library links under certain conditions." ) );
                     invalidLibDlg.ShowCheckBox( _( "Do not show this dialog again." ) );
                     invalidLibDlg.ShowModal();
-                    m_showIllegalSymbolLibDialog = !invalidLibDlg.IsCheckBoxChecked();
+
+                    eeconfig()->m_Appearance.show_illegal_symbol_lib_dialog =
+                                                    !invalidLibDlg.IsCheckBoxChecked();
                 }
 
                 libNames.Clear();

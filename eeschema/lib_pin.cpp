@@ -49,9 +49,10 @@
 #include <transform.h>
 #include <sch_component.h>
 #include <sch_sheet_path.h>
+#include <settings/settings_manager.h>
 #include <settings/color_settings.h>
 #include <trace_helpers.h>
-
+#include <libedit/libedit_settings.h>
 
 static const int pin_orientation_codes[] =
 {
@@ -147,13 +148,15 @@ static int ExternalPinDecoSize( const LIB_PIN &aPin )
 LIB_PIN::LIB_PIN( LIB_PART* aParent )
         : LIB_ITEM( LIB_PIN_T, aParent ), m_shape( GRAPHIC_PINSHAPE::LINE )
 {
-    m_length       = LIB_EDIT_FRAME::GetDefaultPinLength();
     m_orientation  = PIN_RIGHT;                       // Pin orient: Up, Down, Left, Right
     m_type         = ELECTRICAL_PINTYPE::PT_UNSPECIFIED; // electrical type of pin
     m_attributes   = 0;                               // bit 0 != 0: pin invisible
-    m_numTextSize  = LIB_EDIT_FRAME::GetPinNumDefaultSize();
-    m_nameTextSize = LIB_EDIT_FRAME::GetPinNameDefaultSize();
     m_width        = 0;
+
+    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+    m_length       = Mils2iu( settings->m_Defaults.pin_length );
+    m_numTextSize  = Mils2iu( settings->m_Defaults.pin_num_size );
+    m_nameTextSize = Mils2iu( settings->m_Defaults.pin_name_size );
 }
 
 

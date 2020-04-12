@@ -493,7 +493,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType 
             m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
 
         wxPoint cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
-        bool forceHV = m_frame->GetForceHVLines();
+        bool forceHV = m_frame->eeconfig()->m_Drawing.hv_lines_only;
 
         //------------------------------------------------------------------------
         // Handle cancel:
@@ -735,7 +735,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos
 
     // We need 2 segments to go from a given start pin to an end point when the
     // horizontal and vertical lines only switch is on.
-    if( m_frame->GetForceHVLines() )
+    if( m_frame->eeconfig()->m_Drawing.hv_lines_only )
     {
         segment = new SCH_LINE( *segment );
         segment->SetFlags( IS_NEW | IS_MOVED );

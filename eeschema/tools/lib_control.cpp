@@ -445,7 +445,7 @@ int LIB_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
         // Be sure the link to the corresponding LIB_PART is OK:
         comp->Resolve( *m_frame->Prj().SchSymbolLibTable() );
 
-        if( schframe->GetAutoplaceFields() )
+        if( schframe->eeconfig()->m_AutoplaceFields.enable )
             comp->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
         schframe->Raise();

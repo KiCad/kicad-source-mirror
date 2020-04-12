@@ -51,7 +51,9 @@
 #include <dialogs/dialog_edit_one_field.h>
 #include "sch_drawing_tools.h"
 #include <math/util.h>      // for KiROUND
-
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
+#include <libedit_settings.h>
 
 char g_lastBusEntryShape = '/';
 
@@ -396,7 +398,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             else
                 component->SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
 
-            if( m_frame->GetAutoplaceFields() )
+            if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                 component->AutoAutoplaceFields( m_frame->GetScreen() );
 
             break;
@@ -580,7 +582,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             else
                 component->SetOrientation( CMP_MIRROR_Y );
 
-            if( m_frame->GetAutoplaceFields() )
+            if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                 component->AutoAutoplaceFields( m_frame->GetScreen() );
 
             break;
@@ -859,10 +861,33 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     }
     else
     {
-        if( newItem->CanIncrementLabel() )
-            ( (SCH_TEXT*) newItem )->IncrementLabel( m_frame->GetRepeatDeltaLabel() );
+        if( m_isLibEdit )
+        {
+            LIBEDIT_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
 
-        newItem->Move( m_frame->GetRepeatStep() );
+            if( dynamic_cast<SCH_TEXT*>( newItem ) )
+            {
+                SCH_TEXT* text = static_cast<SCH_TEXT*>( newItem );
+                text->IncrementLabel( cfg->m_Repeat.label_delta );
+            }
+
+            newItem->Move( wxPoint( Mils2iu( cfg->m_Repeat.x_step ),
+                                    Mils2iu( cfg->m_Repeat.y_step ) ) );
+        }
+        else
+        {
+            EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+
+            if( dynamic_cast<SCH_TEXT*>( newItem ) )
+            {
+                SCH_TEXT* text = static_cast<SCH_TEXT*>( newItem );
+                text->IncrementLabel( cfg->m_Drawing.repeat_label_increment );
+            }
+
+            newItem->Move( wxPoint( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ),
+                                    Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) ) );
+        }
+
     }
 
     newItem->SetFlags( IS_NEW );
@@ -1083,7 +1108,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 
     dlg.UpdateField( aField, g_CurrentSheet );
 
-    if( m_frame->GetAutoplaceFields() || aField->GetParent()->Type() == SCH_SHEET_T )
+    if( m_frame->eeconfig()->m_AutoplaceFields.enable || aField->GetParent()->Type() == SCH_SHEET_T )
         static_cast<SCH_ITEM*>( aField->GetParent() )->AutoAutoplaceFields( m_frame->GetScreen() );
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
@@ -1223,7 +1248,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // the QUASIMODAL macros here.
         if( dlg.ShowQuasiModal() == wxID_OK )
         {
-            if( m_frame->GetAutoplaceFields() )
+            if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                 component->AutoAutoplaceFields( m_frame->GetScreen() );
 
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );

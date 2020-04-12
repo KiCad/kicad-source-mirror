@@ -35,6 +35,8 @@
 #include <sch_line.h>
 #include <sch_edit_frame.h>
 #include <eeschema_id.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include "sch_move_tool.h"
 
 
@@ -105,6 +107,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         EOT
     };
 
+    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     controls->SetSnapping( true );
 
@@ -115,7 +118,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &EE_ACTIONS::drag ) )
         m_isDragOperation = true;
     else if( aEvent.IsAction( &EE_ACTIONS::moveActivate ) )
-        m_isDragOperation = !m_frame->GetDragActionIsMove();
+        m_isDragOperation = !cfg->m_Input.drag_is_move;
     else
         return 0;
 

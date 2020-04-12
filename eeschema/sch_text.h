@@ -295,8 +295,6 @@ public:
 
     void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
-    bool CanIncrementLabel() const override { return true; }
-
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;

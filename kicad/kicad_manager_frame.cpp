@@ -185,7 +185,7 @@ wxWindow* KICAD_MANAGER_FRAME::GetToolCanvas() const
 }
 
 
-APP_SETTINGS_BASE* KICAD_MANAGER_FRAME::config()
+APP_SETTINGS_BASE* KICAD_MANAGER_FRAME::config() const
 {
     APP_SETTINGS_BASE* ret = PgmTop().PgmSettings();
     wxASSERT( ret );
