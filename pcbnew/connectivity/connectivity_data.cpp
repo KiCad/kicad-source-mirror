@@ -504,7 +504,7 @@ unsigned int CONNECTIVITY_DATA::GetPadCount( int aNet ) const
 {
     int n = 0;
 
-    for( auto pad : m_connAlgo->ItemList() )
+    for( auto&& pad : m_connAlgo->ItemList() )
     {
         if( !pad->Valid() || pad->Parent()->Type() != PCB_PAD_T)
             continue;

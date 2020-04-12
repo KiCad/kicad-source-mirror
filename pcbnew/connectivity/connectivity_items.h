@@ -425,10 +425,20 @@ public:
         m_index.RemoveAll();
     }
 
-    using ITER = decltype(m_items)::iterator;
+    using ITER       = decltype( m_items )::iterator;
+    using CONST_ITER = decltype( m_items )::const_iterator;
 
     ITER begin() { return m_items.begin(); };
     ITER end() { return m_items.end(); };
+
+    CONST_ITER begin() const
+    {
+        return m_items.begin();
+    }
+    CONST_ITER end() const
+    {
+        return m_items.end();
+    }
 
     CN_ITEM* operator[] ( int aIndex ) { return m_items[aIndex]; }
 

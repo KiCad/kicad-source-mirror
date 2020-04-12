@@ -173,7 +173,7 @@ public:
     CN_CONNECTIVITY_ALGO() {}
     ~CN_CONNECTIVITY_ALGO() { Clear(); }
 
-    bool ItemExists( const BOARD_CONNECTED_ITEM* aItem )
+    bool ItemExists( const BOARD_CONNECTED_ITEM* aItem ) const
     {
         return m_itemMap.find( aItem ) != m_itemMap.end();
     }
@@ -197,7 +197,7 @@ public:
             *i = false;
     }
 
-    void GetDirtyClusters( CLUSTERS& aClusters )
+    void GetDirtyClusters( CLUSTERS& aClusters ) const
     {
         for( const auto& cl : m_ratsnestClusters )
         {
@@ -240,17 +240,25 @@ public:
      */
     void    FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones );
 
-    bool    CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& aReport );
-
     const CLUSTERS& GetClusters();
-    int             GetUnconnectedCount();
 
-    CN_LIST& ItemList() { return m_itemList; }
-
-    void ForEachAnchor( const std::function<void( CN_ANCHOR& )>& aFunc );
+    const CN_LIST& ItemList() const
+    {
+        return m_itemList;
+    }
 
     template <typename Func>
-    void ForEachItem( Func&& aFunc )
+    void ForEachAnchor( Func&& aFunc ) const
+    {
+        for( auto&& item : m_itemList )
+        {
+            for( auto&& anchor : item->Anchors() )
+                aFunc( *anchor );
+        }
+    }
+
+    template <typename Func>
+    void ForEachItem( Func&& aFunc ) const
     {
         for( auto&& item : m_itemList )
             aFunc( *item );

@@ -747,16 +747,6 @@ void CN_CONNECTIVITY_ALGO::Clear()
 
 }
 
-void CN_CONNECTIVITY_ALGO::ForEachAnchor( const std::function<void( CN_ANCHOR& )>& aFunc )
-{
-    ForEachItem( [aFunc] ( CN_ITEM& item ) {
-        for( const auto& anchor : item.Anchors() )
-            aFunc( *anchor );
-        }
-    );
-}
-
-
 void CN_CONNECTIVITY_ALGO::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
     m_progressReporter = aReporter;
