@@ -207,10 +207,15 @@ The purpose of the variable is that it represents a MODULE. Something
 like `p_module` would only make that harder to discern.
 
 ## 2.7 Accessing Member Variables and Member Functions ## {#accessing_members}
-We do not use “`this->`” to access either member variables or member
+We do not use `this->` to access either member variables or member
 functions from within the containing class. We let C++ perform this for
 us.
 
+## 2.8 Use of 'auto' ##
+We do -not- use `auto` to reduce repetition.  We do use it to increase
+readability.  This generally means -only- use `auto` where std::lib gets
+overly verbose (such as iterators or `std::make_shared`), or when not using 
+`auto` would cause line-wraps that can't otherwise be avoided.
 
 # 3. Commenting # {#commenting}
 Comments in KiCad typically fall into two categories: in line code
@@ -411,7 +416,6 @@ system. Please remove trailing whitespace.
 It is generally preferred that each statement be placed on its own line.
 This is especially true for statements without keywords.
 
-**Example**
 ~~~~~~~~~~~~~{.cpp}
     x=1; y=2; z=3; // Bad, should be on separate lines.
 ~~~~~~~~~~~~~
@@ -422,7 +426,6 @@ to the same level. It is not necessary to use braces if there is only a
 single line statement after the keyword. In the case of if..else
 if..else, indent all to the same level.
 
-**Example**
 ~~~~~~~~~~~~~{.cpp}
     void function()
     {
@@ -447,7 +450,6 @@ keywords. Spaces should be placed after the opening parenthesis, before
 the closing parenthesis, and between the comma and the next argument in
 functions. No space is needed if a function has no arguments.
 
-**Example**
 ~~~~~~~~~~~~~{.cpp}
     void Function( int aArg1, int aArg2 )
     {
@@ -464,7 +466,6 @@ functions. No space is needed if a function has no arguments.
 ## 4.9 Switch Formatting ## {#switch}
 The case statement is to be indented to the same level as the switch.
 
-**Example**
 ~~~~~~~~~~~~~{.cpp}
     switch( foo )
     {
@@ -479,8 +480,8 @@ The case statement is to be indented to the same level as the switch.
     }
 ~~~~~~~~~~~~~
 
-It is permitted to place all cases on a single line each, if that makes the
-code more readable. This is often done for look-ups or translation functions. In
+It is preferred to place all cases on a single line when that makes the
+code more readable. This is often done for look-ups or mapping functions. In
 this case, you will have to manually align for readability as appropriate and
 reject clang-format's suggested changes, if you use it:
 
@@ -493,6 +494,28 @@ reject clang-format's suggested changes, if you use it:
     case PIN_DOWN:  m_orientation = PIN_RIGHT; break;
     }
 ~~~~~~~~~~~~~
+
+## 4.10 Lamdas ## {#lamda_formatting}
+The braces and statements of the body should be indented as you would a method, 
+with the braces lined up under the capture block:
+
+~~~~~~~~~~~~~{.cpp}
+    auto belowCondition = [] ( const SELECTION& aSel ) 
+                          {
+                              return g_CurrentSheet->Last() != g_RootSheet;
+                          };
+~~~~~~~~~~~~~
+
+or:
+
+~~~~~~~~~~~~~{.cpp}
+    auto belowCondition = 
+        [] ( const SELECTION& aSel ) 
+        {
+            return g_CurrentSheet->Last() != g_RootSheet;
+        };
+~~~~~~~~~~~~~
+
 
 # 5. License Statement # {#license_statement}
 There is a the file copyright.h which you can copy into the top of
