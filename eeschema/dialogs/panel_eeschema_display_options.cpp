@@ -52,11 +52,6 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
 
     m_checkShowHiddenPins->SetValue( cfg->m_Appearance.show_hidden_pins );
-
-    int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
-
-    m_checkSuperSub->SetValue( GetTextMarkupFlags() & superSubFlags );
-
     m_checkPageLimits->SetValue( cfg->m_Appearance.show_page_limits );
 
     m_checkSelTextBox->SetValue( cfg->m_Selection.text_as_box );
@@ -76,17 +71,11 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
 
     cfg->m_Appearance.show_hidden_pins = m_checkShowHiddenPins->GetValue();
     cfg->m_Appearance.show_page_limits = m_checkPageLimits->GetValue();
+
     cfg->m_Selection.text_as_box = m_checkSelTextBox->GetValue();
     cfg->m_Selection.draw_selected_children = m_checkSelDrawChildItems->GetValue();
     cfg->m_Selection.fill_shapes = m_checkSelFillShapes->GetValue();
     cfg->m_Selection.thickness = KiROUND( m_selWidthCtrl->GetValue() );
-
-    int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
-
-    if( m_checkSuperSub->GetValue() )
-        SetTextMarkupFlags( GetTextMarkupFlags() | superSubFlags );
-    else
-        SetTextMarkupFlags( GetTextMarkupFlags() & ~superSubFlags );
 
     // Update canvas
     m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();

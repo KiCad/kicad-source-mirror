@@ -68,7 +68,6 @@ public:
         wxString field_names;
         bool hv_lines_only;
         int repeat_label_increment;
-        int text_markup_flags;
     };
 
     struct INPUT

@@ -26,10 +26,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Appearance") ), wxVERTICAL );
 
 	m_checkShowHiddenPins = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("S&how hidden pins"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_checkShowHiddenPins, 0, wxEXPAND|wxALL, 5 );
-
-	m_checkSuperSub = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Enable superscript/subscript markup"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_checkSuperSub, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizer1->Add( m_checkShowHiddenPins, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkPageLimits = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Show page limi&ts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkPageLimits->SetValue(true);

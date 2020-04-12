@@ -65,8 +65,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM<bool>( "appearance.show_page_limits",
             &m_Appearance.show_page_limits, true ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "appearance.show_sheet_filename_case_sensitivity_dialog",
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_sheet_filename_case_sensitivity_dialog",
             &m_Appearance.show_sheet_filename_case_sensitivity_dialog, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "autoplace_fields.enable",
@@ -96,11 +95,11 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM<int>( "drawing.default_wire_thickness",
             &m_Drawing.default_wire_thickness, DEFAULT_WIRE_THICKNESS ) );
 
-    m_params.emplace_back(
-            new PARAM<wxString>( "drawing.field_names", &m_Drawing.field_names, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "drawing.field_names",
+            &m_Drawing.field_names, "" ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "drawing.hv_lines_only", &m_Drawing.hv_lines_only, true ) );
+    m_params.emplace_back( new PARAM<bool>( "drawing.hv_lines_only",
+            &m_Drawing.hv_lines_only, true ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.repeat_label_increment",
             &m_Drawing.repeat_label_increment, 1, -10, 10 ) );
@@ -111,13 +110,11 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM<COLOR4D>( "drawing.default_sheet_background_color",
             &m_Drawing.default_sheet_background_color, COLOR4D( WHITE ).WithAlpha( 0.0 ) ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "drawing.text_markup_flags", &m_Drawing.text_markup_flags, 0 ) );
+    m_params.emplace_back( new PARAM<bool>( "input.drag_is_move",
+            &m_Input.drag_is_move, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( "input.drag_is_move", &m_Input.drag_is_move, true ) );
-
-    m_params.emplace_back(
-            new PARAM<int>( "selection.thickness", &m_Selection.thickness, 3 ) );
+    m_params.emplace_back( new PARAM<int>( "selection.thickness",
+            &m_Selection.thickness, 3 ) );
 
     m_params.emplace_back( new PARAM<bool>( "selection.draw_selected_children",
             &m_Selection.draw_selected_children, true ) );
@@ -131,8 +128,8 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM<bool>( "selection.text_as_box",
             &m_Selection.text_as_box, false ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "annotation.method", &m_AnnotatePanel.method, 0, 0, 2 ) );
+    m_params.emplace_back( new PARAM<int>( "annotation.method",
+            &m_AnnotatePanel.method, 0, 0, 2 ) );
 
     m_params.emplace_back( new PARAM<int>( "annotation.messages_filter",
             &m_AnnotatePanel.messages_filter, -1 ) );
@@ -140,10 +137,11 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM<int>( "annotation.sort_order",
             &m_AnnotatePanel.sort_order, 0, 0, 1 ) );
 
-    m_params.emplace_back(
-            new PARAM<wxString>( "bom.selected_plugin", &m_BomPanel.selected_plugin, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "bom.selected_plugin",
+            &m_BomPanel.selected_plugin, "" ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "bom.plugins", &m_BomPanel.plugins, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "bom.plugins",
+            &m_BomPanel.plugins, "" ) );
 
     m_params.emplace_back( new PARAM<bool>( "page_settings.export_revision",
             &m_PageSettings.export_revision, false ) );
@@ -190,15 +188,17 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM_MAP<bool>( "field_editor.fields_group_by",
             &m_FieldEditorPanel.fields_group_by, {} ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "plot.background_color", &m_PlotPanel.background_color, false ) );
+    m_params.emplace_back( new PARAM<bool>( "plot.background_color",
+            &m_PlotPanel.background_color, false ) );
 
-    m_params.emplace_back( new PARAM<bool>( "plot.color", &m_PlotPanel.color, true ) );
+    m_params.emplace_back( new PARAM<bool>( "plot.color",
+            &m_PlotPanel.color, true ) );
 
-    m_params.emplace_back(
-            new PARAM<wxString>( "plot.color_theme", &m_PlotPanel.color_theme, wxT( "user" ) ) );
+    m_params.emplace_back( new PARAM<wxString>( "plot.color_theme",
+            &m_PlotPanel.color_theme, wxT( "user" ) ) );
 
-    m_params.emplace_back( new PARAM<int>( "plot.format", &m_PlotPanel.format, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "plot.format",
+            &m_PlotPanel.format, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "plot.frame_reference",
             &m_PlotPanel.frame_reference, true ) );
@@ -209,14 +209,14 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM<double>( "plot.hpgl_pen_size",
             &m_PlotPanel.hpgl_pen_size, 0.5 ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "plot.hpgl_origin", &m_PlotPanel.hpgl_origin, false ) );
+    m_params.emplace_back( new PARAM<bool>( "plot.hpgl_origin",
+            &m_PlotPanel.hpgl_origin, false ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "simulator.window.pos_x", &m_Simulator.window.pos_x, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "simulator.window.pos_x",
+            &m_Simulator.window.pos_x, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "simulator.window.pos_y", &m_Simulator.window.pos_y, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "simulator.window.pos_y",
+            &m_Simulator.window.pos_y, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.window.size_x",
             &m_Simulator.window.size_x, 500 ) );

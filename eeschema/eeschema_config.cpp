@@ -55,6 +55,7 @@
 
 
 static double s_textOffsetRatio = 0.08;
+static int s_textMarkupFlags = 0;
 
 #define FieldNameTemplatesKey         wxT( "FieldNameTemplates" )
 
@@ -280,6 +281,8 @@ void SCH_EDIT_FRAME::AddFormattingParameters( std::vector<PARAM_CFG*>& params )
                                          &s_textOffsetRatio,
                                          (double) TXT_MARGIN / DEFAULT_SIZE_TEXT,
                                          -200.0, 200.0 ) );
+    params.push_back( new PARAM_CFG_INT( wxT( "TextMarkupFlags" ),
+                                         &s_textMarkupFlags, 0 ) );
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "LineThickness" ),
                                          &m_defaultLineWidth,
                                          Mils2iu( appSettings->m_Drawing.default_line_thickness ),
@@ -339,6 +342,8 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
     bool ret = Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDIT,
                                  GetProjectFileParameters() );
 
+    SetTextMarkupFlags( s_textMarkupFlags );
+
     GetRenderSettings()->m_DefaultLineWidth = GetDefaultLineWidth();
     GetRenderSettings()->m_DefaultWireThickness = GetDefaultWireThickness();
     GetRenderSettings()->m_DefaultBusThickness = GetDefaultBusThickness();
@@ -391,6 +396,8 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
 
     wxString path = fn.GetFullPath();
 
+    s_textMarkupFlags = GetTextMarkupFlags();
+
     prj.ConfigSave( Kiface().KifaceSearch(), GROUP_SCH_EDIT, GetProjectFileParameters(), path );
 }
 
@@ -419,8 +426,6 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     if( eeconfig() )
     {
         eeconfig()->m_Appearance.print_sheet_reference     = m_printSheetReference;
-
-        eeconfig()->m_Drawing.text_markup_flags            = GetTextMarkupFlags();
 
         eeconfig()->m_Printing.monochrome                  = m_printMonochrome;
 
