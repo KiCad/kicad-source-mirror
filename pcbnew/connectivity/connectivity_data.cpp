@@ -383,31 +383,25 @@ const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
 const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNetCode,
         const KICAD_T aTypes[] ) const
 {
-    std::set<BOARD_CONNECTED_ITEM*> items;
-    std::vector<BOARD_CONNECTED_ITEM*> rv;
+    std::vector<BOARD_CONNECTED_ITEM*> items;
+    items.reserve( 32 );
 
-    m_connAlgo->ForEachItem( [&items, aNetCode, &aTypes] ( CN_ITEM& aItem )
+    std::bitset<MAX_STRUCT_TYPE_ID> type_bits;
+
+    for( unsigned int i = 0; aTypes[i] != EOT; ++i )
     {
-        if( aItem.Valid() && ( aItem.Net() == aNetCode ) )
-        {
-            KICAD_T itemType = aItem.Parent()->Type();
+        wxASSERT( aTypes[i] < MAX_STRUCT_TYPE_ID );
+        type_bits.set( aTypes[i] );
+    }
 
-            for( int i = 0; aTypes[i] > 0; ++i )
-            {
-                wxASSERT( aTypes[i] < MAX_STRUCT_TYPE_ID );
-
-                if( itemType == aTypes[i] )
-                {
-                    items.insert( aItem.Parent() );
-                    break;
-                }
-            }
-        }
+    m_connAlgo->ForEachItem( [&]( CN_ITEM& aItem ) {
+        if( aItem.Valid() && ( aItem.Net() == aNetCode ) && type_bits[aItem.Parent()->Type()] )
+            items.push_back( aItem.Parent() );
     } );
 
-    std::copy( items.begin(), items.end(), std::back_inserter( rv ) );
-
-    return rv;
+    std::sort( items.begin(), items.end() );
+    items.erase( std::unique( items.begin(), items.end() ), items.end() );
+    return items;
 }
 
 

@@ -248,7 +248,14 @@ public:
     CN_LIST& ItemList() { return m_itemList; }
 
     void ForEachAnchor( const std::function<void( CN_ANCHOR& )>& aFunc );
-    void ForEachItem( const std::function<void( CN_ITEM& )>& aFunc );
+
+    template <typename Func>
+    void ForEachItem( Func&& aFunc )
+    {
+        for( auto&& item : m_itemList )
+            aFunc( *item );
+    }
+
 
     void MarkNetAsDirty( int aNet );
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );

@@ -747,14 +747,6 @@ void CN_CONNECTIVITY_ALGO::Clear()
 
 }
 
-
-void CN_CONNECTIVITY_ALGO::ForEachItem( const std::function<void( CN_ITEM& )>& aFunc )
-{
-    for( auto item : m_itemList )
-        aFunc( *item );
-}
-
-
 void CN_CONNECTIVITY_ALGO::ForEachAnchor( const std::function<void( CN_ANCHOR& )>& aFunc )
 {
     ForEachItem( [aFunc] ( CN_ITEM& item ) {

@@ -144,15 +144,6 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 }
 
 
-int CN_ITEM::Net() const
-{
-    if( !m_parent || !m_valid )
-        return -1;
-
-    return m_parent->GetNetCode();
-}
-
-
 void CN_ITEM::Dump()
 {
     printf("    valid: %d, connected: \n", !!Valid());

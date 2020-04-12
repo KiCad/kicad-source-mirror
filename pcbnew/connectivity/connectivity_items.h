@@ -336,7 +336,10 @@ public:
     virtual int             AnchorCount() const;
     virtual const VECTOR2I  GetAnchor( int n ) const;
 
-    int Net() const;
+    int Net() const
+    {
+        return ( !m_parent || !m_valid ) ? -1 : m_parent->GetNetCode();
+    }
 };
 
 typedef std::shared_ptr<CN_ITEM> CN_ITEM_PTR;
