@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2020 Oleg Endo <olegendo@gcc.gnu.org>
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -25,45 +26,91 @@
 #pragma once
 
 #include <dialog_select_net_from_list_base.h>
+#include <eda_pattern_match.h>
 
 class PCB_EDIT_FRAME;
 class NETINFO_ITEM;
 class BOARD;
+class CN_ITEM;
 
-class DIALOG_SELECT_NET_FROM_LIST : public DIALOG_SELECT_NET_FROM_LIST_BASE
+class DIALOG_SELECT_NET_FROM_LIST : public DIALOG_SELECT_NET_FROM_LIST_BASE, public BOARD_LISTENER
 {
-private:
 public:
     DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParent );
     ~DIALOG_SELECT_NET_FROM_LIST();
 
     // returns true if a net was selected, and its name in aName
-    bool GetNetName( wxString& aName );
+    bool GetNetName( wxString& aName ) const;
 
     /**
-     * Visually highlights a net.
-     * @param aNetName is the name of net to be highlighted.  An empty string will unhighlight
+     * Visually highlights a net in the list view.
+     * @param aNet is the net item to be highlighted.  Nullptr will unhighlight
      * any currently highlighted net.
      */
-    void HighlightNet( const wxString& aNetName );
+    void HighlightNet( NETINFO_ITEM* aNet );
+
+    virtual void OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
+    virtual void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
+    virtual void OnBoardNetSettingsChanged( BOARD& aBoard ) override;
+    virtual void OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
+    virtual void OnBoardHighlightNetChanged( BOARD& aBoard ) override;
 
 private:
+    struct COLUMN_ID;
+    static const COLUMN_ID COLUMN_NET;
+    static const COLUMN_ID COLUMN_NAME;
+    static const COLUMN_ID COLUMN_PAD_COUNT;
+    static const COLUMN_ID COLUMN_VIA_COUNT;
+    static const COLUMN_ID COLUMN_BOARD_LENGTH;
+    static const COLUMN_ID COLUMN_CHIP_LENGTH;
+    static const COLUMN_ID COLUMN_TOTAL_LENGTH;
+
+    struct ROW_DESC;
+
+    ROW_DESC findRow( NETINFO_ITEM* aNet );
+    ROW_DESC findRow( int aNetCode );
+
+    void deleteRow( const ROW_DESC& aRow );
+    void setValue( const ROW_DESC& aRow, const COLUMN_ID& aCol, wxString aVal );
+
+    wxString formatNetCode( const NETINFO_ITEM* aNet ) const;
+    wxString formatNetName( const NETINFO_ITEM* aNet ) const;
+    wxString formatCount( unsigned int aValue ) const;
+    wxString formatLength( int aValue ) const;
+
+    std::vector<CN_ITEM*> relevantConnectivityItems() const;
+    bool                  netFilterMatches( NETINFO_ITEM* aNet ) const;
+    void                  updateNet( NETINFO_ITEM* aNet );
+    void                  highlightNetOnBoard( NETINFO_ITEM* aNet ) const;
+
     void onSelChanged( wxDataViewEvent& event ) override;
     void onFilterChange( wxCommandEvent& event ) override;
     void onListSize( wxSizeEvent& event ) override;
     void onReport( wxCommandEvent& event ) override;
 
     void buildNetsList();
-    wxString getListColumnHeaderNet() { return _( "Net" ); };
-    wxString getListColumnHeaderName() { return _( "Name" ); };
-    wxString getListColumnHeaderCount() { return _( "Pad Count" ); };
-    wxString getListColumnHeaderVias() { return _( "Via Count" ); };
-    wxString getListColumnHeaderBoard() { return _( "Board Length" ); };
-    wxString getListColumnHeaderDie() { return _( "Die Length" ); };
-    wxString getListColumnHeaderLength() { return _( "Length" ); };
     void adjustListColumns();
 
-    wxArrayString   m_netsInitialNames;   // The list of escaped netnames (original names)
+    void onParentWindowClosed( wxCommandEvent& event );
+    void onUnitsChanged( wxCommandEvent& event );
+    void onBoardChanged( wxCommandEvent& event );
+
+    // in addition to the displayed list data, we also keep some auxiliary
+    // data for each list item in order to speed up update of the displayed list.
+    struct LIST_ITEM;
+    struct LIST_ITEM_NET_CMP_LESS;
+
+    // primary vector, sorted by rows
+    std::vector<LIST_ITEM> m_list_items;
+
+    // we can't keep pointers to the elements in the primary vector because
+    // the underlyng storage might change when elements are added or removed.
+    // keep indices instead and look the them up in m_list_items.
+    std::vector<unsigned int> m_list_items_by_net;
+
+
+    EDA_PATTERN_MATCH_WILDCARD m_netFilter;
+
     wxString        m_selection;
     bool            m_wasSelected;
     BOARD*          m_brd;

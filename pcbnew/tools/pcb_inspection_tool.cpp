@@ -451,7 +451,7 @@ int PCB_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
     if( dlg.ShowModal() == wxID_CANCEL )
     {
         // Clear highlight
-        dlg.HighlightNet( "" );
+        dlg.HighlightNet( nullptr );
     }
 
     return 0;
