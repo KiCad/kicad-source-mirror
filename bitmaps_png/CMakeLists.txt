@@ -233,6 +233,7 @@ set( BMAPS_MID
     find
     find_replace
     flag
+    flag_remove
     flip_board
     fonts
     footprint_text
@@ -475,6 +476,7 @@ set( BMAPS_MID
     spreadsheet
     svg_file
     swap_layer
+    switch_corner_rounding_shape
     text
     text_sketch
     three_d

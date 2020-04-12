@@ -497,14 +497,14 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
 {
     int idx = m_cbTheme->GetSelection();
 
-    if( idx == m_cbTheme->GetCount() - 2 )
+    if( idx == (int)m_cbTheme->GetCount() - 2 )
     {
         // separator; re-select active theme
         m_cbTheme->SetStringSelection( m_currentSettings->GetName() );
         return;
     }
 
-    if( idx == m_cbTheme->GetCount() - 1 )
+    if( idx == (int)m_cbTheme->GetCount() - 1 )
     {
         // New Theme...
 

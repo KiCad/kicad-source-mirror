@@ -36,86 +36,86 @@
 #define _(s) s
 
 TOOL_ACTION ACTIONS::doNew( "common.Control.new",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + 'N', LEGACY_HK_NAME( "New" ),
         _( "New..." ), _( "Create a new document in the editor" ),
         new_generic_xpm );
 
 TOOL_ACTION ACTIONS::newLibrary( "common.Control.newLibrary",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",
         _( "New Library..." ), _( "Create a new library folder" ),
         new_generic_xpm );
 
 TOOL_ACTION ACTIONS::addLibrary( "common.Control.addLibrary",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",
         _( "Add Library..." ), _( "Add an existing library folder" ),
         add_library_xpm );
 
 TOOL_ACTION ACTIONS::open( "common.Control.open",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + 'O', LEGACY_HK_NAME( "Open" ),
         _( "Open..." ), _( "Open existing document" ),
         directory_xpm );
 
 TOOL_ACTION ACTIONS::save( "common.Control.save",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + 'S', LEGACY_HK_NAME( "Save" ),
         _( "Save" ), _( "Save changes" ),
         save_xpm );
 
 TOOL_ACTION ACTIONS::saveAs( "common.Control.saveAs",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'S', LEGACY_HK_NAME( "Save As" ),
         _( "Save As..." ), _( "Save current document to another location" ),
         save_as_xpm );
 
 TOOL_ACTION ACTIONS::saveCopyAs( "common.Control.saveCopyAs",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",
         _( "Save Copy As..." ), _( "Save a copy of the current document to another location" ),
         save_as_xpm );
 
 TOOL_ACTION ACTIONS::saveAll( "common.Control.saveAll",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",
         _( "Save All" ), _( "Save all changes" ),
         save_xpm );
 
 TOOL_ACTION ACTIONS::revert( "common.Control.revert",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",
         _( "Revert" ), _( "Throw away changes" ),
         undo_xpm );
 
 TOOL_ACTION ACTIONS::pageSettings( "common.Control.pageSettings",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",
         _( "Page Settings..." ), _( "Settings for paper size and title block info" ),
         sheetset_xpm );
 
 TOOL_ACTION ACTIONS::print( "common.Control.print",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + 'P', LEGACY_HK_NAME( "Print" ),
         _( "Print..." ), _( "Print" ),
         print_button_xpm );
 
 TOOL_ACTION ACTIONS::plot( "common.Control.plot",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",
         _( "Plot..." ), _( "Plot" ),
         plot_xpm );
 
 TOOL_ACTION ACTIONS::quit( "common.Control.quit",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",   // Not currently in use due to wxWidgets crankiness
         _( "Quit" ), _( "Close the current editor" ),
         exit_xpm );
 
 // Generic Edit Actions
 TOOL_ACTION ACTIONS::cancelInteractive( "common.Interactive.cancel",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",   // ESC key is handled in the dispatcher
         _( "Cancel" ), _( "Cancel current tool" ),
         cancel_xpm, AF_NONE );
@@ -130,7 +130,7 @@ TOOL_ACTION ACTIONS::updateMenu( "common.Interactive.updateMenu",
         AS_GLOBAL );
 
 TOOL_ACTION ACTIONS::undo( "common.Interactive.undo",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + 'Z', LEGACY_HK_NAME( "Undo" ),
         _( "Undo" ), _( "Undo last edit" ),
         undo_xpm );
@@ -147,19 +147,19 @@ TOOL_ACTION ACTIONS::redo( "common.Interactive.redo",
         redo_xpm );
 
 TOOL_ACTION ACTIONS::cut( "common.Interactive.cut",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + 'X', LEGACY_HK_NAME( "Cut" ),
         _( "Cut" ), _( "Cut selected item(s) to clipboard" ),
         cut_xpm );
 
 TOOL_ACTION ACTIONS::copy( "common.Interactive.copy",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + 'C', LEGACY_HK_NAME( "Copy" ),
         _( "Copy" ), _( "Copy selected item(s) to clipboard" ),
         copy_xpm );
 
 TOOL_ACTION ACTIONS::paste( "common.Interactive.paste",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + 'V', LEGACY_HK_NAME( "Paste" ),
         _( "Paste" ), _( "Paste clipboard into schematic" ),
         paste_xpm );
@@ -170,13 +170,13 @@ TOOL_ACTION ACTIONS::pasteSpecial( "common.Interactive.pasteSpecial",
         paste_xpm );
 
 TOOL_ACTION ACTIONS::duplicate( "common.Interactive.duplicate",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + 'D', LEGACY_HK_NAME( "Duplicate" ),
         _( "Duplicate" ), _( "Duplicates the selected item(s)" ),
         duplicate_xpm );
 
 TOOL_ACTION ACTIONS::doDelete( "common.Interactive.delete",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         WXK_DELETE, LEGACY_HK_NAME( "Delete Item" ),
         _( "Delete" ), _( "Deletes selected item(s)" ),
         delete_xpm );
@@ -190,37 +190,37 @@ TOOL_ACTION ACTIONS::activatePointEditor( "common.Control.activatePointEditor",
         AS_GLOBAL );
 
 TOOL_ACTION ACTIONS::find( "common.Interactive.find",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + 'F', LEGACY_HK_NAME( "Find" ),
         _( "Find" ), _( "Find text" ),
         find_xpm );
 
 TOOL_ACTION ACTIONS::findAndReplace( "common.Interactive.findAndReplace",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + MD_ALT + 'F', LEGACY_HK_NAME( "Find and Replace" ),
         _( "Find and Replace" ), _( "Find and replace text" ),
         find_replace_xpm );
 
 TOOL_ACTION ACTIONS::findNext( "common.Interactive.findNext",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         WXK_F5, LEGACY_HK_NAME( "Find Next" ),
         _( "Find Next" ), _( "Find next match" ),
         find_xpm );
 
 TOOL_ACTION ACTIONS::findNextMarker( "common.Interactive.findNextMarker",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_SHIFT + WXK_F5, LEGACY_HK_NAME( "Find Next Marker" ),
         _( "Find Next Marker" ), "",
         find_xpm );
 
 TOOL_ACTION ACTIONS::replaceAndFindNext( "common.Interactive.replaceAndFindNext",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",
         _( "Replace and Find Next" ), _( "Replace current match and find next" ),
         find_replace_xpm );
 
 TOOL_ACTION ACTIONS::replaceAll( "common.Interactive.replaceAll",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",
         _( "Replace All" ), _( "Replace all matches" ),
         find_replace_xpm );
@@ -256,7 +256,7 @@ TOOL_ACTION ACTIONS::zoomIn( "common.Control.zoomIn",
 #if defined( __WXMAC__ )
         MD_CTRL + '+',
 #else
-        WXK_F1, 
+        WXK_F1,
 #endif
         LEGACY_HK_NAME( "Zoom In" ),
         _( "Zoom In at Cursor" ), _( "Zoom In at Cursor" ),
@@ -274,25 +274,25 @@ TOOL_ACTION ACTIONS::zoomOut( "common.Control.zoomOut",
         zoom_out_xpm );
 
 TOOL_ACTION ACTIONS::zoomInCenter( "common.Control.zoomInCenter",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",
         _( "Zoom In" ), _( "Zoom In" ),
         zoom_in_xpm );
 
 TOOL_ACTION ACTIONS::zoomOutCenter( "common.Control.zoomOutCenter",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         0, "",
         _( "Zoom Out" ), _( "Zoom Out" ),
         zoom_out_xpm );
 
 TOOL_ACTION ACTIONS::zoomCenter( "common.Control.zoomCenter",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         WXK_F4, LEGACY_HK_NAME( "Zoom Center" ),
         _( "Center" ), _( "Center" ),
         zoom_center_on_screen_xpm );
 
 TOOL_ACTION ACTIONS::zoomTool( "common.Control.zoomTool",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + WXK_F5, LEGACY_HK_NAME( "Zoom to Selection" ),
         _( "Zoom to Selection" ), _( "Zoom to Selection" ),
         zoom_area_xpm, AF_ACTIVATE );
@@ -305,62 +305,62 @@ TOOL_ACTION ACTIONS::centerContents( "common.Control.centerContents",
 
 // Cursor control
 TOOL_ACTION ACTIONS::cursorUp( "common.Control.cursorUp",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         WXK_UP, "",
         _( "Cursor Up" ), "",
         nullptr, AF_NONE, (void*) CURSOR_UP );
 
 TOOL_ACTION ACTIONS::cursorDown( "common.Control.cursorDown",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         WXK_DOWN, "",
         _( "Cursor Down" ), "" ,
         nullptr, AF_NONE, (void*) CURSOR_DOWN );
 
 TOOL_ACTION ACTIONS::cursorLeft( "common.Control.cursorLeft",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         WXK_LEFT, "",
         _( "Cursor Left" ), "" ,
         nullptr, AF_NONE, (void*) CURSOR_LEFT );
 
 TOOL_ACTION ACTIONS::cursorRight( "common.Control.cursorRight",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         WXK_RIGHT, "",
         _( "Cursor Right" ), "" ,
         nullptr, AF_NONE, (void*) CURSOR_RIGHT );
 
 
 TOOL_ACTION ACTIONS::cursorUpFast( "common.Control.cursorUpFast",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + WXK_UP, "",
         _( "Cursor Up Fast" ), "",
         nullptr, AF_NONE, (void*) ( CURSOR_UP | CURSOR_FAST_MOVE ) );
 
 TOOL_ACTION ACTIONS::cursorDownFast( "common.Control.cursorDownFast",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + WXK_DOWN, "",
         _( "Cursor Down Fast" ), "" ,
         nullptr, AF_NONE, (void*) ( CURSOR_DOWN | CURSOR_FAST_MOVE ) );
 
 TOOL_ACTION ACTIONS::cursorLeftFast( "common.Control.cursorLeftFast",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + WXK_LEFT, "",
         _( "Cursor Left Fast" ), "" ,
         nullptr, AF_NONE, (void*) ( CURSOR_LEFT | CURSOR_FAST_MOVE ) );
 
 TOOL_ACTION ACTIONS::cursorRightFast( "common.Control.cursorRightFast",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + WXK_RIGHT, "",
         _( "Cursor Right Fast" ), "" ,
         nullptr, AF_NONE, (void*) ( CURSOR_RIGHT | CURSOR_FAST_MOVE ) );
 
 TOOL_ACTION ACTIONS::cursorClick( "common.Control.cursorClick",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         WXK_RETURN, LEGACY_HK_NAME( "Mouse Left Click" ),
         _( "Click" ), _( "Performs left mouse button click" ),
         nullptr, AF_NONE, (void*) CURSOR_CLICK );
 
 TOOL_ACTION ACTIONS::cursorDblClick( "common.Control.cursorDblClick",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         WXK_END, LEGACY_HK_NAME( "Mouse Left Double Click" ),
         _( "Double-click" ), _( "Performs left mouse button double-click" ),
         nullptr, AF_NONE, (void*) CURSOR_DBL_CLICK );
@@ -370,49 +370,51 @@ TOOL_ACTION ACTIONS::refreshPreview( "common.Control.refreshPreview",
 
 TOOL_ACTION ACTIONS::pinLibrary( "common.Control.pinLibrary",
          AS_GLOBAL, 0, "",
-         _( "Pin Library" ), "Keep the library at the top of the list" );
+         _( "Pin Library" ), "Keep the library at the top of the list",
+         flag_xpm );
 
 TOOL_ACTION ACTIONS::unpinLibrary( "common.Control.unpinLibrary",
          AS_GLOBAL, 0, "",
-         _( "Unpin Library" ), "No longer keep the library at the top of the list" );
+         _( "Unpin Library" ), "No longer keep the library at the top of the list",
+         flag_remove_xpm );
 
 TOOL_ACTION ACTIONS::panUp( "common.Control.panUp",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_SHIFT + WXK_UP, "",
         _( "Pan Up" ), "",
         nullptr, AF_NONE, (void*) CURSOR_UP );
 
 TOOL_ACTION ACTIONS::panDown( "common.Control.panDown",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_SHIFT + WXK_DOWN, "",
         _( "Pan Down" ), "" ,
         nullptr, AF_NONE, (void*) CURSOR_DOWN );
 
 TOOL_ACTION ACTIONS::panLeft( "common.Control.panLeft",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_SHIFT + WXK_LEFT, "",
         _( "Pan Left" ), "" ,
         nullptr, AF_NONE, (void*) CURSOR_LEFT );
 
 TOOL_ACTION ACTIONS::panRight( "common.Control.panRight",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_SHIFT + WXK_RIGHT, "",
         _( "Pan Right" ), "" ,
         nullptr, AF_NONE, (void*) CURSOR_RIGHT );
 
 // Grid control
 TOOL_ACTION ACTIONS::gridFast1( "common.Control.gridFast1",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_ALT + '1', LEGACY_HK_NAME( "Switch Grid To Fast Grid1" ),
         _( "Switch to Fast Grid 1" ), "" );
 
 TOOL_ACTION ACTIONS::gridFast2( "common.Control.gridFast2",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_ALT + '2', LEGACY_HK_NAME( "Switch Grid To Fast Grid2" ),
         _( "Switch to Fast Grid 2" ), "" );
 
 TOOL_ACTION ACTIONS::gridNext( "common.Control.gridNext",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         'N', LEGACY_HK_NAME( "Switch Grid To Next" ),
         _("Switch to Next Grid" ), "" );
 
@@ -421,13 +423,13 @@ TOOL_ACTION ACTIONS::gridPrev( "common.Control.gridPrev",
         _( "Switch to Previous Grid" ), "" );
 
 TOOL_ACTION ACTIONS::gridSetOrigin( "common.Control.gridSetOrigin",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         'S', LEGACY_HK_NAME( "Set Grid Origin" ),
         _( "Grid Origin" ), _( "Set the grid origin point" ),
         grid_select_axis_xpm );
 
 TOOL_ACTION ACTIONS::gridResetOrigin( "common.Control.gridResetOrigin",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         'Z', LEGACY_HK_NAME( "Reset Grid Origin" ),
         _( "Reset Grid Origin" ), "" );
 
@@ -455,7 +457,7 @@ TOOL_ACTION ACTIONS::metricUnits( "common.Control.metricUnits",
         unit_mm_xpm );
 
 TOOL_ACTION ACTIONS::toggleUnits( "common.Control.toggleUnits",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         MD_CTRL + 'U', LEGACY_HK_NAME( "Switch Units" ),
         _( "Switch units" ), _( "Switch between inches and millimeters" ),
         unit_mm_xpm );
@@ -466,12 +468,12 @@ TOOL_ACTION ACTIONS::togglePolarCoords( "common.Control.togglePolarCoords",
         polar_coord_xpm );
 
 TOOL_ACTION ACTIONS::resetLocalCoords( "common.Control.resetLocalCoords",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         ' ', LEGACY_HK_NAME( "Reset Local Coordinates" ),
         _( "Reset Local Coordinates" ), "" );
 
 TOOL_ACTION ACTIONS::toggleCursor( "common.Control.toggleCursor",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         MD_CTRL + MD_SHIFT + 'X', LEGACY_HK_NAME( "Toggle Cursor Display (Modern Toolset only)" ),
         _( "Always Show Cursor" ), _( "Display crosshairs even in selection tool" ),
@@ -489,7 +491,7 @@ TOOL_ACTION ACTIONS::highContrastMode( "common.Control.highContrastMode",
         contrast_mode_xpm );
 
 TOOL_ACTION ACTIONS::selectionTool( "common.InteractiveSelection.selectionTool",
-        AS_GLOBAL, 0, "", 
+        AS_GLOBAL, 0, "",
         _( "Select item(s)" ), "",
         cursor_xpm, AF_ACTIVATE );
 
@@ -544,7 +546,7 @@ TOOL_ACTION ACTIONS::acceleratedGraphics( "common.Control.acceleratedGraphics",
 #ifdef __WXMAC__
         MD_ALT + WXK_F11,
 #else
-        WXK_F11, 
+        WXK_F11,
 #endif
         LEGACY_HK_NAME( "Switch to Modern Toolset with hardware-accelerated graphics (recommended)" ),
         _( "Accelerated Graphics" ), _( "Use hardware-accelerated graphics (recommended)" ),
@@ -596,13 +598,13 @@ TOOL_ACTION ACTIONS::listHotKeys( "common.SuiteControl.listHotKeys",
         _( "List Hotkeys..." ),
         _( "Displays current hotkeys table and corresponding commands" ),
         hotkeys_xpm );
-        
+
 TOOL_ACTION ACTIONS::getInvolved( "common.SuiteControl.getInvolved",
         AS_GLOBAL, 0, "",
         _( "Get Involved" ),
         _( "Open \"Contribute to KiCad\" in a web browser" ),
         info_xpm );
-        
+
 
 // System-wide selection Events
 
