@@ -36,15 +36,15 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
         m_frame( aFrame ),
         m_severities( nullptr )
 {
-    m_formatting = new PANEL_SETUP_FORMATTING( this, aFrame );
-    m_fieldNameTemplates = new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( aFrame, this, false );
-    m_pinMap = new PANEL_SETUP_PINMAP( this, aFrame );
+    m_formatting = new PANEL_SETUP_FORMATTING( m_treebook, aFrame );
+    m_fieldNameTemplates = new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( aFrame, m_treebook, false );
+    m_pinMap = new PANEL_SETUP_PINMAP( m_treebook, aFrame );
 
     ERC_ITEM dummyItem;
     m_severities = new PANEL_SETUP_SEVERITIES( this, dummyItem, g_ErcSettings->m_Severities,
                                                ERCE_FIRST, ERCE_LAST );
 
-    m_textVars = new PANEL_TEXT_VARIABLES( this, &Prj() );
+    m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 
     /*
      * WARNING: If you change page names you MUST update calls to DoShowSchematicSetupDialog().
