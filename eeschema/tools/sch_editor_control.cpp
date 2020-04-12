@@ -714,10 +714,13 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
             SCH_ITEM*      item = static_cast<SCH_ITEM*>( selTool->GetNode( aPosition ) );
             SCH_COMPONENT* comp = nullptr;
 
-            if( item->Type() == SCH_FIELD_T )
-                comp = dynamic_cast<SCH_COMPONENT*>( item->GetParent() );
-            else
-                comp = dynamic_cast<SCH_COMPONENT*>( item );
+            if( item )
+            {
+                if( item->Type() == SCH_FIELD_T )
+                    comp = dynamic_cast<SCH_COMPONENT*>( item->GetParent() );
+                else
+                    comp = dynamic_cast<SCH_COMPONENT*>( item );
+            }
 
             if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
                 netName = comp->GetPartRef()->GetName();
