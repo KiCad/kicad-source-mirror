@@ -179,6 +179,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         renderSettings->SetHighlight( ( netcode >= 0 ), netcode );
 
         pcb->SetHighLightNet( netcode );
+        pcb->HighLightON();
 
         auto merge_area = [netcode, &bbox]( BOARD_CONNECTED_ITEM* aItem )
         {

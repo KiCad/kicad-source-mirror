@@ -30,6 +30,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_tool_base.h>
 
+class DIALOG_SELECT_NET_FROM_LIST;
 
 /**
  * PCB_INSPECTION_TOOL
@@ -102,6 +103,8 @@ private:
 
     bool m_slowRatsnest;        // Indicates current selection ratsnest will be slow to calculate
     wxTimer m_ratsnestTimer;    // Timer to initiate lazy ratsnest calculation (ie: when slow)
+
+    std::unique_ptr<DIALOG_SELECT_NET_FROM_LIST> m_listNetsDialog;
 };
 
 #endif //__BOARD_STATISTICS_TOOL_H

@@ -191,6 +191,7 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     if( enableHighlight && net >= 0 )
     {
         board->SetHighLightNet( net );
+        board->HighLightON();
 
         NETINFO_ITEM* netinfo = board->FindNet( net );
 
@@ -446,13 +447,10 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest()
 
 int PCB_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
 {
-    DIALOG_SELECT_NET_FROM_LIST dlg( m_frame );
+    if( m_listNetsDialog == nullptr )
+        m_listNetsDialog = std::make_unique<DIALOG_SELECT_NET_FROM_LIST>( m_frame );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
-    {
-        // Clear highlight
-        dlg.HighlightNet( nullptr );
-    }
+    m_listNetsDialog->Show( true );
 
     return 0;
 }
