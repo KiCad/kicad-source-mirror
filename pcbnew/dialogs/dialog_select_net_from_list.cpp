@@ -119,8 +119,9 @@ struct DIALOG_SELECT_NET_FROM_LIST::ROW_DESC
 };
 
 
-DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParent )
-    : DIALOG_SELECT_NET_FROM_LIST_BASE( aParent ), m_frame( aParent )
+DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST(
+        PCB_EDIT_FRAME* aParent, const SETTINGS& aSettings )
+        : DIALOG_SELECT_NET_FROM_LIST_BASE( aParent ), m_frame( aParent )
 {
     m_brd = aParent->GetBoard();
     m_wasSelected = false;
@@ -143,6 +144,9 @@ DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParen
     // The fact that we're a list should keep the control from reserving space for the
     // expander buttons... but it doesn't.  Fix by forcing the indent to 0.
     m_netsList->SetIndent( 0 );
+
+    m_textCtrlFilter->SetValue( aSettings.filter_string );
+    m_cbShowZeroPad->SetValue( aSettings.show_zero_pad_nets );
 
     buildNetsList();
 
@@ -181,9 +185,14 @@ DIALOG_SELECT_NET_FROM_LIST::~DIALOG_SELECT_NET_FROM_LIST()
         m_brd->RemoveListener( this );
 }
 
+DIALOG_SELECT_NET_FROM_LIST::SETTINGS DIALOG_SELECT_NET_FROM_LIST::Settings() const
+{
+    return { m_textCtrlFilter->GetValue(), m_cbShowZeroPad->IsChecked() };
+}
 
 void DIALOG_SELECT_NET_FROM_LIST::onParentWindowClosed( wxCommandEvent& event )
 {
+    Close();
     event.Skip();
 }
 

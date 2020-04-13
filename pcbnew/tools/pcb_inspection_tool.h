@@ -26,11 +26,10 @@
 
 
 #include <dialogs/dialog_board_statistics.h>
+#include <dialogs/dialog_select_net_from_list.h>
 #include <pcb_edit_frame.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_tool_base.h>
-
-class DIALOG_SELECT_NET_FROM_LIST;
 
 /**
  * PCB_INSPECTION_TOOL
@@ -95,6 +94,8 @@ private:
     ///> Bind handlers to corresponding TOOL_ACTIONs
     void setTransitions() override;
 
+    void onListNetsDialogClosed( wxCommandEvent& event );
+
 private:
     PCB_EDIT_FRAME* m_frame;    // Pointer to the currently used edit frame.
 
@@ -105,6 +106,7 @@ private:
     wxTimer m_ratsnestTimer;    // Timer to initiate lazy ratsnest calculation (ie: when slow)
 
     std::unique_ptr<DIALOG_SELECT_NET_FROM_LIST> m_listNetsDialog;
+    DIALOG_SELECT_NET_FROM_LIST::SETTINGS        m_listNetsDialogSettings;
 };
 
 #endif //__BOARD_STATISTICS_TOOL_H

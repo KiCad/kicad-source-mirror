@@ -36,8 +36,16 @@ class CN_ITEM;
 class DIALOG_SELECT_NET_FROM_LIST : public DIALOG_SELECT_NET_FROM_LIST_BASE, public BOARD_LISTENER
 {
 public:
-    DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParent );
+    struct SETTINGS
+    {
+        wxString filter_string;
+        bool     show_zero_pad_nets = true;
+    };
+
+    DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParent, const SETTINGS& aSettings );
     ~DIALOG_SELECT_NET_FROM_LIST();
+
+    SETTINGS Settings() const;
 
     // returns true if a net was selected, and its name in aName
     bool GetNetName( wxString& aName ) const;

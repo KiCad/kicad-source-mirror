@@ -28,7 +28,6 @@
 #include <tools/edit_tool.h>
 #include <painter.h>
 #include <connectivity/connectivity_data.h>
-#include <dialogs/dialog_select_net_from_list.h>
 #include <profile.h>
 #include "pcb_inspection_tool.h"
 
@@ -448,11 +447,35 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest()
 int PCB_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
 {
     if( m_listNetsDialog == nullptr )
-        m_listNetsDialog = std::make_unique<DIALOG_SELECT_NET_FROM_LIST>( m_frame );
+    {
+        m_listNetsDialog =
+                std::make_unique<DIALOG_SELECT_NET_FROM_LIST>( m_frame, m_listNetsDialogSettings );
+
+        m_listNetsDialog->Connect( wxEVT_CLOSE_WINDOW,
+                wxCommandEventHandler( PCB_INSPECTION_TOOL::onListNetsDialogClosed ), nullptr,
+                this );
+
+        m_listNetsDialog->Connect( wxEVT_BUTTON,
+                wxCommandEventHandler( PCB_INSPECTION_TOOL::onListNetsDialogClosed ), nullptr,
+                this );
+    }
 
     m_listNetsDialog->Show( true );
-
     return 0;
+}
+
+void PCB_INSPECTION_TOOL::onListNetsDialogClosed( wxCommandEvent& event )
+{
+    m_listNetsDialogSettings = m_listNetsDialog->Settings();
+
+    m_listNetsDialog->Disconnect( wxEVT_CLOSE_WINDOW,
+            wxCommandEventHandler( PCB_INSPECTION_TOOL::onListNetsDialogClosed ), nullptr, this );
+
+    m_listNetsDialog->Disconnect( wxEVT_BUTTON,
+            wxCommandEventHandler( PCB_INSPECTION_TOOL::onListNetsDialogClosed ), nullptr, this );
+
+    m_listNetsDialog->Destroy();
+    m_listNetsDialog.release();
 }
 
 void PCB_INSPECTION_TOOL::setTransitions()
