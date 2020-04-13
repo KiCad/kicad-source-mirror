@@ -54,6 +54,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_actions.h>
 
+wxDEFINE_EVENT( BOARD_CHANGED, wxCommandEvent );
 
 BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnTogglePadDrawMode )
@@ -158,6 +159,9 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         delete m_Pcb;
         m_Pcb = aBoard;
         m_Pcb->SetGeneralSettings( m_Settings );
+
+        wxCommandEvent e( BOARD_CHANGED );
+        ProcessEventLocally( e );
     }
 }
 

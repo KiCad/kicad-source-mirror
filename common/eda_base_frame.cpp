@@ -47,6 +47,8 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 
+wxDEFINE_EVENT( UNITS_CHANGED, wxCommandEvent );
+
 
 // Minimum window size
 static const int s_minsize_x = 500;
@@ -737,4 +739,13 @@ bool EDA_BASE_FRAME::IsContentModified()
 {
     // This function should be overridden in child classes
     return false;
+}
+
+void EDA_BASE_FRAME::ChangeUserUnits( EDA_UNITS aUnits )
+{
+    SetUserUnits( aUnits );
+    unitsChangeRefresh();
+
+    wxCommandEvent e( UNITS_CHANGED );
+    ProcessEventLocally( e );
 }

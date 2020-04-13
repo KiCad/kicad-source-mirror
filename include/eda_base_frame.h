@@ -88,6 +88,8 @@ enum id_librarytype {
     LIBRARY_TYPE_SYMBOL
 };
 
+wxDECLARE_EVENT( UNITS_CHANGED, wxCommandEvent );
+
 
 /**
  * The base frame for deriving all KiCad main window classes.
@@ -209,11 +211,7 @@ public:
         m_userUnits = aUnits;
     }
 
-    void ChangeUserUnits( EDA_UNITS aUnits )
-    {
-        SetUserUnits( aUnits );
-        unitsChangeRefresh();
-    }
+    void ChangeUserUnits( EDA_UNITS aUnits );
 
     SETTINGS_MANAGER* GetSettingsManager() const { return m_settingsManager; }
 

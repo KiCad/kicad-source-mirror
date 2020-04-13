@@ -61,6 +61,9 @@ class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
 class PCBNEW_SETTINGS;
 
+
+wxDECLARE_EVENT( BOARD_CHANGED, wxCommandEvent );
+
 /**
  * PCB_BASE_FRAME
  * basic PCB main window class for Pcbnew, Gerbview, and CvPcb footprint viewer.
