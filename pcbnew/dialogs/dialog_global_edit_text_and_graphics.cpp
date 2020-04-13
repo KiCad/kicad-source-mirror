@@ -277,7 +277,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
             textItem->SetTextSize( wxSize( textItem->GetTextSize().x, m_textHeight.GetValue() ) );
 
         if( !m_thickness.IsIndeterminate() && textItem )
-            textItem->SetThickness( m_thickness.GetValue() );
+            textItem->SetTextPenWidth( m_thickness.GetValue() );
 
         if( m_Italic->Get3StateValue() != wxCHK_UNDETERMINED && textItem )
             textItem->SetItalic( m_Italic->GetValue() );
@@ -298,7 +298,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
         if( textItem )
         {
             textItem->SetTextSize( m_brdSettings->GetTextSize( layer ) );
-            textItem->SetThickness( m_brdSettings->GetTextThickness( layer ) );
+            textItem->SetTextPenWidth( m_brdSettings->GetTextThickness( layer ) );
             textItem->SetItalic( m_brdSettings->GetTextItalic( layer ) );
         }
 

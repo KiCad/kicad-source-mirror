@@ -1016,7 +1016,7 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     else
     {
         // Filled mode
-        m_gal->SetLineWidth( getLineThickness( aText->GetThickness() ) );
+        m_gal->SetLineWidth( getLineThickness( aText->GetEffectiveTextPenWidth( nullptr ) ) );      // JEY TODO: requires RENDER_SETTINGS
     }
 
     m_gal->SetStrokeColor( color );
@@ -1048,14 +1048,15 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     else
     {
         // Filled mode
-        m_gal->SetLineWidth( getLineThickness( aText->GetThickness() ) );
+        m_gal->SetLineWidth( getLineThickness( aText->GetEffectiveTextPenWidth( nullptr ) ) );      // JEY TODO: requires RENDER_SETTINGS
     }
 
     m_gal->SetStrokeColor( color );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( shownText, position, aText->GetDrawRotationRadians(), GetTextMarkupFlags() );
+    m_gal->StrokeText( shownText, position, aText->GetDrawRotationRadians(),
+                       GetTextMarkupFlags() );    // JEY TODO: requires RENDER_SETTINGS
 
     // Draw the umbilical line
     if( aText->IsSelected() )
@@ -1183,10 +1184,10 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
     TEXTE_PCB& text = aDimension->Text();
     VECTOR2D position( text.GetTextPos().x, text.GetTextPos().y );
 
-    m_gal->SetLineWidth( text.GetThickness() );
+    m_gal->SetLineWidth( getLineThickness( text.GetEffectiveTextPenWidth( nullptr ) ) );    // JEY TODO: requires RENDER_SETTINGS
     m_gal->SetTextAttributes( &text );
     m_gal->StrokeText( text.GetShownText(), position, text.GetTextAngleRadians(),
-                       GetTextMarkupFlags() );
+                       GetTextMarkupFlags() );    // JEY TODO: requires RENDER_SETTINGS
 }
 
 

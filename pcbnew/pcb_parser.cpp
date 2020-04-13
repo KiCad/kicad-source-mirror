@@ -300,7 +300,7 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                     break;
 
                 case T_thickness:
-                    aText->SetThickness( parseBoardUnits( "text thickness" ) );
+                    aText->SetTextPenWidth( parseBoardUnits( "text thickness" ) );
                     NeedRIGHT();
                     break;
 

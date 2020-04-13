@@ -361,7 +361,7 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, COLOR4D aColor )
 
     orient = pt_texte->GetDrawRotation();
 
-    thickness = pt_texte->GetThickness();
+    thickness = pt_texte->GetEffectiveTextPenWidth( nullptr );
 
     if( pt_texte->IsMirrored() )
         size.x = -size.x;  // Text is mirrored
@@ -653,7 +653,7 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     size      = pt_texte->GetTextSize();
     pos       = pt_texte->GetTextPos();
     orient    = pt_texte->GetTextAngle();
-    thickness = pt_texte->GetThickness();
+    thickness = pt_texte->GetEffectiveTextPenWidth( nullptr );
 
     if( pt_texte->IsMirrored() )
         size.x = -size.x;

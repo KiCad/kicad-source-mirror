@@ -245,7 +245,7 @@ void DIMENSION::AdjustDimensionDetails( int aPrecision )
     m_Text.SetLayer( GetLayer() );
 
     // calculate the size of the dimension (text + line above the text)
-    ii = m_Text.GetTextHeight() + m_Text.GetThickness() + ( m_Width );
+    ii = m_Text.GetTextHeight() + m_Text.GetEffectiveTextPenWidth( nullptr ) + m_Width; // JEY TODO: requires RENDER_SETTINGS
 
     deltax  = m_featureLineDO.x - m_featureLineGO.x;
     deltay  = m_featureLineDO.y - m_featureLineGO.y;
@@ -456,7 +456,7 @@ const EDA_RECT DIMENSION::GetBoundingBox() const
     EDA_RECT    bBox;
     int         xmin, xmax, ymin, ymax;
 
-    bBox    = m_Text.GetTextBox( -1 );
+    bBox    = m_Text.GetTextBox( nullptr );     // JEY TODO: requires RENDER_SETTINGS
     xmin    = bBox.GetX();
     xmax    = bBox.GetRight();
     ymin    = bBox.GetY();

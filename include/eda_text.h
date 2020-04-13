@@ -30,8 +30,11 @@
 #include <gr_basic.h>               // EDA_DRAW_MODE_T
 #include <base_struct.h>            // EDA_RECT
 #include "kicad_string.h"
+#include "painter.h"
 
 class SHAPE_POLY_SET;
+
+using KIGFX::RENDER_SETTINGS;
 
 // part of the kicad_plugin.h family of defines.
 // See kicad_plugin.h for the choice of the value
@@ -137,15 +140,14 @@ public:
     virtual void SetText( const wxString& aText );
 
     /**
-     * Set the pen width.
-     *
-     * @param aNewThickness is the new pen width
+     * The TextPenWidth is that set by the user.  The EffectiveTextPenWidth also factors
+     * in bold text, default text thickness, and thickness clamping.
      */
-    void SetThickness( int aNewThickness )      { m_e.penwidth = aNewThickness; };
+    void SetTextPenWidth( int aWidth ) { m_e.penwidth = aWidth; };
+    int GetTextPenWidth() const { return m_e.penwidth; };
+    int GetEffectiveTextPenWidth( RENDER_SETTINGS* aSettings ) const;
 
-    /**
-     * Return the pen width.
-     */
+    // JEY TODO: delete
     int GetThickness() const                    { return m_e.penwidth; };
 
     void SetTextAngle( double aAngle )
@@ -308,25 +310,16 @@ public:
     int LenSize( const wxString& aLine, int aThickness, int aMarkupFlags ) const;
 
     /**
-     * Useful in multiline texts to calculate the full text or a line area (for
-     * zones filling, locate functions....)
-     *
-     * @return the rect containing the line of text (i.e. the position and the
-     *         size of one line)
-     *         this rectangle is calculated for 0 orient text.
-     *         If orientation is not 0 the rect must be rotated to match the
-     *         physical area
-     * @param aLine The line of text to consider.
-     * for single line text, aLine is unused
-     * If aLine == -1, the full area (considering all lines) is returned
-     * @param aThickness Overrides the current penwidth when greater than 0.
-     * This is needed when the current penwidth is 0 and a default penwidth is used.
+     * Useful in multiline texts to calculate the full text or a line area (for zones filling,
+     * locate functions....)
+     * @param aSettings An options rendering context to provide defaults, processing flags, etc.
+     * @param aLine The line of text to consider.  Pass -1 for all lines.
      * @param aInvertY Invert the Y axis when calculating bounding box.
-     * @param aMarkupFlags a flagset of MARKUP_FLAG enums indicating which markup tokens should
-     *                     be processed
+     * @return the rect containing the line of text (i.e. the position and the size of one line)
+     *         this rectangle is calculated for 0 orient text.
+     *         If orientation is not 0 the rect must be rotated to match the physical area
      */
-    EDA_RECT GetTextBox( int aLine = -1, int aThickness = -1, bool aInvertY = false,
-                         int aMarkupFlags = 0 ) const;
+    EDA_RECT GetTextBox( RENDER_SETTINGS* aSettings, int aLine = -1, bool aInvertY = false ) const;
 
     /**
      * Return the distance between two lines of text.

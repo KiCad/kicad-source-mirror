@@ -282,30 +282,16 @@ bool SCH_TEXT::operator<( const SCH_ITEM& aItem ) const
 
 int SCH_TEXT::GetPenSize() const
 {
-    int pensize = GetThickness();
-
-    if( pensize == 0 && IsBold()  )
-        pensize = GetPenSizeForBold( GetTextWidth() );
-
-    // Clip pen size for small texts:
-    pensize = Clamp_Text_PenSize( pensize, GetTextSize(), IsBold() );
-
-    return pensize;
+    return GetEffectiveTextPenWidth( nullptr );     // JEY TODO: requires RENDER_SETTINGS
 }
 
 
 void SCH_TEXT::Print( wxDC* DC, const wxPoint& aOffset )
 {
     COLOR4D color = GetLayerColor( m_Layer );
-    int     linewidth = GetPenSize();
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
-    int     savedWidth = GetThickness();
-
-    SetThickness( linewidth );              // Set the minimum width
 
     EDA_TEXT::Print( DC, text_offset, color );
-
-    SetThickness( savedWidth );
 }
 
 
@@ -415,10 +401,7 @@ void SCH_TEXT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 
 const EDA_RECT SCH_TEXT::GetBoundingBox() const
 {
-    // Use the maximum clamped pen width to give us a bit of wiggle room
-    int linewidth = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
-
-    EDA_RECT rect = GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
+    EDA_RECT rect = GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
 
     if( GetTextAngle() != 0 )      // Rotate rect
     {
@@ -586,15 +569,10 @@ bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
 void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
     static std::vector<wxPoint> Poly;
-    COLOR4D  color = aPlotter->ColorSettings()->GetColor( GetLayer() );
-    int      tmp = GetThickness();
-    int      thickness = GetPenSize();
+    COLOR4D color = aPlotter->ColorSettings()->GetColor( GetLayer() );
+    int penWidth = GetEffectiveTextPenWidth( nullptr );
 
-    // Two thicknesses are set here:
-    // The first is for EDA_TEXT, which controls the interline spacing based on text thickness
-    // The second is for the output that sets the actual stroke size
-    SetThickness( thickness );
-    aPlotter->SetCurrentLineWidth( thickness );
+    aPlotter->SetCurrentLineWidth( penWidth );
 
     if( IsMultilineAllowed() )
     {
@@ -610,7 +588,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
             wxPoint textpos = positions[ii] + GetSchematicTextOffset();
             wxString& txt = strings_list.Item( ii );
             aPlotter->Text( textpos, color, txt, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-                            GetVertJustify(), thickness, IsItalic(), IsBold() );
+                            GetVertJustify(), penWidth, IsItalic(), IsBold() );
         }
     }
     else
@@ -618,7 +596,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
         wxPoint textpos = GetTextPos() + GetSchematicTextOffset();
 
         aPlotter->Text( textpos, color, GetShownText(), GetTextAngle(), GetTextSize(),
-                        GetHorizJustify(), GetVertJustify(), thickness, IsItalic(), IsBold() );
+                        GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold() );
     }
 
     // Draw graphic symbol for global or hierarchical labels
@@ -628,8 +606,6 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
 
     if( Poly.size() )
         aPlotter->PlotPoly( Poly, NO_FILL );
-
-    SetThickness( tmp );
 }
 
 
@@ -765,10 +741,7 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
 
 const EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
-    // Use the maximum clamped pen width to give us a bit of wiggle room
-    int linewidth = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
-
-    EDA_RECT rect = GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
+    EDA_RECT rect = GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
 
     if( GetTextAngle() != 0.0 )
     {
@@ -908,17 +881,11 @@ void SCH_GLOBALLABEL::Print( wxDC* DC, const wxPoint& aOffset )
 
     COLOR4D color = GetLayerColor( m_Layer );
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
-    int     linewidth = GetPenSize();
-    int     save_width = GetThickness();
-
-    SetThickness( linewidth );
 
     EDA_TEXT::Print( DC, text_offset, color );
 
-    SetThickness( save_width );   // restore initial value
-
     CreateGraphicShape( Poly, GetTextPos() + aOffset );
-    GRPoly( nullptr, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
+    GRPoly( nullptr, DC, Poly.size(), &Poly[0], false, GetTextPenWidth(), color, color );
 }
 
 
@@ -1152,18 +1119,12 @@ void SCH_HIERLABEL::Print( wxDC* DC, const wxPoint& offset )
 
     auto    conn = Connection( *g_CurrentSheet );
     COLOR4D color = GetLayerColor( ( conn && conn->IsBus() ) ? LAYER_BUS : m_Layer );
-    int     linewidth = GetPenSize();
-    int     save_width = GetThickness();
-
-    SetThickness( linewidth );
-
     wxPoint text_offset = offset + GetSchematicTextOffset();
+
     EDA_TEXT::Print( DC, text_offset, color );
 
-    SetThickness( save_width );         // restore initial value
-
     CreateGraphicShape( Poly, GetTextPos() + offset );
-    GRPoly( nullptr, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
+    GRPoly( nullptr, DC, Poly.size(), &Poly[0], false, GetTextPenWidth(), color, color );
 }
 
 

@@ -131,15 +131,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
 
 int SCH_FIELD::GetPenSize() const
 {
-    int pensize = GetThickness();
-
-    if( pensize == 0 && IsBold()  )
-        pensize = GetPenSizeForBold( GetTextWidth() );
-
-    // Clip pen size for small texts:
-    pensize = Clamp_Text_PenSize( pensize, GetTextSize(), IsBold() );
-
-    return pensize;
+    return GetEffectiveTextPenWidth( nullptr );  // JEY TODO: requires RENDER_SETTINGS
 }
 
 
@@ -214,15 +206,12 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 
 const EDA_RECT SCH_FIELD::GetBoundingBox() const
 {
-    // Use the maximum clamped pen width to give us a bit of wiggle room
-    int linewidth = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
-
     // Calculate the text bounding box:
     EDA_RECT  rect;
     SCH_FIELD text( *this );    // Make a local copy to change text
                                 // because GetBoundingBox() is const
     text.SetText( GetShownText() );
-    rect = text.GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
+    rect = text.GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
 
     // Calculate the bounding box position relative to the parent:
     wxPoint origin = GetParentPosition();

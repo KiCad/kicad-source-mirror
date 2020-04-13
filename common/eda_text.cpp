@@ -141,6 +141,23 @@ void EDA_TEXT::SwapEffects( EDA_TEXT& aTradingPartner )
 }
 
 
+int EDA_TEXT::GetEffectiveTextPenWidth( RENDER_SETTINGS* aSettings ) const
+{
+    int width = GetTextPenWidth();
+
+    if( width == 0 && IsBold() )
+        width = GetPenSizeForBold( GetTextWidth() );
+
+    if( width <= 0 && aSettings )
+        width = aSettings->GetDefaultPenWidth();
+
+    // Clip pen size for small texts:
+    width = Clamp_Text_PenSize( width, GetTextSize(), IsBold() );
+
+    return width;
+}
+
+
 bool EDA_TEXT::Replace( wxFindReplaceData& aSearchData )
 {
     return EDA_ITEM::Replace( aSearchData, m_text );
@@ -181,14 +198,15 @@ int EDA_TEXT::GetInterline() const
 }
 
 
-EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY, int aMarkupFlags ) const
+EDA_RECT EDA_TEXT::GetTextBox( RENDER_SETTINGS* aSettings, int aLine, bool aInvertY ) const
 {
     EDA_RECT       rect;
     wxArrayString  strings;
     wxString       text = GetShownText();
-    int            thickness = ( aThickness < 0 ) ? GetThickness() : aThickness;
+    int            thickness = GetEffectiveTextPenWidth( aSettings );
     int            linecount = 1;
     bool           hasOverBar = false;     // true if the first line of text as an overbar
+    int            markupFlags = aSettings ? aSettings->GetTextMarkupFlags() : 0;
 
     if( IsMultilineAllowed() )
     {
@@ -220,7 +238,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY, int aMa
     const auto& font = basic_gal.GetStrokeFont();
     VECTOR2D    size( GetTextSize() );
     double      penWidth( thickness );
-    int dx = KiROUND( font.ComputeStringBoundaryLimits( text, size, penWidth, aMarkupFlags ).x );
+    int dx = KiROUND( font.ComputeStringBoundaryLimits( text, size, penWidth, markupFlags ).x );
     int dy = GetInterline();
 
     // Creates bounding box (rectangle) for an horizontal
@@ -258,7 +276,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY, int aMa
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
             text = strings.Item( ii );
-            dx = KiROUND( font.ComputeStringBoundaryLimits( text, size, penWidth, aMarkupFlags ).x );
+            dx = KiROUND( font.ComputeStringBoundaryLimits( text, size, penWidth, markupFlags ).x );
             textsize.x = std::max( textsize.x, dx );
             textsize.y += dy;
         }
@@ -335,7 +353,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY, int aMa
 
 bool EDA_TEXT::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
-    EDA_RECT rect = GetTextBox( -1 );   // Get the full text area.
+    EDA_RECT rect = GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
     wxPoint location = aPoint;
 
     rect.Inflate( aAccuracy );
@@ -352,9 +370,9 @@ bool EDA_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy
     rect.Inflate( aAccuracy );
 
     if( aContains )
-        return rect.Contains( GetTextBox( -1 ) );
+        return rect.Contains( GetTextBox( nullptr ) );   // JEY TODO: requires RENDER_SETTINGS
 
-    return rect.Intersects( GetTextBox( -1 ), GetTextAngle() );
+    return rect.Intersects( GetTextBox( nullptr ), GetTextAngle() );   // JEY TODO: requires RENDER_SETTINGS
 }
 
 
@@ -427,7 +445,7 @@ void EDA_TEXT::printOneLineOfText( wxDC* aDC, const wxPoint& aOffset, COLOR4D aC
                                    EDA_DRAW_MODE_T aFillMode,  const wxString& aText,
                                    const wxPoint &aPos )
 {
-    int width = GetThickness();
+    int width = GetEffectiveTextPenWidth( nullptr );
 
     if( aFillMode == SKETCH )
         width = -width;
@@ -469,7 +487,7 @@ bool EDA_TEXT::IsDefaultFormatting() const
            && !IsMirrored()
            && GetHorizJustify() == GR_TEXT_HJUSTIFY_CENTER
            && GetVertJustify() == GR_TEXT_VJUSTIFY_CENTER
-           && GetThickness() == 0
+           && GetTextPenWidth() == 0
            && !IsItalic()
            && !IsBold()
            && !IsMultilineAllowed()
@@ -492,8 +510,8 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 					   FormatInternalUnits( GetTextHeight() ).c_str(),
 					   FormatInternalUnits( GetTextWidth() ).c_str() );
 
-	if( GetThickness() )
-		aFormatter->Print( 0, " (thickness %s)", FormatInternalUnits( GetThickness() ).c_str() );
+	if( GetTextPenWidth() )
+		aFormatter->Print( 0, " (thickness %s)", FormatInternalUnits( GetTextPenWidth() ).c_str() );
 
 	if( IsBold() )
 		aFormatter->Print( 0, " bold" );
@@ -548,6 +566,9 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
     if( IsMirrored() )
         size.x = -size.x;
 
+    bool forceBold = true;
+    int  penWidth = 0;      // use max-width for bold text
+
     COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by GRText
 
     if( IsMultilineAllowed() )
@@ -562,14 +583,14 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
         {
             wxString txt = strings_list.Item( ii );
             GRText( NULL, positions[ii], color, txt, GetTextAngle(), size, GetHorizJustify(),
-                    GetVertJustify(), GetThickness(), IsItalic(), true, addTextSegmToBuffer,
+                    GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToBuffer,
                     &aCornerBuffer );
         }
     }
     else
     {
         GRText( NULL, GetTextPos(), color, GetText(), GetTextAngle(), size, GetHorizJustify(),
-                GetVertJustify(), GetThickness(), IsItalic(), true, addTextSegmToBuffer,
+                GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToBuffer,
                 &aCornerBuffer );
     }
 }

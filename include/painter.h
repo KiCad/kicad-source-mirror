@@ -31,7 +31,6 @@
 #include <set>
 
 #include <gal/color4d.h>
-#include <ws_draw_item.h>
 #include <layers_id_colors_and_visibility.h>
 #include <memory>
 
@@ -45,11 +44,12 @@ class VIEW_ITEM;
 
 /**
  * RENDER_SETTINGS
- * Contains all the knowledge about how graphical objects are drawn on
- * any output surface/device. This includes:
+ * Contains all the knowledge about how graphical objects are drawn on any output
+ * surface/device. This includes:
  * - color/transparency settings
  * - highlighting and high contrast mode control
  * - drawing quality control (sketch/outline mode)
+ * - text processing flags
  * The class acts as an interface between the PAINTER object and the GUI (i.e. Layers/Items
  * widget or display options dialog).
  */
@@ -143,22 +143,9 @@ public:
     /**
      * Function SetHighContrast
      * Turns on/off high contrast display mode.
-     * @param aEnabled determines if high contrast display mode should be enabled or not.
      */
-    inline void SetHighContrast( bool aEnabled )
-    {
-        m_hiContrastEnabled = aEnabled;
-    }
-
-    /**
-     * Function GetHighContrast
-     * Returns information about high contrast display mode.
-     * @return True if the high contrast mode is on, false otherwise.
-     */
-    inline bool GetHighContrast() const
-    {
-        return m_hiContrastEnabled;
-    }
+    void SetHighContrast( bool aEnabled ) { m_hiContrastEnabled = aEnabled; }
+    bool GetHighContrast() const { return m_hiContrastEnabled; }
 
     /**
      * Function GetColor
@@ -170,20 +157,13 @@ public:
      */
     virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const = 0;
 
-    float GetWorksheetLineWidth() const
-    {
-        return m_worksheetLineWidth;
-    }
+    float GetWorksheetLineWidth() const { return m_worksheetLineWidth; }
 
-    inline bool GetShowPageLimits() const
-    {
-        return m_showPageLimits;
-    }
+    int GetDefaultPenWidth() const { return m_defaultPenWidth; }
+    int GetTextMarkupFlags() const { return m_textMarkupFlags; }
 
-    inline void SetShowPageLimits( bool aDraw )
-    {
-        m_showPageLimits = aDraw;
-    }
+    bool GetShowPageLimits() const { return m_showPageLimits; }
+    void SetShowPageLimits( bool aDraw ) { m_showPageLimits = aDraw; }
 
     /**
      * Function GetBackgroundColor
@@ -256,40 +236,34 @@ protected:
 
     std::set<unsigned int> m_activeLayers; ///< Stores active layers number
 
-    ///> Colors for all layers (normal)
-    COLOR4D m_layerColors[LAYER_ID_COUNT];
+    COLOR4D m_layerColors[LAYER_ID_COUNT];      // Layer colors
+    COLOR4D m_layerColorsHi[LAYER_ID_COUNT];    // Layer colors for highlighted objects
+    COLOR4D m_layerColorsSel[LAYER_ID_COUNT];   // Layer colors for selected objects
 
-    ///> Colors for all layers (highlighted)
-    COLOR4D m_layerColorsHi[LAYER_ID_COUNT];
+    COLOR4D m_hiContrastColor[LAYER_ID_COUNT];  // High-contrast mode layer colors
+    COLOR4D m_layerColorsDark[LAYER_ID_COUNT];  // Darkened layer colors (for high-contrast mode)
 
-    ///> Colors for all layers (selected)
-    COLOR4D m_layerColorsSel[LAYER_ID_COUNT];
-
-    ///> Colors for all layers (darkened)
-    COLOR4D m_layerColorsDark[LAYER_ID_COUNT];
-
-    ///< Colora used for high contrast display mode
-    COLOR4D m_hiContrastColor[LAYER_ID_COUNT];
+    COLOR4D m_backgroundColor;                  // The background color
 
     /// Parameters for display modes
-    bool    m_hiContrastEnabled;    ///< High contrast display mode on/off
-    float   m_hiContrastFactor;     ///< Factor used for computing high contrast color
+    bool    m_hiContrastEnabled;    // High contrast display mode on/off
+    float   m_hiContrastFactor;     // Factor used for computing high contrast color
 
-    bool    m_highlightEnabled;     ///< Highlight display mode on/off
-    int     m_highlightNetcode;     ///< Net number that is displayed in highlight
-                                    ///< -1 means that there is no specific net, and whole active
-                                    ///< layer is highlighted
-    bool    m_highlightItems;       ///< Highlight items with their HIGHLIGHT flags set
-    float   m_highlightFactor;      ///< Factor used for computing highlight color
+    bool    m_highlightEnabled;     // Highlight display mode on/off
+    int     m_highlightNetcode;     // Net number that is displayed in highlight
+                                    // -1 means that there is no specific net, and whole active
+                                    // layer is highlighted
+    bool    m_highlightItems;       // Highlight items with their HIGHLIGHT flags set
+    float   m_highlightFactor;      // Factor used for computing highlight color
 
-    float   m_selectFactor;         ///< Specifies how color of selected items is changed
-    float   m_layerOpacity;         ///< Determines opacity of all layers
-    float   m_outlineWidth;         ///< Line width used when drawing outlines
-    float   m_worksheetLineWidth;   ///< Line width used when drawing worksheet
+    float   m_selectFactor;         // Specifies how color of selected items is changed
+    float   m_outlineWidth;         // Line width used when drawing outlines
+    float   m_worksheetLineWidth;   // Line width used when drawing worksheet
 
+    int     m_defaultPenWidth;
+    int     m_textMarkupFlags;      // Indicates whether or not certain markups (such as super-
+                                    // and subscript) should be processed.
     bool    m_showPageLimits;
-
-    COLOR4D m_backgroundColor;      ///< The background color
 };
 
 

@@ -220,9 +220,7 @@ void GRHaloText( wxDC * aDC, const wxPoint &aPos, const COLOR4D aBgColor, COLOR4
  *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
  *  @param aH_justify = horizontal justification (Left, center, right)
  *  @param aV_justify = vertical justification (bottom, center, top)
- *  @param aWidth = line width (pen width) (default = 0)
- *      if width < 0 : draw segments in sketch mode, width = abs(width)
- *      Use a value min(aSize.x, aSize.y) / 5 for a bold text
+ *  @param aPenWidth = line width (if = 0, use plot default line width)
  *  @param aItalic = true to simulate an italic font
  *  @param aBold = true to use a bold font Useful only with default width value (aWidth = 0)
  *  @param aMultilineAllowed = true to plot text as multiline, otherwise single line
@@ -236,29 +234,14 @@ void PLOTTER::Text( const wxPoint&              aPos,
                     const wxSize&               aSize,
                     enum EDA_TEXT_HJUSTIFY_T    aH_justify,
                     enum EDA_TEXT_VJUSTIFY_T    aV_justify,
-                    int                         aWidth,
+                    int                         aPenWidth,
                     bool                        aItalic,
                     bool                        aBold,
                     bool                        aMultilineAllowed,
                     void*                       aData )
 {
-    int textPensize = aWidth;
-
-    if( textPensize == 0 && aBold ) // Use default values if aWidth == 0
-        textPensize = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
-
-    if( textPensize >= 0 )
-        textPensize = Clamp_Text_PenSize( aWidth, aSize, aBold );
-    else
-        textPensize = -Clamp_Text_PenSize( -aWidth, aSize, aBold );
-
-    SetCurrentLineWidth( textPensize, aData );
-
     SetColor( aColor );
 
-    GRText( NULL, aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, textPensize,
+    GRText( NULL, aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aPenWidth,
             aItalic, aBold, nullptr, nullptr, this );
-
-    if( aWidth != textPensize )
-        SetCurrentLineWidth( aWidth, aData );
 }

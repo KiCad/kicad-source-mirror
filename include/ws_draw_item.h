@@ -27,7 +27,6 @@
 
 #include <math/vector2d.h>
 #include <eda_text.h>
-#include <eda_text.h>
 #include <bitmap_base.h>
 #include "msgpanel.h"
 #include <geometry/shape_poly_set.h>
@@ -280,7 +279,7 @@ public:
     {
         SetTextPos( aPos );
         SetTextSize( aSize );
-        SetThickness( aPenWidth );
+        SetTextPenWidth( aPenWidth );
         SetItalic( aItalic );
         SetBold( aBold );
     }
@@ -288,9 +287,6 @@ public:
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_TEXT" ); }
 
     void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override;
-
-    // Accessors:
-    int GetPenWidth() { return GetThickness(); }
 
     void SetTextAngle( double aAngle )
     {

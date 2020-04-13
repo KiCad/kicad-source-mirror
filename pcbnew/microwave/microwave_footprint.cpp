@@ -190,9 +190,9 @@ MODULE* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
     if( aTextSize > 0 )
     {
         module->Reference().SetTextSize( wxSize( aTextSize, aTextSize ) );
-        module->Reference().SetThickness( aTextSize/5 );
+        module->Reference().SetTextPenWidth( aTextSize/5 );
         module->Value().SetTextSize( wxSize( aTextSize, aTextSize ) );
-        module->Value().SetThickness( aTextSize/5 );
+        module->Value().SetTextPenWidth( aTextSize/5 );
     }
 
     // Create 2 pads used in gaps and stubs.  The gap is between these 2 pads

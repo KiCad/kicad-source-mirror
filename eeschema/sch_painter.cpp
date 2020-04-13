@@ -331,10 +331,7 @@ float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows )
 
 float SCH_PAINTER::getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows )
 {
-    float width = (float) aItem->GetThickness();
-
-    if( width == 0 )
-        width = (float) m_schSettings.m_DefaultLineWidth;
+    float width = (float) aItem->GetEffectiveTextPenWidth( &m_schSettings );
 
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();

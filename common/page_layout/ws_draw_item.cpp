@@ -163,7 +163,7 @@ void WS_DRAW_ITEM_TEXT::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D 
 
 const EDA_RECT WS_DRAW_ITEM_TEXT::GetBoundingBox() const
 {
-    return EDA_TEXT::GetTextBox( -1 );
+    return EDA_TEXT::GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
 }
 
 

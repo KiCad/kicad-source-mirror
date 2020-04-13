@@ -149,7 +149,7 @@ void TEXTE_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& 
     msg.Printf( wxT( "%.1f" ), GetTextAngle() / 10.0 );
     aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
 
-    msg = MessageTextFromValue( aUnits, GetThickness() );
+    msg = MessageTextFromValue( aUnits, GetTextPenWidth() );
     aList.emplace_back( _( "Thickness" ), msg, MAGENTA );
 
     msg = MessageTextFromValue( aUnits, GetTextWidth() );
@@ -162,7 +162,7 @@ void TEXTE_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& 
 
 const EDA_RECT TEXTE_PCB::GetBoundingBox() const
 {
-    EDA_RECT rect = GetTextBox( -1, -1 );
+    EDA_RECT rect = GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
 
     if( GetTextAngle() )
         rect = rect.GetBoundingBoxRotated( GetTextPos(), GetTextAngle() );
@@ -197,9 +197,9 @@ void TEXTE_PCB::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT || GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
     {
         if( ( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT ) == IsMirrored() )
-            SetTextX( GetTextPos().x - GetTextBox().GetWidth() );
+            SetTextX( GetTextPos().x - GetTextBox( nullptr ).GetWidth() );   // JEY TODO: requires RENDER_SETTINGS
         else
-            SetTextX( GetTextPos().x + GetTextBox().GetWidth() );
+            SetTextX( GetTextPos().x + GetTextBox( nullptr ).GetWidth() );   // JEY TODO: requires RENDER_SETTINGS
     }
 }
 

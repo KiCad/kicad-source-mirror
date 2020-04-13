@@ -184,54 +184,48 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
 void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
                                                               SHAPE_POLY_SET& aCornerBuffer,
                                                               int aInflateValue,
-                                                              int aError, bool aIncludeText ) const
+                                                              int aError,
+                                                              bool aIncludeText,
+                                                              bool aIncludeEdges ) const
 {
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
 
     for( auto item : GraphicalItems() )
     {
-        switch( item->Type() )
-        {
-        case PCB_MODULE_TEXT_T:
+        if( item->Type() == PCB_MODULE_TEXT_T && aIncludeText )
         {
             TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
 
-            if( ( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer ) && text->IsVisible() )
+            if( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer && text->IsVisible() )
                 texts.push_back( text );
         }
-            break;
 
-        case PCB_MODULE_EDGE_T:
+        if( item->Type() == PCB_MODULE_EDGE_T && aIncludeEdges )
         {
             EDGE_MODULE* outline = (EDGE_MODULE*) item;
 
-            if( aLayer != UNDEFINED_LAYER && outline->GetLayer() != aLayer )
-                break;
-
-            outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, 0, aError );
-        }
-            break;
-
-        default:
-            break;
+            if( aLayer != UNDEFINED_LAYER && outline->GetLayer() == aLayer )
+                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, 0, aError );
         }
     }
 
-    if( !aIncludeText )
-        return;
+    if( aIncludeText )
+    {
+        if( Reference().GetLayer() == aLayer && Reference().IsVisible() )
+            texts.push_back( &Reference() );
 
-    // Convert texts sur modules
-    if( Reference().GetLayer() == aLayer && Reference().IsVisible() )
-        texts.push_back( &Reference() );
-
-    if( Value().GetLayer() == aLayer && Value().IsVisible() )
-        texts.push_back( &Value() );
+        if( Value().GetLayer() == aLayer && Value().IsVisible() )
+            texts.push_back( &Value() );
+    }
 
     prms.m_cornerBuffer = &aCornerBuffer;
 
     for( TEXTE_MODULE* textmod : texts )
     {
-        prms.m_textWidth  = textmod->GetThickness() + ( 2 * aInflateValue );
+        bool forceBold = true;
+        int  penWidth = 0;      // force max width for bold text
+
+        prms.m_textWidth  = textmod->GetEffectiveTextPenWidth( nullptr ) + ( 2 * aInflateValue );
         prms.m_error = aError;
         wxSize size = textmod->GetTextSize();
 
@@ -240,66 +234,9 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
 
         GRText( NULL, textmod->GetTextPos(), BLACK, textmod->GetShownText(),
                 textmod->GetDrawRotation(), size, textmod->GetHorizJustify(),
-                textmod->GetVertJustify(), textmod->GetThickness(), textmod->IsItalic(),
-                true, addTextSegmToPoly, &prms );
+                textmod->GetVertJustify(), penWidth, textmod->IsItalic(),
+                forceBold, addTextSegmToPoly, &prms );
     }
-
-}
-
-
-// Same as function TransformGraphicShapesWithClearanceToPolygonSet but this only for text
-void MODULE::TransformGraphicTextWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
-                                                            SHAPE_POLY_SET& aCornerBuffer,
-                                                            int aInflateValue, int aError ) const
-{
-    std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
-
-    for( auto item : GraphicalItems() )
-    {
-        switch( item->Type() )
-        {
-        case PCB_MODULE_TEXT_T:
-        {
-            TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
-
-            if( text->GetLayer() == aLayer && text->IsVisible() )
-                texts.push_back( text );
-        }
-            break;
-
-        case PCB_MODULE_EDGE_T:
-            // This function does not render this
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    // Convert texts sur modules
-    if( Reference().GetLayer() == aLayer && Reference().IsVisible() )
-        texts.push_back( &Reference() );
-
-    if( Value().GetLayer() == aLayer && Value().IsVisible() )
-        texts.push_back( &Value() );
-
-    prms.m_cornerBuffer = &aCornerBuffer;
-
-    for( TEXTE_MODULE* textmod : texts )
-    {
-        prms.m_textWidth = textmod->GetThickness() + ( 2 * aInflateValue );
-        prms.m_error = aError;
-        wxSize size = textmod->GetTextSize();
-
-        if( textmod->IsMirrored() )
-            size.x = -size.x;
-
-        GRText( NULL, textmod->GetTextPos(), BLACK, textmod->GetShownText(),
-                textmod->GetDrawRotation(), size, textmod->GetHorizJustify(),
-                textmod->GetVertJustify(), textmod->GetThickness(), textmod->IsItalic(),
-                true, addTextSegmToPoly, &prms );
-    }
-
 }
 
 
@@ -342,8 +279,8 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
 
     wxPoint  corners[4];    // Buffer of polygon corners
 
-    EDA_RECT rect = GetTextBox( -1 );
-    rect.Inflate( aClearanceValue );
+    EDA_RECT rect = GetTextBox( nullptr );
+    rect.Inflate( aClearanceValue + Millimeter2iu( DEFAULT_TEXT_WIDTH ) );
     corners[0].x = rect.GetOrigin().x;
     corners[0].y = rect.GetOrigin().y;
     corners[1].y = corners[0].y;
@@ -379,8 +316,11 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCorner
     if( IsMirrored() )
         size.x = -size.x;
 
+    bool forceBold = true;
+    int  penWidth = 0;      // force max width for bold text
+
     prms.m_cornerBuffer = &aCornerBuffer;
-    prms.m_textWidth = GetThickness() + ( 2 * aClearanceValue );
+    prms.m_textWidth = GetEffectiveTextPenWidth( nullptr ) + ( 2 * aClearanceValue );
     prms.m_error = aError;
     COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by GRText
 
@@ -396,13 +336,13 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCorner
         {
             wxString txt = strings_list.Item( ii );
             GRText( NULL, positions[ii], color, txt, GetTextAngle(), size, GetHorizJustify(),
-                    GetVertJustify(), GetThickness(), IsItalic(), true, addTextSegmToPoly, &prms );
+                    GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToPoly, &prms );
         }
     }
     else
     {
         GRText( NULL, GetTextPos(), color, GetShownText(), GetTextAngle(), size, GetHorizJustify(),
-                GetVertJustify(), GetThickness(), IsItalic(), true, addTextSegmToPoly, &prms );
+                GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToPoly, &prms );
     }
 }
 

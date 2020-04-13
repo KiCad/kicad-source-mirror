@@ -347,7 +347,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
                     textMod->SetLayer( layer );
                     textMod->SetTextSize( dsnSettings.GetTextSize( layer ) );
-                    textMod->SetThickness( dsnSettings.GetTextThickness( layer ) );
+                    textMod->SetTextPenWidth( dsnSettings.GetTextThickness( layer ) );
                     textMod->SetItalic( dsnSettings.GetTextItalic( layer ) );
                     textMod->SetKeepUpright( dsnSettings.GetTextUpright( layer ) );
                     textMod->SetTextPos( (wxPoint) cursorPos );
@@ -386,7 +386,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                         textPcb->SetMirrored( true );
 
                     textPcb->SetTextSize( dsnSettings.GetTextSize( layer ) );
-                    textPcb->SetThickness( dsnSettings.GetTextThickness( layer ) );
+                    textPcb->SetTextPenWidth( dsnSettings.GetTextThickness( layer ) );
                     textPcb->SetItalic( dsnSettings.GetTextItalic( layer ) );
                     textPcb->SetTextPos( (wxPoint) cursorPos );
 
@@ -596,7 +596,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->SetOrigin( (wxPoint) cursorPos, boardSettings.m_DimensionPrecision );
                 dimension->SetEnd( (wxPoint) cursorPos, boardSettings.m_DimensionPrecision );
                 dimension->Text().SetTextSize( boardSettings.GetTextSize( layer ) );
-                dimension->Text().SetThickness( boardSettings.GetTextThickness( layer ) );
+                dimension->Text().SetTextPenWidth( boardSettings.GetTextThickness( layer ) );
                 dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
                 dimension->SetWidth( boardSettings.GetLineThickness( layer ) );
                 dimension->SetUnits( boardSettings.m_DimensionUnits == 2 ? EDA_UNITS::MILLIMETRES :

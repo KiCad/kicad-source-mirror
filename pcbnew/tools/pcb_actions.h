@@ -359,7 +359,8 @@ public:
     /// Display module edges as outlines
     static TOOL_ACTION moduleEdgeOutlines;
 
-    /// Display module texts as lines
+    /// Display module texts as lines       // JEY TODO: if we're going to keep this, it needs
+                                            // to be all text, not just module text....
     static TOOL_ACTION moduleTextOutlines;
 
     // Pad tools

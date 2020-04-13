@@ -93,11 +93,13 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const TEXTE_PCB* aText,
 
     s_boardItem    = (const BOARD_ITEM *) &aText;
     s_dstcontainer = aDstContainer;
-    s_textWidth    = aText->GetThickness() + ( 2 * aClearanceValue );
+    s_textWidth    = aText->GetEffectiveTextPenWidth( nullptr ) + ( 2 * aClearanceValue );
     s_biuTo3Dunits = m_biuTo3Dunits;
 
     // not actually used, but needed by GRText
     const COLOR4D dummy_color = COLOR4D::BLACK;
+    bool          forceBold = true;
+    int           penWidth = 0;         // force max width for bold
 
     if( aText->IsMultilineAllowed() )
     {
@@ -111,16 +113,16 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const TEXTE_PCB* aText,
         {
             wxString txt = strings_list.Item( ii );
 
-            GRText( NULL, positions[ii], dummy_color, txt, aText->GetTextAngle(), size,
-                    aText->GetHorizJustify(), aText->GetVertJustify(), aText->GetThickness(),
-                    aText->IsItalic(), true, addTextSegmToContainer );
+            GRText( nullptr, positions[ii], dummy_color, txt, aText->GetTextAngle(), size,
+                    aText->GetHorizJustify(), aText->GetVertJustify(), penWidth, aText->IsItalic(),
+                    penWidth, addTextSegmToContainer );
         }
     }
     else
     {
-        GRText( NULL, aText->GetTextPos(), dummy_color, aText->GetShownText(),
+        GRText( nullptr, aText->GetTextPos(), dummy_color, aText->GetShownText(),
                 aText->GetTextAngle(), size, aText->GetHorizJustify(), aText->GetVertJustify(),
-                aText->GetThickness(), aText->IsItalic(), true, addTextSegmToContainer );
+                penWidth, aText->IsItalic(), penWidth, addTextSegmToContainer );
     }
 }
 
@@ -215,15 +217,17 @@ void BOARD_ADAPTER::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMo
 
     for( TEXTE_MODULE* text : texts )
     {
-        s_textWidth = text->GetThickness() + ( 2 * aInflateValue );
+        s_textWidth = text->GetEffectiveTextPenWidth( nullptr ) + ( 2 * aInflateValue );
         wxSize size = text->GetTextSize();
+        bool   forceBold = true;
+        int    penWidth = 0;        // force max width for bold
 
         if( text->IsMirrored() )
             size.x = -size.x;
 
         GRText( NULL, text->GetTextPos(), BLACK, text->GetShownText(), text->GetDrawRotation(),
-                size, text->GetHorizJustify(), text->GetVertJustify(), text->GetThickness(),
-                text->IsItalic(), true, addTextSegmToContainer );
+                size, text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
+                forceBold, addTextSegmToContainer );
     }
 }
 

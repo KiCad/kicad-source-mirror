@@ -1839,7 +1839,7 @@ void SCH_EAGLE_PLUGIN::loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttrib
         if( aAttribs.ratio.CGet() > 12 )
         {
             aText->SetBold( true );
-            aText->SetThickness( GetPenSizeForBold( aText->GetTextWidth() ) );
+            aText->SetTextPenWidth( GetPenSizeForBold( aText->GetTextWidth() ) );
         }
     }
 

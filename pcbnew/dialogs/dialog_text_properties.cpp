@@ -451,7 +451,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     m_textWidth.SetValue( m_edaText->GetTextSize().x );
     m_textHeight.SetValue( m_edaText->GetTextSize().y );
-    m_thickness.SetValue( m_edaText->GetThickness() );
+    m_thickness.SetValue( m_edaText->GetTextPenWidth() );
     m_posX.SetValue( m_edaText->GetTextPos().x );
     m_posY.SetValue( m_edaText->GetTextPos().y );
 
@@ -542,20 +542,20 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     m_item->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
 
     m_edaText->SetTextSize( wxSize( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
-    m_edaText->SetThickness( m_thickness.GetValue() );
+    m_edaText->SetTextPenWidth( m_thickness.GetValue() );
     m_edaText->SetTextPos( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
 
     if( m_modText )
         m_modText->SetLocalCoord();
 
     // Test for acceptable values for thickness and size and clamp if fails
-    int maxthickness = Clamp_Text_PenSize( m_edaText->GetThickness(), m_edaText->GetTextSize() );
+    int maxPenWidth = Clamp_Text_PenSize( m_edaText->GetTextPenWidth(), m_edaText->GetTextSize() );
 
-    if( m_edaText->GetThickness() > maxthickness )
+    if( m_edaText->GetTextPenWidth() > maxPenWidth )
     {
         DisplayError( this, _( "The text thickness is too large for the text size.\n"
                                "It will be clamped." ) );
-        m_edaText->SetThickness( maxthickness );
+        m_edaText->SetTextPenWidth( maxPenWidth );
     }
 
     m_edaText->SetVisible( m_Visible->GetValue() );

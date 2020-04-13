@@ -25,6 +25,7 @@
 #define PREVIEW_PREVIEW_DRAW_CONTEXT__H_
 
 #include <painter.h>
+#include <math/vector2d.h>
 
 namespace KIGFX
 {

@@ -101,15 +101,7 @@ void LIB_FIELD::Init( int id )
 
 int LIB_FIELD::GetPenSize() const
 {
-    int pensize = GetThickness();
-
-    if( pensize == 0 && IsBold() )
-        pensize = GetPenSizeForBold( GetTextWidth() );
-
-    // Clip pen size for small texts:
-    pensize = Clamp_Text_PenSize( pensize, GetTextSize(), IsBold() );
-
-    return pensize;
+    return GetEffectiveTextPenWidth( nullptr );  // JEY TODO: requires RENDER_SETTINGS
 }
 
 
@@ -325,7 +317,7 @@ const EDA_RECT LIB_FIELD::GetBoundingBox() const
     /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
      * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
-    EDA_RECT rect = GetTextBox( -1, -1, true, GetTextMarkupFlags() );
+    EDA_RECT rect = GetTextBox( nullptr, -1, true );  // JEY TODO: requires RENDER_SETTINGS
     rect.RevertYAxis();
 
     // We are using now a bottom to top Y axis.

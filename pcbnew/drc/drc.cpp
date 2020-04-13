@@ -1059,7 +1059,7 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
         return;
 
     std::vector<wxPoint> textShape;      // a buffer to store the text shape (set of segments)
-    int textWidth = text->GetThickness();
+    int penWidth = text->GetEffectiveTextPenWidth( nullptr );   // JEY TODO: requires RENDER_SETTINGS
 
     // So far the bounding box makes up the text-area
     text->TransformTextShapeToSegmentList( textShape );
@@ -1067,7 +1067,7 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
     if( textShape.size() == 0 )     // Should not happen (empty text?)
         return;
 
-    EDA_RECT bbox = text->GetTextBox();
+    EDA_RECT bbox = text->GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
     SHAPE_RECT rect_area( bbox.GetX(), bbox.GetY(), bbox.GetWidth(), bbox.GetHeight() );
 
     // Test tracks and vias
@@ -1076,7 +1076,7 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
         if( !track->IsOnLayer( aTextItem->GetLayer() ) )
             continue;
 
-        int minDist = ( track->GetWidth() + textWidth ) / 2 + track->GetClearance( NULL );
+        int minDist = ( track->GetWidth() + penWidth ) / 2 + track->GetClearance( NULL );
         SEG trackAsSeg( track->GetStart(), track->GetEnd() );
 
         // Fast test to detect a trach segment candidate inside the text bounding box
@@ -1122,7 +1122,7 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
 
         SHAPE_POLY_SET padOutline;
 
-        int minDist = textWidth/2 + pad->GetClearance( NULL );
+        int minDist = penWidth / 2 + pad->GetClearance( NULL );
         pad->TransformShapeWithClearanceToPolygon( padOutline, 0 );
 
         for( unsigned jj = 0; jj < textShape.size(); jj += 2 )

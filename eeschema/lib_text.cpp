@@ -143,7 +143,7 @@ void LIB_TEXT::MoveTo( const wxPoint& newPosition )
 void LIB_TEXT::NormalizeJustification( bool inverse )
 {
     wxPoint  delta( 0, 0 );
-    EDA_RECT bbox = GetTextBox( -1 );
+    EDA_RECT bbox = GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
 
     if( GetTextAngle() == 0.0 )
     {
@@ -300,15 +300,7 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 
 int LIB_TEXT::GetPenSize() const
 {
-    int pensize = GetThickness();
-
-    if( pensize == 0 && IsBold() )
-        pensize = GetPenSizeForBold( GetTextWidth() );
-
-    // Clip pen size for small texts:
-    pensize = Clamp_Text_PenSize( pensize, GetTextSize(), IsBold() );
-
-    return pensize;
+    return GetEffectiveTextPenWidth( nullptr ); // JEY TODO: requires RENDER_SETTINGS
 }
 
 
@@ -319,7 +311,7 @@ void LIB_TEXT::print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRAN
     /* Calculate the text orientation, according to the component
      * orientation/mirror (needed when draw text in schematic)
      */
-    int orient = GetTextAngle();
+    int orient = (int) GetTextAngle();
 
     if( aTransform.y1 )  // Rotate component 90 degrees.
     {
@@ -350,7 +342,7 @@ void LIB_TEXT::print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRAN
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
     GRText( aDC, txtpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_HJUSTIFY_CENTER,
-            GR_TEXT_VJUSTIFY_CENTER, GetPenSize(), IsItalic(), IsBold() );
+            GR_TEXT_VJUSTIFY_CENTER, GetEffectiveTextPenWidth( nullptr ), IsItalic(), IsBold() );
 }
 
 
@@ -358,7 +350,7 @@ void LIB_TEXT::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
-    wxString msg = MessageTextFromValue( aUnits, GetThickness(), true );
+    wxString msg = MessageTextFromValue( aUnits, GetTextPenWidth(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 }
 
@@ -368,7 +360,7 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
     /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
      * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
-    EDA_RECT rect = GetTextBox( -1, -1, true, GetTextMarkupFlags() );
+    EDA_RECT rect = GetTextBox( nullptr, -1, true );   // JEY TODO: requires RENDER_SETTINGS
     rect.RevertYAxis();
 
     // We are using now a bottom to top Y axis.

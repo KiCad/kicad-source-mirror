@@ -773,15 +773,16 @@ static void vrml_text_callback( int x0, int y0, int xf, int yf, void* aData )
 
 static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
 {
-    model_vrml->m_text_layer    = text->GetLayer();
-    model_vrml->m_text_width    = text->GetThickness();
-
     wxSize size = text->GetTextSize();
 
     if( text->IsMirrored() )
         size.x = -size.x;
 
+    int penWidth = text->GetEffectiveTextPenWidth( nullptr );
     COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by GRText
+
+    model_vrml->m_text_layer    = text->GetLayer();
+    model_vrml->m_text_width    = penWidth;
 
     if( text->IsMultilineAllowed() )
     {
@@ -793,17 +794,16 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
 
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
-            wxString& txt = strings_list.Item( ii );
-            GRText( NULL, positions[ii], color, txt, text->GetTextAngle(), size,
-                    text->GetHorizJustify(), text->GetVertJustify(), text->GetThickness(),
-                    text->IsItalic(), true, vrml_text_callback );
+            GRText( nullptr, positions[ii], color, strings_list[ii], text->GetTextAngle(), size,
+                    text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
+                    true, vrml_text_callback );
         }
     }
     else
     {
-        GRText( NULL, text->GetTextPos(), color, text->GetShownText(), text->GetTextAngle(),
-                size, text->GetHorizJustify(), text->GetVertJustify(), text->GetThickness(),
-                text->IsItalic(), true, vrml_text_callback );
+        GRText( nullptr, text->GetTextPos(), color, text->GetShownText(), text->GetTextAngle(),
+                size, text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
+                true, vrml_text_callback );
     }
 }
 
@@ -1057,12 +1057,14 @@ static void export_vrml_text_module( TEXTE_MODULE* item )
         if( item->IsMirrored() )
             size.x = -size.x;  // Text is mirrored
 
+        int penWidth = item->GetEffectiveTextPenWidth( nullptr );
+
         model_vrml->m_text_layer = item->GetLayer();
-        model_vrml->m_text_width = item->GetThickness();
+        model_vrml->m_text_width = penWidth;
 
         GRText( NULL, item->GetTextPos(), BLACK, item->GetShownText(), item->GetDrawRotation(),
-                size, item->GetHorizJustify(), item->GetVertJustify(), item->GetThickness(),
-                item->IsItalic(), true, vrml_text_callback );
+                size, item->GetHorizJustify(), item->GetVertJustify(), penWidth, item->IsItalic(),
+                true, vrml_text_callback );
     }
 }
 

@@ -393,23 +393,23 @@ public:
      *          aInflateValue = 0 to have the exact shape size
      * @param aError = Maximum error between true arc and polygon approx
      * @param aIncludeText = True to transform text shapes
+     * @param aIncludeEdges = True to transform module shapes
      */
     void TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
             SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError = ARC_HIGH_DEF,
-            bool aIncludeText = true ) const;
+            bool aIncludeText = true, bool aIncludeEdges = true ) const;
 
     /**
      * @brief TransformGraphicTextWithClearanceToPolygonSet
      * This function is the same as TransformGraphicShapesWithClearanceToPolygonSet
      * but only generate text
-     * @param aLayer = the layer to consider, or UNDEFINED_LAYER to consider all
-     * @param aCornerBuffer = the buffer to store polygons
-     * @param aInflateValue = a value to inflate shapes
-     *          aInflateValue = 0 to have the exact shape size
-     * @param aError = Maximum error between true arc and polygon approx
      */
     void TransformGraphicTextWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
-            SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError = ARC_HIGH_DEF ) const;
+            SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError = ARC_HIGH_DEF ) const
+    {
+        TransformGraphicShapesWithClearanceToPolygonSet( aLayer, aCornerBuffer, aInflateValue,
+                                                         aError, true, false );
+    }
 
     /**
      * Resolve any references to system tokens supported by the component.

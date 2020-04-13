@@ -460,12 +460,12 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
     if( ( style & 2 ) )
     {
         m_CurrentText->SetBold( true );
-        m_CurrentText->SetThickness( GetPenSizeForBold( m_CurrentText->GetTextWidth() ) );
+        m_CurrentText->SetTextPenWidth( GetPenSizeForBold( m_CurrentText->GetTextWidth() ) );
     }
     else
     {
         m_CurrentText->SetBold( false );
-        m_CurrentText->SetThickness( 0 );
+        m_CurrentText->SetTextPenWidth( 0 );    // Use default pen width
     }
 
     m_Parent->RefreshItem( m_CurrentText );

@@ -289,7 +289,7 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
     m_gal->Translate( position );
     m_gal->Rotate( -aItem->GetTextAngle() * M_PI / 1800.0 );
     m_gal->SetStrokeColor( m_renderSettings.GetColor( aItem, aLayer ) );
-    m_gal->SetLineWidth( aItem->GetThickness() );
+    m_gal->SetLineWidth( aItem->GetEffectiveTextPenWidth( nullptr ) );  // JEY TODO: requires RENDER_SETTINGS
     m_gal->SetTextAttributes( aItem );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );

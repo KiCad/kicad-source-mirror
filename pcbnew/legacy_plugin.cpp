@@ -1813,15 +1813,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 
     aText->SetTextAngle( orient );
 
-    // Set a reasonable width:
-    if( thickn < 1 )
-        thickn = 1;
-
-    /*  this is better left to the dialogs UIs
-    aText->SetThickness( Clamp_Text_PenSize( thickn, aText->GetSize() ) );
-    */
-
-    aText->SetThickness( thickn );
+    aText->SetTextPenWidth( thickn < 1 ? 0 : thickn );
 
     aText->SetMirrored( mirror && *mirror == 'M' );
 
@@ -2137,8 +2129,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             double angle = degParse( data );
 
             pcbtxt->SetTextSize( size );
-
-            pcbtxt->SetThickness( thickn );
+            pcbtxt->SetTextPenWidth( thickn );
             pcbtxt->SetTextAngle( angle );
 
             pcbtxt->SetTextPos( wxPoint( pos_x, pos_y ) );
@@ -2776,7 +2767,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
             dim->SetTextSize( wxSize( width, height ) );
 
             dim->Text().SetMirrored( mirror && *mirror == '0' );
-            dim->Text().SetThickness( thickn );
+            dim->Text().SetTextPenWidth( thickn );
             dim->Text().SetTextAngle( orient );
         }
 

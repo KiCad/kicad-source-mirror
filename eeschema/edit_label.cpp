@@ -234,7 +234,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
     newtext->SetShape( aText->GetShape() );
     newtext->SetLabelSpinStyle( orientation );
     newtext->SetTextSize( aText->GetTextSize() );
-    newtext->SetThickness( aText->GetThickness() );
+    newtext->SetTextPenWidth( aText->GetTextPenWidth() );
     newtext->SetItalic( aText->IsItalic() );
     newtext->SetBold( aText->IsBold() );
     newtext->SetIsDangling( aText->IsDangling() );

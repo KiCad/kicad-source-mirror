@@ -1427,7 +1427,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
             SCH_PARSE_ERROR( "invalid label type", aReader, line );
     }
 
-    int thickness = 0;
+    int penWidth = 0;
 
     // The following tokens do not exist in version 1 schematic files,
     // and not always in version 2 for HLabels and GLabels
@@ -1441,14 +1441,14 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
                 SCH_PARSE_ERROR( _( "expected 'Italics' or '~'" ), aReader, line );
         }
 
-        // The thickness token does not exist in older versions of the schematic file format
+        // The penWidth token does not exist in older versions of the schematic file format
         // so calling parseInt will be made only if the EOL is not reached.
         if( *line >= ' ' )
-            thickness = parseInt( aReader, line, &line );
+            penWidth = parseInt( aReader, line, &line );
     }
 
-    text->SetBold( thickness != 0 );
-    text->SetThickness( thickness != 0 ? GetPenSizeForBold( size ) : 0 );
+    text->SetBold( penWidth != 0 );
+    text->SetTextPenWidth( penWidth != 0 ? GetPenSizeForBold( size ) : 0 );
 
     // Read the text string for the text.
     char* tmp = aReader.ReadLine();
@@ -2357,7 +2357,7 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
                       Iu2Mils( aText->GetPosition().x ), Iu2Mils( aText->GetPosition().y ),
                       spinStyle,
                       Iu2Mils( aText->GetTextWidth() ),
-                      italics, Iu2Mils( aText->GetThickness() ), TO_UTF8( text ) );
+                      italics, Iu2Mils( aText->GetTextPenWidth() ), TO_UTF8( text ) );
     }
     else if( layer == LAYER_GLOBLABEL || layer == LAYER_HIERLABEL )
     {
@@ -2372,7 +2372,7 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
                       Iu2Mils( aText->GetTextWidth() ),
                       shapeLabelIt->second,
                       italics,
-                      Iu2Mils( aText->GetThickness() ), TO_UTF8( text ) );
+                      Iu2Mils( aText->GetTextPenWidth() ), TO_UTF8( text ) );
     }
 }
 

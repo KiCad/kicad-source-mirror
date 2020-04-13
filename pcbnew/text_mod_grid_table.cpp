@@ -195,7 +195,7 @@ wxString TEXT_MOD_GRID_TABLE::GetValue( int aRow, int aCol )
         return StringFromValue( m_userUnits, text.GetTextHeight(), true, true );
 
     case TMC_THICKNESS:
-        return StringFromValue( m_userUnits, text.GetThickness(), true, true );
+        return StringFromValue( m_userUnits, text.GetTextPenWidth(), true, true );
 
     case TMC_LAYER:
         return text.GetLayerName();
@@ -268,7 +268,7 @@ void TEXT_MOD_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         break;
 
     case TMC_THICKNESS:
-        text.SetThickness( ValueFromString( m_userUnits, aValue, true ) );
+        text.SetTextPenWidth( ValueFromString( m_userUnits, aValue, true ) );
         break;
 
     case TMC_ORIENTATION:

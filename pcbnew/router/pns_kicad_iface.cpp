@@ -942,7 +942,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
     if( !IsCopperLayer( aLayer ) )
         return false;
 
-    int textWidth = aText->GetThickness();
+    int textWidth = aText->GetEffectiveTextPenWidth( nullptr );   // JEY TODO: requires RENDER_SETTINGS
     std::vector<wxPoint> textShape;
 
     aText->TransformTextShapeToSegmentList( textShape );
