@@ -507,26 +507,9 @@ void ZONE_CONTAINER::PrintFilledArea( PCB_BASE_FRAME* aFrame, wxDC* DC, const wx
 
 const EDA_RECT ZONE_CONTAINER::GetBoundingBox() const
 {
-    const int PRELOAD = 0x7FFFFFFF;     // Biggest integer (32 bits)
+    auto bb = m_Poly->BBox();
 
-    int       ymax = -PRELOAD;
-    int       ymin = PRELOAD;
-    int       xmin = PRELOAD;
-    int       xmax = -PRELOAD;
-
-    int       count = GetNumCorners();
-
-    for( int i = 0; i<count; ++i )
-    {
-        wxPoint corner = static_cast<wxPoint>( GetCornerPosition( i ) );
-
-        ymax = std::max( ymax, corner.y );
-        xmax = std::max( xmax, corner.x );
-        ymin = std::min( ymin, corner.y );
-        xmin = std::min( xmin, corner.x );
-    }
-
-    EDA_RECT ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+    EDA_RECT ret( (wxPoint) bb.GetOrigin(), wxSize( bb.GetWidth(), bb.GetHeight() ) );
 
     return ret;
 }
