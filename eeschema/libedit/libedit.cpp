@@ -49,22 +49,23 @@
 void LIB_EDIT_FRAME::updateTitle()
 {
     wxString lib = GetCurLib();
-    wxString title = _( "Symbol Editor" );
+    wxString title;
 
     if( IsSymbolFromSchematic() )
     {
-        title +=  wxT( " \u2014 " );
         title += wxString::Format( _( "%s from schematic" ), m_reference );
+        title +=  wxT( " \u2014 " );
     }
     else
     {
         if( GetCurPart() )
-            title += wxT( " \u2014 " ) + GetCurPart()->GetLibId().Format();
+            title += GetCurPart()->GetLibId().Format() + wxT( " \u2014 " ) ;
 
         if( GetCurPart() && m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() ) )
-            title += wxT( " \u2014 " ) + _( "[Read Only Library]" );
+            title += _( "[Read Only Library]" ) + wxT( " \u2014 " );
     }
 
+    title += _( "Symbol Editor" );
     SetTitle( title );
 }
 

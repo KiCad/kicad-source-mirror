@@ -1099,25 +1099,27 @@ void SCH_EDIT_FRAME::UpdateTitle()
 
     if( GetScreen()->GetFileName().IsEmpty() )
     {
-        title.Printf( _( "Eeschema" ) + wxT( " \u2014" ) + _( " [no file]" ) );
+        title.Printf( _( "[no file]" ) + wxT( " \u2014 " ) + _( "Eeschema" ) );
     }
     else
     {
         wxString    fileName = Prj().AbsolutePath( GetScreen()->GetFileName() );
         wxFileName  fn = fileName;
-
-        title.Printf( _( "Eeschema" ) + wxT( " \u2014 %s [%s] \u2014 %s" ),
-                      fn.GetFullName(),
-                      GetCurrentSheet().PathHumanReadable(),
-                      fn.GetPath() );
+        wxString    append;
 
         if( fn.FileExists() )
         {
             if( !fn.IsFileWritable() )
-                title += _( " [Read Only]" );
+                append = _( "[Read Only] " );
         }
         else
-            title += _( " [no file]" );
+            append = _( "[no file] " );
+
+        title.Printf( wxT( "%s [%s] \u2014 %s %s\u2014 " ) + _( "Eeschema" ),
+                      fn.GetFullName(),
+                      GetCurrentSheet().PathHumanReadable(),
+                      fn.GetPath(),
+                      append );
     }
 
     SetTitle( title );

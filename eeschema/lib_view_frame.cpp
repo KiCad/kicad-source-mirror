@@ -894,7 +894,7 @@ void LIB_VIEW_FRAME::DisplayLibInfos()
     {
         const SYMBOL_LIB_TABLE_ROW* row = Prj().SchSymbolLibTable()->FindRow( m_libraryName );
 
-        wxString title = wxString::Format( _( "Symbol Library Browser -- %s" ),
+        wxString title = wxString::Format( wxT( "%s \u2014 " ) + _( "Symbol Library Browser" ),
                                            row ? row->GetFullURI() : _( "no library selected" ) );
         SetTitle( title );
     }

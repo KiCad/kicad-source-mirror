@@ -592,23 +592,23 @@ void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
 
 void KICAD_MANAGER_FRAME::ProjectChanged()
 {
-    wxString title = wxS( "KiCad " ) + GetBuildVersion();
+    wxString app = wxS( "KiCad " ) + GetMajorMinorVersion();
     wxString file  = GetProjectFileName();
+    wxString title;
 
     if( !file.IsEmpty() )
     {
-        // Ensure file name is absolute
         wxFileName fn( file );
 
-        if( !fn.IsAbsolute() )
-            fn.MakeAbsolute();
-
-        title += " ";
-        title += fn.GetFullPath();
+        title += fn.GetName();
 
         if( !fn.IsDirWritable() )
             title += _( " [Read Only]" );
+
+        title += wxS(" \u2014 ");
     }
+
+    title += app;
 
     SetTitle( title );
 }

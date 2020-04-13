@@ -977,8 +977,7 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
     wxString title;
     wxString path;
 
-    title.Printf( _( "Footprint Library Browser" ) + L" \u2014 %s",
-                  getCurNickname().IsEmpty() ? _( "no library selected" ) : getCurNickname() );
+    title.Printf( getCurNickname().IsEmpty() ? _( "no library selected" ) : getCurNickname() );
 
     // Now, add the full path, for info
     if( !getCurNickname().IsEmpty() )
@@ -989,6 +988,8 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
         if( row )
             title << L" \u2014 " << row->GetFullURI( true );
     }
+
+    title += wxT( " \u2014 " ) + _( "Footprint Library Browser" );
 
     SetTitle( title );
 }

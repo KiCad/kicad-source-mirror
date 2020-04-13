@@ -696,13 +696,13 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 
 void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
-    wxString title = _( "Footprint Editor" );
+    wxString title;
     LIB_ID   fpid = GetLoadedFPID();
     bool     writable = true;
 
     if( IsCurrentFPFromBoard() )
     {
-        title += wxString::Format( wxT( " \u2014 %s [from %s.%s]" ),
+        title += wxString::Format( _( "%s [from %s.%s]" ) + wxT( " \u2014 " ),
                 GetBoard()->GetFirstModule()->GetReference(), Prj().GetProjectName(),
                 PcbFileExtension );
     }
@@ -718,17 +718,19 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
         }
 
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
-        title += wxString::Format( wxT( " \u2014 %s %s" ),
+        title += wxString::Format( wxT( "%s %s \u2014 " ),
                 FROM_UTF8( GetBoard()->GetFirstModule()->GetFPID().Format().c_str() ),
                 writable ? wxString( wxEmptyString ) : _( "[Read Only]" ) );
     }
     else if( !fpid.GetLibItemName().empty() )
     {
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
-        title += wxString::Format( wxT( " \u2014 %s %s" ),
+        title += wxString::Format( wxT( "%s %s \u2014 " ),
                 FROM_UTF8( GetBoard()->GetFirstModule()->GetFPID().GetLibItemName().c_str() ),
                 _( "[Unsaved]" ) );
     }
+
+    title += _( "Footprint Editor" );
 
     SetTitle( title );
 }
@@ -1073,5 +1075,3 @@ void FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng( wxCommandEvent& event )
     wxYield();
     SaveCanvasImageToFile( this, dlg.GetPath() );
 }
-
-
