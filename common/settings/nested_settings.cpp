@@ -30,8 +30,10 @@ NESTED_SETTINGS::NESTED_SETTINGS( const std::string& aName, int aVersion, JSON_S
         JSON_SETTINGS( aName, SETTINGS_LOC::NESTED, aVersion, std::move( aDefault ) ),
         m_parent( aParent ), m_path( aPath )
 {
-    wxASSERT( m_parent );
-    m_parent->AddNestedSettings( this );
+    if( m_parent )
+    {
+    	m_parent->AddNestedSettings( this );
+    }
 
     // In case we were created after the parent's ctor
     LoadFromFile();
@@ -48,17 +50,20 @@ void NESTED_SETTINGS::LoadFromFile( const std::string& aDirectory )
 {
     clear();
 
-    try
+    if( m_parent )
     {
-        update( ( *m_parent )[PointerFromString( m_path ) ] );
+        try
+        {
+            update( ( *m_parent )[PointerFromString( m_path )] );
 
-        wxLogTrace( traceSettings, "Loaded NESTED_SETTINGS %s with schema %d",
-                GetFilename(), m_schemaVersion );
-    }
-    catch( ... )
-    {
-        wxLogTrace( traceSettings, "NESTED_SETTINGS %s: Could not load from %s at %s",
-                m_filename, m_parent->GetFilename(), m_path );
+            wxLogTrace( traceSettings, "Loaded NESTED_SETTINGS %s with schema %d", GetFilename(),
+                    m_schemaVersion );
+        }
+        catch( ... )
+        {
+            wxLogTrace( traceSettings, "NESTED_SETTINGS %s: Could not load from %s at %s",
+                    m_filename, m_parent->GetFilename(), m_path );
+        }
     }
 
     Load();
