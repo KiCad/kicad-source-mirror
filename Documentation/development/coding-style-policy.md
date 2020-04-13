@@ -596,7 +596,14 @@ is exposed in the header file, merely by including that one header
 file.
 
 
-# 7. I Wrote X Lines of Code Before I Read This Document # {#x_lines}
+# 7. When in Rome... #
+Anywhere there are multiple acceptable options, follow the formatting 
+elsewhere in the same file.
+
+If you encounter a situation that has no guidance, follow the formatting
+elsewhere in the same file.
+
+# 8. I Wrote X Lines of Code Before I Read This Document # {#x_lines}
 It's OK. We all make mistakes. Fortunately, KiCad provides a
 configuration file for the code beautifier uncrustify. Uncrustify won't
 fix your naming problems but it does a pretty decent job of formatting
@@ -610,7 +617,7 @@ uncrustify [website][uncrustify] for more information.
 [uncrustify]: http://uncrustify.sourceforge.net/
 
 
-# 8. Show Me an Example # {#show_me_an_example}
+# 9. Show Me an Example # {#show_me_an_example}
 Nothing drives the point home like an example. The source file richio.h
 below was taken directly from the KiCad source.
 
@@ -869,7 +876,7 @@ below was taken directly from the KiCad source.
 ~~~~~~~~~~~~~
 
 
-# 9. Resources # {#resources}
+# 10. Resources # {#resources}
 There are plenty of excellent resources on the Internet on C++ coding
 styles and coding do's and don'ts. Here are a few useful ones. In most
 cases, the coding styles do not follow the KiCad coding style but there
