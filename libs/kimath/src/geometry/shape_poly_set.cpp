@@ -104,11 +104,11 @@ bool SHAPE_POLY_SET::GetRelativeIndices( int aGlobalIdx,
 
     for( polygonIdx = 0; polygonIdx < OutlineCount(); polygonIdx++ )
     {
-        const POLYGON currentPolygon = CPolygon( polygonIdx );
+        const POLYGON& currentPolygon = CPolygon( polygonIdx );
 
         for( contourIdx = 0; contourIdx < currentPolygon.size(); contourIdx++ )
         {
-            SHAPE_LINE_CHAIN currentContour = currentPolygon[contourIdx];
+            const SHAPE_LINE_CHAIN& currentContour = currentPolygon[contourIdx];
             int totalPoints = currentContour.PointCount();
 
             for( vertexIdx = 0; vertexIdx < totalPoints; vertexIdx++ )
