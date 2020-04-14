@@ -153,10 +153,23 @@ LIB_PIN::LIB_PIN( LIB_PART* aParent )
     m_attributes   = 0;                               // bit 0 != 0: pin invisible
     m_width        = 0;
 
-    LIBEDIT_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
-    m_length       = Mils2iu( settings->m_Defaults.pin_length );
-    m_numTextSize  = Mils2iu( settings->m_Defaults.pin_num_size );
-    m_nameTextSize = Mils2iu( settings->m_Defaults.pin_name_size );
+    // Use the application settings for pin sizes if exists.
+    // pgm can be nullptr when running a shared lib from a script, not from a kicad appl
+    PGM_BASE* pgm  = PgmOrNull();
+
+    if( pgm )
+    {
+        LIBEDIT_SETTINGS* settings = pgm->GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+        m_length       = Mils2iu( settings->m_Defaults.pin_length );
+        m_numTextSize  = Mils2iu( settings->m_Defaults.pin_num_size );
+        m_nameTextSize = Mils2iu( settings->m_Defaults.pin_name_size );
+    }
+    else    // Use hardcoded eeschema defaults: libedit settings are not existing.
+    {
+        m_length       = Mils2iu( 100 );
+        m_numTextSize  = Mils2iu( 50 );
+        m_nameTextSize = Mils2iu( 50 );
+    }
 }
 
 

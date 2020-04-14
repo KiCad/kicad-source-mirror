@@ -163,6 +163,13 @@ PGM_BASE& Pgm()
     return *process;
 }
 
+// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from
+// a python script or something else.
+PGM_BASE* PgmOrNull()
+{
+    return process;
+}
+
 
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
