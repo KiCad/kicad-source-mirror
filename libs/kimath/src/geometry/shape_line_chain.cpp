@@ -1011,3 +1011,102 @@ double SHAPE_LINE_CHAIN::Area() const
 
     return -area * 0.5;
 }
+
+
+SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER::POINT_INSIDE_TRACKER( const VECTOR2I& aPoint ) : 
+    m_point( aPoint ),
+    m_state( 0 ),
+    m_count( 0 )
+{
+}
+
+
+bool SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER::processVertex(
+        const VECTOR2I& ip, const VECTOR2I& ipNext )
+{
+    if( ipNext.y == m_point.y )
+    {
+        if( ( ipNext.x == m_point.x )
+                || ( ip.y == m_point.y && ( ( ipNext.x > m_point.x ) == ( ip.x < m_point.x ) ) ) )
+        {
+            m_finished = true;
+            m_state    = -1;
+            return false;
+        }
+    }
+
+    if( ( ip.y < m_point.y ) != ( ipNext.y < m_point.y ) )
+    {
+        if( ip.x >= m_point.x )
+        {
+            if( ipNext.x > m_point.x )
+            {
+                m_state = 1 - m_state;
+            }
+            else
+            {
+                double d = (double) ( ip.x - m_point.x ) * ( ipNext.y - m_point.y )
+                           - (double) ( ipNext.x - m_point.x ) * ( ip.y - m_point.y );
+
+                if( !d )
+                {
+                    m_finished = true;
+                    m_state    = -1;
+                    return false;
+                }
+
+                if( ( d > 0 ) == ( ipNext.y > ip.y ) )
+                    m_state = 1 - m_state;
+            }
+        }
+        else
+        {
+            if( ipNext.x > m_point.x )
+            {
+                double d = (double) ( ip.x - m_point.x ) * ( ipNext.y - m_point.y )
+                           - (double) ( ipNext.x - m_point.x ) * ( ip.y - m_point.y );
+
+                if( !d )
+                {
+                    m_finished = true;
+                    m_state    = -1;
+                    return false;
+                }
+
+                if( ( d > 0 ) == ( ipNext.y > ip.y ) )
+                    m_state = 1 - m_state;
+            }
+        }
+    }
+    return true;
+}
+
+
+void SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER::AddPolyline( const SHAPE_LINE_CHAIN& aPolyline )
+{
+    if( !m_count )
+    {
+        m_lastPoint = aPolyline.CPoint(0);
+        m_firstPoint = aPolyline.CPoint(0);
+    }
+
+    m_count += aPolyline.PointCount();
+
+    for (int i = 1; i < aPolyline.PointCount(); i++ )
+    {
+        auto p = aPolyline.CPoint( i );
+        if( !processVertex( m_lastPoint, p )) 
+            return;
+
+        m_lastPoint = p;
+    }
+
+}
+
+
+bool SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER::IsInside()
+{
+    processVertex( m_lastPoint, m_firstPoint );
+    return m_state > 0;
+}
+

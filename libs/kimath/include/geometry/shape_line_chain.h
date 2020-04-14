@@ -73,6 +73,33 @@ public:
         VECTOR2I p;
     };
 
+
+    /**
+     * Class POINT_INSIDE_TRACKER
+     * 
+     * A dynamic state checking if a point lies within polygon with a dynamically built outline (
+     * with each piece of the outline added by AddPolyline ()
+     */
+    class POINT_INSIDE_TRACKER
+    {
+    public:
+        POINT_INSIDE_TRACKER( const VECTOR2I& aPoint );
+
+        void AddPolyline( const SHAPE_LINE_CHAIN& aPolyline );
+        bool IsInside();
+
+    private:
+
+        bool processVertex ( const VECTOR2I& ip, const VECTOR2I& ipNext );
+
+        VECTOR2I m_point;
+        VECTOR2I m_lastPoint;
+        VECTOR2I m_firstPoint;
+        bool m_finished;
+        int m_state;
+        int m_count;
+    };
+
     typedef std::vector<INTERSECTION> INTERSECTIONS;
 
 
@@ -583,9 +610,9 @@ public:
      *                      generated.
      * @return true if the point is inside the shape (edge is not treated as being inside).
      */
-     bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0, bool aUseBBoxCache = false ) const;
+    bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0, bool aUseBBoxCache = false ) const;
 
-
+    
     /**
      * Function PointOnEdge()
      *
