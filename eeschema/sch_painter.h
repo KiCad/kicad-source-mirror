@@ -99,6 +99,12 @@ public:
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_SCHEMATIC_CURSOR ]; }
 
+    int GetDefaultTextThickness() const override
+    {
+        return m_DefaultLineWidth;
+    }
+
+
     int  m_ShowUnit;                // Show all units if 0
     int  m_ShowConvert;             // Show all conversions if 0
 
@@ -173,6 +179,9 @@ private:
     float getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows );
     float getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows );
     float getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows );
+    float getTextThickness( const SCH_FIELD* aItem, bool aDrawingShadows );
+    float getTextThickness( const LIB_FIELD* aItem, bool aDrawingShadows );
+    float getTextThickness( const LIB_TEXT* aItem, bool aDrawingShadows );
 
     bool setDeviceColors( const LIB_ITEM* aItem, int aLayer );
     void fillIfSelection( int aLayer );

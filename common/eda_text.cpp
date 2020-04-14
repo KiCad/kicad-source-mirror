@@ -149,7 +149,7 @@ int EDA_TEXT::GetEffectiveTextPenWidth( RENDER_SETTINGS* aSettings ) const
         width = GetPenSizeForBold( GetTextWidth() );
 
     if( width <= 0 && aSettings )
-        width = aSettings->GetDefaultPenWidth();
+        width = aSettings->GetDefaultTextThickness();
 
     // Clip pen size for small texts:
     width = Clamp_Text_PenSize( width, GetTextSize(), IsBold() );

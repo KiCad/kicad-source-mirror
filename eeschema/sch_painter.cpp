@@ -78,7 +78,9 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_DefaultLineWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS ),
         m_DefaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
         m_DefaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS )
-{ }
+{
+    m_defaultPenWidth = m_DefaultLineWidth;
+}
 
 
 void SCH_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
@@ -340,6 +342,39 @@ float SCH_PAINTER::getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows
 }
 
 
+float SCH_PAINTER::getTextThickness( const SCH_FIELD* aItem, bool aDrawingShadows )
+{
+    float width = (float) aItem->GetEffectiveTextPenWidth( &m_schSettings );
+
+    if( aItem->IsSelected() && aDrawingShadows )
+        width += getShadowWidth();
+
+    return width;
+}
+
+
+float SCH_PAINTER::getTextThickness( const LIB_FIELD* aItem, bool aDrawingShadows )
+{
+    float width = (float) aItem->GetEffectiveTextPenWidth( &m_schSettings );
+
+    if( aItem->IsSelected() && aDrawingShadows )
+        width += getShadowWidth();
+
+    return width;
+}
+
+
+float SCH_PAINTER::getTextThickness( const LIB_TEXT* aItem, bool aDrawingShadows )
+{
+    float width = (float) aItem->GetEffectiveTextPenWidth( &m_schSettings );
+
+    if( aItem->IsSelected() && aDrawingShadows )
+        width += getShadowWidth();
+
+    return width;
+}
+
+
 void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition, double aAngle )
 {
     m_gal->StrokeText( aText, aPosition, aAngle, GetTextMarkupFlags() );
@@ -572,7 +607,7 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
             return;
     }
 
-    m_gal->SetLineWidth( getLineWidth( aField, drawingShadows ) );
+    m_gal->SetLineWidth( getTextThickness( aField, drawingShadows ) );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
@@ -641,7 +676,7 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
 
     m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
     m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-    m_gal->SetLineWidth( getLineWidth( aText, drawingShadows ) );
+    m_gal->SetLineWidth( getTextThickness( aText, drawingShadows ) );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
@@ -1243,7 +1278,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( getLineWidth( aText, drawingShadows ) );
+    m_gal->SetLineWidth( getTextThickness( aText, drawingShadows ) );
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
 
@@ -1441,7 +1476,6 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 
     m_gal->SetStrokeColor( color );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( getLineWidth( aField, drawingShadows ) );
 
     if( drawingShadows && eeconfig()->m_Selection.text_as_box )
     {
@@ -1462,6 +1496,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
         m_gal->SetFontBold( aField->IsBold() );
         m_gal->SetFontItalic( aField->IsItalic() );
         m_gal->SetTextMirrored( aField->IsMirrored() );
+        m_gal->SetLineWidth( getTextThickness( aField, drawingShadows ) );
 
         strokeText( aField->GetShownText(), textpos, orient == TEXT_ANGLE_VERT ? M_PI / 2 : 0 );
     }

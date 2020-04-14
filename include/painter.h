@@ -159,7 +159,7 @@ public:
 
     float GetWorksheetLineWidth() const { return m_worksheetLineWidth; }
 
-    int GetDefaultPenWidth() const { return m_defaultPenWidth; }
+    virtual int GetDefaultTextThickness() const { return m_defaultPenWidth; }
     int GetTextMarkupFlags() const { return m_textMarkupFlags; }
 
     bool GetShowPageLimits() const { return m_showPageLimits; }
