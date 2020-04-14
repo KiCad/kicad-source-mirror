@@ -33,6 +33,14 @@
 
 class SHAPE_LINE_CHAIN;
 
+namespace KIGFX
+{
+    class RENDER_SETTINGS;
+}
+
+using KIGFX::RENDER_SETTINGS;
+
+
 /*
  * Marker are mainly used to show a DRC or ERC error or warning
  */
@@ -81,7 +89,7 @@ public:
      * Function PrintMarker
      * Prints the shape is the polygon defined in m_Corners (array of wxPoints).
      */
-    void PrintMarker( wxDC* aDC, const wxPoint& aOffset );
+    void PrintMarker( RENDER_SETTINGS* aSettings, const wxPoint& aOffset );
 
     /**
      * Function GetPos

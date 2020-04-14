@@ -35,7 +35,7 @@
 #include <sch_sheet.h>
 #include <settings/settings_manager.h>
 #include <ws_painter.h>
-
+#include <sch_painter.h>
 
 // static members (static to remember last state):
 int DIALOG_PLOT_SCHEMATIC::m_pageSizeSelect = PAGE_SIZE_AUTO;
@@ -268,19 +268,18 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::getPlotOptions( int* aDefaultLineWidth )
+void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
 {
     m_HPGLPenSize = m_penWidth.GetValue();
 
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
 
     if( cfg )
     {
         cfg->m_PlotPanel.background_color = m_plotBackgroundColor->GetValue();
         cfg->m_PlotPanel.color = getModeColor();
-        cfg->m_PlotPanel.color_theme = static_cast<COLOR_SETTINGS*>(
-                m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) )->GetFilename();
+        cfg->m_PlotPanel.color_theme = getColorSettings()->GetFilename();
         cfg->m_PlotPanel.frame_reference = getPlotFrameRef();
         cfg->m_PlotPanel.format = static_cast<int>( GetPlotFileFormat() );
         cfg->m_PlotPanel.hpgl_origin = GetPlotOriginCenter();
@@ -290,7 +289,8 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( int* aDefaultLineWidth )
         cfg->m_PlotPanel.hpgl_pen_size = m_HPGLPenSize / IU_PER_MM;
     }
 
-    *aDefaultLineWidth = (int) m_defaultLineWidth.GetValue();
+    aSettings->LoadColors( getColorSettings() );
+    aSettings->SetDefaultPenWidth( (int) m_defaultLineWidth.GetValue() );
 
     // Plot directory
     wxString path = m_outputDirectoryName->GetValue();
@@ -324,24 +324,24 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
 
 void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
 {
-    int defaultLineWidth;
+    KIGFX::SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
 
-    getPlotOptions( &defaultLineWidth );
+    getPlotOptions( &renderSettings );
 
     switch( GetPlotFileFormat() )
     {
     default:
     case PLOT_FORMAT::POST:
-        createPSFile( aPlotAll, getPlotFrameRef(), defaultLineWidth );
+        createPSFile( aPlotAll, getPlotFrameRef(), &renderSettings );
         break;
     case PLOT_FORMAT::DXF:
         CreateDXFFile( aPlotAll, getPlotFrameRef() );
         break;
     case PLOT_FORMAT::PDF:
-        createPDFFile( aPlotAll, getPlotFrameRef(), defaultLineWidth );
+        createPDFFile( aPlotAll, getPlotFrameRef(), &renderSettings );
         break;
     case PLOT_FORMAT::SVG:
-        createSVGFile( aPlotAll, getPlotFrameRef(), defaultLineWidth );
+        createSVGFile( aPlotAll, getPlotFrameRef(), &renderSettings );
         break;
     case PLOT_FORMAT::HPGL:
         createHPGLFile( aPlotAll, getPlotFrameRef() );

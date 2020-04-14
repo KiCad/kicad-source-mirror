@@ -42,6 +42,7 @@
 #include <pcbnew.h>
 #include <pcbplot.h>
 #include <gendrill_file_writer_base.h>
+#include <pcb_painter.h>
 
 /* Conversion utilities - these will be used often in there... */
 inline double diameter_in_inches( double ius )
@@ -169,8 +170,12 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     }
 
     plotter->SetCreator( wxT( "PCBNEW" ) );
-    plotter->SetDefaultLineWidth( Millimeter2iu( 0.2 ) );
     plotter->SetColorMode( false );
+
+    KIGFX::PCB_RENDER_SETTINGS renderSettings;
+    renderSettings.SetDefaultPenWidth( Millimeter2iu( 0.2 ) );
+
+    plotter->SetRenderSettings( &renderSettings );
 
     if( !plotter->OpenFile( aFullFileName ) )
     {
@@ -211,7 +216,6 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     int      textmarginaftersymbol = Millimeter2iu( 2 );
 
     // Set Drill Symbols width
-    plotter->SetDefaultLineWidth( Millimeter2iu( 0.2 ) );
     plotter->SetCurrentLineWidth( -1 );
 
     // Plot board outlines and drill map
@@ -237,7 +241,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     wxString Text = wxT( "Drill Map:" );
     plotter->Text( wxPoint( plotX, plotY ), COLOR4D::UNSPECIFIED, Text, 0,
             wxSize( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) ),
-            GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, TextWidth, false, false );
+            GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, TextWidth, false, false, 0 );
 
     // For some formats (PS, PDF SVG) we plot the drill size list on more than one column
     // because the list must be contained inside the printed page
@@ -297,7 +301,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
         plotter->Text( wxPoint( plotX, y ), COLOR4D::UNSPECIFIED, msg, 0,
                 wxSize( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) ),
-                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, TextWidth, false, false );
+                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, TextWidth, false, false, 0 );
 
         intervalle = KiROUND( ( ( charSize * charScale ) + TextWidth ) * 1.2 );
 

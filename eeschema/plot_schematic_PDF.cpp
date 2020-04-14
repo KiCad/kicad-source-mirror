@@ -30,6 +30,7 @@
 #include <sch_edit_frame.h>
 #include <base_units.h>
 #include <sch_sheet_path.h>
+#include <sch_painter.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <general.h>
@@ -41,9 +42,8 @@
 #include <wx_html_report_panel.h>
 
 void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef,
-                                           int aDefaultLineWidth )
+                                           RENDER_SETTINGS* aRenderSettings )
 {
-    SCH_SCREEN*     screen = m_parent->GetScreen();
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();     // sheetpath is saved here
 
     /* When printing all pages, the printed page is not the current page.  In
@@ -62,9 +62,8 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef,
 
     // Allocate the plotter and set the job level parameter
     PDF_PLOTTER* plotter = new PDF_PLOTTER();
-    plotter->SetDefaultLineWidth( aDefaultLineWidth );
+    plotter->SetRenderSettings( aRenderSettings );
     plotter->SetColorMode( getModeColor() );
-    plotter->SetColorSettings( getColorSettings() );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );
     plotter->SetTitle( m_parent->GetTitleBlock().GetTitle() );
 
@@ -78,7 +77,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef,
         m_parent->SetCurrentSheet( sheetList[i] );
         m_parent->GetCurrentSheet().UpdateAllScreenReferences();
         m_parent->SetSheetNumberAndCount();
-        screen = m_parent->GetCurrentSheet().LastScreen();
+        SCH_SCREEN* screen = m_parent->GetCurrentSheet().LastScreen();
 
         if( i == 0 )
         {
@@ -151,7 +150,7 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter,
 {
     if( m_plotBackgroundColor->GetValue() )
     {
-        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND ) );
+        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
         wxPoint end( aPlotter->PageSettings().GetWidthIU(),
                      aPlotter->PageSettings().GetHeightIU() );
         aPlotter->Rect( wxPoint( 0, 0 ), end, FILLED_SHAPE, 1.0 );
@@ -170,7 +169,7 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter,
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::setupPlotPagePDF( PLOTTER * aPlotter, SCH_SCREEN* aScreen )
+void DIALOG_PLOT_SCHEMATIC::setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen )
 {
     PAGE_INFO   plotPage;                               // page size selected to plot
     // Considerations on page size and scaling requests

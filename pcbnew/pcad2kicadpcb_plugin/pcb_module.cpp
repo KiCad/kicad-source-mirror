@@ -539,7 +539,7 @@ void PCB_MODULE::AddToBoard()
     ref_text->SetKeepUpright( false );
 
     ref_text->SetItalic( m_name.isItalic );
-    ref_text->SetTextPenWidth( m_name.textstrokeWidth );
+    ref_text->SetTextThickness( m_name.textstrokeWidth );
 
     ref_text->SetMirrored( m_name.mirror );
     ref_text->SetVisible( m_name.textIsVisible );
@@ -566,7 +566,7 @@ void PCB_MODULE::AddToBoard()
     val_text->SetKeepUpright( false );
 
     val_text->SetItalic( m_value.isItalic );
-    val_text->SetTextPenWidth( m_value.textstrokeWidth );
+    val_text->SetTextThickness( m_value.textstrokeWidth );
 
     val_text->SetMirrored( m_value.mirror );
     val_text->SetVisible( m_value.textIsVisible );

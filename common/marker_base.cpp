@@ -36,6 +36,7 @@
 #include "macros.h"
 #include "marker_base.h"
 #include <geometry/shape_line_chain.h>
+#include <render_settings.h>
 #include "dialog_display_info_HTML_base.h"
 
 
@@ -182,8 +183,10 @@ EDA_RECT MARKER_BASE::GetBoundingBoxMarker() const
 }
 
 
-void MARKER_BASE::PrintMarker( wxDC* aDC, const wxPoint& aOffset )
+void MARKER_BASE::PrintMarker( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
+    wxDC* DC = aSettings->GetPrintDC();
+
     // Build the marker shape polygon in internal units:
     std::vector<wxPoint> shape;
     shape.reserve( CORNERS_COUNT );
@@ -191,5 +194,5 @@ void MARKER_BASE::PrintMarker( wxDC* aDC, const wxPoint& aOffset )
     for( const VECTOR2I& corner : MarkerShapeCorners )
         shape.emplace_back( corner * MarkerScale() + m_Pos + aOffset );
 
-    GRClosedPoly( nullptr, aDC, CORNERS_COUNT, &shape[0], true, 0, getColor(), getColor() );
+    GRClosedPoly( nullptr, DC, CORNERS_COUNT, &shape[0], true, 0, getColor(), getColor() );
 }

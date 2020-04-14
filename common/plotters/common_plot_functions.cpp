@@ -64,8 +64,8 @@ void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK
     /* Note: Page sizes values are given in mils
      */
     double   iusPerMil = plotter->GetIUsPerDecimil() * 10.0;
-
-    COLOR4D plotColor = plotter->GetColorMode() ? aColor : COLOR4D::BLACK;
+    COLOR4D  plotColor = plotter->GetColorMode() ? aColor : COLOR4D::BLACK;
+    int      defaultPenWidth = plotter->RenderSettings()->GetDefaultPenWidth();
 
     if( plotColor == COLOR4D::UNSPECIFIED )
         plotColor = COLOR4D( RED );
@@ -97,7 +97,7 @@ void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK
         case WSG_LINE_T:
             {
                 WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
-                plotter->SetCurrentLineWidth( line->GetPenWidth() );
+                plotter->SetCurrentLineWidth( std::max( line->GetPenWidth(), defaultPenWidth ) );
                 plotter->MoveTo( line->GetStart() );
                 plotter->FinishTo( line->GetEnd() );
             }
@@ -106,24 +106,26 @@ void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK
         case WSG_RECT_T:
             {
                 WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
-                plotter->Rect( rect->GetStart(), rect->GetEnd(), NO_FILL, rect->GetPenWidth() );
+                int penWidth = std::max( rect->GetPenWidth(), defaultPenWidth );
+                plotter->Rect( rect->GetStart(), rect->GetEnd(), NO_FILL, penWidth );
             }
             break;
 
         case WSG_TEXT_T:
             {
                 WS_DRAW_ITEM_TEXT* text = (WS_DRAW_ITEM_TEXT*) item;
+                int penWidth = std::max( text->GetEffectiveTextPenWidth(), defaultPenWidth );
                 plotter->Text( text->GetTextPos(), plotColor, text->GetShownText(),
-                               text->GetTextAngle(), text->GetTextSize(),
-                               text->GetHorizJustify(), text->GetVertJustify(),
-                               text->GetEffectiveTextPenWidth( nullptr ),
-                               text->IsItalic(), text->IsBold(), text->IsMultilineAllowed() );
+                               text->GetTextAngle(), text->GetTextSize(), text->GetHorizJustify(),
+                               text->GetVertJustify(), penWidth, text->IsItalic(), text->IsBold(),
+                               text->GetTextMarkupFlags(), text->IsMultilineAllowed() );
             }
             break;
 
         case WSG_POLY_T:
             {
                 WS_DRAW_ITEM_POLYPOLYGONS* poly = (WS_DRAW_ITEM_POLYPOLYGONS*) item;
+                int penWidth = std::max( poly->GetPenWidth(), defaultPenWidth );
                 std::vector<wxPoint> points;
 
                 for( int idx = 0; idx < poly->GetPolygons().OutlineCount(); ++idx )
@@ -134,7 +136,7 @@ void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK
                     for( int ii = 0; ii < outline.PointCount(); ii++ )
                         points.emplace_back( outline.CPoint( ii ).x, outline.CPoint( ii ).y );
 
-                    plotter->PlotPoly(  points, FILLED_SHAPE, poly->GetPenWidth() );
+                    plotter->PlotPoly( points, FILLED_SHAPE, penWidth );
                 }
             }
             break;

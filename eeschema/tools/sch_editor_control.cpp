@@ -1133,6 +1133,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         }
     }
 
+    paste_screen.UpdateTextMarkupFlags( m_frame->GetTextMarkupFlags() );
+
     // Remove the references from our temporary screen to prevent freeing on the DTOR
     paste_screen.Clear( false );
 

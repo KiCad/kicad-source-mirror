@@ -714,7 +714,7 @@ void WS_DATA_ITEM_TEXT::SetConstrainedTextSize()
         dummy.SetVertJustify( m_Vjustify );
         dummy.SetTextAngle( m_Orient * 10 );
 
-        EDA_RECT rect = dummy.GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
+        EDA_RECT rect = dummy.GetTextBox();
         DSIZE size;
         size.x = rect.GetWidth() / FSCALE;
         size.y = rect.GetHeight() / FSCALE;

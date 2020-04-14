@@ -419,14 +419,14 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
     module->Reference().SetTextPos( textPos );
     module->Reference().SetPos0( textPos );
     module->Reference().SetTextSize( wxSize( twsize, thsize ) );
-    module->Reference().SetTextPenWidth( thickness );
+    module->Reference().SetTextThickness( thickness );
 
     // gEDA/pcb shows only one of value/reference/description at a time. Which
     // one is selectable by a global menu setting. pcbnew needs reference as
     // well as value visible, so place the value right below the reference.
     module->Value().SetTextAngle( module->Reference().GetTextAngle() );
     module->Value().SetTextSize( module->Reference().GetTextSize() );
-    module->Value().SetTextPenWidth( module->Reference().GetTextPenWidth() );
+    module->Value().SetTextThickness( module->Reference().GetTextThickness());
     textPos.y += thsize * 13 / 10;  // 130% line height
     module->Value().SetTextPos( textPos );
     module->Value().SetPos0( textPos );

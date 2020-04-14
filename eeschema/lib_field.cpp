@@ -34,12 +34,12 @@
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
+#include <general.h>
 #include <class_libentry.h>
 #include <transform.h>
 #include <lib_field.h>
 #include <template_fieldnames.h>
 #include <settings/color_settings.h>
-#include <default_values.h>    // For some default values
 
 
 LIB_FIELD::LIB_FIELD(LIB_PART * aParent, int idfield ) :
@@ -99,29 +99,23 @@ void LIB_FIELD::Init( int id )
 }
 
 
-int LIB_FIELD::GetPenSize() const
+int LIB_FIELD::GetPenWidth() const
 {
-#if 1
-    // Temporary code not using RENDER_SETTINGS
-    int textThickness = DEFAULT_LINE_THICKNESS * IU_PER_MILS;
-    textThickness = Clamp_Text_PenSize( textThickness, GetTextSize(), IsBold() );
-    return textThickness;
-#else
-    return GetEffectiveTextPenWidth( nullptr );  // JEY TODO: requires RENDER_SETTINGS
-#endif
+    return GetEffectiveTextPenWidth();
 }
 
 
-void LIB_FIELD::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+void LIB_FIELD::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                        const TRANSFORM& aTransform )
 {
-    COLOR4D  color = IsVisible() ? GetDefaultColor() : GetInvisibleItemColor();
-    int      linewidth = GetPenSize();
+    wxDC*    DC = aSettings->GetPrintDC();
+    COLOR4D  color = aSettings->GetLayerColor( IsVisible() ? GetDefaultLayer() : LAYER_HIDDEN );
+    int      penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
     wxPoint  text_pos = aTransform.TransformCoordinate( GetTextPos() ) + aOffset;
     wxString text = aData ? *static_cast<wxString*>( aData ) : GetText();
 
-    GRText( aDC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-            GetVertJustify(), linewidth, IsItalic(), IsBold() );
+    GRText( DC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
+            GetVertJustify(), penWidth, IsItalic(), IsBold(), m_textMarkupFlags );
 }
 
 
@@ -220,12 +214,6 @@ void LIB_FIELD::Offset( const wxPoint& aOffset )
 }
 
 
-bool LIB_FIELD::Inside( EDA_RECT& rect ) const
-{
-    return rect.Intersects( GetBoundingBox() );
-}
-
-
 void LIB_FIELD::MoveTo( const wxPoint& newPosition )
 {
     EDA_TEXT::SetTextPos( newPosition );
@@ -295,12 +283,16 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     COLOR4D color;
 
     if( aPlotter->GetColorMode() )
-        color = aPlotter->ColorSettings()->GetColor( GetDefaultLayer() );
+        color = aPlotter->RenderSettings()->GetLayerColor( GetDefaultLayer() );
     else
         color = COLOR4D::BLACK;
 
-    aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(),
-                    hjustify, vjustify, GetPenSize(), IsItalic(), IsBold() );
+    int penWidth = std::max( GetPenWidth(),aPlotter->RenderSettings()->GetDefaultPenWidth() );
+
+    // NOTE: do NOT use m_textMarkupFlags; those are from the library, not the schematic
+
+    aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(), hjustify, vjustify,
+                    penWidth, IsItalic(), IsBold(), aPlotter->GetTextMarkupFlags() );
 }
 
 
@@ -324,7 +316,7 @@ const EDA_RECT LIB_FIELD::GetBoundingBox() const
     /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
      * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
-    EDA_RECT rect = GetTextBox( nullptr, -1, true );  // JEY TODO: requires RENDER_SETTINGS
+    EDA_RECT rect = GetTextBox( -1, true );
     rect.RevertYAxis();
 
     // We are using now a bottom to top Y axis.
@@ -367,12 +359,6 @@ SCH_LAYER_ID LIB_FIELD::GetDefaultLayer()
     case VALUE:     return LAYER_VALUEPART;
     default:        return LAYER_FIELDS;
     }
-}
-
-
-COLOR4D LIB_FIELD::GetDefaultColor()
-{
-    return GetLayerColor( GetDefaultLayer() );
 }
 
 

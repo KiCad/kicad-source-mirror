@@ -474,7 +474,7 @@ public:
      * @param aOffset is the drawing offset (usually wxPoint(0,0),
      *  but can be different when moving an object)
      */
-    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 

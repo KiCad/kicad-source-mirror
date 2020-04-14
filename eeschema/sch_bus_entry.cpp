@@ -37,6 +37,7 @@
 #include <sch_line.h>
 #include <sch_text.h>
 #include <settings/color_settings.h>
+#include "sch_painter.h"
 #include <default_values.h>    // For some default values
 
 
@@ -121,31 +122,21 @@ const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
     box.SetEnd( m_End() );
 
     box.Normalize();
-    box.Inflate( GetPenSize() / 2 );
+    box.Inflate( ( GetPenWidth() / 2 ) + 1 );
 
     return box;
 }
 
 
-int SCH_BUS_WIRE_ENTRY::GetPenSize() const
+int SCH_BUS_WIRE_ENTRY::GetPenWidth() const
 {
-#if 1
-    // Temporary code not using RENDER_SETTINGS
-    return DEFAULT_WIRE_THICKNESS * IU_PER_MILS;
-#else
-    // JEY TODO: requires RENDER_SETTINGS
-#endif
+    return 1;
 }
 
 
-int SCH_BUS_BUS_ENTRY::GetPenSize() const
+int SCH_BUS_BUS_ENTRY::GetPenWidth() const
 {
-#if 1
-    // Temporary code not using RENDER_SETTINGS
-    return DEFAULT_BUS_THICKNESS * IU_PER_MILS;
-#else
-    // JEY TODO: requires RENDER_SETTINGS
-#endif
+    return 1;
 }
 
 
@@ -169,12 +160,14 @@ void SCH_BUS_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemLis
 }
 
 
-void SCH_BUS_ENTRY_BASE::Print( wxDC* aDC, const wxPoint& aOffset )
+void SCH_BUS_ENTRY_BASE::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    COLOR4D color = GetLayerColor( m_Layer );
+    wxDC*   DC = aSettings->GetPrintDC();
+    COLOR4D color = aSettings->GetLayerColor( m_Layer );
+    int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
-    GRLine( nullptr, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, m_End().x + aOffset.x,
-            m_End().y + aOffset.y, GetPenSize(), color );
+    GRLine( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, m_End().x + aOffset.x,
+            m_End().y + aOffset.y, penWidth, color );
 }
 
 
@@ -341,7 +334,7 @@ bool SCH_BUS_ENTRY_BASE::HitTest( const wxPoint& aPosition, int aAccuracy ) cons
 {
     // Insure minimum accuracy
     if( aAccuracy == 0 )
-        aAccuracy = ( GetPenSize() / 2 ) + 4;
+        aAccuracy = ( GetPenWidth() / 2 ) + 4;
 
     return TestSegmentHit( aPosition, m_pos, m_End(), aAccuracy );
 }
@@ -362,8 +355,10 @@ bool SCH_BUS_ENTRY_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aA
 
 void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->SetCurrentLineWidth( GetPenSize() );
-    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
+    int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
+
+    aPlotter->SetCurrentLineWidth( penWidth );
+    aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( GetLayer() ) );
     aPlotter->MoveTo( m_pos );
     aPlotter->FinishTo( m_End() );
 }

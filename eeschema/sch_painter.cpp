@@ -61,7 +61,6 @@
 #include <view/view.h>
 #include <kiface_i.h>
 #include <default_values.h>
-
 #include "sch_painter.h"
 
 namespace KIGFX
@@ -76,12 +75,9 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_ShowDisabled( false ),
         m_ShowUmbilicals( true ),
         m_OverrideItemColors( false ),
-        m_DefaultLineWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS ),
         m_DefaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
         m_DefaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS )
-{
-    m_defaultPenWidth = m_DefaultLineWidth;
-}
+{ }
 
 
 void SCH_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
@@ -178,7 +174,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
         m_gal->SetStrokeColor( COLOR4D( LIGHTRED ) );
         m_gal->SetLineWidth( Mils2ui( 2 ) );
         m_gal->SetGlyphSize( VECTOR2D( Mils2ui( 20 ), Mils2ui( 20 ) ) );
-        m_gal->StrokeText( conn->Name( true ), pos, 0.0 );
+        m_gal->StrokeText( conn->Name( true ), pos, 0.0, 0 );
     }
 
 #endif
@@ -299,10 +295,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
 
 float SCH_PAINTER::getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows )
 {
-    float width = (float) aItem->GetPenSize();
-
-    if( width == 0 )
-        width = (float) m_schSettings.m_DefaultLineWidth;
+    float width = (float) std::max( aItem->GetPenWidth(), m_schSettings.GetDefaultPenWidth() );
 
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();
@@ -313,17 +306,14 @@ float SCH_PAINTER::getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows )
 
 float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows )
 {
-    float width = (float) aItem->GetPenSize();
+    float width;
 
-    if( width == 0 )
-    {
-        if( aItem->GetLayer() ==  LAYER_WIRE )
-            width = (float)  m_schSettings.m_DefaultWireThickness;
-        else if( aItem->GetLayer() == LAYER_BUS )
-            width = (float)  m_schSettings.m_DefaultBusThickness;
-        else
-            width = (float) m_schSettings.m_DefaultLineWidth;
-    }
+    if( aItem->GetLayer() == LAYER_WIRE )
+        width = (float)  m_schSettings.m_DefaultWireThickness;
+    else if( aItem->GetLayer() == LAYER_BUS )
+        width = (float)  m_schSettings.m_DefaultBusThickness;
+    else
+        width = (float) std::max( aItem->GetPenWidth(), m_schSettings.GetDefaultPenWidth() );
 
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();
@@ -334,7 +324,8 @@ float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows )
 
 float SCH_PAINTER::getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows )
 {
-    float width = (float) aItem->GetEffectiveTextPenWidth( &m_schSettings );
+    float width = (float) std::max( aItem->GetEffectiveTextPenWidth(),
+                                    m_schSettings.GetDefaultPenWidth() );
 
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();
@@ -345,7 +336,8 @@ float SCH_PAINTER::getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows
 
 float SCH_PAINTER::getTextThickness( const SCH_FIELD* aItem, bool aDrawingShadows )
 {
-    float width = (float) aItem->GetEffectiveTextPenWidth( &m_schSettings );
+    float width = (float) std::max( aItem->GetEffectiveTextPenWidth(),
+                                    m_schSettings.GetDefaultPenWidth() );
 
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();
@@ -356,7 +348,8 @@ float SCH_PAINTER::getTextThickness( const SCH_FIELD* aItem, bool aDrawingShadow
 
 float SCH_PAINTER::getTextThickness( const LIB_FIELD* aItem, bool aDrawingShadows )
 {
-    float width = (float) aItem->GetEffectiveTextPenWidth( &m_schSettings );
+    float width = (float) std::max( aItem->GetEffectiveTextPenWidth(),
+                                    m_schSettings.GetDefaultPenWidth() );
 
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();
@@ -367,7 +360,8 @@ float SCH_PAINTER::getTextThickness( const LIB_FIELD* aItem, bool aDrawingShadow
 
 float SCH_PAINTER::getTextThickness( const LIB_TEXT* aItem, bool aDrawingShadows )
 {
-    float width = (float) aItem->GetEffectiveTextPenWidth( &m_schSettings );
+    float width = (float) std::max( aItem->GetEffectiveTextPenWidth(),
+                                    m_schSettings.GetDefaultPenWidth() );
 
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();
@@ -376,9 +370,10 @@ float SCH_PAINTER::getTextThickness( const LIB_TEXT* aItem, bool aDrawingShadows
 }
 
 
-void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition, double aAngle )
+void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition, double aAngle,
+                              int aTextMarkupFlags )
 {
-    m_gal->StrokeText( aText, aPosition, aAngle, GetTextMarkupFlags() );
+    m_gal->StrokeText( aText, aPosition, aAngle, aTextMarkupFlags );
 }
 
 
@@ -637,7 +632,7 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 
         double orient = aField->GetTextAngleRadians();
 
-        strokeText( aField->GetText(), pos, orient );
+        strokeText( aField->GetText(), pos, orient, aField->GetTextMarkupFlags() );
     }
 
     // Draw the umbilical line
@@ -684,7 +679,7 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
     m_gal->SetGlyphSize( VECTOR2D( aText->GetTextSize() ) );
     m_gal->SetFontBold( aText->IsBold() );
     m_gal->SetFontItalic( aText->IsItalic() );
-    strokeText( aText->GetText(), pos, orient );
+    strokeText( aText->GetText(), pos, orient, aText->GetTextMarkupFlags() );
 }
 
 
@@ -719,6 +714,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         return;
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    int  flags = aPin->GetTextMarkupFlags();
 
     if( drawingShadows && !aPin->IsSelected() )
         return;
@@ -966,7 +962,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 
     int   insideOffset = textOffset;
     int   outsideOffset = 10;
-    float lineThickness = (float) m_schSettings.m_DefaultLineWidth;
+    float lineThickness = (float) m_schSettings.GetDefaultPenWidth();
     float aboveOffset = Mils2iu( PIN_TEXT_MARGIN ) + ( thickness[ABOVE] + lineThickness ) / 2.0;
     float belowOffset = Mils2iu( PIN_TEXT_MARGIN ) + ( thickness[BELOW] + lineThickness ) / 2.0;
 
@@ -992,28 +988,28 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             SET_DC( INSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[INSIDE], pos + VECTOR2D( -insideOffset - len, 0 ), 0 );
+            strokeText( text[INSIDE], pos + VECTOR2D( -insideOffset - len, 0 ), 0, flags );
         }
         if( size[OUTSIDE] )
         {
             SET_DC( OUTSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[OUTSIDE], pos + VECTOR2D( outsideOffset, 0 ), 0 );
+            strokeText( text[OUTSIDE], pos + VECTOR2D( outsideOffset, 0 ), 0, flags );
         }
         if( size[ABOVE] )
         {
             SET_DC( ABOVE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            strokeText( text[ABOVE], pos + VECTOR2D( -len / 2.0, -aboveOffset ), 0 );
+            strokeText( text[ABOVE], pos + VECTOR2D( -len / 2.0, -aboveOffset ), 0, flags );
         }
         if( size[BELOW] )
         {
             SET_DC( BELOW );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-            strokeText( text[BELOW], pos + VECTOR2D( -len / 2.0, belowOffset ), 0 );
+            strokeText( text[BELOW], pos + VECTOR2D( -len / 2.0, belowOffset ), 0, flags );
         }
         break;
 
@@ -1024,28 +1020,28 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
-            strokeText( text[INSIDE], pos + VECTOR2D( insideOffset + len, 0 ), 0 );
+            strokeText( text[INSIDE], pos + VECTOR2D( insideOffset + len, 0 ), 0, flags );
         }
         if( size[OUTSIDE] )
         {
             SET_DC( OUTSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[OUTSIDE], pos + VECTOR2D( -outsideOffset, 0 ), 0 );
+            strokeText( text[OUTSIDE], pos + VECTOR2D( -outsideOffset, 0 ), 0, flags );
         }
         if( size[ABOVE] )
         {
             SET_DC( ABOVE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            strokeText( text[ABOVE], pos + VECTOR2D( len / 2.0, -aboveOffset ), 0 );
+            strokeText( text[ABOVE], pos + VECTOR2D( len / 2.0, -aboveOffset ), 0, flags );
         }
         if( size[BELOW] )
         {
             SET_DC( BELOW );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-            strokeText( text[BELOW], pos + VECTOR2D( len / 2.0, belowOffset ), 0 );
+            strokeText( text[BELOW], pos + VECTOR2D( len / 2.0, belowOffset ), 0, flags );
         }
         break;
 
@@ -1055,28 +1051,28 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             SET_DC( INSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[INSIDE], pos + VECTOR2D( 0, insideOffset + len ), M_PI / 2 );
+            strokeText( text[INSIDE], pos + VECTOR2D( 0, insideOffset + len ), M_PI / 2, flags );
         }
         if( size[OUTSIDE] )
         {
             SET_DC( OUTSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[OUTSIDE], pos + VECTOR2D( 0, -outsideOffset ), M_PI / 2 );
+            strokeText( text[OUTSIDE], pos + VECTOR2D( 0, -outsideOffset ), M_PI / 2, flags );
         }
         if( size[ABOVE] )
         {
             SET_DC( ABOVE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            strokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, len / 2.0 ), M_PI / 2 );
+            strokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, len / 2.0 ), M_PI / 2, flags );
         }
         if( size[BELOW] )
         {
             SET_DC( BELOW );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-            strokeText( text[BELOW], pos + VECTOR2D( belowOffset, len / 2.0 ), M_PI / 2 );
+            strokeText( text[BELOW], pos + VECTOR2D( belowOffset, len / 2.0 ), M_PI / 2, flags );
         }
         break;
 
@@ -1086,28 +1082,28 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             SET_DC( INSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[INSIDE], pos + VECTOR2D( 0, -insideOffset - len ), M_PI / 2 );
+            strokeText( text[INSIDE], pos + VECTOR2D( 0, -insideOffset - len ), M_PI / 2, flags );
         }
         if( size[OUTSIDE] )
         {
             SET_DC( OUTSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[OUTSIDE], pos + VECTOR2D( 0, outsideOffset ), M_PI / 2 );
+            strokeText( text[OUTSIDE], pos + VECTOR2D( 0, outsideOffset ), M_PI / 2, flags );
         }
         if( size[ABOVE] )
         {
             SET_DC( ABOVE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            strokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, -len / 2.0 ), M_PI / 2 );
+            strokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, -len / 2.0 ), M_PI / 2, flags );
         }
         if( size[BELOW] )
         {
             SET_DC( BELOW );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-            strokeText( text[BELOW], pos + VECTOR2D( belowOffset, -len / 2.0 ), M_PI / 2 );
+            strokeText( text[BELOW], pos + VECTOR2D( belowOffset, -len / 2.0 ), M_PI / 2, flags );
         }
         break;
 
@@ -1283,7 +1279,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
 
-    VECTOR2D text_offset = aText->GetTextPos() + aText->GetSchematicTextOffset();
+    VECTOR2D text_offset = aText->GetTextPos() + aText->GetSchematicTextOffset( &m_schSettings );
     wxString shownText( aText->GetShownText() );
 
     if( drawingShadows )
@@ -1319,7 +1315,10 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     }
 
     if( !shownText.IsEmpty() )
-        strokeText( shownText, text_offset, aText->GetTextAngleRadians() );
+    {
+        strokeText( shownText, text_offset, aText->GetTextAngleRadians(),
+                    aText->GetTextMarkupFlags() );
+    }
 
     if( aText->IsDangling() )
         drawDanglingSymbol( aText->GetTextPos(), drawingShadows );
@@ -1406,6 +1405,7 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 
         tempPin->ClearFlags();
         tempPin->SetFlags( compPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
+        tempPin->SetTextMarkupFlags( compPin->GetTextMarkupFlags() );
 
         if( compPin->IsDangling() )
             tempPin->SetFlags( IS_DANGLING );
@@ -1499,7 +1499,8 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
         m_gal->SetTextMirrored( aField->IsMirrored() );
         m_gal->SetLineWidth( getTextThickness( aField, drawingShadows ) );
 
-        strokeText( aField->GetShownText(), textpos, orient == TEXT_ANGLE_VERT ? M_PI / 2 : 0 );
+        strokeText( aField->GetShownText(), textpos, orient == TEXT_ANGLE_VERT ? M_PI / 2 : 0,
+                    aField->GetTextMarkupFlags() );
     }
 
     // Draw the umbilical line
@@ -1599,7 +1600,7 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
                 break;
             }
 
-            int     width = aSheet->GetPenSize();
+            int     width = std::max( aSheet->GetPenWidth(), m_schSettings.GetDefaultPenWidth() );
             wxPoint initial_pos = sheetPin->GetTextPos();
             wxPoint offset_pos = initial_pos;
 
@@ -1663,7 +1664,7 @@ void SCH_PAINTER::draw( SCH_NO_CONNECT *aNC, int aLayer )
     m_gal->SetIsFill( false );
 
     VECTOR2D p = aNC->GetPosition();
-    int      delta = std::max( aNC->GetSize(), m_schSettings.m_DefaultLineWidth * 3 ) / 2;
+    int      delta = std::max( aNC->GetSize(), m_schSettings.GetDefaultPenWidth() * 3 ) / 2;
 
     m_gal->DrawLine( p + VECTOR2D( -delta, -delta ), p + VECTOR2D( delta, delta ) );
     m_gal->DrawLine( p + VECTOR2D( -delta, delta ), p + VECTOR2D( delta, -delta ) );

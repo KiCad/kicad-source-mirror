@@ -99,26 +99,22 @@ public:
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_SCHEMATIC_CURSOR ]; }
 
-    int GetDefaultTextThickness() const override
-    {
-        return m_DefaultLineWidth;
-    }
+    int    m_ShowUnit;                // Show all units if 0
+    int    m_ShowConvert;             // Show all conversions if 0
 
+    bool   m_ShowHiddenText;
+    bool   m_ShowHiddenPins;
+    bool   m_ShowPinsElectricalType;
+    bool   m_ShowDisabled;
+    bool   m_ShowUmbilicals;
 
-    int  m_ShowUnit;                // Show all units if 0
-    int  m_ShowConvert;             // Show all conversions if 0
+    bool   m_OverrideItemColors;
 
-    bool m_ShowHiddenText;
-    bool m_ShowHiddenPins;
-    bool m_ShowPinsElectricalType;
-    bool m_ShowDisabled;
-    bool m_ShowUmbilicals;
+    double m_TextOffsetRatio;        // Proportion of font size to offset text above/below
+                                     // wires, buses, etc.
 
-    bool m_OverrideItemColors;
-
-    int  m_DefaultLineWidth;
-    int  m_DefaultWireThickness;
-    int  m_DefaultBusThickness;
+    int    m_DefaultWireThickness;
+    int    m_DefaultBusThickness;
 };
 
 
@@ -187,7 +183,8 @@ private:
     void fillIfSelection( int aLayer );
 
     void triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
-    void strokeText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle );
+    void strokeText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle,
+                     int aTextMarkupFlags );
 
     SCH_RENDER_SETTINGS m_schSettings;
 };

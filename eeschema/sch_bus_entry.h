@@ -82,7 +82,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     const EDA_RECT GetBoundingBox() const override;
 
@@ -141,7 +141,7 @@ public:
         return wxT( "SCH_BUS_WIRE_ENTRY" );
     }
 
-    int GetPenSize() const override;
+    int GetPenWidth() const override;
 
     void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
@@ -189,7 +189,7 @@ public:
         return wxT( "SCH_BUS_BUS_ENTRY" );
     }
 
-    int GetPenSize() const override;
+    int GetPenWidth() const override;
 
     void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 

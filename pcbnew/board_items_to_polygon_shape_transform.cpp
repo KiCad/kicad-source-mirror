@@ -225,7 +225,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
         bool forceBold = true;
         int  penWidth = 0;      // force max width for bold text
 
-        prms.m_textWidth  = textmod->GetEffectiveTextPenWidth( nullptr ) + ( 2 * aInflateValue );
+        prms.m_textWidth  = textmod->GetEffectiveTextPenWidth() + ( 2 * aInflateValue );
         prms.m_error = aError;
         wxSize size = textmod->GetTextSize();
 
@@ -235,7 +235,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
         GRText( NULL, textmod->GetTextPos(), BLACK, textmod->GetShownText(),
                 textmod->GetDrawRotation(), size, textmod->GetHorizJustify(),
                 textmod->GetVertJustify(), penWidth, textmod->IsItalic(),
-                forceBold, addTextSegmToPoly, &prms );
+                forceBold, 0, addTextSegmToPoly, &prms );
     }
 }
 
@@ -279,7 +279,7 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
 
     wxPoint  corners[4];    // Buffer of polygon corners
 
-    EDA_RECT rect = GetTextBox( nullptr );
+    EDA_RECT rect = GetTextBox();
     rect.Inflate( aClearanceValue + Millimeter2iu( DEFAULT_TEXT_WIDTH ) );
     corners[0].x = rect.GetOrigin().x;
     corners[0].y = rect.GetOrigin().y;
@@ -317,10 +317,10 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCorner
         size.x = -size.x;
 
     bool forceBold = true;
-    int  penWidth = 0;      // force max width for bold text
+    int  penWidth = GetEffectiveTextPenWidth();
 
     prms.m_cornerBuffer = &aCornerBuffer;
-    prms.m_textWidth = GetEffectiveTextPenWidth( nullptr ) + ( 2 * aClearanceValue );
+    prms.m_textWidth = GetEffectiveTextPenWidth() + ( 2 * aClearanceValue );
     prms.m_error = aError;
     COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by GRText
 
@@ -330,19 +330,19 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCorner
         wxStringSplit( GetShownText(), strings_list, '\n' );
         std::vector<wxPoint> positions;
         positions.reserve( strings_list.Count() );
-        GetPositionsOfLinesOfMultilineText( positions, strings_list.Count() );
+        GetLinePositions( positions, strings_list.Count() );
 
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             wxString txt = strings_list.Item( ii );
             GRText( NULL, positions[ii], color, txt, GetTextAngle(), size, GetHorizJustify(),
-                    GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToPoly, &prms );
+                    GetVertJustify(), penWidth, IsItalic(), forceBold, 0, addTextSegmToPoly, &prms );
         }
     }
     else
     {
         GRText( NULL, GetTextPos(), color, GetShownText(), GetTextAngle(), size, GetHorizJustify(),
-                GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToPoly, &prms );
+                GetVertJustify(), penWidth, IsItalic(), forceBold, 0, addTextSegmToPoly, &prms );
     }
 }
 

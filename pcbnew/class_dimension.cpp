@@ -245,7 +245,7 @@ void DIMENSION::AdjustDimensionDetails( int aPrecision )
     m_Text.SetLayer( GetLayer() );
 
     // calculate the size of the dimension (text + line above the text)
-    ii = m_Text.GetTextHeight() + m_Text.GetEffectiveTextPenWidth( nullptr ) + m_Width; // JEY TODO: requires RENDER_SETTINGS
+    ii = m_Text.GetTextHeight() + m_Text.GetEffectiveTextPenWidth() + m_Width;
 
     deltax  = m_featureLineDO.x - m_featureLineGO.x;
     deltay  = m_featureLineDO.y - m_featureLineGO.y;
@@ -368,7 +368,7 @@ void DIMENSION::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
     COLOR4D gcolor = Pgm().GetSettingsManager().GetColorSettings()->GetColor( m_Layer );
     auto displ_opts = aFrame->GetDisplayOptions();
     bool filled = displ_opts.m_DisplayDrawItemsFill;
-    int  width   = m_Width;
+    int  width = m_Width;
 
     if( filled )
     {
@@ -456,7 +456,7 @@ const EDA_RECT DIMENSION::GetBoundingBox() const
     EDA_RECT    bBox;
     int         xmin, xmax, ymin, ymax;
 
-    bBox    = m_Text.GetTextBox( nullptr );     // JEY TODO: requires RENDER_SETTINGS
+    bBox    = m_Text.GetTextBox();
     xmin    = bBox.GetX();
     xmax    = bBox.GetRight();
     ymin    = bBox.GetY();

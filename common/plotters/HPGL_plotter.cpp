@@ -234,7 +234,6 @@ void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     paperSize   = pageInfo.GetSizeMils();
     paperSize.x *= 10.0 * aIusPerDecimil;
     paperSize.y *= 10.0 * aIusPerDecimil;
-    SetDefaultLineWidth( 0 );    // HPGL has pen sizes instead
     m_plotMirror = aMirror;
 }
 

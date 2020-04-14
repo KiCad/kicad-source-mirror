@@ -250,7 +250,7 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_LINE* aItem, int aLayer ) const
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
     m_gal->SetStrokeColor( m_renderSettings.GetColor( aItem, aLayer ) );
-    m_gal->SetLineWidth( aItem->GetPenWidth() );
+    m_gal->SetLineWidth( std::max( aItem->GetPenWidth(), m_renderSettings.GetDefaultPenWidth() ) );
     m_gal->DrawLine( VECTOR2D( aItem->GetStart() ), VECTOR2D( aItem->GetEnd() ) );
 }
 
@@ -260,7 +260,7 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_RECT* aItem, int aLayer ) const
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
     m_gal->SetStrokeColor( m_renderSettings.GetColor( aItem, aLayer ) );
-    m_gal->SetLineWidth( aItem->GetPenWidth() );
+    m_gal->SetLineWidth( std::max( aItem->GetPenWidth(), m_renderSettings.GetDefaultPenWidth() ) );
     m_gal->DrawRectangle( VECTOR2D( aItem->GetStart() ), VECTOR2D( aItem->GetEnd() ) );
 }
 
@@ -284,12 +284,14 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_POLYPOLYGONS* aItem, int aLayer
 void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
 {
     VECTOR2D position( aItem->GetTextPos().x, aItem->GetTextPos().y );
+    int      penWidth = std::max( aItem->GetEffectiveTextPenWidth(),
+                                  m_renderSettings.GetDefaultPenWidth() );
 
     m_gal->Save();
     m_gal->Translate( position );
     m_gal->Rotate( -aItem->GetTextAngle() * M_PI / 1800.0 );
     m_gal->SetStrokeColor( m_renderSettings.GetColor( aItem, aLayer ) );
-    m_gal->SetLineWidth( aItem->GetEffectiveTextPenWidth( nullptr ) );  // JEY TODO: requires RENDER_SETTINGS
+    m_gal->SetLineWidth( penWidth );
     m_gal->SetTextAttributes( aItem );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );

@@ -40,9 +40,10 @@
 
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
+#include "sch_painter.h"
 
 void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
-                                           int aDefaultLineWidth )
+                                           RENDER_SETTINGS* aRenderSettings )
 {
     wxString        msg;
     REPORTER&       reporter = m_MessagesBox->Reporter();
@@ -68,7 +69,7 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
             wxString ext = SVG_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 
-            bool success = plotOneSheetSVG( plotFileName.GetFullPath(), screen, aDefaultLineWidth,
+            bool success = plotOneSheetSVG( plotFileName.GetFullPath(), screen, aRenderSettings,
                                             getModeColor() ? false : true, aPrintFrameRef );
 
             if( !success )
@@ -97,18 +98,18 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
 }
 
 
-bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString& aFileName,
-                                             SCH_SCREEN*     aScreen,
-                                             int             aDefaultLineWidth,
-                                             bool            aPlotBlackAndWhite,
-                                             bool            aPlotFrameRef )
+bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString&  aFileName,
+                                             SCH_SCREEN*      aScreen,
+                                             RENDER_SETTINGS* aRenderSettings,
+                                             bool             aPlotBlackAndWhite,
+                                             bool             aPlotFrameRef )
 {
+    const PAGE_INFO& pageInfo = aScreen->GetPageSettings();
+
     SVG_PLOTTER* plotter = new SVG_PLOTTER();
-    const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
+    plotter->SetRenderSettings( aRenderSettings );
     plotter->SetPageSettings( pageInfo );
-    plotter->SetDefaultLineWidth( aDefaultLineWidth );
     plotter->SetColorMode( aPlotBlackAndWhite ? false : true );
-    plotter->SetColorSettings( getColorSettings() );
     wxPoint plot_offset;
     double scale = 1.0;
     // Currently, plot units are in decimil
@@ -129,7 +130,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString& aFileName,
 
     if( m_plotBackgroundColor->GetValue() )
     {
-        plotter->SetColor( plotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND ) );
+        plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
         wxPoint end( plotter->PageSettings().GetWidthIU(),
                      plotter->PageSettings().GetHeightIU() );
         plotter->Rect( wxPoint( 0, 0 ), end, FILLED_SHAPE, 1.0 );

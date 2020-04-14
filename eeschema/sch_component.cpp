@@ -529,24 +529,25 @@ int SCH_COMPONENT::GetUnitCount() const
 }
 
 
-void SCH_COMPONENT::Print( wxDC* aDC, const wxPoint& aOffset )
+void SCH_COMPONENT::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    auto opts = PART_DRAW_OPTIONS::Default();
+    PART_DRAW_OPTIONS opts;
     opts.transform = m_transform;
     opts.draw_visible_fields = false;
     opts.draw_hidden_fields = false;
+    opts.text_markup_flags = m_Fields[0].GetTextMarkupFlags();
 
     if( m_part )
     {
-        m_part->Print( aDC, m_Pos + aOffset, m_unit, m_convert, opts );
+        m_part->Print( aSettings, m_Pos + aOffset, m_unit, m_convert, opts );
     }
     else    // Use dummy() part if the actual cannot be found.
     {
-        dummy()->Print( aDC, m_Pos + aOffset, 0, 0, opts );
+        dummy()->Print( aSettings, m_Pos + aOffset, 0, 0, opts );
     }
 
     for( SCH_FIELD& field : m_Fields )
-        field.Print( aDC, aOffset );
+        field.Print( aSettings, aOffset );
 }
 
 
@@ -821,7 +822,8 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
                 if( !schField )
                 {
                     wxString  fieldName = libField.GetCanonicalName();
-                    SCH_FIELD newField( wxPoint( 0, 0), GetFieldCount(), this, fieldName );
+                    SCH_FIELD newField( wxPoint( 0, 0), GetFieldCount(), this, fieldName,
+                                        GetField( REFERENCE )->GetTextMarkupFlags() );
                     schField = AddField( newField );
                 }
             }
@@ -1821,12 +1823,13 @@ bool SCH_COMPONENT::IsInNetlist() const
 
 void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
 {
-    TRANSFORM temp;
-
     if( m_part )
     {
-        temp = GetTransform();
+        TRANSFORM temp = GetTransform();
         aPlotter->StartBlock( nullptr );
+
+        // A cheater since we don't want to modify the various LIB_ITEMs' m_textMarkupFlags
+        aPlotter->SetTextMarkupFlags( m_Fields[0].GetTextMarkupFlags() );
 
         m_part->Plot( aPlotter, GetUnit(), GetConvert(), m_Pos, temp );
 

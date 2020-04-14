@@ -426,8 +426,8 @@ wxString LIB_PART::SubReference( int aUnit, bool aAddSeparator )
 }
 
 
-void LIB_PART::Print( wxDC* aDc, const wxPoint& aOffset, int aMulti, int aConvert,
-                      const PART_DRAW_OPTIONS& aOpts )
+void LIB_PART::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, int aMulti,
+                      int aConvert, const PART_DRAW_OPTIONS& aOpts )
 {
     /* draw background for filled items using background option
      * Solid lines will be drawn after the background
@@ -452,7 +452,7 @@ void LIB_PART::Print( wxDC* aDc, const wxPoint& aOffset, int aMulti, int aConver
 
             // Now, draw only the background for items with
             // m_Fill == FILLED_WITH_BG_BODYCOLOR:
-            drawItem.Print( aDc, aOffset, (void*) false, aOpts.transform );
+            drawItem.Print( aSettings, aOffset, (void*) false, aOpts.transform );
         }
     }
 
@@ -478,16 +478,16 @@ void LIB_PART::Print( wxDC* aDc, const wxPoint& aOffset, int aMulti, int aConver
 
         if( drawItem.Type() == LIB_PIN_T )
         {
-            drawItem.Print( aDc, aOffset, (void*) &aOpts, aOpts.transform );
+            drawItem.Print( aSettings, aOffset, (void*) &aOpts, aOpts.transform );
         }
         else if( drawItem.Type() == LIB_FIELD_T )
         {
-            drawItem.Print( aDc, aOffset, (void*) NULL, aOpts.transform );
+            drawItem.Print( aSettings, aOffset, (void*) NULL, aOpts.transform );
         }
         else
         {
             bool forceNoFill = drawItem.m_Fill == FILLED_WITH_BG_BODYCOLOR;
-            drawItem.Print( aDc, aOffset, (void*) forceNoFill, aOpts.transform );
+            drawItem.Print( aSettings, aOffset, (void*) forceNoFill, aOpts.transform );
         }
     }
 }
@@ -498,7 +498,7 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
 {
     wxASSERT( aPlotter != NULL );
 
-    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE ) );
+    aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
     bool fill = aPlotter->GetColorMode();
 
     // draw background for filled items using background option
@@ -544,7 +544,7 @@ void LIB_PART::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
 {
     wxASSERT( aPlotter != NULL );
 
-    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_FIELDS ) );
+    aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_FIELDS ) );
     bool fill = aPlotter->GetColorMode();
 
     for( LIB_ITEM& item : m_drawings )

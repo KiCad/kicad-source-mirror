@@ -133,9 +133,10 @@ bool LIB_ITEM::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
 }
 
 
-void LIB_ITEM::Print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRANSFORM& aTransform )
+void LIB_ITEM::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+                      const TRANSFORM& aTransform )
 {
-    print( aDC, aOffset, aData, aTransform );
+    print( aSettings, aOffset, aData, aTransform );
 }
 
 
@@ -149,7 +150,3 @@ void LIB_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-COLOR4D LIB_ITEM::GetDefaultColor()
-{
-    return GetLayerColor( LAYER_DEVICE );
-}

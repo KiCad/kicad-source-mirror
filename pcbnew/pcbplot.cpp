@@ -427,7 +427,10 @@ void PLOT_CONTROLLER::ClosePlot()
     if( m_plotter )
     {
         m_plotter->EndPlot();
+
+        delete m_plotter->RenderSettings();
         delete m_plotter;
+
         m_plotter = NULL;
     }
 }

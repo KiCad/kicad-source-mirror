@@ -32,6 +32,7 @@
 #include <base_struct.h>
 #include <general.h>
 #include <sch_sheet_path.h>
+#include <render_settings.h>
 
 class SCH_CONNECTION;
 class SCH_SHEET_PATH;
@@ -41,6 +42,8 @@ class wxFindReplaceData;
 class PLOTTER;
 class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
+
+using KIGFX::RENDER_SETTINGS;
 
 
 enum FIELDS_AUTOPLACED
@@ -240,16 +243,14 @@ public:
      * Function GetPenSize virtual pure
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize() const { return 0; }
+    virtual int GetPenWidth() const { return 0; }
 
     /**
      * Function Print
      * Print a schematic item. Each schematic item should have its own method
-     * @param aDC Device Context (can be null)
-     * @param aOffset drawing Offset (usually wxPoint(0,0),
-     *  but can be different when moving an object)
+     * @param aOffset drawing offset (usually {0,0} but can be different when moving an object)
      */
-    virtual void Print( wxDC* aDC, const wxPoint&  aOffset ) = 0;
+    virtual void Print( RENDER_SETTINGS* aSettings, const wxPoint&  aOffset ) = 0;
 
     /**
      * Function Move

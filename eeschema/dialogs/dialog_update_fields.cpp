@@ -233,7 +233,8 @@ void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
         else
         {
             // Missing field, it has to be added to the component
-            SCH_FIELD newField( wxPoint( 0, 0 ), newFields.size(), aComponent, fieldName );
+            SCH_FIELD newField( wxPoint( 0, 0 ), newFields.size(), aComponent, fieldName,
+                                m_frame->GetTextMarkupFlags() );
 
             newField.ImportValues( *libField );
             newField.SetText( libField->GetText() );

@@ -54,7 +54,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     m_keepUpright = true;
 
     // Set text thickness to a default value
-    SetTextPenWidth( Millimeter2iu( DEFAULT_TEXT_WIDTH ) );
+    SetTextThickness( Millimeter2iu( DEFAULT_TEXT_WIDTH ) );
     SetLayer( F_SilkS );
 
     // Set position and give a default layer if a valid parent footprint exists
@@ -86,7 +86,7 @@ void TEXTE_MODULE::SetTextAngle( double aAngle )
 
 bool TEXTE_MODULE::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
-    EDA_RECT rect = GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
+    EDA_RECT rect = GetTextBox();
     wxPoint location = aPoint;
 
     rect.Inflate( aAccuracy );
@@ -106,7 +106,7 @@ bool TEXTE_MODULE::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccu
     if( aContains )
         return rect.Contains( GetBoundingBox() );
     else
-        return rect.Intersects( GetTextBox( nullptr ), GetDrawRotation() );   // JEY TODO: requires RENDER_SETTINGS
+        return rect.Intersects( GetTextBox(), GetDrawRotation() );
 }
 
 
@@ -252,7 +252,7 @@ void TEXTE_MODULE::SetLocalCoord()
 const EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 {
     double   angle = GetDrawRotation();
-    EDA_RECT text_area = GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
+    EDA_RECT text_area = GetTextBox();
 
     if( angle )
         text_area = text_area.GetBoundingBoxRotated( GetTextPos(), angle );
@@ -292,7 +292,7 @@ void TEXTE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOff
     }
 
     // Draw mode compensation for the width
-    int width = GetEffectiveTextPenWidth( nullptr );
+    int width = GetEffectiveTextPenWidth();
 
     if( aFrame->GetDisplayOptions().m_DisplayModTextFill == SKETCH )
         width = -width;
@@ -308,7 +308,7 @@ void TEXTE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOff
         size.x = -size.x;
 
     GRText( aDC, pos, color, GetShownText(), orient, size, GetHorizJustify(), GetVertJustify(),
-            width, IsItalic(), IsBold() );
+            width, IsItalic(), IsBold(), 0 );
 }
 
 
@@ -382,7 +382,7 @@ void TEXTE_MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM
     msg.Printf( wxT( "%.1f" ), GetTextAngleDegrees() );
     aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
 
-    msg = MessageTextFromValue( aUnits, GetTextPenWidth(), true );
+    msg = MessageTextFromValue( aUnits, GetTextThickness(), true );
     aList.emplace_back( _( "Thickness" ), msg, DARKGREEN );
 
     msg = MessageTextFromValue( aUnits, GetTextWidth(), true );
@@ -430,7 +430,7 @@ EDA_ITEM* TEXTE_MODULE::Clone() const
 const BOX2I TEXTE_MODULE::ViewBBox() const
 {
     double   angle = GetDrawRotation();
-    EDA_RECT text_area = GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
+    EDA_RECT text_area = GetTextBox();
 
     if( angle )
         text_area = text_area.GetBoundingBoxRotated( GetTextPos(), angle );

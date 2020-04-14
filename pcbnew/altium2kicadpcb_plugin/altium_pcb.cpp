@@ -758,7 +758,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 
     dimension->SetWidth( aElem.linewidth );
 
-    dimension->Text().SetTextPenWidth( aElem.textlinewidth );
+    dimension->Text().SetTextThickness( aElem.textlinewidth );
     dimension->Text().SetTextSize( wxSize( aElem.textheight, aElem.textheight ) );
     dimension->Text().SetBold( aElem.textbold );
     dimension->Text().SetItalic( aElem.textitalic );
@@ -855,7 +855,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
     text->SetPosition( aElem.textPoint.at( 0 ) );
     text->SetLayer( klayer );
     text->SetTextSize( wxSize( aElem.textheight, aElem.textheight ) ); // TODO: parse text width
-    text->SetTextPenWidth( aElem.textlinewidth );
+    text->SetTextThickness( aElem.textlinewidth );
     text->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );
     text->SetVertJustify( EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM );
 }
@@ -1865,7 +1865,7 @@ void ALTIUM_PCB::ParseTexts6Data(
         itm->SetLayer( klayer );
 
         tx->SetTextSize( wxSize( elem.height, elem.height ) ); // TODO: parse text width
-        tx->SetTextPenWidth( elem.strokewidth );
+        tx->SetTextThickness( elem.strokewidth );
         tx->SetMirrored( elem.mirrored );
         if( elem.isDesignator || elem.isComment ) // That's just a bold assumption
         {

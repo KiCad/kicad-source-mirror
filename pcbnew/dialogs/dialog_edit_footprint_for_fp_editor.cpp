@@ -720,7 +720,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAddField( wxCommandEvent& event )
         textMod.SetLayer( m_texts->at( m_texts->size() - 1 ).GetLayer() );
 
     textMod.SetTextSize( dsnSettings.GetTextSize( textMod.GetLayer() ) );
-    textMod.SetTextPenWidth( dsnSettings.GetTextThickness( textMod.GetLayer() ) );
+    textMod.SetTextThickness( dsnSettings.GetTextThickness( textMod.GetLayer() ) );
     textMod.SetItalic( dsnSettings.GetTextItalic( textMod.GetLayer() ) );
 
     m_texts->push_back( textMod );

@@ -35,7 +35,6 @@
 #include <lib_bezier.h>
 #include <transform.h>
 #include <settings/color_settings.h>
-#include <default_values.h>    // For some default values
 
 
 LIB_BEZIER::LIB_BEZIER( LIB_PART* aParent ) :
@@ -89,18 +88,6 @@ void LIB_BEZIER::Offset( const wxPoint& aOffset )
 
     for( i = 0; i < m_PolyPoints.size(); i++ )
         m_PolyPoints[i] += aOffset;
-}
-
-
-bool LIB_BEZIER::Inside( EDA_RECT& aRect ) const
-{
-    for( size_t i = 0; i < m_PolyPoints.size(); i++ )
-    {
-        if( aRect.Contains( m_PolyPoints[i].x, -m_PolyPoints[i].y ) )
-            return true;
-    }
-
-    return false;
 }
 
 
@@ -190,43 +177,35 @@ void LIB_BEZIER::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->PlotPoly( cornerList, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    auto pen_size = GetPenSize();
+    auto pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
     if( !already_filled || pen_size > 0 )
     {
-        pen_size = std::max( 0, pen_size );
-        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE ) );
+        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
         aPlotter->PlotPoly( cornerList, already_filled ? NO_FILL : m_Fill, pen_size );
     }
 }
 
 
-int LIB_BEZIER::GetPenSize() const
+int LIB_BEZIER::GetPenWidth() const
 {
-    if( m_Width )
-        return m_Width;
-
-#if 1
-    // Temporary code not using RENDER_SETTINGS
-    return DEFAULT_LINE_THICKNESS * IU_PER_MILS;
-#else
-    // JEY TODO: requires RENDER_SETTINGS
-#endif
+    return std::max( m_Width, 1 );
 }
 
 
-void LIB_BEZIER::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+void LIB_BEZIER::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                         const TRANSFORM& aTransform )
 {
     std::vector<wxPoint> PolyPointsTraslated;
 
-    COLOR4D color   = GetLayerColor( LAYER_DEVICE );
-    COLOR4D bgColor = GetLayerColor( LAYER_DEVICE_BACKGROUND );
+    wxDC*       DC = aSettings->GetPrintDC();
+    COLOR4D     color = aSettings->GetLayerColor( LAYER_DEVICE );
+    COLOR4D     bgColor = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
     BEZIER_POLY converter( m_BezierPoints );
     converter.GetPoly( m_PolyPoints );
 
@@ -236,20 +215,21 @@ void LIB_BEZIER::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
         PolyPointsTraslated.push_back( aTransform.TransformCoordinate( point ) + aOffset );
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
+    int    penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        GRPoly( nullptr, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, GetPenSize(),
+        GRPoly( nullptr, DC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, penWidth,
                 bgColor, bgColor );
     }
     else if( fill == FILLED_SHAPE  )
     {
-        GRPoly( nullptr, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, GetPenSize(),
+        GRPoly( nullptr, DC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, penWidth,
                 color, color );
     }
     else
     {
-        GRPoly( nullptr, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], false, GetPenSize(),
+        GRPoly( nullptr, DC, m_PolyPoints.size(), &PolyPointsTraslated[0], false, penWidth,
                 color, color );
     }
 }
@@ -257,7 +237,7 @@ void LIB_BEZIER::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
 
 bool LIB_BEZIER::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
 {
-    int     mindist = std::max( aAccuracy + GetPenSize() / 2,
+    int     mindist = std::max( aAccuracy + GetPenWidth() / 2,
                                 Mils2iu( MINIMUM_SELECTION_DISTANCE ) );
     wxPoint start, end;
 
@@ -334,7 +314,7 @@ const EDA_RECT LIB_BEZIER::GetBoundingBox() const
 
     rect.SetOrigin( xmin, ymin );
     rect.SetEnd( xmax, ymax );
-    rect.Inflate( ( GetPenSize()+1 ) / 2 );
+    rect.Inflate( ( GetPenWidth() / 2 ) + 1 );
 
     rect.RevertYAxis();
 

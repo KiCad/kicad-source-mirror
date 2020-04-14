@@ -778,7 +778,8 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
     if( text->IsMirrored() )
         size.x = -size.x;
 
-    int penWidth = text->GetEffectiveTextPenWidth( nullptr );
+    bool    forceBold = true;
+    int     penWidth = text->GetEffectiveTextPenWidth();
     COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by GRText
 
     model_vrml->m_text_layer    = text->GetLayer();
@@ -790,20 +791,20 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
         wxStringSplit( text->GetShownText(), strings_list, '\n' );
         std::vector<wxPoint> positions;
         positions.reserve( strings_list.Count() );
-        text->GetPositionsOfLinesOfMultilineText( positions, strings_list.Count() );
+        text->GetLinePositions( positions, strings_list.Count() );
 
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             GRText( nullptr, positions[ii], color, strings_list[ii], text->GetTextAngle(), size,
                     text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
-                    true, vrml_text_callback );
+                    forceBold, 0, vrml_text_callback );
         }
     }
     else
     {
         GRText( nullptr, text->GetTextPos(), color, text->GetShownText(), text->GetTextAngle(),
                 size, text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
-                true, vrml_text_callback );
+                forceBold, 0, vrml_text_callback );
     }
 }
 
@@ -1057,14 +1058,15 @@ static void export_vrml_text_module( TEXTE_MODULE* item )
         if( item->IsMirrored() )
             size.x = -size.x;  // Text is mirrored
 
-        int penWidth = item->GetEffectiveTextPenWidth( nullptr );
+        bool forceBold = true;
+        int  penWidth = item->GetEffectiveTextPenWidth();
 
         model_vrml->m_text_layer = item->GetLayer();
         model_vrml->m_text_width = penWidth;
 
         GRText( NULL, item->GetTextPos(), BLACK, item->GetShownText(), item->GetDrawRotation(),
                 size, item->GetHorizJustify(), item->GetVertJustify(), penWidth, item->IsItalic(),
-                true, vrml_text_callback );
+                forceBold, 0, vrml_text_callback );
     }
 }
 

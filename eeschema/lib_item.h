@@ -30,7 +30,7 @@
 #include <eda_rect.h>
 #include <transform.h>
 #include <gr_basic.h>
-
+#include <render_settings.h>
 
 class LINE_READER;
 class OUTPUTFORMATTER;
@@ -39,6 +39,7 @@ class PLOTTER;
 class LIB_PIN;
 class MSG_PANEL_ITEM;
 
+using KIGFX::RENDER_SETTINGS;
 
 extern const int fill_tab[];
 
@@ -62,13 +63,12 @@ class LIB_ITEM : public EDA_ITEM
     /**
      * Print the item to \a aDC.
      *
-     * @param aDC A pointer to the device context used to draw the object.
      * @param aOffset A reference to a wxPoint object containing the offset where to draw
      *                from the object's current position.
      * @param aData A pointer to any object specific data required to perform the draw.
      * @param aTransform A reference to a #TRANSFORM object containing drawing transform.
      */
-    virtual void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+    virtual void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                         const TRANSFORM& aTransform ) = 0;
 
     friend class LIB_PART;
@@ -174,13 +174,10 @@ public:
      *              pass reference to the lib component for pins.
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
-    virtual void Print( wxDC* aDC, const wxPoint &aOffset, void* aData,
+    virtual void Print( RENDER_SETTINGS* aSettings, const wxPoint &aOffset, void* aData,
                         const TRANSFORM& aTransform );
 
-    /**
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
-    virtual int GetPenSize() const = 0;
+    virtual int GetPenWidth() const = 0;
 
     LIB_PART* GetParent() const
     {
@@ -242,14 +239,6 @@ public:
     virtual void Offset( const wxPoint& aOffset ) = 0;
 
     /**
-     * Test if any part of the draw object is inside rectangle bounds of \a aRect.
-     *
-     * @param aRect Rectangle to check against.
-     * @return True if object is inside rectangle.
-     */
-    virtual bool Inside( EDA_RECT& aRect ) const = 0;
-
-    /**
      * Move a draw object to \a aPosition.
      *
      * @param aPosition Position to move draw item to.
@@ -302,8 +291,6 @@ public:
      * m_isFillable member to true.
      */
     bool IsFillable() const { return m_isFillable; }
-
-    virtual COLOR4D GetDefaultColor();
 
     void SetUnit( int aUnit ) { m_Unit = aUnit; }
     int GetUnit() const { return m_Unit; }

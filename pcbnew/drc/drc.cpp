@@ -1059,7 +1059,7 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
         return;
 
     std::vector<wxPoint> textShape;      // a buffer to store the text shape (set of segments)
-    int penWidth = text->GetEffectiveTextPenWidth( nullptr );   // JEY TODO: requires RENDER_SETTINGS
+    int penWidth = text->GetEffectiveTextPenWidth();
 
     // So far the bounding box makes up the text-area
     text->TransformTextShapeToSegmentList( textShape );
@@ -1067,7 +1067,7 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
     if( textShape.size() == 0 )     // Should not happen (empty text?)
         return;
 
-    EDA_RECT bbox = text->GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
+    EDA_RECT bbox = text->GetTextBox();
     SHAPE_RECT rect_area( bbox.GetX(), bbox.GetY(), bbox.GetWidth(), bbox.GetHeight() );
 
     // Test tracks and vias

@@ -138,7 +138,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
     EDA_TEXT* textItem;
     tie( boardItem, textItem ) = createText();
     boardItem->SetLayer( GetLayer() );
-    textItem->SetTextPenWidth( MapLineWidth( aThickness ) );
+    textItem->SetTextThickness( MapLineWidth( aThickness ) );
     textItem->SetTextPos( MapCoordinate( aOrigin ) );
     textItem->SetTextAngle( aOrientation * 10.0 );      // Pcbnew uses the decidegree
     textItem->SetTextWidth( aWidth * ImportScalingFactor() );

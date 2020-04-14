@@ -1814,7 +1814,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 
     aText->SetTextAngle( orient );
 
-    aText->SetTextPenWidth( thickn < 1 ? 0 : thickn );
+    aText->SetTextThickness( thickn < 1 ? 0 : thickn );
 
     aText->SetMirrored( mirror && *mirror == 'M' );
 
@@ -2130,7 +2130,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             double angle = degParse( data );
 
             pcbtxt->SetTextSize( size );
-            pcbtxt->SetTextPenWidth( thickn );
+            pcbtxt->SetTextThickness( thickn );
             pcbtxt->SetTextAngle( angle );
 
             pcbtxt->SetTextPos( wxPoint( pos_x, pos_y ) );
@@ -2768,7 +2768,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
             dim->SetTextSize( wxSize( width, height ) );
 
             dim->Text().SetMirrored( mirror && *mirror == '0' );
-            dim->Text().SetTextPenWidth( thickn );
+            dim->Text().SetTextThickness( thickn );
             dim->Text().SetTextAngle( orient );
         }
 

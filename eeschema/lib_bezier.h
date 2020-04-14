@@ -37,9 +37,6 @@ class LIB_BEZIER : public LIB_ITEM
     std::vector<wxPoint> m_BezierPoints;   // list of parameter (3|4)
     std::vector<wxPoint> m_PolyPoints;     // list of points (>= 2)
 
-    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
-                const TRANSFORM& aTransform ) override;
-
 public:
     LIB_BEZIER( LIB_PART * aParent );
 
@@ -75,8 +72,6 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    bool Inside( EDA_RECT& aRect ) const override;
-
     void MoveTo( const wxPoint& aPosition ) override;
 
     wxPoint GetPosition() const override;
@@ -91,14 +86,13 @@ public:
     int GetWidth() const override { return m_Width; }
     void SetWidth( int aWidth ) override { m_Width = aWidth; }
 
-    int GetPenSize( ) const override;
+    int GetPenWidth() const override;
 
     void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     EDA_ITEM* Clone() const override;
 
 private:
-
     /**
      * @copydoc LIB_ITEM::compare()
      *
@@ -108,6 +102,9 @@ private:
      */
     int compare( const LIB_ITEM& aOther,
             LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const override;
+
+    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+                const TRANSFORM& aTransform ) override;
 };
 
 

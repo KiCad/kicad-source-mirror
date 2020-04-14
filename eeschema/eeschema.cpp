@@ -218,13 +218,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
 void IFACE::OnKifaceEnd()
 {
-    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
-
-    for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
-    {
-        cs->SetColor( layer, GetLayerColor( layer ) );
-    }
-
     end_common();
 }
 

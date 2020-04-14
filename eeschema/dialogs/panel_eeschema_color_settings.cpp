@@ -364,8 +364,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     t3->SetIsDangling( false );
     addItem( t3 );
 
-    auto t4 = new SCH_GLOBALLABEL(
-            wxPoint( Mils2iu( 1750 ), Mils2iu( 1400 ) ), wxT( "GLOBAL[3..0]" ) );
+    auto t4 = new SCH_GLOBALLABEL( wxPoint( Mils2iu( 1750 ), Mils2iu( 1400 ) ), wxT( "GLOBAL[3..0]" ) );
     t4->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::LEFT );
     t4->SetIsDangling( false );
     addItem( t4 );

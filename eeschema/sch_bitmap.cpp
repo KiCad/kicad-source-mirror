@@ -59,7 +59,7 @@ SCH_BITMAP::SCH_BITMAP( const SCH_BITMAP& aSchBitmap ) :
 }
 
 
-SCH_ITEM& SCH_BITMAP::operator=( const SCH_ITEM& aItem )
+SCH_BITMAP& SCH_BITMAP::operator=( const SCH_ITEM& aItem )
 {
     wxCHECK_MSG( Type() == aItem.Type(), *this,
                  wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +
@@ -114,11 +114,11 @@ const EDA_RECT SCH_BITMAP::GetBoundingBox() const
 }
 
 
-void SCH_BITMAP::Print( wxDC* aDC, const wxPoint& aOffset  )
+void SCH_BITMAP::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset  )
 {
     wxPoint pos = m_pos + aOffset;
 
-    m_image->DrawBitmap( aDC, pos );
+    m_image->DrawBitmap( aSettings->GetPrintDC(), pos );
 }
 
 
@@ -185,8 +185,8 @@ bool SCH_BITMAP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
 
 void SCH_BITMAP::Plot( PLOTTER* aPlotter )
 {
-    m_image->PlotImage(
-            aPlotter, m_pos, aPlotter->ColorSettings()->GetColor( GetLayer() ), GetPenSize() );
+    m_image->PlotImage( aPlotter, m_pos, aPlotter->RenderSettings()->GetLayerColor( GetLayer() ),
+                        aPlotter->RenderSettings()->GetDefaultPenWidth() );
 }
 
 

@@ -39,14 +39,9 @@
 
 #include <fctsys.h>
 #include <vector>
-
 #include <trigo.h>
-#include <eda_base_frame.h>
 #include <base_struct.h>
-#include <common.h>
 #include <plotter.h>
-#include <macros.h>
-#include <base_screen.h>
 #include <gr_text.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/geometry_utils.h>
@@ -56,19 +51,18 @@
 PLOTTER::PLOTTER( )
 {
     plotScale = 1;
-    defaultPenWidth = 0;
     currentPenWidth = -1;       // To-be-set marker
     penState = 'Z';             // End-of-path idle
     m_plotMirror = false;       // Plot mirror option flag
     m_mirrorIsHorizontal = true;
     m_yaxisReversed = false;
     outputFile = 0;
-    m_colors = nullptr;
     colorMode = false;          // Starts as a BW plot
     negativeMode = false;
     // Temporary init to avoid not initialized vars, will be set later
     m_IUsPerDecimil = 1;        // will be set later to the actual value
     iuPerDeviceUnit = 1;        // will be set later to the actual value
+    m_renderSettings = nullptr;
 }
 
 PLOTTER::~PLOTTER()

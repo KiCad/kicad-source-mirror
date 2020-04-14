@@ -1058,7 +1058,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
         module->SetReference( settings.m_RefDefaultText );
 
     PCB_LAYER_ID layer = ToLAYER_ID( settings.m_RefDefaultlayer );
-    module->Reference().SetTextPenWidth( settings.GetTextThickness( layer ) );
+    module->Reference().SetTextThickness( settings.GetTextThickness( layer ));
     module->Reference().SetTextSize( settings.GetTextSize( layer ) );
     module->Reference().SetItalic( settings.GetTextItalic( layer ) );
     module->Reference().SetKeepUpright( settings.GetTextUpright( layer ) );
@@ -1074,7 +1074,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
         module->SetValue( settings.m_ValueDefaultText );
 
     layer = ToLAYER_ID( settings.m_ValueDefaultlayer );
-    module->Value().SetTextPenWidth( settings.GetTextThickness( layer ) );
+    module->Value().SetTextThickness( settings.GetTextThickness( layer ));
     module->Value().SetTextSize( settings.GetTextSize( layer ) );
     module->Value().SetItalic( settings.GetTextItalic( layer ) );
     module->Value().SetKeepUpright( settings.GetTextUpright( layer ) );

@@ -547,7 +547,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                 double ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
 
-                pcbtxt->SetTextPenWidth( KiROUND( t.size.ToPcbUnits() * ratio / 100 ) );
+                pcbtxt->SetTextThickness( KiROUND( t.size.ToPcbUnits() * ratio / 100 ));
 
                 int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;
 
@@ -762,7 +762,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 dimension->SetEnd( wxPoint( kicad_x( d.x2 ), kicad_y( d.y2 ) ),
                                    DIMENSION_PRECISION );
                 dimension->Text().SetTextSize( designSettings.GetTextSize( layer ) );
-                dimension->Text().SetTextPenWidth( designSettings.GetTextThickness( layer ) );
+                dimension->Text().SetTextThickness( designSettings.GetTextThickness( layer ));
                 dimension->SetWidth( designSettings.GetLineThickness( layer ) );
                 dimension->SetUnits( EDA_UNITS::MILLIMETRES, false );
 
@@ -1307,7 +1307,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
                 ratio = *a.ratio;
         }
 
-        txt->SetTextPenWidth( KiROUND( fontz.y * ratio / 100 ) );
+        txt->SetTextThickness( KiROUND( fontz.y * ratio / 100 ));
 
         int align = ETEXT::BOTTOM_LEFT;     // bottom-left is eagle default
 
@@ -1655,7 +1655,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
 
     double ratio = t.ratio ? *t.ratio : 8;  // DTD says 8 is default
 
-    txt->SetTextPenWidth( KiROUND( t.size.ToPcbUnits() * ratio / 100 ) );
+    txt->SetTextThickness( KiROUND( t.size.ToPcbUnits() * ratio / 100 ));
 
     int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
 

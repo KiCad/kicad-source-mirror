@@ -186,10 +186,14 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
     dc.SetUserScale( scale, scale );
     GRResetPenAndBrush( &dc );
 
-    PART_DRAW_OPTIONS opts = PART_DRAW_OPTIONS::Default();
+    PART_DRAW_OPTIONS opts;
     opts.draw_hidden_fields = true;
+    opts.text_markup_flags = libframe->GetTextMarkupFlags();
 
-    m_dummyPin->Print( &dc, -bBox.Centre(), (void*) &opts, DefaultTransform );
+    RENDER_SETTINGS* renderSettings = libframe->GetRenderSettings();
+    renderSettings->SetPrintDC( &dc );
+
+    m_dummyPin->Print( renderSettings, -bBox.Centre(), (void*) &opts, DefaultTransform );
 
     m_dummyPin->SetParent( nullptr );
 

@@ -155,15 +155,15 @@ void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aLis
 
 // ============================ TEXT ==============================
 
-void WS_DRAW_ITEM_TEXT::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
+void WS_DRAW_ITEM_TEXT::PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    Print( aDC, aOffset, aColor, FILLED );
+    Print( aSettings, aOffset, aSettings->GetLayerColor( LAYER_WORKSHEET ), FILLED );
 }
 
 
 const EDA_RECT WS_DRAW_ITEM_TEXT::GetBoundingBox() const
 {
-    return EDA_TEXT::GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
+    return EDA_TEXT::GetTextBox();
 }
 
 
@@ -190,8 +190,12 @@ wxString WS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 // ============================ POLYGON =================================
 
-void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
+void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
+    wxDC*   DC = aSettings->GetPrintDC();
+    COLOR4D color = aSettings->GetLayerColor( LAYER_WORKSHEET );
+    int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+
     std::vector<wxPoint> points_moved;
 
     for( int idx = 0; idx < m_Polygons.OutlineCount(); ++idx )
@@ -200,11 +204,13 @@ void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, 
         SHAPE_LINE_CHAIN& outline = m_Polygons.Outline( idx );
 
         for( int ii = 0; ii < outline.PointCount(); ii++ )
-            points_moved.emplace_back(
-                    outline.CPoint( ii ).x + aOffset.x, outline.CPoint( ii ).y + aOffset.y );
+        {
+            points_moved.emplace_back( outline.CPoint( ii ).x + aOffset.x,
+                                       outline.CPoint( ii ).y + aOffset.y );
+        }
 
-        GRPoly( nullptr, aDC, points_moved.size(), &points_moved[0], FILLED_SHAPE,
-                GetPenWidth(), aColor, aColor );
+        GRPoly( nullptr, DC, points_moved.size(), &points_moved[0], FILLED_SHAPE, penWidth,
+                color, color );
     }
 }
 
@@ -289,10 +295,14 @@ wxString WS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 // ============================ RECT ==============================
 
-void WS_DRAW_ITEM_RECT::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
+void WS_DRAW_ITEM_RECT::PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    GRRect( nullptr, aDC, GetStart().x + aOffset.x, GetStart().y + aOffset.y,
-            GetEnd().x + aOffset.x, GetEnd().y + aOffset.y, GetPenWidth(), aColor );
+    wxDC*   DC = aSettings->GetPrintDC();
+    COLOR4D color = aSettings->GetLayerColor( LAYER_WORKSHEET );
+    int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+
+    GRRect( nullptr, DC, GetStart().x + aOffset.x, GetStart().y + aOffset.y,
+            GetEnd().x + aOffset.x, GetEnd().y + aOffset.y, penWidth, color );
 }
 
 
@@ -348,9 +358,13 @@ wxString WS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 // ============================ LINE ==============================
 
-void WS_DRAW_ITEM_LINE::PrintWsItem(  wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
+void WS_DRAW_ITEM_LINE::PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    GRLine( nullptr, aDC, GetStart() + aOffset, GetEnd() + aOffset, GetPenWidth(), aColor );
+    wxDC*   DC = aSettings->GetPrintDC();
+    COLOR4D color = aSettings->GetLayerColor( LAYER_WORKSHEET );
+    int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+
+    GRLine( nullptr, DC, GetStart() + aOffset, GetEnd() + aOffset, penWidth, color );
 }
 
 
@@ -362,7 +376,7 @@ const EDA_RECT WS_DRAW_ITEM_LINE::GetBoundingBox() const
 
 bool WS_DRAW_ITEM_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int mindist = aAccuracy + ( GetPenWidth() / 2 );
+    int mindist = aAccuracy + ( GetPenWidth() / 2 ) + 1;
     return TestSegmentHit( aPosition, GetStart(), GetEnd(), mindist );
 }
 
@@ -379,12 +393,12 @@ wxString WS_DRAW_ITEM_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 // ============== BITMAP ================
 
-void WS_DRAW_ITEM_BITMAP::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
+void WS_DRAW_ITEM_BITMAP::PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     WS_DATA_ITEM_BITMAP* bitmap = (WS_DATA_ITEM_BITMAP*) GetPeer();
 
-    if( bitmap->m_ImageBitmap  )
-        bitmap->m_ImageBitmap->DrawBitmap( aDC, m_pos + aOffset );
+    if( bitmap->m_ImageBitmap )
+        bitmap->m_ImageBitmap->DrawBitmap( aSettings->GetPrintDC(), m_pos + aOffset );
 }
 
 
@@ -480,20 +494,20 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
  * The selected items are drawn after (usually 0 or 1)
  * to be sure they are seen, even for overlapping items
  */
-void WS_DRAW_ITEM_LIST::Print( wxDC* aDC, COLOR4D aColor )
+void WS_DRAW_ITEM_LIST::Print( RENDER_SETTINGS* aSettings )
 {
     std::vector<WS_DRAW_ITEM_BASE*> second_items;
 
     for( WS_DRAW_ITEM_BASE* item = GetFirst(); item; item = GetNext() )
     {
         if( item->Type() == WSG_BITMAP_T )
-            item->PrintWsItem( aDC, aColor );
+            item->PrintWsItem( aSettings );
         else
             second_items.push_back( item );
     }
 
     for( auto item : second_items )
-        item->PrintWsItem( aDC, aColor );
+        item->PrintWsItem( aSettings );
 }
 
 

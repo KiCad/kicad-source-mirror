@@ -23,10 +23,7 @@
 
 
 #include <fctsys.h>
-#include <gr_basic.h>
-#include <sch_draw_panel.h>
-#include <sch_screen.h>
-#include <general.h>
+#include <sch_painter.h>
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
 #include <class_library.h>
@@ -34,13 +31,17 @@
 
 void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 {
-    const bool plotColor = true;
+    KIGFX::SCH_RENDER_SETTINGS renderSettings;
+    renderSettings.LoadColors( GetColorSettings() );
+    renderSettings.SetDefaultPenWidth( GetRenderSettings()->GetDefaultPenWidth() );
+
     const PAGE_INFO& pageInfo = GetScreen()->GetPageSettings();
 
     SVG_PLOTTER* plotter = new SVG_PLOTTER();
+    plotter->SetRenderSettings( &renderSettings );
     plotter->SetPageSettings( pageInfo );
-    plotter->SetDefaultLineWidth( GetDefaultLineWidth() );
-    plotter->SetColorMode( plotColor );
+    plotter->SetColorMode( true );
+    plotter->SetTextMarkupFlags( GetTextMarkupFlags() );
 
     wxPoint plot_offset;
     const double scale = 1.0;
@@ -80,7 +81,7 @@ void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 }
 
 
-void LIB_EDIT_FRAME::PrintPage( wxDC* aDC )
+void LIB_EDIT_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
 {
     if( !m_my_part )
         return;
@@ -95,5 +96,5 @@ void LIB_EDIT_FRAME::PrintPage( wxDC* aDC )
     plot_offset.x = pagesize.x / 2;
     plot_offset.y = pagesize.y / 2;
 
-    m_my_part->Print( aDC, plot_offset, m_unit, m_convert, PART_DRAW_OPTIONS::Default() );
+    m_my_part->Print( aSettings, plot_offset, m_unit, m_convert, PART_DRAW_OPTIONS() );
 }

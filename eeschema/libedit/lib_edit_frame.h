@@ -390,7 +390,7 @@ public:
      *
      * @param aDC = wxDC given by the calling print function
      */
-    void PrintPage( wxDC* aDC ) override;
+    void PrintPage( RENDER_SETTINGS* aSettings ) override;
 
     /**
      * Creates the SVG print file for the current edited component.

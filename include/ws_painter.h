@@ -143,9 +143,7 @@ private:
  * @param aTitleBlock The sheet title block, for basic inscriptions.
  * @param aSheetCount The number of sheets (for basic inscriptions).
  * @param aSheetNumber The sheet number (for basic inscriptions).
- * @param aPenWidth the pen size The line width for drawing.
  * @param aScalar the scale factor to convert from mils to internal units.
- * @param aColor The color for drawing.
  * @param aSheetLayer The layer from pcbnew.
  *
  * Parameters used in aPageInfo
@@ -153,9 +151,10 @@ private:
  * - the LTmargin The left top margin of the page layout.
  * - the RBmargin The right bottom margin of the page layout.
  */
-void PrintPageLayout( wxDC* aDC, const PAGE_INFO& aPageInfo, const wxString& aFullSheetName,
-                      const wxString& aFileName, const TITLE_BLOCK& aTitleBlock, int aSheetCount,
-                      int aSheetNumber, int aPenWidth, double aScalar, COLOR4D aColor,
-                      const PROJECT* aProject, const wxString& aSheetLayer = wxEmptyString );
+void PrintPageLayout( RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
+                      const wxString& aFullSheetName, const wxString& aFileName,
+                      const TITLE_BLOCK& aTitleBlock, int aSheetCount, int aSheetNumber,
+                      double aScalar, const PROJECT* aProject,
+                      const wxString& aSheetLayer = wxEmptyString );
 
 #endif // WS_PAINTER_H

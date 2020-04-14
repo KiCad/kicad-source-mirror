@@ -87,18 +87,20 @@ const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
     EDA_RECT rect;
 
     rect.SetOrigin( m_pos );
-    rect.Inflate( ( GetPenSize() + GetSymbolSize() ) / 2 );
+    rect.Inflate( ( GetPenWidth() + GetSymbolSize() ) / 2 );
 
     return rect;
 }
 
 
-void SCH_JUNCTION::Print( wxDC* aDC, const wxPoint& aOffset )
+void SCH_JUNCTION::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    auto    conn = Connection( *g_CurrentSheet );
-    COLOR4D color = GetLayerColor( ( conn && conn->IsBus() ) ? LAYER_BUS : m_Layer );
+    wxDC*           DC = aSettings->GetPrintDC();
+    SCH_CONNECTION* conn = Connection( *g_CurrentSheet );
+    bool            isBus = conn && conn->IsBus();
+    COLOR4D         color = aSettings->GetLayerColor( isBus ? LAYER_BUS : m_Layer );
 
-    GRFilledCircle( nullptr, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, GetSymbolSize() / 2,
+    GRFilledCircle( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, GetSymbolSize() / 2,
                     0, color, color );
 }
 
@@ -194,7 +196,7 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
+    aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( GetLayer() ) );
     aPlotter->Circle( m_pos, GetSymbolSize(), FILLED_SHAPE );
 }
 

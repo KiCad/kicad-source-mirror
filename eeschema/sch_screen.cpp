@@ -31,9 +31,7 @@
 
 #include <common.h>
 #include <eda_rect.h>
-#include <eeschema_id.h>
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <gr_text.h>
 #include <id.h>
 #include <kicad_string.h>
@@ -48,15 +46,11 @@
 #include <class_library.h>
 #include <connection_graph.h>
 #include <lib_pin.h>
-#include <netlist.h>
 #include <netlist_object.h>
-#include <sch_bus_entry.h>
 #include <sch_component.h>
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_marker.h>
-#include <sch_no_connect.h>
-#include <sch_rtree.h>
 #include <sch_sheet.h>
 #include <sch_text.h>
 #include <symbol_lib_table.h>
@@ -65,7 +59,6 @@
 #include <thread>
 #include <algorithm>
 #include <future>
-#include <array>
 
 // TODO(JE) Debugging only
 #include <profile.h>
@@ -499,10 +492,10 @@ void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
         SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
         int mod_hash = libs->GetModifyHash();
 
-        for( auto aItem : Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* aItem : Items().OfType( SCH_COMPONENT_T ) )
             cmps.push_back( static_cast<SCH_COMPONENT*>( aItem ) );
 
-        for( auto cmp : cmps )
+        for( SCH_COMPONENT* cmp : cmps )
             Remove( cmp );
 
         // Must we resolve?
@@ -516,19 +509,56 @@ void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
         // even if the libraries don't change.
         else
         {
-            for( auto cmp : cmps )
+            for( SCH_COMPONENT* cmp : cmps )
                 cmp->UpdatePins();
         }
 
         // Changing the symbol may adjust the bbox of the symbol.  This re-inserts the
         // item with the new bbox
-        for( auto cmp : cmps )
+        for( SCH_COMPONENT* cmp : cmps )
             Append( cmp );
     }
 }
 
 
-void SCH_SCREEN::Print( wxDC* aDC )
+void SCH_SCREEN::UpdateTextMarkupFlags( int aMarkupFlags )
+{
+    for( SCH_ITEM* aItem : Items() )
+    {
+        switch( aItem->Type() )
+        {
+        case SCH_TEXT_T:
+        case SCH_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_SHEET_PIN_T:
+            static_cast<SCH_TEXT*>( aItem )->SetTextMarkupFlags( aMarkupFlags );
+            break;
+
+        case SCH_COMPONENT_T:
+            for( SCH_FIELD& field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )
+                field.SetTextMarkupFlags( aMarkupFlags );
+
+            break;
+
+        case SCH_PIN_T:
+            static_cast<SCH_PIN*>( aItem )->SetTextMarkupFlags( aMarkupFlags );
+            break;
+
+        case SCH_SHEET_T:
+            for( SCH_FIELD& field : static_cast<SCH_SHEET*>( aItem )->GetFields() )
+                field.SetTextMarkupFlags( aMarkupFlags );
+
+            break;
+
+        default:
+            break;
+        }
+    }
+}
+
+
+void SCH_SCREEN::Print( RENDER_SETTINGS* aSettings )
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
     std::vector< SCH_ITEM* > junctions;
@@ -552,21 +582,23 @@ void SCH_SCREEN::Print( wxDC* aDC )
     }
 
     /// Sort to ensure plot-order consistency with screen drawing
-    std::sort( other.begin(), other.end(), []( const SCH_ITEM* a, const SCH_ITEM* b ) {
-        if( a->Type() == b->Type() )
-            return a->GetLayer() > b->GetLayer();
+    std::sort( other.begin(), other.end(),
+               []( const SCH_ITEM* a, const SCH_ITEM* b )
+               {
+                    if( a->Type() == b->Type() )
+                        return a->GetLayer() > b->GetLayer();
 
-        return a->Type() > b->Type();
-    } );
+                    return a->Type() > b->Type();
+               } );
 
     for( auto item : bitmaps )
-        item->Print( aDC, wxPoint( 0, 0 ) );
+        item->Print( aSettings, wxPoint( 0, 0 ) );
 
     for( auto item : other )
-        item->Print( aDC, wxPoint( 0, 0 ) );
+        item->Print( aSettings, wxPoint( 0, 0 ) );
 
     for( auto item : junctions )
-        item->Print( aDC, wxPoint( 0, 0 ) );
+        item->Print( aSettings, wxPoint( 0, 0 ) );
 }
 
 
@@ -601,24 +633,26 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter )
         return a->Type() > b->Type();
     } );
 
+    int defaultPenWidth = aPlotter->RenderSettings()->GetDefaultPenWidth();
+
     // Bitmaps are drawn first to ensure they are in the background
     // This is particularly important for the wxPostscriptDC (used in *nix printers) as
     // the bitmap PS command clears the screen
     for( auto item : bitmaps )
     {
-        aPlotter->SetCurrentLineWidth( item->GetPenSize() );
+        aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
         item->Plot( aPlotter );
     }
 
     for( auto item : other )
     {
-        aPlotter->SetCurrentLineWidth( item->GetPenSize() );
+        aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
         item->Plot( aPlotter );
     }
 
     for( auto item : junctions )
     {
-        aPlotter->SetCurrentLineWidth( item->GetPenSize() );
+        aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
         item->Plot( aPlotter );
     }
 }
@@ -1152,6 +1186,13 @@ void SCH_SCREENS::UpdateSymbolLinks( bool aForce )
     // pointer are stale.
     if( g_ConnectionGraph )
         g_ConnectionGraph->Recalculate( sheets, true );
+}
+
+
+void SCH_SCREENS::UpdateTextMarkupFlags( int aMarkupFlags )
+{
+    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
+        screen->UpdateTextMarkupFlags( aMarkupFlags );
 }
 
 

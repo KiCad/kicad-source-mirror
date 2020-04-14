@@ -463,9 +463,9 @@ SCH_SHEET_PIN* SCH_SHEET::GetPin( const wxPoint& aPosition )
 }
 
 
-int SCH_SHEET::GetPenSize() const
+int SCH_SHEET::GetPenWidth() const
 {
-    return GetBorderWidth();
+    return std::max( GetBorderWidth(), 1 );
 }
 
 
@@ -473,8 +473,9 @@ void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 {
     wxASSERT_MSG( !aManual, "manual autoplacement not currently supported for sheets" );
 
-    wxSize  textSize = m_fields[ SHEETNAME ].GetTextSize();
-    int     margin = KiROUND( GetPenSize() / 2.0 + 4 + std::max( textSize.x, textSize.y ) * 0.5 );
+    wxSize textSize = m_fields[ SHEETNAME ].GetTextSize();
+    int    borderMargin = KiROUND( GetPenWidth() / 2.0 ) + 4;
+    int    margin = borderMargin + KiROUND( std::max( textSize.x, textSize.y ) * 0.5 );
 
     if( IsVerticalOrientation() )
     {
@@ -492,7 +493,7 @@ void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
     }
 
     textSize = m_fields[ SHEETFILENAME ].GetTextSize();
-    margin = KiROUND( GetPenSize() / 2.0 + 4 + std::max( textSize.x, textSize.y ) * 0.4 );
+    margin = borderMargin + KiROUND( std::max( textSize.x, textSize.y ) * 0.4 );
 
     if( IsVerticalOrientation() )
     {
@@ -523,21 +524,21 @@ void SCH_SHEET::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SCH_SHEET::Print( wxDC* aDC, const wxPoint& aOffset )
+void SCH_SHEET::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    wxString  Text;
+    wxDC*     DC = aSettings->GetPrintDC();
     wxPoint   pos = m_pos + aOffset;
-    int       lineWidth = GetPenSize();
+    int       lineWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
     COLOR4D   color = GetBorderColor();
 
-    GRRect( nullptr, aDC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, lineWidth, color );
+    GRRect( nullptr, DC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, lineWidth, color );
 
     for( SCH_FIELD& field : m_fields )
-        field.Print( aDC, aOffset );
+        field.Print( aSettings, aOffset );
 
     /* Draw text : SheetLabel */
     for( SCH_SHEET_PIN* sheetPin : m_pins )
-        sheetPin->Print( aDC, aOffset );
+        sheetPin->Print( aSettings, aOffset );
 }
 
 
@@ -545,7 +546,7 @@ const EDA_RECT SCH_SHEET::GetBodyBoundingBox() const
 {
     wxPoint  end;
     EDA_RECT box( m_pos, m_size );
-    int      lineWidth = GetPenSize();
+    int      lineWidth = GetPenWidth();
     int      textLength = 0;
 
     // Calculate bounding box X size:
@@ -937,12 +938,12 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     COLOR4D borderColor = GetBorderColor();
 
     if( borderColor == COLOR4D::UNSPECIFIED )
-        borderColor = aPlotter->ColorSettings()->GetColor( LAYER_SHEET );
+        borderColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_SHEET );
 
-    aPlotter->SetColor( GetBorderColor() );
+    aPlotter->SetColor( borderColor );
 
-    int thickness = GetPenSize();
-    aPlotter->SetCurrentLineWidth( thickness );
+    int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
+    aPlotter->SetCurrentLineWidth( penWidth );
 
     aPlotter->MoveTo( m_pos );
     pos = m_pos;

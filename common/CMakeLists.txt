@@ -330,6 +330,7 @@ set( COMMON_SRCS
     ptree.cpp
     rc_item.cpp
     refdes_utils.cpp
+    render_settings.cpp
     reporter.cpp
     richio.cpp
     search_stack.cpp

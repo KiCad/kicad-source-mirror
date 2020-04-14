@@ -40,7 +40,6 @@
 #include <settings/color_settings.h>
 #include <netlist_object.h>
 #include <sch_view.h>
-#include <default_values.h>    // For some default values
 
 
 static wxPenStyle getwxPenStyle( PLOT_DASH_TYPE aType )
@@ -290,35 +289,24 @@ void SCH_LINE::SetLineWidth( const int aSize )
 }
 
 
-int SCH_LINE::GetPenSize() const
+int SCH_LINE::GetPenWidth() const
 {
-    if( m_size )
-        return m_size;
-
-#if 1
-    // Temporary code not using RENDER_SETTINGS
-    int thickness = DEFAULT_LINE_THICKNESS * IU_PER_MILS;
-
-    if( GetLayer() == LAYER_BUS )
-        thickness = DEFAULT_BUS_THICKNESS * IU_PER_MILS;
-    else if( GetLayer() == LAYER_WIRE )
-        thickness = DEFAULT_WIRE_THICKNESS * IU_PER_MILS;
-
-    return thickness;
-#else
-    // JEY TODO: requires RENDER_SETTINGS
-#endif
+    return std::max( m_size, 1 );
 }
 
 
-void SCH_LINE::Print( wxDC* DC, const wxPoint& offset )
+void SCH_LINE::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
 {
-    COLOR4D color = ( m_color != COLOR4D::UNSPECIFIED ) ? m_color : GetLayerColor( m_Layer );
-    int     width = GetPenSize();
+    wxDC*   DC = aSettings->GetPrintDC();
+    COLOR4D color = m_color;
     wxPoint start = m_start;
     wxPoint end = m_end;
+    int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
-    GRLine( nullptr, DC, start.x, start.y, end.x, end.y, width, color,
+    if( color == COLOR4D::UNSPECIFIED )
+        color = aSettings->GetLayerColor( m_Layer );
+
+    GRLine( nullptr, DC, start.x, start.y, end.x, end.y, penWidth, color,
             getwxPenStyle( (PLOT_DASH_TYPE) GetLineStyle() ) );
 }
 
@@ -705,7 +693,7 @@ bool SCH_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
     // Insure minimum accuracy
     if( aAccuracy == 0 )
-        aAccuracy = ( GetPenSize() / 2 ) + 4;
+        aAccuracy = ( GetPenWidth() / 2 ) + 4;
 
     return TestSegmentHit( aPosition, m_start, m_end, aAccuracy );
 }
@@ -758,10 +746,11 @@ void SCH_LINE::Plot( PLOTTER* aPlotter )
     if( m_color != COLOR4D::UNSPECIFIED )
         aPlotter->SetColor( m_color );
     else
-        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( GetLayer() ) );
+        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( GetLayer() ) );
 
-    aPlotter->SetCurrentLineWidth( GetPenSize() );
+    int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
+    aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetDash( GetLineStyle() );
 
     aPlotter->MoveTo( m_start );

@@ -169,7 +169,6 @@ void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     iuPerDeviceUnit = 1.0 / aIusPerDecimil; // Gives a DXF in decimils
     iuPerDeviceUnit *= GetUnitScaling();    // Get the scaling factor for the current units
 
-    SetDefaultLineWidth( 0 );               // No line width on DXF
     m_plotMirror = false;                   // No mirroring on DXF
     m_currentColor = COLOR4D::BLACK;
 }
@@ -871,6 +870,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                         int                         aWidth,
                         bool                        aItalic,
                         bool                        aBold,
+                        int                         aTextMarkupFlags,
                         bool                        aMultilineAllowed,
                         void*                       aData )
 {
@@ -880,10 +880,10 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
 
     bool processSuperSub = false;
 
-    if( ( GetTextMarkupFlags() & ENABLE_SUBSCRIPT_MARKUP ) && aText.Contains( wxT( "#" ) ) )
+    if( ( aTextMarkupFlags & ENABLE_SUBSCRIPT_MARKUP ) && aText.Contains( wxT( "#" ) ) )
         processSuperSub = true;
 
-    if( ( GetTextMarkupFlags() & ENABLE_SUPERSCRIPT_MARKUP ) && aText.Contains( wxT( "^" ) ) )
+    if( ( aTextMarkupFlags & ENABLE_SUPERSCRIPT_MARKUP ) && aText.Contains( wxT( "^" ) ) )
         processSuperSub = true;
 
     if( m_textAsLines || containsNonAsciiChars( aText ) || aMultilineAllowed || processSuperSub )
@@ -892,7 +892,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
         // Perhaps multiline texts could be handled as DXF text entity
         // but I do not want spend time about this (JPC)
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                aWidth, aItalic, aBold, aMultilineAllowed );
+                       aWidth, aItalic, aBold, aTextMarkupFlags, aMultilineAllowed );
     }
     else
     {

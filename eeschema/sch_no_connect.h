@@ -63,13 +63,13 @@ public:
         return m_size;
     }
 
-    int GetPenSize() const override;
+    int GetPenWidth() const override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 

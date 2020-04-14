@@ -784,7 +784,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAddField( wxCommandEvent&  )
         textMod.SetLayer( m_texts->at( m_texts->size() - 1 ).GetLayer() );
 
     textMod.SetTextSize( dsnSettings.GetTextSize( textMod.GetLayer() ) );
-    textMod.SetTextPenWidth( dsnSettings.GetTextThickness( textMod.GetLayer() ) );
+    textMod.SetTextThickness( dsnSettings.GetTextThickness( textMod.GetLayer() ) );
     textMod.SetItalic( dsnSettings.GetTextItalic( textMod.GetLayer() ) );
     textMod.SetKeepUpright( dsnSettings.GetTextUpright( textMod.GetLayer() ) );
     textMod.SetMirrored( IsBackLayer( textMod.GetLayer() ) );

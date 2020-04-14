@@ -116,10 +116,7 @@ public:
 
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
-    void Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset = ZeroOffset ) override
-    {
-        PrintMarker( aDC, aOffset );
-    }
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset = ZeroOffset ) override;
 
     const wxPoint GetPosition() const override { return m_Pos; }
     void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }

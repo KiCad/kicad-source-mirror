@@ -661,7 +661,7 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     {
         // If it's not a part then paste as text
         newPart = new LIB_PART( "dummy_part" );
-        LIB_TEXT* newText = new LIB_TEXT( newPart );
+        LIB_TEXT* newText = new LIB_TEXT( newPart, m_frame->GetTextMarkupFlags() );
         newText->SetText( text );
         newPart->AddDrawItem( newText );
     }

@@ -535,7 +535,7 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                 }
 
                 case T_thickness:
-                    aText->SetTextPenWidth( parseInternalUnits( "text thickness" ) );
+                    aText->SetTextThickness( parseInternalUnits( "text thickness" ) );
                     NeedRIGHT();
                     break;
 

@@ -87,6 +87,8 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
     m_defaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
     m_defaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS ),
     m_defaultTextSize( DEFAULT_TEXT_SIZE * IU_PER_MILS ),
+    m_textOffsetRatio( 0.08 ),
+    m_textMarkupFlags( 0 ),
     m_showPinElectricalTypeName( false )
 {
     createCanvas();
@@ -129,7 +131,7 @@ const wxString SCH_BASE_FRAME::GetZoomLevelIndicator() const
 void SCH_BASE_FRAME::SetDefaultLineWidth( int aWidth )
 {
     m_defaultLineWidth = aWidth;
-    GetRenderSettings()->m_DefaultLineWidth = aWidth;
+    GetRenderSettings()->SetDefaultPenWidth( aWidth );
 }
 
 

@@ -90,7 +90,7 @@ struct TEXT_EFFECTS
         angle( 0.0 )
     {}
 
-    short       bits;           ///< any set of booleans a client uses.
+    int         bits;           ///< any set of booleans a client uses.
     signed char hjustify;       ///< horizontal justification
     signed char vjustify;       ///< vertical justification
     wxSize      size;
@@ -112,7 +112,7 @@ struct TEXT_EFFECTS
 class EDA_TEXT
 {
 public:
-    EDA_TEXT( const wxString& text = wxEmptyString );
+    EDA_TEXT( const wxString& text = wxEmptyString, int aMarkupFlags = 0 );
 
     EDA_TEXT( const EDA_TEXT& aText );
 
@@ -140,22 +140,18 @@ public:
     virtual void SetText( const wxString& aText );
 
     /**
-     * The TextPenWidth is that set by the user.  The EffectiveTextPenWidth also factors
-     * in bold text, default text thickness, and thickness clamping.
+     * The TextThickness is that set by the user.  The EffectiveTextPenWidth also factors
+     * in bold text and thickness clamping.
      */
-    void SetTextPenWidth( int aWidth ) { m_e.penwidth = aWidth; };
-    int GetTextPenWidth() const { return m_e.penwidth; };
-    int GetEffectiveTextPenWidth( RENDER_SETTINGS* aSettings ) const;
+    void SetTextThickness( int aWidth ) { m_e.penwidth = aWidth; };
+    int GetTextThickness() const { return m_e.penwidth; };
+    int GetEffectiveTextPenWidth() const;
 
-    // JEY TODO: delete
-    int GetThickness() const                    { return m_e.penwidth; };
-
-    void SetTextAngle( double aAngle )
+    virtual void SetTextAngle( double aAngle )
     {
-        // Higher level classes may be more restrictive than this by
-        // overloading SetTextAngle() (probably non-virtual) or merely
-        // calling EDA_TEXT::SetTextAngle() after clamping aAngle
-        // before calling this lowest inline accessor.
+        // Higher level classes may be more restrictive than this by overloading
+        // SetTextAngle() or merely calling EDA_TEXT::SetTextAngle() after clamping
+        // aAngle before calling this lowest inline accessor.
         m_e.angle = aAngle;
     }
     double GetTextAngle() const                 { return m_e.angle; }
@@ -222,8 +218,11 @@ public:
 
     bool IsDefaultFormatting() const;
 
-    void SetTextSize( const wxSize& aNewSize )  { m_e.size = aNewSize; };
-    const wxSize& GetTextSize() const           { return m_e.size; };
+    void SetTextMarkupFlags( int aFlags )       { m_textMarkupFlags = aFlags; }
+    int GetTextMarkupFlags() const              { return m_textMarkupFlags; }
+
+    void SetTextSize( const wxSize& aNewSize )  { m_e.size = aNewSize; }
+    const wxSize& GetTextSize() const           { return m_e.size; }
 
     void SetTextWidth( int aWidth )             { m_e.size.x = aWidth; }
     int GetTextWidth() const                    { return m_e.size.x; }
@@ -253,7 +252,7 @@ public:
      * @param aColor = text color
      * @param aDisplay_mode = FILLED or SKETCH
      */
-    void Print( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor,
+    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4D aColor,
                 EDA_DRAW_MODE_T aDisplay_mode = FILLED );
 
     /**
@@ -312,14 +311,13 @@ public:
     /**
      * Useful in multiline texts to calculate the full text or a line area (for zones filling,
      * locate functions....)
-     * @param aSettings An options rendering context to provide defaults, processing flags, etc.
      * @param aLine The line of text to consider.  Pass -1 for all lines.
      * @param aInvertY Invert the Y axis when calculating bounding box.
      * @return the rect containing the line of text (i.e. the position and the size of one line)
      *         this rectangle is calculated for 0 orient text.
      *         If orientation is not 0 the rect must be rotated to match the physical area
      */
-    EDA_RECT GetTextBox( RENDER_SETTINGS* aSettings, int aLine = -1, bool aInvertY = false ) const;
+    EDA_RECT GetTextBox( int aLine = -1, bool aInvertY = false ) const;
 
     /**
      * Return the distance between two lines of text.
@@ -344,8 +342,7 @@ public:
      * @param aLineCount is the number of lines (not recalculated here
      * for efficiency reasons
      */
-    void GetPositionsOfLinesOfMultilineText(
-                std::vector<wxPoint>& aPositions, int aLineCount ) const;
+    void GetLinePositions( std::vector<wxPoint>& aPositions, int aLineCount ) const;
     /**
      * Output the object to \a aFormatter in s-expression form.
      *
@@ -356,37 +353,36 @@ public:
      */
     virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
+protected:
+    int           m_textMarkupFlags;   // Set of TEXT_MARKUP_FLAGS indicating which markup
+                                       // features are to be processed.
 private:
-    wxString    m_text;
-    wxString    m_shown_text;   // Cache of unescaped text for efficient access
+    wxString      m_text;
+    wxString      m_shown_text;        // Cache of unescaped text for efficient access
 
-private:
-    /**
-     * Print each line of this EDA_TEXT.
-     *
-     * @param aDC = the current Device Context
-     * @param aOffset = draw offset (usually (0,0))
-     * @param aColor = text color
-     * @param aFillMode = FILLED or SKETCH
-     * @param aText = the single line of text to draw.
-     * @param aPos = the position of this line ).
-     */
-    void printOneLineOfText( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor,
-                             EDA_DRAW_MODE_T aFillMode, const wxString& aText,
-                             const wxPoint& aPos );
-
-    // Private text effects data. API above provides accessor funcs.
-    TEXT_EFFECTS    m_e;
-
-    /// EDA_TEXT effects bools
+    TEXT_EFFECTS  m_e;                 // Private bitflags for text styling.  API above
+                                       // provides accessor funcs.
     enum TE_FLAGS {
-        // start at zero, sequence is irrelevant
         TE_MIRROR,
         TE_ITALIC,
         TE_BOLD,
         TE_MULTILINE,
         TE_VISIBLE,
     };
+
+private:
+    /**
+     * Print each line of this EDA_TEXT.
+     *
+     * @param aOffset = draw offset (usually (0,0))
+     * @param aColor = text color
+     * @param aFillMode = FILLED or SKETCH
+     * @param aText = the single line of text to draw.
+     * @param aPos = the position of this line ).
+     */
+    void printOneLineOfText( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4D aColor,
+                             EDA_DRAW_MODE_T aFillMode, const wxString& aText,
+                             const wxPoint& aPos );
 };
 
 

@@ -83,7 +83,6 @@ void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     // origin at the origin
     paperSize.x = 0;
     paperSize.y = 0;
-    SetDefaultLineWidth( 100 * aIusPerDecimil ); // Arbitrary default
 }
 
 
@@ -283,30 +282,13 @@ bool GERBER_PLOTTER::EndPlot()
 }
 
 
-void GERBER_PLOTTER::SetDefaultLineWidth( int width )
+void GERBER_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
-    defaultPenWidth = width;
-    m_currentApertureIdx = -1;
-}
-
-
-void GERBER_PLOTTER::SetCurrentLineWidth( int width, void* aData )
-{
-    if( width == DO_NOT_SET_LINE_WIDTH )
-        return;
-
-    int pen_width;
-
-    if( width > 0 )
-        pen_width = width;
-    else
-        pen_width = defaultPenWidth;
-
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
     int aperture_attribute = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
 
-    selectAperture( wxSize( pen_width, pen_width ), APERTURE::AT_PLOTTING, aperture_attribute );
-    currentPenWidth = pen_width;
+    selectAperture( wxSize( aWidth, aWidth ), APERTURE::AT_PLOTTING, aperture_attribute );
+    currentPenWidth = aWidth;
 }
 
 
@@ -1183,16 +1165,16 @@ void GERBER_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
 void GERBER_PLOTTER::Text( const wxPoint& aPos, const COLOR4D aColor,
                            const wxString& aText, double aOrient, const wxSize& aSize,
                            enum EDA_TEXT_HJUSTIFY_T aH_justify, enum EDA_TEXT_VJUSTIFY_T aV_justify,
-                           int aWidth, bool aItalic, bool aBold, bool aMultilineAllowed,
-                           void* aData )
+                           int aWidth, bool aItalic, bool aBold, int aTextMarkupFlags,
+                           bool aMultilineAllowed, void* aData )
 {
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
     if( gbr_metadata )
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
-    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize,
-                    aH_justify, aV_justify, aWidth, aItalic, aBold, aMultilineAllowed, aData );
+    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
+                   aBold, aTextMarkupFlags, aMultilineAllowed, aData );
 }
 
 

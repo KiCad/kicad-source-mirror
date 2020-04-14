@@ -130,29 +130,17 @@ public:
     /** Plot in B/W or color.
      * @param aColorMode = true to plot in color, false to plot in black and white
      */
-    virtual void SetColorMode( bool aColorMode )
-    {
-        colorMode = aColorMode;
-    }
+    virtual void SetColorMode( bool aColorMode ) { colorMode = aColorMode; }
+    bool GetColorMode() const { return colorMode; }
 
-    bool GetColorMode() const
-    {
-        return colorMode;
-    }
+    void SetTextMarkupFlags( bool aMarkupFlags ) { m_textMarkupFlags = aMarkupFlags; }
+    int GetTextMarkupFlags() const { return m_textMarkupFlags; }
 
-    void SetColorSettings( COLOR_SETTINGS* aSettings ) { m_colors = aSettings; }
+    void SetRenderSettings( RENDER_SETTINGS* aSettings ) { m_renderSettings = aSettings; }
+    RENDER_SETTINGS* RenderSettings() { return m_renderSettings; }
 
-    COLOR_SETTINGS* ColorSettings() { return m_colors; }
-
-    virtual void SetPageSettings( const PAGE_INFO& aPageSettings )
-    {
-        pageInfo = aPageSettings;
-    }
-
-    PAGE_INFO& PageSettings()
-    {
-        return pageInfo;
-    }
+    virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) { pageInfo = aPageSettings; }
+    PAGE_INFO& PageSettings() { return pageInfo; }
 
     /**
      * Set the line width for the next drawing.
@@ -160,18 +148,7 @@ public:
      * @param aData is an auxiliary parameter, mainly used in gerber plotter
      */
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) = 0;
-
-    /**
-     * Set the default line width. Used at the beginning and when a width
-     * of -1 (USE_DEFAULT_LINE_WIDTH) is requested.
-     * @param width is specified in IUs
-     */
-    virtual void SetDefaultLineWidth( int width ) = 0;
-
-    virtual int GetCurrentLineWidth() const
-    {
-        return currentPenWidth;
-    }
+    virtual int GetCurrentLineWidth() const  { return currentPenWidth; }
 
     virtual void SetColor( COLOR4D color ) = 0;
 
@@ -435,6 +412,7 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
+                       int                         aTextMarkupFlags,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL );
 
@@ -597,25 +575,22 @@ protected:      // variables used in most of plotters:
     FILE*         outputFile;
 
     // Pen handling
-    bool          colorMode;        /// true to plot in color, false to plot in black and white
-    bool          negativeMode;     /// true to generate a negative image (PS mode mainly)
-    int           defaultPenWidth;
-    int           currentPenWidth;
-    /// Current pen state: 'U', 'D' or 'Z' (see PenTo)
-    char          penState;
-    /// Last pen positions; set to -1,-1 when the pen is at rest
-    wxPoint       penLastpos;
-    wxString      creator;
-    wxString      filename;
-    wxString      title;
-    PAGE_INFO     pageInfo;
-    /// Paper size in IU - not in mils
-    wxSize        paperSize;
+    bool             colorMode;           // true to plot in color, false to plot in black & white
+    bool             negativeMode;        // true to generate a negative image (PS mode mainly)
+    int              currentPenWidth;
+    char             penState;            // Current pen state: 'U', 'D' or 'Z' (see PenTo)
+    wxPoint          penLastpos;          // Last pen positions; set to -1,-1 when the pen is
+                                          // at rest
+    wxString         creator;
+    wxString         filename;
+    wxString         title;
+    PAGE_INFO        pageInfo;
+    wxSize           paperSize;          // Paper size in IU - not in mils
 
-    wxArrayString m_headerExtraLines;  /// a set of string to print in header file
+    wxArrayString    m_headerExtraLines; // a set of string to print in header file
 
-    /// Pointer to active color settings that is used for plotting
-    COLOR_SETTINGS* m_colors;
+    RENDER_SETTINGS* m_renderSettings;
+    int              m_textMarkupFlags;
 };
 
 
@@ -644,7 +619,6 @@ public:
         currentPenWidth = userToDeviceSize( penDiameter );
     }
 
-    virtual void SetDefaultLineWidth( int width ) override {}
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
     virtual void SetColor( COLOR4D color ) override {}
@@ -710,7 +684,10 @@ protected:
 class PSLIKE_PLOTTER : public PLOTTER
 {
 public:
-    PSLIKE_PLOTTER() : plotScaleAdjX( 1 ), plotScaleAdjY( 1 ), m_textMode( PLOT_TEXT_MODE::PHANTOM )
+    PSLIKE_PLOTTER() :
+            plotScaleAdjX( 1 ),
+            plotScaleAdjY( 1 ),
+            m_textMode( PLOT_TEXT_MODE::PHANTOM )
     {
     }
 
@@ -722,8 +699,6 @@ public:
         if( mode != PLOT_TEXT_MODE::DEFAULT )
             m_textMode = mode;
     }
-
-    virtual void SetDefaultLineWidth( int width ) override;
 
     /**
      * Set the 'fine' scaling for the postscript engine
@@ -852,6 +827,7 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
+                       int                         aTextMarkupFlags,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
 protected:
@@ -861,11 +837,13 @@ protected:
 class PDF_PLOTTER : public PSLIKE_PLOTTER
 {
 public:
-    PDF_PLOTTER() : pageStreamHandle( 0 ), workFile( NULL )
+    PDF_PLOTTER() :
+            pageTreeHandle( 0 ),
+            fontResDictHandle( 0 ),
+            pageStreamHandle( 0 ),
+            streamLengthHandle( 0 ),
+            workFile( nullptr )
     {
-        // Avoid non initialized variables:
-        pageStreamHandle = streamLengthHandle = fontResDictHandle = 0;
-        pageTreeHandle = 0;
     }
 
     virtual PLOT_FORMAT GetPlotterType() const override
@@ -922,6 +900,7 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
+                       int                         aTextMarkupFlags,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
 
@@ -1015,6 +994,7 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
+                       int                         aTextMarkupFlags,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
 
@@ -1176,7 +1156,6 @@ public:
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
-    virtual void SetDefaultLineWidth( int width ) override;
 
     // RS274X has no dashing, nor colours
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override
@@ -1223,6 +1202,7 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
+                       int                         aTextMarkupFlags,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
 
@@ -1412,17 +1392,17 @@ protected:
      */
     void writeApertureList();
 
-    std::vector<APERTURE> m_apertures;  // The list of available apertures
-    int m_currentApertureIdx;   // The index of the current aperture in m_apertures
+    std::vector<APERTURE> m_apertures; // The list of available apertures
+    int     m_currentApertureIdx;      // The index of the current aperture in m_apertures
 
-    bool     m_gerberUnitInch;  // true if the gerber units are inches, false for mm
-    int      m_gerberUnitFmt;   // number of digits in mantissa.
-                                // usually 6 in Inches and 5 or 6  in mm
-    bool    m_useX2format;      // In recent gerber files, attributes are added.
-                                // Attributes in file header will be added using X2 format if true
-                                // If false (X1 format), these attributes will be added as comments.
-    bool    m_useNetAttributes; // In recent gerber files, netlist info can be added.
-                                // It will be added if this param is true, using X2 or X1 format
+    bool    m_gerberUnitInch;          // true if the gerber units are inches, false for mm
+    int     m_gerberUnitFmt;           // number of digits in mantissa.
+                                       // usually 6 in Inches and 5 or 6  in mm
+    bool    m_useX2format;             // Add X2 file header attributes.  If false, attributes
+                                       // will be added as comments.
+    bool    m_useNetAttributes;        // In recent gerber files, netlist info can be added.
+                                       // It will be added if this param is true, using X2 or
+                                       // X1 format
 };
 
 
@@ -1463,12 +1443,6 @@ public:
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override
     {
         currentPenWidth = 0;
-    }
-
-    virtual void SetDefaultLineWidth( int width ) override
-    {
-        // DXF lines are infinitesimal
-        defaultPenWidth = 0;
     }
 
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
@@ -1516,6 +1490,7 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
+                       int                         aTextMarkupFlags,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
 

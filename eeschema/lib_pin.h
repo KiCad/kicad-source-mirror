@@ -67,28 +67,29 @@ class LIB_PIN : public LIB_ITEM
     // flag.  So the LEGACY_PLUGIN_CACHE needs direct access to the member variables.
     friend class SCH_LEGACY_PLUGIN_CACHE;
 
-    wxPoint  m_position;     ///< Position of the pin.
-    int      m_length;       ///< Length of the pin.
-    int      m_orientation;  ///< Pin orientation (Up, Down, Left, Right)
-    GRAPHIC_PINSHAPE m_shape;        ///< Shape drawn around pin
-    int      m_width;        ///< Line width of the pin.
-    ELECTRICAL_PINTYPE m_type;  ///< Electrical type of the pin.  See enum ELECTRICAL_PINTYPE.
-    int      m_attributes;   ///< Set bit 0 to indicate pin is invisible.
-    wxString m_name;
-    wxString m_number;
-    int      m_numTextSize;
-    int      m_nameTextSize; ///< Pin num and Pin name sizes
-
+    wxPoint            m_position;          // Position of the pin.
+    int                m_length;            // Length of the pin.
+    int                m_orientation;       // Pin orientation (Up, Down, Left, Right)
+    GRAPHIC_PINSHAPE   m_shape;             // Shape drawn around pin
+    int                m_width;             // Line width of the pin.
+    ELECTRICAL_PINTYPE m_type;              // Electrical type of the pin.
+    int                m_attributes;        // Set bit 0 to indicate pin is invisible.
+    wxString           m_name;
+    wxString           m_number;
+    int                m_numTextSize;       // Pin num and Pin name sizes
+    int                m_nameTextSize;
+    int                m_textMarkupFlags;   // Set of TEXT_MARKUP_FLAGS indicating which markup
+                                            // features are to be processed within the pin name
+                                            // and number.
     /**
      * Print a pin, with or without the pin texts
      *
-     * @param aDC Device Context (can be null)
      * @param aOffset Offset to draw
      * @param aData = used here as a boolean indicating whether or not to draw the pin
      *                electrical types
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
-    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
 
 public:
@@ -355,13 +356,13 @@ public:
                && ( !IsVisible() || (LIB_PART*) GetParent()->IsPower() );
     }
 
-    int GetPenSize() const override;
+    int GetPenWidth() const override;
 
     /**
      * Print the pin symbol without text.
      * If \a aColor != 0, draw with \a aColor, else with the normal pin color.
      */
-    void PrintPinSymbol( wxDC* aDC, const wxPoint& aPos, int aOrientation );
+    void PrintPinSymbol( RENDER_SETTINGS* aSettings, const wxPoint& aPos, int aOrientation );
 
     /**
      * Put the pin number and pin text info, given the pin line coordinates.
@@ -371,13 +372,14 @@ public:
      * If TextInside then the text is been put inside,otherwise all is drawn outside.
      * Pin Name:    substring between '~' is negated
      */
-    void PrintPinTexts( wxDC* aDC, wxPoint& aPosition, int aOrientation, int TextInside,
-                        bool DrawPinNum, bool DrawPinName );
+    void PrintPinTexts( RENDER_SETTINGS* aSettings, wxPoint& aPosition, int aOrientation,
+                        int TextInside, bool DrawPinNum, bool DrawPinName, int aMarkupFlags );
 
     /**
      * Draw the electrical type text of the pin (only for the footprint editor)
      */
-    void PrintPinElectricalTypeName( wxDC* aDC, wxPoint& aPosition, int aOrientation );
+    void PrintPinElectricalTypeName( RENDER_SETTINGS* aSettings, wxPoint& aPosition,
+                                     int aOrientation );
 
     /**
      * Plot the pin number and pin text info, given the pin line coordinates.
@@ -387,7 +389,7 @@ public:
      * the opposite direction to x2,y2), otherwise all is drawn outside.
      */
     void PlotPinTexts( PLOTTER *aPlotter, wxPoint& aPosition, int aOrientation,
-                       int aTextInside, bool aDrawPinNum, bool aDrawPinName, int aWidth );
+                       int aTextInside, bool aDrawPinNum, bool aDrawPinName, int aMarkupFlags );
 
     void PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation );
 
@@ -425,8 +427,6 @@ public:
 
     void Offset( const wxPoint& aOffset ) override;
 
-    bool Inside( EDA_RECT& aRect ) const override;
-
     void MoveTo( const wxPoint& aPosition ) override;
 
     wxPoint GetPosition() const override { return m_position; }
@@ -448,6 +448,9 @@ public:
 
     int GetWidth() const override { return m_width; }
     void SetWidth( int aWidth ) override;
+
+    int GetTextMarkupFlags() const { return m_textMarkupFlags; }
+    void SetTextMarkupFlags( int aFlags ) { m_textMarkupFlags = aFlags; }
 
     BITMAP_DEF GetMenuImage() const override;
 

@@ -50,12 +50,14 @@ class WS_DRAW_ITEM_BASE : public EDA_ITEM     // This basic class, not directly 
 protected:
     WS_DATA_ITEM*  m_peer;       // the parent WS_DATA_ITEM item in the WS_DATA_MODEL
     int            m_index;      // the index in the parent's repeat count
+    int            m_penWidth;
 
     WS_DRAW_ITEM_BASE( WS_DATA_ITEM* aPeer, int aIndex, KICAD_T aType ) :
             EDA_ITEM( aType )
     {
         m_peer = aPeer;
         m_index = aIndex;
+        m_penWidth = 0;
         m_Flags = 0;
     }
 
@@ -71,14 +73,22 @@ public:
     virtual void SetPosition( wxPoint aPos ) = 0;
     virtual void SetEnd( wxPoint aPos ) { /* not all types will need this */ }
 
-    // The function to print a WS_DRAW_ITEM
-    virtual void PrintWsItem( wxDC* aDC, COLOR4D aColor )
+    virtual int GetPenWidth() const
     {
-        PrintWsItem( aDC, wxPoint( 0, 0 ), aColor );
+        if( m_penWidth > 0 )
+            return m_penWidth;
+        else
+            return 1;
+    }
+
+    // The function to print a WS_DRAW_ITEM
+    virtual void PrintWsItem( RENDER_SETTINGS* aSettings )
+    {
+        PrintWsItem( aSettings, wxPoint( 0, 0 ) );
     }
 
     // More advanced version of DrawWsItem. This is what must be defined in the derived type.
-    virtual void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) = 0;
+    virtual void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) = 0;
 
     // Derived types must define GetBoundingBox() as a minimum, and can then override the
     // two HitTest() functions if they need something more specific.
@@ -102,7 +112,6 @@ class WS_DRAW_ITEM_LINE : public WS_DRAW_ITEM_BASE
 {
     wxPoint m_start;    // start point of line/rect
     wxPoint m_end;      // end point
-    int     m_penWidth;
 
 public:
     WS_DRAW_ITEM_LINE( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aStart, wxPoint aEnd,
@@ -117,7 +126,6 @@ public:
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_LINE" ); }
 
     // Accessors:
-    int GetPenWidth() const { return m_penWidth; }
     const wxPoint&  GetStart() const { return m_start; }
     void SetStart( wxPoint aPos ) { m_start = aPos; }
     const wxPoint&  GetEnd() const { return m_end; }
@@ -129,7 +137,7 @@ public:
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
-    void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override;
+    void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -144,7 +152,6 @@ class WS_DRAW_ITEM_POLYPOLYGONS : public WS_DRAW_ITEM_BASE
     wxPoint m_pos;      // position of reference point, from the
                         // WS_DATA_ITEM_POLYGONS parent
                         // (used only in page layout editor to draw anchors)
-    int m_penWidth;
 
 public:
     /** The list of polygons. Because these polygons are only for drawing purposes,
@@ -164,7 +171,6 @@ public:
 
     // Accessors:
     SHAPE_POLY_SET& GetPolygons() { return m_Polygons; }
-    int GetPenWidth() const { return m_penWidth; }
     const wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( wxPoint aPos ) override;
 
@@ -172,7 +178,7 @@ public:
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override;
+    void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -186,7 +192,6 @@ class WS_DRAW_ITEM_RECT : public WS_DRAW_ITEM_BASE
 {
     wxPoint m_start;    // start point of line/rect
     wxPoint m_end;      // end point
-    int     m_penWidth;
 
 public:
     WS_DRAW_ITEM_RECT( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aStart, wxPoint aEnd,
@@ -201,7 +206,6 @@ public:
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_RECT" ); }
 
     // Accessors:
-    int GetPenWidth() const { return m_penWidth; }
     const wxPoint&  GetStart() const { return m_start; }
     void SetStart( wxPoint aPos ) { m_start = aPos; }
     const wxPoint&  GetEnd() const { return m_end; }
@@ -210,7 +214,7 @@ public:
     const wxPoint GetPosition() const override { return GetStart(); }
     void SetPosition( wxPoint aPos ) override { SetStart( aPos ); }
 
-    void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override;
+    void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
@@ -230,7 +234,6 @@ class WS_DRAW_ITEM_PAGE : public WS_DRAW_ITEM_BASE
 {
     wxPoint m_markerPos;    // position of the marker
     wxSize  m_pageSize;     // full size of the page
-    int     m_penWidth;
     double m_markerSize;
 
 public:
@@ -244,7 +247,6 @@ public:
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_PAGE" ); }
 
     // Accessors:
-    int GetPenWidth() const { return m_penWidth; }
     void SetPageSize( wxSize aSize ) { m_pageSize = aSize; }
     wxSize GetPageSize() const { return m_pageSize; }
     const wxPoint& GetMarkerPos() const { return m_markerPos; }
@@ -254,7 +256,7 @@ public:
     const wxPoint GetPosition() const override { return wxPoint( 0, 0 ); }
     void SetPosition( wxPoint aPos ) override { /* do nothing */ }
 
-    void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override { /* do nothing */ }
+    void PrintWsItem( RENDER_SETTINGS* , const wxPoint&  ) override { /* do nothing */ }
 
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override { return false; }
@@ -273,22 +275,23 @@ class WS_DRAW_ITEM_TEXT : public WS_DRAW_ITEM_BASE, public EDA_TEXT
 {
 public:
     WS_DRAW_ITEM_TEXT( WS_DATA_ITEM* aPeer, int aIndex, wxString& aText, wxPoint aPos,
-                       wxSize aSize, int aPenWidth, bool aItalic = false, bool aBold = false ) :
+                       wxSize aSize, int aPenWidth, int aMarkupFlags, bool aItalic = false,
+                       bool aBold = false ) :
             WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_TEXT_T),
-            EDA_TEXT( aText )
+            EDA_TEXT( aText, aMarkupFlags )
     {
         SetTextPos( aPos );
         SetTextSize( aSize );
-        SetTextPenWidth( aPenWidth );
+        SetTextThickness( aPenWidth );
         SetItalic( aItalic );
         SetBold( aBold );
     }
 
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_TEXT" ); }
 
-    void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override;
+    void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
-    void SetTextAngle( double aAngle )
+    void SetTextAngle( double aAngle ) override
     {
         EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
     }
@@ -326,7 +329,7 @@ public:
     const wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( wxPoint aPos ) override { m_pos = aPos; }
 
-    void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override;
+    void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
@@ -489,9 +492,8 @@ public:
 
     /**
      * Draws the item list created by BuildWorkSheetGraphicList
-     * @param aDC = the current Device Context
      */
-    void Print( wxDC* aDC, COLOR4D aColor );
+    void Print( RENDER_SETTINGS* aSettings );
 
     /**
      * Function BuildWorkSheetGraphicList is a core function for drawing or plotting the

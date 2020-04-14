@@ -35,6 +35,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_view.h>
+#include <sch_painter.h>
 #include <symbol_lib_table.h>
 #include <dialogs/dialog_sch_sheet_props.h>
 #include <dialogs/dialog_edit_sheet_pin.h>
@@ -471,6 +472,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
     SCH_SCREENS screens( aSheet );
     screens.UpdateSymbolLinks( true );
+    screens.UpdateTextMarkupFlags( GetTextMarkupFlags() );
 
     return true;
 }
@@ -598,7 +600,10 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
     dc.SetUserScale( scale, scale );
 
     dc.Clear();
-    PrintPage( &dc );
+    GetRenderSettings()->SetPrintDC( &dc );
+
+    PrintPage( GetRenderSettings() );
+
     screen->m_IsPrinting = false;
 
     if( wxTheClipboard->Open() )

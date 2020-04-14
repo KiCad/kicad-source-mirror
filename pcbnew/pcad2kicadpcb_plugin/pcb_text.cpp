@@ -115,7 +115,7 @@ void PCB_TEXT::AddToBoard()
         SetTextSizeFromStrokeFontHeight( pcbtxt, m_name.textHeight );
 
     pcbtxt->SetItalic( m_name.isItalic );
-    pcbtxt->SetTextPenWidth( m_name.textstrokeWidth );
+    pcbtxt->SetTextThickness( m_name.textstrokeWidth );
 
     SetTextJustify( pcbtxt, m_name.justify );
     pcbtxt->SetTextPos( wxPoint( m_name.textPositionX,

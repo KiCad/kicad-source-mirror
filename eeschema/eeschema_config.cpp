@@ -55,9 +55,6 @@
 #include <default_values.h>    // For some default values
 
 
-static double s_textOffsetRatio = 0.08;
-static int s_textMarkupFlags = 0;
-
 #define FieldNameTemplatesKey         wxT( "FieldNameTemplates" )
 
 
@@ -221,18 +218,6 @@ void SetSeverity( int aErrorCode, int aSeverity )
 }
 
 
-double GetTextOffsetRatio()
-{
-    return s_textOffsetRatio;
-}
-
-
-void SetTextOffsetRatio( double aOffsetRatio )
-{
-    s_textOffsetRatio = aOffsetRatio;
-}
-
-
 /// Helper for all the old plotting/printing code while it still exists
 COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
 {
@@ -279,11 +264,11 @@ void SCH_EDIT_FRAME::AddFormattingParameters( std::vector<PARAM_CFG*>& params )
                                          Mils2iu( DEFAULT_SIZE_TEXT ),
                                          5, 1000, nullptr, 1 / IU_PER_MILS ) );
     params.push_back( new PARAM_CFG_DOUBLE( wxT( "TextOffsetRatio" ),
-                                         &s_textOffsetRatio,
+                                         &m_textOffsetRatio,
                                          (double) TXT_MARGIN / DEFAULT_SIZE_TEXT,
                                          -200.0, 200.0 ) );
     params.push_back( new PARAM_CFG_INT( wxT( "TextMarkupFlags" ),
-                                         &s_textMarkupFlags, 0 ) );
+                                         &m_textMarkupFlags, 0 ) );
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "LineThickness" ),
                                          &m_defaultLineWidth,
                                          Mils2iu( appSettings->m_Drawing.default_line_thickness ),
@@ -343,11 +328,10 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
     bool ret = Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDIT,
                                  GetProjectFileParameters() );
 
-    SetTextMarkupFlags( s_textMarkupFlags );
-
-    GetRenderSettings()->m_DefaultLineWidth = GetDefaultLineWidth();
+    GetRenderSettings()->SetDefaultPenWidth( GetDefaultLineWidth() );
     GetRenderSettings()->m_DefaultWireThickness = GetDefaultWireThickness();
     GetRenderSettings()->m_DefaultBusThickness = GetDefaultBusThickness();
+    GetRenderSettings()->m_TextOffsetRatio = m_textOffsetRatio;
 
     // Verify some values, because the config file can be edited by hand,
     // and have bad values:
@@ -396,8 +380,6 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
         return;
 
     wxString path = fn.GetFullPath();
-
-    s_textMarkupFlags = GetTextMarkupFlags();
 
     prj.ConfigSave( Kiface().KifaceSearch(), GROUP_SCH_EDIT, GetProjectFileParameters(), path );
 }

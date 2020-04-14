@@ -61,7 +61,7 @@ LIB_ARC::LIB_ARC( LIB_PART*      aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
 
 bool LIB_ARC::HitTest( const wxPoint& aRefPoint, int aAccuracy ) const
 {
-    int     mindist = std::max( aAccuracy + GetPenSize() / 2,
+    int     mindist = std::max( aAccuracy + GetPenWidth() / 2,
                                 Mils2iu( MINIMUM_SELECTION_DISTANCE ) );
     wxPoint relativePosition = aRefPoint;
 
@@ -168,13 +168,6 @@ void LIB_ARC::Offset( const wxPoint& aOffset )
 }
 
 
-bool LIB_ARC::Inside( EDA_RECT& aRect ) const
-{
-    return aRect.Contains( m_ArcStart.x, -m_ArcStart.y )
-        || aRect.Contains( m_ArcEnd.x, -m_ArcEnd.y );
-}
-
-
 void LIB_ARC::MoveTo( const wxPoint& aPosition )
 {
     wxPoint offset = aPosition - m_Pos;
@@ -273,33 +266,35 @@ void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->Arc( pos, -t2, -t1, m_Radius, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    auto pen_size = GetPenSize();
+    auto pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
     if( !already_filled || pen_size > 0 )
     {
         pen_size = std::max( 0, pen_size );
-        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE ) );
+        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
         aPlotter->Arc( pos, -t2, -t1, m_Radius, already_filled ? NO_FILL : m_Fill, pen_size );
     }
 }
 
 
-int LIB_ARC::GetPenSize() const
+int LIB_ARC::GetPenWidth() const
 {
-    return m_Width;
+    return std::max( m_Width, 1 );
 }
 
 
-void LIB_ARC::print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRANSFORM& aTransform )
+void LIB_ARC::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+                     const TRANSFORM& aTransform )
 {
+    wxDC*   DC = aSettings->GetPrintDC();
     wxPoint pos1, pos2, posc;
-    COLOR4D color   = GetLayerColor( LAYER_DEVICE );
-    COLOR4D bgColor = GetLayerColor( LAYER_DEVICE_BACKGROUND );
+    COLOR4D color   = aSettings->GetLayerColor( LAYER_DEVICE );
+    COLOR4D bgColor = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
     pos1 = aTransform.TransformCoordinate( m_ArcEnd ) + aOffset;
     pos2 = aTransform.TransformCoordinate( m_ArcStart ) + aOffset;
@@ -315,15 +310,14 @@ void LIB_ARC::print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRANS
     }
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
-
-    int penSize = GetPenSize();
+    int penSize = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRFilledArc( nullptr, aDC, posc.x, posc.y, pt1, pt2, m_Radius, penSize, bgColor, bgColor );
+        GRFilledArc( nullptr, DC, posc.x, posc.y, pt1, pt2, m_Radius, penSize, bgColor, bgColor );
     else if( fill == FILLED_SHAPE && !aData )
-        GRFilledArc( nullptr, aDC, posc.x, posc.y, pt1, pt2, m_Radius, color, color );
+        GRFilledArc( nullptr, DC, posc.x, posc.y, pt1, pt2, m_Radius, color, color );
     else
-        GRArc1( nullptr, aDC, pos1.x, pos1.y, pos2.x, pos2.y, posc.x, posc.y, penSize, color );
+        GRArc1( nullptr, DC, pos1.x, pos1.y, pos2.x, pos2.y, posc.x, posc.y, penSize, color );
 }
 
 
@@ -384,7 +378,7 @@ const EDA_RECT LIB_ARC::GetBoundingBox() const
 
     rect.SetOrigin( minX, minY );
     rect.SetEnd( maxX, maxY );
-    rect.Inflate( ( GetPenSize()+1 ) / 2 );
+    rect.Inflate( ( GetPenWidth() / 2 ) + 1 );
 
     return rect;
 }

@@ -75,7 +75,7 @@ public:
         EDA_TEXT::Offset( aMoveVector );
     }
 
-    void SetTextAngle( double aAngle );
+    void SetTextAngle( double aAngle ) override;
 
     void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 

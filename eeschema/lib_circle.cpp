@@ -37,7 +37,6 @@
 #include <lib_circle.h>
 #include <settings/color_settings.h>
 #include <transform.h>
-#include <default_values.h>    // For some default values
 
 
 LIB_CIRCLE::LIB_CIRCLE( LIB_PART* aParent ) :
@@ -51,7 +50,7 @@ LIB_CIRCLE::LIB_CIRCLE( LIB_PART* aParent ) :
 
 bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef, int aAccuracy ) const
 {
-    int mindist = std::max( aAccuracy + GetPenSize() / 2,
+    int mindist = std::max( aAccuracy + GetPenWidth() / 2,
                             Mils2iu( MINIMUM_SELECTION_DISTANCE ) );
     int dist = KiROUND( GetLineLength( aPosRef, DefaultTransform.TransformCoordinate( m_Pos ) ) );
 
@@ -126,13 +125,6 @@ void LIB_CIRCLE::Offset( const wxPoint& aOffset )
 }
 
 
-bool LIB_CIRCLE::Inside( EDA_RECT& aRect ) const
-{
-    wxPoint center(m_Pos.x, -m_Pos.y);
-    return aRect.IntersectsCircle( center, GetRadius() );
-}
-
-
 void LIB_CIRCLE::MoveTo( const wxPoint& aPosition )
 {
     Offset( aPosition - m_Pos );
@@ -177,50 +169,44 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->Circle( pos, GetRadius() * 2, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    auto pen_size = GetPenSize();
+    auto pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
     if( !already_filled || pen_size > 0 )
     {
         pen_size = std::max( 0, pen_size );
-        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE ) );
+        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
         aPlotter->Circle( pos, GetRadius() * 2, already_filled ? NO_FILL : m_Fill, pen_size );
     }
 }
 
 
-int LIB_CIRCLE::GetPenSize() const
+int LIB_CIRCLE::GetPenWidth() const
 {
-    if( m_Width )
-        return m_Width;
-
-#if 1
-    // Temporary code not using RENDER_SETTINGS
-    return DEFAULT_LINE_THICKNESS * IU_PER_MILS;
-#else
-    // JEY TODO: requires RENDER_SETTINGS
-#endif
+    return std::max( m_Width, 1 );
 }
 
 
-void LIB_CIRCLE::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+void LIB_CIRCLE::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                         const TRANSFORM& aTransform )
 {
-    wxPoint pos1    = aTransform.TransformCoordinate( m_Pos ) + aOffset;
-    COLOR4D color   = GetLayerColor( LAYER_DEVICE );
-    COLOR4D bgColor = GetLayerColor( LAYER_DEVICE_BACKGROUND );
-    FILL_T  fill    = aData ? NO_FILL : m_Fill;
+    wxDC*   DC       = aSettings->GetPrintDC();
+    wxPoint pos1     = aTransform.TransformCoordinate( m_Pos ) + aOffset;
+    COLOR4D color    = aSettings->GetLayerColor( LAYER_DEVICE );
+    COLOR4D bgColor  = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
+    FILL_T  fill     = aData ? NO_FILL : m_Fill;
+    int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRFilledCircle( nullptr, aDC, pos1.x, pos1.y, GetRadius(), GetPenSize(), bgColor, bgColor );
+        GRFilledCircle( nullptr, DC, pos1.x, pos1.y, GetRadius(), penWidth, bgColor, bgColor );
     else if( fill == FILLED_SHAPE )
-        GRFilledCircle( nullptr, aDC, pos1.x, pos1.y, GetRadius(), 0, color, color );
+        GRFilledCircle( nullptr, DC, pos1.x, pos1.y, GetRadius(), 0, color, color );
     else
-        GRCircle( nullptr, aDC, pos1.x, pos1.y, GetRadius(), GetPenSize(), color );
+        GRCircle( nullptr, DC, pos1.x, pos1.y, GetRadius(), penWidth, color );
 }
 
 
@@ -231,7 +217,7 @@ const EDA_RECT LIB_CIRCLE::GetBoundingBox() const
 
     rect.SetOrigin( m_Pos.x - radius, m_Pos.y - radius );
     rect.SetEnd( m_Pos.x + radius, m_Pos.y + radius );
-    rect.Inflate( ( GetPenSize()+1 ) / 2 );
+    rect.Inflate( ( GetPenWidth() / 2 ) + 1 );
 
     rect.RevertYAxis();
 

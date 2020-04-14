@@ -46,9 +46,12 @@
 #include <netlist_object.h>
 #include <settings/color_settings.h>
 #include <trace_helpers.h>
-#include <default_values.h>    // For some default values
-
+#include <sch_painter.h>
+#include <default_values.h>
 #include <wx/debug.h>
+
+
+using KIGFX::SCH_RENDER_SETTINGS;
 
 
 extern void IncrementLabelMember( wxString& name, int aIncrement );
@@ -93,8 +96,10 @@ static int* TemplateShape[5][4] =
 };
 
 
-SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType )
-        : SCH_ITEM( NULL, aType ), EDA_TEXT( text ), m_shape( PINSHEETLABEL_SHAPE::PS_INPUT )
+SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType, int aMarkupFlags ) :
+        SCH_ITEM( NULL, aType ),
+        EDA_TEXT( text, aMarkupFlags ),
+        m_shape( PINSHEETLABEL_SHAPE::PS_INPUT )
 {
     m_Layer          = LAYER_NOTES;
     m_isDangling     = false;
@@ -131,24 +136,23 @@ void SCH_TEXT::IncrementLabel( int aIncrement )
 }
 
 
-wxPoint SCH_TEXT::GetSchematicTextOffset() const
+wxPoint SCH_TEXT::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const
 {
     wxPoint text_offset;
 
     // add an offset to x (or y) position to aid readability of text on a wire or line
-    int thick_offset = KiROUND( GetTextOffsetRatio() * GetTextSize().y );
-    thick_offset += GetPenSize() / 2;
+    int dist = GetTextOffset( aSettings ) + GetPenWidth();
 
     switch( GetLabelSpinStyle() )
     {
     case LABEL_SPIN_STYLE::UP:
     case LABEL_SPIN_STYLE::BOTTOM:
-        text_offset.x = -thick_offset;
+        text_offset.x = -dist;
         break; // Vert Orientation
     default:
     case LABEL_SPIN_STYLE::LEFT:
     case LABEL_SPIN_STYLE::RIGHT:
-        text_offset.y = -thick_offset;
+        text_offset.y = -dist;
         break; // Horiz Orientation
     }
 
@@ -281,25 +285,29 @@ bool SCH_TEXT::operator<( const SCH_ITEM& aItem ) const
 }
 
 
-int SCH_TEXT::GetPenSize() const
+int SCH_TEXT::GetTextOffset( RENDER_SETTINGS* aSettings ) const
 {
-#if 1
-    // Temporary code not using RENDER_SETTINGS
-    int textThickness = DEFAULT_LINE_THICKNESS * IU_PER_MILS;
-    textThickness = Clamp_Text_PenSize( textThickness, GetTextSize(), IsBold() );
-    return textThickness;
-#else
-    return GetEffectiveTextPenWidth( nullptr );  // JEY TODO: requires RENDER_SETTINGS
-#endif
+    SCH_RENDER_SETTINGS* renderSettings = static_cast<SCH_RENDER_SETTINGS*>( aSettings );
+
+    if( renderSettings )
+        return KiROUND( renderSettings->m_TextOffsetRatio * GetTextSize().y );
+
+    return 0;
 }
 
 
-void SCH_TEXT::Print( wxDC* DC, const wxPoint& aOffset )
+int SCH_TEXT::GetPenWidth() const
 {
-    COLOR4D color = GetLayerColor( m_Layer );
-    wxPoint text_offset = aOffset + GetSchematicTextOffset();
+    return GetEffectiveTextPenWidth();
+}
 
-    EDA_TEXT::Print( DC, text_offset, color );
+
+void SCH_TEXT::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+{
+    COLOR4D color = aSettings->GetLayerColor( m_Layer );
+    wxPoint text_offset = aOffset + GetSchematicTextOffset( aSettings );
+
+    EDA_TEXT::Print( aSettings, text_offset, color );
 }
 
 
@@ -409,7 +417,7 @@ void SCH_TEXT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 
 const EDA_RECT SCH_TEXT::GetBoundingBox() const
 {
-    EDA_RECT rect = GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
+    EDA_RECT rect = GetTextBox();
 
     if( GetTextAngle() != 0 )      // Rotate rect
     {
@@ -577,8 +585,9 @@ bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
 void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
     static std::vector<wxPoint> Poly;
-    COLOR4D color = aPlotter->ColorSettings()->GetColor( GetLayer() );
-    int penWidth = GetPenSize();
+    COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( GetLayer() );
+    int penWidth = std::max( GetEffectiveTextPenWidth(),
+                             aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
     aPlotter->SetCurrentLineWidth( penWidth );
 
@@ -589,28 +598,29 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
         wxStringSplit( GetShownText(), strings_list, '\n' );
         positions.reserve( strings_list.Count() );
 
-        GetPositionsOfLinesOfMultilineText(positions, (int) strings_list.Count() );
+        GetLinePositions( positions, (int) strings_list.Count() );
 
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
-            wxPoint textpos = positions[ii] + GetSchematicTextOffset();
+            wxPoint textpos = positions[ii] + GetSchematicTextOffset( aPlotter->RenderSettings() );
             wxString& txt = strings_list.Item( ii );
             aPlotter->Text( textpos, color, txt, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-                            GetVertJustify(), penWidth, IsItalic(), IsBold() );
+                            GetVertJustify(), penWidth, IsItalic(), IsBold(), m_textMarkupFlags );
         }
     }
     else
     {
-        wxPoint textpos = GetTextPos() + GetSchematicTextOffset();
+        wxPoint textpos = GetTextPos() + GetSchematicTextOffset( aPlotter->RenderSettings() );
 
         aPlotter->Text( textpos, color, GetShownText(), GetTextAngle(), GetTextSize(),
-                        GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold() );
+                        GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold(),
+                        m_textMarkupFlags );
     }
 
     // Draw graphic symbol for global or hierarchical labels
     CreateGraphicShape( Poly, GetTextPos() );
 
-    aPlotter->SetCurrentLineWidth( GetPenSize() );
+    aPlotter->SetCurrentLineWidth( penWidth );
 
     if( Poly.size() )
         aPlotter->PlotPoly( Poly, NO_FILL );
@@ -695,8 +705,8 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text )
-        : SCH_TEXT( pos, text, SCH_LABEL_T )
+SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text, int aMarkupFlags )
+        : SCH_TEXT( pos, text, SCH_LABEL_T, aMarkupFlags )
 {
     m_Layer      = LAYER_LOCLABEL;
     m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
@@ -749,7 +759,7 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
 
 const EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
-    EDA_RECT rect = GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
+    EDA_RECT rect = GetTextBox();
 
     if( GetTextAngle() != 0.0 )
     {
@@ -782,8 +792,8 @@ BITMAP_DEF SCH_LABEL::GetMenuImage() const
 }
 
 
-SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text )
-        : SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T )
+SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text, int aMarkupFlags )
+        : SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T, aMarkupFlags )
 {
     m_Layer      = LAYER_GLOBLABEL;
     m_shape      = PINSHEETLABEL_SHAPE::PS_BIDI;
@@ -798,25 +808,22 @@ EDA_ITEM* SCH_GLOBALLABEL::Clone() const
 }
 
 
-wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
+wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const
 {
     wxPoint text_offset;
-    int     width = GetPenSize();
-    int     halfSize = GetTextWidth() / 2;
-    int     offset   = width;
+    int     dist = GetEffectiveTextPenWidth();
 
     switch( m_shape )
     {
     case PINSHEETLABEL_SHAPE::PS_INPUT:
     case PINSHEETLABEL_SHAPE::PS_BIDI:
     case PINSHEETLABEL_SHAPE::PS_TRISTATE:
-        offset += halfSize;
+        dist += GetTextWidth() / 2;
         break;
 
     case PINSHEETLABEL_SHAPE::PS_OUTPUT:
     case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED:
-        offset += KiROUND( GetTextOffsetRatio() * GetTextSize().y );
-        ;
+        dist += GetTextOffset( aSettings );
         break;
 
     default:
@@ -826,18 +833,10 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
     switch( GetLabelSpinStyle() )
     {
     default:
-    case LABEL_SPIN_STYLE::LEFT:
-        text_offset.x -= offset;
-        break; // Orientation horiz normal
-    case LABEL_SPIN_STYLE::UP:
-        text_offset.y -= offset;
-        break; // Orientation vert UP
-    case LABEL_SPIN_STYLE::RIGHT:
-        text_offset.x += offset;
-        break; // Orientation horiz inverse
-    case LABEL_SPIN_STYLE::BOTTOM:
-        text_offset.y += offset;
-        break; // Orientation vert BOTTOM
+    case LABEL_SPIN_STYLE::LEFT:   text_offset.x -= dist; break;
+    case LABEL_SPIN_STYLE::UP:     text_offset.y -= dist; break;
+    case LABEL_SPIN_STYLE::RIGHT:  text_offset.x += dist; break;
+    case LABEL_SPIN_STYLE::BOTTOM: text_offset.y += dist; break;
     }
 
     return text_offset;
@@ -883,30 +882,29 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 }
 
 
-void SCH_GLOBALLABEL::Print( wxDC* DC, const wxPoint& aOffset )
+void SCH_GLOBALLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     static std::vector <wxPoint> Poly;
 
-    COLOR4D color = GetLayerColor( m_Layer );
-    wxPoint text_offset = aOffset + GetSchematicTextOffset();
+    wxDC*   DC = aSettings->GetPrintDC();
+    COLOR4D color = aSettings->GetLayerColor( m_Layer );
+    int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    wxPoint text_offset = aOffset + GetSchematicTextOffset( aSettings );
 
-    EDA_TEXT::Print( DC, text_offset, color );
+    EDA_TEXT::Print( aSettings, text_offset, color );
 
     CreateGraphicShape( Poly, GetTextPos() + aOffset );
-    GRPoly( nullptr, DC, Poly.size(), &Poly[0], false, GetTextPenWidth(), color, color );
+    GRPoly( nullptr, DC, Poly.size(), &Poly[0], false, penWidth, color, color );
 }
 
 
-void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
+void SCH_GLOBALLABEL::CreateGraphicShape( std::vector<wxPoint>& aPoints, const wxPoint& Pos )
 {
     int halfSize  = GetTextHeight() / 2;
-
-    // Use the maximum clamped pen width to give us a bit of wiggle room
-    int linewidth = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
+    int linewidth = GetPenWidth();
+    int symb_len = LenSize( GetShownText(), linewidth, m_textMarkupFlags ) + ( TXT_MARGIN * 2 );
 
     aPoints.clear();
-
-    int symb_len = LenSize( GetShownText(), linewidth, GetTextMarkupFlags() ) + ( TXT_MARGIN * 2 );
 
     // Create outline shape : 6 points
     int x = symb_len + linewidth + 3;
@@ -969,17 +967,10 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
     switch( GetLabelSpinStyle() )
     {
     default:
-    case LABEL_SPIN_STYLE::LEFT:
-        break; // Orientation horiz normal
-    case LABEL_SPIN_STYLE::UP:
-        angle = -900;
-        break; // Orientation vert UP
-    case LABEL_SPIN_STYLE::RIGHT:
-        angle = 1800;
-        break; // Orientation horiz inverse
-    case LABEL_SPIN_STYLE::BOTTOM:
-        angle = 900;
-        break; // Orientation vert BOTTOM
+    case LABEL_SPIN_STYLE::LEFT:                 break;
+    case LABEL_SPIN_STYLE::UP:     angle = -900; break;
+    case LABEL_SPIN_STYLE::RIGHT:  angle = 1800; break;
+    case LABEL_SPIN_STYLE::BOTTOM: angle = 900;  break;
     }
 
     // Rotate outlines and move corners in real position
@@ -1011,7 +1002,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     height = ( (GetTextHeight() * 15) / 10 ) + width + 2 * TXT_MARGIN;
 
     // text X size add height for triangular shapes(bidirectional)
-    length = LenSize( GetShownText(), width, GetTextMarkupFlags() ) + height +
+    length = LenSize( GetShownText(), width, m_textMarkupFlags ) + height +
              Mils2iu( DANGLING_SYMBOL_SIZE );
 
     switch( GetLabelSpinStyle() )    // respect orientation
@@ -1064,8 +1055,9 @@ BITMAP_DEF SCH_GLOBALLABEL::GetMenuImage() const
 }
 
 
-SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType )
-        : SCH_TEXT( pos, text, aType )
+SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType,
+                              int aMarkupFlags )
+        : SCH_TEXT( pos, text, aType, aMarkupFlags )
 {
     m_Layer      = LAYER_HIERLABEL;
     m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
@@ -1121,22 +1113,25 @@ void SCH_HIERLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 }
 
 
-void SCH_HIERLABEL::Print( wxDC* DC, const wxPoint& offset )
+void SCH_HIERLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
 {
     static std::vector <wxPoint> Poly;
 
-    auto    conn = Connection( *g_CurrentSheet );
-    COLOR4D color = GetLayerColor( ( conn && conn->IsBus() ) ? LAYER_BUS : m_Layer );
-    wxPoint text_offset = offset + GetSchematicTextOffset();
+    wxDC*           DC = aSettings->GetPrintDC();
+    SCH_CONNECTION* conn = Connection( *g_CurrentSheet );
+    bool            isBus = conn && conn->IsBus();
+    COLOR4D         color = aSettings->GetLayerColor( isBus ? LAYER_BUS : m_Layer );
+    int             penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    wxPoint         textOffset = offset + GetSchematicTextOffset( aSettings );
 
-    EDA_TEXT::Print( DC, text_offset, color );
+    EDA_TEXT::Print( aSettings, textOffset, color );
 
     CreateGraphicShape( Poly, GetTextPos() + offset );
-    GRPoly( nullptr, DC, Poly.size(), &Poly[0], false, GetTextPenWidth(), color, color );
+    GRPoly( nullptr, DC, Poly.size(), &Poly[0], false, penWidth, color, color );
 }
 
 
-void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
+void SCH_HIERLABEL::CreateGraphicShape( std::vector<wxPoint>& aPoints, const wxPoint& Pos )
 {
     int* Template = TemplateShape[static_cast<int>( m_shape )][static_cast<int>( m_spin_style )];
     int  halfSize = GetTextWidth() / 2;
@@ -1160,19 +1155,17 @@ void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wx
 
 const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 {
-    int x, y, dx, dy, length, height;
+    int penWidth = GetEffectiveTextPenWidth();
 
-    x  = GetTextPos().x;
-    y  = GetTextPos().y;
-    dx = dy = 0;
+    int x  = GetTextPos().x;
+    int y  = GetTextPos().y;
 
-    // Use the maximum clamped pen width to give us a bit of wiggle room
-    int width = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
+    int height = GetTextHeight() + penWidth + 2 * TXT_MARGIN;
+    int length = LenSize( GetShownText(), penWidth, m_textMarkupFlags )
+                 + height                 // add height for triangular shapes
+                 + 2 * Mils2iu( DANGLING_SYMBOL_SIZE );
 
-    height = GetTextHeight() + width + 2 * TXT_MARGIN;
-    length = LenSize( GetShownText(), width, GetTextMarkupFlags() )
-             + height                 // add height for triangular shapes
-             + 2 * Mils2iu( DANGLING_SYMBOL_SIZE );
+    int dx, dy;
 
     switch( GetLabelSpinStyle() )
     {
@@ -1212,27 +1205,27 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 }
 
 
-wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
+wxPoint SCH_HIERLABEL::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const
 {
     wxPoint text_offset;
-    int     thickness = GetPenSize();
-    int     offset = KiROUND( GetTextOffsetRatio() * GetTextSize().y );
-    int     total_offset = GetTextWidth() + offset + thickness;
+    int     dist = GetTextOffset( aSettings ) + GetPenWidth();
+
+    dist += GetTextWidth();
 
     switch( GetLabelSpinStyle() )
     {
     default:
     case LABEL_SPIN_STYLE::LEFT:
-        text_offset.x = -total_offset;
+        text_offset.x = -dist;
         break; // Orientation horiz normale
     case LABEL_SPIN_STYLE::UP:
-        text_offset.y = -total_offset;
+        text_offset.y = -dist;
         break; // Orientation vert UP
     case LABEL_SPIN_STYLE::RIGHT:
-        text_offset.x = total_offset;
+        text_offset.x = dist;
         break; // Orientation horiz inverse
     case LABEL_SPIN_STYLE::BOTTOM:
-        text_offset.y = total_offset;
+        text_offset.y = dist;
         break; // Orientation vert BOTTOM
     }
 

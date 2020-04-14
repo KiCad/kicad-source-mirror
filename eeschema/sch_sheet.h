@@ -120,7 +120,7 @@ public:
      */
     bool IsMovableFromAnchorPoint() override { return true; }
 
-    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     /**
      * Calculate the graphic shape (a polygon) associated to the text.
@@ -132,7 +132,7 @@ public:
 
     void SwapData( SCH_ITEM* aItem ) override;
 
-    int GetPenSize() const override;
+    int GetPenWidth() const override;
 
     /**
      * Get the sheet label number.
@@ -216,18 +216,17 @@ class SCH_SHEET : public SCH_ITEM
 {
     friend class SCH_SHEET_PIN;
 
-    /// Screen that contains the physical data for the sheet.  In complex hierarchies
-    /// multiple sheets can share a common screen.
-    SCH_SCREEN* m_screen;
 
-    /// The list of sheet connection points.
-    std::vector<SCH_SHEET_PIN*> m_pins;
+    SCH_SCREEN*   m_screen;     // Screen that contains the physical data for the sheet.  In
+                                // complex hierarchies multiple sheets can share a common screen.
+
+    std::vector<SCH_SHEET_PIN*> m_pins;               // The list of sheet connection points.
 
     std::vector<SCH_FIELD>      m_fields;
-    FIELDS_AUTOPLACED           m_fieldsAutoplaced;    // indicates status of field autoplacement
+    FIELDS_AUTOPLACED           m_fieldsAutoplaced;   // Indicates status of field autoplacement.
 
-    wxPoint                     m_pos;                 // The position of the sheet.
-    wxSize                      m_size;                // The size of the sheet.
+    wxPoint                     m_pos;                // The position of the sheet.
+    wxSize                      m_size;               // The size of the sheet.
 
     int                         m_borderWidth;
     KIGFX::COLOR4D              m_borderColor;
@@ -434,9 +433,9 @@ public:
      */
     int GetMinHeight() const;
 
-    int GetPenSize() const override;
+    int GetPenWidth() const override;
 
-    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     /**
      * Return a bounding box for the sheet body but not the fields.

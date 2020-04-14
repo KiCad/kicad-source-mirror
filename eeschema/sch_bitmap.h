@@ -54,7 +54,7 @@ public:
         delete m_image;
     }
 
-    SCH_ITEM& operator=( const SCH_ITEM& aItem );
+    SCH_BITMAP& operator=( const SCH_ITEM& aItem );
 
     BITMAP_BASE* GetImage()
     {
@@ -97,7 +97,7 @@ public:
 
     void SwapData( SCH_ITEM* aItem ) override;
 
-    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;

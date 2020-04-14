@@ -74,8 +74,6 @@ void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     // The CTM is set to 1 user unit per decimil
     iuPerDeviceUnit = 1.0 / aIusPerDecimil;
 
-    SetDefaultLineWidth( 100 / iuPerDeviceUnit );  // arbitrary default
-
     /* The paper size in this engined is handled page by page
        Look in the StartPage function */
 }
@@ -89,23 +87,17 @@ void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
  * no outline thickness
  * use in this case pen width = 1 does not actally change the polygon
  */
-void PDF_PLOTTER::SetCurrentLineWidth( int width, void* aData )
+void PDF_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
     wxASSERT( workFile );
-    int pen_width;
 
-    if( width > 0 )
-        pen_width = width;
-    else if( width == 0 )
-        pen_width = 1;
-    else
-        pen_width = defaultPenWidth;
+    if( aWidth == 0 )
+        aWidth = 1;
 
-    if( pen_width != currentPenWidth )
-        fprintf( workFile, "%g w\n",
-                 userToDeviceSize( pen_width ) );
+    if( aWidth != currentPenWidth )
+        fprintf( workFile, "%g w\n", userToDeviceSize( aWidth ) );
 
-    currentPenWidth = pen_width;
+    currentPenWidth = aWidth;
 }
 
 
@@ -585,7 +577,7 @@ void PDF_PLOTTER::StartPage()
     fprintf( workFile,
              "%g 0 0 %g 0 0 cm 1 J 1 j 0 0 0 rg 0 0 0 RG %g w\n",
              0.0072 * plotScaleAdjX, 0.0072 * plotScaleAdjY,
-             userToDeviceSize( defaultPenWidth ) );
+             userToDeviceSize( m_renderSettings->GetDefaultPenWidth() ) );
 }
 
 /**
@@ -812,6 +804,7 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
                         int                         aWidth,
                         bool                        aItalic,
                         bool                        aBold,
+                        int                         aTextMarkupFlags,
                         bool                        aMultilineAllowed,
                         void*                       aData )
 {
@@ -840,9 +833,9 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     double wideningFactor, heightFactor;
 
     computeTextParameters( aPos, aText, aOrient, aSize, m_plotMirror, aH_justify,
-            aV_justify, aWidth, aItalic, aBold,
-            &wideningFactor, &ctm_a, &ctm_b, &ctm_c,
-            &ctm_d, &ctm_e, &ctm_f, &heightFactor );
+                           aV_justify, aWidth, aItalic, aBold,
+                           &wideningFactor, &ctm_a, &ctm_b, &ctm_c,
+                           &ctm_d, &ctm_e, &ctm_f, &heightFactor );
 
     SetColor( aColor );
     SetCurrentLineWidth( aWidth, aData );
@@ -886,8 +879,8 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     // Plot the stroked text (if requested)
     if( !use_native_font )
     {
-        PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                aWidth, aItalic, aBold, aMultilineAllowed );
+        PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
+                       aItalic, aBold, aTextMarkupFlags, aMultilineAllowed );
     }
 }
 

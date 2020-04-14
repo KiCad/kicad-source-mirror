@@ -71,7 +71,7 @@ private:
     void    initDlg();
 
     // common
-    void getPlotOptions( int* aDefaultLineWidth );
+    void getPlotOptions( RENDER_SETTINGS* aSettings );
 
     bool getModeColor()
     { return m_ModeColorOption->GetSelection() == 0; }
@@ -94,7 +94,7 @@ private:
     void PlotSchematic( bool aPlotAll );
 
     // PDF
-    void    createPDFFile( bool aPlotAll, bool aPlotFrameRef, int aDefaultLineWidth );
+    void    createPDFFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aRenderSettings );
     void    plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen, bool aPlotFrameRef);
     void    setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen );
 
@@ -128,15 +128,16 @@ private:
                               wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // PS
-    void    createPSFile( bool aPlotAll, bool aPlotFrameRef, int aDefaultLineWidth );
-    bool    plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen, int aDefaultLineWidth,
-                            const PAGE_INFO& aPageInfo, wxPoint aPlot0ffset, double aScale,
-                            bool aPlotFrameRef );
+    void    createPSFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );
+    bool    plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen,
+                            RENDER_SETTINGS* aRenderSettings, const PAGE_INFO& aPageInfo,
+                            wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // SVG
-    void    createSVGFile( bool aPlotAll, bool aPlotFrameRef, int aDefaultLineWidth );
-    bool    plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScreen, int aDefaultLineWidth,
-                             bool aPlotBlackAndWhite, bool aPlotFrameRef );
+    void    createSVGFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );
+    bool    plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScreen,
+                             RENDER_SETTINGS* aRenderSettings, bool aPlotBlackAndWhite,
+                             bool aPlotFrameRef );
 
     /**
      * Create a file name with an absolute path name

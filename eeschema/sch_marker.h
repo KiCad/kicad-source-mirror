@@ -54,7 +54,7 @@ public:
 
     SCH_LAYER_ID GetColorLayer() const;
 
-    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     void Plot( PLOTTER* aPlotter ) override
     {

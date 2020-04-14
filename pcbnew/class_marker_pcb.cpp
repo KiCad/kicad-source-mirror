@@ -242,3 +242,13 @@ const BOX2I MARKER_PCB::ViewBBox() const
     EDA_RECT bbox = GetBoundingBox();
     return BOX2I( bbox.GetOrigin(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) );
 }
+
+
+void MARKER_PCB::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
+{
+    // JEY TODO: needs RENDER_SETTINGS passed in
+    RENDER_SETTINGS* renderSettings = aFrame->GetCanvas()->GetView()->GetPainter()->GetSettings();
+    renderSettings->SetPrintDC( aDC );
+
+    PrintMarker( renderSettings, aOffset );
+}

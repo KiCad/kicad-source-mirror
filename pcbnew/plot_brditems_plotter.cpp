@@ -361,7 +361,8 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, COLOR4D aColor )
 
     orient = pt_texte->GetDrawRotation();
 
-    thickness = pt_texte->GetEffectiveTextPenWidth( nullptr );
+    thickness = std::max( pt_texte->GetEffectiveTextPenWidth(),
+                          m_plotter->RenderSettings()->GetDefaultPenWidth() );
 
     if( pt_texte->IsMirrored() )
         size.x = -size.x;  // Text is mirrored
@@ -378,8 +379,9 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, COLOR4D aColor )
     gbr_metadata.SetCmpReference( parent->GetReference() );
 
     m_plotter->Text( pos, aColor, pt_texte->GetShownText(), orient, size,
-                     pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
-                     thickness, pt_texte->IsItalic(), allow_bold, false, &gbr_metadata );
+                     pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(), thickness,
+                     pt_texte->IsItalic(), allow_bold, pt_texte->GetTextMarkupFlags(),
+                     false, &gbr_metadata );
 }
 
 
@@ -508,7 +510,8 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
 
     m_plotter->SetColor( getColor( aEdge->GetLayer() ) );
 
-    int thickness  = aEdge->GetWidth();
+    int thickness = std::max( aEdge->GetWidth(),
+                              m_plotter->RenderSettings()->GetDefaultPenWidth() );
 
     wxPoint pos( aEdge->GetStart() );
     wxPoint end( aEdge->GetEnd() );
@@ -653,7 +656,8 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     size      = pt_texte->GetTextSize();
     pos       = pt_texte->GetTextPos();
     orient    = pt_texte->GetTextAngle();
-    thickness = pt_texte->GetEffectiveTextPenWidth( nullptr );
+    thickness = std::max( pt_texte->GetEffectiveTextPenWidth(),
+                          m_plotter->RenderSettings()->GetDefaultPenWidth() );
 
     if( pt_texte->IsMirrored() )
         size.x = -size.x;
@@ -671,21 +675,21 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
         wxStringSplit( shownText, strings_list, '\n' );
         positions.reserve(  strings_list.Count() );
 
-        pt_texte->GetPositionsOfLinesOfMultilineText( positions, strings_list.Count() );
+        pt_texte->GetLinePositions( positions, strings_list.Count());
 
         for( unsigned ii = 0; ii <  strings_list.Count(); ii++ )
         {
             wxString& txt =  strings_list.Item( ii );
-            m_plotter->Text( positions[ii], color, txt, orient, size,
-                             pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
-                             thickness, pt_texte->IsItalic(), allow_bold, false, &gbr_metadata );
+            m_plotter->Text( positions[ii], color, txt, orient, size, pt_texte->GetHorizJustify(),
+                             pt_texte->GetVertJustify(), thickness, pt_texte->IsItalic(),
+                             allow_bold, pt_texte->GetTextMarkupFlags(), false, &gbr_metadata );
         }
     }
     else
     {
-        m_plotter->Text( pos, color, shownText, orient, size,
-                         pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
-                         thickness, pt_texte->IsItalic(), allow_bold, false, &gbr_metadata );
+        m_plotter->Text( pos, color, shownText, orient, size, pt_texte->GetHorizJustify(),
+                         pt_texte->GetVertJustify(), thickness, pt_texte->IsItalic(), allow_bold,
+                         pt_texte->GetTextMarkupFlags(), false, &gbr_metadata );
     }
 }
 
@@ -780,7 +784,8 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
 
     int     radius = 0;
     double  StAngle = 0, EndAngle = 0;
-    int thickness = aSeg->GetWidth();
+    int     thickness = std::max( aSeg->GetWidth(),
+                                  m_plotter->RenderSettings()->GetDefaultPenWidth() );
 
     m_plotter->SetColor( getColor( aSeg->GetLayer() ) );
 

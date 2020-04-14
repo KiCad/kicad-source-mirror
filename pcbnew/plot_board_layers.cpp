@@ -52,6 +52,7 @@
 
 #include <pcbnew.h>
 #include <pcbplot.h>
+#include <pcb_painter.h>
 #include <gbr_metadata.h>
 
 /*
@@ -101,13 +102,9 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 COLOR4D color = COLOR4D::BLACK;
 
                 if( layersmask_plotpads[B_SilkS] )
-                   color = aPlotter->ColorSettings()->GetColor( B_SilkS );
-
-                if( layersmask_plotpads[F_SilkS] )
-                {
-                    color = ( color == COLOR4D::BLACK ) ?
-                            aPlotter->ColorSettings()->GetColor( F_SilkS ) : color;
-                }
+                    color = aPlotter->RenderSettings()->GetLayerColor( B_SilkS );
+                else if( layersmask_plotpads[F_SilkS] )
+                    color = aPlotter->RenderSettings()->GetLayerColor( F_SilkS );
 
                 itemplotter.PlotPad( pad, color, SKETCH );
             }
@@ -1117,12 +1114,9 @@ static void initializePlotter( PLOTTER *aPlotter, BOARD * aBoard,
     // Has meaning only for gerber plotter. Must be called only after SetViewport
     aPlotter->SetGerberCoordinatesFormat( aPlotOpts->GetGerberPrecision() );
 
-    aPlotter->SetDefaultLineWidth( aPlotOpts->GetLineWidth() );
     aPlotter->SetCreator( wxT( "PCBNEW" ) );
     aPlotter->SetColorMode( false );        // default is plot in Black and White.
     aPlotter->SetTextMode( aPlotOpts->GetTextMode() );
-
-    aPlotter->SetColorSettings( aPlotOpts->ColorSettings() );
 }
 
 
@@ -1213,6 +1207,11 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
         return NULL;
     }
 
+    KIGFX::PCB_RENDER_SETTINGS* renderSettings = new KIGFX::PCB_RENDER_SETTINGS();
+    renderSettings->LoadColors( aPlotOpts->ColorSettings() );
+    renderSettings->SetDefaultPenWidth( aPlotOpts->GetLineWidth() );
+    plotter->SetRenderSettings( renderSettings );
+
     // Compute the viewport and set the other options
 
     // page layout is not mirrored, so temporarily change mirror option for the page layout
@@ -1264,6 +1263,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
         return plotter;
     }
 
+    delete plotter->RenderSettings();
     delete plotter;
     return NULL;
 }

@@ -32,7 +32,7 @@
 #include <project.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
-
+#include <sch_painter.h>
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
 
@@ -109,12 +109,16 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString& aFileName,
                                              double          aScale,
                                              bool            aPlotFrameRef )
 {
-    DXF_PLOTTER* plotter = new DXF_PLOTTER();
+    KIGFX::SCH_RENDER_SETTINGS renderSettings;
+    renderSettings.LoadColors( getColorSettings() );
+    renderSettings.SetDefaultPenWidth( 0 );
 
-    const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
+    const PAGE_INFO& pageInfo = aScreen->GetPageSettings();
+    DXF_PLOTTER*     plotter = new DXF_PLOTTER();
+
+    plotter->SetRenderSettings( &renderSettings );
     plotter->SetPageSettings( pageInfo );
     plotter->SetColorMode( getModeColor() );
-    plotter->SetColorSettings( getColorSettings() );
     // Currently, plot units are in decimil
     plotter->SetViewport( aPlotOffset, IU_PER_MILS/10, aScale, false );
 

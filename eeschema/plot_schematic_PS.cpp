@@ -33,16 +33,14 @@
 #include <project.h>
 #include <reporter.h>
 #include <settings/settings_manager.h>
-
+#include <sch_painter.h>
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
 
 void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
-                                          int aDefaultLineWidth )
+                                          RENDER_SETTINGS* aRenderSettings )
 {
-    SCH_SCREEN*     screen = m_parent->GetScreen();
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();  // sheetpath is saved here
-    PAGE_INFO       actualPage;                                  // page size selected in schematic
     PAGE_INFO       plotPage;                                    // page size selected to plot
 
     /* When printing all pages, the printed page is not the current page.
@@ -63,8 +61,9 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
         m_parent->SetCurrentSheet( sheetList[i] );
         m_parent->GetCurrentSheet().UpdateAllScreenReferences();
         m_parent->SetSheetNumberAndCount();
-        screen = m_parent->GetCurrentSheet().LastScreen();
-        actualPage = screen->GetPageSettings();
+
+        SCH_SCREEN* screen = m_parent->GetCurrentSheet().LastScreen();
+        PAGE_INFO   actualPage = screen->GetPageSettings();
 
         switch( m_pageSizeSelect )
         {
@@ -100,7 +99,7 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
             wxString ext = PS_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( fname, ext, &reporter );
 
-            if( plotOneSheetPS( plotFileName.GetFullPath(), screen, aDefaultLineWidth, plotPage,
+            if( plotOneSheetPS( plotFileName.GetFullPath(), screen, aRenderSettings, plotPage,
                                 plot_offset, scale, aPlotFrameRef ) )
             {
                 msg.Printf( _( "Plot: \"%s\" OK.\n" ), plotFileName.GetFullPath() );
@@ -129,17 +128,16 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
 
 bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
                                             SCH_SCREEN*         aScreen,
-                                            int                 aDefaultLineWidth,
+                                            RENDER_SETTINGS*    aRenderSettings,
                                             const PAGE_INFO&    aPageInfo,
                                             wxPoint             aPlot0ffset,
                                             double              aScale,
                                             bool                aPlotFrameRef )
 {
     PS_PLOTTER* plotter = new PS_PLOTTER();
+    plotter->SetRenderSettings( aRenderSettings );
     plotter->SetPageSettings( aPageInfo );
-    plotter->SetDefaultLineWidth( aDefaultLineWidth );
     plotter->SetColorMode( getModeColor() );
-    plotter->SetColorSettings( getColorSettings() );
     // Currently, plot units are in decimil
     plotter->SetViewport( aPlot0ffset, IU_PER_MILS/10, aScale, false );
 
@@ -158,7 +156,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
 
     if( m_plotBackgroundColor->GetValue() )
     {
-        plotter->SetColor( plotter->ColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND ) );
+        plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
         wxPoint end( plotter->PageSettings().GetWidthIU(),
                      plotter->PageSettings().GetHeightIU() );
         plotter->Rect( wxPoint( 0, 0 ), end, FILLED_SHAPE, 1.0 );

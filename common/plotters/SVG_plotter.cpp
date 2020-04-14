@@ -187,7 +187,6 @@ void SVG_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     paperSize   = pageInfo.GetSizeMils();
     paperSize.x *= 10.0 * aIusPerDecimil;
     paperSize.y *= 10.0 * aIusPerDecimil;
-    SetDefaultLineWidth( 100 * aIusPerDecimil );    // arbitrary default
 }
 
 
@@ -276,19 +275,12 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
 
 /* Set the current line width (in IUs) for the next plot
  */
-void SVG_PLOTTER::SetCurrentLineWidth( int width, void* aData )
+void SVG_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
-    int pen_width;
-
-    if( width >= 0 )
-        pen_width = width;
-    else
-        pen_width = defaultPenWidth;
-
-    if( pen_width != currentPenWidth )
+    if( aWidth != currentPenWidth )
     {
         m_graphics_changed  = true;
-        currentPenWidth     = pen_width;
+        currentPenWidth     = aWidth;
     }
 
     if( m_graphics_changed )
@@ -756,20 +748,13 @@ void SVG_PLOTTER::Text( const wxPoint&              aPos,
                         int                         aWidth,
                         bool                        aItalic,
                         bool                        aBold,
+                        int                         aTextMarkupFlags,
                         bool                        aMultilineAllowed,
                         void*                       aData )
 {
     setFillMode( NO_FILL );
     SetColor( aColor );
     SetCurrentLineWidth( aWidth );
-
-    int width = currentPenWidth;
-
-    if( aWidth <= 0 && aBold )
-        width = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
-
-    if( aWidth <= 0 )
-        width = currentPenWidth;
 
     wxPoint text_pos = aPos;
     const char *hjust = "start";
@@ -806,7 +791,7 @@ void SVG_PLOTTER::Text( const wxPoint&              aPos,
     wxSize text_size;
     // aSize.x or aSize.y is < 0 for mirrored texts.
     // The actual text size value is the absolue value
-    text_size.x = std::abs( GraphicTextWidth( aText, aSize, aItalic, width ) );
+    text_size.x = std::abs( GraphicTextWidth( aText, aSize, aItalic, aWidth ) );
     text_size.y = std::abs( aSize.x * 4/3 ); // Hershey font height to em size conversion
     DPOINT anchor_pos_dev = userToDeviceCoordinates( aPos );
     DPOINT text_pos_dev = userToDeviceCoordinates( text_pos );
@@ -833,6 +818,6 @@ void SVG_PLOTTER::Text( const wxPoint&              aPos,
              "<g class=\"stroked-text\"><desc>%s</desc>\n",
              TO_UTF8( XmlEsc( aText ) ) );
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                   aWidth, aItalic, aBold, aMultilineAllowed );
+                   aWidth, aItalic, aBold, aTextMarkupFlags, aMultilineAllowed );
     fputs( "</g>", outputFile );
 }

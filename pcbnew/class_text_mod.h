@@ -90,7 +90,7 @@ public:
         SetLocalCoord();
     }
 
-    void SetTextAngle( double aAngle );
+    void SetTextAngle( double aAngle ) override;
 
     /**
      * Called when rotating the parent footprint.

@@ -65,19 +65,19 @@ extern bool operator<( const LIB_PART& aItem1, const LIB_PART& aItem2 );
 
 struct PART_DRAW_OPTIONS
 {
-    TRANSFORM transform;        ///< Coordinate adjustment settings
-    bool draw_visible_fields;   ///< Whether to draw "visible" fields
-    bool draw_hidden_fields;    ///< Whether to draw "hidden" fields
-    bool show_elec_type;        ///< Whether to show the pin electrical type
+    TRANSFORM transform;           // Coordinate adjustment settings
+    bool draw_visible_fields;      // Whether to draw "visible" fields
+    bool draw_hidden_fields;       // Whether to draw "hidden" fields
+    bool show_elec_type;           // Whether to show the pin electrical type
+    int  text_markup_flags;        // Whether to process various text markups
 
-    static PART_DRAW_OPTIONS Default()
+    PART_DRAW_OPTIONS()
     {
-        PART_DRAW_OPTIONS def;
-        def.transform = DefaultTransform;
-        def.draw_visible_fields = true;
-        def.draw_hidden_fields  = true;
-        def.show_elec_type      = false;
-        return def;
+        transform = DefaultTransform;
+        draw_visible_fields = true;
+        draw_hidden_fields = true;
+        show_elec_type = false;
+        text_markup_flags = 0;
     }
 };
 
@@ -294,13 +294,12 @@ public:
     /**
      * Print part.
      *
-     * @param aDc - Device context to draw on.
      * @param aOffset - Position of part.
      * @param aMulti - unit if multiple units per part.
      * @param aConvert - Component conversion (DeMorgan) if available.
      * @param aOpts - Drawing options
      */
-    void Print( wxDC* aDc, const wxPoint& aOffset, int aMulti, int aConvert,
+    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, int aMulti, int aConvert,
                 const PART_DRAW_OPTIONS& aOpts );
 
     /**

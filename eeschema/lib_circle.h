@@ -35,9 +35,6 @@ class LIB_CIRCLE : public LIB_ITEM
     wxPoint m_EndPos;         // A point on the circumference of the circle.
     int     m_Width;          // Line width.
 
-    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
-                const TRANSFORM& aTransform ) override;
-
 public:
     LIB_CIRCLE( LIB_PART * aParent );
 
@@ -58,7 +55,7 @@ public:
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    int GetPenSize( ) const override;
+    int GetPenWidth() const override;
 
     const EDA_RECT GetBoundingBox() const override;
 
@@ -68,8 +65,6 @@ public:
     void CalcEdit( const wxPoint& aPosition ) override;
 
     void Offset( const wxPoint& aOffset ) override;
-
-    bool Inside( EDA_RECT& aRect ) const override;
 
     void MoveTo( const wxPoint& aPosition ) override;
 
@@ -98,7 +93,6 @@ public:
     EDA_ITEM* Clone() const override;
 
 private:
-
     /**
      * @copydoc LIB_ITEM::compare()
      *
@@ -109,6 +103,9 @@ private:
      */
     int compare( const LIB_ITEM& aOther,
             LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const override;
+
+    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+                const TRANSFORM& aTransform ) override;
 };
 
 

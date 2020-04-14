@@ -243,7 +243,7 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 }
 
 
-void EDA_DRAW_FRAME::PrintPage( wxDC* aDC )
+void EDA_DRAW_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
 {
     wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error") );
 }
@@ -728,14 +728,14 @@ void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos )
 
 static const wxString productName = wxT( "KiCad E.D.A.  " );
 
-void PrintPageLayout( wxDC* aDC, const PAGE_INFO& aPageInfo, const wxString& aFullSheetName,
-                      const wxString& aFileName, const TITLE_BLOCK& aTitleBlock, int aSheetCount,
-                      int aSheetNumber, int aPenWidth, double aScalar, COLOR4D aColor,
-                      const PROJECT* aProject, const wxString& aSheetLayer )
+void PrintPageLayout( RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
+                      const wxString& aFullSheetName, const wxString& aFileName,
+                      const TITLE_BLOCK& aTitleBlock, int aSheetCount, int aSheetNumber,
+                      double aScalar, const PROJECT* aProject, const wxString& aSheetLayer )
 {
     WS_DRAW_ITEM_LIST drawList;
 
-    drawList.SetDefaultPenSize( aPenWidth );
+    drawList.SetDefaultPenSize( aSettings->GetDefaultPenWidth() );
     drawList.SetMilsToIUfactor( aScalar );
     drawList.SetSheetNumber( aSheetNumber );
     drawList.SetSheetCount( aSheetCount );
@@ -747,35 +747,34 @@ void PrintPageLayout( wxDC* aDC, const PAGE_INFO& aPageInfo, const wxString& aFu
     drawList.BuildWorkSheetGraphicList( aPageInfo, aTitleBlock );
 
     // Draw item list
-    drawList.Print( aDC, aColor );
+    drawList.Print( aSettings );
 }
 
 
-void EDA_DRAW_FRAME::PrintWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
+void EDA_DRAW_FRAME::PrintWorkSheet( RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen,
                                      double aScalar, const wxString &aFilename,
-                                     const wxString &aSheetLayer, COLOR4D aColor )
+                                     const wxString &aSheetLayer )
 {
     if( !m_showBorderAndTitleBlock )
         return;
 
-    COLOR4D color = ( aColor != COLOR4D::UNSPECIFIED ) ? aColor : COLOR4D( RED );
-
-    wxPoint origin = aDC->GetDeviceOrigin();
+    wxDC*   DC = aSettings->GetPrintDC();
+    wxPoint origin = DC->GetDeviceOrigin();
 
     if( origin.y > 0 )
     {
-        aDC->SetDeviceOrigin( 0, 0 );
-        aDC->SetAxisOrientation( true, false );
+        DC->SetDeviceOrigin( 0, 0 );
+        DC->SetAxisOrientation( true, false );
     }
 
-    PrintPageLayout( aDC, GetPageSettings(), GetScreenDesc(), aFilename, GetTitleBlock(),
-                     aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber, aLineWidth, aScalar,
-                     color, &Prj(), aSheetLayer );
+    PrintPageLayout( aSettings, GetPageSettings(), GetScreenDesc(), aFilename, GetTitleBlock(),
+                     aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber, aScalar, &Prj(),
+                     aSheetLayer );
 
     if( origin.y > 0 )
     {
-        aDC->SetDeviceOrigin( origin.x, origin.y );
-        aDC->SetAxisOrientation( true, true );
+        DC->SetDeviceOrigin( origin.x, origin.y );
+        DC->SetAxisOrientation( true, true );
     }
 }
 

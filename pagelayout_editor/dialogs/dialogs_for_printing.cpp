@@ -179,7 +179,13 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
     m_parent->SetDrawBgColor( MakeColour( WHITE ) );
 
     screen->m_ScreenNumber = aPageNum;
-    m_parent->PrintWorkSheet( dc, screen, 0, IU_PER_MILS, wxEmptyString );
+
+    KIGFX::WS_RENDER_SETTINGS renderSettings;
+    renderSettings.SetDefaultPenWidth( 1 );
+    renderSettings.SetLayerColor( LAYER_WORKSHEET, COLOR4D( RED ) );
+    renderSettings.SetPrintDC( dc );
+
+    m_parent->PrintWorkSheet( &renderSettings, screen, IU_PER_MILS, wxEmptyString );
 
     m_parent->SetDrawBgColor( bg_color );
     screen->m_IsPrinting = false;

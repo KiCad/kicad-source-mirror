@@ -60,28 +60,29 @@ SCH_TEXT* SCH_EDIT_FRAME::GetNextNewText()
 
 SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 {
-    wxPoint  cursorPos = (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition();
+    wxPoint   cursorPos = (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition();
     SCH_TEXT* textItem = nullptr;
+    int       markupFlags = GetTextMarkupFlags();
 
     s_queuedTexts.clear();
 
     switch( aType )
     {
     case LAYER_NOTES:
-        textItem = new SCH_TEXT( cursorPos );
+        textItem = new SCH_TEXT( cursorPos, wxEmptyString, SCH_TEXT_T, markupFlags );
         break;
 
     case LAYER_LOCLABEL:
-        textItem = new SCH_LABEL( cursorPos );
+        textItem = new SCH_LABEL( cursorPos, wxEmptyString, markupFlags );
         break;
 
     case LAYER_HIERLABEL:
-        textItem = new SCH_HIERLABEL( cursorPos );
+        textItem = new SCH_HIERLABEL( cursorPos, wxEmptyString, SCH_HIER_LABEL_T, markupFlags );
         textItem->SetShape( lastGlobalLabelShape );
         break;
 
     case LAYER_GLOBLABEL:
-        textItem = new SCH_GLOBALLABEL( cursorPos );
+        textItem = new SCH_GLOBALLABEL( cursorPos, wxEmptyString, markupFlags );
         textItem->SetShape( lastGlobalLabelShape );
         break;
 
@@ -199,6 +200,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
     const wxPoint&   position    = aText->GetPosition();
     LABEL_SPIN_STYLE orientation = aText->GetLabelSpinStyle();
     wxString         txt         = UnescapeString( aText->GetText() );
+    int              markupFlags = GetTextMarkupFlags();
 
     // There can be characters in a SCH_TEXT object that can break labels so we have to
     // fix them here.
@@ -216,11 +218,18 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
 
     switch( aNewType )
     {
-    case SCH_LABEL_T:        newtext = new SCH_LABEL( position, txt );        break;
-    case SCH_GLOBAL_LABEL_T: newtext = new SCH_GLOBALLABEL( position, txt );  break;
-    case SCH_HIER_LABEL_T:   newtext = new SCH_HIERLABEL( position, txt );    break;
-    case SCH_TEXT_T:         newtext = new SCH_TEXT( position, txt );         break;
-
+    case SCH_LABEL_T:
+        newtext = new SCH_LABEL( position, txt, markupFlags );
+        break;
+    case SCH_GLOBAL_LABEL_T:
+        newtext = new SCH_GLOBALLABEL( position, txt, markupFlags );
+        break;
+    case SCH_HIER_LABEL_T:
+        newtext = new SCH_HIERLABEL( position, txt, SCH_HIER_LABEL_T, markupFlags );
+        break;
+    case SCH_TEXT_T:
+        newtext = new SCH_TEXT( position, txt, SCH_TEXT_T, markupFlags );
+        break;
     default:
         wxFAIL_MSG( wxString::Format( "Invalid text type: %d.", aNewType ) );
         return;
@@ -234,7 +243,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
     newtext->SetShape( aText->GetShape() );
     newtext->SetLabelSpinStyle( orientation );
     newtext->SetTextSize( aText->GetTextSize() );
-    newtext->SetTextPenWidth( aText->GetTextPenWidth() );
+    newtext->SetTextThickness( aText->GetTextThickness() );
     newtext->SetItalic( aText->IsItalic() );
     newtext->SetBold( aText->IsBold() );
     newtext->SetIsDangling( aText->IsDangling() );

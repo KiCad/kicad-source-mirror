@@ -50,7 +50,7 @@ class LIB_ARC : public LIB_ITEM
     int      m_Width;           /* Line width */
     int      m_editState;
 
-    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
 
 public:
@@ -77,15 +77,13 @@ public:
 
     void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    int GetPenSize() const override;
+    int GetPenWidth() const override;
 
     void BeginEdit( const wxPoint aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;
     void SetEditState( int aState ) { m_editState = aState; }
 
     void Offset( const wxPoint& aOffset ) override;
-
-    bool Inside( EDA_RECT& aRect ) const override;
 
     void MoveTo( const wxPoint& aPosition ) override;
 

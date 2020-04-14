@@ -41,12 +41,14 @@ class COLOR_SETTINGS;
 class TOOL_MENU;
 class APP_SETTINGS_BASE;
 
-using KIGFX::COLOR4D;
-
 namespace KIGFX
 {
     class GAL_DISPLAY_OPTIONS;
+    class RENDER_SETTINGS;
 }
+
+using KIGFX::COLOR4D;
+using KIGFX::RENDER_SETTINGS;
 
 #define DEFAULT_MAX_UNDO_ITEMS 0
 #define ABS_MAX_UNDO_ITEMS (INT_MAX / 2)
@@ -356,16 +358,13 @@ public:
     /**
      * Prints the page layout with the frame and the basic inscriptions.
      *
-     * @param aDC The device context.
      * @param aScreen screen to draw
-     * @param aLineWidth The pen width to use to draw the layout.
      * @param aScale The mils to Iu conversion factor.
      * @param aFilename The filename to display in basic inscriptions.
      * @param aSheetLayer The layer displayed from pcbnew.
      */
-    void PrintWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth, double aScale,
-                         const wxString &aFilename, const wxString &aSheetLayer = wxEmptyString,
-                         COLOR4D aColor = COLOR4D::UNSPECIFIED );
+    void PrintWorkSheet( RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen, double aScale,
+                         const wxString &aFilename, const wxString &aSheetLayer = wxEmptyString );
 
     void DisplayToolMsg( const wxString& msg ) override;
 
@@ -443,7 +442,7 @@ public:
      *
      * @param aDC = wxDC given by the calling print function
      */
-    virtual void PrintPage( wxDC* aDC );
+    virtual void PrintPage( RENDER_SETTINGS* aSettings );
 
     /**
      * Returns the canvas type stored in the application settings.

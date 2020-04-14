@@ -68,7 +68,7 @@ class LIB_FIELD : public LIB_ITEM, public EDA_TEXT
      * the m_Text
      * </p>
      */
-    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
 
     /**
@@ -138,7 +138,7 @@ public:
     int GetId() const { return m_id; }
     void SetId( int aId ) { m_id = aId; }
 
-    int GetPenSize( ) const override;
+    int GetPenWidth() const override;
 
     /**
      * Copy parameters of this field to another field. Pointers are not copied.
@@ -169,15 +169,11 @@ public:
      */
     wxString GetFullText( int unit = 1 ) const;
 
-    COLOR4D GetDefaultColor() override;
-
     SCH_LAYER_ID GetDefaultLayer();
 
     void BeginEdit( const wxPoint aStartPoint ) override;
 
     void Offset( const wxPoint& aOffset ) override;
-
-    bool Inside( EDA_RECT& aRect ) const override;
 
     void MoveTo( const wxPoint& aPosition ) override;
 
@@ -190,8 +186,8 @@ public:
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                const TRANSFORM& aTransform ) override;
 
-    int GetWidth() const override { return GetTextPenWidth(); }
-    void SetWidth( int aWidth ) override { SetTextPenWidth( aWidth ); }
+    int GetWidth() const override { return GetTextThickness(); }
+    void SetWidth( int aWidth ) override { SetTextThickness( aWidth ); }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 

@@ -82,10 +82,10 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
     if( std::all_of( m_lines.begin() + 1, m_lines.end(),
         [&]( const SCH_LINE* r )
         {
-			return r->GetPenSize() == first_line->GetPenSize();
+			return r->GetPenWidth() == first_line->GetPenWidth();
 		} ) )
     {
-        m_width.SetValue( first_line->GetPenSize() );
+        m_width.SetValue( first_line->GetPenWidth() );
     }
     else
     {

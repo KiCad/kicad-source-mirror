@@ -756,10 +756,15 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         GRResetPenAndBrush( &memDC );
 
         WS_DATA_MODEL::SetAltInstance( m_pagelayout );
+        KIGFX::WS_RENDER_SETTINGS renderSettings;
+        renderSettings.SetDefaultPenWidth( 1 );
+        renderSettings.SetLayerColor( LAYER_WORKSHEET, COLOR4D( RED ) );
+        renderSettings.SetPrintDC( &memDC );
+
         GRFilledRect( NULL, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, WHITE, WHITE );
-        PrintPageLayout( &memDC, pageDUMMY, emptyString, emptyString, m_tb,
-                         m_screen->m_NumberOfScreens, m_screen->m_ScreenNumber, 1, 1, RED,
-                         &Prj() );
+
+        PrintPageLayout( &renderSettings, pageDUMMY, emptyString, emptyString, m_tb,
+                         m_screen->m_NumberOfScreens, m_screen->m_ScreenNumber, 1, &Prj() );
 
         memDC.SelectObject( wxNullBitmap );
         m_PageLayoutExampleBitmap->SetBitmap( *m_page_bitmap );

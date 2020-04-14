@@ -29,43 +29,6 @@
 
 using namespace KIGFX;
 
-RENDER_SETTINGS::RENDER_SETTINGS()
-{
-    // Set the default initial values
-    m_highlightFactor    = 0.5f;
-    m_selectFactor       = 0.5f;
-    m_highlightItems     = false;
-    m_highlightEnabled   = false;
-    m_hiContrastEnabled  = false;
-    m_hiContrastFactor   = 0.2f; //TODO: Make this user-configurable
-    m_highlightNetcode   = -1;
-    m_outlineWidth       = 1;
-    m_worksheetLineWidth = 100000;
-    m_defaultPenWidth    = 0;
-    m_textMarkupFlags    = 0;
-    m_showPageLimits     = false;
-}
-
-
-RENDER_SETTINGS::~RENDER_SETTINGS()
-{
-}
-
-
-void RENDER_SETTINGS::update()
-{
-    // Calculate darkened/highlighted variants of layer colors
-    for( int i = 0; i < LAYER_ID_COUNT; i++ )
-    {
-        m_hiContrastColor[i] = m_layerColors[i].Mix( m_layerColors[LAYER_PCB_BACKGROUND],
-                m_hiContrastFactor );
-        m_layerColorsHi[i]   = m_layerColors[i].Brightened( m_highlightFactor );
-        m_layerColorsDark[i] = m_layerColors[i].Darkened( 1.0 - m_highlightFactor );
-        m_layerColorsSel[i]  = m_layerColors[i].Brightened( m_selectFactor );
-    }
-}
-
-
 PAINTER::PAINTER( GAL* aGal ) :
     m_gal( aGal ),
     m_brightenedColor( 0.0, 1.0, 0.0, 0.9 )

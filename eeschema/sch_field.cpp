@@ -46,12 +46,12 @@
 #include <settings/color_settings.h>
 #include <kicad_string.h>
 #include <trace_helpers.h>
-#include <default_values.h>    // For some default values
 
 
-SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_ITEM* aParent, const wxString& aName ) :
+SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_ITEM* aParent, const wxString& aName,
+                      int aMarkupFlags ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),
-    EDA_TEXT()
+    EDA_TEXT( wxEmptyString, aMarkupFlags )
 {
     SetTextPos( aPos );
     m_id = aFieldId;
@@ -130,25 +130,19 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
 }
 
 
-int SCH_FIELD::GetPenSize() const
+int SCH_FIELD::GetPenWidth() const
 {
-#if 1
-    // Temporary code not using RENDER_SETTINGS
-    int textThickness = DEFAULT_LINE_THICKNESS * IU_PER_MILS;
-    textThickness = Clamp_Text_PenSize( textThickness, GetTextSize(), IsBold() );
-    return textThickness;
-#else
-    return GetEffectiveTextPenWidth( nullptr );  // JEY TODO: requires RENDER_SETTINGS
-#endif
+    return GetEffectiveTextPenWidth();
 }
 
 
-void SCH_FIELD::Print( wxDC* aDC, const wxPoint& aOffset )
+void SCH_FIELD::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
+    wxDC*    DC = aSettings->GetPrintDC();
+    COLOR4D  color = aSettings->GetLayerColor( m_forceVisible ? LAYER_HIDDEN : m_Layer );
     int      orient;
-    COLOR4D  color;
     wxPoint  textpos;
-    int      lineWidth = GetPenSize();
+    int      penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetDefaultPenWidth() );
 
     if( ( !IsVisible() && !m_forceVisible) || IsVoid() )
         return;
@@ -183,13 +177,8 @@ void SCH_FIELD::Print( wxDC* aDC, const wxPoint& aOffset )
     EDA_RECT boundaryBox = GetBoundingBox();
     textpos = boundaryBox.Centre() + aOffset;
 
-    if( m_forceVisible )
-        color = COLOR4D( DARKGRAY );
-    else
-        color = GetLayerColor( m_Layer );
-
-    GRText( aDC, textpos, color, GetShownText(), orient, GetTextSize(),
-            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, lineWidth, IsItalic(), IsBold() );
+    GRText( DC, textpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_HJUSTIFY_CENTER,
+            GR_TEXT_VJUSTIFY_CENTER, penWidth, IsItalic(), IsBold(), m_textMarkupFlags );
 }
 
 
@@ -219,7 +208,7 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
     SCH_FIELD text( *this );    // Make a local copy to change text
                                 // because GetBoundingBox() is const
     text.SetText( GetShownText() );
-    rect = text.GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
+    rect = text.GetTextBox();
 
     // Calculate the bounding box position relative to the parent:
     wxPoint origin = GetParentPosition();
@@ -498,7 +487,9 @@ bool SCH_FIELD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 
 void SCH_FIELD::Plot( PLOTTER* aPlotter )
 {
-    COLOR4D color = aPlotter->ColorSettings()->GetColor( GetLayer() );
+    COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( GetLayer() );
+    int     penWidth = std::max( GetEffectiveTextPenWidth(),
+                                 aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
     if( !IsVisible() )
         return;
@@ -538,10 +529,8 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
     wxPoint  textpos = BoundaryBox.Centre();
 
-    int      thickness = GetPenSize();
-
     aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(),  hjustify, vjustify,
-                    thickness, IsItalic(), IsBold() );
+                    penWidth, IsItalic(), IsBold(), m_textMarkupFlags );
 }
 
 

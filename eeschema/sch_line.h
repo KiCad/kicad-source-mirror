@@ -143,9 +143,9 @@ public:
      */
     double GetLength() const;
 
-    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
-    int GetPenSize() const override;
+    int GetPenWidth() const override;
 
     void Move( const wxPoint& aMoveVector ) override;
     void MoveStart( const wxPoint& aMoveVector );

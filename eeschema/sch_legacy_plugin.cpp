@@ -1449,7 +1449,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
     }
 
     text->SetBold( penWidth != 0 );
-    text->SetTextPenWidth( penWidth != 0 ? GetPenSizeForBold( size ) : 0 );
+    text->SetTextThickness( penWidth != 0 ? GetPenSizeForBold( size ) : 0 );
 
     // Read the text string for the text.
     char* tmp = aReader.ReadLine();
@@ -2283,7 +2283,7 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
     // Write line style (width, type, color) only for non default values
     if( aLine->IsGraphicLine() )
     {
-        if( aLine->GetPenSize() != 0 )
+        if( aLine->GetLineSize() != 0 )
             m_out->Print( 0, " %s %d", T_WIDTH, Iu2Mils( aLine->GetLineSize() ) );
 
         if( aLine->GetLineStyle() != aLine->GetDefaultStyle() )
@@ -2358,7 +2358,7 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
                       Iu2Mils( aText->GetPosition().x ), Iu2Mils( aText->GetPosition().y ),
                       spinStyle,
                       Iu2Mils( aText->GetTextWidth() ),
-                      italics, Iu2Mils( aText->GetTextPenWidth() ), TO_UTF8( text ) );
+                      italics, Iu2Mils( aText->GetTextThickness() ), TO_UTF8( text ) );
     }
     else if( layer == LAYER_GLOBLABEL || layer == LAYER_HIERLABEL )
     {
@@ -2373,7 +2373,7 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
                       Iu2Mils( aText->GetTextWidth() ),
                       shapeLabelIt->second,
                       italics,
-                      Iu2Mils( aText->GetTextPenWidth() ), TO_UTF8( text ) );
+                      Iu2Mils( aText->GetTextThickness() ), TO_UTF8( text ) );
     }
 }
 

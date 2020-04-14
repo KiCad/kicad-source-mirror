@@ -906,13 +906,13 @@ void SCH_EDIT_FRAME::Print()
 }
 
 
-void SCH_EDIT_FRAME::PrintPage( wxDC* aDC )
+void SCH_EDIT_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
 {
     wxString fileName = Prj().AbsolutePath( GetScreen()->GetFileName() );
 
-    aDC->SetLogicalFunction( wxCOPY );
-    GetScreen()->Print( aDC );
-    PrintWorkSheet( aDC, GetScreen(), GetDefaultLineWidth(), IU_PER_MILS, fileName );
+    aSettings->GetPrintDC()->SetLogicalFunction( wxCOPY );
+    GetScreen()->Print( aSettings );
+    PrintWorkSheet( aSettings, GetScreen(), IU_PER_MILS, fileName );
 }
 
 

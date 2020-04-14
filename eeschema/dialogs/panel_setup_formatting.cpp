@@ -72,10 +72,11 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_wireWidth.SetValue( m_frame->GetDefaultWireThickness() );
     m_junctionSize.SetValue( SCH_JUNCTION::g_SymbolSize );
 
-    m_textOffsetRatioCtrl->SetValue( wxString::Format( "%f", GetTextOffsetRatio() * 100.0 ) );
+    wxString offsetRatio = wxString::Format( "%f", m_frame->GetTextOffsetRatio() * 100.0 );
+    m_textOffsetRatioCtrl->SetValue( offsetRatio );
 
     int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
-    m_checkSuperSub->SetValue( GetTextMarkupFlags() & superSubFlags );
+    m_checkSuperSub->SetValue( m_frame->GetTextMarkupFlags() & superSubFlags );
 
     return true;
 }
@@ -111,18 +112,25 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     m_frame->SetDefaultBusThickness( (int) m_busWidth.GetValue() );
     SCH_JUNCTION::g_SymbolSize = (int) m_junctionSize.GetValue();
 
-
     double dtmp = 0.0;
     wxString msg = m_textOffsetRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
-    SetTextOffsetRatio( dtmp / 100.0 );
+    m_frame->SetTextOffsetRatio( dtmp / 100.0 );
 
     int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
 
     if( m_checkSuperSub->GetValue() )
-        SetTextMarkupFlags( GetTextMarkupFlags() | superSubFlags );
+        m_frame->SetTextMarkupFlags( m_frame->GetTextMarkupFlags() | superSubFlags );
     else
-        SetTextMarkupFlags( GetTextMarkupFlags() & ~superSubFlags );
+        m_frame->SetTextMarkupFlags( m_frame->GetTextMarkupFlags() & ~superSubFlags );
+
+    m_frame->GetRenderSettings()->SetDefaultPenWidth( m_frame->GetDefaultLineWidth() );
+    m_frame->GetRenderSettings()->m_DefaultWireThickness = m_frame->GetDefaultWireThickness();
+    m_frame->GetRenderSettings()->m_DefaultBusThickness = m_frame->GetDefaultBusThickness();
+    m_frame->GetRenderSettings()->m_TextOffsetRatio = m_frame->GetTextOffsetRatio();
+
+    SCH_SCREENS schematic;
+    schematic.UpdateTextMarkupFlags( m_frame->GetTextMarkupFlags() );
 
     m_frame->GetCanvas()->GetView()->MarkDirty();
     m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );

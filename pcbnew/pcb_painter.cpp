@@ -1002,6 +1002,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
 {
     wxString shownText( aText->GetShownText() );
+
     if( shownText.Length() == 0 )
         return;
 
@@ -1016,14 +1017,14 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     else
     {
         // Filled mode
-        m_gal->SetLineWidth( getLineThickness( aText->GetEffectiveTextPenWidth( nullptr ) ) );      // JEY TODO: requires RENDER_SETTINGS
+        m_gal->SetLineWidth( getLineThickness( aText->GetEffectiveTextPenWidth() ) );
     }
 
     m_gal->SetStrokeColor( color );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( shownText, position, aText->GetTextAngleRadians(), GetTextMarkupFlags() );
+    m_gal->StrokeText( shownText, position, aText->GetTextAngleRadians(), 0 );
 }
 
 
@@ -1048,15 +1049,14 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     else
     {
         // Filled mode
-        m_gal->SetLineWidth( getLineThickness( aText->GetEffectiveTextPenWidth( nullptr ) ) );      // JEY TODO: requires RENDER_SETTINGS
+        m_gal->SetLineWidth( getLineThickness( aText->GetEffectiveTextPenWidth() ) );
     }
 
     m_gal->SetStrokeColor( color );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( shownText, position, aText->GetDrawRotationRadians(),
-                       GetTextMarkupFlags() );    // JEY TODO: requires RENDER_SETTINGS
+    m_gal->StrokeText( shownText, position, aText->GetDrawRotationRadians(), 0 );
 
     // Draw the umbilical line
     if( aText->IsSelected() )
@@ -1184,10 +1184,9 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
     TEXTE_PCB& text = aDimension->Text();
     VECTOR2D position( text.GetTextPos().x, text.GetTextPos().y );
 
-    m_gal->SetLineWidth( getLineThickness( text.GetEffectiveTextPenWidth( nullptr ) ) );    // JEY TODO: requires RENDER_SETTINGS
+    m_gal->SetLineWidth( getLineThickness( text.GetEffectiveTextPenWidth() ) );
     m_gal->SetTextAttributes( &text );
-    m_gal->StrokeText( text.GetShownText(), position, text.GetTextAngleRadians(),
-                       GetTextMarkupFlags() );    // JEY TODO: requires RENDER_SETTINGS
+    m_gal->StrokeText( text.GetShownText(), position, text.GetTextAngleRadians(), 0 );
 }
 
 

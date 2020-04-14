@@ -70,7 +70,7 @@ void SCH_NO_CONNECT::SwapData( SCH_ITEM* aItem )
 
 const EDA_RECT SCH_NO_CONNECT::GetBoundingBox() const
 {
-    int      delta = ( GetPenSize() + GetSize() ) / 2;
+    int      delta = ( GetPenWidth() + GetSize() ) / 2;
     EDA_RECT box;
 
     box.SetOrigin( m_pos );
@@ -95,29 +95,23 @@ void SCH_NO_CONNECT::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
 }
 
 
-int SCH_NO_CONNECT::GetPenSize() const
+int SCH_NO_CONNECT::GetPenWidth() const
 {
-#if 1
-    // Temporary code not using RENDER_SETTINGS
-    int thickness = DEFAULT_LINE_THICKNESS * IU_PER_MILS;
-    return thickness;
-#else
-    // JEY TODO: requires RENDER_SETTINGS
-#endif
+    return 1;
 }
 
 
-void SCH_NO_CONNECT::Print( wxDC* aDC, const wxPoint& aOffset )
+void SCH_NO_CONNECT::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    int half = GetSize() / 2;
-    int width = GetPenSize();
-    int pX = m_pos.x + aOffset.x;
-    int pY = m_pos.y + aOffset.y;
+    wxDC*   DC = aSettings->GetPrintDC();
+    int     half = GetSize() / 2;
+    int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    int     pX = m_pos.x + aOffset.x;
+    int     pY = m_pos.y + aOffset.y;
+    COLOR4D color = aSettings->GetLayerColor( LAYER_NOCONNECT );
 
-    COLOR4D color = GetLayerColor( LAYER_NOCONNECT );
-
-    GRLine( nullptr, aDC, pX - half, pY - half, pX + half, pY + half, width, color );
-    GRLine( nullptr, aDC, pX + half, pY - half, pX - half, pY + half, width, color );
+    GRLine( nullptr, DC, pX - half, pY - half, pX + half, pY + half, penWidth, color );
+    GRLine( nullptr, DC, pX + half, pY - half, pX - half, pY + half, penWidth, color );
 }
 
 
@@ -167,7 +161,7 @@ bool SCH_NO_CONNECT::doIsConnected( const wxPoint& aPosition ) const
 
 bool SCH_NO_CONNECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int delta = ( GetPenSize() + GetSize() ) / 2 + aAccuracy;
+    int delta = ( GetPenWidth() + GetSize() ) / 2 + aAccuracy;
 
     wxPoint dist = aPosition - m_pos;
 
@@ -194,13 +188,12 @@ bool SCH_NO_CONNECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter )
 {
     int delta = GetSize() / 2;
-    int pX, pY;
+    int pX = m_pos.x;
+    int pY = m_pos.y;
+    int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
-    pX = m_pos.x;
-    pY = m_pos.y;
-
-    aPlotter->SetCurrentLineWidth( GetPenSize() );
-    aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_NOCONNECT ) );
+    aPlotter->SetCurrentLineWidth( penWidth );
+    aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_NOCONNECT ) );
     aPlotter->MoveTo( wxPoint( pX - delta, pY - delta ) );
     aPlotter->FinishTo( wxPoint( pX + delta, pY + delta ) );
     aPlotter->MoveTo( wxPoint( pX + delta, pY - delta ) );

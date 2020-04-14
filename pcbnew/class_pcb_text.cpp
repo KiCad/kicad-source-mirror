@@ -34,8 +34,6 @@
 #include <gr_text.h>
 #include <kicad_string.h>
 #include <trigo.h>
-#include <richio.h>
-#include <macros.h>
 #include <pcb_edit_frame.h>
 #include <msgpanel.h>
 #include <base_units.h>
@@ -46,6 +44,9 @@
 
 #include <class_board.h>
 #include <class_pcb_text.h>
+#include "pcb_painter.h"
+
+using KIGFX::PCB_RENDER_SETTINGS;
 
 
 TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :
@@ -124,7 +125,11 @@ void TEXTE_PCB::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
     if( displ_opts.m_DisplayDrawItemsFill == SKETCH )
         fillmode = SKETCH;
 
-    EDA_TEXT::Print( DC, offset, color, fillmode );
+    // JEY TODO: needs RENDER_SETTINGS passed in...
+    RENDER_SETTINGS* renderSettings = aFrame->GetCanvas()->GetView()->GetPainter()->GetSettings();
+    renderSettings->SetPrintDC( DC );
+
+    EDA_TEXT::Print( renderSettings, offset, color, fillmode );
 }
 
 
@@ -149,7 +154,7 @@ void TEXTE_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& 
     msg.Printf( wxT( "%.1f" ), GetTextAngle() / 10.0 );
     aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
 
-    msg = MessageTextFromValue( aUnits, GetTextPenWidth() );
+    msg = MessageTextFromValue( aUnits, GetTextThickness() );
     aList.emplace_back( _( "Thickness" ), msg, MAGENTA );
 
     msg = MessageTextFromValue( aUnits, GetTextWidth() );
@@ -162,7 +167,7 @@ void TEXTE_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& 
 
 const EDA_RECT TEXTE_PCB::GetBoundingBox() const
 {
-    EDA_RECT rect = GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
+    EDA_RECT rect = GetTextBox();
 
     if( GetTextAngle() )
         rect = rect.GetBoundingBoxRotated( GetTextPos(), GetTextAngle() );
@@ -197,9 +202,9 @@ void TEXTE_PCB::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT || GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
     {
         if( ( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT ) == IsMirrored() )
-            SetTextX( GetTextPos().x - GetTextBox( nullptr ).GetWidth() );   // JEY TODO: requires RENDER_SETTINGS
+            SetTextX( GetTextPos().x - GetTextBox().GetWidth() );
         else
-            SetTextX( GetTextPos().x + GetTextBox( nullptr ).GetWidth() );   // JEY TODO: requires RENDER_SETTINGS
+            SetTextX( GetTextPos().x + GetTextBox().GetWidth() );
     }
 }
 

@@ -44,9 +44,9 @@
 #include <default_values.h>    // For some default values
 
 
-LIB_TEXT::LIB_TEXT( LIB_PART * aParent ) :
+LIB_TEXT::LIB_TEXT( LIB_PART* aParent, int aMarkupFlags ) :
     LIB_ITEM( LIB_TEXT_T, aParent ),
-    EDA_TEXT()
+    EDA_TEXT( wxEmptyString, aMarkupFlags )
 {
     SetTextSize( wxSize( Mils2iu( DEFAULT_TEXT_SIZE ), Mils2iu( DEFAULT_TEXT_SIZE ) ) );
 }
@@ -78,7 +78,7 @@ bool LIB_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 EDA_ITEM* LIB_TEXT::Clone() const
 {
-    LIB_TEXT* newitem = new LIB_TEXT( nullptr );
+    LIB_TEXT* newitem = new LIB_TEXT( nullptr, GetTextMarkupFlags() );
 
     newitem->m_Unit      = m_Unit;
     newitem->m_Convert   = m_Convert;
@@ -129,12 +129,6 @@ void LIB_TEXT::Offset( const wxPoint& aOffset )
 }
 
 
-bool LIB_TEXT::Inside( EDA_RECT& rect ) const
-{
-    return rect.Intersects( GetBoundingBox() );
-}
-
-
 void LIB_TEXT::MoveTo( const wxPoint& newPosition )
 {
     SetTextPos( newPosition );
@@ -144,7 +138,7 @@ void LIB_TEXT::MoveTo( const wxPoint& newPosition )
 void LIB_TEXT::NormalizeJustification( bool inverse )
 {
     wxPoint  delta( 0, 0 );
-    EDA_RECT bbox = GetTextBox( nullptr );   // JEY TODO: requires RENDER_SETTINGS
+    EDA_RECT bbox = GetTextBox();
 
     if( GetTextAngle() == 0.0 )
     {
@@ -289,32 +283,33 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     COLOR4D color;
 
     if( plotter->GetColorMode() )       // Used normal color or selected color
-        color = plotter->ColorSettings()->GetColor( LAYER_DEVICE );
+        color = plotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
     else
         color = COLOR4D::BLACK;
 
-    plotter->Text( pos, color, GetText(), t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT,
-                   GetTextSize(), GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                   GetPenSize(), IsItalic(), IsBold() );
+    int penWidth = std::max( GetEffectiveTextPenWidth(),
+                             plotter->RenderSettings()->GetDefaultPenWidth() );
+
+    // NOTE: do NOT use m_textMarkupFlags; those are from the library, not the schematic
+
+    plotter->Text( pos, color, GetText(), t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT, GetTextSize(),
+                   GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, penWidth, IsItalic(),
+                   IsBold(), plotter->GetTextMarkupFlags() );
 }
 
 
-int LIB_TEXT::GetPenSize() const
+int LIB_TEXT::GetPenWidth() const
 {
-#if 1
-    // Temporary code not using RENDER_SETTINGS
-    int textThickness = DEFAULT_LINE_THICKNESS * IU_PER_MILS;
-    textThickness = Clamp_Text_PenSize( textThickness, GetTextSize(), IsBold() );
-    return textThickness;
-#else
-    return GetEffectiveTextPenWidth( nullptr );  // JEY TODO: requires RENDER_SETTINGS
-#endif
+    return GetEffectiveTextPenWidth();
 }
 
 
-void LIB_TEXT::print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRANSFORM& aTransform )
+void LIB_TEXT::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+                      const TRANSFORM& aTransform )
 {
-    COLOR4D color = GetDefaultColor();
+    wxDC*   DC = aSettings->GetPrintDC();
+    COLOR4D color = aSettings->GetLayerColor( LAYER_DEVICE );
+    int     penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetDefaultPenWidth() );
 
     /* Calculate the text orientation, according to the component
      * orientation/mirror (needed when draw text in schematic)
@@ -349,8 +344,8 @@ void LIB_TEXT::print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRAN
     // Calculate pos according to mirror/rotation.
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
-    GRText( aDC, txtpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_HJUSTIFY_CENTER,
-            GR_TEXT_VJUSTIFY_CENTER, GetEffectiveTextPenWidth( nullptr ), IsItalic(), IsBold() );
+    GRText( DC, txtpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_HJUSTIFY_CENTER,
+            GR_TEXT_VJUSTIFY_CENTER, penWidth, IsItalic(), IsBold(), m_textMarkupFlags );
 }
 
 
@@ -358,7 +353,7 @@ void LIB_TEXT::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
 {
     LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
-    wxString msg = MessageTextFromValue( aUnits, GetTextPenWidth(), true );
+    wxString msg = MessageTextFromValue( aUnits, GetTextThickness(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 }
 
@@ -368,7 +363,7 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
     /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
      * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
-    EDA_RECT rect = GetTextBox( nullptr, -1, true );   // JEY TODO: requires RENDER_SETTINGS
+    EDA_RECT rect = GetTextBox( -1, true );
     rect.RevertYAxis();
 
     // We are using now a bottom to top Y axis.

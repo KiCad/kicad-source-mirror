@@ -543,7 +543,7 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             tsize = ( tsize * 7 ) / 10;
             GRHaloText( aDC, tpos, aDrawInfo.m_Color, BLACK, WHITE, m_name, t_angle,
                         wxSize( tsize , tsize ), GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                        tsize / 7, false, false );
+                        tsize / 7, false, false, 0 );
 
         }
     }
@@ -568,7 +568,7 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         tsize = ( tsize * 7 ) / 10;
         GRHaloText( aDC, tpos, aDrawInfo.m_Color, BLACK, WHITE, shortname, t_angle,
                     wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                    tsize / 7, false, false );
+                    tsize / 7, false, false, 0 );
     }
 }
 

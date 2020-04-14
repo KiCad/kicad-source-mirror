@@ -34,7 +34,7 @@ class LIB_RECTANGLE  : public LIB_ITEM
     wxPoint m_Pos;                  // Rectangle start point.
     int     m_Width;                // Line width
 
-    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
 
 public:
@@ -58,7 +58,7 @@ public:
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
-    int GetPenSize( ) const override;
+    int GetPenWidth() const override;
 
     const EDA_RECT GetBoundingBox() const override;
 
@@ -68,8 +68,6 @@ public:
     void CalcEdit( const wxPoint& aPosition ) override;
 
     void Offset( const wxPoint& aOffset ) override;
-
-    bool Inside( EDA_RECT& aRect ) const override;
 
     void MoveTo( const wxPoint& aPosition ) override;
 

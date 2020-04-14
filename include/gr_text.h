@@ -56,9 +56,6 @@ enum TEXT_MARKUP_FLAGS
     ENABLE_SUPERSCRIPT_MARKUP = 1 << 1
 };
 
-int GetTextMarkupFlags();
-void SetTextMarkupFlags( int aMarkupFlags );
-
 /**
  * Function  Clamp_Text_PenSize
  *As a rule, pen width should not be >1/4em, otherwise the character
@@ -106,6 +103,8 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
  *      Use a value min(aSize.x, aSize.y) / 5 for a bold text
  *  @param aItalic = true to simulate an italic font
  *  @param aBold = true to use a bold font
+ *  @param aMarkupFlags a set of TEXT_MARKUP_FLAGS indicating what markup features are to
+ *                      be processed
  *  @param aCallback( int x0, int y0, int xf, int yf, void* aData ) is a function called
  *                  (if non null) to draw each segment. used to draw 3D texts or for plotting.
  *                  NULL for normal drawings
@@ -114,9 +113,10 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
  *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
  *                  the text. NULL to draw this text.
  */
-void GRText( wxDC * aDC, const wxPoint &aPos, const COLOR4D aColor, const wxString &aText,
+void GRText( wxDC * aDC, const wxPoint &aPos, COLOR4D aColor, const wxString &aText,
              double aOrient, const wxSize &aSize, enum EDA_TEXT_HJUSTIFY_T aH_justify,
              enum EDA_TEXT_VJUSTIFY_T aV_justify, int aWidth, bool aItalic, bool aBold,
+             int aMarkupFlags,
              void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,
              void* aCallbackData = nullptr, PLOTTER * aPlotter = nullptr );
 
@@ -127,10 +127,10 @@ void GRText( wxDC * aDC, const wxPoint &aPos, const COLOR4D aColor, const wxStri
  * If aBgColor is a dark color text is drawn in aColor2 with aColor1
  * border; otherwise colors are swapped.
  */
-void GRHaloText( wxDC * aDC, const wxPoint &aPos, const COLOR4D aBgColor, COLOR4D aColor1,
+void GRHaloText( wxDC * aDC, const wxPoint &aPos, COLOR4D aBgColor, COLOR4D aColor1,
                  COLOR4D aColor2, const wxString &aText, double aOrient, const wxSize &aSize,
                  enum EDA_TEXT_HJUSTIFY_T aH_justify, enum EDA_TEXT_VJUSTIFY_T aV_justify,
-                 int aWidth, bool aItalic, bool aBold,
+                 int aWidth, bool aItalic, bool aBold, int aMarkupFlags,
                  void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,
                  void* aCallbackData = nullptr, PLOTTER * aPlotter = nullptr );
 

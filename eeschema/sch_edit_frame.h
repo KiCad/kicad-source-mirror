@@ -950,7 +950,7 @@ public:
      *
      * @param aDC = wxDC given by the calling print function
      */
-    virtual void PrintPage( wxDC* aDC ) override;
+    virtual void PrintPage( RENDER_SETTINGS* aSettings ) override;
 
     void SetNetListerCommand( const wxString& aCommand ) { m_netListerCommand = aCommand; }
 

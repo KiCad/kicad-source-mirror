@@ -33,7 +33,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <dialog_print_using_printer_base.h>
-
+#include <sch_painter.h>
 
 class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
 {
@@ -424,14 +424,20 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     if( m_parent->GetPrintMonochrome() )
         GRForceBlackPen( true );
 
+    KIGFX::SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
+    renderSettings.SetPrintDC( dc );
+    // The worksheet item print code is shared between PCBNew and EESchema, so it's easier
+    // if they just use the PCB layer.
+    renderSettings.SetLayerColor( LAYER_WORKSHEET,
+                                  renderSettings.GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) );
+
     if( printReference )
     {
-        m_parent->PrintWorkSheet( dc, aScreen, m_parent->GetDefaultLineWidth(), IU_PER_MILS,
-                                  aScreen->GetFileName(), wxEmptyString,
-                                  m_parent->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) );
+        m_parent->PrintWorkSheet( &renderSettings, aScreen, IU_PER_MILS, aScreen->GetFileName(),
+                                  wxEmptyString );
     }
 
-    aScreen->Print( dc );
+    aScreen->Print( &renderSettings );
 
     m_parent->SetDrawBgColor( bgColor );
     aScreen->m_IsPrinting = false;

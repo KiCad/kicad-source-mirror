@@ -50,13 +50,6 @@ const double PSLIKE_PLOTTER::postscriptTextAscent = 0.718;
 
 // Common routines for Postscript-like plotting engines
 
-void PSLIKE_PLOTTER::SetDefaultLineWidth( int width )
-{
-    defaultPenWidth = width;
-    currentPenWidth = -1;
-}
-
-
 void PSLIKE_PLOTTER::SetColor( COLOR4D color )
 {
     if( colorMode )
@@ -422,7 +415,6 @@ void PS_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     paperSize = pageInfo.GetSizeMils();
     paperSize.x *= 10.0 * aIusPerDecimil;
     paperSize.y *= 10.0 * aIusPerDecimil;
-    SetDefaultLineWidth( 100 * aIusPerDecimil );  // arbitrary default
 }
 
 
@@ -525,20 +517,14 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
 
 /* Set the current line width (in IUs) for the next plot
  */
-void PS_PLOTTER::SetCurrentLineWidth( int width, void* aData )
+void PS_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
     wxASSERT( outputFile );
-    int pen_width;
 
-    if( width >= 0 )
-        pen_width = width;
-    else
-        pen_width = defaultPenWidth;
+    if( aWidth != GetCurrentLineWidth() )
+        fprintf( outputFile, "%g setlinewidth\n", userToDeviceSize( aWidth ) );
 
-    if( pen_width != GetCurrentLineWidth() )
-        fprintf( outputFile, "%g setlinewidth\n", userToDeviceSize( pen_width ) );
-
-    currentPenWidth = pen_width;
+    currentPenWidth = aWidth;
 }
 
 
@@ -942,9 +928,9 @@ bool PS_PLOTTER::StartPlot()
     // within the Document Structuring Convention.
     fputs( "%%Page: 1 1\n"
            "%%BeginPageSetup\n"
-       "gsave\n"
-       "0.0072 0.0072 scale\n"    // Configure postscript for decimils coordinates
-       "linemode1\n", outputFile );
+           "gsave\n"
+           "0.0072 0.0072 scale\n"    // Configure postscript for decimils coordinates
+           "linemode1\n", outputFile );
 
 
     // Rototranslate the coordinate to achieve the landscape layout
@@ -953,11 +939,11 @@ bool PS_PLOTTER::StartPlot()
 
     // Apply the user fine scale adjustments
     if( plotScaleAdjX != 1.0 || plotScaleAdjY != 1.0 )
-        fprintf( outputFile, "%g %g scale\n",
-                 plotScaleAdjX, plotScaleAdjY );
+        fprintf( outputFile, "%g %g scale\n", plotScaleAdjX, plotScaleAdjY );
 
     // Set default line width
-    fprintf( outputFile, "%g setlinewidth\n", userToDeviceSize( defaultPenWidth ) );
+    fprintf( outputFile, "%g setlinewidth\n",
+             userToDeviceSize( m_renderSettings->GetDefaultPenWidth() ) );
     fputs( "%%EndPageSetup\n", outputFile );
 
     return true;
@@ -988,6 +974,7 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
                 int                         aWidth,
                 bool                        aItalic,
                 bool                        aBold,
+                int                         aTextMarkupFlags,
                 bool                        aMultilineAllowed,
                 void*                       aData )
 {
@@ -1000,10 +987,10 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
 
     bool processSuperSub = false;
 
-    if( ( GetTextMarkupFlags() & ENABLE_SUBSCRIPT_MARKUP ) && aText.Contains( wxT( "#" ) ) )
+    if( ( aTextMarkupFlags & ENABLE_SUBSCRIPT_MARKUP ) && aText.Contains( wxT( "#" ) ) )
         processSuperSub = true;
 
-    if( ( GetTextMarkupFlags() & ENABLE_SUPERSCRIPT_MARKUP ) && aText.Contains( wxT( "^" ) ) )
+    if( ( aTextMarkupFlags & ENABLE_SUPERSCRIPT_MARKUP ) && aText.Contains( wxT( "^" ) ) )
         processSuperSub = true;
 
     // Draw the native postscript text (if requested)
@@ -1067,7 +1054,7 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
     if( !use_native )
     {
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                       aWidth, aItalic, aBold, aMultilineAllowed );
+                       aWidth, aItalic, aBold, aTextMarkupFlags, aMultilineAllowed );
     }
 }
 

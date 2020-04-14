@@ -33,7 +33,7 @@ class LIB_POLYLINE : public LIB_ITEM
     int m_Width;                              // Line width
     std::vector<wxPoint> m_PolyPoints;        // list of points (>= 2)
 
-    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
 
 public:
@@ -77,7 +77,7 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    int GetPenSize( ) const override;
+    int GetPenWidth() const override;
 
     void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -87,8 +87,6 @@ public:
     void EndEdit() override;
 
     void Offset( const wxPoint& aOffset ) override;
-
-    bool Inside( EDA_RECT& aRect ) const override;
 
     void MoveTo( const wxPoint& aPosition ) override;
 

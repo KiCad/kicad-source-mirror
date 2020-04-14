@@ -71,16 +71,4 @@ extern ERC_SETTINGS* g_ErcSettings;
 int GetSeverity( int aErrorCode );
 void SetSeverity( int aErrorCode, int aSeverity );
 
-/**
- * Amount to offset text above/below wires & buses.  Expressed as a ratio of the text size.
- */
-double GetTextOffsetRatio();
-void SetTextOffsetRatio( double aOffsetRatio );
-
-// Color to draw items flagged invisible, in libedit (they are invisible in Eeschema
-COLOR4D GetInvisibleItemColor();
-
-// TODO(JE) Remove this once wxDC printing is gone
-COLOR4D GetLayerColor( SCH_LAYER_ID aLayer );
-
 #endif    // _GENERAL_H_

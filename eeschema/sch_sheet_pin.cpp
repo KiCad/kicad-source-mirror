@@ -35,6 +35,7 @@
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
+#include <sch_painter.h>
 #include <trigo.h>
 
 
@@ -65,10 +66,10 @@ EDA_ITEM* SCH_SHEET_PIN::Clone() const
 }
 
 
-void SCH_SHEET_PIN::Print( wxDC* aDC, const wxPoint&  aOffset )
+void SCH_SHEET_PIN::Print( RENDER_SETTINGS* aSettings, const wxPoint&  aOffset )
 {
     // The icon selection is handle by the virtual method CreateGraphicShape called by ::Print
-    SCH_HIERLABEL::Print( aDC, aOffset );
+    SCH_HIERLABEL::Print( aSettings, aOffset );
 }
 
 
@@ -95,9 +96,9 @@ bool SCH_SHEET_PIN::operator==( const SCH_SHEET_PIN* aPin ) const
 }
 
 
-int SCH_SHEET_PIN::GetPenSize() const
+int SCH_SHEET_PIN::GetPenWidth() const
 {
-    return 0;   // use default pen size
+    return 1;
 }
 
 
@@ -252,7 +253,7 @@ void SCH_SHEET_PIN::Rotate( wxPoint aPosition )
 }
 
 
-void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos )
+void SCH_SHEET_PIN::CreateGraphicShape( std::vector<wxPoint>& aPoints, const wxPoint& aPos )
 {
     /*
      * These are the same icon shapes as SCH_HIERLABEL but the graphic icon is slightly

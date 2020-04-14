@@ -36,7 +36,6 @@
 #include <lib_rectangle.h>
 #include <settings/color_settings.h>
 #include <transform.h>
-#include <default_values.h>    // For some default values
 
 
 LIB_RECTANGLE::LIB_RECTANGLE( LIB_PART*      aParent ) :
@@ -88,12 +87,6 @@ void LIB_RECTANGLE::Offset( const wxPoint& aOffset )
 }
 
 
-bool LIB_RECTANGLE::Inside( EDA_RECT& aRect ) const
-{
-    return aRect.Contains( m_Pos.x, -m_Pos.y ) || aRect.Contains( m_End.x, -m_End.y );
-}
-
-
 void LIB_RECTANGLE::MoveTo( const wxPoint& aPosition )
 {
     wxPoint size = m_End - m_Pos;
@@ -142,52 +135,45 @@ void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->Rect( pos, end, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    auto pen_size = GetPenSize();
+    auto pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
     if( !already_filled || pen_size > 0 )
     {
-        pen_size = std::max( 0, pen_size );
-        aPlotter->SetColor( aPlotter->ColorSettings()->GetColor( LAYER_DEVICE ) );
+        aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
         aPlotter->Rect( pos, end, already_filled ? NO_FILL : m_Fill, pen_size );
     }
 }
 
 
-int LIB_RECTANGLE::GetPenSize() const
+int LIB_RECTANGLE::GetPenWidth() const
 {
-    if( m_Width )
-        return m_Width;
-
-#if 1
-    // Temporary code not using RENDER_SETTINGS
-    return DEFAULT_LINE_THICKNESS * IU_PER_MILS;
-#else
-    // JEY TODO: requires RENDER_SETTINGS
-#endif
+    return std::max( m_Width, 1 );
 }
 
 
-void LIB_RECTANGLE::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+void LIB_RECTANGLE::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                            const TRANSFORM& aTransform )
 {
-    COLOR4D color   = GetLayerColor( LAYER_DEVICE );
-    COLOR4D bgColor = GetLayerColor( LAYER_DEVICE_BACKGROUND );
+    wxDC*   DC      = aSettings->GetPrintDC();
+    COLOR4D color   = aSettings->GetLayerColor( LAYER_DEVICE );
+    COLOR4D bgColor = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
     wxPoint pt1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
     wxPoint pt2 = aTransform.TransformCoordinate( m_End ) + aOffset;
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
+    int    penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
     if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
-        GRFilledRect( nullptr, aDC, pt1.x, pt1.y, pt2.x, pt2.y, GetPenSize( ), bgColor, bgColor );
+        GRFilledRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, bgColor, bgColor );
     else if( m_Fill == FILLED_SHAPE  && !aData )
-        GRFilledRect( nullptr, aDC, pt1.x, pt1.y, pt2.x, pt2.y, GetPenSize(), color, color );
+        GRFilledRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color, color );
     else
-        GRRect( nullptr, aDC, pt1.x, pt1.y, pt2.x, pt2.y, GetPenSize(), color );
+        GRRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color );
 }
 
 
@@ -207,7 +193,7 @@ const EDA_RECT LIB_RECTANGLE::GetBoundingBox() const
 
     rect.SetOrigin( m_Pos );
     rect.SetEnd( m_End );
-    rect.Inflate( ( GetPenSize()+1 ) / 2 );
+    rect.Inflate( ( GetPenWidth() / 2 ) + 1 );
 
     rect.RevertYAxis();
 
@@ -217,7 +203,7 @@ const EDA_RECT LIB_RECTANGLE::GetBoundingBox() const
 
 bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int     mindist = std::max( aAccuracy + GetPenSize() / 2,
+    int     mindist = std::max( aAccuracy + GetPenWidth() / 2,
                                 Mils2iu( MINIMUM_SELECTION_DISTANCE ) );
     wxPoint actualStart = DefaultTransform.TransformCoordinate( m_Pos );
     wxPoint actualEnd   = DefaultTransform.TransformCoordinate( m_End );

@@ -67,7 +67,7 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
     // on updated viewport data.
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 
-    m_gal->SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
+    m_gal->SetGridColor( m_painter->GetSettings()->GetLayerColor( LAYER_SCHEMATIC_GRID ) );
     m_gal->SetCursorEnabled( false );
     m_gal->SetGridSize( VECTOR2D( Mils2iu( 50.0 ), Mils2iu( 50.0 ) ) );
 
