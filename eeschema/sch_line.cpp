@@ -291,7 +291,22 @@ void SCH_LINE::SetLineWidth( const int aSize )
 
 int SCH_LINE::GetPenSize() const
 {
-    return m_size;
+    if( m_size )
+        return m_size;
+
+#if 1
+    // Temporary code not using RENDER_SETTINGS
+    int thickness = DEFAULT_LINE_THICKNESS * IU_PER_MILS;
+
+    if( GetLayer() == LAYER_BUS )
+        thickness = DEFAULT_BUS_THICKNESS * IU_PER_MILS;
+    else if( GetLayer() == LAYER_WIRE )
+        thickness = DEFAULT_WIRE_THICKNESS * IU_PER_MILS;
+
+    return thickness;
+#else
+    // JEY TODO: requires RENDER_SETTINGS
+#endif
 }
 
 

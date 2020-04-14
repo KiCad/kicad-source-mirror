@@ -194,7 +194,15 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
 int LIB_CIRCLE::GetPenSize() const
 {
-    return m_Width;
+    if( m_Width )
+        return m_Width;
+
+#if 1
+    // Temporary code not using RENDER_SETTINGS
+    return DEFAULT_LINE_THICKNESS * IU_PER_MILS;
+#else
+    // JEY TODO: requires RENDER_SETTINGS
+#endif
 }
 
 

@@ -128,13 +128,23 @@ const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
 
 int SCH_BUS_WIRE_ENTRY::GetPenSize() const
 {
-    return 0;   // use default wire thickness
+#if 1
+    // Temporary code not using RENDER_SETTINGS
+    return DEFAULT_WIRE_THICKNESS * IU_PER_MILS;
+#else
+    // JEY TODO: requires RENDER_SETTINGS
+#endif
 }
 
 
 int SCH_BUS_BUS_ENTRY::GetPenSize() const
 {
-    return 0;   // use default bus thickness
+#if 1
+    // Temporary code not using RENDER_SETTINGS
+    return DEFAULT_BUS_THICKNESS * IU_PER_MILS;
+#else
+    // JEY TODO: requires RENDER_SETTINGS
+#endif
 }
 
 

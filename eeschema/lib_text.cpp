@@ -300,7 +300,14 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 
 int LIB_TEXT::GetPenSize() const
 {
-    return GetEffectiveTextPenWidth( nullptr ); // JEY TODO: requires RENDER_SETTINGS
+#if 1
+    // Temporary code not using RENDER_SETTINGS
+    int textThickness = DEFAULT_LINE_THICKNESS * IU_PER_MILS;
+    textThickness = Clamp_Text_PenSize( textThickness, GetTextSize(), IsBold() );
+    return textThickness;
+#else
+    return GetEffectiveTextPenWidth( nullptr );  // JEY TODO: requires RENDER_SETTINGS
+#endif
 }
 
 

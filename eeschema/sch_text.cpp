@@ -282,7 +282,14 @@ bool SCH_TEXT::operator<( const SCH_ITEM& aItem ) const
 
 int SCH_TEXT::GetPenSize() const
 {
-    return GetEffectiveTextPenWidth( nullptr );     // JEY TODO: requires RENDER_SETTINGS
+#if 1
+    // Temporary code not using RENDER_SETTINGS
+    int textThickness = DEFAULT_LINE_THICKNESS * IU_PER_MILS;
+    textThickness = Clamp_Text_PenSize( textThickness, GetTextSize(), IsBold() );
+    return textThickness;
+#else
+    return GetEffectiveTextPenWidth( nullptr );  // JEY TODO: requires RENDER_SETTINGS
+#endif
 }
 
 
@@ -570,7 +577,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
     static std::vector<wxPoint> Poly;
     COLOR4D color = aPlotter->ColorSettings()->GetColor( GetLayer() );
-    int penWidth = GetEffectiveTextPenWidth( nullptr );
+    int penWidth = GetPenSize();
 
     aPlotter->SetCurrentLineWidth( penWidth );
 

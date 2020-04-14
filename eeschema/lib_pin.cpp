@@ -539,7 +539,15 @@ bool LIB_PIN::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 int LIB_PIN::GetPenSize() const
 {
-    return m_width;
+    if( m_width )
+        return m_width;
+
+#if 1
+    // Temporary code not using RENDER_SETTINGS
+    return DEFAULT_LINE_THICKNESS * IU_PER_MILS;
+#else
+    // JEY TODO: requires RENDER_SETTINGS
+#endif
 }
 
 

@@ -97,7 +97,13 @@ void SCH_NO_CONNECT::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
 
 int SCH_NO_CONNECT::GetPenSize() const
 {
-    return 0;   // use default pen size
+#if 1
+    // Temporary code not using RENDER_SETTINGS
+    int thickness = DEFAULT_LINE_THICKNESS * IU_PER_MILS;
+    return thickness;
+#else
+    // JEY TODO: requires RENDER_SETTINGS
+#endif
 }
 
 
