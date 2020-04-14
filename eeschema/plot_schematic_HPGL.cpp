@@ -180,9 +180,11 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
                                               bool              aPlotFrameRef )
 {
     HPGL_PLOTTER* plotter = new HPGL_PLOTTER();
+    // Currently, plot units are in decimil
 
     plotter->SetPageSettings( aPageInfo );
-    // Currently, plot units are in decimil
+    plotter->SetColorSettings( getColorSettings() );
+    plotter->SetColorMode( getModeColor() );
     plotter->SetViewport( aPlot0ffset, IU_PER_MILS/10, aScale, false );
 
     // Init :
