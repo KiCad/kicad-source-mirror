@@ -30,7 +30,7 @@
 #include <settings/settings_manager.h>
 #include <wx/config.h>
 #include <widgets/ui_common.h>
-#include <general.h>    // For some default values
+#include <default_values.h>    // For some default values
 
 ///! Update the schema version whenever a migration is required
 const int eeschemaSchemaVersion = 0;

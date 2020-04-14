@@ -53,6 +53,7 @@
 #include <settings/color_settings.h>
 #include <trace_helpers.h>
 #include <libedit/libedit_settings.h>
+#include <default_values.h>
 
 static const int pin_orientation_codes[] =
 {
@@ -166,9 +167,9 @@ LIB_PIN::LIB_PIN( LIB_PART* aParent )
     }
     else    // Use hardcoded eeschema defaults: libedit settings are not existing.
     {
-        m_length       = Mils2iu( 100 );
-        m_numTextSize  = Mils2iu( 50 );
-        m_nameTextSize = Mils2iu( 50 );
+        m_length       = Mils2iu( DEFAULT_PIN_LENGTH );
+        m_numTextSize  = Mils2iu( DEFAULT_PINNUM_SIZE );
+        m_nameTextSize = Mils2iu( DEFAULT_PINNAME_SIZE );
     }
 }
 

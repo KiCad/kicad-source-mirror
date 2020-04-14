@@ -34,12 +34,12 @@
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
-#include <general.h>
 #include <class_libentry.h>
 #include <transform.h>
 #include <lib_field.h>
 #include <template_fieldnames.h>
 #include <settings/color_settings.h>
+#include <default_values.h>    // For some default values
 
 
 LIB_FIELD::LIB_FIELD(LIB_PART * aParent, int idfield ) :

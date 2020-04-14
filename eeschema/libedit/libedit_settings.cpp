@@ -25,6 +25,7 @@
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 #include "libedit_settings.h"
+#include <default_values.h>
 
 
 ///! Update the schema version whenever a migration is required
@@ -41,17 +42,20 @@ LIBEDIT_SETTINGS::LIBEDIT_SETTINGS() : APP_SETTINGS_BASE( "libedit", libeditSche
     // Init settings:
     SetLegacyFilename( "eeschema" );
 
-    m_params.emplace_back( new PARAM<int>( "defaults.line_width", &m_Defaults.line_width, 6 ) );
+    m_params.emplace_back( new PARAM<int>( "defaults.line_width",
+                           &m_Defaults.line_width, DEFAULT_LINE_THICKNESS ) );
 
-    m_params.emplace_back( new PARAM<int>( "defaults.text_size", &m_Defaults.text_size, 50 ) );
+    m_params.emplace_back( new PARAM<int>( "defaults.text_size",
+                           &m_Defaults.text_size, DEFAULT_TEXT_SIZE ) );
 
-    m_params.emplace_back( new PARAM<int>( "defaults.pin_length", &m_Defaults.pin_length, 100 ) );
+    m_params.emplace_back( new PARAM<int>( "defaults.pin_length",
+                                           &m_Defaults.pin_length, DEFAULT_PIN_LENGTH ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "defaults.pin_name_size", &m_Defaults.pin_name_size, 50 ) );
+    m_params.emplace_back( new PARAM<int>( "defaults.pin_name_size",
+                           &m_Defaults.pin_name_size, DEFAULT_PINNAME_SIZE ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "defaults.pin_num_size", &m_Defaults.pin_num_size, 50 ) );
+    m_params.emplace_back( new PARAM<int>( "defaults.pin_num_size",
+                           &m_Defaults.pin_num_size, DEFAULT_PINNUM_SIZE ) );
 
     m_params.emplace_back( new PARAM<int>( "repeat.label_delta", &m_Repeat.label_delta, 1 ) );
 

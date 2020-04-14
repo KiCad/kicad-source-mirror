@@ -46,6 +46,7 @@
 #include <netlist_object.h>
 #include <settings/color_settings.h>
 #include <trace_helpers.h>
+#include <default_values.h>    // For some default values
 
 #include <wx/debug.h>
 

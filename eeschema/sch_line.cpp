@@ -40,6 +40,7 @@
 #include <settings/color_settings.h>
 #include <netlist_object.h>
 #include <sch_view.h>
+#include <default_values.h>    // For some default values
 
 
 static wxPenStyle getwxPenStyle( PLOT_DASH_TYPE aType )

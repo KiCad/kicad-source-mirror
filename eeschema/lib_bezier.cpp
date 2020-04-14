@@ -35,6 +35,7 @@
 #include <lib_bezier.h>
 #include <transform.h>
 #include <settings/color_settings.h>
+#include <default_values.h>    // For some default values
 
 
 LIB_BEZIER::LIB_BEZIER( LIB_PART* aParent ) :

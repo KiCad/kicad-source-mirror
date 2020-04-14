@@ -60,6 +60,7 @@
 #include <settings/color_settings.h>
 #include <view/view.h>
 #include <kiface_i.h>
+#include <default_values.h>
 
 #include "sch_painter.h"
 

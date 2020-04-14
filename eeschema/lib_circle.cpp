@@ -37,6 +37,7 @@
 #include <lib_circle.h>
 #include <settings/color_settings.h>
 #include <transform.h>
+#include <default_values.h>    // For some default values
 
 
 LIB_CIRCLE::LIB_CIRCLE( LIB_PART* aParent ) :

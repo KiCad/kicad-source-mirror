@@ -43,7 +43,6 @@
 #include <properties.h>
 #include <trace_helpers.h>
 
-#include <general.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_component.h>
@@ -78,6 +77,8 @@
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
 #include <confirm.h>
 #include <tool/selection.h>
+#include <default_values.h>    // For some default values
+
 
 using namespace TSCHEMATIC_T;
 
@@ -1793,15 +1794,15 @@ void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
 
     int nestLevel = 0;
 
-    if( aPin->GetNameTextSize() != Mils2iu( DEFAULTPINNAMESIZE )
-      || aPin->GetNumberTextSize() != Mils2iu( DEFAULTPINNUMSIZE ) )
+    if( aPin->GetNameTextSize() != Mils2iu( DEFAULT_PINNAME_SIZE )
+      || aPin->GetNumberTextSize() != Mils2iu( DEFAULT_PINNUM_SIZE ) )
     {
         aFormatter.Print( 0, "\n" );
         aFormatter.Print( aNestLevel + 1, "(name %s",
                           aFormatter.Quotew( aPin->GetName() ).c_str() );
 
         // This follows the EDA_TEXT effects formatting for future expansion.
-        if( aPin->GetNameTextSize() != Mils2iu( DEFAULTPINNAMESIZE ) )
+        if( aPin->GetNameTextSize() != Mils2iu( DEFAULT_PINNAME_SIZE ) )
             aFormatter.Print( 0, " (effects (font (size %s %s)))",
                               FormatInternalUnits( aPin->GetNameTextSize() ).c_str(),
                               FormatInternalUnits( aPin->GetNameTextSize() ).c_str() );
@@ -1811,7 +1812,7 @@ void SCH_SEXPR_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
                           aFormatter.Quotew( aPin->GetNumber() ).c_str() );
 
         // This follows the EDA_TEXT effects formatting for future expansion.
-        if( aPin->GetNumberTextSize() != Mils2iu( DEFAULTPINNUMSIZE ) )
+        if( aPin->GetNumberTextSize() != Mils2iu( DEFAULT_PINNUM_SIZE ) )
             aFormatter.Print( 0, " (effects (font (size %s %s)))",
                               FormatInternalUnits( aPin->GetNumberTextSize() ).c_str(),
                               FormatInternalUnits( aPin->GetNumberTextSize() ).c_str() );

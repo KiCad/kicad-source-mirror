@@ -41,13 +41,14 @@
 #include <transform.h>
 #include <settings/color_settings.h>
 #include <lib_text.h>
+#include <default_values.h>    // For some default values
 
 
 LIB_TEXT::LIB_TEXT( LIB_PART * aParent ) :
     LIB_ITEM( LIB_TEXT_T, aParent ),
     EDA_TEXT()
 {
-    SetTextSize( wxSize( Mils2iu( 50 ), Mils2iu( 50 ) ) );
+    SetTextSize( wxSize( Mils2iu( DEFAULT_TEXT_SIZE ), Mils2iu( DEFAULT_TEXT_SIZE ) ) );
 }
 
 

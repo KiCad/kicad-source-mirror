@@ -26,7 +26,7 @@
 #include <memory>
 #include <sch_io_mgr.h>
 #include <stack>
-#include <general.h>
+#include <general.h>        // for EESCHEMA_VERSION definition
 
 
 class KIWAY;

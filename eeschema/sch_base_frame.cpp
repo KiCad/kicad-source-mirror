@@ -41,6 +41,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
+#include <default_values.h>    // For some default values
 
 
 LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
@@ -85,7 +86,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
     m_defaultLineWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS ),
     m_defaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
     m_defaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS ),
-    m_defaultTextSize( 50.0 * IU_PER_MILS ),
+    m_defaultTextSize( DEFAULT_TEXT_SIZE * IU_PER_MILS ),
     m_showPinElectricalTypeName( false )
 {
     createCanvas();

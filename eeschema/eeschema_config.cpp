@@ -52,6 +52,7 @@
 #include <widgets/ui_common.h>
 #include <dialogs/dialog_schematic_setup.h>
 #include "erc.h"
+#include <default_values.h>    // For some default values
 
 
 static double s_textOffsetRatio = 0.08;

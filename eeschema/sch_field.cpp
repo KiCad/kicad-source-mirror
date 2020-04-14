@@ -46,6 +46,7 @@
 #include <settings/color_settings.h>
 #include <kicad_string.h>
 #include <trace_helpers.h>
+#include <default_values.h>    // For some default values
 
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_ITEM* aParent, const wxString& aName ) :

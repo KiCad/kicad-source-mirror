@@ -67,6 +67,7 @@
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
 #include <confirm.h>
 #include <tool/selection.h>
+#include <default_values.h>    // For some default values
 
 
 #define Mils2Iu( x ) Mils2iu( x )

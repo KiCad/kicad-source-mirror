@@ -36,6 +36,7 @@
 #include <lib_rectangle.h>
 #include <settings/color_settings.h>
 #include <transform.h>
+#include <default_values.h>    // For some default values
 
 
 LIB_RECTANGLE::LIB_RECTANGLE( LIB_PART*      aParent ) :

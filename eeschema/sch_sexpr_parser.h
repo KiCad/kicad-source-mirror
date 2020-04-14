@@ -35,8 +35,8 @@
 #include <math/util.h>                           // KiROUND, Clamp
 
 #include <class_library.h>
-#include <general.h>
 #include <schematic_lexer.h>
+#include <default_values.h>    // For some default values
 
 
 class LIB_ARC;

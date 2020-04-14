@@ -37,14 +37,15 @@
 #include <sch_line.h>
 #include <sch_text.h>
 #include <settings/color_settings.h>
+#include <default_values.h>    // For some default values
 
 
 SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, char shape ) :
     SCH_ITEM( NULL, aType )
 {
     m_pos    = pos;
-    m_size.x = Mils2iu( 100 );
-    m_size.y = Mils2iu( 100 );
+    m_size.x = Mils2iu( DEFAULT_SCH_ENTRY_SIZE );
+    m_size.y = Mils2iu( DEFAULT_SCH_ENTRY_SIZE );
 
     if( shape == '/' )
         m_size.y *= -1;

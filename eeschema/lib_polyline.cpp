@@ -36,6 +36,7 @@
 #include <lib_polyline.h>
 #include <settings/color_settings.h>
 #include <transform.h>
+#include <default_values.h>    // For some default values
 
 
 LIB_POLYLINE::LIB_POLYLINE( LIB_PART* aParent ) :
