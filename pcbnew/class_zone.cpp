@@ -1284,7 +1284,7 @@ double ZONE_CONTAINER::CalculateFilledArea()
     {
         m_area += m_FilledPolysList.Outline( i ).Area();
 
-        for( int j = 0; m_FilledPolysList.HoleCount( i ); j++ )
+        for( int j = 0; j < m_FilledPolysList.HoleCount( i ); j++ )
         {
             m_area -= m_FilledPolysList.Hole( i, j ).Area();
         }
