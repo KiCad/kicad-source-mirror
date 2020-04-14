@@ -55,6 +55,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_track_via_properties.h>
 #include <preview_items/ruler_item.h>
 #include <board_commit.h>
+#include <zone_filler.h>
 
 
 void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags )
@@ -922,6 +923,48 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                 m_commit->Modify( parent );
                 getView()->Remove( pad );
                 parent->Remove( pad );
+            }
+            break;
+
+        case PCB_ZONE_AREA_T:
+            // We process the zones special so that cutouts can be deleted when the delete tool
+            // is called from inside a cutout when the zone is selected.
+            {
+                // Only interact with cutouts when deleting and a single item is selected
+                if( !isCut && selectionCopy.GetSize() == 1 )
+                {
+                    VECTOR2I curPos = getViewControls()->GetCursorPosition();
+                    auto     zone   = static_cast<ZONE_CONTAINER*>( item );
+
+                    int outlineIdx, holeIdx;
+
+                    if( zone->HitTestCutout( curPos, &outlineIdx, &holeIdx ) )
+                    {
+                        // Remove the cutout
+                        m_commit->Modify( zone );
+                        zone->RemoveCutout( outlineIdx, holeIdx );
+
+                        std::vector<ZONE_CONTAINER*> toFill;
+                        toFill.emplace_back( zone );
+
+                        // Fill the modified zone
+                        ZONE_FILLER filler( board() );
+                        filler.InstallNewProgressReporter( frame(), _( "Fill Zone" ), 4 );
+                        filler.Fill( toFill );
+
+                        // Update the display
+                        zone->Hatch();
+                        canvas()->Refresh();
+
+                        // Restore the selection on the original zone
+                        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, zone );
+
+                        break;
+                    }
+                }
+
+                // Remove the entire zone otherwise
+                m_commit->Remove( item );
             }
             break;
 

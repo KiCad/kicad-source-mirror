@@ -284,6 +284,24 @@ public:
     bool HitTestFilledArea( const wxPoint& aRefPos ) const;
 
     /**
+     * Tests if the given point is contained within a cutout of the zone.
+     *
+     * @param aRefPos is the point to test
+     * @param aOutlineIdx is the index of the outline containing the cutout
+     * @param aHoleIdx is the index of the hole
+     * @return true if aRefPos is inside a zone cutout
+     */
+    bool HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx = nullptr,
+            int* aHoleIdx = nullptr ) const;
+
+    bool HitTestCutout( const wxPoint& aRefPos, int* aOutlineIdx = nullptr,
+            int* aHoleIdx = nullptr ) const
+    {
+        return HitTestCutout( VECTOR2I( aRefPos.x, aRefPos.y ), aOutlineIdx, aHoleIdx );
+    }
+
+
+    /**
      * Some intersecting zones, despite being on the same layer with the same net, cannot be
      * merged due to other parameters such as fillet radius.  The copper pour will end up
      * effectively merged though, so we want to keep the corners of such intersections sharp.
@@ -617,6 +635,14 @@ public:
     bool GetFilledPolysUseThickness() const { return m_FilledPolysUseThickness; }
     void SetFilledPolysUseThickness( bool aOption ) { m_FilledPolysUseThickness = aOption; }
 
+
+    /**
+     * Remove a cutout from the zone.
+     *
+     * @param aOutlineIdx is the zone outline the hole belongs to
+     * @param aHoleIdx is the hole in the outline to remove
+     */
+    void RemoveCutout( int aOutlineIdx, int aHoleIdx );
 
     /**
      * add a polygon to the zone outline

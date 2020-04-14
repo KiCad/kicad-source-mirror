@@ -60,6 +60,13 @@ SHAPE_POLY_SET::SHAPE_POLY_SET() :
 }
 
 
+SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_LINE_CHAIN& aOutline ) :
+    SHAPE( SH_POLY_SET )
+{
+    AddOutline( aOutline );
+}
+
+
 SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther, bool aDeepCopy ) :
     SHAPE( SH_POLY_SET ), m_polys( aOther.m_polys )
 {

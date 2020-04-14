@@ -689,6 +689,31 @@ bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos ) const
 }
 
 
+bool ZONE_CONTAINER::HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx, int* aHoleIdx ) const
+{
+    // Iterate over each outline polygon in the zone and then iterate over
+    // each hole it has to see if the point is in it.
+    for( int i = 0; i < m_Poly->OutlineCount(); i++ )
+    {
+        for( int j = 0; j < m_Poly->HoleCount( i ); j++ )
+        {
+            if( m_Poly->Hole( i, j ).PointInside( aRefPos ) )
+            {
+                if( aOutlineIdx )
+                    *aOutlineIdx = i;
+
+                if( aHoleIdx )
+                    *aHoleIdx = j;
+
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
 void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
@@ -884,6 +909,21 @@ ZONE_CONNECTION ZONE_CONTAINER::GetPadConnection( D_PAD* aPad ) const
         return m_PadConnection;
     else
         return aPad->GetZoneConnection();
+}
+
+
+void ZONE_CONTAINER::RemoveCutout( int aOutlineIdx, int aHoleIdx )
+{
+    // Ensure the requested cutout is valid
+    if( m_Poly->OutlineCount() < aOutlineIdx || m_Poly->HoleCount( aOutlineIdx ) < aHoleIdx )
+        return;
+
+    SHAPE_POLY_SET cutPoly( m_Poly->Hole( aOutlineIdx, aHoleIdx ) );
+
+    // Add the cutout back to the zone
+    m_Poly->BooleanAdd( cutPoly, SHAPE_POLY_SET::PM_FAST );
+
+    SetNeedRefill( true );
 }
 
 

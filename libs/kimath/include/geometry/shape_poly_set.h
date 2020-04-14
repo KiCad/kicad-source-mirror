@@ -438,6 +438,13 @@ class SHAPE_POLY_SET : public SHAPE
         SHAPE_POLY_SET();
 
         /**
+         * Construct a SHAPE_POLY_SET with the first outline given by aOutline.
+         *
+         * @param aOutline is a closed outline
+         */
+        SHAPE_POLY_SET( const SHAPE_LINE_CHAIN& aOutline );
+
+        /**
          * Copy constructor SHAPE_POLY_SET
          * Performs a deep copy of \p aOther into \p this.
          * @param aOther is the SHAPE_POLY_SET object that will be copied.
