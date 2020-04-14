@@ -109,18 +109,19 @@ LINE SHOVE::assembleLine( const LINKED_ITEM* aSeg, int* aIndex )
 // visually "outwards" of the line/via applying pressure on it. Unfortunately there's no
 // mathematical concept of orientation of an open curve, so we use some primitive heuristics:
 // if the shoved line wraps around the start of the "pusher", it's likely shoved in wrong direction.
-bool SHOVE::checkBumpDirection( const LINE& aCurrent, const LINE& aShoved ) const
+
+// Update: there's no concept of an orientation of an open curve, but nonetheless Tom's dumb as.... (censored)
+// Two open curves put together make a closed polygon... Tom should learn high school geometry!
+
+bool SHOVE::checkBumpDirection( const LINE& aCurrent, const LINE& aObstacle, const LINE& aShoved ) const
 {
-    const SEG& ss = aCurrent.CSegment( 0 );
+    SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER checker( aCurrent.CPoint(0) );
+    checker.AddPolyline( aObstacle.CLine() );
+    checker.AddPolyline( aShoved.CLine().Reverse() );
+    
+    bool inside = checker.IsInside();
 
-    int dist = getClearance( &aCurrent, &aShoved );
-
-    dist += aCurrent.Width() / 2;
-    dist += aShoved.Width() / 2;
-
-    const VECTOR2I ps = ss.A - ( ss.B - ss.A ).Resize( dist );
-
-    return !aShoved.CLine().PointOnEdge( ps );
+    return !inside;
 }
 
 
@@ -218,7 +219,7 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
             continue;
         }
 
-        if( !checkBumpDirection( aCurrent, l ) )
+        if( !checkBumpDirection( aCurrent, aObstacle, l ) )
         {
             wxLogTrace( "PNS", "attempt %d fail direction-check", attempt );
             aShoved.SetShape( l.CLine() );

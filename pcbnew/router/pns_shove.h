@@ -115,7 +115,7 @@ private:
     bool pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea, VIA* aDraggedVia );
 
     SHOVE_STATUS walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, LINE& aShoved );
-    bool checkBumpDirection( const LINE& aCurrent, const LINE& aShoved ) const;
+    bool checkBumpDirection( const LINE& aCurrent, const LINE& aObstacle, const LINE& aShoved ) const;
 
     SHOVE_STATUS onCollidingArc( LINE& aCurrent, ARC* aObstacleArc );
     SHOVE_STATUS onCollidingLine( LINE& aCurrent, LINE& aObstacle );
