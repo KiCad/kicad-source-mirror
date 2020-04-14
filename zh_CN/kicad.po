@@ -1149,7 +1149,7 @@ msgstr "cu. mils"
 
 #: common/base_units.cpp:489
 msgid "in"
-msgstr "在"
+msgstr "英寸"
 
 #: common/base_units.cpp:491
 msgid "sq. in"
@@ -18113,9 +18113,9 @@ msgid ""
 "in an unconnected \n"
 "copper island."
 msgstr ""
-"没有网络将导致\n"
-"在一个没有连接\n"
-"的铜孤岛上。"
+"没有网络的铺铜将\n"
+"形成一片无任何电\n"
+"气连接的孤铜"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:107
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:45
@@ -26231,7 +26231,7 @@ msgstr "切换当前布线方向。"
 
 #: pcbnew/router/router_tool.cpp:152
 msgid "Switch Rounding"
-msgstr "改变"
+msgstr "改变拐角类型"
 
 #: pcbnew/router/router_tool.cpp:153
 msgid "Switches the corner type of the currently routed track."
@@ -26524,7 +26524,7 @@ msgstr "%.1f mils"
 #: pcbnew/toolbars_pcb_editor.cpp:570
 #, c-format
 msgid "Via: %s (%s)"
-msgstr "值：%s (%s)"
+msgstr "过孔：%s (%s)"
 
 #: pcbnew/tools/drawing_tool.cpp:162 pcbnew/tools/drawing_tool.cpp:1083
 msgid "Draw a line segment"
