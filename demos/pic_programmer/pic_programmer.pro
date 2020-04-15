@@ -1,5 +1,5 @@
-update=19/01/2020 20:27:59
-last_client=kicad
+update=15/04/2020 15:22:14
+last_client=pcbnew
 [common]
 NetDir=
 [cvpcb]
@@ -12,11 +12,13 @@ version=1
 [eeschema]
 version=1
 LibDir=
+[ModEditFrame]
+version=1
 [pcbnew]
 version=1
 PageLayoutDescrFile=
 LastNetListRead=pic_programmer.net
-LastSTEPExportPath=
+LastSTEPExportPath=pic_programmer.step
 LastIDFExportPath=
 LastVRMLExportPath=
 LastSpecctraDSNExportPath=
@@ -25,14 +27,14 @@ CopperLayerCount=2
 BoardThickness=1.6
 AllowMicroVias=0
 AllowBlindVias=0
-RequireCourtyardDefinitions=0
-ProhibitOverlappingCourtyards=1
 MinTrackWidth=0.25
 MinViaDiameter=0.8999999999999999
 MinViaDrill=0.5
 MinMicroViaDiameter=0.508
 MinMicroViaDrill=0.127
 MinHoleToHole=0.25
+RequireCourtyardDefinitions=0
+ProhibitOverlappingCourtyards=1
 CopperEdgeClearance=0.01
 TrackWidth1=0.5
 TrackWidth2=0.4
@@ -67,7 +69,7 @@ DimensionPrecision=1
 SolderMaskClearance=0.09999999999999999
 SolderMaskMinWidth=0
 SolderPasteClearance=0
-SolderPasteRatio=-0
+SolderPasteRatio=0
 [pcbnew/Layer.F.Cu]
 Name=top_layer
 Type=0
