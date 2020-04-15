@@ -203,8 +203,7 @@ ABOARD6::ABOARD6( ALTIUM_PARSER& aReader )
 
         ABOARD6_LAYER_STACKUP curlayer;
 
-        curlayer.name = ALTIUM_PARSER::PropertiesReadString(
-                properties, layername, "" ); // TODO: trim string
+        curlayer.name   = ALTIUM_PARSER::PropertiesReadString( properties, layername, "" );
         curlayer.nextId = ALTIUM_PARSER::PropertiesReadInt( properties, layeri + "NEXT", 0 );
         curlayer.prevId = ALTIUM_PARSER::PropertiesReadInt( properties, layeri + "PREV", 0 );
         curlayer.copperthick =
