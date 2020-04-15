@@ -1,4 +1,4 @@
-update=25/08/2019 19:59:15
+update=15/04/2020 18:01:37
 version=1
 last_client=kicad
 [general]
@@ -29,6 +29,15 @@ ERC_CheckBusDriverConflicts=1
 ERC_CheckBusEntryConflicts=1
 ERC_CheckBusToBusConflicts=1
 ERC_CheckBusToNetConflicts=1
+[sheetnames]
+1=00000000-0000-0000-0000-00005e977db2:
+2=00000000-0000-0000-0000-00004bf03681:pal-ntsc.sch
+3=00000000-0000-0000-0000-00004bf03689:ESVIDEO-RVB
+4=00000000-0000-0000-0000-00004bf03685:RAMS
+5=00000000-0000-0000-0000-00004bf0367f:modul
+6=00000000-0000-0000-0000-00004bf0367d:muxdata
+7=00000000-0000-0000-0000-00004bf03683:graphic
+8=00000000-0000-0000-0000-00004bf03687:buspci.sch
 [pcbnew]
 version=1
 PageLayoutDescrFile=
@@ -42,14 +51,14 @@ CopperLayerCount=4
 BoardThickness=1.6002
 AllowMicroVias=0
 AllowBlindVias=0
-RequireCourtyardDefinitions=0
-ProhibitOverlappingCourtyards=1
 MinTrackWidth=0.2
 MinViaDiameter=0.7999999999999999
 MinViaDrill=0.4
 MinMicroViaDiameter=0.508
 MinMicroViaDrill=0.127
 MinHoleToHole=0.25
+RequireCourtyardDefinitions=0
+ProhibitOverlappingCourtyards=1
 CopperEdgeClearance=0.01
 TrackWidth1=0.2
 ViaDiameter1=0.889
@@ -77,10 +86,12 @@ OthersTextSizeH=1
 OthersTextSizeThickness=0.15
 OthersTextItalic=0
 OthersTextUpright=1
+DimensionUnits=0
+DimensionPrecision=1
 SolderMaskClearance=0.254
 SolderMaskMinWidth=0.25
 SolderPasteClearance=0
-SolderPasteRatio=-0
+SolderPasteRatio=0
 [pcbnew/Layer.F.Cu]
 Name=top_copper
 Type=0
