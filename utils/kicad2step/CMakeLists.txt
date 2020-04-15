@@ -40,7 +40,7 @@ if( MINGW )
     list( APPEND K2S_FILES ${CMAKE_SOURCE_DIR}/common/streamwrapper.cpp )
 endif( MINGW )
 
-add_executable( kicad2step ${K2S_FILES} )
+add_executable( kicad2step WIN32 ${K2S_FILES} )
 
 target_link_libraries( kicad2step
     kicad2step_lib
