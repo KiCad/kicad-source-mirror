@@ -123,9 +123,9 @@ Installation from source code
   libngspice           (optional)         http://ngspice.sourceforge.net/
 
   One of:
-    OCE                >= 0.16 (optional) https://github.com/tpaviot/oce
+    OCE                >= 0.18 (optional) https://github.com/tpaviot/oce
 
-    OCC                >= 6.8.0 (optiona) https://www.opencascade.com/content/latest-release
+    OCC                >= 6.9.0 (optiona) https://www.opencascade.com/content/latest-release
 
   Complete documentation for building from source can be found in the developer
   documentation located in Documentation/development/compiling.md
