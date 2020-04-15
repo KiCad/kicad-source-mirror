@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -7,30 +7,28 @@
 
 #pragma once
 
-#include <wx/artprov.h>
-#include <wx/xrc/xmlres.h>
-#include <wx/intl.h>
-class wxListView;
-
 #include "kiway_player.h"
-#include <wx/string.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/menu.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
-#include <wx/colour.h>
-#include <wx/settings.h>
-#include <wx/toolbar.h>
-#include <wx/stattext.h>
-#include <wx/sizer.h>
-#include <wx/panel.h>
+#include <wx/artprov.h>
 #include <wx/aui/auibook.h>
-#include <wx/textctrl.h>
-#include <wx/splitter.h>
-#include <wx/listctrl.h>
+#include <wx/bitmap.h>
+#include <wx/colour.h>
+#include <wx/font.h>
 #include <wx/frame.h>
+#include <wx/gdicmn.h>
+#include <wx/icon.h>
+#include <wx/image.h>
+#include <wx/intl.h>
+#include <wx/listctrl.h>
+#include <wx/menu.h>
+#include <wx/panel.h>
+#include <wx/settings.h>
+#include <wx/sizer.h>
+#include <wx/splitter.h>
+#include <wx/stattext.h>
+#include <wx/string.h>
+#include <wx/textctrl.h>
+#include <wx/toolbar.h>
+#include <wx/xrc/xmlres.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -74,9 +72,6 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxPanel* m_plotPanel;
 		wxBoxSizer* m_sizerPlot;
 		wxAuiNotebook* m_plotNotebook;
-		wxPanel* m_welcomePanel;
-		wxBoxSizer* m_sizer8;
-		wxStaticText* m_staticTextInfo;
 		wxPanel* m_panelConsole;
 		wxBoxSizer* m_sizerConsole;
 		wxTextCtrl* m_simConsole;

@@ -32,6 +32,8 @@
 #include <complex>
 #include <memory>
 
+#include <wx/string.h>
+
 class SPICE_REPORTER;
 class SPICE_SIMULATOR;
 
@@ -89,6 +91,13 @@ public:
     }
 
     /**
+     * @brief Returns a list with all vectors generated in current simulation.
+     * @param none
+     * @return List of vector names. ?May not match to the net name elements.
+     */
+    virtual std::vector<std::string> AllPlots() = 0;
+
+    /**
      * @brief Returns a requested vector with complex values. If the vector is real, then
      * the imaginary part is set to 0 in all values.
      * @param aName is the vector named in Spice convention (e.g. V(3), I(R1)).
@@ -141,6 +150,15 @@ public:
      * @return The netlist.
      */
     virtual const std::string GetNetlist() const = 0;
+
+    /**
+     * @brief Returns a string with simulation name based on enum.
+     * @param aType is the enum describing simulation type
+     * @param aShortName if true  - return is in format "TRAN", "OP".
+     *                   if false - return is in format "Transient", "Operating Point".
+     * @return String with requested name as described above.
+     */
+    static wxString TypeToName( SIM_TYPE aType, bool aShortName );
 
 protected:
     ///> Reporter object to receive simulation log

@@ -23,10 +23,11 @@
  */
 
 #include "netlist_exporter_pspice_sim.h"
+#include <wx/regex.h>
 #include <wx/tokenzr.h>
 
-wxString NETLIST_EXPORTER_PSPICE_SIM::GetSpiceVector( const wxString& aName, SIM_PLOT_TYPE aType,
-        const wxString& aParam ) const
+wxString NETLIST_EXPORTER_PSPICE_SIM::ComponentToVector(
+        const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam ) const
 {
     wxString res;
 
@@ -65,6 +66,41 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::GetSpiceVector( const wxString& aName, SIM
     }
 
     return res;
+}
+
+
+SIM_PLOT_TYPE NETLIST_EXPORTER_PSPICE_SIM::VectorToSignal(
+        const std::string& aVector, wxString& aSignal ) const
+{
+    using namespace std;
+
+    // See ngspice manual chapt. 31.1 "Accessing internal device parameters"
+    wxRegEx  internalDevParameter( "^@(\\w*[\\.\\w+]*)\\[(\\w*)\\]$", wxRE_ADVANCED );
+    wxString vector( aVector );
+
+    if( !internalDevParameter.Matches( vector ) )
+    {
+        // any text is a node name, which returns voltage
+        aSignal = "V(" + aVector + ")";
+        return SPT_VOLTAGE;
+    }
+    else
+    {
+        wxString paramType = internalDevParameter.GetMatch( vector, 2 );
+
+        if( paramType.Lower()[0] == 'i' )
+        {
+            // this is a branch current
+            paramType[0] = 'I';
+            aSignal      = paramType + "(";
+            aSignal += internalDevParameter.GetMatch( vector, 1 ).Upper() + ")";
+            return SPT_CURRENT;
+        }
+        else
+        {
+            return SPT_UNKNOWN;
+        }
+    }
 }
 
 
@@ -129,16 +165,23 @@ SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::GetSimType()
 
 SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( const wxString& aCmd )
 {
-    const std::map<wxString, SIM_TYPE> simCmds = {
-        { ".ac ", ST_AC }, { ".dc ", ST_DC }, { ".disto ", ST_DISTORTION }, { ".noise ", ST_NOISE },
-        { ".op ", ST_OP }, { ".pz ", ST_POLE_ZERO }, { ".sens ", ST_SENSITIVITY }, { ".tf ", ST_TRANS_FUNC },
-        { ".tran ", ST_TRANSIENT }
-    };
-    wxString lcaseCmd = aCmd.Lower();
+    const std::vector<std::pair<wxString, SIM_TYPE>> simCmds = {
+        { "^.ac\\M.*", ST_AC },
+        { "^.dc\\M.*", ST_DC },
+        { "^.tran\\M.*", ST_TRANSIENT },
+        { "^.op\\M.*", ST_OP },
+        { "^.disto\\M.*", ST_DISTORTION },
+        { "^.noise\\M.*", ST_NOISE },
+        { "^.pz\\M.*", ST_POLE_ZERO },
+        { "^.sens\\M.*", ST_SENSITIVITY },
+        { "^.tf\\M.*", ST_TRANS_FUNC } };
+    wxRegEx simCmd;
 
     for( const auto& c : simCmds )
     {
-        if( lcaseCmd.StartsWith( c.first ) )
+        simCmd.Compile( c.first, wxRE_ADVANCED | wxRE_NOSUB | wxRE_ICASE );
+
+        if( simCmd.Matches( aCmd ) )
             return c.second;
     }
 
@@ -193,7 +236,8 @@ void NETLIST_EXPORTER_PSPICE_SIM::writeDirectives( OUTPUTFORMATTER* aFormatter, 
 
             /// @todo is it required to switch to lowercase
             aFormatter->Print( 0, ".save %s\n",
-                    (const char*) GetSpiceVector( item.m_refName, SPT_CURRENT, current ).c_str() );
+                    (const char*) ComponentToVector( item.m_refName, SPT_CURRENT, current )
+                            .c_str() );
         }
     }
 
@@ -202,7 +246,7 @@ void NETLIST_EXPORTER_PSPICE_SIM::writeDirectives( OUTPUTFORMATTER* aFormatter, 
     {
         // the "0" and the "GND" nets are automaticallly saved internally by ngspice.
         // Skip them
-        wxString netname = GetSpiceVector( netMap.first, SPT_VOLTAGE );
+        wxString netname = ComponentToVector( netMap.first, SPT_VOLTAGE );
 
         if( netname == "V(0)" || netname == "V(GND)" )
             continue;

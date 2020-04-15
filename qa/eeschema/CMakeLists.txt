@@ -51,6 +51,9 @@ add_executable( qa_eeschema
     test_sch_rtree.cpp
     test_sch_sheet.cpp
     test_sch_sheet_path.cpp
+    
+    # Simulation tests
+    sim/test_netlist_exporter_pspice_sim.cpp
 
     # Older CMakes cannot link OBJECT libraries
     # https://cmake.org/pipermail/cmake/2013-November/056263.html

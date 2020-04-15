@@ -67,7 +67,6 @@ DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent )
     // wxPanel::Hide() isn't enough on some platforms
     m_simPages->RemovePage( m_simPages->FindPage( m_pgDistortion ) );
     m_simPages->RemovePage( m_simPages->FindPage( m_pgNoise ) );
-    m_simPages->RemovePage( m_simPages->FindPage( m_pgOP ) );
     m_simPages->RemovePage( m_simPages->FindPage( m_pgPoleZero ) );
     m_simPages->RemovePage( m_simPages->FindPage( m_pgSensitivity ) );
     m_simPages->RemovePage( m_simPages->FindPage( m_pgTransferFunction ) );

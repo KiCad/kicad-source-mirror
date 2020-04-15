@@ -59,6 +59,9 @@ public:
     ///> @copydoc SPICE_SIMULATOR::GetXAxis()
     std::string GetXAxis( SIM_TYPE aType ) const override;
 
+    ///> @copydoc SPICE_SIMULATOR::AllPlots()
+    std::vector<std::string> AllPlots() override;
+
     ///> @copydoc SPICE_SIMULATOR::GetPlot()
     std::vector<COMPLEX> GetPlot( const std::string& aName, int aMaxLen = -1 ) override;
 
@@ -89,6 +92,7 @@ private:
     typedef int (*ngSpice_Circ)( char** circarray );
     typedef int (*ngSpice_Command)( char* command );
     typedef pvector_info (*ngGet_Vec_Info)( char* vecname );
+    typedef char* ( *ngSpice_CurPlot )( void );
     typedef char** (*ngSpice_AllPlots)( void );
     typedef char** (*ngSpice_AllVecs)( char* plotname );
     typedef bool (*ngSpice_Running)( void );
@@ -98,6 +102,7 @@ private:
     ngSpice_Circ m_ngSpice_Circ;
     ngSpice_Command m_ngSpice_Command;
     ngGet_Vec_Info m_ngGet_Vec_Info;
+    ngSpice_CurPlot  m_ngSpice_CurPlot;
     ngSpice_AllPlots m_ngSpice_AllPlots;
     ngSpice_AllVecs m_ngSpice_AllVecs;
     ngSpice_Running m_ngSpice_Running;

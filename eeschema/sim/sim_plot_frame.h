@@ -51,7 +51,10 @@ class SCH_COMPONENT;
 
 class SPICE_SIMULATOR;
 class NETLIST_EXPORTER_PSPICE_SIM;
-class SIM_PLOT_PANEL;
+
+#include "sim_plot_panel.h"
+#include "sim_panel_base.h"
+
 class SIM_THREAD_REPORTER;
 class TUNER_SLIDER;
 
@@ -117,6 +120,7 @@ private:
     wxString m_title;
 };
 
+
 /** Implementing SIM_PLOT_FRAME_BASE */
 class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
 {
@@ -125,7 +129,7 @@ public:
     SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~SIM_PLOT_FRAME();
 
-    void StartSimulation();
+    void StartSimulation( const wxString& aSimCommand = wxEmptyString );
     void StopSimulation();
     bool IsSimulationRunning();
 
@@ -135,7 +139,7 @@ public:
      * @param aSimType is requested simulation type.
      * @return The new plot panel.
      */
-    SIM_PLOT_PANEL* NewPlotPanel( SIM_TYPE aSimType );
+    SIM_PANEL_BASE* NewPlotPanel( SIM_TYPE aSimType );
 
     /**
      * @brief Adds a voltage plot for a given net name.
@@ -212,6 +216,14 @@ private:
     void fillDefaultColorList( bool aWhiteBg );
 
     /**
+     * @brief Returns the currently opened plot panel (or NULL if there is none).
+     */
+    SIM_PANEL_BASE* currentPlotWindow() const
+    {
+        return dynamic_cast<SIM_PANEL_BASE*>( m_plotNotebook->GetCurrentPage() );
+    }
+
+    /**
      * @brief Adds a new plot to the current panel.
      * @param aName is the device/net name.
      * @param aType describes the type of plot.
@@ -244,11 +256,6 @@ private:
      * @brief Updates the list of currently plotted signals.
      */
     void updateSignalList();
-
-    /**
-     * @brief Updates the cursor values list.
-     */
-    void updateCursors();
 
     /**
      * @brief Filters out tuners for components that do not exist anymore.
@@ -359,7 +366,7 @@ private:
     };
 
     ///> Map of plot panels and associated data
-    std::map<SIM_PLOT_PANEL*, PLOT_INFO> m_plots;
+    std::map<SIM_PANEL_BASE*, PLOT_INFO> m_plots;
 
     ///> List of currently displayed tuners
     std::list<TUNER_SLIDER*> m_tuners;
@@ -400,12 +407,16 @@ private:
     ///> A string to store the path of saved workbooks during a session
     static wxString m_savedWorkbooksPath;
 
+    ///> Info panel
+    SIM_PANEL_BASE* m_welcomePanel;
+
     // Variables for temporary storage:
     int m_splitterLeftRightSashPosition;
     int m_splitterPlotAndConsoleSashPosition;
     int m_splitterSignalsSashPosition;
     int m_splitterTuneValuesSashPosition;
     bool m_plotUseWhiteBg;
+    unsigned int m_plotNumber;
 
     ///> The color list to draw traces, bg, fg, axis...
     std::vector<wxColour> m_colorList;

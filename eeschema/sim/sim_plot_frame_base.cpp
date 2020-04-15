@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -141,39 +141,6 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_plotNotebook = new wxAuiNotebook( m_plotPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_MIDDLE_CLICK_CLOSE|wxAUI_NB_TAB_MOVE|wxAUI_NB_TAB_SPLIT|wxAUI_NB_TOP );
 	m_plotNotebook->SetMinSize( wxSize( 200,-1 ) );
 
-	m_welcomePanel = new wxPanel( m_plotNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_sizer8 = new wxBoxSizer( wxVERTICAL );
-
-
-	m_sizer8->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	wxBoxSizer* bSizer81;
-	bSizer81 = new wxBoxSizer( wxHORIZONTAL );
-
-
-	bSizer81->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_staticTextInfo = new wxStaticText( m_welcomePanel, wxID_ANY, _("Start the simulation by clicking the Run Simulation button"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfo->Wrap( -1 );
-	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-	m_staticTextInfo->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-
-	bSizer81->Add( m_staticTextInfo, 0, wxALL|wxEXPAND, 5 );
-
-
-	bSizer81->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	m_sizer8->Add( bSizer81, 0, wxEXPAND, 5 );
-
-
-	m_sizer8->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	m_welcomePanel->SetSizer( m_sizer8 );
-	m_welcomePanel->Layout();
-	m_sizer8->Fit( m_welcomePanel );
-	m_plotNotebook->AddPage( m_welcomePanel, _("a page"), false, wxNullBitmap );
 
 	m_sizerPlot->Add( m_plotNotebook, 1, wxEXPAND, 5 );
 

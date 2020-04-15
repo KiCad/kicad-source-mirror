@@ -45,3 +45,39 @@ std::shared_ptr<SPICE_SIMULATOR> SPICE_SIMULATOR::CreateInstance( const std::str
     return NULL;
 }
 
+wxString SPICE_SIMULATOR::TypeToName( SIM_TYPE aType, bool aShortName )
+{
+    switch( aType )
+    {
+    case ST_OP:
+        return aShortName ? wxT( "OP" ) : _( "Operating Point" );
+
+    case ST_AC:
+        return "AC";
+
+    case ST_DC:
+        return aShortName ? wxT( "DC" ) : _( "DC Sweep" );
+
+    case ST_TRANSIENT:
+        return aShortName ? wxT( "TRAN" ) : _( "Transient" );
+
+    case ST_DISTORTION:
+        return aShortName ? wxT( "DISTO" ) : _( "Distortion" );
+
+    case ST_NOISE:
+        return aShortName ? wxT( "NOISE" ) : _( "Noise" );
+
+    case ST_POLE_ZERO:
+        return aShortName ? wxT( "PZ" ) : _( "Pole-zero" );
+
+    case ST_SENSITIVITY:
+        return aShortName ? wxT( "SENS" ) : _( "Sensitivity" );
+
+    case ST_TRANS_FUNC:
+        return aShortName ? wxT( "TF" ) : _( "Transfer function" );
+
+    default:
+    case ST_UNKNOWN:
+        return aShortName ? _( "UNKNOWN!" ) : _( "Unknown" );
+    }
+}
