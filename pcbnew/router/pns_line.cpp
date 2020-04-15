@@ -35,7 +35,7 @@
 namespace PNS {
 
 LINE::LINE( const LINE& aOther )
-        : ITEM( aOther ),
+        : LINK_HOLDER( aOther ),
           m_line( aOther.m_line ),
           m_width( aOther.m_width ),
           m_snapThreshhold( aOther.m_snapThreshhold )
@@ -89,7 +89,7 @@ void LINE::Mark( int aMarker )
 {
     m_marker = aMarker;
 
-    for( auto s : m_segmentRefs )
+    for( auto s : m_links )
         s->Mark( aMarker );
 
 }
@@ -97,7 +97,7 @@ void LINE::Mark( int aMarker )
 
 void LINE::Unmark( int aMarker )
 {
-    for( auto s : m_segmentRefs )
+    for( auto s : m_links )
         s->Unmark( aMarker );
 
     m_marker = 0;
@@ -108,18 +108,12 @@ int LINE::Marker() const
 {
     int marker = m_marker;
 
-    for( auto s : m_segmentRefs )
+    for( auto s : m_links )
     {
         marker |= s->Marker();
     }
 
     return marker;
-}
-
-
-void LINE::copyLinks( const LINE* aParent )
-{
-    m_segmentRefs = aParent->m_segmentRefs;
 }
 
 
@@ -459,20 +453,6 @@ const LINE LINE::ClipToNearestObstacle( NODE* aNode ) const
     return l;
 }
 
-
-void LINE::ShowLinks() const
-{
-    if( !IsLinked() )
-    {
-        wxLogTrace( "PNS", "line %p: no links", this );
-        return;
-    }
-
-    wxLogTrace( "PNS", "line %p: %d linked segs", this, (int) m_segmentRefs.size() );
-
-    for( int i = 0; i < (int) m_segmentRefs.size(); i++ )
-        wxLogTrace( "PNS", "seg %d: %p\n", i, m_segmentRefs[i] );
-}
 
 
 SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECTOR2I& aP )
@@ -852,7 +832,7 @@ void LINE::Reverse()
 {
     m_line = m_line.Reverse();
 
-    std::reverse( m_segmentRefs.begin(), m_segmentRefs.end() );
+    std::reverse( m_links.begin(), m_links.end() );
 }
 
 
@@ -873,7 +853,7 @@ void LINE::SetRank( int aRank )
 {
     m_rank = aRank;
 
-    for( auto s : m_segmentRefs )
+    for( auto s : m_links )
         s->SetRank( aRank );
 
 }
@@ -884,7 +864,7 @@ int LINE::Rank() const
     int min_rank = INT_MAX;
 
     if( IsLinked() ) {
-        for( auto s : m_segmentRefs )
+        for( auto s : m_links )
         {
             min_rank = std::min( min_rank, s->Rank() );
         }
@@ -903,17 +883,17 @@ void LINE::ClipVertexRange( int aStart, int aEnd )
     m_line = m_line.Slice( aStart, aEnd );
 
     if( IsLinked() ) {
-        assert( m_segmentRefs.size() < INT_MAX );
-        assert( (int) m_segmentRefs.size() >= (aEnd - aStart) );
+        assert( m_links.size() < INT_MAX );
+        assert( (int) m_links.size() >= (aEnd - aStart) );
 
         // Note: The range includes aEnd, but we have n-1 segments.
         std::rotate(
-            m_segmentRefs.begin(),
-            m_segmentRefs.begin() + aStart,
-            m_segmentRefs.begin() + aEnd
+            m_links.begin(),
+            m_links.begin() + aStart,
+            m_links.begin() + aEnd
         );
 
-        m_segmentRefs.resize( aEnd - aStart );
+        m_links.resize( aEnd - aStart );
     }
 }
 
@@ -930,12 +910,6 @@ bool LINE::HasLoops() const
     }
 
     return false;
-}
-
-
-void LINE::ClearSegmentLinks()
-{
-    m_segmentRefs.clear();
 }
 
 
@@ -1036,7 +1010,7 @@ OPT_BOX2I LINE::ChangedArea( const LINE* aOther ) const
 
 bool LINE::HasLockedSegments() const
 {
-    for( const auto seg : m_segmentRefs )
+    for( const auto seg : m_links )
     {
         if( seg->Marker() & MK_LOCKED )
             return true;

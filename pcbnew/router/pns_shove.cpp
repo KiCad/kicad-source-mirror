@@ -266,11 +266,11 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
  */
 SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, LINE& aShoved )
 {
-    aShoved.ClearSegmentLinks();
+    aShoved.ClearLinks();
 
     bool obstacleIsHead = false;
 
-    for( auto s : aObstacle.LinkedSegments() )
+    for( auto s : aObstacle.Links() )
     {
         if( s->Marker() & MK_HEAD )
         {
@@ -555,7 +555,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle )
         if( status != WALKAROUND::DONE )
             continue;
 
-        walkaroundLine.ClearSegmentLinks();
+        walkaroundLine.ClearLinks();
         walkaroundLine.Unmark();
     	walkaroundLine.Line().Simplify();
 
@@ -742,7 +742,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
                 lp.first.Reverse();
 
             lp.second = lp.first;
-            lp.second.ClearSegmentLinks();
+            lp.second.ClearLinks();
             lp.second.DragCorner( p0_pushed, lp.second.CLine().Find( p0 ) );
             lp.second.AppendVia( *pushedVia );
             draggedLines.push_back( lp );
@@ -891,11 +891,11 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 {
     int n = 0;
     LINE cur( aCurrent );
-    cur.ClearSegmentLinks();
+    cur.ClearLinks();
 
     JOINT* jt = m_currentNode->FindJoint( aObstacleVia->Pos(), aObstacleVia );
     LINE shoved( aCurrent );
-    shoved.ClearSegmentLinks();
+    shoved.ClearLinks();
 
     cur.RemoveVia();
     unwindLineStack( &aCurrent );
@@ -939,7 +939,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
         LINE head( aCurrent );
         head.Line().Clear();
         head.AppendVia( *aObstacleVia );
-        head.ClearSegmentLinks();
+        head.ClearLinks();
 
         SHOVE_STATUS st = ProcessSingleLine( head, aCurrent, shoved );
 
@@ -974,7 +974,7 @@ void SHOVE::unwindLineStack( LINKED_ITEM* aSeg )
 {
     for( std::vector<LINE>::iterator i = m_lineStack.begin(); i != m_lineStack.end() ; )
     {
-        if( i->ContainsSegment( aSeg ) )
+        if( i->ContainsLink( aSeg ) )
             i = m_lineStack.erase( i );
         else
             i++;
@@ -982,7 +982,7 @@ void SHOVE::unwindLineStack( LINKED_ITEM* aSeg )
 
     for( std::vector<LINE>::iterator i = m_optimizerQueue.begin(); i != m_optimizerQueue.end() ; )
     {
-        if( i->ContainsSegment( aSeg ) )
+        if( i->ContainsLink( aSeg ) )
             i = m_optimizerQueue.erase( i );
         else
             i++;
@@ -998,7 +998,7 @@ void SHOVE::unwindLineStack( ITEM* aItem )
     {
         LINE* l = static_cast<LINE*>( aItem );
 
-        for( auto seg : l->LinkedSegments() )
+        for( auto seg : l->Links() )
             unwindLineStack( seg );
     }
 }
@@ -1031,9 +1031,9 @@ void SHOVE::popLineStack( )
     {
         bool found = false;
 
-        for( auto s : l.LinkedSegments() )
+        for( auto s : l.Links() )
         {
-            if( i->ContainsSegment( s ) )
+            if( i->ContainsLink( s ) )
             {
                 i = m_optimizerQueue.erase( i );
                 found = true;
@@ -1254,7 +1254,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
         return SH_INCOMPLETE;
 
     LINE head( aCurrentHead );
-    head.ClearSegmentLinks();
+    head.ClearLinks();
 
     m_lineStack.clear();
     m_optimizerQueue.clear();
@@ -1382,7 +1382,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
     {
         const LINE* headOrig = static_cast<const LINE*>( item );
         LINE head( *headOrig );
-        head.ClearSegmentLinks();
+        head.ClearLinks();
 
         m_currentNode->Add( head );
 

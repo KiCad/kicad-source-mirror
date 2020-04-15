@@ -574,11 +574,11 @@ void NODE::Add( LINE& aLine, bool aAllowRedundant )
         ARC* rarc;
 
         if( !aAllowRedundant && ( rarc = findRedundantArc( s.GetP0(), s.GetP1(), aLine.Layers(), aLine.Net() ) ) )
-            aLine.LinkSegment( rarc );
+            aLine.Link( rarc );
         else
         {
             auto newarc = std::make_unique< ARC >( aLine, s );
-            aLine.LinkSegment( newarc.get() );
+            aLine.Link( newarc.get() );
             Add( std::move( newarc ), true );
         }
     }
@@ -597,12 +597,12 @@ void NODE::Add( LINE& aLine, bool aAllowRedundant )
                 (rseg = findRedundantSegment( s.A, s.B, aLine.Layers(), aLine.Net() )) )
             {
                 // another line could be referencing this segment too :(
-                aLine.LinkSegment( rseg );
+                aLine.Link( rseg );
             }
             else
             {
                 std::unique_ptr< SEGMENT > newseg( new SEGMENT( aLine, s ) );
-                aLine.LinkSegment( newseg.get() );
+                aLine.Link( newseg.get() );
                 Add( std::move( newseg ), true );
             }
         }
@@ -819,7 +819,7 @@ void NODE::Remove( ITEM* aItem )
     {
         auto l = static_cast<LINE *> ( aItem );
 
-        for ( auto s : l->LinkedSegments() )
+        for ( auto s : l->Links() )
             Remove( s );
 
         break;
@@ -838,7 +838,7 @@ void NODE::Remove( ITEM* aItem )
 void NODE::Remove( LINE& aLine )
 {
     // LINE does not have a seperate remover, as LINEs are never truly a member of the tree
-    std::vector<LINKED_ITEM*>& segRefs = aLine.LinkedSegments();
+    std::vector<LINKED_ITEM*>& segRefs = aLine.Links();
 
     for( auto li : segRefs )
     {
@@ -849,7 +849,7 @@ void NODE::Remove( LINE& aLine )
     }
 
     aLine.SetOwner( nullptr );
-    aLine.ClearSegmentLinks();
+    aLine.ClearLinks();
 }
 
 
@@ -925,7 +925,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex, bool
 
         if( segs[i] && prev_seg != segs[i] )
         {
-            pl.LinkSegment( segs[i] );
+            pl.Link( segs[i] );
 
             // latter condition to avoid loops
             if( segs[i] == aSeg && aOriginSegmentIndex && !originSet )

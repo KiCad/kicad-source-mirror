@@ -32,6 +32,7 @@
 
 #include "pns_item.h"
 #include "pns_via.h"
+#include "pns_link_holder.h"
 
 namespace PNS {
 
@@ -58,16 +59,15 @@ class VIA;
 
 #define PNS_HULL_MARGIN 10
 
-class LINE : public ITEM
+class LINE : public LINK_HOLDER
 {
 public:
-    typedef std::vector<LINKED_ITEM*> SEGMENT_REFS;
 
     /**
      * Constructor
      * Makes an empty line.
      */
-    LINE() : ITEM( LINE_T )
+    LINE() : LINK_HOLDER( LINE_T )
     {
         m_hasVia = false;
         m_width = 1;        // Dummy value
@@ -82,7 +82,7 @@ public:
      * by another
      **/
     LINE( const LINE& aBase, const SHAPE_LINE_CHAIN& aLine )
-            : ITEM( aBase ),
+            : LINK_HOLDER( aBase ),
               m_line( aLine ),
               m_width( aBase.m_width ),
               m_snapThreshhold( aBase.m_snapThreshhold )
@@ -98,7 +98,7 @@ public:
      * @param aVia
      */
     LINE( const VIA& aVia ) :
-        ITEM( LINE_T )
+        LINK_HOLDER( LINE_T )
     {
         m_hasVia = true;
         m_via = aVia;
@@ -120,6 +120,11 @@ public:
     virtual LINE* Clone() const override;
 
     LINE& operator=( const LINE& aOther );
+
+    bool IsLinkedChecked() const
+    {
+        return IsLinked() && LinkCount() == SegmentCount();
+    }
 
     ///> Assigns a shape to the line (a polyline/line chain)
     void SetShape( const SHAPE_LINE_CHAIN& aLine )
@@ -194,53 +199,6 @@ public:
 
     ///> Reverses the point/vertex order
     void Reverse();
-
-
-    /* Linking functions */
-
-    ///> Adds a reference to a segment registered in a NODE that is a part of this line.
-    void LinkSegment( LINKED_ITEM* aSeg )
-    {
-        m_segmentRefs.push_back( aSeg );
-    }
-
-    ///> Returns the list of segments from the owning node that constitute this
-    ///> line (or NULL if the line is not linked)
-    SEGMENT_REFS& LinkedSegments()
-    {
-        return m_segmentRefs;
-    }
-
-    bool IsLinked() const
-    {
-        return m_segmentRefs.size() != 0;
-    }
-
-    bool IsLinkedChecked() const
-    {
-        return IsLinked() && LinkCount() == SegmentCount();
-    }
-
-    ///> Checks if the segment aSeg is a part of the line.
-    bool ContainsSegment( LINKED_ITEM* aSeg ) const
-    {
-        return std::find( m_segmentRefs.begin(), m_segmentRefs.end(),
-                aSeg ) != m_segmentRefs.end();
-    }
-
-    LINKED_ITEM* GetLink( int aIndex ) const
-    {
-        return m_segmentRefs[aIndex];
-    }
-
-    ///> Erases the linking information. Used to detach the line from the owning node.
-    void ClearSegmentLinks();
-
-    ///> Returns the number of segments that were assembled together to form this line.
-    int LinkCount() const
-    {
-        return m_segmentRefs.size();
-    }
 
     ///> Clips the line to the nearest obstacle, traversing from the line's start vertex (0).
     ///> Returns the clipped line.
@@ -319,13 +277,6 @@ private:
 
     VECTOR2I snapDraggedCorner(
             const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP, int aIndex ) const;
-
-    ///> Copies m_segmentRefs from the line aParent.
-    void copyLinks( const LINE* aParent ) ;
-
-    ///> List of segments in the owning NODE (ITEM::m_owner) that constitute this line, or NULL
-    ///> if the line is not a part of any node.
-    SEGMENT_REFS m_segmentRefs;
 
     ///> The actual shape of the line
     SHAPE_LINE_CHAIN m_line;

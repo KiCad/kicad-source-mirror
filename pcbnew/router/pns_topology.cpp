@@ -182,7 +182,7 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::
 
         VECTOR2I anchor = aLeft ? aLine->CPoint( 0 ) : aLine->CPoint( -1 );
         LINKED_ITEM* last =
-                aLeft ? aLine->LinkedSegments().front() : aLine->LinkedSegments().back();
+                aLeft ? aLine->Links().front() : aLine->Links().back();
         JOINT* jt = m_world->FindJoint( anchor, aLine );
 
     assert( jt != NULL );

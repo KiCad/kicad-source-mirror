@@ -190,14 +190,14 @@ void OPTIMIZER::removeCachedSegments( LINE* aLine, int aStartVertex, int aEndVer
 {
     if( !aLine->IsLinked() ) return;
 
-    LINE::SEGMENT_REFS& segs = aLine->LinkedSegments();
+    auto links = aLine->Links();
 
     if( aEndVertex < 0 )
         aEndVertex += aLine->PointCount();
 
     for( int i = aStartVertex; i < aEndVertex - 1; i++ )
     {
-        LINKED_ITEM* s = segs[i];
+        LINKED_ITEM* s = links[i];
         m_cacheTags.erase( s );
         m_cache.Remove( s );
     }
@@ -594,7 +594,10 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
     if( !aResult )
         aResult = aLine;
     else
+    {
         *aResult = *aLine;
+        aResult->ClearLinks();
+    }
 
     m_keepPostures = false;
 

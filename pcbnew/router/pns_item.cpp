@@ -78,6 +78,7 @@ std::string ITEM::KindStr() const
     case VIA_T:     return "via";
     case JOINT_T:   return "joint";
     case SOLID_T:   return "solid";
+    case DIFF_PAIR_T:   return "diff-pair";
     default:        return "unknown";
     }
 }

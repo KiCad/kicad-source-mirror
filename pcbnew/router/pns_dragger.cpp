@@ -206,7 +206,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
         LINE origLine( m_draggedLine );
         LINE dragged( m_draggedLine );
         dragged.SetSnapThreshhold( thresh );
-        dragged.ClearSegmentLinks();
+        dragged.ClearLinks();
 
         if( m_mode == DM_SEGMENT )
             dragged.DragSegment( aP, m_draggedSegmentIndex );
@@ -258,7 +258,7 @@ void DRAGGER::dragViaMarkObstacles( const VIA_HANDLE& aHandle, NODE* aNode, cons
             LINE draggedLine( *l );
 
             draggedLine.DragCorner( aP, origLine.CLine().Find( aHandle.pos ), m_freeAngleMode );
-            draggedLine.ClearSegmentLinks();
+            draggedLine.ClearLinks();
 
             m_draggedItems.Add( draggedLine );
 
@@ -298,7 +298,7 @@ void DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
             LINE draggedLine( *l );
 
             draggedLine.DragCorner( aP, origLine.CLine().Find( aHandle.pos ), m_freeAngleMode );
-            draggedLine.ClearSegmentLinks();
+            draggedLine.ClearLinks();
 
             m_draggedItems.Add( draggedLine );
 
@@ -322,7 +322,7 @@ void DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
 void DRAGGER::optimizeAndUpdateDraggedLine( LINE& dragged, const VECTOR2I& aP )
 {
     VECTOR2D lockV;
-    dragged.ClearSegmentLinks();
+    dragged.ClearLinks();
     dragged.Unmark();
 
     lockV = dragged.CLine().NearestPoint( aP );
@@ -462,7 +462,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         if( ok )
         {
             VECTOR2D lockV;
-            dragged.ClearSegmentLinks();
+            dragged.ClearLinks();
             dragged.Unmark();
 
             lockV = dragged.CLine().NearestPoint( aP );

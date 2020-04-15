@@ -120,7 +120,7 @@ bool COMPONENT_DRAGGER::Drag( const VECTOR2I& aP )
     {
         auto l_new( cn.origLine );
         l_new.Unmark();
-        l_new.ClearSegmentLinks();
+        l_new.ClearLinks();
         l_new.DragCorner( cn.p_next, cn.origLine.CLine().Find( cn.p_orig ) );
 
         Dbg()->AddLine( l_new.CLine(), 4, 100000 );

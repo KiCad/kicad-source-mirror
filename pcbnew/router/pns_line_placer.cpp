@@ -1294,9 +1294,9 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
         {
             total++;
 
-            if( !( line.ContainsSegment( seg ) ) && line.SegmentCount() )
+            if( !( line.ContainsLink( seg ) ) && line.SegmentCount() )
             {
-                for( auto ss : line.LinkedSegments() )
+                for( auto ss : line.Links() )
                     toErase.insert( ss );
 
                 removedCount++;

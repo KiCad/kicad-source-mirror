@@ -30,6 +30,7 @@
 
 #include "pns_line.h"
 #include "pns_via.h"
+#include "pns_link_holder.h"
 
 #include "ranged_num.h"
 
@@ -262,7 +263,7 @@ class DP_GATEWAYS
  * Basic class for a differential pair. Stores two PNS_LINEs (for positive and negative nets, respectively),
  * the gap and coupling constraints.
  **/
-class DIFF_PAIR : public ITEM {
+class DIFF_PAIR : public LINK_HOLDER {
 
 public:
     struct COUPLED_SEGMENTS {
@@ -286,7 +287,7 @@ public:
 
     typedef std::vector<COUPLED_SEGMENTS> COUPLED_SEGMENTS_VEC;
 
-    DIFF_PAIR() : ITEM( DIFF_PAIR_T ), m_hasVias( false )
+    DIFF_PAIR() : LINK_HOLDER( ITEM::DIFF_PAIR_T ), m_hasVias( false )
     {
         // Initialize some members, to avoid uninitialized variables.
         m_net_p = 0;
@@ -299,7 +300,7 @@ public:
     }
 
     DIFF_PAIR( int aGap ) :
-        ITEM( DIFF_PAIR_T ),
+        LINK_HOLDER( ITEM::DIFF_PAIR_T ),
         m_hasVias( false )
     {
         m_gapConstraint = aGap;
@@ -315,7 +316,7 @@ public:
     }
 
     DIFF_PAIR( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, int aGap = 0 ):
-        ITEM( DIFF_PAIR_T ),
+        LINK_HOLDER( ITEM::DIFF_PAIR_T ),
         m_n( aN ),
         m_p( aP ),
         m_hasVias( false )
@@ -333,7 +334,7 @@ public:
     }
 
     DIFF_PAIR( const LINE &aLineP, const LINE &aLineN, int aGap = 0 ):
-        ITEM( DIFF_PAIR_T ),
+        LINK_HOLDER( ITEM::DIFF_PAIR_T ),
         m_line_p( aLineP ),
         m_line_n( aLineN ),
         m_hasVias( false )
@@ -354,10 +355,17 @@ public:
 
     static inline bool ClassOf( const ITEM* aItem )
     {
-        return aItem && DIFF_PAIR_T == aItem->Kind();
+        return aItem && ITEM::DIFF_PAIR_T == aItem->Kind();
     }
 
     DIFF_PAIR* Clone() const override { assert( false ); return NULL; }
+
+    virtual void ClearLinks() override
+    {
+        m_links.clear();
+        m_line_p.ClearLinks();
+        m_line_n.ClearLinks();
+    }
 
     static DIFF_PAIR* AssembleDp( LINE *aLine );
 
