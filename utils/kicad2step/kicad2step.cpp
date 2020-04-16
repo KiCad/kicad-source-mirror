@@ -41,6 +41,8 @@ class KICAD2STEP_FRAME;
 class KICAD2MCAD_APP : public wxApp
 {
 public:
+    KICAD2MCAD_APP() : wxApp(), m_frame( nullptr ), m_Panel( nullptr )
+    {}
     virtual bool OnInit() override;
     virtual int OnRun() override;
     virtual void OnInitCmdLine(wxCmdLineParser& parser) override;

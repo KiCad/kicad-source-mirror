@@ -614,6 +614,11 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
     if( !plotPanel || plotPanel->GetType() != simType )
         plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( NewPlotPanel( simType ) );
 
+    wxASSERT( plotPanel );
+
+    if( !plotPanel )    // Something is wrong
+        return;
+
     TRACE_DESC descriptor( *m_exporter, aName, aType, aParam );
 
     bool updated = false;

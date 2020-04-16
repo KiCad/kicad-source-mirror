@@ -1013,8 +1013,9 @@ double SHAPE_LINE_CHAIN::Area() const
 }
 
 
-SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER::POINT_INSIDE_TRACKER( const VECTOR2I& aPoint ) : 
+SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER::POINT_INSIDE_TRACKER( const VECTOR2I& aPoint ) :
     m_point( aPoint ),
+    m_finished( false ),
     m_state( 0 ),
     m_count( 0 )
 {
@@ -1095,7 +1096,7 @@ void SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER::AddPolyline( const SHAPE_LINE_CHAIN
     for (int i = 1; i < aPolyline.PointCount(); i++ )
     {
         auto p = aPolyline.CPoint( i );
-        if( !processVertex( m_lastPoint, p )) 
+        if( !processVertex( m_lastPoint, p ))
             return;
 
         m_lastPoint = p;

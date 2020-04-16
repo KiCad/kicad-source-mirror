@@ -392,7 +392,7 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         # API with respect to the C99 standard, so make sure we force it to use its own compliant
         # snprintf
         add_definitions(-D__USE_MINGW_ANSI_STDIO=1)
-        
+
         # Allow linking for Boost for the UUID against bcrypt
         set( EXTRA_LIBS "bcrypt" )
 
@@ -682,7 +682,7 @@ endif()
 if( KICAD_USE_OCE )
     set( OCC_LIBRARIES TKBinXCAF TKPCAF TKSTEP TKXDESTEP TKIGES TKXDEIGES )
 
-    find_package( OCE 0.16 REQUIRED ${OCC_LIBRARIES} )
+    find_package( OCE 0.18 REQUIRED ${OCC_LIBRARIES} )
 
 elseif( KICAD_USE_OCC )
     find_package(OpenCASCADE)
@@ -691,10 +691,10 @@ elseif( KICAD_USE_OCC )
                              " KICAD_USE_OCC=True but OpenCASCADE was not found!\n"
                              "================================================================\n")
     endif()
-    if( OCC_VERSION_STRING VERSION_LESS 6.8.0 )
+    if( OCC_VERSION_STRING VERSION_LESS 6.9.0 )
         MESSAGE( FATAL_ERROR "================================================================\n"
                              "OpenCASCADE version ${OCC_VERSION_STRING} was found.\n"
-                             "  KiCad requires a minimum version of 6.8.0\n"
+                             "  KiCad requires a minimum version of 6.9.0\n"
                              "================================================================\n")
     endif()
     include_directories( SYSTEM ${OCC_INCLUDE_DIR} )
