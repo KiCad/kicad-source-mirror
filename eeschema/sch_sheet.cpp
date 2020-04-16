@@ -923,8 +923,7 @@ void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PA
         item->m_Start = item->m_End = sheetPin->GetPosition();
         aNetListItems.push_back( item );
 
-        SCH_CONNECTION conn;
-        if( conn.IsBusLabel( sheetPin->GetText() ) )
+        if( SCH_CONNECTION::IsBusLabel( sheetPin->GetText() ) )
             item->ConvertBusToNetListItems( aNetListItems );
     }
 }

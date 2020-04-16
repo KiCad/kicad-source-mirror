@@ -99,12 +99,12 @@ static int* TemplateShape[5][4] =
 SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType, int aMarkupFlags ) :
         SCH_ITEM( NULL, aType ),
         EDA_TEXT( text, aMarkupFlags ),
-        m_shape( PINSHEETLABEL_SHAPE::PS_INPUT )
+        m_shape( PINSHEETLABEL_SHAPE::PS_INPUT ),
+        m_isDangling( false ),
+        m_connectionType( CONNECTION_TYPE::NONE ),
+        m_spin_style( LABEL_SPIN_STYLE::LEFT )
 {
-    m_Layer          = LAYER_NOTES;
-    m_isDangling     = false;
-    m_connectionType = CONNECTION_TYPE::NONE;
-    m_spin_style     = LABEL_SPIN_STYLE::LEFT;
+    m_Layer = LAYER_NOTES;
 
     SetTextPos( pos );
     SetMultilineAllowed( true );
@@ -112,14 +112,13 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType, int
 
 
 SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
-    SCH_ITEM( aText ),
-    EDA_TEXT( aText )
-{
-    m_shape = aText.m_shape;
-    m_isDangling = aText.m_isDangling;
-    m_spin_style = aText.m_spin_style;
-    m_connectionType = aText.m_connectionType;
-}
+        SCH_ITEM( aText ),
+        EDA_TEXT( aText ),
+        m_shape( aText.m_shape ),
+        m_isDangling( aText.m_isDangling ),
+        m_connectionType( aText.m_connectionType ),
+        m_spin_style( aText.m_spin_style )
+{ }
 
 
 EDA_ITEM* SCH_TEXT::Clone() const
@@ -180,8 +179,6 @@ void SCH_TEXT::MirrorX( int aXaxis_position )
 
 void SCH_TEXT::Rotate( wxPoint aPosition )
 {
-    int dy = 0;
-
     wxPoint pt = GetTextPos();
     RotatePoint( &pt, aPosition, 900 );
     SetTextPos( pt );
@@ -190,6 +187,8 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
 
     if( this->Type() == SCH_TEXT_T )
     {
+        int dy = 0;
+
         switch( GetLabelSpinStyle() )
         {
         case LABEL_SPIN_STYLE::LEFT:
@@ -199,7 +198,6 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
         case LABEL_SPIN_STYLE::UP:
         case LABEL_SPIN_STYLE::BOTTOM:
         default:
-            dy = 0;
             dy = 0;
             break;
         }
@@ -557,7 +555,7 @@ void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
     aNetListItems.push_back( item );
 
     // If a bus connects to label
-    if( Connection( *aSheetPath )->IsBusLabel( GetText() ) )
+    if( SCH_CONNECTION::IsBusLabel( GetText() ) )
         item->ConvertBusToNetListItems( aNetListItems );
 }
 
@@ -994,7 +992,6 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
 
     x  = GetTextPos().x;
     y  = GetTextPos().y;
-    dx = dy = 0;
 
     // Use the maximum clamped pen width to give us a bit of wiggle room
     int width = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
