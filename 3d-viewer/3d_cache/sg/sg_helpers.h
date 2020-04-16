@@ -161,7 +161,7 @@ class SGCOORDINDEX;
 
 namespace S3D
 {
-    bool degenerate( glm::dvec3* pts );
+    bool degenerate( glm::dvec3* pts ) noexcept;
 
     //
     // Normals calculations from triangles

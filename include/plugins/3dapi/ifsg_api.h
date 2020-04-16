@@ -44,7 +44,7 @@ namespace S3D
      * kicad_3dsg library
      */
     SGLIB_API void GetLibVersion( unsigned char* Major, unsigned char* Minor,
-                                  unsigned char* Patch, unsigned char* Revision );
+                                  unsigned char* Patch, unsigned char* Revision ) noexcept;
 
     // functions to extract information from SGNODE pointers
     SGLIB_API S3D::SGTYPES GetSGNodeType( SGNODE* aNode );
@@ -143,7 +143,7 @@ namespace S3D
      * to safely delete an SG* node without associating the node with
      * its corresponding IFSG* wrapper.
      */
-    SGLIB_API void DestroyNode( SGNODE* aNode );
+    SGLIB_API void DestroyNode( SGNODE* aNode ) noexcept;
 
     // NOTE: The following functions facilitate the creation and destruction
     // of data structures for rendering

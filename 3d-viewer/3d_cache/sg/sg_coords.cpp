@@ -93,7 +93,7 @@ bool SGCOORDS::SetParent( SGNODE* aParent, bool notify )
 }
 
 
-SGNODE* SGCOORDS::FindNode(const char *aNodeName, const SGNODE *aCaller)
+SGNODE* SGCOORDS::FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept
 {
     if( NULL == aNodeName || 0 == aNodeName[0] )
         return NULL;
@@ -105,7 +105,7 @@ SGNODE* SGCOORDS::FindNode(const char *aNodeName, const SGNODE *aCaller)
 }
 
 
-void SGCOORDS::unlinkChildNode( const SGNODE* aCaller )
+void SGCOORDS::unlinkChildNode( const SGNODE* aCaller ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -118,7 +118,7 @@ void SGCOORDS::unlinkChildNode( const SGNODE* aCaller )
 }
 
 
-void SGCOORDS::unlinkRefNode( const SGNODE* aCaller )
+void SGCOORDS::unlinkRefNode( const SGNODE* aCaller ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -131,7 +131,7 @@ void SGCOORDS::unlinkRefNode( const SGNODE* aCaller )
 }
 
 
-bool SGCOORDS::AddRefNode( SGNODE* aNode )
+bool SGCOORDS::AddRefNode( SGNODE* aNode ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -144,7 +144,7 @@ bool SGCOORDS::AddRefNode( SGNODE* aNode )
 }
 
 
-bool SGCOORDS::AddChildNode( SGNODE* aNode )
+bool SGCOORDS::AddChildNode( SGNODE* aNode ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;

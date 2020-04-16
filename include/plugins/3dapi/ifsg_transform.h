@@ -52,10 +52,10 @@ public:
 
     bool SetScaleOrientation( const SGVECTOR& aScaleAxis, double aAngle );
     bool SetRotation( const SGVECTOR& aRotationAxis, double aAngle );
-    bool SetScale( const SGPOINT& aScale );
+    bool SetScale( const SGPOINT& aScale ) noexcept;
     bool SetScale( double aScale );
-    bool SetCenter( const SGPOINT& aCenter );
-    bool SetTranslation( const SGPOINT& aTranslation );
+    bool SetCenter( const SGPOINT& aCenter ) noexcept;
+    bool SetTranslation( const SGPOINT& aTranslation ) noexcept;
 };
 
 #endif  // IFSG_TRANSFORM_H

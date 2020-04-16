@@ -207,7 +207,7 @@ void S3D::RenameNodes( SGNODE* aNode )
 }
 
 
-void S3D::DestroyNode( SGNODE* aNode )
+void S3D::DestroyNode( SGNODE* aNode ) noexcept
 {
     if( NULL == aNode )
     {
@@ -585,7 +585,7 @@ void S3D::Init3DMesh( SMESH& aMesh )
 
 
 void S3D::GetLibVersion( unsigned char* Major, unsigned char* Minor,
-    unsigned char* Patch, unsigned char* Revision )
+    unsigned char* Patch, unsigned char* Revision ) noexcept
 {
     if( Major )
         *Major = KICADSG_VERSION_MAJOR;

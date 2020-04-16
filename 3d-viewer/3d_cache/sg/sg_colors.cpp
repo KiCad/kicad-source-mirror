@@ -90,7 +90,7 @@ bool SGCOLORS::SetParent( SGNODE* aParent, bool notify )
 }
 
 
-SGNODE* SGCOLORS::FindNode(const char *aNodeName, const SGNODE *aCaller)
+SGNODE* SGCOLORS::FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept
 {
     if( NULL == aNodeName || 0 == aNodeName[0] )
         return NULL;
@@ -102,7 +102,7 @@ SGNODE* SGCOLORS::FindNode(const char *aNodeName, const SGNODE *aCaller)
 }
 
 
-void SGCOLORS::unlinkChildNode( const SGNODE* aCaller )
+void SGCOLORS::unlinkChildNode( const SGNODE* aCaller ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -115,7 +115,7 @@ void SGCOLORS::unlinkChildNode( const SGNODE* aCaller )
 }
 
 
-void SGCOLORS::unlinkRefNode( const SGNODE* aCaller )
+void SGCOLORS::unlinkRefNode( const SGNODE* aCaller ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -128,7 +128,7 @@ void SGCOLORS::unlinkRefNode( const SGNODE* aCaller )
 }
 
 
-bool SGCOLORS::AddRefNode( SGNODE* aNode )
+bool SGCOLORS::AddRefNode( SGNODE* aNode ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -141,7 +141,7 @@ bool SGCOLORS::AddRefNode( SGNODE* aNode )
 }
 
 
-bool SGCOLORS::AddChildNode( SGNODE* aNode )
+bool SGCOLORS::AddChildNode( SGNODE* aNode ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;

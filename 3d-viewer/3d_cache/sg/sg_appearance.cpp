@@ -215,7 +215,7 @@ bool SGAPPEARANCE::SetAmbient( const SGCOLOR& aRGBColor )
 }
 
 
-SGNODE* SGAPPEARANCE::FindNode(const char *aNodeName, const SGNODE *aCaller)
+SGNODE* SGAPPEARANCE::FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept
 {
     if( NULL == aNodeName || 0 == aNodeName[0] )
         return NULL;
@@ -227,7 +227,7 @@ SGNODE* SGAPPEARANCE::FindNode(const char *aNodeName, const SGNODE *aCaller)
 }
 
 
-void SGAPPEARANCE::unlinkChildNode( const SGNODE* aCaller )
+void SGAPPEARANCE::unlinkChildNode( const SGNODE* aCaller ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -240,7 +240,7 @@ void SGAPPEARANCE::unlinkChildNode( const SGNODE* aCaller )
 }
 
 
-void SGAPPEARANCE::unlinkRefNode( const SGNODE* aCaller )
+void SGAPPEARANCE::unlinkRefNode( const SGNODE* aCaller ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -253,7 +253,7 @@ void SGAPPEARANCE::unlinkRefNode( const SGNODE* aCaller )
 }
 
 
-bool SGAPPEARANCE::AddRefNode( SGNODE* aNode )
+bool SGAPPEARANCE::AddRefNode( SGNODE* aNode ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -266,7 +266,7 @@ bool SGAPPEARANCE::AddRefNode( SGNODE* aNode )
 }
 
 
-bool SGAPPEARANCE::AddChildNode( SGNODE* aNode )
+bool SGAPPEARANCE::AddChildNode( SGNODE* aNode ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;

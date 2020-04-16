@@ -66,7 +66,7 @@ static std::mutex mutex3D_cache;
 static std::mutex mutex3D_cacheManager;
 
 
-static bool isSHA1Same( const unsigned char* shaA, const unsigned char* shaB )
+static bool isSHA1Same( const unsigned char* shaA, const unsigned char* shaB ) noexcept
 {
     for( int i = 0; i < 20; ++i )
         if( shaA[i] != shaB[i] )
@@ -613,7 +613,7 @@ void S3D_CACHE::SetProgramBase( PGM_BASE* aBase )
 }
 
 
-FILENAME_RESOLVER* S3D_CACHE::GetResolver()
+FILENAME_RESOLVER* S3D_CACHE::GetResolver() noexcept
 {
     return m_FNResolver;
 }

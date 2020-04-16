@@ -76,13 +76,19 @@ class BOARD_ADAPTER
      * @brief Set3DCacheManager - Update the Cache manager pointer
      * @param aCachePointer: the pointer to the 3d cache manager
      */
-    void Set3DCacheManager( S3D_CACHE *aCachePointer ) { m_3d_model_manager = aCachePointer; }
+    void Set3DCacheManager( S3D_CACHE *aCachePointer ) noexcept
+    {
+        m_3d_model_manager = aCachePointer;
+    }
 
     /**
      * @brief Get3DCacheManager - Return the 3d cache manager pointer
      * @return
      */
-    S3D_CACHE *Get3DCacheManager( ) const { return m_3d_model_manager; }
+    S3D_CACHE *Get3DCacheManager( ) const noexcept
+    {
+        return m_3d_model_manager;
+    }
 
     /**
      * @brief GetFlag - get a configuration status of a flag
@@ -116,15 +122,24 @@ class BOARD_ADAPTER
      * @brief SetBoard - Set current board to be rendered
      * @param aBoard: board to process
      */
-    void SetBoard( BOARD *aBoard ) { m_board = aBoard; }
+    void SetBoard( BOARD *aBoard ) noexcept
+    {
+        m_board = aBoard;
+    }
 
     /**
      * @brief GetBoard - Get current board to be rendered
      * @return BOARD pointer
      */
-    const BOARD *GetBoard() const { return m_board; }
+    const BOARD *GetBoard() const noexcept
+    {
+        return m_board;
+    }
 
-    void SetColorSettings( COLOR_SETTINGS* aSettings ) { m_colors = aSettings; }
+    void SetColorSettings( COLOR_SETTINGS* aSettings ) noexcept
+    {
+        m_colors = aSettings;
+    }
 
     /**
      * @brief InitSettings - Function to be called by the render when it need to
@@ -138,55 +153,79 @@ class BOARD_ADAPTER
      * @brief BiuTo3Dunits - Board integer units To 3D units
      * @return the conversion factor to transform a position from the board to 3d units
      */
-    double BiuTo3Dunits() const { return m_biuTo3Dunits; }
+    double BiuTo3Dunits() const noexcept
+    {
+        return m_biuTo3Dunits;
+    }
 
     /**
      * @brief GetBBox3DU - Get the bbox of the pcb board
      * @return the board bbox in 3d units
      */
-    const CBBOX &GetBBox3DU() const { return m_boardBoundingBox; }
+    const CBBOX &GetBBox3DU() const noexcept
+    {
+        return m_boardBoundingBox;
+    }
 
     /**
      * @brief GetEpoxyThickness3DU - Get the current epoxy thickness
      * @return thickness in 3d unities
      */
-    float GetEpoxyThickness3DU() const { return m_epoxyThickness3DU; }
+    float GetEpoxyThickness3DU() const noexcept
+    {
+        return m_epoxyThickness3DU;
+    }
 
     /**
      * @brief GetNonCopperLayerThickness3DU - Get the current non copper layers thickness
      * @return thickness in 3d unities of non copperlayers
      */
-    float GetNonCopperLayerThickness3DU() const { return m_nonCopperLayerThickness3DU; }
+    float GetNonCopperLayerThickness3DU() const noexcept
+    {
+        return m_nonCopperLayerThickness3DU;
+    }
 
     /**
      * @brief GetCopperThickness3DU - Get the current copper layer thickness
      * @return thickness in 3d unities of copperlayers
      */
-    float GetCopperThickness3DU() const { return m_copperThickness3DU; }
+    float GetCopperThickness3DU() const noexcept
+    {
+        return m_copperThickness3DU;
+    }
 
     /**
      * @brief GetCopperThicknessBIU - Get the current copper layer thickness
      * @return thickness in board unities
      */
-    int GetCopperThicknessBIU() const;
+    int GetCopperThicknessBIU() const noexcept;
 
     /**
      * @brief GetBoardSizeBIU - Get the board size
      * @return size in BIU unities
      */
-    wxSize GetBoardSizeBIU() const { return m_boardSize; }
+    wxSize GetBoardSizeBIU() const noexcept
+    {
+        return m_boardSize;
+    }
 
     /**
      * @brief GetBoardPosBIU - Get the board size
      * @return size in BIU unities
      */
-    wxPoint GetBoardPosBIU() const { return m_boardPos; }
+    wxPoint GetBoardPosBIU() const noexcept
+    {
+        return m_boardPos;
+    }
 
     /**
      * @brief GetBoardCenter - the board center position in 3d units
      * @return board center vector position in 3d units
      */
-    const SFVEC3F &GetBoardCenter3DU() const { return m_boardCenter; }
+    const SFVEC3F &GetBoardCenter3DU() const noexcept
+    {
+        return m_boardCenter;
+    }
 
     /**
      * @brief GetModulesZcoord3DIU - Get the position of the module in 3d integer units
@@ -201,43 +240,64 @@ class BOARD_ADAPTER
      * @brief GridGet - get the current grid
      * @return space type of the grid
      */
-    GRID3D_TYPE GridGet() const { return m_3D_grid_type; }
+    GRID3D_TYPE GridGet() const noexcept
+    {
+        return m_3D_grid_type;
+    }
 
     /**
      * @brief GridSet - set the current grid
      * @param aGridType = the type space of the grid
      */
-    void GridSet( GRID3D_TYPE aGridType ) { m_3D_grid_type = aGridType; }
+    void GridSet( GRID3D_TYPE aGridType ) noexcept
+    {
+        m_3D_grid_type = aGridType;
+    }
 
     /**
      * @brief RenderEngineSet
      * @param aRenderEngine = the render engine mode selected
      */
-    void RenderEngineSet( RENDER_ENGINE aRenderEngine ) { m_render_engine = aRenderEngine; }
+    void RenderEngineSet( RENDER_ENGINE aRenderEngine ) noexcept
+    {
+        m_render_engine = aRenderEngine;
+    }
 
     /**
      * @brief RenderEngineGet
      * @return render engine on use
      */
-    RENDER_ENGINE RenderEngineGet() const { return m_render_engine; }
+    RENDER_ENGINE RenderEngineGet() const noexcept
+    {
+        return m_render_engine;
+    }
 
     /**
      * @brief MaterialModeSet
      * @param aMaterialMode = the render material mode
      */
-    void MaterialModeSet( MATERIAL_MODE aMaterialMode ) { m_material_mode = aMaterialMode; }
+    void MaterialModeSet( MATERIAL_MODE aMaterialMode ) noexcept
+    {
+        m_material_mode = aMaterialMode;
+    }
 
     /**
      * @brief MaterialModeGet
      * @return material rendering mode
      */
-    MATERIAL_MODE MaterialModeGet() const { return m_material_mode; }
+    MATERIAL_MODE MaterialModeGet() const noexcept
+    {
+        return m_material_mode;
+    }
 
     /**
      * @brief GetBoardPoly - Get the current polygon of the epoxy board
      * @return the shape polygon
      */
-    const SHAPE_POLY_SET &GetBoardPoly() const { return m_board_poly; }
+    const SHAPE_POLY_SET &GetBoardPoly() const noexcept
+    {
+        return m_board_poly;
+    }
 
     /**
      * @brief GetLayerColor - get the technical color of a layer
@@ -265,7 +325,7 @@ class BOARD_ADAPTER
      * @param aLayerId: layer id
      * @return position in 3D unities
      */
-    float GetLayerTopZpos3DU( PCB_LAYER_ID aLayerId ) const
+    float GetLayerTopZpos3DU( PCB_LAYER_ID aLayerId ) const noexcept
     {
         return m_layerZcoordTop[aLayerId];
     }
@@ -275,7 +335,7 @@ class BOARD_ADAPTER
      * @param aLayerId: layer id
      * @return position in 3D unities
      */
-    float GetLayerBottomZpos3DU( PCB_LAYER_ID aLayerId ) const
+    float GetLayerBottomZpos3DU( PCB_LAYER_ID aLayerId ) const noexcept
     {
         return m_layerZcoordBottom[aLayerId];
     }
@@ -284,31 +344,43 @@ class BOARD_ADAPTER
      * @brief GetMapLayers - Get the map of container that have the objects per layer
      * @return the map containers of this board
      */
-    const MAP_CONTAINER_2D &GetMapLayers() const { return m_layers_container2D; }
+    const MAP_CONTAINER_2D &GetMapLayers() const noexcept
+    {
+        return m_layers_container2D;
+    }
 
     /**
      * @brief GetMapLayersHoles -Get the map of container that have the holes per layer
      * @return the map containers of holes from this board
      */
-    const MAP_CONTAINER_2D &GetMapLayersHoles() const { return m_layers_holes2D; }
+    const MAP_CONTAINER_2D &GetMapLayersHoles() const noexcept
+    {
+        return m_layers_holes2D;
+    }
 
     /**
      * @brief GetThroughHole_Outer - Get the inflated ThroughHole container
      * @return a container with holes
      */
-    const CBVHCONTAINER2D &GetThroughHole_Outer() const { return m_through_holes_outer; }
+    const CBVHCONTAINER2D &GetThroughHole_Outer() const noexcept
+    {
+        return m_through_holes_outer;
+    }
 
     /**
      * @brief GetThroughHole_Outer_poly -
      * @return
      */
-    const SHAPE_POLY_SET &GetThroughHole_Outer_poly() const { return m_through_outer_holes_poly; }
+    const SHAPE_POLY_SET &GetThroughHole_Outer_poly() const noexcept
+    {
+        return m_through_outer_holes_poly;
+    }
 
     /**
      * @brief GetThroughHole_Outer_poly_NPTH -
      * @return
      */
-    const SHAPE_POLY_SET &GetThroughHole_Outer_poly_NPTH() const
+    const SHAPE_POLY_SET &GetThroughHole_Outer_poly_NPTH() const noexcept
     {
         return m_through_outer_holes_poly_NPTH;
     }
@@ -317,18 +389,24 @@ class BOARD_ADAPTER
      * @brief GetThroughHole_Vias_Outer -
      * @return a container with via THT holes only
      */
-    const CBVHCONTAINER2D &GetThroughHole_Vias_Outer() const { return m_through_holes_vias_outer; }
+    const CBVHCONTAINER2D &GetThroughHole_Vias_Outer() const noexcept
+    {
+        return m_through_holes_vias_outer;
+    }
 
     /**
      * @brief GetThroughHole_Vias_Inner -
      * @return a container with via THT holes only
      */
-    const CBVHCONTAINER2D &GetThroughHole_Vias_Inner() const { return m_through_holes_vias_inner; }
+    const CBVHCONTAINER2D &GetThroughHole_Vias_Inner() const noexcept
+    {
+        return m_through_holes_vias_inner;
+    }
 
     /**
      * @brief GetThroughHole_Vias_Outer_poly -
      */
-    const SHAPE_POLY_SET &GetThroughHole_Vias_Outer_poly() const
+    const SHAPE_POLY_SET &GetThroughHole_Vias_Outer_poly() const noexcept
     {
         return m_through_outer_holes_vias_poly;
     }
@@ -336,7 +414,7 @@ class BOARD_ADAPTER
     /**
      * @brief GetThroughHole_Vias_Inner_poly -
      */
-    const SHAPE_POLY_SET &GetThroughHole_Vias_Inner_poly() const
+    const SHAPE_POLY_SET &GetThroughHole_Vias_Inner_poly() const noexcept
     {
         return m_through_inner_holes_vias_poly;
     }
@@ -345,43 +423,64 @@ class BOARD_ADAPTER
      * @brief GetThroughHole_Inner - Get the ThroughHole container
      * @return a container with holes
      */
-    const CBVHCONTAINER2D &GetThroughHole_Inner() const { return m_through_holes_inner; }
+    const CBVHCONTAINER2D &GetThroughHole_Inner() const noexcept
+    {
+        return m_through_holes_inner;
+    }
 
     /**
      * @brief GetThroughHole_Inner_poly -
      * @return
      */
-    const SHAPE_POLY_SET &GetThroughHole_Inner_poly() const { return m_through_inner_holes_poly; }
+    const SHAPE_POLY_SET &GetThroughHole_Inner_poly() const noexcept
+    {
+        return m_through_inner_holes_poly;
+    }
 
     /**
      * @brief GetStats_Nr_Vias - Get statistics of the nr of vias
      * @return number of vias
      */
-    unsigned int GetStats_Nr_Vias() const { return m_stats_nr_vias; }
+    unsigned int GetStats_Nr_Vias() const noexcept
+    {
+        return m_stats_nr_vias;
+    }
 
     /**
      * @brief GetStats_Nr_Holes - Get statistics of the nr of holes
      * @return number of holes
      */
-    unsigned int GetStats_Nr_Holes() const { return m_stats_nr_holes; }
+    unsigned int GetStats_Nr_Holes() const noexcept
+    {
+        return m_stats_nr_holes;
+    }
 
     /**
      * @brief GetStats_Med_Via_Hole_Diameter3DU - Average diameter of the via holes
      * @return dimension in 3D units
      */
-    float GetStats_Med_Via_Hole_Diameter3DU() const { return m_stats_via_med_hole_diameter; }
+    float GetStats_Med_Via_Hole_Diameter3DU() const noexcept
+    {
+        return m_stats_via_med_hole_diameter;
+    }
 
     /**
      * @brief GetStats_Med_Hole_Diameter3DU - Average diameter of holes
      * @return dimension in 3D units
      */
-    float GetStats_Med_Hole_Diameter3DU() const { return m_stats_hole_med_diameter; }
+    float GetStats_Med_Hole_Diameter3DU() const noexcept
+    {
+        return m_stats_hole_med_diameter;
+    }
 
     /**
      * @brief GetStats_Med_Track_Width - Average width of the tracks
      * @return dimensions in 3D units
      */
-    float GetStats_Med_Track_Width() const { return m_stats_track_med_width; }
+    float GetStats_Med_Track_Width() const noexcept
+    {
+        return m_stats_track_med_width;
+    }
 
     /**
      * @brief GetNrSegmentsCircle
@@ -409,11 +508,20 @@ class BOARD_ADAPTER
      * @brief GetPolyMap - Get maps of polygons's layers
      * @return the map with polygons's layers
      */
-    const MAP_POLY &GetPolyMap() const { return m_layers_poly; }
+    const MAP_POLY &GetPolyMap() const noexcept
+    {
+        return m_layers_poly;
+    }
 
-    const MAP_POLY &GetPolyMapHoles_Inner() const { return m_layers_inner_holes_poly; }
+    const MAP_POLY &GetPolyMapHoles_Inner() const noexcept
+    {
+        return m_layers_inner_holes_poly;
+    }
 
-    const MAP_POLY &GetPolyMapHoles_Outer() const { return m_layers_outer_holes_poly; }
+    const MAP_POLY &GetPolyMapHoles_Outer() const noexcept
+    {
+        return m_layers_outer_holes_poly;
+    }
 
  private:
     /**

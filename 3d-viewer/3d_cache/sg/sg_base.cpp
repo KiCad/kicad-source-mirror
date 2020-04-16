@@ -62,7 +62,7 @@ SGCOLOR::SGCOLOR( float aRVal, float aGVal, float aBVal )
 }
 
 
-void SGCOLOR::GetColor( float& aRedVal, float& aGreenVal, float& aBlueVal ) const
+void SGCOLOR::GetColor( float& aRedVal, float& aGreenVal, float& aBlueVal ) const noexcept
 {
     aRedVal = red;
     aGreenVal = green;
@@ -71,7 +71,7 @@ void SGCOLOR::GetColor( float& aRedVal, float& aGreenVal, float& aBlueVal ) cons
 }
 
 
-void SGCOLOR::GetColor( SGCOLOR& aColor ) const
+void SGCOLOR::GetColor( SGCOLOR& aColor ) const noexcept
 {
     aColor.red = red;
     aColor.green = green;
@@ -80,7 +80,7 @@ void SGCOLOR::GetColor( SGCOLOR& aColor ) const
 }
 
 
-void SGCOLOR::GetColor( SGCOLOR* aColor ) const
+void SGCOLOR::GetColor( SGCOLOR* aColor ) const noexcept
 {
     if( NULL == aColor )
     {
@@ -114,7 +114,7 @@ bool SGCOLOR::SetColor( float aRedVal, float aGreenVal, float aBlueVal )
 }
 
 
-bool SGCOLOR::SetColor( const SGCOLOR& aColor )
+bool SGCOLOR::SetColor( const SGCOLOR& aColor ) noexcept
 {
     red = aColor.red;
     green = aColor.green;
@@ -123,7 +123,7 @@ bool SGCOLOR::SetColor( const SGCOLOR& aColor )
 }
 
 
-bool SGCOLOR::SetColor( const SGCOLOR* aColor )
+bool SGCOLOR::SetColor( const SGCOLOR* aColor ) noexcept
 {
     if( NULL == aColor )
     {
@@ -144,7 +144,7 @@ bool SGCOLOR::SetColor( const SGCOLOR* aColor )
 }
 
 
-bool SGCOLOR::checkRange( float aRedVal, float aGreenVal, float aBlueVal ) const
+bool SGCOLOR::checkRange( float aRedVal, float aGreenVal, float aBlueVal ) const noexcept
 {
     bool ok = true;
 
@@ -196,7 +196,7 @@ SGPOINT::SGPOINT()
 }
 
 
-SGPOINT::SGPOINT( double aXVal, double aYVal, double aZVal )
+SGPOINT::SGPOINT( double aXVal, double aYVal, double aZVal ) noexcept
 {
     x = aXVal;
     y = aYVal;
@@ -204,7 +204,7 @@ SGPOINT::SGPOINT( double aXVal, double aYVal, double aZVal )
 }
 
 
-void SGPOINT::GetPoint( double& aXVal, double& aYVal, double& aZVal )
+void SGPOINT::GetPoint( double& aXVal, double& aYVal, double& aZVal ) noexcept
 {
     x = aXVal;
     y = aYVal;
@@ -213,7 +213,7 @@ void SGPOINT::GetPoint( double& aXVal, double& aYVal, double& aZVal )
 }
 
 
-void SGPOINT::GetPoint( SGPOINT& aPoint )
+void SGPOINT::GetPoint( SGPOINT& aPoint ) noexcept
 {
     x = aPoint.x;
     y = aPoint.y;
@@ -222,7 +222,7 @@ void SGPOINT::GetPoint( SGPOINT& aPoint )
 }
 
 
-void SGPOINT::GetPoint( SGPOINT* aPoint )
+void SGPOINT::GetPoint( SGPOINT* aPoint ) noexcept
 {
     if( NULL == aPoint )
     {
@@ -243,7 +243,7 @@ void SGPOINT::GetPoint( SGPOINT* aPoint )
 }
 
 
-void SGPOINT::SetPoint( double aXVal, double aYVal, double aZVal )
+void SGPOINT::SetPoint( double aXVal, double aYVal, double aZVal ) noexcept
 {
     x = aXVal;
     y = aYVal;
@@ -252,7 +252,7 @@ void SGPOINT::SetPoint( double aXVal, double aYVal, double aZVal )
 }
 
 
-void SGPOINT::SetPoint( const SGPOINT& aPoint )
+void SGPOINT::SetPoint( const SGPOINT& aPoint ) noexcept
 {
     x = aPoint.x;
     y = aPoint.y;
@@ -280,7 +280,7 @@ SGVECTOR::SGVECTOR( double aXVal, double aYVal, double aZVal )
 }
 
 
-void SGVECTOR::GetVector( double& aXVal, double& aYVal, double& aZVal ) const
+void SGVECTOR::GetVector( double& aXVal, double& aYVal, double& aZVal ) const noexcept
 {
     aXVal = vx;
     aYVal = vy;
@@ -306,7 +306,7 @@ void SGVECTOR::SetVector( const SGVECTOR& aVector )
 }
 
 
-void SGVECTOR::normalize( void )
+void SGVECTOR::normalize( void ) noexcept
 {
     double dx = vx * vx;
     double dy = vy * vy;
@@ -331,7 +331,7 @@ void SGVECTOR::normalize( void )
 }
 
 
-SGVECTOR& SGVECTOR::operator=( const SGVECTOR& source )
+SGVECTOR& SGVECTOR::operator=( const SGVECTOR& source ) noexcept
 {
     vx = source.vx;
     vy = source.vy;

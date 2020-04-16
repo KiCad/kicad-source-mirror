@@ -48,7 +48,7 @@ static const std::string node_names[S3D::SGTYPE_END + 1] = {
 static unsigned int node_counts[S3D::SGTYPE_END] = { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
 
-char const* S3D::GetNodeTypeName( S3D::SGTYPES aType )
+char const* S3D::GetNodeTypeName( S3D::SGTYPES aType ) noexcept
 {
     return node_names[aType].c_str();
 }
@@ -105,13 +105,13 @@ SGNODE::~SGNODE()
 }
 
 
-S3D::SGTYPES SGNODE::GetNodeType( void ) const
+S3D::SGTYPES SGNODE::GetNodeType( void ) const noexcept
 {
     return m_SGtype;
 }
 
 
-SGNODE* SGNODE::GetParent( void ) const
+SGNODE* SGNODE::GetParent( void ) const noexcept
 {
     return m_Parent;
 }
@@ -167,7 +167,7 @@ void SGNODE::SetName( const char *aName )
 }
 
 
-const char * SGNODE::GetNodeTypeName( S3D::SGTYPES aNodeType ) const
+const char * SGNODE::GetNodeTypeName( S3D::SGTYPES aNodeType ) const noexcept
 {
     return node_names[aNodeType].c_str();
 }
@@ -216,7 +216,7 @@ void SGNODE::delNodeRef( const SGNODE* aNode )
 }
 
 
-void SGNODE::AssociateWrapper( SGNODE** aWrapperRef )
+void SGNODE::AssociateWrapper( SGNODE** aWrapperRef ) noexcept
 {
     if( NULL == aWrapperRef )
     {
@@ -261,7 +261,7 @@ void SGNODE::AssociateWrapper( SGNODE** aWrapperRef )
     return;
 }
 
-void SGNODE::DisassociateWrapper( SGNODE** aWrapperRef )
+void SGNODE::DisassociateWrapper( SGNODE** aWrapperRef ) noexcept
 {
     if( !m_Association )
         return;
@@ -301,7 +301,7 @@ void SGNODE::DisassociateWrapper( SGNODE** aWrapperRef )
 }
 
 
-void SGNODE::ResetNodeIndex( void )
+void SGNODE::ResetNodeIndex( void ) noexcept
 {
     for( int i = 0; i < (int)S3D::SGTYPE_END; ++i )
         node_counts[i] = 1;
@@ -362,19 +362,19 @@ void S3D::INIT_SMATERIAL( SMATERIAL& aMaterial )
 }
 
 
-void S3D::INIT_SMESH( SMESH& aMesh )
+void S3D::INIT_SMESH( SMESH& aMesh ) noexcept
 {
     aMesh = {};
 }
 
 
-void S3D::INIT_S3DMODEL( S3DMODEL& aModel )
+void S3D::INIT_S3DMODEL( S3DMODEL& aModel ) noexcept
 {
     aModel = {};
 }
 
 
-void S3D::FREE_SMESH( SMESH& aMesh)
+void S3D::FREE_SMESH( SMESH& aMesh) noexcept
 {
     if( NULL != aMesh.m_Positions )
     {

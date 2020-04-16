@@ -91,7 +91,7 @@ bool SGNORMALS::SetParent( SGNODE* aParent, bool notify )
 }
 
 
-SGNODE* SGNORMALS::FindNode(const char *aNodeName, const SGNODE *aCaller)
+SGNODE* SGNORMALS::FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept
 {
     if( NULL == aNodeName || 0 == aNodeName[0] )
         return NULL;
@@ -103,7 +103,7 @@ SGNODE* SGNORMALS::FindNode(const char *aNodeName, const SGNODE *aCaller)
 }
 
 
-void SGNORMALS::unlinkChildNode( const SGNODE* aCaller )
+void SGNORMALS::unlinkChildNode( const SGNODE* aCaller ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -116,7 +116,7 @@ void SGNORMALS::unlinkChildNode( const SGNODE* aCaller )
 }
 
 
-void SGNORMALS::unlinkRefNode( const SGNODE* aCaller )
+void SGNORMALS::unlinkRefNode( const SGNODE* aCaller ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -129,7 +129,7 @@ void SGNORMALS::unlinkRefNode( const SGNODE* aCaller )
 }
 
 
-bool SGNORMALS::AddRefNode( SGNODE* aNode )
+bool SGNORMALS::AddRefNode( SGNODE* aNode ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -142,7 +142,7 @@ bool SGNORMALS::AddRefNode( SGNODE* aNode )
 }
 
 
-bool SGNORMALS::AddChildNode( SGNODE* aNode )
+bool SGNORMALS::AddChildNode( SGNODE* aNode ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;

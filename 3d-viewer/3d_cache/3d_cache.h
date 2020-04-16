@@ -105,7 +105,7 @@ public:
     S3D_CACHE();
     virtual ~S3D_CACHE();
 
-    KICAD_T Type() override
+    KICAD_T Type() noexcept override
     {
         return S3D_CACHE_T;
     }
@@ -151,7 +151,7 @@ public:
      */
     SCENEGRAPH* Load( const wxString& aModelFile );
 
-    FILENAME_RESOLVER* GetResolver();
+    FILENAME_RESOLVER* GetResolver() noexcept;
 
     /**
      * Function GetFileFilters

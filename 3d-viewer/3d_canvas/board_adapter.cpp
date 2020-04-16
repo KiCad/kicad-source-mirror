@@ -238,7 +238,7 @@ bool BOARD_ADAPTER::ShouldModuleBeDisplayed( MODULE_ATTR_T aModuleAttributs ) co
 #define COPPER_THICKNESS KiROUND( 0.035 * IU_PER_MM )   // for 35 um
 #define TECH_LAYER_THICKNESS KiROUND( 0.04 * IU_PER_MM )
 
-int BOARD_ADAPTER::GetCopperThicknessBIU() const
+int BOARD_ADAPTER::GetCopperThicknessBIU() const noexcept
 {
     return COPPER_THICKNESS;
 }

@@ -171,7 +171,7 @@ bool IFSG_TRANSFORM::SetRotation( const SGVECTOR& aRotationAxis, double aAngle )
 }
 
 
-bool IFSG_TRANSFORM::SetScale( const SGPOINT& aScale )
+bool IFSG_TRANSFORM::SetScale( const SGPOINT& aScale ) noexcept
 {
     if( NULL == m_node )
     {
@@ -223,7 +223,7 @@ bool IFSG_TRANSFORM::SetScale( double aScale )
 }
 
 
-bool IFSG_TRANSFORM::SetTranslation( const SGPOINT& aTranslation )
+bool IFSG_TRANSFORM::SetTranslation( const SGPOINT& aTranslation ) noexcept
 {
     if( NULL == m_node )
     {
@@ -264,7 +264,7 @@ bool IFSG_TRANSFORM::SetScaleOrientation( const SGVECTOR& aScaleAxis, double aAn
 }
 
 
-bool IFSG_TRANSFORM::SetCenter( const SGPOINT& aCenter )
+bool IFSG_TRANSFORM::SetCenter( const SGPOINT& aCenter ) noexcept
 {
     if( NULL == m_node )
     {

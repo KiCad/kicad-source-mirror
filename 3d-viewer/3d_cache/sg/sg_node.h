@@ -50,7 +50,7 @@ namespace S3D
      * Function GetNodeTypeName
      * returns the name of the given type of node
      */
-    char const* GetNodeTypeName( S3D::SGTYPES aType );
+    char const* GetNodeTypeName( S3D::SGTYPES aType ) noexcept;
 
     struct MATLIST
     {
@@ -61,10 +61,10 @@ namespace S3D
     bool GetMatIndex( MATLIST& aList, SGNODE* aNode, int& aIndex );
 
     void INIT_SMATERIAL( SMATERIAL& aMaterial );
-    void INIT_SMESH( SMESH& aMesh );
-    void INIT_S3DMODEL( S3DMODEL& aModel );
+    void INIT_SMESH( SMESH& aMesh ) noexcept;
+    void INIT_S3DMODEL( S3DMODEL& aModel ) noexcept;
 
-    void FREE_SMESH( SMESH& aMesh);
+    void FREE_SMESH( SMESH& aMesh) noexcept;
     void FREE_S3DMODEL( S3DMODEL& aModel );
 }
 
@@ -127,7 +127,7 @@ public:
      * returns true if the object had already been written to a
      * cache file or VRML file; for internal use only.
      */
-    bool isWritten( void )
+    bool isWritten( void ) noexcept
     {
         return m_written;
     }
@@ -140,14 +140,14 @@ public:
      * Function GetNodeType
      * returns the type of this node instance
      */
-    S3D::SGTYPES GetNodeType( void ) const;
+    S3D::SGTYPES GetNodeType( void ) const noexcept;
 
     /**
      * Function GetParent
      * returns a pointer to the parent SGNODE of this object
      * or NULL if the object has no parent (ie. top level transform)
      */
-    SGNODE* GetParent( void ) const;
+    SGNODE* GetParent( void ) const noexcept;
 
     /**
      * Function SetParent
@@ -174,7 +174,7 @@ public:
     const char* GetName( void );
     void SetName(const char *aName);
 
-    const char * GetNodeTypeName( S3D::SGTYPES aNodeType ) const;
+    const char * GetNodeTypeName( S3D::SGTYPES aNodeType ) const noexcept;
 
     /**
      * Function FindNode searches the tree of linked nodes and returns a
@@ -199,21 +199,21 @@ public:
      * This mechanism provides a scheme by which a wrapper can be
      * notified of the destruction of the object which it wraps.
      */
-    void AssociateWrapper( SGNODE** aWrapperRef );
+    void AssociateWrapper( SGNODE** aWrapperRef ) noexcept;
 
     /**
      * Function DisassociateWrapper
      * removes the association between an IFSG* wrapper
      * object and this object.
      */
-    void DisassociateWrapper( SGNODE** aWrapperRef );
+    void DisassociateWrapper( SGNODE** aWrapperRef ) noexcept;
 
     /**
      * Function ResetNodeIndex
      * resets the global SG* node indices in preparation for
      * Write() operations
      */
-    void ResetNodeIndex( void );
+    void ResetNodeIndex( void ) noexcept;
 
     /**
      * Function ReNameNodes

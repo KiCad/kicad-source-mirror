@@ -84,7 +84,7 @@ bool SGINDEX::SetParent( SGNODE* aParent, bool notify )
 }
 
 
-SGNODE* SGINDEX::FindNode(const char *aNodeName, const SGNODE *aCaller)
+SGNODE* SGINDEX::FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept
 {
     if( NULL == aNodeName || 0 == aNodeName[0] )
         return NULL;
@@ -96,7 +96,7 @@ SGNODE* SGINDEX::FindNode(const char *aNodeName, const SGNODE *aCaller)
 }
 
 
-void SGINDEX::unlinkChildNode( const SGNODE* aCaller )
+void SGINDEX::unlinkChildNode( const SGNODE* aCaller ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -109,7 +109,7 @@ void SGINDEX::unlinkChildNode( const SGNODE* aCaller )
 }
 
 
-void SGINDEX::unlinkRefNode( const SGNODE* aCaller )
+void SGINDEX::unlinkRefNode( const SGNODE* aCaller ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -122,7 +122,7 @@ void SGINDEX::unlinkRefNode( const SGNODE* aCaller )
 }
 
 
-bool SGINDEX::AddRefNode( SGNODE* aNode )
+bool SGINDEX::AddRefNode( SGNODE* aNode ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;
@@ -135,7 +135,7 @@ bool SGINDEX::AddRefNode( SGNODE* aNode )
 }
 
 
-bool SGINDEX::AddChildNode( SGNODE* aNode )
+bool SGINDEX::AddChildNode( SGNODE* aNode ) noexcept
 {
     #ifdef DEBUG
     std::ostringstream ostr;

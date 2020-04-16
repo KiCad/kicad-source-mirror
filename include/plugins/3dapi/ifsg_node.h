@@ -87,7 +87,7 @@ public:
      * Function GetRawPtr()
      * returns the raw internal SGNODE pointer
      */
-    SGNODE* GetRawPtr( void );
+    SGNODE* GetRawPtr( void ) noexcept;
 
     /**
      * Function GetNodeType

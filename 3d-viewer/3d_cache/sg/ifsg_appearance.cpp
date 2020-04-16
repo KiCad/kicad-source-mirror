@@ -408,7 +408,7 @@ bool IFSG_APPEARANCE::SetAmbient( const SGCOLOR& aRGBColor )
 }
 
 
-bool IFSG_APPEARANCE::SetShininess( float aShininess )
+bool IFSG_APPEARANCE::SetShininess( float aShininess ) noexcept
 {
     if( NULL == m_node )
     {
@@ -440,7 +440,7 @@ bool IFSG_APPEARANCE::SetShininess( float aShininess )
 }
 
 
-bool IFSG_APPEARANCE::SetTransparency( float aTransparency )
+bool IFSG_APPEARANCE::SetTransparency( float aTransparency ) noexcept
 {
     if( NULL == m_node )
     {

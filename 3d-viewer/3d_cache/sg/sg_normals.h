@@ -37,8 +37,8 @@ class SGNORMALS : public SGNODE
 public:
     std::vector< SGVECTOR > norms;
 
-    void unlinkChildNode( const SGNODE* aNode ) override;
-    void unlinkRefNode( const SGNODE* aNode ) override;
+    void unlinkChildNode( const SGNODE* aNode ) noexcept override;
+    void unlinkRefNode( const SGNODE* aNode ) noexcept override;
 
 public:
     SGNORMALS( SGNODE* aParent );
@@ -46,9 +46,9 @@ public:
 
     virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
 
-    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) override;
-    bool AddRefNode( SGNODE* aNode ) override;
-    bool AddChildNode( SGNODE* aNode ) override;
+    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept override;
+    bool AddRefNode( SGNODE* aNode ) noexcept override;
+    bool AddChildNode( SGNODE* aNode ) noexcept override;
 
     bool GetNormalList( size_t& aListSize, SGVECTOR*& aNormalList );
     void SetNormalList( size_t aListSize, const SGVECTOR* aNormalList );

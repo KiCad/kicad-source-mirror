@@ -41,8 +41,8 @@ public:
     SGCOLOR emissive;   // default 0.0 0.0 0.0
     SGCOLOR specular;   // default 0.0 0.0 0.0
 
-    void unlinkChildNode( const SGNODE* aNode ) override;
-    void unlinkRefNode( const SGNODE* aNode ) override;
+    void unlinkChildNode( const SGNODE* aNode ) noexcept override;
+    void unlinkRefNode( const SGNODE* aNode ) noexcept override;
 
 public:
     SGAPPEARANCE( SGNODE* aParent );
@@ -66,9 +66,9 @@ public:
     bool SetAmbient( const SGCOLOR* aRGBColor );
     bool SetAmbient( const SGCOLOR& aRGBColor );
 
-    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) override;
-    bool AddRefNode( SGNODE* aNode ) override;
-    bool AddChildNode( SGNODE* aNode ) override;
+    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept override;
+    bool AddRefNode( SGNODE* aNode ) noexcept override;
+    bool AddChildNode( SGNODE* aNode ) noexcept override;
 
     void ReNameNodes( void ) override;
     bool WriteVRML( std::ostream& aFile, bool aReuseFlag ) override;

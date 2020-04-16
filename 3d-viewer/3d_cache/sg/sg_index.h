@@ -42,8 +42,8 @@ protected:
 public:
     // for internal SG consumption only
     std::vector< int > index;
-    void unlinkChildNode( const SGNODE* aCaller ) override;
-    void unlinkRefNode( const SGNODE* aCaller ) override;
+    void unlinkChildNode( const SGNODE* aCaller ) noexcept override;
+    void unlinkRefNode( const SGNODE* aCaller ) noexcept override;
 
 public:
     SGINDEX( SGNODE* aParent );
@@ -51,9 +51,9 @@ public:
 
     virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
 
-    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) override;
-    bool AddRefNode( SGNODE* aNode ) override;
-    bool AddChildNode( SGNODE* aNode ) override;
+    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept override;
+    bool AddRefNode( SGNODE* aNode ) noexcept override;
+    bool AddChildNode( SGNODE* aNode ) noexcept override;
 
     /**
      * Function GetIndices

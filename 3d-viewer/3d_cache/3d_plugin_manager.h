@@ -80,7 +80,7 @@ public:
      *
      * @return a pointer to the internal filter list
      */
-    std::list< wxString > const* GetFileFilters( void ) const;
+    std::list< wxString > const* GetFileFilters( void ) const noexcept;
 
     SCENEGRAPH* Load3DModel( const wxString& aFileName, std::string& aPluginInfo );
 

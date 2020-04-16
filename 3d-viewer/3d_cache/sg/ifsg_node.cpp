@@ -63,7 +63,7 @@ void IFSG_NODE::Destroy( void )
 }
 
 
-SGNODE* IFSG_NODE::GetRawPtr( void )
+SGNODE* IFSG_NODE::GetRawPtr( void ) noexcept
 {
     return m_node;
 }

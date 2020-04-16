@@ -336,7 +336,7 @@ bool S3D::ReadColor( std::istream& aFile, SGCOLOR& aColor )
 }
 
 
-bool S3D::degenerate( glm::dvec3* pts )
+bool S3D::degenerate( glm::dvec3* pts ) noexcept
 {
     double dx, dy, dz;
 

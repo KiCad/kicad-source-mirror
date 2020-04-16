@@ -51,16 +51,16 @@ public:
     SGCOLOR();
     SGCOLOR( float aRVal, float aGVal, float aBVal );
 
-    void GetColor( float& aRedVal, float& aGreenVal, float& aBlueVal ) const;
-    void GetColor( SGCOLOR& aColor ) const;
-    void GetColor( SGCOLOR* aColor ) const;
+    void GetColor( float& aRedVal, float& aGreenVal, float& aBlueVal ) const noexcept;
+    void GetColor( SGCOLOR& aColor ) const noexcept;
+    void GetColor( SGCOLOR* aColor ) const noexcept;
 
     bool SetColor( float aRedVal, float aGreenVal, float aBlueVal );
-    bool SetColor( const SGCOLOR& aColor );
-    bool SetColor( const SGCOLOR* aColor );
+    bool SetColor( const SGCOLOR& aColor ) noexcept;
+    bool SetColor( const SGCOLOR* aColor ) noexcept;
 
 private:
-    bool checkRange( float aRedVal, float aGreenVal, float aBlueVal ) const;
+    bool checkRange( float aRedVal, float aGreenVal, float aBlueVal ) const noexcept;
 };
 
 
@@ -73,21 +73,21 @@ public:
 
 public:
     SGPOINT();
-    SGPOINT( double aXVal, double aYVal, double aZVal );
+    SGPOINT( double aXVal, double aYVal, double aZVal ) noexcept;
 
-    void GetPoint( double& aXVal, double& aYVal, double& aZVal );
-    void GetPoint( SGPOINT& aPoint );
-    void GetPoint( SGPOINT* aPoint );
+    void GetPoint( double& aXVal, double& aYVal, double& aZVal ) noexcept;
+    void GetPoint( SGPOINT& aPoint ) noexcept;
+    void GetPoint( SGPOINT* aPoint ) noexcept;
 
-    void SetPoint( double aXVal, double aYVal, double aZVal );
-    void SetPoint( const SGPOINT& aPoint );
+    void SetPoint( double aXVal, double aYVal, double aZVal ) noexcept;
+    void SetPoint( const SGPOINT& aPoint ) noexcept;
 };
 
 
 class SGLIB_API SGVECTOR
 {
 private:
-    void normalize( void );
+    void normalize( void ) noexcept;
 
     double vx;
     double vy;
@@ -97,12 +97,12 @@ public:
     SGVECTOR();
     SGVECTOR( double aXVal, double aYVal, double aZVal );
 
-    void GetVector( double& aXVal, double& aYVal, double& aZVal ) const;
+    void GetVector( double& aXVal, double& aYVal, double& aZVal ) const noexcept;
 
     void SetVector( double aXVal, double aYVal, double aZVal );
     void SetVector( const SGVECTOR& aVector );
 
-    SGVECTOR& operator=( const SGVECTOR& source );
+    SGVECTOR& operator=( const SGVECTOR& source ) noexcept;
 };
 
 

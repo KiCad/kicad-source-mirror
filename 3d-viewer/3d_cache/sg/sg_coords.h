@@ -39,8 +39,8 @@ class SGCOORDS : public SGNODE
 public:
     std::vector< SGPOINT > coords;
 
-    void unlinkChildNode( const SGNODE* aNode ) override;
-    void unlinkRefNode( const SGNODE* aNode ) override;
+    void unlinkChildNode( const SGNODE* aNode ) noexcept override;
+    void unlinkRefNode( const SGNODE* aNode ) noexcept override;
 
 public:
     SGCOORDS( SGNODE* aParent );
@@ -48,9 +48,9 @@ public:
 
     virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
 
-    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) override;
-    bool AddRefNode( SGNODE* aNode ) override;
-    bool AddChildNode( SGNODE* aNode ) override;
+    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept override;
+    bool AddRefNode( SGNODE* aNode ) noexcept override;
+    bool AddChildNode( SGNODE* aNode ) noexcept override;
 
     bool GetCoordsList( size_t& aListSize, SGPOINT*& aCoordsList );
     void SetCoordsList( size_t aListSize, const SGPOINT* aCoordsList );

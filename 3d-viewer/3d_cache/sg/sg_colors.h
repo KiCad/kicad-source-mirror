@@ -37,8 +37,8 @@ class SGCOLORS : public SGNODE
 public:
     std::vector< SGCOLOR > colors;
 
-    void unlinkChildNode( const SGNODE* aNode ) override;
-    void unlinkRefNode( const SGNODE* aNode ) override;
+    void unlinkChildNode( const SGNODE* aNode ) noexcept override;
+    void unlinkRefNode( const SGNODE* aNode ) noexcept override;
 
 public:
     SGCOLORS( SGNODE* aParent );
@@ -46,9 +46,9 @@ public:
 
     virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
 
-    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) override;
-    bool AddRefNode( SGNODE* aNode ) override;
-    bool AddChildNode( SGNODE* aNode ) override;
+    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept override;
+    bool AddRefNode( SGNODE* aNode ) noexcept override;
+    bool AddChildNode( SGNODE* aNode ) noexcept override;
 
     bool GetColorList( size_t& aListSize, SGCOLOR*& aColorList );
     void SetColorList( size_t aListSize, const SGCOLOR* aColorList );

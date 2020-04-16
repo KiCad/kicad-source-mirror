@@ -469,7 +469,7 @@ void S3D_PLUGIN_MANAGER::addExtensionMap( KICAD_PLUGIN_LDR_3D* aPlugin )
 }
 
 
-std::list< wxString > const* S3D_PLUGIN_MANAGER::GetFileFilters( void ) const
+std::list< wxString > const* S3D_PLUGIN_MANAGER::GetFileFilters( void ) const noexcept
 {
     return &m_FileFilters;
 }

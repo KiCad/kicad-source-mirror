@@ -58,8 +58,8 @@ public:
     bool SetAmbient( const SGCOLOR* aRGBColor );
     bool SetAmbient( const SGCOLOR& aRGBColor );
 
-    bool SetShininess( float aShininess );
-    bool SetTransparency( float aTransparency );
+    bool SetShininess( float aShininess ) noexcept;
+    bool SetTransparency( float aTransparency ) noexcept;
 };
 
 #endif  // IFSG_APPEARANCE_H
