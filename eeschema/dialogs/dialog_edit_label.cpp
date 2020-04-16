@@ -117,6 +117,8 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     }
 
     m_valueMultiLine->SetEOLMode( wxSTC_EOL_LF );
+    m_valueMultiLine->SetUseHorizontalScrollBar( false );
+    m_valueMultiLine->SetUseVerticalScrollBar( false );
 
     if( m_CurrentText->IsMultilineAllowed() )
     {
