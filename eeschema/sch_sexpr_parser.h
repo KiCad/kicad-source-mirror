@@ -206,7 +206,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     void parseSchSymbolInstances( std::unique_ptr<SCH_COMPONENT>& aSymbol );
 
     SCH_SHEET_PIN* parseSchSheetPin( SCH_SHEET* aSheet );
-    SCH_FIELD* parseSchField();
+    SCH_FIELD* parseSchField( SCH_COMPONENT* aParentSymbol );
     SCH_COMPONENT* parseSchematicSymbol();
     SCH_BITMAP* parseImage();
     SCH_SHEET* parseSheet();
@@ -221,7 +221,7 @@ public:
 
     void ParseLib( LIB_PART_MAP& aSymbolLibMap );
 
-    LIB_PART* ParseSymbol( LIB_PART_MAP& aSymbolLibMap );
+    LIB_PART* ParseSymbol( LIB_PART_MAP& aSymbolLibMap, bool aIsSchematicLib = false );
 
     LIB_ITEM* ParseDrawItem();
 

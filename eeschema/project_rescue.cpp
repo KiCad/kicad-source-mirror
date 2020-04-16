@@ -573,8 +573,7 @@ bool SCH_EDIT_FRAME::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand )
         {
             SCH_SCREENS schematic;
 
-            schematic.UpdateSymbolLinks( true );
-
+            schematic.UpdateSymbolLinks();
             g_ConnectionGraph->Reset();
             RecalculateConnections( GLOBAL_CLEANUP );
         }
@@ -885,7 +884,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     // Update the schematic symbol library links since the library list has changed.
     SCH_SCREENS schematic;
 
-    schematic.UpdateSymbolLinks( true );
+    schematic.UpdateSymbolLinks();
     return true;
 }
 

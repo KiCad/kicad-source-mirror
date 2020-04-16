@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -269,7 +269,7 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
     }
 
     aReporter.Report( _( "Symbol library table mapping complete!" ), RPT_SEVERITY_INFO );
-    schematic.UpdateSymbolLinks( true );
+    schematic.UpdateSymbolLinks();
 }
 
 
@@ -308,7 +308,7 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_COMPONENT* aSymbol )
                 id.SetLibNickname( row->GetNickName() );
 
                 // Don't resolve symbol library links now.
-                aSymbol->SetLibId( id, nullptr, nullptr );
+                aSymbol->SetLibId( id );
                 return true;
             }
         }

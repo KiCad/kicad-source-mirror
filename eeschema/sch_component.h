@@ -93,8 +93,7 @@ struct COMPONENT_INSTANCE_REFERENCE
 
 
 /**
- * SCH_COMPONENT
- * describes a real schematic component
+ * Schematic symbol object.
  */
 class SCH_COMPONENT : public SCH_ITEM
 {
@@ -115,6 +114,17 @@ private:
                                 ///< what the component is. Determined, upon placement, from the
                                 ///< library component.  Created upon file load, by the first
                                 ///<  non-digits in the reference fields.
+
+    /**
+     * The name used to look up a symbol in the symbol library embedded in a schematic.
+     *
+     * By default this is the same as #LIB_ID::GetLibItemName().  However, schematics
+     * allow for multiple variants of the same library symbol.  Set this member In order
+     * to preserve the link to the original symbol library.  If empty, the return of
+     * #LIB_ID::GetLibItemName() should be used.
+     */
+    wxString    m_schLibSymbolName;
+
     TRANSFORM   m_transform;    ///< The rotation/mirror transformation matrix.
     SCH_FIELDS  m_Fields;       ///< Variable length list of fields.
 
@@ -199,12 +209,41 @@ public:
      */
     bool IsMovableFromAnchorPoint() override { return true; }
 
-    void SetLibId( const LIB_ID& aName, PART_LIBS* aLibs=NULL );
-    void SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTable, PART_LIB* aCacheLib );
+    void SetLibId( const LIB_ID& aName );
 
     const LIB_ID& GetLibId() const        { return m_lib_id; }
 
+    /**
+     * The name of the symbol in the schematic library symbol list.
+     *
+     * @note See #SCH_SCREEN::m_libSymbols
+     *
+     * The name of the schematic symbol list entry can vary from the item name in the #LIB_ID
+     * object because the library symbol may have changed so a new name has to be generated
+     * but the original symbol library link has to be preserved in order to update it from
+     * the library at some point in the future.  If this name is empty, then the library item
+     * name from #LIB_ID is used.
+     */
+    void SetSchSymbolLibraryName( const wxString& aName ) { m_schLibSymbolName = aName; }
+    wxString GetSchSymbolLibraryName() const;
+    bool UseLibIdLookup() const { return m_schLibSymbolName.IsEmpty(); }
+
     std::unique_ptr< LIB_PART >& GetPartRef() { return m_part; }
+
+    /**
+     * Set this schematic symbol library symbol reference to \a aLibSymbol
+     *
+     * The schematic symbol object owns \a aLibSymbol and the pin list will be updated
+     * accordingly.  The #LIB_ID object must be valid ( have both a library nickname and
+     * symbol name ) in order to set the schematic symbol #LIB_ID.  Otherwise an assertion
+     * will be raised in debug builds and the library symbol will be cleared.  The new file
+     * format will no longer require a cache library so all library symbols must be valid.
+     *
+     * @note This is the only way to publicly set the library symbol for a schematic
+     *       symbol except for the ctors that take a LIB_PART reference.  All previous
+     *       public resolvers have been deprecated.
+     */
+    void SetLibSymbol( LIB_PART* aLibSymbol );
 
     /**
      * Return information about the aliased parts
@@ -215,18 +254,6 @@ public:
      * Return the documentation text for the given part alias
      */
     wxString GetDatasheet() const;
-
-    /**
-     * Assigns the current #LIB_PART from \a aLibs which this symbol is based on.
-     *
-     * @param aLibs is the current set of LIB_PARTs to choose from.
-     */
-    bool Resolve( PART_LIBS* aLibs );
-
-    bool Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib = NULL );
-
-    static void ResolveAll( std::vector<SCH_COMPONENT*>& aComponents, SYMBOL_LIB_TABLE& aLibTable,
-            PART_LIB* aCacheLib = NULL );
 
     int GetUnit() const { return m_unit; }
 

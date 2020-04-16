@@ -48,6 +48,7 @@ set( QA_EESCHEMA_SRCS
     test_sch_rtree.cpp
     test_sch_sheet.cpp
     test_sch_sheet_path.cpp
+    test_sch_symbol.cpp
 )
 
 

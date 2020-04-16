@@ -85,6 +85,9 @@ int LIB_ITEM::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareF
     if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_Convert != aOther.m_Convert )
        return m_Convert - m_Convert;
 
+    if( m_Fill != aOther.m_Fill )
+        return m_Fill - aOther.m_Fill;
+
     return 0;
 }
 

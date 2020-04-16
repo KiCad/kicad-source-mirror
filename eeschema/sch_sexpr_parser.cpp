@@ -106,15 +106,15 @@ void SCH_SEXPR_PARSER::ParseLib( LIB_PART_MAP& aSymbolLibMap )
 }
 
 
-LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap )
+LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, bool aIsSchematicLib )
 {
     wxCHECK_MSG( CurTok() == T_symbol, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a symbol." ) );
 
     T token;
     long tmp;
-    wxString error;
     wxString name;
+    wxString error;
     LIB_ITEM* item;
     std::unique_ptr<LIB_PART> symbol( new LIB_PART( wxEmptyString ) );
 
@@ -133,15 +133,18 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap )
 
     name = FromUTF8();
 
-    if( name.IsEmpty() )
+    LIB_ID id;
+
+    if( id.Parse( name, LIB_ID::ID_SCH ) >= 0 )
     {
-        error.Printf( _( "Empty symbol name in\nfile: \"%s\"\nline: %d\noffset: %d" ),
+        error.Printf( _( "Invalid library identifier in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                       CurSource().c_str(), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }
 
-    m_symbolName = name;
-    symbol->SetName( name );
+    m_symbolName = id.GetLibItemName().wx_str();
+    symbol->SetName( m_symbolName );
+    symbol->SetLibId( id );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -152,6 +155,11 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap )
 
         switch( token )
         {
+        case T_power:
+            symbol->SetPower();
+            NeedRIGHT();
+            break;
+
         case T_pin_names:
             parsePinNames( symbol );
             break;
@@ -215,7 +223,8 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap )
             if( !name.StartsWith( m_symbolName ) )
             {
                 error.Printf(
-                    _( "Invalid symbol unit name prefix %s in\nfile: \"%s\"\nline: %d\noffset: %d" ),
+                    _( "Invalid symbol unit name prefix %s in\nfile: \"%s\"\n"
+                       "line: %d\noffset: %d" ),
                     name.c_str(), CurSource().c_str(), CurLineNumber(), CurOffset() );
                 THROW_IO_ERROR( error );
             }
@@ -227,7 +236,8 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap )
             if( tokenizer.CountTokens() != 2 )
             {
                 error.Printf(
-                    _( "Invalid symbol unit name suffix %s in\nfile: \"%s\"\nline: %d\noffset: %d" ),
+                    _( "Invalid symbol unit name suffix %s in\nfile: \"%s\"\n"
+                       "line: %d\noffset: %d" ),
                     name.c_str(), CurSource().c_str(), CurLineNumber(), CurOffset() );
                 THROW_IO_ERROR( error );
             }
@@ -1615,7 +1625,7 @@ void SCH_SEXPR_PARSER::parseTITLE_BLOCK( TITLE_BLOCK& aTitleBlock )
 }
 
 
-SCH_FIELD* SCH_SEXPR_PARSER::parseSchField()
+SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_COMPONENT* aParentSymbol )
 {
     wxCHECK_MSG( CurTok() == T_property, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
@@ -1656,7 +1666,7 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField()
     value = FromUTF8();
 
     std::unique_ptr<SCH_FIELD> field( new SCH_FIELD( wxDefaultPosition, MANDATORY_FIELDS,
-                                                     nullptr, name ) );
+                                                     aParentSymbol, name ) );
 
     field->SetText( value );
     field->SetVisible( true );
@@ -1882,6 +1892,32 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SCREEN* aScreen )
             break;
         }
 
+        case T_lib_symbols:
+        {
+            // Dummy map.  No derived symbols are allowed in the library cache.
+            LIB_PART_MAP symbolLibMap;
+
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_symbol:
+                    aScreen->AddLibSymbol( ParseSymbol( symbolLibMap, true ) );
+                    break;
+
+                default:
+                    Expecting( "symbol" );
+                }
+            }
+
+            break;
+        }
+
         case T_symbol:
             aScreen->Append( static_cast<SCH_ITEM*>( parseSchematicSymbol() ) );
             break;
@@ -1924,6 +1960,8 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SCREEN* aScreen )
                        "bus, text, label, global_label, or hierarchical_label" );
         }
     }
+
+    aScreen->UpdateLocalLibSymbolLinks();
 }
 
 
@@ -1933,10 +1971,12 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a symbol." ) );
 
     T token;
-    int orientation = CMP_ORIENT_0;
     wxString tmp;
+    wxString error;
+    wxString libName;
     SCH_FIELD* field;
     std::unique_ptr<SCH_COMPONENT> symbol( new SCH_COMPONENT() );
+    TRANSFORM transform;
 
     m_fieldId = MANDATORY_FIELDS;
 
@@ -1949,6 +1989,25 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
         switch( token )
         {
+        case T_lib_name:
+        {
+            LIB_ID libId;
+
+            token = NextTok();
+
+            if( !IsSymbol( token ) )
+            {
+                error.Printf( _( "Invalid symbol library name in\nfile: \"%s\"\n"
+                                 "line: %d\noffset: %d" ),
+                              CurSource().c_str(), CurLineNumber(), CurOffset() );
+                THROW_IO_ERROR( error );
+            }
+
+            libName = FromUTF8();
+            NeedRIGHT();
+            break;
+        }
+
         case T_lib_id:
         {
             token = NextTok();
@@ -1956,18 +2015,17 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             if( !IsSymbol( token ) && token != T_NUMBER )
                 Expecting( "symbol|number" );
 
-            LIB_ID id;
-            wxString text = FromUTF8();
+            LIB_ID libId;
 
-            if( !text.IsEmpty() && id.Parse( text, LIB_ID::ID_SCH, true ) >= 0 )
+            if( libId.Parse( FromUTF8(), LIB_ID::ID_SCH ) >= 0 )
             {
-                tmp.Printf( _( "Invalid symbol library ID in\nfile: \"%s\"\nline: %d\n"
-                               "offset: %d" ),
-                            GetChars( CurSource() ), CurLineNumber(), CurOffset() );
-                THROW_IO_ERROR( tmp );
+                error.Printf( _( "Invalid symbol library ID in\nfile: \"%s\"\nline: %d\n"
+                                 "offset: %d" ),
+                              GetChars( CurSource() ), CurLineNumber(), CurOffset() );
+                THROW_IO_ERROR( error );
             }
 
-            symbol->SetLibId( id );
+            symbol->SetLibId( libId );
             NeedRIGHT();
             break;
         }
@@ -1977,13 +2035,14 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
             switch( static_cast<int>( parseDouble( "symbol orientation" ) ) )
             {
-            case 0:    orientation = CMP_ORIENT_0;    break;
-            case 90:   orientation = CMP_ORIENT_90;   break;
-            case 180:  orientation = CMP_ORIENT_180;  break;
-            case 270:  orientation = CMP_ORIENT_270;  break;
+            case 0:    transform = TRANSFORM();                 break;
+            case 90:   transform = TRANSFORM( 0, -1, -1, 0 );   break;
+            case 180:  transform = TRANSFORM( -1, 0, 0, 1 );    break;
+            case 270:  transform = TRANSFORM( 0, 1, 1, 0 );     break;
             default:   Expecting( "0, 90, 180, or 270" );
             }
 
+            symbol->SetTransform( transform );
             NeedRIGHT();
             break;
 
@@ -1991,9 +2050,9 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             token = NextTok();
 
             if( token == T_x )
-                orientation |= CMP_MIRROR_X;
+                symbol->SetOrientation( CMP_MIRROR_X );
             else if( token == T_y )
-                orientation |= CMP_MIRROR_Y;
+                symbol->SetOrientation( CMP_MIRROR_Y );
             else
                 Expecting( "x or y" );
 
@@ -2013,8 +2072,9 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
         case T_property:
         {
-            field = parseSchField();
-            field->SetParent( symbol.get() );
+            // The field parent symbol must be set and it's orientation must be set before
+            // the field positions are set.
+            field = parseSchField( symbol.get() );
 
             if( field->GetId() == REFERENCE )
             {
@@ -2039,11 +2099,12 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             break;
 
         default:
-            Expecting( "lib_id, at, mirror, uuid, property, or instances" );
+            Expecting( "lib_id, lib_name, at, mirror, uuid, property, or instances" );
         }
     }
 
-    symbol->SetOrientation( orientation );
+    if( !libName.IsEmpty() && ( symbol->GetLibId().Format().wx_str() != libName ) )
+        symbol->SetSchSymbolLibraryName( libName );
 
     return symbol.release();
 }
@@ -2167,7 +2228,7 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
             break;
 
         case T_property:
-            field = parseSchField();
+            field = parseSchField( nullptr );
 
             if( field->GetName() == "ki_sheet_name" )
             {

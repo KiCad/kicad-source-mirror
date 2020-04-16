@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,11 +51,13 @@
 
 class BUS_ALIAS;
 
+class LIB_PART;
 class LIB_PIN;
 class SCH_COMPONENT;
 class SCH_LINE;
 class SCH_TEXT;
 class PLOTTER;
+class REPORTER;
 class SCH_SHEET_LIST;
 
 enum SCH_LINE_TEST_T
@@ -114,6 +116,11 @@ private:
 
     /// List of bus aliases stored in this screen
     std::unordered_set< std::shared_ptr< BUS_ALIAS > > m_aliases;
+
+    /// Library symbols required for this schematic.
+    std::map<wxString, LIB_PART*> m_libSymbols;
+
+    void clearLibSymbols();
 
 public:
 
@@ -221,19 +228,27 @@ public:
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
 
     /**
-     * Initialize or reinitialize the weak reference to the #LIB_PART for each #SCH_COMPONENT
-     * found in m_drawList.
+     * Initialize the #LIB_PART reference for each #SCH_COMPONENT found in this schematic
+     * from the project #SYMBOL_LIB_TABLE.
      *
-     * It must be called from:
-     * - Draw function
-     * - when loading a schematic file
-     * - before creating a netlist (in case a library is modified)
-     * - whenever a symbol library is modified
-     * - whenever the symbol library table is modified.
+     * Symbol library links are set using the symbol library table and will fall back to
+     * the cache only if the cache is loaded.  The cache should only be loaded when opening
+     * legacy schematic files.
      *
-     * @param aForce true forces a refresh even if the library modification has hasn't changed.
+     * @note This should only be called when the user specifically requests all library symbol
+     *       links to be updated or when the legacy schematic is opened for the last time.  All
+     *       subsequent schematic loads with the new s-expression will contain the library
+     *       symbols and should call #UpdateLocalLibSymbolLinks.
+     *
+     * @param aReporter Optional #REPORTER object to write status and error messages into.
      */
-    void UpdateSymbolLinks( bool aForce = false );
+    void UpdateSymbolLinks( REPORTER* aReporter = nullptr );
+
+    /**
+     * Initialize the #LIB_PART reference for each #SCH_COMPONENT found in this schematic
+     * with the local project library symbols
+     */
+    void UpdateLocalLibSymbolLinks();
 
     /**
      * Print all the items in the screen to \a aDC.
@@ -450,6 +465,25 @@ public:
                                 const wxString& aFootPrint, bool aSetVisible );
 
     /**
+     * Fetch a list of unique #LIB_PART object pointers required to properly render each
+     * #SCH_COMPONENT in this schematic.
+     *
+     * @return The list of unique #LIB_PART object pointers.
+     */
+    std::map<wxString, LIB_PART*>& GetLibSymbols() { return m_libSymbols; }
+
+    /**
+     * Add \a aLibSymbol to the the library symbol map.
+     *
+     * The symbol is mapped to the result of #LIB_ID::Format().  If a symbol is already
+     * mapped, the existing symbol is replaced with \a aLibSymbol.  The screen object takes
+     * ownership of the pointer.
+     *
+     * @param aLibSymbol A pointer the #LIB_PART to be added to the symbol map.
+     */
+    void AddLibSymbol( LIB_PART* aLibSymbol );
+
+    /**
      * Adds a bus alias definition (and transfers ownership of the pointer)
      */
     void AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias );
@@ -548,17 +582,17 @@ public:
     void DeleteMarker( SCH_MARKER* aMarker );
 
     /**
-     * Initialize or reinitialize the weak reference to the #LIB_PART for each #SCH_COMPONENT
-     * found in the full schematic.
+     * Initialize the #LIB_PART reference for each #SCH_COMPONENT found in the full schematic.
      *
-     * It must be called from:
-     * - draw functions
-     * - when loading a schematic file
-     * - before creating a netlist (in case a library is modified)
-     * - whenever any of the libraries are modified.
-     * - whenever the symbol library table is modified.
+     * @note This should only be called when the user specifically requests all library symbol
+     *       links to be update or when the legacy schematic is opened for the last time.  All
+     *       subsequent schematic loads with the new s-expression will contain the library
+     *       symbols.
+     *
+     * @param aReporter An optional #REPORTER object pointer to write warning and error
+     *                  messages into.
      */
-    void UpdateSymbolLinks( bool aForce = false );
+    void UpdateSymbolLinks( REPORTER* aReporter = nullptr );
 
     void TestDanglingEnds();
 

@@ -54,6 +54,7 @@
 #include <tool/actions.h>
 #include <netlist.h>
 
+
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
                                  bool aCreateBackupFile )
 {
@@ -73,9 +74,9 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
 
     if( aSaveUnderNewName )
     {
-        wxString wildcards = LegacySchematicFileWildcard();
+        wxString wildcards = KiCadSchematicFileWildcard();
 
-        wildcards += "|" + KiCadSchematicFileWildcard();
+        wildcards += "|" + LegacySchematicFileWildcard();
 
         wxFileDialog dlg( this, _( "Schematic Files" ), wxPathOnly( Prj().GetProjectFullName() ),
                           schematicFileName.GetFullName(), wildcards,
@@ -86,10 +87,10 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
 
         schematicFileName = dlg.GetPath();
 
-        if( dlg.GetFilterIndex() == 0
+        if( dlg.GetFilterIndex() == 1
           && schematicFileName.GetExt() != LegacySchematicFileExtension )
             schematicFileName.SetExt( LegacySchematicFileExtension );
-        else if( dlg.GetFilterIndex() == 1
+        else if( dlg.GetFilterIndex() == 0
           && schematicFileName.GetExt() != KiCadSchematicFileExtension )
             schematicFileName.SetExt( KiCadSchematicFileExtension );
     }
@@ -111,7 +112,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
         if( !wxRenameFile( schematicFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {
             msg.Printf( _( "Could not save backup of file \"%s\"" ),
-                        GetChars( schematicFileName.GetFullPath() ) );
+                        schematicFileName.GetFullPath() );
             DisplayError( this, msg );
         }
     }
@@ -132,10 +133,10 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
     catch( const IO_ERROR& ioe )
     {
         msg.Printf( _( "Error saving schematic file \"%s\".\n%s" ),
-                    GetChars( schematicFileName.GetFullPath() ), GetChars( ioe.What() ) );
+                    schematicFileName.GetFullPath(), ioe.What() );
         DisplayError( this, msg );
 
-        msg.Printf( _( "Failed to save \"%s\"" ), GetChars( schematicFileName.GetFullPath() ) );
+        msg.Printf( _( "Failed to save \"%s\"" ), schematicFileName.GetFullPath() );
         AppendMsgPanel( wxEmptyString, msg, CYAN );
 
         success = false;
@@ -166,7 +167,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
         aScreen->ClrSave();
         aScreen->ClrModify();
 
-        msg.Printf( _( "File %s saved" ), GetChars( aScreen->GetFileName() ) );
+        msg.Printf( _( "File %s saved" ),  aScreen->GetFileName() );
         SetStatusText( msg, 0 );
     }
     else
@@ -183,7 +184,16 @@ void SCH_EDIT_FRAME::Save_File( bool doSaveAs )
     if( doSaveAs )
     {
         if( SaveEEFile( NULL, true ) )
-            CreateArchiveLibraryCacheFile( true );
+        {
+            SCH_SCREEN* screen = GetScreen();
+
+            wxCHECK( screen, /* void */ );
+
+            wxFileName fn = screen->GetFileName();
+
+            if( fn.GetExt() == LegacySchematicFileExtension )
+                CreateArchiveLibraryCacheFile( true );
+        }
     }
     else
     {
@@ -197,8 +207,9 @@ void SCH_EDIT_FRAME::Save_File( bool doSaveAs )
 bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
     // implement the pseudo code from KIWAY_PLAYER.h:
-
     wxString msg;
+
+    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
     // This is for python:
     if( aFileSet.size() != 1 )
@@ -208,7 +219,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         return false;
     }
 
-    wxString    fullFileName( aFileSet[0] );
+    wxString fullFileName( aFileSet[0] );
 
     // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
     wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(), wxT( "Path is not absolute!" ) );
@@ -258,6 +269,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SetStatusText( wxEmptyString );
     ClearMsgPanel();
 
+    SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( fullFileName );
+
     // PROJECT::SetProjectFullName() is an impactful function.  It should only be
     // called under carefully considered circumstances.
 
@@ -265,20 +278,28 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // it knows what consequences that will have on other KIFACEs running and using
     // this same PROJECT.  It can be very harmful if that calling code is stupid.
 
-    // Don't reload the symbol libraries if we are just launching Eeschema from KiCad again.
-    // They are already saved in the kiface project object.
-    if( pro.GetFullPath() != Prj().GetProjectFullName()
-      || !Prj().GetElem( PROJECT::ELEM_SCH_PART_LIBS ) )
+    if( schFileType == SCH_IO_MGR::SCH_LEGACY )
     {
-        Prj().SetProjectFullName( pro.GetFullPath() );
+        // Don't reload the symbol libraries if we are just launching Eeschema from KiCad again.
+        // They are already saved in the kiface project object.
+        if( pro.GetFullPath() != Prj().GetProjectFullName()
+          || !Prj().GetElem( PROJECT::ELEM_SCH_PART_LIBS ) )
+        {
+            Prj().SetProjectFullName( pro.GetFullPath() );
 
-        // load the libraries here, not in SCH_SCREEN::Draw() which is a context
-        // that will not tolerate DisplayError() dialog since we're already in an
-        // event handler in there.
-        // And when a schematic file is loaded, we need these libs to initialize
-        // some parameters (links to PART LIB, dangling ends ...)
+            // load the libraries here, not in SCH_SCREEN::Draw() which is a context
+            // that will not tolerate DisplayError() dialog since we're already in an
+            // event handler in there.
+            // And when a schematic file is loaded, we need these libs to initialize
+            // some parameters (links to PART LIB, dangling ends ...)
+            Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
+            Prj().SchLibs();
+        }
+    }
+    else
+    {
+        // No legacy symbol libraries including the cache are loaded with the new file format.
         Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
-        Prj().SchLibs();
     }
 
     LoadProjectFile();
@@ -300,7 +321,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         delete g_RootSheet;   // Delete the current project.
         g_RootSheet = NULL;   // Force CreateScreens() to build new empty project on load failure.
 
-        SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( fullFileName );
         SCH_PLUGIN* plugin = SCH_IO_MGR::FindPlugin( schFileType );
         SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( plugin );
 
@@ -332,10 +352,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 
             msg.Printf( _( "Error loading schematic file \"%s\".\n%s" ),
-                        GetChars( fullFileName ), GetChars( ioe.What() ) );
+                        fullFileName, ioe.What() );
             DisplayError( this, msg );
 
-            msg.Printf( _( "Failed to load \"%s\"" ), GetChars( fullFileName ) );
+            msg.Printf( _( "Failed to load \"%s\"" ), fullFileName );
             AppendMsgPanel( wxEmptyString, msg, CYAN );
 
             return false;
@@ -358,60 +378,83 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         SCH_SCREENS schematic;
 
-        // Convert old projects over to use symbol library table.
-        if( schematic.HasNoFullyDefinedLibIds() )
+        // LIB_ID checks and symbol rescue only apply to the legacy file formats.
+        if( schFileType == SCH_IO_MGR::SCH_LEGACY )
         {
-            DIALOG_SYMBOL_REMAP dlgRemap( this );
-
-            dlgRemap.ShowQuasiModal();
-        }
-        else
-        {
-            // Double check to ensure no legacy library list entries have been
-            // added to the projec file symbol library list.
-            wxString paths;
-            wxArrayString libNames;
-
-            PART_LIBS::LibNamesAndPaths( &Prj(), false, &paths, &libNames );
-
-            if( !libNames.IsEmpty() )
+            // Convert old projects over to use symbol library table.
+            if( schematic.HasNoFullyDefinedLibIds() )
             {
-                if( eeconfig()->m_Appearance.show_illegal_symbol_lib_dialog )
-                {
-                    wxRichMessageDialog invalidLibDlg(
-                            this,
-                            _( "Illegal entry found in project file symbol library list." ),
-                            _( "Project Load Warning" ),
-                            wxOK | wxCENTER | wxICON_EXCLAMATION );
-                    invalidLibDlg.SetExtendedMessage(
-                            _( "Symbol libraries defined in the project file symbol library list "
-                               "are no longer supported and will be\nremoved.  This may cause "
-                               "broken symbol library links under certain conditions." ) );
-                    invalidLibDlg.ShowCheckBox( _( "Do not show this dialog again." ) );
-                    invalidLibDlg.ShowModal();
+                DIALOG_SYMBOL_REMAP dlgRemap( this );
 
-                    eeconfig()->m_Appearance.show_illegal_symbol_lib_dialog =
-                                                    !invalidLibDlg.IsCheckBoxChecked();
+                dlgRemap.ShowQuasiModal();
+            }
+            else
+            {
+                // Double check to ensure no legacy library list entries have been
+                // added to the projec file symbol library list.
+                wxString paths;
+                wxArrayString libNames;
+
+                PART_LIBS::LibNamesAndPaths( &Prj(), false, &paths, &libNames );
+
+                if( !libNames.IsEmpty() )
+                {
+                    if( eeconfig()->m_Appearance.show_illegal_symbol_lib_dialog )
+                    {
+                        wxRichMessageDialog invalidLibDlg(
+                                this,
+                                _( "Illegal entry found in project file symbol library list." ),
+                                _( "Project Load Warning" ),
+                                wxOK | wxCENTER | wxICON_EXCLAMATION );
+                        invalidLibDlg.ShowDetailedText(
+                                _( "Symbol libraries defined in the project file symbol library "
+                                   "list are no longer supported and will be\nremoved.  This may "
+                                   "cause broken symbol library links under certain conditions." ) );
+                        invalidLibDlg.ShowCheckBox( _( "Do not show this dialog again." ) );
+                        invalidLibDlg.ShowModal();
+                        eeconfig()->m_Appearance.show_illegal_symbol_lib_dialog =
+                                !invalidLibDlg.IsCheckBoxChecked();
+                    }
+
+                    libNames.Clear();
+                    paths.Clear();
+                    PART_LIBS::LibNamesAndPaths( &Prj(), true, &paths, &libNames );
                 }
 
-                libNames.Clear();
-                paths.Clear();
-                PART_LIBS::LibNamesAndPaths( &Prj(), true, &paths, &libNames );
+                if( !cfg || !cfg->m_RescueNeverShow )
+                    RescueSymbolLibTableProject( false );
             }
 
-            // Check to see whether some old library parts need to be rescued
-            // Only do this if RescueNeverShow was not set.
-            auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+            // Update all symbol library links for all sheets.
+            schematic.UpdateSymbolLinks();
 
-            if( !cfg || !cfg->m_RescueNeverShow )
-                RescueSymbolLibTableProject( false );
+            if( !cfg || cfg->m_Appearance.show_sexpr_file_convert_warning )
+            {
+                wxRichMessageDialog newFileFormatDlg(
+                        this,
+                        _( "The schematic file will be converted to the new file format on save." ),
+                        _( "Project Load Warning" ),
+                        wxOK | wxCENTER | wxICON_EXCLAMATION );
+                newFileFormatDlg.ShowDetailedText(
+                        _( "This schematic was saved in the legacy file format which is no "
+                           "longer supported and will be saved\nusing the new file format.  The "
+                           "new file format cannot be opened with previous versions of KiCad." ) );
+                newFileFormatDlg.ShowCheckBox( _( "Do not show this dialog again." ) );
+                newFileFormatDlg.ShowModal();
+                cfg->m_Appearance.show_sexpr_file_convert_warning =
+                        !newFileFormatDlg.IsCheckBoxChecked();
+            }
+
+            // Allow the schematic to be saved to new file format without making any edits.
+            OnModify();
+        }
+        else  // S-expression schematic.
+        {
+            for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
+                screen->UpdateLocalLibSymbolLinks();
         }
 
         g_ConnectionGraph->Reset();
-
-        // Update all symbol library links for all sheets.
-        // NOTE: calls RecalculateConnections( GLOBAL_CLEANUP )
-        schematic.UpdateSymbolLinks( true );      // Update all symbol library links for all sheets.
 
         SetScreen( g_CurrentSheet->LastScreen() );
 
@@ -426,8 +469,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
 
         GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
+        RecalculateConnections( GLOBAL_CLEANUP );
         GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
-
         GetScreen()->m_Initialized = true;
     }
 
@@ -476,7 +519,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
     wxFileDialog dlg( this, _( "Append Schematic" ), path, wxEmptyString,
-                      LegacySchematicFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                      KiCadSchematicFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
@@ -548,6 +591,7 @@ bool SCH_EDIT_FRAME::SaveProject()
     SCH_SCREEN* screen;
     SCH_SCREENS screenList;
     bool success = true;
+    bool updateFileType = false;
 
     // I want to see it in the debugger, show me the string!  Can't do that with wxFileName.
     wxString    fileName = Prj().AbsolutePath( g_RootSheet->GetFileName() );
@@ -561,9 +605,35 @@ bool SCH_EDIT_FRAME::SaveProject()
     }
 
     for( screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
-        success &= SaveEEFile( screen );
+    {
+        // Convert legacy schematics file name extensions for the new format.
+        wxFileName tmpFn = screen->GetFileName();
 
-    CreateArchiveLibraryCacheFile();
+        if( tmpFn.GetExt() != KiCadSchematicFileExtension )
+        {
+            updateFileType = true;
+            tmpFn.SetExt( KiCadSchematicFileExtension );
+
+            for( auto item : screen->Items().OfType( SCH_SHEET_T ) )
+            {
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+                wxFileName sheetFileName = sheet->GetFileName();
+
+                if( sheetFileName.GetExt() == KiCadSchematicFileExtension )
+                    continue;
+
+                sheetFileName.SetExt( KiCadSchematicFileExtension );
+                sheet->SetFileName( sheetFileName.GetFullPath() );
+            }
+
+            screen->SetFileName( tmpFn.GetFullPath() );
+        }
+
+        success &= SaveEEFile( screen );
+    }
+
+    if( updateFileType )
+        UpdateFileHistory( g_RootSheet->GetScreen()->GetFileName() );
 
     // Save the sheet name map to the project file
     wxString      configFile = Prj().GetProjectFullName();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1174,9 +1174,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     paste_screen.Clear( false );
 
     // Now we can resolve the components and add everything to the screen, view, etc.
-    //
     SYMBOL_LIB_TABLE* symLibTable = m_frame->Prj().SchSymbolLibTable();
-    PART_LIB*         partLib = m_frame->Prj().SchLibs()->GetCacheLibrary();
 
     for( unsigned i = 0; i < loadedItems.size(); ++i )
     {
@@ -1196,8 +1194,19 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 component->SetUnit( unit );
             }
 
-            component->Resolve( *symLibTable, partLib );
-            component->UpdatePins();
+            LIB_PART* libSymbol = symLibTable->LoadSymbol( component->GetLibId() );
+
+            if( libSymbol )
+            {
+                component->SetLibSymbol( libSymbol );
+            }
+            else
+            {
+                DisplayError( m_frame,
+                        wxString::Format( _( "Symbol '%s' not found in library '%s'." ),
+                                    component->GetLibId().GetLibItemName().wx_str(),
+                                    component->GetLibId().GetLibNickname().wx_str() ) );
+            }
         }
         else
         {

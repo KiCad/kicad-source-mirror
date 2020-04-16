@@ -391,7 +391,7 @@ public:
     static LIB_PART* LoadPart( LINE_READER& aReader, int aMajorVersion, int aMinorVersion,
                                LIB_PART_MAP* aMap = nullptr );
     static void      SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter,
-                                 int aNestLevel = 0, LIB_PART_MAP* aMap = nullptr );
+                                 int aNestLevel = 0, const wxString& aLibName = wxEmptyString );
 };
 
 
@@ -604,11 +604,17 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SCREEN* aScreen )
                   SEXPR_SCHEMATIC_FILE_VERSION,
                   m_out->Quotew( GetBuildVersion() ).c_str() );
 
-    // @todo save cache library here.
-
     aScreen->GetPageSettings().Format( m_out, 1, 0 );
     m_out->Print( 0, "\n" );
     aScreen->GetTitleBlock().Format( m_out, 1, 0 );
+
+    // Save cache library.
+    m_out->Print( 1, "(lib_symbols\n" );
+
+    for( auto libSymbol : aScreen->GetLibSymbols() )
+        SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( libSymbol.second, *m_out, 2, libSymbol.first );
+
+    m_out->Print( 1, ")\n\n" );
 
     // @todo save schematic instance information (page #).
 
@@ -786,8 +792,14 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, int aNestLevel )
     else
         angle = 0.0;
 
-    m_out->Print( aNestLevel, "(symbol (lib_id %s) (at %s %s %s)",
-                  m_out->Quotew( libName ).c_str(),
+    m_out->Print( aNestLevel, "(symbol" );
+
+    if( !aSymbol->UseLibIdLookup() )
+        m_out->Print( 0, " (lib_name %s)",
+                      m_out->Quotew( aSymbol->GetSchSymbolLibraryName() ).c_str() );
+
+    m_out->Print( 0, " (lib_id %s) (at %s %s %s)",
+                  m_out->Quotew( aSymbol->GetLibId().Format().wx_str() ).c_str(),
                   FormatInternalUnits( aSymbol->GetPosition().x ).c_str(),
                   FormatInternalUnits( aSymbol->GetPosition().y ).c_str(),
                   FormatAngle( angle * 10.0 ).c_str() );
@@ -875,13 +887,14 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
     // For some reason (bug in legacy parser?) the field ID for non-mandatory fields is -1 so
     // check for this in order to correctly use the field name.
     if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
-        fieldName = "ki_" + TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId() ).Lower();
+        fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId() );
     else
         fieldName = aField->GetName();
 
-    m_out->Print( aNestLevel, "(property %s %s (at %s %s %s)",
+    m_out->Print( aNestLevel, "(property %s %s (id %d) (at %s %s %s)",
                   m_out->Quotew( fieldName ).c_str(),
                   m_out->Quotew( aField->GetText() ).c_str(),
+                  aField->GetId(),
                   FormatInternalUnits( aField->GetPosition().x ).c_str(),
                   FormatInternalUnits( aField->GetPosition().y ).c_str(),
                   FormatAngle( aField->GetTextAngleDegrees() * 10.0 ).c_str() );
@@ -1130,7 +1143,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
       || ( aText->GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) ) )
     {
         m_out->Print( 0, "\n" );
-        aText->Format( m_out, aNestLevel + 1, 0 );
+        aText->Format( m_out, aNestLevel, 0 );
         m_out->Print( aNestLevel, ")\n" );   // Closes text token with font effects.
     }
     else
@@ -1394,17 +1407,30 @@ void SCH_SEXPR_PLUGIN_CACHE::Save()
 
 
 void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter,
-                                         int aNestLevel, LIB_PART_MAP* aMap )
+                                         int aNestLevel, const wxString& aLibName )
 {
     wxCHECK_RET( aSymbol, "Invalid LIB_PART pointer." );
 
+    std::string name = aFormatter.Quotew( aSymbol->GetLibId().Format().wx_str() );
+    std::string unitName = aSymbol->GetLibId().GetLibItemName();
+
+    if( !aLibName.IsEmpty() )
+    {
+        name = aFormatter.Quotew( aLibName );
+
+        LIB_ID unitId;
+
+        wxCHECK2( unitId.Parse( aLibName, LIB_ID::ID_SCH ) < 0, /* do nothing */ );
+
+        unitName = unitId.GetLibItemName();
+    }
+
     if( aSymbol->IsRoot() )
     {
-        aFormatter.Print( aNestLevel, "(symbol %s",
-                          aFormatter.Quotew( aSymbol->GetName() ).c_str() );
+        aFormatter.Print( aNestLevel, "(symbol %s", name.c_str() );
 
         if( aSymbol->IsPower() )
-            aFormatter.Print( 0, " power" );
+            aFormatter.Print( 0, " (power)" );
 
         // TODO: add uuid token here.
 
@@ -1461,8 +1487,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
         for( auto unit : units )
         {
             aFormatter.Print( aNestLevel + 1, "(symbol \"%s_%d_%d\"\n",
-                              TO_UTF8( aSymbol->GetName() ),
-                              unit.m_unit, unit.m_convert );
+                              unitName.c_str(), unit.m_unit, unit.m_convert );
 
             for( auto item : unit.m_items )
                 saveSymbolDrawItem( item, aFormatter, aNestLevel + 2 );
@@ -1477,7 +1502,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
         wxASSERT( parent );
 
         aFormatter.Print( aNestLevel, "(symbol %s (extends %s)\n",
-                          aFormatter.Quotew( aSymbol->GetName() ).c_str(),
+                          name.c_str(),
                           aFormatter.Quotew( parent->GetName() ).c_str() );
 
         LIB_FIELD tmp = parent->GetValueField();

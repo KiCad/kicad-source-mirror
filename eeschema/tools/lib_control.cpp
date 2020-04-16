@@ -440,10 +440,9 @@ int LIB_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
             return 0;
         }
 
-        SCH_COMPONENT* comp = new SCH_COMPONENT( *part, libId, g_CurrentSheet, unit, convert );
+        wxCHECK( part->GetLibId().IsValid(), 0 );
 
-        // Be sure the link to the corresponding LIB_PART is OK:
-        comp->Resolve( *m_frame->Prj().SchSymbolLibTable() );
+        SCH_COMPONENT* comp = new SCH_COMPONENT( *part, libId, g_CurrentSheet, unit, convert );
 
         if( schframe->eeconfig()->m_AutoplaceFields.enable )
             comp->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );

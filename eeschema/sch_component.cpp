@@ -23,28 +23,22 @@
  */
 
 #include <fctsys.h>
-#include <pgm_base.h>
-#include <sch_draw_panel.h>
 #include <gr_basic.h>
 #include <kicad_string.h>
-#include <richio.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
 
 #include <general.h>
-#include <class_library.h>
 #include <lib_rectangle.h>
 #include <lib_pin.h>
 #include <lib_text.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
-#include <sch_legacy_plugin.h>
 #include <netlist_object.h>
 #include <lib_item.h>
-#include <symbol_lib_table.h>
 
 #include <dialogs/dialog_schematic_find.h>
 
@@ -134,13 +128,10 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
 
     part = aPart.Flatten();
     part->SetParent();
-    m_part.reset( part.release() );
+    SetLibSymbol( part.release() );
 
     // Copy fields from the library component
     UpdateFields( true, true );
-
-    // Update the pin locations
-    UpdatePins();
 
     // Update the reference -- just the prefix for now.
     if( sheet )
@@ -148,6 +139,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
     else
         m_prefix = aPart.GetReferenceField().GetText() + wxT( "?" );
 }
+
 
 SCH_COMPONENT::SCH_COMPONENT(
         LIB_PART& aPart, SCH_SHEET_PATH* aSheet, COMPONENT_SELECTION& aSel, const wxPoint& pos )
@@ -175,7 +167,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     m_isInNetlist = aComponent.m_isInNetlist;
 
     if( aComponent.m_part )
-        m_part.reset( new LIB_PART( *aComponent.m_part.get() ) );
+        SetLibSymbol( new LIB_PART( *aComponent.m_part.get() ) );
 
     const_cast<KIID&>( m_Uuid ) = aComponent.m_Uuid;
 
@@ -187,8 +179,6 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     // Re-parent the fields, which before this had aComponent as parent
     for( SCH_FIELD& field : m_Fields )
         field.SetParent( this );
-
-    UpdatePins();
 
     m_fieldsAutoplaced = aComponent.m_fieldsAutoplaced;
 }
@@ -236,61 +226,28 @@ void SCH_COMPONENT::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, PART_LIBS* aLibs )
+void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId )
 {
     if( m_lib_id != aLibId )
     {
         m_lib_id = aLibId;
         SetModified();
-
-        if( aLibs )
-        {
-            Resolve( aLibs );
-        }
-        else
-        {
-            m_part.reset();
-            m_pins.clear();
-            m_pinMap.clear();
-        }
     }
 }
 
 
-void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTable,
-                              PART_LIB* aCacheLib )
+wxString SCH_COMPONENT::GetSchSymbolLibraryName() const
 {
-    if( m_lib_id == aLibId )
-        return;
+    if( !m_schLibSymbolName.IsEmpty() )
+        return m_schLibSymbolName;
+    else
+        return m_lib_id.Format().wx_str();
+}
 
-    m_lib_id = aLibId;
-    SetModified();
 
-    std::unique_ptr< LIB_PART > symbol;
-
-    if( aSymLibTable && aSymLibTable->HasLibrary( m_lib_id.GetLibNickname() ) )
-    {
-        LIB_PART* tmp = aSymLibTable->LoadSymbol( m_lib_id );
-
-        if( tmp )
-        {
-            symbol = tmp->Flatten();
-            symbol->SetParent();
-        }
-    }
-
-    if( !symbol && aCacheLib )
-    {
-        LIB_PART* tmp = aCacheLib->FindPart( m_lib_id.Format().wx_str() );
-
-        if( tmp )
-        {
-            symbol = tmp->Flatten();
-            symbol->SetParent();
-        }
-    }
-
-    m_part.reset( symbol.release() );
+void SCH_COMPONENT::SetLibSymbol( LIB_PART* aLibSymbol )
+{
+    m_part.reset( aLibSymbol );
     UpdatePins();
 }
 
@@ -314,138 +271,6 @@ wxString SCH_COMPONENT::GetDatasheet() const
     }
 
     return wxEmptyString;
-}
-
-
-bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
-{
-    // I've never been happy that the actual individual PART_LIB is left up to
-    // flimsy search path ordering.  None-the-less find a part based on that design:
-    if( LIB_PART* part = aLibs->FindLibPart( m_lib_id ) )
-    {
-        std::unique_ptr< LIB_PART > flattenedPart = part->Flatten();
-        flattenedPart->SetParent();
-        m_part.reset( flattenedPart.release() );
-        UpdatePins();
-        return true;
-    }
-
-    return false;
-}
-
-
-bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
-{
-    std::unique_ptr< LIB_PART > part;
-
-    try
-    {
-        // We want a full symbol not just the top level child symbol.
-        PROPERTIES props;
-
-        props[ SCH_LEGACY_PLUGIN::PropNoDocFile ] = "";
-
-        // LIB_TABLE_BASE::LoadSymbol() throws an IO_ERROR if the the library nickname
-        // is not found in the table so check if the library still exists in the table
-        // before attempting to load the symbol.
-        if( m_lib_id.IsValid() && aLibTable.HasLibrary( m_lib_id.GetLibNickname() ) )
-        {
-            LIB_PART* tmp = aLibTable.LoadSymbol( m_lib_id );
-
-            if( tmp )
-            {
-                part = tmp->Flatten();
-                part->SetParent();
-            }
-        }
-
-        // Fall back to cache library.  This is temporary until the new schematic file
-        // format is implemented.
-        if( !part && aCacheLib )
-        {
-            wxString libId = m_lib_id.Format().wx_str();
-            libId.Replace( ":", "_" );
-            wxLogTrace( traceSymbolResolver,
-                        "Library symbol %s not found falling back to cache library.",
-                        m_lib_id.Format().wx_str() );
-            LIB_PART* tmp = aCacheLib->FindPart( libId );
-
-            if( tmp )
-            {
-                part = tmp->Flatten();
-                part->SetParent();
-            }
-        }
-
-        if( part )
-        {
-            m_part.reset( part.release() );
-            UpdatePins();
-            return true;
-        }
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        wxLogTrace( traceSymbolResolver, "I/O error %s resolving library symbol %s", ioe.What(),
-                    m_lib_id.Format().wx_str() );
-    }
-
-    wxLogTrace( traceSymbolResolver, "Cannot resolve library symbol %s",
-                m_lib_id.Format().wx_str() );
-
-    m_part.reset();
-    UpdatePins();     // This will clear the pin map and library symbol pin pointers.
-
-    return false;
-}
-
-
-// Helper sort function, used in SCH_COMPONENT::ResolveAll, to sort sch component by lib_id
-static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
-{
-    if( ref->GetLibId() == cmp->GetLibId() )
-    {
-        if( ref->GetUnit() == cmp->GetUnit() )
-            return ref->GetConvert() < cmp->GetConvert();
-
-        return ref->GetUnit() < cmp->GetUnit();
-    }
-
-    return ref->GetLibId() < cmp->GetLibId();
-}
-
-
-void SCH_COMPONENT::ResolveAll(
-        std::vector<SCH_COMPONENT*>& aComponents, SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
-{
-    // sort it by lib part. Cmp will be grouped by same lib part.
-    std::sort( aComponents.begin(), aComponents.end(), sort_by_libid );
-
-    LIB_ID curr_libid;
-
-    for( unsigned ii = 0; ii < aComponents.size(); ++ii )
-    {
-        SCH_COMPONENT* cmp = aComponents[ii];
-        curr_libid = cmp->m_lib_id;
-        cmp->Resolve( aLibTable, aCacheLib );
-        cmp->UpdatePins();
-
-        // Propagate the m_part pointer to other members using the same lib_id
-        for( unsigned jj = ii + 1; jj < aComponents.size(); ++jj )
-        {
-            SCH_COMPONENT* next_cmp = aComponents[jj];
-
-            if( curr_libid != next_cmp->m_lib_id )
-                break;
-
-            if( cmp->m_part )
-                next_cmp->m_part.reset( new LIB_PART( *cmp->m_part.get() ) );
-
-            next_cmp->UpdatePins();
-
-            ii = jj;
-        }
-    }
 }
 
 
@@ -1140,7 +965,7 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
 
     default:
         transform = false;
-        wxMessageBox( wxT( "SetRotateMiroir() error: ill value" ) );
+        wxFAIL_MSG( "Invalid schematic symbol orientation type." );
         break;
     }
 
@@ -1197,7 +1022,7 @@ int SCH_COMPONENT::GetOrientation()
     }
 
     // Error: orientation not found in list (should not happen)
-    wxMessageBox( wxT( "Component orientation matrix internal error" ) );
+    wxFAIL_MSG( "Schematic symbol orientation matrix internal error." );
     m_transform = transform;
 
     return CMP_NORMAL;
@@ -1313,15 +1138,15 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
 
                 aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), msg, BROWN ) );
             }
-
-            if( m_part->GetLib() && m_part->GetLib()->IsCache() )
-                aList.push_back( MSG_PANEL_ITEM( _( "Library" ),
-                                                 m_part->GetLib()->GetLogicalName(), RED ) );
             else if( !m_lib_id.GetLibNickname().empty() )
+            {
                 aList.push_back( MSG_PANEL_ITEM( _( "Library" ), m_lib_id.GetLibNickname(),
                                                  BROWN ) );
+            }
             else
+            {
                 aList.push_back( MSG_PANEL_ITEM( _( "Library" ), _( "Undefined!!!" ), RED ) );
+            }
 
             // Display the current associated footprint, if exists.
             if( !GetField( FOOTPRINT )->IsVoid() )

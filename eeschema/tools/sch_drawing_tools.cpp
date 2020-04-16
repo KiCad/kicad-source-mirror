@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,9 +173,6 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
 
                 component = new SCH_COMPONENT( *part, g_CurrentSheet, sel, (wxPoint) cursorPos );
                 component->SetFlags( IS_NEW | IS_MOVED );
-
-                // Be sure the link to the corresponding LIB_PART is OK:
-                component->Resolve( *m_frame->Prj().SchSymbolLibTable() );
 
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                     component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );

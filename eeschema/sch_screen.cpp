@@ -39,11 +39,13 @@
 #include <pgm_base.h>
 #include <plotter.h>
 #include <project.h>
+#include <reporter.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <sch_item.h>
 
 #include <class_library.h>
+#include <class_libentry.h>
 #include <connection_graph.h>
 #include <lib_pin.h>
 #include <netlist_object.h>
@@ -146,8 +148,18 @@ SCH_SCREEN::SCH_SCREEN( KIWAY* aKiway ) :
 
 SCH_SCREEN::~SCH_SCREEN()
 {
+    clearLibSymbols();
     ClearUndoRedoList();
     FreeDrawList();
+}
+
+
+void SCH_SCREEN::clearLibSymbols()
+{
+    for( auto libSymbol : m_libSymbols )
+        delete libSymbol.second;
+
+    m_libSymbols.clear();
 }
 
 
@@ -169,6 +181,47 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem )
 {
     if( aItem->Type() != SCH_SHEET_PIN_T && aItem->Type() != SCH_FIELD_T )
     {
+        if( aItem->Type() == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( aItem );
+
+            if( symbol->GetPartRef() )
+            {
+                auto it = m_libSymbols.find( symbol->GetSchSymbolLibraryName() );
+
+                if( it == m_libSymbols.end() )
+                {
+                    m_libSymbols[symbol->GetSchSymbolLibraryName()] =
+                            new LIB_PART( *symbol->GetPartRef() );
+                }
+                else
+                {
+                    // The original library symbol may have changed since the last time
+                    // it was added to the schematic.  If it has changed, then a new name
+                    // must be created for the library symbol list to prevent all of the
+                    // other schematic symbols referencing that library symbol from changing.
+                    LIB_PART* foundSymbol = it->second;
+
+                    if( *foundSymbol != *symbol->GetPartRef() )
+                    {
+                        int cnt = 1;
+                        wxString newName;
+
+                        newName.Printf( "%s_%d", symbol->GetLibId().Format().wx_str(), cnt );
+
+                        while( m_libSymbols.find( newName ) != m_libSymbols.end() )
+                        {
+                            cnt += 1;
+                            newName.Printf( "%s_%d", symbol->GetLibId().Format().wx_str(), cnt );
+                        }
+
+                        symbol->SetSchSymbolLibraryName( newName );
+                        m_libSymbols[newName] = new LIB_PART( *symbol->GetPartRef() );
+                    }
+                }
+            }
+        }
+
         m_rtree.insert( aItem );
         --m_modification_sync;
     }
@@ -191,9 +244,14 @@ void SCH_SCREEN::Append( SCH_SCREEN* aScreen )
 void SCH_SCREEN::Clear( bool aFree )
 {
     if( aFree )
+    {
         FreeDrawList();
+        clearLibSymbols();
+    }
     else
+    {
         m_rtree.clear();
+    }
 
     // Clear the project settings
     m_ScreenNumber = m_NumberOfScreens = 1;
@@ -230,7 +288,39 @@ void SCH_SCREEN::Update( SCH_ITEM* aItem )
 
 bool SCH_SCREEN::Remove( SCH_ITEM* aItem )
 {
-    return m_rtree.remove( aItem );
+    bool retv = m_rtree.remove( aItem );
+
+    // Check if the library symbol for the removed schematic symbol is still required.
+    if( retv && aItem->Type() == SCH_COMPONENT_T )
+    {
+        SCH_COMPONENT* removedSymbol = static_cast<SCH_COMPONENT*>( aItem );
+
+        bool removeUnusedLibSymbol = true;
+
+        for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
+        {
+            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+
+            if( removedSymbol->GetSchSymbolLibraryName() == symbol->GetSchSymbolLibraryName() )
+            {
+                removeUnusedLibSymbol = false;
+                break;
+            }
+        }
+
+        if( removeUnusedLibSymbol )
+        {
+            auto it = m_libSymbols.find( removedSymbol->GetSchSymbolLibraryName() );
+
+            if( it != m_libSymbols.end() )
+            {
+                delete it->second;
+                m_libSymbols.erase( it );
+            }
+        }
+    }
+
+    return retv;
 }
 
 
@@ -250,10 +340,8 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
         sheet->RemovePin( sheetPin );
         return;
     }
-    else
-    {
-        delete aItem;
-    }
+
+    delete aItem;
 }
 
 
@@ -481,42 +569,174 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 }
 
 
-void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
+void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 {
-    // Initialize or reinitialize the pointer to the LIB_PART for each component
-    // found in m_drawList, but only if needed (change in lib or schematic)
-    // therefore the calculation time is usually very low.
-    if( !IsEmpty() )
+    wxString msg;
+    std::unique_ptr< LIB_PART > libSymbol;
+    std::vector<SCH_COMPONENT*> symbols;
+    SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
+
+    // This will be a nullptr if an s-expression schematic is loaded.
+    PART_LIBS* legacyLibs = Prj().SchLibs();
+
+    for( auto item : Items().OfType( SCH_COMPONENT_T ) )
+        symbols.push_back( static_cast<SCH_COMPONENT*>( item ) );
+
+    // Remove them from the R tree.  There bounding box size may change.
+    for( auto symbol : symbols )
+        Remove( symbol );
+
+    // Clear all existing symbol links.
+    clearLibSymbols();
+
+    for( auto symbol : symbols )
     {
-        std::vector<SCH_COMPONENT*> cmps;
-        SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
-        int mod_hash = libs->GetModifyHash();
+        LIB_PART* tmp = nullptr;
+        libSymbol.reset();
 
-        for( SCH_ITEM* aItem : Items().OfType( SCH_COMPONENT_T ) )
-            cmps.push_back( static_cast<SCH_COMPONENT*>( aItem ) );
+        // If the symbol is already in the internal library, map the symbol to it.
+        auto it = m_libSymbols.find( symbol->GetSchSymbolLibraryName() );
 
-        for( SCH_COMPONENT* cmp : cmps )
-            Remove( cmp );
-
-        // Must we resolve?
-        if( (m_modification_sync != mod_hash) || aForce )
+        if( ( it != m_libSymbols.end() ) )
         {
-            SCH_COMPONENT::ResolveAll( cmps, *libs, Prj().SchLibs()->GetCacheLibrary() );
+            if( aReporter )
+            {
+                msg.Printf( _( "Setting schematic symbol '%s %s' library identifier "
+                               "to '%s'. " ),
+                            symbol->GetField( REFERENCE )->GetText(),
+                            symbol->GetField( VALUE )->GetText(),
+                            symbol->GetLibId().Format().wx_str() );
+                aReporter->ReportTail( msg, RPT_SEVERITY_INFO );
+            }
 
-            m_modification_sync = mod_hash;     // note the last mod_hash
+            // Internal library symbols are flattens so just make a copy.
+            symbol->GetPartRef().reset( new LIB_PART( *it->second ) );
+            continue;
         }
-        // Resolving will update the pin caches but we must ensure that this happens
-        // even if the libraries don't change.
+
+        if( !symbol->GetLibId().IsValid() )
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "Schematic symbol reference '%s' library identifier is not "
+                               "valid.  Unable to link library symbol." ),
+                            symbol->GetLibId().Format().wx_str() );
+                aReporter->ReportTail( msg, RPT_SEVERITY_WARNING );
+            }
+
+            continue;
+        }
+
+        // LIB_TABLE_BASE::LoadSymbol() throws an IO_ERROR if the the library nickname
+        // is not found in the table so check if the library still exists in the table
+        // before attempting to load the symbol.
+        if( !libs->HasLibrary( symbol->GetLibId().GetLibNickname() ) && !legacyLibs )
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "Symbol library '%s' not found and no fallback cache "
+                               "library avaiable.  Unable to link library symbol." ),
+                            symbol->GetLibId().GetLibNickname().wx_str() );
+                aReporter->ReportTail( msg, RPT_SEVERITY_WARNING );
+            }
+
+            continue;
+        }
+
+        if( libs->HasLibrary( symbol->GetLibId().GetLibNickname() ) )
+        {
+            try
+            {
+                tmp = libs->LoadSymbol( symbol->GetLibId() );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                msg.Printf( _( "I/O error %s resolving library symbol %s" ), ioe.What(),
+                            symbol->GetLibId().Format().wx_str() );
+                aReporter->ReportTail( msg, RPT_SEVERITY_ERROR );
+            }
+        }
+
+        if( !tmp && legacyLibs )
+        {
+            // If here, only the cache library should be loaded if the loaded schematic
+            // is the legacy file format.
+            wxCHECK2( legacyLibs->GetLibraryCount() == 1, continue );
+
+            PART_LIB& legacyCacheLib = legacyLibs->at( 0 );
+
+            // ...and it better be the cache library.
+            wxCHECK2( legacyCacheLib.IsCache(), continue );
+
+            wxString id = symbol->GetLibId().Format();
+
+            id.Replace( ':', '_' );
+
+            if( aReporter )
+            {
+                msg.Printf( _( "Falling back to cache to set symbol '%s:%s' link '%s'." ),
+                            symbol->GetField( REFERENCE )->GetText(),
+                            symbol->GetField( VALUE )->GetText(),
+                            id );
+                aReporter->ReportTail( msg, RPT_SEVERITY_WARNING );
+            }
+
+            tmp = legacyCacheLib.FindPart( id );
+        }
+
+        if( tmp )
+        {
+            // We want a full symbol not just the top level child symbol.
+            libSymbol = tmp->Flatten();
+            libSymbol->SetParent();
+
+            m_libSymbols.insert( { symbol->GetSchSymbolLibraryName(),
+                                   new LIB_PART( *libSymbol.get() ) } );
+
+            if( aReporter )
+            {
+                msg.Printf( _( "Setting schematic symbol '%s %s' library identifier to '%s'. " ),
+                            symbol->GetField( REFERENCE )->GetText(),
+                            symbol->GetField( VALUE )->GetText(),
+                            symbol->GetLibId().Format().wx_str() );
+                aReporter->ReportTail( msg, RPT_SEVERITY_INFO );
+            }
+        }
         else
         {
-            for( SCH_COMPONENT* cmp : cmps )
-                cmp->UpdatePins();
+            if( aReporter )
+            {
+                msg.Printf( _( "No library symbol found for schematic symbol '%s %s'. " ),
+                            symbol->GetField( REFERENCE )->GetText(),
+                            symbol->GetField( VALUE )->GetText() );
+                aReporter->ReportTail( msg, RPT_SEVERITY_ERROR );
+            }
         }
 
-        // Changing the symbol may adjust the bbox of the symbol.  This re-inserts the
-        // item with the new bbox
-        for( SCH_COMPONENT* cmp : cmps )
-            Append( cmp );
+        symbol->SetLibSymbol( libSymbol.release() );
+    }
+
+    // Changing the symbol may adjust the bbox of the symbol.  This re-inserts the
+    // item with the new bbox
+    for( auto symbol : symbols )
+        Append( symbol );
+}
+
+
+void SCH_SCREEN::UpdateLocalLibSymbolLinks()
+{
+    for( auto item : Items().OfType( SCH_COMPONENT_T ) )
+    {
+        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+
+        auto it = m_libSymbols.find( symbol->GetSchSymbolLibraryName() );
+
+        LIB_PART* libSymbol = nullptr;
+
+        if( it != m_libSymbols.end() )
+            libSymbol = new LIB_PART( *it->second );
+
+        symbol->SetLibSymbol( libSymbol );
     }
 }
 
@@ -932,6 +1152,24 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
 }
 
 
+void SCH_SCREEN::AddLibSymbol( LIB_PART* aLibSymbol )
+{
+    wxCHECK( aLibSymbol, /* void */ );
+
+    wxString libSymbolName = aLibSymbol->GetLibId().Format().wx_str();
+
+    auto it = m_libSymbols.find( libSymbolName );
+
+    if( it != m_libSymbols.end() )
+    {
+        delete it->second;
+        m_libSymbols.erase( it );
+    }
+
+    m_libSymbols[libSymbolName] = aLibSymbol;
+}
+
+
 void SCH_SCREEN::AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
 {
     m_aliases.insert( aAlias );
@@ -1185,10 +1423,10 @@ void SCH_SCREENS::DeleteAllMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType )
 }
 
 
-void SCH_SCREENS::UpdateSymbolLinks( bool aForce )
+void SCH_SCREENS::UpdateSymbolLinks( REPORTER* aReporter )
 {
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
-        screen->UpdateSymbolLinks( aForce );
+        screen->UpdateSymbolLinks( aReporter );
 
     SCH_SHEET_LIST sheets( g_RootSheet );
 

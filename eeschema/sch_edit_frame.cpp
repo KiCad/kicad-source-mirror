@@ -768,7 +768,7 @@ void SCH_EDIT_FRAME::NewProject()
     {
         // Enforce the extension, wxFileDialog is inept.
         wxFileName create_me = dlg.GetPath();
-        create_me.SetExt( LegacySchematicFileExtension );
+        create_me.SetExt( KiCadSchematicFileExtension );
 
         if( create_me.FileExists() )
         {
@@ -790,9 +790,9 @@ void SCH_EDIT_FRAME::NewProject()
 void SCH_EDIT_FRAME::LoadProject()
 {
     wxString pro_dir = m_mruPath;
-    wxString wildcards = LegacySchematicFileWildcard();
+    wxString wildcards = KiCadSchematicFileWildcard();
 
-    wildcards += "|" + KiCadSchematicFileWildcard();
+    wildcards += "|" + LegacySchematicFileWildcard();
 
     wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir, wxEmptyString,
                       wildcards, wxFD_OPEN | wxFD_FILE_MUST_EXIST );

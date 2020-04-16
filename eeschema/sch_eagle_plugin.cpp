@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2017-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -1275,16 +1275,19 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
             component->GetField( REFERENCE )->SetVisible( false );
     }
 
-
     // Save the pin positions
-    auto& schLibTable = *m_kiway->Prj().SchSymbolLibTable();
-    wxCHECK( component->Resolve( schLibTable ), /*void*/ );
+    SYMBOL_LIB_TABLE& schLibTable = *m_kiway->Prj().SchSymbolLibTable();
+    LIB_PART* libSymbol = schLibTable.LoadSymbol( component->GetLibId() );
+
+    wxCHECK( libSymbol, /*void*/ );
+
+    component->SetLibSymbol( libSymbol );
+
     std::vector<LIB_PIN*> pins;
     component->GetPins( pins );
 
     for( const auto& pin : pins )
         m_connPoints[component->GetPinPhysicalPosition( pin )].emplace( pin );
-
 
     component->ClearFlags();
 

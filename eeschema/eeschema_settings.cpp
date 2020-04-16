@@ -68,7 +68,11 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM<bool>( "appearance.show_page_limits",
             &m_Appearance.show_page_limits, true ) );
 
-    m_params.emplace_back( new PARAM<bool>( "appearance.show_sheet_filename_case_sensitivity_dialog",
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_sexpr_file_convert_warning",
+            &m_Appearance.show_sexpr_file_convert_warning, true ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "appearance.show_sheet_filename_case_sensitivity_dialog",
             &m_Appearance.show_sheet_filename_case_sensitivity_dialog, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "autoplace_fields.enable",

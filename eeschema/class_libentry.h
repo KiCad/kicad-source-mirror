@@ -579,6 +579,7 @@ public:
 
     bool operator==( const LIB_PART* aPart ) const { return this == aPart; }
     bool operator==( const LIB_PART& aPart ) const { return Compare( aPart ) == 0; }
+    bool operator!=( const LIB_PART& aPart ) const { return Compare( aPart ) != 0; }
 
     const LIB_PART& operator=( const LIB_PART& aPart );
 

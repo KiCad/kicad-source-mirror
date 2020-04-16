@@ -46,6 +46,7 @@ public:
         bool show_hidden_fields;
         bool show_illegal_symbol_lib_dialog;
         bool show_page_limits;
+        bool show_sexpr_file_convert_warning;
         bool show_sheet_filename_case_sensitivity_dialog;
     };
 

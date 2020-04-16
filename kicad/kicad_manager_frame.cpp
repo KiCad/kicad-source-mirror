@@ -225,6 +225,15 @@ const wxString KICAD_MANAGER_FRAME::SchFileName()
 {
    wxFileName   fn( GetProjectFileName() );
 
+   fn.SetExt( KiCadSchematicFileExtension );
+   return fn.GetFullPath();
+}
+
+
+const wxString KICAD_MANAGER_FRAME::SchLegacyFileName()
+{
+   wxFileName   fn( GetProjectFileName() );
+
    fn.SetExt( LegacySchematicFileExtension );
    return fn.GetFullPath();
 }

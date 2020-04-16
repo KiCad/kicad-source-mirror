@@ -786,7 +786,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 {
     wxFileName fn;
     wxString   msg;
-    SCH_IO_MGR::SCH_FILE_T aFileType = SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY;
+    SCH_IO_MGR::SCH_FILE_T fileType = SCH_IO_MGR::SCH_FILE_T::SCH_KICAD;
     PROJECT&   prj = Prj();
 
     m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
@@ -808,10 +808,10 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
             default_path = search->LastVisitedPath();
 
         fn.SetName( aLibrary );
-        fn.SetExt( SchematicLibraryFileExtension );
+        fn.SetExt( KiCadSymbolLibFileExtension );
 
-        wxString wildcards = SchematicLibraryFileWildcard();
-        wildcards += "|" + KiCadSymbolLibFileWildcard();
+        wxString wildcards = KiCadSymbolLibFileWildcard();
+        wildcards += "|" + SchematicLibraryFileWildcard();
 
         wxFileDialog dlg( this, wxString::Format( _( "Save Library \"%s\" As..." ), aLibrary ),
                           default_path, fn.GetFullName(), wildcards,
@@ -823,19 +823,20 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         fn = dlg.GetPath();
 
         // Update the file extension and plugin if a different library type was selected.
-        if( dlg.GetFilterIndex() == 0 )
+        if( dlg.GetFilterIndex() == 1 )
         {
             fn.SetExt( SchematicLibraryFileExtension );
+            fileType = SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY;
         }
         else
         {
             fn.SetExt( KiCadSymbolLibFileExtension );
-            aFileType = SCH_IO_MGR::SCH_FILE_T::SCH_KICAD;
         }
     }
     else
     {
         fn = prj.SchSymbolLibTable()->GetFullURI( aLibrary );
+        fileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
     }
 
     wxFileName docFileName = fn;
@@ -855,7 +856,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     if( !backupFile( docFileName, "bck" ) )
         return false;
 
-    if( !m_libMgr->SaveLibrary( aLibrary, fn.GetFullPath(), aFileType ) )
+    if( !m_libMgr->SaveLibrary( aLibrary, fn.GetFullPath(), fileType ) )
     {
         msg.Printf( _( "Failed to save changes to symbol library file \"%s\"" ),
                     fn.GetFullPath() );

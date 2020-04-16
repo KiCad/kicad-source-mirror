@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -612,7 +612,13 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 
         if( playerType == FRAME_SCH )
         {
-            filepath = m_frame->SchFileName();
+            wxFileName  kicad_schematic( m_frame->SchFileName() );
+            wxFileName  legacy_schematic( m_frame->SchLegacyFileName() );
+
+            if( !legacy_schematic.FileExists() || kicad_schematic.FileExists() )
+                filepath = kicad_schematic.GetFullPath();
+            else
+                filepath = legacy_schematic.GetFullPath();
         }
         else if( playerType == FRAME_PCB_EDITOR )
         {

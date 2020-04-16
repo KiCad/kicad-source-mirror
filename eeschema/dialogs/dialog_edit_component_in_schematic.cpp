@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -398,6 +398,8 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
         return false;
 
+    wxString msg;
+
     // save old cmp in undo list if not already in edit, or moving ...
     if( m_cmp->GetEditFlags() == 0 )
         GetParent()->SaveCopyInUndoList( m_cmp, UR_CHANGED );
@@ -407,8 +409,27 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 
     // Library symbol identifier
     LIB_ID id;
-    id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH, true );
-    m_cmp->SetLibId( id, Prj().SchSymbolLibTable(), Prj().SchLibs()->GetCacheLibrary() );
+
+    if( id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH, true ) >= 0 )
+    {
+        msg.Printf( _( "'%s' is not a valid library indentifier." ),
+                    m_libraryNameTextCtrl->GetValue() );
+        DisplayError( this, msg );
+        return false;
+    }
+
+    LIB_PART* libSymbol = Prj().SchSymbolLibTable()->LoadSymbol( id );
+
+    if( !libSymbol )
+    {
+        msg.Printf( _( "Symbol '%s' not found in symbol library '%s'." ),
+                    id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
+        DisplayError( this, msg );
+        return false;
+    }
+
+    m_cmp->SetLibSymbol( new LIB_PART( *libSymbol ) );
+    m_cmp->SetLibId( id );
 
     // For symbols with multiple shapes (De Morgan representation) Set the selected shape:
     if( m_cbAlternateSymbol->IsEnabled() && m_cbAlternateSymbol->GetValue() )
@@ -466,8 +487,8 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 
                 // grid needs to be notified about the size change,
                 // as it still accesses the data on close (size event)
-                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, i, 1 );
-                m_grid->ProcessTableMessage( msg );
+                wxGridTableMessage gridMsg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, i, 1 );
+                m_grid->ProcessTableMessage( gridMsg );
                 i--;
                 break;
             }
@@ -622,7 +643,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveDown( wxCommandEvent& event )
         m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
     }
     else
+    {
         wxBell();
+    }
 }
 
 
@@ -631,12 +654,33 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFieldsFromLibrary( wxCommandEvent
     if( !m_grid->CommitPendingChanges() )
         return;
 
+    LIB_ID id;
+    wxString msg;
     SCH_COMPONENT copy( *m_cmp );
+
     copy.SetFields( *m_fields );
 
-    LIB_ID id;
     id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH, true );
-    copy.SetLibId( id, Prj().SchSymbolLibTable(), Prj().SchLibs()->GetCacheLibrary() );
+
+    if( id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH, true ) >= 0 )
+    {
+        msg.Printf( _( "'%s' is not a valid library indentifier." ),
+                    m_libraryNameTextCtrl->GetValue() );
+        DisplayError( this, msg );
+        return;
+    }
+
+    LIB_PART* libSymbol = Prj().SchSymbolLibTable()->LoadSymbol( id );
+
+    if( !libSymbol )
+    {
+        msg.Printf( _( "Symbol '%s' not found in symbol library '%s'." ),
+                    id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
+        DisplayError( this, msg );
+        return;
+    }
+
+    m_cmp->SetLibSymbol( new LIB_PART( *libSymbol ) );
 
     // Update the requested fields in the component copy
     std::list<SCH_COMPONENT*> components;

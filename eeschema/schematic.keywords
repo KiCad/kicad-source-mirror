@@ -51,6 +51,8 @@ label
 left
 length
 lib_id
+lib_name
+lib_symbols
 line
 mid
 mirror

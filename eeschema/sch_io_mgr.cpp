@@ -150,7 +150,7 @@ const wxString SCH_IO_MGR::GetLibraryFileExtension( SCH_FILE_T aFileType )
 
 SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath )
 {
-    SCH_FILE_T  ret = SCH_LEGACY;        // default guess, unless detected otherwise.
+    SCH_FILE_T  ret = SCH_KICAD;        // default guess, unless detected otherwise.
     wxFileName  fn( aLibPath );
 
     if( fn.GetExt() == SchematicLibraryFileExtension )
@@ -168,7 +168,7 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
 
 SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromSchPath( const wxString& aSchematicPath )
 {
-    SCH_FILE_T  ret = SCH_LEGACY;        // default guess, unless detected otherwise.
+    SCH_FILE_T  ret = SCH_KICAD;        // default guess, unless detected otherwise.
     wxFileName  fn( aSchematicPath );
 
     if( fn.GetExt() == LegacySchematicFileExtension )
