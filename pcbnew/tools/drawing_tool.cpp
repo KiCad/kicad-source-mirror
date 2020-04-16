@@ -984,9 +984,9 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
 
         if( evt->IsCancelInteractive() )
         {
-            if( started )
-                cleanup();
-            else
+            cleanup();
+
+            if( !started )
             {
                 m_frame->PopTool( aTool );
                 cancelled = true;
@@ -1002,18 +1002,14 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
             }
             else if( evt->IsMoveTool() )
             {
-                if( started )
-                    cleanup();
-
+                cleanup();
                 // leave ourselves on the stack so we come back after the move
                 cancelled = true;
                 break;
             }
             else
             {
-                if( started )
-                    cleanup();
-
+                cleanup();
                 m_frame->PopTool( aTool );
                 cancelled = true;
                 break;
@@ -1219,9 +1215,9 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bo
 
         if( evt->IsCancelInteractive() )
         {
-            if( firstPoint )
-                cleanup();
-            else
+            cleanup();
+
+            if( !firstPoint )
             {
                 m_frame->PopTool( aTool );
                 cancelled = true;
@@ -1237,18 +1233,14 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bo
             }
             else if( evt->IsMoveTool() )
             {
-                if( firstPoint )
-                    cleanup();
-
+                cleanup();
                 // leave ourselves on the stack so we come back after the move
                 cancelled = true;
                 break;
             }
             else
             {
-                if( firstPoint )
-                    cleanup();
-
+                cleanup();
                 m_frame->PopTool( aTool );
                 cancelled = true;
                 break;
