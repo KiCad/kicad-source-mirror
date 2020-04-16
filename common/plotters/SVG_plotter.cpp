@@ -230,6 +230,10 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
     case FILLED_WITH_BG_BODYCOLOR:
         fputs( "fill-opacity:0.6; ", outputFile );
         break;
+
+    case FILLED_WITH_COLOR:
+        wxFAIL_MSG( "FILLED_WITH_COLOR not implemented"  );
+        break;
     }
 
     double pen_w = userToDeviceSize( GetCurrentLineWidth() );
@@ -548,6 +552,10 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     case FILLED_WITH_BG_BODYCOLOR:
     case FILLED_SHAPE:
         setSVGPlotStyle( false, "fill-rule:evenodd;" );
+        break;
+
+    case FILLED_WITH_COLOR:
+        wxFAIL_MSG( "FILLED_WITH_COLOR not implemented"  );
         break;
     }
 
