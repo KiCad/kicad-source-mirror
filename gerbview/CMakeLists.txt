@@ -131,16 +131,10 @@ add_library( gerbview_kiface_objects OBJECT
     ${WIDGET_SRCS}
     ${GERBVIEW_EXTRA_SRCS}
     )
-
-# Since we're not using target_link_libraries, we need to explicitly
-# declare the dependency
-add_dependencies( gerbview_kiface_objects common )
-add_dependencies( gerbview_kiface_objects gal )
-
-# CMake <3.9 can't link anything to object libraries,
-# but we only need include directories, as we will link the kiface MODULE
-target_include_directories( gerbview_kiface_objects PRIVATE
-    $<TARGET_PROPERTY:common,INTERFACE_INCLUDE_DIRECTORIES>
+target_link_libraries( gerbview_kiface_objects
+    PUBLIC
+        common
+        gal
     )
 
 # the main gerbview program, in DSO form.
@@ -151,6 +145,7 @@ set_target_properties( gerbview_kiface PROPERTIES
     SUFFIX          ${KIFACE_SUFFIX}
     )
 target_link_libraries( gerbview_kiface
+    nlohmann_json
     gal
     common
     ${wxWidgets_LIBRARIES}
@@ -165,10 +160,6 @@ if( MAKE_LINK_MAPS )
     set_target_properties( gerbview_kiface PROPERTIES
         LINK_FLAGS "-Wl,-cref,-Map=_gerbview.kiface.map" )
 endif()
-
-target_include_directories( gerbview_kiface PRIVATE
-    $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
-    )
 
 # if building gerbview, then also build gerbview_kiface if out of date.
 add_dependencies( gerbview gerbview_kiface )

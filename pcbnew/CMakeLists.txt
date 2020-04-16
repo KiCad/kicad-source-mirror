@@ -624,11 +624,8 @@ target_link_libraries( pcbnew
     # There's way too much crap coming in from common yet.
     common
     gal
+    nlohmann_json
     ${wxWidgets_LIBRARIES}
-    )
-
-target_include_directories( pcbnew INTERFACE
-    $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 if( PCBNEW_LINK_MAPS )
@@ -655,22 +652,16 @@ make_lexer(
 
 # CMake <3.9 can't link anything to object libraries,
 # but we only need include directories, as we will link the kiface MODULE
-target_include_directories( pcbnew_kiface_objects PRIVATE
-    $<TARGET_PROPERTY:common,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:dxflib_qcad,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:nanosvg,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:tinyspline_lib,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
+target_link_libraries( pcbnew_kiface_objects
+    PRIVATE
+        common
+        dxflib_qcad
+        nanosvg
+        tinyspline_lib
+        nlohmann_json
     )
 
-# Since we're not using target_link_libraries, we need to explicitly
-# declare the dependency
-add_dependencies( pcbnew_kiface_objects common )
-add_dependencies( pcbnew_kiface_objects dxflib_qcad )
-add_dependencies( pcbnew_kiface_objects tinyspline_lib )
-add_dependencies( pcbnew_kiface_objects nanosvg )
-
-add_library( pcbnew_kiface MODULE $<TARGET_OBJECTS:pcbnew_kiface_objects> )
+add_library( pcbnew_kiface MODULE )
 
 set_target_properties( pcbnew_kiface PROPERTIES
     # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
@@ -693,6 +684,7 @@ if ( KICAD_BUILD_TESTS )
 endif ()
 
 set( PCBNEW_KIFACE_LIBRARIES
+    pcbnew_kiface_objects
     3d-viewer
     connectivity
     pcbcommon
@@ -714,7 +706,10 @@ set( PCBNEW_KIFACE_LIBRARIES
     )
 
 
-target_link_libraries( pcbnew_kiface ${PCBNEW_KIFACE_LIBRARIES} )
+target_link_libraries( pcbnew_kiface
+    PRIVATE
+        ${PCBNEW_KIFACE_LIBRARIES}
+    )
 
 set_source_files_properties( pcbnew.cpp PROPERTIES
     # The KIFACE is in pcbnew.cpp, export it:

@@ -72,6 +72,7 @@ add_library( gal STATIC ${GAL_SRCS} )
 target_link_libraries( gal
     common          # This is needed until the circular dependency is removed
     kimath
+    nlohmann_json
     bitmaps
     ${GLEW_LIBRARIES}
     ${CAIRO_LIBRARIES}
@@ -79,10 +80,6 @@ target_link_libraries( gal
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
 )
-
-target_include_directories( gal PRIVATE
-    $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
-    )
 
 
 # Only for win32 cross compilation using MXE
@@ -464,22 +461,18 @@ set( COMMON_SRCS
 
 add_library( common STATIC
     ${COMMON_SRCS}
-    $<TARGET_OBJECTS:libcontext>
     )
 
-target_include_directories( common PRIVATE
-    $<TARGET_PROPERTY:libcontext,INTERFACE_INCLUDE_DIRECTORIES>
-    )
-
-add_dependencies( common libcontext )
 add_dependencies( common version_header )
 add_dependencies( common compoundfilereader )  # used by altium_parser.cpp
 
 target_link_libraries( common
+    libcontext
     kimath
     kiplatform
     bitmaps
     gal
+    compoundfilereader
     ${Boost_LIBRARIES}
     ${CURL_LIBRARIES}
     ${OPENSSL_LIBRARIES}        # empty on Apple
@@ -487,13 +480,11 @@ target_link_libraries( common
     ${EXTRA_LIBS}
     )
 
-target_include_directories( common PUBLIC
-    $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
+target_include_directories( common
+    PUBLIC
+        .
+        ${CMAKE_BINARY_DIR}
     )
-
-target_include_directories( common PUBLIC
-    $<TARGET_PROPERTY:compoundfilereader,INTERFACE_INCLUDE_DIRECTORIES>
-    )  # used by altium_parser.cpp
 
 set( PCB_COMMON_SRCS
     base_screen.cpp
@@ -577,10 +568,6 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
     )
 
 add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
-
-target_include_directories( pcbcommon PUBLIC
-    $<TARGET_PROPERTY:delaunator,INTERFACE_INCLUDE_DIRECTORIES>
-)
 
 target_link_libraries( pcbcommon PUBLIC
     common

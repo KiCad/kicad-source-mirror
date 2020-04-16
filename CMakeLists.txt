@@ -21,7 +21,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
-cmake_minimum_required( VERSION 3.2 FATAL_ERROR )
+cmake_minimum_required( VERSION 3.10 FATAL_ERROR )
 
 # Default to CMAKE_BUILD_TYPE = Release unless overridden on command line
 # http://www.cmake.org/pipermail/cmake/2008-September/023808.html
@@ -190,25 +190,6 @@ endif()
 # change to add_compile_definitions() after minimum required CMake version is 3.12
 set_property( DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS $<$<CONFIG:Debug>:DEBUG> )
 
-# CMP0063: CMake < 3.3 does not handle hidden visibility for static libraries,
-# and 3.3 is backwards compatible when the minimum version is smaller than 3.3.
-if( POLICY CMP0063 )
-    cmake_policy( GET CMP0063 VISIBILITY_POLICY )
-    if( VISIBILITY_POLICY STREQUAL NEW )
-        message( WARNING "Compatibility code for CMake < 3.3 can be removed, search for CMP0063" )
-    else()
-        cmake_policy( SET CMP0063 NEW )
-    endif()
-else()
-    if( CMAKE_CXX_COMPILE_OPTIONS_VISIBILITY AND NOT APPLE )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_COMPILE_OPTIONS_VISIBILITY}hidden" )
-    endif()
-    if( CMAKE_CXX_COMPILE_OPTIONS_VISIBILITY_INLINES_HIDDEN AND NOT APPLE )
-        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_COMPILE_OPTIONS_VISIBILITY_INLINES_HIDDEN}" )
-    endif()
-endif()
-
-
 # Add option to add user directories for linker, if any
 LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} )
 
@@ -236,6 +217,7 @@ perform_feature_checks()
 
 # Setup the compiler warnings
 include( ${CMAKE_MODULE_PATH}/Warnings.cmake )
+
 
 if( WIN32 )
     # define UNICODE and_UNICODE definition on Windows. KiCad uses unicode.

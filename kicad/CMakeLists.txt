@@ -57,10 +57,6 @@ add_executable( kicad WIN32 MACOSX_BUNDLE
     ${KICAD_RESOURCES}
     )
 
-target_include_directories( kicad PRIVATE
-        $<TARGET_PROPERTY:nlohmann_json,INTERFACE_INCLUDE_DIRECTORIES>
-        )
-
 if( UNIX )
     # for build directory: create kiface symlinks so kicad (exe) can be run in-situ
     add_custom_target( kiface_sym_links
@@ -76,11 +72,13 @@ if( APPLE )
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_BINARY_DIR}/kicad/Info.plist
         )
     target_link_libraries( kicad
+        nlohmann_json
         common
         ${wxWidgets_LIBRARIES}
         )
 else()
     target_link_libraries( kicad
+        nlohmann_json
         common
         gal
         common      #repeated due to a circular dependancy bewteen gal and common

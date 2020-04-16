@@ -46,10 +46,6 @@ set( QA_PCBNEW_SRCS
 
 add_executable( qa_pcbnew
     ${QA_PCBNEW_SRCS}
-
-    # Older CMakes cannot link OBJECT libraries
-    # https://cmake.org/pipermail/cmake/2013-November/056263.html
-    $<TARGET_OBJECTS:pcbnew_kiface_objects>
 )
 
 # Pcbnew tests, so pretend to be pcbnew (for units, etc)
@@ -64,6 +60,7 @@ add_dependencies( qa_pcbnew pcbnew )
 
 target_link_libraries( qa_pcbnew
     qa_pcbnew_utils
+    pcbnew_kiface_objects
     3d-viewer
     connectivity
     pcbcommon

@@ -22,7 +22,6 @@ endif()
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
-    ./netlist_exporters
     ./widgets
     symbol_editor
     ./libview
@@ -380,12 +379,14 @@ add_library( eeschema_kiface_objects OBJECT
     ${EESCHEMA_COMMON_SRCS}
     )
 
-# CMake <3.9 can't link anything to object libraries,
-# but we only need include directories, as we will link the kiface MODULE
-target_include_directories( eeschema_kiface_objects PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    $<TARGET_PROPERTY:common,INTERFACE_INCLUDE_DIRECTORIES>
-)
+target_include_directories( eeschema_kiface_objects
+    PUBLIC
+        .
+        netlist_exporters )
+
+target_link_libraries( eeschema_kiface_objects
+    PUBLIC
+        common )
 
 # Since we're not using target_link_libraries, we need to explicitly
 # declare the dependency
@@ -393,24 +394,22 @@ add_dependencies( eeschema_kiface_objects common )
 
 add_library( eeschema_kiface MODULE
     eeschema.cpp
-    $<TARGET_OBJECTS:eeschema_kiface_objects>
     )
 
-target_include_directories( eeschema_kiface PUBLIC
-    $<TARGET_PROPERTY:eeschema_kiface_objects,INTERFACE_INCLUDE_DIRECTORIES>
-)
-
 target_link_libraries( eeschema_kiface
-    common
-    sexpr
-    markdown_lib
-    ${wxWidgets_LIBRARIES}
-    ${GDI_PLUS_LIBRARIES}
+    PRIVATE
+        eeschema_kiface_objects
+        common
+        sexpr
+        markdown_lib
+        ${wxWidgets_LIBRARIES}
+        ${GDI_PLUS_LIBRARIES}
     )
 
 if( KICAD_SPICE )
     target_link_libraries( eeschema_kiface
-        ${NGSPICE_LIBRARY}
+        PRIVATE
+            ${NGSPICE_LIBRARY}
         )
 endif()
 
