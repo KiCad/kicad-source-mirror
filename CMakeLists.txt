@@ -21,14 +21,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
-cmake_minimum_required( VERSION 2.8.12 FATAL_ERROR )
-# because of http://public.kitware.com/Bug/view.php?id=10395
-
-# See https://gitlab.kitware.com/cmake/cmake/issues/15943
-# Remove as soon as 3.1 is minimum required version
-if(POLICY CMP0025)
-  cmake_policy(SET CMP0025 NEW) # CMake 3.0
-endif()
+cmake_minimum_required( VERSION 3.2 FATAL_ERROR )
 
 # Default to CMAKE_BUILD_TYPE = Release unless overridden on command line
 # http://www.cmake.org/pipermail/cmake/2008-September/023808.html
@@ -198,24 +191,6 @@ message( STATUS "KiCad install dir: <${DEFAULT_INSTALL_PATH}>" )
 # Generate build system specific header file.
 include( PerformFeatureChecks )
 perform_feature_checks()
-
-
-# Workaround: CMake < 3.1 does not support CMAKE_CXX_STANDARD
-if( NOT CMAKE_MINIMUM_REQUIRED_VERSION VERSION_LESS 3.1 )
-    message( FATAL_ERROR "Remove compatibility code" )
-endif()
-
-if( CMAKE_VERSION VERSION_LESS 3.1 AND ( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" ) )
-    include(CheckCXXCompilerFlag)
-
-    CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-
-    if(COMPILER_SUPPORTS_CXX11)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-    else()
-        message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-    endif()
-endif()
 
 
 # Warn about missing override specifiers, if supported
