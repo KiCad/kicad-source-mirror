@@ -1668,7 +1668,7 @@ void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                 // There is an associated PIN_LABEL.
                 item = new NETLIST_OBJECT();
                 item->m_SheetPathInclude = *aSheetPath;
-                item->m_Comp = NULL;
+                item->m_Comp = m_pins[ m_pinMap.at( pin ) ].get();;
                 item->m_SheetPath = *aSheetPath;
                 item->m_Type = NETLIST_ITEM::PINLABEL;
                 item->m_Label = pin->GetName();
