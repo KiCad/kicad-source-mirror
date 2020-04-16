@@ -496,7 +496,7 @@ void TOOL_MANAGER::ShutdownTool( TOOL_BASE* aTool )
                 bool end = !st->cofunc->Resume();
 
                 if( end )
-                    it = finishTool( st );
+                    finishTool( st );
             }
         }
     }
@@ -683,7 +683,10 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     bool end = !st->cofunc->Resume();
 
                     if( end )
+                    {
                         it = finishTool( st );
+                        --it;
+                    }
                 }
 
                 // If the tool did not request the event be passed to other tools, we're done
@@ -918,11 +921,7 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
     if( tool->GetType() == INTERACTIVE )
         static_cast<TOOL_INTERACTIVE*>( tool )->resetTransitions();
 
-    // Don't move the iterator past the stack beginning
-    if( it == m_activeTools.begin() )
-        return it;
-
-    return --it;
+    return it;
 }
 
 
