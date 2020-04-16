@@ -87,7 +87,8 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
                       path_post[1], !aWindingDirection ) )
         return STUCK;
     auto l =aPath.CLine();
-#ifdef DEBUG
+
+#if 0
     if( m_logger )
     {
         m_logger->NewGroup( aWindingDirection ? "walk-cw" : "walk-ccw", m_iteration );

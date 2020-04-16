@@ -63,6 +63,7 @@ class RULE_RESOLVER;
 class SHOVE;
 class DRAGGER;
 class DRAG_ALGO;
+class LOGGER;
 
 enum ROUTER_MODE {
     PNS_MODE_ROUTE_SINGLE = 1,
@@ -94,7 +95,6 @@ enum DRAG_MODE
         ROUTER_IFACE() {};
         virtual ~ROUTER_IFACE() {};
 
-        virtual void SetRouter( ROUTER* aRouter ) = 0;
         virtual void SyncWorld( NODE* aNode ) = 0;
         virtual void AddItem( ITEM* aItem ) = 0;
         virtual void RemoveItem( ITEM* aItem ) = 0;
@@ -107,6 +107,8 @@ enum DRAG_MODE
 
         virtual void EraseView() = 0;
         virtual void UpdateNet( int aNetCode ) = 0;
+
+        virtual PNS::NODE* GetWorld() const = 0;
 
         virtual RULE_RESOLVER* GetRuleResolver() = 0;
         virtual DEBUG_DECORATOR* GetDebugDecorator() = 0;
@@ -170,6 +172,7 @@ public:
     const std::vector<int> GetCurrentNets() const;
 
     void DumpLog();
+    LOGGER* Logger();
 
     RULE_RESOLVER* GetRuleResolver() const
     {
@@ -280,6 +283,7 @@ private:
     ROUTING_SETTINGS* m_settings;
     SIZES_SETTINGS m_sizes;
     ROUTER_MODE m_mode;
+    LOGGER* m_logger;
 
     wxString m_toolStatusbarName;
     wxString m_failureReason;

@@ -53,6 +53,9 @@ using namespace std::placeholders;
 #include "pns_segment.h"
 #include "pns_router.h"
 #include "pns_itemset.h"
+#include "pns_logger.h"
+
+#include "pns_kicad_iface.h"
 
 using namespace KIGFX;
 
@@ -471,8 +474,7 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
         switch( aEvent.KeyCode() )
         {
         case '0':
-            wxLogTrace( "PNS", "saving drag/route log...\n" );
-            m_router->DumpLog();
+// fixme: move to new logging infrastructure
             break;
         }
     }

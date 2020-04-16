@@ -38,6 +38,11 @@ public:
     virtual ~DEBUG_DECORATOR()
     {}
 
+    virtual void SetIteration( int iter ) {};
+    virtual void Message( const wxString msg ) {};
+    virtual void NewStage( const std::string& name, int iter ) {};
+    virtual void BeginGroup( const std::string name ) {};
+    virtual void EndGroup( ) {};
     virtual void AddPoint( VECTOR2I aP, int aColor, const std::string aName = "" ) {};
     virtual void AddLine( const SHAPE_LINE_CHAIN& aLine, int aType = 0, int aWidth = 0, const std::string aName = "" ) {};
     virtual void AddSegment( SEG aS, int aColor, const std::string aName = "" ) {};
