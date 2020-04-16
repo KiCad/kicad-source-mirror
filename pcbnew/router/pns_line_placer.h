@@ -70,6 +70,36 @@ private:
     std::vector<STAGE> m_stages;
 };
 
+
+class POSTURE_SOLVER
+{
+public:
+    POSTURE_SOLVER();
+    ~POSTURE_SOLVER();
+
+    void Clear();
+    void AddTrailPoint( const VECTOR2I& aP );
+    void SetTollerance( int toll ) { m_tollerance = toll; }
+    void SetDefaultDirections( DIRECTION_45 aInitDirection, DIRECTION_45 aLastSegDir ) 
+    {
+        m_initDirection = aInitDirection;
+        m_lastSegDirection = aLastSegDir;
+    }
+
+    DIRECTION_45 GetPosture( const VECTOR2I& aP );
+
+    void FlipPosture();
+
+private:
+    const double areaRatioThreshold = 1.5;
+
+    SHAPE_LINE_CHAIN m_trail;
+    int m_tollerance;
+    DIRECTION_45 m_initDirection;
+    DIRECTION_45 m_lastSegDirection;
+    bool m_forced;
+};
+
 /**
  * LINE_PLACER
  *
@@ -385,7 +415,7 @@ private:
 
     const VIA makeVia( const VECTOR2I& aP );
 
-    bool buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aInvertPosture = false );
+    bool buildInitialLine( const VECTOR2I& aP, LINE& aHead );
 
     ///> current routing direction
     DIRECTION_45 m_direction;
@@ -435,6 +465,7 @@ private:
     bool m_placementCorrect;
 
     FIXED_TAIL m_fixedTail;
+    POSTURE_SOLVER m_postureSolver;
 };
 
 }
