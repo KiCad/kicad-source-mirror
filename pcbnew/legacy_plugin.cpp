@@ -593,6 +593,7 @@ void LEGACY_PLUGIN::loadGENERAL()
         else if( TESTLINE( "LayerCount" ) )
         {
             int tmp = intParse( line + SZ( "LayerCount" ) );
+
             m_board->SetCopperLayerCount( tmp );
 
             // This has to be set early so that leg_layer2new() works OK, and
@@ -608,16 +609,17 @@ void LEGACY_PLUGIN::loadGENERAL()
                 THROW_IO_ERROR( "Missing '$GENERAL's LayerCount" );
 
             LEG_MASK enabledLayers = hexParse( line + SZ( "EnabledLayers" ) );
-
             LSET new_mask = leg_mask2new( m_cu_count, enabledLayers );
 
             //DBG( printf( "EnabledLayers: %s\n", new_mask.FmtHex().c_str() );)
-
             m_board->SetEnabledLayers( new_mask );
 
             // layer visibility equals layer usage, unless overridden later via "VisibleLayers"
             // Must call SetEnabledLayers() before calling SetVisibleLayers().
             m_board->SetVisibleLayers( new_mask );
+
+            // Ensure copper layers count is not modified:
+            m_board->SetCopperLayerCount( m_cu_count );
         }
 
         else if( TESTLINE( "VisibleLayers" ) )
@@ -639,7 +641,6 @@ void LEGACY_PLUGIN::loadGENERAL()
                 LEG_MASK layer_mask  = hexParse( line + SZ( "Ly" ) );
 
                 m_cu_count = layerMaskCountSet( layer_mask & ALL_CU_LAYERS );
-
                 m_board->SetCopperLayerCount( m_cu_count );
 
                 saw_LayerCount = true;
@@ -1501,7 +1502,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
             PAD_ATTR_T  attribute;
 
-            data = strtok_r( line + SZ( "At" ), delims, (char**) &data );
+            data = strtok_r( line + SZ( "At" ), delims, &saveptr );
 
             if( !strcmp( data, "SMD" ) )
                 attribute = PAD_ATTRIB_SMD;
@@ -1512,8 +1513,8 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             else
                 attribute = PAD_ATTRIB_STANDARD;
 
-            strtok_r( NULL, delims, (char**) &data );  // skip BufCar
-            strtok_r( NULL, delims, (char**) &data );
+            strtok_r( NULL, delims, &saveptr );  // skip unused prm
+            data = strtok_r( NULL, delims, &saveptr );
 
             LEG_MASK layer_mask = hexParse( data );
 
