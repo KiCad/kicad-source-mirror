@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,10 @@ enum DISPLAY3D_FLG {
     // OpenGL options
     FL_RENDER_OPENGL_SHOW_MODEL_BBOX,
     FL_RENDER_OPENGL_COPPER_THICKNESS,
+    FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE,
+    FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE,
+    FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE,
+    FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE,
 
     // Raytracing options
     FL_RENDER_RAYTRACING_SHADOWS,

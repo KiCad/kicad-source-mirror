@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,6 +57,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::BOARD_ADAPTER" ) );
 
     m_3D_grid_type     = GRID3D_TYPE::NONE;
+    m_antialiasing_mode = ANTIALIASING_MODE::AA_8X;
     m_drawFlags.resize( FL_LAST, false );
 
     if( PgmOrNull() )
@@ -93,7 +94,6 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     SetFlag( FL_USE_REALISTIC_MODE, true );
     SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, true );
     SetFlag( FL_SHOW_BOARD_BODY, true );
-    SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, true );
     SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, true );
     SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, true );
     SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL, true );
@@ -101,6 +101,12 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     SetFlag( FL_SILKSCREEN, true );
     SetFlag( FL_SOLDERMASK, true );
     SetFlag( FL_SUBTRACT_MASK_FROM_SILK, false );
+
+    SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, true );
+    SetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE, false );
+    SetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE, false );
+    SetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE, false );
+    SetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE, false );
 
     m_BgColorBot         = SFVEC3D( 0.4, 0.4, 0.5 );
     m_BgColorTop         = SFVEC3D( 0.8, 0.8, 0.9 );

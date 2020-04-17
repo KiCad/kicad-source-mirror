@@ -24,6 +24,9 @@
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
+#include <wx/panel.h>
+#include <wx/choice.h>
+#include <wx/notebook.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -38,15 +41,13 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxNotebook* m_notebook;
+		wxPanel* m_panelDspOpt;
 		wxStaticText* m_staticText3DRenderOpts;
 		wxStaticBitmap* m_bitmapRealisticMode;
 		wxCheckBox* m_checkBoxRealisticMode;
 		wxStaticBitmap* m_bitmapBoardBody;
 		wxCheckBox* m_checkBoxBoardBody;
-		wxStaticBitmap* m_bitmapCuThickness;
-		wxCheckBox* m_checkBoxCuThickness;
-		wxStaticBitmap* m_bitmapBoundingBoxes;
-		wxCheckBox* m_checkBoxBoundingBoxes;
 		wxStaticBitmap* m_bitmapAreas;
 		wxCheckBox* m_checkBoxAreas;
 		wxStaticBitmap* m_bitmapSubtractMaskFromSilk;
@@ -73,6 +74,29 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxComments;
 		wxStaticBitmap* m_bitmapECO;
 		wxCheckBox* m_checkBoxECO;
+		wxPanel* m_panelOpenGL;
+		wxStaticText* m_staticTextOpenGLRenderOpts;
+		wxStaticBitmap* m_bitmapBoundingBoxes;
+		wxCheckBox* m_checkBoxBoundingBoxes;
+		wxStaticBitmap* m_bitmapCuThickness;
+		wxCheckBox* m_checkBoxCuThickness;
+		wxStaticText* m_staticTextOpenGLRenderOptsAA;
+		wxChoice* m_choiceAntiAliasing;
+		wxStaticText* m_staticText14;
+		wxStaticText* m_staticTextOpenGLWhileMoving;
+		wxCheckBox* m_checkBoxDisableAAMove;
+		wxCheckBox* m_checkBoxDisableMoveThickness;
+		wxCheckBox* m_checkBoxDisableMoveVias;
+		wxCheckBox* m_checkBoxDisableMoveHoles;
+		wxPanel* m_panelRaytracing;
+		wxStaticText* m_staticTextRaytracingRenderOpts;
+		wxCheckBox* m_checkBoxRaytracing_renderShadows;
+		wxCheckBox* m_checkBoxRaytracing_proceduralTextures;
+		wxCheckBox* m_checkBoxRaytracing_addFloor;
+		wxCheckBox* m_checkBoxRaytracing_showRefractions;
+		wxCheckBox* m_checkBoxRaytracing_showReflections;
+		wxCheckBox* m_checkBoxRaytracing_antiAliasing;
+		wxCheckBox* m_checkBoxRaytracing_postProcessing;
 		wxStaticLine* m_staticlineH;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -84,7 +108,7 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 571,372 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_3D_VIEW_OPTIONS_BASE();
 
 };

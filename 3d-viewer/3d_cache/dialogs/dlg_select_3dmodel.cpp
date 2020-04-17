@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     bSizer2->Add( m_FileTree, 1, wxEXPAND | wxALL, 5 );
     bSizer1->Add( bSizer2, 3, wxEXPAND, 5 );
 
-    m_modelViewer = new C3D_MODEL_VIEWER( this, COGL_ATT_LIST::GetAttributesList( true ), m_cache );
+    m_modelViewer = new C3D_MODEL_VIEWER( this, COGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ), m_cache );
     m_modelViewer->SetMinSize( wxSize( 500, 400 ) );
 
     bSizer1->Add( m_modelViewer, 5, wxEXPAND | wxALL | wxCENTER, 5 );

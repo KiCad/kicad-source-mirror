@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -75,7 +75,6 @@ public:
     static TOOL_ACTION attributesTHT;
     static TOOL_ACTION attributesSMD;
     static TOOL_ACTION attributesVirtual;
-    static TOOL_ACTION showCopperThickness;
     static TOOL_ACTION showBoundingBoxes;
     static TOOL_ACTION renderShadows;
     static TOOL_ACTION proceduralTextures;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,9 +94,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
     // Check/uncheck checkboxes
     m_checkBoxRealisticMode->SetValue( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
     m_checkBoxBoardBody->SetValue( m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
-    m_checkBoxCuThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
     m_checkBoxAreas->SetValue( m_settings.GetFlag( FL_ZONE ) );
-    m_checkBoxBoundingBoxes->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
 
     m_checkBox3DshapesTH->SetValue( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
     m_checkBox3DshapesSMD->SetValue( m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
@@ -110,6 +108,24 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
     m_checkBoxECO->SetValue( m_settings.GetFlag( FL_ECO ) );
     m_checkBoxSubtractMaskFromSilk->SetValue( m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
 
+    // OpenGL options
+    m_checkBoxCuThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
+    m_checkBoxBoundingBoxes->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
+    m_checkBoxDisableAAMove->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE ) );
+    m_checkBoxDisableMoveThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE ) );
+    m_checkBoxDisableMoveVias->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE ) );
+    m_checkBoxDisableMoveHoles->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE ) );
+    m_choiceAntiAliasing->SetSelection( static_cast<int>( m_settings.AntiAliasingGet() ) );
+
+    // Raytracing options
+    m_checkBoxRaytracing_renderShadows->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
+    m_checkBoxRaytracing_addFloor->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) );
+    m_checkBoxRaytracing_showRefractions->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) );
+    m_checkBoxRaytracing_showReflections->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) );
+    m_checkBoxRaytracing_postProcessing->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
+    m_checkBoxRaytracing_antiAliasing->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
+    m_checkBoxRaytracing_proceduralTextures->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
+
     return true;
 }
 
@@ -121,9 +137,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
 
     // Set visibility of items
     m_settings.SetFlag( FL_SHOW_BOARD_BODY, m_checkBoxBoardBody->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
     m_settings.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, m_checkBoxBoundingBoxes->GetValue() );
     m_settings.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, m_checkBoxSubtractMaskFromSilk->GetValue() );
 
     // Set 3D shapes visibility
@@ -138,6 +152,24 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     m_settings.SetFlag( FL_ADHESIVE, m_checkBoxAdhesive->GetValue() );
     m_settings.SetFlag( FL_COMMENTS, m_checkBoxComments->GetValue() );
     m_settings.SetFlag( FL_ECO, m_checkBoxECO->GetValue( ) );
+
+    // OpenGL options
+    m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
+    m_settings.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, m_checkBoxBoundingBoxes->GetValue() );
+    m_settings.SetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE, m_checkBoxDisableAAMove->GetValue() );
+    m_settings.SetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE, m_checkBoxDisableMoveThickness->GetValue() );
+    m_settings.SetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE, m_checkBoxDisableMoveVias->GetValue() );
+    m_settings.SetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE, m_checkBoxDisableMoveHoles->GetValue() );
+    m_settings.AntiAliasingSet( static_cast<ANTIALIASING_MODE>( m_choiceAntiAliasing->GetSelection() ) );
+
+    // Raytracing options
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_SHADOWS, m_checkBoxRaytracing_renderShadows->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_BACKFLOOR, m_checkBoxRaytracing_addFloor->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFRACTIONS, m_checkBoxRaytracing_showRefractions->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFLECTIONS, m_checkBoxRaytracing_showReflections->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING, m_checkBoxRaytracing_postProcessing->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING, m_checkBoxRaytracing_antiAliasing->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, m_checkBoxRaytracing_proceduralTextures->GetValue() );
 
     return true;
 }

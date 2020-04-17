@@ -19,6 +19,7 @@
  */
 
 #include <3d_enums.h>
+#include <common_ogl/cogl_att_list.h>
 #include <settings/parameters.h>
 #include <wx/config.h>
 
@@ -48,10 +49,28 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
             static_cast<int>( MATERIAL_MODE::NORMAL ),
             static_cast<int>( MATERIAL_MODE::CAD_MODE ) ) );
 
+    m_params.emplace_back( new PARAM<int>( "render.opengl_AA_mode", &m_Render.opengl_AA_mode,
+           static_cast<int>( ANTIALIASING_MODE::AA_8X ),
+           static_cast<int>( ANTIALIASING_MODE::AA_NONE ),
+           static_cast<int>( ANTIALIASING_MODE::AA_8X ) ) );
+
+    // OpenGL options
     m_params.emplace_back( new PARAM<bool>(
             "render.opengl_copper_thickness", &m_Render.opengl_copper_thickness, true ) );
     m_params.emplace_back( new PARAM<bool>(
             "render.opengl_show_model_bbox", &m_Render.opengl_show_model_bbox, false ) );
+    m_params.emplace_back( new PARAM<bool>(
+            "render.opengl_AA_disableOnMove", &m_Render.opengl_AA_disableOnMove, false ) );
+    m_params.emplace_back( new PARAM<bool>(
+            "render.opengl_thickness_disableOnMove", &m_Render.opengl_thickness_disableOnMove, false ) );
+    m_params.emplace_back( new PARAM<bool>(
+            "render.opengl_vias_disableOnMove", &m_Render.opengl_vias_disableOnMove, false ) );
+    m_params.emplace_back( new PARAM<bool>(
+            "render.opengl_holes_disableOnMove", &m_Render.opengl_holes_disableOnMove, false ) );
+    m_params.emplace_back( new PARAM<bool>(
+            "render.opengl_render_bbox_only_OnMove", &m_Render.opengl_render_bbox_only_OnMove, false ) );
+
+    // Raytracing options
     m_params.emplace_back( new PARAM<bool>( "render.raytrace_anti_aliasing",
             &m_Render.raytrace_anti_aliasing, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.raytrace_backfloor",
@@ -66,6 +85,7 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
             &m_Render.raytrace_refractions, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.raytrace_shadows",
             &m_Render.raytrace_shadows, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "render.realistic", &m_Render.realistic, true ) );
     m_params.emplace_back(
             new PARAM<bool>( "render.show_adhesive", &m_Render.show_adhesive, true ) );

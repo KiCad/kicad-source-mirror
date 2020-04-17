@@ -112,7 +112,7 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     wxStatusBar *status_bar = CreateStatusBar( arrayDim( status_dims ) );
     SetStatusWidths( arrayDim( status_dims ), status_dims );
 
-    m_canvas = new EDA_3D_CANVAS( this, COGL_ATT_LIST::GetAttributesList( true ),
+    m_canvas = new EDA_3D_CANVAS( this, COGL_ATT_LIST::GetAttributesList( m_boardAdapter.AntiAliasingGet() ),
                                   aParent->GetBoard(), m_boardAdapter, m_currentCamera,
                                   Prj().Get3DCacheManager() );
 
@@ -404,38 +404,43 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
     if( cfg )
     {
-#define TRANSER_SETTING( flag, field ) m_boardAdapter.SetFlag( flag, cfg->m_Render.field )
+#define TRANSFER_SETTING( flag, field ) m_boardAdapter.SetFlag( flag, cfg->m_Render.field )
 
-        TRANSER_SETTING( FL_USE_REALISTIC_MODE,      realistic );
-        TRANSER_SETTING( FL_SUBTRACT_MASK_FROM_SILK, subtract_mask_from_silk );
+        TRANSFER_SETTING( FL_USE_REALISTIC_MODE,      realistic );
+        TRANSFER_SETTING( FL_SUBTRACT_MASK_FROM_SILK, subtract_mask_from_silk );
 
         // OpenGL options
-        TRANSER_SETTING( FL_RENDER_OPENGL_COPPER_THICKNESS, opengl_copper_thickness );
-        TRANSER_SETTING( FL_RENDER_OPENGL_SHOW_MODEL_BBOX,  opengl_show_model_bbox );
+        TRANSFER_SETTING( FL_RENDER_OPENGL_COPPER_THICKNESS,          opengl_copper_thickness );
+        TRANSFER_SETTING( FL_RENDER_OPENGL_SHOW_MODEL_BBOX,           opengl_show_model_bbox );
+        TRANSFER_SETTING( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE,        opengl_AA_disableOnMove );
+        TRANSFER_SETTING( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE, opengl_thickness_disableOnMove );
+        TRANSFER_SETTING( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE,      opengl_vias_disableOnMove );
+        TRANSFER_SETTING( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE,     opengl_holes_disableOnMove );
 
         // Raytracing options
-        TRANSER_SETTING( FL_RENDER_RAYTRACING_SHADOWS,             raytrace_shadows );
-        TRANSER_SETTING( FL_RENDER_RAYTRACING_BACKFLOOR,           raytrace_backfloor );
-        TRANSER_SETTING( FL_RENDER_RAYTRACING_REFRACTIONS,         raytrace_refractions );
-        TRANSER_SETTING( FL_RENDER_RAYTRACING_REFLECTIONS,         raytrace_reflections );
-        TRANSER_SETTING( FL_RENDER_RAYTRACING_POST_PROCESSING,     raytrace_post_processing );
-        TRANSER_SETTING( FL_RENDER_RAYTRACING_ANTI_ALIASING,       raytrace_anti_aliasing );
-        TRANSER_SETTING( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, raytrace_procedural_textures );
+        TRANSFER_SETTING( FL_RENDER_RAYTRACING_SHADOWS,             raytrace_shadows );
+        TRANSFER_SETTING( FL_RENDER_RAYTRACING_BACKFLOOR,           raytrace_backfloor );
+        TRANSFER_SETTING( FL_RENDER_RAYTRACING_REFRACTIONS,         raytrace_refractions );
+        TRANSFER_SETTING( FL_RENDER_RAYTRACING_REFLECTIONS,         raytrace_reflections );
+        TRANSFER_SETTING( FL_RENDER_RAYTRACING_POST_PROCESSING,     raytrace_post_processing );
+        TRANSFER_SETTING( FL_RENDER_RAYTRACING_ANTI_ALIASING,       raytrace_anti_aliasing );
+        TRANSFER_SETTING( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, raytrace_procedural_textures );
 
-        TRANSER_SETTING( FL_AXIS,                            show_axis );
-        TRANSER_SETTING( FL_MODULE_ATTRIBUTES_NORMAL,        show_footprints_normal );
-        TRANSER_SETTING( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, show_footprints_insert );
-        TRANSER_SETTING( FL_MODULE_ATTRIBUTES_VIRTUAL,       show_footprints_virtual );
-        TRANSER_SETTING( FL_ZONE,                            show_zones );
-        TRANSER_SETTING( FL_ADHESIVE,                        show_adhesive );
-        TRANSER_SETTING( FL_SILKSCREEN,                      show_silkscreen );
-        TRANSER_SETTING( FL_SOLDERMASK,                      show_soldermask );
-        TRANSER_SETTING( FL_SOLDERPASTE,                     show_solderpaste );
-        TRANSER_SETTING( FL_COMMENTS,                        show_comments );
-        TRANSER_SETTING( FL_ECO,                             show_eco );
-        TRANSER_SETTING( FL_SHOW_BOARD_BODY,                 show_board_body );
+        TRANSFER_SETTING( FL_AXIS,                            show_axis );
+        TRANSFER_SETTING( FL_MODULE_ATTRIBUTES_NORMAL,        show_footprints_normal );
+        TRANSFER_SETTING( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, show_footprints_insert );
+        TRANSFER_SETTING( FL_MODULE_ATTRIBUTES_VIRTUAL,       show_footprints_virtual );
+        TRANSFER_SETTING( FL_ZONE,                            show_zones );
+        TRANSFER_SETTING( FL_ADHESIVE,                        show_adhesive );
+        TRANSFER_SETTING( FL_SILKSCREEN,                      show_silkscreen );
+        TRANSFER_SETTING( FL_SOLDERMASK,                      show_soldermask );
+        TRANSFER_SETTING( FL_SOLDERPASTE,                     show_solderpaste );
+        TRANSFER_SETTING( FL_COMMENTS,                        show_comments );
+        TRANSFER_SETTING( FL_ECO,                             show_eco );
+        TRANSFER_SETTING( FL_SHOW_BOARD_BODY,                 show_board_body );
 
         m_boardAdapter.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
+        m_boardAdapter.AntiAliasingSet( static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode ) );
 
         RENDER_ENGINE engine = static_cast<RENDER_ENGINE>( cfg->m_Render.engine );
         wxLogTrace( m_logTrace, engine == RENDER_ENGINE::RAYTRACING ?
@@ -482,12 +487,18 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
     {
 #define TRANSFER_SETTING( field, flag ) cfg->m_Render.field = m_boardAdapter.GetFlag( flag )
 
-        cfg->m_Render.engine        = static_cast<int>( m_boardAdapter.RenderEngineGet() );
-        cfg->m_Render.grid_type     = static_cast<int>( m_boardAdapter.GridGet() );
-        cfg->m_Render.material_mode = static_cast<int>( m_boardAdapter.MaterialModeGet() );
+        cfg->m_Render.engine         = static_cast<int>( m_boardAdapter.RenderEngineGet() );
+        cfg->m_Render.grid_type      = static_cast<int>( m_boardAdapter.GridGet() );
+        cfg->m_Render.material_mode  = static_cast<int>( m_boardAdapter.MaterialModeGet() );
+        cfg->m_Render.opengl_AA_mode = static_cast<int>( m_boardAdapter.AntiAliasingGet() );
 
-        TRANSFER_SETTING( opengl_copper_thickness,      FL_RENDER_OPENGL_COPPER_THICKNESS );
-        TRANSFER_SETTING( opengl_show_model_bbox,       FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
+        TRANSFER_SETTING( opengl_AA_disableOnMove,        FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE );
+        TRANSFER_SETTING( opengl_copper_thickness,        FL_RENDER_OPENGL_COPPER_THICKNESS );
+        TRANSFER_SETTING( opengl_show_model_bbox,         FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
+        TRANSFER_SETTING( opengl_thickness_disableOnMove, FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE );
+        TRANSFER_SETTING( opengl_vias_disableOnMove,      FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE );
+        TRANSFER_SETTING( opengl_holes_disableOnMove,     FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE );
+
         TRANSFER_SETTING( raytrace_anti_aliasing,       FL_RENDER_RAYTRACING_ANTI_ALIASING );
         TRANSFER_SETTING( raytrace_backfloor,           FL_RENDER_RAYTRACING_BACKFLOOR );
         TRANSFER_SETTING( raytrace_post_processing,     FL_RENDER_RAYTRACING_POST_PROCESSING );
@@ -511,7 +522,7 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
         TRANSFER_SETTING( show_zones,              FL_ZONE );
         TRANSFER_SETTING( subtract_mask_from_silk, FL_SUBTRACT_MASK_FROM_SILK );
 
-#undef TRANSER_SETTING
+#undef TRANSFER_SETTING
     }
 }
 

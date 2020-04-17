@@ -198,11 +198,6 @@ TOOL_ACTION EDA_3D_ACTIONS::attributesVirtual( "3DViewer.Control.attributesVirtu
         _( "Toggle Virtual 3D models" ), _( "Toggle 3D models with 'Virtual' attribute" ),
         nullptr, AF_NONE, (void*) FL_MODULE_ATTRIBUTES_VIRTUAL );
 
-TOOL_ACTION EDA_3D_ACTIONS::showCopperThickness( "3DViewer.Control.showCopperThickness",
-         AS_GLOBAL, 0, "",
-         _( "Show Copper Thickness" ), _( "Shows the thickness of copper layers (slow)" ),
-         use_3D_copper_thickness_xpm, AF_NONE, (void*) FL_RENDER_OPENGL_COPPER_THICKNESS );
-
 TOOL_ACTION EDA_3D_ACTIONS::showBoundingBoxes( "3DViewer.Control.showBoundingBoxes",
          AS_GLOBAL, 0, "",
          _( "Show Model Bounding Boxes" ), _( "Show Model Bounding Boxes" ),
@@ -237,7 +232,6 @@ TOOL_ACTION EDA_3D_ACTIONS::antiAliasing( "3DViewer.Control.antiAliasing",
          AS_GLOBAL, 0, "",
          _( "Anti-aliasing" ), _( "Render with improved quality on final render (slow)" ),
          nullptr, AF_NONE, (void*) FL_RENDER_RAYTRACING_ANTI_ALIASING );
-
 
 TOOL_ACTION EDA_3D_ACTIONS::postProcessing( "3DViewer.Control.postProcessing",
         AS_GLOBAL, 0, "",

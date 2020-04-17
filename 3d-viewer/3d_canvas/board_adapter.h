@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include "../3d_rendering/ccamera.h"
 #include "../3d_enums.h"
 #include "../3d_cache/3d_cache.h"
+#include "../common_ogl/cogl_att_list.h"
 
 #include <layers_id_colors_and_visibility.h>
 #include <class_pad.h>
@@ -254,6 +255,18 @@ class BOARD_ADAPTER
         m_3D_grid_type = aGridType;
     }
 
+    /**
+     * @brief GridGet - get the current antialiasing mode value
+     * @return antialiasing mode value
+     */
+    ANTIALIASING_MODE AntiAliasingGet() const { return m_antialiasing_mode; }
+
+    /**
+     * @brief AntiAliasingSet - set the current antialiasing mode value
+     * @param aAAmode = antialiasing mode value
+     */
+    void AntiAliasingSet( ANTIALIASING_MODE aAAmode ) { m_antialiasing_mode = aAAmode; }
+    
     /**
      * @brief RenderEngineSet
      * @param aRenderEngine = the render engine mode selected
@@ -629,6 +642,7 @@ private:
     GRID3D_TYPE         m_3D_grid_type;
     RENDER_ENGINE       m_render_engine;
     MATERIAL_MODE       m_material_mode;
+    ANTIALIASING_MODE   m_antialiasing_mode;
 
 
     // Pcb board position

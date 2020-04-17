@@ -32,7 +32,13 @@ public:
     {
         int  engine;
         int  grid_type;
+        int  opengl_AA_mode;
         int  material_mode;
+        bool opengl_AA_disableOnMove;
+        bool opengl_thickness_disableOnMove;
+        bool opengl_vias_disableOnMove;
+        bool opengl_holes_disableOnMove;
+        bool opengl_render_bbox_only_OnMove;
         bool opengl_copper_thickness;
         bool opengl_show_model_bbox;
         bool raytrace_anti_aliasing;

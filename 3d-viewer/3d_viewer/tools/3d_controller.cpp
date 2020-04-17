@@ -322,7 +322,6 @@ void EDA_3D_CONTROLLER::setTransitions()
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::attributesTHT.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::attributesSMD.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::attributesVirtual.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showCopperThickness.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showBoundingBoxes.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::renderShadows.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::proceduralTextures.MakeEvent() );

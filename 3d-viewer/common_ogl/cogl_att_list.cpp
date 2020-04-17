@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,10 @@
  */
 
 #include "cogl_att_list.h"
+#include <macros.h>
+#include <wx/glcanvas.h>
 #include <fctsys.h>
+#include <wx/debug.h>
 
 /**
  *  Attributes list to be passed to a wxGLCanvas creation.
@@ -46,7 +49,7 @@ const int COGL_ATT_LIST::m_openGL_attributes_list[] = {
     // Boolean attributes (using itself at padding):
 
     // 0                    1
-    WX_GL_RGBA,           WX_GL_RGBA,
+    WX_GL_RGBA,             WX_GL_RGBA,
     // 2                    3
     WX_GL_DOUBLEBUFFER,     WX_GL_DOUBLEBUFFER,
 
@@ -78,13 +81,15 @@ int COGL_ATT_LIST::m_openGL_attributes_list_to_use[
                                         arrayDim( COGL_ATT_LIST::m_openGL_attributes_list ) ] = { 0 };
 
 
-const int *COGL_ATT_LIST::GetAttributesList( bool aUseAntiAliasing )
+const int *COGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE aAntiAliasingMode )
 {
+    wxASSERT( aAntiAliasingMode <= ANTIALIASING_MODE::AA_8X );
+
     memcpy( m_openGL_attributes_list_to_use,
             m_openGL_attributes_list,
             sizeof( m_openGL_attributes_list_to_use ) );
 
-    if( aUseAntiAliasing )
+    if( aAntiAliasingMode > ANTIALIASING_MODE::AA_NONE )
     {
         // There is a bug on wxGLCanvas that makes IsDisplaySupported fail
         // while testing for antialiasing.
@@ -98,8 +103,10 @@ const int *COGL_ATT_LIST::GetAttributesList( bool aUseAntiAliasing )
         // Check if the canvas supports multisampling.
         if( wxGLCanvas::IsDisplaySupported( m_openGL_attributes_list_to_use ) )
         {
-            // Check for possible sample sizes, start form the top.
-            int maxSamples = 8; // Any higher doesn't change anything.
+            static const int aaSamples[4] = {0, 2, 4, 8};
+
+            // Check for possible sample sizes, start form the requested.
+            int maxSamples = aaSamples[static_cast<int>( aAntiAliasingMode )];
 
             m_openGL_attributes_list_to_use[ATT_WX_GL_SAMPLES_OFFSET_DATA] = maxSamples;
 
@@ -113,12 +120,12 @@ const int *COGL_ATT_LIST::GetAttributesList( bool aUseAntiAliasing )
         else
         {
             DBG( printf("GetAttributesList: AntiAliasing is not supported.\n") );
-            aUseAntiAliasing = false;
+            aAntiAliasingMode = ANTIALIASING_MODE::AA_NONE;
         }
     }
 
     // Disable antialising if it failed or was not requested
-    if( !aUseAntiAliasing )
+    if( aAntiAliasingMode == ANTIALIASING_MODE::AA_NONE )
     {
         // Remove multisampling information
         // (hoping that the GPU driver will decide what is best)

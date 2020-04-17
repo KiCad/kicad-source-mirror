@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Oleg Endo <olegendo@gcc.gnu.org>
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@
 #include "../3d_render_raytracing/shapes3D/cbbox.h"
 #include "../../3d_enums.h"
 
-/// 
+///
 class  C_OGL_3DMODEL
 {
 public:
