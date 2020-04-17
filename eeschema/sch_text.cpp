@@ -616,7 +616,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
     }
 
     // Draw graphic symbol for global or hierarchical labels
-    CreateGraphicShape( Poly, GetTextPos() );
+    CreateGraphicShape( aPlotter->RenderSettings(), Poly, GetTextPos() );
 
     aPlotter->SetCurrentLineWidth( penWidth );
 
@@ -759,6 +759,12 @@ const EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
     EDA_RECT rect = GetTextBox();
 
+    // In practice this is controlled by the current TextOffsetRatio, but the default is
+    // close enough for hit-testing, etc.
+    int margin = Mils2iu( TXT_MARGIN );
+
+    rect.Inflate( margin );
+
     if( GetTextAngle() != 0.0 )
     {
         // Rotate rect
@@ -809,21 +815,18 @@ EDA_ITEM* SCH_GLOBALLABEL::Clone() const
 wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const
 {
     wxPoint text_offset;
-    int     dist = GetEffectiveTextPenWidth();
+    int     dist = GetTextOffset( aSettings );
 
     switch( m_shape )
     {
     case PINSHEETLABEL_SHAPE::PS_INPUT:
     case PINSHEETLABEL_SHAPE::PS_BIDI:
     case PINSHEETLABEL_SHAPE::PS_TRISTATE:
-        dist += GetTextWidth() / 2;
+        dist += GetTextHeight() * 3 / 4;  // Use three-quarters-height as proxy for triangle size
         break;
 
     case PINSHEETLABEL_SHAPE::PS_OUTPUT:
     case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED:
-        dist += GetTextOffset( aSettings );
-        break;
-
     default:
         break;
     }
@@ -891,43 +894,25 @@ void SCH_GLOBALLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset 
 
     EDA_TEXT::Print( aSettings, text_offset, color );
 
-    CreateGraphicShape( Poly, GetTextPos() + aOffset );
+    CreateGraphicShape( aSettings, Poly, GetTextPos() + aOffset );
     GRPoly( nullptr, DC, Poly.size(), &Poly[0], false, penWidth, color, color );
 }
 
 
-void SCH_GLOBALLABEL::CreateGraphicShape( std::vector<wxPoint>& aPoints, const wxPoint& Pos )
+void SCH_GLOBALLABEL::CreateGraphicShape( RENDER_SETTINGS* aRenderSettings,
+                                          std::vector<wxPoint>& aPoints, const wxPoint& Pos )
 {
-    int halfSize  = GetTextHeight() / 2;
+    int margin    = GetTextOffset( aRenderSettings );
+    int halfSize  = ( GetTextHeight() / 2 ) + margin;
     int linewidth = GetPenWidth();
-    int symb_len = LenSize( GetShownText(), linewidth, m_textMarkupFlags ) + ( TXT_MARGIN * 2 );
+    int symb_len  = LenSize( GetShownText(), linewidth, m_textMarkupFlags ) + 2 * margin;
+
+    int x = symb_len + linewidth + 3;
+    int y = halfSize;
 
     aPoints.clear();
 
     // Create outline shape : 6 points
-    int x = symb_len + linewidth + 3;
-
-    // Use negation bar Y position to calculate full vertical size
-    // Search for overbar symbol
-    wxString test = GetText();
-    test.Replace( "~~", "" );
-    bool hasOverBar = test.find( "~" ) != wxString::npos;
-
-    #define V_MARGIN 1.40
-    // Note: this factor is due to the fact the Y size of a few letters like '[' are bigger
-    // than the y size value, and we need a margin for the graphic symbol.
-    int y = KiROUND( halfSize * V_MARGIN );
-
-    #define OVERBAR_V_MARGIN 1.2
-    // Note: this factor is due to the fact we need a margin for the graphic symbol.
-    if( hasOverBar )
-        y = KiROUND( KIGFX::STROKE_FONT::GetInterline( halfSize ) * OVERBAR_V_MARGIN );
-
-    // Gives room for line thickess and margin
-    y += linewidth;         // for line thickess
-    y += linewidth / 2;     // for margin
-
-    // Starting point(anchor)
     aPoints.emplace_back( wxPoint( 0, 0 ) );
     aPoints.emplace_back( wxPoint( 0, -y ) );     // Up
     aPoints.emplace_back( wxPoint( -x, -y ) );    // left
@@ -988,19 +973,20 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector<wxPoint>& aPoints, const w
 
 const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
 {
-    int x, y, dx, dy, length, height;
+    int x  = GetTextPos().x;
+    int y  = GetTextPos().y;
+    int penWidth = GetEffectiveTextPenWidth();
 
-    x  = GetTextPos().x;
-    y  = GetTextPos().y;
+    // In practice this is controlled by the current TextOffsetRatio, but the default is
+    // close enough for hit-testing, etc.
+    int margin = Mils2iu( TXT_MARGIN );
 
-    // Use the maximum clamped pen width to give us a bit of wiggle room
-    int width = Clamp_Text_PenSize( GetTextSize().x, GetTextSize(), IsBold() );
+    int height = ( (GetTextHeight() * 15) / 10 ) + penWidth + 2 * margin;
+    int length = LenSize( GetShownText(), penWidth, m_textMarkupFlags )
+                 + height                 // add height for triangular shapes
+                 + 2 * margin;
 
-    height = ( (GetTextHeight() * 15) / 10 ) + width + 2 * TXT_MARGIN;
-
-    // text X size add height for triangular shapes(bidirectional)
-    length = LenSize( GetShownText(), width, m_textMarkupFlags ) + height +
-             Mils2iu( DANGLING_SYMBOL_SIZE );
+    int dx, dy;
 
     switch( GetLabelSpinStyle() )    // respect orientation
     {
@@ -1008,7 +994,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     case LABEL_SPIN_STYLE::LEFT:
         dx = -length;
         dy = height;
-        x += Mils2iu( DANGLING_SYMBOL_SIZE );
+        x += margin;
         y -= height / 2;
         break;
 
@@ -1016,13 +1002,13 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
         dx = height;
         dy = -length;
         x -= height / 2;
-        y += Mils2iu( DANGLING_SYMBOL_SIZE );
+        y += margin;
         break;
 
     case LABEL_SPIN_STYLE::RIGHT:
         dx = length;
         dy = height;
-        x -= Mils2iu( DANGLING_SYMBOL_SIZE );
+        x -= margin;
         y -= height / 2;
         break;
 
@@ -1030,7 +1016,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
         dx = height;
         dy = length;
         x -= height / 2;
-        y -= Mils2iu( DANGLING_SYMBOL_SIZE );
+        y -= margin;
         break;
     }
 
@@ -1123,15 +1109,17 @@ void SCH_HIERLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
 
     EDA_TEXT::Print( aSettings, textOffset, color );
 
-    CreateGraphicShape( Poly, GetTextPos() + offset );
+    CreateGraphicShape( aSettings, Poly, GetTextPos() + offset );
     GRPoly( nullptr, DC, Poly.size(), &Poly[0], false, penWidth, color, color );
 }
 
 
-void SCH_HIERLABEL::CreateGraphicShape( std::vector<wxPoint>& aPoints, const wxPoint& Pos )
+void SCH_HIERLABEL::CreateGraphicShape( RENDER_SETTINGS* aRenderSettings,
+                                        std::vector<wxPoint>& aPoints, const wxPoint& Pos )
 {
+    int  margin   = GetTextOffset( aRenderSettings );
     int* Template = TemplateShape[static_cast<int>( m_shape )][static_cast<int>( m_spin_style )];
-    int  halfSize = GetTextWidth() / 2;
+    int  halfSize = ( GetTextHeight() / 2 ) + margin;
     int  imax = *Template; Template++;
 
     aPoints.clear();
@@ -1154,13 +1142,17 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 {
     int penWidth = GetEffectiveTextPenWidth();
 
+    // In practice this is controlled by the current TextOffsetRatio, but the default is
+    // close enough for hit-testing, etc.
+    int margin = Mils2iu( TXT_MARGIN );
+
     int x  = GetTextPos().x;
     int y  = GetTextPos().y;
 
-    int height = GetTextHeight() + penWidth + 2 * TXT_MARGIN;
+    int height = GetTextHeight() + penWidth + 2 * margin;
     int length = LenSize( GetShownText(), penWidth, m_textMarkupFlags )
                  + height                 // add height for triangular shapes
-                 + 2 * Mils2iu( DANGLING_SYMBOL_SIZE );
+                 + 2 * margin;
 
     int dx, dy;
 
@@ -1205,7 +1197,7 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 wxPoint SCH_HIERLABEL::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const
 {
     wxPoint text_offset;
-    int     dist = GetTextOffset( aSettings ) + GetPenWidth();
+    int     dist = GetTextOffset( aSettings );
 
     dist += GetTextWidth();
 

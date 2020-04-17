@@ -249,7 +249,8 @@ public:
      * @param Pos Position of the shape, for texts and labels: do nothing
      * Mainly for derived classes (SCH_SHEET_PIN and Hierarchical labels)
      */
-    virtual void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
+    virtual void CreateGraphicShape( RENDER_SETTINGS* aSettings,
+                                     std::vector <wxPoint>& aPoints, const wxPoint& Pos )
     {
         aPoints.clear();
     }
@@ -394,7 +395,8 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    void CreateGraphicShape( std::vector<wxPoint>& aPoints, const wxPoint& aPos ) override;
+    void CreateGraphicShape( RENDER_SETTINGS* aRenderSettings,
+                             std::vector<wxPoint>& aPoints, const wxPoint& aPos ) override;
 
     bool IsConnectable() const override { return true; }
 
@@ -441,7 +443,8 @@ public:
 
     wxPoint GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const override;
 
-    void CreateGraphicShape( std::vector<wxPoint>& aPoints, const wxPoint& Pos ) override;
+    void CreateGraphicShape( RENDER_SETTINGS* aSettings, std::vector<wxPoint>& aPoints,
+                             const wxPoint& Pos ) override;
 
     const EDA_RECT GetBoundingBox() const override;
 

@@ -1527,7 +1527,7 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
     std::vector<wxPoint> pts;
     std::deque<VECTOR2D> pts2;
 
-    aLabel->CreateGraphicShape( pts, aLabel->GetTextPos() );
+    aLabel->CreateGraphicShape( &m_schSettings, pts, aLabel->GetTextPos() );
 
     for( auto p : pts )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
@@ -1568,7 +1568,7 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
     std::vector<wxPoint> pts;
     std::deque<VECTOR2D> pts2;
 
-    aLabel->CreateGraphicShape( pts, aLabel->GetTextPos() );
+    aLabel->CreateGraphicShape( &m_schSettings, pts, aLabel->GetTextPos() );
 
     for( auto p : pts )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );

@@ -128,7 +128,8 @@ public:
      * @param aPoints = a buffer to fill with polygon corners coordinates
      * @param aPos = Position of the shape
      */
-    void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos ) override;
+    void CreateGraphicShape( RENDER_SETTINGS* aSettings,
+                             std::vector <wxPoint>& aPoints, const wxPoint& aPos ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 

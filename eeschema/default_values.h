@@ -28,7 +28,7 @@
 
 #define DANGLING_SYMBOL_SIZE 12
 
-#define TXT_MARGIN 4
+#define TXT_MARGIN 15
 
 ///< The default pin len value when creating pins(can be changed in preference menu)
 #define DEFAULT_PIN_LENGTH 100
