@@ -1644,8 +1644,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 
     case PAD_ATTRIB_HOLE_NOT_PLATED:
         // Mechanical purpose only:
-        // no offset, no net name, no pad name allowed
-        aPad->SetOffset( wxPoint( 0, 0 ) );
+        // no net name, no pad name allowed
         aPad->SetName( wxEmptyString );
         aPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
         break;
