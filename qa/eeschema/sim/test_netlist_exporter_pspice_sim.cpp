@@ -94,13 +94,17 @@ BOOST_AUTO_TEST_CASE( CommandToSimType )
 
     for( auto& step : testData )
     {
-        BOOST_CHECK_EQUAL( m_exporter.CommandToSimType( wxString( step.command ) ), step.type );
+        SIM_TYPE result = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( step.command );
+
+        BOOST_CHECK_EQUAL( result, step.type );
     }
 
     for( auto& step : testData )
     {
         step.command.Append( "\n" );
-        BOOST_CHECK_EQUAL( m_exporter.CommandToSimType( wxString( step.command ) ), step.type );
+        SIM_TYPE result = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( step.command );
+
+        BOOST_CHECK_EQUAL( result, step.type );
     }
 }
 
@@ -117,34 +121,56 @@ BOOST_AUTO_TEST_CASE( VectorToSignal )
         SIM_PLOT_TYPE type;
     };
 
-    std::vector<struct TEST_DATA> testData = { { "@c3[i]", "I(C3)", SPT_CURRENT },
-        { "@r12[i]", "I(R12)", SPT_CURRENT }, { "@r7[i]", "I(R7)", SPT_CURRENT },
-        { "@l2[i]", "I(L2)", SPT_CURRENT }, { "@c2[i]", "I(C2)", SPT_CURRENT },
-        { "@r6[i]", "I(R6)", SPT_CURRENT }, { "@r5[i]", "I(R5)", SPT_CURRENT },
-        { "@r10[i]", "I(R10)", SPT_CURRENT }, { "@q3[ie]", "Ie(Q3)", SPT_CURRENT },
-        { "@q3[ic]", "Ic(Q3)", SPT_CURRENT }, { "@q3[ib]", "Ib(Q3)", SPT_CURRENT },
-        { "@r11[i]", "I(R11)", SPT_CURRENT }, { "@r8[i]", "I(R8)", SPT_CURRENT },
-        { "@q1[ie]", "Ie(Q1)", SPT_CURRENT }, { "@q1[ic]", "Ic(Q1)", SPT_CURRENT },
-        { "@q1[ib]", "Ib(Q1)", SPT_CURRENT }, { "@r1[i]", "I(R1)", SPT_CURRENT },
-        { "@l1[i]", "I(L1)", SPT_CURRENT }, { "@c4[i]", "I(C4)", SPT_CURRENT },
-        { "@r2[i]", "I(R2)", SPT_CURRENT }, { "@q2[ig]", "Ig(Q2)", SPT_CURRENT },
-        { "@q2[id]", "Id(Q2)", SPT_CURRENT }, { "@q2[is]", "Is(Q2)", SPT_CURRENT },
-        { "@v2[i]", "I(V2)", SPT_CURRENT }, { "@r9[i]", "I(R9)", SPT_CURRENT },
-        { "@c1[i]", "I(C1)", SPT_CURRENT }, { "@v1[i]", "I(V1)", SPT_CURRENT },
-        { "@r3[i]", "I(R3)", SPT_CURRENT }, { "@r4[i]", "I(R4)", SPT_CURRENT },
-        { "vout", "V(vout)", SPT_VOLTAGE }, { "net-_q3-pad2_", "V(net-_q3-pad2_)", SPT_VOLTAGE },
+    std::vector<struct TEST_DATA> testData = {
+        { "@c3[i]", "I(C3)", SPT_CURRENT },
+        { "@r12[i]", "I(R12)", SPT_CURRENT },
+        { "@r7[i]", "I(R7)", SPT_CURRENT },
+        { "@l2[i]", "I(L2)", SPT_CURRENT },
+        { "@c2[i]", "I(C2)", SPT_CURRENT },
+        { "@r6[i]", "I(R6)", SPT_CURRENT },
+        { "@r5[i]", "I(R5)", SPT_CURRENT },
+        { "@r10[i]", "I(R10)", SPT_CURRENT },
+        { "@q3[ie]", "Ie(Q3)", SPT_CURRENT },
+        { "@q3[ic]", "Ic(Q3)", SPT_CURRENT },
+        { "@q3[ib]", "Ib(Q3)", SPT_CURRENT },
+        { "@r11[i]", "I(R11)", SPT_CURRENT },
+        { "@r8[i]", "I(R8)", SPT_CURRENT },
+        { "@q1[ie]", "Ie(Q1)", SPT_CURRENT },
+        { "@q1[ic]", "Ic(Q1)", SPT_CURRENT },
+        { "@q1[ib]", "Ib(Q1)", SPT_CURRENT },
+        { "@r1[i]", "I(R1)", SPT_CURRENT },
+        { "@l1[i]", "I(L1)", SPT_CURRENT },
+        { "@c4[i]", "I(C4)", SPT_CURRENT },
+        { "@r2[i]", "I(R2)", SPT_CURRENT },
+        { "@q2[ig]", "Ig(Q2)", SPT_CURRENT },
+        { "@q2[id]", "Id(Q2)", SPT_CURRENT },
+        { "@q2[is]", "Is(Q2)", SPT_CURRENT },
+        { "@v2[i]", "I(V2)", SPT_CURRENT },
+        { "@r9[i]", "I(R9)", SPT_CURRENT },
+        { "@c1[i]", "I(C1)", SPT_CURRENT },
+        { "@v1[i]", "I(V1)", SPT_CURRENT },
+        { "@r3[i]", "I(R3)", SPT_CURRENT },
+        { "@r4[i]", "I(R4)", SPT_CURRENT },
+        { "vout", "V(vout)", SPT_VOLTAGE },
+        { "net-_q3-pad2_", "V(net-_q3-pad2_)", SPT_VOLTAGE },
         { "net-_q2-pad3_", "V(net-_q2-pad3_)", SPT_VOLTAGE },
         { "net-_q2-pad1_", "V(net-_q2-pad1_)", SPT_VOLTAGE },
         { "net-_q1-pad3_", "V(net-_q1-pad3_)", SPT_VOLTAGE },
         { "net-_l2-pad1_", "V(net-_l2-pad1_)", SPT_VOLTAGE },
         { "net-_c4-pad2_", "V(net-_c4-pad2_)", SPT_VOLTAGE },
         { "net-_c3-pad1_", "V(net-_c3-pad1_)", SPT_VOLTAGE },
-        { "net-_c1-pad2_", "V(net-_c1-pad2_)", SPT_VOLTAGE }, { "/vin", "V(/vin)", SPT_VOLTAGE },
-        { "/vbase", "V(/vbase)", SPT_VOLTAGE }, { "+12v", "V(+12v)", SPT_VOLTAGE },
-        { "@m1[cgs]", "", SPT_UNKNOWN }, { "@d1[g11]", "", SPT_UNKNOWN },
-        { "@d1[c12]", "", SPT_UNKNOWN }, { "@d1[y21]", "", SPT_UNKNOWN },
-        { "@n1[vth0]", "", SPT_UNKNOWN }, { "@mn1[gm]", "", SPT_UNKNOWN },
-        { "@m.xmos1.xmos2.m1[vdsat]", "", SPT_UNKNOWN } };
+        { "net-_c1-pad2_", "V(net-_c1-pad2_)", SPT_VOLTAGE },
+        { "/vin", "V(/vin)", SPT_VOLTAGE },
+        { "/vbase", "V(/vbase)", SPT_VOLTAGE },
+        { "+12v", "V(+12v)", SPT_VOLTAGE },
+        { "@m1[cgs]", "", SPT_UNKNOWN },
+        { "@d1[g11]", "", SPT_UNKNOWN },
+        { "@d1[c12]", "", SPT_UNKNOWN },
+        { "@d1[y21]", "", SPT_UNKNOWN },
+        { "@n1[vth0]", "", SPT_UNKNOWN },
+        { "@mn1[gm]", "", SPT_UNKNOWN },
+        { "@m.xmos1.xmos2.m1[vdsat]", "", SPT_UNKNOWN }
+    };
 
     for( auto& step : testData )
     {

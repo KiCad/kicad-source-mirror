@@ -24,10 +24,7 @@
 
 include_directories( BEFORE ${INC_BEFORE} )
 
-add_executable( qa_eeschema
-    # A single top to load the pcnew kiface
-    # ../../common/single_top.cpp
-
+set( QA_EESCHEMA_SRCS
     # stuff from common which is needed...why?
     ${CMAKE_SOURCE_DIR}/common/colors.cpp
     ${CMAKE_SOURCE_DIR}/common/observable.cpp
@@ -51,9 +48,20 @@ add_executable( qa_eeschema
     test_sch_rtree.cpp
     test_sch_sheet.cpp
     test_sch_sheet_path.cpp
-    
-    # Simulation tests
-    sim/test_netlist_exporter_pspice_sim.cpp
+)
+
+
+# Spice specific testing routine
+if( KICAD_SPICE )
+    set( QA_EESCHEMA_SRCS
+        ${QA_EESCHEMA_SRCS}
+        # Simulation tests
+        sim/test_netlist_exporter_pspice_sim.cpp
+    )
+endif()
+
+add_executable( qa_eeschema
+    ${QA_EESCHEMA_SRCS}
 
     # Older CMakes cannot link OBJECT libraries
     # https://cmake.org/pipermail/cmake/2013-November/056263.html
