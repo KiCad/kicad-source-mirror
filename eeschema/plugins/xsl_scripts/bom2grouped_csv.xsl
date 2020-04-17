@@ -64,7 +64,7 @@
 		<!-- list of all references -->
 		<xsl:for-each select="key('partTypeByValueAndFootprint', concat(footprint, '-', value))">
 			<!-- strip non-digits from reference and sort based on remaining number -->
-			<xsl:sort select="translate(@ref, translate(@ref, digits, ''), '')" data-type="number" />
+			<xsl:sort select="translate(@ref, translate(@ref, $digits, ''), '')" data-type="number" />
 			<xsl:value-of select="@ref"/><xsl:text> </xsl:text>
 		</xsl:for-each><xsl:text>,</xsl:text>
 		<!-- quantity of parts with same footprint and value -->
