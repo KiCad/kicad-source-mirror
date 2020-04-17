@@ -123,8 +123,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     // initialize parameters in m_LayersManager
     LoadSettings( config() );
 
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
-
     if( m_LastGridSizeId < 0 )
         m_LastGridSizeId = 0;
 
@@ -215,6 +213,9 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     // Update the checked state of tools
     SyncToolbars();
+
+    // Ensure the window is on top
+    Raise();
 }
 
 

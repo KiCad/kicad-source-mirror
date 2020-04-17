@@ -183,8 +183,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     // this should be OK for all footprint to plot/print
     SetPageSettings( PAGE_INFO( PAGE_INFO::A4 ) );
 
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
-
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
 
@@ -234,7 +232,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     // Default shutdown reason until a file is loaded
     SetShutdownBlockReason( _( "Footprint changes are unsaved" ) );
 
-    Raise();            // On some window managers, this is needed
+    // Ensure the window is on top
+    Raise();
     Show( true );
 }
 

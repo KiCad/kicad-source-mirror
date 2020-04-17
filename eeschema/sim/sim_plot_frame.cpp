@@ -136,9 +136,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     icon.CopyFromBitmap( KiBitmap( simulator_xpm ) );
     SetIcon( icon );
 
-    // Gives a minimal size
-    SetSizeHints( 500, 400, -1, -1, -1, -1 );
-
     // Get the previous size and position of windows:
     LoadSettings( config() );
 
@@ -224,6 +221,9 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     // events
     wxSafeYield();
     setSubWindowsSashSize();
+
+    // Ensure the window is on top
+    Raise();
 }
 
 
@@ -264,8 +264,6 @@ void SIM_PLOT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     if( cfg )
     {
         EDA_BASE_FRAME::LoadSettings( cfg );
-
-        SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
         // Read subwindows sizes (should be > 0 )
         m_splitterLeftRightSashPosition      = cfg->m_Simulator.plot_panel_width;

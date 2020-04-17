@@ -46,6 +46,7 @@ const wxChar* const traceLocale = wxT( "KICAD_LOCALE" );
 const wxChar* const traceScreen = wxT( "KICAD_SCREEN" );
 const wxChar* const traceZoomScroll = wxT( "KICAD_ZOOM_SCROLL" );
 const wxChar* const traceSymbolResolver = wxT( "KICAD_SYM_RESOLVE" );
+const wxChar* const traceDisplayLocation = wxT( "KICAD_DISPLAY_LOCATION");
 
 
 wxString dump( const wxArrayString& aArray )

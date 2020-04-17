@@ -328,69 +328,117 @@ void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 
 void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
 {
-    m_FramePos.x = aCfg->pos_x;
-    m_FramePos.y = aCfg->pos_y;
+    m_FramePos.x  = aCfg->pos_x;
+    m_FramePos.y  = aCfg->pos_y;
     m_FrameSize.x = aCfg->size_x;
     m_FrameSize.y = aCfg->size_y;
+
+    wxLogTrace( traceDisplayLocation, "Config position (%d, %d) with size (%d, %d)",
+            m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Ensure minimum size is set if the stored config was zero-initialized
     if( m_FrameSize.x < s_minsize_x || m_FrameSize.y < s_minsize_y )
     {
         m_FrameSize.x = s_minsize_x;
         m_FrameSize.y = s_minsize_y;
+
+        wxLogTrace( traceDisplayLocation, "Using minimum size (%d, %d)", m_FrameSize.x, m_FrameSize.y );
     }
 
-    // Ensure window isn't bigger than can be displayed
-    int displayIndex = wxDisplay::GetFromPoint( m_FramePos );
+    wxPoint upperRight( m_FramePos.x + m_FrameSize.x, m_FramePos.y );
+    wxPoint upperLeft( m_FramePos.x, m_FramePos.y );
 
-    if( displayIndex == wxNOT_FOUND )
-        displayIndex = 0;
+    // Check to see if the requested display is still attached to the computer
+    int leftInd  = wxDisplay::GetFromPoint( upperLeft );
+    int rightInd = wxDisplay::GetFromPoint( upperRight );
 
-    wxDisplay display( displayIndex );
-    wxRect clientSize = display.GetClientArea();
+    wxLogTrace( traceDisplayLocation, "Number of displays: %d", wxDisplay::GetCount() );
+    wxLogTrace( traceDisplayLocation, "Previous display indices: %d and %d", leftInd, rightInd );
 
-    // The window may have been saved on a display that is no longer present.
-    // First, check the window origin and move it if it's off the chosen display
+    if( rightInd == wxNOT_FOUND && leftInd == wxNOT_FOUND )
+    {
+        wxLogTrace( traceDisplayLocation, "Previous display not found" );
 
-    if( m_FramePos.x >= clientSize.x + clientSize.width ||
-        m_FramePos.y >= clientSize.y + clientSize.height )
+        // If it isn't attached, use the first display
+        wxDisplay display( 0 );
+        wxRect    clientSize = display.GetClientArea();
+
+        wxLogDebug( "Client size (%d, %d)", clientSize.width, clientSize.height );
+
         m_FramePos = wxDefaultPosition;
 
-    // Now, fix up the size if needed
+        // Ensure the window fits on the display, since the other one could have been larger
+        if( m_FrameSize.x > clientSize.width )
+            m_FrameSize.x = clientSize.width;
 
-    if( m_FrameSize.x + m_FramePos.x > clientSize.x + clientSize.width )
-    {
-        m_FrameSize.x = clientSize.width;
-        m_FramePos.x = 0;
+        if( m_FrameSize.y > clientSize.height )
+            m_FrameSize.y = clientSize.height;
     }
-
-    if( m_FrameSize.y + m_FramePos.y > clientSize.y + clientSize.height )
+    else
     {
-        m_FrameSize.y = clientSize.height;
-        m_FramePos.y = 0;
-    }
+        wxRect clientSize;
 
-    if( m_hasAutoSave )
-        m_autoSaveInterval = Pgm().GetCommonSettings()->m_System.autosave_interval;
+        if( leftInd == wxNOT_FOUND )
+        {
+            // If the top-left point is off-screen, use the display for the top-right point
+            wxDisplay display( rightInd );
+            clientSize = display.GetClientArea();
+        }
+        else
+        {
+            wxDisplay display( leftInd );
+            clientSize = display.GetClientArea();
+        }
+
+// The percentage size (represented in decimal) of the region around the screen's border where
+// an upper corner is not allowed
+#define SCREEN_BORDER_REGION 0.10
+
+        int yLim      = clientSize.y + ( clientSize.height * ( 1.0 - SCREEN_BORDER_REGION ) );
+        int xLimLeft  = clientSize.x + ( clientSize.width  * SCREEN_BORDER_REGION );
+        int xLimRight = clientSize.x + ( clientSize.width  * ( 1.0 - SCREEN_BORDER_REGION ) );
+
+        if( upperLeft.x  > xLimRight ||  // Upper left corner too close to right edge of screen
+            upperRight.x < xLimLeft  ||  // Upper right corner too close to left edge of screen
+            upperRight.y > yLim )        // Upper corner too close to the bottom of the screen
+        {
+            m_FramePos = wxDefaultPosition;
+            wxLogTrace( traceDisplayLocation, "Resetting to default position" );
+        }
+    }
 
     // Ensure Window title bar is visible
-#if defined( __WXMAC__ )
+#if defined( __WXOSX__ )
     // for macOSX, the window must be below system (macOSX) toolbar
-    // Ypos_min = GetMBarHeight(); seems no more exist in new API (subject to change)
     int Ypos_min = 20;
 #else
     int Ypos_min = 0;
 #endif
     if( m_FramePos.y < Ypos_min )
-    {
-        if( m_FrameSize.y + ( Ypos_min - m_FramePos.y ) > clientSize.height)
-            m_FrameSize.y = clientSize.height - Ypos_min;
-
         m_FramePos.y = Ypos_min;
+
+    wxLogTrace( traceDisplayLocation, "Final window position (%d, %d) with size (%d, %d)",
+        m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+
+    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+
+    // Center the window if we reset to default
+    if( m_FramePos.x == -1 )
+    {
+        wxLogTrace( traceDisplayLocation, "Centering window" );
+        Center();
+        m_FramePos = GetPosition();
     }
 
+    // Maximize if we were maximized before
     if( aCfg->maximized )
+    {
+        wxLogTrace( traceDisplayLocation, "Maximizing window" );
         Maximize();
+    }
+
+    if( m_hasAutoSave )
+        m_autoSaveInterval = Pgm().GetCommonSettings()->m_System.autosave_interval;
 
     m_perspective = aCfg->perspective;
     m_mruPath = aCfg->mru_path;
@@ -416,6 +464,10 @@ void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
     aCfg->size_x = m_FrameSize.x;
     aCfg->size_y = m_FrameSize.y;
     aCfg->maximized = IsMaximized();
+
+    wxLogTrace( traceDisplayLocation, "Saving window maximized: %s", IsMaximized() ? "true" : "false" );
+    wxLogTrace( traceDisplayLocation, "Saving config position (%d, %d) with size (%d, %d)",
+            m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // TODO(JE) should auto-save in common settings be overwritten by every app?
     if( m_hasAutoSave )

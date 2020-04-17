@@ -130,7 +130,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     GetRenderSettings()->LoadColors( GetColorSettings() );
 
@@ -188,6 +187,9 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 
     SetShutdownBlockReason( _( "Library changes are unsaved" ) );
+
+    // Ensure the window is on top
+    Raise();
 }
 
 

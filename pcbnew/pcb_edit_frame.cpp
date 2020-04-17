@@ -212,8 +212,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // PCB drawings start in the upper left corner.
     GetScreen()->m_Center = false;
 
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
-
     GetScreen()->AddGrid( m_UserGridSize, EDA_UNITS::UNSCALED, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
@@ -323,6 +321,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     #ifdef _WIN32
     appK2S.SetExt( "exe" );
     #endif
+
+    // Ensure the window is on top
+    Raise();
 
 //    if( !appK2S.FileExists() )
  //       GetMenuBar()->FindItem( ID_GEN_EXPORT_FILE_STEP )->Enable( false );

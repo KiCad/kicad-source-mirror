@@ -114,9 +114,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     icon.CopyFromBitmap( KiBitmap( icon_kicad_xpm ) );
     SetIcon( icon );
 
-    // Give the last size and pos to main window
+    // Load the settings
     LoadSettings( config() );
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Left window: is the box which display tree project
     m_leftWin = new TREE_PROJECT_FRAME( this );
@@ -163,6 +162,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_auimgr.GetPane( m_leftWin ).MinSize( 200, -1 );
 
     SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
+
+    // Ensure the window is on top
+    Raise();
 }
 
 

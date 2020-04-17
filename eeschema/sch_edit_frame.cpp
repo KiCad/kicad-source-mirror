@@ -240,8 +240,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     CreateScreens();
 
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
-
     setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -281,6 +279,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     // Default shutdown reason until a file is loaded
     SetShutdownBlockReason( _( "New schematic file is unsaved" ) );
+
+    // Ensure the window is on top
+    Raise();
 }
 
 

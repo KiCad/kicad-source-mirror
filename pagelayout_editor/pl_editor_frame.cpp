@@ -115,7 +115,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetCanvas( drawPanel );
 
     LoadSettings( config() );
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU();
     SetScreen( new PL_EDITOR_SCREEN( pageSizeIU ) );
@@ -197,6 +196,9 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     pglayout.SetPageLayout();
 #endif
     OnNewPageLayout();
+
+    // Ensure the window is on top
+    Raise();
 }
 
 

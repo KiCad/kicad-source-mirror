@@ -146,6 +146,13 @@ extern const wxChar* const traceLocale;
 extern const wxChar* const traceScreen;
 
 /**
+ * Flag to enable debug output of display positioning logic.
+ *
+ * Use "KICAD_DISPLAY_LOCATION" to enable.
+ */
+extern const wxChar* const traceDisplayLocation;
+
+/**
  * Flag to enable debug output of zoom-scrolling calculations in
  * #KIGFX::ZOOM_CONTROLLER and derivatives.
  *
