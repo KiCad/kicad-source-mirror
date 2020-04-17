@@ -265,9 +265,10 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
             else
                 pad->SetShape( PAD_SHAPE_CIRCLE );
         }
-        else if( padShapeName == wxT( "Rect" )
-                 || padShapeName == wxT( "RndRect" ) )
+        else if( padShapeName == wxT( "Rect" ) )
             pad->SetShape( PAD_SHAPE_RECT );
+        else if(  padShapeName == wxT( "RndRect" ) )
+            pad->SetShape( PAD_SHAPE_ROUNDRECT );
         else if( padShapeName == wxT( "Polygon" ) )
             pad->SetShape( PAD_SHAPE_RECT ); // approximation
 
