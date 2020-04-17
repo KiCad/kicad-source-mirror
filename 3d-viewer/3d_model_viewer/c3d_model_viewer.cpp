@@ -310,8 +310,12 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
 
         glTranslatef( -model_center.x, -model_center.y, -model_center.z );
 
+        m_ogl_3dmodel->BeginDrawMulti();
+
         m_ogl_3dmodel->Draw_opaque();
         m_ogl_3dmodel->Draw_transparent();
+
+        m_ogl_3dmodel->EndDrawMulti();
 
         glPopMatrix();
     }
