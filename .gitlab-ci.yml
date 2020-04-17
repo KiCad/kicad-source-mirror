@@ -114,7 +114,7 @@ build_linux:
     # Only save the artifacts that are needed for running the tests in the next stage
     # and the compilation log. The entire build directory is too large to save as an
     # artifact.
-    expire_in: 1 week
+    expire_in: 2 hrs
     when: always
     paths:
       - build/linux/3d-viewer/
