@@ -561,7 +561,11 @@ void LIB_PIN::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* a
                      const TRANSFORM& aTransform )
 {
     PART_DRAW_OPTIONS* opts = (PART_DRAW_OPTIONS*) aData;
-    LIB_PART*          part = GetParent();
+    bool               drawHiddenFields = opts ? opts->draw_hidden_fields : false;
+    bool               showPinType = opts ? opts->show_elec_type : false;
+    int                textMarkupFlags = opts ? opts->text_markup_flags : 0;
+
+    LIB_PART* part = GetParent();
 
     /* Calculate pin orient taking in account the component orientation. */
     int     orient = PinDrawOrient( aTransform );
@@ -569,14 +573,14 @@ void LIB_PIN::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* a
     /* Calculate the pin position */
     wxPoint pos1 = aTransform.TransformCoordinate( m_position ) + aOffset;
 
-    if( IsVisible() || ( opts && opts->draw_hidden_fields ) )
+    if( IsVisible() || drawHiddenFields )
     {
         PrintPinSymbol( aSettings, pos1, orient );
 
         PrintPinTexts( aSettings, pos1, orient, part->GetPinNameOffset(), part->ShowPinNumbers(),
-                       part->ShowPinNames(), opts->text_markup_flags );
+                       part->ShowPinNames(), textMarkupFlags );
 
-        if( opts && opts->show_elec_type )
+        if( showPinType )
             PrintPinElectricalTypeName( aSettings, pos1, orient );
     }
 }
