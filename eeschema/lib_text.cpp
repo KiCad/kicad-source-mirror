@@ -44,9 +44,9 @@
 #include <default_values.h>    // For some default values
 
 
-LIB_TEXT::LIB_TEXT( LIB_PART* aParent, int aMarkupFlags ) :
+LIB_TEXT::LIB_TEXT( LIB_PART* aParent ) :
     LIB_ITEM( LIB_TEXT_T, aParent ),
-    EDA_TEXT( wxEmptyString, aMarkupFlags )
+    EDA_TEXT( wxEmptyString )
 {
     SetTextSize( wxSize( Mils2iu( DEFAULT_TEXT_SIZE ), Mils2iu( DEFAULT_TEXT_SIZE ) ) );
 }
@@ -78,7 +78,7 @@ bool LIB_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 EDA_ITEM* LIB_TEXT::Clone() const
 {
-    LIB_TEXT* newitem = new LIB_TEXT( nullptr, GetTextMarkupFlags() );
+    LIB_TEXT* newitem = new LIB_TEXT( nullptr );
 
     newitem->m_Unit      = m_Unit;
     newitem->m_Convert   = m_Convert;
@@ -290,11 +290,9 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     int penWidth = std::max( GetEffectiveTextPenWidth(),
                              plotter->RenderSettings()->GetDefaultPenWidth() );
 
-    // NOTE: do NOT use m_textMarkupFlags; those are from the library, not the schematic
-
     plotter->Text( pos, color, GetText(), t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT, GetTextSize(),
                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, penWidth, IsItalic(),
-                   IsBold(), plotter->GetTextMarkupFlags() );
+                   IsBold() );
 }
 
 
@@ -345,7 +343,7 @@ void LIB_TEXT::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* 
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
     GRText( DC, txtpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_HJUSTIFY_CENTER,
-            GR_TEXT_VJUSTIFY_CENTER, penWidth, IsItalic(), IsBold(), m_textMarkupFlags );
+            GR_TEXT_VJUSTIFY_CENTER, penWidth, IsItalic(), IsBold() );
 }
 
 

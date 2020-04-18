@@ -112,7 +112,7 @@ struct TEXT_EFFECTS
 class EDA_TEXT
 {
 public:
-    EDA_TEXT( const wxString& text = wxEmptyString, int aMarkupFlags = 0 );
+    EDA_TEXT( const wxString& text = wxEmptyString );
 
     EDA_TEXT( const EDA_TEXT& aText );
 
@@ -218,9 +218,6 @@ public:
 
     bool IsDefaultFormatting() const;
 
-    void SetTextMarkupFlags( int aFlags )       { m_textMarkupFlags = aFlags; }
-    int GetTextMarkupFlags() const              { return m_textMarkupFlags; }
-
     void SetTextSize( const wxSize& aNewSize )  { m_e.size = aNewSize; }
     const wxSize& GetTextSize() const           { return m_e.size; }
 
@@ -303,10 +300,8 @@ public:
      * @param aLine : the line of text to consider.
      * For single line text, this parameter is always m_Text
      * @param aThickness : the stroke width of the text
-     * @param aMarkupFlags a flag set of MARKUP_FLAG enums indicating which markup tokens should
-     *                     be processed
      */
-    int LenSize( const wxString& aLine, int aThickness, int aMarkupFlags ) const;
+    int LenSize( const wxString& aLine, int aThickness ) const;
 
     /**
      * Useful in multiline texts to calculate the full text or a line area (for zones filling,
@@ -353,9 +348,6 @@ public:
      */
     virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
-protected:
-    int           m_textMarkupFlags;   // Set of TEXT_MARKUP_FLAGS indicating which markup
-                                       // features are to be processed.
 private:
     wxString      m_text;
     wxString      m_shown_text;        // Cache of unescaped text for efficient access

@@ -535,7 +535,6 @@ void SCH_COMPONENT::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
     opts.transform = m_transform;
     opts.draw_visible_fields = false;
     opts.draw_hidden_fields = false;
-    opts.text_markup_flags = m_Fields[0].GetTextMarkupFlags();
 
     if( m_part )
     {
@@ -822,8 +821,7 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
                 if( !schField )
                 {
                     wxString  fieldName = libField.GetCanonicalName();
-                    SCH_FIELD newField( wxPoint( 0, 0), GetFieldCount(), this, fieldName,
-                                        GetField( REFERENCE )->GetTextMarkupFlags() );
+                    SCH_FIELD newField( wxPoint( 0, 0), GetFieldCount(), this, fieldName );
                     schField = AddField( newField );
                 }
             }
@@ -1827,9 +1825,6 @@ void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
     {
         TRANSFORM temp = GetTransform();
         aPlotter->StartBlock( nullptr );
-
-        // A cheater since we don't want to modify the various LIB_ITEMs' m_textMarkupFlags
-        aPlotter->SetTextMarkupFlags( m_Fields[0].GetTextMarkupFlags() );
 
         m_part->Plot( aPlotter, GetUnit(), GetConvert(), m_Pos, temp );
 

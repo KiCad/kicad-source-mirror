@@ -115,7 +115,7 @@ void LIB_FIELD::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void*
     wxString text = aData ? *static_cast<wxString*>( aData ) : GetText();
 
     GRText( DC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), IsBold(), m_textMarkupFlags );
+            GetVertJustify(), penWidth, IsItalic(), IsBold() );
 }
 
 
@@ -289,10 +289,8 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     int penWidth = std::max( GetPenWidth(),aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
-    // NOTE: do NOT use m_textMarkupFlags; those are from the library, not the schematic
-
     aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(), hjustify, vjustify,
-                    penWidth, IsItalic(), IsBold(), aPlotter->GetTextMarkupFlags() );
+                    penWidth, IsItalic(), IsBold() );
 }
 
 

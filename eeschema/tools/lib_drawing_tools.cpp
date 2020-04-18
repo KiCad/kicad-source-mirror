@@ -143,7 +143,7 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 }
                 case LIB_TEXT_T:
                 {
-                    LIB_TEXT* text = new LIB_TEXT( part, m_frame->GetTextMarkupFlags() );
+                    LIB_TEXT* text = new LIB_TEXT( part );
                     text->SetPosition( wxPoint( cursorPos.x, -cursorPos.y ) );
                     text->SetTextSize( wxSize( m_frame->GetDefaultTextSize(),
                                                m_frame->GetDefaultTextSize() ) );

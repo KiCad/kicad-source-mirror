@@ -118,7 +118,7 @@ void PlotWorkSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BLOCK
                 plotter->Text( text->GetTextPos(), plotColor, text->GetShownText(),
                                text->GetTextAngle(), text->GetTextSize(), text->GetHorizJustify(),
                                text->GetVertJustify(), penWidth, text->IsItalic(), text->IsBold(),
-                               text->GetTextMarkupFlags(), text->IsMultilineAllowed() );
+                               text->IsMultilineAllowed() );
             }
             break;
 

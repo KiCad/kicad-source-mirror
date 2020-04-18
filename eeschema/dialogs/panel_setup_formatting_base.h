@@ -20,7 +20,6 @@
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
-#include <wx/checkbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,8 +40,6 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_textOffsetRatioLabel;
 		wxTextCtrl* m_textOffsetRatioCtrl;
 		wxStaticText* m_offsetRatioUnits;
-		wxCheckBox* m_checkSuperSub;
-		wxStaticText* m_superSubHint;
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_lineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;

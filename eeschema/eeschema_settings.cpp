@@ -326,7 +326,6 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacyString( aCfg, "FieldNames",           "drawing.field_names" );
     ret &= fromLegacy<bool>( aCfg, "HorizVertLinesOnly",   "drawing.hv_lines_only" );
     ret &= fromLegacy<int>(  aCfg, "RepeatLabelIncrement", "drawing.repeat_label_increment" );
-    ret &= fromLegacy<int>(  aCfg, "TextMarkupFlags",      "drawing.text_markup_flags" );
 
     ret &= fromLegacy<bool>( aCfg, "DragActionIsMove",     "input.drag_is_move" );
 

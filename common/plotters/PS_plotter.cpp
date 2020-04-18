@@ -974,7 +974,6 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
                 int                         aWidth,
                 bool                        aItalic,
                 bool                        aBold,
-                int                         aTextMarkupFlags,
                 bool                        aMultilineAllowed,
                 void*                       aData )
 {
@@ -985,12 +984,7 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
     if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
         aMultilineAllowed = false;  // the text has only one line.
 
-    bool processSuperSub = false;
-
-    if( ( aTextMarkupFlags & ENABLE_SUBSCRIPT_MARKUP ) && aText.Contains( wxT( "#" ) ) )
-        processSuperSub = true;
-
-    if( ( aTextMarkupFlags & ENABLE_SUPERSCRIPT_MARKUP ) && aText.Contains( wxT( "^" ) ) )
+    bool processSuperSub = aText.Contains( wxT( "^{" ) ) || aText.Contains( wxT( "_{" ) );
         processSuperSub = true;
 
     // Draw the native postscript text (if requested)
@@ -1054,7 +1048,7 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
     if( !use_native )
     {
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                       aWidth, aItalic, aBold, aTextMarkupFlags, aMultilineAllowed );
+                       aWidth, aItalic, aBold, aMultilineAllowed );
     }
 }
 

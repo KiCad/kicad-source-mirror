@@ -38,9 +38,6 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAM
         m_wireWidth( aFrame, m_wireWidthLabel, m_wireWidthCtrl, m_wireWidthUnits, true ),
         m_junctionSize( aFrame, m_jctSizeLabel, m_jctSizeCtrl, m_jctSizeUnits, true )
 {
-    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_superSubHint->SetFont( infoFont );
 }
 
 
@@ -74,9 +71,6 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
 
     wxString offsetRatio = wxString::Format( "%f", m_frame->GetTextOffsetRatio() * 100.0 );
     m_textOffsetRatioCtrl->SetValue( offsetRatio );
-
-    int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
-    m_checkSuperSub->SetValue( m_frame->GetTextMarkupFlags() & superSubFlags );
 
     return true;
 }
@@ -117,20 +111,10 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     msg.ToDouble( &dtmp );
     m_frame->SetTextOffsetRatio( dtmp / 100.0 );
 
-    int superSubFlags = ENABLE_SUBSCRIPT_MARKUP | ENABLE_SUPERSCRIPT_MARKUP;
-
-    if( m_checkSuperSub->GetValue() )
-        m_frame->SetTextMarkupFlags( m_frame->GetTextMarkupFlags() | superSubFlags );
-    else
-        m_frame->SetTextMarkupFlags( m_frame->GetTextMarkupFlags() & ~superSubFlags );
-
     m_frame->GetRenderSettings()->SetDefaultPenWidth( m_frame->GetDefaultLineWidth() );
     m_frame->GetRenderSettings()->m_DefaultWireThickness = m_frame->GetDefaultWireThickness();
     m_frame->GetRenderSettings()->m_DefaultBusThickness = m_frame->GetDefaultBusThickness();
     m_frame->GetRenderSettings()->m_TextOffsetRatio = m_frame->GetTextOffsetRatio();
-
-    SCH_SCREENS schematic;
-    schematic.UpdateTextMarkupFlags( m_frame->GetTextMarkupFlags() );
 
     m_frame->GetCanvas()->GetView()->MarkDirty();
     m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );

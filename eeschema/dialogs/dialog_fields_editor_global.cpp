@@ -608,8 +608,7 @@ public:
                 if( !destField && !srcValue.IsEmpty() )
                 {
                     const auto compOrigin = comp.GetPosition();
-                    destField = comp.AddField( SCH_FIELD( compOrigin, -1, &comp, srcName,
-                                                          m_frame->GetTextMarkupFlags() ) );
+                    destField = comp.AddField( SCH_FIELD( compOrigin, -1, &comp, srcName ) );
                 }
 
                 if( !destField )

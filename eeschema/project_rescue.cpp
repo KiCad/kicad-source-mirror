@@ -574,7 +574,6 @@ bool SCH_EDIT_FRAME::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand )
             SCH_SCREENS schematic;
 
             schematic.UpdateSymbolLinks( true );
-            schematic.UpdateTextMarkupFlags( GetTextMarkupFlags() );
 
             g_ConnectionGraph->Reset();
             RecalculateConnections( GLOBAL_CLEANUP );

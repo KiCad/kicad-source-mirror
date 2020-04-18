@@ -185,8 +185,7 @@ BOX2D STROKE_FONT::computeBoundingBox( const GLYPH* aGLYPH, double aGlyphWidth )
 }
 
 
-void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle,
-                        int markupFlags )
+void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle )
 {
     if( aText.empty() )
         return;
@@ -251,7 +250,7 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
     {
         size_t length = newlinePos - begin;
 
-        drawSingleLineText( aText.substr( begin, length ), markupFlags );
+        drawSingleLineText( aText.substr( begin, length ) );
         m_gal->Translate( VECTOR2D( 0.0, lineHeight ) );
 
         begin = newlinePos + 1;
@@ -260,13 +259,13 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
 
     // Draw the last (or the only one) line
     if( !aText.empty() )
-        drawSingleLineText( aText.substr( begin ), markupFlags );
+        drawSingleLineText( aText.substr( begin ) );
 
     m_gal->Restore();
 }
 
 
-void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
+void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 {
     double      xOffset;
     double      yOffset;
@@ -277,7 +276,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
         overbar_italic_comp = -overbar_italic_comp;
 
     // Compute the text size
-    VECTOR2D textSize = computeTextLineSize( aText, markupFlags );
+    VECTOR2D textSize = computeTextLineSize( aText );
     double half_thickness = m_gal->GetLineWidth()/2;
 
     // Context needs to be saved before any transformations
@@ -329,6 +328,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
     // overlap.
     bool     last_had_overbar = false;
     bool     in_overbar = false;
+    bool     in_super_or_subscript = false;
     VECTOR2D glyphSize = baseGlyphSize;
 
     yOffset = 0;
@@ -379,43 +379,40 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
                 in_overbar = !in_overbar;
             }
         }
-        else if( *chIt == '^' && ( markupFlags & ENABLE_SUPERSCRIPT_MARKUP ) )
+        else if( *chIt == '^' )
         {
-            if( ++chIt == end )
-                break;
+            auto lookahead = chIt;
 
-            if( *chIt == '^' )
+            if( ++lookahead != end && *lookahead == '{' )
             {
-                // double ^ is really a ^ so go ahead and process the second one
-            }
-            else
-            {
-                // single ^ starts a superscript
+                //  process superscript
+                chIt = lookahead;
+                in_super_or_subscript = true;
                 glyphSize = baseGlyphSize * 0.8;
                 yOffset = -baseGlyphSize.y * 0.3;
+                continue;
             }
         }
-        else if( *chIt == '#' && ( markupFlags & ENABLE_SUBSCRIPT_MARKUP ) )
+        else if( *chIt == '_' )
         {
-            if( ++chIt == end )
-                break;
+            auto lookahead = chIt;
 
-            if( *chIt == '#' )
+            if( ++lookahead != end && *lookahead == '{' )
             {
-                // double # is really a # so go ahead and process the second one
-            }
-            else
-            {
-                // single _ starts a subscript
+                //  process subscript
+                chIt = lookahead;
+                in_super_or_subscript = true;
                 glyphSize = baseGlyphSize * 0.8;
                 yOffset = baseGlyphSize.y * 0.1;
+                continue;
             }
         }
-        else if( *chIt == ' ' )
+        else if( *chIt == '}' && in_super_or_subscript )
         {
-            // space ends a super- or subscript
+            in_super_or_subscript = false;
             glyphSize = baseGlyphSize;
             yOffset = 0;
+            continue;
         }
 
         // Index into bounding boxes table
@@ -505,15 +502,14 @@ double STROKE_FONT::computeOverbarVerticalPosition() const
 }
 
 
-VECTOR2D STROKE_FONT::computeTextLineSize( const UTF8& aText, int aMarkupFlags ) const
+VECTOR2D STROKE_FONT::computeTextLineSize( const UTF8& aText ) const
 {
-    return ComputeStringBoundaryLimits( aText, m_gal->GetGlyphSize(), m_gal->GetLineWidth(),
-                                        aMarkupFlags );
+    return ComputeStringBoundaryLimits( aText, m_gal->GetGlyphSize(), m_gal->GetLineWidth() );
 }
 
 
 VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECTOR2D& aGlyphSize,
-                                                   double aGlyphThickness, int markupFlags ) const
+                                                   double aGlyphThickness ) const
 {
     VECTOR2D string_bbox;
     int line_count = 1;
@@ -521,6 +517,7 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
 
     double curScale = 1.0;
     bool   in_overbar = false;
+    bool   in_super_or_subscript = false;
 
     for( UTF8::uni_iter it = aText.ubegin(), end = aText.uend(); it < end; ++it )
     {
@@ -572,40 +569,24 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
                 in_overbar = !in_overbar;
             }
         }
-        else if( *it == '^' && ( markupFlags & ENABLE_SUPERSCRIPT_MARKUP ) )
+        else if( *it == '^' || *it == '_' )
         {
-            if( ++it == end )
-                break;
+            auto lookahead = it;
 
-            if( *it == '^' )
+            if( ++lookahead != end && *lookahead == '{' )
             {
-                // double ^ is really a ^ so go ahead and process the second one
-            }
-            else
-            {
-                // single ^ starts a superscript
+                //  process superscript
+                it = lookahead;
+                in_super_or_subscript = true;
                 curScale = 0.8;
+                continue;
             }
         }
-        else if( *it == '#' && ( markupFlags & ENABLE_SUBSCRIPT_MARKUP ) )
+        else if( *it == '}' && in_super_or_subscript )
         {
-            if( ++it == end )
-                break;
-
-            if( *it == '#' )
-            {
-                // double # is really a # so go ahead and process the second one
-            }
-            else
-            {
-                // single _ starts a subscript
-                curScale = 0.8;
-            }
-        }
-        else if( *it == ' ' )
-        {
-            // space ends a super- or subscript
+            in_super_or_subscript = false;
             curScale = 1.0;
+            continue;
         }
 
         // Index in the bounding boxes table

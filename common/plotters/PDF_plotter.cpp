@@ -804,7 +804,6 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
                         int                         aWidth,
                         bool                        aItalic,
                         bool                        aBold,
-                        int                         aTextMarkupFlags,
                         bool                        aMultilineAllowed,
                         void*                       aData )
 {
@@ -880,7 +879,7 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     if( !use_native_font )
     {
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
-                       aItalic, aBold, aTextMarkupFlags, aMultilineAllowed );
+                       aItalic, aBold, aMultilineAllowed );
     }
 }
 

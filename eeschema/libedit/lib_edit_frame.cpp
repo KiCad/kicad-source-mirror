@@ -777,30 +777,6 @@ void LIB_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 
 void LIB_EDIT_FRAME::RebuildView()
 {
-    if( m_my_part )
-    {
-        for( LIB_ITEM& item : m_my_part->GetDrawItems() )
-        {
-            switch( item.Type() )
-            {
-            case LIB_FIELD_T:
-                static_cast<LIB_FIELD*>( &item )->SetTextMarkupFlags( m_textMarkupFlags );
-                break;
-
-            case LIB_TEXT_T:
-                static_cast<LIB_TEXT*>( &item )->SetTextMarkupFlags( m_textMarkupFlags );
-                break;
-
-            case LIB_PIN_T:
-                static_cast<LIB_PIN*>( &item )->SetTextMarkupFlags( m_textMarkupFlags );
-                break;
-
-            default:
-                break;
-            }
-        }
-    }
-
     GetRenderSettings()->m_ShowUnit = m_unit;
     GetRenderSettings()->m_ShowConvert = m_convert;
     GetRenderSettings()->m_ShowDisabled = m_my_part && m_my_part->IsAlias();

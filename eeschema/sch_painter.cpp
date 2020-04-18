@@ -370,10 +370,9 @@ float SCH_PAINTER::getTextThickness( const LIB_TEXT* aItem, bool aDrawingShadows
 }
 
 
-void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition, double aAngle,
-                              int aTextMarkupFlags )
+void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition, double aAngle )
 {
-    m_gal->StrokeText( aText, aPosition, aAngle, aTextMarkupFlags );
+    m_gal->StrokeText( aText, aPosition, aAngle );
 }
 
 
@@ -632,7 +631,7 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 
         double orient = aField->GetTextAngleRadians();
 
-        strokeText( aField->GetText(), pos, orient, aField->GetTextMarkupFlags() );
+        strokeText( aField->GetText(), pos, orient );
     }
 
     // Draw the umbilical line
@@ -679,7 +678,7 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
     m_gal->SetGlyphSize( VECTOR2D( aText->GetTextSize() ) );
     m_gal->SetFontBold( aText->IsBold() );
     m_gal->SetFontItalic( aText->IsItalic() );
-    strokeText( aText->GetText(), pos, orient, aText->GetTextMarkupFlags() );
+    strokeText( aText->GetText(), pos, orient );
 }
 
 
@@ -714,7 +713,6 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         return;
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-    int  flags = aPin->GetTextMarkupFlags();
 
     if( drawingShadows && !aPin->IsSelected() )
         return;
@@ -988,28 +986,28 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             SET_DC( INSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[INSIDE], pos + VECTOR2D( -insideOffset - len, 0 ), 0, flags );
+            strokeText( text[INSIDE], pos + VECTOR2D( -insideOffset - len, 0 ), 0 );
         }
         if( size[OUTSIDE] )
         {
             SET_DC( OUTSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[OUTSIDE], pos + VECTOR2D( outsideOffset, 0 ), 0, flags );
+            strokeText( text[OUTSIDE], pos + VECTOR2D( outsideOffset, 0 ), 0 );
         }
         if( size[ABOVE] )
         {
             SET_DC( ABOVE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            strokeText( text[ABOVE], pos + VECTOR2D( -len / 2.0, -aboveOffset ), 0, flags );
+            strokeText( text[ABOVE], pos + VECTOR2D( -len / 2.0, -aboveOffset ), 0 );
         }
         if( size[BELOW] )
         {
             SET_DC( BELOW );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-            strokeText( text[BELOW], pos + VECTOR2D( -len / 2.0, belowOffset ), 0, flags );
+            strokeText( text[BELOW], pos + VECTOR2D( -len / 2.0, belowOffset ), 0 );
         }
         break;
 
@@ -1020,28 +1018,28 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
-            strokeText( text[INSIDE], pos + VECTOR2D( insideOffset + len, 0 ), 0, flags );
+            strokeText( text[INSIDE], pos + VECTOR2D( insideOffset + len, 0 ), 0 );
         }
         if( size[OUTSIDE] )
         {
             SET_DC( OUTSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[OUTSIDE], pos + VECTOR2D( -outsideOffset, 0 ), 0, flags );
+            strokeText( text[OUTSIDE], pos + VECTOR2D( -outsideOffset, 0 ), 0 );
         }
         if( size[ABOVE] )
         {
             SET_DC( ABOVE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            strokeText( text[ABOVE], pos + VECTOR2D( len / 2.0, -aboveOffset ), 0, flags );
+            strokeText( text[ABOVE], pos + VECTOR2D( len / 2.0, -aboveOffset ), 0 );
         }
         if( size[BELOW] )
         {
             SET_DC( BELOW );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-            strokeText( text[BELOW], pos + VECTOR2D( len / 2.0, belowOffset ), 0, flags );
+            strokeText( text[BELOW], pos + VECTOR2D( len / 2.0, belowOffset ), 0 );
         }
         break;
 
@@ -1051,28 +1049,28 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             SET_DC( INSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[INSIDE], pos + VECTOR2D( 0, insideOffset + len ), M_PI / 2, flags );
+            strokeText( text[INSIDE], pos + VECTOR2D( 0, insideOffset + len ), M_PI / 2 );
         }
         if( size[OUTSIDE] )
         {
             SET_DC( OUTSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[OUTSIDE], pos + VECTOR2D( 0, -outsideOffset ), M_PI / 2, flags );
+            strokeText( text[OUTSIDE], pos + VECTOR2D( 0, -outsideOffset ), M_PI / 2 );
         }
         if( size[ABOVE] )
         {
             SET_DC( ABOVE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            strokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, len / 2.0 ), M_PI / 2, flags );
+            strokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, len / 2.0 ), M_PI / 2 );
         }
         if( size[BELOW] )
         {
             SET_DC( BELOW );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-            strokeText( text[BELOW], pos + VECTOR2D( belowOffset, len / 2.0 ), M_PI / 2, flags );
+            strokeText( text[BELOW], pos + VECTOR2D( belowOffset, len / 2.0 ), M_PI / 2 );
         }
         break;
 
@@ -1082,28 +1080,28 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
             SET_DC( INSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[INSIDE], pos + VECTOR2D( 0, -insideOffset - len ), M_PI / 2, flags );
+            strokeText( text[INSIDE], pos + VECTOR2D( 0, -insideOffset - len ), M_PI / 2 );
         }
         if( size[OUTSIDE] )
         {
             SET_DC( OUTSIDE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            strokeText( text[OUTSIDE], pos + VECTOR2D( 0, outsideOffset ), M_PI / 2, flags );
+            strokeText( text[OUTSIDE], pos + VECTOR2D( 0, outsideOffset ), M_PI / 2 );
         }
         if( size[ABOVE] )
         {
             SET_DC( ABOVE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            strokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, -len / 2.0 ), M_PI / 2, flags );
+            strokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, -len / 2.0 ), M_PI / 2 );
         }
         if( size[BELOW] )
         {
             SET_DC( BELOW );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-            strokeText( text[BELOW], pos + VECTOR2D( belowOffset, -len / 2.0 ), M_PI / 2, flags );
+            strokeText( text[BELOW], pos + VECTOR2D( belowOffset, -len / 2.0 ), M_PI / 2 );
         }
         break;
 
@@ -1316,8 +1314,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
     if( !shownText.IsEmpty() )
     {
-        strokeText( shownText, text_offset, aText->GetTextAngleRadians(),
-                    aText->GetTextMarkupFlags() );
+        strokeText( shownText, text_offset, aText->GetTextAngleRadians() );
     }
 
     if( aText->IsDangling() )
@@ -1405,7 +1402,6 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 
         tempPin->ClearFlags();
         tempPin->SetFlags( compPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
-        tempPin->SetTextMarkupFlags( compPin->GetTextMarkupFlags() );
 
         if( compPin->IsDangling() )
             tempPin->SetFlags( IS_DANGLING );
@@ -1499,8 +1495,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
         m_gal->SetTextMirrored( aField->IsMirrored() );
         m_gal->SetLineWidth( getTextThickness( aField, drawingShadows ) );
 
-        strokeText( aField->GetShownText(), textpos, orient == TEXT_ANGLE_VERT ? M_PI / 2 : 0,
-                    aField->GetTextMarkupFlags() );
+        strokeText( aField->GetShownText(), textpos, orient == TEXT_ANGLE_VERT ? M_PI / 2 : 0 );
     }
 
     // Draw the umbilical line

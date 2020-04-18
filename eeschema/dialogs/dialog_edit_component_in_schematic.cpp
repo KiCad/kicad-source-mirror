@@ -160,8 +160,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {
-            SCH_FIELD field( wxPoint( 0, 0 ), -1, m_cmp, templateFieldname.m_Name,
-                             GetParent()->GetTextMarkupFlags() );
+            SCH_FIELD field( wxPoint( 0, 0 ), -1, m_cmp, templateFieldname.m_Name );
             field.SetVisible( templateFieldname.m_Visible );
             m_fields->push_back( field );
         }
@@ -532,8 +531,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnAddField( wxCommandEvent& event )
 
     int       fieldID = m_fields->size();
     SCH_FIELD newField( wxPoint( 0, 0 ), fieldID, m_cmp,
-                        TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID ),
-                        GetParent()->GetTextMarkupFlags() );
+                        TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID ) );
 
     newField.SetTextAngle( m_fields->at( REFERENCE ).GetTextAngle() );
 
@@ -664,8 +662,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFieldsFromLibrary( wxCommandEvent
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {
-            SCH_FIELD field( wxPoint( 0, 0 ), -1, m_cmp, templateFieldname.m_Name,
-                             GetParent()->GetTextMarkupFlags() );
+            SCH_FIELD field( wxPoint( 0, 0 ), -1, m_cmp, templateFieldname.m_Name );
             field.SetVisible( templateFieldname.m_Visible );
             m_fields->push_back( field );
         }

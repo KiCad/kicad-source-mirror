@@ -39,10 +39,6 @@ class SCH_PIN : public SCH_ITEM
     wxPoint        m_position;
     bool           m_isDangling;
 
-    int            m_textMarkupFlags;   // Set of TEXT_MARKUP_FLAGS indicating which markup
-                                        // features are to be processed within the pin name
-                                        // and number.
-
     /// The name that this pin connection will drive onto a net
     std::mutex m_netmap_mutex;
     std::map<const SCH_SHEET_PATH, wxString> m_net_name_map;
@@ -88,9 +84,6 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
-
-    int GetTextMarkupFlags() const { return m_textMarkupFlags; }
-    void SetTextMarkupFlags( int aFlags ) { m_textMarkupFlags = aFlags; }
 
     bool IsDangling() const override { return m_isDangling; }
     void SetIsDangling( bool isDangling ) { m_isDangling = isDangling; }

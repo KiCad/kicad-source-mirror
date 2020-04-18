@@ -380,8 +380,7 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, COLOR4D aColor )
 
     m_plotter->Text( pos, aColor, pt_texte->GetShownText(), orient, size,
                      pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(), thickness,
-                     pt_texte->IsItalic(), allow_bold, pt_texte->GetTextMarkupFlags(),
-                     false, &gbr_metadata );
+                     pt_texte->IsItalic(), allow_bold, false, &gbr_metadata );
 }
 
 
@@ -682,14 +681,14 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
             wxString& txt =  strings_list.Item( ii );
             m_plotter->Text( positions[ii], color, txt, orient, size, pt_texte->GetHorizJustify(),
                              pt_texte->GetVertJustify(), thickness, pt_texte->IsItalic(),
-                             allow_bold, pt_texte->GetTextMarkupFlags(), false, &gbr_metadata );
+                             allow_bold, false, &gbr_metadata );
         }
     }
     else
     {
         m_plotter->Text( pos, color, shownText, orient, size, pt_texte->GetHorizJustify(),
                          pt_texte->GetVertJustify(), thickness, pt_texte->IsItalic(), allow_bold,
-                         pt_texte->GetTextMarkupFlags(), false, &gbr_metadata );
+                         false, &gbr_metadata );
     }
 }
 

@@ -188,7 +188,6 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
 
     PART_DRAW_OPTIONS opts;
     opts.draw_hidden_fields = true;
-    opts.text_markup_flags = libframe->GetTextMarkupFlags();
 
     RENDER_SETTINGS* renderSettings = libframe->GetRenderSettings();
     renderSettings->SetPrintDC( &dc );

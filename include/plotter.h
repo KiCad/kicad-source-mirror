@@ -133,9 +133,6 @@ public:
     virtual void SetColorMode( bool aColorMode ) { colorMode = aColorMode; }
     bool GetColorMode() const { return colorMode; }
 
-    void SetTextMarkupFlags( bool aMarkupFlags ) { m_textMarkupFlags = aMarkupFlags; }
-    int GetTextMarkupFlags() const { return m_textMarkupFlags; }
-
     void SetRenderSettings( RENDER_SETTINGS* aSettings ) { m_renderSettings = aSettings; }
     RENDER_SETTINGS* RenderSettings() { return m_renderSettings; }
 
@@ -412,7 +409,6 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
-                       int                         aTextMarkupFlags,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL );
 
@@ -590,7 +586,6 @@ protected:      // variables used in most of plotters:
     wxArrayString    m_headerExtraLines; // a set of string to print in header file
 
     RENDER_SETTINGS* m_renderSettings;
-    int              m_textMarkupFlags;
 };
 
 
@@ -827,7 +822,6 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
-                       int                         aTextMarkupFlags,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
 protected:
@@ -900,7 +894,6 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
-                       int                         aTextMarkupFlags,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
 
@@ -994,7 +987,6 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
-                       int                         aTextMarkupFlags,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
 
@@ -1202,7 +1194,6 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
-                       int                         aTextMarkupFlags,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
 
@@ -1490,7 +1481,6 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
-                       int                         aTextMarkupFlags,
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
 

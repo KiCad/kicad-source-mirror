@@ -234,8 +234,8 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
 
         GRText( NULL, textmod->GetTextPos(), BLACK, textmod->GetShownText(),
                 textmod->GetDrawRotation(), size, textmod->GetHorizJustify(),
-                textmod->GetVertJustify(), penWidth, textmod->IsItalic(),
-                forceBold, 0, addTextSegmToPoly, &prms );
+                textmod->GetVertJustify(), penWidth, textmod->IsItalic(), forceBold,
+                addTextSegmToPoly, &prms );
     }
 }
 
@@ -336,13 +336,13 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCorner
         {
             wxString txt = strings_list.Item( ii );
             GRText( NULL, positions[ii], color, txt, GetTextAngle(), size, GetHorizJustify(),
-                    GetVertJustify(), penWidth, IsItalic(), forceBold, 0, addTextSegmToPoly, &prms );
+                    GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToPoly, &prms );
         }
     }
     else
     {
         GRText( NULL, GetTextPos(), color, GetShownText(), GetTextAngle(), size, GetHorizJustify(),
-                GetVertJustify(), penWidth, IsItalic(), forceBold, 0, addTextSegmToPoly, &prms );
+                GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToPoly, &prms );
     }
 }
 

@@ -48,10 +48,10 @@
 #include <trace_helpers.h>
 
 
-SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_ITEM* aParent, const wxString& aName,
-                      int aMarkupFlags ) :
+SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_ITEM* aParent,
+                      const wxString& aName ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),
-    EDA_TEXT( wxEmptyString, aMarkupFlags )
+    EDA_TEXT( wxEmptyString )
 {
     SetTextPos( aPos );
     m_id = aFieldId;
@@ -178,7 +178,7 @@ void SCH_FIELD::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
     textpos = boundaryBox.Centre() + aOffset;
 
     GRText( DC, textpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_HJUSTIFY_CENTER,
-            GR_TEXT_VJUSTIFY_CENTER, penWidth, IsItalic(), IsBold(), m_textMarkupFlags );
+            GR_TEXT_VJUSTIFY_CENTER, penWidth, IsItalic(), IsBold() );
 }
 
 
@@ -525,7 +525,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     wxPoint  textpos = BoundaryBox.Centre();
 
     aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(),  hjustify, vjustify,
-                    penWidth, IsItalic(), IsBold(), m_textMarkupFlags );
+                    penWidth, IsItalic(), IsBold() );
 }
 
 

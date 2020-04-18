@@ -521,43 +521,6 @@ void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
 }
 
 
-void SCH_SCREEN::UpdateTextMarkupFlags( int aMarkupFlags )
-{
-    for( SCH_ITEM* aItem : Items() )
-    {
-        switch( aItem->Type() )
-        {
-        case SCH_TEXT_T:
-        case SCH_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_SHEET_PIN_T:
-            static_cast<SCH_TEXT*>( aItem )->SetTextMarkupFlags( aMarkupFlags );
-            break;
-
-        case SCH_COMPONENT_T:
-            for( SCH_FIELD& field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )
-                field.SetTextMarkupFlags( aMarkupFlags );
-
-            break;
-
-        case SCH_PIN_T:
-            static_cast<SCH_PIN*>( aItem )->SetTextMarkupFlags( aMarkupFlags );
-            break;
-
-        case SCH_SHEET_T:
-            for( SCH_FIELD& field : static_cast<SCH_SHEET*>( aItem )->GetFields() )
-                field.SetTextMarkupFlags( aMarkupFlags );
-
-            break;
-
-        default:
-            break;
-        }
-    }
-}
-
-
 void SCH_SCREEN::Print( RENDER_SETTINGS* aSettings )
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
@@ -1186,13 +1149,6 @@ void SCH_SCREENS::UpdateSymbolLinks( bool aForce )
     // pointer are stale.
     if( g_ConnectionGraph )
         g_ConnectionGraph->Recalculate( sheets, true );
-}
-
-
-void SCH_SCREENS::UpdateTextMarkupFlags( int aMarkupFlags )
-{
-    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
-        screen->UpdateTextMarkupFlags( aMarkupFlags );
 }
 
 

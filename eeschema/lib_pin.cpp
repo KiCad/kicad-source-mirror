@@ -563,7 +563,6 @@ void LIB_PIN::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* a
     PART_DRAW_OPTIONS* opts = (PART_DRAW_OPTIONS*) aData;
     bool               drawHiddenFields = opts ? opts->draw_hidden_fields : false;
     bool               showPinType = opts ? opts->show_elec_type : false;
-    int                textMarkupFlags = opts ? opts->text_markup_flags : 0;
 
     LIB_PART* part = GetParent();
 
@@ -578,7 +577,7 @@ void LIB_PIN::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* a
         PrintPinSymbol( aSettings, pos1, orient );
 
         PrintPinTexts( aSettings, pos1, orient, part->GetPinNameOffset(), part->ShowPinNumbers(),
-                       part->ShowPinNames(), textMarkupFlags );
+                       part->ShowPinNames() );
 
         if( showPinType )
             PrintPinElectricalTypeName( aSettings, pos1, orient );
@@ -696,7 +695,7 @@ void LIB_PIN::PrintPinSymbol( RENDER_SETTINGS* aSettings, const wxPoint& aPos, i
 
 
 void LIB_PIN::PrintPinTexts( RENDER_SETTINGS* aSettings, wxPoint& pin_pos, int orient,
-                             int TextInside, bool DrawPinNum, bool DrawPinName, int aMarkupFlags )
+                             int TextInside, bool DrawPinNum, bool DrawPinName )
 {
     if( !DrawPinName && !DrawPinNum )
         return;
@@ -744,14 +743,14 @@ void LIB_PIN::PrintPinTexts( RENDER_SETTINGS* aSettings, wxPoint& pin_pos, int o
                     x = x1 + TextInside;
                     GRText( DC, wxPoint( x, y1 ), NameColor, m_name, TEXT_ANGLE_HORIZ,
                             PinNameSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                            namePenWidth, false, false, aMarkupFlags );
+                            namePenWidth, false, false );
                 }
                 else    // Orient == PIN_LEFT
                 {
                     x = x1 - TextInside;
                     GRText( DC, wxPoint( x, y1 ), NameColor, m_name, TEXT_ANGLE_HORIZ,
                             PinNameSize, GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER,
-                            namePenWidth, false, false, aMarkupFlags );
+                            namePenWidth, false, false );
                 }
             }
 
@@ -759,7 +758,7 @@ void LIB_PIN::PrintPinTexts( RENDER_SETTINGS* aSettings, wxPoint& pin_pos, int o
             {
                 GRText( DC, wxPoint( (x1 + pin_pos.x) / 2, y1 - num_offset ), NumColor, m_number,
                         TEXT_ANGLE_HORIZ, PinNumSize, GR_TEXT_HJUSTIFY_CENTER,
-                        GR_TEXT_VJUSTIFY_BOTTOM, numPenWidth, false, false, aMarkupFlags );
+                        GR_TEXT_VJUSTIFY_BOTTOM, numPenWidth, false, false );
             }
         }
         else            /* Its a vertical line. */
@@ -772,12 +771,12 @@ void LIB_PIN::PrintPinTexts( RENDER_SETTINGS* aSettings, wxPoint& pin_pos, int o
                 if( DrawPinName )
                     GRText( DC, wxPoint( x1, y ), NameColor, m_name, TEXT_ANGLE_VERT, PinNameSize,
                             GR_TEXT_HJUSTIFY_RIGHT, GR_TEXT_VJUSTIFY_CENTER, namePenWidth, false,
-                            false, aMarkupFlags );
+                            false );
 
                 if( DrawPinNum )
                     GRText( DC, wxPoint( x1 - num_offset, (y1 + pin_pos.y) / 2 ), NumColor,
                             m_number, TEXT_ANGLE_VERT, PinNumSize, GR_TEXT_HJUSTIFY_CENTER,
-                            GR_TEXT_VJUSTIFY_BOTTOM, numPenWidth, false, false, aMarkupFlags );
+                            GR_TEXT_VJUSTIFY_BOTTOM, numPenWidth, false, false );
             }
             else        /* PIN_UP */
             {
@@ -786,12 +785,12 @@ void LIB_PIN::PrintPinTexts( RENDER_SETTINGS* aSettings, wxPoint& pin_pos, int o
                 if( DrawPinName )
                     GRText( DC, wxPoint( x1, y ), NameColor, m_name, TEXT_ANGLE_VERT, PinNameSize,
                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER, namePenWidth, false,
-                            false, aMarkupFlags );
+                            false );
 
                 if( DrawPinNum )
                     GRText( DC, wxPoint( x1 - num_offset, (y1 + pin_pos.y) / 2 ), NumColor,
                             m_number, TEXT_ANGLE_VERT, PinNumSize, GR_TEXT_HJUSTIFY_CENTER,
-                            GR_TEXT_VJUSTIFY_BOTTOM, numPenWidth, false, false, aMarkupFlags );
+                            GR_TEXT_VJUSTIFY_BOTTOM, numPenWidth, false, false );
             }
         }
     }
@@ -805,14 +804,14 @@ void LIB_PIN::PrintPinTexts( RENDER_SETTINGS* aSettings, wxPoint& pin_pos, int o
                 x = (x1 + pin_pos.x) / 2;
                 GRText( DC, wxPoint( x, y1 - name_offset ), NameColor, m_name, TEXT_ANGLE_HORIZ,
                         PinNameSize, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
-                        namePenWidth, false, false, aMarkupFlags );
+                        namePenWidth, false, false );
             }
             if( DrawPinNum )
             {
                 x = (x1 + pin_pos.x) / 2;
                 GRText( DC, wxPoint( x, y1 + num_offset ), NumColor, m_number, TEXT_ANGLE_HORIZ,
                         PinNumSize, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, numPenWidth,
-                        false, false, aMarkupFlags );
+                        false, false );
             }
         }
         else     /* Its a vertical line. */
@@ -822,14 +821,14 @@ void LIB_PIN::PrintPinTexts( RENDER_SETTINGS* aSettings, wxPoint& pin_pos, int o
                 y = (y1 + pin_pos.y) / 2;
                 GRText( DC, wxPoint( x1 - name_offset, y ), NameColor, m_name, TEXT_ANGLE_VERT,
                         PinNameSize, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
-                        namePenWidth, false, false, aMarkupFlags );
+                        namePenWidth, false, false );
             }
 
             if( DrawPinNum )
             {
                 GRText( DC, wxPoint( x1 + num_offset, (y1 + pin_pos.y) / 2 ), NumColor, m_number,
                         TEXT_ANGLE_VERT, PinNumSize, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP,
-                        numPenWidth, false, false, aMarkupFlags );
+                        numPenWidth, false, false );
             }
         }
     }
@@ -1018,7 +1017,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
 
 
 void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int orient, int TextInside,
-                            bool DrawPinNum, bool DrawPinName, int aMarkupFlags )
+                            bool DrawPinNum, bool DrawPinName )
 {
     if( m_name.IsEmpty() || m_name == wxT( "~" ) )
         DrawPinName = false;
@@ -1072,7 +1071,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int orient, int 
                                    PinNameSize,
                                    GR_TEXT_HJUSTIFY_LEFT,
                                    GR_TEXT_VJUSTIFY_CENTER,
-                                   namePenWidth, false, false, aMarkupFlags );
+                                   namePenWidth, false, false );
                 }
                 else    // orient == PIN_LEFT
                 {
@@ -1084,7 +1083,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int orient, int 
                                        PinNameSize,
                                        GR_TEXT_HJUSTIFY_RIGHT,
                                        GR_TEXT_VJUSTIFY_CENTER,
-                                       namePenWidth, false, false, aMarkupFlags );
+                                       namePenWidth, false, false );
                 }
             }
             if( DrawPinNum )
@@ -1095,7 +1094,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int orient, int 
                                TEXT_ANGLE_HORIZ, PinNumSize,
                                GR_TEXT_HJUSTIFY_CENTER,
                                GR_TEXT_VJUSTIFY_BOTTOM,
-                               numPenWidth, false, false, aMarkupFlags );
+                               numPenWidth, false, false );
             }
         }
         else         /* Its a vertical line. */
@@ -1110,7 +1109,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int orient, int 
                                    TEXT_ANGLE_VERT, PinNameSize,
                                    GR_TEXT_HJUSTIFY_RIGHT,
                                    GR_TEXT_VJUSTIFY_CENTER,
-                                   namePenWidth, false, false, aMarkupFlags );
+                                   namePenWidth, false, false );
 
                 if( DrawPinNum )
                 {
@@ -1120,7 +1119,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int orient, int 
                                    TEXT_ANGLE_VERT, PinNumSize,
                                    GR_TEXT_HJUSTIFY_CENTER,
                                    GR_TEXT_VJUSTIFY_BOTTOM,
-                                   numPenWidth, false, false, aMarkupFlags );
+                                   numPenWidth, false, false );
                 }
             }
             else        /* PIN_UP */
@@ -1133,7 +1132,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int orient, int 
                                    TEXT_ANGLE_VERT, PinNameSize,
                                    GR_TEXT_HJUSTIFY_LEFT,
                                    GR_TEXT_VJUSTIFY_CENTER,
-                                   namePenWidth, false, false, aMarkupFlags );
+                                   namePenWidth, false, false );
 
                 if( DrawPinNum )
                 {
@@ -1143,7 +1142,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int orient, int 
                                    TEXT_ANGLE_VERT, PinNumSize,
                                    GR_TEXT_HJUSTIFY_CENTER,
                                    GR_TEXT_VJUSTIFY_BOTTOM,
-                                   numPenWidth, false, false, aMarkupFlags );
+                                   numPenWidth, false, false );
                 }
             }
         }
@@ -1161,7 +1160,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int orient, int 
                                TEXT_ANGLE_HORIZ, PinNameSize,
                                GR_TEXT_HJUSTIFY_CENTER,
                                GR_TEXT_VJUSTIFY_BOTTOM,
-                               namePenWidth, false, false, aMarkupFlags );
+                               namePenWidth, false, false );
             }
 
             if( DrawPinNum )
@@ -1172,7 +1171,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int orient, int 
                                TEXT_ANGLE_HORIZ, PinNumSize,
                                GR_TEXT_HJUSTIFY_CENTER,
                                GR_TEXT_VJUSTIFY_TOP,
-                               numPenWidth, false, false, aMarkupFlags );
+                               numPenWidth, false, false );
             }
         }
         else     /* Its a vertical line. */
@@ -1185,7 +1184,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int orient, int 
                                TEXT_ANGLE_VERT, PinNameSize,
                                GR_TEXT_HJUSTIFY_CENTER,
                                GR_TEXT_VJUSTIFY_BOTTOM,
-                               namePenWidth, false, false, aMarkupFlags );
+                               namePenWidth, false, false );
             }
 
             if( DrawPinNum )
@@ -1196,7 +1195,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int orient, int 
                                TEXT_ANGLE_VERT, PinNumSize,
                                GR_TEXT_HJUSTIFY_CENTER,
                                GR_TEXT_VJUSTIFY_TOP,
-                               numPenWidth, false, false, aMarkupFlags );
+                               numPenWidth, false, false );
             }
         }
     }
@@ -1394,8 +1393,7 @@ void LIB_PIN::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 
     PlotSymbol( plotter, pos, orient );
     PlotPinTexts( plotter, pos, orient, GetParent()->GetPinNameOffset(),
-                  GetParent()->ShowPinNumbers(), GetParent()->ShowPinNames(),
-                  plotter->GetTextMarkupFlags() );
+                  GetParent()->ShowPinNumbers(), GetParent()->ShowPinNames() );
 }
 
 

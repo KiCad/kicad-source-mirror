@@ -115,14 +115,14 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const TEXTE_PCB* aText,
 
             GRText( nullptr, positions[ii], dummy_color, txt, aText->GetTextAngle(), size,
                     aText->GetHorizJustify(), aText->GetVertJustify(), penWidth,
-                    aText->IsItalic(), forceBold, 0, addTextSegmToContainer );
+                    aText->IsItalic(), forceBold, addTextSegmToContainer );
         }
     }
     else
     {
         GRText( nullptr, aText->GetTextPos(), dummy_color, aText->GetShownText(),
                 aText->GetTextAngle(), size, aText->GetHorizJustify(), aText->GetVertJustify(),
-                penWidth, aText->IsItalic(), forceBold, 0, addTextSegmToContainer );
+                penWidth, aText->IsItalic(), forceBold, addTextSegmToContainer );
     }
 }
 
@@ -227,7 +227,7 @@ void BOARD_ADAPTER::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMo
 
         GRText( NULL, text->GetTextPos(), BLACK, text->GetShownText(), text->GetDrawRotation(),
                 size, text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
-                forceBold, 0, addTextSegmToContainer );
+                forceBold, addTextSegmToContainer );
     }
 }
 

@@ -169,12 +169,12 @@ void GAL::ResetTextAttributes()
 }
 
 
-VECTOR2D GAL::GetTextLineSize( const UTF8& aText, int aMarkupFlags ) const
+VECTOR2D GAL::GetTextLineSize( const UTF8& aText ) const
 {
     // Compute the X and Y size of a given text.
     // Because computeTextLineSize expects a one line text,
     // aText is expected to be only one line text.
-    return strokeFont.computeTextLineSize( aText, aMarkupFlags );
+    return strokeFont.computeTextLineSize( aText );
 }
 
 

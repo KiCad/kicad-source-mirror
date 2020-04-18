@@ -73,11 +73,8 @@ public:
      * @param aText is the text to be drawn.
      * @param aPosition is the text position in world coordinates.
      * @param aRotationAngle is the text rotation angle in radians.
-     * @param markupFlags a flagset of MARKUP_FLAG enums indicating which markup tokens should
-     *                    be processed
      */
-    void Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle,
-               int markupFlags );
+    void Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle );
 
     /**
      * Function SetGAL
@@ -92,13 +89,10 @@ public:
     /**
      * Compute the boundary limits of aText (the bounding box of all shapes).
      * The overbar and alignment are not taken in account, '~' characters are skipped.
-     *
-     * @param markupFlags a flagset of MARKUP_FLAG enums indicating which markup tokens should
-     *                    be processed
      * @return a VECTOR2D giving the width and height of text.
      */
     VECTOR2D ComputeStringBoundaryLimits( const UTF8& aText, const VECTOR2D& aGlyphSize,
-                                          double aGlyphThickness, int markupFlags ) const;
+                                          double aGlyphThickness ) const;
 
     /**
      * Compute the vertical position of an overbar, sometimes used in texts.
@@ -129,10 +123,9 @@ private:
      * a only one line text.
      *
      * @param aText is the text string (one line).
-     * @param aMarkupFlags a bitset of TEXT_MARKUP_FLAGS.
      * @return the text size.
      */
-    VECTOR2D computeTextLineSize( const UTF8& aText, int aMarkupFlags ) const;
+    VECTOR2D computeTextLineSize( const UTF8& aText ) const;
 
     /**
      * Compute the vertical position of an overbar, sometimes used in texts.
@@ -156,7 +149,7 @@ private:
      *
      * @param aText is the text to be drawn.
      */
-    void drawSingleLineText( const UTF8& aText, int markupFlags );
+    void drawSingleLineText( const UTF8& aText );
 
     /**
      * @brief Returns number of lines for a given text.

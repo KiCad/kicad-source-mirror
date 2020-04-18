@@ -235,8 +235,6 @@ public:
      */
     void UpdateSymbolLinks( bool aForce = false );
 
-    void UpdateTextMarkupFlags( int aMarkupFlags );
-
     /**
      * Print all the items in the screen to \a aDC.
      *
@@ -555,8 +553,6 @@ public:
      * - whenever the symbol library table is modified.
      */
     void UpdateSymbolLinks( bool aForce = false );
-
-    void UpdateTextMarkupFlags( int aMarkupFlags );
 
     void TestDanglingEnds();
 

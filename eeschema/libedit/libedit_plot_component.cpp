@@ -41,7 +41,6 @@ void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
     plotter->SetRenderSettings( &renderSettings );
     plotter->SetPageSettings( pageInfo );
     plotter->SetColorMode( true );
-    plotter->SetTextMarkupFlags( GetTextMarkupFlags() );
 
     wxPoint plot_offset;
     const double scale = 1.0;

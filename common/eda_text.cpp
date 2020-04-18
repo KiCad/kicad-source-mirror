@@ -83,8 +83,7 @@ EDA_TEXT_VJUSTIFY_T EDA_TEXT::MapVertJustify( int aVertJustify )
 }
 
 
-EDA_TEXT::EDA_TEXT( const wxString& text, int aTextMarkupFlags ) :
-        m_textMarkupFlags( aTextMarkupFlags ),
+EDA_TEXT::EDA_TEXT( const wxString& text ) :
         m_text( text ),
         m_e( 1<<TE_VISIBLE )
 {
@@ -97,7 +96,6 @@ EDA_TEXT::EDA_TEXT( const wxString& text, int aTextMarkupFlags ) :
 
 
 EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
-        m_textMarkupFlags( aText.m_textMarkupFlags ),
         m_text( aText.m_text ),
         m_e( aText.m_e )
 {
@@ -171,14 +169,14 @@ bool EDA_TEXT::Replace( wxFindReplaceData& aSearchData )
 }
 
 
-int EDA_TEXT::LenSize( const wxString& aLine, int aThickness, int aMarkupFlags ) const
+int EDA_TEXT::LenSize( const wxString& aLine, int aThickness ) const
 {
     basic_gal.SetFontItalic( IsItalic() );
     basic_gal.SetFontBold( IsBold() );
     basic_gal.SetLineWidth( (float) aThickness );
     basic_gal.SetGlyphSize( VECTOR2D( GetTextSize() ) );
 
-    VECTOR2D tsize = basic_gal.GetTextLineSize( aLine, aMarkupFlags );
+    VECTOR2D tsize = basic_gal.GetTextLineSize( aLine );
 
     return KiROUND( tsize.x );
 }
@@ -244,8 +242,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     const auto& font = basic_gal.GetStrokeFont();
     VECTOR2D    fontSize( GetTextSize() );
     double      penWidth( thickness );
-    int         dx = KiROUND( font.ComputeStringBoundaryLimits( text, fontSize, penWidth,
-                                                                m_textMarkupFlags ).x );
+    int         dx = KiROUND( font.ComputeStringBoundaryLimits( text, fontSize, penWidth ).x );
     int         dy = GetInterline();
 
     // Creates bounding box (rectangle) for horizontal, left and top justified text. The
@@ -284,8 +281,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
             text = strings.Item( ii );
-            dx = KiROUND( font.ComputeStringBoundaryLimits( text, fontSize, penWidth,
-                                                            m_textMarkupFlags ).x );
+            dx = KiROUND( font.ComputeStringBoundaryLimits( text, fontSize, penWidth ).x );
             textsize.x = std::max( textsize.x, dx );
             textsize.y += dy;
         }
@@ -465,7 +461,7 @@ void EDA_TEXT::printOneLineOfText( RENDER_SETTINGS* aSettings, const wxPoint& aO
         size.x = -size.x;
 
     GRText( DC, aOffset + aPos, aColor, aText, GetTextAngle(), size, GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), IsBold(), m_textMarkupFlags );
+            GetVertJustify(), penWidth, IsItalic(), IsBold() );
 }
 
 
@@ -592,14 +588,14 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
         {
             wxString txt = strings_list.Item( ii );
             GRText( NULL, positions[ii], color, txt, GetTextAngle(), size, GetHorizJustify(),
-                    GetVertJustify(), penWidth, IsItalic(), forceBold, 0, addTextSegmToBuffer,
+                    GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToBuffer,
                     &aCornerBuffer );
         }
     }
     else
     {
         GRText( NULL, GetTextPos(), color, GetText(), GetTextAngle(), size, GetHorizJustify(),
-                GetVertJustify(), penWidth, IsItalic(), forceBold, 0, addTextSegmToBuffer,
+                GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToBuffer,
                 &aCornerBuffer );
     }
 }

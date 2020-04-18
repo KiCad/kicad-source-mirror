@@ -472,7 +472,6 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
     SCH_SCREENS screens( aSheet );
     screens.UpdateSymbolLinks( true );
-    screens.UpdateTextMarkupFlags( GetTextMarkupFlags() );
 
     return true;
 }

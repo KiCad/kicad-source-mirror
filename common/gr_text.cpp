@@ -128,7 +128,7 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool aItalic, 
 void GRText( wxDC* aDC, const wxPoint& aPos, COLOR4D aColor, const wxString& aText,
              double aOrient, const wxSize& aSize, enum EDA_TEXT_HJUSTIFY_T aH_justify,
              enum EDA_TEXT_VJUSTIFY_T aV_justify, int aWidth, bool aItalic, bool aBold,
-             int aMarkupFlags, void (* aCallback)( int x0, int y0, int xf, int yf, void* aData ),
+             void (* aCallback)( int x0, int y0, int xf, int yf, void* aData ),
              void* aCallbackData, PLOTTER* aPlotter )
 {
     bool fill_mode = true;
@@ -166,14 +166,14 @@ void GRText( wxDC* aDC, const wxPoint& aPos, COLOR4D aColor, const wxString& aTe
     basic_gal.m_Color = aColor;
     basic_gal.SetClipBox( nullptr );
 
-    basic_gal.StrokeText( aText, VECTOR2D( aPos ), aOrient * M_PI/1800, aMarkupFlags );
+    basic_gal.StrokeText( aText, VECTOR2D( aPos ), aOrient * M_PI/1800 );
 }
 
 
 void GRHaloText( wxDC * aDC, const wxPoint &aPos, COLOR4D aBgColor, COLOR4D aColor1,
                  COLOR4D aColor2, const wxString &aText, double aOrient, const wxSize &aSize,
                  enum EDA_TEXT_HJUSTIFY_T aH_justify, enum EDA_TEXT_VJUSTIFY_T aV_justify,
-                 int aWidth, bool aItalic, bool aBold, int aMarkupFlags,
+                 int aWidth, bool aItalic, bool aBold,
                  void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ),
                  void* aCallbackData, PLOTTER * aPlotter )
 {
@@ -188,11 +188,11 @@ void GRHaloText( wxDC * aDC, const wxPoint &aPos, COLOR4D aBgColor, COLOR4D aCol
 
     // Draw the background
     GRText( aDC, aPos, aColor1, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
-            aBold, aMarkupFlags, aCallback, aCallbackData, aPlotter );
+            aBold, aCallback, aCallbackData, aPlotter );
 
     // Draw the text
     GRText( aDC, aPos, aColor2, aText, aOrient, aSize, aH_justify, aV_justify, aWidth/4, aItalic,
-            aBold, aMarkupFlags, aCallback, aCallbackData, aPlotter );
+            aBold, aCallback, aCallbackData, aPlotter );
 }
 
 
@@ -223,12 +223,11 @@ void PLOTTER::Text( const wxPoint&              aPos,
                     int                         aPenWidth,
                     bool                        aItalic,
                     bool                        aBold,
-                    int                         aTextMarkupFlags,
                     bool                        aMultilineAllowed,
                     void*                       aData )
 {
     SetColor( aColor );
 
     GRText( NULL, aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aPenWidth,
-            aItalic, aBold, aTextMarkupFlags, nullptr, nullptr, this );
+            aItalic, aBold, nullptr, nullptr, this );
 }

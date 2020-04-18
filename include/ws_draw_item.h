@@ -275,10 +275,10 @@ class WS_DRAW_ITEM_TEXT : public WS_DRAW_ITEM_BASE, public EDA_TEXT
 {
 public:
     WS_DRAW_ITEM_TEXT( WS_DATA_ITEM* aPeer, int aIndex, wxString& aText, wxPoint aPos,
-                       wxSize aSize, int aPenWidth, int aMarkupFlags, bool aItalic = false,
+                       wxSize aSize, int aPenWidth, bool aItalic = false,
                        bool aBold = false ) :
             WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_TEXT_T),
-            EDA_TEXT( aText, aMarkupFlags )
+            EDA_TEXT( aText )
     {
         SetTextPos( aPos );
         SetTextSize( aSize );

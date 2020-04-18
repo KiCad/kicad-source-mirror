@@ -183,8 +183,7 @@ private:
     void fillIfSelection( int aLayer );
 
     void triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
-    void strokeText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle,
-                     int aTextMarkupFlags );
+    void strokeText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle );
 
     SCH_RENDER_SETTINGS m_schSettings;
 };

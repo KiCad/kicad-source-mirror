@@ -96,9 +96,9 @@ static int* TemplateShape[5][4] =
 };
 
 
-SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType, int aMarkupFlags ) :
+SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
         SCH_ITEM( NULL, aType ),
-        EDA_TEXT( text, aMarkupFlags ),
+        EDA_TEXT( text ),
         m_shape( PINSHEETLABEL_SHAPE::PS_INPUT ),
         m_isDangling( false ),
         m_connectionType( CONNECTION_TYPE::NONE ),
@@ -603,7 +603,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
             wxPoint textpos = positions[ii] + GetSchematicTextOffset( aPlotter->RenderSettings() );
             wxString& txt = strings_list.Item( ii );
             aPlotter->Text( textpos, color, txt, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-                            GetVertJustify(), penWidth, IsItalic(), IsBold(), m_textMarkupFlags );
+                            GetVertJustify(), penWidth, IsItalic(), IsBold() );
         }
     }
     else
@@ -611,8 +611,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
         wxPoint textpos = GetTextPos() + GetSchematicTextOffset( aPlotter->RenderSettings() );
 
         aPlotter->Text( textpos, color, GetShownText(), GetTextAngle(), GetTextSize(),
-                        GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold(),
-                        m_textMarkupFlags );
+                        GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold() );
     }
 
     // Draw graphic symbol for global or hierarchical labels
@@ -703,8 +702,8 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text, int aMarkupFlags )
-        : SCH_TEXT( pos, text, SCH_LABEL_T, aMarkupFlags )
+SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text )
+        : SCH_TEXT( pos, text, SCH_LABEL_T )
 {
     m_Layer      = LAYER_LOCLABEL;
     m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
@@ -796,8 +795,8 @@ BITMAP_DEF SCH_LABEL::GetMenuImage() const
 }
 
 
-SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text, int aMarkupFlags )
-        : SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T, aMarkupFlags )
+SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text )
+        : SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T )
 {
     m_Layer      = LAYER_GLOBLABEL;
     m_shape      = PINSHEETLABEL_SHAPE::PS_BIDI;
@@ -905,7 +904,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( RENDER_SETTINGS* aRenderSettings,
     int margin    = GetTextOffset( aRenderSettings );
     int halfSize  = ( GetTextHeight() / 2 ) + margin;
     int linewidth = GetPenWidth();
-    int symb_len  = LenSize( GetShownText(), linewidth, m_textMarkupFlags ) + 2 * margin;
+    int symb_len  = LenSize( GetShownText(), linewidth ) + 2 * margin;
 
     int x = symb_len + linewidth + 3;
     int y = halfSize;
@@ -982,7 +981,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     int margin = Mils2iu( TXT_MARGIN );
 
     int height = ( (GetTextHeight() * 15) / 10 ) + penWidth + 2 * margin;
-    int length = LenSize( GetShownText(), penWidth, m_textMarkupFlags )
+    int length = LenSize( GetShownText(), penWidth )
                  + height                 // add height for triangular shapes
                  + 2 * margin;
 
@@ -1038,9 +1037,8 @@ BITMAP_DEF SCH_GLOBALLABEL::GetMenuImage() const
 }
 
 
-SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType,
-                              int aMarkupFlags )
-        : SCH_TEXT( pos, text, aType, aMarkupFlags )
+SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType )
+        : SCH_TEXT( pos, text, aType )
 {
     m_Layer      = LAYER_HIERLABEL;
     m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
@@ -1150,7 +1148,7 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
     int y  = GetTextPos().y;
 
     int height = GetTextHeight() + penWidth + 2 * margin;
-    int length = LenSize( GetShownText(), penWidth, m_textMarkupFlags )
+    int length = LenSize( GetShownText(), penWidth )
                  + height                 // add height for triangular shapes
                  + 2 * margin;
 

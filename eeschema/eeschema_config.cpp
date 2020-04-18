@@ -267,8 +267,6 @@ void SCH_EDIT_FRAME::AddFormattingParameters( std::vector<PARAM_CFG*>& params )
                                          &m_textOffsetRatio,
                                          (double) TXT_MARGIN / DEFAULT_SIZE_TEXT,
                                          -200.0, 200.0 ) );
-    params.push_back( new PARAM_CFG_INT( wxT( "TextMarkupFlags" ),
-                                         &m_textMarkupFlags, 0 ) );
     params.push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "LineThickness" ),
                                          &m_defaultLineWidth,
                                          Mils2iu( appSettings->m_Drawing.default_line_thickness ),

@@ -797,14 +797,14 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
         {
             GRText( nullptr, positions[ii], color, strings_list[ii], text->GetTextAngle(), size,
                     text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
-                    forceBold, 0, vrml_text_callback );
+                    forceBold, vrml_text_callback );
         }
     }
     else
     {
         GRText( nullptr, text->GetTextPos(), color, text->GetShownText(), text->GetTextAngle(),
                 size, text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
-                forceBold, 0, vrml_text_callback );
+                forceBold, vrml_text_callback );
     }
 }
 
@@ -1066,7 +1066,7 @@ static void export_vrml_text_module( TEXTE_MODULE* item )
 
         GRText( NULL, item->GetTextPos(), BLACK, item->GetShownText(), item->GetDrawRotation(),
                 size, item->GetHorizJustify(), item->GetVertJustify(), penWidth, item->IsItalic(),
-                forceBold, 0, vrml_text_callback );
+                forceBold, vrml_text_callback );
     }
 }
 

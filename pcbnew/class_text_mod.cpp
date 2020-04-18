@@ -308,7 +308,7 @@ void TEXTE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOff
         size.x = -size.x;
 
     GRText( aDC, pos, color, GetShownText(), orient, size, GetHorizJustify(), GetVertJustify(),
-            width, IsItalic(), IsBold(), 0 );
+            width, IsItalic(), IsBold() );
 }
 
 

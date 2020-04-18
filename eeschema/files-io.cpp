@@ -407,7 +407,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
 
         schematic.UpdateSymbolLinks( true );      // Update all symbol library links for all sheets.
-        schematic.UpdateTextMarkupFlags( GetTextMarkupFlags() );
 
         g_ConnectionGraph->Reset();
         RecalculateConnections( GLOBAL_CLEANUP );
@@ -684,7 +683,6 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             UpdateFileHistory( aFileName );
             SCH_SCREENS schematic;
             schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
-            schematic.UpdateTextMarkupFlags( GetTextMarkupFlags() );
 
             GetScreen()->m_Initialized = true;
             SCH_SCREENS allScreens;

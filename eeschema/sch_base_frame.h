@@ -93,7 +93,6 @@ protected:
     int       m_defaultBusThickness;
     int       m_defaultTextSize;
     double    m_textOffsetRatio;
-    int       m_textMarkupFlags;
 
     TEMPLATES m_templateFieldNames;
 
@@ -146,9 +145,6 @@ public:
 
     double GetTextOffsetRatio() const { return m_textOffsetRatio; }
     void SetTextOffsetRatio( double aRatio ) { m_textOffsetRatio = aRatio; }
-
-    int GetTextMarkupFlags() const { return m_textMarkupFlags; }
-    void SetTextMarkupFlags( int aFlags ) { m_textMarkupFlags = aFlags; }
 
     /**
      * Function GetZoomLevelIndicator

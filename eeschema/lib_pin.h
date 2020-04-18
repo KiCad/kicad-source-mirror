@@ -78,9 +78,7 @@ class LIB_PIN : public LIB_ITEM
     wxString           m_number;
     int                m_numTextSize;       // Pin num and Pin name sizes
     int                m_nameTextSize;
-    int                m_textMarkupFlags;   // Set of TEXT_MARKUP_FLAGS indicating which markup
-                                            // features are to be processed within the pin name
-                                            // and number.
+
     /**
      * Print a pin, with or without the pin texts
      *
@@ -373,7 +371,7 @@ public:
      * Pin Name:    substring between '~' is negated
      */
     void PrintPinTexts( RENDER_SETTINGS* aSettings, wxPoint& aPosition, int aOrientation,
-                        int TextInside, bool DrawPinNum, bool DrawPinName, int aMarkupFlags );
+                        int TextInside, bool DrawPinNum, bool DrawPinName );
 
     /**
      * Draw the electrical type text of the pin (only for the footprint editor)
@@ -389,7 +387,7 @@ public:
      * the opposite direction to x2,y2), otherwise all is drawn outside.
      */
     void PlotPinTexts( PLOTTER *aPlotter, wxPoint& aPosition, int aOrientation,
-                       int aTextInside, bool aDrawPinNum, bool aDrawPinName, int aMarkupFlags );
+                       int aTextInside, bool aDrawPinNum, bool aDrawPinName );
 
     void PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation );
 
@@ -448,9 +446,6 @@ public:
 
     int GetWidth() const override { return m_width; }
     void SetWidth( int aWidth ) override;
-
-    int GetTextMarkupFlags() const { return m_textMarkupFlags; }
-    void SetTextMarkupFlags( int aFlags ) { m_textMarkupFlags = aFlags; }
 
     BITMAP_DEF GetMenuImage() const override;
 

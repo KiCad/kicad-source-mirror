@@ -659,7 +659,7 @@ void VIA::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
             tsize = (tsize * 7) / 10;        // small reduction to give a better look, inside via
 
             GRHaloText( aDC, m_Start, color, WHITE, BLACK, text, 0, wxSize( tsize, tsize ),
-                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize/7, false, false, 0 );
+                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize/7, false, false );
         }
     }
 }

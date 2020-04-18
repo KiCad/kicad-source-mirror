@@ -562,8 +562,7 @@ void DIALOG_SCH_SHEET_PROPS::OnAddField( wxCommandEvent& event )
 
     int       fieldID = m_fields->size();
     SCH_FIELD newField( wxPoint( 0, 0 ), fieldID, m_sheet,
-                        SCH_SHEET::GetDefaultFieldName( fieldID ),
-                        m_frame->GetTextMarkupFlags() );
+                        SCH_SHEET::GetDefaultFieldName( fieldID ) );
 
     newField.SetTextAngle( m_fields->at( SHEETNAME ).GetTextAngle() );
 

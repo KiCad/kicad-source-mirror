@@ -339,12 +339,11 @@ public:
      * @param aText is the text to be drawn.
      * @param aPosition is the text position in world coordinates.
      * @param aRotationAngle is the text rotation angle.
-     * @param aMarkupFlags a bitset of TEXT_MARKUP_FLAGS.
      */
     virtual void StrokeText( const wxString& aText, const VECTOR2D& aPosition,
-                                    double aRotationAngle, int aMarkupFlags = 0 )
+                             double aRotationAngle )
     {
-        strokeFont.Draw( aText, aPosition, aRotationAngle, aMarkupFlags );
+        strokeFont.Draw( aText, aPosition, aRotationAngle );
     }
 
     /**
@@ -375,10 +374,9 @@ public:
      * a only one line text.
      *
      * @param aText is the text string (one line).
-     * @param aMarkupFlags a bitset of TEXT_MARKUP_FLAGS.
      * @return is the text size.
      */
-    VECTOR2D GetTextLineSize( const UTF8& aText, int aMarkupFlags = 0 ) const;
+    VECTOR2D GetTextLineSize( const UTF8& aText ) const;
 
     /**
      * Compute the vertical position of an overbar, sometimes used in texts.

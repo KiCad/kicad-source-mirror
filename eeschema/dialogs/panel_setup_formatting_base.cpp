@@ -75,15 +75,6 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 
 	sbSizer4->Add( fgSizer2, 1, wxEXPAND|wxBOTTOM, 5 );
 
-	m_checkSuperSub = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Enable superscript/subscript markup"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkSuperSub->SetToolTip( _("Use '^' for superscript and '#' for subscript") );
-
-	sbSizer4->Add( m_checkSuperSub, 0, wxEXPAND|wxALL, 5 );
-
-	m_superSubHint = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("(preceed superscript text with ^; subscript text with #)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_superSubHint->Wrap( -1 );
-	sbSizer4->Add( m_superSubHint, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
 
 	bLeftColumn->Add( sbSizer4, 1, wxEXPAND|wxALL, 5 );
 
