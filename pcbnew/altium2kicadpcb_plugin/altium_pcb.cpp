@@ -86,9 +86,51 @@ void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName,
 }
 
 
+bool IsAltiumLayerCopper( ALTIUM_LAYER aLayer )
+{
+    return aLayer >= ALTIUM_LAYER::TOP_LAYER && aLayer <= ALTIUM_LAYER::BOTTOM_LAYER;
+}
+
+
 bool IsAltiumLayerAPlane( ALTIUM_LAYER aLayer )
 {
     return aLayer >= ALTIUM_LAYER::INTERNAL_PLANE_1 && aLayer <= ALTIUM_LAYER::INTERNAL_PLANE_16;
+}
+
+
+DRAWSEGMENT* ALTIUM_PCB::HelperCreateAndAddDrawsegment( uint16_t aComponent )
+{
+    if( aComponent == ALTIUM_COMPONENT_NONE )
+    {
+        DRAWSEGMENT* ds = new DRAWSEGMENT( m_board );
+        m_board->Add( ds, ADD_MODE::APPEND );
+        return ds;
+    }
+    else
+    {
+        if( m_components.size() <= aComponent )
+        {
+            THROW_IO_ERROR( wxString::Format(
+                    "Component creator tries to access component id %d of %d existing components",
+                    aComponent, m_components.size() ) );
+        }
+        MODULE*      module = m_components.at( aComponent );
+        DRAWSEGMENT* ds     = new EDGE_MODULE( module );
+        module->Add( ds, ADD_MODE::APPEND );
+        return ds;
+    }
+}
+
+
+void ALTIUM_PCB::HelperDrawsegmentSetLocalCoord( DRAWSEGMENT* aDs, uint16_t aComponent )
+{
+    if( aComponent != ALTIUM_COMPONENT_NONE )
+    {
+        auto em = dynamic_cast<EDGE_MODULE*>( aDs );
+
+        if( em )
+            em->SetLocalCoord();
+    }
 }
 
 
@@ -1378,26 +1420,7 @@ void ALTIUM_PCB::ParseArcs6Data(
         }
         else
         {
-            // TODO: better approach to select if item belongs to a MODULE
-            DRAWSEGMENT* ds = nullptr;
-            if( elem.component == ALTIUM_COMPONENT_NONE )
-            {
-                ds = new DRAWSEGMENT( m_board );
-                m_board->Add( ds, ADD_MODE::APPEND );
-            }
-            else
-            {
-                if( m_components.size() <= elem.component )
-                {
-                    THROW_IO_ERROR( wxString::Format(
-                            "Arcs6 stream tries to access component id %d of %d existing components",
-                            elem.component, m_components.size() ) );
-                }
-                MODULE* module = m_components.at( elem.component );
-                ds             = new EDGE_MODULE( module );
-                module->Add( ds, ADD_MODE::APPEND );
-            }
-
+            DRAWSEGMENT* ds = HelperCreateAndAddDrawsegment( elem.component );
             ds->SetCenter( elem.center );
             ds->SetWidth( elem.width );
             ds->SetLayer( klayer );
@@ -1418,13 +1441,7 @@ void ALTIUM_PCB::ParseArcs6Data(
                 ds->SetArcStart( elem.center + arcStartOffset );
             }
 
-            if( elem.component != ALTIUM_COMPONENT_NONE )
-            {
-                auto em = dynamic_cast<EDGE_MODULE*>( ds );
-
-                if( em )
-                    em->SetLocalCoord();
-            }
+            HelperDrawsegmentSetLocalCoord( ds, elem.component );
         }
     }
 
@@ -1442,6 +1459,14 @@ void ALTIUM_PCB::ParsePads6Data(
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
         APAD6 elem( reader );
+
+        // It is possible to place altium pads on non-copper layers -> we need to interpolate them using drawings!
+        if( !IsAltiumLayerCopper( elem.layer ) && !IsAltiumLayerAPlane( elem.layer )
+                && elem.layer != ALTIUM_LAYER::MULTI_LAYER )
+        {
+            HelperParsePad6NonCopper( elem );
+            continue;
+        }
 
         // Create Pad
         MODULE* module = nullptr;
@@ -1477,12 +1502,6 @@ void ALTIUM_PCB::ParsePads6Data(
 
         if( elem.holesize == 0 )
         {
-            if( elem.layer == ALTIUM_LAYER::MULTI_LAYER )
-            {
-                wxLogError( wxString::Format(
-                            "Pad '%s' of Footprint %s marked as multilayer, but it is an SMT pad",
-                            elem.name, module->GetReference() ) );
-            }
             pad->SetAttribute( PAD_ATTR_T::PAD_ATTRIB_SMD );
         }
         else
@@ -1605,8 +1624,15 @@ void ALTIUM_PCB::ParsePads6Data(
             pad->SetLayerSet( FlipLayerMask( D_PAD::SMDMask() ) );
             break;
         case ALTIUM_LAYER::MULTI_LAYER:
-        default:
             pad->SetLayerSet( elem.plated ? D_PAD::StandardMask() : D_PAD::UnplatedHoleMask() );
+            break;
+        default:
+            PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
+            wxLogError( wxString::Format(
+                    "Pad '%s' of Footprint %s uses the unsupported layer %s. Put it on Eco2_User instead",
+                    elem.name, module->GetReference(), LSET::Name( klayer ) ) );
+            pad->SetLayer( klayer );
+            pad->SetLayerSet( LSET( 2, klayer, Eco2_User ) ); // TODO: support inner Cu as pad layer
             break;
         }
 
@@ -1633,6 +1659,189 @@ void ALTIUM_PCB::ParsePads6Data(
     if( reader.GetRemainingBytes() != 0 )
     {
         THROW_IO_ERROR( "Pads6 stream is not fully parsed" );
+    }
+}
+
+void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
+{
+    PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+    if( klayer == UNDEFINED_LAYER )
+    {
+        wxLogInfo( wxString::Format(
+                _( "Non-Copper Pad on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
+                aElem.layer ) );
+        klayer = Eco1_User;
+    }
+
+    if( aElem.net != ALTIUM_NET_UNCONNECTED )
+    {
+        wxLogError( wxString::Format(
+                "Non-Copper Pad '%s' is connected to a net. This is not supported", aElem.name ) );
+    }
+
+    if( aElem.holesize != 0 )
+    {
+        wxLogError( wxString::Format(
+                "Non-Copper Pad '%s' has a hole. This should not happen", aElem.name ) );
+    }
+
+    if( aElem.padmode != ALTIUM_PAD_MODE::SIMPLE )
+    {
+        wxLogWarning( wxString::Format(
+                _( "Non-Copper Pad '%s' uses a complex pad stack (kind %d). This should not happen" ),
+                aElem.name, aElem.padmode ) );
+    }
+
+    switch( aElem.topshape )
+    {
+    case ALTIUM_PAD_SHAPE::RECT:
+    {
+        // filled rect
+        DRAWSEGMENT* ds = HelperCreateAndAddDrawsegment( aElem.component );
+        ds->SetShape( STROKE_T::S_POLYGON );
+        ds->SetLayer( klayer );
+        ds->SetWidth( 0 );
+
+        ds->SetPolyPoints( { aElem.position + wxPoint( aElem.topsize.x / 2, aElem.topsize.y / 2 ),
+                aElem.position + wxPoint( aElem.topsize.x / 2, -aElem.topsize.y / 2 ),
+                aElem.position + wxPoint( -aElem.topsize.x / 2, -aElem.topsize.y / 2 ),
+                aElem.position + wxPoint( -aElem.topsize.x / 2, aElem.topsize.y / 2 ) } );
+
+        if( aElem.direction != 0 )
+        {
+            ds->Rotate( aElem.position, aElem.direction * 10 );
+        }
+
+        HelperDrawsegmentSetLocalCoord( ds, aElem.component );
+    }
+    break;
+    case ALTIUM_PAD_SHAPE::CIRCLE:
+        if( aElem.sizeAndShape
+                && aElem.sizeAndShape->alt_shape[0] == ALTIUM_PAD_SHAPE_ALT::ROUNDRECT )
+        {
+            // filled roundrect
+            int cornerradius = aElem.sizeAndShape->cornerradius[0];
+            int offset = ( std::min( aElem.topsize.x, aElem.topsize.y ) * cornerradius ) / 200;
+
+            DRAWSEGMENT* ds = HelperCreateAndAddDrawsegment( aElem.component );
+            ds->SetLayer( klayer );
+            ds->SetWidth( offset * 2 );
+
+            if( cornerradius < 100 )
+            {
+                int offsetX = aElem.topsize.x / 2 - offset;
+                int offsetY = aElem.topsize.y / 2 - offset;
+
+                wxPoint p11 = aElem.position + wxPoint( offsetX, offsetY );
+                wxPoint p12 = aElem.position + wxPoint( offsetX, -offsetY );
+                wxPoint p22 = aElem.position + wxPoint( -offsetX, -offsetY );
+                wxPoint p21 = aElem.position + wxPoint( -offsetX, offsetY );
+
+                ds->SetShape( STROKE_T::S_POLYGON );
+                ds->SetPolyPoints( { p11, p12, p22, p21 } );
+            }
+            else if( aElem.topsize.x == aElem.topsize.y )
+            {
+                // circle
+                ds->SetShape( STROKE_T::S_CIRCLE );
+                ds->SetCenter( aElem.position );
+                ds->SetWidth( aElem.topsize.x / 2 );
+                ds->SetArcStart( aElem.position - wxPoint( 0, aElem.topsize.x / 4 ) );
+            }
+            else if( aElem.topsize.x < aElem.topsize.y )
+            {
+                // short vertical line
+                ds->SetShape( STROKE_T::S_SEGMENT );
+                wxPoint pointOffset( 0, ( aElem.topsize.y - aElem.topsize.x ) / 2 );
+                ds->SetStart( aElem.position + pointOffset );
+                ds->SetEnd( aElem.position - pointOffset );
+            }
+            else
+            {
+                // short horizontal line
+                ds->SetShape( STROKE_T::S_SEGMENT );
+                wxPoint pointOffset( ( aElem.topsize.x - aElem.topsize.y ) / 2, 0 );
+                ds->SetStart( aElem.position + pointOffset );
+                ds->SetEnd( aElem.position - pointOffset );
+            }
+
+            if( aElem.direction != 0 )
+            {
+                ds->Rotate( aElem.position, aElem.direction * 10 );
+            }
+
+            HelperDrawsegmentSetLocalCoord( ds, aElem.component );
+        }
+        else if( aElem.topsize.x == aElem.topsize.y )
+        {
+            // filled circle
+            DRAWSEGMENT* ds = HelperCreateAndAddDrawsegment( aElem.component );
+            ds->SetShape( STROKE_T::S_CIRCLE );
+            ds->SetLayer( klayer );
+            ds->SetCenter( aElem.position );
+            ds->SetWidth( aElem.topsize.x / 2 );
+            ds->SetArcStart( aElem.position - wxPoint( 0, aElem.topsize.x / 4 ) );
+            HelperDrawsegmentSetLocalCoord( ds, aElem.component );
+        }
+        else
+        {
+            // short line
+            DRAWSEGMENT* ds = HelperCreateAndAddDrawsegment( aElem.component );
+            ds->SetShape( STROKE_T::S_SEGMENT );
+            ds->SetLayer( klayer );
+            ds->SetWidth( std::min( aElem.topsize.x, aElem.topsize.y ) );
+            if( aElem.topsize.x < aElem.topsize.y )
+            {
+                wxPoint offset( 0, ( aElem.topsize.y - aElem.topsize.x ) / 2 );
+                ds->SetStart( aElem.position + offset );
+                ds->SetEnd( aElem.position - offset );
+            }
+            else
+            {
+                wxPoint offset( ( aElem.topsize.x - aElem.topsize.y ) / 2, 0 );
+                ds->SetStart( aElem.position + offset );
+                ds->SetEnd( aElem.position - offset );
+            }
+            if( aElem.direction != 0 )
+            {
+                ds->Rotate( aElem.position, aElem.direction * 10. );
+            }
+            HelperDrawsegmentSetLocalCoord( ds, aElem.component );
+        }
+        break;
+    case ALTIUM_PAD_SHAPE::OCTAGONAL:
+    {
+        // filled octagon
+        DRAWSEGMENT* ds = HelperCreateAndAddDrawsegment( aElem.component );
+        ds->SetShape( STROKE_T::S_POLYGON );
+        ds->SetLayer( klayer );
+        ds->SetWidth( 0 );
+
+        wxPoint p11 = aElem.position + wxPoint( aElem.topsize.x / 2, aElem.topsize.y / 2 );
+        wxPoint p12 = aElem.position + wxPoint( aElem.topsize.x / 2, -aElem.topsize.y / 2 );
+        wxPoint p22 = aElem.position + wxPoint( -aElem.topsize.x / 2, -aElem.topsize.y / 2 );
+        wxPoint p21 = aElem.position + wxPoint( -aElem.topsize.x / 2, aElem.topsize.y / 2 );
+
+        int     chamfer = std::min( aElem.topsize.x, aElem.topsize.y ) / 4;
+        wxPoint chamferX( chamfer, 0 );
+        wxPoint chamferY( 0, chamfer );
+
+        ds->SetPolyPoints( { p11 - chamferX, p11 - chamferY, p12 + chamferY, p12 - chamferX,
+                p22 + chamferX, p22 + chamferY, p21 - chamferY, p21 + chamferX } );
+
+        if( aElem.direction != 0. )
+        {
+            ds->Rotate( aElem.position, aElem.direction * 10 );
+        }
+
+        HelperDrawsegmentSetLocalCoord( ds, aElem.component );
+    }
+    break;
+    case ALTIUM_PAD_SHAPE::UNKNOWN:
+    default:
+        wxLogError(
+                wxString::Format( "Non-Copper Pad '%s' uses a unknown pad-shape", aElem.name ) );
+        break;
     }
 }
 
@@ -1758,39 +1967,13 @@ void ALTIUM_PCB::ParseTracks6Data(
         }
         else
         {
-            DRAWSEGMENT* ds = nullptr;
-
-            if( elem.component == ALTIUM_COMPONENT_NONE )
-            {
-                ds = new DRAWSEGMENT( m_board );
-                ds->SetShape( STROKE_T::S_SEGMENT );
-                m_board->Add( ds, ADD_MODE::APPEND );
-
-                ds->SetStart( elem.start );
-                ds->SetEnd( elem.end );
-            }
-            else
-            {
-                if( m_components.size() <= elem.component )
-                {
-                    THROW_IO_ERROR( wxString::Format(
-                            "Tracks6 stream tries to access component id %d of %d existing components",
-                            elem.component, m_components.size() ) );
-                }
-                MODULE*      module = m_components.at( elem.component );
-                EDGE_MODULE* em     = new EDGE_MODULE( module, STROKE_T::S_SEGMENT );
-                module->Add( em, ADD_MODE::APPEND );
-
-                em->SetStart( elem.start );
-                em->SetEnd( elem.end );
-                em->SetLocalCoord();
-
-                ds = em;
-            }
-
+            DRAWSEGMENT* ds = HelperCreateAndAddDrawsegment( elem.component );
+            ds->SetShape( STROKE_T::S_SEGMENT );
+            ds->SetStart( elem.start );
+            ds->SetEnd( elem.end );
             ds->SetWidth( elem.width );
-
             ds->SetLayer( klayer );
+            HelperDrawsegmentSetLocalCoord( ds, elem.component );
         }
 
         reader.SkipSubrecord();
@@ -2027,6 +2210,7 @@ void ALTIUM_PCB::ParseFills6Data(
 
             ds->SetShape( STROKE_T::S_POLYGON );
             ds->SetLayer( klayer );
+            ds->SetWidth( 0 );
 
             ds->SetPolyPoints( { p11, p12, p22, p21 } );
 

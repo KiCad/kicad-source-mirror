@@ -82,6 +82,7 @@ enum class ALTIUM_PCB_DIR
 
 
 class BOARD;
+class DRAWSEGMENT;
 class MODULE;
 class ZONE_CONTAINER;
 
@@ -170,7 +171,12 @@ private:
     void HelperParseDimensions6Datum( const ADIMENSION6& aElem );
     void HelperParseDimensions6Center( const ADIMENSION6& aElem );
 
+    void HelperParsePad6NonCopper( const APAD6& aElem );
+
     void HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aVertices );
+
+    DRAWSEGMENT* HelperCreateAndAddDrawsegment( uint16_t aComponent );
+    void         HelperDrawsegmentSetLocalCoord( DRAWSEGMENT* aDs, uint16_t aComponent );
 
     BOARD*                               m_board;
     std::vector<MODULE*>                 m_components;
