@@ -648,7 +648,7 @@ endif()
 #
 # Find GLM library, required
 #
-find_package( GLM 0.9.5.1 REQUIRED )
+find_package( GLM 0.9.8 REQUIRED )
 add_definitions( -DGLM_FORCE_CTOR_INIT )
 include_directories( SYSTEM ${GLM_INCLUDE_DIR} )
 
