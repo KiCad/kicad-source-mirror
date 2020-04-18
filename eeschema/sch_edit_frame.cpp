@@ -1189,3 +1189,10 @@ bool SCH_EDIT_FRAME::IsContentModified()
 
     return sheetList.IsModified();
 }
+
+
+bool SCH_EDIT_FRAME::GetShowAllPins() const
+{
+    EESCHEMA_SETTINGS* cfg = eeconfig();
+    return cfg->m_Appearance.show_hidden_pins;
+}

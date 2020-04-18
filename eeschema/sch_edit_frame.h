@@ -183,6 +183,11 @@ public:
 
     void OnCloseWindow( wxCloseEvent& Event );
 
+    /**
+     * Allow edit frame to show/hide hidden pins.
+     */
+    bool GetShowAllPins() const override;
+
     const wxString& GetNetListFormatName() const { return m_netListFormat; }
     void SetNetListFormatName( const wxString& aFormat ) { m_netListFormat = aFormat; }
 
