@@ -599,9 +599,8 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     // Subrecord 5
     size_t subrecord5 = aReader.ReadAndSetSubrecordLength();
 
-    // TODO: exact minimum length we know?
-    if( subrecord5 < 120 )
-        THROW_IO_ERROR( "Pads6 stream subrecord has length < 120, which is unexpected" );
+    if( subrecord5 < 114 )
+        THROW_IO_ERROR( "Pads6 stream subrecord has length < 114, which is unexpected" );
 
     layer = static_cast<ALTIUM_LAYER>( aReader.Read<uint8_t>() );
     tolayer = ALTIUM_LAYER::UNKNOWN;
@@ -644,7 +643,7 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     aReader.Skip( 3 );
     holerotation = aReader.Read<double>();
 
-    if( subrecord5 == 120 )
+    if( subrecord5 >= 120 )
     {
         tolayer = static_cast<ALTIUM_LAYER>( aReader.Read<uint8_t>() );
         aReader.Skip( 2 );
