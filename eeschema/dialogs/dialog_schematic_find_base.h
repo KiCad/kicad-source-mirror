@@ -49,8 +49,8 @@ class DIALOG_SCH_FIND_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkMatchCase;
 		wxCheckBox* m_checkWholeWord;
 		wxCheckBox* m_checkWildcardMatch;
-		wxCheckBox* m_checkAllFields;
 		wxCheckBox* m_checkAllPins;
+		wxCheckBox* m_checkAllFields;
 		wxCheckBox* m_checkCurrentSheetOnly;
 		wxCheckBox* m_checkReplaceReferences;
 		wxButton* m_buttonFind;
@@ -60,9 +60,14 @@ class DIALOG_SCH_FIND_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnIdle( wxIdleEvent& event ) { event.Skip(); }
+		virtual void OnSearchForSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSearchForText( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTextEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSearchForEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateDrcUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnReplaceWithSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnReplaceWithText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnReplaceWithEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOptions( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFind( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReplace( wxCommandEvent& event ) { event.Skip(); }

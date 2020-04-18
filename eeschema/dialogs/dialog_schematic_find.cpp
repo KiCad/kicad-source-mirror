@@ -34,7 +34,8 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, wxFindReplaceData* aD
                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | aStyle ),
     m_frame( aParent ),
     m_editorControl( m_frame->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>() ),
-    m_findReplaceData( aData )
+    m_findReplaceData( aData ),
+    m_findDirty( true )
 {
     wxASSERT_MSG( m_findReplaceData, wxT( "can't create find dialog without data" ) );
 
@@ -95,8 +96,19 @@ void DIALOG_SCH_FIND::OnClose( wxCloseEvent& aEvent )
 {
     // Notify the SCH_EDIT_FRAME
     m_frame->OnFindDialogClose();
+
     // Notify the controller
-    m_editorControl->UpdateFind( ACTIONS::updateFind.MakeEvent() );
+    m_findDirty = true;
+}
+
+
+void DIALOG_SCH_FIND::OnIdle( wxIdleEvent& aEvent )
+{
+    if( m_findDirty )
+    {
+        m_editorControl->UpdateFind( ACTIONS::updateFind.MakeEvent() );
+        m_findDirty = false;
+    }
 }
 
 
@@ -133,11 +145,55 @@ void DIALOG_SCH_FIND::OnChar( wxKeyEvent& aEvent )
 void DIALOG_SCH_FIND::OnSearchForText( wxCommandEvent& aEvent )
 {
     m_findReplaceData->SetFindString( m_comboFind->GetValue() );
+    m_findDirty = true;
+}
+
+
+void DIALOG_SCH_FIND::OnSearchForSelect( wxCommandEvent& aEvent )
+{
+    m_findReplaceData->SetFindString( m_comboFind->GetValue() );
+
+    // Move the search string to the top of the list if it isn't already there.
+    if( aEvent.GetSelection() != 0 )
+    {
+        wxString tmp = m_comboFind->GetValue();
+        m_comboFind->Delete( aEvent.GetSelection() );
+        m_comboFind->Insert( tmp, 0 );
+        m_comboFind->SetSelection( 0 );
+    }
+
     m_editorControl->UpdateFind( ACTIONS::updateFind.MakeEvent() );
 }
 
 
-void DIALOG_SCH_FIND::OnTextEnter( wxCommandEvent& aEvent )
+void DIALOG_SCH_FIND::OnReplaceWithText( wxCommandEvent& aEvent )
+{
+    m_findReplaceData->SetReplaceString( m_comboReplace->GetValue() );
+}
+
+
+void DIALOG_SCH_FIND::OnReplaceWithSelect( wxCommandEvent& aEvent )
+{
+    m_findReplaceData->SetReplaceString( m_comboReplace->GetValue() );
+
+    // Move the replace string to the top of the list if it isn't already there.
+    if( aEvent.GetSelection() != 0 )
+    {
+        wxString tmp = m_comboReplace->GetValue();
+        m_comboReplace->Delete( aEvent.GetSelection() );
+        m_comboReplace->Insert( tmp, 0 );
+        m_comboReplace->SetSelection( 0 );
+    }
+}
+
+
+void DIALOG_SCH_FIND::OnSearchForEnter( wxCommandEvent& aEvent )
+{
+    OnFind( aEvent );
+}
+
+
+void DIALOG_SCH_FIND::OnReplaceWithEnter( wxCommandEvent& aEvent )
 {
     OnFind( aEvent );
 }
@@ -172,7 +228,7 @@ void DIALOG_SCH_FIND::OnOptions( wxCommandEvent& aEvent )
         flags |= FR_REPLACE_REFERENCES;
 
     m_findReplaceData->SetFlags( flags );
-    m_editorControl->UpdateFind( ACTIONS::updateFind.MakeEvent() );
+    m_findDirty = true;
 }
 
 
@@ -215,9 +271,9 @@ void DIALOG_SCH_FIND::OnReplace( wxCommandEvent& aEvent )
     }
 
     if( aEvent.GetId() == wxID_REPLACE )
-        m_editorControl->FindNext( ACTIONS::replaceAndFindNext.MakeEvent());
+        m_editorControl->ReplaceAndFindNext( ACTIONS::replaceAndFindNext.MakeEvent());
     else if( aEvent.GetId() == wxID_REPLACE_ALL )
-        m_editorControl->FindNext( ACTIONS::replaceAll.MakeEvent());
+        m_editorControl->ReplaceAll( ACTIONS::replaceAll.MakeEvent());
 }
 
 

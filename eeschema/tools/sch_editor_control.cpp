@@ -154,28 +154,56 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
 {
     wxFindReplaceData* data = m_frame->GetFindReplaceData();
 
+    auto visit = [&] ( EDA_ITEM* aItem )
+                 {
+                     if( data && aItem->Matches( *data, nullptr ) )
+                     {
+                         aItem->SetForceVisible( true );
+                         m_selectionTool->BrightenItem( aItem );
+                     }
+                     else if( aItem->IsBrightened() )
+                     {
+                         aItem->SetForceVisible( false );
+                         m_selectionTool->UnbrightenItem( aItem );
+                     }
+                 };
+
     if( aEvent.IsAction( &ACTIONS::find ) || aEvent.IsAction( &ACTIONS::findAndReplace )
         || aEvent.IsAction( &ACTIONS::updateFind ) )
     {
         m_selectionTool->ClearSelection();
 
-        for( auto item : m_frame->GetScreen()->Items() )
+        for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
         {
-            if( data && item->Matches( *data, nullptr ) )
-                m_selectionTool->BrightenItem( item );
-            else if( item->IsBrightened() )
-                m_selectionTool->UnbrightenItem( item );
+            visit( item );
+
+            if( item->Type() == SCH_COMPONENT_T )
+            {
+                SCH_COMPONENT* cmp = static_cast<SCH_COMPONENT*>( item );
+
+                for( SCH_FIELD& field : cmp->GetFields() )
+                    visit( &field );
+
+                for( SCH_PIN* pin : cmp->GetSchPins() )
+                    visit( pin );
+            }
+            else if( item->Type() == SCH_SHEET_T )
+            {
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+                for( SCH_FIELD& field : sheet->GetFields() )
+                    visit( &field );
+
+                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                    visit( pin );
+            }
+
         }
     }
     else if( aEvent.Matches( EVENTS::SelectedItemsModified ) )
     {
         for( EDA_ITEM* item : m_selectionTool->GetSelection() )
-        {
-            if( data && item->Matches( *data, nullptr ) )
-                m_selectionTool->BrightenItem( item );
-            else if( item->IsBrightened() )
-                m_selectionTool->UnbrightenItem( item );
-        }
+            visit( item );
     }
 
     getView()->UpdateItems();
@@ -366,7 +394,12 @@ int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 
     if( item && item->Matches( *data, nullptr ) )
     {
-        item->Replace( *data, g_CurrentSheet );
+        if( item->Replace( *data, g_CurrentSheet ) )
+        {
+            m_frame->RefreshItem( item );
+            m_frame->OnModify();
+        }
+
         FindNext( ACTIONS::findNext.MakeEvent() );
     }
 
@@ -386,12 +419,16 @@ int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
-        //TODO(snh): Fix ReplaceAll
-        //        screen->ForEachItem() for( EDA_ITEM* item = nextMatch( screen, nullptr, data ); item;
-        //                                   item = nextMatch( screen, item, data ) )
-        //        {
-        //            item->Replace( *data, schematic.FindSheetForScreen( screen ) );
-        //        }
+        for( EDA_ITEM* item = nextMatch( screen, nullptr, data ); item;  )
+        {
+            if( item->Replace( *data, schematic.FindSheetForScreen( screen ) ) )
+            {
+                m_frame->RefreshItem( item );
+                m_frame->OnModify();
+            }
+
+            item = nextMatch( screen, dynamic_cast<SCH_ITEM*>( item ), data );
+        }
     }
 
     return 0;

@@ -54,6 +54,7 @@
             <property name="window_name"></property>
             <property name="window_style"></property>
             <event name="OnClose">OnClose</event>
+            <event name="OnIdle">OnIdle</event>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">mainSizer</property>
@@ -217,8 +218,9 @@
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
+                                                <event name="OnCombobox">OnSearchForSelect</event>
                                                 <event name="OnText">OnSearchForText</event>
-                                                <event name="OnTextEnter">OnTextEnter</event>
+                                                <event name="OnTextEnter">OnSearchForEnter</event>
                                                 <event name="OnUpdateUI">OnUpdateDrcUI</event>
                                             </object>
                                         </object>
@@ -346,7 +348,9 @@
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
-                                                <event name="OnTextEnter">OnTextEnter</event>
+                                                <event name="OnCombobox">OnReplaceWithSelect</event>
+                                                <event name="OnText">OnReplaceWithText</event>
+                                                <event name="OnTextEnter">OnReplaceWithEnter</event>
                                                 <event name="OnUpdateUI">OnUpdateDrcUI</event>
                                             </object>
                                         </object>
@@ -807,7 +811,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Search user-defined fields</property>
+                                                <property name="label">Search pin &amp;names and numbers</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -815,7 +819,7 @@
                                                 <property name="minimize_button">0</property>
                                                 <property name="minimum_size"></property>
                                                 <property name="moveable">1</property>
-                                                <property name="name">m_checkAllFields</property>
+                                                <property name="name">m_checkAllPins</property>
                                                 <property name="pane_border">1</property>
                                                 <property name="pane_position"></property>
                                                 <property name="pane_size"></property>
@@ -875,7 +879,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Search pin &amp;names and numbers</property>
+                                                <property name="label">Search hidden fields</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -883,7 +887,7 @@
                                                 <property name="minimize_button">0</property>
                                                 <property name="minimum_size"></property>
                                                 <property name="moveable">1</property>
-                                                <property name="name">m_checkAllPins</property>
+                                                <property name="name">m_checkAllFields</property>
                                                 <property name="pane_border">1</property>
                                                 <property name="pane_position"></property>
                                                 <property name="pane_size"></property>
@@ -1011,7 +1015,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">1</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Replace componen&amp;t reference designators</property>
+                                                <property name="label">Replace matches in reference designators</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>

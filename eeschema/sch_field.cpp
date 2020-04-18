@@ -139,12 +139,12 @@ int SCH_FIELD::GetPenWidth() const
 void SCH_FIELD::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*    DC = aSettings->GetPrintDC();
-    COLOR4D  color = aSettings->GetLayerColor( m_forceVisible ? LAYER_HIDDEN : m_Layer );
+    COLOR4D  color = aSettings->GetLayerColor( IsForceVisible() ? LAYER_HIDDEN : m_Layer );
     int      orient;
     wxPoint  textpos;
     int      penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetDefaultPenWidth() );
 
-    if( ( !IsVisible() && !m_forceVisible) || IsVoid() )
+    if( ( !IsVisible() && !IsForceVisible() ) || IsVoid() )
         return;
 
     // Calculate the text orientation according to the component orientation.
@@ -274,19 +274,19 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     wxString text = GetShownText();
     int      flags = aSearchData.GetFlags();
-    bool     searchUserDefinedFields = flags & FR_SEARCH_ALL_FIELDS;
+    bool     searchHiddenFields = flags & FR_SEARCH_ALL_FIELDS;
     bool     searchAndReplace = flags & FR_SEARCH_REPLACE;
     bool     replaceReferences = flags & FR_REPLACE_REFERENCES;
 
     wxLogTrace( traceFindItem, wxT( "    child item " )
                     + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 
+    if( !IsVisible() && !searchHiddenFields )
+        return false;
+
     if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
     {
         SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
-
-        if( !searchUserDefinedFields && m_id >= MANDATORY_FIELDS )
-            return false;
 
         if( searchAndReplace && m_id == REFERENCE && !replaceReferences )
             return false;
@@ -300,11 +300,6 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
             if( parentComponent->GetUnitCount() > 1 )
                 text << LIB_PART::SubReference( parentComponent->GetUnit() );
         }
-    }
-    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
-    {
-        if( !searchUserDefinedFields && m_id >= SHEET_MANDATORY_FIELDS )
-            return false;
     }
 
     return SCH_ITEM::Matches( text, aSearchData );
@@ -340,7 +335,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     bool isReplaced = false;
 
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T && m_id == REFERENCE )
+    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
     {
         SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
 

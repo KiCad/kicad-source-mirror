@@ -50,12 +50,16 @@ protected:
     // Handlers for DIALOG_SCH_FIND_BASE events.
     void OnClose( wxCloseEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;
+    void OnSearchForSelect( wxCommandEvent& aEvent ) override;
     void OnSearchForText( wxCommandEvent& aEvent ) override;
-    void OnTextEnter( wxCommandEvent& event ) override;
+    void OnSearchForEnter( wxCommandEvent& event ) override;
+    void OnReplaceWithSelect( wxCommandEvent& aEvent ) override;
+    void OnReplaceWithText( wxCommandEvent& aEvent ) override;
+    void OnReplaceWithEnter( wxCommandEvent& event ) override;
     void OnOptions( wxCommandEvent& event ) override;
     void OnUpdateReplaceUI( wxUpdateUIEvent& aEvent ) override;
     void OnUpdateReplaceAllUI( wxUpdateUIEvent& aEvent ) override;
-
+    void OnIdle( wxIdleEvent& event ) override;
     void OnChar( wxKeyEvent& aEvent );
     void OnFind( wxCommandEvent& aEvent ) override;
     void OnReplace( wxCommandEvent& aEvent ) override;
@@ -63,6 +67,7 @@ protected:
     SCH_EDIT_FRAME*     m_frame;
     SCH_EDITOR_CONTROL* m_editorControl;
     wxFindReplaceData*  m_findReplaceData;
+    bool                m_findDirty;
 
     DECLARE_NO_COPY_CLASS( DIALOG_SCH_FIND )
 

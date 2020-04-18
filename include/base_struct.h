@@ -62,7 +62,7 @@ enum FIND_REPLACE_FLAGS
 {
     // The last wxFindReplaceFlag enum is wxFR_MATCHCASE = 0x4.
     FR_CURRENT_SHEET_ONLY = wxFR_MATCHCASE << 1,   // Search the current sheet only.
-    FR_SEARCH_ALL_FIELDS  = wxFR_MATCHCASE << 2,   // Search user fields as well as ref and value.
+    FR_SEARCH_ALL_FIELDS  = wxFR_MATCHCASE << 2,   // Search hidden fields too.
     FR_SEARCH_ALL_PINS    = wxFR_MATCHCASE << 3,   // Search pin name and number.
     FR_MATCH_WILDCARD     = wxFR_MATCHCASE << 4,   // Use simple wild card matching (* & ?).
     FR_SEARCH_WRAP        = wxFR_MATCHCASE << 5,   // Wrap around the start or end of search.
@@ -288,6 +288,8 @@ public:
      *                setting to determine if the item is to be drawn.
      */
     void SetForceVisible( bool aEnable ) { m_forceVisible = aEnable; }
+
+    bool IsForceVisible() const { return m_forceVisible; }
 
     /**
      * Function GetMsgPanelInfo

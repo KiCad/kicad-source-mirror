@@ -1430,7 +1430,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 
     COLOR4D color = getRenderColor( aField, aLayer, drawingShadows );
 
-    if( !aField->IsVisible() )
+    if( !( aField->IsVisible() || aField->IsForceVisible() ) )
     {
         if( m_schSettings.m_ShowHiddenText || aField->IsBrightened() )
             color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows );

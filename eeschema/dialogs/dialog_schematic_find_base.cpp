@@ -89,16 +89,16 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_checkWildcardMatch = new wxCheckBox( this, wxID_ANY, _("Wildcards"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_checkWildcardMatch, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
-	m_checkAllFields = new wxCheckBox( this, wxID_ANY, _("Search user-defined fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_checkAllFields, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
 	m_checkAllPins = new wxCheckBox( this, wxID_ANY, _("Search pin &names and numbers"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_checkAllPins, wxGBPosition( 2, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_checkAllPins, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_checkAllFields = new wxCheckBox( this, wxID_ANY, _("Search hidden fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_checkAllFields, wxGBPosition( 2, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkCurrentSheetOnly = new wxCheckBox( this, wxID_ANY, _("Search the current &sheet only"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_checkCurrentSheetOnly, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_checkReplaceReferences = new wxCheckBox( this, wxID_ANY, _("Replace componen&t reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkReplaceReferences = new wxCheckBox( this, wxID_ANY, _("Replace matches in reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkReplaceReferences->Hide();
 
 	gbSizer2->Add( m_checkReplaceReferences, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -145,16 +145,20 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_SCH_FIND_BASE::OnClose ) );
+	this->Connect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_SCH_FIND_BASE::OnIdle ) );
+	m_comboFind->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnSearchForSelect ), NULL, this );
 	m_comboFind->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnSearchForText ), NULL, this );
-	m_comboFind->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnTextEnter ), NULL, this );
+	m_comboFind->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnSearchForEnter ), NULL, this );
 	m_comboFind->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateDrcUI ), NULL, this );
-	m_comboReplace->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnTextEnter ), NULL, this );
+	m_comboReplace->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplaceWithSelect ), NULL, this );
+	m_comboReplace->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplaceWithText ), NULL, this );
+	m_comboReplace->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplaceWithEnter ), NULL, this );
 	m_comboReplace->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateDrcUI ), NULL, this );
 	m_checkMatchCase->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_checkWholeWord->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_checkWildcardMatch->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
-	m_checkAllFields->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_checkAllPins->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
+	m_checkAllFields->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_checkCurrentSheetOnly->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_buttonFind->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnFind ), NULL, this );
 	m_buttonReplace->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplace ), NULL, this );
@@ -168,16 +172,20 @@ DIALOG_SCH_FIND_BASE::~DIALOG_SCH_FIND_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_SCH_FIND_BASE::OnClose ) );
+	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_SCH_FIND_BASE::OnIdle ) );
+	m_comboFind->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnSearchForSelect ), NULL, this );
 	m_comboFind->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnSearchForText ), NULL, this );
-	m_comboFind->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnTextEnter ), NULL, this );
+	m_comboFind->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnSearchForEnter ), NULL, this );
 	m_comboFind->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateDrcUI ), NULL, this );
-	m_comboReplace->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnTextEnter ), NULL, this );
+	m_comboReplace->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplaceWithSelect ), NULL, this );
+	m_comboReplace->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplaceWithText ), NULL, this );
+	m_comboReplace->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplaceWithEnter ), NULL, this );
 	m_comboReplace->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateDrcUI ), NULL, this );
 	m_checkMatchCase->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_checkWholeWord->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_checkWildcardMatch->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
-	m_checkAllFields->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_checkAllPins->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
+	m_checkAllFields->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_checkCurrentSheetOnly->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnOptions ), NULL, this );
 	m_buttonFind->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnFind ), NULL, this );
 	m_buttonReplace->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnReplace ), NULL, this );
