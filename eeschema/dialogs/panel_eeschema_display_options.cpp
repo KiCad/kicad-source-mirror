@@ -52,6 +52,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
 
     m_checkShowHiddenPins->SetValue( cfg->m_Appearance.show_hidden_pins );
+    m_checkShowHiddenFields->SetValue( cfg->m_Appearance.show_hidden_fields );
     m_checkPageLimits->SetValue( cfg->m_Appearance.show_page_limits );
 
     m_checkSelTextBox->SetValue( cfg->m_Selection.text_as_box );
@@ -70,6 +71,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
 
     cfg->m_Appearance.show_hidden_pins = m_checkShowHiddenPins->GetValue();
+    cfg->m_Appearance.show_hidden_fields = m_checkShowHiddenFields->GetValue();
     cfg->m_Appearance.show_page_limits = m_checkPageLimits->GetValue();
 
     cfg->m_Selection.text_as_box = m_checkSelTextBox->GetValue();
@@ -79,6 +81,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
 
     // Update canvas
     m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
+    m_frame->GetRenderSettings()->m_ShowHiddenText = m_checkShowHiddenFields->GetValue();
     m_frame->GetRenderSettings()->SetShowPageLimits( cfg->m_Appearance.show_page_limits );
     m_frame->GetCanvas()->GetView()->MarkDirty();
     m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );

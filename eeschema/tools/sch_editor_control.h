@@ -119,6 +119,7 @@ public:
     int NavigateHierarchy( const TOOL_EVENT& aEvent );
 
     int ToggleHiddenPins( const TOOL_EVENT& aEvent );
+    int ToggleHiddenFields( const TOOL_EVENT& aEvent );
     int ToggleForceHV( const TOOL_EVENT& aEvent );
 
     void BackAnnotateFootprints( const std::string& aChangedSetOfReferences );

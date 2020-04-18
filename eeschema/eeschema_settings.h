@@ -43,6 +43,7 @@ public:
         bool navigator_stays_open;
         bool print_sheet_reference;
         bool show_hidden_pins;
+        bool show_hidden_fields;
         bool show_illegal_symbol_lib_dialog;
         bool show_page_limits;
         bool show_sheet_filename_case_sensitivity_dialog;

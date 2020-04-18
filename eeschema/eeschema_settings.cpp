@@ -59,6 +59,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM<bool>( "appearance.show_hidden_pins",
             &m_Appearance.show_hidden_pins, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_hidden_fields",
+            &m_Appearance.show_hidden_fields, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "appearance.show_illegal_symbol_lib_dialog",
             &m_Appearance.show_illegal_symbol_lib_dialog, true ) );
 

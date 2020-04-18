@@ -598,6 +598,11 @@ TOOL_ACTION EE_ACTIONS::toggleHiddenPins( "eeschema.EditorControl.showHiddenPins
         _( "Show Hidden Pins" ), "",
         hidden_pin_xpm );
 
+TOOL_ACTION EE_ACTIONS::toggleHiddenFields( "eeschema.EditorControl.showHiddenFields",
+        AS_GLOBAL, 0, "",
+        _( "Show Hidden Fields" ), "",
+        nullptr );
+
 TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
         AS_GLOBAL, 0, "",
         _( "Force H/V Wires and Buses" ), "",
