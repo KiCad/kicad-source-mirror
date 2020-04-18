@@ -468,7 +468,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
             if( destItem )
                 processTextItem( *srcItem, *destItem, false, resetTextLayers, resetTextEffects );
             else if( !deleteExtraTexts )
-                aDest->GraphicalItemsList().Append( new TEXTE_MODULE( *srcItem ) );
+                aDest->Add( new TEXTE_MODULE( *srcItem ) );
         }
     }
 
