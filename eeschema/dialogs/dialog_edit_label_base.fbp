@@ -68,7 +68,7 @@
                         <property name="growablecols">1</property>
                         <property name="growablerows">1</property>
                         <property name="hgap">3</property>
-                        <property name="minimum_size"></property>
+                        <property name="minimum_size">500,-1</property>
                         <property name="name">m_textEntrySizer</property>
                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                         <property name="permission">protected</property>
@@ -302,7 +302,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">480,100</property>
+                                <property name="minimum_size">-1,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_valueMultiLine</property>
                                 <property name="pane_border">1</property>

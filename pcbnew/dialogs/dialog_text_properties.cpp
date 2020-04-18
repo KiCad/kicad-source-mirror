@@ -59,6 +59,9 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 {
     wxString title;
 
+    m_MultiLineText->SetEOLMode( wxSTC_EOL_LF );
+    m_MultiLineText->SetUseHorizontalScrollBar( false );
+
     m_linesThickness.Show( m_item->Type() == PCB_DIMENSION_T );
 
     if( m_item->Type() == PCB_DIMENSION_T )
