@@ -615,6 +615,9 @@ void LEGACY_PLUGIN::loadGENERAL()
             // layer visibility equals layer usage, unless overridden later via "VisibleLayers"
             // Must call SetEnabledLayers() before calling SetVisibleLayers().
             m_board->SetVisibleLayers( new_mask );
+
+            // Ensure copper layers count is not modified:
+            m_board->SetCopperLayerCount( m_cu_count );
         }
 
         else if( TESTLINE( "VisibleLayers" ) )
