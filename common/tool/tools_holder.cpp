@@ -26,8 +26,8 @@
 #include <tool/action_manager.h>
 #include <tool/action_menu.h>
 #include <tool/actions.h>
+#include <tool/tools_holder.h>
 #include <tool/tool_manager.h>
-#include <tools_holder.h>
 
 
 TOOLS_HOLDER::TOOLS_HOLDER() :

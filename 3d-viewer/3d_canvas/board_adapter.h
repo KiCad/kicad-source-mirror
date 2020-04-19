@@ -768,6 +768,8 @@ class EDA_3D_BOARD_HOLDER
 public:
     virtual BOARD_ADAPTER& GetAdapter() = 0;
     virtual CCAMERA&       GetCurrentCamera() = 0;
+
+    virtual ~EDA_3D_BOARD_HOLDER() {};
 };
 
 #endif // BOARD_ADAPTER_H

@@ -39,7 +39,7 @@
 #include "panel_prev_3d_base.h"
 
 #include <vector>
-#include <tools_holder.h>
+#include <tool/tools_holder.h>
 #include <3d_canvas/eda_3d_canvas.h>
 #include <3d_viewer_id.h>
 #include <3d_rendering/ctrack_ball.h>

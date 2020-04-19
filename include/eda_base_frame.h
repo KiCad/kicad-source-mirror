@@ -46,7 +46,7 @@
 #include <frame_type.h>
 #include <hotkeys_basic.h>
 #include <kiway_holder.h>
-#include <tools_holder.h>
+#include <tool/tools_holder.h>
 #include <widgets/ui_common.h>
 
 // Option for main frames

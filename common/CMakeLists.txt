@@ -331,7 +331,6 @@ set( COMMON_SRCS
     status_popup.cpp
     systemdirsappend.cpp
     template_fieldnames.cpp
-    tools_holder.cpp
     trace_helpers.cpp
     undo_redo_container.cpp
     utf8.cpp
@@ -381,6 +380,7 @@ set( COMMON_SRCS
     tool/tool_base.cpp
     tool/tool_dispatcher.cpp
     tool/tool_event.cpp
+    tool/tools_holder.cpp
     tool/tool_interactive.cpp
     tool/tool_manager.cpp
     tool/tool_menu.cpp

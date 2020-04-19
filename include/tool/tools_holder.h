@@ -66,6 +66,8 @@ protected:
 public:
     TOOLS_HOLDER();
 
+    virtual ~TOOLS_HOLDER() { }
+
     /**
      * Return the MVC controller.
      */
