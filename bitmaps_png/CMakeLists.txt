@@ -473,6 +473,8 @@ set( BMAPS_MID
     show_no_layers
     show_no_copper_layers
     show_all_copper_layers
+    show_all_front_layers
+    show_all_back_layers
     spreadsheet
     svg_file
     swap_layer

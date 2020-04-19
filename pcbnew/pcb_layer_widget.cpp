@@ -182,10 +182,10 @@ void PCB_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
     menu.AppendSeparator();
 
     AddMenuItem( &menu, ID_SHOW_ALL_FRONT, _( "Show All Front Layers" ),
-                 KiBitmap( show_no_layers_xpm ) );
+                 KiBitmap( show_all_front_layers_xpm ) );
 
     AddMenuItem( &menu, ID_SHOW_ALL_BACK, _( "Show All Back Layers" ),
-                 KiBitmap( show_all_layers_xpm ) );
+                 KiBitmap( show_all_back_layers_xpm ) );
 }
 
 
