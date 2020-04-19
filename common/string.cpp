@@ -130,25 +130,59 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
 
 wxString UnescapeString( const wxString& aSource )
 {
-    wxString converted = aSource;
+    wxString newbuf;
+    size_t   sourceLen = aSource.length();
 
-    converted.Replace( wxS( "{dblquote}" ), wxS( "\"" ) );
-    converted.Replace( wxS( "{quote}" ), wxS( "'" ) );
-    converted.Replace( wxS( "{lt}" ), wxS( "<" ) );
-    converted.Replace( wxS( "{gt}" ), wxS( ">" ) );
-    converted.Replace( wxS( "{backslash}" ), wxS( "\\" ) );
-    converted.Replace( wxS( "{slash}" ), wxS( "/" ) );
-    converted.Replace( wxS( "{bar}" ), wxS( "|" ) );
-    converted.Replace( wxS( "{colon}" ), wxS( ":" ) );
-    converted.Replace( wxS( "{space}" ), wxS( " " ) );
-    converted.Replace( wxS( "{dollar}" ), wxS( "$" ) );
-    converted.Replace( wxS( "{tab}" ), wxS( "\t" ) );
-    converted.Replace( wxS( "{return}" ), wxS( "\n" ) );
+    for( size_t i = 0; i < sourceLen; ++i )
+    {
+        if( ( aSource[i] == '$' || aSource[i] == '^' || aSource[i] == '_' )
+                && i + 1 < sourceLen && aSource[i+1] == '{' )
+        {
+            for( ; i < sourceLen; ++i )
+            {
+                newbuf += aSource[i];
 
-    // must be done last
-    converted.Replace( wxS( "{brace}" ), wxS( "{" ) );
+                if( aSource[i] == '}' )
+                    break;
+            }
+        }
+        else if( aSource[i] == '{' )
+        {
+            wxString token;
 
-    return converted;
+            for( i = i + 1; i < sourceLen; ++i )
+            {
+                if( aSource[i] == '}' )
+                    break;
+                else
+                    token.append( aSource[i] );
+            }
+
+            if(      token == wxS( "dblquote" ) )  newbuf.append( wxS( "\"" ) );
+            else if( token == wxS( "quote" ) )     newbuf.append( wxS( "'" ) );
+            else if( token == wxS( "lt" ) )        newbuf.append( wxS( "<" ) );
+            else if( token == wxS( "gt" ) )        newbuf.append( wxS( ">" ) );
+            else if( token == wxS( "backslash" ) ) newbuf.append( wxS( "\\" ) );
+            else if( token == wxS( "slash" ) )     newbuf.append( wxS( "/" ) );
+            else if( token == wxS( "bar" ) )       newbuf.append( wxS( "|" ) );
+            else if( token == wxS( "colon" ) )     newbuf.append( wxS( ":" ) );
+            else if( token == wxS( "space" ) )     newbuf.append( wxS( " " ) );
+            else if( token == wxS( "dollar" ) )    newbuf.append( wxS( "$" ) );
+            else if( token == wxS( "tab" ) )       newbuf.append( wxS( "\t" ) );
+            else if( token == wxS( "return" ) )    newbuf.append( wxS( "\n" ) );
+            else if( token == wxS( "brace" ) )     newbuf.append( wxS( "{" ) );
+            else
+            {
+                newbuf.append( "${" + token + "}" );
+            }
+        }
+        else
+        {
+            newbuf.append( aSource[i] );
+        }
+    }
+
+    return newbuf;
 }
 
 
