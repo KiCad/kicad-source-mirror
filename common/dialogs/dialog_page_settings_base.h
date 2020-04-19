@@ -22,6 +22,7 @@
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -29,7 +30,6 @@
 #include <wx/button.h>
 #include <wx/datectrl.h>
 #include <wx/dateevt.h>
-#include <wx/checkbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -56,6 +56,8 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_userSizeXLabel;
 		wxTextCtrl* m_userSizeXCtrl;
 		wxStaticText* m_userSizeXUnits;
+		wxCheckBox* m_PaperExport;
+		wxStaticLine* m_staticline31;
 		wxStaticText* m_staticTextPreview;
 		wxStaticBitmap* m_PageLayoutExampleBitmap;
 		wxStaticText* m_staticTextTitleBlock;

@@ -87,6 +87,7 @@ public:
 
     struct PAGE_SETTINGS
     {
+        bool export_paper;
         bool export_revision;
         bool export_date;
         bool export_title;

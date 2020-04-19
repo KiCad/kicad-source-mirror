@@ -124,6 +124,7 @@ DIALOG_PAGES_SETTINGS::~DIALOG_PAGES_SETTINGS()
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
 
+    cfg->m_PageSettings.export_paper    = m_PaperExport->GetValue();
     cfg->m_PageSettings.export_revision = m_RevisionExport->GetValue();
     cfg->m_PageSettings.export_date     = m_DateExport->GetValue();
     cfg->m_PageSettings.export_title    = m_TitleExport->GetValue();
@@ -212,6 +213,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxASSERT( cfg );
 
+    m_PaperExport->SetValue( cfg->m_PageSettings.export_paper );
     m_RevisionExport->SetValue( cfg->m_PageSettings.export_revision );
     m_DateExport->SetValue( cfg->m_PageSettings.export_date );
     m_TitleExport->SetValue( cfg->m_PageSettings.export_title );
@@ -226,6 +228,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     m_Comment8Export->SetValue( cfg->m_PageSettings.export_comment8 );
     m_Comment9Export->SetValue( cfg->m_PageSettings.export_comment9 );
 #else
+    m_PaperExport->Show( false );
     m_RevisionExport->Show( false );
     m_DateExport->Show( false );
     m_TitleExport->Show( false );
@@ -609,16 +612,16 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
 #ifdef EESCHEMA
     // Exports settings to other sheets if requested:
-    SCH_SCREEN* screen;
-
-    // Build the screen list
     SCH_SCREENS ScreenList;
 
-    // Update title blocks for all screens
-    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
+    // Update page info and/or title blocks for all screens
+    for( SCH_SCREEN* screen = ScreenList.GetFirst(); screen; screen = ScreenList.GetNext() )
     {
         if( screen == m_screen )
             continue;
+
+        if( m_PaperExport->IsChecked() )
+            screen->SetPageSettings( m_pageInfo );
 
         TITLE_BLOCK tb2 = screen->GetTitleBlock();
 
@@ -663,7 +666,6 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
         screen->SetTitleBlock( tb2 );
     }
-
 #endif
 
     return true;

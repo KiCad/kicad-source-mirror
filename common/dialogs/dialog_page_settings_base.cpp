@@ -27,7 +27,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bleftSizer->Add( m_staticTextPaper, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bleftSizer->Add( m_staticline2, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bleftSizer->Add( m_staticline2, 0, wxEXPAND, 5 );
 
 	m_staticTextSize = new wxStaticText( this, wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSize->Wrap( -1 );
@@ -39,9 +39,12 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_paperSizeComboBox->SetSelection( 0 );
 	bleftSizer->Add( m_paperSizeComboBox, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+
+	bleftSizer->Add( 0, 3, 0, wxEXPAND, 5 );
+
 	m_staticTextOrient = new wxStaticText( this, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOrient->Wrap( -1 );
-	bleftSizer->Add( m_staticTextOrient, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bleftSizer->Add( m_staticTextOrient, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxString m_orientationComboBoxChoices[] = { _("Landscape"), _("Portrait") };
 	int m_orientationComboBoxNChoices = sizeof( m_orientationComboBoxChoices ) / sizeof( wxString );
@@ -53,14 +56,17 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_staticTextCustSize->Wrap( -1 );
 	bleftSizer->Add( m_staticTextCustSize, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
+
+	bleftSizer->Add( 0, 2, 0, wxEXPAND, 5 );
+
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 3, 3, 0 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_userSizeYLabel = new wxStaticText( this, wxID_ANY, _("Height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_userSizeYLabel->Wrap( -1 );
-	fgSizer1->Add( m_userSizeYLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_userSizeYLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_userSizeYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_LEFT );
 	#ifdef __WXGTK__
@@ -73,15 +79,15 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	#endif
 	m_userSizeYCtrl->SetToolTip( _("Custom paper height.") );
 
-	fgSizer1->Add( m_userSizeYCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_userSizeYCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_userSizeYUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_userSizeYUnits->Wrap( -1 );
-	fgSizer1->Add( m_userSizeYUnits, 0, wxTOP|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_userSizeYUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_userSizeXLabel = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_userSizeXLabel->Wrap( -1 );
-	fgSizer1->Add( m_userSizeXLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_userSizeXLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_userSizeXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_LEFT );
 	#ifdef __WXGTK__
@@ -94,18 +100,24 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	#endif
 	m_userSizeXCtrl->SetToolTip( _("Custom paper width.") );
 
-	fgSizer1->Add( m_userSizeXCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_userSizeXCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_userSizeXUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_userSizeXUnits->Wrap( -1 );
-	fgSizer1->Add( m_userSizeXUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	fgSizer1->Add( m_userSizeXUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bleftSizer->Add( fgSizer1, 0, wxEXPAND|wxBOTTOM, 5 );
 
-	m_staticTextPreview = new wxStaticText( this, wxID_ANY, _("Layout Preview"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PaperExport = new wxCheckBox( this, wxID_ANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	bleftSizer->Add( m_PaperExport, 0, wxALL, 4 );
+
+	m_staticline31 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bleftSizer->Add( m_staticline31, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
+
+	m_staticTextPreview = new wxStaticText( this, wxID_ANY, _("Preview"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPreview->Wrap( -1 );
-	bleftSizer->Add( m_staticTextPreview, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bleftSizer->Add( m_staticTextPreview, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 10 );
 
 	m_PageLayoutExampleBitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxFULL_REPAINT_ON_RESIZE|wxBORDER_SIMPLE );
 	m_PageLayoutExampleBitmap->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );

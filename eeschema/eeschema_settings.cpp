@@ -146,6 +146,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM<wxString>( "bom.plugins",
             &m_BomPanel.plugins, "" ) );
 
+    m_params.emplace_back( new PARAM<bool>( "page_settings.export_paper",
+            &m_PageSettings.export_paper, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "page_settings.export_revision",
             &m_PageSettings.export_revision, false ) );
 
