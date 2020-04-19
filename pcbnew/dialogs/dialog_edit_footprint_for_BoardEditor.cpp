@@ -493,6 +493,8 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     if( !m_modelsGrid->CommitPendingChanges() )
         return;
 
+    int selected = m_modelsGrid->GetGridCursorRow();
+
     PROJECT& prj = Prj();
     MODULE_3D_SETTINGS model;
 
@@ -520,6 +522,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     if( !S3D::Select3DModel( this, Prj().Get3DCacheManager(), initialpath, filter, &model )
         || model.m_Filename.empty() )
     {
+        select3DModel( selected );
         return;
     }
 
@@ -547,6 +550,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     m_modelsGrid->SetCellValue( idx, 0, filename );
     m_modelsGrid->SetCellValue( idx, 1, wxT( "1" ) );
 
+    select3DModel( idx );
     m_PreviewPane->UpdateDummyModule();
 }
 
@@ -564,6 +568,8 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DRow( wxCommandEvent&  )
     int row = m_modelsGrid->GetNumberRows();
     m_modelsGrid->AppendRows( 1 );
     m_modelsGrid->SetCellValue( row, 1, wxT( "1" ) );
+
+    select3DModel( row );
 
     m_modelsGrid->SetFocus();
     m_modelsGrid->MakeCellVisible( row, 0 );
