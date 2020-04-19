@@ -115,6 +115,13 @@ public:
  * This class import DXF ASCII files and convert basic entities to board entities.
  * It depends on the dxflib library.
  */
+#if 0 //defined(DEBUG)
+// For dxf import debug:
+#define ON_UNSUPPORTED( error_msg ) wxLogMessage( error_msg )
+#else
+#define ON_UNSUPPORTED( error_msg )
+#endif
+
 class DXF_IMPORT_PLUGIN : public GRAPHICS_IMPORT_PLUGIN, public DL_CreationAdapter
 {
 private:
@@ -299,37 +306,61 @@ private:
     virtual void addKnot( const DL_KnotData& aData ) override;
 
     // Not yet handled DXF entities:
+    virtual void addXLine( const DL_XLineData& ) override { ON_UNSUPPORTED( "addXLine" ); }
+
+    virtual void addRay( const DL_RayData& ) override { ON_UNSUPPORTED( "addRay" ); }
+
+    virtual void addArcAlignedText( const DL_ArcAlignedTextData& ) override
+                { ON_UNSUPPORTED( "addArcAlignedText" ); }
+
+    virtual void addAttribute( const DL_AttributeData& ) override
+                { ON_UNSUPPORTED( "addAttribute" ); }
+
     virtual void addDimAlign( const DL_DimensionData&,
-            const DL_DimAlignedData& ) override {}
+            const DL_DimAlignedData& ) override { ON_UNSUPPORTED( "addDimAlign" ); }
     virtual void addDimLinear( const DL_DimensionData&,
-            const DL_DimLinearData& ) override {}
+            const DL_DimLinearData& ) override { ON_UNSUPPORTED( "addDimLinear" ); }
     virtual void addDimRadial( const DL_DimensionData&,
-            const DL_DimRadialData& ) override {}
+            const DL_DimRadialData& ) override { ON_UNSUPPORTED( "addDimRadial" ); }
     virtual void addDimDiametric( const DL_DimensionData&,
-            const DL_DimDiametricData& ) override {}
+            const DL_DimDiametricData& ) override { ON_UNSUPPORTED( "addDimDiametric" ); }
     virtual void addDimAngular( const DL_DimensionData&,
-            const DL_DimAngularData& ) override {}
+            const DL_DimAngularData& ) override { ON_UNSUPPORTED( "addDimAngular" ); }
     virtual void addDimAngular3P( const DL_DimensionData&,
-            const DL_DimAngular3PData& ) override {}
+            const DL_DimAngular3PData& ) override { ON_UNSUPPORTED( "addDimAngular3P" ); }
     virtual void addDimOrdinate( const DL_DimensionData&,
-            const DL_DimOrdinateData& ) override {}
-    virtual void addLeader( const DL_LeaderData& ) override {}
+            const DL_DimOrdinateData& ) override { ON_UNSUPPORTED( "addDimOrdinate" ); }
 
-    virtual void addLeaderVertex( const DL_LeaderVertexData& ) override {}
+    virtual void addLeader( const DL_LeaderData& ) override
+                        { ON_UNSUPPORTED( "addLeader" ); }
 
-    virtual void addHatch( const DL_HatchData& ) override {}
+    virtual void addLeaderVertex( const DL_LeaderVertexData& ) override
+                        { ON_UNSUPPORTED( "addLeaderVertex" ); }
 
-    virtual void addTrace( const DL_TraceData& ) override {}
-    virtual void add3dFace( const DL_3dFaceData& ) override {}
+    virtual void addHatch( const DL_HatchData& ) override { ON_UNSUPPORTED( "addHatch" ); }
 
-    virtual void addSolid( const DL_SolidData& ) override {}
+    virtual void addTrace( const DL_TraceData& ) override { ON_UNSUPPORTED( "addTrace" ); }
+    virtual void add3dFace( const DL_3dFaceData& ) override { ON_UNSUPPORTED( "add3dFace" ); }
 
-    virtual void addImage( const DL_ImageData& ) override {}
+    virtual void addSolid( const DL_SolidData& ) override { ON_UNSUPPORTED( "addSolid" ); }
+
+    virtual void addImage( const DL_ImageData& ) override { ON_UNSUPPORTED( "addImage" ); }
     virtual void linkImage( const DL_ImageDefData& ) override {}
 
-    virtual void addHatchLoop( const DL_HatchLoopData& ) override {}
+    virtual void addHatchLoop( const DL_HatchLoopData& ) override { ON_UNSUPPORTED( "addHatchLoop" ); }
 
-    virtual void addHatchEdge( const DL_HatchEdgeData& ) override {}
+    virtual void addHatchEdge( const DL_HatchEdgeData& ) override { ON_UNSUPPORTED( "addHatchEdge" ); }
+
+    virtual void addXRecord( const std::string& ) override { ON_UNSUPPORTED( "addXRecord" ); }
+    virtual void addXRecordString( int, const std::string& ) override { ON_UNSUPPORTED( "addXRecordString" ); }
+    virtual void addXRecordReal( int, double ) override { ON_UNSUPPORTED( "addXRecordReal" ); }
+    virtual void addXRecordInt( int, int ) override { ON_UNSUPPORTED( "addXRecordInt" ); }
+    virtual void addXRecordBool( int, bool ) override { ON_UNSUPPORTED( "addXRecordBool" ); }
+
+    virtual void addXDataApp( const std::string& ) override { ON_UNSUPPORTED( "addXDataApp" ); }
+    virtual void addXDataString( int, const std::string& ) override { ON_UNSUPPORTED( "addXDataString" ); }
+    virtual void addXDataReal( int, double ) override { ON_UNSUPPORTED( "addXDataReal" ); }
+    virtual void addXDataInt( int, int ) override { ON_UNSUPPORTED( "addXDataInt" ); }
 
     /**
      * Convert a native unicode string into a DXF encoded string.

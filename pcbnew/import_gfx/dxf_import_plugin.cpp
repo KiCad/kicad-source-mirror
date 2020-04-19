@@ -332,10 +332,9 @@ void DXF_IMPORT_PLUGIN::endEntity()
 
 void DXF_IMPORT_PLUGIN::addBlock( const DL_BlockData& aData )
 {
-    // The DXF blocks are not useful in our import, so we skip them with the exception
-    // of the main block that is shown when editing the file
-    if( aData.name.compare( "*Model_Space") )
-        m_inBlock = true;
+    // The DXF blocks are not useful in our import, so we skip the block id
+    // because Pcbnew has no support to group a set of graphic items inside an entity
+    m_inBlock = false;
 }
 
 
