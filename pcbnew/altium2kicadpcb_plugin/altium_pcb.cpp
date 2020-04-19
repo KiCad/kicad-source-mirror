@@ -2032,15 +2032,16 @@ void ALTIUM_PCB::ParseTexts6Data(
             itm = txm;
         }
 
-        if( elem.text == ".Designator" && !elem.isDesignator )
+        wxString trimmedText = elem.text.Trim();
+        if( !elem.isDesignator && trimmedText.CmpNoCase( ".Designator" ) == 0 )
         {
             tx->SetText( "${REFERENCE}" );
         }
-        else if( elem.text == ".Comment" && !elem.isComment )
+        else if( !elem.isComment && trimmedText.CmpNoCase( ".Comment" ) == 0 )
         {
             tx->SetText( "${VALUE}" );
         }
-        else if( elem.text == ".Layer_Name" )
+        else if( trimmedText.CmpNoCase( ".Layer_Name" ) == 0 )
         {
             tx->SetText( "${LAYER}" );
         }
@@ -2058,12 +2059,9 @@ void ALTIUM_PCB::ParseTexts6Data(
 
             if( txm )
             {
-                if( elem.isDesignator || elem.isComment )
-                {
-                    double orientation =
-                            static_cast<const MODULE*>( txm->GetParent() )->GetOrientation();
-                    txm->SetTextAngle( orientation + txm->GetTextAngle() );
-                }
+                double orientation =
+                        static_cast<const MODULE*>( txm->GetParent() )->GetOrientation();
+                txm->SetTextAngle( orientation + txm->GetTextAngle() );
                 txm->SetLocalCoord();
             }
         }
