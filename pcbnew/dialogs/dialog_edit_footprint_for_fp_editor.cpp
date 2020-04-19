@@ -413,7 +413,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnRemove3DModel( wxCommandEvent&  )
         m_shapes3D_list.erase( m_shapes3D_list.begin() + idx );
         m_modelsGrid->DeleteRows( idx );
 
-        select3DModel( idx-1 );       // will clamp idx within bounds
+        select3DModel( idx );       // will clamp idx within bounds
         m_PreviewPane->UpdateDummyModule();
     }
 }
@@ -424,12 +424,14 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     if( !m_modelsGrid->CommitPendingChanges() )
         return;
 
+    int selected = m_modelsGrid->GetGridCursorRow();
+
     PROJECT& prj = Prj();
     MODULE_3D_SETTINGS model;
 
     wxString initialpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
     wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );
-    int filter = 0;
+    int      filter = 0;
 
     // If the PROJECT::VIEWER_3D_PATH hasn't been set yet, use the KISYS3DMOD environment
     // varaible and fall back to the project path if necessary.
@@ -451,6 +453,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     if( !S3D::Select3DModel( this, Prj().Get3DCacheManager(), initialpath, filter, &model )
         || model.m_Filename.empty() )
     {
+        select3DModel( selected );
         return;
     }
 
@@ -478,6 +481,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     m_modelsGrid->SetCellValue( idx, 0, filename );
     m_modelsGrid->SetCellValue( idx, 1, wxT( "1" ) );
 
+    select3DModel( idx );
     m_PreviewPane->UpdateDummyModule();
 }
 
@@ -495,6 +499,8 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DRow( wxCommandEvent&  )
     int row = m_modelsGrid->GetNumberRows();
     m_modelsGrid->AppendRows( 1 );
     m_modelsGrid->SetCellValue( row, 1, wxT( "1" ) );
+
+    select3DModel( row );
 
     m_modelsGrid->SetFocus();
     m_modelsGrid->MakeCellVisible( row, 0 );
