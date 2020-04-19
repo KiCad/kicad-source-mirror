@@ -170,6 +170,7 @@ enum class ALTIUM_POLYGON_HATCHSTYLE
 
 enum class ALTIUM_TEXT_POSITION
 {
+    MANUAL        = 0, // only relevant for NAMEAUTOPOSITION and COMMENTAUTOPOSITION
     LEFT_TOP      = 1,
     LEFT_CENTER   = 2,
     LEFT_BOTTOM   = 3,
@@ -358,6 +359,10 @@ struct ACOMPONENT6
     wxString     sourcefootprintlibrary;
     wxString     sourcecomponentlibrary;
     wxString     sourcelibreference;
+
+    ALTIUM_TEXT_POSITION nameautoposition;
+    ALTIUM_TEXT_POSITION commentautoposition;
+
     explicit ACOMPONENT6( ALTIUM_PARSER& aReader );
 };
 

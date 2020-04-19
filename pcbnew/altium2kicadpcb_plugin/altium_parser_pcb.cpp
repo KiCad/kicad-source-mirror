@@ -280,6 +280,11 @@ ACOMPONENT6::ACOMPONENT6( ALTIUM_PARSER& aReader )
     sourcelibreference =
             ALTIUM_PARSER::PropertiesReadString( properties, "SOURCELIBREFERENCE", "" );
 
+    nameautoposition = static_cast<ALTIUM_TEXT_POSITION>(
+            ALTIUM_PARSER::PropertiesReadInt( properties, "NAMEAUTOPOSITION", 0 ) );
+    commentautoposition = static_cast<ALTIUM_TEXT_POSITION>(
+            ALTIUM_PARSER::PropertiesReadInt( properties, "COMMENTAUTOPOSITION", 0 ) );
+
     if( aReader.HasParsingError() )
     {
         THROW_IO_ERROR( "Components6 stream was not parsed correctly" );

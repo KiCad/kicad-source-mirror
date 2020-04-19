@@ -2061,7 +2061,7 @@ void ALTIUM_PCB::ParseTexts6Data(
             {
                 double orientation =
                         static_cast<const MODULE*>( txm->GetParent() )->GetOrientation();
-                txm->SetTextAngle( orientation + txm->GetTextAngle() );
+                txm->SetTextAngle( txm->GetTextAngle() - orientation );
                 txm->SetLocalCoord();
             }
         }
