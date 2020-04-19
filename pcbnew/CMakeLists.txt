@@ -44,7 +44,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/common/dialogs
     ./exporters
     ${CMAKE_SOURCE_DIR}/utils/idftools
-    ${GLM_INCLUDE_DIR}
     ./specctra_import_export
     ${INC_AFTER}
     )

@@ -4,7 +4,6 @@ if( COMPILER_SUPPORTS_WSHADOW )
 endif()
 
 include_directories(
-        ${GLM_INCLUDE_DIR}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/3d-viewer
 )

@@ -12,11 +12,6 @@
 # export WXTRACE="PLUGIN_OCE"
 #
 
-include_directories( SYSTEM
-    ${OCE_INCLUDE_DIRS}
-    ${OCC_INCLUDE_DIR}
-)
-
 add_library( s3d_plugin_oce MODULE
         oce.cpp
         loadmodel.cpp

@@ -642,6 +642,7 @@ find_package( OpenGL REQUIRED )
 if( NOT GLEW_FOUND )
     find_package( GLEW REQUIRED )
     check_find_package_result( GLEW_FOUND "GLEW" )
+    include_directories( SYSTEM ${GLEW_INCLUDE_DIR} )
 endif()
 
 #
@@ -649,21 +650,27 @@ endif()
 #
 find_package( GLM 0.9.5.1 REQUIRED )
 add_definitions( -DGLM_FORCE_CTOR_INIT )
+include_directories( SYSTEM ${GLM_INCLUDE_DIR} )
 
 #
 # Find CURL library, required
 #
 find_package( CURL REQUIRED )
+include_directories( SYSTEM ${CURL_INCLUDE_DIRS} )
 
 #
 # Find Cairo library, required
 #
 find_package( Cairo 1.12 REQUIRED )
+include_directories( SYSTEM ${CAIRO_INCLUDE_DIR} )
+
 find_package( Pixman 0.30 REQUIRED )
+include_directories( SYSTEM ${PIXMAN_INCLUDE_DIR} )
 
 #
 # Find Boost headers, required.
 find_package( Boost 1.59.0 REQUIRED )
+include_directories( SYSTEM ${Boost_INCLUDE_DIR} )
 
 # Include MinGW resource compiler.
 include( MinGWResourceCompiler )
@@ -683,6 +690,7 @@ if( KICAD_USE_OCE )
     set( OCC_LIBRARIES TKBinXCAF TKPCAF TKSTEP TKXDESTEP TKIGES TKXDEIGES )
 
     find_package( OCE 0.18 REQUIRED ${OCC_LIBRARIES} )
+    include_directories( SYSTEM ${OCE_INCLUDE_DIRS} )
 
 elseif( KICAD_USE_OCC )
     find_package(OpenCASCADE)
@@ -715,7 +723,6 @@ set( INC_BEFORE
     )
 
 set( INC_AFTER
-    ${Boost_INCLUDE_DIR}
     ${CMAKE_BINARY_DIR}
     )
 

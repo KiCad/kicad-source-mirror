@@ -43,7 +43,6 @@ target_link_libraries( unit_test_utils PUBLIC
 
 target_include_directories( unit_test_utils PUBLIC
     include
-    ${Boost_INCLUDE_DIR}
 )
 
 target_compile_definitions( unit_test_utils PUBLIC

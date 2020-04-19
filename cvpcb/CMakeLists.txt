@@ -12,7 +12,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${CMAKE_SOURCE_DIR}/pcbnew/dialogs
     ${CMAKE_SOURCE_DIR}/common
-    ${GLM_INCLUDE_DIR}
     ${INC_AFTER}
     )
 

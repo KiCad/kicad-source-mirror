@@ -13,8 +13,6 @@ include_directories(
     3d_viewer
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include/gal/opengl
-    ${GLEW_INCLUDE_DIR}
-    ${GLM_INCLUDE_DIR}
     ${INC_AFTER}
     )
 
@@ -108,7 +106,7 @@ add_dependencies( 3d-viewer pcbcommon )
 target_link_libraries( 3d-viewer
                        gal
                        kimath
-                       ${Boost_}
+                       ${Boost_LIBRARIES}
                        ${wxWidgets_LIBRARIES}
                        ${OPENGL_LIBRARIES}
                        kicad_3dsg )

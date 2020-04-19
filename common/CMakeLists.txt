@@ -10,22 +10,15 @@ include_directories(
     ./dialogs
     ./widgets
     ./dialog_about
-    ${CAIRO_INCLUDE_DIR}
-    ${PIXMAN_INCLUDE_DIR}
-    ${GLEW_INCLUDE_DIR}
-    ${GLM_INCLUDE_DIR}
-    ${CURL_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/3d-viewer
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${INC_AFTER}
-    ${OCE_INCLUDE_DIRS}
-    ${OCC_INCLUDE_DIR}
-    ${OPENSSL_INCLUDE_DIR}
     )
 
 
 if( NOT APPLE )     # windows and linux use openssl under curl
     find_package( OpenSSL REQUIRED )
+    include_directories( SYSTEM ${OPENSSL_INCLUDE_DIR} )
 endif()
 
 set( GAL_SRCS
