@@ -558,10 +558,12 @@ void ALTIUM_PCB::ParseBoard6Data(
         ;
 
     auto curLayer = static_cast<int>( F_Cu );
-    for( size_t i                                = static_cast<size_t>( ALTIUM_LAYER::TOP_LAYER );
-            i < elem.stackup.size() && i != 0; i = elem.stackup[i - 1].nextId )
+    for( size_t altiumLayerId = static_cast<size_t>( ALTIUM_LAYER::TOP_LAYER );
+            altiumLayerId < elem.stackup.size() && altiumLayerId != 0;
+            altiumLayerId = elem.stackup[altiumLayerId - 1].nextId )
     {
-        auto layer = elem.stackup.at( i - 1 ); // array starts with 0, but stackup with 1
+        // array starts with 0, but stackup with 1
+        ABOARD6_LAYER_STACKUP& layer = elem.stackup.at( altiumLayerId - 1 );
 
         // handle unused layer in case of odd layercount
         if( layer.nextId == 0 && layercount != kicadLayercount )
@@ -584,8 +586,8 @@ void ALTIUM_PCB::ParseBoard6Data(
             ++it;
         }
 
-        m_layermap.insert(
-                { static_cast<ALTIUM_LAYER>( i ), static_cast<PCB_LAYER_ID>( curLayer++ ) } );
+        m_layermap.insert( { static_cast<ALTIUM_LAYER>( altiumLayerId ),
+                static_cast<PCB_LAYER_ID>( curLayer++ ) } );
 
         if( ( *it )->GetType() != BS_ITEM_TYPE_COPPER )
         {
@@ -593,9 +595,21 @@ void ALTIUM_PCB::ParseBoard6Data(
         }
         ( *it )->SetThickness( layer.copperthick );
 
-        m_board->SetLayerName( ( *it )->GetBrdLayerId(), layer.name );
+        ALTIUM_LAYER alayer = static_cast<ALTIUM_LAYER>( altiumLayerId );
+        PCB_LAYER_ID klayer = ( *it )->GetBrdLayerId();
 
-        if( ( *it )->GetBrdLayerId() == B_Cu )
+        m_board->SetLayerName( klayer, layer.name );
+
+        if( layer.copperthick == 0 )
+        {
+            m_board->SetLayerType( klayer, LAYER_T::LT_JUMPER ); // used for things like wirebonding
+        }
+        else if( IsAltiumLayerAPlane( alayer ) )
+        {
+            m_board->SetLayerType( klayer, LAYER_T::LT_POWER );
+        }
+
+        if( klayer == B_Cu )
         {
             if( layer.nextId != 0 )
             {
@@ -603,7 +617,7 @@ void ALTIUM_PCB::ParseBoard6Data(
                         "Board6 stream, unexpected id while parsing last stackup layer" );
             }
             // overwrite entry from internal -> bottom
-            m_layermap[static_cast<ALTIUM_LAYER>( i )] = B_Cu;
+            m_layermap[alayer] = B_Cu;
             break;
         }
 
