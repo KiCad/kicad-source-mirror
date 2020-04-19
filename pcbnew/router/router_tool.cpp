@@ -895,6 +895,17 @@ int ROUTER_TOOL::SettingsDialog( const TOOL_EVENT& aEvent )
 }
 
 
+int ROUTER_TOOL::ChangeRouterMode( const TOOL_EVENT& aEvent )
+{
+    PNS::PNS_MODE mode = aEvent.Parameter<PNS::PNS_MODE>();
+    PNS::ROUTING_SETTINGS& settings = m_router->Settings();
+
+    settings.SetMode( mode );
+
+    return 0;
+}
+
+
 void ROUTER_TOOL::breakTrack()
 {
     if( m_startItem && m_startItem->OfKind( PNS::ITEM::SEGMENT_T ) )
@@ -1358,6 +1369,9 @@ void ROUTER_TOOL::setTransitions()
     Go( &ROUTER_TOOL::MainLoop,               PCB_ACTIONS::routeDiffPair.MakeEvent() );
     Go( &ROUTER_TOOL::DpDimensionsDialog,     PCB_ACTIONS::routerDiffPairDialog.MakeEvent() );
     Go( &ROUTER_TOOL::SettingsDialog,         PCB_ACTIONS::routerSettingsDialog.MakeEvent() );
+    Go( &ROUTER_TOOL::ChangeRouterMode,       PCB_ACTIONS::routerHighlightMode.MakeEvent() );
+    Go( &ROUTER_TOOL::ChangeRouterMode,       PCB_ACTIONS::routerShoveMode.MakeEvent() );
+    Go( &ROUTER_TOOL::ChangeRouterMode,       PCB_ACTIONS::routerWalkaroundMode.MakeEvent() );
     Go( &ROUTER_TOOL::InlineDrag,             PCB_ACTIONS::routerInlineDrag.MakeEvent() );
     Go( &ROUTER_TOOL::InlineBreakTrack,       PCB_ACTIONS::inlineBreakTrack.MakeEvent() );
 
@@ -1370,5 +1384,3 @@ void ROUTER_TOOL::setTransitions()
     Go( &ROUTER_TOOL::CustomTrackWidthDialog, ACT_CustomTrackWidth.MakeEvent() );
     Go( &ROUTER_TOOL::onTrackViaSizeChanged,  PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );
 }
-
-

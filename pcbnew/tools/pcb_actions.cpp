@@ -30,6 +30,7 @@
 #include <microwave/microwave_tool.h>
 #include <tool/tool_manager.h>
 #include <router/pns_router.h>
+#include <router/pns_routing_settings.h>
 
 OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
 {
@@ -1120,6 +1121,21 @@ TOOL_ACTION PCB_ACTIONS::routerDiffPairDialog( "pcbnew.InteractiveRouter.DiffPai
         _( "Differential Pair Dimensions..." ), _( "Open Differential Pair Dimension settings" ),
         ps_diff_pair_gap_xpm );
 
+TOOL_ACTION PCB_ACTIONS::routerHighlightMode( "pcbnew.InteractiveRouter.HighlightMode",
+        AS_GLOBAL, 0, "",
+        _( "Router Highlight Mode" ), _( "Switch router to highlight mode" ),
+        nullptr, AF_NONE, (void*) PNS::RM_MarkObstacles );
+
+TOOL_ACTION PCB_ACTIONS::routerShoveMode( "pcbnew.InteractiveRouter.ShoveMode",
+        AS_GLOBAL, 0, "",
+        _( "Router Shove Mode" ), _( "Switch router to shove mode" ),
+        nullptr, AF_NONE, (void*) PNS::RM_Shove );
+
+TOOL_ACTION PCB_ACTIONS::routerWalkaroundMode( "pcbnew.InteractiveRouter.WalkaroundMode",
+        AS_GLOBAL, 0, "",
+        _( "Router Walkaround Mode" ), _( "Switch router to walkaround mode" ),
+        nullptr, AF_NONE, (void*) PNS::RM_Walkaround );
+
 TOOL_ACTION PCB_ACTIONS::selectLayerPair( "pcbnew.InteractiveRouter.SelectLayerPair",
         AS_GLOBAL, 0, "",
         _( "Set Layer Pair..." ), _( "Change active layer pair for routing" ),
@@ -1176,4 +1192,3 @@ TOOL_ACTION PCB_ACTIONS::dragFreeAngle( "pcbnew.InteractiveRouter.DragFreeAngle"
         _( "Drag (free angle)" ),
         _( "Drags the nearest joint in the track without restricting the track angle." ),
         move_xpm );
-

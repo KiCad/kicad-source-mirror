@@ -184,6 +184,10 @@ public:
     static TOOL_ACTION routerSettingsDialog;
     static TOOL_ACTION routerDiffPairDialog;
 
+    /// Actions to enable switching modes via hotkey assignments
+    static TOOL_ACTION routerHighlightMode;
+    static TOOL_ACTION routerShoveMode;
+    static TOOL_ACTION routerWalkaroundMode;
 
     /// Activation of the Push and Shove router (inline dragging mode)
     static TOOL_ACTION routerInlineDrag;

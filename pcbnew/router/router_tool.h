@@ -43,6 +43,7 @@ public:
     int SelectCopperLayerPair( const TOOL_EVENT& aEvent );
     int DpDimensionsDialog( const TOOL_EVENT& aEvent );
     int SettingsDialog( const TOOL_EVENT& aEvent );
+    int ChangeRouterMode( const TOOL_EVENT& aEvent );
     int CustomTrackWidthDialog( const TOOL_EVENT& aEvent );
 
     void setTransitions() override;
