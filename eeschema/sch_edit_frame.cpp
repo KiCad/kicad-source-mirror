@@ -69,6 +69,7 @@
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/cmdline.h>
 
 #include <gal/graphics_abstraction_layer.h>
 
@@ -225,6 +226,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_findReplaceDialog = nullptr;
     m_findReplaceStatusPopup = nullptr;
+
+    m_generateNetlistAndExit = false;
+    m_netlistFilename        = wxEmptyString;
 
     SetSpiceAdjustPassiveValues( false );
 
@@ -787,6 +791,16 @@ void SCH_EDIT_FRAME::LoadProject()
         OpenProjectFiles( std::vector<wxString>( 1, dlg.GetPath() ) );
         m_mruPath = Prj().GetProjectPath();
     }
+}
+
+
+void SCH_EDIT_FRAME::ParseArgs( wxCmdLineParser& aParser )
+{
+    aParser.AddOption( "n", "netlist" );
+    aParser.Parse();
+
+    if( aParser.Found( "netlist", &m_netlistFilename ) )
+        m_generateNetlistAndExit = true;
 }
 
 

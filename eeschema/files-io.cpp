@@ -52,6 +52,7 @@
 #include <ws_data_model.h>
 #include <connection_graph.h>
 #include <tool/actions.h>
+#include <netlist.h>
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
                                  bool aCreateBackupFile )
@@ -444,6 +445,17 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     GetScreen()->ClearDrawingState();
 
     UpdateTitle();
+
+    // If requested, generate a netlist and exit immediately.
+    // NOTE: This is intended as a developer-only feature for now, and can be removed in lieu of
+    // Python scripting once that is possible.
+    if( m_generateNetlistAndExit )
+    {
+        wxLogDebug( wxT( "Writing netlist to %s and exiting..." ), m_netlistFilename );
+        NETLIST_OBJECT_LIST* netlist = CreateNetlist( false, false );
+        WriteNetListFile( netlist, NET_TYPE_PCBNEW, m_netlistFilename, 0, nullptr );
+        Close( false );
+    }
 
     return true;
 }

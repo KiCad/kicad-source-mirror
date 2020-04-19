@@ -37,6 +37,7 @@
 #include <typeinfo>
 #include <macros.h>
 #include <fctsys.h>
+#include <wx/cmdline.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 #include <wx/snglinst.h>
@@ -316,10 +317,16 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     Kiway.set_kiface( KIWAY::KifaceType( TOP_FRAME ), kiface );
 #endif
 
-    // Open project or file specified on the command line:
-    int argc = App().argc;
+    static const wxCmdLineEntryDesc desc[] = {
+        { wxCMD_LINE_OPTION, "f", "frame", _( "Frame to load" ) },
+        { wxCMD_LINE_PARAM, nullptr, nullptr, _( "File to load" ), wxCMD_LINE_VAL_STRING,
+                wxCMD_LINE_PARAM_MULTIPLE | wxCMD_LINE_PARAM_OPTIONAL },
+        { wxCMD_LINE_NONE }
+    };
 
-    int args_offset = 1;
+    wxCmdLineParser parser( App().argc, App().argv );
+    parser.SetDesc( desc );
+    parser.Parse( false );
 
     FRAME_T appType = TOP_FRAME;
 
@@ -333,28 +340,22 @@ bool PGM_SINGLE_TOP::OnPgmInit()
         { wxT( "" ),       FRAME_T_COUNT }
     };
 
-    if( argc > 2 )
+    wxString frameName;
+
+    if( parser.Found( "frame", &frameName ) )
     {
-        if( App().argv[1] == "--frame" )
+        appType = FRAME_T_COUNT;
+
+        for( const auto& it : frameTypes )
         {
-            wxString appName = App().argv[2];
-            appType = FRAME_T_COUNT;
+            if( it.name == frameName )
+                appType = it.type;
+        }
 
-            for( int i = 0; frameTypes[i].type != FRAME_T_COUNT; i++ )
-            {
-                const auto& frame = frameTypes[i];
-                if(frame.name == appName)
-                {
-                    appType = frame.type;
-                }
-            }
-            args_offset += 2;
-
-            if( appType == FRAME_T_COUNT )
-            {
-                wxLogError( wxT( "Unknown frame: %s" ), appName );
-                return false;
-            }
+        if( appType == FRAME_T_COUNT )
+        {
+            wxLogError( wxT( "Unknown frame: %s" ), frameName );
+            return false;
         }
     }
 
@@ -368,8 +369,14 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
     App().SetTopWindow( frame );      // wxApp gets a face.
 
+    // Individual frames may provide additional option/switch processing, but for compatibility,
+    // any positional arguments are treated as a list of files to pass to OpenProjectFiles
+    frame->ParseArgs( parser );
 
-    if( argc > args_offset )
+    // Now after the frame processing, the rest of the positional args are files
+    std::vector<wxString> fileArgs;
+
+    if( parser.GetParamCount() )
     {
         /*
             gerbview handles multiple project data files, i.e. gerber files on
@@ -380,33 +387,29 @@ bool PGM_SINGLE_TOP::OnPgmInit()
             launcher.
         */
 
-        std::vector<wxString>   argSet;
-
-        for( int i = args_offset;  i < argc;  ++i )
-        {
-            argSet.push_back( App().argv[i] );
-        }
+        for( size_t i = 0; i < parser.GetParamCount(); i++ )
+            fileArgs.push_back( parser.GetParam( i ) );
 
         // special attention to a single argument: argv[1] (==argSet[0])
-        if( argc == args_offset + 1 )
+        if( fileArgs.size() == 1 )
         {
-            wxFileName argv1( argSet[0] );
+            wxFileName argv1( fileArgs[0] );
 
 #if defined(PGM_DATA_FILE_EXT)
             // PGM_DATA_FILE_EXT, if present, may be different for each compile,
             // it may come from CMake on the compiler command line, but often does not.
-            // This facillity is mostly useful for those program modules
+            // This facility is mostly useful for those program modules
             // supporting a single argv[1].
             if( !argv1.GetExt() )
                 argv1.SetExt( wxT( PGM_DATA_FILE_EXT ) );
 #endif
             argv1.MakeAbsolute();
 
-            argSet[0] = argv1.GetFullPath();
+            fileArgs[0] = argv1.GetFullPath();
         }
 
         // Use the KIWAY_PLAYER::OpenProjectFiles() API function:
-        if( !frame->OpenProjectFiles( argSet ) )
+        if( !frame->OpenProjectFiles( fileArgs ) )
         {
             // OpenProjectFiles() API asks that it report failure to the UI.
             // Nothing further to say here.
