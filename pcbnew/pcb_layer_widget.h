@@ -131,6 +131,7 @@ protected:
         ID_SHOW_NO_LAYERS,
         ID_SHOW_ALL_LAYERS,
         ID_SHOW_ALL_FRONT,
+        ID_SHOW_ALL_INNER,
         ID_SHOW_ALL_BACK,
         ID_HIDE_ALL_NON_COPPER,
         ID_SHOW_ALL_NON_COPPER,

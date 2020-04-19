@@ -184,6 +184,9 @@ void PCB_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
     AddMenuItem( &menu, ID_SHOW_ALL_FRONT, _( "Show All Front Layers" ),
                  KiBitmap( show_all_front_layers_xpm ) );
 
+    AddMenuItem( &menu, ID_SHOW_ALL_INNER, _( "Show All Inner Layers" ),
+                 KiBitmap( show_all_copper_layers_xpm ) );
+
     AddMenuItem( &menu, ID_SHOW_ALL_BACK, _( "Show All Back Layers" ),
                  KiBitmap( show_all_back_layers_xpm ) );
 }
@@ -310,6 +313,42 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
                     if(  layer == F_Paste || layer == F_SilkS ||
                          layer == F_Mask  || layer == F_Cu ||
                          layer == F_Fab || layer == F_CrtYd  || layer == Edge_Cuts )
+                    {
+                        visible = true;
+                    }
+                    else
+                    {
+                        visible = false;
+                    }
+
+                    cb->SetValue( visible );
+                    OnLayerVisible( layer, visible, isLast );
+
+                    if( isLast )
+                        break;
+                }
+                break;
+            }
+        case ID_SHOW_ALL_INNER:
+            {
+                visible = false;
+                rowCount = GetLayerRowCount();
+
+                for( int row=0;  row<rowCount;  ++row )
+                {
+                    bool isLast;
+                    wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
+                    PCB_LAYER_ID    layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
+                    isLast = ( row == rowCount-1 );
+
+                    if(  layer == In1_Cu  || layer == In2_Cu || layer == In3_Cu  || layer == In4_Cu ||
+                         layer == In5_Cu  || layer == In6_Cu || layer == In7_Cu  || layer == In8_Cu ||
+                         layer == In9_Cu  || layer == In10_Cu || layer == In11_Cu  || layer == In12_Cu ||
+                         layer == In13_Cu  || layer == In14_Cu || layer == In15_Cu  || layer == In16_Cu ||
+                         layer == In17_Cu  || layer == In18_Cu || layer == In19_Cu  || layer == In20_Cu ||
+                         layer == In21_Cu  || layer == In22_Cu || layer == In23_Cu  || layer == In24_Cu || 
+                         layer == In25_Cu  || layer == In26_Cu || layer == In27_Cu  || layer == In28_Cu || 
+                         layer == In29_Cu  || layer == In30_Cu )
                     {
                         visible = true;
                     }
