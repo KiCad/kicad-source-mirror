@@ -956,7 +956,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     std::unordered_set<CONNECTION_SUBGRAPH*> invalidated_subgraphs;
 
-    for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs)
+    for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
     {
         if( subgraph->m_absorbed )
             continue;
@@ -1003,13 +1003,45 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 // If there is no conflict, promote sheet pins to be strong drivers so that they
                 // will be considered below for propagation/merging.
 
+                // It is possible for this to generate a conflict if the sheet pin has the same
+                // name as a global label on the same sheet, because global merging will then treat
+                // this subgraph as if it had a matching local label.  So, for those cases, we
+                // don't apply this promotion
+
                 if( subgraph->m_driver->Type() == SCH_SHEET_PIN_T )
                 {
-                    wxLogTrace( "CONN", "%ld (%s) weakly driven by unique sheet pin %s, promoting",
-                            subgraph->m_code, name,
-                            subgraph->m_driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
+                    bool     conflict    = false;
+                    wxString global_name = connection->Name( true );
+                    size_t   count       = m_net_name_to_subgraphs_map.count( global_name );
 
-                    subgraph->m_strong_driver = true;
+                    if( count )
+                    {
+                        // A global will conflict if it is on the same sheet as this subgraph, since
+                        // it would be connected by implicit local label linking
+                        auto& candidates = m_net_name_to_subgraphs_map.at( global_name );
+
+                        for( const auto& candidate : candidates )
+                        {
+                            if( candidate->m_sheet == sheet )
+                                conflict = true;
+                        }
+                    }
+
+                    if( conflict )
+                    {
+                        wxLogTrace( "CONN",
+                                "%ld (%s) skipped for promotion due to potential conflict",
+                                subgraph->m_code, name );
+                    }
+                    else
+                    {
+                        wxLogTrace( "CONN",
+                                "%ld (%s) weakly driven by unique sheet pin %s, promoting",
+                                subgraph->m_code, name,
+                                subgraph->m_driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
+
+                        subgraph->m_strong_driver = true;
+                    }
                 }
             }
         }
