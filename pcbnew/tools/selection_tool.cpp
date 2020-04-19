@@ -1609,7 +1609,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         // pick up items under an (unlocked) module without also moving the module's sub-parts.
         if( !m_editModules && !checkVisibilityOnly )
         {
-            if( m_multiple )
+            if( m_multiple && !highContrast )
                 return false;
         }
 
@@ -2313,5 +2313,3 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::selectSheetContents, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
     Go( &SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsModified );
 }
-
-
