@@ -80,6 +80,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Compare KiCad netlists')
     parser.add_argument('first_netlist')
     parser.add_argument('second_netlist')
+    parser.add_argument('--quiet', action='store_true')
 
     args = parser.parse_args()
 
@@ -97,12 +98,14 @@ if __name__ == '__main__':
     b = extract_nets(b)
 
     if a is None:
-        print("Could not read nets from {}".format(fn_a))
-        sys.exit(1)
+        if not args.quiet:
+            print("Could not read nets from {}".format(fn_a))
+        sys.exit(-1)
 
     if b is None:
-        print("Could not read nets from {}".format(fn_b))
-        sys.exit(1)
+        if not args.quiet:
+            print("Could not read nets from {}".format(fn_b))
+        sys.exit(-1)
 
     nets_a = unpack(a)
     nets_b = unpack(b)
@@ -115,47 +118,51 @@ if __name__ == '__main__':
     both = sa & sb
 
     if len(only_a) == len(only_b) == 0:
-        print("{} and {} are identical".format(fn_a, fn_b))
+        if not args.quiet:
+            print("{} and {} are identical".format(fn_a, fn_b))
         sys.exit(0)
 
-    print("A: {}\nB: {}".format(fn_a, fn_b))
+    if not args.quiet:
+        print("A: {}\nB: {}".format(fn_a, fn_b))
 
-    changed_header = False
+        changed_header = False
 
-    for net_name in sorted(both):
-        if nets_a[net_name] != nets_b[net_name]:
-            if not changed_header:
-                print("\nChanged nets:\n")
-                changed_header = True
+        for net_name in sorted(both):
+            if nets_a[net_name] != nets_b[net_name]:
+                if not changed_header:
+                    print("\nChanged nets:\n")
+                    changed_header = True
 
-            print("{}: {} => {}".format(net_name, nets_a[net_name],
-                                        nets_b[net_name]))
+                print("{}: {} => {}".format(net_name, nets_a[net_name],
+                                            nets_b[net_name]))
 
-    discards_a = set()
-    discards_b = set()
+        discards_a = set()
+        discards_b = set()
 
-    renamed_header = False
+        renamed_header = False
 
-    for net_name in sorted(only_a):
-        for candidate in only_b:
-            if nets_a[net_name] == nets_b[candidate]:
-                if not renamed_header:
-                    print("\nRenamed nets (no connection changes):\n")
-                    renamed_header = True
+        for net_name in sorted(only_a):
+            for candidate in only_b:
+                if nets_a[net_name] == nets_b[candidate]:
+                    if not renamed_header:
+                        print("\nRenamed nets (no connection changes):\n")
+                        renamed_header = True
 
-                print("{} => {}".format(net_name, candidate))
-                discards_a.add(net_name)
-                discards_b.add(candidate)
+                    print("{} => {}".format(net_name, candidate))
+                    discards_a.add(net_name)
+                    discards_b.add(candidate)
 
-    only_a.difference_update(discards_a)
-    only_b.difference_update(discards_b)
+        only_a.difference_update(discards_a)
+        only_b.difference_update(discards_b)
 
-    if len(only_a) > 0:
-        print("\nOnly in {}:\n".format(fn_a))
-        print('\n'.join(["{}: {}".format(el, nets_a[el])
-                        for el in sorted(only_a)]))
+        if len(only_a) > 0:
+            print("\nOnly in {}:\n".format(fn_a))
+            print('\n'.join(["{}: {}".format(el, nets_a[el])
+                            for el in sorted(only_a)]))
 
-    if len(only_b) > 0:
-        print("\nOnly in {}:\n".format(fn_b))
-        print('\n'.join(["{}: {}".format(el, nets_b[el])
-                        for el in sorted(only_b)]))
+        if len(only_b) > 0:
+            print("\nOnly in {}:\n".format(fn_b))
+            print('\n'.join(["{}: {}".format(el, nets_b[el])
+                            for el in sorted(only_b)]))
+
+    sys.exit(1)

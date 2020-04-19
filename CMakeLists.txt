@@ -129,6 +129,10 @@ option( KICAD_USE_VALGRIND
     "Build KiCad with valgrind stack tracking enabled."
     OFF )
 
+option( KICAD_NETLIST_QA
+    "Run eeschema netlist QA tests (requires Python 3)"
+    OFF )
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )

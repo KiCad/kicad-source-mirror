@@ -1,0 +1,8 @@
+(fp_lib_table
+  (lib (name "Package_DIP")(type "KiCad")(uri "$(KISYSMOD)/Package_DIP.pretty")(options "")(descr ""))
+  (lib (name "Capacitor_THT")(type "KiCad")(uri "$(KISYSMOD)/Capacitor_THT.pretty")(options "")(descr ""))
+  (lib (name "Resistor_THT")(type "KiCad")(uri "$(KISYSMOD)/Resistor_THT.pretty")(options "")(descr ""))
+  (lib (name "Package_TO_SOT_THT")(type "KiCad")(uri "$(KISYSMOD)/Package_TO_SOT_THT.pretty")(options "")(descr ""))
+  (lib (name "TerminalBlock_Altech")(type "KiCad")(uri "${KISYSMOD}/TerminalBlock_Altech.pretty")(options "")(descr ""))
+  (lib (name "Potentiometer_THT")(type "KiCad")(uri "${KISYSMOD}/Potentiometer_THT.pretty")(options "")(descr ""))
+)

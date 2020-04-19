@@ -100,3 +100,14 @@ set_source_files_properties( eeschema_test_utils.cpp PROPERTIES
 )
 
 kicad_add_boost_test( qa_eeschema eeschema )
+
+# eeschema netlist tests
+# technically this doesn't depend on KICAD_SCRIPTING but if we have that, we know we have Python.
+if( KICAD_SCRIPTING_MODULES AND KICAD_NETLIST_QA )
+
+    add_test( NAME qa_netlist
+        COMMAND ${PYTHON_EXECUTABLE} test_netlists.py ${CMAKE_BINARY_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+
+endif()
