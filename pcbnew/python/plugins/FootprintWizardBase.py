@@ -143,8 +143,8 @@ class FootprintWizard(pcbnew.FootprintWizardPlugin):
 
         thick = self.GetTextThickness()
 
-        self.module.Reference().SetThickness(thick)
-        self.module.Value().SetThickness(thick)
+        self.module.Reference().SetTextThickness(thick)
+        self.module.Value().SetTextThickness(thick)
 
         self.BuildThisFootprint()  # implementer's build function
 
