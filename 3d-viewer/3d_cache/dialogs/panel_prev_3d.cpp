@@ -208,6 +208,8 @@ void PANEL_PREV_3D::SetSelectedModel( int idx )
         xoff->ChangeValue( formatOffsetValue( modelInfo.m_Offset.x ) );
         yoff->ChangeValue( formatOffsetValue( modelInfo.m_Offset.y ) );
         zoff->ChangeValue( formatOffsetValue( modelInfo.m_Offset.z ) );
+
+        m_opacity->SetValue( modelInfo.m_Opacity * 100.0 );
     }
     else
     {
@@ -224,6 +226,8 @@ void PANEL_PREV_3D::SetSelectedModel( int idx )
         xoff->ChangeValue( wxEmptyString );
         yoff->ChangeValue( wxEmptyString );
         zoff->ChangeValue( wxEmptyString );
+
+        m_opacity->SetValue( 100 );
     }
 }
 
@@ -246,6 +250,21 @@ void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
         modelInfo->m_Offset.x = DoubleValueFromString( m_userUnits, xoff->GetValue() ) / IU_PER_MM;
         modelInfo->m_Offset.y = DoubleValueFromString( m_userUnits, yoff->GetValue() ) / IU_PER_MM;
         modelInfo->m_Offset.z = DoubleValueFromString( m_userUnits, zoff->GetValue() ) / IU_PER_MM;
+
+        // Update the dummy module for the preview
+        UpdateDummyModule( false );
+    }
+}
+
+
+void PANEL_PREV_3D::onOpacitySlider( wxCommandEvent& event )
+{
+    if( m_parentModelList && m_selected >= 0 && m_selected < (int) m_parentModelList->size() )
+    {
+        // Write settings back to the parent
+        MODULE_3D_SETTINGS* modelInfo = &m_parentModelList->at( (unsigned) m_selected );
+
+        modelInfo->m_Opacity = m_opacity->GetValue() / 100.0;
 
         // Update the dummy module for the preview
         UpdateDummyModule( false );

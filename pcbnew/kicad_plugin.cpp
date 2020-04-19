@@ -1160,6 +1160,9 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
                           m_out->Quotew( bs3D->m_Filename ).c_str(),
                           bs3D->m_Show ? "" : " hide" );
 
+            if( bs3D->m_Opacity != 1.0 )
+                m_out->Print( aNestLevel+2, "(opacity %0.4f)", bs3D->m_Opacity );
+
             /* Write 3D model offset in mm
              * 4.0.x wrote "at" which was actually in inches
              * 5.0.x onwards, 3D model offset is written using "offset"

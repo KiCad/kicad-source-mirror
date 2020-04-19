@@ -85,6 +85,7 @@ class MODULE_3D_SETTINGS
             m_Scale { 1, 1, 1 },
             m_Rotation { 0, 0, 0 },
             m_Offset { 0, 0, 0 },
+            m_Opacity( 1.0 ),
             m_Show( true )
         {
         }
@@ -97,6 +98,7 @@ class MODULE_3D_SETTINGS
         VECTOR3D m_Scale;       ///< 3D model scaling factor (dimensionless)
         VECTOR3D m_Rotation;    ///< 3D model rotation (degrees)
         VECTOR3D m_Offset;      ///< 3D model offset (mm)
+        double   m_Opacity;
         wxString m_Filename;    ///< The 3D shape filename in 3D library
         bool     m_Show;        ///< Include module in rendering
 };

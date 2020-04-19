@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PANEL_PREV_3D_BASE_H__
-#define __PANEL_PREV_3D_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -21,10 +20,11 @@
 #include <wx/spinbutt.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/slider.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/panel.h>
 
@@ -34,10 +34,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_PREV_3D_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_PREV_3D_BASE : public wxPanel 
+class PANEL_PREV_3D_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticText1;
 		wxTextCtrl* xscale;
@@ -65,6 +65,7 @@ class PANEL_PREV_3D_BASE : public wxPanel
 		wxStaticText* m_staticText32;
 		wxTextCtrl* zoff;
 		wxSpinButton* m_spinZoffset;
+		wxSlider* m_opacity;
 		wxBoxSizer* m_SizerPanelView;
 		wxBitmapButton* m_bpvISO;
 		wxBitmapButton* m_bpvLeft;
@@ -74,7 +75,7 @@ class PANEL_PREV_3D_BASE : public wxPanel
 		wxBitmapButton* m_bpvTop;
 		wxBitmapButton* m_bpvBottom;
 		wxBitmapButton* m_bpUpdate;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onMouseWheelScale( wxMouseEvent& event ) { event.Skip(); }
 		virtual void updateOrientation( wxCommandEvent& event ) { event.Skip(); }
@@ -86,6 +87,7 @@ class PANEL_PREV_3D_BASE : public wxPanel
 		virtual void onMouseWheelOffset( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onDecrementOffset( wxSpinEvent& event ) { event.Skip(); }
 		virtual void onIncrementOffset( wxSpinEvent& event ) { event.Skip(); }
+		virtual void onOpacitySlider( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DISO( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DLeft( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DRight( wxCommandEvent& event ) { event.Skip(); }
@@ -94,14 +96,13 @@ class PANEL_PREV_3D_BASE : public wxPanel
 		virtual void View3DTop( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DBottom( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DUpdate( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
 		wxTextCtrl* yoff;
-		
-		PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
+
+		PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_PREV_3D_BASE();
-	
+
 };
 
-#endif //__PANEL_PREV_3D_BASE_H__

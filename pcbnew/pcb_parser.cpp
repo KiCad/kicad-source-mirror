@@ -415,6 +415,11 @@ MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
             n3D->m_Show = false;
             break;
 
+        case T_opacity:
+            n3D->m_Opacity = parseDouble( "opacity value" );
+            NeedRIGHT();
+            break;
+
         case T_offset:
             NeedLEFT();
             token = NextTok();
@@ -464,7 +469,7 @@ MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
             break;
 
         default:
-            Expecting( "at, hide, offset, scale, or rotate" );
+            Expecting( "at, hide, opacity, offset, scale, or rotate" );
         }
 
     }

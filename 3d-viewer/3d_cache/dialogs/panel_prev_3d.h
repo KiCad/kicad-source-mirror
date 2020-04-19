@@ -134,6 +134,8 @@ private:
         doIncrementOffset( event, -1.0 );
     }
 
+    void onOpacitySlider( wxCommandEvent& event ) override;
+
     void doIncrementScale( wxSpinEvent& aEvent, double aSign );
     void doIncrementRotation( wxSpinEvent& aEvent, double aSign );
     void doIncrementOffset( wxSpinEvent& aEvent, double aSign );
