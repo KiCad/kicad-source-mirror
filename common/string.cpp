@@ -173,7 +173,7 @@ wxString UnescapeString( const wxString& aSource )
             else if( token == wxS( "brace" ) )     newbuf.append( wxS( "{" ) );
             else
             {
-                newbuf.append( "${" + token + "}" );
+                newbuf.append( "{" + token + "}" );
             }
         }
         else
