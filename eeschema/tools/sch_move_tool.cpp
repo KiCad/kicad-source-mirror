@@ -289,7 +289,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         if( item->GetParent() && item->GetParent()->IsSelected() )
                             continue;
 
-                        moveItem( item, delta, m_isDragOperation );
+                        moveItem( item, delta );
                         updateView( item );
                     }
 
@@ -339,7 +339,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( item->GetParent() && item->GetParent()->IsSelected() )
                     continue;
 
-                moveItem( item, delta, m_isDragOperation );
+                moveItem( item, delta );
                 updateView( item );
             }
 
@@ -496,7 +496,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoint,
                                            EDA_ITEMS& aList )
 {
-    for( auto test : m_frame->GetScreen()->Items() )
+    for( SCH_ITEM* test : m_frame->GetScreen()->Items() )
     {
         if( test->IsSelected() || !test->IsConnectable() || !test->CanConnect( aOriginalItem ) )
             continue;
@@ -574,7 +574,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
 
                 for( wxPoint& point : connections )
                 {
-                    if( aOriginalItem->HitTest( point ) )
+                    if( aOriginalItem->HitTest( point, 1 ) )
                     {
                         test->SetFlags( TEMP_SELECTED );
                         aList.push_back( test );
@@ -608,17 +608,60 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
 }
 
 
-void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
+void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 {
+    std::vector< std::pair<double, SCH_TEXT*> > labels;
+
+    auto collectLabels =
+        [&] ( SCH_LINE* aLine )
+        {
+            for( SCH_ITEM* test : m_frame->GetScreen()->Items().OfType( SCH_LABEL_T ) )
+            {
+                if( test->IsSelected() )
+                    continue;   // These will be moved on their own because they're selected
+
+                if( !test->CanConnect( aLine ) || !aLine->HitTest( test->GetPosition(), 1 ) )
+                    continue;
+
+                SCH_TEXT* label = static_cast<SCH_TEXT*>( test );
+                double    pct = GetLineLength( label->GetPosition(), aLine->GetStartPoint() ) /
+                                GetLineLength( aLine->GetEndPoint(), aLine->GetStartPoint() );
+
+                labels.emplace_back( pct, label );
+            }
+        };
+
+    auto adjustLabels =
+        [&] ( SCH_LINE* aLine )
+        {
+            for( std::pair<double, SCH_TEXT*> pair : labels )
+            {
+                double    pct = pair.first;
+                SCH_TEXT* label = pair.second;
+                wxPoint   lineVector( aLine->GetEndPoint() - aLine->GetStartPoint() );
+
+                label->SetPosition( aLine->GetStartPoint() + ( lineVector * pct ) );
+                m_frame->RefreshItem( label );
+            }
+        };
+
     switch( aItem->Type() )
     {
     case SCH_LINE_T:
+    {
+        SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
+
+        if( aItem->HasFlag( STARTPOINT ) || aItem->HasFlag( ENDPOINT ) )
+            collectLabels( line );
+
         if( aItem->HasFlag( STARTPOINT ) )
-            static_cast<SCH_LINE*>( aItem )->MoveStart( (wxPoint) aDelta );
+            line->MoveStart( (wxPoint) aDelta );
 
         if( aItem->HasFlag( ENDPOINT ) )
-            static_cast<SCH_LINE*>( aItem )->MoveEnd( (wxPoint) aDelta );
+            line->MoveEnd( (wxPoint) aDelta );
 
+        adjustLabels( line );
+    }
         break;
 
     case SCH_PIN_T:

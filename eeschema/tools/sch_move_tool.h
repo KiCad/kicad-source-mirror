@@ -50,7 +50,7 @@ public:
     int Main( const TOOL_EVENT& aEvent );
 
 private:
-    void moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag );
+    void moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta );
 
     ///> Finds additional items for a drag operation.
     ///> Connected items with no wire are included (as there is no wire to adjust for the drag).

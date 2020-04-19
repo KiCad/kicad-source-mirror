@@ -368,8 +368,11 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
             wxCHECK_MSG( ii < aItemList.size(), previousState != m_isDangling,
                          wxT( "Dangling end type list overflow.  Bad programmer!" ) );
 
+            int accuracy = 1;   // We have rounding issues with an accuracy of 0
+
             DANGLING_END_ITEM & nextItem = aItemList[ii];
-            m_isDangling = !IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), GetTextPos() );
+            m_isDangling = !TestSegmentHit( GetTextPos(), item.GetPosition(),
+                                            nextItem.GetPosition(), accuracy );
 
             if( !m_isDangling )
             {

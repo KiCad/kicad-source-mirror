@@ -790,6 +790,9 @@ bool SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath )
 SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLayer,
                                SCH_LINE_TEST_T aSearchType )
 {
+    // an accuracy of 0 had problems with rounding errors; use at least 1
+    aAccuracy = std::max( aAccuracy, 1 );
+
     for( SCH_ITEM* item : Items() )
     {
         if( item->Type() != SCH_LINE_T )
