@@ -60,7 +60,11 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     wxString title;
 
     m_MultiLineText->SetEOLMode( wxSTC_EOL_LF );
-    m_MultiLineText->SetUseHorizontalScrollBar( false );
+
+    // A hack which causes Scintilla to auto-size the text editor canvas
+    // See: https://github.com/jacobslusser/ScintillaNET/issues/216
+    m_MultiLineText->SetScrollWidth( 1 );
+    m_MultiLineText->SetScrollWidthTracking( true );
 
     m_linesThickness.Show( m_item->Type() == PCB_DIMENSION_T );
 

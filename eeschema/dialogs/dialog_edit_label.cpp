@@ -117,7 +117,11 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     }
 
     m_valueMultiLine->SetEOLMode( wxSTC_EOL_LF );
-    m_valueMultiLine->SetUseHorizontalScrollBar( false );
+
+    // A hack which causes Scintilla to auto-size the text editor canvas
+    // See: https://github.com/jacobslusser/ScintillaNET/issues/216
+    m_valueMultiLine->SetScrollWidth( 1 );
+    m_valueMultiLine->SetScrollWidthTracking( true );
 
     if( m_CurrentText->IsMultilineAllowed() )
     {
@@ -146,8 +150,10 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
         m_activeTextCtrl = m_valueSingleLine;
         m_activeTextEntry = m_valueSingleLine;
 
-        m_labelCombo->Show( false );       m_valueCombo->Show( false );
-        m_labelMultiLine->Show( false );   m_valueMultiLine->Show( false );
+        m_labelCombo->Show( false );
+        m_valueCombo->Show( false );
+        m_labelMultiLine->Show( false );
+        m_valueMultiLine->Show( false );
 
         if( m_CurrentText->Type() != SCH_TEXT_T )
             m_valueSingleLine->SetValidator( m_netNameValidator );
