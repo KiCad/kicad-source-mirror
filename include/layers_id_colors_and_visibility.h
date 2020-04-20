@@ -493,6 +493,17 @@ public:
     LSET( unsigned aIdCount, int aFirst, ... );  // args chosen to prevent LSET( int ) from compiling
 
     /**
+     * See if the layer set contains a PCB layer.
+     *
+     * @param aLayer is the layer to check
+     * @return true if the layer is included
+     */
+    bool Contains( PCB_LAYER_ID aLayer )
+    {
+        return test( aLayer );
+    }
+
+    /**
      * Function Name
      * returns the fixed name association with aLayerId.
      */

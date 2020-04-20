@@ -148,18 +148,16 @@ bool PCB_LAYER_WIDGET::isLayerAllowedInFpMode( PCB_LAYER_ID aLayer )
 
 void PCB_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
 {
-    // menu text is capitalized:
-    // http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
     AddMenuItem( &menu, ID_SHOW_ALL_COPPER_LAYERS,
                  _( "Show All Copper Layers" ),
                  KiBitmap( select_layer_pair_xpm ) );
-    AddMenuItem( &menu, ID_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE,
+    AddMenuItem( &menu, ID_HIDE_ALL_COPPER_LAYERS_BUT_ACTIVE,
                  _( "Hide All Copper Layers But Active" ),
                  KiBitmap( select_w_layer_xpm ) );
-    AddMenuItem( &menu, ID_ALWAYS_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE,
+    AddMenuItem( &menu, ID_ALWAYS_HIDE_ALL_COPPER_LAYERS_BUT_ACTIVE,
                  _( "Always Hide All Copper Layers But Active" ),
                  KiBitmap( select_w_layer_xpm ) );
-    AddMenuItem( &menu, ID_SHOW_NO_COPPER_LAYERS,
+    AddMenuItem( &menu, ID_HIDE_ALL_COPPER_LAYERS,
                  _( "Hide All Copper Layers" ),
                  KiBitmap( show_no_copper_layers_xpm ) );
 
@@ -181,13 +179,17 @@ void PCB_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
 
     menu.AppendSeparator();
 
-    AddMenuItem( &menu, ID_SHOW_ALL_FRONT, _( "Show All Front Layers" ),
+    AddMenuItem( &menu, ID_SHOW_ONLY_FRONT, _( "Show Only Front Layers" ),
                  KiBitmap( show_all_front_layers_xpm ) );
 
-    AddMenuItem( &menu, ID_SHOW_ALL_INNER, _( "Show All Inner Layers" ),
-                 KiBitmap( show_all_copper_layers_xpm ) );
+    // Only show the internal layer option if internal layers are enabled
+    if( myframe->GetBoard()->GetCopperLayerCount() > 2 )
+    {
+        AddMenuItem( &menu, ID_SHOW_ONLY_INNER, _( "Show Only Inner Layers" ),
+                     KiBitmap( show_all_copper_layers_xpm ) );
+    }
 
-    AddMenuItem( &menu, ID_SHOW_ALL_BACK, _( "Show All Back Layers" ),
+    AddMenuItem( &menu, ID_SHOW_ONLY_BACK, _( "Show Only Back Layers" ),
                  KiBitmap( show_all_back_layers_xpm ) );
 }
 
@@ -205,198 +207,96 @@ void PCB_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
 
 void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 {
-    int     rowCount;
-    int     menuId = event.GetId();
-    bool    visible;
-    bool    force_active_layer_visible;
+    // Force the active layer to be visible
+    bool forceActiveLayer = false;
 
-    m_alwaysShowActiveCopperLayer = ( menuId == ID_ALWAYS_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE );
-    force_active_layer_visible = ( menuId == ID_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE ||
-            menuId == ID_ALWAYS_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE );
+    // Reset the always show property
+    m_alwaysShowActiveCopperLayer = false;
 
-    switch( menuId )
+    // Make a distinction between the layers we want to enable and those we
+    // want to disable explictly. That way we can either or the current layerset
+    // or operate on all layers.
+    LSET layersToShow;
+    LSET layersToHide;
+
+    switch( event.GetId() )
     {
         case ID_SHOW_NO_LAYERS:
+            layersToHide = LSET::AllLayersMask();
+            break;
+
         case ID_SHOW_ALL_LAYERS:
-            {
-                visible = ( menuId == ID_SHOW_ALL_LAYERS );
-                rowCount = GetLayerRowCount();
-
-                for( int row=0;  row<rowCount;  ++row )
-                {
-                    bool isLast;
-                    wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
-                    PCB_LAYER_ID    layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
-                    cb->SetValue( visible );
-
-                    isLast = row == rowCount-1;
-
-                    OnLayerVisible( layer, visible, isLast );
-
-                    if( isLast )
-                        break;
-                }
-                break;
-            }
+            layersToShow = LSET::AllLayersMask();
+            break;
 
         case ID_SHOW_ALL_COPPER_LAYERS:
-        case ID_ALWAYS_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE:
-        case ID_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE:
-        case ID_SHOW_NO_COPPER_LAYERS:
+            layersToShow = LSET::AllCuMask();
+            break;
+
+        case ID_ALWAYS_HIDE_ALL_COPPER_LAYERS_BUT_ACTIVE:
+            m_alwaysShowActiveCopperLayer = true;
+            // Fallthrough
+
+        case ID_HIDE_ALL_COPPER_LAYERS_BUT_ACTIVE:
+            forceActiveLayer = true;
+            // Fallthrough
+
+        case ID_HIDE_ALL_COPPER_LAYERS:
+            layersToHide = LSET::AllCuMask();
+            break;
+
         case ID_HIDE_ALL_NON_COPPER:
+            layersToHide = LSET::AllNonCuMask();
+            break;
+
         case ID_SHOW_ALL_NON_COPPER:
-            {
+            layersToShow = LSET::AllNonCuMask();
+            break;
 
-                // Search the last copper layer row index:
-                int lastCu = -1;
-                rowCount = GetLayerRowCount();
-                for( int row = rowCount-1; row>=0; --row )
-                {
-                    wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
-                    PCB_LAYER_ID    layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
+        case ID_SHOW_ONLY_FRONT:
+            // Include the edgecuts layer as well as the front layers and hide the other layers
+            layersToShow = LSET::FrontMask().set( Edge_Cuts );
+            layersToHide = ~layersToShow;
+            break;
 
-                    if( IsCopperLayer( layer ) )
-                    {
-                        lastCu = row;
-                        break;
-                    }
-                }
+        case ID_SHOW_ONLY_INNER:
+            // Include the edgecuts layer as well as the internal layers and hide the other layers
+            layersToShow = LSET::InternalCuMask().set( Edge_Cuts );
+            layersToHide = ~layersToShow;
+            break;
 
-                // Enable/disable the copper layers visibility:
-                int startrow = 0;
-
-                if(     ( menuId == ID_SHOW_ALL_NON_COPPER ) ||
-                        ( menuId == ID_HIDE_ALL_NON_COPPER ) )
-                {
-                    startrow = lastCu + 1;
-                }
-
-                for( int row = startrow;  row<rowCount;  ++row )
-                {
-                    wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
-                    PCB_LAYER_ID    layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
-
-                    visible = ( ( menuId == ID_SHOW_ALL_COPPER_LAYERS ) || ( menuId == ID_SHOW_ALL_NON_COPPER ) );
-
-                    if( force_active_layer_visible && (layer == myframe->GetActiveLayer() ) )
-                        visible = true;
-
-                    cb->SetValue( visible );
-
-                    bool isLastLayer = (row == lastCu);
-
-                    if(     ( menuId == ID_SHOW_ALL_NON_COPPER ) ||
-                            ( menuId == ID_HIDE_ALL_NON_COPPER ) )
-                    {
-                        isLastLayer = false;
-                    }
-                    OnLayerVisible( layer, visible, isLastLayer );
-
-                    if( isLastLayer )
-                        break;
-                }
-                break;
-            }
-
-        case ID_SHOW_ALL_FRONT:
-            {
-                visible = false;
-                rowCount = GetLayerRowCount();
-
-                for( int row=0;  row<rowCount;  ++row )
-                {
-                    bool isLast;
-                    wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
-                    PCB_LAYER_ID    layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
-                    isLast = ( row == rowCount-1 );
-
-                    if(  layer == F_Paste || layer == F_SilkS ||
-                         layer == F_Mask  || layer == F_Cu ||
-                         layer == F_Fab || layer == F_CrtYd  || layer == Edge_Cuts )
-                    {
-                        visible = true;
-                    }
-                    else
-                    {
-                        visible = false;
-                    }
-
-                    cb->SetValue( visible );
-                    OnLayerVisible( layer, visible, isLast );
-
-                    if( isLast )
-                        break;
-                }
-                break;
-            }
-        case ID_SHOW_ALL_INNER:
-            {
-                visible = false;
-                rowCount = GetLayerRowCount();
-
-                for( int row=0;  row<rowCount;  ++row )
-                {
-                    bool isLast;
-                    wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
-                    PCB_LAYER_ID    layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
-                    isLast = ( row == rowCount-1 );
-
-                    if(  layer == In1_Cu  || layer == In2_Cu || layer == In3_Cu  || layer == In4_Cu ||
-                         layer == In5_Cu  || layer == In6_Cu || layer == In7_Cu  || layer == In8_Cu ||
-                         layer == In9_Cu  || layer == In10_Cu || layer == In11_Cu  || layer == In12_Cu ||
-                         layer == In13_Cu  || layer == In14_Cu || layer == In15_Cu  || layer == In16_Cu ||
-                         layer == In17_Cu  || layer == In18_Cu || layer == In19_Cu  || layer == In20_Cu ||
-                         layer == In21_Cu  || layer == In22_Cu || layer == In23_Cu  || layer == In24_Cu || 
-                         layer == In25_Cu  || layer == In26_Cu || layer == In27_Cu  || layer == In28_Cu || 
-                         layer == In29_Cu  || layer == In30_Cu )
-                    {
-                        visible = true;
-                    }
-                    else
-                    {
-                        visible = false;
-                    }
-
-                    cb->SetValue( visible );
-                    OnLayerVisible( layer, visible, isLast );
-
-                    if( isLast )
-                        break;
-                }
-                break;
-            }
-        case ID_SHOW_ALL_BACK:
-            {
-                visible = false;
-                rowCount = GetLayerRowCount();
-
-                for( int row=0;  row<rowCount;  ++row )
-                {
-                    bool isLast;
-                    wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
-                    PCB_LAYER_ID    layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
-                    isLast = ( row == rowCount-1 );
-
-                    if( layer == B_Paste || layer == B_SilkS ||
-                        layer == B_Mask  || layer == B_Cu ||
-                        layer == B_Fab || layer == B_CrtYd || layer == Edge_Cuts )
-                    {
-                        visible = true;
-                    }
-                    else
-                    {
-                        visible = false;
-                    }
-
-                    cb->SetValue( visible );
-                    OnLayerVisible( layer, visible, isLast );
-
-                    if( isLast )
-                        break;
-                }
-                break;
-            }
+        case ID_SHOW_ONLY_BACK:
+            // Include the edgecuts layer as well as the back layers and hide the other layers
+            layersToShow = LSET::BackMask().set( Edge_Cuts );
+            layersToHide = ~layersToShow;
+            break;
     }
+
+    int  rowCount = GetLayerRowCount();
+
+    for( int row = 0; row < rowCount;  ++row )
+    {
+        wxCheckBox*  cb    = static_cast<wxCheckBox*>( getLayerComp( row, COLUMN_COLOR_LYR_CB ) );
+        PCB_LAYER_ID layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
+
+        bool visible = cb->GetValue();
+
+        if( layersToShow.Contains( layer ) )
+            visible = true;
+
+        if( layersToHide.Contains( layer ) )
+            visible = false;
+
+        // Force the active layer in the editor to be visible
+        if( forceActiveLayer && ( layer == myframe->GetActiveLayer() ) )
+            visible = true;
+
+        cb->SetValue( visible );
+        OnLayerVisible( layer, visible, false );
+    }
+
+    // Refresh the drawing canvas
+    myframe->GetCanvas()->Refresh();
 }
 
 
@@ -664,7 +564,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelected()
     // postprocess after an active layer selection
     // ensure active layer visible
     wxCommandEvent event;
-    event.SetId( ID_ALWAYS_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE );
+    event.SetId( ID_ALWAYS_HIDE_ALL_COPPER_LAYERS_BUT_ACTIVE );
     onPopupSelection( event );
 
     return true;
