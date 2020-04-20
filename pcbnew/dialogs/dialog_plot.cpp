@@ -155,6 +155,10 @@ void DIALOG_PLOT::init_Dialog()
     // Gerber precision for coordinates
     m_coordFormatCtrl->SetSelection( m_plotOpts.GetGerberPrecision() == 5 ? 0 : 1 );
 
+    // SVG precision and units for coordinates
+    m_svgPrecsision->SetValue( m_plotOpts.GetSvgPrecision() );
+    m_svgUnits->SetSelection( m_plotOpts.GetSvgUseInch() );
+
     // Option for excluding contents of "Edges Pcb" layer
     m_excludeEdgeLayerOpt->SetValue( m_plotOpts.GetExcludeEdgeLayer() );
 
@@ -396,8 +400,9 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 
     switch( getPlotFormat() )
     {
-    case PLOT_FORMAT::PDF:
     case PLOT_FORMAT::SVG:
+        m_PlotOptionsSizer->Show( m_svgOptionsSizer );
+    case PLOT_FORMAT::PDF:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( false );
         setPlotModeChoiceSelection( FILLED );
@@ -442,6 +447,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Show( m_PSOptionsSizer );
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
+        m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
         break;
 
     case PLOT_FORMAT::GERBER:
@@ -469,6 +475,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
+        m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
         break;
 
     case PLOT_FORMAT::HPGL:
@@ -492,6 +499,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Show( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
         m_PlotOptionsSizer->Hide( m_SizerDXF_options );
+        m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
         break;
 
     case PLOT_FORMAT::DXF:
@@ -518,6 +526,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
         m_PlotOptionsSizer->Show( m_SizerDXF_options );
+        m_PlotOptionsSizer->Hide( m_svgOptionsSizer );
 
         OnChangeDXFPlotMode( event );
         break;
@@ -693,6 +702,7 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetCreateGerberJobFile( m_generateGerberJobFile->GetValue() );
 
     tempOptions.SetGerberPrecision( m_coordFormatCtrl->GetSelection() == 0 ? 5 : 6 );
+    tempOptions.SetSvgPrecision( m_svgPrecsision->GetValue(), m_svgUnits->GetSelection() );
 
     LSET selectedLayers;
     for( unsigned i = 0; i < m_layerList.size(); i++ )

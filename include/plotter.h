@@ -452,6 +452,11 @@ public:
         // NOP for most plotters. Only for Gerber plotter
     }
 
+    virtual void SetSvgCoordinatesFormat( unsigned aResolution, bool aUseInches = false )
+    {
+        // NOP for most plotters. Only for SVG plotter
+    }
+
     /**
      * calling this function allows one to define the beginning of a group
      * of drawing items, for instance in SVG  or Gerber format.
@@ -962,6 +967,18 @@ public:
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;
 
+    /**
+     * Function SetSvgCoordinatesFormat
+     * selection of SVG step size (number of digits needed for 1 mm or 1 inch )
+     * @param aResolution = number of digits in mantissa of coordinate
+     *                      use a value from 3-6
+     *                      do not use value > 6 to avoid overflow in PCBNEW
+     *                      do not use value > 4 to avoid overflow for other parts
+     * @param aUseInches = true to use inches, false to use mm (default)
+     *
+     * Should be called only after SetViewport() is called
+     */
+    virtual void SetSvgCoordinatesFormat( unsigned aResolution, bool aUseInches = false ) override;
 
     /**
      * calling this function allows one to define the beginning of a group
@@ -991,18 +1008,25 @@ public:
                        void* aData = NULL ) override;
 
 protected:
-    FILL_T m_fillMode;              // true if the current contour
-                                    // rect, arc, circle, polygon must be filled
-    long m_pen_rgb_color;           // current rgb color value: each color has
-                                    // a value 0 ... 255, and the 3 colors are
-                                    // grouped in a 3x8 bits value
-                                    // (written in hex to svg files)
-    long m_brush_rgb_color;         // same as m_pen_rgb_color, used to fill
-                                    // some contours.
-    bool m_graphics_changed;        // true if a pen/brush parameter is modified
-                                    // color, pen size, fil mode ...
-                                    // the new SVG stype must be output on file
-    PLOT_DASH_TYPE m_dashed;        // plot line style
+    FILL_T        m_fillMode;           // true if the current contour
+                                        // rect, arc, circle, polygon must be filled
+    long          m_pen_rgb_color;      // current rgb color value: each color has
+                                        // a value 0 ... 255, and the 3 colors are
+                                        // grouped in a 3x8 bits value
+                                        // (written in hex to svg files)
+    long           m_brush_rgb_color;   // same as m_pen_rgb_color, used to fill
+                                        // some contours.
+    bool           m_graphics_changed;  // true if a pen/brush parameter is modified
+                                        // color, pen size, fil mode ...
+                                        // the new SVG stype must be output on file
+    PLOT_DASH_TYPE m_dashed;            // plot line style
+    bool           m_useInch;           // is 0 if the step size is 10**-n*mm
+                                        // is 1 if the step size is 10**-n*inch
+                                        // Where n is given from m_precision
+    unsigned       m_precision;         // How fine the step size is
+                                        // Use 3-6 (3 means um precision, 6 nm precision) in pcbnew
+                                        // 3-4 in other moduls (avoid values >4 to avoid overflow)
+                                        // see also comment for m_useInch.
 
     /**
      * function emitSetRGBColor()

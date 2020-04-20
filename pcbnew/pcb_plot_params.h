@@ -123,6 +123,14 @@ private:
     /// 5 is the minimal value for professional boards.
     int         m_gerberPrecision;
 
+    /// precision of coordinates in SVG files: accepted 3 - 6
+    /// 6 is the internal resolution of Pcbnew
+    unsigned    m_svgPrecision;
+
+    /// units for SVG plot
+    /// false for metric, true for inch/mils
+    bool        m_svgUseInch;
+
     /// Plot gerbers using auxiliary (drill) origin instead of absolue coordinates
     bool        m_useAuxOrigin;
 
@@ -297,6 +305,10 @@ public:
 
     void        SetGerberPrecision( int aPrecision );
     int         GetGerberPrecision() const { return m_gerberPrecision; }
+
+    void        SetSvgPrecision( unsigned aPrecision, bool aUseInch );
+    unsigned    GetSvgPrecision() const { return m_svgPrecision; }
+    bool        GetSvgUseInch() const { return m_svgUseInch; }
 
     /** Default precision of coordinates in Gerber files.
      * when units are in mm (7 in inches, but Pcbnew uses mm).

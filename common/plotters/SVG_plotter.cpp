@@ -105,7 +105,6 @@
 #include <cstdint>
 #include <wx/mstream.h>
 
-
 /**
  * Function XmlEsc
  * translates '<' to "&lt;", '>' to "&gt;" and so on, according to the spec:
@@ -171,6 +170,8 @@ SVG_PLOTTER::SVG_PLOTTER()
     m_pen_rgb_color   = 0;       // current color value (black)
     m_brush_rgb_color = 0;       // current color value (black)
     m_dashed          = PLOT_DASH_TYPE::SOLID;
+    m_useInch         = true; // decimils is the default
+    m_precision       = 4;    // because there where used before it was changable
 }
 
 
@@ -182,11 +183,28 @@ void SVG_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     plotOffset  = aOffset;
     plotScale   = aScale;
     m_IUsPerDecimil = aIusPerDecimil;
-    iuPerDeviceUnit = 1.0 / aIusPerDecimil;
+
     /* Compute the paper size in IUs */
     paperSize   = pageInfo.GetSizeMils();
     paperSize.x *= 10.0 * aIusPerDecimil;
     paperSize.y *= 10.0 * aIusPerDecimil;
+
+    // set iuPerDeviceUnit, in 0.1mils ( 2.54um )
+    // this was used before the format was changable, so we set is as default
+    SetSvgCoordinatesFormat( 4, true );
+}
+
+void SVG_PLOTTER::SetSvgCoordinatesFormat( unsigned aResolution, bool aUseInches )
+{
+    m_useInch   = aUseInches;
+    m_precision = aResolution;
+
+    // gives now a default value to iuPerDeviceUnit (because the units of the caller is now known)
+    double iusPerMM = m_IUsPerDecimil / 2.54 * 1000;
+    iuPerDeviceUnit = pow( 10.0, m_precision ) / ( iusPerMM );
+
+    if( m_useInch )
+        iuPerDeviceUnit /= 25.4; // convert to inch
 }
 
 
@@ -702,13 +720,10 @@ bool SVG_PLOTTER::StartPlot()
 
     // Write viewport pos and size
     wxPoint origin;    // TODO set to actual value
-    fprintf( outputFile,
-             "    width=\"%gcm\" height=\"%gcm\" viewBox=\"%d %d %d %d\">\n",
+    fprintf( outputFile, "    width=\"%gcm\" height=\"%gcm\" viewBox=\"%d %d %d %d\">\n",
              (double) paperSize.x / m_IUsPerDecimil * 2.54 / 10000,
-             (double) paperSize.y / m_IUsPerDecimil * 2.54 / 10000,
-             origin.x, origin.y,
-             (int) ( paperSize.x / m_IUsPerDecimil ),
-             (int) ( paperSize.y / m_IUsPerDecimil) );
+             (double) paperSize.y / m_IUsPerDecimil * 2.54 / 10000, origin.x, origin.y,
+             (int) ( paperSize.x * iuPerDeviceUnit ), (int) ( paperSize.y * iuPerDeviceUnit) );
 
     // Write title
     char    date_buf[250];

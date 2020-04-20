@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Feb 18 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,6 +31,7 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
+#include <wx/spinctrl.h>
 #include <wx/panel.h>
 #include <wx/menu.h>
 #include <wx/dialog.h>
@@ -112,6 +113,11 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_DXF_plotTextStrokeFontOpt;
 		wxStaticText* DXF_exportUnitsLabel;
 		wxChoice* m_DXF_plotUnits;
+		wxStaticBoxSizer* m_svgOptionsSizer;
+		wxStaticText* svgUnitLabel;
+		wxChoice* m_svgUnits;
+		wxStaticText* svgPrecisionLabel;
+		wxSpinCtrl* m_svgPrecsision;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxBoxSizer* m_sizerButtons;
 		wxButton* m_buttonDRC;

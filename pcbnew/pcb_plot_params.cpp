@@ -101,6 +101,9 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_includeGerberNetlistInfo   = true;
     m_createGerberJobFile        = true;
     m_gerberPrecision            = gbrDefaultPrecision;
+    // we used 0.1mils for SVG step before, but nm precision is more accurate, so we use nm
+    m_svgPrecision               = 6;
+    m_svgUseInch                 = false;
     m_excludeEdgeLayer           = true;
     m_lineWidth                  = g_DrawDefaultLineThickness;
     m_plotFrameRef               = false;
@@ -161,6 +164,11 @@ void PCB_PLOT_PARAMS::SetGerberPrecision( int aPrecision )
                                       gbrDefaultPrecision;
 }
 
+void PCB_PLOT_PARAMS::SetSvgPrecision( unsigned aPrecision, bool aUseInch )
+{
+    m_svgUseInch   = aUseInch;
+    m_svgPrecision = Clamp( 3U, aPrecision, 6U );
+}
 
 // PLEASE NOTE: only plot dialog options are processed
 void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
@@ -279,6 +287,10 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCom
         if( m_DXFplotPolygonMode != aPcbPlotParams.m_DXFplotPolygonMode )
             return false;
         if( m_DXFplotUnits != aPcbPlotParams.m_DXFplotUnits )
+            return false;
+        if( m_svgPrecision != aPcbPlotParams.m_svgPrecision )
+            return false;
+        if( m_svgUseInch != aPcbPlotParams.m_svgUseInch )
             return false;
     }
     if( m_useAuxOrigin != aPcbPlotParams.m_useAuxOrigin )
