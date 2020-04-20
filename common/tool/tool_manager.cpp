@@ -648,16 +648,22 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 
     wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchInternal %s", aEvent.Format() );
 
+    auto it = m_activeTools.begin();
+
     // iterate over active tool stack
-    for( auto it = m_activeTools.begin(); it != m_activeTools.end(); ++it )
+    while( it != m_activeTools.end() )
     {
         TOOL_STATE* st = m_toolIdIndex[*it];
+        bool increment = true;
 
         // forward context menu events to the tool that created the menu
         if( aEvent.IsChoiceMenu() )
         {
             if( *it != m_menuOwner )
+            {
+                ++it;
                 continue;
+            }
         }
 
         // the tool state handler is waiting for events (i.e. called Wait() method)
@@ -685,7 +691,7 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     if( end )
                     {
                         it = finishTool( st );
-                        --it;
+                        increment = false;
                     }
                 }
 
@@ -701,6 +707,9 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                 }
             }
         }
+
+        if( increment )
+            ++it;
     }
 
     for( auto& state : m_toolState )
