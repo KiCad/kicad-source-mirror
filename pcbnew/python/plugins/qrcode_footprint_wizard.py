@@ -158,7 +158,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         self.module.Reference().SetPos0(pos)
         self.module.Reference().SetTextHeight(self.textHeight)
         self.module.Reference().SetTextWidth(self.textWidth)
-        self.module.Reference().SetThickness(self.textThickness)
+        self.module.Reference().SetTextThickness(self.textThickness)
         self.module.Value().SetLayer(pcbnew.F_SilkS)
 
         #build the footprint courtyard
