@@ -159,15 +159,12 @@ public:
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_CURSOR ]; }
 
-    inline bool GetCurvedRatsnestLinesEnabled() const
-    {
-        return m_curvedRatsnestlines;
-    }
+    inline bool GetCurvedRatsnestLinesEnabled() const { return m_curvedRatsnestlines; }
 
-    inline bool GetGlobalRatsnestLinesEnabled() const
-    {
-        return m_globalRatsnestlines;
-    }
+    inline bool GetGlobalRatsnestLinesEnabled() const { return m_globalRatsnestlines; }
+
+    bool GetDrawIndividualViaLayers() const { return m_drawIndividualViaLayers; }
+    void SetDrawIndividualViaLayers( bool aFlag ) { m_drawIndividualViaLayers = aFlag; }
 
 protected:
     ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
@@ -202,6 +199,8 @@ protected:
 
     ///> Flag determining if ratsnest lines are shown by default
     bool    m_globalRatsnestlines = true;
+
+    bool    m_drawIndividualViaLayers = false;
 
     ///> Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE;

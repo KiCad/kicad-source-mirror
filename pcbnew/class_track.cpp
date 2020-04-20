@@ -705,38 +705,24 @@ unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( IsNetnameLayer( aLayer ) )
         return m_Width == 0 ? HIDE : ( Millimeter2iu( 10 ) / m_Width );
 
+    LSET visibleLayers;
 
-    BOARD* board = GetBoard();
+    for( int i = 0; i < PCB_LAYER_ID_COUNT; ++i )
+    {
+        if( aView->IsLayerVisible( i ) )
+            visibleLayers.set( i );
+    }
 
     // Only draw the via if at least one of the layers it crosses is being displayed
-    if( board && ( board->GetVisibleLayers() & GetLayerSet() ).any()
-            && aView->IsLayerVisible( LAYER_VIAS ) )
+    if( ( visibleLayers & GetLayerSet() ).any() && aView->IsLayerVisible( LAYER_VIAS ) )
     {
         switch( m_ViaType )
         {
-        case VIATYPE::THROUGH:
-            if( !aView->IsLayerVisible( LAYER_VIA_THROUGH ) )
-                return HIDE;
-
-            break;
-
-        case VIATYPE::BLIND_BURIED:
-            if( !aView->IsLayerVisible( LAYER_VIA_BBLIND ) )
-                return HIDE;
-
-            break;
-
-        case VIATYPE::MICROVIA:
-            if( !aView->IsLayerVisible( LAYER_VIA_MICROVIA ) )
-                return HIDE;
-
-            break;
-
-        default:
-            break;
+        case VIATYPE::THROUGH:      return aView->IsLayerVisible( LAYER_VIA_THROUGH )  ? 0 : HIDE;
+        case VIATYPE::BLIND_BURIED: return aView->IsLayerVisible( LAYER_VIA_BBLIND )   ? 0 : HIDE;
+        case VIATYPE::MICROVIA:     return aView->IsLayerVisible( LAYER_VIA_MICROVIA ) ? 0 : HIDE;
+        default:                    return 0;
         }
-
-        return 0;
     }
 
     return HIDE;

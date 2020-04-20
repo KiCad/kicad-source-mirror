@@ -612,7 +612,8 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         m_gal->SetFillColor( color );
     }
 
-    if( aVia->GetViaType() == VIATYPE::BLIND_BURIED && aLayer != LAYER_VIAS_HOLES )
+    if( aVia->GetViaType() == VIATYPE::BLIND_BURIED && aLayer != LAYER_VIAS_HOLES
+            && !m_pcbSettings.GetDrawIndividualViaLayers() )
     {
         // Outer circles of blind/buried vias are drawn in a special way to indicate the
         // top and bottom layers
@@ -636,7 +637,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
     }
     else
     {
-        // Draw the outer circles of normal vias and the inner circles for all vias
+        // Draw the outer circles of normal vias and the holes for all vias
         m_gal->DrawCircle( center, radius );
     }
 
