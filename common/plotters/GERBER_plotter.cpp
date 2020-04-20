@@ -284,6 +284,9 @@ bool GERBER_PLOTTER::EndPlot()
 
 void GERBER_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
+    if( aWidth == DO_NOT_SET_LINE_WIDTH )
+        return;
+
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
     int aperture_attribute = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
 
