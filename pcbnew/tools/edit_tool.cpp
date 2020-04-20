@@ -123,16 +123,20 @@ bool EDIT_TOOL::Init()
     m_selectionTool = static_cast<SELECTION_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveSelection" ) );
     wxASSERT_MSG( m_selectionTool, "pcbnew.InteractiveSelection tool is not available" );
 
-    auto editingModuleCondition = [ this ] ( const SELECTION& aSelection ) {
-        return m_editModules;
-    };
+    auto editingModuleCondition =
+            [ this ] ( const SELECTION& aSelection )
+            {
+                return m_editModules;
+            };
 
     auto singleModuleCondition = SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T )
                                     && SELECTION_CONDITIONS::Count( 1 );
 
-    auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
-        return frame()->ToolStackIsEmpty();
-    };
+    auto noActiveToolCondition =
+            [ this ] ( const SELECTION& aSelection )
+            {
+                return frame()->ToolStackIsEmpty();
+            };
 
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
@@ -146,7 +150,7 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::rotateCw, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 )
+    menu.AddItem( PCB_ACTIONS::properties, SELECTION_CONDITIONS::LessThan( 2 )
                       || SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
 
     menu.AddItem( PCB_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
@@ -586,7 +590,11 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection, *m_commit );
             dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
     }
-    else if( selection.Size() == 1 ) // Properties are displayed when there is only one item selected
+    else if( selection.Size() == 0 )
+    {
+        m_toolMgr->RunAction( ACTIONS::pageSettings );
+    }
+    else if( selection.Size() == 1 )
     {
         // Display properties dialog
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );

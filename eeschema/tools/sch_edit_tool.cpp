@@ -136,92 +136,95 @@ bool SCH_EDIT_TOOL::Init()
 
     wxASSERT_MSG( drawingTools, "eeshema.InteractiveDrawing tool is not available" );
 
-    auto sheetTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->IsCurrentTool( EE_ACTIONS::drawSheet ) );
-    };
-
-    auto anyTextTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->IsCurrentTool( EE_ACTIONS::placeLabel )
-              || m_frame->IsCurrentTool( EE_ACTIONS::placeGlobalLabel )
-              || m_frame->IsCurrentTool( EE_ACTIONS::placeHierLabel )
-              || m_frame->IsCurrentTool( EE_ACTIONS::placeSchematicText ) );
-    };
-
-    auto duplicateCondition = [] ( const SELECTION& aSel ) {
-        if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
-            return false;
-
-        return true;
-    };
-
-    auto orientCondition = [] ( const SELECTION& aSel ) {
-        if( aSel.Empty() )
-            return false;
-
-        if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
-            return false;
-
-        SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
-
-        if( aSel.GetSize() > 1 )
-            return true;
-
-        switch( item->Type() )
-        {
-        case SCH_MARKER_T:
-        case SCH_JUNCTION_T:
-        case SCH_NO_CONNECT_T:
-        case SCH_LINE_T:
-        case SCH_PIN_T:
-            return false;
-        default:
-            return true;
-        }
-    };
-
-    auto propertiesCondition = []( const SELECTION& aSel ) {
-        if( aSel.GetSize() != 1
-                && !( aSel.GetSize() >= 1 && aSel.Front()->Type() == SCH_LINE_T
-                           && aSel.AreAllItemsIdentical() ) )
-            return false;
-
-        auto item = static_cast<EDA_ITEM*>( aSel.Front() );
-        switch( item->Type() )
-        {
-        case SCH_MARKER_T:
-        case SCH_JUNCTION_T:
-        case SCH_NO_CONNECT_T:
-        case SCH_BUS_WIRE_ENTRY_T:
-        case SCH_BUS_BUS_ENTRY_T:
-        case SCH_SHEET_PIN_T:
-        case SCH_PIN_T:
-            return false;
-        case SCH_LINE_T:
-        {
-            const std::deque<EDA_ITEM*> items = aSel.GetItems();
-            if( !std::all_of( items.begin(), items.end(),
-                [&]( const EDA_ITEM* selItem )
-                {
-                    const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( selItem );
-                    if ( line == nullptr )
-                    {
-                        wxLogWarning(
-                                "Non-line object encountered in selection, this shouldn't have bypassed the preceeding check" );
-                        return false;
-                    }
-                    return line->IsGraphicLine();
-                } ) )
+    auto sheetTool =
+            [ this ] ( const SELECTION& aSel )
             {
-                return false;
-            }
+                return ( m_frame->IsCurrentTool( EE_ACTIONS::drawSheet ) );
+            };
 
-            // Only graphic lines support properties in the file format
-            return true;
-        }
-        default:
-            return true;
-        }
-    };
+    auto anyTextTool =
+            [ this ] ( const SELECTION& aSel )
+            {
+                return ( m_frame->IsCurrentTool( EE_ACTIONS::placeLabel )
+                      || m_frame->IsCurrentTool( EE_ACTIONS::placeGlobalLabel )
+                      || m_frame->IsCurrentTool( EE_ACTIONS::placeHierLabel )
+                      || m_frame->IsCurrentTool( EE_ACTIONS::placeSchematicText ) );
+            };
+
+    auto duplicateCondition =
+            [] ( const SELECTION& aSel )
+            {
+                if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
+                    return false;
+
+                return true;
+            };
+
+    auto orientCondition =
+            [] ( const SELECTION& aSel )
+            {
+                if( aSel.Empty() )
+                    return false;
+
+                if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
+                    return false;
+
+                SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
+
+                if( aSel.GetSize() > 1 )
+                    return true;
+
+                switch( item->Type() )
+                {
+                case SCH_MARKER_T:
+                case SCH_JUNCTION_T:
+                case SCH_NO_CONNECT_T:
+                case SCH_LINE_T:
+                case SCH_PIN_T:
+                    return false;
+                default:
+                    return true;
+                }
+            };
+
+    auto propertiesCondition =
+            []( const SELECTION& aSel )
+            {
+                if( aSel.GetSize() == 0 )
+                    return true;            // Show worksheet properties
+
+                if( aSel.GetSize() != 1
+                        && !( aSel.GetSize() >= 1 && aSel.Front()->Type() == SCH_LINE_T
+                                   && aSel.AreAllItemsIdentical() ) )
+                    return false;
+
+                EDA_ITEM* item = static_cast<EDA_ITEM*>( aSel.Front() );
+
+                switch( item->Type() )
+                {
+                case SCH_COMPONENT_T:
+                case SCH_SHEET_T:
+                case SCH_SHEET_PIN_T:
+                case SCH_TEXT_T:
+                case SCH_LABEL_T:
+                case SCH_GLOBAL_LABEL_T:
+                case SCH_HIER_LABEL_T:
+                case SCH_FIELD_T:
+                case SCH_BITMAP_T:
+                    return aSel.GetSize() == 1;
+
+                case SCH_LINE_T:
+                    return std::all_of( aSel.GetItems().begin(), aSel.GetItems().end(),
+                                        [&]( EDA_ITEM* selItem )
+                                        {
+                                            SCH_LINE* line = dynamic_cast<SCH_LINE*>( selItem );
+                                            return line && line->IsGraphicLine();
+                                        } );
+
+                default:
+                    return false;
+                }
+            };
 
     static KICAD_T toLabelTypes[] = { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
     auto toLabelCondition = E_C::Count( 1 ) && E_C::OnlyTypes( toLabelTypes );
@@ -1231,7 +1234,10 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::EditableItems );
 
     if( selection.Empty() )
+    {
+        m_toolMgr->RunAction( ACTIONS::pageSettings );
         return 0;
+    }
 
     SCH_ITEM* item = (SCH_ITEM*) selection.Front();
 
