@@ -397,39 +397,6 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
 }
 
 
-void MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
-{
-    for( auto pad : m_pads )
-        pad->Print( aFrame, aDC, aOffset );
-
-    for( auto zone : m_fp_zones )
-        zone->Print( aFrame, aDC, aOffset );
-
-    BOARD* brd = GetBoard();
-
-    // Draw graphic items
-    if( brd->IsElementVisible( LAYER_MOD_REFERENCES ) )
-        m_Reference->Print( aFrame, aDC, aOffset );
-
-    if( brd->IsElementVisible( LAYER_MOD_VALUES ) )
-        m_Value->Print( aFrame, aDC, aOffset );
-
-    for( auto item : m_drawings )
-    {
-        switch( item->Type() )
-        {
-        case PCB_MODULE_TEXT_T:
-        case PCB_MODULE_EDGE_T:
-            item->Print( aFrame, aDC, aOffset );
-            break;
-
-        default:
-            break;
-        }
-    }
-}
-
-
 void MODULE::CalculateBoundingBox()
 {
     m_BoundaryBox = GetFootprintRect();

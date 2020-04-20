@@ -83,8 +83,6 @@ public:
 
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
-    void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset = ZeroOffset ) override;
-
     wxString GetClass() const override
     {
         return wxT( "PCB_TARGET" );

@@ -353,15 +353,6 @@ public:
     /* drawing functions */
 
     /**
-     * Function Print
-     * Prints the footprint to the \a aDC.
-     * @param aFrame = the current Frame
-     * @param aDC = Current Device Context
-     * @param aOffset = draw offset (usually wxPoint(0,0)
-     */
-    void Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset = ZeroOffset ) override;
-
-    /**
      * function TransformPadsShapesWithClearanceToPolygon
      * generate pads shapes on layer aLayer as polygons,
      * and adds these polygons to aCornerBuffer

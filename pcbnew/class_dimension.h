@@ -203,8 +203,6 @@ public:
     TEXTE_PCB&      Text()  { return m_Text; }
     TEXTE_PCB&      Text() const  { return *(const_cast<TEXTE_PCB*> (&m_Text)); }
 
-    void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset = ZeroOffset ) override;
-
     /**
      * Function Move
      * @param offset : moving vector

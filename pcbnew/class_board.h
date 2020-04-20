@@ -748,16 +748,6 @@ public:
     void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
-     * Function Print.
-     * Print the BOARD items.
-     * @param aFrame = the current Frame
-     * @param aDC = the current device context
-     * @param aDrawMode = GR_COPY, GR_OR ... (not always used)
-     * @param aOffset = an draw offset value (default = 0,0)
-     */
-    void Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset = ZeroOffset ) override;
-
-    /**
      * Function Visit
      * may be re-implemented for each derived class in order to handle
      * all the types given by its member data.  Implementations should call

@@ -62,11 +62,6 @@ public:
 
     void ViewDraw( int aLayer, VIEW* aView ) const override;
 
-    void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset = ZeroOffset ) override
-    {
-        wxASSERT( 0 ); // ORIGIN_VIEWITEM never added to BOARD
-    }
-
     void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
         aLayers[0] = LAYER_GP_OVERLAY;

@@ -179,17 +179,6 @@ public:
     ///> Set relative coordinates.
     void SetLocalCoord();
 
-    /* drawing functions */
-
-    /**
-     * Function Print
-     * Print the text according to the footprint pos and orient
-     * @param aFrame = the current Frame
-     * @param aDC = Current Device Context
-     * @param aOffset = draw offset (usually wxPoint(0,0)
-     */
-    void Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint&  aOffset = ZeroOffset ) override;
-
     void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const override;

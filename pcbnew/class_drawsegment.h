@@ -215,8 +215,6 @@ public:
 
     void SetPolyPoints( const std::vector<wxPoint>& aPoints );
 
-    void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& aOffset = ZeroOffset ) override;
-
     void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     const EDA_RECT GetBoundingBox() const override;

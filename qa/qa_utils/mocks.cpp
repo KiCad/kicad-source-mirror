@@ -141,11 +141,6 @@ KIFACE_I& Kiface()
 
 FP_LIB_TABLE GFootprintTable;
 
-void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
-{
-}
-
-
 DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent )
 {
     // these members are initialized to avoid warnings about non initialized vars

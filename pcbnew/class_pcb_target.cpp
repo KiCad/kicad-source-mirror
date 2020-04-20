@@ -72,68 +72,6 @@ PCB_TARGET::~PCB_TARGET()
 }
 
 
-/* Print PCB_TARGET object: 2 segments + 1 circle
- * The circle radius is half the radius of the target
- * 2 lines have length the diameter of the target
- */
-void PCB_TARGET::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
-{
-    int radius, ox, oy, width;
-    int dx1, dx2, dy1, dy2;
-
-    ox = m_Pos.x + offset.x;
-    oy = m_Pos.y + offset.y;
-
-    BOARD* brd =  GetBoard( );
-
-    if( brd->IsLayerVisible( m_Layer ) == false )
-        return;
-
-    COLOR4D gcolor = Pgm().GetSettingsManager().GetColorSettings()->GetColor( m_Layer );
-    auto displ_opts = aFrame->GetDisplayOptions();
-    bool filled = displ_opts.m_DisplayDrawItemsFill;
-    width = m_Width;
-
-    radius = m_Size / 3;
-
-    if( GetShape() )   // shape X
-        radius = m_Size / 2;
-
-    if( filled )
-        GRCircle( nullptr, DC, ox, oy, radius, width, gcolor );
-    else
-    {
-        GRCircle( nullptr, DC, ox, oy, radius + (width / 2), gcolor );
-        GRCircle( nullptr, DC, ox, oy, radius - (width / 2), gcolor );
-    }
-
-
-    radius = m_Size / 2;
-    dx1   = radius;
-    dy1   = 0;
-    dx2   = 0;
-    dy2   = radius;
-
-    if( GetShape() )   // shape X
-    {
-        dx1 = dy1 = radius;
-        dx2 = dx1;
-        dy2 = -dy1;
-    }
-
-    if( filled )
-    {
-        GRLine( nullptr, DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
-        GRLine( nullptr, DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );
-    }
-    else
-    {
-        GRCSegm( nullptr, DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
-        GRCSegm( nullptr, DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );
-    }
-}
-
-
 bool PCB_TARGET::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int dX = aPosition.x - m_Pos.x;

@@ -68,14 +68,6 @@ NETINFO_ITEM::~NETINFO_ITEM()
 }
 
 
-/**
- * Function Print (TODO)
- */
-void NETINFO_ITEM::Print( PCB_BASE_FRAME* frame, wxDC* DC, const wxPoint& aOffset )
-{
-}
-
-
 void NETINFO_ITEM::SetClass( const NETCLASSPTR& aNetClass )
 {
     wxCHECK( m_parent, /* void */ );

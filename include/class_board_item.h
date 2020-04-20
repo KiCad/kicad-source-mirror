@@ -153,12 +153,6 @@ public:
     }
 
     /**
-     * Function Print
-     * BOARD_ITEMs have their own color information.
-     */
-    virtual void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset = ZeroOffset ) = 0;
-
-    /**
      * Function Duplicate
      * creates a copy of a BOARD_ITEM.
      */

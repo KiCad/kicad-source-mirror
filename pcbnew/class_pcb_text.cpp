@@ -111,28 +111,6 @@ void TEXTE_PCB::SetTextAngle( double aAngle )
 }
 
 
-void TEXTE_PCB::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
-{
-   BOARD* brd = GetBoard();
-
-    if( brd->IsLayerVisible( m_Layer ) == false )
-        return;
-
-    auto            color      = Pgm().GetSettingsManager().GetColorSettings()->GetColor( m_Layer );
-    EDA_DRAW_MODE_T fillmode   = FILLED;
-    auto&           displ_opts = aFrame->GetDisplayOptions();
-
-    if( displ_opts.m_DisplayDrawItemsFill == SKETCH )
-        fillmode = SKETCH;
-
-    // JEY TODO: needs RENDER_SETTINGS passed in...
-    RENDER_SETTINGS* renderSettings = aFrame->GetCanvas()->GetView()->GetPainter()->GetSettings();
-    renderSettings->SetPrintDC( DC );
-
-    EDA_TEXT::Print( renderSettings, offset, color, fillmode );
-}
-
-
 void TEXTE_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString    msg;

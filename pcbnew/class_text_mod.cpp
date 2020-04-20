@@ -261,57 +261,6 @@ const EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 }
 
 
-void TEXTE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
-{
-    /* parent must *not* be NULL (a footprint text without a footprint parent has no sense) */
-    wxASSERT( m_Parent );
-
-    BOARD*         brd = GetBoard( );
-    KIGFX::COLOR4D color = Pgm().GetSettingsManager().GetColorSettings()->GetColor( GetLayer() );
-    PCB_LAYER_ID   text_layer = GetLayer();
-
-    if( !brd->IsLayerVisible( m_Layer )
-      || ( IsFrontLayer( text_layer ) && !brd->IsElementVisible( LAYER_MOD_TEXT_FR ) )
-      || ( IsBackLayer( text_layer ) && !brd->IsElementVisible( LAYER_MOD_TEXT_BK ) ) )
-        return;
-
-    if( !brd->IsElementVisible( LAYER_MOD_REFERENCES ) && GetText() == wxT( "${REFERENCE}" ) )
-        return;
-
-    if( !brd->IsElementVisible( LAYER_MOD_VALUES ) && GetText() == wxT( "${VALUE}" ) )
-        return;
-
-    // Invisible texts are still drawn (not plotted) in LAYER_MOD_TEXT_INVISIBLE
-    // Just because we must have to edit them (at least to make them visible)
-    if( !IsVisible() )
-    {
-        if( !brd->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) )
-            return;
-
-        color = Pgm().GetSettingsManager().GetColorSettings()->GetColor( LAYER_MOD_TEXT_INVISIBLE );
-    }
-
-    // Draw mode compensation for the width
-    int width = GetEffectiveTextPenWidth();
-
-    if( aFrame->GetDisplayOptions().m_DisplayModTextFill == SKETCH )
-        width = -width;
-
-    wxPoint pos = GetTextPos() - aOffset;
-
-    // Draw the text proper, with the right attributes
-    wxSize size   = GetTextSize();
-    double orient = GetDrawRotation();
-
-    // If the text is mirrored : negate size.x (mirror / Y axis)
-    if( IsMirrored() )
-        size.x = -size.x;
-
-    GRText( aDC, pos, color, GetShownText(), orient, size, GetHorizJustify(), GetVertJustify(),
-            width, IsItalic(), IsBold() );
-}
-
-
 double TEXTE_MODULE::GetDrawRotation() const
 {
     MODULE* module = (MODULE*) m_Parent;

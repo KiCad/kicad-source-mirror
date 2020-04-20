@@ -455,12 +455,3 @@ void DISPLAY_FOOTPRINTS_FRAME::SyncToolbars()
 }
 
 
-/*
- * Redraw the BOARD items but not cursors, axis or grid.
- */
-void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
-{
-    if( !m_modules.empty() )
-        GetFirstModule()->Print( aFrame, aDC );
-}
-

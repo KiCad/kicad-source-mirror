@@ -244,11 +244,3 @@ const BOX2I MARKER_PCB::ViewBBox() const
 }
 
 
-void MARKER_PCB::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
-{
-    // JEY TODO: needs RENDER_SETTINGS passed in
-    RENDER_SETTINGS* renderSettings = aFrame->GetCanvas()->GetView()->GetPainter()->GetSettings();
-    renderSettings->SetPrintDC( aDC );
-
-    PrintMarker( renderSettings, aOffset );
-}

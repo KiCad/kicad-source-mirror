@@ -545,8 +545,6 @@ public:
     void SetThermalGap( int aGap ) { m_ThermalGap = aGap; }
     int GetThermalGap() const;
 
-    void Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset = ZeroOffset ) override;
-
     /**
      * Function PrintShape
      * basic function to print a pad.

@@ -211,13 +211,6 @@ public:
 #endif
 
     /**
-     * Function Peinr
-     * @todo we actually could show a NET, simply show all the tracks and
-     *       a pads or net name on pad and vias
-     */
-    void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset ) override;
-
-    /**
      * Function GetNet
      * @return int - the netcode
      */

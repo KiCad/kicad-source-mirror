@@ -356,43 +356,6 @@ void DIMENSION::AdjustDimensionDetails( int aPrecision )
 }
 
 
-void DIMENSION::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
-{
-    BOARD* brd = GetBoard();
-
-    if( brd->IsLayerVisible( m_Layer ) == false )
-        return;
-
-    m_Text.Print( aFrame, DC, offset );
-
-    COLOR4D gcolor = Pgm().GetSettingsManager().GetColorSettings()->GetColor( m_Layer );
-    auto displ_opts = aFrame->GetDisplayOptions();
-    bool filled = displ_opts.m_DisplayDrawItemsFill;
-    int  width = m_Width;
-
-    if( filled )
-    {
-        GRLine( nullptr, DC, m_crossBarO + offset, m_crossBarF + offset, width, gcolor );
-        GRLine( nullptr, DC, m_featureLineGO + offset, m_featureLineGF + offset, width, gcolor );
-        GRLine( nullptr, DC, m_featureLineDO + offset, m_featureLineDF + offset, width, gcolor );
-        GRLine( nullptr, DC, m_crossBarF + offset, m_arrowD1F + offset, width, gcolor );
-        GRLine( nullptr, DC, m_crossBarF + offset, m_arrowD2F + offset, width, gcolor );
-        GRLine( nullptr, DC, m_crossBarO + offset, m_arrowG1F + offset, width, gcolor );
-        GRLine( nullptr, DC, m_crossBarO + offset, m_arrowG2F + offset, width, gcolor );
-    }
-    else
-    {
-        GRCSegm( nullptr, DC, m_crossBarO + offset, m_crossBarF + offset, width, gcolor );
-        GRCSegm( nullptr, DC, m_featureLineGO + offset, m_featureLineGF + offset, width, gcolor );
-        GRCSegm( nullptr, DC, m_featureLineDO + offset,  m_featureLineDF + offset, width, gcolor );
-        GRCSegm( nullptr, DC, m_crossBarF + offset, m_arrowD1F + offset, width, gcolor );
-        GRCSegm( nullptr, DC, m_crossBarF + offset, m_arrowD2F + offset, width, gcolor );
-        GRCSegm( nullptr, DC, m_crossBarO + offset, m_arrowG1F + offset, width, gcolor );
-        GRCSegm( nullptr, DC, m_crossBarO + offset, m_arrowG2F + offset, width, gcolor );
-    }
-}
-
-
 // see class_cotation.h
 void DIMENSION::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
 {
