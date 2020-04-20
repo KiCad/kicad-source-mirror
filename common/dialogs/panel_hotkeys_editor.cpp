@@ -45,7 +45,7 @@ static const wxSize default_dialog_size { 500, 350 };
  */
 static wxSearchCtrl* CreateTextFilterBox( wxWindow* aParent, const wxString& aDescriptiveText )
 {
-    auto search_widget = new wxSearchCtrl( aParent, wxID_ANY );
+    wxSearchCtrl* search_widget = new wxSearchCtrl( aParent, wxID_ANY );
 
     search_widget->ShowSearchButton( false );
     search_widget->ShowCancelButton( true );
@@ -64,12 +64,12 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
         m_hotkeyStore()
 {
     const auto margin = KIUI::GetStdMargin();
-    auto mainSizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
     const int side_margins = margin * 2;
-    auto bMargins = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* bMargins = new wxBoxSizer( wxVERTICAL );
 
-    auto filterSearch = CreateTextFilterBox( this, _( "Type filter text" ) );
+    wxSearchCtrl* filterSearch = CreateTextFilterBox( this, _( "Type filter text" ) );
     bMargins->Add( filterSearch, 0, wxBOTTOM | wxEXPAND | wxTOP, margin );
 
     m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore, m_readOnly );
@@ -82,6 +82,14 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
 
     this->SetSizer( mainSizer );
     this->Layout();
+
+#ifdef __WXGTK__
+    // Work around a bug that clips the text vertically in the wxSearchCtrl on GTK
+    filterSearch->SetMinSize( wxSize( filterSearch->GetSize().x,
+                                      filterSearch->GetSize().y + 4 ) );
+
+    this->Layout();
+#endif
 
     // Connect Events
     filterSearch->Bind( wxEVT_COMMAND_TEXT_UPDATED, &PANEL_HOTKEYS_EDITOR::OnFilterSearch, this );
