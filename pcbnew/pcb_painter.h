@@ -162,6 +162,9 @@ public:
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_CURSOR ]; }
 
+    bool GetDrawIndividualViaLayers() const { return m_drawIndividualViaLayers; }
+    void SetDrawIndividualViaLayers( bool aFlag ) { m_drawIndividualViaLayers = aFlag; }
+
 protected:
     ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
     bool    m_sketchMode[GAL_LAYER_ID_END];
@@ -189,6 +192,8 @@ protected:
 
     ///> Flag determining if zones should have outlines drawn
     bool    m_zoneOutlines;
+
+    bool    m_drawIndividualViaLayers = false;
 
     ///> Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE;

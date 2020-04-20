@@ -67,18 +67,18 @@ PCBNEW_PRINTOUT::PCBNEW_PRINTOUT( BOARD* aBoard, const PCBNEW_PRINTOUT_SETTINGS&
 
 bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
 {
-    // Store the layerset, as it is going to be modified below and the original settings are needed
+    // Store the layerset, as it is going to be modified below and the original settings are
+    // needed.
     LSET lset = m_settings.m_layerSet;
     int pageCount = lset.count();
     wxString layer;
     PCB_LAYER_ID extractLayer;
 
     // compute layer mask from page number if we want one page per layer
-    if( m_pcbnewSettings.m_pagination == 0 )  // One page per layer
+    if( m_pcbnewSettings.m_pagination == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE )
     {
-        // This sequence is TBD, call a different
-        // sequencer if needed, such as Seq().  Could not find documentation on
-        // page order.
+        // This sequence is TBD, call a different sequencer if needed, such as Seq().
+        // Could not find documentation on page order.
         LSEQ seq = lset.UIOrder();
 
         // aPage starts at 1, not 0
@@ -116,7 +116,7 @@ int PCBNEW_PRINTOUT::milsToIU( double aMils ) const
 
 
 void PCBNEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
-        const LSET& aLayerSet )
+                                       const LSET& aLayerSet )
 {
     BOARD_PRINTOUT::setupViewLayers( aView, aLayerSet );
 
@@ -133,8 +133,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView
     if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
     {
         // Enable items on copper layers, but do not draw holes
-        for( auto item : { LAYER_PADS_TH, LAYER_VIA_MICROVIA,
-                LAYER_VIA_BBLIND, LAYER_VIA_THROUGH } )
+        for( GAL_LAYER_ID item : { LAYER_PADS_TH, LAYER_VIAS } )
         {
             aView->SetLayerVisible( item, true );
         }
@@ -142,21 +141,21 @@ void PCBNEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView
         if( m_pcbnewSettings.m_drillMarks != PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE )
         {
             // Enable hole layers to draw drill marks
-            for( auto holeLayer : { LAYER_PADS_PLATEDHOLES,
-                    LAYER_NON_PLATEDHOLES, LAYER_VIAS_HOLES })
+            for( GAL_LAYER_ID holeLayer : { LAYER_PADS_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
+                                            LAYER_VIAS_HOLES } )
             {
                 aView->SetLayerVisible( holeLayer, true );
                 aView->SetTopLayer( holeLayer, true );
             }
         }
-
     }
 
 
     // Keep certain items always enabled/disabled and just rely on the layer visibility
     const int alwaysEnabled[] = {
         LAYER_MOD_TEXT_FR, LAYER_MOD_TEXT_BK, LAYER_MOD_FR, LAYER_MOD_BK,
-        LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS
+        LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS,
+        LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND, LAYER_VIA_THROUGH
     };
 
     for( int item : alwaysEnabled )
@@ -168,7 +167,7 @@ void PCBNEW_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPain
 {
     BOARD_PRINTOUT::setupPainter( aPainter );
 
-    auto painter = static_cast<KIGFX::PCB_PRINT_PAINTER*>( aPainter.get() );
+    KIGFX::PCB_PRINT_PAINTER* painter = static_cast<KIGFX::PCB_PRINT_PAINTER*>( aPainter.get() );
 
     switch( m_pcbnewSettings.m_drillMarks )
     {
@@ -184,6 +183,9 @@ void PCBNEW_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPain
             painter->SetDrillMarks( true );
             break;
     }
+
+    painter->GetSettings()->SetDrawIndividualViaLayers(
+            m_pcbnewSettings.m_pagination == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE );
 
     painter->GetSettings()->SetLayerColor( LAYER_PADS_PLATEDHOLES, COLOR4D::WHITE );
     painter->GetSettings()->SetLayerColor( LAYER_NON_PLATEDHOLES, COLOR4D::WHITE );

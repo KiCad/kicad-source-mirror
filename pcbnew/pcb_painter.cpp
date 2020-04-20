@@ -539,7 +539,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         break;
     }
 
-    if( aVia->GetViaType() == VIA_BLIND_BURIED )
+    if( aVia->GetViaType() == VIA_BLIND_BURIED && !m_pcbSettings.GetDrawIndividualViaLayers() )
     {
         // Buried vias are drawn in a special way to indicate the top and bottom layers
         PCB_LAYER_ID layerTop, layerBottom;
