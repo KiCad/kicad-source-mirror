@@ -25,18 +25,15 @@
 #include <kiway_player.h>
 #include <wx/srchctrl.h>
 #include <wx/panel.h>
-#include <wx/button.h>
 #include <wx/sizer.h>
 #include <hotkeys_basic.h>
 #include <widgets/button_row_panel.h>
 #include <widgets/ui_common.h>
 #include <tool/tool_manager.h>
-#include <tool/tool_action.h>
 #include <wx/tokenzr.h>
 #include <gestfich.h>
 
 static const wxSize default_dialog_size { 500, 350 };
-static const wxSize min_dialog_size { -1, 350 };
 
 /**
  * Helper function to add a filter box to a panel, with some
@@ -69,10 +66,7 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
     const auto margin = KIUI::GetStdMargin();
     auto mainSizer = new wxBoxSizer( wxVERTICAL );
 
-    // Sub-sizer for setting a wider side margin
-    // TODO: Can this be set by the parent widget- doesn't seem to be
-    // this panel's responsibility?
-    const int side_margins = 10; // seems to be hardcoded in wxFB
+    const int side_margins = margin * 2;
     auto bMargins = new wxBoxSizer( wxVERTICAL );
 
     auto filterSearch = CreateTextFilterBox( this, _( "Type filter text" ) );
