@@ -25,12 +25,8 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
-#include <common.h>
-#include <trigo.h>
-#include <macros.h>
+//#include <common.h>
 #include <pcb_screen.h>
-#include <gr_text.h>
 #include <pcb_base_frame.h>
 #include <class_board.h>
 #include <class_track.h>
@@ -44,29 +40,11 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 
-/**
- * Function ShowClearance
- * tests to see if the clearance border is drawn on the given track.
- * @return bool - true if should draw clearance, else false.
- */
-static bool ShowClearance( const PCB_DISPLAY_OPTIONS& aDisplOpts, const TRACK* aTrack )
-{
-    // maybe return true for tracks and vias, not for zone segments
-    return IsCopperLayer( aTrack->GetLayer() )
-           && ( aTrack->Type() == PCB_TRACE_T || aTrack->Type() == PCB_VIA_T 
-                    || aTrack->Type() == PCB_ARC_T )
-           && ( ( aDisplOpts.m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS
-                  && ( aTrack->IsDragging() || aTrack->IsMoving() || aTrack->IsNew() ) )
-            || ( aDisplOpts.m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS )
-            );
-
-}
-
 
 TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
 {
-    m_Width = Millimeter2iu( 0.2 );
+    m_Width = Millimeter2iu( 0.2 );     // Gives a reasonable default width
 }
 
 

@@ -98,6 +98,13 @@ private:
 
     struct SPRINGBACK_TAG
     {
+        SPRINGBACK_TAG() :
+            m_length( 0 ),
+            m_node( nullptr ),
+            m_seq( 0 ),
+            m_locked( false )
+        {}
+
         int64_t m_length;
         VIA_HANDLE m_draggedVia;
         VECTOR2I m_p;

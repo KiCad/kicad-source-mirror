@@ -1451,6 +1451,7 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
 
     // Update cursor values
     int itemidx = 0;
+
     for( const auto& trace : plotPanel->GetTraces() )
     {
         if( CURSOR* cursor = trace.second->GetCursor() )
@@ -1498,6 +1499,8 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     {
         TRACE_MAP&      traceMap  = m_plots[plotPanelWindow].m_traces;
         SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( plotPanelWindow );
+
+        wxCHECK_RET( plotPanel, "not a SIM_PLOT_PANEL"  );
 
         for( auto it = traceMap.begin(); it != traceMap.end(); /* iteration occurs in the loop */)
         {
