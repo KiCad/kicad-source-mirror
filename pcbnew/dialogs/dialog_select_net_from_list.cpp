@@ -357,7 +357,7 @@ wxString DIALOG_SELECT_NET_FROM_LIST::formatLength( int aValue ) const
 
 void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
-    if( NETINFO_ITEM* net = dyn_cast<NETINFO_ITEM*>( aBoardItem ) )
+    if( NETINFO_ITEM* net = dynamic_cast<NETINFO_ITEM*>( aBoardItem ) )
     {
         // a new net has been added to the board.  add it to our list if it
         // passes the netname filter test.
@@ -386,7 +386,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* a
 
         return;
     }
-    else if( auto* i = dyn_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) )
+    else if( auto* i = dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) )
     {
         auto r = findRow( i->GetNet() );
 
@@ -420,12 +420,12 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* a
 
 void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
-    if( auto* net = dyn_cast<NETINFO_ITEM*>( aBoardItem ) )
+    if( auto* net = dynamic_cast<NETINFO_ITEM*>( aBoardItem ) )
     {
         deleteRow( findRow( net ) );
         return;
     }
-    else if( auto* mod = dyn_cast<MODULE*>( aBoardItem ) )
+    else if( auto* mod = dynamic_cast<MODULE*>( aBoardItem ) )
     {
         for( const D_PAD* pad : mod->Pads() )
         {
@@ -442,7 +442,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM*
             }
         }
     }
-    else if( auto* i = dyn_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) )
+    else if( auto* i = dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) )
     {
         auto r = findRow( i->GetNet() );
 
