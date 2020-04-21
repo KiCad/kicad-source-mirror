@@ -459,9 +459,17 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
     case LAYER_DEVICE:
         m_gal->SetIsFill( aItem->GetFillMode() == FILLED_SHAPE );
         m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
-        m_gal->SetIsStroke( true );
-        m_gal->SetLineWidth( getLineWidth( aItem, false ) );
-        m_gal->SetStrokeColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
+
+        if( aItem->GetPenWidth() > 0 || aItem->GetFillMode() == NO_FILL )
+        {
+            m_gal->SetIsStroke( true );
+            m_gal->SetLineWidth( getLineWidth( aItem, false ) );
+            m_gal->SetStrokeColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
+        }
+        else
+        {
+            m_gal->SetIsStroke( false );
+        }
 
         return true;
 

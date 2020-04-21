@@ -182,10 +182,12 @@ void LIB_BEZIER::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    auto pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
+    int  pen_size = GetPenWidth();
 
     if( !already_filled || pen_size > 0 )
     {
+        pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetDefaultPenWidth() );
+
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
         aPlotter->PlotPoly( cornerList, already_filled ? NO_FILL : m_Fill, pen_size );
     }
@@ -194,18 +196,27 @@ void LIB_BEZIER::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
 int LIB_BEZIER::GetPenWidth() const
 {
-    return std::max( m_Width, 1 );
+    // Historically 0 meant "default width" and negative numbers meant "don't stroke".
+    if( m_Width < 0 && GetFillMode() != NO_FILL )
+        return 0;
+    else
+        return std::max( m_Width, 1 );
 }
 
 
 void LIB_BEZIER::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                         const TRANSFORM& aTransform )
 {
+    bool forceNoFill = static_cast<bool>( aData );
+    int  penWidth = GetPenWidth();
+
+    if( forceNoFill && m_Fill != NO_FILL && penWidth == 0 )
+        return;
+
     std::vector<wxPoint> PolyPointsTraslated;
 
     wxDC*       DC = aSettings->GetPrintDC();
     COLOR4D     color = aSettings->GetLayerColor( LAYER_DEVICE );
-    COLOR4D     bgColor = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
     BEZIER_POLY converter( m_BezierPoints );
     converter.GetPoly( m_PolyPoints );
 
@@ -214,22 +225,19 @@ void LIB_BEZIER::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void
     for( wxPoint& point : m_PolyPoints )
         PolyPointsTraslated.push_back( aTransform.TransformCoordinate( point ) + aOffset );
 
-    FILL_T fill = aData ? NO_FILL : m_Fill;
-    int    penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    if( forceNoFill || m_Fill == NO_FILL )
+    {
+        penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
 
-    if( fill == FILLED_WITH_BG_BODYCOLOR )
-    {
-        GRPoly( nullptr, DC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, penWidth,
-                bgColor, bgColor );
-    }
-    else if( fill == FILLED_SHAPE  )
-    {
-        GRPoly( nullptr, DC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, penWidth,
+        GRPoly( nullptr, DC, m_PolyPoints.size(), &PolyPointsTraslated[0], false, penWidth,
                 color, color );
     }
     else
     {
-        GRPoly( nullptr, DC, m_PolyPoints.size(), &PolyPointsTraslated[0], false, penWidth,
+        if( m_Fill == FILLED_WITH_BG_BODYCOLOR )
+            color = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
+
+        GRPoly( nullptr, DC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, penWidth,
                 color, color );
     }
 }
