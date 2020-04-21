@@ -1102,7 +1102,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableColSize( wxGridSizeEvent& aEvent )
     wxString           key = m_grid->GetColLabelValue( col );
 
     if( m_grid->GetColSize( col ) )
-        cfg->m_FieldEditorPanel.column_widths[ key ] = m_grid->GetColSize( col );
+        cfg->m_FieldEditorPanel.column_widths[ key.ToStdString() ] = m_grid->GetColSize( col );
 
     aEvent.Skip();
 }
