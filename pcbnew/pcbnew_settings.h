@@ -187,6 +187,25 @@ public:
         bool   check_zones_before_plotting;
     };
 
+    struct DIALOG_REANNOTATE
+    {
+        bool     sort_on_modules;
+        bool     remove_front_prefix;
+        bool     remove_back_prefix;
+        bool     update_schematic;
+        bool     exclude_locked;
+        int      grid_index;
+        int      sort_code;
+        int      annotation_choice;
+        int      report_severity;
+        wxString front_refdes_start;
+        wxString back_refdes_start;
+        wxString front_prefix;
+        wxString back_prefix;
+        wxString exclude_list;
+        wxString report_file_name;
+    };
+
     struct FOOTPRINT_CHOOSER
     {
         int width;
@@ -237,6 +256,8 @@ public:
     DIALOG_PLACE_FILE m_PlaceFile;
 
     DIALOG_PLOT m_Plot;
+
+    DIALOG_REANNOTATE m_Reannotate;
 
     FOOTPRINT_CHOOSER m_FootprintChooser;
 

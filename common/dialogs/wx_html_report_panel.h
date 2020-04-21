@@ -87,6 +87,20 @@ public:
     ///> If the m_showAll option is set, the mask is < 0
     int GetVisibleSeverities();
 
+    ///> If true prints Info: at the beginning of each Info severity line (Default)
+    void SetPrintInfo( bool aPrintInfo );
+
+    ///> @return the visible severity filter.
+    ///> If the m_showAll option is set, the mask is < 0
+    void SetShowSeverity( SEVERITY aSeverity, bool aValue );
+
+    ///> Set the report full file name to the string
+    void SetFileName( wxString& aReportFileName );
+
+    ///> @return reference to the current report fill file name string.
+    wxString& GetFileName( void );
+
+
 private:
     struct REPORT_LINE
     {
@@ -130,6 +144,12 @@ private:
     int m_severities;
 
     bool m_lazyUpdate;
+
+    ///> Print "Info:" at the front of Info messages (default)
+    bool m_PrintInfo;
+
+    ///> Use this as the filename instead of /bin/report.txt (default)
+    wxString m_ReportFileName;
 };
 
 #endif //__WX_HTML_REPORT_PANEL_H__

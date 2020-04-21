@@ -406,6 +406,7 @@ public:
     static TOOL_ACTION appendBoard;
     static TOOL_ACTION showEeschema;
     static TOOL_ACTION boardStatistics;
+    static TOOL_ACTION boardReannotate;
 
     // Appearance controls
     static TOOL_ACTION clearHighlight;

@@ -960,6 +960,12 @@ TOOL_ACTION PCB_ACTIONS::boardStatistics( "pcbnew.InspectionTool.ShowStatisticsD
         _( "Shows board statistics" ), pcbnew_xpm );
 
 
+//Geographic re-annotation tool
+TOOL_ACTION PCB_ACTIONS::boardReannotate( "pcbnew.ReannotateTool.ShowReannotateDialog", AS_GLOBAL, 0,
+        _( "Reannotate PCB" ), _( "Reannotate PCB" ), _( "Reannotate PCB" ),
+        pcbnew_xpm );
+
+
 // PLACEMENT_TOOL
 //
 TOOL_ACTION PCB_ACTIONS::alignTop( "pcbnew.AlignAndDistribute.alignTop",

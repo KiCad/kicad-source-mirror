@@ -54,6 +54,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_board_setup.cpp
     dialogs/dialog_board_statistics.cpp
     dialogs/dialog_board_statistics_base.cpp
+    dialogs/dialog_board_reannotate.cpp
+    dialogs/dialog_board_reannotate_base.cpp  
     dialogs/dialog_choose_footprint.cpp
     dialogs/dialog_cleanup_graphics.cpp
     dialogs/dialog_cleanup_graphics_base.cpp
@@ -317,6 +319,7 @@ set( PCBNEW_CLASS_SRCS
     tools/pcb_bright_box.cpp
     tools/pcb_editor_control.cpp
     tools/pcb_inspection_tool.cpp
+    tools/pcb_reannotate_tool.cpp   
     tools/pcb_selection_conditions.cpp
     tools/pcb_tool_base.cpp
     tools/pcbnew_control.cpp

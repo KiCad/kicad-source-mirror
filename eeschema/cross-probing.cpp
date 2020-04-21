@@ -44,6 +44,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <tools/ee_actions.h>
+#include <tools/reannotate.h>
 #include <tools/sch_editor_control.h>
 #include <advanced_config.h>
 #include <netclass.h>
@@ -576,7 +577,12 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         m_toolManager->RunAction( ACTIONS::updateSchematicFromPcb, true );
         break;
 
-    default:
-        ;
+    case MAIL_REANNOTATE:
+    { //Reannotate the schematic as per the netlist.
+        ReannotateFromPCBNew( this, payload );
+        break;
+    }
+    default:;
+         
     }
 }

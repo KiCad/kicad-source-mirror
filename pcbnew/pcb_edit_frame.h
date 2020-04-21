@@ -26,6 +26,9 @@
 #include "pcb_base_edit_frame.h"
 #include "undo_redo_container.h"
 #include "zones.h"
+#include <mail_type.h>
+#include <map>
+#include <unordered_map>
 
 /*  Forward declarations of classes. */
 class ACTION_PLUGIN;
@@ -852,6 +855,24 @@ public:
      */
     enum FETCH_NETLIST_MODE { NO_ANNOTATION, QUIET_ANNOTATION, ANNOTATION_DIALOG };
     bool FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode );
+
+    /**
+     * Function ReannotateSchematic
+     * @param aNetlist a NETLIST filled in by the caller.
+     *        aMessage is the error message from eeSchem
+     *        if aCommit is false it just test, if true it updates the schematic
+     * @return false if failed due to standalone mode, true if a reply.
+      */
+
+    /// Sends a Netlist packet to eeSchema.
+    /// @return true if success
+    bool ReannotateSchematic( std::string& aNetlist );
+
+
+    /// Test if standalone mode.
+    /// @ return false if not in standalone.
+    /// @return true if in standalone, opens eeSchema, and opens the schematic for this project
+    bool TestStandalone( void );
 
     /**
      * Function DoUpdatePCBFromNetlist

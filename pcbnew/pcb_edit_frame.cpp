@@ -8,7 +8,7 @@
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
+ * Free Software Foundation, either version 3 reannof the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but
@@ -68,6 +68,7 @@
 #include <tools/pcb_editor_control.h>
 #include <tools/pcb_inspection_tool.h>
 #include <tools/pcb_viewer_tools.h>
+#include <tools/pcb_reannotate_tool.h>
 #include <tools/placement_tool.h>
 #include <tools/pad_tool.h>
 #include <microwave/microwave_tool.h>
@@ -452,6 +453,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
     m_toolManager->RegisterTool( new PCB_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new PCB_INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new PCB_REANNOTATE_TOOL );
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
     m_toolManager->RegisterTool( new MICROWAVE_TOOL );
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
@@ -1057,15 +1059,10 @@ bool PCB_EDIT_FRAME::SetCurrentNetClass( const wxString& aNetClassName )
 }
 
 
-bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode )
+bool PCB_EDIT_FRAME::TestStandalone( void )
 {
     if( Kiface().IsSingle() )
-    {
-        DisplayError( this, _( "Cannot update the PCB because Pcbnew is opened in stand-alone "
-                               "mode. In order to create or update PCBs from schematics, you "
-                               "must launch the KiCad project manager and create a project." ) );
         return false;
-    }
 
     // Update PCB requires a netlist. Therefore the schematic editor must be running
     // If this is not the case, open the schematic editor
@@ -1096,9 +1093,32 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST
         frame->Show( true );
 
         // bring ourselves back to the front
-        Raise();
+    }
+    return true;            //Success!
+}
+
+
+//
+// Sends a Netlist packet to eeSchema.
+// The reply is in aNetlist so it is destroyed by this
+//
+bool PCB_EDIT_FRAME::ReannotateSchematic( std::string& aNetlist )
+{
+    Kiway().ExpressMail( FRAME_SCH, MAIL_REANNOTATE, aNetlist, this );
+    return true;
+}
+
+
+bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode )
+{
+    if( !TestStandalone( )) {
+        DisplayError( this, _( "Cannot update the PCB because Pcbnew is opened in stand-alone "
+                               "mode. In order to create or update PCBs from schematics, you "
+                               "must launch the KiCad project manager and create a project." ) );
+        return false;       //Not in standalone mode
     }
 
+    Raise();                //Show
     std::string payload;
 
     if( aMode == NO_ANNOTATION )

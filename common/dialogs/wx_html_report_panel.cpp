@@ -27,15 +27,16 @@
 #include <gal/color4d.h>
 #include <wx/clipbrd.h>
 
-WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow*      parent,
-                                            wxWindowID     id,
-                                            const wxPoint& pos,
-                                            const wxSize&  size,
-                                            long           style ) :
+WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent, 
+                                            wxWindowID id, 
+                                            const wxPoint& pos, 
+                                            const wxSize& size, 
+                                            long style ) :
     WX_HTML_REPORT_PANEL_BASE( parent, id, pos, size, style ),
     m_reporter( this ),
     m_severities( -1 ),
-    m_lazyUpdate( false )
+    m_lazyUpdate( false ),
+    m_PrintInfo( true )
 {
     syncCheckboxes();
     m_htmlView->SetPage( addHeader( "" ) );
@@ -310,7 +311,12 @@ void WX_HTML_REPORT_PANEL::onCheckBoxShowActions( wxCommandEvent& event )
 
 void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
 {
-    wxFileName fn( "./report.txt" );
+    wxFileName fn;
+
+    if( m_ReportFileName.empty() )
+        fn = wxT( "./report.txt" );
+    else
+        fn = m_ReportFileName;
 
     wxFileDialog dlg( this, _( "Save Report to File" ), fn.GetPath(), fn.GetFullName(),
                       TextFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -339,7 +345,7 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
     {
         f.Write( generatePlainText( l ) );
     }
-
+    m_ReportFileName = fn.GetFullPath();
     f.Close();
 }
 
@@ -372,4 +378,45 @@ void WX_HTML_REPORT_PANEL::SetVisibleSeverities( int aSeverities )
 int WX_HTML_REPORT_PANEL::GetVisibleSeverities()
 {
     return m_severities;
+}
+
+
+void WX_HTML_REPORT_PANEL::SetFileName( wxString& aReportFileName )
+{
+    m_ReportFileName = aReportFileName;
+}
+
+
+wxString& WX_HTML_REPORT_PANEL::GetFileName( void )
+{
+    return ( m_ReportFileName );
+}
+
+
+void WX_HTML_REPORT_PANEL::SetPrintInfo( bool aPrintInfo )
+{
+    m_PrintInfo = aPrintInfo;
+}
+
+
+void WX_HTML_REPORT_PANEL::SetShowSeverity( SEVERITY aSeverity, bool aValue )
+{
+    switch( aSeverity )
+    {
+    case RPT_SEVERITY_INFO:
+        m_checkBoxShowInfos->SetValue( aValue );
+        break;
+
+    case RPT_SEVERITY_ACTION:
+        m_checkBoxShowActions->SetValue( aValue );
+        break;
+
+    case RPT_SEVERITY_WARNING:
+        m_checkBoxShowWarnings->SetValue( aValue );
+        break;
+
+    default:
+        m_checkBoxShowErrors->SetValue( aValue );
+        break;
+    }
 }

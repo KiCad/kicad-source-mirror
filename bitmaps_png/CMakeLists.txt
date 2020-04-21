@@ -542,6 +542,14 @@ set( BMAPS_BIG
     icon_pcbnew
     icon_bitmap2component
     icon_pcbcalculator
+    reannotate_down_left
+    reannotate_down_right
+    reannotate_left_down
+    reannotate_left_up
+    reannotate_right_down
+    reannotate_right_up
+    reannotate_up_left
+    reannotate_up_right
     viewlibs_icon
     icon_pagelayout_editor
     wizard_add_fplib_icon
