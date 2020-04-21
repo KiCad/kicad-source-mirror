@@ -395,9 +395,10 @@ public:
     bool IsHighLightNetON() const { return m_highLight.m_highLightOn; }
 
     /**
-     * Function HighLightON
-     * Enable net highlight.
-     * if m_highLight_NetCode >= 0, this net will be highlighted
+     * Enable or disable net highlighting.  If a netcode >= 0 has been set
+     * with SetHighLightNet and aValue is true, the net will be highlighted.
+     * If aValue is false, net highlighting will be disabled regardless of
+     * the highlight netcode being set.
      */
     void HighLightON( bool aValue = true );
 

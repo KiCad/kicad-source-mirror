@@ -62,6 +62,7 @@ def_col( COLUMN_TOTAL_LENGTH, 6, _( "Length" ) );
 
 #undef def_col
 
+
 struct DIALOG_SELECT_NET_FROM_LIST::LIST_ITEM
 {
     LIST_ITEM( NETINFO_ITEM* aNet ) : m_net( aNet )
@@ -75,6 +76,7 @@ struct DIALOG_SELECT_NET_FROM_LIST::LIST_ITEM
     int           m_chip_wire_length  = 0;
     int           m_total_length      = 0;
 };
+
 
 struct DIALOG_SELECT_NET_FROM_LIST::LIST_ITEM_NET_CMP_LESS
 {
@@ -100,6 +102,7 @@ struct DIALOG_SELECT_NET_FROM_LIST::LIST_ITEM_NET_CMP_LESS
         return a < m_base_ptr[b].m_net;
     }
 };
+
 
 struct DIALOG_SELECT_NET_FROM_LIST::ROW_DESC
 {
@@ -185,16 +188,19 @@ DIALOG_SELECT_NET_FROM_LIST::~DIALOG_SELECT_NET_FROM_LIST()
         m_brd->RemoveListener( this );
 }
 
+
 DIALOG_SELECT_NET_FROM_LIST::SETTINGS DIALOG_SELECT_NET_FROM_LIST::Settings() const
 {
     return { m_textCtrlFilter->GetValue(), m_cbShowZeroPad->IsChecked() };
 }
+
 
 void DIALOG_SELECT_NET_FROM_LIST::onParentWindowClosed( wxCommandEvent& event )
 {
     Close();
     event.Skip();
 }
+
 
 void DIALOG_SELECT_NET_FROM_LIST::onUnitsChanged( wxCommandEvent& event )
 {
@@ -205,6 +211,7 @@ void DIALOG_SELECT_NET_FROM_LIST::onUnitsChanged( wxCommandEvent& event )
 
     event.Skip();
 }
+
 
 void DIALOG_SELECT_NET_FROM_LIST::onBoardChanged( wxCommandEvent& event )
 {
@@ -223,6 +230,7 @@ void DIALOG_SELECT_NET_FROM_LIST::onBoardChanged( wxCommandEvent& event )
 
     event.Skip();
 }
+
 
 bool DIALOG_SELECT_NET_FROM_LIST::netFilterMatches( NETINFO_ITEM* aNet ) const
 {
@@ -269,10 +277,7 @@ std::vector<CN_ITEM*> DIALOG_SELECT_NET_FROM_LIST::relevantConnectivityItems() c
     std::vector<CN_ITEM*> cn_items;
     cn_items.reserve( 1024 );
 
-
-    auto connectivity = m_brd->GetConnectivity();
-
-    for( auto& cn_item : connectivity->GetConnectivityAlgo()->ItemList() )
+    for( auto& cn_item : m_brd->GetConnectivity()->GetConnectivityAlgo()->ItemList() )
     {
         if( cn_item->Valid() && type_bits[cn_item->Parent()->Type()] )
             cn_items.push_back( cn_item );
@@ -283,10 +288,12 @@ std::vector<CN_ITEM*> DIALOG_SELECT_NET_FROM_LIST::relevantConnectivityItems() c
     return cn_items;
 }
 
+
 DIALOG_SELECT_NET_FROM_LIST::ROW_DESC DIALOG_SELECT_NET_FROM_LIST::findRow( int aNetCode )
 {
     return findRow( m_brd->FindNet( aNetCode ) );
 }
+
 
 DIALOG_SELECT_NET_FROM_LIST::ROW_DESC DIALOG_SELECT_NET_FROM_LIST::findRow( NETINFO_ITEM* aNet )
 {
@@ -298,6 +305,7 @@ DIALOG_SELECT_NET_FROM_LIST::ROW_DESC DIALOG_SELECT_NET_FROM_LIST::findRow( NETI
     else
         return {};
 }
+
 
 void DIALOG_SELECT_NET_FROM_LIST::deleteRow( const ROW_DESC& aRow )
 {
@@ -314,6 +322,7 @@ void DIALOG_SELECT_NET_FROM_LIST::deleteRow( const ROW_DESC& aRow )
             LIST_ITEM_NET_CMP_LESS( m_list_items ) );
 }
 
+
 void DIALOG_SELECT_NET_FROM_LIST::setValue(
         const ROW_DESC& aRow, const COLUMN_ID& aCol, wxString aVal )
 {
@@ -321,25 +330,30 @@ void DIALOG_SELECT_NET_FROM_LIST::setValue(
         m_netsList->SetValue( aVal, aRow.row_num, aCol.col_num );
 }
 
+
 wxString DIALOG_SELECT_NET_FROM_LIST::formatNetCode( const NETINFO_ITEM* aNet ) const
 {
     return wxString::Format( "%.3d", aNet->GetNet() );
 }
+
 
 wxString DIALOG_SELECT_NET_FROM_LIST::formatNetName( const NETINFO_ITEM* aNet ) const
 {
     return UnescapeString( aNet->GetNetname() );
 }
 
+
 wxString DIALOG_SELECT_NET_FROM_LIST::formatCount( unsigned int aValue ) const
 {
     return wxString::Format( "%u", aValue );
 }
 
+
 wxString DIALOG_SELECT_NET_FROM_LIST::formatLength( int aValue ) const
 {
     return MessageTextFromValue( GetUserUnits(), aValue );
 }
+
 
 void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
@@ -375,6 +389,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* a
     else if( auto* i = dyn_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) )
     {
         auto r = findRow( i->GetNet() );
+
         if( r )
         {
             // try to handle frequent operations quickly.
@@ -402,6 +417,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* a
     }
 }
 
+
 void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
     if( auto* net = dyn_cast<NETINFO_ITEM*>( aBoardItem ) )
@@ -414,6 +430,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM*
         for( const D_PAD* pad : mod->Pads() )
         {
             auto r = findRow( pad->GetNet() );
+
             if( r )
             {
                 r.by_row->m_pad_count -= 1;
@@ -428,6 +445,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM*
     else if( auto* i = dyn_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) )
     {
         auto r = findRow( i->GetNet() );
+
         if( r )
         {
             // try to handle frequent operations quickly.
@@ -455,6 +473,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM*
     }
 }
 
+
 void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
     if( dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) != nullptr
@@ -464,6 +483,7 @@ void DIALOG_SELECT_NET_FROM_LIST::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM*
         m_netsList->Refresh();
     }
 }
+
 
 void DIALOG_SELECT_NET_FROM_LIST::OnBoardHighlightNetChanged( BOARD& aBoard )
 {
@@ -555,6 +575,7 @@ void DIALOG_SELECT_NET_FROM_LIST::updateNet( NETINFO_ITEM* aNet )
         setValue( cur_net_row, COLUMN_TOTAL_LENGTH, formatLength( list_item.m_total_length ) );
     }
 }
+
 
 void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 {
@@ -679,6 +700,7 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
     else
     {
         auto r = findRow( prev_selected_netcode );
+
         if( r )
         {
             m_selection   = r.by_row->m_net->GetNetname();
@@ -691,9 +713,11 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
     }
 }
 
+
 void DIALOG_SELECT_NET_FROM_LIST::HighlightNet( NETINFO_ITEM* aNet )
 {
     const auto r = findRow( aNet );
+
     if( r )
     {
         auto i = m_netsList->RowToItem( r.row_num );
@@ -703,6 +727,7 @@ void DIALOG_SELECT_NET_FROM_LIST::HighlightNet( NETINFO_ITEM* aNet )
     else
         m_netsList->UnselectAll();
 }
+
 
 void DIALOG_SELECT_NET_FROM_LIST::highlightNetOnBoard( NETINFO_ITEM* aNet ) const
 {

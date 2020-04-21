@@ -1807,11 +1807,13 @@ void BOARD::SanitizeNetcodes()
     }
 }
 
+
 void BOARD::AddListener( BOARD_LISTENER* aListener )
 {
     if( std::find( m_listeners.begin(), m_listeners.end(), aListener ) == m_listeners.end() )
         m_listeners.push_back( aListener );
 }
+
 
 void BOARD::RemoveListener( BOARD_LISTENER* aListener )
 {
@@ -1823,6 +1825,7 @@ void BOARD::RemoveListener( BOARD_LISTENER* aListener )
         m_listeners.pop_back();
     }
 }
+
 
 void BOARD::OnItemChanged( BOARD_ITEM* aItem )
 {

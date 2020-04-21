@@ -435,6 +435,7 @@ public:
     {
         return m_items.begin();
     }
+
     CONST_ITER end() const
     {
         return m_items.end();
