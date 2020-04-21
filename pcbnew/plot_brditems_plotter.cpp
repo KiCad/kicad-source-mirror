@@ -667,6 +667,8 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     // So we set bold flag to true
     bool allow_bold = pt_texte->IsBold() || thickness;
 
+    m_plotter->SetCurrentLineWidth( thickness );
+
     if( pt_texte->IsMultilineAllowed() )
     {
         std::vector<wxPoint> positions;

@@ -34,14 +34,11 @@
  *       depending on the application.
  */
 
-#include <base_struct.h>
 #include <base_units.h>
 #include <common.h>
 #include <math/util.h>      // for KiROUND
 #include <macros.h>
 #include <title_block.h>
-
-#include "libeval/numeric_evaluator.h"
 
 
 #if defined( PCBNEW ) || defined( CVPCB ) || defined( EESCHEMA ) || defined( GERBVIEW ) || defined( PL_EDITOR )

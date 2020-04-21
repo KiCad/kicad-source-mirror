@@ -154,7 +154,7 @@ int EDA_TEXT::GetEffectiveTextPenWidth() const
     }
 
     // Clip pen size for small texts:
-    width = Clamp_Text_PenSize( width, GetTextSize(), IsBold() );
+    width = Clamp_Text_PenSize( width, GetTextSize(), ALLOW_BOLD_THICKNESS );
 
     return width;
 }
