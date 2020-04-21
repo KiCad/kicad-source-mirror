@@ -194,6 +194,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM_MAP<bool>( "field_editor.fields_group_by",
             &m_FieldEditorPanel.fields_group_by, {} ) );
 
+    m_params.emplace_back( new PARAM_MAP<int>( "field_editor.column_widths",
+            &m_FieldEditorPanel.column_widths, {} ) );
+
     m_params.emplace_back( new PARAM<bool>( "plot.background_color",
             &m_PlotPanel.background_color, false ) );
 

@@ -120,6 +120,7 @@ public:
     {
         std::map<std::string, bool> fields_show;
         std::map<std::string, bool> fields_group_by;
+        std::map<std::string, int> column_widths;
     };
 
     struct PANEL_LIB_VIEW

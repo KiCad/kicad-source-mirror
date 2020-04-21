@@ -722,6 +722,9 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_grid->UseNativeColHeader( false );
     m_grid->SetTable( m_dataModel, true );
 
+    // must be done after SetTable(), which appears to re-set it
+    m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
+
     // sync m_grid's column visibilities to Show checkboxes in m_fieldsCtrl
     for( int i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
     {
@@ -759,22 +762,34 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
     m_grid->AutoSizeColumns( false );
 
-    for( int col = 0; col < m_grid->GetNumberCols(); ++ col )
+    for( int col = 0; col < m_grid->GetNumberCols(); ++col )
     {
         // Columns are hidden by setting their width to 0 so if we resize them they will
         // become unhidden.
         if( m_grid->IsColShown( col ) )
         {
-            int textWidth = m_dataModel->GetDataWidth( col ) + COLUMN_MARGIN;
-            int maxWidth = defaultDlgSize.x / 3;
+            EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+            wxString           key = m_dataModel->GetColLabelValue( col );
 
-            if( col == m_grid->GetNumberCols() - 1 )
-                m_grid->SetColSize( col, std::min( std::max( 50, textWidth ), maxWidth ) );
+            if( cfg->m_FieldEditorPanel.column_widths.count( key ) )
+            {
+                int width = cfg->m_FieldEditorPanel.column_widths.at( key );
+                m_grid->SetColSize( col, width );
+            }
             else
-                m_grid->SetColSize( col, std::min( std::max( 100, textWidth ), maxWidth ) );
+            {
+                int textWidth = m_dataModel->GetDataWidth( col ) + COLUMN_MARGIN;
+                int maxWidth = defaultDlgSize.x / 3;
+
+                if( col == m_grid->GetNumberCols() - 1 )
+                    m_grid->SetColSize( col, std::min( std::max( 50, textWidth ), maxWidth ) );
+                else
+                    m_grid->SetColSize( col, std::min( std::max( 100, textWidth ), maxWidth ) );
+            }
         }
     }
 
+    m_grid->SelectRow( 0 );
     m_grid->SetGridCursor( 0, 1 );
     SetInitialFocus( m_grid );
 
@@ -884,31 +899,21 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aName,
 
     wxVector<wxVariant> fieldsCtrlRow;
 
-    auto cfg     = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    bool show    = defaultShow;
-    bool sort_by = defaultSortBy;
+    EESCHEMA_SETTINGS* cfg     = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    bool               show    = defaultShow;
+    bool               sort_by = defaultSortBy;
 
     std::string key( aName.ToUTF8() );
 
-    try
-    {
+    if( cfg->m_FieldEditorPanel.fields_show.count( key ) )
         show = cfg->m_FieldEditorPanel.fields_show.at( key );
-    }
-    catch( std::out_of_range& )
-    {
-    }
 
-    try
-    {
-        show = cfg->m_FieldEditorPanel.fields_group_by.at( key );
-    }
-    catch( std::out_of_range& )
-    {
-    }
+    if( cfg->m_FieldEditorPanel.fields_group_by.count( key ) )
+        sort_by = cfg->m_FieldEditorPanel.fields_group_by.at( key );
 
-    fieldsCtrlRow.push_back( wxVariant( aName ) );
-    fieldsCtrlRow.push_back( wxVariant( show ) );
-    fieldsCtrlRow.push_back( wxVariant( sort_by ) );
+    fieldsCtrlRow.emplace_back( wxVariant( aName ) );
+    fieldsCtrlRow.emplace_back( wxVariant( show ) );
+    fieldsCtrlRow.emplace_back( wxVariant( sort_by ) );
 
     m_fieldsCtrl->AppendItem( fieldsCtrlRow );
 }
@@ -1008,8 +1013,8 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
 
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
 {
-    auto cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    wxDataViewItem item = event.GetItem();
+    EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    wxDataViewItem     item = event.GetItem();
 
     int row = m_fieldsCtrl->ItemToRow( item );
     int col = event.GetColumn();
@@ -1083,13 +1088,26 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort( wxGridEvent& aEvent )
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableValueChanged( wxGridEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableValueChanged( wxGridEvent& aEvent )
 {
     m_grid->ForceRefresh();
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnRegroupComponents( wxCommandEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableColSize( wxGridSizeEvent& aEvent )
+{
+    EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    int                col = aEvent.GetRowOrCol();
+    wxString           key = m_grid->GetColLabelValue( col );
+
+    if( m_grid->GetColSize( col ) )
+        cfg->m_FieldEditorPanel.column_widths[ key ] = m_grid->GetColSize( col );
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnRegroupComponents( wxCommandEvent& aEvent )
 {
     m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
     m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );

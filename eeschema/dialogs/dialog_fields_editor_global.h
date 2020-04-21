@@ -62,6 +62,7 @@ private:
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableCellClick( wxGridEvent& event ) override;
     void OnTableItemContextMenu( wxGridEvent& event ) override;
+    void OnTableColSize( wxGridSizeEvent& event ) override;
     void OnSizeFieldList( wxSizeEvent& event ) override;
     void OnAddField( wxCommandEvent& event ) override;
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
