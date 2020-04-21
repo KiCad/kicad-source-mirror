@@ -49,6 +49,7 @@
 #include <type_traits>
 #include <typeinfo>
 #include <boost/uuid/uuid.hpp>
+#include <macros.h>
 
 class PROJECT;
 class SEARCH_STACK;
@@ -106,8 +107,10 @@ private:
 
 extern KIID niluuid;
 
+// declare KIID_VECT_LIST as std::vector<KIID> both for c++ and swig:
+DECL_VEC_FOR_SWIG( KIID_VECT_LIST, KIID )
 
-class KIID_PATH : public std::vector<KIID>
+class KIID_PATH : public KIID_VECT_LIST
 {
 public:
     KIID_PATH()
