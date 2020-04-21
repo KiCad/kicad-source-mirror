@@ -34,6 +34,7 @@ types:
             record_id::text6: text
             record_id::fill6: fill
             record_id::region6: region
+            record_id::componentbody6: componentbody
 
   arc:
     seq:
@@ -570,6 +571,26 @@ types:
     #  repeat-expr: vertices_num+1
     #  type: xyf2
 
+  componentbody:
+    seq:
+    - id: sub1_len
+      type: u4
+    - id: data
+      type: componentbody_sub1
+      size: sub1_len
+
+  componentbody_sub1:
+    seq:
+    - size: 7
+    - id: component
+      type: u2
+    - size: 9
+    - id: propterties_len
+      type: u4
+    - id: properties
+      size: propterties_len
+      type: str
+
   xy:
     seq:
       - id: x
@@ -609,6 +630,7 @@ enums:
     0x05: text6
     0x06: fill6
     0x0b: region6
+    0x0c: componentbody6
 
   boolean:
     0: false

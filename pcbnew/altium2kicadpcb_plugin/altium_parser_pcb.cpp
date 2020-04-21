@@ -26,7 +26,6 @@
 
 #include <ki_exception.h>
 #include <math/util.h>
-#include <wx/translation.h>
 
 #include "altium_parser.h"
 #include "altium_parser_pcb.h"
@@ -378,6 +377,28 @@ ADIMENSION6::ADIMENSION6( ALTIUM_PARSER& aReader )
     }
 }
 
+AMODEL::AMODEL( ALTIUM_PARSER& aReader )
+{
+    std::map<wxString, wxString> properties = aReader.ReadProperties();
+    if( properties.empty() )
+    {
+        THROW_IO_ERROR( "Classes6 stream has no properties!" );
+    }
+
+    name       = ALTIUM_PARSER::PropertiesReadString( properties, "NAME", "" );
+    id         = ALTIUM_PARSER::PropertiesReadString( properties, "ID", "" );
+    isEmbedded = ALTIUM_PARSER::PropertiesReadBool( properties, "EMBED", false );
+
+    rotation.x = ALTIUM_PARSER::PropertiesReadDouble( properties, "ROTX", 0. );
+    rotation.y = ALTIUM_PARSER::PropertiesReadDouble( properties, "ROTY", 0. );
+    rotation.z = ALTIUM_PARSER::PropertiesReadDouble( properties, "ROTZ", 0. );
+
+    if( aReader.HasParsingError() )
+    {
+        THROW_IO_ERROR( "Classes6 stream was not parsed correctly" );
+    }
+}
+
 ANET6::ANET6( ALTIUM_PARSER& aReader )
 {
     std::map<wxString, wxString> properties = aReader.ReadProperties();
@@ -566,6 +587,48 @@ AARC6::AARC6( ALTIUM_PARSER& aReader )
     if( aReader.HasParsingError() )
     {
         THROW_IO_ERROR( "Arcs6 stream was not parsed correctly" );
+    }
+}
+
+ACOMPONENTBODY6::ACOMPONENTBODY6( ALTIUM_PARSER& aReader )
+{
+    ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
+    if( recordtype != ALTIUM_RECORD::MODEL )
+    {
+        THROW_IO_ERROR( "ComponentsBodies6 stream has invalid recordtype" );
+    }
+
+    aReader.ReadAndSetSubrecordLength();
+
+    aReader.Skip( 7 );
+    component = aReader.Read<uint16_t>();
+    aReader.Skip( 9 );
+
+    std::map<wxString, wxString> properties = aReader.ReadProperties();
+    if( properties.empty() )
+    {
+        THROW_IO_ERROR( "ComponentsBodies6 stream has no properties" );
+    }
+
+    modelName       = ALTIUM_PARSER::PropertiesReadString( properties, "MODEL.NAME", "" );
+    modelId         = ALTIUM_PARSER::PropertiesReadString( properties, "MODELID", "" );
+    modelIsEmbedded = ALTIUM_PARSER::PropertiesReadBool( properties, "MODEL.EMBED", false );
+
+    modelPosition.x = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "MODEL.2D.X", "0mil" );
+    modelPosition.y = -ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "MODEL.2D.Y", "0mil" );
+    modelPosition.z = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "MODEL.3D.DZ", "0mil" );
+
+    modelRotation.x = ALTIUM_PARSER::PropertiesReadDouble( properties, "MODEL.3D.ROTX", 0. );
+    modelRotation.y = ALTIUM_PARSER::PropertiesReadDouble( properties, "MODEL.3D.ROTY", 0. );
+    modelRotation.z = ALTIUM_PARSER::PropertiesReadDouble( properties, "MODEL.3D.ROTZ", 0. );
+
+    rotation = ALTIUM_PARSER::PropertiesReadDouble( properties, "MODEL.2D.ROTATION", 0. );
+
+    aReader.SkipSubrecord();
+
+    if( aReader.HasParsingError() )
+    {
+        THROW_IO_ERROR( "Components6 stream was not parsed correctly" );
     }
 }
 

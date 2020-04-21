@@ -29,6 +29,7 @@
 #include <memory>
 #include <vector>
 
+#include <class_module.h>
 #include <wx/gdicmn.h>
 
 // tthis constant specifies an unconnected net
@@ -395,6 +396,17 @@ struct ADIMENSION6
     explicit ADIMENSION6( ALTIUM_PARSER& aReader );
 };
 
+struct AMODEL
+{
+    wxString name;
+    wxString id;
+    bool     isEmbedded;
+
+    MODULE_3D_SETTINGS::VECTOR3D rotation;
+
+    explicit AMODEL( ALTIUM_PARSER& aReader );
+};
+
 struct ANET6
 {
     wxString name;
@@ -484,6 +496,21 @@ struct AARC6
     uint32_t width;
 
     explicit AARC6( ALTIUM_PARSER& aReader );
+};
+
+struct ACOMPONENTBODY6
+{
+    uint16_t component;
+
+    wxString modelName;
+    wxString modelId;
+    bool     modelIsEmbedded;
+
+    MODULE_3D_SETTINGS::VECTOR3D modelPosition;
+    MODULE_3D_SETTINGS::VECTOR3D modelRotation;
+    double                       rotation;
+
+    explicit ACOMPONENTBODY6( ALTIUM_PARSER& aReader );
 };
 
 struct APAD6_SIZE_AND_SHAPE

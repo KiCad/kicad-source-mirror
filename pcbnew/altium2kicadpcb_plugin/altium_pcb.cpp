@@ -38,8 +38,13 @@
 
 #include <compoundfilereader.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <project.h>
 #include <trigo.h>
 #include <utf.h>
+#include <wx/docview.h>
+#include <wx/mstream.h>
+#include <wx/wfstream.h>
+#include <wx/zstream.h>
 
 
 void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName,
@@ -350,6 +355,16 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
                 [this]( auto aReader, auto fileHeader ) {
                     this->ParseComponents6Data( aReader, fileHeader );
                 } },
+        { true, ALTIUM_PCB_DIR::MODELS,
+                [this, aFileMapping]( auto aReader, auto fileHeader ) {
+                    wxString dir( aFileMapping.at( ALTIUM_PCB_DIR::MODELS ) );
+                    dir.RemoveLast( 4 ); // Remove "Data" from the path
+                    this->ParseModelsData( aReader, fileHeader, dir );
+                } },
+        { true, ALTIUM_PCB_DIR::COMPONENTBODIES6,
+                [this]( auto aReader, auto fileHeader ) {
+                    this->ParseComponentsBodies6Data( aReader, fileHeader );
+                } },
         { true, ALTIUM_PCB_DIR::NETS6,
                 [this]( auto aReader, auto fileHeader ) {
                     this->ParseNets6Data( aReader, fileHeader );
@@ -449,6 +464,9 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
     {
         module->CalculateBoundingBox();
     }
+
+    // Otherwise we cannot save the imported board
+    m_board->SetModified();
 }
 
 int ALTIUM_PCB::GetNetCode( uint16_t aId ) const
@@ -783,6 +801,66 @@ void ALTIUM_PCB::ParseComponents6Data(
 }
 
 
+void ALTIUM_PCB::ParseComponentsBodies6Data(
+        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+{
+    ALTIUM_PARSER reader( aReader, aEntry );
+
+    while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
+    {
+        ACOMPONENTBODY6 elem( reader ); // TODO: implement
+
+        if( elem.component == ALTIUM_COMPONENT_NONE )
+        {
+            continue; // TODO: we do not support components for the board yet
+        }
+
+        if( m_components.size() <= elem.component )
+        {
+            THROW_IO_ERROR( wxString::Format(
+                    "ComponentsBodies6 stream tries to access component id %d of %d existing components",
+                    elem.component, m_components.size() ) );
+        }
+
+        if( !elem.modelIsEmbedded )
+        {
+            continue;
+        }
+
+        auto modelTuple = m_models.find( elem.modelId );
+        if( modelTuple == m_models.end() )
+        {
+            THROW_IO_ERROR( wxString::Format(
+                    "ComponentsBodies6 stream tries to access model id %s which does not exist",
+                    elem.modelId ) );
+        }
+
+        MODULE*        module         = m_components.at( elem.component );
+        const wxPoint& modulePosition = module->GetPosition();
+
+        MODULE_3D_SETTINGS modelSettings;
+
+        modelSettings.m_Filename = modelTuple->second;
+
+        modelSettings.m_Offset.x = Iu2Millimeter( (int) elem.modelPosition.x - modulePosition.x );
+        modelSettings.m_Offset.y = -Iu2Millimeter( (int) elem.modelPosition.y - modulePosition.y );
+        modelSettings.m_Offset.z = Iu2Millimeter( (int) elem.modelPosition.z );
+
+        modelSettings.m_Rotation.x = NormalizeAngleDegrees( elem.modelRotation.x, -180, 180 );
+        modelSettings.m_Rotation.y = NormalizeAngleDegrees( elem.modelRotation.y + 180, -180, 180 );
+        modelSettings.m_Rotation.z = NormalizeAngleDegrees(
+                elem.modelRotation.z + module->GetOrientationDegrees() + 180, -180, 180 );
+
+        module->Models().push_back( modelSettings );
+    }
+
+    if( reader.GetRemainingBytes() != 0 )
+    {
+        THROW_IO_ERROR( "ComponentsBodies6 stream is not fully parsed" );
+    }
+}
+
+
 void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 {
     if( aElem.referencePoint.size() != 2 )
@@ -1034,6 +1112,50 @@ void ALTIUM_PCB::ParseDimensions6Data(
         THROW_IO_ERROR( "Dimensions6 stream is not fully parsed" );
     }
 }
+
+
+void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
+        const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString aRootDir )
+{
+    ALTIUM_PARSER reader( aReader, aEntry );
+
+    wxString altiumModelsPath = wxPathOnly( m_board->GetFileName() );
+    wxSetEnv( PROJECT_VAR_NAME,
+            altiumModelsPath ); // TODO: set KIPRJMOD always after import (not only when loading project)?
+
+    int idx = 0;
+    while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
+    {
+        AMODEL elem( reader );
+
+        wxString stepPath = aRootDir + std::to_string( idx++ );
+
+        const CFB::COMPOUND_FILE_ENTRY* stepEntry = FindStream( aReader, stepPath.c_str() );
+
+        size_t                  stepSize = static_cast<size_t>( stepEntry->size );
+        std::unique_ptr<char[]> stepContent( new char[stepSize] );
+
+        // read file into buffer
+        aReader.ReadFile( stepEntry, 0, stepContent.get(), stepSize );
+
+        wxFileName storagePath( altiumModelsPath, elem.name );
+
+        wxMemoryInputStream stepStream( stepContent.get(), stepSize );
+        wxZlibInputStream   zlibInputStream( stepStream );
+
+        wxFileOutputStream outputStream( storagePath.GetFullPath() );
+        outputStream.Write( zlibInputStream );
+        outputStream.Close();
+
+        m_models.insert( { elem.id, "${KIPRJMOD}/" + elem.name } ); // KIPRJMOD
+    }
+
+    if( reader.GetRemainingBytes() != 0 )
+    {
+        THROW_IO_ERROR( "Models stream is not fully parsed" );
+    }
+}
+
 
 void ALTIUM_PCB::ParseNets6Data(
         const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )

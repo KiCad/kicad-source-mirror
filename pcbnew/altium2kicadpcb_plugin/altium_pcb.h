@@ -138,6 +138,8 @@ private:
             const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseDimensions6Data(
             const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseModelsData( const CFB::CompoundFileReader& aReader,
+            const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString aRootDir );
     void ParseNets6Data(
             const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParsePolygons6Data(
@@ -147,6 +149,8 @@ private:
 
     // Binary Format
     void ParseArcs6Data(
+            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseComponentsBodies6Data(
             const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParsePads6Data(
             const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
@@ -181,6 +185,7 @@ private:
     BOARD*                               m_board;
     std::vector<MODULE*>                 m_components;
     std::vector<ZONE_CONTAINER*>         m_polygons;
+    std::map<wxString, wxString>         m_models;
     size_t                               m_num_nets;
     std::map<ALTIUM_LAYER, PCB_LAYER_ID> m_layermap; // used to correctly map copper layers
     std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>> m_rules;
