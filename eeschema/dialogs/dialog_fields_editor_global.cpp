@@ -911,9 +911,10 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aName,
     if( cfg->m_FieldEditorPanel.fields_group_by.count( key ) )
         sort_by = cfg->m_FieldEditorPanel.fields_group_by.at( key );
 
-    fieldsCtrlRow.emplace_back( wxVariant( aName ) );
-    fieldsCtrlRow.emplace_back( wxVariant( show ) );
-    fieldsCtrlRow.emplace_back( wxVariant( sort_by ) );
+    // Don't change these to emplace_back: some versions of wxWidgets don't support it
+    fieldsCtrlRow.push_back( wxVariant( aName ) );
+    fieldsCtrlRow.push_back( wxVariant( show ) );
+    fieldsCtrlRow.push_back( wxVariant( sort_by ) );
 
     m_fieldsCtrl->AppendItem( fieldsCtrlRow );
 }
