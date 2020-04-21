@@ -769,7 +769,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
         if( m_grid->IsColShown( col ) )
         {
             EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-            wxString           key = m_dataModel->GetColLabelValue( col );
+            std::string        key = m_dataModel->GetColLabelValue( col ).ToStdString();
 
             if( cfg->m_FieldEditorPanel.column_widths.count( key ) )
             {
