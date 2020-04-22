@@ -769,7 +769,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
         if( m_grid->IsColShown( col ) )
         {
             EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-            std::string        key = m_dataModel->GetColLabelValue( col ).ToUTF8();
+            std::string        key( m_dataModel->GetColLabelValue( col ).ToUTF8() );
 
             if( cfg->m_FieldEditorPanel.column_widths.count( key ) )
             {
@@ -1099,7 +1099,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableColSize( wxGridSizeEvent& aEvent )
 {
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     int                col = aEvent.GetRowOrCol();
-    std::string        key = m_grid->GetColLabelValue( col ).ToUTF8();
+    std::string        key( m_grid->GetColLabelValue( col ).ToUTF8() );
 
     if( m_grid->GetColSize( col ) )
         cfg->m_FieldEditorPanel.column_widths[ key ] = m_grid->GetColSize( col );
