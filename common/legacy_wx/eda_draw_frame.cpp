@@ -271,6 +271,7 @@ bool EDA_DRAW_FRAME::LockFile( const wxString& aFileName )
 
 void EDA_DRAW_FRAME::unitsChangeRefresh()
 {
+    ReCreateAuxiliaryToolbar();
     UpdateStatusBar();
     UpdateMsgPanel();
 }
@@ -300,6 +301,8 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
     m_canvas->SetEnableAutoPan( option );
 
     m_galDisplayOptions.ReadCommonConfig( *settings, this );
+
+    ReCreateAuxiliaryToolbar();
 }
 
 

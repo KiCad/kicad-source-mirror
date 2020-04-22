@@ -574,6 +574,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     {
         UpdateTrackWidthSelectBox( m_SelTrackWidthBox );
         UpdateViaSizeSelectBox( m_SelViaSizeBox );
+        UpdateGridSelectBox();
 
         // combobox sizes can have changed: apply new best sizes
         wxAuiToolBarItem* item = m_auxiliaryToolBar->FindTool( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH );
