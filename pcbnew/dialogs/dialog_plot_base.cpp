@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 18 2020)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -338,48 +338,29 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_svgOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("SVG Options") ), wxHORIZONTAL );
 
-	wxGridBagSizer* gbSizer21;
-	gbSizer21 = new wxGridBagSizer( 3, 0 );
-	gbSizer21->SetFlexibleDirection( wxHORIZONTAL );
-	gbSizer21->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	wxGridSizer* gSizer1;
-	gSizer1 = new wxGridSizer( 0, 2, 0, 0 );
-
-
-	gbSizer21->Add( gSizer1, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
-
-
-	gbSizer21->AddGrowableCol( 2 );
-
-	m_svgOptionsSizer->Add( gbSizer21, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	wxGridSizer* gSizer2;
-	gSizer2 = new wxGridSizer( 0, 4, 0, 0 );
-
 	svgUnitLabel = new wxStaticText( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	svgUnitLabel->Wrap( -1 );
-	gSizer2->Add( svgUnitLabel, 0, wxALL, 5 );
+	m_svgOptionsSizer->Add( svgUnitLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_svgUnitsChoices[] = { _("Millimeter"), _("Inch") };
 	int m_svgUnitsNChoices = sizeof( m_svgUnitsChoices ) / sizeof( wxString );
 	m_svgUnits = new wxChoice( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_svgUnitsNChoices, m_svgUnitsChoices, 0 );
 	m_svgUnits->SetSelection( 0 );
-	m_svgUnits->SetToolTip( _("The units that are used for a SVG user units. Choose Millimeter when you are not sure.") );
+	m_svgUnits->SetToolTip( _("The units that are used for a SVG user units.\nChoose Millimeter when you are not sure.") );
 
-	gSizer2->Add( m_svgUnits, 0, wxALL, 5 );
+	m_svgOptionsSizer->Add( m_svgUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	m_svgOptionsSizer->Add( 30, 0, 0, 0, 5 );
 
 	svgPrecisionLabel = new wxStaticText( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, _("Precision:"), wxDefaultPosition, wxDefaultSize, 0 );
 	svgPrecisionLabel->Wrap( -1 );
-	gSizer2->Add( svgPrecisionLabel, 0, wxALL, 5 );
+	m_svgOptionsSizer->Add( svgPrecisionLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_svgPrecsision = new wxSpinCtrl( m_svgOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 6, 6 );
-	m_svgPrecsision->SetToolTip( _("How big a SVG user unit is. The number defines how many digits are exported that are below 1 mm or 1 inch. user unit is 10^-<N> mm or 10^-<N> inch. Choose 6 if you are not sure.") );
+	m_svgPrecsision->SetToolTip( _("How big a SVG user unit is.\nThe number defines how many digits are exported that are below 1 mm or 1 inch.\nUser unit is 10^-<N> mm or 10^-<N> inch.\nChoose 6 if you are not sure.") );
 
-	gSizer2->Add( m_svgPrecsision, 0, wxALL, 5 );
-
-
-	m_svgOptionsSizer->Add( gSizer2, 1, wxEXPAND, 5 );
+	m_svgOptionsSizer->Add( m_svgPrecsision, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_PlotOptionsSizer->Add( m_svgOptionsSizer, 1, wxEXPAND, 5 );
@@ -427,7 +408,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	this->SetSizer( m_MainSizer );
 	this->Layout();
-	m_MainSizer->Fit( this );
 	m_popMenu = new wxMenu();
 	wxMenuItem* m_menuItem1;
 	m_menuItem1 = new wxMenuItem( m_popMenu, ID_LAYER_FAB, wxString( _("Select Fab Layers") ) , wxEmptyString, wxITEM_NORMAL );

@@ -318,8 +318,8 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 #endif
 
     static const wxCmdLineEntryDesc desc[] = {
-        { wxCMD_LINE_OPTION, "f", "frame", _( "Frame to load" ).c_str() },
-        { wxCMD_LINE_PARAM, nullptr, nullptr, _( "File to load" ).c_str(), wxCMD_LINE_VAL_STRING,
+        { wxCMD_LINE_OPTION, "f", "frame", "Frame to load" },
+        { wxCMD_LINE_PARAM, nullptr, nullptr, "File to load", wxCMD_LINE_VAL_STRING,
                 wxCMD_LINE_PARAM_MULTIPLE | wxCMD_LINE_PARAM_OPTIONAL },
         { wxCMD_LINE_NONE }
     };
