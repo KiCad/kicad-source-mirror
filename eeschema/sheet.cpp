@@ -116,11 +116,10 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
     wxFileName fileName( aFileName );
 
-    if( !fileName.IsAbsolute() )
+    if( !fileName.IsAbsolute() && !fileName.MakeAbsolute() )
     {
-        wxCHECK_MSG( fileName.MakeAbsolute(), false,
-                     wxString::Format( "Cannot make file name \"%s\" path absolute.",
-                                       aFileName ) );
+        wxFAIL_MSG( wxString::Format( "Cannot make file name \"%s\" path absolute.", aFileName ) );
+        return false;
     }
 
     wxString fullFilename = fileName.GetFullPath();

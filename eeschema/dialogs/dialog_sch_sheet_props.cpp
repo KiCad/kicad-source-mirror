@@ -242,20 +242,29 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
 
     wxString newRelativeNativeFilename = m_fields->at( SHEETFILENAME ).GetText();
 
+    // Ensure filepath is not empty.  (In normal use will be caught by grid validators,
+    // but unedited data from existing files can be bad.)
     if( newRelativeNativeFilename.IsEmpty() )
     {
-        wxMessageBox( _( "A sheet cannot have an empty filename" ) );
+        wxMessageBox( _( "A sheet must have a file specified." ) );
         return false;
     }
 
-    // Ensure the filename extension is OK
+    // Ensure the filename extension is OK.  (In normaly use will be caught by grid
+    // validators, but unedited data from existing files can be bad.)
     wxFileName fn( newRelativeNativeFilename );
-    fn.SetExt( LegacySchematicFileExtension );
+
+    if( fn.GetExt() != "sch" )
+    {
+        wxMessageBox( _( "Sheet file must have a '.sch' extension." ) );
+        return false;
+    }
 
     wxString newRelativeFilename = fn.GetFullPath();
 
     // Inside Eeschema, filenames are stored using unix notation
     newRelativeFilename.Replace( wxT( "\\" ), wxT( "/" ) );
+
     wxString oldFilename = m_sheet->GetFields()[ SHEETFILENAME ].GetText();
     oldFilename.Replace( wxT( "\\" ), wxT( "/" ) );
 
@@ -263,9 +272,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
 
     if( filename_changed )
     {
-        bool ok = onSheetFilenameChanged( newRelativeFilename );
-
-        if( !ok )
+        if( !onSheetFilenameChanged( newRelativeFilename ) )
             return false;
     }
 
@@ -323,7 +330,6 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
     // Relative file names are relative to the path of the current sheet.  This allows for
     // nesting of schematic files in subfolders.
     wxFileName fileName( aNewFilename );
-    fileName.SetExt( LegacySchematicFileExtension );
 
     if( !fileName.IsAbsolute() )
     {
@@ -331,8 +337,12 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
         wxCHECK_MSG( currentScreen, false, "Invalid sheet path object." );
 
         wxFileName currentSheetFileName = currentScreen->GetFileName();
-        wxCHECK_MSG( fileName.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() ), false,
-                     "Cannot normalize new sheet schematic file path." );
+
+        if( !fileName.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() ) )
+        {
+            wxFAIL_MSG( "Cannot normalize new sheet schematic file path." );
+            return false;
+        }
     }
 
     wxString newAbsoluteFilename = fileName.GetFullPath();
@@ -374,7 +384,6 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
 
             if( !IsOK( this, msg ) )
                 return false;
-
         }
         else                                // New file.
         {
@@ -541,10 +550,39 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
 
 void DIALOG_SCH_SHEET_PROPS::OnGridCellChanging( wxGridEvent& event )
 {
+    bool              success = true;
     wxGridCellEditor* editor = m_grid->GetCellEditor( event.GetRow(), event.GetCol() );
-    wxControl* control = editor->GetControl();
+    wxControl*        control = editor->GetControl();
+    wxTextEntry*      textControl = dynamic_cast<wxTextEntry*>( control );
 
-    if( control && control->GetValidator() && !control->GetValidator()->Validate( control ) )
+    // Short-circuit the validator's more generic "can't be empty" message for the
+    // two mandatory fields:
+    if( event.GetRow() == SHEETNAME && event.GetCol() == FDC_VALUE )
+    {
+        if( textControl && textControl->IsEmpty() )
+        {
+            wxMessageBox( _( "A sheet must have a name." ) );
+            success = false;
+        }
+    }
+    else if( event.GetRow() == SHEETFILENAME && event.GetCol() == FDC_VALUE )
+    {
+        if( textControl && textControl->IsEmpty() )
+        {
+            wxMessageBox( _( "A sheet must have a file specified." ) );
+            success = false;
+        }
+        else if( textControl && !textControl->GetValue().EndsWith( wxT( ".sch" ) ) )
+        {
+            wxMessageBox( _( "Sheet filename must have a '.sch' extension." ) );
+            success = false;
+        }
+    }
+
+    if( success && control && control->GetValidator() )
+        success = control->GetValidator()->Validate( control );
+
+    if( !success )
     {
         event.Veto();
         m_delayedFocusRow = event.GetRow();
