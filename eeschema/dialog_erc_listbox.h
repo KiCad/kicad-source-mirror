@@ -83,7 +83,10 @@ public:
         {
             href.Printf( wxT( "href='%d'" ), ii );
             marker_text = m_MarkerListReferences[ii]->GetReporter().ShowHtml( aUnits );
-            marker_text.Replace( wxT( "href=''"), href );
+            marker_text.Replace( wxT( "href=''"), href, false );
+
+            href.Printf( wxT( "href='%d'" ), -ii );
+            marker_text.Replace( wxT( "href=''"), href, false );
             htmlpage += marker_text;
         }
 

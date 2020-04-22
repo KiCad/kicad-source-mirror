@@ -104,17 +104,21 @@ wxString DRC_ITEM::ShowHtml( EDA_UNITS_T aUnits ) const
 
         // an html fragment for the entire message in the listbox.  feel free
         // to add color if you want:
-        return wxString::Format( "<p><b>%s</b><br>&nbsp;&nbsp; <font color='%s'><a href=''>%s</a></font>: %s<br>&nbsp;&nbsp; %s: %s",
+        return wxString::Format( "<p><b>%s</b><br>"
+                                 "&nbsp;&nbsp; <font color='%s'><a href=''>%s</a></font>: %s<br>"
+                                 "&nbsp;&nbsp; <font color='%s'><a href=''>%s</a></font>: %s",
                                  errText,
                                  hrefColour.GetAsString( wxC2S_HTML_SYNTAX ),
                                  ShowCoord( aUnits, m_MainPosition ),
                                  mainText,
+                                 hrefColour.GetAsString( wxC2S_HTML_SYNTAX ),
                                  ShowCoord( aUnits, m_AuxiliaryPosition ),
                                  auxText  );
     }
     else
     {
-        return wxString::Format( "<p><b>%s</b><br>&nbsp;&nbsp; <font color='%s'><a href=''>%s</a></font>: %s",
+        return wxString::Format( "<p><b>%s</b><br>"
+                                 "&nbsp;&nbsp; <font color='%s'><a href=''>%s</a></font>: %s",
                                  errText,
                                  hrefColour.GetAsString( wxC2S_HTML_SYNTAX ),
                                  ShowCoord( aUnits, m_MainPosition ),

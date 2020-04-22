@@ -213,9 +213,16 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
     m_lastMarkerFound = NULL;
 
     long index;
+    bool secondItem = false;
 
     if( !link.ToLong( &index ) )
         return;
+
+    if( index < 0 )
+    {
+        secondItem = true;
+        index = -index;
+    }
 
     const SCH_MARKER* marker = m_MarkersList->GetItem( index );
 
@@ -262,8 +269,18 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
     }
 
     m_lastMarkerFound = marker;
-    m_parent->FocusOnLocation( marker->m_Pos, false, true );
-    m_parent->SetCrossHairPosition( marker->m_Pos );
+
+    if( secondItem )
+    {
+        m_parent->FocusOnLocation( marker->GetReporter().GetPointB() );
+        m_parent->SetCrossHairPosition( marker->GetReporter().GetPointB() );
+    }
+    else
+    {
+        m_parent->FocusOnLocation( marker->m_Pos, false, true );
+        m_parent->SetCrossHairPosition( marker->m_Pos );
+    }
+
     RedrawDrawPanel();
 }
 
