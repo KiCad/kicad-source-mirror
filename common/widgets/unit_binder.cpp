@@ -38,12 +38,12 @@ wxDEFINE_EVENT( DELAY_FOCUS, wxCommandEvent );
 UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
                           wxStaticText* aLabel, wxWindow* aValue, wxStaticText* aUnitLabel,
                           bool aUseMils, bool allowEval ) :
-    m_label( aLabel ),
-    m_value( aValue ),
-    m_unitLabel( aUnitLabel ),
-    m_eval( aParent->GetUserUnits(), aUseMils )
+        m_frame( aParent ),
+        m_label( aLabel ),
+        m_value( aValue ),
+        m_unitLabel( aUnitLabel ),
+        m_eval( aParent->GetUserUnits(), aUseMils )
 {
-    // Fix the units (to the current units) for the life of the binder
     m_units = aParent->GetUserUnits();
     m_useMils = aUseMils;
     m_allowEval = allowEval && dynamic_cast<wxTextEntry*>( m_value );
@@ -63,6 +63,14 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
     m_value->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), NULL, this );
     m_value->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
     Connect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), NULL, this );
+
+    m_frame->Connect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ), nullptr, this );
+}
+
+
+UNIT_BINDER::~UNIT_BINDER()
+{
+    m_frame->Disconnect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ), nullptr, this );
 }
 
 
@@ -71,6 +79,18 @@ void UNIT_BINDER::SetUnits( EDA_UNITS aUnits, bool aUseMils )
     m_units = aUnits;
     m_useMils = aUseMils;
     m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils ) );
+}
+
+
+void UNIT_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
+{
+    int temp = (int) GetValue();
+
+    SetUnits( m_frame->GetUserUnits(), m_useMils );
+
+    SetValue( temp );
+
+    aEvent.Skip();
 }
 
 

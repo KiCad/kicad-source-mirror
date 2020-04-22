@@ -56,6 +56,8 @@ public:
                  wxStaticText* aLabel, wxWindow* aValue, wxStaticText* aUnitLabel,
                  bool aUseMils = false, bool aAllowEval = true );
 
+    ~UNIT_BINDER() override;
+
     /**
      * Function SetUnits
      * Normally not needed (as the UNIT_BINDER inherits from the parent frame), but can be
@@ -147,6 +149,10 @@ protected:
     void onSetFocus( wxFocusEvent& aEvent );
     void onKillFocus( wxFocusEvent& aEvent );
     void delayedFocusHandler( wxCommandEvent& aEvent );
+
+    void onUnitsChanged( wxCommandEvent& aEvent );
+
+    EDA_DRAW_FRAME*   m_frame;
 
     ///> The bound widgets
     wxStaticText*     m_label;
