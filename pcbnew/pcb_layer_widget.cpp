@@ -156,7 +156,7 @@ void PCB_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
                  KiBitmap( show_no_copper_layers_xpm ) );
 
     menu.AppendSeparator();
-    
+
     AddMenuItem( &menu, ID_HIDE_ALL_COPPER_LAYERS_BUT_ACTIVE,
                  _( "Hide All Copper Layers But Active" ),
                  KiBitmap( select_w_layer_xpm ) );
@@ -165,7 +165,7 @@ void PCB_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
                  KiBitmap( select_w_layer_xpm ) );
 
     menu.AppendSeparator();
-    
+
     AddMenuItem( &menu, ID_SHOW_ALL_NON_COPPER,
                  _( "Show All Non Copper Layers" ),
                  KiBitmap( select_w_layer_xpm ) );
@@ -175,10 +175,10 @@ void PCB_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
 
     menu.AppendSeparator();
 
-    AddMenuItem( &menu, ID_SHOW_NO_LAYERS, _( "Hide All Layers" ),
-                 KiBitmap( show_no_layers_xpm ) );
     AddMenuItem( &menu, ID_SHOW_ALL_LAYERS, _( "Show All Layers" ),
                  KiBitmap( show_all_layers_xpm ) );
+    AddMenuItem( &menu, ID_SHOW_NO_LAYERS, _( "Hide All Layers" ),
+                 KiBitmap( show_no_layers_xpm ) );
 
     menu.AppendSeparator();
 
