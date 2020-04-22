@@ -633,7 +633,7 @@ TOOL_ACTION PCB_ACTIONS::updateLocalRatsnest( "pcbnew.Control.updateLocalRatsnes
 
 TOOL_ACTION PCB_ACTIONS::listNets( "pcbnew.Control.listNets",
         AS_GLOBAL, 0, "",
-        _( "List Nets" ), _( "Show a list of nets with names and IDs" ),
+        _( "Net Inspector" ), _( "Show the net inspector" ),
         list_nets_xpm );
 
 TOOL_ACTION PCB_ACTIONS::showPythonConsole( "pcbnew.Control.showPythonConsole",

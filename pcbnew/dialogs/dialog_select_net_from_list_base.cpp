@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,7 +36,7 @@ DIALOG_SELECT_NET_FROM_LIST_BASE::DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* pa
 
 	bSizerMain->Add( bTopSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_netsList = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_HORIZ_RULES );
+	m_netsList = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_HORIZ_RULES|wxDV_VERT_RULES );
 	m_netsList->SetMinSize( wxSize( 500,300 ) );
 
 	bSizerMain->Add( m_netsList, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );

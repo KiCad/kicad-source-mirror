@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,7 +56,7 @@ class DIALOG_SELECT_NET_FROM_LIST_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Nets"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 584,397 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_SELECT_NET_FROM_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Net Inspector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 720,397 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_SELECT_NET_FROM_LIST_BASE();
 
 };
