@@ -320,7 +320,8 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
 
         if( !child->IsList() )
         {
-            ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n", child->GetLineNumber() ) );
+            ReportMessage( wxString::Format(
+                           "corrupt PCB file (line %d)\n", child->GetLineNumber() ) );
             return false;
         }
 
@@ -330,8 +331,9 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
         {
             if( child->GetNumberOfChildren() != 3 )
             {
-                ReportMessage( wxString::Format( "corrupt PCB file (line %d): grid_origin has %d children (expected: 3)\n",
-                       child->GetLineNumber(), child->GetNumberOfChildren() ) );
+                ReportMessage( wxString::Format(
+                               "corrupt PCB file (line %d): grid_origin has %d children (expected: 3)\n",
+                               child->GetLineNumber(), child->GetNumberOfChildren() ) );
                 return false;
             }
 
@@ -343,8 +345,9 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
         {
             if( child->GetNumberOfChildren() != 3 )
             {
-                ReportMessage( wxString::Format( "corrupt PCB file (line %d)m: aux_axis_origin has %d children (expected: 3)\n",
-                                          child->GetLineNumber(), child->GetNumberOfChildren() ) );
+                ReportMessage( wxString::Format(
+                               "corrupt PCB file (line %d)m: aux_axis_origin has %d children (expected: 3)\n",
+                               child->GetLineNumber(), child->GetNumberOfChildren() ) );
                 return false;
             }
 

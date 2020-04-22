@@ -312,7 +312,7 @@ bool KICADMODULE::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
     double posX = m_position.x - aOrigin.x;
     double posY = m_position.y - aOrigin.y;
 
-    for( auto i : m_curves )
+    for( KICADCURVE* i : m_curves )
     {
         if( i->m_layer != LAYER_EDGE || CURVE_NONE == i->m_form )
             continue;

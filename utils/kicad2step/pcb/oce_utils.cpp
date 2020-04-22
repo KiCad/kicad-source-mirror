@@ -260,7 +260,6 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
             ReportMessage( msg );
             return false;
         }
-
     }
     else
     {
@@ -778,6 +777,7 @@ bool PCBMODEL::CreatePCB()
         }
     }
 #else   // Much faster than first version: group all holes and cut only once
+    if( m_cutouts.size() )
     {
         BRepAlgoAPI_Cut Cut;
         TopTools_ListOfShape mainbrd;
@@ -794,6 +794,7 @@ bool PCBMODEL::CreatePCB()
         board = Cut.Shape();
     }
 #endif
+
     // push the board to the data structure
     ReportMessage( "\nGenerate board full shape\n" );
     m_pcb_label = m_assy->AddComponent( m_assy_label, board );
