@@ -1099,7 +1099,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableColSize( wxGridSizeEvent& aEvent )
 {
     EESCHEMA_SETTINGS* cfg = static_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     int                col = aEvent.GetRowOrCol();
-    wxString           key = m_grid->GetColLabelValue( col );
+    std::string        key = m_grid->GetColLabelValue( col ).ToStdString();
 
     if( m_grid->GetColSize( col ) )
         cfg->m_FieldEditorPanel.column_widths[ key.ToStdString() ] = m_grid->GetColSize( col );
