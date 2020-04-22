@@ -185,7 +185,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_buttonGeometry;
 		wxStaticText* m_parentInfoLine1;
 		wxStaticText* m_parentInfoLine2;
-		wxPanel* m_panelShowPad;
 		PCB_DRAW_PANEL_GAL* m_panelShowPadGal;
 		KIGFX::GAL_DISPLAY_OPTIONS m_galOptions;
 		wxCheckBox* m_cbShowPadOutline;
@@ -213,7 +212,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onAddPrimitive( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDuplicatePrimitive( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onGeometryTransform( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void onChangePadMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 

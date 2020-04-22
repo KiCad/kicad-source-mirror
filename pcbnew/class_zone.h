@@ -105,16 +105,6 @@ public:
 
     virtual LSET GetLayerSet() const override;
 
-    /**
-     * Function PrintFilledArea
-     * Draws the filled  area for this zone (polygon list .m_FilledPolysList)
-     * @param aFrame = current Frame
-     * @param DC = current Device Context
-     * @param offset = Draw offset (usually wxPoint(0,0))
-     * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
-     */
-    void PrintFilledArea( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint&  offset = ZeroOffset );
-
     /** Function GetBoundingBox (virtual)
      * @return an EDA_RECT that is the bounding box of the zone outline
      */

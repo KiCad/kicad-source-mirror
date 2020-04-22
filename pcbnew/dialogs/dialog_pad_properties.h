@@ -125,7 +125,6 @@ private:
     void PadTypeSelected( wxCommandEvent& event ) override;
 
     void OnSetLayers( wxCommandEvent& event ) override;
-    void OnPaintShowPanel( wxPaintEvent& event ) override;
 
     // Called when corner setup value is changed for rounded rect pads
     void onCornerSizePercentChange( wxCommandEvent& event ) override;

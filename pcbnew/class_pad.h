@@ -59,30 +59,6 @@ namespace KIGFX
     class VIEW;
 }
 
-// Helper class to store parameters used to draw a pad
-class PAD_DRAWINFO
-{
-public:
-    COLOR4D m_Color;              // color used to draw the pad shape , from pad layers and
-                                  // visible layers
-    COLOR4D m_HoleColor;          // color used to draw the pad hole
-    COLOR4D m_NPHoleColor;        // color used to draw a pad Not Plated hole
-    COLOR4D m_NoNetMarkColor;     // color used to draw a mark on pads having no net
-    int m_PadClearance;           // clearance value, used to draw the pad area outlines
-    wxSize m_Mask_margin;         // margin, used to draw solder paste when only one layer is shown
-    bool m_Display_padnum;        // true to show pad number
-    bool m_Display_netname;       // true to show net name
-    bool m_ShowPadFilled;         // true to show pad as solid area, false to show pas in
-                                  // sketch mode
-    bool m_ShowNCMark;            // true to show pad not connected mark
-    bool m_ShowNotPlatedHole;     // true when the pad hole in not plated, to draw a specific
-                                  // pad shape
-    bool m_IsPrinting;            // true to print, false to display on screen.
-    wxPoint m_Offset;             // general draw offset
-
-    PAD_DRAWINFO();
-};
-
 /** Helper class to handle a primitive (basic shape: polygon, segment, circle or arc)
  * to build a custom pad full shape from a set of primitives
  */
@@ -544,16 +520,6 @@ public:
 
     void SetThermalGap( int aGap ) { m_ThermalGap = aGap; }
     int GetThermalGap() const;
-
-    /**
-     * Function PrintShape
-     * basic function to print a pad.
-     * <p>
-     * This function is used by Print after calculation of parameters (color, ) final
-     * orientation transforms are set.
-     * </p>
-     */
-    void PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo );
 
     /**
      * Function BuildPadPolygon
