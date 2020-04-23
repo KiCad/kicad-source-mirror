@@ -106,7 +106,8 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsAction( &EE_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
-                || evt->IsAction( &ACTIONS::refreshPreview ) )
+                || evt->IsAction( &ACTIONS::refreshPreview )
+                || evt->IsAction( &EE_ACTIONS::symbolMoveActivate ) )
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
@@ -334,4 +335,5 @@ bool LIB_MOVE_TOOL::updateModificationPoint( EE_SELECTION& aSelection )
 void LIB_MOVE_TOOL::setTransitions()
 {
     Go( &LIB_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
+    Go( &LIB_MOVE_TOOL::Main,               EE_ACTIONS::symbolMoveActivate.MakeEvent() );
 }

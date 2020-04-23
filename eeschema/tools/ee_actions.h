@@ -111,7 +111,8 @@ public:
     static TOOL_ACTION finishDrawing;
 
     // Interactive Editing
-    static TOOL_ACTION moveActivate;
+    static TOOL_ACTION symbolMoveActivate;  // Symbol editor move tool activate
+    static TOOL_ACTION moveActivate;        // Schematic editor move tool activate
     static TOOL_ACTION move;
     static TOOL_ACTION drag;
     static TOOL_ACTION repeatDrawItem;
@@ -206,7 +207,7 @@ public:
     static TOOL_ACTION highlightNetTool;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override 
+    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override
     {
         return OPT<TOOL_EVENT>();
     }

@@ -255,27 +255,43 @@ int EE_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
 }
 
 
+const KICAD_T movableSchematicItems[] =
+{
+    SCH_MARKER_T,
+    SCH_JUNCTION_T,
+    SCH_NO_CONNECT_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_LINE_T,
+    SCH_BITMAP_T,
+    SCH_TEXT_T,
+    SCH_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_FIELD_T,
+    SCH_COMPONENT_T,
+    SCH_SHEET_PIN_T,
+    SCH_SHEET_T,
+    EOT
+};
+
+
+const KICAD_T movableSymbolItems[] =
+{
+    LIB_ARC_T,
+    LIB_CIRCLE_T,
+    LIB_TEXT_T,
+    LIB_RECTANGLE_T,
+    LIB_POLYLINE_T,
+    LIB_BEZIER_T,
+    LIB_PIN_T,
+    LIB_FIELD_T,
+    EOT
+};
+
+
 int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    const KICAD_T movableItems[] =
-    {
-        SCH_MARKER_T,
-        SCH_JUNCTION_T,
-        SCH_NO_CONNECT_T,
-        SCH_BUS_BUS_ENTRY_T,
-        SCH_BUS_WIRE_ENTRY_T,
-        SCH_LINE_T,
-        SCH_BITMAP_T,
-        SCH_TEXT_T,
-        SCH_LABEL_T,
-        SCH_GLOBAL_LABEL_T,
-        SCH_HIER_LABEL_T,
-        SCH_FIELD_T,
-        SCH_COMPONENT_T,
-        SCH_SHEET_PIN_T,
-        SCH_SHEET_T,
-        EOT
-    };
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -351,14 +367,19 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // selection is empty? try to start dragging the item under the point where drag
                 // started
-                if( m_selection.Empty() )
-                    m_selection = RequestSelection( movableItems );
+                if( m_isLibEdit && m_selection.Empty() )
+                    m_selection = RequestSelection( movableSymbolItems );
+                else if( m_selection.Empty() )
+                    m_selection = RequestSelection( movableSchematicItems );
 
                 // Check if dragging has started within any of selected items bounding box
                 if( selectionContains( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
-                    m_toolMgr->InvokeTool( "eeschema.InteractiveMove" );
+                    if( m_isLibEdit )
+                        m_toolMgr->InvokeTool( "eeschema.SymbolMoveTool" );
+                    else
+                        m_toolMgr->InvokeTool( "eeschema.InteractiveMove" );
                 }
                 else
                 {

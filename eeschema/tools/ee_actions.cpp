@@ -677,4 +677,6 @@ TOOL_ACTION EE_ACTIONS::moveActivate( "eeschema.InteractiveMove",
         AS_GLOBAL, 0, "",
         _( "Move Activate" ), "", move_xpm, AF_ACTIVATE );
 
-
+TOOL_ACTION EE_ACTIONS::symbolMoveActivate( "eeschema.SymbolMoveTool",
+        AS_GLOBAL, 0, "",
+        _( "Symbol Move Activate" ), "", move_xpm, AF_ACTIVATE );
