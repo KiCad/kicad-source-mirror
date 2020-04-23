@@ -272,7 +272,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
 
     if( GetCanvas() )
+    {
         GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
+        GetCanvas()->GetGAL()->SetAxesEnabled( false );
+    }
 
     InitExitKey();
 
