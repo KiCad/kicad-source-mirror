@@ -253,6 +253,9 @@ bool TOOL_MANAGER::InvokeTool( TOOL_ID aToolId )
     if( tool && tool->GetType() == INTERACTIVE )
         return invokeTool( tool );
 
+    wxLogTrace( kicadTraceToolStack,
+            "TOOL_MANAGER::InvokeTool - No interactive tool with ID %d", aToolId );
+
     return false;       // there is no tool with the given id
 }
 
@@ -263,6 +266,9 @@ bool TOOL_MANAGER::InvokeTool( const std::string& aToolName )
 
     if( tool && tool->GetType() == INTERACTIVE )
         return invokeTool( tool );
+
+    wxLogTrace( kicadTraceToolStack,
+            "TOOL_MANAGER::InvokeTool - No interactive tool with name %s", aToolName );
 
     return false;       // there is no tool with the given name
 }
@@ -378,6 +384,9 @@ bool TOOL_MANAGER::runTool( TOOL_ID aToolId )
     if( tool && tool->GetType() == INTERACTIVE )
         return runTool( tool );
 
+    wxLogTrace( kicadTraceToolStack,
+            "TOOL_MANAGER::runTool - No interactive tool with ID %d", aToolId );
+
     return false;       // there is no tool with the given id
 }
 
@@ -388,6 +397,9 @@ bool TOOL_MANAGER::runTool( const std::string& aToolName )
 
     if( tool && tool->GetType() == INTERACTIVE )
         return runTool( tool );
+
+    wxLogTrace( kicadTraceToolStack,
+            "TOOL_MANAGER::runTool - No interactive tool with name %s", aToolName );
 
     return false;       // there is no tool with the given name
 }
@@ -454,6 +466,9 @@ void TOOL_MANAGER::ShutdownTool( TOOL_ID aToolId )
 
     if( tool && tool->GetType() == INTERACTIVE )
         ShutdownTool( tool );
+
+    wxLogTrace( kicadTraceToolStack,
+            "TOOL_MANAGER::ShutdownTool - No interactive tool with ID %d", aToolId );
 }
 
 
@@ -463,6 +478,9 @@ void TOOL_MANAGER::ShutdownTool( const std::string& aToolName )
 
     if( tool && tool->GetType() == INTERACTIVE )
         ShutdownTool( tool );
+
+    wxLogTrace( kicadTraceToolStack,
+            "TOOL_MANAGER::ShutdownTool - No interactive tool with name %s", aToolName );
 }
 
 
@@ -489,7 +507,7 @@ void TOOL_MANAGER::ShutdownTool( TOOL_BASE* aTool )
             if( st->cofunc )
             {
                 wxLogTrace( kicadTraceToolStack,
-                        "TOOL_MANAGER::ShutdownTool is shutting down tool %s",
+                        "TOOL_MANAGER::ShutdownTool - Shutting down tool %s",
                         st->theTool->GetName() );
 
                 setActiveState( st );
@@ -646,7 +664,7 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
     bool handled = false;
 
-    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchInternal %s", aEvent.Format() );
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchInternal - %s", aEvent.Format() );
 
     auto it = m_activeTools.begin();
 
@@ -682,7 +700,7 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                 if( st->cofunc )
                 {
                     wxLogTrace( kicadTraceToolStack,
-                            "TOOL_MANAGER::dispatchInternal Waking tool %s for event: %s",
+                            "TOOL_MANAGER::dispatchInternal - Waking tool %s for event: %s",
                             st->theTool->GetName(), aEvent.Format() );
 
                     setActiveState( st );
@@ -699,7 +717,7 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                 if( !st->wakeupEvent.PassEvent() )
                 {
                     wxLogTrace( kicadTraceToolStack,
-                            "TOOL_MANAGER::dispatchInternal %s stopped passing event: %s",
+                            "TOOL_MANAGER::dispatchInternal - %s stopped passing event: %s",
                             st->theTool->GetName(), aEvent.Format() );
 
                     handled = true;
@@ -745,7 +763,7 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     st->transitions.clear();
 
                     wxLogTrace( kicadTraceToolStack,
-                            "TOOL_MANAGER::dispatchInternal Running tool %s for event: %s",
+                            "TOOL_MANAGER::dispatchInternal - Running tool %s for event: %s",
                             st->theTool->GetName(), aEvent.Format() );
 
                     // got match? Run the handler.
@@ -770,7 +788,7 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
             break;      // only the first tool gets the event
     }
 
-    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchInternal handled: %s  %s",
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchInternal - Handled: %s  %s",
             ( handled ? "true" : "false" ), aEvent.Format() );
 
     return handled;
@@ -788,7 +806,7 @@ bool TOOL_MANAGER::dispatchHotKey( const TOOL_EVENT& aEvent )
 
 bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 {
-    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchActivation %s", aEvent.Format() );
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchActivation - %s", aEvent.Format() );
     if( aEvent.IsActivate() )
     {
         wxString cmdStr( *aEvent.GetCommandStr() );
@@ -798,7 +816,7 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
         if( tool != m_toolNameIndex.end() )
         {
             wxLogTrace( kicadTraceToolStack,
-                    "TOOL_MANAGER::dispatchActivation Running tool %s for event: %s",
+                    "TOOL_MANAGER::dispatchActivation - Running tool %s for event: %s",
                     tool->second->theTool->GetName(), aEvent.Format() );
 
             runTool( tool->second->theTool );
@@ -1089,7 +1107,7 @@ void TOOL_MANAGER::applyViewControls( TOOL_STATE* aState )
 
 bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
 {
-    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::processEvent %s", aEvent.Format() );
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::processEvent - %s", aEvent.Format() );
 
     // First try to dispatch the action associated with the event if it is a key press event
     bool handled = dispatchHotKey( aEvent );
@@ -1126,7 +1144,7 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
         }
     }
 
-    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::processEvent handled: %s  %s",
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::processEvent - Handled: %s  %s",
             ( handled ? "true" : "false" ), aEvent.Format() );
 
     return handled;
