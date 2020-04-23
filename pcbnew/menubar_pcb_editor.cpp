@@ -84,10 +84,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         fileMenu->AddMenu( openRecentMenu,           FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
 
         fileMenu->AddItem( PCB_ACTIONS::appendBoard, SELECTION_CONDITIONS::ShowAlways );
-        fileMenu->AddItem( ID_IMPORT_NON_KICAD_BOARD,
-                           _( "Import Non-KiCad Board File..." ),
-                           _( "Import board file from other applications" ),
-                           import_brd_file_xpm,      SELECTION_CONDITIONS::ShowAlways );
 
         fileMenu->AddSeparator();
     }
@@ -124,6 +120,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->Add( PCB_ACTIONS::importSpecctraSession );
     submenuImport->Add( _( "Graphics..." ), _( "Import 2D drawing file" ),
                         ID_GEN_IMPORT_GRAPHICS_FILE, import_vector_xpm );
+                        
+    if( Kiface().IsSingle() )
+    {
+        submenuImport->Add( _( "Non-KiCad Board File..." ),
+                            _( "Import board file from other applications" ),
+                            ID_IMPORT_NON_KICAD_BOARD, import_brd_file_xpm );
+    }
 
     fileMenu->AddSeparator();
     fileMenu->AddMenu( submenuImport,                SELECTION_CONDITIONS::ShowAlways );

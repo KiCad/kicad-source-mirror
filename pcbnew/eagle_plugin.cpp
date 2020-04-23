@@ -2303,8 +2303,8 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         // these will also appear in the ratsnest, so there's no need for a warning
         case EAGLE_LAYER::UNROUTED:      kiLayer = Dwgs_User;    break;
 
-        case EAGLE_LAYER::TKEEPOUT:
-        case EAGLE_LAYER::BKEEPOUT:
+        case EAGLE_LAYER::TKEEPOUT:      kiLayer = F_CrtYd;      break;
+        case EAGLE_LAYER::BKEEPOUT:      kiLayer = B_CrtYd;      break;
         case EAGLE_LAYER::TTEST:
         case EAGLE_LAYER::BTEST:
         case EAGLE_LAYER::HOLES:
