@@ -37,12 +37,17 @@
 #define PLOT_LINEWIDTH_MIN        ( 0.02 * IU_PER_MM )  // min value for default line thickness
 #define PLOT_LINEWIDTH_MAX        ( 2 * IU_PER_MM )     // max value for default line thickness
 #define PLOT_LINEWIDTH_DEFAULT    ( DEFAULT_TEXT_WIDTH * IU_PER_MM )
+
 #define HPGL_PEN_DIAMETER_MIN     0
 #define HPGL_PEN_DIAMETER_MAX     100.0     // Unit = mil
 #define HPGL_PEN_SPEED_MIN        1         // this param is always in cm/s
 #define HPGL_PEN_SPEED_MAX        99        // this param is always in cm/s
 #define HPGL_PEN_NUMBER_MIN       1
 #define HPGL_PEN_NUMBER_MAX       16
+
+#define SVG_PRECISION_MIN         3U
+#define SVG_PRECISION_MAX         6U
+#define SVG_PRECISION_DEFAULT     6
 
 
 /**
@@ -102,7 +107,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_createGerberJobFile        = true;
     m_gerberPrecision            = gbrDefaultPrecision;
     // we used 0.1mils for SVG step before, but nm precision is more accurate, so we use nm
-    m_svgPrecision               = 6;
+    m_svgPrecision               = SVG_PRECISION_DEFAULT;
     m_svgUseInch                 = false;
     m_excludeEdgeLayer           = true;
     m_lineWidth                  = g_DrawDefaultLineThickness;
@@ -167,7 +172,7 @@ void PCB_PLOT_PARAMS::SetGerberPrecision( int aPrecision )
 void PCB_PLOT_PARAMS::SetSvgPrecision( unsigned aPrecision, bool aUseInch )
 {
     m_svgUseInch   = aUseInch;
-    m_svgPrecision = Clamp( 3U, aPrecision, 6U );
+    m_svgPrecision = Clamp( SVG_PRECISION_MIN, aPrecision, SVG_PRECISION_MAX );
 }
 
 // PLEASE NOTE: only plot dialog options are processed
@@ -198,6 +203,12 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                                                    // to avoid incompatibility with older Pcbnew version
         aFormatter->Print( aNestLevel+1, "(%s %d)\n",
                            getTokenName( T_gerberprecision ), m_gerberPrecision );
+
+    // Svg options
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_svguseinch ),
+                       m_svgUseInch ? trueStr : falseStr );
+    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_svgprecision ),
+                       m_svgPrecision );
 
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_excludeedgelayer ),
                        m_excludeEdgeLayer ? trueStr : falseStr );
@@ -288,11 +299,11 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCom
             return false;
         if( m_DXFplotUnits != aPcbPlotParams.m_DXFplotUnits )
             return false;
-        if( m_svgPrecision != aPcbPlotParams.m_svgPrecision )
-            return false;
-        if( m_svgUseInch != aPcbPlotParams.m_svgUseInch )
-            return false;
     }
+    if( m_svgPrecision != aPcbPlotParams.m_svgPrecision )
+        return false;
+    if( m_svgUseInch != aPcbPlotParams.m_svgUseInch )
+        return false;
     if( m_useAuxOrigin != aPcbPlotParams.m_useAuxOrigin )
         return false;
     if( m_HPGLPenNum != aPcbPlotParams.m_HPGLPenNum )
@@ -447,6 +458,14 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
         case T_gerberprecision:
             aPcbPlotParams->m_gerberPrecision =
                 parseInt( gbrDefaultPrecision-1, gbrDefaultPrecision);
+            break;
+
+        case T_svgprecision:
+            aPcbPlotParams->m_svgPrecision = parseInt( SVG_PRECISION_MIN, SVG_PRECISION_MAX );
+            break;
+
+        case T_svguseinch:
+            aPcbPlotParams->m_svgUseInch = parseBool();
             break;
 
         case T_psa4output:

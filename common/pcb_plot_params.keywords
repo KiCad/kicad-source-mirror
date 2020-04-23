@@ -24,6 +24,8 @@ pscolor
 psnegative
 scaleselection
 subtractmaskfromsilk
+svgprecision
+svguseinch
 true
 useauxorigin
 usegerberextensions
