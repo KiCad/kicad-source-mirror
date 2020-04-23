@@ -567,7 +567,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
 
     if( m_boardAdapter.GetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE ) )
     {
-        if( aIsMoving == false )
+        if( !aIsMoving )
         {
             glEnable( GL_MULTISAMPLE );
         }
@@ -636,11 +636,14 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
         glLightfv( GL_LIGHT0, GL_POSITION, headlight_pos );
     }
 
-    bool drawMiddleSegments = !( (aIsMoving == true) &&
-                                 m_boardAdapter.GetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE ) );
+    const bool drawMiddleSegments = !( aIsMoving &&
+                                    m_boardAdapter.GetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE ) );
 
-    const bool skipRenderHoles = (aIsMoving == true ) &&
+    const bool skipRenderHoles = aIsMoving &&
                                  m_boardAdapter.GetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE );
+
+    const bool skipRenderVias = aIsMoving &&
+                                m_boardAdapter.GetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE );
 
     // Display board body
     // /////////////////////////////////////////////////////////////////////////
@@ -683,26 +686,14 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
         OGL_SetMaterial( m_materials.m_GrayMaterial );
     }
 
-    if( ( (aIsMoving == true) &&
-          m_boardAdapter.GetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE ) ) ||
-          skipRenderHoles )
+    if( (!( skipRenderVias || skipRenderHoles ) ) && m_ogl_disp_list_via )
     {
-        // Do not render vias while moving or if skipRenderHoles
-    }
-    else
-    {
-        if( m_ogl_disp_list_via )
-        {
-            m_ogl_disp_list_via->DrawAll();
-        }
+        m_ogl_disp_list_via->DrawAll();
     }
 
-    if( !skipRenderHoles )
+    if( ( !skipRenderHoles ) && m_ogl_disp_list_pads_holes )
     {
-        if( m_ogl_disp_list_pads_holes )
-        {
-            m_ogl_disp_list_pads_holes->DrawAll();
-        }
+        m_ogl_disp_list_pads_holes->DrawAll();
     }
 
 
@@ -824,7 +815,6 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
 
     // Render 3D Models (Non-transparent)
     // /////////////////////////////////////////////////////////////////////////
-
     render_3D_models( false, false );
     render_3D_models( true, false );
 

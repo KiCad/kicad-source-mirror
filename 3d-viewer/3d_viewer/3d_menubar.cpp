@@ -121,18 +121,13 @@ void EDA_3D_VIEWER::CreateMenuBar()
         return m_boardAdapter.MaterialModeGet() == MATERIAL_MODE::CAD_MODE;
     };
 
-    auto copperThicknessCondition = [this]( const SELECTION& aSel )
-    {
-        return m_boardAdapter.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS );
-    };
-
     auto boundingBoxesCondition = [this]( const SELECTION& aSel )
     {
         return m_boardAdapter.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
     };
 
     auto renderShadowsCondition = [this]( const SELECTION& aSel )
-	{
+    {
         return m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS );
     };
 
