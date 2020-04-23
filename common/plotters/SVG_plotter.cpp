@@ -255,7 +255,11 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
     }
 
     double pen_w = userToDeviceSize( GetCurrentLineWidth() );
-    fprintf( outputFile, "\nstroke:#%6.6lX; stroke-width:%g; stroke-opacity:1; \n",
+
+    if( pen_w < 0.0 )   // Ensure pen width validity
+        pen_w = 0.0;
+
+    fprintf( outputFile, "\nstroke:#%6.6lX; stroke-width:%f; stroke-opacity:1; \n",
              m_pen_rgb_color, pen_w  );
     fputs( "stroke-linecap:round; stroke-linejoin:round;", outputFile );
 
@@ -263,13 +267,13 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
     switch( m_dashed )
     {
     case PLOT_DASH_TYPE::DASH:
-        fprintf( outputFile, "stroke-dasharray:%g,%g;", GetDashMarkLenIU(), GetDashGapLenIU() );
+        fprintf( outputFile, "stroke-dasharray:%f,%f;", GetDashMarkLenIU(), GetDashGapLenIU() );
         break;
     case PLOT_DASH_TYPE::DOT:
-        fprintf( outputFile, "stroke-dasharray:%g,%g;", GetDotMarkLenIU(), GetDashGapLenIU() );
+        fprintf( outputFile, "stroke-dasharray:%f,%f;", GetDotMarkLenIU(), GetDashGapLenIU() );
         break;
     case PLOT_DASH_TYPE::DASHDOT:
-        fprintf( outputFile, "stroke-dasharray:%g,%g,%g,%g;", GetDashMarkLenIU(), GetDashGapLenIU(),
+        fprintf( outputFile, "stroke-dasharray:%f,%f,%f,%f;", GetDashMarkLenIU(), GetDashGapLenIU(),
                 GetDotMarkLenIU(), GetDashGapLenIU() );
         break;
     case PLOT_DASH_TYPE::DEFAULT:
@@ -388,14 +392,14 @@ void SVG_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int w
     // so use a line when happens.
     if( rect_dev.GetSize().x == 0.0 || rect_dev.GetSize().y == 0.0 )    // Draw a line
         fprintf( outputFile,
-                 "<line x1=\"%g\" y1=\"%g\" x2=\"%g\" y2=\"%g\" />\n",
+                 "<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />\n",
                  rect_dev.GetPosition().x, rect_dev.GetPosition().y,
                  rect_dev.GetEnd().x, rect_dev.GetEnd().y
                  );
 
     else
         fprintf( outputFile,
-                 "<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" rx=\"%g\" />\n",
+                 "<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" rx=\"%f\" />\n",
                  rect_dev.GetPosition().x, rect_dev.GetPosition().y,
                  rect_dev.GetSize().x, rect_dev.GetSize().y,
                  0.0   // radius of rounded corners
@@ -421,7 +425,7 @@ void SVG_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T fill, int wid
     }
 
     fprintf( outputFile,
-             "<circle cx=\"%g\" cy=\"%g\" r=\"%g\" /> \n",
+             "<circle cx=\"%f\" cy=\"%f\" r=\"%f\" /> \n",
              pos_dev.x, pos_dev.y, radius );
 }
 
@@ -513,7 +517,7 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
         setFillMode( fill );
         SetCurrentLineWidth( 0 );
 
-        fprintf( outputFile, "<path d=\"M%g %g A%g %g 0.0 %d %d %g %g L %g %g Z\" />\n",
+        fprintf( outputFile, "<path d=\"M%f %f A%f %f 0.0 %d %d %f %f L %f %f Z\" />\n",
                  start.x, start.y, radius_dev, radius_dev,
                  flg_arc, flg_sweep,
                  end.x, end.y, centre_dev.x, centre_dev.y  );
@@ -521,7 +525,7 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 
     setFillMode( NO_FILL );
     SetCurrentLineWidth( width );
-    fprintf( outputFile, "<path d=\"M%g %g A%g %g 0.0 %d %d %g %g\" />\n",
+    fprintf( outputFile, "<path d=\"M%f %f A%f %f 0.0 %d %d %f %f\" />\n",
              start.x, start.y, radius_dev, radius_dev,
              flg_arc, flg_sweep,
              end.x, end.y  );
@@ -542,7 +546,7 @@ void SVG_PLOTTER::BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
     DPOINT end  = userToDeviceCoordinates( aEnd );
 
     // Generate a cubic curve: start point and 3 other control points.
-    fprintf( outputFile, "<path d=\"M%g,%g C%g,%g %g,%g %g,%g\" />\n",
+    fprintf( outputFile, "<path d=\"M%f,%f C%f,%f %f,%f %f,%f\" />\n",
              start.x, start.y, ctrl1.x, ctrl1.y,
              ctrl2.x, ctrl2.y, end.x, end.y  );
 #else
@@ -578,12 +582,12 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     }
 
     DPOINT pos = userToDeviceCoordinates( aCornerList[0] );
-    fprintf( outputFile, "d=\"M %g,%g\n", pos.x, pos.y );
+    fprintf( outputFile, "d=\"M %f,%f\n", pos.x, pos.y );
 
     for( unsigned ii = 1; ii < aCornerList.size() - 1; ii++ )
     {
         pos = userToDeviceCoordinates( aCornerList[ii] );
-        fprintf( outputFile, "%g,%g\n", pos.x, pos.y );
+        fprintf( outputFile, "%f,%f\n", pos.x, pos.y );
     }
 
     // If the cornerlist ends where it begins, then close the poly
@@ -592,7 +596,7 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     else
     {
         pos = userToDeviceCoordinates( aCornerList.back() );
-        fprintf( outputFile, "%g,%g\n\" /> \n", pos.x, pos.y );
+        fprintf( outputFile, "%f,%f\n\" /> \n", pos.x, pos.y );
     }
 }
 
@@ -632,7 +636,7 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos,
         base64::encode( buffer, encoded );
 
         fprintf( outputFile,
-                 "<image x=\"%g\" y=\"%g\" xlink:href=\"data:image/png;base64,",
+                 "<image x=\"%f\" y=\"%f\" xlink:href=\"data:image/png;base64,",
                  userToDeviceSize( start.x ), userToDeviceSize( start.y )
                  );
 
@@ -644,7 +648,7 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos,
                 fprintf( outputFile, "\n" );
         }
 
-        fprintf( outputFile, "\"\npreserveAspectRatio=\"none\" height=\"%g\" width=\"%g\" />",
+        fprintf( outputFile, "\"\npreserveAspectRatio=\"none\" height=\"%f\" width=\"%f\" />",
                 userToDeviceSize( drawsize.x ), userToDeviceSize( drawsize.y ) );
     }
 
@@ -720,7 +724,7 @@ bool SVG_PLOTTER::StartPlot()
 
     // Write viewport pos and size
     wxPoint origin;    // TODO set to actual value
-    fprintf( outputFile, "    width=\"%gcm\" height=\"%gcm\" viewBox=\"%d %d %d %d\">\n",
+    fprintf( outputFile, "    width=\"%fcm\" height=\"%fcm\" viewBox=\"%d %d %d %d\">\n",
              (double) paperSize.x / m_IUsPerDecimil * 2.54 / 10000,
              (double) paperSize.y / m_IUsPerDecimil * 2.54 / 10000, origin.x, origin.y,
              (int) ( paperSize.x * iuPerDeviceUnit ), (int) ( paperSize.y * iuPerDeviceUnit) );
@@ -741,7 +745,7 @@ bool SVG_PLOTTER::StartPlot()
     // output the pen and brush color (RVB values in hex) and opacity
     double opacity = 1.0;      // 0.0 (transparent to 1.0 (solid)
     fprintf( outputFile,
-             "<g style=\"fill:#%6.6lX; fill-opacity:%g;stroke:#%6.6lX; stroke-opacity:%g;\n",
+             "<g style=\"fill:#%6.6lX; fill-opacity:%f;stroke:#%6.6lX; stroke-opacity:%f;\n",
              m_brush_rgb_color, opacity, m_pen_rgb_color, opacity );
 
     // output the pen cap and line joint
@@ -821,13 +825,13 @@ void SVG_PLOTTER::Text( const wxPoint&              aPos,
 
     if( aOrient != 0 ) {
         fprintf( outputFile,
-                 "<g transform=\"rotate(%g %g %g)\">\n",
+                 "<g transform=\"rotate(%f %f %f)\">\n",
                  - aOrient * 0.1, anchor_pos_dev.x, anchor_pos_dev.y );
     }
 
     fprintf( outputFile,
-             "<text x=\"%g\" y=\"%g\"\n"
-             "textLength=\"%g\" font-size=\"%g\" lengthAdjust=\"spacingAndGlyphs\"\n"
+             "<text x=\"%f\" y=\"%f\"\n"
+             "textLength=\"%f\" font-size=\"%f\" lengthAdjust=\"spacingAndGlyphs\"\n"
              "text-anchor=\"%s\" opacity=\"0\">%s</text>\n",
              text_pos_dev.x, text_pos_dev.y,
              sz_dev.x, sz_dev.y,
