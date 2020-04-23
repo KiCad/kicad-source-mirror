@@ -115,6 +115,36 @@ static wxString makeKey( const wxString& aFirst, const wxString& aSecond )
 }
 
 
+static void setKeepoutSettingsToZone( ZONE_CONTAINER* aZone, LAYER_NUM aLayer )
+{
+    if( aLayer == EAGLE_LAYER::TRESTRICT || aLayer == EAGLE_LAYER::BRESTRICT )
+    {
+        aZone->SetIsKeepout( true );
+        aZone->SetDoNotAllowVias( true );
+        aZone->SetDoNotAllowTracks( true );
+        aZone->SetDoNotAllowCopperPour( true );
+        aZone->SetDoNotAllowPads( true );
+        aZone->SetDoNotAllowFootprints( false );
+
+        if( aLayer == EAGLE_LAYER::TRESTRICT ) // front layer keepout
+            aZone->SetLayer( F_Cu );
+        else // bottom layer keepout
+            aZone->SetLayer( B_Cu );
+    }
+    else if( aLayer == EAGLE_LAYER::VRESTRICT )
+    {
+        aZone->SetIsKeepout( true );
+        aZone->SetDoNotAllowVias( true );
+        aZone->SetDoNotAllowTracks( false );
+        aZone->SetDoNotAllowCopperPour( false );
+        aZone->SetDoNotAllowPads( false );
+        aZone->SetDoNotAllowFootprints( false );
+
+        aZone->SetLayerSet( LSET::AllCuMask() );
+    }
+}
+
+
 void ERULES::parse( wxXmlNode* aRules )
 {
     wxXmlNode* child = aRules->GetChildren();
@@ -654,20 +684,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
                 m_board->Add( zone, ADD_MODE::APPEND );
 
-                if( c.layer == EAGLE_LAYER::TRESTRICT ) // front layer keepout
-                    zone->SetLayer( F_Cu );
-                else if( c.layer == EAGLE_LAYER::BRESTRICT ) // bottom layer keepout
-                    zone->SetLayer( B_Cu );
-                else if( c.layer == EAGLE_LAYER::VRESTRICT ) // all layers
-                    zone->SetLayerSet( LSET::AllCuMask() );
-
-                zone->SetIsKeepout( true );
-                zone->SetDoNotAllowVias( true );
-                if( c.layer == EAGLE_LAYER::TRESTRICT || c.layer == EAGLE_LAYER::BRESTRICT )
-                {
-                    zone->SetDoNotAllowTracks( true );
-                    zone->SetDoNotAllowCopperPour( true );
-                }
+                setKeepoutSettingsToZone( zone, c.layer );
 
                 // approximate circle as polygon with a edge every 10 degree
                 wxPoint center( kicad_x( c.x ), kicad_y( c.y ) );
@@ -1171,7 +1188,8 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     EPOLYGON p( aPolyNode );
     PCB_LAYER_ID layer = kicad_layer( p.layer );
     ZONE_CONTAINER* zone = nullptr;
-    bool keepout = ( p.layer == EAGLE_LAYER::TRESTRICT || p.layer == EAGLE_LAYER::BRESTRICT );
+    bool keepout          = ( p.layer == EAGLE_LAYER::TRESTRICT || p.layer == EAGLE_LAYER::BRESTRICT
+                     || p.layer == EAGLE_LAYER::VRESTRICT );
 
     if( !IsCopperLayer( layer ) && !keepout )
         return nullptr;
@@ -1180,22 +1198,10 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     zone = new ZONE_CONTAINER( m_board );
     m_board->Add( zone, ADD_MODE::APPEND );
 
-    if( p.layer == EAGLE_LAYER::TRESTRICT )         // front layer keepout
-        zone->SetLayer( F_Cu );
-    else if( p.layer == EAGLE_LAYER::BRESTRICT )    // bottom layer keepout
-        zone->SetLayer( B_Cu );
-    else
+    if( !keepout )
         zone->SetLayer( layer );
-
-    if( keepout )
-    {
-        zone->SetIsKeepout( true );
-        zone->SetDoNotAllowVias( true );
-        zone->SetDoNotAllowTracks( true );
-        zone->SetDoNotAllowCopperPour( true );
-        zone->SetDoNotAllowPads( true );
-        zone->SetDoNotAllowFootprints( false );
-    }
+    else
+        setKeepoutSettingsToZone( zone, p.layer );
 
     // Get the first vertex and iterate
     wxXmlNode* vertex = aPolyNode->GetChildren();
@@ -1796,20 +1802,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
         MODULE_ZONE_CONTAINER* zone = new MODULE_ZONE_CONTAINER( aModule );
         aModule->Add( zone, ADD_MODE::APPEND );
 
-        if( r.layer == EAGLE_LAYER::TRESTRICT ) // front layer keepout
-            zone->SetLayer( F_Cu );
-        else if( r.layer == EAGLE_LAYER::BRESTRICT ) // bottom layer keepout
-            zone->SetLayer( B_Cu );
-        else if( r.layer == EAGLE_LAYER::VRESTRICT ) // all layers
-            zone->SetLayerSet( LSET::AllCuMask() );
-
-        zone->SetIsKeepout( true );
-        zone->SetDoNotAllowVias( true );
-        if( r.layer == EAGLE_LAYER::TRESTRICT || r.layer == EAGLE_LAYER::BRESTRICT )
-        {
-            zone->SetDoNotAllowTracks( true );
-            zone->SetDoNotAllowCopperPour( true );
-        }
+        setKeepoutSettingsToZone( zone, r.layer );
 
         const int outlineIdx = -1; // this is the id of the copper zone main outline
         zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
@@ -1929,20 +1922,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
         MODULE_ZONE_CONTAINER* zone = new MODULE_ZONE_CONTAINER( aModule );
         aModule->Add( zone, ADD_MODE::APPEND );
 
-        if( p.layer == EAGLE_LAYER::TRESTRICT ) // front layer keepout
-            zone->SetLayer( F_Cu );
-        else if( p.layer == EAGLE_LAYER::BRESTRICT ) // bottom layer keepout
-            zone->SetLayer( B_Cu );
-        else if( p.layer == EAGLE_LAYER::VRESTRICT ) // all layers
-            zone->SetLayerSet( LSET::AllCuMask() );
-
-        zone->SetIsKeepout( true );
-        zone->SetDoNotAllowVias( true );
-        if( p.layer == EAGLE_LAYER::TRESTRICT || p.layer == EAGLE_LAYER::BRESTRICT )
-        {
-            zone->SetDoNotAllowTracks( true );
-            zone->SetDoNotAllowCopperPour( true );
-        }
+        setKeepoutSettingsToZone( zone, p.layer );
 
         SHAPE_LINE_CHAIN outline( pts );
         outline.SetClosed( true );
@@ -1983,20 +1963,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
         MODULE_ZONE_CONTAINER* zone = new MODULE_ZONE_CONTAINER( aModule );
         aModule->Add( zone, ADD_MODE::APPEND );
 
-        if( e.layer == EAGLE_LAYER::TRESTRICT ) // front layer keepout
-            zone->SetLayer( F_Cu );
-        else if( e.layer == EAGLE_LAYER::BRESTRICT ) // bottom layer keepout
-            zone->SetLayer( B_Cu );
-        else if( e.layer == EAGLE_LAYER::VRESTRICT ) // all layers
-            zone->SetLayerSet( LSET::AllCuMask() );
-
-        zone->SetIsKeepout( true );
-        zone->SetDoNotAllowVias( true );
-        if( e.layer == EAGLE_LAYER::TRESTRICT || e.layer == EAGLE_LAYER::BRESTRICT )
-        {
-            zone->SetDoNotAllowTracks( true );
-            zone->SetDoNotAllowCopperPour( true );
-        }
+        setKeepoutSettingsToZone( zone, e.layer );
 
         // approximate circle as polygon with a edge every 10 degree
         wxPoint center( kicad_x( e.x ), kicad_y( e.y ) );
