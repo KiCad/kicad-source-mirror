@@ -65,6 +65,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     CLR( "schematic.background",        LAYER_SCHEMATIC_BACKGROUND, COLOR4D( WHITE ) );
     CLR( "schematic.brightened",        LAYER_BRIGHTENED,           COLOR4D( PUREMAGENTA ) );
     CLR( "schematic.bus",               LAYER_BUS,                  COLOR4D( BLUE ) );
+    CLR( "schematic.bus_junction",      LAYER_BUS_JUNCTION,         COLOR4D( BLUE ) );
     CLR( "schematic.component_body",    LAYER_DEVICE_BACKGROUND,    COLOR4D( LIGHTYELLOW ) );
     CLR( "schematic.component_outline", LAYER_DEVICE,               COLOR4D( RED ) );
     CLR( "schematic.cursor",            LAYER_SCHEMATIC_CURSOR,     COLOR4D( BLACK ) );

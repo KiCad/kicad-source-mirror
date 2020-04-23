@@ -31,6 +31,9 @@ wxString LayerName( SCH_LAYER_ID aLayer )
     case LAYER_BUS:
         return _( "Bus" );
 
+    case LAYER_BUS_JUNCTION:
+        return _( "Bus Junction" );
+
     case LAYER_JUNCTION:
         return _( "Junction" );
 

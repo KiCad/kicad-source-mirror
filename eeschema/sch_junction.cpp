@@ -50,11 +50,11 @@ int SCH_JUNCTION::GetSymbolSize()
 }
 
 
-SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) :
+SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos, SCH_LAYER_ID aLayer ) :
     SCH_ITEM( NULL, SCH_JUNCTION_T )
 {
-    m_pos    = pos;
-    m_Layer  = LAYER_JUNCTION;
+    m_pos   = pos;
+    m_Layer = aLayer;
 }
 
 
@@ -77,7 +77,7 @@ void SCH_JUNCTION::SwapData( SCH_ITEM* aItem )
 void SCH_JUNCTION::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount     = 2;
-    aLayers[0] = LAYER_JUNCTION;
+    aLayers[0] = m_Layer;
     aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
 
@@ -95,10 +95,8 @@ const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 
 void SCH_JUNCTION::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    wxDC*           DC = aSettings->GetPrintDC();
-    SCH_CONNECTION* conn = Connection( *g_CurrentSheet );
-    bool            isBus = conn && conn->IsBus();
-    COLOR4D         color = aSettings->GetLayerColor( isBus ? LAYER_BUS : m_Layer );
+    wxDC*   DC    = aSettings->GetPrintDC();
+    COLOR4D color = aSettings->GetLayerColor( GetLayer() );
 
     GRFilledCircle( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, GetSymbolSize() / 2,
                     0, color, color );

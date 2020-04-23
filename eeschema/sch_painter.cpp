@@ -1160,13 +1160,7 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
     if( drawingShadows && !aJct->IsSelected() )
         return;
 
-    COLOR4D color;
-    auto    conn = aJct->Connection( *g_CurrentSheet );
-
-    if( conn && conn->IsBus() )
-        color = getRenderColor( aJct, LAYER_BUS, drawingShadows );
-    else
-        color = getRenderColor( aJct, LAYER_JUNCTION, drawingShadows );
+    COLOR4D color = getRenderColor( aJct, aJct->GetLayer(), drawingShadows );
 
     m_gal->SetIsStroke( drawingShadows );
     m_gal->SetLineWidth( getLineWidth( aJct, drawingShadows ) );

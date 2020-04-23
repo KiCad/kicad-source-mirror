@@ -543,7 +543,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             }
 
             // Bus-to-bus entries are treated just like bus wires
-            if( connected_item->Type() == SCH_BUS_BUS_ENTRY_T )
+            else if( connected_item->Type() == SCH_BUS_BUS_ENTRY_T )
             {
                 if( connection_vec.size() < 2 )
                 {
@@ -563,6 +563,15 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                         bus->ConnectedItems( aSheet ).insert( bus_entry );
                     }
                 }
+            }
+
+            // Change junctions to be on bus junction layer if they are touching a bus
+            else if( connected_item->Type() == SCH_JUNCTION_T )
+            {
+                SCH_SCREEN* screen = aSheet.LastScreen();
+                SCH_LINE*   bus    = screen->GetBus( it.first );
+
+                connected_item->SetLayer( bus ? LAYER_BUS_JUNCTION : LAYER_JUNCTION );
             }
 
             for( auto test_it = primary_it + 1; test_it != connection_vec.end(); test_it++ )
