@@ -196,8 +196,11 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
         {
             BOARD_COMMIT bCommit( &m_tool );
             BOARD_ITEM_CONTAINER* parent = m_tool.m_frame->GetModel();
+            LSET graphicPolygonsLayers = LSET::AllLayersMask();
 
-            if( m_tool.getDrawingLayer() != Edge_Cuts )
+            graphicPolygonsLayers.reset( Edge_Cuts ).reset( F_CrtYd ).reset( B_CrtYd );
+
+            if( graphicPolygonsLayers.Contains( m_tool.getDrawingLayer() ) )
             {
                 auto poly = m_tool.m_editModules ? new EDGE_MODULE( (MODULE *) parent )
                                                  : new DRAWSEGMENT();
