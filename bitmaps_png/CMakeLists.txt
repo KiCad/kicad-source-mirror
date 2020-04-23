@@ -372,6 +372,7 @@ set( BMAPS_MID
     options_board
     options_generic
     options_pad
+    options_schematic
     opt_show_polygon
     ortho
     pad_sketch

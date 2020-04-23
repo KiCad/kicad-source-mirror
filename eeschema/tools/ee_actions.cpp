@@ -545,7 +545,7 @@ TOOL_ACTION EE_ACTIONS::schematicSetup( "eeschema.EditorControl.schematicSetup",
         AS_GLOBAL, 0, "",
         _( "Schematic Setup..." ),
         _( "Edit schematic setup including annotation styles and electrical rules" ),
-        options_generic_xpm );
+        options_schematic_xpm );
 
 TOOL_ACTION EE_ACTIONS::showBusManager( "eeschema.EditorControl.showBusManager",
         AS_GLOBAL, 0, "",
