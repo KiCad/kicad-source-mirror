@@ -140,9 +140,15 @@ public:
 
     /**
      * Function GetErrorText
-     * returns the string form of a drc error code.
+     * returns the string form of a RC error code
      */
-    virtual wxString GetErrorText() const = 0;
+    virtual wxString GetErrorText( int aCode = -1 ) const = 0;
+
+    /**
+     * Function GetErrorMessage
+     * returns the error message of a RC_ITEM
+     */
+    virtual wxString GetErrorMessage() const;
 
     /**
      * Function ShowCoord

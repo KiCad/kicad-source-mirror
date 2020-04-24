@@ -32,9 +32,12 @@
 #include <class_board.h>
 
 
-wxString DRC_ITEM::GetErrorText() const
+wxString DRC_ITEM::GetErrorText( int aCode ) const
 {
-    switch( m_errorCode )
+    if( aCode < 0 )
+        aCode = m_errorCode;
+
+    switch( aCode )
     {
     case DRCE_UNCONNECTED_ITEMS:
         return wxString( _( "Unconnected items" ) );
@@ -179,7 +182,7 @@ wxString DRC_ITEM::ShowHtml( PCB_BASE_FRAME* aFrame ) const
 {
     BOARD_ITEM* mainItem = nullptr;
     BOARD_ITEM* auxItem = nullptr;
-    wxString    msg = m_errorMessage.IsEmpty() ? GetErrorText() : m_errorMessage;
+    wxString    msg = m_errorMessage.IsEmpty() ? GetErrorText( m_errorCode ) : m_errorMessage;
     wxString    mainText;
     wxString    auxText;
 

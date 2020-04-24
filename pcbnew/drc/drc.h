@@ -301,9 +301,11 @@ private:
     /**
      * @param aRefPad The reference pad to check
      * @param aPad Another pad to check against
+     * @param aAllowed [out] is the allowed distance (only guaranteed to be set for violations)
+     * @param aActual [out] it the actual difference (only guaranteed to be set for violations)
      * @return bool - true if clearance between aRefPad and aPad is >= dist_min, else false
      */
-    bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad );
+    bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int* aAllowed, int* aActual );
 
 
     /**
@@ -316,11 +318,13 @@ private:
      * @param aPad Is the pad involved in the check
      * @param aSegmentWidth width of the segment to test
      * @param aMinDist Is the minimum clearance needed
+     * @param aActualDist [out] Is the actual clearance (only guarantted to be set on violations)
      *
      * @return true distance >= dist_min,
      *         false if distance < dist_min
      */
-    bool checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist );
+    bool checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist,
+                                  int* aActualDist );
 
 
     /**
@@ -329,13 +333,14 @@ private:
      * The segment is expected starting at 0,0, and on the X axis
      * (used to test DRC between a segment and a round pad, via or round end of a track
      * @param aCentre The coordinate of the circle's center
-     * @param aRadius A "keep out" radius centered over the circle
+     * @param aAllowed A "keep out" radius centered over the circle
      * @param aLength The length of the segment (i.e. coordinate of end, because it is on
      *                the X axis)
+     * @param aActual [out] is the actual distance (only guaranteed to be set on violations)
      * @return bool - true if distance >= radius, else
-     *                false when distance < aRadius
+     *                false when distance < aAllowed
      */
-    static bool checkMarginToCircle( wxPoint aCentre, int aRadius, int aLength );
+    static bool checkMarginToCircle( wxPoint aCentre, int aAllowed, int aLength, int* aActual );
 
 
     /**

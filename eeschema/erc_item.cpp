@@ -30,8 +30,11 @@
 #include <erc_item.h>
 
 
-wxString ERC_ITEM::GetErrorText() const
+wxString ERC_ITEM::GetErrorText( int aErrorCode ) const
 {
+    if( aErrorCode < 0 )
+        aErrorCode = m_errorCode;
+
     switch( m_errorCode )
     {
     case ERCE_UNSPECIFIED:

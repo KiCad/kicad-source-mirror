@@ -46,17 +46,24 @@
  * i.e if for each edge of the first polygon distance from each edge of the other polygon
  * is >= aDist
  */
-bool poly2polyDRC( wxPoint* aTref, int aTrefCount, wxPoint* aTtest, int aTtestCount, int aDist )
+bool poly2polyDRC( wxPoint* aTref, int aTrefCount, wxPoint* aTtest, int aTtestCount,
+                   int aAllowedDist, int* actualDist )
 {
     /* Test if one polygon is contained in the other and thus the polygon overlap.
      * This case is not covered by the following check if one polygone is
      * completely contained in the other (because edges don't intersect)!
      */
     if( TestPointInsidePolygon( aTref, aTrefCount, aTtest[0] ) )
+    {
+        *actualDist = 0;
         return false;
+    }
 
     if( TestPointInsidePolygon( aTtest, aTtestCount, aTref[0] ) )
+    {
+        *actualDist = 0;
         return false;
+    }
 
     for( int ii = 0, jj = aTrefCount - 1; ii < aTrefCount; jj = ii, ii++ )
     {
@@ -70,8 +77,17 @@ bool poly2polyDRC( wxPoint* aTref, int aTrefCount, wxPoint* aTtest, int aTtestCo
                                         aTtest[kk].x, aTtest[kk].y, aTtest[ll].x, aTtest[ll].y,
                                         nullptr, nullptr, &d );
 
-            if( intersect || ( d < aDist ) )
+            if( intersect )
+            {
+                *actualDist = 0;
                 return false;
+            }
+
+            if( d < aAllowedDist )
+            {
+                *actualDist = KiROUND( d );
+                return false;
+            }
         }
     }
 
@@ -82,25 +98,36 @@ bool poly2polyDRC( wxPoint* aTref, int aTrefCount, wxPoint* aTtest, int aTtestCo
 /*
  * compare a trapezoid (can be rectangle) and a segment and return true if distance > aDist
  */
-bool poly2segmentDRC( wxPoint* aTref, int aTrefCount, wxPoint aSegStart, wxPoint aSegEnd, int aDist )
+bool poly2segmentDRC( wxPoint* aTref, int aTrefCount, wxPoint aSegStart, wxPoint aSegEnd,
+                      int aDist, int* aActual )
 {
     /* Test if the segment is contained in the polygon.
      * This case is not covered by the following check if the segment is
      * completely contained in the polygon (because edges don't intersect)!
      */
     if( TestPointInsidePolygon( aTref, aTrefCount, aSegStart ) )
+    {
+        *aActual = 0;
         return false;
+    }
 
     for( int ii = 0, jj = aTrefCount-1; ii < aTrefCount; jj = ii, ii++ )
     {   // for all edges in polygon
         double d;
-        int    intersect = TestForIntersectionOfStraightLineSegments(
-                                            aTref[ii].x, aTref[ii].y, aTref[jj].x, aTref[jj].y,
-                                            aSegStart.x, aSegStart.y, aSegEnd.x, aSegEnd.y,
-                                            NULL, NULL, &d );
 
-        if( intersect || ( d < aDist) )
+        if( TestForIntersectionOfStraightLineSegments( aTref[ii].x, aTref[ii].y, aTref[jj].x,
+                                                       aTref[jj].y, aSegStart.x, aSegStart.y,
+                                                       aSegEnd.x, aSegEnd.y, NULL, NULL, &d ) )
+        {
+            *aActual = 0;
             return false;
+        }
+
+        if( d < aDist )
+        {
+            *aActual = KiROUND( d );
+            return false;
+        }
     }
 
     return true;
@@ -128,6 +155,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
     int  net_code_ref = aRefSeg->GetNetCode();
     int  ref_seg_clearance  = netclass->GetClearance();
     int  ref_seg_width = aRefSeg->GetWidth();
+    int  actual;
 
 
     /******************************************/
@@ -311,7 +339,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
                 m_padToTestPos = dummypad.GetPosition() - origin;
 
-                if( !checkClearanceSegmToPad( &dummypad, ref_seg_width, ref_seg_clearance ) )
+                if( !checkClearanceSegmToPad( &dummypad, ref_seg_width, ref_seg_clearance, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_THROUGH_HOLE );
                     drcItem->SetItems( aRefSeg, pad );
@@ -337,7 +365,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             m_padToTestPos = shape_pos - origin;
             int segToPadClearance = std::max( ref_seg_clearance, pad->GetClearance() );
 
-            if( !checkClearanceSegmToPad( pad, ref_seg_width, segToPadClearance ) )
+            if( !checkClearanceSegmToPad( pad, ref_seg_width, segToPadClearance, &actual ) )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_PAD );
                 drcItem->SetItems( aRefSeg, pad );
@@ -414,7 +442,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 RotatePoint( &delta, angle );
                 RotatePoint( &segStartPoint, angle );
 
-                if( !checkMarginToCircle( segStartPoint, w_dist, delta.x ) )
+                if( !checkMarginToCircle( segStartPoint, w_dist, delta.x, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_NEAR_TRACK );
                     drcItem->SetItems( aRefSeg, track );
@@ -443,7 +471,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
         if( track->Type() == PCB_VIA_T )
         {
-            if( checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
+            if( checkMarginToCircle( segStartPoint, w_dist, m_segmLength, &actual ) )
                 continue;
 
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_VIA );
@@ -488,7 +516,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                         return;
                 }
 
-                if( !checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
+                if( !checkMarginToCircle( segStartPoint, w_dist, m_segmLength, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
                     drcItem->SetItems( aRefSeg, track );
@@ -519,7 +547,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                         return;
                 }
 
-                if( !checkMarginToCircle( segEndPoint, w_dist, m_segmLength ) )
+                if( !checkMarginToCircle( segEndPoint, w_dist, m_segmLength, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
                     drcItem->SetItems( aRefSeg, track );
@@ -572,7 +600,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             }
 
             // At this point the drc error is due to an end near a reference segm end
-            if( !checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
+            if( !checkMarginToCircle( segStartPoint, w_dist, m_segmLength, &actual ) )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
                 drcItem->SetItems( aRefSeg, track );
@@ -583,7 +611,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 if( !m_reportAllTrackErrors )
                     return;
             }
-            if( !checkMarginToCircle( segEndPoint, w_dist, m_segmLength ) )
+            if( !checkMarginToCircle( segEndPoint, w_dist, m_segmLength, &actual ) )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
                 drcItem->SetItems( aRefSeg, track );
@@ -664,7 +692,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                     RotatePoint( &relStartPos, angle );
                     RotatePoint( &relEndPos, angle );
 
-                    if( !checkMarginToCircle( relStartPos, w_dist, delta.x ) )
+                    if( !checkMarginToCircle( relStartPos, w_dist, delta.x, &actual ) )
                     {
                         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
                         drcItem->SetItems( aRefSeg, track );
@@ -676,7 +704,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                             return;
                     }
 
-                    if( !checkMarginToCircle( relEndPos, w_dist, delta.x ) )
+                    if( !checkMarginToCircle( relEndPos, w_dist, delta.x, &actual ) )
                     {
                         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
                         drcItem->SetItems( aRefSeg, track );
@@ -781,13 +809,16 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 }
 
 
-bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
+bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int* aAllowed, int* aActual )
 {
-    int     dist;
+    int    dist;
     double pad_angle;
 
     // Get the clearance between the 2 pads. this is the min distance between aRefPad and aPad
-    int     dist_min = aRefPad->GetClearance( aPad );
+    int    dist_min = aRefPad->GetClearance( aPad );
+    int    dist_extra = 0;
+
+    *aAllowed = dist_min;
 
     // relativePadPos is the aPad shape position relative to the aRefPad shape position
     wxPoint relativePadPos = aPad->ShapePos() - aRefPad->ShapePos();
@@ -876,7 +907,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         m_segmEnd.x = m_segmEnd.y = 0;
 
         m_padToTestPos = relativePadPos;
-        diag = checkClearanceSegmToPad( aPad, aRefPad->GetSize().x, dist_min );
+        diag = checkClearanceSegmToPad( aPad, aRefPad->GetSize().x, dist_min, aActual );
         break;
 
     case PAD_SHAPE_TRAPEZOID:
@@ -891,7 +922,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         if( aRefPad->GetShape() == PAD_SHAPE_ROUNDRECT )
         {
             int padRadius = aRefPad->GetRoundRectCornerRadius();
-            dist_min += padRadius;
+            dist_extra = padRadius;
             GetRoundRectCornerCenters( polyref, padRadius, wxPoint( 0, 0 ), aRefPad->GetSize(),
                                        aRefPad->GetOrientation() );
         }
@@ -939,7 +970,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             if( aPad->GetShape() == PAD_SHAPE_ROUNDRECT )
             {
                 int padRadius = aPad->GetRoundRectCornerRadius();
-                dist_min += padRadius;
+                dist_extra = padRadius;
                 GetRoundRectCornerCenters( polycompare, padRadius, relativePadPos, aPad->GetSize(),
                                            aPad->GetOrientation() );
             }
@@ -986,17 +1017,23 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             {
                 const SHAPE_LINE_CHAIN& refpoly = polysetref.COutline( 0 );
                 // And now test polygons:
-                if( !poly2polyDRC( (wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
-                                    polycompare, 4, dist_min ) )    // Therefore error
+                if( !poly2polyDRC((wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
+                                  polycompare, 4, dist_min + dist_extra, aActual ) )
+                {
+                    *aActual = std::max( 0, *aActual - dist_extra );
                     diag = false;
+                }
             }
             else if( polysetref.OutlineCount() == 0 && polysetcompare.OutlineCount())
             {
                 const SHAPE_LINE_CHAIN& cmppoly = polysetcompare.COutline( 0 );
                 // And now test polygons:
-                if( !poly2polyDRC( (wxPoint*) &cmppoly.CPoint( 0 ), cmppoly.PointCount(),
-                                    polyref, 4, dist_min ) )    // Therefore error
+                if( !poly2polyDRC((wxPoint*) &cmppoly.CPoint( 0 ), cmppoly.PointCount(),
+                                  polyref, 4, dist_min + dist_extra, aActual ) )
+                {
+                    *aActual = std::max( 0, *aActual - dist_extra );
                     diag = false;
+                }
             }
             else if( polysetref.OutlineCount() && polysetcompare.OutlineCount() )
             {
@@ -1004,15 +1041,21 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 const SHAPE_LINE_CHAIN& cmppoly = polysetcompare.COutline( 0 );
 
                 // And now test polygons:
-                if( !poly2polyDRC( (wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
-                                    (wxPoint*) &cmppoly.CPoint( 0 ), cmppoly.PointCount(),
-                                    dist_min ) )    // Therefore error
+                if( !poly2polyDRC((wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
+                                  (wxPoint*) &cmppoly.CPoint( 0 ), cmppoly.PointCount(),
+                                  dist_min + dist_extra, aActual ) )
+                {
+                    *aActual = std::max( 0, *aActual - dist_extra );
                     diag = false;
+                }
             }
             else
             {
-                if( !poly2polyDRC( polyref, 4, polycompare, 4, dist_min ) ) // Therefore error
+                if( !poly2polyDRC( polyref, 4, polycompare, 4, dist_min + dist_extra, aActual ) )
+                {
+                    *aActual = std::max( 0, *aActual - dist_extra );
                     diag = false;
+                }
             }
             break;
 
@@ -1060,7 +1103,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         m_padToTestPos = relativePadPos - segstart;
 
         // Use segment to pad check to test the second pad:
-        diag = checkClearanceSegmToPad( aPad, segm_width, dist_min );
+        diag = checkClearanceSegmToPad( aPad, segm_width, dist_min, aActual );
         break;
     }
 
@@ -1078,7 +1121,8 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
  * and its orientation is m_segmAngle (m_segmAngle must be already initialized)
  * and have aSegmentWidth.
  */
-bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist )
+bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist,
+                                   int* aActualDist )
 {
     // Note:
     // we are using a horizontal segment for test, because we know here
@@ -1119,7 +1163,15 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
          * calculate pad coordinates in the X,Y axis with X axis = segment to test
          */
         RotatePoint( &m_padToTestPos, m_segmAngle );
-        return checkMarginToCircle( m_padToTestPos, distToLine + padHalfsize.x, m_segmLength );
+
+        if( !checkMarginToCircle( m_padToTestPos, aMinDist + segmHalfWidth + padHalfsize.x,
+                                  m_segmLength, aActualDist ) )
+        {
+            *aActualDist = std::max( 0, *aActualDist - segmHalfWidth - padHalfsize.x );
+            return false;
+        }
+
+        return true;
     }
 
     /* calculate the bounding box of the pad, including the clearance and the segment width
@@ -1196,6 +1248,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         // If the segment legth is zero, only check the endpoints, skip the rectangle
         if( m_segmLength && !checkLine( startPoint, endPoint ) )
         {
+            // JEY TODO: set aActual
             return false;
         }
 
@@ -1207,8 +1260,10 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         // to the segment:
         RotatePoint( &cstart, m_segmAngle );
 
-        if( !checkMarginToCircle( cstart, radius + distToLine, m_segmLength ) )
+        if( !checkMarginToCircle( cstart, aMinDist + radius + segmHalfWidth, m_segmLength,
+                                  aActualDist) )
         {
+            *aActualDist = std::max( 0, *aActualDist - radius - segmHalfWidth );
             return false;
         }
 
@@ -1216,8 +1271,10 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         RotatePoint( &cend, m_padToTestPos, orient );
         RotatePoint( &cend, m_segmAngle );
 
-        if( !checkMarginToCircle( cend, radius + distToLine, m_segmLength ) )
+        if( !checkMarginToCircle( cend, aMinDist + radius + segmHalfWidth, m_segmLength,
+                                  aActualDist ) )
         {
+            *aActualDist = std::max( 0, *aActualDist - radius - segmHalfWidth );
             return false;
         }
     }
@@ -1243,7 +1300,10 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         m_ycliphi = m_padToTestPos.y + padHalfsize.y;
 
         if( !checkLine( startPoint, endPoint ) )
+        {
+            // JEY TODO: set aActual
             return false;
+        }
 
         // Testing the second rectangle dimx , dimy + distToLine
         m_xcliplo = m_padToTestPos.x - padHalfsize.x;
@@ -1252,7 +1312,10 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         m_ycliphi = m_padToTestPos.y + padHalfsize.y + distToLine;
 
         if( !checkLine( startPoint, endPoint ) )
+        {
+            // JEY TODO: set aActual
             return false;
+        }
 
         // testing the 4 circles which are the clearance area of each corner:
 
@@ -1262,8 +1325,12 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
 
-        if( !checkMarginToCircle( startPoint, distToLine, m_segmLength ) )
+        if( !checkMarginToCircle( startPoint, aMinDist + segmHalfWidth, m_segmLength,
+                                  aActualDist ) )
+        {
+            *aActualDist = std::max( 0, *aActualDist - segmHalfWidth );
             return false;
+        }
 
         // testing the right top corner of the rectangle
         startPoint.x = m_padToTestPos.x + padHalfsize.x;
@@ -1271,8 +1338,12 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
 
-        if( !checkMarginToCircle( startPoint, distToLine, m_segmLength ) )
+        if( !checkMarginToCircle( startPoint, aMinDist + segmHalfWidth, m_segmLength,
+                                  aActualDist ) )
+        {
+            *aActualDist = std::max( 0, *aActualDist - segmHalfWidth );
             return false;
+        }
 
         // testing the left bottom corner of the rectangle
         startPoint.x = m_padToTestPos.x - padHalfsize.x;
@@ -1280,8 +1351,12 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
 
-        if( !checkMarginToCircle( startPoint, distToLine, m_segmLength ) )
+        if( !checkMarginToCircle( startPoint, aMinDist + segmHalfWidth, m_segmLength,
+                                  aActualDist ) )
+        {
+            *aActualDist = std::max( 0, *aActualDist - segmHalfWidth );
             return false;
+        }
 
         // testing the right bottom corner of the rectangle
         startPoint.x = m_padToTestPos.x + padHalfsize.x;
@@ -1289,8 +1364,12 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
 
-        if( !checkMarginToCircle( startPoint, distToLine, m_segmLength ) )
+        if( !checkMarginToCircle( startPoint, aMinDist + segmHalfWidth, m_segmLength,
+                                  aActualDist ) )
+        {
+            *aActualDist = std::max( 0, *aActualDist - segmHalfWidth );
             return false;
+        }
 
         break;
 
@@ -1306,9 +1385,12 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
             RotatePoint( &poly[ii], m_segmAngle );
         }
 
-        if( !poly2segmentDRC( poly, 4, wxPoint( 0, 0 ),
-                              wxPoint(m_segmLength,0), distToLine ) )
+        if( !poly2segmentDRC( poly, 4, wxPoint( 0, 0 ), wxPoint( m_segmLength, 0 ),
+                              aMinDist + segmHalfWidth, aActualDist ) )
+        {
+            *aActualDist = std::max( 0, *aActualDist - segmHalfWidth );
             return false;
+        }
         }
         break;
 
@@ -1320,8 +1402,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         // relatives to the segment being tested
         // Note, the pad position relative to the segment origin
         // is m_padToTestPos
-        aPad->CustomShapeAsPolygonToBoardPosition( &polyset,
-                    m_padToTestPos, orient );
+        aPad->CustomShapeAsPolygonToBoardPosition( &polyset, m_padToTestPos, orient );
 
         // Rotate all coordinates by m_segmAngle, because the segment orient
         // is m_segmAngle
@@ -1329,16 +1410,17 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         // only the lenght and orientation+ of the segment
         // therefore all coordinates of the pad to test must be rotated by
         // m_segmAngle (they are already relative to the segment origin)
-        aPad->CustomShapeAsPolygonToBoardPosition( &polyset,
-                    wxPoint( 0, 0 ), m_segmAngle );
+        aPad->CustomShapeAsPolygonToBoardPosition( &polyset, wxPoint( 0, 0 ), m_segmAngle );
 
         const SHAPE_LINE_CHAIN& refpoly = polyset.COutline( 0 );
 
-        if( !poly2segmentDRC( (wxPoint*) &refpoly.CPoint( 0 ),
-                              refpoly.PointCount(),
+        if( !poly2segmentDRC( (wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
                               wxPoint( 0, 0 ), wxPoint(m_segmLength,0),
-                              distToLine ) )
+                              aMinDist + segmHalfWidth, aActualDist  ) )
+        {
+            *aActualDist = std::max( 0, *aActualDist - segmHalfWidth );
             return false;
+        }
         }
         break;
 
@@ -1370,11 +1452,13 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
 
         const SHAPE_LINE_CHAIN& refpoly = polyset.COutline( 0 );
 
-        if( !poly2segmentDRC( (wxPoint*) &refpoly.CPoint( 0 ),
-                              refpoly.PointCount(),
+        if( !poly2segmentDRC( (wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
                               wxPoint( 0, 0 ), wxPoint(m_segmLength,0),
-                              distToLine ) )
+                              aMinDist + segmHalfWidth, aActualDist ) )
+        {
+            *aActualDist = std::max( 0, *aActualDist - segmHalfWidth );
             return false;
+        }
         }
         break;
     }
@@ -1387,25 +1471,34 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
  * Helper function checkMarginToCircle
  * Check the distance between a circle (round pad, via or round end of track)
  * and a segment. the segment is expected starting at 0,0, and on the X axis
- * return true if distance >= aRadius
+ * return true if distance >= aAllowed
  */
-bool DRC::checkMarginToCircle( wxPoint aCentre, int aRadius, int aLength )
+bool DRC::checkMarginToCircle( wxPoint aCentre, int aAllowed, int aLength, int* aActual )
 {
-    if( abs( aCentre.y ) >= aRadius )     // trivial case
+    if( abs( aCentre.y ) >= aAllowed )     // trivial case
         return true;
 
-    // Here, distance between aCentre and X axis is < aRadius
-    if( (aCentre.x > -aRadius ) && ( aCentre.x < (aLength + aRadius) ) )
+    // Here, distance between aCentre and X axis is < aAllowed
+    if( ( aCentre.x > -aAllowed ) && ( aCentre.x < ( aLength + aAllowed ) ) )
     {
-        if( (aCentre.x >= 0) && (aCentre.x <= aLength) )
-            return false;           // aCentre is between the starting point and the ending point of the segm
+        if( ( aCentre.x >= 0 ) && ( aCentre.x <= aLength ) )
+        {
+            // aCentre is between the starting point and the ending point of the segm
+            *aActual = abs( aCentre.y );
+            return false;
+        }
 
         if( aCentre.x > aLength )   // aCentre is after the ending point
             aCentre.x -= aLength;   // move aCentre to the starting point of the segment
 
-        if( EuclideanNorm( aCentre ) < aRadius )
-            // distance between aCentre and the starting point or the ending point is < aRadius
+        int distToOrigin = KiROUND( EuclideanNorm( aCentre ) );
+
+        if(  distToOrigin < aAllowed )
+        {
+            // distance between aCentre and the starting point or the ending point is < aAllowed
+            *aActual = distToOrigin;
             return false;
+        }
     }
 
     return true;

@@ -84,7 +84,7 @@ public:
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
     {
-        return BOARD_ITEM::Matches( m_rcItem->GetErrorText(), aSearchData );
+        return BOARD_ITEM::Matches( m_rcItem->GetErrorMessage(), aSearchData );
     }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;

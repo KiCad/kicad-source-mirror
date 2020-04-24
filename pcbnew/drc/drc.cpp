@@ -696,6 +696,7 @@ void DRC::testDrilledHoles()
 
     std::vector<DRILLED_HOLE> holes;
     DRILLED_HOLE              hole;
+    wxString                  msg;
 
     for( MODULE* mod : m_pcb->Modules() )
     {
@@ -735,10 +736,18 @@ void DRC::testDrilledHoles()
             if( checkHole.m_location == refHole.m_location )
                 continue;
 
-            if( KiROUND( GetLineLength( checkHole.m_location, refHole.m_location ) )
-                    <  checkHole.m_drillRadius + refHole.m_drillRadius + holeToHoleMin )
+            int actual = KiROUND( GetLineLength( checkHole.m_location, refHole.m_location ) );
+            actual = std::max( 0, actual - checkHole.m_drillRadius - refHole.m_drillRadius );
+
+            if( actual <  holeToHoleMin )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DRILLED_HOLES_TOO_CLOSE );
+
+                msg.Printf( drcItem->GetErrorText() + _( " (minimum %s; actual %s)" ),
+                            MessageTextFromValue( userUnits(), holeToHoleMin, true ),
+                            MessageTextFromValue( userUnits(), actual, true ) );
+
+                drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( refHole.m_owner, checkHole.m_owner );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, refHole.m_location );
@@ -1319,7 +1328,10 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 
     for( D_PAD** pad_list = aStart;  pad_list<aEnd;  ++pad_list )
     {
-        D_PAD* pad = *pad_list;
+        D_PAD*   pad = *pad_list;
+        int      allowed;
+        int      actual;
+        wxString msg;
 
         if( pad == aRefPad )
             continue;
@@ -1363,9 +1375,15 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                                                            PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE );
                 dummypad.SetOrientation( pad->GetOrientation() );
 
-                if( !checkClearancePadToPad( aRefPad, &dummypad ) )
+                if( !checkClearancePadToPad( aRefPad, &dummypad, &allowed, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
+
+                    msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+                                MessageTextFromValue( userUnits(), allowed, true ),
+                                MessageTextFromValue( userUnits(), actual, true ) );
+
+                    drcItem->SetErrorMessage( msg );
                     drcItem->SetItems( pad, aRefPad );
 
                     MARKER_PCB* marker = new MARKER_PCB( drcItem, pad->GetPosition() );
@@ -1382,9 +1400,15 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                                                                PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE );
                 dummypad.SetOrientation( aRefPad->GetOrientation() );
 
-                if( !checkClearancePadToPad( pad, &dummypad ) )
+                if( !checkClearancePadToPad( pad, &dummypad, &allowed, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
+
+                    msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+                                MessageTextFromValue( userUnits(), allowed, true ),
+                                MessageTextFromValue( userUnits(), actual, true ) );
+
+                    drcItem->SetErrorMessage( msg );
                     drcItem->SetItems( aRefPad, pad );
 
                     MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefPad->GetPosition() );
@@ -1420,9 +1444,15 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
             continue;
         }
 
-        if( !checkClearancePadToPad( aRefPad, pad ) )
+        if( !checkClearancePadToPad( aRefPad, pad, &allowed, &actual ) )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_PAD1 );
+
+            msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+                        MessageTextFromValue( userUnits(), allowed, true ),
+                        MessageTextFromValue( userUnits(), actual, true ) );
+
+            drcItem->SetErrorMessage( msg );
             drcItem->SetItems( aRefPad, pad );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefPad->GetPosition() );

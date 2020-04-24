@@ -394,6 +394,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     RC_ITEM*  rcItem = node->m_RcItem;
     wxString  listName;
     wxMenu    menu;
+    wxString  msg;
 
     switch( GetSeverity( rcItem->GetErrorCode() ) )
     {
@@ -417,20 +418,23 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
     if( GetSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_WARNING )
     {
-        menu.Append( 3, wxString::Format( _( "Change severity to Error for all '%s' violations" ),
-                     rcItem->GetErrorText(),
-                     _( "Violation severities can also be edited in the Board Setup... dialog" ) ) );
+        msg.Printf( _( "Change severity to Error for all '%s' violations" ),
+                    rcItem->GetErrorText( rcItem->GetErrorCode() ),
+                    _( "Violation severities can also be edited in the Board Setup... dialog" ) );
+        menu.Append( 3, msg );
     }
     else
     {
-        menu.Append( 4, wxString::Format( _( "Change severity to Warning for all '%s' violations" ),
-                     rcItem->GetErrorText(),
-                     _( "Violation severities can also be edited in the Board Setup... dialog" ) ) );
+        msg.Printf( _( "Change severity to Warning for all '%s' violations" ),
+                    rcItem->GetErrorText( rcItem->GetErrorCode() ),
+                    _( "Violation severities can also be edited in the Board Setup... dialog" ) );
+        menu.Append( 4, msg );
     }
 
-    menu.Append( 5, wxString::Format( _( "Ignore all '%s' violations" ),
-                 rcItem->GetErrorText() ),
-                 _( "Violations will not be checked or reported" ) );
+    msg.Printf( _( "Ignore all '%s' violations" ),
+                rcItem->GetErrorText( rcItem->GetErrorCode() ),
+                _( "Violations will not be checked or reported" ) );
+    menu.Append( 5, msg );
 
     menu.AppendSeparator();
 

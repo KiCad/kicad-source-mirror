@@ -100,7 +100,7 @@ bool MARKER_PCB::IsOnLayer( PCB_LAYER_ID aLayer ) const
 void MARKER_PCB::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Type" ), _( "Marker" ), DARKCYAN );
-    aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorText(), RED );
+    aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorMessage(), RED );
 
     wxString  mainText;
     wxString  auxText;
@@ -140,7 +140,10 @@ void MARKER_PCB::Flip(const wxPoint& aCentre, bool aFlipLeftRight )
 
 wxString MARKER_PCB::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
-    return wxString::Format( _( "Marker (%s)" ), m_rcItem->GetErrorText() );
+    // m_rcItem->GetErrorMessage() could be used instead, but is probably too long
+    // for menu duty.
+    return wxString::Format( _( "Marker (%s)" ),
+                             m_rcItem->GetErrorText( m_rcItem->GetErrorCode() ) );
 }
 
 

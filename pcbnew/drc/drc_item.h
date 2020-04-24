@@ -45,7 +45,7 @@ public:
      * Function GetErrorText
      * returns the string form of a drc error code.
      */
-    wxString GetErrorText() const override;
+    wxString GetErrorText( int aErrorCode = -1 ) const override;
 
     /**
      * Function ShowHtml

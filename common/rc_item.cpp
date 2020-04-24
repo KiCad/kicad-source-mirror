@@ -33,6 +33,15 @@
 #define WX_DATAVIEW_WINDOW_PADDING 6
 
 
+wxString RC_ITEM::GetErrorMessage() const
+{
+    if( m_errorMessage.IsEmpty() )
+        return GetErrorText( m_errorCode );
+    else
+        return m_errorMessage;
+}
+
+
 wxString RC_ITEM::ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos )
 {
     return wxString::Format( "@(%s, %s)",
@@ -52,13 +61,11 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, const std::map<KIID, EDA_ITEM*>&
     if( m_auxItemUuid != niluuid )
         auxItem = aItemMap.at( m_auxItemUuid );
 
-    wxString msg = m_errorMessage.IsEmpty() ? GetErrorText() : m_errorMessage;
-
     if( mainItem && auxItem )
     {
         return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
-                                 m_errorCode,
-                                 msg,
+                                 GetErrorCode(),
+                                 GetErrorMessage(),
                                  ShowCoord( aUnits, mainItem->GetPosition() ),
                                  mainItem->GetSelectMenuText( aUnits ),
                                  ShowCoord( aUnits, auxItem->GetPosition() ),
@@ -67,16 +74,16 @@ wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, const std::map<KIID, EDA_ITEM*>&
     else if( mainItem )
     {
         return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
-                                 m_errorCode,
-                                 msg,
+                                 GetErrorCode(),
+                                 GetErrorMessage(),
                                  ShowCoord( aUnits, mainItem->GetPosition() ),
                                  mainItem->GetSelectMenuText( aUnits ) );
     }
     else
     {
         return wxString::Format( wxT( "ErrType(%d): %s\n" ),
-                                 m_errorCode,
-                                 msg );
+                                 GetErrorCode(),
+                                 GetErrorMessage() );
     }
 }
 
@@ -254,7 +261,7 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
                                             excluded ? _( "Excluded " ) : wxString( "" ),
                                             error  ? _( "Error: " ) : _( "Warning: " ) );
 
-        aVariant = prefix + rcItem->GetErrorText();
+        aVariant = prefix + rcItem->GetErrorMessage();
     }
         break;
 
