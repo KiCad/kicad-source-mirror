@@ -24,6 +24,8 @@
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/statline.h>
+#include <wx/stattext.h>
+#include <wx/slider.h>
 #include <wx/panel.h>
 #include <wx/choice.h>
 #include <wx/notebook.h>
@@ -70,6 +72,9 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkBoxComments;
 		wxStaticBitmap* m_bitmapECO;
 		wxCheckBox* m_checkBoxECO;
+		wxCheckBox* m_checkBoxEnableAnimation;
+		wxStaticText* m_staticAnimationSpeed;
+		wxSlider* m_sliderAnimationSpeed;
 		wxPanel* m_panelOpenGL;
 		wxStaticBitmap* m_bitmapBoundingBoxes;
 		wxCheckBox* m_checkBoxBoundingBoxes;
@@ -95,11 +100,12 @@ class DIALOG_3D_VIEW_OPTIONS_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCheckRealisticMode( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCheckEnableAnimation( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 659,475 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_3D_VIEW_OPTIONS_BASE();
 
 };

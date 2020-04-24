@@ -64,6 +64,12 @@ public:
         bool subtract_mask_from_silk;
     };
 
+    struct CAMERA_SETTINGS
+    {
+        bool animation_enabled;
+        int  moving_speed_multiplier;
+    };
+
     EDA_3D_VIEWER_SETTINGS();
 
     virtual ~EDA_3D_VIEWER_SETTINGS() {}
@@ -71,6 +77,7 @@ public:
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
     RENDER_SETTINGS m_Render;
+    CAMERA_SETTINGS m_Camera;
 
 protected:
 

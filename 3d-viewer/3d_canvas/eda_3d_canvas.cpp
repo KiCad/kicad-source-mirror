@@ -117,6 +117,8 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
     m_camera_is_moving = false;
     m_render_pivot = false;
     m_camera_moving_speed = 1.0f;
+    m_animation_enabled = true;
+    m_moving_speed_multiplier = 3;
 
     m_strtime_camera_movement = 0;
 
@@ -755,6 +757,19 @@ void EDA_3D_CANVAS::Request_refresh( bool aRedrawImmediately )
 void EDA_3D_CANVAS::request_start_moving_camera( float aMovingSpeed, bool aRenderPivot )
 {
     wxASSERT( aMovingSpeed > FLT_EPSILON );
+
+    // Fast forward the animation if the animation is disabled
+    if( !m_animation_enabled )
+    {
+        m_camera.Interpolate( 1.0f );
+        DisplayStatus();
+        Request_refresh();
+        return;
+    }
+
+    // Map speed multipler option to actual multiplier value
+    // [1,2,3,4,5] -> [0.25, 0.5, 1, 2, 4]
+    aMovingSpeed *= ( 1 << m_moving_speed_multiplier ) / 8.0f;
 
     m_render_pivot = aRenderPivot;
     m_camera_moving_speed = aMovingSpeed;

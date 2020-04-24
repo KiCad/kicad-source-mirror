@@ -103,6 +103,30 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
     bool SetView3D( int aKeycode );
 
     /**
+     * @brief AnimationEnabledSet - Enable or disable camera animation when switching to a pre-defined view
+     * @param aAnimationEnabled: Animation enabled state to set
+     */
+    void AnimationEnabledSet( bool aAnimationEnabled ) { m_animation_enabled = aAnimationEnabled; }
+
+    /**
+     * @brief AnimationEnabledGet - Returns whether camera animation is enabled when switching to a pre-defined view
+     * @return true if animation is enabled
+     */
+    bool AnimationEnabledGet() const { return m_animation_enabled; }
+
+    /**
+     * @brief MovingSpeedMultiplierSet - Set the camera animation moving speed multiplier option
+     * @param aMovingSpeedMultiplier: One of the possible integer options: [1,2,3,4,5]
+     */
+    void MovingSpeedMultiplierSet( int aMovingSpeedMultiplier ) { m_moving_speed_multiplier = aMovingSpeedMultiplier; }
+
+    /**
+     * @brief MovingSpeedMultiplierGet - Return the current camera animation moving speed multiplier option
+     * @return current moving speed multiplier option, one of [1,2,3,4,5]
+     */
+    int MovingSpeedMultiplierGet() const { return m_moving_speed_multiplier; }
+
+    /**
      * @brief RenderEngineChanged - Notify that the render engine was changed
      */
     void RenderEngineChanged();
@@ -208,6 +232,8 @@ private:
     bool                   m_render_pivot;            // Render the pivot while camera moving
     float                  m_camera_moving_speed;     // 1.0f will be 1:1
     unsigned               m_strtime_camera_movement; // Ticktime of camera movement start
+    bool                   m_animation_enabled;       // Camera animation enabled
+    int                    m_moving_speed_multiplier; // Camera animation speed multiplier option
 
     BOARD_ADAPTER&         m_boardAdapter;            // Pre-computed 3D info and settings
     CCAMERA&               m_camera;

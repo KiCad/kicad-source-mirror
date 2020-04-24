@@ -105,6 +105,8 @@ class EDA_3D_VIEWER : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
     BOARD_ADAPTER& GetAdapter() override { return m_boardAdapter; }
     CCAMERA& GetCurrentCamera() override { return m_currentCamera; }
 
+    EDA_3D_CANVAS* GetCanvas()  { return m_canvas; }
+
     /**
      * Get a SFVEC3D from a wx colour dialog
      * @param aColor is the SFVEC3D to change

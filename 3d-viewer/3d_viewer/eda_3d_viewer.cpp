@@ -102,8 +102,6 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     icon.CopyFromBitmap( KiBitmap( icon_3d_xpm ) );
     SetIcon( icon );
 
-    auto config = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
-    LoadSettings( config );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Create the status line
@@ -118,6 +116,9 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
 
     if( m_canvas )
         m_canvas->SetStatusBar( status_bar );
+
+    auto config = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    LoadSettings( config );
 
     // Some settings need the canvas
     loadCommonSettings();
@@ -450,6 +451,9 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
         m_boardAdapter.MaterialModeSet( static_cast<MATERIAL_MODE>( cfg->m_Render.material_mode ) );
 
+        m_canvas->AnimationEnabledSet( cfg->m_Camera.animation_enabled );
+        m_canvas->MovingSpeedMultiplierSet( cfg->m_Camera.moving_speed_multiplier );
+
 #undef TRANSFER_SETTING
     }
 }
@@ -491,6 +495,9 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
         cfg->m_Render.grid_type      = static_cast<int>( m_boardAdapter.GridGet() );
         cfg->m_Render.material_mode  = static_cast<int>( m_boardAdapter.MaterialModeGet() );
         cfg->m_Render.opengl_AA_mode = static_cast<int>( m_boardAdapter.AntiAliasingGet() );
+
+        cfg->m_Camera.animation_enabled       = m_canvas->AnimationEnabledGet();
+        cfg->m_Camera.moving_speed_multiplier = m_canvas->MovingSpeedMultiplierGet();
 
         TRANSFER_SETTING( opengl_AA_disableOnMove,        FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE );
         TRANSFER_SETTING( opengl_copper_thickness,        FL_RENDER_OPENGL_COPPER_THICKNESS );

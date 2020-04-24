@@ -34,8 +34,11 @@ public:
 
 private:
     BOARD_ADAPTER& m_settings;
+    EDA_3D_CANVAS* m_canvas;
 
     void initDialog();
+
+    void OnCheckEnableAnimation( wxCommandEvent& WXUNUSED( event ) ) override;
 
     /// Automatically called when clicking on the OK button
     bool TransferDataFromWindow() override;
@@ -58,7 +61,8 @@ void EDA_3D_VIEWER::Install3DViewOptionDialog( wxCommandEvent& event )
 
 DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* aParent ) :
         DIALOG_3D_VIEW_OPTIONS_BASE( aParent ),
-        m_settings( aParent->GetAdapter() )
+        m_settings( aParent->GetAdapter() ),
+        m_canvas( aParent->GetCanvas() )
 {
     initDialog();
 
@@ -88,6 +92,11 @@ void DIALOG_3D_VIEW_OPTIONS::initDialog()
     m_bitmapSubtractMaskFromSilk->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
 }
 
+void DIALOG_3D_VIEW_OPTIONS::OnCheckEnableAnimation( wxCommandEvent& event )
+{
+    m_staticAnimationSpeed->Enable( m_checkBoxEnableAnimation->GetValue() );
+    m_sliderAnimationSpeed->Enable( m_checkBoxEnableAnimation->GetValue() );
+}
 
 bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
 {
@@ -125,6 +134,12 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
     m_checkBoxRaytracing_postProcessing->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
     m_checkBoxRaytracing_antiAliasing->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
     m_checkBoxRaytracing_proceduralTextures->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
+
+    // Camera Options
+    m_checkBoxEnableAnimation->SetValue( m_canvas->AnimationEnabledGet() );
+    m_sliderAnimationSpeed->SetValue( m_canvas->MovingSpeedMultiplierGet() );
+    m_staticAnimationSpeed->Enable( m_canvas->AnimationEnabledGet() );
+    m_sliderAnimationSpeed->Enable( m_canvas->AnimationEnabledGet() );
 
     return true;
 }
@@ -170,6 +185,10 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     m_settings.SetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING, m_checkBoxRaytracing_postProcessing->GetValue() );
     m_settings.SetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING, m_checkBoxRaytracing_antiAliasing->GetValue() );
     m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, m_checkBoxRaytracing_proceduralTextures->GetValue() );
+
+    // Camera Options
+    m_canvas->AnimationEnabledSet( m_checkBoxEnableAnimation->GetValue() );
+    m_canvas->MovingSpeedMultiplierSet( m_sliderAnimationSpeed->GetValue() );
 
     return true;
 }

@@ -25,7 +25,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizeLeft = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Render options") ), wxVERTICAL );
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Render Options") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerRenderOptions;
 	fgSizerRenderOptions = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -80,10 +80,10 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	sbSizer1->Add( fgSizerRenderOptions, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bSizeLeft->Add( sbSizer1, 1, wxALL|wxEXPAND, 5 );
+	bSizeLeft->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("3D model visibility") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("3D Model Visibility") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer3DVisibility;
 	fgSizer3DVisibility = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -133,7 +133,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Board layers") ), wxVERTICAL );
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Board Layers") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerShowBrdLayersOpts;
 	fgSizerShowBrdLayersOpts = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -180,10 +180,10 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	sbSizer3->Add( fgSizerShowBrdLayersOpts, 0, wxEXPAND, 5 );
 
 
-	bSizerRight->Add( sbSizer3, 1, wxALL|wxEXPAND, 5 );
+	bSizerRight->Add( sbSizer3, 0, wxALL|wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer4;
-	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("User layers (not shown in realistic mode)") ), wxVERTICAL );
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("User Layers (not shown in realistic mode)") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerShowUserLayersOpts;
 	fgSizerShowUserLayersOpts = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -212,10 +212,46 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	sbSizer4->Add( fgSizerShowUserLayersOpts, 0, wxEXPAND, 5 );
 
 
-	bSizerRight->Add( sbSizer4, 1, wxALL|wxEXPAND, 5 );
+	bSizerRight->Add( sbSizer4, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer41;
+	sbSizer41 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Camera Options") ), wxVERTICAL );
+
+	wxFlexGridSizer* fgSizerCameraOpts;
+	fgSizerCameraOpts = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerCameraOpts->SetFlexibleDirection( wxBOTH );
+	fgSizerCameraOpts->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 
-	bSizerDisplayOptions->Add( bSizerRight, 1, wxALL|wxEXPAND, 5 );
+	fgSizerCameraOpts->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
+
+	m_checkBoxEnableAnimation = new wxCheckBox( sbSizer41->GetStaticBox(), wxID_ANY, _("Enable animation"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerCameraOpts->Add( m_checkBoxEnableAnimation, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	fgSizerCameraOpts->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
+
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticAnimationSpeed = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("Animation speed:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticAnimationSpeed->Wrap( -1 );
+	bSizer9->Add( m_staticAnimationSpeed, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+
+	m_sliderAnimationSpeed = new wxSlider( sbSizer41->GetStaticBox(), wxID_ANY, 3, 1, 5, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_MIN_MAX_LABELS );
+	bSizer9->Add( m_sliderAnimationSpeed, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	fgSizerCameraOpts->Add( bSizer9, 1, wxEXPAND, 5 );
+
+
+	sbSizer41->Add( fgSizerCameraOpts, 0, wxEXPAND, 5 );
+
+
+	bSizerRight->Add( sbSizer41, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizerDisplayOptions->Add( bSizerRight, 0, wxALL|wxEXPAND, 5 );
 
 
 	m_panelDspOpt->SetSizer( bSizerDisplayOptions );
@@ -230,7 +266,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerOpenGLRenderoptions;
-	sbSizerOpenGLRenderoptions = new wxStaticBoxSizer( new wxStaticBox( m_panelOpenGL, wxID_ANY, _("OpenGL Render options") ), wxVERTICAL );
+	sbSizerOpenGLRenderoptions = new wxStaticBoxSizer( new wxStaticBox( m_panelOpenGL, wxID_ANY, _("OpenGL Render Options") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer6;
 	fgSizer6 = new wxFlexGridSizer( 2, 3, 0, 0 );
@@ -340,7 +376,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerRaytracingRenderOptions;
-	sbSizerRaytracingRenderOptions = new wxStaticBoxSizer( new wxStaticBox( m_panelRaytracing, wxID_ANY, _("Raytracing Render options") ), wxVERTICAL );
+	sbSizerRaytracingRenderOptions = new wxStaticBoxSizer( new wxStaticBox( m_panelRaytracing, wxID_ANY, _("Raytracing Render Options") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer9;
 	fgSizer9 = new wxFlexGridSizer( 4, 4, 0, 0 );
@@ -350,21 +386,21 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	fgSizer9->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
 
-	m_checkBoxRaytracing_renderShadows = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Render Shadows"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxRaytracing_renderShadows = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Shadows"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxRaytracing_renderShadows->SetValue(true);
 	fgSizer9->Add( m_checkBoxRaytracing_renderShadows, 0, wxALL, 5 );
 
 
 	fgSizer9->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
 
-	m_checkBoxRaytracing_proceduralTextures = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Procedural Textures"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxRaytracing_proceduralTextures = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Procedural textures"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxRaytracing_proceduralTextures->SetValue(true);
 	fgSizer9->Add( m_checkBoxRaytracing_proceduralTextures, 0, wxALL, 5 );
 
 
 	fgSizer9->Add( 0, 0, 1, wxLEFT|wxRIGHT, 5 );
 
-	m_checkBoxRaytracing_addFloor = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Add Floor"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxRaytracing_addFloor = new wxCheckBox( sbSizerRaytracingRenderOptions->GetStaticBox(), wxID_ANY, _("Add floor"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxRaytracing_addFloor->SetValue(true);
 	fgSizer9->Add( m_checkBoxRaytracing_addFloor, 0, wxALL, 5 );
 
@@ -428,17 +464,18 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
-	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 
 	// Connect Events
 	m_checkBoxRealisticMode->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_3D_VIEW_OPTIONS_BASE::OnCheckRealisticMode ), NULL, this );
+	m_checkBoxEnableAnimation->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_3D_VIEW_OPTIONS_BASE::OnCheckEnableAnimation ), NULL, this );
 }
 
 DIALOG_3D_VIEW_OPTIONS_BASE::~DIALOG_3D_VIEW_OPTIONS_BASE()
 {
 	// Disconnect Events
 	m_checkBoxRealisticMode->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_3D_VIEW_OPTIONS_BASE::OnCheckRealisticMode ), NULL, this );
+	m_checkBoxEnableAnimation->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_3D_VIEW_OPTIONS_BASE::OnCheckEnableAnimation ), NULL, this );
 
 }
