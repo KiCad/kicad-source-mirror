@@ -37,6 +37,8 @@ class DRC_COURTYARD_OVERLAP : public DRC_TEST_PROVIDER
 public:
     DRC_COURTYARD_OVERLAP( MARKER_HANDLER aMarkerHandler );
 
+    virtual ~DRC_COURTYARD_OVERLAP() {};
+
     bool RunDRC( BOARD& aBoard ) const override;
 };
 

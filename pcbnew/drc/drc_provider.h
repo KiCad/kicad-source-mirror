@@ -52,6 +52,8 @@ public:
      */
     virtual bool RunDRC( BOARD& aBoard ) const = 0;
 
+    virtual ~DRC_TEST_PROVIDER() {}
+
 protected:
     DRC_TEST_PROVIDER( MARKER_HANDLER aMarkerHandler ) :
             m_marker_handler( std::move( aMarkerHandler ) )
