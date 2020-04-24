@@ -90,19 +90,23 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
             };
 
     PROJECT*  project = nullptr;
-    wxString  text = EDA_TEXT::GetShownText();
+    bool      processTextVars = false;
+    wxString  text = EDA_TEXT::GetShownText( &processTextVars );
 
-    if( g_RootSheet && g_RootSheet->GetScreen() )
-        project = &g_RootSheet->GetScreen()->Kiway().Prj();
-
-    if( aDepth < 10 )
+    if( processTextVars )
     {
-        if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
-            text = ExpandTextVars( text, &symbolResolver, project );
-        else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
-            text = ExpandTextVars( text, &sheetResolver, project );
-        else
-            text = ExpandTextVars( text, nullptr, project );
+        if( g_RootSheet && g_RootSheet->GetScreen() )
+            project = &g_RootSheet->GetScreen()->Kiway().Prj();
+
+        if( aDepth < 10 )
+        {
+            if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+                text = ExpandTextVars( text, &symbolResolver, project );
+            else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+                text = ExpandTextVars( text, &sheetResolver, project );
+            else
+                text = ExpandTextVars( text, nullptr, project );
+        }
     }
 
     // WARNING: the IDs of FIELDS and SHEETS overlap, so one must check *both* the
@@ -204,11 +208,7 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 const EDA_RECT SCH_FIELD::GetBoundingBox() const
 {
     // Calculate the text bounding box:
-    EDA_RECT  rect;
-    SCH_FIELD text( *this );    // Make a local copy to change text
-                                // because GetBoundingBox() is const
-    text.SetText( GetShownText() );
-    rect = text.GetTextBox();
+    EDA_RECT rect = GetTextBox();
 
     // Calculate the bounding box position relative to the parent:
     wxPoint origin = GetParentPosition();

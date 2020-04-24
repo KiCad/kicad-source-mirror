@@ -381,7 +381,7 @@ const BOX2I TEXTE_MODULE::ViewBBox() const
     double   angle = GetDrawRotation();
     EDA_RECT text_area = GetTextBox();
 
-    if( angle )
+    if( angle != 0.0 )
         text_area = text_area.GetBoundingBoxRotated( GetTextPos(), angle );
 
     return BOX2I( text_area.GetPosition(), text_area.GetSize() );
@@ -448,14 +448,19 @@ wxString TEXTE_MODULE::GetShownText( int aDepth ) const
                 return module && module->ResolveTextVar( token, aDepth );
             };
 
-    PROJECT* project = nullptr;
-    wxString text = EDA_TEXT::GetShownText( aDepth );
+    bool     processTextVars = false;
+    wxString text = EDA_TEXT::GetShownText( &processTextVars );
 
-    if( module && module->GetParent() )
-        project = static_cast<BOARD*>( module->GetParent() )->GetProject();
+    if( processTextVars )
+    {
+        PROJECT* project = nullptr;
 
-    if( aDepth < 10 )
-        text = ExpandTextVars( text, &moduleResolver, project );
+        if( module && module->GetParent() )
+            project = static_cast<BOARD*>( module->GetParent() )->GetProject();
+
+        if( aDepth < 10 )
+            text = ExpandTextVars( text, &moduleResolver, project );
+    }
 
     return text;
 }

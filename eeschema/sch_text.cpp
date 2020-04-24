@@ -509,15 +509,19 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
                 return false;
             };
 
-    PROJECT*  project = nullptr;
+    bool     processTextVars = false;
+    wxString text = EDA_TEXT::GetShownText( &processTextVars );
 
-    if( g_RootSheet && g_RootSheet->GetScreen() )
-        project = &g_RootSheet->GetScreen()->Kiway().Prj();
+    if( processTextVars )
+    {
+        PROJECT*  project = nullptr;
 
-    wxString text = EDA_TEXT::GetShownText( aDepth );
+        if( g_RootSheet && g_RootSheet->GetScreen() )
+            project = &g_RootSheet->GetScreen()->Kiway().Prj();
 
-    if( aDepth < 10 )
-        text = ExpandTextVars( text, &textResolver, project );
+        if( aDepth < 10 )
+            text = ExpandTextVars( text, &textResolver, project );
+    }
 
     return text;
 }

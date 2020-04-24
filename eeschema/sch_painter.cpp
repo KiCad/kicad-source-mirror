@@ -602,9 +602,9 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 
     COLOR4D color = getRenderColor( aField, aLayer, drawingShadows );
 
-    if( !aField->IsVisible() )
+    if( !( aField->IsVisible() || aField->IsForceVisible() ) )
     {
-        if( m_schSettings.m_ShowHiddenText || aField->IsBrightened() )
+        if( m_schSettings.m_ShowHiddenText )
             color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows );
         else
             return;
@@ -666,7 +666,7 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
 
     if( !aText->IsVisible() )
     {
-        if( m_schSettings.m_ShowHiddenText || aText->IsBrightened() )
+        if( m_schSettings.m_ShowHiddenText )
             color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows );
         else
             return;
@@ -1265,9 +1265,9 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     if( conn && conn->IsBus() )
         color = getRenderColor( aText, LAYER_BUS, drawingShadows );
 
-    if( !aText->IsVisible() )
+    if( !( aText->IsVisible() || aText->IsForceVisible() ) )
     {
-        if( m_schSettings.m_ShowHiddenText || aText->IsBrightened() )
+        if( m_schSettings.m_ShowHiddenText )
             color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows );
         else
             return;
@@ -1430,7 +1430,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 
     if( !( aField->IsVisible() || aField->IsForceVisible() ) )
     {
-        if( m_schSettings.m_ShowHiddenText || aField->IsBrightened() )
+        if( m_schSettings.m_ShowHiddenText )
             color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows );
         else
             return;

@@ -133,6 +133,17 @@ public:
     virtual wxString GetShownText( int aDepth = 0 ) const { return m_shown_text; }
 
     /**
+     * A version of GetShownText() which also indicates whether or not the text needs
+     * to be processed for text variables.
+     * @param processTextVars [out]
+     */
+    wxString GetShownText( bool* processTextVars ) const
+    {
+        *processTextVars = m_shown_text_has_text_var_refs;
+        return m_shown_text;
+    }
+
+    /**
      * Returns a shortened version (max 15 characters) of the shown text
      */
     wxString ShortenedShownText() const;
@@ -350,10 +361,11 @@ public:
 
 private:
     wxString      m_text;
-    wxString      m_shown_text;        // Cache of unescaped text for efficient access
+    wxString      m_shown_text;           // Cache of unescaped text for efficient access
+    bool          m_shown_text_has_text_var_refs;
 
-    TEXT_EFFECTS  m_e;                 // Private bitflags for text styling.  API above
-                                       // provides accessor funcs.
+    TEXT_EFFECTS  m_e;                    // Private bitflags for text styling.  API above
+                                          // provides accessor funcs.
     enum TE_FLAGS {
         TE_MIRROR,
         TE_ITALIC,

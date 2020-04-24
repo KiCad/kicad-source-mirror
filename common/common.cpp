@@ -379,6 +379,8 @@ wxString ExpandTextVars( const wxString& aSource,
     wxString newbuf;
     size_t   sourceLen = aSource.length();
 
+    newbuf.Alloc( sourceLen );  // best guess (improves performance)
+
     for( size_t i = 0; i < sourceLen; ++i )
     {
         if( aSource[i] == '$' && i + 1 < sourceLen && aSource[i+1] == '{' )
@@ -428,7 +430,7 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject )
     size_t strlen = str.length();
 
     wxString strResult;
-    strResult.Alloc( strlen );
+    strResult.Alloc( strlen );  // best guess (improves performance)
 
     for( size_t n = 0; n < strlen; n++ )
     {

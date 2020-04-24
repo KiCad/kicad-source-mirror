@@ -96,9 +96,10 @@ wxString TEXTE_PCB::GetShownText( int aDepth ) const
                 return false;
             };
 
-    wxString text = EDA_TEXT::GetShownText( aDepth );
+    bool     processTextVars = false;
+    wxString text = EDA_TEXT::GetShownText( &processTextVars );
 
-    if( aDepth < 10 )
+    if( processTextVars && aDepth < 10 )
         text = ExpandTextVars( text, &pcbTextResolver, board->GetProject() );
 
     return text;
