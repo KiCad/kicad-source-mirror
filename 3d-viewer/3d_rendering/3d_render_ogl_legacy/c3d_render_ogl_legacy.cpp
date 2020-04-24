@@ -27,6 +27,7 @@
  * @brief
  */
 
+#include <GL/glew.h>
 
 #include "c3d_render_ogl_legacy.h"
 #include "ogl_legacy_utils.h"
