@@ -143,28 +143,40 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         {
             if( refvia->GetWidth() < dsnSettings.m_MicroViasMinSize )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TOO_SMALL_MICROVIA,
-                                                refvia->GetPosition(), refvia ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA );
+                drcItem->SetItems( refvia );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
+                addMarkerToPcb( marker );
             }
 
             if( refvia->GetDrillValue() < dsnSettings.m_MicroViasMinDrill )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TOO_SMALL_MICROVIA_DRILL,
-                                                refvia->GetPosition(), refvia ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA_DRILL );
+                drcItem->SetItems( refvia );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
+                addMarkerToPcb( marker );
             }
         }
         else
         {
             if( refvia->GetWidth() < dsnSettings.m_ViasMinSize )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TOO_SMALL_VIA,
-                                                refvia->GetPosition(), refvia ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA );
+                drcItem->SetItems( refvia );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
+                addMarkerToPcb( marker );
             }
 
             if( refvia->GetDrillValue() < dsnSettings.m_ViasMinDrill )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TOO_SMALL_VIA_DRILL,
-                                                refvia->GetPosition(), refvia ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_DRILL );
+                drcItem->SetItems( refvia );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
+                addMarkerToPcb( marker );
             }
         }
 
@@ -173,22 +185,31 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         // and a default via hole can be bigger than some vias sizes
         if( refvia->GetDrillValue() > refvia->GetWidth() )
         {
-            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_VIA_HOLE_BIGGER,
-                                            refvia->GetPosition(), refvia ) );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_HOLE_BIGGER );
+            drcItem->SetItems( refvia );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
+            addMarkerToPcb( marker );
         }
 
         // test if the type of via is allowed due to design rules
         if( refvia->GetViaType() == VIATYPE::MICROVIA && !dsnSettings.m_MicroViasAllowed )
         {
-            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_MICRO_VIA_NOT_ALLOWED,
-                                            refvia->GetPosition(), refvia ) );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICRO_VIA_NOT_ALLOWED );
+            drcItem->SetItems( refvia );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
+            addMarkerToPcb( marker );
         }
 
         // test if the type of via is allowed due to design rules
         if( refvia->GetViaType() == VIATYPE::BLIND_BURIED && !dsnSettings.m_BlindBuriedViaAllowed )
         {
-            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_BURIED_VIA_NOT_ALLOWED,
-                                            refvia->GetPosition(), refvia ) );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_BURIED_VIA_NOT_ALLOWED );
+            drcItem->SetItems( refvia );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
+            addMarkerToPcb( marker );
         }
 
         // For microvias: test if they are blind vias and only between 2 layers
@@ -211,8 +232,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
             if( err )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR,
-                                                refvia->GetPosition(), refvia ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR );
+                drcItem->SetItems( refvia );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
+                addMarkerToPcb( marker );
             }
         }
 
@@ -223,8 +247,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         {
             wxPoint refsegMiddle = ( aRefSeg->GetStart() + aRefSeg->GetEnd() ) / 2;
 
-            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TOO_SMALL_TRACK_WIDTH,
-                                            refsegMiddle, aRefSeg ) );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_TRACK_WIDTH );
+            drcItem->SetItems( aRefSeg );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, refsegMiddle );
+            addMarkerToPcb( marker );
         }
     }
 
@@ -286,9 +313,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
                 if( !checkClearanceSegmToPad( &dummypad, ref_seg_width, ref_seg_clearance ) )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_NEAR_THROUGH_HOLE,
-                                                    getLocation( aRefSeg, pad, padSeg ),
-                                                    aRefSeg, pad ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_THROUGH_HOLE );
+                    drcItem->SetItems( aRefSeg, pad );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, pad, padSeg ) );
+                    addMarkerToPcb( marker );
 
                     if( !m_reportAllTrackErrors )
                         return;
@@ -310,9 +339,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
             if( !checkClearanceSegmToPad( pad, ref_seg_width, segToPadClearance ) )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_NEAR_PAD,
-                                                getLocation( aRefSeg, pad, padSeg ),
-                                                aRefSeg, pad ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_PAD );
+                drcItem->SetItems( aRefSeg, pad );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, pad, padSeg ) );
+                addMarkerToPcb( marker );
 
                 if( !m_reportAllTrackErrors )
                     return;
@@ -364,8 +395,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 // Test distance between two vias, i.e. two circles, trivial case
                 if( EuclideanNorm( segStartPoint ) < w_dist )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_VIA_NEAR_VIA,
-                                                    aRefSeg->GetPosition(), aRefSeg, track ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_NEAR_VIA );
+                    drcItem->SetItems( aRefSeg, track );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefSeg->GetPosition() );
+                    addMarkerToPcb( marker );
 
                     if( !m_reportAllTrackErrors )
                         return;
@@ -382,8 +416,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
                 if( !checkMarginToCircle( segStartPoint, w_dist, delta.x ) )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_VIA_NEAR_TRACK,
-                                                    aRefSeg->GetPosition(), aRefSeg, track ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_NEAR_TRACK );
+                    drcItem->SetItems( aRefSeg, track );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefSeg->GetPosition() );
+                    addMarkerToPcb( marker );
 
                     if( !m_reportAllTrackErrors )
                         return;
@@ -409,8 +446,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             if( checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
                 continue;
 
-            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_NEAR_VIA,
-                                            getLocation( aRefSeg, track, seg ), aRefSeg, track ) );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_VIA );
+            drcItem->SetItems( aRefSeg, track );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, track, seg ) );
+            addMarkerToPcb( marker );
 
             if( !m_reportAllTrackErrors )
                 return;
@@ -438,9 +478,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 // Fine test : we consider the rounded shape of each end of the track segment:
                 if( segStartPoint.x >= 0 && segStartPoint.x <= m_segmLength )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_ENDS,
-                                                    getLocation( aRefSeg, track, seg ),
-                                                    aRefSeg, track ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
+                    drcItem->SetItems( aRefSeg, track );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, track, seg ) );
+                    addMarkerToPcb( marker );
 
                     if( !m_reportAllTrackErrors )
                         return;
@@ -448,9 +490,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
                 if( !checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_ENDS,
-                                                    getLocation( aRefSeg, track, seg ),
-                                                    aRefSeg, track ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
+                    drcItem->SetItems( aRefSeg, track );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, track, seg ) );
+                    addMarkerToPcb( marker );
 
                     if( !m_reportAllTrackErrors )
                         return;
@@ -465,9 +509,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 // Fine test : we consider the rounded shape of the ends
                 if( segEndPoint.x >= 0 && segEndPoint.x <= m_segmLength )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_ENDS,
-                                                    getLocation( aRefSeg, track, seg ),
-                                                    aRefSeg, track ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
+                    drcItem->SetItems( aRefSeg, track );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, track, seg ) );
+                    addMarkerToPcb( marker );
 
                     if( !m_reportAllTrackErrors )
                         return;
@@ -475,9 +521,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
                 if( !checkMarginToCircle( segEndPoint, w_dist, m_segmLength ) )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_ENDS,
-                                                    getLocation( aRefSeg, track, seg ),
-                                                    aRefSeg, track ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
+                    drcItem->SetItems( aRefSeg, track );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, track, seg ) );
+                    addMarkerToPcb( marker );
 
                     if( !m_reportAllTrackErrors )
                         return;
@@ -491,9 +539,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 // handled)
                 //  X.............X
                 //    O--REF--+
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_SEGMENTS_TOO_CLOSE,
-                                                getLocation( aRefSeg, track, seg ),
-                                                aRefSeg, track ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_SEGMENTS_TOO_CLOSE );
+                drcItem->SetItems( aRefSeg, track );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, track, seg ) );
+                addMarkerToPcb( marker );
 
                 if( !m_reportAllTrackErrors )
                     return;
@@ -510,9 +560,12 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
             if( ( segStartPoint.y < 0 ) && ( segEndPoint.y > 0 ) )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACKS_CROSSING,
-                                                wxPoint( track->GetStart().x, aRefSeg->GetStart().y ),
-                                                aRefSeg, track ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACKS_CROSSING );
+                drcItem->SetItems( aRefSeg, track );
+
+                wxPoint     pos( track->GetStart().x, aRefSeg->GetStart().y );
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
+                addMarkerToPcb( marker );
 
                 if( !m_reportAllTrackErrors )
                     return;
@@ -521,18 +574,22 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             // At this point the drc error is due to an end near a reference segm end
             if( !checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_ENDS,
-                                                getLocation( aRefSeg, track, seg ),
-                                                aRefSeg, track ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
+                drcItem->SetItems( aRefSeg, track );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, track, seg ) );
+                addMarkerToPcb( marker );
 
                 if( !m_reportAllTrackErrors )
                     return;
             }
             if( !checkMarginToCircle( segEndPoint, w_dist, m_segmLength ) )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_ENDS,
-                                                getLocation( aRefSeg, track, seg ),
-                                                aRefSeg, track ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
+                drcItem->SetItems( aRefSeg, track );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, track, seg ) );
+                addMarkerToPcb( marker );
 
                 if( !m_reportAllTrackErrors )
                     return;
@@ -567,14 +624,19 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                                                   track->GetStart(), track->GetEnd(),
                                                   &failurePoint ) )
                     {
-                        addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACKS_CROSSING,
-                                                        failurePoint, aRefSeg, track ) );
+                        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACKS_CROSSING );
+                        drcItem->SetItems( aRefSeg, track );
+
+                        MARKER_PCB* marker = new MARKER_PCB( drcItem, failurePoint );
+                        addMarkerToPcb( marker );
                     }
                     else
                     {
-                        addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_ENDS,
-                                                        getLocation( aRefSeg, track, seg ),
-                                                        aRefSeg, track ) );
+                        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
+                        drcItem->SetItems( aRefSeg, track );
+
+                        MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, track, seg ) );
+                        addMarkerToPcb( marker );
                     }
 
                     if( !m_reportAllTrackErrors )
@@ -604,9 +666,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
                     if( !checkMarginToCircle( relStartPos, w_dist, delta.x ) )
                     {
-                        addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_ENDS,
-                                                        getLocation( aRefSeg, track, seg ),
-                                                        aRefSeg, track ) );
+                        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
+                        drcItem->SetItems( aRefSeg, track );
+
+                        MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, track, seg ) );
+                        addMarkerToPcb( marker );
 
                         if( !m_reportAllTrackErrors )
                             return;
@@ -614,9 +678,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
                     if( !checkMarginToCircle( relEndPos, w_dist, delta.x ) )
                     {
-                        addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_ENDS,
-                                                        getLocation( aRefSeg, track, seg ),
-                                                        aRefSeg, track ) );
+                        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_ENDS );
+                        drcItem->SetItems( aRefSeg, track );
+
+                        MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, track, seg ) );
+                        addMarkerToPcb( marker );
 
                         if( !m_reportAllTrackErrors )
                             return;
@@ -656,8 +722,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             #define THRESHOLD_DIST Millimeter2iu( 0.001 )
             if( error > THRESHOLD_DIST )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_NEAR_ZONE,
-                                                getLocation( aRefSeg, zone ), aRefSeg, zone  ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_ZONE );
+                drcItem->SetItems( aRefSeg, zone );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( aRefSeg, zone ) );
+                addMarkerToPcb( marker );
             }
         }
     }
@@ -701,8 +770,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 // Best-efforts search for edge segment
                 BOARD::IterateForward<BOARD_ITEM*>( m_pcb->Drawings(), inspector, nullptr, types );
 
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_NEAR_EDGE, (wxPoint) pt,
-                                                aRefSeg, edge ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_EDGE );
+                drcItem->SetItems( aRefSeg, edge );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, (wxPoint) pt );
+                addMarkerToPcb( marker );
             }
         }
     }

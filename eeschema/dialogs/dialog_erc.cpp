@@ -285,14 +285,16 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
                 }
                 else if( pin_to_net_map[pin_name] != item->GetNetName() )
                 {
-                    msg.Printf( _( "Pin %s on %s is connected to both %s and %s" ),
+                    msg.Printf( _( "Pin %s is connected to both %s and %s" ),
                                 item->m_PinNum,
-                                ref,
                                 pin_to_net_map[pin_name],
                                 item->GetNetName() );
 
-                    SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                    marker->SetData( ERCE_DIFFERENT_UNIT_NET, item->m_Start, msg, item->m_Start );
+                    ERC_ITEM* ercItem = new ERC_ITEM( ERCE_DIFFERENT_UNIT_NET );
+                    ercItem->SetErrorMessage( msg );
+                    ercItem->SetItems( item->m_Comp );
+
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, item->m_Start );
                     item->m_SheetPath.LastScreen()->Append( marker );
                 }
             }
@@ -578,18 +580,22 @@ bool DIALOG_ERC::writeReport( const wxString& aFullFileName )
 
     wxString msg = wxString::Format( _( "ERC report (%s, Encoding UTF8)\n" ), DateAndTime() );
 
+    std::map<KIID, EDA_ITEM*> itemMap;
+
     int            err_count = 0;
     int            warn_count = 0;
     int            total_count = 0;
     SCH_SHEET_LIST sheetList( g_RootSheet );
 
+    sheetList.FillItemMap( itemMap );
+
     for( unsigned i = 0;  i < sheetList.size(); i++ )
     {
         msg << wxString::Format( _( "\n***** Sheet %s\n" ), sheetList[i].PathHumanReadable() );
 
-        for( auto aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
+        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
-            auto marker = static_cast<const SCH_MARKER*>( aItem );
+            const SCH_MARKER* marker = static_cast<const SCH_MARKER*>( aItem );
 
             if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
                 continue;
@@ -603,7 +609,7 @@ bool DIALOG_ERC::writeReport( const wxString& aFullFileName )
             default:                                 break;
             }
 
-            msg << marker->GetRCItem()->ShowReport( GetUserUnits() );
+            msg << marker->GetRCItem()->ShowReport( GetUserUnits(), itemMap );
         }
     }
 

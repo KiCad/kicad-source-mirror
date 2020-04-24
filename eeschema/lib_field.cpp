@@ -29,6 +29,7 @@
 #include <gr_text.h>
 #include <kicad_string.h>
 #include <sch_draw_panel.h>
+#include <eda_draw_frame.h>
 #include <plotter.h>
 #include <trigo.h>
 #include <base_units.h>
@@ -420,20 +421,20 @@ void LIB_FIELD::CalcEdit( const wxPoint& aPosition )
 }
 
 
-void LIB_FIELD::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
-    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
+    LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
     // Display style:
     msg = GetTextStyleName();
     aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg, MAGENTA ) );
 
-    msg = MessageTextFromValue( aUnits, GetTextWidth(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, BLUE ) );
 
-    msg = MessageTextFromValue( aUnits, GetTextHeight(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextHeight(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, BLUE ) );
 
     // Display field name (ref, value ...)

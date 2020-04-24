@@ -156,13 +156,13 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
 
     BreakSegmentsOnJunctions( aScreen );
 
-    for( auto item : aScreen->Items().OfType( SCH_LINE_T ) )
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_LINE_T ) )
     {
         if( item->GetLayer() == LAYER_WIRE || item->GetLayer() == LAYER_BUS )
             lines.push_back( static_cast<SCH_LINE*>( item ) );
     }
 
-    for( auto item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
     {
         if( !aScreen->IsJunctionNeeded( item->GetPosition() ) )
             remove_item( item );
@@ -170,7 +170,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
             junctions.push_back( static_cast<SCH_JUNCTION*>( item ) );
     }
 
-    for( auto item : aScreen->Items().OfType( SCH_NO_CONNECT_T ) )
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_NO_CONNECT_T ) )
     {
         ncs.push_back( static_cast<SCH_NO_CONNECT*>( item ) );
     }
@@ -333,12 +333,13 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_SCREEN* aScreen )
     bool brokenSegments = false;
 
     std::set<wxPoint> point_set;
-    for( auto item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
         point_set.insert( item->GetPosition() );
 
-    for( auto item : aScreen->Items().OfType( SCH_BUS_WIRE_ENTRY_T ) )
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_BUS_WIRE_ENTRY_T ) )
     {
-        auto entry = static_cast<SCH_BUS_WIRE_ENTRY*>( item );
+        SCH_BUS_WIRE_ENTRY* entry = static_cast<SCH_BUS_WIRE_ENTRY*>( item );
         point_set.insert( entry->GetPosition() );
         point_set.insert( entry->m_End() );
     }
@@ -371,9 +372,9 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
     /// loop below.  This will invalidate iterators in a std::vector or std::deque
     std::list<SCH_LINE*> lines;
 
-    for( auto item : screen->Items().Overlapping( SCH_LINE_T, aJunction->GetPosition() ) )
+    for( SCH_ITEM* item : screen->Items().Overlapping( SCH_LINE_T, aJunction->GetPosition() ) )
     {
-        auto line = static_cast<SCH_LINE*>( item );
+        SCH_LINE* line = static_cast<SCH_LINE*>( item );
 
         if( line->IsType( wiresAndBuses ) && line->IsEndPoint( aJunction->GetPosition() )
                 && !( line->GetEditFlags() & STRUCT_DELETED ) )

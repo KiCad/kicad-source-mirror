@@ -32,7 +32,7 @@
 
 wxString ERC_ITEM::GetErrorText() const
 {
-    switch( m_ErrorCode )
+    switch( m_errorCode )
     {
     case ERCE_UNSPECIFIED:
         return wxString( _("ERC err unspecified") );

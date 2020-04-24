@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
     BOOST_CHECK_EQUAL( m_sch_pin.GetParentComponent(), &m_parent_comp );
     BOOST_CHECK_EQUAL( m_sch_pin.GetLibPin(), &m_lib_pin );
 
-    BOOST_CHECK_EQUAL( m_sch_pin.GetPosition(), wxPoint( 0, 0 ) );
+    BOOST_CHECK_EQUAL( m_sch_pin.GetLocalPosition(), wxPoint( 0, 0 ) );
 
     // These just forward to LIB_PIN for now, so this isn't very interesting
     // but later we will want to test these functions for SCH_PIN's own functionality

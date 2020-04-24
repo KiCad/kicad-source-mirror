@@ -509,6 +509,9 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
     if( fp == NULL )
         return false;
 
+    std::map<KIID, EDA_ITEM*> itemMap;
+    m_brdEditor->GetBoard()->FillItemMap( itemMap );
+
     int       count;
     EDA_UNITS units = GetUserUnits();
 
@@ -523,21 +526,21 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
     fprintf( fp, "\n** Found %d DRC violations **\n", count );
 
     for( int i = 0; i < count; ++i )
-        fprintf( fp, "%s", TO_UTF8( m_markersProvider->GetItem( i )->ShowReport( units ) ) );
+        fprintf( fp, "%s", TO_UTF8( m_markersProvider->GetItem( i )->ShowReport( units, itemMap ) ) );
 
     count = m_unconnectedItemsProvider->GetCount();
 
     fprintf( fp, "\n** Found %d unconnected pads **\n", count );
 
     for( int i = 0; i < count; ++i )
-        fprintf( fp, "%s", TO_UTF8( m_unconnectedItemsProvider->GetItem( i )->ShowReport( units ) ) );
+        fprintf( fp, "%s", TO_UTF8( m_unconnectedItemsProvider->GetItem( i )->ShowReport( units, itemMap ) ) );
 
     count = m_footprintWarningsProvider->GetCount();
 
     fprintf( fp, "\n** Found %d Footprint errors **\n", count );
 
     for( int i = 0; i < count; ++i )
-        fprintf( fp, "%s", TO_UTF8( m_footprintWarningsProvider->GetItem( i )->ShowReport( units ) ) );
+        fprintf( fp, "%s", TO_UTF8( m_footprintWarningsProvider->GetItem( i )->ShowReport( units, itemMap ) ) );
 
 
     fprintf( fp, "\n** End of Report **\n" );

@@ -391,8 +391,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
 
 
 /**
- * Check if a #MARKER_PCB is described by a particular #COURTYARD_COLLISION
- * object.
+ * Check if a #MARKER_PCB is described by a particular #COURTYARD_COLLISION object.
  */
 static bool CollisionMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
                                       const COURTYARD_COLLISION& aCollision )
@@ -418,8 +417,8 @@ static bool CollisionMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
 
 
 /**
- * Check that the produced markers match the expected. This does NOT
- * check ordering, as that is not part of the contract of the DRC function.
+ * Check that the produced markers match the expected. This does NOT check ordering,
+ * as that is not part of the contract of the DRC function.
  *
  * @param aMarkers    list of markers produced by the DRC
  * @param aCollisions list of expected collisions
@@ -435,15 +434,15 @@ static void CheckCollisionsMatchExpected( BOARD&        aBoard,
     }
 
     KI_TEST::CheckUnorderedMatches( aExpCollisions, aMarkers,
-            [&]( const COURTYARD_COLLISION& aColl, const std::unique_ptr<MARKER_PCB>& aMarker ) {
+            [&]( const COURTYARD_COLLISION& aColl, const std::unique_ptr<MARKER_PCB>& aMarker )
+            {
                 return CollisionMatchesExpected( aBoard, *aMarker, aColl );
             } );
 }
 
 
 /**
- * Get a #BOARD_DESIGN_SETTINGS object that will cause DRC to
- * check for courtyard overlaps
+ * Get a #BOARD_DESIGN_SETTINGS object that will cause DRC to check for courtyard overlaps
  */
 static BOARD_DESIGN_SETTINGS GetOverlapCheckDesignSettings()
 {
@@ -480,7 +479,7 @@ static void DoCourtyardOverlapTest(
                 markers.push_back( std::unique_ptr<MARKER_PCB>( aMarker ) );
             } );
 
-    drc_overlap.RunDRC( EDA_UNITS::MILLIMETRES, *board );
+    drc_overlap.RunDRC( *board );
 
     CheckCollisionsMatchExpected( *board, markers, aCase.m_collisions );
 }

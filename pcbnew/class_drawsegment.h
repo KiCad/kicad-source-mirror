@@ -215,7 +215,7 @@ public:
 
     void SetPolyPoints( const std::vector<wxPoint>& aPoints );
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     const EDA_RECT GetBoundingBox() const override;
 

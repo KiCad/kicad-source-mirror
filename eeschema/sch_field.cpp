@@ -550,7 +550,7 @@ void SCH_FIELD::SetPosition( const wxPoint& aPosition )
 }
 
 
-wxPoint SCH_FIELD::GetPosition() const
+const wxPoint SCH_FIELD::GetPosition() const
 {
     if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
     {
@@ -568,12 +568,7 @@ wxPoint SCH_FIELD::GetPosition() const
 
 wxPoint SCH_FIELD::GetParentPosition() const
 {
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
-        return static_cast<SCH_COMPONENT*>( m_Parent )->GetPosition();
-    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
-        return static_cast<SCH_SHEET*>( m_Parent )->GetPosition();
-    else
-        return wxPoint();
+    return m_Parent->GetPosition();
 }
 
 

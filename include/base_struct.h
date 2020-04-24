@@ -296,12 +296,9 @@ public:
      * populates \a aList of #MSG_PANEL_ITEM objects with it's internal state for display
      * purposes.
      *
-     * @note This method replaces DisplayInfo() so that KiCad objects no longer have any
-     *       knowledge of wxWidgets UI objects.
-     *
      * @param aList is the list to populate.
      */
-    virtual void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+    virtual void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
     {
     }
 
@@ -342,6 +339,8 @@ public:
      * It is OK to overestimate the size by a few counts.
      */
     virtual const EDA_RECT GetBoundingBox() const;
+
+    virtual const wxPoint GetPosition() const { return wxPoint(); }
 
     /**
      * Function Clone

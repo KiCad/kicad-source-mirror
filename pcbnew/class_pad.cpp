@@ -35,7 +35,7 @@
 #include <base_units.h>
 #include <bitmaps.h>
 #include <math/util.h>      // for KiROUND
-
+#include <eda_draw_frame.h>
 #include <geometry/geometry_utils.h>
 #include <pcbnew.h>
 #include <view/view.h>
@@ -940,7 +940,7 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue,
 }
 
 
-void D_PAD::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     MODULE*     module;
     wxString    msg;
@@ -984,13 +984,13 @@ void D_PAD::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aLis
 
     aList.emplace_back( ShowPadShape(), props, DARKGREEN );
 
-    msg = MessageTextFromValue( aUnits, m_Size.x, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Size.x, true );
     aList.emplace_back( _( "Width" ), msg, RED );
 
-    msg = MessageTextFromValue( aUnits, m_Size.y, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Size.y, true );
     aList.emplace_back( _( "Height" ), msg, RED );
 
-    msg = MessageTextFromValue( aUnits, m_Drill.x, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Drill.x, true );
 
     if( GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
     {
@@ -998,9 +998,9 @@ void D_PAD::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aLis
     }
     else
     {
-        msg = MessageTextFromValue( aUnits, m_Drill.x, true )
+        msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Drill.x, true )
                + wxT( "/" )
-               + MessageTextFromValue( aUnits, m_Drill.y, true );
+               + MessageTextFromValue( aFrame->GetUserUnits(), m_Drill.y, true );
         aList.emplace_back( _( "Drill X / Y" ), msg, RED );
     }
 
@@ -1015,14 +1015,14 @@ void D_PAD::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aLis
 
     aList.emplace_back( _( "Angle" ), msg, LIGHTBLUE );
 
-    msg = MessageTextFromValue( aUnits, m_Pos.x )
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Pos.x )
            + wxT( ", " )
-           + MessageTextFromValue( aUnits, m_Pos.y );
+           + MessageTextFromValue( aFrame->GetUserUnits(), m_Pos.y );
     aList.emplace_back( _( "Position" ), msg, LIGHTBLUE );
 
     if( GetPadToDieLength() )
     {
-        msg = MessageTextFromValue( aUnits, GetPadToDieLength(), true );
+        msg = MessageTextFromValue( aFrame->GetUserUnits(), GetPadToDieLength(), true );
         aList.emplace_back( _( "Length in package" ), msg, CYAN );
     }
 }

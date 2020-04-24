@@ -26,12 +26,13 @@
 #include <gr_basic.h>
 #include <macros.h>
 #include <sch_draw_panel.h>
+#include <eda_draw_frame.h>
 #include <plotter.h>
 #include <trigo.h>
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
-
+#include <eda_draw_frame.h>
 #include <general.h>
 #include <lib_polyline.h>
 #include <settings/color_settings.h>
@@ -330,14 +331,14 @@ void LIB_POLYLINE::DeleteSegment( const wxPoint aPosition )
 }
 
 
-void LIB_POLYLINE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void LIB_POLYLINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
+    LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    msg = MessageTextFromValue( aUnits, m_Width, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 

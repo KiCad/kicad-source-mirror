@@ -29,8 +29,9 @@
 #include <trigo.h>
 #include <bezier_curves.h>
 #include <base_units.h>
+#include <eda_draw_frame.h>
 #include <msgpanel.h>
-
+#include <eda_draw_frame.h>
 #include <general.h>
 #include <lib_bezier.h>
 #include <transform.h>
@@ -330,14 +331,14 @@ const EDA_RECT LIB_BEZIER::GetBoundingBox() const
 }
 
 
-void LIB_BEZIER::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void LIB_BEZIER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
+    LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    msg = MessageTextFromValue( aUnits, m_Width, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
 
     aList.emplace_back( _( "Line Width" ), msg, BLUE );
 
@@ -350,7 +351,7 @@ void LIB_BEZIER::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>&
     aList.emplace_back( _( "Bounding Box" ), msg, BROWN );
 }
 
-wxPoint LIB_BEZIER::GetPosition() const
+const wxPoint LIB_BEZIER::GetPosition() const
 {
     if( !m_PolyPoints.size() )
         return wxPoint(0, 0);

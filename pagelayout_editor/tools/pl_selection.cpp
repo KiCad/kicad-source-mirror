@@ -23,38 +23,36 @@
  */
 
 #include <tools/pl_selection.h>
-#include <ws_draw_item.h>
 
 
 EDA_ITEM* PL_SELECTION::GetTopLeftItem( bool onlyModules ) const
 {
-    WS_DRAW_ITEM_BASE* topLeftItem = nullptr;
-    EDA_RECT           topLeftItemBB;
+    EDA_ITEM* topLeftItem = nullptr;
+    EDA_RECT  topLeftItemBB;
 
     // find the leftmost (smallest x coord) and highest (smallest y with the smallest x) item in the selection
-    for( auto item : m_items )
+    for( EDA_ITEM* item : m_items )
     {
-        WS_DRAW_ITEM_BASE* currentItem = static_cast<WS_DRAW_ITEM_BASE*>( item );
-        EDA_RECT currentItemBB = currentItem->GetBoundingBox();
+        EDA_RECT currentItemBB = item->GetBoundingBox();
 
         if( topLeftItem == nullptr )
         {
-            topLeftItem = currentItem;
+            topLeftItem = item;
             topLeftItemBB = currentItemBB;
         }
         else if( currentItemBB.GetLeft() < topLeftItemBB.GetLeft() )
         {
-            topLeftItem = currentItem;
+            topLeftItem = item;
             topLeftItemBB = currentItemBB;
         }
         else if( topLeftItemBB.GetLeft() == currentItemBB.GetLeft()
                     && currentItemBB.GetTop() < topLeftItemBB.GetTop() )
         {
-            topLeftItem = currentItem;
+            topLeftItem = item;
             topLeftItemBB = currentItemBB;
         }
     }
 
-    return static_cast<EDA_ITEM*>( topLeftItem );
+    return topLeftItem;
 }
 

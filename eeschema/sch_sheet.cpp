@@ -679,7 +679,7 @@ int SCH_SHEET::CountSheets()
 }
 
 
-void SCH_SHEET::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     aList.emplace_back( _( "Sheet Name" ), m_fields[ SHEETNAME ].GetText(), CYAN );
     aList.emplace_back( _( "File Name" ), m_fields[ SHEETFILENAME ].GetText(), BROWN );

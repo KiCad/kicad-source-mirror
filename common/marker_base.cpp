@@ -32,7 +32,6 @@
 
 #include "fctsys.h"
 #include "base_screen.h"
-#include "common.h"
 #include "macros.h"
 #include "marker_base.h"
 #include <geometry/shape_line_chain.h>
@@ -86,56 +85,6 @@ MARKER_BASE::MARKER_BASE( int aScalingFactor, RC_ITEM* aItem, TYPEMARKER aType )
 
 MARKER_BASE::~MARKER_BASE()
 {
-}
-
-
-void MARKER_BASE::SetData( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                           EDA_ITEM* aItem, const wxPoint& aPos,
-                           EDA_ITEM* bItem, const wxPoint& bPos )
-{
-    m_Pos = aMarkerPos;
-    m_rcItem->SetData( aUnits, aErrorCode, aItem, aPos, bItem, bPos );
-    m_rcItem->SetParent( this );
-}
-
-
-void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
-                           const wxString& aText, const wxPoint& aPos,
-                           const wxString& bText, const wxPoint& bPos )
-{
-    m_Pos = aMarkerPos;
-    m_rcItem->SetData( aErrorCode, aText, aPos, bText, bPos );
-    m_rcItem->SetParent( this );
-}
-
-
-void MARKER_BASE::SetData( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                           EDA_ITEM* aItem,
-                           EDA_ITEM* bItem )
-{
-    m_Pos = aMarkerPos;
-    m_rcItem->SetData( aUnits, aErrorCode, aItem, bItem );
-    m_rcItem->SetParent( this );
-}
-
-
-void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
-                           const wxString& aText,
-                           const wxString& bText )
-{
-    m_Pos = aMarkerPos;
-    m_rcItem->SetData( aErrorCode, aText, bText );
-    m_rcItem->SetParent( this );
-}
-
-
-void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
-                           const wxString& aText, const KIID& aID,
-                           const wxString& bText, const KIID& bID )
-{
-    m_Pos = aMarkerPos;
-    m_rcItem->SetData( aErrorCode, aText, aID, bText, bID );
-    m_rcItem->SetParent( this );
 }
 
 

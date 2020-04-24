@@ -48,12 +48,12 @@ static const wxChar* DRC_COURTYARD_TRACE = wxT( "KICAD_DRC_COURTYARD" );
 
 
 DRC_COURTYARD_OVERLAP::DRC_COURTYARD_OVERLAP( MARKER_HANDLER aMarkerHandler ) :
-        DRC_PROVIDER( aMarkerHandler )
+        DRC_TEST_PROVIDER( aMarkerHandler )
 {
 }
 
 
-bool DRC_COURTYARD_OVERLAP::RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) const
+bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
 {
     wxLogTrace( DRC_COURTYARD_TRACE, "Running DRC: Courtyard" );
 
@@ -65,14 +65,13 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) const
     // Update courtyard polygons, and test for missing courtyard definition:
     for( MODULE* footprint : aBoard.Modules() )
     {
-        wxPoint pos = footprint->GetPosition();
-        bool    is_ok = footprint->BuildPolyCourtyard();
+        bool is_ok = footprint->BuildPolyCourtyard();
 
         if( !is_ok && !aBoard.GetDesignSettings().Ignore( DRCE_OVERLAPPING_FOOTPRINTS ) )
         {
-            auto m = std::make_unique<MARKER_PCB>( aUnits, DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT,
-                                                   pos, footprint );
-            HandleMarker( std::move( m ) );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT );
+            drcItem->SetItems( footprint );
+            HandleMarker( new MARKER_PCB( drcItem, footprint->GetPosition() ) );
             success = false;
         }
 
@@ -82,9 +81,9 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) const
         if( footprint->GetPolyCourtyardFront().OutlineCount() == 0
                 && footprint->GetPolyCourtyardBack().OutlineCount() == 0 && is_ok )
         {
-            auto m = std::make_unique<MARKER_PCB>( aUnits, DRCE_MISSING_COURTYARD_IN_FOOTPRINT,
-                                                   pos, footprint );
-            HandleMarker( std::move( m ) );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MISSING_COURTYARD_IN_FOOTPRINT );
+            drcItem->SetItems( footprint );
+            HandleMarker( new MARKER_PCB( drcItem, footprint->GetPosition() ) );
             success = false;
         }
     }
@@ -123,10 +122,9 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) const
             if( courtyard.OutlineCount() )
             {
                 //Overlap between footprint and candidate
-                auto  m = std::make_unique<MARKER_PCB>( aUnits, DRCE_OVERLAPPING_FOOTPRINTS,
-                                                        (wxPoint) courtyard.CVertex( 0, 0, -1 ),
-                                                        footprint, candidate );
-                HandleMarker( std::move( m ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_OVERLAPPING_FOOTPRINTS );
+                drcItem->SetItems( footprint, candidate );
+                HandleMarker( new MARKER_PCB( drcItem, (wxPoint) courtyard.CVertex( 0, 0, -1 ) ) );
                 success = false;
             }
         }
@@ -159,10 +157,9 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) const
             if( courtyard.OutlineCount() )
             {
                 //Overlap between footprint and candidate
-                auto  m = std::make_unique<MARKER_PCB>( aUnits, DRCE_OVERLAPPING_FOOTPRINTS,
-                                                        (wxPoint) courtyard.CVertex( 0, 0, -1 ),
-                                                        footprint, candidate );
-                HandleMarker( std::move( m ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_OVERLAPPING_FOOTPRINTS );
+                drcItem->SetItems( footprint, candidate );
+                HandleMarker( new MARKER_PCB( drcItem, (wxPoint) courtyard.CVertex( 0, 0, -1 ) ) );
                 success = false;
             }
         }

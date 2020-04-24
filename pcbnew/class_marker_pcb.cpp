@@ -43,55 +43,13 @@
 /// Factor to convert the maker unit shape to internal units:
 #define SCALING_FACTOR  Millimeter2iu( 0.1 )
 
-MARKER_PCB::MARKER_PCB( BOARD_ITEM* aParent ) :
-        BOARD_ITEM( aParent, PCB_MARKER_T ),
-        MARKER_BASE( SCALING_FACTOR, new DRC_ITEM() ),
-        m_item( nullptr )
-{
-}
 
-
-MARKER_PCB::MARKER_PCB( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                        BOARD_ITEM* aItem,
-                        BOARD_ITEM* bItem ) :
-        BOARD_ITEM( nullptr, PCB_MARKER_T ), // parent set during BOARD::Add()
-        MARKER_BASE( SCALING_FACTOR, new DRC_ITEM() ),
-        m_item( nullptr )
-{
-    SetData( aUnits, aErrorCode, aMarkerPos, aItem, bItem );
-}
-
-
-MARKER_PCB::MARKER_PCB( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                        BOARD_ITEM* aItem, const wxPoint& aPos,
-                        BOARD_ITEM* bItem, const wxPoint& bPos ) :
-        BOARD_ITEM( nullptr, PCB_MARKER_T ), // parent set during BOARD::Add()
-        MARKER_BASE( SCALING_FACTOR, new DRC_ITEM() ),
-        m_item( nullptr )
-{
-    SetData( aUnits, aErrorCode, aMarkerPos, aItem, aPos, bItem, bPos );
-}
-
-
-MARKER_PCB::MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
-                        const wxString& aText, const wxPoint& aPos,
-                        const wxString& bText, const wxPoint& bPos ) :
+MARKER_PCB::MARKER_PCB( DRC_ITEM* aItem, const wxPoint& aPosition ) :
         BOARD_ITEM( nullptr, PCB_MARKER_T ),  // parent set during BOARD::Add()
-        MARKER_BASE( SCALING_FACTOR, new DRC_ITEM() ),
-        m_item( nullptr )
+        MARKER_BASE( SCALING_FACTOR, aItem )
 {
-    SetData( aErrorCode, aMarkerPos, aText, aPos, bText, bPos );
-}
-
-
-MARKER_PCB::MARKER_PCB( int aErrorCode,
-                        const wxString& aText,
-                        const wxString& bText) :
-        BOARD_ITEM( nullptr, PCB_MARKER_T ),  // parent set during BOARD::Add()
-        MARKER_BASE( SCALING_FACTOR, new DRC_ITEM() ),
-        m_item( nullptr )
-{
-    SetData( aErrorCode, wxDefaultPosition, aText, bText );
+    if( m_rcItem )
+        m_rcItem->SetParent( this );
 }
 
 
@@ -103,13 +61,11 @@ MARKER_PCB::~MARKER_PCB()
 
 wxString MARKER_PCB::Serialize() const
 {
-    return wxString::Format( wxT( "%d|%d|%d|%s|%s|%s|%s" ),
+    return wxString::Format( wxT( "%d|%d|%d|%s|%s" ),
                              m_rcItem->GetErrorCode(),
                              m_Pos.x,
                              m_Pos.y,
-                             m_rcItem->GetMainText(),
                              m_rcItem->GetMainItemID().AsString(),
-                             m_rcItem->GetAuxText(),
                              m_rcItem->GetAuxItemID().AsString() );
 }
 
@@ -118,13 +74,13 @@ MARKER_PCB* MARKER_PCB::Deserialize( const wxString& data )
 {
     wxArrayString props = wxSplit( data, '|' );
     int           errorCode = (int) strtol( props[0].c_str(), nullptr, 10 );
-    MARKER_PCB*   marker = new MARKER_PCB( nullptr );   // parent set during BOARD::Add()
+    wxPoint       markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
+                             (int) strtol( props[2].c_str(), nullptr, 10 ) );
 
-    marker->m_Pos.x = (int) strtol( props[1].c_str(), nullptr, 10 );
-    marker->m_Pos.y = (int) strtol( props[2].c_str(), nullptr, 10 );
-    marker->m_rcItem->SetData( errorCode, props[3], KIID( props[4] ), props[5], KIID( props[6] ) );
-    marker->m_rcItem->SetParent( marker );
-    return marker;
+    DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
+    drcItem->SetItems( KIID( props[3] ), KIID( props[4] ) );
+
+    return new MARKER_PCB( drcItem, markerPos );
 }
 
 
@@ -141,11 +97,29 @@ bool MARKER_PCB::IsOnLayer( PCB_LAYER_ID aLayer ) const
 }
 
 
-void MARKER_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void MARKER_PCB::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Type" ), _( "Marker" ), DARKCYAN );
     aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorText(), RED );
-    aList.emplace_back( m_rcItem->GetMainText(), m_rcItem->GetAuxText(), DARKBROWN );
+
+    wxString  mainText;
+    wxString  auxText;
+    EDA_ITEM* mainItem = nullptr;
+    EDA_ITEM* auxItem = nullptr;
+
+    if( m_rcItem->GetMainItemID() != niluuid )
+        mainItem = aFrame->GetItem( m_rcItem->GetMainItemID() );
+
+    if( m_rcItem->GetAuxItemID() != niluuid )
+        auxItem = aFrame->GetItem( m_rcItem->GetAuxItemID() );
+
+    if( mainItem )
+        mainText = mainItem->GetSelectMenuText( aFrame->GetUserUnits() );
+
+    if( auxItem )
+        auxText = auxItem->GetSelectMenuText( aFrame->GetUserUnits() );
+
+    aList.emplace_back( mainText, auxText, DARKBROWN );
 }
 
 

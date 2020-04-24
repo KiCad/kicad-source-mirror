@@ -131,7 +131,7 @@ public:
                 || ( m_pos == rhs.m_pos && m_item < rhs.m_item ) );
     }
 
-    wxPoint GetPosition() const { return m_pos; }
+    const wxPoint GetPosition() const { return m_pos; }
     EDA_ITEM* GetItem() const { return m_item; }
     const EDA_ITEM* GetParent() const { return m_parent; }
     DANGLING_END_T GetType() const { return m_type; }
@@ -443,12 +443,6 @@ public:
      */
     virtual void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                                  SCH_SHEET_PATH*      aSheetPath ) { }
-
-    /**
-     * Function GetPosition
-     * @return A wxPoint object containing the schematic item position.
-     */
-    virtual wxPoint GetPosition() const = 0;
 
     /**
      * Function SetPosition

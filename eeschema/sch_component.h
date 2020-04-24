@@ -311,7 +311,7 @@ public:
      */
     bool ResolveTextVar( wxString* token, int aDepth = 0 ) const;
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
      * Clear exiting component annotation.
@@ -614,7 +614,7 @@ public:
 
     bool IsReplaceable() const override { return true; }
 
-    wxPoint GetPosition() const override { return m_Pos; }
+    const wxPoint GetPosition() const override { return m_Pos; }
     void SetPosition( const wxPoint& aPosition ) override { Move( aPosition - m_Pos ); }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;

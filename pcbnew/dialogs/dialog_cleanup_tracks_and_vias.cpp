@@ -32,6 +32,7 @@
 #include <tools/pcb_actions.h>
 #include <tracks_cleaner.h>
 #include <drc/drc_item.h>
+#include <drc/drc_provider.h>
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParentFrame ):
         DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( aParentFrame ),
@@ -47,6 +48,8 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 
     m_changesTreeModel = new RC_TREE_MODEL( m_parentFrame, m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
+
+    m_changesTreeModel->SetSeverities( RPT_SEVERITY_ACTION );
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
@@ -99,11 +102,6 @@ bool DIALOG_CLEANUP_TRACKS_AND_VIAS::TransferDataFromWindow()
 
 void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
 {
-    for( DRC_ITEM* item : m_items )
-        delete item;
-
-    m_items.clear();
-
     wxBusyCursor busy;
     BOARD_COMMIT commit( m_parentFrame );
     TRACKS_CLEANER cleaner( m_parentFrame->GetUserUnits(), m_parentFrame->GetBoard(), commit );
@@ -112,14 +110,25 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     {
         // Clear current selection list to avoid selection of deleted items
         m_parentFrame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+
+        // ... and to keep the treeModel from trying to refresh a deleted item
+        m_changesTreeModel->SetProvider( nullptr );
     }
+
+    for( DRC_ITEM* item : m_items )
+        delete item;
+
+    m_items.clear();
 
     // Old model has to be refreshed, GAL normally does not keep updating it
     m_parentFrame->Compile_Ratsnest( false );
 
-    bool modified = cleaner.CleanupBoard( aDryRun, &m_items, m_cleanShortCircuitOpt->GetValue(),
-            m_cleanViasOpt->GetValue(), m_mergeSegmOpt->GetValue(),
-            m_deleteUnconnectedOpt->GetValue(), m_deleteTracksInPadsOpt->GetValue() );
+    bool modified = cleaner.CleanupBoard( aDryRun, &m_items,
+                                          m_cleanShortCircuitOpt->GetValue(),
+                                          m_cleanViasOpt->GetValue(),
+                                          m_mergeSegmOpt->GetValue(),
+                                          m_deleteUnconnectedOpt->GetValue(),
+                                          m_deleteTracksInPadsOpt->GetValue() );
 
     if( aDryRun )
     {

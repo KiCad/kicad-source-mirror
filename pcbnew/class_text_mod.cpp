@@ -288,7 +288,7 @@ double TEXTE_MODULE::GetDrawRotation() const
 
 
 // see class_text_mod.h
-void TEXTE_MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void TEXTE_MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     MODULE* module = (MODULE*) m_Parent;
 
@@ -331,13 +331,13 @@ void TEXTE_MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM
     msg.Printf( wxT( "%.1f" ), GetTextAngleDegrees() );
     aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
 
-    msg = MessageTextFromValue( aUnits, GetTextThickness(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextThickness(), true );
     aList.emplace_back( _( "Thickness" ), msg, DARKGREEN );
 
-    msg = MessageTextFromValue( aUnits, GetTextWidth(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth(), true );
     aList.emplace_back( _( "Width" ), msg, RED );
 
-    msg = MessageTextFromValue( aUnits, GetTextHeight(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextHeight(), true );
     aList.emplace_back( _( "Height" ), msg, RED );
 }
 

@@ -27,7 +27,7 @@
 
 #include <sch_screen.h>
 #include <sch_item.h>
-
+#include <sch_marker.h>
 #include <sch_reference_list.h>
 #include <class_library.h>
 #include <sch_sheet_path.h>
@@ -36,7 +36,7 @@
 #include <template_fieldnames.h>
 #include <boost/functional/hash.hpp>
 #include <wx/filename.h>
-
+#include "erc_item.h"
 
 namespace std
 {
@@ -470,6 +470,41 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
 }
 
 
+SCH_ITEM* SCH_SHEET_LIST::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
+{
+    for( const SCH_SHEET_PATH& sheet : *this )
+    {
+        SCH_SCREEN* screen = sheet.LastScreen();
+
+        for( SCH_ITEM* aItem : screen->Items() )
+        {
+            aMap[ aItem->m_Uuid ] = aItem;
+
+            if( aItem->Type() == SCH_COMPONENT_T )
+            {
+                SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( aItem );
+
+                for( SCH_FIELD& field : comp->GetFields() )
+                    aMap[ field.m_Uuid ] = &field;
+
+                for( SCH_PIN* pin : comp->GetSchPins() )
+                    aMap[ pin->m_Uuid ] = pin;
+            }
+            else if( aItem->Type() == SCH_SHEET_T )
+            {
+                SCH_SHEET* sch_sheet = static_cast<SCH_SHEET*>( aItem );
+
+                for( SCH_FIELD& field : sch_sheet->GetFields() )
+                    aMap[ field.m_Uuid ] = &field;
+
+                for( SCH_SHEET_PIN* pin : sch_sheet->GetPins() )
+                    aMap[ pin->m_Uuid ] = pin;
+            }
+        }
+    }
+}
+
+
 void SCH_SHEET_LIST::AnnotatePowerSymbols()
 {
     // List of reference for power symbols
@@ -646,4 +681,96 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForScreen( SCH_SCREEN* aScreen )
     }
 
     return nullptr;
+}
+
+
+void SHEETLIST_ERC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
+{
+    m_severities = aSeverities;
+
+    m_filteredMarkers.clear();
+
+    SCH_SHEET_LIST sheetList( g_RootSheet);
+
+    for( unsigned i = 0; i < sheetList.size(); i++ )
+    {
+        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
+        {
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
+            int markerSeverity;
+
+            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
+                continue;
+
+            if( marker->IsExcluded() )
+                markerSeverity = RPT_SEVERITY_EXCLUSION;
+            else
+                markerSeverity = GetSeverity( marker->GetRCItem()->GetErrorCode() );
+
+            if( markerSeverity & m_severities )
+                m_filteredMarkers.push_back( marker );
+        }
+    }
+}
+
+
+int SHEETLIST_ERC_ITEMS_PROVIDER::GetCount( int aSeverity )
+{
+    if( aSeverity < 0 )
+        return m_filteredMarkers.size();
+
+    int count = 0;
+
+    SCH_SHEET_LIST sheetList( g_RootSheet);
+
+    for( unsigned i = 0; i < sheetList.size(); i++ )
+    {
+        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
+        {
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
+            int markerSeverity;
+
+            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
+                continue;
+
+            if( marker->IsExcluded() )
+                markerSeverity = RPT_SEVERITY_EXCLUSION;
+            else
+                markerSeverity = GetSeverity( marker->GetRCItem()->GetErrorCode() );
+
+            if( markerSeverity == aSeverity )
+                count++;
+        }
+    }
+
+    return count;
+}
+
+
+ERC_ITEM* SHEETLIST_ERC_ITEMS_PROVIDER::GetItem( int aIndex )
+{
+    SCH_MARKER* marker = m_filteredMarkers[ aIndex ];
+
+    return marker ? static_cast<ERC_ITEM*>( marker->GetRCItem() ) : nullptr;
+}
+
+
+void SHEETLIST_ERC_ITEMS_PROVIDER::DeleteItem( int aIndex, bool aDeep )
+{
+    SCH_MARKER* marker = m_filteredMarkers[ aIndex ];
+    m_filteredMarkers.erase( m_filteredMarkers.begin() + aIndex );
+
+    if( aDeep )
+    {
+        SCH_SCREENS ScreenList;
+        ScreenList.DeleteMarker( marker );
+    }
+}
+
+
+void SHEETLIST_ERC_ITEMS_PROVIDER::DeleteAllItems()
+{
+    SCH_SCREENS ScreenList;
+    ScreenList.DeleteAllMarkers( MARKER_BASE::MARKER_ERC );
+    m_filteredMarkers.clear();
 }

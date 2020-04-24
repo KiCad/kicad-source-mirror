@@ -357,10 +357,10 @@ void DIMENSION::AdjustDimensionDetails( int aPrecision )
 
 
 // see class_cotation.h
-void DIMENSION::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void DIMENSION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     // for now, display only the text within the DIMENSION using class TEXTE_PCB.
-    m_Text.GetMsgPanelInfo( aUnits, aList );
+    m_Text.GetMsgPanelInfo( aFrame, aList );
 }
 
 

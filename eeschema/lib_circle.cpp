@@ -32,7 +32,7 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <math/util.h>      // for KiROUND
-
+#include <eda_draw_frame.h>
 #include <general.h>
 #include <lib_circle.h>
 #include <settings/color_settings.h>
@@ -240,18 +240,18 @@ const EDA_RECT LIB_CIRCLE::GetBoundingBox() const
 }
 
 
-void LIB_CIRCLE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void LIB_CIRCLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
+    LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    msg = MessageTextFromValue( aUnits, m_Width, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM(  _( "Line Width" ), msg, BLUE ) );
 
-    msg = MessageTextFromValue( aUnits, GetRadius(), true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetRadius(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ),

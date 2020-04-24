@@ -150,7 +150,7 @@ int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         EDA_ITEM* item = (EDA_ITEM*) selection.Front();
 
         MSG_PANEL_ITEMS msgItems;
-        item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );
+        item->GetMsgPanelInfo( m_frame, msgItems );
         m_frame->SetMsgPanel( msgItems );
 
         WS_DATA_ITEM* dataItem = static_cast<WS_DRAW_ITEM_BASE*>( item )->GetPeer();

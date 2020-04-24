@@ -258,7 +258,7 @@ static bool InvalidMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
     const MODULE*   item_a = dynamic_cast<MODULE*>( aBoard.GetItem( reporter->GetMainItemID() ) );
 
     // This one is more than just a mis-match!
-    if( reporter->HasSecondItem() )
+    if( reporter->GetAuxItemID() != niluuid )
     {
         BOOST_WARN_MESSAGE( false, "Expected no auxiliary item for invalid courtyard DRC." );
         return false;
@@ -313,7 +313,7 @@ void DoCourtyardInvalidTest(
                 markers.push_back( std::unique_ptr<MARKER_PCB>( aMarker ) );
             } );
 
-    drc_overlap.RunDRC( EDA_UNITS::MILLIMETRES, *board );
+    drc_overlap.RunDRC( *board );
 
     CheckInvalidsMatchExpected( *board, markers, aCase.m_exp_errors );
 }

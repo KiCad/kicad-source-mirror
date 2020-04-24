@@ -197,7 +197,7 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         if( netinfo )
         {
             MSG_PANEL_ITEMS items;
-            netinfo->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
+            netinfo->GetMsgPanelInfo( m_frame, items );
             m_frame->SetMsgPanel( items );
             m_frame->SendCrossProbeNetName( netinfo->GetNetname() );
         }

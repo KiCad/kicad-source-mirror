@@ -39,10 +39,14 @@
 #define SCALING_FACTOR  Millimeter2iu( 0.1 )
 
 
-SCH_MARKER::SCH_MARKER( TYPEMARKER aType ) :
+SCH_MARKER::SCH_MARKER( ERC_ITEM* aItem, const wxPoint& aPos ) :
         SCH_ITEM( nullptr, SCH_MARKER_T ),
-        MARKER_BASE( SCALING_FACTOR, new ERC_ITEM(), aType )
+        MARKER_BASE( SCALING_FACTOR, aItem, MARKER_BASE::MARKER_ERC )
 {
+    if( m_rcItem )
+        m_rcItem->SetParent( this );
+
+    m_Pos = aPos;
 }
 
 
@@ -113,9 +117,7 @@ void SCH_MARKER::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 
 bool SCH_MARKER::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
-    return SCH_ITEM::Matches( m_rcItem->GetErrorText(), aSearchData )
-                || SCH_ITEM::Matches( m_rcItem->GetMainText(), aSearchData )
-                || SCH_ITEM::Matches( m_rcItem->GetAuxText(), aSearchData );
+    return SCH_ITEM::Matches( m_rcItem->GetErrorText(), aSearchData );
 }
 
 
@@ -125,7 +127,7 @@ const EDA_RECT SCH_MARKER::GetBoundingBox() const
 }
 
 
-void SCH_MARKER::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void SCH_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     aList.push_back( MSG_PANEL_ITEM( _( "Electronics Rule Check Error" ),
                                      m_rcItem->GetErrorText(), DARKRED ) );

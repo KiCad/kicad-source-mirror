@@ -59,7 +59,7 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     void BeginEdit( const wxPoint aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;
@@ -68,7 +68,7 @@ public:
 
     void MoveTo( const wxPoint& aPosition ) override;
 
-    wxPoint GetPosition() const override { return m_Pos; }
+    const wxPoint GetPosition() const override { return m_Pos; }
 
     void SetEnd( const wxPoint& aPosition ) { m_EndPos = aPosition; }
     wxPoint GetEnd() const { return m_EndPos; }

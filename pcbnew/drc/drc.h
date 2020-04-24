@@ -91,6 +91,11 @@ enum PCB_DRC_CODE {
     DRCE_DUPLICATE_FOOTPRINT,               ///< more than one footprints found for netlist item
     DRCE_EXTRA_FOOTPRINT,                   ///< netlist item not found for footprint
 
+    DRCE_UNRESOLVED_VARIABLE,
+
+    DRCE_LAST = DRCE_UNRESOLVED_VARIABLE,
+
+    // These are actually Cleanup Tracks and Vias actions, not DRCE errors
     DRCE_SHORT,
     DRCE_REDUNDANT_VIA,
     DRCE_DUPLICATE_TRACK,
@@ -98,11 +103,7 @@ enum PCB_DRC_CODE {
     DRCE_DANGLING_TRACK,
     DRCE_DANGLING_VIA,
     DRCE_ZERO_LENGTH_TRACK,
-    DRCE_TRACK_IN_PAD,
-
-    DRCE_UNRESOLVED_VARIABLE,
-
-    DRCE_LAST = DRCE_UNRESOLVED_VARIABLE
+    DRCE_TRACK_IN_PAD
 };
 
 

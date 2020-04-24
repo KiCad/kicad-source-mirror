@@ -435,7 +435,7 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
     MSG_PANEL_ITEMS items;
 
     if( footprint )
-        footprint->GetMsgPanelInfo( m_userUnits, items );
+        footprint->GetMsgPanelInfo( this, items );
 
     SetMsgPanel( items );
 }

@@ -1282,7 +1282,7 @@ const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 }
 
 
-void SCH_COMPONENT::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
@@ -1463,7 +1463,7 @@ bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemLi
         bool previousState = pin->IsDangling();
         pin->SetIsDangling( true );
 
-        wxPoint pos = m_transform.TransformCoordinate( pin->GetPosition() ) + m_Pos;
+        wxPoint pos = m_transform.TransformCoordinate( pin->GetLocalPosition() ) + m_Pos;
 
         for( DANGLING_END_ITEM& each_item : aItemList )
         {
@@ -1528,7 +1528,7 @@ void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
         if( pin_convert > 0 && pin_convert != GetConvert() )
             continue;
 
-        aPoints.push_back( m_transform.TransformCoordinate( pin->GetPosition() ) + m_Pos );
+        aPoints.push_back( m_transform.TransformCoordinate( pin->GetLocalPosition() ) + m_Pos );
     }
 }
 
@@ -1796,8 +1796,8 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
     {
         // Collect only pins attached to the current unit and convert.
         // others are not associated to this component instance
-        int pin_unit = pin.get()->GetLibPin()->GetUnit();
-        int pin_convert = pin.get()->GetLibPin()->GetConvert();
+        int pin_unit = pin->GetLibPin()->GetUnit();
+        int pin_convert = pin->GetLibPin()->GetConvert();
 
         if( pin_unit > 0 && pin_unit != GetUnit() )
             continue;
@@ -1805,7 +1805,7 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
         if( pin_convert > 0 && pin_convert != GetConvert() )
             continue;
 
-        if( pin->GetPosition() == new_pos )
+        if( pin->GetLocalPosition() == new_pos )
             return true;
     }
 

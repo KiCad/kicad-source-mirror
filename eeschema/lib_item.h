@@ -209,7 +209,7 @@ public:
      * </p>
      * @param aList is the list to populate.
      */
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
      * Test LIB_ITEM objects for equivalence.
@@ -245,7 +245,6 @@ public:
      */
     virtual void MoveTo( const wxPoint& aPosition ) = 0;
 
-    virtual wxPoint GetPosition() const = 0;
     void SetPosition( const wxPoint& aPosition ) { MoveTo( aPosition ); }
 
     /**

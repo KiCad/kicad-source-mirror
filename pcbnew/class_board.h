@@ -327,6 +327,8 @@ public:
 
     BOARD_ITEM* GetItem( const KIID& aID );
 
+    void FillItemMap( std::map<KIID, EDA_ITEM*>& aMap );
+
     /**
      * Function GetConnectivity()
      * returns list of missing connections between components/tracks.
@@ -782,7 +784,7 @@ public:
         return ComputeBoundingBox( true );
     }
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
      * Function Visit

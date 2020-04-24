@@ -34,7 +34,7 @@
 #include <macros.h>
 #include <bitmaps.h>
 #include <base_units.h>
-
+#include <eda_draw_frame.h>
 #include <sch_bitmap.h>
 
 #include <wx/mstream.h>
@@ -196,14 +196,14 @@ BITMAP_DEF SCH_BITMAP::GetMenuImage() const
 }
 
 
-void SCH_BITMAP::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void SCH_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     aList.push_back( MSG_PANEL_ITEM( _( "Bitmap" ), wxEmptyString, RED ) );
 
-    aList.push_back(
-            MSG_PANEL_ITEM( _( "Width" ), MessageTextFromValue( aUnits, GetSize().x ), RED ) );
-    aList.push_back(
-            MSG_PANEL_ITEM( _( "Height" ), MessageTextFromValue( aUnits, GetSize().y ), RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Width" ),
+                     MessageTextFromValue( aFrame->GetUserUnits(), GetSize().x ), RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Height" ),
+                     MessageTextFromValue( aFrame->GetUserUnits(), GetSize().y ), RED ) );
 }
 
 

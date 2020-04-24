@@ -95,7 +95,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             netcode = netinfo->GetNet();
 
             MSG_PANEL_ITEMS items;
-            netinfo->GetMsgPanelInfo( GetUserUnits(), items );
+            netinfo->GetMsgPanelInfo( this, items );
             SetMsgPanel( items );
         }
     }

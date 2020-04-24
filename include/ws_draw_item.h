@@ -69,7 +69,6 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    virtual const wxPoint GetPosition() const = 0;
     virtual void SetPosition( wxPoint aPos ) = 0;
     virtual void SetEnd( wxPoint aPos ) { /* not all types will need this */ }
 
@@ -103,7 +102,7 @@ public:
 
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList ) override;
 };
 
 

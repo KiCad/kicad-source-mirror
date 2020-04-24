@@ -31,7 +31,7 @@
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
-
+#include <eda_draw_frame.h>
 #include <general.h>
 #include <lib_rectangle.h>
 #include <settings/color_settings.h>
@@ -191,11 +191,11 @@ void LIB_RECTANGLE::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
 }
 
 
-void LIB_RECTANGLE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void LIB_RECTANGLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
-    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
+    LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    wxString msg = MessageTextFromValue( aUnits, m_Width, true );
+    wxString msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 }

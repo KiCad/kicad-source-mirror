@@ -94,7 +94,7 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 
 wxPoint POSITION_RELATIVE_TOOL::GetSelectionAnchorPosition() const
 {
-    return static_cast<BOARD_ITEM*>( m_selection.GetTopLeftItem() )->GetPosition();
+    return m_selection.GetTopLeftItem()->GetPosition();
 }
 
 

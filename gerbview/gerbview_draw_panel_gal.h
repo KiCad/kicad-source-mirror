@@ -42,7 +42,7 @@ public:
     virtual void SetHighContrastLayer( int aLayer ) override;
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::OnShow()
     void OnShow() override;

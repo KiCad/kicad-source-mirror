@@ -1407,11 +1407,11 @@ void LIB_PIN::SetWidth( int aWidth )
 }
 
 
-void LIB_PIN::getMsgPanelInfoBase( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void LIB_PIN::getMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     wxString text = m_number.IsEmpty() ? wxT( "?" ) : m_number;
 
-    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
+    LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Name" ), m_name, DARKCYAN ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Number" ), text, DARKCYAN ) );
@@ -1424,33 +1424,35 @@ void LIB_PIN::getMsgPanelInfoBase( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), text, DARKGREEN ) );
 
     // Display pin length
-    text = StringFromValue( aUnits, m_length, true );
+    text = StringFromValue( aFrame->GetUserUnits(), m_length, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Length" ), text, MAGENTA ) );
 
     text = getPinOrientationName( (unsigned) GetOrientationIndex( m_orientation ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), text, DARKMAGENTA ) );
 }
 
-void LIB_PIN::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+
+void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
-    getMsgPanelInfoBase( aUnits, aList );
+    getMsgPanelInfoBase( aFrame, aList );
 
     wxString text;
     wxPoint pinpos = GetPosition();
     pinpos.y = -pinpos.y;   // Display coord are top to bottom
                             // lib items coord are bottom to top
 
-    text = MessageTextFromValue( aUnits, pinpos.x, true );
+    text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.x, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Pos X" ), text, DARKMAGENTA ) );
 
-    text = MessageTextFromValue( aUnits, pinpos.y, true );
+    text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.y, true );
     aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text, DARKMAGENTA ) );
 }
 
-void LIB_PIN::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList,
+
+void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList,
                                SCH_COMPONENT* aComponent )
 {
-    getMsgPanelInfoBase( aUnits, aList );
+    getMsgPanelInfoBase( aFrame, aList );
 
     if( !aComponent )
         return;
@@ -1459,10 +1461,10 @@ void LIB_PIN::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aL
     wxPoint pinpos = aComponent->GetTransform().TransformCoordinate( GetPosition() )
                      + aComponent->GetPosition();
 
-    text = MessageTextFromValue( aUnits, pinpos.x, true );
+    text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.x, true );
     aList.emplace_back( _( "Pos X" ), text, DARKMAGENTA );
 
-    text = MessageTextFromValue( aUnits, pinpos.y, true );
+    text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.y, true );
     aList.emplace_back( _( "Pos Y" ), text, DARKMAGENTA );
 
     aList.emplace_back( aComponent->GetField( REFERENCE )->GetShownText(),

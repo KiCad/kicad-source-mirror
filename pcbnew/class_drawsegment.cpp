@@ -342,9 +342,10 @@ MODULE* DRAWSEGMENT::GetParentModule() const
 }
 
 
-void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void DRAWSEGMENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
+    EDA_UNITS units = aFrame->GetUserUnits();
+    wxString  msg;
 
     msg = _( "Drawing" );
 
@@ -357,7 +358,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>
     case S_CIRCLE:
         aList.emplace_back( shape, _( "Circle" ), RED );
 
-        msg = MessageTextFromValue( aUnits, GetLineLength( m_Start, m_End ) );
+        msg = MessageTextFromValue( units, GetLineLength( m_Start, m_End ) );
         aList.emplace_back( _( "Radius" ), msg, RED );
         break;
 
@@ -366,14 +367,14 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>
         msg.Printf( wxT( "%.1f" ), m_Angle / 10.0 );
         aList.emplace_back( _( "Angle" ), msg, RED );
 
-        msg = MessageTextFromValue( aUnits, GetLineLength( m_Start, m_End ) );
+        msg = MessageTextFromValue( units, GetLineLength( m_Start, m_End ) );
         aList.emplace_back( _( "Radius" ), msg, RED );
         break;
 
     case S_CURVE:
         aList.emplace_back( shape, _( "Curve" ), RED );
 
-        msg = MessageTextFromValue( aUnits, GetLength() );
+        msg = MessageTextFromValue( units, GetLength() );
         aList.emplace_back( _( "Length" ), msg, DARKGREEN );
         break;
 
@@ -388,7 +389,7 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>
     {
         aList.emplace_back( shape, _( "Segment" ), RED );
 
-        msg = MessageTextFromValue( aUnits, GetLineLength( m_Start, m_End ) );
+        msg = MessageTextFromValue( units, GetLineLength( m_Start, m_End ) );
         aList.emplace_back( _( "Length" ), msg, DARKGREEN );
 
         // angle counter-clockwise from 3'o-clock
@@ -403,26 +404,26 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>
     {
         VECTOR2I point0 = GetPolyShape().Outline(0).CPoint(0);
         wxString origin = wxString::Format( "@(%s, %s)",
-                                           MessageTextFromValue( aUnits, point0.x ),
-                                           MessageTextFromValue( aUnits, point0.y ) );
+                                           MessageTextFromValue( units, point0.x ),
+                                           MessageTextFromValue( units, point0.y ) );
 
         aList.emplace_back( _( "Origin" ), origin, DARKGREEN );
     }
     else
     {
         wxString start = wxString::Format( "@(%s, %s)",
-                                           MessageTextFromValue( aUnits, GetStart().x ),
-                                           MessageTextFromValue( aUnits, GetStart().y ) );
+                                           MessageTextFromValue( units, GetStart().x ),
+                                           MessageTextFromValue( units, GetStart().y ) );
         wxString end   = wxString::Format( "@(%s, %s)",
-                                           MessageTextFromValue( aUnits, GetEnd().x ),
-                                           MessageTextFromValue( aUnits, GetEnd().y ) );
+                                           MessageTextFromValue( units, GetEnd().x ),
+                                           MessageTextFromValue( units, GetEnd().y ) );
 
         aList.emplace_back( start, end, DARKGREEN );
     }
 
     aList.emplace_back( _( "Layer" ), GetLayerName(), DARKBROWN );
 
-    msg = MessageTextFromValue( aUnits, m_Width, true );
+    msg = MessageTextFromValue( units, m_Width, true );
     aList.emplace_back( _( "Width" ), msg, DARKCYAN );
 }
 

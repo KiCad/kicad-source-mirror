@@ -111,7 +111,7 @@ void TEXTE_PCB::SetTextAngle( double aAngle )
 }
 
 
-void TEXTE_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void TEXTE_PCB::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString    msg;
 
@@ -132,13 +132,13 @@ void TEXTE_PCB::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& 
     msg.Printf( wxT( "%.1f" ), GetTextAngle() / 10.0 );
     aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
 
-    msg = MessageTextFromValue( aUnits, GetTextThickness() );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextThickness() );
     aList.emplace_back( _( "Thickness" ), msg, MAGENTA );
 
-    msg = MessageTextFromValue( aUnits, GetTextWidth() );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
     aList.emplace_back( _( "Width" ), msg, RED );
 
-    msg = MessageTextFromValue( aUnits, GetTextHeight() );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextHeight() );
     aList.emplace_back( _( "Height" ), msg, RED );
 }
 

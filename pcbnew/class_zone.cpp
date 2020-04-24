@@ -510,7 +510,7 @@ bool ZONE_CONTAINER::HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx, i
 }
 
 
-void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 
@@ -585,7 +585,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( MSG_PANEL_ITEM( _( "Fill Mode" ), msg, BROWN ) );
 
-    msg = MessageTextFromValue( aUnits, m_area, false, EDA_DATA_TYPE::AREA );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_area, false, EDA_DATA_TYPE::AREA );
     aList.emplace_back( MSG_PANEL_ITEM( _( "Filled Area" ), msg, BLUE ) );
 
     // Useful for statistics :

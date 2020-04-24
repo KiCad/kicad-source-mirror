@@ -48,7 +48,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& 
 
    	for( int errorCode = m_firstErrorCode; errorCode <= m_lastErrorCode; ++errorCode )
     {
-   	    aDummyItem.SetData( errorCode, wxEmptyString );
+   	    aDummyItem.SetErrorCode( errorCode );
    	    wxString msg = aDummyItem.GetErrorText();
 
         // When msg is empty, for some reason, the current errorCode is not supported

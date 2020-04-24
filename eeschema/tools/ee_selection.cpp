@@ -22,28 +22,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <limits>
-#include <functional>
 #include <tools/ee_selection.h>
-#include <sch_item.h>
-#include <lib_item.h>
+
 
 EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
 {
     EDA_ITEM* topLeftItem = nullptr;
     wxPoint   topLeftPos;
-    wxPoint   pos;
 
-    // find the leftmost (smallest x coord) and highest (smallest y with the smallest x) item in the selection
-    for( auto item : m_items )
+    // find the leftmost (smallest x coord) and highest (smallest y with the smallest x) item
+    // in the selection
+    for( EDA_ITEM* item : m_items )
     {
-        SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
-        LIB_ITEM* lib_item = dynamic_cast<LIB_ITEM*>( item );
-
-        if( sch_item )
-            pos = sch_item->GetPosition();
-        else if( lib_item )
-            pos = lib_item->GetPosition();
+        wxPoint pos = item->GetPosition();
 
         if( ( topLeftItem == nullptr )
             || ( pos.x < topLeftPos.x )
@@ -54,5 +45,5 @@ EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
         }
     }
 
-    return static_cast<EDA_ITEM*>( topLeftItem );
+    return topLeftItem;
 }

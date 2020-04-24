@@ -33,6 +33,7 @@
 
 #include <class_board_item.h>
 #include <marker_base.h>
+#include <drc/drc_item.h>
 
 // Coordinates count for the basic shape marker
 #define MARKER_SHAPE_POINT_COUNT 9
@@ -43,56 +44,7 @@ class MSG_PANEL_ITEM;
 class MARKER_PCB : public BOARD_ITEM, public MARKER_BASE
 {
 public:
-
-    MARKER_PCB( BOARD_ITEM* aParent );
-
-    /**
-     * Constructor
-     * @param aErrorCode The categorizing identifier for an error
-     * @param aMarkerPos The position of the MARKER_PCB on the BOARD
-     * @param aItem The first of two objects
-     * @param bItem The second of the two conflicting objects
-     */
-    MARKER_PCB( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                BOARD_ITEM* aItem,
-                BOARD_ITEM* bItem = nullptr );
-
-    /**
-     * Constructor
-     * @param aErrorCode The categorizing identifier for an error
-     * @param aMarkerPos The position of the MARKER_PCB on the BOARD
-     * @param aItem The first of two objects
-     * @param aPos The position of the first of two objects
-     * @param bItem The second of the two conflicting objects
-     * @param bPos The position of the second of two objects
-     */
-    MARKER_PCB( EDA_UNITS aUnits, int aErrorCode, const wxPoint& aMarkerPos,
-                BOARD_ITEM* aItem, const wxPoint& aPos,
-                BOARD_ITEM* bItem = nullptr, const wxPoint& bPos = wxPoint() );
-
-    /**
-     * Constructor
-     * @param aErrorCode The categorizing identifier for an error
-     * @param aMarkerPos The position of the MARKER_PCB on the BOARD
-     * @param aText Text describing the first of two objects
-     * @param aPos The position of the first of two objects
-     * @param bText Text describing the second of the two conflicting objects
-     * @param bPos The position of the second of two objects
-     */
-    MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
-                const wxString& aText, const wxPoint& aPos,
-                const wxString& bText = wxEmptyString, const wxPoint& bPos = wxPoint() );
-
-    /**
-     * Constructor
-     * @param aErrorCode The categorizing identifier for an error
-     * @param aMarkerPos The position of the MARKER_PCB on the BOARD
-     * @param aText Text describing the first of two objects
-     * @param bText Text describing the second of the two conflicting objects
-     */
-    MARKER_PCB( int aErrorCode,
-                const wxString& aText,
-                const wxString& bText = wxEmptyString );
+    MARKER_PCB( DRC_ITEM* aItem, const wxPoint& aPosition );
 
     ~MARKER_PCB();
 
@@ -128,7 +80,7 @@ public:
 
     GAL_LAYER_ID GetColorLayer() const;
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
     {
@@ -159,10 +111,6 @@ public:
 
 protected:
     KIGFX::COLOR4D getColor() const override;
-
-protected:
-    ///> Pointer to BOARD_ITEM that causes DRC error.
-    const BOARD_ITEM* m_item;
 };
 
 #endif      //  CLASS_MARKER_PCB_H

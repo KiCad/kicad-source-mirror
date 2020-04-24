@@ -122,7 +122,7 @@ void EDGE_MODULE::SetDrawCoord()
 
 
 // see class_edge_mod.h
-void EDGE_MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void EDGE_MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 
@@ -139,7 +139,7 @@ void EDGE_MODULE::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>
     aList.emplace_back( _( "Footprint" ), module->GetReference(), DARKCYAN );
 
     // append the features shared with the base class
-    DRAWSEGMENT::GetMsgPanelInfo( aUnits, aList );
+    DRAWSEGMENT::GetMsgPanelInfo( aFrame, aList );
 }
 
 

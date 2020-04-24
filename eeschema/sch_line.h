@@ -206,7 +206,7 @@ public:
 
     bool operator <( const SCH_ITEM& aItem ) const override;
 
-    wxPoint GetPosition() const override { return m_start; }
+    const wxPoint GetPosition() const override { return m_start; }
     void SetPosition( const wxPoint& aPosition ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
@@ -218,7 +218,7 @@ public:
 
     void SwapData( SCH_ITEM* aItem ) override;
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;

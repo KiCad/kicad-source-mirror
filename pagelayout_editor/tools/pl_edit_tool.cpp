@@ -281,8 +281,7 @@ bool PL_EDIT_TOOL::updateModificationPoint( PL_SELECTION& aSelection )
     // When there is only one item selected, the reference point is its position...
     if( aSelection.Size() == 1 )
     {
-        WS_DRAW_ITEM_BASE* item =  static_cast<WS_DRAW_ITEM_BASE*>( aSelection.Front() );
-        aSelection.SetReferencePoint( item->GetPosition() );
+        aSelection.SetReferencePoint( aSelection.Front()->GetPosition() );
     }
     // ...otherwise modify items with regard to the grid-snapped cursor position
     else
@@ -493,9 +492,7 @@ int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
     if( !selection.Empty() )
     {
-        WS_DRAW_ITEM_BASE* item = (WS_DRAW_ITEM_BASE*) selection.GetTopLeftItem();
-
-        selection.SetReferencePoint( item->GetPosition() );
+        selection.SetReferencePoint( selection.GetTopLeftItem()->GetPosition() );
         m_toolMgr->RunAction( PL_ACTIONS::move, false );
     }
 

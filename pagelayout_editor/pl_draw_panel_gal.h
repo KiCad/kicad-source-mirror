@@ -35,7 +35,7 @@ public:
     virtual ~PL_DRAW_PANEL_GAL();
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /**
      * Build and update the list of WS_DRAW_ITEM_xxx showing the frame layout

@@ -97,6 +97,15 @@ public:
                 bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_IGNORE;
         }
 
+        bds.m_DRCSeverities[ DRCE_SHORT ] = RPT_SEVERITY_ACTION;
+        bds.m_DRCSeverities[ DRCE_REDUNDANT_VIA ] = RPT_SEVERITY_ACTION;
+        bds.m_DRCSeverities[ DRCE_DUPLICATE_TRACK ] = RPT_SEVERITY_ACTION;
+        bds.m_DRCSeverities[ DRCE_MERGE_TRACKS ] = RPT_SEVERITY_ACTION;
+        bds.m_DRCSeverities[ DRCE_DANGLING_TRACK ] = RPT_SEVERITY_ACTION;
+        bds.m_DRCSeverities[ DRCE_DANGLING_VIA ] = RPT_SEVERITY_ACTION;
+        bds.m_DRCSeverities[ DRCE_ZERO_LENGTH_TRACK ] = RPT_SEVERITY_ACTION;
+        bds.m_DRCSeverities[ DRCE_TRACK_IN_PAD ] = RPT_SEVERITY_ACTION;
+
         // TO DO: figure out what we're going to use as keys here so we can read/write these....
 
         aConfig->SetPath( oldPath );

@@ -304,7 +304,7 @@ public:
 
     void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath ) override;
 
-    wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
+    const wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
     void SetPosition( const wxPoint& aPosition ) override { EDA_TEXT::SetTextPos( aPosition ); }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
@@ -314,7 +314,7 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;

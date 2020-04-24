@@ -246,8 +246,11 @@ int DRC::TestZoneToZoneOutlines()
 
                 if( smoothed_polys[ia2].Contains( currentVertex ) )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_ZONES_INTERSECT, pt,
-                                                    zoneRef, zoneToTest ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
+                    drcItem->SetItems( zoneRef, zoneToTest );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pt );
+                    addMarkerToPcb( marker );
                     nerrors++;
                 }
             }
@@ -260,8 +263,11 @@ int DRC::TestZoneToZoneOutlines()
 
                 if( smoothed_polys[ia].Contains( currentVertex ) )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_ZONES_INTERSECT, pt,
-                                                    zoneToTest, zoneRef ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
+                    drcItem->SetItems( zoneToTest, zoneRef );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pt );
+                    addMarkerToPcb( marker );
                     nerrors++;
                 }
             }
@@ -307,8 +313,11 @@ int DRC::TestZoneToZoneOutlines()
 
             for( wxPoint pt : conflictPoints )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_ZONES_TOO_CLOSE, pt,
-                                                zoneRef, zoneToTest ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_TOO_CLOSE );
+                drcItem->SetItems( zoneRef, zoneToTest );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, pt );
+                addMarkerToPcb( marker );
                 nerrors++;
             }
         }
@@ -531,12 +540,13 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     if( nc->GetClearance() < g.m_MinClearance )
     {
         msg.Printf( _( "NETCLASS: \"%s\" has Clearance:%s which is less than global:%s" ),
-                    GetChars( nc->GetName() ),
+                    nc->GetName(),
                     FmtVal( nc->GetClearance() ),
-                    FmtVal( g.m_TrackClearance )
-                    );
+                    FmtVal( g.m_TrackClearance ) );
 
-        addMarkerToPcb( new MARKER_PCB( DRCE_NETCLASS_CLEARANCE, msg ) );
+        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_CLEARANCE );
+        drcItem->SetErrorMessage( msg );
+        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
     }
 #endif
@@ -544,58 +554,65 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     if( nc->GetTrackWidth() < g.m_TrackMinWidth )
     {
         msg.Printf( _( "NETCLASS: \"%s\" has TrackWidth:%s which is less than global:%s" ),
-                    GetChars( nc->GetName() ),
+                    nc->GetName(),
                     FmtVal( nc->GetTrackWidth() ),
-                    FmtVal( g.m_TrackMinWidth )
-                    );
+                    FmtVal( g.m_TrackMinWidth ) );
 
-        addMarkerToPcb( new MARKER_PCB( DRCE_NETCLASS_TRACKWIDTH, msg ) );
+        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_TRACKWIDTH );
+        drcItem->SetErrorMessage( msg );
+        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
     }
 
     if( nc->GetViaDiameter() < g.m_ViasMinSize )
     {
         msg.Printf( _( "NETCLASS: \"%s\" has Via Dia:%s which is less than global:%s" ),
-                    GetChars( nc->GetName() ),
+                    nc->GetName(),
                     FmtVal( nc->GetViaDiameter() ),
-                    FmtVal( g.m_ViasMinSize )
-                    );
+                    FmtVal( g.m_ViasMinSize ) );
 
-        addMarkerToPcb( new MARKER_PCB( DRCE_NETCLASS_VIASIZE, msg ) );
+        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIASIZE );
+        drcItem->SetErrorMessage( msg );
+        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
     }
 
     if( nc->GetViaDrill() < g.m_ViasMinDrill )
     {
         msg.Printf( _( "NETCLASS: \"%s\" has Via Drill:%s which is less than global:%s" ),
-                    GetChars( nc->GetName() ),
+                    nc->GetName(),
                     FmtVal( nc->GetViaDrill() ),
-                    FmtVal( g.m_ViasMinDrill )
-                    );
+                    FmtVal( g.m_ViasMinDrill ) );
 
-        addMarkerToPcb( new MARKER_PCB( DRCE_NETCLASS_VIADRILLSIZE, msg ) );
+        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIADRILLSIZE );
+        drcItem->SetErrorMessage( msg );
+        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
     }
 
     if( nc->GetuViaDiameter() < g.m_MicroViasMinSize )
     {
         msg.Printf( _( "NETCLASS: \"%s\" has uVia Dia:%s which is less than global:%s" ),
-                    GetChars( nc->GetName() ),
+                    nc->GetName(),
                     FmtVal( nc->GetuViaDiameter() ),
                     FmtVal( g.m_MicroViasMinSize ) );
 
-        addMarkerToPcb( new MARKER_PCB( DRCE_NETCLASS_uVIASIZE, msg ) );
+        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIASIZE );
+        drcItem->SetErrorMessage( msg );
+        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
     }
 
     if( nc->GetuViaDrill() < g.m_MicroViasMinDrill )
     {
         msg.Printf( _( "NETCLASS: \"%s\" has uVia Drill:%s which is less than global:%s" ),
-                    GetChars( nc->GetName() ),
+                    nc->GetName(),
                     FmtVal( nc->GetuViaDrill() ),
                     FmtVal( g.m_MicroViasMinDrill ) );
 
-        addMarkerToPcb( new MARKER_PCB( DRCE_NETCLASS_uVIADRILLSIZE, msg ) );
+        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIADRILLSIZE );
+        drcItem->SetErrorMessage( msg );
+        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
     }
 
@@ -721,10 +738,11 @@ void DRC::testDrilledHoles()
             if( KiROUND( GetLineLength( checkHole.m_location, refHole.m_location ) )
                     <  checkHole.m_drillRadius + refHole.m_drillRadius + holeToHoleMin )
             {
-                addMarkerToPcb( new MARKER_PCB( m_pcbEditorFrame->GetUserUnits(),
-                                                DRCE_DRILLED_HOLES_TOO_CLOSE, refHole.m_location,
-                                                refHole.m_owner, refHole.m_location,
-                                                checkHole.m_owner, checkHole.m_location ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DRILLED_HOLES_TOO_CLOSE );
+                drcItem->SetItems( refHole.m_owner, checkHole.m_owner );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, refHole.m_location );
+                addMarkerToPcb( marker );
             }
         }
     }
@@ -799,10 +817,8 @@ void DRC::testUnconnected()
 
     for( const auto& edge : edges )
     {
-        DRC_ITEM* item = new DRC_ITEM();
-        item->SetData( m_pcbEditorFrame->GetUserUnits(), DRCE_UNCONNECTED_ITEMS,
-                       edge.GetSourceNode()->Parent(), (wxPoint) edge.GetSourcePos(),
-                       edge.GetTargetNode()->Parent(), (wxPoint) edge.GetTargetPos() );
+        DRC_ITEM* item = new DRC_ITEM( DRCE_UNCONNECTED_ITEMS );
+        item->SetItems( edge.GetSourceNode()->Parent(), edge.GetTargetNode()->Parent() );
         m_unconnected.push_back( item );
     }
 }
@@ -833,9 +849,11 @@ void DRC::testZones()
 
         if( ( netcode < 0 ) || pads_in_net == 0 )
         {
-            wxPoint markerPos = zone->GetPosition();
-            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE,
-                                            markerPos, zone ) );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE );
+            drcItem->SetItems( zone );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, zone->GetPosition() );
+            addMarkerToPcb( marker );
         }
     }
 
@@ -871,8 +889,11 @@ void DRC::testKeepoutAreas()
 
                 if( area->Outline()->Distance( trackSeg, segm->GetWidth() ) == 0 )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_INSIDE_KEEPOUT,
-                                                    getLocation( segm, area ), segm, area ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_INSIDE_KEEPOUT );
+                    drcItem->SetItems( segm, area );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( segm, area ) );
+                    addMarkerToPcb( marker );
                 }
             }
             else if( segm->Type() == PCB_VIA_T )
@@ -887,8 +908,11 @@ void DRC::testKeepoutAreas()
 
                 if( area->Outline()->Distance( segm->GetPosition() ) < segm->GetWidth()/2 )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_VIA_INSIDE_KEEPOUT,
-                                                    getLocation( segm, area ), segm, area ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_INSIDE_KEEPOUT );
+                    drcItem->SetItems( segm, area );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, getLocation( segm, area ) );
+                    addMarkerToPcb( marker );
                 }
             }
         }
@@ -1010,15 +1034,21 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
             {
                 if( track->Type() == PCB_VIA_T )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_VIA_NEAR_COPPER,
-                                                    getLocation( track, aItem, itemSeg ),
-                                                    track, aItem ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_NEAR_COPPER );
+                    drcItem->SetItems( track, aItem );
+
+                    wxPoint     pos = getLocation( track, aItem, itemSeg );
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
+                    addMarkerToPcb( marker );
                 }
                 else
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_NEAR_COPPER,
-                                                    getLocation( track, aItem, itemSeg ),
-                                                    track, aItem ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_COPPER );
+                    drcItem->SetItems( track, aItem );
+
+                    wxPoint     pos = getLocation( track, aItem, itemSeg );
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
+                    addMarkerToPcb( marker );
                 }
                 break;
             }
@@ -1042,8 +1072,11 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
         {
             if( padOutline.Distance( itemSeg, itemWidth ) == 0 )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_PAD_NEAR_COPPER,
-                                                pad->GetPosition(), pad, aItem ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_COPPER );
+                drcItem->SetItems( pad, aItem );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, pad->GetPosition() );
+                addMarkerToPcb( marker );
                 break;
             }
         }
@@ -1091,15 +1124,21 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
             {
                 if( track->Type() == PCB_VIA_T )
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_VIA_NEAR_COPPER,
-                                                    getLocation( track, aTextItem, textSeg ),
-                                                    track, aTextItem ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_NEAR_COPPER );
+                    drcItem->SetItems( track, aTextItem );
+
+                    wxPoint     pos = getLocation( track, aTextItem, textSeg );
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
+                    addMarkerToPcb( marker );
                 }
                 else
                 {
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_TRACK_NEAR_COPPER,
-                                                    getLocation( track, aTextItem, textSeg ),
-                                                    track, aTextItem ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_COPPER );
+                    drcItem->SetItems( track, aTextItem );
+
+                    wxPoint     pos = getLocation( track, aTextItem, textSeg );
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
+                    addMarkerToPcb( marker );
                 }
                 break;
             }
@@ -1131,8 +1170,11 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
 
             if( padOutline.Distance( textSeg, 0 ) <= minDist )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_PAD_NEAR_COPPER,
-                                                pad->GetPosition(), pad, aTextItem ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_COPPER );
+                drcItem->SetItems( pad, aTextItem );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, pad->GetPosition() );
+                addMarkerToPcb( marker );
                 break;
             }
         }
@@ -1148,8 +1190,11 @@ void DRC::testOutline()
 
     if( !m_pcb->GetBoardPolygonOutlines( m_board_outlines, nullptr, &error_loc ) )
     {
-        addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_INVALID_OUTLINE, error_loc, m_pcb ) );
-        return;
+        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_INVALID_OUTLINE );
+        drcItem->SetItems( m_pcb );
+
+        MARKER_PCB* marker = new MARKER_PCB( drcItem, error_loc );
+        addMarkerToPcb( marker );
     }
 }
 
@@ -1167,8 +1212,11 @@ void DRC::testDisabledLayers()
     {
         if( disabledLayers.test( track->GetLayer() ) )
         {
-            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_DISABLED_LAYER_ITEM,
-                                            track->GetPosition(), track ) );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DISABLED_LAYER_ITEM );
+            drcItem->SetItems( track );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, track->GetPosition() );
+            addMarkerToPcb( marker );
         }
     }
 
@@ -1179,8 +1227,11 @@ void DRC::testDisabledLayers()
                     {
                         if( disabledLayers.test( child->GetLayer() ) )
                         {
-                            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_DISABLED_LAYER_ITEM,
-                                                            child->GetPosition(), child ) );
+                            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DISABLED_LAYER_ITEM );
+                            drcItem->SetItems( child );
+
+                            MARKER_PCB* marker = new MARKER_PCB( drcItem, child->GetPosition() );
+                            addMarkerToPcb( marker );
                         }
                     } );
     }
@@ -1189,8 +1240,11 @@ void DRC::testDisabledLayers()
     {
         if( disabledLayers.test( zone->GetLayer() ) )
         {
-            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_DISABLED_LAYER_ITEM,
-                                            zone->GetPosition(), zone ) );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DISABLED_LAYER_ITEM );
+            drcItem->SetItems( zone );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, zone->GetPosition() );
+            addMarkerToPcb( marker );
         }
     }
 }
@@ -1211,8 +1265,11 @@ void DRC::testTextVars()
 
                     if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                     {
-                        addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_UNRESOLVED_VARIABLE,
-                                                        text->GetPosition(), text ) );
+                        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_UNRESOLVED_VARIABLE );
+                        drcItem->SetItems( text );
+
+                        MARKER_PCB* marker = new MARKER_PCB( drcItem, text->GetPosition() );
+                        addMarkerToPcb( marker );
                     }
                 }
             } );
@@ -1226,8 +1283,11 @@ void DRC::testTextVars()
 
             if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
             {
-                addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_UNRESOLVED_VARIABLE,
-                                                text->GetPosition(), text ) );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_UNRESOLVED_VARIABLE );
+                drcItem->SetItems( text );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, text->GetPosition() );
+                addMarkerToPcb( marker );
             }
         }
     }
@@ -1305,9 +1365,11 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 
                 if( !checkClearancePadToPad( aRefPad, &dummypad ) )
                 {
-                    // here we have a drc error on pad!
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_HOLE_NEAR_PAD,
-                                                    pad->GetPosition(), pad, aRefPad ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
+                    drcItem->SetItems( pad, aRefPad );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, pad->GetPosition() );
+                    addMarkerToPcb( marker );
                     return false;
                 }
             }
@@ -1322,9 +1384,11 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 
                 if( !checkClearancePadToPad( pad, &dummypad ) )
                 {
-                    // here we have a drc error on aRefPad!
-                    addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_HOLE_NEAR_PAD,
-                                                    aRefPad->GetPosition(), aRefPad, pad ) );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
+                    drcItem->SetItems( aRefPad, pad );
+
+                    MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefPad->GetPosition() );
+                    addMarkerToPcb( marker );
                     return false;
                 }
             }
@@ -1358,9 +1422,11 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 
         if( !checkClearancePadToPad( aRefPad, pad ) )
         {
-            // here we have a drc error!
-            addMarkerToPcb( new MARKER_PCB( userUnits(), DRCE_PAD_NEAR_PAD1,
-                                            aRefPad->GetPosition(), aRefPad, pad ) );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_PAD1 );
+            drcItem->SetItems( aRefPad, pad );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, aRefPad->GetPosition() );
+            addMarkerToPcb( marker );
             return false;
         }
     }
@@ -1373,13 +1439,14 @@ void DRC::doOverlappingCourtyardsDrc()
 {
     DRC_COURTYARD_OVERLAP drc_overlap( [&]( MARKER_PCB* aMarker ) { addMarkerToPcb( aMarker ); } );
 
-    drc_overlap.RunDRC( userUnits(), *m_pcb );
+    drc_overlap.RunDRC( *m_pcb );
 }
 
 
 void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits,
                           std::vector<DRC_ITEM*>& aDRCList )
 {
+    wxString msg;
 
     // Search for duplicate footprints on the board
     auto comp = []( const MODULE* x, const MODULE* y )
@@ -1388,15 +1455,14 @@ void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits,
     };
     auto mods = std::set<MODULE*, decltype( comp )>( comp );
 
-    for( auto mod : aPCB->Modules() )
+    for( MODULE* mod : aPCB->Modules() )
     {
         auto ins = mods.insert( mod );
 
         if( !ins.second )
         {
-            DRC_ITEM* item = new DRC_ITEM();
-            item->SetData( aUnits, DRCE_DUPLICATE_FOOTPRINT, mod, mod->GetPosition(),
-                           *ins.first, ( *ins.first )->GetPosition() );
+            DRC_ITEM* item = new DRC_ITEM( DRCE_DUPLICATE_FOOTPRINT );
+            item->SetItems( mod, *ins.first );
             aDRCList.push_back( item );
         }
     }
@@ -1405,15 +1471,16 @@ void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits,
     for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
     {
         COMPONENT* component = aNetlist.GetComponent( ii );
-
-        auto module = aPCB->FindModuleByReference( component->GetReference() );
+        MODULE*    module = aPCB->FindModuleByReference( component->GetReference() );
 
         if( module == NULL )
         {
-            DRC_ITEM* item = new DRC_ITEM();
-            item->SetData( DRCE_MISSING_FOOTPRINT, wxString::Format( wxT( "%s (%s)" ),
-                                                                     component->GetReference(),
-                                                                     component->GetValue() ) );
+            msg.Printf( _( "Missing footprint %s (%s)" ),
+                        component->GetReference(),
+                        component->GetValue() );
+
+            DRC_ITEM* item = new DRC_ITEM( DRCE_MISSING_FOOTPRINT );
+            item->SetErrorMessage( msg );
             aDRCList.push_back( item );
         }
     }
@@ -1425,8 +1492,8 @@ void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits,
 
         if( component == NULL )
         {
-            DRC_ITEM* item = new DRC_ITEM();
-            item->SetData( aUnits, DRCE_EXTRA_FOOTPRINT, module, module->GetPosition() );
+            DRC_ITEM* item = new DRC_ITEM( DRCE_EXTRA_FOOTPRINT );
+            item->SetItems( module );
             aDRCList.push_back( item );
         }
     }

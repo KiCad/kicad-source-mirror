@@ -507,13 +507,13 @@ unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 
 // see class_track.h
-void TRACK::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
     BOARD*   board = GetBoard();
 
     // Display basic infos
-    GetMsgPanelInfoBase( aUnits, aList );
+    GetMsgPanelInfoBase( aFrame, aList );
 
     // Display full track length (in Pcbnew)
     if( board )
@@ -524,15 +524,15 @@ void TRACK::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aLis
 
         std::tie( count, trackLen, lenPadToDie ) = board->GetTrackLength( *this );
 
-        msg = MessageTextFromValue( aUnits, trackLen );
+        msg = MessageTextFromValue( aFrame->GetUserUnits(), trackLen );
         aList.emplace_back( _( "Length" ), msg, DARKCYAN );
 
         if( lenPadToDie != 0 )
         {
-            msg = MessageTextFromValue( aUnits, trackLen + lenPadToDie );
+            msg = MessageTextFromValue( aFrame->GetUserUnits(), trackLen + lenPadToDie );
             aList.emplace_back( _( "Full Length" ), msg, DARKCYAN );
 
-            msg = MessageTextFromValue( aUnits, lenPadToDie, true );
+            msg = MessageTextFromValue( aFrame->GetUserUnits(), lenPadToDie, true );
             aList.emplace_back( _( "Pad To Die Length" ), msg, DARKCYAN );
         }
     }
@@ -543,21 +543,21 @@ void TRACK::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aLis
     {
         aList.emplace_back( _( "NC Name" ), netclass->GetName(), DARKMAGENTA );
 
-        msg = MessageTextFromValue( aUnits, netclass->GetClearance(), true );
+        msg = MessageTextFromValue( aFrame->GetUserUnits(), netclass->GetClearance(), true );
         aList.emplace_back( _( "NC Clearance" ), msg, DARKMAGENTA );
 
-        msg = MessageTextFromValue( aUnits, netclass->GetTrackWidth(), true );
+        msg = MessageTextFromValue( aFrame->GetUserUnits(), netclass->GetTrackWidth(), true );
         aList.emplace_back( _( "NC Width" ), msg, DARKMAGENTA );
 
-        msg = MessageTextFromValue( aUnits, netclass->GetViaDiameter(), true );
+        msg = MessageTextFromValue( aFrame->GetUserUnits(), netclass->GetViaDiameter(), true );
         aList.emplace_back( _( "NC Via Size" ), msg, DARKMAGENTA );
 
-        msg = MessageTextFromValue( aUnits, netclass->GetViaDrill(), true );
+        msg = MessageTextFromValue( aFrame->GetUserUnits(), netclass->GetViaDrill(), true );
         aList.emplace_back( _( "NC Via Drill"), msg, DARKMAGENTA );
     }
 }
 
-void TRACK::GetMsgPanelInfoBase_Common( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 
@@ -618,14 +618,14 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_UNITS aUnits, std::vector<MSG_PANEL_
 }
 
 
-void TRACK::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void TRACK::GetMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
     BOARD* board = GetBoard();
 
     aList.emplace_back( _( "Type" ), _( "Track" ), DARKCYAN );
 
-    GetMsgPanelInfoBase_Common( aUnits, aList );
+    GetMsgPanelInfoBase_Common( aFrame, aList );
 
     // Display layer
     if( board )
@@ -636,17 +636,17 @@ void TRACK::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& 
     aList.emplace_back( _( "Layer" ), msg, BROWN );
 
     // Display width
-    msg = MessageTextFromValue( aUnits, m_Width, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
 
     aList.emplace_back( _( "Width" ), msg, DARKCYAN );
 
     // Display segment length
-    msg = ::MessageTextFromValue( aUnits, GetLength() );
+    msg = ::MessageTextFromValue( aFrame->GetUserUnits(), GetLength() );
     aList.emplace_back( _( "Segment Length" ), msg, DARKCYAN );
 }
 
 
-void VIA::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void VIA::GetMsgPanelInfoBase( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
     BOARD*   board = GetBoard();
@@ -675,7 +675,7 @@ void VIA::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aL
 
     aList.emplace_back( _( "Type" ), msg, DARKCYAN );
 
-    GetMsgPanelInfoBase_Common( aUnits, aList );
+    GetMsgPanelInfoBase_Common( aFrame, aList );
 
 
     // Display layer pair
@@ -692,13 +692,13 @@ void VIA::GetMsgPanelInfoBase( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aL
     aList.emplace_back( _( "Layers" ), msg, BROWN );
 
     // Display width
-    msg = MessageTextFromValue( aUnits, m_Width, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
 
     // Display diameter value:
     aList.emplace_back( _( "Diameter" ), msg, DARKCYAN );
 
     // Display drill value
-    msg = MessageTextFromValue( aUnits, GetDrillValue() );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetDrillValue() );
 
     wxString title = _( "Drill" );
     title += wxT( " " );

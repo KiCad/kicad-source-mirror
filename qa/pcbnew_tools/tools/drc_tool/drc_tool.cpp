@@ -39,7 +39,7 @@ using DRC_DURATION = std::chrono::microseconds;
 
 /**
  * DRC runner: provides a simple framework to run some DRC checks on #BOARDS.
- * The DRC_RUNNER can be set up as needed to instantiate a #DRC_PROVIDER to
+ * The DRC_RUNNER can be set up as needed to instantiate a #DRC_TEST_PROVIDER to
  * perform the desired DRC on the #BOARD and provide some basic information
  * about what happened.
  */
@@ -78,12 +78,12 @@ public:
                                   markers.push_back( std::unique_ptr<MARKER_PCB>( aMarker ) );
                               };
 
-        std::unique_ptr<DRC_PROVIDER> drc_prov = createDrcProvider( aBoard, marker_handler );
+        std::unique_ptr<DRC_TEST_PROVIDER> drc_prov = createDrcProvider( aBoard, marker_handler );
 
         DRC_DURATION duration;
         {
             SCOPED_PROF_COUNTER<DRC_DURATION> timer( duration );
-            drc_prov->RunDRC( EDA_UNITS::MILLIMETRES, aBoard );
+            drc_prov->RunDRC( aBoard );
         }
 
         // report results
@@ -91,7 +91,7 @@ public:
             reportDuration( duration );
 
         if( m_exec_context.m_print_markers )
-            reportMarkers( markers );
+            reportMarkers( aBoard, markers );
     }
 
 private:
@@ -105,22 +105,29 @@ private:
      */
     virtual BOARD_DESIGN_SETTINGS getDesignSettings() const = 0;
 
-    virtual std::unique_ptr<DRC_PROVIDER> createDrcProvider(
-            BOARD& aBoard, DRC_PROVIDER::MARKER_HANDLER aHandler ) = 0;
+    virtual std::unique_ptr<DRC_TEST_PROVIDER> createDrcProvider(
+            BOARD& aBoard, DRC_TEST_PROVIDER::MARKER_HANDLER aHandler ) = 0;
 
     void reportDuration( const DRC_DURATION& aDuration ) const
     {
         std::cout << "Took: " << aDuration.count() << "us" << std::endl;
     }
 
-    void reportMarkers( const std::vector<std::unique_ptr<MARKER_PCB>>& aMarkers ) const
+    void reportMarkers( BOARD& aBoard,
+                        const std::vector<std::unique_ptr<MARKER_PCB>>& aMarkers ) const
     {
+        std::map<KIID, EDA_ITEM*> itemMap;
+        aBoard.FillItemMap( itemMap );
+
         std::cout << "DRC markers: " << aMarkers.size() << std::endl;
 
         int index = 0;
 
         for( const auto& m : aMarkers )
-            std::cout << index++ << ": " << m->GetRCItem()->ShowReport( EDA_UNITS::MILLIMETRES );
+        {
+            std::cout << index++ << ": " ;
+            std::cout << m->GetRCItem()->ShowReport( EDA_UNITS::MILLIMETRES, itemMap );
+        }
 
         if( index )
             std::cout << std::endl;
@@ -159,8 +166,8 @@ private:
         return des_settings;
     }
 
-    std::unique_ptr<DRC_PROVIDER> createDrcProvider(
-            BOARD& aBoard, DRC_PROVIDER::MARKER_HANDLER aHandler ) override
+    std::unique_ptr<DRC_TEST_PROVIDER> createDrcProvider(
+            BOARD& aBoard, DRC_TEST_PROVIDER::MARKER_HANDLER aHandler ) override
     {
         return std::make_unique<DRC_COURTYARD_OVERLAP>( aHandler );
     }
@@ -196,8 +203,8 @@ private:
         return des_settings;
     }
 
-    std::unique_ptr<DRC_PROVIDER> createDrcProvider(
-            BOARD& aBoard, DRC_PROVIDER::MARKER_HANDLER aHandler ) override
+    std::unique_ptr<DRC_TEST_PROVIDER> createDrcProvider(
+            BOARD& aBoard, DRC_TEST_PROVIDER::MARKER_HANDLER aHandler ) override
     {
         return std::make_unique<DRC_COURTYARD_OVERLAP>( aHandler );
     }

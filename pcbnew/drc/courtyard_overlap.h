@@ -32,12 +32,12 @@
 /**
  * A class that provides the courtyard-based DRC checks.
  */
-class DRC_COURTYARD_OVERLAP : public DRC_PROVIDER
+class DRC_COURTYARD_OVERLAP : public DRC_TEST_PROVIDER
 {
 public:
     DRC_COURTYARD_OVERLAP( MARKER_HANDLER aMarkerHandler );
 
-    bool RunDRC( EDA_UNITS aUnits, BOARD& aBoard ) const override;
+    bool RunDRC( BOARD& aBoard ) const override;
 };
 
 #endif // DRC_COURTYARD_OVERLAP__H

@@ -390,7 +390,7 @@ char SCH_BUS_ENTRY_BASE::GetBusEntryShape() const
 }
 
 
-void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 

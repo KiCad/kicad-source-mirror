@@ -342,7 +342,7 @@ public:
      */
     bool ResolveTextVar( wxString* token, int aDepth = 0 ) const;
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     /* there is no member for orientation in sch_sheet, to preserve file
      * format, we detect orientation based on pin edges
@@ -568,7 +568,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    wxPoint GetPosition() const override { return m_pos; }
+    const wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( const wxPoint& aPosition ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;

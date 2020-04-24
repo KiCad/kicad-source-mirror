@@ -187,7 +187,7 @@ public:
 
     wxPoint GetLibPosition() const { return EDA_TEXT::GetTextPos(); }
 
-    wxPoint GetPosition() const override;
+    const wxPoint GetPosition() const override;
     void SetPosition( const wxPoint& aPosition ) override;
 
     wxPoint GetParentPosition() const;

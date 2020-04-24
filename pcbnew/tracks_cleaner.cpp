@@ -133,8 +133,8 @@ bool TRACKS_CLEANER::removeBadTrackSegments()
         {
             if( segment->GetNetCode() != testedPad->GetNetCode() )
             {
-                DRC_ITEM* item = new DRC_ITEM();
-                item->SetData( m_units, DRCE_SHORT, segment, segment->GetPosition() );
+                DRC_ITEM* item = new DRC_ITEM( DRCE_SHORT );
+                item->SetItems( segment );
                 m_itemsList->push_back( item );
 
                 toRemove.insert( segment );
@@ -145,8 +145,8 @@ bool TRACKS_CLEANER::removeBadTrackSegments()
         {
             if( segment->GetNetCode() != testedTrack->GetNetCode() && !testedTrack->GetState( FLAG0 ) )
             {
-                DRC_ITEM* item = new DRC_ITEM();
-                item->SetData( m_units, DRCE_SHORT, segment, segment->GetPosition() );
+                DRC_ITEM* item = new DRC_ITEM( DRCE_SHORT );
+                item->SetItems( segment );
                 m_itemsList->push_back( item );
 
                 toRemove.insert( segment );
@@ -190,9 +190,8 @@ bool TRACKS_CLEANER::cleanupVias()
 
             if( ( pad->GetLayerSet() & all_cu ) == all_cu )
             {
-                DRC_ITEM* item = new DRC_ITEM();
-                item->SetData( m_units, DRCE_REDUNDANT_VIA, via1, via1->GetPosition(), pad,
-                               pad->GetPosition() );
+                DRC_ITEM* item = new DRC_ITEM( DRCE_REDUNDANT_VIA );
+                item->SetItems( via1, pad );
                 m_itemsList->push_back( item );
 
                 // redundant: delete the via
@@ -210,9 +209,8 @@ bool TRACKS_CLEANER::cleanupVias()
 
             if( via1->GetViaType() == via2->GetViaType() )
             {
-                DRC_ITEM* item = new DRC_ITEM();
-                item->SetData( m_units, DRCE_REDUNDANT_VIA, via1, via1->GetPosition(), via2,
-                               via2->GetPosition() );
+                DRC_ITEM* item = new DRC_ITEM( DRCE_REDUNDANT_VIA );
+                item->SetItems( via1, via2 );
                 m_itemsList->push_back( item );
 
                 toRemove.insert( via2 );
@@ -309,9 +307,9 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
 
             if( flag_erase )
             {
-                int code = track->IsTrack() ? DRCE_DANGLING_TRACK : DRCE_DANGLING_VIA;
-                DRC_ITEM* item = new DRC_ITEM();
-                item->SetData( m_units, code, track, track->GetPosition() );
+                int errorCode = track->IsTrack() ? DRCE_DANGLING_TRACK : DRCE_DANGLING_VIA;
+                DRC_ITEM* item = new DRC_ITEM( errorCode );
+                item->SetItems( track );
                 m_itemsList->push_back( item );
 
                 if( !m_dryRun )
@@ -343,8 +341,8 @@ bool TRACKS_CLEANER::deleteNullSegments( TRACKS& aTracks )
     {
         if( segment->IsNull() && segment->Type() == PCB_TRACE_T && !segment->IsLocked() )
         {
-            DRC_ITEM* item = new DRC_ITEM();
-            item->SetData( m_units, DRCE_ZERO_LENGTH_TRACK, segment, segment->GetPosition() );
+            DRC_ITEM* item = new DRC_ITEM( DRCE_ZERO_LENGTH_TRACK );
+            item->SetItems( segment );
             m_itemsList->push_back( item );
 
             toRemove.insert( segment );
@@ -369,8 +367,8 @@ bool TRACKS_CLEANER::deleteTracksInPads()
         {
             if( pad->HitTest( track->GetStart() ) && pad->HitTest( track->GetEnd() ) )
             {
-                DRC_ITEM* item = new DRC_ITEM();
-                item->SetData( m_units, DRCE_TRACK_IN_PAD, track, track->GetPosition() );
+                DRC_ITEM* item = new DRC_ITEM( DRCE_TRACK_IN_PAD );
+                item->SetItems( track );
                 m_itemsList->push_back( item );
 
                 toRemove.insert( track );
@@ -412,8 +410,8 @@ bool TRACKS_CLEANER::cleanupSegments()
                     && track1->GetWidth() == track2->GetWidth()
                     && track1->GetLayer() == track2->GetLayer() )
             {
-                DRC_ITEM* item = new DRC_ITEM();
-                item->SetData( m_units, DRCE_DUPLICATE_TRACK, track2, track2->GetPosition() );
+                DRC_ITEM* item = new DRC_ITEM( DRCE_DUPLICATE_TRACK );
+                item->SetItems( track2 );
                 m_itemsList->push_back( item );
 
                 track2->SetFlags( IS_DELETED );
@@ -512,9 +510,8 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
             return false;
     }
 
-    DRC_ITEM* item = new DRC_ITEM();
-    item->SetData( m_units, DRCE_MERGE_TRACKS, aSeg1, aSeg1->GetPosition(), aSeg2,
-                   aSeg2->GetPosition() );
+    DRC_ITEM* item = new DRC_ITEM( DRCE_MERGE_TRACKS );
+    item->SetItems( aSeg1, aSeg2 );
     m_itemsList->push_back( item );
 
     aSeg2->SetFlags( IS_DELETED );

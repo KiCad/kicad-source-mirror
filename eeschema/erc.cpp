@@ -182,9 +182,10 @@ int TestDuplicateSheetNames( bool aCreateMarker )
                 {
                     if( aCreateMarker )
                     {
-                        SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                        marker->SetData( EDA_UNITS::UNSCALED, ERCE_DUPLICATE_SHEET_NAME,
-                                         item->GetPosition(), item, test_item );
+                        ERC_ITEM* ercItem = new ERC_ITEM( ERCE_DUPLICATE_SHEET_NAME );
+                        ercItem->SetItems( item, test_item );
+
+                        SCH_MARKER* marker = new SCH_MARKER( ercItem, item->GetPosition() );
                         screen->Append( marker );
                     }
 
@@ -214,12 +215,14 @@ void TestTextVars()
                 {
                     if( field.GetShownText().Matches( wxT( "*${*}*" ) ) )
                     {
-                        wxPoint delta = field.GetPosition() - component->GetPosition();
-                        delta = component->GetTransform().TransformCoordinate( delta );
+                        wxPoint pos = field.GetPosition() - component->GetPosition();
+                        pos = component->GetTransform().TransformCoordinate( pos );
+                        pos += component->GetPosition();
 
-                        SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                        marker->SetData( EDA_UNITS::UNSCALED, ERCE_UNRESOLVED_VARIABLE,
-                                         component->GetPosition() + delta, &field );
+                        ERC_ITEM* ercItem = new ERC_ITEM( ERCE_UNRESOLVED_VARIABLE );
+                        ercItem->SetItems( &field );
+
+                        SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
                         screen->Append( marker );
                     }
                 }
@@ -232,9 +235,10 @@ void TestTextVars()
                 {
                     if( field.GetShownText().Matches( wxT( "*${*}*" ) ) )
                     {
-                        SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                        marker->SetData( EDA_UNITS::UNSCALED, ERCE_UNRESOLVED_VARIABLE,
-                                         field.GetPosition(), &field );
+                        ERC_ITEM* ercItem = new ERC_ITEM( ERCE_UNRESOLVED_VARIABLE );
+                        ercItem->SetItems( &field );
+
+                        SCH_MARKER* marker = new SCH_MARKER( ercItem, field.GetPosition() );
                         screen->Append( marker );
                     }
                 }
@@ -243,9 +247,10 @@ void TestTextVars()
                 {
                     if( pin->GetShownText().Matches( wxT( "*${*}*" ) ) )
                     {
-                        SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                        marker->SetData( EDA_UNITS::UNSCALED, ERCE_UNRESOLVED_VARIABLE,
-                                         pin->GetPosition(), pin );
+                        ERC_ITEM* ercItem = new ERC_ITEM( ERCE_UNRESOLVED_VARIABLE );
+                        ercItem->SetItems( pin );
+
+                        SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
                         screen->Append( marker );
                     }
                 }
@@ -254,9 +259,10 @@ void TestTextVars()
             {
                 if( text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
-                    SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                    marker->SetData( EDA_UNITS::UNSCALED, ERCE_UNRESOLVED_VARIABLE,
-                                     text->GetPosition(), text );
+                    ERC_ITEM* ercItem = new ERC_ITEM( ERCE_UNRESOLVED_VARIABLE );
+                    ercItem->SetItems( text );
+
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
                     screen->Append( marker );
                 }
             }
@@ -287,8 +293,10 @@ int TestConflictingBusAliases()
                                 alias->GetParent()->GetFileName(),
                                 test->GetParent()->GetFileName() );
 
-                    SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                    marker->SetData( ERCE_BUS_ALIAS_CONFLICT, wxPoint(), msg );
+                    ERC_ITEM* ercItem = new ERC_ITEM( ERCE_BUS_ALIAS_CONFLICT );
+                    ercItem->SetErrorMessage( msg );
+
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, wxPoint() );
                     test->GetParent()->Append( marker );
 
                     ++err_count;
@@ -321,20 +329,19 @@ int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
         }
 
         // Reference footprint
-        wxString fp;
-        wxString unitName;
-        KIID     unitID;
+        SCH_COMPONENT* unit = nullptr;
+        wxString       unitName;
+        wxString       unitFP;
 
         for( unsigned i = 0; i < component.second.GetCount(); ++i )
         {
-            SCH_COMPONENT* unit = refList.GetItem( i ).GetComp();
             SCH_SHEET_PATH sheetPath = refList.GetItem( i ).GetSheetPath();
-            fp = unit->GetField( FOOTPRINT )->GetText();
+            unitFP = refList.GetItem( i ).GetComp()->GetField( FOOTPRINT )->GetText();
 
-            if( !fp.IsEmpty() )
+            if( !unitFP.IsEmpty() )
             {
+                unit = refList.GetItem( i ).GetComp();
                 unitName = unit->GetRef( &sheetPath, true );
-                unitID = unit->m_Uuid;
                 break;
             }
         }
@@ -343,20 +350,20 @@ int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
         {
             SCH_REFERENCE& secondRef = refList.GetItem( i );
             SCH_COMPONENT* secondUnit = secondRef.GetComp();
-            SCH_SHEET_PATH sheetPath = secondRef.GetSheetPath();
-
+            wxString       secondName = secondUnit->GetRef( &secondRef.GetSheetPath(), true );
             const wxString secondFp = secondUnit->GetField( FOOTPRINT )->GetText();
-            wxString       secondName = secondUnit->GetRef( &sheetPath, true );
-            KIID           secondID = secondUnit->m_Uuid;
+            wxString       msg;
 
-            if( !secondFp.IsEmpty() && fp != secondFp )
+            if( !secondFp.IsEmpty() && unitFP != secondFp )
             {
-                wxString description = _( "%s has '%s' assigned" );
+                msg.Printf( _( "Different footprints assigned to %s and %s" ),
+                            unitName, secondName );
 
-                SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                marker->SetData( ERCE_DIFFERENT_UNIT_FP, secondUnit->GetPosition(),
-                                 wxString::Format( description, unitName, fp ), unitID,
-                                 wxString::Format( description, secondName, secondFp ), secondID );
+                ERC_ITEM* ercItem = new ERC_ITEM( ERCE_DIFFERENT_UNIT_FP );
+                ercItem->SetErrorMessage( msg );
+                ercItem->SetItems( unit, secondUnit );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, secondUnit->GetPosition() );
                 secondRef.GetSheetPath().LastScreen()->Append( marker );
 
                 ++errors;
@@ -375,28 +382,27 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMi
 
     SCH_PIN* pin = static_cast<SCH_PIN*>( aNetItemRef->m_Comp );
 
-    /* Create new marker for ERC error. */
-    SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-    aNetItemRef->m_SheetPath.LastScreen()->Append( marker );
-
     if( aNetItemTst == NULL)
     {
         if( aMinConn == NOD )    /* Nothing driving the net. */
         {
-            marker->SetData( ERCE_PIN_NOT_DRIVEN, aNetItemRef->m_Start,
-                             pin->GetDescription( &aNetItemRef->m_SheetPath ), pin->m_Uuid );
+            ERC_ITEM* ercItem = new ERC_ITEM( ERCE_PIN_NOT_DRIVEN );
+            ercItem->SetItems( pin );
+
+            SCH_MARKER* marker = new SCH_MARKER( ercItem, aNetItemRef->m_Start );
+            aNetItemRef->m_SheetPath.LastScreen()->Append( marker );
             return;
         }
     }
 
     if( aNetItemTst && aNetItemTst->m_Type == NETLIST_ITEM::PIN )  /* Error between 2 pins */
     {
-        SCH_PIN* pinB = static_cast<SCH_PIN*>( aNetItemTst->m_Comp );
+        ERC_ITEM* ercItem = new ERC_ITEM( aDiag == ERR ? ERCE_PIN_TO_PIN_ERROR
+                                                       : ERCE_PIN_TO_PIN_WARNING );
+        ercItem->SetItems( pin, static_cast<SCH_PIN*>( aNetItemTst->m_Comp ) );
 
-        marker->SetData( aDiag == ERR ? ERCE_PIN_TO_PIN_ERROR : ERCE_PIN_TO_PIN_WARNING,
-                         aNetItemRef->m_Start,
-                         pin->GetDescription( &aNetItemRef->m_SheetPath ), pin->m_Uuid,
-                         pinB->GetDescription( &aNetItemTst->m_SheetPath ), pinB->m_Uuid );
+        SCH_MARKER* marker = new SCH_MARKER( ercItem, aNetItemRef->m_Start );
+        aNetItemRef->m_SheetPath.LastScreen()->Append( marker );
     }
 }
 
@@ -724,9 +730,9 @@ static int countIndenticalLabels( std::vector<NETLIST_OBJECT*>& aList, NETLIST_O
 // Helper function: creates a marker for similar labels ERC warning
 static void SimilarLabelsDiagnose( NETLIST_OBJECT* aItemA, NETLIST_OBJECT* aItemB )
 {
-    // Create new marker for ERC.
-    SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-    marker->SetData( EDA_UNITS::UNSCALED, ERCE_SIMILAR_LABELS, aItemA->m_Start,
-                     aItemA->m_Comp, aItemB->m_Comp );
+    ERC_ITEM* ercItem = new ERC_ITEM( ERCE_SIMILAR_LABELS );
+    ercItem->SetItems( aItemA->m_Comp, aItemB->m_Comp );
+
+    SCH_MARKER* marker = new SCH_MARKER( ercItem, aItemA->m_Start );
     aItemA->m_SheetPath.LastScreen()->Append( marker );
 }

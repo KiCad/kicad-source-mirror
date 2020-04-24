@@ -26,7 +26,7 @@
 #include <wx/dataview.h>
 #include <widgets/ui_common.h>
 #include <marker_base.h>
-#include <eda_base_frame.h>
+#include <eda_draw_frame.h>
 #include <rc_item.h>
 #include <base_units.h>
 
@@ -41,25 +41,42 @@ wxString RC_ITEM::ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos )
 }
 
 
-wxString RC_ITEM::ShowReport( EDA_UNITS aUnits ) const
+wxString RC_ITEM::ShowReport( EDA_UNITS aUnits, const std::map<KIID, EDA_ITEM*>& aItemMap ) const
 {
-    if( m_hasSecondItem )
+    EDA_ITEM* mainItem = nullptr;
+    EDA_ITEM* auxItem = nullptr;
+
+    if( m_mainItemUuid != niluuid )
+        mainItem = aItemMap.at( m_mainItemUuid );
+
+    if( m_auxItemUuid != niluuid )
+        auxItem = aItemMap.at( m_auxItemUuid );
+
+    wxString msg = m_errorMessage.IsEmpty() ? GetErrorText() : m_errorMessage;
+
+    if( mainItem && auxItem )
     {
         return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
-                                 m_ErrorCode,
-                                 GetErrorText(),
-                                 ShowCoord( aUnits, m_MainPosition ),
-                                 m_MainText,
-                                 ShowCoord( aUnits, m_AuxPosition ),
-                                 m_AuxText );
+                                 m_errorCode,
+                                 msg,
+                                 ShowCoord( aUnits, mainItem->GetPosition() ),
+                                 mainItem->GetSelectMenuText( aUnits ),
+                                 ShowCoord( aUnits, auxItem->GetPosition() ),
+                                 auxItem->GetSelectMenuText( aUnits ) );
+    }
+    else if( mainItem )
+    {
+        return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
+                                 m_errorCode,
+                                 msg,
+                                 ShowCoord( aUnits, mainItem->GetPosition() ),
+                                 mainItem->GetSelectMenuText( aUnits ) );
     }
     else
     {
-        return wxString::Format( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
-                                 m_ErrorCode,
-                                 GetErrorText(),
-                                 ShowCoord( aUnits, m_MainPosition ),
-                                 m_MainText );
+        return wxString::Format( wxT( "ErrType(%d): %s\n" ),
+                                 m_errorCode,
+                                 msg );
     }
 }
 
@@ -91,7 +108,7 @@ KIID RC_TREE_MODEL::ToUUID( wxDataViewItem aItem )
 }
 
 
-RC_TREE_MODEL::RC_TREE_MODEL( EDA_BASE_FRAME* aParentFrame, wxDataViewCtrl* aView ) :
+RC_TREE_MODEL::RC_TREE_MODEL( EDA_DRAW_FRAME* aParentFrame, wxDataViewCtrl* aView ) :
         m_editFrame( aParentFrame ),
         m_view( aView ),
         m_severities( 0 ),
@@ -221,8 +238,8 @@ unsigned int RC_TREE_MODEL::GetChildren( wxDataViewItem const& aItem,
  * Called by the wxDataView to fetch an item's value.
  */
 void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
-                               wxDataViewItem const&   aItem,
-                               unsigned int            aCol ) const
+                              wxDataViewItem const&   aItem,
+                              unsigned int            aCol ) const
 {
     const RC_TREE_NODE* node = ToNode( aItem );
     const RC_ITEM*      rcItem = node->m_RcItem;
@@ -242,11 +259,19 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
         break;
 
     case RC_TREE_NODE::MAIN_ITEM:
-        aVariant = rcItem->GetMainText();
+    {
+        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetMainItemID() );
+
+        aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+    }
         break;
 
     case RC_TREE_NODE::AUX_ITEM:
-        aVariant = rcItem->GetAuxText();
+    {
+        EDA_ITEM* item = m_editFrame->GetItem( rcItem->GetAuxItemID() );
+
+        aVariant = item->GetSelectMenuText( m_editFrame->GetUserUnits() );
+    }
         break;
     }
 }

@@ -214,6 +214,8 @@ public:
         return m_Pcb;
     }
 
+    EDA_ITEM* GetItem( const KIID& aId ) override;
+
     void FocusOnItem( BOARD_ITEM* aItem );
 
     // General

@@ -121,7 +121,7 @@ bool LIB_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
     m_frame->OnModify( );
 
     MSG_PANEL_ITEMS items;
-    aPin->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
+    aPin->GetMsgPanelInfo( m_frame, items );
     m_frame->SetMsgPanel( items );
 
     aPin->EnableEditMode( false );

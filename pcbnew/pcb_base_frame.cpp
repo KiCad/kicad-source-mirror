@@ -187,6 +187,12 @@ void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
 }
 
 
+EDA_ITEM* PCB_BASE_FRAME::GetItem( const KIID& aId )
+{
+    return GetBoard()->GetItem( aId );
+}
+
+
 void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
 {
     static KIID lastBrightenedItemID( niluuid );

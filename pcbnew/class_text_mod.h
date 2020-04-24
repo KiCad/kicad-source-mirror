@@ -179,7 +179,7 @@ public:
     ///> Set relative coordinates.
     void SetLocalCoord();
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const override;
     bool TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy = 0 ) const override;

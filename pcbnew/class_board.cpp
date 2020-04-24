@@ -76,7 +76,6 @@ public:
     }
 
     // pure virtuals:
-    const wxPoint GetPosition() const override { return wxPoint(); }
     void SetPosition( const wxPoint& ) override {}
 
 #if defined(DEBUG)
@@ -761,6 +760,36 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID )
 }
 
 
+void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
+{
+    for( TRACK* track : Tracks() )
+        aMap[ track->m_Uuid ] = track;
+
+    for( MODULE* module : Modules() )
+    {
+        aMap[ module->m_Uuid ] = module;
+
+        for( D_PAD* pad : module->Pads() )
+            aMap[ pad->m_Uuid ] = pad;
+
+        aMap[ module->Reference().m_Uuid ] = &module->Reference();
+        aMap[ module->Value().m_Uuid ] = &module->Value();
+
+        for( BOARD_ITEM* drawing : module->GraphicalItems() )
+            aMap[ drawing->m_Uuid ] = drawing;
+    }
+
+    for( ZONE_CONTAINER* zone : Zones() )
+        aMap[ zone->m_Uuid ] = zone;
+
+    for( BOARD_ITEM* drawing : Drawings() )
+        aMap[ drawing->m_Uuid ] = drawing;
+
+    for( MARKER_PCB* marker : m_markers )
+        aMap[ marker->m_Uuid ] = marker;
+}
+
+
 unsigned BOARD::GetNodesCount( int aNet )
 {
     unsigned retval = 0;
@@ -841,7 +870,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 }
 
 
-void BOARD::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void BOARD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString txt;
     int      viasCount = 0;

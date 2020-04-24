@@ -362,6 +362,15 @@ void SCH_EDIT_FRAME::SaveCopyForRepeatItem( SCH_ITEM* aItem )
 }
 
 
+EDA_ITEM* SCH_EDIT_FRAME::GetItem( const KIID& aId )
+{
+    SCH_SHEET_LIST schematic( g_RootSheet );
+    SCH_SHEET_PATH dummy;
+
+    return schematic.GetItem( aId, &dummy );
+}
+
+
 void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 {
     SCH_SCREEN* screen;
@@ -1176,12 +1185,11 @@ void SCH_EDIT_FRAME::FixupJunctions()
 
         for( auto aItem : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
-            auto cmp   = static_cast<SCH_COMPONENT*>( aItem );
-            auto xform = cmp->GetTransform();
+            auto cmp = static_cast<SCH_COMPONENT*>( aItem );
 
             for( const SCH_PIN* pin : cmp->GetSchPins( &sheet ) )
             {
-                auto pos = cmp->GetPosition() + xform.TransformCoordinate( pin->GetPosition() );
+                auto pos = pin->GetPosition();
 
                 // Test if a _new_ junction is needed, and add it if missing
                 if( screen->IsJunctionNeeded( pos, true ) )

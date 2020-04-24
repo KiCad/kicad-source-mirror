@@ -35,7 +35,7 @@
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
-
+#include <eda_draw_frame.h>
 #include <lib_item.h>
 #include <general.h>
 #include <transform.h>
@@ -347,11 +347,11 @@ void LIB_TEXT::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* 
 }
 
 
-void LIB_TEXT::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void LIB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
-    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
+    LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    wxString msg = MessageTextFromValue( aUnits, GetTextThickness(), true );
+    wxString msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextThickness(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 }
 

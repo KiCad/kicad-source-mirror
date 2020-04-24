@@ -2042,8 +2042,10 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                                marker->SetData( 0, linestart, "Bus Entry needed" );
+                                ERC_ITEM* ercItem = new ERC_ITEM( 0 );
+                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
+
+                                SCH_MARKER* marker = new SCH_MARKER( ercItem, linestart );
                                 m_currentSheet->GetScreen()->Append( marker );
                             }
                         }
@@ -2078,8 +2080,10 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                                marker->SetData( 0, linestart, "Bus Entry needed" );
+                                ERC_ITEM* ercItem = new ERC_ITEM( 0 );
+                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
+
+                                SCH_MARKER* marker = new SCH_MARKER( ercItem, linestart );
                                 m_currentSheet->GetScreen()->Append( marker );
                             }
                         }
@@ -2118,8 +2122,10 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                                marker->SetData( 0, lineend, "Bus Entry needed" );
+                                ERC_ITEM* ercItem = new ERC_ITEM( 0 );
+                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
+
+                                SCH_MARKER* marker = new SCH_MARKER( ercItem, lineend );
                                 m_currentSheet->GetScreen()->Append( marker );
                             }
                         }
@@ -2153,8 +2159,10 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                                marker->SetData( 0, lineend, "Bus Entry needed" );
+                                ERC_ITEM* ercItem = new ERC_ITEM( 0 );
+                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
+
+                                SCH_MARKER* marker = new SCH_MARKER( ercItem, lineend );
                                 m_currentSheet->GetScreen()->Append( marker );
                             }
                         }
@@ -2193,8 +2201,10 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                                marker->SetData( 0, linestart, "Bus Entry needed" );
+                                ERC_ITEM* ercItem = new ERC_ITEM( 0 );
+                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
+
+                                SCH_MARKER* marker = new SCH_MARKER( ercItem, linestart );
                                 m_currentSheet->GetScreen()->Append( marker );
                             }
                         }
@@ -2223,8 +2233,10 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                                marker->SetData( 0, linestart, "Bus Entry needed" );
+                                ERC_ITEM* ercItem = new ERC_ITEM( 0 );
+                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
+
+                                SCH_MARKER* marker = new SCH_MARKER( ercItem, linestart );
                                 m_currentSheet->GetScreen()->Append( marker );
                             }
                         }
@@ -2260,8 +2272,10 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                                marker->SetData( 0, lineend, "Bus Entry needed" );
+                                ERC_ITEM* ercItem = new ERC_ITEM( 0 );
+                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
+
+                                SCH_MARKER* marker = new SCH_MARKER( ercItem, lineend );
                                 m_currentSheet->GetScreen()->Append( marker );
                             }
                         }
@@ -2290,8 +2304,10 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                             }
                             else
                             {
-                                SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-                                marker->SetData( 0, lineend, "Bus Entry needed" );
+                                ERC_ITEM* ercItem = new ERC_ITEM( 0 );
+                                ercItem->SetErrorMessage( _( "Bus Entry needed" ) );
+
+                                SCH_MARKER* marker = new SCH_MARKER( ercItem, lineend );
                                 m_currentSheet->GetScreen()->Append( marker );
                             }
                         }

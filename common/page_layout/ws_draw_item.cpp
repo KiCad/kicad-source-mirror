@@ -50,6 +50,7 @@
 
 #include <fctsys.h>
 #include <eda_rect.h>
+#include <eda_draw_frame.h>
 #include <gr_text.h>
 #include <ws_draw_item.h>
 #include <ws_data_model.h>
@@ -95,7 +96,7 @@ bool WS_DRAW_ITEM_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAc
 }
 
 
-void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     wxString            msg;
     WS_DATA_ITEM* dataItem = GetPeer();
@@ -144,8 +145,8 @@ void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aLis
     aList.push_back( MSG_PANEL_ITEM( _( "Repeat Label Increment" ), msg, DARKGRAY ) );
 
     msg.Printf( wxT( "(%s, %s)" ),
-                MessageTextFromValue( aUnits, dataItem->m_IncrementVector.x ),
-                MessageTextFromValue( aUnits, dataItem->m_IncrementVector.y ) );
+                MessageTextFromValue( aFrame->GetUserUnits(), dataItem->m_IncrementVector.x ),
+                MessageTextFromValue( aFrame->GetUserUnits(), dataItem->m_IncrementVector.y ) );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Repeat Position Increment" ), msg, RED ) );
 

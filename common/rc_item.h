@@ -72,18 +72,13 @@ public:
 /**
  * RC_ITEM
  * is a holder for a DRC (in Pcbnew) or ERC (in Eeschema) error item.
- * There are holders for information on two EDA_ITEMs.  Some errors involve only one item
- * (item with an incorrect param) so m_hasSecondItem is set to false in this case.
+ * RC_ITEMs can have zero, one, or two related EDA_ITEMs.
  */
 class RC_ITEM
 {
 protected:
-    int           m_ErrorCode;         // the error code's numeric value
-    wxString      m_MainText;          // text for the first EDA_ITEM
-    wxString      m_AuxText;           // text for the second EDA_ITEM
-    wxPoint       m_MainPosition;      // the location of the first EDA_ITEM
-    wxPoint       m_AuxPosition;       // the location of the second EDA_ITEM
-    bool          m_hasSecondItem;     // true when 2 items create a DRC/ERC error
+    int           m_errorCode;         // the error code's numeric value
+    wxString      m_errorMessage;
     MARKER_BASE*  m_parent;            // The marker this item belongs to, if any
     KIID          m_mainItemUuid;
     KIID          m_auxItemUuid;
@@ -92,8 +87,7 @@ public:
 
     RC_ITEM()
     {
-        m_ErrorCode     = 0;
-        m_hasSecondItem = false;
+        m_errorCode     = 0;
         m_parent        = nullptr;
         m_mainItemUuid  = niluuid;
         m_auxItemUuid   = niluuid;
@@ -101,12 +95,8 @@ public:
 
     RC_ITEM( RC_ITEM* aItem )
     {
-        m_ErrorCode = aItem->m_ErrorCode;
-        m_MainText = aItem->m_MainText;
-        m_AuxText = aItem->m_AuxText;
-        m_MainPosition = aItem->m_MainPosition;
-        m_AuxPosition = aItem->m_AuxPosition;
-        m_hasSecondItem = aItem->m_hasSecondItem;
+        m_errorCode = aItem->m_errorCode;
+        m_errorMessage = aItem->m_errorMessage;
         m_parent = aItem->m_parent;
         m_mainItemUuid = aItem->m_mainItemUuid;
         m_auxItemUuid = aItem->m_auxItemUuid;
@@ -114,160 +104,39 @@ public:
 
     virtual ~RC_ITEM() { }
 
-    /**
-     * Function SetData
-     * initialize all data in item
-     * @param aErrorCode = error code
-     * @param aMainItem = the first (main) schematic or board item
-     * @param bAuxItem = the second schematic or board item
-     */
-    void SetData( EDA_UNITS aUnits, int aErrorCode,
-                  EDA_ITEM* aMainItem,
-                  EDA_ITEM* bAuxItem = nullptr )
-    {
-        m_ErrorCode       = aErrorCode;
-        m_MainText        = aMainItem->GetSelectMenuText( aUnits );
-        m_AuxText         = wxEmptyString;
-        m_hasSecondItem   = bAuxItem != nullptr;
-        m_parent          = nullptr;
-        m_mainItemUuid    = aMainItem->m_Uuid;
+    void SetErrorMessage( const wxString& aMessage ) { m_errorMessage = aMessage; }
 
-        if( m_hasSecondItem )
-        {
-            m_AuxText     = bAuxItem->GetSelectMenuText( aUnits );
-            m_auxItemUuid = bAuxItem->m_Uuid;
-        }
+    void SetItems( EDA_ITEM* aItem, EDA_ITEM* bItem = nullptr )
+    {
+        m_mainItemUuid = aItem->m_Uuid;
+
+        if( bItem )
+            m_auxItemUuid = bItem->m_Uuid;
     }
 
-    /**
-     * Function SetData
-     * initialize all data in item
-     * @param aErrorCode = error code
-     * @param aMainItem = the first (main) schematic or board item
-     * @param bAuxItem = the second schematic or board item
-     * @param aMainPos = position the first item and therefore of this issue
-     * @param bAuxPos = position the second item
-     */
-    void SetData( EDA_UNITS aUnits, int aErrorCode,
-                  EDA_ITEM* aMainItem, const wxPoint& aMainPos,
-                  EDA_ITEM* bAuxItem = nullptr, const wxPoint& bAuxPos = wxPoint() )
+    void SetItems( const KIID& aItem, const KIID& bItem = niluuid )
     {
-        m_ErrorCode       = aErrorCode;
-        m_MainText        = aMainItem->GetSelectMenuText( aUnits );
-        m_AuxText         = wxEmptyString;
-        m_MainPosition    = aMainPos;
-        m_AuxPosition     = bAuxPos;
-        m_hasSecondItem   = bAuxItem != nullptr;
-        m_parent          = nullptr;
-        m_mainItemUuid    = aMainItem->m_Uuid;
-
-        if( m_hasSecondItem )
-        {
-            m_AuxText     = bAuxItem->GetSelectMenuText( aUnits );
-            m_auxItemUuid = bAuxItem->m_Uuid;
-        }
+        m_mainItemUuid = aItem;
+        m_auxItemUuid = bItem;
     }
 
-    /**
-     * Function SetData
-     * initialize all data in item
-     * @param aErrorCode = error code
-     * @param aMainText = a description of the first (main) item
-     * @param bAuxText = a description of the second item
-     */
-    void SetData( int aErrorCode,
-                  const wxString& aMainText,
-                  const wxString& bAuxText = wxEmptyString )
-    {
-        m_ErrorCode     = aErrorCode;
-        m_MainText      = aMainText;
-        m_AuxText       = bAuxText;
-        m_hasSecondItem = !bAuxText.IsEmpty();
-        m_parent        = nullptr;
-        m_mainItemUuid  = niluuid;
-        m_auxItemUuid   = niluuid;
-    }
-
-    /**
-     * Function SetData
-     * initialize all data in item
-     * @param aErrorCode = error code
-     * @param aMainText = a description of the first (main) item
-     * @param aMainPos = position the first item and therefore of this issue
-     * @param bAuxText = a description of the second item
-     * @param bAuxPos = position the second item
-     */
-    void SetData( int aErrorCode,
-                  const wxString& aMainText, const wxPoint& aMainPos,
-                  const wxString& bAuxText = wxEmptyString, const wxPoint& bAuxPos = wxPoint() )
-    {
-        m_ErrorCode     = aErrorCode;
-        m_MainText      = aMainText;
-        m_AuxText       = bAuxText;
-        m_MainPosition  = aMainPos;
-        m_AuxPosition   = bAuxPos;
-        m_hasSecondItem = !bAuxText.IsEmpty();
-        m_parent        = nullptr;
-        m_mainItemUuid  = niluuid;
-        m_auxItemUuid   = niluuid;
-    }
-
-    /**
-     * Function SetData
-     * initialize all data in item
-     * @param aErrorCode = error code
-     * @param aMainText = a description of the first (main) item
-     * @param aMainID = UUID of the main item
-     * @param bAuxText = a description of the second item
-     * @param bAuxID = UUID of the second item
-     */
-    void SetData( int aErrorCode,
-                  const wxString& aMainText, const KIID& aMainID,
-                  const wxString& bAuxText, const KIID& bAuxID )
-    {
-        m_ErrorCode     = aErrorCode;
-        m_MainText      = aMainText;
-        m_AuxText       = bAuxText;
-        m_hasSecondItem = !bAuxText.IsEmpty() || bAuxID != niluuid;
-        m_parent        = nullptr;
-        m_mainItemUuid  = aMainID;
-        m_auxItemUuid   = bAuxID;
-    }
-
-    /**
-     * Function SetAuxiliaryData
-     * initialize data for the second (auxiliary) item
-     * @param aAuxiliaryText = the second text (main text) concerning the second schematic
-     *                         or board item
-     * @param aAuxiliaryPos = position the second item
-     */
-    void SetAuxiliaryData( const wxString& aAuxiliaryText, const wxPoint& aAuxiliaryPos )
-    {
-        m_AuxText       = aAuxiliaryText;
-        m_AuxPosition   = aAuxiliaryPos;
-        m_hasSecondItem = true;
-        m_auxItemUuid   = niluuid;
-    }
+    KIID GetMainItemID() const { return m_mainItemUuid; }
+    KIID GetAuxItemID() const { return m_auxItemUuid; }
 
     void SetParent( MARKER_BASE* aMarker ) { m_parent = aMarker; }
     MARKER_BASE* GetParent() const { return m_parent; }
 
-    bool HasSecondItem() const { return m_hasSecondItem; }
-
-    wxString GetMainText() const { return m_MainText; }
-    wxString GetAuxText() const { return m_AuxText; }
-
-    KIID GetMainItemID() const { return m_mainItemUuid; }
-    KIID GetAuxItemID() const { return m_auxItemUuid; }
 
     /**
      * Function ShowReport
      * translates this object into a text string suitable for saving to disk in a report.
      * @return wxString - the simple multi-line report text.
      */
-    virtual wxString ShowReport( EDA_UNITS aUnits ) const;
+    virtual wxString ShowReport( EDA_UNITS aUnits,
+                                 const std::map<KIID, EDA_ITEM*>& aItemMap ) const;
 
-    int GetErrorCode() const { return m_ErrorCode; }
+    int GetErrorCode() const { return m_errorCode; }
+    void SetErrorCode( int aCode ) { m_errorCode = aCode; }
 
     /**
      * Function GetErrorText
@@ -325,7 +194,7 @@ public:
 
 
 public:
-    RC_TREE_MODEL( EDA_BASE_FRAME* aParentFrame, wxDataViewCtrl* aView );
+    RC_TREE_MODEL( EDA_DRAW_FRAME* aParentFrame, wxDataViewCtrl* aView );
 
     ~RC_TREE_MODEL();
 
@@ -384,7 +253,7 @@ private:
     void onSizeView( wxSizeEvent& aEvent );
 
 private:
-    EDA_BASE_FRAME*            m_editFrame;
+    EDA_DRAW_FRAME*            m_editFrame;
     wxDataViewCtrl*            m_view;
     int                        m_severities;
     RC_ITEMS_PROVIDER*         m_rcItemsProvider;   // I own this, but not its contents

@@ -153,13 +153,14 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 
         if( !same )
         {
-            wxPoint pos = ( candidates[0]->Type() == SCH_PIN_T ) ?
-                          static_cast<SCH_PIN*>( candidates[0] )->GetTransformedPosition() :
-                          candidates[0]->GetPosition();
+            wxPoint pos = candidates[0]->Type() == SCH_PIN_T ?
+                              static_cast<SCH_PIN*>( candidates[0] )->GetTransformedPosition() :
+                              candidates[0]->GetPosition();
 
-            auto marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-            marker->SetData( m_frame->GetUserUnits(), ERCE_DRIVER_CONFLICT, pos,
-                             candidates[0], second_item );
+            ERC_ITEM* ercItem = new ERC_ITEM( ERCE_DRIVER_CONFLICT );
+            ercItem->SetItems( candidates[0], second_item );
+
+            SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
             m_sheet.LastScreen()->Append( marker );
 
             // If aCreateMarkers is true, then this is part of ERC check, so we
@@ -439,7 +440,6 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
         else if( item->Type() == SCH_COMPONENT_T )
         {
             SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
-            TRANSFORM t = component->GetTransform();
 
             // TODO(JE) right now this relies on GetSchPins() returning good SCH_PIN pointers
             // that contain good LIB_PIN pointers.  Since these get invalidated whenever the
@@ -452,8 +452,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             {
                 pin->InitializeConnection( aSheet );
 
-                wxPoint pos = t.TransformCoordinate( pin->GetPosition() ) +
-                              component->GetPosition();
+                wxPoint pos = pin->GetPosition();
 
                 // because calling the first time is not thread-safe
                 pin->GetDefaultNetName( aSheet );
@@ -2006,9 +2005,10 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
 
     if( net_item && bus_item )
     {
-        auto marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-        marker->SetData( m_frame->GetUserUnits(), ERCE_BUS_TO_NET_CONFLICT,
-                         net_item->GetPosition(), net_item, bus_item );
+        ERC_ITEM* ercItem = new ERC_ITEM( ERCE_BUS_TO_NET_CONFLICT );
+        ercItem->SetItems( net_item, bus_item );
+
+        SCH_MARKER* marker = new SCH_MARKER( ercItem, net_item->GetPosition() );
         screen->Append( marker );
 
         return false;
@@ -2073,9 +2073,10 @@ bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSu
 
         if( !match )
         {
-            auto marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-            marker->SetData( m_frame->GetUserUnits(), ERCE_BUS_TO_BUS_CONFLICT,
-                             label->GetPosition(), label, port );
+            ERC_ITEM* ercItem = new ERC_ITEM( ERCE_BUS_TO_BUS_CONFLICT );
+            ercItem->SetItems( label, port );
+
+            SCH_MARKER* marker = new SCH_MARKER( ercItem, label->GetPosition() );
             screen->Append( marker );
 
             return false;
@@ -2152,9 +2153,10 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 
     if( conflict )
     {
-        auto marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-        marker->SetData( m_frame->GetUserUnits(), ERCE_BUS_ENTRY_CONFLICT,
-                         bus_entry->GetPosition(), bus_entry, bus_wire );
+        ERC_ITEM* ercItem = new ERC_ITEM( ERCE_BUS_ENTRY_CONFLICT );
+        ercItem->SetItems( bus_entry, bus_wire );
+
+        SCH_MARKER* marker = new SCH_MARKER( ercItem, bus_entry->GetPosition() );
         screen->Append( marker );
 
         return false;
@@ -2204,9 +2206,10 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
         if( pin && has_invalid_items )
         {
-            auto marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-            marker->SetData( ERCE_NOCONNECT_CONNECTED, pin->GetTransformedPosition(),
-                             pin->GetDescription( &aSubgraph->m_sheet ), pin->m_Uuid );
+            ERC_ITEM* ercItem = new ERC_ITEM( ERCE_NOCONNECT_CONNECTED );
+            ercItem->SetItems( pin );
+
+            SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetTransformedPosition() );
             screen->Append( marker );
 
             return false;
@@ -2214,9 +2217,10 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
         if( !has_other_items )
         {
-            SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-            marker->SetData( m_frame->GetUserUnits(), ERCE_NOCONNECT_NOT_CONNECTED,
-                             aSubgraph->m_no_connect->GetPosition(), aSubgraph->m_no_connect );
+            ERC_ITEM* ercItem = new ERC_ITEM( ERCE_NOCONNECT_NOT_CONNECTED );
+            ercItem->SetItems( aSubgraph->m_no_connect );
+
+            SCH_MARKER* marker = new SCH_MARKER( ercItem, aSubgraph->m_no_connect->GetPosition() );
             screen->Append( marker );
 
             return false;
@@ -2268,9 +2272,10 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
         if( pin && !has_other_connections && pin->GetType() != ELECTRICAL_PINTYPE::PT_NC )
         {
-            SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-            marker->SetData( ERCE_PIN_NOT_CONNECTED, pin->GetTransformedPosition(),
-                             pin->GetDescription( &aSubgraph->m_sheet ), pin->m_Uuid );
+            ERC_ITEM* ercItem = new ERC_ITEM( ERCE_PIN_NOT_CONNECTED );
+            ercItem->SetItems( pin );
+
+            SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetTransformedPosition() );
             screen->Append( marker );
 
             return false;
@@ -2359,10 +2364,10 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
     if( !has_other_connections )
     {
-        SCH_MARKER* marker = new SCH_MARKER( MARKER_BASE::MARKER_ERC );
-        marker->SetData( m_frame->GetUserUnits(),
-                         is_global ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED,
-                         text->GetPosition(), text );
+        ERC_ITEM* ercItem = new ERC_ITEM( is_global ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED );
+        ercItem->SetItems( text );
+
+        SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
         aSubgraph->m_sheet.LastScreen()->Append( marker );
 
         return false;

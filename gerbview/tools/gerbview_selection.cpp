@@ -29,7 +29,7 @@ VECTOR2I GERBVIEW_SELECTION::GetCenter() const
 
     if( Size() == 1 )
     {
-        centre = static_cast<GERBER_DRAW_ITEM*>( Front() )->GetPosition();
+        centre = Front()->GetPosition();
     }
     else
     {

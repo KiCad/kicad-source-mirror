@@ -57,18 +57,16 @@ using namespace std::placeholders;
 
 EDA_ITEM* PCBNEW_SELECTION::GetTopLeftItem( bool onlyModules ) const
 {
-    BOARD_ITEM* topLeftItem = nullptr;
-    BOARD_ITEM* currentItem;
+    EDA_ITEM* topLeftItem = nullptr;
 
     wxPoint pnt;
 
     // find the leftmost (smallest x coord) and highest (smallest y with the smallest x) item in the selection
-    for( auto item : m_items )
+    for( EDA_ITEM* item : m_items )
     {
-        currentItem = static_cast<BOARD_ITEM*>( item );
-        pnt = currentItem->GetPosition();
+        pnt = item->GetPosition();
 
-        if( ( currentItem->Type() != PCB_MODULE_T ) && onlyModules )
+        if( ( item->Type() != PCB_MODULE_T ) && onlyModules )
         {
             continue;
         }
@@ -76,18 +74,18 @@ EDA_ITEM* PCBNEW_SELECTION::GetTopLeftItem( bool onlyModules ) const
         {
             if( topLeftItem == nullptr )
             {
-                topLeftItem = currentItem;
+                topLeftItem = item;
             }
             else if( ( pnt.x < topLeftItem->GetPosition().x ) ||
                      ( ( topLeftItem->GetPosition().x == pnt.x ) &&
                      ( pnt.y < topLeftItem->GetPosition().y ) ) )
             {
-                topLeftItem = currentItem;
+                topLeftItem = item;
             }
         }
     }
 
-    return static_cast<EDA_ITEM*>( topLeftItem );
+    return topLeftItem;
 }
 
 

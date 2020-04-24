@@ -33,7 +33,7 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <math/util.h>      // for KiROUND
-
+#include <eda_draw_frame.h>
 #include <general.h>
 #include <lib_arc.h>
 #include <transform.h>
@@ -398,14 +398,14 @@ const EDA_RECT LIB_ARC::GetBoundingBox() const
 }
 
 
-void LIB_ARC::GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList )
+void LIB_ARC::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
+    LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    msg = MessageTextFromValue( aUnits, m_Width, true );
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width, true );
 
     aList.emplace_back( _( "Line Width" ), msg, BLUE );
 

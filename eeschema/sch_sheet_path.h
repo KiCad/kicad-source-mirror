@@ -32,6 +32,7 @@
 #define CLASS_DRAWSHEET_PATH_H
 
 #include <base_struct.h>
+#include <erc_item.h>
 
 #include <map>
 
@@ -349,6 +350,11 @@ public:
     SCH_ITEM* GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut );
 
     /**
+     * Fill an item cache for temporary use when many items need to be fetched.
+     */
+    SCH_ITEM* FillItemMap( std::map<KIID, EDA_ITEM*>& aMap );
+
+    /**
      * Function AnnotatePowerSymbols
      * Silently annotates the not yet annotated power symbols of the entire hierarchy
      * of the sheet path list.
@@ -439,5 +445,34 @@ public:
 
     bool NameExists( const wxString& aSheetName );
 };
+
+
+/**
+ * SHEETLIST_ERC_ITEMS_PROVIDER
+ * is an implementation of the RC_ITEM_LISTinterface which uses the global SHEETLIST
+ * to fulfill the contract.
+ */
+class SHEETLIST_ERC_ITEMS_PROVIDER : public RC_ITEMS_PROVIDER
+{
+private:
+    int                      m_severities;
+    std::vector<SCH_MARKER*> m_filteredMarkers;
+
+public:
+    SHEETLIST_ERC_ITEMS_PROVIDER() :
+            m_severities( 0 )
+    { }
+
+    void SetSeverities( int aSeverities ) override;
+
+    int GetCount( int aSeverity = -1 ) override;
+
+    ERC_ITEM* GetItem( int aIndex ) override;
+
+    void DeleteItem( int aIndex, bool aDeep ) override;
+
+    void DeleteAllItems() override;
+};
+
 
 #endif // CLASS_DRAWSHEET_PATH_H

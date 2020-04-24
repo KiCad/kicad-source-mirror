@@ -193,7 +193,7 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
     DRC::TestFootprints( netlist, m_parent->GetBoard(), GetUserUnits(), drcItems );
 
     for( DRC_ITEM* item : drcItems )
-        dlg.AddHTML_Text( item->ShowHtml( GetUserUnits() ) );
+        dlg.AddHTML_Text( item->ShowHtml( m_parent ) );
 
     dlg.ShowModal();
 }

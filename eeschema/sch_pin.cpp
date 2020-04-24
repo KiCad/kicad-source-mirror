@@ -75,27 +75,9 @@ wxString SCH_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-void SCH_PIN::GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList )
+void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
-    m_libPin->GetMsgPanelInfo( aUnits, aList, GetParentComponent() );
-}
-
-
-wxString SCH_PIN::GetDescription( const SCH_SHEET_PATH* aSheet )
-{
-    if( GetName().IsEmpty() || GetNumber().IsEmpty() )
-    {
-        return wxString::Format( _( "Pin %s of component %s." ),
-                                 GetName().IsEmpty() ? GetNumber() : GetName(),
-                                 GetParentComponent()->GetRef( aSheet ) );
-    }
-    else
-    {
-        return wxString::Format( _( "Pin %s (%s) of component %s." ),
-                                 GetName(),
-                                 GetNumber(),
-                                 GetParentComponent()->GetRef( aSheet ) );
-    }
+    m_libPin->GetMsgPanelInfo( aFrame, aList, GetParentComponent() );
 }
 
 
@@ -134,7 +116,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
 wxPoint SCH_PIN::GetTransformedPosition() const
 {
     TRANSFORM t = GetParentComponent()->GetTransform();
-    return ( t.TransformCoordinate( GetPosition() ) + GetParentComponent()->GetPosition() );
+    return ( t.TransformCoordinate( GetLocalPosition() ) + GetParentComponent()->GetPosition() );
 }
 
 

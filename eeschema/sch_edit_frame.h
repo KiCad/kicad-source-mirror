@@ -915,6 +915,8 @@ public:
      */
     SCH_ITEM* GetRepeatItem() const             { return m_item_to_repeat; }
 
+    EDA_ITEM* GetItem( const KIID& aId ) override;
+
     /**
      * Performs an undo of the last edit WITHOUT logging a corresponding redo.  Used to cancel
      * an in-progress operation.

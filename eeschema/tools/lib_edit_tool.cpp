@@ -446,7 +446,7 @@ void LIB_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
     m_frame->m_DrawSpecificUnit    = !dialog.GetApplyToAllUnits();
 
     MSG_PANEL_ITEMS items;
-    aItem->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
+    aItem->GetMsgPanelInfo( m_frame, items );
     m_frame->SetMsgPanel( items );
 }
 

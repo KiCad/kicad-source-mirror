@@ -539,7 +539,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
             VECTOR2D origin = image->GetPosition();
-            image->SetPosition( item->GetPosition() );
+            image->SetPosition( eda_item->GetPosition() );
 
             if( aList->GetPickedItemStatus( ii ) == UR_DRILLORIGIN )
                 PCB_EDITOR_CONTROL::DoSetDrillOrigin( view, this, item, origin );

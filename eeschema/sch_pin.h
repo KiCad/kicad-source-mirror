@@ -67,8 +67,7 @@ public:
     wxString GetDefaultNetName( const SCH_SHEET_PATH aPath );
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
-    void GetMsgPanelInfo( EDA_UNITS aUnits, MSG_PANEL_ITEMS& aList ) override;
-    wxString GetDescription( const SCH_SHEET_PATH* aSheet );
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList ) override;
 
     void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override {}
 
@@ -79,7 +78,8 @@ public:
 
     void Rotate( wxPoint aPosition ) override {}
 
-    wxPoint GetPosition() const override { return m_position; }
+    const wxPoint GetPosition() const override { return GetTransformedPosition(); }
+    const wxPoint GetLocalPosition() const { return m_position; }
     void SetPosition( const wxPoint& aPosition ) override { m_position = aPosition; }
 
     const EDA_RECT GetBoundingBox() const override;

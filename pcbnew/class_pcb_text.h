@@ -81,7 +81,7 @@ public:
 
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
-    void GetMsgPanelInfo( EDA_UNITS aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override
     {

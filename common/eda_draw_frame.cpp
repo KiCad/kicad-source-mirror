@@ -547,7 +547,7 @@ void EDA_DRAW_FRAME::SetMsgPanel( EDA_ITEM* aItem )
     wxCHECK_RET( aItem, wxT( "Invalid EDA_ITEM pointer.  Bad programmer." ) );
 
     MSG_PANEL_ITEMS items;
-    aItem->GetMsgPanelInfo( m_userUnits, items );
+    aItem->GetMsgPanelInfo( this, items );
     SetMsgPanel( items );
 }
 

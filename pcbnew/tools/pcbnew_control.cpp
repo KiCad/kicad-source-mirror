@@ -1087,7 +1087,7 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         EDA_ITEM*       item = selection.Front();
         MSG_PANEL_ITEMS msgItems;
 
-        item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );
+        item->GetMsgPanelInfo( m_frame, msgItems );
         m_frame->SetMsgPanel( msgItems );
     }
     else if( selection.GetSize() > 1 )

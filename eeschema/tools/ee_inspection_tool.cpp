@@ -303,7 +303,7 @@ int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         EDA_ITEM* item = (EDA_ITEM*) selection.Front();
 
         MSG_PANEL_ITEMS msgItems;
-        item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );
+        item->GetMsgPanelInfo( m_frame, msgItems );
         m_frame->SetMsgPanel( msgItems );
     }
     else

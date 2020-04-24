@@ -438,6 +438,11 @@ public:
     virtual void UpdateMsgPanel();
 
     /**
+     * Fetch an item by KIID.  Frame-type-specific implementation.
+     */
+    virtual EDA_ITEM* GetItem( const KIID& aId ) { return nullptr; }
+
+    /**
      * Print the page pointed by current screen, set by the calling print function.
      *
      * @param aDC = wxDC given by the calling print function
