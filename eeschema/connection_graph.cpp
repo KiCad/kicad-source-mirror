@@ -234,7 +234,7 @@ wxString CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem ) const
     case SCH_HIER_LABEL_T:
     case SCH_SHEET_PIN_T:
     {
-        name = static_cast<SCH_TEXT*>( aItem )->GetText();
+        name = static_cast<SCH_TEXT*>( aItem )->GetShownText();
         break;
     }
 
@@ -795,13 +795,13 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 case SCH_HIER_LABEL_T:
                 {
                     auto text = static_cast<SCH_TEXT*>( driver );
-                    connection->ConfigureFromLabel( text->GetText() );
+                    connection->ConfigureFromLabel( text->GetShownText() );
                     break;
                 }
                 case SCH_SHEET_PIN_T:
                 {
                     auto pin = static_cast<SCH_SHEET_PIN*>( driver );
-                    connection->ConfigureFromLabel( pin->GetText() );
+                    connection->ConfigureFromLabel( pin->GetShownText() );
                     break;
                 }
                 case SCH_PIN_T:
@@ -1775,7 +1775,7 @@ std::shared_ptr<SCH_CONNECTION> CONNECTION_GRAPH::getDefaultConnection( SCH_ITEM
         auto text = static_cast<SCH_TEXT*>( aItem );
 
         c = std::make_shared<SCH_CONNECTION>( aItem, aSheet );
-        c->ConfigureFromLabel( text->GetText() );
+        c->ConfigureFromLabel( text->GetShownText() );
         break;
     }
 
@@ -1887,11 +1887,11 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
         if( labels.size() > 1 )
         {
             bool different = false;
-            wxString first = static_cast<SCH_TEXT*>( labels.at( 0 ) )->GetText();
+            wxString first = static_cast<SCH_TEXT*>( labels.at( 0 ) )->GetShownText();
 
             for( unsigned i = 1; i < labels.size(); ++i )
             {
-                if( static_cast<SCH_TEXT*>( labels.at( i ) )->GetText() != first )
+                if( static_cast<SCH_TEXT*>( labels.at( i ) )->GetShownText() != first )
                 {
                     different = true;
                     break;
