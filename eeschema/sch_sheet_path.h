@@ -352,7 +352,7 @@ public:
     /**
      * Fill an item cache for temporary use when many items need to be fetched.
      */
-    SCH_ITEM* FillItemMap( std::map<KIID, EDA_ITEM*>& aMap );
+    void FillItemMap( std::map<KIID, EDA_ITEM*>& aMap );
 
     /**
      * Function AnnotatePowerSymbols

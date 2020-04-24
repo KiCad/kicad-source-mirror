@@ -470,7 +470,7 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
 }
 
 
-SCH_ITEM* SCH_SHEET_LIST::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
+void SCH_SHEET_LIST::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {
