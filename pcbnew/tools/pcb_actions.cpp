@@ -158,9 +158,9 @@ TOOL_ACTION PCB_ACTIONS::deleteLastPoint( "pcbnew.InteractiveDrawing.deleteLastP
         _( "Delete Last Point" ), _( "Delete the last point added to the current item" ),
         undo_xpm );
 
-TOOL_ACTION PCB_ACTIONS::closeZoneOutline( "pcbnew.InteractiveDrawing.closeZoneOutline",
+TOOL_ACTION PCB_ACTIONS::closeOutline( "pcbnew.InteractiveDrawing.closeOutline",
         AS_CONTEXT, 0, "",
-        _( "Close Zone Outline" ), _( "Close the outline of a zone in progress" ),
+        _( "Close Outline" ), _( "Close the in progress outline" ),
         checked_ok_xpm );
 
 

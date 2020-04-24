@@ -79,19 +79,27 @@ DRAWING_TOOL::~DRAWING_TOOL()
 
 bool DRAWING_TOOL::Init()
 {
-    auto activeToolFunctor = [ this ] ( const SELECTION& aSel ) {
+    auto activeToolFunctor = [ this ] ( const SELECTION& aSel )
+                             {
                                  return m_mode != MODE::NONE;
                              };
 
     // some interactive drawing tools can undo the last point
-    auto canUndoPoint = [ this ] ( const SELECTION& aSel ) {
-                            return m_mode == MODE::ARC || m_mode == MODE::ZONE;
+    auto canUndoPoint = [ this ] ( const SELECTION& aSel )
+                        {
+                            return (   m_mode == MODE::ARC
+                                    || m_mode == MODE::ZONE
+                                    || m_mode == MODE::KEEPOUT
+                                    || m_mode == MODE::GRAPHIC_POLYGON );
                         };
 
-    // functor for zone-only actions
-    auto zoneActiveFunctor = [this ] ( const SELECTION& aSel ) {
-                                 return m_mode == MODE::ZONE;
-                             };
+    // functor for tools that can automatically close the outline
+    auto canCloseOutline = [ this ] ( const SELECTION& aSel )
+                           {
+                                return (   m_mode == MODE::ZONE
+                                        || m_mode == MODE::KEEPOUT
+                                        || m_mode == MODE::GRAPHIC_POLYGON );
+                           };
 
     auto& ctxMenu = m_menu.GetMenu();
 
@@ -100,7 +108,7 @@ bool DRAWING_TOOL::Init()
     ctxMenu.AddSeparator( 1 );
 
     // tool-specific actions
-    ctxMenu.AddItem( PCB_ACTIONS::closeZoneOutline, zoneActiveFunctor, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::closeOutline,    canCloseOutline, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint, canUndoPoint, 200 );
 
     ctxMenu.AddSeparator( 500 );
@@ -1506,11 +1514,11 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         // events that lock in nodes
         else if( evt->IsClick( BUT_LEFT )
                  || evt->IsDblClick( BUT_LEFT )
-                 || evt->IsAction( &PCB_ACTIONS::closeZoneOutline ) )
+                 || evt->IsAction( &PCB_ACTIONS::closeOutline ) )
         {
             // Check if it is double click / closing line (so we have to finish the zone)
             const bool endPolygon = evt->IsDblClick( BUT_LEFT )
-                                    || evt->IsAction( &PCB_ACTIONS::closeZoneOutline )
+                                    || evt->IsAction( &PCB_ACTIONS::closeOutline )
                                     || polyGeomMgr.NewPointClosesOutline( cursorPos );
 
             if( endPolygon )

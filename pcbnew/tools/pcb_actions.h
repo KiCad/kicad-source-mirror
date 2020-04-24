@@ -150,7 +150,7 @@ public:
     static TOOL_ACTION placeImportedGraphics;
     static TOOL_ACTION setAnchor;
     static TOOL_ACTION deleteLastPoint;
-    static TOOL_ACTION closeZoneOutline;
+    static TOOL_ACTION closeOutline;
 
     /// Increase width of currently drawn line
     static TOOL_ACTION incWidth;
