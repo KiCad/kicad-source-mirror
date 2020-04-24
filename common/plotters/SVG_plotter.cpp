@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -599,7 +599,7 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos,
                 fprintf( outputFile, "\n" );
         }
 
-        fprintf( outputFile, "\"\npreserveAspectRatio=\"none\" height=\"%g\" width=\"%g\" />",
+        fprintf( outputFile, "\"\npreserveAspectRatio=\"none\" width=\"%g\" height=\"%g\" />",
                 userToDeviceSize( drawsize.x ), userToDeviceSize( drawsize.y ) );
     }
 
@@ -663,7 +663,11 @@ bool SVG_PLOTTER::StartPlot()
         "<?xml version=\"1.0\" standalone=\"no\"?>\n",
         " <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \n",
         " \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"> \n",
-        "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" \n",
+        "<svg\n"
+        "  xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
+        "  xmlns=\"http://www.w3.org/2000/svg\"\n",
+        "  xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n",
+        "  version=\"1.1\"\n",
         NULL
     };
 
@@ -676,7 +680,7 @@ bool SVG_PLOTTER::StartPlot()
     // Write viewport pos and size
     wxPoint origin;    // TODO set to actual value
     fprintf( outputFile,
-             "    width=\"%gcm\" height=\"%gcm\" viewBox=\"%d %d %d %d\">\n",
+             "  width=\"%fcm\" height=\"%fcm\" viewBox=\"%d %d %d %d\">\n",
              (double) paperSize.x / m_IUsPerDecimil * 2.54 / 10000,
              (double) paperSize.y / m_IUsPerDecimil * 2.54 / 10000,
              origin.x, origin.y,
