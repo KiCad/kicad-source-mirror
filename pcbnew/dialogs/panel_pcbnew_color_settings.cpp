@@ -45,22 +45,34 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
-    mgr.ReloadColorSettings();
-
     PCBNEW_SETTINGS* app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
     COLOR_SETTINGS*  current      = mgr.GetColorSettings( app_settings->m_ColorTheme );
+
+    // Store the current settings before reloading below
+    current->SetColorContext( COLOR_CONTEXT::PCB );
+    current->Store();
+    mgr.SaveColorSettings( current, "board" );
 
     m_optOverrideColors->SetValue( current->GetOverrideSchItemColors() );
 
     m_currentSettings = new COLOR_SETTINGS( *current );
 
-    createThemeList( current );
-
-    for( int id = GAL_LAYER_ID_START; id < GAL_LAYER_ID_END; id++ )
-        m_validLayers.push_back( id );
+    mgr.ReloadColorSettings();
+    createThemeList( app_settings->m_ColorTheme );
 
     for( int id = F_Cu; id < PCB_LAYER_ID_COUNT; id++ )
         m_validLayers.push_back( id );
+
+    for( int id = GAL_LAYER_ID_START; id < GAL_LAYER_ID_END; id++ )
+    {
+        if( id == LAYER_VIAS || id == LAYER_GRID_AXES || id == LAYER_PADS_PLATEDHOLES
+                || id == LAYER_VIAS_HOLES )
+        {
+            continue;
+        }
+
+        m_validLayers.push_back( id );
+    }
 
     m_colorsMainSizer->Insert( 0, 10, 0, 0, wxEXPAND, 5 );
 

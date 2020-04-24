@@ -664,7 +664,6 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     PCB_BASE_FRAME::SaveSettings( aCfg );
 
-    // TODO(JE) remove once color themes exist
     COLOR_SETTINGS* cs = ColorSettings();
     cs->SetColorContext( COLOR_CONTEXT::PCB );
     cs->Store();

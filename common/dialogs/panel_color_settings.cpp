@@ -158,7 +158,7 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
 }
 
 
-void PANEL_COLOR_SETTINGS::createThemeList( const COLOR_SETTINGS* aCurrent )
+void PANEL_COLOR_SETTINGS::createThemeList( const wxString& aCurrent )
 {
     m_cbTheme->Clear();
 
@@ -166,7 +166,7 @@ void PANEL_COLOR_SETTINGS::createThemeList( const COLOR_SETTINGS* aCurrent )
     {
         int pos = m_cbTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
 
-        if( settings == aCurrent )
+        if( settings->GetFilename() == aCurrent )
             m_cbTheme->SetSelection( pos );
     }
 

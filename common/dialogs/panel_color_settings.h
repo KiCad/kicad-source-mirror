@@ -53,7 +53,7 @@ protected:
 
     void SetColor( wxCommandEvent& aEvent );
 
-    void createThemeList( const COLOR_SETTINGS* aCurrent );
+    void createThemeList( const wxString& aCurrent );
 
     void createButton( int aLayer, const KIGFX::COLOR4D& aColor, const wxString& aName );
 

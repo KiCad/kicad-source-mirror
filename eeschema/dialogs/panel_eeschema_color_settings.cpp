@@ -75,7 +75,7 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
     EESCHEMA_SETTINGS* app_settings = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
     COLOR_SETTINGS*    current = mgr.GetColorSettings( app_settings->m_ColorTheme );
 
-    createThemeList( current );
+    createThemeList( app_settings->m_ColorTheme );
 
     m_optOverrideColors->SetValue( current->GetOverrideSchItemColors() );
 

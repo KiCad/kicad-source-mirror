@@ -521,9 +521,10 @@ void PCB_LAYER_WIDGET::ReFill()
 
 void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 {
-    myframe->ColorSettings()->SetColorContext( m_fp_editor_mode ?
-                                               COLOR_CONTEXT::FOOTPRINT : COLOR_CONTEXT::PCB );
-    myframe->ColorSettings()->SetColor( aLayer, aColor );
+    COLOR_SETTINGS* cs = myframe->ColorSettings();
+    cs->SetColorContext( m_fp_editor_mode ? COLOR_CONTEXT::FOOTPRINT : COLOR_CONTEXT::PCB );
+    cs->SetColor( aLayer, aColor );
+
     myframe->GetCanvas()->UpdateColors();
 
     KIGFX::VIEW* view = myframe->GetCanvas()->GetView();

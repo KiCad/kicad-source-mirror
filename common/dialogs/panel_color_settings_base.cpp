@@ -50,7 +50,7 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	bControlSizer->Add( m_btnOpenFolder, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	m_mainSizer->Add( bControlSizer, 0, wxEXPAND|wxRIGHT, 10 );
+	m_mainSizer->Add( bControlSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_mainSizer->Add( m_staticline1, 0, wxEXPAND|wxALL, 5 );
