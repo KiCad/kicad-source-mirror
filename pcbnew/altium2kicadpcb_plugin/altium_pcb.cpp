@@ -846,10 +846,20 @@ void ALTIUM_PCB::ParseComponentsBodies6Data(
         modelSettings.m_Offset.y = -Iu2Millimeter( (int) elem.modelPosition.y - modulePosition.y );
         modelSettings.m_Offset.z = Iu2Millimeter( (int) elem.modelPosition.z );
 
-        modelSettings.m_Rotation.x = NormalizeAngleDegrees( elem.modelRotation.x, -180, 180 );
-        modelSettings.m_Rotation.y = NormalizeAngleDegrees( elem.modelRotation.y + 180, -180, 180 );
-        modelSettings.m_Rotation.z = NormalizeAngleDegrees(
-                elem.modelRotation.z + module->GetOrientationDegrees() + 180, -180, 180 );
+        double correctedRotation =
+                module->IsFlipped() ? -module->GetOrientation() : module->GetOrientation();
+
+        RotatePoint( &modelSettings.m_Offset.x, &modelSettings.m_Offset.y, correctedRotation );
+
+        if( module->IsFlipped() )
+        {
+            // TODO: in case of a flipped module, the offset is sometimes wrong. HowTo correct?
+        }
+
+        modelSettings.m_Rotation.x = NormalizeAngleDegrees( -elem.modelRotation.x, -180, 180 );
+        modelSettings.m_Rotation.y = NormalizeAngleDegrees( elem.modelRotation.y, -180, 180 );
+        modelSettings.m_Rotation.z =
+                NormalizeAngleDegrees( -elem.modelRotation.z + correctedRotation / 10, -180, 180 );
 
         module->Models().push_back( modelSettings );
     }
