@@ -442,7 +442,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         {
         case PCB_MODULE_T:
             deep_reBuild_ratsnest = true;   // Pointers on pads can be invalid
-            // Fall through
+            KI_FALLTHROUGH;
+
         case PCB_ZONE_AREA_T:
         case PCB_TRACE_T:
         case PCB_ARC_T:
@@ -568,7 +569,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
     if( not_found )
         wxMessageBox( _( "Incomplete undo/redo operation: some items not found" ) );
-    
+
     // Rebuild pointers and connectivity that can be changed.
     // connectivity can be rebuilt only in the board editor frame
     if( IsType( FRAME_PCB_EDITOR ) && ( reBuild_ratsnest || deep_reBuild_ratsnest ) )

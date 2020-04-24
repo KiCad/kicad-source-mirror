@@ -172,7 +172,8 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     {
     case S_ARC:
         SetAngle( -GetAngle() );
-        //Fall through
+        KI_FALLTHROUGH;
+
     default:
     case S_SEGMENT:
     case S_CURVE:
@@ -236,7 +237,8 @@ void EDGE_MODULE::Mirror( wxPoint aCentre, bool aMirrorAroundXAxis )
     {
     case S_ARC:
         SetAngle( -GetAngle() );
-        //Fall through
+        KI_FALLTHROUGH;
+
     default:
     case S_CURVE:
     case S_SEGMENT:

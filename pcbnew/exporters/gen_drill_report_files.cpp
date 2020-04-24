@@ -110,7 +110,8 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
     default:
         wxASSERT( false );
-        // fall through
+        KI_FALLTHROUGH;
+
     case PLOT_FORMAT::PDF:
     case PLOT_FORMAT::POST:
     case PLOT_FORMAT::SVG:

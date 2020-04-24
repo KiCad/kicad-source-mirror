@@ -234,7 +234,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
                 msg.Printf( _("GERBER file \"%s\" may not display as intended." ),
                         m_FileName.ToAscii() );
                 AddMessageToList( msg );
-                // Fallthrough
+                KI_FALLTHROUGH;
 
             case 'L':       // No Leading 0
                 m_NoTrailingZeros = false;

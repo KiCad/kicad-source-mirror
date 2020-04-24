@@ -1192,6 +1192,7 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
         pad_dy  = 0;
 
         // Intentionally fall through and treat a rectangle as a trapezoid with no sloped sides
+        KI_FALLTHROUGH;
 
     case PAD_SHAPE_TRAPEZOID:
         {

@@ -25,6 +25,7 @@
 
 #include <netlist_object.h>
 #include <class_library.h>
+#include <macros.h>
 #include <sch_junction.h>
 #include <sch_component.h>
 #include <sch_line.h>
@@ -115,6 +116,7 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
                 break;
 
             // Intentionally fall through if there is no net assigned
+            KI_FALLTHROUGH;
 
         case NETLIST_ITEM::SEGMENT:
             // Test connections point to point type without bus.
@@ -165,6 +167,7 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
                 break;
 
             // Intentionally fall through if there is no bus assigned
+            KI_FALLTHROUGH;
 
         case NETLIST_ITEM::BUS:
             // Control type connections point to point mode bus

@@ -147,10 +147,12 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aUseMils, E
     case EDA_DATA_TYPE::VOLUME:
         value = To_User_Unit( aUnits, value, aUseMils );
         // Fall through to continue computation
+        KI_FALLTHROUGH;
 
     case EDA_DATA_TYPE::AREA:
         value = To_User_Unit( aUnits, value, aUseMils );
         // Fall through to continue computation
+        KI_FALLTHROUGH;
 
     case EDA_DATA_TYPE::DISTANCE:
         value = To_User_Unit( aUnits, value, aUseMils );

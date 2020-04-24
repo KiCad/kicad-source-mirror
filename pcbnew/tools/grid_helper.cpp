@@ -38,6 +38,7 @@ using namespace std::placeholders;
 
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_line_chain.h>
+#include <macros.h>
 #include <math/util.h>      // for KiROUND
 #include <math/vector2d.h>
 #include <painter.h>
@@ -484,7 +485,8 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
                 case S_CURVE:
                     addAnchor( start, CORNER | SNAPPABLE, dseg );
                     addAnchor( end, CORNER | SNAPPABLE, dseg );
-                    //Fallthrough
+                    KI_FALLTHROUGH;
+
                 default:
                     origin = dseg->GetStart();
                     addAnchor( origin, ORIGIN | SNAPPABLE, dseg );

@@ -321,7 +321,8 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
     case ID_SAVE_BOARD:
         if( !GetBoard()->GetFileName().IsEmpty() )
             return SavePcbFile( Prj().AbsolutePath( GetBoard()->GetFileName() ) );
-        // Fall through
+
+        KI_FALLTHROUGH;
 
     case ID_COPY_BOARD_AS:
     case ID_SAVE_BOARD_AS:

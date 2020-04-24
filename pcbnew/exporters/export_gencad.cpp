@@ -479,7 +479,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         {
         default:
             wxASSERT_MSG( false, "Pad type not implemented" );
-            // fall-through
+            KI_FALLTHROUGH;
 
         case PAD_SHAPE_CIRCLE:
             fprintf( aFile, " ROUND %g\n",

@@ -23,6 +23,7 @@
  */
 
 #include "lib_tree.h"
+#include <macros.h>
 #include <wxdataviewctrl_helpers.h>
 #include <wx/artprov.h>
 #include <wx/sizer.h>
@@ -365,6 +366,7 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
             break;
         }
         // Intentionally fall through, so the selected component will be treated as the selected one
+        KI_FALLTHROUGH;
 
     default:
         aKeyStroke.Skip(); // Any other key: pass on to search box directly.

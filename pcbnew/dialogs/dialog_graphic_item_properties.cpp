@@ -325,7 +325,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
         // Check angle of arc.
         if( m_angle.GetValue() == 0 )
             error_msgs.Add( _( "The arc angle cannot be zero." ) );
-        // Fall through.
+        KI_FALLTHROUGH;
 
     case S_CIRCLE:
         // Check radius.

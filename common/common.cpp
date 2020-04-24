@@ -28,6 +28,7 @@
 #include <project.h>
 #include <common.h>
 #include <reporter.h>
+#include <macros.h>
 #include <mutex>
 #include <wx/process.h>
 #include <wx/config.h>
@@ -548,7 +549,7 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject )
 
                 break;
             }
-            // else fall through
+            KI_FALLTHROUGH;
 
         default:
             strResult += str_n;

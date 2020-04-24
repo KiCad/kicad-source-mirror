@@ -324,8 +324,8 @@ void PSLIKE_PLOTTER::fputsPostscriptString(FILE *fout, const wxString& txt)
             case ')':
             case '\\':
                 putc( '\\', fout );
+                KI_FALLTHROUGH;
 
-                // FALLTHRU
             default:
                 putc( ch, fout );
                 break;

@@ -68,6 +68,8 @@
 
 #include "cbvh_pbrt.h"
 #include "../../../3d_fastmath.h"
+#include <macros.h>
+
 #include <boost/range/algorithm/nth_element.hpp>
 #include <boost/range/algorithm/partition.hpp>
 #include <cstdlib>
@@ -560,6 +562,7 @@ BVHBuildNode *CBVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo> &primiti
 
             // Intentionally fall through to SPLITMETHOD::EQUAL_COUNTS since prims
             // with large overlapping bounding boxes may fail to partition
+            KI_FALLTHROUGH;
 
             case SPLITMETHOD::EQUALCOUNTS:
             {

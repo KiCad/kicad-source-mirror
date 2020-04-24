@@ -32,6 +32,7 @@
 #include <class_marker_pcb.h>
 #include <class_zone.h>
 #include <class_drawsegment.h>
+#include <macros.h>
 #include <math/util.h>      // for KiROUND
 
 
@@ -277,7 +278,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     case PCB_MODULE_ZONE_AREA_T:
         module = static_cast<MODULE*>( item->GetParent() );
-        // Fall through
+
+        // Fallthrough to get the zone as well
+        KI_FALLTHROUGH;
+
     case PCB_ZONE_AREA_T:
         zone = static_cast<ZONE_CONTAINER*>( item );
         break;

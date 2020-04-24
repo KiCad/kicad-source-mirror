@@ -31,6 +31,7 @@
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
 #include <board_commit.h>
+#include <macros.h>
 
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent,
                                                           const PCBNEW_SELECTION& aItems,
@@ -492,7 +493,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     {
                     default:
                         wxFAIL_MSG("Unhandled via type");
-                        // fall through
+                        KI_FALLTHROUGH;
 
                     case VIATYPE::THROUGH:
                     case VIATYPE::BLIND_BURIED:

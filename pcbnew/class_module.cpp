@@ -298,8 +298,7 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     case PCB_MODULE_TEXT_T:
         // Only user text can be added this way.
         assert( static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS );
-
-        // no break
+        KI_FALLTHROUGH;
 
     case PCB_MODULE_EDGE_T:
         if( aMode == ADD_MODE::APPEND )
@@ -347,8 +346,7 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
         wxCHECK_RET(
                 static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS,
                 "Please report this bug: Invalid remove operation on required text" );
-
-        // no break
+        KI_FALLTHROUGH;
 
     case PCB_MODULE_EDGE_T:
         for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
@@ -828,7 +826,8 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
             if( result == SEARCH_RESULT::QUIT )
                 break;
 
-        // Intentionally fall through since m_Drawings can hold TYPETEXTMODULE also
+            // Intentionally fall through since m_Drawings can hold TYPETEXTMODULE also
+            KI_FALLTHROUGH;
 
         case PCB_MODULE_EDGE_T:
             result = IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, p );
@@ -949,7 +948,8 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 
     default:
         wxASSERT_MSG( false, "Illegal layer" );    // do you really have modules placed on other layers?
-        // pass through
+        KI_FALLTHROUGH;
+
     case F_Cu:
         aLayers[1] = LAYER_MOD_FR;
         break;

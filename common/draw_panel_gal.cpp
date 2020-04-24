@@ -27,6 +27,7 @@
 #include <confirm.h>
 #include <eda_draw_frame.h>
 #include <kiface_i.h>
+#include <macros.h>
 #include <settings/app_settings.h>
 
 #include <class_draw_panel_gal.h>
@@ -386,6 +387,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
         default:
             wxASSERT( false );
+            KI_FALLTHROUGH;
             // warn about unhandled GAL canvas type, but continue with the fallback option
 
         case GAL_TYPE_NONE:

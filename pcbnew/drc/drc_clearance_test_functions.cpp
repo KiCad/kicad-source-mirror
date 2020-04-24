@@ -39,6 +39,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <board_commit.h>
 #include <math/util.h>      // for KiROUND
+#include <macros.h>
 
 
 /**
@@ -1288,7 +1289,8 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         padHalfsize.y -= r;
         distToLine += r;
         }
-        // Fall through
+        KI_FALLTHROUGH;
+
     case PAD_SHAPE_RECT:
         // the area to test is a rounded rectangle.
         // this can be done by testing 2 rectangles and 4 circles (the corners)

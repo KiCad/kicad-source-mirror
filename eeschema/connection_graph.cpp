@@ -28,6 +28,7 @@
 
 #include <common.h>
 #include <erc.h>
+#include <macros.h>
 #include <sch_bus_entry.h>
 #include <sch_component.h>
 #include <sch_edit_frame.h>
@@ -207,7 +208,10 @@ std::vector<SCH_ITEM*> CONNECTION_SUBGRAPH::GetBusLabels() const
             // Only consider bus vectors
             if( label_conn->Type() == CONNECTION_TYPE::BUS )
                 labels.push_back( item );
+
+            break;
         }
+
         default: break;
         }
     }

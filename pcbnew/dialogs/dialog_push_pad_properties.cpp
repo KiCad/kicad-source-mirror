@@ -25,6 +25,7 @@
 #include <dialog_push_pad_properties.h>
 
 #include <class_pad.h>
+#include <macros.h>
 #include <pcb_edit_frame.h>
 
 
@@ -72,8 +73,7 @@ void DIALOG_PUSH_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     {
     case wxID_APPLY:
         returncode = 1;
-
-    // Fall through
+        KI_FALLTHROUGH;
 
     case wxID_OK:
         m_Pad_Shape_Filter  = m_Pad_Shape_Filter_CB->GetValue();

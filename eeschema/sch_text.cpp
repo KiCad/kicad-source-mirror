@@ -40,6 +40,7 @@
 #include <msgpanel.h>
 #include <gal/stroke_font.h>
 #include <bitmaps.h>
+#include <macros.h>
 #include <math/util.h>      // for KiROUND
 #include <kiway.h>
 #include <sch_text.h>
@@ -357,7 +358,7 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
 
         case BUS_START_END:
             m_connectionType = CONNECTION_TYPE::BUS;
-            // fall through
+            KI_FALLTHROUGH;
 
         case WIRE_START_END:
         {

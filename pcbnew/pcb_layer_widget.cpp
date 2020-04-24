@@ -238,11 +238,11 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 
         case ID_ALWAYS_HIDE_ALL_COPPER_LAYERS_BUT_ACTIVE:
             m_alwaysShowActiveCopperLayer = true;
-            // Fallthrough
+            KI_FALLTHROUGH;
 
         case ID_HIDE_ALL_COPPER_LAYERS_BUT_ACTIVE:
             forceActiveLayer = true;
-            // Fallthrough
+            KI_FALLTHROUGH;
 
         case ID_HIDE_ALL_COPPER_LAYERS:
             layersToHide = LSET::AllCuMask();

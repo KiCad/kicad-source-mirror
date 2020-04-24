@@ -29,6 +29,7 @@
 
 #include <am_param.h>
 #include <am_primitive.h>
+#include <macros.h>
 
 extern int    ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
@@ -184,7 +185,9 @@ bool AM_PARAM::ReadParam( char*& aText  )
 
             if( !found )    // happens when a string starts by ',' before any param
                 break;      // just skip this separator
-            // fall through
+
+            KI_FALLTHROUGH;
+
         case '\n':
         case '\r':
         case 0:     // EOL

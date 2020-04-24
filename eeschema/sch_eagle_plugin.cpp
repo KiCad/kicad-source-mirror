@@ -44,6 +44,7 @@
 #include <lib_polyline.h>
 #include <lib_rectangle.h>
 #include <lib_text.h>
+#include <macros.h>
 #include <project.h>
 #include <sch_bus_entry.h>
 #include <sch_component.h>
@@ -229,6 +230,7 @@ static COMPONENT_ORIENTATION_T kiCadComponentRotation( float eagleDegrees )
     {
     default:
         wxASSERT_MSG( false, wxString::Format( "Unhandled orientation (%d degrees)", roti ) );
+        KI_FALLTHROUGH;
 
     case 0:
         return CMP_ORIENT_0;
@@ -1701,8 +1703,8 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(
     {
     default:
         wxASSERT_MSG( false, wxString::Format( "Unhandled orientation (%d degrees)", roti ) );
+        KI_FALLTHROUGH;
 
-    // fall through
     case 0:
         pin->SetOrientation( 'R' );
         break;

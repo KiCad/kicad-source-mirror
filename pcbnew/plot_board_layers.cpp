@@ -438,7 +438,8 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                     pad->SetSize( padPlotsSize );
                     pad->SetRoundRectCornerRadius( margin.x );
                 }
-                // Fall through
+                KI_FALLTHROUGH;
+
             case PAD_SHAPE_TRAPEZOID:
             case PAD_SHAPE_ROUNDRECT:
             case PAD_SHAPE_CHAMFERED_RECT:

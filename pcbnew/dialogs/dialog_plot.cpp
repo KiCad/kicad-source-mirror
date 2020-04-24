@@ -41,6 +41,7 @@
 #include <tool/tool_manager.h>
 #include <tools/zone_filler_tool.h>
 #include <math/util.h>      // for KiROUND
+#include <macros.h>
 
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
@@ -402,6 +403,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     {
     case PLOT_FORMAT::SVG:
         m_PlotOptionsSizer->Show( m_svgOptionsSizer );
+        KI_FALLTHROUGH;
+
     case PLOT_FORMAT::PDF:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( false );

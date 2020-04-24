@@ -177,6 +177,7 @@ wxString convertLegacyVariableRefs( const wxString& aTextbase )
                 case '8': msg += wxT( "${COMMENT8}" );  break;
                 case '9': msg += wxT( "${COMMENT9}" );  break;
                 }
+                break;
 
             default:
                 break;

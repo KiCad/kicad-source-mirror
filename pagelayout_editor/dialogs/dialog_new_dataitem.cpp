@@ -125,7 +125,8 @@ void DIALOG_NEW_DATAITEM::initDlg()
     case WS_DATA_ITEM::WS_BITMAP:
     case WS_DATA_ITEM::WS_POLYPOLYGON:
         m_textCtrlText->Enable( false );
-        // fall through
+        KI_FALLTHROUGH;
+
     case WS_DATA_ITEM::WS_TEXT:
         m_textCtrlEndX->Enable( false );
         m_textCtrlEndY->Enable( false );

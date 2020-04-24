@@ -836,6 +836,8 @@ SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy )
             if( item->HitTest( aPosition, aAccuracy ) )
                 return (SCH_TEXT*) item;
 
+            break;
+
         default:
             ;
         }
