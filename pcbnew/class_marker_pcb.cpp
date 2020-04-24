@@ -50,6 +50,8 @@ MARKER_PCB::MARKER_PCB( DRC_ITEM* aItem, const wxPoint& aPosition ) :
 {
     if( m_rcItem )
         m_rcItem->SetParent( this );
+
+    m_Pos = aPosition;
 }
 
 
