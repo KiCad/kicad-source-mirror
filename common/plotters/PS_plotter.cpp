@@ -985,7 +985,6 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
         aMultilineAllowed = false;  // the text has only one line.
 
     bool processSuperSub = aText.Contains( wxT( "^{" ) ) || aText.Contains( wxT( "_{" ) );
-        processSuperSub = true;
 
     // Draw the native postscript text (if requested)
     // Currently: does not work: disable it
