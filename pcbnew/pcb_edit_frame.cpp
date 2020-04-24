@@ -531,10 +531,6 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     if( open_dlg )
         open_dlg->Close( true );
 
-    // Save various DRC parameters, such as violation severities (which may have been
-    // edited via the DRC dialog as well as the Board Setup dialog), DRC exclusions, etc.
-    SaveProjectSettings();
-
     if( IsContentModified() )
     {
         wxFileName fileName = GetBoard()->GetFileName();

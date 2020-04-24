@@ -331,6 +331,8 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     menu.Append( 6, _( "Edit violation severities..." ), _( "Open the Board Setup... dialog" ) );
 
+    bool modified = false;
+
     switch( GetPopupMenuSelectionFromUser( menu ) )
     {
     case 1:
@@ -338,7 +340,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
         // Update view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
-        updateDisplayedCounts();
+        modified = true;
         break;
 
     case 2:
@@ -350,7 +352,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         else
             static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->DeleteCurrentItem( false );
 
-        updateDisplayedCounts();
+        modified = true;
         break;
 
     case 3:
@@ -359,7 +361,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
-        updateDisplayedCounts();
+        modified = true;
         break;
 
     case 4:
@@ -368,7 +370,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
-        updateDisplayedCounts();
+        modified = true;
         break;
 
     case 5:
@@ -383,12 +385,19 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
-        updateDisplayedCounts();
+        modified = true;
         break;
 
     case 6:
         m_brdEditor->DoShowBoardSetupDialog( _( "Violation Severity" ) );
         break;
+    }
+
+    if( modified )
+    {
+        updateDisplayedCounts();
+        m_brdEditor->OnModify();
+        m_brdEditor->SyncToolbars();
     }
 }
 

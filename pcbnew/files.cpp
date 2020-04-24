@@ -734,9 +734,12 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     GetBoard()->SynchronizeNetsAndNetClasses();
 
-    // Select default Netclass before writing file.
-    // Useful to save default values in headers
+    // Select default Netclass before writing file. Useful to save default values in headers.
     SetCurrentNetClass( NETCLASS::Default );
+
+    // Save various DRC parameters, such as violation severities (which may have been
+    // edited via the DRC dialog as well as the Board Setup dialog), DRC exclusions, etc.
+    SaveProjectSettings();
 
     ClearMsgPanel();
 
@@ -770,10 +773,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     GetBoard()->SetFileName( pcbFileName.GetFullPath() );
     UpdateTitle();
 
-    // Put the saved file in File History, unless aCreateBackupFile
-    // is false.
-    // aCreateBackupFile == false is mainly used to write autosave files
-    // and not need to have an autosave file in file history
+    // Put the saved file in File History, unless aCreateBackupFile is false (which indicates
+    // an autosave -- and we don't want autosave files in the file history).
     if( aCreateBackupFile )
         UpdateFileHistory( GetBoard()->GetFileName() );
 
