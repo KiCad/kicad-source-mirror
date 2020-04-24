@@ -21,10 +21,12 @@
 #include <wx/wx.h>
 
 
-wxString LayerName( SCH_LAYER_ID aLayer )
+wxString LayerName( int aLayer )
 {
     switch( aLayer )
     {
+    // SCH_LAYER_ID
+
     case LAYER_WIRE:
         return _( "Wire" );
 
@@ -127,7 +129,93 @@ wxString LayerName( SCH_LAYER_ID aLayer )
     case LAYER_SCHEMATIC_WORKSHEET:
         return _( "Worksheet" );
 
+    // GAL_LAYER_ID
+
+    case LAYER_MOD_FR:
+        return _( "Footprints Front" );
+
+    case LAYER_MOD_BK:
+        return _( "Footprints Back" );
+
+    case LAYER_MOD_VALUES:
+        return _( "Values" );
+
+    case LAYER_MOD_REFERENCES:
+        return _( "Reference Designators" );
+
+    case LAYER_MOD_TEXT_FR:
+        return _( "Footprint Text Front" );
+
+    case LAYER_MOD_TEXT_BK:
+        return _( "Footprint Text Back" );
+
+    case LAYER_MOD_TEXT_INVISIBLE:
+        return _( "Hidden Text" );
+
+    case LAYER_PAD_FR:
+        return _( "Pads Front" );
+
+    case LAYER_PAD_BK:
+        return _( "Pads Back" );
+
+    case LAYER_PADS_TH:
+        return _( "Through Hole Pads" );
+
+    case LAYER_TRACKS:
+        return _( "Tracks" );
+
+    case LAYER_VIA_THROUGH:
+        return _( "Through Via" );
+
+    case LAYER_VIA_BBLIND:
+        return _( "Bl/Buried Via" );
+
+    case LAYER_VIA_MICROVIA:
+        return _( "Micro Via" );
+
+    case LAYER_NON_PLATEDHOLES:
+        return _( "Non Plated Holes" );
+
+    case LAYER_RATSNEST:
+        return _( "Ratsnest" );
+
+    case LAYER_NO_CONNECTS:
+        return _( "No-Connects" );
+
+    case LAYER_DRC_WARNING:
+        return _( "DRC Warnings" );
+
+    case LAYER_DRC_ERROR:
+        return _( "DRC Errors" );
+
+    case LAYER_ANCHOR:
+        return _( "Anchors" );
+
+    case LAYER_WORKSHEET:
+        return _( "Worksheet" );
+
+    case LAYER_CURSOR:
+        return _( "Cursor" );
+
+    case LAYER_AUX_ITEMS:
+        return _( "Aux Items" );
+
+    case LAYER_GRID:
+        return _( "Grid" );
+
+    case LAYER_PCB_BACKGROUND:
+        return _( "Background" );
+
+    case LAYER_SELECT_OVERLAY:
+        return _( "Selection highlight" );
+
     default:
+#if DEBUG
+        wxString str;
+        str.Printf( "Unknown: ID %d", aLayer );
+        return str;
+#else
         return wxEmptyString;
+#endif
     }
 }

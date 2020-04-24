@@ -223,14 +223,6 @@ protected:
     void syncLayerWidgetLayer();
 
     /**
-     * Function syncRenderStates
-     * updates the "Render" checkboxes in the layer widget according
-     * to current toggle values determined by IsElementVisible(), and is helpful
-     * immediately after loading a BOARD which may have state information in it.
-     */
-    void syncRenderStates();
-
-    /**
      * Function syncLayerVisibilities
      * updates each "Layer" checkbox in the layer widget according
      * to each layer's current visibility determined by IsLayerVisible(), and is
@@ -534,6 +526,13 @@ public:
      * loading a new BOARD.
      */
     void ReFillLayerWidget();
+
+    /**
+     * Updates the "Render" colors and checkboxes in the layer widget according
+     * to current toggle values determined by IsElementVisible(), and is helpful
+     * immediately after loading a BOARD which may have state information in it.
+     */
+    void SyncRenderStates();
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void ActivateGalCanvas() override;

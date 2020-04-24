@@ -36,6 +36,7 @@
 #include <class_track.h>
 #include <class_marker_pcb.h>
 #include <pcb_base_frame.h>
+#include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <confirm.h>
@@ -204,9 +205,16 @@ void PCB_DRAW_PANEL_GAL::SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
 
 void PCB_DRAW_PANEL_GAL::UpdateColors()
 {
-    COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings();
+    COLOR_SETTINGS* cs = nullptr;
 
     auto frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
+
+    if( frame )
+        cs = frame->ColorSettings();
+    else
+        Pgm().GetSettingsManager().GetColorSettings();
+
+    wxASSERT( cs );
 
     if( frame && frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
         cs->SetColorContext( COLOR_CONTEXT::FOOTPRINT );
@@ -219,6 +227,7 @@ void PCB_DRAW_PANEL_GAL::UpdateColors()
     m_gal->SetGridColor( cs->GetColor( LAYER_GRID ) );
     m_gal->SetCursorColor( cs->GetColor( LAYER_CURSOR ) );
 }
+
 
 void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
 {

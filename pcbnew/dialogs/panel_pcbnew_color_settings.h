@@ -18,18 +18,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_EESCHEMA_COLOR_SETTINGS_H_
-#define PANEL_EESCHEMA_COLOR_SETTINGS_H_
+#ifndef PANEL_PCBNEW_COLOR_SETTINGS_H_
+#define PANEL_PCBNEW_COLOR_SETTINGS_H_
 
 #include <gal/color4d.h>
 #include <layers_id_colors_and_visibility.h>
 #include <panel_color_settings.h>
 
 class COLOR_SETTINGS;
-class SCH_BASE_FRAME;
 class PAGE_INFO;
-class SCH_ITEM;
-class SCH_PREVIEW_PANEL;
+class PCB_EDIT_FRAME;
 class TITLE_BLOCK;
 
 namespace KIGFX
@@ -37,36 +35,27 @@ namespace KIGFX
     class WS_PROXY_VIEW_ITEM;
 }
 
-class PANEL_EESCHEMA_COLOR_SETTINGS : public PANEL_COLOR_SETTINGS
+class PANEL_PCBNEW_COLOR_SETTINGS : public PANEL_COLOR_SETTINGS
 {
 public:
-    PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aFrame, wxWindow* aParent );
+    PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame, wxWindow* aParent );
 
-    ~PANEL_EESCHEMA_COLOR_SETTINGS() override;
+    ~PANEL_PCBNEW_COLOR_SETTINGS() override;
 
 protected:
     bool TransferDataFromWindow() override;
 
     bool TransferDataToWindow() override;
 
-    void OnOverrideItemColorsClicked( wxCommandEvent& aEvent ) override;
-
-    void OnSize( wxSizeEvent& aEvent ) override;
-
-    void OnBtnResetClicked( wxCommandEvent& event ) override;
-
-    bool validateSave( bool aQuiet = false ) override;
-
-    bool saveCurrentTheme( bool aValidate ) override;
-
-    void onNewThemeSelected() override;
-
-    void onColorChanged() override;
+    enum COLOR_CONTEXT_ID
+    {
+        ID_COPY = wxID_HIGHEST + 1,
+        ID_PASTE,
+        ID_REVERT
+    };
 
 private:
-    SCH_BASE_FRAME* m_frame;
-
-    SCH_PREVIEW_PANEL* m_preview;
+    PCB_EDIT_FRAME* m_frame;
 
     PAGE_INFO* m_page;
 
@@ -74,16 +63,7 @@ private:
 
     KIGFX::WS_PROXY_VIEW_ITEM* m_ws;
 
-    std::vector<EDA_ITEM*> m_previewItems;
-
-    void createPreviewItems();
-
     void createButtons();
-
-
-    void updatePreview();
-
-    void zoomFitPreview();
 };
 
 

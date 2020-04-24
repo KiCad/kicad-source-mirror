@@ -348,8 +348,11 @@ enum LAYER_3D_ID : int
 #define LAYER_ID_COUNT FPEDIT_LAYER_ID_END
 
 
-/// Returns the string equivalent of a given layer
-wxString LayerName( SCH_LAYER_ID aLayer );
+/**
+ * Returns the string equivalent of a given layer
+ * @param aLayer is a valid layer ID
+ */
+wxString LayerName( int aLayer );
 
 
 // Some elements do not have yet a visibility control

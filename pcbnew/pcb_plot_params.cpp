@@ -28,6 +28,7 @@
 #include <math/util.h> // for KiROUND
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
+#include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <plotter.h>
 #include <settings/color_settings.h>
@@ -148,8 +149,11 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 
     if( PgmOrNull() )
     {
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+        auto              app = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+
+        m_colors         = mgr.GetColorSettings( app->m_ColorTheme );
         m_default_colors = nullptr;
-        m_colors         = Pgm().GetSettingsManager().GetColorSettings();
     }
     else
     {

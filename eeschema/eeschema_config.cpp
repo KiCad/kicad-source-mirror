@@ -374,7 +374,7 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
 
     fn.SetExt( ProjectFileExtension );
 
-    if( !IsWritable( fn ) )
+    if( !fn.HasName() || !IsWritable( fn ) )
         return;
 
     wxString path = fn.GetFullPath();

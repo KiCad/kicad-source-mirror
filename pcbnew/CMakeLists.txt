@@ -151,6 +151,7 @@ set( PCBNEW_DIALOGS
     dialogs/panel_modedit_display_options.cpp
     dialogs/panel_modedit_settings.cpp
     dialogs/panel_modedit_settings_base.cpp
+    dialogs/panel_pcbnew_color_settings.cpp
     dialogs/panel_pcbnew_display_options.cpp
     dialogs/panel_pcbnew_display_options_base.cpp
     dialogs/panel_pcbnew_settings.cpp

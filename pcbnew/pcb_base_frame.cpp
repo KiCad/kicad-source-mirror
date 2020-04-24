@@ -316,7 +316,7 @@ void PCB_BASE_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
 
 COLOR_SETTINGS* PCB_BASE_FRAME::ColorSettings()
 {
-    return Pgm().GetSettingsManager().GetColorSettings();
+    return Pgm().GetSettingsManager().GetColorSettings( GetSettings()->m_ColorTheme );
 }
 
 

@@ -724,7 +724,7 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     // Sync layer and item visibility
     syncLayerVisibilities();
     syncLayerWidgetLayer();
-    syncRenderStates();
+    SyncRenderStates();
 
     SetElementVisibility( LAYER_RATSNEST, GetDisplayOptions().m_ShowGlobalRatsnest );
 
@@ -750,7 +750,7 @@ void PCB_EDIT_FRAME::syncLayerWidgetLayer()
 }
 
 
-void PCB_EDIT_FRAME::syncRenderStates()
+void PCB_EDIT_FRAME::SyncRenderStates()
 {
     m_Layers->ReFillRender();
 }
@@ -811,12 +811,12 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
 
     m_Layers->SetLayersManagerTabsText();
     ReFillLayerWidget();
-    // m_Layers->ReFillRender();  // syncRenderStates() does this
+    // m_Layers->ReFillRender();  // SyncRenderStates() does this
 
     // upate the layer widget to match board visibility states, both layers and render columns.
     syncLayerVisibilities();
     syncLayerWidgetLayer();
-    syncRenderStates();
+    SyncRenderStates();
 
     m_Layers->Thaw();
 
@@ -900,12 +900,12 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
     // Update the layer manager
     m_Layers->Freeze();
     ReFillLayerWidget();
-    // m_Layers->ReFillRender();  // syncRenderStates() does this
+    // m_Layers->ReFillRender();  // SyncRenderStates() does this
 
     // upate the layer widget to match board visibility states, both layers and render columns.
     syncLayerVisibilities();
     syncLayerWidgetLayer();
-    syncRenderStates();
+    SyncRenderStates();
 
     m_Layers->Thaw();
 }
@@ -948,7 +948,7 @@ void PCB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
     // layer widget to match board visibility states, both layers and render columns.
     syncLayerVisibilities();
     syncLayerWidgetLayer();
-    syncRenderStates();
+    SyncRenderStates();
 }
 
 

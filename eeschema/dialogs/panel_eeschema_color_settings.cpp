@@ -60,15 +60,12 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
           PANEL_COLOR_SETTINGS( aParent ),
           m_frame( aFrame ),
           m_preview( nullptr ),
-          m_currentSettings( nullptr ),
           m_page( nullptr ),
           m_titleBlock( nullptr ),
           m_ws( nullptr ),
-          m_previewItems(),
-          m_buttons(),
-          m_copied( COLOR4D::UNSPECIFIED )
+          m_previewItems()
 {
-    m_buttonSizePx = ConvertDialogToPixels( BUTTON_SIZE );
+    m_colorNamespace = "schematic";
 
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
 
@@ -78,22 +75,16 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
     EESCHEMA_SETTINGS* app_settings = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
     COLOR_SETTINGS*    current = mgr.GetColorSettings( app_settings->m_ColorTheme );
 
-    m_cbTheme->Clear();
-
-    for( COLOR_SETTINGS* settings : mgr.GetColorSettingsList() )
-    {
-        int pos = m_cbTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
-
-        if( settings == current )
-            m_cbTheme->SetSelection( pos );
-    }
-
-    m_cbTheme->Append( wxT( "---" ) );
-    m_cbTheme->Append( _( "New Theme..." ) );
+    createThemeList( current );
 
     m_optOverrideColors->SetValue( current->GetOverrideSchItemColors() );
 
     m_currentSettings = new COLOR_SETTINGS( *current );
+
+    for( int id = SCH_LAYER_ID_START; id < SCH_LAYER_ID_END; id++ )
+        m_validLayers.push_back( id );
+
+    createButtons();
 
     KIGFX::GAL_DISPLAY_OPTIONS options;
     options.ReadConfig( *common_settings, app_settings->m_Window, this );
@@ -105,12 +96,6 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
                                        options, type );
     m_preview->SetStealsFocus( false );
     m_preview->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
-
-    createButtons();
-
-    Connect( FIRST_BUTTON_ID, FIRST_BUTTON_ID + ( SCH_LAYER_ID_END - SCH_LAYER_ID_START ),
-             wxEVT_COMMAND_BUTTON_CLICKED,
-             wxCommandEventHandler( PANEL_EESCHEMA_COLOR_SETTINGS::SetColor ) );
 
     m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
     m_colorsMainSizer->Add( m_preview, 1, wxALL | wxEXPAND, 5 );
@@ -156,60 +141,53 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::TransferDataToWindow()
 }
 
 
-bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme( bool aValidate )
+bool PANEL_EESCHEMA_COLOR_SETTINGS::validateSave( bool aQuiet )
 {
-    if( aValidate )
-    {
-        COLOR4D bgcolor = m_currentSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
-
-        for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
-        {
-            if( bgcolor == m_currentSettings->GetColor( layer )
-                && layer != LAYER_SCHEMATIC_BACKGROUND && layer != LAYER_SHEET_BACKGROUND )
-            {
-                wxString msg = _( "Some items have the same color as the background\n"
-                                  "and they will not be seen on the screen.  Are you\n"
-                                  "sure you want to use these colors?" );
-
-                if( wxMessageBox( msg, _( "Warning" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
-                    return false;
-
-                break;
-            }
-        }
-    }
-
-    SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
-    COLOR_SETTINGS* selected = settingsMgr.GetColorSettings( m_currentSettings->GetFilename() );
-
-    selected->SetOverrideSchItemColors( m_optOverrideColors->GetValue() );
+    COLOR4D bgcolor = m_currentSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
     for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
     {
-        COLOR4D color = m_currentSettings->GetColor( layer );
-
-        // Do not allow non-background layers to be completely white.
-        // This ensures the BW printing recognizes that the colors should be printed black.
-        if( color == COLOR4D::WHITE
-                && layer != LAYER_SCHEMATIC_BACKGROUND && layer != LAYER_SHEET_BACKGROUND )
+        if( bgcolor == m_currentSettings->GetColor( layer )
+            && layer != LAYER_SCHEMATIC_BACKGROUND && layer != LAYER_SHEET_BACKGROUND )
         {
-            color.Darken( 0.01 );
+            wxString msg = _( "Some items have the same color as the background\n"
+                              "and they will not be seen on the screen.  Are you\n"
+                              "sure you want to use these colors?" );
+
+            if( wxMessageBox( msg, _( "Warning" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
+                return false;
+
+            break;
         }
-
-        selected->SetColor( layer, color );
     }
-
-    settingsMgr.SaveColorSettings( selected, "schematic" );
 
     return true;
 }
 
 
+bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme( bool aValidate)
+{
+    for( auto layer : m_validLayers )
+    {
+        COLOR4D color = m_currentSettings->GetColor( layer );
+
+        // Do not allow non-background layers to be completely white.
+        // This ensures the BW printing recognizes that the colors should be printed black.
+        if( color == COLOR4D::WHITE && layer != LAYER_SCHEMATIC_BACKGROUND
+                && layer != LAYER_SHEET_BACKGROUND )
+        {
+            color.Darken( 0.01 );
+        }
+
+        m_currentSettings->SetColor( layer, color );
+    }
+
+    return PANEL_COLOR_SETTINGS::saveCurrentTheme( aValidate );
+}
+
+
 void PANEL_EESCHEMA_COLOR_SETTINGS::createButtons()
 {
-    const int flags  = wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT | wxRIGHT;
-    wxSize    border = ConvertDialogToPixels( BUTTON_BORDER );
-
     std::vector<SCH_LAYER_ID> layers;
 
     for( SCH_LAYER_ID i = SCH_LAYER_ID_START; i < SCH_LAYER_ID_END; ++i )
@@ -221,69 +199,14 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createButtons()
                    return LayerName( a ) < LayerName( b );
                } );
 
-    for( SCH_LAYER_ID layer : layers )
-    {
-        wxString      name  = LayerName( layer );
-        wxStaticText* label = new wxStaticText( m_colorsListWindow, wxID_ANY, name );
-        COLOR4D       color = m_currentSettings->GetColor( layer );
-
-        wxMemoryDC    iconDC;
-        wxBitmap      bitmap( m_buttonSizePx );
-
-        iconDC.SelectObject( bitmap );
-        iconDC.SetPen( *wxBLACK_PEN );
-
-        wxBrush brush;
-        brush.SetColour( color.ToColour() );
-        brush.SetStyle( wxBRUSHSTYLE_SOLID );
-        iconDC.SetBrush( brush );
-        iconDC.DrawRectangle( 0, 0, m_buttonSizePx.x, m_buttonSizePx.y );
-
-        int id = FIRST_BUTTON_ID + ( layer - SCH_LAYER_ID_START );
-
-        auto button = new wxBitmapButton( m_colorsListWindow, id, bitmap, wxDefaultPosition,
-                                          m_buttonSizePx + border + wxSize( 1, 1 ) );
-        button->SetToolTip( _( "Edit color (right click for options)" ) );
-
-        // If the theme is not overriding individual item colors then don't show them so that
-        // the user doesn't get seduced into thinking they'll have some effect.
-        if( layer == LAYER_SHEET || layer == LAYER_SHEET_BACKGROUND )
-        {
-            label->Show( m_currentSettings->GetOverrideSchItemColors() );
-            button->Show( m_currentSettings->GetOverrideSchItemColors() );
-        }
-
-        m_colorsGridSizer->Add( label, 0, flags, 5 );
-        m_colorsGridSizer->Add( button, 0, flags, 5 );
-
-        m_labels[layer] = label;
-        m_buttons[layer] = button;
-
-        button->Bind( wxEVT_RIGHT_DOWN,
-                      [&, layer]( wxMouseEvent& aEvent )
-                      {
-                          ShowColorContextMenu( aEvent, layer );
-                      } );
-    }
+    for( int layer : layers )
+        createButton( layer, m_currentSettings->GetColor( layer ), LayerName( layer ) );
 }
 
 
-void PANEL_EESCHEMA_COLOR_SETTINGS::drawButton( wxBitmapButton* aButton, const COLOR4D& aColor )
+void PANEL_EESCHEMA_COLOR_SETTINGS::onNewThemeSelected()
 {
-    wxMemoryDC iconDC;
-
-    wxBitmap bitmap = aButton->GetBitmapLabel();
-    iconDC.SelectObject( bitmap );
-    iconDC.SetPen( *wxBLACK_PEN );
-
-    wxBrush  brush;
-    brush.SetColour( aColor.ToColour() );
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-
-    iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, m_buttonSizePx.x, m_buttonSizePx.y );
-    aButton->SetBitmapLabel( bitmap );
-    aButton->Refresh();
+    updatePreview();
 }
 
 
@@ -407,49 +330,15 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 }
 
 
-void PANEL_EESCHEMA_COLOR_SETTINGS::SetColor( wxCommandEvent& event )
+void PANEL_EESCHEMA_COLOR_SETTINGS::onColorChanged()
 {
-    auto button = static_cast<wxBitmapButton*>( event.GetEventObject() );
-    auto layer =
-            static_cast<SCH_LAYER_ID>( button->GetId() - FIRST_BUTTON_ID + SCH_LAYER_ID_START );
-
-    COLOR4D oldColor = m_currentSettings->GetColor( layer );
-    COLOR4D newColor = COLOR4D::UNSPECIFIED;
-    DIALOG_COLOR_PICKER dialog( this, oldColor, false );
-
-    if( dialog.ShowModal() == wxID_OK )
-        newColor = dialog.GetColor();
-
-    if( newColor == COLOR4D::UNSPECIFIED || oldColor == newColor )
-        return;
-
-    updateColor( layer, newColor );
-}
-
-
-void PANEL_EESCHEMA_COLOR_SETTINGS::updateColor( SCH_LAYER_ID aLayer, const KIGFX::COLOR4D& aColor )
-{
-    m_currentSettings->SetColor( aLayer, aColor );
-
-    drawButton( m_buttons[aLayer], aColor );
-
     updatePreview();
 }
 
 
 void PANEL_EESCHEMA_COLOR_SETTINGS::OnBtnResetClicked( wxCommandEvent& event )
 {
-    for( const auto& pair : m_buttons )
-    {
-        SCH_LAYER_ID    layer  = pair.first;
-        wxBitmapButton* button = pair.second;
-
-        COLOR4D defaultColor = m_currentSettings->GetDefaultColor( layer );
-
-        m_currentSettings->SetColor( layer, defaultColor );
-        drawButton( button, defaultColor );
-    }
-
+    PANEL_COLOR_SETTINGS::OnBtnResetClicked( event );
     updatePreview();
 }
 
@@ -492,83 +381,6 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnSize( wxSizeEvent& aEvent )
 }
 
 
-void PANEL_EESCHEMA_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
-{
-    int idx = m_cbTheme->GetSelection();
-
-    if( idx == (int)m_cbTheme->GetCount() - 2 )
-    {
-        // separator; re-select active theme
-        m_cbTheme->SetStringSelection( m_currentSettings->GetName() );
-        return;
-    }
-
-    if( idx == (int)m_cbTheme->GetCount() - 1 )
-    {
-        // New Theme...
-
-        if( !saveCurrentTheme( false ) )
-            return;
-
-        MODULE_NAME_CHAR_VALIDATOR themeNameValidator;
-        wxTextEntryDialog dlg( this, _( "New theme name:" ), _( "Add Color Theme" ) );
-        dlg.SetTextValidator( themeNameValidator );
-
-        if( dlg.ShowModal() != wxID_OK )
-            return;
-
-        wxString themeName = dlg.GetValue();
-        wxFileName fn( themeName + wxT( ".json" ) );
-        fn.SetPath( SETTINGS_MANAGER::GetColorSettingsPath() );
-
-        if( fn.Exists() )
-        {
-            wxMessageBox( _( "Theme already exists!" ) );
-            return;
-        }
-
-        SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
-        COLOR_SETTINGS* newSettings = settingsMgr.AddNewColorSettings( themeName );
-        newSettings->SetName( themeName );
-
-        for( SCH_LAYER_ID layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; ++layer )
-            newSettings->SetColor( layer, m_currentSettings->GetColor( layer ) );
-
-        newSettings->SaveToFile( settingsMgr.GetPathForSettingsFile( newSettings ) );
-
-        idx = m_cbTheme->Insert( themeName, idx - 1, static_cast<void*>( newSettings ) );
-        m_cbTheme->SetSelection( idx );
-
-        m_optOverrideColors->SetValue( newSettings->GetOverrideSchItemColors() );
-
-        *m_currentSettings = *newSettings;
-    }
-    else
-    {
-        COLOR_SETTINGS* selected = static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( idx ) );
-
-        if( selected->GetFilename() != m_currentSettings->GetFilename() )
-        {
-            if( !saveCurrentTheme( false ) )
-                return;
-
-            m_optOverrideColors->SetValue( selected->GetOverrideSchItemColors() );
-
-            *m_currentSettings = *selected;
-            updatePreview();
-
-            for( auto pair : m_buttons )
-            {
-                drawButton( pair.second, m_currentSettings->GetColor( pair.first ) );
-
-                if( pair.first == LAYER_SHEET || pair.first == LAYER_SHEET_BACKGROUND )
-                    pair.second->Show( selected->GetOverrideSchItemColors() );
-            }
-        }
-    }
-}
-
-
 void PANEL_EESCHEMA_COLOR_SETTINGS::OnOverrideItemColorsClicked( wxCommandEvent& aEvent )
 {
     m_currentSettings->SetOverrideSchItemColors( m_optOverrideColors->GetValue() );
@@ -583,47 +395,4 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnOverrideItemColorsClicked( wxCommandEvent&
 
     m_colorsGridSizer->Layout();
     m_colorsListWindow->Layout();
-}
-
-
-void PANEL_EESCHEMA_COLOR_SETTINGS::ShowColorContextMenu( wxMouseEvent& aEvent,
-                                                          SCH_LAYER_ID aLayer )
-{
-    auto selected =
-            static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( m_cbTheme->GetSelection() ) );
-
-    COLOR4D current = m_currentSettings->GetColor( aLayer );
-    COLOR4D saved   = selected->GetColor( aLayer );
-
-    wxMenu menu;
-
-    AddMenuItem( &menu, ID_COPY, _( "Copy color" ), KiBitmap( copy_xpm ) );
-
-    if( m_copied != COLOR4D::UNSPECIFIED )
-        AddMenuItem( &menu, ID_PASTE, _( "Paste color" ), KiBitmap( paste_xpm ) );
-
-    if( current != saved )
-        AddMenuItem( &menu, ID_REVERT, _( "Revert to saved color" ), KiBitmap( undo_xpm ) );
-
-    menu.Bind( wxEVT_COMMAND_MENU_SELECTED, [&]( wxCommandEvent& aCmd ) {
-        switch( aCmd.GetId() )
-        {
-        case ID_COPY:
-            m_copied = current;
-            break;
-
-        case ID_PASTE:
-            updateColor( aLayer, m_copied );
-            break;
-
-        case ID_REVERT:
-            updateColor( aLayer, saved );
-            break;
-
-        default:
-            aCmd.Skip();
-        }
-    } );
-
-    PopupMenu( &menu );
 }

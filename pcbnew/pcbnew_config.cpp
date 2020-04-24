@@ -36,6 +36,7 @@
 #include <ws_painter.h>
 #include <panel_hotkeys_editor.h>
 #include <panel_pcbnew_settings.h>
+#include <panel_pcbnew_color_settings.h>
 #include <panel_pcbnew_display_options.h>
 #include <panel_pcbnew_action_plugins.h>
 #include <fp_lib_table.h>
@@ -64,6 +65,7 @@ void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
     book->AddPage( new wxPanel( book ), _( "Pcbnew" ) );
     book->AddSubPage( new PANEL_PCBNEW_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_PCBNEW_COLOR_SETTINGS( this, aParent ), _( "Colors" ) );
     book->AddSubPage( new PANEL_PCBNEW_SETTINGS( this, aParent ), _( "Editing Options" ) );
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     book->AddSubPage( new PANEL_PCBNEW_ACTION_PLUGINS( this, aParent ), _( "Action Plugins" ) );
