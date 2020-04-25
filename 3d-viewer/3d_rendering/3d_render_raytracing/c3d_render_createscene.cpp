@@ -901,10 +901,10 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
                 const float maxZ = glm::max( containerBBox.Max().z,
                                              boardBBox.Max().z );
 
-                const SFVEC3F v5 = SFVEC3F( v1.x, v1.y, maxZ);
-                const SFVEC3F v6 = SFVEC3F( v2.x, v2.y, maxZ);
-                const SFVEC3F v7 = SFVEC3F( v3.x, v3.y, maxZ);
-                const SFVEC3F v8 = SFVEC3F( v4.x, v4.y, maxZ);
+                const SFVEC3F v5 = SFVEC3F( v1.x, v1.y, maxZ );
+                const SFVEC3F v6 = SFVEC3F( v2.x, v2.y, maxZ );
+                const SFVEC3F v7 = SFVEC3F( v3.x, v3.y, maxZ );
+                const SFVEC3F v8 = SFVEC3F( v4.x, v4.y, maxZ );
 
                 CTRIANGLE *newTriangle3 = new CTRIANGLE( v7, v6, v5 );
                 CTRIANGLE *newTriangle4 = new CTRIANGLE( v5, v8, v7 );
