@@ -34,6 +34,8 @@
 #include <wx/treebook.h>
 #include <wx/wx.h>
 
+#include <bitmaps.h>
+
 
 PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* aParent,
                                                                   PCB_EDIT_FRAME* aFrame ) :
@@ -49,6 +51,18 @@ PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* 
 {
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
+
+    // Initialize bitmaps:
+    m_bitmapZoneFillOpt->SetBitmap(  KiBitmap( show_zone_xpm ) );
+    m_bitmapMinTrackWidth->SetBitmap(  KiBitmap( width_track_xpm ) );
+    m_bitmapMinViaDiameter->SetBitmap(  KiBitmap( via_diameter_xpm ) );
+    m_bitmapMinViaDrill->SetBitmap(  KiBitmap( via_hole_diameter_xpm ) );
+    m_bitmapMinuViaDiameter->SetBitmap(  KiBitmap( via_diameter_xpm ) );
+    m_bitmapMinuViaDrill->SetBitmap(  KiBitmap( via_hole_diameter_xpm ) );
+    m_bitmapMinHoleClearance->SetBitmap(  KiBitmap( hole_to_hole_clearance_xpm ) );
+    m_bitmapEdgeClearance->SetBitmap(  KiBitmap( edge_to_copper_clearance_xpm ) );
+    m_bitmapBlindBuried->SetBitmap(  KiBitmap( via_buried_xpm ) );
+    m_bitmap_uVia->SetBitmap(  KiBitmap( via_microvia_xpm ) );
 }
 
 

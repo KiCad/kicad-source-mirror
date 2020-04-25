@@ -211,6 +211,7 @@ set( BMAPS_MID
     edit_cmp_symb_links
     edit_text
     edit
+    edge_to_copper_clearance
     eeschema
     enter_sheet
     ercerr
@@ -259,6 +260,7 @@ set( BMAPS_MID
     hierarchy_nav
     highlight_remove
     hotkeys
+    hole_to_hole_clearance
     html
     icon
     icon_cvpcb_small
@@ -503,6 +505,8 @@ set( BMAPS_MID
     via_buried
     via_microvia
     via_sketch
+    via_diameter
+    via_hole_diameter
     warning
     width_track_via
     width_track
