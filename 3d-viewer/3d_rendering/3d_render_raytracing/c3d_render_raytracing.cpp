@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1934,8 +1934,10 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
         // Refractions
         // /////////////////////////////////////////////////////////////////////
 
-        if((objMaterial->GetTransparency() > 0.0f) &&
-           m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) )
+        const float objTransparency = aHitInfo.pHitObject->GetModelTransparency();
+
+        if( ( objTransparency > 0.0f ) &&
+            m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) )
         {
             const float airIndex = 1.000293f;
             const float glassIndex = 1.49f;
@@ -1951,8 +1953,6 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                          refractionRatio,
                          refractedVector ) )
             {
-                const float objTransparency = objMaterial->GetTransparency();
-
                 // This increase the start point by a "fixed" factor so it will work the
                 // same for all distances
                 const SFVEC3F startPoint = aRay.at( NextFloatUp(

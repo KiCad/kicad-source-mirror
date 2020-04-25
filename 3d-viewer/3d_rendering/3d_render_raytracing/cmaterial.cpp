@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ CMATERIAL::CMATERIAL( const SFVEC3F &aAmbient,
     m_emissiveColor = aEmissive;
     m_specularColor = aSpecular;
     m_shinness      = aShinness;
-    m_transparency  = aTransparency;
+    m_transparency  = glm::clamp( aTransparency, 0.0f, 1.0f );
     m_absorbance    = 1.0f;
     m_reflection    = aReflection;
     m_cast_shadows  = true;

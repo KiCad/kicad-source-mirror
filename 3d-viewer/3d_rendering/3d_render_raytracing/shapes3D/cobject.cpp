@@ -41,6 +41,7 @@ COBJECT::COBJECT( OBJECT3D_TYPE aObjType )
     m_obj_type = aObjType;
     COBJECT3D_STATS::Instance().AddOne( aObjType );
     m_material = &s_defaultMaterial;
+    m_modelTransparency = 0.0f;
 }
 
 
@@ -48,14 +49,14 @@ COBJECT::COBJECT( OBJECT3D_TYPE aObjType )
  * Lookup table for OBJECT2D_TYPE printed names
  */
 // clang-format off
-const std::map<OBJECT3D_TYPE, const char*> objectTypeNames 
-{ 
+const std::map<OBJECT3D_TYPE, const char*> objectTypeNames
+{
     { OBJECT3D_TYPE::CYLINDER,   "OBJECT3D_TYPE::CYLINDER" },
     { OBJECT3D_TYPE::DUMMYBLOCK, "OBJECT2D_TYPE::DUMMYBLOCK" },
     { OBJECT3D_TYPE::LAYERITEM,  "OBJECT2D_TYPE::LAYERITEM" },
     { OBJECT3D_TYPE::XYPLANE,    "OBJECT2D_TYPE::XYPLANE" },
     { OBJECT3D_TYPE::ROUNDSEG,   "OBJECT2D_TYPE::ROUNDSEG" },
-    { OBJECT3D_TYPE::TRIANGLE,   "OBJECT2D_TYPE::TRIANGLE" } 
+    { OBJECT3D_TYPE::TRIANGLE,   "OBJECT2D_TYPE::TRIANGLE" }
 };
 // clang-format on
 

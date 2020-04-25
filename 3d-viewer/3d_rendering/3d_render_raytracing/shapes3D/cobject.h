@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,12 +55,18 @@ protected:
     OBJECT3D_TYPE m_obj_type;
     const CMATERIAL *m_material;
 
+    // m_modelTransparency combines the material and model opacity
+    // 0.0 full opaque, 1.0 full transparent.
+    float m_modelTransparency;
+
 public:
 
     explicit COBJECT( OBJECT3D_TYPE aObjType );
 
     void SetMaterial( const CMATERIAL *aMaterial ) { m_material = aMaterial; }
     const CMATERIAL *GetMaterial() const { return m_material; }
+    float GetModelTransparency() const { return m_modelTransparency; }
+    void SetModelTransparency( float aModelTransparency ) { m_modelTransparency = aModelTransparency; }
 
     virtual SFVEC3F GetDiffuseColor( const HITINFO &aHitInfo ) const = 0;
 

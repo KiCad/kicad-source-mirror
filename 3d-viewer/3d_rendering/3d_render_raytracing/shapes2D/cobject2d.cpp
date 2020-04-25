@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ COBJECT2D::COBJECT2D( OBJECT2D_TYPE aObjType, const BOARD_ITEM &aBoardItem )
  * Lookup table for OBJECT2D_TYPE printed names
  */
 // clang-format off
-const std::map<OBJECT2D_TYPE, const char*> objectTypeNames 
+const std::map<OBJECT2D_TYPE, const char*> objectTypeNames
 {
     { OBJECT2D_TYPE::FILLED_CIRCLE, "OBJECT2D_TYPE::FILLED_CIRCLE" },
     { OBJECT2D_TYPE::CSG,           "OBJECT2D_TYPE::CSG" },

@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Oleg Endo <olegendo@gcc.gnu.org>
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -414,36 +414,9 @@ void C_OGL_3DMODEL::Draw( bool aTransparent, float aOpacity ) const
     glTexCoordPointer( 2, GL_FLOAT, sizeof( VERTEX ),
                        reinterpret_cast<const void*>( offsetof( VERTEX, m_tex_uv ) ) );
 
-    if( aTransparent )
-    {
-        glEnable( GL_BLEND );
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    const SFVEC4F param = SFVEC4F( 1.0f, 1.0f, 1.0f, aOpacity );
 
-        if( aOpacity < 1.0f )
-        {
-            glEnable( GL_TEXTURE_2D );
-            glActiveTexture( GL_TEXTURE0 );
-
-            glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE );
-            glTexEnvf( GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_INTERPOLATE );
-            glTexEnvf( GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE );
-
-            glTexEnvi( GL_TEXTURE_ENV, GL_SRC0_RGB, GL_PRIMARY_COLOR );
-            glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR );
-
-            glTexEnvi( GL_TEXTURE_ENV, GL_SRC1_RGB, GL_PREVIOUS );
-            glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND1_RGB, GL_SRC_COLOR );
-
-            glTexEnvi( GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_PRIMARY_COLOR );
-            glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA );
-            glTexEnvi( GL_TEXTURE_ENV, GL_SRC1_ALPHA, GL_CONSTANT );
-            glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND1_ALPHA, GL_CONSTANT );
-
-            const SFVEC4F param = SFVEC4F( 1.0f, 1.0f, 1.0f, aOpacity );
-
-            glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, (const float*)&param.x );
-        }
-   }
+    glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, (const float*)&param.x );
 
     // BeginDrawMulti();
 
@@ -476,16 +449,6 @@ void C_OGL_3DMODEL::Draw( bool aTransparent, float aOpacity ) const
     }
 
     // EndDrawMulti();
-
-    if( aTransparent )
-    {
-        glDisable( GL_BLEND );
-
-        if( aOpacity < 1.0f )
-        {
-            OGL_ResetTextureStateDefaults();
-        }
-    }
 }
 
 C_OGL_3DMODEL::~C_OGL_3DMODEL()

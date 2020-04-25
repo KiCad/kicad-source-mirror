@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -863,9 +863,39 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
     // /////////////////////////////////////////////////////////////////////////
     // !TODO: this can be optimized. If there are no transparent models (or no opacity),
     // then there is no need to make this function call.
+
+    glDepthMask( GL_FALSE );
+
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+    // Enables Texture Env so it can combine model transparency with
+    // each module opacity setting
+    glEnable( GL_TEXTURE_2D );
+    glActiveTexture( GL_TEXTURE0 );
+
+    glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE );
+    glTexEnvf( GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_INTERPOLATE );
+    glTexEnvf( GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE );
+
+    glTexEnvi( GL_TEXTURE_ENV, GL_SRC0_RGB, GL_PRIMARY_COLOR );
+    glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR );
+
+    glTexEnvi( GL_TEXTURE_ENV, GL_SRC1_RGB, GL_PREVIOUS );
+    glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND1_RGB, GL_SRC_COLOR );
+
+    glTexEnvi( GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_PRIMARY_COLOR );
+    glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA );
+    glTexEnvi( GL_TEXTURE_ENV, GL_SRC1_ALPHA, GL_CONSTANT );
+    glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND1_ALPHA, GL_CONSTANT );
+
     render_3D_models( false, true );
     render_3D_models( true, true );
 
+    glDisable( GL_BLEND );
+    OGL_ResetTextureStateDefaults();
+
+    glDepthMask( GL_TRUE );
 
     // Render Grid
     // /////////////////////////////////////////////////////////////////////////

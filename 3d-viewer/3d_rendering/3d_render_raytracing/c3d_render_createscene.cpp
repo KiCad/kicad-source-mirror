@@ -1335,13 +1335,14 @@ void C3D_RENDER_RAYTRACING::load_3D_models()
 
             while( sM != eM )
             {
-                if( sM->m_Show && !sM->m_Filename.empty() )
+                if( ( (float)sM->m_Opacity > FLT_EPSILON ) &&
+                    ( sM->m_Show && !sM->m_Filename.empty() ) )
                 {
                     // get it from cache
                     const S3DMODEL *modelPtr = cacheMgr->GetModel( sM->m_Filename );
 
                     // only add it if the return is not NULL
-                    if( modelPtr  )
+                    if( modelPtr )
                     {
                         glm::mat4 modelMatrix = moduleMatrix;
 
@@ -1370,7 +1371,7 @@ void C3D_RENDER_RAYTRACING::load_3D_models()
                                                            sM->m_Scale.y,
                                                            sM->m_Scale.z ) );
 
-                        add_3D_models( modelPtr, modelMatrix );
+                        add_3D_models( modelPtr, modelMatrix, (float)sM->m_Opacity );
                     }
                 }
 
@@ -1382,7 +1383,8 @@ void C3D_RENDER_RAYTRACING::load_3D_models()
 
 
 void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
-                                           const glm::mat4 &aModelMatrix )
+                                           const glm::mat4 &aModelMatrix,
+                                           float aModuleOpacity )
 {
 
     // Validate a3DModel pointers
@@ -1591,10 +1593,12 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
                         CTRIANGLE *newTriangle = new  CTRIANGLE( vt0, vt2, vt1,
                                                                  nt0, nt2, nt1 );
 
-
-
                         m_object_container.Add( newTriangle );
                         newTriangle->SetMaterial( (const CMATERIAL *)&blinn_material );
+
+                        const float moduleTransparency = 1.0f - ( ( 1.0f - blinn_material.GetTransparency() ) * aModuleOpacity );
+
+                        newTriangle->SetModelTransparency( moduleTransparency );
 
                         if( mesh.m_Color == NULL )
                         {
