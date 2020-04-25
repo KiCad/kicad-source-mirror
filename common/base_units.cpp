@@ -492,6 +492,7 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils, EDA_DATA_TYPE
                 return _( "cu. in" );
             }
         }
+        break;      // Make compil happy.
 
     case EDA_UNITS::MILLIMETRES:
         switch( aType )
@@ -503,6 +504,7 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils, EDA_DATA_TYPE
         case EDA_DATA_TYPE::VOLUME:
             return _( "cu. mm" );
         }
+        break;      // Make compil happy.
 
     case EDA_UNITS::PERCENT:
         return _( "%" );
@@ -514,8 +516,10 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils, EDA_DATA_TYPE
         return _( "deg" );
 
     default:
-        return wxT( "??" );
+        break;
     }
+
+    return wxT( "??" );
 }
 
 

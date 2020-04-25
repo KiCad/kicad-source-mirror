@@ -568,7 +568,7 @@ const wxPoint SCH_FIELD::GetPosition() const
 
 wxPoint SCH_FIELD::GetParentPosition() const
 {
-    return m_Parent->GetPosition();
+    return m_Parent ? m_Parent->GetPosition() : wxPoint( 0, 0 );
 }
 
 

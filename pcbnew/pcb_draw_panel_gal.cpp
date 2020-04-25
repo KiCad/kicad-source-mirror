@@ -214,7 +214,7 @@ void PCB_DRAW_PANEL_GAL::UpdateColors()
     else
         cs = Pgm().GetSettingsManager().GetColorSettings();
 
-    wxASSERT( cs );
+    wxCHECK_RET( cs, "null COLOR_SETTINGS" );
 
     if( frame && frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
         cs->SetColorContext( COLOR_CONTEXT::FOOTPRINT );
