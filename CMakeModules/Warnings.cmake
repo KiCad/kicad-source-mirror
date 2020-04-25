@@ -35,6 +35,15 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 
 
+    # This is Clang's version of -Wsuggest-override
+    CHECK_CXX_COMPILER_FLAG( "-Winconsistent-missing-override" COMPILER_SUPPORTS_WINCONSISTENT_MISSING_OVERRIDE )
+
+    if( COMPILER_SUPPORTS_WINCONSISTENT_MISSING_OVERRIDE )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Winconsistent-missing-override" )
+        message( STATUS "Enabling warning -Winconsistent-missing-override" )
+    endif()
+
+
     CHECK_CXX_COMPILER_FLAG( "-Wvla" COMPILER_SUPPORTS_WVLA )
 
     if( COMPILER_SUPPORTS_WVLA )
