@@ -148,9 +148,10 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     GetRenderSettings()->SetDefaultPenWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS );
 
     setupTools();
-    ReCreateMenuBar();
+
     ReCreateHToolbar();
     ReCreateVToolbar();
+    ReCreateMenuBar();      // Create after toolbars so that SyncToolbars works
 
     m_libList = new wxListBox( this, ID_LIBVIEW_LIB_LIST, wxDefaultPosition, wxDefaultSize,
                                0, NULL, wxLB_HSCROLL | wxNO_BORDER );
