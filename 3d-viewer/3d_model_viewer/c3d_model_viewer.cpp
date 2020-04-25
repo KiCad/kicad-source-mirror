@@ -313,7 +313,7 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
         m_ogl_3dmodel->BeginDrawMulti();
 
         m_ogl_3dmodel->Draw_opaque();
-        m_ogl_3dmodel->Draw_transparent();
+        m_ogl_3dmodel->Draw_transparent( 1.0f );
 
         m_ogl_3dmodel->EndDrawMulti();
 

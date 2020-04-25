@@ -361,27 +361,27 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
     {
         case B_Mask:
             m_materials.m_SolderMaskBot.m_Diffuse = get_layer_color( aLayerID );
-            OGL_SetMaterial( m_materials.m_SolderMaskBot );
+            OGL_SetMaterial( m_materials.m_SolderMaskBot, 1.0f );
             break;
         case F_Mask:
             m_materials.m_SolderMaskTop.m_Diffuse = get_layer_color( aLayerID );
-            OGL_SetMaterial( m_materials.m_SolderMaskTop );
+            OGL_SetMaterial( m_materials.m_SolderMaskTop, 1.0f );
             break;
 
         case B_Paste:
         case F_Paste:
             m_materials.m_Paste.m_Diffuse = get_layer_color( aLayerID );
-            OGL_SetMaterial( m_materials.m_Paste );
+            OGL_SetMaterial( m_materials.m_Paste, 1.0f );
             break;
 
         case B_SilkS:
             m_materials.m_SilkSBot.m_Diffuse = get_layer_color( aLayerID );
-            OGL_SetMaterial( m_materials.m_SilkSBot );
+            OGL_SetMaterial( m_materials.m_SilkSBot, 1.0f );
             break;
 
         case F_SilkS:
             m_materials.m_SilkSTop.m_Diffuse = get_layer_color( aLayerID );
-            OGL_SetMaterial( m_materials.m_SilkSTop );
+            OGL_SetMaterial( m_materials.m_SilkSTop, 1.0f );
             break;
 
         case B_Adhes:
@@ -409,12 +409,12 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
 
             m_materials.m_Plastic.m_Shininess = 0.078125f * 128.0f;
             m_materials.m_Plastic.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
-            OGL_SetMaterial( m_materials.m_Plastic );
+            OGL_SetMaterial( m_materials.m_Plastic, 1.0f );
         break;
 
         default:
             m_materials.m_Copper.m_Diffuse = get_layer_color( aLayerID );
-            OGL_SetMaterial( m_materials.m_Copper );
+            OGL_SetMaterial( m_materials.m_Copper, 1.0f );
 
         break;
     }
@@ -589,6 +589,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
     glClearStencil( 0x00 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 
+    OGL_ResetTextureStateDefaults();
 
     // Draw the background ( rectangle with color gradient)
     // /////////////////////////////////////////////////////////////////////////
@@ -659,7 +660,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
             m_ogl_disp_list_board->ApplyScalePosition( -m_boardAdapter.GetEpoxyThickness3DU() / 2.0f,
                                                        m_boardAdapter.GetEpoxyThickness3DU() );
 
-            OGL_SetMaterial( m_materials.m_EpoxyBoard );
+            OGL_SetMaterial( m_materials.m_EpoxyBoard, 1.0f );
 
             m_ogl_disp_list_board->SetItIsTransparent( false );
 
@@ -688,7 +689,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
     }
     else
     {
-        OGL_SetMaterial( m_materials.m_GrayMaterial );
+        OGL_SetMaterial( m_materials.m_GrayMaterial, 1.0f );
     }
 
     if( (!( skipRenderVias || skipRenderHoles ) ) && m_ogl_disp_list_via )
@@ -860,6 +861,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw(
 
     // Render 3D Models (Transparent)
     // /////////////////////////////////////////////////////////////////////////
+    // !TODO: this can be optimized. If there are no transparent models (or no opacity),
+    // then there is no need to make this function call.
     render_3D_models( false, true );
     render_3D_models( true, true );
 
@@ -1180,8 +1183,8 @@ void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
                 {
                     if( const C_OGL_3DMODEL *modelPtr = cache_i->second )
                     {
-                        if( ( (!aRenderTransparentOnly) && modelPtr->Have_opaque() ) ||
-                            ( aRenderTransparentOnly && modelPtr->Have_transparent() ) )
+                        if( ( (!aRenderTransparentOnly) && modelPtr->Have_opaque() && (sM.m_Opacity >= 1.0 ) ) ||
+                            ( aRenderTransparentOnly && ( modelPtr->Have_transparent() || (sM.m_Opacity < 1.0 ) ) ) )
                         {
                             glPushMatrix();
 
@@ -1196,7 +1199,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
                             glMultMatrixf( glm::value_ptr( mtx ) );
 
                             if( aRenderTransparentOnly )
-                                modelPtr->Draw_transparent();
+                                modelPtr->Draw_transparent( sM.m_Opacity );
                             else
                                 modelPtr->Draw_opaque();
 

@@ -141,11 +141,15 @@ GLuint OGL_LoadTexture( const CIMAGE &aImage )
 }
 
 
-void OGL_SetMaterial( const SMATERIAL & aMaterial )
+void OGL_SetMaterial( const SMATERIAL & aMaterial, float aOpacity )
 {
     const SFVEC4F ambient  = SFVEC4F( aMaterial.m_Ambient,  1.0f );
-    const SFVEC4F diffuse  = SFVEC4F( aMaterial.m_Diffuse,  1.0f -
-                                      aMaterial.m_Transparency );
+
+    // !TODO: at this moment, diffuse color is added via
+    // glEnableClientState( GL_COLOR_ARRAY ) so this line may has no effect
+    // but can be used for optimization
+    const SFVEC4F diffuse  = SFVEC4F( aMaterial.m_Diffuse,
+                                      ( 1.0f - aMaterial.m_Transparency ) * aOpacity );
     const SFVEC4F specular = SFVEC4F( aMaterial.m_Specular, 1.0f );
     const SFVEC4F emissive = SFVEC4F( aMaterial.m_Emissive, 1.0f );
 
@@ -161,10 +165,10 @@ void OGL_SetMaterial( const SMATERIAL & aMaterial )
 }
 
 
-void OGL_SetDiffuseOnlyMaterial( const SFVEC3F &aMaterialDiffuse )
+void OGL_SetDiffuseOnlyMaterial( const SFVEC3F &aMaterialDiffuse, float aOpacity  )
 {
     const SFVEC4F ambient  = SFVEC4F( 0.2f, 0.2f, 0.2f, 1.0f );
-    const SFVEC4F diffuse  = SFVEC4F( aMaterialDiffuse, 1.0f );
+    const SFVEC4F diffuse  = SFVEC4F( aMaterialDiffuse, aOpacity );
     const SFVEC4F specular = SFVEC4F( 0.0f, 0.0f, 0.0f, 1.0f );
     const SFVEC4F emissive = SFVEC4F( 0.0f, 0.0f, 0.0f, 1.0f );
 
@@ -202,4 +206,17 @@ void OGL_DrawBackground( const SFVEC3F &aTopColor, const SFVEC3F &aBotColor )
     glColor4f( aTopColor.x, aTopColor.y, aTopColor.z, 1.0f );
     glVertex2f( 1.0, 1.0 );     // top right corner
     glEnd();
+}
+
+void OGL_ResetTextureStateDefaults()
+{
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, 0 );
+    glClientActiveTexture( GL_TEXTURE0 );
+    glDisable( GL_TEXTURE_2D );
+    glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+
+    const SFVEC4F zero = SFVEC4F( 0.0f );
+
+    glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, (const float*)&zero.x );
 }

@@ -38,8 +38,9 @@
 /**
  * @brief OGL_SetMaterial - Set OpenGL materials
  * @param aMaterial: a material structure with parameters to set
+ * @param aOpacity: main model opacity 0.0 full transparente, 1.0 full opaque
  */
-void OGL_SetMaterial( const SMATERIAL & aMaterial );
+void OGL_SetMaterial( const SMATERIAL & aMaterial, float aOpacity );
 
 
 /**
@@ -47,7 +48,7 @@ void OGL_SetMaterial( const SMATERIAL & aMaterial );
  * parameters with default values
  * @param aMaterialDiffuse: the diffese color to assign to material properties
  */
-void OGL_SetDiffuseOnlyMaterial( const SFVEC3F &aMaterialDiffuse );
+void OGL_SetDiffuseOnlyMaterial( const SFVEC3F &aMaterialDiffuse, float aOpacity );
 
 
 /**
@@ -71,5 +72,12 @@ void OGL_GetScreenshot( wxImage &aDstImage );
  * @param aBotColor
  */
 void OGL_DrawBackground( const SFVEC3F &aTopColor, const SFVEC3F &aBotColor );
+
+
+/**
+ * @brief OGL_ResetTextureStateDefaults - resets to default state the texture settings
+ */
+void OGL_ResetTextureStateDefaults();
+
 
 #endif // OGL_UTILS_H_

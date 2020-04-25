@@ -391,8 +391,11 @@ void C_OGL_3DMODEL::EndDrawMulti()
 }
 
 
-void C_OGL_3DMODEL::Draw( bool aTransparent ) const
+void C_OGL_3DMODEL::Draw( bool aTransparent, float aOpacity ) const
 {
+    if( aOpacity <= FLT_EPSILON )
+        return;
+
     glBindBuffer( GL_ARRAY_BUFFER, m_vertex_buffer );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_index_buffer );
 
@@ -411,29 +414,61 @@ void C_OGL_3DMODEL::Draw( bool aTransparent ) const
     glTexCoordPointer( 2, GL_FLOAT, sizeof( VERTEX ),
                        reinterpret_cast<const void*>( offsetof( VERTEX, m_tex_uv ) ) );
 
+    if( aTransparent )
+    {
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+        if( aOpacity < 1.0f )
+        {
+            glEnable( GL_TEXTURE_2D );
+            glActiveTexture( GL_TEXTURE0 );
+
+            glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE );
+            glTexEnvf( GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_INTERPOLATE );
+            glTexEnvf( GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE );
+
+            glTexEnvi( GL_TEXTURE_ENV, GL_SRC0_RGB, GL_PRIMARY_COLOR );
+            glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR );
+
+            glTexEnvi( GL_TEXTURE_ENV, GL_SRC1_RGB, GL_PREVIOUS );
+            glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND1_RGB, GL_SRC_COLOR );
+
+            glTexEnvi( GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_PRIMARY_COLOR );
+            glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA );
+            glTexEnvi( GL_TEXTURE_ENV, GL_SRC1_ALPHA, GL_CONSTANT );
+            glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND1_ALPHA, GL_CONSTANT );
+
+            const SFVEC4F param = SFVEC4F( 1.0f, 1.0f, 1.0f, aOpacity );
+
+            glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, (const float*)&param.x );
+        }
+   }
+
     // BeginDrawMulti();
 
     for( auto& mat : m_materials )
     {
-      if( mat.IsTransparent() != aTransparent )
-        continue;
+        if( ( mat.IsTransparent() != aTransparent ) &&
+            ( aOpacity >= 1.0f ) )
+            continue;
 
-      switch( m_material_mode )
-      {
-      case MATERIAL_MODE::NORMAL:
-          OGL_SetMaterial( mat );
-          break;
+        switch( m_material_mode )
+        {
+        case MATERIAL_MODE::NORMAL:
+            OGL_SetMaterial( mat, aOpacity );
+        break;
 
-      case MATERIAL_MODE::DIFFUSE_ONLY:
-          OGL_SetDiffuseOnlyMaterial( mat.m_Diffuse );
-          break;
+        case MATERIAL_MODE::DIFFUSE_ONLY:
+            OGL_SetDiffuseOnlyMaterial( mat.m_Diffuse, aOpacity );
+        break;
 
-      case MATERIAL_MODE::CAD_MODE:
-          OGL_SetDiffuseOnlyMaterial( MaterialDiffuseToColorCAD( mat.m_Diffuse ) );
-          break;
+        case MATERIAL_MODE::CAD_MODE:
+            OGL_SetDiffuseOnlyMaterial( MaterialDiffuseToColorCAD( mat.m_Diffuse ), aOpacity );
+        break;
 
-      default:
-          break;
+        default:
+        break;
       }
 
       glDrawElements( GL_TRIANGLES, mat.m_render_idx_count, m_index_buffer_type,
@@ -441,6 +476,16 @@ void C_OGL_3DMODEL::Draw( bool aTransparent ) const
     }
 
     // EndDrawMulti();
+
+    if( aTransparent )
+    {
+        glDisable( GL_BLEND );
+
+        if( aOpacity < 1.0f )
+        {
+            OGL_ResetTextureStateDefaults();
+        }
+    }
 }
 
 C_OGL_3DMODEL::~C_OGL_3DMODEL()

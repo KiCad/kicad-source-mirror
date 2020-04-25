@@ -53,12 +53,12 @@ public:
     /**
      * @brief Draw_opaque - render the model into the current context
      */
-    void Draw_opaque() const { Draw( false ); }
+    void Draw_opaque() const { Draw( false, 1.0f ); }
 
     /**
      * @brief Draw_transparent - render the model into the current context
      */
-    void Draw_transparent() const { Draw( true ); }
+    void Draw_transparent( float aOpacity ) const { Draw( true, aOpacity ); }
 
     /**
      * @brief Have_opaque - return true if have opaque meshs to render
@@ -155,7 +155,7 @@ private:
                           VERTEX *aVtxOut, GLuint *aIdxOut,
                           const glm::vec4 &aColor );
 
-    void Draw( bool aTransparent ) const;
+    void Draw( bool aTransparent, float aOpacity ) const;
 };
 
 #endif // _C_OGL_3DMODEL_H_
