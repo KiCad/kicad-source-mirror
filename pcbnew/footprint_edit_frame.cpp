@@ -108,7 +108,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                          KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() )
 {
     m_showBorderAndTitleBlock = false;   // true to show the frame references
-    m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
     m_canvasType = aBackend;
     m_AboutTitle = "ModEdit";
     m_selLayerBox = nullptr;

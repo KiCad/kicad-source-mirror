@@ -141,8 +141,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     GetRenderSettings()->m_ShowPinsElectricalType = GetShowElectricalType();
     GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
 
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
-
     setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();

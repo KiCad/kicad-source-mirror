@@ -102,8 +102,6 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     icon.CopyFromBitmap( KiBitmap( icon_3d_xpm ) );
     SetIcon( icon );
 
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
-
     // Create the status line
     static const int status_dims[5] = { -1, -1, 130, 130, 170 };
 

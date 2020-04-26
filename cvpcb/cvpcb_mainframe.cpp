@@ -49,9 +49,6 @@
 #include <tools/cvpcb_association_tool.h>
 #include <tools/cvpcb_control.h>
 
-wxSize const FRAME_MIN_SIZE_DU( 400, 300 );
-wxSize const FRAME_DEFAULT_SIZE_DU( 500, 400 );
-
 #define CVPCB_MAINFRAME_NAME wxT( "CvpcbFrame" )
 
 
@@ -78,13 +75,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetAutoLayout( true );
 
     LoadSettings( config() );
-
-    wxSize const frame_min( ConvertDialogToPixels( FRAME_MIN_SIZE_DU ) );
-
-    SetSizeHints( frame_min );
-
-    // Frame size and position
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     setupTools();
     ReCreateMenuBar();
@@ -372,11 +362,6 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
 void CVPCB_MAINFRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
-
-    wxSize const frame_default( ConvertDialogToPixels( FRAME_DEFAULT_SIZE_DU ) );
-
-    if( m_FrameSize == wxDefaultSize )
-        m_FrameSize = frame_default;
 
     auto cfg = static_cast<CVPCB_SETTINGS*>( aCfg );
 

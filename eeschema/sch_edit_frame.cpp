@@ -221,7 +221,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_printMonochrome = true;
     m_printSheetReference = true;
     m_hasAutoSave = true;
-    m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
     m_AboutTitle = "Eeschema";
 
     m_findReplaceDialog = nullptr;

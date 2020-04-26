@@ -177,7 +177,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_hasAutoSave = true;
     m_microWaveToolBar = NULL;
     m_Layers = nullptr;
-    m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
     // We don't know what state board was in when it was lasat saved, so we have to
     // assume dirty

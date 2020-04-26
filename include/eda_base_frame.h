@@ -124,6 +124,10 @@ protected:
     wxPoint         m_FramePos;
     wxSize          m_FrameSize;
 
+    // These contain the frame size and position for when it is not maximized
+    wxPoint         m_NormalFramePos;
+    wxSize          m_NormalFrameSize;
+
     wxString        m_AboutTitle;           // Name of program displayed in About.
 
     wxAuiManager    m_auimgr;
@@ -244,6 +248,8 @@ public:
     {
         aEvent.Skip();
     }
+
+    void OnMaximize( wxMaximizeEvent& aEvent );
 
     void SetAutoSaveInterval( int aInterval );
 

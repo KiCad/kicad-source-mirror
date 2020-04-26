@@ -69,6 +69,17 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     SetBoard( new BOARD() );
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
 
+    // Create GAL canvas before loading settings
+#ifdef __WXMAC__
+    // Cairo renderer doesn't handle Retina displays
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+#else
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+#endif
+    auto* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                                  GetGalDisplayOptions(), backend );
+    SetCanvas( gal_drawPanel );
+
     // Don't show the default board solder mask clearance.  Only the
     // footprint or pad clearance setting should be shown if it is not 0.
     GetBoard()->GetDesignSettings().m_SolderMaskMargin = 0;
@@ -88,20 +99,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     // Track and via clearance has no meaning here.
     displ_opts.m_ShowTrackClearanceMode = PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE;
     SetDisplayOptions( displ_opts );
-
-    // Create GAL canvas
-#ifdef __WXMAC__
-    // Cairo renderer doesn't handle Retina displays
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-#else
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-#endif
-    auto* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                  GetGalDisplayOptions(), backend );
-    SetCanvas( gal_drawPanel );
-
-    // Now all panels are created, set the window size to the latest saved in config:
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;

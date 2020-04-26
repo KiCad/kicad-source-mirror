@@ -101,7 +101,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_DrawSpecificUnit    = false;
     m_SyncPinEdit         = false;
     SetShowElectricalType( true );
-    m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
     m_my_part = nullptr;
     m_treePane = nullptr;

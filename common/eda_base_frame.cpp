@@ -64,6 +64,7 @@ BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
     EVT_MENU_CLOSE( EDA_BASE_FRAME::OnMenuEvent )
     EVT_MENU_HIGHLIGHT_ALL( EDA_BASE_FRAME::OnMenuEvent )
     EVT_MOVE( EDA_BASE_FRAME::OnMove )
+    EVT_MAXIMIZE( EDA_BASE_FRAME::OnMaximize )
 END_EVENT_TABLE()
 
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
@@ -81,6 +82,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     m_mruPath = wxStandardPaths::Get().GetDocumentsDir();
     m_toolManager = nullptr;
     m_settingsManager = nullptr;
+    m_FrameSize = wxSize( s_minsize_x, s_minsize_y );
 
     // Set a reasonable minimal size for the frame
     SetSizeHints( s_minsize_x, s_minsize_y, -1, -1, -1, -1 );
@@ -434,6 +436,10 @@ void EDA_BASE_FRAME::LoadWindowSettings( WINDOW_SETTINGS* aCfg )
         m_FramePos = GetPosition();
     }
 
+    // Record the frame sizes in an un-maximized state
+    m_NormalFrameSize = m_FrameSize;
+    m_NormalFramePos  = m_FramePos;
+
     // Maximize if we were maximized before
     if( aCfg->maximized )
     {
@@ -460,13 +466,22 @@ void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
 
     wxString baseCfgName = ConfigBaseName();
 
-    m_FrameSize = GetSize();
-    m_FramePos  = GetPosition();
+    // If the window is maximized, we use the saved window size from before it was maximized
+    if( IsMaximized() )
+    {
+        m_FramePos  = m_NormalFramePos;
+        m_FrameSize = m_NormalFrameSize;
+    }
+    else
+    {
+        m_FrameSize = GetSize();
+        m_FramePos  = GetPosition();
+    }
 
-    aCfg->pos_x = m_FramePos.x;
-    aCfg->pos_y = m_FramePos.y;
-    aCfg->size_x = m_FrameSize.x;
-    aCfg->size_y = m_FrameSize.y;
+    aCfg->pos_x     = m_FramePos.x;
+    aCfg->pos_y     = m_FramePos.y;
+    aCfg->size_x    = m_FrameSize.x;
+    aCfg->size_y    = m_FrameSize.y;
     aCfg->maximized = IsMaximized();
 
     wxLogTrace( traceDisplayLocation, "Saving window maximized: %s", IsMaximized() ? "true" : "false" );
@@ -741,6 +756,7 @@ bool EDA_BASE_FRAME::IsContentModified()
     return false;
 }
 
+
 void EDA_BASE_FRAME::ChangeUserUnits( EDA_UNITS aUnits )
 {
     SetUserUnits( aUnits );
@@ -748,4 +764,24 @@ void EDA_BASE_FRAME::ChangeUserUnits( EDA_UNITS aUnits )
 
     wxCommandEvent e( UNITS_CHANGED );
     ProcessEventLocally( e );
+}
+
+
+void EDA_BASE_FRAME::OnMaximize( wxMaximizeEvent& aEvent )
+{
+    // When we maximize the window, we want to save the old information
+    // so that we can add it to the settings on next window load.
+    // Contrary to the documentation, this event seems to be generated
+    // when the window is also being unmaximized, so we only capture the
+    // size information when we maximize the window.
+    if( !IsMaximized() )
+    {
+        m_NormalFrameSize = GetSize();
+        m_NormalFramePos  = GetPosition();
+        wxLogTrace( traceDisplayLocation, "Maximizing window - Saving position (%d, %d) with size (%d, %d)",
+                m_NormalFramePos.x, m_NormalFramePos.y, m_NormalFrameSize.x, m_NormalFrameSize.y );
+    }
+
+    // Skip event to actually maximize the window
+    aEvent.Skip();
 }
