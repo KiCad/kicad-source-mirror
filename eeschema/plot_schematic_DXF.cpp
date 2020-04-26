@@ -140,7 +140,9 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString& aFileName,
         PlotWorkSheet( plotter, &m_parent->Prj(), m_parent->GetTitleBlock(), pageInfo,
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        m_parent->GetScreenDesc(), aScreen->GetFileName(),
-                       plotter->GetColorMode() ? COLOR4D::UNSPECIFIED : COLOR4D::BLACK );
+                       plotter->GetColorMode() ?
+                       plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) :
+                       COLOR4D::BLACK );
     }
 
     aScreen->Plot( plotter );

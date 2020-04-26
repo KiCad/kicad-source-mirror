@@ -162,7 +162,9 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter,
                        m_parent->GetPageSettings(), aScreen->m_ScreenNumber,
                        aScreen->m_NumberOfScreens, m_parent->GetScreenDesc(),
                        aScreen->GetFileName(),
-                       aPlotter->GetColorMode() ? COLOR4D::UNSPECIFIED : COLOR4D::BLACK );
+                       aPlotter->GetColorMode() ?
+                       aPlotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) :
+                       COLOR4D::BLACK );
     }
 
     aScreen->Plot( aPlotter );
