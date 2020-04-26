@@ -39,7 +39,6 @@ id
 image
 input
 input_low
-instances
 inverted
 inverted_clock
 italic
@@ -99,6 +98,7 @@ solid
 start
 stroke
 symbol
+symbol_instances
 text
 thickness
 title

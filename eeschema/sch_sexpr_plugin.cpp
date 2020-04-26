@@ -73,6 +73,7 @@
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
 #include <sch_file_versions.h>
 #include <schematic_lexer.h>
+#include <sch_reference_list.h>
 #include <sch_sexpr_parser.h>
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
 #include <confirm.h>
@@ -299,11 +300,11 @@ static void formatStroke( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aWidt
         aFormatter->Print( 0, " (type %s)", TO_UTF8( getLineStyleToken( aStyle ) ) );
 
     if( !( aColor == COLOR4D::UNSPECIFIED ) )
-        aFormatter->Print( 0, " (color %d %d %d %0.4f)",
+        aFormatter->Print( 0, " (color %d %d %d %s)",
                            KiROUND( aColor.r * 255.0 ),
                            KiROUND( aColor.g * 255.0 ),
                            KiROUND( aColor.b * 255.0 ),
-                           aColor.a );
+                           Double2Str( aColor.a ).c_str() );
 
     aFormatter->Print( 0, ")" );
 }
@@ -523,23 +524,7 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
 
             try
             {
-                loadFile( fileName.GetFullPath(), aSheet->GetScreen() );
-
-                for( auto aItem : aSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
-                {
-                    assert( aItem->Type() == SCH_SHEET_T );
-                    auto sheet = static_cast<SCH_SHEET*>( aItem );
-
-                    // Set the parent to aSheet.  This effectively creates a method to find
-                    // the root sheet from any sheet so a pointer to the root sheet does not
-                    // need to be stored globally.  Note: this is not the same as a hierarchy.
-                    // Complex hierarchies can have multiple copies of a sheet.  This only
-                    // provides a simple tree to find the root sheet.
-                    sheet->SetParent( aSheet );
-
-                    // Recursion starts here.
-                    loadHierarchy( sheet );
-                }
+                loadFile( fileName.GetFullPath(), aSheet );
             }
             catch( const IO_ERROR& ioe )
             {
@@ -553,6 +538,17 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
 
                 m_error += ioe.What();
             }
+
+            // This was moved out of the try{} block so that any sheets definitionsthat
+            // the plugin fully parsed before the exception was raised will be loaded.
+            for( auto aItem : aSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
+            {
+                wxCHECK2( aItem->Type() == SCH_SHEET_T, /* do nothing */ );
+                auto sheet = static_cast<SCH_SHEET*>( aItem );
+
+                // Recursion starts here.
+                loadHierarchy( sheet );
+            }
         }
 
         m_currentPath.pop();
@@ -561,20 +557,20 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
 }
 
 
-void SCH_SEXPR_PLUGIN::loadFile( const wxString& aFileName, SCH_SCREEN* aScreen )
+void SCH_SEXPR_PLUGIN::loadFile( const wxString& aFileName, SCH_SHEET* aSheet )
 {
     FILE_LINE_READER reader( aFileName );
 
     SCH_SEXPR_PARSER parser( &reader );
 
-    parser.ParseSchematic( aScreen );
+    parser.ParseSchematic( aSheet );
 }
 
 
-void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aScreen, KIWAY* aKiway,
+void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, KIWAY* aKiway,
                              const PROPERTIES* aProperties )
 {
-    wxCHECK_RET( aScreen != NULL, "NULL SCH_SCREEN object." );
+    wxCHECK_RET( aSheet != NULL, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
 
     LOCALE_IO   toggle;     // toggles on, then off, the C locale, to write floating point values.
@@ -591,34 +587,44 @@ void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aScreen, KIW
 
     m_out = &formatter;     // no ownership
 
-    Format( aScreen );
+    Format( aSheet );
 }
 
 
-void SCH_SEXPR_PLUGIN::Format( SCH_SCREEN* aScreen )
+void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 {
-    wxCHECK_RET( aScreen != NULL, "NULL SCH_SCREEN* object." );
+    wxCHECK_RET( aSheet != NULL, "NULL SCH_SHEET* object." );
     wxCHECK_RET( m_kiway != NULL, "NULL KIWAY* object." );
+
+    SCH_SCREEN* screen = aSheet->GetScreen();
+
+    wxCHECK( screen, /* void */ );
 
     m_out->Print( 0, "(kicad_sch (version %d) (host eeschema %s)\n\n",
                   SEXPR_SCHEMATIC_FILE_VERSION,
                   m_out->Quotew( GetBuildVersion() ).c_str() );
 
-    aScreen->GetPageSettings().Format( m_out, 1, 0 );
+    // Root sheet must have a permanent UUID.
+    // if( aSheet->IsRootSheet() && aSheet->m_Uuid.IsLegacyTimestamp() )
+    //     const_cast<KIID&>( aSheet->m_Uuid ).ConvertTimestampToUuid();
+
+    // m_out->Print( 1, "(uuid %s)\n\n", m_out->Quotew( aSheet->m_Uuid.AsString() ).c_str() );
+
+    screen->GetPageSettings().Format( m_out, 1, 0 );
     m_out->Print( 0, "\n" );
-    aScreen->GetTitleBlock().Format( m_out, 1, 0 );
+    screen->GetTitleBlock().Format( m_out, 1, 0 );
 
     // Save cache library.
     m_out->Print( 1, "(lib_symbols\n" );
 
-    for( auto libSymbol : aScreen->GetLibSymbols() )
+    for( auto libSymbol : screen->GetLibSymbols() )
         SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( libSymbol.second, *m_out, 2, libSymbol.first );
 
     m_out->Print( 1, ")\n\n" );
 
     // @todo save schematic instance information (page #).
 
-    for( const auto& alias : aScreen->GetBusAliases() )
+    for( const auto& alias : screen->GetBusAliases() )
     {
         saveBusAlias( alias, 1 );
     }
@@ -627,7 +633,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SCREEN* aScreen )
     auto cmp = []( const SCH_ITEM* a, const SCH_ITEM* b ) { return *a < *b; };
     std::multiset<SCH_ITEM*, decltype( cmp )> save_map( cmp );
 
-    for( auto item : aScreen->Items() )
+    for( auto item : screen->Items() )
         save_map.insert( item );
 
     KICAD_T itemType = TYPE_NOT_INIT;
@@ -701,6 +707,48 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SCREEN* aScreen )
         default:
             wxASSERT( "Unexpected schematic object type in SCH_SEXPR_PLUGIN::Format()" );
         }
+    }
+
+    // If this is the root sheet, save all of the sheet paths.
+    if( aSheet->IsRootSheet() )
+    {
+        m_out->Print( 0, "\n" );
+        m_out->Print( 1, "(symbol_instances\n" );
+
+        SCH_SHEET_LIST sheetPaths( aSheet );
+
+        for( auto sheetPath : sheetPaths )
+        {
+            SCH_REFERENCE_LIST instances;
+
+            sheetPath.GetComponents( instances, true, true );
+            instances.SortByReferenceOnly();
+
+            for( size_t i = 0; i < instances.GetCount(); i++ )
+            {
+                m_out->Print( 2, "(path %s (reference %s) (unit %d))\n",
+                              m_out->Quotew( instances[i].GetPath() ).c_str(),
+                              m_out->Quotew( instances[i].GetRef() ).c_str(),
+                              instances[i].GetUnit() );
+            }
+        }
+
+        m_out->Print( 1, ")\n" );  // Close instances token.
+    }
+    else if( screen->m_symbolInstances.size() )
+    {
+        m_out->Print( 0, "\n" );
+        m_out->Print( 1, "(symbol_instances\n" );
+
+        for( auto instance : screen->m_symbolInstances )
+        {
+            m_out->Print( 2, "(path %s (reference %s) (unit %d))\n",
+                          m_out->Quotew( instance.m_Path.AsString() ).c_str(),
+                          m_out->Quotew( instance.m_Reference ).c_str(),
+                          instance.m_Unit );
+        }
+
+        m_out->Print( 1, ")\n" );  // Close instances token.
     }
 
     m_out->Print( 0, ")\n" );
@@ -834,46 +882,6 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, int aNestLevel )
         saveField( &field, aNestLevel + 1 );
     }
 
-    // @todo Save sheet UUID at top level of schematic file.  This will require saving from
-    //       the SCH_SHEET object instead of the SCH_SCREEN object.
-
-    // KIID projectId;
-    // wxString projectName = "unknown";
-    // SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( aSymbol->GetParent() );
-
-    // if( sheet )
-    // {
-    //     SCH_SHEET* rootSheet = sheet->GetRootSheet();
-
-    //     wxASSERT( rootSheet );
-
-    //     projectName = rootSheet->GetName();
-    //     projectId = rootSheet->m_Uuid;
-    // }
-
-    // For simple hierarchies, the reference is defined by the reference property (field).
-    if( aSymbol->GetInstanceReferences().size() > 1 )
-    {
-        m_out->Print( aNestLevel + 1, "(instances\n" );
-
-        // @todo Group project level instances.
-        for( const auto instance : aSymbol->GetInstanceReferences() )
-        {
-            wxString path = "/";
-
-            // Skip root sheet
-            for( int i = 1; i < (int) instance.m_Path.size(); ++i )
-                path += instance.m_Path[i].AsString() + "/";
-
-            m_out->Print( aNestLevel + 2, "(path %s (reference %s) (unit %d))\n",
-                          m_out->Quotew( path ).c_str(),
-                          m_out->Quotew( instance.m_Reference ).c_str(),
-                          instance.m_Unit );
-        }
-
-        m_out->Print( aNestLevel + 1, ")\n" );
-    }
-
     m_out->Print( aNestLevel, ")\n" );
 }
 
@@ -962,7 +970,7 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
 {
     wxCHECK_RET( aSheet != nullptr && m_out != nullptr, "" );
 
-    m_out->Print( aNestLevel, "(sheet (at %s %s) (size %s %s)",
+    m_out->Print( aNestLevel, "(sheet (at %s %s) (size %s %s)\n",
                   FormatInternalUnits( aSheet->GetPosition().x ).c_str(),
                   FormatInternalUnits( aSheet->GetPosition().y ).c_str(),
                   FormatInternalUnits( aSheet->GetSize().GetWidth() ).c_str(),
@@ -970,21 +978,21 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
 
     if( !aSheet->UsesDefaultStroke() )
     {
-        m_out->Print( 0, " " );
-        formatStroke( m_out, 0, aSheet->GetBorderWidth(), PLOT_DASH_TYPE::SOLID,
+        formatStroke( m_out, aNestLevel + 1, aSheet->GetBorderWidth(), PLOT_DASH_TYPE::SOLID,
                       aSheet->GetBorderColor() );
+        m_out->Print( 0, "\n" );
     }
 
     if( !( aSheet->GetBackgroundColor() == COLOR4D::UNSPECIFIED ) )
     {
-        m_out->Print( 0, " (fill (color %d %d %d %0.4f))",
+        m_out->Print( aNestLevel + 1, "(fill (color %d %d %d %0.4f))",
                       KiROUND( aSheet->GetBackgroundColor().r * 255.0 ),
                       KiROUND( aSheet->GetBackgroundColor().g * 255.0 ),
                       KiROUND( aSheet->GetBackgroundColor().b * 255.0 ),
                       aSheet->GetBackgroundColor().a );
+        m_out->Print( 0, "\n" );
     }
 
-    m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel + 1, "(uuid %s)", TO_UTF8( aSheet->m_Uuid.AsString() ) );
     m_out->Print( 0, "\n" );
 

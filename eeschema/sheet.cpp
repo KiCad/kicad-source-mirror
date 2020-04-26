@@ -115,6 +115,10 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( schFileType ) );
     std::unique_ptr< SCH_SHEET> newSheet( new SCH_SHEET );
 
+    // This will cause the sheet UUID to be set to the loaded schematic UUID.  This is required
+    // to ensure all of the sheet paths in any subsheets are correctly generated.
+    const_cast<KIID&>( newSheet->m_Uuid ) = KIID( 0 );
+
     wxFileName fileName( aFileName );
 
     if( !fileName.IsAbsolute() && !fileName.MakeAbsolute() )

@@ -443,13 +443,18 @@ void SCH_SEXPR_PARSER::parseStroke( STROKE_PARAMS& aStroke )
         }
 
         case T_color:
-            aStroke.m_Color =
-                    COLOR4D( parseInt( "red" ) / 255.0,
-                             parseInt( "green" ) / 255.0,
-                             parseInt( "blue" ) / 255.0,
-                             parseDouble( "alpha" ) );
+        {
+            COLOR4D color;
+
+            color.r = parseInt( "red" ) / 255.0;
+            color.g = parseInt( "green" ) / 255.0;
+            color.b = parseInt( "blue" ) / 255.0;
+            color.a = Clamp( parseDouble( "alpha" ), 0.0, 1.0 );
+
+            aStroke.m_Color = color;
             NeedRIGHT();
             break;
+        }
 
         default:
             Expecting( "width, type, or color" );
@@ -496,14 +501,17 @@ void SCH_SEXPR_PARSER::parseFill( FILL_PARAMS& aFill )
         }
 
         case T_color:
-            aFill.m_Color =
-                    COLOR4D( parseInt( "red" ) / 255.0,
-                             parseInt( "green" ) / 255.0,
-                             parseInt( "blue" ) / 255.0,
-                             parseDouble( "alpha" ) );
+        {
+            COLOR4D color;
 
+            color.r = parseInt( "red" ) / 255.0;
+            color.g = parseInt( "green" ) / 255.0;
+            color.b = parseInt( "blue" ) / 255.0;
+            color.a = Clamp( parseDouble( "alpha" ), 0.0, 1.0 );
+            aFill.m_Color = color;
             NeedRIGHT();
             break;
+        }
 
         default:
             Expecting( "type or color" );
@@ -1791,11 +1799,12 @@ SCH_SHEET_PIN* SCH_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
 }
 
 
-void SCH_SEXPR_PARSER::parseSchSymbolInstances( std::unique_ptr<SCH_COMPONENT>& aSymbol )
+void SCH_SEXPR_PARSER::parseSchSymbolInstances( SCH_SCREEN* aScreen )
 {
-    wxCHECK_RET( CurTok() == T_instances,
+    wxCHECK_RET( CurTok() == T_symbol_instances,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as a instances token." ) );
+    wxCHECK( aScreen, /* void */ );
 
     T token;
 
@@ -1812,9 +1821,9 @@ void SCH_SEXPR_PARSER::parseSchSymbolInstances( std::unique_ptr<SCH_COMPONENT>& 
         {
             NeedSYMBOL();
 
-            int unit = 1;
-            wxString reference;
-            KIID_PATH path( FromUTF8() );
+            COMPONENT_INSTANCE_REFERENCE instance;
+
+            instance.m_Path = KIID_PATH( FromUTF8() );
 
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
@@ -1827,12 +1836,12 @@ void SCH_SEXPR_PARSER::parseSchSymbolInstances( std::unique_ptr<SCH_COMPONENT>& 
                 {
                 case T_reference:
                     NeedSYMBOL();
-                    reference = FromUTF8();
+                    instance.m_Reference = FromUTF8();
                     NeedRIGHT();
                     break;
 
                 case T_unit:
-                    unit = parseInt( "symbol unit" );
+                    instance.m_Unit = parseInt( "symbol unit" );
                     NeedRIGHT();
                     break;
 
@@ -1841,8 +1850,7 @@ void SCH_SEXPR_PARSER::parseSchSymbolInstances( std::unique_ptr<SCH_COMPONENT>& 
                 }
             }
 
-            aSymbol->AddHierarchicalReference( path, reference, unit );
-            aSymbol->GetField( REFERENCE )->SetText( reference );
+            aScreen->m_symbolInstances.emplace_back( instance );
             break;
         }
 
@@ -1853,9 +1861,13 @@ void SCH_SEXPR_PARSER::parseSchSymbolInstances( std::unique_ptr<SCH_COMPONENT>& 
 }
 
 
-void SCH_SEXPR_PARSER::ParseSchematic( SCH_SCREEN* aScreen )
+void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet )
 {
-    wxCHECK_RET( aScreen != nullptr, "" );
+    wxCHECK( aSheet != nullptr, /* void */ );
+
+    SCH_SCREEN* screen = aSheet->GetScreen();
+
+    wxCHECK( screen != nullptr, /* void */ );
 
     T token;
 
@@ -1880,7 +1892,7 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SCREEN* aScreen )
         {
             PAGE_INFO pageInfo;
             parsePAGE_INFO( pageInfo );
-            aScreen->SetPageSettings( pageInfo );
+            screen->SetPageSettings( pageInfo );
             break;
         }
 
@@ -1888,7 +1900,7 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SCREEN* aScreen )
         {
             TITLE_BLOCK tb;
             parseTITLE_BLOCK( tb );
-            aScreen->SetTitleBlock( tb );
+            screen->SetTitleBlock( tb );
             break;
         }
 
@@ -1907,7 +1919,7 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SCREEN* aScreen )
                 switch( token )
                 {
                 case T_symbol:
-                    aScreen->AddLibSymbol( ParseSymbol( symbolLibMap, true ) );
+                    screen->AddLibSymbol( ParseSymbol( symbolLibMap, true ) );
                     break;
 
                 default:
@@ -1919,49 +1931,63 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SCREEN* aScreen )
         }
 
         case T_symbol:
-            aScreen->Append( static_cast<SCH_ITEM*>( parseSchematicSymbol() ) );
+            screen->Append( static_cast<SCH_ITEM*>( parseSchematicSymbol() ) );
             break;
 
         case T_image:
-            aScreen->Append( static_cast<SCH_ITEM*>( parseImage() ) );
+            screen->Append( static_cast<SCH_ITEM*>( parseImage() ) );
             break;
 
         case T_sheet:
-            aScreen->Append( static_cast<SCH_ITEM*>( parseSheet() ) );
+        {
+            SCH_SHEET* sheet = parseSheet();
+
+            // Set the parent to aSheet.  This effectively creates a method to find
+            // the root sheet from any sheet so a pointer to the root sheet does not
+            // need to be stored globally.  Note: this is not the same as a hierarchy.
+            // Complex hierarchies can have multiple copies of a sheet.  This only
+            // provides a simple tree to find the root sheet.
+            sheet->SetParent( aSheet );
+            screen->Append( static_cast<SCH_ITEM*>( sheet ) );
             break;
+        }
 
         case T_junction:
-            aScreen->Append( static_cast<SCH_ITEM*>( parseJunction() ) );
+            screen->Append( static_cast<SCH_ITEM*>( parseJunction() ) );
             break;
 
         case T_no_connect:
-            aScreen->Append( static_cast<SCH_ITEM*>( parseNoConnect() ) );
+            screen->Append( static_cast<SCH_ITEM*>( parseNoConnect() ) );
             break;
 
         case T_bus_entry:
-            aScreen->Append( static_cast<SCH_ITEM*>( parseBusEntry() ) );
+            screen->Append( static_cast<SCH_ITEM*>( parseBusEntry() ) );
             break;
 
         case T_polyline:
         case T_bus:
         case T_wire:
-            aScreen->Append( static_cast<SCH_ITEM*>( parseLine() ) );
+            screen->Append( static_cast<SCH_ITEM*>( parseLine() ) );
             break;
 
         case T_text:
         case T_label:
         case T_global_label:
         case T_hierarchical_label:
-            aScreen->Append( static_cast<SCH_ITEM*>( parseSchText() ) );
+            screen->Append( static_cast<SCH_ITEM*>( parseSchText() ) );
+            break;
+
+        case T_symbol_instances:
+            parseSchSymbolInstances( screen );
             break;
 
         default:
-            Expecting( "symbol, bitmap, sheet, junction, no_connect, bus_entry, line"
-                       "bus, text, label, global_label, or hierarchical_label" );
+            Expecting( "symbol, bitmap, sheet, junction, no_connect, bus_entry, line, bus"
+                       "text, label, global_label, hierarchical_label, or symbol_instances" );
         }
     }
 
-    aScreen->UpdateLocalLibSymbolLinks();
+    screen->UpdateLocalLibSymbolLinks();
 }
 
 
@@ -2093,10 +2119,6 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             delete field;
             break;
         }
-
-        case T_instances:
-            parseSchSymbolInstances( symbol );
-            break;
 
         default:
             Expecting( "lib_id, lib_name, at, mirror, uuid, property, or instances" );

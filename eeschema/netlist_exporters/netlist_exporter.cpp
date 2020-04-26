@@ -34,6 +34,7 @@
 #include <class_library.h>
 #include <netlist.h>
 #include <sch_reference_list.h>
+#include <sch_screen.h>
 
 
 wxString NETLIST_EXPORTER::MakeCommandLine( const wxString& aFormatString,

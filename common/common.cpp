@@ -57,18 +57,6 @@ KIID::KIID() :
         m_uuid( randomGenerator() ),
         m_cached_timestamp( 0 )
 {
-#if defined(EESCHEMA)
-    // JEY TODO: use legacy timestamps until new EEschema file format is in
-    static timestamp_t oldTimeStamp;
-    timestamp_t        newTimeStamp = time( NULL );
-
-    if( newTimeStamp <= oldTimeStamp )
-        newTimeStamp = oldTimeStamp + 1;
-
-    oldTimeStamp = newTimeStamp;
-
-    *this = KIID( wxString::Format( "%8.8X", newTimeStamp ) );
-#endif
 }
 
 
@@ -175,6 +163,16 @@ wxString KIID::AsString() const
 wxString KIID::AsLegacyTimestampString() const
 {
     return wxString::Format( "%8.8lX", (unsigned long) AsLegacyTimestamp() );
+}
+
+
+void KIID::ConvertTimestampToUuid()
+{
+    if( !IsLegacyTimestamp() )
+        return;
+
+    m_cached_timestamp = 0;
+    m_uuid = randomGenerator();
 }
 
 

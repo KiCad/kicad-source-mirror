@@ -35,6 +35,7 @@
 #include <bitmaps.h>
 #include <eeschema_settings.h>
 #include <settings/color_settings.h>
+#include <trace_helpers.h>
 #include "panel_eeschema_color_settings.h"
 
 DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
@@ -244,9 +245,11 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
 
     // Ensure filepath is not empty.  (In normal use will be caught by grid validators,
     // but unedited data from existing files can be bad.)
+
+    // @todo What happens when there are invalid file name characters?
     if( newRelativeNativeFilename.IsEmpty() )
     {
-        wxMessageBox( _( "A sheet must have a file specified." ) );
+        wxMessageBox( _( "A sheet must have a valid file name." ) );
         return false;
     }
 
@@ -254,9 +257,9 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
     // validators, but unedited data from existing files can be bad.)
     wxFileName fn( newRelativeNativeFilename );
 
-    if( fn.GetExt() != "sch" )
+    if( fn.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
     {
-        wxMessageBox( _( "Sheet file must have a '.sch' extension." ) );
+        wxMessageBox( _( "Sheet file must have a '.kicad_sch' extension." ) );
         return false;
     }
 
@@ -331,9 +334,25 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
 
 bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilename )
 {
+    wxString msg;
+
     // Relative file names are relative to the path of the current sheet.  This allows for
     // nesting of schematic files in subfolders.
     wxFileName fileName( aNewFilename );
+
+    if( fileName.GetExt().IsEmpty() )
+    {
+        fileName.SetExt( KiCadSchematicFileExtension );
+    }
+    else if( fileName.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
+    {
+        msg.Printf( _( "The file \"%s\" does not appear to be a valid schematic file." ),
+                    fileName.GetFullName() );
+        wxMessageDialog badSchFileDialog( this, msg, _( "Invalid Schematic File" ),
+                wxOK | wxCENTRE | wxICON_EXCLAMATION );
+        badSchFileDialog.ShowModal();
+        return false;
+    }
 
     if( !fileName.IsAbsolute() )
     {
@@ -354,7 +373,6 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
     // Inside Eeschema, filenames are stored using unix notation
     newAbsoluteFilename.Replace( wxT( "\\" ), wxT( "/" ) );
 
-    wxString msg;
     bool renameFile = false;
     bool loadFromFile = false;
     bool clearAnnotation = false;
@@ -367,7 +385,8 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
     if( !g_RootSheet->SearchHierarchy( newAbsoluteFilename, &useScreen ) )
     {
         loadFromFile = wxFileExists( newAbsoluteFilename );
-        wxLogDebug( "Sheet requested file \"%s\", %s",
+
+        wxLogTrace( tracePathsAndFiles, "Sheet requested file \"%s\", %s",
                     newAbsoluteFilename,
                     ( loadFromFile ) ? "found" : "not found" );
     }
@@ -465,7 +484,7 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
 
         if( renameFile )
         {
-            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
             // If the the associated screen is shared by more than one sheet, do not
             // change the filename of the corresponding screen here.
@@ -476,11 +495,12 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
 
             try
             {
-                pi->Save( newAbsoluteFilename, m_sheet->GetScreen(), &Kiway() );
+                pi->Save( newAbsoluteFilename, m_sheet, &Kiway() );
             }
             catch( const IO_ERROR& ioe )
             {
-                msg.Printf( _( "Error occurred saving schematic file \"%s\"." ), newAbsoluteFilename );
+                msg.Printf( _( "Error occurred saving schematic file \"%s\"." ),
+                            newAbsoluteFilename );
                 DisplayErrorMessage( this, msg, ioe.What() );
 
                 msg.Printf( _( "Failed to save schematic \"%s\"" ), newAbsoluteFilename );
@@ -569,17 +589,22 @@ void DIALOG_SCH_SHEET_PROPS::OnGridCellChanging( wxGridEvent& event )
             success = false;
         }
     }
-    else if( event.GetRow() == SHEETFILENAME && event.GetCol() == FDC_VALUE )
+    else if( event.GetRow() == SHEETFILENAME && event.GetCol() == FDC_VALUE && textControl )
     {
-        if( textControl && textControl->IsEmpty() )
+        if( textControl->IsEmpty() )
         {
             wxMessageBox( _( "A sheet must have a file specified." ) );
             success = false;
         }
-        else if( textControl && !textControl->GetValue().EndsWith( wxT( ".sch" ) ) )
+        else
         {
-            wxMessageBox( _( "Sheet filename must have a '.sch' extension." ) );
-            success = false;
+            wxFileName fn = textControl->GetValue();
+
+            if( fn.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
+            {
+                wxMessageBox( _( "Sheet filename must have a '.sch' extension." ) );
+                success = false;
+            }
         }
     }
 

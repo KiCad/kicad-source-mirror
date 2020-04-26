@@ -177,6 +177,14 @@ void SCH_SCREEN::DecRefCount()
 }
 
 
+bool SCH_SCREEN::HasItems( KICAD_T aItemType ) const
+{
+    EE_RTREE::EE_TYPE sheets = const_cast<EE_RTREE&>( m_rtree ).OfType( aItemType );
+
+    return sheets.begin() != sheets.end();
+}
+
+
 void SCH_SCREEN::Append( SCH_ITEM* aItem )
 {
     if( aItem->Type() != SCH_SHEET_PIN_T && aItem->Type() != SCH_FIELD_T )
@@ -1267,7 +1275,16 @@ SCH_SCREEN* SCH_SCREENS::GetScreen( unsigned int aIndex ) const
 }
 
 
-void SCH_SCREENS::addScreenToList( SCH_SCREEN* aScreen )
+SCH_SHEET* SCH_SCREENS::GetSheet( unsigned int aIndex ) const
+{
+    if( aIndex < m_sheets.size() )
+        return m_sheets[ aIndex ];
+
+    return NULL;
+}
+
+
+void SCH_SCREENS::addScreenToList( SCH_SCREEN* aScreen, SCH_SHEET* aSheet )
 {
     if( aScreen == NULL )
         return;
@@ -1279,6 +1296,7 @@ void SCH_SCREENS::addScreenToList( SCH_SCREEN* aScreen )
     }
 
     m_screens.push_back( aScreen );
+    m_sheets.push_back( aSheet );
 }
 
 
@@ -1288,7 +1306,7 @@ void SCH_SCREENS::buildScreenList( SCH_SHEET* aSheet )
     {
         SCH_SCREEN* screen = aSheet->GetScreen();
 
-        addScreenToList( screen );
+        addScreenToList( screen, aSheet );
 
         for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
             buildScreenList( static_cast<SCH_SHEET*>( item ) );

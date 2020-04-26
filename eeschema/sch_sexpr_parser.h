@@ -203,7 +203,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
 
     void parsePAGE_INFO( PAGE_INFO& aPageInfo );
     void parseTITLE_BLOCK( TITLE_BLOCK& aTitleBlock );
-    void parseSchSymbolInstances( std::unique_ptr<SCH_COMPONENT>& aSymbol );
+    void parseSchSymbolInstances( SCH_SCREEN* aScreen );
 
     SCH_SHEET_PIN* parseSchSheetPin( SCH_SHEET* aSheet );
     SCH_FIELD* parseSchField( SCH_COMPONENT* aParentSymbol );
@@ -226,13 +226,13 @@ public:
     LIB_ITEM* ParseDrawItem();
 
     /**
-     * Parse a single schematic file into \a aScreen.
+     * Parse a single schematic file into \a aSheet.
      *
      * @note This does not load any sub-sheets or decent complex sheet hierarchies.
      *
-     * @param aScreen The #SCH_SCREEN object to store the parsed schematic file.
+     * @param aSheet The #SCH_SHEET object to store the parsed schematic file.
      */
-    void ParseSchematic( SCH_SCREEN* aScreen );
+    void ParseSchematic( SCH_SHEET* aSheet );
 
     /**
      * Return whether a version number, if any was parsed, was too recent

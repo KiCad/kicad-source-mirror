@@ -36,9 +36,6 @@
 
 #include <map>
 
-class SCH_REFERENCE;
-class SCH_REFERENCE_LIST;
-
 /**
  * SCH_REFERENCE
  * is used as a helper to define a component's reference designator in a schematic.  This
@@ -68,7 +65,6 @@ class SCH_REFERENCE
 
     friend class SCH_REFERENCE_LIST;
 
-
 public:
 
     SCH_REFERENCE() :
@@ -96,6 +92,8 @@ public:
     SCH_SHEET_PATH& GetSheetPath()             { return m_SheetPath; }
 
     int GetUnit() const                        { return m_Unit; }
+
+    void SetUnit( int aUnit )                  { m_Unit = aUnit; }
 
     void SetSheetNumber( int aSheetNumber )    { m_SheetNum = aSheetNumber; }
 
@@ -132,10 +130,12 @@ public:
     {
         return m_Ref;
     }
+
     void SetRefStr( const std::string& aReference )
     {
         m_Ref = aReference;
     }
+
     const char* GetRefStr() const
     {
         return m_Ref.c_str();
@@ -229,7 +229,7 @@ public:
      * Function GetCount
      * @return the number of items in the list
      */
-    unsigned GetCount()
+    unsigned GetCount() const
     {
         return flatList.size();
     }

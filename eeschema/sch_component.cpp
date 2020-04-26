@@ -383,6 +383,11 @@ void SCH_COMPONENT::AddHierarchicalReference( const KIID_PATH& aPath, const wxSt
     {
         if( m_instanceReferences[ii].m_Path == aPath )
         {
+            wxLogTrace( traceSchSheetPaths,
+                    "Removing symbol instance:\n  sheet path %s\n  reference %s, unit %d\n  from symbol %s.",
+                    aPath.AsString(), m_instanceReferences[ii].m_Reference,
+                    m_instanceReferences[ii].m_Unit, m_Uuid.AsString() );
+
             m_instanceReferences.erase( m_instanceReferences.begin() + ii );
             ii--;
         }
@@ -392,6 +397,11 @@ void SCH_COMPONENT::AddHierarchicalReference( const KIID_PATH& aPath, const wxSt
     instance.m_Path = aPath;
     instance.m_Reference = aRef;
     instance.m_Unit = aUnit;
+
+    wxLogTrace( traceSchSheetPaths,
+            "Adding symbol instance:\n  sheet path %s\n  reference %s, unit %d\n  to symbol %s.",
+            aPath.AsString(), aRef, aUnit, m_Uuid.AsString() );
+
     m_instanceReferences.push_back( instance );
 }
 
@@ -405,6 +415,10 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aInclude
     {
         if( instance.m_Path == path )
         {
+            wxLogTrace( traceSchSheetPaths,
+                    "Setting symbol instance:\n  sheet path %s\n  reference %s, unit %d\n  found in symbol %s.",
+                    path.AsString(), instance.m_Reference, instance.m_Unit, m_Uuid.AsString() );
+
             ref = instance.m_Reference;
             break;
         }
@@ -862,6 +876,34 @@ bool SCH_COMPONENT::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheet
     // This entry does not exist: add it, with its last-used reference
     AddHierarchicalReference( aSheetPath, m_Fields[REFERENCE].GetText(), m_unit );
     return true;
+}
+
+
+bool SCH_COMPONENT::ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath,
+                                              const KIID_PATH& aNewSheetPath )
+{
+    auto it = std::find_if( m_instanceReferences.begin(), m_instanceReferences.end(),
+                [ aOldSheetPath ]( COMPONENT_INSTANCE_REFERENCE& r )->bool
+                {
+                    return aOldSheetPath == r.m_Path;
+                }
+            );
+
+    if( it != m_instanceReferences.end() )
+    {
+        wxLogTrace( traceSchSheetPaths,
+                    "Replacing sheet path %s\n  with sheet path %s\n  for symbol %s.",
+                    aOldSheetPath.AsString(), aNewSheetPath.AsString(), m_Uuid.AsString() );
+
+        it->m_Path = aNewSheetPath;
+        return true;
+    }
+
+    wxLogTrace( traceSchSheetPaths,
+            "Could not find sheet path %s\n  to replace with sheet path %s\n  for symbol %s.",
+            aOldSheetPath.AsString(), aNewSheetPath.AsString(), m_Uuid.AsString() );
+
+    return false;
 }
 
 

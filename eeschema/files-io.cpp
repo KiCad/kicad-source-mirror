@@ -55,22 +55,26 @@
 #include <netlist.h>
 
 
-bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
+bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName,
                                  bool aCreateBackupFile )
 {
     wxString msg;
     wxFileName schematicFileName;
     bool success;
 
-    if( aScreen == NULL )
-        aScreen = GetScreen();
+    if( aSheet == NULL )
+        aSheet = GetCurrentSheet().Last();
+
+    SCH_SCREEN* screen = aSheet->GetScreen();
+
+    wxCHECK( screen, false );
 
     // If no name exists in the window yet - save as new.
-    if( aScreen->GetFileName().IsEmpty() )
+    if( screen->GetFileName().IsEmpty() )
         aSaveUnderNewName = true;
 
     // Construct the name of the file to be saved
-    schematicFileName = Prj().AbsolutePath( aScreen->GetFileName() );
+    schematicFileName = Prj().AbsolutePath( screen->GetFileName() );
 
     if( aSaveUnderNewName )
     {
@@ -127,7 +131,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
 
     try
     {
-        pi->Save( schematicFileName.GetFullPath(), aScreen, &Kiway() );
+        pi->Save( schematicFileName.GetFullPath(), aSheet, &Kiway() );
         success = true;
     }
     catch( const IO_ERROR& ioe )
@@ -160,14 +164,14 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
         // Update the screen and frame info and reset the lock file.
         if( aSaveUnderNewName )
         {
-            aScreen->SetFileName( schematicFileName.GetFullPath() );
+            screen->SetFileName( schematicFileName.GetFullPath() );
             LockFile( schematicFileName.GetFullPath() );
         }
 
-        aScreen->ClrSave();
-        aScreen->ClrModify();
+        screen->ClrSave();
+        screen->ClrModify();
 
-        msg.Printf( _( "File %s saved" ),  aScreen->GetFileName() );
+        msg.Printf( _( "File %s saved" ),  screen->GetFileName() );
         SetStatusText( msg, 0 );
     }
     else
@@ -428,6 +432,31 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // Update all symbol library links for all sheets.
             schematic.UpdateSymbolLinks();
 
+            // Replace sheet and symbol time stamps with real UUIDs and update symbol instance
+            // sheet paths using the new UUID based sheet paths.
+
+            // Save the time stamp sheet paths.
+            SCH_SHEET_LIST timeStampSheetPaths( g_RootSheet );
+
+            std::vector<KIID_PATH> oldSheetPaths = timeStampSheetPaths.GetPaths();
+
+            // The root sheet now gets a permanent UUID.
+            const_cast<KIID&>( g_RootSheet->m_Uuid ).ConvertTimestampToUuid();
+
+            // Change the sheet and symbol time stamps to UUIDs.
+            for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
+            {
+                for( auto sheet : screen->Items().OfType( SCH_SHEET_T ) )
+                    const_cast<KIID&>( sheet->m_Uuid ).ConvertTimestampToUuid();
+
+                for( auto symbol : screen->Items().OfType( SCH_COMPONENT_T ) )
+                    const_cast<KIID&>( symbol->m_Uuid ).ConvertTimestampToUuid();
+            }
+
+            SCH_SHEET_LIST uuidSheetPaths( g_RootSheet );
+
+            timeStampSheetPaths.ReplaceLegacySheetPaths( oldSheetPaths );
+
             if( !cfg || cfg->m_Appearance.show_sexpr_file_convert_warning )
             {
                 wxRichMessageDialog newFileFormatDlg(
@@ -452,6 +481,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
                 screen->UpdateLocalLibSymbolLinks();
+
+            // Restore all of the loaded symbol instances from the root sheet screen.
+            sheetList.UpdateSymbolInstances( g_RootSheet->GetScreen()->m_symbolInstances );
         }
 
         g_ConnectionGraph->Reset();
@@ -588,8 +620,9 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 
 bool SCH_EDIT_FRAME::SaveProject()
 {
+    wxString msg;
     SCH_SCREEN* screen;
-    SCH_SCREENS screenList;
+    SCH_SCREENS screens;
     bool success = true;
     bool updateFileType = false;
 
@@ -599,13 +632,63 @@ bool SCH_EDIT_FRAME::SaveProject()
 
     if( !fn.IsDirWritable() )
     {
-        wxString msg = wxString::Format( _( "Directory \"%s\" is not writable." ), fn.GetPath() );
+        msg = wxString::Format( _( "Directory \"%s\" is not writable." ), fn.GetPath() );
         DisplayError( this, msg );
         return false;
     }
 
-    for( screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
+    // Warn user on potential file overwrite.  This can happen on shared sheets.
+    wxArrayString overwrittenFiles;
+
+    for( size_t i = 0; i < screens.GetCount(); i++ )
     {
+        screen = screens.GetScreen( i );
+
+        wxCHECK2( screen, continue );
+
+        // Convert legacy schematics file name extensions for the new format.
+        wxFileName tmpFn = screen->GetFileName();
+
+        if( tmpFn.GetExt() == KiCadSchematicFileExtension )
+            continue;
+
+        tmpFn.SetExt( KiCadSchematicFileExtension );
+
+        if( tmpFn.FileExists() )
+            overwrittenFiles.Add( tmpFn.GetFullPath() );
+    }
+
+    if( !overwrittenFiles.IsEmpty() )
+    {
+        for( auto overwrittenFile : overwrittenFiles )
+        {
+            if( msg.IsEmpty() )
+                msg = overwrittenFile;
+            else
+                msg += "\n" + overwrittenFile;
+        }
+
+        msg = _( "The following files will be overwritten:\n\n" ) + msg;
+
+        wxRichMessageDialog dlg(
+                this,
+                _( "Saving the project to the new file format will overwrite existing files." ),
+                _( "Project Save Warning" ),
+                wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER | wxICON_EXCLAMATION );
+        dlg.ShowDetailedText( msg );
+        dlg.SetOKCancelLabels( wxMessageDialog::ButtonLabel( _( "Overwrite Files" ) ),
+                wxMessageDialog::ButtonLabel( _( "Abort Project Save" ) ) );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+    }
+
+    for( size_t i = 0; i < screens.GetCount(); i++ )
+    {
+        screen = screens.GetScreen( i );
+
+        wxCHECK2( screen, continue );
+
         // Convert legacy schematics file name extensions for the new format.
         wxFileName tmpFn = screen->GetFileName();
 
@@ -629,7 +712,7 @@ bool SCH_EDIT_FRAME::SaveProject()
             screen->SetFileName( tmpFn.GetFullPath() );
         }
 
-        success &= SaveEEFile( screen );
+        success &= SaveEEFile( screens.GetSheet( i ) );
     }
 
     if( updateFileType )
@@ -678,25 +761,25 @@ bool SCH_EDIT_FRAME::doAutoSave()
     if( !IsWritable( tmp ) )
         return false;
 
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    for( size_t i = 0; i < screens.GetCount(); i++ )
     {
         // Only create auto save files for the schematics that have been modified.
-        if( !screen->IsSave() )
+        if( !screens.GetScreen( i )->IsSave() )
             continue;
 
-        tmpFileName = fn = screen->GetFileName();
+        tmpFileName = fn = screens.GetScreen( i )->GetFileName();
 
         // Auto save file name is the normal file name prefixed with GetAutoSavePrefix().
         fn.SetName( GetAutoSaveFilePrefix() + fn.GetName() );
 
-        screen->SetFileName( fn.GetFullPath() );
+        screens.GetScreen( i )->SetFileName( fn.GetFullPath() );
 
-        if( SaveEEFile( screen, false, NO_BACKUP_FILE ) )
-            screen->SetModify();
+        if( SaveEEFile( screens.GetSheet( i ), false, NO_BACKUP_FILE ) )
+            screens.GetScreen( i )->SetModify();
         else
             autoSaveOk = false;
 
-        screen->SetFileName( tmpFileName.GetFullPath() );
+        screens.GetScreen( i )->SetFileName( tmpFileName.GetFullPath() );
     }
 
     if( autoSaveOk )

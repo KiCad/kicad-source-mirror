@@ -261,7 +261,7 @@ public:
      * and false for items moved with no reference to anchor.
      *
      * Usually return true for small items (labels, junctions) and false for
-     * items which can be large (hierarchical sheets, compoments)
+     * items which can be large (hierarchical sheets, components)
      *
      * @return false for a hierarchical sheet
      */
@@ -317,6 +317,11 @@ public:
      * @return a SCH_SHEET pointer to the root sheet.
      */
     SCH_SHEET* GetRootSheet();
+
+    /**
+     * @return true if this sheet is the root sheet.
+     */
+    bool IsRootSheet() { return GetRootSheet() == this; }
 
     /**
      * Set the #SCH_SCREEN associated with this sheet to \a aScreen.
@@ -485,7 +490,7 @@ public:
     bool LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList );
 
     /**
-     * Count the number of sheets found in "this" sheet includeing all of the subsheets.
+     * Count the number of sheets found in "this" sheet including all of the subsheets.
      *
      * @return the full count of sheets+subsheets contained by "this"
      */

@@ -34,6 +34,8 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <template_fieldnames.h>
+#include <trace_helpers.h>
+
 #include <boost/functional/hash.hpp>
 #include <wx/filename.h>
 #include "erc_item.h"
@@ -331,9 +333,6 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName, const wxStr
 }
 
 
-/********************************************************************/
-/* Class SCH_SHEET_LIST to handle the list of Sheets in a hierarchy */
-/********************************************************************/
 SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
 {
     m_isRootSheet = false;
@@ -636,28 +635,6 @@ bool SCH_SHEET_LIST::SetComponentFootprint( const wxString& aReference,
 }
 
 
-bool SCH_SHEET_LIST::IsComplexHierarchy() const
-{
-    wxString fileName;
-
-    for( unsigned i = 0;  i < size();  i++ )
-    {
-        fileName = at( i ).Last()->GetFileName();
-
-        for( unsigned j = 0;  j < size();  j++ )
-        {
-            if( i == j )
-                continue;
-
-            if( fileName == at( j ).Last()->GetFileName() )
-                return true;
-        }
-    }
-
-    return false;
-}
-
-
 bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
                                        const wxString& aDestFileName )
 {
@@ -698,6 +675,79 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForScreen( SCH_SCREEN* aScreen )
     }
 
     return nullptr;
+}
+
+
+void SCH_SHEET_LIST::UpdateSymbolInstances(
+        std::vector<COMPONENT_INSTANCE_REFERENCE>& aSymbolInstances )
+{
+    wxCHECK( m_isRootSheet, /* void */ );   // Only performed for the entire schematic.
+
+    SCH_REFERENCE_LIST symbolInstances;
+
+    GetComponents( symbolInstances, true, true );
+
+    for( size_t i = 0; i < symbolInstances.GetCount(); i++ )
+    {
+        // The instance paths are stored in the file sans root path so the comparison
+        // should not include the root path.
+        wxString path = symbolInstances[i].GetPath();
+
+        auto it = std::find_if( aSymbolInstances.begin(), aSymbolInstances.end(),
+                    [ path ]( COMPONENT_INSTANCE_REFERENCE& r )->bool
+                    {
+                        return path == r.m_Path.AsString();
+                    }
+                );
+
+        if( it == aSymbolInstances.end() )
+        {
+            wxLogTrace( traceSchSheetPaths, "No symbol instance found for path \"%s\"", path );
+            continue;
+        }
+
+        SCH_COMPONENT* symbol = symbolInstances[i].GetComp();
+
+        wxCHECK2( symbol, continue );
+
+        // Symbol instance paths are stored and looked up in memory with the root path so use
+        // the full path here.
+        symbol->AddHierarchicalReference( symbolInstances[i].GetSheetPath().Path(),
+                it->m_Reference, it->m_Unit );
+        symbol->GetField( REFERENCE )->SetText( it->m_Reference );
+    }
+}
+
+
+std::vector<KIID_PATH> SCH_SHEET_LIST::GetPaths() const
+{
+    std::vector<KIID_PATH> paths;
+
+    for( auto sheetPath : *this )
+        paths.emplace_back( sheetPath.Path() );
+
+    return paths;
+}
+
+
+void SCH_SHEET_LIST::ReplaceLegacySheetPaths( const std::vector<KIID_PATH>& aOldSheetPaths )
+{
+    wxCHECK( size() == aOldSheetPaths.size(), /* void */ );
+
+    for( size_t i = 0;  i < size(); i++ )
+    {
+        const KIID_PATH oldSheetPath = aOldSheetPaths.at( i );
+        const KIID_PATH newSheetPath = at( i ).Path();
+        SCH_SCREEN* screen = at(i).LastScreen();
+
+        wxCHECK( screen, /* void */ );
+
+        for( auto symbol : screen->Items().OfType( SCH_COMPONENT_T ) )
+        {
+            static_cast<SCH_COMPONENT*>( symbol )->ReplaceInstanceSheetPath( oldSheetPath,
+                    newSheetPath );
+        }
+    }
 }
 
 

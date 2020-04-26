@@ -83,6 +83,13 @@ public:
     wxString AsString() const;
     wxString AsLegacyTimestampString() const;
 
+    /**
+     * Change an existing time stamp based UUID into a true UUID.
+     *
+     * If this is not a time stamp based UUID, then no change is made.
+     */
+    void ConvertTimestampToUuid();
+
     bool operator==( KIID const& rhs) const
     {
         return m_uuid == rhs.m_uuid;

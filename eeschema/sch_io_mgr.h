@@ -218,7 +218,7 @@ public:
      *
      * @param aFileName is the name of a file to save to on disk.
      *
-     * @param aSchematic is the class #SCH_SCREEN in memory document tree from which to extract
+     * @param aSchematic is the class #SCH_SHEET in memory document tree from which to extract
      *                   information when writing to \a aFileName.  The caller continues to
      *                   own the SCHEMATIC, and the plugin should refrain from modifying the
      *                   SCHEMATIC if possible.
@@ -230,11 +230,13 @@ public:
      *                    save the file, because it can take any number of additional named
      *                    tuning arguments that the plugin is known to support.  The caller
      *                    continues to own this object (plugin may not delete it), and plugins
-     *                    should expect it to be optionally NULL.
+     *                    should expect it to be optionally NULL.  Set the
+     *                    #PropSaveCurrentSheetOnly property to only save the current sheet.
+     *                    Otherwise, all hierarchial sheets are saved.
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
-    virtual void Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
+    virtual void Save( const wxString& aFileName, SCH_SHEET* aSchematic, KIWAY* aKiway,
                        const PROPERTIES* aProperties = NULL );
 
     /**

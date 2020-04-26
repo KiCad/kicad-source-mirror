@@ -45,17 +45,15 @@
 #include <wx/string.h>
 
 #include <bitmaps.h>
-#include <class_libentry.h>
-#include <lib_pin.h>
 #include <sch_field.h>
 #include <sch_item.h>
 #include <sch_pin.h>
-#include <sch_screen.h>
+#include <sch_sheet_path.h>    // COMPONENT_INSTANCE_REFERENCE
 #include <symbol_lib_table.h>
 #include <transform.h>
 
+class COMPONENT_SELECTION;
 class SCH_SCREEN;
-class SCH_SHEET_PATH;
 class LIB_ITEM;
 class LIB_PIN;
 class LIB_PART;
@@ -82,14 +80,6 @@ typedef std::weak_ptr<LIB_PART>   PART_REF;
 
 
 extern std::string toUTFTildaText( const wxString& txt );
-
-
-struct COMPONENT_INSTANCE_REFERENCE
-{
-    KIID_PATH m_Path;
-    wxString  m_Reference;
-    int       m_Unit;
-};
 
 
 /**
@@ -362,6 +352,17 @@ public:
      * @return false if the alternate reference was existing, true if added.
      */
     bool AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPath );
+
+    /**
+     * Replace \a aOldSheetPath with \a aNewSheetPath in the instance list.
+     *
+     * @param aOldSheetPath is a #KIID_PATH object of an existing path in the instance list.
+     * @param aNewSheetPath is a #KIID_PATH object of the path to replace the existing path.
+     *
+     * @return true if \a aOldSheetPath was found and replaced or false if \a aOldSheetPath was
+     *         not found in the instance list.
+     */
+    bool ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath, const KIID_PATH& aNewSheetPath );
 
     /**
      * Clear the HIGHLIGHTED flag of all items of the component (fields, pins ...)

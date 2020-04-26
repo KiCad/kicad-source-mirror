@@ -30,6 +30,7 @@
 #include <sch_component.h>
 #include <sch_line.h>
 #include <sch_text.h>
+#include <sch_screen.h>
 #include <sch_sheet.h>
 #include <algorithm>
 

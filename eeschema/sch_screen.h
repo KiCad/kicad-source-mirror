@@ -45,6 +45,8 @@
 #include <title_block.h>
 
 #include <lib_id.h>
+#include <sch_component.h>         // COMPONENT_INSTANCE_REFERENCE
+#include <sch_reference_list.h>
 #include <sch_rtree.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
@@ -58,7 +60,11 @@ class SCH_LINE;
 class SCH_TEXT;
 class PLOTTER;
 class REPORTER;
+class SCH_EDIT_FRAME;
+class SCH_SHEET;
 class SCH_SHEET_LIST;
+class SCH_SEXPR_PARSER;
+class SCH_SEXPR_PLUGIN;
 
 enum SCH_LINE_TEST_T
 {
@@ -120,6 +126,26 @@ private:
     /// Library symbols required for this schematic.
     std::map<wxString, LIB_PART*> m_libSymbols;
 
+    /**
+     * The list of symbol instances loaded from the schematic file.
+     *
+     * This list is only used to as temporary storage when the schematic file is loaded.
+     * If the screen is the root sheet, then this information is used to update the
+     *  #SCH_COMPONENT instance reference and unit information after the entire schematic
+     * is loaded and is never used again.  If this screen is not the root sheet, then the
+     * schematic file is the root sheet of another project and this information is saved
+     * unchanged back to the schematic file.
+     *
+     * @warning Under no circumstances is this information to be modified or used after the
+     *          schematic file is loaded.  It is read only and it is only written to non-root
+     *          schematic files.
+     */
+    std::vector<COMPONENT_INSTANCE_REFERENCE> m_symbolInstances;
+
+    friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
+    friend SCH_SEXPR_PARSER;   // Only to load instance information from schematic file.
+    friend SCH_SEXPR_PLUGIN;   // Only to save the loaded instance information to schematic file.
+
     void clearLibSymbols();
 
 public:
@@ -145,6 +171,10 @@ public:
     {
         return m_rtree.empty();
     }
+
+    bool HasItems( KICAD_T aItemType ) const;
+
+    bool HasSheets() const { return HasItems( SCH_SHEET_T ); }
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -530,15 +560,17 @@ class SCH_SCREENS
 {
 private:
     std::vector< SCH_SCREEN* > m_screens;
+    std::vector< SCH_SHEET* >  m_sheets;
     unsigned int               m_index;
 
 public:
     SCH_SCREENS( SCH_SHEET* aSheet = NULL );
     ~SCH_SCREENS();
-    int GetCount() const { return m_screens.size(); }
+    size_t GetCount() const { return m_screens.size(); }
     SCH_SCREEN* GetFirst();
     SCH_SCREEN* GetNext();
     SCH_SCREEN* GetScreen( unsigned int aIndex ) const;
+    SCH_SHEET* GetSheet( unsigned int aIndex ) const;
 
     /**
      * Clear the annotation for all components in the hierarchy.
@@ -656,7 +688,7 @@ public:
     bool CanCauseCaseSensitivityIssue( const wxString& aSchematicFileName ) const;
 
 private:
-    void addScreenToList( SCH_SCREEN* aScreen );
+    void addScreenToList( SCH_SCREEN* aScreen, SCH_SHEET* aSheet );
     void buildScreenList( SCH_SHEET* aSheet);
 };
 

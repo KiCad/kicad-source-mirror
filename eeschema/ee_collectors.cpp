@@ -30,6 +30,7 @@
 #include <sch_bus_entry.h>
 #include <sch_component.h>
 #include <sch_line.h>
+#include <sch_screen.h>
 #include <sch_sheet_path.h>
 #include <transform.h>
 #include "sch_reference_list.h"

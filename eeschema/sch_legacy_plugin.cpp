@@ -1817,10 +1817,10 @@ std::shared_ptr<BUS_ALIAS> SCH_LEGACY_PLUGIN::loadBusAlias( LINE_READER& aReader
 }
 
 
-void SCH_LEGACY_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aScreen, KIWAY* aKiway,
+void SCH_LEGACY_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, KIWAY* aKiway,
                               const PROPERTIES* aProperties )
 {
-    wxCHECK_RET( aScreen != NULL, "NULL SCH_SCREEN object." );
+    wxCHECK_RET( aSheet != NULL, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
 
     LOCALE_IO   toggle;     // toggles on, then off, the C locale, to write floating point values.
@@ -1837,14 +1837,18 @@ void SCH_LEGACY_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aScreen, KI
 
     m_out = &formatter;     // no ownership
 
-    Format( aScreen );
+    Format( aSheet );
 }
 
 
-void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
+void SCH_LEGACY_PLUGIN::Format( SCH_SHEET* aSheet )
 {
-    wxCHECK_RET( aScreen != NULL, "NULL SCH_SCREEN* object." );
+    wxCHECK_RET( aSheet != NULL, "NULL SCH_SHEET* object." );
     wxCHECK_RET( m_kiway != NULL, "NULL KIWAY* object." );
+
+    SCH_SCREEN* screen = aSheet->GetScreen();
+
+    wxCHECK( screen, /* void */ );
 
     // Write the header
     m_out->Print( 0, "%s %s %d\n", "EESchema", SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION );
@@ -1858,15 +1862,15 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
      * simple hierarchy and flat hierarchy.  Used also to search the root
      * sheet ( ScreenNumber = 1 ) within the files
      */
-    const TITLE_BLOCK& tb = aScreen->GetTitleBlock();
-    const PAGE_INFO& page = aScreen->GetPageSettings();
+    const TITLE_BLOCK& tb = screen->GetTitleBlock();
+    const PAGE_INFO& page = screen->GetPageSettings();
 
     m_out->Print( 0, "$Descr %s %d %d%s\n", TO_UTF8( page.GetType() ),
                   page.GetWidthMils(),
                   page.GetHeightMils(),
                   !page.IsCustom() && page.IsPortrait() ? " portrait" : "" );
     m_out->Print( 0, "encoding utf-8\n" );
-    m_out->Print( 0, "Sheet %d %d\n", aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens );
+    m_out->Print( 0, "Sheet %d %d\n", screen->m_ScreenNumber, screen->m_NumberOfScreens );
     m_out->Print( 0, "Title %s\n",    EscapedUTF8( tb.GetTitle() ).c_str() );
     m_out->Print( 0, "Date %s\n",     EscapedUTF8( tb.GetDate() ).c_str() );
     m_out->Print( 0, "Rev %s\n",      EscapedUTF8( tb.GetRevision() ).c_str() );
@@ -1882,7 +1886,7 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
     m_out->Print( 0, "Comment9 %s\n", EscapedUTF8( tb.GetComment( 8 ) ).c_str() );
     m_out->Print( 0, "$EndDescr\n" );
 
-    for( const auto& alias : aScreen->GetBusAliases() )
+    for( const auto& alias : screen->GetBusAliases() )
     {
         saveBusAlias( alias );
     }
@@ -1891,7 +1895,7 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
     auto cmp = []( const SCH_ITEM* a, const SCH_ITEM* b ) { return *a < *b; };
     std::multiset<SCH_ITEM*, decltype( cmp )> save_map( cmp );
 
-    for( auto item : aScreen->Items() )
+    for( auto item : screen->Items() )
         save_map.insert( item );
 
 

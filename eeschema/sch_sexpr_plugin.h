@@ -90,10 +90,10 @@ public:
     void LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen,
                       int version = EESCHEMA_VERSION );
 
-    void Save( const wxString& aFileName, SCH_SCREEN* aScreen, KIWAY* aKiway,
+    void Save( const wxString& aFileName, SCH_SHEET* aSheet, KIWAY* aKiway,
                const PROPERTIES* aProperties = nullptr ) override;
 
-    void Format( SCH_SCREEN* aScreen );
+    void Format( SCH_SHEET* aSheet );
 
     void Format( SELECTION* aSelection, OUTPUTFORMATTER* aFormatter );
 
@@ -126,7 +126,7 @@ public:
 
 private:
     void loadHierarchy( SCH_SHEET* aSheet );
-    void loadFile( const wxString& aFileName, SCH_SCREEN* aScreen );
+    void loadFile( const wxString& aFileName, SCH_SHEET* aSheet );
 
     void saveSymbol( SCH_COMPONENT* aComponent, int aNestLevel );
     void saveField( SCH_FIELD* aField, int aNestLevel );

@@ -37,6 +37,17 @@
 #include <map>
 
 
+/**
+ * A simple container for schematic symbol instance infromation.
+ */
+struct COMPONENT_INSTANCE_REFERENCE
+{
+    KIID_PATH m_Path;
+    wxString  m_Reference;
+    int       m_Unit;
+};
+
+
 /** Info about complex hierarchies handling:
  * A hierarchical schematic uses sheets (hierarchical sheets) included in a
  * given sheet.  Each sheet corresponds to a schematic drawing handled by a
@@ -406,15 +417,6 @@ public:
                                 bool aSetVisible );
 
     /**
-     * Function IsComplexHierarchy
-     * searches all of the sheets for duplicate files names which indicates a complex
-     * hierarchy.
-     *
-     * @return true if the #SCH_SHEET_LIST is a complex hierarchy.
-     */
-    bool IsComplexHierarchy() const;
-
-    /**
      * Function TestForRecursion
      *
      * test every SCH_SHEET_PATH in the SCH_SHEET_LIST to verify if adding the sheets stored
@@ -446,6 +448,29 @@ public:
     void BuildSheetList( SCH_SHEET* aSheet );
 
     bool NameExists( const wxString& aSheetName );
+
+    /**
+     * Update all of the symbol instance information using \a aSymbolInstances.
+     *
+     * @param aSymbolInstances is the symbol path information loaded from the root schematic.
+     */
+    void UpdateSymbolInstances( std::vector<COMPONENT_INSTANCE_REFERENCE>& aSymbolInstances );
+
+    std::vector<KIID_PATH> GetPaths() const;
+
+    /**
+     * Update all of the symbol sheet paths to the sheet paths defined in \a aOldSheetPaths.
+     *
+     * @note The list of old sheet paths must be the exact same size and order as the existing
+     *       sheet paths.  This should not be an issue if no new sheets where added between the
+     *       creation of this sheet list and \a aOldSheetPaths.  This should only be called
+     *       when updating legacy schematics to the new schematic file format.  Once this
+     *       happens, the schematic cannot be save to the legacy file format because the
+     *       time stamp part of UUIDs are no longer guaranteed to be unique.
+     *
+     * @param aOldSheetPaths is the #SHEET_PATH_LIST to update from.
+     */
+    void ReplaceLegacySheetPaths( const std::vector<KIID_PATH>& aOldSheetPaths );
 };
 
 
