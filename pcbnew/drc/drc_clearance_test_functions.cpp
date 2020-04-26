@@ -149,11 +149,8 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
     wxString  msg;
 
     SEG         refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
-    NETCLASSPTR netclass = aRefSeg->GetNetClass();
     LSET        layerMask = aRefSeg->GetLayerSet();
-    int         refNetCode = aRefSeg->GetNetCode();
     int         refSegWidth = aRefSeg->GetWidth();
-    int         refSegClearance  = netclass->GetClearance();
 
 
     /******************************************/
@@ -171,7 +168,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA );
 
-                msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                             MessageTextFromValue( userUnits(), dsnSettings.m_MicroViasMinSize, true ),
                             MessageTextFromValue( userUnits(), refvia->GetWidth(), true ) );
 
@@ -186,7 +183,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA_DRILL );
 
-                msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                             MessageTextFromValue( userUnits(), dsnSettings.m_MicroViasMinDrill, true ),
                             MessageTextFromValue( userUnits(), refvia->GetDrillValue(), true ) );
 
@@ -203,7 +200,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA );
 
-                msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                             MessageTextFromValue( userUnits(), dsnSettings.m_ViasMinSize, true ),
                             MessageTextFromValue( userUnits(), refvia->GetWidth(), true ) );
 
@@ -218,7 +215,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_DRILL );
 
-                msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                             MessageTextFromValue( userUnits(), dsnSettings.m_ViasMinDrill, true ),
                             MessageTextFromValue( userUnits(), refvia->GetDrillValue(), true ) );
 
@@ -237,7 +234,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_HOLE_BIGGER );
 
-            msg.Printf( drcItem->GetErrorText() + _( "(diameter %s; drill %s)" ),
+            msg.Printf( drcItem->GetErrorText() + _( " (diameter %s; drill %s)" ),
                         MessageTextFromValue( userUnits(), refvia->GetWidth(), true ),
                         MessageTextFromValue( userUnits(), refvia->GetDrillValue(), true ) );
 
@@ -305,7 +302,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_TRACK_WIDTH );
 
-            msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+            msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                         MessageTextFromValue( userUnits(), dsnSettings.m_TrackMinWidth, true ),
                         MessageTextFromValue( userUnits(), refSegWidth, true ) );
 
@@ -350,9 +347,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                     slotEnd.y += ( pad->GetDrillSize().y / 2 ) - slotHalfWidth;
                 }
 
-                SEG slotSeg( slotStart, slotEnd );
-                int widths = slotHalfWidth + ( refSegWidth / 2 );
-                int center2centerAllowed = refSegClearance + widths;
+                wxString clearanceSource;
+                int      minClearance = aRefSeg->GetClearance( nullptr, &clearanceSource );
+                SEG      slotSeg( slotStart, slotEnd );
+                int      widths = slotHalfWidth + ( refSegWidth / 2 );
+                int      center2centerAllowed = minClearance + widths;
 
                 // Avoid square-roots if possible (for performance)
                 SEG::ecoord center2center_squared = refSeg.SquaredDistance( slotSeg );
@@ -362,8 +361,9 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                     int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_THROUGH_HOLE );
 
-                    msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
-                                MessageTextFromValue( userUnits(), refSegClearance, true ),
+                    msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                                clearanceSource,
+                                MessageTextFromValue( userUnits(), minClearance, true ),
                                 MessageTextFromValue( userUnits(), actual, true ) );
 
                     drcItem->SetErrorMessage( msg );
@@ -381,18 +381,20 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 continue;
 
             // No need to check pads with the same net as the refSeg.
-            if( pad->GetNetCode() && refNetCode == pad->GetNetCode() )
+            if( pad->GetNetCode() && aRefSeg->GetNetCode() == pad->GetNetCode() )
                 continue;
 
-            SEG padSeg( pad->GetPosition(), pad->GetPosition() );
-            int minClearance = std::max( refSegClearance, pad->GetClearance() );
-            int actual;
+            wxString clearanceSource;
+            int      minClearance = aRefSeg->GetClearance( pad, &clearanceSource );
+            SEG      padSeg( pad->GetPosition(), pad->GetPosition() );
+            int      actual;
 
             if( !checkClearanceSegmToPad( refSeg, refSegWidth, pad, minClearance, &actual ) )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_PAD );
 
-                msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+                msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                            clearanceSource,
                             MessageTextFromValue( userUnits(), minClearance, true ),
                             MessageTextFromValue( userUnits(), actual, true ) );
 
@@ -418,17 +420,18 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         TRACK* track = *it;
 
         // No problem if segments have the same net code:
-        if( refNetCode == track->GetNetCode() )
+        if( aRefSeg->GetNetCode() == track->GetNetCode() )
             continue;
 
         // No problem if tracks are on different layers :
         if( !( layerMask & track->GetLayerSet() ).any() )
             continue;
 
-        SEG trackSeg( track->GetStart(), track->GetEnd() );
-        int minClearance = std::max( refSegClearance, track->GetClearance() );
-        int widths = ( refSegWidth + track->GetWidth() ) / 2;
-        int center2centerAllowed = minClearance + widths;
+        wxString clearanceSource;
+        int      minClearance = aRefSeg->GetClearance( track, &clearanceSource );
+        SEG      trackSeg( track->GetStart(), track->GetEnd() );
+        int      widths = ( refSegWidth + track->GetWidth() ) / 2;
+        int      center2centerAllowed = minClearance + widths;
 
         // Avoid square-roots if possible (for performance)
         SEG::ecoord  center2center_squared = refSeg.SquaredDistance( trackSeg );
@@ -461,7 +464,8 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
             DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
 
-            msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+            msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                        clearanceSource,
                         MessageTextFromValue( userUnits(), minClearance, true ),
                         MessageTextFromValue( userUnits(), actual, true ) );
 
@@ -492,13 +496,14 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             if( !( layerMask & zone->GetLayerSet() ).any() )
                 continue;
 
-            if( zone->GetNetCode() && zone->GetNetCode() == refNetCode )
+            if( zone->GetNetCode() && zone->GetNetCode() == aRefSeg->GetNetCode() )
                 continue;
 
-            int clearance = std::max( refSegClearance, zone->GetClearance() );
+            wxString        clearanceSource;
+            int             minClearance = aRefSeg->GetClearance( zone, &clearanceSource );
             SHAPE_POLY_SET* outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
 
-            int error = clearance - outline->Distance( testSeg, refSegWidth );
+            int error = minClearance - outline->Distance( testSeg, refSegWidth );
 
             // to avoid false positive, due to rounding issues and approxiamtions
             // in distance and clearance calculations, use a small threshold for distance
@@ -509,9 +514,10 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_ZONE );
 
-                msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), clearance, true ),
-                            MessageTextFromValue( userUnits(), clearance - error, true ) );
+                msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                            clearanceSource,
+                            MessageTextFromValue( userUnits(), minClearance, true ),
+                            MessageTextFromValue( userUnits(), minClearance - error, true ) );
 
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( aRefSeg, zone );
@@ -528,9 +534,17 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
     {
         SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
 
-        int clearance = std::max( refSegClearance, dsnSettings.m_CopperEdgeClearance );
+        wxString clearanceSource;
+        int      minClearance = aRefSeg->GetClearance( nullptr, &clearanceSource );
+
+        if( dsnSettings.m_CopperEdgeClearance > minClearance )
+        {
+            minClearance = dsnSettings.m_CopperEdgeClearance;
+            clearanceSource = _( "board edge clearance" );
+        }
+
         int halfWidth = refSegWidth / 2;
-        int center2centerAllowed = clearance + halfWidth;
+        int center2centerAllowed = minClearance + halfWidth;
 
         for( auto it = m_board_outlines.IterateSegmentsWithHoles(); it; it++ )
         {
@@ -550,7 +564,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                             if( !test_edge || test_edge->GetLayer() != Edge_Cuts )
                                 return SEARCH_RESULT::CONTINUE;
 
-                            if( test_edge->HitTest( (wxPoint) pt, clearance + halfWidth ) )
+                            if( test_edge->HitTest( (wxPoint) pt, minClearance + halfWidth ) )
                             {
                                 edge = test_edge;
                                 return SEARCH_RESULT::QUIT;
@@ -565,8 +579,9 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 int       actual = std::max( 0.0, sqrt( center2center_squared ) - halfWidth );
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_EDGE );
 
-                msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), clearance, true ),
+                msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                            clearanceSource,
+                            MessageTextFromValue( userUnits(), minClearance, true ),
                             MessageTextFromValue( userUnits(), actual, true ) );
 
                 drcItem->SetErrorMessage( msg );

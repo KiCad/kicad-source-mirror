@@ -467,10 +467,12 @@ public:
      * returned clearance is the greater of this object's clearance and
      * aItem's clearance.  If \a aItem is NULL, then this objects clearance
      * is returned.
-     * @param aItem is another BOARD_CONNECTED_ITEM or NULL
+     * @param aItem is an optional BOARD_CONNECTED_ITEM
+     * @param aSource [out] optionally reports the source as a user-readable string
      * @return int - the clearance in internal units.
      */
-    int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const override;
+    int GetClearance( BOARD_CONNECTED_ITEM* aItem = nullptr,
+                      wxString* aSource = nullptr ) const override;
 
    // Mask margins handling:
 

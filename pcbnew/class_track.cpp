@@ -117,11 +117,11 @@ BITMAP_DEF VIA::GetMenuImage() const
 }
 
 
-int TRACK::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
+int TRACK::GetClearance( BOARD_CONNECTED_ITEM* aItem, wxString* aSource ) const
 {
     // Currently tracks have no specific clearance parameter on a per track or per
     // segment basis.  The NETCLASS clearance is used.
-    return BOARD_CONNECTED_ITEM::GetClearance( aItem );
+    return BOARD_CONNECTED_ITEM::GetClearance( aItem, aSource );
 }
 
 

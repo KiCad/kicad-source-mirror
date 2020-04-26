@@ -110,7 +110,8 @@ public:
      */
     const EDA_RECT GetBoundingBox() const override;
 
-    int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const override;
+    int GetClearance( BOARD_CONNECTED_ITEM* aItem = nullptr,
+                      wxString* aSource = nullptr ) const override;
 
     /**
      * Function IsOnCopperLayer

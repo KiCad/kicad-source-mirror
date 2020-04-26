@@ -634,32 +634,38 @@ bool D_PAD::IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps )
 }
 
 
-int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
+int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem, wxString* aSource ) const
 {
-    // A pad can have specific clearance parameters that
-    // overrides its NETCLASS clearance value
-    int clearance = m_LocalClearance;
+    int myClearance;
 
-    if( clearance == 0 )
+    // A pad can have specific clearance that overrides its NETCLASS clearance value
+    if( m_LocalClearance )
     {
-        // If local clearance is 0, use the parent footprint clearance value
-        if( GetParent() && GetParent()->GetLocalClearance() )
-            clearance = GetParent()->GetLocalClearance();
+        myClearance = m_LocalClearance;
+
+        if( aSource )
+            *aSource = wxString::Format( _( "pad %s clearance" ), GetName() );
     }
 
-    if( clearance == 0 )   // If the parent footprint clearance value = 0, use NETCLASS value
-        return BOARD_CONNECTED_ITEM::GetClearance( aItem );
-
-    // We have a specific clearance.
-    // if aItem, return the biggest clearance
-    if( aItem )
+    // A footprint can have a specific clearance value
+    else if( GetParent() && GetParent()->GetLocalClearance() )
     {
-        int hisClearance = aItem->GetClearance();
-        return std::max( hisClearance, clearance );
+        myClearance = GetParent()->GetLocalClearance();
+
+        if( aSource )
+            *aSource = wxString::Format( _( "%s footprint clearance" ), GetParent()->GetReference() );
     }
 
-    // Return the specific clearance.
-    return clearance;
+    // Otherwise use the baseclass method to fetch the netclass setting
+    else
+    {
+        myClearance = BOARD_CONNECTED_ITEM::GetClearance( nullptr, aSource );
+    }
+
+    if( aItem && aItem->GetClearance() > myClearance )
+        return aItem->GetClearance( nullptr, aSource );
+
+    return myClearance;
 }
 
 

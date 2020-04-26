@@ -1329,11 +1329,6 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
     // Ensure the hole is on all copper layers
     dummypad.SetLayerSet( all_cu | dummypad.GetLayerSet() );
 
-    // Use the minimal local clearance value for the dummy pad.
-    // The clearance of the active pad will be used as minimum distance to a hole
-    // (a value = 0 means use netclass value)
-    dummypad.SetLocalClearance( 1 );
-
     for( D_PAD** pad_list = aStart;  pad_list<aEnd;  ++pad_list )
     {
         D_PAD*   pad = *pad_list;
@@ -1381,14 +1376,16 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                                                            PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE );
                 dummypad.SetOrientation( pad->GetOrientation() );
 
-                int minClearance = aRefPad->GetClearance( &dummypad );
-                int actual;
+                wxString source;
+                int      minClearance = aRefPad->GetClearance( nullptr, &source );
+                int      actual;
 
                 if( !checkClearancePadToPad( aRefPad, &dummypad, minClearance, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
 
-                    msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+                    msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                                source,
                                 MessageTextFromValue( userUnits(), minClearance, true ),
                                 MessageTextFromValue( userUnits(), actual, true ) );
 
@@ -1409,14 +1406,16 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                                                                PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE );
                 dummypad.SetOrientation( aRefPad->GetOrientation() );
 
-                int minClearance = pad->GetClearance( &dummypad );
-                int actual;
+                wxString source;
+                int      minClearance = pad->GetClearance( nullptr, &source );
+                int      actual;
 
                 if( !checkClearancePadToPad( pad, &dummypad, minClearance, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
 
-                    msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+                    msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                                source,
                                 MessageTextFromValue( userUnits(), minClearance, true ),
                                 MessageTextFromValue( userUnits(), actual, true ) );
 
@@ -1456,14 +1455,16 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
             continue;
         }
 
-        int minClearance = aRefPad->GetClearance( &dummypad );
-        int actual;
+        wxString source;
+        int      minClearance = aRefPad->GetClearance( nullptr, &source );
+        int      actual;
 
         if( !checkClearancePadToPad( aRefPad, pad, minClearance, &actual ) )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_PAD1 );
 
-            msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+            msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                        source,
                         MessageTextFromValue( userUnits(), minClearance, true ),
                         MessageTextFromValue( userUnits(), actual, true ) );
 
