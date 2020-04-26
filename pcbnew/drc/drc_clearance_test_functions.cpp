@@ -342,27 +342,16 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                  * shortened by half its minor axis.
                  * A circular hole is just a degenerate case of an oval hole.
                  */
-                wxPoint slotStart = pad->GetPosition();
-                wxPoint slotEnd = pad->GetPosition();
-                int     slotHalfWidth;
+                wxPoint slotStart;
+                wxPoint slotEnd;
+                int     slotWidth;
 
-                if( pad->GetDrillSize().x > pad->GetDrillSize().y )
-                {
-                    slotHalfWidth = pad->GetDrillSize().y / 2;
-                    slotStart.x -= ( pad->GetDrillSize().x / 2 ) - slotHalfWidth;
-                    slotEnd.x += ( pad->GetDrillSize().x / 2 ) - slotHalfWidth;
-                }
-                else
-                {
-                    slotHalfWidth = pad->GetDrillSize().x / 2;
-                    slotStart.y -= ( pad->GetDrillSize().y / 2 ) - slotHalfWidth;
-                    slotEnd.y += ( pad->GetDrillSize().y / 2 ) - slotHalfWidth;
-                }
+                pad->GetOblongDrillGeometry( slotStart, slotEnd, slotWidth );
 
                 wxString clearanceSource;
                 int      minClearance = aRefSeg->GetClearance( nullptr, &clearanceSource );
                 SEG      slotSeg( slotStart, slotEnd );
-                int      widths = slotHalfWidth + ( refSegWidth / 2 );
+                int      widths = ( slotWidth + refSegWidth ) / 2;
                 int      center2centerAllowed = minClearance + widths;
 
                 // Avoid square-roots if possible (for performance)
@@ -868,7 +857,7 @@ bool DRC::checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_P
          * shortened by half its minor axis.
          * A circular pad is just a degenerate case of an oval hole.
          */
-        wxPoint padStart = pad->GetPosition() + pad->GetOffset();
+        wxPoint padStart = pad->GetPosition() + pad->GetOffset();   // JEY TODO: needs to handle rotation....
         wxPoint padEnd = pad->GetPosition() + pad->GetOffset();
         int     padHalfWidth;
 
@@ -900,20 +889,18 @@ bool DRC::checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_P
     }
     else if( pad->GetShape() == PAD_SHAPE_RECT || pad->GetShape() == PAD_SHAPE_ROUNDRECT )
     {
-        wxSize  padSize = pad->GetSize();
+        EDA_RECT padBBox = pad->GetBoundingBox();
         int     widths = refSegWidth / 2;
 
         // Note a ROUNDRECT pad with a corner radius = r can be treated as a smaller
         // RECT (size - 2*r) with a clearance increased by r
         if( pad->GetShape() == PAD_SHAPE_ROUNDRECT )
         {
-            padSize.x -= 2 * pad->GetRoundRectCornerRadius();
-            padSize.y -= 2 * pad->GetRoundRectCornerRadius();
+            padBBox.Inflate( -2 * pad->GetRoundRectCornerRadius() );
             widths += pad->GetRoundRectCornerRadius();
         }
 
-        wxPoint    padStart = pad->GetPosition() + pad->GetOffset() - ( padSize / 2 );
-        SHAPE_RECT padShape( padStart, padSize.x, padSize.y );
+        SHAPE_RECT padShape( padBBox.GetPosition(), padBBox.GetWidth(), padBBox.GetHeight() );
         int        actual;
 
         if( padShape.DoCollide( refSeg, minClearance + widths, &actual ) )
