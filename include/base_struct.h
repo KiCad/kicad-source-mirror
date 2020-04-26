@@ -4,7 +4,7 @@
  * Copyright (C) 2013-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -213,8 +213,8 @@ public:
 
     void SetNext( EDA_ITEM* aNext )       { Pnext = aNext; }
     void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
-    void SetParent( EDA_ITEM* aParent )   { m_Parent = aParent; }
     void SetList( DHEAD* aList )          { m_List = aList; }
+    virtual void SetParent( EDA_ITEM* aParent )   { m_Parent = aParent; }
 
     inline bool IsNew() const { return m_Flags & IS_NEW; }
     inline bool IsModified() const { return m_Flags & IS_CHANGED; }

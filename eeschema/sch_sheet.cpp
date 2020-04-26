@@ -101,6 +101,19 @@ EDA_ITEM* SCH_SHEET::Clone() const
 }
 
 
+void SCH_SHEET::SetParent( EDA_ITEM* aSheet )
+{
+    m_Parent = nullptr;
+
+    if( aSheet )
+    {
+        // Parent must be another SCH_SHEET object or nullptr
+        wxCHECK( aSheet->Type() == SCH_SHEET_T, /* void */ );
+        m_Parent = aSheet;
+    }
+}
+
+
 void SCH_SHEET::SetScreen( SCH_SCREEN* aScreen )
 {
     if( aScreen == m_screen )
@@ -135,10 +148,15 @@ int SCH_SHEET::GetScreenCount() const
 
 SCH_SHEET* SCH_SHEET::GetRootSheet()
 {
-    SCH_SHEET* sheet = dynamic_cast< SCH_SHEET* >( GetParent() );
+    EDA_ITEM* item = GetParent();
 
-    if( sheet == NULL )
+    if( item == nullptr )
         return this;
+
+    SCH_SHEET* sheet = dynamic_cast< SCH_SHEET* >( item );
+
+    // The parent must be a SCH_SHEET object.
+    wxCHECK( sheet, nullptr );
 
     // Recurse until a sheet is found with no parent which is the root sheet.
     return sheet->GetRootSheet();

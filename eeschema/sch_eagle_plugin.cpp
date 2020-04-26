@@ -577,7 +577,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             SCH_SCREEN* screen = new SCH_SCREEN( m_kiway );
 
             sheet->SetTimeStamp( GetNewTimeStamp() - i );    // minus the sheet index to make it unique.
-            sheet->SetParent( m_rootSheet->GetScreen() );
+            sheet->SetParent( m_rootSheet );
             sheet->SetScreen( screen );
             sheet->GetScreen()->SetFileName( sheet->GetFileName() );
 

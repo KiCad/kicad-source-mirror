@@ -253,6 +253,8 @@ public:
         return wxT( "SCH_SHEET" );
     }
 
+    virtual void SetParent( EDA_ITEM* aSheet ) override;
+
     /**
      * Return true for items which are moved with the anchor point at mouse cursor
      * and false for items moved with no reference to anchor.
