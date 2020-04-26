@@ -375,7 +375,7 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	sbSizer3->Add( bSizer3DButtons, 0, wxEXPAND, 5 );
 
 
-	bSizerMain3D->Add( sbSizer3, 5, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerMain3D->Add( sbSizer3, 3, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	bLowerSizer3D = new wxBoxSizer( wxHORIZONTAL );
 
