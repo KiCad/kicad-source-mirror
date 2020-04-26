@@ -562,28 +562,38 @@ bool SHAPE::Collide( const SHAPE* aShape, int aClearance ) const
 
 bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance ) const
 {
-    //VECTOR2I pmin = VECTOR2I( std::min( aSeg.a.x, aSeg.b.x ), std::min( aSeg.a.y, aSeg.b.y ) );
-    //VECTOR2I pmax = VECTOR2I( std::max( aSeg.a.x, aSeg.b.x ), std::max( aSeg.a.y, aSeg.b.y ));
-    //BOX2I r( pmin, VECTOR2I( pmax.x - pmin.x, pmax.y - pmin.y ) );
+    int dummy;
+    return DoCollide( aSeg, aClearance, &dummy );
+}
 
-    //if( BBox( 0 ).SquaredDistance( r ) > aClearance * aClearance )
-    //    return false;
 
+bool SHAPE_RECT::DoCollide( const SEG& aSeg, int aClearance, int* aActualDist ) const
+{
     if( BBox( 0 ).Contains( aSeg.A ) || BBox( 0 ).Contains( aSeg.B ) )
+    {
+        *aActualDist = 0;
         return true;
+    }
 
     VECTOR2I vts[] = { VECTOR2I( m_p0.x, m_p0.y ),
-                        VECTOR2I( m_p0.x, m_p0.y + m_h ),
-                        VECTOR2I( m_p0.x + m_w, m_p0.y + m_h ),
-                        VECTOR2I( m_p0.x + m_w, m_p0.y ),
-                        VECTOR2I( m_p0.x, m_p0.y ) };
+                       VECTOR2I( m_p0.x, m_p0.y + m_h ),
+                       VECTOR2I( m_p0.x + m_w, m_p0.y + m_h ),
+                       VECTOR2I( m_p0.x + m_w, m_p0.y ),
+                       VECTOR2I( m_p0.x, m_p0.y ) };
 
-    for( int i = 0; i < 4; i++ )
+    SEG         s( vts[0], vts[1] );
+    SEG::ecoord dist_squared = s.SquaredDistance( aSeg );
+
+    for( int i = 1; i < 4; i++ )
     {
-        SEG s( vts[i], vts[i + 1], i );
+        s = SEG( vts[i], vts[i + 1] );
+        dist_squared = std::min( dist_squared, s.SquaredDistance( aSeg ) );
+    }
 
-        if( s.Distance( aSeg ) < aClearance )
-            return true;
+    if( dist_squared < SEG::ecoord( aClearance ) * SEG::ecoord( aClearance ) )
+    {
+        *aActualDist = sqrt( dist_squared );
+        return true;
     }
 
     return false;

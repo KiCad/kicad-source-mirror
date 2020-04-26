@@ -72,14 +72,6 @@ DRC::DRC() :
 
     m_drcRun = false;
     m_footprintsTested = false;
-
-    m_segmAngle  = 0;
-    m_segmLength = 0;
-
-    m_xcliplo = 0;
-    m_ycliplo = 0;
-    m_xcliphi = 0;
-    m_ycliphi = 0;
 }
 
 
@@ -178,8 +170,9 @@ void DRC::DestroyDRCDialog( int aReason )
 
 int DRC::TestZoneToZoneOutlines()
 {
-    BOARD* board = m_pcbEditorFrame->GetBoard();
-    int nerrors = 0;
+    BOARD*   board = m_pcbEditorFrame->GetBoard();
+    int      nerrors = 0;
+    wxString msg;
 
     std::vector<SHAPE_POLY_SET> smoothed_polys;
     smoothed_polys.resize( board->GetAreaCount() );
@@ -273,7 +266,7 @@ int DRC::TestZoneToZoneOutlines()
             }
 
             // Iterate through all the segments of refSmoothedPoly
-            std::set<wxPoint> conflictPoints;
+            std::map<wxPoint, int> conflictPoints;
 
             for( auto refIt = smoothed_polys[ia].IterateSegmentsWithHoles(); refIt; refIt++ )
             {
@@ -307,16 +300,27 @@ int DRC::TestZoneToZoneOutlines()
                                                          &pt.x, &pt.y );
 
                     if( d < zone2zoneClearance )
-                        conflictPoints.insert( pt );
+                    {
+                        if( conflictPoints.count( pt ) )
+                            conflictPoints[ pt ] = std::min( conflictPoints[ pt ], d );
+                        else
+                            conflictPoints[ pt ] = d;
+                    }
                 }
             }
 
-            for( wxPoint pt : conflictPoints )
+            for( const std::pair<const wxPoint, int>& conflict : conflictPoints )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_TOO_CLOSE );
+
+                msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+                            MessageTextFromValue( userUnits(), zone2zoneClearance ),
+                            MessageTextFromValue( userUnits(), conflict.second ) );
+
+                drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( zoneRef, zoneToTest );
 
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, pt );
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, conflict.first );
                 addMarkerToPcb( marker );
                 nerrors++;
             }
@@ -534,17 +538,16 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
 
     const BOARD_DESIGN_SETTINGS& g = m_pcb->GetDesignSettings();
 
-#define FmtVal( x ) GetChars( StringFromValue( m_pcbEditorFrame->GetUserUnits(), x ) )
-
 #if 0   // set to 1 when (if...) BOARD_DESIGN_SETTINGS has a m_MinClearance value
     if( nc->GetClearance() < g.m_MinClearance )
     {
-        msg.Printf( _( "NETCLASS: \"%s\" has Clearance:%s which is less than global:%s" ),
-                    nc->GetName(),
-                    FmtVal( nc->GetClearance() ),
-                    FmtVal( g.m_TrackClearance ) );
-
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_CLEARANCE );
+
+        msg.Printf( drcItem->GetErrorText() + _( "(global minimum %s; '%s' minimum %s)" ),
+                    MessageTextFromValue( userUnits(), g.m_TrackClearance, true ),
+                    nc->GetName(),
+                    MessageTextFromValue( userUnits(), nc->GetClearance(), true ) );
+
         drcItem->SetErrorMessage( msg );
         addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
@@ -553,12 +556,13 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
 
     if( nc->GetTrackWidth() < g.m_TrackMinWidth )
     {
-        msg.Printf( _( "NETCLASS: \"%s\" has TrackWidth:%s which is less than global:%s" ),
-                    nc->GetName(),
-                    FmtVal( nc->GetTrackWidth() ),
-                    FmtVal( g.m_TrackMinWidth ) );
-
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_TRACKWIDTH );
+
+        msg.Printf( drcItem->GetErrorText() + _( "(global minimum %s; '%s' minimum %s)" ),
+                    MessageTextFromValue( userUnits(), g.m_TrackMinWidth, true ),
+                    nc->GetName(),
+                    MessageTextFromValue( userUnits(), nc->GetTrackWidth(), true ) );
+
         drcItem->SetErrorMessage( msg );
         addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
@@ -566,12 +570,13 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
 
     if( nc->GetViaDiameter() < g.m_ViasMinSize )
     {
-        msg.Printf( _( "NETCLASS: \"%s\" has Via Dia:%s which is less than global:%s" ),
-                    nc->GetName(),
-                    FmtVal( nc->GetViaDiameter() ),
-                    FmtVal( g.m_ViasMinSize ) );
-
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIASIZE );
+
+        msg.Printf( drcItem->GetErrorText() + _( "(global minimum %s; '%s' minimum %s)" ),
+                    MessageTextFromValue( userUnits(), g.m_ViasMinSize, true ),
+                    nc->GetName(),
+                    MessageTextFromValue( userUnits(), nc->GetViaDiameter(), true ) );
+
         drcItem->SetErrorMessage( msg );
         addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
@@ -579,12 +584,13 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
 
     if( nc->GetViaDrill() < g.m_ViasMinDrill )
     {
-        msg.Printf( _( "NETCLASS: \"%s\" has Via Drill:%s which is less than global:%s" ),
-                    nc->GetName(),
-                    FmtVal( nc->GetViaDrill() ),
-                    FmtVal( g.m_ViasMinDrill ) );
-
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIADRILLSIZE );
+
+        msg.Printf( drcItem->GetErrorText() + _( "(global minimum %s; '%s' minimum %s)" ),
+                    MessageTextFromValue( userUnits(), g.m_ViasMinDrill, true ),
+                    nc->GetName(),
+                    MessageTextFromValue( userUnits(), nc->GetViaDrill(), true ) );
+
         drcItem->SetErrorMessage( msg );
         addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
@@ -592,12 +598,13 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
 
     if( nc->GetuViaDiameter() < g.m_MicroViasMinSize )
     {
-        msg.Printf( _( "NETCLASS: \"%s\" has uVia Dia:%s which is less than global:%s" ),
-                    nc->GetName(),
-                    FmtVal( nc->GetuViaDiameter() ),
-                    FmtVal( g.m_MicroViasMinSize ) );
-
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIASIZE );
+
+        msg.Printf( drcItem->GetErrorText() + _( "(global minimum %s; '%s' minimum %s)" ),
+                    MessageTextFromValue( userUnits(), g.m_MicroViasMinSize, true ),
+                    nc->GetName(),
+                    MessageTextFromValue( userUnits(), nc->GetuViaDiameter(), true ) );
+
         drcItem->SetErrorMessage( msg );
         addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
@@ -605,12 +612,13 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
 
     if( nc->GetuViaDrill() < g.m_MicroViasMinDrill )
     {
-        msg.Printf( _( "NETCLASS: \"%s\" has uVia Drill:%s which is less than global:%s" ),
-                    nc->GetName(),
-                    FmtVal( nc->GetuViaDrill() ),
-                    FmtVal( g.m_MicroViasMinDrill ) );
-
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIADRILLSIZE );
+
+        msg.Printf( drcItem->GetErrorText() + _( "(global minimum %s; '%s' minimum %s)" ),
+                    MessageTextFromValue( userUnits(), g.m_MicroViasMinDrill, true ),
+                    nc->GetName(),
+                    MessageTextFromValue( userUnits(), nc->GetuViaDrill(), true ) );
+
         drcItem->SetErrorMessage( msg );
         addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
@@ -1046,7 +1054,7 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_NEAR_COPPER );
                     drcItem->SetItems( track, aItem );
 
-                    wxPoint     pos = getLocation( track, aItem, itemSeg );
+                    wxPoint     pos = getLocation( track, itemSeg );
                     MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
                     addMarkerToPcb( marker );
                 }
@@ -1055,7 +1063,7 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_COPPER );
                     drcItem->SetItems( track, aItem );
 
-                    wxPoint     pos = getLocation( track, aItem, itemSeg );
+                    wxPoint     pos = getLocation( track, itemSeg );
                     MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
                     addMarkerToPcb( marker );
                 }
@@ -1136,7 +1144,7 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_VIA_NEAR_COPPER );
                     drcItem->SetItems( track, aTextItem );
 
-                    wxPoint     pos = getLocation( track, aTextItem, textSeg );
+                    wxPoint     pos = getLocation( track, textSeg );
                     MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
                     addMarkerToPcb( marker );
                 }
@@ -1145,7 +1153,7 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_COPPER );
                     drcItem->SetItems( track, aTextItem );
 
-                    wxPoint     pos = getLocation( track, aTextItem, textSeg );
+                    wxPoint     pos = getLocation( track, textSeg );
                     MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
                     addMarkerToPcb( marker );
                 }
@@ -1329,8 +1337,6 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
     for( D_PAD** pad_list = aStart;  pad_list<aEnd;  ++pad_list )
     {
         D_PAD*   pad = *pad_list;
-        int      allowed;
-        int      actual;
         wxString msg;
 
         if( pad == aRefPad )
@@ -1375,12 +1381,15 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                                                            PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE );
                 dummypad.SetOrientation( pad->GetOrientation() );
 
-                if( !checkClearancePadToPad( aRefPad, &dummypad, &allowed, &actual ) )
+                int minClearance = aRefPad->GetClearance( &dummypad );
+                int actual;
+
+                if( !checkClearancePadToPad( aRefPad, &dummypad, minClearance, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
 
                     msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
-                                MessageTextFromValue( userUnits(), allowed, true ),
+                                MessageTextFromValue( userUnits(), minClearance, true ),
                                 MessageTextFromValue( userUnits(), actual, true ) );
 
                     drcItem->SetErrorMessage( msg );
@@ -1400,12 +1409,15 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                                                                PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE );
                 dummypad.SetOrientation( aRefPad->GetOrientation() );
 
-                if( !checkClearancePadToPad( pad, &dummypad, &allowed, &actual ) )
+                int minClearance = pad->GetClearance( &dummypad );
+                int actual;
+
+                if( !checkClearancePadToPad( pad, &dummypad, minClearance, &actual ) )
                 {
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_HOLE_NEAR_PAD );
 
                     msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
-                                MessageTextFromValue( userUnits(), allowed, true ),
+                                MessageTextFromValue( userUnits(), minClearance, true ),
                                 MessageTextFromValue( userUnits(), actual, true ) );
 
                     drcItem->SetErrorMessage( msg );
@@ -1444,12 +1456,15 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
             continue;
         }
 
-        if( !checkClearancePadToPad( aRefPad, pad, &allowed, &actual ) )
+        int minClearance = aRefPad->GetClearance( &dummypad );
+        int actual;
+
+        if( !checkClearancePadToPad( aRefPad, pad, minClearance, &actual ) )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_PAD1 );
 
             msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
-                        MessageTextFromValue( userUnits(), allowed, true ),
+                        MessageTextFromValue( userUnits(), minClearance, true ),
                         MessageTextFromValue( userUnits(), actual, true ) );
 
             drcItem->SetErrorMessage( msg );
@@ -1572,7 +1587,7 @@ wxPoint DRC::getLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone ) const
 }
 
 
-wxPoint DRC::getLocation( TRACK* aTrack, BOARD_ITEM* aConflitItem, const SEG& aConflictSeg ) const
+wxPoint DRC::getLocation( TRACK* aTrack, const SEG& aConflictSeg ) const
 {
     wxPoint pt1 = aTrack->GetPosition();
     wxPoint pt2 = aTrack->GetEnd();
@@ -1580,7 +1595,7 @@ wxPoint DRC::getLocation( TRACK* aTrack, BOARD_ITEM* aConflitItem, const SEG& aC
     // Do a binary search along the track for a "good enough" marker location
     while( GetLineLength( pt1, pt2 ) > EPSILON )
     {
-        if( aConflictSeg.Distance( pt1 ) < aConflictSeg.Distance( pt2 ) )
+        if( aConflictSeg.SquaredDistance( pt1 ) < aConflictSeg.SquaredDistance( pt2 ) )
             pt2 = ( pt1 + pt2 ) / 2;
         else
             pt1 = ( pt1 + pt2 ) / 2;

@@ -93,6 +93,8 @@ public:
     /// @copydoc SHAPE::Collide()
     bool Collide( const SEG& aSeg, int aClearance = 0 ) const override;
 
+    bool DoCollide( const SEG& aSeg, int aClearance, int* aActualDist ) const;
+
     /**
      * Function GetPosition()
      *

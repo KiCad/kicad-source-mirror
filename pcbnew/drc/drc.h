@@ -34,10 +34,6 @@
 #include <vector>
 #include <tools/pcb_tool_base.h>
 
-#define OK_DRC  0
-#define BAD_DRC 1
-
-
 
 /// DRC error codes:
 enum PCB_DRC_CODE {
@@ -155,29 +151,6 @@ private:
     bool     m_reportAllTrackErrors;    // Report all tracks errors (or only 4 first errors)
     bool     m_testFootprints;          // Test footprints against schematic
 
-    /* In DRC functions, many calculations are using coordinates relative
-     * to the position of the segment under test (segm to segm DRC, segm to pad DRC
-     * Next variables store coordinates relative to the start point of this segment
-     */
-    wxPoint  m_padToTestPos;            // Position of the pad for segm-to-pad and pad-to-pad
-    wxPoint  m_segmEnd;                 // End point of the reference segment (start = (0, 0) )
-
-    /* Some functions are comparing the ref segm to pads or others segments using
-     * coordinates relative to the ref segment considered as the X axis
-     * so we store the ref segment length (the end point relative to these axis)
-     * and the segment orientation (used to rotate other coordinates)
-     */
-    double   m_segmAngle;               // Ref segm orientation in 0.1 degree
-    int      m_segmLength;              // length of the reference segment
-
-    /* variables used in checkLine to test DRC segm to segm:
-     * define the area relative to the ref segment that does not contains any other segment
-     */
-    int      m_xcliplo;
-    int      m_ycliplo;
-    int      m_xcliphi;
-    int      m_ycliphi;
-
     PCB_EDIT_FRAME*        m_pcbEditorFrame;   // The pcb frame editor which owns the board
     BOARD*                 m_pcb;
     SHAPE_POLY_SET         m_board_outlines;   // The board outline including cutouts
@@ -207,7 +180,7 @@ private:
      * Fetches a reasonable point for marking a violoation between two non-point objects.
      */
     wxPoint getLocation( TRACK* aTrack, ZONE_CONTAINER* aConflictZone ) const;
-    wxPoint getLocation( TRACK* aTrack, BOARD_ITEM* aConflitItem, const SEG& aConflictSeg ) const;
+    wxPoint getLocation( TRACK* aTrack, const SEG& aConflictSeg ) const;
 
     //-----<categorical group tests>-----------------------------------------
 
@@ -301,16 +274,17 @@ private:
     /**
      * @param aRefPad The reference pad to check
      * @param aPad Another pad to check against
-     * @param aAllowed [out] is the allowed distance (only guaranteed to be set for violations)
-     * @param aActual [out] it the actual difference (only guaranteed to be set for violations)
-     * @return bool - true if clearance between aRefPad and aPad is >= dist_min, else false
+     * @param aMinClearance is the minimum allowed distance between the pads
+     * @param aActual [out] it the actual distance (only guaranteed to be set for violations)
+     * @return bool - true if clearance between aRefPad and aPad is >= aMinClearance, else false
      */
-    bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int* aAllowed, int* aActual );
+    bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance, int* aActual );
 
 
     /**
      * Check the distance from a pad to segment.  This function uses several
      * instance variable not passed in:
+     * // JEY TODO: nuke these:
      *      m_segmLength = length of the segment being tested
      *      m_segmAngle  = angle of the segment with the X axis;
      *      m_segmEnd    = end coordinate of the segment
@@ -323,35 +297,10 @@ private:
      * @return true distance >= dist_min,
      *         false if distance < dist_min
      */
-    bool checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist,
-                                  int* aActualDist );
+    bool checkClearanceSegmToPad( const SEG& seg, int segWidth, const D_PAD* pad,
+                                  int minClearance, int* aActualDist );
 
 
-    /**
-     * Check the distance from a point to a segment.
-     *
-     * The segment is expected starting at 0,0, and on the X axis
-     * (used to test DRC between a segment and a round pad, via or round end of a track
-     * @param aCentre The coordinate of the circle's center
-     * @param aAllowed A "keep out" radius centered over the circle
-     * @param aLength The length of the segment (i.e. coordinate of end, because it is on
-     *                the X axis)
-     * @param aActual [out] is the actual distance (only guaranteed to be set on violations)
-     * @return bool - true if distance >= radius, else
-     *                false when distance < aAllowed
-     */
-    static bool checkMarginToCircle( wxPoint aCentre, int aAllowed, int aLength, int* aActual );
-
-
-    /**
-     * Function checkLine
-     * (helper function used in drc calculations to see if one track is in contact with
-     *  another track).
-     * Test if a line intersects a bounding box (a rectangle)
-     * The rectangle is defined by m_xcliplo, m_ycliplo and m_xcliphi, m_ycliphi
-     * return true if the line from aSegStart to aSegEnd is outside the bounding box
-     */
-    bool checkLine( wxPoint aSegStart, wxPoint aSegEnd );
 
     //-----</single tests>---------------------------------------------
 

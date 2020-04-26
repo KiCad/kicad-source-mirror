@@ -67,6 +67,18 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     SetLayoutDirection( wxLayout_LeftToRight );
 
+    // If we're in a dialog, we have to go looking for our parent frame
+    if( !m_edaFrame )
+    {
+        wxWindow* ancestor = aParentWindow->GetParent();
+
+        while( ancestor && !dynamic_cast<EDA_DRAW_FRAME*>( ancestor ) )
+            ancestor = ancestor->GetParent();
+
+        if( ancestor )
+            m_edaFrame = dynamic_cast<EDA_DRAW_FRAME*>( ancestor );
+    }
+
     SwitchBackend( aGalType );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
