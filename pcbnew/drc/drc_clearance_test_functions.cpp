@@ -148,9 +148,10 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
     BOARD_DESIGN_SETTINGS& dsnSettings = m_pcb->GetDesignSettings();
     wxString  msg;
 
-    SEG         refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
-    LSET        layerMask = aRefSeg->GetLayerSet();
-    int         refSegWidth = aRefSeg->GetWidth();
+    SEG      refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
+    LSET     layerMask = aRefSeg->GetLayerSet();
+    EDA_RECT refSegBB = aRefSeg->GetBoundingBox();
+    int      refSegWidth = aRefSeg->GetWidth();
 
 
     /******************************************/
@@ -322,8 +323,19 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
     // Compute the min distance to pads
     for( MODULE* mod : m_pcb->Modules() )
     {
+        // Don't preflight at the module level.  Getting a module's bounding box goes
+        // through all its pads anyway (so it's no faster), and also all its drawings
+        // (so it's in fact slower).
+
         for( D_PAD* pad : mod->Pads() )
         {
+            // Preflight based on bounding boxes.
+            EDA_RECT inflatedBB = refSegBB;
+            inflatedBB.Inflate( pad->GetBoundingRadius() + aRefSeg->GetClearance( pad, nullptr ) );
+
+            if( !inflatedBB.Contains( pad->GetPosition() ) )
+                continue;
+
             if( pad->GetDrillSize().x > 0 )
             {
                 /* Treat an oval hole as a line segment along the hole's major axis,
@@ -423,8 +435,15 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         if( aRefSeg->GetNetCode() == track->GetNetCode() )
             continue;
 
-        // No problem if tracks are on different layers :
+        // No problem if tracks are on different layers:
         if( !( layerMask & track->GetLayerSet() ).any() )
+            continue;
+
+        // Preflight based on inflated bounding boxes:
+        EDA_RECT trackBB = track->GetBoundingBox();
+        trackBB.Inflate( aRefSeg->GetClearance( track, nullptr ) );
+
+        if( !trackBB.Intersects( refSegBB ) )
             continue;
 
         wxString clearanceSource;
