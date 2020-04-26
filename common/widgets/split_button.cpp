@@ -247,8 +247,6 @@ bool SPLIT_BUTTON::Enable( bool aEnable )
         m_stateMenu   = wxCONTROL_DISABLED;
     }
 
-    wxPaintEvent event;
-    ProcessEvent( event );
     Refresh();
 
     return aEnable;
