@@ -47,19 +47,19 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 
 	m_staticText3 = new wxStaticText( sbSizerScale->GetStaticBox(), wxID_ANY, _("Z:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
-	fgSizerScale->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizerScale->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	zscale = new wxTextCtrl( sbSizerScale->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerScale->Add( zscale, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizerScale->Add( zscale, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_spinZscale = new wxSpinButton( sbSizerScale->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
-	fgSizerScale->Add( m_spinZscale, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	fgSizerScale->Add( m_spinZscale, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizerScale->Add( fgSizerScale, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 
-	bSizerLeft->Add( sbSizerScale, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerLeft->Add( sbSizerScale, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbSizerRotation;
 	sbSizerRotation = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Rotation") ), wxVERTICAL );
@@ -91,19 +91,19 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 
 	m_staticText31 = new wxStaticText( sbSizerRotation->GetStaticBox(), wxID_ANY, _("Z:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText31->Wrap( -1 );
-	fgSizerRotate->Add( m_staticText31, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizerRotate->Add( m_staticText31, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	zrot = new wxTextCtrl( sbSizerRotation->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRotate->Add( zrot, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizerRotate->Add( zrot, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_spinZrot = new wxSpinButton( sbSizerRotation->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
-	fgSizerRotate->Add( m_spinZrot, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	fgSizerRotate->Add( m_spinZrot, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizerRotation->Add( fgSizerRotate, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 
-	bSizerLeft->Add( sbSizerRotation, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerLeft->Add( sbSizerRotation, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbSizerOffset;
 	sbSizerOffset = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Offset") ), wxVERTICAL );
@@ -135,19 +135,19 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 
 	m_staticText32 = new wxStaticText( sbSizerOffset->GetStaticBox(), wxID_ANY, _("Z:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText32->Wrap( -1 );
-	fgSizerOffset->Add( m_staticText32, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizerOffset->Add( m_staticText32, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	zoff = new wxTextCtrl( sbSizerOffset->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerOffset->Add( zoff, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	fgSizerOffset->Add( zoff, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_spinZoffset = new wxSpinButton( sbSizerOffset->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_VERTICAL );
-	fgSizerOffset->Add( m_spinZoffset, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	fgSizerOffset->Add( m_spinZoffset, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizerOffset->Add( fgSizerOffset, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 
-	bSizerLeft->Add( sbSizerOffset, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerLeft->Add( sbSizerOffset, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Opacity") ), wxVERTICAL );
@@ -156,7 +156,7 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	sbSizer4->Add( m_opacity, 0, wxEXPAND, 5 );
 
 
-	bSizerLeft->Add( sbSizer4, 1, wxEXPAND|wxALL, 5 );
+	bSizerLeft->Add( sbSizer4, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizermain->Add( bSizerLeft, 0, 0, 5 );
@@ -177,7 +177,7 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	bSizerRight->Add( m_SizerPanelView, 1, wxEXPAND|wxBOTTOM, 8 );
 
 
-	bSizermain->Add( bSizerRight, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 4 );
+	bSizermain->Add( bSizerRight, 1, wxEXPAND|wxRIGHT|wxLEFT, 4 );
 
 	wxBoxSizer* bSizer3DButtons;
 	bSizer3DButtons = new wxBoxSizer( wxVERTICAL );
@@ -220,7 +220,7 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	bSizer3DButtons->Add( m_bpUpdate, 0, wxTOP, 5 );
 
 
-	bSizermain->Add( bSizer3DButtons, 0, wxALL|wxEXPAND, 5 );
+	bSizermain->Add( bSizer3DButtons, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bSizermain );

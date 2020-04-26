@@ -3582,8 +3582,8 @@
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
-                                        <property name="proportion">3</property>
-                                        <object class="wxStaticBoxSizer" expanded="0">
+                                        <property name="proportion">4</property>
+                                        <object class="wxStaticBoxSizer" expanded="1">
                                             <property name="id">wxID_ANY</property>
                                             <property name="label"></property>
                                             <property name="minimum_size"></property>
@@ -3681,11 +3681,11 @@
                                                     <event name="OnGridSelectCell">On3DModelSelected</event>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxBoxSizer" expanded="0">
+                                                <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bSizer3DButtons</property>
                                                     <property name="orient">wxHORIZONTAL</property>
@@ -3843,7 +3843,7 @@
                                                         <object class="spacer" expanded="0">
                                                             <property name="height">0</property>
                                                             <property name="permission">protected</property>
-                                                            <property name="width">0</property>
+                                                            <property name="width">10</property>
                                                         </object>
                                                     </object>
                                                     <object class="sizeritem" expanded="0">
@@ -3931,7 +3931,7 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="0">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxALL|wxEXPAND</property>
+                                                        <property name="flag">wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxButton" expanded="0">
                                                             <property name="BottomDockable">1</property>
@@ -4009,7 +4009,7 @@
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
-                                        <property name="proportion">10</property>
+                                        <property name="proportion">11</property>
                                         <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
                                             <property name="name">bLowerSizer3D</property>

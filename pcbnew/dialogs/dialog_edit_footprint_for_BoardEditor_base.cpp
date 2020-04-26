@@ -463,7 +463,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bSizer3DButtons->Add( m_buttonBrowse, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
-	bSizer3DButtons->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer3DButtons->Add( 10, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_buttonRemove = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_buttonRemove->SetMinSize( wxSize( 30,29 ) );
@@ -474,18 +474,18 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bSizer3DButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_button8 = new wxButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Configure Paths..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3DButtons->Add( m_button8, 0, wxALL|wxEXPAND, 5 );
+	bSizer3DButtons->Add( m_button8, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizer3->Add( bSizer3DButtons, 0, wxEXPAND, 5 );
 
 
-	bSizerMain3D->Add( sbSizer3, 3, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerMain3D->Add( sbSizer3, 4, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	bLowerSizer3D = new wxBoxSizer( wxHORIZONTAL );
 
 
-	bSizerMain3D->Add( bLowerSizer3D, 10, wxEXPAND, 5 );
+	bSizerMain3D->Add( bLowerSizer3D, 11, wxEXPAND, 5 );
 
 
 	m_Panel3D->SetSizer( bSizerMain3D );

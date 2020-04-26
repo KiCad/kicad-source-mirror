@@ -857,10 +857,12 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::adjustGridColumns( int aWidth )
         itemsWidth -= m_itemsGrid->GetColSize( i );
 
     if( itemsWidth > 0 )
+    {
         m_itemsGrid->SetColSize( 0, std::max( itemsWidth,
                 m_itemsGrid->GetVisibleWidth( 0, true, false, false ) ) );
+    }
 
-    m_modelsGrid->SetColSize( 0, modelsWidth - m_modelsGrid->GetColSize( 1 ) - 5 );
+    m_modelsGrid->SetColSize( 0, modelsWidth - m_modelsGrid->GetColSize( 1 ) - 6 );
 }
 
 
