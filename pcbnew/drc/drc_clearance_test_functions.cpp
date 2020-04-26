@@ -39,7 +39,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <board_commit.h>
 #include <math/util.h>      // for KiROUND
-#include <libs/kimath/include/geometry/shape_rect.h>
+#include <geometry/shape_rect.h>
 #include <macros.h>
 
 
