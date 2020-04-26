@@ -687,28 +687,6 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
             try
             {
                 loadFile( fileName.GetFullPath(), aSheet->GetScreen() );
-
-                EDA_ITEM* item = aSheet->GetScreen()->GetDrawItems();
-
-                while( item )
-                {
-                    if( item->Type() == SCH_SHEET_T )
-                    {
-                        SCH_SHEET* sheet = (SCH_SHEET*) item;
-
-                        // Set the parent to aSheet.  This effectively creates a method to find
-                        // the root sheet from any sheet so a pointer to the root sheet does not
-                        // need to be stored globally.  Note: this is not the same as a hierarchy.
-                        // Complex hierarchies can have multiple copies of a sheet.  This only
-                        // provides a simple tree to find the root sheet.
-                        sheet->SetParent( aSheet );
-
-                        // Recursion starts here.
-                        loadHierarchy( sheet );
-                    }
-
-                    item = item->Next();
-                }
             }
             catch( const IO_ERROR& ioe )
             {
@@ -721,6 +699,28 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
                     m_error += "\n";
 
                 m_error += ioe.What();
+            }
+
+            EDA_ITEM* item = aSheet->GetScreen()->GetDrawItems();
+
+            while( item )
+            {
+                if( item->Type() == SCH_SHEET_T )
+                {
+                    SCH_SHEET* sheet = (SCH_SHEET*) item;
+
+                    // Set the parent to aSheet.  This effectively creates a method to find
+                    // the root sheet from any sheet so a pointer to the root sheet does not
+                    // need to be stored globally.  Note: this is not the same as a hierarchy.
+                    // Complex hierarchies can have multiple copies of a sheet.  This only
+                    // provides a simple tree to find the root sheet.
+                    sheet->SetParent( aSheet );
+
+                    // Recursion starts here.
+                    loadHierarchy( sheet );
+                }
+
+                item = item->Next();
             }
         }
 
