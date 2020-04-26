@@ -596,7 +596,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET( pos ) );
             SCH_SCREEN*                screen = new SCH_SCREEN( m_kiway );
 
-            sheet->SetParent( m_rootSheet->GetScreen() );
+            sheet->SetParent( m_rootSheet );
             sheet->SetScreen( screen );
             sheet->GetScreen()->SetFileName( sheet->GetFileName() );
 

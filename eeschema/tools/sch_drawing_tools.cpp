@@ -843,7 +843,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             sheet = new SCH_SHEET( (wxPoint) cursorPos );
             sheet->SetFlags( IS_NEW | IS_RESIZED );
-            sheet->SetParent( m_frame->GetScreen() );
+            sheet->SetParent( m_frame->GetCurrentSheet().Last() );
             sheet->SetScreen( NULL );
             sheet->SetBorderWidth( m_frame->GetDefaultLineWidth() );
             sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );
