@@ -472,6 +472,9 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils, EDA_DATA_TYPE
         {
             switch( aType )
             {
+            default:
+                wxASSERT( 0 );
+                KI_FALLTHROUGH;
             case EDA_DATA_TYPE::DISTANCE:
                 return _( "mils" );
             case EDA_DATA_TYPE::AREA:
@@ -484,6 +487,9 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils, EDA_DATA_TYPE
         {
             switch( aType )
             {
+            default:
+                wxASSERT( 0 );
+                KI_FALLTHROUGH;
             case EDA_DATA_TYPE::DISTANCE:
                 return _( "in" );
             case EDA_DATA_TYPE::AREA:
@@ -492,11 +498,13 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils, EDA_DATA_TYPE
                 return _( "cu. in" );
             }
         }
-        break;      // Make compil happy.
 
     case EDA_UNITS::MILLIMETRES:
         switch( aType )
         {
+        default:
+            wxASSERT( 0 );
+            KI_FALLTHROUGH;
         case EDA_DATA_TYPE::DISTANCE:
             return _( "mm" );
         case EDA_DATA_TYPE::AREA:
@@ -504,7 +512,6 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils, EDA_DATA_TYPE
         case EDA_DATA_TYPE::VOLUME:
             return _( "cu. mm" );
         }
-        break;      // Make compil happy.
 
     case EDA_UNITS::PERCENT:
         return _( "%" );
@@ -516,10 +523,8 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS aUnit, bool aUseMils, EDA_DATA_TYPE
         return _( "deg" );
 
     default:
-        break;
+        return wxT( "??" );
     }
-
-    return wxT( "??" );
 }
 
 
