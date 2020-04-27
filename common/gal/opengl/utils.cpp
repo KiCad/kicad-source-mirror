@@ -83,7 +83,7 @@ int checkGlError( const std::string& aInfo, bool aThrow )
                     errorMsg = "Framebuffer attachments have different dimensions";
                     break;
                 default:
-                    errorMsg = "Unknown incomplete framebufer error";
+                    errorMsg.Printf( "Unknown incomplete framebuffer error id %X", status );
                 }
             }
             else
