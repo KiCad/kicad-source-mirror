@@ -336,6 +336,13 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             if( !inflatedBB.Contains( pad->GetPosition() ) )
                 continue;
 
+            if( !( pad->GetLayerSet() & layerMask ).any() )
+                continue;
+
+            // No need to check pads with the same net as the refSeg.
+            if( pad->GetNetCode() && aRefSeg->GetNetCode() == pad->GetNetCode() )
+                continue;
+
             if( pad->GetDrillSize().x > 0 )
             {
                 wxString clearanceSource;
@@ -379,13 +386,6 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                         return;
                 }
             }
-
-            if( !( pad->GetLayerSet() & layerMask ).any() )
-                continue;
-
-            // No need to check pads with the same net as the refSeg.
-            if( pad->GetNetCode() && aRefSeg->GetNetCode() == pad->GetNetCode() )
-                continue;
 
             wxString clearanceSource;
             int      minClearance = aRefSeg->GetClearance( pad, &clearanceSource );
