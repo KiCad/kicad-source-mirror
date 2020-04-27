@@ -338,21 +338,23 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
             if( pad->GetDrillSize().x > 0 )
             {
+                wxString clearanceSource;
+                int      minClearance = aRefSeg->GetClearance( nullptr, &clearanceSource );
+
                 /* Treat an oval hole as a line segment along the hole's major axis,
                  * shortened by half its minor axis.
                  * A circular hole is just a degenerate case of an oval hole.
                  */
-                wxPoint slotStart;
-                wxPoint slotEnd;
+                wxPoint slotStart, slotEnd;
                 int     slotWidth;
 
-                pad->GetOblongDrillGeometry( slotStart, slotEnd, slotWidth );
+                pad->GetOblongGeometry( pad->GetDrillSize(), &slotStart, &slotEnd, &slotWidth );
+                slotStart += pad->GetPosition();
+                slotEnd += pad->GetPosition();
 
-                wxString clearanceSource;
-                int      minClearance = aRefSeg->GetClearance( nullptr, &clearanceSource );
-                SEG      slotSeg( slotStart, slotEnd );
-                int      widths = ( slotWidth + refSegWidth ) / 2;
-                int      center2centerAllowed = minClearance + widths;
+                SEG     slotSeg( slotStart, slotEnd );
+                int     widths = ( slotWidth + refSegWidth ) / 2;
+                int     center2centerAllowed = minClearance + widths;
 
                 // Avoid square-roots if possible (for performance)
                 SEG::ecoord center2center_squared = refSeg.SquaredDistance( slotSeg );
@@ -387,11 +389,11 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
             wxString clearanceSource;
             int      minClearance = aRefSeg->GetClearance( pad, &clearanceSource );
-            SEG      padSeg( pad->GetPosition(), pad->GetPosition() );
             int      actual;
 
             if( !checkClearanceSegmToPad( refSeg, refSegWidth, pad, minClearance, &actual ) )
             {
+                SEG       padSeg( pad->GetPosition(), pad->GetPosition() );
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_PAD );
 
                 msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
@@ -666,22 +668,12 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance
          * shortened by half its minor axis.
          * A circular pad is just a degenerate case of an oval hole.
          */
-        wxPoint refPadStart = aRefPad->GetPosition() + aRefPad->GetOffset();
-        wxPoint refPadEnd = aRefPad->GetPosition() + aRefPad->GetOffset();
+        wxPoint refPadStart, refPadEnd;
         int     refPadWidth;
 
-        if( aRefPad->GetSize().x > aRefPad->GetSize().y )
-        {
-            refPadWidth = aRefPad->GetSize().y;
-            refPadStart.x -= ( aRefPad->GetSize().x - refPadWidth ) / 2;
-            refPadEnd.x += ( aRefPad->GetSize().x - refPadWidth ) / 2;
-        }
-        else
-        {
-            refPadWidth = aRefPad->GetSize().x;
-            refPadStart.y -= ( aRefPad->GetSize().y - refPadWidth ) / 2;
-            refPadEnd.y += ( aRefPad->GetSize().y - refPadWidth ) / 2;
-        }
+        aRefPad->GetOblongGeometry( aRefPad->GetSize(), &refPadStart, &refPadEnd, &refPadWidth );
+        refPadStart += aRefPad->ShapePos();
+        refPadEnd += aRefPad->ShapePos();
 
         SEG refPadSeg( refPadStart, refPadEnd );
         diag = checkClearanceSegmToPad( refPadSeg, refPadWidth, aPad, aMinClearance, aActual );
@@ -694,14 +686,6 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance
         wxPoint polyref[4];
         // corners of aRefPad (used only for custom pad)
         SHAPE_POLY_SET polysetref;
-        // corners of aPad (used only for rect/roundrect/trap pad)
-        wxPoint polycompare[4];
-        // corners of aPad (used only custom pad)
-        SHAPE_POLY_SET polysetcompare;
-
-        // pad_angle = pad orient relative to the aRefPad orient
-        double pad_angle = aRefPad->GetOrientation() + aPad->GetOrientation();
-        NORMALIZE_ANGLE_POS( pad_angle );
 
         if( aRefPad->GetShape() == PAD_SHAPE_ROUNDRECT )
         {
@@ -738,6 +722,11 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance
             // BuildPadPolygon has meaning for rect a trapeziod shapes and returns the 4 corners.
             aRefPad->BuildPadPolygon( polyref, wxSize( 0, 0 ), aRefPad->GetOrientation() );
         }
+
+        // corners of aPad (used only for rect/roundrect/trap pad)
+        wxPoint polycompare[4];
+        // corners of aPad (used only custom pad)
+        SHAPE_POLY_SET polysetcompare;
 
         switch( aPad->GetShape() )
         {
@@ -784,6 +773,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad, int aMinClearance
                 for( int ii = 0; ii < 4; ii++ )
                     polycompare[ii] += relativePadPos;
             }
+
             // And now test polygons: We have 3 cases:
             // one poly is complex and the other is basic (has only 4 corners)
             // both polys are complex
@@ -857,25 +847,15 @@ bool DRC::checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_P
          * shortened by half its minor axis.
          * A circular pad is just a degenerate case of an oval hole.
          */
-        wxPoint padStart = pad->GetPosition() + pad->GetOffset();   // JEY TODO: needs to handle rotation....
-        wxPoint padEnd = pad->GetPosition() + pad->GetOffset();
-        int     padHalfWidth;
+        wxPoint padStart, padEnd;
+        int     padWidth;
 
-        if( pad->GetSize().x > pad->GetSize().y )
-        {
-            padHalfWidth = pad->GetSize().y / 2;
-            padStart.x -= ( pad->GetSize().x / 2 ) - padHalfWidth;
-            padEnd.x += ( pad->GetSize().x / 2 ) - padHalfWidth;
-        }
-        else
-        {
-            padHalfWidth = pad->GetSize().x / 2;
-            padStart.y -= ( pad->GetSize().y / 2 ) - padHalfWidth;
-            padEnd.y += ( pad->GetSize().y / 2 ) - padHalfWidth;
-        }
+        pad->GetOblongGeometry( pad->GetSize(), &padStart, &padEnd, &padWidth );
+        padStart += pad->ShapePos();
+        padEnd += pad->ShapePos();
 
         SEG padSeg( padStart, padEnd );
-        int widths = padHalfWidth + ( refSegWidth / 2 );
+        int widths = ( padWidth + refSegWidth ) / 2;
         int center2centerAllowed = minClearance + widths;
 
         // Avoid square-roots if possible (for performance)

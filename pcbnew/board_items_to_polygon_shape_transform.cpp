@@ -679,8 +679,8 @@ void D_PAD::BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer, wxSize aInflate
 }
 
 
-bool D_PAD::BuildPadDrillShapePolygon(
-        SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError ) const
+bool D_PAD::BuildPadDrillShapePolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
+                                       int aError ) const
 {
     wxSize drillsize = GetDrillSize();
 
@@ -697,7 +697,7 @@ bool D_PAD::BuildPadDrillShapePolygon(
         wxPoint start, end;
         int width;
 
-        GetOblongDrillGeometry( start, end, width );
+        GetOblongGeometry( GetDrillSize(), &start, &end, &width );
 
         start += GetPosition();
         end += GetPosition();

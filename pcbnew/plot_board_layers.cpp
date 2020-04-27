@@ -779,7 +779,8 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                         // Note: small drill marks have no significance when applied to slots
                         wxPoint drl_start, drl_end;
                         int width;
-                        pad->GetOblongDrillGeometry( drl_start, drl_end, width );
+
+                        pad->GetOblongGeometry( pad->GetDrillSize(), &drl_start, &drl_end, &width );
                         aPlotter->ThickSegment( pad->GetPosition() + drl_start,
                                                 pad->GetPosition() + drl_end, width, SKETCH, NULL );
                     }

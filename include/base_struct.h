@@ -343,6 +343,13 @@ public:
     virtual const wxPoint GetPosition() const { return wxPoint(); }
 
     /**
+     * Function GetFocusPosition
+     * similar to GetPosition, but allows items to return their visual center rather
+     * than their anchor.
+     */
+    virtual const wxPoint GetFocusPosition() const { return GetPosition(); }
+
+    /**
      * Function Clone
      * creates a duplicate of this item with linked list members set to NULL.
      *

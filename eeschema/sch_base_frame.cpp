@@ -360,20 +360,8 @@ void SCH_BASE_FRAME::FocusOnItem( SCH_ITEM* aItem )
         RefreshItem( aItem );
         lastBrightenedItemID = aItem->m_Uuid;
 
-        wxPoint position = aItem->GetPosition();
-
-        if( aItem->GetParent() && aItem->GetParent()->Type() == SCH_COMPONENT_T )
-        {
-            SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( aItem->GetParent() );
-
-            // for a pin, GetPosition() is relative to the symbol, not rotated, not mirrored
-            // calculate the physical position:
-            wxPoint delta;
-            delta = comp->GetTransform().TransformCoordinate( position );
-            position = delta + comp->GetPosition();
-        }
-
-        FocusOnLocation( position );
+        // JEY TODO: test this with pins and fields (and with rotated symbols) ....
+        FocusOnLocation( aItem->GetFocusPosition() );
     }
 }
 

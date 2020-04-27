@@ -230,7 +230,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
 
         GetCanvas()->GetView()->Update( aItem );
         lastBrightenedItemID = aItem->m_Uuid;
-        FocusOnLocation( aItem->GetPosition() );
+        FocusOnLocation( aItem->GetFocusPosition() );
         GetCanvas()->Refresh();
     }
 }

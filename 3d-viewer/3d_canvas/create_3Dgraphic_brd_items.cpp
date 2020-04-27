@@ -590,7 +590,7 @@ COBJECT2D *BOARD_ADAPTER::createNewPadDrill( const D_PAD* aPad, int aInflateValu
         wxPoint start, end;
         int width;
 
-        aPad->GetOblongDrillGeometry( start, end, width );
+        aPad->GetOblongGeometry( aPad->GetDrillSize(), &start, &end, &width );
 
         width += aInflateValue * 2;
         start += aPad->GetPosition();

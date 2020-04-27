@@ -100,6 +100,7 @@ public:
 
     void SetPosition( const wxPoint& aPos ) override { m_Start = aPos; }
     const wxPoint GetPosition() const override { return m_Start; }
+    const wxPoint GetFocusPosition() const override { return ( m_Start + m_End ) / 2; }
 
     void SetWidth( int aWidth )                 { m_Width = aWidth; }
     int GetWidth() const                        { return m_Width; }
