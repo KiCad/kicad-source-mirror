@@ -96,6 +96,7 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
                                        options, type );
     m_preview->SetStealsFocus( false );
     m_preview->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
+    m_preview->GetGAL()->SetAxesEnabled( false );
 
     m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
     m_colorsMainSizer->Add( m_preview, 1, wxALL | wxEXPAND, 5 );

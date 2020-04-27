@@ -42,7 +42,7 @@ class PANEL_COLOR_SETTINGS_BASE : public wxPanel
 		wxChoice* m_cbTheme;
 		wxButton* m_btnReset;
 		wxButton* m_btnOpenFolder;
-		wxStaticLine* m_staticline1;
+		wxStaticLine* m_staticline2;
 		wxBoxSizer* m_colorsMainSizer;
 		wxScrolledWindow* m_colorsListWindow;
 		wxFlexGridSizer* m_colorsGridSizer;

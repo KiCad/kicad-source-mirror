@@ -49,6 +49,9 @@ PANEL_COLOR_SETTINGS::PANEL_COLOR_SETTINGS( wxWindow* aParent ) :
 {
 #ifdef __APPLE__
     m_btnOpenFolder->SetLabel( _( "Reveal Themes in Finder" ) );
+
+    // Simple border is too dark on OSX
+    m_colorsListWindow->SetWindowStyle( wxBORDER_SUNKEN|wxVSCROLL );
 #endif
 
     m_buttonSizePx = ConvertDialogToPixels( BUTTON_SIZE );
@@ -178,7 +181,6 @@ void PANEL_COLOR_SETTINGS::createThemeList( const wxString& aCurrent )
 void PANEL_COLOR_SETTINGS::createButton( int aLayer, const KIGFX::COLOR4D& aColor,
                                          const wxString& aName )
 {
-    const int    flags  = wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT | wxRIGHT;
     const wxSize border = ConvertDialogToPixels( BUTTON_BORDER );
 
     wxStaticText* label = new wxStaticText( m_colorsListWindow, wxID_ANY, aName );
@@ -201,8 +203,8 @@ void PANEL_COLOR_SETTINGS::createButton( int aLayer, const KIGFX::COLOR4D& aColo
                                       m_buttonSizePx + border + wxSize( 1, 1 ) );
     button->SetToolTip( _( "Edit color (right click for options)" ) );
 
-    m_colorsGridSizer->Add( label, 0, flags, 5 );
-    m_colorsGridSizer->Add( button, 0, flags, 5 );
+    m_colorsGridSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT | wxLEFT, 5 );
+    m_colorsGridSizer->Add( button, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5 );
 
     m_labels[aLayer]  = label;
     m_buttons[aLayer] = button;

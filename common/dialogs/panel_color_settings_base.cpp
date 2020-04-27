@@ -50,15 +50,19 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	bControlSizer->Add( m_btnOpenFolder, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	m_mainSizer->Add( bControlSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
+	m_mainSizer->Add( bControlSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_mainSizer->Add( m_staticline1, 0, wxEXPAND|wxALL, 5 );
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_mainSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
 
 	m_colorsMainSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_colorsListWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	wxBoxSizer* bottomMargin;
+	bottomMargin = new wxBoxSizer( wxVERTICAL );
+
+	m_colorsListWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxVSCROLL );
 	m_colorsListWindow->SetScrollRate( 5, 5 );
+	m_colorsListWindow->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	m_colorsListWindow->SetMinSize( wxSize( 240,-1 ) );
 
 	m_colorsGridSizer = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -66,14 +70,18 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_colorsGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_colorsGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
+	m_colorsGridSizer->SetMinSize( wxSize( 100,-1 ) );
 
 	m_colorsListWindow->SetSizer( m_colorsGridSizer );
 	m_colorsListWindow->Layout();
 	m_colorsGridSizer->Fit( m_colorsListWindow );
-	m_colorsMainSizer->Add( m_colorsListWindow, 0, wxEXPAND | wxALL, 5 );
+	bottomMargin->Add( m_colorsListWindow, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	m_mainSizer->Add( m_colorsMainSizer, 1, wxEXPAND, 5 );
+	m_colorsMainSizer->Add( bottomMargin, 0, wxEXPAND|wxBOTTOM, 3 );
+
+
+	m_mainSizer->Add( m_colorsMainSizer, 1, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( m_mainSizer );
