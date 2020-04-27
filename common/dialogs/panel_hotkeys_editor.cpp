@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ static wxSearchCtrl* CreateTextFilterBox( wxWindow* aParent, const wxString& aDe
     search_widget->ShowSearchButton( false );
     search_widget->ShowCancelButton( true );
 
-    search_widget->SetDescriptiveText( aDescriptiveText);
+    search_widget->SetDescriptiveText( aDescriptiveText );
 
     return search_widget;
 }
@@ -70,7 +70,7 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
     wxBoxSizer* bMargins = new wxBoxSizer( wxVERTICAL );
 
     wxSearchCtrl* filterSearch = CreateTextFilterBox( this, _( "Type filter text" ) );
-    bMargins->Add( filterSearch, 0, wxBOTTOM | wxEXPAND | wxTOP, margin );
+    bMargins->Add( filterSearch, 0, wxALL | wxEXPAND, margin );
 
     m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore, m_readOnly );
     bMargins->Add( m_hotkeyListCtrl, 1, wxALL | wxEXPAND, margin );
@@ -80,15 +80,15 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
 
     mainSizer->Add( bMargins, 1, wxEXPAND | wxRIGHT | wxLEFT, side_margins );
 
-    this->SetSizer( mainSizer );
-    this->Layout();
+    SetSizer( mainSizer );
+    Layout();
 
 #ifdef __WXGTK__
     // Work around a bug that clips the text vertically in the wxSearchCtrl on GTK
     filterSearch->SetMinSize( wxSize( filterSearch->GetSize().x,
                                       int( filterSearch->GetSize().y * 1.6 ) ) );
 
-    this->Layout();
+    Layout();
 #endif
 
     // Connect Events
