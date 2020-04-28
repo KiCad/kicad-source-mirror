@@ -29,18 +29,22 @@
 
 PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& aDummyItem,
                                                 std::map<int, int>& aSeverities,
-                                                int aFirstErrorCode, int aLastErrorCode ) :
+                                                int aFirstErrorCode, int aLastErrorCode,
+                                                int aPinMapSpecialCase ) :
         wxPanel( aParent->GetTreebook() ),
         m_severities( aSeverities ),
         m_firstErrorCode( aFirstErrorCode ),
-        m_lastErrorCode( aLastErrorCode )
+        m_lastErrorCode( aLastErrorCode ),
+        m_pinMapSpecialCase( aPinMapSpecialCase )
 {
     wxString          severities[] = { _( "Error" ), _( "Warning" ), _( "Ignore" ) };
+    int               severityCount = sizeof( severities ) / sizeof( wxString );
     int               baseID = 1000;
     wxBoxSizer*       panelSizer = new wxBoxSizer( wxVERTICAL );
     wxScrolledWindow* scrollWin = new wxScrolledWindow( this, wxID_ANY,
                                                         wxDefaultPosition, wxDefaultSize,
                                                         wxTAB_TRAVERSAL | wxVSCROLL );
+
     scrollWin->SetScrollRate( 0, 5 );
 
     wxFlexGridSizer* gridSizer = new wxFlexGridSizer( 0, 2, 0, 5 );
@@ -63,7 +67,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& 
    	        wxPanel*    radioPanel = new wxPanel( scrollWin );
    	        wxBoxSizer* radioSizer = new wxBoxSizer( wxHORIZONTAL );
 
-            for( size_t i = 0; i < sizeof( severities ) / sizeof( wxString ); ++i )
+            for( size_t i = 0; i < severityCount; ++i )
             {
                 m_buttonMap[ errorCode ][i] = new wxRadioButton( radioPanel,
                                                                  baseID + errorCode * 10 + i,
@@ -71,13 +75,49 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& 
                                                                  wxDefaultPosition,
                                                                  wxDefaultSize,
                                                                  i == 0 ? wxRB_GROUP : 0 );
-                radioSizer->Add( m_buttonMap[ errorCode ][i], 1, wxRIGHT | wxEXPAND, 25 );
+                radioSizer->Add( m_buttonMap[ errorCode ][i], 0, wxRIGHT | wxEXPAND, 30 );
             }
 
             radioPanel->SetSizer( radioSizer );
             radioPanel->Layout();
             gridSizer->Add( radioPanel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 4  );
         }
+    }
+
+   	if( m_pinMapSpecialCase >= 0 )
+    {
+        wxString pinMapSeverities[] = { _( "From Pin Conflicts Map" ), _( "" ), _( "Ignore" ) };
+   	    int      errorCode = m_pinMapSpecialCase;
+        wxString msg = aDummyItem.GetErrorText( errorCode );
+
+        wxStaticText* errorLabel = new wxStaticText( scrollWin, wxID_ANY, msg + wxT( ":" ) );
+        gridSizer->Add( errorLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 4  );
+
+        wxPanel*    radioPanel = new wxPanel( scrollWin );
+        wxBoxSizer* radioSizer = new wxBoxSizer( wxHORIZONTAL );
+
+        for( size_t i = 0; i < 3; ++i )
+        {
+            if( pinMapSeverities[i] == wxT( "" ) )
+            {
+                wxStaticText* spacer = new wxStaticText( radioPanel, wxID_ANY, wxT( "" ) );
+                radioSizer->Add( spacer, 0, wxRIGHT | wxEXPAND, 17 );
+            }
+            else
+            {
+                m_buttonMap[ errorCode ][i] = new wxRadioButton( radioPanel,
+                                                                 baseID + errorCode * 10 + i,
+                                                                 pinMapSeverities[i],
+                                                                 wxDefaultPosition,
+                                                                 wxDefaultSize,
+                                                                 i == 0 ? wxRB_GROUP : 0 );
+                radioSizer->Add( m_buttonMap[ errorCode ][i], 0, wxEXPAND );
+            }
+        }
+
+        radioPanel->SetSizer( radioSizer );
+        radioPanel->Layout();
+        gridSizer->Add( radioPanel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 4  );
     }
 
     scrollWin->SetSizer( gridSizer );
@@ -106,6 +146,14 @@ void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, int>& aSettings )
         default:                                                                  break;
         }
     }
+
+    if( m_pinMapSpecialCase >= 0 )
+    {
+        int newSeverity = aSettings[ m_pinMapSpecialCase ];
+
+        m_buttonMap[ m_pinMapSpecialCase ][0]->SetValue( newSeverity != RPT_SEVERITY_IGNORE );
+        m_buttonMap[ m_pinMapSpecialCase ][1]->SetValue( newSeverity == RPT_SEVERITY_IGNORE );
+    }
 }
 
 
@@ -113,7 +161,7 @@ bool PANEL_SETUP_SEVERITIES::TransferDataToWindow()
 {
     for( int errorCode = m_firstErrorCode; errorCode <= m_lastErrorCode; ++errorCode )
     {
-        if(! m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
+        if( !m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
             continue;
 
         switch( m_severities[ errorCode ] )
@@ -125,27 +173,47 @@ bool PANEL_SETUP_SEVERITIES::TransferDataToWindow()
         }
     }
 
+    if( m_pinMapSpecialCase >= 0 )
+    {
+        int severity = m_severities[ m_pinMapSpecialCase ];
+
+        m_buttonMap[ m_pinMapSpecialCase ][0]->SetValue( severity != RPT_SEVERITY_IGNORE );
+        m_buttonMap[ m_pinMapSpecialCase ][2]->SetValue( severity == RPT_SEVERITY_IGNORE );
+    }
+
     return true;
 }
 
 
 bool PANEL_SETUP_SEVERITIES::TransferDataFromWindow()
 {
-    for( auto const& entry : m_buttonMap )
+    for( int errorCode = m_firstErrorCode; errorCode <= m_lastErrorCode; ++errorCode )
     {
-        if( !entry.second[0] )  // this entry does not actually exist
+        if( !m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
             continue;
 
         int severity = RPT_SEVERITY_UNDEFINED;
 
-        if( entry.second[0]->GetValue() )
+        if( m_buttonMap[ errorCode ][0]->GetValue() )
             severity = RPT_SEVERITY_ERROR;
-        else if( entry.second[1]->GetValue() )
+        else if( m_buttonMap[ errorCode ][1]->GetValue() )
             severity = RPT_SEVERITY_WARNING;
-        else if( entry.second[2]->GetValue() )
+        else if( m_buttonMap[ errorCode ][2]->GetValue() )
             severity = RPT_SEVERITY_IGNORE;
 
-        m_severities[ entry.first ] = severity;
+        m_severities[ errorCode ] = severity;
+    }
+
+    if( m_pinMapSpecialCase >= 0 )
+    {
+        int severity = RPT_SEVERITY_UNDEFINED;
+
+        if( m_buttonMap[ m_pinMapSpecialCase ][0]->GetValue() )
+            severity = RPT_SEVERITY_ERROR;
+        else if( m_buttonMap[ m_pinMapSpecialCase ][2]->GetValue() )
+            severity = RPT_SEVERITY_IGNORE;
+
+        m_severities[ m_pinMapSpecialCase ] = severity;
     }
 
     return true;

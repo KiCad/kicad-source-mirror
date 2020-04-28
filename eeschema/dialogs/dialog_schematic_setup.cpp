@@ -42,7 +42,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
     ERC_ITEM dummyItem( 0 );
     m_severities = new PANEL_SETUP_SEVERITIES( this, dummyItem, g_ErcSettings->m_Severities,
-                                               ERCE_FIRST, ERCE_LAST );
+                                               ERCE_FIRST, ERCE_LAST, ERCE_PIN_TO_PIN_WARNING );
 
     m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 
@@ -55,8 +55,8 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_treebook->AddSubPage( m_fieldNameTemplates, _( "Field Name Templates" ) );
 
     m_treebook->AddPage( new wxPanel( this ),  _( "Electrical Rules" ) );
-    m_treebook->AddSubPage( m_pinMap, _( "Pin Conflicts Map" ) );
     m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
+    m_treebook->AddSubPage( m_pinMap, _( "Pin Conflicts Map" ) );
 
     m_treebook->AddPage( new wxPanel( this ), _( "Project" ) );
     m_treebook->AddSubPage( m_textVars, _( "Text Variables" ) );

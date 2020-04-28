@@ -56,8 +56,6 @@ enum ERCE_T
     ERCE_DUPLICATE_SHEET_NAME = ERCE_FIRST,  // duplicate sheet names within a given sheet
     ERCE_PIN_NOT_CONNECTED,     // pin not connected and not no connect symbol
     ERCE_PIN_NOT_DRIVEN,        // pin connected to some others pins but no pin to drive it
-    ERCE_PIN_TO_PIN_WARNING,    // pin connected to an other pin: warning level
-    ERCE_PIN_TO_PIN_ERROR,      // pin connected to an other pin: error level
     ERCE_HIERACHICAL_LABEL,     // mismatch between hierarchical labels and pins sheets
     ERCE_NOCONNECT_CONNECTED,   // a no connect symbol is connected to more than 1 pin
     ERCE_NOCONNECT_NOT_CONNECTED, // a no connect symbol is not connected to anything
@@ -73,7 +71,12 @@ enum ERCE_T
     ERCE_BUS_TO_NET_CONFLICT,   // a bus wire is graphically connected to a net port/pin (or vice versa)
     ERCE_GLOBLABEL,             // a global label is unique
     ERCE_UNRESOLVED_VARIABLE,
-    ERCE_LAST = ERCE_UNRESOLVED_VARIABLE
+    ERCE_LAST = ERCE_UNRESOLVED_VARIABLE,
+
+    // Errors after this point will not automatically appear in the Severities Panel
+
+    ERCE_PIN_TO_PIN_WARNING,    // pin connected to an other pin: warning level
+    ERCE_PIN_TO_PIN_ERROR,      // pin connected to an other pin: error level
 };
 
 /* Minimal connection table */

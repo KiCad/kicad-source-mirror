@@ -77,7 +77,7 @@ void SCH_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount     = 2;
 
-    switch( g_ErcSettings->m_Severities[ m_rcItem->GetErrorCode() ] )
+    switch( GetSeverity( m_rcItem->GetErrorCode() ) )
     {
     default:
     case SEVERITY::RPT_SEVERITY_ERROR:   aLayers[0] = LAYER_ERC_ERR;  break;
@@ -93,7 +93,7 @@ SCH_LAYER_ID SCH_MARKER::GetColorLayer() const
     if( IsExcluded() )
         return LAYER_HIDDEN;
 
-    switch( g_ErcSettings->m_Severities[ m_rcItem->GetErrorCode() ] )
+    switch( GetSeverity( m_rcItem->GetErrorCode() ) )
     {
     default:
     case SEVERITY::RPT_SEVERITY_ERROR:   return LAYER_ERC_ERR;

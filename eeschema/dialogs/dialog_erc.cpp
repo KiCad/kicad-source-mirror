@@ -416,29 +416,40 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
     menu.AppendSeparator();
 
-    if( GetSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_WARNING )
+    if( rcItem->GetErrorCode() == ERCE_PIN_TO_PIN_WARNING
+        || rcItem->GetErrorCode() == ERCE_PIN_TO_PIN_ERROR )
     {
-        msg.Printf( _( "Change severity to Error for all '%s' violations" ),
-                    rcItem->GetErrorText( rcItem->GetErrorCode() ),
-                    _( "Violation severities can also be edited in the Board Setup... dialog" ) );
-        menu.Append( 3, msg );
+        // Pin to pin severities edited through pin conflict map
+    }
+    else if( GetSeverity( rcItem->GetErrorCode() ) == RPT_SEVERITY_WARNING )
+    {
+        menu.Append( 4, wxString::Format( _( "Change severity to Error for all '%s' violations" ),
+                                          rcItem->GetErrorText( rcItem->GetErrorCode() ) ),
+                     _( "Violation severities can also be edited in the Board Setup... dialog" ) );
     }
     else
     {
-        msg.Printf( _( "Change severity to Warning for all '%s' violations" ),
-                    rcItem->GetErrorText( rcItem->GetErrorCode() ),
-                    _( "Violation severities can also be edited in the Board Setup... dialog" ) );
-        menu.Append( 4, msg );
+        menu.Append( 5, wxString::Format( _( "Change severity to Warning for all '%s' violations" ),
+                                          rcItem->GetErrorText( rcItem->GetErrorCode() ) ),
+                     _( "Violation severities can also be edited in the Board Setup... dialog" ) );
     }
 
-    msg.Printf( _( "Ignore all '%s' violations" ),
-                rcItem->GetErrorText( rcItem->GetErrorCode() ),
-                _( "Violations will not be checked or reported" ) );
-    menu.Append( 5, msg );
+    menu.Append( 6, wxString::Format( _( "Ignore all '%s' violations" ),
+                                      rcItem->GetErrorText( rcItem->GetErrorCode() ) ),
+                 _( "Violations will not be checked or reported" ) );
 
     menu.AppendSeparator();
 
-    menu.Append( 6, _( "Edit violation severities..." ), _( "Open the Schematic Setup... dialog" ) );
+    if( rcItem->GetErrorCode() == ERCE_PIN_TO_PIN_WARNING
+        || rcItem->GetErrorCode() == ERCE_PIN_TO_PIN_ERROR )
+    {
+        menu.Append( 7, _( "Edit pin-to-pin conflict map..." ) );
+    }
+    else
+    {
+        menu.Append( 8, _( "Edit violation severities..." ),
+                     _( "Open the Schematic Setup... dialog" ) );
+    }
 
     switch( GetPopupMenuSelectionFromUser( menu ) )
     {
@@ -462,7 +473,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         updateDisplayedCounts();
         break;
 
-    case 3:
+    case 4:
         SetSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_ERROR );
 
         // Rebuild model and view
@@ -470,7 +481,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         updateDisplayedCounts();
         break;
 
-    case 4:
+    case 5:
         SetSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_WARNING );
 
         // Rebuild model and view
@@ -478,9 +489,12 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         updateDisplayedCounts();
         break;
 
-    case 5:
+    case 6:
     {
         SetSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_IGNORE );
+
+        if( rcItem->GetErrorCode() == ERCE_PIN_TO_PIN_ERROR )
+            SetSeverity( ERCE_PIN_TO_PIN_WARNING, RPT_SEVERITY_IGNORE );
 
         SCH_SCREENS ScreenList;
         ScreenList.DeleteMarkers( MARKER_BASE::MARKER_ERC, rcItem->GetErrorCode() );
@@ -491,7 +505,11 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     }
         break;
 
-    case 6:
+    case 7:
+        m_parent->DoShowSchematicSetupDialog( _( "Pin Conflicts Map" ) );
+        break;
+
+    case 8:
         m_parent->DoShowSchematicSetupDialog( _( "Violation Severity" ) );
         break;
     }
@@ -606,7 +624,7 @@ bool DIALOG_ERC::writeReport( const wxString& aFullFileName )
 
             total_count++;
 
-            switch( g_ErcSettings->m_Severities[ marker->GetRCItem()->GetErrorCode() ] )
+            switch( GetSeverity( marker->GetRCItem()->GetErrorCode() ) )
             {
             case RPT_SEVERITY_ERROR:   err_count++;  break;
             case RPT_SEVERITY_WARNING: warn_count++; break;

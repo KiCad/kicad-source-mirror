@@ -209,6 +209,24 @@ public:
 
 int GetSeverity( int aErrorCode )
 {
+    // Special-case pin-to-pin errors:
+    // Ignore-or-not is controlled by ERCE_PIN_TO_PIN_WARNING (for both)
+    // Warning-or-error is controlled by which errorCode it is
+    if( aErrorCode == ERCE_PIN_TO_PIN_ERROR )
+    {
+        if( g_ErcSettings->m_Severities[ ERCE_PIN_TO_PIN_WARNING ] == RPT_SEVERITY_IGNORE )
+            return RPT_SEVERITY_IGNORE;
+        else
+            return RPT_SEVERITY_ERROR;
+    }
+    else if( aErrorCode == ERCE_PIN_TO_PIN_WARNING )
+    {
+        if( g_ErcSettings->m_Severities[ ERCE_PIN_TO_PIN_WARNING ] == RPT_SEVERITY_IGNORE )
+            return RPT_SEVERITY_IGNORE;
+        else
+            return RPT_SEVERITY_WARNING;
+    }
+
     return g_ErcSettings->m_Severities[ aErrorCode ];
 }
 

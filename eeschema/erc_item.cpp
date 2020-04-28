@@ -46,9 +46,9 @@ wxString ERC_ITEM::GetErrorText( int aErrorCode ) const
     case ERCE_PIN_NOT_DRIVEN:
         return wxString( _( "Pin connected to other pins, but not driven by any pin" ) );
     case ERCE_PIN_TO_PIN_WARNING:
-        return wxString( _("Conflict problem between pins. Severity: warning") );
+        KI_FALLTHROUGH;         // Must share text with ERCE_PIN_TO_PIN_ERROR
     case ERCE_PIN_TO_PIN_ERROR:
-        return wxString( _("Conflict problem between pins. Severity: error") );
+        return wxString( _("Conflict problem between pins") );
     case ERCE_HIERACHICAL_LABEL:
         return wxString( _("Mismatch between hierarchical labels and pins sheets") );
     case ERCE_NOCONNECT_CONNECTED:
@@ -81,6 +81,6 @@ wxString ERC_ITEM::GetErrorText( int aErrorCode ) const
         return wxString( _( "Unresolved text variable" ) );
     default:
         wxFAIL_MSG( "Missing ERC error description" );
-        return wxString( wxT("Unknown.") );
+        return wxString( wxT( "Unknown" ) );
     }
 }

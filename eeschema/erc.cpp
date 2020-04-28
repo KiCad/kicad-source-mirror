@@ -427,6 +427,15 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
         if( aNetItemRef == netItemTst )
             continue;
 
+        if( netItemTst < aList->size() )
+        {
+            ELECTRICAL_PINTYPE test_elect_type = aList->GetItem( netItemTst )->m_ElectricalPinType;
+            erc = PinMap[static_cast<int>( ref_elect_type )][static_cast<int>(test_elect_type )];
+        }
+
+        if( erc != OK )
+            Diagnose( aList->GetItem( aNetItemRef ), aList->GetItem( netItemTst ), 1, erc );
+
         // We examine only a given net. We stop the search if the net changes
         if( ( netItemTst >= aList->size() ) // End of list
             || ( aList->GetItemNet( aNetItemRef ) !=
@@ -528,8 +537,6 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
                 {
                     if( aList->GetConnectionType( netItemTst ) == NET_CONNECTION::UNCONNECTED )
                     {
-                        Diagnose( aList->GetItem( aNetItemRef ), aList->GetItem( netItemTst ),
-                                  0, erc );
                         aList->SetConnectionType( netItemTst,
                                                   NET_CONNECTION::NOCONNECT_SYMBOL_PRESENT );
                     }
