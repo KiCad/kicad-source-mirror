@@ -81,14 +81,22 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
 
 int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem, wxString* aSource ) const
 {
-    NETCLASSPTR netclass = GetNetClass();
-    int         myClearance = netclass->GetClearance();
+    NETCLASSPTR netclass;
 
-    if( aSource )
-        *aSource = wxString::Format( _( "%s netclass clearance" ), netclass->GetName() );
+    // NB: we must check the net first, as when it is 0 GetNetClass() will return the
+    // orphaned net netclass, not the default netclass.
+    if( m_netinfo->GetNet() == 0 )
+        netclass = GetBoard()->GetDesignSettings().GetDefault();
+    else
+        netclass = GetNetClass();
+
+    int myClearance = netclass->GetClearance();
 
     if( aItem && aItem->GetClearance() > myClearance )
         return aItem->GetClearance( nullptr, aSource );
+
+    if( aSource )
+        *aSource = wxString::Format( _( "%s netclass clearance" ), netclass->GetName() );
 
     return myClearance;
 }
