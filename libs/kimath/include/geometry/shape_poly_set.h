@@ -1169,7 +1169,7 @@ class SHAPE_POLY_SET : public SHAPE
          * @return int -  The minimum distance between aPoint and all the segments of the aIndex-th
          *                polygon. If the point is contained in the polygon, the distance is zero.
          */
-        int DistanceToPolygon( VECTOR2I aPoint, int aIndex );
+        SEG::ecoord SquaredDistanceToPolygon( VECTOR2I aPoint, int aIndex );
 
         /**
          * Function DistanceToPolygon
@@ -1183,26 +1183,28 @@ class SHAPE_POLY_SET : public SHAPE
          *                  aIndex-th polygon. If the point is contained in the polygon, the
          *                  distance is zero.
          */
-        int DistanceToPolygon( const SEG& aSegment, int aIndex, int aSegmentWidth = 0 );
+        SEG::ecoord SquaredDistanceToPolygon( const SEG& aSegment, int aIndex );
 
         /**
-         * Function DistanceToPolygon
-         * computes the minimum distance between aPoint and all the polygons in the set
+         * Function SquaredDistance
+         * computes the minimum distance squared between aPoint and all the polygons in the set.
+         * Squared distances are used because they avoid the cost of doing square-roots.
          * @param  aPoint is the point whose distance to the set has to be measured.
-         * @return int -  The minimum distance between aPoint and all the polygons in the set. If
-         *                the point is contained in any of the polygons, the distance is zero.
+         * @return The minimum distance squared between aPoint and all the polygons in the set.
+         *         If the point is contained in any of the polygons, the distance is zero.
          */
-        int Distance( VECTOR2I aPoint );
+        SEG::ecoord SquaredDistance( VECTOR2I aPoint );
 
         /**
-         * Function DistanceToPolygon
-         * computes the minimum distance between aSegment and all the polygons in the set.
+         * Function SquaredDistance
+         * computes the minimum distance squared between aSegment and all the polygons in the set.
+         * Squared distances are used because they avoid the cost of doing square-roots.
          * @param  aSegment is the segment whose distance to the polygon set has to be measured.
          * @param  aSegmentWidth is the width of the segment; defaults to zero.
-         * @return int -    The minimum distance between aSegment and all the polygons in the set.
-         *                  If the point is contained in the polygon, the distance is zero.
+         * @return  The minimum distance squared between aSegment and all the polygons in the set.
+         *          If the point is contained in the polygon, the distance is zero.
          */
-        int Distance( const SEG& aSegment, int aSegmentWidth = 0 );
+        SEG::ecoord SquaredDistance( const SEG& aSegment );
 
         /**
          * Function IsVertexInHole.

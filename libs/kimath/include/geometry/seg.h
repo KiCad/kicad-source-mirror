@@ -113,6 +113,11 @@ public:
         return (A != aSeg.A || B != aSeg.B);
     }
 
+    static SEG::ecoord Square( int a )
+    {
+        return ecoord( a ) * a;
+    }
+
     /**
       * Function LineProject()
       *

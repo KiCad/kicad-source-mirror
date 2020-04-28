@@ -1557,7 +1557,7 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::FilletPolygon( unsigned int aRadius, int
 }
 
 
-int SHAPE_POLY_SET::DistanceToPolygon( VECTOR2I aPoint, int aPolygonIndex )
+SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( VECTOR2I aPoint, int aPolygonIndex )
 {
     // We calculate the min dist between the segment and each outline segment.  However, if the
     // segment to test is inside the outline, and does not cross any edge, it can be seen outside
@@ -1569,13 +1569,13 @@ int SHAPE_POLY_SET::DistanceToPolygon( VECTOR2I aPoint, int aPolygonIndex )
     SEGMENT_ITERATOR iterator = IterateSegmentsWithHoles( aPolygonIndex );
 
     SEG polygonEdge = *iterator;
-    int minDistance = polygonEdge.Distance( aPoint );
+    SEG::ecoord minDistance = polygonEdge.SquaredDistance( aPoint );
 
     for( iterator++; iterator && minDistance > 0; iterator++ )
     {
         polygonEdge = *iterator;
 
-        int currentDistance = polygonEdge.Distance( aPoint );
+        SEG::ecoord currentDistance = polygonEdge.SquaredDistance( aPoint );
 
         if( currentDistance < minDistance )
             minDistance = currentDistance;
@@ -1585,7 +1585,7 @@ int SHAPE_POLY_SET::DistanceToPolygon( VECTOR2I aPoint, int aPolygonIndex )
 }
 
 
-int SHAPE_POLY_SET::DistanceToPolygon( const SEG& aSegment, int aPolygonIndex, int aSegmentWidth )
+SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( const SEG& aSegment, int aPolygonIndex )
 {
     // We calculate the min dist between the segment and each outline segment.  However, if the
     // segment to test is inside the outline, and does not cross any edge, it can be seen outside
@@ -1595,38 +1595,33 @@ int SHAPE_POLY_SET::DistanceToPolygon( const SEG& aSegment, int aPolygonIndex, i
         return 0;
 
     SEGMENT_ITERATOR iterator = IterateSegmentsWithHoles( aPolygonIndex );
-
-    SEG polygonEdge = *iterator;
-    int minDistance = polygonEdge.Distance( aSegment );
+    SEG              polygonEdge = *iterator;
+    SEG::ecoord      minDistance = polygonEdge.SquaredDistance( aSegment );
 
     for( iterator++; iterator && minDistance > 0; iterator++ )
     {
         polygonEdge = *iterator;
 
-        int currentDistance = polygonEdge.Distance( aSegment );
+        SEG::ecoord currentDistance = polygonEdge.SquaredDistance( aSegment );
 
         if( currentDistance < minDistance )
             minDistance = currentDistance;
     }
-
-    // Take into account the width of the segment
-    if( aSegmentWidth > 0 )
-        minDistance -= aSegmentWidth / 2;
 
     // Return the maximum of minDistance and zero
     return minDistance < 0 ? 0 : minDistance;
 }
 
 
-int SHAPE_POLY_SET::Distance( VECTOR2I aPoint )
+SEG::ecoord SHAPE_POLY_SET::SquaredDistance( VECTOR2I aPoint )
 {
-    int currentDistance;
-    int minDistance = DistanceToPolygon( aPoint, 0 );
+    SEG::ecoord currentDistance;
+    SEG::ecoord minDistance = SquaredDistanceToPolygon( aPoint, 0 );
 
     // Iterate through all the polygons and get the minimum distance.
     for( unsigned int polygonIdx = 1; polygonIdx < m_polys.size(); polygonIdx++ )
     {
-        currentDistance = DistanceToPolygon( aPoint, polygonIdx );
+        currentDistance = SquaredDistanceToPolygon( aPoint, polygonIdx );
 
         if( currentDistance < minDistance )
             minDistance = currentDistance;
@@ -1636,15 +1631,15 @@ int SHAPE_POLY_SET::Distance( VECTOR2I aPoint )
 }
 
 
-int SHAPE_POLY_SET::Distance( const SEG& aSegment, int aSegmentWidth )
+SEG::ecoord SHAPE_POLY_SET::SquaredDistance( const SEG& aSegment )
 {
-    int currentDistance;
-    int minDistance = DistanceToPolygon( aSegment, 0, aSegmentWidth );
+    SEG::ecoord currentDistance;
+    SEG::ecoord minDistance = SquaredDistanceToPolygon( aSegment, 0 );
 
     // Iterate through all the polygons and get the minimum distance.
     for( unsigned int polygonIdx = 1; polygonIdx < m_polys.size(); polygonIdx++ )
     {
-        currentDistance = DistanceToPolygon( aSegment, polygonIdx, aSegmentWidth );
+        currentDistance = SquaredDistanceToPolygon( aSegment, polygonIdx );
 
         if( currentDistance < minDistance )
             minDistance = currentDistance;

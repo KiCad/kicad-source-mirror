@@ -43,12 +43,6 @@
 #include <macros.h>
 
 
-static SEG::ecoord square( int a )
-{
-    return SEG::ecoord( a ) * a;
-}
-
-
 /**
  * compare 2 convex polygons and return true if distance > aDist (if no error DRC)
  * i.e if for each edge of the first polygon distance from each edge of the other polygon
@@ -366,7 +360,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 // Avoid square-roots if possible (for performance)
                 SEG::ecoord center2center_squared = refSeg.SquaredDistance( slotSeg );
 
-                if( center2center_squared < square( center2centerAllowed ) )
+                if( center2center_squared < SEG::Square( center2centerAllowed ) )
                 {
                     int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
                     DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_THROUGH_HOLE );
@@ -460,7 +454,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             if( !m_reportAllTrackErrors )
                 return;
         }
-        else if( center2center_squared < square( center2centerAllowed ) )
+        else if( center2center_squared < SEG::Square( center2centerAllowed ) )
         {
             int errorCode = DRCE_TRACK_ENDS;
 
@@ -511,23 +505,26 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
             wxString        clearanceSource;
             int             minClearance = aRefSeg->GetClearance( zone, &clearanceSource );
+            int             widths = refSegWidth / 2;
+            int             center2centerAllowed = minClearance + widths;
             SHAPE_POLY_SET* outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
 
-            int error = minClearance - outline->Distance( testSeg, refSegWidth );
+            SEG::ecoord     center2center_squared = outline->SquaredDistance( testSeg );
 
             // to avoid false positive, due to rounding issues and approxiamtions
             // in distance and clearance calculations, use a small threshold for distance
             // (1 micron)
             #define THRESHOLD_DIST Millimeter2iu( 0.001 )
 
-            if( error > THRESHOLD_DIST )
+            if( center2center_squared + THRESHOLD_DIST < SEG::Square( center2centerAllowed ) )
             {
+                int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_ZONE );
 
                 msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                             clearanceSource,
                             MessageTextFromValue( userUnits(), minClearance, true ),
-                            MessageTextFromValue( userUnits(), minClearance - error, true ) );
+                            MessageTextFromValue( userUnits(), actual, true ) );
 
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( aRefSeg, zone );
@@ -560,7 +557,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         {
             SEG::ecoord center2center_squared = testSeg.SquaredDistance(  *it );
 
-            if( center2center_squared < square( center2centerAllowed ) )
+            if( center2center_squared < SEG::Square( center2centerAllowed ) )
             {
                 VECTOR2I pt = testSeg.NearestPoint( *it );
 
@@ -861,7 +858,7 @@ bool DRC::checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_P
         // Avoid square-roots if possible (for performance)
         SEG::ecoord center2center_squared = refSeg.SquaredDistance( padSeg );
 
-        if( center2center_squared < square( center2centerAllowed ) )
+        if( center2center_squared < SEG::Square( center2centerAllowed ) )
         {
             *aActualDist = std::max( 0.0, sqrt( center2center_squared ) - widths );
             return false;
