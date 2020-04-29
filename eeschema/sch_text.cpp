@@ -625,10 +625,8 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
     // Draw graphic symbol for global or hierarchical labels
     CreateGraphicShape( aPlotter->RenderSettings(), Poly, GetTextPos() );
 
-    aPlotter->SetCurrentLineWidth( penWidth );
-
     if( Poly.size() )
-        aPlotter->PlotPoly( Poly, NO_FILL );
+        aPlotter->PlotPoly( Poly, NO_FILL, penWidth );
 }
 
 
@@ -1123,10 +1121,10 @@ void SCH_HIERLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
 void SCH_HIERLABEL::CreateGraphicShape( RENDER_SETTINGS* aRenderSettings,
                                         std::vector<wxPoint>& aPoints, const wxPoint& Pos )
 {
-    int  margin   = GetTextOffset( aRenderSettings );
     int* Template = TemplateShape[static_cast<int>( m_shape )][static_cast<int>( m_spin_style )];
-    int  halfSize = ( GetTextHeight() / 2 ) + margin;
-    int  imax = *Template; Template++;
+    int  halfSize = GetTextHeight() / 2;
+    int  imax = *Template;
+    Template++;
 
     aPoints.clear();
 
