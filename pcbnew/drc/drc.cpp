@@ -224,7 +224,8 @@ int DRC::TestZoneToZoneOutlines()
             // Get clearance used in zone to zone test.  The policy used to
             // obtain that value is now part of the zone object itself by way of
             // ZONE_CONTAINER::GetClearance().
-            int zone2zoneClearance = zoneRef->GetClearance( zoneToTest );
+            wxString clearanceSource;
+            int      zone2zoneClearance = zoneRef->GetClearance( zoneToTest, &clearanceSource );
 
             // Keepout areas have no clearance, so set zone2zoneClearance to 1
             // ( zone2zoneClearance = 0  can create problems in test functions)
@@ -313,7 +314,8 @@ int DRC::TestZoneToZoneOutlines()
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_TOO_CLOSE );
 
-                msg.Printf( drcItem->GetErrorText() + _( "(minimum %s; actual %s)" ),
+                msg.Printf( drcItem->GetErrorText() + _( "(%s %s; actual %s)" ),
+                            clearanceSource,
                             MessageTextFromValue( userUnits(), zone2zoneClearance ),
                             MessageTextFromValue( userUnits(), conflict.second ) );
 
@@ -543,7 +545,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_CLEARANCE );
 
-        msg.Printf( drcItem->GetErrorText() + _( "(global minimum %s; '%s' minimum %s)" ),
+        msg.Printf( drcItem->GetErrorText() + _( "(board minimum %s; '%s' minimum %s)" ),
                     MessageTextFromValue( userUnits(), g.m_TrackClearance, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetClearance(), true ) );
@@ -558,7 +560,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_TRACKWIDTH );
 
-        msg.Printf( drcItem->GetErrorText() + _( "(global minimum %s; '%s' minimum %s)" ),
+        msg.Printf( drcItem->GetErrorText() + _( "(board minimum %s; '%s' minimum %s)" ),
                     MessageTextFromValue( userUnits(), g.m_TrackMinWidth, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetTrackWidth(), true ) );
@@ -572,7 +574,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIASIZE );
 
-        msg.Printf( drcItem->GetErrorText() + _( "(global minimum %s; '%s' minimum %s)" ),
+        msg.Printf( drcItem->GetErrorText() + _( "(board minimum %s; '%s' minimum %s)" ),
                     MessageTextFromValue( userUnits(), g.m_ViasMinSize, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetViaDiameter(), true ) );
@@ -586,7 +588,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIADRILLSIZE );
 
-        msg.Printf( drcItem->GetErrorText() + _( "(global minimum %s; '%s' minimum %s)" ),
+        msg.Printf( drcItem->GetErrorText() + _( "(board minimum %s; '%s' minimum %s)" ),
                     MessageTextFromValue( userUnits(), g.m_ViasMinDrill, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetViaDrill(), true ) );
@@ -600,7 +602,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIASIZE );
 
-        msg.Printf( drcItem->GetErrorText() + _( "(global minimum %s; '%s' minimum %s)" ),
+        msg.Printf( drcItem->GetErrorText() + _( "(board minimum %s; '%s' minimum %s)" ),
                     MessageTextFromValue( userUnits(), g.m_MicroViasMinSize, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetuViaDiameter(), true ) );
@@ -614,7 +616,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIADRILLSIZE );
 
-        msg.Printf( drcItem->GetErrorText() + _( "(global minimum %s; '%s' minimum %s)" ),
+        msg.Printf( drcItem->GetErrorText() + _( "(board minimum %s; '%s' minimum %s)" ),
                     MessageTextFromValue( userUnits(), g.m_MicroViasMinDrill, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetuViaDrill(), true ) );
@@ -751,7 +753,7 @@ void DRC::testDrilledHoles()
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DRILLED_HOLES_TOO_CLOSE );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (minimum %s; actual %s)" ),
+                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                             MessageTextFromValue( userUnits(), holeToHoleMin, true ),
                             MessageTextFromValue( userUnits(), actual, true ) );
 
