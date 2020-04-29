@@ -873,7 +873,7 @@ bool DRC::checkClearanceSegmToPad( const SEG& refSeg, int refSegWidth, const D_P
         // RECT (size - 2*r) with a clearance increased by r
         if( pad->GetShape() == PAD_SHAPE_ROUNDRECT )
         {
-            padBBox.Inflate( -2 * pad->GetRoundRectCornerRadius() );
+            padBBox.Inflate( - pad->GetRoundRectCornerRadius() );
             widths += pad->GetRoundRectCornerRadius();
         }
 
