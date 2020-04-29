@@ -312,14 +312,25 @@ int DRC::TestZoneToZoneOutlines()
 
             for( const std::pair<const wxPoint, int>& conflict : conflictPoints )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONES_TOO_CLOSE );
+                int       actual = conflict.second;
+                DRC_ITEM* drcItem;
 
-                msg.Printf( drcItem->GetErrorText() + _( "(%s %s; actual %s)" ),
-                            clearanceSource,
-                            MessageTextFromValue( userUnits(), zone2zoneClearance ),
-                            MessageTextFromValue( userUnits(), conflict.second ) );
+                if( actual <= 0 )
+                {
+                    drcItem = new DRC_ITEM( DRCE_ZONES_INTERSECT );
+                }
+                else
+                {
+                    drcItem = new DRC_ITEM( DRCE_ZONES_TOO_CLOSE );
 
-                drcItem->SetErrorMessage( msg );
+                    msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                                clearanceSource,
+                                MessageTextFromValue( userUnits(), zone2zoneClearance, true ),
+                                MessageTextFromValue( userUnits(), conflict.second, true ) );
+
+                    drcItem->SetErrorMessage( msg );
+                }
+
                 drcItem->SetItems( zoneRef, zoneToTest );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, conflict.first );
@@ -347,7 +358,12 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
     testOutline();
 
-    // someone should have cleared the two lists before calling this.
+    if( aMessages )
+    {
+        aMessages->AppendText( _( "Netclasses...\n" ) );
+        wxSafeYield();
+    }
+
     if( !testNetClasses() )
     {
         // testing the netclasses is a special case because if the netclasses
@@ -355,7 +371,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         // class (a NET) will cause its items such as tracks, vias, and pads
         // to also fail.  So quit after *all* netclass errors have been reported.
         if( aMessages )
-            aMessages->AppendText( _( "Aborting\n" ) );
+            aMessages->AppendText( _( "NETCLASS VIOLATIONS: Aborting DRC\n" ) );
 
         // update the m_drcDialog listboxes
         updatePointers();
@@ -545,7 +561,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_CLEARANCE );
 
-        msg.Printf( drcItem->GetErrorText() + _( "(board minimum %s; '%s' minimum %s)" ),
+        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
                     MessageTextFromValue( userUnits(), g.m_TrackClearance, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetClearance(), true ) );
@@ -560,7 +576,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_TRACKWIDTH );
 
-        msg.Printf( drcItem->GetErrorText() + _( "(board minimum %s; '%s' minimum %s)" ),
+        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
                     MessageTextFromValue( userUnits(), g.m_TrackMinWidth, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetTrackWidth(), true ) );
@@ -574,7 +590,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIASIZE );
 
-        msg.Printf( drcItem->GetErrorText() + _( "(board minimum %s; '%s' minimum %s)" ),
+        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
                     MessageTextFromValue( userUnits(), g.m_ViasMinSize, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetViaDiameter(), true ) );
@@ -588,7 +604,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIADRILLSIZE );
 
-        msg.Printf( drcItem->GetErrorText() + _( "(board minimum %s; '%s' minimum %s)" ),
+        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
                     MessageTextFromValue( userUnits(), g.m_ViasMinDrill, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetViaDrill(), true ) );
@@ -602,7 +618,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIASIZE );
 
-        msg.Printf( drcItem->GetErrorText() + _( "(board minimum %s; '%s' minimum %s)" ),
+        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
                     MessageTextFromValue( userUnits(), g.m_MicroViasMinSize, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetuViaDiameter(), true ) );
@@ -616,7 +632,7 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIADRILLSIZE );
 
-        msg.Printf( drcItem->GetErrorText() + _( "(board minimum %s; '%s' minimum %s)" ),
+        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
                     MessageTextFromValue( userUnits(), g.m_MicroViasMinDrill, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetuViaDrill(), true ) );
@@ -1308,9 +1324,11 @@ void DRC::testOutline()
 
 void DRC::testDisabledLayers()
 {
-    BOARD* board = m_pcbEditorFrame->GetBoard();
+    BOARD*   board = m_pcbEditorFrame->GetBoard();
     wxCHECK( board, /*void*/ );
-    LSET disabledLayers = board->GetEnabledLayers().flip();
+
+    LSET     disabledLayers = board->GetEnabledLayers().flip();
+    wxString msg;
 
     // Perform the test only for copper layers
     disabledLayers &= LSET::AllCuMask();
@@ -1320,6 +1338,11 @@ void DRC::testDisabledLayers()
         if( disabledLayers.test( track->GetLayer() ) )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DISABLED_LAYER_ITEM );
+
+            msg.Printf( drcItem->GetErrorText() + _( "layer %s" ),
+                        track->GetLayerName() );
+
+            drcItem->SetErrorMessage( msg );
             drcItem->SetItems( track );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, track->GetPosition() );
@@ -1335,6 +1358,11 @@ void DRC::testDisabledLayers()
                         if( disabledLayers.test( child->GetLayer() ) )
                         {
                             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DISABLED_LAYER_ITEM );
+
+                            msg.Printf( drcItem->GetErrorText() + _( "layer %s" ),
+                                        child->GetLayerName() );
+
+                            drcItem->SetErrorMessage( msg );
                             drcItem->SetItems( child );
 
                             MARKER_PCB* marker = new MARKER_PCB( drcItem, child->GetPosition() );
@@ -1348,6 +1376,11 @@ void DRC::testDisabledLayers()
         if( disabledLayers.test( zone->GetLayer() ) )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DISABLED_LAYER_ITEM );
+
+            msg.Printf( drcItem->GetErrorText() + _( "layer %s" ),
+                        zone->GetLayerName() );
+
+            drcItem->SetErrorMessage( msg );
             drcItem->SetItems( zone );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, zone->GetPosition() );

@@ -64,17 +64,17 @@ wxString DRC_ITEM::GetErrorText( int aCode ) const
     case DRCE_VIA_HOLE_BIGGER:
         return wxString( _( "Via hole > diameter" ) );
     case DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR:
-        return wxString( _( "Micro Via: incorrect layer pairs (not adjacent)" ) );
+        return wxString( _( "Micro Via: incorrect layer pairs" ) );
     case DRCE_MICRO_VIA_NOT_ALLOWED:
-        return wxString( _( "Micro Via: not allowed" ) );
+        return wxString( _( "Micro Via: not allowed (board design rule constraints)" ) );
     case DRCE_BURIED_VIA_NOT_ALLOWED:
-        return wxString( _( "Buried Via: not allowed" ) );
+        return wxString( _( "Buried Via: not allowed (board design rule constraints)" ) );
     case DRCE_DISABLED_LAYER_ITEM:
         return wxString( _( "Item on a disabled layer" ) );
     case DRCE_ZONES_INTERSECT:
-        return wxString( _( "Copper area inside copper area" ) );
+        return wxString( _( "Copper areas intersect" ) );
     case DRCE_ZONES_TOO_CLOSE:
-        return wxString( _( "Copper areas intersect or are too close" ) );
+        return wxString( _( "Copper areas too close" ) );
 
     case DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE:
         return wxString( _( "Copper area belongs to a net which has no pads" ) );
@@ -102,17 +102,17 @@ wxString DRC_ITEM::GetErrorText( int aCode ) const
 
     // use &lt; since this is text ultimately embedded in HTML
     case DRCE_NETCLASS_TRACKWIDTH:
-        return wxString( _( "NetClass Track Width < global limit" ) );
+        return wxString( _( "NetClass Track Width too small" ) );
     case DRCE_NETCLASS_CLEARANCE:
-        return wxString( _( "NetClass Clearance < global limit" ) );
+        return wxString( _( "NetClass Clearance too small" ) );
     case DRCE_NETCLASS_VIASIZE:
-        return wxString( _( "NetClass Via Dia < global limit" ) );
+        return wxString( _( "NetClass Via Dia too small" ) );
     case DRCE_NETCLASS_VIADRILLSIZE:
-        return wxString( _( "NetClass Via Drill < global limit" ) );
+        return wxString( _( "NetClass Via Drill too small" ) );
     case DRCE_NETCLASS_uVIASIZE:
-        return wxString( _( "NetClass uVia Dia < global limit" ) );
+        return wxString( _( "NetClass uVia Dia too small" ) );
     case DRCE_NETCLASS_uVIADRILLSIZE:
-        return wxString( _( "NetClass uVia Drill < global limit" ) );
+        return wxString( _( "NetClass uVia Drill too small" ) );
 
     case DRCE_VIA_INSIDE_KEEPOUT:
         return wxString( _( "Via inside keepout area" ) );

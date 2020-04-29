@@ -167,7 +167,8 @@ void RC_TREE_MODEL::rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities 
         m_tree.push_back( new RC_TREE_NODE( nullptr, drcItem, RC_TREE_NODE::MARKER ) );
         RC_TREE_NODE* n = m_tree.back();
 
-        n->m_Children.push_back( new RC_TREE_NODE( n, drcItem, RC_TREE_NODE::MAIN_ITEM ) );
+        if( drcItem->GetMainItemID() != niluuid )
+            n->m_Children.push_back( new RC_TREE_NODE( n, drcItem, RC_TREE_NODE::MAIN_ITEM ) );
 
         if( drcItem->GetAuxItemID() != niluuid )
             n->m_Children.push_back( new RC_TREE_NODE( n, drcItem, RC_TREE_NODE::AUX_ITEM ) );

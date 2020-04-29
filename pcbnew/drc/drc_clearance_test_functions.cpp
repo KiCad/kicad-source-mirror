@@ -265,8 +265,8 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         // and **only one layer** can be drilled
         if( refvia->GetViaType() == VIATYPE::MICROVIA )
         {
-            PCB_LAYER_ID    layer1, layer2;
-            bool        err = true;
+            PCB_LAYER_ID layer1, layer2;
+            bool         err = true;
 
             refvia->LayerPair( &layer1, &layer2 );
 
@@ -281,6 +281,12 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             if( err )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR );
+
+                msg.Printf( drcItem->GetErrorText() + _( " (%s and %s not adjacent)" ),
+                            m_pcb->GetLayerName( layer1 ),
+                            m_pcb->GetLayerName( layer2 ) );
+
+                drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( refvia );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
