@@ -140,7 +140,7 @@ BOOST_AUTO_TEST_CASE( SegDistance )
         {
             SHAPE_POLY_SET polyset = c.m_polyset;
 
-            int dist = sqrt( polyset.SquaredDistance( c.m_seg ) ) - c.m_seg_width;
+            int dist = sqrt( polyset.SquaredDistance( c.m_seg ) ) - ( c.m_seg_width / 2 );
 
             // right answer?
             BOOST_CHECK_PREDICATE( KI_TEST::IsWithin<int>, ( dist )( c.m_exp_dist )( 1 ) );
