@@ -31,7 +31,7 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
     if( COMPILER_SUPPORTS_WSUGGEST_OVERRIDE )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsuggest-override" )
-        message( STATUS "Enabling warning -Wsugest-override" )
+        message( STATUS "Enabling warning -Wsuggest-override" )
     endif()
 
 
