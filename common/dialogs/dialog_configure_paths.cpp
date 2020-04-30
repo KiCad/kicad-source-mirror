@@ -413,8 +413,12 @@ void DIALOG_CONFIGURE_PATHS::OnDeleteSearchPath( wxCommandEvent& event )
     m_SearchPaths->CommitPendingChanges( true /* silent mode; we don't care if it's valid */ );
     m_SearchPaths->DeleteRows( curRow, 1 );
 
-    m_SearchPaths->MakeCellVisible( std::max( 0, curRow-1 ), m_SearchPaths->GetGridCursorCol() );
-    m_SearchPaths->SetGridCursor( std::max( 0, curRow-1 ), m_SearchPaths->GetGridCursorCol() );
+    // if there are still rows in grid, make previous row visible
+    if( m_SearchPaths->GetNumberRows() )
+    {
+        m_SearchPaths->MakeCellVisible( std::max( 0, curRow-1 ), m_SearchPaths->GetGridCursorCol() );
+        m_SearchPaths->SetGridCursor( std::max( 0, curRow-1 ), m_SearchPaths->GetGridCursorCol() );
+    }
 }
 
 
