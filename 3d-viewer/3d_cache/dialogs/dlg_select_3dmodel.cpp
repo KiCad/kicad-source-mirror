@@ -92,8 +92,8 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
             if( !ext_list.empty() )
             {
                 wxString full_filter;
-                full_filter.Printf( _( "All supported files (%s)|%s)" ), ext_list, ext_list );
-                full_filter << '|' << filter;
+                full_filter.Printf( _( "All supported files (%s)" ), ext_list );
+                full_filter << '|' << ext_list << '|' << filter;
                 m_FileTree->SetFilter( full_filter );
             }
             else
