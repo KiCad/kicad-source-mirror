@@ -146,7 +146,7 @@ void SCH_FIELD::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
     COLOR4D  color = aSettings->GetLayerColor( IsForceVisible() ? LAYER_HIDDEN : m_Layer );
     int      orient;
     wxPoint  textpos;
-    int      penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetDefaultPenWidth() );
+    int      penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
 
     if( ( !IsVisible() && !IsForceVisible() ) || IsVoid() )
         return;
@@ -483,8 +483,8 @@ bool SCH_FIELD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 void SCH_FIELD::Plot( PLOTTER* aPlotter )
 {
     COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( GetLayer() );
-    int     penWidth = std::max( GetEffectiveTextPenWidth(),
-                                 aPlotter->RenderSettings()->GetDefaultPenWidth() );
+    int     penWidth = GetEffectiveTextPenWidth(
+                            aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
     if( !IsVisible() )
         return;

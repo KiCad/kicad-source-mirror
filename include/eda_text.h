@@ -156,7 +156,12 @@ public:
      */
     void SetTextThickness( int aWidth ) { m_e.penwidth = aWidth; };
     int GetTextThickness() const { return m_e.penwidth; };
-    int GetEffectiveTextPenWidth() const;
+
+    /**
+     * The EffectiveTextPenWidth uses the text thickness if > 1 or
+     * aDefaultWidth.
+     */
+    int GetEffectiveTextPenWidth( int aDefaultWidth = 0 ) const;
 
     virtual void SetTextAngle( double aAngle )
     {

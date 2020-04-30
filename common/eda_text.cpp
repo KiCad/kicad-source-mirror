@@ -149,15 +149,19 @@ void EDA_TEXT::SwapEffects( EDA_TEXT& aTradingPartner )
 }
 
 
-int EDA_TEXT::GetEffectiveTextPenWidth() const
+int EDA_TEXT::GetEffectiveTextPenWidth( int aDefaultWidth ) const
 {
     int width = GetTextThickness();
 
-    if( width <= 0 )
+    if( width <= 1 )
     {
+        width = aDefaultWidth;
+
         if( IsBold() )
             width = GetPenSizeForBold( GetTextWidth() );
-        else
+
+        // Avoid using a 0 width for text: it can create issues when drawing it
+        if( width <= 1 )
             width = 1;
     }
 

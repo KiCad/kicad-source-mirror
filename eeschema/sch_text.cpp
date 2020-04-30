@@ -592,8 +592,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
     static std::vector<wxPoint> Poly;
     COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( GetLayer() );
-    int penWidth = std::max( GetEffectiveTextPenWidth(),
-                             aPlotter->RenderSettings()->GetDefaultPenWidth() );
+    int penWidth = GetEffectiveTextPenWidth( aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
     aPlotter->SetCurrentLineWidth( penWidth );
 
