@@ -42,8 +42,7 @@ DIALOG_EDIT_SHEET_PIN::DIALOG_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_
     DIALOG_EDIT_SHEET_PIN_BASE( parent ),
     m_frame( parent ),
     m_sheetPin( aPin ),
-    m_textWidth( parent, m_widthLabel, m_widthCtrl, m_widthUnits, true ),
-    m_textHeight( parent, m_heightLabel, m_heightCtrl, m_heightUnits, true )
+    m_textSize( parent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true )
 {
     for( const wxString& sheetPinType : sheetPinTypes )
         m_choiceConnectionType->Append( sheetPinType );
@@ -79,8 +78,9 @@ bool DIALOG_EDIT_SHEET_PIN::TransferDataToWindow()
 {
     m_textName->SetValue( UnescapeString( m_sheetPin->GetText() ) );
     m_textName->SelectAll();
-    m_textWidth.SetValue( m_sheetPin->GetTextWidth() );
-    m_textHeight.SetValue( m_sheetPin->GetTextHeight() );
+    // Currently, eeschema uses only the text width as text size
+    // (only the text width is saved in files), and expects text width = text height
+    m_textSize.SetValue( m_sheetPin->GetTextWidth() );
     m_choiceConnectionType->SetSelection( static_cast<int>( m_sheetPin->GetShape() ) );
 
     return true;
@@ -93,7 +93,9 @@ bool DIALOG_EDIT_SHEET_PIN::TransferDataFromWindow()
         m_frame->SaveCopyInUndoList( (SCH_ITEM*) m_sheetPin->GetParent(), UR_CHANGED );
 
     m_sheetPin->SetText( EscapeString( m_textName->GetValue(), CTX_NETNAME ) );
-    m_sheetPin->SetTextSize( wxSize( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
+    // Currently, eeschema uses only the text width as text size,
+    // and expects text width = text height
+    m_sheetPin->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
     auto shape = static_cast<PINSHEETLABEL_SHAPE>( m_choiceConnectionType->GetCurrentSelection() );
     m_sheetPin->SetShape( shape );

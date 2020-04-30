@@ -38,8 +38,7 @@ class DIALOG_EDIT_SHEET_PIN : public DIALOG_EDIT_SHEET_PIN_BASE
     SCH_EDIT_FRAME* m_frame;
     SCH_SHEET_PIN*  m_sheetPin;
 
-    UNIT_BINDER     m_textWidth;
-    UNIT_BINDER     m_textHeight;
+    UNIT_BINDER     m_textSize;
 
 public:
     DIALOG_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_PIN* aPin );

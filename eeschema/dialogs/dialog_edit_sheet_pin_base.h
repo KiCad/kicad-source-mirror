@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -37,12 +37,9 @@ class DIALOG_EDIT_SHEET_PIN_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticText1;
 		wxTextCtrl* m_textName;
-		wxStaticText* m_heightLabel;
-		wxTextCtrl* m_heightCtrl;
-		wxStaticText* m_heightUnits;
-		wxStaticText* m_widthLabel;
-		wxTextCtrl* m_widthCtrl;
-		wxStaticText* m_widthUnits;
+		wxStaticText* m_textSizeLabel;
+		wxTextCtrl* m_textSizeCtrl;
+		wxStaticText* m_textSizeUnits;
 		wxStaticText* m_staticText3;
 		wxChoice* m_choiceConnectionType;
 		wxStaticLine* m_staticline1;
