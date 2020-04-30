@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -473,8 +473,8 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 
 	bSizer3DButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_button8 = new wxButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Configure Paths..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3DButtons->Add( m_button8, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_buttonCfgPath = new wxButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Configure Paths..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3DButtons->Add( m_buttonCfgPath, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizer3->Add( bSizer3DButtons, 0, wxEXPAND, 5 );
@@ -571,7 +571,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_buttonAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnAdd3DRow ), NULL, this );
 	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnAdd3DModel ), NULL, this );
 	m_buttonRemove->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnRemove3DModel ), NULL, this );
-	m_button8->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::Cfg3DPath ), NULL, this );
+	m_buttonCfgPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::Cfg3DPath ), NULL, this );
 }
 
 DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::~DIALOG_FOOTPRINT_BOARD_EDITOR_BASE()
@@ -598,6 +598,6 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::~DIALOG_FOOTPRINT_BOARD_EDITOR_BASE()
 	m_buttonAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnAdd3DRow ), NULL, this );
 	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnAdd3DModel ), NULL, this );
 	m_buttonRemove->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnRemove3DModel ), NULL, this );
-	m_button8->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::Cfg3DPath ), NULL, this );
+	m_buttonCfgPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::Cfg3DPath ), NULL, this );
 
 }

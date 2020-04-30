@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -110,7 +110,7 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_buttonAdd;
 		wxBitmapButton* m_buttonBrowse;
 		wxBitmapButton* m_buttonRemove;
-		wxButton* m_button8;
+		wxButton* m_buttonCfgPath;
 		wxBoxSizer* bLowerSizer3D;
 		wxStaticText* m_libraryIDLabel;
 		wxTextCtrl* m_tcLibraryID;
