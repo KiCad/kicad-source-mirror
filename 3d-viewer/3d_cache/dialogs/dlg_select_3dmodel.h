@@ -31,22 +31,14 @@
 #ifndef DLG_SELECT_3DMODEL_H
 #define DLG_SELECT_3DMODEL_H
 
-#include <wx/event.h>
-#include <wx/stattext.h>
-#include <wx/button.h>
-#include <wx/dialog.h>
-#include <wx/dirctrl.h>
-#include <wx/sizer.h>
-#include <wx/frame.h>
-
-#include <dialog_shim.h>
+#include "dlg_select_3dmodel_base.h"
 
 class MODULE_3D_SETTINGS;
 class S3D_CACHE;
 class FILENAME_RESOLVER;
 class C3D_MODEL_VIEWER;
 
-class DLG_SELECT_3DMODEL : public DIALOG_SHIM
+class DLG_SELECT_3DMODEL : public DLG_SELECT_3D_MODELE_BASE
 {
 private:
     MODULE_3D_SETTINGS* m_model;        // data for the selected model
@@ -56,9 +48,7 @@ private:
     wxString& m_previousDir;
     int&      m_previousFilterIndex;
 
-    wxGenericDirCtrl* m_FileTree;
     C3D_MODEL_VIEWER* m_modelViewer;
-    wxChoice*         dirChoices;
 
     void updateDirChoiceList( void );
 
@@ -67,12 +57,10 @@ public:
         wxString& prevModelSelectDir, int& prevModelWildcard );
 
     bool TransferDataFromWindow() override;
-    void OnSelectionChanged( wxTreeEvent& event );
-    void OnFileActivated( wxTreeEvent& event );
-    void SetRootDir( wxCommandEvent& event );
-    void Cfg3DPaths( wxCommandEvent& event );
-
-    wxDECLARE_EVENT_TABLE();
+    void OnSelectionChanged( wxCommandEvent& event )override;
+    void OnFileActivated( wxCommandEvent& event )override;
+    void SetRootDir( wxCommandEvent& event ) override;
+    void Cfg3DPaths( wxCommandEvent& event ) override;
 };
 
 #endif  // DLG_SELECT_3DMODEL_H

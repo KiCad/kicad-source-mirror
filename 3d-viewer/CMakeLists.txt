@@ -30,6 +30,7 @@ set(3D-VIEWER_SRCS
     3d_cache/3d_cache.cpp
     3d_cache/3d_plugin_manager.cpp
     ${DIR_DLG}/3d_cache_dialogs.cpp
+    ${DIR_DLG}/dlg_select_3dmodel_base.cpp
     ${DIR_DLG}/dlg_select_3dmodel.cpp
     ${DIR_DLG}/panel_prev_3d_base.cpp
     ${DIR_DLG}/panel_prev_3d.cpp

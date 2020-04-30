@@ -35,82 +35,70 @@
 #include <filename_resolver.h>
 #include <pcbnew/class_module.h>
 
-#define ID_FILE_TREE    ( wxID_LAST + 1 )
-#define ID_SET_DIR      ( ID_FILE_TREE + 1 )
-#define ID_CFG_PATHS    ( ID_SET_DIR + 1 )
-
-
-wxBEGIN_EVENT_TABLE( DLG_SELECT_3DMODEL, DIALOG_SHIM )
-    EVT_DIRCTRL_SELECTIONCHANGED( ID_FILE_TREE, DLG_SELECT_3DMODEL::OnSelectionChanged )
-    EVT_DIRCTRL_FILEACTIVATED( ID_FILE_TREE, DLG_SELECT_3DMODEL::OnFileActivated )
-    EVT_CHOICE( ID_SET_DIR, DLG_SELECT_3DMODEL::SetRootDir )
-    EVT_BUTTON( ID_CFG_PATHS, DLG_SELECT_3DMODEL::Cfg3DPaths )
-wxEND_EVENT_TABLE()
-
 
 DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager,
     MODULE_3D_SETTINGS* aModelItem, wxString& prevModelSelectDir, int& prevModelWildcard ) :
-    DIALOG_SHIM( aParent, wxID_ANY, _( "Select 3D Model" ), wxDefaultPosition,
-                 wxSize( 500,200 ), wxCAPTION | wxRESIZE_BORDER | wxCLOSE_BOX
-               | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxSYSTEM_MENU ),
+    DLG_SELECT_3D_MODELE_BASE( aParent ),
     m_model( aModelItem ), m_cache( aCacheManager ), m_previousDir( prevModelSelectDir ),
     m_previousFilterIndex( prevModelWildcard )
 {
-    SetSizeHints( wxSize( 500,200 ), wxDefaultSize );
-
     if( NULL != m_cache )
         m_resolver = m_cache->GetResolver();
     else
         m_resolver = NULL;
 
-    wxBoxSizer* bSizer0 = new wxBoxSizer( wxVERTICAL );
-
-    wxBoxSizer* bSizer1 = new wxBoxSizer( wxHORIZONTAL );
-
-    wxBoxSizer* bSizer2 = new wxBoxSizer( wxVERTICAL );
-
     // set to NULL to avoid segfaults when m_FileTree is instantiated
     // and wxGenericDirCtrl events are posted
     m_modelViewer = NULL;
-    dirChoices = NULL;
 
-    m_FileTree = new wxGenericDirCtrl( this, ID_FILE_TREE, prevModelSelectDir, wxDefaultPosition,
-        wxSize( 300,100 ), wxDIRCTRL_3D_INTERNAL | wxDIRCTRL_EDIT_LABELS
-        | wxDIRCTRL_SELECT_FIRST | wxDIRCTRL_SHOW_FILTERS | wxBORDER_SIMPLE, wxEmptyString, 0 );
-
-
-    m_FileTree->ShowHidden( false );
-    m_FileTree->SetMinSize( wxSize( 300, 400 ) );
-    m_FileTree->SetLabel( wxT( "3D_MODEL_SELECTOR" ) );
-
-    bSizer2->Add( m_FileTree, 1, wxEXPAND | wxALL, 5 );
-    bSizer1->Add( bSizer2, 3, wxEXPAND, 5 );
-
-    m_modelViewer = new C3D_MODEL_VIEWER( this, COGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ), m_cache );
-    m_modelViewer->SetMinSize( wxSize( 500, 400 ) );
-
-    bSizer1->Add( m_modelViewer, 5, wxEXPAND | wxALL | wxCENTER, 5 );
+    m_modelViewer = new C3D_MODEL_VIEWER( m_pane3Dviewer,
+                                          COGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
+                                          m_cache );
+    m_modelViewer->SetMinSize( wxSize( 300, -1 ) );
+    m_Sizer3Dviewer->Add( m_modelViewer, 1, wxEXPAND, 5 );
 
     // create the filter list
     if( NULL != m_cache )
     {
         std::list< wxString > const* fl = m_cache->GetFileFilters();
         std::list< wxString >::const_iterator sL = fl->begin();
-        std::list< wxString >::const_iterator eL = fl->end();
+
+        // The files filter string build from list of loaded plugins:
         wxString filter;
 
-        while( sL != eL )
+        // The files filter extensions only build from list of loaded plugins:
+        wxString ext_list;
+
+        while( sL != fl->end() )
         {
+            if( !filter.IsEmpty() )
+                filter.Append( "|" );
+
             filter.Append( *sL );
 
-            ++sL;
+            if( !ext_list.IsEmpty() )
+                ext_list.Append( ";" );
 
-            if( sL != eL )
-                filter.Append( wxT( "|" ) );
+            wxString ext = sL->AfterLast( '|' );
+
+            if( ext.Len() > 3 ) // Skip *.*
+                ext_list.Append( ext );
+
+            ++sL;
         }
 
         if( !filter.empty() )
-            m_FileTree->SetFilter( filter );
+        {
+            if( !ext_list.empty() )
+            {
+                wxString full_filter;
+                full_filter.Printf( _( "All supported files (%s)|%s)" ), ext_list, ext_list );
+                full_filter << '|' << filter;
+                m_FileTree->SetFilter( full_filter );
+            }
+            else
+                m_FileTree->SetFilter( filter );
+        }
         else
             m_FileTree->SetFilter( wxFileSelectorDefaultWildcardStr );
 
@@ -129,43 +117,19 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
         m_FileTree->SetFilterIndex( 0 );
     }
 
-    // Add the path choice box and config button
-    wxBoxSizer* hboxDirChoice = new wxBoxSizer( wxHORIZONTAL );
-    dirChoices = new wxChoice( this, ID_SET_DIR, wxDefaultPosition, wxSize( 320, 20 ) );
-    dirChoices->SetMinSize( wxSize( 320, 12 ) );
-
-    wxStaticText* stDirChoice = new wxStaticText( this, -1, _( "Paths:" ) );
-    wxButton* cfgPaths = new wxButton( this, ID_CFG_PATHS, _( "Configure Paths" ) );
-    hboxDirChoice->Add( stDirChoice, 0, wxALL | wxCENTER, 5 );
-    hboxDirChoice->Add( dirChoices, 1, wxEXPAND | wxALL, 5 );
-    hboxDirChoice->Add( cfgPaths, 0, wxALL, 5 );
-
-    wxButton* btn_OK = new wxButton( this, wxID_OK, _( "OK" ) );
-    wxButton* btn_Cancel = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-
-    wxStdDialogButtonSizer* hSizer1 = new wxStdDialogButtonSizer();
-    hSizer1->AddButton( btn_OK );
-    hSizer1->AddButton( btn_Cancel );
-    hSizer1->Realize();
-
-    bSizer0->Add( bSizer1, 1, wxALL | wxEXPAND, 5 );
-    bSizer0->Add( hboxDirChoice, 0, wxALL | wxEXPAND, 5 );
-    bSizer0->Add( hSizer1, 0, wxALL | wxEXPAND, 5 );
-
+    m_FileTree->SetPath( m_previousDir );
     updateDirChoiceList();
-
-    SetSizerAndFit( bSizer0 );
-    Layout();
-    Centre( wxBOTH );
 
     m_modelViewer->Refresh();
     m_modelViewer->SetFocus();
+
+    FinishDialogSettings();
 }
 
 
 bool DLG_SELECT_3DMODEL::TransferDataFromWindow()
 {
-    if( NULL == m_model || NULL == m_FileTree )
+    if( !m_model || !m_FileTree )
         return true;
 
     m_model->m_Scale.x = 1.0;
@@ -197,35 +161,27 @@ bool DLG_SELECT_3DMODEL::TransferDataFromWindow()
 }
 
 
-void DLG_SELECT_3DMODEL::OnSelectionChanged( wxTreeEvent& event )
+void DLG_SELECT_3DMODEL::OnSelectionChanged( wxCommandEvent& event )
 {
     if( m_modelViewer )
         m_modelViewer->Set3DModel( m_FileTree->GetFilePath() );
-
-    event.Skip();
-    return;
 }
 
 
-void DLG_SELECT_3DMODEL::OnFileActivated( wxTreeEvent& event )
+void DLG_SELECT_3DMODEL::OnFileActivated( wxCommandEvent& event )
 {
     if( m_modelViewer )
         m_modelViewer->Set3DModel( m_FileTree->GetFilePath() );
 
-    event.Skip();
     SetEscapeId( wxID_OK );
     Close();
-
-    return;
 }
 
 
 void DLG_SELECT_3DMODEL::SetRootDir( wxCommandEvent& event )
 {
-    if( m_FileTree && dirChoices->GetSelection() > 0 )
-        m_FileTree->SetPath( dirChoices->GetString( dirChoices->GetSelection() ) );
-
-    return;
+    if( m_FileTree && m_dirChoices->GetSelection() > 0 )
+        m_FileTree->SetPath( m_dirChoices->GetString( m_dirChoices->GetSelection() ) );
 }
 
 
@@ -238,23 +194,22 @@ void DLG_SELECT_3DMODEL::Cfg3DPaths( wxCommandEvent& event )
 
 void DLG_SELECT_3DMODEL::updateDirChoiceList( void )
 {
-    if( NULL == m_FileTree || NULL == m_resolver || NULL == dirChoices )
+    if( !m_FileTree || !m_resolver || !m_dirChoices )
         return;
 
     std::list< SEARCH_PATH > const* md = m_resolver->GetPaths();
     std::list< SEARCH_PATH >::const_iterator sL = md->begin();
-    std::list< SEARCH_PATH >::const_iterator eL = md->end();
     std::set< wxString > cl;
     wxString prjDir;
 
     // extract the current project dir
-    if( sL != eL )
+    if( sL != md->end() )
     {
         prjDir = sL->m_pathexp;
         ++sL;
     }
 
-    while( sL != eL )
+    while( sL != md->end() )
     {
         if( !sL->m_pathexp.empty() && sL->m_pathexp.compare( prjDir ) )
             cl.insert( sL->m_pathexp );
@@ -265,30 +220,29 @@ void DLG_SELECT_3DMODEL::updateDirChoiceList( void )
     if( !cl.empty() )
     {
         unsigned int choice = 0;
-        dirChoices->Clear();
-        dirChoices->Append( "" ); //Insert a blank string at the beginning to allow selection
+        m_dirChoices->Clear();
+        m_dirChoices->Append( "" ); //Insert a blank string at the beginning to allow selection
 
         if( !prjDir.empty() )
         {
-            dirChoices->Append( prjDir );
+            m_dirChoices->Append( prjDir );
 
             if( prjDir == m_FileTree->GetPath() )
                 choice = 1;
         }
 
         std::set< wxString >::const_iterator sI = cl.begin();
-        std::set< wxString >::const_iterator eI = cl.end();
 
-        while( sI != eI )
+        while( sI != cl.end() )
         {
             if( *sI == m_FileTree->GetPath() )
-                choice = dirChoices->GetCount();
+                choice = m_dirChoices->GetCount();
 
-            dirChoices->Append( *sI );
+            m_dirChoices->Append( *sI );
             ++sI;
         }
 
-        dirChoices->Select( choice );
+        m_dirChoices->SetSelection( choice );
     }
 
     return;
