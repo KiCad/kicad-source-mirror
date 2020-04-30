@@ -65,12 +65,12 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_SHOW_REAL_MODE, wxEmptyString,
                             KiScaledBitmap( pagelayout_normal_view_mode_xpm, this ),
                             _( "Show title block in preview mode:\n"
-                               "text placeholders will be replaced with preview data"),
+                               "text placeholders will be replaced with preview data."),
                             wxITEM_CHECK );
     m_mainToolBar->AddTool( ID_SHOW_PL_EDITOR_MODE, wxEmptyString,
                             KiScaledBitmap( pagelayout_special_view_mode_xpm, this ),
                             _( "Show title block in edit mode:\n"
-                               "text placeholders show as %-tokens"),
+                               "text placeholders are shown as ${keyword} tokens."),
                             wxITEM_CHECK );
 
     KiScaledSeparator( m_mainToolBar, this );
