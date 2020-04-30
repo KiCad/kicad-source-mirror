@@ -1025,6 +1025,19 @@ void D_PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
         msg = MessageTextFromValue( aFrame->GetUserUnits(), GetPadToDieLength(), true );
         aList.emplace_back( _( "Length in package" ), msg, CYAN );
     }
+
+    // Display the actual pad clearance:
+    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetClearance(), true );
+    aList.emplace_back( _( "Pad clearance" ), msg, CYAN );
+
+    // Display the netclass name (a pad having a netcode = 0 (no net) use the
+    // default netclass for clearance):
+    if( m_netinfo->GetNet() <= 0 )
+        msg = GetBoard()->GetDesignSettings().GetDefault()->GetName();
+    else
+        msg = GetNetClassName();
+
+    aList.emplace_back( _( "Net class" ), msg, CYAN );
 }
 
 
