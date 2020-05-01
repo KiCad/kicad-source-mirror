@@ -245,7 +245,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICRO_VIA_NOT_ALLOWED );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" );
+            msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" ) );
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( refvia );
 
@@ -258,7 +258,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_BURIED_VIA_NOT_ALLOWED );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" );
+            msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" ) );
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( refvia );
 
