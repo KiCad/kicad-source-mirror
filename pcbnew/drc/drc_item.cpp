@@ -66,9 +66,9 @@ wxString DRC_ITEM::GetErrorText( int aCode ) const
     case DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR:
         return wxString( _( "Micro Via: incorrect layer pairs" ) );
     case DRCE_MICRO_VIA_NOT_ALLOWED:
-        return wxString( _( "Micro Via: not allowed (board design rule constraints)" ) );
+        return wxString( _( "Micro Via: not allowed" ) );
     case DRCE_BURIED_VIA_NOT_ALLOWED:
-        return wxString( _( "Buried Via: not allowed (board design rule constraints)" ) );
+        return wxString( _( "Buried Via: not allowed" ) );
     case DRCE_DISABLED_LAYER_ITEM:
         return wxString( _( "Item on a disabled layer" ) );
     case DRCE_ZONES_INTERSECT:

@@ -244,6 +244,9 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         if( refvia->GetViaType() == VIATYPE::MICROVIA && !dsnSettings.m_MicroViasAllowed )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICRO_VIA_NOT_ALLOWED );
+
+            msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" );
+            drcItem->SetErrorMessage( msg );
             drcItem->SetItems( refvia );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
@@ -254,6 +257,9 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         if( refvia->GetViaType() == VIATYPE::BLIND_BURIED && !dsnSettings.m_BlindBuriedViaAllowed )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_BURIED_VIA_NOT_ALLOWED );
+
+            msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" );
+            drcItem->SetErrorMessage( msg );
             drcItem->SetItems( refvia );
 
             MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
