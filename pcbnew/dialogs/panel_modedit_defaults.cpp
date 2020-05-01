@@ -23,7 +23,6 @@
 
 #include <fctsys.h>
 #include <pcbnew.h>
-#include <board_design_settings.h>
 #include <widgets/paged_dialog.h>
 #include <footprint_edit_frame.h>
 #include <widgets/wx_grid.h>
@@ -48,6 +47,7 @@ enum
     ROW_COPPER,
     ROW_EDGES,
     ROW_COURTYARD,
+    ROW_FAB,
     ROW_OTHERS,
 
     ROW_COUNT
@@ -157,7 +157,7 @@ bool PANEL_MODEDIT_DEFAULTS::validateData()
         return false;
 
     // Test text parameters.
-    for( int row : { ROW_SILK, ROW_COPPER, ROW_OTHERS } )
+    for( int row : { ROW_SILK, ROW_COPPER, ROW_FAB, ROW_OTHERS } )
     {
         int textSize = std::min( getGridValue( row, COL_TEXT_WIDTH ),
                                  getGridValue( row, COL_TEXT_HEIGHT ) );

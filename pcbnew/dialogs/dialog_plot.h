@@ -56,7 +56,6 @@ private:
     int                 m_widthAdjustMinValue;      // Global track width limits
     int                 m_widthAdjustMaxValue;      // tracks width will be "clipped" whenever the
                                                     // m_PSWidthAdjust to these limits.
-    UNIT_BINDER         m_defaultLineWidth;
     UNIT_BINDER         m_defaultPenSize;
     UNIT_BINDER         m_trackWidthCorrection;
 

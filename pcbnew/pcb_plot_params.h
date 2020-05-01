@@ -155,8 +155,9 @@ private:
     /// Force plotting of fields marked invisible
     bool        m_plotInvisibleText;
 
-    /// Allows pads outlines on silkscreen layer (when pads are also on silk screen)
-    bool        m_plotPadsOnSilkLayer;
+    /// Plots pads outlines on fab layers
+    bool        m_sketchPadsOnFabLayers;
+    int         m_sketchPadLineWidth;
 
     /* These next two scale factors are intended to compensate plotters
      * (mainly printers) X and Y scale error. Therefore they are expected very
@@ -256,8 +257,10 @@ public:
     void        SetMirror( bool aFlag ) { m_mirror = aFlag; }
     bool        GetMirror() const { return m_mirror; }
 
-    void        SetPlotPadsOnSilkLayer( bool aFlag ) { m_plotPadsOnSilkLayer = aFlag; }
-    bool        GetPlotPadsOnSilkLayer() const { return m_plotPadsOnSilkLayer; }
+    void        SetSketchPadsOnFabLayers( bool aFlag ) { m_sketchPadsOnFabLayers = aFlag; }
+    bool        GetSketchPadsOnFabLayers() const { return m_sketchPadsOnFabLayers; }
+    void        SetSketchPadLineWidth( int aWidth ) { m_sketchPadLineWidth = aWidth; }
+    int         GetSketchPadLineWidth() const { return m_sketchPadLineWidth; }
 
     void        SetPlotInvisibleText( bool aFlag ) { m_plotInvisibleText = aFlag; }
     bool        GetPlotInvisibleText() const { return m_plotInvisibleText; }
@@ -342,9 +345,6 @@ public:
 
     void        SetHPGLPenNum( int aVal ) { m_HPGLPenNum = aVal; }
     int         GetHPGLPenNum() const { return m_HPGLPenNum; }
-
-    int         GetLineWidth() const { return m_lineWidth; };
-    bool        SetLineWidth( int aValue );
 };
 
 

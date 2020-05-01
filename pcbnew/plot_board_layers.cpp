@@ -62,94 +62,6 @@
 static void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                                  const PCB_PLOT_PARAMS& aPlotOpt, int aMinThickness );
 
-/*
- * Creates the plot for silkscreen layers.  Silkscreen layers have specific requirement for
- * pads (not filled) and texts (with option to remove them from some copper areas (pads...)
- */
-void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
-                     const PCB_PLOT_PARAMS& aPlotOpt )
-{
-    BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
-    itemplotter.SetLayerSet( aLayerMask );
-
-    // Plot edge layer and graphic items
-    itemplotter.PlotBoardGraphicItems();
-
-    // Plot footprint outlines :
-    itemplotter.Plot_Edges_Modules();
-
-    // Plot pads (creates pads outlines, for pads on silkscreen layers)
-    LSET layersmask_plotpads = aLayerMask;
-
-    // Calculate the mask layers of allowed layers for pads
-
-    if( !aPlotOpt.GetPlotPadsOnSilkLayer() )       // Do not plot pads on silk screen layers
-        layersmask_plotpads.set( B_SilkS, false ).set( F_SilkS, false );
-
-    if( layersmask_plotpads.any() )
-    {
-        for( auto Module : aBoard->Modules() )
-        {
-            aPlotter->StartBlock( NULL );
-
-            for( auto pad : Module->Pads() )
-            {
-                // See if the pad is on this layer
-                LSET masklayer = pad->GetLayerSet();
-                if( !( masklayer & layersmask_plotpads ).any() )
-                    continue;
-
-                COLOR4D color = COLOR4D::BLACK;
-
-                if( layersmask_plotpads[B_SilkS] )
-                    color = aPlotter->RenderSettings()->GetLayerColor( B_SilkS );
-                else if( layersmask_plotpads[F_SilkS] )
-                    color = aPlotter->RenderSettings()->GetLayerColor( F_SilkS );
-
-                itemplotter.PlotPad( pad, color, SKETCH );
-            }
-
-            aPlotter->EndBlock( NULL );
-        }
-    }
-
-    // Plot footprints fields (ref, value ...)
-    for( auto module : aBoard->Modules() )
-    {
-        if( ! itemplotter.PlotAllTextsModule( module ) )
-        {
-             wxLogMessage( _( "Your BOARD has a bad layer number for footprint %s" ),
-                           module->GetReference() );
-        }
-    }
-
-    // Plot filled areas
-    aPlotter->StartBlock( NULL );
-
-    // Plot all zones together so we don't end up with divots where zones touch each other.
-    ZONE_CONTAINER* zone = nullptr;
-    SHAPE_POLY_SET aggregateArea;
-
-    for( ZONE_CONTAINER* candidate : aBoard->Zones() )
-    {
-        if( !aLayerMask[ candidate->GetLayer() ] )
-            continue;
-
-        if( !zone )
-            zone = candidate;
-
-        aggregateArea.BooleanAdd( candidate->GetFilledPolysList(), SHAPE_POLY_SET::PM_FAST );
-    }
-
-    if( zone )
-    {
-        aggregateArea.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-        itemplotter.PlotFilledAreas( zone, aggregateArea );
-    }
-
-    aPlotter->EndBlock( NULL );
-}
-
 void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                         const PCB_PLOT_PARAMS& aPlotOpt )
 {
@@ -227,7 +139,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                 // and must not be used for other plot formats
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
-                PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
+                PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
 
             // Gerber: Subtract soldermask from silkscreen if enabled
             if( aPlotter->GetPlotterType() == PLOT_FORMAT::GERBER
@@ -270,7 +182,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                 // and must not be used for other plot formats
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
-                PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
+                PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
             break;
 
         default:
@@ -300,58 +212,51 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     itemplotter.SetLayerSet( aLayerMask );
 
     EDA_DRAW_MODE_T plotMode = aPlotOpt.GetPlotMode();
+    bool onCopperLayer = ( LSET::AllCuMask() & aLayerMask ).any();
+    bool onSolderMaskLayer = ( LSET( 2, F_Mask, B_Mask ) & aLayerMask ).any();
+    bool onSolderPasteLayer = ( LSET( 2, F_Paste, B_Paste ) & aLayerMask ).any();
+    bool onFabLayer = ( LSET( 2, F_Fab, B_Fab ) & aLayerMask ).any();
+    bool sketchPads = onFabLayer && aPlotOpt.GetSketchPadsOnFabLayers();
 
      // Plot edge layer and graphic items
     itemplotter.PlotBoardGraphicItems();
 
     // Draw footprint texts:
-    for( auto module : aBoard->Modules() )
-    {
-        if( ! itemplotter.PlotAllTextsModule( module ) )
-        {
-            wxLogMessage( _( "Your BOARD has a bad layer number for footprint %s" ),
-                          module->GetReference() );
-        }
-    }
+    for( MODULE* module : aBoard->Modules() )
+        itemplotter.PlotFootprintTextItems( module );
 
     // Draw footprint other graphic items:
-    for( auto module : aBoard->Modules() )
-    {
-        for( auto item : module->GraphicalItems() )
-        {
-            if( item->Type() == PCB_MODULE_EDGE_T && aLayerMask[ item->GetLayer() ] )
-                itemplotter.Plot_1_EdgeModule( (EDGE_MODULE*) item );
-        }
-    }
+    for( MODULE* module : aBoard->Modules() )
+        itemplotter.PlotFootprintGraphicItems( module );
 
     // Plot footprint pads
-    for( auto module : aBoard->Modules() )
+    for( MODULE* module : aBoard->Modules() )
     {
         aPlotter->StartBlock( NULL );
 
-        for( auto pad : module->Pads() )
+        for( D_PAD* pad : module->Pads() )
         {
-            if( (pad->GetLayerSet() & aLayerMask) == 0 )
-                continue;
+            EDA_DRAW_MODE_T padPlotMode = plotMode;
+
+            if( !( pad->GetLayerSet() & aLayerMask ).any() )
+            {
+                if( sketchPads )
+                    padPlotMode = SKETCH;
+                else
+                    continue;
+            }
 
             wxSize margin;
             double width_adj = 0;
 
-            if( ( aLayerMask & LSET::AllCuMask() ).any() )
+            if( onCopperLayer )
                 width_adj =  itemplotter.getFineWidthAdj();
 
-            static const LSET speed( 4, B_Mask, F_Mask, B_Paste, F_Paste );
-
-            LSET anded = ( speed & aLayerMask );
-
-            if( anded == LSET( F_Mask ) || anded == LSET( B_Mask ) )
-            {
+            if( onSolderMaskLayer )
                 margin.x = margin.y = pad->GetSolderMaskMargin();
-            }
-            else if( anded == LSET( F_Paste ) || anded == LSET( B_Paste ) )
-            {
+
+            if( onSolderPasteLayer )
                 margin = pad->GetSolderPasteMargin();
-            }
 
             // Now offset the pad size by margin + width_adj
             // this is easy for most shapes, but not for a trapezoid or a custom shape
@@ -413,6 +318,11 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             if( pad->GetLayerSet()[F_Cu] )
                 color = color.LegacyMix( aPlotOpt.ColorSettings()->GetColor( LAYER_PAD_FR ) );
 
+            if( sketchPads && aLayerMask[F_Fab] )
+                color = aPlotOpt.ColorSettings()->GetColor( F_Fab );
+            else if( sketchPads && aLayerMask[B_Fab] )
+                color = aPlotOpt.ColorSettings()->GetColor( B_Fab );
+
             // Temporary set the pad size to the required plot size:
             wxSize tmppadsize = pad->GetSize();
 
@@ -428,7 +338,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                     ( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED ) )
                     break;
 
-                itemplotter.PlotPad( pad, color, plotMode );
+                itemplotter.PlotPad( pad, color, padPlotMode );
                 break;
 
             case PAD_SHAPE_RECT:
@@ -444,7 +354,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             case PAD_SHAPE_ROUNDRECT:
             case PAD_SHAPE_CHAMFERED_RECT:
                 pad->SetSize( padPlotsSize );
-                itemplotter.PlotPad( pad, color, plotMode );
+                itemplotter.PlotPad( pad, color, padPlotMode );
                 break;
 
             case PAD_SHAPE_CUSTOM:
@@ -469,7 +379,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 if( margin.x < 0 )  // we expect margin.x = margin.y for custom pads
                     dummy.SetSize( padPlotsSize );
 
-                itemplotter.PlotPad( &dummy, color, plotMode );
+                itemplotter.PlotPad( &dummy, color, padPlotMode );
             }
                 break;
             }
@@ -863,10 +773,10 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     {
         for( auto item : module->GraphicalItems() )
         {
-            itemplotter.PlotAllTextsModule( module );
+            itemplotter.PlotFootprintTextItems( module );
 
             if( item->Type() == PCB_MODULE_EDGE_T && item->GetLayer() == layer )
-                itemplotter.Plot_1_EdgeModule( (EDGE_MODULE*) item );
+                itemplotter.PlotFootprintGraphicItem((EDGE_MODULE*) item );
         }
     }
 
@@ -1213,7 +1123,6 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts, int aLayer,
 
     KIGFX::PCB_RENDER_SETTINGS* renderSettings = new KIGFX::PCB_RENDER_SETTINGS();
     renderSettings->LoadColors( aPlotOpts->ColorSettings() );
-    renderSettings->SetDefaultPenWidth( aPlotOpts->GetLineWidth() );
     plotter->SetRenderSettings( renderSettings );
 
     // Compute the viewport and set the other options

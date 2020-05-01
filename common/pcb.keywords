@@ -89,6 +89,8 @@ edge_width
 effects
 end
 epsilon_r
+fab_layers_line_width
+fab_layers_text_dims
 feature1
 feature2
 fill

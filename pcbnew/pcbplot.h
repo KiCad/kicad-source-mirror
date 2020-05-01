@@ -90,18 +90,15 @@ public:
 
     // Basic functions to plot a board item
     void SetLayerSet( LSET aLayerMask )     { m_layerMask = aLayerMask; }
-    void Plot_Edges_Modules();
-    void Plot_1_EdgeModule( EDGE_MODULE* aEdge );
-    void PlotTextModule( TEXTE_MODULE* aTextMod, COLOR4D aColor );
+    void PlotFootprintGraphicItems( MODULE* aModule );
+    void PlotFootprintGraphicItem( EDGE_MODULE* aEdge );
+    void PlotFootprintTextItem( TEXTE_MODULE* aTextMod, COLOR4D aColor );
 
     /*
-     * Plot field of a module (footprint)
-     * Reference, Value, and other fields are plotted only if
-     * the corresponding option is enabled
-     * Invisible text fields are plotted only if PlotInvisibleText option is set
-     * usually they are not plotted.
+     * Reference, Value, and other fields are plotted only if the corresponding option is enabled.
+     * Invisible text fields are plotted only if PlotInvisibleText option is set.
      */
-    bool PlotAllTextsModule( MODULE* aModule );
+    void PlotFootprintTextItems( MODULE* aModule );
 
     void PlotDimension( DIMENSION* Dimension );
     void PlotPcbTarget( PCB_TARGET* PtMire );
@@ -205,19 +202,6 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
  */
 void PlotLayerOutlines( BOARD *aBoard, PLOTTER* aPlotter,
                         LSET aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt );
-
-/**
- * Function PlotSilkScreen
- * plot silkscreen layers which have specific requirements, mainly for pads.
- * Should not be used for other layers
- * @param aBoard = the board to plot
- * @param aPlotter = the plotter to use
- * @param aLayerMask = the mask to define the layers to plot (silkscreen Front and/or Back)
- * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
- */
-void PlotSilkScreen( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
-                     const PCB_PLOT_PARAMS&  aPlotOpt );
-
 
 /**
  * Function BuildPlotFileName (helper function)

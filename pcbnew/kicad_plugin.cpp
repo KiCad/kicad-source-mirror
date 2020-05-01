@@ -627,6 +627,15 @@ void PCB_IO::formatDefaults( const BOARD_DESIGN_SETTINGS& aSettings, int aNestLe
                   aSettings.m_TextItalic[ LAYER_CLASS_SILK ] ? " italic" : "",
                   aSettings.m_TextUpright[ LAYER_CLASS_SILK ] ? " keep_upright" : "" );
 
+    m_out->Print( aNestLevel+1, "(fab_layers_line_width %s)\n",
+                  FormatInternalUnits( aSettings.m_LineThickness[ LAYER_CLASS_FAB ] ).c_str() );
+    m_out->Print( aNestLevel+1, "(fab_layers_text_dims (size %s %s) (thickness %s)%s%s)\n",
+                  FormatInternalUnits( aSettings.m_TextSize[ LAYER_CLASS_FAB ].x ).c_str(),
+                  FormatInternalUnits( aSettings.m_TextSize[ LAYER_CLASS_FAB ].y ).c_str(),
+                  FormatInternalUnits( aSettings.m_TextThickness[ LAYER_CLASS_FAB ] ).c_str(),
+                  aSettings.m_TextItalic[ LAYER_CLASS_OTHERS ] ? " italic" : "",
+                  aSettings.m_TextUpright[ LAYER_CLASS_OTHERS ] ? " keep_upright" : "" );
+
     m_out->Print( aNestLevel+1, "(other_layers_line_width %s)\n",
                   FormatInternalUnits( aSettings.m_LineThickness[ LAYER_CLASS_OTHERS ] ).c_str() );
     m_out->Print( aNestLevel+1, "(other_layers_text_dims (size %s %s) (thickness %s)%s%s)\n",

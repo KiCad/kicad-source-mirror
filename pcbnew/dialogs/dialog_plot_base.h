@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -72,7 +72,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotModuleRefOpt;
 		wxCheckBox* m_plotInvisibleText;
 		wxCheckBox* m_excludeEdgeLayerOpt;
-		wxCheckBox* m_excludePadsFromSilkscreen;
+		wxCheckBox* m_sketchPadsOnFabLayers;
 		wxCheckBox* m_plotNoViaOnMaskOpt;
 		wxCheckBox* m_useAuxOriginCheckBox;
 		wxStaticText* drillMarksLabel;
@@ -81,9 +81,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxChoice* m_scaleOpt;
 		wxStaticText* plotModeLabel;
 		wxChoice* m_plotModeOpt;
-		wxStaticText* m_lineWidthLabel;
-		wxTextCtrl* m_lineWidthCtrl;
-		wxStaticText* m_lineWidthUnits;
 		wxCheckBox* m_plotMirrorOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
 		wxCheckBox* m_zoneFillCheck;

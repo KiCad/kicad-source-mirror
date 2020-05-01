@@ -46,7 +46,6 @@
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     DIALOG_PLOT_BASE( aParent ), m_parent( aParent ),
-    m_defaultLineWidth( aParent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
     m_defaultPenSize( aParent, m_hpglPenLabel, m_hpglPenCtrl, m_hpglPenUnits, true ),
     m_trackWidthCorrection( aParent, m_widthAdjustLabel, m_widthAdjustCtrl, m_widthAdjustUnits, true )
 {
@@ -106,8 +105,6 @@ void DIALOG_PLOT::init_Dialog()
     // Set units and value for HPGL pen size (this param is in mils).
     m_defaultPenSize.SetValue( m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS );
 
-    m_defaultLineWidth.SetValue( m_plotOpts.GetLineWidth() );
-
     // Test for a reasonable scale value. Set to 1 if problem
     if( m_XScaleAdjust < PLOT_MIN_SCALE || m_YScaleAdjust < PLOT_MIN_SCALE
         || m_XScaleAdjust > PLOT_MAX_SCALE || m_YScaleAdjust > PLOT_MAX_SCALE )
@@ -164,7 +161,7 @@ void DIALOG_PLOT::init_Dialog()
     m_excludeEdgeLayerOpt->SetValue( m_plotOpts.GetExcludeEdgeLayer() );
 
     // Option to exclude pads from silkscreen layers
-    m_excludePadsFromSilkscreen->SetValue( !m_plotOpts.GetPlotPadsOnSilkLayer() );
+    m_sketchPadsOnFabLayers->SetValue( m_plotOpts.GetSketchPadsOnFabLayers() );
 
     // Option to tent vias
     m_subtractMaskFromSilk->SetValue( m_plotOpts.GetSubtractMaskFromSilk() );
@@ -412,7 +409,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
-        m_defaultLineWidth.Enable( true );
         m_defaultPenSize.Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( false );
@@ -436,7 +432,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
-        m_defaultLineWidth.Enable( true );
         m_defaultPenSize.Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( true );
@@ -461,7 +456,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
-        m_defaultLineWidth.Enable( true );
         m_defaultPenSize.Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( false );
@@ -487,7 +481,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
-        m_defaultLineWidth.Enable( false );
         m_defaultPenSize.Enable( true );
         m_excludeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( true );
@@ -512,7 +505,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
-        m_defaultLineWidth.Enable( false );
         m_defaultPenSize.Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
         m_scaleOpt->Enable( false );
@@ -595,7 +587,7 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetExcludeEdgeLayer( m_excludeEdgeLayerOpt->GetValue() );
     tempOptions.SetSubtractMaskFromSilk( m_subtractMaskFromSilk->GetValue() );
     tempOptions.SetPlotFrameRef( m_plotSheetRef->GetValue() );
-    tempOptions.SetPlotPadsOnSilkLayer( !m_excludePadsFromSilkscreen->GetValue() );
+    tempOptions.SetSketchPadsOnFabLayers( m_sketchPadsOnFabLayers->GetValue());
     tempOptions.SetUseAuxOrigin( m_useAuxOriginCheckBox->GetValue() );
     tempOptions.SetPlotValue( m_plotModuleValueOpt->GetValue() );
     tempOptions.SetPlotReference( m_plotModuleRefOpt->GetValue() );
@@ -639,14 +631,6 @@ void DIALOG_PLOT::applyPlotSettings()
     }
     else    // keep the last value (initial value if no HPGL plot made)
         tempOptions.SetHPGLPenDiameter( m_plotOpts.GetHPGLPenDiameter() );
-
-    // Default linewidth
-    if( !tempOptions.SetLineWidth( m_defaultLineWidth.GetValue() ) )
-    {
-        m_defaultLineWidth.SetValue( tempOptions.GetLineWidth() );
-        msg.Printf( _( "Default line width constrained." ) );
-        reporter.Report( msg, RPT_SEVERITY_INFO );
-    }
 
     // X scale
     double tmpDouble;
@@ -753,6 +737,8 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     BOARD* board = m_parent->GetBoard();
 
     applyPlotSettings();
+
+    m_plotOpts.SetSketchPadLineWidth( board->GetDesignSettings().GetLineThickness( F_Fab ) );
 
     // If no layer selected, we have nothing plotted.
     // Prompt user if it happens because he could think there is a bug in Pcbnew.

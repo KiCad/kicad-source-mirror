@@ -731,8 +731,6 @@ void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, EDA_DRAW_
 
     if( trace_mode == SKETCH )
     {
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, gbr_metadata );
-
         if( gbr_metadata )
             formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
@@ -825,8 +823,6 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
     case 1800:
         if( trace_mode == SKETCH )
         {
-            SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, gbr_metadata );
-
             if( gbr_metadata )
                 formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
@@ -1113,8 +1109,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
         metadata = *gbr_metadata;
 
     if( aTrace_Mode == SKETCH )
-        PlotPoly( cornerList, NO_FILL, USE_DEFAULT_LINE_WIDTH,
-                  &metadata );
+        PlotPoly( cornerList, NO_FILL, DO_NOT_SET_LINE_WIDTH, &metadata );
     else
         PlotGerberRegion( cornerList, &metadata );
 }
@@ -1145,7 +1140,6 @@ void GERBER_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
 
         cornerList.push_back( cornerList[0] );  // Close the shape
 
-        SetCurrentLineWidth( aDiameter/8, gbr_metadata );
         PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), gbr_metadata );
     }
     else

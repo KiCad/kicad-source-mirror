@@ -212,6 +212,9 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
     // the white items are not seen on a white paper or screen
     m_plotter->SetColor( aColor != WHITE ? aColor : LIGHTGRAY);
 
+    if( aPlotMode == SKETCH )
+        m_plotter->SetCurrentLineWidth( GetSketchPadLineWidth(), &gbr_metadata );
+
     switch( aPad->GetShape() )
     {
     case PAD_SHAPE_CIRCLE:
@@ -275,7 +278,7 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
 }
 
 
-bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
+void BRDITEMS_PLOTTER::PlotFootprintTextItems( MODULE* aModule )
 {
     TEXTE_MODULE* textModule = &aModule->Reference();
     LAYER_NUM     textLayer = textModule->GetLayer();
@@ -284,7 +287,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     if( GetPlotReference() && m_layerMask[textLayer]
         && ( textModule->IsVisible() || GetPlotInvisibleText() ) )
     {
-        PlotTextModule( textModule, getColor( textLayer ) );
+        PlotFootprintTextItem( textModule, getColor( textLayer ));
     }
 
     textModule = &aModule->Value();
@@ -293,7 +296,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     if( GetPlotValue() && m_layerMask[textLayer]
         && ( textModule->IsVisible() || GetPlotInvisibleText() ) )
     {
-        PlotTextModule( textModule, getColor( textLayer ) );
+        PlotFootprintTextItem( textModule, getColor( textLayer ));
     }
 
     for( auto item : aModule->GraphicalItems() )
@@ -309,7 +312,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
         textLayer = textModule->GetLayer();
 
         if( textLayer >= PCB_LAYER_ID_COUNT )
-            return false;
+            return;
 
         if( !m_layerMask[textLayer] )
             continue;
@@ -320,10 +323,8 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
         if( textModule->GetText() == wxT( "${VALUE}" ) && !GetPlotValue() )
             continue;
 
-        PlotTextModule( textModule, getColor( textLayer ) );
+        PlotFootprintTextItem( textModule, getColor( textLayer ));
     }
-
-    return true;
 }
 
 
@@ -343,44 +344,36 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
     }
 }
 
-void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, COLOR4D aColor )
+void BRDITEMS_PLOTTER::PlotFootprintTextItem( TEXTE_MODULE* aTextMod, COLOR4D aColor )
 {
-    wxSize  size;
-    wxPoint pos;
-    double  orient;
-    int     thickness;
-
     if( aColor == COLOR4D::WHITE )
         aColor = COLOR4D( LIGHTGRAY );
 
     m_plotter->SetColor( aColor );
 
     // calculate some text parameters :
-    size = pt_texte->GetTextSize();
-    pos = pt_texte->GetTextPos();
+    wxSize  size = aTextMod->GetTextSize();
+    wxPoint pos = aTextMod->GetTextPos();
+    double  orient = aTextMod->GetDrawRotation();
 
-    orient = pt_texte->GetDrawRotation();
-
-    thickness = std::max( pt_texte->GetEffectiveTextPenWidth(),
-                          m_plotter->RenderSettings()->GetDefaultPenWidth() );
-
-    if( pt_texte->IsMirrored() )
+    if( aTextMod->IsMirrored() )
         size.x = -size.x;  // Text is mirrored
 
     // Non bold texts thickness is clamped at 1/6 char size by the low level draw function.
     // but in Pcbnew we do not manage bold texts and thickness up to 1/4 char size
     // (like bold text) and we manage the thickness.
     // So we set bold flag to true
-    bool allow_bold = pt_texte->IsBold() || thickness;
+    bool allow_bold = true;
 
     GBR_METADATA gbr_metadata;
     gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
-    MODULE* parent = static_cast<MODULE*> ( pt_texte->GetParent() );
+    MODULE* parent = static_cast<MODULE*> ( aTextMod->GetParent() );
     gbr_metadata.SetCmpReference( parent->GetReference() );
 
-    m_plotter->Text( pos, aColor, pt_texte->GetShownText(), orient, size,
-                     pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(), thickness,
-                     pt_texte->IsItalic(), allow_bold, false, &gbr_metadata );
+    m_plotter->Text( pos, aColor, aTextMod->GetShownText(), orient, size,
+                     aTextMod->GetHorizJustify(), aTextMod->GetVertJustify(),
+                     aTextMod->GetEffectiveTextPenWidth(), aTextMod->IsItalic(), allow_bold,
+                     false, &gbr_metadata );
 }
 
 
@@ -486,32 +479,27 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
 
 
 // Plot footprints graphic items (outlines)
-void BRDITEMS_PLOTTER::Plot_Edges_Modules()
+void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( MODULE* aModule )
 {
-    for( auto module : m_board->Modules() )
+    for( BOARD_ITEM* item : aModule->GraphicalItems() )
     {
-        for( auto item : module->GraphicalItems() )
-        {
-            EDGE_MODULE* edge = dyn_cast<EDGE_MODULE*>( item );
+        EDGE_MODULE* edge = dynamic_cast<EDGE_MODULE*>( item );
 
-            if( edge && m_layerMask[edge->GetLayer()] )
-                Plot_1_EdgeModule( edge );
-        }
+        if( edge && m_layerMask[ edge->GetLayer() ] )
+            PlotFootprintGraphicItem( edge );
     }
 }
 
 
 //* Plot a graphic item (outline) relative to a footprint
-void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
+void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( EDGE_MODULE* aEdge )
 {
     if( aEdge->Type() != PCB_MODULE_EDGE_T )
         return;
 
     m_plotter->SetColor( getColor( aEdge->GetLayer() ) );
 
-    int thickness = std::max( aEdge->GetWidth(),
-                              m_plotter->RenderSettings()->GetDefaultPenWidth() );
-
+    int     thickness = aEdge->GetWidth();
     wxPoint pos( aEdge->GetStart() );
     wxPoint end( aEdge->GetEnd() );
 
@@ -632,10 +620,6 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
 // Plot a PCB Text, i.e. a text found on a copper or technical layer
 void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
 {
-    double  orient;
-    int     thickness;
-    wxPoint pos;
-    wxSize  size;
     wxString shownText( pt_texte->GetShownText() );
 
     if( shownText.IsEmpty() )
@@ -652,11 +636,10 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     COLOR4D color = getColor( pt_texte->GetLayer() );
     m_plotter->SetColor( color );
 
-    size      = pt_texte->GetTextSize();
-    pos       = pt_texte->GetTextPos();
-    orient    = pt_texte->GetTextAngle();
-    thickness = std::max( pt_texte->GetEffectiveTextPenWidth(),
-                          m_plotter->RenderSettings()->GetDefaultPenWidth() );
+    wxSize  size      = pt_texte->GetTextSize();
+    wxPoint pos       = pt_texte->GetTextPos();
+    double  orient    = pt_texte->GetTextAngle();
+    int     thickness = pt_texte->GetEffectiveTextPenWidth();
 
     if( pt_texte->IsMirrored() )
         size.x = -size.x;
@@ -665,7 +648,7 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     // but in Pcbnew we do not manage bold texts and thickness up to 1/4 char size
     // (like bold text) and we manage the thickness.
     // So we set bold flag to true
-    bool allow_bold = pt_texte->IsBold() || thickness;
+    bool allow_bold = true;
 
     m_plotter->SetCurrentLineWidth( thickness );
 
@@ -785,8 +768,7 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
 
     int     radius = 0;
     double  StAngle = 0, EndAngle = 0;
-    int     thickness = std::max( aSeg->GetWidth(),
-                                  m_plotter->RenderSettings()->GetDefaultPenWidth() );
+    int     thickness = aSeg->GetWidth();
 
     m_plotter->SetColor( getColor( aSeg->GetLayer() ) );
 
@@ -824,9 +806,8 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
         break;
 
     case S_CURVE:
-        m_plotter->BezierCurve( aSeg->GetStart(), aSeg->GetBezControl1(),
-                                aSeg->GetBezControl2(), aSeg->GetEnd(),
-                                0, thickness );
+        m_plotter->BezierCurve( aSeg->GetStart(), aSeg->GetBezControl1(), aSeg->GetBezControl2(),
+                                aSeg->GetEnd(), 0, thickness );
         break;
 
     case S_POLYGON:
@@ -837,7 +818,7 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
                 {
                     auto seg = it.Get();
                     m_plotter->ThickSegment( wxPoint( seg.A ), wxPoint( seg.B ),
-                            thickness, GetPlotMode(), &gbr_metadata );
+                                             thickness, GetPlotMode(), &gbr_metadata );
                 }
             }
             else

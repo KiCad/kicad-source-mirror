@@ -47,6 +47,7 @@ enum
     ROW_COPPER,
     ROW_EDGES,
     ROW_COURTYARD,
+    ROW_FAB,
     ROW_OTHERS,
 
     ROW_COUNT
@@ -150,7 +151,7 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::validateData()
         return false;
 
     // Test text parameters.
-    for( int row : { ROW_SILK, ROW_COPPER, ROW_OTHERS } )
+    for( int row : { ROW_SILK, ROW_COPPER, ROW_FAB, ROW_OTHERS } )
     {
         int textSize = std::min( getGridValue( row, COL_TEXT_WIDTH ),
                                  getGridValue( row, COL_TEXT_HEIGHT ) );

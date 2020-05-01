@@ -551,6 +551,13 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_TextItalic[ LAYER_CLASS_COURTYARD ] = false;
     m_TextUpright[ LAYER_CLASS_COURTYARD ] = false;
 
+    m_LineThickness[ LAYER_CLASS_FAB ] = Millimeter2iu( DEFAULT_LINE_WIDTH );
+    m_TextSize[ LAYER_CLASS_FAB ] = wxSize( Millimeter2iu( DEFAULT_TEXT_SIZE ),
+                                                  Millimeter2iu( DEFAULT_TEXT_SIZE ) );
+    m_TextThickness[ LAYER_CLASS_FAB ] = Millimeter2iu( DEFAULT_TEXT_WIDTH );
+    m_TextItalic[ LAYER_CLASS_FAB ] = false;
+    m_TextUpright[ LAYER_CLASS_FAB ] = false;
+
     m_LineThickness[ LAYER_CLASS_OTHERS ] = Millimeter2iu( DEFAULT_LINE_WIDTH );
     m_TextSize[ LAYER_CLASS_OTHERS ] = wxSize( Millimeter2iu( DEFAULT_TEXT_SIZE ),
                                                Millimeter2iu( DEFAULT_TEXT_SIZE ) );
@@ -733,6 +740,32 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( BOARD* aBoard, std::vector<PARAM_CFG*
           &m_LineThickness[ LAYER_CLASS_COURTYARD ],
           Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
           nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "FabLineWidth" ),
+          &m_LineThickness[ LAYER_CLASS_FAB ],
+          Millimeter2iu( DEFAULT_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "FabTextSizeV" ),
+          &m_TextSize[ LAYER_CLASS_FAB ].x,
+          Millimeter2iu( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "FabTextSizeH" ),
+          &m_TextSize[ LAYER_CLASS_FAB ].y,
+          Millimeter2iu( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "FabTextSizeThickness" ),
+          &m_TextThickness[ LAYER_CLASS_FAB ],
+          Millimeter2iu( DEFAULT_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH,
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_BOOL( wxT( "FabTextItalic" ),
+          &m_TextItalic[ LAYER_CLASS_FAB ], false ) );
+
+    aResult->push_back( new PARAM_CFG_BOOL( wxT( "FabTextUpright" ),
+          &m_TextUpright[ LAYER_CLASS_FAB ], true ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "OthersLineWidth" ),
           &m_LineThickness[ LAYER_CLASS_OTHERS ],
@@ -1034,7 +1067,7 @@ void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LSET aMask )
 }
 
 
-// Return the layer class index { silk, copper, edges & courtyards, others } of the
+// Return the layer class index { silk, copper, edges & courtyards, fab, others } of the
 // given layer.
 int BOARD_DESIGN_SETTINGS::GetLayerClass( PCB_LAYER_ID aLayer ) const
 {
@@ -1046,6 +1079,8 @@ int BOARD_DESIGN_SETTINGS::GetLayerClass( PCB_LAYER_ID aLayer ) const
         return LAYER_CLASS_EDGES;
     else if( aLayer == F_CrtYd || aLayer == B_CrtYd )
         return LAYER_CLASS_COURTYARD;
+    else if( aLayer == F_Fab || aLayer == B_Fab )
+        return LAYER_CLASS_FAB;
     else
         return LAYER_CLASS_OTHERS;
 }

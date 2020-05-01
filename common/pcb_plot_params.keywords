@@ -13,7 +13,6 @@ mirror
 mode
 outputdirectory
 outputformat
-padsonsilk
 pcbplotparams
 plotframeref
 plotinvisibletext
@@ -23,6 +22,7 @@ psa4output
 pscolor
 psnegative
 scaleselection
+sketchpadsonfab
 subtractmaskfromsilk
 svgprecision
 svguseinch

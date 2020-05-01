@@ -126,7 +126,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_plotReference              = true;
     m_plotValue                  = true;
     m_plotInvisibleText          = false;
-    m_plotPadsOnSilkLayer        = false;
+    m_sketchPadsOnFabLayers      = false;
     m_subtractMaskFromSilk       = false;
     m_format                     = PLOT_FORMAT::GERBER;
     m_mirror                     = false;
@@ -248,8 +248,8 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        m_plotValue ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotinvisibletext ),
                        m_plotInvisibleText ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_padsonsilk ),
-                       m_plotPadsOnSilkLayer ? trueStr : falseStr );
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_sketchpadsonfab ),
+                       m_sketchPadsOnFabLayers ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_subtractmaskfromsilk ),
                        m_subtractMaskFromSilk ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_outputformat ),
@@ -326,7 +326,7 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCom
         return false;
     if( m_plotInvisibleText != aPcbPlotParams.m_plotInvisibleText )
         return false;
-    if( m_plotPadsOnSilkLayer != aPcbPlotParams.m_plotPadsOnSilkLayer )
+    if( m_sketchPadsOnFabLayers != aPcbPlotParams.m_sketchPadsOnFabLayers )
         return false;
     if( m_subtractMaskFromSilk != aPcbPlotParams.m_subtractMaskFromSilk )
         return false;
@@ -373,11 +373,6 @@ bool PCB_PLOT_PARAMS::SetHPGLPenSpeed( int aValue )
     return setInt( &m_HPGLPenSpeed, aValue, HPGL_PEN_SPEED_MIN, HPGL_PEN_SPEED_MAX );
 }
 
-
-bool PCB_PLOT_PARAMS::SetLineWidth( int aValue )
-{
-    return setInt( &m_lineWidth, aValue, PLOT_LINEWIDTH_MIN, PLOT_LINEWIDTH_MAX );
-}
 
 // PCB_PLOT_PARAMS_PARSER
 
@@ -480,17 +475,6 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             aPcbPlotParams->m_excludeEdgeLayer = parseBool();
             break;
 
-        case T_linewidth:
-            {
-                // Due to a bug, this (minor) parameter was saved in biu
-                // and now is saved in mm
-                // If the read value is outside bounds, force a default value
-                double tmp = parseDouble();
-                if( !aPcbPlotParams->SetLineWidth( KiROUND( tmp * IU_PER_MM ) ) )
-                    aPcbPlotParams->SetLineWidth( PLOT_LINEWIDTH_DEFAULT );
-            }
-            break;
-
         case T_plotframeref:
             aPcbPlotParams->m_plotFrameRef = parseBool();
             break;
@@ -546,8 +530,8 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             aPcbPlotParams->m_plotInvisibleText = parseBool();
             break;
 
-        case T_padsonsilk:
-            aPcbPlotParams->m_plotPadsOnSilkLayer= parseBool();
+        case T_sketchpadsonfab:
+            aPcbPlotParams->m_sketchPadsOnFabLayers= parseBool();
             break;
 
         case T_subtractmaskfromsilk:

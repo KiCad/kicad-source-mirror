@@ -116,6 +116,26 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
             Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
             MM_PER_IU ) );
 
+    m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.fab_line_width",
+           &m_DesignSettings.m_LineThickness[ LAYER_CLASS_FAB ],
+           Millimeter2iu( DEFAULT_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),
+           MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.fab_text_size_h",
+           &m_DesignSettings.m_TextSize[ LAYER_CLASS_FAB ].x,
+           Millimeter2iu( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE, MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.fab_text_size_v",
+           &m_DesignSettings.m_TextSize[ LAYER_CLASS_FAB ].y,
+           Millimeter2iu( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE, MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.fab_text_thickness",
+           &m_DesignSettings.m_TextThickness[ LAYER_CLASS_FAB ],
+           Millimeter2iu( DEFAULT_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH, MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM<bool>( "design_settings.fab_text_italic",
+            &m_DesignSettings.m_TextItalic[ LAYER_CLASS_FAB ], false ) );
+
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.others_line_width",
            &m_DesignSettings.m_LineThickness[ LAYER_CLASS_OTHERS ],
            Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 5.0 ),

@@ -1734,6 +1734,15 @@ void PCB_PARSER::parseDefaults( BOARD_DESIGN_SETTINGS& designSettings )
             parseDefaultTextDims( designSettings, LAYER_CLASS_SILK );
             break;
 
+        case T_fab_layers_line_width:
+            designSettings.m_LineThickness[ LAYER_CLASS_FAB ] = parseBoardUnits( token );
+            NeedRIGHT();
+            break;
+
+        case T_fab_layers_text_dims:
+            parseDefaultTextDims( designSettings, LAYER_CLASS_FAB );
+            break;
+
         case T_other_layers_line_width:
             designSettings.m_LineThickness[ LAYER_CLASS_OTHERS ] = parseBoardUnits( token );
             NeedRIGHT();

@@ -97,7 +97,7 @@ PANEL_MODEDIT_DEFAULTS_BASE::PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 
 	// Grid
-	m_grid->CreateGrid( 5, 5 );
+	m_grid->CreateGrid( 6, 5 );
 	m_grid->EnableEditing( true );
 	m_grid->EnableGridLines( true );
 	m_grid->EnableDragGridSize( false );
@@ -126,7 +126,8 @@ PANEL_MODEDIT_DEFAULTS_BASE::PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	m_grid->SetRowLabelValue( 1, _("Copper Layers") );
 	m_grid->SetRowLabelValue( 2, _("Edge Cuts") );
 	m_grid->SetRowLabelValue( 3, _("Courtyards") );
-	m_grid->SetRowLabelValue( 4, _("Other Layers") );
+	m_grid->SetRowLabelValue( 4, _("Fab Layers") );
+	m_grid->SetRowLabelValue( 5, _("Other Layers") );
 	m_grid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
