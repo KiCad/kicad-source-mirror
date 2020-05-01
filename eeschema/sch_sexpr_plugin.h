@@ -144,6 +144,7 @@ private:
 
 protected:
     int                  m_version;    ///< Version of file being loaded.
+    int                  m_fieldId;    ///< Non-mandatory schematic field ID counter.
 
     /** For throwing exceptions or errors on partial schematic loads. */
     wxString             m_error;

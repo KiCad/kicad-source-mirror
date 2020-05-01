@@ -877,6 +877,8 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, int aNestLevel )
     m_out->Print( aNestLevel + 1, "(uuid %s)\n",
                   m_out->Quotew( aSymbol->m_Uuid.AsString() ).c_str() );
 
+    m_fieldId = MANDATORY_FIELDS;
+
     for( SCH_FIELD& field : aSymbol->GetFields() )
     {
         saveField( &field, aNestLevel + 1 );
@@ -898,6 +900,12 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
         fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId() );
     else
         fieldName = aField->GetName();
+
+    if( aField->GetId() == -1 /* undefined ID */ )
+    {
+        aField->SetId( m_fieldId );
+        m_fieldId += 1;
+    }
 
     m_out->Print( aNestLevel, "(property %s %s (id %d) (at %s %s %s)",
                   m_out->Quotew( fieldName ).c_str(),

@@ -571,7 +571,8 @@ SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
     else
         field = NULL;
 
-    wxASSERT( field );
+    wxASSERT_MSG( field, wxString::Format( "No field ID %d found in symbol %s.",
+                                           aFieldNdx, m_Uuid.AsString() ) );
 
     return const_cast<SCH_FIELD*>( field );
 }

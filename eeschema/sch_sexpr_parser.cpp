@@ -2115,7 +2115,9 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
                 symbol->AddField( *field );
             }
 
-            *symbol->GetField( field->GetId() ) = *field;
+            if( symbol->GetField( field->GetId() ) )
+                *symbol->GetField( field->GetId() ) = *field;
+
             delete field;
             break;
         }
