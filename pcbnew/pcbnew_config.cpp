@@ -65,7 +65,7 @@ void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
     book->AddPage( new wxPanel( book ), _( "Pcbnew" ) );
     book->AddSubPage( new PANEL_PCBNEW_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
-    book->AddSubPage( new PANEL_PCBNEW_COLOR_SETTINGS( this, aParent ), _( "Colors" ) );
+    book->AddSubPage( new PANEL_PCBNEW_COLOR_SETTINGS( this, book ), _( "Colors" ) );
     book->AddSubPage( new PANEL_PCBNEW_SETTINGS( this, aParent ), _( "Editing Options" ) );
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     book->AddSubPage( new PANEL_PCBNEW_ACTION_PLUGINS( this, aParent ), _( "Action Plugins" ) );
