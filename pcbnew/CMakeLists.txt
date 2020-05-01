@@ -229,7 +229,7 @@ set( PCBNEW_MICROWAVE_SRCS
     )
 
 set( PCBNEW_DRC_SRCS
-    drc/courtyard_overlap.cpp
+    drc/drc_courtyard_tester.cpp
     drc/drc.cpp
     drc/drc_clearance_test_functions.cpp
     )

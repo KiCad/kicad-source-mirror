@@ -267,7 +267,7 @@ private:
     /**
      * Test for footprint courtyard overlaps.
      */
-    void doOverlappingCourtyardsDrc();
+    void doCourtyardsDrc();
 
     //-----<single tests>----------------------------------------------
 

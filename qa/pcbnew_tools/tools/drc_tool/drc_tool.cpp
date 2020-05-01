@@ -31,7 +31,7 @@
 #include <pcbnew_utils/board_file_utils.h>
 #include <widgets/ui_common.h>
 #include <pcbnew/drc/drc.h>
-#include <drc/courtyard_overlap.h>
+#include <drc/drc_courtyard_tester.h>
 
 #include <qa_utils/utility_registry.h>
 
@@ -169,7 +169,7 @@ private:
     std::unique_ptr<DRC_TEST_PROVIDER> createDrcProvider(
             BOARD& aBoard, DRC_TEST_PROVIDER::MARKER_HANDLER aHandler ) override
     {
-        return std::make_unique<DRC_COURTYARD_OVERLAP>( aHandler );
+        return std::make_unique<DRC_COURTYARD_TESTER>( aHandler );
     }
 };
 
@@ -206,7 +206,7 @@ private:
     std::unique_ptr<DRC_TEST_PROVIDER> createDrcProvider(
             BOARD& aBoard, DRC_TEST_PROVIDER::MARKER_HANDLER aHandler ) override
     {
-        return std::make_unique<DRC_COURTYARD_OVERLAP>( aHandler );
+        return std::make_unique<DRC_COURTYARD_TESTER>( aHandler );
     }
 };
 

@@ -1,13 +1,9 @@
-/**
- * @file drc_marker_functions.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +24,7 @@
  */
 
 
-#include <drc/courtyard_overlap.h>
+#include <drc/drc_courtyard_tester.h>
 
 #include <class_module.h>
 #include <drc/drc.h>
@@ -47,13 +43,13 @@
 static const wxChar* DRC_COURTYARD_TRACE = wxT( "KICAD_DRC_COURTYARD" );
 
 
-DRC_COURTYARD_OVERLAP::DRC_COURTYARD_OVERLAP( MARKER_HANDLER aMarkerHandler ) :
+DRC_COURTYARD_TESTER::DRC_COURTYARD_TESTER( MARKER_HANDLER aMarkerHandler ) :
         DRC_TEST_PROVIDER( aMarkerHandler )
 {
 }
 
 
-bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
+bool DRC_COURTYARD_TESTER::RunDRC( BOARD& aBoard ) const
 {
     wxLogTrace( DRC_COURTYARD_TRACE, "Running DRC: Courtyard" );
 
@@ -65,26 +61,31 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
     // Update courtyard polygons, and test for missing courtyard definition:
     for( MODULE* footprint : aBoard.Modules() )
     {
-        bool is_ok = footprint->BuildPolyCourtyard();
-
-        if( !is_ok && !aBoard.GetDesignSettings().Ignore( DRCE_OVERLAPPING_FOOTPRINTS ) )
+        if( footprint->BuildPolyCourtyard() )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT );
-            drcItem->SetItems( footprint );
-            HandleMarker( new MARKER_PCB( drcItem, footprint->GetPosition() ) );
-            success = false;
+            if( !aBoard.GetDesignSettings().Ignore( DRCE_MISSING_COURTYARD_IN_FOOTPRINT ) )
+            {
+                int outlineCount = footprint->GetPolyCourtyardFront().OutlineCount()
+                                 + footprint->GetPolyCourtyardBack().OutlineCount();
+
+                if( outlineCount == 0 )
+                {
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MISSING_COURTYARD_IN_FOOTPRINT );
+                    drcItem->SetItems( footprint );
+                    HandleMarker( new MARKER_PCB( drcItem, footprint->GetPosition() ) );
+                    success = false;
+                }
+            }
         }
-
-        if( aBoard.GetDesignSettings().Ignore( DRCE_MISSING_COURTYARD_IN_FOOTPRINT ) )
-            continue;
-
-        if( footprint->GetPolyCourtyardFront().OutlineCount() == 0
-                && footprint->GetPolyCourtyardBack().OutlineCount() == 0 && is_ok )
+        else
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MISSING_COURTYARD_IN_FOOTPRINT );
-            drcItem->SetItems( footprint );
-            HandleMarker( new MARKER_PCB( drcItem, footprint->GetPosition() ) );
-            success = false;
+            if( !aBoard.GetDesignSettings().Ignore( DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT ) )
+            {
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT );
+                drcItem->SetItems( footprint );
+                HandleMarker( new MARKER_PCB( drcItem, footprint->GetPosition() ) );
+                success = false;
+            }
         }
     }
 

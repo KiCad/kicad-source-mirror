@@ -29,7 +29,7 @@
 #include <class_module.h>
 #include <drc/drc.h>
 #include <drc/drc_item.h>
-#include <drc/courtyard_overlap.h>
+#include <drc/drc_courtyard_tester.h>
 #include <widgets/ui_common.h>
 
 #include "../board_test_utils.h"
@@ -473,7 +473,7 @@ static void DoCourtyardOverlapTest(
     // list of markers to collect
     std::vector<std::unique_ptr<MARKER_PCB>> markers;
 
-    DRC_COURTYARD_OVERLAP drc_overlap(
+    DRC_COURTYARD_TESTER drc_overlap(
             [&]( MARKER_PCB* aMarker )
             {
                 markers.push_back( std::unique_ptr<MARKER_PCB>( aMarker ) );

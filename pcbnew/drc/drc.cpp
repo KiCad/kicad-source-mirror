@@ -52,7 +52,7 @@
 #include <board_commit.h>
 #include <geometry/shape_arc.h>
 #include <drc/drc_item.h>
-#include <drc/courtyard_overlap.h>
+#include <drc/drc_courtyard_tester.h>
 #include <tools/zone_filler_tool.h>
 
 DRC::DRC() :
@@ -469,9 +469,10 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
     testCopperTextAndGraphics();
 
-    // find overlapping courtyard ares.
+    // test courtyards
     if( !m_pcb->GetDesignSettings().Ignore( DRCE_OVERLAPPING_FOOTPRINTS )
-        && !m_pcb->GetDesignSettings().Ignore( DRCE_MISSING_COURTYARD_IN_FOOTPRINT ) )
+        || !m_pcb->GetDesignSettings().Ignore( DRCE_MISSING_COURTYARD_IN_FOOTPRINT )
+        || !m_pcb->GetDesignSettings().Ignore( DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT ) )
     {
         if( aMessages )
         {
@@ -479,7 +480,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
             aMessages->Refresh();
         }
 
-        doOverlappingCourtyardsDrc();
+        doCourtyardsDrc();
     }
 
     for( DRC_ITEM* footprintItem : m_footprints )
@@ -1604,9 +1605,9 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 }
 
 
-void DRC::doOverlappingCourtyardsDrc()
+void DRC::doCourtyardsDrc()
 {
-    DRC_COURTYARD_OVERLAP drc_overlap( [&]( MARKER_PCB* aMarker ) { addMarkerToPcb( aMarker ); } );
+    DRC_COURTYARD_TESTER drc_overlap( [&]( MARKER_PCB* aMarker ) { addMarkerToPcb( aMarker ); } );
 
     drc_overlap.RunDRC( *m_pcb );
 }
