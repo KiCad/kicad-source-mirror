@@ -216,22 +216,22 @@ void GERBER_LAYER_WIDGET::ReFill()
 {
     Freeze();
 
-    ClearLayerRows();
-
     for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
+        int      aRow = findLayerRow( layer );
+        bool     visible = true;
+        COLOR4D  color = myframe->GetLayerColor( GERBER_DRAW_LAYER( layer ) );
         wxString msg = GetImagesList()->GetDisplayName( layer );
-
-        bool visible = true;
 
         if( myframe->GetCanvas() )
             visible = myframe->GetCanvas()->GetView()->IsLayerVisible( GERBER_DRAW_LAYER( layer ) );
         else
             visible = myframe->IsLayerVisible( layer );
 
-        AppendLayerRow( LAYER_WIDGET::ROW( msg, layer,
-                        myframe->GetLayerColor( GERBER_DRAW_LAYER( layer ) ),
-                        wxEmptyString, visible, true ) );
+        if( aRow >= 0 )
+            updateLayerRow( findLayerRow( layer ), msg );
+        else
+            AppendLayerRow( LAYER_WIDGET::ROW( msg, layer, color, wxEmptyString, visible, true ) );
     }
 
     UpdateLayouts();

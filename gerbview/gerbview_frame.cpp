@@ -56,7 +56,7 @@
 #include <dialogs/panel_gerbview_settings.h>
 #include <dialogs/panel_gerbview_display_options.h>
 #include <panel_hotkeys_editor.h>
-
+#include <wx/wupdlock.h>
 
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
         : EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ), wxDefaultPosition,
@@ -350,6 +350,8 @@ void GERBVIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 void GERBVIEW_FRAME::ReFillLayerWidget()
 {
+    wxWindowUpdateLocker no_update( m_LayersManager );
+
     m_LayersManager->ReFill();
     m_SelLayerBox->Resync();
     ReCreateAuxiliaryToolbar();
@@ -852,7 +854,7 @@ void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
     ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 
     if( doLayerWidgetUpdate )
-        m_LayersManager->SelectLayer( GetActiveLayer() );
+        m_LayersManager->SelectLayer( aLayer );
 
     UpdateTitleAndInfo();
 

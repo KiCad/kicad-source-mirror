@@ -238,6 +238,8 @@ protected:
 
     void setLayerCheckbox( LAYER_NUM aLayer, bool isVisible );
 
+    void updateLayerRow( int aRow, const wxString& aName );
+
     /**
      * Function passOnFocus
      * gives away the keyboard focus up to the main parent window.

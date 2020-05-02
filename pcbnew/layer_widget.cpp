@@ -182,13 +182,14 @@ void LAYER_WIDGET::OnRightDownRender( wxMouseEvent& aEvent, COLOR_SWATCH* aColor
                  _( "Change Render Color for " ) + aRenderName,
                  KiBitmap( setcolor_board_body_xpm ) );
 
-    menu.Bind( wxEVT_COMMAND_MENU_SELECTED, [aColorSwatch]( wxCommandEvent& event ) {
-        if ( event.GetId() == ID_CHANGE_RENDER_COLOR ) {
-            aColorSwatch->GetNewSwatchColor();
-        } else {
-            event.Skip();
-        }
-    } );
+    menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
+               [aColorSwatch]( wxCommandEvent& event )
+               {
+                   if( event.GetId() == ID_CHANGE_RENDER_COLOR )
+                       aColorSwatch->GetNewSwatchColor();
+                   else
+                       event.Skip();
+               } );
 
     PopupMenu( &menu );
     passOnFocus();
@@ -209,18 +210,22 @@ void LAYER_WIDGET::OnRenderSwatchChanged( wxCommandEvent& aEvent )
         int count = GetLayerRowCount();
         int row;
         int col = 1;    // bitmap button is column 1 in layers tab
+
         for( row = 0; row < count; ++row )
         {
             COLOR_SWATCH* swatch = dynamic_cast<COLOR_SWATCH*>( getLayerComp( row, col ) );
+
             if( swatch )
                 swatch->SetSwatchBackground( newColor );
         }
 
         count = GetRenderRowCount();
         col = 0;    // bitmap button is column 0 in render tab
+
         for( row = 0; row < count; ++row )
         {
             COLOR_SWATCH* swatch = dynamic_cast<COLOR_SWATCH*>( getRenderComp( row, col ) );
+
             if( swatch )
                 swatch->SetSwatchBackground( newColor );
         }
@@ -359,18 +364,43 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     // Bind right click eventhandler to all columns
     wxString layerName( aSpec.rowName );
 
-    sbm->Bind( wxEVT_RIGHT_DOWN, [this, bmb, layerName] ( wxMouseEvent& aEvt ) {
-        OnRightDownLayer( aEvt, bmb, layerName );
-    } );
-    bmb->Bind( wxEVT_RIGHT_DOWN, [this, bmb, layerName] ( wxMouseEvent& aEvt ) {
-        OnRightDownLayer( aEvt, bmb, layerName );
-    } );
-    cb->Bind( wxEVT_RIGHT_DOWN, [this, bmb, layerName] ( wxMouseEvent& aEvt ) {
-        OnRightDownLayer( aEvt, bmb, layerName );
-    } );
-    st->Bind( wxEVT_RIGHT_DOWN, [this, bmb, layerName] ( wxMouseEvent& aEvt ) {
-        OnRightDownLayer( aEvt, bmb, layerName );
-    } );
+    sbm->Bind( wxEVT_RIGHT_DOWN, [this, bmb, layerName] ( wxMouseEvent& aEvt )
+                                 {
+                                     OnRightDownLayer( aEvt, bmb, layerName );
+                                 } );
+    bmb->Bind( wxEVT_RIGHT_DOWN, [this, bmb, layerName] ( wxMouseEvent& aEvt )
+                                 {
+                                     OnRightDownLayer( aEvt, bmb, layerName );
+                                 } );
+    cb->Bind( wxEVT_RIGHT_DOWN, [this, bmb, layerName] ( wxMouseEvent& aEvt )
+                                {
+                                    OnRightDownLayer( aEvt, bmb, layerName );
+                                } );
+    st->Bind( wxEVT_RIGHT_DOWN, [this, bmb, layerName] ( wxMouseEvent& aEvt )
+                                {
+                                    OnRightDownLayer( aEvt, bmb, layerName );
+                                } );
+}
+
+
+void LAYER_WIDGET::updateLayerRow( int aRow, const wxString& aName )
+{
+    wxStaticText* label = dynamic_cast<wxStaticText*>( getLayerComp( aRow, COLUMN_COLOR_LYRNAME ) );
+
+    if( label )
+        label->SetLabel( aName );
+
+    INDICATOR_ICON* indicator = (INDICATOR_ICON*) getLayerComp( aRow, 0 );
+
+    if( indicator )
+    {
+        if( aRow == m_CurrentRow )
+            indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::ON );
+        if( useAlternateBitmap( aRow ) )
+            indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::DIMMED );
+        else
+            indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
+    }
 }
 
 
@@ -638,6 +668,7 @@ void LAYER_WIDGET::SelectLayerRow( int aRow )
     m_notebook->SetSelection( 0 );
 
     INDICATOR_ICON* oldIndicator = (INDICATOR_ICON*) getLayerComp( m_CurrentRow, 0 );
+
     if( oldIndicator )
     {
         if( useAlternateBitmap( m_CurrentRow ) )
@@ -647,6 +678,7 @@ void LAYER_WIDGET::SelectLayerRow( int aRow )
     }
 
     INDICATOR_ICON* newIndicator = (INDICATOR_ICON*) getLayerComp( aRow, 0 );
+
     if( newIndicator )
     {
         newIndicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::ON );

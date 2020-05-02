@@ -39,9 +39,10 @@ INDICATOR_ICON::INDICATOR_ICON( wxWindow* aParent, ICON_PROVIDER& aIconProvider,
 
     sizer->Add( m_bitmap, 0, 0 );
 
-    auto evtSkipper = [this] ( wxEvent& aEvent ) {
-        wxPostEvent( this, aEvent );
-    };
+    auto evtSkipper = [this] ( wxEvent& aEvent )
+                      {
+                          wxPostEvent( this, aEvent );
+                      };
 
     m_bitmap->Bind( wxEVT_LEFT_DOWN, evtSkipper );
 }
@@ -166,16 +167,11 @@ const wxBitmap& ROW_ICON_PROVIDER::GetIndicatorIcon( INDICATOR_ICON::ICON_ID aId
 {
     switch( aId )
     {
-    case STATE::UP:
-        return m_upArrowBitmap;
-    case STATE::DOWN:
-        return m_downArrowBitmap;
-    case STATE::ON:
-        return m_rightArrowBitmap;
-    case STATE::DIMMED:
-        return m_dotBitmap;
-    case STATE::OFF:
-    default:
-        return m_blankBitmap;
+    case STATE::UP:     return m_upArrowBitmap;
+    case STATE::DOWN:   return m_downArrowBitmap;
+    case STATE::ON:     return m_rightArrowBitmap;
+    case STATE::DIMMED: return m_dotBitmap;
+    case STATE::OFF:    return m_blankBitmap;
+    default:            return m_blankBitmap;
     }
 }
