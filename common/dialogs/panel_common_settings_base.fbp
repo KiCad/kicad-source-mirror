@@ -686,7 +686,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxBOTTOM|wxLEFT</property>
+                                    <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxGridBagSizer" expanded="1">
                                         <property name="empty_cell_size">-1,5</property>
@@ -834,7 +834,7 @@
                                             <property name="border">5</property>
                                             <property name="colspan">1</property>
                                             <property name="column">2</property>
-                                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                                             <property name="row">0</property>
                                             <property name="rowspan">1</property>
                                             <object class="wxBitmapButton" expanded="1">
@@ -1112,7 +1112,7 @@
                                             <property name="border">5</property>
                                             <property name="colspan">1</property>
                                             <property name="column">2</property>
-                                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                                             <property name="row">3</property>
                                             <property name="rowspan">1</property>
                                             <object class="wxBitmapButton" expanded="1">
@@ -1613,7 +1613,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">4</property>
-                                    <property name="flag">wxALL</property>
+                                    <property name="flag"></property>
                                     <property name="proportion">0</property>
                                     <object class="wxCheckBox" expanded="0">
                                         <property name="BottomDockable">1</property>
