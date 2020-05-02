@@ -28,6 +28,7 @@
 #include <list>
 #include <map>
 #include <string>
+#include <set>
 
 class TOOL_BASE;
 class TOOL_MANAGER;
@@ -86,7 +87,7 @@ public:
      * @param aHotKey is the hotkey to be handled.
      * @return True if there was an action associated with the hotkey, false otherwise.
      */
-    bool RunHotKey( int aHotKey ) const;
+    bool RunHotKey( int aHotKey, std::set<const TOOL_ACTION*>* aWhiteList ) const;
 
     /**
      * Function GetHotKey()

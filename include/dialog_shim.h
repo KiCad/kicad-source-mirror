@@ -207,6 +207,8 @@ protected:
     bool                   m_qmodal_showing;
     WDO_ENABLE_DISABLE*    m_qmodal_parent_disabler;
 
+    EDA_BASE_FRAME*        m_parentFrame;
+
     std::vector<wxWindow*> m_tabOrder;
 
 private:

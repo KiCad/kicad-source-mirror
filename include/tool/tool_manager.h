@@ -256,9 +256,11 @@ public:
     /**
      * Propagates an event to tools that requested events of matching type(s).
      * @param aEvent is the event to be processed.
+     * @param aWhiteList an optional list of allowed TOOL_ACTIONs
      * @return true if the event is a managed hotkey
      */
-    bool ProcessEvent( const TOOL_EVENT& aEvent );
+    bool ProcessEvent( const TOOL_EVENT& aEvent,
+                       std::set<const TOOL_ACTION*>* aWhiteList = nullptr );
 
     /**
      * Puts an event to the event queue to be processed at the end of event processing cycle.
@@ -429,12 +431,13 @@ private:
     bool dispatchInternal( const TOOL_EVENT& aEvent );
 
     /**
-     * Function dispatchStandardEvents()
+     * Function dispatchHotKey()
      * Handles specific events, that are intended for TOOL_MANAGER rather than tools.
      * @param aEvent is the event to be processed.
      * @return true if the event was processed and should not go any further.
      */
-    bool dispatchHotKey( const TOOL_EVENT& aEvent );
+    bool dispatchHotKey( const TOOL_EVENT& aEvent,
+                         std::set<const TOOL_ACTION*>* aWhiteList = nullptr );
 
     /**
      * Function dispatchActivation()
@@ -457,30 +460,9 @@ private:
      * Makes a tool active, so it can receive events and react to them. Activated tool is pushed
      * on the active tools stack, so the last activated tool receives events first.
      *
-     * @param aToolId is the ID number of tool to be run.
-     */
-    bool runTool( TOOL_ID aToolId );
-
-    /**
-     * Function runTool()
-     * Makes a tool active, so it can receive events and react to them. Activated tool is pushed
-     * on the active tools stack, so the last activated tool receives events first.
-     *
-     * @param aName is the name of tool to be run.
-     */
-    bool runTool( const std::string& aName );
-
-    /**
-     * Function runTool()
-     * Makes a tool active, so it can receive events and react to them. Activated tool is pushed
-     * on the active tools stack, so the last activated tool receives events first.
-     *
      * @param aTool is the tool to be run.
      */
     bool runTool( TOOL_BASE* aTool );
-
-    template <class Parameters>
-    void invokeTool( const std::string& aName, const Parameters& aToolParams );
 
     /**
      * Function finishTool()
@@ -526,9 +508,13 @@ private:
      */
     void applyViewControls( TOOL_STATE* aState );
 
-    ///> Main function for event processing.
-    ///> @return true if a hotkey was handled
-    bool processEvent( const TOOL_EVENT& aEvent );
+    /**
+     * Main function for event processing.
+     * @param aWhiteList an optional list of allowed TOOL_ACTIONs
+     * @return true if a hotkey was handled
+     */
+    bool processEvent( const TOOL_EVENT& aEvent,
+                       std::set<const TOOL_ACTION*>* aWhiteList = nullptr );
 
     /**
      * Saves the previous active state and sets a new one.

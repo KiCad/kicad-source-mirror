@@ -193,6 +193,16 @@ void EDA_DRAW_FRAME::unitsChangeRefresh()
 }
 
 
+void EDA_DRAW_FRAME::DispatchBehindModalDialog( wxKeyEvent& aEvent )
+{
+    static std::set<const TOOL_ACTION*> whiteList = { &ACTIONS::toggleUnits,
+                                                      &ACTIONS::imperialUnits,
+                                                      &ACTIONS::metricUnits };
+
+    m_toolDispatcher->DispatchWxEvent( aEvent, &whiteList );
+}
+
+
 void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     EDA_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );

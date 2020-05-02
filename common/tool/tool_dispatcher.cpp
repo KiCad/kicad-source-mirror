@@ -327,6 +327,12 @@ int translateSpecialCode( int aKeyCode )
 
 void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
+    DispatchWxEvent( aEvent, nullptr );
+}
+
+
+void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent, std::set<const TOOL_ACTION*>* aWhiteList )
+{
     bool            motion = false;
     bool            buttonEvents = false;
     VECTOR2D        pos;
@@ -523,7 +529,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     {
         wxLogTrace( kicadTraceToolStack, "TOOL_DISPATCHER::DispatchWxEvent %s", evt->Format() );
 
-        handled = m_toolMgr->ProcessEvent( *evt );
+        handled = m_toolMgr->ProcessEvent( *evt, aWhiteList );
 
         // ESC is the special key for canceling tools, and is therefore seen as handled
         if( key == WXK_ESCAPE )

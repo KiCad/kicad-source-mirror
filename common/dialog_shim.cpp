@@ -74,7 +74,8 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
           m_initialFocusTarget( nullptr ),
           m_qmodal_loop( nullptr ),
           m_qmodal_showing( false ),
-          m_qmodal_parent_disabler( nullptr )
+          m_qmodal_parent_disabler( nullptr ),
+          m_parentFrame( nullptr )
 {
     KIWAY_HOLDER* kiwayHolder = nullptr;
 
@@ -98,7 +99,8 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
     // Don't mouse-warp after a dialog run from the context menu
     if( kiwayHolder && kiwayHolder->GetType() == KIWAY_HOLDER::FRAME )
     {
-        TOOL_MANAGER* toolMgr = static_cast<EDA_BASE_FRAME*>( kiwayHolder )->GetToolManager();
+        m_parentFrame = static_cast<EDA_BASE_FRAME*>( kiwayHolder );
+        TOOL_MANAGER* toolMgr = m_parentFrame->GetToolManager();
 
         if( toolMgr && toolMgr->IsContextMenuActive() )
             toolMgr->VetoContextMenuMouseWarp();
@@ -509,6 +511,14 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
 
 void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
 {
+    if( m_parentFrame )
+    {
+        m_parentFrame->DispatchBehindModalDialog( aEvt );
+
+        if( !aEvt.GetSkipped() )
+            return;
+    }
+
     // shift-return (Mac default) or Ctrl-Return (GTK) for OK
     if( aEvt.GetKeyCode() == WXK_RETURN && ( aEvt.ShiftDown() || aEvt.ControlDown() ) )
     {

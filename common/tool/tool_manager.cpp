@@ -377,34 +377,6 @@ bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 }
 
 
-bool TOOL_MANAGER::runTool( TOOL_ID aToolId )
-{
-    TOOL_BASE* tool = FindTool( aToolId );
-
-    if( tool && tool->GetType() == INTERACTIVE )
-        return runTool( tool );
-
-    wxLogTrace( kicadTraceToolStack,
-            "TOOL_MANAGER::runTool - No interactive tool with ID %d", aToolId );
-
-    return false;       // there is no tool with the given id
-}
-
-
-bool TOOL_MANAGER::runTool( const std::string& aToolName )
-{
-    TOOL_BASE* tool = FindTool( aToolName );
-
-    if( tool && tool->GetType() == INTERACTIVE )
-        return runTool( tool );
-
-    wxLogTrace( kicadTraceToolStack,
-            "TOOL_MANAGER::runTool - No interactive tool with name %s", aToolName );
-
-    return false;       // there is no tool with the given name
-}
-
-
 bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
 {
     wxASSERT( aTool != NULL );
@@ -795,10 +767,11 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 }
 
 
-bool TOOL_MANAGER::dispatchHotKey( const TOOL_EVENT& aEvent )
+bool TOOL_MANAGER::dispatchHotKey( const TOOL_EVENT& aEvent,
+                                   std::set<const TOOL_ACTION*>* aWhiteList )
 {
     if( aEvent.Action() == TA_KEY_PRESSED )
-        return m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode() );
+        return m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode(), aWhiteList );
 
     return false;
 }
@@ -952,9 +925,10 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 }
 
 
-bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
+bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent,
+                                 std::set<const TOOL_ACTION*>* aWhiteList )
 {
-    bool handled = processEvent( aEvent );
+    bool handled = processEvent( aEvent, aWhiteList );
 
     TOOL_STATE* activeTool = GetCurrentToolState();
 
@@ -1105,12 +1079,13 @@ void TOOL_MANAGER::applyViewControls( TOOL_STATE* aState )
 }
 
 
-bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
+bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent,
+                                 std::set<const TOOL_ACTION*>* aWhiteList )
 {
     wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::processEvent - %s", aEvent.Format() );
 
     // First try to dispatch the action associated with the event if it is a key press event
-    bool handled = dispatchHotKey( aEvent );
+    bool handled = dispatchHotKey( aEvent, aWhiteList );
 
     if( !handled )
     {

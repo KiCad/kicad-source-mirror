@@ -217,6 +217,8 @@ public:
 
     void ChangeUserUnits( EDA_UNITS aUnits );
 
+    virtual void DispatchBehindModalDialog( wxKeyEvent& aEvent ) { }
+
     SETTINGS_MANAGER* GetSettingsManager() const { return m_settingsManager; }
 
     virtual int GetSeverity( int aErrorCode ) const { return RPT_SEVERITY_UNDEFINED; }
