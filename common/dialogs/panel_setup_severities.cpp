@@ -67,7 +67,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& 
    	        wxPanel*    radioPanel = new wxPanel( scrollWin );
    	        wxBoxSizer* radioSizer = new wxBoxSizer( wxHORIZONTAL );
 
-            for( size_t i = 0; i < severityCount; ++i )
+            for( int i = 0; i < severityCount; ++i )
             {
                 m_buttonMap[ errorCode ][i] = new wxRadioButton( radioPanel,
                                                                  baseID + errorCode * 10 + i,
@@ -86,7 +86,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent, RC_ITEM& 
 
    	if( m_pinMapSpecialCase >= 0 )
     {
-        wxString pinMapSeverities[] = { _( "From Pin Conflicts Map" ), _( "" ), _( "Ignore" ) };
+        wxString pinMapSeverities[] = { _( "From Pin Conflicts Map" ), wxT( "" ), _( "Ignore" ) };
    	    int      errorCode = m_pinMapSpecialCase;
         wxString msg = aDummyItem.GetErrorText( errorCode );
 
