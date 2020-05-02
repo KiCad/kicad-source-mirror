@@ -128,7 +128,7 @@
                                 <object class="auinotebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Global Libraries</property>
-                                    <property name="select">0</property>
+                                    <property name="select">1</property>
                                     <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -419,7 +419,7 @@
                                 <object class="auinotebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Project Specific Libraries</property>
-                                    <property name="select">1</property>
+                                    <property name="select">0</property>
                                     <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -720,7 +720,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxRIGHT|wxLEFT</property>
+                                    <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -793,7 +793,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxRIGHT</property>
+                                    <property name="flag">wxBOTTOM|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="CustomControl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -855,7 +855,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxRIGHT</property>
+                                    <property name="flag">wxBOTTOM|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -928,7 +928,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxRIGHT</property>
+                                    <property name="flag">wxBOTTOM|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -1011,7 +1011,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxRIGHT|wxLEFT</property>
+                                    <property name="flag">wxBOTTOM|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -1100,7 +1100,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">1</property>
                             <object class="wxGrid" expanded="0">
                                 <property name="BottomDockable">1</property>

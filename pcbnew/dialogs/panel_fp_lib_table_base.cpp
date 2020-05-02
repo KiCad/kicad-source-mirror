@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Nov  6 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -73,7 +73,7 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	m_global_panel->SetSizer( m_global_sizer );
 	m_global_panel->Layout();
 	m_global_sizer->Fit( m_global_panel );
-	m_auinotebook->AddPage( m_global_panel, _("Global Libraries"), false, wxNullBitmap );
+	m_auinotebook->AddPage( m_global_panel, _("Global Libraries"), true, wxNullBitmap );
 	m_project_panel = new wxPanel( m_auinotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_project_sizer;
 	m_project_sizer = new wxBoxSizer( wxVERTICAL );
@@ -125,7 +125,7 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	m_project_panel->SetSizer( m_project_sizer );
 	m_project_panel->Layout();
 	m_project_sizer->Fit( m_project_panel );
-	m_auinotebook->AddPage( m_project_panel, _("Project Specific Libraries"), true, wxNullBitmap );
+	m_auinotebook->AddPage( m_project_panel, _("Project Specific Libraries"), false, wxNullBitmap );
 
 	m_top_sizer->Add( m_auinotebook, 6, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -135,20 +135,20 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	m_append_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
 	m_append_button->SetToolTip( _("Add empty row to table") );
 
-	bButtonsSizer->Add( m_append_button, 0, wxRIGHT|wxLEFT, 5 );
+	bButtonsSizer->Add( m_append_button, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_browseButton = new SPLIT_BUTTON( m_top_sizer->GetStaticBox(), wxID_ANY, _( "Add Existing" ), wxDefaultPosition );
-	bButtonsSizer->Add( m_browseButton, 0, wxRIGHT, 5 );
+	bButtonsSizer->Add( m_browseButton, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_move_up_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
 	m_move_up_button->SetToolTip( _("Move up") );
 
-	bButtonsSizer->Add( m_move_up_button, 0, wxRIGHT, 5 );
+	bButtonsSizer->Add( m_move_up_button, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_move_down_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
 	m_move_down_button->SetToolTip( _("Move down") );
 
-	bButtonsSizer->Add( m_move_down_button, 0, wxRIGHT, 5 );
+	bButtonsSizer->Add( m_move_down_button, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	bButtonsSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -156,7 +156,7 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	m_delete_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
 	m_delete_button->SetToolTip( _("Remove library from table") );
 
-	bButtonsSizer->Add( m_delete_button, 0, wxRIGHT|wxLEFT, 5 );
+	bButtonsSizer->Add( m_delete_button, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	m_top_sizer->Add( bButtonsSizer, 0, wxEXPAND, 5 );
@@ -196,7 +196,7 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	m_path_subs_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_path_subs_grid->SetToolTip( _("This is a read-only table which shows pertinent environment variables.") );
 
-	sbSizer1->Add( m_path_subs_grid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizer1->Add( m_path_subs_grid, 1, wxALL|wxEXPAND, 5 );
 
 
 	bMainSizer->Add( sbSizer1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
