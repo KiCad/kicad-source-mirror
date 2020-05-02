@@ -35,6 +35,7 @@
 #include <gal/opengl/utils.h>
 
 #include <list>
+#include <algorithm>
 #include <cassert>
 
 #ifdef __WXDEBUG__
