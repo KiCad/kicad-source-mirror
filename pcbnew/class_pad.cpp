@@ -1567,6 +1567,16 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
         else
             aLayers[aCount++] = LAYER_PAD_BK_NETNAMES;
     }
+    else
+    {
+        // Internal layers only.  (Not yet supported in GUI, but is being used by Python
+        // footprint generators and will be needed anyway once pad stacks are supported.)
+        for ( int internal = In1_Cu; internal < In30_Cu; ++internal )
+        {
+            if( IsOnLayer( (PCB_LAYER_ID) internal ) )
+                aLayers[aCount++] = internal;
+        }
+    }
 
     // Check non-copper layers. This list should include all the layers that the
     // footprint editor allows a pad to be placed on.
