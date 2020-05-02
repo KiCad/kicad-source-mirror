@@ -98,6 +98,8 @@ public:
 
     void HideWorksheet();
 
+    WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_worksheet.get(); }
+
     void HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin = nullptr );
 
 private:

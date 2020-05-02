@@ -30,6 +30,7 @@
 #include <class_edge_mod.h>
 #include <collectors.h>
 #include <pcb_edit_frame.h>
+#include <ws_proxy_view_item.h>
 #include <kiway.h>
 #include <footprint_edit_frame.h>
 #include <array_creator.h>
@@ -576,9 +577,8 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
-    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-
-    const auto& selection = m_selectionTool->RequestSelection(
+    PCB_BASE_EDIT_FRAME*    editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    const PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             {
                 EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
@@ -590,10 +590,6 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection, *m_commit );
             dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
     }
-    else if( selection.Size() == 0 )
-    {
-        m_toolMgr->RunAction( ACTIONS::pageSettings );
-    }
     else if( selection.Size() == 1 )
     {
         // Display properties dialog
@@ -604,6 +600,14 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         // Notify other tools of the changes
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+    }
+    else if( selection.Size() == 0 && getView()->IsLayerVisible( LAYER_WORKSHEET ) )
+    {
+        KIGFX::WS_PROXY_VIEW_ITEM* worksheet = editFrame->GetCanvas()->GetWorksheet();
+        VECTOR2D cursorPos = getViewControls()->GetCursorPosition( false );
+
+        if( worksheet && worksheet->HitTestWorksheetItems( getView(), (wxPoint) cursorPos ) )
+            m_toolMgr->RunAction( ACTIONS::pageSettings );
     }
 
     if( selection.IsHover() )

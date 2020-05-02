@@ -60,6 +60,8 @@ public:
      */
     void SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet );
 
+    KIGFX::WS_PROXY_VIEW_ITEM* GetWorksheet() const { return m_worksheet.get(); }
+
     // TODO(JE) Look at optimizing this out
     /**
      * Updates the color settings in the painter and GAL

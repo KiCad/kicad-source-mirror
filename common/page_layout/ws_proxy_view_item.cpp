@@ -65,26 +65,34 @@ const BOX2I WS_PROXY_VIEW_ITEM::ViewBBox() const
 }
 
 
-void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
+void WS_PROXY_VIEW_ITEM::buildDrawList( VIEW* aView, WS_DRAW_ITEM_LIST* aDrawList ) const
 {
-    auto gal = aView->GetGAL();
-    auto settings = aView->GetPainter()->GetSettings();
-    wxString fileName( m_fileName.c_str(), wxConvUTF8 );
-    wxString sheetName( m_sheetName.c_str(), wxConvUTF8 );
-    WS_DRAW_ITEM_LIST drawList;
+    RENDER_SETTINGS* settings = aView->GetPainter()->GetSettings();
+    wxString         fileName( m_fileName.c_str(), wxConvUTF8 );
+    wxString         sheetName( m_sheetName.c_str(), wxConvUTF8 );
 
-    drawList.SetDefaultPenSize( (int) settings->GetWorksheetLineWidth() );
+    aDrawList->SetDefaultPenSize( (int) settings->GetWorksheetLineWidth() );
     // Adjust the scaling factor for worksheet items:
     // worksheet items coordinates and sizes are stored in mils,
     // and must be scaled to the same units as the caller
-    drawList.SetMilsToIUfactor( m_mils2IUscalefactor );
-    drawList.SetSheetNumber( m_sheetNumber );
-    drawList.SetSheetCount( m_sheetCount );
-    drawList.SetFileName( fileName );
-    drawList.SetSheetName( sheetName );
-    drawList.SetProject( m_project );
+    aDrawList->SetMilsToIUfactor( m_mils2IUscalefactor );
+    aDrawList->SetSheetNumber( m_sheetNumber );
+    aDrawList->SetSheetCount( m_sheetCount );
+    aDrawList->SetFileName( fileName );
+    aDrawList->SetSheetName( sheetName );
+    aDrawList->SetProject( m_project );
 
-    drawList.BuildWorkSheetGraphicList( *m_pageInfo, *m_titleBlock );
+    aDrawList->BuildWorkSheetGraphicList( *m_pageInfo, *m_titleBlock );
+}
+
+
+void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
+{
+    GAL*              gal = aView->GetGAL();
+    RENDER_SETTINGS*  settings = aView->GetPainter()->GetSettings();
+    WS_DRAW_ITEM_LIST drawList;
+
+    buildDrawList( aView, &drawList );
 
     // Draw the title block normally even if the view is flipped
     bool flipped = gal->IsFlippedX();
@@ -124,3 +132,18 @@ void WS_PROXY_VIEW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
+bool WS_PROXY_VIEW_ITEM::HitTestWorksheetItems( VIEW* aView, const wxPoint& aPosition )
+{
+    int               accuracy = (int) aView->ToWorld( 5.0 );   // five pixels at current zoom
+    WS_DRAW_ITEM_LIST drawList;
+
+    buildDrawList( aView, &drawList );
+
+    for( WS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
+    {
+        if( item->HitTest( aPosition, accuracy ) )
+            return true;
+    }
+
+    return false;
+}

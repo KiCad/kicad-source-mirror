@@ -40,6 +40,7 @@
 #include <sch_line.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
+#include <ws_proxy_view_item.h>
 #include <eeschema_id.h>
 #include <status_popup.h>
 #include <wx/gdicmn.h>
@@ -1235,7 +1236,15 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     if( selection.Empty() )
     {
-        m_toolMgr->RunAction( ACTIONS::pageSettings );
+        if( getView()->IsLayerVisible( LAYER_SCHEMATIC_WORKSHEET ) )
+        {
+            KIGFX::WS_PROXY_VIEW_ITEM* worksheet = m_frame->GetCanvas()->GetView()->GetWorksheet();
+            VECTOR2D cursorPos = getViewControls()->GetCursorPosition( false );
+
+            if( worksheet && worksheet->HitTestWorksheetItems( getView(), (wxPoint) cursorPos ) )
+                m_toolMgr->RunAction( ACTIONS::pageSettings );
+        }
+
         return 0;
     }
 

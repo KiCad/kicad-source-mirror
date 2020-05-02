@@ -556,7 +556,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             WS_PROXY_UNDO_ITEM* item = (WS_PROXY_UNDO_ITEM*) eda_item;
             item->Restore( this );
             *item = alt_item;
-            GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
         }
         break;
 

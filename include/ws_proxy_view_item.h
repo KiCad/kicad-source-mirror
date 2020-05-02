@@ -34,6 +34,7 @@ class WS_DRAW_ITEM_LINE;
 class WS_DRAW_ITEM_RECT;
 class WS_DRAW_ITEM_TEXT;
 class WS_DRAW_ITEM_BITMAP;
+class WS_DRAW_ITEM_LIST;
 
 namespace KIGFX
 {
@@ -101,7 +102,11 @@ public:
         return wxT( "WS_PROXY_VIEW_ITEM" );
     }
 
+    bool HitTestWorksheetItems( VIEW* aView, const wxPoint& aPosition );
+
 protected:
+    void buildDrawList( VIEW* aView, WS_DRAW_ITEM_LIST* aDrawList ) const;
+
     /// the factor between mils (units used in worksheet and internal units)
     /// it is the value IU_PER_MILS used in the caller
     int                m_mils2IUscalefactor;
