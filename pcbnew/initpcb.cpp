@@ -34,12 +34,18 @@
 
 #include <pcbnew.h>
 #include <footprint_edit_frame.h>
+#include <tool/tool_manager.h>
+#include "tools/pcb_actions.h"
 
 
 bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
 {
     if( GetBoard() == NULL )
         return false;
+
+    // Gal canvas: Ensure there are no selected items in selection list.
+    // (all items will be deleted):
+    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
     if( aQuery && !GetBoard()->IsEmpty() )
     {
@@ -98,6 +104,10 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
 {
     if( GetBoard() == NULL )
         return false;
+
+    // Gal canvas: Ensure there are no selected items in selection list.
+    // (all items will be deleted):
+    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
     if( aQuery && GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
