@@ -36,6 +36,7 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAM
         m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
         m_busWidth( aFrame, m_busWidthLabel, m_busWidthCtrl, m_busWidthUnits, true ),
         m_wireWidth( aFrame, m_wireWidthLabel, m_wireWidthCtrl, m_wireWidthUnits, true ),
+        m_pinSymbolSize( aFrame, m_pinSymbolSizeLabel, m_pinSymbolSizeCtrl, m_pinSymbolSizeUnits, true ),
         m_junctionSize( aFrame, m_jctSizeLabel, m_jctSizeCtrl, m_jctSizeUnits, true )
 {
 }
@@ -61,12 +62,14 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_lineWidth.SetUnits( EDA_UNITS::INCHES, true );
     m_busWidth.SetUnits( EDA_UNITS::INCHES, true );
     m_wireWidth.SetUnits( EDA_UNITS::INCHES, true );
+    m_pinSymbolSize.SetUnits( EDA_UNITS::INCHES, true );
     m_junctionSize.SetUnits( EDA_UNITS::INCHES, true );
 
     m_textSize.SetValue( m_frame->GetDefaultTextSize() );
     m_lineWidth.SetValue( m_frame->GetDefaultLineWidth() );
     m_busWidth.SetValue( m_frame->GetDefaultBusThickness() );
     m_wireWidth.SetValue( m_frame->GetDefaultWireThickness() );
+    m_pinSymbolSize.SetValue( m_frame->GetPinSymbolSize() );
     m_junctionSize.SetValue( SCH_JUNCTION::g_SymbolSize );
 
     wxString offsetRatio = wxString::Format( "%f", m_frame->GetTextOffsetRatio() * 100.0 );
@@ -104,6 +107,7 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     m_frame->SetDefaultLineWidth( (int) m_lineWidth.GetValue() );
     m_frame->SetDefaultWireThickness( (int) m_wireWidth.GetValue() );
     m_frame->SetDefaultBusThickness( (int) m_busWidth.GetValue() );
+    m_frame->SetPinSymbolSize( (int) m_pinSymbolSize.GetValue() );
     SCH_JUNCTION::g_SymbolSize = (int) m_junctionSize.GetValue();
 
     double dtmp = 0.0;
@@ -115,6 +119,7 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     m_frame->GetRenderSettings()->m_DefaultWireThickness = m_frame->GetDefaultWireThickness();
     m_frame->GetRenderSettings()->m_DefaultBusThickness = m_frame->GetDefaultBusThickness();
     m_frame->GetRenderSettings()->m_TextOffsetRatio = m_frame->GetTextOffsetRatio();
+    m_frame->GetRenderSettings()->m_PinSymbolSize = m_frame->GetPinSymbolSize();
 
     m_frame->GetCanvas()->GetView()->MarkDirty();
     m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );

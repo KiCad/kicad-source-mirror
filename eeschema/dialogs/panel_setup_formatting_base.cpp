@@ -98,6 +98,17 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	m_lineWidthUnits->Wrap( -1 );
 	fgSizer321->Add( m_lineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
+	m_pinSymbolSizeLabel = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("Pin symbol size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pinSymbolSizeLabel->Wrap( -1 );
+	fgSizer321->Add( m_pinSymbolSizeLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_pinSymbolSizeCtrl = new wxTextCtrl( sbSizer41->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer321->Add( m_pinSymbolSizeCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_pinSymbolSizeUnits = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pinSymbolSizeUnits->Wrap( -1 );
+	fgSizer321->Add( m_pinSymbolSizeUnits, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
 
 	sbSizer41->Add( fgSizer321, 1, wxEXPAND|wxBOTTOM, 5 );
 

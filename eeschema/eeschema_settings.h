@@ -64,6 +64,7 @@ public:
         int default_repeat_offset_x;
         int default_repeat_offset_y;
         int default_wire_thickness;
+        int pin_symbol_size;
         COLOR4D default_sheet_border_color;
         COLOR4D default_sheet_background_color;
         wxString field_names;

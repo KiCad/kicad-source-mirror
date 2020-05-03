@@ -93,6 +93,7 @@ protected:
     int       m_defaultBusThickness;
     int       m_defaultTextSize;
     double    m_textOffsetRatio;
+    int       m_pinSymbolSize;
 
     TEMPLATES m_templateFieldNames;
 
@@ -139,6 +140,9 @@ public:
 
     int GetDefaultBusThickness() const { return m_defaultBusThickness; }
     void SetDefaultBusThickness( int aThickness );
+
+    int GetPinSymbolSize() const { return m_pinSymbolSize; }
+    void SetPinSymbolSize( int aSize );
 
     int GetDefaultTextSize() const { return m_defaultTextSize; }
     void SetDefaultTextSize( int aSize ) { m_defaultTextSize = aSize; }

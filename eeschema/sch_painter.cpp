@@ -77,7 +77,8 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_OverrideItemColors( false ),
         m_TextOffsetRatio( 0.08 ),
         m_DefaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
-        m_DefaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS )
+        m_DefaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS ),
+        m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 )
 {
     SetDefaultPenWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS );
 }
@@ -691,16 +692,22 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
 }
 
 
-static int InternalPinDecoSize( const LIB_PIN &aPin )
+int SCH_PAINTER::internalPinDecoSize( const LIB_PIN &aPin )
 {
+    if( m_schSettings.m_PinSymbolSize > 0 )
+        return m_schSettings.m_PinSymbolSize;
+
     return aPin.GetNameTextSize() != 0 ? aPin.GetNameTextSize() / 2 : aPin.GetNumberTextSize() / 2;
 }
 
 
 // Utility for getting the size of the 'external' pin decorators (as a radius)
 // i.e. the negation circle, the polarity 'slopes' and the nonlogic marker
-static int ExternalPinDecoSize( const LIB_PIN &aPin )
+int SCH_PAINTER::externalPinDecoSize( const LIB_PIN &aPin )
 {
+    if( m_schSettings.m_PinSymbolSize > 0 )
+        return m_schSettings.m_PinSymbolSize;
+
     return aPin.GetNumberTextSize() / 2;
 }
 
@@ -782,9 +789,9 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     m_gal->SetFontBold( false );
     m_gal->SetFontItalic( false );
 
-    const int radius = ExternalPinDecoSize( *aPin );
+    const int radius = externalPinDecoSize( *aPin );
     const int diam = radius*2;
-    const int clock_size = InternalPinDecoSize( *aPin );
+    const int clock_size = internalPinDecoSize( *aPin );
 
     if( aPin->GetType() == ELECTRICAL_PINTYPE::PT_NC ) // Draw a N.C. symbol
     {

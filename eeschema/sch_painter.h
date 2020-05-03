@@ -115,6 +115,7 @@ public:
 
     int    m_DefaultWireThickness;
     int    m_DefaultBusThickness;
+    int    m_PinSymbolSize;
 };
 
 
@@ -167,6 +168,9 @@ private:
 
     void drawPinDanglingSymbol( const VECTOR2I& aPos, bool aDrawingShadows );
     void drawDanglingSymbol( const wxPoint& aPos, bool aDrawingShadows );
+
+    int internalPinDecoSize( const LIB_PIN &aPin );
+    int externalPinDecoSize( const LIB_PIN &aPin );
 
     bool isUnitAndConversionShown( const LIB_ITEM* aItem );
 

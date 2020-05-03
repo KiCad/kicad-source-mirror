@@ -88,6 +88,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
     m_defaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS ),
     m_defaultTextSize( DEFAULT_TEXT_SIZE * IU_PER_MILS ),
     m_textOffsetRatio( 0.08 ),
+    m_pinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
     m_showPinElectricalTypeName( false )
 {
     createCanvas();
@@ -145,6 +146,13 @@ void SCH_BASE_FRAME::SetDefaultBusThickness( int aThickness )
 {
     m_defaultBusThickness = aThickness;
     GetRenderSettings()->m_DefaultBusThickness = aThickness;
+}
+
+
+void SCH_BASE_FRAME::SetPinSymbolSize( int aSize )
+{
+    m_pinSymbolSize = aSize;
+    GetRenderSettings()->m_PinSymbolSize = aSize;
 }
 
 

@@ -54,6 +54,7 @@
 #include <trace_helpers.h>
 #include <libedit/libedit_settings.h>
 #include <default_values.h>
+#include "sch_painter.h"
 
 static const int pin_orientation_codes[] =
 {
@@ -132,8 +133,12 @@ static const wxString getPinOrientationName( unsigned aPinOrientationCode )
 // i.e. the clock symbols (falling clock is actually external but is of
 // the same kind)
 
-static int InternalPinDecoSize( const LIB_PIN &aPin )
+static int internalPinDecoSize( RENDER_SETTINGS* aSettings, const LIB_PIN &aPin )
 {
+    KIGFX::SCH_RENDER_SETTINGS* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
+
+    if( settings && settings->m_PinSymbolSize )
+        return settings->m_PinSymbolSize;
 
     return aPin.GetNameTextSize() != 0 ? aPin.GetNameTextSize() / 2 : aPin.GetNumberTextSize() / 2;
 }
@@ -141,8 +146,13 @@ static int InternalPinDecoSize( const LIB_PIN &aPin )
 /// Utility for getting the size of the 'external' pin decorators (as a radius)
 // i.e. the negation circle, the polarity 'slopes' and the nonlogic
 // marker
-static int ExternalPinDecoSize( const LIB_PIN &aPin )
+static int externalPinDecoSize( RENDER_SETTINGS* aSettings, const LIB_PIN &aPin )
 {
+    KIGFX::SCH_RENDER_SETTINGS* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
+
+    if( settings && settings->m_PinSymbolSize )
+        return settings->m_PinSymbolSize;
+
     return aPin.GetNumberTextSize() / 2;
 }
 
@@ -607,7 +617,7 @@ void LIB_PIN::PrintPinSymbol( RENDER_SETTINGS* aSettings, const wxPoint& aPos, i
 
     if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
     {
-        const int radius = ExternalPinDecoSize( *this );
+        const int radius = externalPinDecoSize( aSettings, *this );
         GRCircle( nullptr, DC, MapX1 * radius + x1, MapY1 * radius + y1, radius, width, color );
 
         GRMoveTo( MapX1 * radius * 2 + x1, MapY1 * radius * 2 + y1 );
@@ -624,7 +634,7 @@ void LIB_PIN::PrintPinSymbol( RENDER_SETTINGS* aSettings, const wxPoint& aPos, i
             || m_shape == GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK
             || m_shape == GRAPHIC_PINSHAPE::CLOCK_LOW )
     {
-        const int clock_size = InternalPinDecoSize( *this );
+        const int clock_size = internalPinDecoSize( aSettings, *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
             GRMoveTo( x1, y1 + clock_size );
@@ -643,7 +653,7 @@ void LIB_PIN::PrintPinSymbol( RENDER_SETTINGS* aSettings, const wxPoint& aPos, i
     if( m_shape == GRAPHIC_PINSHAPE::INPUT_LOW || m_shape == GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK
             || m_shape == GRAPHIC_PINSHAPE::CLOCK_LOW )
     {
-        const int deco_size = ExternalPinDecoSize( *this );
+        const int deco_size = externalPinDecoSize( aSettings, *this );
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
         {
             GRMoveTo( x1 + MapX1 * deco_size * 2, y1 );
@@ -660,7 +670,7 @@ void LIB_PIN::PrintPinSymbol( RENDER_SETTINGS* aSettings, const wxPoint& aPos, i
 
     if( m_shape == GRAPHIC_PINSHAPE::OUTPUT_LOW ) /* IEEE symbol "Active Low Output" */
     {
-        const int deco_size = ExternalPinDecoSize( *this );
+        const int deco_size = externalPinDecoSize( aSettings, *this );
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
         {
             GRMoveTo( x1, y1 - deco_size * 2 );
@@ -674,7 +684,7 @@ void LIB_PIN::PrintPinSymbol( RENDER_SETTINGS* aSettings, const wxPoint& aPos, i
     }
     else if( m_shape == GRAPHIC_PINSHAPE::NONLOGIC ) /* NonLogic pin symbol */
     {
-        const int deco_size = ExternalPinDecoSize( *this );
+        const int deco_size = externalPinDecoSize( aSettings, *this );
         GRMoveTo( x1 - (MapX1 + MapY1) * deco_size, y1 - (MapY1 - MapX1) * deco_size );
         GRLineTo( nullptr, DC, x1 + (MapX1 + MapY1) * deco_size,
                   y1 + ( MapY1 - MapX1 ) * deco_size, width, color );
@@ -910,7 +920,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
 
     if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
     {
-        const int radius = ExternalPinDecoSize( *this );
+        const int radius = externalPinDecoSize( aPlotter->RenderSettings(), *this );
         aPlotter->Circle( wxPoint( MapX1 * radius + x1, MapY1 * radius + y1 ), radius * 2,
                           NO_FILL, penWidth );
 
@@ -919,7 +929,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     }
     else if( m_shape == GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK )
     {
-        const int deco_size = InternalPinDecoSize( *this );
+        const int deco_size = internalPinDecoSize( aPlotter->RenderSettings(), *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
             aPlotter->MoveTo( wxPoint( x1, y1 + deco_size ) );
@@ -945,7 +955,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     if( m_shape == GRAPHIC_PINSHAPE::CLOCK || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK
             || m_shape == GRAPHIC_PINSHAPE::CLOCK_LOW )
     {
-        const int deco_size = InternalPinDecoSize( *this );
+        const int deco_size = internalPinDecoSize( aPlotter->RenderSettings(), *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
             aPlotter->MoveTo( wxPoint( x1, y1 + deco_size ) );
@@ -963,7 +973,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     if( m_shape == GRAPHIC_PINSHAPE::INPUT_LOW
             || m_shape == GRAPHIC_PINSHAPE::CLOCK_LOW ) /* IEEE symbol "Active Low Input" */
     {
-        const int deco_size = ExternalPinDecoSize( *this );
+        const int deco_size = externalPinDecoSize( aPlotter->RenderSettings(), *this );
 
         if( MapY1 == 0 )        /* MapX1 = +- 1 */
         {
@@ -982,7 +992,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
 
     if( m_shape == GRAPHIC_PINSHAPE::OUTPUT_LOW ) /* IEEE symbol "Active Low Output" */
     {
-        const int symbol_size = ExternalPinDecoSize( *this );
+        const int symbol_size = externalPinDecoSize( aPlotter->RenderSettings(), *this );
 
         if( MapY1 == 0 )        /* MapX1 = +- 1 */
         {
@@ -997,7 +1007,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     }
     else if( m_shape == GRAPHIC_PINSHAPE::NONLOGIC ) /* NonLogic pin symbol */
     {
-        const int deco_size = ExternalPinDecoSize( *this );
+        const int deco_size = externalPinDecoSize( aPlotter->RenderSettings(), *this );
         aPlotter->MoveTo( wxPoint( x1 - (MapX1 + MapY1) * deco_size, y1 - (MapY1 - MapX1) * deco_size ) );
         aPlotter->FinishTo( wxPoint( x1 + (MapX1 + MapY1) * deco_size, y1 + (MapY1 - MapX1) * deco_size ) );
         aPlotter->MoveTo( wxPoint( x1 - (MapX1 - MapY1) * deco_size, y1 - (MapY1 + MapX1) * deco_size ) );
@@ -1511,7 +1521,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles ) const
     int numberTextHeight  = showNum ? KiROUND( m_numTextSize * 1.1 ) : 0;
 
     if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
-        minsizeV = std::max( TARGET_PIN_RADIUS, ExternalPinDecoSize( *this ) );
+        minsizeV = std::max( TARGET_PIN_RADIUS, externalPinDecoSize( nullptr, *this ) );
 
     // calculate top left corner position
     // for the default pin orientation (PIN_RIGHT)

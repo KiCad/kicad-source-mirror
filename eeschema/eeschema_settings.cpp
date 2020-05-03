@@ -86,6 +86,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() : APP_SETTINGS_BASE( "eeschema", eeschema
     m_params.emplace_back( new PARAM<int>( "drawing.default_junction_size",
             &m_Drawing.default_junction_size, DEFAULT_JUNCTION_DIAM ) );
 
+    m_params.emplace_back( new PARAM<int>( "drawing.pin_symbol_size",
+            &m_Drawing.pin_symbol_size, DEFAULT_TEXT_SIZE / 2 ) );
+
     m_params.emplace_back( new PARAM<int>( "drawing.default_line_thickness",
             &m_Drawing.default_line_thickness, DEFAULT_LINE_THICKNESS ) );
 
