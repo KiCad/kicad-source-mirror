@@ -532,7 +532,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent, std::set<const TOOL_ACTI
         handled = m_toolMgr->ProcessEvent( *evt, aWhiteList );
 
         // ESC is the special key for canceling tools, and is therefore seen as handled
-        if( key == WXK_ESCAPE )
+        if( key == WXK_ESCAPE && ( !aWhiteList || aWhiteList.count( ACTIONS::cancelInteractive ) ) )
             handled = true;
     }
 

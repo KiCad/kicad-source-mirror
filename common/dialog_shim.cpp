@@ -511,9 +511,7 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
 
 void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
 {
-    // Do not send WXK_ESCAPE char hook event to the parent frame
-    // It must be handled by the dialog itself
-    if( m_parentFrame && aEvt.GetKeyCode() != WXK_ESCAPE )
+    if( m_parentFrame )
     {
         m_parentFrame->DispatchBehindModalDialog( aEvt );
 
