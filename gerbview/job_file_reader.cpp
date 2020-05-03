@@ -229,8 +229,6 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
 
     SortLayersByX2Attributes();
 
-    SetActiveLayer( 0 );
-
     if( !msg.IsEmpty() )
     {
         wxSafeYield();  // Allows slice of time to redraw the screen
