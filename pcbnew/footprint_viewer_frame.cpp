@@ -580,6 +580,12 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& aEvent )
 
     ReCreateFootprintList();
     UpdateTitle();
+
+    // The m_libList has now the focus, in order to be able to use arrow keys
+    // to navigate inside the list.
+    // the gal canvas must not steal the focus to allow navigation
+    GetCanvas()->SetStealsFocus( false );
+    m_libList->SetFocus();
 }
 
 
@@ -629,6 +635,12 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
         GetCanvas()->Refresh();
         Update3DView( true );
     }
+
+    // The m_fpList has now the focus, in order to be able to use arrow keys
+    // to navigate inside the list.
+    // the gal canvas must not steal the focus to allow navigation
+    GetCanvas()->SetStealsFocus( false );
+    m_fpList->SetFocus();
 }
 
 
