@@ -78,7 +78,9 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_TextOffsetRatio( 0.08 ),
         m_DefaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
         m_DefaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS )
-{ }
+{
+    SetDefaultPenWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS );
+}
 
 
 void SCH_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )

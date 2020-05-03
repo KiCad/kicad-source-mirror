@@ -55,6 +55,8 @@
 #include <tools/ee_inspection_tool.h>
 #include <view/view_controls.h>
 
+#include <default_values.h>
+
 // Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
 wxString LIB_VIEW_FRAME::m_entryName;
@@ -138,8 +140,12 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = GetGalDisplayOptions();
     gal_opts.m_axesEnabled = true;
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
-    GetRenderSettings()->m_ShowPinsElectricalType = GetShowElectricalType();
     GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
+
+    GetRenderSettings()->m_ShowPinsElectricalType = GetShowElectricalType();
+    GetRenderSettings()->m_ShowHiddenText = true;
+    GetRenderSettings()->m_ShowHiddenPins = true;
+    GetRenderSettings()->SetDefaultPenWidth( DEFAULT_LINE_THICKNESS * IU_PER_MILS );
 
     setupTools();
     ReCreateMenuBar();
