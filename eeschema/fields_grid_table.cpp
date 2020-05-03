@@ -74,12 +74,12 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_mandatoryFieldCount( SHEET_MANDATORY_FIELDS ),
         m_part( nullptr ),
         m_fieldNameValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_NAME ),
-        m_referenceValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), REFERENCE ),
+        m_referenceValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), SHEETNAME_V ),
         m_valueValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), VALUE ),
         m_libIdValidator( LIB_ID::ID_PCB ),
         m_urlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE ),
         m_nonUrlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE ),
-        m_filepathValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), SHEETFILENAME )
+        m_filepathValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), SHEETFILENAME_V )
 {
     initGrid( aDialog );
 }
@@ -319,6 +319,11 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         {
             m_urlAttr->IncRef();
             return m_urlAttr;
+        }
+        else if( m_parentType == SCH_SHEET_T && aRow == SHEETNAME )
+        {
+            m_referenceAttr->IncRef();
+            return m_referenceAttr;
         }
         else if( m_parentType == SCH_SHEET_T && aRow == SHEETFILENAME )
         {

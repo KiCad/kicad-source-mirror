@@ -163,7 +163,7 @@ wxString SCH_SHEET_PATH::PathHumanReadable() const
 
     // Start at 1 to avoid the root sheet, as above.
     for( unsigned i = 1; i < size(); i++ )
-        s = s + at( i )->GetName() + wxT( "/" );
+        s = s + at( i )->GetFields()[ SHEETNAME ].GetShownText() + wxT( "/" );
 
     return s;
 }
@@ -364,7 +364,10 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 
     if( m_currentSheetPath.LastScreen() )
     {
-        for( auto item : m_currentSheetPath.LastScreen()->Items().OfType( SCH_SHEET_T ) )
+        std::vector<SCH_ITEM*> childSheets;
+        m_currentSheetPath.LastScreen()->GetSheets( &childSheets );
+
+        for( SCH_ITEM* item : childSheets )
         {
             auto sheet = static_cast<SCH_SHEET*>( item );
 

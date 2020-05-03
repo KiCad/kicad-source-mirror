@@ -160,12 +160,16 @@ void HIERARCHY_NAVIG_DLG::buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemI
 {
     wxCHECK_RET( m_nbsheets < NB_MAX_SHEET, "Maximum number of sheets exceeded." );
 
-    for( auto aItem : aList->LastScreen()->Items().OfType( SCH_SHEET_T ) )
+    std::vector<SCH_ITEM*> sheetChildren;
+    aList->LastScreen()->GetSheets( &sheetChildren );
+
+    for( SCH_ITEM* aItem : sheetChildren )
     {
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
+        wxString   sheetName = sheet->GetFields()[ SHEETNAME ].GetShownText();
         m_nbsheets++;
         wxTreeItemId menu;
-        menu = m_Tree->AppendItem( *aPreviousmenu, sheet->GetName(), 0, 1 );
+        menu = m_Tree->AppendItem( *aPreviousmenu, sheetName, 0, 1 );
         aList->push_back( sheet );
         m_Tree->SetItemData( menu, new TreeItemData( *aList ) );
 

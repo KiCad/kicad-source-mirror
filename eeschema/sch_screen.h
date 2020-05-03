@@ -392,8 +392,14 @@ public:
      *
      * @param aItems Hierarchical item list to fill.
      */
-    void GetHierarchicalItems( EDA_ITEMS& aItems );
+    void GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems );
 
+    /**
+     * Similar to GetItems().OfType( SCH_SHEET_T ), but return the sheets in a
+     * deterministic order (L-R, T-B) for sheet numbering.
+     * @param aItems
+     */
+    void GetSheets( std::vector<SCH_ITEM*>* aItems );
 
     /**
      * Return a line item located at \a aPosition.

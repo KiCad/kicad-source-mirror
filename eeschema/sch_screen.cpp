@@ -759,13 +759,29 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
 }
 
 
-void SCH_SCREEN::GetHierarchicalItems( EDA_ITEMS& aItems )
+void SCH_SCREEN::GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems )
 {
     for( SCH_ITEM* item : Items() )
     {
         if( ( item->Type() == SCH_SHEET_T ) || ( item->Type() == SCH_COMPONENT_T ) )
-            aItems.push_back( item );
+            aItems->push_back( item );
     }
+}
+
+
+void SCH_SCREEN::GetSheets( std::vector<SCH_ITEM*>* aItems )
+{
+    for( SCH_ITEM* item : Items().OfType( SCH_SHEET_T ) )
+        aItems->push_back( item );
+
+    std::sort( aItems->begin(), aItems->end(),
+            []( EDA_ITEM* a, EDA_ITEM* b ) -> bool
+            {
+                if( a->GetPosition().x == b->GetPosition().x )
+                    return a->GetPosition().y < b->GetPosition().y;
+                else
+                    return a->GetPosition().x < b->GetPosition().x;
+            } );
 }
 
 
@@ -1065,7 +1081,7 @@ void SCH_SCREENS::ClearAnnotationOfNewSheetPaths( SCH_SHEET_LIST& aInitialSheetP
 
 int SCH_SCREENS::ReplaceDuplicateTimeStamps()
 {
-    EDA_ITEMS items;
+    std::vector<SCH_ITEM*> items;
     int count = 0;
 
     auto timestamp_cmp = []( const EDA_ITEM* a, const EDA_ITEM* b ) -> bool
@@ -1076,7 +1092,7 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
     std::set<EDA_ITEM*, decltype( timestamp_cmp )> unique_stamps( timestamp_cmp );
 
     for( SCH_SCREEN* screen : m_screens )
-        screen->GetHierarchicalItems( items );
+        screen->GetHierarchicalItems( &items );
 
     if( items.size() < 2 )
         return 0;

@@ -228,6 +228,26 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
         }
     }
 
+    if( token->IsSameAs( wxT( "#" ) ) )
+    {
+        SCH_SHEET_LIST sheetList( g_RootSheet );
+
+        for( const SCH_SHEET_PATH& sheet : sheetList )
+        {
+            if( sheet.Last() == this )   // Current sheet path found
+            {
+                *token = wxString::Format( wxT( "%d" ), sheet.GetPageNumber() );
+                return true;
+            }
+        }
+    }
+    else if( token->IsSameAs( wxT( "##" ) ) )
+    {
+        SCH_SHEET_LIST sheetList( g_RootSheet );
+        *token = wxString::Format( wxT( "%d" ), (int) sheetList.size() );
+        return true;
+    }
+
     return false;
 }
 
@@ -705,7 +725,7 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList 
 #if 1   // Set to 1 to display the sheet UUID and hierarchical path
     wxString msgU, msgL;
     msgU << _( "UUID" ) << ": " << m_Uuid.AsString();
-    msgL << _( "Path" ) << ": " <<g_CurrentSheet->PathHumanReadable();
+    msgL << _( "Path" ) << ": " << g_CurrentSheet->PathHumanReadable();
 
     aList.push_back( MSG_PANEL_ITEM( msgU, msgL, BLUE ) );
 #endif

@@ -44,15 +44,27 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsLibEditor, int aFieldId, wxSt
 
     // The reference field cannot contain spaces.
     if( aFieldId == REFERENCE )
+    {
         excludes += " ";
-    else if( aFieldId == VALUE && m_isLibEditor )
+    }
+    else if( ( aFieldId == VALUE && m_isLibEditor )
+                || aFieldId == SHEETNAME_V
+                || aFieldId == SHEETFILENAME_V )
+    {
         excludes += " :/\\";
+    }
 
     long style = GetStyle();
 
-    // The reference and value fields cannot be empty.
-    if( aFieldId == REFERENCE || aFieldId == VALUE || aFieldId == FIELD_NAME )
+    // The reference, value sheetname and sheetfilename fields cannot be empty.
+    if( aFieldId == REFERENCE
+            || aFieldId == VALUE
+            || aFieldId == SHEETNAME_V
+            || aFieldId == SHEETFILENAME_V
+            || aFieldId == FIELD_NAME )
+    {
         style |= wxFILTER_EMPTY;
+    }
 
     SetStyle( style );
     SetCharExcludes( excludes );
@@ -101,6 +113,14 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
         fieldCharError = _( "The datasheet field cannot contain %s character(s)." );
         break;
 
+    case SHEETNAME_V:
+        fieldCharError = _( "The sheet name cannot contain %s character(s)." );
+        break;
+
+    case SHEETFILENAME_V:
+        fieldCharError = _( "The sheet filename cannot contain %s character(s)." );
+        break;
+
     default:
         fieldCharError = _( "The field cannot contain %s character(s)." );
         break;
@@ -121,8 +141,10 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
     else if( HasFlag( wxFILTER_EXCLUDE_CHAR_LIST ) && ContainsExcludedCharacters( val ) )
     {
         wxArrayString whiteSpace;
-        bool spaceIllegal = ( m_fieldId == REFERENCE ) ||
-                            ( m_fieldId == VALUE && m_isLibEditor );
+        bool spaceIllegal = m_fieldId == REFERENCE
+                                || ( m_fieldId == VALUE && m_isLibEditor )
+                                || m_fieldId == SHEETNAME_V
+                                || m_fieldId == SHEETFILENAME_V;
 
         if( val.Find( '\r' ) != wxNOT_FOUND )
             whiteSpace.Add( _( "carriage return" ) );
