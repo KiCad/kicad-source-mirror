@@ -767,7 +767,7 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 }
 
 
-bool TOOL_MANAGER::dispatchHotKey( const TOOL_EVENT& aEvent,
+bool TOOL_MANAGER::DispatchHotKey( const TOOL_EVENT& aEvent,
                                    std::set<const TOOL_ACTION*>* aWhiteList )
 {
     if( aEvent.Action() == TA_KEY_PRESSED )
@@ -925,10 +925,9 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 }
 
 
-bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent,
-                                 std::set<const TOOL_ACTION*>* aWhiteList )
+bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 {
-    bool handled = processEvent( aEvent, aWhiteList );
+    bool handled = processEvent( aEvent );
 
     TOOL_STATE* activeTool = GetCurrentToolState();
 
@@ -1079,13 +1078,12 @@ void TOOL_MANAGER::applyViewControls( TOOL_STATE* aState )
 }
 
 
-bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent,
-                                 std::set<const TOOL_ACTION*>* aWhiteList )
+bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
 {
     wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::processEvent - %s", aEvent.Format() );
 
     // First try to dispatch the action associated with the event if it is a key press event
-    bool handled = dispatchHotKey( aEvent, aWhiteList );
+    bool handled = DispatchHotKey( aEvent );
 
     if( !handled )
     {

@@ -193,13 +193,19 @@ void EDA_DRAW_FRAME::unitsChangeRefresh()
 }
 
 
-void EDA_DRAW_FRAME::DispatchBehindModalDialog( wxKeyEvent& aEvent )
+bool EDA_DRAW_FRAME::DispatchBehindModalDialog( wxKeyEvent& aEvent )
 {
     static std::set<const TOOL_ACTION*> whiteList = { &ACTIONS::toggleUnits,
                                                       &ACTIONS::imperialUnits,
                                                       &ACTIONS::metricUnits };
 
-    m_toolDispatcher->DispatchWxEvent( aEvent, &whiteList );
+    bool dummy;
+    OPT<TOOL_EVENT> evt = m_toolDispatcher->GetToolEvent( &aEvent, &dummy );
+
+    if( evt && evt->Action() == TA_KEY_PRESSED )
+        return m_toolManager->DispatchHotKey( *evt, &whiteList );
+
+    return false;
 }
 
 

@@ -256,11 +256,9 @@ public:
     /**
      * Propagates an event to tools that requested events of matching type(s).
      * @param aEvent is the event to be processed.
-     * @param aWhiteList an optional list of allowed TOOL_ACTIONs
      * @return true if the event is a managed hotkey
      */
-    bool ProcessEvent( const TOOL_EVENT& aEvent,
-                       std::set<const TOOL_ACTION*>* aWhiteList = nullptr );
+    bool ProcessEvent( const TOOL_EVENT& aEvent );
 
     /**
      * Puts an event to the event queue to be processed at the end of event processing cycle.
@@ -421,6 +419,16 @@ public:
      */
     void DispatchContextMenu( const TOOL_EVENT& aEvent );
 
+    /**
+     * Function dispatchHotKey()
+     * Handles specific events, that are intended for TOOL_MANAGER rather than tools.
+     * @param aEvent is the event to be processed.
+     * @param aWhiteList an optional list of allowed actions to run
+     * @return true if the event was processed and should not go any further.
+     */
+    bool DispatchHotKey( const TOOL_EVENT& aEvent,
+                         std::set<const TOOL_ACTION*>* aWhiteList = nullptr );
+
 private:
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
 
@@ -429,15 +437,6 @@ private:
      * Passes an event at first to the active tools, then to all others.
      */
     bool dispatchInternal( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function dispatchHotKey()
-     * Handles specific events, that are intended for TOOL_MANAGER rather than tools.
-     * @param aEvent is the event to be processed.
-     * @return true if the event was processed and should not go any further.
-     */
-    bool dispatchHotKey( const TOOL_EVENT& aEvent,
-                         std::set<const TOOL_ACTION*>* aWhiteList = nullptr );
 
     /**
      * Function dispatchActivation()
@@ -510,11 +509,9 @@ private:
 
     /**
      * Main function for event processing.
-     * @param aWhiteList an optional list of allowed TOOL_ACTIONs
      * @return true if a hotkey was handled
      */
-    bool processEvent( const TOOL_EVENT& aEvent,
-                       std::set<const TOOL_ACTION*>* aWhiteList = nullptr );
+    bool processEvent( const TOOL_EVENT& aEvent );
 
     /**
      * Saves the previous active state and sets a new one.

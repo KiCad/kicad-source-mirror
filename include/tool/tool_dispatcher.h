@@ -72,19 +72,14 @@ public:
      * Processes wxEvents (mostly UI events), translates them to TOOL_EVENTs, and makes tools
      * handle those.
      * @param aEvent is the wxWidgets event to be processed.
-     * @param aWhiteList an optional list of allowed TOOL_ACTIONs
      */
     virtual void DispatchWxEvent( wxEvent& aEvent );
 
     /**
-     * Function DispatchWxEvent()
-     * Processes wxEvents (mostly UI events), translates them to TOOL_EVENTs, and makes tools
-     * handle those.
-     * @param aEvent is the wxWidgets event to be processed.
-     * @param aWhiteList a list of allowable TOOL_ACTIONs.  Those not appearing on the list
-     *                   will not be dispatched.
+     * Function GetToolEvent()
+     * Maps a wxWidgets key event to a TOOL_EVENT.
      */
-    virtual void DispatchWxEvent( wxEvent& aEvent, std::set<const TOOL_ACTION*>* aWhiteList );
+    OPT<TOOL_EVENT> GetToolEvent( wxKeyEvent* aKeyEvent, bool* aSpecialKeyFlag );
 
     /**
      * Function DispatchWxCommand()

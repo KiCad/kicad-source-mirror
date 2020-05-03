@@ -511,13 +511,8 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
 
 void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
 {
-    if( m_parentFrame )
-    {
-        m_parentFrame->DispatchBehindModalDialog( aEvt );
-
-        if( !aEvt.GetSkipped() )
-            return;
-    }
+    if( m_parentFrame && m_parentFrame->DispatchBehindModalDialog( aEvt ) )
+        return;
 
     // shift-return (Mac default) or Ctrl-Return (GTK) for OK
     if( aEvt.GetKeyCode() == WXK_RETURN && ( aEvt.ShiftDown() || aEvt.ControlDown() ) )

@@ -122,7 +122,7 @@ protected:
 
     void unitsChangeRefresh() override;
 
-    void DispatchBehindModalDialog( wxKeyEvent& aEvent ) override;
+    bool DispatchBehindModalDialog( wxKeyEvent& aEvent ) override;
 
     void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
