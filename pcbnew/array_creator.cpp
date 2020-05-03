@@ -100,7 +100,7 @@ void ARRAY_CREATOR::Invoke()
                 {
                     // Don't bother incrementing pads: the module won't update
                     // until commit, so we can only do this once
-                    new_item = module->DuplicateItem( item, false );
+                    new_item = module->DuplicateItem( item );
                 }
                 else
                 {

@@ -43,6 +43,8 @@
 #include <tools/pcbnew_picker_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/grid_helper.h>
+#include <tools/footprint_editor_tools.h>
+#include <pad_naming.h>
 #include <view/view_controls.h>
 #include <connectivity/connectivity_data.h>
 #include <confirm.h>
@@ -1135,14 +1137,24 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         if( m_editModules )
         {
             MODULE* editModule = editFrame->GetBoard()->GetFirstModule();
-            dupe_item = editModule->DuplicateItem( orig_item, increment );
+            dupe_item = editModule->DuplicateItem( orig_item );
+
+            if( increment && item->Type() == PCB_PAD_T
+                    && PAD_NAMING::PadCanHaveName( *static_cast<D_PAD*>( dupe_item ) ) )
+            {
+                MODULE_EDITOR_TOOLS* modEdit = m_toolMgr->GetTool<MODULE_EDITOR_TOOLS>();
+                wxString padName = modEdit->GetLastPadName();
+                padName = editModule->GetNextPadName( padName );
+                modEdit->SetLastPadName( padName );
+                static_cast<D_PAD*>( dupe_item )->SetName( padName );
+            }
         }
         else if( orig_item->GetParent() && orig_item->GetParent()->Type() == PCB_MODULE_T )
         {
             MODULE* parent = static_cast<MODULE*>( orig_item->GetParent() );
 
             m_commit->Modify( parent );
-            dupe_item = parent->DuplicateItem( orig_item, false, true /* add to parent */ );
+            dupe_item = parent->DuplicateItem( orig_item, true /* add to parent */ );
         }
         else
         {

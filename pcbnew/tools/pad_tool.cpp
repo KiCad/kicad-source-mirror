@@ -36,6 +36,7 @@
 #include <tools/selection_tool.h>
 #include <tools/pcb_selection_conditions.h>
 #include <tools/edit_tool.h>
+#include <tools/footprint_editor_tools.h>
 #include <dialogs/dialog_enum_pads.h>
 
 
@@ -262,6 +263,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     getViewControls()->ShowCursor( true );
 
+    MODULE_EDITOR_TOOLS* fpTools = m_toolMgr->GetTool<MODULE_EDITOR_TOOLS>();
     KIGFX::VIEW* view = m_toolMgr->GetView();
     VECTOR2I oldCursorPos;  // store the previous mouse cursor position, during mouse drag
     std::list<D_PAD*> selectedPads;
@@ -350,6 +352,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                     wxString newName = wxString::Format( wxT( "%s%d" ), padPrefix, newval );
                     oldNames[newName] = { newval, pad->GetName() };
                     pad->SetName( newName );
+                    fpTools->SetLastPadName( newName );
                     pad->SetSelected();
                     getView()->Update( pad );
 
@@ -372,6 +375,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                     {
                         storedPadNumbers.push_back( it->second.first );
                         pad->SetName( it->second.second );
+                        fpTools->SetLastPadName( it->second.second );
                         oldNames.erase( it );
 
                         int newval = storedPadNumbers.front();

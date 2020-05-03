@@ -99,13 +99,18 @@ public:
      */
     int ExplodePadToShapes( const TOOL_EVENT& aEvent );
 
+    wxString GetLastPadName() const { return m_lastPadName; }
+    void SetLastPadName( const wxString& aPadName ) { m_lastPadName = aPadName; }
+
 private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
 private:
     FOOTPRINT_EDIT_FRAME*       m_frame;
-    
+
+    wxString                    m_lastPadName;
+
     // A private clipboard for cut/copy/past of an entire footprint
     std::unique_ptr<MODULE>     m_copiedModule;
 };

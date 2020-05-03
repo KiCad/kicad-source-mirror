@@ -623,17 +623,6 @@ wxPoint D_PAD::ShapePos() const
 }
 
 
-bool D_PAD::IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps )
-{
-    bool skip = aSkipUnconnectable && ( GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED );
-
-    if( !skip )
-        SetName( GetParent()->GetNextPadName( aFillSequenceGaps ) );
-
-    return !skip;
-}
-
-
 int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem, wxString* aSource ) const
 {
     int myClearance;
