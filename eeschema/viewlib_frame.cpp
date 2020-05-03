@@ -621,6 +621,12 @@ void LIB_VIEW_FRAME::ClickOnLibList( wxCommandEvent& event )
     m_selection_changed = true;
 
     SetSelectedLibrary( m_libList->GetString( ii ) );
+
+    // The m_libList has now the focus, in order to be able to use arrow keys
+    // to navigate inside the list.
+    // the gal canvas must not steal the focus to allow navigation
+    GetGalCanvas()->SetStealsFocus( false );
+    m_libList->SetFocus();
 }
 
 
@@ -651,6 +657,12 @@ void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
     m_selection_changed = true;
 
     SetSelectedComponent( m_cmpList->GetString( ii ) );
+
+    // The m_cmpList has now the focus, in order to be able to use arrow keys
+    // to navigate inside the list.
+    // the gal canvas must not steal the focus to allow navigation
+    GetGalCanvas()->SetStealsFocus( false );
+    m_cmpList->SetFocus();
 }
 
 
