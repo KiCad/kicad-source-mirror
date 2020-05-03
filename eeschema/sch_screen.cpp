@@ -777,10 +777,36 @@ void SCH_SCREEN::GetSheets( std::vector<SCH_ITEM*>* aItems )
     std::sort( aItems->begin(), aItems->end(),
             []( EDA_ITEM* a, EDA_ITEM* b ) -> bool
             {
-                if( a->GetPosition().x == b->GetPosition().x )
-                    return a->GetPosition().y < b->GetPosition().y;
-                else
+                long a_order = 0;
+                long b_order = 0;
+
+                for( const SCH_FIELD& field : static_cast<SCH_SHEET*>( a )->GetFields() )
+                {
+                    if( field.GetName().CmpNoCase( wxT( "Order" ) ) == 0 )
+                    {
+                        field.GetText().ToLong( &a_order );
+                        break;
+                    }
+                }
+
+                for( const SCH_FIELD& field : static_cast<SCH_SHEET*>( b )->GetFields() )
+                {
+                    if( field.GetName().CmpNoCase( wxT( "Order" ) ) == 0 )
+                    {
+                        field.GetText().ToLong( &b_order );
+                        break;
+                    }
+                }
+
+                if( a_order == b_order )
+                {
+                    if( a->GetPosition().x == b->GetPosition().x )
+                        return a->GetPosition().y < b->GetPosition().y;
+
                     return a->GetPosition().x < b->GetPosition().x;
+                }
+
+                return a_order < b_order;
             } );
 }
 
