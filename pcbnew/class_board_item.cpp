@@ -95,35 +95,6 @@ void BOARD_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-int BOARD_ITEM::getNextNumberInSequence( const std::set<int>& aSeq, bool aFillSequenceGaps)
-{
-    if( aSeq.empty() )
-        return 1;
-
-    // By default go to the end of the sequence
-    int candidate = *aSeq.rbegin();
-
-    // Filling in gaps in pad numbering
-    if( aFillSequenceGaps )
-    {
-        // start at the beginning
-        candidate = *aSeq.begin();
-
-        for( auto it : aSeq )
-        {
-            if( it - candidate > 1 )
-                break;
-
-            candidate = it;
-        }
-    }
-
-    ++candidate;
-
-    return candidate;
-}
-
-
 void BOARD_ITEM::DeleteStructure()
 {
     auto parent = GetParent();

@@ -42,7 +42,8 @@
 #include <class_module.h>
 #include <pcb_painter.h>
 #include <widgets/net_selector.h>
-
+#include <tool/tool_manager.h>
+#include <tools/footprint_editor_tools.h>
 #include <dialog_pad_properties.h>
 #include <html_messagebox.h>
 
@@ -97,7 +98,12 @@ static const LSET std_pad_layers[] =
 void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
 {
     DIALOG_PAD_PROPERTIES dlg( this, aPad );
-    dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
+
+    if( dlg.ShowQuasiModal() == wxID_OK )       // QuasiModal required for NET_SELECTOR
+    {
+        MODULE_EDITOR_TOOLS* fpTools = m_toolManager->GetTool<MODULE_EDITOR_TOOLS>();
+        fpTools->SetLastPadName( aPad->GetName() );
+    }
 }
 
 

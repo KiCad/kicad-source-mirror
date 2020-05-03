@@ -67,14 +67,10 @@ enum STROKE_T
  */
 class BOARD_ITEM : public EDA_ITEM
 {
-
 protected:
     PCB_LAYER_ID    m_Layer;
 
-    static int getNextNumberInSequence( const std::set<int>& aSeq, bool aFillSequenceGaps );
-
 public:
-
     BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
         EDA_ITEM( aParent, idtype ), m_Layer( F_Cu )
     {

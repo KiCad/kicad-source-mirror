@@ -23,6 +23,7 @@
  */
 
 #include "footprint_editor_tools.h"
+#include <pad_naming.h>
 #include "kicad_clipboard.h"
 #include "selection_tool.h"
 #include "pcb_actions.h"
@@ -93,6 +94,8 @@ MODULE_EDITOR_TOOLS::~MODULE_EDITOR_TOOLS()
 
 void MODULE_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 {
+    if( aReason == MODEL_RELOAD )
+        m_lastPadName = wxT( "1" );
 }
 
 
@@ -104,11 +107,28 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
     struct PAD_PLACER : public INTERACTIVE_PLACER_BASE
     {
+        PAD_PLACER( MODULE_EDITOR_TOOLS* aFPEditTools )
+        {
+            m_fpEditTools = aFPEditTools;
+        }
+
+        virtual ~PAD_PLACER()
+        {
+        }
+
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {
             D_PAD* pad = new D_PAD ( m_board->m_Modules );
             m_frame->Import_Pad_Settings( pad, false );     // use the global settings for pad
-            pad->IncrementPadName( true, true );
+
+            if( PAD_NAMING::PadCanHaveName( *pad ) )
+            {
+                wxString padName = m_fpEditTools->GetLastPadName();
+                padName = m_board->m_Modules->GetNextPadName( padName );
+                pad->SetName( padName );
+                m_fpEditTools->SetLastPadName( padName );
+            }
+
             return std::unique_ptr<BOARD_ITEM>( pad );
         }
 
@@ -126,9 +146,11 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
             return false;
         }
+
+        MODULE_EDITOR_TOOLS* m_fpEditTools;
     };
 
-    PAD_PLACER placer;
+    PAD_PLACER placer( this );
 
     frame()->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
 
@@ -481,8 +503,15 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
         pad->SetLayerSet( D_PAD::SMDMask() );
         int radius = Millimeter2iu( 0.2 );
         pad->SetSize ( wxSize( radius, radius ) );
-        pad->IncrementPadName( true, true );
         pad->SetOrientation( 0 );
+
+        if( PAD_NAMING::PadCanHaveName( *pad ) )
+        {
+            wxString padName = GetLastPadName();
+            padName = board()->m_Modules->GetNextPadName( padName );
+            pad->SetName( padName );
+            SetLastPadName( padName );
+        }
     }
 
     pad->SetShape ( PAD_SHAPE_CUSTOM );

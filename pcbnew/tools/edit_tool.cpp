@@ -39,6 +39,8 @@
 #include <pcbnew_id.h>
 #include <status_popup.h>
 #include <tool/tool_manager.h>
+#include <tools/footprint_editor_tools.h>
+#include <pad_naming.h>
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -1126,7 +1128,18 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         if( m_editModules )
         {
-            dupe_item = editFrame->GetBoard()->m_Modules->Duplicate( orig_item, increment );
+            MODULE* editModule = editFrame->GetBoard()->m_Modules;
+            dupe_item = editModule->Duplicate( orig_item );
+
+            if( increment && item->Type() == PCB_PAD_T
+                    && PAD_NAMING::PadCanHaveName( *static_cast<D_PAD*>( dupe_item ) ) )
+            {
+                MODULE_EDITOR_TOOLS* modEdit = m_toolMgr->GetTool<MODULE_EDITOR_TOOLS>();
+                wxString padName = modEdit->GetLastPadName();
+                padName = editModule->GetNextPadName( padName );
+                modEdit->SetLastPadName( padName );
+                static_cast<D_PAD*>( dupe_item )->SetName( padName );
+            }
         }
         else
         {

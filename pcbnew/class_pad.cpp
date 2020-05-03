@@ -562,17 +562,6 @@ wxPoint D_PAD::ShapePos() const
 }
 
 
-bool D_PAD::IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps )
-{
-    bool skip = aSkipUnconnectable && ( GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED );
-
-    if( !skip )
-        SetName( GetParent()->GetNextPadName( aFillSequenceGaps ) );
-
-    return !skip;
-}
-
-
 void D_PAD::CopyNetlistSettings( D_PAD* aPad, bool aCopyLocalSettings )
 {
     // Don't do anything foolish like trying to copy to yourself.

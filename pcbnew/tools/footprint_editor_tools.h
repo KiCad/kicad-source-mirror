@@ -82,10 +82,14 @@ public:
      */
     int ExplodePadToShapes( const TOOL_EVENT& aEvent );
 
+    wxString GetLastPadName() const { return m_lastPadName; }
+    void SetLastPadName( const wxString& aPadName ) { m_lastPadName = aPadName; }
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
+private:
+    wxString                    m_lastPadName;
 };
 
 #endif

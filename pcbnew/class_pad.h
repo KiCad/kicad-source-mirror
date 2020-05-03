@@ -192,18 +192,6 @@ public:
         return m_name;
     }
 
-    /**
-     * Function IncrementPadName
-     *
-     * Increments the pad name to the next available name in the module.
-     *
-     * @param aSkipUnconnectable skips any pads that are not connectable (for example NPTH)
-     * @param aFillSequenceGaps if true, the next reference in a sequence
-     * like A1,A3,A4 will be A2. If false, it will be A5.
-     * @return pad name incremented
-     */
-    bool IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps );
-
     bool PadNameEqual( const D_PAD* other ) const
     {
         return m_name == other->m_name; // hide tricks behind sensible API

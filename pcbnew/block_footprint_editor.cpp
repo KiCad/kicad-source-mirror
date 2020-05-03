@@ -53,7 +53,9 @@
 #include <class_edge_mod.h>
 
 #include <dialogs/dialog_move_exact.h>
-
+#include <tool/tool_manager.h>
+#include <tools/footprint_editor_tools.h>
+#include <pad_naming.h>
 
 #define BLOCK_COLOR BROWN
 
@@ -72,7 +74,6 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 static int  MarkItemsInBloc( MODULE* module, EDA_RECT& Rect );
 
 static void ClearMarkItems( MODULE* module );
-static void CopyMarkedItems( MODULE* module, wxPoint offset, bool aIncrement );
 static void MoveMarkedItems( MODULE* module, wxPoint offset );
 static void DeleteMarkedItems( MODULE* module );
 
@@ -452,7 +453,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
 /* Copy marked items, at new position = old position + offset
  */
-void CopyMarkedItems( MODULE* module, wxPoint offset, bool aIncrement )
+void FOOTPRINT_EDIT_FRAME::CopyMarkedItems( MODULE* module, wxPoint offset, bool aIncrement )
 {
     if( module == NULL )
         return;
@@ -473,8 +474,14 @@ void CopyMarkedItems( MODULE* module, wxPoint offset, bool aIncrement )
         NewPad->SetFlags( SELECTED );
         module->PadsList().PushFront( NewPad );
 
-        if( aIncrement )
-            NewPad->IncrementPadName( true, true );
+        if( aIncrement && PAD_NAMING::PadCanHaveName( *NewPad ) )
+        {
+            MODULE_EDITOR_TOOLS* modEdit = m_toolManager->GetTool<MODULE_EDITOR_TOOLS>();
+            wxString padName = modEdit->GetLastPadName();
+            padName = module->GetNextPadName( padName );
+            modEdit->SetLastPadName( padName );
+            NewPad->SetName( padName );
+        }
     }
 
     BOARD_ITEM* newItem;

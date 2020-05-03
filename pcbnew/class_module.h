@@ -555,12 +555,8 @@ public:
     /**
      * Function GetNextPadName
      * returns the next available pad name in the module
-     *
-     * @param aFillSequenceGaps true if the numbering should "fill in" gaps in
-     * the sequence, else return the highest value + 1
-     * @return the next available pad name
      */
-    wxString GetNextPadName( bool aFillSequenceGaps ) const;
+    wxString GetNextPadName( const wxString& aLastPadName ) const;
 
     double GetArea( int aPadding = 0 ) const;
 
@@ -578,9 +574,7 @@ public:
      * Duplicate a given item within the module, without adding to the board
      * @return the new item, or NULL if the item could not be duplicated
      */
-    BOARD_ITEM* Duplicate( const BOARD_ITEM* aItem,
-            bool aIncrementPadNumbers,
-            bool aAddToModule = false );
+    BOARD_ITEM* Duplicate( const BOARD_ITEM* aItem, bool aAddToModule = false );
 
     /**
      * Function Add3DModel

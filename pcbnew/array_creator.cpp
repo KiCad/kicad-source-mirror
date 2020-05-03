@@ -106,7 +106,7 @@ void ARRAY_CREATOR::Invoke()
                 {
                     // Don't bother incrementing pads: the module won't update
                     // until commit, so we can only do this once
-                    new_item.reset( module->Duplicate( item, false ) );
+                    new_item.reset( module->Duplicate( item ) );
                 }
                 else
                 {

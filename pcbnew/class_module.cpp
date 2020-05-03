@@ -1244,9 +1244,8 @@ void MODULE::SetOrientation( double newangle )
     CalculateBoundingBox();
 }
 
-BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
-                               bool aIncrementPadNumbers,
-                               bool aAddToModule )
+
+BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem, bool aAddToModule )
 {
     BOARD_ITEM* new_item = NULL;
     D_PAD* new_pad = NULL;
@@ -1305,29 +1304,25 @@ BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
         break;
     }
 
-    if( aIncrementPadNumbers && new_pad && !new_pad->IsAperturePad() )
-    {
-        new_pad->IncrementPadName( true, true );
-    }
-
     return new_item;
 }
 
 
-wxString MODULE::GetNextPadName( bool aFillSequenceGaps ) const
+wxString MODULE::GetNextPadName( const wxString& aLastPadName ) const
 {
-    std::set<int> usedNumbers;
+    std::set<wxString> usedNames;
 
     // Create a set of used pad numbers
     for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
-    {
-        int padNumber = GetTrailingInt( pad->GetName() );
-        usedNumbers.insert( padNumber );
-    }
+        usedNames.insert( pad->GetName() );
 
-    const int nextNum = getNextNumberInSequence( usedNumbers, aFillSequenceGaps );
+    wxString prefix = UTIL::GetReferencePrefix( aLastPadName );
+    int      num = GetTrailingInt( aLastPadName );
 
-    return wxString::Format( wxT( "%i" ), nextNum );
+    while( usedNames.count( wxString::Format( "%s%d", prefix, num ) ) )
+        num++;
+
+    return wxString::Format( "%s%d", prefix, num );
 }
 
 

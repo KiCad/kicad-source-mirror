@@ -283,6 +283,8 @@ public:
      */
     virtual bool HandleBlockEnd( wxDC* DC ) override;
 
+    void CopyMarkedItems( MODULE* module, wxPoint offset, bool aIncrement );
+
     BOARD_ITEM* ModeditLocateAndDisplay( int aHotKeyCode = 0 );
 
     /// Return the LIB_ID of the part selected in the footprint or the part being edited.
