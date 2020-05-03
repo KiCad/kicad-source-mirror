@@ -651,8 +651,11 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
     {
         SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
 
-        if( aItem->HasFlag( STARTPOINT ) || aItem->HasFlag( ENDPOINT ) )
-            collectLabels( line );
+        if( !aItem->IsNew() )
+        {
+            if( aItem->HasFlag( STARTPOINT ) || aItem->HasFlag( ENDPOINT ) )
+                collectLabels( line );
+        }
 
         if( aItem->HasFlag( STARTPOINT ) )
             line->MoveStart( (wxPoint) aDelta );
@@ -660,7 +663,10 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         if( aItem->HasFlag( ENDPOINT ) )
             line->MoveEnd( (wxPoint) aDelta );
 
-        adjustLabels( line );
+        if( !aItem->IsNew() )
+        {
+            adjustLabels( line );
+        }
     }
         break;
 
