@@ -41,6 +41,42 @@ void GERBVIEW_CONTROL::Reset( RESET_REASON aReason )
 }
 
 
+int GERBVIEW_CONTROL::OpenGerber( const TOOL_EVENT& aEvent )
+{
+    m_frame->LoadGerberFiles( wxEmptyString );
+    // loadListOfGerberAndDrillFiles() refreshes the canvas
+
+    return 0;
+}
+
+
+int GERBVIEW_CONTROL::OpenDrillFile( const TOOL_EVENT& aEvent )
+{
+    m_frame->LoadExcellonFiles( wxEmptyString );
+    m_frame->GetCanvas()->Refresh();
+
+    return 0;
+}
+
+
+int GERBVIEW_CONTROL::OpenJobFile( const TOOL_EVENT& aEvent )
+{
+    m_frame->LoadGerberJobFile( wxEmptyString );
+    m_frame->GetCanvas()->Refresh();
+
+    return 0;
+}
+
+
+int GERBVIEW_CONTROL::OpenZipFile( const TOOL_EVENT& aEvent )
+{
+    m_frame->LoadZipArchiveFile( wxEmptyString );
+    m_frame->GetCanvas()->Refresh();
+
+    return 0;
+}
+
+
 int GERBVIEW_CONTROL::HighlightControl( const TOOL_EVENT& aEvent )
 {
     auto settings = static_cast<KIGFX::GERBVIEW_PAINTER*>( getView()->GetPainter() )->GetSettings();
@@ -187,6 +223,10 @@ int GERBVIEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
 void GERBVIEW_CONTROL::setTransitions()
 {
+    Go( &GERBVIEW_CONTROL::OpenGerber,         GERBVIEW_ACTIONS::openGerber.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::OpenDrillFile,      GERBVIEW_ACTIONS::openDrillFile.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::OpenJobFile,        GERBVIEW_ACTIONS::openJobFile.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::OpenZipFile,        GERBVIEW_ACTIONS::openZipFile.MakeEvent() );
     Go( &GERBVIEW_CONTROL::Print,              ACTIONS::print.MakeEvent() );
 
     Go( &GERBVIEW_CONTROL::HighlightControl,   GERBVIEW_ACTIONS::highlightClear.MakeEvent() );

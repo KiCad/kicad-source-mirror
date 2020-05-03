@@ -33,7 +33,6 @@
 #include <dialog_helpers.h>
 #include <DCodeSelectionbox.h>
 #include <gerbview_layer_widget.h>
-#include <gerbview_draw_panel_gal.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <tool/selection.h>
@@ -48,16 +47,11 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( GERBVIEW_FRAME::OnCloseWindow )
     EVT_SIZE( GERBVIEW_FRAME::OnSize )
 
-    EVT_TOOL( wxID_FILE, GERBVIEW_FRAME::Files_io )
     EVT_TOOL( ID_GERBVIEW_ERASE_ALL, GERBVIEW_FRAME::Files_io )
     EVT_TOOL( ID_GERBVIEW_RELOAD_ALL, GERBVIEW_FRAME::Files_io )
-    EVT_TOOL( ID_GERBVIEW_LOAD_DRILL_FILE, GERBVIEW_FRAME::Files_io )
-    EVT_TOOL( ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE, GERBVIEW_FRAME::Files_io )
-    EVT_TOOL( ID_GERBVIEW_LOAD_JOB_FILE, GERBVIEW_FRAME::Files_io )
     EVT_TOOL( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
 
     // Menu Files:
-    EVT_MENU( wxID_FILE, GERBVIEW_FRAME::Files_io )
     EVT_MENU( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
     EVT_MENU( ID_GERBVIEW_EXPORT_TO_PCBNEW, GERBVIEW_FRAME::ExportDataInPcbnewFormat )
 

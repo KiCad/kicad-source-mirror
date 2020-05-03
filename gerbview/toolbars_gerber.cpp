@@ -31,14 +31,13 @@
 #include <gbr_layer_box_selector.h>
 #include <DCodeSelectionbox.h>
 #include <dialog_helpers.h>
-#include <bitmaps.h>
 #include <kicad_string.h>
 #include <wx/wupdlock.h>
 #include <tool/actions.h>
 #include <tool/action_toolbar.h>
 #include <tools/gerbview_actions.h>
 
-void GERBVIEW_FRAME::ReCreateHToolbar( void )
+void GERBVIEW_FRAME::ReCreateHToolbar()
 {
     wxString      msg;
 
@@ -57,12 +56,8 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
                             KiScaledBitmap( reload2_xpm, this ),
                             _( "Reload all layers" ) );
 
-    m_mainToolBar->AddTool( wxID_FILE, wxEmptyString, KiScaledBitmap( load_gerber_xpm, this ),
-                            _( "Open Gerber file(s) on the current layer. Previous data will be deleted" ) );
-
-    m_mainToolBar->AddTool( ID_GERBVIEW_LOAD_DRILL_FILE, wxEmptyString,
-                            KiScaledBitmap( gerbview_drill_file_xpm, this ),
-                            _( "Open Excellon drill file(s) on the current layer. Previous data will be deleted" ) );
+    m_mainToolBar->Add( GERBVIEW_ACTIONS::openGerber );
+    m_mainToolBar->Add( GERBVIEW_ACTIONS::openDrillFile );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiScaledBitmap( print_button_xpm, this ),

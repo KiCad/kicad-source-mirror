@@ -29,8 +29,6 @@
 #include <pgm_base.h>
 
 /**
- * Command IDs for the printed circuit board editor.
- *
  * Please add IDs that are unique to the gerber file viewer (GerbView) here and not in
  * the global id.h file.  This will prevent the entire project from being rebuilt when
  * adding new commands to the GerbView.
@@ -41,9 +39,6 @@ enum gerbview_ids
     ID_MAIN_MENUBAR = ID_END_LIST,
 
     ID_GERBVIEW_SHOW_LIST_DCODES,
-    ID_GERBVIEW_LOAD_DRILL_FILE,
-    ID_GERBVIEW_LOAD_JOB_FILE,
-    ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE,
     ID_GERBVIEW_ERASE_ALL,
     ID_GERBVIEW_RELOAD_ALL,
     ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,

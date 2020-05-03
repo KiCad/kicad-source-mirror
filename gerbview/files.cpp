@@ -23,7 +23,6 @@
  */
 
 #include <fctsys.h>
-#include <wx/fs_zip.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 #include <common.h>
@@ -39,9 +38,8 @@
 #include <widgets/progress_reporter.h>
 
 // HTML Messages used more than one time:
-#define MSG_NO_MORE_LAYER\
-    _( "<b>No more available free graphic layer</b> in Gerbview to load files" )
-#define MSG_NOT_LOADED _( "\n<b>Not loaded:</b> <i>%s</i>" )
+#define MSG_NO_MORE_LAYER _( "<b>No more available layers in Gerbview to load files" )
+#define MSG_NOT_LOADED    _( "\n<b>Not loaded:</b> <i>%s</i>" )
 
 
 void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
@@ -119,14 +117,8 @@ void GERBVIEW_FRAME::OnClearJobFileHistory( wxCommandEvent& aEvent )
 /* File commands. */
 void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
 {
-    int        id = event.GetId();
-
-    switch( id )
+    switch( event.GetId() )
     {
-    case wxID_FILE:
-        LoadGerberFiles( wxEmptyString );
-        break;
-
     case ID_GERBVIEW_ERASE_ALL:
         Clear_DrawLayers( false );
         Zoom_Automatique( false );
@@ -170,21 +162,6 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
     }
     break;
 
-    case ID_GERBVIEW_LOAD_DRILL_FILE:
-        LoadExcellonFiles( wxEmptyString );
-        GetCanvas()->Refresh();
-        break;
-
-    case ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE:
-        LoadZipArchiveFile( wxEmptyString );
-        GetCanvas()->Refresh();
-        break;
-
-    case ID_GERBVIEW_LOAD_JOB_FILE:
-        LoadGerberJobFile( wxEmptyString );
-        GetCanvas()->Refresh();
-        break;
-
     default:
         wxFAIL_MSG( "File_io: unexpected command id" );
         break;
@@ -204,13 +181,13 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     {
         /* Standard gerber filetypes
          * (See http://en.wikipedia.org/wiki/Gerber_File)
-         * the .gbr (.pho in legacy files) extension is the default used in Pcbnew
-         * However there are a lot of other extensions used for gerber files
-         * Because the first letter is usually g, we accept g* as extension
-         * (Mainly internal copper layers do not have specific extension,
-         *  and filenames are like *.g1, *.g2 *.gb1 ...).
-         * Now (2014) Ucamco (the company which manages the Gerber format) encourages
-         * use of .gbr only and the Gerber X2 file format.
+         * The .gbr (.pho in legacy files) extension is the default used in Pcbnew; however
+         * there are a lot of other extensions used for gerber files.  Because the first letter
+         * is usually g, we accept g* as extension.
+         * (Mainly internal copper layers do not have specific extension, and filenames are like
+         * *.g1, *.g2 *.gb1 ...)
+         * Now (2014) Ucamco (the company which manages the Gerber format) encourages use of .gbr
+         * only and the Gerber X2 file format.
          */
         filetypes = _( "Gerber files (.g* .lgr .pho)" );
         filetypes << wxT("|");
@@ -247,9 +224,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
                 currentPath.RemoveLast();
         }
 
-        wxFileDialog dlg( this, _( "Open Gerber File(s)" ),
-                          currentPath,
-                          filename.GetFullName(),
+        wxFileDialog dlg( this, _( "Open Gerber File(s)" ), currentPath, filename.GetFullName(),
                           filetypes,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE | wxFD_CHANGE_DIR );
         dlg.SetFilterIndex( lastGerberFileWildcard );
@@ -669,12 +644,8 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
         else
             currentPath = m_mruPath;
 
-        wxFileDialog dlg( this,
-                          _( "Open Zip File" ),
-                          currentPath,
-                          filename.GetFullName(),
-                          ZipFileWildcard(),
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+        wxFileDialog dlg( this, _( "Open Zip File" ), currentPath, filename.GetFullName(),
+                          ZipFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;

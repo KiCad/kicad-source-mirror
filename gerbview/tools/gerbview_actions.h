@@ -70,6 +70,12 @@ public:
 
     static TOOL_ACTION layerChanged;        // notification
 
+    // Files
+    static TOOL_ACTION openGerber;
+    static TOOL_ACTION openDrillFile;
+    static TOOL_ACTION openJobFile;
+    static TOOL_ACTION openZipFile;
+
     // Highlighting
     static TOOL_ACTION highlightClear;
     static TOOL_ACTION highlightNet;

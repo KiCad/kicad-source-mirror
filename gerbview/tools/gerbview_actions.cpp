@@ -55,6 +55,30 @@ OPT<TOOL_EVENT> GERBVIEW_ACTIONS::TranslateLegacyId( int aId )
 
 // GERBVIEW_CONTROL
 //
+TOOL_ACTION GERBVIEW_ACTIONS::openGerber( "gerbview.Control.openGerber",
+        AS_GLOBAL, 0, "",
+        _( "Open Gerber File(s)..." ),
+        _( "Open Gerber file(s) on the current layer. Previous data will be deleted" ),
+        load_gerber_xpm );
+
+TOOL_ACTION GERBVIEW_ACTIONS::openDrillFile( "gerbview.Control.openDrillFile",
+        AS_GLOBAL, 0, "",
+        _( "Open Excellon Drill File(s)..." ),
+        _( "Open Excellon drill file(s) on the current layer. Previous data will be deleted" ),
+        gerbview_drill_file_xpm );
+
+TOOL_ACTION GERBVIEW_ACTIONS::openJobFile( "gerbview.Control.openJobFile",
+        AS_GLOBAL, 0, "",
+        _( "Open Gerber Job File..." ),
+        _( "Open a Gerber job file and its associated gerber files" ),
+        gerber_job_file_xpm );
+
+TOOL_ACTION GERBVIEW_ACTIONS::openZipFile( "gerbview.Control.openZipFile",
+        AS_GLOBAL, 0, "",
+        _( "Open Zip Archive File..." ),
+        _( "Open a zipped archive (Gerber and Drill) file" ),
+        zip_xpm );
+
 TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
         AS_GLOBAL, 0, "", "", "",
         nullptr, AF_NOTIFY );

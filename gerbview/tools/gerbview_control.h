@@ -53,6 +53,12 @@ public:
     int LayerAlphaInc( const TOOL_EVENT& aEvent );
     int LayerAlphaDec( const TOOL_EVENT& aEvent );
 
+    // Files
+    int OpenGerber( const TOOL_EVENT& aEvent );
+    int OpenDrillFile( const TOOL_EVENT& aEvent );
+    int OpenJobFile( const TOOL_EVENT& aEvent );
+    int OpenZipFile( const TOOL_EVENT& aEvent );
+
     // Highlight control
     int HighlightControl( const TOOL_EVENT& aEvent );
 

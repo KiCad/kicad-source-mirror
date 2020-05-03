@@ -28,7 +28,6 @@
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
-#include <advanced_config.h>
 #include <tool/actions.h>
 #include <tool/conditional_menu.h>
 #include <tool/tool_manager.h>
@@ -108,25 +107,17 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         m_zipFileHistory.AddFilesToMenu();
     }
 
-    fileMenu->AddItem( wxID_FILE, _( "Open &Gerber File(s)..." ),
-                       _( "Open Gerber file(s) on the current layer. Previous data will be deleted" ),
-                       load_gerber_xpm,            SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentGbrMenu,          FILE_HISTORY::FileHistoryNotEmpty( recentGbrFiles ) );
+    fileMenu->AddItem( GERBVIEW_ACTIONS::openGerber,    SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( openRecentGbrMenu, FILE_HISTORY::FileHistoryNotEmpty( recentGbrFiles ) );
 
-    fileMenu->AddItem( ID_GERBVIEW_LOAD_DRILL_FILE, _( "Open &Excellon Drill File(s)..." ),
-                       _( "Open Excellon drill file(s) on the current layer. Previous data will be deleted" ),
-                       gerbview_drill_file_xpm,    SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentDrlMenu,          FILE_HISTORY::FileHistoryNotEmpty( m_drillFileHistory ) );
+    fileMenu->AddItem( GERBVIEW_ACTIONS::openDrillFile, SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( openRecentDrlMenu, FILE_HISTORY::FileHistoryNotEmpty( m_drillFileHistory ) );
 
-    fileMenu->AddItem( ID_GERBVIEW_LOAD_JOB_FILE, _( "Open Gerber &Job File..." ),
-                       _( "Open a Gerber job file and its associated gerber files" ),
-                       gerber_job_file_xpm,        SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentJobMenu,          FILE_HISTORY::FileHistoryNotEmpty( m_jobFileHistory ) );
+    fileMenu->AddItem( GERBVIEW_ACTIONS::openJobFile,   SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( openRecentJobMenu, FILE_HISTORY::FileHistoryNotEmpty( m_jobFileHistory ) );
 
-    fileMenu->AddItem( ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE, _( "Open &Zip Archive File..." ),
-                       _( "Open a zipped archive (Gerber and Drill) file" ),
-                       zip_xpm,                    SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentZipMenu,          FILE_HISTORY::FileHistoryNotEmpty( m_zipFileHistory ) );
+    fileMenu->AddItem( GERBVIEW_ACTIONS::openZipFile,   SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( openRecentZipMenu, FILE_HISTORY::FileHistoryNotEmpty( m_zipFileHistory ) );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ID_GERBVIEW_ERASE_ALL,  _( "Clear &All Layers" ),
