@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Nov  6 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,10 +56,10 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	fgSizerScale->Add( m_spinZscale, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizerScale->Add( fgSizerScale, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	sbSizerScale->Add( fgSizerScale, 0, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
 
 
-	bSizerLeft->Add( sbSizerScale, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerLeft->Add( sbSizerScale, 0, wxLEFT|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizerRotation;
 	sbSizerRotation = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Rotation") ), wxVERTICAL );
@@ -100,10 +100,10 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	fgSizerRotate->Add( m_spinZrot, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizerRotation->Add( fgSizerRotate, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	sbSizerRotation->Add( fgSizerRotate, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	bSizerLeft->Add( sbSizerRotation, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerLeft->Add( sbSizerRotation, 0, wxLEFT|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizerOffset;
 	sbSizerOffset = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Offset") ), wxVERTICAL );
@@ -144,19 +144,19 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	fgSizerOffset->Add( m_spinZoffset, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizerOffset->Add( fgSizerOffset, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
+	sbSizerOffset->Add( fgSizerOffset, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	bSizerLeft->Add( sbSizerOffset, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerLeft->Add( sbSizerOffset, 0, wxLEFT|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Opacity") ), wxVERTICAL );
 
 	m_opacity = new wxSlider( sbSizer4->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
-	sbSizer4->Add( m_opacity, 0, wxEXPAND, 5 );
+	sbSizer4->Add( m_opacity, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerLeft->Add( sbSizer4, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerLeft->Add( sbSizer4, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizermain->Add( bSizerLeft, 0, 0, 5 );
@@ -169,7 +169,7 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	staticPreviewLabel->Wrap( -1 );
 	staticPreviewLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizerRight->Add( staticPreviewLabel, 0, wxLEFT, 15 );
+	bSizerRight->Add( staticPreviewLabel, 0, wxLEFT|wxRIGHT, 10 );
 
 	m_SizerPanelView = new wxBoxSizer( wxVERTICAL );
 
@@ -177,13 +177,13 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	bSizerRight->Add( m_SizerPanelView, 1, wxEXPAND|wxBOTTOM, 8 );
 
 
-	bSizermain->Add( bSizerRight, 1, wxEXPAND|wxRIGHT|wxLEFT, 4 );
+	bSizermain->Add( bSizerRight, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxBoxSizer* bSizer3DButtons;
 	bSizer3DButtons = new wxBoxSizer( wxVERTICAL );
 
 
-	bSizer3DButtons->Add( 0, 0, 0, wxEXPAND|wxTOP, 4 );
+	bSizer3DButtons->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );
 
 	m_bpvISO = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 40,40 ), wxBU_AUTODRAW|0 );
 	m_bpvISO->SetToolTip( _("Change to isometric perspective") );
@@ -194,19 +194,19 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	bSizer3DButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_bpvLeft = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 40,40 ), wxBU_AUTODRAW|0 );
-	bSizer3DButtons->Add( m_bpvLeft, 0, 0, 5 );
+	bSizer3DButtons->Add( m_bpvLeft, 0, wxALIGN_LEFT|wxALIGN_RIGHT|wxBOTTOM, 5 );
 
 	m_bpvRight = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 40,40 ), wxBU_AUTODRAW|0 );
-	bSizer3DButtons->Add( m_bpvRight, 0, 0, 5 );
+	bSizer3DButtons->Add( m_bpvRight, 0, wxBOTTOM, 5 );
 
 	m_bpvFront = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 40,40 ), wxBU_AUTODRAW|0 );
-	bSizer3DButtons->Add( m_bpvFront, 0, 0, 5 );
+	bSizer3DButtons->Add( m_bpvFront, 0, wxBOTTOM, 5 );
 
 	m_bpvBack = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 40,40 ), wxBU_AUTODRAW|0 );
-	bSizer3DButtons->Add( m_bpvBack, 0, 0, 5 );
+	bSizer3DButtons->Add( m_bpvBack, 0, wxBOTTOM, 5 );
 
 	m_bpvTop = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 40,40 ), wxBU_AUTODRAW|0 );
-	bSizer3DButtons->Add( m_bpvTop, 0, 0, 5 );
+	bSizer3DButtons->Add( m_bpvTop, 0, wxBOTTOM, 5 );
 
 	m_bpvBottom = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 40,40 ), wxBU_AUTODRAW|0 );
 	bSizer3DButtons->Add( m_bpvBottom, 0, 0, 5 );
@@ -217,10 +217,10 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	m_bpUpdate = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 40,40 ), wxBU_AUTODRAW|0 );
 	m_bpUpdate->SetToolTip( _("Reload board and 3D models") );
 
-	bSizer3DButtons->Add( m_bpUpdate, 0, wxTOP, 5 );
+	bSizer3DButtons->Add( m_bpUpdate, 0, wxBOTTOM, 5 );
 
 
-	bSizermain->Add( bSizer3DButtons, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizermain->Add( bSizer3DButtons, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	this->SetSizer( bSizermain );

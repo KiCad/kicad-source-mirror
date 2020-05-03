@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Nov  6 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -77,7 +77,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_itemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_itemsGrid->SetMinSize( wxSize( 800,140 ) );
 
-	sbSizerTexts->Add( m_itemsGrid, 1, wxEXPAND|wxBOTTOM, 5 );
+	sbSizerTexts->Add( m_itemsGrid, 1, wxALL|wxBOTTOM|wxEXPAND, 5 );
 
 	wxBoxSizer* bButtonSize;
 	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
@@ -85,7 +85,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_bpAdd = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpAdd->SetMinSize( wxSize( 30,29 ) );
 
-	bButtonSize->Add( m_bpAdd, 0, wxRIGHT, 5 );
+	bButtonSize->Add( m_bpAdd, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bButtonSize->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -93,7 +93,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_bpDelete = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpDelete->SetMinSize( wxSize( 30,29 ) );
 
-	bButtonSize->Add( m_bpDelete, 0, wxRIGHT|wxLEFT, 5 );
+	bButtonSize->Add( m_bpDelete, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	sbSizerTexts->Add( bButtonSize, 0, wxEXPAND, 5 );
@@ -146,7 +146,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	int m_BoardSideCtrlNChoices = sizeof( m_BoardSideCtrlChoices ) / sizeof( wxString );
 	m_BoardSideCtrl = new wxChoice( sbSizer7->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_BoardSideCtrlNChoices, m_BoardSideCtrlChoices, 0 );
 	m_BoardSideCtrl->SetSelection( 0 );
-	fgSizerPos->Add( m_BoardSideCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP, 5 );
+	fgSizerPos->Add( m_BoardSideCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	sbSizer7->Add( fgSizerPos, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -181,7 +181,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	gbSizer1->Add( m_OrientOther, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_OrientValueCtrl = new wxTextCtrl( sbOrientationSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_OrientValueCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	gbSizer1->Add( m_OrientValueCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	gbSizer1->AddGrowableCol( 1 );
@@ -214,7 +214,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_allow90Label->Wrap( -1 );
 	m_allow90Label->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	m_sizerAllow90->Add( m_allow90Label, 0, 0, 5 );
+	m_sizerAllow90->Add( m_allow90Label, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_CostRot90Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sizerAllow90->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -231,7 +231,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_allow180Label->Wrap( -1 );
 	m_allow180Label->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	m_sizerAllow180->Add( m_allow180Label, 0, 0, 5 );
+	m_sizerAllow180->Add( m_allow180Label, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_CostRot180Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sizerAllow180->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -288,7 +288,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_PanelGeneral->SetSizer( m_PanelPropertiesBoxSizer );
 	m_PanelGeneral->Layout();
 	m_PanelPropertiesBoxSizer->Fit( m_PanelGeneral );
-	m_NoteBook->AddPage( m_PanelGeneral, _("General"), true );
+	m_NoteBook->AddPage( m_PanelGeneral, _("General"), false );
 	m_PanelClearances = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelClearances;
 	bSizerPanelClearances = new wxBoxSizer( wxVERTICAL );
@@ -300,19 +300,19 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_staticTextInfo->Wrap( -1 );
 	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	sbSizerLocalProperties->Add( m_staticTextInfo, 0, wxRIGHT, 10 );
+	sbSizerLocalProperties->Add( m_staticTextInfo, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_staticTextInfoValPos = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Positive clearance means area bigger than the pad (usual for mask clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoValPos->Wrap( -1 );
 	m_staticTextInfoValPos->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	sbSizerLocalProperties->Add( m_staticTextInfoValPos, 0, wxTOP|wxRIGHT, 10 );
+	sbSizerLocalProperties->Add( m_staticTextInfoValPos, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_staticTextInfoValNeg = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Negative clearance means area smaller than the pad (usual for paste clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoValNeg->Wrap( -1 );
 	m_staticTextInfoValNeg->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	sbSizerLocalProperties->Add( m_staticTextInfoValNeg, 0, wxBOTTOM|wxRIGHT, 10 );
+	sbSizerLocalProperties->Add( m_staticTextInfoValNeg, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	wxFlexGridSizer* fgSizerClearances;
 	fgSizerClearances = new wxFlexGridSizer( 5, 3, 0, 0 );
@@ -324,33 +324,33 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_NetClearanceLabel->Wrap( -1 );
 	m_NetClearanceLabel->SetToolTip( _("This is the local net clearance for all pad of this footprint\nIf 0, the Netclass values are used\nThis value can be superseded by a pad local value.") );
 
-	fgSizerClearances->Add( m_NetClearanceLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerClearances->Add( m_NetClearanceLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_NetClearanceCtrl = new wxTextCtrl( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerClearances->Add( m_NetClearanceCtrl, 1, wxEXPAND|wxALL, 5 );
 
 	m_NetClearanceUnits = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_NetClearanceUnits->Wrap( -1 );
-	fgSizerClearances->Add( m_NetClearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerClearances->Add( m_NetClearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_SolderMaskMarginLabel = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderMaskMarginLabel->Wrap( -1 );
 	m_SolderMaskMarginLabel->SetToolTip( _("This is the local clearance between pads and the solder mask for this footprint.\nThis value can be superseded by a pad local value.\nIf 0, the global value is used.") );
 
-	fgSizerClearances->Add( m_SolderMaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerClearances->Add( m_SolderMaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_SolderMaskMarginCtrl = new wxTextCtrl( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerClearances->Add( m_SolderMaskMarginCtrl, 1, wxALL|wxEXPAND, 5 );
+	fgSizerClearances->Add( m_SolderMaskMarginCtrl, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_SolderMaskMarginUnits = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderMaskMarginUnits->Wrap( -1 );
-	fgSizerClearances->Add( m_SolderMaskMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerClearances->Add( m_SolderMaskMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_SolderPasteMarginLabel = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Solder paste absolute clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderPasteMarginLabel->Wrap( -1 );
 	m_SolderPasteMarginLabel->SetToolTip( _("This is the local clearance between pads and the solder paste for this footprint.\nThis value can be superseded by a pad local values.\nThe final clearance value is the sum of this value and the clearance value ratio.\nA negative value means a smaller mask size than pad size.") );
 
-	fgSizerClearances->Add( m_SolderPasteMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerClearances->Add( m_SolderPasteMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_SolderPasteMarginCtrl = new wxTextCtrl( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerClearances->Add( m_SolderPasteMarginCtrl, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -363,14 +363,14 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_staticTextRatio->Wrap( -1 );
 	m_staticTextRatio->SetToolTip( _("This is the local clearance ratio in percent between pads and the solder paste for this footprint.\nA value of 10 means the clearance value is 10 percent of the pad size.\nThis value can be superseded by a pad local value.\nThe final clearance value is the sum of this value and the clearance value.\nA negative value means a smaller mask size than pad size.") );
 
-	fgSizerClearances->Add( m_staticTextRatio, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerClearances->Add( m_staticTextRatio, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_SolderPasteMarginRatioCtrl = new TEXT_CTRL_EVAL( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerClearances->Add( m_SolderPasteMarginRatioCtrl, 1, wxALL|wxEXPAND, 5 );
 
 	m_SolderPasteRatioMarginUnits = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderPasteRatioMarginUnits->Wrap( -1 );
-	fgSizerClearances->Add( m_SolderPasteRatioMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerClearances->Add( m_SolderPasteRatioMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 
 	sbSizerLocalProperties->Add( fgSizerClearances, 1, wxEXPAND, 5 );
@@ -379,13 +379,13 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_staticTextInfoCopper->Wrap( -1 );
 	m_staticTextInfoCopper->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	sbSizerLocalProperties->Add( m_staticTextInfoCopper, 0, wxEXPAND|wxTOP|wxRIGHT, 10 );
+	sbSizerLocalProperties->Add( m_staticTextInfoCopper, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_staticTextInfoPaste = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Note: solder paste clearances (absolute and relative) are added to determine the final clearance."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPaste->Wrap( -1 );
 	m_staticTextInfoPaste->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	sbSizerLocalProperties->Add( m_staticTextInfoPaste, 0, wxBOTTOM|wxRIGHT, 10 );
+	sbSizerLocalProperties->Add( m_staticTextInfoPaste, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerPanelClearances->Add( sbSizerLocalProperties, 0, wxEXPAND|wxALL, 10 );
@@ -395,7 +395,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 
 	m_staticText16 = new wxStaticText( sbSizerZoneConnection->GetStaticBox(), wxID_ANY, _("Pad connection to zones:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
-	sbSizerZoneConnection->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	sbSizerZoneConnection->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxString m_ZoneConnectionChoiceChoices[] = { _("Use zone setting"), _("Solid"), _("Thermal relief"), _("None") };
 	int m_ZoneConnectionChoiceNChoices = sizeof( m_ZoneConnectionChoiceChoices ) / sizeof( wxString );
@@ -447,7 +447,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_modelsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_modelsGrid->SetMinSize( wxSize( -1,56 ) );
 
-	sbSizer3->Add( m_modelsGrid, 1, wxEXPAND|wxRIGHT, 5 );
+	sbSizer3->Add( m_modelsGrid, 1, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer3DButtons;
 	bSizer3DButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -455,7 +455,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_buttonAdd = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_buttonAdd->SetMinSize( wxSize( 30,29 ) );
 
-	bSizer3DButtons->Add( m_buttonAdd, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer3DButtons->Add( m_buttonAdd, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_buttonBrowse = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_buttonBrowse->SetMinSize( wxSize( 30,29 ) );
@@ -463,7 +463,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bSizer3DButtons->Add( m_buttonBrowse, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
-	bSizer3DButtons->Add( 10, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer3DButtons->Add( 10, 0, 0, wxEXPAND|wxLEFT, 5 );
 
 	m_buttonRemove = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_buttonRemove->SetMinSize( wxSize( 30,29 ) );
@@ -474,7 +474,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bSizer3DButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_buttonCfgPath = new wxButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Configure Paths..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3DButtons->Add( m_buttonCfgPath, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer3DButtons->Add( m_buttonCfgPath, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	sbSizer3->Add( bSizer3DButtons, 0, wxEXPAND, 5 );
@@ -491,7 +491,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_Panel3D->SetSizer( bSizerMain3D );
 	m_Panel3D->Layout();
 	bSizerMain3D->Fit( m_Panel3D );
-	m_NoteBook->AddPage( m_Panel3D, _("3D Settings"), false );
+	m_NoteBook->AddPage( m_Panel3D, _("3D Settings"), true );
 
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
@@ -514,7 +514,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_tcLibraryID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_tcLibraryID->SetToolTip( _("The library ID and footprint ID currently assigned.  Use “Change Footprint…” to assign a different footprint.") );
 
-	fgSizerSymbolRef->Add( m_tcLibraryID, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSymbolRef->Add( m_tcLibraryID, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 	m_sheetPathLabel = new wxStaticText( this, wxID_ANY, _("Symbol link:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sheetPathLabel->Wrap( -1 );
@@ -524,13 +524,13 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_tcSheetPath->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_tcSheetPath->SetToolTip( _("The link to the associated schematic symbol, comprising the Unique IDs of the parent sheet(s) and the symbol.") );
 
-	fgSizerSymbolRef->Add( m_tcSheetPath, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerSymbolRef->Add( m_tcSheetPath, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
-	bSizerButtons->Add( fgSizerSymbolRef, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 10 );
+	bSizerButtons->Add( fgSizerSymbolRef, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
-	bSizerButtons->Add( 80, 0, 0, wxEXPAND, 5 );
+	m_GeneralBoxSizer->Add( bSizerButtons, 0, wxEXPAND|wxLEFT, 5 );
 
 	m_sdbSizerStdButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerStdButtonsOK = new wxButton( this, wxID_OK );
@@ -539,10 +539,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_sdbSizerStdButtons->AddButton( m_sdbSizerStdButtonsCancel );
 	m_sdbSizerStdButtons->Realize();
 
-	bSizerButtons->Add( m_sdbSizerStdButtons, 0, wxEXPAND|wxALL, 5 );
-
-
-	m_GeneralBoxSizer->Add( bSizerButtons, 0, wxEXPAND|wxLEFT, 5 );
+	m_GeneralBoxSizer->Add( m_sdbSizerStdButtons, 0, wxEXPAND|wxALL, 5 );
 
 
 	this->SetSizer( m_GeneralBoxSizer );
