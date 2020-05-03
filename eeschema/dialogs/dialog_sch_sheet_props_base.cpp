@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Nov  6 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -120,10 +120,10 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 
 	m_borderWidthLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Border width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderWidthLabel->Wrap( -1 );
-	sbSizer2->Add( m_borderWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	sbSizer2->Add( m_borderWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	m_borderWidthCtrl = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer2->Add( m_borderWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizer2->Add( m_borderWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_borderWidthUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderWidthUnits->Wrap( -1 );
@@ -136,11 +136,11 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	m_borderColorLabel->Wrap( -1 );
 	sbSizer2->Add( m_borderColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-    m_borderSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_borderSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-	m_borderSwatch->SetMinSize( wxSize( 48, 24 ) );
+	m_borderSwatch->SetMinSize( wxSize( 48,24 ) );
 
-	sbSizer2->Add( m_borderSwatch, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
+	sbSizer2->Add( m_borderSwatch, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizer2->Add( 40, 0, 1, wxEXPAND, 5 );
@@ -149,10 +149,10 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	m_backgroundColorLabel->Wrap( -1 );
 	sbSizer2->Add( m_backgroundColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-    m_backgroundSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_backgroundSwatch->SetMinSize( wxSize( 48, 24 ) );
+	m_backgroundSwatch = new COLOR_SWATCH( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_backgroundSwatch->SetMinSize( wxSize( 48,24 ) );
 
-	sbSizer2->Add( m_backgroundSwatch, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
+	sbSizer2->Add( m_backgroundSwatch, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizer5->Add( sbSizer2, 1, wxEXPAND|wxBOTTOM, 5 );
@@ -163,9 +163,6 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 
 	mainSizer->Add( m_longForm, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxALL, 5 );
-
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
@@ -175,27 +172,30 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	fgSizer1->SetFlexibleDirection( wxHORIZONTAL );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_hiearchicalPathLabel = new wxStaticText( this, wxID_ANY, _("Hierarchical Path:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hiearchicalPathLabel = new wxStaticText( this, wxID_ANY, _("Hierarchical path:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_hiearchicalPathLabel->Wrap( -1 );
-	fgSizer1->Add( m_hiearchicalPathLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_hiearchicalPathLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	m_heirarchyPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	fgSizer1->Add( m_heirarchyPath, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_timestampLabel = new wxStaticText( this, wxID_ANY, _("Unique ID:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_timestampLabel = new wxStaticText( this, wxID_ANY, _("Unique identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_timestampLabel->Wrap( -1 );
-	fgSizer1->Add( m_timestampLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_timestampLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	m_textCtrlTimeStamp = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	m_textCtrlTimeStamp->SetToolTip( _("Unique ID that identifies the symbol") );
 
-	fgSizer1->Add( m_textCtrlTimeStamp, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizer1->Add( m_textCtrlTimeStamp, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerBottom->Add( fgSizer1, 1, wxEXPAND|wxALL, 5 );
+	bSizerBottom->Add( fgSizer1, 1, wxEXPAND, 5 );
 
 
-	bSizerBottom->Add( 100, 0, 0, wxEXPAND, 5 );
+	mainSizer->Add( bSizerBottom, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND, 5 );
 
 	m_stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	m_stdDialogButtonSizerOK = new wxButton( this, wxID_OK );
@@ -204,14 +204,12 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	m_stdDialogButtonSizer->AddButton( m_stdDialogButtonSizerCancel );
 	m_stdDialogButtonSizer->Realize();
 
-	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxEXPAND|wxALL, 5 );
-
-
-	mainSizer->Add( bSizerBottom, 0, wxEXPAND|wxLEFT, 5 );
+	mainSizer->Add( m_stdDialogButtonSizer, 0, wxEXPAND|wxALL, 5 );
 
 
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SCH_SHEET_PROPS_BASE::OnInitDlg ) );
