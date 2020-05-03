@@ -101,7 +101,7 @@ void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
 
     if( dlg.ShowQuasiModal() == wxID_OK )       // QuasiModal required for NET_SELECTOR
     {
-        MODULE_EDITOR_TOOLS* fpTools = m_toolManager->GetTool<MODULE_EDITOR_TOOLS>();
+        FOOTPRINT_EDITOR_TOOLS* fpTools = m_toolManager->GetTool<FOOTPRINT_EDITOR_TOOLS>();
         fpTools->SetLastPadName( aPad->GetName() );
     }
 }

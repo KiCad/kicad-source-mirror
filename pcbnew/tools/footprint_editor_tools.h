@@ -32,15 +32,15 @@ class FOOTPRINT_EDIT_FRAME;
 
 
 /**
- * MODULE_EDITOR_TOOLS
+ * FOOTPRINT_EDITOR_TOOLS
  *
  * Module editor specific tools.
  */
-class MODULE_EDITOR_TOOLS : public PCB_TOOL_BASE
+class FOOTPRINT_EDITOR_TOOLS : public PCB_TOOL_BASE
 {
 public:
-    MODULE_EDITOR_TOOLS();
-    ~MODULE_EDITOR_TOOLS() override;
+    FOOTPRINT_EDITOR_TOOLS();
+    ~FOOTPRINT_EDITOR_TOOLS() override;
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;

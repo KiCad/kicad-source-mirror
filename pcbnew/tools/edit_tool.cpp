@@ -1142,7 +1142,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             if( increment && item->Type() == PCB_PAD_T
                     && PAD_NAMING::PadCanHaveName( *static_cast<D_PAD*>( dupe_item ) ) )
             {
-                MODULE_EDITOR_TOOLS* modEdit = m_toolMgr->GetTool<MODULE_EDITOR_TOOLS>();
+                FOOTPRINT_EDITOR_TOOLS* modEdit = m_toolMgr->GetTool<FOOTPRINT_EDITOR_TOOLS>();
                 wxString padName = modEdit->GetLastPadName();
                 padName = editModule->GetNextPadName( padName );
                 modEdit->SetLastPadName( padName );

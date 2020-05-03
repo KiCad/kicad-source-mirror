@@ -55,19 +55,19 @@ using namespace std::placeholders;
 #include <wx/defs.h>
 
 
-MODULE_EDITOR_TOOLS::MODULE_EDITOR_TOOLS() :
+FOOTPRINT_EDITOR_TOOLS::FOOTPRINT_EDITOR_TOOLS() :
     PCB_TOOL_BASE( "pcbnew.ModuleEditor" ),
     m_frame( nullptr )
 {
 }
 
 
-MODULE_EDITOR_TOOLS::~MODULE_EDITOR_TOOLS()
+FOOTPRINT_EDITOR_TOOLS::~FOOTPRINT_EDITOR_TOOLS()
 {
 }
 
 
-void MODULE_EDITOR_TOOLS::Reset( RESET_REASON aReason )
+void FOOTPRINT_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<FOOTPRINT_EDIT_FRAME>();
 
@@ -76,7 +76,7 @@ void MODULE_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 }
 
 
-bool MODULE_EDITOR_TOOLS::Init()
+bool FOOTPRINT_EDITOR_TOOLS::Init()
 {
     // Build a context menu for the footprint tree
     //
@@ -135,7 +135,7 @@ bool MODULE_EDITOR_TOOLS::Init()
 }
 
 
-int MODULE_EDITOR_TOOLS::NewFootprint( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::NewFootprint( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent evt( wxEVT_NULL, ID_MODEDIT_NEW_MODULE );
     getEditFrame<FOOTPRINT_EDIT_FRAME>()->Process_Special_Functions( evt );
@@ -143,7 +143,7 @@ int MODULE_EDITOR_TOOLS::NewFootprint( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::CreateFootprint( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::CreateFootprint( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent evt( wxEVT_NULL, ID_MODEDIT_NEW_MODULE_FROM_WIZARD );
     getEditFrame<FOOTPRINT_EDIT_FRAME>()->Process_Special_Functions( evt );
@@ -151,7 +151,7 @@ int MODULE_EDITOR_TOOLS::CreateFootprint( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::Save( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::Save( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent evt( wxEVT_NULL, ID_MODEDIT_SAVE );
     getEditFrame<FOOTPRINT_EDIT_FRAME>()->Process_Special_Functions( evt );
@@ -159,7 +159,7 @@ int MODULE_EDITOR_TOOLS::Save( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::SaveAs( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::SaveAs( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent evt( wxEVT_NULL, ID_MODEDIT_SAVE_AS );
     getEditFrame<FOOTPRINT_EDIT_FRAME>()->Process_Special_Functions( evt );
@@ -167,14 +167,14 @@ int MODULE_EDITOR_TOOLS::SaveAs( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::Revert( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::Revert( const TOOL_EVENT& aEvent )
 {
     getEditFrame<FOOTPRINT_EDIT_FRAME>()->RevertFootprint();
     return 0;
 }
 
 
-int MODULE_EDITOR_TOOLS::CutCopyFootprint( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::CutCopyFootprint( const TOOL_EVENT& aEvent )
 {
     LIB_ID fpID = m_frame->GetTreeFPID();
 
@@ -190,7 +190,7 @@ int MODULE_EDITOR_TOOLS::CutCopyFootprint( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::PasteFootprint( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::PasteFootprint( const TOOL_EVENT& aEvent )
 {
     if( m_copiedModule && !m_frame->GetTreeFPID().GetLibNickname().empty() )
     {
@@ -212,7 +212,7 @@ int MODULE_EDITOR_TOOLS::PasteFootprint( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::DeleteFootprint( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::DeleteFootprint( const TOOL_EVENT& aEvent )
 {
     FOOTPRINT_EDIT_FRAME* frame = getEditFrame<FOOTPRINT_EDIT_FRAME>();
 
@@ -228,7 +228,7 @@ int MODULE_EDITOR_TOOLS::DeleteFootprint( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::ImportFootprint( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::ImportFootprint( const TOOL_EVENT& aEvent )
 {
     if( !m_frame->Clear_Pcb( true ) )
         return -1;                  // this command is aborted
@@ -250,7 +250,7 @@ int MODULE_EDITOR_TOOLS::ImportFootprint( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::ExportFootprint( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::ExportFootprint( const TOOL_EVENT& aEvent )
 {
     LIB_ID  fpID = m_frame->GetTreeFPID();
     MODULE* fp;
@@ -265,14 +265,14 @@ int MODULE_EDITOR_TOOLS::ExportFootprint( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::EditFootprint( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::EditFootprint( const TOOL_EVENT& aEvent )
 {
     m_frame->LoadModuleFromLibrary( m_frame->GetTreeFPID() );
     return 0;
 }
 
 
-int MODULE_EDITOR_TOOLS::PinLibrary( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::PinLibrary( const TOOL_EVENT& aEvent )
 {
     LIB_TREE_NODE* currentNode = m_frame->GetCurrentTreeNode();
 
@@ -286,7 +286,7 @@ int MODULE_EDITOR_TOOLS::PinLibrary( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::UnpinLibrary( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::UnpinLibrary( const TOOL_EVENT& aEvent )
 {
     LIB_TREE_NODE* currentNode = m_frame->GetCurrentTreeNode();
 
@@ -300,14 +300,14 @@ int MODULE_EDITOR_TOOLS::UnpinLibrary( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::ToggleFootprintTree( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::ToggleFootprintTree( const TOOL_EVENT& aEvent )
 {
     m_frame->ToggleSearchTree();
     return 0;
 }
 
 
-int MODULE_EDITOR_TOOLS::Properties( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::Properties( const TOOL_EVENT& aEvent )
 {
     MODULE* footprint = m_frame->GetBoard()->GetFirstModule();
 
@@ -320,21 +320,21 @@ int MODULE_EDITOR_TOOLS::Properties( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::DefaultPadProperties( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::DefaultPadProperties( const TOOL_EVENT& aEvent )
 {
     getEditFrame<FOOTPRINT_EDIT_FRAME>()->InstallPadOptionsFrame( nullptr );
     return 0;
 }
 
 
-int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 {
     if( !m_frame->GetBoard()->GetFirstModule() )
         return 0;
 
     struct PAD_PLACER : public INTERACTIVE_PLACER_BASE
     {
-        PAD_PLACER( MODULE_EDITOR_TOOLS* aFPEditTools )
+        PAD_PLACER( FOOTPRINT_EDITOR_TOOLS* aFPEditTools )
         {
             m_fpEditTools = aFPEditTools;
         }
@@ -375,7 +375,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
             return false;
         }
 
-        MODULE_EDITOR_TOOLS* m_fpEditTools;
+        FOOTPRINT_EDITOR_TOOLS* m_fpEditTools;
     };
 
     PAD_PLACER placer( this );
@@ -387,7 +387,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
 {
     PCBNEW_SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
     BOARD_COMMIT      commit( m_frame );
@@ -437,7 +437,7 @@ int MODULE_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 {
     PCBNEW_SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
@@ -605,33 +605,33 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-void MODULE_EDITOR_TOOLS::setTransitions()
+void FOOTPRINT_EDITOR_TOOLS::setTransitions()
 {
-    Go( &MODULE_EDITOR_TOOLS::NewFootprint,         PCB_ACTIONS::newFootprint.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::CreateFootprint,      PCB_ACTIONS::createFootprint.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::Save,                 ACTIONS::save.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::Save,                 PCB_ACTIONS::saveToBoard.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::Save,                 PCB_ACTIONS::saveToLibrary.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::SaveAs,               ACTIONS::saveAs.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::SaveAs,               ACTIONS::saveCopyAs.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::Revert,               ACTIONS::revert.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::DeleteFootprint,      PCB_ACTIONS::deleteFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::NewFootprint,         PCB_ACTIONS::newFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::CreateFootprint,      PCB_ACTIONS::createFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::Save,                 ACTIONS::save.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::Save,                 PCB_ACTIONS::saveToBoard.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::Save,                 PCB_ACTIONS::saveToLibrary.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::SaveAs,               ACTIONS::saveAs.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::SaveAs,               ACTIONS::saveCopyAs.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::Revert,               ACTIONS::revert.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::DeleteFootprint,      PCB_ACTIONS::deleteFootprint.MakeEvent() );
 
-    Go( &MODULE_EDITOR_TOOLS::EditFootprint,        PCB_ACTIONS::editFootprint.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::CutCopyFootprint,     PCB_ACTIONS::cutFootprint.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::CutCopyFootprint,     PCB_ACTIONS::copyFootprint.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::PasteFootprint,       PCB_ACTIONS::pasteFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::EditFootprint,        PCB_ACTIONS::editFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::CutCopyFootprint,     PCB_ACTIONS::cutFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::CutCopyFootprint,     PCB_ACTIONS::copyFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::PasteFootprint,       PCB_ACTIONS::pasteFootprint.MakeEvent() );
 
-    Go( &MODULE_EDITOR_TOOLS::ImportFootprint,      PCB_ACTIONS::importFootprint.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::ExportFootprint,      PCB_ACTIONS::exportFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::ImportFootprint,      PCB_ACTIONS::importFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::ExportFootprint,      PCB_ACTIONS::exportFootprint.MakeEvent() );
 
-    Go( &MODULE_EDITOR_TOOLS::PinLibrary,           ACTIONS::pinLibrary.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::UnpinLibrary,         ACTIONS::unpinLibrary.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::ToggleFootprintTree,  PCB_ACTIONS::toggleFootprintTree.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::Properties,           PCB_ACTIONS::footprintProperties.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::DefaultPadProperties, PCB_ACTIONS::defaultPadProperties.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::PinLibrary,           ACTIONS::pinLibrary.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::UnpinLibrary,         ACTIONS::unpinLibrary.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::ToggleFootprintTree,  PCB_ACTIONS::toggleFootprintTree.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::Properties,           PCB_ACTIONS::footprintProperties.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::DefaultPadProperties, PCB_ACTIONS::defaultPadProperties.MakeEvent() );
 
-    Go( &MODULE_EDITOR_TOOLS::PlacePad,             PCB_ACTIONS::placePad.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::CreatePadFromShapes,  PCB_ACTIONS::createPadFromShapes.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::ExplodePadToShapes,   PCB_ACTIONS::explodePadToShapes.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::PlacePad,             PCB_ACTIONS::placePad.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::CreatePadFromShapes,  PCB_ACTIONS::createPadFromShapes.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_TOOLS::ExplodePadToShapes,   PCB_ACTIONS::explodePadToShapes.MakeEvent() );
 }

@@ -22,12 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_module.h
- * @brief Module description (excepted pads)
- */
-
-
 #ifndef MODULE_H_
 #define MODULE_H_
 
@@ -354,21 +348,20 @@ public:
 
     /**
      * function TransformPadsShapesWithClearanceToPolygon
-     * generate pads shapes on layer aLayer as polygons,
-     * and adds these polygons to aCornerBuffer
-     * Useful to generate a polygonal representation of a footprint
-     * in 3D view and plot functions, when a full polygonal approach is needed
+     * generate pads shapes on layer aLayer as polygons and adds these polygons to aCornerBuffer
+     * Useful to generate a polygonal representation of a footprint in 3D view and plot functions,
+     * when a full polygonal approach is needed
      * @param aLayer = the layer to consider, or UNDEFINED_LAYER to consider all
      * @param aCornerBuffer = the buffer to store polygons
      * @param aInflateValue = an additionnal size to add to pad shapes
      *          aInflateValue = 0 to have the exact pad size
      * @param aMaxError = Maximum deviation from true for arcs
-     * @param aSkipNPTHPadsWihNoCopper = if true, do not add a NPTH pad shape,
-     *  if the shape has same size and position as the hole. Usually, these
-     *  pads are not drawn on copper layers, because there is actually no copper
-     *  Due to diff between layers and holes, these pads must be skipped to be sure
-     *  there is no copper left on the board (for instance when creating Gerber Files or 3D shapes)
-     *  default = false
+     * @param aSkipNPTHPadsWihNoCopper = if true, do not add a NPTH pad shape, if the shape has
+     *          same size and position as the hole. Usually, these pads are not drawn on copper
+     *          layers, because there is actually no copper
+     *          Due to diff between layers and holes, these pads must be skipped to be sure
+     *          there is no copper left on the board (for instance when creating Gerber Files or
+     *          3D shapes).  Defaults to false.
      */
     void TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
             SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aMaxError = ARC_HIGH_DEF,
@@ -376,10 +369,10 @@ public:
 
     /**
      * function TransformGraphicShapesWithClearanceToPolygonSet
-     * generate shapes of graphic items (outlines) on layer aLayer as polygons,
-     * and adds these polygons to aCornerBuffer
-     * Useful to generate a polygonal representation of a footprint
-     * in 3D view and plot functions, when a full polygonal approach is needed
+     * generate shapes of graphic items (outlines) on layer aLayer as polygons and adds these
+     * polygons to aCornerBuffer
+     * Useful to generate a polygonal representation of a footprint in 3D view and plot functions,
+     * when a full polygonal approach is needed
      * @param aLayer = the layer to consider, or UNDEFINED_LAYER to consider all
      * @param aCornerBuffer = the buffer to store polygons
      * @param aInflateValue = a value to inflate shapes
@@ -556,7 +549,7 @@ public:
 
     /**
      * Function DuplicateItem
-     * Duplicate a given item within the module, without adding to the board
+     * Duplicate a given item within the module, optionally adding it to the board
      * @return the new item, or NULL if the item could not be duplicated
      */
     BOARD_ITEM* DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule = false );
@@ -592,8 +585,7 @@ public:
     void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction );
 
     /**
-     * Returns a set of all layers that this module has drawings on
-     * similar to ViewGetLayers()
+     * Returns a set of all layers that this module has drawings on similar to ViewGetLayers()
      *
      * @param aLayers is an array to store layer ids
      * @param aCount is the number of layers stored in the array
@@ -663,12 +655,10 @@ public:
     SHAPE_POLY_SET& GetPolyCourtyardFront() { return m_poly_courtyard_front; }
     SHAPE_POLY_SET& GetPolyCourtyardBack() { return m_poly_courtyard_back; }
 
-    /** Used in DRC to build the courtyard area (a complex polygon)
-     * from graphic items put on the courtyard
+    /**
+     * Builds a complex polygon of the courtyard area from graphic items on the courtyard layer
      * @return true if OK, or no courtyard defined,
-     * false only if the polygon cannot be built due to amalformed courtyard shape
-     * The polygon cannot be built if segments/arcs on courtyard layers
-     * cannot be grouped in a polygon.
+     *         false only if the polygon cannot be built due to a malformed courtyard shape
      */
     bool BuildPolyCourtyard();
 

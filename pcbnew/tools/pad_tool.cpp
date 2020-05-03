@@ -263,7 +263,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     getViewControls()->ShowCursor( true );
 
-    MODULE_EDITOR_TOOLS* fpTools = m_toolMgr->GetTool<MODULE_EDITOR_TOOLS>();
+    FOOTPRINT_EDITOR_TOOLS* fpTools = m_toolMgr->GetTool<FOOTPRINT_EDITOR_TOOLS>();
     KIGFX::VIEW* view = m_toolMgr->GetView();
     VECTOR2I oldCursorPos;  // store the previous mouse cursor position, during mouse drag
     std::list<D_PAD*> selectedPads;
