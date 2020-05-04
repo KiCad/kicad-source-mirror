@@ -21,6 +21,7 @@ import sys
 import xml.sax as sax
 import re
 import pdb
+import string
 
 #-----<Configure>----------------------------------------------------------------
 
@@ -335,7 +336,8 @@ class comp():
         result = False
         if self.getValue() == other.getValue():
             if self.getFootprint() == other.getFootprint():
-                result = True
+                if self.getRef().rstrip(string.digits) == other.getRef().rstrip(string.digits):
+                    result = True
         return result
 
     def setLibPart(self, part):
