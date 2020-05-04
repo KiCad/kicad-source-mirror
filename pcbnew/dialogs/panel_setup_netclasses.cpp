@@ -75,8 +75,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
 
     m_originalColWidths = new int[ m_netclassGrid->GetNumberCols() ];
     // Calculate a min best size to handle longest usual numeric values:
-    // (The 'M' large char is used to give a margin)
-    int min_best_width = m_netclassGrid->GetTextExtent( "555,555555 milsM" ).x;
+    int min_best_width = m_netclassGrid->GetTextExtent( "555,555555 mils" ).x;
 
     for( int i = 0; i < m_netclassGrid->GetNumberCols(); ++i )
     {
@@ -391,7 +390,7 @@ void PANEL_SETUP_NETCLASSES::AdjustNetclassGridColumns( int aWidth )
         aWidth -= m_originalColWidths[ i ];
     }
 
-    m_netclassGrid->SetColSize( 0, std::max( aWidth, m_originalColWidths[ 0 ] ) );
+    m_netclassGrid->SetColSize( 0, std::max( aWidth - 2, m_originalColWidths[ 0 ] ) );
 }
 
 
@@ -492,10 +491,9 @@ void PANEL_SETUP_NETCLASSES::OnUpdateUI( wxUpdateUIEvent& event )
     wxSize netclassSize = GetClientSize();
     netclassSize.y -= m_membershipSize.y;
 
-    // Modify m_netclassesPane size only if needed, because calling Layout()
-    // has a annoying effect if a wxChoice is open, it is closed by this call.
-    // So it cannot blindly called inside each wxUpdateUIEvent event,
-    // at least on Windows + wxWidgets 3.0 (do not happens with 3.1.1).
+    // Modify m_netclassesPane size only if needed, because calling Layout() has the annoying
+    // effect of closing any open wxChoice dropdowns.  So it cannot blindly called inside each
+    // wxUpdateUIEvent event, at least on Windows + wxWidgets 3.0 (not an issue with 3.1.1).
     if( netclassSize.y != m_netclassesPane->GetSize().y )
     {
         m_netclassesPane->SetMinSize( netclassSize );

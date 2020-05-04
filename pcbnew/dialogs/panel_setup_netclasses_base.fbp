@@ -180,7 +180,7 @@
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
                                             <property name="label_bg"></property>
-                                            <property name="label_font">,90,92,-1,70,0</property>
+                                            <property name="label_font"></property>
                                             <property name="label_text"></property>
                                             <property name="margin_height">0</property>
                                             <property name="margin_width">0</property>
@@ -1230,11 +1230,11 @@
                                             </object>
                                         </object>
                                     </object>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND|wxLEFT</property>
                                         <property name="proportion">1</property>
-                                        <object class="wxBoxSizer" expanded="0">
+                                        <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
                                             <property name="name">bRight</property>
                                             <property name="orient">wxVERTICAL</property>
@@ -1292,7 +1292,7 @@
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="label_bg"></property>
-                                                    <property name="label_font">,90,92,-1,70,0</property>
+                                                    <property name="label_font"></property>
                                                     <property name="label_text"></property>
                                                     <property name="margin_height">0</property>
                                                     <property name="margin_width">0</property>

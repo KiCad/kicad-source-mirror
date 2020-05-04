@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,12 +28,8 @@
 #include <panel_setup_feature_constraints.h>
 #include <panel_setup_feature_constraints_base.h>  // for PANEL_SETUP_FEATUR...
 #include <pcb_edit_frame.h>
-
 #include <widgets/paged_dialog.h>                  // for PAGED_DIALOG
-#include <widgets/unit_binder.h>                   // for UNIT_BINDER
 #include <wx/treebook.h>
-#include <wx/wx.h>
-
 #include <bitmaps.h>
 
 
@@ -51,18 +47,6 @@ PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* 
 {
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
-
-    // Initialize bitmaps:
-    m_bitmapZoneFillOpt->SetBitmap(  KiBitmap( show_zone_xpm ) );
-    m_bitmapMinTrackWidth->SetBitmap(  KiBitmap( width_track_xpm ) );
-    m_bitmapMinViaDiameter->SetBitmap(  KiBitmap( via_diameter_xpm ) );
-    m_bitmapMinViaDrill->SetBitmap(  KiBitmap( via_hole_diameter_xpm ) );
-    m_bitmapMinuViaDiameter->SetBitmap(  KiBitmap( via_diameter_xpm ) );
-    m_bitmapMinuViaDrill->SetBitmap(  KiBitmap( via_hole_diameter_xpm ) );
-    m_bitmapMinHoleClearance->SetBitmap(  KiBitmap( hole_to_hole_clearance_xpm ) );
-    m_bitmapEdgeClearance->SetBitmap(  KiBitmap( edge_to_copper_clearance_xpm ) );
-    m_bitmapBlindBuried->SetBitmap(  KiBitmap( via_buried_xpm ) );
-    m_bitmap_uVia->SetBitmap(  KiBitmap( via_microvia_xpm ) );
 }
 
 
@@ -117,6 +101,28 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
     m_BrdSettings->m_ZoneUseNoOutlineInFill = m_cbOutlinePolygonFastest->GetValue();
 
     return true;
+}
+
+
+bool PANEL_SETUP_FEATURE_CONSTRAINTS::Show( bool aShow )
+{
+    bool retVal = wxPanel::Show( aShow );
+
+    // These *should* work in the constructor, and indeed they do if this panel is the
+    // first displayed.  However, on OSX 3.0.5 (at least), if another panel is displayed
+    // first then the icons will be blank unless they're set here.
+    m_bitmapZoneFillOpt->SetBitmap( KiBitmap( show_zone_xpm ) );
+    m_bitmapMinTrackWidth->SetBitmap( KiBitmap( width_track_xpm ) );
+    m_bitmapMinViaDiameter->SetBitmap( KiBitmap( via_diameter_xpm ) );
+    m_bitmapMinViaDrill->SetBitmap( KiBitmap( via_hole_diameter_xpm ) );
+    m_bitmapMinuViaDiameter->SetBitmap( KiBitmap( via_diameter_xpm ) );
+    m_bitmapMinuViaDrill->SetBitmap( KiBitmap( via_hole_diameter_xpm ) );
+    m_bitmapMinHoleClearance->SetBitmap( KiBitmap( hole_to_hole_clearance_xpm ) );
+    m_bitmapEdgeClearance->SetBitmap( KiBitmap( edge_to_copper_clearance_xpm ) );
+    m_bitmapBlindBuried->SetBitmap( KiBitmap( via_buried_xpm ) );
+    m_bitmap_uVia->SetBitmap( KiBitmap( via_microvia_xpm ) );
+
+    return retVal;
 }
 
 

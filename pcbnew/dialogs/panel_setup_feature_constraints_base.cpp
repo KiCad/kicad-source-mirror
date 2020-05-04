@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -95,7 +95,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bitmapZoneFillOpt = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer5->Add( m_bitmapZoneFillOpt, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizer5->Add( m_bitmapZoneFillOpt, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxBoxSizer* bSizerOutlinesOpts;
 	bSizerOutlinesOpts = new wxBoxSizer( wxVERTICAL );
@@ -111,10 +111,10 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	bSizer5->Add( bSizerOutlinesOpts, 1, wxEXPAND, 5 );
 
 
-	m_bSizerPolygonFillOption->Add( bSizer5, 1, wxEXPAND|wxLEFT, 15 );
+	m_bSizerPolygonFillOption->Add( bSizer5, 1, wxEXPAND, 15 );
 
 
-	sbFeatureRules->Add( m_bSizerPolygonFillOption, 0, wxEXPAND|wxTOP, 5 );
+	sbFeatureRules->Add( m_bSizerPolygonFillOption, 0, wxEXPAND|wxTOP, 10 );
 
 
 	bMainSizer->Add( sbFeatureRules, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -126,7 +126,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	sbFeatureConstraints = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgFeatureConstraints;
-	fgFeatureConstraints = new wxFlexGridSizer( 0, 4, 2, 0 );
+	fgFeatureConstraints = new wxFlexGridSizer( 0, 4, 0, 0 );
 	fgFeatureConstraints->AddGrowableCol( 2 );
 	fgFeatureConstraints->SetFlexibleDirection( wxBOTH );
 	fgFeatureConstraints->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -148,7 +148,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	fgFeatureConstraints->Add( m_TrackMinWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM, 5 );
 
 
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
@@ -188,7 +188,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	fgFeatureConstraints->Add( m_ViaMinDrillUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
 
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
@@ -228,7 +228,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	fgFeatureConstraints->Add( m_uviaMinDrillUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
 
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxALL, 10 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -254,7 +254,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	fgFeatureConstraints->Add( m_HoleToHoleUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 
 
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );

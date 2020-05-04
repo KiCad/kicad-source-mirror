@@ -58,6 +58,7 @@ public:
     void ImportSettingsFrom( BOARD* aBoard );
 
 private:
+    bool Show( bool aShow ) override;
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
