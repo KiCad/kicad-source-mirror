@@ -152,6 +152,12 @@ bool DRC::IsDRCDialogShown()
 
 void DRC::addMarkerToPcb( MARKER_PCB* aMarker )
 {
+    if( m_pcb->GetDesignSettings().Ignore( aMarker->GetRCItem()->GetErrorCode() ) )
+    {
+        delete aMarker;
+        return;
+    }
+
     BOARD_COMMIT commit( m_pcbEditorFrame );
     commit.Add( aMarker );
     commit.Push( wxEmptyString, false, false );
@@ -437,7 +443,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     testZones();
 
     // find and gather unconnected pads.
-    if( m_doUnconnectedTest )
+    if( m_doUnconnectedTest && !m_pcb->GetDesignSettings().Ignore( DRCE_UNCONNECTED_ITEMS ) )
     {
         if( aMessages )
         {
@@ -508,7 +514,8 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     }
 
     // Check if there are items on disabled layers
-    testDisabledLayers();
+    if( !m_pcb->GetDesignSettings().Ignore( DRCE_DISABLED_LAYER_ITEM ) )
+        testDisabledLayers();
 
     if( aMessages )
     {
@@ -704,15 +711,13 @@ void DRC::testPad2Pad()
 
 void DRC::testDrilledHoles()
 {
-    int holeToHoleMin = m_pcb->GetDesignSettings().m_HoleToHoleMin;
+    BOARD_DESIGN_SETTINGS& dsnSettings = m_pcb->GetDesignSettings();
 
-    if( holeToHoleMin == 0 )    // No min setting turns testing off.
-        return;
-
-    // Test drilled hole clearances to minimize drill bit breakage.
+    // Test drilled holes to minimize drill bit breakage.
     //
-    // Notes: slots are milled, so we're only concerned with circular holes
-    //        microvias are laser-drilled, so we're only concerned with standard vias
+    // Check pad & std. via circular holes for hole-to-hole-min (non-circular holes are milled)
+    // Check pad & std. via holes for via-min-drill (minimum hole classification)
+    // Check uvia holes for uvia-min-drill (laser drill classification)
 
     struct DRILLED_HOLE
     {
@@ -729,7 +734,28 @@ void DRC::testDrilledHoles()
     {
         for( D_PAD* pad : mod->Pads( ) )
         {
-            if( pad->GetDrillSize().x && pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+            int minDimension = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
+
+            if( minDimension == 0 )
+                continue;
+
+            if( !dsnSettings.Ignore( DRCE_TOO_SMALL_PAD_DRILL )
+                    && minDimension < dsnSettings.m_ViasMinDrill )
+            {
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_PAD_DRILL );
+
+                msg.Printf( drcItem->GetErrorText() + _( " (board min via drill %s; actual %s)" ),
+                            MessageTextFromValue( userUnits(), dsnSettings.m_ViasMinDrill, true ),
+                            MessageTextFromValue( userUnits(), minDimension, true ) );
+
+                drcItem->SetErrorMessage( msg );
+                drcItem->SetItems( pad );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, pad->GetPosition() );
+                addMarkerToPcb( marker );
+            }
+
+            if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
             {
                 hole.m_location = pad->GetPosition();
                 hole.m_drillRadius = pad->GetDrillSize().x / 2;
@@ -742,14 +768,55 @@ void DRC::testDrilledHoles()
     for( TRACK* track : m_pcb->Tracks() )
     {
         VIA* via = dynamic_cast<VIA*>( track );
-        if( via && via->GetViaType() == VIATYPE::THROUGH )
+
+        if( !via )
+            continue;
+
+        if( via->GetViaType() == VIATYPE::MICROVIA )
         {
+            if( !dsnSettings.Ignore( DRCE_TOO_SMALL_MICROVIA_DRILL )
+                    && via->GetDrillValue() < dsnSettings.m_MicroViasMinDrill )
+            {
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA_DRILL );
+
+                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
+                            MessageTextFromValue( userUnits(), dsnSettings.m_MicroViasMinDrill, true ),
+                            MessageTextFromValue( userUnits(), via->GetDrillValue(), true ) );
+
+                drcItem->SetErrorMessage( msg );
+                drcItem->SetItems( via );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, via->GetPosition() );
+                addMarkerToPcb( marker );
+            }
+        }
+        else
+        {
+            if( !dsnSettings.Ignore( DRCE_TOO_SMALL_MICROVIA_DRILL )
+                    && via->GetDrillValue() < dsnSettings.m_ViasMinDrill )
+            {
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_DRILL );
+
+                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
+                            MessageTextFromValue( userUnits(), dsnSettings.m_ViasMinDrill, true ),
+                            MessageTextFromValue( userUnits(), via->GetDrillValue(), true ) );
+
+                drcItem->SetErrorMessage( msg );
+                drcItem->SetItems( via );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, via->GetPosition() );
+                addMarkerToPcb( marker );
+            }
+
             hole.m_location = via->GetPosition();
             hole.m_drillRadius = via->GetDrillValue() / 2;
             hole.m_owner = via;
             holes.push_back( hole );
         }
     }
+
+    if( dsnSettings.m_HoleToHoleMin == 0 || dsnSettings.Ignore( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
+        return;
 
     for( size_t ii = 0; ii < holes.size(); ++ii )
     {
@@ -766,12 +833,12 @@ void DRC::testDrilledHoles()
             int actual = KiROUND( GetLineLength( checkHole.m_location, refHole.m_location ) );
             actual = std::max( 0, actual - checkHole.m_drillRadius - refHole.m_drillRadius );
 
-            if( actual <  holeToHoleMin )
+            if( actual < dsnSettings.m_HoleToHoleMin )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DRILLED_HOLES_TOO_CLOSE );
 
                 msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), holeToHoleMin, true ),
+                            MessageTextFromValue( userUnits(), dsnSettings.m_HoleToHoleMin, true ),
                             MessageTextFromValue( userUnits(), actual, true ) );
 
                 drcItem->SetErrorMessage( msg );
@@ -870,26 +937,29 @@ void DRC::testZones()
     // In recent Pcbnew versions, the netcode is always >= 0, but an internal net name
     // is stored, and initialized from the file or the zone properties editor.
     // if it differs from the net name from net code, there is a DRC issue
-    for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
+    if( !m_pcb->GetDesignSettings().Ignore( DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE ) )
     {
-        ZONE_CONTAINER* zone = m_pcb->GetArea( ii );
-
-        if( !zone->IsOnCopperLayer() )
-            continue;
-
-        int netcode = zone->GetNetCode();
-        // a netcode < 0 or > 0 and no pad in net  is a error or strange
-        // perhaps a "dead" net, which happens when all pads in this net were removed
-        // Remark: a netcode < 0 should not happen (this is more a bug somewhere)
-        int pads_in_net = ( netcode > 0 ) ? m_pcb->GetConnectivity()->GetPadCount( netcode ) : 1;
-
-        if( ( netcode < 0 ) || pads_in_net == 0 )
+        for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE );
-            drcItem->SetItems( zone );
+            ZONE_CONTAINER* zone = m_pcb->GetArea( ii );
 
-            MARKER_PCB* marker = new MARKER_PCB( drcItem, zone->GetPosition() );
-            addMarkerToPcb( marker );
+            if( !zone->IsOnCopperLayer() )
+                continue;
+
+            int netcode = zone->GetNetCode();
+            // a netcode < 0 or > 0 and no pad in net  is a error or strange
+            // perhaps a "dead" net, which happens when all pads in this net were removed
+            // Remark: a netcode < 0 should not happen (this is more a bug somewhere)
+            int pads_in_net = ( netcode > 0 ) ? m_pcb->GetConnectivity()->GetPadCount( netcode ) : 1;
+
+            if( ( netcode < 0 ) || pads_in_net == 0 )
+            {
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE );
+                drcItem->SetItems( zone );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, zone->GetPosition() );
+                addMarkerToPcb( marker );
+            }
         }
     }
 
@@ -1618,53 +1688,62 @@ void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS aUnits,
 {
     wxString msg;
 
-    // Search for duplicate footprints on the board
     auto comp = []( const MODULE* x, const MODULE* y )
     {
         return x->GetReference().CmpNoCase( y->GetReference() ) < 0;
     };
     auto mods = std::set<MODULE*, decltype( comp )>( comp );
 
-    for( MODULE* mod : aPCB->Modules() )
+    if( !aPCB->GetDesignSettings().Ignore( DRCE_DUPLICATE_FOOTPRINT ) )
     {
-        auto ins = mods.insert( mod );
-
-        if( !ins.second )
+        // Search for duplicate footprints on the board
+        for( MODULE* mod : aPCB->Modules() )
         {
-            DRC_ITEM* item = new DRC_ITEM( DRCE_DUPLICATE_FOOTPRINT );
-            item->SetItems( mod, *ins.first );
-            aDRCList.push_back( item );
+            auto ins = mods.insert( mod );
+
+            if( !ins.second )
+            {
+                DRC_ITEM* item = new DRC_ITEM( DRCE_DUPLICATE_FOOTPRINT );
+                item->SetItems( mod, *ins.first );
+                aDRCList.push_back( item );
+            }
         }
     }
 
-    // Search for component footprints in the netlist but not on the board.
-    for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
+    if( !aPCB->GetDesignSettings().Ignore( DRCE_MISSING_FOOTPRINT ) )
     {
-        COMPONENT* component = aNetlist.GetComponent( ii );
-        MODULE*    module = aPCB->FindModuleByReference( component->GetReference() );
-
-        if( module == NULL )
+        // Search for component footprints in the netlist but not on the board.
+        for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
         {
-            msg.Printf( _( "Missing footprint %s (%s)" ),
-                        component->GetReference(),
-                        component->GetValue() );
+            COMPONENT* component = aNetlist.GetComponent( ii );
+            MODULE*    module = aPCB->FindModuleByReference( component->GetReference() );
 
-            DRC_ITEM* item = new DRC_ITEM( DRCE_MISSING_FOOTPRINT );
-            item->SetErrorMessage( msg );
-            aDRCList.push_back( item );
+            if( module == NULL )
+            {
+                msg.Printf( _( "Missing footprint %s (%s)" ),
+                            component->GetReference(),
+                            component->GetValue() );
+
+                DRC_ITEM* item = new DRC_ITEM( DRCE_MISSING_FOOTPRINT );
+                item->SetErrorMessage( msg );
+                aDRCList.push_back( item );
+            }
         }
     }
 
-    // Search for component footprints found on board but not in netlist.
-    for( auto module : mods )
+    if( !aPCB->GetDesignSettings().Ignore( DRCE_EXTRA_FOOTPRINT ) )
     {
-        COMPONENT* component = aNetlist.GetComponentByReference( module->GetReference() );
-
-        if( component == NULL )
+        // Search for component footprints found on board but not in netlist.
+        for( auto module : mods )
         {
-            DRC_ITEM* item = new DRC_ITEM( DRCE_EXTRA_FOOTPRINT );
-            item->SetItems( module );
-            aDRCList.push_back( item );
+            COMPONENT* component = aNetlist.GetComponentByReference( module->GetReference() );
+
+            if( component == NULL )
+            {
+                DRC_ITEM* item = new DRC_ITEM( DRCE_EXTRA_FOOTPRINT );
+                item->SetItems( module );
+                aDRCList.push_back( item );
+            }
         }
     }
 }

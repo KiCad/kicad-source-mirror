@@ -247,8 +247,8 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
         doc = xmlDocument.GetRoot();
 
         m_min_trace    = INT_MAX;
+        m_min_hole     = INT_MAX;
         m_min_via      = INT_MAX;
-        m_min_via_hole = INT_MAX;
 
         loadAllSections( doc );
 
@@ -260,8 +260,8 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
         if( m_min_via < designSettings.m_ViasMinSize )
             designSettings.m_ViasMinSize = m_min_via;
 
-        if( m_min_via_hole < designSettings.m_ViasMinDrill )
-            designSettings.m_ViasMinDrill = m_min_via_hole;
+        if( m_min_hole < designSettings.m_ViasMinDrill )
+            designSettings.m_ViasMinDrill = m_min_hole;
 
         if( m_rules->mdWireWire )
         {
@@ -308,10 +308,10 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
 
 void EAGLE_PLUGIN::init( const PROPERTIES* aProperties )
 {
-    m_hole_count   = 0;
-    m_min_trace    = 0;
-    m_min_via      = 0;
-    m_min_via_hole = 0;
+    m_hole_count = 0;
+    m_min_trace  = 0;
+    m_min_hole   = 0;
+    m_min_via    = 0;
     m_xpath->clear();
     m_pads_to_nets.clear();
 
@@ -1406,7 +1406,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
 }
 
 
-MODULE* EAGLE_PLUGIN::makeModule( wxXmlNode* aPackage, const wxString& aPkgName ) const
+MODULE* EAGLE_PLUGIN::makeModule( wxXmlNode* aPackage, const wxString& aPkgName )
 {
     std::unique_ptr<MODULE> m( new MODULE( m_board ) );
 
@@ -1524,11 +1524,12 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree )
 {
     // this is thru hole technology here, no SMDs
     EPAD e( aTree );
     int shape = EPAD::UNDEF;
+    int drillz = e.drill.ToPcbUnits();
 
     D_PAD* pad = new D_PAD( aModule );
     aModule->Add( pad );
@@ -1541,8 +1542,11 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
     else if( aModule->GetLayer() == B_Cu && m_rules->psBottom != EPAD::UNDEF )
         shape = m_rules->psBottom;
 
-    pad->SetDrillSize( wxSize( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() ) );
+    pad->SetDrillSize( wxSize( drillz, drillz ) );
     pad->SetLayerSet( LSET::AllCuMask() );
+
+    if( drillz < m_min_hole )
+        m_min_hole = drillz;
 
     // Solder mask
     if( !e.stop || *e.stop == true )         // enabled by default
@@ -2173,8 +2177,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     if( kidiam < m_min_via )
                         m_min_via = kidiam;
 
-                    if( drillz < m_min_via_hole )
-                        m_min_via_hole = drillz;
+                    if( drillz < m_min_hole )
+                        m_min_hole = drillz;
 
                     if( layer_front_most == F_Cu && layer_back_most == B_Cu )
                         via->SetViaType( VIATYPE::THROUGH );

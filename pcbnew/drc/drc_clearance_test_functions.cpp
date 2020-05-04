@@ -173,21 +173,6 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
                 addMarkerToPcb( marker );
             }
-
-            if( refvia->GetDrillValue() < dsnSettings.m_MicroViasMinDrill )
-            {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA_DRILL );
-
-                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), dsnSettings.m_MicroViasMinDrill, true ),
-                            MessageTextFromValue( userUnits(), refvia->GetDrillValue(), true ) );
-
-                drcItem->SetErrorMessage( msg );
-                drcItem->SetItems( refvia );
-
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-                addMarkerToPcb( marker );
-            }
         }
         else
         {
@@ -198,21 +183,6 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
                             MessageTextFromValue( userUnits(), dsnSettings.m_ViasMinSize, true ),
                             MessageTextFromValue( userUnits(), refvia->GetWidth(), true ) );
-
-                drcItem->SetErrorMessage( msg );
-                drcItem->SetItems( refvia );
-
-                MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
-                addMarkerToPcb( marker );
-            }
-
-            if( refvia->GetDrillValue() < dsnSettings.m_ViasMinDrill )
-            {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_DRILL );
-
-                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), dsnSettings.m_ViasMinDrill, true ),
-                            MessageTextFromValue( userUnits(), refvia->GetDrillValue(), true ) );
 
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( refvia );

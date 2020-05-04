@@ -188,8 +188,8 @@ private:
     BOARD*      m_board;            ///< which BOARD is being worked on, no ownership here
 
     int         m_min_trace;        ///< smallest trace we find on Load(), in BIU.
+    int         m_min_hole;         ///< smallest diameter hole we find on Load(), in BIU.
     int         m_min_via;          ///< smallest via we find on Load(), in BIU.
-    int         m_min_via_hole;     ///< smallest via diameter hole we find on Load(), in BIU.
 
     wxString    m_lib_path;
     wxDateTime  m_mod_time;
@@ -267,10 +267,10 @@ private:
      * Function makeModule
      * creates a MODULE from an Eagle package.
      */
-    MODULE* makeModule( wxXmlNode* aPackage, const wxString& aPkgName ) const;
+    MODULE* makeModule( wxXmlNode* aPackage, const wxString& aPkgName );
 
     void packageWire( MODULE* aModule, wxXmlNode* aTree ) const;
-    void packagePad( MODULE* aModule, wxXmlNode* aTree ) const;
+    void packagePad( MODULE* aModule, wxXmlNode* aTree );
     void packageText( MODULE* aModule, wxXmlNode* aTree ) const;
     void packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const;
     void packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const;

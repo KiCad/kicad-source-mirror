@@ -91,6 +91,8 @@ wxString DRC_ITEM::GetErrorText( int aCode ) const
         return wxString( _( "Micro via size too small" ) );
     case DRCE_TOO_SMALL_VIA_DRILL:
         return wxString( _( "Via drill too small" ) );
+    case DRCE_TOO_SMALL_PAD_DRILL:
+        return wxString( _( "Pad drill too small" ) );
     case DRCE_TOO_SMALL_MICROVIA_DRILL:
         return wxString( _( "Micro via drill too small" ) );
     case DRCE_DRILLED_HOLES_TOO_CLOSE:

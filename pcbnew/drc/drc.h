@@ -59,6 +59,7 @@ enum PCB_DRC_CODE {
     DRCE_TOO_SMALL_VIA,                     ///< Too small via size
     DRCE_TOO_SMALL_MICROVIA,                ///< Too small micro via size
     DRCE_TOO_SMALL_VIA_DRILL,               ///< Too small via drill
+    DRCE_TOO_SMALL_PAD_DRILL,               ///< Too small via drill
     DRCE_TOO_SMALL_MICROVIA_DRILL,          ///< Too small micro via drill
     DRCE_NETCLASS_TRACKWIDTH,               ///< netclass has TrackWidth < board.m_designSettings->m_TrackMinWidth
     DRCE_NETCLASS_CLEARANCE,                ///< netclass has Clearance < board.m_designSettings->m_TrackClearance
