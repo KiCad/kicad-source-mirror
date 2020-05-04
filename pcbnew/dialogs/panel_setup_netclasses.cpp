@@ -516,10 +516,11 @@ bool PANEL_SETUP_NETCLASSES::validateData()
 
     wxString msg;
     int minViaDia = m_ConstraintsPanel->m_viaMinSize.GetValue();
-    int minViaDrill = m_ConstraintsPanel->m_viaMinDrill.GetValue();
+    int minThroughHole = m_ConstraintsPanel->m_throughHoleMin.GetValue();
     int minUViaDia = m_ConstraintsPanel->m_uviaMinSize.GetValue();
     int minUViaDrill = m_ConstraintsPanel->m_uviaMinDrill.GetValue();
     int minTrackWidth = m_ConstraintsPanel->m_trackMinWidth.GetValue();
+    int minClearance = m_ConstraintsPanel->m_minClearance.GetValue();
 
     // Test net class parameters.
     for( int row = 0; row < m_netclassGrid->GetNumberRows(); row++ )
@@ -530,6 +531,14 @@ bool PANEL_SETUP_NETCLASSES::validateData()
 
         if( !validateNetclassName( row, netclassName, false ) )
             return false;
+
+        if( getNetclassValue( row, GRID_CLEARANCE ) < minClearance )
+        {
+            msg.Printf( _( "Clearance less than minimum clearance (%s)." ),
+                        StringFromValue( m_Frame->GetUserUnits(), minClearance, true, true ) );
+            m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_CLEARANCE );
+            return false;
+        }
 
         if( getNetclassValue( row, GRID_TRACKSIZE ) < minTrackWidth )
         {
@@ -563,10 +572,10 @@ bool PANEL_SETUP_NETCLASSES::validateData()
             return false;
         }
 
-        if( getNetclassValue( row, GRID_VIADRILL ) < minViaDrill )
+        if( getNetclassValue( row, GRID_VIADRILL ) < minThroughHole )
         {
             msg.Printf( _( "Via drill less than minimum via drill (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minViaDrill, true, true ) );
+                        StringFromValue( m_Frame->GetUserUnits(), minThroughHole, true, true ) );
             m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_VIADRILL );
             return false;
         }

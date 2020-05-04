@@ -260,8 +260,8 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
         if( m_min_via < designSettings.m_ViasMinSize )
             designSettings.m_ViasMinSize = m_min_via;
 
-        if( m_min_hole < designSettings.m_ViasMinDrill )
-            designSettings.m_ViasMinDrill = m_min_hole;
+        if( m_min_hole < designSettings.m_MinThroughDrill )
+            designSettings.m_MinThroughDrill = m_min_hole;
 
         if( m_rules->mdWireWire )
         {

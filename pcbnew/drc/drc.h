@@ -64,7 +64,7 @@ enum PCB_DRC_CODE {
     DRCE_NETCLASS_TRACKWIDTH,               ///< netclass has TrackWidth < board.m_designSettings->m_TrackMinWidth
     DRCE_NETCLASS_CLEARANCE,                ///< netclass has Clearance < board.m_designSettings->m_TrackClearance
     DRCE_NETCLASS_VIASIZE,                  ///< netclass has ViaSize < board.m_designSettings->m_ViasMinSize
-    DRCE_NETCLASS_VIADRILLSIZE,             ///< netclass has ViaDrillSize < board.m_designSettings->m_ViasMinDrill
+    DRCE_NETCLASS_VIADRILLSIZE,             ///< netclass has ViaDrillSize < board.m_designSettings->m_MinThroughDrill
     DRCE_NETCLASS_uVIASIZE,                 ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinSize
     DRCE_NETCLASS_uVIADRILLSIZE,            ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinDrill
     DRCE_VIA_INSIDE_KEEPOUT,                ///< Via in inside a keepout area

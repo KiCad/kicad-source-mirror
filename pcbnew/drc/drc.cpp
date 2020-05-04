@@ -564,13 +564,12 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
 
     const BOARD_DESIGN_SETTINGS& g = m_pcb->GetDesignSettings();
 
-#if 0   // set to 1 when (if...) BOARD_DESIGN_SETTINGS has a m_MinClearance value
     if( nc->GetClearance() < g.m_MinClearance )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_CLEARANCE );
 
         msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                    MessageTextFromValue( userUnits(), g.m_TrackClearance, true ),
+                    MessageTextFromValue( userUnits(), g.m_MinClearance, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetClearance(), true ) );
 
@@ -578,7 +577,6 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
         addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
         ret = false;
     }
-#endif
 
     if( nc->GetTrackWidth() < g.m_TrackMinWidth )
     {
@@ -608,12 +606,12 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
         ret = false;
     }
 
-    if( nc->GetViaDrill() < g.m_ViasMinDrill )
+    if( nc->GetViaDrill() < g.m_MinThroughDrill )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIADRILLSIZE );
 
-        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
-                    MessageTextFromValue( userUnits(), g.m_ViasMinDrill, true ),
+        msg.Printf( drcItem->GetErrorText() + _( " (board min through hole %s; %s netclass %s)" ),
+                    MessageTextFromValue( userUnits(), g.m_MinThroughDrill, true ),
                     nc->GetName(),
                     MessageTextFromValue( userUnits(), nc->GetViaDrill(), true ) );
 
@@ -740,12 +738,12 @@ void DRC::testDrilledHoles()
                 continue;
 
             if( !dsnSettings.Ignore( DRCE_TOO_SMALL_PAD_DRILL )
-                    && minDimension < dsnSettings.m_ViasMinDrill )
+                    && minDimension < dsnSettings.m_MinThroughDrill )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_PAD_DRILL );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (board min via drill %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), dsnSettings.m_ViasMinDrill, true ),
+                msg.Printf( drcItem->GetErrorText() + _( " (board min through hole %s; actual %s)" ),
+                            MessageTextFromValue( userUnits(), dsnSettings.m_MinThroughDrill, true ),
                             MessageTextFromValue( userUnits(), minDimension, true ) );
 
                 drcItem->SetErrorMessage( msg );
@@ -792,13 +790,13 @@ void DRC::testDrilledHoles()
         }
         else
         {
-            if( !dsnSettings.Ignore( DRCE_TOO_SMALL_MICROVIA_DRILL )
-                    && via->GetDrillValue() < dsnSettings.m_ViasMinDrill )
+            if( !dsnSettings.Ignore( DRCE_TOO_SMALL_VIA_DRILL )
+                    && via->GetDrillValue() < dsnSettings.m_MinThroughDrill )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_DRILL );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), dsnSettings.m_ViasMinDrill, true ),
+                msg.Printf( drcItem->GetErrorText() + _( " (board min through hole %s; actual %s)" ),
+                            MessageTextFromValue( userUnits(), dsnSettings.m_MinThroughDrill, true ),
                             MessageTextFromValue( userUnits(), via->GetDrillValue(), true ) );
 
                 drcItem->SetErrorMessage( msg );

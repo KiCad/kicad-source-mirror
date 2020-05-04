@@ -36,9 +36,10 @@
 PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* aParent,
                                                                   PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( aParent->GetTreebook() ),
+        m_minClearance( aFrame, m_clearanceTitle, m_clearanceCtrl, m_clearanceUnits, true ),
         m_trackMinWidth( aFrame, m_TrackMinWidthTitle, m_TrackMinWidthCtrl, m_TrackMinWidthUnits, true ),
         m_viaMinSize( aFrame, m_ViaMinTitle, m_SetViasMinSizeCtrl, m_ViaMinUnits, true ),
-        m_viaMinDrill( aFrame, m_ViaMinDrillTitle, m_SetViasMinDrillCtrl, m_ViaMinDrillUnits, true ),
+        m_throughHoleMin( aFrame, m_MinDrillTitle, m_MinDrillCtrl, m_MinDrillUnits, true ),
         m_uviaMinSize( aFrame, m_uviaMinSizeLabel, m_uviaMinSizeCtrl, m_uviaMinSizeUnits, true ),
         m_uviaMinDrill( aFrame, m_uviaMinDrillLabel, m_uviaMinDrillCtrl, m_uviaMinDrillUnits, true ),
         m_holeToHoleMin( aFrame, m_HoleToHoleTitle, m_SetHoleToHoleCtrl, m_HoleToHoleUnits, true ),
@@ -52,24 +53,24 @@ PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* 
 
 bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
 {
-    m_trackMinWidth.SetValue( m_BrdSettings->m_TrackMinWidth );
-    m_viaMinSize.SetValue(m_BrdSettings->m_ViasMinSize );
-    m_viaMinDrill.SetValue( m_BrdSettings->m_ViasMinDrill );
-
     m_OptAllowBlindBuriedVias->SetValue( m_BrdSettings->m_BlindBuriedViaAllowed );
     m_OptAllowMicroVias->SetValue( m_BrdSettings->m_MicroViasAllowed );
-
-    m_uviaMinSize.SetValue( m_BrdSettings->m_MicroViasMinSize );
-    m_uviaMinDrill.SetValue( m_BrdSettings->m_MicroViasMinDrill );
-
-    m_holeToHoleMin.SetValue( m_BrdSettings->m_HoleToHoleMin );
-
-    m_edgeClearance.SetValue( m_BrdSettings->m_CopperEdgeClearance );
 
     m_maxError.SetValue( m_BrdSettings->m_MaxError );
 
     m_cbOutlinePolygonFastest->SetValue( m_BrdSettings->m_ZoneUseNoOutlineInFill );
     m_cbOutlinePolygonBestQ->SetValue( !m_BrdSettings->m_ZoneUseNoOutlineInFill );
+
+    m_minClearance.SetValue( m_BrdSettings->m_MinClearance );
+    m_trackMinWidth.SetValue( m_BrdSettings->m_TrackMinWidth );
+    m_viaMinSize.SetValue(m_BrdSettings->m_ViasMinSize );
+    m_edgeClearance.SetValue( m_BrdSettings->m_CopperEdgeClearance );
+
+    m_throughHoleMin.SetValue( m_BrdSettings->m_MinThroughDrill );
+    m_holeToHoleMin.SetValue( m_BrdSettings->m_HoleToHoleMin );
+
+    m_uviaMinSize.SetValue( m_BrdSettings->m_MicroViasMinSize );
+    m_uviaMinDrill.SetValue( m_BrdSettings->m_MicroViasMinDrill );
 
     return true;
 }
@@ -77,28 +78,42 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
 
 bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
 {
-    // Update tracks minimum values for DRC
-    m_BrdSettings->m_TrackMinWidth = m_trackMinWidth.GetValue();
+    if( !m_minClearance.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
+        return false;
 
-    // Update vias minimum values for DRC
-    m_BrdSettings->m_ViasMinSize = m_viaMinSize.GetValue();
-    m_BrdSettings->m_ViasMinDrill = m_viaMinDrill.GetValue();
+    if( !m_trackMinWidth.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
+        return false;
+
+    if( !m_viaMinSize.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
+        return false;
+
+    if( !m_edgeClearance.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
+        return false;
+
+    if( !m_throughHoleMin.Validate( Mils2iu( 2 ), Mils2iu( 1000 ) ) )   // #107 to 1 inch
+        return false;
+
+    if( !m_holeToHoleMin.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
+        return false;
 
     m_BrdSettings->m_BlindBuriedViaAllowed = m_OptAllowBlindBuriedVias->GetValue();
     m_BrdSettings->m_MicroViasAllowed = m_OptAllowMicroVias->GetValue();
-
-    // Update microvias minimum values for DRC
-    m_BrdSettings->m_MicroViasMinSize = m_uviaMinSize.GetValue();
-    m_BrdSettings->m_MicroViasMinDrill = m_uviaMinDrill.GetValue();
-
-    m_BrdSettings->SetMinHoleSeparation( m_holeToHoleMin.GetValue() );
-
-    m_BrdSettings->SetCopperEdgeClearance( m_edgeClearance.GetValue() );
 
     m_BrdSettings->m_MaxError = Clamp<int>( IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
             m_maxError.GetValue(), IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );
 
     m_BrdSettings->m_ZoneUseNoOutlineInFill = m_cbOutlinePolygonFastest->GetValue();
+
+    m_BrdSettings->m_MinClearance = m_minClearance.GetValue();
+    m_BrdSettings->m_TrackMinWidth = m_trackMinWidth.GetValue();
+    m_BrdSettings->m_ViasMinSize = m_viaMinSize.GetValue();
+    m_BrdSettings->SetCopperEdgeClearance( m_edgeClearance.GetValue() );
+
+    m_BrdSettings->m_MinThroughDrill = m_throughHoleMin.GetValue();
+    m_BrdSettings->SetMinHoleSeparation( m_holeToHoleMin.GetValue() );
+
+    m_BrdSettings->m_MicroViasMinSize = m_uviaMinSize.GetValue();
+    m_BrdSettings->m_MicroViasMinDrill = m_uviaMinDrill.GetValue();
 
     return true;
 }
@@ -112,6 +127,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::Show( bool aShow )
     // first displayed.  However, on OSX 3.0.5 (at least), if another panel is displayed
     // first then the icons will be blank unless they're set here.
     m_bitmapZoneFillOpt->SetBitmap( KiBitmap( show_zone_xpm ) );
+    m_bitmapClearance->SetBitmap( KiBitmap( ps_diff_pair_gap_xpm ) );
     m_bitmapMinTrackWidth->SetBitmap( KiBitmap( width_track_xpm ) );
     m_bitmapMinViaDiameter->SetBitmap( KiBitmap( via_diameter_xpm ) );
     m_bitmapMinViaDrill->SetBitmap( KiBitmap( via_hole_diameter_xpm ) );

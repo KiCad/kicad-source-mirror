@@ -66,9 +66,10 @@
 #define DEFAULT_CUSTOMDPAIRGAP        0.18
 #define DEFAULT_CUSTOMDPAIRVIAGAP     0.18
 
+#define DEFAULT_MINCLEARANCE          0.0     // overall min clearance
 #define DEFAULT_TRACKMINWIDTH         0.2     // track width min value
 #define DEFAULT_VIASMINSIZE           0.4     // vias (not micro vias) min diameter
-#define DEFAULT_VIASMINDRILL          0.3     // vias (not micro vias) min drill diameter
+#define DEFAULT_MINTHROUGHDRILL       0.3     // through holes (not micro vias) min drill diameter
 #define DEFAULT_MICROVIASMINSIZE      0.2     // micro vias (not vias) min diameter
 #define DEFAULT_MICROVIASMINDRILL     0.1     // micro vias (not vias) min drill diameter
 #define DEFAULT_HOLETOHOLEMIN         0.25    // separation between drilled hole edges
@@ -198,9 +199,10 @@ public:
 
     bool       m_UseConnectedTrackWidth;    // use width of existing track when creating a new,
                                             // connected track
+    int        m_MinClearance;              // overall min clearance
     int        m_TrackMinWidth;             // track min value for width ((min copper size value
     int        m_ViasMinSize;               // vias (not micro vias) min diameter
-    int        m_ViasMinDrill;              // vias (not micro vias) min drill diameter
+    int        m_MinThroughDrill;           // through hole (not micro vias) min drill diameter
     int        m_MicroViasMinSize;          // micro vias min diameter
     int        m_MicroViasMinDrill;         // micro vias min drill diameter
     int        m_CopperEdgeClearance;

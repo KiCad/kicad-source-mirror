@@ -374,18 +374,24 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case 5:
+    {
         m_BrdSettings.m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
         m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
 
-        for( MARKER_PCB* marker : m_brdEditor->GetBoard()->Markers() )
+        std::vector<MARKER_PCB*>& markers = m_brdEditor->GetBoard()->Markers();
+
+        for( unsigned i = 0; i < markers.size(); )
         {
-            if( marker->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
-                m_brdEditor->GetBoard()->Delete( marker );
+            if( markers[i]->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
+                markers.erase( markers.begin() + i );
+            else
+                ++i;
         }
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
         modified = true;
+    }
         break;
 
     case 6:

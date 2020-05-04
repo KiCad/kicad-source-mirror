@@ -222,8 +222,9 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
 
     wxString msg;
     int minViaDia = m_ConstraintsPanel->m_viaMinSize.GetValue();
-    int minViaDrill = m_ConstraintsPanel->m_viaMinDrill.GetValue();
+    int minThroughHole = m_ConstraintsPanel->m_throughHoleMin.GetValue();
     int minTrackWidth = m_ConstraintsPanel->m_trackMinWidth.GetValue();
+    int minClearance = m_ConstraintsPanel->m_minClearance.GetValue();
 
     // Test tracks
     for( int row = 0; row < m_trackWidthsGrid->GetNumberRows();  ++row )
@@ -267,10 +268,10 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
             return false;
         }
 
-        if( ValueFromString( m_Frame->GetUserUnits(), viaDrill ) < minViaDrill )
+        if( ValueFromString( m_Frame->GetUserUnits(), viaDrill ) < minThroughHole )
         {
-            msg.Printf( _( "Via drill less than minimum via drill (%s)." ),
-                        StringFromValue( m_Frame->GetUserUnits(), minViaDrill, true, true ) );
+            msg.Printf( _( "Via drill less than minimum through hole (%s)." ),
+                        StringFromValue( m_Frame->GetUserUnits(), minThroughHole, true, true ) );
             m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
             return false;
         }
@@ -309,9 +310,10 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
             return false;
         }
 
-        if( ValueFromString( m_Frame->GetUserUnits(), gap ) < 0 )
+        if( ValueFromString( m_Frame->GetUserUnits(), gap ) < minClearance )
         {
-            msg.Printf( _( "Differential pair gap cannot be negative." ) );
+            msg.Printf( _( "Differential pair gap less than minimum clearance (%s)." ),
+                        StringFromValue( m_Frame->GetUserUnits(), minClearance, true, true ) );
             m_Parent->SetError( msg, this, m_diffPairsGrid, row, 1 );
             return false;
         }
@@ -321,9 +323,10 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         if( viaGap.IsEmpty() )
             continue;
 
-        if( ValueFromString( m_Frame->GetUserUnits(), viaGap ) < 0 )
+        if( ValueFromString( m_Frame->GetUserUnits(), viaGap ) < minClearance )
         {
-            msg.Printf( _( "Differential pair via gap cannot be negative." ) );
+            msg.Printf( _( "Differential pair via gap less than minimum clearance (%s)." ),
+                        StringFromValue( m_Frame->GetUserUnits(), minClearance, true, true ) );
             m_Parent->SetError( msg, this, m_diffPairsGrid, row, 2 );
             return false;
         }

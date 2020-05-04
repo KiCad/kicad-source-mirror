@@ -54,6 +54,7 @@ chamfer
 chamfer_ratio
 circle
 clearance
+clearance_min
 color
 comment
 company
@@ -222,6 +223,7 @@ thermal_width
 thermal_gap
 thermal_bridge_width
 thickness
+through_hole_min
 top
 top_left
 top_right

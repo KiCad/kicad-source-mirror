@@ -10,19 +10,19 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/statbmp.h>
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/statbmp.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
-#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/panel.h>
@@ -37,6 +37,7 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 	private:
 
 	protected:
+		wxStaticText* m_staticText26;
 		wxStaticBitmap* m_bitmapBlindBuried;
 		wxCheckBox* m_OptAllowBlindBuriedVias;
 		wxStaticBitmap* m_bitmap_uVia;
@@ -52,6 +53,11 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticBitmap* m_bitmapZoneFillOpt;
 		wxCheckBox* m_cbOutlinePolygonBestQ;
 		wxCheckBox* m_cbOutlinePolygonFastest;
+		wxStaticText* m_staticText23;
+		wxStaticBitmap* m_bitmapClearance;
+		wxStaticText* m_clearanceTitle;
+		wxTextCtrl* m_clearanceCtrl;
+		wxStaticText* m_clearanceUnits;
 		wxStaticBitmap* m_bitmapMinTrackWidth;
 		wxStaticText* m_TrackMinWidthTitle;
 		wxTextCtrl* m_TrackMinWidthCtrl;
@@ -60,10 +66,28 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_ViaMinTitle;
 		wxTextCtrl* m_SetViasMinSizeCtrl;
 		wxStaticText* m_ViaMinUnits;
+		wxStaticBitmap* m_bitmapEdgeClearance;
+		wxStaticText* m_EdgeClearanceLabel;
+		wxTextCtrl* m_EdgeClearanceCtrl;
+		wxStaticText* m_EdgeClearanceUnits;
+		wxStaticLine* m_staticline3;
+		wxStaticLine* m_staticline4;
+		wxStaticLine* m_staticline5;
+		wxStaticLine* m_staticline6;
+		wxStaticText* m_staticText24;
 		wxStaticBitmap* m_bitmapMinViaDrill;
-		wxStaticText* m_ViaMinDrillTitle;
-		wxTextCtrl* m_SetViasMinDrillCtrl;
-		wxStaticText* m_ViaMinDrillUnits;
+		wxStaticText* m_MinDrillTitle;
+		wxTextCtrl* m_MinDrillCtrl;
+		wxStaticText* m_MinDrillUnits;
+		wxStaticBitmap* m_bitmapMinHoleClearance;
+		wxStaticText* m_HoleToHoleTitle;
+		wxTextCtrl* m_SetHoleToHoleCtrl;
+		wxStaticText* m_HoleToHoleUnits;
+		wxStaticLine* m_staticline8;
+		wxStaticLine* m_staticline9;
+		wxStaticLine* m_staticline10;
+		wxStaticLine* m_staticline11;
+		wxStaticText* m_staticText25;
 		wxStaticBitmap* m_bitmapMinuViaDiameter;
 		wxStaticText* m_uviaMinSizeLabel;
 		wxTextCtrl* m_uviaMinSizeCtrl;
@@ -72,14 +96,6 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_uviaMinDrillLabel;
 		wxTextCtrl* m_uviaMinDrillCtrl;
 		wxStaticText* m_uviaMinDrillUnits;
-		wxStaticBitmap* m_bitmapMinHoleClearance;
-		wxStaticText* m_HoleToHoleTitle;
-		wxTextCtrl* m_SetHoleToHoleCtrl;
-		wxStaticText* m_HoleToHoleUnits;
-		wxStaticBitmap* m_bitmapEdgeClearance;
-		wxStaticText* m_EdgeClearanceLabel;
-		wxTextCtrl* m_EdgeClearanceCtrl;
-		wxStaticText* m_EdgeClearanceUnits;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void onChangeOutlineOpt( wxCommandEvent& event ) { event.Skip(); }

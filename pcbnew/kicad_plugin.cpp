@@ -507,16 +507,18 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
 
     m_out->Print( aNestLevel+1, "(trace_min %s)\n",
                   FormatInternalUnits( dsnSettings.m_TrackMinWidth ).c_str() );
+    m_out->Print( aNestLevel+1, "(clearance_min %s)\n",
+                  FormatInternalUnits( dsnSettings.m_MinClearance ).c_str() );
+    m_out->Print( aNestLevel+1, "(via_min_size %s)\n",
+                  FormatInternalUnits( dsnSettings.m_ViasMinSize ).c_str() );
+    m_out->Print( aNestLevel+1, "(through_hole_min %s)\n",
+                  FormatInternalUnits( dsnSettings.m_MinThroughDrill ).c_str() );
 
     // Save current default via size, for compatibility with older Pcbnew version;
     m_out->Print( aNestLevel+1, "(via_size %s)\n",
                   FormatInternalUnits( dsnSettings.GetDefault()->GetViaDiameter() ).c_str() );
     m_out->Print( aNestLevel+1, "(via_drill %s)\n",
                   FormatInternalUnits( dsnSettings.GetDefault()->GetViaDrill() ).c_str() );
-    m_out->Print( aNestLevel+1, "(via_min_size %s)\n",
-                  FormatInternalUnits( dsnSettings.m_ViasMinSize ).c_str() );
-    m_out->Print( aNestLevel+1, "(via_min_drill %s)\n",
-                  FormatInternalUnits( dsnSettings.m_ViasMinDrill ).c_str() );
 
     // Save custom via dimensions list (the first is not saved here: it's the netclass value)
     for( unsigned ii = 1; ii < dsnSettings.m_ViasDimensionsList.size(); ii++ )

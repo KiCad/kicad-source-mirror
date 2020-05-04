@@ -1004,7 +1004,7 @@ void LEGACY_PLUGIN::loadSETUP()
         else if( TESTLINE( "ViaMinDrill" ) )
         {
             BIU tmp = biuParse( line + SZ( "ViaMinDrill" ) );
-            bds.m_ViasMinDrill = tmp;
+            bds.m_MinThroughDrill = tmp;
         }
 
         else if( TESTLINE( "MicroViaSize" ) )

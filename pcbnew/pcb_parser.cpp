@@ -1475,6 +1475,11 @@ void PCB_PARSER::parseSetup()
             NeedRIGHT();
             break;
 
+        case T_clearance_min:
+            designSettings.m_MinClearance = parseBoardUnits( T_clearance_min );
+            NeedRIGHT();
+            break;
+
         case T_trace_min:
             designSettings.m_TrackMinWidth = parseBoardUnits( T_trace_min );
             NeedRIGHT();
@@ -1495,8 +1500,14 @@ void PCB_PARSER::parseSetup()
             NeedRIGHT();
             break;
 
+        case T_through_hole_min:
+            designSettings.m_MinThroughDrill = parseBoardUnits( T_through_hole_min );
+            NeedRIGHT();
+            break;
+
+        // Legacy token for T_through_hole_min
         case T_via_min_drill:
-            designSettings.m_ViasMinDrill = parseBoardUnits( T_via_min_drill );
+            designSettings.m_MinThroughDrill = parseBoardUnits( T_via_min_drill );
             NeedRIGHT();
             break;
 

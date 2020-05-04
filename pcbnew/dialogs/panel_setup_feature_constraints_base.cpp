@@ -17,6 +17,10 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	wxBoxSizer* sbFeatureRules;
 	sbFeatureRules = new wxBoxSizer( wxVERTICAL );
 
+	m_staticText26 = new wxStaticText( this, wxID_ANY, _("Allowed features"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText26->Wrap( -1 );
+	sbFeatureRules->Add( m_staticText26, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
 	wxFlexGridSizer* fgSizerViaOpt;
 	fgSizerViaOpt = new wxFlexGridSizer( 0, 2, 0, 0 );
 	fgSizerViaOpt->SetFlexibleDirection( wxBOTH );
@@ -127,12 +131,38 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 
 	wxFlexGridSizer* fgFeatureConstraints;
 	fgFeatureConstraints = new wxFlexGridSizer( 0, 4, 0, 0 );
-	fgFeatureConstraints->AddGrowableCol( 2 );
 	fgFeatureConstraints->SetFlexibleDirection( wxBOTH );
 	fgFeatureConstraints->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
+	m_staticText23 = new wxStaticText( this, wxID_ANY, _("Copper"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText23->Wrap( -1 );
+	fgFeatureConstraints->Add( m_staticText23, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_bitmapClearance = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_bitmapClearance, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+	m_clearanceTitle = new wxStaticText( this, wxID_ANY, _("Minimum clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_clearanceTitle->Wrap( -1 );
+	fgFeatureConstraints->Add( m_clearanceTitle, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_clearanceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_clearanceCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_clearanceUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_clearanceUnits->Wrap( -1 );
+	fgFeatureConstraints->Add( m_clearanceUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
 	m_bitmapMinTrackWidth = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_bitmapMinTrackWidth, 0, wxALL, 5 );
+	fgFeatureConstraints->Add( m_bitmapMinTrackWidth, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	m_TrackMinWidthTitle = new wxStaticText( this, wxID_ANY, _("Minimum track width:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_TrackMinWidthTitle->Wrap( -1 );
@@ -147,20 +177,8 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	m_TrackMinWidthUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_TrackMinWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
-
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-
-
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
-
-
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
-
-
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
-
 	m_bitmapMinViaDiameter = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_bitmapMinViaDiameter, 0, wxALL, 5 );
+	fgFeatureConstraints->Add( m_bitmapMinViaDiameter, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	m_ViaMinTitle = new wxStaticText( this, wxID_ANY, _("Minimum via diameter:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_ViaMinTitle->Wrap( -1 );
@@ -173,22 +191,88 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	m_ViaMinUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_ViaMinUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
+	m_bitmapEdgeClearance = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_bitmapEdgeClearance, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+	m_EdgeClearanceLabel = new wxStaticText( this, wxID_ANY, _("Copper edge clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EdgeClearanceLabel->Wrap( -1 );
+	fgFeatureConstraints->Add( m_EdgeClearanceLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_EdgeClearanceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_EdgeClearanceCtrl, 0, wxALL|wxEXPAND, 5 );
+
+	m_EdgeClearanceUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EdgeClearanceUnits->Wrap( -1 );
+	fgFeatureConstraints->Add( m_EdgeClearanceUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline3, 0, wxTOP|wxEXPAND, 20 );
+
+	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline4, 0, wxEXPAND|wxTOP, 20 );
+
+	m_staticline5 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline5, 0, wxEXPAND|wxTOP, 20 );
+
+	m_staticline6 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline6, 0, wxEXPAND|wxTOP, 20 );
+
+	m_staticText24 = new wxStaticText( this, wxID_ANY, _("Holes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText24->Wrap( -1 );
+	fgFeatureConstraints->Add( m_staticText24, 0, wxALL, 5 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
+
 	m_bitmapMinViaDrill = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_bitmapMinViaDrill, 0, wxALL, 5 );
+	fgFeatureConstraints->Add( m_bitmapMinViaDrill, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	m_ViaMinDrillTitle = new wxStaticText( this, wxID_ANY, _("Minimum via drill:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
-	m_ViaMinDrillTitle->Wrap( -1 );
-	fgFeatureConstraints->Add( m_ViaMinDrillTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	m_MinDrillTitle = new wxStaticText( this, wxID_ANY, _("Minimum through hole:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_MinDrillTitle->Wrap( -1 );
+	fgFeatureConstraints->Add( m_MinDrillTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
-	m_SetViasMinDrillCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_SetViasMinDrillCtrl, 0, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_MinDrillCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_MinDrillCtrl, 0, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_ViaMinDrillUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
-	m_ViaMinDrillUnits->Wrap( -1 );
-	fgFeatureConstraints->Add( m_ViaMinDrillUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	m_MinDrillUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_MinDrillUnits->Wrap( -1 );
+	fgFeatureConstraints->Add( m_MinDrillUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
+	m_bitmapMinHoleClearance = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_bitmapMinHoleClearance, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_HoleToHoleTitle = new wxStaticText( this, wxID_ANY, _("Hole to hole clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_HoleToHoleTitle->Wrap( -1 );
+	fgFeatureConstraints->Add( m_HoleToHoleTitle, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_SetHoleToHoleCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_SetHoleToHoleCtrl, 0, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_HoleToHoleUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_HoleToHoleUnits->Wrap( -1 );
+	fgFeatureConstraints->Add( m_HoleToHoleUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_staticline8 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline8, 0, wxEXPAND|wxTOP, 20 );
+
+	m_staticline9 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline9, 0, wxEXPAND|wxTOP, 20 );
+
+	m_staticline10 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline10, 0, wxEXPAND|wxTOP, 20 );
+
+	m_staticline11 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline11, 0, wxEXPAND|wxTOP, 20 );
+
+	m_staticText25 = new wxStaticText( this, wxID_ANY, _("uVias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText25->Wrap( -1 );
+	fgFeatureConstraints->Add( m_staticText25, 0, wxALL, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
@@ -200,7 +284,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
 
 	m_bitmapMinuViaDiameter = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_bitmapMinuViaDiameter, 0, wxALL, 5 );
+	fgFeatureConstraints->Add( m_bitmapMinuViaDiameter, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	m_uviaMinSizeLabel = new wxStaticText( this, wxID_ANY, _("Minimum uVia diameter:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_uviaMinSizeLabel->Wrap( -1 );
@@ -214,7 +298,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	fgFeatureConstraints->Add( m_uviaMinSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
 	m_bitmapMinuViaDrill = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_bitmapMinuViaDrill, 0, wxALL, 5 );
+	fgFeatureConstraints->Add( m_bitmapMinuViaDrill, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	m_uviaMinDrillLabel = new wxStaticText( this, wxID_ANY, _("Minimum uVia drill:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_uviaMinDrillLabel->Wrap( -1 );
@@ -228,59 +312,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	fgFeatureConstraints->Add( m_uviaMinDrillUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
 
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxALL, 10 );
-
-
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
-
-	m_bitmapMinHoleClearance = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_bitmapMinHoleClearance, 0, wxALL, 5 );
-
-	m_HoleToHoleTitle = new wxStaticText( this, wxID_ANY, _("Hole to hole clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_HoleToHoleTitle->Wrap( -1 );
-	fgFeatureConstraints->Add( m_HoleToHoleTitle, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_SetHoleToHoleCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_SetHoleToHoleCtrl, 0, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_HoleToHoleUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_HoleToHoleUnits->Wrap( -1 );
-	fgFeatureConstraints->Add( m_HoleToHoleUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-
-
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
-
-	m_bitmapEdgeClearance = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_bitmapEdgeClearance, 0, wxALL, 5 );
-
-	m_EdgeClearanceLabel = new wxStaticText( this, wxID_ANY, _("Copper edge clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_EdgeClearanceLabel->Wrap( -1 );
-	fgFeatureConstraints->Add( m_EdgeClearanceLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_EdgeClearanceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_EdgeClearanceCtrl, 0, wxALL|wxEXPAND, 5 );
-
-	m_EdgeClearanceUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_EdgeClearanceUnits->Wrap( -1 );
-	fgFeatureConstraints->Add( m_EdgeClearanceUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	sbFeatureConstraints->Add( fgFeatureConstraints, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+	sbFeatureConstraints->Add( fgFeatureConstraints, 1, wxEXPAND|wxLEFT, 5 );
 
 
 	bMainSizer->Add( sbFeatureConstraints, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
