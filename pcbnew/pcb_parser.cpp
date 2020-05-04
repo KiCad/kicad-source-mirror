@@ -597,15 +597,15 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_segment:
-            m_board->Add( parseTRACK(), ADD_MODE::INSERT );
+            m_board->Add( parseTRACK(), ADD_MODE::APPEND );
             break;
 
         case T_arc:
-            m_board->Add( parseARC(), ADD_MODE::INSERT );
+            m_board->Add( parseARC(), ADD_MODE::APPEND );
             break;
 
         case T_via:
-            m_board->Add( parseVIA(), ADD_MODE::INSERT );
+            m_board->Add( parseVIA(), ADD_MODE::APPEND );
             break;
 
         case T_zone:
@@ -2540,7 +2540,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
                 break;
 
             default:
-                module->Add( text );
+                module->Add( text, ADD_MODE::APPEND );
             }
         }
         break;
@@ -2554,7 +2554,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             {
                 em->SetParent( module.get() );
                 em->SetDrawCoord();
-                module->Add( em );
+                module->Add( em, ADD_MODE::APPEND );
             }
             else
                 delete em;
@@ -2570,7 +2570,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             EDGE_MODULE* em = parseEDGE_MODULE();
             em->SetParent( module.get() );
             em->SetDrawCoord();
-            module->Add( em );
+            module->Add( em, ADD_MODE::APPEND );
         }
 
         break;

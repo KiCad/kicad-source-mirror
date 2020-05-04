@@ -81,9 +81,10 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
     if( cfg )
+    {
         m_shownColumns = cfg->m_Appearance.edit_component_visible_columns;
-
-    m_grid->ShowHideColumns( m_shownColumns );
+        m_grid->ShowHideColumns( m_shownColumns );
+    }
 
     wxToolTip::Enable( true );
     m_stdDialogButtonSizerOK->SetDefault();
