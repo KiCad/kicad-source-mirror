@@ -410,15 +410,49 @@ void processTextItem( const TEXTE_MODULE& aSrc, TEXTE_MODULE& aDest,
 
 TEXTE_MODULE* getMatchingTextItem( TEXTE_MODULE* aRefItem, MODULE* aModule )
 {
-    for( auto item : aModule->GraphicalItems() )
+    std::vector<TEXTE_MODULE*> candidates;
+
+    for( BOARD_ITEM* item : aModule->GraphicalItems() )
     {
         TEXTE_MODULE* candidate = dyn_cast<TEXTE_MODULE*>( item );
 
         if( candidate && candidate->GetText() == aRefItem->GetText() )
-            return candidate;
+            candidates.push_back( candidate );
     }
 
-    return nullptr;
+    if( candidates.size() == 0 )
+        return nullptr;
+
+    if( candidates.size() == 1 )
+        return candidates[0];
+
+    // Try refining the match by layer
+    std::vector<TEXTE_MODULE*> candidatesOnSameLayer;
+
+    for( TEXTE_MODULE* candidate : candidates )
+    {
+        if( candidate->GetLayer() == aRefItem->GetLayer() )
+            candidatesOnSameLayer.push_back( candidate );
+    }
+
+    if( candidatesOnSameLayer.size() == 1 )
+        return candidatesOnSameLayer[0];
+
+    // Last ditch effort: refine by position
+    std::vector<TEXTE_MODULE*> candidatesAtSamePos;
+
+    for( TEXTE_MODULE* candidate : candidatesOnSameLayer.size() ? candidatesOnSameLayer : candidates )
+    {
+        if( candidate->GetPos0() == aRefItem->GetPos0() )
+            candidatesAtSamePos.push_back( candidate );
+    }
+
+    if( candidatesAtSamePos.size() > 0 )
+        return candidatesAtSamePos[0];
+    else if( candidatesOnSameLayer.size() > 0 )
+        return candidatesOnSameLayer[0];
+    else
+        return candidates[0];
 }
 
 
@@ -442,7 +476,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
 
     aDest->SetLocked( aSrc->IsLocked() );
 
-    for( auto pad : aDest->Pads() )
+    for( D_PAD* pad : aDest->Pads() )
     {
         D_PAD* oldPad = aSrc->FindPadByName( pad->GetName() );
 
@@ -468,7 +502,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
                      resetTextLayers, resetTextEffects );
 
     // Copy fields in accordance with the reset* flags
-    for( auto item : aSrc->GraphicalItems() )
+    for( BOARD_ITEM* item : aSrc->GraphicalItems() )
     {
         TEXTE_MODULE* srcItem = dyn_cast<TEXTE_MODULE*>( item );
 
