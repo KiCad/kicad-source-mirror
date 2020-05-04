@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2018 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,8 +64,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
     switch( aFormat )
     {
     case NET_TYPE_PCBNEW:
-        helper = new NETLIST_EXPORTER_KICAD( this, aConnectedItemsList,
-                                             g_ConnectionGraph );
+        helper = new NETLIST_EXPORTER_KICAD( this, aConnectedItemsList, g_ConnectionGraph );
         break;
 
     case NET_TYPE_ORCADPCB2:
@@ -164,11 +163,6 @@ int TestDuplicateSheetNames( bool aCreateMarker );
 
 bool SCH_EDIT_FRAME::prepareForNetlist()
 {
-    SCH_SCREENS schematic;
-
-    // Ensure all symbol library links for all sheets valid:
-    schematic.UpdateSymbolLinks();
-
     // Ensure all power symbols have a valid reference
     SCH_SHEET_LIST sheets( g_RootSheet );
     sheets.AnnotatePowerSymbols();
@@ -211,15 +205,13 @@ void SCH_EDIT_FRAME::sendNetlistToCvpcb()
 NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::CreateNetlist( bool aSilent,
                                                     bool aSilentAnnotate )
 {
-    if( !aSilent ) // checks for errors and invokes annotation dialog as neccessary
+    if( !aSilent ) // checks for errors and invokes annotation dialog as necessary
     {
         if( !prepareForNetlist() )
             return nullptr;
     }
     else // performs similar function as prepareForNetlist but without a dialog.
     {
-        SCH_SCREENS schematic;
-        schematic.UpdateSymbolLinks();
         SCH_SHEET_LIST sheets( g_RootSheet );
         sheets.AnnotatePowerSymbols();
 
