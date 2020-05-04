@@ -376,7 +376,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Other footprint fields</property>
+                                        <property name="label">Other footprint text items</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -2425,7 +2425,7 @@
                                 <property name="row_label_values"></property>
                                 <property name="row_label_vert_alignment">wxALIGN_CENTER</property>
                                 <property name="row_sizes"></property>
-                                <property name="rows">6</property>
+                                <property name="rows">7</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
                                 <property name="subclass"></property>

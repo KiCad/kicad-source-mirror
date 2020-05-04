@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,7 +40,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_boardGraphics = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("PCB graphic items"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_boardGraphics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_otherFields = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Other footprint fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_otherFields = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Other footprint text items"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_otherFields, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
@@ -231,7 +231,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_grid = new wxGrid( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
 
 	// Grid
-	m_grid->CreateGrid( 6, 7 );
+	m_grid->CreateGrid( 7, 7 );
 	m_grid->EnableEditing( false );
 	m_grid->EnableGridLines( true );
 	m_grid->EnableDragGridSize( false );
