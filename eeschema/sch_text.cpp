@@ -912,7 +912,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( RENDER_SETTINGS* aRenderSettings,
     int symb_len  = LenSize( GetShownText(), linewidth ) + 2 * margin;
 
     int x = symb_len + linewidth + 3;
-    int y = halfSize;
+    int y = halfSize + linewidth + 3;
 
     aPoints.clear();
 
