@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -82,8 +82,8 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	bSizeLeft->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );
 
-	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("3D Model Visibility") ), wxVERTICAL );
+	wxStaticBoxSizer* sbSizer3DVis;
+	sbSizer3DVis = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("3D Model Visibility") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer3DVisibility;
 	fgSizer3DVisibility = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -93,35 +93,35 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	fgSizer3DVisibility->Add( 0, 0, 1, wxRIGHT|wxLEFT, 10 );
 
-	m_bitmap3DshapesTH = new wxStaticBitmap( sbSizer2->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmap3DshapesTH = new wxStaticBitmap( sbSizer3DVis->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3DVisibility->Add( m_bitmap3DshapesTH, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_checkBox3DshapesTH = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Show 3D through hole models"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBox3DshapesTH = new wxCheckBox( sbSizer3DVis->GetStaticBox(), wxID_ANY, _("Show 3D through hole models"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3DVisibility->Add( m_checkBox3DshapesTH, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer3DVisibility->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_bitmap3DshapesSMD = new wxStaticBitmap( sbSizer2->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmap3DshapesSMD = new wxStaticBitmap( sbSizer3DVis->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3DVisibility->Add( m_bitmap3DshapesSMD, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_checkBox3DshapesSMD = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Show 3D SMD models"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBox3DshapesSMD = new wxCheckBox( sbSizer3DVis->GetStaticBox(), wxID_ANY, _("Show 3D SMD models"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3DVisibility->Add( m_checkBox3DshapesSMD, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer3DVisibility->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_bitmap3DshapesVirtual = new wxStaticBitmap( sbSizer2->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmap3DshapesVirtual = new wxStaticBitmap( sbSizer3DVis->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3DVisibility->Add( m_bitmap3DshapesVirtual, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_checkBox3DshapesVirtual = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Show 3D virtual models"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBox3DshapesVirtual = new wxCheckBox( sbSizer3DVis->GetStaticBox(), wxID_ANY, _("Show 3D virtual models"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3DVisibility->Add( m_checkBox3DshapesVirtual, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizer2->Add( fgSizer3DVisibility, 0, wxEXPAND, 5 );
+	sbSizer3DVis->Add( fgSizer3DVisibility, 0, wxEXPAND, 5 );
 
 
-	bSizeLeft->Add( sbSizer2, 1, wxALL|wxEXPAND, 5 );
+	bSizeLeft->Add( sbSizer3DVis, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizerDisplayOptions->Add( bSizeLeft, 1, wxALL|wxEXPAND, 5 );
@@ -214,41 +214,30 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 
 	bSizerRight->Add( sbSizer4, 0, wxALL|wxEXPAND, 5 );
 
-	wxStaticBoxSizer* sbSizer41;
-	sbSizer41 = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Camera Options") ), wxVERTICAL );
+	wxStaticBoxSizer* sbSizerAnimation;
+	sbSizerAnimation = new wxStaticBoxSizer( new wxStaticBox( m_panelDspOpt, wxID_ANY, _("Camera Options") ), wxVERTICAL );
 
-	wxFlexGridSizer* fgSizerCameraOpts;
-	fgSizerCameraOpts = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizerCameraOpts->SetFlexibleDirection( wxBOTH );
-	fgSizerCameraOpts->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_checkBoxEnableAnimation = new wxCheckBox( sbSizerAnimation->GetStaticBox(), wxID_ANY, _("Enable animation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxEnableAnimation->SetValue(true);
+	sbSizerAnimation->Add( m_checkBoxEnableAnimation, 0, wxALL, 5 );
 
+	wxBoxSizer* bSizerSlider;
+	bSizerSlider = new wxBoxSizer( wxHORIZONTAL );
 
-	fgSizerCameraOpts->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
-
-	m_checkBoxEnableAnimation = new wxCheckBox( sbSizer41->GetStaticBox(), wxID_ANY, _("Enable animation"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerCameraOpts->Add( m_checkBoxEnableAnimation, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	fgSizerCameraOpts->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
-
-	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_staticAnimationSpeed = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("Animation speed:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticAnimationSpeed = new wxStaticText( sbSizerAnimation->GetStaticBox(), wxID_ANY, _("Animation speed:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticAnimationSpeed->Wrap( -1 );
-	bSizer9->Add( m_staticAnimationSpeed, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	bSizerSlider->Add( m_staticAnimationSpeed, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_sliderAnimationSpeed = new wxSlider( sbSizer41->GetStaticBox(), wxID_ANY, 3, 1, 5, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_MIN_MAX_LABELS );
-	bSizer9->Add( m_sliderAnimationSpeed, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_sliderAnimationSpeed = new wxSlider( sbSizerAnimation->GetStaticBox(), wxID_ANY, 3, 1, 5, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
+	m_sliderAnimationSpeed->SetMinSize( wxSize( 100,-1 ) );
 
-
-	fgSizerCameraOpts->Add( bSizer9, 1, wxEXPAND, 5 );
-
-
-	sbSizer41->Add( fgSizerCameraOpts, 0, wxEXPAND, 5 );
+	bSizerSlider->Add( m_sliderAnimationSpeed, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizerRight->Add( sbSizer41, 1, wxALL|wxEXPAND, 5 );
+	sbSizerAnimation->Add( bSizerSlider, 1, wxEXPAND, 5 );
+
+
+	bSizerRight->Add( sbSizerAnimation, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizerDisplayOptions->Add( bSizerRight, 0, wxALL|wxEXPAND, 5 );
