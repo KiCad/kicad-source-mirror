@@ -234,49 +234,42 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_COMPONENT* aComponent, int aUnit )
 
 void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
 {
-    if( !aComponent )
+    if( !aComponent || !aComponent->GetPartRef() )
         return;
 
-    LIB_ID id = aComponent->GetLibId();
-    LIB_PART* part = GetLibPart( id );
+    wxString msg;
 
-    if( part )
+    if( !aComponent->GetPartRef()->HasConversion() )
     {
-        wxString msg;
+        LIB_ID id = aComponent->GetPartRef()->GetLibId();
 
-        if( !part->HasConversion() )
-        {
-            msg.Printf( _( "No alternate body style found for symbol \"%s\" in library \"%s\"." ),
-                        id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
-            DisplayError( this,  msg );
-            return;
-        }
-
-        STATUS_FLAGS savedFlags = aComponent->GetFlags();
-
-        aComponent->SetConvert( aComponent->GetConvert() + 1 );
-
-        // ensure m_Convert = 1 or 2
-        // 1 = shape 1 = not converted
-        // 2 = shape 2 = first converted shape
-        // > 2 is not used but could be used for more shapes
-        // like multiple shapes for a programmable component
-        // When m_Convert = val max, return to the first shape
-        if( aComponent->GetConvert() > LIB_ITEM::LIB_CONVERT::DEMORGAN )
-            aComponent->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
-
-        // The alternate symbol may cause a change in the connection status so test the
-        // connections so the connection indicators are drawn correctly.
-        aComponent->UpdatePins();
-        TestDanglingEnds();
-        aComponent->ClearFlags();
-        aComponent->SetFlags( savedFlags );   // Restore m_Flags (modified by SetConvert())
-
-        // If selected make sure all the now-included pins are selected
-        if( aComponent->IsSelected() )
-            m_toolManager->RunAction( EE_ACTIONS::addItemToSel, true, aComponent );
-
-        RefreshItem( aComponent );
-        OnModify();
+        msg.Printf( _( "No alternate body style found for symbol \"%s\" in library \"%s\"." ),
+                    id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
+        DisplayError( this,  msg );
+        return;
     }
+
+    STATUS_FLAGS savedFlags = aComponent->GetFlags();
+
+    aComponent->SetConvert( aComponent->GetConvert() + 1 );
+
+    // ensure m_Convert = 1 or 2
+    // 1 = shape 1 = not converted
+    // 2 = shape 2 = first converted shape
+    // > 2 is not used but could be used for more shapes
+    // like multiple shapes for a programmable component
+    // When m_Convert = val max, return to the first shape
+    if( aComponent->GetConvert() > LIB_ITEM::LIB_CONVERT::DEMORGAN )
+        aComponent->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
+
+    TestDanglingEnds();
+    aComponent->ClearFlags();
+    aComponent->SetFlags( savedFlags );   // Restore m_Flags (modified by SetConvert())
+
+    // If selected make sure all the now-included pins are selected
+    if( aComponent->IsSelected() )
+        m_toolManager->RunAction( EE_ACTIONS::addItemToSel, true, aComponent );
+
+    RefreshItem( aComponent );
+    OnModify();
 }

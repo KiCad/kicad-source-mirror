@@ -283,7 +283,6 @@ void SCH_COMPONENT::UpdatePins()
 
     if( m_part )
     {
-        SCH_PIN_MAP map;
         unsigned i = 0;
 
         for( LIB_PIN* libPin = m_part->GetNextPin(); libPin; libPin = m_part->GetNextPin( libPin ) )
@@ -329,9 +328,14 @@ void SCH_COMPONENT::UpdateUnit( int aUnit )
 
 void SCH_COMPONENT::SetConvert( int aConvert )
 {
+    wxCHECK( m_part && m_part->HasConversion(), /* void */ );
+
     if( m_convert != aConvert )
     {
         m_convert = aConvert;
+
+        // The convert may have a different pin layout so the update the pin map.
+        UpdatePins();
         SetModified();
     }
 }
