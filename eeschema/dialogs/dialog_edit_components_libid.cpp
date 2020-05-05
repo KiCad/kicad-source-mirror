@@ -29,12 +29,14 @@
 
 
 #include <fctsys.h>
+#include <confirm.h>
 #include <sch_edit_frame.h>
 #include <sch_draw_panel.h>
 #include <sch_component.h>
 #include <sch_reference_list.h>
 #include <pgm_base.h>
 #include <symbol_lib_table.h>
+#include <trace_helpers.h>
 #include <widgets/wx_grid.h>
 
 #include <dialog_edit_components_libid_base.h>
@@ -289,12 +291,12 @@ public:
 
 
 /**
- * DIALOG_EDIT_COMPONENTS_LIBID is a dialog to globally edit the LIB_ID of groups if components
- * having the same initial LIB_ID.
- * this is useful when you want:
- *  to move a symbol from a symbol library to another symbol library
- *  to change the nickname of a library
- *  globally replace the symbol used by a group of components by another symbol.
+ * Dialog to globally edit the #LIB_ID of groups if components having the same initial LIB_ID.
+ *
+ * This is useful when you want to:
+ *  * to move a symbol from a symbol library to another symbol library
+ *    to change the nickname of a library
+ *  * globally replace the symbol used by a group of components by another symbol.
  */
 class DIALOG_EDIT_COMPONENTS_LIBID : public DIALOG_EDIT_COMPONENTS_LIBID_BASE
 {
@@ -302,10 +304,11 @@ public:
     DIALOG_EDIT_COMPONENTS_LIBID( SCH_EDIT_FRAME* aParent );
     ~DIALOG_EDIT_COMPONENTS_LIBID() override;
 
+    SCH_EDIT_FRAME* GetParent();
+
     bool IsSchematicModified() { return m_isModified; }
 
 private:
-    SCH_EDIT_FRAME*  m_parent;
     bool             m_isModified;          // set to true if the schematic is modified
     std::vector<int> m_OrphansRowIndexes;   // list of rows containing orphan lib_id
 
@@ -380,7 +383,6 @@ private:
 DIALOG_EDIT_COMPONENTS_LIBID::DIALOG_EDIT_COMPONENTS_LIBID( SCH_EDIT_FRAME* aParent )
     :DIALOG_EDIT_COMPONENTS_LIBID_BASE( aParent )
 {
-    m_parent = aParent;
     m_autoWrapRenderer = new GRIDCELL_AUTOWRAP_STRINGRENDERER;
 
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
@@ -494,6 +496,12 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
 }
 
 
+SCH_EDIT_FRAME* DIALOG_EDIT_COMPONENTS_LIBID::GetParent()
+{
+    return dynamic_cast<SCH_EDIT_FRAME*>( wxDialog::GetParent() );
+}
+
+
 void DIALOG_EDIT_COMPONENTS_LIBID::AddRowToGrid( bool aMarkRow, const wxString& aReferences,
                                                  const wxString& aStrLibId )
 {
@@ -574,7 +582,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::validateLibIds()
 void DIALOG_EDIT_COMPONENTS_LIBID::onApplyButton( wxCommandEvent& event )
 {
     if( TransferDataFromWindow() )
-        m_parent->GetCanvas()->Refresh();
+        GetParent()->GetCanvas()->Refresh();
 }
 
 
@@ -713,7 +721,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::setLibIdByBrowser( int aRow )
         aPreselectedLibid.Parse( current, LIB_ID::ID_SCH, true );
 
     COMPONENT_SELECTION sel =
-            m_parent->SelectComponentFromLibBrowser( this, NULL, aPreselectedLibid, 0, 0 );
+            GetParent()->SelectComponentFromLibBrowser( this, NULL, aPreselectedLibid, 0, 0 );
 #endif
 
     if( sel.LibId.empty() )     // command aborted
@@ -758,6 +766,29 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
             if( cmp.m_Row != row )
                 continue;
 
+            LIB_PART* symbol = nullptr;
+
+            try
+            {
+                symbol = Prj().SchSymbolLibTable()->LoadSymbol( id );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxString msg;
+
+                msg.Printf( _( "Error occurred loading symbol %s from library %s."
+                               "\n\n%s" ),
+                            id.GetLibItemName().wx_str(),
+                            id.GetLibNickname().wx_str(),
+                            ioe.What() );
+
+                DisplayError( this, msg );
+            }
+
+            if( symbol == nullptr )
+                continue;
+
+            cmp.m_Screen->Remove( cmp.m_Component );
             SCH_FIELD* value = cmp.m_Component->GetField( VALUE );
 
             // If value is a proxy for the itemName then make sure it gets updated
@@ -765,7 +796,9 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
                 value->SetText( id.GetLibItemName().wx_str() );
 
             cmp.m_Component->SetLibId( id );
+            cmp.m_Component->SetLibSymbol( symbol->Flatten().release() );
             change = true;
+            cmp.m_Screen->Append( cmp.m_Component );
             cmp.m_Screen->SetModify();
         }
     }
@@ -773,8 +806,6 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
     if( change )
     {
         m_isModified = true;
-        SCH_SCREENS schematic;
-        schematic.UpdateSymbolLinks();
     }
 
     return true;
@@ -798,18 +829,41 @@ void DIALOG_EDIT_COMPONENTS_LIBID::revertChanges()
 
             if( cmp.m_Component->GetLibId() != id )
             {
+                LIB_PART* symbol = nullptr;
+
+                try
+                {
+                    symbol = Prj().SchSymbolLibTable()->LoadSymbol( id );
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    // It's probably a bad idea to show a user error dialog here because the
+                    // the reason to use this dialog is when there are a bunch of broken library
+                    // symbol links so just show a debug trace message for development purposes.
+                    wxLogTrace( traceSymbolResolver,
+                                "Error occurred loading symbol %s from library %s."
+                                "\n\n%s",
+                                id.GetLibItemName().wx_str(),
+                                id.GetLibNickname().wx_str(),
+                                ioe.What() );
+                }
+
+                cmp.m_Screen->Remove( cmp.m_Component );
+
+                if( symbol )
+                    cmp.m_Component->SetLibSymbol( symbol->Flatten().release() );
+                else
+                    cmp.m_Component->SetLibSymbol( symbol );
+
                 cmp.m_Component->SetLibId( id );
+                cmp.m_Screen->Append( cmp.m_Component );
                 change = true;
             }
         }
     }
 
     if( change )
-    {
-        SCH_SCREENS schematic;
-        schematic.UpdateSymbolLinks();
-        m_parent->GetCanvas()->Refresh();
-    }
+        GetParent()->GetCanvas()->Refresh();
 }
 
 

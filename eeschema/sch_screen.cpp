@@ -756,9 +756,6 @@ void SCH_SCREEN::Print( RENDER_SETTINGS* aSettings )
     std::vector<SCH_ITEM*>   bitmaps;
     std::vector<SCH_ITEM*>   other;
 
-    // Ensure links are up to date, even if a library was reloaded for some reason:
-    UpdateSymbolLinks();
-
     for( auto item : Items() )
     {
         if( item->IsMoving() || item->IsResized() )
@@ -799,9 +796,6 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter )
     std::vector< SCH_ITEM* > junctions;
     std::vector< SCH_ITEM* > bitmaps;
     std::vector< SCH_ITEM* > other;
-
-    // Ensure links are up to date, even if a library was reloaded for some reason:
-    UpdateSymbolLinks();
 
     for( auto item : Items() )
     {
