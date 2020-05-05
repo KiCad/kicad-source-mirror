@@ -617,8 +617,8 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
                 aReporter->ReportTail( msg, RPT_SEVERITY_INFO );
             }
 
-            // Internal library symbols are flattens so just make a copy.
-            symbol->GetPartRef().reset( new LIB_PART( *it->second ) );
+            // Internal library symbols are already flattened so just make a copy.
+            symbol->SetLibSymbol( new LIB_PART( *it->second ) );
             continue;
         }
 

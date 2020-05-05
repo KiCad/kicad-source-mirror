@@ -352,6 +352,8 @@ public:
      */
     LIB_ITEM* GetNextDrawItem( LIB_ITEM* aItem = NULL, KICAD_T aType = TYPE_NOT_INIT );
 
+    size_t GetPinCount() const { return m_drawings.size( LIB_PIN_T ); }
+
     /**
      * Return the next pin object from the draw list.
      *

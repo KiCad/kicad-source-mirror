@@ -281,22 +281,22 @@ void SCH_COMPONENT::UpdatePins()
     m_pins.clear();
     m_pinMap.clear();
 
-    if( m_part )
+    if( !m_part )
+        return;
+
+    unsigned i = 0;
+
+    for( LIB_PIN* libPin = m_part->GetNextPin(); libPin; libPin = m_part->GetNextPin( libPin ) )
     {
-        unsigned i = 0;
+        wxASSERT( libPin->Type() == LIB_PIN_T );
 
-        for( LIB_PIN* libPin = m_part->GetNextPin(); libPin; libPin = m_part->GetNextPin( libPin ) )
-        {
-            wxASSERT( libPin->Type() == LIB_PIN_T );
+        if( libPin->GetConvert() && m_convert && ( m_convert != libPin->GetConvert() ) )
+            continue;
 
-            if( libPin->GetConvert() && m_convert && ( m_convert != libPin->GetConvert() ) )
-                continue;
+        m_pins.push_back( std::unique_ptr<SCH_PIN>( new SCH_PIN( libPin, this ) ) );
+        m_pinMap[ libPin ] = i;
 
-            m_pins.push_back( std::unique_ptr<SCH_PIN>( new SCH_PIN( libPin, this ) ) );
-            m_pinMap[ libPin ] = i;
-
-            ++i;
-        }
+        ++i;
     }
 }
 
@@ -1500,47 +1500,51 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
 void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                                     SCH_SHEET_PATH*      aSheetPath )
 {
-    if( m_part )
+    if( !m_part )
+        return;
+
+    // This should not happen but just in case the pin map size doesn't match the number of
+    // pins in the symbol, update the pin map.
+    wxCHECK2( m_part->GetPinCount() == m_pins.size(), UpdatePins() );
+
+    for( LIB_PIN* pin = m_part->GetNextPin();  pin;  pin = m_part->GetNextPin( pin ) )
     {
-        for( LIB_PIN* pin = m_part->GetNextPin();  pin;  pin = m_part->GetNextPin( pin ) )
+        wxASSERT( pin->Type() == LIB_PIN_T );
+
+        if( pin->GetUnit() && ( pin->GetUnit() != GetUnitSelection( aSheetPath ) ) )
+            continue;
+
+        if( pin->GetConvert() && ( pin->GetConvert() != GetConvert() ) )
+            continue;
+
+        wxPoint pos = GetTransform().TransformCoordinate( pin->GetPosition() ) + m_Pos;
+
+        NETLIST_OBJECT* item = new NETLIST_OBJECT();
+        item->m_SheetPathInclude = *aSheetPath;
+        item->m_Comp = m_pins[ m_pinMap.at( pin ) ].get();
+        item->m_SheetPath = *aSheetPath;
+        item->m_Type = NETLIST_ITEM::PIN;
+        item->m_Link = (SCH_ITEM*) this;
+        item->m_ElectricalPinType = pin->GetType();
+        item->m_PinNum = pin->GetNumber();
+        item->m_Label = pin->GetName();
+        item->m_Start = item->m_End = pos;
+
+        aNetListItems.push_back( item );
+
+        if( pin->IsPowerConnection() )
         {
-            wxASSERT( pin->Type() == LIB_PIN_T );
-
-            if( pin->GetUnit() && ( pin->GetUnit() != GetUnitSelection( aSheetPath ) ) )
-                continue;
-
-            if( pin->GetConvert() && ( pin->GetConvert() != GetConvert() ) )
-                continue;
-
-            wxPoint pos = GetTransform().TransformCoordinate( pin->GetPosition() ) + m_Pos;
-
-            NETLIST_OBJECT* item = new NETLIST_OBJECT();
+            // There is an associated PIN_LABEL.
+            item = new NETLIST_OBJECT();
             item->m_SheetPathInclude = *aSheetPath;
             item->m_Comp = m_pins[ m_pinMap.at( pin ) ].get();
             item->m_SheetPath = *aSheetPath;
-            item->m_Type = NETLIST_ITEM::PIN;
-            item->m_Link = (SCH_ITEM*) this;
-            item->m_ElectricalPinType = pin->GetType();
-            item->m_PinNum = pin->GetNumber();
+            item->m_Type = NETLIST_ITEM::PINLABEL;
             item->m_Label = pin->GetName();
-            item->m_Start = item->m_End = pos;
+            item->m_Start = pos;
+            item->m_End = item->m_Start;
 
             aNetListItems.push_back( item );
-
-            if( pin->IsPowerConnection() )
-            {
-                // There is an associated PIN_LABEL.
-                item = new NETLIST_OBJECT();
-                item->m_SheetPathInclude = *aSheetPath;
-                item->m_Comp = m_pins[ m_pinMap.at( pin ) ].get();
-                item->m_SheetPath = *aSheetPath;
-                item->m_Type = NETLIST_ITEM::PINLABEL;
-                item->m_Label = pin->GetName();
-                item->m_Start = pos;
-                item->m_End = item->m_Start;
-
-                aNetListItems.push_back( item );
-            }
         }
     }
 }
