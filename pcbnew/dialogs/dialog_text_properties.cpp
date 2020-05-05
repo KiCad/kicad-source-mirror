@@ -159,7 +159,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
     // Set font sizes
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
     m_statusLine->SetFont( infoFont );
 
     m_sdbSizerOK->SetDefault();

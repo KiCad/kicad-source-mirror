@@ -203,18 +203,19 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 
 	m_timeStampLabel = new wxStaticText( this, wxID_ANY, _("Unique ID:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_timeStampLabel->Wrap( -1 );
-	bSizerUUID->Add( m_timeStampLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizerUUID->Add( m_timeStampLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_textCtrlTimeStamp = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_textCtrlTimeStamp = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
+	m_textCtrlTimeStamp->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_textCtrlTimeStamp->SetToolTip( _("Unique ID that identifies the symbol") );
 
-	bSizerUUID->Add( m_textCtrlTimeStamp, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	bSizerUUID->Add( m_textCtrlTimeStamp, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bSizerBottom->Add( bSizerUUID, 1, wxEXPAND, 10 );
+	bSizerBottom->Add( bSizerUUID, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerBottom->Add( 10, 0, 0, wxEXPAND, 5 );
+	bSizerBottom->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Edit Spice Model..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerBottom->Add( m_spiceFieldsButton, 0, wxEXPAND|wxALL, 5 );

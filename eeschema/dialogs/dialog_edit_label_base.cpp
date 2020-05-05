@@ -36,7 +36,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 
 	m_labelMultiLine = new wxStaticText( this, wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelMultiLine->Wrap( -1 );
-	m_textEntrySizer->Add( m_labelMultiLine, 0, wxRIGHT, 5 );
+	m_textEntrySizer->Add( m_labelMultiLine, 0, wxTOP|wxRIGHT, 6 );
 
 	m_valueMultiLine = new wxStyledTextCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SUNKEN, wxEmptyString );
 	m_valueMultiLine->SetUseTabs( true );
@@ -86,14 +86,34 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	bSizeCtrlSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_textSizeCtrl = new wxTextCtrl( this, wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizeCtrlSizer->Add( m_textSizeCtrl, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizeCtrlSizer->Add( m_textSizeCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_textSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textSizeUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeUnits->Wrap( -1 );
-	bSizeCtrlSizer->Add( m_textSizeUnits, 0, wxALIGN_CENTER_VERTICAL, 2 );
+	bSizeCtrlSizer->Add( m_textSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 20 );
 
 
-	m_textEntrySizer->Add( bSizeCtrlSizer, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 3 );
+	bSizeCtrlSizer->Add( 0, 0, 1, wxEXPAND, 15 );
+
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxVERTICAL );
+
+	m_textOffsetNote1 = new wxStaticText( this, wxID_ANY, _("Note: margins between text and shape are controlled by the"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOffsetNote1->Wrap( -1 );
+	bSizer5->Add( m_textOffsetNote1, 0, 0, 5 );
+
+	m_textOffsetNote2 = new wxStaticText( this, wxID_ANY, _("text offset ratio in Preferences > General > Formatting."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOffsetNote2->Wrap( -1 );
+	bSizer5->Add( m_textOffsetNote2, 0, 0, 5 );
+
+
+	bSizeCtrlSizer->Add( bSizer5, 0, wxEXPAND|wxLEFT, 10 );
+
+
+	bSizeCtrlSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	m_textEntrySizer->Add( bSizeCtrlSizer, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 3 );
 
 
 	bMainSizer->Add( m_textEntrySizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 12 );
@@ -122,6 +142,9 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 
 	bMainSizer->Add( m_OptionsSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
 	m_sdbSizer1->AddButton( m_sdbSizer1OK );
@@ -129,7 +152,10 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bMainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( m_sdbSizer1, 1, wxALL|wxEXPAND, 5 );
+
+
+	bMainSizer->Add( bSizer4, 0, wxEXPAND|wxALL, 5 );
 
 
 	this->SetSizer( bMainSizer );

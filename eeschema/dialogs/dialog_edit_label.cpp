@@ -166,6 +166,19 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     m_TextShape->Show( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T ||
                        m_CurrentText->Type() == SCH_HIER_LABEL_T );
 
+    if( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+        infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
+        m_textOffsetNote1->SetFont( infoFont );
+        m_textOffsetNote2->SetFont( infoFont );
+    }
+    else
+    {
+        m_textOffsetNote1->Show( false );
+        m_textOffsetNote2->Show( false );
+    }
+
     m_sdbSizer1OK->SetDefault();
     Layout();
 

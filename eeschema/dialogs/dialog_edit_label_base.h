@@ -51,6 +51,8 @@ class DIALOG_LABEL_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
+		wxStaticText* m_textOffsetNote1;
+		wxStaticText* m_textOffsetNote2;
 		wxRadioBox* m_TextOrient;
 		wxRadioBox* m_TextStyle;
 		wxRadioBox* m_TextShape;

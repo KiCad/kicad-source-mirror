@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -71,7 +71,6 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_itemsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
-	m_itemsGrid->SetLabelFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	// Cell Defaults
 	m_itemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
@@ -499,7 +498,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
 
 	wxFlexGridSizer* fgSizerSymbolRef;
-	fgSizerSymbolRef = new wxFlexGridSizer( 0, 2, 5, 0 );
+	fgSizerSymbolRef = new wxFlexGridSizer( 0, 2, 4, 0 );
 	fgSizerSymbolRef->AddGrowableCol( 1 );
 	fgSizerSymbolRef->SetFlexibleDirection( wxBOTH );
 	fgSizerSymbolRef->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -510,7 +509,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 
 	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
 
-	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
 	m_tcLibraryID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_tcLibraryID->SetToolTip( _("The library ID and footprint ID currently assigned.  Use “Change Footprint…” to assign a different footprint.") );
 
@@ -520,17 +519,17 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_stFullUuid->Wrap( -1 );
 	fgSizerSymbolRef->Add( m_stFullUuid, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_tcFullUuid = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_tcFullUuid = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
 	m_tcFullUuid->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_tcFullUuid->SetToolTip( _("The link to the associated schematic symbol, comprising the Unique IDs of the parent sheet(s) and the symbol.") );
 
 	fgSizerSymbolRef->Add( m_tcFullUuid, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
-	bSizerButtons->Add( fgSizerSymbolRef, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizerButtons->Add( fgSizerSymbolRef, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
-	m_GeneralBoxSizer->Add( bSizerButtons, 0, wxEXPAND|wxLEFT, 5 );
+	m_GeneralBoxSizer->Add( bSizerButtons, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizerStdButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerStdButtonsOK = new wxButton( this, wxID_OK );
