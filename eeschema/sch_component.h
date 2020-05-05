@@ -224,14 +224,17 @@ public:
      * Set this schematic symbol library symbol reference to \a aLibSymbol
      *
      * The schematic symbol object owns \a aLibSymbol and the pin list will be updated
-     * accordingly.  The #LIB_ID object must be valid ( have both a library nickname and
-     * symbol name ) in order to set the schematic symbol #LIB_ID.  Otherwise an assertion
-     * will be raised in debug builds and the library symbol will be cleared.  The new file
-     * format will no longer require a cache library so all library symbols must be valid.
+     * accordingly.  The #LIB_PART object can be null to clear the library symbol link
+     * as well as the pin map.  If the #LIB_PART object is not null, it must be a root
+     * symbol.  Otherwise an assertion will be raised in debug builds and the library
+     * symbol will be cleared.  The new file format will no longer require a cache
+     * library so all library symbols must be valid.
      *
      * @note This is the only way to publicly set the library symbol for a schematic
      *       symbol except for the ctors that take a LIB_PART reference.  All previous
      *       public resolvers have been deprecated.
+     *
+     * @param aLibSymbol is the library symbol to associate with this schematic symbol.
      */
     void SetLibSymbol( LIB_PART* aLibSymbol );
 

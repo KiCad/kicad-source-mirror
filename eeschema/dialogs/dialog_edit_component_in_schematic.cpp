@@ -370,6 +370,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
             return false;
         }
     }
+
     m_libraryNameTextCtrl->SetValue( id.Format() );
 
     // Check for missing field names.
@@ -397,6 +398,14 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
         return false;
+
+    SCH_SCREEN* currentScreen = GetParent()->GetScreen();
+
+    wxCHECK( currentScreen, false );
+
+    // This needs to be done before the LIB_ID is changed to prevent stale library symbols in
+    // the schematic file.
+    currentScreen->Remove( m_cmp );
 
     wxString msg;
 
@@ -428,7 +437,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
         return false;
     }
 
-    m_cmp->SetLibSymbol( new LIB_PART( *libSymbol ) );
+    m_cmp->SetLibSymbol( libSymbol->Flatten().release() );
     m_cmp->SetLibId( id );
 
     // For symbols with multiple shapes (De Morgan representation) Set the selected shape:
@@ -520,8 +529,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
         }
     }
 
-    m_cmp->UpdatePins();
-
+    currentScreen->Append( m_cmp );
     GetParent()->TestDanglingEnds();
     GetParent()->RefreshItem( m_cmp );
     GetParent()->OnModify();
@@ -579,7 +587,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnDeleteField( wxCommandEvent& event )
     int curRow = m_grid->GetGridCursorRow();
 
     if( curRow < 0 )
+    {
         return;
+    }
     else if( curRow < MANDATORY_FIELDS )
     {
         DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
@@ -621,7 +631,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnMoveUp( wxCommandEvent& event )
         m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
     }
     else
+    {
         wxBell();
+    }
 }
 
 

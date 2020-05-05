@@ -247,6 +247,8 @@ wxString SCH_COMPONENT::GetSchSymbolLibraryName() const
 
 void SCH_COMPONENT::SetLibSymbol( LIB_PART* aLibSymbol )
 {
+    wxCHECK2( ( aLibSymbol == nullptr ) || ( aLibSymbol->IsRoot() ), aLibSymbol = nullptr );
+
     m_part.reset( aLibSymbol );
     UpdatePins();
 }
