@@ -854,7 +854,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
             {
                 SCH_CONNECTION* pin_conn = comp->GetConnectionForPin( pin, *g_CurrentSheet );
 
-                if( pin_conn && pin_conn->Name( false ) == selectedNetName )
+                if( comp && pin_conn && pin_conn->Name( false ) == selectedNetName )
                 {
                     comp->BrightenPin( pin );
                     redraw = true;

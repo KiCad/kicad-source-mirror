@@ -471,6 +471,7 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
 
         // If we got here, the schematic loaded successfully.
         sheet = newSheet.release();
+        m_rootSheet = nullptr;         // Quiet Coverity warning.
     }
     else
     {

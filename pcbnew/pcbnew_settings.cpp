@@ -46,6 +46,7 @@ const int pcbnewSchemaVersion = 0;
 PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVersion ),
         m_Use45DegreeGraphicSegments( false ),
         m_FlipLeftRight( false ),
+        m_ShowPageLimits( true ),
         m_MagneticPads( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
         m_MagneticTracks( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
         m_MagneticGraphics( true ),

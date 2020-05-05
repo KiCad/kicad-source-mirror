@@ -470,8 +470,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                            "new file format cannot be opened with previous versions of KiCad." ) );
                 newFileFormatDlg.ShowCheckBox( _( "Do not show this dialog again." ) );
                 newFileFormatDlg.ShowModal();
-                cfg->m_Appearance.show_sexpr_file_convert_warning =
-                        !newFileFormatDlg.IsCheckBoxChecked();
+
+                if( cfg )
+                    cfg->m_Appearance.show_sexpr_file_convert_warning =
+                            !newFileFormatDlg.IsCheckBoxChecked();
             }
 
             // Allow the schematic to be saved to new file format without making any edits.
