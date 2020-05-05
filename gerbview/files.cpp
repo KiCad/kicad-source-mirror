@@ -38,7 +38,7 @@
 #include <widgets/progress_reporter.h>
 
 // HTML Messages used more than one time:
-#define MSG_NO_MORE_LAYER _( "<b>No more available layers in Gerbview to load files" )
+#define MSG_NO_MORE_LAYER _( "<b>No more available layers</b> in Gerbview to load files" )
 #define MSG_NOT_LOADED    _( "\n<b>Not loaded:</b> <i>%s</i>" )
 
 

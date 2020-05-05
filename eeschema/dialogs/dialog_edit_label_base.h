@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,8 +51,7 @@ class DIALOG_LABEL_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
-		wxStaticText* m_textOffsetNote1;
-		wxStaticText* m_textOffsetNote2;
+		wxStaticText* m_textOffsetNote;
 		wxRadioBox* m_TextOrient;
 		wxRadioBox* m_TextStyle;
 		wxRadioBox* m_TextShape;
