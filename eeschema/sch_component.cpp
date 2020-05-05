@@ -328,8 +328,6 @@ void SCH_COMPONENT::UpdateUnit( int aUnit )
 
 void SCH_COMPONENT::SetConvert( int aConvert )
 {
-    wxCHECK( m_part && m_part->HasConversion(), /* void */ );
-
     if( m_convert != aConvert )
     {
         m_convert = aConvert;

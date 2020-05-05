@@ -1281,7 +1281,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     wxCHECK( libSymbol, /*void*/ );
 
-    component->SetLibSymbol( libSymbol );
+    component->SetLibSymbol( new LIB_PART( *libSymbol ) );
 
     std::vector<LIB_PIN*> pins;
     component->GetPins( pins );

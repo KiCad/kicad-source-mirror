@@ -1198,7 +1198,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             if( libSymbol )
             {
-                component->SetLibSymbol( libSymbol );
+                component->SetLibSymbol( new LIB_PART( *libSymbol ) );
             }
             else
             {
