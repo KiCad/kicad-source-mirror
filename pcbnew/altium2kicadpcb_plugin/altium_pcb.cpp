@@ -1131,9 +1131,36 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
-    wxString altiumModelsPath = wxPathOnly( m_board->GetFileName() );
-    wxSetEnv( PROJECT_VAR_NAME,
-            altiumModelsPath ); // TODO: set KIPRJMOD always after import (not only when loading project)?
+    if( reader.GetRemainingBytes() == 0 )
+    {
+        return; // fast path: no 3d-models present which need to be imported -> no directory needs to be created
+    }
+
+    wxString projectPath = wxPathOnly( m_board->GetFileName() );
+    // TODO: set KIPRJMOD always after import (not only when loading project)?
+    wxSetEnv( PROJECT_VAR_NAME, projectPath );
+
+    // TODO: make this path configurable?
+    const wxString altiumModelDir = "ALTIUM_EMBEDDED_MODELS";
+
+    wxFileName altiumModelsPath = wxFileName::DirName( projectPath );
+    wxString   kicadModelPrefix = "${KIPRJMOD}/" + altiumModelDir + "/";
+    if( !altiumModelsPath.AppendDir( altiumModelDir ) )
+    {
+        THROW_IO_ERROR( "Cannot construct directory path for step models" );
+    }
+
+    // Create dir if it does not exist
+    if( !altiumModelsPath.DirExists() )
+    {
+        if( !altiumModelsPath.Mkdir() )
+        {
+            wxLogError( wxString::Format(
+                    _( "Cannot create directory \"%s\" -> no 3D-models will be imported." ),
+                    GetChars( altiumModelsPath.GetFullPath() ) ) );
+            return;
+        }
+    }
 
     int idx = 0;
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
@@ -1150,7 +1177,14 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
         // read file into buffer
         aReader.ReadFile( stepEntry, 0, stepContent.get(), stepSize );
 
-        wxFileName storagePath( altiumModelsPath, elem.name );
+        wxFileName storagePath( altiumModelsPath.GetPath(), elem.name );
+        if( !storagePath.IsDirWritable() )
+        {
+            wxLogError(
+                    wxString::Format( _( "You do not have write permissions to save file \"%s\"." ),
+                            GetChars( storagePath.GetFullPath() ) ) );
+            continue;
+        }
 
         wxMemoryInputStream stepStream( stepContent.get(), stepSize );
         wxZlibInputStream   zlibInputStream( stepStream );
@@ -1159,7 +1193,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
         outputStream.Write( zlibInputStream );
         outputStream.Close();
 
-        m_models.insert( { elem.id, "${KIPRJMOD}/" + elem.name } ); // KIPRJMOD
+        m_models.insert( { elem.id, kicadModelPrefix + elem.name } );
     }
 
     if( reader.GetRemainingBytes() != 0 )
