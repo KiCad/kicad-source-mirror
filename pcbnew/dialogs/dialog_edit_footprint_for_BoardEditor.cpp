@@ -112,18 +112,14 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
 
     bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
 
-    // Set font sizes
+    // Set font size for items showing long strings:
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_allow90Label->SetFont( infoFont );
-    m_allow180Label->SetFont( infoFont );
     m_staticTextInfoCopper->SetFont( infoFont );
     m_staticTextInfoPaste->SetFont( infoFont );
 
-    m_libraryIDLabel->SetFont( infoFont );
     m_tcLibraryID->SetFont( infoFont );
-    m_sheetPathLabel->SetFont( infoFont );
-    m_tcSheetPath->SetFont( infoFont );
+    m_tcFullUuid->SetFont( infoFont );
 
     infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_staticTextInfoValNeg->SetFont( infoFont );
@@ -383,23 +379,11 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     select3DModel( 0 );   // will clamp idx within bounds
     m_PreviewPane->UpdateDummyModule();
 
-    // Show the footprint's ID.
+    // Show the footprint's FPID.
     m_tcLibraryID->SetValue( m_footprint->GetFPID().Format() );
-    m_tcSheetPath->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 
-    wxString path = "/";
-
-    // Exclude the last path step (it's the component)
-    for( size_t i = 0; i + 1 < m_footprint->GetPath().size(); ++i )
-    {
-        if( path.length() > 1 )
-            path += "/";
-
-        path += Prj().GetSheetName( m_footprint->GetPath()[i] );
-    }
-
-    m_tcSheetPath->SetValue( path );
-    m_tcSheetPath->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+    // Show the footprint's full unique Kicad ID.
+    m_tcFullUuid->SetValue( m_footprint->GetPath().AsString() );
 
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
     {
