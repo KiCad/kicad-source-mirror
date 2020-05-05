@@ -127,6 +127,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
 
     m_LayerCtrl->SetBoardFrame( m_parent );
     m_LayerCtrl->SetLayersHotkeys( false );
+    m_LayerCtrl->SetUndefinedLayerName( INDETERMINATE_ACTION );
     m_LayerCtrl->Resync();
 
     m_grid->SetCellHighlightPenWidth( 0 );
@@ -176,10 +177,10 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_footprintFilter->ChangeValue( g_footprintFilter );
     m_footprintFilterOpt->SetValue( g_filterByFootprint );
 
-    m_lineWidth.SetValue( INDETERMINATE );
-    m_textWidth.SetValue( INDETERMINATE );
-    m_textHeight.SetValue( INDETERMINATE );
-    m_thickness.SetValue( INDETERMINATE );
+    m_lineWidth.SetValue( INDETERMINATE_ACTION );
+    m_textWidth.SetValue( INDETERMINATE_ACTION );
+    m_textHeight.SetValue( INDETERMINATE_ACTION );
+    m_thickness.SetValue( INDETERMINATE_ACTION );
     m_Italic->Set3StateValue( wxCHK_UNDETERMINED );
     m_keepUpright->Set3StateValue( wxCHK_UNDETERMINED );
     m_Visible->Set3StateValue( wxCHK_UNDETERMINED );

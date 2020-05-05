@@ -46,14 +46,14 @@ public:
 
     // Returns a color index from the layer id
     // Virtual function
-    COLOR4D GetLayerColor( int aLayer ) const override;
+    COLOR4D getLayerColor( int aLayer ) const override;
 
     // Returns true if the layer id is enabled (i.e. is it should be displayed)
     // Virtual function
-    bool IsLayerEnabled( int aLayer ) const override { return true; }
+    bool isLayerEnabled( int aLayer ) const override { return true; }
 
     // Returns the name of the layer id
-    wxString GetLayerName( int aLayer ) const override;
+    wxString getLayerName( int aLayer ) const override;
 };
 
 #endif //GBR_LAYER_BOX_SELECTOR_H

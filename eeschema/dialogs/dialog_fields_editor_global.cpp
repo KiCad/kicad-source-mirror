@@ -273,12 +273,18 @@ public:
 
                 if( !m_dataStore.count( compID ) ||
                         !m_dataStore[ compID ].count( m_fieldNames[ aCol ] ) )
-                    return INDETERMINATE;
+                {
+                    return INDETERMINATE_STATE;
+                }
 
                 if( &ref == &group.m_Refs.front() )
+                {
                     fieldValue = m_dataStore[ compID ][ m_fieldNames[ aCol ] ];
+                }
                 else if ( fieldValue != m_dataStore[ compID ][ m_fieldNames[ aCol ] ] )
-                    return INDETERMINATE;
+                {
+                    return INDETERMINATE_STATE;
+                }
             }
         }
 

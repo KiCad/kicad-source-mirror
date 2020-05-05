@@ -89,7 +89,7 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
     }
     else
     {
-        m_width.SetValue( INDETERMINATE );
+        m_width.SetValue( INDETERMINATE_ACTION );
     }
 
     if( std::all_of( m_lines.begin() + 1, m_lines.end(),

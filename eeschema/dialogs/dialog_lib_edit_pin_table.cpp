@@ -157,7 +157,7 @@ public:
                 if( !fieldValue.Length() )
                     fieldValue = val;
                 else if( val != fieldValue )
-                    fieldValue = INDETERMINATE;
+                    fieldValue = INDETERMINATE_STATE;
             }
         }
 
@@ -166,7 +166,7 @@ public:
 
     void SetValue( int aRow, int aCol, const wxString &aValue ) override
     {
-        if( aValue == INDETERMINATE )
+        if( aValue == INDETERMINATE_STATE )
             return;
 
         LIB_PINS pins = m_rows[ aRow ];
@@ -389,28 +389,33 @@ public:
 
 
 DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( LIB_EDIT_FRAME* parent, LIB_PART* aPart ) :
-    DIALOG_LIB_EDIT_PIN_TABLE_BASE( parent ),
-    m_editFrame( parent ),
-    m_part( aPart )
+        DIALOG_LIB_EDIT_PIN_TABLE_BASE( parent ),
+        m_editFrame( parent ),
+        m_part( aPart )
 {
     if( g_typeNames.empty())
     {
         for( unsigned i = 0; i < ELECTRICAL_PINTYPES_TOTAL; ++i )
             g_typeIcons.push_back( GetBitmap( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
+
         for( unsigned i = 0; i < ELECTRICAL_PINTYPES_TOTAL; ++i )
             g_typeNames.push_back( GetText( static_cast<ELECTRICAL_PINTYPE>( i ) ) );
-        g_typeNames.push_back( INDETERMINATE );
+
+        g_typeNames.push_back( INDETERMINATE_STATE );
 
         for( unsigned i = 0; i < GRAPHIC_PINSHAPES_TOTAL; ++i )
             g_shapeIcons.push_back( GetBitmap( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
+
         for( unsigned i = 0; i < GRAPHIC_PINSHAPES_TOTAL; ++i )
             g_shapeNames.push_back( GetText( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
-        g_shapeNames.push_back( INDETERMINATE );
+
+        g_shapeNames.push_back( INDETERMINATE_STATE );
 
         for( unsigned i = 0; i < LIB_PIN::GetOrientationNames().size(); ++i )
             g_orientationIcons.push_back( LIB_PIN::GetOrientationSymbols()[ i ] );
+
         g_orientationNames = LIB_PIN::GetOrientationNames();
-        g_orientationNames.push_back( INDETERMINATE );
+        g_orientationNames.push_back( INDETERMINATE_STATE );
     }
 
     m_dataModel = new PIN_TABLE_DATA_MODEL( GetUserUnits() );

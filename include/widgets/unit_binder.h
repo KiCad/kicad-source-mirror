@@ -89,7 +89,7 @@ public:
      */
     virtual void ChangeValue( int aValue );
 
-    void ChangeValue( wxString aValue );
+    void ChangeValue( const wxString& aValue );
 
     /**
      * Function GetValue

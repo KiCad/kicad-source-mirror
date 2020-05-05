@@ -154,7 +154,7 @@ void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
     for( LAYER_NUM i = 0; i < elements; ++i )
     {
         wxBitmap layerbmp( 14, 14 );
-        DrawColorSwatch( layerbmp, GetLayerColor( LAYER_PCB_BACKGROUND ), GetLayerColor( i ) );
+        DrawColorSwatch( layerbmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( i ) );
     }
 }
 

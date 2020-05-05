@@ -181,15 +181,15 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
 
     m_netFilterOpt->SetValue( g_filterByNet );
 
-    m_textSize.SetValue( INDETERMINATE );
-    m_orientation->SetStringSelection( INDETERMINATE );
-    m_hAlign->SetStringSelection( INDETERMINATE );
-    m_vAlign->SetStringSelection( INDETERMINATE );
+    m_textSize.SetValue( INDETERMINATE_ACTION );
+    m_orientation->SetStringSelection( INDETERMINATE_ACTION );
+    m_hAlign->SetStringSelection( INDETERMINATE_ACTION );
+    m_vAlign->SetStringSelection( INDETERMINATE_ACTION );
     m_Italic->Set3StateValue( wxCHK_UNDETERMINED );
     m_Bold->Set3StateValue( wxCHK_UNDETERMINED );
     m_Visible->Set3StateValue( wxCHK_UNDETERMINED );
-    m_lineWidth.SetValue( INDETERMINATE );
-    m_lineStyle->SetStringSelection( INDETERMINATE );
+    m_lineWidth.SetValue( INDETERMINATE_ACTION );
+    m_lineStyle->SetStringSelection( INDETERMINATE_ACTION );
     m_setColor->SetValue( false );
     m_setBgColor->SetValue( false );
 
@@ -217,13 +217,13 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
             m_hasChange = true;
         }
 
-        if( m_hAlign->GetStringSelection() != INDETERMINATE )
+        if( m_hAlign->GetStringSelection() != INDETERMINATE_ACTION )
         {
             eda_text->SetHorizJustify( EDA_TEXT::MapHorizJustify( m_hAlign->GetSelection() - 1 ) );
             m_hasChange = true;
         }
 
-        if( m_hAlign->GetStringSelection() != INDETERMINATE )
+        if( m_hAlign->GetStringSelection() != INDETERMINATE_ACTION )
         {
             eda_text->SetVertJustify( EDA_TEXT::MapVertJustify( m_vAlign->GetSelection() - 1 ) );
             m_hasChange = true;
@@ -251,7 +251,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
     // No else!  Labels are both.
     if( sch_text )
     {
-        if( m_orientation->GetStringSelection() != INDETERMINATE )
+        if( m_orientation->GetStringSelection() != INDETERMINATE_ACTION )
         {
             sch_text->SetLabelSpinStyle( (LABEL_SPIN_STYLE::SPIN) m_orientation->GetSelection() );
             m_hasChange = true;
@@ -268,7 +268,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
 
         if( lineItem->GetLayer() == LAYER_NOTES )
         {
-            if( m_lineStyle->GetStringSelection() != INDETERMINATE )
+            if( m_lineStyle->GetStringSelection() != INDETERMINATE_ACTION )
             {
                 lineItem->SetLineStyle( m_lineStyle->GetSelection() );
                 m_hasChange = true;

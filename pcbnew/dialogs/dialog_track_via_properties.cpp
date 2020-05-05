@@ -56,9 +56,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     VIATYPE viaType = VIATYPE::NOT_DEFINED;
 
-    m_netSelector->SetBoard( aParent->GetBoard() );
-    m_netSelector->SetNetInfo( &aParent->GetBoard()->GetNetInfo() );
-
     m_TrackLayerCtrl->SetLayersHotkeys( false );
     m_TrackLayerCtrl->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
     m_TrackLayerCtrl->SetBoardFrame( aParent );
@@ -80,7 +77,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     bool hasUnlocked = false;
 
     // Look for values that are common for every item that is selected
-    for( auto& item : m_items )
+    for( EDA_ITEM* item : m_items )
     {
         if( !nets )
         {
@@ -112,22 +109,26 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                 else        // check if values are the same for every selected track
                 {
                     if( m_trackStartX.GetValue() != t->GetStart().x )
-                        m_trackStartX.SetValue( INDETERMINATE );
+                        m_trackStartX.SetValue( INDETERMINATE_STATE );
 
                     if( m_trackStartY.GetValue() != t->GetStart().y )
-                        m_trackStartY.SetValue( INDETERMINATE );
+                        m_trackStartY.SetValue( INDETERMINATE_STATE );
 
                     if( m_trackEndX.GetValue() != t->GetEnd().x )
-                        m_trackEndX.SetValue( INDETERMINATE );
+                        m_trackEndX.SetValue( INDETERMINATE_STATE );
 
                     if( m_trackEndY.GetValue() != t->GetEnd().y )
-                        m_trackEndY.SetValue( INDETERMINATE );
+                        m_trackEndY.SetValue( INDETERMINATE_STATE );
 
                     if( m_trackWidth.GetValue() != t->GetWidth() )
-                        m_trackWidth.SetValue( INDETERMINATE );
+                        m_trackWidth.SetValue( INDETERMINATE_STATE );
 
                     if( m_TrackLayerCtrl->GetLayerSelection() != t->GetLayer() )
+                    {
+                        m_TrackLayerCtrl->SetUndefinedLayerName( INDETERMINATE_STATE );
+                        m_TrackLayerCtrl->Resync();
                         m_TrackLayerCtrl->SetLayerSelection( UNDEFINED_LAYER );
+                    }
                 }
 
                 if( t->IsLocked() )
@@ -156,25 +157,33 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                 else        // check if values are the same for every selected via
                 {
                     if( m_viaX.GetValue() != v->GetPosition().x )
-                        m_viaX.SetValue( INDETERMINATE );
+                        m_viaX.SetValue( INDETERMINATE_STATE );
 
                     if( m_viaY.GetValue() != v->GetPosition().y )
-                        m_viaY.SetValue( INDETERMINATE );
+                        m_viaY.SetValue( INDETERMINATE_STATE );
 
                     if( m_viaDiameter.GetValue() != v->GetWidth() )
-                        m_viaDiameter.SetValue( INDETERMINATE );
+                        m_viaDiameter.SetValue( INDETERMINATE_STATE );
 
                     if( m_viaDrill.GetValue() != v->GetDrillValue() )
-                        m_viaDrill.SetValue( INDETERMINATE );
+                        m_viaDrill.SetValue( INDETERMINATE_STATE );
 
                     if( viaType != v->GetViaType() )
                         viaType = VIATYPE::NOT_DEFINED;
 
                     if( m_ViaStartLayer->GetLayerSelection() != v->TopLayer() )
+                    {
+                        m_ViaStartLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
+                        m_ViaStartLayer->Resync();
                         m_ViaStartLayer->SetLayerSelection( UNDEFINED_LAYER );
+                    }
 
                     if( m_ViaEndLayer->GetLayerSelection() != v->BottomLayer() )
+                    {
+                        m_ViaEndLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
+                        m_ViaEndLayer->Resync();
                         m_ViaEndLayer->SetLayerSelection( UNDEFINED_LAYER );
+                    }
                 }
 
                 if( v->IsLocked() )
@@ -193,10 +202,18 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         }
     }
 
+    m_netSelector->SetBoard( aParent->GetBoard() );
+    m_netSelector->SetNetInfo( &aParent->GetBoard()->GetNetInfo() );
+
     if ( net >= 0 )
+    {
         m_netSelector->SetSelectedNetcode( net );
+    }
     else
+    {
+        m_netSelector->SetIndeterminateString( INDETERMINATE_STATE );
         m_netSelector->SetIndeterminate();
+    }
 
     wxASSERT( m_tracks || m_vias );
 

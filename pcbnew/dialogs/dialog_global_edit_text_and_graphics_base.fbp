@@ -1081,7 +1081,7 @@
                                         <object class="wxFlexGridSizer" expanded="1">
                                             <property name="cols">5</property>
                                             <property name="flexible_direction">wxBOTH</property>
-                                            <property name="growablecols"></property>
+                                            <property name="growablecols">1,4</property>
                                             <property name="growablerows"></property>
                                             <property name="hgap">0</property>
                                             <property name="minimum_size"></property>
@@ -1233,11 +1233,11 @@
                                                 <object class="spacer" expanded="0">
                                                     <property name="height">0</property>
                                                     <property name="permission">protected</property>
-                                                    <property name="width">100</property>
+                                                    <property name="width">0</property>
                                                 </object>
                                             </object>
                                             <object class="sizeritem" expanded="0">
-                                                <property name="border">5</property>
+                                                <property name="border">120</property>
                                                 <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxCheckBox" expanded="0">
@@ -1753,7 +1753,7 @@
                                                 </object>
                                             </object>
                                             <object class="sizeritem" expanded="0">
-                                                <property name="border">5</property>
+                                                <property name="border">120</property>
                                                 <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxCheckBox" expanded="0">
@@ -2013,7 +2013,7 @@
                                                 </object>
                                             </object>
                                             <object class="sizeritem" expanded="0">
-                                                <property name="border">5</property>
+                                                <property name="border">120</property>
                                                 <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxCheckBox" expanded="0">

@@ -49,6 +49,9 @@ public:
 
     void SetNetInfo( NETINFO_LIST* aNetInfoList );
 
+    // Set to wxEmptyString to disallow indeterminate settings
+    void SetIndeterminateString( const wxString& aString );
+
     void SetBoard( BOARD* aBoard );
 
     void SetSelectedNetcode( int aNetcode );
@@ -63,6 +66,7 @@ protected:
     void onKeyDown( wxKeyEvent& aEvt );
 
     NET_SELECTOR_COMBOPOPUP* m_netSelectorPopup;
+    wxString                 m_indeterminateString;
 };
 
 

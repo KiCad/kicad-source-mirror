@@ -110,6 +110,9 @@ public:
 
     wxString GetStringValue() const override
     {
+        if( m_selectedNetcode == -1 )
+            return m_indeterminateLabel;
+
         NETINFO_ITEM* netInfo = m_netinfoList->GetNetItem( m_selectedNetcode );
 
         if( netInfo && netInfo->GetNet() > 0 )
@@ -121,6 +124,12 @@ public:
     void SetNetInfo( NETINFO_LIST* aNetInfoList )
     {
         m_netinfoList = aNetInfoList;
+        rebuildList();
+    }
+
+    void SetIndeterminateLabel( const wxString& aIndeterminateLabel )
+    {
+        m_indeterminateLabel = aIndeterminateLabel;
         rebuildList();
     }
 
@@ -186,10 +195,10 @@ public:
         if( selection >= 0 )
             selectedNetName = m_listBox->GetString( (unsigned) selection );
 
-        if( selectedNetName.IsEmpty() )
+        if( selectedNetName.IsEmpty() || selectedNetName == m_indeterminateLabel )
         {
             m_selectedNetcode = -1;
-            GetComboCtrl()->SetValue( INDETERMINATE );
+            GetComboCtrl()->SetValue( m_indeterminateLabel );
         }
         else if( selectedNetName == NO_NET )
         {
@@ -313,6 +322,9 @@ protected:
             wxString newnet = wxString::Format( "%s: %s", CREATE_NET, netstring );
             netNames.insert( netNames.begin(), newnet );
         }
+
+        if( !m_indeterminateLabel.IsEmpty() )
+            netNames.push_back( m_indeterminateLabel );
 
         m_listBox->Set( netNames );
     }
@@ -504,6 +516,7 @@ protected:
     int              m_maxPopupHeight;
 
     NETINFO_LIST*    m_netinfoList;
+    wxString         m_indeterminateLabel;
     BOARD*           m_board;
 
     int              m_selectedNetcode;
@@ -574,6 +587,13 @@ void NET_SELECTOR::SetNetInfo( NETINFO_LIST* aNetInfoList )
 }
 
 
+void NET_SELECTOR::SetIndeterminateString( const wxString& aString )
+{
+    m_indeterminateString = aString;
+    m_netSelectorPopup->SetIndeterminateLabel( aString );
+}
+
+
 void NET_SELECTOR::SetBoard( BOARD* aBoard )
 {
     m_netSelectorPopup->SetBoard( aBoard );
@@ -603,7 +623,7 @@ wxString NET_SELECTOR::GetSelectedNetname()
 void NET_SELECTOR::SetIndeterminate()
 {
     m_netSelectorPopup->SetIndeterminate();
-    SetValue( INDETERMINATE );
+    SetValue( m_indeterminateString  );
 }
 
 

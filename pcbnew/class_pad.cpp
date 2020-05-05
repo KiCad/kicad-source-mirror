@@ -131,7 +131,7 @@ LSET D_PAD::UnplatedHoleMask()
 
 LSET D_PAD::ApertureMask()
 {
-    static LSET saved = LSET( 1, F_Paste );
+    static LSET saved( 1, F_Paste );
     return saved;
 }
 

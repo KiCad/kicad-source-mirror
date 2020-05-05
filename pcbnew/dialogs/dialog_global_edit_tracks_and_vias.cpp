@@ -118,11 +118,14 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
     buildFilterLists();
 
     m_parent->UpdateTrackWidthSelectBox( m_trackWidthSelectBox, false );
+    m_trackWidthSelectBox->Append( INDETERMINATE_ACTION );
     m_parent->UpdateViaSizeSelectBox( m_viaSizesSelectBox, false );
+    m_viaSizesSelectBox->Append( INDETERMINATE_ACTION );
 
     m_layerBox->SetBoardFrame( m_parent );
     m_layerBox->SetLayersHotkeys( false );
     m_layerBox->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
+    m_layerBox->SetUndefinedLayerName( INDETERMINATE_ACTION );
     m_layerBox->Resync();
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -246,6 +249,10 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
     else if( item )
         m_layerFilter->SetLayerSelection( item->GetLayer() );
 
+    m_trackWidthSelectBox->SetSelection( (int) m_trackWidthSelectBox->GetCount() - 1 );
+    m_viaSizesSelectBox->SetSelection( (int) m_viaSizesSelectBox->GetCount() - 1 );
+    m_layerBox->SetStringSelection( INDETERMINATE_ACTION );
+
     return true;
 }
 
@@ -266,22 +273,33 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnUpdateUI( wxUpdateUIEvent&  )
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoList, TRACK* aItem )
 {
     BOARD_DESIGN_SETTINGS& brdSettings = m_brd->GetDesignSettings();
+    bool                   isTrack = aItem->Type() == PCB_TRACE_T;
+    bool                   isVia = aItem->Type() == PCB_VIA_T;
 
     if( m_setToSpecifiedValues->GetValue() )
     {
-        unsigned int prevTrackWidthIndex = brdSettings.GetTrackWidthIndex();
-        unsigned int prevViaSizeIndex = brdSettings.GetViaSizeIndex();
+        if( isTrack && m_trackWidthSelectBox->GetStringSelection() != INDETERMINATE_ACTION )
         {
+            unsigned int prevTrackWidthIndex = brdSettings.GetTrackWidthIndex();
             brdSettings.SetTrackWidthIndex( (unsigned) m_trackWidthSelectBox->GetSelection() );
+
+            if( m_parent->SetTrackSegmentWidth( aItem, aUndoList, false ) == TRACK_ACTION_DRC_ERROR )
+                m_failedDRC = true;
+
+            brdSettings.SetTrackWidthIndex( prevTrackWidthIndex );
+        }
+        else if( isVia && m_viaSizesSelectBox->GetStringSelection() != INDETERMINATE_ACTION )
+        {
+            unsigned int prevViaSizeIndex = brdSettings.GetViaSizeIndex();
             brdSettings.SetViaSizeIndex( (unsigned) m_viaSizesSelectBox->GetSelection() );
 
             if( m_parent->SetTrackSegmentWidth( aItem, aUndoList, false ) == TRACK_ACTION_DRC_ERROR )
                 m_failedDRC = true;
-        }
-        brdSettings.SetTrackWidthIndex( prevTrackWidthIndex );
-        brdSettings.SetViaSizeIndex( prevViaSizeIndex );
 
-        if( m_layerBox->GetLayerSelection() != UNDEFINED_LAYER && aItem->Type() == PCB_TRACE_T )
+            brdSettings.SetViaSizeIndex( prevViaSizeIndex );
+        }
+
+        if( isTrack && m_layerBox->GetLayerSelection() != UNDEFINED_LAYER )
         {
             if( aUndoList->FindItem( aItem ) < 0 )
             {

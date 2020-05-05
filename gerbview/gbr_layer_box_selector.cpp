@@ -45,14 +45,14 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
 
     for( unsigned layerid = 0; layerid < images.ImagesMaxCount(); ++layerid )
     {
-        if( !IsLayerEnabled( layerid ) )
+        if( !isLayerEnabled( layerid ) )
             continue;
 
         // Prepare Bitmap
         wxBitmap bmp( BM_SIZE, BM_SIZE );
-        DrawColorSwatch( bmp, GetLayerColor( LAYER_PCB_BACKGROUND ), GetLayerColor( layerid ) );
+        DrawColorSwatch( bmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( layerid ) );
 
-        Append( GetLayerName( layerid ), bmp, (void*)(intptr_t) layerid );
+        Append( getLayerName( layerid ), bmp, (void*)(intptr_t) layerid );
     }
 
     // Ensure the width of the widget is enough to show the text and the icon
@@ -65,7 +65,7 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
 
 
 // Returns a color index from the layer id
-COLOR4D GBR_LAYER_BOX_SELECTOR::GetLayerColor( int aLayer ) const
+COLOR4D GBR_LAYER_BOX_SELECTOR::getLayerColor( int aLayer ) const
 {
     GERBVIEW_FRAME* frame = (GERBVIEW_FRAME*) GetParent()->GetParent();
 
@@ -74,7 +74,7 @@ COLOR4D GBR_LAYER_BOX_SELECTOR::GetLayerColor( int aLayer ) const
 
 
 // Returns the name of the layer id
-wxString GBR_LAYER_BOX_SELECTOR::GetLayerName( int aLayer ) const
+wxString GBR_LAYER_BOX_SELECTOR::getLayerName( int aLayer ) const
 {
     GERBER_FILE_IMAGE_LIST& images = GERBER_FILE_IMAGE_LIST::GetImagesList();
     wxString name = images.GetDisplayName( aLayer );

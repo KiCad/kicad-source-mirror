@@ -28,10 +28,7 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include <common.h>
-#include <pcbnew.h>
 #include <pcb_edit_frame.h>
-#include <board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>
 #include <settings/color_settings.h>
 
@@ -45,18 +42,38 @@ static TOOL_ACTION* layer2action( PCB_LAYER_ID aLayer )
     switch( aLayer )
     {
     case F_Cu:      return &PCB_ACTIONS::layerTop;
-
-    case B_Cu:      return &PCB_ACTIONS::layerBottom;
-
     case In1_Cu:    return &PCB_ACTIONS::layerInner1;
     case In2_Cu:    return &PCB_ACTIONS::layerInner2;
     case In3_Cu:    return &PCB_ACTIONS::layerInner3;
     case In4_Cu:    return &PCB_ACTIONS::layerInner4;
     case In5_Cu:    return &PCB_ACTIONS::layerInner5;
     case In6_Cu:    return &PCB_ACTIONS::layerInner6;
-
-    default:
-        return nullptr;
+    case In7_Cu:    return &PCB_ACTIONS::layerInner7;
+    case In8_Cu:    return &PCB_ACTIONS::layerInner8;
+    case In9_Cu:    return &PCB_ACTIONS::layerInner9;
+    case In10_Cu:   return &PCB_ACTIONS::layerInner10;
+    case In11_Cu:   return &PCB_ACTIONS::layerInner11;
+    case In12_Cu:   return &PCB_ACTIONS::layerInner12;
+    case In13_Cu:   return &PCB_ACTIONS::layerInner13;
+    case In14_Cu:   return &PCB_ACTIONS::layerInner14;
+    case In15_Cu:   return &PCB_ACTIONS::layerInner15;
+    case In16_Cu:   return &PCB_ACTIONS::layerInner16;
+    case In17_Cu:   return &PCB_ACTIONS::layerInner17;
+    case In18_Cu:   return &PCB_ACTIONS::layerInner18;
+    case In19_Cu:   return &PCB_ACTIONS::layerInner19;
+    case In20_Cu:   return &PCB_ACTIONS::layerInner20;
+    case In21_Cu:   return &PCB_ACTIONS::layerInner21;
+    case In22_Cu:   return &PCB_ACTIONS::layerInner22;
+    case In23_Cu:   return &PCB_ACTIONS::layerInner23;
+    case In24_Cu:   return &PCB_ACTIONS::layerInner24;
+    case In25_Cu:   return &PCB_ACTIONS::layerInner25;
+    case In26_Cu:   return &PCB_ACTIONS::layerInner26;
+    case In27_Cu:   return &PCB_ACTIONS::layerInner27;
+    case In28_Cu:   return &PCB_ACTIONS::layerInner28;
+    case In29_Cu:   return &PCB_ACTIONS::layerInner29;
+    case In30_Cu:   return &PCB_ACTIONS::layerInner30;
+    case B_Cu:      return &PCB_ACTIONS::layerBottom;
+    default:        return nullptr;
     }
 }
 
@@ -91,9 +108,9 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
             layerstatus.Empty();
 
         wxBitmap bmp( BM_SIZE, BM_SIZE );
-        DrawColorSwatch( bmp, GetLayerColor( LAYER_PCB_BACKGROUND ), GetLayerColor( layerid ) );
+        DrawColorSwatch( bmp, getLayerColor( LAYER_PCB_BACKGROUND ), getLayerColor( layerid ) );
 
-        wxString layername = GetLayerName( layerid ) + layerstatus;
+        wxString layername = getLayerName( layerid ) + layerstatus;
 
         if( m_layerhotkeys )
         {
@@ -110,6 +127,15 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
         minwidth = std::max( minwidth, w );
     }
 
+    if( !m_undefinedLayerName.IsEmpty() )
+    {
+        Append( m_undefinedLayerName, wxNullBitmap, (void*)(intptr_t)UNDEFINED_LAYER );
+
+        int w, h;
+        dc.GetTextExtent ( m_undefinedLayerName, &w, &h );
+        minwidth = std::max( minwidth, w );
+    }
+
     // Approximate bitmap size and margins
     minwidth += BM_SIZE + 32 + ConvertDialogToPixels( wxSize( 8, 0 ) ).x;
     SetMinSize( wxSize( minwidth, -1 ) );
@@ -117,11 +143,9 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
 
 
 // Returns true if the layer id is enabled (i.e. is it should be displayed)
-bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( LAYER_NUM aLayer ) const
+bool PCB_LAYER_BOX_SELECTOR::isLayerEnabled( LAYER_NUM aLayer ) const
 {
-    wxASSERT( m_boardFrame != NULL );
     BOARD* board = m_boardFrame->GetBoard();
-    wxASSERT( board != NULL );
 
     return board->IsLayerEnabled( ToLAYER_ID( aLayer ) );
 }
@@ -129,16 +153,14 @@ bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( LAYER_NUM aLayer ) const
 
 LSET PCB_LAYER_BOX_SELECTOR::getEnabledLayers() const
 {
-    wxASSERT( m_boardFrame != NULL );
     BOARD* board = m_boardFrame->GetBoard();
-    wxASSERT( board != NULL );
 
     return board->GetEnabledLayers();
 }
 
 
 // Returns a color index from the layer id
-COLOR4D PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
+COLOR4D PCB_LAYER_BOX_SELECTOR::getLayerColor( LAYER_NUM aLayer ) const
 {
     wxASSERT( m_boardFrame );
 
@@ -147,11 +169,9 @@ COLOR4D PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
 
 
 // Returns the name of the layer id
-wxString PCB_LAYER_BOX_SELECTOR::GetLayerName( LAYER_NUM aLayer ) const
+wxString PCB_LAYER_BOX_SELECTOR::getLayerName( LAYER_NUM aLayer ) const
 {
-    wxASSERT( m_boardFrame );
     BOARD* board = m_boardFrame->GetBoard();
-    wxASSERT( board );
 
     return board->GetLayerName( ToLAYER_ID( aLayer ) );
 }

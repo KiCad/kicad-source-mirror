@@ -55,20 +55,20 @@ protected:
     PCB_BASE_FRAME*  m_frame;
 
     // Returns true if the layer id is enabled (i.e. is it should be displayed)
-    bool IsLayerEnabled( LAYER_NUM aLayer ) const override
+    bool isLayerEnabled( LAYER_NUM aLayer ) const override
     {
         return m_frame->GetBoard()->IsLayerEnabled( PCB_LAYER_ID( aLayer ) );
     }
 
     // Returns a color index from the layer id
     // Virtual function
-    COLOR4D GetLayerColor( LAYER_NUM aLayer ) const override
+    COLOR4D getLayerColor( LAYER_NUM aLayer ) const override
     {
         return m_frame->ColorSettings()->GetColor( aLayer );
     }
 
     // Returns the name of the layer id
-    wxString GetLayerName( LAYER_NUM aLayer ) const override
+    wxString getLayerName( LAYER_NUM aLayer ) const override
     {
         return m_frame->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) );
     }
@@ -127,7 +127,7 @@ PCB_ONE_LAYER_SELECTOR::PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD* 
 
 void PCB_ONE_LAYER_SELECTOR::buildList()
 {
-    wxColour bg = GetLayerColor( LAYER_PCB_BACKGROUND ).ToColour();
+    wxColour bg = getLayerColor( LAYER_PCB_BACKGROUND ).ToColour();
     int      left_row = 0;
     int      right_row = 0;
     wxString layername;
@@ -139,12 +139,12 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
         if( m_notAllowedLayersMask[layerid] )
             continue;
 
-        wxColour fg = GetLayerColor( layerid ).ToColour();
+        wxColour fg = getLayerColor( layerid ).ToColour();
         wxColour color( wxColour::AlphaBlend( fg.Red(), bg.Red(), fg.Alpha() / 255.0 ),
                         wxColour::AlphaBlend( fg.Green(), bg.Green(), fg.Alpha() / 255.0 ),
                         wxColour::AlphaBlend( fg.Blue(), bg.Blue(), fg.Alpha() / 255.0 ) );
 
-        layername = wxT( " " ) + GetLayerName( layerid );
+        layername = wxT( " " ) + getLayerName( layerid );
 
         if( IsCopperLayer( layerid ) )
         {
@@ -305,7 +305,7 @@ SELECT_COPPER_LAYERS_PAIR_DIALOG::SELECT_COPPER_LAYERS_PAIR_DIALOG(
 
 void SELECT_COPPER_LAYERS_PAIR_DIALOG::buildList()
 {
-    wxColour bg = GetLayerColor( LAYER_PCB_BACKGROUND ).ToColour();
+    wxColour bg = getLayerColor( LAYER_PCB_BACKGROUND ).ToColour();
     int      row = 0;
     wxString layername;
 
@@ -316,12 +316,12 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::buildList()
         if( !IsCopperLayer( layerid ) )
             continue;
 
-        wxColour fg = GetLayerColor( layerid ).ToColour();
+        wxColour fg = getLayerColor( layerid ).ToColour();
         wxColour color( wxColour::AlphaBlend( fg.Red(), bg.Red(), fg.Alpha() / 255.0 ),
                         wxColour::AlphaBlend( fg.Green(), bg.Green(), fg.Alpha() / 255.0 ),
                         wxColour::AlphaBlend( fg.Blue(), bg.Blue(), fg.Alpha() / 255.0 ) );
 
-        layername = wxT( " " ) + GetLayerName( layerid );
+        layername = wxT( " " ) + getLayerName( layerid );
 
         if( row )
             m_leftGridLayers->AppendRows( 1 );

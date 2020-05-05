@@ -47,22 +47,20 @@ public:
     {
     }
 
-    // Returns a color index from the layer id
-    // Virtual function because GerbView uses its own functions in a derived class
-    virtual COLOR4D GetLayerColor( LAYER_NUM aLayer ) const = 0;
-
-    // Returns the name of the layer id
-    // Virtual pure function because GerbView uses its own functions in a derived class
-    virtual wxString GetLayerName( LAYER_NUM aLayer ) const = 0;
-
-    // Returns true if the layer id is enabled (i.e. is it should be displayed)
-    // Virtual function pure because GerbView uses its own functions in a derived class
-    virtual bool IsLayerEnabled( LAYER_NUM aLayer ) const = 0;
-
     bool SetLayersHotkeys( bool value );
 
-   // Fills the layer bitmap aLayerbmp with the layer color
+    // Fills the layer bitmap aLayerbmp with the layer color
     static void DrawColorSwatch( wxBitmap& aLayerbmp, COLOR4D aBackground, COLOR4D aColor );
+
+protected:
+    // Returns a color index from the layer id
+    virtual COLOR4D getLayerColor( LAYER_NUM aLayer ) const = 0;
+
+    // Returns the name of the layer id
+    virtual wxString getLayerName( LAYER_NUM aLayer ) const = 0;
+
+    // Returns true if the layer id is enabled (i.e. is it should be displayed)
+    virtual bool isLayerEnabled( LAYER_NUM aLayer ) const = 0;
 };
 
 
