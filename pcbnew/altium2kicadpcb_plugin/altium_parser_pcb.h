@@ -509,6 +509,7 @@ struct ACOMPONENTBODY6
     MODULE_3D_SETTINGS::VECTOR3D modelPosition;
     MODULE_3D_SETTINGS::VECTOR3D modelRotation;
     double                       rotation;
+    double                       bodyOpacity;
 
     explicit ACOMPONENTBODY6( ALTIUM_PARSER& aReader );
 };

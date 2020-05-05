@@ -624,6 +624,8 @@ ACOMPONENTBODY6::ACOMPONENTBODY6( ALTIUM_PARSER& aReader )
 
     rotation = ALTIUM_PARSER::PropertiesReadDouble( properties, "MODEL.2D.ROTATION", 0. );
 
+    bodyOpacity = ALTIUM_PARSER::PropertiesReadDouble( properties, "BODYOPACITY3D", 1. );
+
     aReader.SkipSubrecord();
 
     if( aReader.HasParsingError() )
