@@ -52,6 +52,7 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
 {
     auto cfg = m_frame->GetSettings();
 
+    m_cbRelinkFootprints->SetValue( cfg->m_NetlistDialog.associate_by_ref_sch );
     m_cbUpdateFootprints->SetValue( cfg->m_NetlistDialog.update_footprints );
     m_cbDeleteExtraFootprints->SetValue( cfg->m_NetlistDialog.delete_extra_footprints );
     m_cbDeleteSinglePadNets->SetValue( cfg->m_NetlistDialog.delete_single_pad_nets );
@@ -86,6 +87,7 @@ DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
 
     auto cfg = m_frame->GetSettings();
 
+    cfg->m_NetlistDialog.associate_by_ref_sch    = m_cbRelinkFootprints->GetValue();
     cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();
     cfg->m_NetlistDialog.delete_extra_footprints = m_cbDeleteExtraFootprints->GetValue();
     cfg->m_NetlistDialog.delete_single_pad_nets  = m_cbDeleteSinglePadNets->GetValue();

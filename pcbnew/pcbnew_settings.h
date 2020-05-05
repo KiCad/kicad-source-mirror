@@ -144,6 +144,7 @@ public:
         bool delete_shorting_tracks;
         bool delete_extra_footprints;
         bool delete_single_pad_nets;
+        bool associate_by_ref_sch;
     };
 
     struct DIALOG_PLACE_FILE

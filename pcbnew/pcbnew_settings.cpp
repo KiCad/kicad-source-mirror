@@ -318,6 +318,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVe
     m_params.emplace_back( new PARAM<bool>(
             "netlist.delete_single_pad_nets", &m_NetlistDialog.delete_single_pad_nets, false ) );
 
+    m_params.emplace_back( new PARAM<bool>(
+            "netlist.associate_by_ref_sch", &m_NetlistDialog.associate_by_ref_sch, false ) );
+
     m_params.emplace_back(new PARAM<int>( "place_file.units", &m_PlaceFile.units, 1 ) );
 
     m_params.emplace_back(
