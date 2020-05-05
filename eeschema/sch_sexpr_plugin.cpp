@@ -416,6 +416,7 @@ void SCH_SEXPR_PLUGIN::init( KIWAY* aKiway, const PROPERTIES* aProperties )
     m_kiway = aKiway;
     m_cache = NULL;
     m_out = NULL;
+    m_fieldId = MANDATORY_FIELDS;
 }
 
 
@@ -869,9 +870,12 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_COMPONENT* aSymbol, int aNestLevel )
     }
 
     if( !( aSymbol->GetInstanceReferences().size() > 1 ) )
-        m_out->Print( 0, " (unit %d)\n", aSymbol->GetUnit() );
-    else
-        m_out->Print( 0, "\n" );
+        m_out->Print( 0, " (unit %d)", aSymbol->GetUnit() );
+
+    if( aSymbol->GetConvert() == LIB_ITEM::LIB_CONVERT::DEMORGAN )
+        m_out->Print( 0, " (convert %d)", aSymbol->GetConvert() );
+
+    m_out->Print( 0, "\n" );
 
     // @todo Convert to full UUID if current UUID is a legacy time stamp.
     m_out->Print( aNestLevel + 1, "(uuid %s)\n",

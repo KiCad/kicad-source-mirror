@@ -2090,6 +2090,11 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             NeedRIGHT();
             break;
 
+        case T_convert:
+            symbol->SetConvert( parseInt( "symbol convert" ) );
+            NeedRIGHT();
+            break;
+
         case T_uuid:
             NeedSYMBOL();
             const_cast<KIID&>( symbol->m_Uuid ) = KIID( FromUTF8() );
