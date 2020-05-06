@@ -1752,6 +1752,11 @@ void ALTIUM_PCB::ParsePads6Data(
                     break;
                 }
             }
+
+            if( elem.sizeAndShape )
+            {
+                pad->SetOffset( elem.sizeAndShape->holeoffset[0] );
+            }
         }
 
         if( elem.padmode != ALTIUM_PAD_MODE::SIMPLE )
