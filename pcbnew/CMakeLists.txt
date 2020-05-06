@@ -359,36 +359,29 @@ set( PCBNEW_SCRIPTING_PYTHON_HELPERS
     swig/python_scripting.cpp
     )
 
-if( COMPILER_SUPPORTS_WSHADOW )
-    # .cpp files are compiled with extra ${WSHADOW_FLAGS}, but not .cxx files
+
+if( COMPILER_SUPPORTS_WARNINGS )
+    # Only compile our source files with the warnings, since the SWIG generated
+    # files contain a lot of warnings, we just ignore it.
     set_source_files_properties(
         ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS} ${PCBNEW_SCRIPTING_DIALOGS} ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
-        PROPERTIES COMPILE_FLAGS ${WSHADOW_FLAGS}
-    )
-
-    # There is a lot of 'local variable shadowed' warnings,
-    # but we have no control over the generated code
-    set_source_files_properties( pcbnew_wrap.cxx pcbnewPYTHON_wrap.cxx
-        PROPERTIES COMPILE_FLAGS -Wno-shadow
+        PROPERTIES COMPILE_FLAGS ${WARN_FLAGS_CXX}
     )
 endif()
 
 
 if( KICAD_SCRIPTING )
+
+    # Disable all warnings for the SWIG file
+    if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+        set_source_files_properties( pcbnew_wrap.cxx PROPERTIES COMPILE_FLAGS "-Wno-everything" )
+    endif()
+
     set( PCBNEW_SCRIPTING_SRCS
         ${PCBNEW_SCRIPTING_DIALOGS}
         pcbnew_wrap.cxx
         ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
         )
-
-
-    # Swig generated files do not use the override specifier, therefore
-    # disable suggest-override warnings
-    if( COMPILER_SUPPORTS_WSUGGEST_OVERRIDE )
-        set_source_files_properties( pcbnew_wrap.cxx pcbnewPYTHON_wrap.cxx
-            PROPERTIES COMPILE_FLAGS -Wno-suggest-override
-        )
-    endif()
 endif()
 
 

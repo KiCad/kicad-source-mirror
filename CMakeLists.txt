@@ -302,11 +302,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_CXX_FLAGS "-ffloat-store ${CMAKE_CXX_FLAGS}" )
     endif()
 
-    # Establish -Wall early, so specialized relaxations of this may come
-    # subsequently on the command line, such as in pcbnew/github/CMakeLists.txt
-    set( CMAKE_C_FLAGS   "-Wall ${CMAKE_C_FLAGS}" )
-    set( CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS}" )
-
     # Link flags in Debug: -g1 and -ggdb1 or -g1 and -ggdb3 can be used.
     # Level 1 produces minimal information, enough for making basic backtraces.
     # This includes descriptions of functions and external variables, and line number tables,
