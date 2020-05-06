@@ -163,6 +163,12 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
 
 void PANEL_COLOR_SETTINGS::createThemeList( const wxString& aCurrent )
 {
+    int width    = 0;
+    int height   = 0;
+
+    m_cbTheme->GetTextExtent( _( "New Theme..." ), &width, &height );
+    int minwidth = width;
+
     m_cbTheme->Clear();
 
     for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
@@ -171,10 +177,15 @@ void PANEL_COLOR_SETTINGS::createThemeList( const wxString& aCurrent )
 
         if( settings->GetFilename() == aCurrent )
             m_cbTheme->SetSelection( pos );
+
+        m_cbTheme->GetTextExtent( settings->GetName(), &width, &height );
+        minwidth = std::max( minwidth, width );
     }
 
     m_cbTheme->Append( wxT( "---" ) );
     m_cbTheme->Append( _( "New Theme..." ) );
+
+    m_cbTheme->SetMinSize( wxSize( minwidth + 50, -1 ) );
 }
 
 
