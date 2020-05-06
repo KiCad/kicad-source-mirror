@@ -85,6 +85,8 @@ public:
      */
     void PythonPluginsReload();
 
+    COLOR_SETTINGS* ColorSettings() override;
+
 private:
 
     void                OnSize( wxSizeEvent& event ) override;

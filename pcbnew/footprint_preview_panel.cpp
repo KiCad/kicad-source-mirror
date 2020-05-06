@@ -423,9 +423,7 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
         panel->GetGAL()->SetGridVisibility( pcbnew->IsGridVisible() );
         panel->GetGAL()->SetGridSize( VECTOR2D( pcbnew->GetScreen()->GetGridSize() ) );
 
-        // Grid color (among other things):
-        KIGFX::PAINTER* pcbnew_painter = pcbnew->GetCanvas()->GetView()->GetPainter();
-        panel->GetView()->GetPainter()->ApplySettings( pcbnew_painter->GetSettings() );
+        panel->GetView()->GetPainter()->GetSettings()->LoadColors( pcbnew->GetColorSettings() );
     }
     else
     {
@@ -435,6 +433,8 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
         std::unique_ptr<PCB_SCREEN> temp_screen = std::make_unique<PCB_SCREEN>( wxSize() );
         temp_screen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + cfg->m_Window.grid.last_size );
         panel->GetGAL()->SetGridSize( VECTOR2D( temp_screen->GetGridSize() ) );
+
+        panel->UpdateColors();
     }
 
     return panel;

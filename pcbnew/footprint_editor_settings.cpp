@@ -28,8 +28,11 @@
 #include <wx/config.h>
 
 
+extern const char* traceSettings;
+
+
 ///! Update the schema version whenever a migration is required
-const int fpEditSchemaVersion = 0;
+const int fpEditSchemaVersion = 1;
 
 
 FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
@@ -239,14 +242,13 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     const std::string f = "ModEdit";
 
     // Migrate color settings that were stored in the pcbnew config file
+    // We create a copy of the user scheme for the footprint editor context
 
     SETTINGS_MANAGER& manager = Pgm().GetSettingsManager();
-    COLOR_SETTINGS* cs = manager.GetColorSettings();
+    COLOR_SETTINGS* cs = manager.AddNewColorSettings( "user_footprints" );
 
-    // Flush here just in case we somehow have dirty pcbnew colors
+    cs->SetName( wxT( "KiCad Default (Footprints)" ) );
     manager.Save( cs );
-
-    cs->SetColorContext( COLOR_CONTEXT::FOOTPRINT );
 
     auto migrateLegacyColor = [&] ( const std::string& aKey, int aLayerId ) {
         wxString str;
@@ -280,7 +282,64 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     migrateLegacyColor( f + "Color4DViaThruEx",          LAYER_VIA_THROUGH );
     migrateLegacyColor( f + "Color4DWorksheet",          LAYER_WORKSHEET );
 
-    manager.SaveColorSettings( cs, "fpedit" );
+    manager.SaveColorSettings( cs, "board" );
+
+    ( *this )[PointerFromString( "appearance.color_theme" )] = "user_footprints";
 
     return ret;
+}
+
+
+bool FOOTPRINT_EDITOR_SETTINGS::Migrate()
+{
+    bool ret = true;
+    int  filever = at( PointerFromString( "meta.version" ) ).get<int>();
+
+    if( filever == 0 )
+    {
+        ret &= migrateSchema0to1();
+
+        if( ret )
+        {
+            ( *this )[PointerFromString( "meta.version" )] = 1;
+        }
+    }
+
+    return ret;
+}
+
+
+bool FOOTPRINT_EDITOR_SETTINGS::migrateSchema0to1()
+{
+    /**
+     * Schema version 0 to 1:
+     *
+     * - Check to see if a footprints version of the currently selected theme exists.
+     * - If so, select it
+     */
+
+    if( !m_manager )
+    {
+        wxLogTrace(
+                traceSettings, "Error: FOOTPRINT_EDITOR_SETTINGS migration cannot run unmanaged!" );
+        return false;
+    }
+
+    nlohmann::json::json_pointer theme_ptr( "/appearance/color_theme" );
+
+    wxString selected = at( theme_ptr ).get<wxString>();
+    wxString search   = selected + wxT( "_footprints" );
+
+    for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
+    {
+        if( settings->GetFilename() == search )
+        {
+            wxLogTrace( traceSettings, "Updating footprint editor theme from %s to %s",
+                    selected, search );
+            ( *this )[theme_ptr] = search;
+            return true;
+        }
+    }
+
+    return true;
 }

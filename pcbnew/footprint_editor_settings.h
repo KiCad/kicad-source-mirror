@@ -42,6 +42,8 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
+    bool Migrate() override;
+
     BOARD_DESIGN_SETTINGS m_DesignSettings;
 
     MAGNETIC_OPTIONS m_MagneticPads;
@@ -64,6 +66,10 @@ public:
 protected:
 
     virtual std::string getLegacyFrameName() const override { return "ModEditFrame"; }
+
+private:
+
+    bool migrateSchema0to1();
 };
 
 

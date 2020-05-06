@@ -26,12 +26,15 @@
 #include <tool/tool_manager.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_layer_widget.h>
+#include <pcbnew_settings.h>
+#include <pgm_base.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <class_board.h>
 #include <view/view.h>
 #include "footprint_info_impl.h"
 #include <project.h>
 #include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 #include <tools/pcb_actions.h>
 
 PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -130,4 +133,10 @@ void PCB_BASE_EDIT_FRAME::SetGridVisibility( bool aVisible )
 
     // TODO (ISM): Remove this by changing toolbars to use the EVT_UPDATE_UI to get the state
     SyncToolbars();
+}
+
+
+COLOR_SETTINGS* PCB_BASE_EDIT_FRAME::ColorSettings()
+{
+    return Pgm().GetSettingsManager().GetColorSettings( GetPcbNewSettings()->m_ColorTheme );
 }

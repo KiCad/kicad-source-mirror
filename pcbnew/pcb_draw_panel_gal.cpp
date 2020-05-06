@@ -210,16 +210,20 @@ void PCB_DRAW_PANEL_GAL::UpdateColors()
     auto frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
 
     if( frame )
+    {
         cs = frame->ColorSettings();
+    }
     else
-        cs = Pgm().GetSettingsManager().GetColorSettings();
+    {
+        PCBNEW_SETTINGS* app = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+
+        if( app )
+            cs = Pgm().GetSettingsManager().GetColorSettings( app->m_ColorTheme );
+        else
+            cs = Pgm().GetSettingsManager().GetColorSettings();
+    }
 
     wxCHECK_RET( cs, "null COLOR_SETTINGS" );
-
-    if( frame && frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
-        cs->SetColorContext( COLOR_CONTEXT::FOOTPRINT );
-    else
-        cs->SetColorContext( COLOR_CONTEXT::PCB );
 
     auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
     rs->LoadColors( cs );

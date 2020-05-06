@@ -168,7 +168,11 @@ public:
      * Helper to retrieve the current color settings
      * @return a pointer to the active COLOR_SETTINGS
      */
-    COLOR_SETTINGS* ColorSettings();
+    virtual COLOR_SETTINGS* ColorSettings()
+    {
+        wxFAIL_MSG( "Color settings requested for a frame that does not define them!" );
+        return nullptr;
+    }
 
     PCBNEW_SETTINGS& Settings() { return *m_Settings; }
 

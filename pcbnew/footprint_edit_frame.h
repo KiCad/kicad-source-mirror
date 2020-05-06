@@ -82,6 +82,8 @@ public:
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
+    COLOR_SETTINGS* ColorSettings() override;
+
     const BOX2I GetDocumentExtents() const override;
 
     void OnCloseWindow( wxCloseEvent& Event ) override;

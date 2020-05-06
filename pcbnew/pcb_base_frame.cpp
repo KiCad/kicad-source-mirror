@@ -36,6 +36,7 @@
 #include <pgm_base.h>
 #include <3d_viewer/eda_3d_viewer.h>          // To include VIEWER3D_FRAMENAME
 #include <pcbnew.h>
+#include <footprint_editor_settings.h>
 #include <fp_lib_table.h>
 #include <pcbnew_id.h>
 #include <class_board.h>
@@ -317,12 +318,6 @@ void PCB_BASE_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
 {
     wxASSERT( m_Pcb );
     m_Pcb->SetDesignSettings( aSettings );
-}
-
-
-COLOR_SETTINGS* PCB_BASE_FRAME::ColorSettings()
-{
-    return Pgm().GetSettingsManager().GetColorSettings( GetSettings()->m_ColorTheme );
 }
 
 

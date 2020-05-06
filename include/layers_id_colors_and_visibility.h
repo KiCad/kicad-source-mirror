@@ -312,25 +312,11 @@ enum GERBVIEW_LAYER_ID: int
 
 #define GERBER_DRAW_LAYER_INDEX( x ) ( x - GERBVIEW_LAYER_ID_START )
 
-// TODO(JE) Remove after we have color themes
-// Temporary virtual layers to store color themes for footprint editor
-enum FPEDIT_LAYER_ID : int
-{
-    FPEDIT_LAYER_ID_START = GERBVIEW_LAYER_ID_END,
-
-    // Reserve a copy of the board and netname layers...
-    FPEDIT_LAYER_ID_RESERVED = FPEDIT_LAYER_ID_START + ( 2 * PCB_LAYER_ID_COUNT ),
-
-    // And a copy of the GAL layers
-    FPEDIT_GAL_RESERVED = FPEDIT_LAYER_ID_RESERVED + ( GAL_LAYER_ID_END - GAL_LAYER_ID_START ),
-
-    FPEDIT_LAYER_ID_END
-};
 
 /// 3D Viewer virtual layers for color settings
 enum LAYER_3D_ID : int
 {
-        LAYER_3D_START = FPEDIT_LAYER_ID_END,
+        LAYER_3D_START = GERBVIEW_LAYER_ID_END,
 
         LAYER_3D_BACKGROUND_BOTTOM,
         LAYER_3D_BACKGROUND_TOP,
@@ -345,7 +331,7 @@ enum LAYER_3D_ID : int
 };
 
 /// Must update this if you add any enums after GerbView!
-#define LAYER_ID_COUNT FPEDIT_LAYER_ID_END
+#define LAYER_ID_COUNT LAYER_3D_END
 
 
 /**

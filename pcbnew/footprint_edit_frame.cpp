@@ -35,6 +35,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <confirm.h>
+#include <dialogs/panel_modedit_color_settings.h>
 #include <dialogs/panel_modedit_defaults.h>
 #include <dialogs/panel_modedit_display_options.h>
 #include <dialogs/panel_modedit_settings.h>
@@ -440,11 +441,6 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     EDA_DRAW_FRAME::LoadSettings( cfg );
 
-    // TODO(JE) remove once color themes exist
-    COLOR_SETTINGS* cs = ColorSettings();
-    cs->SetColorContext( COLOR_CONTEXT::FOOTPRINT );
-    cs->Load();
-
     // Ensure some params are valid
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
@@ -473,12 +469,13 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     cfg->m_DesignSettings = GetDesignSettings();
     cfg->m_Display = m_DisplayOptions;
     cfg->m_LibWidth = m_treePane->GetSize().x;
+}
 
-    // TODO(JE) remove once color themes exist
-    // Ensure footprint editor color settings get flushed to disk before context is changed
-    COLOR_SETTINGS* cs = ColorSettings();
-    cs->SetColorContext( COLOR_CONTEXT::FOOTPRINT );
-    Pgm().GetSettingsManager().SaveColorSettings( cs, "fpedit" );
+
+COLOR_SETTINGS* FOOTPRINT_EDIT_FRAME::ColorSettings()
+{
+    return Pgm().GetSettingsManager().GetColorSettings(
+            GetFootprintEditorSettings()->m_ColorTheme );
 }
 
 
@@ -817,6 +814,7 @@ void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
     book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
     book->AddSubPage( new PANEL_MODEDIT_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_MODEDIT_COLOR_SETTINGS( this, book ), _( "Colors" ) );
     book->AddSubPage( new PANEL_MODEDIT_SETTINGS( this, aParent ), _( "Editing Options" ) );
     book->AddSubPage( new PANEL_MODEDIT_DEFAULTS( this, aParent ), _( "Default Values" ) );
 

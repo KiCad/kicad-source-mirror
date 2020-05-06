@@ -19,18 +19,21 @@
  */
 
 #include <layers_id_colors_and_visibility.h>
+#include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/parameters.h>
+#include <settings/settings_manager.h>
 
+
+extern const char* traceSettings;
 
 ///! Update the schema version whenever a migration is required
-const int colorsSchemaVersion = 0;
+const int colorsSchemaVersion = 1;
 
 
 COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
         JSON_SETTINGS( std::move( aFilename ), SETTINGS_LOC::COLORS, colorsSchemaVersion ),
-        m_overrideSchItemColors( false ),
-        m_color_context( COLOR_CONTEXT::PCB )
+        m_overrideSchItemColors( false )
 {
 
     m_params.emplace_back( new PARAM<wxString>( "meta.name", &m_displayName, "KiCad Default" ) );
@@ -196,97 +199,6 @@ COLOR_SETTINGS::COLOR_SETTINGS( std::string aFilename ) :
     CLR( "board.b_fab",         B_Fab,      COLOR4D( BLUE ) );
     CLR( "board.f_fab",         F_Fab,      COLOR4D( DARKGRAY ) );
 
-    // TODO(JE) Storing fpedit colors here is a temporary hack to preserve user settings.
-    // Ultimately, if a user wants to have different colors for pcbnew and the footprint editor,
-    // they should simply choose a different named color theme for each.
-    // While we only have a single color theme, we need to store two mappings of all the
-    // pcb-related colors, one for pcbnew and one for footprint editor.
-    // Once color themes are supported, we should bump the schema version of COLOR_SETTINGS
-    // and in the migration split out the "User" theme to "User.FpEdit" or something, then set
-    // the User.FpEdit scheme as active for the footprint editor.
-
-#define FL FPEDIT_LAYER_ID_START
-
-    CLR( "fpedit.anchor",                   FL + LAYER_ANCHOR,             COLOR4D( BLUE ) );
-    CLR( "fpedit.aux_items",                FL + LAYER_AUX_ITEMS,          COLOR4D( WHITE ) );
-    CLR( "fpedit.background",               FL + LAYER_PCB_BACKGROUND,     COLOR4D( BLACK ) );
-    CLR( "fpedit.cursor",                   FL + LAYER_CURSOR,             COLOR4D( WHITE ) );
-    CLR( "fpedit.drc_error",                FL + LAYER_DRC_ERROR,          COLOR4D( PURERED ) );
-    CLR( "fpedit.drc_warning",              FL + LAYER_DRC_WARNING,        COLOR4D( PUREYELLOW ) );
-    CLR( "fpedit.footprint_text_back",      FL + LAYER_MOD_TEXT_BK,        COLOR4D( BLUE ) );
-    CLR( "fpedit.footprint_text_front",     FL + LAYER_MOD_TEXT_FR,        COLOR4D( LIGHTGRAY ) );
-    CLR( "fpedit.footprint_text_invisible", FL + LAYER_MOD_TEXT_INVISIBLE, COLOR4D( LIGHTGRAY ) );
-    CLR( "fpedit.grid",                     FL + LAYER_GRID,               COLOR4D( DARKGRAY ) );
-    CLR( "fpedit.grid_axes",                FL + LAYER_GRID_AXES,          COLOR4D( LIGHTGRAY ) );
-    CLR( "fpedit.microvia",                 FL + LAYER_VIA_MICROVIA,       COLOR4D( LIGHTGRAY ) );
-    CLR( "fpedit.no_connect",               FL + LAYER_NO_CONNECTS,        COLOR4D( BLUE ) );
-    CLR( "fpedit.pad_back",                 FL + LAYER_PAD_BK,             COLOR4D( GREEN ) );
-    CLR( "fpedit.pad_front",                FL + LAYER_PAD_FR,             COLOR4D( RED ) );
-    CLR( "fpedit.pad_plated_hole",          FL + LAYER_PADS_PLATEDHOLES,   COLOR4D( YELLOW ) );
-    CLR( "fpedit.pad_through_hole",         FL + LAYER_PADS_TH,            COLOR4D( YELLOW ) );
-    CLR( "fpedit.plated_hole",              FL + LAYER_NON_PLATEDHOLES,    COLOR4D( YELLOW ) );
-    CLR( "fpedit.ratsnest",                 FL + LAYER_RATSNEST,           COLOR4D( WHITE ) );
-    CLR( "fpedit.select_overlay",           FL + LAYER_SELECT_OVERLAY,     COLOR4D( DARKRED ) );
-    CLR( "fpedit.through_via",              FL + LAYER_VIA_THROUGH,        COLOR4D( LIGHTGRAY ) );
-    CLR( "fpedit.via",                      FL + LAYER_VIAS,               COLOR4D( BLACK ) );
-    CLR( "fpedit.via_blind_buried",         FL + LAYER_VIA_BBLIND,         COLOR4D( BROWN ) );
-    CLR( "fpedit.via_hole",                 FL + LAYER_VIAS_HOLES,         COLOR4D( WHITE ) );
-    CLR( "fpedit.via_micro",                FL + LAYER_VIA_MICROVIA,       COLOR4D( CYAN ) );
-    CLR( "fpedit.via_through",              FL + LAYER_VIA_THROUGH,        COLOR4D( LIGHTGRAY ) );
-    CLR( "fpedit.worksheet",                FL + LAYER_WORKSHEET,          COLOR4D( DARKRED ) );
-
-    CLR( "fpedit.copper.f",      FL + F_Cu,       COLOR4D( RED ) );
-    CLR( "fpedit.copper.in1",    FL + In1_Cu,     COLOR4D( YELLOW ) );
-    CLR( "fpedit.copper.in2",    FL + In2_Cu,     COLOR4D( LIGHTMAGENTA ) );
-    CLR( "fpedit.copper.in3",    FL + In3_Cu,     COLOR4D( LIGHTRED ) );
-    CLR( "fpedit.copper.in4",    FL + In4_Cu,     COLOR4D( CYAN ) );
-    CLR( "fpedit.copper.in5",    FL + In5_Cu,     COLOR4D( GREEN ) );
-    CLR( "fpedit.copper.in6",    FL + In6_Cu,     COLOR4D( BLUE ) );
-    CLR( "fpedit.copper.in7",    FL + In7_Cu,     COLOR4D( DARKGRAY ) );
-    CLR( "fpedit.copper.in8",    FL + In8_Cu,     COLOR4D( MAGENTA ) );
-    CLR( "fpedit.copper.in9",    FL + In9_Cu,     COLOR4D( LIGHTGRAY ) );
-    CLR( "fpedit.copper.in10",   FL + In10_Cu,    COLOR4D( MAGENTA ) );
-    CLR( "fpedit.copper.in11",   FL + In11_Cu,    COLOR4D( RED ) );
-    CLR( "fpedit.copper.in12",   FL + In12_Cu,    COLOR4D( BROWN ) );
-    CLR( "fpedit.copper.in13",   FL + In13_Cu,    COLOR4D( LIGHTGRAY ) );
-    CLR( "fpedit.copper.in14",   FL + In14_Cu,    COLOR4D( BLUE ) );
-    CLR( "fpedit.copper.in15",   FL + In15_Cu,    COLOR4D( GREEN ) );
-    CLR( "fpedit.copper.in16",   FL + In16_Cu,    COLOR4D( RED ) );
-    CLR( "fpedit.copper.in17",   FL + In17_Cu,    COLOR4D( YELLOW ) );
-    CLR( "fpedit.copper.in18",   FL + In18_Cu,    COLOR4D( LIGHTMAGENTA ) );
-    CLR( "fpedit.copper.in19",   FL + In19_Cu,    COLOR4D( LIGHTRED ) );
-    CLR( "fpedit.copper.in20",   FL + In20_Cu,    COLOR4D( CYAN ) );
-    CLR( "fpedit.copper.in21",   FL + In21_Cu,    COLOR4D( GREEN ) );
-    CLR( "fpedit.copper.in22",   FL + In22_Cu,    COLOR4D( BLUE ) );
-    CLR( "fpedit.copper.in23",   FL + In23_Cu,    COLOR4D( DARKGRAY ) );
-    CLR( "fpedit.copper.in24",   FL + In24_Cu,    COLOR4D( MAGENTA ) );
-    CLR( "fpedit.copper.in25",   FL + In25_Cu,    COLOR4D( LIGHTGRAY ) );
-    CLR( "fpedit.copper.in26",   FL + In26_Cu,    COLOR4D( MAGENTA ) );
-    CLR( "fpedit.copper.in27",   FL + In27_Cu,    COLOR4D( RED ) );
-    CLR( "fpedit.copper.in28",   FL + In28_Cu,    COLOR4D( BROWN ) );
-    CLR( "fpedit.copper.in29",   FL + In29_Cu,    COLOR4D( LIGHTGRAY ) );
-    CLR( "fpedit.copper.in30",   FL + In30_Cu,    COLOR4D( BLUE ) );
-    CLR( "fpedit.copper.b",      FL + B_Cu,       COLOR4D( GREEN ) );
-
-    CLR( "fpedit.b_adhes",       FL + B_Adhes,    COLOR4D( BLUE ) );
-    CLR( "fpedit.f_adhes",       FL + F_Adhes,    COLOR4D( MAGENTA ) );
-    CLR( "fpedit.b_paste",       FL + B_Paste,    COLOR4D( LIGHTCYAN ) );
-    CLR( "fpedit.f_paste",       FL + F_Paste,    COLOR4D( RED ) );
-    CLR( "fpedit.b_silks",       FL + B_SilkS,    COLOR4D( MAGENTA ) );
-    CLR( "fpedit.f_silks",       FL + F_SilkS,    COLOR4D( CYAN ) );
-    CLR( "fpedit.b_mask",        FL + B_Mask,     COLOR4D( BROWN ) );
-    CLR( "fpedit.f_mask",        FL + F_Mask,     COLOR4D( MAGENTA ) );
-    CLR( "fpedit.dwgs_user",     FL + Dwgs_User,  COLOR4D( LIGHTGRAY ) );
-    CLR( "fpedit.cmts_user",     FL + Cmts_User,  COLOR4D( BLUE ) );
-    CLR( "fpedit.eco1_user",     FL + Eco1_User,  COLOR4D( GREEN ) );
-    CLR( "fpedit.eco2_user",     FL + Eco2_User,  COLOR4D( YELLOW ) );
-    CLR( "fpedit.edge_cuts",     FL + Edge_Cuts,  COLOR4D( YELLOW ) );
-    CLR( "fpedit.margin",        FL + Margin,     COLOR4D( LIGHTMAGENTA ) );
-    CLR( "fpedit.b_crtyd",       FL + B_CrtYd,    COLOR4D( DARKGRAY ) );
-    CLR( "fpedit.f_crtyd",       FL + F_CrtYd,    COLOR4D( LIGHTGRAY ) );
-    CLR( "fpedit.b_fab",         FL + B_Fab,      COLOR4D( BLUE ) );
-    CLR( "fpedit.f_fab",         FL + F_Fab,      COLOR4D( DARKGRAY ) );
-
     // Colors for 3D viewer, which are used as defaults unless overridden by the board
     CLR( "3d_viewer.background_bottom", LAYER_3D_BACKGROUND_BOTTOM, COLOR4D( 0.4, 0.4, 0.5, 1.0 ) );
     CLR( "3d_viewer.background_top",    LAYER_3D_BACKGROUND_TOP,    COLOR4D( 0.8, 0.8, 0.9, 1.0 ) );
@@ -305,14 +217,75 @@ bool COLOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 }
 
 
-COLOR4D COLOR_SETTINGS::GetColor( int aLayer ) const
+bool COLOR_SETTINGS::Migrate()
 {
-    if( m_color_context == COLOR_CONTEXT::FOOTPRINT && aLayer >= PCBNEW_LAYER_ID_START
-            && aLayer <= GAL_LAYER_ID_END )
+    bool ret = true;
+    int  filever = at( PointerFromString( "meta.version" ) ).get<int>();
+
+    if( filever == 0 )
     {
-        aLayer += FPEDIT_LAYER_ID_START;
+        ret &= migrateSchema0to1();
+
+        if( ret )
+        {
+            ( *this )[PointerFromString( "meta.version" )] = 1;
+        }
     }
 
+    return ret;
+}
+
+
+bool COLOR_SETTINGS::migrateSchema0to1()
+{
+    /**
+     * Schema version 0 to 1:
+     *
+     * - Footprint editor settings are split out into a new file called "ThemeName (Footprints)"
+     * - fpedit namespace is removed from the schema
+     */
+
+    if( !m_manager )
+    {
+        wxLogTrace( traceSettings, "Error: COLOR_SETTINGS migration cannot run unmanaged!" );
+        return false;
+    }
+
+    nlohmann::json::json_pointer board( "/board" );
+    nlohmann::json::json_pointer fpedit( "/fpedit" );
+
+    if( !contains( fpedit ) )
+    {
+        wxLogTrace( traceSettings, "migrateSchema0to1: %s doesn't have fpedit settings; skipping.",
+                m_filename );
+        return true;
+    }
+
+    wxString filename = m_filename + wxT( "_footprints" );
+
+    COLOR_SETTINGS* fpsettings = m_manager->AddNewColorSettings( filename );
+
+    // Start out with a clone
+    nlohmann::json::json_pointer root( "" );
+    ( *fpsettings )[root] = at( root );
+
+    // Footprint editor now just looks at the "board" namespace
+    ( *fpsettings )[board] = fpsettings->at( fpedit );
+
+    fpsettings->erase( "fpedit" );
+    fpsettings->Load();
+    fpsettings->SetName( fpsettings->GetName() + _( " (Footprints)" ) );
+    m_manager->Save( fpsettings );
+
+    // Now we can get rid of our own copy
+    erase( "fpedit" );
+
+    return true;
+}
+
+
+COLOR4D COLOR_SETTINGS::GetColor( int aLayer ) const
+{
     if( m_colors.count( aLayer ) )
         return m_colors.at( aLayer );
 
@@ -324,12 +297,6 @@ COLOR4D COLOR_SETTINGS::GetDefaultColor( int aLayer )
 {
     if( !m_defaultColors.count( aLayer ) )
     {
-        if( m_color_context == COLOR_CONTEXT::FOOTPRINT && aLayer >= PCBNEW_LAYER_ID_START
-                && aLayer <= GAL_LAYER_ID_END )
-        {
-            aLayer += FPEDIT_LAYER_ID_START;
-        }
-
         COLOR_MAP_PARAM* p = nullptr;
 
         for( auto param : m_params )
@@ -347,8 +314,5 @@ COLOR4D COLOR_SETTINGS::GetDefaultColor( int aLayer )
 
 void COLOR_SETTINGS::SetColor( int aLayer, COLOR4D aColor )
 {
-    if( m_color_context == COLOR_CONTEXT::FOOTPRINT )
-        aLayer += FPEDIT_LAYER_ID_START;
-
     m_colors[ aLayer ] = aColor;
 }

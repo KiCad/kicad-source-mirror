@@ -146,6 +146,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_update_pcb_base.cpp
     dialogs/panel_fp_lib_table.cpp
     dialogs/panel_fp_lib_table_base.cpp
+    dialogs/panel_modedit_color_settings.cpp
     dialogs/panel_modedit_defaults.cpp
     dialogs/panel_modedit_defaults_base.cpp
     dialogs/panel_modedit_display_options.cpp

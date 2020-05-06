@@ -49,15 +49,6 @@ using KIGFX::COLOR4D;
 #include <settings/json_settings.h>
 #include <settings/parameters.h>
 
-/**
- * For specifying whether to retrieve colors from the "pcbnew" or "fpedit" set.
- * Can be removed once color themes exist.
- */
-enum class COLOR_CONTEXT
-{
-    PCB,
-    FOOTPRINT
-};
 
 class COLOR_SETTINGS : public JSON_SETTINGS
 {
@@ -75,17 +66,13 @@ public:
 
     bool MigrateFromLegacy( wxConfigBase* aCfg ) override;
 
+    bool Migrate() override;
+
     COLOR4D GetColor( int aLayer ) const;
 
     COLOR4D GetDefaultColor( int aLayer );
 
     void SetColor( int aLayer, COLOR4D aColor );
-
-    // TODO(JE) remove once color themes exist
-    void SetColorContext( COLOR_CONTEXT aContext = COLOR_CONTEXT::PCB )
-    {
-        m_color_context = aContext;
-    }
 
     const wxString& GetName() const { return m_displayName; }
     void SetName( const wxString& aName ) { m_displayName = aName; }
@@ -94,7 +81,10 @@ public:
     void SetOverrideSchItemColors( bool aFlag ) { m_overrideSchItemColors = aFlag; }
 
 private:
+    bool migrateSchema0to1();
+
     wxString m_displayName;
+
     bool     m_overrideSchItemColors;
 
     /**
@@ -104,9 +94,6 @@ private:
     std::unordered_map<int, COLOR4D> m_colors;
 
     std::unordered_map<int, COLOR4D> m_defaultColors;
-
-    // TODO(JE) remove once color themes exist
-    COLOR_CONTEXT m_color_context;
 };
 
 class COLOR_MAP_PARAM : public PARAM_BASE

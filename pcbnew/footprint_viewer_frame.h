@@ -80,6 +80,8 @@ public:
      */
     bool ShowModal( wxString* aFootprint, wxWindow* aParent ) override;
 
+    COLOR_SETTINGS* ColorSettings() override;
+
 private:
     wxTextCtrl*         m_libFilter;
     wxListBox*          m_libList;        // The list of libs names

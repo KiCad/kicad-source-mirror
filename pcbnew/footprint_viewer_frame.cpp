@@ -743,6 +743,17 @@ WINDOW_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* a
 }
 
 
+COLOR_SETTINGS* FOOTPRINT_VIEWER_FRAME::ColorSettings()
+{
+    auto* settings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+
+    if( settings )
+        return Pgm().GetSettingsManager().GetColorSettings( settings->m_ColorTheme );
+    else
+        return Pgm().GetSettingsManager().GetColorSettings();
+}
+
+
 void FOOTPRINT_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     PCB_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );

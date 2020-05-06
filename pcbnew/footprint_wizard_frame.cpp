@@ -35,6 +35,7 @@
 #include <grid_tricks.h>
 #include <class_board.h>
 #include <footprint_edit_frame.h>
+#include <footprint_editor_settings.h>
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
 #include "footprint_wizard_frame.h"
@@ -42,6 +43,9 @@
 #include <wx/numformatter.h>
 #include <wildcards_and_files_ext.h>
 #include <base_units.h>
+#include <pgm_base.h>
+#include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
@@ -287,6 +291,13 @@ void FOOTPRINT_WIZARD_FRAME::OnSize( wxSizeEvent& SizeEv )
         m_auimgr.Update();
 
     SizeEv.Skip();
+}
+
+
+COLOR_SETTINGS* FOOTPRINT_WIZARD_FRAME::ColorSettings()
+{
+    return Pgm().GetSettingsManager().GetColorSettings(
+            GetFootprintEditorSettings()->m_ColorTheme );
 }
 
 

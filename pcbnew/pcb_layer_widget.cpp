@@ -122,8 +122,6 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwn
 
 COLOR4D PCB_LAYER_WIDGET::getBackgroundLayerColor()
 {
-    myframe->ColorSettings()->SetColorContext( m_fp_editor_mode ?
-                                               COLOR_CONTEXT::FOOTPRINT : COLOR_CONTEXT::PCB );
     return myframe->ColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
 }
 
@@ -315,9 +313,6 @@ void PCB_LAYER_WIDGET::ReFillRender()
     BOARD* board = myframe->GetBoard();
     auto settings = board->GetDesignSettings();
 
-    myframe->ColorSettings()->SetColorContext( m_fp_editor_mode ?
-                                               COLOR_CONTEXT::FOOTPRINT : COLOR_CONTEXT::PCB );
-
     ClearRenderRows();
 
     // Add "Items" tab rows to LAYER_WIDGET, after setting color and checkbox state.
@@ -428,9 +423,6 @@ void PCB_LAYER_WIDGET::ReFill()
     BOARD*  brd = myframe->GetBoard();
     LSET    enabled = brd->GetEnabledLayers();
 
-    myframe->ColorSettings()->SetColorContext( m_fp_editor_mode ?
-                                               COLOR_CONTEXT::FOOTPRINT : COLOR_CONTEXT::PCB );
-
     ClearLayerRows();
 
     wxString dsc;
@@ -522,7 +514,6 @@ void PCB_LAYER_WIDGET::ReFill()
 void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 {
     COLOR_SETTINGS* cs = myframe->ColorSettings();
-    cs->SetColorContext( m_fp_editor_mode ? COLOR_CONTEXT::FOOTPRINT : COLOR_CONTEXT::PCB );
     cs->SetColor( aLayer, aColor );
 
     myframe->GetCanvas()->UpdateColors();
@@ -610,8 +601,6 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 {
     wxASSERT( aId > GAL_LAYER_ID_START && aId < GAL_LAYER_ID_END );
 
-    myframe->ColorSettings()->SetColorContext( m_fp_editor_mode ?
-                                               COLOR_CONTEXT::FOOTPRINT : COLOR_CONTEXT::PCB );
     myframe->ColorSettings()->SetColor( aId, aColor );
     myframe->GetCanvas()->UpdateColors();
 

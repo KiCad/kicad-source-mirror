@@ -596,7 +596,6 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 void PCB_EDIT_FRAME::ActivateGalCanvas()
 {
     PCB_BASE_EDIT_FRAME::ActivateGalCanvas();
-    ColorSettings()->SetColorContext( COLOR_CONTEXT::PCB );
     GetCanvas()->UpdateColors();
     GetCanvas()->Refresh();
 }
@@ -636,11 +635,6 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     PCB_BASE_FRAME::LoadSettings( aCfg );
 
-    // TODO(JE) remove once color themes exist
-    COLOR_SETTINGS* cs = ColorSettings();
-    cs->SetColorContext( COLOR_CONTEXT::PCB );
-    cs->Load();
-
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
@@ -658,13 +652,6 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     PCB_BASE_FRAME::SaveSettings( aCfg );
-
-    COLOR_SETTINGS* cs = ColorSettings();
-    cs->SetColorContext( COLOR_CONTEXT::PCB );
-    cs->Store();
-
-    // Ensure pcbnew color settings get flushed to disk before context is changed
-    Pgm().GetSettingsManager().SaveColorSettings( cs, "board" );
 
     auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxASSERT( cfg );

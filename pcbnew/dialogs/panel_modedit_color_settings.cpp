@@ -21,17 +21,17 @@
 #include <regex>
 
 #include <class_board.h>
+#include <footprint_edit_frame.h>
+#include <footprint_editor_settings.h>
 #include <gal/gal_display_options.h>
 #include <layers_id_colors_and_visibility.h>
-#include <panel_pcbnew_color_settings.h>
-#include <pcbnew_settings.h>
-#include <pcb_edit_frame.h>
+#include <panel_modedit_color_settings.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 
 
-PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame,
-                                                          wxWindow* aParent )
+PANEL_MODEDIT_COLOR_SETTINGS::PANEL_MODEDIT_COLOR_SETTINGS( FOOTPRINT_EDIT_FRAME* aFrame,
+                                                            wxWindow* aParent )
         : PANEL_COLOR_SETTINGS( aParent ),
           m_frame( aFrame ),
           m_page( nullptr ),
@@ -45,8 +45,8 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
-    PCBNEW_SETTINGS* app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
-    COLOR_SETTINGS*  current      = mgr.GetColorSettings( app_settings->m_ColorTheme );
+    FOOTPRINT_EDITOR_SETTINGS* settings = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    COLOR_SETTINGS*            current  = mgr.GetColorSettings( settings->m_ColorTheme );
 
     // Store the current settings before reloading below
     current->Store();
@@ -57,7 +57,7 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame
     m_currentSettings = new COLOR_SETTINGS( *current );
 
     mgr.ReloadColorSettings();
-    createThemeList( app_settings->m_ColorTheme );
+    createThemeList( settings->m_ColorTheme );
 
     for( int id = F_Cu; id < PCB_LAYER_ID_COUNT; id++ )
         m_validLayers.push_back( id );
@@ -79,14 +79,14 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame
 }
 
 
-PANEL_PCBNEW_COLOR_SETTINGS::~PANEL_PCBNEW_COLOR_SETTINGS()
+PANEL_MODEDIT_COLOR_SETTINGS::~PANEL_MODEDIT_COLOR_SETTINGS()
 {
     delete m_page;
     delete m_titleBlock;
 }
 
 
-bool PANEL_PCBNEW_COLOR_SETTINGS::TransferDataFromWindow()
+bool PANEL_MODEDIT_COLOR_SETTINGS::TransferDataFromWindow()
 {
     m_currentSettings->SetOverrideSchItemColors( m_optOverrideColors->GetValue() );
 
@@ -96,23 +96,22 @@ bool PANEL_PCBNEW_COLOR_SETTINGS::TransferDataFromWindow()
     m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings()->LoadColors( m_currentSettings );
 
     SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS* app_settings = settingsMgr.GetAppSettings<PCBNEW_SETTINGS>();
-    app_settings->m_ColorTheme = m_currentSettings->GetFilename();
+    FOOTPRINT_EDITOR_SETTINGS* settings = settingsMgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+    settings->m_ColorTheme = m_currentSettings->GetFilename();
 
-    m_frame->ReFillLayerWidget();
-    m_frame->SyncRenderStates();
+    m_frame->UpdateUserInterface();
 
     return true;
 }
 
 
-bool PANEL_PCBNEW_COLOR_SETTINGS::TransferDataToWindow()
+bool PANEL_MODEDIT_COLOR_SETTINGS::TransferDataToWindow()
 {
     return true;
 }
 
 
-void PANEL_PCBNEW_COLOR_SETTINGS::createButtons()
+void PANEL_MODEDIT_COLOR_SETTINGS::createButtons()
 {
     std::vector<int> layers;
 
