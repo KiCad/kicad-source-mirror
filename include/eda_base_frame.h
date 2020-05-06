@@ -490,6 +490,16 @@ public:
      * @return true if the contents of the frame have not been saved
      */
     virtual bool IsContentModified();
+
+    /**
+     * Get the undecorated window size that can be used for restoring the window size.
+     *
+     * This is needed for GTK, since the normal wxWidgets GetSize() call will return
+     * a window size that includes the window decorations added by the window manager.
+     *
+     * @return the undecorated window size
+     */
+    wxSize GetWindowSize();
 };
 
 

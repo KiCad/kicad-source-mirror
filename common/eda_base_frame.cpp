@@ -474,7 +474,7 @@ void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
     }
     else
     {
-        m_FrameSize = GetSize();
+        m_FrameSize = GetWindowSize();
         m_FramePos  = GetPosition();
     }
 
@@ -776,7 +776,7 @@ void EDA_BASE_FRAME::OnMaximize( wxMaximizeEvent& aEvent )
     // size information when we maximize the window.
     if( !IsMaximized() )
     {
-        m_NormalFrameSize = GetSize();
+        m_NormalFrameSize = GetWindowSize();
         m_NormalFramePos  = GetPosition();
         wxLogTrace( traceDisplayLocation, "Maximizing window - Saving position (%d, %d) with size (%d, %d)",
                 m_NormalFramePos.x, m_NormalFramePos.y, m_NormalFrameSize.x, m_NormalFrameSize.y );
@@ -784,4 +784,23 @@ void EDA_BASE_FRAME::OnMaximize( wxMaximizeEvent& aEvent )
 
     // Skip event to actually maximize the window
     aEvent.Skip();
+}
+
+
+wxSize EDA_BASE_FRAME::GetWindowSize()
+{
+    #ifdef __WXGTK__
+        // GTK includes the window decorations in the normal GetSize call,
+        // so we have to use a GTK-specific sizing call that returns the
+        // non-decorated window size.
+        int width  = 0;
+        int height = 0;
+        GTKDoGetSize( &width, &height );
+
+        wxSize winSize( width, height );
+    #else
+        wxSize winSize = GetSize();
+    #endif
+
+    return winSize;
 }
