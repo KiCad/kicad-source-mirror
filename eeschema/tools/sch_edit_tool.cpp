@@ -1160,6 +1160,9 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
         editFieldText( (SCH_FIELD*) item );
     }
 
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
     return 0;
 }
 
@@ -1182,6 +1185,9 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
     updateView( component );
     m_frame->OnModify();
 
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
     return 0;
 }
 
@@ -1192,7 +1198,6 @@ int SCH_EDIT_TOOL::UpdateFields( const TOOL_EVENT& aEvent )
 
     for( auto item : m_frame->GetScreen()->Items().OfType( SCH_COMPONENT_T ) )
         components.push_back( static_cast<SCH_COMPONENT*>( item ) );
-
 
     if( InvokeDialogUpdateFields( m_frame, components, true ) == wxID_OK )
         m_frame->GetCanvas()->Refresh();
@@ -1225,6 +1230,9 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 
     if( component->IsNew() )
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     return 0;
 }
@@ -1395,9 +1403,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     updateView( item );
 
     if( selection.IsHover() )
-    {
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    }
 
     return 0;
 }
@@ -1446,6 +1452,9 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             m_frame->ConvertTextType( text, convertTo );
     }
 
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
     return 0;
 }
 
@@ -1493,6 +1502,9 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
     m_frame->GetScreen()->Update( sheet );
     updateView( sheet );
     m_frame->OnModify();
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     return 0;
 }
