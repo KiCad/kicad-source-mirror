@@ -98,11 +98,11 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
 
-	m_textOffsetNote1 = new wxStaticText( this, wxID_ANY, _("Note: margins between text and shape are controlled by the"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOffsetNote1 = new wxStaticText( this, wxID_ANY, _("Note: the margins around the text are controlled by the text"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOffsetNote1->Wrap( -1 );
 	bSizer5->Add( m_textOffsetNote1, 0, 0, 5 );
 
-	m_textOffsetNote2 = new wxStaticText( this, wxID_ANY, _("text offset ratio in Preferences > General > Formatting."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textOffsetNote2 = new wxStaticText( this, wxID_ANY, _("offset ratio in Schematic Setup > General > Formatting."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOffsetNote2->Wrap( -1 );
 	bSizer5->Add( m_textOffsetNote2, 0, 0, 5 );
 
