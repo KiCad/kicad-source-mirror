@@ -141,6 +141,13 @@ public:
 
     PART_SPTR SharedPtr() { return m_me; }
 
+private:
+    // We create a different set parent function for this class, so we hide
+    // the inherited one.
+    using EDA_ITEM::SetParent;
+
+public:
+
     void SetParent( LIB_PART* aParent = nullptr );
     PART_REF& GetParent() { return m_parent; }
 

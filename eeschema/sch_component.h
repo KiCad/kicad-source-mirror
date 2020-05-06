@@ -52,7 +52,7 @@
 #include <symbol_lib_table.h>
 #include <transform.h>
 
-class COMPONENT_SELECTION;
+struct COMPONENT_SELECTION;
 class SCH_SCREEN;
 class LIB_ITEM;
 class LIB_PIN;

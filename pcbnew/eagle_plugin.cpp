@@ -1529,7 +1529,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree )
     // this is thru hole technology here, no SMDs
     EPAD e( aTree );
     int shape = EPAD::UNDEF;
-    int drillz = e.drill.ToPcbUnits();
+    int eagleDrillz = e.drill.ToPcbUnits();
 
     D_PAD* pad = new D_PAD( aModule );
     aModule->Add( pad );
@@ -1542,11 +1542,11 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree )
     else if( aModule->GetLayer() == B_Cu && m_rules->psBottom != EPAD::UNDEF )
         shape = m_rules->psBottom;
 
-    pad->SetDrillSize( wxSize( drillz, drillz ) );
+    pad->SetDrillSize( wxSize( eagleDrillz, eagleDrillz ) );
     pad->SetLayerSet( LSET::AllCuMask() );
 
-    if( drillz < m_min_hole )
-        m_min_hole = drillz;
+    if( eagleDrillz < m_min_hole )
+        m_min_hole = eagleDrillz;
 
     // Solder mask
     if( !e.stop || *e.stop == true )         // enabled by default
