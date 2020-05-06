@@ -53,7 +53,7 @@ private:
     void OnMatchRefClicked( wxCommandEvent& event ) override;
     void OnMatchValueClicked( wxCommandEvent& event ) override;
     void OnMatchIDClicked( wxCommandEvent& event ) override;
-    void OnApplyClicked( wxCommandEvent& event ) override;
+    void OnOKClicked( wxCommandEvent& event ) override;
     void ViewAndSelectFootprint( wxCommandEvent& event ) override;
 
     wxRadioButton* getRadioButtonForMode();

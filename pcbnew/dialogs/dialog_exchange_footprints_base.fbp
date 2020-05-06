@@ -1682,12 +1682,12 @@
                     <property name="flag">wxEXPAND|wxALL</property>
                     <property name="proportion">0</property>
                     <object class="wxStdDialogButtonSizer" expanded="1">
-                        <property name="Apply">1</property>
+                        <property name="Apply">0</property>
                         <property name="Cancel">1</property>
                         <property name="ContextHelp">0</property>
                         <property name="Help">0</property>
                         <property name="No">0</property>
-                        <property name="OK">0</property>
+                        <property name="OK">1</property>
                         <property name="Save">0</property>
                         <property name="Yes">0</property>
                         <property name="minimum_size" />
@@ -1701,6 +1701,7 @@
                         <event name="OnOKButtonClick" />
                         <event name="OnSaveButtonClick" />
                         <event name="OnYesButtonClick" />
+                        <event name="OnOKButtonClick">OnOKClicked</event>
                     </object>
                 </object>
             </object>

@@ -139,8 +139,8 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     // Ensure m_closeButton (with id = wxID_CANCEL) has the right label
     // (to fix automatic renaming of button label )
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
-
-    m_sdbSizerApply->SetDefault();
+    m_sdbSizerOK->SetLabel( verb );
+    m_sdbSizerOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -266,7 +266,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchIDClicked( wxCommandEvent& event )
 }
 
 
-void DIALOG_EXCHANGE_FOOTPRINTS::OnApplyClicked( wxCommandEvent& event )
+void DIALOG_EXCHANGE_FOOTPRINTS::OnOKClicked( wxCommandEvent& event )
 {
     wxBusyCursor dummy;
 
