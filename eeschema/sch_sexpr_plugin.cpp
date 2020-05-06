@@ -1178,7 +1178,19 @@ void SCH_SEXPR_PLUGIN::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aNes
 {
     wxCHECK_RET( aAlias != NULL, "BUS_ALIAS* is NULL" );
 
-    wxString members = boost::algorithm::join( aAlias->Members(), " " );
+    wxString members;
+
+    for( auto member : aAlias->Members() )
+    {
+        if( members.IsEmpty() )
+            members = m_out->Quotew( member );
+        else
+            members += " " + m_out->Quotew( member );
+    }
+
+    m_out->Print( aNestLevel, "(bus_alias %s (members %s))\n",
+                  m_out->Quotew( aAlias->GetName() ).c_str(),
+                  TO_UTF8( members ) );
 }
 
 

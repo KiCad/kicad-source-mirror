@@ -215,6 +215,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     SCH_BUS_WIRE_ENTRY* parseBusEntry();
     SCH_LINE* parseLine();
     SCH_TEXT* parseSchText();
+    void parseBusAlias( SCH_SCREEN* aScreen );
 
 public:
     SCH_SEXPR_PARSER( LINE_READER* aLineReader = nullptr );

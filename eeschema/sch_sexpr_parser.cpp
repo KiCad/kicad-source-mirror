@@ -1981,9 +1981,14 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet )
             parseSchSymbolInstances( screen );
             break;
 
+        case T_bus_alias:
+            parseBusAlias( screen );
+            break;
+
         default:
-            Expecting( "symbol, bitmap, sheet, junction, no_connect, bus_entry, line, bus"
-                       "text, label, global_label, hierarchical_label, or symbol_instances" );
+            Expecting( "symbol, page, title_block, bitmap, sheet, junction, no_connect, "
+                       "bus_entry, line, bus, text, label, global_label, hierarchical_label, "
+                       "symbol_instances, or bus_alias" );
         }
     }
 
@@ -2545,4 +2550,38 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
     }
 
     return text.release();
+}
+
+
+void SCH_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
+{
+    wxCHECK_RET( CurTok() == T_bus_alias,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a bus alias." ) );
+    wxCHECK( aScreen, /* void */ );
+
+    T token;
+    auto busAlias = std::make_shared< BUS_ALIAS >( aScreen );
+
+    NeedSYMBOL();
+    busAlias->SetName( FromUTF8() );
+    NeedLEFT();
+    token = NextTok();
+
+    if( token != T_members )
+        Expecting( "members" );
+
+    token = NextTok();
+
+    while( token != T_RIGHT )
+    {
+        if( !IsSymbol( token ) )
+            Expecting( "quoted string" );
+
+        busAlias->AddMember( FromUTF8() );
+        token = NextTok();
+    }
+
+    NeedRIGHT();
+
+    aScreen->AddBusAlias( busAlias );
 }

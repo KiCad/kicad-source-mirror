@@ -11,6 +11,7 @@ bitmap
 bold
 bottom
 bus
+bus_alias
 bus_entry
 center
 circle
@@ -54,6 +55,7 @@ lib_id
 lib_name
 lib_symbols
 line
+members
 mid
 mirror
 name
