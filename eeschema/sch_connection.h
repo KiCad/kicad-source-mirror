@@ -304,6 +304,15 @@ public:
     static bool IsBusLabel( const wxString& aLabel );
 
     /**
+     * Test if \a aLabel looks like a bus notation.
+     * This check is much less expensive than IsBusLabel.
+     *
+     * @param aLabel A wxString object containing the label to test.
+     * @return true if text might be a bus label
+     */
+    static bool MightBeBusLabel( const wxString& aLabel );
+
+    /**
      * Test if \a aLabel has a bus vector notation (simple bus, e.g. A[7..0])
      *
      * @param aLabel A wxString object containing the label to test.

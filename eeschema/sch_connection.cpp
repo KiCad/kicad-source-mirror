@@ -400,9 +400,16 @@ void SCH_CONNECTION::AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 
 bool SCH_CONNECTION::IsBusLabel( const wxString& aLabel )
 {
-    //return IsBusVectorLabel( aLabel ) || IsBusGroupLabel( aLabel );
+    return IsBusVectorLabel( aLabel ) || IsBusGroupLabel( aLabel );
+}
+
+
+bool SCH_CONNECTION::MightBeBusLabel( const wxString& aLabel )
+{
     // Weak heuristic for performance reasons.  Stronger test will be used for connectivity
-    return aLabel.Contains( wxT( "[" ) ) || aLabel.Contains( wxT( "{" ) );
+    wxString label = UnescapeString( aLabel );
+
+    return label.Contains( wxT( "[" ) ) || label.Contains( wxT( "{" ) );
 }
 
 

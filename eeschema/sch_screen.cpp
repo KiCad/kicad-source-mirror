@@ -523,12 +523,12 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 
         label = GetSheetLabel( aPosition );
 
-        if( label && conn.IsBusLabel( label->GetText() ) && label->IsConnected( aPosition ) )
+        if( label && conn.MightBeBusLabel( label->GetText() ) && label->IsConnected( aPosition ) )
             return true;
 
         text = GetLabel( aPosition );
 
-        if( text && conn.IsBusLabel( text->GetText() ) && text->IsConnected( aPosition )
+        if( text && conn.MightBeBusLabel( text->GetText() ) && text->IsConnected( aPosition )
             && (text->Type() != SCH_LABEL_T) )
             return true;
 
@@ -559,12 +559,12 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 
         text = GetLabel( aPosition );
 
-        if( text && text->IsConnected( aPosition ) && !conn.IsBusLabel( text->GetText() ) )
+        if( text && text->IsConnected( aPosition ) && !conn.MightBeBusLabel( text->GetText() ) )
             return true;
 
         label = GetSheetLabel( aPosition );
 
-        if( label && label->IsConnected( aPosition ) && !conn.IsBusLabel( label->GetText() ) )
+        if( label && label->IsConnected( aPosition ) && !conn.MightBeBusLabel( label->GetText() ) )
             return true;
 
         break;
