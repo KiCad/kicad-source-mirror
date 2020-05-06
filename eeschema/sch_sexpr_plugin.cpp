@@ -1017,16 +1017,9 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
 
     m_fieldId = SHEET_MANDATORY_FIELDS;
 
-    for( const SCH_FIELD& field : aSheet->GetFields() )
+    for( SCH_FIELD& field : aSheet->GetFields() )
     {
-        SCH_FIELD tmp = field;
-
-        if( field.GetId() == SHEETNAME )
-            tmp.SetName( "ki_sheet_name" );
-        else if( field.GetId() == SHEETFILENAME )
-            tmp.SetName( "ki_sheet_file" );
-
-        saveField( &tmp, aNestLevel + 1 );
+        saveField( &field, aNestLevel + 1 );
     }
 
     for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
