@@ -91,7 +91,7 @@ DIALOG_DRC::~DIALOG_DRC()
 {
     m_brdEditor->FocusOnItem( nullptr );
 
-    PCBNEW_SETTINGS* settings = m_brdEditor->GetSettings();
+    PCBNEW_SETTINGS* settings = m_brdEditor->GetPcbNewSettings();
     settings->m_DrcDialog.refill_zones       = m_cbRefillZones->GetValue();
     settings->m_DrcDialog.test_track_to_zone = m_cbReportAllTrackErrors->GetValue();
     settings->m_DrcDialog.test_footprints    = m_cbTestFootprints->GetValue();
@@ -143,7 +143,7 @@ void DIALOG_DRC::initValues()
 
     displayDRCValues();
 
-    auto cfg = m_brdEditor->GetSettings();
+    auto cfg = m_brdEditor->GetPcbNewSettings();
 
     m_cbRefillZones->SetValue( cfg->m_DrcDialog.refill_zones );
     m_cbReportAllTrackErrors->SetValue( cfg->m_DrcDialog.test_track_to_zone );

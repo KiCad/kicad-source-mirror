@@ -74,7 +74,7 @@ void DIALOG_PLOT::init_Dialog()
     BOARD*      board = m_parent->GetBoard();
     wxFileName  fileName;
 
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
 
     m_XScaleAdjust = cfg->m_Plot.fine_scale_x;
     m_YScaleAdjust = cfg->m_Plot.fine_scale_y;
@@ -657,7 +657,7 @@ void DIALOG_PLOT::applyPlotSettings()
         reporter.Report( msg, RPT_SEVERITY_INFO );
     }
 
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
 
     cfg->m_Plot.fine_scale_x = m_XScaleAdjust;
     cfg->m_Plot.fine_scale_y = m_YScaleAdjust;

@@ -50,7 +50,7 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
     m_netlist( aNetlist ),
     m_initialized( false )
 {
-    auto cfg = m_frame->GetSettings();
+    auto cfg = m_frame->GetPcbNewSettings();
 
     m_cbRelinkFootprints->SetValue( cfg->m_NetlistDialog.associate_by_ref_sch );
     m_cbUpdateFootprints->SetValue( cfg->m_NetlistDialog.update_footprints );
@@ -85,7 +85,7 @@ DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
 {
     m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
 
-    auto cfg = m_frame->GetSettings();
+    auto cfg = m_frame->GetPcbNewSettings();
 
     cfg->m_NetlistDialog.associate_by_ref_sch    = m_cbRelinkFootprints->GetValue();
     cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();

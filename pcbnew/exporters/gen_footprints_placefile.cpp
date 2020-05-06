@@ -146,7 +146,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 {
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
 
     m_units            = static_cast<EDA_UNITS>( cfg->m_PlaceFile.units );
     m_fileOpt          = cfg->m_PlaceFile.file_options;
@@ -204,7 +204,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
     m_fileFormat = m_rbFormat->GetSelection();
     m_includeBoardEdge = m_cbIncludeBoardEdge->GetValue();
 
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
 
     cfg->m_PlaceFile.units              = static_cast<int>( m_units );
     cfg->m_PlaceFile.file_options       = m_fileOpt;

@@ -260,7 +260,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     m_settings.m_HatchFillTypeSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();
     m_settings.m_HatchFillTypeSmoothingValue = m_spinCtrlSmoothValue->GetValue();
 
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
     cfg->m_Zones.hatching_style = static_cast<int>( m_settings.m_Zone_HatchingStyle );
 
     m_settings.m_Zone_45_Only = m_ConstrainOpt->GetValue();

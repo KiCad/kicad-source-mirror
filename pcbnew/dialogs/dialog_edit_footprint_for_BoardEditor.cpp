@@ -92,7 +92,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_modelsGrid->PushEventHandler( new GRID_TRICKS( m_modelsGrid ) );
 
     // Show/hide text item columns according to the user's preference
-    m_itemsGrid->ShowHideColumns( m_frame->GetSettings()->m_FootprintTextShownColumns );
+    m_itemsGrid->ShowHideColumns( m_frame->GetPcbNewSettings()->m_FootprintTextShownColumns );
 
     // Set up the 3D models grid
     wxGridCellAttr* attr = new wxGridCellAttr;
@@ -159,7 +159,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
 
 DIALOG_FOOTPRINT_BOARD_EDITOR::~DIALOG_FOOTPRINT_BOARD_EDITOR()
 {
-    m_frame->GetSettings()->m_FootprintTextShownColumns =
+    m_frame->GetPcbNewSettings()->m_FootprintTextShownColumns =
             m_itemsGrid->GetShownColumns().ToStdString();
 
     // Prevents crash bug in wxGrid's d'tor

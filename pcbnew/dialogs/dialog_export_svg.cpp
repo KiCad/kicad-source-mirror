@@ -108,7 +108,7 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
     m_outputDirectory = m_outputDirectoryName->GetValue();
     m_outputDirectory.Replace( wxT( "\\" ), wxT( "/" ) );
 
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
 
     cfg->m_ExportSvg.black_and_white  = m_printBW;
     cfg->m_ExportSvg.mirror           = m_printMirror;
@@ -132,7 +132,7 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
 
 void DIALOG_EXPORT_SVG::initDialog()
 {
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
 
     m_printBW         = cfg->m_ExportSvg.black_and_white;
     m_printMirror     = cfg->m_ExportSvg.mirror;

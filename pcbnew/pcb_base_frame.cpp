@@ -769,9 +769,15 @@ void PCB_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-PCBNEW_SETTINGS* PCB_BASE_FRAME::GetSettings()
+PCBNEW_SETTINGS* PCB_BASE_FRAME::GetPcbNewSettings()
 {
     return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+}
+
+
+FOOTPRINT_EDITOR_SETTINGS* PCB_BASE_FRAME::GetFootprintEditorSettings()
+{
+    return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 }
 
 

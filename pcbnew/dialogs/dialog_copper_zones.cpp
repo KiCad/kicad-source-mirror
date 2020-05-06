@@ -183,7 +183,7 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     m_NetFiltering = false;
     m_NetSortingByPadCount = true;
 
-    auto cfg = m_Parent->GetSettings();
+    auto cfg = m_Parent->GetPcbNewSettings();
 
     int opt = cfg->m_Zones.net_sort_mode;
     m_NetFiltering = opt >= 2;
@@ -357,7 +357,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
         break;
     }
 
-    auto cfg = m_Parent->GetSettings();
+    auto cfg = m_Parent->GetPcbNewSettings();
 
     cfg->m_Zones.hatching_style = static_cast<int>( m_settings.m_Zone_HatchingStyle );
     cfg->m_Zones.net_filter = m_DoNotShowNetNameFilter->GetValue().ToStdString();
@@ -468,7 +468,7 @@ void DIALOG_COPPER_ZONE::OnNetSortingOptionSelected( wxCommandEvent& event )
 
     buildAvailableListOfNets();
 
-    auto cfg = m_Parent->GetSettings();
+    auto cfg = m_Parent->GetPcbNewSettings();
 
     int configValue = m_NetFiltering ? 2 : 0;
 

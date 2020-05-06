@@ -38,7 +38,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
         DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( aParentFrame ),
     m_parentFrame( aParentFrame )
 {
-    auto cfg = m_parentFrame->GetSettings();
+    auto cfg = m_parentFrame->GetPcbNewSettings();
 
     m_cleanViasOpt->SetValue( cfg->m_Cleanup.cleanup_vias );
     m_mergeSegmOpt->SetValue( cfg->m_Cleanup.merge_segments );
@@ -63,7 +63,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
 {
-    auto cfg = m_parentFrame->GetSettings();
+    auto cfg = m_parentFrame->GetPcbNewSettings();
 
     cfg->m_Cleanup.cleanup_vias           = m_cleanViasOpt->GetValue();
     cfg->m_Cleanup.merge_segments         = m_mergeSegmOpt->GetValue();

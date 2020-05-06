@@ -50,7 +50,7 @@ public:
     {
         SetFocus();
 
-        auto cfg = m_parent->GetSettings();
+        auto cfg = m_parent->GetPcbNewSettings();
 
         m_idfThouOpt = cfg->m_ExportIdf.units_mils;
         m_rbUnitSelection->SetSelection( m_idfThouOpt ? 1 : 0 );
@@ -93,7 +93,7 @@ public:
     {
         m_idfThouOpt = m_rbUnitSelection->GetSelection() == 1;
 
-        auto cfg = m_parent->GetSettings();
+        auto cfg = m_parent->GetPcbNewSettings();
 
         cfg->m_ExportIdf.units_mils  = m_idfThouOpt;
         cfg->m_ExportIdf.auto_adjust = m_AutoAdjust;

@@ -71,7 +71,7 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullF
     m_NetlistFilenameCtrl->SetValue( m_netlistPath );
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
 
     m_cbUpdateFootprints->SetValue( cfg->m_NetlistDialog.update_footprints );
     m_cbDeleteShortingTracks->SetValue( cfg->m_NetlistDialog.delete_shorting_tracks );
@@ -103,7 +103,7 @@ DIALOG_NETLIST::~DIALOG_NETLIST()
     m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
     m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;
 
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
 
     cfg->m_NetlistDialog.report_filter           = m_MessageWindow->GetVisibleSeverities();
     cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();

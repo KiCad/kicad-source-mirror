@@ -175,7 +175,7 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataFromWindow()
         break;
     }
 
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
     cfg->m_Zones.hatching_style = static_cast<int>( m_zonesettings.m_Zone_HatchingStyle );
 
     m_zonesettings.m_Zone_45_Only = m_cbConstrainCtrl->GetValue();

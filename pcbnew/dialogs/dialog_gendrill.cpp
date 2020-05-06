@@ -100,7 +100,7 @@ DIALOG_GENDRILL::~DIALOG_GENDRILL()
 
 void DIALOG_GENDRILL::initDialog()
 {
-    auto cfg = m_pcbEditFrame->GetSettings();
+    auto cfg = m_pcbEditFrame->GetPcbNewSettings();
 
     m_Merge_PTH_NPTH           = cfg->m_GenDrill.merge_pth_npth;
     m_MinimalHeader            = cfg->m_GenDrill.minimal_header;
@@ -236,7 +236,7 @@ void DIALOG_GENDRILL::UpdateConfig()
 {
     UpdateDrillParams();
 
-    auto cfg = m_pcbEditFrame->GetSettings();
+    auto cfg = m_pcbEditFrame->GetPcbNewSettings();
 
     cfg->m_GenDrill.merge_pth_npth           = m_Merge_PTH_NPTH;
     cfg->m_GenDrill.minimal_header           = m_MinimalHeader;
@@ -257,13 +257,13 @@ void DIALOG_GENDRILL::OnSelDrillUnitsSelected( wxCommandEvent& event )
 
 void DIALOG_GENDRILL::OnGenMapFile( wxCommandEvent& event )
 {
-    GenDrillAndMapFiles( false, true);
+    GenDrillAndMapFiles( false, true );
 }
 
 
 void DIALOG_GENDRILL::OnGenDrillFile( wxCommandEvent& event )
 {
-    GenDrillAndMapFiles(true, false);
+    GenDrillAndMapFiles( true, false );
 }
 
 

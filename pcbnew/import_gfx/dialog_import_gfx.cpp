@@ -75,7 +75,7 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     m_lineWidth = 0.2;             // always in mm
     m_lineWidthUnits = 0;
 
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
 
     m_layer                = cfg->m_ImportGraphics.layer;
     m_placementInteractive = cfg->m_ImportGraphics.interactive_placement;
@@ -120,7 +120,7 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
 
 DIALOG_IMPORT_GFX::~DIALOG_IMPORT_GFX()
 {
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
 
     cfg->m_ImportGraphics.layer                 = m_layer;
     cfg->m_ImportGraphics.interactive_placement = m_placementInteractive;

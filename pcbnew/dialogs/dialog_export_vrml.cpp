@@ -61,7 +61,7 @@ public:
     {
         m_filePicker->SetFocus();
 
-        auto cfg = m_parent->GetSettings();
+        auto cfg = m_parent->GetPcbNewSettings();
 
         m_unitsOpt            = cfg->m_ExportVrml.units;
         m_copy3DFilesOpt      = cfg->m_ExportVrml.copy_3d_models;
@@ -96,7 +96,7 @@ public:
         m_unitsOpt = GetUnits();
         m_copy3DFilesOpt = GetCopyFilesOption();
 
-        auto cfg = m_parent->GetSettings();
+        auto cfg = m_parent->GetPcbNewSettings();
 
         cfg->m_ExportVrml.units              = m_unitsOpt;
         cfg->m_ExportVrml.copy_3d_models     = m_copy3DFilesOpt;

@@ -60,6 +60,7 @@ class ZONE_SETTINGS;
 class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
 class PCBNEW_SETTINGS;
+class FOOTPRINT_EDITOR_SETTINGS;
 
 
 wxDECLARE_EVENT( BOARD_CHANGED, wxCommandEvent );
@@ -405,7 +406,9 @@ public:
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    PCBNEW_SETTINGS* GetSettings();
+    PCBNEW_SETTINGS* GetPcbNewSettings();
+
+    FOOTPRINT_EDITOR_SETTINGS* GetFootprintEditorSettings();
 
     void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 

@@ -100,7 +100,7 @@ public:
     {
         GetOriginOption(); // Update m_STEP_org_opt member.
 
-        auto cfg = m_parent->GetSettings();
+        auto cfg = m_parent->GetPcbNewSettings();
 
         cfg->m_ExportStep.origin_mode = static_cast<int>( m_STEP_org_opt );
         cfg->m_ExportStep.origin_units = m_STEP_OrgUnitChoice->GetSelection();
@@ -143,7 +143,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
 
     SetFocus();
 
-    auto cfg = m_parent->GetSettings();
+    auto cfg = m_parent->GetPcbNewSettings();
 
     m_STEP_org_opt = static_cast<STEP_ORG_OPT>( cfg->m_ExportStep.origin_mode );
 

@@ -108,7 +108,7 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
 
     m_router->UpdateSizes( m_savedSizes );
 
-    PCBNEW_SETTINGS* settings = frame()->GetSettings();
+    PCBNEW_SETTINGS* settings = frame()->GetPcbNewSettings();
 
     if( !settings->m_PnsSettings )
         settings->m_PnsSettings = std::make_unique<ROUTING_SETTINGS>( settings, "tools.pns" );
