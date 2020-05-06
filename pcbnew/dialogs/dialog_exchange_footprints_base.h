@@ -66,7 +66,7 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_reset3DModels;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxStdDialogButtonSizer* m_sdbSizer;
-		wxButton* m_sdbSizerApply;
+		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
@@ -77,7 +77,7 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		virtual void OnMatchValueClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMatchIDClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ViewAndSelectFootprint( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnApplyClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOKClicked( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
