@@ -557,7 +557,10 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
         if( m_Exposure && GetLastItemInList() )    // End of polygon
         {
             GERBER_DRAW_ITEM * gbritem = GetLastItemInList();
-            gbritem->m_Polygon.Append( gbritem->m_Polygon.CVertex( 0 ) );
+
+            if( gbritem->m_Polygon.VertexCount() )
+                gbritem->m_Polygon.Append( gbritem->m_Polygon.CVertex( 0 ) );
+
             StepAndRepeatItem( *gbritem );
         }
         m_Exposure = false;
