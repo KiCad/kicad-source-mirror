@@ -65,7 +65,7 @@ void PANEL_COLOR_SETTINGS::OnBtnResetClicked( wxCommandEvent& event )
     if( !m_currentSettings )
         return;
 
-    for( const std::pair<int, COLOR_SWATCH*>& pair : m_swatches )
+    for( const std::pair<const int, COLOR_SWATCH*>& pair : m_swatches )
     {
         int           layer  = pair.first;
         COLOR_SWATCH* button = pair.second;
