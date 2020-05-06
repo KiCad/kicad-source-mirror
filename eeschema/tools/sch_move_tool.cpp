@@ -528,6 +528,10 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                 testLine->SetFlags( ENDPOINT | TEMP_SELECTED );
                 otherEnd = testLine->GetStartPoint();
             }
+            else
+            {
+                break;
+            }
 
             // Since only one end is going to move, the movement vector of any labels attached
             // to it is scaled by the proportion of the line length the label is from the moving
@@ -544,7 +548,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                     if( !label->HasFlag( TEMP_SELECTED ) )
                         aList.push_back( label );
 
-                    double scale = GetLineLength( label->GetPosition(), aPoint ) /
+                    double scale = GetLineLength( label->GetPosition(), otherEnd ) /
                                     GetLineLength( otherEnd, aPoint );
 
                     m_specialCaseLabels[label] = scale;
