@@ -88,10 +88,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                        _( "Append schematic sheet content from another project to the current sheet" ),
                        add_document_xpm,           EE_CONDITIONS::ShowAlways );
 
-    fileMenu->AddItem( ID_IMPORT_NON_KICAD_SCH, _( "Import Non KiCad Schematic..." ),
-                       _( "Replace current schematic sheet with one imported from another application" ),
-                       import_document_xpm,        EE_CONDITIONS::ShowAlways );
-
     fileMenu->AddSeparator();
 
     // Import submenu
@@ -99,6 +95,10 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->SetTool( selTool );
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( import_xpm );
+    submenuImport->Add( _( "Import Non KiCad Schematic..." ),
+                        _( "Replace current schematic sheet with one imported from another application" ),
+                        ID_IMPORT_NON_KICAD_SCH, import_document_xpm );
+
     submenuImport->Add( EE_ACTIONS::importFPAssignments );
     fileMenu->AddMenu( submenuImport,              EE_CONDITIONS::ShowAlways );
 
