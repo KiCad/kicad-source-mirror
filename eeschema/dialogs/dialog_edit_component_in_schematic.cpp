@@ -692,7 +692,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFieldsFromLibrary( wxCommandEvent
         return;
     }
 
-    m_cmp->SetLibSymbol( new LIB_PART( *libSymbol ) );
+    copy.SetLibSymbol( libSymbol->Flatten().release() );
 
     // Update the requested fields in the component copy
     std::list<SCH_COMPONENT*> components;
