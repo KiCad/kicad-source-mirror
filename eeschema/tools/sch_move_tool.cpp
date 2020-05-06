@@ -188,6 +188,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 // Setup a drag or a move
                 //
                 m_dragAdditions.clear();
+                m_specialCaseLabels.clear();
                 internalPoints.clear();
 
 
@@ -509,6 +510,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         {
             // Select the connected end of wires/bus connections.
             SCH_LINE* testLine = static_cast<SCH_LINE*>( test );
+            wxPoint   otherEnd;
 
             if( testLine->GetStartPoint() == aPoint )
             {
@@ -516,6 +518,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                     aList.push_back( testLine );
 
                 testLine->SetFlags( STARTPOINT | TEMP_SELECTED );
+                otherEnd = testLine->GetEndPoint();
             }
             else if( testLine->GetEndPoint() == aPoint )
             {
@@ -523,7 +526,31 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                     aList.push_back( testLine );
 
                 testLine->SetFlags( ENDPOINT | TEMP_SELECTED );
+                otherEnd = testLine->GetStartPoint();
             }
+
+            // Since only one end is going to move, the movement vector of any labels attached
+            // to it is scaled by the proportion of the line length the label is from the moving
+            // end.
+            for( SCH_ITEM* item : m_frame->GetScreen()->Items().OfType( SCH_LABEL_T ) )
+            {
+                if( item->IsSelected() )
+                    continue;   // These will be moved on their own because they're selected
+
+                if( item->CanConnect( testLine ) && testLine->HitTest( item->GetPosition(), 1 ) )
+                {
+                    SCH_TEXT* label = static_cast<SCH_TEXT*>( item );
+
+                    if( !label->HasFlag( TEMP_SELECTED ) )
+                        aList.push_back( label );
+
+                    double scale = GetLineLength( label->GetPosition(), aPoint ) /
+                                    GetLineLength( otherEnd, aPoint );
+
+                    m_specialCaseLabels[label] = scale;
+                }
+            }
+
             break;
         }
 
@@ -610,52 +637,11 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
 
 void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 {
-    std::vector< std::pair<double, SCH_TEXT*> > labels;
-
-    auto collectLabels =
-        [&] ( SCH_LINE* aLine )
-        {
-            for( SCH_ITEM* test : m_frame->GetScreen()->Items().OfType( SCH_LABEL_T ) )
-            {
-                if( test->IsSelected() )
-                    continue;   // These will be moved on their own because they're selected
-
-                if( !test->CanConnect( aLine ) || !aLine->HitTest( test->GetPosition(), 1 ) )
-                    continue;
-
-                SCH_TEXT* label = static_cast<SCH_TEXT*>( test );
-                double    pct = GetLineLength( label->GetPosition(), aLine->GetStartPoint() ) /
-                                GetLineLength( aLine->GetEndPoint(), aLine->GetStartPoint() );
-
-                labels.emplace_back( pct, label );
-            }
-        };
-
-    auto adjustLabels =
-        [&] ( SCH_LINE* aLine )
-        {
-            for( std::pair<double, SCH_TEXT*> pair : labels )
-            {
-                double    pct = pair.first;
-                SCH_TEXT* label = pair.second;
-                wxPoint   lineVector( aLine->GetEndPoint() - aLine->GetStartPoint() );
-
-                label->SetPosition( aLine->GetStartPoint() + ( lineVector * pct ) );
-                m_frame->RefreshItem( label );
-            }
-        };
-
     switch( aItem->Type() )
     {
     case SCH_LINE_T:
     {
         SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
-
-        if( !aItem->IsNew() )
-        {
-            if( aItem->HasFlag( STARTPOINT ) || aItem->HasFlag( ENDPOINT ) )
-                collectLabels( line );
-        }
 
         if( aItem->HasFlag( STARTPOINT ) )
             line->MoveStart( (wxPoint) aDelta );
@@ -663,10 +649,6 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         if( aItem->HasFlag( ENDPOINT ) )
             line->MoveEnd( (wxPoint) aDelta );
 
-        if( !aItem->IsNew() )
-        {
-            adjustLabels( line );
-        }
     }
         break;
 
@@ -697,6 +679,17 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) aItem;
         pin->SetStoredPos( pin->GetStoredPos() + (wxPoint) aDelta );
         pin->ConstrainOnEdge( pin->GetStoredPos() );
+        break;
+    }
+    case SCH_LABEL_T:
+    {
+        SCH_TEXT* label = static_cast<SCH_TEXT*>( aItem );
+
+        if( m_specialCaseLabels.count( label ) )
+            label->Move( (wxPoint) aDelta * m_specialCaseLabels[ label ] );
+        else
+            label->Move( (wxPoint) aDelta );
+
         break;
     }
     default:

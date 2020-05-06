@@ -76,6 +76,11 @@ private:
     VECTOR2I              m_cursor;
 
     boost::optional<VECTOR2I> m_anchorPos;
+
+    // A map of labels to scaling factors.  Used to scale the movement vector for labels that
+    // are attached to wires which have only one end moving.
+    std::map<SCH_TEXT*, double> m_specialCaseLabels;
+
 };
 
 #endif //KICAD_SCH_MOVE_TOOL_H
