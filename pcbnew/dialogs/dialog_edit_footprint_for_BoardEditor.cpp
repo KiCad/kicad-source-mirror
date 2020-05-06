@@ -101,6 +101,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     attr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
     m_modelsGrid->SetColAttr( 1, attr );
     m_modelsGrid->SetWindowStyleFlag( m_modelsGrid->GetWindowStyle() & ~wxHSCROLL );
+    m_modelsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     m_OrientValidator.SetRange( -360.0, 360.0 );
     m_OrientValueCtrl->SetValidator( m_OrientValidator );
