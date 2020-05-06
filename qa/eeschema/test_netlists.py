@@ -58,7 +58,7 @@ if __name__ == '__main__':
                 project = entry.name
                 project_dir = os.path.join(data_dir, project)
 
-                sch_file = os.path.join(project_dir, project + '.sch')
+                sch_file = os.path.join(project_dir, project + '.kicad_sch')
                 good_net_file = os.path.join(project_dir, project + '.net')
 
                 net_file = good_net_file if args.initialize else os.path.join(

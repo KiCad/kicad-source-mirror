@@ -270,3 +270,7 @@ ERC_CheckBusDriverConflicts=1
 ERC_CheckBusEntryConflicts=1
 ERC_CheckBusToBusConflicts=1
 ERC_CheckBusToNetConflicts=1
+[sheetnames]
+1=eb063423-89e5-49ef-bae6-7699737e6b5a:
+2=d00ead2f-5339-4b21-b543-a1e8bcb2cac8:ampli_ht_vertical
+3=c858e08e-dc96-4567-97f1-e6a1c86dcf23:ampli_ht_horizontal

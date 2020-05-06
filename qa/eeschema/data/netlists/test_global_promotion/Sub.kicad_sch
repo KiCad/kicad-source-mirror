@@ -1,0 +1,18 @@
+(kicad_sch (version 20200310) (host eeschema "(5.99.0-1545-g9916f24fa)")
+
+  (page "A4")
+
+  (lib_symbols
+  )
+
+
+  (wire (pts (xy 72.39 50.8) (xy 102.87 50.8)))
+
+  (label "5V" (at 102.87 50.8 180)
+    (effects (font (size 1.27 1.27)) (justify right bottom))
+  )
+
+  (global_label "5Vanalog" (shape input) (at 72.39 50.8 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+  )
+)

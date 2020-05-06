@@ -32,10 +32,6 @@ NetIExt=net
 version=1
 LibDir=
 [eeschema/libraries]
-[sheetnames]
-1=00000000-0000-0000-0000-00005e9ccd14:
-2=00000000-0000-0000-0000-00005cc15ef9:Sheet5CC15EF8
-3=00000000-0000-0000-0000-00005cc165f1:sheet5CC165F1
 [schematic_editor]
 version=1
 PageLayoutDescrFile=
@@ -57,3 +53,7 @@ ERC_CheckBusDriverConflicts=1
 ERC_CheckBusEntryConflicts=1
 ERC_CheckBusToBusConflicts=1
 ERC_CheckBusToNetConflicts=1
+[sheetnames]
+1=91b958de-b407-4182-95d8-1b5954f54035:
+2=c553ce07-2a0e-4998-8847-480337617a8b:Sheet5CC15EF8
+3=5dfa4056-2305-40f4-b6b9-c726f6d4a7c1:sheet5CC165F1
