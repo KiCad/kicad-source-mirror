@@ -206,7 +206,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     void parseSchSymbolInstances( SCH_SCREEN* aScreen );
 
     SCH_SHEET_PIN* parseSchSheetPin( SCH_SHEET* aSheet );
-    SCH_FIELD* parseSchField( SCH_COMPONENT* aParentSymbol );
+    SCH_FIELD* parseSchField( SCH_ITEM* aParent );
     SCH_COMPONENT* parseSchematicSymbol();
     SCH_BITMAP* parseImage();
     SCH_SHEET* parseSheet();

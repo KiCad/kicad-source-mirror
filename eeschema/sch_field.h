@@ -113,7 +113,7 @@ public:
 
     int GetId() const { return m_id; }
 
-    void SetId( int aId ) { m_id = aId; }
+    void SetId( int aId );
 
     wxString GetShownText( int aDepth = 0 ) const override;
 

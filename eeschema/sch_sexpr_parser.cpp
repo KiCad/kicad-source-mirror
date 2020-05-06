@@ -1633,7 +1633,7 @@ void SCH_SEXPR_PARSER::parseTITLE_BLOCK( TITLE_BLOCK& aTitleBlock )
 }
 
 
-SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_COMPONENT* aParentSymbol )
+SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
 {
     wxCHECK_MSG( CurTok() == T_property, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
@@ -1673,8 +1673,7 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_COMPONENT* aParentSymbol )
     // Empty property values are valid.
     value = FromUTF8();
 
-    std::unique_ptr<SCH_FIELD> field( new SCH_FIELD( wxDefaultPosition, MANDATORY_FIELDS,
-                                                     aParentSymbol, name ) );
+    std::unique_ptr<SCH_FIELD> field( new SCH_FIELD( wxDefaultPosition, -1, aParent, name ) );
 
     field->SetText( value );
     field->SetVisible( true );
@@ -2112,21 +2111,10 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             // the field positions are set.
             field = parseSchField( symbol.get() );
 
-            if( field->GetId() == REFERENCE )
-            {
-                field->SetLayer( LAYER_REFERENCEPART );
-            }
-            else if( field->GetId() == VALUE )
-            {
-                field->SetLayer( LAYER_VALUEPART );
-            }
-            else if( field->GetId() >= MANDATORY_FIELDS )
-            {
-                symbol->AddField( *field );
-            }
-
             if( symbol->GetField( field->GetId() ) )
                 *symbol->GetField( field->GetId() ) = *field;
+            else
+                symbol->AddField( *field );
 
             delete field;
             break;
@@ -2262,25 +2250,19 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
             break;
 
         case T_property:
-            field = parseSchField( nullptr );
+            field = parseSchField( sheet.get() );
 
-            if( field->GetName() == "ki_sheet_name" )
+            if( m_requiredVersion <= 20200310 )
             {
-                field->SetId( SHEETNAME );
-                field->SetName( SCH_SHEET::GetDefaultFieldName( SHEETNAME ) );
-            }
-            else if( field->GetName() == "ki_sheet_file" )
-            {
-                field->SetId( SHEETFILENAME );
-                field->SetName( SCH_SHEET::GetDefaultFieldName( SHEETFILENAME ) );
-            }
-            else
-            {
-                field->SetId( m_fieldId );
-                m_fieldId += 1;
+                // Earlier versions had the wrong ids (and names) saved for sheet fields.
+                // Fortunately they only saved the sheetname and sheetfilepath (and always
+                // in that order), so we can hack in a recovery.
+                if( fields.empty() )
+                    field->SetId( SHEETNAME );
+                else
+                    field->SetId( SHEETFILENAME );
             }
 
-            field->SetParent( sheet.get() );
             fields.emplace_back( *field );
             delete field;
             break;

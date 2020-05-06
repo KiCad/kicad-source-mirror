@@ -1666,7 +1666,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                 // We freely renumber the index to fit the next available field slot.
                 index = component->GetFieldCount();  // new has this index after insertion
 
-                SCH_FIELD field( wxPoint( 0, 0 ), -1, component.get(), name );
+                SCH_FIELD field( wxPoint( 0, 0 ), index, component.get(), name );
                 component->AddField( field );
             }
 

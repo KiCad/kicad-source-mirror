@@ -51,14 +51,13 @@
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_ITEM* aParent,
                       const wxString& aName ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),
-    EDA_TEXT( wxEmptyString )
+    EDA_TEXT( wxEmptyString ),
+    m_id( 0 ),
+    m_name( aName )
 {
     SetTextPos( aPos );
-    m_id = aFieldId;
-    m_name = aName;
-
+    SetId( aFieldId );  // will also set the layer
     SetVisible( false );
-    SetLayer( LAYER_FIELDS );
 }
 
 
@@ -70,6 +69,32 @@ SCH_FIELD::~SCH_FIELD()
 EDA_ITEM* SCH_FIELD::Clone() const
 {
     return new SCH_FIELD( *this );
+}
+
+
+void SCH_FIELD::SetId( int aId )
+{
+    m_id = aId;
+
+    if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+    {
+        switch( m_id )
+        {
+        case SHEETNAME:     SetLayer( LAYER_SHEETNAME );     break;
+        case SHEETFILENAME: SetLayer( LAYER_SHEETFILENAME ); break;
+        default:            SetLayer( LAYER_SHEETFIELDS );   break;
+        }
+    }
+    else
+    {
+        switch( m_id )
+        {
+        case REFERENCE:     SetLayer( LAYER_REFERENCEPART ); break;
+        case VALUE:         SetLayer( LAYER_VALUEPART );     break;
+        default:            SetLayer( LAYER_FIELDS );        break;
+        }
+    }
+
 }
 
 

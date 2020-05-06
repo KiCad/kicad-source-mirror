@@ -416,7 +416,7 @@ void SCH_SEXPR_PLUGIN::init( KIWAY* aKiway, const PROPERTIES* aProperties )
     m_kiway = aKiway;
     m_cache = NULL;
     m_out = NULL;
-    m_fieldId = MANDATORY_FIELDS;
+    m_fieldId = 100;    // number arbitrarily > MANDATORY_FIELDS or SHEET_MANDATORY_FIELDS
 }
 
 
@@ -897,14 +897,20 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
 {
     wxCHECK_RET( aField != nullptr && m_out != nullptr, "" );
 
-    wxString fieldName;
+    wxString fieldName = aField->GetName();
 
     // For some reason (bug in legacy parser?) the field ID for non-mandatory fields is -1 so
     // check for this in order to correctly use the field name.
-    if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
-        fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId() );
-    else
-        fieldName = aField->GetName();
+    if( aField->GetParent()->Type() == SCH_COMPONENT_T )
+    {
+        if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
+            fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId() );
+    }
+    else if( aField->GetParent()->Type() == SCH_SHEET_T )
+    {
+        if( aField->GetId() >= 0 && aField->GetId() < SHEET_MANDATORY_FIELDS )
+            fieldName = SCH_SHEET::GetDefaultFieldName( aField->GetId() );
+    }
 
     if( aField->GetId() == -1 /* undefined ID */ )
     {
@@ -1008,6 +1014,8 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
 
     m_out->Print( aNestLevel + 1, "(uuid %s)", TO_UTF8( aSheet->m_Uuid.AsString() ) );
     m_out->Print( 0, "\n" );
+
+    m_fieldId = SHEET_MANDATORY_FIELDS;
 
     for( const SCH_FIELD& field : aSheet->GetFields() )
     {
