@@ -45,13 +45,6 @@
 #include <sch_base_frame.h>
 #include <widgets/color_swatch.h>
 
-// Width and height of every (color-displaying / bitmap) button in dialog units
-const wxSize BUTTON_SIZE( 24, 12 );
-const wxSize BUTTON_BORDER( 4, 4 );
-
-// Button ID starting point
-constexpr int FIRST_BUTTON_ID = 1800;
-
 
 PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aFrame,
                                                               wxWindow* aParent ) :
