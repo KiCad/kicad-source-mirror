@@ -73,6 +73,8 @@ JSON_SETTINGS* SETTINGS_MANAGER::RegisterSettings( JSON_SETTINGS* aSettings, boo
 {
     std::unique_ptr<JSON_SETTINGS> ptr( aSettings );
 
+    ptr->SetManager( this );
+
     wxLogTrace( traceSettings, "Registered new settings object %s", ptr->GetFilename() );
 
     if( aLoadNow )
@@ -231,6 +233,9 @@ public:
 
 void SETTINGS_MANAGER::registerColorSettings( const wxString& aFilename )
 {
+    if( m_color_settings.count( aFilename ) )
+        return;
+
     m_color_settings[aFilename] = static_cast<COLOR_SETTINGS*>(
             RegisterSettings( new COLOR_SETTINGS( aFilename.ToStdString() ) ) );
 }

@@ -40,7 +40,7 @@ JSON_SETTINGS::JSON_SETTINGS( const std::string& aFilename, SETTINGS_LOC aLocati
                               nlohmann::json aDefault ) :
         nlohmann::json( std::move( aDefault ) ), m_filename( aFilename ), m_legacy_filename( "" ),
         m_location( aLocation ), m_createIfMissing( aCreateIfMissing ), m_writeFile( aWriteFile ),
-        m_schemaVersion( aSchemaVersion )
+        m_schemaVersion( aSchemaVersion ), m_manager( nullptr )
 {
     m_params.emplace_back(
             new PARAM<std::string>( "meta.filename", &m_filename, m_filename, true ) );
@@ -72,7 +72,8 @@ void JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
     clear();
     Load();
 
-    bool migrated = false;
+    bool      migrated        = false;
+    bool      legacy_migrated = false;
     LOCALE_IO locale;
 
     auto migrateFromLegacy = [&] ( wxFileName& aPath ) {
@@ -92,7 +93,7 @@ void JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
         }
 
         // Either way, we want to clean up the old file afterwards
-        migrated = true;
+        legacy_migrated = true;
     };
 
     wxFileName path( aDirectory, m_filename, "json" );
@@ -123,30 +124,36 @@ void JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
             in >> *this;
 
             // If parse succeeds, check if schema migration is required
+            int filever = -1;
+
             try
             {
-                int filever = at( PointerFromString( "meta.version" ) ).get<int>();
-
-                if( filever < m_schemaVersion )
-                {
-                    wxLogTrace( traceSettings, "%s: attempting migration from version %d to %d",
-                            m_filename, filever, m_schemaVersion );
-
-                    if( !Migrate() )
-                    {
-                        wxLogTrace( traceSettings, "%s: migration failed!", m_filename );
-                    }
-                }
-                else if( filever > m_schemaVersion )
-                {
-                    wxLogTrace( traceSettings,
-                            "%s: warning: file version %d is newer than latest (%d)", m_filename,
-                            filever, m_schemaVersion );
-                }
+                filever = at( PointerFromString( "meta.version" ) ).get<int>();
             }
             catch( ... )
             {
                 wxLogTrace( traceSettings, "%s: file version could not be read!", m_filename );
+            }
+
+            if( filever >= 0 && filever < m_schemaVersion )
+            {
+                wxLogTrace( traceSettings, "%s: attempting migration from version %d to %d",
+                        m_filename, filever, m_schemaVersion );
+
+                if( Migrate() )
+                {
+                    migrated = true;
+                }
+                else
+                {
+                    wxLogTrace( traceSettings, "%s: migration failed!", m_filename );
+                }
+            }
+            else if( filever > m_schemaVersion )
+            {
+                wxLogTrace( traceSettings,
+                        "%s: warning: file version %d is newer than latest (%d)", m_filename,
+                        filever, m_schemaVersion );
             }
         }
         catch( nlohmann::json::parse_error& error )
@@ -168,9 +175,9 @@ void JSON_SETTINGS::LoadFromFile( const std::string& aDirectory )
     wxLogTrace( traceSettings, "Loaded %s with schema %d", GetFilename(), m_schemaVersion );
 
     // If we migrated, clean up the legacy file (with no extension)
-    if( migrated )
+    if( legacy_migrated || migrated )
     {
-        if( !wxRemoveFile( path.GetFullPath() ) )
+        if( legacy_migrated && !wxRemoveFile( path.GetFullPath() ) )
         {
             wxLogTrace(
                     traceSettings, "Warning: could not remove legacy file %s", path.GetFullPath() );

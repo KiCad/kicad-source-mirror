@@ -30,6 +30,8 @@
 class wxConfigBase;
 class NESTED_SETTINGS;
 class PARAM_BASE;
+class SETTINGS_MANAGER;
+
 
 enum class SETTINGS_LOC {
     USER,       ///< The main config directory (e.g. ~/.config/kicad/)
@@ -166,6 +168,11 @@ public:
      */
     void ReleaseNestedSettings( NESTED_SETTINGS* aSettings );
 
+    void SetManager( SETTINGS_MANAGER* aManager )
+    {
+        m_manager = aManager;
+    }
+
     /**
     * Builds a JSON pointer based on a given string
     * @param aPath is the path in the form "key1.key2.key3"
@@ -226,6 +233,9 @@ protected:
 
     /// Version of this settings schema.
     int m_schemaVersion;
+
+    /// A pointer to the settings manager managing this file (may be null)
+    SETTINGS_MANAGER* m_manager;
 
     /// A list of JSON pointers that are preserved during a read-update-write to disk
     std::vector<nlohmann::json::json_pointer> m_preserved_paths;
