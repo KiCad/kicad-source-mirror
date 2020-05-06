@@ -21,13 +21,11 @@
 #include <regex>
 
 #include <bitmaps.h>
-#include <dialogs/dialog_color_picker.h>
 #include <eeschema_settings.h>
 #include <gal/gal_display_options.h>
 #include <layers_id_colors_and_visibility.h>
 #include <class_libentry.h>
 #include <lib_polyline.h>
-#include <menus_helpers.h>
 #include <page_info.h>
 #include <panel_eeschema_color_settings.h>
 #include <pgm_base.h>
@@ -45,7 +43,7 @@
 #include <view/view.h>
 #include <ws_proxy_view_item.h>
 #include <sch_base_frame.h>
-#include <validators.h>
+#include <widgets/color_swatch.h>
 
 // Width and height of every (color-displaying / bitmap) button in dialog units
 const wxSize BUTTON_SIZE( 24, 12 );
@@ -84,7 +82,9 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
     for( int id = SCH_LAYER_ID_START; id < SCH_LAYER_ID_END; id++ )
         m_validLayers.push_back( id );
 
-    createButtons();
+    m_backgroundLayer = LAYER_SCHEMATIC_BACKGROUND;
+
+    createSwatches();
 
     KIGFX::GAL_DISPLAY_OPTIONS options;
     options.ReadConfig( *common_settings, app_settings->m_Window, this );
@@ -187,7 +187,7 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme( bool aValidate)
 }
 
 
-void PANEL_EESCHEMA_COLOR_SETTINGS::createButtons()
+void PANEL_EESCHEMA_COLOR_SETTINGS::createSwatches()
 {
     std::vector<SCH_LAYER_ID> layers;
 
@@ -201,7 +201,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createButtons()
                } );
 
     for( int layer : layers )
-        createButton( layer, m_currentSettings->GetColor( layer ), LayerName( layer ) );
+        createSwatch( layer, LayerName( layer ) );
 }
 
 
@@ -389,10 +389,10 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnOverrideItemColorsClicked( wxCommandEvent&
     // If the theme is not overriding individual item colors then don't show them so that
     // the user doesn't get seduced into thinking they'll have some effect.
     m_labels[ LAYER_SHEET ]->Show( m_currentSettings->GetOverrideSchItemColors() );
-    m_buttons[ LAYER_SHEET ]->Show( m_currentSettings->GetOverrideSchItemColors() );
+    m_swatches[ LAYER_SHEET ]->Show( m_currentSettings->GetOverrideSchItemColors() );
 
     m_labels[ LAYER_SHEET_BACKGROUND ]->Show( m_currentSettings->GetOverrideSchItemColors() );
-    m_buttons[ LAYER_SHEET_BACKGROUND ]->Show( m_currentSettings->GetOverrideSchItemColors() );
+    m_swatches[ LAYER_SHEET_BACKGROUND ]->Show( m_currentSettings->GetOverrideSchItemColors() );
 
     m_colorsGridSizer->Layout();
     m_colorsListWindow->Layout();

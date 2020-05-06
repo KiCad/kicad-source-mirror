@@ -78,7 +78,7 @@ private:
 
     void createPreviewItems();
 
-    void createButtons();
+    void createSwatches();
 
 
     void updatePreview();

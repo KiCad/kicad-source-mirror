@@ -299,13 +299,18 @@ COLOR4D COLOR_SETTINGS::GetDefaultColor( int aLayer )
     {
         COLOR_MAP_PARAM* p = nullptr;
 
-        for( auto param : m_params )
-            if( auto cmp = dynamic_cast<COLOR_MAP_PARAM*>( param ) )
-                if( cmp->GetKey() == aLayer )
-                    p = cmp;
+        for( PARAM_BASE* param : m_params )
+        {
+            COLOR_MAP_PARAM* cmp = dynamic_cast<COLOR_MAP_PARAM*>( param );
 
-        wxASSERT( p );
-        m_defaultColors[aLayer] = p->GetDefault();
+            if( cmp && cmp->GetKey() == aLayer )
+                p = cmp;
+        }
+
+        if( p )
+            m_defaultColors[aLayer] = p->GetDefault();
+        else
+            m_defaultColors[aLayer] = COLOR4D::UNSPECIFIED;
     }
 
     return m_defaultColors.at( aLayer );;

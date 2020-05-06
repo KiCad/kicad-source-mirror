@@ -148,11 +148,9 @@ void LAYER_WIDGET::OnRightDownLayer( wxMouseEvent& aEvent, COLOR_SWATCH* aColorS
 
 void LAYER_WIDGET::OnLayerSwatchChanged( wxCommandEvent& aEvent )
 {
-    auto eventSource = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
-
-    COLOR4D newColor = eventSource->GetSwatchColor();
-
-    LAYER_NUM layer = getDecodedId( eventSource->GetId() );
+    COLOR_SWATCH* eventSource = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
+    COLOR4D       newColor = eventSource->GetSwatchColor();
+    LAYER_NUM     layer = getDecodedId( eventSource->GetId() );
 
     // tell the client code.
     OnLayerColorChange( layer, newColor );
@@ -333,7 +331,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     col = COLUMN_COLORBM;
 
     auto bmb = new COLOR_SWATCH( m_LayerScrolledWindow, aSpec.color, encodeId( col, aSpec.id ),
-                                 getBackgroundLayerColor(), aSpec.defaultColor );
+                                 getBackgroundLayerColor(), aSpec.defaultColor, false );
     bmb->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
     bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnLayerSwatchChanged, this );
     bmb->SetToolTip( _("Left double click or middle click for color change, right click for menu" ) );
@@ -433,7 +431,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     if( aSpec.color != COLOR4D::UNSPECIFIED )
     {
         auto bmb = new COLOR_SWATCH( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ),
-                                     getBackgroundLayerColor(), aSpec.defaultColor );
+                                     getBackgroundLayerColor(), aSpec.defaultColor, false );
         bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnRenderSwatchChanged, this );
         bmb->SetToolTip( _( "Left double click or middle click for color change" ) );
         m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );

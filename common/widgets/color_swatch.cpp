@@ -65,13 +65,16 @@ wxBitmap COLOR_SWATCH::MakeBitmap( COLOR4D aColor, COLOR4D aBackground, wxSize a
 
 
 COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D aBackground,
-                            const COLOR4D aDefault ) :
+                            const COLOR4D aDefault, bool aForDialog ) :
         wxPanel( aParent, aID ),
         m_color( aColor ),
         m_background( aBackground ),
         m_default( aDefault )
 {
-    m_size = ConvertDialogToPixels( PALETTE_SWATCH_SIZE_DU );
+    if( aForDialog )
+        m_size = ConvertDialogToPixels( DIALOG_SWATCH_SIZE_DU );
+    else
+        m_size = ConvertDialogToPixels( PALETTE_SWATCH_SIZE_DU );
 
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
@@ -128,7 +131,6 @@ void COLOR_SWATCH::setupEvents()
     {
         // forward click to any other listeners, since we don't want them
         m_swatch->Bind( wxEVT_LEFT_DOWN, &COLOR_SWATCH::rePostEvent, this );
-        m_swatch->Bind( wxEVT_RIGHT_DOWN, &COLOR_SWATCH::rePostEvent, this );
 
         // bind the events that trigger the dialog
         m_swatch->Bind( wxEVT_LEFT_DCLICK,
@@ -143,6 +145,8 @@ void COLOR_SWATCH::setupEvents()
                     {
                         GetNewSwatchColor();
                     } );
+
+    m_swatch->Bind( wxEVT_RIGHT_DOWN, &COLOR_SWATCH::rePostEvent, this );
 }
 
 

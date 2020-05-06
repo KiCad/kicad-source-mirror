@@ -63,7 +63,7 @@ private:
 
     KIGFX::WS_PROXY_VIEW_ITEM* m_ws;
 
-    void createButtons();
+    void createSwatches();
 };
 
 

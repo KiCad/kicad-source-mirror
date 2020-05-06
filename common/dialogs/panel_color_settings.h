@@ -26,6 +26,7 @@
 
 
 class COLOR_SETTINGS;
+class COLOR_SWATCH;
 
 
 class PANEL_COLOR_SETTINGS : public PANEL_COLOR_SETTINGS_BASE
@@ -51,15 +52,13 @@ protected:
 
     void ShowColorContextMenu( wxMouseEvent& aEvent, int aLayer );
 
-    void SetColor( wxCommandEvent& aEvent );
+    void OnColorChanged( wxCommandEvent& aEvent );
 
     void createThemeList( const wxString& aCurrent );
 
-    void createButton( int aLayer, const KIGFX::COLOR4D& aColor, const wxString& aName );
+    void createSwatch( int aLayer, const wxString& aName );
 
     void updateColor( int aLayer, const KIGFX::COLOR4D& aColor );
-
-    void drawButton( wxBitmapButton* aButton, const KIGFX::COLOR4D& aColor ) const;
 
     virtual bool saveCurrentTheme( bool aValidate );
 
@@ -85,11 +84,8 @@ protected:
 
     COLOR_SETTINGS* m_currentSettings;
 
-    wxSize m_buttonSizePx;
-
     std::map<int, wxStaticText*> m_labels;
-
-    std::map<int, wxBitmapButton*> m_buttons;
+    std::map<int, COLOR_SWATCH*> m_swatches;
 
     KIGFX::COLOR4D m_copied;
 
@@ -102,6 +98,7 @@ protected:
      * This list must be filled in the application-specific color settings panel constructors.
      */
     std::vector<int> m_validLayers;
+    int              m_backgroundLayer;
 
     /**
      * A namespace that will be passed to SETTINGS_MANAGER::SaveColorSettings

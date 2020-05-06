@@ -29,11 +29,8 @@
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <validators.h>
+#include <widgets/color_swatch.h>
 
-
-// Width and height of every (color-displaying / bitmap) button in dialog units
-const wxSize BUTTON_SIZE( 24, 12 );
-const wxSize BUTTON_BORDER( 4, 4 );
 
 // Button ID starting point
 constexpr int FIRST_BUTTON_ID = 1800;
@@ -42,7 +39,7 @@ constexpr int FIRST_BUTTON_ID = 1800;
 PANEL_COLOR_SETTINGS::PANEL_COLOR_SETTINGS( wxWindow* aParent ) :
         PANEL_COLOR_SETTINGS_BASE( aParent ),
         m_currentSettings( nullptr ),
-        m_buttons(),
+        m_swatches(),
         m_copied( COLOR4D::UNSPECIFIED ),
         m_validLayers(),
         m_colorNamespace()
@@ -53,8 +50,6 @@ PANEL_COLOR_SETTINGS::PANEL_COLOR_SETTINGS( wxWindow* aParent ) :
     // Simple border is too dark on OSX
     m_colorsListWindow->SetWindowStyle( wxBORDER_SUNKEN|wxVSCROLL );
 #endif
-
-    m_buttonSizePx = ConvertDialogToPixels( BUTTON_SIZE );
 }
 
 
@@ -70,15 +65,15 @@ void PANEL_COLOR_SETTINGS::OnBtnResetClicked( wxCommandEvent& event )
     if( !m_currentSettings )
         return;
 
-    for( const auto& pair : m_buttons )
+    for( const std::pair<int, COLOR_SWATCH*>& pair : m_swatches )
     {
-        int             layer  = pair.first;
-        wxBitmapButton* button = pair.second;
+        int           layer  = pair.first;
+        COLOR_SWATCH* button = pair.second;
 
         COLOR4D defaultColor = m_currentSettings->GetDefaultColor( layer );
 
         m_currentSettings->SetColor( layer, defaultColor );
-        drawButton( button, defaultColor );
+        button->SetSwatchColor( defaultColor, false );
     }
 }
 
@@ -149,9 +144,12 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
             *m_currentSettings = *selected;
             onNewThemeSelected();
 
-            for( auto pair : m_buttons )
+            COLOR4D background = m_currentSettings->GetColor( m_backgroundLayer );
+
+            for( std::pair<int, COLOR_SWATCH*> pair : m_swatches )
             {
-                drawButton( pair.second, m_currentSettings->GetColor( pair.first ) );
+                pair.second->SetSwatchBackground( background );
+                pair.second->SetSwatchColor( m_currentSettings->GetColor( pair.first ), false );
 
                 if( pair.first == LAYER_SHEET || pair.first == LAYER_SHEET_BACKGROUND )
                     pair.second->Show( selected->GetOverrideSchItemColors() );
@@ -189,44 +187,33 @@ void PANEL_COLOR_SETTINGS::createThemeList( const wxString& aCurrent )
 }
 
 
-void PANEL_COLOR_SETTINGS::createButton( int aLayer, const KIGFX::COLOR4D& aColor,
-                                         const wxString& aName )
+void PANEL_COLOR_SETTINGS::createSwatch( int aLayer, const wxString& aName )
 {
-    const wxSize border = ConvertDialogToPixels( BUTTON_BORDER );
-
     wxStaticText* label = new wxStaticText( m_colorsListWindow, wxID_ANY, aName );
 
-    wxMemoryDC    iconDC;
-    wxBitmap      bitmap( m_buttonSizePx );
+    void*           clientData = m_cbTheme->GetClientData( m_cbTheme->GetSelection() );
+    COLOR_SETTINGS* selected = static_cast<COLOR_SETTINGS*>( clientData );
+    int             id = FIRST_BUTTON_ID + aLayer;
+    COLOR4D         defaultColor    = selected->GetDefaultColor( aLayer );
+    COLOR4D         color           = m_currentSettings->GetColor( aLayer );
+    COLOR4D         backgroundColor = m_currentSettings->GetColor( m_backgroundLayer );
 
-    iconDC.SelectObject( bitmap );
-    iconDC.SetPen( *wxBLACK_PEN );
-
-    wxBrush brush;
-    brush.SetColour( aColor.ToColour() );
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-    iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, m_buttonSizePx.x, m_buttonSizePx.y );
-
-    int id = FIRST_BUTTON_ID + aLayer;
-
-    auto button = new wxBitmapButton( m_colorsListWindow, id, bitmap, wxDefaultPosition,
-                                      m_buttonSizePx + border + wxSize( 1, 1 ) );
-    button->SetToolTip( _( "Edit color (right click for options)" ) );
+    COLOR_SWATCH* swatch = new COLOR_SWATCH( m_colorsListWindow, color, id, backgroundColor,
+                                             defaultColor, true );
+    swatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
     m_colorsGridSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT | wxLEFT, 5 );
-    m_colorsGridSizer->Add( button, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5 );
+    m_colorsGridSizer->Add( swatch, 0, wxALIGN_CENTER_VERTICAL | wxALL, 3 );
 
-    m_labels[aLayer]  = label;
-    m_buttons[aLayer] = button;
+    m_labels[aLayer]   = label;
+    m_swatches[aLayer] = swatch;
 
-    button->Bind( wxEVT_RIGHT_DOWN,
+    swatch->Bind( wxEVT_RIGHT_DOWN,
                   [&, aLayer]( wxMouseEvent& aEvent )
                   {
                     ShowColorContextMenu( aEvent, aLayer );
                   } );
-
-    button->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &PANEL_COLOR_SETTINGS::SetColor, this );
+    swatch->Bind( COLOR_SWATCH_CHANGED, &PANEL_COLOR_SETTINGS::OnColorChanged, this );
 }
 
 
@@ -249,7 +236,8 @@ void PANEL_COLOR_SETTINGS::ShowColorContextMenu( wxMouseEvent& aEvent, int aLaye
         AddMenuItem( &menu, ID_REVERT, _( "Revert to saved color" ), KiBitmap( undo_xpm ) );
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
-            [&]( wxCommandEvent& aCmd ) {
+            [&]( wxCommandEvent& aCmd )
+            {
                 switch( aCmd.GetId() )
                 {
                 case ID_COPY:
@@ -273,41 +261,13 @@ void PANEL_COLOR_SETTINGS::ShowColorContextMenu( wxMouseEvent& aEvent, int aLaye
 }
 
 
-void PANEL_COLOR_SETTINGS::SetColor( wxCommandEvent& event )
+void PANEL_COLOR_SETTINGS::OnColorChanged( wxCommandEvent& aEvent )
 {
-    auto button = static_cast<wxBitmapButton*>( event.GetEventObject() );
-    auto layer  = static_cast<SCH_LAYER_ID>( button->GetId() - FIRST_BUTTON_ID );
-
-    COLOR4D oldColor = m_currentSettings->GetColor( layer );
-    COLOR4D newColor = COLOR4D::UNSPECIFIED;
-    DIALOG_COLOR_PICKER dialog( this, oldColor, false );
-
-    if( dialog.ShowModal() == wxID_OK )
-        newColor = dialog.GetColor();
-
-    if( newColor == COLOR4D::UNSPECIFIED || oldColor == newColor )
-        return;
+    COLOR_SWATCH* swatch = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
+    COLOR4D       newColor = swatch->GetSwatchColor();
+    LAYER_NUM     layer = static_cast<SCH_LAYER_ID>( swatch->GetId() - FIRST_BUTTON_ID );
 
     updateColor( layer, newColor );
-}
-
-
-void PANEL_COLOR_SETTINGS::drawButton( wxBitmapButton* aButton, const COLOR4D& aColor ) const
-{
-    wxMemoryDC iconDC;
-
-    wxBitmap bitmap = aButton->GetBitmapLabel();
-    iconDC.SelectObject( bitmap );
-    iconDC.SetPen( *wxBLACK_PEN );
-
-    wxBrush  brush;
-    brush.SetColour( aColor.ToColour() );
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-
-    iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, m_buttonSizePx.x, m_buttonSizePx.y );
-    aButton->SetBitmapLabel( bitmap );
-    aButton->Refresh();
 }
 
 
@@ -316,7 +276,15 @@ void PANEL_COLOR_SETTINGS::updateColor( int aLayer, const KIGFX::COLOR4D& aColor
     if( m_currentSettings )
         m_currentSettings->SetColor( aLayer, aColor );
 
-    drawButton( m_buttons[aLayer], aColor );
+    m_swatches[aLayer]->SetSwatchColor( aColor, false );
+
+    if( aLayer == m_backgroundLayer )
+    {
+        COLOR4D background = m_currentSettings->GetColor( m_backgroundLayer );
+
+        for( std::pair<int, COLOR_SWATCH*> pair : m_swatches )
+            pair.second->SetSwatchBackground( background );
+    }
 
     onColorChanged();
 }

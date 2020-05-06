@@ -73,9 +73,11 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame
         m_validLayers.push_back( id );
     }
 
+    m_backgroundLayer = LAYER_PCB_BACKGROUND;
+
     m_colorsMainSizer->Insert( 0, 10, 0, 0, wxEXPAND, 5 );
 
-    createButtons();
+    createSwatches();
 }
 
 
@@ -112,7 +114,7 @@ bool PANEL_PCBNEW_COLOR_SETTINGS::TransferDataToWindow()
 }
 
 
-void PANEL_PCBNEW_COLOR_SETTINGS::createButtons()
+void PANEL_PCBNEW_COLOR_SETTINGS::createSwatches()
 {
     std::vector<int> layers;
 
@@ -141,6 +143,6 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createButtons()
         if( board && layer >= PCBNEW_LAYER_ID_START && layer < PCB_LAYER_ID_COUNT )
             name = board->GetLayerName( static_cast<PCB_LAYER_ID>( layer ) );
 
-        createButton( layer, m_currentSettings->GetColor( layer ), name );
+        createSwatch( layer, name );
     }
 }

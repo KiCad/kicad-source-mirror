@@ -47,7 +47,7 @@ public:
      * @param aID id to use when sending swatch events
      */
     COLOR_SWATCH( wxWindow* aParent, KIGFX::COLOR4D aColor, int aID, KIGFX::COLOR4D aBackground,
-                  const KIGFX::COLOR4D aDefault = KIGFX::COLOR4D::UNSPECIFIED );
+                  const KIGFX::COLOR4D aDefault, bool aForDialog );
 
     /**
      * constructor for wxFormBuilder
