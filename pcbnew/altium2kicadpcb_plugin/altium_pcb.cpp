@@ -1815,11 +1815,8 @@ void ALTIUM_PCB::ParsePads6Data(
             break;
         default:
             PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
-            wxLogError( wxString::Format(
-                    "Pad '%s' of Footprint %s uses the unsupported layer %s. Put it on Eco2_User instead",
-                    elem.name, module->GetReference(), LSET::Name( klayer ) ) );
             pad->SetLayer( klayer );
-            pad->SetLayerSet( LSET( 2, klayer, Eco2_User ) ); // TODO: support inner Cu as pad layer
+            pad->SetLayerSet( LSET( 1, klayer ) );
             break;
         }
 
