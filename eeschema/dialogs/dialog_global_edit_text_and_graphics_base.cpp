@@ -100,10 +100,19 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer2->Add( m_referenceFilter, 0, wxEXPAND|wxLEFT, 5 );
 
 	m_symbolFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by parent symbol library id:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_symbolFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_symbolFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_symbolFilter = new wxTextCtrl( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_symbolFilter, 0, wxEXPAND|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_typeFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by parent symbol type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_typeFilterOpt, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_typeFilterChoices[] = { _("Non-power symbols"), _("Power symbols") };
+	int m_typeFilterNChoices = sizeof( m_typeFilterChoices ) / sizeof( wxString );
+	m_typeFilter = new wxChoice( sbFilters->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_typeFilterNChoices, m_typeFilterChoices, 0 );
+	m_typeFilter->SetSelection( 0 );
+	fgSizer2->Add( m_typeFilter, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer2->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );

@@ -55,6 +55,8 @@ static bool       g_filterByReference;
 static wxString   g_referenceFilter;
 static bool       g_filterBySymbol;
 static wxString   g_symbolFilter;
+static bool       g_filterByType;
+static bool       g_typeFilterIsPower;
 static bool       g_filterByNet;
 static wxString   g_netFilter;
 
@@ -130,6 +132,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
     g_referenceFilter = m_referenceFilter->GetValue();
     g_filterBySymbol = m_symbolFilterOpt->GetValue();
     g_symbolFilter = m_symbolFilter->GetValue();
+    g_filterByType = m_typeFilterOpt->GetValue();
+    g_typeFilterIsPower = m_typeFilter->GetSelection() == 1;
     g_filterByNet = m_netFilterOpt->GetValue();
     g_netFilter = m_netFilter->GetValue();
 }
@@ -160,6 +164,8 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_referenceFilterOpt->SetValue( g_filterByReference );
     m_symbolFilter->ChangeValue( g_symbolFilter );
     m_symbolFilterOpt->SetValue( g_filterBySymbol );
+    m_typeFilter->SetSelection( g_typeFilterIsPower ? 1 : 0 );
+    m_typeFilterOpt->SetValue( g_filterByType );
 
     if( g_filterByNet && !g_netFilter.IsEmpty() )
     {
@@ -315,6 +321,17 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
             wxString id = static_cast<SCH_COMPONENT*>( aItem )->GetLibId().Format();
 
             if( !WildCompareString( m_symbolFilter->GetValue(), id, false ) )
+                return;
+        }
+    }
+
+    if( m_typeFilterOpt->GetValue() )
+    {
+        if( aItem->Type() == SCH_COMPONENT_T )
+        {
+            bool isPower = static_cast<SCH_COMPONENT*>( aItem )->GetPartRef()->IsPower();
+
+            if( isPower != ( m_typeFilter->GetSelection() == 1 ) )
                 return;
         }
     }

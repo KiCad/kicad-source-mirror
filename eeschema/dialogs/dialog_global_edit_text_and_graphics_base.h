@@ -21,8 +21,8 @@
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
-#include <wx/stattext.h>
 #include <wx/choice.h>
+#include <wx/stattext.h>
 #include <wx/statline.h>
 #include <wx/panel.h>
 #include <wx/button.h>
@@ -57,6 +57,8 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_referenceFilter;
 		wxCheckBox* m_symbolFilterOpt;
 		wxTextCtrl* m_symbolFilter;
+		wxCheckBox* m_typeFilterOpt;
+		wxChoice* m_typeFilter;
 		wxCheckBox* m_netFilterOpt;
 		wxTextCtrl* m_netFilter;
 		wxPanel* m_specifiedValues;
