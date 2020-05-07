@@ -885,6 +885,9 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
                 const SFVEC3F v2 = SFVEC3F( v1.x, v3.y, v1.z );
                 const SFVEC3F v4 = SFVEC3F( v3.x, v1.y, v1.z );
 
+                SFVEC3F backgroundColor =
+                        ConvertSRGBToLinear( static_cast<SFVEC3F>( m_boardAdapter.m_BgColorTop ) );
+
                 CTRIANGLE *newTriangle1 = new CTRIANGLE( v1, v2, v3 );
                 CTRIANGLE *newTriangle2 = new CTRIANGLE( v3, v4, v1 );
 
@@ -894,8 +897,8 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
                 newTriangle1->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
                 newTriangle2->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
 
-                newTriangle1->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BgColorTop ) );
-                newTriangle2->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BgColorTop ) );
+                newTriangle1->SetColor( backgroundColor );
+                newTriangle2->SetColor( backgroundColor );
 
                 // Ceiling triangles
                 const float maxZ = glm::max( containerBBox.Max().z,
@@ -915,8 +918,8 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
                 newTriangle3->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
                 newTriangle4->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
 
-                newTriangle3->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BgColorTop ) );
-                newTriangle4->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_boardAdapter.m_BgColorTop ) );
+                newTriangle3->SetColor( backgroundColor );
+                newTriangle4->SetColor( backgroundColor );
             }
         }
     }
