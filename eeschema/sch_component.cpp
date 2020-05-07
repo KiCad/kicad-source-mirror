@@ -1503,10 +1503,6 @@ void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
     if( !m_part )
         return;
 
-    // This should not happen but just in case the pin map size doesn't match the number of
-    // pins in the symbol, update the pin map.
-    wxCHECK2( m_part->GetPinCount() == m_pins.size(), UpdatePins() );
-
     for( LIB_PIN* pin = m_part->GetNextPin();  pin;  pin = m_part->GetNextPin( pin ) )
     {
         wxASSERT( pin->Type() == LIB_PIN_T );
