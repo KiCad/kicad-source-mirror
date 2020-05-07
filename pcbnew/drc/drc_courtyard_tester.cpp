@@ -63,14 +63,14 @@ bool DRC_COURTYARD_TESTER::RunDRC( BOARD& aBoard ) const
     {
         if( footprint->BuildPolyCourtyard() )
         {
-            if( !aBoard.GetDesignSettings().Ignore( DRCE_MISSING_COURTYARD_IN_FOOTPRINT ) )
+            if( !aBoard.GetDesignSettings().Ignore( DRCE_MISSING_COURTYARD ) )
             {
                 int outlineCount = footprint->GetPolyCourtyardFront().OutlineCount()
                                  + footprint->GetPolyCourtyardBack().OutlineCount();
 
                 if( outlineCount == 0 )
                 {
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MISSING_COURTYARD_IN_FOOTPRINT );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MISSING_COURTYARD );
                     drcItem->SetItems( footprint );
                     HandleMarker( new MARKER_PCB( drcItem, footprint->GetPosition() ) );
                     success = false;
@@ -79,9 +79,13 @@ bool DRC_COURTYARD_TESTER::RunDRC( BOARD& aBoard ) const
         }
         else
         {
-            if( !aBoard.GetDesignSettings().Ignore( DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT ) )
+            if( !aBoard.GetDesignSettings().Ignore( DRCE_MALFORMED_COURTYARD ) )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MALFORMED_COURTYARD );
+
+                msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
+
+                drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( footprint );
                 HandleMarker( new MARKER_PCB( drcItem, footprint->GetPosition() ) );
                 success = false;

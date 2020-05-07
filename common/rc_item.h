@@ -142,7 +142,7 @@ public:
      * Function GetErrorText
      * returns the string form of a RC error code
      */
-    virtual wxString GetErrorText( int aCode = -1 ) const = 0;
+    virtual wxString GetErrorText( int aCode = -1, bool aTranslate = true ) const = 0;
 
     /**
      * Function GetErrorMessage

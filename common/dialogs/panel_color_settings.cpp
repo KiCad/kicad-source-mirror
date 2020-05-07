@@ -42,6 +42,7 @@ PANEL_COLOR_SETTINGS::PANEL_COLOR_SETTINGS( wxWindow* aParent ) :
         m_swatches(),
         m_copied( COLOR4D::UNSPECIFIED ),
         m_validLayers(),
+        m_backgroundLayer( LAYER_PCB_BACKGROUND ),
         m_colorNamespace()
 {
 #ifdef __APPLE__

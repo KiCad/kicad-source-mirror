@@ -32,145 +32,114 @@
 #include <class_board.h>
 
 
-wxString DRC_ITEM::GetErrorText( int aCode ) const
+DRC_ITEM::DRC_ITEM( int aErrorCode )
 {
+    m_errorCode = aErrorCode;
+}
+
+
+DRC_ITEM::DRC_ITEM( const wxString& aErrorText )
+{
+    for( int errorCode = DRCE_FIRST; errorCode <= DRCE_LAST; ++errorCode )
+    {
+        if( aErrorText == GetErrorText( errorCode, false ) )
+        {
+            m_errorCode = errorCode;
+            break;
+        }
+    }
+}
+
+
+wxString DRC_ITEM::GetErrorText( int aCode, bool aTranslate ) const
+{
+    wxString msg;
+
     if( aCode < 0 )
         aCode = m_errorCode;
 
     switch( aCode )
     {
-    case DRCE_UNCONNECTED_ITEMS:
-        return wxString( _( "Unconnected items" ) );
-    case DRCE_TRACK_NEAR_THROUGH_HOLE:
-        return wxString( _( "Track too close to thru-hole" ) );
-    case DRCE_TRACK_NEAR_PAD:
-        return wxString( _( "Track too close to pad" ) );
-    case DRCE_TRACK_NEAR_VIA:
-        return wxString( _( "Track too close to via" ) );
-    case DRCE_VIA_NEAR_VIA:
-        return wxString( _( "Via too close to via" ) );
-    case DRCE_VIA_NEAR_TRACK:
-        return wxString( _( "Via too close to track" ) );
-    case DRCE_TRACK_ENDS:
-        return wxString( _( "Two track ends too close" ) );
-    case DRCE_TRACK_SEGMENTS_TOO_CLOSE:
-        return wxString( _( "Two parallel track segments too close" ) );
-    case DRCE_TRACKS_CROSSING:
-        return wxString( _( "Tracks crossing" ) );
-    case DRCE_TRACK_NEAR_ZONE:
-        return wxString( _( "Track too close to copper area" ) );
-    case DRCE_PAD_NEAR_PAD1:
-        return wxString( _( "Pad too close to pad" ) );
-    case DRCE_VIA_HOLE_BIGGER:
-        return wxString( _( "Via hole > diameter" ) );
-    case DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR:
-        return wxString( _( "Micro via through too many layers" ) );
-    case DRCE_MICRO_VIA_NOT_ALLOWED:
-        return wxString( _( "Micro via not allowed" ) );
-    case DRCE_BURIED_VIA_NOT_ALLOWED:
-        return wxString( _( "Buried via not allowed" ) );
-    case DRCE_DISABLED_LAYER_ITEM:
-        return wxString( _( "Item on a disabled layer" ) );
-    case DRCE_ZONES_INTERSECT:
-        return wxString( _( "Copper areas intersect" ) );
-    case DRCE_ZONES_TOO_CLOSE:
-        return wxString( _( "Copper areas too close" ) );
+    case DRCE_UNCONNECTED_ITEMS:        msg = _HKI( "Unconnected items" );                  break;
+    case DRCE_TRACK_NEAR_HOLE:          msg = _HKI( "Track too close to hole" );            break;
+    case DRCE_TRACK_NEAR_PAD:           msg = _HKI( "Track too close to pad" );             break;
+    case DRCE_TRACK_NEAR_VIA:           msg = _HKI( "Track too close to via" );             break;
+    case DRCE_VIA_NEAR_VIA:             msg = _HKI( "Vias too close" );                     break;
+    case DRCE_VIA_NEAR_TRACK:           msg = _HKI( "Via too close to track" );             break;
+    case DRCE_TRACK_ENDS:               msg = _HKI( "Track ends too close" );               break;
+    case DRCE_TRACK_SEGMENTS_TOO_CLOSE: msg = _HKI( "Parallel tracks too close" );          break;
+    case DRCE_TRACKS_CROSSING:          msg = _HKI( "Tracks crossing" );                    break;
+    case DRCE_TRACK_NEAR_ZONE:          msg = _HKI( "Track too close to copper area" );     break;
+    case DRCE_PAD_NEAR_PAD:             msg = _HKI( "Pads too close" );                     break;
+    case DRCE_VIA_HOLE_BIGGER:          msg = _HKI( "Via hole larger than diameter" );      break;
+    case DRCE_MICROVIA_TOO_MANY_LAYERS: msg = _HKI( "Micro via through too many layers" );  break;
+    case DRCE_MICROVIA_NOT_ALLOWED:     msg = _HKI( "Micro via not allowed" );              break;
+    case DRCE_BURIED_VIA_NOT_ALLOWED:   msg = _HKI( "Buried via not allowed" );             break;
+    case DRCE_DISABLED_LAYER_ITEM:      msg = _HKI( "Item on a disabled layer" );           break;
+    case DRCE_ZONES_INTERSECT:          msg = _HKI( "Copper areas intersect" );             break;
+    case DRCE_ZONES_TOO_CLOSE:          msg = _HKI( "Copper areas too close" );             break;
 
-    case DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE:
-        return wxString( _( "Copper area belongs to a net which has no pads" ) );
+    case DRCE_ZONE_HAS_EMPTY_NET:       msg = _HKI( "Copper zone net has no pads" );        break;
 
-    case DRCE_HOLE_NEAR_PAD:
-        return wxString( _( "Hole too close to pad" ) );
-    case DRCE_HOLE_NEAR_TRACK:
-        return wxString( _( "Hole too close to track" ) );
-    case DRCE_TOO_SMALL_TRACK_WIDTH:
-        return wxString( _( "Track width too small" ) );
-    case DRCE_TOO_SMALL_VIA:
-        return wxString( _( "Via size too small" ) );
-    case DRCE_TOO_SMALL_MICROVIA:
-        return wxString( _( "Micro via size too small" ) );
-    case DRCE_TOO_SMALL_VIA_DRILL:
-        return wxString( _( "Via drill too small" ) );
-    case DRCE_TOO_SMALL_PAD_DRILL:
-        return wxString( _( "Pad drill too small" ) );
-    case DRCE_TOO_SMALL_MICROVIA_DRILL:
-        return wxString( _( "Micro via drill too small" ) );
-    case DRCE_DRILLED_HOLES_TOO_CLOSE:
-        return wxString( _( "Drilled holes too close together" ) );
-    case DRCE_TRACK_NEAR_EDGE:
-        return wxString( _( "Track too close to board edge" ) );
-    case DRCE_INVALID_OUTLINE:
-        return wxString( _( "Board outline does not form a closed polygon" ) );
+    case DRCE_HOLE_NEAR_PAD:            msg = _HKI( "Hole too close to pad" );              break;
+    case DRCE_HOLE_NEAR_TRACK:          msg = _HKI( "Hole too close to track" );            break;
+    case DRCE_TOO_SMALL_TRACK_WIDTH:    msg = _HKI( "Track width too small" );              break;
+    case DRCE_TOO_SMALL_VIA:            msg = _HKI( "Via size too small" );                 break;
+    case DRCE_TOO_SMALL_MICROVIA:       msg = _HKI( "Micro via size too small" );           break;
+    case DRCE_TOO_SMALL_VIA_DRILL:      msg = _HKI( "Via drill too small" );                break;
+    case DRCE_TOO_SMALL_PAD_DRILL:      msg = _HKI( "Pad drill too small" );                break;
+    case DRCE_TOO_SMALL_MICROVIA_DRILL: msg = _HKI( "Micro via drill too small" );          break;
+    case DRCE_DRILLED_HOLES_TOO_CLOSE:  msg = _HKI( "Drilled holes too close together" );   break;
+    case DRCE_TRACK_NEAR_EDGE:          msg = _HKI( "Track too close to board edge" );      break;
+    case DRCE_INVALID_OUTLINE:          msg = _HKI( "Board has malformed outline" );        break;
 
     // use &lt; since this is text ultimately embedded in HTML
-    case DRCE_NETCLASS_TRACKWIDTH:
-        return wxString( _( "NetClass Track Width too small" ) );
-    case DRCE_NETCLASS_CLEARANCE:
-        return wxString( _( "NetClass Clearance too small" ) );
-    case DRCE_NETCLASS_VIASIZE:
-        return wxString( _( "NetClass Via Dia too small" ) );
-    case DRCE_NETCLASS_VIADRILLSIZE:
-        return wxString( _( "NetClass Via Drill too small" ) );
-    case DRCE_NETCLASS_uVIASIZE:
-        return wxString( _( "NetClass uVia Dia too small" ) );
-    case DRCE_NETCLASS_uVIADRILLSIZE:
-        return wxString( _( "NetClass uVia Drill too small" ) );
+    case DRCE_NETCLASS_TRACKWIDTH:      msg = _HKI( "NetClass Track Width too small" );     break;
+    case DRCE_NETCLASS_CLEARANCE:       msg = _HKI( "NetClass Clearance too small" );       break;
+    case DRCE_NETCLASS_VIASIZE:         msg = _HKI( "NetClass Via Dia too small" );         break;
+    case DRCE_NETCLASS_VIADRILLSIZE:    msg = _HKI( "NetClass Via Drill too small" );       break;
+    case DRCE_NETCLASS_uVIASIZE:        msg = _HKI( "NetClass uVia Dia too small" );        break;
+    case DRCE_NETCLASS_uVIADRILLSIZE:   msg = _HKI( "NetClass uVia Drill too small" );      break;
 
-    case DRCE_VIA_INSIDE_KEEPOUT:
-        return wxString( _( "Via inside keepout area" ) );
-    case DRCE_TRACK_INSIDE_KEEPOUT:
-        return wxString( _( "Track inside keepout area" ) );
-    case DRCE_PAD_INSIDE_KEEPOUT:
-        return wxString( _( "Pad inside keepout area" ) );
-    case DRCE_FOOTPRINT_INSIDE_KEEPOUT:
-        return wxString( _( "Footprint inside keepout area" ) );
+    case DRCE_VIA_INSIDE_KEEPOUT:       msg = _HKI( "Via inside keepout area" );            break;
+    case DRCE_TRACK_INSIDE_KEEPOUT:     msg = _HKI( "Track inside keepout area" );          break;
+    case DRCE_PAD_INSIDE_KEEPOUT:       msg = _HKI( "Pad inside keepout area" );            break;
+    case DRCE_FOOTPRINT_INSIDE_KEEPOUT: msg = _HKI( "Footprint inside keepout area" );      break;
 
-    case DRCE_VIA_NEAR_COPPER:
-        return wxString( _( "Via too close to copper item" ) );
-    case DRCE_TRACK_NEAR_COPPER:
-        return wxString( _( "Track too close to copper item" ) );
-    case DRCE_PAD_NEAR_COPPER:
-        return wxString( _( "Pad too close to copper item" ) );
+    case DRCE_VIA_NEAR_COPPER:          msg = _HKI( "Via too close to copper item" );       break;
+    case DRCE_TRACK_NEAR_COPPER:        msg = _HKI( "Track too close to copper item" );     break;
+    case DRCE_PAD_NEAR_COPPER:          msg = _HKI( "Pad too close to copper item" );       break;
 
-    case DRCE_OVERLAPPING_FOOTPRINTS:
-        return wxString( _( "Courtyards overlap" ) );
+    case DRCE_OVERLAPPING_FOOTPRINTS:   msg = _HKI( "Courtyards overlap" );                 break;
+    case DRCE_MISSING_COURTYARD:        msg = _HKI( "Footprint has no courtyard defined" ); break;
+    case DRCE_MALFORMED_COURTYARD:      msg = _HKI( "Footprint has malformed courtyard" );  break;
 
-    case DRCE_MISSING_COURTYARD_IN_FOOTPRINT:
-        return wxString( _( "Footprint has no courtyard defined" ) );
+    case DRCE_DUPLICATE_FOOTPRINT:      msg = _HKI( "Duplicate footprints" );               break;
+    case DRCE_MISSING_FOOTPRINT:        msg = _HKI( "Missing footprint" );                  break;
+    case DRCE_EXTRA_FOOTPRINT:          msg = _HKI( "Extra footprint" );                    break;
 
-    case DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT:
-        return wxString( _( "Footprint has incorrect courtyard (not a closed shape)" ) );
+    // For cleanup tracks and vias:
+    case DRCE_SHORT:                    msg = _HKI( "Remove track shorting two nets" );     break;
+    case DRCE_REDUNDANT_VIA:            msg = _HKI( "Remove redundant via" );               break;
+    case DRCE_DUPLICATE_TRACK:          msg = _HKI( "Remove duplicate track" );             break;
+    case DRCE_MERGE_TRACKS:             msg = _HKI( "Merge co-linear tracks" );             break;
+    case DRCE_DANGLING_TRACK:           msg = _HKI( "Remove dangling track" );              break;
+    case DRCE_DANGLING_VIA:             msg = _HKI( "Remove dangling via" );                break;
+    case DRCE_ZERO_LENGTH_TRACK:        msg = _HKI( "Remove zero-length track" );           break;
+    case DRCE_TRACK_IN_PAD:             msg = _HKI( "Remove track inside pad" );            break;
 
-    case DRCE_DUPLICATE_FOOTPRINT:
-        return wxString( _( "Duplicate footprints" ) );
-    case DRCE_MISSING_FOOTPRINT:
-        return wxString( _( "Missing footprint" ) );
-    case DRCE_EXTRA_FOOTPRINT:
-        return wxString( _( "Extra footprint" ) );
-
-    case DRCE_SHORT:
-        return wxString( _( "Remove track shorting two nets" ) );
-    case DRCE_REDUNDANT_VIA:
-        return wxString( _( "Remove redundant via" ) );
-    case DRCE_DUPLICATE_TRACK:
-        return wxString( _( "Remove duplicate track" ) );
-    case DRCE_MERGE_TRACKS:
-        return wxString( _( "Merge co-linear tracks" ) );
-    case DRCE_DANGLING_TRACK:
-        return wxString( _( "Remove dangling track" ) );
-    case DRCE_DANGLING_VIA:
-        return wxString( _( "Remove dangling via" ) );
-    case DRCE_ZERO_LENGTH_TRACK:
-        return wxString( _( "Remove zero-length track" ) );
-    case DRCE_TRACK_IN_PAD:
-        return wxString( _( "Remove track inside pad" ) );
-
-    case DRCE_UNRESOLVED_VARIABLE:
-        return wxString( _( "Unresolved text variable" ) );
+    case DRCE_UNRESOLVED_VARIABLE:      msg = _HKI( "Unresolved text variable" );           break;
 
     default:
-        return wxEmptyString;
+        wxFAIL_MSG( "Missing DRC error description" );
+        msg = _HKI( "Unknown DRC violation" );
+        break;
     }
+
+    if( aTranslate )
+        return wxGetTranslation( msg );
+    else
+        return msg;
 }
 
 

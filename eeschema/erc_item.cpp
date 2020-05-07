@@ -23,64 +23,90 @@
 
 
 #include <fctsys.h>
-#include <common.h>
 #include "wx/html/m_templ.h"
 #include "wx/html/styleparams.h"
 #include <erc.h>
 #include <erc_item.h>
+#include <i18n_utility.h>
 
-
-wxString ERC_ITEM::GetErrorText( int aErrorCode ) const
+wxString ERC_ITEM::GetErrorText( int aErrorCode, bool aTranslate ) const
 {
+    wxString msg;
+
     if( aErrorCode < 0 )
         aErrorCode = m_errorCode;
 
     switch( aErrorCode )
     {
     case ERCE_UNSPECIFIED:
-        return wxString( _("ERC err unspecified") );
+        msg = _HKI("ERC err unspecified" );
+        break;
     case ERCE_DUPLICATE_SHEET_NAME:
-        return wxString( _("Duplicate sheet names within a given sheet") );
+        msg = _HKI("Duplicate sheet names within a given sheet" );
+        break;
     case ERCE_PIN_NOT_CONNECTED:
-        return wxString( _("Pin not connected") );
+        msg = _HKI("Pin not connected" );
+        break;
     case ERCE_PIN_NOT_DRIVEN:
-        return wxString( _( "Pin connected to other pins, but not driven by any pin" ) );
+        msg = _HKI( "Pin connected to other pins, but not driven by any pin" );
+        break;
     case ERCE_PIN_TO_PIN_WARNING:
-        KI_FALLTHROUGH;         // Must share text with ERCE_PIN_TO_PIN_ERROR
     case ERCE_PIN_TO_PIN_ERROR:
-        return wxString( _("Conflict problem between pins") );
+        msg = _HKI("Conflict problem between pins" );
+        break;
     case ERCE_HIERACHICAL_LABEL:
-        return wxString( _("Mismatch between hierarchical labels and pins sheets") );
+        msg = _HKI("Mismatch between hierarchical labels and pins sheets" );
+        break;
     case ERCE_NOCONNECT_CONNECTED:
-        return wxString( _("A pin with a \"no connection\" flag is connected") );
+        msg = _HKI("A pin with a \"no connection\" flag is connected" );
+        break;
     case ERCE_NOCONNECT_NOT_CONNECTED:
-        return wxString( _("Unconnected \"no connection\" flag") );
+        msg = _HKI("Unconnected \"no connection\" flag" );
+        break;
     case ERCE_LABEL_NOT_CONNECTED:
-        return wxString( _("Label not connected anywhere else in the schematic") );
+        msg = _HKI("Label not connected anywhere else in the schematic" );
+        break;
     case ERCE_SIMILAR_LABELS:
-        return wxString( _("Labels are similar (lower/upper case difference only)" ) );
+        msg = _HKI("Labels are similar (lower/upper case difference only)" );
+        break;
     case ERCE_DIFFERENT_UNIT_FP:
-        return wxString( _("Different footprint assigned in another unit of the same component" ) );
+        msg = _HKI("Different footprint assigned in another unit of the same component" );
+        break;
     case ERCE_DIFFERENT_UNIT_NET:
-        return wxString( _("Different net assigned to a shared pin in another unit of the same component" ) );
+        msg = _HKI("Different net assigned to a shared pin in another unit of the same component" );
+        break;
     case ERCE_BUS_ALIAS_CONFLICT:
-        return wxString( _("Conflict between bus alias definitions across schematic sheets") );
+        msg = _HKI("Conflict between bus alias definitions across schematic sheets" );
+        break;
     case ERCE_DRIVER_CONFLICT:
-        return wxString( _( "More than one name given to this bus or net" ) );
+        msg = _HKI( "More than one name given to this bus or net" );
+        break;
     case ERCE_BUS_ENTRY_CONFLICT:
-        return wxString( _( "Net is graphically connected to a bus but not a bus member" ) );
+        msg = _HKI( "Net is graphically connected to a bus but not a bus member" );
+        break;
     case ERCE_BUS_LABEL_ERROR:
-        return wxString( _( "Label attached to bus item does not describe a bus" ) );
+        msg = _HKI( "Label attached to bus item does not describe a bus" );
+        break;
     case ERCE_BUS_TO_BUS_CONFLICT:
-        return wxString( _( "Buses are graphically connected but share no bus members" ) );
+        msg = _HKI( "Buses are graphically connected but share no bus members" );
+        break;
     case ERCE_BUS_TO_NET_CONFLICT:
-        return wxString( _( "Invalid connection between bus and net items" ) );
+        msg = _HKI( "Invalid connection between bus and net items" );
+        break;
     case ERCE_GLOBLABEL:
-        return wxString( _( "Global label not connected anywhere else in the schematic" ) );
+        msg = _HKI( "Global label not connected anywhere else in the schematic" );
+        break;
     case ERCE_UNRESOLVED_VARIABLE:
-        return wxString( _( "Unresolved text variable" ) );
+        msg = _HKI( "Unresolved text variable" );
+        break;
     default:
         wxFAIL_MSG( "Missing ERC error description" );
-        return wxString( wxT( "Unknown" ) );
+        msg = _HKI( "Unknown ERC violation" );
+        break;
     }
+
+    if( aTranslate )
+        return wxGetTranslation( msg );
+    else
+        return msg;
 }

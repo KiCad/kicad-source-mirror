@@ -213,7 +213,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         // test if the type of via is allowed due to design rules
         if( refvia->GetViaType() == VIATYPE::MICROVIA && !dsnSettings.m_MicroViasAllowed )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICRO_VIA_NOT_ALLOWED );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICROVIA_NOT_ALLOWED );
 
             msg.Printf( drcItem->GetErrorText() + _( " (board design rule constraints)" ) );
             drcItem->SetErrorMessage( msg );
@@ -256,7 +256,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
             if( err )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICROVIA_TOO_MANY_LAYERS );
 
                 msg.Printf( drcItem->GetErrorText() + _( " (%s and %s not adjacent)" ),
                             m_pcb->GetLayerName( layer1 ),
@@ -345,7 +345,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 if( center2center_squared < SEG::Square( center2centerAllowed ) )
                 {
                     int       actual = std::max( 0.0, sqrt( center2center_squared ) - widths );
-                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_THROUGH_HOLE );
+                    DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_HOLE );
 
                     msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                                 clearanceSource,

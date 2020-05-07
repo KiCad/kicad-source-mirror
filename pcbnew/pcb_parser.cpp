@@ -63,9 +63,9 @@ void PCB_PARSER::init()
     m_layerIndices.clear();
     m_layerMasks.clear();
 
-    // Add untranslated default (i.e. english) layernames.
+    // Add untranslated default (i.e. English) layernames.
     // Some may be overridden later if parsing a board rather than a footprint.
-    // The english name will survive if parsing only a footprint.
+    // The English name will survive if parsing only a footprint.
     for( LAYER_NUM layer = 0;  layer < PCB_LAYER_ID_COUNT;  ++layer )
     {
         std::string untranslated = TO_UTF8( wxString( LSET::Name( PCB_LAYER_ID( layer ) ) ) );

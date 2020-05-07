@@ -477,8 +477,8 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
     // test courtyards
     if( !m_pcb->GetDesignSettings().Ignore( DRCE_OVERLAPPING_FOOTPRINTS )
-        || !m_pcb->GetDesignSettings().Ignore( DRCE_MISSING_COURTYARD_IN_FOOTPRINT )
-        || !m_pcb->GetDesignSettings().Ignore( DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT ) )
+        || !m_pcb->GetDesignSettings().Ignore( DRCE_MISSING_COURTYARD )
+        || !m_pcb->GetDesignSettings().Ignore( DRCE_MALFORMED_COURTYARD ) )
     {
         if( aMessages )
         {
@@ -935,7 +935,7 @@ void DRC::testZones()
     // In recent Pcbnew versions, the netcode is always >= 0, but an internal net name
     // is stored, and initialized from the file or the zone properties editor.
     // if it differs from the net name from net code, there is a DRC issue
-    if( !m_pcb->GetDesignSettings().Ignore( DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE ) )
+    if( !m_pcb->GetDesignSettings().Ignore( DRCE_ZONE_HAS_EMPTY_NET ) )
     {
         for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
         {
@@ -952,7 +952,7 @@ void DRC::testZones()
 
             if( ( netcode < 0 ) || pads_in_net == 0 )
             {
-                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE );
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_ZONE_HAS_EMPTY_NET );
                 drcItem->SetItems( zone );
 
                 MARKER_PCB* marker = new MARKER_PCB( drcItem, zone->GetPosition() );
@@ -1445,13 +1445,18 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
 
 void DRC::testOutline()
 {
-    wxPoint error_loc( m_pcb->GetBoardEdgesBoundingBox().GetPosition() );
+    wxString msg;
+    wxPoint  error_loc( m_pcb->GetBoardEdgesBoundingBox().GetPosition() );
 
     m_board_outlines.RemoveAllContours();
 
     if( !m_pcb->GetBoardPolygonOutlines( m_board_outlines, nullptr, &error_loc ) )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_INVALID_OUTLINE );
+
+        msg.Printf( drcItem->GetErrorText() + _( " (not a closed shape)" ) );
+
+        drcItem->SetErrorMessage( msg );
         drcItem->SetItems( m_pcb );
 
         MARKER_PCB* marker = new MARKER_PCB( drcItem, error_loc );
@@ -1722,7 +1727,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 
         if( !checkClearancePadToPad( aRefPad, pad, minClearance, &actual ) )
         {
-            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_PAD1 );
+            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_NEAR_PAD );
 
             msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
                         source,

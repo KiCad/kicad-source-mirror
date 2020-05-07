@@ -63,8 +63,8 @@ MARKER_PCB::~MARKER_PCB()
 
 wxString MARKER_PCB::Serialize() const
 {
-    return wxString::Format( wxT( "%d|%d|%d|%s|%s" ),
-                             m_rcItem->GetErrorCode(),
+    return wxString::Format( wxT( "%s|%d|%d|%s|%s" ),
+                             m_rcItem->GetErrorText( m_rcItem->GetErrorCode(), false ),
                              m_Pos.x,
                              m_Pos.y,
                              m_rcItem->GetMainItemID().AsString(),
@@ -75,11 +75,10 @@ wxString MARKER_PCB::Serialize() const
 MARKER_PCB* MARKER_PCB::Deserialize( const wxString& data )
 {
     wxArrayString props = wxSplit( data, '|' );
-    int           errorCode = (int) strtol( props[0].c_str(), nullptr, 10 );
     wxPoint       markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
                              (int) strtol( props[2].c_str(), nullptr, 10 ) );
 
-    DRC_ITEM* drcItem = new DRC_ITEM( errorCode );
+    DRC_ITEM* drcItem = new DRC_ITEM( props[0] );
     drcItem->SetItems( KIID( props[3] ), KIID( props[4] ) );
 
     return new MARKER_PCB( drcItem, markerPos );

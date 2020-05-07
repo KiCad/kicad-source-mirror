@@ -102,7 +102,7 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
         {   // one error: the module has no courtyard
             {
                 "U1",
-                DRCE_MISSING_COURTYARD_IN_FOOTPRINT,
+                    DRCE_MISSING_COURTYARD,
             },
         },
     },
@@ -121,7 +121,7 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
         {   // one error: the module has malformed courtyard
             {
                 "U1",
-                DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT,
+                    DRCE_MALFORMED_COURTYARD,
             },
         },
     },
@@ -140,7 +140,7 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
         {   // one error: the module has malformed courtyard
             {
                 "U1",
-                DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT,
+                    DRCE_MALFORMED_COURTYARD,
             },
         },
     },
@@ -179,7 +179,7 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
         {   // one error: the second module has malformed courtyard
             {
                 "U2",
-                DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT,
+                    DRCE_MALFORMED_COURTYARD,
             },
         },
     },
@@ -242,7 +242,7 @@ static BOARD_DESIGN_SETTINGS GetOverlapCheckDesignSettings()
     des_settings.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] = RPT_SEVERITY_ERROR;
 
     // we will also check for missing courtyards here
-    des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = RPT_SEVERITY_ERROR;
+    des_settings.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_ERROR;
 
     return des_settings;
 }

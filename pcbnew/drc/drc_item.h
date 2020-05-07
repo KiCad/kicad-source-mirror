@@ -31,21 +31,20 @@
 #include <marker_base.h>
 #include <class_board.h>
 #include <pcb_base_frame.h>
-
+#include "drc.h"
 
 class DRC_ITEM : public RC_ITEM
 {
 public:
-    DRC_ITEM( int aErrorCode )
-    {
-        m_errorCode = aErrorCode;
-    }
+    DRC_ITEM( int aErrorCode );
+
+    DRC_ITEM( const wxString& aErrorText );
 
     /**
      * Function GetErrorText
      * returns the string form of a drc error code.
      */
-    wxString GetErrorText( int aErrorCode = -1 ) const override;
+    wxString GetErrorText( int aErrorCode = -1, bool aTranslate = true ) const override;
 
     /**
      * Function ShowHtml

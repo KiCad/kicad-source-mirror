@@ -84,9 +84,9 @@ public:
         if( aConfig->Read( wxT( "RequireCourtyardDefinitions" ), &flag, false ) )
         {
             if( flag )
-                bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = RPT_SEVERITY_ERROR;
+                bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_ERROR;
             else
-                bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = RPT_SEVERITY_IGNORE;
+                bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_IGNORE;
         }
 
         if( aConfig->Read( wxT( "ProhibitOverlappingCourtyards" ), &flag, false ) )
@@ -106,7 +106,27 @@ public:
         bds.m_DRCSeverities[ DRCE_ZERO_LENGTH_TRACK ] = RPT_SEVERITY_ACTION;
         bds.m_DRCSeverities[ DRCE_TRACK_IN_PAD ] = RPT_SEVERITY_ACTION;
 
-        // TO DO: figure out what we're going to use as keys here so we can read/write these....
+        DRC_ITEM drc( 0 );
+        wxString severity;
+
+        auto mapSeverity = []( const wxString& aSeverity )
+                           {
+                               if( aSeverity == wxT( "warning" ) )
+                                   return RPT_SEVERITY_WARNING;
+                               else if( aSeverity == wxT( "ignore" ) )
+                                   return RPT_SEVERITY_IGNORE;
+                               else
+                                   return RPT_SEVERITY_ERROR;
+                           };
+
+        for( int i = DRCE_FIRST; i <= DRCE_LAST; ++i )
+        {
+            wxString name = drc.GetErrorText( i, false );
+            name.Replace( wxT( " " ), wxT( "_" ) );
+
+            if( aConfig->Read( name, &severity, wxEmptyString ) )
+                bds.m_DRCSeverities[i] = mapSeverity( severity );
+        }
 
         aConfig->SetPath( oldPath );
     }
@@ -119,15 +139,25 @@ public:
         BOARD*                 board = m_Pt_param;
         BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
         wxString               oldPath = aConfig->GetPath();
+        DRC_ITEM               drc( 0 );
 
-        // TO DO: figure out what we're going to use as keys here so we can read/write these....
+        auto mapSeverity = []( int aSeverity )
+                           {
+                               if( aSeverity == RPT_SEVERITY_IGNORE )
+                                   return wxT( "ignore" );
+                               else if( aSeverity == RPT_SEVERITY_WARNING )
+                                   return wxT( "warning" );
+                               else
+                                   return wxT( "error" );
+                           };
 
-        // TO DO: for now just write out the legacy ones so we don't lose them
-        // TO DO: remove this once the new scheme is in place
-        aConfig->Write( wxT( "RequireCourtyardDefinitions" ),
-                        bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] != RPT_SEVERITY_IGNORE );
-        aConfig->Write( wxT( "ProhibitOverlappingCourtyards" ),
-                        bds.m_DRCSeverities[ DRCE_OVERLAPPING_FOOTPRINTS ] != RPT_SEVERITY_IGNORE );
+        for( int i = DRCE_FIRST; i <= DRCE_LAST; ++i )
+        {
+            wxString name = drc.GetErrorText( i, false );
+            name.Replace( wxT( " " ), wxT( "_" ) );
+
+            aConfig->Write( name, mapSeverity( bds.m_DRCSeverities[i] ) );
+        }
 
         aConfig->SetPath( oldPath );
     }
@@ -590,7 +620,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     for( int errorCode = DRCE_FIRST; errorCode <= DRCE_LAST; ++errorCode )
         m_DRCSeverities[ errorCode ] = RPT_SEVERITY_ERROR;
 
-    m_DRCSeverities[ DRCE_MISSING_COURTYARD_IN_FOOTPRINT ] = RPT_SEVERITY_IGNORE;
+    m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_IGNORE;
 
     m_DRCSeverities[ DRCE_MISSING_FOOTPRINT ] = RPT_SEVERITY_WARNING;
     m_DRCSeverities[ DRCE_DUPLICATE_FOOTPRINT ] = RPT_SEVERITY_WARNING;
