@@ -352,6 +352,11 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
     else
         m_Parent->RebuildView();
 
+    // It's possible that the symbol being edited has no pins, in which case there may be no
+    // alternate body style objects causing #LIB_PART::HasCoversion() to always return false.
+    // This allows the user to edit the alternate body style just in case this condition occurs.
+    m_Parent->SetShowDeMorgan( m_AsConvertButt->GetValue() );
+
     return true;
 }
 
