@@ -432,31 +432,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // Update all symbol library links for all sheets.
             schematic.UpdateSymbolLinks();
 
-            // Replace sheet and symbol time stamps with real UUIDs and update symbol instance
-            // sheet paths using the new UUID based sheet paths.
-
-            // Save the time stamp sheet paths.
-            SCH_SHEET_LIST timeStampSheetPaths( g_RootSheet );
-
-            std::vector<KIID_PATH> oldSheetPaths = timeStampSheetPaths.GetPaths();
-
-            // The root sheet now gets a permanent UUID.
-            const_cast<KIID&>( g_RootSheet->m_Uuid ).ConvertTimestampToUuid();
-
-            // Change the sheet and symbol time stamps to UUIDs.
-            for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
-            {
-                for( auto sheet : screen->Items().OfType( SCH_SHEET_T ) )
-                    const_cast<KIID&>( sheet->m_Uuid ).ConvertTimestampToUuid();
-
-                for( auto symbol : screen->Items().OfType( SCH_COMPONENT_T ) )
-                    const_cast<KIID&>( symbol->m_Uuid ).ConvertTimestampToUuid();
-            }
-
-            SCH_SHEET_LIST uuidSheetPaths( g_RootSheet );
-
-            timeStampSheetPaths.ReplaceLegacySheetPaths( oldSheetPaths );
-
             if( !cfg || cfg->m_Appearance.show_sexpr_file_convert_warning )
             {
                 wxRichMessageDialog newFileFormatDlg(
@@ -709,6 +684,7 @@ bool SCH_EDIT_FRAME::SaveProject()
 
                 sheetFileName.SetExt( KiCadSchematicFileExtension );
                 sheet->SetFileName( sheetFileName.GetFullPath() );
+                RefreshItem( sheet );
             }
 
             screen->SetFileName( tmpFn.GetFullPath() );

@@ -1228,3 +1228,37 @@ bool SCH_EDIT_FRAME::GetShowAllPins() const
     EESCHEMA_SETTINGS* cfg = eeconfig();
     return cfg->m_Appearance.show_hidden_pins;
 }
+
+
+void SCH_EDIT_FRAME::ConvertTimeStampUuids()
+{
+    // Remove this once this method is fully implemented.  Otherwise, don't use it.
+    wxCHECK( false, /* void */ );
+
+    // Replace sheet and symbol time stamps with real UUIDs and update symbol instance
+    // sheet paths using the new UUID based sheet paths.
+
+    // Save the time stamp sheet paths.
+    SCH_SHEET_LIST timeStampSheetPaths( g_RootSheet );
+
+    std::vector<KIID_PATH> oldSheetPaths = timeStampSheetPaths.GetPaths();
+
+    // The root sheet now gets a permanent UUID.
+    const_cast<KIID&>( g_RootSheet->m_Uuid ).ConvertTimestampToUuid();
+
+    SCH_SCREENS schematic;
+
+    // Change the sheet and symbol time stamps to UUIDs.
+    for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
+    {
+        for( auto sheet : screen->Items().OfType( SCH_SHEET_T ) )
+            const_cast<KIID&>( sheet->m_Uuid ).ConvertTimestampToUuid();
+
+        for( auto symbol : screen->Items().OfType( SCH_COMPONENT_T ) )
+            const_cast<KIID&>( symbol->m_Uuid ).ConvertTimestampToUuid();
+    }
+
+    SCH_SHEET_LIST uuidSheetPaths( g_RootSheet );
+
+    timeStampSheetPaths.ReplaceLegacySheetPaths( oldSheetPaths );
+}
