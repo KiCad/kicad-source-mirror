@@ -602,7 +602,7 @@ void DIALOG_SCH_SHEET_PROPS::OnGridCellChanging( wxGridEvent& event )
 
             if( fn.GetExt().CmpNoCase( KiCadSchematicFileExtension ) != 0 )
             {
-                wxMessageBox( _( "Sheet filename must have a '.sch' extension." ) );
+                wxMessageBox( _( "Sheet filename must have a '.kicad_sch' extension." ) );
                 success = false;
             }
         }
