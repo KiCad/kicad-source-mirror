@@ -500,8 +500,8 @@ bool LIB_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 {
     wxFileName fn = m_libMgr->GetUniqueLibraryName();
 
-    if( !LibraryFileBrowser( !aCreateNew, fn, SchematicLibraryFileWildcard(),
-                             SchematicLibraryFileExtension, false ) )
+    if( !LibraryFileBrowser( !aCreateNew, fn, KiCadSymbolLibFileWildcard(),
+                             KiCadSymbolLibFileExtension, false ) )
     {
         return false;
     }

@@ -641,7 +641,8 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LI
     if( relPath.IsEmpty() )
         relPath = aFilePath;
 
-    wxString typeName = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY );
+    SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( aFilePath );
+    wxString typeName = SCH_IO_MGR::ShowType( schFileType );
     SYMBOL_LIB_TABLE_ROW* libRow = new SYMBOL_LIB_TABLE_ROW( libName, relPath, typeName );
     aTable->InsertRow( libRow );
 
