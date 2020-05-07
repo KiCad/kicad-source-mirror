@@ -170,7 +170,8 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     {
         wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
         infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
-        m_textOffsetNote->SetFont( infoFont );
+        m_note1->SetFont( infoFont );
+        m_note2->SetFont( infoFont );
     }
     else
         m_textOffsetNote->Show( false );

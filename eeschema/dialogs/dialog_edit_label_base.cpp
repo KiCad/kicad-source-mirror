@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -93,20 +93,20 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	bSizeCtrlSizer->Add( m_textSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 20 );
 
 
-	bSizeCtrlSizer->Add( 0, 0, 1, wxEXPAND, 15 );
+	bSizeCtrlSizer->Add( 0, 0, 0, wxEXPAND, 15 );
 
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxVERTICAL );
+	m_textOffsetNote = new wxBoxSizer( wxHORIZONTAL );
 
-	m_textOffsetNote = new wxStaticText( this, wxID_ANY, _("Note:\nthe margins around the text are controlled by the text\noffset ratio in Schematic Setup > General > Formatting."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textOffsetNote->Wrap( -1 );
-	bSizer5->Add( m_textOffsetNote, 0, 0, 5 );
+	m_note1 = new wxStaticText( this, wxID_ANY, _("Note:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_note1->Wrap( -1 );
+	m_textOffsetNote->Add( m_note1, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_note2 = new wxStaticText( this, wxID_ANY, _("the margins around the text are controlled by the text\noffset ratio in Schematic Setup > General > Formatting."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_note2->Wrap( -1 );
+	m_textOffsetNote->Add( m_note2, 0, wxEXPAND, 5 );
 
 
-	bSizeCtrlSizer->Add( bSizer5, 0, wxEXPAND|wxLEFT, 10 );
-
-
-	bSizeCtrlSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizeCtrlSizer->Add( m_textOffsetNote, 1, wxEXPAND|wxLEFT, 10 );
 
 
 	m_textEntrySizer->Add( bSizeCtrlSizer, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 3 );
