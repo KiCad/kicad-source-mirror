@@ -548,10 +548,10 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                     if( !label->HasFlag( TEMP_SELECTED ) )
                         aList.push_back( label );
 
-                    double scale = GetLineLength( label->GetPosition(), otherEnd ) /
-                                    GetLineLength( otherEnd, aPoint );
-
-                    m_specialCaseLabels[label] = scale;
+                    SPECIAL_CASE_LABEL_INFO info;
+                    info.attachedLine = testLine;
+                    info.originalLabelPos = label->GetPosition();
+                    m_specialCaseLabels[label] = info;
                 }
             }
 
@@ -690,7 +690,11 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         SCH_TEXT* label = static_cast<SCH_TEXT*>( aItem );
 
         if( m_specialCaseLabels.count( label ) )
-            label->Move( (wxPoint) aDelta * m_specialCaseLabels[ label ] );
+        {
+            SPECIAL_CASE_LABEL_INFO info = m_specialCaseLabels[ label ];
+            SEG currentLine( info.attachedLine->GetStartPoint(), info.attachedLine->GetEndPoint() );
+            label->SetPosition( (wxPoint) currentLine.NearestPoint( info.originalLabelPos ) );
+        }
         else
             label->Move( (wxPoint) aDelta );
 

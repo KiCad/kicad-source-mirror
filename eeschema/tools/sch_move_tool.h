@@ -33,6 +33,13 @@ class SCH_EDIT_FRAME;
 class EE_SELECTION_TOOL;
 
 
+struct SPECIAL_CASE_LABEL_INFO
+{
+    SCH_LINE* attachedLine;
+    wxPoint   originalLabelPos;
+};
+
+
 class SCH_MOVE_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
@@ -79,7 +86,7 @@ private:
 
     // A map of labels to scaling factors.  Used to scale the movement vector for labels that
     // are attached to wires which have only one end moving.
-    std::map<SCH_TEXT*, double> m_specialCaseLabels;
+    std::map<SCH_TEXT*, SPECIAL_CASE_LABEL_INFO> m_specialCaseLabels;
 
 };
 
