@@ -1834,10 +1834,12 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     if( aZone->GetIsKeepout() )
     {
-        m_out->Print( aNestLevel+1, "(keepout (tracks %s) (vias %s) (copperpour %s))\n",
+        m_out->Print( aNestLevel+1, "(keepout (tracks %s) (vias %s) (pads %s ) (copperpour %s) (footprints %s))\n",
                       aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",
                       aZone->GetDoNotAllowVias() ? "not_allowed" : "allowed",
-                      aZone->GetDoNotAllowCopperPour() ? "not_allowed" : "allowed" );
+                      aZone->GetDoNotAllowPads() ? "not_allowed" : "allowed",
+                      aZone->GetDoNotAllowCopperPour() ? "not_allowed" : "allowed",
+                      aZone->GetDoNotAllowFootprints() ? "not_allowed" : "allowed" );
     }
 
     m_out->Print( aNestLevel+1, "(fill" );
@@ -1918,10 +1920,12 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
             if( newLine == 0 )
                 m_out->Print( aNestLevel+3, "(xy %s %s)",
-                              FormatInternalUnits( iterator->x ).c_str(), FormatInternalUnits( iterator->y ).c_str() );
+                              FormatInternalUnits( iterator->x ).c_str(),
+                              FormatInternalUnits( iterator->y ).c_str() );
             else
                 m_out->Print( 0, " (xy %s %s)",
-                              FormatInternalUnits( iterator->x ).c_str(), FormatInternalUnits( iterator->y ).c_str() );
+                              FormatInternalUnits( iterator->x ).c_str(),
+                              FormatInternalUnits( iterator->y ).c_str() );
 
             if( newLine < 4 )
             {
@@ -1978,10 +1982,12 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
             if( newLine == 0 )
                 m_out->Print( aNestLevel+3, "(xy %s %s)",
-                              FormatInternalUnits( it->x ).c_str(), FormatInternalUnits( it->y ).c_str() );
+                              FormatInternalUnits( it->x ).c_str(),
+                              FormatInternalUnits( it->y ).c_str() );
             else
                 m_out->Print( 0, " (xy %s %s)",
-                              FormatInternalUnits( it->x ) .c_str(), FormatInternalUnits( it->y ).c_str() );
+                              FormatInternalUnits( it->x ) .c_str(),
+                              FormatInternalUnits( it->y ).c_str() );
 
             if( newLine < 4 )
             {

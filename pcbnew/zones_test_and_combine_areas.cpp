@@ -195,6 +195,12 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
 
             if( area_to_test->GetDoNotAllowVias() != area2->GetDoNotAllowVias() )
                 continue;
+
+            if( area_to_test->GetDoNotAllowPads() != area2->GetDoNotAllowPads() )
+                continue;
+
+            if( area_to_test->GetDoNotAllowFootprints() != area2->GetDoNotAllowFootprints() )
+                continue;
         }
         // Filled zone specific tests
         else

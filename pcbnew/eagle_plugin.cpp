@@ -1138,6 +1138,8 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
         zone->SetDoNotAllowVias( true );
         zone->SetDoNotAllowTracks( true );
         zone->SetDoNotAllowCopperPour( true );
+        zone->SetDoNotAllowPads( true );
+        zone->SetDoNotAllowFootprints( false );
     }
 
     // Get the first vertex and iterate

@@ -91,6 +91,8 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataToWindow()
     // Init keepout parameters:
     m_cbTracksCtrl->SetValue( m_zonesettings.GetDoNotAllowTracks() );
     m_cbViasCtrl->SetValue( m_zonesettings.GetDoNotAllowVias() );
+    m_cbPadsCtrl->SetValue( m_zonesettings.GetDoNotAllowPads() );
+    m_cbFootprintsCtrl->SetValue( m_zonesettings.GetDoNotAllowFootprints() );
     m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowCopperPour() );
 
     m_cbConstrainCtrl->SetValue( m_zonesettings.m_Zone_45_Only );
@@ -146,10 +148,14 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataFromWindow()
     m_zonesettings.SetDoNotAllowTracks( m_cbTracksCtrl->GetValue() );
     m_zonesettings.SetDoNotAllowVias( m_cbViasCtrl->GetValue() );
     m_zonesettings.SetDoNotAllowCopperPour( m_cbCopperPourCtrl->GetValue() );
+    m_zonesettings.SetDoNotAllowPads( m_cbPadsCtrl->GetValue() );
+    m_zonesettings.SetDoNotAllowFootprints( m_cbFootprintsCtrl->GetValue() );
 
     // Test for not allowed items: should have at least one item not allowed:
     if( ! m_zonesettings.GetDoNotAllowTracks() &&
         ! m_zonesettings.GetDoNotAllowVias() &&
+        ! m_zonesettings.GetDoNotAllowPads() &&
+        ! m_zonesettings.GetDoNotAllowFootprints() &&
         ! m_zonesettings.GetDoNotAllowCopperPour() )
     {
         DisplayError( NULL, _("Tracks, vias, and pads are allowed. The keepout will have no effect." ) );

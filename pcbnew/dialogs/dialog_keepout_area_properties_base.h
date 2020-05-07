@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,7 +40,9 @@ class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxDataViewListCtrl* m_layers;
 		wxCheckBox* m_cbTracksCtrl;
 		wxCheckBox* m_cbViasCtrl;
+		wxCheckBox* m_cbPadsCtrl;
 		wxCheckBox* m_cbCopperPourCtrl;
+		wxCheckBox* m_cbFootprintsCtrl;
 		wxCheckBox* m_cbConstrainCtrl;
 		wxStaticText* m_staticTextStyle;
 		wxChoice* m_OutlineAppearanceCtrl;

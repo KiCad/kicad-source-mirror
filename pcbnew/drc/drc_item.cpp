@@ -122,6 +122,8 @@ wxString DRC_ITEM::GetErrorText( int aCode ) const
         return wxString( _( "Track inside keepout area" ) );
     case DRCE_PAD_INSIDE_KEEPOUT:
         return wxString( _( "Pad inside keepout area" ) );
+    case DRCE_FOOTPRINT_INSIDE_KEEPOUT:
+        return wxString( _( "Footprint inside keepout area" ) );
 
     case DRCE_VIA_NEAR_COPPER:
         return wxString( _( "Via too close to copper item" ) );

@@ -977,7 +977,7 @@ void DRC::testKeepoutAreas()
         if( !area->GetIsKeepout() )
             continue;
 
-        for( auto segm : m_pcb->Tracks() )
+        for( TRACK* segm : m_pcb->Tracks() )
         {
             if( segm->Type() == PCB_TRACE_T )
             {
@@ -1006,9 +1006,7 @@ void DRC::testKeepoutAreas()
                 if( ! area->GetDoNotAllowVias()  )
                     continue;
 
-                auto viaLayers = segm->GetLayerSet();
-
-                if( !area->CommonLayerExists( viaLayers ) )
+                if( !area->CommonLayerExists( segm->GetLayerSet() ) )
                     continue;
 
                 int         widths = segm->GetWidth() / 2;
@@ -1025,7 +1023,78 @@ void DRC::testKeepoutAreas()
                 }
             }
         }
-        // Test pads: TODO
+
+        if( !area->GetDoNotAllowPads() && !area->GetDoNotAllowFootprints() )
+            continue;
+
+        EDA_RECT areaBBox = area->GetBoundingBox();
+        bool     checkFront = area->CommonLayerExists( LSET::FrontMask() );
+        bool     checkBack = area->CommonLayerExists( LSET::BackMask() );
+
+        for( MODULE* fp : m_pcb->Modules() )
+        {
+            if( area->GetDoNotAllowFootprints() && ( fp->IsFlipped() ? checkBack : checkFront ) )
+            {
+                // Fast test to detect a footprint inside the keepout area bounding box.
+                if( areaBBox.Intersects( fp->GetBoundingBox() ) )
+                {
+                    fp->BuildPolyCourtyard();
+
+                    SHAPE_POLY_SET outline = fp->IsFlipped() ? fp->GetPolyCourtyardBack()
+                                                             : fp->GetPolyCourtyardFront();
+
+                    if( outline.OutlineCount() == 0 )
+                        outline = fp->GetBoundingPoly();
+
+                    // Build the common area between footprint and the keepout area:
+                    outline.BooleanIntersection( *area->Outline(), SHAPE_POLY_SET::PM_FAST );
+
+                    // If it's not empty then we have a violation
+                    if( outline.OutlineCount() )
+                    {
+                        const VECTOR2I& pt = outline.CVertex( 0, 0, -1 );
+                        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_FOOTPRINT_INSIDE_KEEPOUT );
+                        drcItem->SetItems( fp, area );
+
+                        MARKER_PCB* marker = new MARKER_PCB( drcItem, (wxPoint) pt );
+                        addMarkerToPcb( marker );
+                    }
+                }
+            }
+
+            if( area->GetDoNotAllowPads() )
+            {
+                for( D_PAD* pad : fp->Pads() )
+                {
+                    if( !area->CommonLayerExists( pad->GetLayerSet() ) )
+                        continue;
+
+                    // Fast test to detect a pad inside the keepout area bounding box.
+                    EDA_RECT padBBox( pad->ShapePos(), wxSize() );
+                    padBBox.Inflate( pad->GetBoundingRadius() );
+
+                    if( areaBBox.Intersects( padBBox ) )
+                    {
+                        SHAPE_POLY_SET outline;
+                        pad->TransformShapeWithClearanceToPolygon( outline, 0 );
+
+                        // Build the common area between pad and the keepout area:
+                        outline.BooleanIntersection( *area->Outline(), SHAPE_POLY_SET::PM_FAST );
+
+                        // If it's not empty then we have a violation
+                        if( outline.OutlineCount() )
+                        {
+                            const VECTOR2I& pt = outline.CVertex( 0, 0, -1 );
+                            DRC_ITEM* drcItem = new DRC_ITEM( DRCE_PAD_INSIDE_KEEPOUT );
+                            drcItem->SetItems( pad, area );
+
+                            MARKER_PCB* marker = new MARKER_PCB( drcItem, (wxPoint) pt );
+                            addMarkerToPcb( marker );
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -1059,7 +1128,7 @@ void DRC::testCopperTextAndGraphics()
         if( module->IsNetTie() )
             continue;
 
-        for( auto item : module->GraphicalItems() )
+        for( BOARD_ITEM* item : module->GraphicalItems() )
         {
             if( IsCopperLayer( item->GetLayer() ) )
             {

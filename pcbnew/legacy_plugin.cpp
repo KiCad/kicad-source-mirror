@@ -2529,6 +2529,9 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         {
             char* token;
             zc->SetIsKeepout( true );
+            zc->SetDoNotAllowPads( false );        // Not supported in legacy
+            zc->SetDoNotAllowFootprints( false );  // Not supported in legacy
+
             // e.g. "ZKeepout tracks N vias N pads Y"
             token = strtok_r( line + SZ( "ZKeepout" ), delims, (char**) &data );
 

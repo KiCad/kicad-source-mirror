@@ -657,11 +657,15 @@ public:
     bool GetDoNotAllowCopperPour() const { return m_doNotAllowCopperPour; }
     bool GetDoNotAllowVias() const { return m_doNotAllowVias; }
     bool GetDoNotAllowTracks() const { return m_doNotAllowTracks; }
+    bool GetDoNotAllowPads() const { return m_doNotAllowPads; }
+    bool GetDoNotAllowFootprints() const { return m_doNotAllowFootprints; }
 
     void SetIsKeepout( bool aEnable ) { m_isKeepout = aEnable; }
     void SetDoNotAllowCopperPour( bool aEnable ) { m_doNotAllowCopperPour = aEnable; }
     void SetDoNotAllowVias( bool aEnable ) { m_doNotAllowVias = aEnable; }
     void SetDoNotAllowTracks( bool aEnable ) { m_doNotAllowTracks = aEnable; }
+    void SetDoNotAllowPads( bool aEnable ) { m_doNotAllowPads = aEnable; }
+    void SetDoNotAllowFootprints( bool aEnable ) { m_doNotAllowFootprints = aEnable; }
 
     /**
      * Hatch related methods
@@ -764,6 +768,8 @@ protected:
     bool                  m_doNotAllowCopperPour;
     bool                  m_doNotAllowVias;
     bool                  m_doNotAllowTracks;
+    bool                  m_doNotAllowPads;
+    bool                  m_doNotAllowFootprints;
 
     ZONE_CONNECTION       m_PadConnection;
     int                   m_ZoneClearance;           ///< Clearance value in internal units.

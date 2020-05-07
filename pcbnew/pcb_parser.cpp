@@ -3910,6 +3910,10 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
         case T_keepout:
             zone->SetIsKeepout( true );
 
+            // Initialize these two because their tokens won't appear in older files:
+            zone->SetDoNotAllowPads( false );
+            zone->SetDoNotAllowFootprints( false );
+
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
                 if( token == T_LEFT )
@@ -3939,6 +3943,22 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
                     if( token != T_allowed && token != T_not_allowed )
                         Expecting( "allowed or not_allowed" );
                     zone->SetDoNotAllowCopperPour( token == T_not_allowed );
+                    break;
+
+                case T_pads:
+                    token = NextTok();
+
+                    if( token != T_allowed && token != T_not_allowed )
+                        Expecting( "allowed or not_allowed" );
+                    zone->SetDoNotAllowPads( token == T_not_allowed );
+                    break;
+
+                case T_footprints:
+                    token = NextTok();
+
+                    if( token != T_allowed && token != T_not_allowed )
+                        Expecting( "allowed or not_allowed" );
+                    zone->SetDoNotAllowFootprints( token == T_not_allowed );
                     break;
 
                 default:

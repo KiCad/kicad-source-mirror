@@ -85,6 +85,12 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
 
         if(  GetDoNotAllowTracks() != aZoneToCompare.GetDoNotAllowTracks() )
             return false;
+
+        if(  GetDoNotAllowPads() != aZoneToCompare.GetDoNotAllowPads() )
+            return false;
+
+        if(  GetDoNotAllowFootprints() != aZoneToCompare.GetDoNotAllowFootprints() )
+            return false;
     }
 
     if( m_ZoneClearance != aZoneToCompare.m_ZoneClearance )

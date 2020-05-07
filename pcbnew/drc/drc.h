@@ -68,8 +68,8 @@ enum PCB_DRC_CODE {
     DRCE_NETCLASS_uVIASIZE,                 ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinSize
     DRCE_NETCLASS_uVIADRILLSIZE,            ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinDrill
     DRCE_VIA_INSIDE_KEEPOUT,                ///< Via in inside a keepout area
-    DRCE_TRACK_INSIDE_KEEPOUT,              ///< Track in inside a keepout area
-    DRCE_PAD_INSIDE_KEEPOUT,                ///< Pad in inside a keepout area
+    DRCE_TRACK_INSIDE_KEEPOUT,              ///< Track inside a keepout area
+    DRCE_PAD_INSIDE_KEEPOUT,                ///< Pad inside a keepout area
     DRCE_TRACK_NEAR_COPPER,                 ///< track & copper graphic collide or are too close
     DRCE_VIA_NEAR_COPPER,                   ///< via and copper graphic collide or are too close
     DRCE_PAD_NEAR_COPPER,                   ///< pad and copper graphic collide or are too close
@@ -89,8 +89,9 @@ enum PCB_DRC_CODE {
     DRCE_EXTRA_FOOTPRINT,                   ///< netlist item not found for footprint
 
     DRCE_UNRESOLVED_VARIABLE,
+    DRCE_FOOTPRINT_INSIDE_KEEPOUT,          ///< Footprint inside a keepout area
 
-    DRCE_LAST = DRCE_UNRESOLVED_VARIABLE,
+    DRCE_LAST = DRCE_FOOTPRINT_INSIDE_KEEPOUT,
 
     // These are actually Cleanup Tracks and Vias actions, not DRCE errors
     DRCE_SHORT,

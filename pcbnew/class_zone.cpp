@@ -68,6 +68,8 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
     SetDoNotAllowCopperPour( false );           // has meaning only if m_isKeepout == true
     SetDoNotAllowVias( true );                  // has meaning only if m_isKeepout == true
     SetDoNotAllowTracks( true );                // has meaning only if m_isKeepout == true
+    SetDoNotAllowPads( true );                  // has meaning only if m_isKeepout == true
+    SetDoNotAllowFootprints( false );           // has meaning only if m_isKeepout == true
     m_cornerRadius = 0;
     SetLocalFlags( 0 );                         // flags tempoarry used in zone calculations
     m_Poly = new SHAPE_POLY_SET();              // Outlines
@@ -162,6 +164,8 @@ void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
     m_doNotAllowCopperPour = aZone.m_doNotAllowCopperPour;
     m_doNotAllowVias = aZone.m_doNotAllowVias;
     m_doNotAllowTracks = aZone.m_doNotAllowTracks;
+    m_doNotAllowPads = aZone.m_doNotAllowPads;
+    m_doNotAllowFootprints = aZone.m_doNotAllowFootprints;
 
     m_cornerSmoothingType = aZone.m_cornerSmoothingType;
     m_cornerRadius = aZone.m_cornerRadius;
@@ -534,13 +538,19 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         msg.Empty();
 
         if( GetDoNotAllowVias() )
-            AccumulateDescription( msg, _( "No via" ) );
+            AccumulateDescription( msg, _( "No vias" ) );
 
         if( GetDoNotAllowTracks() )
-            AccumulateDescription( msg, _("No track") );
+            AccumulateDescription( msg, _("No tracks") );
+
+        if( GetDoNotAllowPads() )
+            AccumulateDescription( msg, _("No pads") );
 
         if( GetDoNotAllowCopperPour() )
-            AccumulateDescription( msg, _("No copper pour") );
+            AccumulateDescription( msg, _("No copper pours") );
+
+        if( GetDoNotAllowFootprints() )
+            AccumulateDescription( msg, _("No footpints") );
 
         aList.emplace_back( MSG_PANEL_ITEM( _( "Keepout" ), msg, RED ) );
     }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -41,11 +41,20 @@ DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWind
 	m_cbViasCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_cbViasCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
+	m_cbPadsCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRight->Add( m_cbPadsCtrl, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
 	m_cbCopperPourCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out copper pours"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_cbCopperPourCtrl, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizerRight->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	m_cbFootprintsCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRight->Add( m_cbFootprintsCtrl, 0, wxALL, 5 );
+
+
+	bSizerRight->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_cbConstrainCtrl = new wxCheckBox( this, wxID_ANY, _("Constrain outline to H, V and 45 deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_cbConstrainCtrl, 0, wxALL, 5 );

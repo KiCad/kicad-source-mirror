@@ -78,6 +78,8 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     SetDoNotAllowCopperPour( false );
     SetDoNotAllowVias( true );
     SetDoNotAllowTracks( true );
+    SetDoNotAllowPads( true );
+    SetDoNotAllowFootprints( false );
 }
 
 
@@ -103,6 +105,8 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_keepoutDoNotAllowCopperPour = aSource.GetDoNotAllowCopperPour();
     m_keepoutDoNotAllowVias = aSource.GetDoNotAllowVias();
     m_keepoutDoNotAllowTracks = aSource.GetDoNotAllowTracks();
+    m_keepoutDoNotAllowPads = aSource.GetDoNotAllowPads();
+    m_keepoutDoNotAllowFootprints = aSource.GetDoNotAllowFootprints();
     m_Zone_45_Only = aSource.GetHV45();
 
     m_CurrentZone_Layer  = aSource.GetLayer();
@@ -131,6 +135,8 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     aTarget.SetDoNotAllowCopperPour( GetDoNotAllowCopperPour() );
     aTarget.SetDoNotAllowVias( GetDoNotAllowVias() );
     aTarget.SetDoNotAllowTracks( GetDoNotAllowTracks() );
+    aTarget.SetDoNotAllowPads( GetDoNotAllowPads() );
+    aTarget.SetDoNotAllowFootprints( GetDoNotAllowFootprints() );
     aTarget.SetHV45( m_Zone_45_Only );
 
     if( aFullExport )

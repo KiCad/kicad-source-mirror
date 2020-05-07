@@ -209,13 +209,19 @@ void PCB_POLYGON::AddToBoard()
             zone->SetIsKeepout( true );
             zone->SetDoNotAllowTracks( true );
             zone->SetDoNotAllowVias( true );
+            zone->SetDoNotAllowPads( true );
             zone->SetDoNotAllowCopperPour( true );
+            zone->SetDoNotAllowFootprints( false );
         }
         else if( m_objType == wxT( 'C' ) )
         {
             // convert cutouts to keepouts because standalone cutouts are not supported in KiCad
             zone->SetIsKeepout( true );
             zone->SetDoNotAllowCopperPour( true );
+            zone->SetDoNotAllowTracks( false );
+            zone->SetDoNotAllowVias( false );
+            zone->SetDoNotAllowPads( false );
+            zone->SetDoNotAllowFootprints( false );
         }
 
         //if( m_filled )

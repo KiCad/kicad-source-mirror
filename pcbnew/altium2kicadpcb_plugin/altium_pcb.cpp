@@ -1155,6 +1155,8 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
                 zone->SetIsKeepout( true );
                 zone->SetDoNotAllowTracks( false );
                 zone->SetDoNotAllowVias( false );
+                zone->SetDoNotAllowPads( false );
+                zone->SetDoNotAllowFootprints( false );
                 zone->SetDoNotAllowCopperPour( true );
             }
             else
@@ -1346,6 +1348,8 @@ void ALTIUM_PCB::ParseArcs6Data(
             zone->SetIsKeepout( true );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowVias( false );
+            zone->SetDoNotAllowPads( false );
+            zone->SetDoNotAllowFootprints( false );
             zone->SetDoNotAllowCopperPour( true );
 
             ds.TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF, false );
@@ -1730,6 +1734,8 @@ void ALTIUM_PCB::ParseTracks6Data(
             zone->SetIsKeepout( true );
             zone->SetDoNotAllowTracks( false );
             zone->SetDoNotAllowVias( false );
+            zone->SetDoNotAllowPads( false );
+            zone->SetDoNotAllowFootprints( false );
             zone->SetDoNotAllowCopperPour( true );
 
             ds.TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF, false );
@@ -2001,6 +2007,8 @@ void ALTIUM_PCB::ParseFills6Data(
                 zone->SetIsKeepout( true );
                 zone->SetDoNotAllowTracks( false );
                 zone->SetDoNotAllowVias( false );
+                zone->SetDoNotAllowPads( false );
+                zone->SetDoNotAllowFootprints( false );
                 zone->SetDoNotAllowCopperPour( true );
             }
 
