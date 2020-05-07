@@ -1130,7 +1130,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
     // Draw the outline
     const SHAPE_POLY_SET* outline = aZone->Outline();
 
-    if( m_pcbSettings.m_zoneOutlines && outline )
+    if( m_pcbSettings.m_zoneOutlines && outline && outline->OutlineCount() > 0 )
     {
         m_gal->SetStrokeColor( color );
         m_gal->SetIsFill( false );
