@@ -223,3 +223,22 @@ BITMAP_DEF SCH_JUNCTION::GetMenuImage() const
 {
     return add_junction_xpm;
 }
+
+
+bool SCH_JUNCTION::operator <( const SCH_ITEM& aItem ) const
+{
+    if( Type() != aItem.Type() )
+        return Type() < aItem.Type();
+
+    if( GetLayer() != aItem.GetLayer() )
+        return GetLayer() < aItem.GetLayer();
+
+    auto junction = static_cast<const SCH_JUNCTION*>( &aItem );
+
+    if( GetPosition().x != junction->GetPosition().x )
+        return GetPosition().x < junction->GetPosition().x;
+
+    return GetPosition().y < junction->GetPosition().y;
+
+}
+

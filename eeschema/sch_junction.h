@@ -113,6 +113,8 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    virtual bool operator <( const SCH_ITEM& aItem ) const override;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
