@@ -38,6 +38,7 @@
 #include <dialog_edit_label_base.h>
 #include <kicad_string.h>
 #include <tool/actions.h>
+#include <html_messagebox.h>
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
@@ -71,8 +72,9 @@ public:
     }
 
 private:
-    virtual void OnEnterKey( wxCommandEvent& aEvent ) override;
-    void OnCharHook( wxKeyEvent& aEvt );
+    void OnEnterKey( wxCommandEvent& aEvent ) override;
+    void OnCharHook( wxKeyEvent& aEvent );
+    void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -174,7 +176,10 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
         m_note2->SetFont( infoFont );
     }
     else
-        m_textOffsetNote->Show( false );
+    {
+        m_note1->Show( false );
+        m_note2->Show( false );
+    }
 
     m_sdbSizer1OK->SetDefault();
     Layout();
@@ -490,4 +495,78 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
     m_Parent->OnModify();
 
     return true;
+}
+
+
+void DIALOG_LABEL_EDITOR::OnFormattingHelp( wxHyperlinkEvent& aEvent )
+{
+    wxString msg = _(
+            "<table>"
+            "   <tr>"
+            "      <th>Markup</th>"
+            "      <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>"
+            "      <th>Result</th>"
+            "   </tr>"
+            "   <tr>"
+            "      <td>&nbsp;<br>^{superscript}</td>"
+            "      <td></td>"
+            "      <td>&nbsp;<br><sup>superscript</sup></td>"
+            "   </tr>"
+            "   <tr>"
+            "      <td>&nbsp;<br>Driver Board^{Rev A}</td>"
+            "      <td></td>"
+            "      <td>&nbsp;<br>Driver Board<sup>Rev A</sup></td>"
+            "   </tr>"
+            "   <tr><td><br></td></tr>"
+            "   <tr>"
+            "      <td>&nbsp;<br>_{subscript}</td>"
+            "      <td></td>"
+            "      <td>&nbsp;<br><sub>subscript</sub></td>"
+            "   </tr>"
+            "   <tr>"
+            "      <td>&nbsp;<br>D_{0} - D_{15}</td>"
+            "      <td></td>"
+            "      <td>&nbsp;<br>D<sub>0</sub> - D<sub>31</sub></td>"
+            "   </tr>"
+            "   <tr><td></td></tr>"
+            "   <tr>"
+            "      <td>"
+            "         &nbsp;<br>~overbar<br>"
+            "         &nbsp;<br>~CLK"
+            "      </td>"
+            "      <td></td>"
+            "      <td>"
+            "         <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u><br>overbar<br>"
+            "         <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u><br>CLK"
+            "      </td>"
+            "   </tr>"
+            "   <tr><td><br></td></tr>"
+            "   <tr>"
+            "      <td>&nbsp;<br>${variable}</td>"
+            "      <td></td>"
+            "      <td>&nbsp;<br><i>variable_value</i></td>"
+            "   </tr>"
+            "   <tr>"
+            "      <td>&nbsp;<br>${REVISION}</td>"
+            "      <td></td>"
+            "      <td>&nbsp;<br>2020.1</td>"
+            "   </tr>"
+            "   <tr><td><br></td></tr>"
+            "   <tr>"
+            "      <td>&nbsp;<br>${refdes:field}</td>"
+            "      <td></td>"
+            "      <td>&nbsp;<br><i>field_value</i></td>"
+            "   </tr>"
+            "   <tr>"
+            "      <td>&nbsp;<br>${R3:VALUE}</td>"
+            "      <td></td>"
+            "      <td>&nbsp;<br>150K</td>"
+            "   </tr>"
+            "</table>" );
+
+    HTML_MESSAGE_BOX dlg( GetParent(), _( "Syntax Help" ) );
+    dlg.SetDialogSizeInDU( 180, 280 );
+
+    dlg.AddHTML_Text( msg );
+    dlg.ShowModal();
 }

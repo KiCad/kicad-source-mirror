@@ -20,6 +20,7 @@
 #include <wx/textctrl.h>
 #include <wx/stc/stc.h>
 #include <wx/combobox.h>
+#include <wx/hyperlink.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
 #include <wx/button.h>
@@ -51,7 +52,7 @@ class DIALOG_LABEL_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
-		wxBoxSizer* m_textOffsetNote;
+		wxHyperlinkCtrl* m_formattingHelp;
 		wxStaticText* m_note1;
 		wxStaticText* m_note2;
 		wxRadioBox* m_TextOrient;
@@ -63,6 +64,7 @@ class DIALOG_LABEL_EDITOR_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnEnterKey( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnFormattingHelp( wxHyperlinkEvent& event ) { event.Skip(); }
 
 
 	public:
