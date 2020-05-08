@@ -1335,7 +1335,7 @@ void C3D_RENDER_RAYTRACING::load_3D_models()
 
             while( sM != eM )
             {
-                if( ( (float)sM->m_Opacity > FLT_EPSILON ) &&
+                if( ( static_cast<float>( sM->m_Opacity ) > FLT_EPSILON ) &&
                     ( sM->m_Show && !sM->m_Filename.empty() ) )
                 {
                     // get it from cache

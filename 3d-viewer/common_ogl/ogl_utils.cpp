@@ -208,6 +208,7 @@ void OGL_DrawBackground( const SFVEC3F &aTopColor, const SFVEC3F &aBotColor )
     glEnd();
 }
 
+
 void OGL_ResetTextureStateDefaults()
 {
     glActiveTexture( GL_TEXTURE0 );
@@ -218,5 +219,5 @@ void OGL_ResetTextureStateDefaults()
 
     const SFVEC4F zero = SFVEC4F( 0.0f );
 
-    glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, (const float*)&zero.x );
+    glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, static_cast<const float*>( &zero.x ) );
 }
