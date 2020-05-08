@@ -40,8 +40,6 @@
 
 #include <memory>
 
-using std::unique_ptr;
-
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
 class PCBNEW_SETTINGS;

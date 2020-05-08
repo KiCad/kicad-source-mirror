@@ -61,7 +61,7 @@ int GRAPHICS_IMPORTER_PCBNEW::MapLineWidth( double aLineWidth )
 
 void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth )
 {
-    unique_ptr<DRAWSEGMENT> line( createDrawing() );
+    std::unique_ptr<DRAWSEGMENT> line( createDrawing() );
     line->SetShape( S_SEGMENT );
     line->SetLayer( GetLayer() );
     line->SetWidth( MapLineWidth( aWidth ) );
@@ -77,7 +77,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D&
 
 void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth )
 {
-    unique_ptr<DRAWSEGMENT> circle( createDrawing() );
+    std::unique_ptr<DRAWSEGMENT> circle( createDrawing() );
     circle->SetShape( S_CIRCLE );
     circle->SetLayer( GetLayer() );
     circle->SetWidth( MapLineWidth( aWidth ) );
@@ -94,7 +94,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
 void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
                                        double aAngle, double aWidth )
 {
-    unique_ptr<DRAWSEGMENT> arc( createDrawing() );
+    std::unique_ptr<DRAWSEGMENT> arc( createDrawing() );
     arc->SetShape( S_ARC );
     arc->SetLayer( GetLayer() );
     arc->SetWidth( MapLineWidth( aWidth ) );
@@ -117,7 +117,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector< VECTOR2D >& aVerti
     for( const VECTOR2D& precisePoint : aVertices )
         convertedPoints.emplace_back( MapCoordinate( precisePoint ) );
 
-    unique_ptr<DRAWSEGMENT> polygon( createDrawing() );
+    std::unique_ptr<DRAWSEGMENT> polygon( createDrawing() );
     polygon->SetShape( S_POLYGON );
     polygon->SetLayer( GetLayer() );
     polygon->SetPolyPoints( convertedPoints );
@@ -134,7 +134,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
         double aHeight, double aWidth, double aThickness, double aOrientation,
         EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify )
 {
-    unique_ptr<BOARD_ITEM> boardItem;
+    std::unique_ptr<BOARD_ITEM> boardItem;
     EDA_TEXT* textItem;
     tie( boardItem, textItem ) = createText();
     boardItem->SetLayer( GetLayer() );
@@ -157,7 +157,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
 void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,
                 const VECTOR2D& BezierControl2, const VECTOR2D& aEnd, double aWidth )
 {
-    unique_ptr<DRAWSEGMENT> spline( createDrawing() );
+    std::unique_ptr<DRAWSEGMENT> spline( createDrawing() );
     spline->SetShape( S_CURVE );
     spline->SetLayer( GetLayer() );
     spline->SetWidth( MapLineWidth( aWidth ) );
@@ -174,27 +174,27 @@ void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D
 }
 
 
-unique_ptr<DRAWSEGMENT> GRAPHICS_IMPORTER_BOARD::createDrawing()
+std::unique_ptr<DRAWSEGMENT> GRAPHICS_IMPORTER_BOARD::createDrawing()
 {
     return std::make_unique<DRAWSEGMENT>( m_board );
 }
 
 
-std::pair<unique_ptr<BOARD_ITEM>, EDA_TEXT*> GRAPHICS_IMPORTER_BOARD::createText()
+std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> GRAPHICS_IMPORTER_BOARD::createText()
 {
     TEXTE_PCB* text = new TEXTE_PCB( m_board );
-    return make_pair( unique_ptr<BOARD_ITEM>( text ), static_cast<EDA_TEXT*>( text ) );
+    return make_pair( std::unique_ptr<BOARD_ITEM>( text ), static_cast<EDA_TEXT*>( text ) );
 }
 
 
-unique_ptr<DRAWSEGMENT> GRAPHICS_IMPORTER_MODULE::createDrawing()
+std::unique_ptr<DRAWSEGMENT> GRAPHICS_IMPORTER_MODULE::createDrawing()
 {
-    return unique_ptr<DRAWSEGMENT>( new EDGE_MODULE( m_module ) );
+    return std::unique_ptr<DRAWSEGMENT>( new EDGE_MODULE( m_module ) );
 }
 
 
-std::pair<unique_ptr<BOARD_ITEM>, EDA_TEXT*> GRAPHICS_IMPORTER_MODULE::createText()
+std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> GRAPHICS_IMPORTER_MODULE::createText()
 {
     TEXTE_MODULE* text = new TEXTE_MODULE( m_module );
-    return make_pair( unique_ptr<BOARD_ITEM>( text ), static_cast<EDA_TEXT*>( text ) );
+    return make_pair( std::unique_ptr<BOARD_ITEM>( text ), static_cast<EDA_TEXT*>( text ) );
 }

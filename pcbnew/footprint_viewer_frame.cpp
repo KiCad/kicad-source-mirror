@@ -409,7 +409,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
             EDA_COMBINED_MATCHER matcher( term );
             int                  matches, position;
 
-            for( const unique_ptr<FOOTPRINT_INFO>& footprint : fp_info_list->GetList() )
+            for( const std::unique_ptr<FOOTPRINT_INFO>& footprint : fp_info_list->GetList() )
             {
                 wxString search = footprint->GetFootprintName() + " " + footprint->GetSearchText();
                 bool     matched = matcher.Find( search.Lower(), matches, position );
@@ -423,7 +423,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
         }
     }
 
-    for( const unique_ptr<FOOTPRINT_INFO>& footprint : fp_info_list->GetList() )
+    for( const std::unique_ptr<FOOTPRINT_INFO>& footprint : fp_info_list->GetList() )
     {
         if( !excludes.count( footprint->GetFootprintName() ) )
             m_fpList->Append( footprint->GetFootprintName() );
