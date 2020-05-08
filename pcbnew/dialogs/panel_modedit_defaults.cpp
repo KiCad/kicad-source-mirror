@@ -22,7 +22,6 @@
  */
 
 #include <fctsys.h>
-#include <pcbnew.h>
 #include <widgets/paged_dialog.h>
 #include <footprint_edit_frame.h>
 #include <widgets/wx_grid.h>
@@ -30,7 +29,7 @@
 
 #include <panel_modedit_defaults.h>
 #include <grid_layer_box_helpers.h>
-#include <bitmaps_png/include/bitmaps_png/bitmaps_list.h>
+#include <bitmaps.h>
 
 class TEXT_ITEMS_GRID_TABLE : public wxGridTableBase
 {
@@ -54,7 +53,7 @@ public:
         }
     }
 
-    wxString GetRowLabelValue( int aRow )
+    wxString GetRowLabelValue( int aRow ) override
     {
         switch( aRow )
         {
@@ -64,7 +63,7 @@ public:
         }
     }
 
-    bool CanGetValueAs( int aRow, int aCol, const wxString& aTypeName )
+    bool CanGetValueAs( int aRow, int aCol, const wxString& aTypeName ) override
     {
         switch( aCol )
         {
@@ -75,7 +74,7 @@ public:
         }
     }
 
-    bool CanSetValueAs( int aRow, int aCol, const wxString& aTypeName )
+    bool CanSetValueAs( int aRow, int aCol, const wxString& aTypeName ) override
     {
         return CanGetValueAs( aRow, aCol, aTypeName );
     }
@@ -107,7 +106,7 @@ public:
     void SetValueAsLong( int row, int col, long value ) override
     {
         if( col == 2 )
-            m_items[row].m_Layer = value;
+            m_items[row].m_Layer = (int) value;
     }
 
     bool AppendRows( size_t aNumRows = 1 ) override
