@@ -20,6 +20,8 @@
 #include <wx/wx.h>
 #include <widgets/ui_common.h>
 
+#include <algorithm>
+
 
 int KIUI::GetStdMargin()
 {

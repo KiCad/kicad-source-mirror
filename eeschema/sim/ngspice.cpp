@@ -37,6 +37,8 @@
 
 #include <stdexcept>
 
+#include <algorithm>
+
 using namespace std;
 
 static const wxChar* const traceNgspice = wxT( "KICAD_NGSPICE" );

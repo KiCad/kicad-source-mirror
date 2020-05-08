@@ -31,6 +31,7 @@
 #include "buffers_debug.h"
 #include <cstring> // For memcpy
 
+#include <algorithm>
 #include <atomic>
 #include <thread>
 #include <chrono>

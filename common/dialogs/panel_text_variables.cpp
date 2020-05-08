@@ -30,6 +30,8 @@
 #include <grid_tricks.h>
 #include <widgets/wx_grid.h>
 
+#include <algorithm>
+
 enum TEXT_VAR_GRID_COLUMNS
 {
     TV_NAME_COL = 0,

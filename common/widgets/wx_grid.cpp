@@ -26,6 +26,8 @@
 #include <wx/wx.h>
 #include "wx_grid.h"
 
+#include <algorithm>
+
 
 #define MIN_GRIDCELL_MARGIN 3
 

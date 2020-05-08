@@ -79,6 +79,8 @@
 
 #include <deque>
 
+#include <algorithm>
+
 // For memory leak debug
 #ifdef _WINDOWS
 #ifdef _DEBUG
