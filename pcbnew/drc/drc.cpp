@@ -1038,10 +1038,13 @@ void DRC::testKeepoutAreas()
                 // Fast test to detect a footprint inside the keepout area bounding box.
                 if( areaBBox.Intersects( fp->GetBoundingBox() ) )
                 {
-                    fp->BuildPolyCourtyard();
+                    SHAPE_POLY_SET outline;
 
-                    SHAPE_POLY_SET outline = fp->IsFlipped() ? fp->GetPolyCourtyardBack()
-                                                             : fp->GetPolyCourtyardFront();
+                    if( fp->BuildPolyCourtyard() )
+                    {
+                        outline = fp->IsFlipped() ? fp->GetPolyCourtyardBack()
+                                                  : fp->GetPolyCourtyardFront();
+                    }
 
                     if( outline.OutlineCount() == 0 )
                         outline = fp->GetBoundingPoly();
