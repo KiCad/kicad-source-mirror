@@ -806,7 +806,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
             nameField.SetText( candidateName );
 
-            sheet->SetParent( m_frame->GetScreen() );
+            sheet->SetParent( m_frame->GetCurrentSheet().Last() );
             m_frame->AddToScreen( sheet );
 
             copiedSheets = true;
