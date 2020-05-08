@@ -303,7 +303,9 @@ wxString LIB_FIELD::GetFullText( int unit ) const
     wxString text = GetText();
     text << wxT( "?" );
 
-    if( GetParent() && GetParent()->IsMulti() )
+    wxCHECK( GetParent(), text );
+
+    if( GetParent()->IsMulti() )
         text << LIB_PART::SubReference( unit );
 
     return text;

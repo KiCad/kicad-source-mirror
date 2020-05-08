@@ -690,11 +690,12 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
     wxCHECK_RET( CurTok() == T_property,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as a property token." ) );
+    wxCHECK( aSymbol, /* void */ );
 
     wxString error;
     wxString name;
     wxString value;
-    std::unique_ptr<LIB_FIELD> field( new LIB_FIELD( MANDATORY_FIELDS ) );
+    std::unique_ptr<LIB_FIELD> field( new LIB_FIELD( aSymbol.get(), MANDATORY_FIELDS ) );
 
     T token = NextTok();
 
