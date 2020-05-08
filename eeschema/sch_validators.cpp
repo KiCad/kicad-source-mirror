@@ -47,9 +47,7 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsLibEditor, int aFieldId, wxSt
     {
         excludes += " ";
     }
-    else if( ( aFieldId == VALUE && m_isLibEditor )
-                || aFieldId == SHEETNAME_V
-                || aFieldId == SHEETFILENAME_V )
+    else if( ( aFieldId == VALUE && m_isLibEditor ) || aFieldId == SHEETNAME_V )
     {
         excludes += " :/\\";
     }
