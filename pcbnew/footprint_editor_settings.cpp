@@ -36,11 +36,19 @@ const int fpEditSchemaVersion = 1;
 
 
 FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
-        APP_SETTINGS_BASE( "fpedit", fpEditSchemaVersion ), m_DesignSettings(), m_MagneticPads(),
-        m_Display(), m_UserGrid(), m_PolarCoords( false ), m_Use45DegreeGraphicSegments( true ),
-        m_LibWidth( 250 ), m_LastImportExportPath(), m_FootprintTextShownColumns()
+        APP_SETTINGS_BASE( "fpedit", fpEditSchemaVersion ),
+        m_DesignSettings(),
+        m_MagneticPads(),
+        m_Display(),
+        m_UserGrid(),
+        m_PolarCoords( false ),
+        m_Use45DegreeGraphicSegments( true ),
+        m_LibWidth( 250 ),
+        m_LastImportExportPath(),
+        m_FootprintTextShownColumns()
 {
-    m_params.emplace_back( new PARAM<int>( "window.lib_width", &m_LibWidth, 250 ) );
+    m_params.emplace_back( new PARAM<int>( "window.lib_width",
+            &m_LibWidth, 250 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "system.last_import_export_path",
             &m_LastImportExportPath, "" ) );
@@ -57,14 +65,56 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "editing.use_45_degree_graphic_segments",
             &m_Use45DegreeGraphicSegments, false ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "pcb_display.footprint_text", &m_Display.m_DisplayModTextFill, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.footprint_text",
+            &m_Display.m_DisplayModTextFill, true ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "pcb_display.graphic_items_fill", &m_Display.m_DisplayDrawItemsFill, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.graphic_items_fill",
+            &m_Display.m_DisplayDrawItemsFill, true ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "pcb_display.pad_fill", &m_Display.m_DisplayPadFill, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_fill",
+            &m_Display.m_DisplayPadFill, true ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
+            "design_settings.default_footprint_text_items",
+            [&] () -> nlohmann::json
+            {
+                nlohmann::json js = nlohmann::json::array();
+
+                for( const TEXT_ITEM_INFO& item : m_DesignSettings.m_DefaultFPTextItems )
+                {
+                    js.push_back( nlohmann::json( { item.m_Text.ToUTF8(),
+                                                    item.m_Visible,
+                                                    item.m_Layer } ) );
+                }
+
+                return js;
+            },
+            [&] ( const nlohmann::json& aObj )
+            {
+                m_DesignSettings.m_DefaultFPTextItems.clear();
+
+                if( !aObj.is_array() )
+                    return;
+
+                for( const nlohmann::json& entry : aObj )
+                {
+                    if( entry.empty() || !entry.is_array() )
+                        continue;
+
+                    TEXT_ITEM_INFO textInfo( wxT( "" ), true, F_SilkS );
+
+                    textInfo.m_Text = entry.at(0).get<wxString>();
+                    textInfo.m_Visible = entry.at(1).get<bool>();
+                    textInfo.m_Layer = entry.at(2).get<int>();
+
+                    m_DesignSettings.m_DefaultFPTextItems.push_back( std::move( textInfo ) );
+                }
+            },
+            nlohmann::json::array( {
+                                       { "REF**", true, F_SilkS },
+                                       { "", true, F_Fab },
+                                       { "${REFERENCE}", true, F_Fab }
+                                   } ) ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.silk_line_width",
             &m_DesignSettings.m_LineThickness[ LAYER_CLASS_SILK ],
@@ -158,24 +208,6 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "design_settings.others_text_italic",
             &m_DesignSettings.m_TextItalic[ LAYER_CLASS_OTHERS ], false ) );
-
-    m_params.emplace_back( new PARAM<int>( "design_settings.default_ref_layer",
-            &m_DesignSettings.m_RefDefaultlayer, F_SilkS, F_SilkS, F_Fab ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "design_settings.default_ref_text",
-            &m_DesignSettings.m_RefDefaultText, "REF**" ) );
-
-    m_params.emplace_back( new PARAM<bool>( "design_settings.default_ref_visibility",
-            &m_DesignSettings.m_RefDefaultVisibility, true ) );
-
-    m_params.emplace_back( new PARAM<int>( "design_settings.default_value_layer",
-            &m_DesignSettings.m_ValueDefaultlayer, F_SilkS, F_SilkS, F_Fab ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "design_settings.default_value_text",
-            &m_DesignSettings.m_ValueDefaultText, "" ) );
-
-    m_params.emplace_back( new PARAM<bool>( "design_settings.default_value_visibility",
-            &m_DesignSettings.m_ValueDefaultVisibility, true ) );
 }
 
 
@@ -183,61 +215,53 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 {
     bool ret = APP_SETTINGS_BASE::MigrateFromLegacy( aCfg );
 
-    ret &= fromLegacy<int>(  aCfg, "ModeditLibWidth",   "window.lib_width" );
-    ret &= fromLegacyString( aCfg, "import_last_path",  "system.last_import_export_path" );
-    ret &= fromLegacyString(
-            aCfg, "LibFootprintTextShownColumns", "window.footprint_text_shown_columns" );
+    //
+    // NOTE: there's no value in line-wrapping these; it just makes the table unreadable.
+    //
+    ret &= fromLegacy<int>(  aCfg, "ModeditLibWidth",              "window.lib_width" );
+    ret &= fromLegacyString( aCfg, "import_last_path",             "system.last_import_export_path" );
+    ret &= fromLegacyString( aCfg, "LibFootprintTextShownColumns", "window.footprint_text_shown_columns" );
 
-    ret &= fromLegacy<int>(  aCfg, "FpEditorMagneticPads",          "editing.magnetic_pads" );
-    ret &= fromLegacy<bool>( aCfg, "FpEditorDisplayPolarCoords",    "editing.polar_coords" );
-    ret &= fromLegacy<int>(  aCfg,
-            "FpEditorUse45DegreeGraphicSegments", "editing.use_45_degree_graphic_segments" );
+    ret &= fromLegacy<int>(  aCfg, "FpEditorMagneticPads",               "editing.magnetic_pads" );
+    ret &= fromLegacy<bool>( aCfg, "FpEditorDisplayPolarCoords",         "editing.polar_coords" );
+    ret &= fromLegacy<int>(  aCfg, "FpEditorUse45DegreeGraphicSegments", "editing.use_45_degree_graphic_segments" );
 
-    ret &= fromLegacy<bool>(  aCfg,
-            "FpEditorGraphicLinesDisplayMode", "pcb_display.graphic_items_fill" );
-    ret &= fromLegacy<bool>(  aCfg, "FpEditorPadDisplayMode",   "pcb_display.pad_fill" );
-    ret &= fromLegacy<bool>(  aCfg, "FpEditorTextsDisplayMode", "pcb_display.footprint_text" );
+    ret &= fromLegacy<bool>(  aCfg, "FpEditorGraphicLinesDisplayMode", "pcb_display.graphic_items_fill" );
+    ret &= fromLegacy<bool>(  aCfg, "FpEditorPadDisplayMode",          "pcb_display.pad_fill" );
+    ret &= fromLegacy<bool>(  aCfg, "FpEditorTextsDisplayMode",        "pcb_display.footprint_text" );
 
-    ret &= fromLegacy<double>( aCfg, "FpEditorSilkLineWidth", "design_settings.silk_line_width" );
-    ret &= fromLegacy<double>( aCfg, "FpEditorSilkTextSizeH", "design_settings.silk_text_size_h" );
-    ret &= fromLegacy<double>( aCfg, "FpEditorSilkTextSizeV", "design_settings.silk_text_size_v" );
-    ret &= fromLegacy<double>( aCfg,
-            "FpEditorSilkTextThickness", "design_settings.silk_text_thickness" );
-    ret &= fromLegacy<bool>(   aCfg, "FpEditorSilkTextItalic", "design_settings.silk_text_italic" );
-    ret &= fromLegacy<double>( aCfg,
-            "FpEditorCopperLineWidth", "design_settings.copper_line_width" );
-    ret &= fromLegacy<double>( aCfg,
-            "FpEditorCopperTextSizeH", "design_settings.copper_text_size_h" );
-    ret &= fromLegacy<double>( aCfg,
-            "FpEditorCopperTextSizeV", "design_settings.copper_text_size_v" );
-    ret &= fromLegacy<double>( aCfg,
-            "FpEditorCopperTextThickness", "design_settings.copper_text_thickness" );
-    ret &= fromLegacy<bool>(   aCfg,
-            "FpEditorCopperTextItalic", "design_settings.copper_text_italic" );
-    ret &= fromLegacy<double>( aCfg,
-            "FpEditorEdgeCutLineWidth", "design_settings.edge_line_width" );
-    ret &= fromLegacy<double>( aCfg,
-            "FpEditorCourtyardLineWidth", "design_settings.courtyard_line_width" );
-    ret &= fromLegacy<double>( aCfg,
-            "FpEditorOthersLineWidth", "design_settings.others_line_width" );
-    ret &= fromLegacy<double>( aCfg,
-            "FpEditorOthersTextSizeH", "design_settings.others_text_size_h" );
-    ret &= fromLegacy<double>( aCfg,
-            "FpEditorOthersTextSizeV", "design_settings.others_text_size_v" );
-    ret &= fromLegacy<double>( aCfg,
-            "FpEditorOthersTextSizeThickness", "design_settings.others_text_thickness" );
-    ret &= fromLegacy<bool>( aCfg,
-            "FpEditorOthersTextItalic", "design_settings.others_text_italic" );
-    ret &= fromLegacy<int>(  aCfg, "FpEditorRefDefaultLayer", "design_settings.default_ref_layer" );
-    ret &= fromLegacyString( aCfg, "FpEditorRefDefaultText", "design_settings.default_ref_text" );
-    ret &= fromLegacy<bool>( aCfg,
-            "FpEditorRefDefaultVisibility", "design_settings.default_ref_visibility" );
-    ret &= fromLegacy<int>( aCfg,
-            "FpEditorValueDefaultLayer", "design_settings.default_value_layer" );
-    ret &= fromLegacyString( aCfg,
-            "FpEditorValueDefaultText", "design_settings.default_value_text" );
-    ret &= fromLegacy<bool>( aCfg,
-            "FpEditorValueDefaultVisibility", "design_settings.default_value_visibility" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorSilkLineWidth",       "design_settings.silk_line_width" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorSilkTextSizeH",       "design_settings.silk_text_size_h" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorSilkTextSizeV",       "design_settings.silk_text_size_v" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorSilkTextThickness",   "design_settings.silk_text_thickness" );
+    ret &= fromLegacy<bool>(   aCfg, "FpEditorSilkTextItalic",      "design_settings.silk_text_italic" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorCopperLineWidth",     "design_settings.copper_line_width" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorCopperTextSizeH",     "design_settings.copper_text_size_h" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorCopperTextSizeV",     "design_settings.copper_text_size_v" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorCopperTextThickness", "design_settings.copper_text_thickness" );
+    ret &= fromLegacy<bool>(   aCfg, "FpEditorCopperTextItalic",    "design_settings.copper_text_italic" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorEdgeCutLineWidth",    "design_settings.edge_line_width" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorCourtyardLineWidth",  "design_settings.courtyard_line_width" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorOthersLineWidth",     "design_settings.others_line_width" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorOthersTextSizeH",     "design_settings.others_text_size_h" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorOthersTextSizeV",     "design_settings.others_text_size_v" );
+    ret &= fromLegacy<double>( aCfg, "FpEditorOthersTextThickness", "design_settings.others_text_thickness" );
+    ret &= fromLegacy<bool>(   aCfg, "FpEditorOthersTextItalic",    "design_settings.others_text_italic" );
+
+    nlohmann::json textItems = nlohmann::json::array( {
+                                                          { "REF**", true, F_SilkS },
+                                                          { "", true, F_Fab }
+                                                      } );
+
+    ( *this )[PointerFromString( "design_settings.default_footprint_text_items" )] = textItems;
+
+    ret &= fromLegacyString( aCfg, "FpEditorRefDefaultText",         "design_settings.default_footprint_text_items.0.0" );
+    ret &= fromLegacy<bool>( aCfg, "FpEditorRefDefaultVisibility",   "design_settings.default_footprint_text_items.0.1" );
+    ret &= fromLegacy<int>(  aCfg, "FpEditorRefDefaultLayer",        "design_settings.default_footprint_text_items.0.2" );
+    ret &= fromLegacyString( aCfg, "FpEditorValueDefaultText",       "design_settings.default_footprint_text_items.1.0" );
+    ret &= fromLegacy<bool>( aCfg, "FpEditorValueDefaultVisibility", "design_settings.default_footprint_text_items.1.1" );
+    ret &= fromLegacy<int>( aCfg,  "FpEditorValueDefaultLayer",      "design_settings.default_footprint_text_items.1.2" );
+
 
     const std::string f = "ModEdit";
 
@@ -250,12 +274,13 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     cs->SetName( wxT( "KiCad Default (Footprints)" ) );
     manager.Save( cs );
 
-    auto migrateLegacyColor = [&] ( const std::string& aKey, int aLayerId ) {
-        wxString str;
+    auto migrateLegacyColor = [&] ( const std::string& aKey, int aLayerId )
+                              {
+                                  wxString str;
 
-        if( aCfg->Read( aKey, &str ) )
-            cs->SetColor( aLayerId, COLOR4D( str ) );
-    };
+                                  if( aCfg->Read( aKey, &str ) )
+                                      cs->SetColor( aLayerId, COLOR4D( str ) );
+                              };
 
     for( int i = 0; i < PCB_LAYER_ID_COUNT; ++i )
     {

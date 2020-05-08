@@ -32,12 +32,18 @@ class PANEL_MODEDIT_DEFAULTS : public PANEL_MODEDIT_DEFAULTS_BASE
     BOARD_DESIGN_SETTINGS   m_brdSettings;
     FOOTPRINT_EDIT_FRAME*   m_frame;
     PAGED_DIALOG*           m_Parent;
+    bool                    m_firstShow = true;
 
 public:
     PANEL_MODEDIT_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent );
     ~PANEL_MODEDIT_DEFAULTS() override;
 
 private:
+    virtual void OnAddTextItem( wxCommandEvent& event ) override;
+    virtual void OnDeleteTextItem( wxCommandEvent& event ) override;
+
+    bool Show( bool aShow ) override;
+
     int getGridValue( int aRow, int aCol );
 
     bool validateData();

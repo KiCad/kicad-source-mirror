@@ -551,6 +551,13 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_BlindBuriedViaAllowed = false;
     m_MicroViasAllowed  = false;
 
+    // First is always the reference designator
+    m_DefaultFPTextItems.emplace_back( wxT( "REF**" ), true, F_SilkS );
+    // Second is always the value
+    m_DefaultFPTextItems.emplace_back( wxT( "" ), true, F_Fab );
+    // Any following ones are freebies
+    m_DefaultFPTextItems.emplace_back( wxT( "${REF}" ), true, F_Fab );
+
     m_LineThickness[ LAYER_CLASS_SILK ] = Millimeter2iu( DEFAULT_SILK_LINE_WIDTH );
     m_TextSize[ LAYER_CLASS_SILK ] = wxSize( Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ),
                                              Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ) );
@@ -642,15 +649,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_viaSizeIndex = 0;
     m_trackWidthIndex = 0;
     m_diffPairIndex = 0;
-
-    // Default ref text on fp creation. If empty, use footprint name as default
-    m_RefDefaultText = "REF**";
-    m_RefDefaultVisibility = true;
-    m_RefDefaultlayer = int( F_SilkS );
-    // Default value text on fp creation. If empty, use footprint name as default
-    m_ValueDefaultText = "";
-    m_ValueDefaultVisibility = true;
-    m_ValueDefaultlayer = int( F_Fab );
 }
 
 // Add parameters to save in project config.

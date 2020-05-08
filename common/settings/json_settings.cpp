@@ -38,9 +38,14 @@ extern const char* traceSettings;
 JSON_SETTINGS::JSON_SETTINGS( const std::string& aFilename, SETTINGS_LOC aLocation,
                               int aSchemaVersion, bool aCreateIfMissing, bool aWriteFile,
                               nlohmann::json aDefault ) :
-        nlohmann::json( std::move( aDefault ) ), m_filename( aFilename ), m_legacy_filename( "" ),
-        m_location( aLocation ), m_createIfMissing( aCreateIfMissing ), m_writeFile( aWriteFile ),
-        m_schemaVersion( aSchemaVersion ), m_manager( nullptr )
+        nlohmann::json( std::move( aDefault ) ),
+        m_filename( aFilename ),
+        m_legacy_filename( "" ),
+        m_location( aLocation ),
+        m_createIfMissing( aCreateIfMissing ),
+        m_writeFile( aWriteFile ),
+        m_schemaVersion( aSchemaVersion ),
+        m_manager( nullptr )
 {
     m_params.emplace_back(
             new PARAM<std::string>( "meta.filename", &m_filename, m_filename, true ) );

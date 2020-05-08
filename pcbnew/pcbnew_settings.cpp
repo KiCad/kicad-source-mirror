@@ -352,22 +352,25 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVe
     m_params.emplace_back( new PARAM<wxString>( "window.footprint_text_shown_columns",
             &m_FootprintTextShownColumns, "0 1 2 3 4 5 6" ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "footprint_wizard_list.width", &m_FootprintWizardList.width, -1 ) );
+    m_params.emplace_back( new PARAM<int>( "footprint_wizard_list.width",
+            &m_FootprintWizardList.width, -1 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "footprint_wizard_list.height", &m_FootprintWizardList.height, -1 ) );
+    m_params.emplace_back( new PARAM<int>( "footprint_wizard_list.height",
+            &m_FootprintWizardList.height, -1 ) );
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
-    m_params.emplace_back(
-            new PARAM_LAMBDA<nlohmann::json>( "action_plugins", [&]() -> nlohmann::json {
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "action_plugins",
+            [&]() -> nlohmann::json
+            {
                 nlohmann::json js = nlohmann::json::array();
 
                 for( const auto& pair : m_VisibleActionPlugins )
                     js.push_back( nlohmann::json( { { pair.first.ToUTF8(), pair.second } } ) );
 
                 return js;
-            }, [&]( const nlohmann::json& aObj ) {
+            },
+            [&]( const nlohmann::json& aObj )
+            {
                 m_VisibleActionPlugins.clear();
 
                 if( !aObj.is_array() )
@@ -386,7 +389,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() : APP_SETTINGS_BASE( "pcbnew", pcbnewSchemaVe
                                 wxString( pair.key().c_str(), wxConvUTF8 ), pair.value() ) );
                     }
                 }
-            }, nlohmann::json::array() ) );
+            },
+            nlohmann::json::array() ) );
 #endif
 
     addParamsForWindow( &m_FootprintViewer, "footprint_viewer" );
@@ -404,6 +408,9 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     const std::string f = getLegacyFrameName();
 
+    //
+    // NOTE: there's no value in line-wrapping these; it just makes the table unreadable.
+    //
     ret &= fromLegacy<bool>( aCfg, "ShowLayerManagerTools",    "aui.show_layer_manager" );
     ret &= fromLegacy<bool>( aCfg, "ShowMicrowaveTools",       "aui.show_microwave_tools" );
 
@@ -447,11 +454,11 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<double>( aCfg, "PlotLineWidth_mm",       "plot.line_width" );
 
     aCfg->SetPath( "/dialogs/cleanup_tracks" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupVias",         "cleanup.cleanup_vias" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupVias",          "cleanup.cleanup_vias" );
     ret &= fromLegacy<bool>(  aCfg, "DialogCleanupMergeSegments", "cleanup.merge_segments" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupUnconnected",  "cleanup.cleanup_unconnected" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupShortCircuit", "cleanup.cleanup_short_circuits" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupTracksInPads", "cleanup.cleanup_tracks_in_pad" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupUnconnected",   "cleanup.cleanup_unconnected" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupShortCircuit",  "cleanup.cleanup_short_circuits" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupTracksInPads",  "cleanup.cleanup_tracks_in_pad" );
     aCfg->SetPath( "../.." );
 
     ret &= fromLegacy<bool>(   aCfg, "RefillZonesBeforeDrc", "drc_dialog.refill_zones" );
@@ -533,6 +540,9 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
         ( *this )[PointerFromString( "action_plugins" ) ] = js;
     }
 
+    //
+    // NOTE: there's no value in line-wrapping these; it just makes the table unreadable.
+    //
     ret &= fromLegacy<int>(    aCfg, "VrmlExportUnit",       "export_vrml.units" );
     ret &= fromLegacy<bool>(   aCfg, "VrmlExportCopyFiles",  "export_vrml.copy_3d_models" );
     ret &= fromLegacy<bool>(   aCfg, "VrmlUseRelativePaths", "export_vrml.use_relative_paths" );
@@ -550,42 +560,38 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<double>( aCfg, "Zone_TH_Copper_Width",  "zones.thermal_relief_copper_width" );
 
     aCfg->SetPath( "ImportGraphics" );
-    ret &= fromLegacy<int>(    aCfg, "BoardLayer",          "import_graphics.layer" );
-    ret &= fromLegacy<bool>(
-            aCfg, "InteractivePlacement", "import_graphics.interactive_placement" );
-    ret &= fromLegacyString(   aCfg, "LastFile",            "import_graphics.last_file" );
-    ret &= fromLegacy<double>( aCfg, "LineWidth",           "import_graphics.line_width" );
-    ret &= fromLegacy<int>(    aCfg, "LineWidthUnits",      "import_graphics.line_width_units" );
-    ret &= fromLegacy<int>(    aCfg, "PositionUnits",       "import_graphics.origin_units" );
-    ret &= fromLegacy<double>( aCfg, "PositionX",           "import_graphics.origin_x" );
-    ret &= fromLegacy<double>( aCfg, "PositionY",           "import_graphics.origin_y" );
+    ret &= fromLegacy<int>(    aCfg, "BoardLayer",           "import_graphics.layer" );
+    ret &= fromLegacy<bool>(   aCfg, "InteractivePlacement", "import_graphics.interactive_placement" );
+    ret &= fromLegacyString(   aCfg, "LastFile",             "import_graphics.last_file" );
+    ret &= fromLegacy<double>( aCfg, "LineWidth",            "import_graphics.line_width" );
+    ret &= fromLegacy<int>(    aCfg, "LineWidthUnits",       "import_graphics.line_width_units" );
+    ret &= fromLegacy<int>(    aCfg, "PositionUnits",        "import_graphics.origin_units" );
+    ret &= fromLegacy<double>( aCfg, "PositionX",            "import_graphics.origin_x" );
+    ret &= fromLegacy<double>( aCfg, "PositionY",            "import_graphics.origin_y" );
     aCfg->SetPath( ".." );
 
-    ret &= fromLegacy<int>(  aCfg, "NetlistReportFilterMsg",  "netlist.report_filter" );
-    ret &= fromLegacy<bool>( aCfg, "NetlistUpdateFootprints", "netlist.update_footprints" );
-    ret &= fromLegacy<bool>( aCfg,
-            "NetlistDeleteShortingTracks", "netlist.delete_shorting_tracks" );
-    ret &= fromLegacy<bool>( aCfg,
-            "NetlistDeleteExtraFootprints", "netlist.delete_extra_footprints" );
-    ret &= fromLegacy<bool>( aCfg, "NetlistDeleteSinglePadNets", "netlist.delete_single_pad_nets" );
+    ret &= fromLegacy<int>(  aCfg, "NetlistReportFilterMsg",       "netlist.report_filter" );
+    ret &= fromLegacy<bool>( aCfg, "NetlistUpdateFootprints",      "netlist.update_footprints" );
+    ret &= fromLegacy<bool>( aCfg, "NetlistDeleteShortingTracks",  "netlist.delete_shorting_tracks" );
+    ret &= fromLegacy<bool>( aCfg, "NetlistDeleteExtraFootprints", "netlist.delete_extra_footprints" );
+    ret &= fromLegacy<bool>( aCfg, "NetlistDeleteSinglePadNets",   "netlist.delete_single_pad_nets" );
 
     ret &= fromLegacy<int>(    aCfg, "PlaceFileUnits",          "place_file.units" );
     ret &= fromLegacy<int>(    aCfg, "PlaceFileOpts",           "place_file.file_options" );
     ret &= fromLegacy<int>(    aCfg, "PlaceFileFormat",         "place_file.file_format" );
     ret &= fromLegacy<bool>(   aCfg, "PlaceFileIncludeBrdEdge", "place_file.include_board_edge" );
 
-    ret &= fromLegacy<int>(    aCfg, "PrintSinglePage",        "plot.one_page_per_layer" );
-    ret &= fromLegacy<int>(    aCfg, "PrintPadsDrillOpt",      "plot.pads_drill_mode" );
-    ret &= fromLegacy<double>( aCfg, "PlotXFineScaleAdj",      "plot.fine_scale_x" );
-    ret &= fromLegacy<double>( aCfg, "PlotYFineScaleAdj",      "plot.fine_scale_y" );
-    ret &= fromLegacy<double>( aCfg, "PSPlotFineWidthAdj",     "plot.ps_fine_width_adjust" );
-    ret &= fromLegacy<bool>( aCfg, "CheckZonesBeforePlotting", "plot.check_zones_before_plotting" );
+    ret &= fromLegacy<int>(    aCfg, "PrintSinglePage",          "plot.one_page_per_layer" );
+    ret &= fromLegacy<int>(    aCfg, "PrintPadsDrillOpt",        "plot.pads_drill_mode" );
+    ret &= fromLegacy<double>( aCfg, "PlotXFineScaleAdj",        "plot.fine_scale_x" );
+    ret &= fromLegacy<double>( aCfg, "PlotYFineScaleAdj",        "plot.fine_scale_y" );
+    ret &= fromLegacy<double>( aCfg, "PSPlotFineWidthAdj",       "plot.ps_fine_width_adjust" );
+    ret &= fromLegacy<bool>(   aCfg, "CheckZonesBeforePlotting", "plot.check_zones_before_plotting" );
 
-    ret &= fromLegacyString( aCfg,
-            "FootprintTextShownColumns", "window.footprint_text_shown_columns" );
+    ret &= fromLegacyString( aCfg, "FootprintTextShownColumns", "window.footprint_text_shown_columns" );
 
-    ret &= fromLegacy<int>(    aCfg, "FpWizardListWidth",        "footprint_wizard_list.width" );
-    ret &= fromLegacy<int>(    aCfg, "FpWizardListHeight",       "footprint_wizard_list.height" );
+    ret &= fromLegacy<int>( aCfg, "FpWizardListWidth",        "footprint_wizard_list.width" );
+    ret &= fromLegacy<int>( aCfg, "FpWizardListHeight",       "footprint_wizard_list.height" );
 
     migrateWindowConfig( aCfg, "ModViewFrame", "footprint_viewer" );
 
@@ -595,10 +601,10 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     const std::string p = "pcbnew.InteractiveRouter.";
 
-    ( *this )[PointerFromString( "tools.pns.meta" ) ] = nlohmann::json( {
-                { "filename", "pns" },
-                { "version", 0 }
-            } );
+    ( *this )[PointerFromString( "tools.pns.meta" )] = nlohmann::json( {
+                                                                           { "filename", "pns" },
+                                                                           { "version", 0 }
+                                                                       } );
 
     ret &= fromLegacy<int>(  aCfg, p + "Mode",                  "tools.pns.mode" );
     ret &= fromLegacy<int>(  aCfg, p + "OptimizerEffort",       "tools.pns.effort" );

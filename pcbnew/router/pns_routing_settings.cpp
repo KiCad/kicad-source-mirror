@@ -69,25 +69,28 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_params.emplace_back( new PARAM<bool>( "start_diagonal",   &m_startDiagonal,   false ) );
     m_params.emplace_back( new PARAM<int>( "shove_iteration_limit", &m_shoveIterationLimit, 250 ) );
 
-    m_params.emplace_back( new PARAM_LAMBDA<int>( "shove_time_limit", [this] () -> int {
+    m_params.emplace_back( new PARAM_LAMBDA<int>( "shove_time_limit",
+            [this] () -> int
+            {
                 return m_shoveTimeLimit.Get();
-            }, [this] ( int aVal ) {
+            },
+            [this] ( int aVal )
+            {
                 m_shoveTimeLimit.Set( aVal );
-            }, 1000 ) );
+            },
+            1000 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "walkaround_iteration_limit", &m_walkaroundIterationLimit, 40 ) );
-    m_params.emplace_back( new PARAM<bool>( "jump_over_obstacles", &m_jumpOverObstacles, false ) );
+    m_params.emplace_back( new PARAM<int>( "walkaround_iteration_limit", &m_walkaroundIterationLimit, 40 ) );
+    m_params.emplace_back( new PARAM<bool>( "jump_over_obstacles",       &m_jumpOverObstacles, false ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "smooth_dragged_segments", &m_smoothDraggedSegments, true ) );
+    m_params.emplace_back( new PARAM<bool>( "smooth_dragged_segments",   &m_smoothDraggedSegments, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "can_violate_drc",  &m_canViolateDRC,     false ) );
     m_params.emplace_back( new PARAM<bool>( "free_angle_mode",  &m_freeAngleMode,     false ) );
     m_params.emplace_back( new PARAM<bool>( "inline_drag",      &m_inlineDragEnabled, false ) );
     m_params.emplace_back( new PARAM<bool>( "snap_to_tracks",   &m_snapToTracks,      false ) );
     m_params.emplace_back( new PARAM<bool>( "snap_to_pads",     &m_snapToPads,        false ) );
-    m_params.emplace_back( new PARAM<bool>( "optimize_dragged_track",     &m_optimizeDraggedTrack,        true ) );
+    m_params.emplace_back( new PARAM<bool>( "optimize_dragged_track", &m_optimizeDraggedTrack, true ) );
 
     m_params.emplace_back( new PARAM<int>( "min_radius",        &m_minRadius,         0 ) );
     m_params.emplace_back( new PARAM<int>( "max_radius",        &m_maxRadius,         1000000 ) );

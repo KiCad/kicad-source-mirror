@@ -18,10 +18,14 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
-#include <wx/choice.h>
-#include <wx/sizer.h>
 #include <wx/grid.h>
+#include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/button.h>
+#include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -35,18 +39,18 @@ class PANEL_MODEDIT_DEFAULTS_BASE : public wxPanel
 	private:
 
 	protected:
-		wxStaticText* m_staticText13;
-		wxStaticText* m_staticTextRef;
-		wxTextCtrl* m_textCtrlRefText;
-		wxChoice* m_choiceLayerReference;
-		wxChoice* m_choiceVisibleReference;
-		wxStaticText* m_staticTextValue;
-		wxTextCtrl* m_textCtrlValueText;
-		wxChoice* m_choiceLayerValue;
-		wxChoice* m_choiceVisibleValue;
+		wxStaticText* defaultTextItemsLabel;
+		WX_GRID* m_textItemsGrid;
+		wxBitmapButton* m_bpAdd;
+		wxBitmapButton* m_bpDelete;
 		wxStaticText* m_staticTextInfo;
-		wxStaticText* m_staticText1;
-		WX_GRID* m_grid;
+		WX_GRID* m_layerClassesGrid;
+
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
+		virtual void OnAddTextItem( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteTextItem( wxCommandEvent& event ) { event.Skip(); }
+
 
 	public:
 

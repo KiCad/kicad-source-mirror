@@ -150,9 +150,9 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataFromGrid()
 
     for( int row = 0; row < m_grid->GetNumberRows(); ++row )
     {
-        m_fields[row].m_Name  = m_grid->GetCellValue( row, 0 );
-        m_fields[row].m_Visible = ( m_grid->GetCellValue( row, 1 ) != wxEmptyString );
-        m_fields[row].m_URL     = ( m_grid->GetCellValue( row, 2 ) != wxEmptyString );
+        m_fields[row].m_Name    = m_grid->GetCellValue( row, 0 );
+        m_fields[row].m_Visible = m_grid->GetCellValue( row, 1 ) != wxEmptyString;
+        m_fields[row].m_URL     = m_grid->GetCellValue( row, 2 ) != wxEmptyString;
     }
 
     return true;

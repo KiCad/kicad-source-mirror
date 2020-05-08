@@ -29,6 +29,120 @@
 #include <grid_tricks.h>
 
 #include <panel_modedit_defaults.h>
+#include <grid_layer_box_helpers.h>
+#include <bitmaps_png/include/bitmaps_png/bitmaps_list.h>
+
+class TEXT_ITEMS_GRID_TABLE : public wxGridTableBase
+{
+    std::vector<TEXT_ITEM_INFO> m_items;
+
+public:
+    TEXT_ITEMS_GRID_TABLE()
+    { }
+
+    int GetNumberRows() override { return m_items.size(); }
+    int GetNumberCols() override { return 3; }
+
+    wxString GetColLabelValue( int aCol ) override
+    {
+        switch( aCol )
+        {
+        case 0: return _( "Text Items" );
+        case 1: return _( "Show" );
+        case 2: return _( "Layer" );
+        default: return wxEmptyString;
+        }
+    }
+
+    wxString GetRowLabelValue( int aRow )
+    {
+        switch( aRow )
+        {
+        case 0:   return _( "Reference designator" );
+        case 1:   return _( "Value" );
+        default:  return wxEmptyString;
+        }
+    }
+
+    bool CanGetValueAs( int aRow, int aCol, const wxString& aTypeName )
+    {
+        switch( aCol )
+        {
+        case 0: return aTypeName == wxGRID_VALUE_STRING;
+        case 1: return aTypeName == wxGRID_VALUE_BOOL;
+        case 2: return aTypeName == wxGRID_VALUE_NUMBER;
+        default: wxFAIL; return false;
+        }
+    }
+
+    bool CanSetValueAs( int aRow, int aCol, const wxString& aTypeName )
+    {
+        return CanGetValueAs( aRow, aCol, aTypeName );
+    }
+
+    wxString GetValue( int row, int col ) override
+    {
+        return m_items[row].m_Text;
+    }
+    void SetValue( int row, int col, const wxString& value ) override
+    {
+        if( col == 0 )
+            m_items[row].m_Text = value;
+    }
+
+    bool GetValueAsBool( int row, int col ) override
+    {
+        return m_items[row].m_Visible;
+    }
+    void SetValueAsBool( int row, int col, bool value ) override
+    {
+        if( col == 1 )
+            m_items[row].m_Visible = value;
+    }
+
+    long GetValueAsLong( int row, int col ) override
+    {
+        return m_items[row].m_Layer;
+    }
+    void SetValueAsLong( int row, int col, long value ) override
+    {
+        if( col == 2 )
+            m_items[row].m_Layer = value;
+    }
+
+    bool AppendRows( size_t aNumRows = 1 ) override
+    {
+        for( int i = 0; i < aNumRows; ++i )
+            m_items.emplace_back( wxT( "" ), true, F_SilkS );
+
+        if( GetView() )
+        {
+            wxGridTableMessage msg( this,  wxGRIDTABLE_NOTIFY_ROWS_APPENDED, aNumRows );
+            GetView()->ProcessTableMessage( msg );
+        }
+
+        return true;
+    }
+
+    bool DeleteRows( size_t aPos, size_t aNumRows ) override
+    {
+        // aPos may be a large positive, e.g. size_t(-1), and the sum of
+        // aPos+aNumRows may wrap here, so both ends of the range are tested.
+        if( aPos < m_items.size() && aPos + aNumRows <= m_items.size() )
+        {
+            m_items.erase( m_items.begin() + aPos, m_items.begin() + aPos + aNumRows );
+
+            if( GetView() )
+            {
+                wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aPos, aNumRows );
+                GetView()->ProcessTableMessage( msg );
+            }
+            return true;
+        }
+
+        return false;
+    }
+};
 
 
 // Columns of layer classes grid
@@ -60,14 +174,27 @@ PANEL_MODEDIT_DEFAULTS::PANEL_MODEDIT_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame, PA
         m_frame( aFrame ),
         m_Parent( aParent )
 {
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
+    m_textItemsGrid->SetDefaultRowSize( m_textItemsGrid->GetDefaultRowSize() + 4 );
+    m_layerClassesGrid->SetDefaultRowSize( m_layerClassesGrid->GetDefaultRowSize() + 4 );
+
+    m_textItemsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE(), true );
+
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetRenderer( new wxGridCellBoolRenderer() );
+    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+    m_textItemsGrid->SetColAttr( 1, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_frame ) );
+    attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_frame, LSET::ForbiddenTextLayers() ) );
+    m_textItemsGrid->SetColAttr( 2, attr );
 
     // Work around a bug in wxWidgets where it fails to recalculate the grid height
     // after changing the default row size
-    m_grid->AppendRows( 1 );
-    m_grid->DeleteRows( m_grid->GetNumberRows() - 1, 1 );
+    m_layerClassesGrid->AppendRows( 1 );
+    m_layerClassesGrid->DeleteRows( m_layerClassesGrid->GetNumberRows() - 1, 1 );
 
-    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+    m_layerClassesGrid->PushEventHandler( new GRID_TRICKS( m_layerClassesGrid ) );
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
@@ -77,8 +204,8 @@ PANEL_MODEDIT_DEFAULTS::PANEL_MODEDIT_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame, PA
 
 PANEL_MODEDIT_DEFAULTS::~PANEL_MODEDIT_DEFAULTS()
 {
-    // destroy GRID_TRICKS before m_grid.
-    m_grid->PopEventHandler( true );
+    // destroy GRID_TRICKS before m_layerClassesGrid.
+    m_layerClassesGrid->PopEventHandler( true );
 }
 
 
@@ -87,10 +214,10 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataToWindow()
     wxColour disabledColour = wxSystemSettings::GetColour( wxSYS_COLOUR_BACKGROUND );
 
 #define SET_MILS_CELL( row, col, val ) \
-    m_grid->SetCellValue( row, col, StringFromValue( m_frame->GetUserUnits(), val, true, true ) )
+    m_layerClassesGrid->SetCellValue( row, col, StringFromValue( m_frame->GetUserUnits(), val, true, true ) )
 
 #define DISABLE_CELL( row, col ) \
-    m_grid->SetReadOnly( row, col ); m_grid->SetCellBackgroundColour( row, col, disabledColour );
+    m_layerClassesGrid->SetReadOnly( row, col ); m_layerClassesGrid->SetCellBackgroundColour( row, col, disabledColour );
 
     for( int i = 0; i < ROW_COUNT; ++i )
     {
@@ -108,36 +235,39 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataToWindow()
             SET_MILS_CELL( i, COL_TEXT_WIDTH, m_brdSettings.m_TextSize[ i ].x );
             SET_MILS_CELL( i, COL_TEXT_HEIGHT, m_brdSettings.m_TextSize[ i ].y );
             SET_MILS_CELL( i, COL_TEXT_THICKNESS, m_brdSettings.m_TextThickness[ i ] );
-            m_grid->SetCellValue( i, COL_TEXT_ITALIC, m_brdSettings.m_TextItalic[ i ] ? "1" : "" );
+            m_layerClassesGrid->SetCellValue( i, COL_TEXT_ITALIC, m_brdSettings.m_TextItalic[ i ] ? "1" : "" );
 
             auto attr = new wxGridCellAttr;
             attr->SetRenderer( new wxGridCellBoolRenderer() );
             attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
             attr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
-            m_grid->SetAttr( i, COL_TEXT_ITALIC, attr );
+            m_layerClassesGrid->SetAttr( i, COL_TEXT_ITALIC, attr );
         }
     }
 
     // Footprint defaults
-    m_textCtrlRefText->SetValue( m_brdSettings.m_RefDefaultText );
-    m_choiceLayerReference->SetSelection( m_brdSettings.m_RefDefaultlayer == F_SilkS ? 0 : 1 );
-    m_choiceVisibleReference->SetSelection( m_brdSettings.m_RefDefaultVisibility ? 0 : 1 );
+    m_textItemsGrid->GetTable()->AppendRows( m_brdSettings.m_DefaultFPTextItems.size() );
 
-    m_textCtrlValueText->SetValue( m_brdSettings.m_ValueDefaultText );
-    m_choiceLayerValue->SetSelection( m_brdSettings.m_ValueDefaultlayer == F_SilkS ? 0 : 1 );
-    m_choiceVisibleValue->SetSelection( m_brdSettings.m_ValueDefaultVisibility ? 0 : 1 );
-
-    for( int col = 0; col < m_grid->GetNumberCols(); col++ )
+    for( int i = 0; i < m_brdSettings.m_DefaultFPTextItems.size(); ++i )
     {
-        // Set the minimal width to the column label size.
-        m_grid->SetColMinimalWidth( col, m_grid->GetVisibleWidth( col, true, false, false ) );
+        TEXT_ITEM_INFO item = m_brdSettings.m_DefaultFPTextItems[i];
 
-        // Set the width to see the full contents
-        if( m_grid->IsColShown( col ) )
-            m_grid->SetColSize( col, m_grid->GetVisibleWidth( col, true, true, true ) );
+        m_textItemsGrid->GetTable()->SetValue( i, 0, item.m_Text );
+        m_textItemsGrid->GetTable()->SetValueAsBool( i, 1, item.m_Visible );
+        m_textItemsGrid->GetTable()->SetValueAsLong( i, 2, item.m_Layer );
     }
 
-    m_grid->SetRowLabelSize( m_grid->GetVisibleWidth( -1, true, true, true ) );
+    for( int col = 0; col < m_layerClassesGrid->GetNumberCols(); col++ )
+    {
+        // Set the minimal width to the column label size.
+        m_layerClassesGrid->SetColMinimalWidth( col, m_layerClassesGrid->GetVisibleWidth( col, true, false, false ) );
+
+        // Set the width to see the full contents
+        if( m_layerClassesGrid->IsColShown( col ) )
+            m_layerClassesGrid->SetColSize( col, m_layerClassesGrid->GetVisibleWidth( col, true, true, true ) );
+    }
+
+    m_layerClassesGrid->SetRowLabelSize( m_layerClassesGrid->GetVisibleWidth( -1, true, true, true ) );
 
     Layout();
 
@@ -145,15 +275,39 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataToWindow()
 }
 
 
+bool PANEL_MODEDIT_DEFAULTS::Show( bool aShow )
+{
+    bool retVal = wxPanel::Show( aShow );
+
+    if( aShow )
+    {
+        // These *should* work in the constructor, and indeed they do if this panel is the
+        // first displayed.  However, on OSX 3.0.5 (at least), if another panel is displayed
+        // first then the icons will be blank unless they're set here.
+        m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
+        m_bpDelete->SetBitmap( KiBitmap( trash_xpm ) );
+    }
+
+    if( aShow && m_firstShow )
+    {
+        m_layerClassesGrid->SetColumnWidth( 0, m_layerClassesGrid->GetColumnWidth( 0 ) + 1 );
+        m_firstShow = false;
+    }
+
+    return retVal;
+}
+
+
 int PANEL_MODEDIT_DEFAULTS::getGridValue( int aRow, int aCol )
 {
-    return ValueFromString( m_frame->GetUserUnits(), m_grid->GetCellValue( aRow, aCol ), true );
+    return ValueFromString( m_frame->GetUserUnits(),
+                            m_layerClassesGrid->GetCellValue( aRow, aCol ), true );
 }
 
 
 bool PANEL_MODEDIT_DEFAULTS::validateData()
 {
-    if( !m_grid->CommitPendingChanges() )
+    if( !m_textItemsGrid->CommitPendingChanges() || !m_layerClassesGrid->CommitPendingChanges() )
         return false;
 
     // Test text parameters.
@@ -166,7 +320,7 @@ bool PANEL_MODEDIT_DEFAULTS::validateData()
         {
             wxString msg = _( "Text will not be readable with a thickness greater than\n"
                               "1/4 its width or height." );
-            m_Parent->SetError( msg, this, m_grid, row, COL_TEXT_THICKNESS );
+            m_Parent->SetError( msg, this, m_layerClassesGrid, row, COL_TEXT_THICKNESS );
             return false;
         }
     }
@@ -187,24 +341,68 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataFromWindow()
         if( i == ROW_EDGES || i == ROW_COURTYARD )
             continue;
 
-        m_brdSettings.m_TextSize[ i ] =
-                wxSize( getGridValue( i, COL_TEXT_WIDTH ), getGridValue( i, COL_TEXT_HEIGHT ) );
+        m_brdSettings.m_TextSize[ i ] = wxSize( getGridValue( i, COL_TEXT_WIDTH ),
+                                                getGridValue( i, COL_TEXT_HEIGHT ) );
         m_brdSettings.m_TextThickness[ i ] = getGridValue( i, COL_TEXT_THICKNESS );
-        m_brdSettings.m_TextItalic[ i ] =
-                wxGridCellBoolEditor::IsTrueValue( m_grid->GetCellValue( i, COL_TEXT_ITALIC ) );
+
+        wxString msg = m_layerClassesGrid->GetCellValue( i, COL_TEXT_ITALIC );
+        m_brdSettings.m_TextItalic[ i ] = wxGridCellBoolEditor::IsTrueValue( msg );
     }
 
     // Footprint defaults
-    m_brdSettings.m_RefDefaultText = m_textCtrlRefText->GetValue();
-    m_brdSettings.m_RefDefaultlayer = (m_choiceLayerReference->GetSelection() == 0) ? F_SilkS : F_Fab;
-    m_brdSettings.m_RefDefaultVisibility = m_choiceVisibleReference->GetSelection() == 0;
+    wxGridTableBase* table = m_textItemsGrid->GetTable();
+    m_brdSettings.m_DefaultFPTextItems.clear();
 
+    for( int i = 0; i < m_textItemsGrid->GetNumberRows(); ++i )
+    {
+        wxString text = table->GetValue( i, 0 );
+        bool     visible = table->GetValueAsBool( i, 1 );
+        int      layer = (int) table->GetValueAsLong( i, 2 );
 
-    m_brdSettings.m_ValueDefaultText = m_textCtrlValueText->GetValue();
-    m_brdSettings.m_ValueDefaultlayer = (m_choiceLayerValue->GetSelection() == 0) ? F_SilkS : F_Fab;
-    m_brdSettings.m_ValueDefaultVisibility = m_choiceVisibleValue->GetSelection() == 0;
+        m_brdSettings.m_DefaultFPTextItems.emplace_back( text, visible, layer );
+    }
 
     m_frame->SetDesignSettings( m_brdSettings );
 
     return true;
 }
+
+
+void PANEL_MODEDIT_DEFAULTS::OnAddTextItem( wxCommandEvent& event )
+{
+    if( !m_textItemsGrid->CommitPendingChanges() || !m_layerClassesGrid->CommitPendingChanges() )
+        return;
+
+    wxGridTableBase* table = m_textItemsGrid->GetTable();
+
+    int newRow = m_textItemsGrid->GetNumberRows();
+    table->AppendRows( 1 );
+    table->SetValueAsBool( newRow, 1, table->GetValueAsBool( newRow - 1, 1 ) );
+    table->SetValueAsLong( newRow, 2, table->GetValueAsLong( newRow - 1, 2 ) );
+
+    m_textItemsGrid->MakeCellVisible( newRow, 0 );
+    m_textItemsGrid->SetGridCursor( newRow, 0 );
+
+    m_textItemsGrid->EnableCellEditControl( true );
+    m_textItemsGrid->ShowCellEditControl();
+}
+
+
+void PANEL_MODEDIT_DEFAULTS::OnDeleteTextItem( wxCommandEvent& event )
+{
+    if( !m_textItemsGrid->CommitPendingChanges() || !m_layerClassesGrid->CommitPendingChanges() )
+        return;
+
+    int curRow = m_textItemsGrid->GetGridCursorRow();
+
+    if( curRow < 2 )    // First two rows are required
+        return;
+
+    m_textItemsGrid->GetTable()->DeleteRows( curRow, 1 );
+
+    curRow = std::max( 0, curRow - 1 );
+    m_textItemsGrid->MakeCellVisible( curRow, m_textItemsGrid->GetGridCursorCol() );
+    m_textItemsGrid->SetGridCursor( curRow, m_textItemsGrid->GetGridCursorCol() );
+}
+
+

@@ -33,7 +33,9 @@ class PARAM_BASE
 {
 public:
     PARAM_BASE( std::string aJsonPath, bool aReadOnly ) :
-            m_path( std::move( aJsonPath ) ), m_readOnly( aReadOnly ) {}
+            m_path( std::move( aJsonPath ) ),
+            m_readOnly( aReadOnly )
+    {}
 
     virtual ~PARAM_BASE() = default;
 
@@ -65,15 +67,23 @@ class PARAM : public PARAM_BASE
 public:
     PARAM( const std::string& aJsonPath, ValueType* aPtr, ValueType aDefault,
            bool aReadOnly = false ) :
-            PARAM_BASE( aJsonPath, aReadOnly ), m_ptr( aPtr ), m_default( aDefault ),
-            m_min(), m_max(), m_use_minmax( false )
-    {}
+            PARAM_BASE( aJsonPath, aReadOnly ),
+            m_ptr( aPtr ),
+            m_default( aDefault ),
+            m_min(),
+            m_max(),
+            m_use_minmax( false )
+    { }
 
     PARAM( const std::string& aJsonPath, ValueType* aPtr, ValueType aDefault, ValueType aMin,
-            ValueType aMax, bool aReadOnly = false ) :
-            PARAM_BASE( aJsonPath, aReadOnly ), m_ptr( aPtr ), m_default( aDefault ),
-            m_min( aMin ), m_max( aMax ), m_use_minmax( true )
-    {}
+           ValueType aMax, bool aReadOnly = false ) :
+            PARAM_BASE( aJsonPath, aReadOnly ),
+            m_ptr( aPtr ),
+            m_default( aDefault ),
+            m_min( aMin ),
+            m_max( aMax ),
+            m_use_minmax( true )
+    { }
 
     void Load( JSON_SETTINGS* aSettings ) const override
     {
@@ -119,6 +129,7 @@ private:
     bool m_use_minmax;
 };
 
+
 /**
  * Like a normal param, but with custom getter and setter functions
  * @tparam ValueType is the value to store
@@ -128,10 +139,13 @@ class PARAM_LAMBDA : public PARAM_BASE
 {
 public:
     PARAM_LAMBDA( const std::string& aJsonPath,  std::function<ValueType()> aGetter,
-            std::function<void( ValueType )> aSetter, ValueType aDefault, bool aReadOnly = false ) :
-            PARAM_BASE( aJsonPath, aReadOnly ), m_default( aDefault ),  m_getter( aGetter ),
+                  std::function<void( ValueType )> aSetter, ValueType aDefault,
+                  bool aReadOnly = false ) :
+            PARAM_BASE( aJsonPath, aReadOnly ),
+            m_default( aDefault ),
+            m_getter( aGetter ),
             m_setter( aSetter )
-    {}
+    { }
 
     void Load( JSON_SETTINGS* aSettings ) const override
     {
@@ -183,6 +197,7 @@ private:
     std::function<void( ValueType )> m_setter;
 };
 
+
 /**
  * Represents a parameter that has a scaling factor between the value in the file and the
  * value used internally (i.e. the value pointer).  This basically only makes sense to use
@@ -195,15 +210,25 @@ class PARAM_SCALED: public PARAM_BASE
 public:
     PARAM_SCALED( const std::string& aJsonPath, ValueType* aPtr, ValueType aDefault,
                   double aScale = 1.0, bool aReadOnly = false ) :
-            PARAM_BASE( aJsonPath, aReadOnly ), m_ptr( aPtr ), m_default( aDefault ),
-            m_min(), m_max(), m_use_minmax( false ), m_scale( aScale )
-    {}
+            PARAM_BASE( aJsonPath, aReadOnly ),
+            m_ptr( aPtr ),
+            m_default( aDefault ),
+            m_min(),
+            m_max(),
+            m_use_minmax( false ),
+            m_scale( aScale )
+    { }
 
-    PARAM_SCALED( const std::string& aJsonPath, ValueType* aPtr, ValueType aDefault, ValueType aMin,
-                  ValueType aMax, double aScale = 1.0, bool aReadOnly = false ) :
-            PARAM_BASE( aJsonPath, aReadOnly ), m_ptr( aPtr ), m_default( aDefault ),
-            m_min( aMin ), m_max( aMax ), m_use_minmax( true ), m_scale( aScale )
-    {}
+    PARAM_SCALED( const std::string& aJsonPath, ValueType* aPtr, ValueType aDefault,
+                  ValueType aMin, ValueType aMax, double aScale = 1.0, bool aReadOnly = false ) :
+            PARAM_BASE( aJsonPath, aReadOnly ),
+            m_ptr( aPtr ),
+            m_default( aDefault ),
+            m_min( aMin ),
+            m_max( aMax ),
+            m_use_minmax( true ),
+            m_scale( aScale )
+    { }
 
     void Load( JSON_SETTINGS* aSettings ) const override
     {
@@ -256,11 +281,17 @@ class PARAM_LIST : public PARAM_BASE
 public:
     PARAM_LIST( const std::string& aJsonPath, std::vector<Type>* aPtr,
                 std::initializer_list<Type> aDefault, bool aReadOnly = false ) :
-                PARAM_BASE( aJsonPath, aReadOnly ), m_ptr( aPtr ), m_default( aDefault ) {}
+            PARAM_BASE( aJsonPath, aReadOnly ),
+            m_ptr( aPtr ),
+            m_default( aDefault )
+    { }
 
     PARAM_LIST( const std::string& aJsonPath, std::vector<Type>* aPtr,
                 std::vector<Type> aDefault, bool aReadOnly = false ) :
-                PARAM_BASE( aJsonPath, aReadOnly ), m_ptr( aPtr ), m_default( aDefault ) {}
+            PARAM_BASE( aJsonPath, aReadOnly ),
+            m_ptr( aPtr ),
+            m_default( aDefault )
+    { }
 
     void Load( JSON_SETTINGS* aSettings ) const override
     {
@@ -304,6 +335,7 @@ private:
     std::vector<Type> m_default;
 };
 
+
 /**
  * Represents a map of <std::string, Value>.  The key parameter has to be a string in JSON.
  *
@@ -323,7 +355,10 @@ public:
     PARAM_MAP( const std::string& aJsonPath, std::map<std::string, Value>* aPtr,
                std::initializer_list<std::pair<const std::string, Value>> aDefault,
                bool aReadOnly = false ) :
-            PARAM_BASE( aJsonPath, aReadOnly ), m_ptr( aPtr ), m_default( aDefault ) {}
+            PARAM_BASE( aJsonPath, aReadOnly ),
+            m_ptr( aPtr ),
+            m_default( aDefault )
+    { }
 
     void Load( JSON_SETTINGS* aSettings ) const override
     {

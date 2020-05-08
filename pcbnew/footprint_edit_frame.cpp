@@ -128,13 +128,18 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                                             GetGalDisplayOptions(), m_canvasType );
     SetCanvas( drawPanel );
-
     SetBoard( new BOARD() );
 
-    // In modedit, the default net clearance is not known.
-    // (it depends on the actual board)
-    // So we do not show the default clearance, by setting it to 0
-    // The footprint or pad specific clearance will be shown
+    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), true );
+
+    // LoadSettings() *after* creating m_LayersManager, because LoadSettings() initialize
+    // parameters in m_LayersManager
+    // NOTE: KifaceSettings() will return PCBNEW_SETTINGS if we started from pcbnew
+    LoadSettings( GetSettings() );
+
+    // In modedit, the default net clearance is not known (it depends on the actual board).
+    // So we do not show the default clearance, by setting it to 0.
+    // The footprint or pad specific clearance will be shown.
     GetBoard()->GetDesignSettings().GetDefault()->SetClearance( 0 );
 
     // Don't show the default board solder mask clearance in the footprint editor.  Only the
@@ -145,27 +150,18 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     restoreLastFootprint();
 
     // Ensure all layers and items are visible:
-    // In footprint editor, some layers have no meaning or
-    // cannot be used, but we show all of them, at least to be able
-    // to edit a bad layer
+    // In footprint editor, some layers have no meaning or cannot be used, but we show all of
+    // them, at least to be able to edit a bad layer
     GetBoard()->SetVisibleAlls();
 
-    // However the "no net" mark on pads is useless, because there is
-    // no net in footprint editor: make it non visible
+    // However the "no net" mark on pads is useless, because there are no nets in footprint
+    // editor: make it non visible.
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
-    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), true );
-
-    // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
-    // initialize parameters in m_LayersManager
-    // NOTE: KifaceSettings() will return PCBNEW_SETTINGS if we started from pcbnew
-    LoadSettings( GetSettings() );
-
-    // Must be set after calling LoadSettings() to be sure these parameters are
-    // non dependent on what is read in stored settings.
-    // Enable one internal layer, because footprints support keepout areas that
-    // can be on internal layers only (therefore on the first internal layer)
-    // This is needed to handle these keepout in internal layers only
+    // Must be set after calling LoadSettings() to be sure these parameters are not dependent
+    // on what is read in stored settings.  Enable one internal layer, because footprints
+    // support keepout areas that can be on internal layers only (therefore on the first internal
+    // layer).  This is needed to handle these keepout in internal layers only.
     GetBoard()->SetCopperLayerCount( 3 );
     GetBoard()->SetEnabledLayers( GetBoard()->GetEnabledLayers().set( In1_Cu ) );
     GetBoard()->SetVisibleLayers( GetBoard()->GetEnabledLayers() );
@@ -179,8 +175,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     GetScreen()->AddGrid( m_UserGridSize, EDA_UNITS::UNSCALED, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
 
-    // In modedit, set the default paper size to A4:
-    // this should be OK for all footprint to plot/print
+    // In modedit, set the default paper size to A4 for plot/print
     SetPageSettings( PAGE_INFO( PAGE_INFO::A4 ) );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
@@ -437,22 +432,11 @@ FOOTPRINT_EDITOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetSettings()
 void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     // aCfg will be the PCBNEW_SETTINGS
-    auto cfg = GetSettings();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
 
     EDA_DRAW_FRAME::LoadSettings( cfg );
 
-    // Ensure some params are valid
-    BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
-
-    settings = cfg->m_DesignSettings;
-
-    // Usually, graphic items are drawn on F_SilkS or F_Fab layer
-    // Force these layers if not default
-    if( ( settings.m_RefDefaultlayer != F_SilkS ) && ( settings.m_RefDefaultlayer != F_Fab ) )
-        settings.m_RefDefaultlayer = F_SilkS;
-
-    if( ( settings.m_ValueDefaultlayer != F_SilkS ) && ( settings.m_ValueDefaultlayer != F_Fab ) )
-        settings.m_ValueDefaultlayer = F_Fab;
+    GetDesignSettings() = cfg->m_DesignSettings;
 
     m_DisplayOptions = cfg->m_Display;
     m_defaultLibWidth = cfg->m_LibWidth;

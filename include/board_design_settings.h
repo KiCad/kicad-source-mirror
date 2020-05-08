@@ -175,6 +175,22 @@ enum
     LAYER_CLASS_COUNT
 };
 
+
+struct TEXT_ITEM_INFO
+{
+    wxString m_Text;
+    bool     m_Visible;
+    int      m_Layer;
+
+    TEXT_ITEM_INFO( const wxString& aText, bool aVisible, int aLayer )
+    {
+        m_Text = aText;
+        m_Visible = aVisible;
+        m_Layer = aLayer;
+    }
+};
+
+
 // forward declaration from class_track.h
 enum class VIATYPE : int;
 
@@ -230,6 +246,9 @@ public:
     double     m_SolderPasteMarginRatio;    ///< Solder pask margin ratio value of pad size
                                             ///< The final margin is the sum of these 2 values
 
+    // Variables used in footprint editing (default value in item/footprint creation)
+    std::vector<TEXT_ITEM_INFO> m_DefaultFPTextItems;
+
     // Arrays of default values for the various layer classes.
     int        m_LineThickness[ LAYER_CLASS_COUNT ];
     wxSize     m_TextSize[ LAYER_CLASS_COUNT ];
@@ -239,22 +258,6 @@ public:
 
     int        m_DimensionUnits;
     int        m_DimensionPrecision;
-
-    // Variables used in footprint editing (default value in item/footprint creation)
-
-    wxString   m_RefDefaultText;           ///< Default ref text on fp creation
-                                            // if empty, use footprint name as default
-    bool       m_RefDefaultVisibility;      ///< Default ref text visibility on fp creation
-    int        m_RefDefaultlayer;           ///< Default ref text layer on fp creation
-                                            // should be a PCB_LAYER_ID, but use an int
-                                            // to save this param in config
-
-    wxString   m_ValueDefaultText;         ///< Default value text on fp creation
-                                            // if empty, use footprint name as default
-    bool       m_ValueDefaultVisibility;    ///< Default value text visibility on fp creation
-    int        m_ValueDefaultlayer;         ///< Default value text layer on fp creation
-                                            // should be a PCB_LAYER_ID, but use an int
-                                            // to save this param in config
 
     // Miscellaneous
     wxPoint    m_AuxOrigin;                 ///< origin for plot exports

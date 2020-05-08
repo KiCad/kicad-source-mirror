@@ -19,127 +19,134 @@ PANEL_MODEDIT_DEFAULTS_BASE::PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerMargins;
 	bSizerMargins = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText13 = new wxStaticText( this, wxID_ANY, _("Default values for new footprints:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText13->Wrap( -1 );
-	bSizerMargins->Add( m_staticText13, 0, wxTOP|wxLEFT, 5 );
+	defaultTextItemsLabel = new wxStaticText( this, wxID_ANY, _("Default text items for new footprints:"), wxDefaultPosition, wxDefaultSize, 0 );
+	defaultTextItemsLabel->Wrap( -1 );
+	bSizerMargins->Add( defaultTextItemsLabel, 0, wxTOP|wxLEFT, 5 );
 
-	wxFlexGridSizer* defaultValuesSizer;
-	defaultValuesSizer = new wxFlexGridSizer( 0, 4, 5, 5 );
-	defaultValuesSizer->AddGrowableCol( 1 );
-	defaultValuesSizer->SetFlexibleDirection( wxBOTH );
-	defaultValuesSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxStaticBoxSizer* sbSizerTexts;
+	sbSizerTexts = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxEmptyString ), wxVERTICAL );
 
-	m_staticTextRef = new wxStaticText( this, wxID_ANY, _("&Reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextRef->Wrap( -1 );
-	defaultValuesSizer->Add( m_staticTextRef, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	m_textItemsGrid = new WX_GRID( sbSizerTexts->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 
-	m_textCtrlRefText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textCtrlRefText->SetToolTip( _("Default text for reference\nLeave blank to use the footprint name") );
+	// Grid
+	m_textItemsGrid->CreateGrid( 2, 3 );
+	m_textItemsGrid->EnableEditing( true );
+	m_textItemsGrid->EnableGridLines( true );
+	m_textItemsGrid->EnableDragGridSize( false );
+	m_textItemsGrid->SetMargins( 0, 0 );
 
-	defaultValuesSizer->Add( m_textCtrlRefText, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT, 5 );
+	// Columns
+	m_textItemsGrid->SetColSize( 0, 233 );
+	m_textItemsGrid->SetColSize( 1, 60 );
+	m_textItemsGrid->SetColSize( 2, 120 );
+	m_textItemsGrid->EnableDragColMove( false );
+	m_textItemsGrid->EnableDragColSize( true );
+	m_textItemsGrid->SetColLabelSize( 24 );
+	m_textItemsGrid->SetColLabelValue( 0, _("Text Items") );
+	m_textItemsGrid->SetColLabelValue( 1, _("Show") );
+	m_textItemsGrid->SetColLabelValue( 2, _("Layer") );
+	m_textItemsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
-	wxString m_choiceLayerReferenceChoices[] = { _("SilkScreen"), _("Fab. Layer") };
-	int m_choiceLayerReferenceNChoices = sizeof( m_choiceLayerReferenceChoices ) / sizeof( wxString );
-	m_choiceLayerReference = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceLayerReferenceNChoices, m_choiceLayerReferenceChoices, 0 );
-	m_choiceLayerReference->SetSelection( 0 );
-	defaultValuesSizer->Add( m_choiceLayerReference, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	// Rows
+	m_textItemsGrid->EnableDragRowSize( false );
+	m_textItemsGrid->SetRowLabelSize( 160 );
+	m_textItemsGrid->SetRowLabelValue( 0, _("Reference designator") );
+	m_textItemsGrid->SetRowLabelValue( 1, _("Value") );
+	m_textItemsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
-	wxString m_choiceVisibleReferenceChoices[] = { _("Visible"), _("Invisible") };
-	int m_choiceVisibleReferenceNChoices = sizeof( m_choiceVisibleReferenceChoices ) / sizeof( wxString );
-	m_choiceVisibleReference = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceVisibleReferenceNChoices, m_choiceVisibleReferenceChoices, 0 );
-	m_choiceVisibleReference->SetSelection( 0 );
-	defaultValuesSizer->Add( m_choiceVisibleReference, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	// Label Appearance
 
-	m_staticTextValue = new wxStaticText( this, wxID_ANY, _("V&alue:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextValue->Wrap( -1 );
-	defaultValuesSizer->Add( m_staticTextValue, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	// Cell Defaults
+	m_textItemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_textItemsGrid->SetMinSize( wxSize( -1,140 ) );
 
-	m_textCtrlValueText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textCtrlValueText->SetToolTip( _("Default text for value\nLeave blank to use the footprint name") );
-	m_textCtrlValueText->SetMinSize( wxSize( 160,-1 ) );
+	sbSizerTexts->Add( m_textItemsGrid, 1, wxALL|wxBOTTOM|wxEXPAND, 5 );
 
-	defaultValuesSizer->Add( m_textCtrlValueText, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	wxBoxSizer* bButtonSize;
+	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
 
-	wxString m_choiceLayerValueChoices[] = { _("SilkScreen"), _("Fab. Layer") };
-	int m_choiceLayerValueNChoices = sizeof( m_choiceLayerValueChoices ) / sizeof( wxString );
-	m_choiceLayerValue = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceLayerValueNChoices, m_choiceLayerValueChoices, 0 );
-	m_choiceLayerValue->SetSelection( 1 );
-	defaultValuesSizer->Add( m_choiceLayerValue, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_bpAdd = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpAdd->SetMinSize( wxSize( 30,29 ) );
 
-	wxString m_choiceVisibleValueChoices[] = { _("Visible"), _("Invisible") };
-	int m_choiceVisibleValueNChoices = sizeof( m_choiceVisibleValueChoices ) / sizeof( wxString );
-	m_choiceVisibleValue = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceVisibleValueNChoices, m_choiceVisibleValueChoices, 0 );
-	m_choiceVisibleValue->SetSelection( 0 );
-	defaultValuesSizer->Add( m_choiceVisibleValue, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bButtonSize->Add( m_bpAdd, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerMargins->Add( defaultValuesSizer, 0, wxEXPAND|wxLEFT, 25 );
+	bButtonSize->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	m_bpDelete = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpDelete->SetMinSize( wxSize( 30,29 ) );
+
+	bButtonSize->Add( m_bpDelete, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerMargins->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	sbSizerTexts->Add( bButtonSize, 0, wxEXPAND, 5 );
 
-	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("A blank reference designator or value will use the footprint name."), wxDefaultPosition, wxDefaultSize, 0 );
+
+	bSizerMargins->Add( sbSizerTexts, 1, wxEXPAND|wxLEFT, 20 );
+
+	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Note: a blank reference designator or value will use the footprint name."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
-	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	bSizerMargins->Add( m_staticTextInfo, 0, wxBOTTOM|wxLEFT, 25 );
 
 
 	bSizerMargins->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
 
-	wxBoxSizer* defaultSizesSizer1;
-	defaultSizesSizer1 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* defaultPropertiesSizer;
+	defaultPropertiesSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Default properties for new graphic items:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	defaultSizesSizer1->Add( m_staticText1, 0, wxBOTTOM|wxRIGHT, 5 );
+	wxStaticText* defaultPropertiesLabel;
+	defaultPropertiesLabel = new wxStaticText( this, wxID_ANY, _("Default properties for new graphic items:"), wxDefaultPosition, wxDefaultSize, 0 );
+	defaultPropertiesLabel->Wrap( -1 );
+	defaultPropertiesSizer->Add( defaultPropertiesLabel, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_layerClassesGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 
 	// Grid
-	m_grid->CreateGrid( 6, 5 );
-	m_grid->EnableEditing( true );
-	m_grid->EnableGridLines( true );
-	m_grid->EnableDragGridSize( false );
-	m_grid->SetMargins( 0, 0 );
+	m_layerClassesGrid->CreateGrid( 6, 5 );
+	m_layerClassesGrid->EnableEditing( true );
+	m_layerClassesGrid->EnableGridLines( true );
+	m_layerClassesGrid->EnableDragGridSize( false );
+	m_layerClassesGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_grid->SetColSize( 0, 110 );
-	m_grid->SetColSize( 1, 100 );
-	m_grid->SetColSize( 2, 100 );
-	m_grid->SetColSize( 3, 100 );
-	m_grid->SetColSize( 4, 60 );
-	m_grid->EnableDragColMove( false );
-	m_grid->EnableDragColSize( true );
-	m_grid->SetColLabelSize( 22 );
-	m_grid->SetColLabelValue( 0, _("Line Thickness") );
-	m_grid->SetColLabelValue( 1, _("Text Width") );
-	m_grid->SetColLabelValue( 2, _("Text Height") );
-	m_grid->SetColLabelValue( 3, _("Text Thickness") );
-	m_grid->SetColLabelValue( 4, _("Italic") );
-	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+	m_layerClassesGrid->SetColSize( 0, 110 );
+	m_layerClassesGrid->SetColSize( 1, 100 );
+	m_layerClassesGrid->SetColSize( 2, 100 );
+	m_layerClassesGrid->SetColSize( 3, 100 );
+	m_layerClassesGrid->SetColSize( 4, 60 );
+	m_layerClassesGrid->EnableDragColMove( false );
+	m_layerClassesGrid->EnableDragColSize( true );
+	m_layerClassesGrid->SetColLabelSize( 22 );
+	m_layerClassesGrid->SetColLabelValue( 0, _("Line Thickness") );
+	m_layerClassesGrid->SetColLabelValue( 1, _("Text Width") );
+	m_layerClassesGrid->SetColLabelValue( 2, _("Text Height") );
+	m_layerClassesGrid->SetColLabelValue( 3, _("Text Thickness") );
+	m_layerClassesGrid->SetColLabelValue( 4, _("Italic") );
+	m_layerClassesGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
-	m_grid->EnableDragRowSize( false );
-	m_grid->SetRowLabelSize( 125 );
-	m_grid->SetRowLabelValue( 0, _("Silk Layers") );
-	m_grid->SetRowLabelValue( 1, _("Copper Layers") );
-	m_grid->SetRowLabelValue( 2, _("Edge Cuts") );
-	m_grid->SetRowLabelValue( 3, _("Courtyards") );
-	m_grid->SetRowLabelValue( 4, _("Fab Layers") );
-	m_grid->SetRowLabelValue( 5, _("Other Layers") );
-	m_grid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+	m_layerClassesGrid->EnableDragRowSize( false );
+	m_layerClassesGrid->SetRowLabelSize( 125 );
+	m_layerClassesGrid->SetRowLabelValue( 0, _("Silk Layers") );
+	m_layerClassesGrid->SetRowLabelValue( 1, _("Copper Layers") );
+	m_layerClassesGrid->SetRowLabelValue( 2, _("Edge Cuts") );
+	m_layerClassesGrid->SetRowLabelValue( 3, _("Courtyards") );
+	m_layerClassesGrid->SetRowLabelValue( 4, _("Fab Layers") );
+	m_layerClassesGrid->SetRowLabelValue( 5, _("Other Layers") );
+	m_layerClassesGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
 
 	// Cell Defaults
-	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_grid->SetToolTip( _("Net Class parameters") );
+	m_layerClassesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_layerClassesGrid->SetToolTip( _("Net Class parameters") );
 
-	defaultSizesSizer1->Add( m_grid, 1, wxBOTTOM|wxLEFT, 20 );
+	defaultPropertiesSizer->Add( m_layerClassesGrid, 1, wxBOTTOM|wxLEFT, 20 );
 
 
-	bSizerMargins->Add( defaultSizesSizer1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerMargins->Add( defaultPropertiesSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerMain->Add( bSizerMargins, 1, wxRIGHT|wxLEFT, 5 );
@@ -148,8 +155,18 @@ PANEL_MODEDIT_DEFAULTS_BASE::PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	this->SetSizer( bSizerMain );
 	this->Layout();
 	bSizerMain->Fit( this );
+
+	// Connect Events
+	m_textItemsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_MODEDIT_DEFAULTS_BASE::OnGridSize ), NULL, this );
+	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_MODEDIT_DEFAULTS_BASE::OnAddTextItem ), NULL, this );
+	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_MODEDIT_DEFAULTS_BASE::OnDeleteTextItem ), NULL, this );
 }
 
 PANEL_MODEDIT_DEFAULTS_BASE::~PANEL_MODEDIT_DEFAULTS_BASE()
 {
+	// Disconnect Events
+	m_textItemsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_MODEDIT_DEFAULTS_BASE::OnGridSize ), NULL, this );
+	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_MODEDIT_DEFAULTS_BASE::OnAddTextItem ), NULL, this );
+	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_MODEDIT_DEFAULTS_BASE::OnDeleteTextItem ), NULL, this );
+
 }

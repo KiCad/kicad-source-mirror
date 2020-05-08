@@ -123,20 +123,23 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::Show( bool aShow )
 {
     bool retVal = wxPanel::Show( aShow );
 
-    // These *should* work in the constructor, and indeed they do if this panel is the
-    // first displayed.  However, on OSX 3.0.5 (at least), if another panel is displayed
-    // first then the icons will be blank unless they're set here.
-    m_bitmapZoneFillOpt->SetBitmap( KiBitmap( show_zone_xpm ) );
-    m_bitmapClearance->SetBitmap( KiBitmap( ps_diff_pair_gap_xpm ) );
-    m_bitmapMinTrackWidth->SetBitmap( KiBitmap( width_track_xpm ) );
-    m_bitmapMinViaDiameter->SetBitmap( KiBitmap( via_diameter_xpm ) );
-    m_bitmapMinViaDrill->SetBitmap( KiBitmap( via_hole_diameter_xpm ) );
-    m_bitmapMinuViaDiameter->SetBitmap( KiBitmap( via_diameter_xpm ) );
-    m_bitmapMinuViaDrill->SetBitmap( KiBitmap( via_hole_diameter_xpm ) );
-    m_bitmapMinHoleClearance->SetBitmap( KiBitmap( hole_to_hole_clearance_xpm ) );
-    m_bitmapEdgeClearance->SetBitmap( KiBitmap( edge_to_copper_clearance_xpm ) );
-    m_bitmapBlindBuried->SetBitmap( KiBitmap( via_buried_xpm ) );
-    m_bitmap_uVia->SetBitmap( KiBitmap( via_microvia_xpm ) );
+    if( aShow )
+    {
+        // These *should* work in the constructor, and indeed they do if this panel is the
+        // first displayed.  However, on OSX 3.0.5 (at least), if another panel is displayed
+        // first then the icons will be blank unless they're set here.
+        m_bitmapZoneFillOpt->SetBitmap( KiBitmap( show_zone_xpm ) );
+        m_bitmapClearance->SetBitmap( KiBitmap( ps_diff_pair_gap_xpm ) );
+        m_bitmapMinTrackWidth->SetBitmap( KiBitmap( width_track_xpm ) );
+        m_bitmapMinViaDiameter->SetBitmap( KiBitmap( via_diameter_xpm ) );
+        m_bitmapMinViaDrill->SetBitmap( KiBitmap( via_hole_diameter_xpm ) );
+        m_bitmapMinuViaDiameter->SetBitmap( KiBitmap( via_diameter_xpm ) );
+        m_bitmapMinuViaDrill->SetBitmap( KiBitmap( via_hole_diameter_xpm ) );
+        m_bitmapMinHoleClearance->SetBitmap( KiBitmap( hole_to_hole_clearance_xpm ) );
+        m_bitmapEdgeClearance->SetBitmap( KiBitmap( edge_to_copper_clearance_xpm ) );
+        m_bitmapBlindBuried->SetBitmap( KiBitmap( via_buried_xpm ) );
+        m_bitmap_uVia->SetBitmap( KiBitmap( via_microvia_xpm ) );
+    }
 
     return retVal;
 }

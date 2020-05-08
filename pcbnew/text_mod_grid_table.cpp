@@ -105,7 +105,7 @@ wxString TEXT_MOD_GRID_TABLE::GetRowLabelValue( int aRow )
 {
     switch( aRow )
     {
-    case 0:   return _( "Reference" );
+    case 0:   return _( "Reference designator" );
     case 1:   return _( "Value" );
     default:  return wxEmptyString;
     }
@@ -201,8 +201,8 @@ wxString TEXT_MOD_GRID_TABLE::GetValue( int aRow, int aCol )
         return text.GetLayerName();
 
     case TMC_ORIENTATION:
-        return StringFromValue(
-                EDA_UNITS::DEGREES, (int) NormalizeAnglePos( text.GetTextAngle() ), true );
+        return StringFromValue( EDA_UNITS::DEGREES, (int) NormalizeAnglePos( text.GetTextAngle() ),
+                                true );
 
     case TMC_XOFFSET:
         return StringFromValue( m_userUnits, text.GetPos0().x, true );

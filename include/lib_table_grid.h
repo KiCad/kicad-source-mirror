@@ -150,10 +150,7 @@ public:
 
         if( GetView() )
         {
-            wxGridTableMessage msg( this,
-                                    wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
-                                    aNumRows );
-
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, aNumRows );
             GetView()->ProcessTableMessage( msg );
         }
 
@@ -170,11 +167,7 @@ public:
             erase( start, start + aNumRows );
             if( GetView() )
             {
-                wxGridTableMessage msg( this,
-                                        wxGRIDTABLE_NOTIFY_ROWS_DELETED,
-                                        aPos,
-                                        aNumRows );
-
+                wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aPos, aNumRows );
                 GetView()->ProcessTableMessage( msg );
             }
             return true;

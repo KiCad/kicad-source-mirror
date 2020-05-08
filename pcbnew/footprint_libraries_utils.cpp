@@ -51,22 +51,6 @@
 
 // unique, "file local" translations:
 
-#define FMT_OK_DELETE       _( "OK to delete footprint \"%s\" in library \"%s\"" )
-#define FMT_IMPORT_MODULE   _( "Import Footprint" )
-#define FMT_FILE_NOT_FOUND  _( "File \"%s\" not found" )
-#define FMT_NOT_MODULE      _( "Not a footprint file" )
-#define FMT_MOD_NOT_FOUND   _( "Unable to find or load footprint \"%s\" from lib path \"%s\"" )
-#define FMT_LIB_READ_ONLY   _( "Library \"%s\" is read only, not writable" )
-
-#define FMT_EXPORT_MODULE   _( "Export Footprint" )
-#define FMT_SAVE_MODULE     _( "Save Footprint" )
-#define FMT_MOD_REF         _( "Enter footprint name:" )
-#define FMT_EXPORTED        _( "Footprint exported to file \"%s\"" )
-#define FMT_MOD_DELETED     _( "Footprint \"%s\" deleted from library \"%s\"" )
-#define FMT_MOD_CREATE      _( "New Footprint" )
-
-#define FMT_NO_REF_ABORTED  _( "No footprint name defined." )
-#define FMT_SELECT_LIB      _( "Select Library" )
 
 static const wxString INFO_LEGACY_LIB_WARN_EDIT(
         _(  "Writing/modifying legacy libraries (.mod files) is not allowed\n"\
@@ -96,7 +80,7 @@ static wxFileName getFootprintFilenameFromUser( wxWindow* aParent, const wxStrin
              << GedaPcbFootprintLibFileWildcard() << wxChar( '|' )
              << AllFilesWildcard();
 
-    wxFileDialog dlg( aParent, FMT_IMPORT_MODULE, aLastPath, wxEmptyString, wildCard,
+    wxFileDialog dlg( aParent, _( "Import Footprint" ), aLastPath, wxEmptyString, wildCard,
             wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     dlg.SetFilterIndex( lastFilterIndex );
@@ -262,23 +246,23 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
 
     if( !fp )
     {
-        wxString msg = wxString::Format( FMT_FILE_NOT_FOUND, GetChars( fn.GetFullPath() ) );
+        wxString msg = wxString::Format( _( "File \"%s\" not found" ), fn.GetFullPath() );
         DisplayError( this, msg );
         return NULL;
     }
 
     cfg->m_LastImportExportPath = lastOpenedPathForLoading;
 
-    wxString    moduleName;
+    wxString moduleName;
     IO_MGR::PCB_FILE_T fileType = detect_file_type( fp, fn.GetFullPath(), &moduleName );
 
     if( fileType == IO_MGR::FILE_TYPE_NONE )
     {
-        DisplayError( this, FMT_NOT_MODULE );
+        DisplayError( this, _( "Not a footprint file" ) );
         return NULL;
     }
 
-    MODULE*    module = NULL;
+    MODULE* module = NULL;
 
     try
     {
@@ -286,8 +270,9 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
 
         if( !module )
         {
-            wxString msg = wxString::Format(
-                    FMT_MOD_NOT_FOUND, GetChars( moduleName ), GetChars( fn.GetFullPath() ) );
+            wxString msg = wxString::Format( _( "Unable to load footprint '%s' from '%s'" ),
+                                             moduleName,
+                                             fn.GetFullPath() );
             DisplayError( this, msg );
             return NULL;
         }
@@ -342,7 +327,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
     else
         fn.SetPath( m_mruPath );
 
-    wxFileDialog dlg( this, FMT_EXPORT_MODULE, fn.GetPath(), fn.GetFullName(),
+    wxFileDialog dlg( this, _( "Export Footprint" ), fn.GetPath(), fn.GetFullName(),
                       wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -385,7 +370,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
         return;
     }
 
-    wxString msg = wxString::Format( FMT_EXPORTED, GetChars( dlg.GetPath() ) );
+    wxString msg = wxString::Format( _( "Footprint exported to file \"%s\"" ), dlg.GetPath() );
     DisplayInfoMessage( this, msg );
 }
 
@@ -449,7 +434,8 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
         {
             if( !writable )
             {
-                wxString msg = wxString::Format( FMT_LIB_READ_ONLY, libPath );
+                wxString msg = wxString::Format( _( "Library \"%s\" is read only, not writable" ),
+                                                 libPath );
                 DisplayError( this, msg );
                 return wxEmptyString;
             }
@@ -585,13 +571,15 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aC
 
     if( !Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname ) )
     {
-        wxString msg = wxString::Format( _( "Library \"%s\" is read only" ), nickname );
+        wxString msg = wxString::Format( _( "Library '%s' is read only" ), nickname );
         DisplayError( this, msg );
         return false;
     }
 
     // Confirmation
-    wxString msg = wxString::Format( FMT_OK_DELETE, fpname.GetData(), nickname.GetData() );
+    wxString msg = wxString::Format( _( "Delete footprint '%s' from library '%s'?" ),
+                                     fpname.GetData(),
+                                     nickname.GetData() );
 
     if( aConfirm && !IsOK( this, msg ) )
         return false;
@@ -606,7 +594,9 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aC
         return false;
     }
 
-    msg.Printf( FMT_MOD_DELETED, fpname.GetData(), nickname.GetData() );
+    msg.Printf( _( "Footprint '%s' deleted from library '%s'" ),
+                fpname.GetData(),
+                nickname.GetData() );
 
     SetStatusText( msg );
 
@@ -880,7 +870,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
         itemsToDisplay.push_back( item );
     }
 
-    EDA_LIST_DIALOG dlg( this, FMT_SAVE_MODULE, headers, itemsToDisplay, libraryName );
+    EDA_LIST_DIALOG dlg( this, _( "Save Footprint" ), headers, itemsToDisplay, libraryName );
     dlg.SetListLabel( _( "Save in library:" ) );
     dlg.SetOKLabel( _( "Save" ) );
 
@@ -1011,19 +1001,13 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
 
 MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
 {
-    // Creates a new footprint at position 0,0 which contains the minimal items:
-    // the reference and the value.
-    //   Value : initialized to the footprint name.
-    //           put on fab layer (front side)
-    //   Reference : initialized to a default value (REF**).
-    //               put on silkscreen layer (front side)
-
     wxString moduleName = aModuleName;
 
     // Ask for the new module name
     if( moduleName.IsEmpty() )
     {
-        WX_TEXT_ENTRY_DIALOG dlg( this, FMT_MOD_REF, FMT_MOD_CREATE, moduleName );
+        WX_TEXT_ENTRY_DIALOG dlg( this, _( "Enter footprint name:" ), _( "New Footprint" ),
+                                  moduleName );
         dlg.SetTextValidator( MODULE_NAME_CHAR_VALIDATOR( &moduleName ) );
 
         if( dlg.ShowModal() != wxID_OK )
@@ -1035,7 +1019,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
 
     if( moduleName.IsEmpty() )
     {
-        DisplayInfoMessage( this, FMT_NO_REF_ABORTED );
+        DisplayInfoMessage( this, _( "No footprint name defined." ) );
         return NULL;
     }
 
@@ -1048,40 +1032,59 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     // Update its name in lib
     module->SetFPID( LIB_ID( wxEmptyString, moduleName ) );
 
+    PCB_LAYER_ID layer;
     wxPoint default_pos;
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
-    // Update reference:
-    if( settings.m_RefDefaultText.empty() )
-        module->SetReference( moduleName );
-    else
-        module->SetReference( settings.m_RefDefaultText );
-
-    PCB_LAYER_ID layer = ToLAYER_ID( settings.m_RefDefaultlayer );
-    module->Reference().SetTextThickness( settings.GetTextThickness( layer ));
-    module->Reference().SetTextSize( settings.GetTextSize( layer ) );
-    module->Reference().SetItalic( settings.GetTextItalic( layer ) );
-    module->Reference().SetKeepUpright( settings.GetTextUpright( layer ) );
-    default_pos.y = GetDesignSettings().GetTextSize( layer ).y / 2;
-    module->Reference().SetPosition( default_pos );
+    module->Reference().SetText( settings.m_DefaultFPTextItems[0].m_Text );
+    module->Reference().SetVisible( settings.m_DefaultFPTextItems[0].m_Visible );
+    layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[0].m_Layer;
     module->Reference().SetLayer( layer );
-    module->Reference().SetVisible( settings.m_RefDefaultVisibility );
+    default_pos.y -= settings.GetTextSize( layer ).y / 2;
+    module->Reference().SetPosition( default_pos );
+    default_pos.y += settings.GetTextSize( layer ).y;
 
-    // Set the value field to a default value
-    if( settings.m_ValueDefaultText.empty() )
-        module->SetValue( moduleName );
-    else
-        module->SetValue( settings.m_ValueDefaultText );
-
-    layer = ToLAYER_ID( settings.m_ValueDefaultlayer );
-    module->Value().SetTextThickness( settings.GetTextThickness( layer ));
-    module->Value().SetTextSize( settings.GetTextSize( layer ) );
-    module->Value().SetItalic( settings.GetTextItalic( layer ) );
-    module->Value().SetKeepUpright( settings.GetTextUpright( layer ) );
-    default_pos.y = -default_pos.y;
-    module->Value().SetPosition( default_pos );
+    module->Value().SetText( settings.m_DefaultFPTextItems[1].m_Text );
+    module->Value().SetVisible( settings.m_DefaultFPTextItems[1].m_Visible );
+    layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[1].m_Layer;
     module->Value().SetLayer( layer );
-    module->Value().SetVisible( settings.m_ValueDefaultVisibility );
+    default_pos.y += settings.GetTextSize( layer ).y / 2;
+    module->Value().SetPosition( default_pos );
+    default_pos.y += settings.GetTextSize( layer ).y;
+
+    for( int i = 2; i < settings.m_DefaultFPTextItems.size(); ++i )
+    {
+        TEXTE_MODULE* textItem = new TEXTE_MODULE( module );
+        textItem->SetText( settings.m_DefaultFPTextItems[i].m_Text );
+        textItem->SetVisible( settings.m_DefaultFPTextItems[i].m_Visible );
+        layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[i].m_Layer;
+        textItem->SetLayer( layer );
+        default_pos.y += settings.GetTextSize( layer ).y / 2;
+        textItem->SetPosition( default_pos );
+        default_pos.y += settings.GetTextSize( layer ).y;
+        module->GraphicalItems().push_back( textItem );
+    }
+
+    if( module->GetReference().IsEmpty() )
+        module->SetReference( moduleName );
+
+    if( module->GetValue().IsEmpty() )
+        module->SetValue( moduleName );
+
+    module->RunOnChildren(
+            [&] ( BOARD_ITEM* aChild )
+            {
+                if( aChild->Type() == PCB_MODULE_TEXT_T )
+                {
+                    TEXTE_MODULE* textItem = static_cast<TEXTE_MODULE*>( aChild );
+                    PCB_LAYER_ID  layer = textItem->GetLayer();
+
+                    textItem->SetTextThickness( settings.GetTextThickness( layer ) );
+                    textItem->SetTextSize( settings.GetTextSize( layer ) );
+                    textItem->SetItalic( settings.GetTextItalic( layer ) );
+                    textItem->SetKeepUpright( settings.GetTextUpright( layer ) );
+                }
+            } );
 
     SetMsgPanel( module );
     return module;
@@ -1100,24 +1103,20 @@ wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
     std::vector< wxArrayString > itemsToDisplay;
     std::vector< wxString >      nicknames = fptbl->GetLogicalLibs();
 
-    for( unsigned i = 0; i < nicknames.size(); i++ )
+    for( const wxString& nickname : nicknames )
     {
         wxArrayString item;
 
-        item.Add( nicknames[i] );
-        item.Add( fptbl->GetDescription( nicknames[i] ) );
+        item.Add( nickname );
+        item.Add( fptbl->GetDescription( nickname ) );
 
         itemsToDisplay.push_back( item );
     }
 
-    EDA_LIST_DIALOG dlg( this, FMT_SELECT_LIB, headers, itemsToDisplay, aNicknameExisting );
+    EDA_LIST_DIALOG dlg( this, _( "Select Library" ), headers, itemsToDisplay, aNicknameExisting );
 
     if( dlg.ShowModal() != wxID_OK )
         return wxEmptyString;
 
-    wxString nickname = dlg.GetTextSelection();
-
-    wxLogDebug( wxT( "Chose footprint library \"%s\"." ), GetChars( nickname ) );
-
-    return nickname;
+    return dlg.GetTextSelection();
 }
