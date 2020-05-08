@@ -566,19 +566,21 @@ void SCH_COMPONENT::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSel
 }
 
 
-SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
+SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx )
 {
-    const SCH_FIELD* field;
-
     if( (unsigned) aFieldNdx < m_Fields.size() )
-        field = &m_Fields[aFieldNdx];
-    else
-        field = NULL;
+        return &m_Fields[aFieldNdx];
 
-    wxASSERT_MSG( field, wxString::Format( "No field ID %d found in symbol %s.",
-                                           aFieldNdx, m_Uuid.AsString() ) );
+    return nullptr;
+}
 
-    return const_cast<SCH_FIELD*>( field );
+
+const SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
+{
+    if( (unsigned) aFieldNdx < m_Fields.size() )
+        return &m_Fields[aFieldNdx];
+
+    return nullptr;
 }
 
 

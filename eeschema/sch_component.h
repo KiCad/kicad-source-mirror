@@ -389,7 +389,9 @@ public:
      *
      * @return is the field at \a aFieldNdx or NULL if the field does not exist.
      */
-    SCH_FIELD* GetField( int aFieldNdx ) const;
+    SCH_FIELD* GetField( int aFieldNdx );
+
+    const SCH_FIELD* GetField( int aFieldNdx ) const;
 
     /**
      * Search for a field named \a aFieldName and returns text associated with this field.
