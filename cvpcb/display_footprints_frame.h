@@ -80,6 +80,8 @@ public:
     bool GetAutoZoom() const { return m_autoZoom; }
     void SetAutoZoom( bool aEnable ) { m_autoZoom = aEnable; }
 
+    COLOR_SETTINGS* ColorSettings() override;
+
     /**
      * Function GetGridColor() , virtual
      * @return the color of the grid

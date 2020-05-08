@@ -29,6 +29,7 @@
 #include <common.h>
 #include <confirm.h>
 #include <cvpcb_settings.h>
+#include <footprint_editor_settings.h>
 #include <fp_lib_table.h>
 #include <id.h>
 #include <lib_id.h>
@@ -36,6 +37,8 @@
 #include <msgpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_painter.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
 #include <tool/tool_dispatcher.h>
@@ -452,3 +455,12 @@ void DISPLAY_FOOTPRINTS_FRAME::SyncToolbars()
 }
 
 
+COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::ColorSettings()
+{
+    auto* settings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+
+    if( settings )
+        return Pgm().GetSettingsManager().GetColorSettings( settings->m_ColorTheme );
+    else
+        return Pgm().GetSettingsManager().GetColorSettings();
+}
