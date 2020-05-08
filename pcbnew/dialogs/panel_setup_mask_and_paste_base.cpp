@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,7 +38,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	m_bitmapWarning = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_WARNING, wxART_OTHER ), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer4->Add( m_bitmapWarning, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Note: Set Solder mask minimum width to 0,\nunless your board house ask for a specific value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Note: Set Solder mask minimum bridge width to 0,\nunless your board house asks for a specific value"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoMaskMinWidth->Wrap( -1 );
 	m_staticTextInfoMaskMinWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
@@ -69,7 +69,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	m_MaskMarginUnits->Wrap( -1 );
 	fgGridSolderMaskSizer->Add( m_MaskMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_MaskMinWidthLabel = new wxStaticText( this, wxID_ANY, _("Solder mask minimum width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MaskMinWidthLabel = new wxStaticText( this, wxID_ANY, _("Solder mask minimum bridge width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskMinWidthLabel->Wrap( -1 );
 	m_MaskMinWidthLabel->SetToolTip( _("Min dist between 2 pad areas.\nTwo pad areas nearer than this value will be merged during plotting.\nThis parameter is used only to plot solder mask layers.\nLeave it to 0, unless you know what you are doing.") );
 
