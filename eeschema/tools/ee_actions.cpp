@@ -253,7 +253,7 @@ TOOL_ACTION EE_ACTIONS::placeSymbol( "eeschema.InteractiveDrawing.placeSymbol",
         AS_GLOBAL,
         'A', LEGACY_HK_NAME( "Add Symbol" ),
         _( "Add Symbol" ), _( "Add a symbol" ),
-        add_component_xpm, AF_ACTIVATE );
+        import_part_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerPort",
         AS_GLOBAL,
