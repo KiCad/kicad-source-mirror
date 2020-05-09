@@ -85,18 +85,28 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem, wxString* a
 
     // NB: we must check the net first, as when it is 0 GetNetClass() will return the
     // orphaned net netclass, not the default netclass.
-    if( m_netinfo->GetNet() == 0 )
-        netclass = GetBoard()->GetDesignSettings().GetDefault();
-    else
-        netclass = GetNetClass();
+    if( GetBoard() )
+    {
+        if( m_netinfo->GetNet() == 0 )
+            netclass = GetBoard()->GetDesignSettings().GetDefault();
+        else
+            netclass = GetNetClass();
+    }
+    // No clearance if "this" is not (yet) linked to a board therefore no available netclass
 
-    int myClearance = netclass->GetClearance();
+    int myClearance = netclass ? netclass->GetClearance() : 0;
 
     if( aItem && aItem->GetClearance() > myClearance )
         return aItem->GetClearance( nullptr, aSource );
 
     if( aSource )
-        *aSource = wxString::Format( _( "%s netclass clearance" ), netclass->GetName() );
+    {
+        if( netclass )
+            *aSource = wxString::Format( _( "%s netclass clearance" ),
+                                         netclass->GetName() );
+        else
+            *aSource = _( "No netclass" );
+    }
 
     return myClearance;
 }
