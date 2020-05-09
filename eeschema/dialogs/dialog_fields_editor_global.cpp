@@ -887,12 +887,13 @@ bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataFromWindow()
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
 
     m_dataModel->ApplyData();
-    m_parent->SyncView();
-    m_parent->OnModify();
 
     // Reset the view to where we left the user
     m_parent->SetCurrentSheet( currentSheet );
+    m_parent->SyncView();
     m_parent->Refresh();
+
+    m_parent->OnModify();
 
     return true;
 }
