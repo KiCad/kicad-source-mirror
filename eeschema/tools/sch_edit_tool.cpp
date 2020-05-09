@@ -1387,19 +1387,19 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_LINE_T:
     {
-        std::deque<SCH_LINE*> graphicLines;
+        std::deque<SCH_LINE*> lines;
 
-        for( EDA_ITEM* selItem : selection.Items() )
+        for( auto selItem : selection.Items() )
         {
             SCH_LINE* line = dynamic_cast<SCH_LINE*>( selItem );
 
-            if( line && line->IsGraphicLine() )
-                graphicLines.push_back( line );
+            if( line )
+                lines.push_back( line );
             else
                 return 0;
         }
 
-        DIALOG_EDIT_LINE_STYLE dlg( m_frame, graphicLines );
+        DIALOG_EDIT_LINE_STYLE dlg( m_frame, lines );
 
         if( dlg.ShowModal() == wxID_OK )
         {

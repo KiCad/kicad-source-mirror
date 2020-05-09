@@ -820,6 +820,12 @@ bool SCH_LINE::IsGraphicLine() const
 }
 
 
+bool SCH_LINE::IsWire() const
+{
+    return ( GetLayer() == LAYER_WIRE );
+}
+
+
 bool SCH_LINE::UsesDefaultStroke() const
 {
     return m_size == 0 && m_color == COLOR4D::UNSPECIFIED

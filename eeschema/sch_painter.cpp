@@ -313,14 +313,32 @@ float SCH_PAINTER::getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows )
 
 float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows )
 {
+    wxCHECK( aItem && aItem->Type() == SCH_LINE_T,
+            static_cast<float>( m_schSettings.m_DefaultWireThickness ) );
+
     float width;
+    const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( aItem );
+
+    wxCHECK( line, static_cast<float>( m_schSettings.m_DefaultWireThickness ) );
 
     if( aItem->GetLayer() == LAYER_WIRE )
-        width = (float)  m_schSettings.m_DefaultWireThickness;
+    {
+        if( line->GetLineSize() != 0 )
+            width = (float) line->GetLineSize();
+        else
+            width = (float)  m_schSettings.m_DefaultWireThickness;
+    }
     else if( aItem->GetLayer() == LAYER_BUS )
-        width = (float)  m_schSettings.m_DefaultBusThickness;
+    {
+        if( line->GetLineSize() != 0 )
+            width = (float) line->GetLineSize();
+        else
+            width = (float)  m_schSettings.m_DefaultBusThickness;
+    }
     else
+    {
         width = (float) std::max( aItem->GetPenWidth(), m_schSettings.GetDefaultPenWidth() );
+    }
 
     if( aItem->IsSelected() && aDrawingShadows )
         width += getShadowWidth();

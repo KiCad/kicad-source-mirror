@@ -231,6 +231,13 @@ public:
      */
     bool IsGraphicLine() const;
 
+    /**
+     * Returns true if the line is a wire.
+     *
+     * @return true if this line is on the wire layer.
+     */
+    bool IsWire() const;
+
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;
 };
