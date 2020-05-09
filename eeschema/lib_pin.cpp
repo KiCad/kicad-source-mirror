@@ -1492,7 +1492,6 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
 const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles ) const
 {
-    LIB_PART*      entry = static_cast<LIB_PART*>( m_Parent );
     EDA_RECT       bbox;
     wxPoint        begin;
     wxPoint        end;
@@ -1504,14 +1503,15 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles ) const
     if( !aIncludeInvisibles && !IsVisible() )
         showName = false;
 
-    if( entry )
+    if( GetParent() )
     {
-        if( entry->ShowPinNames() )
-            nameTextOffset = entry->GetPinNameOffset();
+        if( GetParent()->ShowPinNames() )
+            nameTextOffset = GetParent()->GetPinNameOffset();
         else
             showName = false;
 
-        showNum = entry->ShowPinNumbers();
+        if( !GetParent()->ShowPinNumbers() )
+            showNum = false;
     }
 
     // First, calculate boundary box corners position
