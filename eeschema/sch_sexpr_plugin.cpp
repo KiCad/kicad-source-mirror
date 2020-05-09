@@ -1399,6 +1399,8 @@ void SCH_SEXPR_PLUGIN_CACHE::Save()
     if( !m_isModified )
         return;
 
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+
     // Write through symlinks, don't replace them.
     wxFileName fn = GetRealFile();
 
