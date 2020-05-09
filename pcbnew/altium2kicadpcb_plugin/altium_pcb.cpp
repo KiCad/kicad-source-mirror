@@ -1285,10 +1285,12 @@ void ALTIUM_PCB::ParsePolygons6Data(
             }
         }
 
-        if( elem.hatchstyle != ALTIUM_POLYGON_HATCHSTYLE::SOLID )
+        if( elem.hatchstyle != ALTIUM_POLYGON_HATCHSTYLE::SOLID &&
+            elem.hatchstyle != ALTIUM_POLYGON_HATCHSTYLE::UNKNOWN )
         {
             zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
             zone->SetHatchFillTypeThickness( elem.trackwidth );
+
             if( elem.hatchstyle == ALTIUM_POLYGON_HATCHSTYLE::NONE )
             {
                 // use a small hack to get us only an outline (hopefully)
@@ -1299,6 +1301,7 @@ void ALTIUM_PCB::ParsePolygons6Data(
             {
                 zone->SetHatchFillTypeGap( elem.gridsize - elem.trackwidth );
             }
+
             zone->SetHatchFillTypeOrientation(
                     elem.hatchstyle == ALTIUM_POLYGON_HATCHSTYLE::DEGREE_45 ? 45 : 0 );
         }
