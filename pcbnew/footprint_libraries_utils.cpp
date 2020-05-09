@@ -1052,7 +1052,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     module->Value().SetPosition( default_pos );
     default_pos.y += settings.GetTextSize( layer ).y;
 
-    for( int i = 2; i < settings.m_DefaultFPTextItems.size(); ++i )
+    for( size_t i = 2; i < settings.m_DefaultFPTextItems.size(); ++i )
     {
         TEXTE_MODULE* textItem = new TEXTE_MODULE( module );
         textItem->SetText( settings.m_DefaultFPTextItems[i].m_Text );

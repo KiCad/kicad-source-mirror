@@ -111,7 +111,7 @@ public:
 
     bool AppendRows( size_t aNumRows = 1 ) override
     {
-        for( int i = 0; i < aNumRows; ++i )
+        for( size_t i = 0; i < aNumRows; ++i )
             m_items.emplace_back( wxT( "" ), true, F_SilkS );
 
         if( GetView() )
@@ -247,7 +247,7 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataToWindow()
     // Footprint defaults
     m_textItemsGrid->GetTable()->AppendRows( m_brdSettings.m_DefaultFPTextItems.size() );
 
-    for( int i = 0; i < m_brdSettings.m_DefaultFPTextItems.size(); ++i )
+    for( size_t i = 0; i < m_brdSettings.m_DefaultFPTextItems.size(); ++i )
     {
         TEXT_ITEM_INFO item = m_brdSettings.m_DefaultFPTextItems[i];
 
@@ -289,7 +289,7 @@ bool PANEL_MODEDIT_DEFAULTS::Show( bool aShow )
 
     if( aShow && m_firstShow )
     {
-        m_layerClassesGrid->SetColumnWidth( 0, m_layerClassesGrid->GetColumnWidth( 0 ) + 1 );
+        m_layerClassesGrid->SetColSize( 0, m_layerClassesGrid->GetColSize( 0 ) + 1 );
         m_firstShow = false;
     }
 

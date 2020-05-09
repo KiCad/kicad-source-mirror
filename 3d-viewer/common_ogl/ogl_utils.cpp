@@ -27,6 +27,7 @@
  * @brief implements generic openGL functions that are common to any openGL target
  */
 
+#include <GL/glew.h>
 
 #include "openGL_includes.h"
 #include "ogl_utils.h"
