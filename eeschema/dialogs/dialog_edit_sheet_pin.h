@@ -48,6 +48,7 @@ public:
 
 private:
 	void onOKButton( wxCommandEvent& event ) override;
+    void OnSyntaxHelp( wxHyperlinkEvent& event ) override;
 };
 
 #endif // DIALOG_EDIT_SHEET_PIN_H

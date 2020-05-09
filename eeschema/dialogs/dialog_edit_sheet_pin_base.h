@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,9 +18,10 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/choice.h>
+#include <wx/hyperlink.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
+#include <wx/choice.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -37,17 +38,20 @@ class DIALOG_EDIT_SHEET_PIN_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticText1;
 		wxTextCtrl* m_textName;
+		wxHyperlinkCtrl* m_hyperlink1;
+		wxStaticLine* m_staticline3;
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
 		wxStaticText* m_staticText3;
 		wxChoice* m_choiceConnectionType;
-		wxStaticLine* m_staticline1;
+		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnSyntaxHelp( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void onOKButton( wxCommandEvent& event ) { event.Skip(); }
 
 

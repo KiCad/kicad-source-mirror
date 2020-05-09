@@ -112,3 +112,9 @@ void DIALOG_EDIT_SHEET_PIN::onOKButton( wxCommandEvent& event )
 {
     event.Skip();
 }
+
+
+void DIALOG_EDIT_SHEET_PIN::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
+{
+    SCH_TEXT::ShowSyntaxHelp( this );
+}
