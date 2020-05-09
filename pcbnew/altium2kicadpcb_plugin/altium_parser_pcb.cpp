@@ -889,6 +889,9 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader )
 
     text = aReader.ReadWxString(); // TODO: what about strings with length > 255?
 
+    // Normalize Windows line endings
+    text.Replace( "\r\n", "\n" );
+
     aReader.SkipSubrecord();
 
     if( aReader.HasParsingError() )
