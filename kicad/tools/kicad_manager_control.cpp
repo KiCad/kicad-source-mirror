@@ -368,12 +368,14 @@ public:
             // straight copy
             CopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
         }
-        else if( ext == "sch"
-              || ext == "sch-bak"
-              || ext == "sym"
-              || ext == "lib"
-              || ext == "net"
-              || destFile.GetName() == "sym-lib-table" )
+        else if( ext == "kicad_sch"
+                 || ext == "kicad_sch-bak"
+                 || ext == "sch"
+                 || ext == "sch-bak"
+                 || ext == "sym"
+                 || ext == "lib"
+                 || ext == "net"
+                 || destFile.GetName() == "sym-lib-table" )
         {
             KIFACE* eeschema = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
             eeschema->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
@@ -432,8 +434,6 @@ public:
         }
 
         /* TODO: what about these?
-        MacrosFileExtension;
-        FootprintPlaceFileExtension;
         KiCadFootprintLibPathExtension;
         GedaPcbFootprintLibFileExtension;
         EagleFootprintLibPathExtension;

@@ -411,16 +411,18 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName )
     // It will avoid messages from the schematic editor or the board editor to create a new file
     // And forces the user to create main files under the right name for the project manager
     wxFileName fn( aProjectFileName.GetFullPath() );
-    fn.SetExt( LegacySchematicFileExtension );
+    fn.SetExt( KiCadSchematicFileExtension );
 
-    // If a <project>.sch file does not exist, create a "stub" file ( minimal schematic file )
+    // If a <project>.kicad_sch file does not exist, create a "stub" file ( minimal schematic file )
     if( !fn.FileExists() )
     {
         wxFile file( fn.GetFullPath(), wxFile::write );
 
         if( file.IsOpened() )
-            file.Write( wxT( "EESchema Schematic File Version 2\n"
-                             "EELAYER 25 0\nEELAYER END\n$EndSCHEMATC\n" ) );
+            file.Write( wxT( "(kicad_sch (version 20200310) (host eeschema \"unknown\")\n"
+                             "(  page \"A4\")\n  (lib_symbols)\n"
+                             "  (symbol_instances)\n)\n" ) );
+
 
         // wxFile dtor will close the file
     }
