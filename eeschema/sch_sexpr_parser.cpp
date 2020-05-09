@@ -2170,12 +2170,17 @@ SCH_BITMAP* SCH_SEXPR_PARSER::parseImage()
 
             wxString data;
 
+            // Reserve 128K because most image files are going to be larger than the default
+            // 1K that wxString reserves.
+            data.reserve( 2^17 );
+
             while( token != T_RIGHT )
             {
                 if( !IsSymbol( token ) )
                     Expecting( "base64 image data" );
 
                 data += FromUTF8();
+                token = NextTok();
             }
 
             wxMemoryBuffer buffer = wxBase64Decode( data );
