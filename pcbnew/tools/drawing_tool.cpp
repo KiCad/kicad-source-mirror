@@ -365,9 +365,11 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     DIALOG_TEXT_PROPERTIES textDialog( m_frame, textMod );
                     bool cancelled;
 
-                    RunMainStack([&]() {
-                        cancelled = !textDialog.ShowModal() || textMod->GetText().IsEmpty();
-                    } );
+                    RunMainStack( [&]()
+                                  {
+                                      cancelled = !textDialog.ShowModal()
+                                                    || textMod->GetText().IsEmpty();
+                                  } );
 
                     if( cancelled )
                     {
@@ -398,9 +400,10 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     textPcb->SetItalic( dsnSettings.GetTextItalic( layer ) );
                     textPcb->SetTextPos( (wxPoint) cursorPos );
 
-                    RunMainStack([&]() {
-                        m_frame->InstallTextOptionsFrame( textPcb );
-                    } );
+                    RunMainStack( [&]()
+                                  {
+                                      m_frame->InstallTextOptionsFrame( textPcb );
+                                  } );
 
                     if( textPcb->GetText().IsEmpty() )
                         delete textPcb;
@@ -412,6 +415,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 {
                     m_controls->WarpCursor( text->GetPosition(), true );
                     m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
+                    m_view->Update( &selection() );
                 }
             }
 
