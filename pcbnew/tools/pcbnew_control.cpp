@@ -836,11 +836,14 @@ template<typename T>
 static void moveNoFlagToVector( std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
 {
     std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),
-            [](T aItem)
+            [aIsNew]( T aItem )
             {
-                bool retval = ( aItem->GetFlags() & FLAG0 ) == 0;
+                bool doCopy = ( aItem->GetFlags() & FLAG0 ) == 0;
+
                 aItem->ClearFlags( FLAG0 );
-                return retval;
+                aItem->SetFlags( aIsNew ? IS_NEW : 0 );
+
+                return doCopy;
             } );
 
     if( aIsNew )
