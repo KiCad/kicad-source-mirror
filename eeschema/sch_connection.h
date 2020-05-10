@@ -79,7 +79,7 @@ public:
      * For CONNECTION_BUS, this will deduce the correct BUS_TYPE and also
      * generate a correct list of members.
      */
-    void ConfigureFromLabel( wxString aLabel );
+    void ConfigureFromLabel( const wxString& aLabel );
 
     /**
      * Clears connectivity information
@@ -271,8 +271,8 @@ public:
      * @param aMemberList is a list of member strings, e.g. "A7", "A6", and so on
      * @return true if aBus was successfully parsed
      */
-    bool ParseBusVector( wxString aBus, wxString* aName,
-                         std::vector<wxString>& aMemberList ) const;
+    static bool ParseBusVector( const wxString& aBus, wxString* aName,
+                                std::vector<wxString>* aMemberList );
 
     /**
      * Parses a bus group label into the name and a list of components
@@ -282,8 +282,8 @@ public:
      * @param aMemberList is a list of member strings, e.g. "DP", "DM"
      * @return true if aGroup was successfully parsed
      */
-    bool ParseBusGroup( wxString aGroup, wxString* name,
-                        std::vector<wxString>& aMemberList ) const;
+    static bool ParseBusGroup( wxString aGroup, wxString* name,
+                               std::vector<wxString>* aMemberList );
 
     /**
      * Adds information about the connection object to aList
@@ -311,22 +311,6 @@ public:
      * @return true if text might be a bus label
      */
     static bool MightBeBusLabel( const wxString& aLabel );
-
-    /**
-     * Test if \a aLabel has a bus vector notation (simple bus, e.g. A[7..0])
-     *
-     * @param aLabel A wxString object containing the label to test.
-     * @return true if text is a bus notation format otherwise false is returned.
-     */
-    static bool IsBusVectorLabel( const wxString& aLabel );
-
-    /**
-     * Test if \a aLabel has a bus group notation.
-     *
-     * @param aLabel A wxString object containing the label to test.
-     * @return true if text is a bus group notation format
-     */
-    static bool IsBusGroupLabel( const wxString& aLabel );
 
 private:
     void recacheName();

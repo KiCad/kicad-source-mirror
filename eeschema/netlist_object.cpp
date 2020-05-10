@@ -243,39 +243,32 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
     long member_offset = 0;
 
     auto alias = SCH_SCREEN::GetBusAlias( m_Label );
-    if( alias || conn.IsBusGroupLabel( m_Label ) )
+    wxString group_name;
+    bool self_set = false;
+    std::vector<wxString> bus_contents_vec;
+
+    if( alias )
     {
-        wxString group_name;
-        bool self_set = false;
-        std::vector<wxString> bus_contents_vec;
-
-        if( alias )
-        {
-            for( const auto& member : alias->Members() )
-                bus_contents_vec.emplace_back( member );
-        }
-        else
-        {
-            wxCHECK_RET( conn.ParseBusGroup( m_Label, &group_name, bus_contents_vec ),
-                         wxString::Format( _( "Failed to parse bus group %s" ), m_Label ) );
-        }
-
+        for( const wxString& member : alias->Members() )
+            bus_contents_vec.emplace_back( member );
+    }
+    else if( SCH_CONNECTION::ParseBusGroup( m_Label, &group_name, &bus_contents_vec ) )
+    {
         // For named bus groups, like "USB{DP DM}"
-        auto group_prefix = ( group_name != "" ) ? ( group_name + "." ) : "";
+        wxString group_prefix = ( group_name != "" ) ? ( group_name + "." ) : "";
 
-        std::list<wxString> bus_contents( bus_contents_vec.begin(),
-                                          bus_contents_vec.end() );
+        std::list<wxString> bus_contents( bus_contents_vec.begin(), bus_contents_vec.end() );
 
         for( const auto& bus_member : bus_contents )
         {
+            wxString prefix;
+            std::vector<wxString> members;
+
             // Nested bus vector inside a bus group
-            if( conn.IsBusVectorLabel( bus_member ) )
+            if( SCH_CONNECTION::ParseBusVector( bus_member, &prefix, &members ) )
             {
-                wxString prefix;
-                std::vector<wxString> members;
                 long begin, end;
 
-                conn.ParseBusVector( bus_member, &prefix, members );
                 prefix = group_prefix + prefix;
                 begin = conn.VectorStart();
                 end = conn.VectorEnd();
@@ -318,21 +311,15 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
             }
         }
     }
-    else
+    else if( SCH_CONNECTION::ParseBusVector( m_Label, &group_name, &bus_contents_vec ) )
     {
-        // Plain bus vector
-        wxString prefix;
-        std::vector<wxString> members;
-        long begin, end;
+        long begin = conn.VectorStart();
+        long end = conn.VectorEnd();
 
-        conn.ParseBusVector( m_Label, &prefix, members );
-        begin = conn.VectorStart();
-        end = conn.VectorEnd();
-
-        m_Label = members[0];
+        m_Label = bus_contents_vec[0];
         m_Member = begin;
 
-        fillBusVector( aNetListItems, prefix, begin + 1, end, 0 );
+        fillBusVector( aNetListItems, group_name, begin + 1, end, 0 );
     }
 }
 

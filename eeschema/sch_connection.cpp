@@ -57,10 +57,6 @@
  * just USB_DP and USB_DN.
  *
  */
-static std::regex bus_label_re( "^([^[:space:]]+)(\\[[\\d]+\\.+[\\d]+\\])(~?)$" );
-
-static std::regex bus_group_label_re( "^([^[:space:]]+)?\\{((?:[^[:space:]]+(?:\\[[\\d]+\\.+[\\d]+\\])? ?)+)\\}$" );
-
 
 SCH_CONNECTION::SCH_CONNECTION( SCH_ITEM* aParent, SCH_SHEET_PATH aPath ) :
         m_sheet( aPath ),
@@ -113,25 +109,26 @@ bool SCH_CONNECTION::operator!=( const SCH_CONNECTION& aOther ) const
 }
 
 
-void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
+void SCH_CONNECTION::ConfigureFromLabel( const wxString& aLabel )
 {
     m_members.clear();
 
     m_name       = aLabel;
     m_local_name = aLabel;
 
+    wxString prefix;
+    std::vector<wxString> members;
+
     wxString unescaped = UnescapeString( aLabel );
 
-    if( IsBusVectorLabel( unescaped ) )
+    if( ParseBusVector( unescaped, &prefix, &members ) )
     {
         m_type = CONNECTION_TYPE::BUS;
+        m_vector_prefix = prefix;
 
-        std::vector<wxString> members;
-
-        ParseBusVector( unescaped, &m_vector_prefix, members );
         long i = 0;
 
-        for( const auto& vector_member : members )
+        for( const wxString& vector_member : members )
         {
             auto member            = std::make_shared<SCH_CONNECTION>( m_parent, m_sheet );
             member->m_type         = CONNECTION_TYPE::NET;
@@ -142,38 +139,33 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
             m_members.push_back( member );
         }
     }
-    else if( IsBusGroupLabel( unescaped ) )
+    else if( ParseBusGroup( unescaped, &prefix, &members ) )
     {
         m_type = CONNECTION_TYPE::BUS_GROUP;
 
-        std::vector<wxString> members;
-        wxString group_name;
+        // Named bus groups generate a net prefix, unnamed ones don't
+        if( !prefix.IsEmpty() )
+            prefix += wxT( "." );
 
-        if( ParseBusGroup( unescaped, &group_name, members ) )
+        for( const wxString& group_member : members )
         {
-            // Named bus groups generate a net prefix, unnamed ones don't
-            wxString prefix = group_name != wxT( "" ) ? ( group_name + wxT( "." ) ) : wxT( "" );
-
-            for( const auto& group_member : members )
+            // Handle alias inside bus group member list
+            if( auto alias = g_ConnectionGraph->GetBusAlias( group_member ) )
             {
-                // Handle alias inside bus group member list
-                if( auto alias = g_ConnectionGraph->GetBusAlias( group_member ) )
-                {
-                    for( const auto& alias_member : alias->Members() )
-                    {
-                        auto member = std::make_shared< SCH_CONNECTION >( m_parent, m_sheet );
-                        member->SetPrefix( prefix );
-                        member->ConfigureFromLabel( alias_member );
-                        m_members.push_back( member );
-                    }
-                }
-                else
+                for( const wxString& alias_member : alias->Members() )
                 {
                     auto member = std::make_shared< SCH_CONNECTION >( m_parent, m_sheet );
                     member->SetPrefix( prefix );
-                    member->ConfigureFromLabel( group_member );
+                    member->ConfigureFromLabel( alias_member );
                     m_members.push_back( member );
                 }
+            }
+            else
+            {
+                auto member = std::make_shared< SCH_CONNECTION >( m_parent, m_sheet );
+                member->SetPrefix( prefix );
+                member->ConfigureFromLabel( group_member );
+                m_members.push_back( member );
             }
         }
     }
@@ -351,7 +343,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 
         aList.push_back( MSG_PANEL_ITEM( msg, members, RED ) );
     }
-    else if( ParseBusGroup( m_name, &group_name, group_members ) )
+    else if( ParseBusGroup( m_name, &group_name, &group_members ) )
     {
         for( const auto& group_member : group_members )
         {
@@ -400,7 +392,7 @@ void SCH_CONNECTION::AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 
 bool SCH_CONNECTION::IsBusLabel( const wxString& aLabel )
 {
-    return IsBusVectorLabel( aLabel ) || IsBusGroupLabel( aLabel );
+    return ParseBusVector( aLabel, nullptr, nullptr ) || ParseBusGroup( aLabel, nullptr, nullptr );
 }
 
 
@@ -413,104 +405,128 @@ bool SCH_CONNECTION::MightBeBusLabel( const wxString& aLabel )
 }
 
 
-bool SCH_CONNECTION::IsBusVectorLabel( const wxString& aLabel )
+static bool isSuperSub( wxChar c )
 {
-    if( !aLabel.Contains( wxT( "[" ) ) )
-        return false;
-
-    try
-    {
-        return std::regex_match( std::string( aLabel.mb_str() ), bus_label_re );
-    }
-    catch( ... )
-    {
-        return false;
-    }
-}
+    return c == '_' || c == '^';
+};
 
 
-bool SCH_CONNECTION::IsBusGroupLabel( const wxString& aLabel )
+bool SCH_CONNECTION::ParseBusVector( const wxString& aBus, wxString* aName,
+                                     std::vector<wxString>* aMemberList )
 {
-    if( !aLabel.Contains( wxT( "{" ) ) )
-        return false;
+    auto isDigit = []( wxChar c )
+                   {
+                       static   wxString digits( wxT( "0123456789" ) );
+                       return digits.Contains( c );
+                   };
 
-    try
-    {
-        return std::regex_match( std::string( aLabel.mb_str() ), bus_group_label_re );
-    }
-    catch( ... )
-    {
-        return false;
-    }
-}
-
-
-bool SCH_CONNECTION::ParseBusVector( wxString aBus, wxString* aName,
-                                     std::vector<wxString>& aMemberList ) const
-{
-    auto ss_vector = std::string( aBus.mb_str() );
-    std::smatch matches;
-
-    try
-    {
-        if( !std::regex_match( ss_vector, matches, bus_label_re ) )
-            return false;
-    }
-    catch( ... )
-    {
-        return false;
-    }
-
-    long begin = 0, end = 0;
-    *aName = wxString( matches[1] );
-    wxString numberString( matches[2] );
-
-    // If we have three match groups, it means there was a tilde at the end of the vector
-    bool append_tilde = wxString( matches[3] ).IsSameAs( wxT( "~" ) );
-
-    // numberString will include the brackets, e.g. [5..0] so skip the first one
-    size_t i = 1, len = numberString.Len();
+    size_t   busLen = aBus.length();
+    size_t   i = 0;
+    wxString prefix;
+    wxString suffix;
     wxString tmp;
+    long     begin = 0;
+    long     end = 0;
+    int      braceNesting = 0;
 
-    while( i < len && numberString[i] != '.' )
+    // Parse prefix
+    //
+    for( ; i < busLen; ++i )
     {
-        tmp.Append( numberString[i] );
-        i++;
+        if( aBus[i] == '{' )
+        {
+            if( i > 0 && isSuperSub( aBus[i-1] ) )
+                braceNesting++;
+            else
+                return false;
+        }
+        else if( aBus[i] == '}' )
+        {
+            braceNesting--;
+        }
+
+        if( aBus[i] == ' ' || aBus[i] == ']' )
+            return false;
+
+        if( aBus[i] == '[' )
+            break;
+
+        prefix += aBus[i];
     }
 
-    tmp.ToLong( &begin );
+    // Parse start number
+    //
+    i++;  // '[' character
 
-    while( i < len && numberString[i] == '.' )
-        i++;
-
-    tmp.Empty();
-
-    while( i < len && numberString[i] != ']' )
+    for( ; i < busLen; ++i )
     {
-        tmp.Append( numberString[i] );
-        i++;
+        if( aBus[i] == '.' && i + 1 < busLen && aBus[i+1] == '.' )
+        {
+            tmp.ToLong( &begin );
+            i += 2;
+            break;
+        }
+
+        if( !isDigit( aBus[i] ) )
+            return false;
+
+        tmp += aBus[i];
     }
 
-    tmp.ToLong( &end );
+    // Parse end number
+    //
+    tmp = wxEmptyString;
 
-    if( begin < 0 )
-        begin = 0;
-
-    if( end < 0 )
-        end = 0;
-
-    if( begin > end )
-        std::swap( begin, end );
-
-    for( long idx = begin; idx <= end; ++idx )
+    for( ; i < busLen; ++i )
     {
-        wxString str = *aName;
-        str << idx;
+        if( aBus[i] == ']' )
+        {
+            tmp.ToLong( &end );
+            ++i;
+            break;
+        }
 
-        if( append_tilde )
-            str << '~';
+        if( !isDigit( aBus[i] ) )
+            return false;
 
-        aMemberList.emplace_back( str );
+        tmp += aBus[i];
+    }
+
+    // Parse suffix
+    //
+    for( ; i < busLen; ++i )
+    {
+        if( aBus[i] == '}' )
+        {
+            braceNesting--;
+            suffix += aBus[i];
+        }
+        else if( aBus[i] == '~' )
+        {
+            suffix += aBus[i];
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    if( braceNesting != 0 )
+        return false;
+
+    if( aName )
+        *aName = prefix;
+
+    if( aMemberList )
+    {
+        for( long idx = begin; idx <= end; ++idx )
+        {
+            wxString str = prefix;
+            str << idx;
+            str << suffix;
+
+            aMemberList->emplace_back( str );
+        }
     }
 
     return true;
@@ -518,32 +534,82 @@ bool SCH_CONNECTION::ParseBusVector( wxString aBus, wxString* aName,
 
 
 bool SCH_CONNECTION::ParseBusGroup( wxString aGroup, wxString* aName,
-                                    std::vector<wxString>& aMemberList ) const
+                                    std::vector<wxString>* aMemberList )
 {
-    auto ss_group = std::string( aGroup.mb_str() );
-    std::smatch matches;
+    size_t   groupLen = aGroup.length();
+    size_t   i = 0;
+    wxString prefix;
+    wxString suffix;
+    wxString tmp;
+    int      braceNesting = 0;
 
-    try
+    // Parse prefix
+    //
+    for( ; i < groupLen; ++i )
     {
-        if( !std::regex_match( ss_group, matches, bus_group_label_re ) )
+        if( aGroup[i] == '{' )
         {
-            return false;
+            if( i > 0 && isSuperSub( aGroup[i-1] ) )
+                braceNesting++;
+            else
+                break;
         }
+        else if( aGroup[i] == '}' )
+        {
+            braceNesting--;
+        }
+
+        if( aGroup[i] == ' ' || aGroup[i] == '[' || aGroup[i] == ']' )
+            return false;
+
+        prefix += aGroup[i];
     }
-    catch( ... )
-    {
+
+    if( braceNesting != 0 )
         return false;
-    }
 
-    *aName = wxString( matches[1] );
+    if( aName )
+        *aName = prefix;
 
-    wxStringTokenizer tokenizer( wxString( matches[2] ), " " );
-    while( tokenizer.HasMoreTokens() )
+    // Parse members
+    //
+    i++;  // '{' character
+
+    for( ; i < groupLen; ++i )
     {
-        aMemberList.push_back( tokenizer.GetNextToken() );
+        if( aGroup[i] == '{' )
+        {
+            if( i > 0 && isSuperSub( aGroup[i-1] ) )
+                braceNesting++;
+            else
+                return false;
+        }
+        else if( aGroup[i] == '}' )
+        {
+            if( braceNesting )
+                braceNesting--;
+            else
+            {
+                if( aMemberList )
+                    aMemberList->push_back( tmp );
+
+                return true;
+            }
+        }
+
+        if( aGroup[i] == ' ' )
+        {
+            if( aMemberList )
+                aMemberList->push_back( tmp );
+
+            tmp.Clear();
+            continue;
+        }
+
+        tmp += aGroup[i];
     }
 
-    return true;
+    return false;
 }
 
 

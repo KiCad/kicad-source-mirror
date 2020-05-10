@@ -16,7 +16,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_textEntrySizer = new wxFlexGridSizer( 5, 2, 3, 3 );
+	m_textEntrySizer = new wxFlexGridSizer( 5, 2, 1, 3 );
 	m_textEntrySizer->AddGrowableCol( 1 );
 	m_textEntrySizer->AddGrowableRow( 1 );
 	m_textEntrySizer->SetFlexibleDirection( wxBOTH );
@@ -27,12 +27,12 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_labelSingleLine->Wrap( -1 );
 	m_labelSingleLine->SetToolTip( _("Enter the text to be used within the schematic") );
 
-	m_textEntrySizer->Add( m_labelSingleLine, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	m_textEntrySizer->Add( m_labelSingleLine, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 2 );
 
 	m_valueSingleLine = new wxTextCtrl( this, wxID_VALUESINGLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER|wxTE_RICH );
 	m_valueSingleLine->SetMinSize( wxSize( 360,-1 ) );
 
-	m_textEntrySizer->Add( m_valueSingleLine, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_textEntrySizer->Add( m_valueSingleLine, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 2 );
 
 	m_labelMultiLine = new wxStaticText( this, wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelMultiLine->Wrap( -1 );
@@ -67,7 +67,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_valueMultiLine->MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
 	m_valueMultiLine->SetSelBackground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 	m_valueMultiLine->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-	m_textEntrySizer->Add( m_valueMultiLine, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_textEntrySizer->Add( m_valueMultiLine, 1, wxEXPAND|wxBOTTOM, 2 );
 
 	m_labelCombo = new wxStaticText( this, wxID_ANY, _("Label:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCombo->Wrap( -1 );
@@ -76,17 +76,17 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_valueCombo = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
 	m_valueCombo->SetMinSize( wxSize( 360,-1 ) );
 
-	m_textEntrySizer->Add( m_valueCombo, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_textEntrySizer->Add( m_valueCombo, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textSizeLabel = new wxStaticText( this, wxID_ANY, _("Text Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_textSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 6 );
+	m_textEntrySizer->Add( m_textSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 6 );
 
 	wxBoxSizer* bSizeCtrlSizer;
 	bSizeCtrlSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_textSizeCtrl = new wxTextCtrl( this, wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizeCtrlSizer->Add( m_textSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 6 );
+	bSizeCtrlSizer->Add( m_textSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 6 );
 
 	m_textSizeUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeUnits->Wrap( -1 );
@@ -96,18 +96,18 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	bSizeCtrlSizer->Add( 0, 0, 1, wxEXPAND, 15 );
 
 	m_formattingHelp = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
-	bSizeCtrlSizer->Add( m_formattingHelp, 0, wxBOTTOM|wxRIGHT|wxLEFT, 8 );
+	bSizeCtrlSizer->Add( m_formattingHelp, 0, wxBOTTOM|wxRIGHT|wxLEFT, 7 );
 
 
-	m_textEntrySizer->Add( bSizeCtrlSizer, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 3 );
+	m_textEntrySizer->Add( bSizeCtrlSizer, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 6 );
 
 	m_note1 = new wxStaticText( this, wxID_ANY, _("Note:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_note1->Wrap( -1 );
-	m_textEntrySizer->Add( m_note1, 0, wxTOP|wxRIGHT, 5 );
+	m_textEntrySizer->Add( m_note1, 0, wxTOP|wxRIGHT, 2 );
 
 	m_note2 = new wxStaticText( this, wxID_ANY, _("The margins around the text are controlled by the text offset ratio\nin Schematic Setup > General > Formatting."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_note2->Wrap( -1 );
-	m_textEntrySizer->Add( m_note2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_note2, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 2 );
 
 
 	bMainSizer->Add( m_textEntrySizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 12 );

@@ -2606,7 +2606,7 @@ wxString SCH_EAGLE_PLUGIN::fixSymbolName( const wxString& aName )
 
 wxString SCH_EAGLE_PLUGIN::translateEagleBusName( const wxString& aEagleName ) const
 {
-    if( SCH_CONNECTION::IsBusVectorLabel( aEagleName ) )
+    if( SCH_CONNECTION::ParseBusVector( aEagleName, nullptr, nullptr ) )
         return aEagleName;
 
     wxString ret = "{";
