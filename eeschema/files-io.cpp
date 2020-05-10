@@ -645,14 +645,13 @@ bool SCH_EDIT_FRAME::SaveProject()
                 msg += "\n" + overwrittenFile;
         }
 
-        msg = _( "The following files will be overwritten:\n\n" ) + msg;
-
         wxRichMessageDialog dlg(
                 this,
                 _( "Saving the project to the new file format will overwrite existing files." ),
                 _( "Project Save Warning" ),
                 wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER | wxICON_EXCLAMATION );
-        dlg.ShowDetailedText( msg );
+        dlg.ShowDetailedText( wxString::Format(
+                              _( "The following files will be overwritten:\n\n%s" ), msg ) );
         dlg.SetOKCancelLabels( wxMessageDialog::ButtonLabel( _( "Overwrite Files" ) ),
                 wxMessageDialog::ButtonLabel( _( "Abort Project Save" ) ) );
 

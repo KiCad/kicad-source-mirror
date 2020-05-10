@@ -541,16 +541,16 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
             AccumulateDescription( msg, _( "No vias" ) );
 
         if( GetDoNotAllowTracks() )
-            AccumulateDescription( msg, _("No tracks") );
+            AccumulateDescription( msg, _( "No tracks" ) );
 
         if( GetDoNotAllowPads() )
-            AccumulateDescription( msg, _("No pads") );
+            AccumulateDescription( msg, _( "No pads" ) );
 
         if( GetDoNotAllowCopperPour() )
-            AccumulateDescription( msg, _("No copper pours") );
+            AccumulateDescription( msg, _( "No copper zones" ) );
 
         if( GetDoNotAllowFootprints() )
-            AccumulateDescription( msg, _("No footpints") );
+            AccumulateDescription( msg, _( "No footprints" ) );
 
         aList.emplace_back( MSG_PANEL_ITEM( _( "Keepout" ), msg, RED ) );
     }

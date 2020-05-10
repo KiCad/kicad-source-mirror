@@ -643,7 +643,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
             if( aReporter )
             {
                 msg.Printf( _( "Symbol library '%s' not found and no fallback cache "
-                               "library avaiable.  Unable to link library symbol." ),
+                               "library available.  Unable to link library symbol." ),
                             symbol->GetLibId().GetLibNickname().wx_str() );
                 aReporter->ReportTail( msg, RPT_SEVERITY_WARNING );
             }
