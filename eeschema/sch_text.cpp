@@ -32,21 +32,17 @@
 #include <gr_basic.h>
 #include <macros.h>
 #include <trigo.h>
-#include <sch_draw_panel.h>
 #include <sch_component.h>
-#include <gr_text.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
 #include <msgpanel.h>
 #include <gal/stroke_font.h>
 #include <bitmaps.h>
-#include <macros.h>
 #include <math/util.h>      // for KiROUND
 #include <kiway.h>
 #include <sch_text.h>
 #include <netlist_object.h>
 #include <settings/color_settings.h>
-#include <trace_helpers.h>
 #include <sch_painter.h>
 #include <default_values.h>
 #include <wx/debug.h>
@@ -1207,18 +1203,10 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) cons
     switch( GetLabelSpinStyle() )
     {
     default:
-    case LABEL_SPIN_STYLE::LEFT:
-        text_offset.x = -dist;
-        break; // Orientation horiz normale
-    case LABEL_SPIN_STYLE::UP:
-        text_offset.y = -dist;
-        break; // Orientation vert UP
-    case LABEL_SPIN_STYLE::RIGHT:
-        text_offset.x = dist;
-        break; // Orientation horiz inverse
-    case LABEL_SPIN_STYLE::BOTTOM:
-        text_offset.y = dist;
-        break; // Orientation vert BOTTOM
+    case LABEL_SPIN_STYLE::LEFT:   text_offset.x = -dist; break; // Orientation horiz normale
+    case LABEL_SPIN_STYLE::UP:     text_offset.y = -dist; break; // Orientation vert UP
+    case LABEL_SPIN_STYLE::RIGHT:  text_offset.x = dist;  break; // Orientation horiz inverse
+    case LABEL_SPIN_STYLE::BOTTOM: text_offset.y = dist;  break; // Orientation vert BOTTOM
     }
 
     return text_offset;
@@ -1247,59 +1235,61 @@ void SCH_TEXT::ShowSyntaxHelp( wxWindow* aParentWindow )
             "      <th>Result</th>"
             "   </tr>"
             "   <tr>"
-            "      <td>&nbsp;<br>^{superscript}</td>"
+            "      <td>&nbsp;<br><samp>^{superscript}</samp></td>"
             "      <td></td>"
-            "      <td>&nbsp;<br><sup>superscript</sup>&nbsp;</td>"
+            "      <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>"
             "   </tr>"
             "   <tr>"
-            "      <td>&nbsp;<br>Driver Board^{Rev A}</td>"
+            "      <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>"
             "      <td></td>"
-            "      <td>&nbsp;<br>Driver Board<sup>Rev A</sup></td>"
+            "      <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>"
             "   </tr>"
             "   <tr><td><br></td></tr>"
             "   <tr>"
-            "      <td>&nbsp;<br>_{subscript}</td>"
+            "      <td>&nbsp;<br><samp>_{subscript}</samp></td>"
             "      <td></td>"
-            "      <td>&nbsp;<br><sub>subscript</sub>&nbsp;</td>"
+            "      <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>"
             "   </tr>"
             "   <tr>"
-            "      <td>&nbsp;<br>D_{0} - D_{15}</td>"
+            "      <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>"
             "      <td></td>"
-            "      <td>&nbsp;<br>D<sub>0</sub> - D<sub>31</sub></td>"
+            "      <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>31</sub></samp></td>"
             "   </tr>"
             "   <tr><td></td></tr>"
             "   <tr>"
             "      <td>"
-            "         &nbsp;<br>~overbar<br>"
-            "         &nbsp;<br>~CLK"
+            "         &nbsp;<br><samp>~overbar</samp><br>"
+            "         &nbsp;<br><samp>~CLK</samp>"
             "      </td>"
             "      <td></td>"
             "      <td>"
-            "         <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u><br>overbar<br>"
-            "         <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u><br>CLK"
+            "         <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br>"
+            "         <samp>overbar</samp><br>"
+            "         <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br>"
+            "         <samp>CLK</samp>"
             "      </td>"
             "   </tr>"
             "   <tr><td><br></td></tr>"
             "   <tr>"
-            "      <td>&nbsp;<br>${variable}</td>"
+            "      <td>&nbsp;<br><samp>${variable}</samp></td>"
             "      <td></td>"
-            "      <td>&nbsp;<br><i>variable_value</i></td>"
+            "      <td>&nbsp;<br><samp><i>variable_value</i></samp></td>"
             "   </tr>"
             "   <tr>"
-            "      <td>&nbsp;<br>${REVISION}</td>"
+            "      <td>&nbsp;<br><samp>${REVISION}</samp></td>"
             "      <td></td>"
-            "      <td>&nbsp;<br>2020.1</td>"
+            "      <td>&nbsp;<br><samp>2020.1</samp></td>"
             "   </tr>"
             "   <tr><td><br></td></tr>"
             "   <tr>"
-            "      <td>&nbsp;<br>${refdes:field}</td>"
+            "      <td>&nbsp;<br><samp>${refdes:field}</samp></td>"
             "      <td></td>"
-            "      <td>&nbsp;<br><i>field_value</i> of symbol <i>refdes</i></td>"
+            "      <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></samp></td>"
             "   </tr>"
             "   <tr>"
-            "      <td>&nbsp;<br>${R3:VALUE}</td>"
+            "      <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>"
             "      <td></td>"
-            "      <td>&nbsp;<br>150K</td>"
+            "      <td>&nbsp;<br><samp>150K</samp></td>"
             "   </tr>"
             "   <tr><td><br></td></tr>"
             "   <tr><td><br></td></tr>"
@@ -1309,53 +1299,59 @@ void SCH_TEXT::ShowSyntaxHelp( wxWindow* aParentWindow )
             "      <th>Resultant Nets</th>"
             "   </tr>"
             "   <tr>"
-            "      <td>&nbsp;<br>prefix[m..n]</td>"
+            "      <td>&nbsp;<br><samp>prefix[m..n]</samp></td>"
             "      <td></td>"
-            "      <td>&nbsp;<br>prefixm to prefixn</td>"
+            "      <td>&nbsp;<br><samp>prefixm to prefixn</samp></td>"
             "   </tr>"
             "   <tr>"
-            "      <td>&nbsp;<br>D[0..7]</td>"
+            "      <td>&nbsp;<br><samp>D[0..7]</samp></td>"
             "      <td></td>"
-            "      <td>&nbsp;<br>D0, D1, D2, D3, D4, D5, D6, D7</td>"
+            "      <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>"
+            "   </tr>"
+            "   <tr><td><br></td></tr>"
+            "   <tr><samp>"
+            "      <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>"
+            "      <td></td>"
+            "      <td>&nbsp;<br><samp>net1, net2, ...</samp></td>"
+            "   </tr>"
+            "   <tr>"
+            "      <td>&nbsp;<br><samp>{SCL SDA}</samp></td>"
+            "      <td></td>"
+            "      <td>&nbsp;<br><samp>SCL, SDA</samp></td>"
+            "   </tr></samp>"
+            "   <tr><td><br></td></tr>"
+            "   <tr>"
+            "      <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>"
+            "      <td></td>"
+            "      <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>"
+            "   </tr>"
+            "   <tr>"
+            "      <td>&nbsp;<br><samp>USB1{DP DM}</samp></td>"
+            "      <td></td>"
+            "      <td>&nbsp;<br><samp>USB1.DP, USB1.DM</samp></td>"
             "   </tr>"
             "   <tr><td><br></td></tr>"
             "   <tr>"
-            "      <td>&nbsp;<br>{net1 net2 ...}</td>"
+            "      <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>"
             "      <td></td>"
-            "      <td>&nbsp;<br>net1, net2, ...</td>"
+            "      <td>&nbsp;<br>"
+            "         <samp>MEM.D1, MEM.D2, MEM.LATCH</samp>"
+            "      </td>"
             "   </tr>"
             "   <tr>"
-            "      <td>&nbsp;<br>{SCL SDA}</td>"
-            "      <td></td>"
-            "      <td>&nbsp;<br>SCL, SDA</td>"
-            "   </tr>"
-            "   <tr><td><br></td></tr>"
-            "   <tr>"
-            "      <td>&nbsp;<br>prefix{net1 net2 ...}</td>"
-            "      <td></td>"
-            "      <td>&nbsp;<br>prefix.net1, prefix.net2, ...</td>"
-            "   </tr>"
-            "   <tr>"
-            "      <td>&nbsp;<br>USB1{DP DM}</td>"
-            "      <td></td>"
-            "      <td>&nbsp;<br>USB1.DP, USB1.DM</td>"
-            "   </tr>"
-            "   <tr><td><br></td></tr>"
-            "   <tr>"
-            "      <td>&nbsp;<br>MEM{D_{[1..2]} ~LATCH}</td>"
+            "      <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>"
             "      <td></td>"
             "      <td>"
-            "         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-            "         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-            "         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-            "         <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u><br>"
-            "         MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH"
+            "         <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+            "               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+            "               <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br>"
+            "         <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp>"
             "      </td>"
             "   </tr>"
             "</table>" );
 
     HTML_MESSAGE_BOX dlg( aParentWindow, _( "Syntax Help" ) );
-    dlg.SetDialogSizeInDU( 240, 280 );
+    dlg.SetDialogSizeInDU( 280, 280 );
 
     dlg.AddHTML_Text( msg );
     dlg.ShowModal();
