@@ -2256,6 +2256,8 @@ void ALTIUM_PCB::ParseTexts6Data(
                 module->Add( txm, ADD_MODE::APPEND );
             }
 
+            txm->SetKeepUpright( false );
+
             tx  = txm;
             itm = txm;
         }
@@ -2304,7 +2306,15 @@ void ALTIUM_PCB::ParseTexts6Data(
         }
         itm->SetLayer( klayer );
 
-        tx->SetTextSize( wxSize( elem.height, elem.height ) ); // TODO: parse text width
+        if( elem.isTruetype )
+        {
+            // TODO: why is this required? Somehow, truetype size is calculated differently
+            tx->SetTextSize( wxSize( elem.height / 2, elem.height / 2 ) );
+        }
+        else
+        {
+            tx->SetTextSize( wxSize( elem.height, elem.height ) ); // TODO: parse text width
+        }
         tx->SetTextThickness( elem.strokewidth );
         tx->SetMirrored( elem.mirrored );
         if( elem.isDesignator || elem.isComment ) // That's just a bold assumption
