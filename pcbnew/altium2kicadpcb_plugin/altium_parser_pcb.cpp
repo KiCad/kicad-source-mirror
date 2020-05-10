@@ -728,8 +728,8 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
 
     // Subrecord 6
     size_t subrecord6 = aReader.ReadAndSetSubrecordLength();
-    if( subrecord6 == 651
-            || subrecord6 == 628 ) // TODO: better detection mechanism (Altium 14 = 628)
+    // Known lengths: 596, 628, 651
+    if( subrecord6 >= 596 )
     {                              // TODO: detect type from something else than the size?
         sizeAndShape = std::make_unique<APAD6_SIZE_AND_SHAPE>();
 
@@ -761,6 +761,11 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
 
         for( uint8_t& radius : sizeAndShape->cornerradius )
             radius = aReader.Read<uint8_t>();
+    }
+    else if( subrecord6 != 0 )
+    {
+        wxLogError( wxString::Format(
+                "Pads6 stream has unexpected length for subrecord 6: %d", subrecord6 ) );
     }
 
     aReader.SkipSubrecord();
