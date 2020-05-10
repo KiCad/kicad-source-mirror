@@ -2172,7 +2172,7 @@ SCH_BITMAP* SCH_SEXPR_PARSER::parseImage()
 
             // Reserve 128K because most image files are going to be larger than the default
             // 1K that wxString reserves.
-            data.reserve( 2^17 );
+            data.reserve( 1 << 17 );
 
             while( token != T_RIGHT )
             {
