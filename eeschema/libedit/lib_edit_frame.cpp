@@ -239,9 +239,21 @@ void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
 }
 
 
+WINDOW_SETTINGS* LIB_EDIT_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
+{
+    auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+
+    wxCHECK_MSG( cfg, nullptr, "Could not load libedit settings" );
+
+    return &cfg->m_Window;
+}
+
+
 COLOR_SETTINGS* LIB_EDIT_FRAME::GetColorSettings()
 {
     auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
+
+    wxCHECK_MSG( cfg, nullptr, "Could not load libedit settings" );
 
     if( cfg->m_UseEeschemaColorSettings )
         return m_colorSettings;
