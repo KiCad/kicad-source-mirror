@@ -481,30 +481,33 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     if( entry && entry->IsPower() )
         m_fields->at( VALUE ).SetText( m_cmp->GetLibId().GetLibItemName() );
 
-    // Remove any TEMPLATE_FIELDNAMES which were not set (given values).
+    // Push all fields to the component -except- for those which are TEMPLATE_FIELDNAMES
+    // with empty values.
     TEMPLATE_FIELDNAMES templateFieldnames = GetParent()->GetTemplateFieldNames();
+    SCH_FIELDS&         fields = m_cmp->GetFields();
 
-    for( size_t i = MANDATORY_FIELDS; i < m_fields->size(); ++i )
+    fields.clear();
+
+    for( size_t i = 0; i < m_fields->size(); ++i )
     {
         SCH_FIELD& field = m_fields->at( i );
+        bool       emptyTemplateField = false;
 
-        for( const auto& fieldname : templateFieldnames )
+        if( i >= MANDATORY_FIELDS )
         {
-            if( field.GetName() == fieldname.m_Name && field.GetText().IsEmpty() )
+            for( const auto& fieldname : templateFieldnames )
             {
-                m_fields->erase( m_fields->begin() + i );
-
-                // grid needs to be notified about the size change,
-                // as it still accesses the data on close (size event)
-                wxGridTableMessage gridMsg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, i, 1 );
-                m_grid->ProcessTableMessage( gridMsg );
-                i--;
-                break;
+                if( field.GetName() == fieldname.m_Name && field.GetText().IsEmpty() )
+                {
+                    emptyTemplateField = true;
+                    break;
+                }
             }
         }
-    }
 
-    m_cmp->SetFields( *m_fields );
+        if( !emptyTemplateField )
+            fields.push_back( field );
+    }
 
     // Reference has a specific initialization, depending on the current active sheet
     // because for a given component, in a complex hierarchy, there are more than one
