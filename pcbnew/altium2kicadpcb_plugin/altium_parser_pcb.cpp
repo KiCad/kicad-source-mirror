@@ -743,6 +743,7 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     // Subrecord 6
     size_t subrecord6 = aReader.ReadAndSetSubrecordLength();
     // Known lengths: 596, 628, 651
+    // 596 is the number of bytes read in this code-block
     if( subrecord6 >= 596 )
     {                              // TODO: detect type from something else than the size?
         sizeAndShape = std::make_unique<APAD6_SIZE_AND_SHAPE>();
