@@ -435,7 +435,10 @@ APOLYGON6::APOLYGON6( ALTIUM_PARSER& aReader )
     minprimlength = ALTIUM_PARSER::PropertiesReadKicadUnit( properties, "MINPRIMLENGTH", "0mil" );
     useoctagons   = ALTIUM_PARSER::PropertiesReadBool( properties, "USEOCTAGONS", false );
 
+    pourindex     = ALTIUM_PARSER::PropertiesReadInt( properties, "POURINDEX", 0 );
+
     wxString hatchstyleraw = ALTIUM_PARSER::PropertiesReadString( properties, "HATCHSTYLE", "" );
+
     if( hatchstyleraw == "Solid" )
     {
         hatchstyle = ALTIUM_POLYGON_HATCHSTYLE::SOLID;
@@ -540,6 +543,17 @@ ARULE6::ARULE6( ALTIUM_PARSER& aReader )
                 properties, "RELIEFCONDUCTORWIDTH", "10mil" );
         polygonconnectReliefentries =
                 ALTIUM_PARSER::PropertiesReadInt( properties, "RELIEFENTRIES", 4 );
+
+        wxString style = ALTIUM_PARSER::PropertiesReadString( properties, "CONNECTSTYLE", "" );
+
+        if( style == "Direct" )
+            polygonconnectStyle = ALTIUM_CONNECT_STYLE::DIRECT;
+        else if( style == "Relief" )
+            polygonconnectStyle = ALTIUM_CONNECT_STYLE::RELIEF;
+        else if( style == "NoConnect" )
+            polygonconnectStyle = ALTIUM_CONNECT_STYLE::NONE;
+        else
+            polygonconnectStyle = ALTIUM_CONNECT_STYLE::UNKNOWN;
     }
     else
     {

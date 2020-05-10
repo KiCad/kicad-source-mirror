@@ -191,6 +191,9 @@ private:
     std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>> m_rules;
 
     std::map<ALTIUM_LAYER, ZONE_CONTAINER*> m_outer_plane;
+
+    /// Altium stores pour order across all layers
+    int m_highest_pour_index;
 };
 
 

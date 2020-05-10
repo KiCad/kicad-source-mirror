@@ -330,8 +330,9 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
 
 ALTIUM_PCB::ALTIUM_PCB( BOARD* aBoard )
 {
-    m_board = aBoard;
-    m_num_nets = 0;
+    m_board              = aBoard;
+    m_num_nets           = 0;
+    m_highest_pour_index = 0;
 }
 
 ALTIUM_PCB::~ALTIUM_PCB()
@@ -451,6 +452,27 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
         {
             wxLogError( wxString::Format( _( "File not found: '%s'" ), mappedDirectory->second ) );
         }
+    }
+
+    // fixup zone priorities since Altium stores them in the opposite order
+    for( auto& zone : m_polygons )
+    {
+        if( !zone )
+            continue;
+
+        // Altium "fills" - not poured in Altium
+        if( zone->GetPriority() == 1000 )
+        {
+            // Unlikely, but you never know
+            if( m_highest_pour_index >= 1000 )
+                zone->SetPriority( m_highest_pour_index + 1 );
+
+            continue;
+        }
+
+        int priority = m_highest_pour_index - zone->GetPriority();
+
+        zone->SetPriority( priority >= 0 ? priority : 0 );
     }
 
     // change priority of outer zone to zero
@@ -1249,6 +1271,10 @@ void ALTIUM_PCB::ParsePolygons6Data(
         zone->SetLayer( klayer );
         zone->SetPosition( elem.vertices.at( 0 ).position );
         zone->SetLocked( elem.locked );
+        zone->SetPriority( elem.pourindex > 0 ? elem.pourindex : 0 );
+
+        if( elem.pourindex > m_highest_pour_index )
+            m_highest_pour_index = elem.pourindex;
 
         for( auto& vertice : elem.vertices )
         {
@@ -1257,17 +1283,39 @@ void ALTIUM_PCB::ParsePolygons6Data(
 
         // TODO: more flexible rule parsing
         const ARULE6* clearanceRule = GetRuleDefault( ALTIUM_RULE_KIND::PLANE_CLEARANCE );
+
         if( clearanceRule != nullptr )
         {
             zone->SetZoneClearance( clearanceRule->planeclearanceClearance );
         }
+
         const ARULE6* polygonConnectRule = GetRuleDefault( ALTIUM_RULE_KIND::POLYGON_CONNECT );
+
         if( polygonConnectRule != nullptr )
         {
+            switch( polygonConnectRule->polygonconnectStyle )
+            {
+            case ALTIUM_CONNECT_STYLE::DIRECT:
+                zone->SetPadConnection( ZONE_CONNECTION::FULL );
+                break;
+
+            case ALTIUM_CONNECT_STYLE::NONE:
+                zone->SetPadConnection( ZONE_CONNECTION::NONE );
+                break;
+
+            default:
+            case ALTIUM_CONNECT_STYLE::RELIEF:
+                zone->SetPadConnection( ZONE_CONNECTION::THERMAL );
+                break;
+            }
+
             // TODO: correct variables?
             zone->SetThermalReliefCopperBridge(
                     polygonConnectRule->polygonconnectReliefconductorwidth );
             zone->SetThermalReliefGap( polygonConnectRule->polygonconnectAirgapwidth );
+
+            if( polygonConnectRule->polygonconnectReliefconductorwidth < zone->GetMinThickness() )
+                zone->SetMinThickness( polygonConnectRule->polygonconnectReliefconductorwidth );
         }
 
         if( IsAltiumLayerAPlane( elem.layer ) )
