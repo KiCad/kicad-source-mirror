@@ -468,9 +468,34 @@ const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents() const
     MODULE* module = GetBoard()->GetFirstModule();
 
     if( module )
-        return module->GetFootprintRect();
-    else
-        return GetBoardBoundingBox( false );
+    {
+        bool hasGraphicalItem = module->Pads().size() || module->Zones().size();
+
+        if( !hasGraphicalItem )
+        {
+            for( const BOARD_ITEM* item : module->GraphicalItems() )
+            {
+                if( item->Type() == PCB_MODULE_TEXT_T )
+                    continue;
+
+                hasGraphicalItem = true;
+                break;
+            }
+        }
+
+        if( hasGraphicalItem )
+        {
+            return module->GetFootprintRect();
+        }
+        else
+        {
+            BOX2I newModuleBB( { 0, 0 }, { 0, 0 } );
+            newModuleBB.Inflate( Millimeter2iu( 12 ) );
+            return newModuleBB;
+        }
+    }
+
+    return GetBoardBoundingBox( false );
 }
 
 
