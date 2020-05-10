@@ -2222,6 +2222,14 @@ void ALTIUM_PCB::ParseTexts6Data(
     {
         ATEXT6 elem( reader );
 
+        if( elem.fonttype == ALTIUM_TEXT_TYPE::BARCODE )
+        {
+            wxLogWarning( wxString::Format(
+                    _( "Ignore Barcode on Altium layer %d because it is not supported right now." ),
+                    elem.layer ) );
+            continue;
+        }
+
         // TODO: better approach to select if item belongs to a MODULE
         EDA_TEXT*   tx  = nullptr;
         BOARD_ITEM* itm = nullptr;
@@ -2306,7 +2314,7 @@ void ALTIUM_PCB::ParseTexts6Data(
         }
         itm->SetLayer( klayer );
 
-        if( elem.isTruetype )
+        if( elem.fonttype == ALTIUM_TEXT_TYPE::TRUETYPE )
         {
             // TODO: why is this required? Somehow, truetype size is calculated differently
             tx->SetTextSize( wxSize( elem.height / 2, elem.height / 2 ) );

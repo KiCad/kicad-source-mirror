@@ -461,18 +461,39 @@ types:
       - id: is_inverted
         type: u1
         enum: boolean
-      - size: 21
+      - id: margin
+        type: s4
+      - id: use_offset  # use margin otherwise
+        type: u1
+        enum: boolean
+      - size: 16
       - id: position
         type: u1
         enum: text_position
-      - size: 27
-      - id: truetype
+      - id: offset
+        type: s4
+      - id: barcode_full_size  # TODO: also for non-barcode?
+        type: xy
+      - id: barcode_margin  # TODO: also for non-barcode?
+        type: xy
+      - size: 4
+      - id: barcode_type
+        type: u1
+        enum: text_barcode_type
+      - size: 1
+      - id: barcode_inverted
         type: u1
         enum: boolean
+      - id: font_type
+        type: u1
+        enum: text_font_type
       - id: barcode_name
         size: 64
         type: str   # TODO: terminates with [0, 0]
         encoding: UTF-16
+      - id: barcode_show_text
+        type: u1
+        enum: boolean
 
   text_sub2:
     seq:
@@ -683,6 +704,15 @@ enums:
     7: right_top
     8: right_center
     9: right_bottom
+
+  text_font_type:
+    0: stroke
+    1: truetype
+    2: barcode
+
+  text_barcode_type:
+    0: code39
+    1: code128
 
   layer:
     1: f_cu

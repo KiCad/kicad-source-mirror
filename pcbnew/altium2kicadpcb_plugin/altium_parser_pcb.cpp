@@ -905,7 +905,7 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader )
         textposition = ALTIUM_TEXT_POSITION::LEFT_BOTTOM;
     }
     aReader.Skip( 27 );
-    isTruetype = aReader.Read<uint8_t>() != 0;
+    fonttype = static_cast<ALTIUM_TEXT_TYPE>( aReader.Read<uint8_t>() );
 
     aReader.SkipSubrecord();
 
