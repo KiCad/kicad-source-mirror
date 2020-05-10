@@ -465,9 +465,8 @@ void EDA_DRAW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    wxString         baseCfgName = ConfigBaseName();
-    COMMON_SETTINGS* cmnCfg      = Pgm().GetCommonSettings();
-    WINDOW_SETTINGS* window      = GetWindowSettings( aCfg );
+    COMMON_SETTINGS* cmnCfg = Pgm().GetCommonSettings();
+    WINDOW_SETTINGS* window = GetWindowSettings( aCfg );
 
     // Read units used in dialogs and toolbars
     SetUserUnits( static_cast<EDA_UNITS>( aCfg->m_System.units ) );

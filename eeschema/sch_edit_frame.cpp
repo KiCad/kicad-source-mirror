@@ -239,7 +239,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     // Initialize grid id to the default value (50 mils):
     m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
 
-    LoadSettings( config() );
+    LoadSettings( eeconfig() );
 
     CreateScreens();
 

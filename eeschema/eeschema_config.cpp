@@ -445,7 +445,9 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    EDA_DRAW_FRAME::LoadSettings( config() );
+    wxCHECK_RET( aCfg, "Call to SCH_BASE_FRAME::SaveSettings with null settings" );
+
+    EDA_DRAW_FRAME::LoadSettings( aCfg );
 
     if( eeconfig() )
     {
@@ -471,7 +473,9 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
 void SCH_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    EDA_DRAW_FRAME::SaveSettings( config() );
+    wxCHECK_RET( aCfg, "Call to SCH_BASE_FRAME::SaveSettings with null settings" );
+
+    EDA_DRAW_FRAME::SaveSettings( aCfg );
 
     if( eeconfig() )
     {

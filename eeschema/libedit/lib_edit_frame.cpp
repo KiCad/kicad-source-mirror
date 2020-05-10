@@ -210,14 +210,13 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 
 void LIB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    SCH_BASE_FRAME::LoadSettings( eeconfig() );
+    wxCHECK_RET( m_settings, "Call to LIB_EDIT_FRAME::LoadSettings with null m_settings" );
 
-    if( m_settings )
-    {
-        SetDefaultLineWidth( Mils2iu( m_settings->m_Defaults.line_width ) );
-        SetDefaultTextSize( Mils2iu( m_settings->m_Defaults.text_size ) );
-        m_showPinElectricalTypeName = m_settings->m_ShowPinElectricalType;
-    }
+    SCH_BASE_FRAME::LoadSettings( GetSettings() );
+
+    SetDefaultLineWidth( Mils2iu( m_settings->m_Defaults.line_width ) );
+    SetDefaultTextSize( Mils2iu( m_settings->m_Defaults.text_size ) );
+    m_showPinElectricalTypeName = m_settings->m_ShowPinElectricalType;
 
     GetRenderSettings()->m_ShowPinsElectricalType = GetShowElectricalType();
 
@@ -228,9 +227,11 @@ void LIB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
+void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
-    SCH_BASE_FRAME::SaveSettings( eeconfig() );
+    wxCHECK_RET( m_settings, "Call to LIB_EDIT_FRAME::LoadSettings with null m_settings" );
+
+    SCH_BASE_FRAME::SaveSettings( GetSettings() );
 
     m_settings->m_Defaults.line_width    = Iu2Mils( GetDefaultLineWidth() );
     m_settings->m_Defaults.text_size     = Iu2Mils( GetDefaultTextSize() );
@@ -239,26 +240,12 @@ void LIB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
 }
 
 
-WINDOW_SETTINGS* LIB_EDIT_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
-{
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
-
-    wxCHECK_MSG( cfg, nullptr, "Could not load libedit settings" );
-
-    return &cfg->m_Window;
-}
-
-
 COLOR_SETTINGS* LIB_EDIT_FRAME::GetColorSettings()
 {
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<LIBEDIT_SETTINGS>();
-
-    wxCHECK_MSG( cfg, nullptr, "Could not load libedit settings" );
-
-    if( cfg->m_UseEeschemaColorSettings )
+    if( GetSettings()->m_UseEeschemaColorSettings )
         return m_colorSettings;
     else
-        return Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
+        return Pgm().GetSettingsManager().GetColorSettings( GetSettings()->m_ColorTheme );
 }
 
 
