@@ -114,7 +114,7 @@ public:
     SCH_SCREEN* GetScreen() const override;
     void SetScreen( BASE_SCREEN* aScreen ) override;
 
-    EESCHEMA_SETTINGS* eeconfig() const { return static_cast<EESCHEMA_SETTINGS*>( config() ); }
+    EESCHEMA_SETTINGS* eeconfig() const { return dynamic_cast<EESCHEMA_SETTINGS*>( config() ); }
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
