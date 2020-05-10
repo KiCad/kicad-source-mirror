@@ -266,7 +266,7 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
     case ALTIUM_LAYER::DRILL_GUIDE:
         return Dwgs_User;
     case ALTIUM_LAYER::KEEP_OUT_LAYER:
-        return UNDEFINED_LAYER;
+        return Margin;
 
     case ALTIUM_LAYER::MECHANICAL_1:
         return Dwgs_User; //Edge_Cuts;
