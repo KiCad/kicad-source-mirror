@@ -2316,7 +2316,9 @@ void ALTIUM_PCB::ParseTexts6Data(
             tx->SetTextSize( wxSize( elem.height, elem.height ) ); // TODO: parse text width
         }
         tx->SetTextThickness( elem.strokewidth );
-        tx->SetMirrored( elem.mirrored );
+        tx->SetBold( elem.isBold );
+        tx->SetItalic( elem.isItalic );
+        tx->SetMirrored( elem.isMirrored );
         if( elem.isDesignator || elem.isComment ) // That's just a bold assumption
         {
             tx->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT );

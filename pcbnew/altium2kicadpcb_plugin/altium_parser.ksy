@@ -436,7 +436,7 @@ types:
       - size: 1
       - id: rotation
         type: f8
-      - id: mirrored
+      - id: is_mirrored
         type: u1
         enum: boolean
       - id: strokewidth
@@ -447,12 +447,21 @@ types:
       - id: is_designator
         type: u1
         enum: boolean
-      - size: 4
+      - size: 2
+      - id: is_bold
+        type: u1
+        enum: boolean
+      - id: is_italic
+        type: u1
+        enum: boolean
       - id: font_name
         size: 64
         type: str  # TODO: terminates with [0, 0]
         encoding: UTF-16
-      - size: 22
+      - id: is_inverted
+        type: u1
+        enum: boolean
+      - size: 21
       - id: position
         type: u1
         enum: text_position

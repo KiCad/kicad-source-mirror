@@ -630,7 +630,11 @@ struct ATEXT6
     double               rotation;
     uint32_t             strokewidth;
     ALTIUM_TEXT_POSITION textposition;
-    bool                 mirrored;
+
+    bool isBold;
+    bool isItalic;
+    bool isMirrored;
+    bool isInverted;
 
     bool isComment;
     bool isDesignator;

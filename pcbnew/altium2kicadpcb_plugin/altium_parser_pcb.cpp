@@ -885,11 +885,16 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader )
     height   = aReader.ReadKicadUnit();
     aReader.Skip( 2 );
     rotation     = aReader.Read<double>();
-    mirrored     = aReader.Read<uint8_t>() != 0;
+    isMirrored   = aReader.Read<uint8_t>() != 0;
     strokewidth  = aReader.ReadKicadUnit();
     isComment    = aReader.Read<uint8_t>() != 0;
     isDesignator = aReader.Read<uint8_t>() != 0;
-    aReader.Skip( 90 );
+    aReader.Skip( 2 );
+    isBold   = aReader.Read<uint8_t>() != 0;
+    isItalic = aReader.Read<uint8_t>() != 0;
+    aReader.Skip( 64 ); // font_name
+    isInverted = aReader.Read<uint8_t>() != 0;
+    aReader.Skip( 21 );
     textposition = static_cast<ALTIUM_TEXT_POSITION>( aReader.Read<uint8_t>() );
     /**
      * In Altium 14 (subrecord1 == 230) only left bottom is valid? I think there is a bit missing.
