@@ -1372,24 +1372,17 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
         {
             HelperCreateBoardOutline( elem.vertices );
         }
-        else if( elem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT )
+        else if( elem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT || elem.is_keepout )
         {
             ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
             m_board->Add( zone, ADD_MODE::APPEND );
 
-            if( elem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT || elem.is_keepout )
-            {
-                zone->SetIsKeepout( true );
-                zone->SetDoNotAllowTracks( false );
-                zone->SetDoNotAllowVias( false );
-                zone->SetDoNotAllowPads( false );
-                zone->SetDoNotAllowFootprints( false );
-                zone->SetDoNotAllowCopperPour( true );
-            }
-            else
-            {
-                zone->SetNetCode( GetNetCode( elem.net ) );
-            }
+            zone->SetIsKeepout( true );
+            zone->SetDoNotAllowTracks( false );
+            zone->SetDoNotAllowVias( false );
+            zone->SetDoNotAllowPads( false );
+            zone->SetDoNotAllowFootprints( false );
+            zone->SetDoNotAllowCopperPour( true );
 
             if( elem.layer == ALTIUM_LAYER::MULTI_LAYER )
             {
