@@ -11,8 +11,11 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.92.0 r15299"
-   sodipodi:docname="hole_to_hole_clearance.svg">
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   sodipodi:docname="hole_to_hole_clearance.svg"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/hole_to_hole_clearance.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <metadata
      id="metadata40">
     <rdf:RDF>
@@ -34,20 +37,23 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1033"
+     inkscape:window-width="1440"
+     inkscape:window-height="800"
      id="namedview38"
      showgrid="true"
      inkscape:snap-to-guides="false"
      inkscape:snap-grids="true"
-     inkscape:zoom="16.2191"
-     inkscape:cx="7.3268629"
-     inkscape:cy="8.6731364"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:zoom="18.627423"
+     inkscape:cx="8.344182"
+     inkscape:cy="17.262623"
+     inkscape:window-x="0"
+     inkscape:window-y="1"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
-     inkscape:snap-nodes="true">
+     inkscape:snap-nodes="false"
+     inkscape:snap-others="false"
+     inkscape:object-nodes="false"
+     inkscape:snap-global="false">
     <inkscape:grid
        type="xygrid"
        id="grid3017"
@@ -95,7 +101,7 @@
      sodipodi:nodetypes="cc"
      inkscape:connector-curvature="0"
      id="path3086"
-     d="M 9.8372477,18.533333 2.1117654,10.996869"
+     d="M 10.91573,18.381012 0.63311166,8.3499825"
      style="fill:#333333;stroke:#3333ff;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   <path
      style="fill:#a8a802;fill-opacity:1;stroke:#9b0000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -107,11 +113,11 @@
      sodipodi:nodetypes="cc"
      inkscape:connector-curvature="0"
      id="path3086-4"
-     d="M 18.39215,9.7554234 10.666667,2.2189586"
+     d="M 18.27073,10.602968 7.9881117,0.57193474"
      style="fill:#333333;stroke:#3333ff;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   <g
      id="g936"
-     transform="translate(-8.6967344,-8.9834435)">
+     transform="matrix(0.81,0,0,0.81,-6.9693991,-7.0981882)">
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
@@ -121,13 +127,13 @@
     <path
        inkscape:connector-curvature="0"
        id="path5195"
-       d="m 18.666667,18 2.296734,-4.883223 -4.593465,2.441612"
+       d="m 19.735669,17.476243 1.890502,-4.898747 -4.855632,1.700114"
        style="fill:none;fill-opacity:1;stroke:#333390;stroke-width:0.88802433;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:nodetypes="ccc" />
     <path
        inkscape:connector-curvature="0"
        id="path5195-8"
-       d="m 15.30518,16.666667 -2.294822,4.8 4.589642,-2.4"
+       d="m 14.517086,16.954935 -1.506728,4.635461 4.48056,-1.93544"
        style="fill:none;fill-opacity:1;stroke:#333390;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:nodetypes="ccc" />
   </g>
