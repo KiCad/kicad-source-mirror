@@ -491,10 +491,6 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         return;
     }
 
-    // Shutdown all running tools ( and commit any pending change )
-    if( m_toolManager )
-        m_toolManager->ShutdownAllTools();
-
     if( Kiface().IsSingle() )
     {
         LIB_EDIT_FRAME* libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
@@ -516,7 +512,6 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     if( simFrame && !simFrame->Close() )   // Can close the simulator?
         return;
 
-
     if( sheetList.IsModified() )
     {
         wxFileName fileName = g_RootSheet->GetScreen()->GetFileName();
@@ -529,6 +524,14 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
             return;
         }
     }
+
+    //
+    // OK, we're really closing now.  No more returns after this.
+    //
+
+    // Shutdown all running tools ( and commit any pending change )
+    if( m_toolManager )
+        m_toolManager->ShutdownAllTools();
 
     // Close the find dialog and preserve it's setting if it is displayed.
     if( m_findReplaceDialog )
@@ -546,9 +549,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     }
 
     if( FindHierarchyNavigator() )
-    {
         FindHierarchyNavigator()->Close( true );
-    }
 
     SCH_SCREENS screens;
     wxFileName fn;
@@ -569,9 +570,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     wxString fileName = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
 
     if( !g_RootSheet->GetScreen()->GetFileName().IsEmpty() && !g_RootSheet->GetScreen()->IsEmpty() )
-    {
         UpdateFileHistory( fileName );
-    }
 
     g_RootSheet->GetScreen()->Clear();
 
