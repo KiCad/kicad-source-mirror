@@ -21,6 +21,7 @@
 
 #include <lib_tree_model.h>
 
+#include <algorithm>
 #include <eda_pattern_match.h>
 #include <lib_tree_item.h>
 #include <utility>
