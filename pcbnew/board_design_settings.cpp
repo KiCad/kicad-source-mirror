@@ -617,6 +617,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
 
     m_MinClearance        = Millimeter2iu( DEFAULT_MINCLEARANCE );
     m_TrackMinWidth       = Millimeter2iu( DEFAULT_TRACKMINWIDTH );
+    m_ViasMinAnnulus      = Millimeter2iu( DEFAULT_VIASMINSIZE - DEFAULT_MINTHROUGHDRILL ) / 2;
     m_ViasMinSize         = Millimeter2iu( DEFAULT_VIASMINSIZE );
     m_MinThroughDrill     = Millimeter2iu( DEFAULT_MINTHROUGHDRILL );
     m_MicroViasMinSize    = Millimeter2iu( DEFAULT_MICROVIASMINSIZE );
@@ -671,6 +672,11 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( BOARD* aBoard, std::vector<PARAM_CFG*
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinTrackWidth" ),
           &m_TrackMinWidth,
           Millimeter2iu( DEFAULT_TRACKMINWIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
+          nullptr, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinViaAnnulus" ),
+          &m_ViasMinAnnulus,
+          Millimeter2iu( DEFAULT_VIASMINSIZE ), Millimeter2iu( 0.01 ), Millimeter2iu( 25.0 ),
           nullptr, MM_PER_IU ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinViaDiameter" ),

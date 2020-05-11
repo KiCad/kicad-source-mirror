@@ -190,6 +190,7 @@ private:
     int         m_min_trace;        ///< smallest trace we find on Load(), in BIU.
     int         m_min_hole;         ///< smallest diameter hole we find on Load(), in BIU.
     int         m_min_via;          ///< smallest via we find on Load(), in BIU.
+    int         m_min_annulus;      ///< smallest via annulus we find on Load(), in BIU.
 
     wxString    m_lib_path;
     wxDateTime  m_mod_time;

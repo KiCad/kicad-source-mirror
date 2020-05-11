@@ -502,6 +502,7 @@ set( BMAPS_MID
     update_pcb_from_sch
     use_3D_copper_thickness
     via
+    via_annulus
     via_buried
     via_microvia
     via_sketch

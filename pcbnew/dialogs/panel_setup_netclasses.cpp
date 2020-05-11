@@ -515,6 +515,7 @@ bool PANEL_SETUP_NETCLASSES::validateData()
         return false;
 
     wxString msg;
+    int minViaAnnulus = m_ConstraintsPanel->m_viaMinAnnulus.GetValue();
     int minViaDia = m_ConstraintsPanel->m_viaMinSize.GetValue();
     int minThroughHole = m_ConstraintsPanel->m_throughHoleMin.GetValue();
     int minUViaDia = m_ConstraintsPanel->m_uviaMinSize.GetValue();
@@ -572,6 +573,15 @@ bool PANEL_SETUP_NETCLASSES::validateData()
             return false;
         }
 
+        if( ( getNetclassValue( row, GRID_VIASIZE )
+                - getNetclassValue( row, GRID_VIADRILL ) ) / 2 < minViaAnnulus )
+        {
+            msg.Printf( _( "Via diameter and drill leave via annulus less than minimum (%s)." ),
+                        StringFromValue( m_Frame->GetUserUnits(), minViaAnnulus, true, true ) );
+            m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_VIASIZE );
+            return false;
+        }
+
         if( getNetclassValue( row, GRID_VIADRILL ) < minThroughHole )
         {
             msg.Printf( _( "Via drill less than minimum via drill (%s)." ),
@@ -603,6 +613,8 @@ bool PANEL_SETUP_NETCLASSES::validateData()
             m_Parent->SetError( msg, this, m_netclassGrid, row, GRID_uVIADRILL );
             return false;
         }
+
+        // JEY TODO: test microvias agains via min annulus?
     }
 
     return true;

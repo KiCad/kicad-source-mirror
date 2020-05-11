@@ -38,6 +38,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* 
         PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( aParent->GetTreebook() ),
         m_minClearance( aFrame, m_clearanceTitle, m_clearanceCtrl, m_clearanceUnits, true ),
         m_trackMinWidth( aFrame, m_TrackMinWidthTitle, m_TrackMinWidthCtrl, m_TrackMinWidthUnits, true ),
+        m_viaMinAnnulus( aFrame, m_ViaMinAnnulusTitle, m_ViaMinAnnulusCtrl, m_ViaMinAnnulusUnits, true ),
         m_viaMinSize( aFrame, m_ViaMinTitle, m_SetViasMinSizeCtrl, m_ViaMinUnits, true ),
         m_throughHoleMin( aFrame, m_MinDrillTitle, m_MinDrillCtrl, m_MinDrillUnits, true ),
         m_uviaMinSize( aFrame, m_uviaMinSizeLabel, m_uviaMinSizeCtrl, m_uviaMinSizeUnits, true ),
@@ -63,6 +64,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
 
     m_minClearance.SetValue( m_BrdSettings->m_MinClearance );
     m_trackMinWidth.SetValue( m_BrdSettings->m_TrackMinWidth );
+    m_viaMinAnnulus.SetValue( m_BrdSettings->m_ViasMinAnnulus );
     m_viaMinSize.SetValue(m_BrdSettings->m_ViasMinSize );
     m_edgeClearance.SetValue( m_BrdSettings->m_CopperEdgeClearance );
 
@@ -82,6 +84,9 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
         return false;
 
     if( !m_trackMinWidth.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
+        return false;
+
+    if( !m_viaMinAnnulus.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
         return false;
 
     if( !m_viaMinSize.Validate( 0, Mils2iu( 10000 ) ) )   // 0 to 10 inches
@@ -106,6 +111,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
 
     m_BrdSettings->m_MinClearance = m_minClearance.GetValue();
     m_BrdSettings->m_TrackMinWidth = m_trackMinWidth.GetValue();
+    m_BrdSettings->m_ViasMinAnnulus = m_viaMinAnnulus.GetValue();
     m_BrdSettings->m_ViasMinSize = m_viaMinSize.GetValue();
     m_BrdSettings->SetCopperEdgeClearance( m_edgeClearance.GetValue() );
 
@@ -131,6 +137,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::Show( bool aShow )
         m_bitmapZoneFillOpt->SetBitmap( KiBitmap( show_zone_xpm ) );
         m_bitmapClearance->SetBitmap( KiBitmap( ps_diff_pair_gap_xpm ) );
         m_bitmapMinTrackWidth->SetBitmap( KiBitmap( width_track_xpm ) );
+        m_bitmapMinViaAnnulus->SetBitmap( KiBitmap( via_annulus_xpm ) );
         m_bitmapMinViaDiameter->SetBitmap( KiBitmap( via_diameter_xpm ) );
         m_bitmapMinViaDrill->SetBitmap( KiBitmap( via_hole_diameter_xpm ) );
         m_bitmapMinuViaDiameter->SetBitmap( KiBitmap( via_diameter_xpm ) );

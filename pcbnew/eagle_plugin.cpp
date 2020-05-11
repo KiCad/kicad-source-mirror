@@ -249,6 +249,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
         m_min_trace    = INT_MAX;
         m_min_hole     = INT_MAX;
         m_min_via      = INT_MAX;
+        m_min_annulus  = INT_MAX;
 
         loadAllSections( doc );
 
@@ -262,6 +263,9 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
 
         if( m_min_hole < designSettings.m_MinThroughDrill )
             designSettings.m_MinThroughDrill = m_min_hole;
+
+        if( m_min_annulus < designSettings.m_ViasMinAnnulus )
+            designSettings.m_ViasMinAnnulus = m_min_annulus;
 
         if( m_rules->mdWireWire )
         {
@@ -308,10 +312,11 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
 
 void EAGLE_PLUGIN::init( const PROPERTIES* aProperties )
 {
-    m_hole_count = 0;
-    m_min_trace  = 0;
-    m_min_hole   = 0;
-    m_min_via    = 0;
+    m_hole_count  = 0;
+    m_min_trace   = 0;
+    m_min_hole    = 0;
+    m_min_via     = 0;
+    m_min_annulus = 0;
     m_xpath->clear();
     m_pads_to_nets.clear();
 
@@ -2181,6 +2186,9 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     if( drillz < m_min_hole )
                         m_min_hole = drillz;
+
+                    if( ( kidiam - drillz ) / 2 < m_min_annulus )
+                        m_min_annulus = ( kidiam - drillz ) / 2;
 
                     if( layer_front_most == F_Cu && layer_back_most == B_Cu )
                         via->SetViaType( VIATYPE::THROUGH );

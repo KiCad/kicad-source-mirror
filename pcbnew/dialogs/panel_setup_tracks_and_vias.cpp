@@ -221,6 +221,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
     }
 
     wxString msg;
+    int minViaAnnulus = m_ConstraintsPanel->m_viaMinAnnulus.GetValue();
     int minViaDia = m_ConstraintsPanel->m_viaMinSize.GetValue();
     int minThroughHole = m_ConstraintsPanel->m_throughHoleMin.GetValue();
     int minTrackWidth = m_ConstraintsPanel->m_trackMinWidth.GetValue();
@@ -281,6 +282,15 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
         {
             msg = _( "Via drill larger than via diameter." );
             m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
+            return false;
+        }
+
+        if( ( ValueFromString( m_Frame->GetUserUnits(), viaDia )
+                - ValueFromString( m_Frame->GetUserUnits(), viaDrill ) ) / 2 < minViaAnnulus )
+        {
+            msg.Printf( _( "Diameter and drill leave via annulus less than minimum (%s)." ),
+                        StringFromValue( m_Frame->GetUserUnits(), minViaAnnulus, true, true ) );
+            m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_SIZE_COL );
             return false;
         }
     }

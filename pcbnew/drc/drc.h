@@ -61,6 +61,7 @@ enum PCB_DRC_CODE {
     DRCE_DRILLED_HOLES_TOO_CLOSE,           ///< overlapping drilled holes break drill bits
     DRCE_TOO_SMALL_TRACK_WIDTH,             ///< Too small track width
     DRCE_TOO_SMALL_VIA,                     ///< Too small via size
+    DRCE_TOO_SMALL_VIA_ANNULUS,             ///< Via size and drill leave annulus too small
     DRCE_TOO_SMALL_VIA_DRILL,               ///< Too small via drill
     DRCE_TOO_SMALL_PAD_DRILL,               ///< Too small via drill
     DRCE_VIA_HOLE_BIGGER,                   ///< via's hole is bigger than its diameter
@@ -71,6 +72,7 @@ enum PCB_DRC_CODE {
     DRCE_BURIED_VIA_NOT_ALLOWED,            ///< buried vias are not allowed
     DRCE_NETCLASS_TRACKWIDTH,               ///< netclass has TrackWidth < board.m_designSettings->m_TrackMinWidth
     DRCE_NETCLASS_CLEARANCE,                ///< netclass has Clearance < board.m_designSettings->m_TrackClearance
+    DRCE_NETCLASS_VIAANNULUS,               ///< netclass ViaSize & ViaDrill leave annulus < board.m_designSettings->m_ViasMinAnnulus
     DRCE_NETCLASS_VIASIZE,                  ///< netclass has ViaSize < board.m_designSettings->m_ViasMinSize
     DRCE_NETCLASS_VIADRILLSIZE,             ///< netclass has ViaDrillSize < board.m_designSettings->m_MinThroughDrill
     DRCE_NETCLASS_uVIASIZE,                 ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinSize

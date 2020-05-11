@@ -176,6 +176,23 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         }
         else
         {
+            int viaAnnulus = ( refvia->GetWidth() - refvia->GetDrill() ) / 2;
+
+            if( viaAnnulus < dsnSettings.m_ViasMinAnnulus )
+            {
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_ANNULUS );
+
+                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
+                            MessageTextFromValue( userUnits(), dsnSettings.m_ViasMinSize, true ),
+                            MessageTextFromValue( userUnits(), viaAnnulus, true ) );
+
+                drcItem->SetErrorMessage( msg );
+                drcItem->SetItems( refvia );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
+                addMarkerToPcb( marker );
+            }
+
             if( refvia->GetWidth() < dsnSettings.m_ViasMinSize )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA );

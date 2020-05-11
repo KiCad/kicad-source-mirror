@@ -255,6 +255,7 @@ via
 vias
 via_dia
 via_drill
+via_min_annulus
 via_min_drill
 via_min_size
 via_size

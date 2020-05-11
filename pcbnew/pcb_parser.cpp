@@ -1495,6 +1495,11 @@ void PCB_PARSER::parseSetup()
             NeedRIGHT();
             break;
 
+        case T_via_min_annulus:
+            designSettings.m_ViasMinAnnulus = parseBoardUnits( T_via_min_annulus );
+            NeedRIGHT();
+            break;
+
         case T_via_min_size:
             designSettings.m_ViasMinSize = parseBoardUnits( T_via_min_size );
             NeedRIGHT();

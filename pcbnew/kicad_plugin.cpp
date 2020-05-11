@@ -509,6 +509,8 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
                   FormatInternalUnits( dsnSettings.m_TrackMinWidth ).c_str() );
     m_out->Print( aNestLevel+1, "(clearance_min %s)\n",
                   FormatInternalUnits( dsnSettings.m_MinClearance ).c_str() );
+    m_out->Print( aNestLevel+1, "(via_min_annulus %s)\n",
+                  FormatInternalUnits( dsnSettings.m_ViasMinAnnulus ).c_str() );
     m_out->Print( aNestLevel+1, "(via_min_size %s)\n",
                   FormatInternalUnits( dsnSettings.m_ViasMinSize ).c_str() );
     m_out->Print( aNestLevel+1, "(through_hole_min %s)\n",

@@ -44,6 +44,7 @@ private:
 public:
     UNIT_BINDER             m_minClearance;
     UNIT_BINDER             m_trackMinWidth;
+    UNIT_BINDER             m_viaMinAnnulus;
     UNIT_BINDER             m_viaMinSize;
     UNIT_BINDER             m_throughHoleMin;
     UNIT_BINDER             m_uviaMinSize;

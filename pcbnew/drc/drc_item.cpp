@@ -85,6 +85,7 @@ wxString DRC_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     case DRCE_HOLE_NEAR_TRACK:          msg = _HKI( "Hole too close to track" );            break;
     case DRCE_TOO_SMALL_TRACK_WIDTH:    msg = _HKI( "Track width too small" );              break;
     case DRCE_TOO_SMALL_VIA:            msg = _HKI( "Via size too small" );                 break;
+    case DRCE_TOO_SMALL_VIA_ANNULUS:    msg = _HKI( "Via annulus too small" );              break;
     case DRCE_TOO_SMALL_MICROVIA:       msg = _HKI( "Micro via size too small" );           break;
     case DRCE_TOO_SMALL_VIA_DRILL:      msg = _HKI( "Via drill too small" );                break;
     case DRCE_TOO_SMALL_PAD_DRILL:      msg = _HKI( "Pad drill too small" );                break;
@@ -96,6 +97,7 @@ wxString DRC_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     // use &lt; since this is text ultimately embedded in HTML
     case DRCE_NETCLASS_TRACKWIDTH:      msg = _HKI( "NetClass Track Width too small" );     break;
     case DRCE_NETCLASS_CLEARANCE:       msg = _HKI( "NetClass Clearance too small" );       break;
+    case DRCE_NETCLASS_VIAANNULUS:      msg = _HKI( "NetClass via annulus too small" );     break;
     case DRCE_NETCLASS_VIASIZE:         msg = _HKI( "NetClass Via Dia too small" );         break;
     case DRCE_NETCLASS_VIADRILLSIZE:    msg = _HKI( "NetClass Via Drill too small" );       break;
     case DRCE_NETCLASS_uVIASIZE:        msg = _HKI( "NetClass uVia Dia too small" );        break;

@@ -620,6 +620,22 @@ bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
         ret = false;
     }
 
+    int ncViaAnnulus = ( nc->GetViaDiameter() - nc->GetViaDrill() ) / 2;
+
+    if( ncViaAnnulus < g.m_ViasMinAnnulus )
+    {
+        DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_VIAANNULUS );
+
+        msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; %s netclass %s)" ),
+                    MessageTextFromValue( userUnits(), g.m_ViasMinAnnulus, true ),
+                    nc->GetName(),
+                    MessageTextFromValue( userUnits(), ncViaAnnulus, true ) );
+
+        drcItem->SetErrorMessage( msg );
+        addMarkerToPcb( new MARKER_PCB( drcItem, wxPoint() ) );
+        ret = false;
+    }
+
     if( nc->GetuViaDiameter() < g.m_MicroViasMinSize )
     {
         DRC_ITEM* drcItem = new DRC_ITEM( DRCE_NETCLASS_uVIASIZE );

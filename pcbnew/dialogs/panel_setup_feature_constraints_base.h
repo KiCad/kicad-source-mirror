@@ -62,6 +62,10 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_TrackMinWidthTitle;
 		wxTextCtrl* m_TrackMinWidthCtrl;
 		wxStaticText* m_TrackMinWidthUnits;
+		wxStaticBitmap* m_bitmapMinViaAnnulus;
+		wxStaticText* m_ViaMinAnnulusTitle;
+		wxTextCtrl* m_ViaMinAnnulusCtrl;
+		wxStaticText* m_ViaMinAnnulusUnits;
 		wxStaticBitmap* m_bitmapMinViaDiameter;
 		wxStaticText* m_ViaMinTitle;
 		wxTextCtrl* m_SetViasMinSizeCtrl;
