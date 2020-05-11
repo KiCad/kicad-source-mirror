@@ -11,6 +11,7 @@
 		<comment>KiCad Schematic</comment>
 		<comment xml:lang="fr">Schéma électronique KiCad</comment>
 		<glob pattern="*.sch"/>
+		<glob pattern="*.kicad_sch"/>
 	</mime-type>
 	<mime-type type="application/x-kicad-pcb">
 		<sub-class-of type="text/plain"/>
