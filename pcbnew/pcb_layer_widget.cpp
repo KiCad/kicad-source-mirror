@@ -326,11 +326,16 @@ void PCB_LAYER_WIDGET::ReFillRender()
         if( m_fp_editor_mode && !isAllowedInFpMode( renderRow.id ) )
             continue;
 
+        // Don't remove microvia and bblind vias if they're not allowed: that's only a DRC
+        // setting (which might be set to ignore) and the user can add them irrespective of
+        // the setting.
+        /*
         if( renderRow.id == LAYER_VIA_MICROVIA && !settings.m_MicroViasAllowed )
             continue;
 
         if( renderRow.id == LAYER_VIA_BBLIND && !settings.m_BlindBuriedViaAllowed )
             continue;
+        */
 
         if( !renderRow.spacer )
         {

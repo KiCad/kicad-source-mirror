@@ -464,6 +464,9 @@ void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 
     case VIATYPE::MICROVIA:
         aLayers[2] = LAYER_VIA_MICROVIA;
+        aLayers[3] = m_Layer;
+        aLayers[4] = m_BottomLayer;
+        aCount += 2;
         break;
 
     default:
