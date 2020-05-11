@@ -364,15 +364,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 
                 // so what's a triple ~?  It could be a real ~ followed by an overbar, or
                 // it could be an overbar followed by a real ~.  The old algorithm did the
-                // later so we will too....
-                auto tempIt = chIt;
-
-                if( ++tempIt < end && *tempIt == '~' )
-                {
-                    // eat the first two, toggle overbar, and then process the third
-                    ++chIt;
-                    in_overbar = !in_overbar;
-                }
+                // former so we will too....
             }
             else
             {
@@ -553,15 +545,7 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
 
                 // so what's a triple ~?  It could be a real ~ followed by an overbar, or
                 // it could be an overbar followed by a real ~.  The old algorithm did the
-                // later so we will too....
-                auto tempIt = it;
-
-                if( ++tempIt < end && *tempIt == '~' )
-                {
-                    // eat the first two, toggle overbar, and then process the third
-                    ++it;
-                    in_overbar = !in_overbar;
-                }
+                // former so we will too....
             }
             else
             {

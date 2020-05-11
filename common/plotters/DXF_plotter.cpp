@@ -1018,16 +1018,9 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                     {
                         // double ~ is really a ~ so go ahead and process the second one
 
-                        // so what about a triple ~?  It could be a real ~ followed by an
-                        // overbar, or it could be an overbar followed by a real ~.  The old
-                        // eeschema algorithm did the later so we will too....
-                        if( i + i < aText.length() && aText[i + 1] == '~' )
-                        {
-                            // eat the first two and toggle overbar
-                            ++i;
-                            fputs( overlining ? "%%o" : "%%O", outputFile );
-                            overlining = !overlining;
-                        }
+                        // so what's a triple ~?  It could be a real ~ followed by an overbar,
+                        // or it could be an overbar followed by a real ~.  The old algorithm
+                        // did the former so we will too....
                     }
                     else
                     {

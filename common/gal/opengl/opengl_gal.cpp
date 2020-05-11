@@ -1204,15 +1204,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
                 // so what's a triple ~?  It could be a real ~ followed by an overbar, or
                 // it could be an overbar followed by a real ~.  The old algorithm did the
-                // later so we will too....
-                auto tempIt = chIt;
-
-                if( ++tempIt < end && *tempIt == '~' )
-                {
-                    // eat the first two, toggle overbar, and then process the third
-                    ++chIt;
-                    overbar = !overbar;
-                }
+                // former so we will too....
             }
             else
             {
