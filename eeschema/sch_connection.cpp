@@ -429,6 +429,8 @@ bool SCH_CONNECTION::ParseBusVector( const wxString& aBus, wxString* aName,
     long     end = 0;
     int      braceNesting = 0;
 
+    prefix.reserve( busLen );
+
     // Parse prefix
     //
     for( ; i < busLen; ++i )
@@ -458,6 +460,9 @@ bool SCH_CONNECTION::ParseBusVector( const wxString& aBus, wxString* aName,
     //
     i++;  // '[' character
 
+    if( i >= busLen )
+        return false;
+
     for( ; i < busLen; ++i )
     {
         if( aBus[i] == '.' && i + 1 < busLen && aBus[i+1] == '.' )
@@ -476,6 +481,9 @@ bool SCH_CONNECTION::ParseBusVector( const wxString& aBus, wxString* aName,
     // Parse end number
     //
     tmp = wxEmptyString;
+
+    if( i >= busLen )
+        return false;
 
     for( ; i < busLen; ++i )
     {
@@ -543,6 +551,8 @@ bool SCH_CONNECTION::ParseBusGroup( wxString aGroup, wxString* aName,
     wxString tmp;
     int      braceNesting = 0;
 
+    prefix.reserve( groupLen );
+
     // Parse prefix
     //
     for( ; i < groupLen; ++i )
@@ -574,6 +584,9 @@ bool SCH_CONNECTION::ParseBusGroup( wxString aGroup, wxString* aName,
     // Parse members
     //
     i++;  // '{' character
+
+    if( i >= groupLen )
+        return false;
 
     for( ; i < groupLen; ++i )
     {

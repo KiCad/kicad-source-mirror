@@ -247,13 +247,14 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
     bool self_set = false;
     std::vector<wxString> bus_contents_vec;
 
-    if( alias )
+    if( alias || SCH_CONNECTION::ParseBusGroup( m_Label, &group_name, &bus_contents_vec ) )
     {
-        for( const wxString& member : alias->Members() )
-            bus_contents_vec.emplace_back( member );
-    }
-    else if( SCH_CONNECTION::ParseBusGroup( m_Label, &group_name, &bus_contents_vec ) )
-    {
+        if( alias )
+        {
+            for( const wxString& member : alias->Members() )
+                bus_contents_vec.emplace_back( member );
+        }
+
         // For named bus groups, like "USB{DP DM}"
         wxString group_prefix = ( group_name != "" ) ? ( group_name + "." ) : "";
 
