@@ -159,10 +159,8 @@ int EDA_TEXT::GetEffectiveTextPenWidth( int aDefaultWidth ) const
 
         if( IsBold() )
             width = GetPenSizeForBold( GetTextWidth() );
-
-        // Avoid using a 0 width for text: it can create issues when drawing it
-        if( width <= 1 )
-            width = 1;
+        else if( width <= 1 )
+            width = GetPenSizeForNormal( GetTextWidth() );
     }
 
     // Clip pen size for small texts:

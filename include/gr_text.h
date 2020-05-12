@@ -74,6 +74,13 @@ int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold = true );
 int GetPenSizeForBold( int aTextSize );
 
 /**
+ * Function GetPensizeForNormal
+ * @return the "best" value for a pen size to draw/plot a non-bold text
+ * @param aTextSize = the char size (height or width)
+ */
+int GetPenSizeForNormal( int aTextSize );
+
+/**
  * Function GraphicTextWidth
  * @return the X size of the graphic text
  * the full X size is GraphicTextWidth + the thickness of graphic lines

@@ -31,6 +31,7 @@
 #include <gr_basic.h>
 #include <macros.h>
 #include <sch_draw_panel.h>
+#include <sch_painter.h>
 #include <plotter.h>
 #include <base_units.h>
 #include <eeschema_config.h>
@@ -743,12 +744,22 @@ bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_LINE::Plot( PLOTTER* aPlotter )
 {
+    auto* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+    int   penWidth;
+
     if( m_color != COLOR4D::UNSPECIFIED )
         aPlotter->SetColor( m_color );
     else
         aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( GetLayer() ) );
 
-    int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
+    switch( m_Layer )
+    {
+    case LAYER_WIRE: penWidth = settings->m_DefaultWireThickness; break;
+    case LAYER_BUS:  penWidth = settings->m_DefaultBusThickness;  break;
+    default:         penWidth = GetPenWidth();                    break;
+    }
+
+    penWidth = std::max( penWidth, aPlotter->RenderSettings()->GetDefaultPenWidth() );
 
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetDash( GetLineStyle() );

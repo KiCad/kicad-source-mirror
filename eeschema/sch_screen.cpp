@@ -823,19 +823,19 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter )
     // Bitmaps are drawn first to ensure they are in the background
     // This is particularly important for the wxPostscriptDC (used in *nix printers) as
     // the bitmap PS command clears the screen
-    for( auto item : bitmaps )
+    for( SCH_ITEM* item : bitmaps )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
         item->Plot( aPlotter );
     }
 
-    for( auto item : other )
+    for( SCH_ITEM* item : other )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
         item->Plot( aPlotter );
     }
 
-    for( auto item : junctions )
+    for( SCH_ITEM* item : junctions )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
         item->Plot( aPlotter );

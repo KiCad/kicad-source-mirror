@@ -54,6 +54,12 @@ int GetPenSizeForBold( int aTextSize )
 }
 
 
+int GetPenSizeForNormal( int aTextSize )
+{
+    return KiROUND( aTextSize / 8.0 );
+}
+
+
 /**
  * Function  Clamp_Text_PenSize
  * Don't allow text to become cluttered up in its own fatness.  Bold fonts are generally around
