@@ -58,6 +58,19 @@ public:
     int Plot( const TOOL_EVENT& aEvent );
     int Quit( const TOOL_EVENT& aEvent );
 
+    /**
+     * Perform rescue operations to recover old projects from before certain changes were made.
+     *
+     * - Exports cached symbols that conflict with new symbols to a separate library.
+     * - Exports cached symbols not found in any symbol library.
+     * - Renames symbols named before libraries were case sensitive.
+     */
+    int RescueSymbols( const TOOL_EVENT& aEvent );
+    int RemapSymbols( const TOOL_EVENT& aEvent );
+
+    bool RescueLegacyProject( bool aRunningOnDemand );
+    bool RescueSymbolLibTableProject( bool aRunningOnDemand );
+
     int FindAndReplace( const TOOL_EVENT& aEvent );
 
     int FindNext( const TOOL_EVENT& aEvent );
@@ -141,6 +154,8 @@ public:
 private:
     ///> copy selection to clipboard
     bool doCopy();
+
+    bool rescueProject( RESCUER& aRescuer, bool aRunningOnDemand );
 
     bool searchSupplementaryClipboard( const wxString& aSheetFilename, SCH_SCREEN** aScreen );
 

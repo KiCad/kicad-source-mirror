@@ -541,53 +541,6 @@ void RESCUER::UndoRescues()
 }
 
 
-bool SCH_EDIT_FRAME::RescueLegacyProject( bool aRunningOnDemand )
-{
-    LEGACY_RESCUER rescuer( Prj(), &GetCurrentSheet(), GetCanvas()->GetBackend() );
-
-    return rescueProject( rescuer, aRunningOnDemand );
-}
-
-
-bool SCH_EDIT_FRAME::RescueSymbolLibTableProject( bool aRunningOnDemand )
-{
-    SYMBOL_LIB_TABLE_RESCUER rescuer( Prj(), &GetCurrentSheet(), GetCanvas()->GetBackend() );
-
-    return rescueProject( rescuer, aRunningOnDemand );
-}
-
-
-bool SCH_EDIT_FRAME::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand )
-{
-    if( !RESCUER::RescueProject( this, aRescuer, aRunningOnDemand ) )
-        return false;
-
-    if( aRescuer.GetCandidateCount() )
-    {
-        LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
-
-        if( viewer )
-            viewer->ReCreateListLib();
-
-        if( aRunningOnDemand )
-        {
-            SCH_SCREENS schematic;
-
-            schematic.UpdateSymbolLinks();
-            g_ConnectionGraph->Reset();
-            RecalculateConnections( GLOBAL_CLEANUP );
-        }
-
-        GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
-        SyncView();
-        GetCanvas()->Refresh();
-        OnModify();
-    }
-
-    return true;
-}
-
-
 bool RESCUER::RescueProject( wxWindow* aParent, RESCUER& aRescuer, bool aRunningOnDemand )
 {
     aRescuer.FindCandidates();

@@ -153,6 +153,9 @@ public:
     static TOOL_ACTION showBusManager;
     static TOOL_ACTION schematicSetup;
 
+    static TOOL_ACTION rescueSymbols;
+    static TOOL_ACTION remapSymbols;
+
     // Suite operations
     static TOOL_ACTION editWithLibEdit;
     static TOOL_ACTION showPcbNew;

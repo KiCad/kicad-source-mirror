@@ -28,6 +28,9 @@
 #include <dialogs/dialog_fields_editor_global.h>
 #include <dialogs/dialog_page_settings.h>
 #include <dialogs/dialog_paste_special.h>
+#include <dialogs/dialog_plot_schematic.h>
+#include <dialogs/dialog_symbol_remap.h>
+#include <project_rescue.h>
 #include <erc.h>
 #include <fctsys.h>
 #include <invoke_sch_dialog.h>
@@ -43,6 +46,7 @@
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
 #include <simulation_cursors.h>
+#include <lib_view_frame.h>
 #include <status_popup.h>
 #include <tool/picker_tool.h>
 #include <tool/tool_manager.h>
@@ -51,13 +55,9 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_editor_control.h>
 #include <ws_proxy_undo_item.h>
-#include <dialogs/dialog_page_settings.h>
-#include <dialogs/dialog_fields_editor_global.h>
-#include <invoke_sch_dialog.h>
-#include <dialogs/dialog_paste_special.h>
-#include <netlist_exporters/netlist_exporter_pspice.h>
 #include <math/util.h>      // for KiROUND
 #include <dialog_update_from_pcb.h>
+
 
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
 {
@@ -113,16 +113,103 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::RescueSymbols( const TOOL_EVENT& aEvent )
+{
+    SCH_SCREENS schematic;
+
+    if( schematic.HasNoFullyDefinedLibIds() )
+        RescueLegacyProject( true );
+    else
+        RescueSymbolLibTableProject( true );
+
+    return 0;
+}
+
+
+bool SCH_EDITOR_CONTROL::RescueLegacyProject( bool aRunningOnDemand )
+{
+    LEGACY_RESCUER rescuer( m_frame->Prj(), &m_frame->GetCurrentSheet(),
+                            m_frame->GetCanvas()->GetBackend() );
+
+    return rescueProject( rescuer, aRunningOnDemand );
+}
+
+
+bool SCH_EDITOR_CONTROL::RescueSymbolLibTableProject( bool aRunningOnDemand )
+{
+    SYMBOL_LIB_TABLE_RESCUER rescuer( m_frame->Prj(), &m_frame->GetCurrentSheet(),
+                                      m_frame->GetCanvas()->GetBackend() );
+
+    return rescueProject( rescuer, aRunningOnDemand );
+}
+
+
+bool SCH_EDITOR_CONTROL::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand )
+{
+    if( !RESCUER::RescueProject( m_frame, aRescuer, aRunningOnDemand ) )
+        return false;
+
+    if( aRescuer.GetCandidateCount() )
+    {
+        KIWAY_PLAYER* viewer = m_frame->Kiway().Player( FRAME_SCH_VIEWER, false );
+
+        if( viewer )
+            static_cast<LIB_VIEW_FRAME*>( viewer )->ReCreateListLib();
+
+        if( aRunningOnDemand )
+        {
+            SCH_SCREENS schematic;
+
+            schematic.UpdateSymbolLinks();
+            g_ConnectionGraph->Reset();
+            m_frame->RecalculateConnections( GLOBAL_CLEANUP );
+        }
+
+        m_frame->GetScreen()->ClearUndoORRedoList( m_frame->GetScreen()->m_UndoList, 1 );
+        m_frame->SyncView();
+        m_frame->GetCanvas()->Refresh();
+        m_frame->OnModify();
+    }
+
+    return true;
+}
+
+
+int SCH_EDITOR_CONTROL::RemapSymbols( const TOOL_EVENT& aEvent )
+{
+    DIALOG_SYMBOL_REMAP dlgRemap( m_frame );
+
+    dlgRemap.ShowQuasiModal();
+
+    m_frame->GetCanvas()->Refresh( true );
+
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::Print( const TOOL_EVENT& aEvent )
 {
-    m_frame->Print();
+    InvokeDialogPrintUsingPrinter( m_frame );
+
+    wxFileName fn = m_frame->Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
+
+    if( fn.GetName() != NAMELESS_PROJECT )
+        m_frame->SaveProjectSettings();
+
     return 0;
 }
 
 
 int SCH_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 {
-    m_frame->PlotSchematic();
+    DIALOG_PLOT_SCHEMATIC dlg( m_frame );
+
+    dlg.ShowModal();
+
+    // save project config if the prj config has changed:
+    if( dlg.PrjConfigChanged() )
+        m_frame->SaveProjectSettings();
+
     return 0;
 }
 
@@ -1503,6 +1590,9 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Print,                 ACTIONS::print.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Plot,                  ACTIONS::plot.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Quit,                  ACTIONS::quit.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::RescueSymbols,         EE_ACTIONS::rescueSymbols.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::RemapSymbols,          EE_ACTIONS::remapSymbols.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::FindAndReplace,        ACTIONS::find.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::FindAndReplace,        ACTIONS::findAndReplace.MakeEvent() );

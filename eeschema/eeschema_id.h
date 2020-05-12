@@ -56,10 +56,6 @@ enum id_eeschema_frm
 {
     ID_IMPORT_NON_KICAD_SCH = ID_END_LIST,
 
-    /* Schematic editor main menubar IDs. */
-    ID_RESCUE_CACHED,
-    ID_REMAP_SYMBOLS,
-
     /* Library editor horizontal toolbar IDs. */
     ID_LIBEDIT_SELECT_PART_NUMBER,
 

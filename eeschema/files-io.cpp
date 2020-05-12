@@ -52,6 +52,7 @@
 #include <ws_data_model.h>
 #include <connection_graph.h>
 #include <tool/actions.h>
+#include <tools/sch_editor_control.h>>
 #include <netlist.h>
 
 
@@ -426,7 +427,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 }
 
                 if( !cfg || !cfg->m_RescueNeverShow )
-                    RescueSymbolLibTableProject( false );
+                {
+                    SCH_EDITOR_CONTROL* editor = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
+                    editor->RescueSymbolLibTableProject( false );
+                }
             }
 
             // Update all symbol library links for all sheets.

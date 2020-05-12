@@ -558,20 +558,12 @@ public:
      */
     void SetSheetNumberAndCount();
 
-    /**
-     * Show the print dialog.
-     */
-    void Print();
-
     wxPageSetupDialogData& GetPageSetupData() { return m_pageSetupData; }
 
     bool GetPrintMonochrome() { return m_printMonochrome; }
     void SetPrintMonochrome( bool aMonochrome ) { m_printMonochrome = aMonochrome; }
     bool GetPrintSheetReference() { return m_printSheetReference; }
     void SetPrintSheetReference( bool aShow ) { m_printSheetReference = aShow; }
-
-    // Plot functions:
-    void PlotSchematic();
 
     void NewProject();
     void LoadProject();
@@ -661,8 +653,6 @@ public:
 
     void OnOpenPcbnew( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );
-    void OnRescueProject( wxCommandEvent& event );
-    void OnRemapSymbols( wxCommandEvent& aEvent );
     void OnUpdatePCB( wxCommandEvent& event );
     void OnAnnotate( wxCommandEvent& event );
 
@@ -942,23 +932,6 @@ public:
      * @return True if \a aFileName was written successfully.
      */
     bool CreateArchiveLibrary( const wxString& aFileName );
-
-    /**
-     * Perform rescue operations to recover old projects from before certain changes were made.
-     *
-     * - Exports cached symbols that conflict with new symbols to a separate library.
-     * - Exports cached symbols not found in any symbol library.
-     * - Renames symbols named before libraries were case sensitive.
-     *
-     * @param aRunningOnDemand - indicates whether the tool has been called up by the user
-     *      (as opposed to being run automatically). If true, an information dialog is
-     *      displayed if there are no components to rescue. If false, the tool is silent
-     *      if there are no components to rescue, and a "Never Show Again" button is
-     *      displayed.
-     */
-    bool rescueProject( RESCUER& aRescuer, bool aRunningOnDemand );
-    bool RescueLegacyProject( bool aRunningOnDemand );
-    bool RescueSymbolLibTableProject( bool aRunningOnDemand );
 
     /**
      * Plot or print the current sheet to the clipboard.

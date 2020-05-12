@@ -547,6 +547,18 @@ TOOL_ACTION EE_ACTIONS::schematicSetup( "eeschema.EditorControl.schematicSetup",
         _( "Edit schematic setup including annotation styles and electrical rules" ),
         options_schematic_xpm );
 
+TOOL_ACTION EE_ACTIONS::rescueSymbols( "eeschema.EditorControl.rescueSymbols",
+        AS_GLOBAL, 0, "",
+        _( "Rescue Symbols..." ),
+        _( "Find old symbols in project and rename/rescue them" ),
+        rescue_xpm );
+
+TOOL_ACTION EE_ACTIONS::remapSymbols( "eeschema.EditorControl.remapSymbols",
+        AS_GLOBAL, 0, "",
+        _( "Remap Symbols..." ),
+        _( "Remap legacy library symbols to symbol library table" ),
+        rescue_xpm );
+
 TOOL_ACTION EE_ACTIONS::showBusManager( "eeschema.EditorControl.showBusManager",
         AS_GLOBAL, 0, "",
         _( "Bus Definitions..." ), _( "Manage bus definitions" ),

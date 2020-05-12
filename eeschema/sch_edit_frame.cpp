@@ -201,9 +201,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_EXIT, SCH_EDIT_FRAME::OnExit )
     EVT_MENU( wxID_CLOSE, SCH_EDIT_FRAME::OnExit )
 
-    EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
-    EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
-
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 END_EVENT_TABLE()
 
@@ -889,27 +886,6 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::OnRescueProject( wxCommandEvent& event )
-{
-    SCH_SCREENS schematic;
-
-    if( schematic.HasNoFullyDefinedLibIds() )
-        RescueLegacyProject( true );
-    else
-        RescueSymbolLibTableProject( true );
-}
-
-
-void SCH_EDIT_FRAME::OnRemapSymbols( wxCommandEvent& event )
-{
-    DIALOG_SYMBOL_REMAP dlgRemap( this );
-
-    dlgRemap.ShowQuasiModal();
-
-    GetCanvas()->Refresh( true );
-}
-
-
 void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
 {
     if( event.GetId() == wxID_EXIT )
@@ -917,17 +893,6 @@ void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
 
     if( event.GetId() == wxID_CLOSE || Kiface().IsSingle() )
         Close( false );
-}
-
-
-void SCH_EDIT_FRAME::Print()
-{
-    InvokeDialogPrintUsingPrinter( this );
-
-    wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
-
-    if( fn.GetName() != NAMELESS_PROJECT )
-        Prj().ConfigSave( Kiface().KifaceSearch(), GROUP_SCH_EDIT, GetProjectFileParameters() );
 }
 
 

@@ -1,6 +1,3 @@
-/** @file dialog_plot_schematic.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -42,22 +39,11 @@ int DIALOG_PLOT_SCHEMATIC::m_pageSizeSelect = PAGE_SIZE_AUTO;
 int DIALOG_PLOT_SCHEMATIC::m_HPGLPaperSizeSelect = PAGE_SIZE_AUTO;
 
 
-void SCH_EDIT_FRAME::PlotSchematic()
-{
-    DIALOG_PLOT_SCHEMATIC dlg( this );
-
-    dlg.ShowModal();
-
-    // save project config if the prj config has changed:
-    if( dlg.PrjConfigChanged() )
-        SaveProjectSettings();
-}
-
-
 DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent )
         : DIALOG_PLOT_SCHEMATIC_BASE( parent ),
           m_parent( parent ),
           m_plotFormat( PLOT_FORMAT::UNDEFINED ),
+          m_HPGLPenSize( 1.0 ),
           m_defaultLineWidth( parent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true ),
           m_penWidth( parent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
 {
