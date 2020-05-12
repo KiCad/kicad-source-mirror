@@ -1477,7 +1477,7 @@ LIB_TEXT* SCH_SEXPR_PARSER::parseText()
 
 void SCH_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
 {
-    wxCHECK_RET( CurTok() == T_paper,
+    wxCHECK_RET( ( CurTok() == T_page && m_requiredVersion <= 20200506 ) || CurTok() == T_paper,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a PAGE_INFO." ) );
 
     T token;
