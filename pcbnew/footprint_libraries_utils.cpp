@@ -1032,36 +1032,36 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     // Update its name in lib
     module->SetFPID( LIB_ID( wxEmptyString, moduleName ) );
 
-    PCB_LAYER_ID layer;
+    PCB_LAYER_ID txt_layer;
     wxPoint default_pos;
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
     module->Reference().SetText( settings.m_DefaultFPTextItems[0].m_Text );
     module->Reference().SetVisible( settings.m_DefaultFPTextItems[0].m_Visible );
-    layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[0].m_Layer;
-    module->Reference().SetLayer( layer );
-    default_pos.y -= settings.GetTextSize( layer ).y / 2;
+    txt_layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[0].m_Layer;
+    module->Reference().SetLayer( txt_layer );
+    default_pos.y -= settings.GetTextSize( txt_layer ).y / 2;
     module->Reference().SetPosition( default_pos );
-    default_pos.y += settings.GetTextSize( layer ).y;
+    default_pos.y += settings.GetTextSize( txt_layer ).y;
 
     module->Value().SetText( settings.m_DefaultFPTextItems[1].m_Text );
     module->Value().SetVisible( settings.m_DefaultFPTextItems[1].m_Visible );
-    layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[1].m_Layer;
-    module->Value().SetLayer( layer );
-    default_pos.y += settings.GetTextSize( layer ).y / 2;
+    txt_layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[1].m_Layer;
+    module->Value().SetLayer( txt_layer );
+    default_pos.y += settings.GetTextSize( txt_layer ).y / 2;
     module->Value().SetPosition( default_pos );
-    default_pos.y += settings.GetTextSize( layer ).y;
+    default_pos.y += settings.GetTextSize( txt_layer ).y;
 
     for( size_t i = 2; i < settings.m_DefaultFPTextItems.size(); ++i )
     {
         TEXTE_MODULE* textItem = new TEXTE_MODULE( module );
         textItem->SetText( settings.m_DefaultFPTextItems[i].m_Text );
         textItem->SetVisible( settings.m_DefaultFPTextItems[i].m_Visible );
-        layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[i].m_Layer;
-        textItem->SetLayer( layer );
-        default_pos.y += settings.GetTextSize( layer ).y / 2;
+        txt_layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[i].m_Layer;
+        textItem->SetLayer( txt_layer );
+        default_pos.y += settings.GetTextSize( txt_layer ).y / 2;
         textItem->SetPosition( default_pos );
-        default_pos.y += settings.GetTextSize( layer ).y;
+        default_pos.y += settings.GetTextSize( txt_layer ).y;
         module->GraphicalItems().push_back( textItem );
     }
 

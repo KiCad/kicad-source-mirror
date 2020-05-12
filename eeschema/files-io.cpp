@@ -52,7 +52,7 @@
 #include <ws_data_model.h>
 #include <connection_graph.h>
 #include <tool/actions.h>
-#include <tools/sch_editor_control.h>>
+#include <tools/sch_editor_control.h>
 #include <netlist.h>
 
 
