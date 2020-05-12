@@ -56,9 +56,10 @@ TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent )
     m_ImageList = new wxImageList( iconsize.x, iconsize.y, true, TREE_MAX );
 
     m_ImageList->Add( KiBitmap( new_project_xpm ) );            // TREE_PROJECT
-    m_ImageList->Add( KiBitmap( eeschema_xpm ) );               // TREE_SCHEMA
+    m_ImageList->Add( KiBitmap( eeschema_xpm ) );               // TREE_LEGACY_SCHEMATIC
+    m_ImageList->Add( KiBitmap( eeschema_xpm ) );               // TREE_SEXPR_SCHEMATIC
     m_ImageList->Add( KiBitmap( pcbnew_xpm ) );                 // TREE_LEGACY_PCB
-    m_ImageList->Add( KiBitmap( pcbnew_xpm ) );                 // TREE_SFMT_PCB
+    m_ImageList->Add( KiBitmap( pcbnew_xpm ) );                 // TREE_SEXPR_PCB
     m_ImageList->Add( KiBitmap( icon_gerbview_small_xpm ) );    // TREE_GERBER
     m_ImageList->Add( KiBitmap( html_xpm ) );                   // TREE_HTML
     m_ImageList->Add( KiBitmap( datasheet_xpm ) );              // TREE_PDF

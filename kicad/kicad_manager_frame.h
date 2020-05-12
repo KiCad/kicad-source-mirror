@@ -44,9 +44,10 @@ class KICAD_SETTINGS;
 enum TreeFileType {
     TREE_ROOT = 0,
     TREE_PROJECT,
-    TREE_SCHEMA,            // Schematic file (.sch)
+    TREE_LEGACY_SCHEMATIC,  // Schematic file (.sch)
+    TREE_SEXPR_SCHEMATIC,   // Schematic file (.sch)
     TREE_LEGACY_PCB,        // board file (.brd) legacy format
-    TREE_SEXP_PCB,          // board file (.kicad_brd) new s expression format
+    TREE_SEXPR_PCB,         // board file (.kicad_brd) new s expression format
     TREE_GERBER,            // Gerber  file (.pho, .g*)
     TREE_HTML,              // HTML file (.htm, *.html)
     TREE_PDF,               // PDF file (.pdf)

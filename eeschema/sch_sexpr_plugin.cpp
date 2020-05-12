@@ -612,6 +612,10 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 
     // m_out->Print( 1, "(uuid %s)\n\n", m_out->Quotew( aSheet->m_Uuid.AsString() ).c_str() );
 
+    m_out->Print( 1, "(page %d %d)\n\n",
+                  screen->m_ScreenNumber,
+                  screen->m_NumberOfScreens );
+
     screen->GetPageSettings().Format( m_out, 1, 0 );
     m_out->Print( 0, "\n" );
     screen->GetTitleBlock().Format( m_out, 1, 0 );
@@ -624,18 +628,20 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 
     m_out->Print( 1, ")\n\n" );
 
-    // @todo save schematic instance information (page #).
-
     for( const auto& alias : screen->GetBusAliases() )
     {
         saveBusAlias( alias, 1 );
     }
 
     // Enforce item ordering
-    auto cmp = []( const SCH_ITEM* a, const SCH_ITEM* b ) { return *a < *b; };
+    auto cmp = []( const SCH_ITEM* a, const SCH_ITEM* b )
+               {
+                   return *a < *b;
+               };
+
     std::multiset<SCH_ITEM*, decltype( cmp )> save_map( cmp );
 
-    for( auto item : screen->Items() )
+    for( SCH_ITEM* item : screen->Items() )
         save_map.insert( item );
 
     KICAD_T itemType = TYPE_NOT_INIT;
@@ -719,7 +725,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 
         SCH_SHEET_LIST sheetPaths( aSheet );
 
-        for( auto sheetPath : sheetPaths )
+        for( const SCH_SHEET_PATH& sheetPath : sheetPaths )
         {
             SCH_REFERENCE_LIST instances;
 
@@ -742,7 +748,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
         m_out->Print( 0, "\n" );
         m_out->Print( 1, "(symbol_instances\n" );
 
-        for( auto instance : screen->m_symbolInstances )
+        for( const COMPONENT_INSTANCE_REFERENCE& instance : screen->m_symbolInstances )
         {
             m_out->Print( 2, "(path %s (reference %s) (unit %d))\n",
                           m_out->Quotew( instance.m_Path.AsString() ).c_str(),

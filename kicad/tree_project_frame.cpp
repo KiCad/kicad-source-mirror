@@ -265,9 +265,10 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
     switch( type )
     {
     case TREE_PROJECT:           return ProjectFileExtension;
-    case TREE_SCHEMA:            return LegacySchematicFileExtension;
+    case TREE_LEGACY_SCHEMATIC:  return LegacySchematicFileExtension;
+    case TREE_SEXPR_SCHEMATIC:   return KiCadSchematicFileExtension;
     case TREE_LEGACY_PCB:        return LegacyPcbFileExtension;
-    case TREE_SEXP_PCB:          return KiCadPcbFileExtension;
+    case TREE_SEXPR_PCB:         return KiCadPcbFileExtension;
     case TREE_GERBER:            return GerberFileExtensionWildCard;
     case TREE_HTML:              return HtmlFileExtension;
     case TREE_PDF:               return PdfFileExtension;
@@ -308,19 +309,16 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
     {
         // Filter
         wxRegEx reg;
+        bool    addFile = false;
 
-        bool    isSchematic = false;
-        bool    addFile     = false;
-
-        for( unsigned i = 0; i < m_filters.size(); i++ )
+        for( const wxString& m_filter : m_filters )
         {
-            wxCHECK2_MSG( reg.Compile( m_filters[i], wxRE_ICASE ), continue,
-                          wxString::Format( "Regex %s failed to compile.", m_filters[i] ) );
+            wxCHECK2_MSG( reg.Compile( m_filter, wxRE_ICASE ), continue,
+                          wxString::Format( "Regex %s failed to compile.", m_filter ) );
 
             if( reg.Matches( aName ) )
             {
                 addFile = true;
-                isSchematic = ( fn.GetExt() == "sch" || fn.GetExt() == "kicad_sch" );
                 break;
             }
         }
@@ -340,7 +338,7 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
         // create is sent to the wxFileSystemWatcher, but the file still has 0 byte
         // so it cannot detected as root sheet
         // This is an ugly fix.
-        if( isSchematic )
+        if( fn.GetExt() == "sch" || fn.GetExt() == "kicad_sch" )
         {
             wxString          fullFileName = aName.BeforeLast( '.' );
             wxString          rootName;
@@ -362,16 +360,31 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject(
 
                 addFile = false;
 
-                // check the first 100 lines for the "Sheet 1" string
+                // check the first 100 lines for the "Sheet 1"  or "(page 1" string
                 for( int i = 0; i<100; ++i )
                 {
                     if( !fgets( line, sizeof(line), fp ) )
                         break;
 
-                    if( !strncmp( line, "Sheet 1 ", 8 ) )
+                    if( fn.GetExt() == "sch" )
                     {
-                        addFile = true;
-                        break;
+                        if( strncmp( line, "Sheet 1 ", 8 ) == 0 )
+                        {
+                            addFile = true;
+                            break;
+                        }
+                    } else if( fn.GetExt() == "kicad_sch" )
+                    {
+                        char* start = line;
+
+                        while( *start == ' ' )
+                            start++;
+
+                        if( strncmp( start, "(page 1 ", 8 ) == 0 )
+                        {
+                            addFile = true;
+                            break;
+                        }
                     }
                 }
 

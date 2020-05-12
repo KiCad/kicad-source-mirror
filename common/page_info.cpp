@@ -266,7 +266,7 @@ void PAGE_INFO::SetHeightMils( int aHeightInMils )
 
 void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
 {
-    aFormatter->Print( aNestLevel, "(page %s", aFormatter->Quotew( GetType() ).c_str() );
+    aFormatter->Print( aNestLevel, "(paper %s", aFormatter->Quotew( GetType() ).c_str() );
 
     // The page dimensions are only required for user defined page sizes.
     // Internally, the page size is in mils

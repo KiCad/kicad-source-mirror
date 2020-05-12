@@ -1477,7 +1477,7 @@ LIB_TEXT* SCH_SEXPR_PARSER::parseText()
 
 void SCH_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
 {
-    wxCHECK_RET( CurTok() == T_page,
+    wxCHECK_RET( CurTok() == T_paper,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a PAGE_INFO." ) );
 
     T token;
@@ -1886,13 +1886,26 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet )
 
         token = NextTok();
 
+        if( token == T_page && m_requiredVersion <= 20200506 )
+            token = T_paper;
+
         switch( token )
         {
-        case T_page:
+        case T_paper:
         {
             PAGE_INFO pageInfo;
             parsePAGE_INFO( pageInfo );
             screen->SetPageSettings( pageInfo );
+            break;
+        }
+
+        case T_page:
+        {
+            // Only saved for top-level sniffing in Kicad Manager frame and other external
+            // tool usage with flat hierarchies
+            NeedSYMBOLorNUMBER();
+            NeedSYMBOLorNUMBER();
+            NeedRIGHT();
             break;
         }
 
@@ -1986,7 +1999,7 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet )
             break;
 
         default:
-            Expecting( "symbol, page, title_block, bitmap, sheet, junction, no_connect, "
+            Expecting( "symbol, paper, page, title_block, bitmap, sheet, junction, no_connect, "
                        "bus_entry, line, bus, text, label, global_label, hierarchical_label, "
                        "symbol_instances, or bus_alias" );
         }

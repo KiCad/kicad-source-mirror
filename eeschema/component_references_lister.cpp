@@ -650,7 +650,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
 
 
 SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibPart,
-                              SCH_SHEET_PATH& aSheetPath )
+                              const SCH_SHEET_PATH& aSheetPath )
 {
     wxASSERT( aComponent != NULL );
 

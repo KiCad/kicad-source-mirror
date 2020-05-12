@@ -258,7 +258,7 @@ public:
      * The normal option is false, and set to true only to build the full list of components.
      */
     void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
-                        bool aForceIncludeOrphanComponents = false );
+                        bool aForceIncludeOrphanComponents = false ) const;
 
     /**
      * Function GetMultiUnitComponents

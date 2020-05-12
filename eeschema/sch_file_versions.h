@@ -39,4 +39,8 @@
  */
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20200310  // Initial version.  Sheet fields were named
                                                  // incorectly (using symbol field vocabulary).
-#define SEXPR_SCHEMATIC_FILE_VERSION   20200506
+
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20200506  // Used "page" instead of "paper" for paper
+                                                 // sizes.
+
+#define SEXPR_SCHEMATIC_FILE_VERSION   20200512

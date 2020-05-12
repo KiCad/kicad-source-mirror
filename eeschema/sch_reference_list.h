@@ -81,7 +81,7 @@ public:
     }
 
     SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent,
-                   SCH_SHEET_PATH& aSheetPath );
+                   const SCH_SHEET_PATH& aSheetPath );
 
     SCH_COMPONENT* GetComp() const             { return m_RootCmp; }
 

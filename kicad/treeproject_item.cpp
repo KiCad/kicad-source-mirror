@@ -168,7 +168,8 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
         m_parent->Toggle( id );
         break;
 
-    case TREE_SCHEMA:
+    case TREE_LEGACY_SCHEMATIC:
+    case TREE_SEXPR_SCHEMATIC:
         if( fullFileName == frame->SchFileName() )
         {
             toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSchematic, true );
@@ -181,7 +182,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
         break;
 
     case TREE_LEGACY_PCB:
-    case TREE_SEXP_PCB:
+    case TREE_SEXPR_PCB:
         if( fullFileName == frame->PcbFileName() || fullFileName == frame->PcbLegacyFileName() )
         {
             toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editPCB, true );

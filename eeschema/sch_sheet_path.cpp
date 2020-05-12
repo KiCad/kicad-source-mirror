@@ -184,7 +184,7 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
 
 
 void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
-                                    bool aForceIncludeOrphanComponents )
+                                    bool aForceIncludeOrphanComponents ) const
 {
     for( auto item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
     {
