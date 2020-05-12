@@ -199,9 +199,9 @@ bool SCH_EDIT_TOOL::Init()
                                    && aSel.AreAllItemsIdentical() ) )
                     return false;
 
-                EDA_ITEM* item = static_cast<EDA_ITEM*>( aSel.Front() );
+                EDA_ITEM* firstItem = static_cast<EDA_ITEM*>( aSel.Front() );
 
-                switch( item->Type() )
+                switch( firstItem->Type() )
                 {
                 case SCH_COMPONENT_T:
                 case SCH_SHEET_T:
@@ -215,12 +215,15 @@ bool SCH_EDIT_TOOL::Init()
                     return aSel.GetSize() == 1;
 
                 case SCH_LINE_T:
-                    return std::all_of( aSel.GetItems().begin(), aSel.GetItems().end(),
-                                        [&]( EDA_ITEM* selItem )
-                                        {
-                                            SCH_LINE* line = dynamic_cast<SCH_LINE*>( selItem );
-                                            return line && line->IsGraphicLine();
-                                        } );
+                    for( EDA_ITEM* item : aSel.GetItems() )
+                    {
+                        SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
+
+                        if( !line || !line->IsGraphicLine() )
+                            return false;
+                    }
+
+                    return true;
 
                 default:
                     return false;
