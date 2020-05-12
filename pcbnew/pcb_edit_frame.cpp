@@ -1001,7 +1001,7 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST
 
     if( !frame->IsShown() )
     {
-        wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), LegacySchematicFileExtension );
+        wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), KiCadSchematicFileExtension );
 
         frame->OpenProjectFiles( std::vector<wxString>( 1, schfn.GetFullPath() ) );
 
