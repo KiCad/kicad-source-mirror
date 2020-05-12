@@ -500,7 +500,7 @@ The braces and statements of the body should be indented as you would a method,
 with the braces lined up under the capture block:
 
 ~~~~~~~~~~~~~{.cpp}
-    auto belowCondition = [] ( const SELECTION& aSel ) 
+    auto belowCondition = []( const SELECTION& aSel ) 
                           {
                               return g_CurrentSheet->Last() != g_RootSheet;
                           };
@@ -510,7 +510,7 @@ or:
 
 ~~~~~~~~~~~~~{.cpp}
     auto belowCondition = 
-        [] ( const SELECTION& aSel ) 
+        []( const SELECTION& aSel ) 
         {
             return g_CurrentSheet->Last() != g_RootSheet;
         };
