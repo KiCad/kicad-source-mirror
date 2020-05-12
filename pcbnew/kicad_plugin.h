@@ -65,8 +65,9 @@ class TEXTE_PCB;
 //#define SEXPR_BOARD_FILE_VERSION    20190905  // Add board physical stackup info in setup section
 //#define SEXPR_BOARD_FILE_VERSION    20190907  // Keepout areas in footprints
 //#define SEXPR_BOARD_FILE_VERSION    20191123  // pin function in pads
-//#define SEXPR_BOARD_FILE_VERSION    20200104    // pad property for fabrication
-#define SEXPR_BOARD_FILE_VERSION      20200119  // arcs in tracks
+//#define SEXPR_BOARD_FILE_VERSION    20200104  // pad property for fabrication
+//#define SEXPR_BOARD_FILE_VERSION    20200119  // arcs in tracks
+#define SEXPR_BOARD_FILE_VERSION      20200512  // page -> paper
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)

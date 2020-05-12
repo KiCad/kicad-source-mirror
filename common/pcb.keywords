@@ -177,6 +177,7 @@ pad_prop_testpoint
 pad_prop_heatsink
 property
 page
+paper
 path
 pcb_text_size
 pcb_text_width

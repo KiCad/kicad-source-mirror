@@ -546,13 +546,16 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
 
         token = NextTok();
 
+        if( token == T_page && m_requiredVersion <= 20200119 )
+            token = T_paper;
+
         switch( token )
         {
         case T_general:
             parseGeneralSection();
             break;
 
-        case T_page:
+        case T_paper:
             parsePAGE_INFO();
             break;
 
@@ -790,7 +793,7 @@ void PCB_PARSER::parseGeneralSection()
 
 void PCB_PARSER::parsePAGE_INFO()
 {
-    wxCHECK_RET( CurTok() == T_page,
+    wxCHECK_RET( ( CurTok() == T_page && m_requiredVersion <= 20200119 ) || CurTok() == T_paper,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a PAGE_INFO." ) );
 
     T token;
