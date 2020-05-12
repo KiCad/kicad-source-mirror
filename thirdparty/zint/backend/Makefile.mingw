@@ -1,0 +1,81 @@
+# Linux makefile for libzint
+#
+# make			compiles with QR Code support
+# make install		copies to /usr/lib
+# make uninstall	removes library
+# make clean		cleans up a previous compilation and any object or editor files
+#
+
+ZINT_VERSION:=-DZINT_VERSION=\"2.3.2\"
+
+
+CC:= gcc
+AR:= ar rc
+RANLIB:= ranlib
+INCLUDE:= -I/mingw/include
+CFLAGS:= -D_WIN32 -O2 -fms-extensions -mms-bitfields -fno-exceptions -fomit-frame-pointer -Wall
+
+prefix := /mingw
+includedir := $(prefix)/include
+libdir := $(prefix)/lib
+bindir := $(prefix)/bin
+DESTDIR :=
+APP:=zint
+DLL:=$(APP).dll
+STATLIB:=lib$(APP).a
+
+COMMON_OBJ:= common.o render.o png.o library.o ps.o large.o reedsol.o gs1.o svg.o \
+	hanxin.o mailmark.o dotcode.o codablock.o emf.o eci.o \
+	raster.o tif.o gif.o pcx.o bmp.o
+ONEDIM_OBJ:= code.o code128.o 2of5.o upcean.o telepen.o medical.o plessey.o rss.o
+POSTAL_OBJ:= postal.o auspost.o imail.o
+TWODIM_OBJ:= code16k.o dmatrix.o pdf417.o qr.o maxicode.o composite.o aztec.o code49.o code1.o gridmtx.o
+
+LIB_OBJ:= $(COMMON_OBJ) $(ONEDIM_OBJ) $(TWODIM_OBJ) $(POSTAL_OBJ)
+DLL_OBJ:= $(LIB_OBJ:.o=.lo) dllversion.lo
+
+
+ifeq ($(NO_PNG),true)
+DEFINES+= -DNO_PNG
+else
+DEFINES_DLL+= -DPNG_DLL -DZLIB_DLL
+LIBS+= -lpng -lz
+endif
+
+LIBS+= -lm
+
+all: $(DLL) $(STATLIB)
+
+%.lo:%.c
+	@echo Compiling $< ...
+	$(CC) $(CFLAGS) $(DEFINES) $(DEFINES_DLL) -DDLL_EXPORT -DPIC $(ZINT_VERSION) -c -o $@ $<
+
+%.o:%.c
+	@echo Compiling $< ...
+	$(CC) $(CFLAGS) $(DEFINES) $(ZINT_VERSION) -c -o $@ $<
+	 
+$(DLL):$(DLL_OBJ)
+	@echo Linking $@...
+	o2dll.sh -o $@ $(DLL_OBJ) $(LIBS)
+
+$(STATLIB): $(LIB_OBJ)
+	@echo Linking $@...
+	$(AR) $@ $(LIB_OBJ)
+	-@ ($(RANLIB) $@ || true) >/dev/null 2>&1
+		
+.PHONY: install uninstall clean dist
+
+install:
+	cp -fp libzint.* $(DESTDIR)$(libdir)
+	cp -fp zint.h $(DESTDIR)$(includedir)/zint.h
+	cp -fp zint.dll $(DESTDIR)$(bindir)
+
+uninstall:
+	rm $(DESTDIR)$(libdir)/libzint.*
+	rm $(DESTDIR)$(includedir)/zint.h
+	rm $(DESTDIR)$(bindir)/zint.dll
+
+clean:
+	rm -f *.lib *.dll *.o *.a *~ *.res *.exe *.def *.lo *.bak
+
+

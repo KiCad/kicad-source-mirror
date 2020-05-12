@@ -98,6 +98,7 @@ enum KICAD_T
     PCB_ARC_T,               ///< class PCB_ARC, an arc track segment on a copper layer
     PCB_MARKER_T,            ///< class PCB_MARKER, a marker used to show something
     PCB_DIMENSION_T,         ///< class PCB_DIMENSION_BASE: abstract dimension meta-type
+    PCB_BARCODE_T,           ///< class PCB_BARCODE, a barcode (graphic item)
     PCB_DIM_ALIGNED_T,       ///< class PCB_DIM_ALIGNED, a linear dimension (graphic item)
     PCB_DIM_LEADER_T,        ///< class PCB_DIM_LEADER, a leader dimension (graphic item)
     PCB_DIM_CENTER_T,        ///< class PCB_DIM_CENTER, a center point marking (graphic item)

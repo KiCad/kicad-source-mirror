@@ -211,6 +211,7 @@ public:
     static TOOL_ACTION drawRadialDimension;
     static TOOL_ACTION drawOrthogonalDimension;
     static TOOL_ACTION drawLeader;
+    static TOOL_ACTION drawBarcode;
     static TOOL_ACTION drawZone;
     static TOOL_ACTION drawVia;
     static TOOL_ACTION drawRuleArea;

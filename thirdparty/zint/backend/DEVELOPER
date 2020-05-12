@@ -1,0 +1,133 @@
+Contents
+--------
+
+Here is a guide to which bit of source code does what.
+
+2of5.c:
+	Matrix 2 of 5
+	Industrial 2 of 5
+	IATA 2 of 5
+	Data Logic
+	Interleaved 2 of 5
+	ITF-14
+	Deutche Post Leitcode
+	Deutche Post Identcode
+
+auspost.c:
+	Australia Post Standard Customer Barcode
+	Australia Post Customer Barcode 2
+	Australia Post Customer Barcode 3
+	Australia Post Reply Paid Barcode
+	Australia Post Routing Barcode
+	Australia Post Redirect Barcode
+
+aztec.c:
+	Aztec Code
+	Compact Aztec Code
+	Aztec Runes
+
+blockf.c:
+	Codablock-F
+
+code128.c:
+	Code 128
+	Code 128 Subset B
+	NVE-18
+	GS1-128 (UCC/EAN-128)
+	EAN-14
+
+code16k.c:
+	Code 16k
+
+code.c:
+	Code 11
+	Code 39
+	Pharmazentral Nummer (PZN)
+	Extended Code 39 (Code 39+)
+	Code 93
+	LOGMARS
+	Channel Code
+
+code1.c:
+	Code One
+
+code49.c:
+	Code 49
+
+composite.c:
+	CC-A Composite Symbology
+	CC-B Composite Symbology
+	CC-C Composite Symbology
+
+dotcode.c:
+        Dot Code
+
+dm200.c:
+	Data Matrix ECC 200
+
+gridmtx.c:
+	Grid Matrix
+
+hanxin.c:
+        Han Xin Code
+
+imail.c:
+	USPS OneCode (Intelligent Mail)
+
+maxicode.c:
+	UPS Maxicode
+
+medical.c:
+	Pharma Code
+	Two Track Pharma Code
+	Codabar
+	Code 32
+
+pdf417.c:
+	PDF417
+	Truncated PDF417
+	MicroPDF417
+
+plessey.c:
+	UK Plessey Code (bidirectional)
+	MSI Plessey
+
+postal.c:
+	PostNet
+	PLANET
+	Facing Identification Mark (FIM)
+	Royal Mail 4-State Country Code (RM4SCC)
+	KIX Code
+	DAFT Code
+	Flattermarken
+	Korean Postal Code
+	Japanese Postal Code
+
+qr.c:
+	QR Code
+	Micro QR Code
+        UPNQR
+
+rss.c:
+	GS1 DataBar (DataBar-14) (RSS-14)
+	GS1 DataBar Stacked (RSS-14 Stacked)
+	GS1 DataBar Stacked Omnidirectional (DataBar-14 Stacked Omnidirectional)
+		(RSS-14 Stacked Omnidirectional)
+	GS1 DataBar Limited (RSS Limited)
+	GS1 DataBar Expanded (RSS Expanded)
+	GS1 DataBar Expanded Stacked (RSS Expanded Stacked)
+
+telepen.c:
+	Telepen ASCII
+	Telepen Numeric
+
+upcean.c:
+	UPC-A
+	UPC-E
+	EAN-2 add-on
+	EAN-5 add-on
+	EAN-8
+	EAN-13
+	SBN (verification)
+	ISBN (verification)
+	ISBN-13 (verification)

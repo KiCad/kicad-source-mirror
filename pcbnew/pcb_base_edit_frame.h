@@ -39,6 +39,7 @@ class PCB_TEXT;
 class PCB_SHAPE;
 class FILEDLG_HOOK_NEW_LIBRARY;
 struct PCB_SELECTION_FILTER_OPTIONS;
+class PCB_BARCODE;
 
 /**
  * Common, abstract interface for edit frames.
@@ -191,6 +192,9 @@ public:
      * Set the angle used for rotate operations.
      */
     //void SetRotationAngle( EDA_ANGLE aRotationAngle );
+    void InstallTextOptionsFrame( BOARD_ITEM* aText );
+    void InstallBarcodeOptionsFrame( PCB_BARCODE* aText );
+    void InstallGraphicItemPropertiesDialog( BOARD_ITEM* aItem );
 
     void ShowReferenceImagePropertiesDialog( BOARD_ITEM* aBitmap );
     void ShowTextPropertiesDialog( PCB_TEXT* aText );
