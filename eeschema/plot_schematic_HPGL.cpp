@@ -30,6 +30,7 @@
 #include <sch_edit_frame.h>
 #include <base_units.h>
 #include <sch_sheet_path.h>
+#include <schematic.h>
 #include <project.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -98,7 +99,7 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
     SCH_SHEET_LIST  sheetList;
 
     if( aPlotAll )
-        sheetList.BuildSheetList( g_RootSheet );
+        sheetList.BuildSheetList( &m_parent->Schematic().Root() );
     else
         sheetList.push_back( m_parent->GetCurrentSheet() );
 

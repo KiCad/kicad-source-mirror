@@ -35,6 +35,7 @@
 #include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <sch_reference_list.h>
+#include <schematic.h>
 #include <dsnlexer.h>
 #include <ptree.h>
 #include <boost/property_tree/ptree.hpp>
@@ -46,7 +47,7 @@ void SCH_EDITOR_CONTROL::BackAnnotateFootprints( const std::string& aChangedSetO
 {
     // Build a flat list of components in schematic:
     SCH_REFERENCE_LIST  refs;
-    SCH_SHEET_LIST      sheets( g_RootSheet );
+    SCH_SHEET_LIST      sheets    = m_frame->Schematic().GetSheets();
     bool                isChanged = false;
 
     sheets.GetComponents( refs, false );
@@ -127,7 +128,7 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
 {
     // Build a flat list of components in schematic:
     SCH_REFERENCE_LIST  referencesList;
-    SCH_SHEET_LIST      sheetList( g_RootSheet );
+    SCH_SHEET_LIST      sheetList = m_frame->Schematic().GetSheets();
 
     sheetList.GetComponents( referencesList, false );
 

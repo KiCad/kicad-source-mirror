@@ -40,6 +40,7 @@
 #include <sch_line.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
+#include <schematic.h>
 #include <ws_proxy_view_item.h>
 #include <eeschema_id.h>
 #include <status_popup.h>
@@ -770,7 +771,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
     // Keep track of existing sheet paths. Duplicating a selection can modify this list
     bool copiedSheets = false;
-    SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
+    SCH_SHEET_LIST initial_sheetpathList = m_frame->Schematic().GetSheets();
 
     for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
     {
@@ -797,12 +798,12 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         case SCH_SHEET_T:
         {
-            SCH_SHEET_LIST hierarchy( g_RootSheet );
-            SCH_SHEET*     sheet = (SCH_SHEET*) newItem;
-            SCH_FIELD&     nameField = sheet->GetFields()[SHEETNAME];
-            wxString       baseName = nameField.GetText();
+            SCH_SHEET_LIST hierarchy     = m_frame->Schematic().GetSheets();
+            SCH_SHEET*     sheet         = (SCH_SHEET*) newItem;
+            SCH_FIELD&     nameField     = sheet->GetFields()[SHEETNAME];
+            wxString       baseName      = nameField.GetText();
             wxString       candidateName = baseName;
-            int            uniquifier = 1;
+            int            uniquifier    = 1;
 
             while( hierarchy.NameExists( candidateName ) )
                 candidateName = wxString::Format( wxT( "%s%d" ), baseName, uniquifier++ );
@@ -834,7 +835,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     {
         // We clear annotation of new sheet paths.
         // Annotation of new components added in current sheet is already cleared.
-        SCH_SCREENS screensList( g_RootSheet );
+        SCH_SCREENS screensList( &m_frame->Schematic().Root() );
         screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
         m_frame->SetSheetNumberAndCount();
     }
@@ -1113,7 +1114,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
-    dlg.UpdateField( aField, g_CurrentSheet );
+    dlg.UpdateField( aField, &m_frame->GetCurrentSheet() );
 
     if( m_frame->eeconfig()->m_AutoplaceFields.enable || aField->GetParent()->Type() == SCH_SHEET_T )
         static_cast<SCH_ITEM*>( aField->GetParent() )->AutoAutoplaceFields( m_frame->GetScreen() );
@@ -1304,22 +1305,23 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         bool           doClearAnnotation;
         bool           doRefresh = false;
         // Keep track of existing sheet paths. EditSheet() can modify this list
-        SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
+        SCH_SHEET_LIST initial_sheetpathList = m_frame->Schematic().GetSheets();
 
-        doRefresh = m_frame->EditSheetProperties( sheet, g_CurrentSheet, &doClearAnnotation );
+        doRefresh = m_frame->EditSheetProperties(
+                sheet, &m_frame->GetCurrentSheet(), &doClearAnnotation );
 
         // If the sheet file is changed and new sheet contents are loaded then we have to
         // clear the annotations on the new content (as it may have been set from some other
         // sheet path reference)
         if( doClearAnnotation )
         {
-            SCH_SCREENS screensList( g_RootSheet );
+            SCH_SCREENS screensList( &m_frame->Schematic().Root() );
             // We clear annotation of new sheet paths here:
             screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
             // Clear annotation of g_CurrentSheet itself, because its sheetpath is not a new
             // path, but components managed by its sheet path must have their annotation
             // cleared, because they are new:
-            sheet->GetScreen()->ClearAnnotation( g_CurrentSheet );
+            sheet->GetScreen()->ClearAnnotation( &m_frame->GetCurrentSheet() );
         }
 
         if( doRefresh )

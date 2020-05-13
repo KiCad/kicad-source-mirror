@@ -38,6 +38,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_text.h>
+#include <schematic.h>
 
 #include <advanced_config.h>
 #include <connection_graph.h>
@@ -297,7 +298,10 @@ void CONNECTION_SUBGRAPH::UpdateItemConnections()
         SCH_CONNECTION* item_conn = item->Connection( m_sheet );
 
         if( !item_conn )
+        {
             item_conn = item->InitializeConnection( m_sheet );
+            item_conn->SetGraph( m_graph );
+        }
 
         if( ( m_driver_connection->IsBus() && item_conn->IsNet() ) ||
             ( m_driver_connection->IsNet() && item_conn->IsBus() ) )
@@ -432,7 +436,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
             {
                 if( !pin->Connection( aSheet ) )
-                    pin->InitializeConnection( aSheet );
+                    pin->InitializeConnection( aSheet )->SetGraph( this );
 
                 pin->ConnectedItems( aSheet ).clear();
                 pin->Connection( aSheet )->Reset();
@@ -454,7 +458,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
 
             for( SCH_PIN* pin : component->GetSchPins( &aSheet ) )
             {
-                pin->InitializeConnection( aSheet );
+                pin->InitializeConnection( aSheet )->SetGraph( this );
 
                 wxPoint pos = pin->GetPosition();
 
@@ -475,6 +479,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
         {
             m_items.insert( item );
             auto conn = item->InitializeConnection( aSheet );
+            conn->SetGraph( this );
 
             // Set bus/net property here so that the propagation code uses it
             switch( item->Type() )
@@ -636,8 +641,9 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
 void CONNECTION_GRAPH::buildConnectionGraph()
 {
     // Recache all bus aliases for later use
+    wxCHECK_RET( m_schematic, "Connection graph cannot be built without schematic pointer" );
 
-    SCH_SHEET_LIST all_sheets( g_RootSheet );
+    SCH_SHEET_LIST all_sheets = m_schematic->GetSheets();
 
     for( unsigned i = 0; i < all_sheets.size(); i++ )
     {
@@ -656,7 +662,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
             if( connection->SubgraphCode() == 0 )
             {
-                auto subgraph = new CONNECTION_SUBGRAPH( m_frame );
+                auto subgraph = new CONNECTION_SUBGRAPH( this );
 
                 subgraph->m_code = m_last_subgraph_code++;
                 subgraph->m_sheet = sheet;
@@ -667,15 +673,19 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                 std::list<SCH_ITEM*> members;
 
-                auto get_items = [ &sheet ] ( SCH_ITEM* aItem ) -> bool
-                    {
-                      auto* conn = aItem->Connection( sheet );
+                auto get_items =
+                        [&]( SCH_ITEM* aItem ) -> bool
+                        {
+                            auto* conn = aItem->Connection( sheet );
 
-                      if( !conn )
-                          conn = aItem->InitializeConnection( sheet );
+                            if( !conn )
+                            {
+                                conn = aItem->InitializeConnection( sheet );
+                                conn->SetGraph( this );
+                            }
 
-                      return ( conn->SubgraphCode() == 0 );
-                    };
+                            return ( conn->SubgraphCode() == 0 );
+                        };
 
                 std::copy_if( item->ConnectedItems( sheet ).begin(),
                               item->ConnectedItems( sheet ).end(),
@@ -916,7 +926,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         SCH_CONNECTION* connection = pin->Connection( sheet );
 
         if( !connection )
+        {
             connection = pin->InitializeConnection( sheet );
+            connection->SetGraph( this );
+        }
 
         // If this pin already has a subgraph, don't need to process
         if( connection->SubgraphCode() > 0 )
@@ -937,7 +950,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         }
         else
         {
-            subgraph = new CONNECTION_SUBGRAPH( m_frame );
+            subgraph = new CONNECTION_SUBGRAPH( this );
 
             subgraph->m_code = m_last_subgraph_code++;
             subgraph->m_sheet = sheet;
@@ -1920,6 +1933,10 @@ int CONNECTION_GRAPH::RunERC()
 {
     int error_count = 0;
 
+    wxCHECK_MSG( m_schematic, true, "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" );
+
+    ERC_SETTINGS* settings = m_schematic->ErcSettings();
+
     for( auto&& subgraph : m_subgraphs )
     {
         // Graph is supposed to be up-to-date before calling RunERC()
@@ -1936,18 +1953,18 @@ int CONNECTION_GRAPH::RunERC()
          * format due to their TestDanglingEnds() implementation.
          */
 
-        if( g_ErcSettings->IsTestEnabled( ERCE_DRIVER_CONFLICT ) && !subgraph->ResolveDrivers() )
+        if( settings->IsTestEnabled( ERCE_DRIVER_CONFLICT ) && !subgraph->ResolveDrivers() )
             error_count++;
 
-        if( g_ErcSettings->IsTestEnabled( ERCE_BUS_TO_NET_CONFLICT )
+        if( settings->IsTestEnabled( ERCE_BUS_TO_NET_CONFLICT )
                 && !ercCheckBusToNetConflicts( subgraph ) )
             error_count++;
 
-        if( g_ErcSettings->IsTestEnabled( ERCE_BUS_ENTRY_CONFLICT )
+        if( settings->IsTestEnabled( ERCE_BUS_ENTRY_CONFLICT )
                 && !ercCheckBusToBusEntryConflicts( subgraph ) )
             error_count++;
 
-        if( g_ErcSettings->IsTestEnabled( ERCE_BUS_TO_BUS_CONFLICT )
+        if( settings->IsTestEnabled( ERCE_BUS_TO_BUS_CONFLICT )
                 && !ercCheckBusToBusConflicts( subgraph ) )
             error_count++;
 
@@ -1957,8 +1974,8 @@ int CONNECTION_GRAPH::RunERC()
         if( !ercCheckNoConnects( subgraph ) )
             error_count++;
 
-        if( ( g_ErcSettings->IsTestEnabled( ERCE_LABEL_NOT_CONNECTED )
-                || g_ErcSettings->IsTestEnabled( ERCE_GLOBLABEL ) ) && !ercCheckLabels( subgraph ) )
+        if( ( settings->IsTestEnabled( ERCE_LABEL_NOT_CONNECTED )
+                || settings->IsTestEnabled( ERCE_GLOBLABEL ) ) && !ercCheckLabels( subgraph ) )
             error_count++;
     }
 
@@ -2329,8 +2346,10 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
     bool is_global = text->Type() == SCH_GLOBAL_LABEL_T;
 
+    wxCHECK_MSG( m_schematic, true, "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" );
+
     // Global label check can be disabled independently
-    if( !g_ErcSettings->IsTestEnabled( ERCE_GLOBLABEL ) && is_global )
+    if( !m_schematic->ErcSettings()->IsTestEnabled( ERCE_GLOBLABEL ) && is_global )
         return true;
 
     wxString name = text->GetShownText();

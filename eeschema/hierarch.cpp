@@ -33,6 +33,7 @@
 #include <general.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
+#include <schematic.h>
 #include <wx/imaglist.h>
 #include <wx/treectrl.h>
 #include <tool/tool_manager.h>
@@ -95,10 +96,10 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent ) :
     wxTreeItemId root = m_Tree->AddRoot( _( "Root" ), 0, 1 );
     m_Tree->SetItemBold( root, true );
 
-    m_list.push_back( g_RootSheet );
+    m_list.push_back( &m_SchFrameEditor->Schematic().Root() );
     m_Tree->SetItemData( root, new TreeItemData( m_list ) );
 
-    if( m_SchFrameEditor->GetCurrentSheet().Last() == g_RootSheet )
+    if( m_SchFrameEditor->GetCurrentSheet().Last() == &m_SchFrameEditor->Schematic().Root() )
         m_Tree->SelectItem( root );
 
     buildHierarchyTree( &m_list, &root );
@@ -195,7 +196,7 @@ void HIERARCHY_NAVIG_DLG::UpdateHierarchyTree()
     wxTreeItemId root = m_Tree->GetRootItem();
     m_Tree->DeleteChildren( root );
     m_list.clear();
-    m_list.push_back( g_RootSheet );
+    m_list.push_back( &m_SchFrameEditor->Schematic().Root() );
     buildHierarchyTree( &m_list, &root );
 
     Thaw();
@@ -230,7 +231,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
-    SCH_SCREEN* screen = g_CurrentSheet->LastScreen();
+    SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
 
     wxASSERT( screen );
 
@@ -240,7 +241,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     GetScreen()->SetGrid( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 );
 
     // update the References
-    g_CurrentSheet->UpdateAllScreenReferences();
+    GetCurrentSheet().UpdateAllScreenReferences();
     SetSheetNumberAndCount();
 
     if( !screen->m_Initialized )

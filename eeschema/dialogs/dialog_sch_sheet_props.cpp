@@ -32,6 +32,7 @@
 #include <widgets/tab_traversal.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
+#include <schematic.h>
 #include <bitmaps.h>
 #include <eeschema_settings.h>
 #include <settings/color_settings.h>
@@ -168,7 +169,7 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataToWindow()
     m_backgroundSwatch->SetSwatchBackground( canvas );
 
     // set up the read-only fields
-    m_heirarchyPath->SetValue( g_CurrentSheet->PathHumanReadable() );
+    m_heirarchyPath->SetValue( m_frame->GetCurrentSheet().PathHumanReadable() );
     m_textCtrlTimeStamp->SetValue( m_sheet->m_Uuid.AsString() );
 
     Layout();
@@ -356,7 +357,7 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
 
     if( !fileName.IsAbsolute() )
     {
-        const SCH_SCREEN* currentScreen = g_CurrentSheet->LastScreen();
+        const SCH_SCREEN* currentScreen = m_frame->GetCurrentSheet().LastScreen();
         wxCHECK_MSG( currentScreen, false, "Invalid sheet path object." );
 
         wxFileName currentSheetFileName = currentScreen->GetFileName();
@@ -382,7 +383,7 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
 
     // Search for a schematic file having the same filename already in use in the hierarchy
     // or on disk, in order to reuse it.
-    if( !g_RootSheet->SearchHierarchy( newAbsoluteFilename, &useScreen ) )
+    if( !m_frame->Schematic().Root().SearchHierarchy( newAbsoluteFilename, &useScreen ) )
     {
         loadFromFile = wxFileExists( newAbsoluteFilename );
 
@@ -521,6 +522,7 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
     }
 
     wxFileName nativeFileName( aNewFilename );
+    SCH_SHEET_PATH& currentSheet = m_frame->GetCurrentSheet();
 
     if( useScreen )
     {
@@ -531,10 +533,10 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
         tmpSheet->SetScreen( useScreen );
 
         // No need to check for valid library IDs if we are using an existing screen.
-        if( m_frame->CheckSheetForRecursion( tmpSheet.get(), g_CurrentSheet ) )
+        if( m_frame->CheckSheetForRecursion( tmpSheet.get(), &currentSheet ) )
         {
             if( restoreSheet )
-                g_CurrentSheet->LastScreen()->Append( m_sheet );
+                currentSheet.LastScreen()->Append( m_sheet );
 
             return false;
         }
@@ -549,20 +551,20 @@ bool DIALOG_SCH_SHEET_PROPS::onSheetFilenameChanged( const wxString& aNewFilenam
             // Temporarily remove the sheet from the current schematic page so that recursion
             // and symbol library link tests can be performed with the modified sheet settings.
             restoreSheet = true;
-            g_CurrentSheet->LastScreen()->Remove( m_sheet );
+            currentSheet.LastScreen()->Remove( m_sheet );
         }
 
-        if( !m_frame->LoadSheetFromFile( m_sheet, g_CurrentSheet, newAbsoluteFilename )
-                || m_frame->CheckSheetForRecursion( m_sheet, g_CurrentSheet ) )
+        if( !m_frame->LoadSheetFromFile( m_sheet, &currentSheet, newAbsoluteFilename )
+                || m_frame->CheckSheetForRecursion( m_sheet, &currentSheet ) )
         {
             if( restoreSheet )
-                g_CurrentSheet->LastScreen()->Append( m_sheet );
+                currentSheet.LastScreen()->Append( m_sheet );
 
             return false;
         }
 
         if( restoreSheet )
-            g_CurrentSheet->LastScreen()->Append( m_sheet );
+            currentSheet.LastScreen()->Append( m_sheet );
     }
 
     if( m_clearAnnotationNewItems )

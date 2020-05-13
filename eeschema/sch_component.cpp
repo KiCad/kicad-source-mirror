@@ -37,6 +37,7 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
+#include <schematic.h>
 #include <netlist_object.h>
 #include <lib_item.h>
 
@@ -722,12 +723,16 @@ void SCH_COMPONENT::GetPins( std::vector<LIB_PIN*>& aPinsList )
 
 SCH_PIN_PTRS SCH_COMPONENT::GetSchPins( const SCH_SHEET_PATH* aSheet ) const
 {
-    if( aSheet == nullptr )
-        aSheet = g_CurrentSheet;
-
-    // TODO(JE) if this works, consider caching in m_sheet_pins
-    int unit = GetUnitSelection( aSheet );
     SCH_PIN_PTRS ptrs;
+
+    if( aSheet == nullptr )
+    {
+        wxCHECK_MSG( Schematic(), ptrs, "Can't call GetSchPins on a component with no schematic" );
+
+        aSheet = &Schematic()->CurrentSheet();
+    }
+
+    int unit = GetUnitSelection( aSheet );
 
     for( const auto& p : m_pins )
     {
@@ -1160,14 +1165,18 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
 {
     wxString msg;
 
+    SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
+
     // part and alias can differ if alias is not the root
     if( m_part )
     {
         if( m_part.get() != dummy() )
         {
-            if( g_CurrentSheet )
-                aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( g_CurrentSheet ),
-                                                 DARKCYAN ) );
+            if( schframe )
+            {
+                aList.push_back( MSG_PANEL_ITEM(
+                        _( "Reference" ), GetRef( &schframe->GetCurrentSheet() ), DARKCYAN ) );
+            }
 
             msg = m_part->IsPower() ? _( "Power symbol" ) : _( "Value" );
 
@@ -1213,9 +1222,11 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
     }
     else
     {
-        if( g_CurrentSheet )
-            aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( g_CurrentSheet ),
-                                             DARKCYAN ) );
+        if( schframe )
+        {
+            aList.push_back( MSG_PANEL_ITEM(
+                    _( "Reference" ), GetRef( &schframe->GetCurrentSheet() ), DARKCYAN ) );
+        }
 
         aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetField( VALUE )->GetShownText(),
                                          DARKCYAN ) );

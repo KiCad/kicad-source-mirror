@@ -37,6 +37,7 @@
 #include <reporter.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet_path.h>
+#include <schematic.h>
 #include <utf8.h>
 
 
@@ -68,7 +69,7 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
 
     int errors = getPcbModulesFromString( aNetlist );
 
-    SCH_SHEET_LIST sheets( g_RootSheet );
+    SCH_SHEET_LIST sheets = m_frame->Schematic().GetSheets();
     sheets.GetComponents( m_refs, false );
     sheets.GetMultiUnitComponents( m_multiUnitsRefs );
 

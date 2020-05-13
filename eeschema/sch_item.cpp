@@ -35,6 +35,7 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_pin.h>
+#include <schematic.h>
 #include <general.h>
 
 
@@ -46,9 +47,8 @@
 SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType ) :
     EDA_ITEM( aParent, aType )
 {
-    m_Layer = LAYER_WIRE; // It's only a default, in fact
-    m_fieldsAutoplaced = FIELDS_AUTOPLACED_NO;
-
+    m_Layer              = LAYER_WIRE; // It's only a default, in fact
+    m_fieldsAutoplaced   = FIELDS_AUTOPLACED_NO;
     m_connectivity_dirty = true;
 }
 
@@ -56,9 +56,8 @@ SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType ) :
 SCH_ITEM::SCH_ITEM( const SCH_ITEM& aItem ) :
     EDA_ITEM( aItem )
 {
-    m_Layer = aItem.m_Layer;
-    m_fieldsAutoplaced = aItem.m_fieldsAutoplaced;
-
+    m_Layer              = aItem.m_Layer;
+    m_fieldsAutoplaced   = aItem.m_fieldsAutoplaced;
     m_connectivity_dirty = true;
 }
 
@@ -108,6 +107,22 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
     }
 
     return newItem;
+}
+
+
+SCHEMATIC* SCH_ITEM::Schematic() const
+{
+    EDA_ITEM* parent = GetParent();
+
+    while( parent )
+    {
+        if( parent->Type() == SCHEMATIC_T )
+            return static_cast<SCHEMATIC*>( parent );
+        else
+            parent = parent->GetParent();
+    }
+
+    return nullptr;
 }
 
 

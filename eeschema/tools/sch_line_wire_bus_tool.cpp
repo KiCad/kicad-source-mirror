@@ -74,6 +74,7 @@
 #include <sch_sheet_path.h>
 #include <sch_text.h>
 #include <sch_view.h>
+#include <schematic.h>
 
 #include <ee_actions.h>
 #include <ee_point_editor.h>
@@ -131,7 +132,7 @@ private:
             return;
         }
 
-        SCH_CONNECTION* connection = bus->Connection( *g_CurrentSheet );
+        SCH_CONNECTION* connection = bus->Connection( frame->GetCurrentSheet() );
 
         if( !connection ||  !connection->IsBus() || connection->Members().empty() )
         {
@@ -203,9 +204,11 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
         return ( m_frame->IsCurrentTool( EE_ACTIONS::drawLines ) );
     };
 
-    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
-        return g_CurrentSheet->Last() != g_RootSheet;
-    };
+    auto belowRootSheetCondition =
+            [&]( const SELECTION& aSel )
+            {
+                return m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root();
+            };
 
     auto busSelection = EE_CONDITIONS::MoreThan( 0 )
                             && EE_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );

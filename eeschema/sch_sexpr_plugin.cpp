@@ -54,6 +54,7 @@
 #include <sch_text.h>
 #include <sch_sheet.h>
 #include <sch_bitmap.h>
+#include <schematic.h>
 #include <bus_alias.h>
 #include <sch_sexpr_plugin.h>
 #include <template_fieldnames.h>
@@ -418,7 +419,7 @@ void SCH_SEXPR_PLUGIN::init( KIWAY* aKiway, const PROPERTIES* aProperties )
 }
 
 
-SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
+SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCHEMATIC* aSchematic,
                                    SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
     wxASSERT( !aFileName || aKiway != NULL );
@@ -459,10 +460,12 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     m_currentPath.push( m_path );
     init( aKiway, aProperties );
 
+    m_schematic = aSchematic;
+
     if( aAppendToMe == NULL )
     {
         // Clean up any allocated memory if an exception occurs loading the schematic.
-        std::unique_ptr< SCH_SHEET > newSheet( new SCH_SHEET );
+        std::unique_ptr< SCH_SHEET > newSheet( new SCH_SHEET( aSchematic ) );
         newSheet->SetFileName( aFileName );
         m_rootSheet = newSheet.get();
         loadHierarchy( newSheet.get() );
@@ -473,8 +476,8 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     }
     else
     {
-        m_rootSheet = aAppendToMe->GetRootSheet();
-        wxASSERT( m_rootSheet != NULL );
+        wxCHECK_MSG( aSchematic->IsValid(), nullptr, "Can't append to a schematic with no root!" );
+        m_rootSheet = &aSchematic->Root();
         sheet = aAppendToMe;
         loadHierarchy( sheet );
     }
@@ -514,13 +517,14 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         if( screen )
         {
             aSheet->SetScreen( screen );
-
+            aSheet->GetScreen()->SetParent( m_schematic );
             // Do not need to load the sub-sheets - this has already been done.
         }
         else
         {
             aSheet->SetScreen( new SCH_SCREEN( m_kiway ) );
             aSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
+            aSheet->GetScreen()->SetParent( m_schematic );
 
             try
             {

@@ -53,6 +53,7 @@ class RESCUER;
 class SCH_EDIT_FRAME;
 class SCH_LEGACY_PLUGIN;
 class SCH_SHEET_PATH;
+class SCHEMATIC;
 
 
 enum RESCUE_TYPE
@@ -234,6 +235,7 @@ protected:
 
     std::vector<SCH_COMPONENT*> m_components;
     PROJECT* m_prj;
+    SCHEMATIC* m_schematic;
     EDA_DRAW_PANEL_GAL::GAL_TYPE m_galBackEndType;
     SCH_SHEET_PATH* m_currentSheet;
 
@@ -243,7 +245,7 @@ protected:
     std::vector<RESCUE_LOG> m_rescue_log;
 
 public:
-    RESCUER( PROJECT& aProject, SCH_SHEET_PATH* aCurrentSheet,
+    RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic, SCH_SHEET_PATH* aCurrentSheet,
              EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackeEndType );
 
     virtual ~RESCUER()
@@ -299,6 +301,8 @@ public:
      */
     PROJECT* GetPrj() { return m_prj; }
 
+    SCHEMATIC* Schematic() { return m_schematic; }
+
     /**
      * Used by individual #RESCUE_CANDIDATE objects to log a rescue for undoing.
      */
@@ -327,9 +331,9 @@ private:
     std::unique_ptr<PART_LIB> m_rescue_lib;
 
 public:
-    LEGACY_RESCUER( PROJECT& aProject, SCH_SHEET_PATH* aCurrentSheet,
+    LEGACY_RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic, SCH_SHEET_PATH* aCurrentSheet,
                     EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType ) :
-        RESCUER( aProject, aCurrentSheet, aGalBackEndType )
+        RESCUER( aProject, aSchematic, aCurrentSheet, aGalBackEndType )
     {
     }
 
@@ -357,7 +361,8 @@ private:
     std::unique_ptr< PROPERTIES > m_properties;   ///< Library plugin properties
 
 public:
-    SYMBOL_LIB_TABLE_RESCUER( PROJECT& aProject, SCH_SHEET_PATH* aCurrentSheet,
+    SYMBOL_LIB_TABLE_RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic,
+                              SCH_SHEET_PATH* aCurrentSheet,
                               EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackeEndType );
 
     virtual ~SYMBOL_LIB_TABLE_RESCUER()

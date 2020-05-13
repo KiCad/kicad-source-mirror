@@ -35,10 +35,10 @@
 #include <lib_view_frame.h>
 #include <project_rescue.h>
 #include <sch_io_mgr.h>
-#include <sch_sheet.h>
 #include <sch_component.h>
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
+#include <schematic.h>
 #include <symbol_lib_table.h>
 #include <env_paths.h>
 
@@ -46,7 +46,8 @@
 
 
 DIALOG_SYMBOL_REMAP::DIALOG_SYMBOL_REMAP( SCH_EDIT_FRAME* aParent ) :
-    DIALOG_SYMBOL_REMAP_BASE( aParent )
+    DIALOG_SYMBOL_REMAP_BASE( aParent ),
+    m_frame( aParent )
 {
     m_remapped = false;
 
@@ -87,7 +88,8 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     // Ignore the never show rescue setting for one last rescue of legacy symbol
     // libraries before remapping to the symbol library table.  This ensures the
     // best remapping results.
-    LEGACY_RESCUER rescuer( Prj(), &parent->GetCurrentSheet(), parent->GetCanvas()->GetBackend() );
+    LEGACY_RESCUER rescuer( Prj(), &parent->Schematic(), &parent->GetCurrentSheet(),
+            parent->GetCanvas()->GetBackend() );
 
     if( RESCUER::RescueProject( this, rescuer, false ) )
     {
@@ -241,7 +243,7 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
 void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
 {
     wxString msg;
-    SCH_SCREENS schematic;
+    SCH_SCREENS schematic( m_frame->Schematic().Root() );
     SCH_COMPONENT* symbol;
     SCH_SCREEN* screen;
 
@@ -327,7 +329,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     wxFileName srcFileName;
     wxFileName destFileName;
     wxFileName backupPath;
-    SCH_SCREENS schematic;
+    SCH_SCREENS schematic( m_frame->Schematic().Root() );
 
     // Copy backup files to different folder so as not to pollute the project folder.
     destFileName.SetPath( Prj().GetProjectPath() );

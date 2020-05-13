@@ -54,6 +54,7 @@ class SCH_NO_CONNECT;
 class SCH_LINE;
 class SCH_BUS_ENTRY_BASE;
 class SCH_BITMAP;
+class SCHEMATIC;
 
 namespace KIGFX
 {
@@ -143,6 +144,11 @@ public:
         return &m_schSettings;
     }
 
+    void SetSchematic( SCHEMATIC* aSchematic )
+    {
+        m_schematic = aSchematic;
+    }
+
 private:
 	void draw( LIB_RECTANGLE* aRect, int aLayer );
 	void draw( LIB_PIN* aPin, int aLayer );
@@ -190,6 +196,8 @@ private:
     void strokeText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle );
 
     SCH_RENDER_SETTINGS m_schSettings;
+
+    SCHEMATIC* m_schematic;
 };
 
 }; // namespace KIGFX

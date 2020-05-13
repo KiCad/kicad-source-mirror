@@ -34,6 +34,7 @@
 #include <sch_component.h>
 #include <sch_text.h>
 #include <sch_sheet.h>
+#include <schematic.h>
 
 /**
  * UNIQUE_STRINGS
@@ -101,6 +102,9 @@ protected:
 
     /// unique library parts used. LIB_PART items are sorted by names
     std::set<LIB_PART*, LIB_PART_LESS_THAN> m_LibParts;
+
+    /// The schematic we're generating a netlist for
+    SCHEMATIC* m_schematic;
 
     /**
      * Function sprintPinNetName
@@ -171,8 +175,9 @@ public:
      * @param aMasterList we take ownership of this here.
      * @param aLibTable is the symbol library table of the project.
      */
-    NETLIST_EXPORTER( NETLIST_OBJECT_LIST* aMasterList ) :
-        m_masterList( aMasterList )
+    NETLIST_EXPORTER( NETLIST_OBJECT_LIST* aMasterList, SCHEMATIC* aSchematic ) :
+        m_masterList( aMasterList ),
+        m_schematic( aSchematic )
     {
         wxASSERT( aMasterList );
     }

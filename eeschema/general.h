@@ -27,15 +27,10 @@
 
 #include <gal/color4d.h>
 #include <layers_id_colors_and_visibility.h>
-#include <erc_settings.h>
 
 using KIGFX::COLOR4D;
 
-class CONNECTION_GRAPH;
 class TRANSFORM;
-class SCH_SHEET;
-class SCH_SHEET_PATH;
-class ERC_SETTINGS;
 
 #define EESCHEMA_VERSION 5
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
@@ -47,28 +42,5 @@ class ERC_SETTINGS;
  * the Y coordinate and keeps the X coordiate
  */
 extern TRANSFORM DefaultTransform;
-
-/* First and main (root) screen */
-extern SCH_SHEET*   g_RootSheet;
-
-/**
- * With the new connectivity algorithm, many more places than before want to
- * know what the current sheet is.  This was moved here from SCH_EDIT_FRAME
- * but we could refactor things to get rid of this global.
- */
-extern SCH_SHEET_PATH* g_CurrentSheet;    ///< which sheet we are presently working on.
-
-/**
- * This also wants to live in the eventual SCHEMATIC object
- */
-extern CONNECTION_GRAPH* g_ConnectionGraph;
-
-/**
- * This also wants to live in the eventual SCHEMATIC object
- */
-extern ERC_SETTINGS* g_ErcSettings;
-
-int GetSeverity( int aErrorCode );
-void SetSeverity( int aErrorCode, int aSeverity );
 
 #endif    // _GENERAL_H_

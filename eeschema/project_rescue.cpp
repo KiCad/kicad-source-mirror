@@ -33,6 +33,7 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_edit_frame.h>
+#include <schematic.h>
 #include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
 
@@ -59,9 +60,9 @@ static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
  *
  * @param aComponents - a vector that will take the symbols
  */
-static void get_components( std::vector<SCH_COMPONENT*>& aComponents )
+static void get_components( SCHEMATIC* aSchematic, std::vector<SCH_COMPONENT*>& aComponents )
 {
-    SCH_SCREENS screens;
+    SCH_SCREENS screens( aSchematic->Root() );
 
     // Get the full list
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
@@ -108,9 +109,9 @@ static LIB_PART* find_component( const wxString& aName, PART_LIBS* aLibs, bool a
 }
 
 
-static wxFileName GetRescueLibraryFileName()
+static wxFileName GetRescueLibraryFileName( SCHEMATIC* aSchematic )
 {
-    wxFileName fn( g_RootSheet->GetScreen()->GetFileName() );
+    wxFileName fn = aSchematic->GetFileName();
     fn.SetName( fn.GetName() + wxT( "-rescue" ) );
     fn.SetExt( SchematicLibraryFileExtension );
     return fn;
@@ -429,7 +430,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
 
             // Differentiate symbol name in the rescue library by appending the symbol library
             // table nickname to the symbol name to prevent name clashes in the rescue library.
-            wxString libNickname = GetRescueLibraryFileName().GetName();
+            wxString libNickname = GetRescueLibraryFileName( aRescuer.Schematic() ).GetName();
 
             // Spaces in the file name will break the symbol name because they are not
             // quoted in the symbol library file format.
@@ -495,10 +496,14 @@ bool RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 }
 
 
-RESCUER::RESCUER( PROJECT& aProject, SCH_SHEET_PATH* aCurrentSheet,
+RESCUER::RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic, SCH_SHEET_PATH* aCurrentSheet,
                   EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType )
 {
-    get_components( m_components );
+    m_schematic = aSchematic ? aSchematic : aCurrentSheet->LastScreen()->Schematic();
+
+    wxASSERT( m_schematic );
+
+    get_components( m_schematic, m_components );
     m_prj = &aProject;
     m_currentSheet = aCurrentSheet;
     m_galBackEndType = aGalBackEndType;
@@ -634,7 +639,7 @@ void LEGACY_RESCUER::InvokeDialog( wxWindow* aParent, bool aAskShowAgain )
 
 void LEGACY_RESCUER::OpenRescueLibrary()
 {
-    wxFileName fn = GetRescueLibraryFileName();
+    wxFileName fn = GetRescueLibraryFileName( m_schematic );
 
     std::unique_ptr<PART_LIB> rescue_lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, fn.GetFullPath() ) );
 
@@ -736,10 +741,8 @@ bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     m_prj->SetElem( PROJECT::ELEM_SCH_PART_LIBS, libs );
 
     // Update the schematic symbol library links since the library list has changed.
-    SCH_SCREENS schematic;
-
+    SCH_SCREENS schematic( m_schematic->Root() );
     schematic.UpdateSymbolLinks();
-
     return true;
 }
 
@@ -753,10 +756,10 @@ void LEGACY_RESCUER::AddPart( LIB_PART* aNewPart )
 }
 
 
-SYMBOL_LIB_TABLE_RESCUER::SYMBOL_LIB_TABLE_RESCUER( PROJECT& aProject,
+SYMBOL_LIB_TABLE_RESCUER::SYMBOL_LIB_TABLE_RESCUER( PROJECT& aProject, SCHEMATIC* aSchematic,
                                                     SCH_SHEET_PATH* aCurrentSheet,
                                                     EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType ) :
-    RESCUER( aProject, aCurrentSheet, aGalBackEndType )
+    RESCUER( aProject, aSchematic, aCurrentSheet, aGalBackEndType )
 {
     m_properties = std::make_unique<PROPERTIES>();
 }
@@ -785,7 +788,7 @@ void SYMBOL_LIB_TABLE_RESCUER::OpenRescueLibrary()
 bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 {
     wxString msg;
-    wxFileName fn = GetRescueLibraryFileName();
+    wxFileName fn = GetRescueLibraryFileName( m_schematic );
 
     // If the rescue library already exists in the symbol library table no need save it to add
     // it to the table.
@@ -835,8 +838,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
         return false;
 
     // Update the schematic symbol library links since the library list has changed.
-    SCH_SCREENS schematic;
-
+    SCH_SCREENS schematic( m_schematic->Root() );
     schematic.UpdateSymbolLinks();
     return true;
 }
@@ -846,7 +848,7 @@ void SYMBOL_LIB_TABLE_RESCUER::AddPart( LIB_PART* aNewPart )
 {
     wxCHECK_RET( aNewPart, "Invalid LIB_PART pointer." );
 
-    wxFileName fn = GetRescueLibraryFileName();
+    wxFileName fn = GetRescueLibraryFileName( m_schematic );
 
     try
     {

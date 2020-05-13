@@ -42,6 +42,7 @@
 #include <sch_edit_frame.h>
 #include <sch_junction.h>
 #include <sch_painter.h>
+#include <schematic.h>
 #include <settings/app_settings.h>
 #include <settings/settings_manager.h>
 #include <symbol_lib_table.h>
@@ -207,35 +208,6 @@ public:
 };
 
 
-int GetSeverity( int aErrorCode )
-{
-    // Special-case pin-to-pin errors:
-    // Ignore-or-not is controlled by ERCE_PIN_TO_PIN_WARNING (for both)
-    // Warning-or-error is controlled by which errorCode it is
-    if( aErrorCode == ERCE_PIN_TO_PIN_ERROR )
-    {
-        if( g_ErcSettings->m_Severities[ ERCE_PIN_TO_PIN_WARNING ] == RPT_SEVERITY_IGNORE )
-            return RPT_SEVERITY_IGNORE;
-        else
-            return RPT_SEVERITY_ERROR;
-    }
-    else if( aErrorCode == ERCE_PIN_TO_PIN_WARNING )
-    {
-        if( g_ErcSettings->m_Severities[ ERCE_PIN_TO_PIN_WARNING ] == RPT_SEVERITY_IGNORE )
-            return RPT_SEVERITY_IGNORE;
-        else
-            return RPT_SEVERITY_WARNING;
-    }
-
-    return g_ErcSettings->m_Severities[ aErrorCode ];
-}
-
-void SetSeverity( int aErrorCode, int aSeverity )
-{
-    g_ErcSettings->m_Severities[ aErrorCode ] = aSeverity;
-}
-
-
 /// Helper for all the old plotting/printing code while it still exists
 COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
 {
@@ -327,7 +299,7 @@ std::vector<PARAM_CFG*>& SCH_EDIT_FRAME::GetProjectFileParameters()
 
     params.push_back( new PARAM_CFG_FIELDNAMES( &m_templateFieldNames ) );
 
-    params.push_back( new PARAM_CFG_SEVERITIES( g_ErcSettings ) );
+    params.push_back( new PARAM_CFG_SEVERITIES( Schematic().ErcSettings() ) );
 
     return params;
 }
@@ -393,7 +365,7 @@ void SCH_EDIT_FRAME::DoShowSchematicSetupDialog( const wxString& aInitialPage,
 void SCH_EDIT_FRAME::SaveProjectSettings()
 {
     PROJECT&        prj = Prj();
-    wxFileName      fn = g_RootSheet->GetScreen()->GetFileName();  //ConfigFileName
+    wxFileName      fn = Schematic().RootScreen()->GetFileName();  //ConfigFileName
 
     fn.SetExt( ProjectFileExtension );
 

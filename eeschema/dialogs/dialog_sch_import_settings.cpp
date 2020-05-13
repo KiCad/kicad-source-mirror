@@ -25,6 +25,7 @@
 #include <sch_edit_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
+#include <schematic.h>
 
 #include <dialog_sch_import_settings.h>
 
@@ -54,7 +55,7 @@ bool DIALOG_SCH_IMPORT_SETTINGS::TransferDataToWindow()
 
 void DIALOG_SCH_IMPORT_SETTINGS::OnBrowseClicked( wxCommandEvent& event )
 {
-    wxFileName fn = g_RootSheet->GetFileName();
+    wxFileName fn = m_frame->Schematic().Root().GetFileName();
     fn.SetExt( ProjectFileExtension );
 
     wxFileDialog dlg( this, _( "Import Settings From" ), fn.GetPath(), fn.GetFullName(),

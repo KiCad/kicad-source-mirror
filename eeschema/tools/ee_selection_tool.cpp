@@ -43,6 +43,7 @@
 #include <sch_item.h>
 #include <sch_line.h>
 #include <sch_sheet.h>
+#include <schematic.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_line_wire_bus_tool.h>
@@ -163,12 +164,21 @@ bool EE_SELECTION_TOOL::Init()
     auto schEditCondition = [this] ( const SELECTION& aSel ) {
         return !m_isLibEdit && !m_isLibView;
     };
-    auto belowRootSheetCondition = [this] ( const SELECTION& aSel ) {
-        return !m_isLibEdit && !m_isLibView && g_CurrentSheet->Last() != g_RootSheet;
-    };
-    auto havePartCondition = [ this ] ( const SELECTION& sel ) {
-        return m_isLibEdit && ( (LIB_EDIT_FRAME*) m_frame )->GetCurPart();
-    };
+    auto belowRootSheetCondition =
+            [&]( const SELECTION& aSel )
+            {
+                SCH_EDIT_FRAME* schEditFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+                return ( schEditFrame&&
+                         schEditFrame->GetCurrentSheet().Last() !=
+                         &schEditFrame->Schematic().Root() );
+            };
+
+    auto havePartCondition =
+            [&]( const SELECTION& sel )
+            {
+                return m_isLibEdit && libEditFrame->GetCurPart();
+            };
 
     auto& menu = m_menu.GetMenu();
 
@@ -315,7 +325,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
-            m_frame->FocusOnItem( nullptr );
+            if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+                schframe->FocusOnItem( nullptr );
 
             SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr, false,
                          m_additive, m_subtractive, m_exclusive_or );
@@ -341,7 +352,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // double click? Display the properties window
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
-            m_frame->FocusOnItem( nullptr );
+            if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+                schframe->FocusOnItem( nullptr );
 
             if( m_selection.Empty() )
                 SelectPoint( evt->Position());
@@ -357,7 +369,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
-            m_frame->FocusOnItem( nullptr );
+            if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+                schframe->FocusOnItem( nullptr );
 
             if( m_additive || m_subtractive || m_exclusive_or || m_frame->GetDragSelects() )
             {
@@ -412,14 +425,16 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( evt->IsCancelInteractive() )
         {
-            m_frame->FocusOnItem( nullptr );
+            if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+                schframe->FocusOnItem( nullptr );
 
             ClearSelection();
         }
 
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
-            m_frame->FocusOnItem( nullptr );
+            if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+                schframe->FocusOnItem( nullptr );
 
             ClearSelection();
         }
@@ -1244,14 +1259,18 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
     // represented in the LIB_PART and will inherit the settings of the parent component.)
     if( itemType == SCH_COMPONENT_T )
     {
-        SCH_PIN_PTRS pins = static_cast<SCH_COMPONENT*>( aItem )->GetSchPins( g_CurrentSheet );
-
-        for( SCH_PIN* pin : pins )
+        if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
         {
-            if( aMode == SELECTED )
-                pin->SetSelected();
-            else if( aMode == BRIGHTENED )
-                pin->SetBrightened();
+            SCH_PIN_PTRS pins = static_cast<SCH_COMPONENT*>( aItem )->GetSchPins(
+                    &schframe->GetCurrentSheet() );
+
+            for( SCH_PIN* pin : pins )
+            {
+                if( aMode == SELECTED )
+                    pin->SetSelected();
+                else if( aMode == BRIGHTENED )
+                    pin->SetBrightened();
+            }
         }
 
         for( SCH_FIELD& field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )
@@ -1304,14 +1323,18 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
     // represented in the LIB_PART.)
     if( itemType == SCH_COMPONENT_T )
     {
-        SCH_PIN_PTRS pins = static_cast<SCH_COMPONENT*>( aItem )->GetSchPins( g_CurrentSheet );
-
-        for( SCH_PIN* pin : pins )
+        if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
         {
-            if( aMode == SELECTED )
-                pin->ClearSelected();
-            else if( aMode == BRIGHTENED )
-                pin->ClearBrightened();
+            SCH_PIN_PTRS pins = static_cast<SCH_COMPONENT*>( aItem )->GetSchPins(
+                    &schframe->GetCurrentSheet() );
+
+            for( SCH_PIN* pin : pins )
+            {
+                if( aMode == SELECTED )
+                    pin->ClearSelected();
+                else if( aMode == BRIGHTENED )
+                    pin->ClearBrightened();
+            }
         }
 
         for( SCH_FIELD& field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )

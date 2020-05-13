@@ -234,7 +234,7 @@ class SCH_SHEET : public SCH_ITEM
     KIGFX::COLOR4D              m_backgroundColor;
 
 public:
-    SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );
+    SCH_SHEET( EDA_ITEM* aParent = nullptr, const wxPoint& pos = wxPoint( 0, 0 ) );
 
     /**
      * Copy \a aSheet into a new object.  All sheet pins are copied as is except and
@@ -253,8 +253,6 @@ public:
     {
         return wxT( "SCH_SHEET" );
     }
-
-    virtual void SetParent( EDA_ITEM* aSheet ) override;
 
     /**
      * Return true for items which are moved with the anchor point at mouse cursor
@@ -281,7 +279,7 @@ public:
 
     wxString GetName() const { return m_fields[ SHEETNAME ].GetText(); }
 
-    SCH_SCREEN* GetScreen() { return m_screen; }
+    SCH_SCREEN* GetScreen() const { return m_screen; }
 
     wxSize GetSize() { return m_size; }
     void SetSize( const wxSize& aSize ) { m_size = aSize; }
@@ -308,20 +306,9 @@ public:
     bool UsesDefaultStroke() const;
 
     /**
-     * Return the root sheet of this SCH_SHEET object.
-     *
-     * The root (top level) sheet can be found by walking up the parent links until the only
-     * sheet that has no parent is found.  The root sheet can be found from any sheet without
-     * having to maintain a global root sheet pointer.
-     *
-     * @return a SCH_SHEET pointer to the root sheet.
-     */
-    SCH_SHEET* GetRootSheet();
-
-    /**
      * @return true if this sheet is the root sheet.
      */
-    bool IsRootSheet() { return GetRootSheet() == this; }
+    bool IsRootSheet() const;
 
     /**
      * Set the #SCH_SCREEN associated with this sheet to \a aScreen.
@@ -494,7 +481,7 @@ public:
      *
      * @return the full count of sheets+subsheets contained by "this"
      */
-    int CountSheets();
+    int CountSheets() const;
 
     /**
      * Return the filename corresponding to this sheet.

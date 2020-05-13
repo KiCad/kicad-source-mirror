@@ -157,6 +157,8 @@ public:
 
     ~SCH_SCREEN();
 
+    SCHEMATIC* Schematic() const;
+
     EE_RTREE& Items()
     {
         return m_rtree;
@@ -534,17 +536,6 @@ public:
         return m_aliases;
     }
 
-    /**
-     * Returns true if the given string is a valid bus alias in a loaded screen
-     */
-    static bool IsBusAlias( const wxString& aLabel );
-
-    /**
-     * Returns a pointer to a bus alias object for the given label,
-     * or null if one doesn't exist
-     */
-    static std::shared_ptr<BUS_ALIAS> GetBusAlias( const wxString& aLabel );
-
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
@@ -555,6 +546,10 @@ public:
  * Container class that holds multiple #SCH_SCREEN objects in a hierarchy.
  *
  * Individual #SCH_SCREEN objects are unique and correspond to .sch files.
+ *
+ * NOTE: It may be desirable to fold the functionality of SCH_SCREENS into
+ * the new SCHEMATIC class at some point, since SCHEMATIC can also be thought
+ * of as owning the collection of all the SCH_SCREEN objects.
  */
 class SCH_SCREENS
 {
@@ -564,7 +559,8 @@ private:
     unsigned int               m_index;
 
 public:
-    SCH_SCREENS( SCH_SHEET* aSheet = NULL );
+    SCH_SCREENS( SCH_SHEET* aSheet );
+    SCH_SCREENS( SCH_SHEET& aSheet ) : SCH_SCREENS( &aSheet ) {}
     ~SCH_SCREENS();
     size_t GetCount() const { return m_screens.size(); }
     SCH_SCREEN* GetFirst();

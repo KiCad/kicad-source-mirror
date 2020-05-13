@@ -47,8 +47,8 @@ void SCH_PLUGIN::SaveLibrary( const wxString& aFileName, const PROPERTIES* aProp
 }
 
 
-SCH_SHEET* SCH_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCH_SHEET* aAppendToMe,
-                             const PROPERTIES* aProperties )
+SCH_SHEET* SCH_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCHEMATIC* aSchematic,
+                             SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
     not_implemented( this, __FUNCTION__ );
     return NULL;

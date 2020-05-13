@@ -91,8 +91,8 @@ public:
 
     int GetModifyHash() const override;
 
-    SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway, SCH_SHEET* aAppendToMe = NULL,
-                     const PROPERTIES* aProperties = NULL ) override;
+    SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway, SCHEMATIC* aSchematic,
+                     SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL ) override;
 
     bool CheckHeader( const wxString& aFileName ) override;
 
@@ -188,6 +188,7 @@ private:
     wxString m_version; ///< Eagle file version.
     wxFileName m_filename;
     wxString m_libName; ///< Library name to save symbols
+    SCHEMATIC* m_schematic;   ///< Passed to Load(), the schematic object being loaded
 
     EPART_MAP m_partlist;
     std::map<wxString, EAGLE_LIBRARY> m_eagleLibs;

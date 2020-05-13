@@ -30,6 +30,7 @@
 #include <sch_edit_frame.h>
 #include <sch_line.h>
 #include <sch_sheet.h>
+#include <schematic.h>
 #include <advanced_config.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
@@ -179,7 +180,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     else if( selection.GetSize() )
     {
         SCH_ITEM* sch_item = (SCH_ITEM*) selection.Front();
-        SCH_CONNECTION* connection = sch_item->Connection( *g_CurrentSheet );
+        SCH_CONNECTION* connection = sch_item->Connection( m_parent->GetCurrentSheet() );
 
         if( connection )
             m_netFilter->SetValue( connection->Name() );
@@ -430,10 +431,8 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     if( !m_textSize.Validate( Mils2iu( 1 ), Mils2iu( 10000 ) ) )  // 1 mil .. 10 inches
         return false;
 
-    SCH_SHEET_LIST aSheets( g_RootSheet );
-
     // Go through sheets
-    for( const SCH_SHEET_PATH& sheetPath : aSheets )
+    for( const SCH_SHEET_PATH& sheetPath : m_parent->Schematic().GetSheets() )
     {
         SCH_SCREEN* screen = sheetPath.LastScreen();
 

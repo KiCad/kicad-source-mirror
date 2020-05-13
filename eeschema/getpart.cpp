@@ -214,7 +214,7 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_COMPONENT* aComponent, int aUnit )
         SaveCopyInUndoList( aComponent, UR_CHANGED );
 
     /* Update the unit number. */
-    aComponent->SetUnitSelection( g_CurrentSheet, aUnit );
+    aComponent->SetUnitSelection( &GetCurrentSheet(), aUnit );
     aComponent->SetUnit( aUnit );
     aComponent->ClearFlags();
     aComponent->SetFlags( savedFlags ); // Restore m_Flag modified by SetUnit()

@@ -36,6 +36,7 @@
 #include <refdes_utils.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
+#include <schematic.h>
 #include <tools/sch_editor_control.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
@@ -678,8 +679,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     wxSize defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
 
     // Get all components from the list of schematic sheets
-    SCH_SHEET_LIST sheets( g_RootSheet );
-    sheets.GetComponents( m_componentRefs, false );
+    m_parent->Schematic().GetSheets().GetComponents( m_componentRefs, false );
 
     m_bRefresh->SetBitmap( KiBitmap( refresh_xpm ) );
 

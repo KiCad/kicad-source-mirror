@@ -48,8 +48,8 @@ class NETLIST_EXPORTER_CADSTAR : public NETLIST_EXPORTER
     bool writeListOfNets( FILE* f );
 
 public:
-    NETLIST_EXPORTER_CADSTAR( NETLIST_OBJECT_LIST* aMasterList ) :
-        NETLIST_EXPORTER( aMasterList )
+    NETLIST_EXPORTER_CADSTAR( NETLIST_OBJECT_LIST* aMasterList, SCHEMATIC* aSchematic ) :
+        NETLIST_EXPORTER( aMasterList, aSchematic )
     {
     }
 

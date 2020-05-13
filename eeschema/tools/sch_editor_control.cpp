@@ -43,6 +43,7 @@
 #include <sch_painter.h>
 #include <sch_sheet.h>
 #include <sch_view.h>
+#include <schematic.h>
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
 #include <simulation_cursors.h>
@@ -115,7 +116,7 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::RescueSymbols( const TOOL_EVENT& aEvent )
 {
-    SCH_SCREENS schematic;
+    SCH_SCREENS schematic( m_frame->Schematic().Root() );
 
     if( schematic.HasNoFullyDefinedLibIds() )
         RescueLegacyProject( true );
@@ -128,7 +129,7 @@ int SCH_EDITOR_CONTROL::RescueSymbols( const TOOL_EVENT& aEvent )
 
 bool SCH_EDITOR_CONTROL::RescueLegacyProject( bool aRunningOnDemand )
 {
-    LEGACY_RESCUER rescuer( m_frame->Prj(), &m_frame->GetCurrentSheet(),
+    LEGACY_RESCUER rescuer( m_frame->Prj(), &m_frame->Schematic(), &m_frame->GetCurrentSheet(),
                             m_frame->GetCanvas()->GetBackend() );
 
     return rescueProject( rescuer, aRunningOnDemand );
@@ -137,7 +138,8 @@ bool SCH_EDITOR_CONTROL::RescueLegacyProject( bool aRunningOnDemand )
 
 bool SCH_EDITOR_CONTROL::RescueSymbolLibTableProject( bool aRunningOnDemand )
 {
-    SYMBOL_LIB_TABLE_RESCUER rescuer( m_frame->Prj(), &m_frame->GetCurrentSheet(),
+    SYMBOL_LIB_TABLE_RESCUER rescuer( m_frame->Prj(), &m_frame->Schematic(),
+                                      &m_frame->GetCurrentSheet(),
                                       m_frame->GetCanvas()->GetBackend() );
 
     return rescueProject( rescuer, aRunningOnDemand );
@@ -158,10 +160,9 @@ bool SCH_EDITOR_CONTROL::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand
 
         if( aRunningOnDemand )
         {
-            SCH_SCREENS schematic;
+            SCH_SCREENS schematic( m_frame->Schematic().Root() );
 
             schematic.UpdateSymbolLinks();
-            g_ConnectionGraph->Reset();
             m_frame->RecalculateConnections( GLOBAL_CLEANUP );
         }
 
@@ -191,7 +192,7 @@ int SCH_EDITOR_CONTROL::Print( const TOOL_EVENT& aEvent )
 {
     InvokeDialogPrintUsingPrinter( m_frame );
 
-    wxFileName fn = m_frame->Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
+    wxFileName fn = m_frame->Prj().AbsolutePath( m_frame->Schematic().RootScreen()->GetFileName() );
 
     if( fn.GetName() != NAMELESS_PROJECT )
         m_frame->SaveProjectSettings();
@@ -409,8 +410,8 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 
     if( !item && searchAllSheets )
     {
-        SCH_SHEET_LIST schematic( g_RootSheet );
-        SCH_SCREENS    screens;
+        SCH_SHEET_LIST schematic = m_frame->Schematic().GetSheets();
+        SCH_SCREENS    screens( m_frame->Schematic().Root() );
 
         for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         {
@@ -429,8 +430,8 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
                 SCH_SHEET_PATH* sheet = schematic.FindSheetForScreen( screen );
                 wxCHECK_MSG( sheet, 0, "Sheet not found for " + screen->GetFileName() );
 
-                *g_CurrentSheet = *sheet;
-                g_CurrentSheet->UpdateAllScreenReferences();
+                m_frame->Schematic().SetCurrentSheet( *sheet );
+                m_frame->GetCurrentSheet().UpdateAllScreenReferences();
 
                 screen->SetZoom( m_frame->GetScreen()->GetZoom() );
                 screen->TestDanglingEnds();
@@ -481,7 +482,7 @@ int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 
     if( item && item->Matches( *data, nullptr ) )
     {
-        if( item->Replace( *data, g_CurrentSheet ) )
+        if( item->Replace( *data, &m_frame->GetCurrentSheet() ) )
         {
             m_frame->RefreshItem( item );
             m_frame->OnModify();
@@ -501,8 +502,8 @@ int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
     if( !data )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
 
-    SCH_SHEET_LIST schematic( g_RootSheet );
-    SCH_SCREENS    screens;
+    SCH_SHEET_LIST schematic = m_frame->Schematic().GetSheets();
+    SCH_SCREENS    screens( m_frame->Schematic().Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
@@ -663,7 +664,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 else
                     param = wxString::Format( wxT( "I%s" ), pin->GetName().Lower() );
 
-                simFrame->AddCurrentPlot( comp->GetRef( g_CurrentSheet ), param );
+                simFrame->AddCurrentPlot( comp->GetRef( &m_frame->GetCurrentSheet() ), param );
             }
 
             return true;
@@ -687,8 +688,8 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             {
                 item = nullptr;
 
-                if( wire->Connection( *g_CurrentSheet ) )
-                    netName = wire->Connection( *g_CurrentSheet )->Name();
+                if( wire->Connection( m_frame->GetCurrentSheet() ) )
+                    netName = wire->Connection( m_frame->GetCurrentSheet() )->Name();
             }
 
             if( item && item->Type() == SCH_PIN_T )
@@ -828,7 +829,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
     if( aPosition != CLEAR )
     {
-        if( TestDuplicateSheetNames( false ) > 0 )
+        if( TestDuplicateSheetNames( &editFrame->Schematic(), false ) > 0 )
         {
             wxMessageBox( _( "Error: duplicate sub-sheet names found in current sheet." ) );
             retVal = false;
@@ -848,8 +849,8 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
             if( comp && comp->GetPartRef() && comp->GetPartRef()->IsPower() )
                 netName = comp->GetPartRef()->GetName();
-            else if( item && item->Connection( *g_CurrentSheet ) )
-                netName = item->Connection( *g_CurrentSheet )->Name();
+            else if( item && item->Connection( editFrame->GetCurrentSheet() ) )
+                netName = item->Connection( editFrame->GetCurrentSheet() )->Name();
         }
     }
 
@@ -894,7 +895,7 @@ int SCH_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 {
-    SCH_SCREEN*            screen = g_CurrentSheet->LastScreen();
+    SCH_SCREEN*            screen = m_frame->GetCurrentSheet().LastScreen();
     std::vector<EDA_ITEM*> itemsToRedraw;
     wxString               selectedNetName = m_frame->GetSelectedNetName();
 
@@ -916,7 +917,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         }
         else
         {
-            SCH_CONNECTION* connection = item->Connection( *g_CurrentSheet );
+            SCH_CONNECTION* connection = item->Connection( m_frame->GetCurrentSheet() );
 
             if( connection )
                 itemConnectionName = connection->Name();
@@ -939,7 +940,8 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
             for( LIB_PIN* pin : pins )
             {
-                SCH_CONNECTION* pin_conn = comp->GetConnectionForPin( pin, *g_CurrentSheet );
+                SCH_CONNECTION* pin_conn =
+                        comp->GetConnectionForPin( pin, m_frame->GetCurrentSheet() );
 
                 if( comp && pin_conn && pin_conn->Name( false ) == selectedNetName )
                 {
@@ -965,7 +967,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         {
             for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
             {
-                SCH_CONNECTION* pin_conn = pin->Connection( *g_CurrentSheet );
+                SCH_CONNECTION* pin_conn = pin->Connection( m_frame->GetCurrentSheet() );
                 bool            redrawPin = pin->IsBrightened();
 
                 if( pin_conn && pin_conn->Name() == selectedNetName )
@@ -1214,10 +1216,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // SCH_SEXP_PLUGIN added the items to the paste screen, but not to the view or anything
     // else.  Pull them back out to start with.
     //
-    EDA_ITEMS      loadedItems;
-    bool           sheetsPasted = false;
-    SCH_SHEET_LIST hierarchy( g_RootSheet );
-    wxFileName     destFn = g_CurrentSheet->Last()->GetFileName();
+    EDA_ITEMS       loadedItems;
+    bool            sheetsPasted = false;
+    SCH_SHEET_LIST  hierarchy    = m_frame->Schematic().GetSheets();
+    SCH_SHEET_PATH& currentSheet = m_frame->GetCurrentSheet();
+    wxFileName      destFn       = currentSheet.Last()->GetFileName();
 
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( m_frame->Prj().GetProjectPath() );
@@ -1304,31 +1307,32 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         if( item->Type() == SCH_SHEET_T )
         {
-            SCH_SHEET*  sheet = (SCH_SHEET*) item;
-            SCH_FIELD&  nameField = sheet->GetFields()[SHEETNAME];
-            wxFileName  fn = sheet->GetFileName();
-            SCH_SCREEN* existingScreen = nullptr;
-            bool        dropSheetAnnotations = false;
-            wxString    baseName = nameField.GetText();
-            wxString    candidateName = baseName;
-            int         uniquifier = 1;
+            SCH_SHEET*      sheet                = (SCH_SHEET*) item;
+            SCH_FIELD&      nameField            = sheet->GetFields()[SHEETNAME];
+            wxFileName      fn                   = sheet->GetFileName();
+            SCH_SCREEN*     existingScreen       = nullptr;
+            bool            dropSheetAnnotations = false;
+            wxString        baseName             = nameField.GetText();
+            wxString        candidateName        = baseName;
+            int             uniquifier           = 1;
 
             while( hierarchy.NameExists( candidateName ) )
                 candidateName = wxString::Format( wxT( "%s%d" ), baseName, uniquifier++ );
 
             nameField.SetText( candidateName );
 
-            sheet->SetParent( g_CurrentSheet->Last() );
+            sheet->SetParent( currentSheet.Last() );
             sheet->SetScreen( nullptr );
             sheetsPasted = true;
 
             if( !fn.IsAbsolute() )
             {
-                wxFileName currentSheetFileName = g_CurrentSheet->LastScreen()->GetFileName();
+                wxFileName currentSheetFileName = currentSheet.LastScreen()->GetFileName();
                 fn.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() );
             }
 
-            if( g_RootSheet->SearchHierarchy( fn.GetFullPath( wxPATH_UNIX ), &existingScreen ) )
+            if( m_frame->Schematic().Root().SearchHierarchy(
+                        fn.GetFullPath( wxPATH_UNIX ), &existingScreen ) )
                 dropSheetAnnotations = !forceKeepAnnotations;
             else
                 searchSupplementaryClipboard( sheet->GetFileName(), &existingScreen );
@@ -1337,7 +1341,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             {
                 sheet->SetScreen( existingScreen );
 
-                SCH_SHEET_PATH sheetpath = *g_CurrentSheet;
+                SCH_SHEET_PATH sheetpath = currentSheet;
                 sheetpath.push_back( sheet );
 
                 // Clear annotation and create the AR for this path, if not exists,
@@ -1351,7 +1355,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
             else
             {
-                if( !m_frame->LoadSheetFromFile( sheet, g_CurrentSheet, fn.GetFullPath() ) )
+                if( !m_frame->LoadSheetFromFile( sheet, &currentSheet, fn.GetFullPath() ) )
                     m_frame->InitSheet( sheet, sheet->GetFileName() );
             }
         }
@@ -1517,7 +1521,7 @@ int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-        g_CurrentSheet->push_back( sheet );
+        m_frame->GetCurrentSheet().push_back( sheet );
         m_frame->DisplayCurrentSheet();
         m_frame->UpdateHierarchyNavigator();
     }
@@ -1528,12 +1532,12 @@ int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::LeaveSheet( const TOOL_EVENT& aEvent )
 {
-    if( g_CurrentSheet->Last() != g_RootSheet )
+    if( m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root() )
     {
         m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-        g_CurrentSheet->pop_back();
+        m_frame->GetCurrentSheet().pop_back();
         m_frame->DisplayCurrentSheet();
         m_frame->UpdateHierarchyNavigator();
     }

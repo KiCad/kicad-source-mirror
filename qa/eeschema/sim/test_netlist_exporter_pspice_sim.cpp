@@ -39,7 +39,8 @@ class TEST_NETLIST_EXPORTER_PSPICE_SIM
 {
 public:
     TEST_NETLIST_EXPORTER_PSPICE_SIM()
-            : m_netlist( new NETLIST_OBJECT_LIST ), m_exporter( m_netlist )
+            : m_netlist( new NETLIST_OBJECT_LIST ),
+              m_exporter( m_netlist, nullptr )
     {
     }
 

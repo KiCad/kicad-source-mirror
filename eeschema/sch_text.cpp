@@ -41,6 +41,7 @@
 #include <math/util.h>      // for KiROUND
 #include <kiway.h>
 #include <sch_text.h>
+#include <schematic.h>
 #include <netlist_object.h>
 #include <settings/color_settings.h>
 #include <sch_painter.h>
@@ -474,7 +475,10 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
                 {
                     if( token->Contains( ':' ) )
                     {
-                        SCH_SHEET_LIST sheetList( g_RootSheet );
+                        wxCHECK_MSG( Schematic(), wxEmptyString,
+                                     "No parent SCHEMATIC set for SCH_TEXT!" );
+
+                        SCH_SHEET_LIST sheetList = Schematic()->GetSheets();
                         wxString       remainder;
                         wxString       ref = token->BeforeFirst( ':', &remainder );
                         SCH_SHEET_PATH dummy;
@@ -511,10 +515,13 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
 
     if( processTextVars )
     {
-        PROJECT*  project = nullptr;
+        wxCHECK_MSG( Schematic(), wxEmptyString,
+                     "No parent SCHEMATIC set for SCH_TEXT!" );
 
-        if( g_RootSheet && g_RootSheet->GetScreen() )
-            project = &g_RootSheet->GetScreen()->Kiway().Prj();
+        PROJECT* project = nullptr;
+
+        if( Schematic()->RootScreen() )
+            project = &Schematic()->RootScreen()->Kiway().Prj();
 
         if( aDepth < 10 )
             text = ExpandTextVars( text, &textResolver, project );
@@ -675,8 +682,13 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Size" ), msg, RED ) );
 
 #if defined(DEBUG)
-    if( auto conn = Connection( *g_CurrentSheet ) )
-        conn->AppendDebugInfoToMsgPanel( aList );
+    SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
+
+    if( schframe )
+    {
+        if( auto conn = Connection( schframe->GetCurrentSheet() ) )
+            conn->AppendDebugInfoToMsgPanel( aList );
+    }
 
     msg.Printf( "%p", this );
     aList.push_back( MSG_PANEL_ITEM( "Object Address", msg, RED ) );
@@ -727,13 +739,17 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
     if( SCH_ITEM::IsType( aScanTypes ) )
         return true;
 
+    wxCHECK_MSG( Schematic(), false, "No parent SCHEMATIC set for SCH_LABEL!" );
+
+    SCH_SHEET_PATH current = Schematic()->CurrentSheet();
+
     for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
     {
         if( *p == SCH_LABEL_LOCATE_WIRE_T )
         {
-            wxASSERT( m_connected_items.count( *g_CurrentSheet ) );
+            wxASSERT( m_connected_items.count( current ) );
 
-            for( SCH_ITEM* connection : m_connected_items.at( *g_CurrentSheet ) )
+            for( SCH_ITEM* connection : m_connected_items.at( current ) )
             {
                 if( connection->IsType( wireTypes ) )
                     return true;
@@ -741,9 +757,9 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
         }
         else if ( *p == SCH_LABEL_LOCATE_BUS_T )
         {
-            wxASSERT( m_connected_items.count( *g_CurrentSheet ) );
+            wxASSERT( m_connected_items.count( current ) );
 
-            for( SCH_ITEM* connection : m_connected_items.at( *g_CurrentSheet ) )
+            for( SCH_ITEM* connection : m_connected_items.at( current ) )
             {
                 if( connection->IsType( busTypes ) )
                     return true;
@@ -1097,10 +1113,12 @@ void SCH_HIERLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 
 void SCH_HIERLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
 {
+    wxCHECK_RET( Schematic(), "No parent SCHEMATIC set for SCH_LABEL!" );
+
     static std::vector <wxPoint> Poly;
 
     wxDC*           DC = aSettings->GetPrintDC();
-    SCH_CONNECTION* conn = Connection( *g_CurrentSheet );
+    SCH_CONNECTION* conn = Connection( Schematic()->CurrentSheet() );
     bool            isBus = conn && conn->IsBus();
     COLOR4D         color = aSettings->GetLayerColor( isBus ? LAYER_BUS : m_Layer );
     int             penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );

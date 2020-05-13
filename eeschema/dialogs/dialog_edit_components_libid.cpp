@@ -34,6 +34,7 @@
 #include <sch_draw_panel.h>
 #include <sch_component.h>
 #include <sch_reference_list.h>
+#include <schematic.h>
 #include <pgm_base.h>
 #include <symbol_lib_table.h>
 #include <trace_helpers.h>
@@ -423,7 +424,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
     // In complex hierarchies, the same component is in fact duplicated, but
     // it is listed with different references (one by sheet instance)
     // the list is larger and looks like it contains all components
-    SCH_SHEET_LIST sheets( g_RootSheet );
+    const SCH_SHEET_LIST& sheets = GetParent()->Schematic().GetSheets();
     SCH_REFERENCE_LIST references;
     // build the full list of components including component having no symbol in loaded libs
     // (orphan components)

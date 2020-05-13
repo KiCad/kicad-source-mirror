@@ -29,10 +29,10 @@
 #include <eeschema_settings.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <sch_sheet.h>
 #include <settings/settings_manager.h>
 #include <ws_painter.h>
 #include <sch_painter.h>
+#include <schematic.h>
 
 // static members (static to remember last state):
 int DIALOG_PLOT_SCHEMATIC::m_pageSizeSelect = PAGE_SIZE_AUTO;
@@ -151,7 +151,7 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
 
     wxFileName      dirName = wxFileName::DirName( dirDialog.GetPath() );
 
-    wxFileName fn( Prj().AbsolutePath( g_RootSheet->GetFileName() ) );
+    wxFileName fn( Prj().AbsolutePath( m_parent->Schematic().Root().GetFileName() ) );
     wxString defaultPath = fn.GetPathWithSep();
     wxString msg;
     msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ), GetChars( defaultPath ) );

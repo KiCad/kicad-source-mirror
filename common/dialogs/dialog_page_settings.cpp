@@ -43,7 +43,9 @@
 
 #ifdef EESCHEMA
 #include <general.h>
+#include <sch_edit_frame.h>
 #include <sch_screen.h>
+#include <schematic.h>
 #include <eeschema_settings.h>
 #endif
 
@@ -611,8 +613,11 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
 
 #ifdef EESCHEMA
+    wxCHECK_MSG( dynamic_cast<SCH_EDIT_FRAME*>( m_parent ), true,
+            "DIALOG_PAGES_SETTINGS::OnDateApplyClick frame is not a schematic frame!" );
+
     // Exports settings to other sheets if requested:
-    SCH_SCREENS ScreenList;
+    SCH_SCREENS ScreenList( dynamic_cast<SCH_EDIT_FRAME*>( m_parent )->Schematic().Root() );
 
     // Update page info and/or title blocks for all screens
     for( SCH_SCREEN* screen = ScreenList.GetFirst(); screen; screen = ScreenList.GetNext() )

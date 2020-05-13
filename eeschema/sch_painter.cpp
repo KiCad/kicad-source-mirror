@@ -57,6 +57,7 @@
 #include <sch_no_connect.h>
 #include <sch_sheet.h>
 #include <sch_text.h>
+#include <schematic.h>
 #include <settings/color_settings.h>
 #include <view/view.h>
 #include <kiface_i.h>
@@ -150,7 +151,8 @@ static LIB_PART* dummy()
 
 
 SCH_PAINTER::SCH_PAINTER( GAL* aGal ) :
-    KIGFX::PAINTER( aGal )
+    KIGFX::PAINTER( aGal ),
+    m_schematic( nullptr )
 { }
 
 
@@ -1267,11 +1269,15 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     default:                  aLayer = LAYER_NOTES;      break;
     }
 
-    COLOR4D         color = getRenderColor( aText, aLayer, drawingShadows );
-    SCH_CONNECTION* conn = aText->Connection( *g_CurrentSheet );
+    COLOR4D color = getRenderColor( aText, aLayer, drawingShadows );
 
-    if( conn && conn->IsBus() )
-        color = getRenderColor( aText, LAYER_BUS, drawingShadows );
+    if( m_schematic )
+    {
+        SCH_CONNECTION* conn = aText->Connection( m_schematic->CurrentSheet() );
+
+        if( conn && conn->IsBus() )
+            color = getRenderColor( aText, LAYER_BUS, drawingShadows );
+    }
 
     if( !( aText->IsVisible() || aText->IsForceVisible() ) )
     {
@@ -1565,10 +1571,13 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
 
     COLOR4D color = getRenderColor( aLabel, LAYER_SHEETLABEL, drawingShadows );
 
-    SCH_CONNECTION* conn = aLabel->Connection( *g_CurrentSheet );
+    if( m_schematic )
+    {
+        SCH_CONNECTION* conn = aLabel->Connection( m_schematic->CurrentSheet() );
 
-    if( conn && conn->IsBus() )
-        color = getRenderColor( aLabel, LAYER_BUS, drawingShadows );
+        if( conn && conn->IsBus() )
+            color = getRenderColor( aLabel, LAYER_BUS, drawingShadows );
+    }
 
     std::vector<wxPoint> pts;
     std::deque<VECTOR2D> pts2;

@@ -34,6 +34,7 @@
 #include <eeschema_config.h>
 #include <general.h>
 #include <sch_bus_entry.h>
+#include <sch_edit_frame.h>
 #include <sch_line.h>
 #include <sch_text.h>
 #include <settings/color_settings.h>
@@ -402,7 +403,13 @@ void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEM
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Bus Entry Type" ), msg, DARKCYAN ) );
-    if( auto conn = Connection( *g_CurrentSheet ) )
+
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
+
+    if( !frame )
+        return;
+
+    if( auto conn = Connection( frame->GetCurrentSheet() ) )
     {
 #if defined(DEBUG)
         conn->AppendDebugInfoToMsgPanel( aList );

@@ -31,6 +31,7 @@
 #include <base_units.h>
 #include <sch_sheet_path.h>
 #include <sch_painter.h>
+#include <schematic.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <general.h>
@@ -56,7 +57,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef,
     SCH_SHEET_LIST sheetList;
 
     if( aPlotAll )
-        sheetList.BuildSheetList( g_RootSheet );
+        sheetList.BuildSheetList( &m_parent->Schematic().Root() );
     else
         sheetList.push_back( m_parent->GetCurrentSheet() );
 

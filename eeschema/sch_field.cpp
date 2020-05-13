@@ -43,6 +43,7 @@
 #include <class_library.h>
 #include <sch_component.h>
 #include <sch_field.h>
+#include <schematic.h>
 #include <settings/color_settings.h>
 #include <kicad_string.h>
 #include <trace_helpers.h>
@@ -120,8 +121,8 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
 
     if( processTextVars )
     {
-        if( g_RootSheet && g_RootSheet->GetScreen() )
-            project = &g_RootSheet->GetScreen()->Kiway().Prj();
+        if( Schematic() )
+            project = &Schematic()->RootScreen()->Kiway().Prj();
 
         if( aDepth < 10 )
         {

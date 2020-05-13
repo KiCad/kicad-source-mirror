@@ -150,7 +150,7 @@ void SCH_CONNECTION::ConfigureFromLabel( const wxString& aLabel )
         for( const wxString& group_member : members )
         {
             // Handle alias inside bus group member list
-            if( auto alias = g_ConnectionGraph->GetBusAlias( group_member ) )
+            if( auto alias = m_graph->GetBusAlias( group_member ) )
             {
                 for( const wxString& alias_member : alias->Members() )
                 {
@@ -332,7 +332,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
     }
 #endif
 
-    if( auto alias = g_ConnectionGraph->GetBusAlias( m_name ) )
+    if( auto alias = m_graph->GetBusAlias( m_name ) )
     {
         msg.Printf( _( "Bus Alias %s Members" ), m_name );
 
@@ -347,7 +347,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
     {
         for( const auto& group_member : group_members )
         {
-            if( auto group_alias = g_ConnectionGraph->GetBusAlias( group_member ) )
+            if( auto group_alias = m_graph->GetBusAlias( group_member ) )
             {
                 msg.Printf( _( "Bus Alias %s Members" ), group_alias->GetName() );
 

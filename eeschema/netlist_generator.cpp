@@ -33,6 +33,7 @@
 #include <gestfich.h>
 #include <pgm_base.h>
 #include <sch_edit_frame.h>
+#include <schematic.h>
 #include <reporter.h>
 #include <confirm.h>
 #include <kiway.h>
@@ -61,22 +62,25 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
 
     NETLIST_EXPORTER *helper;
 
+    SCHEMATIC* sch = &Schematic();
+
     switch( aFormat )
     {
     case NET_TYPE_PCBNEW:
-        helper = new NETLIST_EXPORTER_KICAD( this, aConnectedItemsList, g_ConnectionGraph );
+        helper = new NETLIST_EXPORTER_KICAD(
+                this, aConnectedItemsList, sch, sch->ConnectionGraph() );
         break;
 
     case NET_TYPE_ORCADPCB2:
-        helper = new NETLIST_EXPORTER_ORCADPCB2( aConnectedItemsList );
+        helper = new NETLIST_EXPORTER_ORCADPCB2( aConnectedItemsList, sch );
         break;
 
     case NET_TYPE_CADSTAR:
-        helper = new NETLIST_EXPORTER_CADSTAR( aConnectedItemsList );
+        helper = new NETLIST_EXPORTER_CADSTAR( aConnectedItemsList, sch );
         break;
 
     case NET_TYPE_SPICE:
-        helper = new NETLIST_EXPORTER_PSPICE( aConnectedItemsList );
+        helper = new NETLIST_EXPORTER_PSPICE( aConnectedItemsList, sch );
         break;
 
     default:
@@ -85,8 +89,8 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
             tmpFile.SetExt( GENERIC_INTERMEDIATE_NETLIST_EXT );
             fileName = tmpFile.GetFullPath();
 
-            helper = new NETLIST_EXPORTER_GENERIC( this, aConnectedItemsList,
-                                                   g_ConnectionGraph );
+            helper = new NETLIST_EXPORTER_GENERIC( this, aConnectedItemsList, sch,
+                    sch->ConnectionGraph() );
             executeCommandLine = true;
         }
         break;
@@ -158,14 +162,13 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
 
 
 //Imported function:
-int TestDuplicateSheetNames( bool aCreateMarker );
+int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker );
 
 
 bool SCH_EDIT_FRAME::prepareForNetlist()
 {
     // Ensure all power symbols have a valid reference
-    SCH_SHEET_LIST sheets( g_RootSheet );
-    sheets.AnnotatePowerSymbols();
+    Schematic().GetSheets().AnnotatePowerSymbols();
 
     // Performs some controls:
     if( CheckAnnotate( NULL_REPORTER::GetInstance(), 0 ) )
@@ -178,7 +181,7 @@ bool SCH_EDIT_FRAME::prepareForNetlist()
     }
 
     // Test duplicate sheet names:
-    if( TestDuplicateSheetNames( false ) > 0 )
+    if( TestDuplicateSheetNames( &Schematic(), false ) > 0 )
     {
         if( !IsOK( this, _( "Error: duplicate sheet names. Continue?" ) ) )
             return false;
@@ -191,7 +194,7 @@ bool SCH_EDIT_FRAME::prepareForNetlist()
 void SCH_EDIT_FRAME::sendNetlistToCvpcb()
 {
     NETLIST_OBJECT_LIST*   net_atoms = BuildNetListBase();
-    NETLIST_EXPORTER_KICAD exporter( this, net_atoms, g_ConnectionGraph );
+    NETLIST_EXPORTER_KICAD exporter( this, net_atoms, &Schematic(), Schematic().ConnectionGraph() );
     STRING_FORMATTER       formatter;
 
     // @todo : trim GNL_ALL down to minimum for CVPCB
@@ -212,8 +215,7 @@ NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::CreateNetlist( bool aSilent,
     }
     else // performs similar function as prepareForNetlist but without a dialog.
     {
-        SCH_SHEET_LIST sheets( g_RootSheet );
-        sheets.AnnotatePowerSymbols();
+        Schematic().GetSheets().AnnotatePowerSymbols();
 
         if( aSilentAnnotate )
             AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, 0, false, false, true,
@@ -236,7 +238,7 @@ NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::BuildNetListBase( bool updateStatusText )
     std::unique_ptr<NETLIST_OBJECT_LIST> ret( new NETLIST_OBJECT_LIST() );
 
     // Creates the flattened sheet list:
-    SCH_SHEET_LIST aSheets( g_RootSheet );
+    SCH_SHEET_LIST aSheets = Schematic().GetSheets();
 
     // Build netlist info
     bool success = ret->BuildNetListInfo( aSheets );

@@ -46,8 +46,9 @@ struct SPICE_DC_PARAMS
 class NETLIST_EXPORTER_PSPICE_SIM : public NETLIST_EXPORTER_PSPICE
 {
 public:
-    NETLIST_EXPORTER_PSPICE_SIM( NETLIST_OBJECT_LIST* aMasterList, PROJECT* aProject = nullptr ) :
-        NETLIST_EXPORTER_PSPICE( aMasterList, aProject )
+    NETLIST_EXPORTER_PSPICE_SIM( NETLIST_OBJECT_LIST* aMasterList, SCHEMATIC* aSchematic,
+            PROJECT* aProject = nullptr ) :
+            NETLIST_EXPORTER_PSPICE( aMasterList, aSchematic, aProject )
     {
     }
 

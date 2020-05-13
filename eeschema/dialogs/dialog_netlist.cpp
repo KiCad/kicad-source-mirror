@@ -45,6 +45,7 @@
 #include <invoke_sch_dialog.h>
 #include <netlist_exporters/netlist_exporter_pspice.h>
 #include <eeschema_settings.h>
+#include <schematic.h>
 
 #include <eeschema_id.h>
 #include <wx/regex.h>
@@ -439,7 +440,7 @@ bool NETLIST_DIALOG::TransferDataFromWindow()
     unsigned netlist_opt = 0;
 
     // Calculate the netlist filename
-    fn = g_RootSheet->GetScreen()->GetFileName();
+    fn = m_Parent->Schematic().GetFileName();
     FilenamePrms( currPage->m_IdNetType, &fileExt, &fileWildcard );
 
     // Set some parameters

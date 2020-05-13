@@ -101,9 +101,10 @@ struct SPICE_ITEM
 class NETLIST_EXPORTER_PSPICE : public NETLIST_EXPORTER
 {
 public:
-    NETLIST_EXPORTER_PSPICE( NETLIST_OBJECT_LIST* aMasterList, PROJECT* aProject = NULL ) :
-        NETLIST_EXPORTER( aMasterList ),
-        m_project( aProject )
+    NETLIST_EXPORTER_PSPICE( NETLIST_OBJECT_LIST* aMasterList, SCHEMATIC* aSchematic,
+            PROJECT* aProject = nullptr ) :
+            NETLIST_EXPORTER( aMasterList, aSchematic ),
+            m_project( aProject )
     {
     }
 

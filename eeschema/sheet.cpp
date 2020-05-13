@@ -36,6 +36,7 @@
 #include <sch_sheet_path.h>
 #include <sch_view.h>
 #include <sch_painter.h>
+#include <schematic.h>
 #include <symbol_lib_table.h>
 #include <dialogs/dialog_sch_sheet_props.h>
 #include <dialogs/dialog_edit_sheet_pin.h>
@@ -47,7 +48,7 @@ bool SCH_EDIT_FRAME::CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* 
     wxASSERT( aSheet && aHierarchy );
 
     wxString msg;
-    SCH_SHEET_LIST hierarchy( g_RootSheet );  // This is the full schematic sheet hierarchy.
+    SCH_SHEET_LIST hierarchy = Schematic().GetSheets();  // The full schematic sheet hierarchy.
     SCH_SHEET_LIST sheetHierarchy( aSheet );  // This is the hierarchy of the loaded file.
 
     wxFileName destFile = aHierarchy->LastScreen()->GetFileName();
@@ -113,7 +114,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     SCH_SCREEN* currentScreen = aHierarchy->LastScreen();
     SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( aFileName );
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( schFileType ) );
-    std::unique_ptr< SCH_SHEET> newSheet( new SCH_SHEET );
+    std::unique_ptr< SCH_SHEET> newSheet( new SCH_SHEET( &Schematic() ) );
 
     // This will cause the sheet UUID to be set to the loaded schematic UUID.  This is required
     // to ensure all of the sheet paths in any subsheets are correctly generated.
@@ -133,12 +134,12 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     {
         if( aSheet->GetScreen() != nullptr )
         {
-            newSheet.reset( pi->Load( fullFilename, &Kiway() ) );
+            newSheet.reset( pi->Load( fullFilename, &Kiway(), &Schematic() ) );
         }
         else
         {
             newSheet->SetFileName( fullFilename );
-            pi->Load( fullFilename, &Kiway(), newSheet.get() );
+            pi->Load( fullFilename, &Kiway(), &Schematic(), newSheet.get() );
         }
 
         if( !pi->GetError().IsEmpty() )
@@ -209,8 +210,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     }
 
     // Make sure any new sheet changes do not cause any recursion issues.
-    SCH_SHEET_LIST hierarchy( g_RootSheet );          // This is the schematic sheet hierarchy.
-    SCH_SHEET_LIST sheetHierarchy( newSheet.get() );  // This is the hierarchy of the loaded file.
+    SCH_SHEET_LIST hierarchy = Schematic().GetSheets(); // This is the schematic sheet hierarchy.
+    SCH_SHEET_LIST sheetHierarchy( newSheet.get() );    // This is the hierarchy of the loaded file.
 
     if( CheckSheetForRecursion( newSheet.get(), aHierarchy )
       || checkForNoFullyDefinedLibIds( newSheet.get() ) )
@@ -221,7 +222,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     wxArrayString    names;
     wxArrayString    newLibNames;
     SCH_SCREENS      newScreens( newSheet.get() );   // All screens associated with the import.
-    SCH_SCREENS      prjScreens( g_RootSheet );
+    SCH_SCREENS      prjScreens( &Schematic().Root() );
 
     newScreens.GetLibNicknames( names );
 
@@ -471,7 +472,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     else
         aSheet->GetScreen()->Append( newScreen );
 
-    SCH_SCREENS allScreens;
+    SCH_SCREENS allScreens( Schematic().Root() );
     allScreens.ReplaceDuplicateTimeStamps();
 
     return true;
@@ -628,7 +629,7 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 bool SCH_EDIT_FRAME::AllowCaseSensitiveFileNameClashes( const wxString& aSchematicFileName )
 {
     wxString msg;
-    SCH_SCREENS screens;
+    SCH_SCREENS screens( Schematic().Root() );
     wxFileName fn = aSchematicFileName;
 
     wxCHECK( fn.IsAbsolute(), false );

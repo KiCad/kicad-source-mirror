@@ -34,6 +34,7 @@
 #include <sch_text.h>
 #include <sch_component.h>
 #include <sch_reference_list.h>
+#include <schematic.h>
 #include <widgets/unit_binder.h>
 #include <dialog_edit_label_base.h>
 #include <kicad_string.h>
@@ -78,6 +79,10 @@ private:
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    wxString convertKIIDsToReferences( const wxString& aSource ) const;
+
+    wxString convertReferencesToKIIDs( const wxString& aSource ) const;
 
     SCH_EDIT_FRAME* m_Parent;
     SCH_TEXT*       m_CurrentText;
@@ -204,7 +209,7 @@ DIALOG_LABEL_EDITOR::~DIALOG_LABEL_EDITOR()
 }
 
 
-wxString convertKIIDsToReferences( const wxString& aSource )
+wxString DIALOG_LABEL_EDITOR::convertKIIDsToReferences( const wxString& aSource ) const
 {
     wxString newbuf;
     size_t   sourceLen = aSource.length();
@@ -229,7 +234,7 @@ wxString convertKIIDsToReferences( const wxString& aSource )
 
             if( isCrossRef )
             {
-                SCH_SHEET_LIST sheetList( g_RootSheet );
+                SCH_SHEET_LIST sheetList = m_Parent->Schematic().GetSheets();
                 wxString       remainder;
                 wxString       ref = token.BeforeFirst( ':', &remainder );
 
@@ -255,7 +260,7 @@ wxString convertKIIDsToReferences( const wxString& aSource )
 }
 
 
-wxString convertReferencesToKIIDs( const wxString& aSource )
+wxString DIALOG_LABEL_EDITOR::convertReferencesToKIIDs( const wxString& aSource ) const
 {
     wxString newbuf;
     size_t   sourceLen = aSource.length();
@@ -280,7 +285,7 @@ wxString convertReferencesToKIIDs( const wxString& aSource )
 
             if( isCrossRef )
             {
-                SCH_SHEET_LIST     sheets( g_RootSheet );
+                SCH_SHEET_LIST     sheets = m_Parent->Schematic().GetSheets();
                 wxString           remainder;
                 wxString           ref = token.BeforeFirst( ':', &remainder );
                 SCH_REFERENCE_LIST references;
@@ -335,7 +340,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     {
         // Load the combobox with the existing labels of the same type
         std::set<wxString> existingLabels;
-        SCH_SCREENS        allScreens;
+        SCH_SCREENS        allScreens( m_Parent->Schematic().Root() );
 
         for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
         {

@@ -37,6 +37,7 @@
 #include <class_library.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
+#include <schematic.h>
 
 
 bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilename )
@@ -46,7 +47,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilenam
     if( aUseCurrentSheetFilename )
         fn = GetScreen()->GetFileName();
     else
-        fn = g_RootSheet->GetScreen()->GetFileName();
+        fn = Schematic().RootScreen()->GetFileName();
 
     fn.SetName( fn.GetName() + "-cache" );
     fn.SetExt( SchematicLibraryFileExtension );
@@ -55,7 +56,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilenam
 
     // Update the schematic symbol library links.
     // because the lib cache has changed
-    SCH_SCREENS schematic;
+    SCH_SCREENS schematic( Schematic().Root() );
     schematic.UpdateSymbolLinks();
 
     return success;
@@ -66,7 +67,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 {
     wxString          tmp;
     wxString          errorMsg;
-    SCH_SCREENS       screens;
+    SCH_SCREENS       screens( Schematic().Root() );
 
     // Create a new empty library to archive components:
     std::unique_ptr<PART_LIB> archLib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );

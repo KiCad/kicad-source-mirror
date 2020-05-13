@@ -29,6 +29,7 @@
 #include <plotter.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet_path.h>
+#include <schematic.h>
 #include <project.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -52,7 +53,7 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
     SCH_SHEET_LIST sheetList;
 
     if( aPlotAll )
-        sheetList.BuildSheetList( g_RootSheet );
+        sheetList.BuildSheetList( &schframe->Schematic().Root() );
     else
         sheetList.push_back( schframe->GetCurrentSheet() );
 

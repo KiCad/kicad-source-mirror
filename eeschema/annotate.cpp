@@ -28,17 +28,17 @@
 #include <confirm.h>
 #include <reporter.h>
 #include <sch_edit_frame.h>
+#include <schematic.h>
 
 #include <sch_reference_list.h>
 #include <class_library.h>
 
 
-void mapExistingAnnotation( std::map<wxString, wxString>& aMap )
+void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 {
-    SCH_SHEET_LIST     sheets( g_RootSheet );
     SCH_REFERENCE_LIST references;
 
-    sheets.GetComponents( references );
+    Schematic().GetSheets().GetComponents( references );
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
@@ -64,16 +64,16 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
     {
         SCH_SCREEN* screen = GetScreen();
         wxCHECK_RET( screen != NULL, wxT( "Attempt to clear annotation of a NULL screen." ) );
-        screen->ClearAnnotation( g_CurrentSheet );
+        screen->ClearAnnotation( &GetCurrentSheet() );
     }
     else
     {
-        SCH_SCREENS ScreenList;
+        SCH_SCREENS ScreenList( Schematic().Root() );
         ScreenList.ClearAnnotation();
     }
 
     // Update the references for the sheet that is currently being displayed.
-    g_CurrentSheet->UpdateAllScreenReferences();
+    GetCurrentSheet().UpdateAllScreenReferences();
 
     SyncView();
     GetCanvas()->Refresh();
@@ -92,10 +92,10 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 {
     SCH_REFERENCE_LIST references;
 
-    SCH_SCREENS screens;
+    SCH_SCREENS screens( Schematic().Root() );
 
     // Build the sheet list.
-    SCH_SHEET_LIST sheets( g_RootSheet );
+    SCH_SHEET_LIST sheets = Schematic().GetSheets();
 
     // Map of locked components
     SCH_MULTI_UNIT_REFERENCE_MAP lockedComponents;
@@ -124,7 +124,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
         if( aAnnotateSchematic )
             sheets.GetMultiUnitComponents( lockedComponents );
         else
-            g_CurrentSheet->GetMultiUnitComponents( lockedComponents );
+            GetCurrentSheet().GetMultiUnitComponents( lockedComponents );
     }
 
     // Store previous annotations for building info messages
@@ -141,7 +141,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     if( aAnnotateSchematic )
         sheets.GetComponents( references );
     else
-        g_CurrentSheet->GetComponents( references );
+        GetCurrentSheet().GetComponents( references );
 
     // Break full components reference in name (prefix) and number:
     // example: IC1 become IC, and 1
@@ -229,7 +229,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
         aReporter.ReportTail( _( "Annotation complete." ), RPT_SEVERITY_ACTION );
 
     // Update on screen references, that can be modified by previous calculations:
-    g_CurrentSheet->UpdateAllScreenReferences();
+    GetCurrentSheet().UpdateAllScreenReferences();
     SetSheetNumberAndCount();
 
     SyncView();
@@ -240,15 +240,13 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
 int SCH_EDIT_FRAME::CheckAnnotate( REPORTER& aReporter, bool aOneSheetOnly )
 {
-    // build the screen list
-    SCH_SHEET_LIST      sheetList( g_RootSheet );
     SCH_REFERENCE_LIST  componentsList;
 
     // Build the list of components
     if( !aOneSheetOnly )
-        sheetList.GetComponents( componentsList );
+        Schematic().GetSheets().GetComponents( componentsList );
     else
-        g_CurrentSheet->GetComponents( componentsList );
+        GetCurrentSheet().GetComponents( componentsList );
 
     // Empty schematic does not need annotation
     if( componentsList.GetCount() == 0 )

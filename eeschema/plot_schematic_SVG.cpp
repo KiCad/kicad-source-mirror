@@ -34,6 +34,7 @@
 #include <base_units.h>
 #include <lib_edit_frame.h>
 #include <sch_sheet_path.h>
+#include <schematic.h>
 #include <project.h>
 #include <reporter.h>
 #include <settings/settings_manager.h>
@@ -51,7 +52,7 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
     SCH_SHEET_LIST  sheetList;
 
     if( aPrintAll )
-        sheetList.BuildSheetList( g_RootSheet );
+        sheetList.BuildSheetList( &m_parent->Schematic().Root() );
     else
         sheetList.push_back( m_parent->GetCurrentSheet() );
 

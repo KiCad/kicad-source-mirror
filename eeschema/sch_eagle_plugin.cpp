@@ -57,6 +57,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_text.h>
+#include <schematic.h>
 #include <symbol_lib_table.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
@@ -389,7 +390,8 @@ int SCH_EAGLE_PLUGIN::GetModifyHash() const
 }
 
 
-SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCH_SHEET* aAppendToMe,
+SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCHEMATIC* aSchematic,
+        SCH_SHEET* aAppendToMe,
         const PROPERTIES* aProperties )
 {
     wxASSERT( !aFileName || aKiway != NULL );
@@ -398,8 +400,9 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCH
     // Load the document
     wxXmlDocument xmlDocument;
 
-    m_filename = aFileName;
-    m_kiway    = aKiway;
+    m_filename  = aFileName;
+    m_kiway     = aKiway;
+    m_schematic = aSchematic;
 
     if( !xmlDocument.Load( m_filename.GetFullPath() ) )
         THROW_IO_ERROR(
@@ -410,11 +413,12 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCH
 
     if( aAppendToMe )
     {
-        m_rootSheet = aAppendToMe->GetRootSheet();
+        wxCHECK_MSG( aSchematic->IsValid(), nullptr, "Can't append to a schematic with no root!" );
+        m_rootSheet = &aSchematic->Root();
     }
     else
     {
-        m_rootSheet = new SCH_SHEET();
+        m_rootSheet = new SCH_SHEET( aSchematic );
         m_rootSheet->SetFileName( aFileName );
     }
 
@@ -422,6 +426,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCH
     {
         SCH_SCREEN* screen = new SCH_SCREEN( aKiway );
         screen->SetFileName( aFileName );
+        screen->SetParent( m_schematic );
         m_rootSheet->SetScreen( screen );
     }
 
@@ -593,12 +598,12 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
         while( sheetNode )
         {
             wxPoint                    pos = wxPoint( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
-            std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET( pos ) );
+            std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET( m_rootSheet, pos ) );
             SCH_SCREEN*                screen = new SCH_SCREEN( m_kiway );
 
-            sheet->SetParent( m_rootSheet );
             sheet->SetScreen( screen );
             sheet->GetScreen()->SetFileName( sheet->GetFileName() );
+            sheet->GetScreen()->SetParent( m_schematic );
 
             m_currentSheet = sheet.get();
             loadSheet( sheetNode, i );

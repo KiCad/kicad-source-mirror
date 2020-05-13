@@ -40,6 +40,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
+#include <schematic.h>
 #include <wildcards_and_files_ext.h>
 #include <project_rescue.h>
 #include <eeschema_config.h>
@@ -258,18 +259,11 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // unload current project file before loading new
     {
         SetScreen( nullptr );
-        delete g_RootSheet;
-
-        if( g_CurrentSheet )
-            g_CurrentSheet->clear();
-
-        g_RootSheet = nullptr;
-
         CreateScreens();
     }
 
     GetScreen()->SetFileName( fullFileName );
-    g_RootSheet->SetFileName( fullFileName );
+    Schematic().Root().SetFileName( fullFileName );
 
     SetStatusText( wxEmptyString );
     ClearMsgPanel();
@@ -323,8 +317,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     else
     {
         SetScreen( nullptr );
-        delete g_RootSheet;   // Delete the current project.
-        g_RootSheet = NULL;   // Force CreateScreens() to build new empty project on load failure.
+        Schematic().Reset();
 
         SCH_PLUGIN* plugin = SCH_IO_MGR::FindPlugin( schFileType );
         SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( plugin );
@@ -334,11 +327,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         try
         {
-            g_RootSheet = pi->Load( fullFileName, &Kiway() );
+            Schematic().SetRoot( pi->Load( fullFileName, &Kiway(), &Schematic() ) );
 
-            g_CurrentSheet = new SCH_SHEET_PATH();
-            g_CurrentSheet->clear();
-            g_CurrentSheet->push_back( g_RootSheet );
+            GetCurrentSheet().push_back( &Schematic().Root() );
 
             if( !pi->GetError().IsEmpty() )
             {
@@ -368,7 +359,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         // It's possible the schematic parser fixed errors due to bugs so warn the user
         // that the schematic has been fixed (modified).
-        SCH_SHEET_LIST sheetList( g_RootSheet );
+        SCH_SHEET_LIST sheetList = Schematic().GetSheets();
 
         if( sheetList.IsModified() )
         {
@@ -381,7 +372,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         UpdateFileHistory( fullFileName );
 
-        SCH_SCREENS schematic;
+        SCH_SCREENS schematic( Schematic().Root() );
 
         // LIB_ID checks and symbol rescue only apply to the legacy file formats.
         if( schFileType == SCH_IO_MGR::SCH_LEGACY )
@@ -464,16 +455,16 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 screen->UpdateLocalLibSymbolLinks();
 
             // Restore all of the loaded symbol instances from the root sheet screen.
-            sheetList.UpdateSymbolInstances( g_RootSheet->GetScreen()->m_symbolInstances );
+            sheetList.UpdateSymbolInstances( Schematic().RootScreen()->m_symbolInstances );
         }
 
-        g_ConnectionGraph->Reset();
+        Schematic().ConnectionGraph()->Reset();
 
-        SetScreen( g_CurrentSheet->LastScreen() );
+        SetScreen( GetCurrentSheet().LastScreen() );
 
         // Migrate conflicting bus definitions
         // TODO(JE) This should only run once based on schematic file version
-        if( g_ConnectionGraph->GetBusesNeedingMigration().size() > 0 )
+        if( Schematic().ConnectionGraph()->GetBusesNeedingMigration().size() > 0 )
         {
             DIALOG_MIGRATE_BUSES dlg( this );
             dlg.ShowQuasiModal();
@@ -603,12 +594,12 @@ bool SCH_EDIT_FRAME::SaveProject()
 {
     wxString msg;
     SCH_SCREEN* screen;
-    SCH_SCREENS screens;
+    SCH_SCREENS screens( Schematic().Root() );
     bool success = true;
     bool updateFileType = false;
 
     // I want to see it in the debugger, show me the string!  Can't do that with wxFileName.
-    wxString    fileName = Prj().AbsolutePath( g_RootSheet->GetFileName() );
+    wxString    fileName = Prj().AbsolutePath( Schematic().Root().GetFileName() );
     wxFileName  fn = fileName;
 
     if( !fn.IsDirWritable() )
@@ -697,7 +688,7 @@ bool SCH_EDIT_FRAME::SaveProject()
     }
 
     if( updateFileType )
-        UpdateFileHistory( g_RootSheet->GetScreen()->GetFileName() );
+        UpdateFileHistory( Schematic().RootScreen()->GetFileName() );
 
     // Save the sheet name map to the project file
     wxString      configFile = Prj().GetProjectFullName();
@@ -707,9 +698,7 @@ bool SCH_EDIT_FRAME::SaveProject()
     config->DeleteGroup( GROUP_SHEET_NAMES );
     config->SetPath( GROUP_SHEET_NAMES );
 
-    SCH_SHEET_LIST  sheetList( g_RootSheet );
-
-    for( SCH_SHEET_PATH& sheetPath : sheetList )
+    for( SCH_SHEET_PATH& sheetPath : Schematic().GetSheets() )
     {
         SCH_SHEET* sheet = sheetPath.Last();
         config->Write( wxString::Format( "%d", index++ ),
@@ -727,10 +716,10 @@ bool SCH_EDIT_FRAME::SaveProject()
 
 bool SCH_EDIT_FRAME::doAutoSave()
 {
-    wxFileName  tmpFileName = g_RootSheet->GetFileName();
+    wxFileName  tmpFileName = Schematic().Root().GetFileName();
     wxFileName  fn = tmpFileName;
     wxFileName  tmp;
-    SCH_SCREENS screens;
+    SCH_SCREENS screens( Schematic().Root() );
 
     bool autoSaveOk = true;
 
@@ -773,7 +762,7 @@ bool SCH_EDIT_FRAME::doAutoSave()
 bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 {
     wxFileName newfilename;
-    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCH_SHEET_LIST sheetList = Schematic().GetSheets();
 
     switch( (SCH_IO_MGR::SCH_FILE_T) aFileType )
     {
@@ -792,10 +781,10 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
         try
         {
-            delete g_RootSheet;
-            g_RootSheet = nullptr;
+            Schematic().Reset();
+
             SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
-            g_RootSheet = pi->Load( aFileName, &Kiway() );
+            Schematic().SetRoot( pi->Load( aFileName, &Kiway(), &Schematic() ) );
 
             // Eagle sheets do not use a worksheet frame by default, so set it to an empty one
             WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
@@ -815,23 +804,21 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             newfilename.SetName( Prj().GetProjectName() );
             newfilename.SetExt( LegacySchematicFileExtension );
 
-            g_CurrentSheet->clear();
-            g_CurrentSheet->push_back( g_RootSheet );
-            SetScreen( g_CurrentSheet->LastScreen() );
+            GetCurrentSheet().push_back( &Schematic().Root() );
+            SetScreen( GetCurrentSheet().LastScreen() );
 
-            g_RootSheet->SetFileName( newfilename.GetFullPath() );
+            Schematic().Root().SetFileName( newfilename.GetFullPath() );
             GetScreen()->SetFileName( newfilename.GetFullPath() );
             GetScreen()->SetModify();
             SaveProjectSettings();
 
             UpdateFileHistory( aFileName );
-            SCH_SCREENS schematic;
+            SCH_SCREENS schematic( Schematic().Root() );
             schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
 
             GetScreen()->m_Initialized = true;
-            SCH_SCREENS allScreens;
 
-            for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
+            for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
             {
                 for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
                 {
@@ -888,7 +875,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
 bool SCH_EDIT_FRAME::AskToSaveChanges()
 {
-    SCH_SCREENS screenList;
+    SCH_SCREENS screenList( Schematic().Root() );
 
     // Save any currently open and modified project files.
     for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )

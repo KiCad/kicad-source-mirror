@@ -58,6 +58,7 @@ class SCH_SHEET_PIN;
 class SCH_COMPONENT;
 class SCH_FIELD;
 class SCH_JUNCTION;
+class SCHEMATIC;
 class DIALOG_SCH_FIND;
 class wxFindReplaceData;
 class RESCUER;
@@ -121,6 +122,7 @@ class SCH_EDIT_FRAME : public SCH_BASE_FRAME
     friend class SCH_EDITOR_CONTROL;
 
 private:
+    SCHEMATIC*              m_schematic;          ///< The currently loaded schematic
     wxString                m_SelectedNetName;
 
     std::vector<PARAM_CFG*> m_projectFileParams;
@@ -184,6 +186,8 @@ public:
     ~SCH_EDIT_FRAME() override;
 
     SCH_SCREEN* GetScreen() const override;
+
+    SCHEMATIC& Schematic() const;
 
     void OnCloseWindow( wxCloseEvent& Event );
 
@@ -506,11 +510,8 @@ public:
      */
     int ModalAnnotate( const wxString& aMessage );
 
-    ///> @copydoc EDA_BASE_FRAME::GetSeverity()
-    int GetSeverity( int aErrorCode ) const override;
-
     // Functions used for hierarchy handling
-    SCH_SHEET_PATH& GetCurrentSheet();
+    SCH_SHEET_PATH& GetCurrentSheet() const;
 
     void SetCurrentSheet( const SCH_SHEET_PATH& aSheet );
 
@@ -690,6 +691,12 @@ private:
      *  @param aFileType SCH_FILE_T value for file type
      */
     bool importFile( const wxString& aFileName, int aFileType );
+
+    /**
+     * Fills a map of uuid -> reference from the currently loaded schematic
+     * @param aMap is a map to fill
+     */
+    void mapExistingAnnotation( std::map<wxString, wxString>& aMap );
 
 public:
     /**
@@ -983,6 +990,8 @@ public:
     const BOX2I GetDocumentExtents() const override;
 
     void FixupJunctions();
+
+    void FocusOnItem( SCH_ITEM* aItem );
 
     /**
      * Convert sheet and symbol legacy time stamp UUIDs to full UUIDs.

@@ -22,6 +22,7 @@
 
 #include <invoke_sch_dialog.h>
 #include <sch_sheet_path.h>
+#include <schematic.h>
 
 #include "dialog_bus_manager.h"
 
@@ -192,13 +193,14 @@ bool DIALOG_BUS_MANAGER::TransferDataToWindow()
 {
     m_aliases.clear();
 
-    SCH_SHEET_LIST aSheets( g_RootSheet );
+    const SCH_SHEET_LIST& sheets = m_parent->Schematic().GetSheets();
+
     std::vector< std::shared_ptr< BUS_ALIAS > > original_aliases;
 
     // collect aliases from each open sheet
-    for( unsigned i = 0; i < aSheets.size(); i++ )
+    for( unsigned i = 0; i < sheets.size(); i++ )
     {
-        auto sheet_aliases = aSheets[i].LastScreen()->GetBusAliases();
+        auto sheet_aliases = sheets[i].LastScreen()->GetBusAliases();
         original_aliases.insert( original_aliases.end(), sheet_aliases.begin(),
                                  sheet_aliases.end() );
     }

@@ -69,7 +69,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
     // Create netlist module section
     m_ReferencesAlreadyFound.Clear();
 
-    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {

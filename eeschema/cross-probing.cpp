@@ -36,6 +36,7 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_view.h>
+#include <schematic.h>
 #include <reporter.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <tools/ee_actions.h>
@@ -48,18 +49,18 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                                                     const wxString& aSearchText )
 {
     SCH_SHEET_PATH* sheetWithComponentFound = NULL;
-    SCH_COMPONENT*  Component = NULL;
+    SCH_COMPONENT*  component               = NULL;
     wxPoint         pos;
     LIB_PIN*        pin = nullptr;
-    SCH_SHEET_LIST  sheetList( g_RootSheet );
+    SCH_SHEET_LIST  sheetList;
     SCH_ITEM*       foundItem = nullptr;
 
     if( !aSearchHierarchy )
-        sheetList.push_back( *g_CurrentSheet );
+        sheetList.push_back( m_frame->GetCurrentSheet() );
     else
-        sheetList.BuildSheetList( g_RootSheet );
+        sheetList.BuildSheetList( &m_frame->Schematic().Root() );
 
-    for( SCH_SHEET_PATH& sheet : sheetList)
+    for( SCH_SHEET_PATH& sheet : sheetList )
     {
         SCH_SCREEN* screen = sheet.LastScreen();
 
@@ -69,7 +70,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
 
             if( aReference.CmpNoCase( pSch->GetRef( &sheet ) ) == 0 )
             {
-                Component = pSch;
+                component               = pSch;
                 sheetWithComponentFound = &sheet;
 
                 if( aSearchType == HIGHLIGHT_PIN )
@@ -80,14 +81,14 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
                     if( pin )
                     {
                         pos += pin->GetPosition();
-                        foundItem = Component;
+                        foundItem = component;
                         break;
                     }
                 }
                 else
                 {
                     pos = pSch->GetPosition();
-                    foundItem = Component;
+                    foundItem = component;
                     break;
                 }
             }
@@ -97,19 +98,19 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
             break;
     }
 
-    if( Component )
+    if( component )
     {
-        if( *sheetWithComponentFound != *g_CurrentSheet )
+        if( *sheetWithComponentFound != m_frame->GetCurrentSheet() )
         {
             sheetWithComponentFound->LastScreen()->SetZoom( m_frame->GetScreen()->GetZoom() );
-            *g_CurrentSheet = *sheetWithComponentFound;
+            m_frame->Schematic().SetCurrentSheet( *sheetWithComponentFound );
             m_frame->DisplayCurrentSheet();
         }
 
         wxPoint delta;
-        pos  -= Component->GetPosition();
-        delta = Component->GetTransform().TransformCoordinate( pos );
-        pos   = delta + Component->GetPosition();
+        pos  -= component->GetPosition();
+        delta = component->GetTransform().TransformCoordinate( pos );
+        pos   = delta + component->GetPosition();
 
         m_frame->GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( pos, false );
         m_frame->CenterScreen( pos, false );
@@ -124,7 +125,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
     else
         msg_item = _( "component" );
 
-    if( Component )
+    if( component )
     {
         if( foundItem )
             msg.Printf( _( "%s %s found" ), aReference, msg_item );
@@ -390,8 +391,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     case MAIL_SCH_GET_NETLIST:
         if( payload.find( "quiet-annotate" ) != std::string::npos )
         {
-            SCH_SHEET_LIST sheets( g_RootSheet );
-            sheets.AnnotatePowerSymbols();
+            Schematic().GetSheets().AnnotatePowerSymbols();
             AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, 0, false, false, true,
                                 NULL_REPORTER::GetInstance() );
         }
@@ -405,7 +405,8 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         {
             NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
-            NETLIST_EXPORTER_KICAD exporter( this, net_atoms, g_ConnectionGraph );
+            NETLIST_EXPORTER_KICAD exporter(
+                    this, net_atoms, &Schematic(), Schematic().ConnectionGraph() );
             STRING_FORMATTER formatter;
 
             exporter.Format( &formatter, GNL_ALL );
@@ -428,7 +429,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
     case MAIL_SCH_REFRESH:
     {
-        SCH_SCREENS schematic;
+        SCH_SCREENS schematic( Schematic().Root() );
         schematic.TestDanglingEnds();
 
         GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );

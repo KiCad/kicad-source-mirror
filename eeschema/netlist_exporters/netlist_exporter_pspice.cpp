@@ -267,7 +267,8 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
 bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
 {
     const wxString      delimiters( "{:,; }" );
-    SCH_SHEET_LIST      sheetList( g_RootSheet );
+
+    SCH_SHEET_LIST      sheetList = m_schematic->GetSheets();
     // Set of reference names, to check for duplications
     std::set<wxString>  refNames;
 
@@ -378,7 +379,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
 
 void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 {
-    const SCH_SHEET_LIST& sheetList = g_RootSheet;
+    const SCH_SHEET_LIST& sheetList = m_schematic->GetSheets();
     wxRegEx couplingK( "^[kK][[:digit:]]*[[:space:]]+[[:alnum:]]+[[:space:]]+[[:alnum:]]+",
             wxRE_ADVANCED );
 

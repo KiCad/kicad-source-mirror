@@ -48,6 +48,7 @@
 #include <lib_pin.h>
 #include <transform.h>
 #include <sch_component.h>
+#include <sch_edit_frame.h>  // For message panel debug info
 #include <sch_sheet_path.h>
 #include <settings/settings_manager.h>
 #include <settings/color_settings.h>
@@ -1482,7 +1483,12 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
 #if defined(DEBUG)
 
-    auto conn = aComponent->GetConnectionForPin( this, *g_CurrentSheet );
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
+
+    if( !frame )
+        return;
+
+    auto conn = aComponent->GetConnectionForPin( this, frame->GetCurrentSheet() );
 
     if( conn )
         conn->AppendDebugInfoToMsgPanel( aList );

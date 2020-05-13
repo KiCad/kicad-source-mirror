@@ -29,6 +29,7 @@
 #include <bitmaps.h>
 #include <base_units.h>
 #include <sch_marker.h>
+#include <schematic.h>
 #include <widgets/ui_common.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -75,9 +76,11 @@ void SCH_MARKER::Show( int nestLevel, std::ostream& os ) const
 
 void SCH_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount     = 2;
+    aCount = 2;
 
-    switch( GetSeverity( m_rcItem->GetErrorCode() ) )
+    wxCHECK_RET( Schematic(), "No SCHEMATIC set for SCH_MARKER!" );
+
+    switch( Schematic()->GetErcSeverity( m_rcItem->GetErrorCode() ) )
     {
     default:
     case SEVERITY::RPT_SEVERITY_ERROR:   aLayers[0] = LAYER_ERC_ERR;  break;
@@ -93,7 +96,9 @@ SCH_LAYER_ID SCH_MARKER::GetColorLayer() const
     if( IsExcluded() )
         return LAYER_HIDDEN;
 
-    switch( GetSeverity( m_rcItem->GetErrorCode() ) )
+    wxCHECK_MSG( Schematic(), LAYER_ERC_ERR, "No SCHEMATIC set for SCH_MARKER!" );
+
+    switch( Schematic()->GetErcSeverity( m_rcItem->GetErrorCode() ) )
     {
     default:
     case SEVERITY::RPT_SEVERITY_ERROR:   return LAYER_ERC_ERR;

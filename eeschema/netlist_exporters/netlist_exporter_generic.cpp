@@ -106,7 +106,7 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
 
         wxString    ref = comp->GetRef( aSheet );
 
-        SCH_SHEET_LIST sheetList( g_RootSheet );
+        SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
         int minUnit = comp->GetUnit();
 
         for( unsigned i = 0;  i < sheetList.size();  i++ )
@@ -193,7 +193,6 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
             xfield->AddAttribute( "name", it->first );
         }
     }
-
 }
 
 
@@ -203,7 +202,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
 
     m_ReferencesAlreadyFound.Clear();
 
-    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
 
     // Output is xml, so there is no reason to remove spaces from the field values.
     // And XML element names need not be translated to various languages.
@@ -290,7 +289,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
     wxFileName sourceFileName;
 
     // the root sheet is a special sheet, call it source
-    xdesign->AddChild( node( "source", g_RootSheet->GetScreen()->GetFileName() ) );
+    xdesign->AddChild( node( "source", m_schematic->GetFileName() ) );
 
     xdesign->AddChild( node( "date", DateAndTime() ) );
 
@@ -300,7 +299,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
     /*
         Export the sheets information
     */
-    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
 
     for( unsigned i = 0;  i < sheetList.size();  i++ )
     {

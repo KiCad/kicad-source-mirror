@@ -305,7 +305,7 @@ void NETLIST_EXPORTER::findAllUnitsOfComponent( SCH_COMPONENT* aComponent,
     wxString    ref = aComponent->GetRef( aSheetPath );
     wxString    ref2;
 
-    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
 
     for( unsigned i = 0;  i < sheetList.size();  i++ )
     {

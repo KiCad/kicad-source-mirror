@@ -19,6 +19,7 @@
  */
 
 #include <sch_connection.h>
+#include <schematic.h>
 #include <connection_graph.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
@@ -72,7 +73,7 @@ DIALOG_MIGRATE_BUSES::DIALOG_MIGRATE_BUSES( SCH_EDIT_FRAME* aParent )
 void DIALOG_MIGRATE_BUSES::loadGraphData()
 {
     m_items.clear();
-    auto subgraphs = g_ConnectionGraph->GetBusesNeedingMigration();
+    auto subgraphs = m_frame->Schematic().ConnectionGraph()->GetBusesNeedingMigration();
 
     for( auto subgraph : subgraphs )
     {
@@ -172,11 +173,13 @@ void DIALOG_MIGRATE_BUSES::onItemSelected( wxListEvent& aEvent )
     auto sheet = subgraph->m_sheet;
     auto driver = subgraph->m_driver;
 
-    if( sheet != *g_CurrentSheet )
+    const SCH_SHEET_PATH& current = m_frame->GetCurrentSheet();
+
+    if( sheet != current )
     {
         sheet.LastScreen()->SetZoom( m_frame->GetScreen()->GetZoom() );
-        *g_CurrentSheet = sheet;
-        g_CurrentSheet->UpdateAllScreenReferences();
+        sheet.UpdateAllScreenReferences();
+        m_frame->Schematic().SetCurrentSheet( sheet );
         sheet.LastScreen()->TestDanglingEnds();
     }
 

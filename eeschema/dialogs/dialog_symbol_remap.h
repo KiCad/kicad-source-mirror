@@ -87,6 +87,8 @@ private:
     bool backupProject( REPORTER& aReporter );
 
     bool m_remapped;
+
+    SCH_EDIT_FRAME* m_frame;
 };
 
 #endif  // _DIALOG_SYMBOL_REMAP_H_

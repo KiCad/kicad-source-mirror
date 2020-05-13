@@ -32,6 +32,7 @@
 #include <sch_sheet_path.h>
 
 
+class CONNECTION_GRAPH;
 class SCH_ITEM;
 class SCH_SHEET_PATH;
 
@@ -72,6 +73,11 @@ public:
     bool operator==( const SCH_CONNECTION& aOther ) const;
 
     bool operator!=( const SCH_CONNECTION& aOther ) const;
+
+    void SetGraph( CONNECTION_GRAPH* aGraph )
+    {
+        m_graph = aGraph;
+    }
 
     /**
      * Configures the connection given a label.
@@ -369,6 +375,12 @@ private:
      * pointers.  This seems fine at the moment.
      */
     std::vector< std::shared_ptr< SCH_CONNECTION > > m_members;
+
+    /**
+     * Pointer to the connection graph for the schematic this connection exists on.
+     * Needed for bus alias lookups.
+     */
+    CONNECTION_GRAPH* m_graph;
 
 };
 

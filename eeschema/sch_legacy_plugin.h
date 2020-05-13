@@ -97,7 +97,7 @@ public:
 
     int GetModifyHash() const override;
 
-    SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway,
+    SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway , SCHEMATIC* aSchematic,
                      SCH_SHEET* aAppendToMe = nullptr,
                      const PROPERTIES* aProperties = nullptr ) override;
 
@@ -181,6 +181,7 @@ protected:
     SCH_SHEET*           m_rootSheet;  ///< The root sheet of the schematic being loaded..
     OUTPUTFORMATTER*     m_out;        ///< The output formatter for saving SCH_SCREEN objects.
     SCH_LEGACY_PLUGIN_CACHE* m_cache;
+    SCHEMATIC*          m_schematic;   ///< Passed to Load(), the schematic object being loaded
 
     /// initialize PLUGIN like a constructor would.
     void init( KIWAY* aKiway, const PROPERTIES* aProperties = nullptr );

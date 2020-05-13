@@ -32,6 +32,7 @@
 class SCH_SHEET;
 class SCH_SCREEN;
 class SCH_PLUGIN;
+class SCHEMATIC;
 class KIWAY;
 class LIB_PART;
 class PART_LIB;
@@ -208,7 +209,7 @@ public:
      *                 wrong, using line number and character offsets of the input file if
      *                 possible.
      */
-    virtual SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway,
+    virtual SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway, SCHEMATIC* aSchematic,
                              SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL );
 
     /**

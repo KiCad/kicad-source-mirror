@@ -34,6 +34,7 @@
 #include <reporter.h>
 #include <settings/settings_manager.h>
 #include <sch_painter.h>
+#include <schematic.h>
 #include <dialog_plot_schematic.h>
 #include <wx_html_report_panel.h>
 
@@ -52,7 +53,7 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef,
     SCH_SHEET_LIST  sheetList;
 
     if( aPlotAll )
-        sheetList.BuildSheetList( g_RootSheet );
+        sheetList.BuildSheetList( &m_parent->Schematic().Root() );
     else
         sheetList.push_back( m_parent->GetCurrentSheet() );
 

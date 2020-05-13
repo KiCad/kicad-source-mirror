@@ -270,7 +270,7 @@ public:
      * @param aIncludePowerSymbols : false to only get normal components.
      */
     void GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
-                                 bool aIncludePowerSymbols = true );
+                                 bool aIncludePowerSymbols = true ) const;
 
     /**
      * Function SetFootprintField
@@ -333,7 +333,6 @@ typedef SCH_SHEET_PATHS::iterator                SCH_SHEET_PATHS_ITER;
 class SCH_SHEET_LIST : public SCH_SHEET_PATHS
 {
 private:
-    bool            m_isRootSheet;
     SCH_SHEET_PATH  m_currentSheetPath;
 
 public:
@@ -360,7 +359,7 @@ public:
     /**
      * Fetch a SCH_ITEM by ID.  Also returns the sheet the item was found on in \a aPathOut.
      */
-    SCH_ITEM* GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut );
+    SCH_ITEM* GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut = nullptr );
 
     /**
      * Fill an item cache for temporary use when many items need to be fetched.
@@ -389,7 +388,7 @@ public:
      * The normal option is false, and set to true only to build the full list of components.
      */
     void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
-                        bool aForceIncludeOrphanComponents = false );
+                        bool aForceIncludeOrphanComponents = false ) const;
 
     /**
      * Function GetMultiUnitComponents
@@ -401,7 +400,7 @@ public:
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
     void GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
-                                 bool aIncludePowerSymbols = true );
+                                 bool aIncludePowerSymbols = true ) const;
 
     /**
      * Function SetFootprintField
@@ -451,7 +450,7 @@ public:
 
     /**
      * Update all of the symbol instance information using \a aSymbolInstances.
-     *
+     * WARNING: Do not call this on anything other than the full hierarchy.
      * @param aSymbolInstances is the symbol path information loaded from the root schematic.
      */
     void UpdateSymbolInstances( std::vector<COMPONENT_INSTANCE_REFERENCE>& aSymbolInstances );
@@ -472,34 +471,5 @@ public:
      */
     void ReplaceLegacySheetPaths( const std::vector<KIID_PATH>& aOldSheetPaths );
 };
-
-
-/**
- * SHEETLIST_ERC_ITEMS_PROVIDER
- * is an implementation of the RC_ITEM_LISTinterface which uses the global SHEETLIST
- * to fulfill the contract.
- */
-class SHEETLIST_ERC_ITEMS_PROVIDER : public RC_ITEMS_PROVIDER
-{
-private:
-    int                      m_severities;
-    std::vector<SCH_MARKER*> m_filteredMarkers;
-
-public:
-    SHEETLIST_ERC_ITEMS_PROVIDER() :
-            m_severities( 0 )
-    { }
-
-    void SetSeverities( int aSeverities ) override;
-
-    int GetCount( int aSeverity = -1 ) override;
-
-    ERC_ITEM* GetItem( int aIndex ) override;
-
-    void DeleteItem( int aIndex, bool aDeep ) override;
-
-    void DeleteAllItems() override;
-};
-
 
 #endif // CLASS_DRAWSHEET_PATH_H

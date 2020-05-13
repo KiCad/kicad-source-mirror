@@ -33,6 +33,7 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <sch_sheet.h>
+#include <schematic.h>
 #include <sch_sheet_path.h>
 #include <dialog_print_using_printer_base.h>
 #include <sch_painter.h>
@@ -319,10 +320,12 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataFromWindow()
 
     SavePrintOptions();
 
-    wxPrintDialogData printDialogData( m_parent->GetPageSetupData().GetPrintData() );
-    printDialogData.SetMaxPage( g_RootSheet->CountSheets() );
+    int sheet_count = m_parent->Schematic().Root().CountSheets();
 
-    if( g_RootSheet->CountSheets() > 1 )
+    wxPrintDialogData printDialogData( m_parent->GetPageSetupData().GetPrintData() );
+    printDialogData.SetMaxPage( sheet_count );
+
+    if( sheet_count > 1 )
         printDialogData.EnablePageNumbers( true );
 
     wxPrinter printer( &printDialogData );
@@ -348,7 +351,7 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataFromWindow()
 
 bool SCH_PRINTOUT::OnPrintPage( int page )
 {
-    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCH_SHEET_LIST sheetList = m_parent->Schematic().GetSheets();
 
     wxCHECK_MSG( page >= 1 && page <= (int)sheetList.size(), false,
                  wxT( "Cannot print invalid page number." ) );
@@ -379,13 +382,13 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
 void SCH_PRINTOUT::GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo )
 {
     *minPage = *selPageFrom = 1;
-    *maxPage = *selPageTo   = g_RootSheet->CountSheets();
+    *maxPage = *selPageTo   = m_parent->Schematic().Root().CountSheets();
 }
 
 
 bool SCH_PRINTOUT::HasPage( int pageNum )
 {
-    return g_RootSheet->CountSheets() >= pageNum;
+    return m_parent->Schematic().Root().CountSheets() >= pageNum;
 }
 
 

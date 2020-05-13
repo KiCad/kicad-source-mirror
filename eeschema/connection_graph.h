@@ -36,6 +36,8 @@
 #endif
 
 
+class CONNECTION_GRAPH;
+class SCHEMATIC;
 class SCH_EDIT_FRAME;
 class SCH_HIERLABEL;
 class SCH_PIN;
@@ -70,11 +72,20 @@ public:
         GLOBAL
     };
 
-    explicit CONNECTION_SUBGRAPH( SCH_EDIT_FRAME* aFrame ) :
-        m_dirty( false ), m_absorbed( false ), m_absorbed_by( nullptr ), m_code( -1 ),
-        m_multiple_drivers( false ), m_strong_driver( false ), m_local_driver( false ),
-        m_no_connect( nullptr ), m_bus_entry( nullptr ), m_driver( nullptr ), m_frame( aFrame ),
-        m_driver_connection( nullptr ), m_hier_parent( nullptr )
+    explicit CONNECTION_SUBGRAPH( CONNECTION_GRAPH* aGraph ) :
+              m_graph( aGraph ),
+              m_dirty( false ),
+              m_absorbed( false ),
+              m_absorbed_by( nullptr ),
+              m_code( -1 ),
+              m_multiple_drivers( false ),
+              m_strong_driver( false ),
+              m_local_driver( false ),
+              m_no_connect( nullptr ),
+              m_bus_entry( nullptr ),
+              m_driver( nullptr ),
+              m_driver_connection( nullptr ),
+              m_hier_parent( nullptr )
     {}
 
     ~CONNECTION_SUBGRAPH() = default;
@@ -126,6 +137,8 @@ public:
      */
     static PRIORITY GetDriverPriority( SCH_ITEM* aDriver );
 
+    CONNECTION_GRAPH* m_graph;
+
     bool m_dirty;
 
     /// True if this subgraph has been absorbed into another.  No pointers here are safe if so!
@@ -162,9 +175,6 @@ public:
     SCH_ITEM* m_driver;
 
     SCH_SHEET_PATH m_sheet;
-
-    // Needed for m_userUnits for now; maybe refactor later
-    SCH_EDIT_FRAME* m_frame;
 
     /// Cache for driver connection
     SCH_CONNECTION* m_driver_connection;
@@ -210,11 +220,11 @@ typedef std::map<NET_NAME_CODE, std::vector<CONNECTION_SUBGRAPH*>> NET_MAP;
 class CONNECTION_GRAPH
 {
 public:
-    CONNECTION_GRAPH( SCH_EDIT_FRAME* aFrame )
-            : m_last_net_code( 1 ),
+    CONNECTION_GRAPH( SCHEMATIC* aSchematic = nullptr ) :
+              m_last_net_code( 1 ),
               m_last_bus_code( 1 ),
               m_last_subgraph_code( 1 ),
-              m_frame( aFrame )
+              m_schematic( aSchematic )
     {}
 
     ~CONNECTION_GRAPH()
@@ -223,6 +233,11 @@ public:
     }
 
     void Reset();
+
+    void SetSchematic( SCHEMATIC* aSchematic )
+    {
+        m_schematic = aSchematic;
+    }
 
     /**
      * Updates the connection graph for the given list of sheets.
@@ -301,10 +316,7 @@ private:
 
     int m_last_subgraph_code;
 
-    std::mutex m_item_mutex;
-
-    // Needed for m_userUnits for now; maybe refactor later
-    SCH_EDIT_FRAME* m_frame;
+    SCHEMATIC* m_schematic;     ///< The schematic this graph represents
 
     /**
      * Updates the graphical connectivity between items (i.e. where they touch)

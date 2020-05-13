@@ -34,6 +34,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
+#include <schematic.h>
 #include <settings/color_settings.h>
 #include <netlist_object.h>
 #include <trace_helpers.h>
@@ -67,8 +68,8 @@ const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx )
 }
 
 
-SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
-    SCH_ITEM( NULL, SCH_SHEET_T )
+SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const wxPoint& pos ) :
+    SCH_ITEM( aParent, SCH_SHEET_T )
 {
     m_Layer = LAYER_SHEET;
     m_pos = pos;
@@ -146,19 +147,6 @@ EDA_ITEM* SCH_SHEET::Clone() const
 }
 
 
-void SCH_SHEET::SetParent( EDA_ITEM* aSheet )
-{
-    m_Parent = nullptr;
-
-    if( aSheet )
-    {
-        // Parent must be another SCH_SHEET object or nullptr
-        wxCHECK( aSheet->Type() == SCH_SHEET_T, /* void */ );
-        m_Parent = aSheet;
-    }
-}
-
-
 void SCH_SHEET::SetScreen( SCH_SCREEN* aScreen )
 {
     if( aScreen == m_screen )
@@ -191,20 +179,11 @@ int SCH_SHEET::GetScreenCount() const
 }
 
 
-SCH_SHEET* SCH_SHEET::GetRootSheet()
+bool SCH_SHEET::IsRootSheet() const
 {
-    EDA_ITEM* item = GetParent();
+    wxCHECK_MSG( Schematic(), false, "Can't call IsRootSheet without setting a schematic" );
 
-    if( item == nullptr )
-        return this;
-
-    SCH_SHEET* sheet = dynamic_cast< SCH_SHEET* >( item );
-
-    // The parent must be a SCH_SHEET object.
-    wxCHECK( sheet, nullptr );
-
-    // Recurse until a sheet is found with no parent which is the root sheet.
-    return sheet->GetRootSheet();
+    return &Schematic()->Root() == this;
 }
 
 
@@ -230,9 +209,7 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
 
     if( token->IsSameAs( wxT( "#" ) ) )
     {
-        SCH_SHEET_LIST sheetList( g_RootSheet );
-
-        for( const SCH_SHEET_PATH& sheet : sheetList )
+        for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
         {
             if( sheet.Last() == this )   // Current sheet path found
             {
@@ -243,7 +220,7 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
     }
     else if( token->IsSameAs( wxT( "##" ) ) )
     {
-        SCH_SHEET_LIST sheetList( g_RootSheet );
+        SCH_SHEET_LIST sheetList = Schematic()->GetSheets();
         *token = wxString::Format( wxT( "%d" ), (int) sheetList.size() );
         return true;
     }
@@ -703,7 +680,7 @@ bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
 }
 
 
-int SCH_SHEET::CountSheets()
+int SCH_SHEET::CountSheets() const
 {
     int count = 1; //1 = this!!
 
@@ -723,11 +700,15 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList 
     aList.emplace_back( _( "File Name" ), m_fields[ SHEETFILENAME ].GetText(), BROWN );
 
 #if 1   // Set to 1 to display the sheet UUID and hierarchical path
-    wxString msgU, msgL;
-    msgU << _( "UUID" ) << ": " << m_Uuid.AsString();
-    msgL << _( "Path" ) << ": " << g_CurrentSheet->PathHumanReadable();
 
-    aList.push_back( MSG_PANEL_ITEM( msgU, msgL, BLUE ) );
+    if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
+    {
+        wxString msgU, msgL;
+        msgU << _( "UUID" ) << ": " << m_Uuid.AsString();
+        msgL << _( "Path" ) << ": " << schframe->GetCurrentSheet().PathHumanReadable();
+
+        aList.push_back( MSG_PANEL_ITEM( msgU, msgL, BLUE ) );
+    }
 #endif
 }
 

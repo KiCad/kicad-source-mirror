@@ -791,7 +791,12 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Type" ), msg, DARKCYAN ) );
 
-    if( auto conn = Connection( *g_CurrentSheet ) )
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
+
+    if( !frame )
+        return;
+
+    if( auto conn = Connection( frame->GetCurrentSheet() ) )
     {
 #if defined(DEBUG)
         conn->AppendDebugInfoToMsgPanel( aList );

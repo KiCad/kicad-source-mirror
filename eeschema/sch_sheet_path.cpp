@@ -33,6 +33,7 @@
 #include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
+#include <schematic.h>
 #include <template_fieldnames.h>
 #include <trace_helpers.h>
 
@@ -209,7 +210,7 @@ void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aInclu
 
 
 void SCH_SHEET_PATH::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
-                                             bool aIncludePowerSymbols )
+                                             bool aIncludePowerSymbols ) const
 {
     for( auto item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
     {
@@ -263,7 +264,11 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName, const wxStr
     if( m_recursion_test_cache.count( pair ) )
         return m_recursion_test_cache.at( pair );
 
-    wxFileName rootFn = g_RootSheet->GetFileName();
+    SCHEMATIC* sch = LastScreen()->Schematic();
+
+    wxCHECK_MSG( sch, false, "No SCHEMATIC found in SCH_SHEET_PATH::TestForRecursion!" );
+
+    wxFileName rootFn = sch->GetFileName();
     wxFileName srcFn = aSrcFileName;
     wxFileName destFn = aDestFileName;
 
@@ -335,8 +340,6 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName, const wxStr
 
 SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
 {
-    m_isRootSheet = false;
-
     if( aSheet != NULL )
         BuildSheetList( aSheet );
 }
@@ -347,9 +350,6 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
     wxCHECK_RET( aSheet != NULL, wxT( "Cannot build sheet list from undefined sheet." ) );
 
     std::vector<SCH_SHEET*> badSheets;
-
-    if( aSheet == g_RootSheet )
-        m_isRootSheet = true;
 
     m_currentSheetPath.push_back( aSheet );
 
@@ -432,7 +432,9 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
         {
             if( aItem->m_Uuid == aID )
             {
-                *aPathOut = sheet;
+                if( aPathOut )
+                    *aPathOut = sheet;
+
                 return aItem;
             }
             else if( aItem->Type() == SCH_COMPONENT_T )
@@ -443,7 +445,9 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
                 {
                     if( field.m_Uuid == aID )
                     {
-                        *aPathOut = sheet;
+                        if( aPathOut )
+                            *aPathOut = sheet;
+
                         return &field;
                     }
                 }
@@ -452,7 +456,9 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
                 {
                     if( pin->m_Uuid == aID )
                     {
-                        *aPathOut = sheet;
+                        if( aPathOut )
+                            *aPathOut = sheet;
+
                         return pin;
                     }
                 }
@@ -465,7 +471,8 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
                 {
                     if( field.m_Uuid == aID )
                     {
-                        *aPathOut = sheet;
+                        if( aPathOut )
+                            *aPathOut = sheet;
                         return &field;
                     }
                 }
@@ -474,7 +481,9 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
                 {
                     if( pin->m_Uuid == aID )
                     {
-                        *aPathOut = sheet;
+                        if( aPathOut )
+                            *aPathOut = sheet;
+
                         return pin;
                     }
                 }
@@ -595,16 +604,17 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
 
 
 void SCH_SHEET_LIST::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
-                                    bool aForceIncludeOrphanComponents )
+                                    bool aForceIncludeOrphanComponents ) const
 {
-    for( SCH_SHEET_PATH& sheet : *this )
+    for( const SCH_SHEET_PATH& sheet : *this )
         sheet.GetComponents( aReferences, aIncludePowerSymbols, aForceIncludeOrphanComponents );
 }
 
+
 void SCH_SHEET_LIST::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
-                                             bool aIncludePowerSymbols )
+                                             bool aIncludePowerSymbols ) const
 {
-    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
+    for( SCH_SHEET_PATHS::const_iterator it = begin(); it != end(); ++it )
     {
         SCH_MULTI_UNIT_REFERENCE_MAP tempMap;
         (*it).GetMultiUnitComponents( tempMap );
@@ -638,7 +648,14 @@ bool SCH_SHEET_LIST::SetComponentFootprint( const wxString& aReference,
 bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
                                        const wxString& aDestFileName )
 {
-    wxFileName rootFn = g_RootSheet->GetFileName();
+    if( empty() )
+        return false;
+
+    SCHEMATIC* sch = at( 0 ).LastScreen()->Schematic();
+
+    wxCHECK_MSG( sch, false, "No SCHEMATIC found in SCH_SHEET_LIST::TestForRecursion!" );
+
+    wxFileName rootFn = sch->GetFileName();
     wxFileName destFn = aDestFileName;
 
     if( destFn.IsRelative() )
@@ -681,8 +698,6 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForScreen( SCH_SCREEN* aScreen )
 void SCH_SHEET_LIST::UpdateSymbolInstances(
         std::vector<COMPONENT_INSTANCE_REFERENCE>& aSymbolInstances )
 {
-    wxCHECK( m_isRootSheet, /* void */ );   // Only performed for the entire schematic.
-
     SCH_REFERENCE_LIST symbolInstances;
 
     GetComponents( symbolInstances, true, true );
@@ -748,96 +763,4 @@ void SCH_SHEET_LIST::ReplaceLegacySheetPaths( const std::vector<KIID_PATH>& aOld
                     newSheetPath );
         }
     }
-}
-
-
-void SHEETLIST_ERC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
-{
-    m_severities = aSeverities;
-
-    m_filteredMarkers.clear();
-
-    SCH_SHEET_LIST sheetList( g_RootSheet);
-
-    for( unsigned i = 0; i < sheetList.size(); i++ )
-    {
-        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
-        {
-            SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
-            int markerSeverity;
-
-            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
-                continue;
-
-            if( marker->IsExcluded() )
-                markerSeverity = RPT_SEVERITY_EXCLUSION;
-            else
-                markerSeverity = GetSeverity( marker->GetRCItem()->GetErrorCode() );
-
-            if( markerSeverity & m_severities )
-                m_filteredMarkers.push_back( marker );
-        }
-    }
-}
-
-
-int SHEETLIST_ERC_ITEMS_PROVIDER::GetCount( int aSeverity )
-{
-    if( aSeverity < 0 )
-        return m_filteredMarkers.size();
-
-    int count = 0;
-
-    SCH_SHEET_LIST sheetList( g_RootSheet);
-
-    for( unsigned i = 0; i < sheetList.size(); i++ )
-    {
-        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
-        {
-            SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
-            int markerSeverity;
-
-            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
-                continue;
-
-            if( marker->IsExcluded() )
-                markerSeverity = RPT_SEVERITY_EXCLUSION;
-            else
-                markerSeverity = GetSeverity( marker->GetRCItem()->GetErrorCode() );
-
-            if( markerSeverity == aSeverity )
-                count++;
-        }
-    }
-
-    return count;
-}
-
-
-ERC_ITEM* SHEETLIST_ERC_ITEMS_PROVIDER::GetItem( int aIndex )
-{
-    SCH_MARKER* marker = m_filteredMarkers[ aIndex ];
-
-    return marker ? static_cast<ERC_ITEM*>( marker->GetRCItem() ) : nullptr;
-}
-
-
-void SHEETLIST_ERC_ITEMS_PROVIDER::DeleteItem( int aIndex, bool aDeep )
-{
-    SCH_MARKER* marker = m_filteredMarkers[ aIndex ];
-    m_filteredMarkers.erase( m_filteredMarkers.begin() + aIndex );
-
-    if( aDeep )
-    {
-        SCH_SCREENS ScreenList;
-        ScreenList.DeleteMarker( marker );
-    }
-}
-
-
-void SHEETLIST_ERC_ITEMS_PROVIDER::DeleteAllItems()
-{
-    SCH_SCREENS ScreenList;
-    ScreenList.DeleteAllMarkers( MARKER_BASE::MARKER_ERC );
-    m_filteredMarkers.clear();
 }

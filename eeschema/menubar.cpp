@@ -28,6 +28,7 @@
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
+#include <schematic.h>
 #include <tool/conditional_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
@@ -46,10 +47,10 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     wxMenuBar* oldMenuBar = GetMenuBar();
     wxMenuBar* menuBar = new wxMenuBar();
 
-    auto modifiedDocumentCondition = [] ( const SELECTION& sel ) {
-        SCH_SHEET_LIST sheetList( g_RootSheet );
-        return sheetList.IsModified();
-    };
+    auto modifiedDocumentCondition = [&]( const SELECTION& sel )
+                                     {
+                                         return Schematic().GetSheets().IsModified();
+                                     };
 
     //-- File menu -----------------------------------------------------------
     //
@@ -162,24 +163,40 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
-    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
-        return g_CurrentSheet->Last() != g_RootSheet;
-    };
-    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
-        return IsGridVisible();
-    };
-    auto imperialUnitsCondition = [this]( const SELECTION& aSel ) {
-        return GetUserUnits() == EDA_UNITS::INCHES;
-    };
-    auto metricUnitsCondition = [this]( const SELECTION& aSel ) {
-        return GetUserUnits() == EDA_UNITS::MILLIMETRES;
-    };
-    auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetGalDisplayOptions().m_fullscreenCursor;
-    };
-    auto hiddenPinsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetShowAllPins();
-    };
+    auto belowRootSheetCondition =
+            [this]( const SELECTION& aSel )
+            {
+                return GetCurrentSheet().Last() != &Schematic().Root();
+            };
+
+    auto gridShownCondition =
+            [this]( const SELECTION& aSel )
+            {
+                return IsGridVisible();
+            };
+
+    auto imperialUnitsCondition =
+            [this]( const SELECTION& aSel )
+            {
+                return GetUserUnits() == EDA_UNITS::INCHES;
+            };
+
+    auto metricUnitsCondition =
+            [this]( const SELECTION& aSel )
+            {
+                return GetUserUnits() == EDA_UNITS::MILLIMETRES;
+            };
+
+    auto fullCrosshairCondition =
+            [this]( const SELECTION& aSel )
+            {
+                return GetGalDisplayOptions().m_fullscreenCursor;
+            };
+    auto hiddenPinsCondition =
+            [this]( const SELECTION& aSel )
+            {
+                return GetShowAllPins();
+            };
 
     viewMenu->AddItem( ACTIONS::showSymbolBrowser,        EE_CONDITIONS::ShowAlways );
     viewMenu->AddItem( EE_ACTIONS::navigateHierarchy,     EE_CONDITIONS::ShowAlways );
@@ -256,12 +273,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* toolsMenu = new CONDITIONAL_MENU( false, selTool );
 
-    auto remapSymbolsCondition = [] ( const SELECTION& aSel ) {
-        SCH_SCREENS schematic;
+    auto remapSymbolsCondition =
+            [&]( const SELECTION& aSel )
+            {
+                SCH_SCREENS schematic( Schematic().Root() );
 
-        // The remapping can only be performed on legacy projects.
-        return schematic.HasNoFullyDefinedLibIds();
-    };
+                // The remapping can only be performed on legacy projects.
+                return schematic.HasNoFullyDefinedLibIds();
+            };
 
     toolsMenu->AddItem( ACTIONS::updatePcbFromSchematic,    EE_CONDITIONS::ShowAlways );
     toolsMenu->AddItem( ACTIONS::updateSchematicFromPcb,    EE_CONDITIONS::ShowAlways );

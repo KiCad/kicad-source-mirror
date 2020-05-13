@@ -36,6 +36,7 @@
 #include <sch_connection.h>
 #include <netlist_object.h>
 #include <sch_edit_frame.h>
+#include <schematic.h>
 
 #if defined(DEBUG)
 
@@ -242,7 +243,7 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
     // bus groups (including with nested vectors) the code is something arbitrary.
     long member_offset = 0;
 
-    auto alias = SCH_SCREEN::GetBusAlias( m_Label );
+    auto alias = static_cast<SCH_ITEM*>( m_Comp )->Schematic()->GetBusAlias( m_Label );
     wxString group_name;
     bool self_set = false;
     std::vector<wxString> bus_contents_vec;
@@ -286,7 +287,8 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
                 fillBusVector( aNetListItems, prefix, begin, end, member_offset );
                 member_offset += std::abs( end - begin );
             }
-            else if( auto nested_alias = SCH_SCREEN::GetBusAlias( bus_member ) )
+            else if( auto nested_alias = static_cast<SCH_ITEM*>( m_Comp )->Schematic()->GetBusAlias(
+                             bus_member ) )
             {
                 // Nested alias inside a group
                 for( const auto& alias_member : nested_alias->Members() )

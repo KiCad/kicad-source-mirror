@@ -159,6 +159,8 @@ enum KICAD_T
     // General
     SCH_SCREEN_T,
 
+    SCHEMATIC_T,
+
     /*
      * Draw items in library component.
      *

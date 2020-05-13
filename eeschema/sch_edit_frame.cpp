@@ -49,6 +49,7 @@
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
 #include <sch_sheet.h>
+#include <schematic.h>
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
 #include <symbol_lib_table.h>
@@ -72,10 +73,6 @@
 #include <wx/cmdline.h>
 
 #include <gal/graphics_abstraction_layer.h>
-
-SCH_SHEET_PATH* g_CurrentSheet = nullptr; // declared in general.h
-CONNECTION_GRAPH* g_ConnectionGraph = nullptr;
-ERC_SETTINGS* g_ErcSettings = nullptr;
 
 // non-member so it can be moved easily, and kept REALLY private.
 // Do NOT Clear() in here.
@@ -210,9 +207,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
     m_item_to_repeat( nullptr )
 {
-    g_CurrentSheet = new SCH_SHEET_PATH();
-    g_ConnectionGraph = new CONNECTION_GRAPH( this );
-    g_ErcSettings = new ERC_SETTINGS();
+    m_schematic = new SCHEMATIC();
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_hasAutoSave = true;
@@ -269,6 +264,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     {
         GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
         GetCanvas()->GetGAL()->SetAxesEnabled( false );
+
+        if( auto p = dynamic_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() ) )
+            p->SetSchematic( m_schematic );
     }
 
     InitExitKey();
@@ -296,15 +294,7 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 
     SetScreen( NULL );
 
-    delete g_CurrentSheet;          // a SCH_SHEET_PATH, on the heap.
-    delete g_ConnectionGraph;
-    delete g_RootSheet;
-    delete g_ErcSettings;
-
-    g_CurrentSheet = nullptr;
-    g_ConnectionGraph = nullptr;
-    g_RootSheet = nullptr;
-    g_ErcSettings = nullptr;
+    delete m_schematic;
 }
 
 
@@ -358,58 +348,54 @@ void SCH_EDIT_FRAME::SaveCopyForRepeatItem( SCH_ITEM* aItem )
 
 EDA_ITEM* SCH_EDIT_FRAME::GetItem( const KIID& aId )
 {
-    SCH_SHEET_LIST schematic( g_RootSheet );
-    SCH_SHEET_PATH dummy;
-
-    return schematic.GetItem( aId, &dummy );
+    return Schematic().GetSheets().GetItem( aId );
 }
 
 
 void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 {
     SCH_SCREEN* screen;
-    SCH_SCREENS s_list;
+    SCH_SCREENS s_list( Schematic().Root() );
 
     // Set the sheet count, and the sheet number (1 for root sheet)
-    int              sheet_count = g_RootSheet->CountSheets();
-    int              SheetNumber = 1;
-    const KIID_PATH& current_sheetpath = g_CurrentSheet->Path();
-    SCH_SHEET_LIST   sheetList( g_RootSheet );
+    int              sheet_count       = Schematic().Root().CountSheets();
+    int              sheet_number      = 1;
+    const KIID_PATH& current_sheetpath = GetCurrentSheet().Path();
 
     // Examine all sheets path to find the current sheets path,
     // and count them from root to the current sheet path:
-    for( const SCH_SHEET_PATH& sheet : sheetList )
+    for( const SCH_SHEET_PATH& sheet : Schematic().GetSheets() )
     {
         if( sheet.Path() == current_sheetpath )   // Current sheet path found
             break;
 
-        SheetNumber++;                         // Not found, increment before this current path
+        sheet_number++;                         // Not found, increment before this current path
     }
 
-    g_CurrentSheet->SetPageNumber( SheetNumber );
+    GetCurrentSheet().SetPageNumber( sheet_number );
 
     for( screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
         screen->m_NumberOfScreens = sheet_count;
 
-    GetScreen()->m_ScreenNumber = SheetNumber;
+    GetScreen()->m_ScreenNumber = sheet_number;
 }
 
 
 SCH_SCREEN* SCH_EDIT_FRAME::GetScreen() const
 {
-    if( !g_CurrentSheet )
-        return nullptr;
+    return GetCurrentSheet().LastScreen();
+}
 
-    return g_CurrentSheet->LastScreen();
+
+SCHEMATIC& SCH_EDIT_FRAME::Schematic() const
+{
+    return *m_schematic;
 }
 
 
 wxString SCH_EDIT_FRAME::GetScreenDesc() const
 {
-    if(! g_CurrentSheet )
-        return wxT("<unknown>");
-
-    wxString s = g_CurrentSheet->PathHumanReadable();
+    wxString s = GetCurrentSheet().PathHumanReadable();
 
     return s;
 }
@@ -417,22 +403,17 @@ wxString SCH_EDIT_FRAME::GetScreenDesc() const
 
 void SCH_EDIT_FRAME::CreateScreens()
 {
-    if( g_RootSheet == NULL )
-        g_RootSheet = new SCH_SHEET();
+    m_schematic->Reset();
+    m_schematic->SetRoot( new SCH_SHEET( m_schematic ) );
 
-    if( g_RootSheet->GetScreen() == NULL )
-    {
-        SCH_SCREEN* screen = new SCH_SCREEN( &Kiway() );
-        screen->SetMaxUndoItems( m_UndoRedoCountMax );
-        g_RootSheet->SetScreen( screen );
-        SetScreen( g_RootSheet->GetScreen() );
-    }
+    SCH_SCREEN* rootScreen = new SCH_SCREEN( &Kiway() );
+    rootScreen->SetMaxUndoItems( m_UndoRedoCountMax );
+    m_schematic->Root().SetScreen( rootScreen );
+    SetScreen( Schematic().RootScreen() );
 
-    g_RootSheet->GetScreen()->SetFileName( wxEmptyString );
+    m_schematic->RootScreen()->SetFileName( wxEmptyString );
 
-    g_CurrentSheet->clear();
-    g_CurrentSheet->push_back( g_RootSheet );
-    g_ConnectionGraph->Reset();
+    GetCurrentSheet().push_back( &m_schematic->Root() );
 
     if( GetScreen() == NULL )
     {
@@ -445,22 +426,20 @@ void SCH_EDIT_FRAME::CreateScreens()
 }
 
 
-SCH_SHEET_PATH& SCH_EDIT_FRAME::GetCurrentSheet()
+SCH_SHEET_PATH& SCH_EDIT_FRAME::GetCurrentSheet() const
 {
-    wxASSERT_MSG( g_CurrentSheet != NULL, wxT( "SCH_EDIT_FRAME g_CurrentSheet member is NULL." ) );
-
-    return *g_CurrentSheet;
+    return m_schematic->CurrentSheet();
 }
 
 
 void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
 {
-    if( aSheet != *g_CurrentSheet )
+    if( aSheet != GetCurrentSheet() )
     {
         FocusOnItem( nullptr );
 
-        *g_CurrentSheet = aSheet;
-        GetCanvas()->DisplaySheet( g_CurrentSheet->LastScreen() );
+        Schematic().SetCurrentSheet( aSheet );
+        GetCanvas()->DisplaySheet( aSheet.LastScreen() );
     }
 }
 
@@ -469,18 +448,16 @@ void SCH_EDIT_FRAME::HardRedraw()
 {
     FocusOnItem( nullptr );
 
-    GetCanvas()->DisplaySheet( g_CurrentSheet->LastScreen() );
+    GetCanvas()->DisplaySheet( GetCurrentSheet().LastScreen() );
     GetCanvas()->ForceRefresh();
 }
 
 
 void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
-    SCH_SHEET_LIST sheetList( g_RootSheet );
-
     // Shutdown blocks must be determined and vetoed as early as possible
     if( SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-            && sheetList.IsModified() )
+            && Schematic().GetSheets().IsModified() )
     {
         aEvent.Veto();
         return;
@@ -507,9 +484,11 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     if( simFrame && !simFrame->Close() )   // Can close the simulator?
         return;
 
-    if( sheetList.IsModified() )
+    SCH_SHEET_LIST sheetlist = Schematic().GetSheets();
+
+    if( sheetlist.IsModified() )
     {
-        wxFileName fileName = g_RootSheet->GetScreen()->GetFileName();
+        wxFileName fileName = Schematic().RootScreen()->GetFileName();
         wxString msg = _( "Save changes to \"%s\" before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
@@ -546,7 +525,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     if( FindHierarchyNavigator() )
         FindHierarchyNavigator()->Close( true );
 
-    SCH_SCREENS screens;
+    SCH_SCREENS screens( Schematic().Root() );
     wxFileName fn;
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
@@ -560,17 +539,17 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
             wxRemoveFile( fn.GetFullPath() );
     }
 
-    sheetList.ClearModifyStatus();
+    sheetlist.ClearModifyStatus();
 
-    wxString fileName = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
+    wxString fileName = Prj().AbsolutePath( Schematic().RootScreen()->GetFileName() );
 
-    if( !g_RootSheet->GetScreen()->GetFileName().IsEmpty() && !g_RootSheet->GetScreen()->IsEmpty() )
+    if( !Schematic().GetFileName().IsEmpty() && !Schematic().RootScreen()->IsEmpty() )
         UpdateFileHistory( fileName );
 
-    g_RootSheet->GetScreen()->Clear();
+    Schematic().RootScreen()->Clear();
 
     // all sub sheets are deleted, only the main sheet is usable
-    g_CurrentSheet->clear();
+    GetCurrentSheet().clear();
 
     Destroy();
 }
@@ -582,11 +561,11 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
     // Note that we need to fetch the rootSheetName out of its filename, as the root SCH_SHEET's
     // name is just a timestamp.
 
-    wxFileName rootFn( g_CurrentSheet->at( 0 )->GetFileName() );
+    wxFileName rootFn( GetCurrentSheet().at( 0 )->GetFileName() );
     wxString   filename = rootFn.GetName();
 
-    for( unsigned i = 1; i < g_CurrentSheet->size(); i++ )
-        filename += wxT( "-" ) + g_CurrentSheet->at( i )->GetName();
+    for( unsigned i = 1; i < GetCurrentSheet().size(); i++ )
+        filename += wxT( "-" ) + GetCurrentSheet().at( i )->GetName();
 
     return filename;
 }
@@ -611,7 +590,7 @@ void SCH_EDIT_FRAME::OnModify()
 
 void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 {
-    wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
+    wxFileName fn = Prj().AbsolutePath( Schematic().GetFileName() );
 
     fn.SetExt( PcbFileExtension );
 
@@ -811,7 +790,7 @@ void SCH_EDIT_FRAME::ParseArgs( wxCmdLineParser& aParser )
 
 void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 {
-    wxFileName kicad_board = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
+    wxFileName kicad_board = Prj().AbsolutePath( Schematic().GetFileName() );
 
     if( kicad_board.IsOk() )
     {
@@ -857,7 +836,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
 {
-    wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
+    wxFileName fn = Prj().AbsolutePath( Schematic().GetFileName() );
     fn.SetExt( NetlistFileExtension );
 
     if( !prepareForNetlist() )
@@ -909,9 +888,9 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
     // In case this event happens before g_RootSheet is initialized which does happen
     // on mingw64 builds.
 
-    if( g_RootSheet != NULL )
+    if( Schematic().IsValid() )
     {
-        SCH_SCREENS screenList;
+        SCH_SCREENS screenList( Schematic().Root() );
 
         for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
         {
@@ -1004,7 +983,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
 
         TestDanglingEnds();
 
-        for( SCH_ITEM* item : aItem->ConnectedItems( *g_CurrentSheet ) )
+        for( SCH_ITEM* item : aItem->ConnectedItems( GetCurrentSheet() ) )
             RefreshItem( item );
     }
 
@@ -1028,7 +1007,7 @@ void SCH_EDIT_FRAME::UpdateTitle()
 
         title.Printf( _( "Eeschema" ) + wxT( " \u2014 %s [%s] \u2014 %s" ),
                       fn.GetFullName(),
-                      g_CurrentSheet->PathHumanReadable(),
+                      GetCurrentSheet().PathHumanReadable(),
                       fn.GetPath() );
 
         if( fn.FileExists() )
@@ -1044,15 +1023,9 @@ void SCH_EDIT_FRAME::UpdateTitle()
 }
 
 
-int SCH_EDIT_FRAME::GetSeverity( int aErrorCode ) const
-{
-    return ::GetSeverity( aErrorCode );
-}
-
-
 void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 {
-    SCH_SHEET_LIST list( g_RootSheet );
+    SCH_SHEET_LIST list = Schematic().GetSheets();
     PROF_COUNTER   timer;
 
     // Ensure schematic graph is accurate
@@ -1069,7 +1042,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
     timer.Stop();
     wxLogTrace( "CONN_PROFILE", "SchematicCleanUp() %0.4f ms", timer.msecs() );
 
-    g_ConnectionGraph->Recalculate( list, true );
+    Schematic().ConnectionGraph()->Recalculate( list, true );
 }
 
 
@@ -1133,8 +1106,7 @@ void SCH_EDIT_FRAME::FixupJunctions()
 
     bool modified = false;
 
-    SCH_SHEET_LIST sheetList;
-    sheetList.BuildSheetList( g_RootSheet );
+    SCH_SHEET_LIST sheetList = Schematic().GetSheets();
 
     for( const SCH_SHEET_PATH& sheet : sheetList )
     {
@@ -1179,9 +1151,7 @@ void SCH_EDIT_FRAME::FixupJunctions()
 
 bool SCH_EDIT_FRAME::IsContentModified()
 {
-    SCH_SHEET_LIST sheetList( g_RootSheet );
-
-    return sheetList.IsModified();
+    return Schematic().GetSheets().IsModified();
 }
 
 
@@ -1189,6 +1159,35 @@ bool SCH_EDIT_FRAME::GetShowAllPins() const
 {
     EESCHEMA_SETTINGS* cfg = eeconfig();
     return cfg->m_Appearance.show_hidden_pins;
+}
+
+
+void SCH_EDIT_FRAME::FocusOnItem( SCH_ITEM* aItem )
+{
+    static KIID lastBrightenedItemID( niluuid );
+
+    SCH_SHEET_LIST sheetList = Schematic().GetSheets();
+    SCH_SHEET_PATH dummy;
+    SCH_ITEM*      lastItem = sheetList.GetItem( lastBrightenedItemID, &dummy );
+
+    if( lastItem && lastItem != aItem )
+    {
+        lastItem->ClearBrightened();
+
+        RefreshItem( lastItem );
+        lastBrightenedItemID = niluuid;
+    }
+
+    if( aItem )
+    {
+        aItem->SetBrightened();
+
+        RefreshItem( aItem );
+        lastBrightenedItemID = aItem->m_Uuid;
+
+        // JEY TODO: test this with pins and fields (and with rotated symbols) ....
+        FocusOnLocation( aItem->GetFocusPosition() );
+    }
 }
 
 
@@ -1201,14 +1200,14 @@ void SCH_EDIT_FRAME::ConvertTimeStampUuids()
     // sheet paths using the new UUID based sheet paths.
 
     // Save the time stamp sheet paths.
-    SCH_SHEET_LIST timeStampSheetPaths( g_RootSheet );
+    SCH_SHEET_LIST timeStampSheetPaths = Schematic().GetSheets();
 
     std::vector<KIID_PATH> oldSheetPaths = timeStampSheetPaths.GetPaths();
 
     // The root sheet now gets a permanent UUID.
-    const_cast<KIID&>( g_RootSheet->m_Uuid ).ConvertTimestampToUuid();
+    const_cast<KIID&>( Schematic().Root().m_Uuid ).ConvertTimestampToUuid();
 
-    SCH_SCREENS schematic;
+    SCH_SCREENS schematic( Schematic().Root() );
 
     // Change the sheet and symbol time stamps to UUIDs.
     for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
@@ -1220,18 +1219,11 @@ void SCH_EDIT_FRAME::ConvertTimeStampUuids()
             const_cast<KIID&>( symbol->m_Uuid ).ConvertTimestampToUuid();
     }
 
-    SCH_SHEET_LIST uuidSheetPaths( g_RootSheet );
-
     timeStampSheetPaths.ReplaceLegacySheetPaths( oldSheetPaths );
 }
 
 
 wxString SCH_EDIT_FRAME::GetCurrentFileName() const
 {
-    SCH_SCREEN* screen = g_RootSheet->GetScreen();
-
-    if( screen )
-        return screen->GetFileName();
-
-    return wxEmptyString;
+    return Schematic().GetFileName();
 }

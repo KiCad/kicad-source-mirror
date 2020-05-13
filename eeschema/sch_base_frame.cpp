@@ -345,35 +345,6 @@ void SCH_BASE_FRAME::CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 }
 
 
-void SCH_BASE_FRAME::FocusOnItem( SCH_ITEM* aItem )
-{
-    static KIID lastBrightenedItemID( niluuid );
-
-    SCH_SHEET_LIST sheetList( g_RootSheet );
-    SCH_SHEET_PATH dummy;
-    SCH_ITEM*      lastItem = sheetList.GetItem( lastBrightenedItemID, &dummy );
-
-    if( lastItem && lastItem != aItem )
-    {
-        lastItem->ClearBrightened();
-
-        RefreshItem( lastItem );
-        lastBrightenedItemID = niluuid;
-    }
-
-    if( aItem )
-    {
-        aItem->SetBrightened();
-
-        RefreshItem( aItem );
-        lastBrightenedItemID = aItem->m_Uuid;
-
-        // JEY TODO: test this with pins and fields (and with rotated symbols) ....
-        FocusOnLocation( aItem->GetFocusPosition() );
-    }
-}
-
-
 void SCH_BASE_FRAME::HardRedraw()
 {
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );

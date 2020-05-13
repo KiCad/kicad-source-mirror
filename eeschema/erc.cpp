@@ -38,6 +38,7 @@
 #include <sch_marker.h>
 #include <sch_sheet.h>
 #include <sch_reference_list.h>
+#include <schematic.h>
 #include <wx/ffile.h>
 
 
@@ -154,11 +155,12 @@ static int MinimalReq[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL] =
 };
 
 
-int TestDuplicateSheetNames( bool aCreateMarker )
+int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker )
 {
     SCH_SCREEN* screen;
     int         err_count = 0;
-    SCH_SCREENS screenList;      // Created the list of screen
+
+    SCH_SCREENS screenList( aSchematic->Root() );
 
     for( screen = screenList.GetFirst(); screen != NULL; screen = screenList.GetNext() )
     {
@@ -199,9 +201,9 @@ int TestDuplicateSheetNames( bool aCreateMarker )
 }
 
 
-void TestTextVars()
+void TestTextVars( SCHEMATIC* aSchematic )
 {
-    SCH_SCREENS screens;
+    SCH_SCREENS screens( aSchematic->Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
     {
@@ -271,11 +273,12 @@ void TestTextVars()
 }
 
 
-int TestConflictingBusAliases()
+int TestConflictingBusAliases( SCHEMATIC* aSchematic )
 {
     wxString    msg;
     int         err_count = 0;
-    SCH_SCREENS screens;
+
+    SCH_SCREENS screens( aSchematic->Root() );
     std::vector< std::shared_ptr<BUS_ALIAS> > aliases;
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
@@ -311,7 +314,7 @@ int TestConflictingBusAliases()
 }
 
 
-int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
+int TestMultiunitFootprints( const SCH_SHEET_LIST& aSheetList )
 {
     int errors = 0;
     std::map<wxString, LIB_ID> footprints;

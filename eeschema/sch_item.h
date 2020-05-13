@@ -36,6 +36,7 @@
 
 class SCH_CONNECTION;
 class SCH_SHEET_PATH;
+class SCHEMATIC;
 class LINE_READER;
 class SCH_EDIT_FRAME;
 class wxFindReplaceData;
@@ -207,6 +208,19 @@ public:
 
     wxPoint& GetStoredPos() { return m_storedPos; }
     void     SetStoredPos( wxPoint aPos ) { m_storedPos = aPos; }
+
+    /**
+     * Searches the item hierarchy to find a SCHEMATIC
+     *
+     * Every SCH_ITEM that lives on a SCH_SCREEN should be parented to either that screen
+     * or another SCH_ITEM on the same screen (for example, pins to their components).
+     *
+     * Every SCH_SCREEN should be parented to the SCHEMATIC.
+     * Note that this hierarchy is not the same as the sheet hierarchy!
+     *
+     * @return the parent schematic this item lives on, or nullptr
+     */
+    SCHEMATIC* Schematic() const;
 
     /**
      * Function IsLocked

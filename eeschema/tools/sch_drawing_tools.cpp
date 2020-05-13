@@ -43,6 +43,7 @@
 #include <sch_text.h>
 #include <sch_sheet.h>
 #include <sch_bitmap.h>
+#include <schematic.h>
 #include <class_library.h>
 #include <eeschema_settings.h>
 
@@ -56,9 +57,11 @@ bool SCH_DRAWING_TOOLS::Init()
 {
     EE_TOOL_BASE::Init();
 
-    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
-        return g_CurrentSheet->Last() != g_RootSheet;
-    };
+    auto belowRootSheetCondition =
+            [&]( const SELECTION& aSel )
+            {
+                return m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root();
+            };
 
     auto& ctxMenu = m_menu.GetMenu();
     ctxMenu.AddItem( EE_ACTIONS::leaveSheet, belowRootSheetCondition, 2 );
@@ -171,7 +174,8 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 if( !part )
                     continue;
 
-                component = new SCH_COMPONENT( *part, g_CurrentSheet, sel, (wxPoint) cursorPos );
+                component = new SCH_COMPONENT(
+                        *part, &m_frame->GetCurrentSheet(), sel, (wxPoint) cursorPos );
                 component->SetFlags( IS_NEW | IS_MOVED );
 
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )
@@ -218,7 +222,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                         next_comp = static_cast<SCH_COMPONENT*>( component->Duplicate() );
                         next_comp->SetFlags( IS_NEW | IS_MOVED );
                         next_comp->SetUnit( new_unit );
-                        next_comp->SetUnitSelection( g_CurrentSheet, new_unit );
+                        next_comp->SetUnitSelection( &m_frame->GetCurrentSheet(), new_unit );
 
                         if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                             component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
@@ -838,9 +842,9 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-            sheet = new SCH_SHEET( (wxPoint) cursorPos );
+            sheet = new SCH_SHEET(
+                    m_frame->GetCurrentSheet().Last(), static_cast<wxPoint>( cursorPos ) );
             sheet->SetFlags( IS_NEW | IS_RESIZED );
-            sheet->SetParent( m_frame->GetCurrentSheet().Last() );
             sheet->SetScreen( NULL );
             sheet->SetBorderWidth( m_frame->GetDefaultLineWidth() );
             sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );
@@ -858,7 +862,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             getViewControls()->SetAutoPan( false );
             getViewControls()->CaptureCursor( false );
 
-            if( m_frame->EditSheetProperties((SCH_SHEET*) sheet, g_CurrentSheet, nullptr ) )
+            if( m_frame->EditSheetProperties(
+                        static_cast<SCH_SHEET*>( sheet ), &m_frame->GetCurrentSheet(), nullptr ) )
             {
                 sheet->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 

@@ -34,6 +34,7 @@
 class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
 class SCH_SHEET_LIST;
+class SCHEMATIC;
 
 /* For ERC markers: error types (used in diags, and to set the color):
 */
@@ -115,13 +116,13 @@ void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned
  * @param aCreateMarker: true = create error markers in schematic,
  *                       false = calculate error count only
  */
-int TestDuplicateSheetNames( bool aCreateMarker );
+int TestDuplicateSheetNames( SCHEMATIC* aSchematic, bool aCreateMarker );
 
 /**
  * Function TestTextVars()
  * Checks for any unresolved text variable references.
  */
-void TestTextVars();
+void TestTextVars( SCHEMATIC* aSchematic );
 
 /**
  * Checks that there are not conflicting bus alias definitions in the schematic
@@ -131,14 +132,14 @@ void TestTextVars();
  *
  * @return the error count
  */
-int TestConflictingBusAliases();
+int TestConflictingBusAliases( SCHEMATIC* aSchematic );
 
 /**
  * Test if all units of each multiunit component have the same footprint assigned.
  * @param aSheetList contains components to be validated.
  * @return The error count.
  */
-int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList );
+int TestMultiunitFootprints( const SCH_SHEET_LIST& aSheetList );
 
 
 #endif  // _ERC_H

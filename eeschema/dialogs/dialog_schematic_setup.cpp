@@ -18,6 +18,7 @@
  */
 
 #include <sch_edit_frame.h>
+#include <schematic.h>
 #include <kiface_i.h>
 #include <dialog_sch_import_settings.h>
 #include <panel_setup_severities.h>
@@ -41,8 +42,9 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     m_pinMap = new PANEL_SETUP_PINMAP( m_treebook, aFrame );
 
     ERC_ITEM dummyItem( 0 );
-    m_severities = new PANEL_SETUP_SEVERITIES( this, dummyItem, g_ErcSettings->m_Severities,
-                                               ERCE_FIRST, ERCE_LAST, ERCE_PIN_TO_PIN_WARNING );
+    m_severities = new PANEL_SETUP_SEVERITIES( this, dummyItem,
+            m_frame->Schematic().ErcSettings()->m_Severities, ERCE_FIRST, ERCE_LAST,
+            ERCE_PIN_TO_PIN_WARNING );
 
     m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
 

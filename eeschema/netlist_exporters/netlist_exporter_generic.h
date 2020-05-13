@@ -70,8 +70,9 @@ protected:
 public:
     NETLIST_EXPORTER_GENERIC( SCH_EDIT_FRAME* aFrame,
                               NETLIST_OBJECT_LIST* aMasterList,
+                              SCHEMATIC* aSchematic,
                               CONNECTION_GRAPH* aGraph = nullptr  ) :
-        NETLIST_EXPORTER( aMasterList ),
+        NETLIST_EXPORTER( aMasterList, aSchematic ),
         m_libTable( aFrame->Prj().SchSymbolLibTable() ),
         m_graph( aGraph )
     {}

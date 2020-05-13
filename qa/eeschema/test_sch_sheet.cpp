@@ -30,6 +30,7 @@
 
 // Code under test
 #include <sch_sheet.h>
+#include <schematic.h>
 
 #include "uuid_test_utils.h"
 
@@ -41,6 +42,9 @@ public:
     TEST_SCH_SHEET_FIXTURE() : m_sheet(), m_csheet( m_sheet )
     {
     }
+
+    ///> Dummy schematic to attach the test sheet to
+    SCHEMATIC m_schematic;
 
     SCH_SHEET m_sheet;
 
@@ -73,13 +77,26 @@ BOOST_AUTO_TEST_CASE( Default )
 {
     BOOST_CHECK_EQUAL( m_csheet.GetPosition(), wxPoint( 0, 0 ) );
 
-    // it is it's own root sheet
-    BOOST_CHECK_EQUAL( m_sheet.GetRootSheet(), &m_sheet );
+    BOOST_CHECK_EQUAL( m_sheet.GetParent(), nullptr );
     BOOST_CHECK_EQUAL( m_sheet.CountSheets(), 1 );
 
     BOOST_CHECK_EQUAL( m_csheet.GetScreenCount(), 0 );
 
     BOOST_CHECK_EQUAL( m_sheet.ComponentCount(), 0 );
+}
+
+/**
+ * Test setting parent schematic
+ */
+BOOST_AUTO_TEST_CASE( SchematicParent )
+{
+    m_sheet.SetParent( &m_schematic );
+
+    BOOST_CHECK_EQUAL( m_sheet.IsRootSheet(), false );
+
+    m_schematic.SetRoot( &m_sheet );
+
+    BOOST_CHECK_EQUAL( m_sheet.IsRootSheet(), true );
 }
 
 /**

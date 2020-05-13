@@ -44,6 +44,7 @@
 #include <pgm_base.h>
 #include <reporter.h>
 #include <sch_edit_frame.h>
+#include <schematic.h>
 
 #include <dialogs/dialog_bom_cfg_lexer.h>
 
@@ -456,7 +457,7 @@ void DIALOG_BOM::pluginInit()
 void DIALOG_BOM::OnRunGenerator( wxCommandEvent& event )
 {
     // Calculate the xml netlist filename
-    wxFileName fn = g_RootSheet->GetScreen()->GetFileName();
+    wxFileName fn = m_parent->Schematic().GetFileName();
 
     fn.SetPath( wxPathOnly( Prj().GetProjectFullName() ) );
     fn.ClearExt();

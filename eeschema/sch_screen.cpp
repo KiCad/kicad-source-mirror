@@ -55,6 +55,7 @@
 #include <sch_marker.h>
 #include <sch_sheet.h>
 #include <sch_text.h>
+#include <schematic.h>
 #include <symbol_lib_table.h>
 #include <tool/common_tools.h>
 
@@ -154,6 +155,15 @@ SCH_SCREEN::~SCH_SCREEN()
 }
 
 
+SCHEMATIC* SCH_SCREEN::Schematic() const
+{
+    wxCHECK_MSG( GetParent() && GetParent()->Type() == SCHEMATIC_T, nullptr,
+            "SCH_SCREEN must have a SCHEMATIC parent!" );
+
+    return static_cast<SCHEMATIC*>( GetParent() );
+}
+
+
 void SCH_SCREEN::clearLibSymbols()
 {
     for( auto libSymbol : m_libSymbols )
@@ -187,6 +197,9 @@ bool SCH_SCREEN::HasItems( KICAD_T aItemType ) const
 
 void SCH_SCREEN::Append( SCH_ITEM* aItem )
 {
+    // Ensure the item can reach the SCHEMATIC through this screen
+    aItem->SetParent( this );
+
     if( aItem->Type() != SCH_SHEET_PIN_T && aItem->Type() != SCH_FIELD_T )
     {
         if( aItem->Type() == SCH_COMPONENT_T )
@@ -1178,42 +1191,6 @@ void SCH_SCREEN::AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
 }
 
 
-bool SCH_SCREEN::IsBusAlias( const wxString& aLabel )
-{
-    SCH_SHEET_LIST aSheets( g_RootSheet );
-    for( unsigned i = 0; i < aSheets.size(); i++ )
-    {
-        for( const auto& alias : aSheets[i].LastScreen()->GetBusAliases() )
-        {
-            if( alias->GetName() == aLabel )
-            {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-
-std::shared_ptr<BUS_ALIAS> SCH_SCREEN::GetBusAlias( const wxString& aLabel )
-{
-    SCH_SHEET_LIST aSheets( g_RootSheet );
-    for( unsigned i = 0; i < aSheets.size(); i++ )
-    {
-        for( auto alias : aSheets[i].LastScreen()->GetBusAliases() )
-        {
-            if( alias->GetName() == aLabel )
-            {
-                return alias;
-            }
-        }
-    }
-
-    return NULL;
-}
-
-
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
@@ -1231,7 +1208,7 @@ void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 SCH_SCREENS::SCH_SCREENS( SCH_SHEET* aSheet )
 {
     m_index = 0;
-    buildScreenList( ( !aSheet ) ? g_RootSheet : aSheet );
+    buildScreenList( aSheet );
 }
 
 
@@ -1317,16 +1294,18 @@ void SCH_SCREENS::ClearAnnotation()
 
 void SCH_SCREENS::ClearAnnotationOfNewSheetPaths( SCH_SHEET_LIST& aInitialSheetPathList )
 {
+    SCHEMATIC* sch = GetFirst()->Schematic();
+
+    wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::ClearAnnotationOfNewSheetPaths" );
+
     // Clear the annotation for the components inside new sheetpaths
     // not already in aInitialSheetList
-    SCH_SCREENS screensList( g_RootSheet );     // The list of screens, shared by sheet paths
+    SCH_SCREENS screensList( sch->Root() );     // The list of screens, shared by sheet paths
     screensList.BuildClientSheetPathList();     // build the shared by sheet paths, by screen
 
     // Search for new sheet paths, not existing in aInitialSheetPathList
     // and existing in sheetpathList
-    SCH_SHEET_LIST sheetpathList( g_RootSheet );
-
-    for( SCH_SHEET_PATH& sheetpath: sheetpathList )
+    for( SCH_SHEET_PATH& sheetpath : sch->GetSheets() )
     {
         bool path_exists = false;
 
@@ -1440,12 +1419,16 @@ void SCH_SCREENS::UpdateSymbolLinks( REPORTER* aReporter )
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
         screen->UpdateSymbolLinks( aReporter );
 
-    SCH_SHEET_LIST sheets( g_RootSheet );
+    SCHEMATIC* sch = GetFirst()->Schematic();
+
+    wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::UpdateSymbolLinks" );
+
+    SCH_SHEET_LIST sheets = sch->GetSheets();
 
     // All of the library symbols have been replaced with copies so the connection graph
     // pointer are stale.
-    if( g_ConnectionGraph )
-        g_ConnectionGraph->Recalculate( sheets, true );
+    if( sch->ConnectionGraph() )
+        sch->ConnectionGraph()->Recalculate( sheets, true );
 }
 
 
@@ -1588,12 +1571,14 @@ bool SCH_SCREENS::CanCauseCaseSensitivityIssue( const wxString& aSchematicFileNa
 
 void SCH_SCREENS::BuildClientSheetPathList()
 {
-    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCHEMATIC* sch = GetFirst()->Schematic();
+
+    wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::BuildClientSheetPathList" );
 
     for( SCH_SCREEN* curr_screen = GetFirst(); curr_screen; curr_screen = GetNext() )
         curr_screen->GetClientSheetPaths().clear();
 
-    for( SCH_SHEET_PATH& sheetpath: sheetList )
+    for( SCH_SHEET_PATH& sheetpath : sch->GetSheets() )
     {
         SCH_SCREEN* used_screen = sheetpath.LastScreen();
 
