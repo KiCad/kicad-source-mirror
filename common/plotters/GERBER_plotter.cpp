@@ -286,6 +286,10 @@ void GERBER_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
     if( aWidth == DO_NOT_SET_LINE_WIDTH )
         return;
+    else if( aWidth == USE_DEFAULT_LINE_WIDTH )
+        aWidth = m_renderSettings->GetDefaultPenWidth();
+
+    wxASSERT_MSG( aWidth >= 0, "Plotter called to set negative pen width" );
 
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
     int aperture_attribute = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;

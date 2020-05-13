@@ -303,6 +303,15 @@ void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle
  */
 void SVG_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
+    if( aWidth == DO_NOT_SET_LINE_WIDTH )
+        return;
+    else if( aWidth == USE_DEFAULT_LINE_WIDTH )
+        aWidth = m_renderSettings->GetDefaultPenWidth();
+    else if( aWidth == 0 )
+        aWidth = 1;
+
+    wxASSERT_MSG( aWidth > 0, "Plotter called to set negative pen width" );
+
     if( aWidth != currentPenWidth )
     {
         m_graphics_changed  = true;
