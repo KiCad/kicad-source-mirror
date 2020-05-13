@@ -607,19 +607,26 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
     m_footprint->Value() = m_texts->at( 1 );
 
     size_t i = 2;
-    for( auto item : m_footprint->GraphicalItems() )
+    std::vector<TEXTE_MODULE*> items_to_remove;
+
+    for( BOARD_ITEM* item : m_footprint->GraphicalItems() )
     {
-        TEXTE_MODULE* textModule = dyn_cast<TEXTE_MODULE*>( item );
+        TEXTE_MODULE* textModule = dynamic_cast<TEXTE_MODULE*>( item );
 
         if( textModule )
         {
             // copy grid table entries till we run out, then delete any remaining texts
             if( i < m_texts->size() )
                 *textModule = m_texts->at( i++ );
-            else
-                textModule->DeleteStructure();
+            else    // store this item to remove and delete it later,
+                    // after the graphic list is explored:
+                items_to_remove.push_back( textModule );
         }
     }
+
+    // Remove items from m_footprint graphic list:
+    for( TEXTE_MODULE* item: items_to_remove )
+        item->DeleteStructure();
 
     // if there are still grid table entries, create new texts for them
     while( i < m_texts->size() )
