@@ -355,6 +355,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( TEXTE_MODULE* aTextMod, COLOR4D aC
     wxSize  size = aTextMod->GetTextSize();
     wxPoint pos = aTextMod->GetTextPos();
     double  orient = aTextMod->GetDrawRotation();
+    int     thickness = aTextMod->GetEffectiveTextPenWidth();
 
     if( aTextMod->IsMirrored() )
         size.x = -size.x;  // Text is mirrored
@@ -370,10 +371,11 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( TEXTE_MODULE* aTextMod, COLOR4D aC
     MODULE* parent = static_cast<MODULE*> ( aTextMod->GetParent() );
     gbr_metadata.SetCmpReference( parent->GetReference() );
 
+    m_plotter->SetCurrentLineWidth( thickness );
+
     m_plotter->Text( pos, aColor, aTextMod->GetShownText(), orient, size,
-                     aTextMod->GetHorizJustify(), aTextMod->GetVertJustify(),
-                     aTextMod->GetEffectiveTextPenWidth(), aTextMod->IsItalic(), allow_bold,
-                     false, &gbr_metadata );
+                     aTextMod->GetHorizJustify(), aTextMod->GetVertJustify(), thickness,
+                     aTextMod->IsItalic(), allow_bold, false, &gbr_metadata );
 }
 
 
