@@ -52,9 +52,9 @@ const std::map<PLOT_DASH_TYPE, struct lineTypeStruct> lineTypeNames = {
 };
 
 
-DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE(
-        SCH_EDIT_FRAME* aParent, std::deque<SCH_LINE*>& lines )
-        : DIALOG_EDIT_LINE_STYLE_BASE( aParent ),
+DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent,
+                                                std::deque<SCH_LINE*>& lines ) :
+          DIALOG_EDIT_LINE_STYLE_BASE( aParent ),
           m_frame( aParent ),
           m_lines( lines ),
           m_width( aParent, m_staticTextWidth, m_lineWidth, m_staticWidthUnits, true )

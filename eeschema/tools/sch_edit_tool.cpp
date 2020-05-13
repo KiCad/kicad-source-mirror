@@ -1263,6 +1263,21 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     switch( item->Type() )
     {
+    case SCH_LINE_T:
+        if( !selection.AreAllItemsIdentical() )
+            return 0;
+
+        break;
+
+    default:
+        if( selection.Size() > 1 )
+            return 0;
+
+        break;
+    }
+
+    switch( item->Type() )
+    {
     case SCH_COMPONENT_T:
     {
         SCH_COMPONENT* component = (SCH_COMPONENT*) item;
@@ -1293,14 +1308,17 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         doRefresh = m_frame->EditSheetProperties( sheet, g_CurrentSheet, &doClearAnnotation );
 
-        if( doClearAnnotation )     // happens when the current sheet load a existing file
-        {                           // we must clear "new" components annotation
+        // If the sheet file is changed and new sheet contents are loaded then we have to
+        // clear the annotations on the new content (as it may have been set from some other
+        // sheet path reference)
+        if( doClearAnnotation )
+        {
             SCH_SCREENS screensList( g_RootSheet );
             // We clear annotation of new sheet paths here:
             screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
-            // Clear annotation of g_CurrentSheet itself, because its sheetpath
-            // is not a new path, but components managed by its sheet path must have
-            // their annotation cleared, because they are new:
+            // Clear annotation of g_CurrentSheet itself, because its sheetpath is not a new
+            // path, but components managed by its sheet path must have their annotation
+            // cleared, because they are new:
             sheet->GetScreen()->ClearAnnotation( g_CurrentSheet );
         }
 
@@ -1316,7 +1334,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_SHEET_PIN_T:
     {
-        SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) item;
+        SCH_SHEET_PIN*        pin = (SCH_SHEET_PIN*) item;
         DIALOG_EDIT_SHEET_PIN dlg( m_frame, pin );
 
         if( dlg.ShowModal() == wxID_OK )
@@ -1366,24 +1384,19 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_LINE_T:
     {
-        if( !selection.AreAllItemsIdentical() )
-            break;
+        std::deque<SCH_LINE*> graphicLines;
 
-        std::deque<SCH_LINE*> lines;
-        for( auto selItem : selection.Items() )
+        for( EDA_ITEM* selItem : selection.Items() )
         {
             SCH_LINE* line = dynamic_cast<SCH_LINE*>( selItem );
 
-            if( line )
-                lines.push_back( line );
+            if( line && line->IsGraphicLine() )
+                graphicLines.push_back( line );
+            else
+                return 0;
         }
 
-        // Verify we are only editing graphic lines
-        if( !std::all_of( lines.begin(), lines.end(),
-                    [&]( const SCH_LINE* r ) { return r->IsGraphicLine(); } ) )
-            break;
-
-        DIALOG_EDIT_LINE_STYLE dlg( m_frame, lines );
+        DIALOG_EDIT_LINE_STYLE dlg( m_frame, graphicLines );
 
         if( dlg.ShowModal() == wxID_OK )
         {
