@@ -522,6 +522,11 @@ bool SCH_CONNECTION::ParseBusVector( const wxString& aBus, wxString* aName,
     if( braceNesting != 0 )
         return false;
 
+    if( begin == end )
+        return false;
+    else if( begin > end )
+        std::swap( begin, end );
+
     if( aName )
         *aName = prefix;
 
