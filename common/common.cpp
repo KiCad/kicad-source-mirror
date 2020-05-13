@@ -554,6 +554,11 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject )
         }
     }
 
+#ifndef __WINDOWS__
+    if( strResult.StartsWith( "~" ) )
+        strResult.Replace( "~", wxGetHomeDir(), false );
+#endif // __WINDOWS__
+
     return strResult;
 }
 
