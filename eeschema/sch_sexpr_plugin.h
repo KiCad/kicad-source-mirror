@@ -24,6 +24,7 @@
 
 #include <memory>
 #include <sch_io_mgr.h>
+#include <sch_file_versions.h>
 #include <stack>
 
 
@@ -87,8 +88,8 @@ public:
                      SCH_SHEET* aAppendToMe = nullptr,
                      const PROPERTIES* aProperties = nullptr ) override;
 
-    void LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen,
-                      int version = EESCHEMA_VERSION );
+    void LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet,
+                      int aVersion = SEXPR_SCHEMATIC_FILE_VERSION );
 
     void Save( const wxString& aFileName, SCH_SHEET* aSheet, KIWAY* aKiway,
                const PROPERTIES* aProperties = nullptr ) override;
@@ -121,7 +122,8 @@ public:
 
     const wxString& GetError() const override { return m_error; }
 
-    static LIB_PART* ParsePart( LINE_READER& aReader, int majorVersion = 0, int minorVersion = 0 );
+    static LIB_PART* ParsePart( LINE_READER& aReader,
+                                int aVersion = SEXPR_SCHEMATIC_FILE_VERSION );
     static void FormatPart( LIB_PART* aPart, OUTPUTFORMATTER& aFormatter );
 
 private:

@@ -36,6 +36,7 @@
 
 #include <class_library.h>
 #include <schematic_lexer.h>
+#include <sch_file_versions.h>
 #include <default_values.h>    // For some default values
 
 
@@ -222,18 +223,30 @@ public:
 
     void ParseLib( LIB_PART_MAP& aSymbolLibMap );
 
-    LIB_PART* ParseSymbol( LIB_PART_MAP& aSymbolLibMap, bool aIsSchematicLib = false );
+    LIB_PART* ParseSymbol( LIB_PART_MAP& aSymbolLibMap,
+                           int aFileVersion = SEXPR_SYMBOL_LIB_FILE_VERSION );
 
     LIB_ITEM* ParseDrawItem();
 
     /**
-     * Parse a single schematic file into \a aSheet.
+     * Parse the internal #LINE_READER object into \a aSheet.
+     *
+     * When \a aIsCopyableOnly is true, only schematic objects that are viewable on the canvas
+     * for copy and paste purposes are parsed.  Other schematic content such as bus definitions
+     * or instance data will throw an #IO_ERROR exception.
+     *
+     * When \a aIsCopyableOnly is false, full schematic file parsing is performed.
      *
      * @note This does not load any sub-sheets or decent complex sheet hierarchies.
      *
      * @param aSheet The #SCH_SHEET object to store the parsed schematic file.
+     * @param aIsCopyableOnly Load only the schematic objects that can be copied into \a aSheet
+     *                        if true.  Otherwise, load the full schematic file format.
+     * @param aFileVersion The schematic file version to parser.  Defaults to the schematic
+     *                     file being parsed when \a aIsCopyableOnly is false.
      */
-    void ParseSchematic( SCH_SHEET* aSheet );
+    void ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyablyOnly = false,
+                         int aFileVersion = SEXPR_SCHEMATIC_FILE_VERSION );
 
     /**
      * Return whether a version number, if any was parsed, was too recent

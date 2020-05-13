@@ -48,7 +48,6 @@
 #include <sch_component.h>
 #include <sch_edit_frame.h>          // CMP_ORIENT_XXX
 #include <sch_field.h>
-#include <sch_file_versions.h>
 #include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_no_connect.h>
@@ -95,7 +94,7 @@ void SCH_SEXPR_PARSER::ParseLib( LIB_PART_MAP& aSymbolLibMap )
         {
             m_unit = 1;
             m_convert = 1;
-            LIB_PART* symbol = ParseSymbol( aSymbolLibMap );
+            LIB_PART* symbol = ParseSymbol( aSymbolLibMap, m_requiredVersion );
             aSymbolLibMap[symbol->GetName()] = symbol;
         }
         else
@@ -106,7 +105,7 @@ void SCH_SEXPR_PARSER::ParseLib( LIB_PART_MAP& aSymbolLibMap )
 }
 
 
-LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, bool aIsSchematicLib )
+LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, int aFileVersion )
 {
     wxCHECK_MSG( CurTok() == T_symbol, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a symbol." ) );
@@ -118,6 +117,7 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, bool aIsSc
     LIB_ITEM* item;
     std::unique_ptr<LIB_PART> symbol( new LIB_PART( wxEmptyString ) );
 
+    m_requiredVersion = aFileVersion;
     symbol->SetUnitCount( 1 );
 
     m_fieldId = MANDATORY_FIELDS;
@@ -1861,7 +1861,7 @@ void SCH_SEXPR_PARSER::parseSchSymbolInstances( SCH_SCREEN* aScreen )
 }
 
 
-void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet )
+void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, int aFileVersion )
 {
     wxCHECK( aSheet != nullptr, /* void */ );
 
@@ -1869,30 +1869,42 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet )
 
     wxCHECK( screen != nullptr, /* void */ );
 
+    if( aIsCopyableOnly )
+        m_requiredVersion = aFileVersion;
+
     T token;
 
-    NeedLEFT();
-    NextTok();
+    if( !aIsCopyableOnly )
+    {
+        NeedLEFT();
+        NextTok();
 
-    if( CurTok() != T_kicad_sch )
-        Expecting( "kicad_sch" );
+        if( CurTok() != T_kicad_sch )
+            Expecting( "kicad_sch" );
 
-    parseHeader( T_kicad_sch, SEXPR_SCHEMATIC_FILE_VERSION );
+        parseHeader( T_kicad_sch, SEXPR_SCHEMATIC_FILE_VERSION );
+    }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
+        if( aIsCopyableOnly && token == T_EOF )
+            break;
+
         if( token != T_LEFT )
             Expecting( T_LEFT );
 
         token = NextTok();
 
-        if( token == T_page && m_requiredVersion <= 20200506 )
+        if( !aIsCopyableOnly && token == T_page && m_requiredVersion <= 20200506 )
             token = T_paper;
 
         switch( token )
         {
         case T_paper:
         {
+            if( aIsCopyableOnly )
+                Unexpected( T_paper );
+
             PAGE_INFO pageInfo;
             parsePAGE_INFO( pageInfo );
             screen->SetPageSettings( pageInfo );
@@ -1901,6 +1913,9 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet )
 
         case T_page:
         {
+            if( aIsCopyableOnly )
+                Unexpected( T_page );
+
             // Only saved for top-level sniffing in Kicad Manager frame and other external
             // tool usage with flat hierarchies
             NeedSYMBOLorNUMBER();
@@ -1911,6 +1926,9 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet )
 
         case T_title_block:
         {
+            if( aIsCopyableOnly )
+                Unexpected( T_title_block );
+
             TITLE_BLOCK tb;
             parseTITLE_BLOCK( tb );
             screen->SetTitleBlock( tb );
@@ -1919,6 +1937,9 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet )
 
         case T_lib_symbols:
         {
+            if( aIsCopyableOnly )
+                Unexpected( T_lib_symbols );
+
             // Dummy map.  No derived symbols are allowed in the library cache.
             LIB_PART_MAP symbolLibMap;
 
@@ -1932,7 +1953,7 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet )
                 switch( token )
                 {
                 case T_symbol:
-                    screen->AddLibSymbol( ParseSymbol( symbolLibMap, true ) );
+                    screen->AddLibSymbol( ParseSymbol( symbolLibMap ) );
                     break;
 
                 default:
@@ -1991,10 +2012,16 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet )
             break;
 
         case T_symbol_instances:
+            if( aIsCopyableOnly )
+                Unexpected( T_symbol_instances );
+
             parseSchSymbolInstances( screen );
             break;
 
         case T_bus_alias:
+            if( aIsCopyableOnly )
+                Unexpected( T_bus_alias );
+
             parseBusAlias( screen );
             break;
 
@@ -2005,7 +2032,8 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet )
         }
     }
 
-    screen->UpdateLocalLibSymbolLinks();
+    if( !aIsCopyableOnly )
+        screen->UpdateLocalLibSymbolLinks();
 }
 
 

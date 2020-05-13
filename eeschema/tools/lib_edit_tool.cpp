@@ -38,7 +38,7 @@
 #include <dialogs/dialog_edit_one_field.h>
 #include <dialogs/dialog_edit_component_in_lib.h>
 #include <dialogs/dialog_lib_edit_pin_table.h>
-#include <sch_legacy_plugin.h>
+#include <sch_sexpr_plugin.h>
 #include <lib_text.h>
 #include "lib_edit_tool.h"
 #include <math/util.h>      // for KiROUND
@@ -627,7 +627,7 @@ int LIB_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
     LIB_PART* partCopy = new LIB_PART( *part );
 
     STRING_FORMATTER  formatter;
-    SCH_LEGACY_PLUGIN::FormatPart( partCopy, formatter );
+    SCH_SEXPR_PLUGIN::FormatPart( partCopy, formatter );
 
     delete partCopy;
 
@@ -654,8 +654,7 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
     try
     {
-        reader.ReadLine();
-        newPart = SCH_LEGACY_PLUGIN::ParsePart( reader );
+        newPart = SCH_SEXPR_PLUGIN::ParsePart( reader );
     }
     catch( IO_ERROR& )
     {

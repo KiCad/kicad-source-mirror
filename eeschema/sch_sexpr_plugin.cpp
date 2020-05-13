@@ -389,10 +389,8 @@ public:
 
     wxString GetFileName() const { return m_libFileName.GetFullPath(); }
 
-    static LIB_PART* LoadPart( LINE_READER& aReader, int aMajorVersion, int aMinorVersion,
-                               LIB_PART_MAP* aMap = nullptr );
-    static void      SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter,
-                                 int aNestLevel = 0, const wxString& aLibName = wxEmptyString );
+    static void SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter,
+                            int aNestLevel = 0, const wxString& aLibName = wxEmptyString );
 };
 
 
@@ -566,6 +564,16 @@ void SCH_SEXPR_PLUGIN::loadFile( const wxString& aFileName, SCH_SHEET* aSheet )
     SCH_SEXPR_PARSER parser( &reader );
 
     parser.ParseSchematic( aSheet );
+}
+
+
+void SCH_SEXPR_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, int aFileVersion )
+{
+    wxCHECK( aSheet, /* void */ );
+
+    SCH_SEXPR_PARSER parser( &aReader );
+
+    parser.ParseSchematic( aSheet, true, aFileVersion );
 }
 
 
@@ -1388,16 +1396,6 @@ void SCH_SEXPR_PLUGIN_CACHE::Load()
     // reload the cache as needed.
     m_fileModTime = GetLibModificationTime();
 }
-
-
-LIB_PART* SCH_SEXPR_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVersion,
-                                            int aMinorVersion, LIB_PART_MAP* aMap )
-{
-    std::unique_ptr< LIB_PART > part( new LIB_PART( wxEmptyString ) );
-
-    return part.release();
-}
-
 
 
 void SCH_SEXPR_PLUGIN_CACHE::Save()
@@ -2285,10 +2283,15 @@ bool SCH_SEXPR_PLUGIN::IsSymbolLibWritable( const wxString& aLibraryPath )
 }
 
 
-LIB_PART* SCH_SEXPR_PLUGIN::ParsePart( LINE_READER& reader, int aMajorVersion,
-                                       int aMinorVersion )
+LIB_PART* SCH_SEXPR_PLUGIN::ParsePart( LINE_READER& aReader, int aFileVersion )
 {
-    return SCH_SEXPR_PLUGIN_CACHE::LoadPart( reader, aMajorVersion, aMinorVersion );
+    LIB_PART_MAP map;
+    SCH_SEXPR_PARSER parser( &aReader );
+
+    parser.NeedLEFT();
+    parser.NextTok();
+
+    return parser.ParseSymbol( map, aFileVersion );
 }
 
 

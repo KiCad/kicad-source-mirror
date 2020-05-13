@@ -38,7 +38,7 @@
 #include <netlist_exporters/netlist_exporter_pspice.h>
 #include <netlist_object.h>
 #include <sch_edit_frame.h>
-#include <sch_legacy_plugin.h>
+#include <sch_sexpr_plugin.h>
 #include <sch_line.h>
 #include <sch_painter.h>
 #include <sch_sheet.h>
@@ -1106,7 +1106,7 @@ bool SCH_EDITOR_CONTROL::doCopy()
     }
 
     STRING_FORMATTER formatter;
-    SCH_LEGACY_PLUGIN plugin;
+    SCH_SEXPR_PLUGIN plugin;
 
     plugin.Format( &selection, &formatter );
 
@@ -1177,18 +1177,22 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         return 0;
 
     STRING_LINE_READER reader( text, "Clipboard" );
-    SCH_LEGACY_PLUGIN  plugin;
+    SCH_SEXPR_PLUGIN  plugin;
 
-    SCH_SCREEN paste_screen( &m_frame->GetScreen()->Kiway() );
+    SCH_SHEET paste_sheet;
+    SCH_SCREEN* paste_screen = new SCH_SCREEN( &m_frame->GetScreen()->Kiway() );
+
+    // Screen object on heap is owned by the sheet.
+    paste_sheet.SetScreen( paste_screen );
 
     try
     {
-        plugin.LoadContent( reader, &paste_screen );
+        plugin.LoadContent( reader, &paste_sheet );
     }
-    catch( IO_ERROR& )
+    catch( IO_ERROR& ioe )
     {
         // If it wasn't content, then paste as text
-        paste_screen.Append( new SCH_TEXT( wxPoint( 0, 0 ), text ) );
+        paste_screen->Append( new SCH_TEXT( wxPoint( 0, 0 ), text ) );
     }
 
     bool forceKeepAnnotations = false;
@@ -1206,7 +1210,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( forceDropAnnotations )
         dropAnnotations = true;
 
-    // SCH_LEGACY_PLUGIN added the items to the paste screen, but not to the view or anything
+    // SCH_SEXP_PLUGIN added the items to the paste screen, but not to the view or anything
     // else.  Pull them back out to start with.
     //
     EDA_ITEMS      loadedItems;
@@ -1217,7 +1221,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( m_frame->Prj().GetProjectPath() );
 
-    for( SCH_ITEM* item : paste_screen.Items() )
+    for( SCH_ITEM* item : paste_screen->Items() )
     {
         loadedItems.push_back( item );
 
@@ -1258,10 +1262,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
 
     // Remove the references from our temporary screen to prevent freeing on the DTOR
-    paste_screen.Clear( false );
-
-    // Now we can resolve the components and add everything to the screen, view, etc.
-    SYMBOL_LIB_TABLE* symLibTable = m_frame->Prj().SchSymbolLibTable();
+    paste_screen->Clear( false );
 
     for( unsigned i = 0; i < loadedItems.size(); ++i )
     {
@@ -1271,6 +1272,19 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
+            // The library symbol gets set from the cached library symbols in the current
+            // schematic not the symbol libraries.  The cached library symbol may have
+            // changed from the original library symbol which would cause the copy to
+            // be incorrect.
+            SCH_SCREEN* currentScreen = m_frame->GetScreen();
+
+            wxCHECK2( currentScreen, continue );
+
+            auto it = currentScreen->GetLibSymbols().find( component->GetSchSymbolLibraryName() );
+
+            if( it != currentScreen->GetLibSymbols().end() )
+                component->SetLibSymbol( new LIB_PART( *it->second ) );
+
             if( dropAnnotations )
             {
                 const_cast<KIID&>( component->m_Uuid ) = KIID();
@@ -1279,20 +1293,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 int unit = component->GetUnit();
                 component->ClearAnnotation( nullptr );
                 component->SetUnit( unit );
-            }
-
-            LIB_PART* libSymbol = symLibTable->LoadSymbol( component->GetLibId() );
-
-            if( libSymbol )
-            {
-                component->SetLibSymbol( new LIB_PART( *libSymbol ) );
-            }
-            else
-            {
-                DisplayError( m_frame,
-                        wxString::Format( _( "Symbol '%s' not found in library '%s'." ),
-                                    component->GetLibId().GetLibItemName().wx_str(),
-                                    component->GetLibId().GetLibNickname().wx_str() ) );
             }
         }
         else
