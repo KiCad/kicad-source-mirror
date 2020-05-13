@@ -631,6 +631,88 @@ bool SCH_CONNECTION::ParseBusGroup( wxString aGroup, wxString* aName,
 }
 
 
+wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
+{
+    size_t   groupLen = aGroup.length();
+    size_t   i = 0;
+    wxString ret;
+    int      braceNesting = 0;
+    int      tildeNesting = 0;
+
+    // Parse prefix
+    //
+    for( ; i < groupLen; ++i )
+    {
+        if( isSuperSub( aGroup[i] ) && i + 1 < groupLen && aGroup[i+1] == '{' )
+        {
+            braceNesting++;
+            i++;
+            continue;
+        }
+        else if( aGroup[i] == '~' )
+        {
+            if( tildeNesting )
+            {
+                tildeNesting = 0;
+                continue;
+            }
+            else
+            {
+                tildeNesting++;
+            }
+        }
+        else if( aGroup[i] == '}' )
+        {
+            braceNesting--;
+            continue;
+        }
+
+        ret += aGroup[i];
+
+        if( aGroup[i] == '{' )
+            break;
+    }
+
+    // Parse members
+    //
+    i++;  // '{' character
+
+    for( ; i < groupLen; ++i )
+    {
+        if( isSuperSub( aGroup[i] ) && i + 1 < groupLen && aGroup[i+1] == '{' )
+        {
+            braceNesting++;
+            i++;
+            continue;
+        }
+        else if( aGroup[i] == '~' )
+        {
+            if( tildeNesting )
+            {
+                tildeNesting = 0;
+                continue;
+            }
+            else
+            {
+                tildeNesting++;
+            }
+        }
+        else if( aGroup[i] == '}' )
+        {
+            braceNesting--;
+            continue;
+        }
+
+        ret += aGroup[i];
+
+        if( aGroup[i] == '}' )
+            break;
+    }
+
+    return ret;
+}
+
+
 bool SCH_CONNECTION::IsSubsetOf( SCH_CONNECTION* aOther ) const
 {
     if( aOther->IsNet() )

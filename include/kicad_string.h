@@ -54,6 +54,11 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext );
 wxString UnescapeString( const wxString& aSource );
 
 /**
+ * Remove markup (such as overbar or subscript) that we can't render to menu items.
+ */
+wxString PrettyPrintForMenu( const wxString& aString );
+
+/**
  * Copy bytes from @a aSource delimited string segment to @a aDest buffer.
  *
  * The extracted string will be null terminated even if truncation is necessary

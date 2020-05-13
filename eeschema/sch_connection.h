@@ -245,6 +245,8 @@ public:
         return m_members;
     }
 
+    static wxString PrintBusForUI( const wxString& aString );
+
     /**
      * Returns true if aOther is a subset of this connection or vice versa.
      *
