@@ -1185,6 +1185,22 @@ const BOX2I SHAPE_POLY_SET::BBox( int aClearance ) const
 }
 
 
+const BOX2I SHAPE_POLY_SET::BBoxFromCaches() const
+{
+    BOX2I bb;
+
+    for( unsigned i = 0; i < m_polys.size(); i++ )
+    {
+        if( i == 0 )
+            bb = m_polys[i][0].BBoxFromCache();
+        else
+            bb.Merge( m_polys[i][0].BBoxFromCache() );
+    }
+
+    return bb;
+}
+
+
 bool SHAPE_POLY_SET::PointOnEdge( const VECTOR2I& aP ) const
 {
     // Iterate through all the polygons in the set

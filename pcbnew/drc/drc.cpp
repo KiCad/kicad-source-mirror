@@ -478,7 +478,9 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     // test courtyards
     if( !m_pcb->GetDesignSettings().Ignore( DRCE_OVERLAPPING_FOOTPRINTS )
         || !m_pcb->GetDesignSettings().Ignore( DRCE_MISSING_COURTYARD )
-        || !m_pcb->GetDesignSettings().Ignore( DRCE_MALFORMED_COURTYARD ) )
+        || !m_pcb->GetDesignSettings().Ignore( DRCE_MALFORMED_COURTYARD )
+        || !m_pcb->GetDesignSettings().Ignore( DRCE_PTH_IN_COURTYARD )
+        || !m_pcb->GetDesignSettings().Ignore( DRCE_NPTH_IN_COURTYARD ) )
     {
         if( aMessages )
         {

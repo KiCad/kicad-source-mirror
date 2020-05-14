@@ -1042,6 +1042,8 @@ class SHAPE_POLY_SET : public SHAPE
          */
         void BuildBBoxCaches();
 
+        const BOX2I BBoxFromCaches() const;
+
         /**
          * Returns true if a given subpolygon contains the point aP
          *
@@ -1235,9 +1237,6 @@ class SHAPE_POLY_SET : public SHAPE
 
         void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aShape,
                         const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
-
-        bool pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath,
-                             bool aIgnoreEdges, bool aUseBBoxCaches = false ) const;
 
         /**
          * containsSingle function

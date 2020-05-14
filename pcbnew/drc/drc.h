@@ -87,6 +87,8 @@ enum PCB_DRC_CODE {
     DRCE_MISSING_COURTYARD,                 ///< footprint has no courtyard defined
     DRCE_MALFORMED_COURTYARD,               ///< footprint has a courtyard but malformed
                                             ///< (not convertible to a closed polygon with holes)
+    DRCE_PTH_IN_COURTYARD,
+    DRCE_NPTH_IN_COURTYARD,
     DRCE_DISABLED_LAYER_ITEM,               ///< item on a disabled layer
     DRCE_INVALID_OUTLINE,                   ///< invalid board outline
     DRCE_MISSING_FOOTPRINT,                 ///< footprint not found for netlist item

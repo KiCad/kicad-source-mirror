@@ -115,6 +115,8 @@ wxString DRC_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     case DRCE_OVERLAPPING_FOOTPRINTS:   msg = _HKI( "Courtyards overlap" );                 break;
     case DRCE_MISSING_COURTYARD:        msg = _HKI( "Footprint has no courtyard defined" ); break;
     case DRCE_MALFORMED_COURTYARD:      msg = _HKI( "Footprint has malformed courtyard" );  break;
+    case DRCE_PTH_IN_COURTYARD:         msg = _HKI( "PTH inside courtyard" );               break;
+    case DRCE_NPTH_IN_COURTYARD:        msg = _HKI( "NPTH inside courtyard" );              break;
 
     case DRCE_DUPLICATE_FOOTPRINT:      msg = _HKI( "Duplicate footprints" );               break;
     case DRCE_MISSING_FOOTPRINT:        msg = _HKI( "Missing footprint" );                  break;

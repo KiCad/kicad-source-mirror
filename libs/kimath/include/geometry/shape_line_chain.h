@@ -375,6 +375,11 @@ public:
             m_bbox.Inflate( m_width );
     }
 
+    const BOX2I BBoxFromCache() const
+    {
+        return m_bbox;
+    }
+
     /**
      * Function Collide()
      *
