@@ -530,7 +530,7 @@ void DIALOG_COLOR_PICKER::SetEditVals( CHANGED_COLOR aChanged, bool aCheckTransp
     if( aCheckTransparency )
     {
         // If they've changed the color, they probably don't want it to remain 100% transparent,
-        // and it looks like a bug when it changing the color has no effect.
+        // and it looks like a bug when changing the color has no effect.
         if( m_newColor4D.a == 0.0 )
             m_newColor4D.a = 1.0;
     }
@@ -556,9 +556,10 @@ void DIALOG_COLOR_PICKER::SetEditVals( CHANGED_COLOR aChanged, bool aCheckTransp
         m_spinCtrlSaturation->SetValue( m_sat * 255 );
 
     if( aChanged != VAL_CHANGED )
-    {
         m_sliderBrightness->SetValue(normalizeToInt( m_val ) );
-    }
+
+    if( aChanged != HEX_CHANGED )
+        m_colorValue->SetValue( m_newColor4D.ToWxString( wxC2S_CSS_SYNTAX ) );
 }
 
 
@@ -711,6 +712,16 @@ void DIALOG_COLOR_PICKER::onHSVMouseDrag( wxMouseEvent& event )
 
     if( setHSvaluesFromCursor( event.GetPosition() ) )
         drawAll();
+}
+
+
+void DIALOG_COLOR_PICKER::OnColorValueText( wxCommandEvent& event )
+{
+    m_newColor4D.SetFromWxString( m_colorValue->GetValue() );
+    m_newColor4D.ToHSV( m_hue, m_sat, m_val, true );
+
+    SetEditVals( HEX_CHANGED, true );
+    drawAll();
 }
 
 

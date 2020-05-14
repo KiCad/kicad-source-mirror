@@ -28,6 +28,7 @@
 #include <wx/panel.h>
 #include <wx/notebook.h>
 #include <wx/statline.h>
+#include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -68,6 +69,7 @@ class DIALOG_COLOR_PICKER_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextOldColor;
 		wxStaticBitmap* m_OldColorRect;
 		wxStaticBitmap* m_NewColorRect;
+		wxTextCtrl* m_colorValue;
 		wxButton* m_resetToDefault;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -85,6 +87,7 @@ class DIALOG_COLOR_PICKER_BASE : public DIALOG_SHIM
 		virtual void OnChangeEditSat( wxSpinEvent& event ) { event.Skip(); }
 		virtual void OnChangeBrightness( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnChangeAlpha( wxScrollEvent& event ) { event.Skip(); }
+		virtual void OnColorValueText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnResetButton( wxCommandEvent& event ) { event.Skip(); }
 
 

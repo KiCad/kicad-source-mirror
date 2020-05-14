@@ -182,7 +182,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextOldColor = new wxStaticText( this, wxID_ANY, _("Preview (old / new):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOldColor = new wxStaticText( this, wxID_ANY, _("Preview (old/new):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOldColor->Wrap( -1 );
 	bButtonsSizer->Add( m_staticTextOldColor, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -196,8 +196,19 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 
 	bButtonsSizer->Add( m_NewColorRect, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
+
+	bButtonsSizer->Add( 10, 0, 0, wxEXPAND, 5 );
+
+	m_colorValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_colorValue->SetMinSize( wxSize( 176,-1 ) );
+
+	bButtonsSizer->Add( m_colorValue, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	bButtonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );
+
 	m_resetToDefault = new wxButton( this, wxID_ANY, _("Reset to Default"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_resetToDefault, 0, wxALL, 5 );
+	bButtonsSizer->Add( m_resetToDefault, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -246,6 +257,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	m_sliderTransparency->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
 	m_sliderTransparency->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
 	m_sliderTransparency->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_colorValue->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COLOR_PICKER_BASE::OnColorValueText ), NULL, this );
 	m_resetToDefault->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COLOR_PICKER_BASE::OnResetButton ), NULL, this );
 }
 
@@ -279,6 +291,7 @@ DIALOG_COLOR_PICKER_BASE::~DIALOG_COLOR_PICKER_BASE()
 	m_sliderTransparency->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
 	m_sliderTransparency->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
 	m_sliderTransparency->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_colorValue->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_COLOR_PICKER_BASE::OnColorValueText ), NULL, this );
 	m_resetToDefault->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COLOR_PICKER_BASE::OnResetButton ), NULL, this );
 
 }

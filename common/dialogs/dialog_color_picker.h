@@ -62,6 +62,7 @@ enum CHANGED_COLOR
     HUE_CHANGED,
     SAT_CHANGED,
     VAL_CHANGED,
+    HEX_CHANGED
 };
 
 class DIALOG_COLOR_PICKER : public DIALOG_COLOR_PICKER_BASE
@@ -147,6 +148,8 @@ private:
 	void onRGBMouseDrag( wxMouseEvent& event ) override;
 	void onHSVMouseClick( wxMouseEvent& event ) override;
 	void onHSVMouseDrag( wxMouseEvent& event ) override;
+
+    void OnColorValueText( wxCommandEvent& event ) override;
 
     ///< Event handler for the reset button press
     void OnResetButton( wxCommandEvent& aEvent ) override;
