@@ -82,13 +82,6 @@ private:
 
     /**
      * helper function
-     * Rebuild list of tracks, and connected tracks
-     * this info must be rebuilt when tracks are erased
-     */
-    void buildTrackConnectionInfo();
-
-    /**
-     * helper function
      * merge aTrackRef and aCandidate, when possible,
      * i.e. when they are colinear, same width, and obviously same layer
      * @return true if the segments are merged, false if not
@@ -96,15 +89,6 @@ private:
      * @param aSeg2 is the candidate, and after merging, the removed segment
      */
     bool mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 );
-
-    /**
-     * @return true if aTrack has at least one end dangling, i.e. connected
-     * to nothing.
-     * if aTrack is a via, it is dangling if the via is connected to nothing
-     * or only one item.
-     * @param aTrack is the track (or the via) to test.
-     */
-    bool testTrackEndpointDangling( TRACK* aTrack );
 
     /**
      * @return true if a track end position is a node, i.e. a end connected

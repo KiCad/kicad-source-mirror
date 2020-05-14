@@ -56,6 +56,8 @@ enum PCB_DRC_CODE {
     DRCE_ZONES_INTERSECT,                   ///< copper area outlines intersect
     DRCE_ZONES_TOO_CLOSE,                   ///< copper area outlines are too close
     DRCE_ZONE_HAS_EMPTY_NET,                ///< copper area has a net but no pads in nets, which is suspicious
+    DRCE_DANGLING_VIA,                      ///< via which isn't connected to anything
+    DRCE_DANGLING_TRACK,                    ///< track with at least one end not connected to anything
     DRCE_HOLE_NEAR_PAD,                     ///< hole too close to pad
     DRCE_HOLE_NEAR_TRACK,                   ///< hole too close to track
     DRCE_DRILLED_HOLES_TOO_CLOSE,           ///< overlapping drilled holes break drill bits
@@ -96,14 +98,14 @@ enum PCB_DRC_CODE {
     DRCE_LAST = DRCE_UNRESOLVED_VARIABLE,
 
     // These are actually Cleanup Tracks and Vias actions, not DRCE errors
-    DRCE_SHORT,
-    DRCE_REDUNDANT_VIA,
-    DRCE_DUPLICATE_TRACK,
-    DRCE_MERGE_TRACKS,
-    DRCE_DANGLING_TRACK,
-    DRCE_DANGLING_VIA,
-    DRCE_ZERO_LENGTH_TRACK,
-    DRCE_TRACK_IN_PAD
+    CLEANUP_SHORT,
+    CLEANUP_REDUNDANT_VIA,
+    CLEANUP_DUPLICATE_TRACK,
+    CLEANUP_MERGE_TRACKS,
+    CLEANUP_DANGLING_TRACK,
+    CLEANUP_DANGLING_VIA,
+    CLEANUP_ZERO_LENGTH_TRACK,
+    CLEANUP_TRACK_IN_PAD
 };
 
 

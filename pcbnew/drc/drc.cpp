@@ -868,12 +868,11 @@ void DRC::testDrilledHoles()
 
 void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
 {
-    wxProgressDialog * progressDialog = NULL;
-    const int delta = 500;  // This is the number of tests between 2 calls to the
-                            // progress bar
-    int count = m_pcb->Tracks().size();
-
-    int deltamax = count/delta;
+    wxProgressDialog* progressDialog = NULL;
+    const int         delta = 500;  // This is the number of tests between 2 calls to the
+                                    // progress bar
+    int               count = m_pcb->Tracks().size();
+    int               deltamax = count/delta;
 
     if( aShowProgressBar && deltamax > 3 )
     {
@@ -883,6 +882,17 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
                                                deltamax, aActiveWindow,
                                                wxPD_AUTO_HIDE | wxPD_CAN_ABORT | wxPD_ELAPSED_TIME );
         progressDialog->Update( 0, wxEmptyString );
+    }
+
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_pcb->GetConnectivity();
+    BOARD_DESIGN_SETTINGS&             settings = m_pcb->GetDesignSettings();
+
+
+    if( !m_pcb->GetDesignSettings().Ignore( DRCE_DANGLING_TRACK )
+            || !m_pcb->GetDesignSettings().Ignore( DRCE_DANGLING_VIA ) )
+    {
+        connectivity->Clear();
+        connectivity->Build( m_pcb ); // just in case. This really needs to be reliable.
     }
 
     int ii = 0;
@@ -909,6 +919,19 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
 
         // Test new segment against tracks and pads, optionally against copper zones
         doTrackDrc( *seg_it, seg_it + 1, m_pcb->Tracks().end(), m_doZonesTest );
+
+        // Test for dangling items
+        int code = (*seg_it)->Type() == PCB_VIA_T ? DRCE_DANGLING_VIA : DRCE_DANGLING_TRACK;
+        wxPoint pos;
+
+        if( !settings.Ignore( code ) && connectivity->TestTrackEndpointDangling( *seg_it, &pos ) )
+        {
+            DRC_ITEM* drcItem = new DRC_ITEM( code );
+            drcItem->SetItems( *seg_it );
+
+            MARKER_PCB* marker = new MARKER_PCB( drcItem, pos );
+            addMarkerToPcb( marker );
+        }
     }
 
     if( progressDialog )

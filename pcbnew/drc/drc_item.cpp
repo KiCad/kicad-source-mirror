@@ -78,9 +78,9 @@ wxString DRC_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     case DRCE_DISABLED_LAYER_ITEM:      msg = _HKI( "Item on a disabled layer" );           break;
     case DRCE_ZONES_INTERSECT:          msg = _HKI( "Copper areas intersect" );             break;
     case DRCE_ZONES_TOO_CLOSE:          msg = _HKI( "Copper areas too close" );             break;
-
     case DRCE_ZONE_HAS_EMPTY_NET:       msg = _HKI( "Copper zone net has no pads" );        break;
-
+    case DRCE_DANGLING_VIA:             msg = _HKI( "Via is not connected" );               break;
+    case DRCE_DANGLING_TRACK:           msg = _HKI( "Track has unconnected end" );          break;
     case DRCE_HOLE_NEAR_PAD:            msg = _HKI( "Hole too close to pad" );              break;
     case DRCE_HOLE_NEAR_TRACK:          msg = _HKI( "Hole too close to track" );            break;
     case DRCE_TOO_SMALL_TRACK_WIDTH:    msg = _HKI( "Track width too small" );              break;
@@ -121,14 +121,14 @@ wxString DRC_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     case DRCE_EXTRA_FOOTPRINT:          msg = _HKI( "Extra footprint" );                    break;
 
     // For cleanup tracks and vias:
-    case DRCE_SHORT:                    msg = _HKI( "Remove track shorting two nets" );     break;
-    case DRCE_REDUNDANT_VIA:            msg = _HKI( "Remove redundant via" );               break;
-    case DRCE_DUPLICATE_TRACK:          msg = _HKI( "Remove duplicate track" );             break;
-    case DRCE_MERGE_TRACKS:             msg = _HKI( "Merge co-linear tracks" );             break;
-    case DRCE_DANGLING_TRACK:           msg = _HKI( "Remove dangling track" );              break;
-    case DRCE_DANGLING_VIA:             msg = _HKI( "Remove dangling via" );                break;
-    case DRCE_ZERO_LENGTH_TRACK:        msg = _HKI( "Remove zero-length track" );           break;
-    case DRCE_TRACK_IN_PAD:             msg = _HKI( "Remove track inside pad" );            break;
+    case CLEANUP_SHORT:                 msg = _HKI( "Remove track shorting two nets" );     break;
+    case CLEANUP_REDUNDANT_VIA:         msg = _HKI( "Remove redundant via" );               break;
+    case CLEANUP_DUPLICATE_TRACK:       msg = _HKI( "Remove duplicate track" );             break;
+    case CLEANUP_MERGE_TRACKS:          msg = _HKI( "Merge co-linear tracks" );             break;
+    case CLEANUP_DANGLING_TRACK:        msg = _HKI( "Remove dangling track" );              break;
+    case CLEANUP_DANGLING_VIA:          msg = _HKI( "Remove dangling via" );                break;
+    case CLEANUP_ZERO_LENGTH_TRACK:     msg = _HKI( "Remove zero-length track" );           break;
+    case CLEANUP_TRACK_IN_PAD:          msg = _HKI( "Remove track inside pad" );            break;
 
     case DRCE_UNRESOLVED_VARIABLE:      msg = _HKI( "Unresolved text variable" );           break;
 

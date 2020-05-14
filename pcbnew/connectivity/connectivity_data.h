@@ -183,6 +183,8 @@ public:
 
     void GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges ) const;
 
+    bool TestTrackEndpointDangling( TRACK* aTrack, wxPoint* aPos );
+
     /**
      * Function ClearDynamicRatsnest()
      * Erases the temporary dynamic ratsnest (i.e. the ratsnest lines that

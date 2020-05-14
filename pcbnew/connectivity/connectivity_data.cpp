@@ -598,6 +598,35 @@ void CONNECTIVITY_DATA::GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges) const
 }
 
 
+bool CONNECTIVITY_DATA::TestTrackEndpointDangling( TRACK* aTrack, wxPoint* aPos )
+{
+    auto items = GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems();
+
+    // Not in the connectivity system.  This is a bug!
+    if( items.empty() )
+    {
+        wxFAIL_MSG( "track not in connectivity system" );
+        return false;
+    }
+
+    CN_ITEM* citem = items.front();
+
+    if( !citem->Valid() )
+        return false;
+
+    for( const std::shared_ptr<CN_ANCHOR>& anchor : citem->Anchors() )
+    {
+        if( anchor->IsDangling() )
+        {
+            *aPos = (wxPoint) anchor->Pos();
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
         const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor, KICAD_T aTypes[] )
 {
@@ -700,3 +729,5 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( MODULE* a
 
     return edges;
 }
+
+

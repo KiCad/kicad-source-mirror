@@ -133,7 +133,7 @@ bool TRACKS_CLEANER::removeBadTrackSegments()
         {
             if( segment->GetNetCode() != testedPad->GetNetCode() )
             {
-                DRC_ITEM* item = new DRC_ITEM( DRCE_SHORT );
+                DRC_ITEM* item = new DRC_ITEM( CLEANUP_SHORT );
                 item->SetItems( segment );
                 m_itemsList->push_back( item );
 
@@ -145,7 +145,7 @@ bool TRACKS_CLEANER::removeBadTrackSegments()
         {
             if( segment->GetNetCode() != testedTrack->GetNetCode() && !testedTrack->GetState( FLAG0 ) )
             {
-                DRC_ITEM* item = new DRC_ITEM( DRCE_SHORT );
+                DRC_ITEM* item = new DRC_ITEM( CLEANUP_SHORT );
                 item->SetItems( segment );
                 m_itemsList->push_back( item );
 
@@ -190,7 +190,7 @@ bool TRACKS_CLEANER::cleanupVias()
 
             if( ( pad->GetLayerSet() & all_cu ) == all_cu )
             {
-                DRC_ITEM* item = new DRC_ITEM( DRCE_REDUNDANT_VIA );
+                DRC_ITEM* item = new DRC_ITEM( CLEANUP_REDUNDANT_VIA );
                 item->SetItems( via1, pad );
                 m_itemsList->push_back( item );
 
@@ -209,7 +209,7 @@ bool TRACKS_CLEANER::cleanupVias()
 
             if( via1->GetViaType() == via2->GetViaType() )
             {
-                DRC_ITEM* item = new DRC_ITEM( DRCE_REDUNDANT_VIA );
+                DRC_ITEM* item = new DRC_ITEM( CLEANUP_REDUNDANT_VIA );
                 item->SetItems( via1, via2 );
                 m_itemsList->push_back( item );
 
@@ -221,35 +221,6 @@ bool TRACKS_CLEANER::cleanupVias()
 
 
     return removeItems( toRemove );
-}
-
-
-bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack )
-{
-    auto connectivity = m_brd->GetConnectivity();
-    auto items = connectivity->GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems();
-
-    // Not in the connectivity system.  This is a bug!
-    if( items.empty() )
-    {
-        wxASSERT( !items.empty() );
-        return false;
-    }
-
-    auto citem = items.front();
-
-    if( !citem->Valid() )
-        return false;
-
-    auto anchors = citem->Anchors();
-
-    for( const auto& anchor : anchors )
-    {
-        if( anchor->IsDangling() )
-            return true;
-    }
-
-    return false;
 }
 
 
@@ -299,15 +270,16 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
 
         for( TRACK* track : m_brd->Tracks() )
         {
-            bool flag_erase = false; // Start without a good reason to erase it
+            bool    flag_erase = false; // Start without a good reason to erase it
+            wxPoint pos;
 
             // Tst if a track (or a via) endpoint is not connected to another track or to a zone.
-            if( testTrackEndpointDangling( track ) )
+            if( m_brd->GetConnectivity()->TestTrackEndpointDangling( track, &pos ) )
                 flag_erase = true;
 
             if( flag_erase )
             {
-                int errorCode = track->IsTrack() ? DRCE_DANGLING_TRACK : DRCE_DANGLING_VIA;
+                int errorCode = track->IsTrack() ? CLEANUP_DANGLING_TRACK : CLEANUP_DANGLING_VIA;
                 DRC_ITEM* item = new DRC_ITEM( errorCode );
                 item->SetItems( track );
                 m_itemsList->push_back( item );
@@ -341,7 +313,7 @@ bool TRACKS_CLEANER::deleteNullSegments( TRACKS& aTracks )
     {
         if( segment->IsNull() && segment->Type() == PCB_TRACE_T && !segment->IsLocked() )
         {
-            DRC_ITEM* item = new DRC_ITEM( DRCE_ZERO_LENGTH_TRACK );
+            DRC_ITEM* item = new DRC_ITEM( CLEANUP_ZERO_LENGTH_TRACK );
             item->SetItems( segment );
             m_itemsList->push_back( item );
 
@@ -367,7 +339,7 @@ bool TRACKS_CLEANER::deleteTracksInPads()
         {
             if( pad->HitTest( track->GetStart() ) && pad->HitTest( track->GetEnd() ) )
             {
-                DRC_ITEM* item = new DRC_ITEM( DRCE_TRACK_IN_PAD );
+                DRC_ITEM* item = new DRC_ITEM( CLEANUP_TRACK_IN_PAD );
                 item->SetItems( track );
                 m_itemsList->push_back( item );
 
@@ -410,7 +382,7 @@ bool TRACKS_CLEANER::cleanupSegments()
                     && track1->GetWidth() == track2->GetWidth()
                     && track1->GetLayer() == track2->GetLayer() )
             {
-                DRC_ITEM* item = new DRC_ITEM( DRCE_DUPLICATE_TRACK );
+                DRC_ITEM* item = new DRC_ITEM( CLEANUP_DUPLICATE_TRACK );
                 item->SetItems( track2 );
                 m_itemsList->push_back( item );
 
@@ -510,7 +482,7 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
             return false;
     }
 
-    DRC_ITEM* item = new DRC_ITEM( DRCE_MERGE_TRACKS );
+    DRC_ITEM* item = new DRC_ITEM( CLEANUP_MERGE_TRACKS );
     item->SetItems( aSeg1, aSeg2 );
     m_itemsList->push_back( item );
 
