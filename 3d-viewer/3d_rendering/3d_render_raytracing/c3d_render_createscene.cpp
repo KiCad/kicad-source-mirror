@@ -620,8 +620,10 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER* aStatusTextReporter, REPORTER* aWa
                         static_cast<const CBVHCONTAINER2D*>( mapLayers.at( layerMask_id ) );
 
                 CONST_LIST_OBJECT2D intersectionList;
-                containerMaskLayer2d->GetListObjectsIntersects( object2d_A->GetBBox(),
-                                                                intersectionList );
+
+                if( containerMaskLayer2d )  // can be null if B_Mask or F_Mask is not shown
+                    containerMaskLayer2d->GetListObjectsIntersects( object2d_A->GetBBox(),
+                                                                    intersectionList );
 
                 if( !intersectionList.empty() )
                 {
