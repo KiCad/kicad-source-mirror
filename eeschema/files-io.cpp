@@ -772,7 +772,6 @@ bool SCH_EDIT_FRAME::doAutoSave()
 
 bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 {
-    wxString projectpath;
     wxFileName newfilename;
     SCH_SHEET_LIST sheetList( g_RootSheet );
 
@@ -812,9 +811,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                 layoutfile.Close();
             }
 
-            projectpath = Prj().GetProjectPath();
-            newfilename.SetPath( projectpath );
-            newfilename.SetName( projectpath );
+            newfilename.SetPath( Prj().GetProjectPath() );
+            newfilename.SetName( Prj().GetProjectName() );
             newfilename.SetExt( LegacySchematicFileExtension );
 
             g_CurrentSheet->clear();
