@@ -157,7 +157,7 @@ wxString SCH_EAGLE_PLUGIN::getLibName()
 
 wxFileName SCH_EAGLE_PLUGIN::getLibFileName()
 {
-    wxFileName fn( m_kiway->Prj().GetProjectPath(), getLibName(), SchematicLibraryFileExtension );
+    wxFileName fn( m_kiway->Prj().GetProjectPath(), getLibName(), KiCadSymbolLibFileExtension );
 
     return fn;
 }
@@ -432,7 +432,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
 
     wxCHECK_MSG( libTable, NULL, "Could not load symbol lib table." );
 
-    m_pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    m_pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
     m_properties                                        = std::make_unique<PROPERTIES>();
     ( *m_properties )[SCH_LEGACY_PLUGIN::PropBuffering] = "";
 
@@ -446,7 +446,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
 
         // Add the new library to the project symbol library table.
         libTable->InsertRow(
-                new SYMBOL_LIB_TABLE_ROW( getLibName(), libTableUri, wxString( "Legacy" ) ) );
+                new SYMBOL_LIB_TABLE_ROW( getLibName(), libTableUri, wxString( "KiCad" ) ) );
 
         // Save project symbol library table.
         wxFileName fn(
@@ -501,9 +501,9 @@ void SCH_EAGLE_PLUGIN::loadDrawing( wxXmlNode* aDrawingNode )
 
     // wxXmlNode* settings = drawingChildren["settings"]
 
-
     // Load schematic
     auto schematic = drawingChildren["schematic"];
+
     if( schematic )
         loadSchematic( schematic );
 }

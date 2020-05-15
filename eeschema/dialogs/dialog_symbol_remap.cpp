@@ -434,7 +434,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
     // Back up the cache library.
     srcFileName.SetPath( Prj().GetProjectPath() );
     srcFileName.SetName( Prj().GetProjectName() + "-cache" );
-    srcFileName.SetExt( SchematicLibraryFileExtension );
+    srcFileName.SetExt( LegacySymbolLibFileExtension );
 
     destFileName = srcFileName;
     destFileName.SetName( destFileName.GetName() + timeStamp );

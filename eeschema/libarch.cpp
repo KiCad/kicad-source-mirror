@@ -50,7 +50,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilenam
         fn = Schematic().RootScreen()->GetFileName();
 
     fn.SetName( fn.GetName() + "-cache" );
-    fn.SetExt( SchematicLibraryFileExtension );
+    fn.SetExt( LegacySymbolLibFileExtension );
 
     bool success = CreateArchiveLibrary( fn.GetFullPath() );
 

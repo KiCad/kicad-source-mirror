@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -489,7 +489,7 @@ const wxString PART_LIBS::CacheName( const wxString& aFullProjectFilename )
     wxFileName  name = aFullProjectFilename;
 
     name.SetName( name.GetName() + "-cache" );
-    name.SetExt( SchematicLibraryFileExtension );
+    name.SetExt( LegacySymbolLibFileExtension );
 
     if( name.FileExists() )
         return name.GetFullPath();
@@ -538,7 +538,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
             // lib_names[] does not store the file extension. Set it.
             // Remember lib_names[i] can contain a '.' in name, so using a wxFileName
             // before adding the extension can create incorrect full filename
-            wxString fullname = lib_names[i] + "." + SchematicLibraryFileExtension;
+            wxString fullname = lib_names[i] + "." + LegacySymbolLibFileExtension;
             // Now the full name is set, we can use a wxFileName.
             wxFileName fn( fullname );
 

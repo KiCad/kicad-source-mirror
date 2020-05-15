@@ -813,7 +813,6 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         fn.SetExt( KiCadSymbolLibFileExtension );
 
         wxString wildcards = KiCadSymbolLibFileWildcard();
-        wildcards += "|" + SchematicLibraryFileWildcard();
 
         wxFileDialog dlg( this, wxString::Format( _( "Save Library \"%s\" As..." ), aLibrary ),
                           default_path, fn.GetFullName(), wildcards,
@@ -824,16 +823,8 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
         fn = dlg.GetPath();
 
-        // Update the file extension and plugin if a different library type was selected.
-        if( dlg.GetFilterIndex() == 1 )
-        {
-            fn.SetExt( SchematicLibraryFileExtension );
-            fileType = SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY;
-        }
-        else
-        {
+        if( fn.GetExt().IsEmpty() )
             fn.SetExt( KiCadSymbolLibFileExtension );
-        }
     }
     else
     {
@@ -841,21 +832,14 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         fileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
     }
 
-    wxFileName docFileName = fn;
-    docFileName.SetExt( DOC_EXT );
-
     // Verify the user has write privileges before attempting to save the library file.
-    if( !IsWritable( fn ) || !IsWritable( docFileName ) )
+    if( !IsWritable( fn ) )
         return false;
 
     ClearMsgPanel();
 
     // Copy .lib file to .bak.
     if( !backupFile( fn, "bak" ) )
-        return false;
-
-    // Copy .dcm file to .bck.
-    if( !backupFile( docFileName, "bck" ) )
         return false;
 
     if( !m_libMgr->SaveLibrary( aLibrary, fn.GetFullPath(), fileType ) )
@@ -871,9 +855,6 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
     ClearMsgPanel();
     msg.Printf( _( "Symbol library file \"%s\" saved" ), fn.GetFullPath() );
-    wxString msg1;
-    msg1.Printf( _( "Symbol library documentation file \"%s\" saved" ), docFileName.GetFullPath() );
-    AppendMsgPanel( msg, msg1, BLUE );
     RebuildSymbolUnitsList();
 
     return true;

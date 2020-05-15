@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 jean-pierre.charras
- * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -799,7 +799,7 @@ void BM2CMP_FRAME::exportEeschemaFormat()
 
     wxFileDialog fileDlg( this, _( "Create Symbol Library" ),
                           path, wxEmptyString,
-                          SchematicLibraryFileWildcard(),
+                          LegacySymbolLibFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     int          diag = fileDlg.ShowModal();
@@ -808,7 +808,7 @@ void BM2CMP_FRAME::exportEeschemaFormat()
         return;
 
     fn = fileDlg.GetPath();
-    fn.SetExt( SchematicLibraryFileExtension );
+    fn.SetExt( LegacySymbolLibFileExtension );
     m_ConvertedFileName = fn.GetFullPath();
 
     FILE*    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );

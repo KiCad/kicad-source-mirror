@@ -60,6 +60,7 @@ public:
 
                     // ALTIUM,
                     // etc.
+                    SCH_FILE_UNKNOWN
             } )
 
     /**

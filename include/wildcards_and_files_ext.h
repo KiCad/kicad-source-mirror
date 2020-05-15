@@ -110,7 +110,7 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts );
 wxString formatWildcardExt( const wxString& aWildcard );
 
 extern const std::string SchematicSymbolFileExtension;
-extern const std::string SchematicLibraryFileExtension;
+extern const std::string LegacySymbolLibFileExtension;
 extern const std::string SchematicBackupFileExtension;
 
 extern const std::string VrmlFileExtension;
@@ -173,7 +173,7 @@ extern wxString ComponentFileWildcard();
 extern wxString PageLayoutDescrFileWildcard();
 extern wxString SchematicSymbolFileWildcard();
 extern wxString KiCadSymbolLibFileWildcard();
-extern wxString SchematicLibraryFileWildcard();
+extern wxString LegacySymbolLibFileWildcard();
 extern wxString ProjectFileWildcard();
 extern wxString KiCadSchematicFileWildcard();
 extern wxString LegacySchematicFileWildcard();

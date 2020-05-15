@@ -113,7 +113,7 @@ static wxFileName GetRescueLibraryFileName( SCHEMATIC* aSchematic )
 {
     wxFileName fn = aSchematic->GetFileName();
     fn.SetName( fn.GetName() + wxT( "-rescue" ) );
-    fn.SetExt( SchematicLibraryFileExtension );
+    fn.SetExt( LegacySymbolLibFileExtension );
     return fn;
 }
 

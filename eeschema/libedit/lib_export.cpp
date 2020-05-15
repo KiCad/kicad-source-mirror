@@ -47,17 +47,27 @@ void LIB_EDIT_FRAME::ImportPart()
             return;
     }
 
+    wxString wildcards = KiCadSymbolLibFileWildcard();
+
+    wildcards += "|" + LegacySymbolLibFileWildcard();
+
     wxFileDialog dlg( this, _( "Import Symbol" ), m_mruPath, wxEmptyString,
-                      SchematicLibraryFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                      wildcards, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     wxFileName fn = dlg.GetPath();
+
+    if( fn.GetExt().IsEmpty() )
+        fn.SetExt( (dlg.GetFilterIndex() == 0) ?
+                   KiCadSymbolLibFileExtension : LegacySymbolLibFileExtension );
+
     m_mruPath = fn.GetPath();
 
     wxArrayString symbols;
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    SCH_IO_MGR::SCH_FILE_T piType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( piType ) );
 
     // TODO dialog to select the part to be imported if there is more than one
     try
@@ -108,10 +118,10 @@ void LIB_EDIT_FRAME::ExportPart()
     wxFileName fn;
 
     fn.SetName( part->GetName().Lower() );
-    fn.SetExt( SchematicLibraryFileExtension );
+    fn.SetExt( KiCadSymbolLibFileExtension );
 
     wxFileDialog dlg( this, _( "Export Symbol" ), m_mruPath, fn.GetFullName(),
-                      SchematicLibraryFileWildcard(), wxFD_SAVE );
+                      KiCadSymbolLibFileWildcard(), wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -121,7 +131,7 @@ void LIB_EDIT_FRAME::ExportPart()
 
     LIB_PART* old_part = NULL;
 
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
     if( fn.FileExists() )
     {
@@ -165,7 +175,10 @@ void LIB_EDIT_FRAME::ExportPart()
         if( !fn.FileExists() )
             pi->CreateSymbolLib( fn.GetFullPath() );
 
-        pi->SaveSymbol( fn.GetFullPath(), new LIB_PART( *part ) );
+        // The flattened symbol is most likely what the user would want.  As some point in
+        // the future as more of the symbol library inheritance is implemented, this may have
+        // to be changes to save parts of inherited symbols.
+        pi->SaveSymbol( fn.GetFullPath(), part->Flatten().release() );
     }
     catch( const IO_ERROR& ioe )
     {

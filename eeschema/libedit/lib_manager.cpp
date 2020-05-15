@@ -133,7 +133,7 @@ SYMBOL_LIB_TABLE_ROW* LIB_MANAGER::GetLibrary( const wxString& aLibrary ) const
 bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileName,
                                SCH_IO_MGR::SCH_FILE_T aFileType )
 {
-    wxCHECK( LibraryExists( aLibrary ), false );
+    wxCHECK( aFileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY && LibraryExists( aLibrary ), false );
     wxFileName fn( aFileName );
     wxCHECK( !fn.FileExists() || fn.IsFileWritable(), false );
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( aFileType ) );
@@ -271,8 +271,19 @@ bool LIB_MANAGER::ClearPartModified( const wxString& aAlias, const wxString& aLi
 bool LIB_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 {
     wxCHECK( LibraryExists( aLibrary ), true );
+
     wxFileName fn( symTable()->GetFullURI( aLibrary ) );
-    return ( fn.FileExists() && !fn.IsFileWritable() ) || !fn.IsDirWritable();
+
+    // From hence forth, legacy symbol libraries are not writable.
+    const SYMBOL_LIB_TABLE_ROW* row = dynamic_cast<const SYMBOL_LIB_TABLE_ROW*>(
+            symTable()->FindRowByURI( fn.GetFullPath() ) );
+    SCH_IO_MGR::SCH_FILE_T fileType = SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN;
+
+    if( row )
+        fileType = SCH_IO_MGR::EnumFromStr( row->GetType() );
+
+    return ( fileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY ) && fn.FileExists() &&
+            ( !fn.IsFileWritable() || !fn.IsDirWritable() );
 }
 
 
@@ -648,6 +659,8 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LI
 
     if( aCreate )
     {
+        wxCHECK( schFileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY, false );
+
         try
         {
             aTable->CreateSymbolLib( libName );

@@ -80,7 +80,7 @@ static const std::map<int, supportedFileType>& fileTypes()
         { ID_PANEL_SYM_LIB_LEGACY,
             {
                 "KiCad legacy symbol library file (*.lib)",
-                SchematicSymbolFileWildcard(),
+                LegacySymbolLibFileWildcard(),
                 "",
                 true,
                 SCH_IO_MGR::SCH_LEGACY
@@ -255,7 +255,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
         attr = new wxGridCellAttr;
         attr->SetEditor( new GRID_CELL_SYMLIB_EDITOR( m_parent, &m_lastBrowseDir,
-                SchematicLibraryFileWildcard() ) );
+                KiCadSymbolLibFileWildcard() ) );
         g->SetColAttr( COL_URI, attr );
 
         attr = new wxGridCellAttr;
@@ -410,9 +410,9 @@ void PANEL_SYM_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
 
 void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
-    wxString wildcards = SchematicLibraryFileWildcard();
+    wxString wildcards = KiCadSymbolLibFileWildcard();
 
-    wildcards += "|" + KiCadSymbolLibFileWildcard();
+    wildcards += "|" + LegacySymbolLibFileWildcard();
 
     wxFileDialog dlg( this, _( "Select Library" ), m_lastBrowseDir,
                       wxEmptyString, wildcards,

@@ -60,6 +60,8 @@ SCH_PLUGIN* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
         return new SCH_SEXPR_PLUGIN();
     case SCH_EAGLE:
         return new SCH_EAGLE_PLUGIN();
+    default:
+        ;
     }
 
     return NULL;
@@ -153,7 +155,7 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
     SCH_FILE_T  ret = SCH_KICAD;        // default guess, unless detected otherwise.
     wxFileName  fn( aLibPath );
 
-    if( fn.GetExt() == SchematicLibraryFileExtension )
+    if( fn.GetExt() == LegacySymbolLibFileExtension )
     {
         ret = SCH_LEGACY;
     }

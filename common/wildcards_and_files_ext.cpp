@@ -116,7 +116,7 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts )
 
 const std::string KiCadSymbolLibFileExtension( "kicad_sym" );
 const std::string SchematicSymbolFileExtension( "sym" );
-const std::string SchematicLibraryFileExtension( "lib" );
+const std::string LegacySymbolLibFileExtension( "lib" );
 
 const std::string VrmlFileExtension( "wrl" );
 
@@ -180,7 +180,7 @@ wxString KiCadSymbolLibFileWildcard()
 }
 
 
-wxString SchematicLibraryFileWildcard()
+wxString LegacySymbolLibFileWildcard()
 {
     return _( "KiCad legacy symbol library files" ) + AddFileExtListToFilter( { "lib" } );
 }

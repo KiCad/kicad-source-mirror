@@ -83,8 +83,6 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName,
     {
         wxString wildcards = KiCadSchematicFileWildcard();
 
-        wildcards += "|" + LegacySchematicFileWildcard();
-
         wxFileDialog dlg( this, _( "Schematic Files" ), wxPathOnly( Prj().GetProjectFullName() ),
                           schematicFileName.GetFullName(), wildcards,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -94,11 +92,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName,
 
         schematicFileName = dlg.GetPath();
 
-        if( dlg.GetFilterIndex() == 1
-          && schematicFileName.GetExt() != LegacySchematicFileExtension )
-            schematicFileName.SetExt( LegacySchematicFileExtension );
-        else if( dlg.GetFilterIndex() == 0
-          && schematicFileName.GetExt() != KiCadSchematicFileExtension )
+        if( schematicFileName.GetExt().IsEmpty() )
             schematicFileName.SetExt( KiCadSchematicFileExtension );
     }
 

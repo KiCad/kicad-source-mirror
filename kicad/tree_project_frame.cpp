@@ -283,7 +283,7 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
     case TREE_SVG:               return SVGFileExtension;
     case TREE_PAGE_LAYOUT_DESCR: return PageLayoutDescrFileExtension;
     case TREE_FOOTPRINT_FILE:    return KiCadFootprintFileExtension;
-    case TREE_SCHEMATIC_LIBFILE: return SchematicLibraryFileExtension;
+    case TREE_SCHEMATIC_LIBFILE: return LegacySymbolLibFileExtension;
     default:                     return wxEmptyString;
     }
 }
