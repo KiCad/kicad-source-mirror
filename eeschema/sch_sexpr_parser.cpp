@@ -1937,9 +1937,6 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
 
         case T_lib_symbols:
         {
-            if( aIsCopyableOnly )
-                Unexpected( T_lib_symbols );
-
             // Dummy map.  No derived symbols are allowed in the library cache.
             LIB_PART_MAP symbolLibMap;
 
@@ -2032,8 +2029,7 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
         }
     }
 
-    if( !aIsCopyableOnly )
-        screen->UpdateLocalLibSymbolLinks();
+    screen->UpdateLocalLibSymbolLinks();
 }
 
 
@@ -2152,6 +2148,33 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             // The field parent symbol must be set and it's orientation must be set before
             // the field positions are set.
             field = parseSchField( symbol.get() );
+
+            // Set the default symbol reference prefix.
+            if( field->GetId() == REFERENCE )
+            {
+                wxString refDesignator = field->GetText();
+
+                refDesignator.Replace( "~", " " );
+
+                wxString prefix = refDesignator;
+
+                while( prefix.Length() )
+                {
+                    if( ( prefix.Last() < '0' || prefix.Last() > '9') && prefix.Last() != '?' )
+                        break;
+
+                    prefix.RemoveLast();
+                }
+
+                // Avoid a prefix containing trailing/leading spaces
+                prefix.Trim( true );
+                prefix.Trim( false );
+
+                if( prefix.IsEmpty() )
+                    symbol->SetPrefix( wxString( "U" ) );
+                else
+                    symbol->SetPrefix( prefix );
+            }
 
             if( symbol->GetField( field->GetId() ) )
                 *symbol->GetField( field->GetId() ) = *field;

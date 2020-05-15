@@ -77,7 +77,7 @@
 #include <sch_sexpr_parser.h>
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
 #include <confirm.h>
-#include <tool/selection.h>
+#include <ee_selection.h>
 #include <default_values.h>    // For some default values
 
 
@@ -771,13 +771,54 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 }
 
 
-void SCH_SEXPR_PLUGIN::Format( SELECTION* aSelection, OUTPUTFORMATTER* aFormatter )
+void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, OUTPUTFORMATTER* aFormatter )
 {
+    wxCHECK( aSelection && aFormatter, /* void */ );
+
     m_out = aFormatter;
 
-    for( unsigned i = 0; i < aSelection->GetSize(); ++i )
+    size_t i;
+    SCH_ITEM* item;
+    std::map<wxString, LIB_PART*> libSymbols;
+    SCH_SCREEN* screen = aSelection->GetScreen();
+
+    for( i = 0; i < aSelection->GetSize(); ++i )
     {
-        SCH_ITEM* item = (SCH_ITEM*) aSelection->GetItem( i );
+        item = dynamic_cast<SCH_ITEM*>( aSelection->GetItem( i ) );
+
+        wxCHECK2( item, continue );
+
+        if( item->Type() != SCH_COMPONENT_T )
+            continue;
+
+        SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
+
+        wxCHECK2( symbol, continue );
+
+        wxString libSymbolLookup = symbol->GetLibId().Format().wx_str();
+
+        if( !symbol->UseLibIdLookup() )
+            libSymbolLookup = symbol->GetSchSymbolLibraryName();
+
+        auto it = screen->GetLibSymbols().find( libSymbolLookup );
+
+        if( it != screen->GetLibSymbols().end() )
+            libSymbols[ libSymbolLookup ] = it->second;
+    }
+
+    if( !libSymbols.empty() )
+    {
+        m_out->Print( 0, "(lib_symbols\n" );
+
+        for( auto libSymbol : libSymbols )
+            SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( libSymbol.second, *m_out, 1, libSymbol.first );
+
+        m_out->Print( 0, ")\n\n" );
+    }
+
+    for( i = 0; i < aSelection->GetSize(); ++i )
+    {
+        item = (SCH_ITEM*) aSelection->GetItem( i );
 
         switch( item->Type() )
         {

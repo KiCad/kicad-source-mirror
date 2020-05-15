@@ -25,6 +25,13 @@
 #include <tools/ee_selection.h>
 
 
+EE_SELECTION::EE_SELECTION( SCH_SCREEN* aScreen ) :
+    SELECTION()
+{
+    m_screen = aScreen;
+}
+
+
 EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
 {
     EDA_ITEM* topLeftItem = nullptr;

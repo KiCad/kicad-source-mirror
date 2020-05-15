@@ -1094,6 +1094,7 @@ bool SCH_EDITOR_CONTROL::doCopy()
     if( !selection.GetSize() )
         return false;
 
+    selection.SetScreen( m_frame->GetScreen() );
     m_supplementaryClipboard.clear();
 
     for( EDA_ITEM* item : selection )

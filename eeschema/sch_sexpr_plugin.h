@@ -41,7 +41,7 @@ class SCH_TEXT;
 class SCH_COMPONENT;
 class SCH_FIELD;
 class PROPERTIES;
-class SELECTION;
+class EE_SELECTION;
 class SCH_SEXPR_PLUGIN_CACHE;
 class LIB_PART;
 class PART_LIB;
@@ -96,7 +96,7 @@ public:
 
     void Format( SCH_SHEET* aSheet );
 
-    void Format( SELECTION* aSelection, OUTPUTFORMATTER* aFormatter );
+    void Format( EE_SELECTION* aSelection, OUTPUTFORMATTER* aFormatter );
 
     void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                              const wxString&   aLibraryPath,

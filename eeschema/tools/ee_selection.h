@@ -25,13 +25,26 @@
 #ifndef EE_SELECTION_H
 #define EE_SELECTION_H
 
+class SCH_SCREEN;
+
+
 #include <tool/selection.h>
 
 
 class EE_SELECTION : public SELECTION
 {
+    /**
+     * Screen of selected objects.  Used to fetch library symbols for copy.
+     */
+    SCH_SCREEN* m_screen;
+
 public:
+    EE_SELECTION( SCH_SCREEN* aScreen = nullptr );
+
     EDA_ITEM* GetTopLeftItem( bool onlyModules = false ) const override;
+
+    void SetScreen( SCH_SCREEN* aScreen ) { m_screen = aScreen; }
+    SCH_SCREEN* GetScreen() { return m_screen; }
 };
 
 #endif  //  EE_SELECTION_H
