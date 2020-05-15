@@ -67,7 +67,19 @@ JSON_SETTINGS::~JSON_SETTINGS()
 void JSON_SETTINGS::Load()
 {
     for( auto param : m_params )
-        param->Load( this );
+    {
+        try
+        {
+            param->Load( this );
+        }
+        catch( ... )
+        {
+            // Skip unreadable parameters in file:
+#ifdef DEBUG
+            wxLogMessage( wxString::Format( "param '%s' load err", param->GetJsonPath().c_str() ) );
+#endif
+        }
+    }
 }
 
 

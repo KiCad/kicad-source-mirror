@@ -53,13 +53,22 @@ public:
 
     virtual void SetDefault() = 0;
 
-protected:
+    /**
+     * @return the path name of the parameter used to store it in the json file
+     * mainly usefull in error messages
+     */
+    const std::string& GetJsonPath() { return m_path; }
 
+protected:
+    /**
+     * the string used to store the param in json files
+     */
     std::string m_path;
 
     ///! True if the parameter pointer should never be overwritten
     bool m_readOnly;
 };
+
 
 template<typename ValueType>
 class PARAM : public PARAM_BASE
