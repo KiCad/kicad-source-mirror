@@ -177,6 +177,13 @@ void TEXTE_PCB::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
     SetMirrored( !IsMirrored() );
 
+    double text_angle = GetTextAngle();
+    if( text_angle < 1800 )
+        text_angle = 1800 - text_angle;
+    else
+        text_angle = 3600 - text_angle + 1800;
+    SetTextAngle( text_angle );
+
     // adjust justified text for mirroring
     if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT || GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
     {
