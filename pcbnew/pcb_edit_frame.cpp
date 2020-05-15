@@ -1054,7 +1054,7 @@ void PCB_EDIT_FRAME::RunEeschema()
 {
     wxString   msg;
     wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(),
-                      LegacySchematicFileExtension );
+                      KiCadSchematicFileExtension );
 
     if( !schfn.FileExists() )
     {
