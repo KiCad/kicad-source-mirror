@@ -36,6 +36,7 @@
 #include <board_design_settings.h>
 #include <drc/drc.h>
 #include <widgets/ui_common.h>
+#include <drc/drc_rule.h>
 
 #define CopperLayerCountKey         wxT( "CopperLayerCount" )
 #define BoardThicknessKey           wxT( "BoardThickness" )
@@ -962,12 +963,11 @@ int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
 {
     int clearance = m_NetClasses.GetDefault()->GetClearance();
 
-    //Read list of Net Classes
-    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); ++nc )
-    {
-        NETCLASSPTR netclass = nc->second;
-        clearance = std::max( clearance, netclass->GetClearance() );
-    }
+    for( const std::pair<wxString, NETCLASSPTR>& netclass : m_NetClasses.NetClasses() )
+        clearance = std::max( clearance, netclass.second->GetClearance() );
+
+    for( const DRC_RULE* rule : m_DRCRules )
+        clearance = std::max( clearance, rule->m_Clearance );
 
     return clearance;
 }
@@ -977,11 +977,48 @@ int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue()
 {
     int clearance = m_NetClasses.GetDefault()->GetClearance();
 
-    //Read list of Net Classes
-    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); ++nc )
+    for( const std::pair<wxString, NETCLASSPTR>& netclass : m_NetClasses.NetClasses() )
+        clearance = std::min( clearance, netclass.second->GetClearance() );
+
+    return clearance;
+}
+
+
+int BOARD_DESIGN_SETTINGS::GetRuleClearance( const BOARD_ITEM* aItem, const NETCLASS* aNetclass,
+                                             const BOARD_ITEM* bItem, const NETCLASS* bNetclass,
+                                             wxString* aSource )
+{
+    std::vector<DRC_SELECTOR*> matched;
+
+    MatchSelectors( m_DRCRuleSelectors, aItem, aNetclass, bItem, bNetclass, &matched );
+
+    std::sort( matched.begin(), matched.end(),
+               []( DRC_SELECTOR* a, DRC_SELECTOR* b ) -> bool
+               {
+                   return a->m_Priority < b->m_Priority;
+               });
+
+    int clearance = 0;
+
+    for( DRC_SELECTOR* selector : matched )
     {
-        NETCLASSPTR netclass = nc->second;
-        clearance = std::min( clearance, netclass->GetClearance() );
+        // ignore hole rules; we're just interested in copper here
+        for( KICAD_T matchType : selector->m_MatchTypes )
+        {
+            if( BaseType( matchType ) == PCB_LOCATE_HOLE_T )
+                continue;
+        }
+
+        if( selector->m_Rule->m_Clearance > 0 )
+        {
+            clearance = std::max( clearance, selector->m_Rule->m_Clearance );
+            *aSource = selector->m_Rule->m_Name;
+        }
+        else if( selector->m_Rule->m_Clearance < 0 )
+        {
+            clearance = std::min( clearance, abs( selector->m_Rule->m_Clearance ) );
+            *aSource = selector->m_Rule->m_Name;
+        }
     }
 
     return clearance;

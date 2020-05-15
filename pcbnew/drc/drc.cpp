@@ -54,6 +54,8 @@
 #include <drc/drc_item.h>
 #include <drc/drc_courtyard_tester.h>
 #include <tools/zone_filler_tool.h>
+#include <confirm.h>
+#include "drc_rule_parser.h"
 
 DRC::DRC() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
@@ -95,6 +97,8 @@ void DRC::Reset( RESET_REASON aReason )
             DestroyDRCDialog( wxID_OK );
 
         m_pcb = m_pcbEditorFrame->GetBoard();
+
+        readRules();
     }
 }
 
@@ -350,8 +354,36 @@ int DRC::TestZoneToZoneOutlines()
 }
 
 
+void DRC::readRules()
+{
+    wxString rulesFilepath = m_pcbEditorFrame->Prj().AbsolutePath( "drc-rules" );
+
+    BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
+    bds.m_DRCRuleSelectors.clear();
+    bds.m_DRCRules.clear();
+
+    FILE* fp = wxFopen( rulesFilepath, wxT( "rt" ) );
+
+    if( fp )
+    {
+        try
+        {
+            DRC_RULES_PARSER parser( m_pcb, fp, rulesFilepath );
+            parser.Parse( bds.m_DRCRuleSelectors, bds.m_DRCRules );
+        }
+        catch( PARSE_ERROR& pe )
+        {
+            DisplayError( m_drcDialog, pe.What() );
+        }
+    }
+}
+
+
 void DRC::RunTests( wxTextCtrl* aMessages )
 {
+    // TODO: timestamp file and read only if newer
+    readRules();
+
     // be sure m_pcb is the current board, not a old one
     // ( the board can be reloaded )
     m_pcb = m_pcbEditorFrame->GetBoard();
@@ -727,7 +759,7 @@ void DRC::testPad2Pad()
 
 void DRC::testDrilledHoles()
 {
-    BOARD_DESIGN_SETTINGS& dsnSettings = m_pcb->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
 
     // Test drilled holes to minimize drill bit breakage.
     //
@@ -738,8 +770,8 @@ void DRC::testDrilledHoles()
     struct DRILLED_HOLE
     {
         wxPoint     m_location;
-        int         m_drillRadius;
-        BOARD_ITEM* m_owner;
+        int         m_drillRadius = 0;
+        BOARD_ITEM* m_owner = nullptr;
     };
 
     std::vector<DRILLED_HOLE> holes;
@@ -750,19 +782,37 @@ void DRC::testDrilledHoles()
     {
         for( D_PAD* pad : mod->Pads( ) )
         {
-            int minDimension = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
+            int holeSize = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
 
-            if( minDimension == 0 )
+            if( holeSize == 0 )
                 continue;
 
-            if( !dsnSettings.Ignore( DRCE_TOO_SMALL_PAD_DRILL )
-                    && minDimension < dsnSettings.m_MinThroughDrill )
+            NETCLASS* netclass = pad->GetNet()->GetNet() == 0 ? bds.GetDefault().get()
+                                                              : pad->GetNetClass().get();
+            int       minHole = bds.m_MinThroughDrill;
+            wxString  minHoleSource = _( "board" );
+
+            std::vector<DRC_SELECTOR*> matched;
+
+            MatchSelectors( bds.m_DRCRuleSelectors, pad, netclass, nullptr, nullptr, &matched );
+
+            for( DRC_SELECTOR* selector : matched )
+            {
+                if( selector->m_Rule->m_Hole > minHole )
+                {
+                    minHole = selector->m_Rule->m_Hole;
+                    minHoleSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
+                }
+            }
+
+            if( !bds.Ignore( DRCE_TOO_SMALL_PAD_DRILL ) && holeSize < minHole )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_PAD_DRILL );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (board min through hole %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), dsnSettings.m_MinThroughDrill, true ),
-                            MessageTextFromValue( userUnits(), minDimension, true ) );
+                msg.Printf( drcItem->GetErrorText() + _( " (%s min hole %s; actual %s)" ),
+                            minHoleSource,
+                            MessageTextFromValue( userUnits(), minHole, true ),
+                            MessageTextFromValue( userUnits(), holeSize, true ) );
 
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( pad );
@@ -788,15 +838,39 @@ void DRC::testDrilledHoles()
         if( !via )
             continue;
 
+        NETCLASS* netclass = via->GetNet()->GetNet() == 0 ? bds.GetDefault().get()
+                                                          : via->GetNetClass().get();
+        int       minHole = 0;
+        wxString  minHoleSource;
+
+        std::vector<DRC_SELECTOR*> matched;
+
+        MatchSelectors( bds.m_DRCRuleSelectors, via, netclass, nullptr, nullptr, &matched );
+
+        for( DRC_SELECTOR* selector : matched )
+        {
+            if( selector->m_Rule->m_Hole > minHole )
+            {
+                minHole = selector->m_Rule->m_Hole;
+                minHoleSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
+            }
+        }
+
         if( via->GetViaType() == VIATYPE::MICROVIA )
         {
-            if( !dsnSettings.Ignore( DRCE_TOO_SMALL_MICROVIA_DRILL )
-                    && via->GetDrillValue() < dsnSettings.m_MicroViasMinDrill )
+            if( bds.m_MicroViasMinDrill > minHole )
+            {
+                minHole = bds.m_MicroViasMinDrill;
+                minHoleSource = _( "board" );
+            }
+
+            if( !bds.Ignore( DRCE_TOO_SMALL_MICROVIA_DRILL ) && via->GetDrillValue() < minHole )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA_DRILL );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), dsnSettings.m_MicroViasMinDrill, true ),
+                msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
+                            minHoleSource,
+                            MessageTextFromValue( userUnits(), minHole, true ),
                             MessageTextFromValue( userUnits(), via->GetDrillValue(), true ) );
 
                 drcItem->SetErrorMessage( msg );
@@ -808,13 +882,19 @@ void DRC::testDrilledHoles()
         }
         else
         {
-            if( !dsnSettings.Ignore( DRCE_TOO_SMALL_VIA_DRILL )
-                    && via->GetDrillValue() < dsnSettings.m_MinThroughDrill )
+            if( bds.m_MinThroughDrill > minHole )
+            {
+                minHole = bds.m_MinThroughDrill;
+                minHoleSource = _( "board" );
+            }
+
+            if( !bds.Ignore( DRCE_TOO_SMALL_VIA_DRILL ) && via->GetDrillValue() < minHole )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_DRILL );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (board min through hole %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), dsnSettings.m_MinThroughDrill, true ),
+                msg.Printf( drcItem->GetErrorText() + _( " (%s min hole %s; actual %s)" ),
+                            minHoleSource,
+                            MessageTextFromValue( userUnits(), minHole, true ),
                             MessageTextFromValue( userUnits(), via->GetDrillValue(), true ) );
 
                 drcItem->SetErrorMessage( msg );
@@ -831,7 +911,7 @@ void DRC::testDrilledHoles()
         }
     }
 
-    if( dsnSettings.m_HoleToHoleMin == 0 || dsnSettings.Ignore( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
+    if( bds.m_HoleToHoleMin == 0 || bds.Ignore( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
         return;
 
     for( size_t ii = 0; ii < holes.size(); ++ii )
@@ -849,12 +929,12 @@ void DRC::testDrilledHoles()
             int actual = KiROUND( GetLineLength( checkHole.m_location, refHole.m_location ) );
             actual = std::max( 0, actual - checkHole.m_drillRadius - refHole.m_drillRadius );
 
-            if( actual < dsnSettings.m_HoleToHoleMin )
+            if( actual < bds.m_HoleToHoleMin )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_DRILLED_HOLES_TOO_CLOSE );
 
                 msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), dsnSettings.m_HoleToHoleMin, true ),
+                            MessageTextFromValue( userUnits(), bds.m_HoleToHoleMin, true ),
                             MessageTextFromValue( userUnits(), actual, true ) );
 
                 drcItem->SetErrorMessage( msg );

@@ -47,8 +47,6 @@ class
 DIALOG_DRC: public DIALOG_DRC_BASE
 {
 public:
-    BOARD_DESIGN_SETTINGS  m_BrdSettings;
-
     /// Constructors
     DIALOG_DRC( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent );
     ~DIALOG_DRC();
@@ -93,6 +91,8 @@ private:
 
     void deleteAllMarkers();
     void refreshBoardEditor();
+
+    BOARD_DESIGN_SETTINGS& bds() { return m_currentBoard->GetDesignSettings(); }
 
     BOARD*             m_currentBoard;     // the board currently on test
     DRC*               m_tester;

@@ -29,6 +29,8 @@
 #include <netclass.h>
 #include <config_params.h>
 #include <board_stackup_manager/class_board_stackup.h>
+#include <drc/drc_rule.h>
+
 
 #define DEFAULT_SILK_LINE_WIDTH       0.12
 #define DEFAULT_COPPER_LINE_WIDTH     0.20
@@ -194,6 +196,7 @@ struct TEXT_ITEM_INFO
 // forward declaration from class_track.h
 enum class VIATYPE : int;
 
+
 /**
  * BOARD_DESIGN_SETTINGS
  * contains design settings for a BOARD object.
@@ -207,7 +210,9 @@ public:
     std::vector<DIFF_PAIR_DIMENSION> m_DiffPairDimensionsList;
 
     // List of netclasses. There is always the default netclass.
-    NETCLASSES m_NetClasses;
+    NETCLASSES                       m_NetClasses;
+    std::vector<DRC_SELECTOR*>       m_DRCRuleSelectors;
+    std::vector<DRC_RULE*>           m_DRCRules;
 
     bool       m_MicroViasAllowed;          ///< true to allow micro vias
     bool       m_BlindBuriedViaAllowed;     ///< true to allow blind/buried vias
@@ -388,6 +393,10 @@ public:
      * @return the smallest clearance value found in NetClasses list
      */
     int GetSmallestClearanceValue();
+
+    int GetRuleClearance( const BOARD_ITEM* aItem, const NETCLASS* aItemNetclass,
+                          const BOARD_ITEM* bItem, const NETCLASS* bItemNetclass,
+                          wxString* aSource );
 
     /**
      * Function GetCurrentMicroViaSize
@@ -863,10 +872,6 @@ public:
     bool GetTextUpright( PCB_LAYER_ID aLayer ) const;
 
     int GetLayerClass( PCB_LAYER_ID aLayer ) const;
-
-private:
-    void formatNetClass( NETCLASS* aNetClass, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                         int aControlBits ) const;
 };
 
 #endif  // BOARD_DESIGN_SETTINGS_H_

@@ -94,7 +94,6 @@ wxString DRC_ITEM::GetErrorText( int aCode, bool aTranslate ) const
     case DRCE_TRACK_NEAR_EDGE:          msg = _HKI( "Track too close to board edge" );      break;
     case DRCE_INVALID_OUTLINE:          msg = _HKI( "Board has malformed outline" );        break;
 
-    // use &lt; since this is text ultimately embedded in HTML
     case DRCE_NETCLASS_TRACKWIDTH:      msg = _HKI( "NetClass Track Width too small" );     break;
     case DRCE_NETCLASS_CLEARANCE:       msg = _HKI( "NetClass Clearance too small" );       break;
     case DRCE_NETCLASS_VIAANNULUS:      msg = _HKI( "NetClass via annulus too small" );     break;

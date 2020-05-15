@@ -162,7 +162,7 @@ private:
     PCB_EDIT_FRAME*        m_pcbEditorFrame;   // The pcb frame editor which owns the board
     BOARD*                 m_pcb;
     SHAPE_POLY_SET         m_board_outlines;   // The board outline including cutouts
-    DIALOG_DRC*    m_drcDialog;
+    DIALOG_DRC*            m_drcDialog;
 
     std::vector<DRC_ITEM*> m_unconnected;      // list of unconnected pads
     std::vector<DRC_ITEM*> m_footprints;       // list of footprint warnings
@@ -176,6 +176,8 @@ private:
      * Update needed pointers from the one pointer which is known not to change.
      */
     void updatePointers();
+
+    void readRules();
 
     EDA_UNITS userUnits() const { return m_pcbEditorFrame->GetUserUnits(); }
 

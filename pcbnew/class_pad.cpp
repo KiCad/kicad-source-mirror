@@ -623,14 +623,14 @@ wxPoint D_PAD::ShapePos() const
 }
 
 
-int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem, wxString* aSource ) const
+int D_PAD::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
 {
-    int myClearance;
+    int clearance;
 
     // A pad can have specific clearance that overrides its NETCLASS clearance value
     if( m_LocalClearance )
     {
-        myClearance = m_LocalClearance;
+        clearance = m_LocalClearance;
 
         if( aSource )
             *aSource = wxString::Format( _( "pad %s clearance" ), GetName() );
@@ -639,22 +639,19 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem, wxString* aSource ) const
     // A footprint can have a specific clearance value
     else if( GetParent() && GetParent()->GetLocalClearance() )
     {
-        myClearance = GetParent()->GetLocalClearance();
+        clearance = GetParent()->GetLocalClearance();
 
         if( aSource )
             *aSource = wxString::Format( _( "%s footprint clearance" ), GetParent()->GetReference() );
     }
 
-    // Otherwise use the baseclass method to fetch the netclass setting
+    // Otherwise use the baseclass method to fetch the netclass and/or rule setting
     else
     {
-        myClearance = BOARD_CONNECTED_ITEM::GetClearance( nullptr, aSource );
+        clearance = BOARD_CONNECTED_ITEM::GetClearance( aItem, aSource );
     }
 
-    if( aItem && aItem->GetClearance() > myClearance )
-        return aItem->GetClearance( nullptr, aSource );
-
-    return myClearance;
+    return clearance;
 }
 
 

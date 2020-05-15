@@ -3,6 +3,8 @@ boost_root
 Build*
 build*
 common/fp_lib_table_keywords.cpp
+common/drc_rules_keywords.cpp
+common/drc_rules_lexer.h
 common/netlist_keywords.*
 common/netlist_lexer.h
 common/pcb_plot_params_lexer.h

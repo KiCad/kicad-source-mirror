@@ -516,20 +516,26 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, SHAPE_POL
  */
 void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aHoles )
 {
+    static DRAWSEGMENT dummyEdge;
+    dummyEdge.SetLayer( Edge_Cuts );
+
     // a small extra clearance to be sure actual track clearance is not smaller
     // than requested clearance due to many approximations in calculations,
     // like arc to segment approx, rounding issues...
     // 2 microns are a good value
     int extra_margin = Millimeter2iu( 0.002 );
 
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     int zone_clearance = aZone->GetClearance();
-    int edgeClearance = m_board->GetDesignSettings().m_CopperEdgeClearance;
-    int zone_to_edgecut_clearance = std::max( aZone->GetZoneClearance(), edgeClearance );
+    int edge_clearance = aZone->GetClearance( &dummyEdge );
+
+    if( bds.m_CopperEdgeClearance > edge_clearance )
+        edge_clearance = bds.m_CopperEdgeClearance;
 
     // items outside the zone bounding box are skipped
     // the bounding box is the zone bounding box + the biggest clearance found in Netclass list
     EDA_RECT zone_boundingbox = aZone->GetBoundingBox();
-    int biggest_clearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
+    int      biggest_clearance = bds.GetBiggestClearanceValue();
     biggest_clearance = std::max( biggest_clearance, zone_clearance ) + extra_margin;
     zone_boundingbox.Inflate( biggest_clearance );
 
@@ -615,7 +621,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
 
         if( aItem->IsOnLayer( Edge_Cuts ) )
         {
-            gap = zone_to_edgecut_clearance;
+            gap = edge_clearance;
 
             // edge cuts by definition don't have a width
             ignoreLineWidth = true;

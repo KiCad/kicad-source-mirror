@@ -60,7 +60,6 @@ DIALOG_DRC::DIALOG_DRC( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aP
     m_tester       = aTester;
     m_brdEditor    = aEditorFrame;
     m_currentBoard = m_brdEditor->GetBoard();
-    m_BrdSettings  = m_brdEditor->GetBoard()->GetDesignSettings();
 
     m_markerTreeModel = new RC_TREE_MODEL( m_brdEditor, m_markerDataView );
     m_markerDataView->AssociateModel( m_markerTreeModel );
@@ -117,7 +116,6 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 
     // updating data which can be modified outside the dialog (DRC parameters, units ...)
     // because the dialog is not modal
-    m_BrdSettings = m_brdEditor->GetBoard()->GetDesignSettings();
     displayDRCValues();
 
     m_markerTreeModel->SetProvider( m_markersProvider );
@@ -129,9 +127,9 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 
 void DIALOG_DRC::displayDRCValues()
 {
-    m_trackMinWidth.SetValue( m_BrdSettings.m_TrackMinWidth );
-    m_viaMinSize.SetValue( m_BrdSettings.m_ViasMinSize );
-    m_uviaMinSize.SetValue( m_BrdSettings.m_MicroViasMinSize );
+    m_trackMinWidth.SetValue( bds().m_TrackMinWidth );
+    m_viaMinSize.SetValue( bds().m_ViasMinSize );
+    m_uviaMinSize.SetValue( bds().m_MicroViasMinSize );
 }
 
 
@@ -162,11 +160,9 @@ void DIALOG_DRC::initValues()
 
 void DIALOG_DRC::setDRCParameters()
 {
-    m_BrdSettings.m_TrackMinWidth    = (int) m_trackMinWidth.GetValue();
-    m_BrdSettings.m_ViasMinSize      = (int) m_viaMinSize.GetValue();
-    m_BrdSettings.m_MicroViasMinSize = (int) m_uviaMinSize.GetValue();
-
-    m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
+    bds().m_TrackMinWidth    = (int) m_trackMinWidth.GetValue();
+    bds().m_ViasMinSize      = (int) m_viaMinSize.GetValue();
+    bds().m_MicroViasMinSize = (int) m_uviaMinSize.GetValue();
 }
 
 
@@ -287,7 +283,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     wxMenu    menu;
     wxString  msg;
 
-    switch( m_BrdSettings.m_DRCSeverities[ rcItem->GetErrorCode() ] )
+    switch( bds().m_DRCSeverities[ rcItem->GetErrorCode() ] )
     {
     case RPT_SEVERITY_ERROR:   listName = _( "errors" );      break;
     case RPT_SEVERITY_WARNING: listName = _( "warnings" );    break;
@@ -307,7 +303,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     menu.AppendSeparator();
 
-    if( m_BrdSettings.m_DRCSeverities[ rcItem->GetErrorCode() ] == RPT_SEVERITY_WARNING )
+    if( bds().m_DRCSeverities[ rcItem->GetErrorCode() ] == RPT_SEVERITY_WARNING )
     {
         msg.Printf( _( "Change severity to Error for all '%s' violations" ),
                     rcItem->GetErrorText( rcItem->GetErrorCode() ),
@@ -356,8 +352,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case 3:
-        m_BrdSettings.m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_ERROR;
-        m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
+        bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_ERROR;
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
@@ -365,8 +360,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case 4:
-        m_BrdSettings.m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_WARNING;
-        m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
+        bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_WARNING;
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );
@@ -375,8 +369,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     case 5:
     {
-        m_BrdSettings.m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
-        m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
+        bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
 
         std::vector<MARKER_PCB*>& markers = m_brdEditor->GetBoard()->Markers();
 

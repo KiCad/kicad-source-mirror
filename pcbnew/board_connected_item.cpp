@@ -79,36 +79,63 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
 }
 
 
-int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem, wxString* aSource ) const
+int BOARD_CONNECTED_ITEM::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
 {
-    NETCLASSPTR netclass;
+    NETCLASS*              myNetclass = nullptr;
+    NETCLASS*              itemNetclass = nullptr;
+    BOARD_DESIGN_SETTINGS* bds = nullptr;
 
     // NB: we must check the net first, as when it is 0 GetNetClass() will return the
     // orphaned net netclass, not the default netclass.
     if( GetBoard() )
     {
         if( m_netinfo->GetNet() == 0 )
-            netclass = GetBoard()->GetDesignSettings().GetDefault();
+            myNetclass = GetBoard()->GetDesignSettings().GetDefault().get();
         else
-            netclass = GetNetClass();
+            myNetclass = GetNetClass().get();
+
+        bds = &GetBoard()->GetDesignSettings();
     }
     // No clearance if "this" is not (yet) linked to a board therefore no available netclass
 
-    int myClearance = netclass ? netclass->GetClearance() : 0;
+    if( aItem && aItem->GetBoard() && dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
+    {
+        if( dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNet()->GetNet() == 0 )
+            itemNetclass = GetBoard()->GetDesignSettings().GetDefault().get();
+        else
+            itemNetclass = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetClass().get();
 
-    if( aItem && aItem->GetClearance() > myClearance )
-        return aItem->GetClearance( nullptr, aSource );
+        bds = &aItem->GetBoard()->GetDesignSettings();
+    }
+
+    int      myClearance = myNetclass ? myNetclass->GetClearance() : 0;
+    int      itemClearance = itemNetclass ? itemNetclass->GetClearance() : 0;
+    wxString ruleSource;
+    int      ruleClearance = bds ? bds->GetRuleClearance( this, myNetclass,
+                                                          aItem, itemNetclass, &ruleSource ) : 0;
+    int      clearance = std::max( std::max( myClearance, itemClearance ), ruleClearance );
 
     if( aSource )
     {
-        if( netclass )
-            *aSource = wxString::Format( _( "%s netclass clearance" ),
-                                         netclass->GetName() );
+        if( clearance == myClearance && myNetclass )
+        {
+            *aSource = wxString::Format( _( "'%s' netclass clearance" ), myNetclass->GetName() );
+        }
+        else if( clearance == itemClearance && itemNetclass )
+        {
+            *aSource = wxString::Format( _( "'%s' netclass clearance" ), itemNetclass->GetName() );
+        }
+        else if( clearance == ruleClearance && !ruleSource.IsEmpty() )
+        {
+            *aSource = wxString::Format( _( "'%s' rule clearance" ), ruleSource );
+        }
         else
+        {
             *aSource = _( "No netclass" );
+        }
     }
 
-    return myClearance;
+    return clearance;
 }
 
 

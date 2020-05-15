@@ -139,13 +139,18 @@ bool poly2segmentDRC( wxPoint* aTref, int aTrefCount, wxPoint aSegStart, wxPoint
 void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterator aEndIt,
                       bool aTestZones )
 {
-    BOARD_DESIGN_SETTINGS& dsnSettings = m_pcb->GetDesignSettings();
-    wxString  msg;
+    BOARD_DESIGN_SETTINGS&     bds = m_pcb->GetDesignSettings();
+    std::vector<DRC_SELECTOR*> matched;
 
-    SEG      refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
-    LSET     layerMask = aRefSeg->GetLayerSet();
-    EDA_RECT refSegBB = aRefSeg->GetBoundingBox();
-    int      refSegWidth = aRefSeg->GetWidth();
+    wxString  msg;
+    SEG       refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
+    LSET      layerMask = aRefSeg->GetLayerSet();
+    NETCLASS* netclass = aRefSeg->GetNet()->GetNet() == 0 ? bds.GetDefault().get()
+                                                          : aRefSeg->GetNetClass().get();
+    EDA_RECT  refSegBB = aRefSeg->GetBoundingBox();
+    int       refSegWidth = aRefSeg->GetWidth();
+
+    MatchSelectors( bds.m_DRCRuleSelectors, aRefSeg, netclass, nullptr, nullptr, &matched );
 
 
     /******************************************/
@@ -154,17 +159,45 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
     if( aRefSeg->Type() == PCB_VIA_T )
     {
-        VIA *refvia = static_cast<VIA*>( aRefSeg );
+        VIA      *refvia = static_cast<VIA*>( aRefSeg );
+        int      viaAnnulus = ( refvia->GetWidth() - refvia->GetDrill() ) / 2;
+        int      minAnnulus;
+        wxString minAnnulusSource;
+
+        for( DRC_SELECTOR* selector : matched )
+        {
+            if( selector->m_Rule->m_AnnulusWidth > minAnnulus )
+            {
+                minAnnulus = selector->m_Rule->m_AnnulusWidth;
+                minAnnulusSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
+            }
+        }
 
         // test if the via size is smaller than minimum
         if( refvia->GetViaType() == VIATYPE::MICROVIA )
         {
-            if( refvia->GetWidth() < dsnSettings.m_MicroViasMinSize )
+            if( viaAnnulus < minAnnulus )
+            {
+                DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_ANNULUS );
+
+                msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
+                            minAnnulusSource,
+                            MessageTextFromValue( userUnits(), minAnnulus, true ),
+                            MessageTextFromValue( userUnits(), viaAnnulus, true ) );
+
+                drcItem->SetErrorMessage( msg );
+                drcItem->SetItems( refvia );
+
+                MARKER_PCB* marker = new MARKER_PCB( drcItem, refvia->GetPosition() );
+                addMarkerToPcb( marker );
+            }
+
+            if( refvia->GetWidth() < bds.m_MicroViasMinSize )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_MICROVIA );
 
                 msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), dsnSettings.m_MicroViasMinSize, true ),
+                            MessageTextFromValue( userUnits(), bds.m_MicroViasMinSize, true ),
                             MessageTextFromValue( userUnits(), refvia->GetWidth(), true ) );
 
                 drcItem->SetErrorMessage( msg );
@@ -176,14 +209,19 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         }
         else
         {
-            int viaAnnulus = ( refvia->GetWidth() - refvia->GetDrill() ) / 2;
+            if( bds.m_ViasMinAnnulus > minAnnulus )
+            {
+                minAnnulus = bds.m_ViasMinAnnulus;
+                minAnnulusSource = _( "board" );
+            }
 
-            if( viaAnnulus < dsnSettings.m_ViasMinAnnulus )
+            if( viaAnnulus < minAnnulus )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA_ANNULUS );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), dsnSettings.m_ViasMinSize, true ),
+                msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
+                            minAnnulusSource,
+                            MessageTextFromValue( userUnits(), minAnnulus, true ),
                             MessageTextFromValue( userUnits(), viaAnnulus, true ) );
 
                 drcItem->SetErrorMessage( msg );
@@ -193,12 +231,12 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 addMarkerToPcb( marker );
             }
 
-            if( refvia->GetWidth() < dsnSettings.m_ViasMinSize )
+            if( refvia->GetWidth() < bds.m_ViasMinSize )
             {
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_VIA );
 
                 msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                            MessageTextFromValue( userUnits(), dsnSettings.m_ViasMinSize, true ),
+                            MessageTextFromValue( userUnits(), bds.m_ViasMinSize, true ),
                             MessageTextFromValue( userUnits(), refvia->GetWidth(), true ) );
 
                 drcItem->SetErrorMessage( msg );
@@ -228,7 +266,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         }
 
         // test if the type of via is allowed due to design rules
-        if( refvia->GetViaType() == VIATYPE::MICROVIA && !dsnSettings.m_MicroViasAllowed )
+        if( refvia->GetViaType() == VIATYPE::MICROVIA && !bds.m_MicroViasAllowed )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_MICROVIA_NOT_ALLOWED );
 
@@ -241,7 +279,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
         }
 
         // test if the type of via is allowed due to design rules
-        if( refvia->GetViaType() == VIATYPE::BLIND_BURIED && !dsnSettings.m_BlindBuriedViaAllowed )
+        if( refvia->GetViaType() == VIATYPE::BLIND_BURIED && !bds.m_BlindBuriedViaAllowed )
         {
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_BURIED_VIA_NOT_ALLOWED );
 
@@ -266,7 +304,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             if( layer1 > layer2 )
                 std::swap( layer1, layer2 );
 
-            if( layer2 == B_Cu && layer1 == dsnSettings.GetCopperLayerCount() - 2 )
+            if( layer2 == B_Cu && layer1 == bds.GetCopperLayerCount() - 2 )
                 err = false;
             else if( layer1 == F_Cu  &&  layer2 == In1_Cu  )
                 err = false;
@@ -290,14 +328,27 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
     }
     else    // This is a track segment
     {
-        if( refSegWidth < dsnSettings.m_TrackMinWidth )
+        int      minWidth = bds.m_TrackMinWidth;
+        wxString minWidthSource = _( "board" );
+
+        for( DRC_SELECTOR* selector : matched )
+        {
+            if( selector->m_Rule->m_TrackWidth > minWidth )
+            {
+                minWidth = selector->m_Rule->m_AnnulusWidth;
+                minWidthSource = wxString::Format( _( "'%s' rule" ), selector->m_Rule->m_Name );
+            }
+        }
+
+        if( refSegWidth < minWidth )
         {
             wxPoint refsegMiddle = ( aRefSeg->GetStart() + aRefSeg->GetEnd() ) / 2;
 
             DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TOO_SMALL_TRACK_WIDTH );
 
-            msg.Printf( drcItem->GetErrorText() + _( " (board minimum %s; actual %s)" ),
-                        MessageTextFromValue( userUnits(), dsnSettings.m_TrackMinWidth, true ),
+            msg.Printf( drcItem->GetErrorText() + _( " (%s minimum %s; actual %s)" ),
+                        minWidthSource,
+                        MessageTextFromValue( userUnits(), bds.m_TrackMinWidth, true ),
                         MessageTextFromValue( userUnits(), refSegWidth, true ) );
 
             drcItem->SetErrorMessage( msg );
@@ -538,15 +589,17 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
     /* Phase 4: test DRC with to board edge        */
     /***********************************************/
     {
-        SEG testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
+        static DRAWSEGMENT dummyEdge;
+        dummyEdge.SetLayer( Edge_Cuts );
 
+        SEG      testSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
         wxString clearanceSource;
-        int      minClearance = aRefSeg->GetClearance( nullptr, &clearanceSource );
+        int      minClearance = aRefSeg->GetClearance( &dummyEdge, &clearanceSource );
 
-        if( dsnSettings.m_CopperEdgeClearance > minClearance )
+        if( bds.m_CopperEdgeClearance > minClearance )
         {
-            minClearance = dsnSettings.m_CopperEdgeClearance;
-            clearanceSource = _( "board edge clearance" );
+            minClearance = bds.m_CopperEdgeClearance;
+            clearanceSource = _( "board edge" );
         }
 
         int halfWidth = refSegWidth / 2;
@@ -585,7 +638,7 @@ void DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
                 int       actual = std::max( 0.0, sqrt( center2center_squared ) - halfWidth );
                 DRC_ITEM* drcItem = new DRC_ITEM( DRCE_TRACK_NEAR_EDGE );
 
-                msg.Printf( drcItem->GetErrorText() + _( " (%s %s; actual %s)" ),
+                msg.Printf( drcItem->GetErrorText() + _( " (%s clearance %s; actual %s)" ),
                             clearanceSource,
                             MessageTextFromValue( userUnits(), minClearance, true ),
                             MessageTextFromValue( userUnits(), actual, true ) );

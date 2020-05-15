@@ -233,6 +233,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_courtyard_tester.cpp
     drc/drc.cpp
     drc/drc_clearance_test_functions.cpp
+    drc/drc_rule_parser.cpp
     )
 
 set( PCBNEW_NETLIST_SRCS

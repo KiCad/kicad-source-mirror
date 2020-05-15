@@ -74,6 +74,20 @@ public:
         return aItem && PCB_MODULE_TEXT_T == aItem->Type();
     }
 
+    bool IsType( const KICAD_T aScanTypes[] ) const override
+    {
+        if( BOARD_ITEM::IsType( aScanTypes ) )
+            return true;
+
+        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        {
+            if( *p == PCB_LOCATE_TEXT_T )
+                return true;
+        }
+
+        return false;
+    }
+
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
     {
         return BOARD_ITEM::Matches( GetShownText(), aSearchData );

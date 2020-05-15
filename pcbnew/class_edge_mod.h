@@ -56,6 +56,22 @@ public:
         return aItem && PCB_MODULE_EDGE_T == aItem->Type();
     }
 
+    bool IsType( const KICAD_T aScanTypes[] ) const override
+    {
+        if( BOARD_ITEM::IsType( aScanTypes ) )
+            return true;
+
+        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        {
+            if( *p == PCB_LOCATE_GRAPHIC_T )
+                return true;
+            else if( *p == PCB_LOCATE_BOARD_EDGE_T )
+                return m_Layer == Edge_Cuts;
+        }
+
+        return false;
+    }
+
     /**
      * Move an edge of the footprint.
      * This is a footprint shape modification.

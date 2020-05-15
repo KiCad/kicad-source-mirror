@@ -140,6 +140,27 @@ public:
         return aItem && PCB_PAD_T == aItem->Type();
     }
 
+    bool IsType( const KICAD_T aScanTypes[] ) const override
+    {
+        if( BOARD_CONNECTED_ITEM::IsType( aScanTypes ) )
+            return true;
+
+        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        {
+            if( m_Drill.x > 0 && m_Drill.y > 0 )
+            {
+                if( *p == PCB_LOCATE_HOLE_T )
+                    return true;
+                else if( *p == PCB_LOCATE_PTH_T && m_Attribute != PAD_ATTRIB_HOLE_NOT_PLATED )
+                    return true;
+                else if( *p == PCB_LOCATE_NPTH_T && m_Attribute == PAD_ATTRIB_HOLE_NOT_PLATED )
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     MODULE* GetParent() const { return (MODULE*) m_Parent; }
 
     /**
@@ -459,12 +480,11 @@ public:
      * returned clearance is the greater of this object's clearance and
      * aItem's clearance.  If \a aItem is NULL, then this objects clearance
      * is returned.
-     * @param aItem is an optional BOARD_CONNECTED_ITEM
+     * @param aItem is an optional BOARD_ITEM
      * @param aSource [out] optionally reports the source as a user-readable string
      * @return int - the clearance in internal units.
      */
-    int GetClearance( BOARD_CONNECTED_ITEM* aItem = nullptr,
-                      wxString* aSource = nullptr ) const override;
+    int GetClearance( BOARD_ITEM* aItem = nullptr, wxString* aSource = nullptr ) const override;
 
    // Mask margins handling:
 

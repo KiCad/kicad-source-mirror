@@ -463,6 +463,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/connectivity/connectivity_data.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/convert_drawsegment_list_to_polygon.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_item.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/eagle_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/footprint_editor_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/gpcb_plugin.cpp
@@ -523,6 +524,15 @@ make_lexer(
     pcb_plot_params_lexer.h
     pcb_plot_params_keywords.cpp
     PCBPLOTPARAMS_T
+    )
+
+# auto-generate drc_rules_lexer.h and drc_rules_keywords.cpp
+make_lexer(
+    common
+    drc_rules.keywords
+    drc_rules_lexer.h
+    drc_rules_keywords.cpp
+    DRCRULE_T
     )
 
 # auto-generate pcbnew_sexpr.h and pcbnew_sexpr.cpp

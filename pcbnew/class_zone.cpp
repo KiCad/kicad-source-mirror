@@ -458,33 +458,31 @@ bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 }
 
 
-int ZONE_CONTAINER::GetClearance( BOARD_CONNECTED_ITEM* aItem, wxString* aSource ) const
+int ZONE_CONTAINER::GetClearance( BOARD_ITEM* aItem, wxString* aSource ) const
 {
+    if( m_isKeepout )
+        return 0;
+
     // The actual zone clearance is the biggest of the zone netclass clearance
     // and the zone clearance setting in the zone properties dialog.
-    int myClearance = m_ZoneClearance;
+    int      zoneClearance = m_ZoneClearance;
+    wxString source;
+    int      clearance = BOARD_CONNECTED_ITEM::GetClearance( aItem, &source );
 
-    if( aSource )
-        *aSource = _( "zone clearance" );
-
-    if( !m_isKeepout )  // Net class has no meaning for a keepout area.
+    if( clearance > zoneClearance )
     {
-        NETCLASSPTR myClass = GetNetClass();
+        if( aSource )
+            *aSource = source;
 
-        if( myClass->GetClearance() > myClearance )
-        {
-            myClearance = myClass->GetClearance();
-
-            if( aSource )
-                *aSource = wxString::Format( _( "'%s' netclass clearance" ), myClass->GetName() );
-        }
+        return clearance;
     }
+    else
+    {
+        if( aSource )
+            *aSource = _( "zone clearance" );
 
-    // Get the final clearance between me and aItem
-    if( aItem && aItem->GetClearance() > myClearance )
-        return aItem->GetClearance( nullptr, aSource );
-
-    return myClearance;
+        return zoneClearance;
+    }
 }
 
 

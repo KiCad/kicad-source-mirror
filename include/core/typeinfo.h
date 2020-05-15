@@ -103,6 +103,16 @@ enum KICAD_T
     PCB_ITEM_LIST_T,        ///< class BOARD_ITEM_LIST, a list of board items
     PCB_NETINFO_T,          ///< class NETINFO_ITEM, a description of a net
 
+    PCB_LOCATE_STDVIA_T,
+    PCB_LOCATE_UVIA_T,
+    PCB_LOCATE_BBVIA_T,
+    PCB_LOCATE_TEXT_T,
+    PCB_LOCATE_GRAPHIC_T,
+    PCB_LOCATE_HOLE_T,
+    PCB_LOCATE_PTH_T,
+    PCB_LOCATE_NPTH_T,
+    PCB_LOCATE_BOARD_EDGE_T,
+
     // Schematic draw Items.  The order of these items effects the sort order.
     // It is currently ordered to mimic the old Eeschema locate behavior where
     // the smallest item is the selected item.
@@ -234,6 +244,11 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
 
     case SCH_COMPONENT_LOCATE_POWER_T:
         return SCH_COMPONENT_T;
+
+    case PCB_LOCATE_HOLE_T:
+    case PCB_LOCATE_PTH_T:
+    case PCB_LOCATE_NPTH_T:
+        return PCB_LOCATE_HOLE_T;
 
     default:
         return aType;

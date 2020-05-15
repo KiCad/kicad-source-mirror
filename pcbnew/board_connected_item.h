@@ -157,12 +157,11 @@ public:
      * returned clearance is the greater of this object's NETCLASS clearance and
      * aItem's NETCLASS clearance.  If \a aItem is NULL, then this objects clearance
      * is returned.
-     * @param aItem is an optional BOARD_CONNECTED_ITEM
+     * @param aItem is an optional BOARD_ITEM
      * @param aSource [out] optionally reports the source as a user-readable string
      * @return int - the clearance in internal units.
      */
-    virtual int GetClearance( BOARD_CONNECTED_ITEM* aItem = nullptr,
-                              wxString* aSource = nullptr ) const;
+    virtual int GetClearance( BOARD_ITEM* aItem = nullptr, wxString* aSource = nullptr ) const;
 
      /**
       * Function GetNetClass
