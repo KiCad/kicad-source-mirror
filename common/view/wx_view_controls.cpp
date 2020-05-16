@@ -133,14 +133,6 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
 
 WX_VIEW_CONTROLS::~WX_VIEW_CONTROLS()
 {
-    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
-
-    if( cfg )
-    {
-        cfg->m_Input.mousewheel_pan = m_settings.m_enableMousewheelPan;
-        cfg->m_Input.center_on_zoom = m_settings.m_warpCursor;
-        cfg->m_Input.auto_pan = m_settings.m_autoPanSettingEnabled;
-    }
 }
 
 
