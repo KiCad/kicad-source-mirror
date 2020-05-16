@@ -282,8 +282,8 @@ bool LIB_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
     if( row )
         fileType = SCH_IO_MGR::EnumFromStr( row->GetType() );
 
-    return ( fileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY ) && fn.FileExists() &&
-            ( !fn.IsFileWritable() || !fn.IsDirWritable() );
+    return ( fileType == SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY ) ||
+            ( fn.FileExists() && !fn.IsFileWritable() ) || !fn.IsDirWritable();
 }
 
 

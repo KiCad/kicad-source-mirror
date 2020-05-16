@@ -55,6 +55,9 @@ void LIB_EDIT_FRAME::updateTitle()
     if( GetCurPart() )
         title += wxT( " \u2014 " ) + GetCurPart()->GetLibId().Format();
 
+    if( GetCurPart() && m_libMgr && m_libMgr->IsLibraryReadOnly( GetCurLib() ) )
+        title += " [Read Only Library]";
+
     SetTitle( title );
 }
 
@@ -375,9 +378,14 @@ void LIB_EDIT_FRAME::Save()
     {
         saveLibrary( libName, false );
     }
+    else if( !libName.IsEmpty() && m_libMgr->IsLibraryReadOnly( libName ) )
+    {
+        // Force a "Save As..." if the modified library is read only.
+        saveLibrary( libName, true );
+    }
     else
     {
-        // Save Part
+        // Save a single library.
         if( m_libMgr->FlushPart( partName, libName ) )
             m_libMgr->ClearPartModified( partName, libName );
     }
@@ -838,7 +846,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
     ClearMsgPanel();
 
-    // Copy .lib file to .bak.
+    // Copy .kicad_symb file to .bak.
     if( !backupFile( fn, "bak" ) )
         return false;
 
@@ -895,7 +903,11 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
             {
                 // If saving under existing name fails then do a Save As..., and if that
                 // fails then cancel close action.
-                if( !saveLibrary( libNickname, false ) && !saveLibrary( libNickname, true ) )
+                if( !m_libMgr->IsLibraryReadOnly( libNickname )
+                  && !saveLibrary( libNickname, false ) )
+                    return false;
+
+                if( !saveLibrary( libNickname, true ) )
                     return false;
             }
         }

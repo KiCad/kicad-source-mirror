@@ -45,13 +45,18 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
         LIB_ID libId = getTargetLibId();
         const wxString& libName = libId.GetLibNickname();
         const wxString& partName = libId.GetLibItemName();
-        bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
+        bool readOnly = libName.IsEmpty();
 
         if( partName.IsEmpty() )
             return ( !readOnly && m_libMgr->IsLibraryModified( libName ) );
         else
             return ( !readOnly && m_libMgr->IsPartModified( partName, libName ) );
     };
+
+    auto saveAllEnableCondition = [this] ( const SELECTION& sel )
+            {
+                return m_libMgr->HasModifications();
+            };
 
     //-- File menu -----------------------------------------------
     //
@@ -64,7 +69,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddSeparator();
     fileMenu->AddItem( ACTIONS::save,                modifiedDocumentCondition );
     fileMenu->AddItem( ACTIONS::saveCopyAs,          EE_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ACTIONS::saveAll,             EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::saveAll,             saveAllEnableCondition );
     fileMenu->AddItem( ACTIONS::revert,              modifiedDocumentCondition );
 
     fileMenu->AddSeparator();

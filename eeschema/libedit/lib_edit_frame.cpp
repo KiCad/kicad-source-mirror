@@ -417,6 +417,8 @@ wxString LIB_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 
     m_libMgr->SetCurrentLib( aLibNickname );
 
+    ReCreateMenuBar();
+
     return old;
 }
 
@@ -909,7 +911,8 @@ bool LIB_EDIT_FRAME::IsContentModified()
     // Test if any library has been modified
     for( const auto& libNickname : m_libMgr->GetLibraryNames() )
     {
-        if( m_libMgr->IsLibraryModified( libNickname ) )
+        if( m_libMgr->IsLibraryModified( libNickname )
+          && !m_libMgr->IsLibraryReadOnly( libNickname ) )
             return true;
     }
 
