@@ -122,8 +122,6 @@ public:
      */
     const wxString& GetHelpFileName() const             { return m_bm.m_help_file; }
 
-    FILE_HISTORY&   GetFileHistory()                    { return *m_bm.m_history; }
-
     /// Only for DSO specific 'non-library' files.
     /// (The library search path is in the PROJECT class.)
     SEARCH_STACK&       KifaceSearch()                  { return m_bm.m_search; }

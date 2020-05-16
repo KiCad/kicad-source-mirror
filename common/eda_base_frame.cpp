@@ -72,6 +72,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
                                 long aStyle, const wxString& aFrameName, KIWAY* aKiway ) :
         wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName ),
         KIWAY_HOLDER( aKiway, KIWAY_HOLDER::FRAME ),
+        m_fileHistory( nullptr ),
         m_userUnits( EDA_UNITS::MILLIMETRES )
 {
     m_Ident = aFrameType;
@@ -149,6 +150,7 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 EDA_BASE_FRAME::~EDA_BASE_FRAME()
 {
     delete m_autoSaveTimer;
+    delete m_fileHistory;
 
     if( SupportsShutdownBlockReason() )
     {
@@ -320,6 +322,14 @@ void EDA_BASE_FRAME::ShowChangedLanguage()
 void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     TOOLS_HOLDER::CommonSettingsChanged( aEnvVarsChanged );
+
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+
+    if( m_fileHistory )
+    {
+        int historySize = settings->m_System.file_history_size;
+        m_fileHistory->SetMaxFiles( (unsigned) std::max( 0, historySize ) );
+    }
 
     if( GetMenuBar() )
     {
@@ -504,12 +514,24 @@ void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
 void EDA_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     LoadWindowSettings( GetWindowSettings( aCfg ) );
+
+    // Get file history size from common settings
+    int fileHistorySize = Pgm().GetCommonSettings()->m_System.file_history_size;
+
+    // Load the recently used files into the history menu
+    m_fileHistory = new FILE_HISTORY( (unsigned) std::max( 0, fileHistorySize ),
+                                      ID_FILE1, ID_FILE_LIST_CLEAR );
+    m_fileHistory->Load( *aCfg );
 }
 
 
 void EDA_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     SaveWindowSettings( GetWindowSettings( aCfg ) );
+
+    // Save the recently used files list
+    if( m_fileHistory )
+        m_fileHistory->Save( *aCfg );
 }
 
 
@@ -546,12 +568,12 @@ void EDA_BASE_FRAME::PrintMsg( const wxString& text )
 
 void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName, FILE_HISTORY* aFileHistory )
 {
-    FILE_HISTORY* fileHistory = aFileHistory;
+    if( !aFileHistory )
+        aFileHistory = m_fileHistory;
 
-    if( !fileHistory )
-        fileHistory = &Kiface().GetFileHistory();
+    wxASSERT( aFileHistory );
 
-    fileHistory->AddFileToHistory( FullFileName );
+    aFileHistory->AddFileToHistory( FullFileName );
 
     // Update the menubar to update the file history menu
     if( GetMenuBar() )
@@ -565,20 +587,20 @@ void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName, FILE_HISTO
 wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
                                              FILE_HISTORY* aFileHistory )
 {
-    FILE_HISTORY* fileHistory = aFileHistory;
+    if( !aFileHistory )
+        aFileHistory = m_fileHistory;
 
-    if( !fileHistory )
-        fileHistory = &Kiface().GetFileHistory();
+    wxASSERT( aFileHistory );
 
-    int baseId = fileHistory->GetBaseId();
+    int baseId = aFileHistory->GetBaseId();
 
-    wxASSERT( cmdId >= baseId && cmdId < baseId + (int) fileHistory->GetCount() );
+    wxASSERT( cmdId >= baseId && cmdId < baseId + (int) aFileHistory->GetCount() );
 
     unsigned i = cmdId - baseId;
 
-    if( i < fileHistory->GetCount() )
+    if( i < aFileHistory->GetCount() )
     {
-        wxString fn = fileHistory->GetHistoryFile( i );
+        wxString fn = aFileHistory->GetHistoryFile( i );
 
         if( wxFileName::FileExists( fn ) )
             return fn;
@@ -587,8 +609,15 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
             wxString msg = wxString::Format( _( "File \"%s\" was not found." ), fn );
             wxMessageBox( msg );
 
-            fileHistory->RemoveFileFromHistory( i );
+            aFileHistory->RemoveFileFromHistory( i );
         }
+    }
+
+    // Update the menubar to update the file history menu
+    if( GetMenuBar() )
+    {
+        ReCreateMenuBar();
+        GetMenuBar()->Refresh();
     }
 
     return wxEmptyString;
@@ -598,9 +627,18 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
 void EDA_BASE_FRAME::ClearFileHistory( FILE_HISTORY* aFileHistory )
 {
     if( !aFileHistory )
-        aFileHistory = &Kiface().GetFileHistory();
+        aFileHistory = m_fileHistory;
+
+    wxASSERT( aFileHistory );
 
     aFileHistory->ClearFileHistory();
+
+    // Update the menubar to update the file history menu
+    if( GetMenuBar() )
+    {
+        ReCreateMenuBar();
+        GetMenuBar()->Refresh();
+    }
 }
 
 

@@ -25,7 +25,6 @@
 #include <bin_mod.h>
 #include <common.h>
 #include <filehistory.h>
-#include <id.h>         // for ID_FILE1 and FILE_HISTORY_SIZE
 #include <pgm_base.h>
 #include <settings/app_settings.h>
 #include <settings/common_settings.h>
@@ -34,20 +33,13 @@
 
 BIN_MOD::BIN_MOD( const char* aName ) :
     m_name( aName ),
-    m_config( nullptr ),
-    m_history( nullptr )
+    m_config( nullptr )
 {
 }
 
 
 void BIN_MOD::Init()
 {
-    // get file history size from common settings
-    int fileHistorySize = Pgm().GetCommonSettings()->m_System.file_history_size;
-
-    m_history = new FILE_HISTORY( (unsigned) std::max( 0, fileHistorySize ), ID_FILE1, ID_FILE_LIST_CLEAR );
-    m_history->Load( *m_config );
-
     // Prepare On Line Help. Use only lower case for help file names, in order to
     // avoid problems with upper/lower case file names under windows and unix.
     // Help files are now using html format.
@@ -62,13 +54,6 @@ void BIN_MOD::End()
 {
     if( m_config )
     {
-        if( m_history )
-        {
-            m_history->Save( *m_config );
-            delete m_history;
-            m_history = nullptr;
-        }
-
         // The settings manager will outlive this module so we need to clean up the module level
         // settings here instead of leaving it up to the manager
         Pgm().GetSettingsManager().FlushAndRelease( m_config );

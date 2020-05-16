@@ -46,8 +46,7 @@
 
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 {
-    wxFileName projFileName = GetFileFromHistory( event.GetId(), _( "KiCad project file" ),
-                                                  &PgmTop().GetFileHistory() );
+    wxFileName projFileName = GetFileFromHistory( event.GetId(), _( "KiCad project file" ) );
     if( !projFileName.FileExists() )
         return;
 
@@ -57,7 +56,7 @@ void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnClearFileHistory( wxCommandEvent& aEvent )
 {
-    ClearFileHistory( &PgmTop().GetFileHistory() );
+    ClearFileHistory();
 }
 
 

@@ -208,6 +208,7 @@ void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
     }
 }
 
+
 void PCB_EDIT_FRAME::OnClearFileHistory( wxCommandEvent& aEvent )
 {
     ClearFileHistory();

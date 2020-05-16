@@ -64,7 +64,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     if( Kiface().IsSingle() )   // not when under a project mgr
     {
-        FILE_HISTORY& fileHistory = Kiface().GetFileHistory();
+        FILE_HISTORY& fileHistory = GetFileHistory();
 
         // Create the menu if it does not exist. Adding a file to/from the history
         // will automatically refresh the menu.
@@ -120,7 +120,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->Add( PCB_ACTIONS::importSpecctraSession );
     submenuImport->Add( _( "Graphics..." ), _( "Import 2D drawing file" ),
                         ID_GEN_IMPORT_GRAPHICS_FILE, import_vector_xpm );
-                        
+
     if( Kiface().IsSingle() )
     {
         submenuImport->Add( _( "Non-KiCad Board File..." ),

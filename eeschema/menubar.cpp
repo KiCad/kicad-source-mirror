@@ -58,7 +58,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     if( Kiface().IsSingle() )   // When not under a project mgr
     {
-        FILE_HISTORY& fileHistory = Kiface().GetFileHistory();
+        FILE_HISTORY& fileHistory = GetFileHistory();
 
         // Add this menu to the list of menus managed by the file history
         // (the file history will be updated when adding/removing files in history)

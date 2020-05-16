@@ -51,7 +51,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     static ACTION_MENU* openRecentJobMenu;
     static ACTION_MENU* openRecentZipMenu;
 
-    FILE_HISTORY& recentGbrFiles = Kiface().GetFileHistory();
+    FILE_HISTORY& recentGbrFiles = GetFileHistory();
     recentGbrFiles.SetClearText( _( "Clear Recent Gerber Files" ) );
 
 

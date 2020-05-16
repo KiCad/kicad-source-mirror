@@ -312,8 +312,9 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
     {
         int px, py;
 
+        // Save the currently opened file in the file history
         if( !GetProjectFileName().empty() )
-            UpdateFileHistory( GetProjectFileName(), &PgmTop().GetFileHistory() );
+            UpdateFileHistory( GetProjectFileName() );
 
         if( !IsIconized() )   // save main frame position and size
         {
@@ -369,7 +370,7 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     if( aProjectFileName.IsDirWritable() )
         SetMruPath( Prj().GetProjectPath() ); // Only set MRU path if we have write access. Why?
 
-    UpdateFileHistory( aProjectFileName.GetFullPath(), &PgmTop().GetFileHistory() );
+    UpdateFileHistory( aProjectFileName.GetFullPath() );
 
     m_leftWin->ReCreateTreePrj();
 
@@ -442,6 +443,8 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName )
 
         // wxFile dtor will close the file
     }
+
+    UpdateFileHistory( aProjectFileName.GetFullPath() );
 }
 
 
@@ -502,7 +505,7 @@ void KICAD_MANAGER_FRAME::ShowChangedLanguage()
 void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     int historySize = Pgm().GetCommonSettings()->m_System.file_history_size;
-    PgmTop().GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );
+    GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );
 }
 
 

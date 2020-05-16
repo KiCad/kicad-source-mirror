@@ -218,9 +218,6 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 
     SetAutoSaveInterval( settings->m_System.autosave_interval );
 
-    int historySize = settings->m_System.file_history_size;
-    Kiface().GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );
-
     viewControls->EnableMousewheelPan( settings->m_Input.mousewheel_pan );
     viewControls->EnableCursorWarping( settings->m_Input.center_on_zoom );
     viewControls->EnableAutoPan( settings->m_Input.auto_pan );

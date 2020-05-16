@@ -47,7 +47,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     //-- File menu -----------------------------------------------------------
     //
     CONDITIONAL_MENU* fileMenu    = new CONDITIONAL_MENU( false, controlTool );
-    FILE_HISTORY&     fileHistory = PgmTop().GetFileHistory();
+    FILE_HISTORY&     fileHistory = GetFileHistory();
 
     fileHistory.SetClearText( _( "Clear Recent Projects" ) );
 

@@ -36,7 +36,6 @@
 #include <memory>
 
 class APP_SETTINGS_BASE;
-class FILE_HISTORY;
 
 /**
  * Struct BIN_MOD
@@ -63,7 +62,6 @@ struct BIN_MOD
     const char*         m_name;             ///< name of this binary module, static C string.
 
     APP_SETTINGS_BASE*  m_config; ///< maybe from $HOME/.${m_name}
-    FILE_HISTORY*       m_history;
     wxString            m_help_file;
 
     SEARCH_STACK        m_search;

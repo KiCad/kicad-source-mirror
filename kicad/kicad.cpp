@@ -118,7 +118,7 @@ bool PGM_KICAD::OnPgmInit()
 
         if( it != GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
             m_bm.m_search.Insert( it->second.GetValue(), 0 );
-    
+
         // The KICAD_USER_TEMPLATE_DIR takes precedence over KICAD_TEMPLATE_DIR and the search
         // stack template path.
         it = GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
@@ -139,13 +139,13 @@ bool PGM_KICAD::OnPgmInit()
     {
         projToLoad = App().argv[1];
     }
-    else if( GetFileHistory().GetCount() )
+    else if( frame->GetFileHistory().GetCount() )
     {
-        wxString last_pro = GetFileHistory().GetHistoryFile( 0 );
+        wxString last_pro = frame->GetFileHistory().GetHistoryFile( 0 );
 
         if( !wxFileExists( last_pro ) )
         {
-            GetFileHistory().RemoveFileFromHistory( 0 );
+            frame->GetFileHistory().RemoveFileFromHistory( 0 );
         }
         else
         {

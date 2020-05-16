@@ -138,6 +138,8 @@ protected:
 
     SETTINGS_MANAGER* m_settingsManager;
 
+    FILE_HISTORY*   m_fileHistory;              // The frame's recently opened file list
+
     bool            m_hasAutoSave;
     bool            m_autoSaveState;
     int             m_autoSaveInterval;     // The auto save interval time in seconds.
@@ -371,7 +373,7 @@ public:
      * @return a wxString containing the selected filename
      */
     wxString GetFileFromHistory( int cmdId, const wxString& type,
-                                 FILE_HISTORY* aFileHistory = NULL );
+                                 FILE_HISTORY* aFileHistory = nullptr );
 
     /**
      * Removes all files from the file history.
@@ -379,7 +381,7 @@ public:
      * @param aFileHistory The FILE_HISTORY in use. If null, the main application file
      *                     history is used
      */
-    void ClearFileHistory( FILE_HISTORY* aFileHistory = NULL );
+    void ClearFileHistory( FILE_HISTORY* aFileHistory = nullptr );
 
     /**
      * Update the list of recently opened files.
@@ -390,7 +392,17 @@ public:
      * @param aFileHistory The FILE_HISTORY in use.
      * If NULL, the main application file history is used.
      */
-    void UpdateFileHistory( const wxString& FullFileName, FILE_HISTORY* aFileHistory = NULL );
+    void UpdateFileHistory( const wxString& FullFileName, FILE_HISTORY* aFileHistory = nullptr );
+
+    /**
+     * Get the frame's main file history.
+     *
+     * @return the main file history
+     */
+    FILE_HISTORY& GetFileHistory()
+    {
+        return *m_fileHistory;
+    }
 
     void SetMruPath( const wxString& aPath ) { m_mruPath = aPath; }
 

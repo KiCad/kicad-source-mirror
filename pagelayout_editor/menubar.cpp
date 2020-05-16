@@ -49,7 +49,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     };
 
     static ACTION_MENU* openRecentMenu;  // Open Recent submenu, static to remember this menu
-    FILE_HISTORY&       recentFiles = Kiface().GetFileHistory();
+    FILE_HISTORY&       recentFiles = GetFileHistory();
 
     // Create the menu if it does not exist. Adding a file to/from the history
     // will automatically refresh the menu.
