@@ -122,7 +122,7 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwn
 
 COLOR4D PCB_LAYER_WIDGET::getBackgroundLayerColor()
 {
-    return myframe->ColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
+    return myframe->GetColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
 }
 
 
@@ -345,9 +345,9 @@ void PCB_LAYER_WIDGET::ReFillRender()
             if( renderRow.color != COLOR4D::UNSPECIFIED )       // does this row show a color?
             {
                 // this window frame must have an established BOARD, i.e. after SetBoard()
-                renderRow.color = myframe->ColorSettings()->GetColor(
+                renderRow.color = myframe->GetColorSettings()->GetColor(
                         static_cast<GAL_LAYER_ID>( renderRow.id ) );
-                renderRow.defaultColor = myframe->ColorSettings()->GetDefaultColor(
+                renderRow.defaultColor = myframe->GetColorSettings()->GetDefaultColor(
                         static_cast<GAL_LAYER_ID>( renderRow.id ) );
             }
 
@@ -453,8 +453,8 @@ void PCB_LAYER_WIDGET::ReFill()
         }
 
         AppendLayerRow( LAYER_WIDGET::ROW( brd->GetLayerName( layer ), layer,
-                myframe->ColorSettings()->GetColor( layer ), dsc, true, true,
-                myframe->ColorSettings()->GetDefaultColor( layer ) ) );
+                myframe->GetColorSettings()->GetColor( layer ), dsc, true, true,
+                myframe->GetColorSettings()->GetDefaultColor( layer ) ) );
 
         if( m_fp_editor_mode && LSET::ForbiddenFootprintLayers().test( layer ) )
         {
@@ -501,9 +501,9 @@ void PCB_LAYER_WIDGET::ReFill()
             continue;
 
         AppendLayerRow( LAYER_WIDGET::ROW( brd->GetLayerName( layer ), layer,
-                myframe->ColorSettings()->GetColor( layer ),
+                myframe->GetColorSettings()->GetColor( layer ),
                 wxGetTranslation( non_cu_seq[i].tooltip ), true, true,
-                myframe->ColorSettings()->GetDefaultColor( layer ) ) );
+                myframe->GetColorSettings()->GetDefaultColor( layer ) ) );
 
         if( m_fp_editor_mode && LSET::ForbiddenFootprintLayers().test( layer ) )
         {
@@ -518,7 +518,7 @@ void PCB_LAYER_WIDGET::ReFill()
 
 void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 {
-    COLOR_SETTINGS* cs = myframe->ColorSettings();
+    COLOR_SETTINGS* cs = myframe->GetColorSettings();
     cs->SetColor( aLayer, aColor );
 
     myframe->GetCanvas()->UpdateColors();
@@ -606,7 +606,7 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 {
     wxASSERT( aId > GAL_LAYER_ID_START && aId < GAL_LAYER_ID_END );
 
-    myframe->ColorSettings()->SetColor( aId, aColor );
+    myframe->GetColorSettings()->SetColor( aId, aColor );
     myframe->GetCanvas()->UpdateColors();
 
     KIGFX::VIEW* view = myframe->GetCanvas()->GetView();

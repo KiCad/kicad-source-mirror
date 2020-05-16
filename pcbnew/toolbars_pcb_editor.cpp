@@ -100,7 +100,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         change = true;
     }
 
-    active_layer_color = ColorSettings()->GetColor( GetActiveLayer() );
+    active_layer_color = GetColorSettings()->GetColor( GetActiveLayer() );
 
     if( m_prevIconVal.previous_active_layer_color != active_layer_color )
     {
@@ -108,7 +108,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         change = true;
     }
 
-    top_color = ColorSettings()->GetColor( GetScreen()->m_Route_Layer_TOP );
+    top_color = GetColorSettings()->GetColor( GetScreen()->m_Route_Layer_TOP );
 
     if( m_prevIconVal.previous_Route_Layer_TOP_color != top_color )
     {
@@ -116,7 +116,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         change = true;
     }
 
-    bottom_color = ColorSettings()->GetColor( GetScreen()->m_Route_Layer_BOTTOM );
+    bottom_color = GetColorSettings()->GetColor( GetScreen()->m_Route_Layer_BOTTOM );
 
     if( m_prevIconVal.previous_Route_Layer_BOTTOM_color != bottom_color )
     {
@@ -125,7 +125,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
     }
 
     int via_type = static_cast<int>( GetDesignSettings().m_CurrentViaType );
-    via_color = ColorSettings()->GetColor( LAYER_VIAS + via_type );
+    via_color = GetColorSettings()->GetColor( LAYER_VIAS + via_type );
 
     if( m_prevIconVal.previous_via_color != via_color )
     {
@@ -133,7 +133,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
         change = true;
     }
 
-    background_color = ColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
+    background_color = GetColorSettings()->GetColor( LAYER_PCB_BACKGROUND );
 
     if( m_prevIconVal.previous_background_color != background_color )
     {

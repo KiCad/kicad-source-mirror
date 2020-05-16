@@ -933,7 +933,7 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
     auto settings = painter->GetSettings();
     auto displ_opts = GetDisplayOptions();
     settings->LoadDisplayOptions( displ_opts, ShowPageLimits() );
-    settings->LoadColors( ColorSettings() );
+    settings->LoadColors( GetColorSettings() );
 
     canvas->GetView()->RecacheAllItems();
     canvas->SetEventDispatcher( m_toolDispatcher );

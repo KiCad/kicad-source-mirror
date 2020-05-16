@@ -669,14 +669,14 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 COLOR4D PCB_EDIT_FRAME::GetGridColor()
 {
-    return ColorSettings()->GetColor( LAYER_GRID );
+    return GetColorSettings()->GetColor( LAYER_GRID );
 }
 
 
 void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
 {
 
-    ColorSettings()->SetColor( LAYER_GRID, aColor );
+    GetColorSettings()->SetColor( LAYER_GRID, aColor );
     GetCanvas()->GetGAL()->SetGridColor( aColor );
 }
 

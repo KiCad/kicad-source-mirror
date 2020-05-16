@@ -164,7 +164,7 @@ COLOR4D PCB_LAYER_BOX_SELECTOR::getLayerColor( LAYER_NUM aLayer ) const
 {
     wxASSERT( m_boardFrame );
 
-    return m_boardFrame->ColorSettings()->GetColor( aLayer );
+    return m_boardFrame->GetColorSettings()->GetColor( aLayer );
 }
 
 

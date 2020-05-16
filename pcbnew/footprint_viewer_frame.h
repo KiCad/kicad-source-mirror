@@ -80,7 +80,7 @@ public:
      */
     bool ShowModal( wxString* aFootprint, wxWindow* aParent ) override;
 
-    COLOR_SETTINGS* ColorSettings() override;
+    COLOR_SETTINGS* GetColorSettings() override;
 
 private:
     wxTextCtrl*         m_libFilter;

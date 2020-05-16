@@ -190,7 +190,7 @@ public:
 
     void OnGridSettings( wxCommandEvent& aEvent ) override;
 
-    COLOR_SETTINGS* ColorSettings() override;
+    COLOR_SETTINGS* GetColorSettings() override;
 
 protected:
     /// User defined rotation angle (in tenths of a degree).

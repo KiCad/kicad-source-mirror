@@ -136,7 +136,7 @@ void PCB_BASE_EDIT_FRAME::SetGridVisibility( bool aVisible )
 }
 
 
-COLOR_SETTINGS* PCB_BASE_EDIT_FRAME::ColorSettings()
+COLOR_SETTINGS* PCB_BASE_EDIT_FRAME::GetColorSettings()
 {
     return Pgm().GetSettingsManager().GetColorSettings( GetPcbNewSettings()->m_ColorTheme );
 }

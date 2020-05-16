@@ -58,7 +58,7 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
 
     // draw the swatch
     wxBitmap bitmap( 14, 14 );
-    COLOR_SETTINGS* cs = m_frame->ColorSettings();
+    COLOR_SETTINGS* cs = m_frame->GetColorSettings();
     LAYER_SELECTOR::DrawColorSwatch( bitmap,
                                      cs->GetColor( ToLAYER_ID( LAYER_PCB_BACKGROUND ) ),
                                      cs->GetColor( ToLAYER_ID( value ) ) );

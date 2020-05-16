@@ -456,7 +456,7 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-COLOR_SETTINGS* FOOTPRINT_EDIT_FRAME::ColorSettings()
+COLOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetColorSettings()
 {
     return Pgm().GetSettingsManager().GetColorSettings(
             GetFootprintEditorSettings()->m_ColorTheme );

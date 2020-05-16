@@ -743,7 +743,7 @@ WINDOW_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* a
 }
 
 
-COLOR_SETTINGS* FOOTPRINT_VIEWER_FRAME::ColorSettings()
+COLOR_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetColorSettings()
 {
     auto* settings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 
@@ -886,7 +886,7 @@ void FOOTPRINT_VIEWER_FRAME::Update3DView( bool aForceReload, const wxString* aT
 
 COLOR4D FOOTPRINT_VIEWER_FRAME::GetGridColor()
 {
-    return ColorSettings()->GetColor( LAYER_GRID );
+    return GetColorSettings()->GetColor( LAYER_GRID );
 }
 
 

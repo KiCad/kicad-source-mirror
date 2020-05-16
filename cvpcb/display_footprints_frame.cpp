@@ -455,7 +455,7 @@ void DISPLAY_FOOTPRINTS_FRAME::SyncToolbars()
 }
 
 
-COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::ColorSettings()
+COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings()
 {
     auto* settings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 

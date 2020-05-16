@@ -168,9 +168,9 @@ public:
      * Helper to retrieve the current color settings
      * @return a pointer to the active COLOR_SETTINGS
      */
-    virtual COLOR_SETTINGS* ColorSettings()
+    virtual COLOR_SETTINGS* GetColorSettings() override
     {
-        wxFAIL_MSG( "Color settings requested for a frame that does not define them!" );
+        wxFAIL_MSG( "Color settings requested for a PCB_BASE_FRAME that does not override!" );
         return nullptr;
     }
 

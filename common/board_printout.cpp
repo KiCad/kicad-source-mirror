@@ -106,8 +106,8 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
 
 
     // Set the color scheme
-    auto srcSettings = m_view->GetPainter()->GetSettings();
     auto dstSettings = view->GetPainter()->GetSettings();
+    dstSettings->LoadColors( m_settings.m_colorSettings );
 
     if( m_settings.m_blackWhite )
     {
@@ -120,11 +120,10 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
         {
             // Cairo does not support translucent colors on PostScript surfaces
             // see 'Features support by the PostScript surface' on
-            // ttps://www.cairographics.org/documentation/using_the_postscript_surface/
-            dstSettings->SetLayerColor( i, srcSettings->GetLayerColor( i ).WithAlpha( 1.0 ) );
+            // https://www.cairographics.org/documentation/using_the_postscript_surface/
+            dstSettings->SetLayerColor( i, dstSettings->GetLayerColor( i ).WithAlpha( 1.0 ) );
         }
     }
-
 
     setupViewLayers( view, m_settings.m_layerSet );
     setupPainter( painter );
@@ -170,6 +169,9 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     gal->SetLookAtPoint( bBox.Centre() );
     gal->SetZoomFactor( m_settings.m_scale );
 
+    gal->SetClearColor( dstSettings->GetBackgroundColor() );
+    gal->ClearScreen();
+
     {
     KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
     view->Redraw();
@@ -194,7 +196,8 @@ void BOARD_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
 
 void BOARD_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter )
 {
-    aPainter->GetSettings()->SetBackgroundColor( COLOR4D::WHITE );
+    if( !m_settings.m_background )
+        aPainter->GetSettings()->SetBackgroundColor( COLOR4D::WHITE );
 }
 
 

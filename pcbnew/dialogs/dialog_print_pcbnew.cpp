@@ -29,6 +29,7 @@
 #include <confirm.h>
 #include <base_units.h>
 #include <pcbnew.h>
+#include <pcbnew_settings.h>
 #include <pcbplot.h>
 #include <class_board.h>
 #include <tool/tool_manager.h>
@@ -57,6 +58,9 @@ private:
 
     void onSelectAllClick( wxCommandEvent& event );
     void onDeselectAllClick( wxCommandEvent& event );
+
+    void onUseThemeChecked( wxCommandEvent& event );
+    void onColorModeChanged( wxCommandEvent& event );
 
     ///> (Un)checks all items in a checklist box
     void setListBoxValue( wxCheckListBox* aList, bool aValue );
@@ -92,6 +96,10 @@ private:
     wxCheckBox* m_checkboxMirror;
     wxChoice* m_drillMarksChoice;
     wxRadioBox* m_boxPagination;
+    wxCheckBox* m_checkBackground;
+    wxCheckBox* m_checkUseTheme;
+    wxStaticText* m_lblTheme;
+    wxChoice* m_colorTheme;
 };
 
 
@@ -103,6 +111,9 @@ DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent, PCBNEW_P
 
     createExtraOptions();
     createLeftPanel();
+
+    m_outputMode->Bind(
+            wxEVT_COMMAND_CHOICE_SELECTED, &DIALOG_PRINT_PCBNEW::onColorModeChanged, this );
 }
 
 
@@ -137,6 +148,35 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
     m_checkboxNoEdge->SetValue( settings()->m_noEdgeLayer );
     m_titleBlock->SetValue( settings()->m_titleBlock );
 
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+
+    m_checkBackground->SetValue( cfg->m_Printing.background );
+    m_checkUseTheme->SetValue( cfg->m_Printing.use_theme );
+
+    m_colorTheme->Clear();
+
+    int width    = 0;
+    int height   = 0;
+    int minwidth = width;
+
+    wxString target = cfg->m_Printing.use_theme ? cfg->m_Printing.color_theme : cfg->m_ColorTheme;
+
+    for( COLOR_SETTINGS* settings : Pgm().GetSettingsManager().GetColorSettingsList() )
+    {
+        int pos = m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
+
+        if( settings->GetFilename() == target )
+            m_colorTheme->SetSelection( pos );
+
+        m_colorTheme->GetTextExtent( settings->GetName(), &width, &height );
+        minwidth = std::max( minwidth, width );
+    }
+
+    m_colorTheme->SetMinSize( wxSize( minwidth + 50, -1 ) );
+
+    wxCommandEvent dummy;
+    onColorModeChanged( dummy );
+
     // Options to plot pads and vias holes
     m_drillMarksChoice->SetSelection( settings()->m_drillMarks );
 
@@ -156,6 +196,29 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
     wxStaticBox* box = getOptionsBox();
     int rows = optionsSizer->GetEffectiveRowsCount();
     int cols = optionsSizer->GetEffectiveColsCount();
+
+    m_checkBackground = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY,
+            _( "Print background color" ), wxDefaultPosition, wxDefaultSize, 0 );
+    optionsSizer->Add( m_checkBackground, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
+
+    m_checkUseTheme = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY,
+            _( "Use a different color theme for printing" ), wxDefaultPosition, wxDefaultSize, 0 );
+    optionsSizer->Add( m_checkUseTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
+
+    m_checkUseTheme->Bind(
+            wxEVT_COMMAND_CHECKBOX_CLICKED, &DIALOG_PRINT_PCBNEW::onUseThemeChecked, this );
+
+    m_lblTheme = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _( "Color theme:" ),
+            wxDefaultPosition, wxDefaultSize, 0 );
+    m_lblTheme->Wrap( -1 );
+    optionsSizer->Add( m_lblTheme, wxGBPosition( rows, 0 ), wxGBSpan( 1, 1 ),
+            wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+
+    wxArrayString m_colorThemeChoices;
+    m_colorTheme = new wxChoice( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition,
+            wxDefaultSize, m_colorThemeChoices, 0 );
+    m_colorTheme->SetSelection( 0 );
+    optionsSizer->Add( m_colorTheme, wxGBPosition( rows++, 1 ), wxGBSpan( 1, 2 ), wxALL, 5 );
 
     // Drill marks option
     auto drillMarksLabel = new wxStaticText( box, wxID_ANY, _( "Drill marks:" ) );
@@ -181,7 +244,8 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
             wxBOTTOM | wxRIGHT | wxLEFT, 5 );
     optionsSizer->Add( m_checkboxMirror, wxGBPosition( rows + 1, 0 ), wxGBSpan( 1, cols ),
             wxBOTTOM | wxRIGHT | wxLEFT, 5 );
-    optionsSizer->Add( m_boxPagination, wxGBPosition( rows + 2, 0 ), wxGBSpan( 1, cols ), wxALL | wxEXPAND, 5 );
+    optionsSizer->Add( m_boxPagination, wxGBPosition( rows + 2, 0 ), wxGBSpan( 1, cols ),
+            wxALL | wxEXPAND, 5 );
 }
 
 
@@ -255,6 +319,26 @@ void DIALOG_PRINT_PCBNEW::onDeselectAllClick( wxCommandEvent& event )
 }
 
 
+void DIALOG_PRINT_PCBNEW::onUseThemeChecked( wxCommandEvent& event )
+{
+    m_lblTheme->Enable( m_checkUseTheme->GetValue() );
+    m_colorTheme->Enable( m_checkUseTheme->GetValue() );
+}
+
+
+void DIALOG_PRINT_PCBNEW::onColorModeChanged( wxCommandEvent& event )
+{
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+
+    m_settings->m_blackWhite = m_outputMode->GetSelection();
+
+    m_checkBackground->Enable( !m_settings->m_blackWhite );
+    m_checkUseTheme->Enable( !m_settings->m_blackWhite );
+    m_lblTheme->Enable( !m_settings->m_blackWhite && cfg->m_Printing.use_theme );
+    m_colorTheme->Enable( !m_settings->m_blackWhite && cfg->m_Printing.use_theme );
+}
+
+
 void DIALOG_PRINT_PCBNEW::setListBoxValue( wxCheckListBox* aList, bool aValue )
 {
     for( unsigned int i = 0; i < aList->GetCount(); ++i )
@@ -319,6 +403,29 @@ void DIALOG_PRINT_PCBNEW::saveSettings()
         ? PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE : PCBNEW_PRINTOUT_SETTINGS::ALL_LAYERS;
 
     settings()->m_mirror = m_checkboxMirror->GetValue();
+
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+
+    cfg->m_Printing.background = m_checkBackground->GetValue();
+    settings()->m_background   = cfg->m_Printing.background;
+    cfg->m_Printing.use_theme  = m_checkUseTheme->GetValue();
+
+    COLOR_SETTINGS* theme = static_cast<COLOR_SETTINGS*>(
+            m_colorTheme->GetClientData( m_colorTheme->GetSelection() ) );
+
+    if( theme && m_checkUseTheme->IsChecked() )
+    {
+        cfg->m_Printing.color_theme = theme->GetFilename();
+        settings()->m_colorSettings = theme;
+    }
+    else
+    {
+        // This should always work, but in case it doesn't we fall back on default colors
+        if( auto pcbframe = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_parent ) )
+            settings()->m_colorSettings = pcbframe->GetColorSettings();
+        else
+            settings()->m_colorSettings = m_parent->GetColorSettings();
+    }
 
     DIALOG_PRINT_GENERIC::saveSettings();
 }

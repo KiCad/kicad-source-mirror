@@ -403,7 +403,7 @@ int PCBNEW_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 {
-    auto settings = m_frame->ColorSettings();
+    auto settings = m_frame->GetColorSettings();
 
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
     KIGFX::COLOR4D currentColor = settings->GetColor( currentLayer );
@@ -429,7 +429,7 @@ int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 {
-    auto settings = m_frame->ColorSettings();
+    auto settings = m_frame->GetColorSettings();
 
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
     KIGFX::COLOR4D currentColor = settings->GetColor( currentLayer );

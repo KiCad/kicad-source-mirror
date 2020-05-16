@@ -430,7 +430,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 
 COLOR4D FOOTPRINT_EDIT_FRAME::GetGridColor()
 {
-    return ColorSettings()->GetColor( LAYER_GRID );
+    return GetColorSettings()->GetColor( LAYER_GRID );
 }
 
 

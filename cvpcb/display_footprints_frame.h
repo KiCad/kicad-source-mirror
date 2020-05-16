@@ -80,7 +80,7 @@ public:
     bool GetAutoZoom() const { return m_autoZoom; }
     void SetAutoZoom( bool aEnable ) { m_autoZoom = aEnable; }
 
-    COLOR_SETTINGS* ColorSettings() override;
+    COLOR_SETTINGS* GetColorSettings() override;
 
     /**
      * Function GetGridColor() , virtual

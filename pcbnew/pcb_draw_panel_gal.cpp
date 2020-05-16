@@ -211,7 +211,7 @@ void PCB_DRAW_PANEL_GAL::UpdateColors()
 
     if( frame )
     {
-        cs = frame->ColorSettings();
+        cs = frame->GetColorSettings();
     }
     else
     {

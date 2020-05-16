@@ -22,6 +22,7 @@
 #include <page_info.h>
 
 class APP_SETTINGS_BASE;
+class COLOR_SETTINGS;
 
 /**
  * PRINT_PARAMETERS
@@ -36,6 +37,7 @@ struct PRINTOUT_SETTINGS
         m_titleBlock = false;
         m_blackWhite = true;
         m_pageCount  = 0;
+        m_background = false;
     }
 
     virtual ~PRINTOUT_SETTINGS()
@@ -49,7 +51,11 @@ struct PRINTOUT_SETTINGS
     bool   m_titleBlock;    ///< Print frame and title block
     bool   m_blackWhite;    ///< Print in B&W or Color
     int    m_pageCount;     ///< Number of pages to print
+    bool   m_background;    ///< Print background color
     const PAGE_INFO& m_pageInfo;
+
+    /// The color settings to be used for printing
+    COLOR_SETTINGS* m_colorSettings;
 
     /**
      * Returns true if the drawing border and title block should be printed.
