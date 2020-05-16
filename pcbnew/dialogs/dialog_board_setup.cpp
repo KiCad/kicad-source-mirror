@@ -32,7 +32,7 @@
 #include <panel_text_variables.h>
 
 #include "dialog_board_setup.h"
-
+#include "panel_setup_rules.h"
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         PAGED_DIALOG( aFrame, _( "Board Setup" ), _( "Import Settings from Another Project..." ) ),
@@ -42,6 +42,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_textAndGraphics = new PANEL_SETUP_TEXT_AND_GRAPHICS( this, aFrame );
     m_constraints = new PANEL_SETUP_FEATURE_CONSTRAINTS( this, aFrame );
     m_netclasses = new PANEL_SETUP_NETCLASSES( this, aFrame, m_constraints );
+    m_rules = new PANEL_SETUP_RULES( this, aFrame );
     m_tracksAndVias = new PANEL_SETUP_TRACKS_AND_VIAS( this, aFrame, m_constraints );
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
     m_physicalStackup = new PANEL_SETUP_BOARD_STACKUP( this, aFrame, m_layers );
@@ -71,6 +72,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_treebook->AddPage( new wxPanel( this ),  _( "Design Rules" ) );
     m_treebook->AddSubPage( m_constraints,  _( "Constraints" ) );
     m_treebook->AddSubPage( m_netclasses,  _( "Net Classes" ) );
+    m_treebook->AddSubPage( m_rules, _( "Rules" ) );
     m_treebook->AddSubPage( m_severities, _( "Violation Severity" ) );
 
     m_treebook->AddPage( new wxPanel( this ), _( "Project" ) );

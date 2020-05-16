@@ -92,15 +92,15 @@ void DRC::Reset( RESET_REASON aReason )
 {
     m_pcbEditorFrame = getEditFrame<PCB_EDIT_FRAME>();
 
-    if( aReason == MODEL_RELOAD )
+    if( m_pcb != m_pcbEditorFrame->GetBoard() )
     {
         if( m_drcDialog )
             DestroyDRCDialog( wxID_OK );
 
         m_pcb = m_pcbEditorFrame->GetBoard();
-
-        loadRules();
     }
+
+    loadRules();
 }
 
 

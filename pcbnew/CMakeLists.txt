@@ -165,6 +165,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_setup_layers_base.cpp
     dialogs/panel_setup_netclasses.cpp
     dialogs/panel_setup_netclasses_base.cpp
+    dialogs/panel_setup_rules.cpp
+    dialogs/panel_setup_rules_base.cpp
     dialogs/panel_setup_text_and_graphics.cpp
     dialogs/panel_setup_text_and_graphics_base.cpp
     dialogs/panel_setup_tracks_and_vias.cpp
