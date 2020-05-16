@@ -441,11 +441,17 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
         m_boardAdapter.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
         m_boardAdapter.AntiAliasingSet( static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode ) );
 
+        // When opening the 3D viewer, we use the opengl mode, not the ray tracing engine
+        // because the ray tracing is very time consumming, and can be seen as not working
+        // (freeze window) with large boards.
+#if 0
         RENDER_ENGINE engine = static_cast<RENDER_ENGINE>( cfg->m_Render.engine );
         wxLogTrace( m_logTrace, engine == RENDER_ENGINE::RAYTRACING ?
                                 "EDA_3D_VIEWER::LoadSettings render setting Ray Trace" :
                                 "EDA_3D_VIEWER::LoadSettings render setting OpenGL" );
-        m_boardAdapter.RenderEngineSet( engine );
+#else
+        m_boardAdapter.RenderEngineSet( RENDER_ENGINE::OPENGL_LEGACY );
+#endif
 
         m_boardAdapter.MaterialModeSet( static_cast<MATERIAL_MODE>( cfg->m_Render.material_mode ) );
 
